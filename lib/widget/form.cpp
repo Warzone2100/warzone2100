@@ -834,16 +834,9 @@ void formDisplayClickable(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIEL
 	}
 }
 
-
-/* Draw top tabs */
-static void formDisplayTTabs(W_TABFORM *psForm, SDWORD x0, SDWORD y0,
-        UDWORD width, UDWORD height,
-        UDWORD number, UDWORD selected, UDWORD hilite,
-        PIELIGHT *pColours, UDWORD TabGap)
+static void formDisplayTabs(W_TABFORM *psForm, int x0, int y0, int width, int height,
+        int number, int selected, int hilite, PIELIGHT *pColours, int tabGap)
 {
-	SDWORD	x, x1, y1;
-	UDWORD	i, drawnumber;
-
 #if NO_DISPLAY_SINGLE_TABS
 	if (number == 1)
 	{
@@ -852,9 +845,26 @@ static void formDisplayTTabs(W_TABFORM *psForm, SDWORD x0, SDWORD y0,
 	}
 #endif
 
-	x = x0 + 2;
-	x1 = x + width - 2;
-	y1 = y0 + height;
+	int x = x0;
+	int y = y0;
+	int x1 = x0 + width;
+	int y1 = y0 + height;
+	int xDelta = 0;
+	int yDelta = 0;
+
+	bool horizontal = psForm->majorPos == WFORM_TABTOP || psForm->majorPos == WFORM_TABBOTTOM;
+	if (horizontal)
+	{
+		x += 2;
+		xDelta = width + tabGap;
+	}
+	else
+	{
+		y += 2;
+		yDelta = height + tabGap;
+	}
+
+	unsigned drawNumber = number;
 	if (number > psForm->maxTabsShown)  //we can display 8 tabs fine with no extra voodoo.
 	{
 		// We do NOT want to draw all the tabs once we have drawn 7 tabs
@@ -862,12 +872,9 @@ static void formDisplayTTabs(W_TABFORM *psForm, SDWORD x0, SDWORD y0,
 		// that is seen on the form itself.  This would be 0-6 (7 tabs)
 		// We also fix drawnumber, so we don't display too many tabs since the pages
 		// will be empty.
-		drawnumber = (number - ((psForm->TabMultiplier - 1) * psForm->maxTabsShown));
-		if (drawnumber > psForm->maxTabsShown)
-		{
-			drawnumber = psForm->maxTabsShown ;
-		}
-		selected = (selected % psForm->maxTabsShown);	//Go from Virtual range, to our range
+		drawNumber -= (psForm->TabMultiplier - 1)*psForm->maxTabsShown;
+		drawNumber = std::min(drawNumber, psForm->maxTabsShown);
+		selected = selected % psForm->maxTabsShown;  //Go from Virtual range, to our range
 
 		if (hilite != 65535)			//sigh.  Don't blame me for this!It is THEIR 'hack'.
 		{
@@ -877,225 +884,48 @@ static void formDisplayTTabs(W_TABFORM *psForm, SDWORD x0, SDWORD y0,
 	else
 	{
 		// normal draw
-		drawnumber = number;
+		drawNumber = number;
 	}
-	for (i = 0; i < drawnumber; i++)
+	for (unsigned i = 0; i < drawNumber; ++i)
 	{
 		if (psForm->pTabDisplay)
 		{
-			psForm->pTabDisplay(psForm, WFORM_TABTOP, i, i == selected, i == hilite, x, y0, width, height);
+			psForm->pTabDisplay(psForm, psForm->majorPos, i, i == selected, i == hilite, x, y, width, height);
 		}
 		else
 		{
 			if (i == selected)
 			{
 				/* Fill in the tab */
-				pie_BoxFill(x + 1, y0 + 1, x1 - 1, y1, pColours[WCOL_BKGRND]);
+				pie_BoxFill(x + 1, y + 1, x1 - 1, y1, pColours[WCOL_BKGRND]);
 				/* Draw the outline */
-				iV_Line(x, y0 + 2, x, y1 - 1, pColours[WCOL_LIGHT]);
-				iV_Line(x, y0 + 2, x + 2, y0, pColours[WCOL_LIGHT]);
-				iV_Line(x + 2, y0, x1 - 1, y0, pColours[WCOL_LIGHT]);
-				iV_Line(x1, y0 + 1, x1, y1, pColours[WCOL_DARK]);
+				iV_Line(x, y + 2, x, y1 - 1, pColours[WCOL_LIGHT]);
+				iV_Line(x, y + 2, x + 2, y, pColours[WCOL_LIGHT]);
+				iV_Line(x + 2, y, x1 - 1, y, pColours[WCOL_LIGHT]);
+				iV_Line(x1, y + 1, x1, y1, pColours[WCOL_DARK]);
 			}
 			else
 			{
 				/* Fill in the tab */
-				pie_BoxFill(x + 1, y0 + 2, x1 - 1, y1 - 1, pColours[WCOL_BKGRND]);
+				pie_BoxFill(x + 1, y + 2, x1 - 1, y1 - 1, pColours[WCOL_BKGRND]);
 				/* Draw the outline */
-				iV_Line(x, y0 + 3, x, y1 - 1, pColours[WCOL_LIGHT]);
-				iV_Line(x, y0 + 3, x + 2, y0 + 1, pColours[WCOL_LIGHT]);
-				iV_Line(x + 2, y0 + 1, x1 - 1, y0 + 1, pColours[WCOL_LIGHT]);
-				iV_Line(x1, y0 + 2, x1, y1 - 1, pColours[WCOL_DARK]);
+				iV_Line(x, y + 3, x, y1 - 1, pColours[WCOL_LIGHT]);
+				iV_Line(x, y + 3, x + 2, y + 1, pColours[WCOL_LIGHT]);
+				iV_Line(x + 2, y + 1, x1 - 1, y + 1, pColours[WCOL_LIGHT]);
+				iV_Line(x1, y + 2, x1, y1 - 1, pColours[WCOL_DARK]);
 			}
 			if (i == hilite)
 			{
 				/* Draw the hilite box */
-				iV_Box(x + 2, y0 + 4, x1 - 3, y1 - 3, pColours[WCOL_HILITE]);
+				iV_Box(x + 2, y + 4, x1 - 3, y1 - 3, pColours[WCOL_HILITE]);
 			}
 		}
-		x += width + TabGap;
-		x1 += width + TabGap;
+		x += xDelta;
+		x1 += xDelta;
+		y += yDelta;
+		y1 += yDelta;
 	}
 }
-
-
-/* Draw bottom tabs */
-static void formDisplayBTabs(W_TABFORM *psForm, SDWORD x0, SDWORD y0,
-        UDWORD width, UDWORD height,
-        UDWORD number, UDWORD selected, UDWORD hilite,
-        PIELIGHT *pColours, UDWORD TabGap)
-{
-	SDWORD	x, x1, y1;
-	UDWORD	i;
-
-#if NO_DISPLAY_SINGLE_TABS
-	if (number == 1)
-	{
-		/* Don't display single tabs */
-		return;
-	}
-#endif
-
-	x = x0 + 2;
-	x1 = x + width - 2;
-	y1 = y0 + height;
-	for (i = 0; i < number; i++)
-	{
-		if (psForm->pTabDisplay)
-		{
-			psForm->pTabDisplay(psForm, WFORM_TABBOTTOM, i, i == selected, i == hilite, x, y0, width, height);
-		}
-		else
-		{
-			if (i == selected)
-			{
-				/* Fill in the tab */
-				pie_BoxFill(x + 1, y0, x1 - 1, y1 - 1, pColours[WCOL_BKGRND]);
-				/* Draw the outline */
-				iV_Line(x, y0, x, y1 - 1, pColours[WCOL_LIGHT]);
-				iV_Line(x, y1, x1 - 3, y1, pColours[WCOL_DARK]);
-				iV_Line(x1 - 2, y1, x1, y1 - 2, pColours[WCOL_DARK]);
-				iV_Line(x1, y1 - 3, x1, y0 + 1, pColours[WCOL_DARK]);
-			}
-			else
-			{
-				/* Fill in the tab */
-				pie_BoxFill(x + 1, y0 + 1, x1 - 1, y1 - 2, pColours[WCOL_BKGRND]);
-				/* Draw the outline */
-				iV_Line(x, y0 + 1, x, y1 - 1, pColours[WCOL_LIGHT]);
-				iV_Line(x + 1, y1 - 1, x1 - 3, y1 - 1, pColours[WCOL_DARK]);
-				iV_Line(x1 - 2, y1 - 1, x1, y1 - 3, pColours[WCOL_DARK]);
-				iV_Line(x1, y1 - 4, x1, y0 + 1, pColours[WCOL_DARK]);
-			}
-			if (i == hilite)
-			{
-				/* Draw the hilite box */
-				iV_Box(x + 2, y0 + 3, x1 - 3, y1 - 4, pColours[WCOL_HILITE]);
-			}
-		}
-		x += width + TabGap;
-		x1 += width + TabGap;
-	}
-}
-
-
-/* Draw left tabs */
-static void formDisplayLTabs(W_TABFORM *psForm, SDWORD x0, SDWORD y0,
-        UDWORD width, UDWORD height,
-        UDWORD number, UDWORD selected, UDWORD hilite,
-        PIELIGHT *pColours, UDWORD TabGap)
-{
-	SDWORD	x1, y, y1;
-	UDWORD	i;
-
-#if NO_DISPLAY_SINGLE_TABS
-	if (number == 1)
-	{
-		/* Don't display single tabs */
-		return;
-	}
-#endif
-
-	x1 = x0 + width;
-	y = y0 + 2;
-	y1 = y + height - 2;
-	for (i = 0; i < number; i++)
-	{
-		if (psForm->pTabDisplay)
-		{
-			psForm->pTabDisplay(psForm, WFORM_TABLEFT, i, i == selected, i == hilite, x0, y, width, height);
-		}
-		else
-		{
-			if (i == selected)
-			{
-				/* Fill in the tab */
-				pie_BoxFill(x0 + 1, y + 1, x1, y1 - 1, pColours[WCOL_BKGRND]);
-				/* Draw the outline */
-				iV_Line(x0, y, x1 - 1, y, pColours[WCOL_LIGHT]);
-				iV_Line(x0, y + 1, x0, y1 - 2, pColours[WCOL_LIGHT]);
-				iV_Line(x0 + 1, y1 - 1, x0 + 2, y1, pColours[WCOL_DARK]);
-				iV_Line(x0 + 3, y1, x1, y1, pColours[WCOL_DARK]);
-			}
-			else
-			{
-				/* Fill in the tab */
-				pie_BoxFill(x0 + 2, y + 1, x1 - 1, y1 - 1, pColours[WCOL_BKGRND]);
-				/* Draw the outline */
-				iV_Line(x0 + 1, y, x1 - 1, y, pColours[WCOL_LIGHT]);
-				iV_Line(x0 + 1, y + 1, x0 + 1, y1 - 2, pColours[WCOL_LIGHT]);
-				iV_Line(x0 + 2, y1 - 1, x0 + 3, y1, pColours[WCOL_DARK]);
-				iV_Line(x0 + 4, y1, x1 - 1, y1, pColours[WCOL_DARK]);
-			}
-			if (i == hilite)
-			{
-				iV_Box(x0 + 4, y + 2, x1 - 2, y1 - 3, pColours[WCOL_HILITE]);
-			}
-		}
-		y += height + TabGap;
-		y1 += height + TabGap;
-	}
-}
-
-
-/* Draw right tabs */
-static void formDisplayRTabs(W_TABFORM *psForm, SDWORD x0, SDWORD y0,
-        UDWORD width, UDWORD height,
-        UDWORD number, UDWORD selected, UDWORD hilite,
-        PIELIGHT *pColours, UDWORD TabGap)
-{
-	SDWORD	x1, y, y1;
-	UDWORD	i;
-
-#if NO_DISPLAY_SINGLE_TABS
-	if (number == 1)
-	{
-		/* Don't display single tabs */
-		return;
-	}
-#endif
-
-	x1 = x0 + width;
-	y = y0 + 2;
-	y1 = y + height - 2;
-	for (i = 0; i < number; i++)
-	{
-		if (psForm->pTabDisplay)
-		{
-			psForm->pTabDisplay(psForm, WFORM_TABRIGHT, i, i == selected, i == hilite, x0, y, width, height);
-		}
-		else
-		{
-			if (i == selected)
-			{
-				/* Fill in the tab */
-				pie_BoxFill(x0, y + 1, x1 - 1, y1 - 1, pColours[WCOL_BKGRND]);
-				/* Draw the outline */
-				iV_Line(x0, y, x1 - 1, y, pColours[WCOL_LIGHT]);
-				iV_Line(x1, y, x1, y1 - 2, pColours[WCOL_DARK]);
-				iV_Line(x1 - 1, y1 - 1, x1 - 2, y1, pColours[WCOL_DARK]);
-				iV_Line(x1 - 3, y1, x0, y1, pColours[WCOL_DARK]);
-			}
-			else
-			{
-				/* Fill in the tab */
-				pie_BoxFill(x0 + 1, y + 1, x1 - 2, y1 - 1, pColours[WCOL_BKGRND]);
-				/* Draw the outline */
-				iV_Line(x0 + 1, y, x1 - 1, y, pColours[WCOL_LIGHT]);
-				iV_Line(x1 - 1, y, x1 - 1, y1 - 2, pColours[WCOL_DARK]);
-				iV_Line(x1 - 2, y1 - 1, x1 - 3, y1, pColours[WCOL_DARK]);
-				iV_Line(x1 - 4, y1, x0 + 1, y1, pColours[WCOL_DARK]);
-			}
-			if (i == hilite)
-			{
-				iV_Box(x0 + 2, y + 2, x1 - 4, y1 - 3, pColours[WCOL_HILITE]);
-			}
-		}
-		y += height + TabGap;
-		y1 += height + TabGap;
-	}
-}
-
 
 /* Display a tabbed form */
 void formDisplayTabbed(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
@@ -1133,31 +963,31 @@ void formDisplayTabbed(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGH
 	switch (psForm->majorPos)
 	{
 	case WFORM_TABTOP:
-		formDisplayTTabs(psForm, x0 + psForm->majorOffset, y0 - psForm->tabMajorThickness + psForm->tabVertOffset,
+		formDisplayTabs(psForm, x0 + psForm->majorOffset, y0 - psForm->tabMajorThickness + psForm->tabVertOffset,
 		        psForm->majorSize, psForm->tabMajorThickness,
 		        psForm->numMajor, psForm->majorT, psForm->tabHiLite,
 		        pColours, psForm->tabMajorGap);
 		break;
 	case WFORM_TABBOTTOM:
-		formDisplayBTabs(psForm, x0 + psForm->majorOffset, y1 + psForm->tabVertOffset,
+		formDisplayTabs(psForm, x0 + psForm->majorOffset, y1 + psForm->tabVertOffset,
 		        psForm->majorSize, psForm->tabMajorThickness,
 		        psForm->numMajor, psForm->majorT, psForm->tabHiLite,
 		        pColours, psForm->tabMajorGap);
 		break;
 	case WFORM_TABLEFT:
-		formDisplayLTabs(psForm, x0 - psForm->tabMajorThickness + psForm->tabHorzOffset, y0 + psForm->majorOffset,
+		formDisplayTabs(psForm, x0 - psForm->tabMajorThickness + psForm->tabHorzOffset, y0 + psForm->majorOffset,
 		        psForm->tabMajorThickness, psForm->majorSize,
 		        psForm->numMajor, psForm->majorT, psForm->tabHiLite,
 		        pColours, psForm->tabMajorGap);
 		break;
 	case WFORM_TABRIGHT:
-		formDisplayRTabs(psForm, x1 - psForm->tabHorzOffset, y0 + psForm->majorOffset,
+		formDisplayTabs(psForm, x1 - psForm->tabHorzOffset, y0 + psForm->majorOffset,
 		        psForm->tabMajorThickness, psForm->majorSize,
 		        psForm->numMajor, psForm->majorT, psForm->tabHiLite,
 		        pColours, psForm->tabMajorGap);
 		break;
 	case WFORM_TABNONE:
-		ASSERT(false, "formDisplayTabbed: Cannot have a tabbed form with no major tabs");
+		ASSERT(false, "Cannot have a tabbed form with no major tabs");
 		break;
 	}
 }
