@@ -49,7 +49,6 @@ static SWORD ClickedAudioID = -1;
 
 /* Function prototypes */
 static void widgDisplayForm(W_FORM *psForm, UDWORD xOffset, UDWORD yOffset);
-static void widgRelease(WIDGET *psWidget);
 
 static WIDGET_KEY lastReleasedKey_DEPRECATED = WKEY_NONE;
 
@@ -159,7 +158,7 @@ void widgReleaseWidgetList(WIDGET *psWidgets)
 		{
 			psMouseOverWidget = NULL;
 		}
-		widgRelease(psCurr);
+		delete psCurr;
 	}
 }
 
@@ -171,13 +170,6 @@ void widgReleaseScreen(W_SCREEN *psScreen)
 
 	delete psScreen->psForm;
 	delete psScreen;
-}
-
-
-/* Release a widget */
-static void widgRelease(WIDGET *psWidget)
-{
-	delete psWidget;
 }
 
 /* Check whether an ID has been used on a form */
@@ -303,17 +295,16 @@ bool widgAddSlider(W_SCREEN *psScreen, const W_SLDINIT *psInit)
 }
 
 /* Delete a widget from a form */
-static bool widgDeleteFromForm(W_FORM *psForm, UDWORD id, W_CONTEXT *psContext)
+static bool widgDeleteFromForm(W_FORM *psForm, UDWORD id)
 {
 	WIDGET		*psPrev = NULL, *psCurr, *psNext;
 	W_TABFORM	*psTabForm;
 	W_MAJORTAB	*psMajor;
-	W_CONTEXT	sNewContext;
 
 	/* Clear the last hilite if necessary */
 	if ((psForm->psLastHiLite != NULL) && (psForm->psLastHiLite->id == id))
 	{
-		psForm->psLastHiLite->highlightLost(psContext);
+		psForm->psLastHiLite->highlightLost();
 		psForm->psLastHiLite = NULL;
 	}
 
@@ -331,7 +322,7 @@ static bool widgDeleteFromForm(W_FORM *psForm, UDWORD id, W_CONTEXT *psContext)
 			{
 				/* The widget is the first on this tab */
 				psNext = psMajor->psWidgets->psNext;
-				widgRelease(psMajor->psWidgets);
+				delete psMajor->psWidgets;
 				psMajor->psWidgets = psNext;
 
 				return true;
@@ -343,20 +334,14 @@ static bool widgDeleteFromForm(W_FORM *psForm, UDWORD id, W_CONTEXT *psContext)
 					if (psCurr->id == id)
 					{
 						psPrev->psNext = psCurr->psNext;
-						widgRelease(psCurr);
+						delete psCurr;
 
 						return true;
 					}
 					if (psCurr->type == WIDG_FORM)
 					{
 						/* Recurse down to other form */
-						sNewContext.psScreen = psContext->psScreen;
-						sNewContext.psForm = (W_FORM *)psCurr;
-						sNewContext.xOffset = psContext->xOffset - psCurr->x;
-						sNewContext.yOffset = psContext->yOffset - psCurr->y;
-						sNewContext.mx = psContext->mx - psCurr->x;
-						sNewContext.my = psContext->my - psCurr->y;
-						if (widgDeleteFromForm((W_FORM *)psCurr, id, &sNewContext))
+						if (widgDeleteFromForm((W_FORM *)psCurr, id))
 						{
 							return true;
 						}
@@ -377,7 +362,7 @@ static bool widgDeleteFromForm(W_FORM *psForm, UDWORD id, W_CONTEXT *psContext)
 		{
 			/* The widget is the first in the list */
 			psNext = psForm->psWidgets->psNext;
-			widgRelease(psForm->psWidgets);
+			delete psForm->psWidgets;
 			psForm->psWidgets = psNext;
 
 			return true;
@@ -390,20 +375,14 @@ static bool widgDeleteFromForm(W_FORM *psForm, UDWORD id, W_CONTEXT *psContext)
 				if (psCurr->id == id)
 				{
 					psPrev->psNext = psCurr->psNext;
-					widgRelease(psCurr);
+					delete psCurr;
 
 					return true;
 				}
 				if (psCurr->type == WIDG_FORM)
 				{
 					/* Recurse down to other form */
-					sNewContext.psScreen = psContext->psScreen;
-					sNewContext.psForm = (W_FORM *)psCurr;
-					sNewContext.xOffset = psContext->xOffset - psCurr->x;
-					sNewContext.yOffset = psContext->yOffset - psCurr->y;
-					sNewContext.mx = psContext->mx - psCurr->x;
-					sNewContext.my = psContext->my - psCurr->y;
-					if (widgDeleteFromForm((W_FORM *)psCurr, id, &sNewContext))
+					if (widgDeleteFromForm((W_FORM *)psCurr, id))
 					{
 						return true;
 					}
@@ -420,8 +399,6 @@ static bool widgDeleteFromForm(W_FORM *psForm, UDWORD id, W_CONTEXT *psContext)
 /* Delete a widget from the screen */
 void widgDelete(W_SCREEN *psScreen, UDWORD id)
 {
-	W_CONTEXT	sContext;
-
 	ASSERT(psScreen != NULL,
 	       "widgDelete: Invalid screen pointer");
 
@@ -439,13 +416,7 @@ void widgDelete(W_SCREEN *psScreen, UDWORD id)
 	}
 
 	/* Set up the initial context */
-	sContext.psScreen = psScreen;
-	sContext.psForm = (W_FORM *)psScreen->psForm;
-	sContext.xOffset = 0;
-	sContext.yOffset = 0;
-	sContext.mx = mouseX();
-	sContext.my = mouseY();
-	(void)widgDeleteFromForm((W_FORM *)psScreen->psForm, id, &sContext);
+	widgDeleteFromForm(psScreen->psForm, id);
 }
 
 /* Find a widget on a form from it's id number */
@@ -945,7 +916,7 @@ static void widgProcessClick(W_CONTEXT &psContext, WIDGET_KEY key, bool wasPress
 	{
 		if (psForm->psLastHiLite != NULL)
 		{
-			psForm->psLastHiLite->highlightLost(&sWidgContext);
+			psForm->psLastHiLite->highlightLost();
 		}
 		if (widgetUnderMouse != NULL)
 		{

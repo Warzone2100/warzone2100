@@ -769,27 +769,27 @@ void W_CLICKFORM::highlight(W_CONTEXT *psContext)
 
 
 /* Respond to the mouse moving off a form */
-void W_FORM::highlightLost(W_CONTEXT *psContext)
+void W_FORM::highlightLost()
 {
 	// If one of the widgets was highlighted that has to lose it as well.
 	if (psLastHiLite != NULL)
 	{
-		psLastHiLite->highlightLost(psContext);
+		psLastHiLite->highlightLost();
 	}
 	// Clear the tool tip if there is one.
 	tipStop(this);
 }
 
-void W_TABFORM::highlightLost(W_CONTEXT *psContext)
+void W_TABFORM::highlightLost()
 {
-	W_FORM::highlightLost(psContext);
+	W_FORM::highlightLost();
 
 	tabHiLite = (UWORD)(-1);
 }
 
-void W_CLICKFORM::highlightLost(W_CONTEXT *psContext)
+void W_CLICKFORM::highlightLost()
 {
-	W_FORM::highlightLost(psContext);
+	W_FORM::highlightLost();
 
 	state &= ~(WCLICK_DOWN | WCLICK_HILITE);
 }

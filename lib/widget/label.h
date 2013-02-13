@@ -34,7 +34,7 @@ struct W_LABEL : public WIDGET
 	W_LABEL(W_LABINIT const *init);
 
 	void highlight(W_CONTEXT *psContext);
-	void highlightLost(W_CONTEXT *);
+	void highlightLost();
 
 	QString getString() const;
 	void setString(QString string);

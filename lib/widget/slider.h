@@ -39,7 +39,7 @@ struct W_SLIDER : public WIDGET
 	void clicked(W_CONTEXT *psContext, WIDGET_KEY key);
 	void released(W_CONTEXT *psContext, WIDGET_KEY key);
 	void highlight(W_CONTEXT *psContext);
-	void highlightLost(W_CONTEXT *psContext);
+	void highlightLost();
 	void run(W_CONTEXT *psContext);
 
 	void setTip(QString string);

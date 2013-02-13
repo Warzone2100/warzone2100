@@ -525,7 +525,7 @@ void W_EDITBOX::highlight(W_CONTEXT *)
 
 
 /* Respond to the mouse moving off an edit box */
-void W_EDITBOX::highlightLost(W_CONTEXT *)
+void W_EDITBOX::highlightLost()
 {
 	W_EDITBOX *psWidget = this;
 	if (psWidget->state & WEDBS_DISABLE)

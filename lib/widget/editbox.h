@@ -44,7 +44,7 @@ struct W_EDITBOX : public WIDGET
 
 	void clicked(W_CONTEXT *psContext, WIDGET_KEY key);
 	void highlight(W_CONTEXT *psContext);
-	void highlightLost(W_CONTEXT *psContext);
+	void highlightLost();
 	void focusLost(W_SCREEN *psScreen);
 	void run(W_CONTEXT *psContext);
 

@@ -203,7 +203,7 @@ void W_BUTTON::highlight(W_CONTEXT *psContext)
 
 
 /* Respond to the mouse moving off a button */
-void W_BUTTON::highlightLost(W_CONTEXT *)
+void W_BUTTON::highlightLost()
 {
 	state &= ~(WBUTS_DOWN | WBUTS_HILITE);
 	if (!pTip.isEmpty())

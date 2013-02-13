@@ -76,7 +76,7 @@ struct WIDGET
 	virtual void clicked(W_CONTEXT *, WIDGET_KEY = WKEY_PRIMARY) {}
 	virtual void released(W_CONTEXT *, WIDGET_KEY = WKEY_PRIMARY) {}
 	virtual void highlight(W_CONTEXT *) {}
-	virtual void highlightLost(W_CONTEXT *) {}
+	virtual void highlightLost() {}
 	virtual void focusLost(W_SCREEN *) {}
 	virtual void run(W_CONTEXT *) {}
 

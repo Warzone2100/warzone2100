@@ -289,7 +289,7 @@ void W_SLIDER::highlight(W_CONTEXT *)
 
 
 /* Respond to the mouse moving off a slider */
-void W_SLIDER::highlightLost(W_CONTEXT *)
+void W_SLIDER::highlightLost()
 {
 	state &= ~SLD_HILITE;
 }

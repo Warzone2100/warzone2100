@@ -32,7 +32,7 @@ struct W_BARGRAPH : public WIDGET
 	W_BARGRAPH(W_BARINIT const *init);
 
 	void highlight(W_CONTEXT *psContext);
-	void highlightLost(W_CONTEXT *);
+	void highlightLost();
 
 	void setTip(QString string);
 

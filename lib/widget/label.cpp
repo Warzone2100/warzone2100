@@ -97,7 +97,7 @@ void W_LABEL::highlight(W_CONTEXT *psContext)
 
 
 /* Respond to the mouse moving off a label */
-void W_LABEL::highlightLost(W_CONTEXT *)
+void W_LABEL::highlightLost()
 {
 	if (!pTip.isEmpty())
 	{

@@ -34,7 +34,7 @@ struct W_FORM : public WIDGET
 	~W_FORM();
 
 	void clicked(W_CONTEXT *psContext, WIDGET_KEY key);
-	void highlightLost(W_CONTEXT *psContext);
+	void highlightLost();
 
 	bool            disableChildren;        ///< Disable all child widgets if true
 	UWORD           Ax0, Ay0, Ax1, Ay1;     ///< Working coords for animations.
@@ -62,7 +62,7 @@ struct W_TABFORM : public W_FORM
 	~W_TABFORM();
 
 	void released(W_CONTEXT *psContext, WIDGET_KEY key);
-	void highlightLost(W_CONTEXT *psContext);
+	void highlightLost();
 	void run(W_CONTEXT *psContext);
 
 	UWORD           majorPos;                       // Position of the tabs on the form
@@ -107,7 +107,7 @@ struct W_CLICKFORM : public W_FORM
 	void clicked(W_CONTEXT *psContext, WIDGET_KEY key);
 	void released(W_CONTEXT *psContext, WIDGET_KEY key);
 	void highlight(W_CONTEXT *psContext);
-	void highlightLost(W_CONTEXT *psContext);
+	void highlightLost();
 	void run(W_CONTEXT *psContext);
 
 	unsigned getState();

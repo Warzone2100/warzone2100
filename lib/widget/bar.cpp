@@ -160,7 +160,7 @@ void W_BARGRAPH::highlight(W_CONTEXT *psContext)
 
 
 /* Respond to the mouse moving off a barGraph */
-void W_BARGRAPH::highlightLost(W_CONTEXT *)
+void W_BARGRAPH::highlightLost()
 {
 	tipStop(this);
 }
