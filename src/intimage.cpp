@@ -150,11 +150,6 @@ TABDEF	StandardTab = {
 	IMAGE_TAB1DOWN,		// Major tab clicked.
 	IMAGE_TABHILIGHT,	// Major tab hilighted by mouse.
 	IMAGE_TABSELECTED,	// Major tab currently selected.
-
-	IMAGE_TAB1,			// Minor tab tab Normal.
-	IMAGE_TAB1DOWN,		// Minor tab clicked.
-	IMAGE_TABHILIGHT,	// Minor tab hilighted by mouse.
-	IMAGE_TABSELECTED,	// Minor tab currently selected.
 };
 
 TABDEF	SmallTab = {
@@ -162,11 +157,6 @@ TABDEF	SmallTab = {
 	IMAGE_TAB1DOWN_SM,		// Major tab clicked.
 	IMAGE_TABHILIGHT_SM,	// Major tab hilighted by mouse.
 	IMAGE_TAB1SELECTED_SM,	// Major tab currently selected.
-
-	IMAGE_TAB1_SM,			// Minor tab tab Normal.
-	IMAGE_TAB1DOWN_SM,		// Minor tab clicked.
-	IMAGE_TABHILIGHT_SM,	// Minor tab hilighted by mouse.
-	IMAGE_TAB1SELECTED_SM,	// Minor tab currently selected.
 };
 
 // Read bitmaps used by the interface.

@@ -1132,33 +1132,17 @@ void AdjustTabFormSize(W_TABFORM *Form, UDWORD *x0, UDWORD *y0, UDWORD *x1, UDWO
 	{
 		*x0 += Form->tabMajorThickness - Form->tabHorzOffset;
 	}
-	else if (Form->minorPos == WFORM_TABLEFT)
-	{
-		*x0 += Form->tabMinorThickness - Form->tabHorzOffset;
-	}
 	if (Form->majorPos == WFORM_TABRIGHT)
 	{
 		*x1 -= Form->tabMajorThickness - Form->tabHorzOffset;
-	}
-	else if (Form->minorPos == WFORM_TABRIGHT)
-	{
-		*x1 -= Form->tabMinorThickness - Form->tabHorzOffset;
 	}
 	if (Form->majorPos == WFORM_TABTOP)
 	{
 		*y0 += Form->tabMajorThickness - Form->tabVertOffset;
 	}
-	else if (Form->minorPos == WFORM_TABTOP)
-	{
-		*y0 += Form->tabMinorThickness - Form->tabVertOffset;
-	}
 	if (Form->majorPos == WFORM_TABBOTTOM)
 	{
 		*y1 -= Form->tabMajorThickness - Form->tabVertOffset;
-	}
-	else if (Form->minorPos == WFORM_TABBOTTOM)
-	{
-		*y1 -= Form->tabMinorThickness - Form->tabVertOffset;
 	}
 }
 
@@ -1602,36 +1586,20 @@ void intDisplayReticuleButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, 
 }
 
 
-void intDisplayTab(WIDGET *psWidget, UDWORD TabType, UDWORD Position,
+void intDisplayTab(WIDGET *psWidget, UDWORD Position,
         UDWORD Number, bool Selected, bool Hilight, UDWORD x, UDWORD y, UDWORD Width, UDWORD Height)
 {
 	TABDEF *Tab = (TABDEF *)psWidget->pUserData;
 
-	if (TabType == TAB_MAJOR)
-	{
-		iV_DrawImage(IntImages, (UWORD)Tab->MajorUp, x, y);
+	iV_DrawImage(IntImages, (UWORD)Tab->MajorUp, x, y);
 
-		if (Hilight)
-		{
-			iV_DrawImage(IntImages, (UWORD)Tab->MajorHilight, x, y);
-		}
-		else if (Selected)
-		{
-			iV_DrawImage(IntImages, (UWORD)Tab->MajorSelected, x, y);
-		}
+	if (Hilight)
+	{
+		iV_DrawImage(IntImages, (UWORD)Tab->MajorHilight, x, y);
 	}
-	else
+	else if (Selected)
 	{
-		iV_DrawImage(IntImages, (UWORD)(Tab->MinorUp), x, y);
-
-		if (Hilight)
-		{
-			iV_DrawImage(IntImages, Tab->MinorHilight, x, y);
-		}
-		else if (Selected)
-		{
-			iV_DrawImage(IntImages, Tab->MinorSelected, x, y);
-		}
+		iV_DrawImage(IntImages, (UWORD)Tab->MajorSelected, x, y);
 	}
 }
 

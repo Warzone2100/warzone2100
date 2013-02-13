@@ -39,11 +39,6 @@ struct TABDEF
 	SWORD MajorDown;		//< Index of image to use for tab pressed.
 	SWORD MajorHilight;		//< Index of image to use for tab hilighted by mouse.
 	SWORD MajorSelected;		//< Index of image to use for tab selected (same as pressed).
-
-	SWORD MinorUp;			//< As above but for minor tabs.
-	SWORD MinorDown;
-	SWORD MinorHilight;
-	SWORD MinorSelected;
 };
 
 extern IMAGEFILE *IntImages;	//< All the 2d graphics for the user interface.

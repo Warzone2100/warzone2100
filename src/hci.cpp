@@ -293,7 +293,7 @@ static BASE_STATS		*psPositionStats;
 static UWORD			objNumTabs;
 
 /* The tab positions of the object form when the structure form is displayed */
-static UWORD			objMajor, objMinor;
+static UWORD			objMajor;
 
 /* Store a list of stats pointers from the main structure stats */
 static STRUCTURE_STATS	**apsStructStatsList;
@@ -613,7 +613,7 @@ static FLAG_POSITION *intFindSelectedDelivPoint(void)
 //
 static void intDoScreenRefresh(void)
 {
-	UWORD			objMajor = 0, objMinor = 0, statMajor = 0, statMinor = 0;
+	UWORD           objMajor = 0, statMajor = 0;
 	FLAG_POSITION	*psFlag;
 
 	if (IntRefreshPending)
@@ -640,11 +640,11 @@ static void intDoScreenRefresh(void)
 			// store the current tab position
 			if (widgGetFromID(psWScreen, IDOBJ_TABFORM) != NULL)
 			{
-				widgGetTabs(psWScreen, IDOBJ_TABFORM, &objMajor, &objMinor);
+				widgGetTabs(psWScreen, IDOBJ_TABFORM, &objMajor);
 			}
 			if (StatsWasUp)
 			{
-				widgGetTabs(psWScreen, IDSTAT_TABFORM, &statMajor, &statMinor);
+				widgGetTabs(psWScreen, IDSTAT_TABFORM, &statMajor);
 			}
 			// now make sure the stats screen isn't up
 			if (widgGetFromID(psWScreen, IDSTAT_FORM) != NULL)
@@ -657,8 +657,8 @@ static void intDoScreenRefresh(void)
 			{
 				// refresh when unit dies
 				psObjSelected = NULL;
-				objMajor = objMinor = 0;
-				statMajor = statMinor = 0;
+				objMajor = 0;
+				statMajor = 0;
 			}
 
 			// see if there was a delivery point being positioned
@@ -699,15 +699,9 @@ static void intDoScreenRefresh(void)
 				if (objMajor >= widgGetNumTabMajor(psWScreen, IDOBJ_TABFORM))
 				{
 					objMajor = 0;	// reset
-					objMinor = 0;
 					debug(LOG_ERROR, "Reset tabs since objMajor is too big");
 				}
-				else if (objMinor >= widgGetNumTabMinor(psWScreen, IDOBJ_TABFORM, objMajor))
-				{
-					objMinor = 0;	// reset minor only
-					debug(LOG_ERROR, "Reset minor tabs since objMinor is too big");
-				}
-				widgSetTabs(psWScreen, IDOBJ_TABFORM, objMajor, objMinor);
+				widgSetTabs(psWScreen, IDOBJ_TABFORM, objMajor);
 			}
 
 			if (widgGetFromID(psWScreen, IDSTAT_TABFORM) != NULL)
@@ -715,15 +709,9 @@ static void intDoScreenRefresh(void)
 				if (statMajor >= widgGetNumTabMajor(psWScreen, IDSTAT_TABFORM))
 				{
 					statMajor = 0;	// reset
-					statMinor = 0;
 					debug(LOG_ERROR, "Reset tabs since statMajor is too big");
 				}
-				else if (statMinor >= widgGetNumTabMinor(psWScreen, IDSTAT_TABFORM, statMajor))
-				{
-					statMinor = 0;	// reset minor only
-					debug(LOG_ERROR, "Reset minor tabs since statMinor is too big");
-				}
-				widgSetTabs(psWScreen, IDSTAT_TABFORM, statMajor, statMinor);
+				widgSetTabs(psWScreen, IDSTAT_TABFORM, statMajor);
 			}
 
 			if (psFlag != NULL)
@@ -1113,7 +1101,7 @@ INT_RETVAL intRunWidgets(void)
 	INT_RETVAL		retCode;
 	bool			quitting = false;
 	UDWORD			structX, structY, structX2, structY2;
-	UWORD			objMajor, objMinor;
+	UWORD                   objMajor;
 	STRUCTURE		*psStructure;
 	DROID			*psDroid;
 	SDWORD			i;
@@ -1153,7 +1141,7 @@ INT_RETVAL intRunWidgets(void)
 			ASSERT(widgGetFromID(psWScreen, IDOBJ_TABFORM) != NULL, "No object form");
 
 			/* Remove the old screen */
-			widgGetTabs(psWScreen, IDOBJ_TABFORM, &objMajor, &objMinor);
+			widgGetTabs(psWScreen, IDOBJ_TABFORM, &objMajor);
 			intRemoveObject();
 
 			/* Add the new screen */
@@ -1176,11 +1164,11 @@ INT_RETVAL intRunWidgets(void)
 			/* Reset the tabs on the object screen */
 			if (objMajor > objNumTabs)
 			{
-				widgSetTabs(psWScreen, IDOBJ_TABFORM, objNumTabs, objMinor);
+				widgSetTabs(psWScreen, IDOBJ_TABFORM, objNumTabs);
 			}
 			else
 			{
-				widgSetTabs(psWScreen, IDOBJ_TABFORM, objMajor, objMinor);
+				widgSetTabs(psWScreen, IDOBJ_TABFORM, objMajor);
 			}
 		}
 		else if (intMode == INT_STAT)
@@ -1761,7 +1749,7 @@ static void intRunStats(void)
 static void intAddObjectStats(BASE_OBJECT *psObj, UDWORD id)
 {
 	BASE_STATS		*psStats;
-	UWORD			statMajor = 0, statMinor = 0, newStatMajor, newStatMinor;
+	UWORD               statMajor = 0, newStatMajor;
 	UDWORD			i, j, index;
 	UDWORD			count;
 	SDWORD			iconNumber, entryIN;
@@ -1771,17 +1759,14 @@ static void intAddObjectStats(BASE_OBJECT *psObj, UDWORD id)
 	intStopStructPosition();
 
 	/* Get the current tab pos */
-	widgGetTabs(psWScreen, IDOBJ_TABFORM, &objMajor, &objMinor);
-
-	/* if there is already a stats form up, remove it */
-	statMajor = statMinor = 0;
+	widgGetTabs(psWScreen, IDOBJ_TABFORM, &objMajor);
 
 	// Store the tab positions.
 	if (intMode == INT_STAT)
 	{
 		if (widgGetFromID(psWScreen, IDSTAT_FORM) != NULL)
 		{
-			widgGetTabs(psWScreen, IDSTAT_TABFORM, &statMajor, &statMinor);
+			widgGetTabs(psWScreen, IDSTAT_TABFORM, &statMajor);
 		}
 		intRemoveStatsNoAnim();
 	}
@@ -1870,15 +1855,14 @@ static void intAddObjectStats(BASE_OBJECT *psObj, UDWORD id)
 	if (psForm != NULL)
 	{
 		newStatMajor = psForm->numMajor;
-		newStatMinor = psForm->asMajor[statMajor].numMinor;
 
 		// Restore the tab positions.
 		if ((!psStats) && (widgGetFromID(psWScreen, IDSTAT_FORM) != NULL))
 		{
 			// only restore if we've still got at least that many tabs
-			if (newStatMajor > statMajor && newStatMinor > statMinor)
+			if (newStatMajor > statMajor)
 			{
-				widgSetTabs(psWScreen, IDSTAT_TABFORM, statMajor, statMinor);
+				widgSetTabs(psWScreen, IDSTAT_TABFORM, statMajor);
 			}
 		}
 	}
@@ -1889,7 +1873,7 @@ static void intAddObjectStats(BASE_OBJECT *psObj, UDWORD id)
 	objStatID = id;
 
 	/* Reset the tabs and lock the button */
-	widgSetTabs(psWScreen, IDOBJ_TABFORM, objMajor, objMinor);
+	widgSetTabs(psWScreen, IDOBJ_TABFORM, objMajor);
 	if (id != 0)
 	{
 		widgSetButtonState(psWScreen, id, WBUT_CLICKLOCK);
@@ -2274,14 +2258,14 @@ static void intProcessStats(UDWORD id)
 				}
 
 				// Get the tabs on the object form
-				widgGetTabs(psWScreen, IDOBJ_TABFORM, &objMajor, &objMinor);
+				widgGetTabs(psWScreen, IDOBJ_TABFORM, &objMajor);
 
 				// Close the stats box
 				intRemoveStats();
 				intMode = INT_OBJECT;
 
 				// Reset the tabs on the object form
-				widgSetTabs(psWScreen, IDOBJ_TABFORM, objMajor, objMinor);
+				widgSetTabs(psWScreen, IDOBJ_TABFORM, objMajor);
 
 				// Close the object box as well if selecting a location to build- no longer hide/reveal
 				// or if selecting a structure to demolish
@@ -2313,14 +2297,14 @@ static void intProcessStats(UDWORD id)
 	else if (id == IDSTAT_CLOSE)
 	{
 		/* Get the tabs on the object form */
-		widgGetTabs(psWScreen, IDOBJ_TABFORM, &objMajor, &objMinor);
+		widgGetTabs(psWScreen, IDOBJ_TABFORM, &objMajor);
 
 		/* Close the structure box without doing anything */
 		intRemoveStats();
 		intMode = INT_OBJECT;
 
 		/* Reset the tabs on the build form */
-		widgSetTabs(psWScreen, IDOBJ_TABFORM, objMajor, objMinor);
+		widgSetTabs(psWScreen, IDOBJ_TABFORM, objMajor);
 
 		/* Unlock the stats button */
 		widgSetButtonState(psWScreen, objStatID, 0);
@@ -3302,7 +3286,6 @@ static bool intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected, 
 	sFormInit.height = OBJ_HEIGHT;
 	sFormInit.numMajor = numForms(apsObjectList.size(), (OBJ_WIDTH - OBJ_GAP) / (OBJ_BUTWIDTH + OBJ_GAP));
 	sFormInit.majorPos = WFORM_TABTOP;
-	sFormInit.minorPos = WFORM_TABNONE;
 	sFormInit.majorSize = OBJ_TABWIDTH;
 	sFormInit.majorOffset = OBJ_TABOFFSET;
 	sFormInit.tabVertOffset = (OBJ_TABHEIGHT / 2);
@@ -3318,10 +3301,6 @@ static bool intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected, 
 	}
 	sFormInit.maxTabsShown = WFORM_MAXMAJOR;
 	sFormInit.numMajor = std::min<unsigned>(sFormInit.numMajor, WFORM_MAXMAJOR);
-	for (unsigned i = 0; i < sFormInit.numMajor; ++i)
-	{
-		sFormInit.aNumMinors[i] = 1;
-	}
 	if (!widgAddForm(psWScreen, &sFormInit))
 	{
 		return false;
@@ -3335,7 +3314,6 @@ static bool intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected, 
 	sBFormInit.formID = IDOBJ_TABFORM;
 	sBFormInit.id = IDOBJ_OBJSTART;
 	sBFormInit.majorID = 0;
-	sBFormInit.minorID = 0;
 	sBFormInit.style = WFORM_CLICKABLE;
 	sBFormInit.x = OBJ_STARTX;
 	sBFormInit.y = OBJ_STARTY;
@@ -3741,7 +3719,7 @@ static bool intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected, 
 		}
 	}
 
-	widgSetTabs(psWScreen, IDOBJ_TABFORM, (UWORD)displayForm, 0);
+	widgSetTabs(psWScreen, IDOBJ_TABFORM, (UWORD)displayForm);
 
 	// if the selected object isn't on one of the main buttons (too many objects)
 	// reset the selected pointer
@@ -4116,7 +4094,6 @@ static void intSetStats(UDWORD id, BASE_STATS *psStats)
 	sFormInit.formID = IDOBJ_TABFORM;
 	butPerForm = (OBJ_WIDTH - OBJ_GAP) / (OBJ_BUTWIDTH + OBJ_GAP);
 	sFormInit.majorID = (UWORD)((id - IDOBJ_STATSTART) / butPerForm);
-	sFormInit.minorID = 0;
 	sFormInit.id = id;
 	sFormInit.style = WFORM_CLICKABLE | WFORM_SECONDARY;
 	butPos = (id - IDOBJ_STATSTART) % butPerForm;
@@ -4416,7 +4393,6 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 	sFormInit.numStats = numStats;			// store # of 'stats' (items) in form
 	sFormInit.numMajor = numForms(numStats, butPerForm);	// STUPID name for # of tabs!
 	sFormInit.majorPos = WFORM_TABTOP;
-	sFormInit.minorPos = WFORM_TABNONE;
 	sFormInit.majorSize = OBJ_TABWIDTH;
 	sFormInit.majorOffset = OBJ_TABOFFSET;
 	sFormInit.tabVertOffset = (OBJ_TABHEIGHT / 2);
@@ -4440,10 +4416,6 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 			sFormInit.TabMultiplier = 1;		// Enable our tabMultiplier buttons.
 		}
 	}
-	for (i = 0; i < sFormInit.numMajor; i++)	// Sets # of tab's minors
-	{
-		sFormInit.aNumMinors[i] = 1;
-	}
 	if (!widgAddForm(psWScreen, &sFormInit))
 	{
 		return false;
@@ -4453,7 +4425,6 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 	W_FORMINIT sBFormInit;
 	sBFormInit.formID = IDSTAT_TABFORM;
 	sBFormInit.majorID = 0;
-	sBFormInit.minorID = 0;
 	sBFormInit.id = IDSTAT_START;
 	sBFormInit.style = WFORM_CLICKABLE | WFORM_SECONDARY;
 	sBFormInit.x = STAT_BUTX;
@@ -4664,7 +4635,7 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 	/* Set the correct page and button if necessary */
 	if (statID)
 	{
-		widgSetTabs(psWScreen, IDSTAT_TABFORM, (UWORD)statForm, 0);
+		widgSetTabs(psWScreen, IDSTAT_TABFORM, (UWORD)statForm);
 		widgSetButtonState(psWScreen, statID, WBUT_CLICKLOCK);
 	}
 
@@ -5323,7 +5294,6 @@ bool intAddProximityButton(PROXIMITY_DISPLAY *psProxDisp, UDWORD inc)
 	ASSERT(sBFormInit.id < IDPROX_END, "Invalid proximity message button ID %d", (int)sBFormInit.id);
 
 	sBFormInit.majorID = 0;
-	sBFormInit.minorID = 0;
 	sBFormInit.style = WFORM_CLICKABLE;
 	sBFormInit.width = PROX_BUTWIDTH;
 	sBFormInit.height = PROX_BUTHEIGHT;

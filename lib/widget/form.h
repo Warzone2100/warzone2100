@@ -45,25 +45,13 @@ struct W_FORM : public WIDGET
 	WIDGET         *psWidgets;              ///< The widgets on the form
 };
 
-/* Information for a minor tab */
-struct W_MINORTAB
-{
-	W_MINORTAB();
-
-	/* Graphics data for the tab will go here */
-	WIDGET		*psWidgets;			// Widgets on the tab
-	QString         pTip;                           // Tool tip
-};
-
 /* Information for a major tab */
 struct W_MAJORTAB
 {
 	W_MAJORTAB();
 
 	/* Graphics data for the tab will go here */
-	UWORD			lastMinor;					// Store which was the last selected minor tab
-	UWORD			numMinor;
-	W_MINORTAB		asMinor[WFORM_MAXMINOR];	// Minor tab information
+	WIDGET *                psWidgets;              // Widgets on the tab
 	QString                 pTip;
 };
 
@@ -77,17 +65,14 @@ struct W_TABFORM : public W_FORM
 	void highlightLost(W_CONTEXT *psContext);
 	void run(W_CONTEXT *psContext);
 
-	UWORD		majorPos, minorPos;		// Position of the tabs on the form
-	UWORD		majorSize, minorSize;	// the size of tabs horizontally and vertically
+	UWORD           majorPos;                       // Position of the tabs on the form
+	UWORD           majorSize;                      // the size of tabs horizontally and vertically
 	UWORD		tabMajorThickness;			// The thickness of the tabs
-	UWORD		tabMinorThickness;			// The thickness of the tabs
 	UWORD		tabMajorGap;					// The gap between tabs
-	UWORD		tabMinorGap;					// The gap between tabs
 	SWORD		tabVertOffset;				// Tab form overlap offset.
 	SWORD		tabHorzOffset;				// Tab form overlap offset.
 	SWORD		majorOffset;			// Tab start offset.
-	SWORD		minorOffset;			// Tab start offset.
-	UWORD		majorT, minorT;			// which tab is selected
+	UWORD           majorT;                         // which tab is selected
 	UWORD		state;					// Current state of the widget
 	UWORD		tabHiLite;				// which tab is hilited.
 	/* NOTE: If tabHiLite is (UWORD)(-1) then there is no hilite.  A bit of a hack I know */
@@ -152,7 +137,7 @@ struct W_FORMGETALL
 	WIDGET		*psGAWList;
 	W_TABFORM	*psGAWForm;
 	W_MAJORTAB	*psGAWMajor;
-	UDWORD		GAWMajor, GAWMinor;
+	UDWORD          GAWMajor;
 };
 
 /* Initialise the formGetAllWidgets function */

@@ -103,7 +103,7 @@ struct W_INIT
 	W_INIT();
 
 	UDWORD                  formID;                 ///< ID number of form to put widget on. ID == 0 specifies the default form for the screen
-	UWORD                   majorID, minorID;       ///< Which major and minor tab to put the widget on for a tabbed form
+	UWORD                   majorID;                ///< Which tab to put the widget on for a tabbed form
 	UDWORD                  id;                     ///< Unique id number (chosen by user)
 	UDWORD                  style;                  ///< widget style
 	SWORD                   x, y;                   ///< screen location
@@ -139,11 +139,8 @@ struct W_INIT
 #define MAX_TAB_STD_SHOWN   4		// max # of tabs we can display using standard tab icons.
 #define MAX_TAB_SMALL_SHOWN 8		// max # of tabs we can display using small tab icons.
 #define TAB_SEVEN    7		//*with* tab scroll buttons, we can only (currently) show 7 max!
-// NOTE: enable TAB_MINOR at your own risk.  Have NOT testest new rotuines with that.
-#define TAB_MINOR 0	// Tab types passed into tab display callbacks.
-#define TAB_MAJOR 1
 
-typedef void (*TAB_DISPLAY)(WIDGET *psWidget, UDWORD TabType, UDWORD Position, UDWORD Number, bool Selected, bool Hilight, UDWORD x, UDWORD y, UDWORD Width, UDWORD Height);
+typedef void (*TAB_DISPLAY)(WIDGET *psWidget, UDWORD Position, UDWORD Number, bool Selected, bool Hilight, UDWORD x, UDWORD y, UDWORD Width, UDWORD Height);
 typedef void (*FONT_DISPLAY)(UDWORD x, UDWORD y, char *String);
 
 /** Form initialisation structure */
@@ -153,24 +150,20 @@ struct W_FORMINIT : public W_INIT
 
 	/* Data for a tabbed form */
 	bool                    disableChildren;
-	UWORD			majorPos, minorPos;		// Position of the tabs on the form
-	UWORD			majorSize, minorSize;		// Size of the tabs (in pixels)
-	SWORD			majorOffset, minorOffset;	// Tab start offset.
+	UWORD                   majorPos;                       // Position of the tabs on the form
+	UWORD                   majorSize;                      // Size of the tabs (in pixels)
+	SWORD                   majorOffset;                    // Tab start offset.
 	SWORD			tabVertOffset;			///< Tab form overlap offset.
 	SWORD			tabHorzOffset;			///< Tab form overlap offset.
 	UWORD			tabMajorThickness;		///< The thickness of the tabs
-	UWORD			tabMinorThickness;		///< The thickness of the tabs
 	UWORD			tabMajorGap;			///< The space between tabs
-	UWORD			tabMinorGap;			///< The space between tabs
 	UWORD			numStats;			///< Number of "stats" (items) in list
 	UWORD			numButtons;			///< Number of buttons per form
 	UWORD			numMajor;			///< Number of major tabs
-	UWORD			aNumMinors[WFORM_MAXMAJOR];	///< Number of minor tabs for each major
 	SWORD			TabMultiplier;			///< Used to tell system we got lots of (virtual) tabs to display
 	unsigned                maxTabsShown;                   ///< Maximum number of tabs shown at once.
 	const char		*pTip;				///< Tool tip for the form itself
 	char			*apMajorTips[WFORM_MAXMAJOR];	///< Tool tips for the major tabs
-	char			*apMinorTips[WFORM_MAXMAJOR][WFORM_MAXMINOR];	///< Tool tips for the minor tabs
 	TAB_DISPLAY		pTabDisplay;			///< Optional callback for displaying a tab.
 	WIDGET_DISPLAY		pFormDisplay;			///< Optional callback to display the form.
 };
@@ -316,16 +309,13 @@ extern const char *widgGetString(W_SCREEN *psScreen, UDWORD id);
 extern void widgSetString(W_SCREEN *psScreen, UDWORD id, const char *pText);
 
 /** Set the current tabs for a tab form */
-extern void widgSetTabs(W_SCREEN *psScreen, UDWORD id, UWORD major, UWORD minor);
+void widgSetTabs(W_SCREEN *psScreen, UDWORD id, UWORD major);
 
 /** Get the current tabs for a tab form */
-extern void widgGetTabs(W_SCREEN *psScreen, UDWORD id, UWORD *pMajor, UWORD *pMinor);
+void widgGetTabs(W_SCREEN *psScreen, UDWORD id, UWORD *pMajor);
 
 /** Get the number of major tab in a tab form. */
 int widgGetNumTabMajor(W_SCREEN *psScreen, UDWORD id);
-
-/** Get the number of minor tabs in a tab form. */
-int widgGetNumTabMinor(W_SCREEN *psScreen, UDWORD id, UWORD pMajor);
 
 /** Get the current position of a widget */
 extern void widgGetPos(W_SCREEN *psScreen, UDWORD id, SWORD *pX, SWORD *pY);

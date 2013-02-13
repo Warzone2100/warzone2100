@@ -213,7 +213,6 @@ bool startLimitScreen(void)
 	sFormInit.height =LIMITSH - 4;
 	sFormInit.numMajor = numForms(numButtons, BUTPERFORM);
 	sFormInit.majorPos = WFORM_TABTOP;
-	sFormInit.minorPos = WFORM_TABNONE;
 	sFormInit.majorSize = OBJ_TABWIDTH+3; //!!
 	sFormInit.majorOffset = OBJ_TABOFFSET;
 	sFormInit.tabVertOffset = (OBJ_TABHEIGHT/2);			//(DES_TAB_HEIGHT/2)+2;
@@ -221,11 +220,6 @@ bool startLimitScreen(void)
 	sFormInit.pUserData = &StandardTab;
 	sFormInit.pTabDisplay = intDisplayTab;
 
-	// TABFIXME --unsure if needs fixing yet.
-	for (i=0; i< sFormInit.numMajor; i++)
-	{
-		sFormInit.aNumMinors[i] = 1;
-	}
 	widgAddForm(psWScreen, &sFormInit);
 
 	//Put the buttons on it

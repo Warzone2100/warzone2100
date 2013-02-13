@@ -134,7 +134,7 @@ static	UDWORD			g_iLaunchTime = 0;
 //used for audio message for reinforcements
 static  bool            bFirstTransporter;
 //the tab positions of the DroidsAvail window
-static  UWORD           objMajor = 0, objMinor = 0;
+static  UWORD           objMajor = 0;
 
 /*functions */
 static bool intAddTransporterContents(void);
@@ -474,7 +474,6 @@ void intRemoveTransporterLaunch(void)
 /* Add the Transporter Button form */
 bool intAddTransButtonForm(void)
 {
-	UDWORD			numButtons, i;
 	SDWORD			BufferID;
 	DROID			*psDroid;
 
@@ -489,13 +488,12 @@ bool intAddTransButtonForm(void)
 	sFormInit.y = TRANS_TABY;
 
 	sFormInit.majorPos = WFORM_TABTOP;
-	sFormInit.minorPos = WFORM_TABNONE;
 	sFormInit.majorSize = OBJ_TABWIDTH;
 	sFormInit.majorOffset = OBJ_TABOFFSET;
 	sFormInit.tabVertOffset = (OBJ_TABHEIGHT / 2);
 	sFormInit.tabMajorThickness = OBJ_TABHEIGHT;
 
-	numButtons = 0;
+	unsigned numButtons = 0;
 	/*work out the number of buttons */
 	for (psDroid = transInterfaceDroidList(); psDroid; psDroid = psDroid->psNext)
 	{
@@ -525,11 +523,6 @@ bool intAddTransButtonForm(void)
 		// standard sized tab icons.
 		sFormInit.numMajor = MAX_TAB_STD_SHOWN;
 	}
-	//set minor tabs to 1
-	for (i = 0; i < sFormInit.numMajor; i++)
-	{
-		sFormInit.aNumMinors[i] = 1;
-	}
 
 	if (!widgAddForm(psWScreen, &sFormInit))
 	{
@@ -542,7 +535,6 @@ bool intAddTransButtonForm(void)
 	sBFormInit.formID = IDTRANS_TABFORM;
 	sBFormInit.id = IDTRANS_START;
 	sBFormInit.majorID = 0;
-	sBFormInit.minorID = 0;
 	sBFormInit.style = WFORM_CLICKABLE;
 	sBFormInit.x = OBJ_STARTX;
 	sBFormInit.y = OBJ_STARTY;
@@ -583,7 +575,7 @@ bool intAddTransButtonForm(void)
 			if (psDroid == psCurrTransporter)
 			{
 				widgSetButtonState(psWScreen, sBFormInit.id, WBUT_LOCK);
-				widgSetTabs(psWScreen, IDTRANS_TABFORM, sBFormInit.majorID, 0);
+				widgSetTabs(psWScreen, IDTRANS_TABFORM, sBFormInit.majorID);
 			}
 
 			//now do status button
@@ -629,7 +621,6 @@ bool intAddTransButtonForm(void)
 /* Add the Transporter Contents form */
 bool intAddTransContentsForm(void)
 {
-	UDWORD			i;
 	SDWORD			BufferID;
 	DROID			*psDroid, *psNext;
 
@@ -644,7 +635,6 @@ bool intAddTransContentsForm(void)
 	sFormInit.y = TRANSCONT_TABY;
 
 	sFormInit.majorPos = WFORM_TABTOP;
-	sFormInit.minorPos = WFORM_TABNONE;
 	sFormInit.majorSize = OBJ_TABWIDTH;
 	sFormInit.majorOffset = OBJ_TABOFFSET;
 	sFormInit.tabVertOffset = (OBJ_TABHEIGHT / 2);
@@ -652,12 +642,6 @@ bool intAddTransContentsForm(void)
 
 	// TABFIXME: Looks like 10 units is max for this?
 	sFormInit.numMajor = 1;
-
-	//set minor tabs to 1
-	for (i = 0; i < sFormInit.numMajor; i++)
-	{
-		sFormInit.aNumMinors[i] = 1;
-	}
 
 	sFormInit.pUserData = &StandardTab;
 	sFormInit.pTabDisplay = intDisplayTab;
@@ -672,7 +656,6 @@ bool intAddTransContentsForm(void)
 	sBFormInit.formID = IDTRANS_CONTABFORM;
 	sBFormInit.id = IDTRANS_CONTSTART;
 	sBFormInit.majorID = 0;
-	sBFormInit.minorID = 0;
 	sBFormInit.style = WFORM_CLICKABLE;
 	sBFormInit.x = OBJ_STARTX;
 	sBFormInit.y = OBJ_STARTY - OBJ_BUTHEIGHT - OBJ_GAP;
@@ -730,7 +713,7 @@ bool intAddTransContentsForm(void)
 /* Add the Droids back at home form */
 bool intAddDroidsAvailForm(void)
 {
-	UDWORD			numButtons, i, butPerForm;
+	UDWORD                  numButtons, butPerForm;
 	SDWORD			BufferID;
 	DROID			*psDroid;
 	bool			Animate = true;
@@ -801,7 +784,6 @@ bool intAddDroidsAvailForm(void)
 	sFormInit.y = TRANSDROID_TABY;
 
 	sFormInit.majorPos = WFORM_TABTOP;
-	sFormInit.minorPos = WFORM_TABNONE;
 
 	sFormInit.majorSize = (OBJ_TABWIDTH / 2);
 
@@ -839,11 +821,6 @@ bool intAddDroidsAvailForm(void)
 		// small sized tab icons. No scrolltabs here.
 		sFormInit.numMajor = MAX_TAB_SMALL_SHOWN;
 	}
-	//set minor tabs to 1
-	for (i = 0; i < sFormInit.numMajor; i++)
-	{
-		sFormInit.aNumMinors[i] = 1;
-	}
 
 	sFormInit.pUserData = &SmallTab;
 
@@ -859,7 +836,6 @@ bool intAddDroidsAvailForm(void)
 	sBFormInit.formID = IDTRANS_DROIDTAB;
 	sBFormInit.id = IDTRANS_DROIDSTART;
 	sBFormInit.majorID = 0;
-	sBFormInit.minorID = 0;
 	sBFormInit.style = WFORM_CLICKABLE;
 	sBFormInit.x = OBJ_STARTX;
 	sBFormInit.y = AVAIL_STARTY;
@@ -943,12 +919,12 @@ bool intAddDroidsAvailForm(void)
 	if (objMajor > (UWORD)(sFormInit.numMajor - 1))
 	{
 		//set to last if have lost a tab
-		widgSetTabs(psWScreen, IDTRANS_DROIDTAB, (UWORD)(sFormInit.numMajor - 1), objMinor);
+		widgSetTabs(psWScreen, IDTRANS_DROIDTAB, (UWORD)(sFormInit.numMajor - 1));
 	}
 	else
 	{
 		//set to same tab we were on previously
-		widgSetTabs(psWScreen, IDTRANS_DROIDTAB, objMajor, objMinor);
+		widgSetTabs(psWScreen, IDTRANS_DROIDTAB, objMajor);
 	}
 
 	return true;
@@ -1176,7 +1152,7 @@ void intRemoveTransDroidsAvail(void)
 		Form->pUserData = NULL; // Used to signal when the close anim has finished.
 		ClosingTransDroids = true;
 		//remember which tab we were on
-		widgGetTabs(psWScreen, IDTRANS_DROIDTAB, &objMajor, &objMinor);
+		widgGetTabs(psWScreen, IDTRANS_DROIDTAB, &objMajor);
 	}
 }
 
@@ -1186,7 +1162,7 @@ void intRemoveTransDroidsAvailNoAnim(void)
 	if (widgGetFromID(psWScreen, IDTRANS_DROIDS) != NULL)
 	{
 		//remember which tab we were on
-		widgGetTabs(psWScreen, IDTRANS_DROIDTAB, &objMajor, &objMinor);
+		widgGetTabs(psWScreen, IDTRANS_DROIDTAB, &objMajor);
 
 		//remove main screen
 		widgDelete(psWScreen, IDTRANS_DROIDS);

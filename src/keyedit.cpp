@@ -293,7 +293,7 @@ static void displayKeyMap(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_D
 bool startKeyMapEditor(bool first)
 {
 	KEY_MAPPING	*psMapping;
-	UDWORD		i,mapcount =0;
+	UDWORD          mapcount = 0;
 	UDWORD		bubbleCount;
 	bool		bAtEnd,bGotOne;
 	KEY_MAPPING	*psPresent = NULL, *psNext;
@@ -359,7 +359,6 @@ bool startKeyMapEditor(bool first)
 	sFormInit.height		= KM_H- 4;
 	sFormInit.numMajor		= numForms(mapcount, BUTTONSPERKEYMAPPAGE);
 	sFormInit.majorPos		= WFORM_TABTOP;
-	sFormInit.minorPos		= WFORM_TABNONE;
 	sFormInit.majorSize		= OBJ_TABWIDTH+3;
 	sFormInit.majorOffset		= OBJ_TABOFFSET;
 	sFormInit.tabVertOffset		= (OBJ_TABHEIGHT/2);
@@ -367,11 +366,6 @@ bool startKeyMapEditor(bool first)
 	sFormInit.pUserData		= &StandardTab;
 	sFormInit.pTabDisplay		= intDisplayTab;
 
-	// TABFIXME: Special case for tabs, since this one has whole screen to itself. No need to modify(?)
-	for (i=0; i< sFormInit.numMajor; i++)
-	{
-		sFormInit.aNumMinors[i] = 1;
-	}
 	widgAddForm(psWScreen, &sFormInit);
 
 	//Put the buttons on it

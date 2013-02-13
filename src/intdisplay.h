@@ -173,8 +173,7 @@ void intDisplayButtonPressed(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, P
 
 void intDisplayReticuleButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 
-void intDisplayTab(WIDGET *psWidget,UDWORD TabType, UDWORD Position,
-					UDWORD Number,bool Selected,bool Hilight,UDWORD x,UDWORD y,UDWORD Width,UDWORD Height);
+void intDisplayTab(WIDGET *psWidget, UDWORD Position, UDWORD Number, bool Selected, bool Hilight, UDWORD x, UDWORD y, UDWORD Width, UDWORD Height);
 void intDisplaySlider(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 
 void intDisplayNumber(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);

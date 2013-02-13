@@ -384,7 +384,7 @@ void addMultiRequest(const char* searchDir, const char* fileExtension, UDWORD mo
 	char**             currFile;
 	const unsigned int extensionLength = strlen(fileExtension);
 	const unsigned int buttonsX = (mode == MULTIOP_MAP) ? 22 : 17;
-	unsigned int       numButtons, count, butPerForm, i;
+	unsigned int       numButtons, count, butPerForm;
 	static char		tips[NBTIPS][MAX_STR_LENGTH];
 
 	context = mode;
@@ -449,7 +449,6 @@ void addMultiRequest(const char* searchDir, const char* fileExtension, UDWORD mo
 	sFormInit.numMajor = numForms(numButtons, butPerForm);
 
 	sFormInit.majorPos = WFORM_TABTOP;
-	sFormInit.minorPos = WFORM_TABNONE;
 	sFormInit.majorSize = OBJ_TABWIDTH+2;
 	sFormInit.majorOffset = OBJ_TABOFFSET;
 	sFormInit.tabVertOffset = (OBJ_TABHEIGHT/2);
@@ -467,10 +466,6 @@ void addMultiRequest(const char* searchDir, const char* fileExtension, UDWORD mo
 		sFormInit.majorSize /= 2;
 	}
 
-	for (i = 0; i < sFormInit.numMajor; ++i)
-	{
-		sFormInit.aNumMinors[i] = 2;
-	}
 	widgAddForm(psRScreen, &sFormInit);
 
 	// Add the close button.

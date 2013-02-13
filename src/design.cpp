@@ -82,8 +82,6 @@
 #include "multistat.h"
 #include "qtscript.h"
 
-#define TAB_USEMAJOR 0
-
 //how many buttons can be put on the system component form
 #define DES_BUTSPERFORM  8
 
@@ -279,7 +277,7 @@ static bool intAddSystemButtons(DES_COMPMODE mode);
 /* Add the component buttons to the main tab of the system or component form */
 static bool intAddComponentButtons(COMPONENT_STATS *psStats, UDWORD size,
                                    UBYTE *aAvailable,	UDWORD numEntries,
-                                   UDWORD compID, UDWORD WhichTab);
+                                   UDWORD compID);
 /* Add the component buttons to the main tab of the component form */
 static bool intAddExtraSystemButtons(UDWORD sensorIndex, UDWORD ecmIndex,
                                      UDWORD constIndex, UDWORD repairIndex, UDWORD brainIndex);
@@ -839,7 +837,6 @@ void desSetupDesignTemplates(void)
 static bool _intAddTemplateForm(DROID_TEMPLATE *psSelected)
 {
 	UDWORD		numButtons, butPerForm;
-	UDWORD		i;
 
 	/* Count the number of minor tabs needed for the template form */
 	numButtons = apsTemplateList.size();
@@ -876,7 +873,6 @@ static bool _intAddTemplateForm(DROID_TEMPLATE *psSelected)
 	sFormInit.height = DES_LEFTFORMHEIGHT;	//DES_TEMPLHEIGHT;
 	sFormInit.numMajor = numForms(numButtons, butPerForm);
 	sFormInit.majorPos = WFORM_TABTOP;
-	sFormInit.minorPos = WFORM_TABNONE;
 	sFormInit.majorSize = DES_TAB_WIDTH;
 	sFormInit.majorOffset = DES_TAB_LEFTOFFSET;
 	sFormInit.tabVertOffset = (DES_TAB_HEIGHT / 2);			//(DES_TAB_HEIGHT/2)+2;
@@ -895,10 +891,6 @@ static bool _intAddTemplateForm(DROID_TEMPLATE *psSelected)
 		// Change MAX_TAB_STD_SHOWN to ..SMALL_SHOWN, this will give us 80 templates max.
 	}
 
-	for (i = 0; i < sFormInit.numMajor; i++)
-	{
-		sFormInit.aNumMinors[i] = 1;
-	}
 	if (!widgAddForm(psWScreen, &sFormInit))
 	{
 		return false;
@@ -1003,7 +995,7 @@ static bool intAddTemplateButtons(UDWORD formID, UDWORD formWidth, UDWORD formHe
 		{
 			droidTemplID = sButInit.id;
 			widgSetButtonState(psWScreen, droidTemplID, WBUT_LOCK);
-			widgSetTabs(psWScreen, IDDES_TEMPLFORM, sButInit.majorID, 0);
+			widgSetTabs(psWScreen, IDDES_TEMPLFORM, sButInit.majorID);
 		}
 
 		/* Update the init struct for the next button */
@@ -1100,7 +1092,7 @@ static void intSetDesignMode(DES_COMPMODE newCompMode)
 		intAddComponentButtons((COMPONENT_STATS *)asWeaponStats,
 		                       sizeof(WEAPON_STATS),
 		                       apCompLists[selectedPlayer][COMP_WEAPON],
-		                       numWeaponStats, weaponIndex, TAB_USEMAJOR);
+		                       numWeaponStats, weaponIndex);
 		intAddSystemButtons(IDES_TURRET);
 		widgSetButtonState(psWScreen, IDDES_SYSTEMFORM, WBUT_LOCK);
 		widgSetButtonState(psWScreen, IDDES_SYSTEMBUTTON, WBUT_CLICKLOCK);
@@ -1114,7 +1106,7 @@ static void intSetDesignMode(DES_COMPMODE newCompMode)
 		intAddComponentButtons((COMPONENT_STATS *)asBodyStats,
 		                       sizeof(BODY_STATS),
 		                       apCompLists[selectedPlayer][COMP_BODY],
-		                       numBodyStats, sCurrDesign.asParts[COMP_BODY], TAB_USEMAJOR);
+		                       numBodyStats, sCurrDesign.asParts[COMP_BODY]);
 		widgSetButtonState(psWScreen, IDDES_BODYFORM, WBUT_LOCK);
 		widgSetButtonState(psWScreen, IDDES_BODYBUTTON, WBUT_CLICKLOCK);
 		widgReveal(psWScreen, IDDES_BODYFORM);
@@ -1126,8 +1118,7 @@ static void intSetDesignMode(DES_COMPMODE newCompMode)
 		intAddComponentButtons((COMPONENT_STATS *)asPropulsionStats,
 		                       sizeof(PROPULSION_STATS),
 		                       apCompLists[selectedPlayer][COMP_PROPULSION],
-		                       numPropulsionStats, sCurrDesign.asParts[COMP_PROPULSION],
-		                       TAB_USEMAJOR);
+		                       numPropulsionStats, sCurrDesign.asParts[COMP_PROPULSION]);
 		widgSetButtonState(psWScreen, IDDES_PROPFORM, WBUT_LOCK);
 		widgSetButtonState(psWScreen, IDDES_PROPBUTTON, WBUT_CLICKLOCK);
 		widgReveal(psWScreen, IDDES_PROPFORM);
@@ -1140,7 +1131,7 @@ static void intSetDesignMode(DES_COMPMODE newCompMode)
 		intAddComponentButtons((COMPONENT_STATS *)asWeaponStats,
 		                       sizeof(WEAPON_STATS),
 		                       apCompLists[selectedPlayer][COMP_WEAPON],
-		                       numWeaponStats, weaponIndex, TAB_USEMAJOR);
+		                       numWeaponStats, weaponIndex);
 		intAddSystemButtons(IDES_TURRET_A);
 		widgSetButtonState(psWScreen, IDDES_SYSTEMFORM, WBUT_LOCK);
 		widgSetButtonState(psWScreen, IDDES_WPABUTTON, WBUT_CLICKLOCK);
@@ -1157,7 +1148,7 @@ static void intSetDesignMode(DES_COMPMODE newCompMode)
 		intAddComponentButtons((COMPONENT_STATS *)asWeaponStats,
 		                       sizeof(WEAPON_STATS),
 		                       apCompLists[selectedPlayer][COMP_WEAPON],
-		                       numWeaponStats, weaponIndex, TAB_USEMAJOR);
+		                       numWeaponStats, weaponIndex);
 		intAddSystemButtons(IDES_TURRET_B);
 		widgSetButtonState(psWScreen, IDDES_SYSTEMFORM, WBUT_LOCK);
 		widgSetButtonState(psWScreen, IDDES_WPBBUTTON, WBUT_CLICKLOCK);
@@ -1920,7 +1911,7 @@ static UDWORD intNumAvailable(UBYTE *aAvailable, UDWORD numEntries, COMPONENT_ST
 /* Add the component tab form to the design screen */
 static bool intAddComponentForm(UDWORD numButtons)
 {
-	UDWORD			i, butPerForm, numFrm;
+	unsigned butPerForm, numFrm;
 
 	butPerForm = DES_BUTSPERFORM;
 
@@ -1988,7 +1979,6 @@ static bool intAddComponentForm(UDWORD numButtons)
 	numFrm = numForms(numButtons, butPerForm);
 	sFormInit.numMajor = (UWORD)(numFrm >= WFORM_MAXMAJOR ? WFORM_MAXMAJOR - 1 : numFrm);
 	sFormInit.majorPos = WFORM_TABTOP;
-	sFormInit.minorPos = WFORM_TABNONE;
 	sFormInit.majorSize = DES_TAB_WIDTH;
 	sFormInit.majorOffset = DES_TAB_LEFTOFFSET;
 	sFormInit.tabVertOffset = (DES_TAB_HEIGHT / 2);
@@ -2005,10 +1995,6 @@ static bool intAddComponentForm(UDWORD numButtons)
 			sFormInit.majorOffset = OBJ_TABOFFSET + 7;
 			sFormInit.TabMultiplier = 1;
 		}
-	}
-	for (i = 0; i < sFormInit.numMajor; i++)
-	{
-		sFormInit.aNumMinors[i] = 1;
 	}
 
 	if (!widgAddForm(psWScreen, &sFormInit))
@@ -2084,7 +2070,7 @@ static bool intAddSystemButtons(DES_COMPMODE mode)
 /* Add the component buttons to the main tab of the component form */
 static bool intAddComponentButtons(COMPONENT_STATS *psStats, UDWORD size,
                                    UBYTE *aAvailable,	UDWORD numEntries,
-                                   UDWORD compID, UDWORD WhichTab)
+                                   UDWORD compID)
 {
 	W_TABFORM           *psTabForm;
 	UDWORD				i, maxComponents;
@@ -2104,7 +2090,6 @@ static bool intAddComponentButtons(COMPONENT_STATS *psStats, UDWORD size,
 	W_FORMINIT sButInit;
 	sButInit.formID = IDDES_COMPFORM;
 	sButInit.majorID = IDES_MAINTAB;
-	sButInit.minorID = 0;
 	sButInit.id = IDDES_COMPSTART;
 	sButInit.style = WFORM_CLICKABLE;
 	sButInit.x = DES_RIGHTFORMBUTX;
@@ -2213,7 +2198,7 @@ static bool intAddComponentButtons(COMPONENT_STATS *psStats, UDWORD size,
 		{
 			desCompID = sButInit.id;
 			widgSetButtonState(psWScreen, sButInit.id, WBUT_LOCK);
-			widgSetTabs(psWScreen, IDDES_COMPFORM, sButInit.majorID, sButInit.minorID);
+			widgSetTabs(psWScreen, IDDES_COMPFORM, sButInit.majorID);
 		}
 
 		// if this is a command droid that is in use or dead - make it unavailable
@@ -2226,46 +2211,22 @@ static bool intAddComponentButtons(COMPONENT_STATS *psStats, UDWORD size,
 			}
 		}
 
-		if (WhichTab == TAB_USEMAJOR)
+		/* Update the init struct for the next button */
+		sButInit.id += 1;
+		sButInit.x += DES_TABBUTWIDTH + DES_TABBUTGAP;
+		if (sButInit.x + DES_TABBUTWIDTH + DES_TABBUTGAP > DES_RIGHTFORMWIDTH - DES_TABTHICKNESS)
 		{
-			/* Update the init struct for the next button */
-			sButInit.id += 1;
-			sButInit.x += DES_TABBUTWIDTH + DES_TABBUTGAP;
-			if (sButInit.x + DES_TABBUTWIDTH + DES_TABBUTGAP > DES_RIGHTFORMWIDTH - DES_TABTHICKNESS)
-			{
-				sButInit.x = DES_RIGHTFORMBUTX;
-				sButInit.y += DES_TABBUTHEIGHT + DES_TABBUTGAP;
-			}
-			if (sButInit.y + DES_TABBUTHEIGHT + DES_TABBUTGAP > DES_RIGHTFORMHEIGHT - DES_MAJORSIZE)
-			{
-				sButInit.y = DES_RIGHTFORMBUTY;
-				sButInit.majorID += 1;
-				if (sButInit.majorID >= WFORM_MAXMAJOR)
-				{
-					debug(LOG_NEVER, "Too many buttons for component form");
-					return false;
-				}
-			}
+			sButInit.x = DES_RIGHTFORMBUTX;
+			sButInit.y += DES_TABBUTHEIGHT + DES_TABBUTGAP;
 		}
-		else
+		if (sButInit.y + DES_TABBUTHEIGHT + DES_TABBUTGAP > DES_RIGHTFORMHEIGHT - DES_MAJORSIZE)
 		{
-			/* Update the init struct for the next button */
-			sButInit.id += 1;
-			sButInit.x += DES_TABBUTWIDTH + DES_TABBUTGAP;
-			if (sButInit.x + DES_TABBUTWIDTH + DES_TABBUTGAP > DES_RIGHTFORMWIDTH - DES_MINORSIZE)
+			sButInit.y = DES_RIGHTFORMBUTY;
+			sButInit.majorID += 1;
+			if (sButInit.majorID >= WFORM_MAXMAJOR)
 			{
-				sButInit.x = DES_RIGHTFORMBUTX;
-				sButInit.y += DES_TABBUTHEIGHT + DES_TABBUTGAP;
-			}
-			if (sButInit.y + DES_TABBUTHEIGHT + DES_TABBUTGAP > DES_RIGHTFORMHEIGHT - DES_MAJORSIZE)
-			{
-				sButInit.y = DES_RIGHTFORMBUTY;
-				sButInit.minorID += 1;
-				if (sButInit.minorID >= WFORM_MAXMINOR)
-				{
-					debug(LOG_NEVER, "Too many buttons for component form");
-					return false;
-				}
+				debug(LOG_NEVER, "Too many buttons for component form");
+				return false;
 			}
 		}
 
@@ -2306,7 +2267,6 @@ static bool intAddExtraSystemButtons(UDWORD sensorIndex, UDWORD ecmIndex,
 	W_FORMINIT sButInit;
 	sButInit.formID = IDDES_COMPFORM;
 	sButInit.majorID = 0;
-	sButInit.minorID = 0;
 	sButInit.id = IDDES_EXTRASYSSTART;
 	sButInit.style = WFORM_CLICKABLE;
 	sButInit.x = DES_RIGHTFORMBUTX;
@@ -2420,7 +2380,7 @@ static bool intAddExtraSystemButtons(UDWORD sensorIndex, UDWORD ecmIndex,
 				desCompID = sButInit.id;
 				widgSetButtonState(psWScreen, sButInit.id, WBUT_LOCK);
 				widgSetTabs(psWScreen, IDDES_COMPFORM,
-				            sButInit.majorID, sButInit.minorID);
+				            sButInit.majorID);
 			}
 
 			// Update the init struct for the next button

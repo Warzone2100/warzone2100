@@ -79,7 +79,7 @@ void widgShutDown(void)
 
 W_INIT::W_INIT()
 	: formID(0)
-	, majorID(0), minorID(0)
+	, majorID(0)
 	, id(0)
 	, style(0)
 	, x(0), y(0)
@@ -307,9 +307,7 @@ static bool widgDeleteFromForm(W_FORM *psForm, UDWORD id, W_CONTEXT *psContext)
 {
 	WIDGET		*psPrev = NULL, *psCurr, *psNext;
 	W_TABFORM	*psTabForm;
-	UDWORD		minor, major;
 	W_MAJORTAB	*psMajor;
-	W_MINORTAB	*psMinor;
 	W_CONTEXT	sNewContext;
 
 	/* Clear the last hilite if necessary */
@@ -327,49 +325,44 @@ static bool widgDeleteFromForm(W_FORM *psForm, UDWORD id, W_CONTEXT *psContext)
 
 		/* loop through all the tabs */
 		psMajor = psTabForm->asMajor;
-		for (major = 0; major < psTabForm->numMajor; major++)
+		for (unsigned major = 0; major < psTabForm->numMajor; ++major)
 		{
-			psMinor = psMajor->asMinor;
-			for (minor = 0; minor < psMajor->numMinor; minor++)
+			if (psMajor->psWidgets && psMajor->psWidgets->id == id)
 			{
-				if (psMinor->psWidgets && psMinor->psWidgets->id == id)
-				{
-					/* The widget is the first on this tab */
-					psNext = psMinor->psWidgets->psNext;
-					widgRelease(psMinor->psWidgets);
-					psMinor->psWidgets = psNext;
+				/* The widget is the first on this tab */
+				psNext = psMajor->psWidgets->psNext;
+				widgRelease(psMajor->psWidgets);
+				psMajor->psWidgets = psNext;
 
-					return true;
-				}
-				else
+				return true;
+			}
+			else
+			{
+				for (psCurr = psMajor->psWidgets; psCurr; psCurr = psCurr->psNext)
 				{
-					for (psCurr = psMinor->psWidgets; psCurr; psCurr = psCurr->psNext)
+					if (psCurr->id == id)
 					{
-						if (psCurr->id == id)
-						{
-							psPrev->psNext = psCurr->psNext;
-							widgRelease(psCurr);
+						psPrev->psNext = psCurr->psNext;
+						widgRelease(psCurr);
 
+						return true;
+					}
+					if (psCurr->type == WIDG_FORM)
+					{
+						/* Recurse down to other form */
+						sNewContext.psScreen = psContext->psScreen;
+						sNewContext.psForm = (W_FORM *)psCurr;
+						sNewContext.xOffset = psContext->xOffset - psCurr->x;
+						sNewContext.yOffset = psContext->yOffset - psCurr->y;
+						sNewContext.mx = psContext->mx - psCurr->x;
+						sNewContext.my = psContext->my - psCurr->y;
+						if (widgDeleteFromForm((W_FORM *)psCurr, id, &sNewContext))
+						{
 							return true;
 						}
-						if (psCurr->type == WIDG_FORM)
-						{
-							/* Recurse down to other form */
-							sNewContext.psScreen = psContext->psScreen;
-							sNewContext.psForm = (W_FORM *)psCurr;
-							sNewContext.xOffset = psContext->xOffset - psCurr->x;
-							sNewContext.yOffset = psContext->yOffset - psCurr->y;
-							sNewContext.mx = psContext->mx - psCurr->x;
-							sNewContext.my = psContext->my - psCurr->y;
-							if (widgDeleteFromForm((W_FORM *)psCurr, id, &sNewContext))
-							{
-								return true;
-							}
-						}
-						psPrev = psCurr;
 					}
+					psPrev = psCurr;
 				}
-				psMinor++;
 			}
 			psMajor++;
 		}

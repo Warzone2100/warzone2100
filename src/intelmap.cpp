@@ -291,7 +291,7 @@ bool intAddIntelMap(void)
 /* Add the Message sub form */
 static bool intAddMessageForm(bool playCurrent)
 {
-	UDWORD			numButtons, i;
+	UDWORD                  numButtons;
 	MESSAGE			*psMessage;
 	RESEARCH		*psResearch;
 	SDWORD			BufferID;
@@ -307,7 +307,6 @@ static bool intAddMessageForm(bool playCurrent)
 	sFormInit.y = INTMAP_MSGY;
 
 	sFormInit.majorPos = WFORM_TABTOP;
-	sFormInit.minorPos = WFORM_TABNONE;
 	sFormInit.majorSize = OBJ_TABWIDTH;
 	sFormInit.majorOffset = OBJ_TABOFFSET;
 	sFormInit.tabVertOffset = (OBJ_TABHEIGHT/2);
@@ -343,11 +342,6 @@ static bool intAddMessageForm(bool playCurrent)
 		// standard sized tab icons.
 		sFormInit.numMajor = MAX_TAB_STD_SHOWN;
 	}
-	//set minor tabs to 1
-	for (i=0; i< sFormInit.numMajor; i++)
-	{
-		sFormInit.aNumMinors[i] = 1;
-	}
 
 	if (!widgAddForm(psWScreen, &sFormInit))
 	{
@@ -360,7 +354,6 @@ static bool intAddMessageForm(bool playCurrent)
 	sBFormInit.formID = IDINTMAP_MSGFORM;
 	sBFormInit.id = IDINTMAP_MSGSTART;
 	sBFormInit.majorID = 0;
-	sBFormInit.minorID = 0;
 	sBFormInit.style = WFORM_CLICKABLE;
 	sBFormInit.x = OBJ_STARTX;
 	sBFormInit.y = OBJ_STATSTARTY;
@@ -427,7 +420,7 @@ static bool intAddMessageForm(bool playCurrent)
 		{
 			messageID = sBFormInit.id;
 			widgSetButtonState(psWScreen, messageID, WBUT_LOCK);
-			widgSetTabs(psWScreen, IDINTMAP_MSGFORM, sBFormInit.majorID, 0);
+			widgSetTabs(psWScreen, IDINTMAP_MSGFORM, sBFormInit.majorID);
 		}
 
 		/* Update the init struct for the next button */
@@ -551,7 +544,6 @@ bool intAddMessageView(MESSAGE * psMessage)
 		sFormInit.height = INTMAP_SEQTEXTHEIGHT;
 
 		sFormInit.majorPos = WFORM_TABBOTTOM;
-		sFormInit.minorPos = WFORM_TABNONE;
 		sFormInit.majorSize = OBJ_TABWIDTH;
 		sFormInit.majorOffset = OBJ_TABOFFSET;
 		sFormInit.tabVertOffset = (OBJ_TABHEIGHT/2);
@@ -561,7 +553,6 @@ bool intAddMessageView(MESSAGE * psMessage)
 
 		cur_seq = cur_seqpage = 0;
 		do {
-			sFormInit.aNumMinors[sFormInit.numMajor] = 1;
 			sFormInit.numMajor++;
 		}
 		while (!intDisplaySeqTextViewPage(psViewReplay, 0, 0,
@@ -580,7 +571,6 @@ bool intAddMessageView(MESSAGE * psMessage)
 		sTabForm.formID = IDINTMAP_SEQTEXT;
 		sTabForm.id = IDINTMAP_SEQTEXTSTART;
 		sTabForm.majorID = 0;
-		sTabForm.minorID = 0;
 		sTabForm.style = WFORM_PLAIN;
 		sTabForm.x = INTMAP_SEQTEXTTABX;
 		sTabForm.y = INTMAP_SEQTEXTTABY;
