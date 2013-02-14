@@ -397,7 +397,7 @@ static bool intAddMessageForm(bool playCurrent)
 				psResearch =  getResearchForMsg((VIEWDATA *)psMessage->pViewData);
 				if (psResearch)
 				{
-					sBFormInit.pTip = getStatName(psResearch);;
+					sBFormInit.pTip = getStatName(psResearch);
 				}
 				else
 				{

@@ -101,7 +101,7 @@ static bool addQuitOptions(void)
 	sFormInit.id		= INTINGAMEOP;
 	sFormInit.style		= WFORM_PLAIN;
 	sFormInit.width		= INTINGAMEOP3_W;
-	sFormInit.height	= INTINGAMEOP3_H;;
+	sFormInit.height	= INTINGAMEOP3_H;
 	sFormInit.x		= (SWORD)INTINGAMEOP3_X;
 	sFormInit.y		= (SWORD)INTINGAMEOP3_Y;
 	sFormInit.pDisplay	= intOpenPlainForm;
