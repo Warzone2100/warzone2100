@@ -54,7 +54,7 @@ static char		screendump_filename[PATH_MAX];
 static bool		screendump_required = false;
 static GLuint		backDropTexture = 0;
 
-static GLuint buffers[VBO_COUNT];;
+static GLuint buffers[VBO_COUNT];
 
 static int preview_width = 0, preview_height = 0;
 static Vector2i player_pos[MAX_PLAYERS];
@@ -329,7 +329,7 @@ void screen_Display()
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 	glBindBuffer(GL_ARRAY_BUFFER, buffers[VBO_TEXCOORD]); glTexCoordPointer(2, GL_FLOAT, 0, NULL);
-	glBindBuffer(GL_ARRAY_BUFFER, buffers[VBO_VERTEX]); glVertexPointer(2, GL_FLOAT, 0, NULL);
+	glBindBuffer(GL_ARRAY_BUFFER, buffers[VBO_VERTEX]); glVertexPointer(2, GL_INT, 0, NULL);
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -422,7 +422,7 @@ void screen_Upload(const char *newBackDropBmp)
 
 	// Generate coordinates and put them into VBOs
 	GLfloat texcoords[8] = { 0.0f, 0.0f,  tx, 0.0,  0.0f, ty,  tx, ty };
-	GLfloat vertices[8] = { x1, y1,  x2, y1,  x1, y2,  x2, y2 };
+	GLint vertices[8] = { x1, y1,  x2, y1,  x1, y2,  x2, y2 };
 	glBindBuffer(GL_ARRAY_BUFFER, buffers[VBO_TEXCOORD]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(texcoords), texcoords, GL_STATIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, buffers[VBO_VERTEX]);
