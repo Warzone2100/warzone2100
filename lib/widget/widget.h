@@ -163,7 +163,6 @@ struct W_FORMINIT : public W_INIT
 	SWORD			TabMultiplier;			///< Used to tell system we got lots of (virtual) tabs to display
 	unsigned                maxTabsShown;                   ///< Maximum number of tabs shown at once.
 	const char		*pTip;				///< Tool tip for the form itself
-	char			*apMajorTips[WFORM_MAXMAJOR];	///< Tool tips for the major tabs
 	TAB_DISPLAY		pTabDisplay;			///< Optional callback for displaying a tab.
 	WIDGET_DISPLAY		pFormDisplay;			///< Optional callback to display the form.
 };

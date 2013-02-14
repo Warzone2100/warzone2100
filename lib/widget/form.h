@@ -52,7 +52,6 @@ struct W_MAJORTAB
 
 	/* Graphics data for the tab will go here */
 	WIDGET *                psWidgets;              // Widgets on the tab
-	QString                 pTip;
 };
 
 /* The tabbed form data structure */

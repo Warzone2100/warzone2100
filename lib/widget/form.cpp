@@ -60,11 +60,9 @@ W_FORMINIT::W_FORMINIT()
 	, TabMultiplier(0)
 	, maxTabsShown(MAX_TAB_SMALL_SHOWN - 1)  // Equal to TAB_SEVEN, which is equal to 7.
 	, pTip(NULL)
-	// apMajorTips
 	, pTabDisplay(NULL)
 	, pFormDisplay(NULL)
 {
-	memset(apMajorTips, 0, sizeof(apMajorTips));
 }
 
 W_FORM::W_FORM(W_FORMINIT const *init)
@@ -144,11 +142,6 @@ W_TABFORM::W_TABFORM(W_FORMINIT const *init)
 	 * All widget pointers have been zeroed by the memset above.
 	 */
 	numMajor = init->numMajor;
-	for (unsigned major = 0; major < init->numMajor; ++major)
-	{
-		/* Check for a tip for the major tab */
-		asMajor[major].pTip = QString::fromUtf8(init->apMajorTips[major]);
-	}
 
 	if (init->pDisplay == NULL)
 	{
@@ -639,24 +632,11 @@ void W_TABFORM::run(W_CONTEXT *psContext)
 		{
 			// Got a new tab - start the tool tip if there is one.
 			tabHiLite = (UWORD)sTabPos.index;
-			QString pTip;
-			pTip = asMajor[sTabPos.index].pTip;
-			if (!pTip.isEmpty())
-			{
-				// Got a tip - start it off.
-				tipStart(this, pTip, psContext->psScreen->TipFontID, aColours, sTabPos.x + psContext->xOffset, sTabPos.y + psContext->yOffset, sTabPos.width, sTabPos.height);
-			}
-			else
-			{
-				// No tip - clear any old tip.
-				tipStop(this);
-			}
 		}
 	}
 	else
 	{
 		// No tab - clear the tool tip.
-		tipStop(this);
 		// And clear the highlight.
 		tabHiLite = (UWORD)(-1);
 	}
