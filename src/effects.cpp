@@ -373,6 +373,7 @@ void shutdownEffectsSystem(void)
 		killEffect(eff);
 		eff = effNext;
 	}
+	free(chunkList.first);
 	chunkList.first = NULL;
 	chunkList.last = NULL;
 }

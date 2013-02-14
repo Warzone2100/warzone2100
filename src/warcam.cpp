@@ -74,7 +74,7 @@ static BASE_OBJECT radarTarget(OBJ_TARGET, 0, 0);
 /* Do we trun to face when doing a radar jump? */
 static	bool	bRadarAllign;
 
-static SDWORD	presAvAngle = 0;;
+static SDWORD	presAvAngle = 0;
 
 /*	These are the DEFAULT offsets that make us track _behind_ a droid and allow
 	it to be pretty far _down_ the screen, so we can see more

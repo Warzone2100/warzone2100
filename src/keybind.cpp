@@ -311,7 +311,7 @@ MAPTILE	*psTile;
 		for (j=0; j < mapHeight; j++)
 		{
 			psTile = mapTile(i,j);
-			psTile->height/=2;;
+			psTile->height/=2;
 		}
 	}
 }
