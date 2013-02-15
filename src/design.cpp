@@ -2239,10 +2239,11 @@ static bool intAddComponentButtons(COMPONENT_STATS *psStats, UDWORD size,
 	psTabForm = (W_TABFORM *) widgGetFromID(psWScreen, IDDES_COMPFORM);
 	if (psTabForm)
 	{
-		numTabs = psTabForm->numMajor;
-		if (numComponent < (UDWORD)(numTabs * DES_BUTSPERFORM))
+		numTabs = psTabForm->childTabs.size();
+		if (numForms(numComponent, DES_BUTSPERFORM) < numTabs)
 		{
-			psTabForm->numMajor = numForms(numComponent, DES_BUTSPERFORM);
+			debug(LOG_WARNING, "Too many tabs.");
+			//psTabForm->numMajor = numForms(numComponent, DES_BUTSPERFORM);
 		}
 	}
 
@@ -4109,7 +4110,7 @@ void intProcessDesign(UDWORD id)
 				W_TABFORM	*psTForm;
 				UWORD numTabs;
 				psTForm = (W_TABFORM *)widgGetFromID(psWScreen, IDDES_COMPFORM);
-				numTabs = psTForm->numMajor;
+				numTabs = psTForm->childTabs.size();
 				numTabs = ((numTabs / DES_NUMMAJORTABS) + 1);
 				psTForm->TabMultiplier += 1;
 				if (psTForm->TabMultiplier > numTabs)
@@ -4117,10 +4118,7 @@ void intProcessDesign(UDWORD id)
 					psTForm->TabMultiplier -= 1;
 				}
 				psTForm->majorT += DES_NUMMAJORTABS;
-				if (psTForm->majorT >= psTForm->numMajor)
-				{
-					psTForm->majorT = psTForm->numMajor - 1;
-				}
+				psTForm->majorT = std::min<unsigned>(psTForm->majorT, psTForm->childTabs.size() - 1);
 				break;
 			}
 		}

@@ -57,6 +57,7 @@ enum WIDGET_TYPE
 	WIDG_EDITBOX,
 	WIDG_BARGRAPH,
 	WIDG_SLIDER,
+	WIDG_UNSPECIFIED_TYPE,
 };
 
 /* The keys that can be used to press a button */
@@ -70,8 +71,13 @@ enum WIDGET_KEY
 /* The base widget data type */
 struct WIDGET
 {
+	typedef std::vector<WIDGET *> Children;
+
 	WIDGET(W_INIT const *init, WIDGET_TYPE type);
-	virtual ~WIDGET() {}
+	WIDGET(WIDGET *parent);
+	virtual ~WIDGET();
+
+	virtual void widgetLost(WIDGET *);
 
 	virtual void clicked(W_CONTEXT *, WIDGET_KEY = WKEY_PRIMARY) {}
 	virtual void released(W_CONTEXT *, WIDGET_KEY = WKEY_PRIMARY) {}
@@ -90,6 +96,12 @@ struct WIDGET
 	void setString(char const *stringUtf8) { setString(QString::fromUtf8(stringUtf8)); }
 	void setTip(char const *stringUtf8) { setTip(QString::fromUtf8(stringUtf8)); }
 
+	WIDGET *parent() { return parentWidget; }
+	Children const &children() { return childWidgets; }
+
+	void attach(WIDGET *widget);
+	void detach(WIDGET *widget);
+
 	UDWORD                  formID;                 ///< ID of the widgets base form.
 	UDWORD                  id;                     ///< The user set ID number for the widget. This is returned when e.g. a button is pressed.
 	WIDGET_TYPE             type;                   ///< The widget type
@@ -101,7 +113,9 @@ struct WIDGET
 	void                   *pUserData;              ///< Pointer to a user data block (if any)
 	UDWORD                  UserData;               ///< User data (if any)
 
-	WIDGET                 *psNext;                 ///< Pointer to the next widget in the screen list
+private:
+	WIDGET *                parentWidget;           ///< Parent widget.
+	std::vector<WIDGET *>   childWidgets;           ///< Child widgets. Will be deleted if we are deleted.
 };
 
 

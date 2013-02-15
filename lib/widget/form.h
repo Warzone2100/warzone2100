@@ -31,7 +31,8 @@
 struct W_FORM : public WIDGET
 {
 	W_FORM(W_FORMINIT const *init);
-	~W_FORM();
+
+	void widgetLost(WIDGET *widget);
 
 	void clicked(W_CONTEXT *psContext, WIDGET_KEY key);
 	void highlightLost();
@@ -58,7 +59,6 @@ struct W_MAJORTAB
 struct W_TABFORM : public W_FORM
 {
 	W_TABFORM(W_FORMINIT const *init);
-	~W_TABFORM();
 
 	void released(W_CONTEXT *psContext, WIDGET_KEY key);
 	void highlightLost();
@@ -78,12 +78,11 @@ struct W_TABFORM : public W_FORM
 	/*       but I don't really have the energy to change it.  (Don't design stuff after  */
 	/*       beers at lunch-time :-)                                                      */
 
-	UWORD		numMajor;				// The number of major tabs
 	SWORD		TabMultiplier;				//used to tell system we got lots of tabs to display
 	unsigned        maxTabsShown;                   ///< Maximum number of tabs shown at once.
 	UWORD		numStats;				//# of 'stats' (items) in list
 	UWORD		numButtons;				//# of buttons per form
-	W_MAJORTAB	asMajor[WFORM_MAXMAJOR];	// The major tab information
+	Children        childTabs;                      // The major tab information
 	TAB_DISPLAY pTabDisplay;			// Optional callback for display tabs.
 };
 
@@ -125,7 +124,7 @@ struct W_CLICKFORM : public W_FORM
 bool formAddWidget(W_FORM *psForm, WIDGET *psWidget, W_INIT const *psInit);
 
 /* Return the widgets currently displayed by a form */
-extern WIDGET *formGetWidgets(W_FORM *psWidget);
+WIDGET::Children const &formGetWidgets(W_FORM *psWidget);
 
 /* Return the origin on the form from which button locations are calculated */
 extern void formGetOrigin(W_FORM *psWidget, SDWORD *pXOrigin, SDWORD *pYOrigin);
@@ -133,10 +132,7 @@ extern void formGetOrigin(W_FORM *psWidget, SDWORD *pXOrigin, SDWORD *pYOrigin);
 /* Variables for the formGetAllWidgets functions */
 struct W_FORMGETALL
 {
-	WIDGET		*psGAWList;
-	W_TABFORM	*psGAWForm;
-	W_MAJORTAB	*psGAWMajor;
-	UDWORD          GAWMajor;
+	WIDGET::Children::const_iterator tabBegin, tabEnd, begin, end;
 };
 
 /* Initialise the formGetAllWidgets function */

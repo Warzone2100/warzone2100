@@ -94,12 +94,6 @@ W_FORM::W_FORM(W_FORMINIT const *init)
 	ASSERT((init->style & WFORM_CLICKABLE) != 0 || (init->style & (WFORM_NOPRIMARY | WFORM_SECONDARY)) == 0, "Cannot set keys if the form isn't clickable");
 }
 
-W_FORM::~W_FORM()
-{
-	widgReleaseWidgetList(psWidgets);
-	CheckpsMouseOverWidget(this);  // clear global if needed
-}
-
 W_CLICKFORM::W_CLICKFORM(W_FORMINIT const *init)
 	: W_FORM(init)
 	, state(WCLICK_NORMAL)
@@ -137,11 +131,11 @@ W_TABFORM::W_TABFORM(W_FORMINIT const *init)
 	, numButtons(init->numButtons)
 	, pTabDisplay(init->pTabDisplay)
 {
-	/* Allocate the memory for tool tips and copy them in */
-	/* Set up the tab data.
-	 * All widget pointers have been zeroed by the memset above.
-	 */
-	numMajor = init->numMajor;
+	childTabs.resize(init->numMajor);
+	for (unsigned n = 0; n < childTabs.size(); ++n)
+	{
+		childTabs[n] = new WIDGET(this);
+	}
 
 	if (init->pDisplay == NULL)
 	{
@@ -152,48 +146,29 @@ W_TABFORM::W_TABFORM(W_FORMINIT const *init)
 	ASSERT(init->numMajor < WFORM_MAXMAJOR, "Too many Major tabs");
 }
 
-/* Free a tabbed form widget */
-W_TABFORM::~W_TABFORM()
+void W_FORM::widgetLost(WIDGET *widget)
 {
-	W_FORMGETALL sGetAll;
-	formInitGetAllWidgets(this, &sGetAll);
-	for (WIDGET *psCurr = formGetAllWidgets(&sGetAll); psCurr != NULL; psCurr = formGetAllWidgets(&sGetAll))
+	// Clear the last highlight if necessary.
+	if (psLastHiLite == widget)
 	{
-		widgReleaseWidgetList(psCurr);
+		psLastHiLite = NULL;
 	}
 }
 
 /* Add a widget to a form */
 bool formAddWidget(W_FORM *psForm, WIDGET *psWidget, W_INIT const *psInit)
 {
-	W_TABFORM	*psTabForm;
-	WIDGET		**ppsList;
-	W_MAJORTAB	*psMajor;
-
-	ASSERT(psWidget != NULL,
-	       "formAddWidget: Invalid widget pointer");
+	ASSERT_OR_RETURN(false, psWidget != NULL && psForm != NULL, "Invalid pointer");
 
 	if (psForm->style & WFORM_TABBED)
 	{
-		ASSERT(psForm != NULL,
-		       "formAddWidget: Invalid tab form pointer");
-		psTabForm = (W_TABFORM *)psForm;
-		if (psInit->majorID >= psTabForm->numMajor)
-		{
-			ASSERT(false, "formAddWidget: Major tab does not exist");
-			return false;
-		}
-		psMajor = psTabForm->asMajor + psInit->majorID;
-		ppsList = &psMajor->psWidgets;
-		psWidget->psNext = *ppsList;
-		*ppsList = psWidget;
+		W_TABFORM *psTabForm = (W_TABFORM *)psForm;
+		ASSERT_OR_RETURN(false, psInit->majorID < psTabForm->childTabs.size(), "Major tab does not exist");
+		psTabForm->childTabs[psInit->majorID]->attach(psWidget);
 	}
 	else
 	{
-		ASSERT(psForm != NULL,
-		       "formAddWidget: Invalid form pointer");
-		psWidget->psNext = psForm->psWidgets;
-		psForm->psWidgets = psWidget;
+		psForm->attach(psWidget);
 	}
 
 	return true;
@@ -234,20 +209,16 @@ void W_CLICKFORM::setState(unsigned newState)
 }
 
 /* Return the widgets currently displayed by a form */
-WIDGET *formGetWidgets(W_FORM *psWidget)
+WIDGET::Children const &formGetWidgets(W_FORM *psWidget)
 {
-	W_TABFORM	*psTabForm;
-	W_MAJORTAB	*psMajor;
-
 	if (psWidget->style & WFORM_TABBED)
 	{
-		psTabForm = (W_TABFORM *)psWidget;
-		psMajor = psTabForm->asMajor + psTabForm->majorT;
-		return psMajor->psWidgets;
+		W_TABFORM *psTabForm = (W_TABFORM *)psWidget;
+		return psTabForm->childTabs[psTabForm->majorT]->children();
 	}
 	else
 	{
-		return psWidget->psWidgets;
+		return psWidget->children();
 	}
 }
 
@@ -257,15 +228,18 @@ void formInitGetAllWidgets(W_FORM *psWidget, W_FORMGETALL *psCtrl)
 {
 	if (psWidget->style & WFORM_TABBED)
 	{
-		psCtrl->psGAWList = NULL;
-		psCtrl->psGAWForm = (W_TABFORM *)psWidget;
-		psCtrl->psGAWMajor = psCtrl->psGAWForm->asMajor;
-		psCtrl->GAWMajor = 0;
+		psCtrl->tabBegin = ((W_TABFORM *)psWidget)->childTabs.begin();
+		psCtrl->tabEnd = ((W_TABFORM *)psWidget)->childTabs.end();
+		psCtrl->begin = (*psCtrl->tabBegin)->children().begin();
+		psCtrl->end = (*psCtrl->tabBegin)->children().end();
+		++psCtrl->tabBegin;
 	}
 	else
 	{
-		psCtrl->psGAWList = psWidget->psWidgets;
-		psCtrl->psGAWForm = NULL;
+		psCtrl->tabBegin = psWidget->children().end();  // tabBegin..tabEnd = empty range.
+		psCtrl->tabEnd = psWidget->children().end();
+		psCtrl->begin = psWidget->children().begin();
+		psCtrl->end = psWidget->children().end();
 	}
 }
 
@@ -276,27 +250,20 @@ void formInitGetAllWidgets(W_FORM *psWidget, W_FORMGETALL *psCtrl)
  */
 WIDGET *formGetAllWidgets(W_FORMGETALL *psCtrl)
 {
-	WIDGET	*psRetList;
-
-	if (psCtrl->psGAWForm == NULL)
+	while (psCtrl->begin == psCtrl->end)
 	{
-		/* Not a tabbed form, return the list */
-		psRetList = psCtrl->psGAWList;
-		psCtrl->psGAWList = NULL;
-	}
-	else
-	{
-		/* Working with a tabbed form - search for the first widget list */
-		psRetList = NULL;
-		while (psRetList == NULL && psCtrl->GAWMajor < psCtrl->psGAWForm->numMajor)
+		if (psCtrl->tabBegin == psCtrl->tabEnd)
 		{
-			psRetList = psCtrl->psGAWMajor->psWidgets;
-			++psCtrl->GAWMajor;
-			++psCtrl->psGAWMajor;
+			return NULL;
 		}
+		psCtrl->begin = (*psCtrl->tabBegin)->children().begin();
+		psCtrl->end = (*psCtrl->tabBegin)->children().end();
+		++psCtrl->tabBegin;
 	}
 
-	return psRetList;
+	WIDGET *ret = *psCtrl->begin;
+	++psCtrl->begin;
+	return ret;
 }
 
 
@@ -343,13 +310,9 @@ int widgGetNumTabMajor(W_SCREEN *psScreen, UDWORD id)
 {
 	W_TABFORM *const psForm = widgGetTabbedFormById(psScreen, id);
 
-	ASSERT(psForm != NULL, "Couldn't find a tabbed form with ID %u", id);
-	if (psForm == NULL)
-	{
-		return 0;
-	}
+	ASSERT_OR_RETURN(0, psForm != NULL, "Couldn't find a tabbed form with ID %u", id);
 
-	return psForm->numMajor;
+	return psForm->childTabs.size();
 }
 
 /* Get the current tabs for a tab form */
@@ -365,7 +328,7 @@ void widgGetTabs(W_SCREEN *psScreen, UDWORD id, UWORD *pMajor)
 		return;
 	}
 	ASSERT(psForm != NULL, "widgGetTabs: Invalid tab form pointer");
-	ASSERT(psForm->majorT < psForm->numMajor, "widgGetTabs: invalid major id %u >= max %u", psForm->majorT, psForm->numMajor);
+	ASSERT(psForm->majorT < psForm->childTabs.size(), "widgGetTabs: invalid major id %u >= max %u", psForm->majorT, (unsigned)psForm->childTabs.size());
 
 	*pMajor = psForm->majorT;
 }
@@ -572,7 +535,7 @@ static bool formPickTab(W_TABFORM *psForm, UDWORD fx, UDWORD fy,
 	case WFORM_TABTOP:
 		if (formPickHTab(psTabPos, x0 + psForm->majorOffset, y0 - psForm->tabMajorThickness,
 		        psForm->majorSize, psForm->tabMajorThickness, psForm->tabMajorGap,
-		        psForm->numMajor, fx, fy, psForm->maxTabsShown))
+		        psForm->childTabs.size(), fx, fy, psForm->maxTabsShown))
 		{
 			return true;
 		}
@@ -580,7 +543,7 @@ static bool formPickTab(W_TABFORM *psForm, UDWORD fx, UDWORD fy,
 	case WFORM_TABBOTTOM:
 		if (formPickHTab(psTabPos, x0 + psForm->majorOffset, y1,
 		        psForm->majorSize, psForm->tabMajorThickness, psForm->tabMajorGap,
-		        psForm->numMajor, fx, fy, psForm->maxTabsShown))
+		        psForm->childTabs.size(), fx, fy, psForm->maxTabsShown))
 		{
 			return true;
 		}
@@ -588,7 +551,7 @@ static bool formPickTab(W_TABFORM *psForm, UDWORD fx, UDWORD fy,
 	case WFORM_TABLEFT:
 		if (formPickVTab(psTabPos, x0 - psForm->tabMajorThickness, y0 + psForm->majorOffset,
 		        psForm->tabMajorThickness, psForm->majorSize, psForm->tabMajorGap,
-		        psForm->numMajor, fx, fy))
+		        psForm->childTabs.size(), fx, fy))
 		{
 			return true;
 		}
@@ -596,7 +559,7 @@ static bool formPickTab(W_TABFORM *psForm, UDWORD fx, UDWORD fy,
 	case WFORM_TABRIGHT:
 		if (formPickVTab(psTabPos, x1, y0 + psForm->majorOffset,
 		        psForm->tabMajorThickness, psForm->majorSize, psForm->tabMajorGap,
-		        psForm->numMajor, fx, fy))
+		        psForm->childTabs.size(), fx, fy))
 		{
 			return true;
 		}
@@ -709,7 +672,7 @@ void W_TABFORM::released(W_CONTEXT *psContext, WIDGET_KEY)
 	if (formPickTab(this, psContext->mx, psContext->my, &sTabPos))
 	{
 		// Clicked on a tab.
-		ASSERT(majorT < numMajor, "invalid major id %u >= max %u", sTabPos.index, numMajor);
+		ASSERT(majorT < childTabs.size(), "invalid major id %u >= max %u", sTabPos.index, (unsigned)childTabs.size());
 		majorT = sTabPos.index;
 		widgSetReturn(psContext->psScreen, this);
 	}
@@ -945,25 +908,25 @@ void formDisplayTabbed(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGH
 	case WFORM_TABTOP:
 		formDisplayTabs(psForm, x0 + psForm->majorOffset, y0 - psForm->tabMajorThickness + psForm->tabVertOffset,
 		        psForm->majorSize, psForm->tabMajorThickness,
-		        psForm->numMajor, psForm->majorT, psForm->tabHiLite,
+		        psForm->childTabs.size(), psForm->majorT, psForm->tabHiLite,
 		        pColours, psForm->tabMajorGap);
 		break;
 	case WFORM_TABBOTTOM:
 		formDisplayTabs(psForm, x0 + psForm->majorOffset, y1 + psForm->tabVertOffset,
 		        psForm->majorSize, psForm->tabMajorThickness,
-		        psForm->numMajor, psForm->majorT, psForm->tabHiLite,
+		        psForm->childTabs.size(), psForm->majorT, psForm->tabHiLite,
 		        pColours, psForm->tabMajorGap);
 		break;
 	case WFORM_TABLEFT:
 		formDisplayTabs(psForm, x0 - psForm->tabMajorThickness + psForm->tabHorzOffset, y0 + psForm->majorOffset,
 		        psForm->tabMajorThickness, psForm->majorSize,
-		        psForm->numMajor, psForm->majorT, psForm->tabHiLite,
+		        psForm->childTabs.size(), psForm->majorT, psForm->tabHiLite,
 		        pColours, psForm->tabMajorGap);
 		break;
 	case WFORM_TABRIGHT:
 		formDisplayTabs(psForm, x1 - psForm->tabHorzOffset, y0 + psForm->majorOffset,
 		        psForm->tabMajorThickness, psForm->majorSize,
-		        psForm->numMajor, psForm->majorT, psForm->tabHiLite,
+		        psForm->childTabs.size(), psForm->majorT, psForm->tabHiLite,
 		        pColours, psForm->tabMajorGap);
 		break;
 	case WFORM_TABNONE:

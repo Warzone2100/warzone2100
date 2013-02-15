@@ -2924,10 +2924,7 @@ void kf_BuildNextPage()
 		psTForm->TabMultiplier += 1;
 	}
 
-	if (psTForm->majorT >= psTForm->numMajor)
-	{
-		psTForm->majorT = psTForm->numMajor - 1;
-	}
+	psTForm->majorT = std::min<unsigned>(psTForm->majorT, psTForm->childTabs.size() - 1);
 	audio_PlayTrack( ID_SOUND_BUTTON_CLICK_5 );
 
 #ifdef  DEBUG_SCROLLTABS

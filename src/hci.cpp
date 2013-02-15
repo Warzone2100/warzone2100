@@ -1084,10 +1084,7 @@ static void intProcessEditStats(UDWORD id)
 			audio_PlayTrack(ID_SOUND_BUILD_FAIL);
 		}
 		psTForm->majorT += TAB_SEVEN;					// set tab # to next "page"
-		if (psTForm->majorT >= psTForm->numMajor)
-		{
-			psTForm->majorT = psTForm->numMajor - 1;		//set it back to max -1
-		}
+		psTForm->majorT = std::min<unsigned>(psTForm->majorT, psTForm->childTabs.size() - 1);
 #ifdef  DEBUG_SCROLLTABS		//for debuging
 		sprintf(buf, "[debug menu]Clicked RT %d numtabs %d tab # %d", psTForm->TabMultiplier, numTabs, psTForm->majorT);
 		addConsoleMessage(buf, DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
@@ -1854,7 +1851,7 @@ static void intAddObjectStats(BASE_OBJECT *psObj, UDWORD id)
 	psForm = (W_TABFORM *)widgGetFromID(psWScreen, IDSTAT_TABFORM);
 	if (psForm != NULL)
 	{
-		newStatMajor = psForm->numMajor;
+		newStatMajor = psForm->childTabs.size();
 
 		// Restore the tab positions.
 		if ((!psStats) && (widgGetFromID(psWScreen, IDSTAT_FORM) != NULL))
@@ -2408,10 +2405,7 @@ static void intProcessStats(UDWORD id)
 		}
 		//add routine to update tab widgets now...
 		psTForm->majorT += TAB_SEVEN;				// set tab # to next "page"
-		if (psTForm->majorT >= psTForm->numMajor)	// check if too many
-		{
-			psTForm->majorT = psTForm->numMajor - 1;	// set it back to max -1
-		}
+		psTForm->majorT = std::min<unsigned>(psTForm->majorT, psTForm->childTabs.size() - 1);
 #ifdef  DEBUG_SCROLLTABS		//for debuging
 		sprintf(buf, "[build menu]Clicked RT %d numtabs %d tab # %d", psTForm->TabMultiplier, numTabs, psTForm->majorT);
 		addConsoleMessage(buf, DEFAULT_JUSTIFY, SYSTEM_MESSAGE);

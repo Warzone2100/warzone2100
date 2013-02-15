@@ -30,9 +30,6 @@
 /* Set the id number for widgRunScreen to return */
 extern void widgSetReturn(W_SCREEN *psScreen, WIDGET *psWidget);
 
-/* Release a list of widgets */
-extern void widgReleaseWidgetList(WIDGET *psWidgets);
-
 /* Set the keyboard focus for the screen */
 extern void screenSetFocus(W_SCREEN *psScreen, WIDGET *psWidget);
 
