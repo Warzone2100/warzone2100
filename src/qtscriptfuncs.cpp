@@ -1180,7 +1180,7 @@ static QScriptValue js_activateStructure(QScriptContext *context, QScriptEngine 
 }
 
 //-- \subsection{findResearch(research)}
-//-- Return list of research items remaining to research for the given research item. (3.2+ only)
+//-- Return list of research items remaining to be researched for the given research item. (3.2+ only)
 static QScriptValue js_findResearch(QScriptContext *context, QScriptEngine *engine)
 {
 	QList<RESEARCH *> list;
@@ -1193,6 +1193,7 @@ static QScriptValue js_findResearch(QScriptContext *context, QScriptEngine *engi
 	{
 		return engine->newArray(0); // return empty array
 	}
+	debug(LOG_SCRIPT, "Find reqs for %s for player %d", resName.toUtf8().constData(), player);
 	// Go down the requirements list for the desired tech
 	QList<RESEARCH *> reslist;
 	RESEARCH *cur = psTarget;
@@ -1222,7 +1223,7 @@ static QScriptValue js_findResearch(QScriptContext *context, QScriptEngine *engi
 	QScriptValue retval = engine->newArray(list.size());
 	for (int i = 0; i < list.size(); i++)
 	{
-		retval.setProperty(i, convResearch(list[i], engine, i));
+		retval.setProperty(i, convResearch(list[i], engine, player));
 	}
 	return retval;
 }	
