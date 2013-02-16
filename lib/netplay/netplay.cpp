@@ -2179,12 +2179,14 @@ static void NETregisterServer(int state)
 				{
 					debug(LOG_ERROR, "Failed to register game with server: %s", strSockError(getSockErr()));
 					socketClose(rs_socket);
+					server_not_there = true;
 					rs_socket = NULL;
 				}
 
 				if (readLobbyResponse(rs_socket, NET_TIMEOUT_DELAY) == SOCKET_ERROR)
 				{
 					socketClose(rs_socket);
+					server_not_there = true;
 					rs_socket = NULL;
 					return;
 				}
