@@ -1268,7 +1268,6 @@ void drawTerrain(void)
 
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, textureIndexVBO); glError();
-	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 	
 	// load the vertex (geometry) buffer
 	glBindBuffer(GL_ARRAY_BUFFER, geometryVBO);
@@ -1436,7 +1435,6 @@ void drawWater(void)
 	glBindTexture(GL_TEXTURE_2D, pie_Texture(iV_GetTexture("page-81")));
 	glError();
 	glEnable(GL_TEXTURE_2D);
-	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 	glEnable(GL_TEXTURE_GEN_S); glError();
 	glEnable(GL_TEXTURE_GEN_T); glError();
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);

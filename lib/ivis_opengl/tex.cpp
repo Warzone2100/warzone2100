@@ -165,8 +165,6 @@ int pie_AddTexPage(iV_Image *s, const char* filename, int slot, int maxTextureSi
 		minfilter = GL_LINEAR;
 	}
 
-	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, minfilter);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 

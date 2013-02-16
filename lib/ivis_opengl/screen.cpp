@@ -286,7 +286,6 @@ void screen_SetBackDropFromFile(const char* filename)
 			glBindTexture(GL_TEXTURE_2D, backDropTexture);
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image.width, image.height,
 			             0, iV_getPixelFormat(&image), GL_UNSIGNED_BYTE, image.bmp);
-			glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
@@ -399,7 +398,6 @@ void screen_Upload(const char *newBackDropBmp)
 		pie_SetTexturePage(TEXPAGE_EXTERN);
 		glBindTexture(GL_TEXTURE_2D, backDropTexture);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, BACKDROP_HACK_WIDTH, BACKDROP_HACK_HEIGHT, 0, GL_RGB, GL_UNSIGNED_BYTE, newBackDropBmp);
-		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 
