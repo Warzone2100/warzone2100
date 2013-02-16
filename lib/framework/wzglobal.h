@@ -310,6 +310,9 @@
 */
 #if defined(__cplusplus)
 # define WZ_CXX98
+# if __cplusplus >= 201103L || defined(__GXX_EXPERIMENTAL_CXX0X__)
+#  define WZ_CXX11
+# endif
 #endif /* WZ_CXXxx */
 
 
