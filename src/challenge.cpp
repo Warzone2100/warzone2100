@@ -167,8 +167,7 @@ bool addChallenges()
 
 	(void) PHYSFS_mkdir(sSearchPath); // just in case
 
-	psRequestScreen = widgCreateScreen(); // init the screen
-	widgSetTipFont(psRequestScreen, font_regular);
+	psRequestScreen = new W_SCREEN; // init the screen
 
 	/* add a form to place the tabbed form on */
 	W_FORMINIT sFormInit;
@@ -334,8 +333,8 @@ bool addChallenges()
 // ////////////////////////////////////////////////////////////////////////////
 bool closeChallenges()
 {
-	widgDelete(psRequestScreen, CHALLENGE_FORM);
-	widgReleaseScreen(psRequestScreen);
+	delete psRequestScreen;
+	psRequestScreen = NULL;
 	// need to "eat" up the return key so it don't pass back to game.
 	inputLoseFocus();
 	challengesUp = false;

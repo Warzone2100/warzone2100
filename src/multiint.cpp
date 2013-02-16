@@ -693,8 +693,7 @@ static void decideWRF(void)
 
 static bool OptionsInet(void)			//internet options
 {
-	psConScreen = widgCreateScreen();
-	widgSetTipFont(psConScreen,font_regular);
+	psConScreen = new W_SCREEN;
 
 	W_FORMINIT sFormInit;           //Connection Settings
 	sFormInit.formID = 0;
@@ -812,7 +811,8 @@ void runConnectionScreen(void)
 
 			if(SettingsUp == true)
 			{
-				widgReleaseScreen(psConScreen);
+				delete psConScreen;
+				psConScreen = NULL;
 				SettingsUp = false;
 			}
 
@@ -821,7 +821,8 @@ void runConnectionScreen(void)
 		case CON_IP_CANCEL:
 			if (SettingsUp == true)
 			{
-				widgReleaseScreen(psConScreen);
+				delete psConScreen;
+				psConScreen = NULL;
 				SettingsUp = false;
 			}
 			break;

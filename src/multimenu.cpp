@@ -417,8 +417,7 @@ void addMultiRequest(const char* searchDir, const char* fileExtension, UDWORD mo
 		}
 	}
 
-	psRScreen = widgCreateScreen(); ///< move this to intinit or somewhere like that.. (close too.)
-	widgSetTipFont(psRScreen,font_regular);
+	psRScreen = new W_SCREEN; ///< move this to intinit or somewhere like that.. (close too.)
 
 	/* Calculate how many buttons will go on a single form */
 	butPerForm = ((M_REQUEST_W - 0 - 4) / (R_BUT_W +4)) * ((M_REQUEST_H - 0- 4) / (R_BUT_H+ 4));
@@ -619,10 +618,10 @@ void addMultiRequest(const char* searchDir, const char* fileExtension, UDWORD mo
 
 static void closeMultiRequester(void)
 {
-	widgDelete(psRScreen,M_REQUEST);
 	multiRequestUp = false;
 	resetReadyStatus(false);
-	widgReleaseScreen(psRScreen);		// move this to the frontend shutdown...
+	delete psRScreen;  // move this to the frontend shutdown...
+	psRScreen = NULL;
 	return;
 }
 

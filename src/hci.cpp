@@ -485,14 +485,7 @@ bool intInitialise(void)
 
 	intInitialiseGraphics();
 
-	psWScreen = widgCreateScreen();
-	if (psWScreen == NULL)
-	{
-		debug(LOG_ERROR, "intInitialise: Couldn't create widget screen");
-		return false;
-	}
-
-	widgSetTipFont(psWScreen, font_regular);
+	psWScreen = new W_SCREEN;
 
 	if (GetGameMode() == GS_NORMAL)
 	{
@@ -552,7 +545,8 @@ void intResetPreviousObj(void)
 /* Shut down the in game interface */
 void interfaceShutDown(void)
 {
-	widgReleaseScreen(psWScreen);
+	delete psWScreen;
+	psWScreen = NULL;
 
 	free(apsStructStatsList);
 	free(ppResearchList);

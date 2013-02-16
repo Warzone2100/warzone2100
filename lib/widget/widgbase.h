@@ -128,9 +128,12 @@ typedef std::vector<WidgetTrigger> WidgetTriggers;
 /* The screen structure which stores all info for a widget screen */
 struct W_SCREEN
 {
+	W_SCREEN();
+	~W_SCREEN();
+
 	W_FORM          *psForm;        ///< The root form of the screen
 	WIDGET          *psFocus;       ///< The widget that has keyboard focus
-	enum iV_fonts    TipFontID;     ///< ID of the IVIS font to use for tool tips.
+	iV_fonts         TipFontID;     ///< ID of the IVIS font to use for tool tips.
 	WidgetTriggers   retWidgets;    ///< The widgets to be returned by widgRunScreen.
 };
 

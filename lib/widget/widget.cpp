@@ -162,40 +162,24 @@ void WIDGET::widgetLost(WIDGET *widget)
 	}
 }
 
-/* Create an empty widget screen */
-W_SCREEN *widgCreateScreen()
+W_SCREEN::W_SCREEN()
+	: psFocus(NULL)
+	, TipFontID(font_regular)
 {
-	W_SCREEN *psScreen = new W_SCREEN;
-	if (psScreen == NULL)
-	{
-		debug(LOG_FATAL, "widgCreateScreen: Out of memory");
-		abort();
-		return NULL;
-	}
-
 	W_FORMINIT sInit;
 	sInit.id = 0;
 	sInit.style = WFORM_PLAIN | WFORM_INVISIBLE;
 	sInit.x = 0;
 	sInit.y = 0;
-	sInit.width = (UWORD)(screenWidth - 1);
-	sInit.height = (UWORD)(screenHeight - 1);
+	sInit.width = screenWidth - 1;
+	sInit.height = screenHeight - 1;
 
-	psScreen->psForm = new W_FORM(&sInit);
-	psScreen->psFocus = NULL;
-	psScreen->TipFontID = font_regular;
-
-	return psScreen;
+	psForm = new W_FORM(&sInit);
 }
 
-/* Release a screen and all its associated data */
-void widgReleaseScreen(W_SCREEN *psScreen)
+W_SCREEN::~W_SCREEN()
 {
-	ASSERT(psScreen != NULL,
-	       "widgReleaseScreen: Invalid screen pointer");
-
-	delete psScreen->psForm;
-	delete psScreen;
+	delete psForm;
 }
 
 /* Check whether an ID has been used on a form */

@@ -193,8 +193,7 @@ bool addLoadSave(LOADSAVE_MODE savemode, const char *title)
 		intRemoveReticule();
 	}
 
-	psRequestScreen = widgCreateScreen(); // init the screen
-	widgSetTipFont(psRequestScreen,font_regular);
+	psRequestScreen = new W_SCREEN;
 
 	/* add a form to place the tabbed form on */
 	W_FORMINIT sFormInit;
@@ -337,7 +336,6 @@ bool addLoadSave(LOADSAVE_MODE savemode, const char *title)
 // ////////////////////////////////////////////////////////////////////////////
 bool closeLoadSave(void)
 {
-	widgDelete(psRequestScreen,LOADSAVE_FORM);
 	bLoadSaveUp = false;
 
 	if ((bLoadSaveMode == LOAD_INGAME_MISSION) || (bLoadSaveMode == SAVE_INGAME_MISSION)
@@ -358,7 +356,8 @@ bool closeLoadSave(void)
 		intShowPowerBar();
 
 	}
-	widgReleaseScreen(psRequestScreen);
+	delete psRequestScreen;
+	psRequestScreen = NULL;
 	// need to "eat" up the return key so it don't pass back to game.
 	inputLoseFocus();
 	return true;

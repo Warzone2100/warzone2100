@@ -262,12 +262,6 @@ extern void widgReset(void);
 /** Shut down the widget module */
 extern void widgShutDown(void);
 
-/** Create an empty widget screen */
-extern W_SCREEN *widgCreateScreen(void);
-
-/** Release a screen and all its associated data */
-extern void widgReleaseScreen(W_SCREEN *psScreen);
-
 /** Set the tool tip font for a screen */
 extern void widgSetTipFont(W_SCREEN *psScreen, enum iV_fonts FontID);
 
