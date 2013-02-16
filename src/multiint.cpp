@@ -935,9 +935,9 @@ static void addGames(void)
 	static const char *badModTip = "Your loaded mods are incompatible with this game. (Check mods/autoload/?)";
 
 	//count games to see if need two columns.
-	for(i=0;i<MaxGames;i++)							// draw games
+	for (i=0; i < MaxGames; i++)
 	{
-		if( NetPlay.games[i].desc.dwSize !=0)
+		if (NetPlay.games[i].desc.dwSize !=0)
 		{
 			gcount++;
 		}
@@ -967,7 +967,8 @@ static void addGames(void)
 		for (i=0; i<MaxGames; i++)							// draw games
 		{
 			widgDelete(psWScreen, GAMES_GAMESTART+i);	// remove old icon.
-			if (NetPlay.games[i].desc.dwSize !=0)
+			// Since we lack a filter GUI button, we only show newer or same versions.
+			if (NetPlay.games[i].desc.dwSize !=0 && ((NetPlay.games[i].game_version_major >= NETGetMajorVersion()) && (NetPlay.games[i].game_version_minor >= NETGetMinorVersion())))
 			{
 
 				sButInit.id = GAMES_GAMESTART+i;
