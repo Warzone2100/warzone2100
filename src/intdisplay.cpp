@@ -128,7 +128,7 @@ static void setBarGraphValue(W_BARGRAPH *barGraph, PIELIGHT colour, int value, i
 {
 	barGraph->majorCol = colour;
 	barGraph->majorSize = PERNUM(WBAR_SCALE, clip(value, 0, range), range);
-	barGraph->style &= ~WIDG_HIDDEN;
+	barGraph->show();
 }
 
 static void formatEmpty(W_BARGRAPH *barGraph)
@@ -199,7 +199,7 @@ void intUpdateProgressBar(WIDGET *psWidget, W_CONTEXT *psContext)
 
 	if (psObj == NULL)
 	{
-		BarGraph->style |= WIDG_HIDDEN;
+		BarGraph->hide();
 		return;
 	}
 
@@ -209,7 +209,7 @@ void intUpdateProgressBar(WIDGET *psWidget, W_CONTEXT *psContext)
 	}
 
 	BarGraph->majorSize = 0;
-	BarGraph->style |= WIDG_HIDDEN;
+	BarGraph->hide();
 
 	switch (psObj->type)
 	{
@@ -308,11 +308,11 @@ void intUpdateQuantity(WIDGET *psWidget, W_CONTEXT *psContext)
 		char tmp[20];
 		ssprintf(tmp, "%d", remaining);
 		Label->aText = QString::fromUtf8(tmp);
-		Label->style &= ~WIDG_HIDDEN;
+		Label->show();
 	}
 	else
 	{
-		Label->style |= WIDG_HIDDEN;
+		Label->hide();
 	}
 }
 
@@ -336,12 +336,12 @@ void intAddFactoryInc(WIDGET *psWidget, W_CONTEXT *psContext)
 		char tmp[20];
 		ssprintf(tmp, "%u", Factory->psAssemblyPoint->factoryInc + 1);
 		Label->aText = QString::fromUtf8(tmp);
-		Label->style &= ~WIDG_HIDDEN;
+		Label->show();
 	}
 	else
 	{
 		Label->aText.clear();
-		Label->style |= WIDG_HIDDEN;
+		Label->hide();
 	}
 }
 
@@ -381,12 +381,12 @@ void intAddProdQuantity(WIDGET *psWidget, W_CONTEXT *psContext)
 				ssprintf(tmp, "%u", entry.numRemaining());
 			}
 			Label->aText = QString::fromUtf8(tmp);
-			Label->style &= ~WIDG_HIDDEN;
+			Label->show();
 		}
 		else
 		{
 			Label->aText.clear();
-			Label->style |= WIDG_HIDDEN;
+			Label->hide();
 		}
 	}
 }
@@ -416,13 +416,13 @@ void intAddLoopQuantity(WIDGET *psWidget, W_CONTEXT *psContext)
 		{
 			Label->aText.clear();  // Don't show "1" loop.
 		}
-		Label->style &= ~WIDG_HIDDEN;
+		Label->show();
 	}
 	else
 	{
 		//hide the label if no factory
 		Label->aText.clear();
-		Label->style |= WIDG_HIDDEN;
+		Label->hide();
 	}
 }
 
@@ -443,12 +443,12 @@ void intUpdateCommandSize(WIDGET *psWidget, W_CONTEXT *psContext)
 		char tmp[40];
 		ssprintf(tmp, "%u/%u", psDroid->psGroup ? psDroid->psGroup->getNumMembers() : 0, cmdDroidMaxGroup(psDroid));
 		Label->aText = QString::fromUtf8(tmp);
-		Label->style &= ~WIDG_HIDDEN;
+		Label->show();
 	}
 	else
 	{
 		Label->aText.clear();
-		Label->style |= WIDG_HIDDEN;
+		Label->hide();
 	}
 }
 
@@ -468,12 +468,12 @@ void intUpdateCommandExp(WIDGET *psWidget, W_CONTEXT *psContext)
 
 		int numStars = std::max((int)getDroidLevel(psDroid) - 1, 0);
 		Label->aText = QString(numStars, '*');
-		Label->style &= ~WIDG_HIDDEN;
+		Label->show();
 	}
 	else
 	{
 		Label->aText.clear();
-		Label->style |= WIDG_HIDDEN;
+		Label->hide();
 	}
 }
 
@@ -514,12 +514,12 @@ void intUpdateCommandFact(WIDGET *psWidget, W_CONTEXT *psContext)
 				Label->aText.append((char)('0' + i + 1));
 			}
 		}
-		Label->style &= ~WIDG_HIDDEN;
+		Label->show();
 	}
 	else
 	{
 		Label->aText.clear();
-		Label->style |= WIDG_HIDDEN;
+		Label->hide();
 	}
 }
 

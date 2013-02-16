@@ -614,13 +614,13 @@ static void intDoScreenRefresh(void)
 	{
 		Refreshing = true;
 
-		if (((intMode == INT_OBJECT) ||
-		     (intMode == INT_STAT) ||
-		     (intMode == INT_CMDORDER) ||
-		     (intMode == INT_ORDER) ||
-		     (intMode == INT_TRANSPORTER)) &&
-		    (widgGetFromID(psWScreen, IDOBJ_FORM) != NULL) &&
-		    !(widgGetFromID(psWScreen, IDOBJ_FORM)->style & WIDG_HIDDEN))
+		if ((intMode == INT_OBJECT ||
+		     intMode == INT_STAT ||
+		     intMode == INT_CMDORDER ||
+		     intMode == INT_ORDER ||
+		     intMode == INT_TRANSPORTER) &&
+		     widgGetFromID(psWScreen, IDOBJ_FORM) != NULL &&
+		     widgGetFromID(psWScreen, IDOBJ_FORM)->visible())
 		{
 			bool StatsWasUp = false;
 			bool OrderWasUp = false;

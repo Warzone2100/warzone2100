@@ -68,10 +68,16 @@ enum WIDGET_KEY
 	WKEY_SECONDARY,
 };
 
+enum
+{
+	WIDG_HIDDEN = 0x8000,  ///< The widget is initially hidden
+};
+
 /* The base widget data type */
 struct WIDGET
 {
 	typedef std::vector<WIDGET *> Children;
+
 
 	WIDGET(W_INIT const *init, WIDGET_TYPE type);
 	WIDGET(WIDGET *parent);
@@ -92,6 +98,10 @@ struct WIDGET
 	virtual QString getString() const;
 	virtual void setString(QString string);
 	virtual void setTip(QString string);
+
+	void show(bool doShow = true) { style = (style & ~WIDG_HIDDEN) | (!doShow*WIDG_HIDDEN); }
+	void hide() { show(false); }
+	bool visible() { return (style & WIDG_HIDDEN) == 0; }
 
 	void setString(char const *stringUtf8) { setString(QString::fromUtf8(stringUtf8)); }
 	void setTip(char const *stringUtf8) { setTip(QString::fromUtf8(stringUtf8)); }

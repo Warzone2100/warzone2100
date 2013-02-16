@@ -40,8 +40,6 @@
  * Widget style definitions - these control how the basic widget appears on screen
  */
 
-#define WIDG_HIDDEN		0x8000	///< The widget is initially hidden
-
 /************ Form styles ****************/
 
 #define WFORM_PLAIN		0	///< Plain form

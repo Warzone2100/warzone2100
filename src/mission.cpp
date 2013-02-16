@@ -2048,7 +2048,7 @@ void intUpdateMissionTimer(WIDGET *psWidget, W_CONTEXT *psContext)
 	}
 
 	fillTimeDisplay(Label->aText, timeRemaining, true);
-	Label->style &= ~WIDG_HIDDEN;	// Make sure its visible
+	Label->show();  // Make sure its visible
 
 	if (challengeActive)
 	{
@@ -2184,7 +2184,7 @@ void intUpdateTransporterTimer(WIDGET *psWidget, W_CONTEXT *psContext)
 	Label->aText[3] = (UBYTE)('0'+ calcTime / 10);
 	Label->aText[4] = (UBYTE)('0'+ calcTime % 10);*/
 
-	Label->style &= ~WIDG_HIDDEN;
+	Label->show();
 }
 
 /* Remove the Mission Timer widgets from the screen*/

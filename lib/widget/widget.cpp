@@ -341,34 +341,20 @@ WIDGET *widgGetFromID(W_SCREEN *psScreen, UDWORD id)
 	return widgFormGetFromID(psScreen->psForm, id);
 }
 
-
-/* Hide a widget */
 void widgHide(W_SCREEN *psScreen, UDWORD id)
 {
-	WIDGET	*psWidget;
+	WIDGET *psWidget = widgGetFromID(psScreen, id);
+	ASSERT_OR_RETURN(, psWidget != NULL, "Couldn't find widget from id.");
 
-	psWidget = widgGetFromID(psScreen, id);
-	ASSERT(psWidget != NULL,
-	       "widgHide: couldn't find widget from id");
-	if (psWidget)
-	{
-		psWidget->style |= WIDG_HIDDEN;
-	}
+	psWidget->hide();
 }
 
-
-/* Reveal a widget */
 void widgReveal(W_SCREEN *psScreen, UDWORD id)
 {
-	WIDGET	*psWidget;
+	WIDGET *psWidget = widgGetFromID(psScreen, id);
+	ASSERT_OR_RETURN(, psWidget != NULL, "Couldn't find widget from id.");
 
-	psWidget = widgGetFromID(psScreen, id);
-	ASSERT(psWidget != NULL,
-	       "widgReveal: couldn't find widget from id");
-	if (psWidget)
-	{
-		psWidget->style &= ~WIDG_HIDDEN;
-	}
+	psWidget->show();
 }
 
 
@@ -674,7 +660,7 @@ static void widgProcessForm(W_CONTEXT *psContext)
 		WIDGET *psCurr = *i;
 
 		/* Skip any hidden widgets */
-		if (psCurr->style & WIDG_HIDDEN)
+		if (!psCurr->visible())
 		{
 			continue;
 		}
@@ -718,7 +704,7 @@ static void widgProcessClick(W_CONTEXT &psContext, WIDGET_KEY key, bool wasPress
 	{
 		WIDGET *psCurr = *i;
 
-		if ((psCurr->style & WIDG_HIDDEN) != 0 || psCurr->type != WIDG_FORM)
+		if (!psCurr->visible() || psCurr->type != WIDG_FORM)
 		{
 			continue;  // Skip any hidden forms or non-form widgets.
 		}
@@ -755,7 +741,7 @@ static void widgProcessClick(W_CONTEXT &psContext, WIDGET_KEY key, bool wasPress
 	{
 		WIDGET *psCurr = *i;
 
-		if (psCurr->style & WIDG_HIDDEN)
+		if (!psCurr->visible())
 		{
 			continue;  // Skip hidden widgets.
 		}
@@ -936,7 +922,7 @@ static void widgDisplayForm(W_FORM *psForm, UDWORD xOffset, UDWORD yOffset)
 		WIDGET *psCurr = *i;
 
 		/* Skip any hidden widgets */
-		if (psCurr->style & WIDG_HIDDEN)
+		if (!psCurr->visible())
 		{
 			continue;
 		}
