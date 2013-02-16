@@ -326,6 +326,7 @@ void screen_Display()
 	glBindTexture(GL_TEXTURE_2D, backDropTexture);
 
 	// Draw backdrop
+	glColor3f(1, 1, 1);
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 	glBindBuffer(GL_ARRAY_BUFFER, buffers[VBO_TEXCOORD]); glTexCoordPointer(2, GL_FLOAT, 0, NULL);
