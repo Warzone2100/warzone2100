@@ -169,13 +169,13 @@ unsigned NET_PlayerConnectionStatus[CONNECTIONSTATUS_NORMAL][MAX_PLAYERS];
 
 // ////////////////////////////////////////////////////////////////////////////
 /************************************************************************************
- **  NOTE (!)  Change the versionString when net code changes!!
- **            ie ("trunk", "2.1.3", "3.0", ...)
+ **  NOTE (!)  Increment NETCODE_VERSION_MINOR on each release.
+ **
  ************************************************************************************
 **/
 static char const *versionString = version_getVersionString();
-static int NETCODE_VERSION_MAJOR = 6;
-static int NETCODE_VERSION_MINOR = 5;
+static int NETCODE_VERSION_MAJOR = 7;
+static int NETCODE_VERSION_MINOR = 0;
 
 bool NETisCorrectVersion(uint32_t game_version_major, uint32_t game_version_minor)
 {
