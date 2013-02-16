@@ -185,6 +185,7 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 	{
 		pie_SetRendMode(REND_ALPHA);
 		colour.byte.a = (UBYTE)pieFlagData;
+		light = false;
 	}
 	else if (pieFlag & pie_PREMULTIPLIED)
 	{
