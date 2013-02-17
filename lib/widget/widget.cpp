@@ -96,7 +96,7 @@ WIDGET::WIDGET(W_INIT const *init, WIDGET_TYPE type)
 	, style(init->style)
 	, x(init->x), y(init->y)
 	, width(init->width), height(init->height)
-	, display(init->pDisplay)
+	, displayFunction(init->pDisplay)
 	, callback(init->pCallback)
 	, pUserData(init->pUserData)
 	, UserData(init->UserData)
@@ -110,7 +110,7 @@ WIDGET::WIDGET(WIDGET *parent)
 	, style(0)
 	, x(0), y(0)
 	, width(1), height(1)
-	, display(NULL)
+	, displayFunction(NULL)
 	, callback(NULL)
 	, pUserData(NULL)
 	, UserData(0)
@@ -892,7 +892,7 @@ static void widgDisplayForm(W_FORM *psForm, UDWORD xOffset, UDWORD yOffset)
 	SDWORD	xOrigin = 0, yOrigin = 0;
 
 	/* Display the form */
-	psForm->display((WIDGET *)psForm, xOffset, yOffset, psForm->aColours);
+	psForm->display(xOffset, yOffset, psForm->aColours);
 	if (psForm->disableChildren == true)
 	{
 		return;
@@ -933,7 +933,7 @@ static void widgDisplayForm(W_FORM *psForm, UDWORD xOffset, UDWORD yOffset)
 		}
 		else
 		{
-			psCurr->display(psCurr, xOffset, yOffset, psForm->aColours);
+			psCurr->display(xOffset, yOffset, psForm->aColours);
 		}
 	}
 }

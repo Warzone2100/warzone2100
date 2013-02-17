@@ -1208,12 +1208,12 @@ void intOpenPlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_
 	{
 		if (Form->pUserData != NULL)
 		{
-			Form->display = (WIDGET_DISPLAY)Form->pUserData;
+			Form->displayFunction = (WIDGET_DISPLAY)Form->pUserData;
 		}
 		else
 		{
 			//default to display
-			Form->display = intDisplayPlainForm;
+			Form->displayFunction = intDisplayPlainForm;
 		}
 		Form->disableChildren = false;
 		Form->animCount = 0;

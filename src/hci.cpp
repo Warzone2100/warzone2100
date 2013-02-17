@@ -3793,7 +3793,7 @@ void intRemoveObject(void)
 	Form = (W_TABFORM *)widgGetFromID(psWScreen, IDOBJ_FORM);
 	if (Form)
 	{
-		Form->display = intClosePlainForm;
+		Form->displayFunction = intClosePlainForm;
 		Form->disableChildren = true;
 		Form->pUserData = NULL; // Used to signal when the close anim has finished.
 		ClosingObject = true;
@@ -3838,7 +3838,7 @@ void intRemoveStats(void)
 	Form = (W_TABFORM *)widgGetFromID(psWScreen, IDSTAT_FORM);
 	if (Form)
 	{
-		Form->display = intClosePlainForm;
+		Form->displayFunction = intClosePlainForm;
 		Form->pUserData = NULL; // Used to signal when the close anim has finished.
 		Form->disableChildren = true;
 		ClosingStats = true;

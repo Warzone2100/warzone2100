@@ -35,6 +35,7 @@ struct W_LABEL : public WIDGET
 
 	void highlight(W_CONTEXT *psContext);
 	void highlightLost();
+	void display(int xOffset, int yOffset, PIELIGHT *pColours);
 
 	QString getString() const;
 	void setString(QString string);
@@ -44,8 +45,5 @@ struct W_LABEL : public WIDGET
 	iV_fonts FontID;
 	QString  pTip;          // The tool tip for the button
 };
-
-/* label display function */
-extern void labelDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 
 #endif // __INCLUDED_LIB_WIDGET_LABEL_H__

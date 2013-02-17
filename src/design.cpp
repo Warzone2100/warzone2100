@@ -3348,14 +3348,7 @@ static void intSetButtonFlash(UDWORD id, bool bFlash)
 
 	ASSERT_OR_RETURN(, psWidget->type == WIDG_BUTTON, "Not a button");
 
-	if (bFlash == true)
-	{
-		psWidget->display = intDisplayButtonFlash;
-	}
-	else
-	{
-		psWidget->display = intDisplayButtonHilight;
-	}
+	psWidget->displayFunction = bFlash? intDisplayButtonFlash : intDisplayButtonHilight;
 }
 
 /*

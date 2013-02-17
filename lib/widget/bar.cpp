@@ -60,23 +60,6 @@ W_BARGRAPH::W_BARGRAPH(W_BARINIT const *init)
 	, textCol(WZCOL_BLACK)
 	, pTip(QString::fromUtf8(init->pTip))
 {
-	/* Set the display function */
-	if (display == NULL)
-	{
-		if (init->style & WBAR_TROUGH)
-		{
-			display = barGraphDisplayTrough;
-		}
-		else if (init->style & WBAR_DOUBLE)
-		{
-			display = barGraphDisplayDouble;
-		}
-		else
-		{
-			display = barGraphDisplay;
-		}
-	}
-
 	/* Set the minor colour if necessary */
 	// Actually, this sets the major colour to the minor colour. The minor colour used to be left completely uninitialised... Wonder what it was for..?
 	if (style & WBAR_DOUBLE)
@@ -187,7 +170,7 @@ static void barGraphDisplayText(W_BARGRAPH *barGraph, int x0, int x1, int y1, PI
 }
 
 /* The simple bar graph display function */
-void barGraphDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+static void barGraphDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {
 	SDWORD		x0 = 0, y0 = 0, x1 = 0, y1 = 0;
 	W_BARGRAPH	*psBGraph;
@@ -231,7 +214,7 @@ void barGraphDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT 
 
 
 /* The double bar graph display function */
-void barGraphDisplayDouble(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+static void barGraphDisplayDouble(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {
 	SDWORD		x0 = 0, y0 = 0, x1 = 0, y1 = 0, x2 = 0, y2 = 0, x3 = 0, y3 = 0;
 	W_BARGRAPH	*psBGraph = (W_BARGRAPH *)psWidget;
@@ -402,6 +385,28 @@ void barGraphDisplayTrough(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIE
 	}
 
 	barGraphDisplayText(psBGraph, x0, tx1, ty1, pColours);
+}
+
+void W_BARGRAPH::display(int xOffset, int yOffset, PIELIGHT *pColours)
+{
+	if (displayFunction != NULL)
+	{
+		displayFunction(this, xOffset, yOffset, pColours);
+		return;
+	}
+
+	if (style & WBAR_TROUGH)
+	{
+		barGraphDisplayTrough(this, xOffset, yOffset, pColours);
+	}
+	else if (style & WBAR_DOUBLE)
+	{
+		barGraphDisplayDouble(this, xOffset, yOffset, pColours);
+	}
+	else
+	{
+		barGraphDisplay(this, xOffset, yOffset, pColours);
+	}
 }
 
 void W_BARGRAPH::setTip(QString string)

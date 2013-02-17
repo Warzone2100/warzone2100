@@ -42,43 +42,37 @@ W_LABEL::W_LABEL(W_LABINIT const *init)
 	, FontID(init->FontID)
 	, pTip(QString::fromUtf8(init->pTip))
 {
-	if (display == NULL)
-	{
-		display = labelDisplay;
-	}
-
 	ASSERT((init->style & ~(WLAB_PLAIN | WLAB_ALIGNLEFT | WLAB_ALIGNRIGHT | WLAB_ALIGNCENTRE | WIDG_HIDDEN)) == 0, "Unknown button style");
 }
 
-/* label display function */
-void labelDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+void W_LABEL::display(int xOffset, int yOffset, PIELIGHT *pColours)
 {
-	unsigned int fx, fy, fw;
-	W_LABEL		*psLabel;
-	enum iV_fonts FontID;
-
-	psLabel = (W_LABEL *)psWidget;
-	FontID = psLabel->FontID;
+	if (displayFunction != NULL)
+	{
+		displayFunction(this, xOffset, yOffset, pColours);
+		return;
+	}
 
 	iV_SetFont(FontID);
 	iV_SetTextColour(pColours[WCOL_TEXT]);
 
-	QByteArray text = psLabel->aText.toUtf8();
-	if (psLabel->style & WLAB_ALIGNCENTRE)
+	QByteArray text = aText.toUtf8();
+	int fx;
+	if (style & WLAB_ALIGNCENTRE)
 	{
-		fw = iV_GetTextWidth(text.constData());
-		fx = xOffset + psLabel->x + (psLabel->width - fw) / 2;
+		int fw = iV_GetTextWidth(text.constData());
+		fx = xOffset + x + (width - fw) / 2;
 	}
-	else if (psLabel->style & WLAB_ALIGNRIGHT)
+	else if (style & WLAB_ALIGNRIGHT)
 	{
-		fw = iV_GetTextWidth(text.constData());
-		fx = xOffset + psLabel->x + psLabel->width - fw;
+		int fw = iV_GetTextWidth(text.constData());
+		fx = xOffset + x + width - fw;
 	}
 	else
 	{
-		fx = xOffset + psLabel->x;
+		fx = xOffset + x;
 	}
-	fy = yOffset + psLabel->y + (psLabel->height - iV_GetTextLineSize()) / 2 - iV_GetTextAboveBase();
+	int fy = yOffset + y + (height - iV_GetTextLineSize()) / 2 - iV_GetTextAboveBase();
 	iV_DrawText(text.constData(), fx, fy);
 }
 

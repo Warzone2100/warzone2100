@@ -442,7 +442,7 @@ bool intCloseInGameOptions(bool bPutUpLoadSave, bool bResetMissionWidgets)
 
 		if(Form)
 		{
-			Form->display		 = intClosePlainForm;
+			Form->displayFunction    = intClosePlainForm;
 			Form->pUserData		 = NULL; // Used to signal when the close anim has finished.
 			Form->disableChildren= true;
 			ClosingInGameOp		 = true;		// like orderup/closingorder

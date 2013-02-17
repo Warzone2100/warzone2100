@@ -91,6 +91,7 @@ struct WIDGET
 	virtual void highlightLost() {}
 	virtual void focusLost(W_SCREEN *) {}
 	virtual void run(W_CONTEXT *) {}
+	virtual void display(int, int, PIELIGHT *) {}
 
 	virtual unsigned getState();
 	virtual void setState(unsigned state);
@@ -118,7 +119,7 @@ struct WIDGET
 	UDWORD                  style;                  ///< The style of the widget
 	SWORD                   x, y;                   ///< The location of the widget
 	UWORD                   width, height;          ///< The size of the widget
-	WIDGET_DISPLAY          display;                ///< Display the widget
+	WIDGET_DISPLAY          displayFunction;        ///< Override function to display the widget.
 	WIDGET_CALLBACK         callback;               ///< User callback (if any)
 	void                   *pUserData;              ///< Pointer to a user data block (if any)
 	UDWORD                  UserData;               ///< User data (if any)

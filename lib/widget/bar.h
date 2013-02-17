@@ -33,6 +33,7 @@ struct W_BARGRAPH : public WIDGET
 
 	void highlight(W_CONTEXT *psContext);
 	void highlightLost();
+	void display(int xOffset, int yOffset, PIELIGHT *pColours);
 
 	void setTip(QString string);
 
@@ -50,12 +51,6 @@ struct W_BARGRAPH : public WIDGET
 	QString         pTip;                           // The tool tip for the graph
 	QString         text;                           // Text on the bar.
 };
-
-/* The bar graph display function */
-extern void barGraphDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
-
-/* The double bar graph display function */
-extern void barGraphDisplayDouble(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 
 /* The trough bar graph display function */
 extern void barGraphDisplayTrough(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);

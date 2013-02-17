@@ -77,11 +77,6 @@ W_EDITBOX::W_EDITBOX(W_EDBINIT const *init)
 	}
 	aText = QString::fromUtf8(text);
 
-	if (display == NULL)
-	{
-		display = editBoxDisplay;
-	}
-
 	initialise();
 
 	ASSERT((init->style & ~(WEDB_PLAIN | WIDG_HIDDEN)) == 0, "Unknown edit box style");
@@ -536,86 +531,79 @@ void W_EDITBOX::highlightLost()
 	psWidget->state = psWidget->state & WEDBS_MASK;
 }
 
-
-/* The edit box display function */
-void editBoxDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+void W_EDITBOX::display(int xOffset, int yOffset, PIELIGHT *pColours)
 {
-	W_EDITBOX	*psEdBox;
-	SDWORD		x0, y0, x1, y1, fx, fy, cx, cy;
-	enum iV_fonts CurrFontID;
-
-#if CURSOR_BLINK
-	bool		blink;
-#endif
-
-	psEdBox = (W_EDITBOX *)psWidget;
-	CurrFontID = psEdBox->FontID;
-
-	x0 = psEdBox->x + xOffset;
-	y0 = psEdBox->y + yOffset;
-	x1 = x0 + psEdBox->width;
-	y1 = y0 + psEdBox->height;
-
-	if (psEdBox->pBoxDisplay)
+	if (displayFunction != NULL)
 	{
-		psEdBox->pBoxDisplay((WIDGET *)psEdBox, xOffset, yOffset, pColours);
+		displayFunction(this, xOffset, yOffset, pColours);
+		return;
+	}
+
+	int x0 = x + xOffset;
+	int y0 = y + yOffset;
+	int x1 = x0 + width;
+	int y1 = y0 + height;
+
+	if (pBoxDisplay != NULL)
+	{
+		pBoxDisplay(this, xOffset, yOffset, pColours);
 	}
 	else
 	{
 		iV_ShadowBox(x0, y0, x1, y1, 0, pColours[WCOL_DARK], pColours[WCOL_LIGHT], pColours[WCOL_BKGRND]);
 	}
 
-	fx = x0 + WEDB_XGAP;// + (psEdBox->width - fw) / 2;
+	int fx = x0 + WEDB_XGAP;// + (psEdBox->width - fw) / 2;
 
-	iV_SetFont(CurrFontID);
+	iV_SetFont(FontID);
 	iV_SetTextColour(pColours[WCOL_TEXT]);
 
-	fy = y0 + (psEdBox->height - iV_GetTextLineSize()) / 2 - iV_GetTextAboveBase();
+	int fy = y0 + (height - iV_GetTextLineSize()) / 2 - iV_GetTextAboveBase();
 
 	/* If there is more text than will fit into the box, display the bit with the cursor in it */
-	QString tmp = psEdBox->aText;
-	tmp.remove(0, psEdBox->printStart);  // Erase anything there isn't room to display.
-	tmp.remove(psEdBox->printChars, tmp.length());
+	QString tmp = aText;
+	tmp.remove(0, printStart);  // Erase anything there isn't room to display.
+	tmp.remove(printChars, tmp.length());
 
 	iV_DrawText(tmp.toUtf8().constData(), fx, fy);
 
 	// Display the cursor if editing
 #if CURSOR_BLINK
-	blink = !(((wzGetTicks() - psEdBox->blinkOffset) / WEDB_BLINKRATE) % 2);
-	if ((psEdBox->state & WEDBS_MASK) == WEDBS_INSERT && blink)
+	bool blink = !(((wzGetTicks() - blinkOffset) / WEDB_BLINKRATE) % 2);
+	if ((state & WEDBS_MASK) == WEDBS_INSERT && blink)
 #else
-	if ((psEdBox->state & WEDBS_MASK) == WEDBS_INSERT)
+	if ((state & WEDBS_MASK) == WEDBS_INSERT)
 #endif
 	{
 		// insert mode
-		QString tmp = psEdBox->aText;
-		tmp.remove(psEdBox->insPos, tmp.length());         // Erase from the cursor on, to find where the cursor should be.
-		tmp.remove(0, psEdBox->printStart);
+		QString tmp = aText;
+		tmp.remove(insPos, tmp.length());         // Erase from the cursor on, to find where the cursor should be.
+		tmp.remove(0, printStart);
 
-		cx = x0 + WEDB_XGAP + iV_GetTextWidth(tmp.toUtf8().constData());
+		int cx = x0 + WEDB_XGAP + iV_GetTextWidth(tmp.toUtf8().constData());
 		cx += iV_GetTextWidth("-");
-		cy = fy;
+		int cy = fy;
 		iV_Line(cx, cy + iV_GetTextAboveBase(), cx, cy - iV_GetTextBelowBase(), pColours[WCOL_CURSOR]);
 	}
 #if CURSOR_BLINK
-	else if ((psEdBox->state & WEDBS_MASK) == WEDBS_OVER && blink)
+	else if ((state & WEDBS_MASK) == WEDBS_OVER && blink)
 #else
-	else if ((psEdBox->state & WEDBS_MASK) == WEDBS_OVER)
+	else if ((state & WEDBS_MASK) == WEDBS_OVER)
 #endif
 	{
 		// overwrite mode
-		QString tmp = psEdBox->aText;
-		tmp.remove(psEdBox->insPos, tmp.length());         // Erase from the cursor on, to find where the cursor should be.
-		tmp.remove(0, psEdBox->printStart);
+		QString tmp = aText;
+		tmp.remove(insPos, tmp.length());         // Erase from the cursor on, to find where the cursor should be.
+		tmp.remove(0, printStart);
 
-		cx = x0 + WEDB_XGAP + iV_GetTextWidth(tmp.toUtf8().constData());
-		cy = fy;
+		int cx = x0 + WEDB_XGAP + iV_GetTextWidth(tmp.toUtf8().constData());
+		int cy = fy;
 		iV_Line(cx, cy, cx + WEDB_CURSORSIZE, cy, pColours[WCOL_CURSOR]);
 	}
 
-	if (psEdBox->pBoxDisplay == NULL)
+	if (pBoxDisplay == NULL)
 	{
-		if (psEdBox->state & WEDBS_HILITE)
+		if ((state & WEDBS_HILITE) != 0)
 		{
 			/* Display the button hilite */
 			iV_Box(x0 - 2, y0 - 2, x1 + 2, y1 + 2, pColours[WCOL_HILITE]);

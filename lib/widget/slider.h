@@ -41,6 +41,7 @@ struct W_SLIDER : public WIDGET
 	void highlight(W_CONTEXT *psContext);
 	void highlightLost();
 	void run(W_CONTEXT *psContext);
+	void display(int xOffset, int yOffset, PIELIGHT *pColours);
 
 	void setTip(QString string);
 
@@ -51,8 +52,5 @@ struct W_SLIDER : public WIDGET
 	UWORD		state;				// Slider state
 	QString         pTip;                           // Tool tip
 };
-
-/* The slider display function */
-extern void sliderDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 
 #endif // __INCLUDED_LIB_WIDGET_SLIDER_H__

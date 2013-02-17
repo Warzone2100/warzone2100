@@ -1037,7 +1037,7 @@ void intRemoveIntelMap(void)
 	Form = (W_TABFORM*)widgGetFromID(psWScreen,IDINTMAP_FORM);
 	if(Form)
 	{
-		Form->display = intClosePlainForm;
+		Form->displayFunction = intClosePlainForm;
 		Form->disableChildren = true;
 		Form->pUserData = NULL; // Used to signal when the close anim has finished.
 	}
@@ -1099,7 +1099,7 @@ void intRemoveMessageView(bool animated)
 
 
 			// Start the window close animation.
-			Form->display = intClosePlainForm;
+			Form->displayFunction = intClosePlainForm;
 			Form->disableChildren = true;
 			Form->pUserData = NULL; // Used to signal when the close anim has finished.
 			ClosingMessageView = true;

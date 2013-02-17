@@ -36,6 +36,7 @@ struct W_FORM : public WIDGET
 
 	void clicked(W_CONTEXT *psContext, WIDGET_KEY key);
 	void highlightLost();
+	void display(int xOffset, int yOffset, PIELIGHT *pColours);
 
 	bool            disableChildren;        ///< Disable all child widgets if true
 	UWORD           Ax0, Ay0, Ax1, Ay1;     ///< Working coords for animations.
@@ -63,6 +64,7 @@ struct W_TABFORM : public W_FORM
 	void released(W_CONTEXT *psContext, WIDGET_KEY key);
 	void highlightLost();
 	void run(W_CONTEXT *psContext);
+	void display(int xOffset, int yOffset, PIELIGHT *pColours);
 
 	UWORD           majorPos;                       // Position of the tabs on the form
 	UWORD           majorSize;                      // the size of tabs horizontally and vertically
@@ -84,6 +86,9 @@ struct W_TABFORM : public W_FORM
 	UWORD		numButtons;				//# of buttons per form
 	Children        childTabs;                      // The major tab information
 	TAB_DISPLAY pTabDisplay;			// Optional callback for display tabs.
+
+private:
+	void displayTabs(int x0, int y0, int width, int height, int number, int selected, int highlight, PIELIGHT *pColours, int tabGap);
 };
 
 
@@ -107,6 +112,7 @@ struct W_CLICKFORM : public W_FORM
 	void highlight(W_CONTEXT *psContext);
 	void highlightLost();
 	void run(W_CONTEXT *psContext);
+	void display(int xOffset, int yOffset, PIELIGHT *pColours);
 
 	unsigned getState();
 	void setState(unsigned state);
@@ -143,10 +149,5 @@ extern void formInitGetAllWidgets(W_FORM *psWidget, W_FORMGETALL *psCtrl);
  * When a NULL list is returned, all widgets have been seen.
  */
 extern WIDGET *formGetAllWidgets(W_FORMGETALL *psCtrl);
-
-/* Display function prototypes */
-extern void formDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
-extern void formDisplayClickable(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
-extern void formDisplayTabbed(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 
 #endif // __INCLUDED_LIB_WIDGET_FORM_H__

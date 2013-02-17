@@ -48,11 +48,6 @@ W_BUTTON::W_BUTTON(W_BUTINIT const *init)
 	, AudioCallback(WidgGetAudioCallback())
 	, FontID(init->FontID)
 {
-	if (display == NULL)
-	{
-		display = buttonDisplay;
-	}
-
 	ASSERT((init->style & ~(WBUT_PLAIN | WIDG_HIDDEN | WFORM_NOCLICKMOVE | WBUT_NOPRIMARY | WBUT_SECONDARY | WBUT_TXTCENTRE)) == 0, "unknown button style");
 }
 
@@ -212,77 +207,71 @@ void W_BUTTON::highlightLost()
 	}
 }
 
-
-/* Display a button */
-void buttonDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+void W_BUTTON::display(int xOffset, int yOffset, PIELIGHT *pColours)
 {
-	W_BUTTON	*psButton;
-	SDWORD		x0, y0, x1, y1, fx, fy, fw;
-
-	ASSERT(psWidget != NULL && pColours != NULL, "Invalid pointers");
-	if (!psWidget || !pColours)
+	if (displayFunction != NULL)
 	{
+		displayFunction(this, xOffset, yOffset, pColours);
 		return;
 	}
 
-	psButton = (W_BUTTON *)psWidget;
+	int x0 = x + xOffset;
+	int y0 = y + yOffset;
+	int x1 = x0 + width;
+	int y1 = y0 + height;
 
-	x0 = psButton->x + xOffset;
-	y0 = psButton->y + yOffset;
-	x1 = x0 + psButton->width;
-	y1 = y0 + psButton->height;
-
-	bool haveText = !psButton->pText.isEmpty();
-	QByteArray textBytes = psButton->pText.toUtf8();
+	bool haveText = !pText.isEmpty();
+	QByteArray textBytes = pText.toUtf8();
 	char const *textData = textBytes.constData();
 
-	if (psButton->state & (WBUTS_DOWN | WBUTS_LOCKED | WBUTS_CLICKLOCK))
+	if (state & (WBUTS_DOWN | WBUTS_LOCKED | WBUTS_CLICKLOCK))
 	{
 		/* Display the button down */
 		iV_ShadowBox(x0, y0, x1, y1, 0, pColours[WCOL_LIGHT], pColours[WCOL_DARK], pColours[WCOL_BKGRND]);
 
 		if (haveText)
 		{
-			iV_SetFont(psButton->FontID);
+			iV_SetFont(FontID);
 			iV_SetTextColour(pColours[WCOL_TEXT]);
-			fw = iV_GetTextWidth(textData);
-			if (psButton->style & WBUT_NOCLICKMOVE)
+			int fw = iV_GetTextWidth(textData);
+			int fx, fy;
+			if (style & WBUT_NOCLICKMOVE)
 			{
-				fx = x0 + (psButton->width - fw) / 2 + 1;
-				fy = y0 + 1 + (psButton->height - iV_GetTextLineSize()) / 2 - iV_GetTextAboveBase();
+				fx = x0 + (width - fw) / 2 + 1;
+				fy = y0 + 1 + (height - iV_GetTextLineSize()) / 2 - iV_GetTextAboveBase();
 			}
 			else
 			{
-				fx = x0 + (psButton->width - fw) / 2;
-				fy = y0 + (psButton->height - iV_GetTextLineSize()) / 2 - iV_GetTextAboveBase();
+				fx = x0 + (width - fw) / 2;
+				fy = y0 + (height - iV_GetTextLineSize()) / 2 - iV_GetTextAboveBase();
 			}
 			iV_DrawText(textData, fx, fy);
 		}
 
-		if (psButton->state & WBUTS_HILITE)
+		if (state & WBUTS_HILITE)
 		{
 			/* Display the button hilite */
 			iV_Box(x0 + 3, y0 + 3, x1 - 2, y1 - 2, pColours[WCOL_HILITE]);
 		}
 	}
-	else if (psButton->state & WBUTS_GREY)
+	else if (state & WBUTS_GREY)
 	{
 		/* Display the disabled button */
 		iV_ShadowBox(x0, y0, x1, y1, 0, pColours[WCOL_LIGHT], pColours[WCOL_LIGHT], pColours[WCOL_BKGRND]);
 
 		if (haveText)
 		{
-			iV_SetFont(psButton->FontID);
-			fw = iV_GetTextWidth(textData);
-			fx = x0 + (psButton->width - fw) / 2;
-			fy = y0 + (psButton->height - iV_GetTextLineSize()) / 2 - iV_GetTextAboveBase();
+			iV_SetFont(FontID);
+			int fw = iV_GetTextWidth(textData);
+			int fx = x0 + (width - fw) / 2;
+			int fy = y0 + (height - iV_GetTextLineSize()) / 2 - iV_GetTextAboveBase();
 			iV_SetTextColour(pColours[WCOL_LIGHT]);
 			iV_DrawText(textData, fx + 1, fy + 1);
 			iV_SetTextColour(pColours[WCOL_DISABLE]);
 			iV_DrawText(textData, fx, fy);
 		}
 
-		if (psButton->state & WBUTS_HILITE)
+		if (state & WBUTS_HILITE)
 		{
 			/* Display the button hilite */
 			iV_Box(x0 + 2, y0 + 2, x1 - 3, y1 - 3, pColours[WCOL_HILITE]);
@@ -295,15 +284,15 @@ void buttonDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 
 		if (haveText)
 		{
-			iV_SetFont(psButton->FontID);
+			iV_SetFont(FontID);
 			iV_SetTextColour(pColours[WCOL_TEXT]);
-			fw = iV_GetTextWidth(textData);
-			fx = x0 + (psButton->width - fw) / 2;
-			fy = y0 + (psButton->height - iV_GetTextLineSize()) / 2 - iV_GetTextAboveBase();
+			int fw = iV_GetTextWidth(textData);
+			int fx = x0 + (width - fw) / 2;
+			int fy = y0 + (height - iV_GetTextLineSize()) / 2 - iV_GetTextAboveBase();
 			iV_DrawText(textData, fx, fy);
 		}
 
-		if (psButton->state & WBUTS_HILITE)
+		if (state & WBUTS_HILITE)
 		{
 			/* Display the button hilite */
 			iV_Box(x0 + 2, y0 + 2, x1 - 3, y1 - 3, pColours[WCOL_HILITE]);

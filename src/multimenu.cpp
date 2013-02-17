@@ -1367,7 +1367,7 @@ bool intCloseMultiMenu(void)
 	// Start the window close animation.
 	Form = (W_TABFORM*)widgGetFromID(psWScreen,MULTIMENU_FORM);
 	if(Form) {
-		Form->display = intClosePlainForm;
+		Form->displayFunction = intClosePlainForm;
 		Form->pUserData = NULL;	// Used to signal when the close anim has finished.
 		Form->disableChildren = true;
 		ClosingMultiMenu = true;

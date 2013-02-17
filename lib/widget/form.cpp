@@ -74,11 +74,6 @@ W_FORM::W_FORM(W_FORMINIT const *init)
 	, psLastHiLite(NULL)
 	, psWidgets(NULL)
 {
-	if (display == NULL)
-	{
-		display = formDisplay;
-	}
-
 	aColours[WCOL_BKGRND]    = WZCOL_FORM_BACKGROUND;
 	aColours[WCOL_TEXT]      = WZCOL_FORM_TEXT;
 	aColours[WCOL_LIGHT]     = WZCOL_FORM_LIGHT;
@@ -101,17 +96,11 @@ W_CLICKFORM::W_CLICKFORM(W_FORMINIT const *init)
 	, HilightAudioID(WidgGetHilightAudioID())
 	, ClickedAudioID(WidgGetClickedAudioID())
 	, AudioCallback(WidgGetAudioCallback())
-{
-	if (init->pDisplay == NULL)
-	{
-		display = formDisplayClickable;
-	}
-}
+{}
 
 W_MAJORTAB::W_MAJORTAB()
 	: psWidgets(NULL)
-{
-}
+{}
 
 W_TABFORM::W_TABFORM(W_FORMINIT const *init)
 	: W_FORM(init)
@@ -135,11 +124,6 @@ W_TABFORM::W_TABFORM(W_FORMINIT const *init)
 	for (unsigned n = 0; n < childTabs.size(); ++n)
 	{
 		childTabs[n] = new WIDGET(this);
-	}
-
-	if (init->pDisplay == NULL)
-	{
-		display = formDisplayTabbed;
 	}
 
 	ASSERT(init->numMajor != 0, "Must have at least one major tab on a tabbed form");
@@ -737,37 +721,40 @@ void W_CLICKFORM::highlightLost()
 	state &= ~(WCLICK_DOWN | WCLICK_HILITE);
 }
 
-/* Display a form */
-void formDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+void W_FORM::display(int xOffset, int yOffset, PIELIGHT *pColours)
 {
-	UDWORD	x0, y0, x1, y1;
-
-	if (!(psWidget->style & WFORM_INVISIBLE))
+	if (displayFunction != NULL)
 	{
-		x0 = psWidget->x + xOffset;
-		y0 = psWidget->y + yOffset;
-		x1 = x0 + psWidget->width;
-		y1 = y0 + psWidget->height;
+		displayFunction(this, xOffset, yOffset, pColours);
+		return;
+	}
+
+	if ((style & WFORM_INVISIBLE) == 0)
+	{
+		int x0 = x + xOffset;
+		int y0 = y + yOffset;
+		int x1 = x0 + width;
+		int y1 = y0 + height;
 
 		iV_ShadowBox(x0, y0, x1, y1, 1, pColours[WCOL_LIGHT], pColours[WCOL_DARK], pColours[WCOL_BKGRND]);
 	}
 }
 
-
-/* Display a clickable form */
-void formDisplayClickable(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+void W_CLICKFORM::display(int xOffset, int yOffset, PIELIGHT *pColours)
 {
-	UDWORD			x0, y0, x1, y1;
-	W_CLICKFORM		*psForm;
+	if (displayFunction != NULL)
+	{
+		displayFunction(this, xOffset, yOffset, pColours);
+		return;
+	}
 
-	psForm = (W_CLICKFORM *)psWidget;
-	x0 = psWidget->x + xOffset;
-	y0 = psWidget->y + yOffset;
-	x1 = x0 + psWidget->width;
-	y1 = y0 + psWidget->height;
+	int x0 = x + xOffset;
+	int y0 = y + yOffset;
+	int x1 = x0 + width;
+	int y1 = y0 + height;
 
 	/* Display the border */
-	if (psForm->state & (WCLICK_DOWN | WCLICK_LOCKED | WCLICK_CLICKLOCK))
+	if (state & (WCLICK_DOWN | WCLICK_LOCKED | WCLICK_CLICKLOCK))
 	{
 		iV_ShadowBox(x0, y0, x1, y1, 1, pColours[WCOL_DARK], pColours[WCOL_LIGHT], pColours[WCOL_BKGRND]);
 	}
@@ -777,8 +764,7 @@ void formDisplayClickable(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIEL
 	}
 }
 
-static void formDisplayTabs(W_TABFORM *psForm, int x0, int y0, int width, int height,
-        int number, int selected, int hilite, PIELIGHT *pColours, int tabGap)
+void W_TABFORM::displayTabs(int x0, int y0, int width, int height, int number, int selected, int highlight, PIELIGHT *pColours, int tabGap)
 {
 #if NO_DISPLAY_SINGLE_TABS
 	if (number == 1)
@@ -795,7 +781,7 @@ static void formDisplayTabs(W_TABFORM *psForm, int x0, int y0, int width, int he
 	int xDelta = 0;
 	int yDelta = 0;
 
-	bool horizontal = psForm->majorPos == WFORM_TABTOP || psForm->majorPos == WFORM_TABBOTTOM;
+	bool horizontal = majorPos == WFORM_TABTOP || majorPos == WFORM_TABBOTTOM;
 	if (horizontal)
 	{
 		x += 2;
@@ -808,20 +794,20 @@ static void formDisplayTabs(W_TABFORM *psForm, int x0, int y0, int width, int he
 	}
 
 	unsigned drawNumber = number;
-	if (number > psForm->maxTabsShown)  //we can display 8 tabs fine with no extra voodoo.
+	if (number > maxTabsShown)  //we can display 8 tabs fine with no extra voodoo.
 	{
 		// We do NOT want to draw all the tabs once we have drawn 7 tabs
-		// Both selected & hilite are converted from virtual tab range, to a range
+		// Both selected & highlight are converted from virtual tab range, to a range
 		// that is seen on the form itself.  This would be 0-6 (7 tabs)
 		// We also fix drawnumber, so we don't display too many tabs since the pages
 		// will be empty.
-		drawNumber -= (psForm->TabMultiplier - 1)*psForm->maxTabsShown;
-		drawNumber = std::min(drawNumber, psForm->maxTabsShown);
-		selected = selected % psForm->maxTabsShown;  //Go from Virtual range, to our range
+		drawNumber -= (TabMultiplier - 1)*maxTabsShown;
+		drawNumber = std::min(drawNumber, maxTabsShown);
+		selected = selected % maxTabsShown;  //Go from Virtual range, to our range
 
-		if (hilite != 65535)			//sigh.  Don't blame me for this!It is THEIR 'hack'.
+		if (highlight != 65535)  //sigh.  Don't blame me for this!It is THEIR 'hack'.
 		{
-			hilite = hilite % psForm->maxTabsShown;    //we want to hilite tab 0 - 6.
+			highlight = highlight % maxTabsShown;    //we want to highlight tab 0 - 6.
 		}
 	}
 	else
@@ -831,9 +817,9 @@ static void formDisplayTabs(W_TABFORM *psForm, int x0, int y0, int width, int he
 	}
 	for (unsigned i = 0; i < drawNumber; ++i)
 	{
-		if (psForm->pTabDisplay)
+		if (pTabDisplay)
 		{
-			psForm->pTabDisplay(psForm, psForm->majorPos, i, i == selected, i == hilite, x, y, width, height);
+			pTabDisplay(this, majorPos, i, i == selected, i == highlight, x, y, width, height);
 		}
 		else
 		{
@@ -857,9 +843,9 @@ static void formDisplayTabs(W_TABFORM *psForm, int x0, int y0, int width, int he
 				iV_Line(x + 2, y + 1, x1 - 1, y + 1, pColours[WCOL_LIGHT]);
 				iV_Line(x1, y + 2, x1, y1 - 1, pColours[WCOL_DARK]);
 			}
-			if (i == hilite)
+			if (i == highlight)
 			{
-				/* Draw the hilite box */
+				/* Draw the highlight box */
 				iV_Box(x + 2, y + 4, x1 - 3, y1 - 3, pColours[WCOL_HILITE]);
 			}
 		}
@@ -870,64 +856,32 @@ static void formDisplayTabs(W_TABFORM *psForm, int x0, int y0, int width, int he
 	}
 }
 
-/* Display a tabbed form */
-void formDisplayTabbed(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+void W_TABFORM::display(int xOffset, int yOffset, PIELIGHT *pColours)
 {
-	UDWORD		x0, y0, x1, y1;
-	W_TABFORM	*psForm;
-
-	psForm = (W_TABFORM *)psWidget;
-
-	/* Get the basic position of the form */
-	x0 = psForm->x + xOffset;
-	y0 = psForm->y + yOffset;
-	x1 = x0 + psForm->width;
-	y1 = y0 + psForm->height;
-
-	/* Adjust for where the tabs are */
-	if (psForm->majorPos == WFORM_TABLEFT)
+	if (displayFunction != NULL)
 	{
-		x0 += psForm->tabMajorThickness - psForm->tabHorzOffset;
-	}
-	if (psForm->majorPos == WFORM_TABRIGHT)
-	{
-		x1 -= psForm->tabMajorThickness - psForm->tabHorzOffset;
-	}
-	if (psForm->majorPos == WFORM_TABTOP)
-	{
-		y0 += psForm->tabMajorThickness - psForm->tabVertOffset;
-	}
-	if (psForm->majorPos == WFORM_TABBOTTOM)
-	{
-		y1 -= psForm->tabMajorThickness - psForm->tabVertOffset;
+		displayFunction(this, xOffset, yOffset, pColours);
+		return;
 	}
 
-	/* Draw the major tabs */
-	switch (psForm->majorPos)
+	int x0 = x + xOffset;
+	int y0 = y + yOffset;
+	int x1 = x0 + width;
+	int y1 = y0 + height;
+
+	switch (majorPos)
 	{
 	case WFORM_TABTOP:
-		formDisplayTabs(psForm, x0 + psForm->majorOffset, y0 - psForm->tabMajorThickness + psForm->tabVertOffset,
-		        psForm->majorSize, psForm->tabMajorThickness,
-		        psForm->childTabs.size(), psForm->majorT, psForm->tabHiLite,
-		        pColours, psForm->tabMajorGap);
+		displayTabs(x0 + majorOffset, y0,                     majorSize, tabMajorThickness, childTabs.size(), majorT, tabHiLite, pColours, tabMajorGap);
 		break;
 	case WFORM_TABBOTTOM:
-		formDisplayTabs(psForm, x0 + psForm->majorOffset, y1 + psForm->tabVertOffset,
-		        psForm->majorSize, psForm->tabMajorThickness,
-		        psForm->childTabs.size(), psForm->majorT, psForm->tabHiLite,
-		        pColours, psForm->tabMajorGap);
+		displayTabs(x0 + majorOffset, y1 - tabMajorThickness, majorSize, tabMajorThickness, childTabs.size(), majorT, tabHiLite, pColours, tabMajorGap);
 		break;
 	case WFORM_TABLEFT:
-		formDisplayTabs(psForm, x0 - psForm->tabMajorThickness + psForm->tabHorzOffset, y0 + psForm->majorOffset,
-		        psForm->tabMajorThickness, psForm->majorSize,
-		        psForm->childTabs.size(), psForm->majorT, psForm->tabHiLite,
-		        pColours, psForm->tabMajorGap);
+		displayTabs(x0,                     y0 + majorOffset, tabMajorThickness, majorSize, childTabs.size(), majorT, tabHiLite, pColours, tabMajorGap);
 		break;
 	case WFORM_TABRIGHT:
-		formDisplayTabs(psForm, x1 - psForm->tabHorzOffset, y0 + psForm->majorOffset,
-		        psForm->tabMajorThickness, psForm->majorSize,
-		        psForm->childTabs.size(), psForm->majorT, psForm->tabHiLite,
-		        pColours, psForm->tabMajorGap);
+		displayTabs(x1 - tabMajorThickness, y0 + majorOffset, tabMajorThickness, majorSize, childTabs.size(), majorT, tabHiLite, pColours, tabMajorGap);
 		break;
 	case WFORM_TABNONE:
 		ASSERT(false, "Cannot have a tabbed form with no major tabs");

@@ -48,6 +48,7 @@ struct W_BUTTON : public WIDGET
 	void highlight(W_CONTEXT *psContext);
 	void highlightLost();
 	void run(W_CONTEXT *psContext);
+	void display(int xOffset, int yOffset, PIELIGHT *pColours);
 
 	unsigned getState();
 	void setState(unsigned state);
@@ -62,10 +63,7 @@ struct W_BUTTON : public WIDGET
 	SWORD HilightAudioID;				// Audio ID for form clicked sound
 	SWORD ClickedAudioID;				// Audio ID for form hilighted sound
 	WIDGET_AUDIOCALLBACK AudioCallback;	// Pointer to audio callback function
-	enum iV_fonts FontID;
+	iV_fonts        FontID;
 };
-
-/* The button display function */
-extern void buttonDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 
 #endif // __INCLUDED_LIB_WIDGET_BUTTON_H__
