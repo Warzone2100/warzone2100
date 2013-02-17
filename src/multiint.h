@@ -209,6 +209,8 @@ void loadMapPreview(bool hideInterface);
 #define MULTIOP_HOST_BUT		0xf0f0
 #define MULTIOP_HOSTX			5
 
+#define MULTIOP_FILTER_TOGGLE   30277
+
 #define MULTIOP_STRUCTLIMITS	21277	// we are using 10277 already
 #define MULTIOP_LIMITS_BUT		0xf0d0
 
