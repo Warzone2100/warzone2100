@@ -116,7 +116,7 @@ static void init_tileNames(int type);
 /// The different ground types
 GROUND_TYPE *psGroundTypes;
 int numGroundTypes;
-char *tileset = NULL;
+char *tilesetDir = NULL;
 static int numTile_names;
 static char *Tile_names = NULL;
 #define ARIZONA 1
@@ -239,9 +239,9 @@ static bool mapLoadGroundTypes(void)
 
 	pFileData = fileLoadBuffer;
 
-	debug(LOG_TERRAIN, "tileset: %s", tileset);
+	debug(LOG_TERRAIN, "tileset: %s", tilesetDir);
 	// For Arizona
-	if (strcmp(tileset, "texpages/tertilesc1hw") == 0)
+	if (strcmp(tilesetDir, "texpages/tertilesc1hw") == 0)
 	{
 fallback:
 		init_tileNames(ARIZONA);
@@ -281,7 +281,7 @@ fallback:
 		SetDecals("tileset/arizonadecals.txt", "arizona_decals");
 	}
 	// for Urban
-	else if (strcmp(tileset, "texpages/tertilesc2hw") == 0)
+	else if (strcmp(tilesetDir, "texpages/tertilesc2hw") == 0)
 	{
 		init_tileNames(URBAN);
 		if (!loadFileToBuffer("tileset/tertilesc2hwGtype.txt", pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
@@ -320,7 +320,7 @@ fallback:
 		SetDecals("tileset/urbandecals.txt", "urban_decals");
 	}
 	// for Rockie
-	else if (strcmp(tileset, "texpages/tertilesc3hw") == 0)
+	else if (strcmp(tilesetDir, "texpages/tertilesc3hw") == 0)
 	{
 		init_tileNames(ROCKIE);
 		if (!loadFileToBuffer("tileset/tertilesc3hwGtype.txt", pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
@@ -361,7 +361,7 @@ fallback:
 	// When a map uses something other than the above, we fallback to Arizona
 	else
 	{
-		debug(LOG_ERROR, "unsupported tileset: %s", tileset);
+		debug(LOG_ERROR, "unsupported tileset: %s", tilesetDir);
 		debug(LOG_POPUP, "This is a UNSUPPORTED map with a custom tileset.\nDefaulting to tertilesc1hw -- map may look strange!");
 		// HACK: / FIXME: For now, we just pretend this is a tertilesc1hw map.
 		goto fallback;
@@ -627,7 +627,7 @@ static bool mapSetGroundTypes(void)
 		{
 			MAPTILE *psTile = mapTile(i, j);
 
-			psTile->ground = determineGroundType(i,j,tileset);
+			psTile->ground = determineGroundType(i, j, tilesetDir);
 
 			if (hasDecals(i,j))
 			{
@@ -779,9 +779,9 @@ bool mapLoad(char *filename, bool preview)
 	mapHeight = height;
 	
 	// FIXME: the map preview code loads the map without setting the tileset
-	if (!tileset)
+	if (!tilesetDir)
 	{
-		tileset = strdup("texpages/tertilesc1hw");
+		tilesetDir = strdup("texpages/tertilesc1hw");
 	}
 	
 	// load the ground types

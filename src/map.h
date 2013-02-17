@@ -119,7 +119,7 @@ extern MAPTILE *psMapTiles;
 extern float waterLevel;
 extern GROUND_TYPE *psGroundTypes;
 extern int numGroundTypes;
-extern char *tileset;
+extern char *tilesetDir;
 
 #define AIR_BLOCKED		0x01	///< Aircraft cannot pass tile
 #define FEATURE_BLOCKED		0x02	///< Ground units cannot pass tile due to item in the way
@@ -345,7 +345,6 @@ extern MAPTILE *psMapTiles;
 
 extern GROUND_TYPE *psGroundTypes;
 extern int numGroundTypes;
-extern char *tileset;
 
 /*
  * Usage-Example:

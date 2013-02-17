@@ -120,8 +120,8 @@ bool texLoad(const char *fileName)
 	ASSERT_OR_RETURN(false, MIPMAP_MAX == TILE_WIDTH && MIPMAP_MAX == TILE_HEIGHT, "Bad tile sizes");
 	
 	// store the filename so we can later determine which tileset we are using
-	if (tileset) free(tileset);
-	tileset = strdup(fileName);
+	if (tilesetDir) free(tilesetDir);
+	tilesetDir = strdup(fileName);
 
 	// reset defaults
 	mipmap_max = MIPMAP_MAX;
