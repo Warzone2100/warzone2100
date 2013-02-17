@@ -498,9 +498,9 @@ function eventResearched(tech, labparam)
 	}
 	var techlist = [
 		"R-Defense-Tower01",	// mg tower
-		"R-Struc-PowerModuleMk1",	// power module
-		"R-Struc-Factory-Module",	// factory module
-		"R-Vehicle-Body09", // tiger body (implies python)
+		"R-Vehicle-Prop-Halftracks",	// halftracks
+		"R-Defense-Tower06", // pod tower
+		"R-Vehicle-Body09", // tiger body (implies python and factory module)
 		"R-Struc-Power-Upgrade03a", // final power upgrade
 		"R-Cyborg-Armor-Heat07", // some cyborg armor
 		"R-Vehicle-Body14", // dragon body (implies vengeance)
