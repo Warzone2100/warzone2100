@@ -125,6 +125,10 @@ WIDGET::~WIDGET()
 	{
 		psMouseOverWidget = NULL;
 	}
+	if (screenPointer != NULL && screenPointer->psFocus == this)
+	{
+		screenPointer->psFocus = NULL;
+	}
 
 	if (parentWidget != NULL)
 	{
@@ -141,6 +145,7 @@ void WIDGET::attach(WIDGET *widget)
 {
 	ASSERT_OR_RETURN(, widget != NULL && widget->parentWidget == NULL, "Bad attach.");
 	widget->parentWidget = this;
+	widget->setScreenPointer(screenPointer);
 	childWidgets.push_back(widget);
 }
 
@@ -149,9 +154,19 @@ void WIDGET::detach(WIDGET *widget)
 	ASSERT_OR_RETURN(, widget != NULL && widget->parentWidget != NULL, "Bad detach.");
 
 	widget->parentWidget = NULL;
+	widget->setScreenPointer(NULL);
 	childWidgets.erase(std::find(childWidgets.begin(), childWidgets.end(), widget));
 
 	widgetLost(widget);
+}
+
+void WIDGET::setScreenPointer(W_SCREEN *screen)
+{
+	screenPointer = screen;
+	for (Children::const_iterator i = childWidgets.begin(); i != childWidgets.end(); ++i)
+	{
+		(*i)->setScreenPointer(screen);
+	}
 }
 
 void WIDGET::widgetLost(WIDGET *widget)
@@ -175,6 +190,7 @@ W_SCREEN::W_SCREEN()
 	sInit.height = screenHeight - 1;
 
 	psForm = new W_FORM(&sInit);
+	psForm->screenPointer = this;
 }
 
 W_SCREEN::~W_SCREEN()
@@ -304,15 +320,7 @@ void widgDelete(W_SCREEN *psScreen, UDWORD id)
 {
 	ASSERT_OR_RETURN(, psScreen != NULL, "Invalid screen pointer");
 
-	WIDGET *widget = widgGetFromID(psScreen, id);
-
-	// Clear the keyboard focus if necessary.
-	if (psScreen->psFocus == widget)
-	{
-		screenClearFocus(psScreen);
-	}
-
-	delete widget;
+	delete widgGetFromID(psScreen, id);
 }
 
 /* Find a widget on a form from its id number */

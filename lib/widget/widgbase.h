@@ -123,8 +123,11 @@ struct WIDGET
 	WIDGET_CALLBACK         callback;               ///< User callback (if any)
 	void                   *pUserData;              ///< Pointer to a user data block (if any)
 	UDWORD                  UserData;               ///< User data (if any)
+	W_SCREEN *              screenPointer;          ///< Pointer to screen the widget is on (if attached).
 
 private:
+	void setScreenPointer(W_SCREEN *screen);        ///< Set screen pointer for us and all children.
+
 	WIDGET *                parentWidget;           ///< Parent widget.
 	std::vector<WIDGET *>   childWidgets;           ///< Child widgets. Will be deleted if we are deleted.
 
