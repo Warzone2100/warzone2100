@@ -67,6 +67,81 @@ struct PIERECT  ///< Screen rectangle.
  */
 /***************************************************************************/
 
+GFX::GFX(GLenum drawType, int coordsPerVertex) : mdrawType(drawType), mCoordsPerVertex(coordsPerVertex), mSize(0)
+{
+	glGenBuffers(VBO_MINIMAL, mBuffers);
+	glGenTextures(1, &mTexture);
+}
+
+void GFX::loadTexture(const char *filename, GLenum filter)
+{
+	const char *extension = strrchr(filename, '.'); // determine the filetype
+	iV_Image image;
+	if (!extension || strcmp(extension, ".png") != 0)
+	{
+		debug(LOG_ERROR, "Bad image filename: %s", filename);
+		return;
+	}
+	if (iV_loadImage_PNG(filename, &image))
+	{
+		makeTexture(image.width, image.height, filter, iV_getPixelFormat(&image), image.bmp);
+		iV_unloadImage(&image);
+	}
+}
+
+void GFX::makeTexture(int width, int height, GLenum filter, GLenum format, const GLvoid *image)
+{
+	pie_SetTexturePage(TEXPAGE_EXTERN);
+	glBindTexture(GL_TEXTURE_2D, mTexture);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, format, GL_UNSIGNED_BYTE, image);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filter);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filter);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+	mWidth = width;
+	mHeight = height;
+	mFormat = format;
+}
+
+void GFX::updateTexture(const void *image, int width, int height)
+{
+	if (width == -1) width = mWidth;
+	if (height == -1) height = mHeight;
+	pie_SetTexturePage(TEXPAGE_EXTERN);
+	glBindTexture(GL_TEXTURE_2D, mTexture);
+	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, mFormat, GL_UNSIGNED_BYTE, image);
+}
+
+void GFX::buffers(int vertices, const GLvoid *vertBuf, const GLvoid *texBuf)
+{
+	glBindBuffer(GL_ARRAY_BUFFER, mBuffers[VBO_TEXCOORD]);
+	glBufferData(GL_ARRAY_BUFFER, vertices * 2 * sizeof(GLfloat), texBuf, GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, mBuffers[VBO_VERTEX]);
+	glBufferData(GL_ARRAY_BUFFER, vertices * mCoordsPerVertex * sizeof(GLfloat), vertBuf, GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	mSize = vertices;
+}
+
+void GFX::draw()
+{
+	pie_SetTexturePage(TEXPAGE_EXTERN);
+	glBindTexture(GL_TEXTURE_2D, mTexture);
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+	glBindBuffer(GL_ARRAY_BUFFER, mBuffers[VBO_TEXCOORD]); glTexCoordPointer(2, GL_FLOAT, 0, NULL);
+	glBindBuffer(GL_ARRAY_BUFFER, mBuffers[VBO_VERTEX]); glVertexPointer(mCoordsPerVertex, GL_FLOAT, 0, NULL);
+	glDrawArrays(mdrawType, 0, mSize);
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
+GFX::~GFX()
+{
+	glDeleteBuffers(VBO_MINIMAL, mBuffers);
+	glDeleteTextures(1, &mTexture);
+}
+
 void iV_Line(int x0, int y0, int x1, int y1, PIELIGHT colour)
 {
 	pie_SetTexturePage(TEXPAGE_NONE);
