@@ -34,13 +34,6 @@
 #include "lib/framework/frame.h"
 #include "piedef.h"
 
-struct CLIP_VERTEX
-{
-	Vector3i pos;
-	unsigned int u, v;
-	PIELIGHT light;
-};
-
 /***************************************************************************/
 /*
  *	Global ProtoTypes

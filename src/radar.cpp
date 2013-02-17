@@ -107,7 +107,7 @@ static int frameSkip = 0;
 
 static void DrawRadarTiles(void);
 static void DrawRadarObjects(void);
-static void DrawRadarExtras(float radarX, float radarY, float pixSizeH, float pixSizeV);
+static void DrawRadarExtras(float pixSizeH, float pixSizeV);
 static void DrawNorth(void);
 
 static void radarSize(int ZoomLevel)
@@ -285,7 +285,7 @@ void drawRadar(void)
 		pie_RenderRadar();
         pie_MatBegin();
             pie_TRANSLATE(-radarWidth/2 - 1, -radarHeight/2 - 1, 0);
-            DrawRadarExtras(0, 0, pixSizeH, pixSizeV);
+            DrawRadarExtras(pixSizeH, pixSizeV);
         pie_MatEnd();
 		drawRadarBlips(-radarWidth/2.0 - 1, -radarHeight/2.0 - 1, pixSizeH, pixSizeV);
 	pie_MatEnd();
@@ -576,7 +576,7 @@ static SDWORD getLengthAdjust( void )
 }
 
 /** Draws a Myth/FF7 style viewing window */
-static void drawViewingWindow(float radarX, float radarY, int x, int y, float pixSizeH, float pixSizeV)
+static void drawViewingWindow(int x, int y, float pixSizeH, float pixSizeV)
 {
 	Vector3i v[4], tv[4], centre;
 	int	shortX, longX, yDrop, yDropVar;
@@ -601,8 +601,8 @@ static void drawViewingWindow(float radarX, float radarY, int x, int y, float pi
 	v[3].x = -shortX;
 	v[3].y = yDrop;
 
-	centre.x = radarX + x - scrollMinX*pixSizeH;
-	centre.y = radarY + y - scrollMinY*pixSizeV;
+	centre.x = x - scrollMinX * pixSizeH;
+	centre.y = y - scrollMinY * pixSizeV;
 
 	RotateVector2D(v,tv,&centre,player.r.y,4);
 
@@ -627,20 +627,19 @@ static void drawViewingWindow(float radarX, float radarY, int x, int y, float pi
 		colour.rgba = 0;
 		colour.byte.a = 0x3f;
 		break;
-
 	}
 
 	/* Send the four points to the draw routine and the clip box params */
-	pie_DrawViewingWindow(tv, radarX, radarY, radarX + radarWidth, radarY + radarHeight, colour);
+	pie_DrawViewingWindow(tv, colour);
 }
 
-static void DrawRadarExtras(float radarX, float radarY, float pixSizeH, float pixSizeV)
+static void DrawRadarExtras(float pixSizeH, float pixSizeV)
 {
 	int viewX = player.p.x*pixSizeH / TILE_UNITS;
 	int viewY = player.p.z*pixSizeV / TILE_UNITS;
 
-	drawViewingWindow(radarX, radarY, viewX, viewY, pixSizeH, pixSizeV);
-	RenderWindowFrame(FRAME_RADAR, radarX - 1, radarY - 1, radarWidth + 2, radarHeight + 2);
+	drawViewingWindow(viewX, viewY, pixSizeH, pixSizeV);
+	RenderWindowFrame(FRAME_RADAR, -1, -1, radarWidth + 2, radarHeight + 2);
 }
 
 /** Does a screen coordinate lie within the radar area? */

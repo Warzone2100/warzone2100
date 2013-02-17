@@ -37,42 +37,33 @@
 static GFX *skyboxGfx = NULL;
 
 #define VW_VERTICES 5
-void pie_DrawViewingWindow(Vector3i *v, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2, PIELIGHT colour)
+void pie_DrawViewingWindow(Vector3i *v, PIELIGHT colour)
 {
-	CLIP_VERTEX pieVrts[VW_VERTICES];
+	Vector3i pieVrts[VW_VERTICES];
 	SDWORD i;
 
 	pie_SetTexturePage(TEXPAGE_NONE);
 	pie_SetRendMode(REND_ALPHA);
 
-	pieVrts[0].pos.x = v[1].x;
-	pieVrts[0].pos.y = v[1].y;
-	//cull triangles with off screen points
-	pieVrts[0].pos.z  = INTERFACE_DEPTH;
+	pieVrts[0] = v[1];
+	pieVrts[0].z = INTERFACE_DEPTH;	// cull triangles with off screen points
 
-	pieVrts[0].u = 0;
-	pieVrts[0].v = 0;
-	pieVrts[0].light = colour;
+	pieVrts[1] = v[0];
+	pieVrts[1].z = INTERFACE_DEPTH;
 
-	pieVrts[1] = pieVrts[0];
-	pieVrts[2] = pieVrts[0];
-	pieVrts[3] = pieVrts[0];
+	pieVrts[2] = v[2];
+	pieVrts[2].z = INTERFACE_DEPTH;
+
+	pieVrts[3] = v[3];
+	pieVrts[3].z = INTERFACE_DEPTH;
+
 	pieVrts[4] = pieVrts[0];
-
-	pieVrts[1].pos.x = v[0].x;
-	pieVrts[1].pos.y = v[0].y;
-
-	pieVrts[2].pos.x = v[2].x;
-	pieVrts[2].pos.y = v[2].y;
-
-	pieVrts[3].pos.x = v[3].x;
-	pieVrts[3].pos.y = v[3].y;
 
 	glColor4ub(colour.byte.r, colour.byte.g, colour.byte.b, colour.byte.a >> 1);
 	glBegin(GL_TRIANGLE_FAN);
 		for (i = 0; i < VW_VERTICES; i++)
 		{
-			glVertex2f(pieVrts[i].pos.x, pieVrts[i].pos.y);
+			glVertex2f(pieVrts[i].x, pieVrts[i].y);
 		}
 	glEnd();
 
@@ -80,9 +71,9 @@ void pie_DrawViewingWindow(Vector3i *v, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD 
 	glBegin(GL_LINE_STRIP);
 		for (i = 0; i < VW_VERTICES; i++)
 		{
-			glVertex2f(pieVrts[i].pos.x, pieVrts[i].pos.y);
+			glVertex2f(pieVrts[i].x, pieVrts[i].y);
 		}
-	glVertex2f(pieVrts[0].pos.x, pieVrts[0].pos.y);
+		glVertex2f(pieVrts[0].x, pieVrts[0].y);
 	glEnd();
 }
 
