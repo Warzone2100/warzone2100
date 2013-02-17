@@ -509,6 +509,21 @@ QScriptEngine *loadPlayerScript(QString path, int player, int difficulty)
 	}
 	//== \item[mapName] The name of the current map.
 	engine->globalObject().setProperty("mapName", game.map, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	//== \item[baseType] The area name of the map.
+	QString tilesetType("CUSTOM");
+	if (strcmp(tilesetDir, "texpages/tertilesc1hw") == 0)
+	{
+		tilesetType = "ARIZONA";
+	}
+	else if (strcmp(tilesetDir, "texpages/tertilesc2hw") == 0)
+	{
+		tilesetType = "URBAN";
+	}
+	else if (strcmp(tilesetDir, "texpages/tertilesc3hw") == 0)
+	{
+		tilesetType = "ROCKIES";
+	}
+	engine->globalObject().setProperty("tilesetType", tilesetType, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	//== \item[baseType] The type of base that the game starts with. It will be one of CAMP_CLEAN, CAMP_BASE or CAMP_WALLS.
 	engine->globalObject().setProperty("baseType", game.base, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	//== \item[alliancesType] The type of alliances permitted in this game. It will be one of NO_ALLIANCES, ALLIANCES or ALLIANCES_TEAMS.
