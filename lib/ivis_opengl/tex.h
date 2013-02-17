@@ -44,8 +44,6 @@ extern int pie_ReplaceTexPage(iV_Image *s, const char *texPage, int maxTextureSi
 extern int pie_AddTexPage(iV_Image *s, const char *filename, int slot, int maxTextureSize, bool useMipmaping);
 extern void pie_TexInit(void);
 
-extern void pie_InitSkybox(SDWORD pageNum);
-
 extern void pie_MakeTexPageName(char * filename);
 extern void pie_MakeTexPageTCMaskName(char * filename);
 

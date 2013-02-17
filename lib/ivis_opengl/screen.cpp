@@ -52,9 +52,8 @@ int wz_texture_compression = 0;
 static bool		bBackDrop = false;
 static char		screendump_filename[PATH_MAX];
 static bool		screendump_required = false;
-static GLuint		backDropTexture = 0;
 
-static GLuint buffers[VBO_COUNT];
+static GFX *backdropGfx = NULL;
 
 static int preview_width = 0, preview_height = 0;
 static Vector2i player_pos[MAX_PLAYERS];
@@ -184,9 +183,8 @@ bool screenInitialise()
 
 	pie_Skybox_Init();
 
-	// Generate backdrop buffers
-	glGenBuffers(VBO_MINIMAL, buffers);
-	glGenTextures(1, &backDropTexture);
+	// Generate backdrop render
+	backdropGfx = new GFX(GL_TRIANGLE_STRIP, 2);
 
 	glErrors();
 	return true;
@@ -196,8 +194,7 @@ void screenShutDown(void)
 {
 	pie_Skybox_Shutdown();
 
-	glDeleteBuffers(VBO_MINIMAL, buffers);
-	glDeleteTextures(1, &backDropTexture);
+	delete backdropGfx;
 
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_ACCUM_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
@@ -265,39 +262,8 @@ void screen_EnableMissingFunctions()
 
 void screen_SetBackDropFromFile(const char* filename)
 {
-	// HACK : We should use a resource handler here!
-	const char *extension = strrchr(filename, '.');// determine the filetype
-	iV_Image image;
-
-	if(!extension)
-	{
-		debug(LOG_ERROR, "Image without extension: \"%s\"!", filename);
-		return; // filename without extension... don't bother
-	}
-
-	// Make sure the current texture page is reloaded after we are finished
-	// Otherwise WZ will think it is still loaded and not load it again
-	pie_SetTexturePage(TEXPAGE_EXTERN);
-
-	if (strcmp(extension, ".png") == 0)
-	{
-		if (iV_loadImage_PNG(filename, &image))
-		{
-			glBindTexture(GL_TEXTURE_2D, backDropTexture);
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image.width, image.height,
-			             0, iV_getPixelFormat(&image), GL_UNSIGNED_BYTE, image.bmp);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-			iV_unloadImage(&image);
-			screen_Upload(NULL);
-		}
-	}
-	else
-	{
-		debug(LOG_ERROR, "Unknown extension \"%s\" for image \"%s\"!", extension, filename);
-	}
+	backdropGfx->loadTexture(filename);
+	screen_Upload(NULL);
 }
 
 void screen_StopBackDrop(void)
@@ -319,22 +285,9 @@ void screen_Display()
 {
 	pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_OFF);
 
-	// Make sure the current texture page is reloaded after we are finished
-	// Otherwise WZ will think it is still loaded and not load it again
-	pie_SetTexturePage(TEXPAGE_EXTERN);
-	glBindTexture(GL_TEXTURE_2D, backDropTexture);
-
 	// Draw backdrop
 	glColor3f(1, 1, 1);
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-	glBindBuffer(GL_ARRAY_BUFFER, buffers[VBO_TEXCOORD]); glTexCoordPointer(2, GL_FLOAT, 0, NULL);
-	glBindBuffer(GL_ARRAY_BUFFER, buffers[VBO_VERTEX]); glVertexPointer(2, GL_INT, 0, NULL);
-	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-	glDisableClientState(GL_VERTEX_ARRAY);
-	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glErrors();
+	backdropGfx->draw();
 
 	if (mappreview)
 	{
@@ -376,8 +329,9 @@ void screen_Display()
 //bitmap MUST be (BACKDROP_HACK_WIDTH * BACKDROP_HACK_HEIGHT) for now.
 void screen_Upload(const char *newBackDropBmp)
 {
-	int x1 = 0, x2 = screenWidth, y1 = 0, y2 = screenHeight, scale = 0, w = 0, h = 0;
+	GLfloat x1 = 0, x2 = screenWidth, y1 = 0, y2 = screenHeight;
 	GLfloat tx = 1, ty = 1;
+	int scale = 0, w = 0, h = 0;
 	const float aspect = screenWidth / (float)screenHeight, backdropAspect = 4 / (float)3;
 
 	if (aspect < backdropAspect)
@@ -395,14 +349,7 @@ void screen_Upload(const char *newBackDropBmp)
 
 	if (newBackDropBmp) // preview
 	{
-		pie_SetTexturePage(TEXPAGE_EXTERN);
-		glBindTexture(GL_TEXTURE_2D, backDropTexture);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, BACKDROP_HACK_WIDTH, BACKDROP_HACK_HEIGHT, 0, GL_RGB, GL_UNSIGNED_BYTE, newBackDropBmp);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		backdropGfx->makeTexture(BACKDROP_HACK_WIDTH, BACKDROP_HACK_HEIGHT, GL_NEAREST, GL_RGB, newBackDropBmp);
 
 		int s1 = screenWidth / preview_width;
 		int s2 = screenHeight / preview_height;
@@ -421,14 +368,8 @@ void screen_Upload(const char *newBackDropBmp)
 
 	// Generate coordinates and put them into VBOs
 	GLfloat texcoords[8] = { 0.0f, 0.0f,  tx, 0.0,  0.0f, ty,  tx, ty };
-	GLint vertices[8] = { x1, y1,  x2, y1,  x1, y2,  x2, y2 };
-	glBindBuffer(GL_ARRAY_BUFFER, buffers[VBO_TEXCOORD]);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(texcoords), texcoords, GL_STATIC_DRAW);
-	glBindBuffer(GL_ARRAY_BUFFER, buffers[VBO_VERTEX]);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-	glErrors();
+	GLfloat vertices[8] = { x1, y1,  x2, y1,  x1, y2,  x2, y2 };
+	backdropGfx->buffers(4, vertices, texcoords);
 }
 
 void screen_enableMapPreview(int width, int height, Vector2i *playerpositions)

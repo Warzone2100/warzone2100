@@ -3682,19 +3682,15 @@ static QScriptValue js_setWeather(QScriptContext *context, QScriptEngine *)
 	return QScriptValue();
 }
 
-//-- \subsection{setSky(texture page, wind speed, skybox scale)}
-//-- Change the skybox. Default values are "page-25", 0.5, and 10000.0. Returns true on success. (3.2+ only)
+//-- \subsection{setSky(texture file, wind speed, skybox scale)}
+//-- Change the skybox. (3.2+ only)
 static QScriptValue js_setSky(QScriptContext *context, QScriptEngine *)
 {
 	QString page = context->argument(0).toString();
 	float wind = context->argument(1).toNumber();
 	float scale = context->argument(2).toNumber();
-	bool found = iV_GetTexture(page.toUtf8().constData()) >= 0;
-	if (found)
-	{
-		setSkyBox(page.toUtf8().constData(), wind, scale);
-	}
-	return QScriptValue(found);
+	setSkyBox(page.toUtf8().constData(), wind, scale);
+	return QScriptValue();
 }
 
 //-- \subsection{hackMarkTiles([label | x, y[, x2, y2]])}

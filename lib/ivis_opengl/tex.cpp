@@ -184,14 +184,6 @@ int pie_AddTexPage(iV_Image *s, const char* filename, int slot, int maxTextureSi
 	return page;
 }
 
-
-void pie_InitSkybox(SDWORD pageNum)
-{
-	pie_SetTexturePage(pageNum);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-}
-
-
 /*!
  * Turns filename into a pagename if possible
  * \param[in,out] filename Filename to pagify

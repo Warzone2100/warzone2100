@@ -62,6 +62,7 @@
 #include "timer.h"
 #include "lib/framework/math_ext.h"
 #include "lib/ivis_opengl/piestate.h"
+#include "lib/ivis_opengl/pieblitfunc.h"
 #include "lib/sound/audio.h"
 #include "lib/sound/openal_error.h"
 #include "lib/sound/mixer.h"
@@ -146,7 +147,7 @@ static int dropped = 0;
 
 // Screen dimensions
 #define NUM_VERTICES 4
-static GLuint buffers[VBO_COUNT];
+static GFX *videoGfx = NULL;
 static GLfloat vertices[NUM_VERTICES][2];
 static GLfloat Scrnvidpos[3];
 
@@ -256,7 +257,6 @@ static double getRelativeTime(void)
 
 const GLfloat texture_width = 1024.0f;
 const GLfloat texture_height = 1024.0f;
-static GLuint video_texture;
 
 /** Allocates memory to hold the decoded video frame
  */
@@ -268,14 +268,12 @@ static void Allocate_videoFrame(void)
 
 	RGBAframe = (uint32_t *)malloc(size);
 	memset(RGBAframe, 0, size);
-	glGenTextures(1, &video_texture);
 }
 
 static void deallocateVideoFrame(void)
 {
 	if (RGBAframe)
 		free(RGBAframe);
-	glDeleteTextures(1, &video_texture);
 }
 
 #ifndef __BIG_ENDIAN__
@@ -304,12 +302,6 @@ static void video_write(bool update)
 	// when using scanlines we need to double the height
 	const int height_factor = (use_scanlines ? 2 : 1);
 	yuv_buffer yuv;
-
-	glErrors();
-	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, video_texture);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	if (update)
 	{
@@ -378,9 +370,7 @@ static void video_write(bool update)
 				rgb_offset += video_width;
 		}
 
-		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, video_width,
-				video_height * height_factor, GL_RGBA, GL_UNSIGNED_BYTE, RGBAframe);
-		glErrors();
+		videoGfx->updateTexture(RGBAframe, video_width, video_height * height_factor);
 	}
 
 	glDisable(GL_DEPTH_TEST);
@@ -389,21 +379,10 @@ static void video_write(bool update)
 	glPushMatrix();
 	glTranslatef(Scrnvidpos[0], Scrnvidpos[1], Scrnvidpos[2]);
 
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-	glBindBuffer(GL_ARRAY_BUFFER, buffers[VBO_TEXCOORD]); glTexCoordPointer(2, GL_FLOAT, 0, NULL);
-	glBindBuffer(GL_ARRAY_BUFFER, buffers[VBO_VERTEX]); glVertexPointer(2, GL_FLOAT, 0, NULL);
-	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-	glDisableClientState(GL_VERTEX_ARRAY);
-	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	videoGfx->draw();
 
 	glPopMatrix();
 	glErrors();
-
-	// Make sure the current texture page is reloaded after we are finished
-	// Otherwise WZ will think it is still loaded and not load it again
-	pie_SetTexturePage(TEXPAGE_NONE);
 }
 
 // FIXME: perhaps we should use wz's routine for audio?
@@ -689,21 +668,22 @@ bool seq_Play(const char* filename)
 	}
 
 	/* open video */
-	glGenBuffers(VBO_MINIMAL, buffers);
-	glErrors();
+	videoGfx = new GFX(GL_TRIANGLE_STRIP, 2);
 	if (theora_p)
 	{
 		if (videodata.ti.frame_width > texture_width || videodata.ti.frame_height > texture_height)
 		{
 			debug(LOG_ERROR, "Video size too large, must be below %.gx%.g!",
 					texture_width, texture_height);
-			glDeleteBuffers(VBO_MINIMAL, buffers);
+			delete videoGfx;
+			videoGfx = NULL;
 			return false;
 		}
 		if (videodata.ti.pixelformat != OC_PF_420)
 		{
 			debug(LOG_ERROR, "Video not in YUV420 format!");
-			glDeleteBuffers(VBO_MINIMAL, buffers);
+			delete videoGfx;
+			videoGfx = NULL;
 			return false;
 		}
 		char *blackframe = (char *)calloc(1, texture_width * texture_height * 4);
@@ -713,27 +693,15 @@ bool seq_Play(const char* filename)
 			use_scanlines = SCANLINES_OFF;
 
 		Allocate_videoFrame();
-
-		glBindTexture(GL_TEXTURE_2D, video_texture);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texture_width, texture_height,
-				0, GL_RGBA, GL_UNSIGNED_BYTE, blackframe);
+		videoGfx->makeTexture(texture_width, texture_height, GL_LINEAR, GL_RGBA, blackframe);
 		free(blackframe);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 
 		// when using scanlines we need to double the height
 		const int height_factor = (use_scanlines ? 2 : 1);
 		const GLfloat vtwidth = (float)videodata.ti.frame_width / texture_width;
 		const GLfloat vtheight = (float)videodata.ti.frame_height * height_factor / texture_height;
 		GLfloat texcoords[NUM_VERTICES * 2] = { 0.0f, 0.0f, vtwidth, 0.0f, 0.0f, vtheight, vtwidth, vtheight };
-		glBindBuffer(GL_ARRAY_BUFFER, buffers[VBO_TEXCOORD]);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(texcoords), texcoords, GL_STATIC_DRAW);
-		glBindBuffer(GL_ARRAY_BUFFER, buffers[VBO_VERTEX]);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-		glErrors();
+		videoGfx->buffers(NUM_VERTICES, vertices, texcoords);
 	}
 
 	/* on to the main decode loop.  We assume in this example that audio
@@ -939,8 +907,8 @@ void seq_Shutdown()
 		debug(LOG_VIDEO, "movie is not playing");
 		return;
 	}
-	glDeleteBuffers(VBO_MINIMAL, buffers);
-	glErrors();
+	delete videoGfx;
+	videoGfx = NULL;
 
 	if (vorbis_p)
 	{

@@ -31,9 +31,10 @@
 #include "lib/ivis_opengl/piestate.h"
 #include "piematrix.h"
 #include "lib/ivis_opengl/piemode.h"
+#include "lib/ivis_opengl/pieblitfunc.h"
 #include "lib/ivis_opengl/pieclip.h"
 
-static GLuint skyboxbuffers[VBO_MINIMAL];
+static GFX *skyboxGfx = NULL;
 
 #define VW_VERTICES 5
 void pie_DrawViewingWindow(Vector3i *v, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2, PIELIGHT colour)
@@ -119,17 +120,19 @@ void pie_Skybox_Init()
 	                   u + w * 8, v + h, u + w * 8, v };
 
 	GL_DEBUG("Initializing skybox");
-	glGenBuffers(VBO_MINIMAL, skyboxbuffers);
-	glBindBuffer(GL_ARRAY_BUFFER, skyboxbuffers[VBO_VERTEX]);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vert), vert, GL_STATIC_DRAW);
-	glBindBuffer(GL_ARRAY_BUFFER, skyboxbuffers[VBO_TEXCOORD]);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(texc), texc, GL_STATIC_DRAW);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	skyboxGfx = new GFX(GL_QUAD_STRIP, 3);
+	skyboxGfx->buffers(10, vert, texc);
+}
+
+void pie_Skybox_Texture(const char *filename)
+{
+	skyboxGfx->loadTexture(filename);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 }
 
 void pie_Skybox_Shutdown()
 {
-	glDeleteBuffers(VBO_MINIMAL, skyboxbuffers);
+	delete skyboxGfx;
 }
 
 void pie_DrawSkybox(float scale)
@@ -155,14 +158,7 @@ void pie_DrawSkybox(float scale)
 	// Apply scale matrix
 	glScalef(scale, scale/2.0f, scale);
 
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-	glBindBuffer(GL_ARRAY_BUFFER, skyboxbuffers[VBO_VERTEX]); glVertexPointer(3, GL_FLOAT, 0, NULL);
-	glBindBuffer(GL_ARRAY_BUFFER, skyboxbuffers[VBO_TEXCOORD]); glTexCoordPointer(2, GL_FLOAT, 0, NULL);
-	glDrawArrays(GL_QUAD_STRIP, 0, 10);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glDisableClientState(GL_VERTEX_ARRAY);
-	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+	skyboxGfx->draw();
 
 	glPopAttrib();
 }

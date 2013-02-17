@@ -2,6 +2,14 @@
 //
 // * Enable unit design and minimap only when an HQ exists
 
+function eventGameInit()
+{
+	if (tilesetType != "ARIZONA")
+	{
+		setSky("texpages/page-25-sky-urban.png", 0.5, 10000.0);
+	}
+}
+
 function eventStartLevel()
 {
 	// Disable by default

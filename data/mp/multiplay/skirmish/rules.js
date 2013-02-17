@@ -10,6 +10,11 @@ var lastHitTime = 0;
 
 function eventGameInit()
 {
+	if (tilesetType != "ARIZONA")
+	{
+		setSky("texpages/page-25-sky-urban.png", 0.5, 10000.0);
+	}
+
 	hackNetOff();
 	for (var playnum = 0; playnum < maxPlayers; playnum++)
 	{

@@ -40,5 +40,6 @@ extern void pie_DrawViewingWindow( Vector3i *v, UDWORD x1, UDWORD y1, UDWORD x2,
 void pie_DrawSkybox(float scale);
 void pie_Skybox_Init();
 void pie_Skybox_Shutdown();
+void pie_Skybox_Texture(const char *filename);
 
 #endif // _piedef_h

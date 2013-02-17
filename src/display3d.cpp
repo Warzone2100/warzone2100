@@ -145,8 +145,7 @@ bool	godMode;
 bool	showGateways = false;
 bool	showPath = false;
 
-/// The name of the texture page used to draw the skybox
-static char skyboxPageName[PATH_MAX] = "page-25";
+// Skybox data
 static float wind = 0.0f;
 static float windSpeed = 0.0f;
 static float skybox_scale = 10000.0f;
@@ -305,11 +304,10 @@ static const int BLUEPRINT_OPACITY=120;
 
 void setSkyBox(const char *page, float mywind, float myscale)
 {
-	sstrcpy(skyboxPageName, page);
 	windSpeed = mywind;
 	wind = 0.0f;
 	skybox_scale = myscale;
-	pie_InitSkybox(iV_GetTexture(skyboxPageName));
+	pie_Skybox_Texture(page);
 }
 
 static inline void rotateSomething(int &x, int &y, uint16_t angle)
@@ -1098,7 +1096,8 @@ bool init3DView(void)
 
 	bRender3DOnly = false;
 
-	setSkyBox("page-25", 0.0f, 10000.0f);
+	// default skybox, will override in script if not satisfactory
+	setSkyBox("texpages/page-25-sky-arizona.png", 0.0f, 10000.0f);
 
 	// distance is not saved, so initialise it now
 	distance = START_DISTANCE; // distance
@@ -3536,9 +3535,6 @@ static void renderSurroundings(void)
 
 	// rotate it
 	pie_MatRotY(DEG(wind));
-
-	// Set the texture page
-	pie_SetTexturePage(iV_GetTexture(skyboxPageName));
 
 	if(!gamePaused())
 	{
