@@ -431,7 +431,10 @@ function eventResearched(tech, labparam)
 		"R-Defense-Tower01",	// mg tower
 		"R-Struc-PowerModuleMk1",	// power module
 		"R-Struc-Factory-Module",	// factory module
-		"R-Struc-Research-Upgrade06",	// final research upgrade
+		"R-Vehicle-Body09", // tiger body (implies python)
+		"R-Struc-Power-Upgrade03a", // final power upgrade
+		"R-Cyborg-Armor-Heat07", // some cyborg armor
+		"R-Vehicle-Body14", // dragon body (implies vengeance)
 	];
 	var anyfound = true; // assume success
 	var lablist;
