@@ -94,8 +94,8 @@ void GFX::makeTexture(int width, int height, GLenum filter, GLenum format, const
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, format, GL_UNSIGNED_BYTE, image);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filter);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filter);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	mWidth = width;
 	mHeight = height;
 	mFormat = format;
@@ -433,20 +433,8 @@ bool pie_ShutdownRadar(void)
 
 void pie_SetRadar(GLfloat x, GLfloat y, GLfloat width, GLfloat height, int twidth, int theight, bool filter)
 {
-	int w = 1, h = 1;
-	char *black;
-
-	/* Find power of two size */
-	while (twidth > (w *= 2)) {}
-	while (theight > (h *= 2)) {}
-
-	black = (char *)calloc(1, w * h * 4);
-	radarGfx->makeTexture(twidth, theight, filter ? GL_LINEAR : GL_NEAREST, GL_RGBA, black);
-	free(black);
-
-	GLfloat radarTexX = ((GLfloat)twidth / (GLfloat)w);
-	GLfloat radarTexY = ((GLfloat)theight / (GLfloat)h);
-	GLfloat texcoords[] = { 0.0f, 0.0f,  radarTexX, 0.0f,  0.0f, radarTexY,  radarTexX, radarTexY };
+	radarGfx->makeTexture(twidth, theight, filter ? GL_LINEAR : GL_NEAREST);
+	GLfloat texcoords[] = { 0.0f, 0.0f,  1.0f, 0.0f,  0.0f, 1.0f,  1.0f, 1.0f };
 	GLfloat vertices[] = { x, y,  x + width, y,  x, y + height,  x + width, y + height };
 	radarGfx->buffers(4, vertices, texcoords);
 }

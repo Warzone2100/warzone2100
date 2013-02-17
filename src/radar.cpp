@@ -261,11 +261,7 @@ void drawRadar(void)
 {
 	float	pixSizeH, pixSizeV;
 
-	ASSERT(radarBuffer, "No radar buffer allocated");
-	if (!radarBuffer)
-	{
-		return;
-	}
+	ASSERT_OR_RETURN(, radarBuffer, "No radar buffer allocated");
 
 	CalcRadarPixelSize(&pixSizeH, &pixSizeV);
 
@@ -286,11 +282,6 @@ void drawRadar(void)
 			pie_MatRotZ(player.r.y);
 			DrawNorth();
 		}
-		// draw the box at the dimensions of the map
-		iV_TransBoxFill(-radarWidth/2.0 - 1,
-						-radarHeight/2.0 - 1,
-						 radarWidth/2.0,
-						 radarHeight/2.0);
 		pie_RenderRadar();
         pie_MatBegin();
             pie_TRANSLATE(-radarWidth/2 - 1, -radarHeight/2 - 1, 0);
@@ -407,6 +398,11 @@ static void DrawRadarTiles(void)
 			size_t pos = radarTexWidth * (y - scrollMinY) + (x - scrollMinX);
 
 			ASSERT(pos * sizeof(*radarBuffer) < radarBufferSize, "Buffer overrun");
+			if (y == scrollMinY || x == scrollMinX || y == scrollMaxY - 1 || x == scrollMaxX - 1)
+			{
+				radarBuffer[pos] = WZCOL_BLACK.rgba;
+				continue;
+			}
 			radarBuffer[pos] = appliedRadarColour(radarDrawMode, psTile).rgba;
 		}
 	}
