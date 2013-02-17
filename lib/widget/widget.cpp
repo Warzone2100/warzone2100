@@ -229,15 +229,6 @@ static bool widgCheckIDForm(W_FORM *psForm, UDWORD id)
 	return false;
 }
 
-/* Set the tool tip font for a screen */
-void widgSetTipFont(W_SCREEN *psScreen, enum iV_fonts FontID)
-{
-	ASSERT(psScreen != NULL,
-	       "widgSetTipFont: Invalid screen pointer");
-
-	psScreen->TipFontID = FontID;
-}
-
 static bool widgAddWidget(W_SCREEN *psScreen, W_INIT const *psInit, WIDGET *widget)
 {
 	ASSERT_OR_RETURN(false, widget != NULL, "Invalid widget");

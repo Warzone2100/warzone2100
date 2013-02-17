@@ -260,9 +260,6 @@ extern void widgReset(void);
 /** Shut down the widget module */
 extern void widgShutDown(void);
 
-/** Set the tool tip font for a screen */
-extern void widgSetTipFont(W_SCREEN *psScreen, enum iV_fonts FontID);
-
 /** Add a form to the widget screen */
 extern bool widgAddForm(W_SCREEN *psScreen, const W_FORMINIT *psInit);
 
