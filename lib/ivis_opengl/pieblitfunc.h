@@ -112,10 +112,11 @@ static inline void iV_DrawImageScaled(Image image, int x, int y, int w, int h) {
 extern void iV_TransBoxFill(float x0, float y0, float x1, float y1);
 extern void pie_UniTransBoxFill(float x0, float y0, float x1, float y1, PIELIGHT colour);
 
-extern bool pie_InitRadar(void);
-extern bool pie_ShutdownRadar(void);
-extern void pie_DownLoadRadar(UDWORD *buffer, int width, int height, bool filter);
-extern void pie_RenderRadar(int x, int y, int width, int height);
+bool pie_InitRadar();
+bool pie_ShutdownRadar();
+void pie_DownLoadRadar(UDWORD *buffer);
+void pie_RenderRadar();
+void pie_SetRadar(GLfloat x, GLfloat y, GLfloat width, GLfloat height, int twidth, int theight, bool filter);
 
 enum SCREENTYPE
 {

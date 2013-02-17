@@ -162,12 +162,6 @@ bool resizeRadar(void)
 	radarTexHeight = scrollMaxY - scrollMinY;
 	radarBufferSize = radarTexWidth * radarTexHeight * sizeof(UDWORD);
 	radarBuffer = (uint32_t *)malloc(radarBufferSize);
-	if (radarBuffer == NULL)
-	{
-		debug(LOG_FATAL, "Out of memory!");
-		abort();
-		return false;
-	}
 	memset(radarBuffer, 0, radarBufferSize);
         if (rotateRadar)
 	{
@@ -179,6 +173,8 @@ bool resizeRadar(void)
 	}
 	debug(LOG_WZ, "Setting radar zoom to %u", RadarZoom);
 	radarSize(RadarZoom);
+	pie_SetRadar(-radarWidth/2.0 - 1, -radarHeight/2.0 - 1, radarWidth, radarHeight, 
+	             radarTexWidth, radarTexHeight, rotateRadar || (RadarZoom % 16 != 0));
 
 	return true;
 }
@@ -211,6 +207,7 @@ void SetRadarZoom(uint8_t ZoomLevel)
 	RadarZoom = ZoomLevel;
 	radarSize(RadarZoom);
 	frameSkip = 0;
+	resizeRadar();
 }
 
 uint8_t GetRadarZoom(void)
@@ -274,14 +271,9 @@ void drawRadar(void)
 
 	if (frameSkip <= 0)
 	{
-		bool filter = true;
-		if (!rotateRadar)
-		{
-			filter = RadarZoom % 16 != 0;
-		}
 		DrawRadarTiles();
 		DrawRadarObjects();
-		pie_DownLoadRadar(radarBuffer, radarTexWidth, radarTexHeight, filter);
+		pie_DownLoadRadar(radarBuffer);
 		frameSkip = RADAR_FRAME_SKIP;
 	}
 	frameSkip--;
@@ -299,10 +291,7 @@ void drawRadar(void)
 						-radarHeight/2.0 - 1,
 						 radarWidth/2.0,
 						 radarHeight/2.0);
-		pie_RenderRadar(-radarWidth/2.0 - 1,
-						-radarHeight/2.0 - 1,
-						 radarWidth,
-						 radarHeight);
+		pie_RenderRadar();
         pie_MatBegin();
             pie_TRANSLATE(-radarWidth/2 - 1, -radarHeight/2 - 1, 0);
             DrawRadarExtras(0, 0, pixSizeH, pixSizeV);

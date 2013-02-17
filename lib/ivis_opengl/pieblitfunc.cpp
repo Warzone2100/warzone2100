@@ -52,9 +52,7 @@
 #define pie_FILLBLUE	128
 #define pie_FILLTRANS	128
 
-static GLuint radarTexture;
-static GLuint radarSizeX, radarSizeY;
-static GLfloat radarTexX, radarTexY;
+static GFX *radarGfx = NULL;
 
 struct PIERECT  ///< Screen rectangle.
 {
@@ -422,63 +420,49 @@ void iV_DrawImageScaled(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int w, int
 
 bool pie_InitRadar(void)
 {
-	glGenTextures(1, &radarTexture);
+	radarGfx = new GFX(GL_TRIANGLE_STRIP, 2);
 	return true;
 }
 
 bool pie_ShutdownRadar(void)
 {
-	glDeleteTextures(1, &radarTexture);
+	delete radarGfx;
+	radarGfx = NULL;
 	return true;
 }
 
-/** Store radar texture with given width and height. */
-void pie_DownLoadRadar(UDWORD *buffer, int width, int height, bool filter)
+void pie_SetRadar(GLfloat x, GLfloat y, GLfloat width, GLfloat height, int twidth, int theight, bool filter)
 {
 	int w = 1, h = 1;
 	char *black;
 
 	/* Find power of two size */
-	while (width > (w *= 2)) {}
-	while (height > (h *= 2)) {}
+	while (twidth > (w *= 2)) {}
+	while (theight > (h *= 2)) {}
 
-	pie_SetTexturePage(TEXPAGE_EXTERN);
-	glBindTexture(GL_TEXTURE_2D, radarTexture);
 	black = (char *)calloc(1, w * h * 4);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, black);
+	radarGfx->makeTexture(twidth, theight, filter ? GL_LINEAR : GL_NEAREST, GL_RGBA, black);
 	free(black);
-	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
-	if (filter)
-	{
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	}
-	else
-	{
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	}
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-	radarSizeX = width;
-	radarSizeY = height;
-	radarTexX = ((GLfloat)width / (GLfloat)w);
-	radarTexY = ((GLfloat)height / (GLfloat)h);
+
+	GLfloat radarTexX = ((GLfloat)twidth / (GLfloat)w);
+	GLfloat radarTexY = ((GLfloat)theight / (GLfloat)h);
+	GLfloat texcoords[] = { 0.0f, 0.0f,  radarTexX, 0.0f,  0.0f, radarTexY,  radarTexX, radarTexY };
+	GLfloat vertices[] = { x, y,  x + width, y,  x, y + height,  x + width, y + height };
+	radarGfx->buffers(4, vertices, texcoords);
+}
+
+/** Store radar texture with given width and height. */
+void pie_DownLoadRadar(UDWORD *buffer)
+{
+	radarGfx->updateTexture(buffer);
 }
 
 /** Display radar texture using the given height and width, depending on zoom level. */
-void pie_RenderRadar(int x, int y, int width, int height)
+void pie_RenderRadar()
 {
-	pie_SetTexturePage(TEXPAGE_EXTERN);
-	glBindTexture(GL_TEXTURE_2D, radarTexture);
 	pie_SetRendMode(REND_ALPHA);
-	glColor4ubv(WZCOL_WHITE.vector);
-	glBegin(GL_TRIANGLE_STRIP);
-		glTexCoord2f(0, 0);			glVertex2f(x, y);
-		glTexCoord2f(radarTexX, 0);		glVertex2f(x + width, y);
-		glTexCoord2f(0, radarTexY);		glVertex2f(x, y + height);
-		glTexCoord2f(radarTexX, radarTexY);	glVertex2f(x + width, y + height);
-	glEnd();
+	glColor4ubv(WZCOL_WHITE.vector); // hack
+	radarGfx->draw();
 }
 
 void pie_LoadBackDrop(SCREENTYPE screenType)
