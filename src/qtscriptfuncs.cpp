@@ -1470,7 +1470,7 @@ static DROID_TEMPLATE *makeTemplate(int player, int x, int y, const QString &tem
 
 	memset(psTemplate->asParts, 0, sizeof(psTemplate->asParts)); // reset to defaults
 	memset(psTemplate->asWeaps, 0, sizeof(psTemplate->asWeaps));
-	int body = get_first_available_component(player, capacity, context->argument(2), COMP_BODY, strict);
+	int body = get_first_available_component(player, capacity, context->argument(paramstart), COMP_BODY, strict);
 	if (body < 0)
 	{
 		debug(LOG_SCRIPT, "Wanted to build %s but body types all unavailable",
@@ -1478,7 +1478,7 @@ static DROID_TEMPLATE *makeTemplate(int player, int x, int y, const QString &tem
 		delete psTemplate;
 		return NULL; // no component available
 	}
-	int prop = get_first_available_component(player, capacity, context->argument(3), COMP_PROPULSION, strict);
+	int prop = get_first_available_component(player, capacity, context->argument(paramstart + 1), COMP_PROPULSION, strict);
 	if (prop < 0)
 	{
 		debug(LOG_SCRIPT, "Wanted to build %s but propulsion types all unavailable",
