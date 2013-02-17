@@ -57,6 +57,7 @@ bool rotateRadar; ///< Rotate the radar?
 static PIELIGHT		colRadarAlly, colRadarMe, colRadarEnemy;
 static PIELIGHT		tileColours[MAX_TILES];
 static UDWORD		*radarBuffer = NULL;
+static Vector3i		playerpos;
 
 PIELIGHT clanColours[]=
 {	// see frontend2.png for team color order.
@@ -105,10 +106,11 @@ static float RadarZoomMultiplier = 1.0f;
 static UDWORD radarBufferSize = 0;
 static int frameSkip = 0;
 
-static void DrawRadarTiles(void);
-static void DrawRadarObjects(void);
-static void DrawRadarExtras(float pixSizeH, float pixSizeV);
-static void DrawNorth(void);
+static void DrawRadarTiles();
+static void DrawRadarObjects();
+static void DrawRadarExtras();
+static void DrawNorth();
+static void setViewingWindow();
 
 static void radarSize(int ZoomLevel)
 {
@@ -128,16 +130,17 @@ static void radarSize(int ZoomLevel)
 	debug(LOG_WZ, "radar=(%u,%u) tex=(%u,%u) size=(%u,%u)", radarCenterX, radarCenterY, radarTexWidth, radarTexHeight, radarWidth, radarHeight);
 }
 
-void radarInitVars(void)
+void radarInitVars()
 {
 	radarTexWidth = 0;
 	radarTexHeight = 0;
 	RadarZoom = DEFAULT_RADARZOOM;
 	debug(LOG_WZ, "Resetting radar zoom to %u", RadarZoom);
 	radarSize(RadarZoom);
+	playerpos = Vector3i(-1, -1, -1);
 }
 
-bool InitRadar(void)
+bool InitRadar()
 {
 	// Ally/enemy/me colors
 	colRadarAlly = WZCOL_YELLOW;
@@ -152,7 +155,7 @@ bool InitRadar(void)
 	return true;
 }
 
-bool resizeRadar(void)
+bool resizeRadar()
 {
 	if (radarBuffer)
 	{
@@ -175,11 +178,12 @@ bool resizeRadar(void)
 	radarSize(RadarZoom);
 	pie_SetRadar(-radarWidth/2.0 - 1, -radarHeight/2.0 - 1, radarWidth, radarHeight, 
 	             radarTexWidth, radarTexHeight, rotateRadar || (RadarZoom % 16 != 0));
+	setViewingWindow();
 
 	return true;
 }
 
-bool ShutdownRadar(void)
+bool ShutdownRadar()
 {
 	pie_ShutdownRadar();
 
@@ -210,7 +214,7 @@ void SetRadarZoom(uint8_t ZoomLevel)
 	resizeRadar();
 }
 
-uint8_t GetRadarZoom(void)
+uint8_t GetRadarZoom()
 {
 	return RadarZoom;
 }
@@ -257,13 +261,20 @@ void CalcRadarPosition(int mX, int mY, int *PosX, int *PosY)
 	*PosY = sPosY;
 }
 
-void drawRadar(void)
+void drawRadar()
 {
 	float	pixSizeH, pixSizeV;
 
+	CalcRadarPixelSize(&pixSizeH, &pixSizeV);
+
 	ASSERT_OR_RETURN(, radarBuffer, "No radar buffer allocated");
 
-	CalcRadarPixelSize(&pixSizeH, &pixSizeV);
+	// Do not recalculate frustum window coordinates if position or zoom does not change
+	if (playerpos.x != player.p.x || playerpos.y != player.p.y || playerpos.z != player.p.z)
+	{
+		setViewingWindow();
+	}
+	playerpos = player.p; // cache position
 
 	if (frameSkip <= 0)
 	{
@@ -283,15 +294,15 @@ void drawRadar(void)
 			DrawNorth();
 		}
 		pie_RenderRadar();
-        pie_MatBegin();
-            pie_TRANSLATE(-radarWidth/2 - 1, -radarHeight/2 - 1, 0);
-            DrawRadarExtras(pixSizeH, pixSizeV);
-        pie_MatEnd();
+		pie_MatBegin();
+			pie_TRANSLATE(-radarWidth/2 - 1, -radarHeight/2 - 1, 0);
+			DrawRadarExtras();
+		pie_MatEnd();
 		drawRadarBlips(-radarWidth/2.0 - 1, -radarHeight/2.0 - 1, pixSizeH, pixSizeV);
 	pie_MatEnd();
 }
 
-static void DrawNorth(void)
+static void DrawNorth()
 {
 	iV_DrawImage(IntImages, RADAR_NORTH, -((radarWidth / 2.0) + iV_GetImageWidth(IntImages, RADAR_NORTH) + 1), -(radarHeight / 2.0));
 }
@@ -386,7 +397,7 @@ static PIELIGHT appliedRadarColour(RADAR_DRAW_MODE radarDrawMode, MAPTILE *WTile
 }
 
 /** Draw the map tiles on the radar. */
-static void DrawRadarTiles(void)
+static void DrawRadarTiles()
 {
 	SDWORD	x, y;
 
@@ -409,7 +420,7 @@ static void DrawRadarTiles(void)
 }
 
 /** Draw the droids and structure positions on the radar. */
-static void DrawRadarObjects(void)
+static void DrawRadarObjects()
 {
 	UBYTE				clan;
 	PIELIGHT			playerCol;
@@ -576,13 +587,17 @@ static SDWORD getLengthAdjust( void )
 }
 
 /** Draws a Myth/FF7 style viewing window */
-static void drawViewingWindow(int x, int y, float pixSizeH, float pixSizeV)
+static void setViewingWindow()
 {
+	float pixSizeH, pixSizeV;
 	Vector3i v[4], tv[4], centre;
 	int	shortX, longX, yDrop, yDropVar;
 	int	dif = getDistanceAdjust();
 	int	dif2 = getLengthAdjust();
 	PIELIGHT colour;
+	CalcRadarPixelSize(&pixSizeH, &pixSizeV);
+	int x = player.p.x * pixSizeH / TILE_UNITS;
+	int y = player.p.z * pixSizeV / TILE_UNITS;
 
 	shortX = ((visibleTiles.x / 4) - (dif / 6)) * pixSizeH;
 	longX = ((visibleTiles.x / 2) - (dif / 4)) * pixSizeH;
@@ -630,15 +645,12 @@ static void drawViewingWindow(int x, int y, float pixSizeH, float pixSizeV)
 	}
 
 	/* Send the four points to the draw routine and the clip box params */
-	pie_DrawViewingWindow(tv, colour);
+	pie_SetViewingWindow(tv, colour);
 }
 
-static void DrawRadarExtras(float pixSizeH, float pixSizeV)
+static void DrawRadarExtras()
 {
-	int viewX = player.p.x*pixSizeH / TILE_UNITS;
-	int viewY = player.p.z*pixSizeV / TILE_UNITS;
-
-	drawViewingWindow(viewX, viewY, pixSizeH, pixSizeV);
+	pie_DrawViewingWindow();
 	RenderWindowFrame(FRAME_RADAR, -1, -1, radarWidth + 2, radarHeight + 2);
 }
 

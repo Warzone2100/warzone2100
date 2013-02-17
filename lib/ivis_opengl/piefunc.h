@@ -33,9 +33,10 @@
 #include "lib/ivis_opengl/piedef.h"
 #include "lib/ivis_opengl/pieclip.h"
 
-extern UBYTE pie_ByteScale(UBYTE a, UBYTE b) WZ_DECL_CONST;
-extern void pie_TransColouredTriangle(Vector3f *vrt, PIELIGHT c);
-extern void pie_DrawViewingWindow(Vector3i *v, PIELIGHT colour);
+void pie_TransColouredTriangle(Vector3f *vrt, PIELIGHT c);
+
+void pie_SetViewingWindow(Vector3i *v, PIELIGHT colour);
+void pie_DrawViewingWindow();
 
 void pie_DrawSkybox(float scale);
 void pie_Skybox_Init();

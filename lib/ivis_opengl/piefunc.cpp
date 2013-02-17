@@ -37,13 +37,12 @@
 static GFX *skyboxGfx = NULL;
 
 #define VW_VERTICES 5
-void pie_DrawViewingWindow(Vector3i *v, PIELIGHT colour)
-{
-	Vector3i pieVrts[VW_VERTICES];
-	SDWORD i;
+static Vector3i pieVrts[VW_VERTICES];
+static PIELIGHT pieColour;
 
-	pie_SetTexturePage(TEXPAGE_NONE);
-	pie_SetRendMode(REND_ALPHA);
+void pie_SetViewingWindow(Vector3i *v, PIELIGHT colour)
+{
+	pieColour = colour;
 
 	pieVrts[0] = v[1];
 	pieVrts[0].z = INTERFACE_DEPTH;	// cull triangles with off screen points
@@ -58,6 +57,15 @@ void pie_DrawViewingWindow(Vector3i *v, PIELIGHT colour)
 	pieVrts[3].z = INTERFACE_DEPTH;
 
 	pieVrts[4] = pieVrts[0];
+}
+
+void pie_DrawViewingWindow()
+{
+	SDWORD i;
+	PIELIGHT colour = pieColour;
+
+	pie_SetTexturePage(TEXPAGE_NONE);
+	pie_SetRendMode(REND_ALPHA);
 
 	glColor4ub(colour.byte.r, colour.byte.g, colour.byte.b, colour.byte.a >> 1);
 	glBegin(GL_TRIANGLE_FAN);
@@ -152,9 +160,4 @@ void pie_DrawSkybox(float scale)
 	skyboxGfx->draw();
 
 	glPopAttrib();
-}
-
-UBYTE pie_ByteScale(UBYTE a, UBYTE b)
-{
-	return ((UDWORD)a * (UDWORD)b) >> 8;
 }
