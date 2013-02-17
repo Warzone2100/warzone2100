@@ -375,6 +375,75 @@ function maintenance()
 {
 	log("Maintenance check");
 
+	var struct = null, module = "";
+	if (isStructureAvailable(powModule))
+	{
+		var structlist = enumStruct(me, POWER_GEN);
+		for (i = 0; i < structlist.length; i++)
+		{
+			if (structlist[i].modules < 1) 
+			{
+				struct = structlist[i];
+				module = powModule;
+				break;
+			}
+		}
+	}
+	if (!struct && isStructureAvailable(facModule))
+	{
+		var structlist = enumStruct(me, FACTORY);
+		for (i = 0; i < structlist.length; i++)
+		{
+			if (structlist[i].modules < 2) 
+			{
+				struct = structlist[i];
+				module = facModule;
+				break;
+			}
+		}
+	}
+	if (!struct && isStructureAvailable(facModule))
+	{
+		var structlist = enumStruct(me, VTOL_FACTORY);
+		for (i = 0; i < structlist.length; i++)
+		{
+			if (structlist[i].modules < 2) 
+			{
+				struct = structlist[i];
+				module = facModule;
+				break;
+			}
+		}
+	}
+	if (isStructureAvailable(resModule))
+	{
+		var structlist = enumStruct(me, RESEARCH_LAB);
+		for (i = 0; i < structlist.length; i++)
+		{
+			if (structlist[i].modules < 1) 
+			{
+				struct = structlist[i];
+				module = resModule;
+				break;
+			}
+		}
+	}
+	if (struct) 
+	{
+		log("Found a structure to upgrade");
+		var builders = enumDroid(me, DROID_CONSTRUCT);
+		for (j = 0; j < builders.length; j++)
+		{
+			mydroid = builders[j];
+			var currDist = distBetweenTwoPoints(struct.x, struct.y, mydroid.x, mydroid.y);
+			if (conCanHelp(mydroid, struct.x, struct.y) && currDist < 20)
+			{
+				orderDroidBuild(mydroid, DORDER_BUILD, module, struct.x, struct.y);
+			}
+		}
+		return;
+	}
+	
 	var reslist = enumResearch();
 	if (reslist.length == 0)
 	{
@@ -483,23 +552,6 @@ function eventStructureBuilt(struct, droid)
 	else if (struct.stattype == FACTORY || struct.stattype == CYBORG_FACTORY || struct.stattype == VTOL_FACTORY)
 	{
 		eventDroidBuilt(null, struct);
-	}
-	else if (struct.stattype == POWER_GEN && droid)
-	{
-		if (isStructureAvailable(powModule)) // Immediately upgrade it, if possible
-		{
-			var builders = enumDroid(me, DROID_CONSTRUCT);
-			for (i = 0; i < builders.length; i++)
-			{
-				mydroid = builders[i];
-				var currDist = distBetweenTwoPoints(struct.x, struct.y, mydroid.x, mydroid.y);
-				if (conCanHelp(mydroid, struct.x, struct.y) && currDist < 20)
-				{
-					orderDroidBuild(droid, DORDER_BUILD, powModule, struct.x, struct.y);
-				}
-				return;
-			}
-		}
 	}
 	if (!fundamentalsTriggered)
 	{
