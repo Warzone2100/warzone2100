@@ -29,15 +29,11 @@
 #include "lib/ivis_opengl/textdraw.h"
 
 /* Button states */
-#define WBUTS_NORMAL	0x0000
-#define WBUTS_DOWN		0x0001		// Button is down
-#define WBUTS_GREY		0x0002		// Button is disabled
-#define WBUTS_HILITE	0x0004		// Button is hilited
-#define WBUTS_LOCKED	0x0008		// Button is locked down
-#define WBUTS_CLICKLOCK	0x0010		// Button is locked but clickable
-#define WBUTS_FLASH		0x0020		// Button flashing is enabled
-#define WBUTS_FLASHON	0x0040		// Button is flashing
-
+enum
+{
+	WBUT_DOWN      = 0x10,  ///< Button is down.
+	WBUT_HIGHLIGHT = 0x20,  ///< Button is highlighted.
+};
 
 struct W_BUTTON : public WIDGET
 {
@@ -47,7 +43,6 @@ struct W_BUTTON : public WIDGET
 	void released(W_CONTEXT *psContext, WIDGET_KEY key);
 	void highlight(W_CONTEXT *psContext);
 	void highlightLost();
-	void run(W_CONTEXT *psContext);
 	void display(int xOffset, int yOffset, PIELIGHT *pColours);
 
 	unsigned getState();

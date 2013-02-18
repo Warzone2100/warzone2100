@@ -68,7 +68,6 @@
 /************ Button styles **************/
 
 #define WBUT_PLAIN		0	///< Plain button (text with a box around it)
-#define	WBUT_NOCLICKMOVE	8	///< Disable movement on a button
 
 
 /**

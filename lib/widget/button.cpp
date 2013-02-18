@@ -40,7 +40,7 @@ W_BUTINIT::W_BUTINIT()
 
 W_BUTTON::W_BUTTON(W_BUTINIT const *init)
 	: WIDGET(init, WIDG_BUTTON)
-	, state(WBUTS_NORMAL)
+	, state(WBUT_PLAIN)
 	, pText(QString::fromUtf8(init->pText))
 	, pTip(QString::fromUtf8(init->pTip))
 	, HilightAudioID(WidgGetHilightAudioID())
@@ -48,41 +48,23 @@ W_BUTTON::W_BUTTON(W_BUTINIT const *init)
 	, AudioCallback(WidgGetAudioCallback())
 	, FontID(init->FontID)
 {
-	ASSERT((init->style & ~(WBUT_PLAIN | WIDG_HIDDEN | WFORM_NOCLICKMOVE | WBUT_NOPRIMARY | WBUT_SECONDARY | WBUT_TXTCENTRE)) == 0, "unknown button style");
+	ASSERT((init->style & ~(WBUT_PLAIN | WIDG_HIDDEN | WBUT_NOPRIMARY | WBUT_SECONDARY | WBUT_TXTCENTRE)) == 0, "unknown button style");
 }
-
-static const unsigned buttonflagMap[] = {WBUTS_GREY,      WBUT_DISABLE,
-                                         WBUTS_LOCKED,    WBUT_LOCK,
-                                         WBUTS_CLICKLOCK, WBUT_CLICKLOCK};
 
 unsigned W_BUTTON::getState()
 {
-	unsigned retState = 0;
-	for (unsigned i = 0; i < ARRAY_SIZE(buttonflagMap); i += 2)
-	{
-		if ((state & buttonflagMap[i]) != 0)
-		{
-			retState |= buttonflagMap[i + 1];
-		}
-	}
-
-	if (state & WBUTS_FLASH)
-	{
-		retState |= WBUT_FLASH;
-	}
-
-	return retState;
+	return state & (WBUT_DISABLE | WBUT_LOCK | WBUT_CLICKLOCK | WBUT_FLASH | WBUT_DOWN | WBUT_HIGHLIGHT);
 }
 
 void W_BUTTON::setFlash(bool enable)
 {
 	if (enable)
 	{
-		state |= WBUTS_FLASH;
+		state |= WBUT_FLASH;
 	}
 	else
 	{
-		state &= ~(WBUTS_FLASH | WBUTS_FLASHON);
+		state &= ~WBUT_FLASH;
 	}
 }
 
@@ -90,14 +72,8 @@ void W_BUTTON::setState(unsigned newState)
 {
 	ASSERT(!((newState & WBUT_LOCK) && (newState & WBUT_CLICKLOCK)), "Cannot have both WBUT_LOCK and WBUT_CLICKLOCK");
 
-	for (unsigned i = 0; i < ARRAY_SIZE(buttonflagMap); i += 2)
-	{
-		state &= ~buttonflagMap[i];
-		if ((newState & buttonflagMap[i + 1]) != 0)
-		{
-			state |= buttonflagMap[i];
-		}
-	}
+	unsigned mask = WBUT_DISABLE | WBUT_LOCK | WBUT_CLICKLOCK;
+	state = (state & ~mask) | (newState & mask);
 }
 
 QString W_BUTTON::getString() const
@@ -115,28 +91,10 @@ void W_BUTTON::setTip(QString string)
 	pTip = string;
 }
 
-/* Run a button widget */
-void W_BUTTON::run(W_CONTEXT *)
-{
-	if (state & WBUTS_FLASH)
-	{
-		if (((realTime / 250) % 2) == 0)
-		{
-			state &= ~WBUTS_FLASHON;
-		}
-		else
-		{
-			state |= WBUTS_FLASHON;
-		}
-	}
-}
-
-
-/* Respond to a mouse click */
 void W_BUTTON::clicked(W_CONTEXT *, WIDGET_KEY key)
 {
 	/* Can't click a button if it is disabled or locked down */
-	if (!(state & (WBUTS_GREY | WBUTS_LOCKED)))
+	if ((state & (WBUT_DISABLE | WBUT_LOCK)) == 0)
 	{
 		// Check this is the correct key
 		if ((!(style & WBUT_NOPRIMARY) && key == WKEY_PRIMARY) ||
@@ -146,9 +104,8 @@ void W_BUTTON::clicked(W_CONTEXT *, WIDGET_KEY key)
 			{
 				AudioCallback(ClickedAudioID);
 			}
-			state &= ~WBUTS_FLASH;	// Stop it flashing
-			state &= ~WBUTS_FLASHON;
-			state |= WBUTS_DOWN;
+			state &= ~WBUT_FLASH;	// Stop it flashing
+			state |= WBUT_DOWN;
 		}
 	}
 
@@ -163,14 +120,14 @@ void W_BUTTON::clicked(W_CONTEXT *, WIDGET_KEY key)
 void W_BUTTON::released(W_CONTEXT *psContext, WIDGET_KEY key)
 {
 	W_SCREEN *psScreen = psContext->psScreen;
-	if (state & WBUTS_DOWN)
+	if (state & WBUT_DOWN)
 	{
 		// Check this is the correct key
 		if ((!(style & WBUT_NOPRIMARY) && key == WKEY_PRIMARY) ||
 		    ((style & WBUT_SECONDARY) && key == WKEY_SECONDARY))
 		{
 			widgSetReturn(psScreen, this);
-			state &= ~WBUTS_DOWN;
+			state &= ~WBUT_DOWN;
 		}
 	}
 }
@@ -179,7 +136,7 @@ void W_BUTTON::released(W_CONTEXT *psContext, WIDGET_KEY key)
 /* Respond to a mouse moving over a button */
 void W_BUTTON::highlight(W_CONTEXT *psContext)
 {
-	state |= WBUTS_HILITE;
+	state |= WBUT_HIGHLIGHT;
 
 	if (AudioCallback)
 	{
@@ -200,7 +157,7 @@ void W_BUTTON::highlight(W_CONTEXT *psContext)
 /* Respond to the mouse moving off a button */
 void W_BUTTON::highlightLost()
 {
-	state &= ~(WBUTS_DOWN | WBUTS_HILITE);
+	state &= ~(WBUT_DOWN | WBUT_HIGHLIGHT);
 	if (!pTip.isEmpty())
 	{
 		tipStop(this);
@@ -224,7 +181,7 @@ void W_BUTTON::display(int xOffset, int yOffset, PIELIGHT *pColours)
 	QByteArray textBytes = pText.toUtf8();
 	char const *textData = textBytes.constData();
 
-	if (state & (WBUTS_DOWN | WBUTS_LOCKED | WBUTS_CLICKLOCK))
+	if (state & (WBUT_DOWN | WBUT_LOCK | WBUT_CLICKLOCK))
 	{
 		/* Display the button down */
 		iV_ShadowBox(x0, y0, x1, y1, 0, pColours[WCOL_LIGHT], pColours[WCOL_DARK], pColours[WCOL_BKGRND]);
@@ -234,27 +191,18 @@ void W_BUTTON::display(int xOffset, int yOffset, PIELIGHT *pColours)
 			iV_SetFont(FontID);
 			iV_SetTextColour(pColours[WCOL_TEXT]);
 			int fw = iV_GetTextWidth(textData);
-			int fx, fy;
-			if (style & WBUT_NOCLICKMOVE)
-			{
-				fx = x0 + (width() - fw) / 2 + 1;
-				fy = y0 + 1 + (height() - iV_GetTextLineSize()) / 2 - iV_GetTextAboveBase();
-			}
-			else
-			{
-				fx = x0 + (width() - fw) / 2;
-				fy = y0 + (height() - iV_GetTextLineSize()) / 2 - iV_GetTextAboveBase();
-			}
+			int fx = x0 + (width() - fw) / 2;
+			int fy = y0 + (height() - iV_GetTextLineSize()) / 2 - iV_GetTextAboveBase();
 			iV_DrawText(textData, fx, fy);
 		}
 
-		if (state & WBUTS_HILITE)
+		if (state & WBUT_HIGHLIGHT)
 		{
 			/* Display the button hilite */
 			iV_Box(x0 + 3, y0 + 3, x1 - 2, y1 - 2, pColours[WCOL_HILITE]);
 		}
 	}
-	else if (state & WBUTS_GREY)
+	else if (state & WBUT_DISABLE)
 	{
 		/* Display the disabled button */
 		iV_ShadowBox(x0, y0, x1, y1, 0, pColours[WCOL_LIGHT], pColours[WCOL_LIGHT], pColours[WCOL_BKGRND]);
@@ -271,7 +219,7 @@ void W_BUTTON::display(int xOffset, int yOffset, PIELIGHT *pColours)
 			iV_DrawText(textData, fx, fy);
 		}
 
-		if (state & WBUTS_HILITE)
+		if (state & WBUT_HIGHLIGHT)
 		{
 			/* Display the button hilite */
 			iV_Box(x0 + 2, y0 + 2, x1 - 3, y1 - 3, pColours[WCOL_HILITE]);
@@ -292,7 +240,7 @@ void W_BUTTON::display(int xOffset, int yOffset, PIELIGHT *pColours)
 			iV_DrawText(textData, fx, fy);
 		}
 
-		if (state & WBUTS_HILITE)
+		if (state & WBUT_HIGHLIGHT)
 		{
 			/* Display the button hilite */
 			iV_Box(x0 + 2, y0 + 2, x1 - 3, y1 - 3, pColours[WCOL_HILITE]);

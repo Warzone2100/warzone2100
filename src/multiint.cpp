@@ -4426,9 +4426,6 @@ void displayMultiBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT 
 {
 	int x = xOffset + psWidget->x();
 	int y = yOffset + psWidget->y();
-	bool	Hilight = false;
-	UDWORD	Down = 0;
-	UDWORD	Grey = 0;
 	UWORD	im_norm = UNPACKDWORD_QUAD_A((UDWORD)psWidget->UserData);
 	UWORD	im_down = UNPACKDWORD_QUAD_B((UDWORD)psWidget->UserData);
 	UWORD	im_hili = UNPACKDWORD_QUAD_C((UDWORD)psWidget->UserData);
@@ -4445,10 +4442,7 @@ void displayMultiBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT 
 	}
 
 	// evaluate auto-frame
-	if (((W_BUTTON*)psWidget)->state & WBUTS_HILITE)
-	{
-		Hilight = true;
-	}
+	bool Hilight = (psWidget->getState() & WBUT_HIGHLIGHT) != 0;
 
 	// evaluate auto-frame
 	if (im_hili == 1 && Hilight && im_norm != IMAGE_WEE_GUY)
@@ -4490,15 +4484,8 @@ void displayMultiBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT 
 		Hilight = false;
 	}
 
-	if( ((W_BUTTON*)psWidget)->state & (WCLICK_DOWN | WCLICK_LOCKED | WCLICK_CLICKLOCK))
-	{
-		Down = 1;
-	}
-
-	if( ((W_BUTTON*)psWidget)->state & WBUTS_GREY)
-	{
-		Grey = 1;
-	}
+	bool Down = (psWidget->getState() & (WBUT_DOWN | WBUT_LOCK | WBUT_CLICKLOCK)) != 0;
+	bool Grey = (psWidget->getState() & WBUT_DISABLE) != 0;
 
 	int toDraw[3];
 	int numToDraw = 0;

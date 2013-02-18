@@ -83,10 +83,9 @@
 //
 #define formIsHilite(p) 	(((W_CLICKFORM*)p)->state & WCLICK_HILITE)
 
-// Is a button widget hilited, either because the cursor is over it or it is flashing.
+// Is a button widget highlighted, either because the cursor is over it or it is flashing.
 //
-#define buttonIsHilite(p) 	(((W_BUTTON*)p)->state & WBUTS_HILITE)
-#define buttonIsFlashing(p)  (((W_BUTTON*)p)->state & WBUTS_FLASHON)
+#define buttonIsHilite(p)  ((p->getState() & WBUT_HIGHLIGHT) != 0)
 
 #define FORM_OPEN_ANIM_DURATION		(GAME_TICKS_PER_SEC/6) // Time duration for form open/close anims.
 
@@ -1396,83 +1395,29 @@ void intDisplayImageHilight(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ
 	}
 }
 
-
-static void GetButtonState(WIDGET *psWidget, bool *Hilight, UDWORD *Down, bool *Grey)
-{
-	switch (psWidget->type)
-	{
-	case WIDG_FORM:
-		*Hilight = formIsHilite(psWidget);
-		if (((W_CLICKFORM *)psWidget)->state & (WCLICK_DOWN | WCLICK_LOCKED | WCLICK_CLICKLOCK))
-		{
-			*Down = 1;
-		}
-		if (((W_CLICKFORM *)psWidget)->state & WCLICK_GREY)
-		{
-			*Grey = true;
-		}
-		break;
-
-	case WIDG_BUTTON:
-		*Hilight = buttonIsHilite(psWidget);
-		if (((W_BUTTON *)psWidget)->state & (WBUTS_DOWN | WBUTS_LOCKED | WBUTS_CLICKLOCK))
-		{
-			*Down = 1;
-		}
-		if (((W_BUTTON *)psWidget)->state & WBUTS_GREY)
-		{
-			*Grey = true;
-		}
-		break;
-
-	case WIDG_EDITBOX:
-		if (((W_EDITBOX *)psWidget)->state & WEDBS_HILITE)
-		{
-			*Hilight = true;
-		}
-		break;
-
-	case WIDG_SLIDER:
-		if (((W_SLIDER *)psWidget)->state & SLD_HILITE)
-		{
-			*Hilight = true;
-		}
-		if (((W_SLIDER *)psWidget)->state & (WCLICK_DOWN | WCLICK_LOCKED | WCLICK_CLICKLOCK))
-		{
-			*Down = 1;
-		}
-		break;
-
-	default:
-		*Hilight = false;
-	}
-}
-
-
-// Display one of two images depending on if the widget is hilighted by the mouse.
-//
+// Display one of two images depending on whether the widget is highlighted by the mouse.
 void intDisplayButtonHilight(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
 	int x = xOffset + psWidget->x();
 	int y = yOffset + psWidget->y();
-	bool Hilight = false;
-	bool Grey = false;
-	UDWORD Down = 0;
 	UWORD ImageID;
 
-	GetButtonState(psWidget, &Hilight, &Down, &Grey);
-	if (Grey)
+	unsigned state = psWidget->getState();
+	bool grey = (state & WBUT_DISABLE) != 0;
+	bool down = (state & (WBUT_DOWN | WBUT_LOCK | WBUT_CLICKLOCK)) != 0;
+	bool highlight = (state & WBUT_HIGHLIGHT) != 0;
+	if (grey)
 	{
 		ImageID = UNPACKDWORD_TRI_A(psWidget->UserData);
-		Hilight = false;
+		highlight = false;
 	}
 	else
 	{
-		ImageID = UNPACKDWORD_TRI_C(psWidget->UserData) + Down;
+		ImageID = UNPACKDWORD_TRI_C(psWidget->UserData) + down;
 	}
 
 	iV_DrawImage(IntImages, ImageID, x, y);
-	if (Hilight)
+	if (highlight)
 	{
 		iV_DrawImage(IntImages, UNPACKDWORD_TRI_B(psWidget->UserData), x, y);
 	}
@@ -1516,13 +1461,13 @@ void intDisplayReticuleButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, 
 	ASSERT(psWidget->type == WIDG_BUTTON, "Not a button");
 	W_BUTTON *psButton = (W_BUTTON *)psWidget;
 
-	if (psButton->state & WBUTS_GREY)
+	if (psButton->state & WBUT_DISABLE)
 	{
 		iV_DrawImage(IntImages, IMAGE_RETICULE_GREY, x, y);
 		return;
 	}
 
-	Down = psButton->state & (WBUTS_DOWN | WBUTS_CLICKLOCK);
+	Down = psButton->state & (WBUT_DOWN | WBUT_CLICKLOCK);
 	Hilight = buttonIsHilite(psButton);
 
 	if (Down)
@@ -1608,7 +1553,7 @@ void intDisplayButtonPressed(WIDGET *psWidget, UDWORD xOffset,
 	UBYTE		Hilight = 0;
 	UWORD		ImageID;
 
-	if (psButton->state & (WBUTS_DOWN | WBUTS_LOCKED | WBUTS_CLICKLOCK))
+	if (psButton->state & (WBUT_DOWN | WBUT_LOCK | WBUT_CLICKLOCK))
 	{
 		ImageID = UNPACKDWORD_TRI_A(psWidget->UserData);
 	}
@@ -1641,7 +1586,7 @@ void intDisplayDPButton(WIDGET *psWidget, UDWORD xOffset,
 	{
 		ASSERT(StructIsFactory(psStruct), "Structure is not a factory");
 
-		if (psButton->state & (WBUTS_DOWN | WBUTS_LOCKED | WBUTS_CLICKLOCK))
+		if (psButton->state & (WBUT_DOWN | WBUT_LOCK | WBUT_CLICKLOCK))
 		{
 			down = true;
 		}

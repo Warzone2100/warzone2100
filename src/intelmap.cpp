@@ -1117,7 +1117,6 @@ void intDisplayMessageButton(WIDGET *psWidget, UDWORD xOffset,
 	W_CLICKFORM		*psButton = (W_CLICKFORM*)psWidget;
 	RENDERED_BUTTON *psBuffer = (RENDERED_BUTTON*)psButton->pUserData;
 	MESSAGE			*psMsg;
-	bool			Hilight = false;
 	UDWORD			Down = 0, IMDType = 0, compID;
 	SDWORD			image = -1;
 	RESEARCH		*pResearch = NULL;
@@ -1126,8 +1125,8 @@ void intDisplayMessageButton(WIDGET *psWidget, UDWORD xOffset,
 
 	OpenButtonRender(xOffset + psButton->x(), yOffset + psButton->y());
 
-	Down = psButton->state & (WBUTS_DOWN | WBUTS_CLICKLOCK);
-	Hilight = psButton->state & WBUTS_HILITE;
+	Down = psButton->state & (WBUT_DOWN | WBUT_CLICKLOCK);
+	bool Hilight = psButton->state & WBUT_HIGHLIGHT;
 
 	// Get the object associated with this widget.
 	psMsg = (MESSAGE *)psBuffer->Data;
