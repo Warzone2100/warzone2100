@@ -665,7 +665,7 @@ static void displayCompObj(DROID *psDroid, bool bButton)
 						{
 							Rotation rot = getInterpolatedWeaponRotation(psDroid, i, graphicsTime);
 
-							pie_MatBegin();
+							pie_MatBegin(!bButton);
 
 							//to skip number of VTOL_CONNECTOR_START ground unit connectors
 							if ( iConnector < VTOL_CONNECTOR_START )
@@ -817,7 +817,7 @@ static void displayCompObj(DROID *psDroid, bool bButton)
 				Allegedly - all droids will have a mount graphic so this shouldn't
 				fall on it's arse......*/
 				//sensor and cyborg and ecm uses connectors[0]
-				pie_MatBegin();
+				pie_MatBegin(!bButton);
 				/* vtol weapons inverted */
 				if ( iConnector >= VTOL_CONNECTOR_START )
 				{
@@ -966,7 +966,7 @@ void displayComponentObject(DROID *psDroid)
 	leftFirst = angleDelta(player.r.y - st.rot.direction) <= 0;
 
 	/* Push the matrix */
-	pie_MatBegin();
+	pie_MatBegin(true);
 
 	/* Get the real position */
 	position.x = st.pos.x - player.p.x;

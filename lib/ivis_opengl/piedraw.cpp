@@ -40,6 +40,9 @@
 #include <vector>
 #include <algorithm>
 
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))
 #define SHADOW_END_DISTANCE (8000*8000) // Keep in sync with lighting.c:FOG_END
 
@@ -126,7 +129,7 @@ struct ShadowcastingShape
 
 typedef struct
 {
-	float		matrix[16];
+	glm::mat4	matrix;
 	iIMDShape*	shape;
 	int		frame;
 	PIELIGHT	colour;
@@ -164,10 +167,11 @@ static void pie_Draw3DButton2(iIMDShape *shape, const PIELIGHT &colour, const PI
 	pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
 }
 
-static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELIGHT teamcolour, int pieFlag, int pieFlagData)
+static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELIGHT teamcolour, int pieFlag, int pieFlagData, glm::mat4 &matrix)
 {
 	bool light = true;
 
+	glLoadMatrixf(&matrix[0][0]);
 	pie_SetAlphaTest((pieFlag & pie_PREMULTIPLIED) == 0);
 
 	/* Set fog status */
@@ -221,15 +225,6 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 	else
 	{
 		pie_DeactivateShader();
-	}
-
-	if (pieFlag & pie_HEIGHT_SCALED)	// construct
-	{
-		glScalef(1.0f, (float)pieFlagData / (float)pie_RAISE_SCALE, 1.0f);
-	}
-	if (pieFlag & pie_RAISE)		// collapse
-	{
-		glTranslatef(1.0f, (-shape->max.y * (pie_RAISE_SCALE - pieFlagData)) * (1.0f / pie_RAISE_SCALE), 1.0f);
 	}
 
 	glColor4ubv(colour.vector);     // Only need to set once for entire model
@@ -434,13 +429,22 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, int
 	else
 	{
 		SHAPE tshape;
-		pie_GetMatrix(tshape.matrix);
 		tshape.shape = shape;
 		tshape.frame = frame;
 		tshape.colour = colour;
 		tshape.teamcolour = teamcolour;
 		tshape.flag = pieFlag;
 		tshape.flag_data = pieFlagData;
+		pie_GetMatrix(&tshape.matrix[0][0]);
+
+		if (pieFlag & pie_HEIGHT_SCALED)	// construct
+		{
+			tshape.matrix = glm::scale(tshape.matrix, glm::vec3(1.0f, (float)pieFlagData / (float)pie_RAISE_SCALE, 1.0f));
+		}
+		if (pieFlag & pie_RAISE)		// collapse
+		{
+			tshape.matrix = glm::translate(tshape.matrix, glm::vec3(1.0f, (-shape->max.y * (pie_RAISE_SCALE - pieFlagData)) * (1.0f / pie_RAISE_SCALE), 1.0f));
+		}
 
 		if (pieFlag & (pie_ADDITIVE | pie_TRANSLUCENT | pie_PREMULTIPLIED))
 		{
@@ -556,16 +560,14 @@ void pie_RemainingPasses(void)
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 	for (unsigned i = 0; i < shapes.size(); ++i)
 	{
-		glLoadMatrixf(shapes[i].matrix);
-		pie_Draw3DShape2(shapes[i].shape, shapes[i].frame, shapes[i].colour, shapes[i].teamcolour, shapes[i].flag, shapes[i].flag_data);
+		pie_Draw3DShape2(shapes[i].shape, shapes[i].frame, shapes[i].colour, shapes[i].teamcolour, shapes[i].flag, shapes[i].flag_data, shapes[i].matrix);
 	}
 	// Draw translucent models last
 	// TODO, sort list by Z order to do translucency correctly
 	GL_DEBUG("Remaining passes - translucent models");
 	for (unsigned i = 0; i < tshapes.size(); ++i)
 	{
-		glLoadMatrixf(tshapes[i].matrix);
-		pie_Draw3DShape2(tshapes[i].shape, tshapes[i].frame, tshapes[i].colour, tshapes[i].teamcolour, tshapes[i].flag, tshapes[i].flag_data);
+		pie_Draw3DShape2(tshapes[i].shape, tshapes[i].frame, tshapes[i].colour, tshapes[i].teamcolour, tshapes[i].flag, tshapes[i].flag_data, tshapes[i].matrix);
 	}
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_NORMAL_ARRAY);

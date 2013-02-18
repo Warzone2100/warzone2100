@@ -1023,15 +1023,17 @@ static void drawTiles(iView *player)
 	/* ---------------------------------------------------------------- */
 	/* Now display all the static objects                               */
 	/* ---------------------------------------------------------------- */
-	displayStaticObjects(); // bucket render implemented
-	displayFeatures(); // bucket render implemented
-	displayDynamicObjects(); //bucket render implemented
+	pie_MatBegin(true);
+	displayStaticObjects(); // may be bucket render implemented
+	displayFeatures();
+	displayDynamicObjects(); // may be bucket render implemented
 	if(doWeDrawProximitys())
 	{
-		displayProximityMsgs(); // bucket render implemented
+		displayProximityMsgs();
 	}
-	displayDelivPoints(); // bucket render implemented
-	display3DProjectiles(); // bucket render implemented
+	displayDelivPoints();
+	display3DProjectiles(); // may be bucket render implemented
+	pie_MatEnd();
 
 	GL_DEBUG("Draw 3D scene - particles");
 	atmosDrawParticles();
@@ -1272,7 +1274,7 @@ void	renderProjectile(PROJECTILE *psCurr)
 		/* What's the present height of the bullet? */
 		dv.y = st.pos.z;
 		/* Set up the matrix */
-		pie_MatBegin();
+		pie_MatBegin(true);
 		Vector3i camera = actualCameraPosition;
 
 		/* Translate to the correct position */
@@ -1370,7 +1372,7 @@ void	renderAnimComponent( const COMPONENT_OBJECT *psObj )
 		psParentObj->sDisplay.frameNumber = currentGameFrame;
 
 		/* Push the indentity matrix */
-		pie_MatBegin();
+		pie_MatBegin(true);
 
 		/* parent object translation */
 		pie_TRANSLATE(dv.x, dv.y, dv.z);
@@ -1930,7 +1932,7 @@ void	renderFeature(FEATURE *psFeature)
 	);
 
 	/* Push the indentity matrix */
-	pie_MatBegin();
+	pie_MatBegin(true);
 
 	/* Translate the feature  - N.B. We can also do rotations here should we require
 	buildings to face different ways - Don't know if this is necessary - should be IMO */
@@ -2030,7 +2032,7 @@ void renderProximityMsg(PROXIMITY_DISPLAY *psProxDisp)
 	dv.z = -(msgY - player.p.z);
 
 	/* Push the indentity matrix */
-	pie_MatBegin();
+	pie_MatBegin(true);
 
 	/* Translate the message */
 	pie_TRANSLATE(dv.x,dv.y,dv.z);
@@ -2127,7 +2129,7 @@ void	renderStructure(STRUCTURE *psStructure)
 		dv.x = psStructure->pos.x - player.p.x;
 		dv.z = -(psStructure->pos.y - player.p.z);
 		dv.y = psStructure->pos.z;
-		pie_MatBegin();
+		pie_MatBegin(true);
 		pie_TRANSLATE(dv.x,dv.y,dv.z);
 		int frame = graphicsTime / BLIP_ANIM_DURATION + psStructure->id % 8192;  // de-sync the blip effect, but don't overflow the int
 		pie_Draw3DShape(getImdFromIndex(MI_BLIP), frame, 0, WZCOL_WHITE, pie_ADDITIVE, psStructure->visible[selectedPlayer] / 2);
@@ -2170,7 +2172,7 @@ void	renderStructure(STRUCTURE *psStructure)
 	dv.z = -(structY - player.p.z);
 	dv.y = psStructure->pos.z;
 	/* Push the indentity matrix */
-	pie_MatBegin();
+	pie_MatBegin(true);
 
 	/* Translate the building  - N.B. We can also do rotations here should we require
 	buildings to face different ways - Don't know if this is necessary - should be IMO */
@@ -2313,7 +2315,7 @@ void	renderStructure(STRUCTURE *psStructure)
 
 				if (weaponImd[i] != NULL)
 				{
-					pie_MatBegin();
+					pie_MatBegin(true);
 					pie_TRANSLATE(strImd->connectors[i].x, strImd->connectors[i].z, strImd->connectors[i].y);
 					pie_MatRotY(-rot.direction);
 					int recoilValue = noRecoil? 0 : getRecoil(psStructure->asWeaps[i]);
@@ -2415,7 +2417,7 @@ void	renderStructure(STRUCTURE *psStructure)
 						// draw Weapon/ECM/Sensor for structure
 						if (flashImd[i] != NULL)
 						{
-							pie_MatBegin();
+							pie_MatBegin(true);
 							// horrendous hack
 							if (strImd->max.y > 80) // babatower
 							{
@@ -2463,7 +2465,7 @@ void	renderStructure(STRUCTURE *psStructure)
 					{
 						iIMDShape *lImd;
 
-						pie_MatBegin();
+						pie_MatBegin(true);
 						pie_TRANSLATE(psStructure->sDisplay.imd->connectors->x, psStructure->sDisplay.imd->connectors->z,
 						             psStructure->sDisplay.imd->connectors->y);
 						lImd = getImdFromIndex(MI_LANDING);
@@ -2503,7 +2505,7 @@ void	renderDeliveryPoint(FLAG_POSITION *psPosition, bool blueprint)
 	dv.y = psPosition->coords.z;
 
 	/* Push the indentity matrix */
-	ScopedPieMatrix matScope;
+	pie_MatBegin(true);
 
 	pie_TRANSLATE(dv.x,dv.y,dv.z);
 
@@ -2531,6 +2533,8 @@ void	renderDeliveryPoint(FLAG_POSITION *psPosition, bool blueprint)
 	psPosition->screenX = x;
 	psPosition->screenY = y;
 	psPosition->screenR = r;
+
+	pie_MatEnd();
 }
 
 /// Draw a piece of wall
@@ -2566,7 +2570,7 @@ static bool	renderWallSection(STRUCTURE *psStructure)
 		dv.y -= gateCurrentOpenHeight(psStructure, graphicsTime, 1);  // Make gate stick out by 1 unit, so that the tops of ┼ gates can safely have heights differing by 1 unit.
 
 		/* Push the indentity matrix */
-		pie_MatBegin();
+		pie_MatBegin(true);
 
 		/* Translate */
 		pie_TRANSLATE(dv.x,dv.y,dv.z);

@@ -198,11 +198,10 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
 			position.y += psCompObj->psShape->ocen.z;
 			position.z -= psCompObj->psShape->ocen.y;
 
-			pie_MatBegin();
+			pie_MatBegin(true);
 
 			/* object (animation) translations - ivis z and y flipped */
-			pie_TRANSLATE( psCompObj->position.x, psCompObj->position.z,
-							psCompObj->position.y );
+			pie_TRANSLATE(psCompObj->position.x, psCompObj->position.z, psCompObj->position.y);
 
 			/* object (animation) rotations */
 			pie_MatRotY(-psCompObj->orientation.z);
@@ -417,12 +416,12 @@ void bucketAddTypeToList(RENDER_TYPE objectType, void* pObject)
 	bucketArray.push_back(newTag);
 }
 
-
 /* render Objects in list */
 void bucketRenderCurrentList(void)
 {
 	std::sort(bucketArray.begin(), bucketArray.end());
 
+	pie_MatBegin(true);
 	for (std::vector<BUCKET_TAG>::const_iterator thisTag = bucketArray.begin(); thisTag != bucketArray.end(); ++thisTag)
 	{
 		switch(thisTag->objectType)
@@ -459,8 +458,8 @@ void bucketRenderCurrentList(void)
 				break;
 		}
 	}
+	pie_MatEnd();
 
 	//reset the bucket array as we go
-	//reset the tag array
-	bucketArray.clear();
+	bucketArray.resize(0);
 }

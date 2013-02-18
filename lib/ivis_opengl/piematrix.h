@@ -47,20 +47,9 @@ static inline WZ_DECL_CONST WZ_DECL_WARN_UNUSED_RESULT
 
 //*************************************************************************
 
-
-extern void pie_MatInit(void);
-
-
-//*************************************************************************
-
-extern void pie_MatBegin(void);
-extern void pie_MatEnd(void);
-
-struct ScopedPieMatrix
-{
-	ScopedPieMatrix() { pie_MatBegin(); }
-	~ScopedPieMatrix() { pie_MatEnd(); } // Automatic end of scope matrix popping
-};
+void pie_MatInit();
+void pie_MatBegin(bool cached = false);
+void pie_MatEnd();
 
 //*************************************************************************
 

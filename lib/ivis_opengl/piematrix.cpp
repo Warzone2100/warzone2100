@@ -21,6 +21,9 @@
  *  Matrix manipulation functions.
  */
 
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+
 #include "lib/framework/frame.h"
 #include "lib/framework/opengl.h"
 
@@ -50,6 +53,8 @@ struct SDMATRIX
 	       d, e, f,
 	       g, h, i,
 	       j, k, l;
+	bool cached;
+	glm::mat4 matrix;
 
 	SDMATRIX() : a(FP12_MULTIPLIER), b(0), c(0), d(0), e(FP12_MULTIPLIER), f(0), g(0), h(0), i(FP12_MULTIPLIER), j(0), k(0), l(0) {}
 };
@@ -65,7 +70,7 @@ static SDWORD _MATRIX_INDEX;
 //*
 //******
 
-void pie_MatBegin(void)
+void pie_MatBegin(bool cached)
 {
 	_MATRIX_INDEX++;
 	ASSERT( _MATRIX_INDEX < MATRIX_MAX, "pie_MatBegin past top of the stack" );
@@ -73,7 +78,16 @@ void pie_MatBegin(void)
 	psMatrix++;
 	aMatrixStack[_MATRIX_INDEX] = aMatrixStack[_MATRIX_INDEX-1];
 
-	glPushMatrix();
+	psMatrix->cached = cached;
+
+	if (!cached)
+	{
+		glPushMatrix();
+	}
+	else if (!aMatrixStack[_MATRIX_INDEX-1].cached)
+	{
+		glGetFloatv(GL_MODELVIEW_MATRIX, &psMatrix->matrix[0][0]);
+	}
 }
 
 
@@ -81,15 +95,16 @@ void pie_MatBegin(void)
 //*** make current transformation matrix previous one on stack
 //*
 //******
-
-void pie_MatEnd(void)
+void pie_MatEnd()
 {
 	_MATRIX_INDEX--;
 	ASSERT( _MATRIX_INDEX >= 0, "pie_MatEnd of the bottom of the stack" );
 
+	if (!psMatrix->cached)
+	{
+		glPopMatrix();
+	}
 	psMatrix--;
-
-	glPopMatrix();
 }
 
 
@@ -107,7 +122,15 @@ void pie_TRANSLATE(int32_t x, int32_t y, int32_t z)
 	psMatrix->k += x * psMatrix->b + y * psMatrix->e + z * psMatrix->h;
 	psMatrix->l += x * psMatrix->c + y * psMatrix->f + z * psMatrix->i;
 
-	glTranslatef(x, y, z);
+	if (!psMatrix->cached)
+	{
+		glTranslatef(x, y, z);
+	}
+	else
+	{
+		glm::vec3 v(x, y, z);
+		psMatrix->matrix = glm::translate(psMatrix->matrix, v);
+	}
 }
 
 //*************************************************************************
@@ -140,7 +163,15 @@ void pie_MatScale(float scale)
 	psMatrix->h = psMatrix->h * scale;
 	psMatrix->i = psMatrix->i * scale;
 
-	glScalef(scale, scale, scale);
+	if (!psMatrix->cached)
+	{
+		glScalef(scale, scale, scale);
+	}
+	else
+	{
+		glm::vec3 v(scale, scale, scale);
+		psMatrix->matrix = glm::scale(psMatrix->matrix, v);
+	}
 }
 
 
@@ -179,7 +210,15 @@ void pie_MatRotY(uint16_t y)
 		psMatrix->i = (sra*psMatrix->c + cra*psMatrix->i)>>16;
 		psMatrix->c = t;
 
-		glRotatef(UNDEG(y), 0.0f, 1.0f, 0.0f);
+		if (!psMatrix->cached)
+		{
+			glRotatef(UNDEG(y), 0.0f, 1.0f, 0.0f);
+		}
+		else
+		{
+			glm::vec3 v(0.0f, 1.0f, 0.0f);
+			psMatrix->matrix = glm::rotate(psMatrix->matrix, UNDEG(y), v);
+		}
 	}
 }
 
@@ -219,7 +258,15 @@ void pie_MatRotZ(uint16_t z)
 		psMatrix->f = (cra*psMatrix->f - sra*psMatrix->c)>>16;
 		psMatrix->c = t;
 
-		glRotatef(UNDEG(z), 0.0f, 0.0f, 1.0f);
+		if (!psMatrix->cached)
+		{
+			glRotatef(UNDEG(z), 0.0f, 0.0f, 1.0f);
+		}
+		else
+		{
+			glm::vec3 v(0.0f, 0.0f, 1.0f);
+			psMatrix->matrix = glm::rotate(psMatrix->matrix, UNDEG(z), v);
+		}
 	}
 }
 
@@ -259,7 +306,16 @@ void pie_MatRotX(uint16_t x)
 		psMatrix->i = (cra*psMatrix->i - sra*psMatrix->f)>>16;
 		psMatrix->f = t;
 
-		glRotatef(UNDEG(x), 1.0f, 0.0f, 0.0f);
+		if (!psMatrix->cached)
+		{
+			glRotatef(UNDEG(x), 1.0f, 0.0f, 0.0f);
+		}
+		else
+		{
+			glm::vec3 v(1.0f, 0.0f, 0.0f);
+			psMatrix->matrix = glm::rotate(psMatrix->matrix, UNDEG(x), v);
+		}
+
 	}
 }
 
@@ -269,7 +325,14 @@ void pie_MatRotX(uint16_t x)
 //******
 void pie_GetMatrix(float *matrix)
 {
-	glGetFloatv(GL_MODELVIEW_MATRIX, matrix);
+	if (!psMatrix->cached)
+	{
+		glGetFloatv(GL_MODELVIEW_MATRIX, matrix);
+	}
+	else
+	{
+		memcpy(matrix, &psMatrix->matrix[0][0], sizeof(float) * 16);
+	}
 }
 
 /*!
