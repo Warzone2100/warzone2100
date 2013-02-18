@@ -1,8 +1,6 @@
 AM_CPPFLAGS = -DYY_NO_INPUT $(WZ_CPPFLAGS) $(QT4_CFLAGS)
 AM_CFLAGS = $(WZ_CFLAGS)
 AM_CXXFLAGS = $(WZ_CXXFLAGS) $(QT4_CFLAGS)
-AM_LFLAGS = $(FLEX_FLAGS)
-AM_YFLAGS = -d
 
 BUILT_SOURCES = \
 	chat_parser.h \
@@ -20,14 +18,14 @@ noinst_HEADERS = \
 	stack.h
 
 libscript_a_SOURCES = \
-	chat_lexer.lpp \
-	chat_parser.ypp \
+	chat_lexer.cpp \
+	chat_parser.cpp \
 	codeprint.cpp \
 	event.cpp \
 	eventsave.cpp \
 	interpreter.cpp \
 	script.cpp \
-	script_lexer.lpp \
-	script_parser.ypp \
+	script_lexer.cpp \
+	script_parser.cpp \
 	stack.cpp
 

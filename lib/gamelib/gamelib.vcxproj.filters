@@ -9,9 +9,6 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
-    <Filter Include="FlexBison">
-      <UniqueIdentifier>{d9ee26c1-75fa-4dc9-bd73-146c94d60e3e}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="anim.cpp">
@@ -40,9 +37,6 @@
     <ClInclude Include="animobj.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="audp_parser.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="gtime.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -52,15 +46,8 @@
     <ClInclude Include="parser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <BisonParser Include="audp_parser.ypp">
-      <Filter>FlexBison</Filter>
-    </BisonParser>
-  </ItemGroup>
-  <ItemGroup>
-    <FlexGenerator Include="audp_lexer.lpp">
-      <Filter>FlexBison</Filter>
-    </FlexGenerator>
+    <ClInclude Include="audp_parser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,8 +1,6 @@
 AM_CPPFLAGS = -DYY_NO_INPUT $(SDL_CFLAGS) $(WZ_CPPFLAGS) $(QT4_CFLAGS)
 AM_CFLAGS = $(WZ_CFLAGS)
 AM_CXXFLAGS = $(WZ_CXXFLAGS) $(QT4_CFLAGS)
-AM_LFLAGS = $(FLEX_FLAGS)
-AM_YFLAGS = -d
 
 MOCHEADER = \
 	wzconfig.h
@@ -70,12 +68,12 @@ libframework_a_SOURCES = \
 	geometry.cpp \
 	i18n.cpp \
 	lexer_input.cpp \
-	resource_lexer.lpp \
-	resource_parser.ypp \
+	resource_lexer.cpp \
+	resource_parser.cpp \
 	stdio_ext.cpp \
 	strres.cpp \
-	strres_lexer.lpp \
-	strres_parser.ypp \
+	strres_lexer.cpp \
+	strres_parser.cpp \
 	treap.cpp \
 	trig.cpp \
 	utf.cpp \

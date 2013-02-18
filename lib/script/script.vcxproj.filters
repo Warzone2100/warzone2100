@@ -9,9 +9,6 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
-    <Filter Include="FlexBison">
-      <UniqueIdentifier>{30be94dd-96c4-473b-a323-e6bf6f278b9d}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="codeprint.cpp">
@@ -70,27 +67,11 @@
     <ClInclude Include="stack.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="chat_parser.hpp">
+    <ClInclude Include="chat_parser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="script_parser.hpp">
+    <ClInclude Include="script_parser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <FlexGenerator Include="chat_lexer.lpp">
-      <Filter>FlexBison</Filter>
-    </FlexGenerator>
-    <FlexGenerator Include="script_lexer.lpp">
-      <Filter>FlexBison</Filter>
-    </FlexGenerator>
-  </ItemGroup>
-  <ItemGroup>
-    <BisonParser Include="chat_parser.ypp">
-      <Filter>FlexBison</Filter>
-    </BisonParser>
-    <BisonParser Include="script_parser.ypp">
-      <Filter>FlexBison</Filter>
-    </BisonParser>
   </ItemGroup>
 </Project>

@@ -60,9 +60,7 @@
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
-  <ImportGroup Label="ExtensionSettings">
-    <Import Project="..\..\devpkg\FlexBison.props" />
-  </ImportGroup>
+  <ImportGroup Label="ExtensionSettings" />
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
@@ -237,7 +235,7 @@
     <ClCompile Include="stack.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="chat_parser.hpp" />
+    <ClInclude Include="chat_parser.h" />
     <ClInclude Include="chat_processing.h" />
     <ClInclude Include="codeprint.h" />
     <ClInclude Include="event.h" />
@@ -245,25 +243,9 @@
     <ClInclude Include="interpreter.h" />
     <ClInclude Include="parse.h" />
     <ClInclude Include="script.h" />
-    <ClInclude Include="script_parser.hpp" />
+    <ClInclude Include="script_parser.h" />
     <ClInclude Include="stack.h" />
   </ItemGroup>
-  <ItemGroup>
-    <FlexGenerator Include="chat_lexer.lpp">
-      <FileType>Document</FileType>
-    </FlexGenerator>
-    <BisonParser Include="chat_parser.ypp">
-      <FileType>Document</FileType>
-    </BisonParser>
-    <FlexGenerator Include="script_lexer.lpp">
-      <FileType>Document</FileType>
-    </FlexGenerator>
-    <BisonParser Include="script_parser.ypp">
-      <FileType>Document</FileType>
-    </BisonParser>
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
-  <ImportGroup Label="ExtensionTargets">
-    <Import Project="..\..\devpkg\FlexBison.targets" />
-  </ImportGroup>
+  <ImportGroup Label="ExtensionTargets" />
 </Project>
