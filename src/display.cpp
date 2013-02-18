@@ -28,6 +28,7 @@
 #include "lib/framework/input.h"
 #include "lib/framework/strres.h"
 #include "lib/ivis_opengl/piestate.h"
+#include "lib/ivis_opengl/piedef.h"
 #include "lib/framework/fixedpoint.h"
 #include "lib/framework/wzapp.h"
 
@@ -273,6 +274,7 @@ bool	getDrawShadows( void )
 void	setDrawShadows( bool val )
 {
 	bDrawShadows = val;
+	pie_setShadows(val);
 }
 
 void	setShakeStatus( bool val )

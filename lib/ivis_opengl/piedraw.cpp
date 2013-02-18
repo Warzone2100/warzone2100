@@ -92,17 +92,16 @@ void pie_Lighting0(LIGHTING_TYPE entry, float value[4])
 	lighting0[entry][3] = value[3];
 }
 
-void pie_BeginLighting(const Vector3f *light, bool drawshadows)
+void pie_setShadows(bool drawShadows)
+{
+	shadows = drawShadows;
+}
+
+void pie_BeginLighting(const Vector3f *light)
 {
 	const float pos[4] = { light->x, light->y, light->z, 0.0f };
 
 	glLightfv(GL_LIGHT0, GL_POSITION, pos);
-	glEnable(GL_LIGHT0);
-
-	if (drawshadows)
-	{
-		shadows = true;
-	}
 }
 
 void pie_EndLighting(void)
@@ -546,6 +545,7 @@ static void pie_DrawShadows(void)
 void pie_RemainingPasses(void)
 {
 	GL_DEBUG("Remaining passes - shadows");
+	glEnable(GL_LIGHT0);
 	// Draw shadows
 	if (shadows)
 	{
@@ -572,6 +572,7 @@ void pie_RemainingPasses(void)
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_NORMAL_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+	glDisable(GL_LIGHT0);
 	pie_DeactivateShader();
 	glPopMatrix();
 	tshapes.resize(0);

@@ -976,7 +976,7 @@ static void drawTiles(iView *player)
 
 	// this also detemines the length of the shadows
 	theSun = getTheSun();
-	pie_BeginLighting(&theSun, getDrawShadows());
+	pie_BeginLighting(&theSun);
 
 	// update the fog of war... FIXME: Remove this
 	for (i = -visibleTiles.y/2, idx=0; i <= visibleTiles.y/2; i++,++idx)
@@ -1058,8 +1058,6 @@ static void drawTiles(iView *player)
 	displayBlueprints();
 
 	pie_RemainingPasses(); // draws shadows and transparent shapes
-
-	pie_EndLighting();
 
 	if(!gamePaused())
 	{
