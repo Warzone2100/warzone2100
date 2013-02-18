@@ -119,11 +119,11 @@ void pie_EndLighting(void)
 
 struct ShadowcastingShape
 {
-	float		matrix[16];
+	glm::mat4	matrix;
 	iIMDShape*	shape;
 	int		flag;
 	int		flag_data;
-	Vector3f	light;
+	glm::vec4	light;
 };
 
 typedef struct
@@ -282,7 +282,7 @@ static inline float scale_y(float y, int flag, int flag_data)
 }
 
 /// Draw the shadow for a shape
-static void pie_DrawShadow(iIMDShape *shape, int flag, int flag_data, Vector3f* light)
+static void pie_DrawShadow(iIMDShape *shape, int flag, int flag_data, const glm::vec4 &light)
 {
 	unsigned int i, j, n;
 	Vector3f *pVertices;
@@ -304,15 +304,13 @@ static void pie_DrawShadow(iIMDShape *shape, int flag, int flag_data, Vector3f* 
 		edgelist.clear();
 		for (i = 0, pPolys = shape->polys; i < shape->npolys; ++i, ++pPolys)
 		{
-			Vector3f p[3];
+			glm::vec3 p[3];
 			for(j = 0; j < 3; j++)
 			{
 				int current = pPolys->pindex[j];
-				p[j] = Vector3f(pVertices[current].x, scale_y(pVertices[current].y, flag, flag_data), pVertices[current].z);
+				p[j] = glm::vec3(pVertices[current].x, scale_y(pVertices[current].y, flag, flag_data), pVertices[current].z);
 			}
-
-			Vector3f normal = crossProduct(p[2] - p[0], p[1] - p[0]);
-			if (normal * *light > 0)
+			if (glm::dot(glm::cross(p[2] - p[0], p[1] - p[0]), glm::vec3(light)) > 0.0f)
 			{
 				for (n = 1; n < 3; n++)
 				{
@@ -353,27 +351,11 @@ static void pie_DrawShadow(iIMDShape *shape, int flag, int flag_data, Vector3f* 
 		int a = drawlist[i].from, b = drawlist[i].to;
 
 		glVertex3f(pVertices[b].x, scale_y(pVertices[b].y, flag, flag_data), pVertices[b].z);
-		glVertex3f(pVertices[b].x+light->x, scale_y(pVertices[b].y, flag, flag_data)+light->y, pVertices[b].z+light->z);
-		glVertex3f(pVertices[a].x+light->x, scale_y(pVertices[a].y, flag, flag_data)+light->y, pVertices[a].z+light->z);
+		glVertex3f(pVertices[b].x + light[0], scale_y(pVertices[b].y, flag, flag_data) + light[1], pVertices[b].z + light[2]);
+		glVertex3f(pVertices[a].x + light[0], scale_y(pVertices[a].y, flag, flag_data) + light[1], pVertices[a].z + light[2]);
 		glVertex3f(pVertices[a].x, scale_y(pVertices[a].y, flag, flag_data), pVertices[a].z);
 	}
 	glEnd();
-}
-
-static void inverse_matrix(const float * src, float * dst)
-{
-	const float det = src[0]*src[5]*src[10] + src[4]*src[9]*src[2] + src[8]*src[1]*src[6] - src[2]*src[5]*src[8] - src[6]*src[9]*src[0] - src[10]*src[1]*src[4];
-	const float invdet = 1.0f/det;
-
-	dst[0] = invdet * (src[5]*src[10] - src[9]*src[6]);
-	dst[1] = invdet * (src[9]*src[2] - src[1]*src[10]);
-	dst[2] = invdet * (src[1]*src[6] - src[5]*src[2]);
-	dst[3] = invdet * (src[8]*src[6] - src[4]*src[10]);
-	dst[4] = invdet * (src[0]*src[10] - src[8]*src[2]);
-	dst[5] = invdet * (src[4]*src[2] - src[0]*src[6]);
-	dst[6] = invdet * (src[4]*src[9] - src[8]*src[5]);
-	dst[7] = invdet * (src[8]*src[1] - src[0]*src[9]);
-	dst[8] = invdet * (src[0]*src[5] - src[4]*src[1]);
 }
 
 void pie_SetUp(void)
@@ -457,24 +439,20 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, int
 
 				// draw a shadow
 				ShadowcastingShape scshape;
-				pie_GetMatrix(scshape.matrix);
-				distance = scshape.matrix[12] * scshape.matrix[12];
-				distance += scshape.matrix[13] * scshape.matrix[13];
-				distance += scshape.matrix[14] * scshape.matrix[14];
+				pie_GetMatrix(&scshape.matrix[0][0]);
+				distance = scshape.matrix[3][0] * scshape.matrix[3][0];
+				distance += scshape.matrix[3][1] * scshape.matrix[3][1];
+				distance += scshape.matrix[3][2] * scshape.matrix[3][2];
 
 				// if object is too far in the fog don't generate a shadow.
 				if (distance < SHADOW_END_DISTANCE)
 				{
-					float invmat[9], pos_light0[4];
-
-					inverse_matrix( scshape.matrix, invmat );
+					glm::vec4 pos_light0;
+					glm::mat4 invmat = glm::inverse(scshape.matrix);
 
 					// Calculate the light position relative to the object
-					glGetLightfv(GL_LIGHT0, GL_POSITION, pos_light0);
-					scshape.light.x = invmat[0] * pos_light0[0] + invmat[3] * pos_light0[1] + invmat[6] * pos_light0[2];
-					scshape.light.y = invmat[1] * pos_light0[0] + invmat[4] * pos_light0[1] + invmat[7] * pos_light0[2];
-					scshape.light.z = invmat[2] * pos_light0[0] + invmat[5] * pos_light0[1] + invmat[8] * pos_light0[2];
-
+					glGetLightfv(GL_LIGHT0, GL_POSITION, &pos_light0[0]);
+					scshape.light = invmat * pos_light0;
 					scshape.shape = shape;
 					scshape.flag = pieFlag;
 					scshape.flag_data = pieFlagData;
@@ -491,8 +469,8 @@ static void pie_ShadowDrawLoop(void)
 {
 	for (unsigned i = 0; i < scshapes.size(); i++)
 	{
-		glLoadMatrixf(scshapes[i].matrix);
-		pie_DrawShadow(scshapes[i].shape, scshapes[i].flag, scshapes[i].flag_data, &scshapes[i].light);
+		glLoadMatrixf(&scshapes[i].matrix[0][0]);
+		pie_DrawShadow(scshapes[i].shape, scshapes[i].flag, scshapes[i].flag_data, scshapes[i].light);
 	}
 }
 
