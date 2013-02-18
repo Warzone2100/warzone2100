@@ -1,8 +1,6 @@
 AM_CPPFLAGS = -DYY_NO_INPUT $(SDL_CFLAGS) $(PHYSFS_CFLAGS) $(PNG_CFLAGS) $(VORBISFILE_CFLAGS) $(VORBIS_CFLAGS) $(OPENAL_CFLAGS) $(OPENGLC_CFLAGS) $(OPENGL_CFLAGS) $(WZ_CPPFLAGS) $(GLEW_CFLAGS)
 AM_CFLAGS = $(WZ_CFLAGS)
 AM_CXXFLAGS = $(WZ_CXXFLAGS) $(QT4_CFLAGS)
-AM_LFLAGS = $(FLEX_FLAGS)
-AM_YFLAGS = -d
 
 .PHONY: autorevision.h
 
@@ -16,8 +14,7 @@ CLEANFILES = \
 	autorevision.h.new
 
 BUILT_SOURCES = \
-	autorevision.h \
-	scriptvals_parser.h
+	autorevision.h
 
 EXTRA_DIST = \
 	autorevision.cache \
@@ -133,6 +130,7 @@ noinst_HEADERS = \
 	scriptobj.h \
 	scripttabs.h \
 	scriptvals.h \
+	scriptvals_parser.h \
 	selection.h \
 	seqdisp.h \
 	statsdef.h \
@@ -200,7 +198,7 @@ warzone2100_SOURCES = \
 	keybind.cpp \
 	keyedit.cpp \
 	keymap.cpp \
-	level_lexer.lpp \
+	level_lexer.cpp \
 	levels.cpp \
 	lighting.cpp \
 	loadsave.cpp \
@@ -246,8 +244,8 @@ warzone2100_SOURCES = \
 	scriptobj.cpp \
 	scripttabs.cpp \
 	scriptvals.cpp \
-	scriptvals_lexer.lpp \
-	scriptvals_parser.ypp \
+	scriptvals_lexer.cpp \
+	scriptvals_parser.cpp \
 	selection.cpp \
 	seqdisp.cpp \
 	stats.cpp \
