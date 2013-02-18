@@ -361,11 +361,17 @@ extern void widgSetColour(W_SCREEN *psScreen, UDWORD id, UDWORD index, PIELIGHT 
 /** Set the global toop tip text colour. */
 extern void widgSetTipColour(PIELIGHT colour);
 
-/* Possible states for a button */
-#define WBUT_DISABLE	0x0001		///< Disable (grey out) a button
-#define WBUT_LOCK	0x0002		///< Fix a button down
-#define WBUT_CLICKLOCK	0x0004		///< Fix a button down but it is still clickable
-#define WBUT_FLASH	0x0008		///< Make a button flash.
+// Possible states for a button or clickform.
+enum ButtonState
+{
+	WBUT_DISABLE   = 0x01,  ///< Disable (grey out) a button.
+	WBUT_LOCK      = 0x02,  ///< Fix a button down.
+	WBUT_CLICKLOCK = 0x04,  ///< Fix a button down but it is still clickable.
+	WBUT_FLASH     = 0x08,  ///< Make a button flash.
+	WBUT_DOWN      = 0x10,  ///< Button is down.
+	WBUT_HIGHLIGHT = 0x20,  ///< Button is highlighted.
+};
+
 
 extern void widgSetButtonFlash(W_SCREEN *psScreen, UDWORD id);
 extern void widgClearButtonFlash(W_SCREEN *psScreen, UDWORD id);

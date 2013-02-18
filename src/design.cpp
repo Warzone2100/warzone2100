@@ -4321,7 +4321,7 @@ static void intDisplayStatForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 	pie_SetGeometricOffset(xOffset + psWidget->width() / 4, yOffset + psWidget->height() / 2);
 
 	/* inc rotation if highlighted */
-	if (Form->state & WCLICK_HILITE)
+	if ((Form->getState() & WBUT_HIGHLIGHT) != 0)
 	{
 		iRY += realTimeAdjustedAverage(BUTTONOBJ_ROTSPEED);
 		iRY %= 360;

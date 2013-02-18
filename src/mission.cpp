@@ -1848,9 +1848,8 @@ void missionMoveTransporterOffWorld(DROID *psTransporter)
 			psForm = (W_CLICKFORM *)widgGetFromID(psWScreen, IDTRANTIMER_BUTTON);
 			if (psForm)
 			{
-				psForm->setState(WCLICK_NORMAL);
+				psForm->setState(WBUT_PLAIN);
 			}
-
 		}
 		//need a callback for when all the selectedPlayers' reinforcements have been delivered
 		if (psTransporter->player == selectedPlayer)

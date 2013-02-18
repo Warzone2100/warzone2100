@@ -91,17 +91,6 @@ private:
 	void displayTabs(int x0, int y0, int width, int height, int number, int selected, int highlight, PIELIGHT *pColours, int tabGap);
 };
 
-
-/* Button states for a clickable form */
-#define WCLICK_NORMAL		0x0000
-#define WCLICK_DOWN			0x0001		// Button is down
-#define WCLICK_GREY			0x0002		// Button is disabled
-#define WCLICK_HILITE		0x0004		// Button is hilited
-#define WCLICK_LOCKED		0x0008		// Button is locked down
-#define WCLICK_CLICKLOCK	0x0010		// Button is locked but clickable
-#define WCLICK_FLASH		0x0020		// Button flashing is enabled
-#define WCLICK_FLASHON		0x0040		// Button is flashing
-
 /* The clickable form data structure */
 struct W_CLICKFORM : public W_FORM
 {
@@ -111,7 +100,6 @@ struct W_CLICKFORM : public W_FORM
 	void released(W_CONTEXT *psContext, WIDGET_KEY key);
 	void highlight(W_CONTEXT *psContext);
 	void highlightLost();
-	void run(W_CONTEXT *psContext);
 	void display(int xOffset, int yOffset, PIELIGHT *pColours);
 
 	unsigned getState();

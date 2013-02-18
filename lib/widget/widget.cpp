@@ -905,7 +905,7 @@ static void widgDisplayForm(W_FORM *psForm, UDWORD xOffset, UDWORD yOffset)
 	{
 		if ((psForm->style & WFORM_CLICKABLE) &&
 		    (((W_CLICKFORM *)psForm)->state &
-		     (WCLICK_DOWN | WCLICK_LOCKED | WCLICK_CLICKLOCK)))
+		     (WBUT_DOWN | WBUT_LOCK | WBUT_CLICKLOCK)))
 		{
 			xOffset += 1;
 			yOffset += 1;

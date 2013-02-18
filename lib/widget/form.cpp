@@ -91,7 +91,7 @@ W_FORM::W_FORM(W_FORMINIT const *init)
 
 W_CLICKFORM::W_CLICKFORM(W_FORMINIT const *init)
 	: W_FORM(init)
-	, state(WCLICK_NORMAL)
+	, state(WBUT_PLAIN)
 	, pTip(QString::fromUtf8(init->pTip))
 	, HilightAudioID(WidgGetHilightAudioID())
 	, ClickedAudioID(WidgGetClickedAudioID())
@@ -158,38 +158,17 @@ bool formAddWidget(W_FORM *psForm, WIDGET *psWidget, W_INIT const *psInit)
 	return true;
 }
 
-
-static const unsigned clickFormflagMap[] = {WCLICK_GREY,      WBUT_DISABLE,
-                                            WCLICK_LOCKED,    WBUT_LOCK,
-                                            WCLICK_CLICKLOCK, WBUT_CLICKLOCK};
-
 unsigned W_CLICKFORM::getState()
 {
-	unsigned retState = 0;
-	for (unsigned i = 0; i < ARRAY_SIZE(clickFormflagMap); i += 2)
-	{
-		if ((state & clickFormflagMap[i]) != 0)
-		{
-			retState |= clickFormflagMap[i + 1];
-		}
-	}
-
-	return retState;
+	return state & (WBUT_DISABLE | WBUT_LOCK | WBUT_CLICKLOCK | WBUT_FLASH | WBUT_DOWN | WBUT_HIGHLIGHT);
 }
 
 void W_CLICKFORM::setState(unsigned newState)
 {
-	ASSERT(!((state & WBUT_LOCK) && (state & WBUT_CLICKLOCK)),
-	       "widgSetButtonState: Cannot have WBUT_LOCK and WBUT_CLICKLOCK");
+	ASSERT(!((newState & WBUT_LOCK) && (newState & WBUT_CLICKLOCK)), "Cannot have both WBUT_LOCK and WBUT_CLICKLOCK");
 
-	for (unsigned i = 0; i < ARRAY_SIZE(clickFormflagMap); i += 2)
-	{
-		state &= ~clickFormflagMap[i];
-		if ((newState & clickFormflagMap[i + 1]) != 0)
-		{
-			state |= clickFormflagMap[i];
-		}
-	}
+	unsigned mask = WBUT_DISABLE | WBUT_LOCK | WBUT_CLICKLOCK;
+	state = (state & ~mask) | (newState & mask);
 }
 
 /* Return the widgets currently displayed by a form */
@@ -589,30 +568,15 @@ void W_TABFORM::run(W_CONTEXT *psContext)
 	}
 }
 
-void W_CLICKFORM::run(W_CONTEXT *)
-{
-	if (state & WCLICK_FLASH)
-	{
-		if (((realTime / 250) % 2) == 0)
-		{
-			state &= ~WCLICK_FLASHON;
-		}
-		else
-		{
-			state |= WCLICK_FLASHON;
-		}
-	}
-}
-
 void W_CLICKFORM::setFlash(bool enable)
 {
 	if (enable)
 	{
-		state |= WCLICK_FLASH;
+		state |= WBUT_FLASH;
 	}
 	else
 	{
-		state &= ~(WCLICK_FLASH | WCLICK_FLASHON);
+		state &= ~WBUT_FLASH;
 	}
 }
 
@@ -628,15 +592,14 @@ void W_CLICKFORM::clicked(W_CONTEXT *psContext, WIDGET_KEY key)
 	W_FORM::clicked(psContext, key);
 
 	// Can't click a button if it is disabled or locked down.
-	if (!(state & (WCLICK_GREY | WCLICK_LOCKED)))
+	if ((state & (WBUT_DISABLE | WBUT_LOCK)) == 0)
 	{
 		// Check this is the correct key
 		if ((!(style & WFORM_NOPRIMARY) && key == WKEY_PRIMARY) ||
 			((style & WFORM_SECONDARY) && key == WKEY_SECONDARY))
 		{
-			state &= ~WCLICK_FLASH;	// Stop it flashing
-			state &= ~WCLICK_FLASHON;
-			state |= WCLICK_DOWN;
+			state &= ~WBUT_FLASH;  // Stop it flashing
+			state |= WBUT_DOWN;
 
 			if (AudioCallback != NULL)
 			{
@@ -664,14 +627,14 @@ void W_TABFORM::released(W_CONTEXT *psContext, WIDGET_KEY)
 
 void W_CLICKFORM::released(W_CONTEXT *psContext, WIDGET_KEY key)
 {
-	if ((state & WCLICK_DOWN) != 0)
+	if ((state & WBUT_DOWN) != 0)
 	{
 		// Check this is the correct key.
 		if ((!(style & WFORM_NOPRIMARY) && key == WKEY_PRIMARY) ||
 		    ((style & WFORM_SECONDARY) && key == WKEY_SECONDARY))
 		{
 			widgSetReturn(psContext->psScreen, this);
-			state &= ~WCLICK_DOWN;
+			state &= ~WBUT_DOWN;
 		}
 	}
 }
@@ -680,7 +643,7 @@ void W_CLICKFORM::released(W_CONTEXT *psContext, WIDGET_KEY key)
 /* Respond to a mouse moving over a form */
 void W_CLICKFORM::highlight(W_CONTEXT *psContext)
 {
-	state |= WCLICK_HILITE;
+	state |= WBUT_HIGHLIGHT;
 
 	// If there is a tip string start the tool tip.
 	if (!pTip.isEmpty())
@@ -718,7 +681,7 @@ void W_CLICKFORM::highlightLost()
 {
 	W_FORM::highlightLost();
 
-	state &= ~(WCLICK_DOWN | WCLICK_HILITE);
+	state &= ~(WBUT_DOWN | WBUT_HIGHLIGHT);
 }
 
 void W_FORM::display(int xOffset, int yOffset, PIELIGHT *pColours)
@@ -754,7 +717,7 @@ void W_CLICKFORM::display(int xOffset, int yOffset, PIELIGHT *pColours)
 	int y1 = y0 + height();
 
 	/* Display the border */
-	if (state & (WCLICK_DOWN | WCLICK_LOCKED | WCLICK_CLICKLOCK))
+	if ((state & (WBUT_DOWN | WBUT_LOCK | WBUT_CLICKLOCK)) != 0)
 	{
 		iV_ShadowBox(x0, y0, x1, y1, 1, pColours[WCOL_DARK], pColours[WCOL_LIGHT], pColours[WCOL_BKGRND]);
 	}

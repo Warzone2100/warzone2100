@@ -28,13 +28,6 @@
 #include "widgbase.h"
 #include "lib/ivis_opengl/textdraw.h"
 
-/* Button states */
-enum
-{
-	WBUT_DOWN      = 0x10,  ///< Button is down.
-	WBUT_HIGHLIGHT = 0x20,  ///< Button is highlighted.
-};
-
 struct W_BUTTON : public WIDGET
 {
 	W_BUTTON(W_BUTINIT const *init);

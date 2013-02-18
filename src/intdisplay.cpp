@@ -79,10 +79,6 @@
 
 #include "multiplay.h"
 
-// Is a clickable form widget hilited, either because the cursor is over it or it is flashing.
-//
-#define formIsHilite(p) 	(((W_CLICKFORM*)p)->state & WCLICK_HILITE)
-
 // Is a button widget highlighted, either because the cursor is over it or it is flashing.
 //
 #define buttonIsHilite(p)  ((p->getState() & WBUT_HIGHLIGHT) != 0)
@@ -655,9 +651,7 @@ void intDisplayStatusButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ
 	BASE_OBJECT         *psObj;
 	STRUCTURE           *Structure;
 	DROID               *Droid;
-	bool                Down;
 	SDWORD              Image;
-	bool                Hilight = false;
 	BASE_STATS          *Stats, *psResGraphic;
 	RENDERED_BUTTON     *Buffer = (RENDERED_BUTTON *)Form->pUserData;
 	UDWORD              IMDType = 0, compID;
@@ -667,16 +661,13 @@ void intDisplayStatusButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ
 
 	OpenButtonRender(xOffset + Form->x(), yOffset + Form->y());
 
-	Down = Form->state & (WCLICK_DOWN | WCLICK_LOCKED | WCLICK_CLICKLOCK);
-
-	Hilight = Form->state & WCLICK_HILITE;
+	bool Down = (Form->getState() & (WBUT_DOWN | WBUT_LOCK | WBUT_CLICKLOCK)) != 0;
+	bool Hilight = (Form->getState() & WBUT_HIGHLIGHT) != 0;
 
 	if (Hilight)
 	{
 		Buffer->ImdRotation += realTimeAdjustedAverage(BUTTONOBJ_ROTSPEED);
 	}
-
-	Hilight = formIsHilite(Form);	// Hilited or flashing.
 
 	Buffer->State = Form->state;
 
@@ -875,24 +866,19 @@ void intDisplayObjectButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ
 {
 	W_CLICKFORM *Form = (W_CLICKFORM *)psWidget;
 	BASE_OBJECT *psObj;
-	bool Down;
-	bool Hilight = false;
 	RENDERED_BUTTON *Buffer = (RENDERED_BUTTON *)Form->pUserData;
 	UDWORD IMDType = 0;
 	void *Object;
 
 	OpenButtonRender(xOffset + Form->x(), yOffset + Form->y());
 
-	Down = Form->state & (WCLICK_DOWN | WCLICK_LOCKED | WCLICK_CLICKLOCK);
-
-	Hilight = Form->state & WCLICK_HILITE;
+	bool Down = (Form->getState() & (WBUT_DOWN | WBUT_LOCK | WBUT_CLICKLOCK)) != 0;
+	bool Hilight = (Form->getState() & WBUT_HIGHLIGHT) != 0;
 
 	if (Hilight)
 	{
 		Buffer->ImdRotation += realTimeAdjustedAverage(BUTTONOBJ_ROTSPEED);
 	}
-
-	Hilight = formIsHilite(Form);	// Hilited or flashing.
 
 	Buffer->State = Form->state;
 
@@ -950,9 +936,7 @@ void intDisplayStatsButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_
 {
 	W_CLICKFORM     *Form = (W_CLICKFORM *)psWidget;
 	BASE_STATS      *Stat, *psResGraphic;
-	bool            Down;
 	SDWORD          Image, compID;
-	bool            Hilight = false;
 	RENDERED_BUTTON *Buffer = (RENDERED_BUTTON *)Form->pUserData;
 	UDWORD          IMDType = 0;
 	UDWORD          Player = selectedPlayer;		// ajl, changed for multiplayer (from 0)
@@ -960,16 +944,13 @@ void intDisplayStatsButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_
 
 	OpenButtonRender(xOffset + Form->x(), yOffset + Form->y());
 
-	Down = Form->state & (WCLICK_DOWN | WCLICK_LOCKED | WCLICK_CLICKLOCK);
-
-	Hilight = Form->state & WCLICK_HILITE;
+	bool Down = (Form->getState() & (WBUT_DOWN | WBUT_LOCK | WBUT_CLICKLOCK)) != 0;
+	bool Hilight = (Form->getState() & WBUT_HIGHLIGHT) != 0;
 
 	if (Hilight)
 	{
 		Buffer->ImdRotation += realTimeAdjustedAverage(BUTTONOBJ_ROTSPEED);
 	}
-
-	Hilight = formIsHilite(Form);
 
 	Buffer->State = Form->state;
 
@@ -1344,7 +1325,7 @@ void intDisplayImageHilight(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ
 	switch (psWidget->type)
 	{
 	case WIDG_FORM:
-		Hilight = formIsHilite(psWidget);
+		Hilight = (psWidget->getState() & WBUT_HIGHLIGHT) != 0;
 		break;
 
 	case WIDG_BUTTON:
@@ -2765,29 +2746,25 @@ void intDisplayTransportButton(WIDGET *psWidget, UDWORD xOffset,
         UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
 	W_CLICKFORM		*Form = (W_CLICKFORM *)psWidget;
-	bool			Down;
-	bool			Hilight = false;
 	RENDERED_BUTTON		*Buffer = (RENDERED_BUTTON *)Form->pUserData;
 	DROID			*psDroid = NULL;
 	UDWORD			gfxId;
 
 	OpenButtonRender(xOffset + Form->x(), yOffset + Form->y());
 
-	Down = Form->state & (WCLICK_DOWN | WCLICK_LOCKED | WCLICK_CLICKLOCK);
+	bool Down = (Form->getState() & (WBUT_DOWN | WBUT_LOCK | WBUT_CLICKLOCK)) != 0;
 
 	// Allocate this outside of the if so the rank icons are always draw
 	psDroid = (DROID *)Buffer->Data;
 	// There should always be a droid associated with the button
 	ASSERT(psDroid != NULL, "Invalid droid pointer");
 
-	Hilight = Form->state & WCLICK_HILITE;
+	bool Hilight = (Form->getState() & WBUT_HIGHLIGHT) != 0;
 
 	if (Hilight)
 	{
 		Buffer->ImdRotation += realTimeAdjustedAverage(BUTTONOBJ_ROTSPEED);
 	}
-
-	Hilight = formIsHilite(Form);
 
 	Buffer->State = Form->state;
 
