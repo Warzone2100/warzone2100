@@ -36,6 +36,7 @@
 #include "lib/ivis_opengl/piemode.h"
 #include "lib/ivis_opengl/piestate.h"
 #include "lib/ivis_opengl/screen.h"
+#include "lib/ivis_opengl/pieblitfunc.h"
 #include "lib/ivis_opengl/tex.h"
 #include "lib/ivis_opengl/ivi.h"
 #include "lib/netplay/netplay.h"
@@ -545,6 +546,7 @@ bool systemInitialise(void)
 	// Fix badly named OpenGL functions. Must be done after iV_TextInit, to avoid the renames being clobbered by an extra glewInit() call.
 	screen_EnableMissingFunctions();
 
+	pie_InitRadar();
 	iV_Reset();								// Reset the IV library.
 
 	readAIs();
@@ -560,6 +562,7 @@ extern char *mod_list;
 
 void systemShutdown(void)
 {
+	pie_ShutdownRadar();
 	if (mod_list)
 	{
 		free(mod_list);

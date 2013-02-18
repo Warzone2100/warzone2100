@@ -150,8 +150,6 @@ bool InitRadar()
 	{
 		RadarZoom = pie_GetVideoBufferWidth() <= 640 ? 14 : DEFAULT_RADARZOOM * 2;
 	}
-	pie_InitRadar();
-
 	return true;
 }
 
@@ -185,11 +183,8 @@ bool resizeRadar()
 
 bool ShutdownRadar()
 {
-	pie_ShutdownRadar();
-
 	free(radarBuffer);
 	radarBuffer = NULL;
-
 	return true;
 }
 
