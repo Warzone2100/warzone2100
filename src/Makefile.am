@@ -137,6 +137,7 @@ noinst_HEADERS = \
 	scriptobj.h \
 	scripttabs.h \
 	scriptvals.h \
+	scriptvals_parser.h \
 	selection.h \
 	seqdisp.h \
 	statsdef.h \
