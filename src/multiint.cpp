@@ -155,6 +155,7 @@ static bool EnablePasswordPrompt = false;	// if we need the password prompt
 LOBBY_ERROR_TYPES LobbyError = ERROR_NOERROR;
 static bool allowChangePosition = true;
 static char tooltipbuffer[MaxGames][256] = {{'\0'}};
+static bool toggleFilter = true;	// Used to show all games or only games that are of the same version
 /// end of globals.
 // ////////////////////////////////////////////////////////////////////////////
 // Function protos
@@ -918,14 +919,14 @@ bool joinGame(const char* host, uint32_t port)
 
 static void addGames(void)
 {
-	UDWORD i,gcount=0;
+	int i, gcount = 0, added = 0;
 	static const char *wrongVersionTip = "Your version of Warzone is incompatible with this game.";
 	static const char *badModTip = "Your loaded mods are incompatible with this game. (Check mods/autoload/?)";
 
 	//count games to see if need two columns.
-	for(i=0;i<MaxGames;i++)							// draw games
+	for (i=0; i < MaxGames; i++)
 	{
-		if( NetPlay.games[i].desc.dwSize !=0)
+		if (NetPlay.games[i].desc.dwSize !=0)
 		{
 			gcount++;
 		}
@@ -955,9 +956,15 @@ static void addGames(void)
 		for (i=0; i<MaxGames; i++)							// draw games
 		{
 			widgDelete(psWScreen, GAMES_GAMESTART+i);	// remove old icon.
-			if (NetPlay.games[i].desc.dwSize !=0)
-			{
 
+			if (NetPlay.games[i].desc.dwSize !=0 )
+			{	// either display all games, or games that are the client's specific version
+				if (toggleFilter)
+				{
+					if ((NetPlay.games[i].game_version_major != NETGetMajorVersion()) || (NetPlay.games[i].game_version_minor != NETGetMinorVersion()))
+						continue;
+				}
+				added++;
 				sButInit.id = GAMES_GAMESTART+i;
 				sButInit.x = 20;
 				sButInit.y = (UWORD)(45+((5+GAMES_GAMEHEIGHT)*i) );
@@ -1004,6 +1011,23 @@ static void addGames(void)
 
 				widgAddButton(psWScreen, &sButInit);
 			}
+		}
+		if (added < gcount)
+		{
+			sButInit = W_BUTINIT();
+			sButInit.formID = FRONTEND_BOTFORM;
+			sButInit.id = FRONTEND_NOGAMESAVAILABLE;
+			sButInit.x = 70;
+			sButInit.y = 378;
+			sButInit.style = WBUT_TXTCENTRE;
+			sButInit.width = FRONTEND_BUTWIDTH;
+			sButInit.UserData = 0; // store disable state
+			sButInit.height = FRONTEND_BUTHEIGHT;
+			sButInit.pDisplay = displayTextOption;
+			sButInit.FontID = font_large;
+			sButInit.pText = _("Can't find any games for your version.");
+
+			widgAddButton(psWScreen, &sButInit);
 		}
 	}
 	else
@@ -1106,8 +1130,12 @@ void runGameFind(void )
 		changeTitleMode(PROTOCOL);
 	}
 
-	if(id == MULTIOP_REFRESH)
+	if(id == MULTIOP_REFRESH || id == MULTIOP_FILTER_TOGGLE)
 	{
+		if (id == MULTIOP_FILTER_TOGGLE)
+		{
+			toggleFilter = !toggleFilter;
+		}
 		ingame.localOptionsReceived = true;
 		if (!NETfindGame())							// find games synchronously
 		{
@@ -1232,6 +1260,9 @@ void startGameFind(void)
 	//refresh
 	addMultiBut(psWScreen,FRONTEND_BOTFORM,MULTIOP_REFRESH, MULTIOP_CHATBOXW-MULTIOP_OKW-5,5,MULTIOP_OKW,MULTIOP_OKH,
 	            _("Refresh Games List"),IMAGE_REFRESH,IMAGE_REFRESH,false);			// Find Games button
+	//filter toggle
+	addMultiBut(psWScreen,FRONTEND_BOTFORM,MULTIOP_FILTER_TOGGLE, MULTIOP_CHATBOXW-MULTIOP_OKW-45,5,MULTIOP_OKW,MULTIOP_OKH,
+	            _("Filter Games List"),IMAGE_FOG_OFF,IMAGE_FOG_OFF_HI,false);			// Find Games button
 	if (safeSearch || disableLobbyRefresh)
 	{
 		widgHide(psWScreen, MULTIOP_REFRESH);

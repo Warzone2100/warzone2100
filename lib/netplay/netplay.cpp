@@ -181,6 +181,17 @@ bool NETisCorrectVersion(uint32_t game_version_major, uint32_t game_version_mino
 {
 	return (NETCODE_VERSION_MAJOR == game_version_major && NETCODE_VERSION_MINOR == game_version_minor);
 }
+
+int NETGetMajorVersion(void)
+{
+	return NETCODE_VERSION_MAJOR;
+}
+
+int NETGetMinorVersion(void)
+{
+	return NETCODE_VERSION_MINOR;
+}
+
 //	Sets if the game is password protected or not
 void NETGameLocked( bool flag)
 {
@@ -2179,12 +2190,14 @@ static void NETregisterServer(int state)
 				{
 					debug(LOG_ERROR, "Failed to register game with server: %s", strSockError(getSockErr()));
 					socketClose(rs_socket);
+					server_not_there = true;
 					rs_socket = NULL;
 				}
 
 				if (readLobbyResponse(rs_socket, NET_TIMEOUT_DELAY) == SOCKET_ERROR)
 				{
 					socketClose(rs_socket);
+					server_not_there = true;
 					rs_socket = NULL;
 					return;
 				}
