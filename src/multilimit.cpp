@@ -416,10 +416,10 @@ void applyLimitSet(void)
 
 static void displayStructureBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
-	UDWORD	x = xOffset+psWidget->x;
-	UDWORD	y = yOffset+psWidget->y;
-	UDWORD	w = psWidget->width;
-	UDWORD	h = psWidget->height;
+	int x = xOffset + psWidget->x();
+	int y = yOffset + psWidget->y();
+	int w = psWidget->width();
+	int h = psWidget->height();
 	STRUCTURE_STATS	*stat = asStructureStats + psWidget->UserData;
 	Position position;
 	Vector3i rotation;
@@ -430,7 +430,7 @@ static void displayStructureBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset
 	drawBlueBox(x,y,w,h);
 
 	// draw image
-	pie_SetGeometricOffset( x+35 ,y+(psWidget->height/2)+9);
+	pie_SetGeometricOffset(x + 35, y + psWidget->height()/2 + 9);
 	rotation.x = -15;
 	rotation.y = ((realTime/45)%360) ; //45
 	rotation.z = 0;
@@ -454,11 +454,11 @@ static void displayStructureBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset
 	// draw name
 	iV_SetFont(font_regular);											// font
 	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
-	iV_DrawText(_(getName(stat->pName)), x + 80, y + (psWidget->height / 2) + 3);
+	iV_DrawText(_(getName(stat->pName)), x + 80, y + psWidget->height()/2 + 3);
 
 	// draw limit
 	ssprintf(str, "%d", ((W_SLIDER *)widgGetFromID(psWScreen, psWidget->id + 1))->pos);
-	iV_DrawText(str, x+270, y+(psWidget->height/2)+3);
+	iV_DrawText(str, x + 270, y + psWidget->height()/2 + 3);
 
 	return;
 }

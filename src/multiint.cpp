@@ -1191,10 +1191,10 @@ void runGameFind(void )
 // Used to draw the password box for the lobby screen
 static void displayPasswordEditBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
-	UDWORD	x = xOffset+psWidget->x;
-	UDWORD	y = yOffset+psWidget->y;
-	UDWORD	w = psWidget->width;
-	UDWORD  h = psWidget->height;
+	int x = xOffset + psWidget->x();
+	int y = yOffset + psWidget->y();
+	int w = psWidget->width();
+	int h = psWidget->height();
 
 	pie_BoxFill(x, y, x + w, y + h, WZCOL_MENU_BORDER);
 	pie_BoxFill(x + 1, y + 1, x + w - 1, y + h - 1, WZCOL_MENU_BACKGROUND);
@@ -1202,13 +1202,12 @@ static void displayPasswordEditBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOff
 
 static void showPasswordLabel( WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
-	SDWORD	fx,fy;
 	W_LABEL	*psLab;
 
 	psLab = (W_LABEL *)psWidget;
 
-	fx = xOffset + psWidget->x;
-	fy = yOffset + psWidget->y;
+	int fx = xOffset + psWidget->x();
+	int fy = yOffset + psWidget->y();
 
 	iV_SetFont(font_large);
 	iV_SetTextColour(WZCOL_FORM_TEXT);
@@ -3974,12 +3973,12 @@ bool startMultiOptions(bool bReenter)
 
 void displayChatEdit(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {
-	UDWORD x = xOffset+psWidget->x;
-	UDWORD y = yOffset+psWidget->y -4;			// 4 is the magic number.
+	int x = xOffset + psWidget->x();
+	int y = yOffset + psWidget->y() - 4;  // 4 is the magic number.
 
 	// draws the line at the bottom of the multiplayer join dialog separating the chat
 	// box from the input box
-	iV_Line(x, y, x + psWidget->width, y, WZCOL_MENU_SEPARATOR);
+	iV_Line(x, y, x + psWidget->width(), y, WZCOL_MENU_SEPARATOR);
 
 	return;
 }
@@ -3987,8 +3986,8 @@ void displayChatEdit(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT 
 // ////////////////////////////////////////////////////////////////////////////
 void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {
-	UDWORD x = xOffset + psWidget->x;
-	UDWORD y = yOffset + psWidget->y;
+	int x = xOffset + psWidget->x();
+	int y = yOffset + psWidget->y();
 	UDWORD	gameID = psWidget->UserData;
 	char tmp[80], name[StringSize];
 
@@ -3999,10 +3998,10 @@ void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGH
 	}
 
 	// Draw blue boxes for games (buttons) & headers
-	drawBlueBox(x, y, psWidget->width, psWidget->height);
-	drawBlueBox(x, y, GAMES_STATUS_START - 4 ,psWidget->height);
-	drawBlueBox(x, y, GAMES_PLAYERS_START - 4 ,psWidget->height);
-	drawBlueBox(x, y, GAMES_MAPNAME_START - 4, psWidget->height);
+	drawBlueBox(x, y, psWidget->width(), psWidget->height());
+	drawBlueBox(x, y, GAMES_STATUS_START - 4 ,psWidget->height());
+	drawBlueBox(x, y, GAMES_PLAYERS_START - 4 ,psWidget->height());
+	drawBlueBox(x, y, GAMES_MAPNAME_START - 4, psWidget->height());
 
 	//draw game info
 	iV_SetFont(font_regular);
@@ -4130,13 +4129,13 @@ void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGH
 
 void displayTeamChooser(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {
-	UDWORD		x = xOffset+psWidget->x;
-	UDWORD		y = yOffset+psWidget->y;
+	int x = xOffset + psWidget->x();
+	int y = yOffset + psWidget->y();
 	UDWORD		i = psWidget->UserData;
 
 	ASSERT(i < MAX_PLAYERS && NetPlay.players[i].team >= 0 && NetPlay.players[i].team < MAX_PLAYERS, "Team index out of bounds" );
 
-	drawBlueBox(x,y,psWidget->width,psWidget->height);							// right
+	drawBlueBox(x, y, psWidget->width(), psWidget->height());
 
 	if (game.skDiff[i])
 	{
@@ -4146,12 +4145,12 @@ void displayTeamChooser(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIG
 
 void displayPosition(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {
-	const int x = xOffset + psWidget->x;
-	const int y = yOffset + psWidget->y;
+	const int x = xOffset + psWidget->x();
+	const int y = yOffset + psWidget->y();
 	const int i = psWidget->UserData;
 	char text[80];
 
-	drawBlueBox(x, y, psWidget->width, psWidget->height);
+	drawBlueBox(x, y, psWidget->width(), psWidget->height());
 	iV_SetFont(font_regular);
 	iV_SetTextColour(WZCOL_FORM_TEXT);
 	ssprintf(text, _("Click to take player slot %d"), NetPlay.players[i].position);
@@ -4160,12 +4159,12 @@ void displayPosition(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT 
 
 static void displayAi(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {
-	const int x = xOffset + psWidget->x;
-	const int y = yOffset + psWidget->y;
+	const int x = xOffset + psWidget->x();
+	const int y = yOffset + psWidget->y();
 	const int j = psWidget->UserData;
 	const char *commsText[] = { N_("Open"), N_("Closed") };
 
-	drawBlueBox(x, y, psWidget->width, psWidget->height);
+	drawBlueBox(x, y, psWidget->width(), psWidget->height());
 	iV_SetFont(font_regular);
 	iV_SetTextColour(WZCOL_FORM_TEXT);
 	iV_DrawText((j >= 0) ? aidata[j].name : gettext(commsText[j + 2]), x + 10, y + 22);
@@ -4185,12 +4184,12 @@ static int difficultyIcon(int difficulty)
 
 static void displayDifficulty(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {
-	const int x = xOffset + psWidget->x;
-	const int y = yOffset + psWidget->y;
+	const int x = xOffset + psWidget->x();
+	const int y = yOffset + psWidget->y();
 	const int j = psWidget->UserData;
 
 	ASSERT_OR_RETURN(, j < ARRAY_SIZE(difficultyList), "Bad difficulty found: %d", j);
-	drawBlueBox(x, y, psWidget->width, psWidget->height);
+	drawBlueBox(x, y, psWidget->width(), psWidget->height());
 	iV_SetFont(font_regular);
 	iV_SetTextColour(WZCOL_FORM_TEXT);
 	iV_DrawImage(FrontImages, difficultyIcon(j), x + 5, y + 5);
@@ -4200,14 +4199,14 @@ static void displayDifficulty(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, 
 // ////////////////////////////////////////////////////////////////////////////
 void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {
-	UDWORD		x = xOffset+psWidget->x;
-	UDWORD		y = yOffset+psWidget->y;
+	int x = xOffset + psWidget->x();
+	int y = yOffset + psWidget->y();
 	UDWORD		j = psWidget->UserData, eval;
 
 	const int nameX = 32;
 
 	//bluboxes.
-	drawBlueBox(x,y,psWidget->width,psWidget->height);							// right
+	drawBlueBox(x, y, psWidget->width(), psWidget->height());
 	if (NetPlay.isHost && NetPlay.players[j].wzFile.isSending)
 	{
 		static char mapProgressString[MAX_STR_LENGTH] = {'\0'};
@@ -4229,16 +4228,16 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 	}
 	else if (ingame.localOptionsReceived && NetPlay.players[j].allocated)					// only draw if real player!
 	{
-		drawBlueBox(x,y,psWidget->width,psWidget->height);							// right
+		drawBlueBox(x, y, psWidget->width(), psWidget->height());
 
 		iV_SetFont(font_regular);											// font
 		iV_SetTextColour(WZCOL_FORM_TEXT);
 
 		// name
 		std::string name = NetPlay.players[j].name;
-		if (iV_GetTextWidth(name.c_str()) > psWidget->width - nameX)
+		if (iV_GetTextWidth(name.c_str()) > psWidget->width() - nameX)
 		{
-			while (!name.empty() && iV_GetTextWidth((name + "...").c_str()) > psWidget->width - nameX)
+			while (!name.empty() && iV_GetTextWidth((name + "...").c_str()) > psWidget->width() - nameX)
 			{
 				name.resize(name.size() - 1);  // Clip name.
 			}
@@ -4375,11 +4374,11 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 
 void displayColour(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {
-	const int x = xOffset + psWidget->x;
-	const int y = yOffset + psWidget->y;
+	const int x = xOffset + psWidget->x();
+	const int y = yOffset + psWidget->y();
 	const int j = psWidget->UserData;
 
-	drawBlueBox(x, y, psWidget->width, psWidget->height);
+	drawBlueBox(x, y, psWidget->width(), psWidget->height());
 	if (!NetPlay.players[j].wzFile.isSending && game.skDiff[j])
 	{
 		int player = getPlayerColour(j);
@@ -4392,10 +4391,10 @@ void displayColour(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 // Display blue box
 void intDisplayFeBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {
-	UDWORD	x = xOffset+psWidget->x;
-	UDWORD	y = yOffset+psWidget->y;
-	UDWORD	w = psWidget->width;
-	UDWORD	h = psWidget->height;
+	int x = xOffset + psWidget->x();
+	int y = yOffset + psWidget->y();
+	int w = psWidget->width();
+	int h = psWidget->height();
 
 	drawBlueBox(x,y,w,h);
 }
@@ -4404,10 +4403,10 @@ void intDisplayFeBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT 
 // Display edit box
 void displayMultiEditBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {
-	UDWORD	x = xOffset+psWidget->x;
-	UDWORD	y = yOffset+psWidget->y;
+	int x = xOffset + psWidget->x();
+	int y = yOffset + psWidget->y();
 
-	drawBlueBox(x,y,psWidget->width,psWidget->height);
+	drawBlueBox(x, y, psWidget->width(), psWidget->height());
 
 	if( ((W_EDITBOX*)psWidget)->state & WEDBS_DISABLE)					// disabled
 	{
@@ -4417,7 +4416,7 @@ void displayMultiEditBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELI
 		colour.byte.b = FILLBLUE;
 		colour.byte.g = FILLGREEN;
 		colour.byte.a = FILLTRANS;
-		pie_UniTransBoxFill(x, y, x + psWidget->width + psWidget->height, y+psWidget->height, colour);
+		pie_UniTransBoxFill(x, y, x + psWidget->width() + psWidget->height(), y + psWidget->height(), colour);
 	}
 }
 
@@ -4425,8 +4424,8 @@ void displayMultiEditBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELI
 // Display one of two images depending on if the widget is hilighted by the mouse.
 void displayMultiBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {
-	UDWORD	x = xOffset+psWidget->x;
-	UDWORD	y = yOffset+psWidget->y;
+	int x = xOffset + psWidget->x();
+	int y = yOffset + psWidget->y();
 	bool	Hilight = false;
 	UDWORD	Down = 0;
 	UDWORD	Grey = 0;
@@ -4442,7 +4441,7 @@ void displayMultiBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT 
 	if (im_norm == IMAGE_EDIT_MAP || im_norm == IMAGE_EDIT_GAME || im_norm == IMAGE_EDIT_PLAYER
 		|| im_norm == IMAGE_LOCK_BLUE || im_norm == IMAGE_UNLOCK_BLUE)
 	{
-		drawBlueBox(x - 2, y - 2, psWidget->height, psWidget->height);	// box on end.
+		drawBlueBox(x - 2, y - 2, psWidget->height(), psWidget->height());  // box on end.
 	}
 
 	// evaluate auto-frame
@@ -4543,7 +4542,7 @@ void displayMultiBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT 
 	if (Grey)
 	{
 		// disabled, render something over it!
-		iV_TransBoxFill(x, y, x + psWidget->width, y + psWidget->height);
+		iV_TransBoxFill(x, y, x + psWidget->width(), y + psWidget->height());
 	}
 }
 

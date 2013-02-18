@@ -265,18 +265,18 @@ void displayRequestOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIEL
 {
 	LEVEL_DATASET *mapData = (LEVEL_DATASET *)psWidget->pUserData;
 
-	UDWORD	x = xOffset+psWidget->x;
-	UDWORD	y = yOffset+psWidget->y;
+	int x = xOffset + psWidget->x();
+	int y = yOffset + psWidget->y();
 	char  butString[255];
 
 	sstrcpy(butString, ((W_BUTTON *)psWidget)->pTip.toUtf8().constData());
 
-	drawBlueBox(x,y,psWidget->width,psWidget->height);	//draw box
+	drawBlueBox(x, y, psWidget->width(), psWidget->height());
 
 	iV_SetFont(font_regular);					// font
 	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
 
-	while(iV_GetTextWidth(butString) > psWidget->width -10 )
+	while (iV_GetTextWidth(butString) > psWidget->width() - 10)
 	{
 		butString[strlen(butString)-1]='\0';
 	}
@@ -301,7 +301,7 @@ void displayRequestOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIEL
 			iV_SetFont(font_small);
 			iV_SetTextColour(WZCOL_TEXT_DARK);
 			sstrcpy(butString, hash.toString().c_str());
-			while (iV_GetTextWidth(butString) > psWidget->width - 10 - (8 + mapData->players*6))
+			while (iV_GetTextWidth(butString) > psWidget->width() - 10 - (8 + mapData->players*6))
 			{
 				butString[strlen(butString) - 1] = '\0';
 			}
@@ -321,11 +321,11 @@ void displayRequestOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIEL
 
 static void displayCamTypeBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {
-	UDWORD	x = xOffset+psWidget->x;
-	UDWORD	y = yOffset+psWidget->y;
+	int x = xOffset + psWidget->x();
+	int y = yOffset + psWidget->y();
 	char buffer[8];
 
-	drawBlueBox(x,y,psWidget->width,psWidget->height);	//draw box
+	drawBlueBox(x, y, psWidget->width(), psWidget->height());
 	sprintf(buffer, "T%i", (int)(psWidget->UserData));
 	if ((unsigned int)(psWidget->UserData) == current_tech) {
 		iV_SetTextColour(WZCOL_TEXT_BRIGHT);
@@ -337,11 +337,11 @@ static void displayCamTypeBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, 
 
 static void displayNumPlayersBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {
-	UDWORD	x = xOffset+psWidget->x;
-	UDWORD	y = yOffset+psWidget->y;
+	int x = xOffset + psWidget->x();
+	int y = yOffset + psWidget->y();
 	char buffer[8];
 
-	drawBlueBox(x,y,psWidget->width,psWidget->height);	//draw box
+	drawBlueBox(x, y, psWidget->width(), psWidget->height());
 	if ((unsigned int)(psWidget->UserData) == current_numplayers) {
 		iV_SetTextColour(WZCOL_TEXT_BRIGHT);
 	} else {
@@ -799,13 +799,13 @@ static void displayExtraGubbins(UDWORD height)
 static void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {
 	char str[128];
-	int x = xOffset + psWidget->x;
-	int y = yOffset + psWidget->y;
+	int x = xOffset + psWidget->x();
+	int y = yOffset + psWidget->y();
 	unsigned player = psWidget->UserData;  // Get the in game player number.
 
 	if (responsibleFor(player, 0))
 	{
-		displayExtraGubbins(widgGetFromID(psWScreen,MULTIMENU_FORM)->height);
+		displayExtraGubbins(widgGetFromID(psWScreen,MULTIMENU_FORM)->height());
 	}
 
 	iV_SetFont(font_regular);  // font
@@ -984,8 +984,8 @@ static void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 static void displayDebugMenu(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {
 	char			str[128];
-	UDWORD			x					= xOffset+psWidget->x;
-	UDWORD			y					= yOffset+psWidget->y;
+	int x = xOffset + psWidget->x();
+	int y = yOffset + psWidget->y();
 	UDWORD			index = psWidget->UserData;
 
 	iV_SetFont(font_regular);											// font

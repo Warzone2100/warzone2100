@@ -37,7 +37,6 @@ struct W_SLIDER : public WIDGET
 	W_SLIDER(W_SLDINIT const *init);
 
 	void clicked(W_CONTEXT *psContext, WIDGET_KEY key);
-	void released(W_CONTEXT *psContext, WIDGET_KEY key);
 	void highlight(W_CONTEXT *psContext);
 	void highlightLost();
 	void run(W_CONTEXT *psContext);

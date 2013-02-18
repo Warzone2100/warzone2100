@@ -491,8 +491,8 @@ static bool formPickTab(W_TABFORM *psForm, UDWORD fx, UDWORD fy,
 	/* Get the basic position of the form */
 	x0 = 0;
 	y0 = 0;
-	x1 = psForm->width;
-	y1 = psForm->height;
+	x1 = psForm->width();
+	y1 = psForm->height();
 
 	/* Adjust for where the tabs are */
 	if (psForm->majorPos == WFORM_TABLEFT)
@@ -565,8 +565,8 @@ void W_TABFORM::run(W_CONTEXT *psContext)
 	int my = psContext->my;
 
 	// If the mouse is over the form, see if any tabs need to be highlighted.
-	if (mx < 0 || mx > width ||
-	    my < 0 || my > height)
+	if (mx < 0 || mx > width() ||
+	    my < 0 || my > height())
 	{
 		return;
 	}
@@ -685,7 +685,7 @@ void W_CLICKFORM::highlight(W_CONTEXT *psContext)
 	// If there is a tip string start the tool tip.
 	if (!pTip.isEmpty())
 	{
-		tipStart(this, pTip, psContext->psScreen->TipFontID, psContext->psForm->aColours, x + psContext->xOffset, y + psContext->yOffset, width, height);
+		tipStart(this, pTip, psContext->psScreen->TipFontID, psContext->psForm->aColours, x() + psContext->xOffset, y() + psContext->yOffset, width(), height());
 	}
 
 	if (AudioCallback != NULL)
@@ -731,10 +731,10 @@ void W_FORM::display(int xOffset, int yOffset, PIELIGHT *pColours)
 
 	if ((style & WFORM_INVISIBLE) == 0)
 	{
-		int x0 = x + xOffset;
-		int y0 = y + yOffset;
-		int x1 = x0 + width;
-		int y1 = y0 + height;
+		int x0 = x() + xOffset;
+		int y0 = y() + yOffset;
+		int x1 = x0 + width();
+		int y1 = y0 + height();
 
 		iV_ShadowBox(x0, y0, x1, y1, 1, pColours[WCOL_LIGHT], pColours[WCOL_DARK], pColours[WCOL_BKGRND]);
 	}
@@ -748,10 +748,10 @@ void W_CLICKFORM::display(int xOffset, int yOffset, PIELIGHT *pColours)
 		return;
 	}
 
-	int x0 = x + xOffset;
-	int y0 = y + yOffset;
-	int x1 = x0 + width;
-	int y1 = y0 + height;
+	int x0 = x() + xOffset;
+	int y0 = y() + yOffset;
+	int x1 = x0 + width();
+	int y1 = y0 + height();
 
 	/* Display the border */
 	if (state & (WCLICK_DOWN | WCLICK_LOCKED | WCLICK_CLICKLOCK))
@@ -864,10 +864,10 @@ void W_TABFORM::display(int xOffset, int yOffset, PIELIGHT *pColours)
 		return;
 	}
 
-	int x0 = x + xOffset;
-	int y0 = y + yOffset;
-	int x1 = x0 + width;
-	int y1 = y0 + height;
+	int x0 = x() + xOffset;
+	int y0 = y() + yOffset;
+	int x1 = x0 + width();
+	int y1 = y0 + height();
 
 	switch (majorPos)
 	{

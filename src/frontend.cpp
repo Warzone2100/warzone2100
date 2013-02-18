@@ -1569,7 +1569,7 @@ static void displayTitleBitmap(WZ_DECL_UNUSED WIDGET *psWidget, WZ_DECL_UNUSED U
 // show warzone logo
 static void displayLogo(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
-	iV_DrawImageScaled(FrontImages, IMAGE_FE_LOGO, xOffset + psWidget->x, yOffset + psWidget->y, psWidget->width, psWidget->height);
+	iV_DrawImageScaled(FrontImages, IMAGE_FE_LOGO, xOffset + psWidget->x(), yOffset + psWidget->y(), psWidget->width(), psWidget->height());
 }
 
 
@@ -1578,26 +1578,24 @@ static void displayLogo(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DEC
 static void displayBigSlider(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
 	W_SLIDER *Slider = (W_SLIDER*)psWidget;
-	UDWORD x = xOffset+psWidget->x;
-	UDWORD y = yOffset+psWidget->y;
-	SWORD sx;
+	int x = xOffset + psWidget->x();
+	int y = yOffset + psWidget->y();
 
 	iV_DrawImage(IntImages,IMAGE_SLIDER_BIG,x+STAT_SLD_OX,y+STAT_SLD_OY);			// draw bdrop
 
-	sx = (SWORD)((Slider->width-3 - Slider->barSize) * Slider->pos / Slider->numStops);	// determine pos.
+	int sx = (Slider->width() - 3 - Slider->barSize) * Slider->pos / Slider->numStops;  // determine pos.
 	iV_DrawImage(IntImages,IMAGE_SLIDER_BIGBUT,x+3+sx,y+3);								//draw amount
 }
 
 static void displayAISlider(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
 	W_SLIDER *Slider = (W_SLIDER*)psWidget;
-	UDWORD x = xOffset+psWidget->x;
-	UDWORD y = yOffset+psWidget->y;
-	SWORD sx;
+	int x = xOffset + psWidget->x();
+	int y = yOffset + psWidget->y();
 
 	iV_DrawImage(IntImages,IMAGE_SLIDER_AI,x+STAT_SLD_OX,y+STAT_SLD_OY);			// draw bdrop
 
-	sx = (SWORD)((Slider->width-3 - Slider->barSize) * Slider->pos / Slider->numStops);	// determine pos.
+	int sx = (Slider->width() - 3 - Slider->barSize) * Slider->pos / Slider->numStops;  // determine pos.
 	iV_DrawImage(IntImages,IMAGE_SLIDER_BIGBUT,x+3+sx,y+3);								//draw amount
 }
 
@@ -1613,15 +1611,15 @@ static void displayText(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DEC
 	iV_SetFont(psLab->FontID);
 
 	fw = iV_GetTextWidth(psLab->aText.toUtf8().constData());
-	fy = yOffset + psWidget->y;
+	fy = yOffset + psWidget->y();
 
 	if (psWidget->style & WLAB_ALIGNCENTRE)	//check for centering, calculate offset.
 	{
-		fx = xOffset + psWidget->x + ((psWidget->width - fw) / 2);
+		fx = xOffset + psWidget->x() + ((psWidget->width() - fw) / 2);
 	}
 	else
 	{
-		fx = xOffset + psWidget->x;
+		fx = xOffset + psWidget->x();
 	}
 
 	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
@@ -1641,8 +1639,8 @@ static void displayTextAt270(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, W
 
 	iV_SetFont(font_large);
 
-	fx = xOffset + psWidget->x;
-	fy = yOffset + psWidget->y + iV_GetTextWidth(psLab->aText.toUtf8().constData());
+	fx = xOffset + psWidget->x();
+	fy = yOffset + psWidget->y() + iV_GetTextWidth(psLab->aText.toUtf8().constData());
 
 	iV_SetTextColour(WZCOL_GREY);
 	iV_DrawTextRotated(psLab->aText.toUtf8().constData(), fx+2, fy+2, 270.f);
@@ -1668,15 +1666,15 @@ void displayTextOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL
 	}
 
   	fw = iV_GetTextWidth(psBut->pText.toUtf8().constData());
-	fy = yOffset + psWidget->y + (psWidget->height - iV_GetTextLineSize())/2 - iV_GetTextAboveBase();
+	fy = yOffset + psWidget->y() + (psWidget->height() - iV_GetTextLineSize())/2 - iV_GetTextAboveBase();
 
 	if (psWidget->style & WBUT_TXTCENTRE)							//check for centering, calculate offset.
 	{
-		fx = xOffset + psWidget->x + ((psWidget->width - fw) / 2);
+		fx = xOffset + psWidget->x() + ((psWidget->width() - fw) / 2);
 	}
 	else
 	{
-		fx = xOffset + psWidget->x;
+		fx = xOffset + psWidget->x();
 	}
 
 	if(greyOut)														// unavailable

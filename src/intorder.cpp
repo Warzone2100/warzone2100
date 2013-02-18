@@ -773,9 +773,9 @@ bool intAddOrder(BASE_OBJECT *psObj)
 	}
 
 	// Now we know how many orders there are we can resize the form accordingly.
+	int newHeight = Height + CLOSE_HEIGHT + ORDER_BUTGAP;
 	Form = (W_FORM*)widgGetFromID(psWScreen,IDORDER_FORM);
-	Form->height = (UWORD)(Height + CLOSE_HEIGHT + ORDER_BUTGAP);
-	Form->y = (SWORD)(ORDER_BOTTOMY-Form->height);
+	Form->setGeometry(Form->x(), ORDER_BOTTOMY - newHeight, Form->width(), newHeight);
 
 	OrderUp = true;
 

@@ -251,10 +251,10 @@ static bool keyMapToString(char *pStr, KEY_MAPPING *psMapping)
 // display a keymap on the interface.
 static void displayKeyMap(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
-	UDWORD		x = xOffset+psWidget->x;
-	UDWORD		y = yOffset+psWidget->y;
-	UDWORD		w = psWidget->width;
-	UDWORD		h = psWidget->height;
+	int x = xOffset + psWidget->x();
+	int y = yOffset + psWidget->y();
+	int w = psWidget->width();
+	int h = psWidget->height();
 	KEY_MAPPING *psMapping = (KEY_MAPPING*)psWidget->pUserData;
 	char		sKey[MAX_STR_LENGTH];
 
@@ -276,7 +276,7 @@ static void displayKeyMap(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_D
 	iV_SetFont(font_regular);											// font type
 	iV_SetTextColour(WZCOL_FORM_TEXT);
 
-	iV_DrawText(_(psMapping->pName), x + 2, y + (psWidget->height / 2) + 3);
+	iV_DrawText(_(psMapping->pName), x + 2, y + (psWidget->height() / 2) + 3);
 
 	// draw binding
 	keyMapToString(sKey, psMapping);
@@ -286,7 +286,7 @@ static void displayKeyMap(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_D
 		iV_SetTextColour(WZCOL_YELLOW);
 		sstrcat(sKey, " (numpad)");
 	}
-	iV_DrawText(sKey, x + 364, y + (psWidget->height / 2) + 3);
+	iV_DrawText(sKey, x + 364, y + (psWidget->height() / 2) + 3);
 }
 
 // ////////////////////////////////////////////////////////////////////////////

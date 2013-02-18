@@ -94,13 +94,12 @@ WIDGET::WIDGET(W_INIT const *init, WIDGET_TYPE type)
 	, id(init->id)
 	, type(type)
 	, style(init->style)
-	, x(init->x), y(init->y)
-	, width(init->width), height(init->height)
 	, displayFunction(init->pDisplay)
 	, callback(init->pCallback)
 	, pUserData(init->pUserData)
 	, UserData(init->UserData)
 	, parentWidget(NULL)
+	, dim(init->x, init->y, init->width, init->height)
 {}
 
 WIDGET::WIDGET(WIDGET *parent)
@@ -108,13 +107,12 @@ WIDGET::WIDGET(WIDGET *parent)
 	, id(0xFFFFEEEEu)
 	, type(WIDG_UNSPECIFIED_TYPE)
 	, style(0)
-	, x(0), y(0)
-	, width(1), height(1)
 	, displayFunction(NULL)
 	, callback(NULL)
 	, pUserData(NULL)
 	, UserData(0)
 	, parentWidget(NULL)
+	, dim(0, 0, 1, 1)
 {
 	parent->attach(this);
 }
@@ -366,8 +364,8 @@ void widgGetPos(W_SCREEN *psScreen, UDWORD id, SWORD *pX, SWORD *pY)
 	psWidget = widgGetFromID(psScreen, id);
 	if (psWidget != NULL)
 	{
-		*pX = psWidget->x;
-		*pY = psWidget->y;
+		*pX = psWidget->x();
+		*pY = psWidget->y();
 	}
 	else
 	{
@@ -607,10 +605,10 @@ static void widgProcessCallbacks(W_CONTEXT *psContext)
 		if (psCurr->type == WIDG_FORM)
 		{
 			sFormContext.psForm = (W_FORM *)psCurr;
-			sFormContext.mx = sWidgContext.mx - psCurr->x;
-			sFormContext.my = sWidgContext.my - psCurr->y;
-			sFormContext.xOffset = sWidgContext.xOffset + psCurr->x;
-			sFormContext.yOffset = sWidgContext.yOffset + psCurr->y;
+			sFormContext.mx = sWidgContext.mx - psCurr->x();
+			sFormContext.my = sWidgContext.my - psCurr->y();
+			sFormContext.xOffset = sWidgContext.xOffset + psCurr->x();
+			sFormContext.yOffset = sWidgContext.yOffset + psCurr->y();
 			widgProcessCallbacks(&sFormContext);
 		}
 
@@ -668,10 +666,10 @@ static void widgProcessForm(W_CONTEXT *psContext)
 		{
 			/* Found a sub form, so set up the context */
 			sFormContext.psForm = (W_FORM *)psCurr;
-			sFormContext.mx = mx - psCurr->x - xOrigin;
-			sFormContext.my = my - psCurr->y - yOrigin;
-			sFormContext.xOffset = xOffset + psCurr->x + xOrigin;
-			sFormContext.yOffset = yOffset + psCurr->y + yOrigin;
+			sFormContext.mx = mx - psCurr->x() - xOrigin;
+			sFormContext.my = my - psCurr->y() - yOrigin;
+			sFormContext.xOffset = xOffset + psCurr->x() + xOrigin;
+			sFormContext.yOffset = yOffset + psCurr->y() + yOrigin;
 
 			/* Process it */
 			widgProcessForm(&sFormContext);
@@ -712,16 +710,16 @@ static void widgProcessClick(W_CONTEXT &psContext, WIDGET_KEY key, bool wasPress
 		W_CONTEXT sFormContext;
 		sFormContext.psScreen = psContext.psScreen;
 		sFormContext.psForm = (W_FORM *)psCurr;
-		sFormContext.mx = oPos.x - psCurr->x;
-		sFormContext.my = oPos.y - psCurr->y;
-		sFormContext.xOffset = oOffset.x + psCurr->x;
-		sFormContext.yOffset = oOffset.y + psCurr->y;
+		sFormContext.mx = oPos.x - psCurr->x();
+		sFormContext.my = oPos.y - psCurr->y();
+		sFormContext.xOffset = oOffset.x + psCurr->x();
+		sFormContext.yOffset = oOffset.y + psCurr->y();
 
 		// Process it (recursively).
 		widgProcessClick(sFormContext, key, wasPressed);
 	}
 
-	if (pos.x < 0 || pos.x > psForm->width || pos.y < 0 || pos.y >= psForm->height)
+	if (pos.x < 0 || pos.x > psForm->width() || pos.y < 0 || pos.y >= psForm->height())
 	{
 		return;  // Click is somewhere else.
 	}
@@ -745,7 +743,7 @@ static void widgProcessClick(W_CONTEXT &psContext, WIDGET_KEY key, bool wasPress
 			continue;  // Skip hidden widgets.
 		}
 
-		if (oPos.x < psCurr->x || oPos.x > psCurr->x + psCurr->width || oPos.y < psCurr->y || oPos.y > psCurr->y + psCurr->height)
+		if (!psCurr->geometry().contains(oPos.x, oPos.y))
 		{
 			continue;  // The click missed the widget.
 		}
@@ -899,8 +897,8 @@ static void widgDisplayForm(W_FORM *psForm, UDWORD xOffset, UDWORD yOffset)
 
 	/* Update the offset from the current form's position */
 	formGetOrigin(psForm, &xOrigin, &yOrigin);
-	xOffset += psForm->x + xOrigin;
-	yOffset += psForm->y + yOrigin;
+	xOffset += psForm->x() + xOrigin;
+	yOffset += psForm->y() + yOrigin;
 
 	/* If this is a clickable form, the widgets on it have to move when it's down */
 	if (!(psForm->style & WFORM_NOCLICKMOVE))

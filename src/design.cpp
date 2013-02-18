@@ -4298,7 +4298,7 @@ static void intDisplayStatForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 {
 	static UDWORD	iRY = 45;
 	W_CLICKFORM		*Form = (W_CLICKFORM *)psWidget;
-	UWORD			x0 = xOffset + Form->x, y0 = yOffset + Form->y;
+	UWORD			x0 = xOffset + Form->x(), y0 = yOffset + Form->y();
 
 	/* get stats from userdata pointer in widget stored in
 	 * intSetSystemStats, intSetBodyStats, intSetPropulsionStats
@@ -4314,11 +4314,11 @@ static void intDisplayStatForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 
 	iV_DrawImage(IntImages, (UWORD)(IMAGE_DES_STATBACKLEFT), x0, y0);
 	iV_DrawImageRepeatX(IntImages, IMAGE_DES_STATBACKMID, x0 + iV_GetImageWidth(IntImages, IMAGE_DES_STATBACKLEFT), y0,
-	                    Form->width - iV_GetImageWidth(IntImages, IMAGE_DES_STATBACKLEFT) - iV_GetImageWidth(IntImages, IMAGE_DES_STATBACKRIGHT));
-	iV_DrawImage(IntImages, IMAGE_DES_STATBACKRIGHT, x0 + Form->width - iV_GetImageWidth(IntImages, IMAGE_DES_STATBACKRIGHT), y0);
+	                    Form->width() - iV_GetImageWidth(IntImages, IMAGE_DES_STATBACKLEFT) - iV_GetImageWidth(IntImages, IMAGE_DES_STATBACKRIGHT));
+	iV_DrawImage(IntImages, IMAGE_DES_STATBACKRIGHT, x0 + Form->width() - iV_GetImageWidth(IntImages, IMAGE_DES_STATBACKRIGHT), y0);
 
 	/* display current component */
-	pie_SetGeometricOffset(xOffset + psWidget->width / 4, yOffset + psWidget->height / 2);
+	pie_SetGeometricOffset(xOffset + psWidget->width() / 4, yOffset + psWidget->height() / 2);
 
 	/* inc rotation if highlighted */
 	if (Form->state & WCLICK_HILITE)
@@ -4341,10 +4341,10 @@ static void intDisplayViewForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 	SWORD			templateRadius;
 	SDWORD			falseScale;
 
-	x0 = xOffset + Form->x;
-	y0 = yOffset + Form->y;
-	x1 = x0 + Form->width;
-	y1 = y0 + Form->height;
+	x0 = xOffset + Form->x();
+	y0 = yOffset + Form->y();
+	x1 = x0 + Form->width();
+	y1 = y0 + Form->height();
 
 	RenderWindowFrame(FRAME_NORMAL, x0, y0, x1 - x0, y1 - y0);
 
@@ -4397,10 +4397,10 @@ static void intDisplayDesignForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffse
 	W_TABFORM *Form = (W_TABFORM *)psWidget;
 	UDWORD x0, y0, x1, y1;
 
-	x0 = xOffset + Form->x;
-	y0 = yOffset + Form->y;
-	x1 = x0 + Form->width;
-	y1 = y0 + Form->height;
+	x0 = xOffset + Form->x();
+	y0 = yOffset + Form->y();
+	x1 = x0 + Form->width();
+	y1 = y0 + Form->height();
 
 	RenderWindowFrame(FRAME_NORMAL, x0, y0, x1 - x0, y1 - y0);
 }

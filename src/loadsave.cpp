@@ -465,10 +465,10 @@ bool runLoadSave(bool bResetMissionWidgets)
 				W_EDBINIT sEdInit;
 				sEdInit.formID= LOADSAVE_FORM;
 				sEdInit.id    = SAVEENTRY_EDIT;
-				sEdInit.x	  =	widgGetFromID(psRequestScreen,id)->x;
-				sEdInit.y     =	widgGetFromID(psRequestScreen,id)->y;
-				sEdInit.width = widgGetFromID(psRequestScreen,id)->width;
-				sEdInit.height= widgGetFromID(psRequestScreen,id)->height;
+				sEdInit.x     = widgGetFromID(psRequestScreen,id)->x();
+				sEdInit.y     = widgGetFromID(psRequestScreen,id)->y();
+				sEdInit.width = widgGetFromID(psRequestScreen,id)->width();
+				sEdInit.height= widgGetFromID(psRequestScreen,id)->height();
 				QByteArray textBytes = ((W_BUTTON *)widgGetFromID(psRequestScreen,id))->pText.toUtf8();
 				sEdInit.pText = textBytes.constData();
 				sEdInit.pBoxDisplay = displayLoadSaveEdit;
@@ -655,8 +655,8 @@ void removeWildcards(char *pStr)
 static void displayLoadBanner(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
 	PIELIGHT col;
-	UDWORD	x = xOffset+psWidget->x;
-	UDWORD	y = yOffset+psWidget->y;
+	int x = xOffset + psWidget->x();
+	int y = yOffset + psWidget->y();
 
 	if(psWidget->pUserData)
 	{
@@ -667,19 +667,18 @@ static void displayLoadBanner(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, 
 		col = WZCOL_MENU_LOAD_BORDER;
 	}
 
-	pie_BoxFill(x, y, x + psWidget->width, y + psWidget->height, col);
-	pie_BoxFill(x + 2,y + 2, x + psWidget->width - 2, y + psWidget->height - 2, WZCOL_MENU_BACKGROUND);
+	pie_BoxFill(x, y, x + psWidget->width(), y + psWidget->height(), col);
+	pie_BoxFill(x + 2,y + 2, x + psWidget->width() - 2, y + psWidget->height() - 2, WZCOL_MENU_BACKGROUND);
 }
 
 // ////////////////////////////////////////////////////////////////////////////
 static void displayLoadSlot(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
-
-	UDWORD	x = xOffset+psWidget->x;
-	UDWORD	y = yOffset+psWidget->y;
+	int x = xOffset + psWidget->x();
+	int y = yOffset + psWidget->y();
 	char  butString[64];
 
-	drawBlueBox(x,y,psWidget->width,psWidget->height);	//draw box
+	drawBlueBox(x, y, psWidget->width(), psWidget->height());  //draw box
 
 	if (!((W_BUTTON *)psWidget)->pText.isEmpty())
 	{
@@ -688,7 +687,7 @@ static void displayLoadSlot(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ
 		iV_SetFont(font_regular);									// font
 		iV_SetTextColour(WZCOL_FORM_TEXT);
 
-		while(iV_GetTextWidth(butString) > psWidget->width)
+		while(iV_GetTextWidth(butString) > psWidget->width())
 		{
 			butString[strlen(butString)-1]='\0';
 		}
@@ -701,10 +700,10 @@ static void displayLoadSlot(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ
 // ////////////////////////////////////////////////////////////////////////////
 static void displayLoadSaveEdit(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
-	UDWORD	x = xOffset+psWidget->x;
-	UDWORD	y = yOffset+psWidget->y;
-	UDWORD	w = psWidget->width;
-	UDWORD  h = psWidget->height;
+	int x = xOffset + psWidget->x();
+	int y = yOffset + psWidget->y();
+	int w = psWidget->width();
+	int h = psWidget->height();
 
 	pie_BoxFill(x, y, x + w, y + h, WZCOL_MENU_LOAD_BORDER);
 	pie_BoxFill(x + 1, y + 1, x + w - 1, y + h - 1, WZCOL_MENU_BACKGROUND);

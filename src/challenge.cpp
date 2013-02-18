@@ -83,11 +83,11 @@ bool		challengeActive = false;	///< Whether we are running a challenge
 static void displayLoadBanner(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
 	PIELIGHT col = WZCOL_GREEN;
-	UDWORD	x = xOffset + psWidget->x;
-	UDWORD	y = yOffset + psWidget->y;
+	UDWORD	x = xOffset + psWidget->x();
+	UDWORD	y = yOffset + psWidget->y();
 
-	pie_BoxFill(x, y, x + psWidget->width, y + psWidget->height, col);
-	pie_BoxFill(x + 2, y + 2, x + psWidget->width - 2, y + psWidget->height - 2, WZCOL_MENU_BACKGROUND);
+	pie_BoxFill(x, y, x + psWidget->width(), y + psWidget->height(), col);
+	pie_BoxFill(x + 2, y + 2, x + psWidget->width() - 2, y + psWidget->height() - 2, WZCOL_MENU_BACKGROUND);
 }
 
 // quite the hack, game name is stored in global sRequestResult
@@ -129,11 +129,11 @@ void updateChallenge(bool gameWon)
 static void displayLoadSlot(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
 
-	UDWORD	x = xOffset + psWidget->x;
-	UDWORD	y = yOffset + psWidget->y;
+	UDWORD	x = xOffset + psWidget->x();
+	UDWORD	y = yOffset + psWidget->y();
 	char  butString[64];
 
-	drawBlueBox(x, y, psWidget->width, psWidget->height);	//draw box
+	drawBlueBox(x, y, psWidget->width(), psWidget->height());	//draw box
 
 	if (!((W_BUTTON *)psWidget)->pText.isEmpty())
 	{
@@ -142,7 +142,7 @@ static void displayLoadSlot(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ
 		iV_SetFont(font_regular);									// font
 		iV_SetTextColour(WZCOL_FORM_TEXT);
 
-		while (iV_GetTextWidth(butString) > psWidget->width)
+		while (iV_GetTextWidth(butString) > psWidget->width())
 		{
 			butString[strlen(butString)-1] = '\0';
 		}

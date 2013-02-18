@@ -528,7 +528,6 @@ void intUpdateCommandFact(WIDGET *psWidget, W_CONTEXT *psContext)
 void intDisplayPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
 	W_BARGRAPH *BarGraph = (W_BARGRAPH *)psWidget;
-	SDWORD		x0, y0;
 	SDWORD		Avail, ManPow, realPower;
 	SDWORD		Empty;
 	SDWORD		BarWidth, textWidth = 0;
@@ -545,7 +544,7 @@ void intDisplayPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DEC
 	Avail = (displayPower + 1e-8) / POWERBAR_SCALE;
 	realPower = (displayPower + 1e-8) - ManuPower;
 
-	BarWidth = BarGraph->width;
+	BarWidth = BarGraph->width();
 	iV_SetFont(font_regular);
 	sprintf(szVal, "%d", realPower);
 	textWidth = iV_GetTextWidth(szVal);
@@ -574,8 +573,8 @@ void intDisplayPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DEC
 		Empty = 0;
 	}
 
-	x0 = xOffset + BarGraph->x;
-	y0 = yOffset + BarGraph->y;
+	int x0 = xOffset + BarGraph->x();
+	int y0 = yOffset + BarGraph->y();
 
 	pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
 	pie_SetFogStatus(false);
@@ -667,7 +666,7 @@ void intDisplayStatusButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ
 	void                *Object;
 	bool	            bOnHold = false;
 
-	OpenButtonRender(xOffset + Form->x, yOffset + Form->y);
+	OpenButtonRender(xOffset + Form->x(), yOffset + Form->y());
 
 	Down = Form->state & (WCLICK_DOWN | WCLICK_LOCKED | WCLICK_CLICKLOCK);
 
@@ -854,19 +853,18 @@ void intDisplayStatusButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ
 	{
 		if (((realTime / 250) % 2) == 0)
 		{
-			iV_DrawImage(IntImages, IMAGE_BUT0_DOWN, xOffset + Form->x, yOffset + Form->y);
+			iV_DrawImage(IntImages, IMAGE_BUT0_DOWN, xOffset + Form->x(), yOffset + Form->y());
 		}
 		else
 		{
-			iV_DrawImage(IntImages, IMAGE_BUT_HILITE, xOffset + Form->x, yOffset + Form->y);
+			iV_DrawImage(IntImages, IMAGE_BUT_HILITE, xOffset + Form->x(), yOffset + Form->y());
 		}
 	}
 	else
 	{
 		if (Hilight)
 		{
-
-			iV_DrawImage(IntImages, IMAGE_BUT_HILITE, xOffset + Form->x, yOffset + Form->y);
+			iV_DrawImage(IntImages, IMAGE_BUT_HILITE, xOffset + Form->x(), yOffset + Form->y());
 		}
 	}
 }
@@ -884,7 +882,7 @@ void intDisplayObjectButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ
 	UDWORD IMDType = 0;
 	void *Object;
 
-	OpenButtonRender(xOffset + Form->x, yOffset + Form->y);
+	OpenButtonRender(xOffset + Form->x(), yOffset + Form->y());
 
 	Down = Form->state & (WCLICK_DOWN | WCLICK_LOCKED | WCLICK_CLICKLOCK);
 
@@ -942,7 +940,7 @@ void intDisplayObjectButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ
 	if (Hilight)
 	{
 
-		iV_DrawImage(IntImages, IMAGE_BUTB_HILITE, xOffset + Form->x, yOffset + Form->y);
+		iV_DrawImage(IntImages, IMAGE_BUTB_HILITE, xOffset + Form->x(), yOffset + Form->y());
 	}
 }
 
@@ -961,7 +959,7 @@ void intDisplayStatsButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_
 	UDWORD          Player = selectedPlayer;		// ajl, changed for multiplayer (from 0)
 	void            *Object;
 
-	OpenButtonRender(xOffset + Form->x, yOffset + Form->y);
+	OpenButtonRender(xOffset + Form->x(), yOffset + Form->y());
 
 	Down = Form->state & (WCLICK_DOWN | WCLICK_LOCKED | WCLICK_CLICKLOCK);
 
@@ -1103,7 +1101,7 @@ void intDisplayStatsButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_
 	if (Hilight)
 	{
 
-		iV_DrawImage(IntImages, IMAGE_BUT_HILITE, xOffset + Form->x, yOffset + Form->y);
+		iV_DrawImage(IntImages, IMAGE_BUT_HILITE, xOffset + Form->x(), yOffset + Form->y());
 	}
 }
 
@@ -1124,8 +1122,7 @@ void RenderBlankToButton(RENDERED_BUTTON *Buffer, bool Down, UDWORD buttonType)
 	CreateBlankButton(Buffer, Down, buttonType);
 }
 
-
-void AdjustTabFormSize(W_TABFORM *Form, UDWORD *x0, UDWORD *y0, UDWORD *x1, UDWORD *y1)
+static void AdjustTabFormSize(W_TABFORM *Form, int *x0, int *y0, int *x1, int *y1)
 {
 	/* Adjust for where the tabs are */
 	if (Form->majorPos == WFORM_TABLEFT)
@@ -1158,10 +1155,10 @@ void intOpenPlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_
 	UDWORD		APos;
 	SDWORD		Ay0, Ay1;
 
-	Tx0 = xOffset + Form->x;
-	Ty0 = yOffset + Form->y;
-	Tx1 = Tx0 + Form->width;
-	Ty1 = Ty0 + Form->height;
+	Tx0 = xOffset + Form->x();
+	Ty0 = yOffset + Form->y();
+	Tx1 = Tx0 + Form->width();
+	Ty1 = Ty0 + Form->height();
 
 	if (Form->animCount == 0)
 	{
@@ -1172,8 +1169,8 @@ void intOpenPlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_
 		}
 		Form->Ax0 = (UWORD)Tx0;
 		Form->Ax1 = (UWORD)Tx1;
-		Form->Ay0 = (UWORD)(Ty0 + (Form->height / 2) - 4);
-		Form->Ay1 = (UWORD)(Ty0 + (Form->height / 2) + 4);
+		Form->Ay0 = (UWORD)(Ty0 + (Form->height() / 2) - 4);
+		Form->Ay1 = (UWORD)(Ty0 + (Form->height() / 2) + 4);
 		Form->startTime = realTime;
 	}
 	else
@@ -1185,12 +1182,12 @@ void intOpenPlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_
 
 	Form->animCount++;
 
-	Range = (Form->height / 2) - 4;
+	Range = (Form->height() / 2) - 4;
 	Duration = (realTime - Form->startTime) << 16 ;
 	APos = (Range * (Duration / FORM_OPEN_ANIM_DURATION)) >> 16;
 
-	Ay0 = Ty0 + (Form->height / 2) - 4 - APos;
-	Ay1 = Ty0 + (Form->height / 2) + 4 + APos;
+	Ay0 = Ty0 + (Form->height() / 2) - 4 - APos;
+	Ay1 = Ty0 + (Form->height() / 2) + 4 + APos;
 
 	if (Ay0 <= (SDWORD)Ty0)
 	{
@@ -1231,8 +1228,8 @@ void intClosePlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL
 	UDWORD Duration;
 	UDWORD APos;
 
-	Ty0 = yOffset + Form->y + (Form->height / 2) - 4;
-	Ty1 = yOffset + Form->y + (Form->height / 2) + 4;
+	Ty0 = yOffset + Form->y() + (Form->height() / 2) - 4;
+	Ty1 = yOffset + Form->y() + (Form->height() / 2) + 4;
 
 	if (Form->animCount == 0)
 	{
@@ -1241,10 +1238,10 @@ void intClosePlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL
 			audio_PlayTrack(FormCloseAudioID);
 			FormCloseCount++;
 		}
-		Form->Ax0 = (UWORD)(xOffset + Form->x);
-		Form->Ay0 = (UWORD)(yOffset + Form->y);
-		Form->Ax1 = (UWORD)(Form->Ax0 + Form->width);
-		Form->Ay1 = (UWORD)(Form->Ay0 + Form->height);
+		Form->Ax0 = (UWORD)(xOffset + Form->x());
+		Form->Ay0 = (UWORD)(yOffset + Form->y());
+		Form->Ax1 = (UWORD)(Form->Ax0 + Form->width());
+		Form->Ay1 = (UWORD)(Form->Ay0 + Form->height());
 		Form->startTime = realTime;
 	}
 	else
@@ -1256,12 +1253,12 @@ void intClosePlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL
 
 	Form->animCount++;
 
-	Range = (Form->height / 2) - 4;
+	Range = (Form->height() / 2) - 4;
 	Duration = (realTime - Form->startTime) << 16 ;
 	APos = (Range * (Duration / FORM_OPEN_ANIM_DURATION)) >> 16;
 
-	Form->Ay0 = (UWORD)(yOffset + Form->y + APos);
-	Form->Ay1 = (UWORD)(yOffset + Form->y + Form->height - APos);
+	Form->Ay0 = (UWORD)(yOffset + Form->y() + APos);
+	Form->Ay1 = (UWORD)(yOffset + Form->y() + Form->height() - APos);
 
 	if (Form->Ay0 >= Ty0)
 	{
@@ -1283,12 +1280,11 @@ void intClosePlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL
 void intDisplayPlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
 	W_TABFORM *Form = (W_TABFORM *)psWidget;
-	UDWORD x0, y0, x1, y1;
 
-	x0 = xOffset + Form->x;
-	y0 = yOffset + Form->y;
-	x1 = x0 + Form->width;
-	y1 = y0 + Form->height;
+	int x0 = xOffset + Form->x();
+	int y0 = yOffset + Form->y();
+	int x1 = x0 + Form->width();
+	int y1 = y0 + Form->height();
 
 	RenderWindowFrame(FRAME_NORMAL, x0, y0, x1 - x0, y1 - y0);
 }
@@ -1297,12 +1293,11 @@ void intDisplayPlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DE
 void intDisplayStatsForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
 	W_TABFORM *Form = (W_TABFORM *)psWidget;
-	UDWORD x0, y0, x1, y1;
 
-	x0 = xOffset + Form->x;
-	y0 = yOffset + Form->y;
-	x1 = x0 + Form->width;
-	y1 = y0 + Form->height;
+	int x0 = xOffset + Form->x();
+	int y0 = yOffset + Form->y();
+	int x1 = x0 + Form->width();
+	int y1 = y0 + Form->height();
 
 	AdjustTabFormSize(Form, &x0, &y0, &x1, &y1);
 
@@ -1314,8 +1309,8 @@ void intDisplayStatsForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DE
 //
 void intDisplayImage(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
-	UDWORD x = xOffset + psWidget->x;
-	UDWORD y = yOffset + psWidget->y;
+	int x = xOffset + psWidget->x();
+	int y = yOffset + psWidget->y();
 
 	iV_DrawImage(IntImages, psWidget->UserData, x, y);
 }
@@ -1324,14 +1319,13 @@ void intDisplayImage(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_U
 //draws the mission clock - flashes when below a predefined time
 void intDisplayMissionClock(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
-	UDWORD  x = xOffset + psWidget->x;
-	UDWORD  y = yOffset + psWidget->y;
-	UDWORD  flash;
+	int x = xOffset + psWidget->x();
+	int y = yOffset + psWidget->y();
 
 	// Draw the background image
 	iV_DrawImage(IntImages, UNPACKDWORD_TRI_B(psWidget->UserData), x, y);
 	// Need to flash the timer when < 5 minutes remaining, but > 4 minutes
-	flash = UNPACKDWORD_TRI_A(psWidget->UserData);
+	bool flash = UNPACKDWORD_TRI_A(psWidget->UserData);
 	if (flash && ((realTime / 250) % 2) == 0)
 	{
 		iV_DrawImage(IntImages, UNPACKDWORD_TRI_C(psWidget->UserData), x, y);
@@ -1343,8 +1337,8 @@ void intDisplayMissionClock(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ
 //
 void intDisplayImageHilight(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
-	UDWORD x = xOffset + psWidget->x;
-	UDWORD y = yOffset + psWidget->y, flash;
+	int x = xOffset + psWidget->x();
+	int y = yOffset + psWidget->y();
 	UWORD ImageID;
 	bool Hilight = false;
 
@@ -1380,7 +1374,7 @@ void intDisplayImageHilight(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ
 
 
 	//need to flash the button if Full Transporter
-	flash = UNPACKDWORD_TRI_A(psWidget->UserData);
+	bool flash = UNPACKDWORD_TRI_A(psWidget->UserData);
 	if (flash && psWidget->id == IDTRANS_LAUNCH)
 	{
 		if (((realTime / 250) % 2) == 0)
@@ -1459,8 +1453,8 @@ static void GetButtonState(WIDGET *psWidget, bool *Hilight, UDWORD *Down, bool *
 //
 void intDisplayButtonHilight(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
-	UDWORD x = xOffset + psWidget->x;
-	UDWORD y = yOffset + psWidget->y;
+	int x = xOffset + psWidget->x();
+	int y = yOffset + psWidget->y();
 	bool Hilight = false;
 	bool Grey = false;
 	UDWORD Down = 0;
@@ -1490,8 +1484,8 @@ void intDisplayButtonHilight(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, W
 // flash depend on whether or not the button is highlighted.
 void intDisplayButtonFlash(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
-	UDWORD x = xOffset + psWidget->x;
-	UDWORD y = yOffset + psWidget->y;
+	int x = xOffset + psWidget->x();
+	int y = yOffset + psWidget->y();
 	UWORD ImageID;
 
 	ASSERT(psWidget->type == WIDG_BUTTON, "Not a button");
@@ -1510,8 +1504,8 @@ void intDisplayButtonFlash(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_
 
 void intDisplayReticuleButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
-	UDWORD	x = xOffset + psWidget->x;
-	UDWORD	y = yOffset + psWidget->y;
+	int     x = xOffset + psWidget->x();
+	int     y = yOffset + psWidget->y();
 	bool	Hilight = false;
 	bool	Down = false;
 	UBYTE	DownTime = UNPACKDWORD_QUAD_C(psWidget->UserData);
@@ -1609,8 +1603,8 @@ void intDisplayButtonPressed(WIDGET *psWidget, UDWORD xOffset,
         UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
 	W_BUTTON	*psButton = (W_BUTTON *)psWidget;
-	UDWORD		x = xOffset + psButton->x;
-	UDWORD		y = yOffset + psButton->y;
+	UDWORD		x = xOffset + psButton->x();
+	UDWORD		y = yOffset + psButton->y();
 	UBYTE		Hilight = 0;
 	UWORD		ImageID;
 
@@ -1638,8 +1632,8 @@ void intDisplayDPButton(WIDGET *psWidget, UDWORD xOffset,
 {
 	W_BUTTON	*psButton = (W_BUTTON *)psWidget;
 	STRUCTURE	*psStruct = (STRUCTURE *)psButton->pUserData;
-	UDWORD		x = xOffset + psButton->x;
-	UDWORD		y = yOffset + psButton->y;
+	UDWORD		x = xOffset + psButton->x();
+	UDWORD		y = yOffset + psButton->y();
 	UBYTE		hilight = 0, down = 0;
 	UWORD		imageID;
 
@@ -1689,14 +1683,12 @@ void intDisplayDPButton(WIDGET *psWidget, UDWORD xOffset,
 void intDisplaySlider(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
 	W_SLIDER *Slider = (W_SLIDER *)psWidget;
-	UDWORD x = xOffset + psWidget->x;
-	UDWORD y = yOffset + psWidget->y;
-	SWORD sx;
+	int x = xOffset + psWidget->x();
+	int y = yOffset + psWidget->y();
 
 	iV_DrawImage(IntImages, IMAGE_SLIDER_BACK, x + STAT_SLD_OX, y + STAT_SLD_OY);
 
-	sx = (SWORD)((Slider->width - Slider->barSize)
-	        * Slider->pos / Slider->numStops);
+	int sx = (Slider->width() - Slider->barSize) * Slider->pos / Slider->numStops;
 
 	iV_DrawImage(IntImages, IMAGE_SLIDER_BUT, x + sx, y - 2);
 }
@@ -1709,8 +1701,8 @@ void intDisplayEditBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL
 	W_EDITBOX	*psEditBox = (W_EDITBOX *) psWidget;
 	UWORD		iImageIDLeft, iImageIDMid, iImageIDRight;
 	UDWORD		iX, iY, iDX, iXRight;
-	UDWORD		iXLeft = xOffset + psWidget->x,
-	            iYLeft = yOffset + psWidget->y;
+	UDWORD          iXLeft = xOffset + psWidget->x(),
+	                iYLeft = yOffset + psWidget->y();
 
 	if (psEditBox->state & WEDBS_HILITE)
 	{
@@ -1733,7 +1725,7 @@ void intDisplayEditBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL
 	/* draw middle of bar */
 	iX += iV_GetImageWidth(IntImages, iImageIDLeft);
 	iDX = iV_GetImageWidth(IntImages, iImageIDMid);
-	iXRight = xOffset + psWidget->width - iV_GetImageWidth(IntImages, iImageIDRight);
+	iXRight = xOffset + psWidget->width() - iV_GetImageWidth(IntImages, iImageIDRight);
 	while (iX < iXRight)
 	{
 		iV_DrawImage(IntImages, iImageIDMid, iX, iY);
@@ -1748,8 +1740,8 @@ void intDisplayEditBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL
 void intDisplayNumber(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
 	W_LABEL		*Label = (W_LABEL *)psWidget;
-	UDWORD		x = Label->x + xOffset;
-	UDWORD		y = Label->y + yOffset;
+	UDWORD		x = Label->x() + xOffset;
+	UDWORD		y = Label->y() + yOffset;
 	UDWORD		Quantity = 1;
 
 	//Quantity depends on the factory
@@ -2738,8 +2730,8 @@ static void intDisplayBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, bool
 	W_BARGRAPH *BarGraph = (W_BARGRAPH *)psWidget;
 	char szVal[30];
 	char const *szCheckWidth = "00000";
-	int x0 = xOffset + BarGraph->x;
-	int y0 = yOffset + BarGraph->y;
+	int x0 = xOffset + BarGraph->x();
+	int y0 = yOffset + BarGraph->y();
 	int arbitaryOffset = 3;
 	int iX, iY;
 	int barWidth = 100, width;
@@ -2749,7 +2741,7 @@ static void intDisplayBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, bool
 	{
 		//draw the background image
 		iV_DrawImage(IntImages, IMAGE_DES_POWERBAR_LEFT, x0, y0);
-		iV_DrawImage(IntImages, IMAGE_DES_POWERBAR_RIGHT, x0 + psWidget->width - iV_GetImageWidth(IntImages, IMAGE_DES_POWERBAR_RIGHT), y0);
+		iV_DrawImage(IntImages, IMAGE_DES_POWERBAR_RIGHT, x0 + psWidget->width() - iV_GetImageWidth(IntImages, IMAGE_DES_POWERBAR_RIGHT), y0);
 	}
 
 	// Arbitrary increment for the position of the bars
@@ -2763,7 +2755,7 @@ static void intDisplayBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, bool
 	if (isPowerBar)
 	{
 		// Adjust the width based on the text drawn
-		barWidth = BarGraph->width - (iX - x0 + arbitaryOffset);
+		barWidth = BarGraph->width() - (iX - x0 + arbitaryOffset);
 	}
 
 	//draw current value section
@@ -2834,7 +2826,7 @@ void intDisplayTransportButton(WIDGET *psWidget, UDWORD xOffset,
 	DROID			*psDroid = NULL;
 	UDWORD			gfxId;
 
-	OpenButtonRender(xOffset + Form->x, yOffset + Form->y);
+	OpenButtonRender(xOffset + Form->x(), yOffset + Form->y());
 
 	Down = Form->state & (WCLICK_DOWN | WCLICK_LOCKED | WCLICK_CLICKLOCK);
 
@@ -2866,7 +2858,7 @@ void intDisplayTransportButton(WIDGET *psWidget, UDWORD xOffset,
 
 	if (Hilight)
 	{
-		iV_DrawImage(IntImages, IMAGE_BUT_HILITE, xOffset + Form->x, yOffset + Form->y);
+		iV_DrawImage(IntImages, IMAGE_BUT_HILITE, xOffset + Form->x(), yOffset + Form->y());
 	}
 
 	if (psDroid && missionForReInforcements())
@@ -2876,7 +2868,7 @@ void intDisplayTransportButton(WIDGET *psWidget, UDWORD xOffset,
 		if (gfxId != UDWORD_MAX)
 		{
 			/* Render the rank graphic at the correct location */
-			iV_DrawImage(IntImages, (UWORD)gfxId, xOffset + Form->x + 50, yOffset + Form->y + 30);
+			iV_DrawImage(IntImages, gfxId, xOffset + Form->x() + 50, yOffset + Form->y() + 30);
 		}
 	}
 }
@@ -3066,16 +3058,15 @@ void intDisplayProximityBlips(WIDGET *psWidget, WZ_DECL_UNUSED UDWORD xOffset,
 	if (!psMsg->read)
 	{
 		//set the button's x/y so that can be clicked on
-		psButton->x = (SWORD)(psProxDisp->screenX - psButton->width / 2);
-		psButton->y = (SWORD)(psProxDisp->screenY - psButton->height / 2);
+		psButton->move(psProxDisp->screenX - psButton->width() / 2, psProxDisp->screenY - psButton->height() / 2);
 	}
 }
 
 
 static UDWORD sliderMousePos(W_SLIDER *Slider)
 {
-	return (widgGetFromID(psWScreen, Slider->formID)->x + Slider->x)
-	       + ((Slider->pos * Slider->width) / Slider->numStops);
+	return (Slider->parent()->x() + Slider->x())
+	       + ((Slider->pos * Slider->width()) / Slider->numStops);
 }
 
 
@@ -3128,8 +3119,8 @@ void intUpdateQuantitySlider(WIDGET *psWidget, W_CONTEXT *psContext)
 void intDisplayResSubGroup(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
 	W_LABEL		*Label = (W_LABEL *)psWidget;
-	UDWORD		x = Label->x + xOffset;
-	UDWORD		y = Label->y + yOffset;
+	UDWORD		x = Label->x() + xOffset;
+	UDWORD		y = Label->y() + yOffset;
 	RESEARCH    *psResearch = (RESEARCH *)Label->pUserData;
 
 	if (psResearch->subGroup != NO_RESEARCH_ICON)
@@ -3141,8 +3132,8 @@ void intDisplayResSubGroup(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_
 void intDisplayAllyIcon(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
 	W_LABEL		*Label = (W_LABEL *)psWidget;
-	UDWORD		x = Label->x + xOffset;
-	UDWORD		y = Label->y + yOffset;
+	UDWORD		x = Label->x() + xOffset;
+	UDWORD		y = Label->y() + yOffset;
 
 	unsigned ref = UNPACKDWORD_HI(psWidget->UserData) + REF_RESEARCH_START;
 	unsigned num = UNPACKDWORD_LOW(psWidget->UserData);

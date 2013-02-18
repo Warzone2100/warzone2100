@@ -760,10 +760,10 @@ static void intDisplaySeqTextView(WIDGET *psWidget,
 	size_t cur_seq, cur_seqpage;
 	UDWORD x0, y0, page;
 
-	x0 = xOffset + Form->x;
-	y0 = yOffset + Form->y;
+	x0 = xOffset + Form->x();
+	y0 = yOffset + Form->y();
 
-	RenderWindowFrame(FRAME_NORMAL, x0, y0, Form->width, Form->height);
+	RenderWindowFrame(FRAME_NORMAL, x0, y0, Form->width(), Form->height());
 
 	/* work out where we're up to in the text */
 	cur_seq = cur_seqpage = 0;
@@ -773,15 +773,11 @@ static void intDisplaySeqTextView(WIDGET *psWidget,
 		ASSERT(!"the form is tabbed", "intDisplaySeqTextView: the form is tabbed");
 		for (page = 0; page < Form->majorT; page++)
 		{
-			intDisplaySeqTextViewPage(psViewReplay, x0, y0,
-						  Form->width, Form->height,
-						  false, &cur_seq, &cur_seqpage);
+			intDisplaySeqTextViewPage(psViewReplay, x0, y0, Form->width(), Form->height(), false, &cur_seq, &cur_seqpage);
 		}
 	}
 
-	intDisplaySeqTextViewPage(psViewReplay, x0, y0,
-				  Form->width-40, Form->height,
-				  true, &cur_seq, &cur_seqpage);
+	intDisplaySeqTextViewPage(psViewReplay, x0, y0, Form->width() - 40, Form->height(), true, &cur_seq, &cur_seqpage);
 }
 
 
@@ -1128,7 +1124,7 @@ void intDisplayMessageButton(WIDGET *psWidget, UDWORD xOffset,
 	BASE_STATS *psResGraphic = NULL;
 	bool MovieButton = false;
 
-	OpenButtonRender(xOffset + psButton->x, yOffset + psButton->y);
+	OpenButtonRender(xOffset + psButton->x(), yOffset + psButton->y());
 
 	Down = psButton->state & (WBUTS_DOWN | WBUTS_CLICKLOCK);
 	Hilight = psButton->state & WBUTS_HILITE;
@@ -1232,9 +1228,7 @@ void intDisplayMessageButton(WIDGET *psWidget, UDWORD xOffset,
 
 	if (Hilight)
 	{
-
-		iV_DrawImage(IntImages,IMAGE_BUT_HILITE,xOffset+psButton->x,
-			yOffset+psButton->y);
+		iV_DrawImage(IntImages, IMAGE_BUT_HILITE, xOffset + psButton->x(), yOffset + psButton->y());
 	}
 }
 
@@ -1244,7 +1238,6 @@ void intDisplayPIEView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL
 {
 	W_TABFORM		*Form = (W_TABFORM*)psWidget;
 	MESSAGE			*psMessage = (MESSAGE *)Form->pUserData;
-	UDWORD			x0,y0,x1,y1;
 	SWORD			image = -1;
 	RESEARCH        *psResearch;
 
@@ -1256,15 +1249,15 @@ void intDisplayPIEView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL
 
 	if (psMessage->pViewData)
 	{
-		x0 = xOffset+Form->x;
-		y0 = yOffset+Form->y;
-		x1 = x0 + Form->width;
-		y1 = y0 + Form->height;
+		int x0 = xOffset + Form->x();
+		int y0 = yOffset + Form->y();
+		int x1 = x0 + Form->width();
+		int y1 = y0 + Form->height();
 
 		//moved from after close render
 		RenderWindowFrame(FRAME_NORMAL, x0 - 1, y0 - 1, x1 - x0 + 2, y1 - y0 + 2);
 
-		OpenButtonRender(xOffset + Form->x, yOffset + Form->y);
+		OpenButtonRender(xOffset + Form->x(), yOffset + Form->y());
 
 		if (((VIEWDATA *)psMessage->pViewData)->type != VIEW_RES)
 		{
@@ -1291,7 +1284,6 @@ void intDisplayFLICView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DEC
 
 	W_TABFORM		*Form = (W_TABFORM*)psWidget;
 	MESSAGE			*psMessage = (MESSAGE *)Form->pUserData;
-	UDWORD			x0,y0,x1,y1;
 	VIEW_RESEARCH	*psViewResearch;
 
 	//shouldn't have any proximity messages here...
@@ -1302,12 +1294,12 @@ void intDisplayFLICView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DEC
 
 	if (psMessage->pViewData)
 	{
-		OpenButtonRender(xOffset + Form->x, yOffset + Form->y);
+		OpenButtonRender(xOffset + Form->x(), yOffset + Form->y());
 
-		x0 = xOffset+Form->x;
-		y0 = yOffset+Form->y;
-		x1 = x0 + Form->width;
-		y1 = y0 + Form->height;
+		int x0 = xOffset + Form->x();
+		int y0 = yOffset + Form->y();
+		int x1 = x0 + Form->width();
+		int y1 = y0 + Form->height();
 
 		if (((VIEWDATA *)psMessage->pViewData)->type != VIEW_RES)
 		{
@@ -1333,14 +1325,12 @@ void intDisplayTEXTView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DEC
 {
 	W_TABFORM		*Form = (W_TABFORM*)psWidget;
 	MESSAGE			*psMessage = (MESSAGE *)Form->pUserData;
-	UDWORD			x0, y0, x1, y1, i, linePitch;
-	UDWORD			ty;
 
-	x0 = xOffset+Form->x;
-	y0 = yOffset+Form->y;
-	x1 = x0 + Form->width;
-	y1 = y0 + Form->height;
-	ty = y0;
+	int x0 = xOffset + Form->x();
+	int y0 = yOffset + Form->y();
+	int x1 = x0 + Form->width();
+	int y1 = y0 + Form->height();
+	int ty = y0;
 
 	RenderWindowFrame(FRAME_NORMAL, x0, y0, x1 - x0, y1 - y0);
 
@@ -1348,7 +1338,7 @@ void intDisplayTEXTView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DEC
 	{
 		iV_SetFont(font_regular);
 		/* Get the travel to the next line */
-		linePitch = iV_GetTextLineSize();
+		int linePitch = iV_GetTextLineSize();
 		/* Fix for spacing.... */
 		linePitch+=3;
 		ty+=3;
@@ -1357,10 +1347,10 @@ void intDisplayTEXTView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DEC
 
 		iV_SetTextColour(WZCOL_TEXT_BRIGHT);
 		//add each message
-		for (i = 0; i < ((VIEWDATA *)psMessage->pViewData)->textMsg.size(); i++)
+		for (unsigned i = 0; i < ((VIEWDATA *)psMessage->pViewData)->textMsg.size(); i++)
 		{
 			//check haven't run out of room first!
-			if (i * linePitch > Form->height)
+			if (i * linePitch > Form->height())
 			{
 				ASSERT( false, "intDisplayTEXTView: Run out of room!" );
 				return;

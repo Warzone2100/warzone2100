@@ -27,6 +27,7 @@
 #include "lib/framework/frame.h"
 #include "lib/ivis_opengl/piedef.h"
 #include "lib/ivis_opengl/textdraw.h"
+#include <QtCore/QRect>
 
 
 /* Forward definitions */
@@ -109,6 +110,13 @@ struct WIDGET
 
 	WIDGET *parent() { return parentWidget; }
 	Children const &children() { return childWidgets; }
+	QRect const &geometry() const { return dim; }
+	int x() const { return dim.x(); }
+	int y() const { return dim.y(); }
+	int width() const { return dim.width(); }
+	int height() const { return dim.height(); }
+	void move(int x, int y) { dim.moveTo(x, y); }
+	void setGeometry(int x, int y, int w, int h) { dim.setRect(x, y, w, h); }
 
 	void attach(WIDGET *widget);
 	void detach(WIDGET *widget);
@@ -117,8 +125,8 @@ struct WIDGET
 	UDWORD                  id;                     ///< The user set ID number for the widget. This is returned when e.g. a button is pressed.
 	WIDGET_TYPE             type;                   ///< The widget type
 	UDWORD                  style;                  ///< The style of the widget
-	SWORD                   x, y;                   ///< The location of the widget
-	UWORD                   width, height;          ///< The size of the widget
+	//SWORD                   x, y;                   ///< The location of the widget
+	//UWORD                   width, height;          ///< The size of the widget
 	WIDGET_DISPLAY          displayFunction;        ///< Override function to display the widget.
 	WIDGET_CALLBACK         callback;               ///< User callback (if any)
 	void                   *pUserData;              ///< Pointer to a user data block (if any)
@@ -130,6 +138,8 @@ private:
 
 	WIDGET *                parentWidget;           ///< Parent widget.
 	std::vector<WIDGET *>   childWidgets;           ///< Child widgets. Will be deleted if we are deleted.
+
+	QRect                   dim;
 
 private:
 #ifdef WZ_CXX11

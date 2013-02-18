@@ -191,8 +191,8 @@ void W_BUTTON::highlight(W_CONTEXT *psContext)
 	{
 		tipStart(this, pTip, psContext->psScreen->TipFontID,
 		         psContext->psForm->aColours,
-		         x + psContext->xOffset, y + psContext->yOffset,
-		         width, height);
+		         x() + psContext->xOffset, y() + psContext->yOffset,
+		         width(), height());
 	}
 }
 
@@ -215,10 +215,10 @@ void W_BUTTON::display(int xOffset, int yOffset, PIELIGHT *pColours)
 		return;
 	}
 
-	int x0 = x + xOffset;
-	int y0 = y + yOffset;
-	int x1 = x0 + width;
-	int y1 = y0 + height;
+	int x0 = x() + xOffset;
+	int y0 = y() + yOffset;
+	int x1 = x0 + width();
+	int y1 = y0 + height();
 
 	bool haveText = !pText.isEmpty();
 	QByteArray textBytes = pText.toUtf8();
@@ -237,13 +237,13 @@ void W_BUTTON::display(int xOffset, int yOffset, PIELIGHT *pColours)
 			int fx, fy;
 			if (style & WBUT_NOCLICKMOVE)
 			{
-				fx = x0 + (width - fw) / 2 + 1;
-				fy = y0 + 1 + (height - iV_GetTextLineSize()) / 2 - iV_GetTextAboveBase();
+				fx = x0 + (width() - fw) / 2 + 1;
+				fy = y0 + 1 + (height() - iV_GetTextLineSize()) / 2 - iV_GetTextAboveBase();
 			}
 			else
 			{
-				fx = x0 + (width - fw) / 2;
-				fy = y0 + (height - iV_GetTextLineSize()) / 2 - iV_GetTextAboveBase();
+				fx = x0 + (width() - fw) / 2;
+				fy = y0 + (height() - iV_GetTextLineSize()) / 2 - iV_GetTextAboveBase();
 			}
 			iV_DrawText(textData, fx, fy);
 		}
@@ -263,8 +263,8 @@ void W_BUTTON::display(int xOffset, int yOffset, PIELIGHT *pColours)
 		{
 			iV_SetFont(FontID);
 			int fw = iV_GetTextWidth(textData);
-			int fx = x0 + (width - fw) / 2;
-			int fy = y0 + (height - iV_GetTextLineSize()) / 2 - iV_GetTextAboveBase();
+			int fx = x0 + (width() - fw) / 2;
+			int fy = y0 + (height() - iV_GetTextLineSize()) / 2 - iV_GetTextAboveBase();
 			iV_SetTextColour(pColours[WCOL_LIGHT]);
 			iV_DrawText(textData, fx + 1, fy + 1);
 			iV_SetTextColour(pColours[WCOL_DISABLE]);
@@ -287,8 +287,8 @@ void W_BUTTON::display(int xOffset, int yOffset, PIELIGHT *pColours)
 			iV_SetFont(FontID);
 			iV_SetTextColour(pColours[WCOL_TEXT]);
 			int fw = iV_GetTextWidth(textData);
-			int fx = x0 + (width - fw) / 2;
-			int fy = y0 + (height - iV_GetTextLineSize()) / 2 - iV_GetTextAboveBase();
+			int fx = x0 + (width() - fw) / 2;
+			int fy = y0 + (height() - iV_GetTextLineSize()) / 2 - iV_GetTextAboveBase();
 			iV_DrawText(textData, fx, fy);
 		}
 

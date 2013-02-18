@@ -174,7 +174,7 @@ void W_EDITBOX::fitStringStart()
 	{
 		int pixelWidth = iV_GetTextWidth(tmp.toUtf8().constData());
 
-		if (pixelWidth <= width - (WEDB_XGAP * 2 + WEDB_CURSORSIZE))
+		if (pixelWidth <= width() - (WEDB_XGAP * 2 + WEDB_CURSORSIZE))
 		{
 			printChars = tmp.length();
 			printWidth = pixelWidth;
@@ -200,7 +200,7 @@ void W_EDITBOX::fitStringEnd()
 	{
 		int pixelWidth = iV_GetTextWidth(tmp.toUtf8().constData());
 
-		if (pixelWidth <= width - (WEDB_XGAP * 2 + WEDB_CURSORSIZE))
+		if (pixelWidth <= width() - (WEDB_XGAP * 2 + WEDB_CURSORSIZE))
 		{
 			printChars = tmp.length();
 			printWidth = pixelWidth;
@@ -261,7 +261,7 @@ void W_EDITBOX::run(W_CONTEXT *psContext)
 	/* If there is a mouse click outside of the edit box - stop editing */
 	int mx = psContext->mx;
 	int my = psContext->my;
-	if (mousePressed(MOUSE_LMB) && (mx < x || mx > x + width || my < y || my > y + height))
+	if (mousePressed(MOUSE_LMB) && !geometry().contains(mx, my))
 	{
 		screenClearFocus(psContext->psScreen);
 		return;
@@ -460,7 +460,7 @@ void W_EDITBOX::clicked(W_CONTEXT *psContext, WIDGET_KEY)
 
 	// Set cursor position to the click location.
 	iV_SetFont(FontID);
-	setCursorPosPixels(psContext->mx - x);
+	setCursorPosPixels(psContext->mx - x());
 
 	// Cursor should be visible instantly.
 	blinkOffset = wzGetTicks();
@@ -539,10 +539,10 @@ void W_EDITBOX::display(int xOffset, int yOffset, PIELIGHT *pColours)
 		return;
 	}
 
-	int x0 = x + xOffset;
-	int y0 = y + yOffset;
-	int x1 = x0 + width;
-	int y1 = y0 + height;
+	int x0 = x() + xOffset;
+	int y0 = y() + yOffset;
+	int x1 = x0 + width();
+	int y1 = y0 + height();
 
 	if (pBoxDisplay != NULL)
 	{
@@ -558,7 +558,7 @@ void W_EDITBOX::display(int xOffset, int yOffset, PIELIGHT *pColours)
 	iV_SetFont(FontID);
 	iV_SetTextColour(pColours[WCOL_TEXT]);
 
-	int fy = y0 + (height - iV_GetTextLineSize()) / 2 - iV_GetTextAboveBase();
+	int fy = y0 + (height() - iV_GetTextLineSize()) / 2 - iV_GetTextAboveBase();
 
 	/* If there is more text than will fit into the box, display the bit with the cursor in it */
 	QString tmp = aText;

@@ -61,18 +61,18 @@ void W_LABEL::display(int xOffset, int yOffset, PIELIGHT *pColours)
 	if (style & WLAB_ALIGNCENTRE)
 	{
 		int fw = iV_GetTextWidth(text.constData());
-		fx = xOffset + x + (width - fw) / 2;
+		fx = xOffset + x() + (width() - fw) / 2;
 	}
 	else if (style & WLAB_ALIGNRIGHT)
 	{
 		int fw = iV_GetTextWidth(text.constData());
-		fx = xOffset + x + width - fw;
+		fx = xOffset + x() + width() - fw;
 	}
 	else
 	{
-		fx = xOffset + x;
+		fx = xOffset + x();
 	}
-	int fy = yOffset + y + (height - iV_GetTextLineSize()) / 2 - iV_GetTextAboveBase();
+	int fy = yOffset + y() + (height() - iV_GetTextLineSize()) / 2 - iV_GetTextAboveBase();
 	iV_DrawText(text.constData(), fx, fy);
 }
 
@@ -84,8 +84,8 @@ void W_LABEL::highlight(W_CONTEXT *psContext)
 	{
 		tipStart(this, pTip, psContext->psScreen->TipFontID,
 		         psContext->psForm->aColours,
-		         x + psContext->xOffset, y + psContext->yOffset,
-		         width, height);
+		         x() + psContext->xOffset, y() + psContext->yOffset,
+		         width(), height());
 	}
 }
 

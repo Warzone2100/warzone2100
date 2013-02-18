@@ -489,10 +489,10 @@ static void NetworkDisplayPlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOf
 	W_TABFORM *Form = (W_TABFORM*)psWidget;
 	UDWORD x0,y0,x1,y1;
 
-	x0 = xOffset+Form->x;
-	y0 = yOffset+Form->y;
-	x1 = x0 + Form->width;
-	y1 = y0 + Form->height;
+	x0 = xOffset+Form->x();
+	y0 = yOffset+Form->y();
+	x1 = x0 + Form->width();
+	y1 = y0 + Form->height();
 
 	// Don't draw anything, a rectangle behind the icon just looks strange, if you notice it.
 	//RenderWindowFrame(FRAME_NORMAL, x0, y0, x1 - x0, y1 - y0);
@@ -505,8 +505,8 @@ static void NetworkDisplayPlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOf
 /// Displays an image for the Network Issue button
 static void NetworkDisplayImage(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
-	UDWORD x = xOffset+psWidget->x;
-	UDWORD y = yOffset+psWidget->y;
+	int x = xOffset + psWidget->x();
+	int y = yOffset + psWidget->y();
 	UWORD ImageID;
 	CONNECTION_STATUS status = (CONNECTION_STATUS)UNPACKDWORD_TRI_A(psWidget->UserData);
 
