@@ -1094,6 +1094,7 @@ bool stageThreeInitialise(void)
 
 	effectResetUpdates();
 	initLighting(0, 0, mapWidth, mapHeight);
+	pie_InitLighting();
 
 	if(bMultiPlayer)
 	{

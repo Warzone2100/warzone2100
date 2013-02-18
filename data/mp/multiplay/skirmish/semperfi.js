@@ -747,4 +747,8 @@ function eventChat(from, to, message)
 	{
 		donatePower(playerPower(me) / 2, from);
 	}
+	else if (message == "crazycolours")
+	{
+		setSunIntensity(0.6, 0.4, 0.3,  1.0, 0.8, 0.7,  1.2, 0.9, 0.8);
+	}
 }

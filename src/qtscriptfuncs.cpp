@@ -3669,6 +3669,7 @@ static QScriptValue js_setSunIntensity(QScriptContext *context, QScriptEngine *)
 	pie_Lighting0(LIGHT_AMBIENT, ambient);
 	pie_Lighting0(LIGHT_DIFFUSE, diffuse);
 	pie_Lighting0(LIGHT_SPECULAR, specular);
+	pie_SetupLighting();
 	return QScriptValue();
 }
 

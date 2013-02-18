@@ -59,11 +59,27 @@ static GLenum ss_op_depth_pass_back = GL_DECR;
 static unsigned int pieCount = 0;
 static unsigned int polyCount = 0;
 static bool shadows = false;
-static GLfloat lighting0[LIGHT_MAX][4] = {{0.0f, 0.0f, 0.0f, 1.0f},  {0.5f, 0.5f, 0.5f, 1.0f},  {0.8f, 0.8f, 0.8f, 1.0f},  {1.0f, 1.0f, 1.0f, 1.0f}};
+static GLfloat lighting0[LIGHT_MAX][4];
 
 /*
  *	Source
  */
+
+void pie_InitLighting()
+{
+	const GLfloat defaultLight[LIGHT_MAX][4] = {{0.0f, 0.0f, 0.0f, 1.0f},  {0.5f, 0.5f, 0.5f, 1.0f},  {0.8f, 0.8f, 0.8f, 1.0f},  {1.0f, 1.0f, 1.0f, 1.0f}};
+	memcpy(lighting0, defaultLight, sizeof(lighting0));
+	pie_SetupLighting();
+}
+
+void pie_SetupLighting()
+{
+	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, lighting0[LIGHT_EMISSIVE]);
+	glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_FALSE);
+	glLightfv(GL_LIGHT0, GL_AMBIENT, lighting0[LIGHT_AMBIENT]);
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, lighting0[LIGHT_DIFFUSE]);
+	glLightfv(GL_LIGHT0, GL_SPECULAR, lighting0[LIGHT_SPECULAR]);
+}
 
 void pie_Lighting0(LIGHTING_TYPE entry, float value[4])
 {
@@ -75,25 +91,15 @@ void pie_Lighting0(LIGHTING_TYPE entry, float value[4])
 
 void pie_BeginLighting(const Vector3f *light, bool drawshadows)
 {
-	const float pos[4] = {light->x, light->y, light->z, 0.0f};
+	const float pos[4] = { light->x, light->y, light->z, 0.0f };
 
-	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, lighting0[LIGHT_EMISSIVE]);
-	glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_FALSE);
 	glLightfv(GL_LIGHT0, GL_POSITION, pos);
-	glLightfv(GL_LIGHT0, GL_AMBIENT, lighting0[LIGHT_AMBIENT]);
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, lighting0[LIGHT_DIFFUSE]);
-	glLightfv(GL_LIGHT0, GL_SPECULAR, lighting0[LIGHT_SPECULAR]);
 	glEnable(GL_LIGHT0);
 
 	if (drawshadows)
 	{
 		shadows = true;
 	}
-}
-
-bool pie_GetLightingState(void)
-{
-	return true;
 }
 
 void pie_EndLighting(void)

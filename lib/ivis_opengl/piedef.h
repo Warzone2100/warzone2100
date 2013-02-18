@@ -82,6 +82,10 @@ extern void pie_GetResetCounts(unsigned int* pPieCount, unsigned int* pPolyCount
 /** Setup stencil shadows and OpenGL lighting. */
 void pie_BeginLighting(const Vector3f * light, bool drawshadows);
 
+/** Set light parameters */
+void pie_InitLighting();
+void pie_SetupLighting();
+
 /* Stop using stencil shadows and OpenGL lighting (if enabled). */
 void pie_EndLighting(void);
 
