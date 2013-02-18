@@ -9,9 +9,6 @@ MOCEDFILES = $(MOCHEADER:%.h=%_moc.cpp)
 %_moc.cpp: %.h
 	$(MOC4) -o $@ $<
 
-BUILT_SOURCES = \
-	resource_parser.h \
-	strres_parser.h
 
 CLEANFILES = \
 	$(MOCEDFILES)
@@ -44,9 +41,11 @@ noinst_HEADERS = \
 	physfs_ext.h \
 	rational.h \
 	resly.h \
+	resource_parser.h \
 	stdio_ext.h \
 	string_ext.h \
 	strres.h \
+	strres_parser.h \
 	strresly.h \
 	treap.h \
 	trig.h \

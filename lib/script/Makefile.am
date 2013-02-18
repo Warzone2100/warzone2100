@@ -2,12 +2,10 @@ AM_CPPFLAGS = -DYY_NO_INPUT $(WZ_CPPFLAGS) $(QT4_CFLAGS)
 AM_CFLAGS = $(WZ_CFLAGS)
 AM_CXXFLAGS = $(WZ_CXXFLAGS) $(QT4_CFLAGS)
 
-BUILT_SOURCES = \
-	chat_parser.h \
-	script_parser.h
 
 noinst_LIBRARIES = libscript.a
 noinst_HEADERS = \
+	chat_parser.h \
 	chat_processing.h \
 	codeprint.h \
 	event.h \
@@ -15,6 +13,7 @@ noinst_HEADERS = \
 	interpreter.h \
 	parse.h \
 	script.h \
+	script_parser.h \
 	stack.h
 
 libscript_a_SOURCES = \
