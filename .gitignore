@@ -4,6 +4,11 @@
 *.bak
 .*.swp
 
+# Random noises
+*.meow
+*.squeak
+*.moo
+
 # Generated binary files:
 *.o
 *.lo
