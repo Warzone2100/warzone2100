@@ -47,9 +47,6 @@ static WIDGET_AUDIOCALLBACK AudioCallback = NULL;
 static SWORD HilightAudioID = -1;
 static SWORD ClickedAudioID = -1;
 
-/* Function prototypes */
-static void widgDisplayForm(W_FORM *psForm, UDWORD xOffset, UDWORD yOffset);
-
 static WIDGET_KEY lastReleasedKey_DEPRECATED = WKEY_NONE;
 
 
@@ -569,6 +566,16 @@ void widgSetString(W_SCREEN *psScreen, UDWORD id, const char *pText)
 	psWidget->setString(QString::fromUtf8(pText));
 }
 
+static void formGetOrigin(WIDGET *widget, int *x, int *y)
+{
+	*x = 0;
+	*y = 0;
+	if (widget->type == WIDG_FORM && (widget->style & WFORM_TABBED) != 0)
+	{
+		*x = ((W_TABFORM *)widget)->tabWidget()->x();
+		*y = ((W_TABFORM *)widget)->tabWidget()->y();
+	}
+}
 
 /* Call any callbacks for the widgets on a form */
 static void widgProcessCallbacks(W_CONTEXT *psContext)
@@ -882,56 +889,47 @@ void widgSetReturn(W_SCREEN *psScreen, WIDGET *psWidget)
 	psScreen->retWidgets.push_back(trigger);
 }
 
-
-/* Display the widgets on a form */
-static void widgDisplayForm(W_FORM *psForm, UDWORD xOffset, UDWORD yOffset)
+void WIDGET::displayRecursive(int xOffset, int yOffset, PIELIGHT *colours)
 {
-	SDWORD	xOrigin = 0, yOrigin = 0;
+	if (type == WIDG_FORM)
+	{
+		colours = ((W_FORM *)this)->aColours;
+	}
 
-	/* Display the form */
-	psForm->display(xOffset, yOffset, psForm->aColours);
-	if (psForm->disableChildren == true)
+	display(xOffset, yOffset, colours);
+
+	if (type == WIDG_FORM && ((W_FORM *)this)->disableChildren)
 	{
 		return;
 	}
 
-	/* Update the offset from the current form's position */
-	formGetOrigin(psForm, &xOrigin, &yOrigin);
-	xOffset += psForm->x() + xOrigin;
-	yOffset += psForm->y() + yOrigin;
+	// Update the offset from the current widget's position.
+	xOffset += x();
+	yOffset += y();
 
-	/* If this is a clickable form, the widgets on it have to move when it's down */
-	if (!(psForm->style & WFORM_NOCLICKMOVE))
+	// If this is a clickable form, the widgets on it have to move when it's down.
+	if (type == WIDG_FORM && (((W_FORM *)this)->style & WFORM_NOCLICKMOVE) == 0)
 	{
-		if ((psForm->style & WFORM_CLICKABLE) &&
-		    (((W_CLICKFORM *)psForm)->state &
-		     (WBUT_DOWN | WBUT_LOCK | WBUT_CLICKLOCK)))
+		if ((((W_FORM *)this)->style & WFORM_CLICKABLE) != 0 &&
+		    (((W_CLICKFORM *)this)->state & (WBUT_DOWN | WBUT_LOCK | WBUT_CLICKLOCK)) != 0)
 		{
-			xOffset += 1;
-			yOffset += 1;
+			++xOffset;
+			++yOffset;
 		}
 	}
 
-	/* Display the widgets on the form */
-	WIDGET::Children const &children = formGetWidgets(psForm);
-	for (WIDGET::Children::const_iterator i = children.begin(); i != children.end(); ++i)
+	// Display the widgets on this widget.
+	for (WIDGET::Children::const_iterator i = childWidgets.begin(); i != childWidgets.end(); ++i)
 	{
 		WIDGET *psCurr = *i;
 
-		/* Skip any hidden widgets */
+		// Skip any hidden widgets.
 		if (!psCurr->visible())
 		{
 			continue;
 		}
 
-		if (psCurr->type == WIDG_FORM)
-		{
-			widgDisplayForm((W_FORM *)psCurr, xOffset, yOffset);
-		}
-		else
-		{
-			psCurr->display(xOffset, yOffset, psForm->aColours);
-		}
+		psCurr->displayRecursive(xOffset, yOffset, colours);
 	}
 }
 
@@ -943,8 +941,8 @@ static void widgDisplayForm(W_FORM *psForm, UDWORD xOffset, UDWORD yOffset)
  */
 void widgDisplayScreen(W_SCREEN *psScreen)
 {
-	/* Display the widgets */
-	widgDisplayForm((W_FORM *)psScreen->psForm, 0, 0);
+	// Display the widgets.
+	psScreen->psForm->displayRecursive(0, 0, NULL);
 
 	/* Display the tool tip if there is one */
 	tipDisplay();

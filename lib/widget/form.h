@@ -66,6 +66,15 @@ struct W_TABFORM : public W_FORM
 	void run(W_CONTEXT *psContext);
 	void display(int xOffset, int yOffset, PIELIGHT *pColours);
 
+	int tab() const { return currentTab; }
+	bool setTab(int newTab);  ///< Sets the tab, clamped to a valid range. Returns true iff newTab was in the valid range.
+	bool scrollDeltaTab(int delta) { return setTab(tab() + delta); }
+	bool scrollNextTab() { return scrollDeltaTab(1); }
+	bool scrollPreviousTab() { return scrollDeltaTab(-1); }
+	int numTabs() const { return childTabs.size(); }
+	void setNumTabs(int numTabs);  ///< Adds/removes tabs. If removing tabs, widgets on the removed tabs will be deleted.
+	WIDGET *tabWidget() { return childTabs[currentTab]; }
+
 	UWORD           majorPos;                       // Position of the tabs on the form
 	UWORD           majorSize;                      // the size of tabs horizontally and vertically
 	UWORD		tabMajorThickness;			// The thickness of the tabs
@@ -73,7 +82,6 @@ struct W_TABFORM : public W_FORM
 	SWORD		tabVertOffset;				// Tab form overlap offset.
 	SWORD		tabHorzOffset;				// Tab form overlap offset.
 	SWORD		majorOffset;			// Tab start offset.
-	UWORD           majorT;                         // which tab is selected
 	UWORD		state;					// Current state of the widget
 	UWORD		tabHiLite;				// which tab is hilited.
 	/* NOTE: If tabHiLite is (UWORD)(-1) then there is no hilite.  A bit of a hack I know */
@@ -88,7 +96,10 @@ struct W_TABFORM : public W_FORM
 	TAB_DISPLAY pTabDisplay;			// Optional callback for display tabs.
 
 private:
+	void fixChildGeometry();
 	void displayTabs(int x0, int y0, int width, int height, int number, int selected, int highlight, PIELIGHT *pColours, int tabGap);
+
+	unsigned currentTab;
 };
 
 /* The clickable form data structure */
@@ -119,9 +130,6 @@ bool formAddWidget(W_FORM *psForm, WIDGET *psWidget, W_INIT const *psInit);
 
 /* Return the widgets currently displayed by a form */
 WIDGET::Children const &formGetWidgets(W_FORM *psWidget);
-
-/* Return the origin on the form from which button locations are calculated */
-extern void formGetOrigin(W_FORM *psWidget, SDWORD *pXOrigin, SDWORD *pYOrigin);
 
 /* Variables for the formGetAllWidgets functions */
 struct W_FORMGETALL

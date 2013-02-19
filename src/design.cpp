@@ -4078,23 +4078,13 @@ void intProcessDesign(UDWORD id)
 			/* left scroll button */
 			{
 				W_TABFORM	*psTForm;
-				int temp;
 				psTForm = (W_TABFORM *)widgGetFromID(psWScreen, IDDES_COMPFORM);
 				psTForm->TabMultiplier -= 1;
 				if (psTForm->TabMultiplier < 1)
 				{
 					psTForm->TabMultiplier = 1;
 				}
-				temp = psTForm->majorT;
-				temp -= DES_NUMMAJORTABS;
-				if (temp < 0)
-				{
-					psTForm->majorT = 0;
-				}
-				else
-				{
-					psTForm->majorT = temp;
-				}
+				psTForm->scrollDeltaTab(-DES_NUMMAJORTABS);
 				break;
 			}
 		case IDDES_TABSCRL_RIGHT:
@@ -4110,8 +4100,7 @@ void intProcessDesign(UDWORD id)
 				{
 					psTForm->TabMultiplier -= 1;
 				}
-				psTForm->majorT += DES_NUMMAJORTABS;
-				psTForm->majorT = std::min<unsigned>(psTForm->majorT, psTForm->childTabs.size() - 1);
+				psTForm->scrollDeltaTab(DES_NUMMAJORTABS);
 				break;
 			}
 		}

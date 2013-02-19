@@ -1033,7 +1033,6 @@ static void intProcessEditStats(UDWORD id)
 	else if (id == IDSTAT_TABSCRL_LEFT)	//user hit left scroll tab from DEBUG menu.
 	{
 		W_TABFORM	*psTForm;
-		int temp;
 #ifdef  DEBUG_SCROLLTABS
 		char buf[200];		//only used for debugging
 #endif
@@ -1045,19 +1044,9 @@ static void intProcessEditStats(UDWORD id)
 			audio_PlayTrack(ID_SOUND_BUILD_FAIL);
 		}
 		// add routine to update tab widgets now...
-		temp = psTForm->majorT;					//set tab # to previous "page"
-		temp -= TAB_SEVEN;						//7 = 1 "page" of tabs
-		if (temp < 0)
-		{
-			psTForm->majorT = 0;
-			audio_PlayTrack(ID_SOUND_BUILD_FAIL);
-		}
-		else
-		{
-			psTForm->majorT = temp;
-		}
+		psTForm->scrollDeltaTab(-TAB_SEVEN);  // set tab # to previous "page"
 #ifdef  DEBUG_SCROLLTABS
-		sprintf(buf, "[debug menu]Clicked LT %d tab #=%d", psTForm->TabMultiplier, psTForm->majorT);
+		sprintf(buf, "[debug menu]Clicked LT %d tab #=%d", psTForm->TabMultiplier, psTForm->tab());
 		addConsoleMessage(buf, DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 #endif
 	}
@@ -1077,10 +1066,9 @@ static void intProcessEditStats(UDWORD id)
 			psTForm->TabMultiplier -= 1;					// to signify past max?
 			audio_PlayTrack(ID_SOUND_BUILD_FAIL);
 		}
-		psTForm->majorT += TAB_SEVEN;					// set tab # to next "page"
-		psTForm->majorT = std::min<unsigned>(psTForm->majorT, psTForm->childTabs.size() - 1);
+		psTForm->scrollDeltaTab(TAB_SEVEN);  // set tab # to next "page"
 #ifdef  DEBUG_SCROLLTABS		//for debuging
-		sprintf(buf, "[debug menu]Clicked RT %d numtabs %d tab # %d", psTForm->TabMultiplier, numTabs, psTForm->majorT);
+		sprintf(buf, "[debug menu]Clicked RT %d numtabs %d tab # %d", psTForm->TabMultiplier, numTabs, psTForm->tab());
 		addConsoleMessage(buf, DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 #endif
 	}
@@ -2354,7 +2342,6 @@ static void intProcessStats(UDWORD id)
 	else if (id == IDSTAT_TABSCRL_LEFT)	//user hit left scroll tab from BUILD menu
 	{
 		W_TABFORM	*psTForm;
-		int temp;
 #ifdef  DEBUG_SCROLLTABS
 		char buf[200];		//only used for debugging
 #endif
@@ -2366,16 +2353,7 @@ static void intProcessStats(UDWORD id)
 			audio_PlayTrack(ID_SOUND_BUILD_FAIL);
 		}
 		//add routine to update tab widgets now...
-		temp = psTForm->majorT;					// set tab # to previous "page"
-		temp -= TAB_SEVEN;						// 7 = 1 "page" of tabs
-		if (temp < 0)
-		{
-			psTForm->majorT = 0;
-		}
-		else
-		{
-			psTForm->majorT = temp;
-		}
+		psTForm->scrollDeltaTab(-TAB_SEVEN);  // set tab # to previous "page"
 #ifdef  DEBUG_SCROLLTABS
 		sprintf(buf, "[build menu]Clicked LT %d tab #=%d", psTForm->TabMultiplier, psTForm->majorT);
 		addConsoleMessage(buf, DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
@@ -2398,10 +2376,9 @@ static void intProcessStats(UDWORD id)
 			audio_PlayTrack(ID_SOUND_BUILD_FAIL);
 		}
 		//add routine to update tab widgets now...
-		psTForm->majorT += TAB_SEVEN;				// set tab # to next "page"
-		psTForm->majorT = std::min<unsigned>(psTForm->majorT, psTForm->childTabs.size() - 1);
+		psTForm->scrollDeltaTab(TAB_SEVEN);  // set tab # to next "page"
 #ifdef  DEBUG_SCROLLTABS		//for debuging
-		sprintf(buf, "[build menu]Clicked RT %d numtabs %d tab # %d", psTForm->TabMultiplier, numTabs, psTForm->majorT);
+		sprintf(buf, "[build menu]Clicked RT %d numtabs %d tab # %d", psTForm->TabMultiplier, numTabs, psTForm->tab());
 		addConsoleMessage(buf, DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 #endif
 	}

@@ -758,24 +758,14 @@ static void intDisplaySeqTextView(WIDGET *psWidget,
 	W_TABFORM *Form = (W_TABFORM*)psWidget;
 	VIEW_REPLAY *psViewReplay = (VIEW_REPLAY*)Form->pUserData;
 	size_t cur_seq, cur_seqpage;
-	UDWORD x0, y0, page;
 
-	x0 = xOffset + Form->x();
-	y0 = yOffset + Form->y();
+	int x0 = xOffset + Form->x();
+	int y0 = yOffset + Form->y();
 
 	RenderWindowFrame(FRAME_NORMAL, x0, y0, Form->width(), Form->height());
 
 	/* work out where we're up to in the text */
 	cur_seq = cur_seqpage = 0;
-	if(Form->style & WFORM_TABBED)
-	{
-		// Gerard 2007-04-07: dead code?
-		ASSERT(!"the form is tabbed", "intDisplaySeqTextView: the form is tabbed");
-		for (page = 0; page < Form->majorT; page++)
-		{
-			intDisplaySeqTextViewPage(psViewReplay, x0, y0, Form->width(), Form->height(), false, &cur_seq, &cur_seqpage);
-		}
-	}
 
 	intDisplaySeqTextViewPage(psViewReplay, x0, y0, Form->width() - 40, Form->height(), true, &cur_seq, &cur_seqpage);
 }

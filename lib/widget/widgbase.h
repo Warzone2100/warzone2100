@@ -125,8 +125,6 @@ struct WIDGET
 	UDWORD                  id;                     ///< The user set ID number for the widget. This is returned when e.g. a button is pressed.
 	WIDGET_TYPE             type;                   ///< The widget type
 	UDWORD                  style;                  ///< The style of the widget
-	//SWORD                   x, y;                   ///< The location of the widget
-	//UWORD                   width, height;          ///< The size of the widget
 	WIDGET_DISPLAY          displayFunction;        ///< Override function to display the widget.
 	WIDGET_CALLBACK         callback;               ///< User callback (if any)
 	void                   *pUserData;              ///< Pointer to a user data block (if any)
@@ -135,6 +133,9 @@ struct WIDGET
 
 private:
 	void setScreenPointer(W_SCREEN *screen);        ///< Set screen pointer for us and all children.
+public:
+	void displayRecursive(int xOffset, int yOffset, PIELIGHT *colours);  ///< Display this widget, and all visible children.
+private:
 
 	WIDGET *                parentWidget;           ///< Parent widget.
 	std::vector<WIDGET *>   childWidgets;           ///< Child widgets. Will be deleted if we are deleted.

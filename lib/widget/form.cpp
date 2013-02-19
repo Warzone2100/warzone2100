@@ -111,7 +111,6 @@ W_TABFORM::W_TABFORM(W_FORMINIT const *init)
 	, tabVertOffset(init->tabVertOffset)
 	, tabHorzOffset(init->tabHorzOffset)
 	, majorOffset(init->majorOffset)
-	, majorT(0)
 	, state(0)
 	, tabHiLite(~0)
 	, TabMultiplier(init->TabMultiplier)
@@ -119,15 +118,40 @@ W_TABFORM::W_TABFORM(W_FORMINIT const *init)
 	, numStats(init->numStats)
 	, numButtons(init->numButtons)
 	, pTabDisplay(init->pTabDisplay)
+	, currentTab(0)
 {
-	childTabs.resize(init->numMajor);
-	for (unsigned n = 0; n < childTabs.size(); ++n)
+	setNumTabs(init->numMajor);
+}
+
+bool W_TABFORM::setTab(int newTab)
+{
+	if (currentTab < childTabs.size())
+	{
+		childTabs[currentTab]->hide();
+	}
+	currentTab = clip(newTab, 0, childTabs.size() - 1);
+	childTabs[currentTab]->show();
+	return currentTab == newTab;
+}
+
+void W_TABFORM::setNumTabs(int numTabs)
+{
+	ASSERT(numTabs >= 1, "Must have at least one major tab on a tabbed form");
+	ASSERT(numTabs < WFORM_MAXMAJOR, "Too many Major tabs");
+
+	unsigned prevNumTabs = childTabs.size();
+	for (unsigned n = numTabs; n < prevNumTabs; ++n)
+	{
+		delete childTabs[n];
+	}
+	childTabs.resize(numTabs);
+	for (unsigned n = prevNumTabs; n < childTabs.size(); ++n)
 	{
 		childTabs[n] = new WIDGET(this);
+		childTabs[n]->show(n == currentTab);
 	}
-
-	ASSERT(init->numMajor != 0, "Must have at least one major tab on a tabbed form");
-	ASSERT(init->numMajor < WFORM_MAXMAJOR, "Too many Major tabs");
+	setTab(currentTab);  // Ensure that currentTab is still valid.
+	fixChildGeometry();
 }
 
 void W_FORM::widgetLost(WIDGET *widget)
@@ -177,7 +201,7 @@ WIDGET::Children const &formGetWidgets(W_FORM *psWidget)
 	if (psWidget->style & WFORM_TABBED)
 	{
 		W_TABFORM *psTabForm = (W_TABFORM *)psWidget;
-		return psTabForm->childTabs[psTabForm->majorT]->children();
+		return psTabForm->tabWidget()->children();
 	}
 	else
 	{
@@ -266,7 +290,7 @@ void widgSetTabs(W_SCREEN *psScreen, UDWORD id, UWORD major)
 		return;
 	}
 
-	psForm->majorT = major;
+	psForm->setTab(major);
 }
 
 int widgGetNumTabMajor(W_SCREEN *psScreen, UDWORD id)
@@ -275,25 +299,16 @@ int widgGetNumTabMajor(W_SCREEN *psScreen, UDWORD id)
 
 	ASSERT_OR_RETURN(0, psForm != NULL, "Couldn't find a tabbed form with ID %u", id);
 
-	return psForm->childTabs.size();
+	return psForm->numTabs();
 }
 
 /* Get the current tabs for a tab form */
 void widgGetTabs(W_SCREEN *psScreen, UDWORD id, UWORD *pMajor)
 {
-	W_TABFORM	*psForm;
+	W_TABFORM *const psForm = widgGetTabbedFormById(psScreen, id);
+	ASSERT_OR_RETURN(, psForm != NULL, "Couldn't find a tabbed form with ID %u", id);
 
-	psForm = (W_TABFORM *)widgGetFromID(psScreen, id);
-	if (psForm == NULL || psForm->type != WIDG_FORM ||
-	    !(psForm->style & WFORM_TABBED))
-	{
-		ASSERT(false, "widgGetTabs: couldn't find tabbed form from id");
-		return;
-	}
-	ASSERT(psForm != NULL, "widgGetTabs: Invalid tab form pointer");
-	ASSERT(psForm->majorT < psForm->childTabs.size(), "widgGetTabs: invalid major id %u >= max %u", psForm->majorT, (unsigned)psForm->childTabs.size());
-
-	*pMajor = psForm->majorT;
+	*pMajor = psForm->tab();
 }
 
 
@@ -307,42 +322,21 @@ void widgSetColour(W_SCREEN *psScreen, UDWORD id, UDWORD index, PIELIGHT colour)
 	psForm->aColours[index] = colour;
 }
 
-
-/* Return the origin on the form from which button locations are calculated */
-void formGetOrigin(W_FORM *psWidget, SDWORD *pXOrigin, SDWORD *pYOrigin)
+void W_TABFORM::fixChildGeometry()
 {
-	W_TABFORM	*psTabForm;
+	bool horizontal = majorPos == WFORM_TABTOP || majorPos == WFORM_TABBOTTOM;
+	bool leftOrTop = majorPos == WFORM_TABLEFT || majorPos == WFORM_TABTOP;
 
-	ASSERT(psWidget != NULL,
-	       "formGetOrigin: Invalid form pointer");
+	int dw = horizontal? 0 : -tabMajorThickness;
+	int dh = horizontal? -tabMajorThickness : 0;
+	int dx = -dw*leftOrTop;
+	int dy = -dh*leftOrTop;
 
-	if (psWidget->style & WFORM_TABBED)
+	for (Children::iterator i = childTabs.begin(); i != childTabs.end(); ++i)
 	{
-		psTabForm = (W_TABFORM *)psWidget;
-		if (psTabForm->majorPos == WFORM_TABTOP)
-		{
-			*pYOrigin = psTabForm->tabMajorThickness;
-		}
-		else
-		{
-			*pYOrigin = 0;
-		}
-		if (psTabForm->majorPos == WFORM_TABLEFT)
-		{
-			*pXOrigin = psTabForm->tabMajorThickness;
-		}
-		else
-		{
-			*pXOrigin = 0;
-		}
-	}
-	else
-	{
-		*pXOrigin = 0;
-		*pYOrigin = 0;
+		(*i)->setGeometry(dx, dy, width() + dw, height() + dh);
 	}
 }
-
 
 // Currently in game, I can only find that warzone uses horizontal tabs.
 // So ONLY this routine was modified.  Will have to modify the vert. tab
@@ -619,8 +613,7 @@ void W_TABFORM::released(W_CONTEXT *psContext, WIDGET_KEY)
 	if (formPickTab(this, psContext->mx, psContext->my, &sTabPos))
 	{
 		// Clicked on a tab.
-		ASSERT(majorT < childTabs.size(), "invalid major id %u >= max %u", sTabPos.index, (unsigned)childTabs.size());
-		majorT = sTabPos.index;
+		setTab(sTabPos.index);
 		widgSetReturn(psContext->psScreen, this);
 	}
 }
@@ -835,16 +828,16 @@ void W_TABFORM::display(int xOffset, int yOffset, PIELIGHT *pColours)
 	switch (majorPos)
 	{
 	case WFORM_TABTOP:
-		displayTabs(x0 + majorOffset, y0,                     majorSize, tabMajorThickness, childTabs.size(), majorT, tabHiLite, pColours, tabMajorGap);
+		displayTabs(x0 + majorOffset, y0,                     majorSize, tabMajorThickness, childTabs.size(), tab(), tabHiLite, pColours, tabMajorGap);
 		break;
 	case WFORM_TABBOTTOM:
-		displayTabs(x0 + majorOffset, y1 - tabMajorThickness, majorSize, tabMajorThickness, childTabs.size(), majorT, tabHiLite, pColours, tabMajorGap);
+		displayTabs(x0 + majorOffset, y1 - tabMajorThickness, majorSize, tabMajorThickness, childTabs.size(), tab(), tabHiLite, pColours, tabMajorGap);
 		break;
 	case WFORM_TABLEFT:
-		displayTabs(x0,                     y0 + majorOffset, tabMajorThickness, majorSize, childTabs.size(), majorT, tabHiLite, pColours, tabMajorGap);
+		displayTabs(x0,                     y0 + majorOffset, tabMajorThickness, majorSize, childTabs.size(), tab(), tabHiLite, pColours, tabMajorGap);
 		break;
 	case WFORM_TABRIGHT:
-		displayTabs(x1 - tabMajorThickness, y0 + majorOffset, tabMajorThickness, majorSize, childTabs.size(), majorT, tabHiLite, pColours, tabMajorGap);
+		displayTabs(x1 - tabMajorThickness, y0 + majorOffset, tabMajorThickness, majorSize, childTabs.size(), tab(), tabHiLite, pColours, tabMajorGap);
 		break;
 	case WFORM_TABNONE:
 		ASSERT(false, "Cannot have a tabbed form with no major tabs");
