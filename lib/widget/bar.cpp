@@ -149,7 +149,7 @@ void W_BARGRAPH::highlightLost()
 }
 
 
-static void barGraphDisplayText(W_BARGRAPH *barGraph, int x0, int x1, int y1, PIELIGHT *pColours)
+static void barGraphDisplayText(W_BARGRAPH *barGraph, int x0, int x1, int y1, PIELIGHT *)
 {
 	if (!barGraph->text.isEmpty())
 	{

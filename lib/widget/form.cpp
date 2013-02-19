@@ -36,15 +36,6 @@
 #define NO_DISPLAY_SINGLE_TABS 1
 
 
-/* Store the position of a tab */
-struct TAB_POS
-{
-	SDWORD		index;
-	SDWORD		x, y;
-	UDWORD		width, height;
-	SDWORD		TabMultiplier;			//Added to keep track of tab scroll
-};
-
 W_FORMINIT::W_FORMINIT()
 	: disableChildren(false)
 	, majorPos(0)
@@ -57,7 +48,6 @@ W_FORMINIT::W_FORMINIT()
 	, numStats(0)
 	, numButtons(0)
 	, numMajor(0)
-	, TabMultiplier(0)
 	, maxTabsShown(MAX_TAB_SMALL_SHOWN - 1)  // Equal to TAB_SEVEN, which is equal to 7.
 	, pTip(NULL)
 	, pTabDisplay(NULL)
@@ -113,7 +103,6 @@ W_TABFORM::W_TABFORM(W_FORMINIT const *init)
 	, majorOffset(init->majorOffset)
 	, state(0)
 	, tabHiLite(~0)
-	, TabMultiplier(init->TabMultiplier)
 	, maxTabsShown(init->maxTabsShown)
 	, numStats(init->numStats)
 	, numButtons(init->numButtons)
@@ -131,13 +120,12 @@ bool W_TABFORM::setTab(int newTab)
 	}
 	currentTab = clip(newTab, 0, childTabs.size() - 1);
 	childTabs[currentTab]->show();
-	return currentTab == newTab;
+	return currentTab == (unsigned)newTab;
 }
 
 void W_TABFORM::setNumTabs(int numTabs)
 {
 	ASSERT(numTabs >= 1, "Must have at least one major tab on a tabbed form");
-	ASSERT(numTabs < WFORM_MAXMAJOR, "Too many Major tabs");
 
 	unsigned prevNumTabs = childTabs.size();
 	for (unsigned n = numTabs; n < prevNumTabs; ++n)
@@ -338,228 +326,54 @@ void W_TABFORM::fixChildGeometry()
 	}
 }
 
-// Currently in game, I can only find that warzone uses horizontal tabs.
-// So ONLY this routine was modified.  Will have to modify the vert. tab
-// routine if we ever use it.
-// Choose a horizontal tab from a coordinate
-static bool formPickHTab(TAB_POS *psTabPos,
-        SDWORD x0, SDWORD y0,
-        UDWORD width, UDWORD height, UDWORD gap,
-        UDWORD number, SDWORD fx, SDWORD fy, unsigned maxTabsShown)
+QRect W_TABFORM::tabPos(int index)
 {
-	SDWORD	x, y1;
-	UDWORD	i;
-
-#if NO_DISPLAY_SINGLE_TABS
-	if (number == 1)
+	if (NO_DISPLAY_SINGLE_TABS && numTabs() == 1)
 	{
-		// Don't have single tabs
-		return false;
-	}
-#endif
-
-	x = x0;
-	y1 = y0 + height;
-
-	// We need to filter out some tabs, since we can only display 7 at a time, with
-	// the scroll tabs in place, and 8 without. MAX_TAB_SMALL_SHOWN (currently 8) is the case
-	// when we do NOT want scrolltabs, and are using smallTab icons.
-	// Also need to check if the TabMultiplier is set or not, if not then it means
-	// we have not yet added the code to display/handle the tab scroll buttons.
-	// At this time, I think only the design screen has this limitation of only 8 tabs.
-	if (number > maxTabsShown  && psTabPos->TabMultiplier) // of course only do this if we actually need >8 tabs.
-	{
-		number -= (psTabPos->TabMultiplier - 1) * maxTabsShown;
-		number = std::min(number, maxTabsShown);  // is it still > than maxTabsShown?
-	}
-	else if (number > maxTabsShown + 1)
-	{
-		// we need to clip the tab count to max amount *without* the scrolltabs visible.
-		// The reason for this, is that in design screen & 'feature' debug & others(?),
-		// we can get over max # of tabs that the game originally supported.
-		// This made it look bad.
-		number = maxTabsShown + 1;
+		return QRect();  // Don't display single tabs.
 	}
 
-	for (i = 0; i < number; i++)
+	int n = index - tabPage()*maxTabsShown;
+	if (n < 0 || (unsigned)n >= maxTabsShown)
 	{
-//		if (fx >= x && fx <= x + (SDWORD)(width - gap) &&
-		if (fx >= x && fx <= x + (SDWORD)(width) &&
-		    fy >= y0 && fy <= y1)
-		{
-			// found a tab under the coordinate
-			if (psTabPos->TabMultiplier)	//Checks to see we need the extra tab scroll buttons
-			{
-				// holds the VIRTUAL tab #, since obviously, we can't display more than 7
-				psTabPos->index = (i % maxTabsShown) + ((psTabPos->TabMultiplier - 1) * maxTabsShown);
-			}
-			else
-			{
-				// This is a normal request.
-				psTabPos->index = i;
-			}
-			psTabPos->x = x ;
-			psTabPos->y = y0;
-			psTabPos->width = width;
-			psTabPos->height = height;
-			return true;
-		}
-
-		x += width + gap;
+		return QRect();  // Tab icon is not currently visible.
 	}
 
-	/* Didn't find any  */
-	return false;
+	int pos = majorOffset + n*(majorSize + tabMajorGap);
+
+	switch (majorPos)
+	{
+	case WFORM_TABTOP:    return QRect(pos, 0,                            majorSize, tabMajorThickness);
+	case WFORM_TABBOTTOM: return QRect(pos, height() - tabMajorThickness, majorSize, tabMajorThickness);
+	case WFORM_TABLEFT:   return QRect(0,                           pos,  tabMajorThickness, majorSize);
+	case WFORM_TABRIGHT:  return QRect(width() - tabMajorThickness, pos,  tabMajorThickness, majorSize);
+	}
+	ASSERT(false, "Cannot have a tabbed form with no major tabs");
+	return QRect();
 }
 
-// NOTE: This routine is NOT modified to use the tab scroll buttons.
-// Choose a vertical tab from a coordinate
-static bool formPickVTab(TAB_POS *psTabPos,
-        SDWORD x0, SDWORD y0,
-        UDWORD width, UDWORD height, UDWORD gap,
-        UDWORD number, SDWORD fx, SDWORD fy)
+int W_TABFORM::pickTab(int clickX, int clickY)
 {
-	SDWORD	x1, y;
-	UDWORD	i;
-
-#if NO_DISPLAY_SINGLE_TABS
-	if (number == 1)
+	for (int i = 0; i < numTabs(); ++i)
 	{
-		/* Don't have single tabs */
-		return false;
-	}
-#endif
-
-	x1 = x0 + width;
-	y = y0;
-	for (i = 0; i < number; i++)
-	{
-		if (fx >= x0 && fx <= x1 &&
-		    fy >= y && fy <= y + (SDWORD)(height))
-//			fy >= y && fy <= y + (SDWORD)(height - gap))
+		QRect r = tabPos(i);
+		if (r.isNull())
 		{
-			/* found a tab under the coordinate */
-			psTabPos->index = i;
-			psTabPos->x = x0;
-			psTabPos->y = y;
-			psTabPos->width = width;
-			psTabPos->height = height;
-			return true;
+			continue;
 		}
 
-		y += height + gap;
+		if (r.contains(clickX, clickY))
+		{
+			return i;
+		}
 	}
-
-	/* Didn't find any */
-	return false;
+	return -1;
 }
 
-
-/* Find which tab is under a form coordinate */
-static bool formPickTab(W_TABFORM *psForm, UDWORD fx, UDWORD fy,
-        TAB_POS *psTabPos)
-{
-	SDWORD		x0, y0, x1, y1;
-
-	/* Get the basic position of the form */
-	x0 = 0;
-	y0 = 0;
-	x1 = psForm->width();
-	y1 = psForm->height();
-
-	/* Adjust for where the tabs are */
-	if (psForm->majorPos == WFORM_TABLEFT)
-	{
-		x0 += psForm->tabMajorThickness;
-	}
-	if (psForm->majorPos == WFORM_TABRIGHT)
-	{
-		x1 -= psForm->tabMajorThickness;
-	}
-	if (psForm->majorPos == WFORM_TABTOP)
-	{
-		y0 += psForm->tabMajorThickness;
-	}
-	if (psForm->majorPos == WFORM_TABBOTTOM)
-	{
-		y1 -= psForm->tabMajorThickness;
-	}
-
-	psTabPos->TabMultiplier = psForm->TabMultiplier;
-	/* Check the major tabs */
-	switch (psForm->majorPos)
-	{
-	case WFORM_TABTOP:
-		if (formPickHTab(psTabPos, x0 + psForm->majorOffset, y0 - psForm->tabMajorThickness,
-		        psForm->majorSize, psForm->tabMajorThickness, psForm->tabMajorGap,
-		        psForm->childTabs.size(), fx, fy, psForm->maxTabsShown))
-		{
-			return true;
-		}
-		break;
-	case WFORM_TABBOTTOM:
-		if (formPickHTab(psTabPos, x0 + psForm->majorOffset, y1,
-		        psForm->majorSize, psForm->tabMajorThickness, psForm->tabMajorGap,
-		        psForm->childTabs.size(), fx, fy, psForm->maxTabsShown))
-		{
-			return true;
-		}
-		break;
-	case WFORM_TABLEFT:
-		if (formPickVTab(psTabPos, x0 - psForm->tabMajorThickness, y0 + psForm->majorOffset,
-		        psForm->tabMajorThickness, psForm->majorSize, psForm->tabMajorGap,
-		        psForm->childTabs.size(), fx, fy))
-		{
-			return true;
-		}
-		break;
-	case WFORM_TABRIGHT:
-		if (formPickVTab(psTabPos, x1, y0 + psForm->majorOffset,
-		        psForm->tabMajorThickness, psForm->majorSize, psForm->tabMajorGap,
-		        psForm->childTabs.size(), fx, fy))
-		{
-			return true;
-		}
-		break;
-	case WFORM_TABNONE:
-		ASSERT(false, "Cannot have a tabbed form with no major tabs");
-		break;
-	}
-
-	return false;
-}
-
-extern UDWORD realTime;  // FIXME Include a header...
-
-/* Run a form widget */
 void W_TABFORM::run(W_CONTEXT *psContext)
 {
-	int mx = psContext->mx;
-	int my = psContext->my;
-
 	// If the mouse is over the form, see if any tabs need to be highlighted.
-	if (mx < 0 || mx > width() ||
-	    my < 0 || my > height())
-	{
-		return;
-	}
-
-	TAB_POS sTabPos;
-	memset(&sTabPos, 0x0, sizeof(TAB_POS));
-	if (formPickTab(this, mx, my, &sTabPos))
-	{
-		if (tabHiLite != (UWORD)sTabPos.index)
-		{
-			// Got a new tab - start the tool tip if there is one.
-			tabHiLite = (UWORD)sTabPos.index;
-		}
-	}
-	else
-	{
-		// No tab - clear the tool tip.
-		// And clear the highlight.
-		tabHiLite = (UWORD)(-1);
-	}
+	tabHiLite = pickTab(psContext->mx, psContext->my);
 }
 
 void W_CLICKFORM::setFlash(bool enable)
@@ -607,13 +421,11 @@ void W_CLICKFORM::clicked(W_CONTEXT *psContext, WIDGET_KEY key)
 /* Respond to a mouse form up */
 void W_TABFORM::released(W_CONTEXT *psContext, WIDGET_KEY)
 {
-	TAB_POS sTabPos;
-
-	/* See if a tab has been clicked on */
-	if (formPickTab(this, psContext->mx, psContext->my, &sTabPos))
+	int newTab = pickTab(psContext->mx, psContext->my);
+	if (newTab >= 0)
 	{
 		// Clicked on a tab.
-		setTab(sTabPos.index);
+		setTab(newTab);
 		widgSetReturn(psContext->psScreen, this);
 	}
 }
@@ -720,66 +532,38 @@ void W_CLICKFORM::display(int xOffset, int yOffset, PIELIGHT *pColours)
 	}
 }
 
-void W_TABFORM::displayTabs(int x0, int y0, int width, int height, int number, int selected, int highlight, PIELIGHT *pColours, int tabGap)
+void W_TABFORM::display(int xOffset, int yOffset, PIELIGHT *pColours)
 {
-#if NO_DISPLAY_SINGLE_TABS
-	if (number == 1)
+	if (displayFunction != NULL)
 	{
-		/* Don't display single tabs */
+		displayFunction(this, xOffset, yOffset, pColours);
 		return;
 	}
-#endif
 
-	int x = x0;
-	int y = y0;
-	int x1 = x0 + width;
-	int y1 = y0 + height;
-	int xDelta = 0;
-	int yDelta = 0;
+	int x0 = x() + xOffset;
+	int y0 = y() + yOffset;
 
-	bool horizontal = majorPos == WFORM_TABTOP || majorPos == WFORM_TABBOTTOM;
-	if (horizontal)
+	for (int i = 0; i < numTabs(); ++i)
 	{
-		x += 2;
-		xDelta = width + tabGap;
-	}
-	else
-	{
-		y += 2;
-		yDelta = height + tabGap;
-	}
-
-	unsigned drawNumber = number;
-	if (number > maxTabsShown)  //we can display 8 tabs fine with no extra voodoo.
-	{
-		// We do NOT want to draw all the tabs once we have drawn 7 tabs
-		// Both selected & highlight are converted from virtual tab range, to a range
-		// that is seen on the form itself.  This would be 0-6 (7 tabs)
-		// We also fix drawnumber, so we don't display too many tabs since the pages
-		// will be empty.
-		drawNumber -= (TabMultiplier - 1)*maxTabsShown;
-		drawNumber = std::min(drawNumber, maxTabsShown);
-		selected = selected % maxTabsShown;  //Go from Virtual range, to our range
-
-		if (highlight != 65535)  //sigh.  Don't blame me for this!It is THEIR 'hack'.
+		QRect r = tabPos(i);
+		if (r.isNull())
 		{
-			highlight = highlight % maxTabsShown;    //we want to highlight tab 0 - 6.
+			continue;
 		}
-	}
-	else
-	{
-		// normal draw
-		drawNumber = number;
-	}
-	for (unsigned i = 0; i < drawNumber; ++i)
-	{
+
+		bool isCurrent = (unsigned)i == currentTab;
+		bool isHighlighted = (unsigned)i == tabHiLite;
 		if (pTabDisplay)
 		{
-			pTabDisplay(this, majorPos, i, i == selected, i == highlight, x, y, width, height);
+			pTabDisplay(this, majorPos, i - tabPage()*maxTabsShown, isCurrent, isHighlighted, x0 + r.x(), y0 + r.y(), r.width(), r.height());
 		}
 		else
 		{
-			if (i == selected)
+			int x = x0 + r.x();
+			int y = y0 + r.y();
+			int x1 = x + r.width();
+			int y1 = y + r.height();
+			if (isCurrent)
 			{
 				/* Fill in the tab */
 				pie_BoxFill(x + 1, y + 1, x1 - 1, y1, pColours[WCOL_BKGRND]);
@@ -799,49 +583,12 @@ void W_TABFORM::displayTabs(int x0, int y0, int width, int height, int number, i
 				iV_Line(x + 2, y + 1, x1 - 1, y + 1, pColours[WCOL_LIGHT]);
 				iV_Line(x1, y + 2, x1, y1 - 1, pColours[WCOL_DARK]);
 			}
-			if (i == highlight)
+			if (isHighlighted)
 			{
 				/* Draw the highlight box */
 				iV_Box(x + 2, y + 4, x1 - 3, y1 - 3, pColours[WCOL_HILITE]);
 			}
 		}
-		x += xDelta;
-		x1 += xDelta;
-		y += yDelta;
-		y1 += yDelta;
-	}
-}
-
-void W_TABFORM::display(int xOffset, int yOffset, PIELIGHT *pColours)
-{
-	if (displayFunction != NULL)
-	{
-		displayFunction(this, xOffset, yOffset, pColours);
-		return;
-	}
-
-	int x0 = x() + xOffset;
-	int y0 = y() + yOffset;
-	int x1 = x0 + width();
-	int y1 = y0 + height();
-
-	switch (majorPos)
-	{
-	case WFORM_TABTOP:
-		displayTabs(x0 + majorOffset, y0,                     majorSize, tabMajorThickness, childTabs.size(), tab(), tabHiLite, pColours, tabMajorGap);
-		break;
-	case WFORM_TABBOTTOM:
-		displayTabs(x0 + majorOffset, y1 - tabMajorThickness, majorSize, tabMajorThickness, childTabs.size(), tab(), tabHiLite, pColours, tabMajorGap);
-		break;
-	case WFORM_TABLEFT:
-		displayTabs(x0,                     y0 + majorOffset, tabMajorThickness, majorSize, childTabs.size(), tab(), tabHiLite, pColours, tabMajorGap);
-		break;
-	case WFORM_TABRIGHT:
-		displayTabs(x1 - tabMajorThickness, y0 + majorOffset, tabMajorThickness, majorSize, childTabs.size(), tab(), tabHiLite, pColours, tabMajorGap);
-		break;
-	case WFORM_TABNONE:
-		ASSERT(false, "Cannot have a tabbed form with no major tabs");
-		break;
 	}
 }
 

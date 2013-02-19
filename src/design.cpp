@@ -1911,9 +1911,7 @@ static UDWORD intNumAvailable(UBYTE *aAvailable, UDWORD numEntries, COMPONENT_ST
 /* Add the component tab form to the design screen */
 static bool intAddComponentForm(UDWORD numButtons)
 {
-	unsigned butPerForm, numFrm;
-
-	butPerForm = DES_BUTSPERFORM;
+	unsigned butPerForm = DES_BUTSPERFORM;
 
 	/* add a form to place the tabbed form on */
 	W_FORMINIT sFormInit;
@@ -1976,8 +1974,7 @@ static bool intAddComponentForm(UDWORD numButtons)
 	sFormInit.y = 40;
 	sFormInit.width = DES_RIGHTFORMWIDTH;
 	sFormInit.height = DES_RIGHTFORMHEIGHT;
-	numFrm = numForms(numButtons, butPerForm);
-	sFormInit.numMajor = (UWORD)(numFrm >= WFORM_MAXMAJOR ? WFORM_MAXMAJOR - 1 : numFrm);
+	sFormInit.numMajor = numForms(numButtons, butPerForm);
 	sFormInit.majorPos = WFORM_TABTOP;
 	sFormInit.majorSize = DES_TAB_WIDTH;
 	sFormInit.majorOffset = DES_TAB_LEFTOFFSET;
@@ -1992,8 +1989,7 @@ static bool intAddComponentForm(UDWORD numButtons)
 		sFormInit.majorSize /= 2;
 		if (sFormInit.numMajor > MAX_TAB_SMALL_SHOWN)
 		{
-			sFormInit.majorOffset = OBJ_TABOFFSET + 7;
-			sFormInit.TabMultiplier = 1;
+			sFormInit.majorOffset = OBJ_TABOFFSET + 9;
 		}
 	}
 
@@ -2223,11 +2219,6 @@ static bool intAddComponentButtons(COMPONENT_STATS *psStats, UDWORD size,
 		{
 			sButInit.y = DES_RIGHTFORMBUTY;
 			sButInit.majorID += 1;
-			if (sButInit.majorID >= WFORM_MAXMAJOR)
-			{
-				debug(LOG_NEVER, "Too many buttons for component form");
-				return false;
-			}
 		}
 
 		/* Update the stats pointer for the next button */
@@ -4079,28 +4070,15 @@ void intProcessDesign(UDWORD id)
 			{
 				W_TABFORM	*psTForm;
 				psTForm = (W_TABFORM *)widgGetFromID(psWScreen, IDDES_COMPFORM);
-				psTForm->TabMultiplier -= 1;
-				if (psTForm->TabMultiplier < 1)
-				{
-					psTForm->TabMultiplier = 1;
-				}
-				psTForm->scrollDeltaTab(-DES_NUMMAJORTABS);
+				psTForm->scrollPreviousTabPage();
 				break;
 			}
 		case IDDES_TABSCRL_RIGHT:
 			/* right scroll button */
 			{
 				W_TABFORM	*psTForm;
-				UWORD numTabs;
 				psTForm = (W_TABFORM *)widgGetFromID(psWScreen, IDDES_COMPFORM);
-				numTabs = psTForm->childTabs.size();
-				numTabs = ((numTabs / DES_NUMMAJORTABS) + 1);
-				psTForm->TabMultiplier += 1;
-				if (psTForm->TabMultiplier > numTabs)
-				{
-					psTForm->TabMultiplier -= 1;
-				}
-				psTForm->scrollDeltaTab(DES_NUMMAJORTABS);
+				psTForm->scrollNextTabPage();
 				break;
 			}
 		}

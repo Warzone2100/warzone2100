@@ -67,10 +67,13 @@ struct W_TABFORM : public W_FORM
 	void display(int xOffset, int yOffset, PIELIGHT *pColours);
 
 	int tab() const { return currentTab; }
+	int tabPage() const { return currentTab/maxTabsShown; }
 	bool setTab(int newTab);  ///< Sets the tab, clamped to a valid range. Returns true iff newTab was in the valid range.
 	bool scrollDeltaTab(int delta) { return setTab(tab() + delta); }
 	bool scrollNextTab() { return scrollDeltaTab(1); }
 	bool scrollPreviousTab() { return scrollDeltaTab(-1); }
+	bool scrollNextTabPage() { return scrollDeltaTab(maxTabsShown); }
+	bool scrollPreviousTabPage() { return scrollDeltaTab(-(int)maxTabsShown); }
 	int numTabs() const { return childTabs.size(); }
 	void setNumTabs(int numTabs);  ///< Adds/removes tabs. If removing tabs, widgets on the removed tabs will be deleted.
 	WIDGET *tabWidget() { return childTabs[currentTab]; }
@@ -88,7 +91,6 @@ struct W_TABFORM : public W_FORM
 	/*       but I don't really have the energy to change it.  (Don't design stuff after  */
 	/*       beers at lunch-time :-)                                                      */
 
-	SWORD		TabMultiplier;				//used to tell system we got lots of tabs to display
 	unsigned        maxTabsShown;                   ///< Maximum number of tabs shown at once.
 	UWORD		numStats;				//# of 'stats' (items) in list
 	UWORD		numButtons;				//# of buttons per form
@@ -97,7 +99,8 @@ struct W_TABFORM : public W_FORM
 
 private:
 	void fixChildGeometry();
-	void displayTabs(int x0, int y0, int width, int height, int number, int selected, int highlight, PIELIGHT *pColours, int tabGap);
+	QRect tabPos(int index);
+	int pickTab(int clickX, int clickY);
 
 	unsigned currentTab;
 };

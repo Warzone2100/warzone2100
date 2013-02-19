@@ -121,18 +121,6 @@ struct W_INIT
 #define WFORM_TABRIGHT		3
 #define WFORM_TABBOTTOM		4
 
-/*
- * Upper limits for major and minor tabs on a tab form.
- * Not the best way to do it I know, but it keeps the memory
- * management MUCH simpler.
- */
-
-// The below define is max # of tabs we can have.
-// It is set to 20  Look @  #define	MAXSTRUCTURES	200 in hci.h  Keep them in check!
-// New routines really have no max limit. I am not sure what max # a legal user can have.
-#define WFORM_MAXMAJOR		40	   // Maximum number of major tabs on a tab form
-// we do NOT use MAX MINOR now, it is another way to draw the widgets.
-#define WFORM_MAXMINOR		5	   //15		// Maximum number of minor tabs off a major
 #define MAX_TAB_STD_SHOWN   4		// max # of tabs we can display using standard tab icons.
 #define MAX_TAB_SMALL_SHOWN 8		// max # of tabs we can display using small tab icons.
 #define TAB_SEVEN    7		//*with* tab scroll buttons, we can only (currently) show 7 max!
@@ -157,7 +145,6 @@ struct W_FORMINIT : public W_INIT
 	UWORD			numStats;			///< Number of "stats" (items) in list
 	UWORD			numButtons;			///< Number of buttons per form
 	UWORD			numMajor;			///< Number of major tabs
-	SWORD			TabMultiplier;			///< Used to tell system we got lots of (virtual) tabs to display
 	unsigned                maxTabsShown;                   ///< Maximum number of tabs shown at once.
 	const char		*pTip;				///< Tool tip for the form itself
 	TAB_DISPLAY		pTabDisplay;			///< Optional callback for displaying a tab.

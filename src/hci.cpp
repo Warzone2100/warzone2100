@@ -1037,14 +1037,11 @@ static void intProcessEditStats(UDWORD id)
 		char buf[200];		//only used for debugging
 #endif
 		psTForm = (W_TABFORM *)widgGetFromID(psWScreen, IDSTAT_TABFORM);	//get our form
-		psTForm->TabMultiplier -= 1;				// -1 since user hit left button
-		if (psTForm->TabMultiplier < 1)
+		// add routine to update tab widgets now...
+		if (!psTForm->scrollPreviousTabPage())
 		{
-			psTForm->TabMultiplier = 1;			//Must be at least 1.
 			audio_PlayTrack(ID_SOUND_BUILD_FAIL);
 		}
-		// add routine to update tab widgets now...
-		psTForm->scrollDeltaTab(-TAB_SEVEN);  // set tab # to previous "page"
 #ifdef  DEBUG_SCROLLTABS
 		sprintf(buf, "[debug menu]Clicked LT %d tab #=%d", psTForm->TabMultiplier, psTForm->tab());
 		addConsoleMessage(buf, DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
@@ -1053,20 +1050,14 @@ static void intProcessEditStats(UDWORD id)
 	else if (id == IDSTAT_TABSCRL_RIGHT) // user hit right scroll tab from DEBUG menu
 	{
 		W_TABFORM	*psTForm;
-		UWORD numTabs;
 #ifdef  DEBUG_SCROLLTABS
 		char buf[200];					// only used for debugging.
 #endif
 		psTForm = (W_TABFORM *)widgGetFromID(psWScreen, IDSTAT_TABFORM);
-		numTabs = numForms(psTForm->numStats, psTForm->numButtons);
-		numTabs = ((numTabs / TAB_SEVEN) + 1);	// (Total tabs needed / 7(max tabs that fit))+1
-		psTForm->TabMultiplier += 1;
-		if (psTForm->TabMultiplier > numTabs)			// add 'Bzzt' sound effect?
+		if (!psTForm->scrollNextTabPage())
 		{
-			psTForm->TabMultiplier -= 1;					// to signify past max?
 			audio_PlayTrack(ID_SOUND_BUILD_FAIL);
 		}
-		psTForm->scrollDeltaTab(TAB_SEVEN);  // set tab # to next "page"
 #ifdef  DEBUG_SCROLLTABS		//for debuging
 		sprintf(buf, "[debug menu]Clicked RT %d numtabs %d tab # %d", psTForm->TabMultiplier, numTabs, psTForm->tab());
 		addConsoleMessage(buf, DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
@@ -2346,14 +2337,11 @@ static void intProcessStats(UDWORD id)
 		char buf[200];		//only used for debugging
 #endif
 		psTForm = (W_TABFORM *)widgGetFromID(psWScreen, IDSTAT_TABFORM);	//get our form
-		psTForm->TabMultiplier -= 1;				// -1 since user hit left button
-		if (psTForm->TabMultiplier < 1)
+		//add routine to update tab widgets now...
+		if (!psTForm->scrollPreviousTabPage())
 		{
-			psTForm->TabMultiplier = 1;			// Must be at least 1.
 			audio_PlayTrack(ID_SOUND_BUILD_FAIL);
 		}
-		//add routine to update tab widgets now...
-		psTForm->scrollDeltaTab(-TAB_SEVEN);  // set tab # to previous "page"
 #ifdef  DEBUG_SCROLLTABS
 		sprintf(buf, "[build menu]Clicked LT %d tab #=%d", psTForm->TabMultiplier, psTForm->majorT);
 		addConsoleMessage(buf, DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
@@ -2362,21 +2350,15 @@ static void intProcessStats(UDWORD id)
 	else if (id == IDSTAT_TABSCRL_RIGHT)	// user hit right scroll tab from BUILD menu
 	{
 		W_TABFORM	*psTForm;
-		UWORD numTabs;
 #ifdef  DEBUG_SCROLLTABS
 		char buf[200];					// only used for debugging.
 #endif
 		psTForm = (W_TABFORM *)widgGetFromID(psWScreen, IDSTAT_TABFORM);
-		numTabs = numForms(psTForm->numStats, psTForm->numButtons);
-		numTabs = ((numTabs / TAB_SEVEN) + 1);	// (Total tabs needed / 7(max tabs that fit))+1
-		psTForm->TabMultiplier += 1;
-		if (psTForm->TabMultiplier > numTabs)		//add 'Bzzt' sound effect?
+		//add routine to update tab widgets now...
+		if (!psTForm->scrollNextTabPage())
 		{
-			psTForm->TabMultiplier -= 1;				//to signify past max?
 			audio_PlayTrack(ID_SOUND_BUILD_FAIL);
 		}
-		//add routine to update tab widgets now...
-		psTForm->scrollDeltaTab(TAB_SEVEN);  // set tab # to next "page"
 #ifdef  DEBUG_SCROLLTABS		//for debuging
 		sprintf(buf, "[build menu]Clicked RT %d numtabs %d tab # %d", psTForm->TabMultiplier, numTabs, psTForm->tab());
 		addConsoleMessage(buf, DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
@@ -3264,8 +3246,7 @@ static bool intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected, 
 		sFormInit.pUserData = &SmallTab;
 		sFormInit.majorSize /= 2;
 	}
-	sFormInit.maxTabsShown = WFORM_MAXMAJOR;
-	sFormInit.numMajor = std::min<unsigned>(sFormInit.numMajor, WFORM_MAXMAJOR);
+	sFormInit.maxTabsShown = sFormInit.numMajor;
 	if (!widgAddForm(psWScreen, &sFormInit))
 	{
 		return false;
@@ -4377,8 +4358,7 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 		if (sFormInit.numMajor > MAX_TAB_SMALL_SHOWN)		// 7 tabs is all we can fit with current form size.
 		{
 			// make room for new tab item (tab scroll buttons)
-			sFormInit.majorOffset = OBJ_TABOFFSET + 10;
-			sFormInit.TabMultiplier = 1;		// Enable our tabMultiplier buttons.
+			sFormInit.majorOffset = OBJ_TABOFFSET + 12;
 		}
 	}
 	if (!widgAddForm(psWScreen, &sFormInit))

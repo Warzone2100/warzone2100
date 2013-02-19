@@ -2846,18 +2846,11 @@ void kf_NoAssert()
 // rotuine to decrement the tab-scroll 'buttons'
 void kf_BuildPrevPage()
 {
-	W_TABFORM *psTForm;
-
 	ASSERT_OR_RETURN( , psWScreen != NULL, " Invalid screen pointer!");
-	psTForm = (W_TABFORM *)widgGetFromID(psWScreen, IDSTAT_TABFORM);	//get our form
+	W_TABFORM *psTForm = (W_TABFORM *)widgGetFromID(psWScreen, IDSTAT_TABFORM);
 	if (psTForm == NULL)
 	{
 		return;
-	}
-
-	if (psTForm->TabMultiplier < 1)
-	{
-		psTForm->TabMultiplier = 1;				// 1-based
 	}
 
 	if (!psTForm->scrollPreviousTab())
@@ -2866,11 +2859,6 @@ void kf_BuildPrevPage()
 		return;
 	}
 
-	int tabPos = psTForm->tab() % TAB_SEVEN;  // The tabs position on the page
-	if ((tabPos == (TAB_SEVEN - 1)) && (psTForm->TabMultiplier > 1))
-	{
-		psTForm->TabMultiplier -= 1;
-	}
 	audio_PlayTrack(ID_SOUND_BUTTON_CLICK_5);
 
 #ifdef  DEBUG_SCROLLTABS
@@ -2881,25 +2869,12 @@ void kf_BuildPrevPage()
 // rotuine to advance the tab-scroll 'buttons'
 void kf_BuildNextPage()
 {
-	W_TABFORM	*psTForm;
-	int numTabs;
-	int maxTabs;
-
 	ASSERT_OR_RETURN( , psWScreen != NULL, " Invalid screen pointer!");
-
-	psTForm = (W_TABFORM *)widgGetFromID(psWScreen, IDSTAT_TABFORM);
+	W_TABFORM *psTForm = (W_TABFORM *)widgGetFromID(psWScreen, IDSTAT_TABFORM);
 	if (psTForm == NULL)
 	{
 		return;
 	}
-
-	if (psTForm->TabMultiplier < 1)
-	{
-		psTForm->TabMultiplier = 1;				// 1-based
-		audio_PlayTrack(ID_SOUND_BUILD_FAIL);
-	}
-	numTabs = numForms(psTForm->numStats,psTForm->numButtons);
-	maxTabs = ((numTabs /TAB_SEVEN));			// (Total tabs needed / 7(max tabs that fit))+1
 
 	if (!psTForm->scrollNextTab())
 	{
@@ -2907,14 +2882,8 @@ void kf_BuildNextPage()
 		audio_PlayTrack(ID_SOUND_BUILD_FAIL);
 		return;
 	}
-	int tabPos = psTForm->tab() % TAB_SEVEN;  // The tabs position on the page
-	// 7 mod 7 = 0, since we are going forward we can assume it's the next tab
-	if ((tabPos == 0) && (psTForm->TabMultiplier <= maxTabs))
-	{
-		psTForm->TabMultiplier += 1;
-	}
 
-	audio_PlayTrack( ID_SOUND_BUTTON_CLICK_5 );
+	audio_PlayTrack(ID_SOUND_BUTTON_CLICK_5);
 
 #ifdef  DEBUG_SCROLLTABS
 	console("Tabs: %d - MaxTabs: %d - MajorT: %d - numMajor: %d - TabMultiplier: %d",numTabs, maxTabs, psTForm->tab(), psTForm->numMajor, psTForm->TabMultiplier);
