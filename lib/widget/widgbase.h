@@ -121,7 +121,6 @@ struct WIDGET
 	void attach(WIDGET *widget);
 	void detach(WIDGET *widget);
 
-	UDWORD                  formID;                 ///< ID of the widgets base form.
 	UDWORD                  id;                     ///< The user set ID number for the widget. This is returned when e.g. a button is pressed.
 	WIDGET_TYPE             type;                   ///< The widget type
 	UDWORD                  style;                  ///< The style of the widget

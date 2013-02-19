@@ -87,8 +87,7 @@ W_INIT::W_INIT()
 {}
 
 WIDGET::WIDGET(W_INIT const *init, WIDGET_TYPE type)
-	: formID(init->formID)
-	, id(init->id)
+	: id(init->id)
 	, type(type)
 	, style(init->style)
 	, displayFunction(init->pDisplay)
@@ -100,8 +99,7 @@ WIDGET::WIDGET(W_INIT const *init, WIDGET_TYPE type)
 {}
 
 WIDGET::WIDGET(WIDGET *parent)
-	: formID(0)
-	, id(0xFFFFEEEEu)
+	: id(0xFFFFEEEEu)
 	, type(WIDG_UNSPECIFIED_TYPE)
 	, style(0)
 	, displayFunction(NULL)
