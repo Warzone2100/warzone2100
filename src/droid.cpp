@@ -452,6 +452,7 @@ void recycleDroid(DROID *psDroid)
 	position.z = psDroid->pos.y;
 	position.y = psDroid->pos.z;
 
+	triggerEvent(TRIGGER_OBJECT_RECYCLED, psDroid);
 	vanishDroid(psDroid);
 
 	addEffect(&position, EFFECT_EXPLOSION, EXPLOSION_TYPE_DISCOVERY, false, NULL, false, gameTime - deltaGameTime + 1);

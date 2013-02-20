@@ -892,6 +892,9 @@ bool triggerEvent(SCRIPT_TRIGGER_TYPE trigger, BASE_OBJECT *psObj)
 			callFunction(engine, "eventReinforcementsArrived", QScriptValueList()); // deprecated!
 			callFunction(engine, "eventTransporterArrived", args);
 			break;
+		case TRIGGER_OBJECT_RECYCLED:
+			callFunction(engine, "eventObjectRecycled", args);
+			break;
 		case TRIGGER_TRANSPORTER_EXIT:
 			callFunction(engine, "eventTransporterExit", args);
 			break;

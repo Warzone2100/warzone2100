@@ -928,6 +928,7 @@ void structureBuild(STRUCTURE *psStruct, DROID *psDroid, int buildPoints, int bu
 	}
 	if (buildPoints < 0 && psStruct->currentBuildPts == 0)
 	{
+		triggerEvent(TRIGGER_OBJECT_RECYCLED, psStruct);
 		removeStruct(psStruct, true);
 	}
 
