@@ -8,6 +8,7 @@
 *.meow
 *.squeak
 *.moo
+*.rats
 
 # Generated binary files:
 *.o
