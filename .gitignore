@@ -9,6 +9,7 @@
 *.squeak
 *.moo
 *.rats
+*.tails
 
 # Generated binary files:
 *.o
