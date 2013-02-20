@@ -51,6 +51,15 @@ W_BUTTON::W_BUTTON(W_BUTINIT const *init)
 	ASSERT((init->style & ~(WBUT_PLAIN | WIDG_HIDDEN | WBUT_NOPRIMARY | WBUT_SECONDARY | WBUT_TXTCENTRE)) == 0, "unknown button style");
 }
 
+W_BUTTON::W_BUTTON(WIDGET *parent)
+	: WIDGET(parent)
+	, state(WBUT_PLAIN)
+	, HilightAudioID(WidgGetHilightAudioID())
+	, ClickedAudioID(WidgGetClickedAudioID())
+	, AudioCallback(WidgGetAudioCallback())
+	, FontID(font_regular)
+{}
+
 unsigned W_BUTTON::getState()
 {
 	return state & (WBUT_DISABLE | WBUT_LOCK | WBUT_CLICKLOCK | WBUT_FLASH | WBUT_DOWN | WBUT_HIGHLIGHT);

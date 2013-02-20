@@ -165,7 +165,6 @@ static void displayPasswordEditBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOff
 
 // Drawing Functions
 static void displayChatEdit     (WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
-static void displayMultiBut     (WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 static void intDisplayFeBox     (WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 static void displayRemoteGame   (WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 static void displayPlayer       (WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
@@ -236,6 +235,18 @@ static std::vector<AIDATA> aidata;
 
 /// Player name overrides
 static char nameOverrides[MAX_PLAYERS][MAX_LEN_AI_NAME];
+
+struct WzMultiButton : public W_BUTTON
+{
+	WzMultiButton(WIDGET *parent) : W_BUTTON(parent) {}
+
+	void display(int xOffset, int yOffset, PIELIGHT *pColours);
+
+	Image imNormal;
+	Image imDown;
+	unsigned doHighlight;
+	unsigned tc;
+};
 
 const char *getAIName(int player)
 {
@@ -4420,94 +4431,85 @@ void displayMultiEditBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELI
 	}
 }
 
-// ////////////////////////////////////////////////////////////////////////////
-// Display one of two images depending on if the widget is hilighted by the mouse.
-void displayMultiBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+void WzMultiButton::display(int xOffset, int yOffset, PIELIGHT *pColours)
 {
-	int x = xOffset + psWidget->x();
-	int y = yOffset + psWidget->y();
-	UWORD	im_norm = UNPACKDWORD_QUAD_A((UDWORD)psWidget->UserData);
-	UWORD	im_down = UNPACKDWORD_QUAD_B((UDWORD)psWidget->UserData);
-	UWORD	im_hili = UNPACKDWORD_QUAD_C((UDWORD)psWidget->UserData);
-	unsigned tc     = UNPACKDWORD_QUAD_D(psWidget->UserData);
-	UWORD	hiToUse = im_hili;
+	int x0 = xOffset + x();
+	int y0 = yOffset + y();
+	Image hiToUse(NULL, 0);
 
 	// FIXME: This seems to be a way to conserve space, so you can use a
 	// transparent icon with these edit boxes.
 	// hack for multieditbox
-	if (im_norm == IMAGE_EDIT_MAP || im_norm == IMAGE_EDIT_GAME || im_norm == IMAGE_EDIT_PLAYER
-		|| im_norm == IMAGE_LOCK_BLUE || im_norm == IMAGE_UNLOCK_BLUE)
+	if (imNormal.id == IMAGE_EDIT_MAP || imNormal.id == IMAGE_EDIT_GAME || imNormal.id == IMAGE_EDIT_PLAYER
+	    || imNormal.id == IMAGE_LOCK_BLUE || imNormal.id == IMAGE_UNLOCK_BLUE)
 	{
-		drawBlueBox(x - 2, y - 2, psWidget->height(), psWidget->height());  // box on end.
+		drawBlueBox(x0 - 2, y0 - 2, height(), height());  // box on end.
 	}
 
 	// evaluate auto-frame
-	bool Hilight = (psWidget->getState() & WBUT_HIGHLIGHT) != 0;
+	bool highlight = (getState() & WBUT_HIGHLIGHT) != 0;
+
+	if (imNormal.id == IMAGE_WEE_GUY)
+	{
+		// fugly hack for adding player number to the wee guy (whoever that is)
+		iV_DrawImage(IntImages, IMAGE_ASCII48 - 10 + doHighlight, x0 + 11, y0 + 8);
+		highlight = false;
+	}
 
 	// evaluate auto-frame
-	if (im_hili == 1 && Hilight && im_norm != IMAGE_WEE_GUY)
+	if (doHighlight == 1 && highlight)
 	{
-		Hilight = true;
-		switch(iV_GetImageWidth(FrontImages, im_norm))			//pick a hilight.
+		switch (imNormal.width())  //pick a hilight.
 		{
 		case 30:
-			hiToUse = IMAGE_HI34;
+			hiToUse = Image(FrontImages, IMAGE_HI34);
 			break;
 		case 60:
-			hiToUse = IMAGE_HI64;
+			hiToUse = Image(FrontImages, IMAGE_HI64);
 			break;
 		case 19:
-			hiToUse = IMAGE_HI23;
+			hiToUse = Image(FrontImages, IMAGE_HI23);
 			break;
 		case 27:
-			hiToUse = IMAGE_HI31;
+			hiToUse = Image(FrontImages, IMAGE_HI31);
 			break;
 		case 35:
-			hiToUse = IMAGE_HI39;
+			hiToUse = Image(FrontImages, IMAGE_HI39);
 			break;
 		case 37:
-			hiToUse = IMAGE_HI41;
+			hiToUse = Image(FrontImages, IMAGE_HI41);
 			break;
 		case 56:
-			hiToUse = IMAGE_HI56;
-			break;
-		default:
-			hiToUse = 0;
+			hiToUse = Image(FrontImages, IMAGE_HI56);
 			break;
 		}
 	}
 
-	if (im_norm == IMAGE_WEE_GUY)
-	{
-		// fugly hack for adding player number to the wee guy (whoever that is)
-		iV_DrawImage(IntImages, IMAGE_ASCII48 - 10 + im_hili, x + 11, y + 8);
-		Hilight = false;
-	}
+	bool down = (getState() & (WBUT_DOWN | WBUT_LOCK | WBUT_CLICKLOCK)) != 0;
+	bool grey = (getState() & WBUT_DISABLE) != 0;
 
-	bool Down = (psWidget->getState() & (WBUT_DOWN | WBUT_LOCK | WBUT_CLICKLOCK)) != 0;
-	bool Grey = (psWidget->getState() & WBUT_DISABLE) != 0;
-
-	int toDraw[3];
+	Image toDraw[3];
 	int numToDraw = 0;
 
 	// now display
-	toDraw[numToDraw++] = im_norm;
+	toDraw[numToDraw++] = imNormal;
 
 	// hilights etc..
-	if (Down)
+	if (down)
 	{
-		toDraw[numToDraw++] = im_down;
+		toDraw[numToDraw++] = imDown;
 	}
-	if(Hilight && !Grey && hiToUse)
+	if (highlight && !grey && hiToUse.images != NULL)
 	{
 		toDraw[numToDraw++] = hiToUse;
 	}
 
 	for (int n = 0; n < numToDraw; ++n)
 	{
+		Image tcImage(toDraw[n].images, toDraw[n].id + 1);
 		if (tc == MAX_PLAYERS)
 		{
-			iV_DrawImage(FrontImages, toDraw[n], x, y);
+			iV_DrawImage(toDraw[n], x0, y0);
 		}
 		else if (tc == MAX_PLAYERS + 1)
 		{
@@ -4518,21 +4520,20 @@ void displayMultiBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT 
 			mix.byte.g = 128 + iSinR(65536*f/scale + 65536*1/3, 127);
 			mix.byte.b = 128 + iSinR(65536*f/scale + 65536*2/3, 127);
 			mix.byte.a = 255;
-			iV_DrawImageTc(FrontImages, toDraw[n], toDraw[n] + 1, x, y, mix);
+			iV_DrawImageTc(toDraw[n], tcImage, x0, y0, mix);
 		}
 		else
 		{
-			iV_DrawImageTc(FrontImages, toDraw[n], toDraw[n] + 1, x, y, pal_GetTeamColour(tc));
+			iV_DrawImageTc(toDraw[n], tcImage, x0, y0, pal_GetTeamColour(tc));
 		}
 	}
 
-	if (Grey)
+	if (grey)
 	{
 		// disabled, render something over it!
-		iV_TransBoxFill(x, y, x + psWidget->width(), y + psWidget->height());
+		iV_TransBoxFill(x0, y0, x0 + width(), y0 + height());
 	}
 }
-
 
 /////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -4562,18 +4563,15 @@ static bool addMultiEditBox(UDWORD formid, UDWORD id, UDWORD x, UDWORD y, char c
 
 bool addMultiBut(W_SCREEN *screen, UDWORD formid, UDWORD id, UDWORD x, UDWORD y, UDWORD width, UDWORD height, const char* tipres, UDWORD norm, UDWORD down, UDWORD hi, unsigned tc)
 {
-	W_BUTINIT sButInit;
-	sButInit.formID = formid;
-	sButInit.id = id;
-	sButInit.x = (short) x;
-	sButInit.y = (short) y;
-	sButInit.width = (unsigned short) width;
-	sButInit.height= (unsigned short) height;
-	sButInit.pTip = tipres;
-	sButInit.pDisplay = displayMultiBut;
-	sButInit.UserData = PACKDWORD_QUAD(norm, down, hi, tc);
-
-	return widgAddButton(screen, &sButInit);
+	WzMultiButton *button = new WzMultiButton(widgGetFromID(screen, formid));
+	button->id = id;
+	button->setGeometry(x, y, width, height);
+	button->setTip(QString::fromUtf8(tipres));
+	button->imNormal = Image(FrontImages, norm);
+	button->imDown = Image(FrontImages, down);
+	button->doHighlight = hi;
+	button->tc = tc;
+	return true;
 }
 
 /*

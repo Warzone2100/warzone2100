@@ -31,6 +31,7 @@
 struct W_BUTTON : public WIDGET
 {
 	W_BUTTON(W_BUTINIT const *init);
+	W_BUTTON(WIDGET *parent);
 
 	void clicked(W_CONTEXT *psContext, WIDGET_KEY key);
 	void released(W_CONTEXT *psContext, WIDGET_KEY key);
