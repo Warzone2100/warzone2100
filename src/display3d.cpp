@@ -302,6 +302,16 @@ static const int BLUEPRINT_OPACITY=120;
 
 /********************  Functions  ********************/
 
+static void setScreenDisp(SCREEN_DISP_DATA *sDisplay)
+{
+	Vector3i zero(0, 0, 0);
+	Vector2i s(0, 0);
+
+	pie_RotateProject(&zero, &s);
+	sDisplay->screenX = s.x;
+	sDisplay->screenY = s.y;
+}
+
 void setSkyBox(const char *page, float mywind, float myscale)
 {
 	windSpeed = mywind;
@@ -1404,15 +1414,10 @@ void	renderAnimComponent( const COMPONENT_OBJECT *psObj )
 		//brightness and fog calculation
 		if (psParentObj->type == OBJ_STRUCTURE)
 		{
-			const Vector3i zero(0, 0, 0);
-			Vector2i s(0, 0);
 			STRUCTURE *psStructure = (STRUCTURE*)psParentObj;
 
 			brightness = structureBrightness(psStructure);
-
-			pie_RotateProject( &zero, &s );
-			psStructure->sDisplay.screenX = s.x;
-			psStructure->sDisplay.screenY = s.y;
+			setScreenDisp(&psStructure->sDisplay);
 		}
 		else
 		{
@@ -1972,11 +1977,7 @@ void	renderFeature(FEATURE *psFeature)
 
 	pie_Draw3DShape(psFeature->sDisplay.imd, 0, 0, brightness, shadowFlags, 0);
 
-	Vector3i zero(0, 0, 0);
-	Vector2i s(0, 0);
-	pie_RotateProject(&zero, &s);
-	psFeature->sDisplay.screenX = s.x;
-	psFeature->sDisplay.screenY = s.y;
+	setScreenDisp(&psFeature->sDisplay);
 
 	pie_MatEnd();
 }
@@ -2229,9 +2230,11 @@ void	renderStructure(STRUCTURE *psStructure)
 			pie_Draw3DShape(psStructure->prebuiltImd, 0, colour, buildingBrightness, pie_SHADOW, 0);
 		}
 		pie_Draw3DShape(strImd, 0, colour, buildingBrightness, pie_HEIGHT_SCALED | pie_SHADOW, structHeightScale(psStructure) * pie_RAISE_SCALE);
+		setScreenDisp(&psStructure->sDisplay);
+		pie_MatEnd();
+		return;
 	}
-	else
-	{
+
 		if (structureIsBlueprint(psStructure))
 		{
 			pieFlag = pie_TRANSLUCENT;
@@ -2473,17 +2476,8 @@ void	renderStructure(STRUCTURE *psStructure)
 				}
 			}
 		}
-	}
 
-	{
-		Vector3i zero(0, 0, 0);
-		Vector2i s(0, 0);
-
-		pie_RotateProject(&zero, &s);
-		psStructure->sDisplay.screenX = s.x;
-		psStructure->sDisplay.screenY = s.y;
-	}
-
+	setScreenDisp(&psStructure->sDisplay);
 	pie_MatEnd();
 }
 
@@ -2545,8 +2539,11 @@ static bool	renderWallSection(STRUCTURE *psStructure)
 	int				pieFlag, pieFlagData;
 	MAPTILE			*psTile = worldTile(psStructure->pos.x, psStructure->pos.y);
 
-	if(psStructure->visible[selectedPlayer])
+	if (!psStructure->visible[selectedPlayer])
 	{
+		return false;
+	}
+
 		if (psTile->jammerBits & alliancebits[psStructure->player])
 		{
 			ecmFlag = pie_ECM;
@@ -2605,21 +2602,12 @@ static bool	renderWallSection(STRUCTURE *psStructure)
 			pie_Draw3DShape(psStructure->sDisplay.imd, 0, getPlayerColour(psStructure->player), brightness, pieFlag|ecmFlag, pieFlagData);
 		}
 
-		{
-			Vector3i zero(0, 0, 0);
-			Vector2i s(0, 0);
-
-			pie_RotateProject( &zero, &s );
-			psStructure->sDisplay.screenX = s.x;
-			psStructure->sDisplay.screenY = s.y;
-		}
+		setScreenDisp(&psStructure->sDisplay);
 
 		pie_SetShaderStretchDepth(0);
 		pie_MatEnd();
 
-		return(true);
-	}
-	return false;
+		return true;
 }
 
 /// Draws a shadow under a droid
@@ -3069,9 +3057,7 @@ static void	drawDroidSelections( void )
 			continue;  // Not visible, anyway. Don't bother with health bars.
 		}
 
-		/* If it's selected and on screen or it's the one the mouse is over ||*/
-		// ABSOLUTELY MAD LOGICAL EXPRESSION!!! :-)
-		// Now slightly less mad and slightly less buggy.
+		/* If it's selected and on screen or it's the one the mouse is over */
 		if (eitherSelected(psDroid) ||
 		    (bMouseOverOwnDroid && psDroid == (DROID *) psClickedOn) ||
 		    droidUnderRepair(psDroid) ||
@@ -3098,19 +3084,16 @@ static void	drawDroidSelections( void )
 			mulH = (float)psDroid->body / (float)psDroid->originalBody;
 			damage = mulH * (float)psDroid->sDisplay.screenR;// (((psDroid->sDisplay.screenR*10000)/100)*damage)/10000;
 			if (damage > psDroid->sDisplay.screenR)
+			{
 				damage = psDroid->sDisplay.screenR;
+			}
 
 			damage *=2;
 			scrX = psDroid->sDisplay.screenX;
 			scrY = psDroid->sDisplay.screenY;
 			scrR = psDroid->sDisplay.screenR;
 
-			/* Yeah, yeah yeah - hardcoded palette entries - need to change to #defined colour names */
-			/* Three DFX clips properly right now - not sure if software does */
-//			if((scrX+scrR)>0 && (scrY+scrR)>0 && (scrX-scrR)<DISP_WIDTH
-//				&& (scrY-scrR)<DISP_HEIGHT)
-			{
-				if(!driveModeActive() || driveIsDriven(psDroid)) {
+				if(!driveModeActive() || driveIsDriven(psDroid)){
 					boxCol = WZCOL_WHITE;
 				} else {
 					boxCol = WZCOL_GREEN;
@@ -3140,7 +3123,6 @@ static void	drawDroidSelections( void )
 					drawDroidCmndNo(psDroid);
 					drawDroidGroupNumber(psDroid);
 				}
-			}
 
 			for (i = 0;i < psDroid->numWeaps;i++)
 			{
@@ -3214,7 +3196,6 @@ static void	drawDroidSelections( void )
 				scrY = psDroid->sDisplay.screenY;
 				scrR = psDroid->sDisplay.screenR;
 
-				/* Yeah, yeah yeah - hardcoded palette entries - need to change to #defined colour names */
 				/* Three DFX clips properly right now - not sure if software does */
 				if (	(scrX + scrR) > 0
 					&&	(scrX - scrR) < pie_GetVideoBufferWidth()
@@ -3227,14 +3208,10 @@ static void	drawDroidSelections( void )
 						boxCol = WZCOL_GREEN;
 					}
 
-					//we always want to show the enemy health/resistance as energyBar - AB 18/06/99
-					//if(bEnergyBars)
-					{
 						/* Power bars */
 						pie_BoxFill(scrX - scrR - 1, scrY + scrR + 2, scrX + scrR + 1, scrY + scrR + 6, WZCOL_RELOAD_BACKGROUND);
 						pie_BoxFill(scrX - scrR, scrY + scrR+3, scrX - scrR + damage, scrY + scrR + 4, powerCol);
 						pie_BoxFill(scrX - scrR, scrY + scrR+4, scrX - scrR + damage, scrY + scrR + 5, powerColShadow);
-					}
 				}
 			}
 		}
@@ -3657,7 +3634,6 @@ static void	processDestinationTarget( void )
 	SWORD offset;
 	SWORD x0,y0,x1,y1;
 
-
 	if(bDestTargetting)
 	{
 		if( (realTime - lastDestAssignation) < DEST_TARGET_TIME)
@@ -3777,7 +3753,6 @@ static void structureEffectsPlayer( UDWORD player )
 
 					pos.x = psStructure->pos.x - xDif;
 					pos.z = psStructure->pos.y - yDif;
-//					pos.y = map_Height(pos.x,pos.z) + 64 + (i*20);	// 64 up to get to base of spire
 					effectGiveAuxVar(50);	// half normal plasma size...
 
 					addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_LASER,false,NULL,0);
@@ -3811,7 +3786,6 @@ static void structureEffectsPlayer( UDWORD player )
 						addEffect(&pos,EFFECT_EXPLOSION, EXPLOSION_TYPE_LASER,false,NULL,0);
 						pos.x = psStructure->pos.x - xDif;
 						pos.z = psStructure->pos.y - yDif;	// buildings are level!
-		//				pos.y = map_Height(pos.x,pos.z) + psStructure->sDisplay->pos.max.y;
 						effectGiveAuxVar(30+bFXSize);	// half normal plasma size...
 						addEffect(&pos,EFFECT_EXPLOSION, EXPLOSION_TYPE_LASER,false,NULL,0);
 					}
@@ -4042,17 +4016,14 @@ static	void	doConstructionLines( void )
 							}
 						}
 					}
-
 					else if ((psDroid->action == DACTION_DEMOLISH) ||
 							(psDroid->action == DACTION_REPAIR) ||
 							(psDroid->action == DACTION_RESTORE))
 					{
-						if(psDroid->psActionTarget[0])
+						if (psDroid->psActionTarget[0]
+						    && psDroid->psActionTarget[0]->type == OBJ_STRUCTURE)
 						{
-							if(psDroid->psActionTarget[0]->type == OBJ_STRUCTURE)
-							{
-								addConstructionLine(psDroid, (STRUCTURE*)psDroid->psActionTarget[0]);
-							}
+							addConstructionLine(psDroid, (STRUCTURE*)psDroid->psActionTarget[0]);
 						}
 					}
 				}
