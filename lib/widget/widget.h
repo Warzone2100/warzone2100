@@ -231,9 +231,6 @@ struct W_SLDINIT : public W_INIT
 
 /***********************************************************************************/
 
-/** The maximum lenth of strings for the widget system */
-#define WIDG_MAXSTR		80
-
 /** The maximum value for bar graph size */
 #define WBAR_SCALE		100
 

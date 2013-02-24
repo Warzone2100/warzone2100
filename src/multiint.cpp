@@ -2621,10 +2621,9 @@ static void addChatBox(void)
 
 	if (*getModList())
 	{
-		char modListMessage[WIDG_MAXSTR] = "";
-		sstrcat(modListMessage, _("Mod: "));
-		sstrcat(modListMessage, getModList());
-		addConsoleMessage(modListMessage,DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+		std::string modListMessage = _("Mod: ");
+		modListMessage += getModList();
+		addConsoleMessage(modListMessage.c_str(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 		if (NetPlay.bComms)
 		{
 			addConsoleMessage(_("All players need to have the same mods to join your game."),DEFAULT_JUSTIFY, SYSTEM_MESSAGE);

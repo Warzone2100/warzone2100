@@ -344,7 +344,7 @@ static void desCreateDefaultTemplate(void);
 static void updateStoreButton(bool isStored);
 
 /* The current name of the design */
-static char			aCurrName[WIDG_MAXSTR];
+static char			aCurrName[MAX_STR_LENGTH];
 
 /* Store a list of component stats pointers for the design screen */
 extern UDWORD			maxComponent;
@@ -1215,7 +1215,7 @@ intChooseSystemStats(DROID_TEMPLATE *psTemplate)
 
 const char *GetDefaultTemplateName(DROID_TEMPLATE *psTemplate)
 {
-	// NOTE:	At this time, savegames can support a max of 60. We are using WIDG_MAXSTR (currently 80 )for display
+	// NOTE:	At this time, savegames can support a max of 60. We are using MAX_STR_LENGTH (currently 256) for display
 	// We are also returning a truncated string, instead of NULL if the string is too long.
 	COMPONENT_STATS *psStats = NULL;
 	int compIndex;
@@ -1263,9 +1263,9 @@ const char *GetDefaultTemplateName(DROID_TEMPLATE *psTemplate)
 	{
 		const char *pStr = getStatName(psStats);
 
-		if (strlen(aCurrName) + strlen(pStr) > WIDG_MAXSTR)
+		if (strlen(aCurrName) + strlen(pStr) > MAX_STR_LENGTH)
 		{
-			debug(LOG_ERROR, "Name string too long %s+%s > %u", aCurrName, pStr, WIDG_MAXSTR);
+			debug(LOG_ERROR, "Name string too long %s+%s > %u", aCurrName, pStr, MAX_STR_LENGTH);
 			debug(LOG_ERROR, "Please report what language you are using in the bug report!");
 		}
 
@@ -1280,7 +1280,7 @@ const char *GetDefaultTemplateName(DROID_TEMPLATE *psTemplate)
 	{
 		const char *pStr = getStatName(psStats);
 
-		if (strlen(aCurrName) + strlen(pStr) > WIDG_MAXSTR)
+		if (strlen(aCurrName) + strlen(pStr) > MAX_STR_LENGTH)
 		{
 			debug(LOG_ERROR, "Name string too long %s+%s", aCurrName, pStr);
 			debug(LOG_ERROR, "Please report what language you are using in the bug report!");

@@ -79,10 +79,6 @@ struct CAMPAIGN_FILE
 // ////////////////////////////////////////////////////////////////////////////
 // Global variables
 
-// Widget code and non-constant strings do not get along
-static char resolution[WIDG_MAXSTR];
-static char textureSize[WIDG_MAXSTR];
-
 tMode titleMode; // the global case
 tMode lastTitleMode; // Since skirmish and multiplayer setup use the same functions, we use this to go back to the corresponding menu.
 
@@ -917,10 +913,11 @@ bool runAudioOptionsMenu(void)
 static bool startVideoOptionsMenu(void)
 {
 	// Generate the resolution string
-	snprintf(resolution, WIDG_MAXSTR, "%d x %d",
-	         war_GetWidth(), war_GetHeight());
+	char resolution[43];
+	char textureSize[20];
+	ssprintf(resolution, "%d x %d", war_GetWidth(), war_GetHeight());
 	// Generate texture size string
-	snprintf(textureSize, WIDG_MAXSTR, "%d", getTextureSize());
+	ssprintf(textureSize, "%d", getTextureSize());
 
 	addBackdrop();
 	addTopForm();
@@ -1092,7 +1089,8 @@ bool runVideoOptionsMenu(void)
 			war_SetHeight(modes[current].height());
 
 			// Generate the textual representation of the new width and height
-			snprintf(resolution, WIDG_MAXSTR, "%d x %d", modes[current].width(), modes[current].height());
+			char resolution[43];
+			ssprintf(resolution, "%d x %d", modes[current].width(), modes[current].height());
 
 			// Update the widget
 			widgSetString(psWScreen, FRONTEND_RESOLUTION_R, resolution);
@@ -1128,7 +1126,8 @@ bool runVideoOptionsMenu(void)
 			setTextureSize(newTexSize);
 
 			// Generate the string representation of the new size
-			snprintf(textureSize, WIDG_MAXSTR, "%d", newTexSize);
+			char textureSize[20];
+			ssprintf(textureSize, "%d", newTexSize);
 
 			// Update the widget
 			widgSetString(psWScreen, FRONTEND_TEXTURESZ_R, textureSize);
