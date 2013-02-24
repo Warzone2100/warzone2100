@@ -148,6 +148,7 @@
     <PreBuildEvent>
       <Message>Generating the autorevison.h file...</Message>
       <Command>$(QTDIR)\bin\moc.exe qtscriptdebug.h  -o qtscriptdebug.h.moc
+$(QTDIR)\bin\moc.exe multiint.h  -o multiint_moc.h
 call $(ProjectDir)..\build_tools\autorevision.bat $(ProjectDir)</Command>
     </PreBuildEvent>
     <BisonParser>
@@ -648,7 +649,6 @@ call $(ProjectDir)..\build_tools\autorevision.bat $(ProjectDir)</Command>
     <ClInclude Include="scriptobj.h" />
     <ClInclude Include="scripttabs.h" />
     <ClInclude Include="scriptvals.h" />
-    <ClInclude Include="scriptvals_parser.hpp" />
     <ClInclude Include="selection.h" />
     <ClInclude Include="seqdisp.h" />
     <ClInclude Include="stats.h" />

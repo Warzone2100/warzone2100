@@ -27,6 +27,9 @@
 #include "widget.h"
 #include "widgint.h"
 #include "form.h"
+#if defined(WZ_CC_MSVC)
+#include "form_moc.h"		// this is generated on the pre-build event.
+#endif
 #include "tip.h"
 // FIXME Direct iVis implementation include!
 #include "lib/ivis_opengl/pieblitfunc.h"

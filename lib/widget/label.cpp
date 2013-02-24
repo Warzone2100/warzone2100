@@ -25,6 +25,9 @@
 #include "widget.h"
 #include "widgint.h"
 #include "label.h"
+#if defined(WZ_CC_MSVC)
+#include "label_moc.h"		// this is generated on the pre-build event.
+#endif
 #include "form.h"
 #include "tip.h"
 // FIXME Direct iVis implementation include!

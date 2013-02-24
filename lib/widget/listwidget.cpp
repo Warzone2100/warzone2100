@@ -22,6 +22,9 @@
  */
 
 #include "listwidget.h"
+#if defined(WZ_CC_MSVC)
+#include "listwidget_moc.h"		// this is generated on the pre-build event.
+#endif
 #include "button.h"
 #include <QtCore/QSignalMapper>
 

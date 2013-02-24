@@ -117,6 +117,18 @@
       <WarningLevel>Level4</WarningLevel>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
+    <PreBuildEvent>
+      <Command>$(QTDIR)\bin\moc.exe bar.h. -o bar_moc.h
+$(QTDIR)\bin\moc.exe  button.h -o button_moc.h 
+$(QTDIR)\bin\moc.exe  editbox.h -o editbox_moc.h
+$(QTDIR)\bin\moc.exe  form.h   -o form_moc.h 
+$(QTDIR)\bin\moc.exe  label.h  -o label_moc.h 
+$(QTDIR)\bin\moc.exe  listwidget.h -o listwidget_moc.h 
+$(QTDIR)\bin\moc.exe  slider.h -o slider_moc.h 
+$(QTDIR)\bin\moc.exe  widgbase.h -o widgbase_moc.h
+
+</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_SDL_STLport_x32|Win32'">
     <ClCompile>
@@ -205,8 +217,10 @@
     <ClInclude Include="editbox.h" />
     <ClInclude Include="form.h" />
     <ClInclude Include="label.h" />
+    <ClInclude Include="label_moc.h" />
     <ClInclude Include="listwidget.h" />
     <ClInclude Include="slider.h" />
+    <ClInclude Include="slider_moc.h" />
     <ClInclude Include="tip.h" />
     <ClInclude Include="widgbase.h" />
     <ClInclude Include="widget.h" />

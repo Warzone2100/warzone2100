@@ -35,6 +35,9 @@
     <ClCompile Include="widget.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="listwidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bar.h">
@@ -65,6 +68,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="widgint.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="listwidget.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="label_moc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="slider_moc.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

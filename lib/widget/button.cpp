@@ -26,6 +26,9 @@
 #include "widget.h"
 #include "widgint.h"
 #include "button.h"
+#if defined(WZ_CC_MSVC)
+#include "button_moc.h"		// this is generated on the pre-build event.
+#endif
 #include "form.h"
 #include "tip.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
