@@ -40,6 +40,7 @@ struct W_EDITBOX;
 struct W_BARGRAPH;
 struct W_BUTTON;
 struct W_LABEL;
+struct W_SLIDER;
 
 /* The display function prototype */
 typedef void (*WIDGET_DISPLAY)(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);

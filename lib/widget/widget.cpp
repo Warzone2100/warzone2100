@@ -245,7 +245,7 @@ static bool widgAddWidget(W_SCREEN *psScreen, W_INIT const *psInit, WIDGET *widg
 }
 
 /* Add a form to the widget screen */
-bool widgAddForm(W_SCREEN *psScreen, const W_FORMINIT *psInit)
+W_FORM *widgAddForm(W_SCREEN *psScreen, const W_FORMINIT *psInit)
 {
 	W_FORM *psForm;
 	if (psInit->style & WFORM_TABBED)
@@ -261,42 +261,42 @@ bool widgAddForm(W_SCREEN *psScreen, const W_FORMINIT *psInit)
 		psForm = new W_FORM(psInit);
 	}
 
-	return widgAddWidget(psScreen, psInit, psForm);
+	return widgAddWidget(psScreen, psInit, psForm)? psForm : nullptr;
 }
 
 /* Add a label to the widget screen */
-bool widgAddLabel(W_SCREEN *psScreen, const W_LABINIT *psInit)
+W_LABEL *widgAddLabel(W_SCREEN *psScreen, const W_LABINIT *psInit)
 {
 	W_LABEL *psLabel = new W_LABEL(psInit);
-	return widgAddWidget(psScreen, psInit, psLabel);
+	return widgAddWidget(psScreen, psInit, psLabel)? psLabel : nullptr;
 }
 
 /* Add a button to the widget screen */
-bool widgAddButton(W_SCREEN *psScreen, const W_BUTINIT *psInit)
+W_BUTTON *widgAddButton(W_SCREEN *psScreen, const W_BUTINIT *psInit)
 {
 	W_BUTTON *psButton = new W_BUTTON(psInit);
-	return widgAddWidget(psScreen, psInit, psButton);
+	return widgAddWidget(psScreen, psInit, psButton)? psButton : nullptr;
 }
 
 /* Add an edit box to the widget screen */
-bool widgAddEditBox(W_SCREEN *psScreen, const W_EDBINIT *psInit)
+W_EDITBOX *widgAddEditBox(W_SCREEN *psScreen, const W_EDBINIT *psInit)
 {
 	W_EDITBOX *psEdBox = new W_EDITBOX(psInit);
-	return widgAddWidget(psScreen, psInit, psEdBox);
+	return widgAddWidget(psScreen, psInit, psEdBox)? psEdBox : nullptr;
 }
 
 /* Add a bar graph to the widget screen */
-bool widgAddBarGraph(W_SCREEN *psScreen, const W_BARINIT *psInit)
+W_BARGRAPH *widgAddBarGraph(W_SCREEN *psScreen, const W_BARINIT *psInit)
 {
 	W_BARGRAPH *psBarGraph = new W_BARGRAPH(psInit);
-	return widgAddWidget(psScreen, psInit, psBarGraph);
+	return widgAddWidget(psScreen, psInit, psBarGraph)? psBarGraph : nullptr;
 }
 
 /* Add a slider to a form */
-bool widgAddSlider(W_SCREEN *psScreen, const W_SLDINIT *psInit)
+W_SLIDER *widgAddSlider(W_SCREEN *psScreen, const W_SLDINIT *psInit)
 {
 	W_SLIDER *psSlider = new W_SLIDER(psInit);
-	return widgAddWidget(psScreen, psInit, psSlider);
+	return widgAddWidget(psScreen, psInit, psSlider)? psSlider : nullptr;
 }
 
 /* Delete a widget from the screen */

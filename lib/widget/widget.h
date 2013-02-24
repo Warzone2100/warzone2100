@@ -244,22 +244,22 @@ extern void widgReset(void);
 extern void widgShutDown(void);
 
 /** Add a form to the widget screen */
-extern bool widgAddForm(W_SCREEN *psScreen, const W_FORMINIT *psInit);
+W_FORM *widgAddForm(W_SCREEN *psScreen, const W_FORMINIT *psInit);
 
 /** Add a label to the widget screen */
-extern bool widgAddLabel(W_SCREEN *psScreen, const W_LABINIT *psInit);
+W_LABEL *widgAddLabel(W_SCREEN *psScreen, const W_LABINIT *psInit);
 
 /** Add a button to a form */
-extern bool widgAddButton(W_SCREEN *psScreen, const W_BUTINIT *psInit);
+W_BUTTON *widgAddButton(W_SCREEN *psScreen, const W_BUTINIT *psInit);
 
 /** Add an edit box to a form */
-extern bool widgAddEditBox(W_SCREEN *psScreen, const W_EDBINIT *psInit);
+W_EDITBOX *widgAddEditBox(W_SCREEN *psScreen, const W_EDBINIT *psInit);
 
 /** Add a bar graph to a form */
-extern bool widgAddBarGraph(W_SCREEN *psScreen, const W_BARINIT *psInit);
+W_BARGRAPH *widgAddBarGraph(W_SCREEN *psScreen, const W_BARINIT *psInit);
 
 /** Add a slider to a form */
-extern bool widgAddSlider(W_SCREEN *psScreen, const W_SLDINIT *psInit);
+W_SLIDER *widgAddSlider(W_SCREEN *psScreen, const W_SLDINIT *psInit);
 
 /** Delete a widget from the screen */
 extern void widgDelete(W_SCREEN *psScreen, UDWORD id);
