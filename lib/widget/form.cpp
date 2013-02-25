@@ -316,17 +316,6 @@ void widgGetTabs(W_SCREEN *psScreen, UDWORD id, UWORD *pMajor)
 	*pMajor = psForm->tab();
 }
 
-
-/* Set a colour on a form */
-void widgSetColour(W_SCREEN *psScreen, UDWORD id, UDWORD index, PIELIGHT colour)
-{
-	W_TABFORM	*psForm = (W_TABFORM *)widgGetFromID(psScreen, id);
-
-	ASSERT_OR_RETURN(, psForm && psForm->type == WIDG_FORM, "Could not find form from id %u", id);
-	ASSERT_OR_RETURN(, index < WCOL_MAX, "Colour id %u out of range", index);
-	psForm->aColours[index] = colour;
-}
-
 void W_TABFORM::fixChildGeometry()
 {
 	bool horizontal = majorPos == WFORM_TABTOP || majorPos == WFORM_TABBOTTOM;

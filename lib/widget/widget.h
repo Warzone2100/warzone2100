@@ -340,9 +340,6 @@ enum _w_colour
 	WCOL_MAX,	///< All colour numbers are less than this
 };
 
-/** Set a colour on a form */
-extern void widgSetColour(W_SCREEN *psScreen, UDWORD id, UDWORD index, PIELIGHT colour);
-
 /** Set the global toop tip text colour. */
 extern void widgSetTipColour(PIELIGHT colour);
 

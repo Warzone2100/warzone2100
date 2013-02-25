@@ -722,9 +722,6 @@ static bool _intAddDesign(bool bShowCentreScreen)
 		return false;
 	}
 
-	/* Set the text colour for the form */
-	widgSetColour(psWScreen, IDDES_POWERFORM, WCOL_TEXT, WZCOL_DESIGN_POWER_FORM_BACKGROUND);
-
 	/* Add the design template power bar and label*/
 	sLabInit.formID	= IDDES_POWERFORM;
 	sLabInit.id = IDDES_TEMPPOWERLAB;
@@ -733,10 +730,7 @@ static bool _intAddDesign(bool bShowCentreScreen)
 	sLabInit.pTip = _("Total Power Required");
 	sLabInit.pDisplay = intDisplayImage;
 	sLabInit.UserData = IMAGE_DES_POWER;
-	if (!widgAddLabel(psWScreen, &sLabInit))
-	{
-		return true;
-	}
+	widgAddLabel(psWScreen, &sLabInit);
 
 	sBarInit = W_BARINIT();
 	sBarInit.formID = IDDES_POWERFORM;
@@ -764,10 +758,7 @@ static bool _intAddDesign(bool bShowCentreScreen)
 	sLabInit.pTip = _("Total Body Points");
 	sLabInit.pDisplay = intDisplayImage;
 	sLabInit.UserData = IMAGE_DES_BODYPOINTS;
-	if (!widgAddLabel(psWScreen, &sLabInit))
-	{
-		return true;
-	}
+	widgAddLabel(psWScreen, &sLabInit);
 
 	sBarInit = W_BARINIT();
 	sBarInit.formID = IDDES_POWERFORM;

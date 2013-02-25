@@ -37,6 +37,8 @@ struct W_BARGRAPH : public WIDGET
 
 	void setTip(QString string);
 
+	void setBackgroundColour(PIELIGHT colour) { backgroundColour = colour; haveBackgroundColour = true; }
+
 	WBAR_ORIENTATION barPos;                        // Orientation of the bar on the widget
 	UWORD		majorSize;			// Percentage of the main bar that is filled
 	UWORD		minorSize;			// Percentage of the minor bar if there is one
@@ -50,6 +52,10 @@ struct W_BARGRAPH : public WIDGET
 	PIELIGHT        textCol;                        // Colour for the text on the bar.
 	QString         pTip;                           // The tool tip for the graph
 	QString         text;                           // Text on the bar.
+
+//private:
+	PIELIGHT backgroundColour;
+	bool haveBackgroundColour;
 };
 
 /* The trough bar graph display function */

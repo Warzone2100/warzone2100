@@ -59,6 +59,7 @@ W_BARGRAPH::W_BARGRAPH(W_BARINIT const *init)
 	, minorCol(init->sMinorCol)
 	, textCol(WZCOL_BLACK)
 	, pTip(QString::fromUtf8(init->pTip))
+	, haveBackgroundColour(false)
 {
 	/* Set the minor colour if necessary */
 	// Actually, this sets the major colour to the minor colour. The minor colour used to be left completely uninitialised... Wonder what it was for..?
@@ -381,7 +382,7 @@ void barGraphDisplayTrough(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIE
 	}
 	if (showTrough)
 	{
-		iV_ShadowBox(tx0, ty0, tx1, ty1, 0, pColours[WCOL_DARK], pColours[WCOL_LIGHT], pColours[WCOL_BKGRND]);
+		iV_ShadowBox(tx0, ty0, tx1, ty1, 0, pColours[WCOL_DARK], pColours[WCOL_LIGHT], psBGraph->haveBackgroundColour? psBGraph->backgroundColour : pColours[WCOL_BKGRND]);
 	}
 
 	barGraphDisplayText(psBGraph, x0, tx1, ty1, pColours);

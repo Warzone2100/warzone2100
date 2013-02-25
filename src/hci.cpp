@@ -46,6 +46,8 @@
 #include "action.h"
 #include "lib/sound/audio_id.h"
 #include "lib/sound/audio.h"
+#include "lib/widget/label.h"
+#include "lib/widget/bar.h"
 #include "console.h"
 #include "design.h"
 #include "display.h"
@@ -3561,13 +3563,6 @@ static bool intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected, 
 			return false;
 		}
 
-		if (psObj->type != OBJ_DROID || (((DROID *)psObj)->droidType == DROID_CONSTRUCT || ((DROID *)psObj)->droidType == DROID_CYBORG_CONSTRUCT))
-		{
-			// Set the colour for the production run size text.
-			widgSetColour(psWScreen, sBFormInit2.id, WCOL_TEXT, WZCOL_ACTION_PRODUCTION_RUN_TEXT);
-			widgSetColour(psWScreen, sBFormInit2.id, WCOL_BKGRND, WZCOL_ACTION_PRODUCTION_RUN_BACKGROUND);
-		}
-
 		// Add command droid bits
 		if ((psObj->type == OBJ_DROID) &&
 		    (((DROID *)psObj)->droidType == DROID_COMMAND))
@@ -3581,18 +3576,12 @@ static bool intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected, 
 			sLabInitCmdFac.formID = sBFormInit2.id;
 			sLabInitCmdFac.pCallback = intUpdateCommandFact;
 			sLabInitCmdFac.pUserData = psObj;
-			if (!widgAddLabel(psWScreen, &sLabInitCmdFac))
-			{
-				return false;
-			}
+			widgAddLabel(psWScreen, &sLabInitCmdFac);
 			// the assigned VTOL factories label
 			sLabInitCmdFac2.formID = sBFormInit2.id;
 			sLabInitCmdFac2.pCallback = intUpdateCommandFact;
 			sLabInitCmdFac2.pUserData = psObj;
-			if (!widgAddLabel(psWScreen, &sLabInitCmdFac2))
-			{
-				return false;
-			}
+			widgAddLabel(psWScreen, &sLabInitCmdFac2);
 		}
 		else
 		{
@@ -3601,10 +3590,7 @@ static bool intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected, 
 			sLabInit.pCallback = intUpdateQuantity;
 			sLabInit.pUserData = psObj;
 		}
-		if (!widgAddLabel(psWScreen, &sLabInit))
-		{
-			return false;
-		}
+		W_LABEL *label = widgAddLabel(psWScreen, &sLabInit);
 
 		// Add the progress bar.
 		sBarInit.formID = sBFormInit2.id;
@@ -3613,9 +3599,12 @@ static bool intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected, 
 		sBarInit.pUserData = psObj;
 		sBarInit.iRange = GAME_TICKS_PER_SEC;
 
-		if (!widgAddBarGraph(psWScreen, &sBarInit))
+		W_BARGRAPH *bar = widgAddBarGraph(psWScreen, &sBarInit);
+		if (psObj->type != OBJ_DROID || (((DROID *)psObj)->droidType == DROID_CONSTRUCT || ((DROID *)psObj)->droidType == DROID_CYBORG_CONSTRUCT))
 		{
-			return false;
+			// Set the colour for the production run size text.
+			label->setFontColour(WZCOL_ACTION_PRODUCTION_RUN_TEXT);
+			bar->setBackgroundColour(WZCOL_ACTION_PRODUCTION_RUN_BACKGROUND);
 		}
 
 		/* If this matches psSelected note which form to display */
@@ -4121,11 +4110,9 @@ static void intSetStats(UDWORD id, BASE_STATS *psStats)
 
 	widgAddForm(psWScreen, &sFormInit);
 	// Set the colour for the production run size text.
-	widgSetColour(psWScreen, sFormInit.id, WCOL_TEXT, WZCOL_ACTION_PRODUCTION_RUN_TEXT);
-	widgSetColour(psWScreen, sFormInit.id, WCOL_BKGRND, WZCOL_ACTION_PRODUCTION_RUN_BACKGROUND);
 
-	widgAddLabel(psWScreen, &sLabInit);
-	widgAddBarGraph(psWScreen, &sBarInit);
+	widgAddLabel(psWScreen, &sLabInit)->setFontColour(WZCOL_ACTION_PRODUCTION_RUN_TEXT);
+	widgAddBarGraph(psWScreen, &sBarInit)->setBackgroundColour(WZCOL_ACTION_PRODUCTION_RUN_BACKGROUND);
 
 	psObj = intGetObject(id);
 	if (psObj && psObj->selected)
@@ -4424,7 +4411,7 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 		{
 			return false;
 		}
-		widgSetColour(psWScreen, sBFormInit.id, WCOL_BKGRND, WZCOL_BLACK);
+		W_BARGRAPH *bar;
 
 		//Stat = ppsStatsList[i];
 		if (Stat->ref >= REF_STRUCTURE_START &&
@@ -4442,11 +4429,8 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 
 			sBarInit.formID = sBFormInit.id;
 			sBarInit.iRange = GAME_TICKS_PER_SEC;
-			if (!widgAddBarGraph(psWScreen, &sBarInit))
-			{
-				return false;
-			}
-
+			bar = widgAddBarGraph(psWScreen, &sBarInit);
+			bar->setBackgroundColour(WZCOL_BLACK);
 		}
 		else if (Stat->ref >= REF_TEMPLATE_START &&
 		        Stat->ref < REF_TEMPLATE_START + REF_RANGE)  	// It's a droid.
@@ -4463,10 +4447,8 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 
 			sBarInit.formID = sBFormInit.id;
 			sBarInit.iRange = GAME_TICKS_PER_SEC;
-			if (!widgAddBarGraph(psWScreen, &sBarInit))
-			{
-				return false;
-			}
+			bar = widgAddBarGraph(psWScreen, &sBarInit);
+			bar->setBackgroundColour(WZCOL_BLACK);
 
 			// Add a text label for the quantity to produce.
 			sLabInit.formID = sBFormInit.id;
@@ -4547,10 +4529,8 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 			}
 
 			sBarInit.formID = sBFormInit.id;
-			if (!widgAddBarGraph(psWScreen, &sBarInit))
-			{
-				return false;
-			}
+			bar = widgAddBarGraph(psWScreen, &sBarInit);
+			bar->setBackgroundColour(WZCOL_BLACK);
 		}
 
 		/* If this matches psSelected note the form and button */
