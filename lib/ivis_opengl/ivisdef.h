@@ -164,6 +164,7 @@ struct Image
 {
 	Image(IMAGEFILE const *images = NULL, unsigned id = 0) : images(const_cast<IMAGEFILE *>(images)), id(id) {}
 
+	bool isNull() const { return images == nullptr; }
 	int width() const { return images->imageDefs[id].Width; }
 	int height() const { return images->imageDefs[id].Height; }
 	int xOffset() const { return images->imageDefs[id].XOffset; }

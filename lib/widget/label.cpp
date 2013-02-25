@@ -41,9 +41,16 @@ W_LABEL::W_LABEL(W_LABINIT const *init)
 	, aText(QString::fromUtf8(init->pText))
 	, FontID(init->FontID)
 	, pTip(QString::fromUtf8(init->pTip))
+	, haveFontColour(false)
 {
 	ASSERT((init->style & ~(WLAB_PLAIN | WLAB_ALIGNLEFT | WLAB_ALIGNRIGHT | WLAB_ALIGNCENTRE | WIDG_HIDDEN)) == 0, "Unknown button style");
 }
+
+W_LABEL::W_LABEL(WIDGET *parent)
+	: WIDGET(parent, WIDG_LABEL)
+	, FontID(font_regular)
+	, haveFontColour(false)
+{}
 
 void W_LABEL::display(int xOffset, int yOffset, PIELIGHT *pColours)
 {
@@ -54,7 +61,7 @@ void W_LABEL::display(int xOffset, int yOffset, PIELIGHT *pColours)
 	}
 
 	iV_SetFont(FontID);
-	iV_SetTextColour(pColours[WCOL_TEXT]);
+	iV_SetTextColour(haveFontColour? fontColour : pColours[WCOL_TEXT]);
 
 	QByteArray text = aText.toUtf8();
 	int fx;
@@ -112,4 +119,10 @@ void W_LABEL::setString(QString string)
 void W_LABEL::setTip(QString string)
 {
 	pTip = string;
+}
+
+void W_LABEL::setTextAlignment(WzTextAlignment align)
+{
+	style &= ~(WLAB_ALIGNLEFT | WLAB_ALIGNCENTRE | WLAB_ALIGNRIGHT);
+	style |= align;
 }

@@ -98,9 +98,9 @@ WIDGET::WIDGET(W_INIT const *init, WIDGET_TYPE type)
 	, dim(init->x, init->y, init->width, init->height)
 {}
 
-WIDGET::WIDGET(WIDGET *parent)
+WIDGET::WIDGET(WIDGET *parent, WIDGET_TYPE type)
 	: id(0xFFFFEEEEu)
-	, type(WIDG_UNSPECIFIED_TYPE)
+	, type(type)
 	, style(0)
 	, displayFunction(NULL)
 	, callback(NULL)

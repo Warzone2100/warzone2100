@@ -55,7 +55,6 @@ W_EDBINIT::W_EDBINIT()
 	: pText(NULL)
 	, FontID(font_regular)
 	, pBoxDisplay(NULL)
-	, pFontDisplay(NULL)
 {}
 
 W_EDITBOX::W_EDITBOX(W_EDBINIT const *init)
@@ -65,10 +64,10 @@ W_EDITBOX::W_EDITBOX(W_EDBINIT const *init)
 	, blinkOffset(wzGetTicks())
 	, printStart(0)
 	, pBoxDisplay(init->pBoxDisplay)
-	, pFontDisplay(init->pFontDisplay)
 	, HilightAudioID(WidgGetHilightAudioID())
 	, ClickedAudioID(WidgGetClickedAudioID())
 	, AudioCallback(WidgGetAudioCallback())
+	, haveBoxColour(false)
 {
 	char const *text = init->pText;
 	if (!text)
@@ -81,6 +80,17 @@ W_EDITBOX::W_EDITBOX(W_EDBINIT const *init)
 
 	ASSERT((init->style & ~(WEDB_PLAIN | WIDG_HIDDEN)) == 0, "Unknown edit box style");
 }
+
+W_EDITBOX::W_EDITBOX(WIDGET* parent)
+	: WIDGET(parent)
+	, state(WEDBS_FIXED)
+	, FontID(font_regular)
+	, pBoxDisplay(nullptr)
+	, HilightAudioID(WidgGetHilightAudioID())
+	, ClickedAudioID(WidgGetClickedAudioID())
+	, AudioCallback(WidgGetAudioCallback())
+	, haveBoxColour(false)
+{}
 
 void W_EDITBOX::initialise()
 {
@@ -531,6 +541,14 @@ void W_EDITBOX::highlightLost()
 	psWidget->state = psWidget->state & WEDBS_MASK;
 }
 
+void W_EDITBOX::setBoxColours(PIELIGHT first, PIELIGHT second, PIELIGHT background)
+{
+	boxColourFirst = first;
+	boxColourSecond = second;
+	boxColourBackground = background;
+	haveBoxColour = true;
+}
+
 void W_EDITBOX::display(int xOffset, int yOffset, PIELIGHT *pColours)
 {
 	if (displayFunction != NULL)
@@ -547,6 +565,10 @@ void W_EDITBOX::display(int xOffset, int yOffset, PIELIGHT *pColours)
 	if (pBoxDisplay != NULL)
 	{
 		pBoxDisplay(this, xOffset, yOffset, pColours);
+	}
+	else if (haveBoxColour)
+	{
+		iV_ShadowBox(x0, y0, x1, y1, 0, boxColourFirst, boxColourSecond, boxColourBackground);
 	}
 	else
 	{

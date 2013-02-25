@@ -64,6 +64,28 @@ W_FORM::W_FORM(W_FORMINIT const *init)
 	, psLastHiLite(NULL)
 	, psWidgets(NULL)
 {
+	setDefaultColours();
+
+	ASSERT((init->style & ~(WFORM_TABBED | WFORM_INVISIBLE | WFORM_CLICKABLE | WFORM_NOCLICKMOVE | WFORM_NOPRIMARY | WFORM_SECONDARY | WIDG_HIDDEN)) == 0, "Unknown style bit");
+	ASSERT((init->style & WFORM_TABBED) == 0 || (init->style & (WFORM_INVISIBLE | WFORM_CLICKABLE)) == 0, "Tabbed form cannot be invisible or clickable");
+	ASSERT((init->style & WFORM_INVISIBLE) == 0 || (init->style & WFORM_CLICKABLE) == 0, "Cannot have an invisible clickable form");
+	ASSERT((init->style & WFORM_CLICKABLE) != 0 || (init->style & (WFORM_NOPRIMARY | WFORM_SECONDARY)) == 0, "Cannot set keys if the form isn't clickable");
+}
+
+W_FORM::W_FORM(WIDGET *parent)
+	: WIDGET(parent, WIDG_FORM)
+	, disableChildren(false)
+	, Ax0(0), Ay0(0), Ax1(0), Ay1(0)
+	, animCount(0)
+	, startTime(0)
+	, psLastHiLite(NULL)
+	, psWidgets(NULL)
+{
+	setDefaultColours();
+}
+
+void W_FORM::setDefaultColours()
+{
 	aColours[WCOL_BKGRND]    = WZCOL_FORM_BACKGROUND;
 	aColours[WCOL_TEXT]      = WZCOL_FORM_TEXT;
 	aColours[WCOL_LIGHT]     = WZCOL_FORM_LIGHT;
@@ -72,11 +94,6 @@ W_FORM::W_FORM(W_FORMINIT const *init)
 	aColours[WCOL_CURSOR]    = WZCOL_FORM_CURSOR;
 	aColours[WCOL_TIPBKGRND] = WZCOL_FORM_TIP_BACKGROUND;
 	aColours[WCOL_DISABLE]   = WZCOL_FORM_DISABLE;
-
-	ASSERT((init->style & ~(WFORM_TABBED | WFORM_INVISIBLE | WFORM_CLICKABLE | WFORM_NOCLICKMOVE | WFORM_NOPRIMARY | WFORM_SECONDARY | WIDG_HIDDEN)) == 0, "Unknown style bit");
-	ASSERT((init->style & WFORM_TABBED) == 0 || (init->style & (WFORM_INVISIBLE | WFORM_CLICKABLE)) == 0, "Tabbed form cannot be invisible or clickable");
-	ASSERT((init->style & WFORM_INVISIBLE) == 0 || (init->style & WFORM_CLICKABLE) == 0, "Cannot have an invisible clickable form");
-	ASSERT((init->style & WFORM_CLICKABLE) != 0 || (init->style & (WFORM_NOPRIMARY | WFORM_SECONDARY)) == 0, "Cannot set keys if the form isn't clickable");
 }
 
 W_CLICKFORM::W_CLICKFORM(W_FORMINIT const *init)

@@ -61,9 +61,12 @@
 /************ Label styles ***************/
 
 #define WLAB_PLAIN		0	///< Plain text only label
-#define WLAB_ALIGNLEFT		1	///< Align the text at the left of the box
-#define WLAB_ALIGNCENTRE	2	///< Center the text
-#define WLAB_ALIGNRIGHT		4	///< Align the text at the right of the box
+enum WzTextAlignment
+{
+	WLAB_ALIGNLEFT   = 1,  ///< Align the text at the left of the box
+	WLAB_ALIGNCENTRE = 2,  ///< Center the text
+	WLAB_ALIGNRIGHT  = 4,  ///< Align the text at the right of the box
+};
 
 /************ Button styles **************/
 
@@ -126,7 +129,6 @@ struct W_INIT
 #define TAB_SEVEN    7		//*with* tab scroll buttons, we can only (currently) show 7 max!
 
 typedef void (*TAB_DISPLAY)(WIDGET *psWidget, UDWORD Position, UDWORD Number, bool Selected, bool Hilight, UDWORD x, UDWORD y, UDWORD Width, UDWORD Height);
-typedef void (*FONT_DISPLAY)(UDWORD x, UDWORD y, char *String);
 
 /** Form initialisation structure */
 struct W_FORMINIT : public W_INIT
@@ -179,7 +181,6 @@ struct W_EDBINIT : public W_INIT
 	const char *pText;		///< initial contents of the edit box
 	enum iV_fonts FontID;		///< ID of the IVIS font to use for this widget.
 	WIDGET_DISPLAY pBoxDisplay;	///< Optional callback to display the form.
-	FONT_DISPLAY pFontDisplay;	///< Optional callback to display a string.
 };
 
 /* Orientation flags for the bar graph */

@@ -31,6 +31,7 @@
 struct W_FORM : public WIDGET
 {
 	W_FORM(W_FORMINIT const *init);
+	W_FORM(WIDGET *parent);
 
 	void widgetLost(WIDGET *widget);
 
@@ -45,6 +46,9 @@ struct W_FORM : public WIDGET
 	PIELIGHT        aColours[WCOL_MAX];     ///< Colours for the form and its widgets
 	WIDGET         *psLastHiLite;           ///< The last widget to be hilited. This is used to track when the mouse moves off something.
 	WIDGET         *psWidgets;              ///< The widgets on the form
+
+private:
+	void setDefaultColours();
 };
 
 /* Information for a major tab */

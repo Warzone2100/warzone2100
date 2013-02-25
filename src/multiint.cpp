@@ -161,7 +161,6 @@ static char tooltipbuffer[MaxGames][256] = {{'\0'}};
 static bool addMultiEditBox(UDWORD formid, UDWORD id, UDWORD x, UDWORD y, char const *tip, char const *tipres, UDWORD icon, UDWORD iconhi, UDWORD iconid);
 static void addBlueForm					(UDWORD parent,UDWORD id, const char *txt,UDWORD x,UDWORD y,UDWORD w,UDWORD h);
 static void drawReadyButton(UDWORD player);
-static void displayPasswordEditBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours);
 
 // Drawing Functions
 static void displayChatEdit     (WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
@@ -175,6 +174,7 @@ static void displayAi           (WIDGET *psWidget, UDWORD xOffset, UDWORD yOffse
 static void displayDifficulty   (WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 static void displayMultiEditBox (WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 static void setLockedTeamsMode  (void);
+static Image getFrontHighlightImage(Image image);
 
 // find games
 static void addGames				(void);
@@ -1199,38 +1199,12 @@ void runGameFind(void )
 	displayConsoleMessages();
 }
 
-// Used to draw the password box for the lobby screen
-static void displayPasswordEditBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
-{
-	int x = xOffset + psWidget->x();
-	int y = yOffset + psWidget->y();
-	int w = psWidget->width();
-	int h = psWidget->height();
-
-	pie_BoxFill(x, y, x + w, y + h, WZCOL_MENU_BORDER);
-	pie_BoxFill(x + 1, y + 1, x + w - 1, y + h - 1, WZCOL_MENU_BACKGROUND);
-}
-
-static void showPasswordLabel( WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
-{
-	W_LABEL	*psLab;
-
-	psLab = (W_LABEL *)psWidget;
-
-	int fx = xOffset + psWidget->x();
-	int fy = yOffset + psWidget->y();
-
-	iV_SetFont(font_large);
-	iV_SetTextColour(WZCOL_FORM_TEXT);
-
-	iV_DrawText(psLab->aText.toUtf8().constData(), fx, fy);
-	iV_SetTextColour(WZCOL_TEXT_MEDIUM);
-}
-
 // This is what starts the lobby screen
 void startGameFind(void)
 {
 	addBackdrop();										//background image
+
+	W_FORM *parent = (W_FORM *)widgGetFromID(psWScreen, FRONTEND_BACKDROP);
 
 	// draws the background of the games listed
 	W_FORMINIT sFormInit;
@@ -1270,56 +1244,38 @@ void startGameFind(void)
 
 	// Password stuff. Hidden by default.
 
+	// draws the background of the password box
+	W_FORM *passwordForm = new W_FORM(parent);
+	passwordForm->id = FRONTEND_PASSWORDFORM;
+	passwordForm->setGeometry(FRONTEND_BOTFORMX, 160, FRONTEND_TOPFORMW, FRONTEND_TOPFORMH - 40);
+	passwordForm->displayFunction = intOpenPlainForm;
+	passwordForm->disableChildren = true;
+
 	// password label.
-	W_LABINIT sLabInit;
-	sLabInit.formID = FRONTEND_BACKDROP;
-	sLabInit.id		= CON_PASSWORD_LABEL;
-	sLabInit.style	= WLAB_ALIGNCENTRE;
-	sLabInit.x		= 180;
-	sLabInit.y		= 195;
-	sLabInit.width	= CON_SETTINGSWIDTH;
-	sLabInit.height = 20;
-	sLabInit.pText	= _("Enter Password:");
-	sLabInit.pDisplay = showPasswordLabel;
-	widgAddLabel(psWScreen, &sLabInit);
+	W_LABEL *enterPasswordLabel = new W_LABEL(passwordForm);
+	enterPasswordLabel->setTextAlignment(WLAB_ALIGNCENTRE);
+	enterPasswordLabel->setGeometry(130, 0, 280, 40);
+	enterPasswordLabel->setFont(font_large, WZCOL_FORM_TEXT);
+	enterPasswordLabel->setString(_("Enter Password:"));
 
 	// and finally draw the password entry box
-	W_EDBINIT sEdInit;
-	sEdInit.formID = FRONTEND_BACKDROP;
-	sEdInit.id = CON_PASSWORD;
-	sEdInit.x = 180;
-	sEdInit.y = 200;
-	sEdInit.width = 280;
-	sEdInit.height = 20;
-	sEdInit.pText = "";
-	sEdInit.pBoxDisplay = displayPasswordEditBox;
+	W_EDITBOX *passwordBox = new W_EDITBOX(passwordForm);
+	passwordBox->id = CON_PASSWORD;
+	passwordBox->setGeometry(130, 40, 280, 20);
+	passwordBox->setBoxColours(WZCOL_MENU_BORDER, WZCOL_MENU_BORDER, WZCOL_MENU_BACKGROUND);
 
-	widgAddEditBox(psWScreen, &sEdInit);
+	W_BUTTON *buttonYes = new W_BUTTON(passwordForm);
+	buttonYes->id = CON_PASSWORDYES;
+	buttonYes->setImages(Image(FrontImages, IMAGE_OK), Image(FrontImages, IMAGE_OK), getFrontHighlightImage(Image(FrontImages, IMAGE_OK)));
+	buttonYes->move(180, 65);
+	buttonYes->setTip(_("OK"));
+	W_BUTTON *buttonNo = new W_BUTTON(passwordForm);
+	buttonNo->id = CON_PASSWORDNO;
+	buttonNo->setImages(Image(FrontImages, IMAGE_NO), Image(FrontImages, IMAGE_NO), getFrontHighlightImage(Image(FrontImages, IMAGE_NO)));
+	buttonNo->move(230, 65);
+	buttonNo->setTip(_("Cancel"));
 
-	addMultiBut(psWScreen, FRONTEND_BACKDROP,CON_PASSWORDYES,230,225,MULTIOP_OKW,MULTIOP_OKH,
-	            _("OK"),IMAGE_OK,IMAGE_OK,true);
-	addMultiBut(psWScreen, FRONTEND_BACKDROP,CON_PASSWORDNO,280,225,MULTIOP_OKW,MULTIOP_OKH,
-	            _("Cancel"),IMAGE_NO,IMAGE_NO,true);
-
-	// draws the background of the password box
-	sFormInit = W_FORMINIT();
-	sFormInit.formID = FRONTEND_BACKDROP;
-	sFormInit.id = FRONTEND_PASSWORDFORM;
-	sFormInit.style = WFORM_PLAIN;
-	sFormInit.x = FRONTEND_BOTFORMX;
-	sFormInit.y = 160;
-	sFormInit.width = FRONTEND_TOPFORMW;
-	sFormInit.height = FRONTEND_TOPFORMH-40;
-	sFormInit.pDisplay = intOpenPlainForm;
-	sFormInit.disableChildren = true;
-
-	widgAddForm(psWScreen, &sFormInit);
-
-	widgHide(psWScreen, FRONTEND_PASSWORDFORM);
-	widgHide(psWScreen, CON_PASSWORD_LABEL);
-	widgHide(psWScreen, CON_PASSWORD);
-	widgHide(psWScreen, CON_PASSWORDYES);
-	widgHide(psWScreen, CON_PASSWORDNO);
+	passwordForm->hide();
 
 	EnablePasswordPrompt = false;
 }
@@ -1329,10 +1285,6 @@ static void hidePasswordForm(void)
 	EnablePasswordPrompt = false;
 
 	if (widgGetFromID(psWScreen, FRONTEND_PASSWORDFORM)) widgHide(psWScreen, FRONTEND_PASSWORDFORM);
-	if (widgGetFromID(psWScreen, CON_PASSWORD_LABEL)) widgHide(psWScreen, CON_PASSWORD_LABEL);
-	if (widgGetFromID(psWScreen, CON_PASSWORD)) widgHide(psWScreen, CON_PASSWORD);
-	if (widgGetFromID(psWScreen, CON_PASSWORDYES))widgHide(psWScreen, CON_PASSWORDYES);
-	if (widgGetFromID(psWScreen, CON_PASSWORDNO)) 	widgHide(psWScreen, CON_PASSWORDNO);
 
 	widgReveal(psWScreen, FRONTEND_SIDETEXT);
 	widgReveal(psWScreen, FRONTEND_BOTFORM);
@@ -1357,10 +1309,6 @@ static void showPasswordForm(void)
 	removeGames();
 
 	widgReveal(psWScreen, FRONTEND_PASSWORDFORM);
-	widgReveal(psWScreen, CON_PASSWORD_LABEL);
-	widgReveal(psWScreen, CON_PASSWORD);
-	widgReveal(psWScreen, CON_PASSWORDYES);
-	widgReveal(psWScreen, CON_PASSWORDNO);
 
 	// auto click in the password box
 	sContext.psScreen	= psWScreen;
@@ -4430,6 +4378,25 @@ void displayMultiEditBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELI
 	}
 }
 
+static Image getFrontHighlightImage(Image image)
+{
+	if (image.isNull())
+	{
+		return Image();
+	}
+	switch (image.width())
+	{
+	case 30: return Image(FrontImages, IMAGE_HI34);
+	case 60: return Image(FrontImages, IMAGE_HI64);
+	case 19: return Image(FrontImages, IMAGE_HI23);
+	case 27: return Image(FrontImages, IMAGE_HI31);
+	case 35: return Image(FrontImages, IMAGE_HI39);
+	case 37: return Image(FrontImages, IMAGE_HI41);
+	case 56: return Image(FrontImages, IMAGE_HI56);
+	}
+	return Image();
+}
+
 void WzMultiButton::display(int xOffset, int yOffset, PIELIGHT *pColours)
 {
 	int x0 = xOffset + x();
@@ -4448,40 +4415,10 @@ void WzMultiButton::display(int xOffset, int yOffset, PIELIGHT *pColours)
 	// evaluate auto-frame
 	bool highlight = (getState() & WBUT_HIGHLIGHT) != 0;
 
-	if (imNormal.id == IMAGE_WEE_GUY)
-	{
-		// fugly hack for adding player number to the wee guy (whoever that is)
-		iV_DrawImage(IntImages, IMAGE_ASCII48 - 10 + doHighlight, x0 + 11, y0 + 8);
-		highlight = false;
-	}
-
 	// evaluate auto-frame
 	if (doHighlight == 1 && highlight)
 	{
-		switch (imNormal.width())  //pick a hilight.
-		{
-		case 30:
-			hiToUse = Image(FrontImages, IMAGE_HI34);
-			break;
-		case 60:
-			hiToUse = Image(FrontImages, IMAGE_HI64);
-			break;
-		case 19:
-			hiToUse = Image(FrontImages, IMAGE_HI23);
-			break;
-		case 27:
-			hiToUse = Image(FrontImages, IMAGE_HI31);
-			break;
-		case 35:
-			hiToUse = Image(FrontImages, IMAGE_HI39);
-			break;
-		case 37:
-			hiToUse = Image(FrontImages, IMAGE_HI41);
-			break;
-		case 56:
-			hiToUse = Image(FrontImages, IMAGE_HI56);
-			break;
-		}
+		hiToUse = getFrontHighlightImage(imNormal);
 	}
 
 	bool down = (getState() & (WBUT_DOWN | WBUT_LOCK | WBUT_CLICKLOCK)) != 0;

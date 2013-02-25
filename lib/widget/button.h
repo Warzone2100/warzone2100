@@ -46,8 +46,17 @@ struct W_BUTTON : public WIDGET
 	void setString(QString string);
 	void setTip(QString string);
 
+	void setImages(Image image, Image imageDown, Image imageHighlight, Image imageDisabled = Image());
+
+	void setString(char const *stringUtf8) { WIDGET::setString(stringUtf8); }  // Unhide the WIDGET::setString(char const *) function...
+	void setTip(char const *stringUtf8) { WIDGET::setTip(stringUtf8); }  // Unhide the WIDGET::setString(char const *) function...
+
 	UDWORD		state;				// The current button state
 	QString         pText;                          // The text for the button
+	Image           image;                          ///< The image for the button.
+	Image           imageDown;                      ///< The image for the button, when down. Is overlaid over image.
+	Image           imageDisabled;                  ///< The image for the button, when disabled. Is overlaid over image.
+	Image           imageHighlight;                 ///< The image for the button, when highlighted. Is overlaid over image.
 	QString         pTip;                           // The tool tip for the button
 	SWORD HilightAudioID;				// Audio ID for form clicked sound
 	SWORD ClickedAudioID;				// Audio ID for form hilighted sound

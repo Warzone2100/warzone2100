@@ -41,6 +41,7 @@
 struct W_EDITBOX : public WIDGET
 {
 	W_EDITBOX(W_EDBINIT const *init);
+	W_EDITBOX(WIDGET *parent);
 
 	void clicked(W_CONTEXT *psContext, WIDGET_KEY key);
 	void highlight(W_CONTEXT *psContext);
@@ -53,6 +54,8 @@ struct W_EDITBOX : public WIDGET
 	QString getString() const;
 	void setString(QString string);
 
+	void setBoxColours(PIELIGHT first, PIELIGHT second, PIELIGHT background);
+
 	UDWORD		state;						// The current edit box state
 	QString         aText;                  // The text in the edit box
 	iV_fonts        FontID;
@@ -62,7 +65,6 @@ struct W_EDITBOX : public WIDGET
 	int             printChars;					// The number of characters appearing in the box
 	int             printWidth;					// The pixel width of the characters in the box
 	WIDGET_DISPLAY	pBoxDisplay;			// Optional callback to display the edit box background.
-	FONT_DISPLAY pFontDisplay;				// Optional callback to display a string.
 	SWORD HilightAudioID;					// Audio ID for form clicked sound
 	SWORD ClickedAudioID;					// Audio ID for form hilighted sound
 	WIDGET_AUDIOCALLBACK AudioCallback;		// Pointer to audio callback function
@@ -76,6 +78,9 @@ private:
 	void fitStringStart();  // Calculate how much of the start of a string can fit into the edit box
 	void fitStringEnd();
 	void setCursorPosPixels(int xPos);
+
+	PIELIGHT boxColourFirst, boxColourSecond, boxColourBackground;
+	bool haveBoxColour;
 };
 
 #endif // __INCLUDED_LIB_WIDGET_EDITBOX_H__

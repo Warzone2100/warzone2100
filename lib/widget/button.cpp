@@ -52,7 +52,7 @@ W_BUTTON::W_BUTTON(W_BUTINIT const *init)
 }
 
 W_BUTTON::W_BUTTON(WIDGET *parent)
-	: WIDGET(parent)
+	: WIDGET(parent, WIDG_BUTTON)
 	, state(WBUT_PLAIN)
 	, HilightAudioID(WidgGetHilightAudioID())
 	, ClickedAudioID(WidgGetClickedAudioID())
@@ -187,72 +187,73 @@ void W_BUTTON::display(int xOffset, int yOffset, PIELIGHT *pColours)
 	int y1 = y0 + height();
 
 	bool haveText = !pText.isEmpty();
-	QByteArray textBytes = pText.toUtf8();
-	char const *textData = textBytes.constData();
 
-	if (state & (WBUT_DOWN | WBUT_LOCK | WBUT_CLICKLOCK))
+	bool isDown = (state & (WBUT_DOWN | WBUT_LOCK | WBUT_CLICKLOCK)) != 0;
+	bool isDisabled = (state & WBUT_DISABLE) != 0;
+	bool isHighlight = (state & WBUT_HIGHLIGHT) != 0;
+
+	// Display the button.
+	if (!image.isNull())
 	{
-		/* Display the button down */
-		iV_ShadowBox(x0, y0, x1, y1, 0, pColours[WCOL_LIGHT], pColours[WCOL_DARK], pColours[WCOL_BKGRND]);
-
-		if (haveText)
+		iV_DrawImage(image, x0, y0);
+		if (isDown && !imageDown.isNull())
 		{
-			iV_SetFont(FontID);
-			iV_SetTextColour(pColours[WCOL_TEXT]);
-			int fw = iV_GetTextWidth(textData);
-			int fx = x0 + (width() - fw) / 2;
-			int fy = y0 + (height() - iV_GetTextLineSize()) / 2 - iV_GetTextAboveBase();
-			iV_DrawText(textData, fx, fy);
+			iV_DrawImage(imageDown, x0, y0);
 		}
-
-		if (state & WBUT_HIGHLIGHT)
+		if (isDisabled && !imageDisabled.isNull())
 		{
-			/* Display the button hilite */
-			iV_Box(x0 + 3, y0 + 3, x1 - 2, y1 - 2, pColours[WCOL_HILITE]);
+			iV_DrawImage(imageDisabled, x0, y0);
 		}
-	}
-	else if (state & WBUT_DISABLE)
-	{
-		/* Display the disabled button */
-		iV_ShadowBox(x0, y0, x1, y1, 0, pColours[WCOL_LIGHT], pColours[WCOL_LIGHT], pColours[WCOL_BKGRND]);
-
-		if (haveText)
+		if (isHighlight && !imageHighlight.isNull())
 		{
-			iV_SetFont(FontID);
-			int fw = iV_GetTextWidth(textData);
-			int fx = x0 + (width() - fw) / 2;
-			int fy = y0 + (height() - iV_GetTextLineSize()) / 2 - iV_GetTextAboveBase();
-			iV_SetTextColour(pColours[WCOL_LIGHT]);
-			iV_DrawText(textData, fx + 1, fy + 1);
-			iV_SetTextColour(pColours[WCOL_DISABLE]);
-			iV_DrawText(textData, fx, fy);
-		}
-
-		if (state & WBUT_HIGHLIGHT)
-		{
-			/* Display the button hilite */
-			iV_Box(x0 + 2, y0 + 2, x1 - 3, y1 - 3, pColours[WCOL_HILITE]);
+			iV_DrawImage(imageHighlight, x0, y0);
 		}
 	}
 	else
 	{
-		/* Display the button up */
-		iV_ShadowBox(x0, y0, x1, y1, 0, pColours[WCOL_LIGHT], pColours[WCOL_DARK], pColours[WCOL_BKGRND]);
-
-		if (haveText)
+		iV_ShadowBox(x0, y0, x1, y1, 0, pColours[WCOL_LIGHT], pColours[isDisabled? WCOL_LIGHT : WCOL_DARK], pColours[WCOL_BKGRND]);
+		if (isHighlight)
 		{
-			iV_SetFont(FontID);
-			iV_SetTextColour(pColours[WCOL_TEXT]);
-			int fw = iV_GetTextWidth(textData);
-			int fx = x0 + (width() - fw) / 2;
-			int fy = y0 + (height() - iV_GetTextLineSize()) / 2 - iV_GetTextAboveBase();
-			iV_DrawText(textData, fx, fy);
-		}
-
-		if (state & WBUT_HIGHLIGHT)
-		{
-			/* Display the button hilite */
 			iV_Box(x0 + 2, y0 + 2, x1 - 3, y1 - 3, pColours[WCOL_HILITE]);
 		}
+	}
+
+	if (haveText)
+	{
+		QByteArray textBytes = pText.toUtf8();
+
+		iV_SetFont(FontID);
+		int fw = iV_GetTextWidth(textBytes.constData());
+		int fx = x0 + (width() - fw) / 2;
+		int fy = y0 + (height() - iV_GetTextLineSize()) / 2 - iV_GetTextAboveBase();
+		if (isDisabled)
+		{
+			iV_SetTextColour(pColours[WCOL_LIGHT]);
+			iV_DrawText(textBytes.constData(), fx + 1, fy + 1);
+			iV_SetTextColour(pColours[WCOL_DISABLE]);
+		}
+		else
+		{
+			iV_SetTextColour(pColours[WCOL_TEXT]);
+		}
+		iV_DrawText(textBytes.constData(), fx, fy);
+	}
+
+	if (isDisabled && !image.isNull() && imageDisabled.isNull())
+	{
+		// disabled, render something over it!
+		iV_TransBoxFill(x0, y0, x0 + width(), y0 + height());
+	}
+}
+
+void W_BUTTON::setImages(Image image_, Image imageDown_, Image imageHighlight_, Image imageDisabled_)
+{
+	image = image_;
+	imageDown = imageDown_;
+	imageDisabled = imageDisabled_;
+	imageHighlight = imageHighlight_;
+	if (!image.isNull())
+	{
+		setGeometry(x(), y(), image.width(), image.height());
 	}
 }

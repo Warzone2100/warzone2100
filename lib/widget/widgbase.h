@@ -82,7 +82,7 @@ struct WIDGET
 
 
 	WIDGET(W_INIT const *init, WIDGET_TYPE type);
-	WIDGET(WIDGET *parent);
+	WIDGET(WIDGET *parent, WIDGET_TYPE type = WIDG_UNSPECIFIED_TYPE);
 	virtual ~WIDGET();
 
 	virtual void widgetLost(WIDGET *);
