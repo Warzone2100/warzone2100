@@ -126,16 +126,15 @@ void W_BUTTON::clicked(W_CONTEXT *, WIDGET_KEY key)
 }
 
 /* Respond to a mouse button up */
-void W_BUTTON::released(W_CONTEXT *psContext, WIDGET_KEY key)
+void W_BUTTON::released(W_CONTEXT *, WIDGET_KEY key)
 {
-	W_SCREEN *psScreen = psContext->psScreen;
 	if (state & WBUT_DOWN)
 	{
 		// Check this is the correct key
 		if ((!(style & WBUT_NOPRIMARY) && key == WKEY_PRIMARY) ||
 		    ((style & WBUT_SECONDARY) && key == WKEY_SECONDARY))
 		{
-			widgSetReturn(psScreen, this);
+			widgSetReturn(screenPointer, this);
 			state &= ~WBUT_DOWN;
 		}
 	}
@@ -155,7 +154,7 @@ void W_BUTTON::highlight(W_CONTEXT *psContext)
 	/* If there is a tip string start the tool tip */
 	if (!pTip.isEmpty())
 	{
-		tipStart(this, pTip, psContext->psScreen->TipFontID, x() + psContext->xOffset, y() + psContext->yOffset, width(), height());
+		tipStart(this, pTip, screenPointer->TipFontID, x() + psContext->xOffset, y() + psContext->yOffset, width(), height());
 	}
 }
 

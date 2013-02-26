@@ -750,8 +750,6 @@ static bool OptionsInet(void)			//internet options
 	}
 	// auto click in the text box
 	W_CONTEXT sContext;
-	sContext.psScreen	= psConScreen;
-	sContext.psForm		= (W_FORM *)psConScreen->psForm;
 	sContext.xOffset	= 0;
 	sContext.yOffset	= 0;
 	sContext.mx			= 0;
@@ -1311,8 +1309,6 @@ static void showPasswordForm(void)
 	widgReveal(psWScreen, FRONTEND_PASSWORDFORM);
 
 	// auto click in the password box
-	sContext.psScreen	= psWScreen;
-	sContext.psForm		= (W_FORM *)psWScreen->psForm;
 	sContext.xOffset	= 0;
 	sContext.yOffset	= 0;
 	sContext.mx			= 0;
@@ -3682,8 +3678,6 @@ void runMultiOptions(void)
 	k = getQwertyKey();
 	if(	k && psWScreen->psFocus == NULL)
 	{
-		context.psScreen	= psWScreen;
-		context.psForm		= (W_FORM *)psWScreen->psForm;
 		context.xOffset		= 0;
 		context.yOffset		= 0;
 		context.mx			= mouseX();

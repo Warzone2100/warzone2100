@@ -150,7 +150,6 @@ struct W_FORMINIT : public W_INIT
 	unsigned                maxTabsShown;                   ///< Maximum number of tabs shown at once.
 	const char		*pTip;				///< Tool tip for the form itself
 	TAB_DISPLAY		pTabDisplay;			///< Optional callback for displaying a tab.
-	WIDGET_DISPLAY		pFormDisplay;			///< Optional callback to display the form.
 };
 
 /** Label initialisation structure */

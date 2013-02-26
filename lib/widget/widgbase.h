@@ -134,6 +134,9 @@ struct WIDGET
 private:
 	void setScreenPointer(W_SCREEN *screen);        ///< Set screen pointer for us and all children.
 public:
+	void processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed);
+	void runRecursive(W_CONTEXT *psContext);
+	void processCallbacksRecursive(W_CONTEXT *psContext);
 	void displayRecursive(int xOffset, int yOffset);  ///< Display this widget, and all visible children.
 private:
 
@@ -167,6 +170,7 @@ struct W_SCREEN
 
 	W_FORM          *psForm;        ///< The root form of the screen
 	WIDGET          *psFocus;       ///< The widget that has keyboard focus
+	WIDGET *        lastHighlight;  ///< The last widget to be highlighted. This is used to track when the mouse moves off something.
 	iV_fonts         TipFontID;     ///< ID of the IVIS font to use for tool tips.
 	WidgetTriggers   retWidgets;    ///< The widgets to be returned by widgRunScreen.
 
@@ -183,8 +187,6 @@ private:
 /* Context information to pass into the widget functions */
 struct W_CONTEXT
 {
-	W_SCREEN	*psScreen;			// Parent screen of the widget
-	W_FORM         *psForm;                 ///< Parent form of the widget
 	SDWORD		xOffset, yOffset;	// Screen offset of the parent form
 	SDWORD		mx, my;				// mouse position on the form
 };

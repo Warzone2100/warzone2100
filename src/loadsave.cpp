@@ -488,8 +488,6 @@ bool runLoadSave(bool bResetMissionWidgets)
 				chosenSlotId = id;
 
 				// auto click in the edit box we just made.
-				context.psScreen	= psRequestScreen;
-				context.psForm		= (W_FORM *)psRequestScreen->psForm;
 				context.xOffset		= 0;
 				context.yOffset		= 0;
 				context.mx			= mouseX();

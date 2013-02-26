@@ -51,7 +51,6 @@ W_FORMINIT::W_FORMINIT()
 	, maxTabsShown(MAX_TAB_SMALL_SHOWN - 1)  // Equal to TAB_SEVEN, which is equal to 7.
 	, pTip(NULL)
 	, pTabDisplay(NULL)
-	, pFormDisplay(NULL)
 {
 }
 
@@ -61,8 +60,6 @@ W_FORM::W_FORM(W_FORMINIT const *init)
 	, Ax0(0), Ay0(0), Ax1(0), Ay1(0)  // These assignments were previously done by a memset.
 	, animCount(0)
 	, startTime(0)                    // This assignment was previously done by a memset.
-	, psLastHiLite(NULL)
-	, psWidgets(NULL)
 {
 	ASSERT((init->style & ~(WFORM_TABBED | WFORM_INVISIBLE | WFORM_CLICKABLE | WFORM_NOCLICKMOVE | WFORM_NOPRIMARY | WFORM_SECONDARY | WIDG_HIDDEN)) == 0, "Unknown style bit");
 	ASSERT((init->style & WFORM_TABBED) == 0 || (init->style & (WFORM_INVISIBLE | WFORM_CLICKABLE)) == 0, "Tabbed form cannot be invisible or clickable");
@@ -76,8 +73,6 @@ W_FORM::W_FORM(WIDGET *parent)
 	, Ax0(0), Ay0(0), Ax1(0), Ay1(0)
 	, animCount(0)
 	, startTime(0)
-	, psLastHiLite(NULL)
-	, psWidgets(NULL)
 {}
 
 W_CLICKFORM::W_CLICKFORM(W_FORMINIT const *init)
@@ -87,10 +82,6 @@ W_CLICKFORM::W_CLICKFORM(W_FORMINIT const *init)
 	, HilightAudioID(WidgGetHilightAudioID())
 	, ClickedAudioID(WidgGetClickedAudioID())
 	, AudioCallback(WidgGetAudioCallback())
-{}
-
-W_MAJORTAB::W_MAJORTAB()
-	: psWidgets(NULL)
 {}
 
 W_TABFORM::W_TABFORM(W_FORMINIT const *init)
@@ -143,15 +134,6 @@ void W_TABFORM::setNumTabs(int numTabs)
 	fixChildGeometry();
 }
 
-void W_FORM::widgetLost(WIDGET *widget)
-{
-	// Clear the last highlight if necessary.
-	if (psLastHiLite == widget)
-	{
-		psLastHiLite = NULL;
-	}
-}
-
 /* Add a widget to a form */
 bool formAddWidget(W_FORM *psForm, WIDGET *psWidget, W_INIT const *psInit)
 {
@@ -183,65 +165,6 @@ void W_CLICKFORM::setState(unsigned newState)
 	unsigned mask = WBUT_DISABLE | WBUT_LOCK | WBUT_CLICKLOCK;
 	state = (state & ~mask) | (newState & mask);
 }
-
-/* Return the widgets currently displayed by a form */
-WIDGET::Children const &formGetWidgets(W_FORM *psWidget)
-{
-	if (psWidget->style & WFORM_TABBED)
-	{
-		W_TABFORM *psTabForm = (W_TABFORM *)psWidget;
-		return psTabForm->tabWidget()->children();
-	}
-	else
-	{
-		return psWidget->children();
-	}
-}
-
-
-/* Initialise the formGetAllWidgets function */
-void formInitGetAllWidgets(W_FORM *psWidget, W_FORMGETALL *psCtrl)
-{
-	if (psWidget->style & WFORM_TABBED)
-	{
-		psCtrl->tabBegin = ((W_TABFORM *)psWidget)->childTabs.begin();
-		psCtrl->tabEnd = ((W_TABFORM *)psWidget)->childTabs.end();
-		psCtrl->begin = (*psCtrl->tabBegin)->children().begin();
-		psCtrl->end = (*psCtrl->tabBegin)->children().end();
-		++psCtrl->tabBegin;
-	}
-	else
-	{
-		psCtrl->tabBegin = psWidget->children().end();  // tabBegin..tabEnd = empty range.
-		psCtrl->tabEnd = psWidget->children().end();
-		psCtrl->begin = psWidget->children().begin();
-		psCtrl->end = psWidget->children().end();
-	}
-}
-
-
-/* Repeated calls to this function will return widget lists
- * until all widgets in a form have been returned.
- * When a NULL list is returned, all widgets have been seen.
- */
-WIDGET *formGetAllWidgets(W_FORMGETALL *psCtrl)
-{
-	while (psCtrl->begin == psCtrl->end)
-	{
-		if (psCtrl->tabBegin == psCtrl->tabEnd)
-		{
-			return NULL;
-		}
-		psCtrl->begin = (*psCtrl->tabBegin)->children().begin();
-		psCtrl->end = (*psCtrl->tabBegin)->children().end();
-		++psCtrl->tabBegin;
-	}
-
-	WIDGET *ret = *psCtrl->begin;
-	++psCtrl->begin;
-	return ret;
-}
-
 
 static W_TABFORM *widgGetTabbedFormById(W_SCREEN *const psScreen, const UDWORD id)
 {
@@ -416,11 +339,11 @@ void W_TABFORM::released(W_CONTEXT *psContext, WIDGET_KEY)
 	{
 		// Clicked on a tab.
 		setTab(newTab);
-		widgSetReturn(psContext->psScreen, this);
+		widgSetReturn(screenPointer, this);
 	}
 }
 
-void W_CLICKFORM::released(W_CONTEXT *psContext, WIDGET_KEY key)
+void W_CLICKFORM::released(W_CONTEXT *, WIDGET_KEY key)
 {
 	if ((state & WBUT_DOWN) != 0)
 	{
@@ -428,7 +351,7 @@ void W_CLICKFORM::released(W_CONTEXT *psContext, WIDGET_KEY key)
 		if ((!(style & WFORM_NOPRIMARY) && key == WKEY_PRIMARY) ||
 		    ((style & WFORM_SECONDARY) && key == WKEY_SECONDARY))
 		{
-			widgSetReturn(psContext->psScreen, this);
+			widgSetReturn(screenPointer, this);
 			state &= ~WBUT_DOWN;
 		}
 	}
@@ -443,7 +366,7 @@ void W_CLICKFORM::highlight(W_CONTEXT *psContext)
 	// If there is a tip string start the tool tip.
 	if (!pTip.isEmpty())
 	{
-		tipStart(this, pTip, psContext->psScreen->TipFontID, x() + psContext->xOffset, y() + psContext->yOffset, width(), height());
+		tipStart(this, pTip, screenPointer->TipFontID, x() + psContext->xOffset, y() + psContext->yOffset, width(), height());
 	}
 
 	if (AudioCallback != NULL)
@@ -456,11 +379,6 @@ void W_CLICKFORM::highlight(W_CONTEXT *psContext)
 /* Respond to the mouse moving off a form */
 void W_FORM::highlightLost()
 {
-	// If one of the widgets was highlighted that has to lose it as well.
-	if (psLastHiLite != NULL)
-	{
-		psLastHiLite->highlightLost();
-	}
 	// Clear the tool tip if there is one.
 	tipStop(this);
 }

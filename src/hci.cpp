@@ -4520,7 +4520,8 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 					progress.UserData = Stat->ref - REF_RESEARCH_START;
 					progress.pTip = _("Ally progress");
 					progress.pDisplay = intDisplayAllyBar;
-					widgAddBarGraph(psWScreen, &progress);
+					W_BARGRAPH *bar = widgAddBarGraph(psWScreen, &progress);
+					bar->setBackgroundColour(WZCOL_BLACK);
 
 					++allyResearchIconCount;
 

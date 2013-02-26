@@ -94,6 +94,7 @@ WIDGET::WIDGET(W_INIT const *init, WIDGET_TYPE type)
 	, callback(init->pCallback)
 	, pUserData(init->pUserData)
 	, UserData(init->UserData)
+	, screenPointer(nullptr)
 	, parentWidget(NULL)
 	, dim(init->x, init->y, init->width, init->height)
 {}
@@ -106,6 +107,7 @@ WIDGET::WIDGET(WIDGET *parent, WIDGET_TYPE type)
 	, callback(NULL)
 	, pUserData(NULL)
 	, UserData(0)
+	, screenPointer(nullptr)
 	, parentWidget(NULL)
 	, dim(0, 0, 1, 1)
 {
@@ -114,14 +116,7 @@ WIDGET::WIDGET(WIDGET *parent, WIDGET_TYPE type)
 
 WIDGET::~WIDGET()
 {
-	if (psMouseOverWidget == this)
-	{
-		psMouseOverWidget = NULL;
-	}
-	if (screenPointer != NULL && screenPointer->psFocus == this)
-	{
-		screenPointer->psFocus = NULL;
-	}
+	setScreenPointer(nullptr);  // Clear any pointers to us directly from screenPointer.
 
 	if (parentWidget != NULL)
 	{
@@ -155,6 +150,24 @@ void WIDGET::detach(WIDGET *widget)
 
 void WIDGET::setScreenPointer(W_SCREEN *screen)
 {
+	if (screenPointer == screen)
+	{
+		return;
+	}
+
+	if (psMouseOverWidget == this)
+	{
+		psMouseOverWidget = nullptr;
+	}
+	if (screenPointer != nullptr && screenPointer->psFocus == this)
+	{
+		screenPointer->psFocus = nullptr;
+	}
+	if (screenPointer != nullptr && screenPointer->lastHighlight == this)
+	{
+		screenPointer->lastHighlight = nullptr;
+	}
+
 	screenPointer = screen;
 	for (Children::const_iterator i = childWidgets.begin(); i != childWidgets.end(); ++i)
 	{
@@ -172,6 +185,7 @@ void WIDGET::widgetLost(WIDGET *widget)
 
 W_SCREEN::W_SCREEN()
 	: psFocus(NULL)
+	, lastHighlight(nullptr)
 	, TipFontID(font_regular)
 {
 	W_FORMINIT sInit;
@@ -192,33 +206,19 @@ W_SCREEN::~W_SCREEN()
 }
 
 /* Check whether an ID has been used on a form */
-static bool widgCheckIDForm(W_FORM *psForm, UDWORD id)
+static bool widgCheckIDForm(WIDGET *psForm, UDWORD id)
 {
-	WIDGET			*psCurr;
-	W_FORMGETALL	sGetAll;
-
-	/* Check the widgets on the form */
-	formInitGetAllWidgets(psForm, &sGetAll);
-	psCurr = formGetAllWidgets(&sGetAll);
-	while (psCurr != NULL)
+	if (psForm->id == id)
 	{
-		if (psCurr->id == id)
+		return true;
+	}
+	for (WIDGET::Children::const_iterator i = psForm->children().begin(); i != psForm->children().end(); ++i)
+	{
+		if (widgCheckIDForm(*i, id))
 		{
 			return true;
 		}
-
-		if (psCurr->type == WIDG_FORM)
-		{
-			/* Another form so recurse */
-			if (widgCheckIDForm((W_FORM *)psCurr, id))
-			{
-				return true;
-			}
-		}
-
-		psCurr = formGetAllWidgets(&sGetAll);
 	}
-
 	return false;
 }
 
@@ -226,7 +226,7 @@ static bool widgAddWidget(W_SCREEN *psScreen, W_INIT const *psInit, WIDGET *widg
 {
 	ASSERT_OR_RETURN(false, widget != NULL, "Invalid widget");
 	ASSERT_OR_RETURN(false, psScreen != NULL, "Invalid screen pointer");
-	ASSERT_OR_RETURN(false, !widgCheckIDForm((W_FORM *)psScreen->psForm, psInit->id), "ID number has already been used (%d)", psInit->id);
+	ASSERT_OR_RETURN(false, !widgCheckIDForm(psScreen->psForm, psInit->id), "ID number has already been used (%d)", psInit->id);
 	// Find the form to add the widget to.
 	W_FORM *psParent;
 	if (psInit->formID == 0)
@@ -564,100 +564,36 @@ void widgSetString(W_SCREEN *psScreen, UDWORD id, const char *pText)
 	psWidget->setString(QString::fromUtf8(pText));
 }
 
-static void formGetOrigin(WIDGET *widget, int *x, int *y)
+void WIDGET::processCallbacksRecursive(W_CONTEXT *psContext)
 {
-	*x = 0;
-	*y = 0;
-	if (widget->type == WIDG_FORM && (widget->style & WFORM_TABBED) != 0)
-	{
-		*x = ((W_TABFORM *)widget)->tabWidget()->x();
-		*y = ((W_TABFORM *)widget)->tabWidget()->y();
-	}
-}
-
-/* Call any callbacks for the widgets on a form */
-static void widgProcessCallbacks(W_CONTEXT *psContext)
-{
-	WIDGET			*psCurr;
-	W_CONTEXT		sFormContext, sWidgContext;
-	SDWORD			xOrigin, yOrigin;
-	W_FORMGETALL	sFormCtl;
-
-	/* Initialise the form context */
-	sFormContext.psScreen = psContext->psScreen;
-
-	/* Initialise widget context */
-	formGetOrigin(psContext->psForm, &xOrigin, &yOrigin);
-	sWidgContext.psScreen = psContext->psScreen;
-	sWidgContext.psForm = psContext->psForm;
-	sWidgContext.mx = psContext->mx - xOrigin;
-	sWidgContext.my = psContext->my - yOrigin;
-	sWidgContext.xOffset = psContext->xOffset + xOrigin;
-	sWidgContext.yOffset = psContext->yOffset + yOrigin;
-
 	/* Go through all the widgets on the form */
-	formInitGetAllWidgets(psContext->psForm, &sFormCtl);
-	psCurr = formGetAllWidgets(&sFormCtl);
-	while (psCurr)
+	for (WIDGET::Children::const_iterator i = childWidgets.begin(); i != childWidgets.end(); ++i)
 	{
+		WIDGET *psCurr = *i;
+
 		/* Call the callback */
 		if (psCurr->callback)
 		{
-			psCurr->callback(psCurr, &sWidgContext);
+			psCurr->callback(psCurr, psContext);
 		}
 
 		/* and then recurse */
-		if (psCurr->type == WIDG_FORM)
-		{
-			sFormContext.psForm = (W_FORM *)psCurr;
-			sFormContext.mx = sWidgContext.mx - psCurr->x();
-			sFormContext.my = sWidgContext.my - psCurr->y();
-			sFormContext.xOffset = sWidgContext.xOffset + psCurr->x();
-			sFormContext.yOffset = sWidgContext.yOffset + psCurr->y();
-			widgProcessCallbacks(&sFormContext);
-		}
-
-		/* See if the form has any more widgets on it */
-		psCurr = formGetAllWidgets(&sFormCtl);
+		W_CONTEXT sFormContext;
+		sFormContext.mx = psContext->mx - psCurr->x();
+		sFormContext.my = psContext->my - psCurr->y();
+		sFormContext.xOffset = psContext->xOffset + psCurr->x();
+		sFormContext.yOffset = psContext->yOffset + psCurr->y();
+		psCurr->processCallbacksRecursive(&sFormContext);
 	}
 }
-
 
 /* Process all the widgets on a form.
  * mx and my are the coords of the mouse relative to the form origin.
  */
-static void widgProcessForm(W_CONTEXT *psContext)
+void WIDGET::runRecursive(W_CONTEXT *psContext)
 {
-	SDWORD		mx, my, xOffset, yOffset, xOrigin, yOrigin;
-	W_FORM		*psForm;
-	W_CONTEXT	sFormContext, sWidgContext;
-
-	/* Note current form */
-	psForm = psContext->psForm;
-
-	/* Note the current mouse position */
-	mx = psContext->mx;
-	my = psContext->my;
-
-	/* Note the current offset */
-	xOffset = psContext->xOffset;
-	yOffset = psContext->yOffset;
-
-	/* Initialise the form context */
-	sFormContext.psScreen = psContext->psScreen;
-
-	/* Initialise widget context */
-	formGetOrigin(psForm, &xOrigin, &yOrigin);
-	sWidgContext.psScreen = psContext->psScreen;
-	sWidgContext.psForm = psForm;
-	sWidgContext.mx = mx - xOrigin;
-	sWidgContext.my = my - yOrigin;
-	sWidgContext.xOffset = xOffset + xOrigin;
-	sWidgContext.yOffset = yOffset + yOrigin;
-
 	/* Process the form's widgets */
-	WIDGET::Children const &children = formGetWidgets(psForm);
-	for (WIDGET::Children::const_iterator i = children.begin(); i != children.end(); ++i)
+	for (WIDGET::Children::const_iterator i = childWidgets.begin(); i != childWidgets.end(); ++i)
 	{
 		WIDGET *psCurr = *i;
 
@@ -667,141 +603,64 @@ static void widgProcessForm(W_CONTEXT *psContext)
 			continue;
 		}
 
-		if (psCurr->type == WIDG_FORM)
-		{
-			/* Found a sub form, so set up the context */
-			sFormContext.psForm = (W_FORM *)psCurr;
-			sFormContext.mx = mx - psCurr->x() - xOrigin;
-			sFormContext.my = my - psCurr->y() - yOrigin;
-			sFormContext.xOffset = xOffset + psCurr->x() + xOrigin;
-			sFormContext.yOffset = yOffset + psCurr->y() + yOrigin;
+		/* Found a sub form, so set up the context */
+		W_CONTEXT sFormContext;
+		sFormContext.mx = psContext->mx - psCurr->x();
+		sFormContext.my = psContext->my - psCurr->y();
+		sFormContext.xOffset = psContext->xOffset + psCurr->x();
+		sFormContext.yOffset = psContext->yOffset + psCurr->y();
 
-			/* Process it */
-			widgProcessForm(&sFormContext);
-		}
-		else
-		{
-			/* Run the widget */
-			psCurr->run(&sWidgContext);
-		}
+		/* Process it */
+		psCurr->runRecursive(&sFormContext);
+
+		/* Run the widget */
+		psCurr->run(psContext);
 	}
-
-	/* Run this form */
-	psForm->run(psContext);
 }
 
-static void widgProcessClick(W_CONTEXT &psContext, WIDGET_KEY key, bool wasPressed)
+void WIDGET::processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed)
 {
-	W_FORM *psForm = psContext.psForm;
-	Vector2i origin;
-	formGetOrigin(psForm, &origin.x, &origin.y);
-	Vector2i pos(psContext.mx, psContext.my);
-	Vector2i oPos = pos - origin;
-	Vector2i offset(psContext.xOffset, psContext.yOffset);
-	Vector2i oOffset = offset + origin;
+	Vector2i pos(psContext->mx, psContext->my);
+	Vector2i offset(psContext->xOffset, psContext->yOffset);
 
-	// Process subforms (but not widgets, yet).
-	WIDGET::Children const &children = formGetWidgets(psForm);
-	for (WIDGET::Children::const_iterator i = children.begin(); i != children.end(); ++i)
+	// Process subwidgets.
+	for (WIDGET::Children::const_iterator i = childWidgets.begin(); i != childWidgets.end(); ++i)
 	{
 		WIDGET *psCurr = *i;
 
-		if (!psCurr->visible() || psCurr->type != WIDG_FORM)
+		if (!psCurr->visible() || !psCurr->dim.contains(psContext->mx, psContext->my))
 		{
-			continue;  // Skip any hidden forms or non-form widgets.
+			continue;  // Skip any hidden widgets, or widgets the click missed.
 		}
 
-		// Found a sub form, so set up the context.
+		// Found a subwidget, so set up the context.
 		W_CONTEXT sFormContext;
-		sFormContext.psScreen = psContext.psScreen;
-		sFormContext.psForm = (W_FORM *)psCurr;
-		sFormContext.mx = oPos.x - psCurr->x();
-		sFormContext.my = oPos.y - psCurr->y();
-		sFormContext.xOffset = oOffset.x + psCurr->x();
-		sFormContext.yOffset = oOffset.y + psCurr->y();
+		sFormContext.mx = psContext->mx - psCurr->x();
+		sFormContext.my = psContext->my - psCurr->y();
+		sFormContext.xOffset = psContext->xOffset + psCurr->x();
+		sFormContext.yOffset = psContext->yOffset + psCurr->y();
 
 		// Process it (recursively).
-		widgProcessClick(sFormContext, key, wasPressed);
+		psCurr->processClickRecursive(&sFormContext, key, wasPressed);
 	}
 
-	if (pos.x < 0 || pos.x > psForm->width() || pos.y < 0 || pos.y >= psForm->height())
+	if (psMouseOverWidget == nullptr)
 	{
-		return;  // Click is somewhere else.
+		psMouseOverWidget = this;  // Mark that the mouse is over a widget (if we haven't already).
 	}
-
-	W_CONTEXT sWidgContext;
-	sWidgContext.psScreen = psContext.psScreen;
-	sWidgContext.psForm = psForm;
-	sWidgContext.mx = oPos.x;
-	sWidgContext.my = oPos.y;
-	sWidgContext.xOffset = oOffset.x;
-	sWidgContext.yOffset = oOffset.y;
-
-	// Process widgets.
-	WIDGET *widgetUnderMouse = NULL;
-	for (WIDGET::Children::const_iterator i = children.begin(); i != children.end(); ++i)
+	if (screenPointer->lastHighlight != this && psMouseOverWidget == this)
 	{
-		WIDGET *psCurr = *i;
-
-		if (!psCurr->visible())
+		if (screenPointer->lastHighlight != nullptr)
 		{
-			continue;  // Skip hidden widgets.
+			screenPointer->lastHighlight->highlightLost();
 		}
-
-		if (!psCurr->geometry().contains(oPos.x, oPos.y))
-		{
-			continue;  // The click missed the widget.
-		}
-
-		if (!psMouseOverWidget)
-		{
-			psMouseOverWidget = psCurr;  // Mark that the mouse is over a widget (if we haven't already).
-		}
-
-		if ((psForm->style & WFORM_CLICKABLE) != 0)
-		{
-			continue;  // Don't check the widgets if we are a clickable form.
-		}
-
-		widgetUnderMouse = psCurr;  // One (at least) of our widgets will get the click, so don't send it to us (we are the form).
-
-		if (key == WKEY_NONE)
-		{
-			continue;  // Just checking mouse position, not a click.
-		}
-
-		if (wasPressed)
-		{
-			psCurr->clicked(&sWidgContext, key);
-		}
-		else
-		{
-			psCurr->released(&sWidgContext, key);
-		}
-	}
-
-	// See if the mouse has moved onto or off a widget.
-	if (psForm->psLastHiLite != widgetUnderMouse)
-	{
-		if (psForm->psLastHiLite != NULL)
-		{
-			psForm->psLastHiLite->highlightLost();
-		}
-		if (widgetUnderMouse != NULL)
-		{
-			widgetUnderMouse->highlight(&sWidgContext);
-		}
-		psForm->psLastHiLite = widgetUnderMouse;
-	}
-
-	if (widgetUnderMouse != NULL)
-	{
-		return;  // Only send the Clicked or Released messages if a widget didn't get the message.
-	}
-
-	if (!psMouseOverWidget)
-	{
-		psMouseOverWidget = psForm;  // Note that the mouse is over this form.
+		screenPointer->lastHighlight = this;  // Mark that the mouse is over a widget (if we haven't already).
+		W_CONTEXT highlightContext;
+		highlightContext.mx = psContext->mx + x();
+		highlightContext.my = psContext->my + y();
+		highlightContext.xOffset = psContext->xOffset - x();
+		highlightContext.yOffset = psContext->yOffset - y();
+		highlight(&highlightContext);
 	}
 
 	if (key == WKEY_NONE)
@@ -811,11 +670,11 @@ static void widgProcessClick(W_CONTEXT &psContext, WIDGET_KEY key, bool wasPress
 
 	if (wasPressed)
 	{
-		psForm->clicked(&psContext, key);
+		clicked(psContext, key);
 	}
 	else
 	{
-		psForm->released(&psContext, key);
+		released(psContext, key);
 	}
 }
 
@@ -829,8 +688,6 @@ WidgetTriggers const &widgRunScreen(W_SCREEN *psScreen)
 
 	/* Initialise the context */
 	W_CONTEXT sContext;
-	sContext.psScreen = psScreen;
-	sContext.psForm = psScreen->psForm;
 	sContext.xOffset = 0;
 	sContext.yOffset = 0;
 	psMouseOverWidget = NULL;
@@ -858,7 +715,7 @@ WidgetTriggers const &widgRunScreen(W_SCREEN *psScreen)
 			}
 			sContext.mx = c->pos.x;
 			sContext.my = c->pos.y;
-			widgProcessClick(sContext, wkey, pressed);
+			psScreen->psForm->processClickRecursive(&sContext, wkey, pressed);
 
 			lastReleasedKey_DEPRECATED = wkey;
 		}
@@ -866,13 +723,13 @@ WidgetTriggers const &widgRunScreen(W_SCREEN *psScreen)
 
 	sContext.mx = mouseX();
 	sContext.my = mouseY();
-	widgProcessClick(sContext, WKEY_NONE, true);  // Update highlights and psMouseOverWidget.
+	psScreen->psForm->processClickRecursive(&sContext, WKEY_NONE, true);  // Update highlights and psMouseOverWidget.
 
 	/* Process the screen's widgets */
-	widgProcessForm(&sContext);
+	psScreen->psForm->runRecursive(&sContext);
 
 	/* Process any user callback functions */
-	widgProcessCallbacks(&sContext);
+	psScreen->psForm->processCallbacksRecursive(&sContext);
 
 	/* Return the ID of a pressed button or finished edit box if any */
 	return psScreen->retWidgets;

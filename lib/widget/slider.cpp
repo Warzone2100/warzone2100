@@ -144,7 +144,7 @@ void W_SLIDER::run(W_CONTEXT *psContext)
 	if ((state & SLD_DRAG) && !mouseDown(MOUSE_LMB))
 	{
 		state &= ~SLD_DRAG;
-		widgSetReturn(psContext->psScreen, this);
+		widgSetReturn(screenPointer, this);
 	}
 	else if (!(state & SLD_DRAG) && mouseDown(MOUSE_LMB))
 	{

@@ -33,8 +33,6 @@ struct W_FORM : public WIDGET
 	W_FORM(W_FORMINIT const *init);
 	W_FORM(WIDGET *parent);
 
-	void widgetLost(WIDGET *widget);
-
 	void clicked(W_CONTEXT *psContext, WIDGET_KEY key);
 	void highlightLost();
 	void display(int xOffset, int yOffset);
@@ -43,17 +41,6 @@ struct W_FORM : public WIDGET
 	UWORD           Ax0, Ay0, Ax1, Ay1;     ///< Working coords for animations.
 	UDWORD          animCount;              ///< Animation counter.
 	UDWORD          startTime;              ///< Animation start time
-	WIDGET         *psLastHiLite;           ///< The last widget to be hilited. This is used to track when the mouse moves off something.
-	WIDGET         *psWidgets;              ///< The widgets on the form
-};
-
-/* Information for a major tab */
-struct W_MAJORTAB
-{
-	W_MAJORTAB();
-
-	/* Graphics data for the tab will go here */
-	WIDGET *                psWidgets;              // Widgets on the tab
 };
 
 /* The tabbed form data structure */
@@ -130,23 +117,5 @@ struct W_CLICKFORM : public W_FORM
 
 /* Add a widget to a form */
 bool formAddWidget(W_FORM *psForm, WIDGET *psWidget, W_INIT const *psInit);
-
-/* Return the widgets currently displayed by a form */
-WIDGET::Children const &formGetWidgets(W_FORM *psWidget);
-
-/* Variables for the formGetAllWidgets functions */
-struct W_FORMGETALL
-{
-	WIDGET::Children::const_iterator tabBegin, tabEnd, begin, end;
-};
-
-/* Initialise the formGetAllWidgets function */
-extern void formInitGetAllWidgets(W_FORM *psWidget, W_FORMGETALL *psCtrl);
-
-/* Repeated calls to this function will return widget lists
- * until all widgets in a form have been returned.
- * When a NULL list is returned, all widgets have been seen.
- */
-extern WIDGET *formGetAllWidgets(W_FORMGETALL *psCtrl);
 
 #endif // __INCLUDED_LIB_WIDGET_FORM_H__
