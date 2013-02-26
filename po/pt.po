@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2013-01-04 22:11-0500\n"
+"POT-Creation-Date: 2012-10-30 16:57+0100\n"
 "PO-Revision-Date: 2011-02-16 12:57-0300\n"
 "Last-Translator: Artur Filipe <tucalipe@gmail.com>\n"
 "Language-Team: Portugese <warzone2100-project@lists.sourceforge.net>\n"
@@ -12056,7 +12056,7 @@ msgid "OpenGL GLSL shader version 1.20 is not supported by your system. Some thi
 msgstr ""
 
 #: lib/ivis_opengl/screen.cpp:193
-msgid "OpenGL 1.2 + TEC is not supported by your system. The game requires this. Please upgrade your graphics drivers/hardware, if possible."
+msgid "OpenGL 1.2 + VBO + TEC is not supported by your system. The game requires this. Please upgrade your graphics drivers/hardware, if possible."
 msgstr ""
 
 #: lib/netplay/netplay.cpp:210
@@ -12164,151 +12164,147 @@ msgstr ""
 msgid "Debug mode now disabled!"
 msgstr "Menu de Debug Aberto"
 
-#: src/clparse.cpp:243
+#: src/clparse.cpp:242
 msgid "Set configuration directory"
 msgstr "Definir directório de configuração"
 
-#: src/clparse.cpp:243
+#: src/clparse.cpp:242
 msgid "configuration directory"
 msgstr "directório de configuração"
 
-#: src/clparse.cpp:244
+#: src/clparse.cpp:243
 msgid "Set default data directory"
 msgstr "Definir directório de dados original."
 
-#: src/clparse.cpp:244
+#: src/clparse.cpp:243
 msgid "data directory"
 msgstr "directório de dados"
 
-#: src/clparse.cpp:245
+#: src/clparse.cpp:244
 msgid "Show debug for given level"
 msgstr "Mostrar debug para o nível dado"
 
-#: src/clparse.cpp:245
+#: src/clparse.cpp:244
 msgid "debug level"
 msgstr "debug do nível"
 
-#: src/clparse.cpp:246
+#: src/clparse.cpp:245
 msgid "Log debug output to file"
 msgstr "Registar resultados do debug para um ficheiro"
 
-#: src/clparse.cpp:246
+#: src/clparse.cpp:245
 msgid "file"
 msgstr "ficheiro"
 
-#: src/clparse.cpp:247
+#: src/clparse.cpp:246
 msgid "Flush all debug output written to stderr"
 msgstr "Esvazia todo o output de debug escrito em stderr"
 
-#: src/clparse.cpp:248
+#: src/clparse.cpp:247
 msgid "Play in fullscreen mode"
 msgstr "Jogar em modo de ecrâ inteiro"
 
-#: src/clparse.cpp:249
+#: src/clparse.cpp:248
 msgid "Load a specific game"
 msgstr "Carregar um jogo específico"
 
-#: src/clparse.cpp:249
+#: src/clparse.cpp:248
 msgid "game-name"
 msgstr "nome do jogo"
 
-#: src/clparse.cpp:250
+#: src/clparse.cpp:249
 msgid "Show this help message and exit"
 msgstr "Mostrar esta mensagem de ajuda e sair"
 
-#: src/clparse.cpp:251
+#: src/clparse.cpp:250
 msgid "Enable a global mod"
 msgstr "Activar um mod global"
 
+#: src/clparse.cpp:250
 #: src/clparse.cpp:251
 #: src/clparse.cpp:252
-#: src/clparse.cpp:253
 msgid "mod"
 msgstr "mod"
 
-#: src/clparse.cpp:252
+#: src/clparse.cpp:251
 msgid "Enable a campaign only mod"
 msgstr "Activar um mod apenas para a campanha"
 
-#: src/clparse.cpp:253
+#: src/clparse.cpp:252
 msgid "Enable a multiplay only mod"
 msgstr "Activar um mod apenas de multijogador"
 
-#: src/clparse.cpp:254
+#: src/clparse.cpp:253
 #, fuzzy
 msgid "Disable asserts"
 msgstr "Desactivar sombras"
 
-#: src/clparse.cpp:255
+#: src/clparse.cpp:254
 msgid "Causes a crash to test the crash handler"
 msgstr "Faz o jogo crashar para testar o crash handler"
 
-#: src/clparse.cpp:256
+#: src/clparse.cpp:255
 msgid "Load a saved game"
 msgstr "Carregar um jogo gravado"
 
-#: src/clparse.cpp:256
+#: src/clparse.cpp:255
 msgid "savegame"
 msgstr "jogo gravado"
 
-#: src/clparse.cpp:257
+#: src/clparse.cpp:256
 msgid "Play in windowed mode"
 msgstr "Jogar em modo de janela"
 
-#: src/clparse.cpp:258
+#: src/clparse.cpp:257
 msgid "Show version information and exit"
 msgstr "Mostrar informação da versão e sair"
 
-#: src/clparse.cpp:259
+#: src/clparse.cpp:258
 msgid "Set the resolution to use"
 msgstr "Definir a resolução a usar"
 
-#: src/clparse.cpp:259
+#: src/clparse.cpp:258
 msgid "WIDTHxHEIGHT"
 msgstr "LARGURAxALTURA"
 
-#: src/clparse.cpp:260
+#: src/clparse.cpp:259
 msgid "Enable shadows"
 msgstr "Activar sombras"
 
-#: src/clparse.cpp:261
+#: src/clparse.cpp:260
 msgid "Disable shadows"
 msgstr "Desactivar sombras"
 
-#: src/clparse.cpp:262
+#: src/clparse.cpp:261
 msgid "Enable sound"
 msgstr "Activar som"
 
-#: src/clparse.cpp:263
+#: src/clparse.cpp:262
 msgid "Disable sound"
 msgstr "Desactivar som"
 
-#: src/clparse.cpp:264
+#: src/clparse.cpp:263
 msgid "connect directly to IP/hostname"
 msgstr "Conectar directamente a um IP/Hostname"
 
-#: src/clparse.cpp:264
+#: src/clparse.cpp:263
 msgid "host"
 msgstr "Anfitrião"
 
-#: src/clparse.cpp:265
+#: src/clparse.cpp:264
 msgid "go directly to host screen"
 msgstr "ir directamente para o ecrã de anfitrião"
 
-#: src/clparse.cpp:266
+#: src/clparse.cpp:265
 msgid "Enable texture compression"
 msgstr ""
 
-#: src/clparse.cpp:267
+#: src/clparse.cpp:266
 msgid "Disable texture compression"
 msgstr ""
 
-#: src/clparse.cpp:268
-msgid "Disable the use of OpenGL shaders"
-msgstr ""
-
-#: src/clparse.cpp:269
-msgid "Disable the use of OpenGL Vertex Buffer Objects"
+#: src/clparse.cpp:267
+msgid "Only use OpenGL 1.5"
 msgstr ""
 
 #: src/cmddroid.cpp:110
@@ -12487,20 +12483,20 @@ msgstr "Sistemas"
 msgid "Delete Template"
 msgstr ""
 
-#: src/display3d.cpp:674
+#: src/display3d.cpp:656
 msgid "Player left"
 msgstr "Jogador Saiu"
 
-#: src/display3d.cpp:678
+#: src/display3d.cpp:660
 msgid "Player dropped"
 msgstr "Jogador caiu"
 
-#: src/display3d.cpp:682
+#: src/display3d.cpp:664
 #: src/multiint.cpp:2308
 msgid "Waiting for other players"
 msgstr "À espera dos outros jogadores"
 
-#: src/display3d.cpp:687
+#: src/display3d.cpp:669
 msgid "Out of sync"
 msgstr ""
 
@@ -12633,7 +12629,7 @@ msgid "MAIN MENU"
 msgstr "MENU PRINCIPAL"
 
 #: src/frontend.cpp:117
-msgid "Official site: http://wz2100.net/"
+msgid "Warzone 2100 is completely free and open source (FLOSS). Official site: http://wz2100.net/"
 msgstr ""
 
 #: src/frontend.cpp:188
@@ -12715,7 +12711,7 @@ msgid "Join Game"
 msgstr "Juntar-se a Jogo"
 
 #: src/frontend.cpp:402
-msgid "TCP port 2100 must be opened in your firewall or router to host games!"
+msgid "TCP PORT 2100 MUST BE OPENED IN YOUR FIREWALL / ROUTER TO HOST GAMES!"
 msgstr ""
 
 #: src/frontend.cpp:464
@@ -13253,7 +13249,7 @@ msgstr "Nova Campanha"
 msgid "Save Skirmish Game"
 msgstr "Iniciar jogo de Escaramuça"
 
-#: src/init.cpp:422
+#: src/init.cpp:421
 #, c-format
 msgid ""
 "The required mod could not be loaded: %s\n"
@@ -14975,12 +14971,12 @@ msgstr ""
 msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
 msgstr ""
 
-#: src/qtscriptfuncs.cpp:1595
+#: src/qtscriptfuncs.cpp:1591
 #: src/scriptfuncs.cpp:3263
 msgid "YOU ARE VICTORIOUS!"
 msgstr "FOSTE VITORIOSO!"
 
-#: src/qtscriptfuncs.cpp:1600
+#: src/qtscriptfuncs.cpp:1596
 #: src/scriptfuncs.cpp:3267
 msgid "YOU WERE DEFEATED!"
 msgstr "FOSTE DERROTADO"
@@ -15150,63 +15146,63 @@ msgid_plural "%u units selected"
 msgstr[0] "%u unidade seleccionada"
 msgstr[1] "%u unidades seleccionadas"
 
-#: src/structure.cpp:2625
+#: src/structure.cpp:2632
 #, fuzzy
 msgid "Can't build anymore units, Command Control Limit Reached - Production Halted"
 msgstr "Limite de Controlo de Comando Alcançado - Produção Parada"
 
-#: src/structure.cpp:5618
-#: src/structure.cpp:5643
+#: src/structure.cpp:5625
+#: src/structure.cpp:5650
 #, fuzzy, c-format
 msgid "%s - %u Unit assigned - Damage %3.0f%%"
 msgid_plural "%s - %u Units assigned - Damage %3.0f%%"
 msgstr[0] "%s - %u unidade atribuída"
 msgstr[1] "%s - %u unidades atribuídas"
 
-#: src/structure.cpp:5648
-#: src/structure.cpp:5716
-#: src/structure.cpp:5731
-#: src/structure.cpp:5745
+#: src/structure.cpp:5655
+#: src/structure.cpp:5723
+#: src/structure.cpp:5738
+#: src/structure.cpp:5752
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Dano %3.0f%%"
 
-#: src/structure.cpp:5698
+#: src/structure.cpp:5705
 #, fuzzy, c-format
 msgid "%s - Connected %u of %u - Damage %3.0f%%"
 msgstr "%s - Ligado a %u de %u"
 
-#: src/structure.cpp:5862
-#: src/structure.cpp:5907
+#: src/structure.cpp:5869
+#: src/structure.cpp:5914
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Danificado Electronicamente"
 
-#: src/structure.cpp:6158
+#: src/structure.cpp:6165
 msgid "Electronic Reward - Visibility Report"
 msgstr "Recompensa Electrónica - Relatório de Visibilidade"
 
-#: src/structure.cpp:6198
+#: src/structure.cpp:6205
 msgid "Factory Reward - Propulsion"
 msgstr "Recompensa de Fábrica - Propulsão"
 
-#: src/structure.cpp:6222
+#: src/structure.cpp:6229
 msgid "Factory Reward - Body"
 msgstr "Recompensa de Fábrica - Corpo"
 
-#: src/structure.cpp:6246
+#: src/structure.cpp:6253
 msgid "Factory Reward - Weapon"
 msgstr "Recompensa de Fábrica - Arma"
 
-#: src/structure.cpp:6255
+#: src/structure.cpp:6262
 msgid "Factory Reward - Nothing"
 msgstr "Recompensa de Fábrica - Nada"
 
-#: src/structure.cpp:6283
+#: src/structure.cpp:6290
 msgid "Repair Facility Award - Repair"
 msgstr "Recompensa de Posto de Reparação - Reparações"
 
-#: src/structure.cpp:6290
+#: src/structure.cpp:6297
 msgid "Repair Facility Award - Nothing"
 msgstr "Recompensa de Posto de Reparação - Nada"
 

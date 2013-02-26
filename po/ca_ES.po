@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100-master_20110320qt\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2013-01-04 22:11-0500\n"
+"POT-Creation-Date: 2012-10-30 16:57+0100\n"
 "PO-Revision-Date: 2012-06-24 12:17+0200\n"
 "Last-Translator: Àngel Mompó <mecatxis@gmail.com>\n"
 "Language-Team: Catalan <ca@dodds.net> <>\n"
@@ -11887,7 +11887,7 @@ msgstr "La versió 1.2 del OepnGL GLSL shader no està implementada en el vostre
 
 #: lib/ivis_opengl/screen.cpp:193
 #, fuzzy
-msgid "OpenGL 1.2 + TEC is not supported by your system. The game requires this. Please upgrade your graphics drivers/hardware, if possible."
+msgid "OpenGL 1.2 + VBO + TEC is not supported by your system. The game requires this. Please upgrade your graphics drivers/hardware, if possible."
 msgstr "El vostre sistema no és compatible amb OpenGL 1.2 + TEC. Aquest joc el necessita. Si podeu, actualitzeu la vostra tarja gràfica o el controlador."
 
 #: lib/netplay/netplay.cpp:210
@@ -11997,151 +11997,147 @@ msgstr "El mode de depuració ara està habilitat!"
 msgid "Debug mode now disabled!"
 msgstr "El mode de depuració ara està deshabilitat!"
 
-#: src/clparse.cpp:243
+#: src/clparse.cpp:242
 msgid "Set configuration directory"
 msgstr "Estableix la carpeta de configuració"
 
-#: src/clparse.cpp:243
+#: src/clparse.cpp:242
 msgid "configuration directory"
 msgstr "carpeta-configuració"
 
-#: src/clparse.cpp:244
+#: src/clparse.cpp:243
 msgid "Set default data directory"
 msgstr "Estableix la carpeta de dades per defecte"
 
-#: src/clparse.cpp:244
+#: src/clparse.cpp:243
 msgid "data directory"
 msgstr "carpeta-dades"
 
-#: src/clparse.cpp:245
+#: src/clparse.cpp:244
 msgid "Show debug for given level"
 msgstr "Mostra la depuració al nivell indicat"
 
-#: src/clparse.cpp:245
+#: src/clparse.cpp:244
 msgid "debug level"
 msgstr "nivell de depuració"
 
-#: src/clparse.cpp:246
+#: src/clparse.cpp:245
 msgid "Log debug output to file"
 msgstr "Desa la sortida de depuració en un fitxer"
 
-#: src/clparse.cpp:246
+#: src/clparse.cpp:245
 msgid "file"
 msgstr "fitxer"
 
-#: src/clparse.cpp:247
+#: src/clparse.cpp:246
 msgid "Flush all debug output written to stderr"
 msgstr "Buida tota la sortida de depuració a stderr"
 
-#: src/clparse.cpp:248
+#: src/clparse.cpp:247
 msgid "Play in fullscreen mode"
 msgstr "Juga en mode de pantalla completa"
 
-#: src/clparse.cpp:249
+#: src/clparse.cpp:248
 msgid "Load a specific game"
 msgstr "Carrega una partida especifica"
 
-#: src/clparse.cpp:249
+#: src/clparse.cpp:248
 msgid "game-name"
 msgstr "nom-partida"
 
-#: src/clparse.cpp:250
+#: src/clparse.cpp:249
 msgid "Show this help message and exit"
 msgstr "Mostra aquesta ajuda i surt"
 
-#: src/clparse.cpp:251
+#: src/clparse.cpp:250
 msgid "Enable a global mod"
 msgstr "Habilita un mod global"
 
+#: src/clparse.cpp:250
 #: src/clparse.cpp:251
 #: src/clparse.cpp:252
-#: src/clparse.cpp:253
 msgid "mod"
 msgstr "mod"
 
-#: src/clparse.cpp:252
+#: src/clparse.cpp:251
 msgid "Enable a campaign only mod"
 msgstr "Habilita un mod només per la campanya"
 
-#: src/clparse.cpp:253
+#: src/clparse.cpp:252
 msgid "Enable a multiplay only mod"
 msgstr "Habilita un mod només pel mode multijug."
 
-#: src/clparse.cpp:254
+#: src/clparse.cpp:253
 msgid "Disable asserts"
 msgstr "Deshabilita les assercions"
 
-#: src/clparse.cpp:255
+#: src/clparse.cpp:254
 msgid "Causes a crash to test the crash handler"
 msgstr "Provoca una fallada per provar-ne el gestor"
 
-#: src/clparse.cpp:256
+#: src/clparse.cpp:255
 msgid "Load a saved game"
 msgstr "Carrega una partida desada"
 
-#: src/clparse.cpp:256
+#: src/clparse.cpp:255
 msgid "savegame"
 msgstr "partida-desada"
 
-#: src/clparse.cpp:257
+#: src/clparse.cpp:256
 msgid "Play in windowed mode"
 msgstr "Juga en mode finestra"
 
-#: src/clparse.cpp:258
+#: src/clparse.cpp:257
 msgid "Show version information and exit"
 msgstr "Mostra informació de la versió i surt"
 
-#: src/clparse.cpp:259
+#: src/clparse.cpp:258
 msgid "Set the resolution to use"
 msgstr "Estableix la resolució que es farà servir"
 
-#: src/clparse.cpp:259
+#: src/clparse.cpp:258
 msgid "WIDTHxHEIGHT"
 msgstr "AMPLADAxALÇADA"
 
-#: src/clparse.cpp:260
+#: src/clparse.cpp:259
 msgid "Enable shadows"
 msgstr "Habilita les ombres"
 
-#: src/clparse.cpp:261
+#: src/clparse.cpp:260
 msgid "Disable shadows"
 msgstr "Deshabilita les ombres"
 
-#: src/clparse.cpp:262
+#: src/clparse.cpp:261
 msgid "Enable sound"
 msgstr "Habilita el so"
 
-#: src/clparse.cpp:263
+#: src/clparse.cpp:262
 msgid "Disable sound"
 msgstr "Deshabilita el so"
 
-#: src/clparse.cpp:264
+#: src/clparse.cpp:263
 msgid "connect directly to IP/hostname"
 msgstr "Connecta directament a la IP/nom de l'amfitrió"
 
-#: src/clparse.cpp:264
+#: src/clparse.cpp:263
 msgid "host"
 msgstr "amfitrió"
 
-#: src/clparse.cpp:265
+#: src/clparse.cpp:264
 msgid "go directly to host screen"
 msgstr "Va directament a la pantalla d'amfitrió"
 
-#: src/clparse.cpp:266
+#: src/clparse.cpp:265
 msgid "Enable texture compression"
 msgstr "Habilita la compressió de textures"
 
-#: src/clparse.cpp:267
+#: src/clparse.cpp:266
 msgid "Disable texture compression"
 msgstr "Deshabilita la compressió de textures"
 
-#: src/clparse.cpp:268
-msgid "Disable the use of OpenGL shaders"
-msgstr "Deshabilita l'ús de OpenGL shaders"
-
-#: src/clparse.cpp:269
-msgid "Disable the use of OpenGL Vertex Buffer Objects"
-msgstr "Deshabilita l'ús de la memòria intermèdia d'objectes OpenGL Vertex"
+#: src/clparse.cpp:267
+msgid "Only use OpenGL 1.5"
+msgstr ""
 
 #: src/cmddroid.cpp:110
 msgid "Commander needs a higher level to command more units"
@@ -12317,20 +12313,20 @@ msgstr "Sistemes"
 msgid "Delete Template"
 msgstr "Esborra plantilla"
 
-#: src/display3d.cpp:674
+#: src/display3d.cpp:656
 msgid "Player left"
 msgstr "Ha marxat un jugador"
 
-#: src/display3d.cpp:678
+#: src/display3d.cpp:660
 msgid "Player dropped"
 msgstr "Ha caigut un jugador"
 
-#: src/display3d.cpp:682
+#: src/display3d.cpp:664
 #: src/multiint.cpp:2308
 msgid "Waiting for other players"
 msgstr "S'està esperant els altres jugadors"
 
-#: src/display3d.cpp:687
+#: src/display3d.cpp:669
 msgid "Out of sync"
 msgstr "S'ha perdut el sincronisme"
 
@@ -12463,8 +12459,8 @@ msgid "MAIN MENU"
 msgstr "MENÚ PRINCIPAL"
 
 #: src/frontend.cpp:117
-msgid "Official site: http://wz2100.net/"
-msgstr ""
+msgid "Warzone 2100 is completely free and open source (FLOSS). Official site: http://wz2100.net/"
+msgstr "Warzone 2100 és completament lliure i de codi obert (FLOSS). Pàgina oficial: http://wz2100.net/"
 
 #: src/frontend.cpp:188
 msgid "Fast Play"
@@ -12540,8 +12536,8 @@ msgid "Join Game"
 msgstr "Uneix-te a una partida"
 
 #: src/frontend.cpp:402
-msgid "TCP port 2100 must be opened in your firewall or router to host games!"
-msgstr ""
+msgid "TCP PORT 2100 MUST BE OPENED IN YOUR FIREWALL / ROUTER TO HOST GAMES!"
+msgstr "El vostre tallafocs/encaminador ha de tenir el port TCP 2100 obert per hostatjar partides!"
 
 #: src/frontend.cpp:464
 #: src/multiint.cpp:1442
@@ -13055,7 +13051,7 @@ msgstr "Desa la campanya"
 msgid "Save Skirmish Game"
 msgstr "Desa l'escaramussa"
 
-#: src/init.cpp:422
+#: src/init.cpp:421
 #, c-format
 msgid ""
 "The required mod could not be loaded: %s\n"
@@ -14725,12 +14721,12 @@ msgstr "Marró"
 msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
 msgstr "No ho podem fer! Hem de ser una unitat ciborg per utilitzar un transport ciborg!"
 
-#: src/qtscriptfuncs.cpp:1595
+#: src/qtscriptfuncs.cpp:1591
 #: src/scriptfuncs.cpp:3263
 msgid "YOU ARE VICTORIOUS!"
 msgstr "HEU GUANYAT!"
 
-#: src/qtscriptfuncs.cpp:1600
+#: src/qtscriptfuncs.cpp:1596
 #: src/scriptfuncs.cpp:3267
 msgid "YOU WERE DEFEATED!"
 msgstr "HEU ESTAT DERROTAT!"
@@ -14900,62 +14896,62 @@ msgid_plural "%u units selected"
 msgstr[0] "%u unitat seleccionada"
 msgstr[1] "%u unitats seleccionades"
 
-#: src/structure.cpp:2625
+#: src/structure.cpp:2632
 msgid "Can't build anymore units, Command Control Limit Reached - Production Halted"
 msgstr "No es pot construir cap unitat més, el control de comandament ha arribat al seu límit- S'atura la producció"
 
-#: src/structure.cpp:5618
-#: src/structure.cpp:5643
+#: src/structure.cpp:5625
+#: src/structure.cpp:5650
 #, c-format
 msgid "%s - %u Unit assigned - Damage %3.0f%%"
 msgid_plural "%s - %u Units assigned - Damage %3.0f%%"
 msgstr[0] "%s - %u unitat assignada - Desperfectes %3.0f%%"
 msgstr[1] "%s - %u unitats assignades - Desperfectes %3.0f%%"
 
-#: src/structure.cpp:5648
-#: src/structure.cpp:5716
-#: src/structure.cpp:5731
-#: src/structure.cpp:5745
+#: src/structure.cpp:5655
+#: src/structure.cpp:5723
+#: src/structure.cpp:5738
+#: src/structure.cpp:5752
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - Desperfectes %3.0f%%"
 
-#: src/structure.cpp:5698
+#: src/structure.cpp:5705
 #, c-format
 msgid "%s - Connected %u of %u - Damage %3.0f%%"
 msgstr "%s - connectat a %u de %u - Desperfectes %3.0f%%"
 
-#: src/structure.cpp:5862
-#: src/structure.cpp:5907
+#: src/structure.cpp:5869
+#: src/structure.cpp:5914
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Danyat electrònicament"
 
-#: src/structure.cpp:6158
+#: src/structure.cpp:6165
 msgid "Electronic Reward - Visibility Report"
 msgstr "Recompensa electrònica - Informe de visibilitat"
 
-#: src/structure.cpp:6198
+#: src/structure.cpp:6205
 msgid "Factory Reward - Propulsion"
 msgstr "Recompensa de fabricació - Propulsió"
 
-#: src/structure.cpp:6222
+#: src/structure.cpp:6229
 msgid "Factory Reward - Body"
 msgstr "Recompensa de fabricació - Cos"
 
-#: src/structure.cpp:6246
+#: src/structure.cpp:6253
 msgid "Factory Reward - Weapon"
 msgstr "Recompensa de fabricació - Arma"
 
-#: src/structure.cpp:6255
+#: src/structure.cpp:6262
 msgid "Factory Reward - Nothing"
 msgstr "Recompensa de fabricació - Res"
 
-#: src/structure.cpp:6283
+#: src/structure.cpp:6290
 msgid "Repair Facility Award - Repair"
 msgstr "Recompensa de reparació - Reparació"
 
-#: src/structure.cpp:6290
+#: src/structure.cpp:6297
 msgid "Repair Facility Award - Nothing"
 msgstr "Recompensa de reparació - Res"
 
@@ -14992,14 +14988,14 @@ msgstr " - Construcció %s"
 msgid "Version %s%s%s%s"
 msgstr "Versió %s-%s%s%s%s"
 
-#~ msgid "Warzone 2100 is completely free and open source (FLOSS). Official site: http://wz2100.net/"
-#~ msgstr "Warzone 2100 és completament lliure i de codi obert (FLOSS). Pàgina oficial: http://wz2100.net/"
-
-#~ msgid "TCP PORT 2100 MUST BE OPENED IN YOUR FIREWALL / ROUTER TO HOST GAMES!"
-#~ msgstr "El vostre tallafocs/encaminador ha de tenir el port TCP 2100 obert per hostatjar partides!"
-
 #~ msgid "Password is already set!"
 #~ msgstr "Ja heu posat la contrasenya!"
+
+#~ msgid "Disable the use of OpenGL shaders"
+#~ msgstr "Deshabilita l'ús de OpenGL shaders"
+
+#~ msgid "Disable the use of OpenGL Vertex Buffer Objects"
+#~ msgstr "Deshabilita l'ús de la memòria intermèdia d'objectes OpenGL Vertex"
 
 #, fuzzy
 #~ msgid "Unit Colour (SP)"

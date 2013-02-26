@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2013-01-04 22:11-0500\n"
+"POT-Creation-Date: 2012-10-30 16:57+0100\n"
 "PO-Revision-Date: 2012-09-03 21:33+0400\n"
 "Last-Translator: vadim s. sabinich <vadim@sabini.ch>\n"
 "Language-Team: Russian <>\n"
@@ -11892,8 +11892,7 @@ msgid "OpenGL GLSL shader version 1.20 is not supported by your system. Some thi
 msgstr "OpenGL GLSL шейдер версия 1.20 не поддерживается вашей системой. Некоторые вещи могут выглядить неправильно. Пожалуйста, обновите ваши графические драйвера/железо, если возможно"
 
 #: lib/ivis_opengl/screen.cpp:193
-#, fuzzy
-msgid "OpenGL 1.2 + TEC is not supported by your system. The game requires this. Please upgrade your graphics drivers/hardware, if possible."
+msgid "OpenGL 1.2 + VBO + TEC is not supported by your system. The game requires this. Please upgrade your graphics drivers/hardware, if possible."
 msgstr "OpenGL 1.2 + VBO + TEC не поддерживается вашей системой. Игра требует это. Пожалуйста, обновите ваши графические драйвера/железо, если возможно"
 
 #: lib/netplay/netplay.cpp:210
@@ -12003,152 +12002,147 @@ msgstr "Отладочный режим включен"
 msgid "Debug mode now disabled!"
 msgstr "Меню отладки закрыто"
 
-#: src/clparse.cpp:243
+#: src/clparse.cpp:242
 msgid "Set configuration directory"
 msgstr "выбрать папку с настройками"
 
-#: src/clparse.cpp:243
+#: src/clparse.cpp:242
 msgid "configuration directory"
 msgstr "папка с настройками"
 
-#: src/clparse.cpp:244
+#: src/clparse.cpp:243
 msgid "Set default data directory"
 msgstr "Выбрать папку с данными по умолчанию"
 
-#: src/clparse.cpp:244
+#: src/clparse.cpp:243
 msgid "data directory"
 msgstr "папка с данными"
 
-#: src/clparse.cpp:245
+#: src/clparse.cpp:244
 msgid "Show debug for given level"
 msgstr "Показать отладку данного уровня"
 
-#: src/clparse.cpp:245
+#: src/clparse.cpp:244
 msgid "debug level"
 msgstr "уровень отладки"
 
-#: src/clparse.cpp:246
+#: src/clparse.cpp:245
 msgid "Log debug output to file"
 msgstr "Лог отладки в файл"
 
-#: src/clparse.cpp:246
+#: src/clparse.cpp:245
 msgid "file"
 msgstr "файл"
 
-#: src/clparse.cpp:247
+#: src/clparse.cpp:246
 msgid "Flush all debug output written to stderr"
 msgstr "Слить все записи отладки в выходной файл stderr"
 
-#: src/clparse.cpp:248
+#: src/clparse.cpp:247
 msgid "Play in fullscreen mode"
 msgstr "Полноэкранный режим"
 
-#: src/clparse.cpp:249
+#: src/clparse.cpp:248
 msgid "Load a specific game"
 msgstr "Загрузить особую игру"
 
-#: src/clparse.cpp:249
+#: src/clparse.cpp:248
 msgid "game-name"
 msgstr "Название игры"
 
-#: src/clparse.cpp:250
+#: src/clparse.cpp:249
 msgid "Show this help message and exit"
 msgstr "Отобразить данное справочное сообщение и выйти"
 
-#: src/clparse.cpp:251
+#: src/clparse.cpp:250
 msgid "Enable a global mod"
 msgstr "включить глобальный мод"
 
+#: src/clparse.cpp:250
 #: src/clparse.cpp:251
 #: src/clparse.cpp:252
-#: src/clparse.cpp:253
 msgid "mod"
 msgstr "мод"
 
-#: src/clparse.cpp:252
+#: src/clparse.cpp:251
 msgid "Enable a campaign only mod"
 msgstr "включить мод для Кампаний "
 
-#: src/clparse.cpp:253
+#: src/clparse.cpp:252
 msgid "Enable a multiplay only mod"
 msgstr "Включить мод для мультиплеера"
 
-#: src/clparse.cpp:254
+#: src/clparse.cpp:253
 msgid "Disable asserts"
 msgstr "Отключить утверждения"
 
-#: src/clparse.cpp:255
+#: src/clparse.cpp:254
 msgid "Causes a crash to test the crash handler"
 msgstr "вызывает крэш для тестирования прораммы обработки "
 
-#: src/clparse.cpp:256
+#: src/clparse.cpp:255
 msgid "Load a saved game"
 msgstr "Загрузить игру"
 
-#: src/clparse.cpp:256
+#: src/clparse.cpp:255
 msgid "savegame"
 msgstr "сохранение"
 
-#: src/clparse.cpp:257
+#: src/clparse.cpp:256
 msgid "Play in windowed mode"
 msgstr "Оконный режим"
 
-#: src/clparse.cpp:258
+#: src/clparse.cpp:257
 msgid "Show version information and exit"
 msgstr "Показать номер версии и выйти"
 
-#: src/clparse.cpp:259
+#: src/clparse.cpp:258
 msgid "Set the resolution to use"
 msgstr "Установить используемое разрешение"
 
-#: src/clparse.cpp:259
+#: src/clparse.cpp:258
 msgid "WIDTHxHEIGHT"
 msgstr "ШИРИНАхВЫСОТА"
 
-#: src/clparse.cpp:260
+#: src/clparse.cpp:259
 msgid "Enable shadows"
 msgstr "Включить тени"
 
-#: src/clparse.cpp:261
+#: src/clparse.cpp:260
 msgid "Disable shadows"
 msgstr "Отключить тени"
 
-#: src/clparse.cpp:262
+#: src/clparse.cpp:261
 msgid "Enable sound"
 msgstr "Включить звук"
 
-#: src/clparse.cpp:263
+#: src/clparse.cpp:262
 msgid "Disable sound"
 msgstr "Отключить звук"
 
-#: src/clparse.cpp:264
+#: src/clparse.cpp:263
 msgid "connect directly to IP/hostname"
 msgstr "прямое соединение с IP/ имя сервера"
 
-#: src/clparse.cpp:264
+#: src/clparse.cpp:263
 msgid "host"
 msgstr "Хост"
 
-#: src/clparse.cpp:265
+#: src/clparse.cpp:264
 msgid "go directly to host screen"
 msgstr "прямо на экран хоста"
 
-#: src/clparse.cpp:266
+#: src/clparse.cpp:265
 msgid "Enable texture compression"
 msgstr "Включить сжатие текстур"
 
-#: src/clparse.cpp:267
+#: src/clparse.cpp:266
 msgid "Disable texture compression"
 msgstr "Отключить сжатие текстур"
 
-#: src/clparse.cpp:268
-#, fuzzy
-msgid "Disable the use of OpenGL shaders"
-msgstr "Отключить сжатие текстур"
-
-#: src/clparse.cpp:269
-msgid "Disable the use of OpenGL Vertex Buffer Objects"
-msgstr ""
+#: src/clparse.cpp:267
+msgid "Only use OpenGL 1.5"
+msgstr "Использовать только OpenGL 1.5"
 
 #: src/cmddroid.cpp:110
 msgid "Commander needs a higher level to command more units"
@@ -12324,20 +12318,20 @@ msgstr "Системы"
 msgid "Delete Template"
 msgstr "Удалить Шаблон"
 
-#: src/display3d.cpp:674
+#: src/display3d.cpp:656
 msgid "Player left"
 msgstr "Игрок ушел"
 
-#: src/display3d.cpp:678
+#: src/display3d.cpp:660
 msgid "Player dropped"
 msgstr "Игрок исчез"
 
-#: src/display3d.cpp:682
+#: src/display3d.cpp:664
 #: src/multiint.cpp:2308
 msgid "Waiting for other players"
 msgstr "Ожидание других игроков"
 
-#: src/display3d.cpp:687
+#: src/display3d.cpp:669
 msgid "Out of sync"
 msgstr "Рассинхронизация"
 
@@ -12474,9 +12468,8 @@ msgid "MAIN MENU"
 msgstr "ГЛАВНОЕ МЕНЮ"
 
 #: src/frontend.cpp:117
-#, fuzzy
-msgid "Official site: http://wz2100.net/"
-msgstr "Посетите наш оффициальный сайт: http://wz2100.net"
+msgid "Warzone 2100 is completely free and open source (FLOSS). Official site: http://wz2100.net/"
+msgstr "Warzone 2100 полностью бесплатный и открытый код (FLOSS). Официальный сайт: http://wz2100.net/"
 
 #: src/frontend.cpp:188
 msgid "Fast Play"
@@ -12552,8 +12545,8 @@ msgid "Join Game"
 msgstr "Присоединиться"
 
 #: src/frontend.cpp:402
-msgid "TCP port 2100 must be opened in your firewall or router to host games!"
-msgstr ""
+msgid "TCP PORT 2100 MUST BE OPENED IN YOUR FIREWALL / ROUTER TO HOST GAMES!"
+msgstr "Порт TCP 2100 должен быть открыт в вашем фаерволе / роутере чтобы создавать игры!"
 
 #: src/frontend.cpp:464
 #: src/multiint.cpp:1442
@@ -13067,7 +13060,7 @@ msgstr "Сохранить Кампанию"
 msgid "Save Skirmish Game"
 msgstr "Сохранить Сражение"
 
-#: src/init.cpp:422
+#: src/init.cpp:421
 #, c-format
 msgid ""
 "The required mod could not be loaded: %s\n"
@@ -14737,12 +14730,12 @@ msgstr "Коричневый"
 msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
 msgstr "Мы не киборги, чтобы использовать Транспорт киборгов."
 
-#: src/qtscriptfuncs.cpp:1595
+#: src/qtscriptfuncs.cpp:1591
 #: src/scriptfuncs.cpp:3263
 msgid "YOU ARE VICTORIOUS!"
 msgstr "ПОБЕДА!"
 
-#: src/qtscriptfuncs.cpp:1600
+#: src/qtscriptfuncs.cpp:1596
 #: src/scriptfuncs.cpp:3267
 msgid "YOU WERE DEFEATED!"
 msgstr "ВЫ ПРОИГРАЛИ!"
@@ -14913,13 +14906,13 @@ msgstr[0] "выбран %u юнит"
 msgstr[1] "выбрано %u юнита"
 msgstr[2] "выбрано %u юнитов"
 
-#: src/structure.cpp:2625
+#: src/structure.cpp:2632
 #, fuzzy
 msgid "Can't build anymore units, Command Control Limit Reached - Production Halted"
 msgstr "Достигнут Предел Командного Контроля - Производство Остановлено"
 
-#: src/structure.cpp:5618
-#: src/structure.cpp:5643
+#: src/structure.cpp:5625
+#: src/structure.cpp:5650
 #, c-format
 msgid "%s - %u Unit assigned - Damage %3.0f%%"
 msgid_plural "%s - %u Units assigned - Damage %3.0f%%"
@@ -14927,50 +14920,50 @@ msgstr[0] "%s - %u Юнит назначен - Урон %3.0f%%"
 msgstr[1] "%s - %u Юнита назначено - Урон %3.0f%%"
 msgstr[2] "%s - %u Юнитов назначено - Урон %3.0f%%"
 
-#: src/structure.cpp:5648
-#: src/structure.cpp:5716
-#: src/structure.cpp:5731
-#: src/structure.cpp:5745
+#: src/structure.cpp:5655
+#: src/structure.cpp:5723
+#: src/structure.cpp:5738
+#: src/structure.cpp:5752
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - повреждение %3.0f%%"
 
-#: src/structure.cpp:5698
+#: src/structure.cpp:5705
 #, c-format
 msgid "%s - Connected %u of %u - Damage %3.0f%%"
 msgstr "%s - Подключено %u из %u - Урон %3.0f%%"
 
-#: src/structure.cpp:5862
-#: src/structure.cpp:5907
+#: src/structure.cpp:5869
+#: src/structure.cpp:5914
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Электронные повреждения"
 
-#: src/structure.cpp:6158
+#: src/structure.cpp:6165
 msgid "Electronic Reward - Visibility Report"
 msgstr "награда - доклад о местоположении"
 
-#: src/structure.cpp:6198
+#: src/structure.cpp:6205
 msgid "Factory Reward - Propulsion"
 msgstr "награда завода - движитель"
 
-#: src/structure.cpp:6222
+#: src/structure.cpp:6229
 msgid "Factory Reward - Body"
 msgstr "награда завода - рама"
 
-#: src/structure.cpp:6246
+#: src/structure.cpp:6253
 msgid "Factory Reward - Weapon"
 msgstr "награда завода - оружие"
 
-#: src/structure.cpp:6255
+#: src/structure.cpp:6262
 msgid "Factory Reward - Nothing"
 msgstr "награда завода - ничего"
 
-#: src/structure.cpp:6283
+#: src/structure.cpp:6290
 msgid "Repair Facility Award - Repair"
 msgstr "награда мастерской - ремонт"
 
-#: src/structure.cpp:6290
+#: src/structure.cpp:6297
 msgid "Repair Facility Award - Nothing"
 msgstr "награда мастерской - ничего"
 
@@ -15007,20 +15000,14 @@ msgstr " - сборка %s"
 msgid "Version %s%s%s%s"
 msgstr "Версия %s-%s%s%s%s"
 
-#~ msgid "Only use OpenGL 1.5"
-#~ msgstr "Использовать только OpenGL 1.5"
-
-#~ msgid "Warzone 2100 is completely free and open source (FLOSS). Official site: http://wz2100.net/"
-#~ msgstr "Warzone 2100 полностью бесплатный и открытый код (FLOSS). Официальный сайт: http://wz2100.net/"
-
-#~ msgid "TCP PORT 2100 MUST BE OPENED IN YOUR FIREWALL / ROUTER TO HOST GAMES!"
-#~ msgstr "Порт TCP 2100 должен быть открыт в вашем фаерволе / роутере чтобы создавать игры!"
-
 #~ msgid "Password is already set!"
 #~ msgstr "Пароль уже установлен"
 
 #~ msgid "OpenGL 2.0 is not supported by your system. Some things may look wrong. Please upgrade your graphics driver/hardware, if possible."
 #~ msgstr "OpenGL 2.0 не поддерживается вашей системой. Некоторые вещи могут выглядить неправильно. Пожалуйста, обновите ваши графические драйвера/железо, если возможно"
+
+#~ msgid "Visit our official site: http://wz2100.net"
+#~ msgstr "Посетите наш оффициальный сайт: http://wz2100.net"
 
 #, fuzzy
 #~ msgid "Unit Colour (SP)"

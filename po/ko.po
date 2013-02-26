@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100 2.3_branch\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2013-01-04 22:11-0500\n"
+"POT-Creation-Date: 2012-10-30 16:57+0100\n"
 "PO-Revision-Date: 2010-11-23 21:01+0900\n"
 "Last-Translator: Joshua Shin <urgood2@gmail.com>\n"
 "Language-Team: Korean Translation Team <urgood2@gmail.com>\n"
@@ -11940,7 +11940,7 @@ msgid "OpenGL GLSL shader version 1.20 is not supported by your system. Some thi
 msgstr ""
 
 #: lib/ivis_opengl/screen.cpp:193
-msgid "OpenGL 1.2 + TEC is not supported by your system. The game requires this. Please upgrade your graphics drivers/hardware, if possible."
+msgid "OpenGL 1.2 + VBO + TEC is not supported by your system. The game requires this. Please upgrade your graphics drivers/hardware, if possible."
 msgstr ""
 
 #: lib/netplay/netplay.cpp:210
@@ -12052,150 +12052,146 @@ msgstr ""
 msgid "Debug mode now disabled!"
 msgstr "디버그 메뉴가 열였습니다"
 
-#: src/clparse.cpp:243
+#: src/clparse.cpp:242
 msgid "Set configuration directory"
 msgstr "환경 설정 디렉토리로 설정"
 
-#: src/clparse.cpp:243
+#: src/clparse.cpp:242
 msgid "configuration directory"
 msgstr "환경 설정 디렉토리"
 
-#: src/clparse.cpp:244
+#: src/clparse.cpp:243
 msgid "Set default data directory"
 msgstr "기본 자료 디렉토리로 설정"
 
-#: src/clparse.cpp:244
+#: src/clparse.cpp:243
 msgid "data directory"
 msgstr "자료 디렉토리"
 
-#: src/clparse.cpp:245
+#: src/clparse.cpp:244
 msgid "Show debug for given level"
 msgstr "특정 레벨의 디버깅 표시"
 
-#: src/clparse.cpp:245
+#: src/clparse.cpp:244
 msgid "debug level"
 msgstr "레벨 디버그하기"
 
-#: src/clparse.cpp:246
+#: src/clparse.cpp:245
 msgid "Log debug output to file"
 msgstr "파일로 디버깅 출력을 로그하기"
 
-#: src/clparse.cpp:246
+#: src/clparse.cpp:245
 msgid "file"
 msgstr "파일"
 
-#: src/clparse.cpp:247
+#: src/clparse.cpp:246
 msgid "Flush all debug output written to stderr"
 msgstr "모든 디버깅 출력을 stderr로 보내기(flush)"
 
-#: src/clparse.cpp:248
+#: src/clparse.cpp:247
 msgid "Play in fullscreen mode"
 msgstr "전체 화면 모드로 실행"
 
-#: src/clparse.cpp:249
+#: src/clparse.cpp:248
 msgid "Load a specific game"
 msgstr "특정 게임을 로드하기"
 
-#: src/clparse.cpp:249
+#: src/clparse.cpp:248
 msgid "game-name"
 msgstr "게임 네임(이름)"
 
-#: src/clparse.cpp:250
+#: src/clparse.cpp:249
 msgid "Show this help message and exit"
 msgstr "이 도움말 메시지를 보인 다음 종료하기"
 
-#: src/clparse.cpp:251
+#: src/clparse.cpp:250
 msgid "Enable a global mod"
 msgstr "글로벌 mod를 활성화하기"
 
+#: src/clparse.cpp:250
 #: src/clparse.cpp:251
 #: src/clparse.cpp:252
-#: src/clparse.cpp:253
 msgid "mod"
 msgstr "mod"
 
-#: src/clparse.cpp:252
+#: src/clparse.cpp:251
 msgid "Enable a campaign only mod"
 msgstr "캠페인용 mod를 활성화하기"
 
-#: src/clparse.cpp:253
+#: src/clparse.cpp:252
 msgid "Enable a multiplay only mod"
 msgstr "멀티플레이어용 mod를 활성화하기"
 
-#: src/clparse.cpp:254
+#: src/clparse.cpp:253
 msgid "Disable asserts"
 msgstr "assert 비활성화하기"
 
-#: src/clparse.cpp:255
+#: src/clparse.cpp:254
 msgid "Causes a crash to test the crash handler"
 msgstr "(컴퓨터) 크래시 핸들러를 시험하기 위해 크래시를 일으킵니다"
 
-#: src/clparse.cpp:256
+#: src/clparse.cpp:255
 msgid "Load a saved game"
 msgstr "저장된 게임 로드"
 
-#: src/clparse.cpp:256
+#: src/clparse.cpp:255
 msgid "savegame"
 msgstr "세이브게임"
 
-#: src/clparse.cpp:257
+#: src/clparse.cpp:256
 msgid "Play in windowed mode"
 msgstr "창(windowed) 모드로 실행"
 
-#: src/clparse.cpp:258
+#: src/clparse.cpp:257
 msgid "Show version information and exit"
 msgstr "버젼 정보를 보인 다음 종료하기"
 
-#: src/clparse.cpp:259
+#: src/clparse.cpp:258
 msgid "Set the resolution to use"
 msgstr "사용할 화면 해상도를 설정하십시오"
 
-#: src/clparse.cpp:259
+#: src/clparse.cpp:258
 msgid "WIDTHxHEIGHT"
 msgstr "너비x높이"
 
-#: src/clparse.cpp:260
+#: src/clparse.cpp:259
 msgid "Enable shadows"
 msgstr "그림자 사용"
 
-#: src/clparse.cpp:261
+#: src/clparse.cpp:260
 msgid "Disable shadows"
 msgstr "그림자 사용 안함"
 
-#: src/clparse.cpp:262
+#: src/clparse.cpp:261
 msgid "Enable sound"
 msgstr "소리 켜짐"
 
-#: src/clparse.cpp:263
+#: src/clparse.cpp:262
 msgid "Disable sound"
 msgstr "소리 꺼짐"
 
-#: src/clparse.cpp:264
+#: src/clparse.cpp:263
 msgid "connect directly to IP/hostname"
 msgstr "바로 IP 또는 호스트네임으로 연결"
 
-#: src/clparse.cpp:264
+#: src/clparse.cpp:263
 msgid "host"
 msgstr "호스트"
 
-#: src/clparse.cpp:265
+#: src/clparse.cpp:264
 msgid "go directly to host screen"
 msgstr "호스트 화면으로 바로 가기"
 
-#: src/clparse.cpp:266
+#: src/clparse.cpp:265
 msgid "Enable texture compression"
 msgstr ""
 
-#: src/clparse.cpp:267
+#: src/clparse.cpp:266
 msgid "Disable texture compression"
 msgstr ""
 
-#: src/clparse.cpp:268
-msgid "Disable the use of OpenGL shaders"
-msgstr ""
-
-#: src/clparse.cpp:269
-msgid "Disable the use of OpenGL Vertex Buffer Objects"
+#: src/clparse.cpp:267
+msgid "Only use OpenGL 1.5"
 msgstr ""
 
 #: src/cmddroid.cpp:110
@@ -12378,21 +12374,21 @@ msgstr "시스템"
 msgid "Delete Template"
 msgstr ""
 
-#: src/display3d.cpp:674
+#: src/display3d.cpp:656
 msgid "Player left"
 msgstr "플레이어가 떠났습니다"
 
 # same thing as player left??
-#: src/display3d.cpp:678
+#: src/display3d.cpp:660
 msgid "Player dropped"
 msgstr "플레이어가 인터넷 연결 문제 또는 게임 버그 때문에 퇴장하였습니다"
 
-#: src/display3d.cpp:682
+#: src/display3d.cpp:664
 #: src/multiint.cpp:2308
 msgid "Waiting for other players"
 msgstr "다른 플레이어를 더 기다리고 있습니다"
 
-#: src/display3d.cpp:687
+#: src/display3d.cpp:669
 msgid "Out of sync"
 msgstr ""
 
@@ -12525,7 +12521,7 @@ msgid "MAIN MENU"
 msgstr "메인 메뉴"
 
 #: src/frontend.cpp:117
-msgid "Official site: http://wz2100.net/"
+msgid "Warzone 2100 is completely free and open source (FLOSS). Official site: http://wz2100.net/"
 msgstr ""
 
 #: src/frontend.cpp:188
@@ -12606,7 +12602,7 @@ msgid "Join Game"
 msgstr "네트워크 게임 참여하기"
 
 #: src/frontend.cpp:402
-msgid "TCP port 2100 must be opened in your firewall or router to host games!"
+msgid "TCP PORT 2100 MUST BE OPENED IN YOUR FIREWALL / ROUTER TO HOST GAMES!"
 msgstr ""
 
 #: src/frontend.cpp:464
@@ -13137,7 +13133,7 @@ msgstr "새 캠페인"
 msgid "Save Skirmish Game"
 msgstr "스커미쉬(Skirmish) 게임 시작"
 
-#: src/init.cpp:422
+#: src/init.cpp:421
 #, c-format
 msgid ""
 "The required mod could not be loaded: %s\n"
@@ -14841,12 +14837,12 @@ msgstr ""
 msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
 msgstr ""
 
-#: src/qtscriptfuncs.cpp:1595
+#: src/qtscriptfuncs.cpp:1591
 #: src/scriptfuncs.cpp:3263
 msgid "YOU ARE VICTORIOUS!"
 msgstr "당신이 승리했습니다!"
 
-#: src/qtscriptfuncs.cpp:1600
+#: src/qtscriptfuncs.cpp:1596
 #: src/scriptfuncs.cpp:3267
 msgid "YOU WERE DEFEATED!"
 msgstr "당신이 패배했습니다!"
@@ -15015,62 +15011,62 @@ msgid "%u unit selected"
 msgid_plural "%u units selected"
 msgstr[0] "유닛 %u개가 선택되었습니다"
 
-#: src/structure.cpp:2625
+#: src/structure.cpp:2632
 #, fuzzy
 msgid "Can't build anymore units, Command Control Limit Reached - Production Halted"
 msgstr "제어 한계에 도달하였습니다 - 생산이 중단되었습니다"
 
-#: src/structure.cpp:5618
-#: src/structure.cpp:5643
+#: src/structure.cpp:5625
+#: src/structure.cpp:5650
 #, fuzzy, c-format
 msgid "%s - %u Unit assigned - Damage %3.0f%%"
 msgid_plural "%s - %u Units assigned - Damage %3.0f%%"
 msgstr[0] "%s - 유닛 %u개 할당되었습니다"
 
-#: src/structure.cpp:5648
-#: src/structure.cpp:5716
-#: src/structure.cpp:5731
-#: src/structure.cpp:5745
+#: src/structure.cpp:5655
+#: src/structure.cpp:5723
+#: src/structure.cpp:5738
+#: src/structure.cpp:5752
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - 데미지 %3.0f%%"
 
-#: src/structure.cpp:5698
+#: src/structure.cpp:5705
 #, fuzzy, c-format
 msgid "%s - Connected %u of %u - Damage %3.0f%%"
 msgstr "%s - %u개 연결 되었습니다 (전체 %u개)"
 
-#: src/structure.cpp:5862
-#: src/structure.cpp:5907
+#: src/structure.cpp:5869
+#: src/structure.cpp:5914
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - 전자적으로 손상됨"
 
-#: src/structure.cpp:6158
+#: src/structure.cpp:6165
 msgid "Electronic Reward - Visibility Report"
 msgstr "전자적 보상 - 시계보고"
 
-#: src/structure.cpp:6198
+#: src/structure.cpp:6205
 msgid "Factory Reward - Propulsion"
 msgstr "공장 보상 - 추진력"
 
-#: src/structure.cpp:6222
+#: src/structure.cpp:6229
 msgid "Factory Reward - Body"
 msgstr "공장 보상 - 차체"
 
-#: src/structure.cpp:6246
+#: src/structure.cpp:6253
 msgid "Factory Reward - Weapon"
 msgstr "공장 보상 - 무기"
 
-#: src/structure.cpp:6255
+#: src/structure.cpp:6262
 msgid "Factory Reward - Nothing"
 msgstr "공장 보상 - 없음"
 
-#: src/structure.cpp:6283
+#: src/structure.cpp:6290
 msgid "Repair Facility Award - Repair"
 msgstr "수리 시설 상 - 수리"
 
-#: src/structure.cpp:6290
+#: src/structure.cpp:6297
 msgid "Repair Facility Award - Nothing"
 msgstr "수리 시설 상 - 없음"
 
