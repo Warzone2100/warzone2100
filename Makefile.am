@@ -44,6 +44,7 @@ EXTRA_DIST= \
 	pkg/dpkg \
 	macosx \
 	3rdparty/SDL/mac \
+	3rdparty/glm \
 	tools/image/image.cpp \
 	tools/image/configs \
 	tools/image/Image.xcodeproj \
