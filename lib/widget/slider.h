@@ -40,7 +40,7 @@ struct W_SLIDER : public WIDGET
 	void highlight(W_CONTEXT *psContext);
 	void highlightLost();
 	void run(W_CONTEXT *psContext);
-	void display(int xOffset, int yOffset, PIELIGHT *pColours);
+	void display(int xOffset, int yOffset);
 
 	void setTip(QString string);
 

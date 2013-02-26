@@ -77,7 +77,7 @@
 // ////////////////////////////////////////////////////////////////////////////
 // protos.
 
-static void displayStructureBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+static void displayStructureBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 
 // ////////////////////////////////////////////////////////////////////////////
 
@@ -414,7 +414,7 @@ void applyLimitSet(void)
 
 // ////////////////////////////////////////////////////////////////////////////
 
-static void displayStructureBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
+static void displayStructureBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
 	int x = xOffset + psWidget->x();
 	int y = yOffset + psWidget->y();

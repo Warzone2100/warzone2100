@@ -1540,7 +1540,7 @@ bool runGameOptionsMenu(void)
 // drawing functions
 
 // show a background piccy (currently used for version and mods labels)
-static void displayTitleBitmap(WZ_DECL_UNUSED WIDGET *psWidget, WZ_DECL_UNUSED UDWORD xOffset, WZ_DECL_UNUSED UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
+static void displayTitleBitmap(WZ_DECL_UNUSED WIDGET *psWidget, WZ_DECL_UNUSED UDWORD xOffset, WZ_DECL_UNUSED UDWORD yOffset)
 {
 	char modListText[MAX_STR_LENGTH] = "";
 
@@ -1566,7 +1566,7 @@ static void displayTitleBitmap(WZ_DECL_UNUSED WIDGET *psWidget, WZ_DECL_UNUSED U
 
 // ////////////////////////////////////////////////////////////////////////////
 // show warzone logo
-static void displayLogo(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
+static void displayLogo(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
 	iV_DrawImageScaled(FrontImages, IMAGE_FE_LOGO, xOffset + psWidget->x(), yOffset + psWidget->y(), psWidget->width(), psWidget->height());
 }
@@ -1574,7 +1574,7 @@ static void displayLogo(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DEC
 
 // ////////////////////////////////////////////////////////////////////////////
 // show, well have a guess..
-static void displayBigSlider(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
+static void displayBigSlider(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
 	W_SLIDER *Slider = (W_SLIDER*)psWidget;
 	int x = xOffset + psWidget->x();
@@ -1586,7 +1586,7 @@ static void displayBigSlider(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, W
 	iV_DrawImage(IntImages,IMAGE_SLIDER_BIGBUT,x+3+sx,y+3);								//draw amount
 }
 
-static void displayAISlider(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
+static void displayAISlider(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
 	W_SLIDER *Slider = (W_SLIDER*)psWidget;
 	int x = xOffset + psWidget->x();
@@ -1601,7 +1601,7 @@ static void displayAISlider(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ
 
 // ////////////////////////////////////////////////////////////////////////////
 // show text.
-static void displayText(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
+static void displayText(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
 	SDWORD			fx,fy, fw;
 	W_LABEL		*psLab;
@@ -1629,7 +1629,7 @@ static void displayText(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DEC
 
 // ////////////////////////////////////////////////////////////////////////////
 // show text written on its side.
-static void displayTextAt270(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
+static void displayTextAt270(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
 	SDWORD		fx,fy;
 	W_LABEL		*psLab;
@@ -1649,7 +1649,7 @@ static void displayTextAt270(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, W
 
 // ////////////////////////////////////////////////////////////////////////////
 // show a text option.
-void displayTextOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
+void displayTextOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
 	SDWORD			fx,fy, fw;
 	W_BUTTON		*psBut;

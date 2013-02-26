@@ -155,10 +155,7 @@ void W_BUTTON::highlight(W_CONTEXT *psContext)
 	/* If there is a tip string start the tool tip */
 	if (!pTip.isEmpty())
 	{
-		tipStart(this, pTip, psContext->psScreen->TipFontID,
-		         psContext->psForm->aColours,
-		         x() + psContext->xOffset, y() + psContext->yOffset,
-		         width(), height());
+		tipStart(this, pTip, psContext->psScreen->TipFontID, x() + psContext->xOffset, y() + psContext->yOffset, width(), height());
 	}
 }
 
@@ -173,11 +170,11 @@ void W_BUTTON::highlightLost()
 	}
 }
 
-void W_BUTTON::display(int xOffset, int yOffset, PIELIGHT *pColours)
+void W_BUTTON::display(int xOffset, int yOffset)
 {
 	if (displayFunction != NULL)
 	{
-		displayFunction(this, xOffset, yOffset, pColours);
+		displayFunction(this, xOffset, yOffset);
 		return;
 	}
 
@@ -211,10 +208,10 @@ void W_BUTTON::display(int xOffset, int yOffset, PIELIGHT *pColours)
 	}
 	else
 	{
-		iV_ShadowBox(x0, y0, x1, y1, 0, pColours[WCOL_LIGHT], pColours[isDisabled? WCOL_LIGHT : WCOL_DARK], pColours[WCOL_BKGRND]);
+		iV_ShadowBox(x0, y0, x1, y1, 0, WZCOL_FORM_LIGHT, isDisabled? WZCOL_FORM_LIGHT : WZCOL_FORM_DARK, WZCOL_FORM_BACKGROUND);
 		if (isHighlight)
 		{
-			iV_Box(x0 + 2, y0 + 2, x1 - 3, y1 - 3, pColours[WCOL_HILITE]);
+			iV_Box(x0 + 2, y0 + 2, x1 - 3, y1 - 3, WZCOL_FORM_HILITE);
 		}
 	}
 
@@ -228,13 +225,13 @@ void W_BUTTON::display(int xOffset, int yOffset, PIELIGHT *pColours)
 		int fy = y0 + (height() - iV_GetTextLineSize()) / 2 - iV_GetTextAboveBase();
 		if (isDisabled)
 		{
-			iV_SetTextColour(pColours[WCOL_LIGHT]);
+			iV_SetTextColour(WZCOL_FORM_LIGHT);
 			iV_DrawText(textBytes.constData(), fx + 1, fy + 1);
-			iV_SetTextColour(pColours[WCOL_DISABLE]);
+			iV_SetTextColour(WZCOL_FORM_DISABLE);
 		}
 		else
 		{
-			iV_SetTextColour(pColours[WCOL_TEXT]);
+			iV_SetTextColour(WZCOL_FORM_TEXT);
 		}
 		iV_DrawText(textBytes.constData(), fx, fy);
 	}

@@ -37,7 +37,7 @@ struct W_BUTTON : public WIDGET
 	void released(W_CONTEXT *psContext, WIDGET_KEY key);
 	void highlight(W_CONTEXT *psContext);
 	void highlightLost();
-	void display(int xOffset, int yOffset, PIELIGHT *pColours);
+	void display(int xOffset, int yOffset);
 
 	unsigned getState();
 	void setState(unsigned state);

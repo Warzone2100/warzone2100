@@ -163,16 +163,16 @@ static void addBlueForm					(UDWORD parent,UDWORD id, const char *txt,UDWORD x,U
 static void drawReadyButton(UDWORD player);
 
 // Drawing Functions
-static void displayChatEdit     (WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
-static void intDisplayFeBox     (WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
-static void displayRemoteGame   (WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
-static void displayPlayer       (WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
-static void displayPosition     (WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
-static void displayColour       (WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
-static void displayTeamChooser  (WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
-static void displayAi           (WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
-static void displayDifficulty   (WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
-static void displayMultiEditBox (WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+static void displayChatEdit     (WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
+static void intDisplayFeBox     (WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
+static void displayRemoteGame   (WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
+static void displayPlayer       (WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
+static void displayPosition     (WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
+static void displayColour       (WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
+static void displayTeamChooser  (WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
+static void displayAi           (WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
+static void displayDifficulty   (WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
+static void displayMultiEditBox (WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 static void setLockedTeamsMode  (void);
 static Image getFrontHighlightImage(Image image);
 
@@ -240,7 +240,7 @@ struct WzMultiButton : public W_BUTTON
 {
 	WzMultiButton(WIDGET *parent) : W_BUTTON(parent) {}
 
-	void display(int xOffset, int yOffset, PIELIGHT *pColours);
+	void display(int xOffset, int yOffset);
 
 	Image imNormal;
 	Image imDown;
@@ -3929,7 +3929,7 @@ bool startMultiOptions(bool bReenter)
 /////////////////////////////////////////////////////////////////////////////////////////
 // Drawing functions
 
-void displayChatEdit(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+void displayChatEdit(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
 	int x = xOffset + psWidget->x();
 	int y = yOffset + psWidget->y() - 4;  // 4 is the magic number.
@@ -3942,7 +3942,7 @@ void displayChatEdit(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT 
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
 	int x = xOffset + psWidget->x();
 	int y = yOffset + psWidget->y();
@@ -4085,7 +4085,7 @@ void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGH
 	}
 }
 
-void displayTeamChooser(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+void displayTeamChooser(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
 	int x = xOffset + psWidget->x();
 	int y = yOffset + psWidget->y();
@@ -4101,7 +4101,7 @@ void displayTeamChooser(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIG
 	}
 }
 
-void displayPosition(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+void displayPosition(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
 	const int x = xOffset + psWidget->x();
 	const int y = yOffset + psWidget->y();
@@ -4115,7 +4115,7 @@ void displayPosition(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT 
 	iV_DrawText(text, x + 10, y + 22);
 }
 
-static void displayAi(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+static void displayAi(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
 	const int x = xOffset + psWidget->x();
 	const int y = yOffset + psWidget->y();
@@ -4140,7 +4140,7 @@ static int difficultyIcon(int difficulty)
 	}
 }
 
-static void displayDifficulty(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+static void displayDifficulty(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
 	const int x = xOffset + psWidget->x();
 	const int y = yOffset + psWidget->y();
@@ -4155,7 +4155,7 @@ static void displayDifficulty(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, 
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
 	int x = xOffset + psWidget->x();
 	int y = yOffset + psWidget->y();
@@ -4330,7 +4330,7 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 	}
 }
 
-void displayColour(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+void displayColour(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
 	const int x = xOffset + psWidget->x();
 	const int y = yOffset + psWidget->y();
@@ -4347,7 +4347,7 @@ void displayColour(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 
 // ////////////////////////////////////////////////////////////////////////////
 // Display blue box
-void intDisplayFeBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+void intDisplayFeBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
 	int x = xOffset + psWidget->x();
 	int y = yOffset + psWidget->y();
@@ -4359,7 +4359,7 @@ void intDisplayFeBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT 
 
 // ////////////////////////////////////////////////////////////////////////////
 // Display edit box
-void displayMultiEditBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+void displayMultiEditBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
 	int x = xOffset + psWidget->x();
 	int y = yOffset + psWidget->y();
@@ -4397,7 +4397,7 @@ static Image getFrontHighlightImage(Image image)
 	return Image();
 }
 
-void WzMultiButton::display(int xOffset, int yOffset, PIELIGHT *pColours)
+void WzMultiButton::display(int xOffset, int yOffset)
 {
 	int x0 = xOffset + x();
 	int y0 = yOffset + y();

@@ -887,14 +887,9 @@ void widgSetReturn(W_SCREEN *psScreen, WIDGET *psWidget)
 	psScreen->retWidgets.push_back(trigger);
 }
 
-void WIDGET::displayRecursive(int xOffset, int yOffset, PIELIGHT *colours)
+void WIDGET::displayRecursive(int xOffset, int yOffset)
 {
-	if (type == WIDG_FORM)
-	{
-		colours = ((W_FORM *)this)->aColours;
-	}
-
-	display(xOffset, yOffset, colours);
+	display(xOffset, yOffset);
 
 	if (type == WIDG_FORM && ((W_FORM *)this)->disableChildren)
 	{
@@ -927,7 +922,7 @@ void WIDGET::displayRecursive(int xOffset, int yOffset, PIELIGHT *colours)
 			continue;
 		}
 
-		psCurr->displayRecursive(xOffset, yOffset, colours);
+		psCurr->displayRecursive(xOffset, yOffset);
 	}
 }
 
@@ -940,7 +935,7 @@ void WIDGET::displayRecursive(int xOffset, int yOffset, PIELIGHT *colours)
 void widgDisplayScreen(W_SCREEN *psScreen)
 {
 	// Display the widgets.
-	psScreen->psForm->displayRecursive(0, 0, NULL);
+	psScreen->psForm->displayRecursive(0, 0);
 
 	/* Display the tool tip if there is one */
 	tipDisplay();

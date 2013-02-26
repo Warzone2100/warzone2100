@@ -33,11 +33,11 @@ struct W_BARGRAPH : public WIDGET
 
 	void highlight(W_CONTEXT *psContext);
 	void highlightLost();
-	void display(int xOffset, int yOffset, PIELIGHT *pColours);
+	void display(int xOffset, int yOffset);
 
 	void setTip(QString string);
 
-	void setBackgroundColour(PIELIGHT colour) { backgroundColour = colour; haveBackgroundColour = true; }
+	void setBackgroundColour(PIELIGHT colour) { backgroundColour = colour; }
 
 	WBAR_ORIENTATION barPos;                        // Orientation of the bar on the widget
 	UWORD		majorSize;			// Percentage of the main bar that is filled
@@ -55,10 +55,9 @@ struct W_BARGRAPH : public WIDGET
 
 //private:
 	PIELIGHT backgroundColour;
-	bool haveBackgroundColour;
 };
 
 /* The trough bar graph display function */
-extern void barGraphDisplayTrough(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+void barGraphDisplayTrough(WIDGET* psWidget, UDWORD xOffset, UDWORD yOffset);
 
 #endif // __INCLUDED_LIB_WIDGET_BAR_H__

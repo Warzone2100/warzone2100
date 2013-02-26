@@ -249,12 +249,12 @@ extern W_SCREEN		*psWScreen;
 DROID_TEMPLATE sDefaultDesignTemplate;
 
 static void desSetupDesignTemplates();
-static void intDisplayTemplateButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+static void intDisplayTemplateButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 static void setDesignPauseState();
 static void resetDesignPauseState();
 static bool intAddTemplateButtons(UDWORD formID, UDWORD formWidth, UDWORD formHeight,
                                   UDWORD butWidth, UDWORD butHeight, UDWORD gap, DROID_TEMPLATE *psSelected);
-static void intDisplayDesignForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours);
+static void intDisplayDesignForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 
 /* Set the current mode of the design screen, and display the appropriate component lists */
 static void intSetDesignMode(DES_COMPMODE newCompMode);
@@ -362,9 +362,9 @@ static UDWORD			droidTemplID;
 /* The current design being edited on the design screen */
 DROID_TEMPLATE			sCurrDesign;
 
-static void intDisplayStatForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
-static void intDisplayViewForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
-static void intDisplayComponentButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+static void intDisplayStatForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
+static void intDisplayViewForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
+static void intDisplayComponentButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 
 extern bool bRender3DOnly;
 
@@ -4252,7 +4252,7 @@ void intRunDesign(void)
 	}
 }
 
-static void intDisplayStatForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
+static void intDisplayStatForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
 	static UDWORD	iRY = 45;
 	W_CLICKFORM		*Form = (W_CLICKFORM *)psWidget;
@@ -4290,7 +4290,7 @@ static void intDisplayStatForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 }
 
 /* Displays the 3D view of the droid in a window on the design form */
-static void intDisplayViewForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
+static void intDisplayViewForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
 	W_FORM			*Form = (W_FORM *)psWidget;
 	UDWORD			x0, y0, x1, y1;
@@ -4335,22 +4335,22 @@ static void intDisplayViewForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 }
 
 
-void intDisplayTemplateButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+void intDisplayTemplateButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
-	intDisplayStatsButton(psWidget, xOffset, yOffset, pColours);
+	intDisplayStatsButton(psWidget, xOffset, yOffset);
 }
 
 
-static void intDisplayComponentButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+static void intDisplayComponentButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
 	BASE_STATS *OldCurStatsTemplate = CurrentStatsTemplate;
 
-	intDisplayStatsButton(psWidget, xOffset, yOffset, pColours);
+	intDisplayStatsButton(psWidget, xOffset, yOffset);
 	CurrentStatsTemplate = OldCurStatsTemplate;
 }
 
 /* General display window for the design form  SOLID BACKGROUND - NOT TRANSPARENT*/
-static void intDisplayDesignForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
+static void intDisplayDesignForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
 	W_TABFORM *Form = (W_TABFORM *)psWidget;
 	UDWORD x0, y0, x1, y1;

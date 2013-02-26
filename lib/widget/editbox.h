@@ -48,7 +48,7 @@ struct W_EDITBOX : public WIDGET
 	void highlightLost();
 	void focusLost(W_SCREEN *psScreen);
 	void run(W_CONTEXT *psContext);
-	void display(int xOffset, int yOffset, PIELIGHT *pColours);
+	void display(int xOffset, int yOffset);
 
 	void setState(unsigned state);
 	QString getString() const;
@@ -80,7 +80,6 @@ private:
 	void setCursorPosPixels(int xPos);
 
 	PIELIGHT boxColourFirst, boxColourSecond, boxColourBackground;
-	bool haveBoxColour;
 };
 
 #endif // __INCLUDED_LIB_WIDGET_EDITBOX_H__

@@ -43,7 +43,7 @@ struct W_LABEL;
 struct W_SLIDER;
 
 /* The display function prototype */
-typedef void (*WIDGET_DISPLAY)(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+typedef void (*WIDGET_DISPLAY)(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 
 /* The optional user callback function */
 typedef void (*WIDGET_CALLBACK)(WIDGET *psWidget, W_CONTEXT *psContext);
@@ -93,7 +93,7 @@ struct WIDGET
 	virtual void highlightLost() {}
 	virtual void focusLost(W_SCREEN *) {}
 	virtual void run(W_CONTEXT *) {}
-	virtual void display(int, int, PIELIGHT *) {}
+	virtual void display(int, int) {}
 
 	virtual unsigned getState();
 	virtual void setState(unsigned state);
@@ -134,7 +134,7 @@ struct WIDGET
 private:
 	void setScreenPointer(W_SCREEN *screen);        ///< Set screen pointer for us and all children.
 public:
-	void displayRecursive(int xOffset, int yOffset, PIELIGHT *colours);  ///< Display this widget, and all visible children.
+	void displayRecursive(int xOffset, int yOffset);  ///< Display this widget, and all visible children.
 private:
 
 	WIDGET *                parentWidget;           ///< Parent widget.

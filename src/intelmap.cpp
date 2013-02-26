@@ -164,21 +164,18 @@ static bool				playCurrent;
 /* functions declarations ****************/
 static bool intAddMessageForm(bool playCurrent);
 /*Displays the buttons used on the intelligence map */
-static void intDisplayMessageButton(WIDGET *psWidget, UDWORD xOffset,
-							  UDWORD yOffset, PIELIGHT *pColours);
+static void intDisplayMessageButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 
 /*deal with the actual button press - proxMsg is set to true if a proximity
   button has been pressed*/
 static void intIntelButtonPressed(bool proxMsg, UDWORD id);
 
-static void intDisplayPIEView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
-static void intDisplayFLICView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
-static void intDisplayTEXTView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+static void intDisplayPIEView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
+static void intDisplayFLICView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
+static void intDisplayTEXTView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 static void addVideoText(SEQ_DISPLAY *psSeqDisplay, UDWORD sequence);
 
-static void intDisplaySeqTextView(WIDGET *psWidget,
-				  UDWORD xOffset, UDWORD yOffset,
-				  PIELIGHT *pColours);
+static void intDisplaySeqTextView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 static bool intDisplaySeqTextViewPage(VIEW_REPLAY *psViewReplay,
 				      UDWORD x0, UDWORD y0,
 				      UDWORD width, UDWORD height,
@@ -751,9 +748,7 @@ static bool intDisplaySeqTextViewPage(VIEW_REPLAY *psViewReplay,
 /**
  * Draw the text window for the intelligence display
  */
-static void intDisplaySeqTextView(WIDGET *psWidget,
-				  UDWORD xOffset, UDWORD yOffset,
-				  WZ_DECL_UNUSED PIELIGHT *pColours)
+static void intDisplaySeqTextView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
 	W_TABFORM *Form = (W_TABFORM*)psWidget;
 	VIEW_REPLAY *psViewReplay = (VIEW_REPLAY*)Form->pUserData;
@@ -1101,8 +1096,7 @@ void intRemoveMessageView(bool animated)
 
 
 /*Displays the buttons used on the intelligence map */
-void intDisplayMessageButton(WIDGET *psWidget, UDWORD xOffset,
-							  UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
+void intDisplayMessageButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
 	W_CLICKFORM		*psButton = (W_CLICKFORM*)psWidget;
 	RENDERED_BUTTON *psBuffer = (RENDERED_BUTTON*)psButton->pUserData;
@@ -1223,7 +1217,7 @@ void intDisplayMessageButton(WIDGET *psWidget, UDWORD xOffset,
 
 
 /* displays the PIE view for the current message */
-void intDisplayPIEView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
+void intDisplayPIEView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
 	W_TABFORM		*Form = (W_TABFORM*)psWidget;
 	MESSAGE			*psMessage = (MESSAGE *)Form->pUserData;
@@ -1268,7 +1262,7 @@ void intDisplayPIEView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL
 }
 
 /* displays the FLIC view for the current message */
-void intDisplayFLICView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
+void intDisplayFLICView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
 
 	W_TABFORM		*Form = (W_TABFORM*)psWidget;
@@ -1310,7 +1304,7 @@ void intDisplayFLICView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DEC
  * If this function breaks, please merge it with intDisplaySeqTextViewPage
  * which presumably does almost the same.
  */
-void intDisplayTEXTView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
+void intDisplayTEXTView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
 	W_TABFORM		*Form = (W_TABFORM*)psWidget;
 	MESSAGE			*psMessage = (MESSAGE *)Form->pUserData;

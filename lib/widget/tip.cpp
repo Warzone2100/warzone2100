@@ -56,7 +56,6 @@ static SDWORD		wx, wy, ww, wh;		// Position and size of button to place tip by
 static SDWORD		tx, ty, tw, th;		// Position and size of the tip box
 static SDWORD		fx, fy;				// Position of the text
 static QString          pTip;                   // Tip text
-static PIELIGHT		*pColours;			// The colours for the tool tip
 static WIDGET		*psWidget;			// The button the tip is for
 static enum iV_fonts FontID = font_regular;	// ID for the Ivis Font.
 static PIELIGHT TipColour;
@@ -85,14 +84,9 @@ void widgSetTipColour(PIELIGHT colour)
  * x,y,width,height - specify the position of the button to place the
  * tip by.
  */
-void tipStart(WIDGET *psSource, QString pNewTip, iV_fonts NewFontID, PIELIGHT *pNewColours, int x, int y, int width, int height)
+void tipStart(WIDGET *psSource, QString pNewTip, iV_fonts NewFontID, int x, int y, int width, int height)
 {
-	ASSERT(psSource != NULL,
-	       "tipStart: Invalid widget pointer");
-//	ASSERT( pNewTip != NULL,
-//		"tipStart: Invalid tip pointer" );
-	ASSERT(pNewColours != NULL,
-	       "tipStart: Invalid colours pointer");
+	ASSERT(psSource != NULL, "Invalid widget pointer");
 
 	tipState = TIP_WAIT;
 	startTime = wzGetTicks();
@@ -103,7 +97,6 @@ void tipStart(WIDGET *psSource, QString pNewTip, iV_fonts NewFontID, PIELIGHT *p
 	pTip = pNewTip;
 	psWidget = psSource;
 	FontID = NewFontID;
-	pColours = pNewColours;
 }
 
 
@@ -199,12 +192,12 @@ void tipDisplay(void)
 		break;
 	case TIP_ACTIVE:
 		/* Draw the tool tip */
-		pie_BoxFill(tx, ty, tx + tw, ty + th, pColours[WCOL_TIPBKGRND]);
-		iV_Line(tx + 1, ty + th - 2, tx + 1,    ty + 1, pColours[WCOL_DARK]);
-		iV_Line(tx + 2, ty + 1,    tx + tw - 2, ty + 1, pColours[WCOL_DARK]);
-		iV_Line(tx,	  ty + th,   tx + tw,   ty + th, pColours[WCOL_DARK]);
-		iV_Line(tx + tw, ty + th - 1, tx + tw,   ty, pColours[WCOL_DARK]);
-		iV_Box(tx, ty, tx + tw - 1, ty + th - 1, pColours[WCOL_LIGHT]);
+		pie_BoxFill(tx, ty, tx + tw, ty + th, WZCOL_FORM_TIP_BACKGROUND);
+		iV_Line(tx + 1,  ty + th - 2, tx + 1,      ty + 1,  WZCOL_FORM_DARK);
+		iV_Line(tx + 2,  ty + 1,      tx + tw - 2, ty + 1,  WZCOL_FORM_DARK);
+		iV_Line(tx,      ty + th,     tx + tw,     ty + th, WZCOL_FORM_DARK);
+		iV_Line(tx + tw, ty + th - 1, tx + tw,     ty,      WZCOL_FORM_DARK);
+		iV_Box(tx, ty, tx + tw - 1, ty + th - 1, WZCOL_FORM_LIGHT);
 
 		iV_SetFont(FontID);
 		iV_SetTextColour(TipColour);

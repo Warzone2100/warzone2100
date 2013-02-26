@@ -256,11 +256,11 @@ void W_SLIDER::highlightLost()
 	state &= ~SLD_HILITE;
 }
 
-void W_SLIDER::display(int xOffset, int yOffset, PIELIGHT *pColours)
+void W_SLIDER::display(int xOffset, int yOffset)
 {
 	if (displayFunction != NULL)
 	{
-		displayFunction(this, xOffset, yOffset, pColours);
+		displayFunction(this, xOffset, yOffset);
 		return;
 	}
 
@@ -274,8 +274,8 @@ void W_SLIDER::display(int xOffset, int yOffset, PIELIGHT *pColours)
 		x0 = x() + xOffset + barSize / 2;
 		y0 = y() + yOffset + height() / 2;
 		x1 = x0 + width() - barSize;
-		iV_Line(x0, y0, x1, y0, pColours[WCOL_DARK]);
-		iV_Line(x0, y0 + 1, x1, y0 + 1, pColours[WCOL_LIGHT]);
+		iV_Line(x0, y0, x1, y0, WZCOL_FORM_DARK);
+		iV_Line(x0, y0 + 1, x1, y0 + 1, WZCOL_FORM_LIGHT);
 
 		/* Now Draw the bar */
 		sliderGetBarBox(this, &x0, &y0, &bbwidth, &bbheight);
@@ -283,7 +283,7 @@ void W_SLIDER::display(int xOffset, int yOffset, PIELIGHT *pColours)
 		y0 = y0 + y() + yOffset;
 		x1 = x0 + bbwidth;
 		y1 = y0 + bbheight;
-		iV_ShadowBox(x0, y0, x1, y1, 0, pColours[WCOL_LIGHT], pColours[WCOL_DARK], pColours[WCOL_BKGRND]);
+		iV_ShadowBox(x0, y0, x1, y1, 0, WZCOL_FORM_LIGHT, WZCOL_FORM_DARK, WZCOL_FORM_BACKGROUND);
 		break;
 	case WSLD_TOP:
 	case WSLD_BOTTOM:
@@ -291,8 +291,8 @@ void W_SLIDER::display(int xOffset, int yOffset, PIELIGHT *pColours)
 		x0 = x() + xOffset + width() / 2;
 		y0 = y() + yOffset + barSize / 2;
 		y1 = y0 + height() - barSize;
-		iV_Line(x0, y0, x0, y1, pColours[WCOL_DARK]);
-		iV_Line(x0 + 1, y0, x0 + 1, y1, pColours[WCOL_LIGHT]);
+		iV_Line(x0, y0, x0, y1, WZCOL_FORM_DARK);
+		iV_Line(x0 + 1, y0, x0 + 1, y1, WZCOL_FORM_LIGHT);
 
 		/* Now Draw the bar */
 		sliderGetBarBox(this, &x0, &y0, &bbwidth, &bbheight);
@@ -300,7 +300,7 @@ void W_SLIDER::display(int xOffset, int yOffset, PIELIGHT *pColours)
 		y0 = y0 + y() + yOffset;
 		x1 = x0 + bbwidth;
 		y1 = y0 + bbheight;
-		iV_ShadowBox(x0, y0, x1, y1, 0, pColours[WCOL_LIGHT], pColours[WCOL_DARK], pColours[WCOL_BKGRND]);
+		iV_ShadowBox(x0, y0, x1, y1, 0, WZCOL_FORM_LIGHT, WZCOL_FORM_DARK, WZCOL_FORM_BACKGROUND);
 		break;
 	}
 
@@ -310,7 +310,7 @@ void W_SLIDER::display(int xOffset, int yOffset, PIELIGHT *pColours)
 		y0 = y() + yOffset - 2;
 		x1 = x0 + width() + 4;
 		y1 = y0 + height() + 4;
-		iV_Box(x0, y0, x1, y1, pColours[WCOL_HILITE]);
+		iV_Box(x0, y0, x1, y1, WZCOL_FORM_HILITE);
 	}
 }
 

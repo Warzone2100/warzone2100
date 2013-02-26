@@ -37,18 +37,14 @@ struct W_FORM : public WIDGET
 
 	void clicked(W_CONTEXT *psContext, WIDGET_KEY key);
 	void highlightLost();
-	void display(int xOffset, int yOffset, PIELIGHT *pColours);
+	void display(int xOffset, int yOffset);
 
 	bool            disableChildren;        ///< Disable all child widgets if true
 	UWORD           Ax0, Ay0, Ax1, Ay1;     ///< Working coords for animations.
 	UDWORD          animCount;              ///< Animation counter.
 	UDWORD          startTime;              ///< Animation start time
-	PIELIGHT        aColours[WCOL_MAX];     ///< Colours for the form and its widgets
 	WIDGET         *psLastHiLite;           ///< The last widget to be hilited. This is used to track when the mouse moves off something.
 	WIDGET         *psWidgets;              ///< The widgets on the form
-
-private:
-	void setDefaultColours();
 };
 
 /* Information for a major tab */
@@ -68,7 +64,7 @@ struct W_TABFORM : public W_FORM
 	void released(W_CONTEXT *psContext, WIDGET_KEY key);
 	void highlightLost();
 	void run(W_CONTEXT *psContext);
-	void display(int xOffset, int yOffset, PIELIGHT *pColours);
+	void display(int xOffset, int yOffset);
 
 	int tab() const { return currentTab; }
 	int tabPage() const { return currentTab/maxTabsShown; }
@@ -118,7 +114,7 @@ struct W_CLICKFORM : public W_FORM
 	void released(W_CONTEXT *psContext, WIDGET_KEY key);
 	void highlight(W_CONTEXT *psContext);
 	void highlightLost();
-	void display(int xOffset, int yOffset, PIELIGHT *pColours);
+	void display(int xOffset, int yOffset);
 
 	unsigned getState();
 	void setState(unsigned state);

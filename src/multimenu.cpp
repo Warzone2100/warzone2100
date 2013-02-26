@@ -260,7 +260,7 @@ static LEVEL_DATASET *enumerateMultiMaps(bool first, unsigned camToUse, unsigned
 
 // ////////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////////
-void displayRequestOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+void displayRequestOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
 	LEVEL_DATASET *mapData = (LEVEL_DATASET *)psWidget->pUserData;
 
@@ -318,7 +318,7 @@ void displayRequestOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIEL
 // ////////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////////
 
-static void displayCamTypeBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+static void displayCamTypeBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
 	int x = xOffset + psWidget->x();
 	int y = yOffset + psWidget->y();
@@ -334,7 +334,7 @@ static void displayCamTypeBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, 
 	iV_DrawText(buffer, x+2, y+12);
 }
 
-static void displayNumPlayersBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+static void displayNumPlayersBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
 	int x = xOffset + psWidget->x();
 	int y = yOffset + psWidget->y();
@@ -795,7 +795,7 @@ static void displayExtraGubbins(UDWORD height)
 }
 
 
-static void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+static void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
 	char str[128];
 	int x = xOffset + psWidget->x();
@@ -980,7 +980,7 @@ static void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 	}
 }
 
-static void displayDebugMenu(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+static void displayDebugMenu(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
 	char			str[128];
 	int x = xOffset + psWidget->x();
@@ -1001,7 +1001,7 @@ static void displayDebugMenu(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, P
 // ////////////////////////////////////////////////////////////////////////////
 // alliance display funcs
 
-static void displayAllianceState(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+static void displayAllianceState(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
 	UDWORD a, b, c, player = psWidget->UserData;
 	switch(alliances[selectedPlayer][player])
@@ -1030,11 +1030,11 @@ static void displayAllianceState(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffse
 	}
 
 	psWidget->UserData = PACKDWORD_TRI(a,b,c);
-	intDisplayImageHilight(psWidget,  xOffset,  yOffset, pColours);
+	intDisplayImageHilight(psWidget,  xOffset,  yOffset);
 	psWidget->UserData = player;
 }
 
-static void displayChannelState(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+static void displayChannelState(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
 	UDWORD player = psWidget->UserData;
 
@@ -1046,7 +1046,7 @@ static void displayChannelState(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset
 	{
 		psWidget->UserData = PACKDWORD_TRI(0, IMAGE_MULTI_NOCHAN, IMAGE_MULTI_NOCHAN);
 	}
-	intDisplayImageHilight(psWidget, xOffset, yOffset, pColours);
+	intDisplayImageHilight(psWidget, xOffset, yOffset);
 	psWidget->UserData = player;
 }
 

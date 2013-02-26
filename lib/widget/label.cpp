@@ -41,7 +41,7 @@ W_LABEL::W_LABEL(W_LABINIT const *init)
 	, aText(QString::fromUtf8(init->pText))
 	, FontID(init->FontID)
 	, pTip(QString::fromUtf8(init->pTip))
-	, haveFontColour(false)
+	, fontColour(WZCOL_FORM_TEXT)
 {
 	ASSERT((init->style & ~(WLAB_PLAIN | WLAB_ALIGNLEFT | WLAB_ALIGNRIGHT | WLAB_ALIGNCENTRE | WIDG_HIDDEN)) == 0, "Unknown button style");
 }
@@ -49,19 +49,19 @@ W_LABEL::W_LABEL(W_LABINIT const *init)
 W_LABEL::W_LABEL(WIDGET *parent)
 	: WIDGET(parent, WIDG_LABEL)
 	, FontID(font_regular)
-	, haveFontColour(false)
+	, fontColour(WZCOL_FORM_TEXT)
 {}
 
-void W_LABEL::display(int xOffset, int yOffset, PIELIGHT *pColours)
+void W_LABEL::display(int xOffset, int yOffset)
 {
 	if (displayFunction != NULL)
 	{
-		displayFunction(this, xOffset, yOffset, pColours);
+		displayFunction(this, xOffset, yOffset);
 		return;
 	}
 
 	iV_SetFont(FontID);
-	iV_SetTextColour(haveFontColour? fontColour : pColours[WCOL_TEXT]);
+	iV_SetTextColour(fontColour);
 
 	QByteArray text = aText.toUtf8();
 	int fx;
@@ -89,10 +89,7 @@ void W_LABEL::highlight(W_CONTEXT *psContext)
 	/* If there is a tip string start the tool tip */
 	if (!pTip.isEmpty())
 	{
-		tipStart(this, pTip, psContext->psScreen->TipFontID,
-		         psContext->psForm->aColours,
-		         x() + psContext->xOffset, y() + psContext->yOffset,
-		         width(), height());
+		tipStart(this, pTip, psContext->psScreen->TipFontID, x() + psContext->xOffset, y() + psContext->yOffset, width(), height());
 	}
 }
 

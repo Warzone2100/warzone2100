@@ -64,8 +64,6 @@ W_FORM::W_FORM(W_FORMINIT const *init)
 	, psLastHiLite(NULL)
 	, psWidgets(NULL)
 {
-	setDefaultColours();
-
 	ASSERT((init->style & ~(WFORM_TABBED | WFORM_INVISIBLE | WFORM_CLICKABLE | WFORM_NOCLICKMOVE | WFORM_NOPRIMARY | WFORM_SECONDARY | WIDG_HIDDEN)) == 0, "Unknown style bit");
 	ASSERT((init->style & WFORM_TABBED) == 0 || (init->style & (WFORM_INVISIBLE | WFORM_CLICKABLE)) == 0, "Tabbed form cannot be invisible or clickable");
 	ASSERT((init->style & WFORM_INVISIBLE) == 0 || (init->style & WFORM_CLICKABLE) == 0, "Cannot have an invisible clickable form");
@@ -80,21 +78,7 @@ W_FORM::W_FORM(WIDGET *parent)
 	, startTime(0)
 	, psLastHiLite(NULL)
 	, psWidgets(NULL)
-{
-	setDefaultColours();
-}
-
-void W_FORM::setDefaultColours()
-{
-	aColours[WCOL_BKGRND]    = WZCOL_FORM_BACKGROUND;
-	aColours[WCOL_TEXT]      = WZCOL_FORM_TEXT;
-	aColours[WCOL_LIGHT]     = WZCOL_FORM_LIGHT;
-	aColours[WCOL_DARK]      = WZCOL_FORM_DARK;
-	aColours[WCOL_HILITE]    = WZCOL_FORM_HILITE;
-	aColours[WCOL_CURSOR]    = WZCOL_FORM_CURSOR;
-	aColours[WCOL_TIPBKGRND] = WZCOL_FORM_TIP_BACKGROUND;
-	aColours[WCOL_DISABLE]   = WZCOL_FORM_DISABLE;
-}
+{}
 
 W_CLICKFORM::W_CLICKFORM(W_FORMINIT const *init)
 	: W_FORM(init)
@@ -459,7 +443,7 @@ void W_CLICKFORM::highlight(W_CONTEXT *psContext)
 	// If there is a tip string start the tool tip.
 	if (!pTip.isEmpty())
 	{
-		tipStart(this, pTip, psContext->psScreen->TipFontID, psContext->psForm->aColours, x() + psContext->xOffset, y() + psContext->yOffset, width(), height());
+		tipStart(this, pTip, psContext->psScreen->TipFontID, x() + psContext->xOffset, y() + psContext->yOffset, width(), height());
 	}
 
 	if (AudioCallback != NULL)
@@ -495,11 +479,11 @@ void W_CLICKFORM::highlightLost()
 	state &= ~(WBUT_DOWN | WBUT_HIGHLIGHT);
 }
 
-void W_FORM::display(int xOffset, int yOffset, PIELIGHT *pColours)
+void W_FORM::display(int xOffset, int yOffset)
 {
 	if (displayFunction != NULL)
 	{
-		displayFunction(this, xOffset, yOffset, pColours);
+		displayFunction(this, xOffset, yOffset);
 		return;
 	}
 
@@ -510,15 +494,15 @@ void W_FORM::display(int xOffset, int yOffset, PIELIGHT *pColours)
 		int x1 = x0 + width();
 		int y1 = y0 + height();
 
-		iV_ShadowBox(x0, y0, x1, y1, 1, pColours[WCOL_LIGHT], pColours[WCOL_DARK], pColours[WCOL_BKGRND]);
+		iV_ShadowBox(x0, y0, x1, y1, 1, WZCOL_FORM_LIGHT, WZCOL_FORM_DARK, WZCOL_FORM_BACKGROUND);
 	}
 }
 
-void W_CLICKFORM::display(int xOffset, int yOffset, PIELIGHT *pColours)
+void W_CLICKFORM::display(int xOffset, int yOffset)
 {
 	if (displayFunction != NULL)
 	{
-		displayFunction(this, xOffset, yOffset, pColours);
+		displayFunction(this, xOffset, yOffset);
 		return;
 	}
 
@@ -530,19 +514,19 @@ void W_CLICKFORM::display(int xOffset, int yOffset, PIELIGHT *pColours)
 	/* Display the border */
 	if ((state & (WBUT_DOWN | WBUT_LOCK | WBUT_CLICKLOCK)) != 0)
 	{
-		iV_ShadowBox(x0, y0, x1, y1, 1, pColours[WCOL_DARK], pColours[WCOL_LIGHT], pColours[WCOL_BKGRND]);
+		iV_ShadowBox(x0, y0, x1, y1, 1, WZCOL_FORM_DARK, WZCOL_FORM_LIGHT, WZCOL_FORM_BACKGROUND);
 	}
 	else
 	{
-		iV_ShadowBox(x0, y0, x1, y1, 1, pColours[WCOL_LIGHT], pColours[WCOL_DARK], pColours[WCOL_BKGRND]);
+		iV_ShadowBox(x0, y0, x1, y1, 1, WZCOL_FORM_LIGHT, WZCOL_FORM_DARK, WZCOL_FORM_BACKGROUND);
 	}
 }
 
-void W_TABFORM::display(int xOffset, int yOffset, PIELIGHT *pColours)
+void W_TABFORM::display(int xOffset, int yOffset)
 {
 	if (displayFunction != NULL)
 	{
-		displayFunction(this, xOffset, yOffset, pColours);
+		displayFunction(this, xOffset, yOffset);
 		return;
 	}
 
@@ -572,27 +556,27 @@ void W_TABFORM::display(int xOffset, int yOffset, PIELIGHT *pColours)
 			if (isCurrent)
 			{
 				/* Fill in the tab */
-				pie_BoxFill(x + 1, y + 1, x1 - 1, y1, pColours[WCOL_BKGRND]);
+				pie_BoxFill(x + 1, y + 1, x1 - 1, y1, WZCOL_FORM_BACKGROUND);
 				/* Draw the outline */
-				iV_Line(x, y + 2, x, y1 - 1, pColours[WCOL_LIGHT]);
-				iV_Line(x, y + 2, x + 2, y, pColours[WCOL_LIGHT]);
-				iV_Line(x + 2, y, x1 - 1, y, pColours[WCOL_LIGHT]);
-				iV_Line(x1, y + 1, x1, y1, pColours[WCOL_DARK]);
+				iV_Line(x, y + 2, x, y1 - 1, WZCOL_FORM_LIGHT);
+				iV_Line(x, y + 2, x + 2, y, WZCOL_FORM_LIGHT);
+				iV_Line(x + 2, y, x1 - 1, y, WZCOL_FORM_LIGHT);
+				iV_Line(x1, y + 1, x1, y1, WZCOL_FORM_DARK);
 			}
 			else
 			{
 				/* Fill in the tab */
-				pie_BoxFill(x + 1, y + 2, x1 - 1, y1 - 1, pColours[WCOL_BKGRND]);
+				pie_BoxFill(x + 1, y + 2, x1 - 1, y1 - 1, WZCOL_FORM_BACKGROUND);
 				/* Draw the outline */
-				iV_Line(x, y + 3, x, y1 - 1, pColours[WCOL_LIGHT]);
-				iV_Line(x, y + 3, x + 2, y + 1, pColours[WCOL_LIGHT]);
-				iV_Line(x + 2, y + 1, x1 - 1, y + 1, pColours[WCOL_LIGHT]);
-				iV_Line(x1, y + 2, x1, y1 - 1, pColours[WCOL_DARK]);
+				iV_Line(x, y + 3, x, y1 - 1, WZCOL_FORM_LIGHT);
+				iV_Line(x, y + 3, x + 2, y + 1, WZCOL_FORM_LIGHT);
+				iV_Line(x + 2, y + 1, x1 - 1, y + 1, WZCOL_FORM_LIGHT);
+				iV_Line(x1, y + 2, x1, y1 - 1, WZCOL_FORM_DARK);
 			}
 			if (isHighlighted)
 			{
 				/* Draw the highlight box */
-				iV_Box(x + 2, y + 4, x1 - 3, y1 - 3, pColours[WCOL_HILITE]);
+				iV_Box(x + 2, y + 4, x1 - 3, y1 - 3, WZCOL_FORM_HILITE);
 			}
 		}
 	}

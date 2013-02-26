@@ -80,7 +80,7 @@ static	W_SCREEN	*psRequestScreen;					// Widget screen for requester
 bool		challengesUp = false;		///< True when interface is up and should be run.
 bool		challengeActive = false;	///< Whether we are running a challenge
 
-static void displayLoadBanner(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
+static void displayLoadBanner(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
 	PIELIGHT col = WZCOL_GREEN;
 	UDWORD	x = xOffset + psWidget->x();
@@ -126,7 +126,7 @@ void updateChallenge(bool gameWon)
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-static void displayLoadSlot(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
+static void displayLoadSlot(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
 
 	UDWORD	x = xOffset + psWidget->x();

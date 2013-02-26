@@ -36,14 +36,14 @@ struct W_LABEL : public WIDGET
 
 	void highlight(W_CONTEXT *psContext);
 	void highlightLost();
-	void display(int xOffset, int yOffset, PIELIGHT *pColours);
+	void display(int xOffset, int yOffset);
 
 	QString getString() const;
 	void setString(QString string);
 	void setTip(QString string);
 
 	void setFont(iV_fonts font) { FontID = font; }
-	void setFontColour(PIELIGHT colour) { fontColour = colour; haveFontColour = true; }
+	void setFontColour(PIELIGHT colour) { fontColour = colour; }
 	void setFont(iV_fonts font, PIELIGHT colour) { setFont(font); setFontColour(colour); }
 	void setTextAlignment(WzTextAlignment align);
 
@@ -56,7 +56,6 @@ struct W_LABEL : public WIDGET
 
 private:
 	PIELIGHT fontColour;
-	bool haveFontColour;
 };
 
 #endif // __INCLUDED_LIB_WIDGET_LABEL_H__

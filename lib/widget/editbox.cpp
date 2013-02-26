@@ -67,7 +67,9 @@ W_EDITBOX::W_EDITBOX(W_EDBINIT const *init)
 	, HilightAudioID(WidgGetHilightAudioID())
 	, ClickedAudioID(WidgGetClickedAudioID())
 	, AudioCallback(WidgGetAudioCallback())
-	, haveBoxColour(false)
+	, boxColourFirst(WZCOL_FORM_DARK)
+	, boxColourSecond(WZCOL_FORM_LIGHT)
+	, boxColourBackground(WZCOL_FORM_BACKGROUND)
 {
 	char const *text = init->pText;
 	if (!text)
@@ -89,7 +91,9 @@ W_EDITBOX::W_EDITBOX(WIDGET* parent)
 	, HilightAudioID(WidgGetHilightAudioID())
 	, ClickedAudioID(WidgGetClickedAudioID())
 	, AudioCallback(WidgGetAudioCallback())
-	, haveBoxColour(false)
+	, boxColourFirst(WZCOL_FORM_DARK)
+	, boxColourSecond(WZCOL_FORM_LIGHT)
+	, boxColourBackground(WZCOL_FORM_BACKGROUND)
 {}
 
 void W_EDITBOX::initialise()
@@ -546,14 +550,13 @@ void W_EDITBOX::setBoxColours(PIELIGHT first, PIELIGHT second, PIELIGHT backgrou
 	boxColourFirst = first;
 	boxColourSecond = second;
 	boxColourBackground = background;
-	haveBoxColour = true;
 }
 
-void W_EDITBOX::display(int xOffset, int yOffset, PIELIGHT *pColours)
+void W_EDITBOX::display(int xOffset, int yOffset)
 {
 	if (displayFunction != NULL)
 	{
-		displayFunction(this, xOffset, yOffset, pColours);
+		displayFunction(this, xOffset, yOffset);
 		return;
 	}
 
@@ -564,21 +567,17 @@ void W_EDITBOX::display(int xOffset, int yOffset, PIELIGHT *pColours)
 
 	if (pBoxDisplay != NULL)
 	{
-		pBoxDisplay(this, xOffset, yOffset, pColours);
-	}
-	else if (haveBoxColour)
-	{
-		iV_ShadowBox(x0, y0, x1, y1, 0, boxColourFirst, boxColourSecond, boxColourBackground);
+		pBoxDisplay(this, xOffset, yOffset);
 	}
 	else
 	{
-		iV_ShadowBox(x0, y0, x1, y1, 0, pColours[WCOL_DARK], pColours[WCOL_LIGHT], pColours[WCOL_BKGRND]);
+		iV_ShadowBox(x0, y0, x1, y1, 0, boxColourFirst, boxColourSecond, boxColourBackground);
 	}
 
 	int fx = x0 + WEDB_XGAP;// + (psEdBox->width - fw) / 2;
 
 	iV_SetFont(FontID);
-	iV_SetTextColour(pColours[WCOL_TEXT]);
+	iV_SetTextColour(WZCOL_FORM_TEXT);
 
 	int fy = y0 + (height() - iV_GetTextLineSize()) / 2 - iV_GetTextAboveBase();
 
@@ -605,7 +604,7 @@ void W_EDITBOX::display(int xOffset, int yOffset, PIELIGHT *pColours)
 		int cx = x0 + WEDB_XGAP + iV_GetTextWidth(tmp.toUtf8().constData());
 		cx += iV_GetTextWidth("-");
 		int cy = fy;
-		iV_Line(cx, cy + iV_GetTextAboveBase(), cx, cy - iV_GetTextBelowBase(), pColours[WCOL_CURSOR]);
+		iV_Line(cx, cy + iV_GetTextAboveBase(), cx, cy - iV_GetTextBelowBase(), WZCOL_FORM_CURSOR);
 	}
 #if CURSOR_BLINK
 	else if ((state & WEDBS_MASK) == WEDBS_OVER && blink)
@@ -620,7 +619,7 @@ void W_EDITBOX::display(int xOffset, int yOffset, PIELIGHT *pColours)
 
 		int cx = x0 + WEDB_XGAP + iV_GetTextWidth(tmp.toUtf8().constData());
 		int cy = fy;
-		iV_Line(cx, cy, cx + WEDB_CURSORSIZE, cy, pColours[WCOL_CURSOR]);
+		iV_Line(cx, cy, cx + WEDB_CURSORSIZE, cy, WZCOL_FORM_CURSOR);
 	}
 
 	if (pBoxDisplay == NULL)
@@ -628,7 +627,7 @@ void W_EDITBOX::display(int xOffset, int yOffset, PIELIGHT *pColours)
 		if ((state & WEDBS_HILITE) != 0)
 		{
 			/* Display the button hilite */
-			iV_Box(x0 - 2, y0 - 2, x1 + 2, y1 + 2, pColours[WCOL_HILITE]);
+			iV_Box(x0 - 2, y0 - 2, x1 + 2, y1 + 2, WZCOL_FORM_HILITE);
 		}
 	}
 }

@@ -59,7 +59,7 @@ W_BARGRAPH::W_BARGRAPH(W_BARINIT const *init)
 	, minorCol(init->sMinorCol)
 	, textCol(WZCOL_BLACK)
 	, pTip(QString::fromUtf8(init->pTip))
-	, haveBackgroundColour(false)
+	, backgroundColour(WZCOL_FORM_BACKGROUND)
 {
 	/* Set the minor colour if necessary */
 	// Actually, this sets the major colour to the minor colour. The minor colour used to be left completely uninitialised... Wonder what it was for..?
@@ -135,10 +135,7 @@ void W_BARGRAPH::highlight(W_CONTEXT *psContext)
 {
 	if (!pTip.isEmpty())
 	{
-		tipStart(this, pTip, psContext->psScreen->TipFontID,
-		         psContext->psForm->aColours,
-		         x() + psContext->xOffset, y() + psContext->yOffset,
-		         width(), height());
+		tipStart(this, pTip, psContext->psScreen->TipFontID, x() + psContext->xOffset, y() + psContext->yOffset, width(), height());
 	}
 }
 
@@ -150,7 +147,7 @@ void W_BARGRAPH::highlightLost()
 }
 
 
-static void barGraphDisplayText(W_BARGRAPH *barGraph, int x0, int x1, int y1, PIELIGHT *)
+static void barGraphDisplayText(W_BARGRAPH *barGraph, int x0, int x1, int y1)
 {
 	if (!barGraph->text.isEmpty())
 	{
@@ -171,7 +168,7 @@ static void barGraphDisplayText(W_BARGRAPH *barGraph, int x0, int x1, int y1, PI
 }
 
 /* The simple bar graph display function */
-static void barGraphDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+static void barGraphDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
 	SDWORD		x0 = 0, y0 = 0, x1 = 0, y1 = 0;
 	W_BARGRAPH	*psBGraph;
@@ -208,14 +205,14 @@ static void barGraphDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PI
 	}
 
 	/* Now draw the graph */
-	iV_ShadowBox(x0, y0, x1, y1, 0, pColours[WCOL_LIGHT], pColours[WCOL_DARK], psBGraph->majorCol);
+	iV_ShadowBox(x0, y0, x1, y1, 0, WZCOL_FORM_LIGHT, WZCOL_FORM_DARK, psBGraph->majorCol);
 
-	barGraphDisplayText(psBGraph, x0, x1, y1, pColours);
+	barGraphDisplayText(psBGraph, x0, x1, y1);
 }
 
 
 /* The double bar graph display function */
-static void barGraphDisplayDouble(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+static void barGraphDisplayDouble(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
 	SDWORD		x0 = 0, y0 = 0, x1 = 0, y1 = 0, x2 = 0, y2 = 0, x3 = 0, y3 = 0;
 	W_BARGRAPH	*psBGraph = (W_BARGRAPH *)psWidget;
@@ -280,18 +277,18 @@ static void barGraphDisplayDouble(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffs
 	/* Draw the minor bar graph */
 	if (psBGraph->minorSize > 0)
 	{
-		iV_ShadowBox(x2, y2, x3, y3, 0, pColours[WCOL_LIGHT], pColours[WCOL_DARK], psBGraph->minorCol);
+		iV_ShadowBox(x2, y2, x3, y3, 0, WZCOL_FORM_LIGHT, WZCOL_FORM_DARK, psBGraph->minorCol);
 	}
 
 	/* Draw the major bar graph */
-	iV_ShadowBox(x0, y0, x1, y1, 0, pColours[WCOL_LIGHT], pColours[WCOL_DARK], psBGraph->majorCol);
+	iV_ShadowBox(x0, y0, x1, y1, 0, WZCOL_FORM_LIGHT, WZCOL_FORM_DARK, psBGraph->majorCol);
 
-	barGraphDisplayText(psBGraph, x0, x1, y1, pColours);
+	barGraphDisplayText(psBGraph, x0, x1, y1);
 }
 
 
 /* The trough bar graph display function */
-void barGraphDisplayTrough(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+void barGraphDisplayTrough(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
 	SDWORD		x0 = 0, y0 = 0, x1 = 0, y1 = 0;		// Position of the bar
 	SDWORD		tx0 = 0, ty0 = 0, tx1 = 0, ty1 = 0;	// Position of the trough
@@ -382,31 +379,31 @@ void barGraphDisplayTrough(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIE
 	}
 	if (showTrough)
 	{
-		iV_ShadowBox(tx0, ty0, tx1, ty1, 0, pColours[WCOL_DARK], pColours[WCOL_LIGHT], psBGraph->haveBackgroundColour? psBGraph->backgroundColour : pColours[WCOL_BKGRND]);
+		iV_ShadowBox(tx0, ty0, tx1, ty1, 0, WZCOL_FORM_DARK, WZCOL_FORM_LIGHT, psBGraph->backgroundColour);
 	}
 
-	barGraphDisplayText(psBGraph, x0, tx1, ty1, pColours);
+	barGraphDisplayText(psBGraph, x0, tx1, ty1);
 }
 
-void W_BARGRAPH::display(int xOffset, int yOffset, PIELIGHT *pColours)
+void W_BARGRAPH::display(int xOffset, int yOffset)
 {
 	if (displayFunction != NULL)
 	{
-		displayFunction(this, xOffset, yOffset, pColours);
+		displayFunction(this, xOffset, yOffset);
 		return;
 	}
 
 	if (style & WBAR_TROUGH)
 	{
-		barGraphDisplayTrough(this, xOffset, yOffset, pColours);
+		barGraphDisplayTrough(this, xOffset, yOffset);
 	}
 	else if (style & WBAR_DOUBLE)
 	{
-		barGraphDisplayDouble(this, xOffset, yOffset, pColours);
+		barGraphDisplayDouble(this, xOffset, yOffset);
 	}
 	else
 	{
-		barGraphDisplay(this, xOffset, yOffset, pColours);
+		barGraphDisplay(this, xOffset, yOffset);
 	}
 }
 
