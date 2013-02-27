@@ -558,7 +558,7 @@ void widgSetString(W_SCREEN *psScreen, UDWORD id, const char *pText)
 
 	if (psWidget->type == WIDG_EDITBOX && psScreen->psFocus == psWidget)
 	{
-		screenClearFocus(psScreen);
+		psScreen->setFocus(nullptr);
 	}
 
 	psWidget->setString(QString::fromUtf8(pText));
@@ -735,13 +735,12 @@ WidgetTriggers const &widgRunScreen(W_SCREEN *psScreen)
 	return psScreen->retWidgets;
 }
 
-
 /* Set the id number for widgRunScreen to return */
-void widgSetReturn(W_SCREEN *psScreen, WIDGET *psWidget)
+void W_SCREEN::setReturn(WIDGET *psWidget)
 {
 	WidgetTrigger trigger;
 	trigger.widget = psWidget;
-	psScreen->retWidgets.push_back(trigger);
+	retWidgets.push_back(trigger);
 }
 
 void WIDGET::displayRecursive(int xOffset, int yOffset)
@@ -798,22 +797,13 @@ void widgDisplayScreen(W_SCREEN *psScreen)
 	tipDisplay();
 }
 
-/* Set the keyboard focus for the screen */
-void screenSetFocus(W_SCREEN *psScreen, WIDGET *psWidget)
+void W_SCREEN::setFocus(WIDGET *widget)
 {
-	screenClearFocus(psScreen);
-	psScreen->psFocus = psWidget;
-}
-
-
-/* Clear the keyboard focus */
-void screenClearFocus(W_SCREEN *psScreen)
-{
-	if (psScreen->psFocus != NULL)
+	if (psFocus != nullptr)
 	{
-		psScreen->psFocus->focusLost(psScreen);
-		psScreen->psFocus = NULL;
+		psFocus->focusLost();
 	}
+	psFocus = widget;
 }
 
 void WidgSetAudio(WIDGET_AUDIOCALLBACK Callback, SWORD HilightID, SWORD ClickedID)

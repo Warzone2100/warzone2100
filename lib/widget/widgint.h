@@ -25,15 +25,6 @@
 #define __INCLUDED_LIB_WIDGET_WIDGINT_H__
 
 #include "lib/framework/input.h"
-#include "widgbase.h"
-
-/* Set the id number for widgRunScreen to return */
-extern void widgSetReturn(W_SCREEN *psScreen, WIDGET *psWidget);
-
-/* Set the keyboard focus for the screen */
-extern void screenSetFocus(W_SCREEN *psScreen, WIDGET *psWidget);
-
-/* Clear the keyboard focus */
-extern void screenClearFocus(W_SCREEN *psScreen);
+//#include "widgbase.h"
 
 #endif // __INCLUDED_LIB_WIDGET_WIDGINT_H__

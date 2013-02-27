@@ -134,7 +134,7 @@ void W_BUTTON::released(W_CONTEXT *, WIDGET_KEY key)
 		if ((!(style & WBUT_NOPRIMARY) && key == WKEY_PRIMARY) ||
 		    ((style & WBUT_SECONDARY) && key == WKEY_SECONDARY))
 		{
-			widgSetReturn(screenPointer, this);
+			screenPointer->setReturn(this);
 			state &= ~WBUT_DOWN;
 		}
 	}

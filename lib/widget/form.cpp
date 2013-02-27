@@ -339,7 +339,7 @@ void W_TABFORM::released(W_CONTEXT *psContext, WIDGET_KEY)
 	{
 		// Clicked on a tab.
 		setTab(newTab);
-		widgSetReturn(screenPointer, this);
+		screenPointer->setReturn(this);
 	}
 }
 
@@ -351,7 +351,7 @@ void W_CLICKFORM::released(W_CONTEXT *, WIDGET_KEY key)
 		if ((!(style & WFORM_NOPRIMARY) && key == WKEY_PRIMARY) ||
 		    ((style & WFORM_SECONDARY) && key == WKEY_SECONDARY))
 		{
-			widgSetReturn(screenPointer, this);
+			screenPointer->setReturn(this);
 			state &= ~WBUT_DOWN;
 		}
 	}

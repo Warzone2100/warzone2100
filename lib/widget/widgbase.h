@@ -91,7 +91,7 @@ struct WIDGET
 	virtual void released(W_CONTEXT *, WIDGET_KEY = WKEY_PRIMARY) {}
 	virtual void highlight(W_CONTEXT *) {}
 	virtual void highlightLost() {}
-	virtual void focusLost(W_SCREEN *) {}
+	virtual void focusLost() {}
 	virtual void run(W_CONTEXT *) {}
 	virtual void display(int, int) {}
 
@@ -167,6 +167,9 @@ struct W_SCREEN
 {
 	W_SCREEN();
 	~W_SCREEN();
+
+	void setFocus(WIDGET *widget);  ///< Sets psFocus, notifying the old widget, if any.
+	void setReturn(WIDGET *psWidget);  ///< Adds psWidget to retWidgets.
 
 	W_FORM          *psForm;        ///< The root form of the screen
 	WIDGET          *psFocus;       ///< The widget that has keyboard focus

@@ -277,7 +277,7 @@ void W_EDITBOX::run(W_CONTEXT *psContext)
 	int my = psContext->my;
 	if (mousePressed(MOUSE_LMB) && !geometry().contains(mx, my))
 	{
-		screenClearFocus(screenPointer);
+		screenPointer->setFocus(nullptr);
 		return;
 	}
 
@@ -390,8 +390,7 @@ void W_EDITBOX::run(W_CONTEXT *psContext)
 		case INPBUF_CR :
 		case KEY_KPENTER:                  // either normal return key || keypad enter
 			/* Finish editing */
-			focusLost(screenPointer);
-			screenClearFocus(screenPointer);
+			screenPointer->setFocus(nullptr);
 			debug(LOG_INPUT, "EditBox cursor return");
 			return;
 			break;
@@ -496,13 +495,13 @@ void W_EDITBOX::clicked(W_CONTEXT *psContext, WIDGET_KEY)
 		inputClearBuffer();
 
 		/* Tell the form that the edit box has focus */
-		screenSetFocus(screenPointer, this);
+		screenPointer->setFocus(this);
 	}
 }
 
 
 /* Respond to loss of focus */
-void W_EDITBOX::focusLost(W_SCREEN *psScreen)
+void W_EDITBOX::focusLost()
 {
 	ASSERT(!(state & WEDBS_DISABLE), "editBoxFocusLost: disabled edit box");
 
@@ -511,7 +510,7 @@ void W_EDITBOX::focusLost(W_SCREEN *psScreen)
 	printStart = 0;
 	fitStringStart();
 
-	widgSetReturn(psScreen, this);
+	screenPointer->setReturn(this);
 }
 
 
