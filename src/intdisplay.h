@@ -160,8 +160,7 @@ struct IntFormAnimated : public W_FORM
 
 	void display(int xOffset, int yOffset);
 
-	void closeAnimate();
-	bool isClosed() const;
+	void closeAnimateDelete();              ///< Animates the form closing, and deletes itself when done.
 
 private:
 	void displayOpening(int xOffset, int yOffset);

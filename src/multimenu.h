@@ -46,7 +46,6 @@ extern void		intCloseDebugMenuNoAnim	(void);
 extern void		setDebugMenuEntry(char *entry, SDWORD index);
 
 extern bool		MultiMenuUp;
-extern bool		ClosingMultiMenu;
 
 extern bool		DebugMenuUp;
 

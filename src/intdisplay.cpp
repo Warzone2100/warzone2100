@@ -1131,16 +1131,10 @@ IntFormAnimated::IntFormAnimated(WIDGET *parent, bool openAnimate)
 	disableChildren = openAnimate;
 }
 
-void IntFormAnimated::closeAnimate()
+void IntFormAnimated::closeAnimateDelete()
 {
 	currentAction = 3;
 	disableChildren = true;
-	pUserData = nullptr; // Used to signal when the close anim has finished.
-}
-
-bool IntFormAnimated::isClosed() const
-{
-	return currentAction == 5;
 }
 
 void IntFormAnimated::display(int xOffset, int yOffset)
@@ -1187,11 +1181,6 @@ void IntFormAnimated::display(int xOffset, int yOffset)
 			aBegin = aOpen;
 			aEnd = aClosed;
 			break;
-		case 5:  // Closed.
-			aBegin = aClosed;
-			aEnd = aClosed;
-			startTime = realTime;
-			break;
 	}
 	int den = FORM_OPEN_ANIM_DURATION;
 	int num = std::min<unsigned>(realTime - startTime, den);
@@ -1201,7 +1190,7 @@ void IntFormAnimated::display(int xOffset, int yOffset)
 		switch (currentAction)
 		{
 			case 2: disableChildren = false; break;
-			case 5: pUserData = (void *)1;   break;
+			case 5: deleteLater();           break;
 		}
 	}
 

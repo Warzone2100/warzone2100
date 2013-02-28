@@ -255,13 +255,6 @@ extern std::list<DROID_TEMPLATE> localTemplates;       ///< Unsychnronised list,
 /* pointer to hold the imd to use for a new template in the design screen */
 extern iIMDShape	*pNewDesignIMD;
 
-extern bool ClosingMessageView;
-extern bool ClosingIntelMap;
-extern bool	ClosingTrans;
-extern bool	ClosingTransCont;
-extern bool	ClosingTransDroids;
-extern bool ClosingOrder;
-
 /* Initialise the in game interface */
 extern bool intInitialise(void);
 
@@ -392,8 +385,6 @@ extern BASE_OBJECT *getCurrentSelected(void);
 
 //initialise all the previous obj - particularly useful for when go Off world!
 extern void intResetPreviousObj(void);
-
-extern void HandleClosingWindows(void);
 
 extern bool intIsRefreshing(void);
 

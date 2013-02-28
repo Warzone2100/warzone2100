@@ -52,8 +52,7 @@
 #include "main.h"
 #include "warzoneconfig.h"
 
-//status bools.(for hci.h)
-bool	ClosingInGameOp	= false;
+
 bool	InGameOpUp		= false;
 bool 	isInGamePopupUp = false;
 // ////////////////////////////////////////////////////////////////////////////
@@ -371,7 +370,6 @@ bool intCloseInGameOptions(bool bPutUpLoadSave, bool bResetMissionWidgets)
 		}
 
 		InGameOpUp = false;
-		ClosingInGameOp = true;
 	}
 	else
 	{
@@ -390,8 +388,7 @@ bool intCloseInGameOptions(bool bPutUpLoadSave, bool bResetMissionWidgets)
 
 		if (form)
 		{
-			form->closeAnimate();
-			ClosingInGameOp		 = true;		// like orderup/closingorder
+			form->closeAnimateDelete();
 			InGameOpUp			 = false;
 		}
 	}

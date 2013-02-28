@@ -1034,8 +1034,7 @@ void intRemoveTrans(void)
 	IntFormAnimated *form = (IntFormAnimated *)widgGetFromID(psWScreen, IDTRANS_FORM);
 	if (form)
 	{
-		form->closeAnimate();
-		ClosingTrans = true;
+		form->closeAnimateDelete();
 	}
 
 	intRemoveTransContent();
@@ -1060,8 +1059,7 @@ void intRemoveTransContent(void)
 	IntFormAnimated *form = (IntFormAnimated *)widgGetFromID(psWScreen, IDTRANS_CONTENTFORM);
 	if (form)
 	{
-		form->closeAnimate();
-		ClosingTransCont = true;
+		form->closeAnimateDelete();
 	}
 }
 
@@ -1079,10 +1077,9 @@ void intRemoveTransDroidsAvail(void)
 	IntFormAnimated *form = (IntFormAnimated *)widgGetFromID(psWScreen, IDTRANS_DROIDS);
 	if (form)
 	{
-		form->closeAnimate();
-		ClosingTransDroids = true;
 		//remember which tab we were on
 		widgGetTabs(psWScreen, IDTRANS_DROIDTAB, &objMajor);
+		form->closeAnimateDelete();
 	}
 }
 

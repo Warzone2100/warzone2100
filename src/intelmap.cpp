@@ -968,9 +968,8 @@ void intRemoveIntelMap(void)
 	IntFormAnimated *form = (IntFormAnimated *)widgGetFromID(psWScreen, IDINTMAP_FORM);
 	if (form)
 	{
-		form->closeAnimate();
+		form->closeAnimateDelete();
 	}
-	ClosingIntelMap = true;
 	//remove the text label
 	widgDelete(psWScreen, IDINTMAP_PAUSELABEL);
 
@@ -1022,11 +1021,8 @@ void intRemoveMessageView(bool animated)
 
 	if (animated)
 	{
-		widgDelete(psWScreen, IDINTMAP_CLOSE);
-
 		// Start the window close animation.
-		form->closeAnimate();
-		ClosingMessageView = true;
+		form->closeAnimateDelete();
 	}
 	else
 	{

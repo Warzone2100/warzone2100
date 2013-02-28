@@ -85,6 +85,8 @@ struct WIDGET
 	WIDGET(WIDGET *parent, WIDGET_TYPE type = WIDG_UNSPECIFIED_TYPE);
 	virtual ~WIDGET();
 
+	void deleteLater();  ///< Like "delete this;", but safe to call from display/run callbacks.
+
 	virtual void widgetLost(WIDGET *);
 
 	virtual void clicked(W_CONTEXT *, WIDGET_KEY = WKEY_PRIMARY) {}

@@ -137,15 +137,7 @@ static BUTSTATE ReticuleEnabled[NUMRETBUTS] =  	// Reticule button enable states
 	{IDRET_COMMAND, false, false},
 };
 
-static bool ClosingObject = false;
-static bool ClosingStats = false;
 static UDWORD	keyButtonMapping = 0;
-bool ClosingMessageView = false;
-bool ClosingIntelMap = false;
-bool ClosingOrder = false;
-bool ClosingTrans = false;
-bool ClosingTransCont = false;
-bool ClosingTransDroids = false;
 static bool ReticuleUp = false;
 static bool Refreshing = false;
 
@@ -3721,8 +3713,7 @@ void intRemoveObject(void)
 	IntFormAnimated *Form = (IntFormAnimated *)widgGetFromID(psWScreen, IDOBJ_FORM);
 	if (Form)
 	{
-		Form->closeAnimate();
-		ClosingObject = true;
+		Form->closeAnimateDelete();
 	}
 
 	ClearObjectBuffers();
@@ -3762,8 +3753,7 @@ void intRemoveStats(void)
 	IntFormAnimated *Form = (IntFormAnimated *)widgGetFromID(psWScreen, IDSTAT_FORM);
 	if (Form)
 	{
-		Form->closeAnimate();
-		ClosingStats = true;
+		Form->closeAnimateDelete();
 	}
 
 	ClearStatBuffers();
@@ -3785,189 +3775,6 @@ void intRemoveStatsNoAnim(void)
 	StatsUp = false;
 	psStatsScreenOwner = NULL;
 }
-
-// Poll for closing windows and handle them, ensure called even if game is paused.
-//
-void HandleClosingWindows(void)
-{
-	WIDGET *Widg;
-
-	if (ClosingObject)
-	{
-		Widg = widgGetFromID(psWScreen, IDOBJ_FORM);
-		if (Widg)
-		{
-			// Has the window finished closing?
-			if (Widg->pUserData)
-			{
-				widgDelete(psWScreen, IDOBJ_FORM);
-				ClosingObject = false;
-			}
-		}
-		else
-		{
-			ClosingObject = false;
-		}
-	}
-
-	if (ClosingStats)
-	{
-		Widg = widgGetFromID(psWScreen, IDSTAT_FORM);
-		if (Widg)
-		{
-			// Has the window finished closing?
-			if (Widg->pUserData)
-			{
-				widgDelete(psWScreen, IDSTAT_FORM);
-				ClosingStats = false;
-			}
-		}
-		else
-		{
-			ClosingStats = false;
-		}
-	}
-	if (ClosingMessageView)
-	{
-		Widg = widgGetFromID(psWScreen, IDINTMAP_MSGVIEW);
-		if (Widg)
-		{
-			// Has the window finished closing?
-			if (Widg->pUserData)
-			{
-				widgDelete(psWScreen, IDINTMAP_MSGVIEW);
-				ClosingMessageView = false;
-			}
-		}
-		else
-		{
-			ClosingMessageView = false;
-		}
-	}
-	if (ClosingIntelMap)
-	{
-		Widg = widgGetFromID(psWScreen, IDINTMAP_FORM);
-		if (Widg)
-		{
-			// Has the window finished closing?
-			if (Widg->pUserData)
-			{
-				widgDelete(psWScreen, IDINTMAP_FORM);
-				ClosingIntelMap = false;
-			}
-		}
-		else
-		{
-			ClosingIntelMap = false;
-		}
-	}
-
-	if (ClosingOrder)
-	{
-		Widg = widgGetFromID(psWScreen, IDORDER_FORM);
-		if (Widg)
-		{
-			// Has the window finished closing?
-			if (Widg->pUserData)
-			{
-				widgDelete(psWScreen, IDORDER_FORM);
-				ClosingOrder = false;
-			}
-		}
-		else
-		{
-			ClosingOrder = false;
-		}
-	}
-	if (ClosingTrans)
-	{
-		Widg = widgGetFromID(psWScreen, IDTRANS_FORM);
-		if (Widg)
-		{
-			// Has the window finished closing?
-			if (Widg->pUserData)
-			{
-				widgDelete(psWScreen, IDTRANS_FORM);
-				ClosingTrans = false;
-			}
-		}
-		else
-		{
-			ClosingTrans = false;
-		}
-	}
-	if (ClosingTransCont)
-	{
-		Widg = widgGetFromID(psWScreen, IDTRANS_CONTENTFORM);
-		if (Widg)
-		{
-			// Has the window finished closing?
-			if (Widg->pUserData)
-			{
-				widgDelete(psWScreen, IDTRANS_CONTENTFORM);
-				ClosingTransCont = false;
-			}
-		}
-		else
-		{
-			ClosingTransCont = false;
-		}
-	}
-	if (ClosingTransDroids)
-	{
-		Widg = widgGetFromID(psWScreen, IDTRANS_DROIDS);
-		if (Widg)
-		{
-			// Has the window finished closing?
-			if (Widg->pUserData)
-			{
-				widgDelete(psWScreen, IDTRANS_DROIDS);
-				ClosingTransDroids = false;
-			}
-		}
-		else
-		{
-			ClosingTransDroids = false;
-		}
-	}
-
-	if (ClosingInGameOp)
-	{
-		Widg = widgGetFromID(psWScreen, INTINGAMEOP);
-		if (Widg)
-		{
-			// Has the window finished closing?
-			if (Widg->pUserData)
-			{
-				widgDelete(psWScreen, INTINGAMEOP);
-				ClosingInGameOp = false;
-			}
-		}
-		else
-		{
-			ClosingInGameOp = false;
-		}
-	}
-
-	if (ClosingMultiMenu)
-	{
-		Widg = widgGetFromID(psWScreen, MULTIMENU_FORM);
-		if (Widg)
-		{
-			// Has the window finished closing?
-			if (Widg->pUserData)
-			{
-				widgDelete(psWScreen, MULTIMENU_FORM);
-				ClosingMultiMenu = false;
-			}
-		}
-		else
-		{
-			ClosingMultiMenu = false;
-		}
-	}
-}
-
 
 /**
  * Get the object refered to by a button ID on the object screen. This works for object or stats buttons.

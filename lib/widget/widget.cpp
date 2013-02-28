@@ -49,6 +49,8 @@ static SWORD ClickedAudioID = -1;
 
 static WIDGET_KEY lastReleasedKey_DEPRECATED = WKEY_NONE;
 
+static std::vector<WIDGET *> widgetDeletionQueue;
+
 
 /* Initialise the widget module */
 bool widgInitialise()
@@ -72,6 +74,18 @@ void widgShutDown(void)
 {
 }
 
+static void deleteOldWidgets()
+{
+	while (!widgetDeletionQueue.empty())
+	{
+		WIDGET *guiltyWidget = widgetDeletionQueue.back();
+		widgetDeletionQueue.pop_back();  // Do this before deleting widget, in case it calls deleteLater() on other widgets.
+
+		ASSERT_OR_RETURN(, std::find(widgetDeletionQueue.begin(), widgetDeletionQueue.end(), guiltyWidget) == widgetDeletionQueue.end(), "Called deleteLater() twice on the same widget.");
+
+		delete guiltyWidget;
+	}
+}
 
 W_INIT::W_INIT()
 	: formID(0)
@@ -127,6 +141,11 @@ WIDGET::~WIDGET()
 		childWidgets[n]->parentWidget = NULL;  // Detach in advance, slightly faster than detach(), and doesn't change our list.
 		delete childWidgets[n];
 	}
+}
+
+void WIDGET::deleteLater()
+{
+	   widgetDeletionQueue.push_back(this);
 }
 
 void WIDGET::attach(WIDGET *widget)
@@ -731,6 +750,8 @@ WidgetTriggers const &widgRunScreen(W_SCREEN *psScreen)
 	/* Process any user callback functions */
 	psScreen->psForm->processCallbacksRecursive(&sContext);
 
+	deleteOldWidgets();  // Delete any widgets that called deleteLater() while being run.
+
 	/* Return the ID of a pressed button or finished edit box if any */
 	return psScreen->retWidgets;
 }
@@ -792,6 +813,8 @@ void widgDisplayScreen(W_SCREEN *psScreen)
 {
 	// Display the widgets.
 	psScreen->psForm->displayRecursive(0, 0);
+
+	deleteOldWidgets();  // Delete any widgets that called deleteLater() while being displayed.
 
 	/* Display the tool tip if there is one */
 	tipDisplay();

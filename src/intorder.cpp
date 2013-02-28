@@ -1082,8 +1082,7 @@ void intRemoveOrder(void)
 	IntFormAnimated *form = (IntFormAnimated *)widgGetFromID(psWScreen, IDORDER_FORM);
 	if (form != nullptr)
 	{
-		form->closeAnimate();
-		ClosingOrder = true;
+		form->closeAnimateDelete();
 		OrderUp = false;
 		SelectedDroids.clear();
 		psSelectedFactory = NULL;

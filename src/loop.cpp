@@ -146,8 +146,6 @@ static GAMECODE renderLoop()
 		intAddInGamePopup();
 	}
 
-	HandleClosingWindows();	// Needs to be done outside the pause case.
-
 	audio_Update();
 
 	wzShowMouse(true);

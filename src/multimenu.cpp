@@ -70,7 +70,6 @@ W_SCREEN  *psRScreen;			// requester stuff.
 extern char	MultiCustomMapsPath[PATH_MAX];
 
 bool	MultiMenuUp			= false;
-bool	ClosingMultiMenu	= false;
 bool	DebugMenuUp		= false;
 static UDWORD	context = 0;
 UDWORD	current_tech = 1;
@@ -1311,12 +1310,11 @@ bool intAddMultiMenu(void)
 // ////////////////////////////////////////////////////////////////////////////
 void intCloseMultiMenuNoAnim(void)
 {
-	if (!MultiMenuUp && !ClosingMultiMenu)
+	widgDelete(psWScreen, MULTIMENU_FORM);
+	if (!MultiMenuUp)
 	{
 		return;
 	}
-	widgDelete(psWScreen, MULTIMENU_CLOSE);
-	widgDelete(psWScreen, MULTIMENU_FORM);
 	MultiMenuUp = false;
 	if (intMode != INT_INTELMAP)
 	{
@@ -1333,14 +1331,11 @@ bool intCloseMultiMenu(void)
 		return true;
 	}
 
-	widgDelete(psWScreen, MULTIMENU_CLOSE);
-
 	// Start the window close animation.
 	IntFormAnimated *form = (IntFormAnimated *)widgGetFromID(psWScreen, MULTIMENU_FORM);
 	if (form != nullptr)
 	{
-		form->closeAnimate();
-		ClosingMultiMenu = true;
+		form->closeAnimateDelete();
 		MultiMenuUp  = false;
 	}
 
