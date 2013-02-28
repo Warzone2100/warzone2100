@@ -26,6 +26,9 @@
 #include "lib/framework/frameint.h"
 #include "lib/framework/utf.h"
 #include "lib/ivis_opengl/textdraw.h"
+#include "lib/ivis_opengl/pieblitfunc.h"
+#include "lib/ivis_opengl/piestate.h"
+#include "lib/gamelib/gtime.h"
 
 #include "widget.h"
 #include "widgint.h"
@@ -50,6 +53,8 @@ static SWORD ClickedAudioID = -1;
 static WIDGET_KEY lastReleasedKey_DEPRECATED = WKEY_NONE;
 
 static std::vector<WIDGET *> widgetDeletionQueue;
+
+static bool debugBoundingBoxesOnly = false;
 
 
 /* Initialise the widget module */
@@ -766,7 +771,18 @@ void W_SCREEN::setReturn(WIDGET *psWidget)
 
 void WIDGET::displayRecursive(int xOffset, int yOffset)
 {
-	display(xOffset, yOffset);
+	if (debugBoundingBoxesOnly)
+	{
+		// Display bounding boxes.
+		PIELIGHT col;
+		col.byte.r = 128 + iSinSR(realTime, 2000, 127); col.byte.g = 128 + iSinSR(realTime + 667, 2000, 127); col.byte.b = 128 + iSinSR(realTime + 1333, 2000, 127); col.byte.a = 128;
+		iV_Box(xOffset + x(), yOffset + y(), xOffset + x() + width() - 1, yOffset + y() + height() - 1, col);
+	}
+	else
+	{
+		// Display widget.
+		display(xOffset, yOffset);
+	}
 
 	if (type == WIDG_FORM && ((W_FORM *)this)->disableChildren)
 	{
@@ -811,6 +827,15 @@ void WIDGET::displayRecursive(int xOffset, int yOffset)
  */
 void widgDisplayScreen(W_SCREEN *psScreen)
 {
+	// To toggle debug bounding boxes: Press: Left Shift   --  --  --------------
+	//                                        Left Ctrl  ------------  --  --  ----
+	static const int debugSequence[] = {-1, 0, 1, 3, 1, 3, 1, 3, 2, 3, 2, 3, 2, 3, 1, 0, -1};
+	static int const *debugLoc = debugSequence;
+	static bool debugBoundingBoxes = false;
+	int debugCode = keyDown(KEY_LCTRL) + 2*keyDown(KEY_LSHIFT);
+	debugLoc = debugLoc[1] == -1? debugSequence : debugLoc[0] == debugCode? debugLoc : debugLoc[1] == debugCode? debugLoc + 1 : debugSequence;
+	debugBoundingBoxes = debugBoundingBoxes ^ (debugLoc[1] == -1);
+
 	// Display the widgets.
 	psScreen->psForm->displayRecursive(0, 0);
 
@@ -818,6 +843,14 @@ void widgDisplayScreen(W_SCREEN *psScreen)
 
 	/* Display the tool tip if there is one */
 	tipDisplay();
+
+	if (debugBoundingBoxes)
+	{
+		debugBoundingBoxesOnly = true;
+		pie_SetRendMode(REND_ALPHA);
+		psScreen->psForm->displayRecursive(0, 0);
+		debugBoundingBoxesOnly = false;
+	}
 }
 
 void W_SCREEN::setFocus(WIDGET *widget)
