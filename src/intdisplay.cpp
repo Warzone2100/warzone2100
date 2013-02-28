@@ -1140,7 +1140,7 @@ void IntFormAnimated::closeAnimateDelete()
 void IntFormAnimated::display(int xOffset, int yOffset)
 {
 	QRect aOpen(xOffset + x(), yOffset + y(), width(), height());
-	QRect aClosed(aOpen.x(), aOpen.y() + aOpen.height()/2 - 4, aOpen.width(), 8);
+	QRect aClosed(aOpen.x() + aOpen.width()/4, aOpen.y() + aOpen.height()/2 - 4, aOpen.width()/2, 8);
 	QRect aBegin;
 	QRect aEnd;
 	switch (currentAction)
