@@ -57,9 +57,6 @@ W_FORMINIT::W_FORMINIT()
 W_FORM::W_FORM(W_FORMINIT const *init)
 	: WIDGET(init, WIDG_FORM)
 	, disableChildren(init->disableChildren)
-	, Ax0(0), Ay0(0), Ax1(0), Ay1(0)  // These assignments were previously done by a memset.
-	, animCount(0)
-	, startTime(0)                    // This assignment was previously done by a memset.
 {
 	ASSERT((init->style & ~(WFORM_TABBED | WFORM_INVISIBLE | WFORM_CLICKABLE | WFORM_NOCLICKMOVE | WFORM_NOPRIMARY | WFORM_SECONDARY | WIDG_HIDDEN)) == 0, "Unknown style bit");
 	ASSERT((init->style & WFORM_TABBED) == 0 || (init->style & (WFORM_INVISIBLE | WFORM_CLICKABLE)) == 0, "Tabbed form cannot be invisible or clickable");
@@ -70,9 +67,6 @@ W_FORM::W_FORM(W_FORMINIT const *init)
 W_FORM::W_FORM(WIDGET *parent)
 	: WIDGET(parent, WIDG_FORM)
 	, disableChildren(false)
-	, Ax0(0), Ay0(0), Ax1(0), Ay1(0)
-	, animCount(0)
-	, startTime(0)
 {}
 
 W_CLICKFORM::W_CLICKFORM(W_FORMINIT const *init)

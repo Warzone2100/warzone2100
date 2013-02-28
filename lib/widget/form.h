@@ -38,9 +38,6 @@ struct W_FORM : public WIDGET
 	void display(int xOffset, int yOffset);
 
 	bool            disableChildren;        ///< Disable all child widgets if true
-	UWORD           Ax0, Ay0, Ax1, Ay1;     ///< Working coords for animations.
-	UDWORD          animCount;              ///< Animation counter.
-	UDWORD          startTime;              ///< Animation start time
 };
 
 /* The tabbed form data structure */

@@ -195,29 +195,23 @@ bool addLoadSave(LOADSAVE_MODE savemode, const char *title)
 
 	psRequestScreen = new W_SCREEN;
 
+	WIDGET *parent = psRequestScreen->psForm;
+
 	/* add a form to place the tabbed form on */
-	W_FORMINIT sFormInit;
-	sFormInit.formID = 0;				//this adds the blue background, and the "box" behind the buttons -Q
-	sFormInit.id = LOADSAVE_FORM;
-	sFormInit.style = WFORM_PLAIN;
-	sFormInit.x = (SWORD) LOADSAVE_X;
-	sFormInit.y = (SWORD) LOADSAVE_Y;
-	sFormInit.width = LOADSAVE_W;
 	// we need the form to be long enough for all resolutions, so we take the total number of items * height
 	// and * the gaps, add the banner, and finally, the fudge factor ;)
-	sFormInit.height = (slotsInColumn * LOADENTRY_H + LOADSAVE_HGAP* slotsInColumn)+ LOADSAVE_BANNER_DEPTH+20;
-	sFormInit.disableChildren = true;
-	sFormInit.pDisplay = intOpenPlainForm;
-	widgAddForm(psRequestScreen, &sFormInit);
+	IntFormAnimated *loadSaveForm = new IntFormAnimated(parent);
+	loadSaveForm->id = LOADSAVE_FORM;
+	loadSaveForm->setGeometry(LOADSAVE_X, LOADSAVE_Y, LOADSAVE_W, slotsInColumn*(LOADENTRY_H + LOADSAVE_HGAP) + LOADSAVE_BANNER_DEPTH + 20);
 
 	// Add Banner
+	W_FORMINIT sFormInit;
 	sFormInit.formID = LOADSAVE_FORM;
 	sFormInit.id = LOADSAVE_BANNER;
 	sFormInit.x = LOADSAVE_HGAP;
 	sFormInit.y = LOADSAVE_VGAP;
 	sFormInit.width = LOADSAVE_W-(2*LOADSAVE_HGAP);
 	sFormInit.height = LOADSAVE_BANNER_DEPTH;
-	sFormInit.disableChildren = false;
 	sFormInit.pDisplay = displayLoadBanner;
 	sFormInit.UserData = bLoad;
 	widgAddForm(psRequestScreen, &sFormInit);

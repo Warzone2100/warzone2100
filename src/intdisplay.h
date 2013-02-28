@@ -153,11 +153,22 @@ void intDisplayStatsButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 
 void intDisplayStatsForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 
-void intOpenPlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
+/// Form which animates opening/closing.
+struct IntFormAnimated : public W_FORM
+{
+	IntFormAnimated(WIDGET *parent, bool openAnimate = true);
 
-void intClosePlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
+	void display(int xOffset, int yOffset);
 
-void intDisplayPlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
+	void closeAnimate();
+	bool isClosed() const;
+
+private:
+	void displayOpening(int xOffset, int yOffset);
+
+	unsigned        startTime;              ///< Animation start time
+	int             currentAction;          ///< Opening/open/closing/closed.
+};
 
 void intDisplayImage(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 

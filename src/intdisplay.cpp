@@ -1123,152 +1123,95 @@ static void AdjustTabFormSize(W_TABFORM *Form, int *x0, int *y0, int *x1, int *y
 	}
 }
 
-
-// Widget callback function to do the open form animation. Doesn't just open Plain Forms!!
-//
-void intOpenPlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+IntFormAnimated::IntFormAnimated(WIDGET *parent, bool openAnimate)
+	: W_FORM(parent)
+	, startTime(0)
+	, currentAction(openAnimate? 0 : 2)
 {
-	W_TABFORM	*Form = (W_TABFORM *)psWidget;
-	UDWORD		Tx0, Ty0, Tx1, Ty1;
-	UDWORD		Range;
-	UDWORD		Duration;
-	UDWORD		APos;
-	SDWORD		Ay0, Ay1;
-
-	Tx0 = xOffset + Form->x();
-	Ty0 = yOffset + Form->y();
-	Tx1 = Tx0 + Form->width();
-	Ty1 = Ty0 + Form->height();
-
-	if (Form->animCount == 0)
-	{
-		if ((FormOpenAudioID >= 0) && (FormOpenCount == 0))
-		{
-			audio_PlayTrack(FormOpenAudioID);
-			FormOpenCount++;
-		}
-		Form->Ax0 = (UWORD)Tx0;
-		Form->Ax1 = (UWORD)Tx1;
-		Form->Ay0 = (UWORD)(Ty0 + (Form->height() / 2) - 4);
-		Form->Ay1 = (UWORD)(Ty0 + (Form->height() / 2) + 4);
-		Form->startTime = realTime;
-	}
-	else
-	{
-		FormOpenCount = 0;
-	}
-
-	RenderWindowFrame(FRAME_NORMAL, Form->Ax0, Form->Ay0, Form->Ax1 - Form->Ax0, Form->Ay1 - Form->Ay0);
-
-	Form->animCount++;
-
-	Range = (Form->height() / 2) - 4;
-	Duration = (realTime - Form->startTime) << 16 ;
-	APos = (Range * (Duration / FORM_OPEN_ANIM_DURATION)) >> 16;
-
-	Ay0 = Ty0 + (Form->height() / 2) - 4 - APos;
-	Ay1 = Ty0 + (Form->height() / 2) + 4 + APos;
-
-	if (Ay0 <= (SDWORD)Ty0)
-	{
-		Ay0 = Ty0;
-	}
-
-	if (Ay1 >= (SDWORD)Ty1)
-	{
-		Ay1 = Ty1;
-	}
-	Form->Ay0 = (UWORD)Ay0;
-	Form->Ay1 = (UWORD)Ay1;
-
-	if ((Form->Ay0 == Ty0) && (Form->Ay1 == Ty1))
-	{
-		if (Form->pUserData != NULL)
-		{
-			Form->displayFunction = (WIDGET_DISPLAY)Form->pUserData;
-		}
-		else
-		{
-			//default to display
-			Form->displayFunction = intDisplayPlainForm;
-		}
-		Form->disableChildren = false;
-		Form->animCount = 0;
-	}
+	disableChildren = openAnimate;
 }
 
-
-// Widget callback function to do the close form animation.
-//
-void intClosePlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+void IntFormAnimated::closeAnimate()
 {
-	W_TABFORM *Form = (W_TABFORM *)psWidget;
-	UDWORD Ty0, Ty1;
-	UDWORD Range;
-	UDWORD Duration;
-	UDWORD APos;
+	currentAction = 3;
+	disableChildren = true;
+	pUserData = nullptr; // Used to signal when the close anim has finished.
+}
 
-	Ty0 = yOffset + Form->y() + (Form->height() / 2) - 4;
-	Ty1 = yOffset + Form->y() + (Form->height() / 2) + 4;
+bool IntFormAnimated::isClosed() const
+{
+	return currentAction == 5;
+}
 
-	if (Form->animCount == 0)
+void IntFormAnimated::display(int xOffset, int yOffset)
+{
+	QRect aOpen(xOffset + x(), yOffset + y(), width(), height());
+	QRect aClosed(aOpen.x(), aOpen.y() + aOpen.height()/2 - 4, aOpen.width(), 8);
+	QRect aBegin;
+	QRect aEnd;
+	switch (currentAction)
 	{
-		if ((FormCloseAudioID >= 0) && (FormCloseCount == 0))
+		case 1: FormOpenCount = 0;  break;
+		case 4: FormCloseCount = 0; break;
+	}
+	switch (currentAction)
+	{
+		case 0:  // Start opening.
+			if (FormOpenAudioID >= 0 && FormOpenCount == 0)
+			{
+				audio_PlayTrack(FormOpenAudioID);
+				++FormOpenCount;
+			}
+			startTime = realTime;
+			++currentAction;
+			// No break.
+		case 1:  // Continue opening.
+			aBegin = aClosed;
+			aEnd = aOpen;
+			break;
+		case 2:  // Open.
+			aBegin = aOpen;
+			aEnd = aOpen;
+			startTime = realTime;
+			break;
+		case 3:  // Start closing.
+			if (FormCloseAudioID >= 0 && FormCloseCount == 0)
+			{
+				audio_PlayTrack(FormCloseAudioID);
+				FormCloseCount++;
+			}
+			startTime = realTime;
+			++currentAction;
+			// No break.
+		case 4:  // Continue closing.
+			aBegin = aOpen;
+			aEnd = aClosed;
+			break;
+		case 5:  // Closed.
+			aBegin = aClosed;
+			aEnd = aClosed;
+			startTime = realTime;
+			break;
+	}
+	int den = FORM_OPEN_ANIM_DURATION;
+	int num = std::min<unsigned>(realTime - startTime, den);
+	if (num == den)
+	{
+		++currentAction;
+		switch (currentAction)
 		{
-			audio_PlayTrack(FormCloseAudioID);
-			FormCloseCount++;
+			case 2: disableChildren = false; break;
+			case 5: pUserData = (void *)1;   break;
 		}
-		Form->Ax0 = (UWORD)(xOffset + Form->x());
-		Form->Ay0 = (UWORD)(yOffset + Form->y());
-		Form->Ax1 = (UWORD)(Form->Ax0 + Form->width());
-		Form->Ay1 = (UWORD)(Form->Ay0 + Form->height());
-		Form->startTime = realTime;
-	}
-	else
-	{
-		FormCloseCount = 0;
 	}
 
-	RenderWindowFrame(FRAME_NORMAL, Form->Ax0, Form->Ay0, Form->Ax1 - Form->Ax0, Form->Ay1 - Form->Ay0);
+	QRect aCur = QRect(aBegin.x()      + (aEnd.x()      - aBegin.x())     *num/den,
+	                   aBegin.y()      + (aEnd.y()      - aBegin.y())     *num/den,
+	                   aBegin.width()  + (aEnd.width()  - aBegin.width()) *num/den,
+	                   aBegin.height() + (aEnd.height() - aBegin.height())*num/den);
 
-	Form->animCount++;
-
-	Range = (Form->height() / 2) - 4;
-	Duration = (realTime - Form->startTime) << 16 ;
-	APos = (Range * (Duration / FORM_OPEN_ANIM_DURATION)) >> 16;
-
-	Form->Ay0 = (UWORD)(yOffset + Form->y() + APos);
-	Form->Ay1 = (UWORD)(yOffset + Form->y() + Form->height() - APos);
-
-	if (Form->Ay0 >= Ty0)
-	{
-		Form->Ay0 = (UWORD)Ty0;
-	}
-	if (Form->Ay1 <= Ty1)
-	{
-		Form->Ay1 = (UWORD)Ty1;
-	}
-
-	if ((Form->Ay0 == Ty0) && (Form->Ay1 == Ty1))
-	{
-		Form->pUserData = (void *)1;
-		Form->animCount = 0;
-	}
+	RenderWindowFrame(FRAME_NORMAL, aCur.x(), aCur.y(), aCur.width(), aCur.height());
 }
-
-
-void intDisplayPlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
-{
-	W_TABFORM *Form = (W_TABFORM *)psWidget;
-
-	int x0 = xOffset + Form->x();
-	int y0 = yOffset + Form->y();
-	int x1 = x0 + Form->width();
-	int y1 = y0 + Form->height();
-
-	RenderWindowFrame(FRAME_NORMAL, x0, y0, x1 - x0, y1 - y0);
-}
-
 
 void intDisplayStatsForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {

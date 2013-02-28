@@ -421,21 +421,15 @@ void addMultiRequest(const char* searchDir, const char* fileExtension, UDWORD mo
 	/* Calculate how many buttons will go on a single form */
 	butPerForm = ((M_REQUEST_W - 0 - 4) / (R_BUT_W +4)) * ((M_REQUEST_H - 0- 4) / (R_BUT_H+ 4));
 
+	WIDGET *parent = psRScreen->psForm;
+
 	/* add a form to place the tabbed form on */
-	W_FORMINIT sFormInit;
-	sFormInit.formID = 0;
-	sFormInit.id = M_REQUEST;
-	sFormInit.style = WFORM_PLAIN;
-	sFormInit.x = (SWORD)(M_REQUEST_X+D_W);
-	sFormInit.y = (SWORD)(M_REQUEST_Y+D_H);
-	sFormInit.width = M_REQUEST_W;
-	sFormInit.height = M_REQUEST_H;
-	sFormInit.disableChildren = true;
-	sFormInit.pDisplay = intOpenPlainForm;
-	widgAddForm(psRScreen, &sFormInit);
+	IntFormAnimated *requestForm = new IntFormAnimated(parent);
+	requestForm->id = M_REQUEST;
+	requestForm->setGeometry(M_REQUEST_X + D_W, M_REQUEST_Y + D_H, M_REQUEST_W, M_REQUEST_H);
 
 	/* Add the tabs */
-	sFormInit = W_FORMINIT();
+	W_FORMINIT sFormInit;
 	sFormInit.formID = M_REQUEST;
 	sFormInit.id = M_REQUEST_TAB;
 	sFormInit.style = WFORM_TABBED;
@@ -1203,22 +1197,12 @@ bool addDebugMenu(bool bAdd)
 			formHeight += DEBUGMENU_ENTRY_H;
 	}
 
-	// add form
-	W_FORMINIT sFormInit;
-	sFormInit.formID		  = 0;
-	sFormInit.id			  = DEBUGMENU;
-	sFormInit.style			  = WFORM_PLAIN;
-	sFormInit.x				  =(SWORD)(DEBUGMENU_FORM_X);
-	sFormInit.y				  =(SWORD)(DEBUGMENU_FORM_Y);
-	sFormInit.width			  = DEBUGMENU_FORM_W;
-	sFormInit.height          = formHeight;
-	sFormInit.pDisplay		  = intOpenPlainForm;
-	sFormInit.disableChildren = true;
+	WIDGET *parent = psWScreen->psForm;
 
-	if (!widgAddForm(psWScreen, &sFormInit))
-	{
-		return false;
-	}
+	// add form
+	IntFormAnimated *debugMenu = new IntFormAnimated(parent);
+	debugMenu->id = DEBUGMENU;
+	debugMenu->setGeometry(DEBUGMENU_FORM_X, DEBUGMENU_FORM_Y, DEBUGMENU_FORM_W, formHeight);
 
 	// add debug info
 	pos = 0;
@@ -1227,7 +1211,7 @@ bool addDebugMenu(bool bAdd)
 		if(strcmp(debugMenuEntry[i],""))
 		{
 			// add form
-			sFormInit = W_FORMINIT();
+			W_FORMINIT sFormInit;
 			sFormInit.formID		  = DEBUGMENU;
 			sFormInit.id			  = DEBUGMENU_CLOSE + pos + 1;
 			sFormInit.style			  = WFORM_PLAIN;
@@ -1282,22 +1266,12 @@ bool intAddMultiMenu(void)
 		intResetScreen(false);
 	}
 
-	// add form
-	W_FORMINIT sFormInit;
-	sFormInit.formID		  = 0;
-	sFormInit.id			  = MULTIMENU_FORM;
-	sFormInit.style			  = WFORM_PLAIN;
-	sFormInit.x				  =(SWORD)(MULTIMENU_FORM_X);
-	sFormInit.y				  =(SWORD)(MULTIMENU_FORM_Y);
-	sFormInit.width			  = MULTIMENU_FORM_W;
-	sFormInit.height          = MULTIMENU_PLAYER_H*game.maxPlayers + MULTIMENU_PLAYER_H + 7;
-	sFormInit.pDisplay		  = intOpenPlainForm;
-	sFormInit.disableChildren = true;
+	WIDGET *parent = psWScreen->psForm;
 
-	if (!widgAddForm(psWScreen, &sFormInit))
-	{
-		return false;
-	}
+	// add form
+	IntFormAnimated *multiMenuForm = new IntFormAnimated(parent);
+	multiMenuForm->id = MULTIMENU_FORM;
+	multiMenuForm->setGeometry(MULTIMENU_FORM_X, MULTIMENU_FORM_Y, MULTIMENU_FORM_W, MULTIMENU_PLAYER_H*game.maxPlayers + MULTIMENU_PLAYER_H + 7);
 
 	// add any players
 	for(i=0;i<MAX_PLAYERS;i++)
@@ -1354,8 +1328,6 @@ void intCloseMultiMenuNoAnim(void)
 // ////////////////////////////////////////////////////////////////////////////
 bool intCloseMultiMenu(void)
 {
-	W_TABFORM *Form;
-
 	if (!MultiMenuUp)
 	{
 		return true;
@@ -1364,11 +1336,10 @@ bool intCloseMultiMenu(void)
 	widgDelete(psWScreen, MULTIMENU_CLOSE);
 
 	// Start the window close animation.
-	Form = (W_TABFORM*)widgGetFromID(psWScreen,MULTIMENU_FORM);
-	if(Form) {
-		Form->displayFunction = intClosePlainForm;
-		Form->pUserData = NULL;	// Used to signal when the close anim has finished.
-		Form->disableChildren = true;
+	IntFormAnimated *form = (IntFormAnimated *)widgGetFromID(psWScreen, MULTIMENU_FORM);
+	if (form != nullptr)
+	{
+		form->closeAnimate();
 		ClosingMultiMenu = true;
 		MultiMenuUp  = false;
 	}

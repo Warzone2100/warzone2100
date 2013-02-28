@@ -396,19 +396,12 @@ static bool _intAddDesign(bool bShowCentreScreen)
 		bRender3DOnly = false;
 	}
 
+	WIDGET *parent = psWScreen->psForm;
+
 	/* Add the main design form */
-	sFormInit.formID = 0;
-	sFormInit.id = IDDES_FORM;
-	sFormInit.style = WFORM_PLAIN;
-	sFormInit.x = (SWORD)DES_CENTERFORMX;	//0;
-	sFormInit.y = (SWORD)DES_CENTERFORMY;	//0;
-	sFormInit.width = DES_CENTERFORMWIDTH;	//DISP_WIDTH-1;
-	sFormInit.height = DES_CENTERFORMHEIGHT;	//DES_BASEHEIGHT;
-	sFormInit.pDisplay = intDisplayPlainForm;
-	if (!widgAddForm(psWScreen, &sFormInit))
-	{
-		return false;
-	}
+	IntFormAnimated *desForm = new IntFormAnimated(parent, false);
+	desForm->id = IDDES_FORM;
+	desForm->setGeometry(DES_CENTERFORMX, DES_CENTERFORMY, DES_CENTERFORMWIDTH, DES_CENTERFORMHEIGHT);
 
 	/* add the edit name box */
 	sEdInit.formID = IDDES_FORM;
@@ -589,18 +582,9 @@ static bool _intAddDesign(bool bShowCentreScreen)
 	}
 
 	/* add central stats form */
-	sFormInit.formID = 0;
-	sFormInit.id = IDDES_STATSFORM;
-	sFormInit.style = WFORM_PLAIN;
-	sFormInit.x = (SWORD)DES_STATSFORMX;
-	sFormInit.y = (SWORD)DES_STATSFORMY;
-	sFormInit.width = DES_STATSFORMWIDTH;
-	sFormInit.height = DES_STATSFORMHEIGHT;
-	sFormInit.pDisplay = intDisplayPlainForm;
-	if (!widgAddForm(psWScreen, &sFormInit))
-	{
-		return false;
-	}
+	IntFormAnimated *statsForm = new IntFormAnimated(parent, false);
+	statsForm->id = IDDES_STATSFORM;
+	statsForm->setGeometry(DES_STATSFORMX, DES_STATSFORMY, DES_STATSFORMWIDTH, DES_STATSFORMHEIGHT);
 
 	/* Add the body form */
 	sFormInit.formID = IDDES_STATSFORM;
@@ -788,11 +772,8 @@ static bool _intAddDesign(bool bShowCentreScreen)
 	intSetDesignMode(IDES_BODY);
 
 	/* hide design and component forms until required */
-	if (bShowCentreScreen == false)
-	{
-		widgHide(psWScreen, IDDES_FORM);
-	}
-	widgHide(psWScreen, IDDES_STATSFORM);
+	desForm->show(bShowCentreScreen);
+	statsForm->hide();
 	widgHide(psWScreen, IDDES_RIGHTBASE);
 
 	return true;
@@ -838,23 +819,15 @@ static bool _intAddTemplateForm(DROID_TEMPLATE *psSelected)
 	             ((DES_LEFTFORMHEIGHT - DES_TABTHICKNESS - DES_TABBUTGAP) /
 	              (DES_TABBUTHEIGHT + DES_TABBUTGAP));
 
+	WIDGET *parent = psWScreen->psForm;
+
 	/* add a form to place the tabbed form on */
-	W_FORMINIT sFormInit;
-	sFormInit.formID = 0;
-	sFormInit.id = IDDES_TEMPLBASE;
-	sFormInit.style = WFORM_PLAIN;
-	sFormInit.x = (SWORD)RET_X;
-	sFormInit.y = (SWORD)DESIGN_Y;
-	sFormInit.width = RET_FORMWIDTH;
-	sFormInit.height = DES_LEFTFORMHEIGHT + 4;
-	sFormInit.pDisplay = intDisplayPlainForm;
-	if (!widgAddForm(psWScreen, &sFormInit))
-	{
-		return false;
-	}
+	IntFormAnimated *templbaseForm = new IntFormAnimated(parent, false);
+	templbaseForm->id = IDDES_TEMPLBASE;
+	templbaseForm->setGeometry(RET_X, DESIGN_Y, RET_FORMWIDTH, DES_LEFTFORMHEIGHT + 4);
 
 	/* Add the design templates form */
-	sFormInit = W_FORMINIT();
+	W_FORMINIT sFormInit;
 	sFormInit.formID = IDDES_TEMPLBASE;	//IDDES_FORM;
 	sFormInit.id = IDDES_TEMPLFORM;
 	sFormInit.style = WFORM_TABBED;
@@ -1904,20 +1877,12 @@ static bool intAddComponentForm(UDWORD numButtons)
 {
 	unsigned butPerForm = DES_BUTSPERFORM;
 
+	WIDGET *parent = psWScreen->psForm;
+
 	/* add a form to place the tabbed form on */
-	W_FORMINIT sFormInit;
-	sFormInit.formID = 0;
-	sFormInit.id = IDDES_RIGHTBASE;
-	sFormInit.style = WFORM_PLAIN;
-	sFormInit.x = (SWORD)(RADTLX - 2);
-	sFormInit.y = (SWORD)DESIGN_Y;
-	sFormInit.width = RET_FORMWIDTH;
-	sFormInit.height = DES_RIGHTFORMHEIGHT + 4;
-	sFormInit.pDisplay = intDisplayPlainForm;
-	if (!widgAddForm(psWScreen, &sFormInit))
-	{
-		return false;
-	}
+	IntFormAnimated *rightBase = new IntFormAnimated(parent, false);
+	rightBase->id = IDDES_RIGHTBASE;
+	rightBase->setGeometry(RADTLX - 2, DESIGN_Y, RET_FORMWIDTH, DES_RIGHTFORMHEIGHT + 4);
 
 	/* Calculate how many buttons will go on a form */
 	//================== adds L/R Scroll buttons ===================================
@@ -1957,7 +1922,7 @@ static bool intAddComponentForm(UDWORD numButtons)
 	}
 
 	//now a single form
-	sFormInit = W_FORMINIT();
+	W_FORMINIT sFormInit;
 	sFormInit.formID = IDDES_RIGHTBASE;
 	sFormInit.id = IDDES_COMPFORM;
 	sFormInit.style = WFORM_TABBED;

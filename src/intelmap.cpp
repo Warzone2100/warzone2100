@@ -242,35 +242,12 @@ bool intAddIntelMap(void)
 	//set pause states before putting the interface up
 	setIntelligencePauseState();
 
-	W_FORMINIT sFormInit;
+	WIDGET *parent = psWScreen->psForm;
 
 	// Add the main Intelligence Map form
-
-	sFormInit.formID = 0;
-	sFormInit.id = IDINTMAP_FORM;
-	sFormInit.style = WFORM_PLAIN;
-	sFormInit.x = (SWORD)INTMAP_X;
-	sFormInit.y = (SWORD)INTMAP_Y;
-	sFormInit.width = INTMAP_WIDTH;
-	sFormInit.height = INTMAP_HEIGHT;
-
-	// If the window was closed then do open animation.
-	if(Animate)
-	{
-		sFormInit.pDisplay = intOpenPlainForm;
-		sFormInit.disableChildren = true;
-	}
-	else
-	{
-		// otherwise just recreate it.
-		sFormInit.pDisplay = intDisplayPlainForm;
-	}
-
-	//sFormInit.pDisplay = intDisplayPlainForm;
-	if (!widgAddForm(psWScreen, &sFormInit))
-	{
-		return false;
-	}
+	IntFormAnimated *intMapForm = new IntFormAnimated(parent, Animate);  // Do not animate the opening, if the window was already open.
+	intMapForm->id = IDINTMAP_FORM;
+	intMapForm->setGeometry(INTMAP_X, INTMAP_Y, INTMAP_WIDTH, INTMAP_HEIGHT);
 
 	if (!intAddMessageForm(playCurrent))
 	{
@@ -477,39 +454,17 @@ bool intAddMessageView(MESSAGE * psMessage)
 		intCloseMultiMenuNoAnim();
 	}
 
-	/* Add the base form */
-	W_FORMINIT sFormInit;
-	sFormInit.formID = 0;
-	sFormInit.id = IDINTMAP_MSGVIEW;
-	sFormInit.style = WFORM_PLAIN;
-	//size and position depends on the type of message - ONLY RESEARCH now
-	sFormInit.width = INTMAP_RESEARCHWIDTH;
-	sFormInit.height = INTMAP_RESEARCHHEIGHT;
-	sFormInit.x = (SWORD)INTMAP_RESEARCHX;
-	sFormInit.y = (SWORD)INTMAP_RESEARCHY;
+	WIDGET *parent = psWScreen->psForm;
 
-	// If the window was closed then do open animation.
-	if(Animate)
-	{
-		sFormInit.pDisplay = intOpenPlainForm;
-		sFormInit.disableChildren = true;
-	}
-	else
-	{
-		// otherwise just display it.
-		sFormInit.pDisplay = intDisplayPlainForm;
-	}
-
-	if (!widgAddForm(psWScreen, &sFormInit))
-	{
-		return false;
-	}
+	IntFormAnimated *intMapMsgView = new IntFormAnimated(parent, Animate);  // Do not animate the opening, if the window was already open.
+	intMapMsgView->id = IDINTMAP_MSGVIEW;
+	intMapMsgView->setGeometry(INTMAP_RESEARCHX, INTMAP_RESEARCHY, INTMAP_RESEARCHWIDTH, INTMAP_RESEARCHHEIGHT);
 
 	/* Add the close box */
 	W_BUTINIT sButInit;
 	sButInit.formID = IDINTMAP_MSGVIEW;
 	sButInit.id = IDINTMAP_CLOSE;
-	sButInit.x = (SWORD)(sFormInit.width - OPT_GAP - CLOSE_SIZE);
+	sButInit.x = intMapMsgView->width() - OPT_GAP - CLOSE_SIZE;
 	sButInit.y = OPT_GAP;
 	sButInit.width = CLOSE_SIZE;
 	sButInit.height = CLOSE_SIZE;
@@ -530,8 +485,7 @@ bool intAddMessageView(MESSAGE * psMessage)
 		psViewReplay = (VIEW_REPLAY *)((VIEWDATA *)psMessage->pViewData)->pData;
 
 		/* Add a big tabbed text box for the subtitle text */
-		sFormInit = W_FORMINIT();
-
+		W_FORMINIT sFormInit;
 		sFormInit.id = IDINTMAP_SEQTEXT;
 		sFormInit.formID = IDINTMAP_MSGVIEW;
 		sFormInit.style = WFORM_TABBED;
@@ -615,8 +569,7 @@ bool intAddMessageView(MESSAGE * psMessage)
 	}
 
 	/*Add the PIE box*/
-
-	sFormInit = W_FORMINIT();
+	W_FORMINIT sFormInit;
 	sFormInit.formID = IDINTMAP_MSGVIEW;
 	sFormInit.id = IDINITMAP_PIEVIEW;
 	sFormInit.style = WFORM_PLAIN;
@@ -1004,23 +957,18 @@ static void intCleanUpIntelMap(void)
 /* Remove the Intelligence Map widgets from the screen */
 void intRemoveIntelMap(void)
 {
-	WIDGET		*Widg;
-	W_TABFORM	*Form;
-
 	//remove 3dView if still there
-	Widg = widgGetFromID(psWScreen,IDINTMAP_MSGVIEW);
+	WIDGET *Widg = widgGetFromID(psWScreen, IDINTMAP_MSGVIEW);
 	if(Widg)
 	{
 		intRemoveMessageView(false);
 	}
 
 	// Start the window close animation.
-	Form = (W_TABFORM*)widgGetFromID(psWScreen,IDINTMAP_FORM);
-	if(Form)
+	IntFormAnimated *form = (IntFormAnimated *)widgGetFromID(psWScreen, IDINTMAP_FORM);
+	if (form)
 	{
-		Form->displayFunction = intClosePlainForm;
-		Form->disableChildren = true;
-		Form->pUserData = NULL; // Used to signal when the close anim has finished.
+		form->closeAnimate();
 	}
 	ClosingIntelMap = true;
 	//remove the text label
@@ -1061,36 +1009,29 @@ void intRemoveIntelMapNoAnim(void)
 /* Remove the Message View from the Intelligence screen */
 void intRemoveMessageView(bool animated)
 {
-	W_TABFORM		*Form;
-	VIEW_RESEARCH	*psViewResearch;
-
 	//remove 3dView if still there
-	Form = (W_TABFORM*)widgGetFromID(psWScreen,IDINTMAP_MSGVIEW);
-	if(Form)
+	IntFormAnimated *form = (IntFormAnimated *)widgGetFromID(psWScreen, IDINTMAP_MSGVIEW);
+	if (form == nullptr)
 	{
+		return;
+	}
 
-		//stop the video
-		psViewResearch = (VIEW_RESEARCH *)Form->pUserData;
-		seq_RenderVideoToBuffer(psViewResearch->sequenceName, SEQUENCE_KILL);
+	//stop the video
+	VIEW_RESEARCH *psViewResearch = (VIEW_RESEARCH *)form->pUserData;
+	seq_RenderVideoToBuffer(psViewResearch->sequenceName, SEQUENCE_KILL);
 
-		if (animated)
-		{
+	if (animated)
+	{
+		widgDelete(psWScreen, IDINTMAP_CLOSE);
 
-			widgDelete(psWScreen, IDINTMAP_CLOSE);
-
-
-			// Start the window close animation.
-			Form->displayFunction = intClosePlainForm;
-			Form->disableChildren = true;
-			Form->pUserData = NULL; // Used to signal when the close anim has finished.
-			ClosingMessageView = true;
-		}
-		else
-		{
-			//remove without the animating close window
-			widgDelete(psWScreen, IDINTMAP_MSGVIEW);
-
-		}
+		// Start the window close animation.
+		form->closeAnimate();
+		ClosingMessageView = true;
+	}
+	else
+	{
+		//remove without the animating close window
+		delete form;
 	}
 }
 

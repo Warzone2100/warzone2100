@@ -2251,48 +2251,19 @@ static bool _intAddMissionResult(bool result, bool bPlaySuccess)
 	sFormInit.formID		= 0;
 	sFormInit.id			= IDMISSIONRES_BACKFORM;
 	sFormInit.style			= WFORM_PLAIN;
-	sFormInit.x				= (SWORD)(0 + D_W);
-	sFormInit.y				= (SWORD)(0 + D_H);
-	sFormInit.width			= 640;
-	sFormInit.height		= 480;
 	sFormInit.pDisplay		= intDisplayMissionBackDrop;
-	if (!widgAddForm(psWScreen, &sFormInit))
-	{
-		return false;
-	}
+	W_FORM *missionResBackForm = widgAddForm(psWScreen, &sFormInit);
+	missionResBackForm->setGeometry(0 + D_W, 0 + D_H, 640, 480);
 
 	// TITLE
-	sFormInit.formID		= IDMISSIONRES_BACKFORM;
-
-	sFormInit.id			= IDMISSIONRES_TITLE;
-	sFormInit.style			= WFORM_PLAIN;
-	sFormInit.x				= MISSIONRES_TITLE_X;
-	sFormInit.y				= MISSIONRES_TITLE_Y;
-	sFormInit.width			= MISSIONRES_TITLE_W;
-	sFormInit.height		= MISSIONRES_TITLE_H;
-	sFormInit.disableChildren = true;
-	sFormInit.pDisplay		= intOpenPlainForm;	//intDisplayPlainForm;
-
-	if (!widgAddForm(psWScreen, &sFormInit))
-	{
-		return false;
-	}
+	IntFormAnimated *missionResTitle = new IntFormAnimated(missionResBackForm);
+	missionResTitle->id = IDMISSIONRES_TITLE;
+	missionResTitle->setGeometry(MISSIONRES_TITLE_X, MISSIONRES_TITLE_Y, MISSIONRES_TITLE_W, MISSIONRES_TITLE_H);
 
 	// add form
-	sFormInit.formID		= IDMISSIONRES_BACKFORM;
-
-	sFormInit.id			= IDMISSIONRES_FORM;
-	sFormInit.style			= WFORM_PLAIN;
-	sFormInit.x				= MISSIONRES_X;
-	sFormInit.y				= MISSIONRES_Y;
-	sFormInit.width			= MISSIONRES_W;
-	sFormInit.height		= MISSIONRES_H;
-	sFormInit.disableChildren = true;
-	sFormInit.pDisplay		= intOpenPlainForm;	//intDisplayPlainForm;
-	if (!widgAddForm(psWScreen, &sFormInit))
-	{
-		return false;
-	}
+	IntFormAnimated *missionResForm = new IntFormAnimated(missionResBackForm);
+	missionResForm->id = IDMISSIONRES_FORM;
+	missionResForm->setGeometry(MISSIONRES_X, MISSIONRES_Y, MISSIONRES_W, MISSIONRES_H);
 
 	// description of success/fail
 	W_LABINIT sLabInit;

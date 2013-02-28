@@ -1724,36 +1724,26 @@ void addBackdrop(void)
 // ////////////////////////////////////////////////////////////////////////////
 void addTopForm(void)
 {
-	W_FORMINIT sFormInit;
+	WIDGET *parent = widgGetFromID(psWScreen, FRONTEND_BACKDROP);
 
-	sFormInit.formID = FRONTEND_BACKDROP;
-	sFormInit.id = FRONTEND_TOPFORM;
-	sFormInit.style = WFORM_PLAIN;
-
-	if(titleMode == MULTIOPTION)
+	IntFormAnimated *topForm = new IntFormAnimated(parent, false);
+	topForm->id = FRONTEND_TOPFORM;
+	if (titleMode == MULTIOPTION)
 	{
-		sFormInit.x		= FRONTEND_TOPFORM_WIDEX;
-		sFormInit.y		= FRONTEND_TOPFORM_WIDEY;
-		sFormInit.width = FRONTEND_TOPFORM_WIDEW;
-		sFormInit.height= FRONTEND_TOPFORM_WIDEH;
+		topForm->setGeometry(FRONTEND_TOPFORM_WIDEX, FRONTEND_TOPFORM_WIDEY, FRONTEND_TOPFORM_WIDEW, FRONTEND_TOPFORM_WIDEH);
 	}
 	else
-
 	{
-		sFormInit.x		= FRONTEND_TOPFORMX;
-		sFormInit.y		= FRONTEND_TOPFORMY;
-		sFormInit.width = FRONTEND_TOPFORMW;
-		sFormInit.height= FRONTEND_TOPFORMH;
+		topForm->setGeometry(FRONTEND_TOPFORMX, FRONTEND_TOPFORMY, FRONTEND_TOPFORMW, FRONTEND_TOPFORMH);
 	}
-	sFormInit.pDisplay = intDisplayPlainForm;
-	widgAddForm(psWScreen, &sFormInit);
 
+	W_FORMINIT sFormInit;
 	sFormInit.formID= FRONTEND_TOPFORM;
 	sFormInit.id	= FRONTEND_LOGO;
 	int imgW = iV_GetImageWidth(FrontImages, IMAGE_FE_LOGO);
 	int imgH = iV_GetImageHeight(FrontImages, IMAGE_FE_LOGO);
-	int dstW = sFormInit.width;
-	int dstH = sFormInit.height;
+	int dstW = topForm->width();
+	int dstH = topForm->height();
 	if (imgW*dstH < imgH*dstW)  // Want to set aspect ratio dstW/dstH = imgW/imgH.
 	{
 		dstW = imgW * dstH/imgH;  // Too wide.
@@ -1762,8 +1752,8 @@ void addTopForm(void)
 	{
 		dstH = imgH * dstW/imgW;  // Too high.
 	}
-	sFormInit.x = (sFormInit.width  - dstW)/2;
-	sFormInit.y = (sFormInit.height - dstH)/2;
+	sFormInit.x = (topForm->width()  - dstW)/2;
+	sFormInit.y = (topForm->height() - dstH)/2;
 	sFormInit.width  = dstW;
 	sFormInit.height = dstH;
 	sFormInit.pDisplay= displayLogo;
@@ -1773,20 +1763,11 @@ void addTopForm(void)
 // ////////////////////////////////////////////////////////////////////////////
 void addBottomForm(void)
 {
-	W_FORMINIT sFormInit;
+	WIDGET *parent = widgGetFromID(psWScreen, FRONTEND_BACKDROP);
 
-	sFormInit.formID = FRONTEND_BACKDROP;
-	sFormInit.id = FRONTEND_BOTFORM;
-	sFormInit.style = WFORM_PLAIN;
-	sFormInit.x = FRONTEND_BOTFORMX;
-	sFormInit.y = FRONTEND_BOTFORMY;
-	sFormInit.width = FRONTEND_BOTFORMW;
-	sFormInit.height = FRONTEND_BOTFORMH;
-
-	sFormInit.pDisplay = intOpenPlainForm;
-	sFormInit.disableChildren = true;
-
-	widgAddForm(psWScreen, &sFormInit);
+	IntFormAnimated *botForm = new IntFormAnimated(parent);
+	botForm->id = FRONTEND_BOTFORM;
+	botForm->setGeometry(FRONTEND_BOTFORMX, FRONTEND_BOTFORMY, FRONTEND_BOTFORMW, FRONTEND_BOTFORMH);
 }
 
 // ////////////////////////////////////////////////////////////////////////////

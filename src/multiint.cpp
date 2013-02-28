@@ -1202,21 +1202,12 @@ void startGameFind(void)
 {
 	addBackdrop();										//background image
 
-	W_FORM *parent = (W_FORM *)widgGetFromID(psWScreen, FRONTEND_BACKDROP);
+	WIDGET *parent = widgGetFromID(psWScreen, FRONTEND_BACKDROP);
 
 	// draws the background of the games listed
-	W_FORMINIT sFormInit;
-	sFormInit.formID = FRONTEND_BACKDROP;
-	sFormInit.id = FRONTEND_BOTFORM;
-	sFormInit.style = WFORM_PLAIN;
-	sFormInit.x = MULTIOP_OPTIONSX;
-	sFormInit.y = MULTIOP_OPTIONSY;
-	sFormInit.width = MULTIOP_CHATBOXW;
-	sFormInit.height = 415;	// FIXME: Add box at bottom for server messages
-	sFormInit.pDisplay = intOpenPlainForm;
-	sFormInit.disableChildren = true;
-
-	widgAddForm(psWScreen, &sFormInit);
+	IntFormAnimated *botForm = new IntFormAnimated(parent);
+	botForm->id = FRONTEND_BOTFORM;
+	botForm->setGeometry(MULTIOP_OPTIONSX, MULTIOP_OPTIONSY, MULTIOP_CHATBOXW, 415);  // FIXME: Add box at bottom for server messages
 
 	addSideText(FRONTEND_SIDETEXT,  MULTIOP_OPTIONSX-3, MULTIOP_OPTIONSY,_("GAMES"));
 
@@ -1243,11 +1234,9 @@ void startGameFind(void)
 	// Password stuff. Hidden by default.
 
 	// draws the background of the password box
-	W_FORM *passwordForm = new W_FORM(parent);
+	IntFormAnimated *passwordForm = new IntFormAnimated(parent);
 	passwordForm->id = FRONTEND_PASSWORDFORM;
 	passwordForm->setGeometry(FRONTEND_BOTFORMX, 160, FRONTEND_TOPFORMW, FRONTEND_TOPFORMH - 40);
-	passwordForm->displayFunction = intOpenPlainForm;
-	passwordForm->disableChildren = true;
 
 	// password label.
 	W_LABEL *enterPasswordLabel = new W_LABEL(passwordForm);
@@ -1394,16 +1383,12 @@ static void addGameOptions()
 
 	iV_SetFont(font_regular);
 
-	W_FORMINIT sFormInit;                          // draw options box.
-	sFormInit.formID = FRONTEND_BACKDROP;
-	sFormInit.id = MULTIOP_OPTIONS;
-	sFormInit.x = MULTIOP_OPTIONSX;
-	sFormInit.y = MULTIOP_OPTIONSY;
-	sFormInit.style = WFORM_PLAIN;
-	sFormInit.width = MULTIOP_OPTIONSW;
-	sFormInit.height = MULTIOP_OPTIONSH;
-	sFormInit.pDisplay = intDisplayPlainForm;
-	widgAddForm(psWScreen, &sFormInit);
+	WIDGET *parent = widgGetFromID(psWScreen, FRONTEND_BACKDROP);
+
+	// draw options box.
+	IntFormAnimated *optionsForm = new IntFormAnimated(parent, false);
+	optionsForm->id = MULTIOP_OPTIONS;
+	optionsForm->setGeometry(MULTIOP_OPTIONSX, MULTIOP_OPTIONSY, MULTIOP_OPTIONSW, MULTIOP_OPTIONSH);
 
 	addSideText(FRONTEND_SIDETEXT3, MULTIOP_OPTIONSX-3 , MULTIOP_OPTIONSY,_("OPTIONS"));
 
@@ -1678,16 +1663,11 @@ static void addDifficultyChooser(int player)
 	widgDelete(psWScreen, FRONTEND_SIDETEXT2);
 	difficultyChooserUp = player;
 
-	W_FORMINIT sFormInit;
-	sFormInit.formID = FRONTEND_BACKDROP;
-	sFormInit.id = MULTIOP_AI_FORM;	// reuse
-	sFormInit.x = MULTIOP_PLAYERSX;
-	sFormInit.y = MULTIOP_PLAYERSY;
-	sFormInit.style = WFORM_PLAIN;
-	sFormInit.width = MULTIOP_PLAYERSW;
-	sFormInit.height = MULTIOP_PLAYERSH;
-	sFormInit.pDisplay = intDisplayPlainForm;
-	widgAddForm(psWScreen, &sFormInit);
+	WIDGET *parent = widgGetFromID(psWScreen, FRONTEND_BACKDROP);
+
+	IntFormAnimated *aiForm = new IntFormAnimated(parent, false);
+	aiForm->id = MULTIOP_AI_FORM;
+	aiForm->setGeometry(MULTIOP_PLAYERSX, MULTIOP_PLAYERSY, MULTIOP_PLAYERSW, MULTIOP_PLAYERSH);
 
 	addSideText(FRONTEND_SIDETEXT2, MULTIOP_PLAYERSX - 3, MULTIOP_PLAYERSY, _("DIFFICULTY"));
 
@@ -1723,16 +1703,11 @@ static void addAiChooser(int player)
 	widgDelete(psWScreen, FRONTEND_SIDETEXT2);
 	aiChooserUp = player;
 
-	W_FORMINIT sFormInit;
-	sFormInit.formID = FRONTEND_BACKDROP;
-	sFormInit.id = MULTIOP_AI_FORM;
-	sFormInit.x = MULTIOP_PLAYERSX;
-	sFormInit.y = MULTIOP_PLAYERSY;
-	sFormInit.style = WFORM_PLAIN;
-	sFormInit.width = MULTIOP_PLAYERSW;
-	sFormInit.height = MULTIOP_PLAYERSH;
-	sFormInit.pDisplay = intDisplayPlainForm;
-	widgAddForm(psWScreen, &sFormInit);
+	WIDGET *parent = widgGetFromID(psWScreen, FRONTEND_BACKDROP);
+
+	IntFormAnimated *aiForm = new IntFormAnimated(parent, false);
+	aiForm->id = MULTIOP_AI_FORM;
+	aiForm->setGeometry(MULTIOP_PLAYERSX, MULTIOP_PLAYERSY, MULTIOP_PLAYERSW, MULTIOP_PLAYERSH);
 
 	addSideText(FRONTEND_SIDETEXT2, MULTIOP_PLAYERSX - 3, MULTIOP_PLAYERSY, _("CHOOSE AI"));
 
@@ -2334,16 +2309,12 @@ void addPlayerBox(bool players)
 		return;
 	}
 
-	W_FORMINIT sFormInit;                           // draw player window
-	sFormInit.formID = FRONTEND_BACKDROP;
-	sFormInit.id = MULTIOP_PLAYERS;
-	sFormInit.x = MULTIOP_PLAYERSX;
-	sFormInit.y = MULTIOP_PLAYERSY;
-	sFormInit.style = WFORM_PLAIN;
-	sFormInit.width = MULTIOP_PLAYERSW;
-	sFormInit.height = MULTIOP_PLAYERSH;
-	sFormInit.pDisplay = intDisplayPlainForm;
-	widgAddForm(psWScreen, &sFormInit);
+	// draw player window
+	WIDGET *parent = widgGetFromID(psWScreen, FRONTEND_BACKDROP);
+
+	IntFormAnimated *playersForm = new IntFormAnimated(parent, false);
+	playersForm->id = MULTIOP_PLAYERS;
+	playersForm->setGeometry(MULTIOP_PLAYERSX, MULTIOP_PLAYERSY, MULTIOP_PLAYERSW, MULTIOP_PLAYERSH);
 
 	addSideText(FRONTEND_SIDETEXT2, MULTIOP_PLAYERSX-3, MULTIOP_PLAYERSY,_("PLAYERS"));
 
@@ -2526,18 +2497,11 @@ static void addChatBox(void)
 		return;
 	}
 
-	W_FORMINIT sFormInit;
+	WIDGET *parent = widgGetFromID(psWScreen, FRONTEND_BACKDROP);
 
-	sFormInit.formID = FRONTEND_BACKDROP;							// add the form
-	sFormInit.id = MULTIOP_CHATBOX;
-	sFormInit.x = MULTIOP_CHATBOXX;
-	sFormInit.y = MULTIOP_CHATBOXY;
-	sFormInit.style = WFORM_PLAIN;
-	sFormInit.width = MULTIOP_CHATBOXW;
-	sFormInit.height = MULTIOP_CHATBOXH;
-	sFormInit.disableChildren = true;								// wait till open!
-	sFormInit.pDisplay = intOpenPlainForm;//intDisplayPlainForm;
-	widgAddForm(psWScreen, &sFormInit);
+	IntFormAnimated *chatBox = new IntFormAnimated(parent);
+	chatBox->id = MULTIOP_CHATBOX;
+	chatBox->setGeometry(MULTIOP_CHATBOXX, MULTIOP_CHATBOXY, MULTIOP_CHATBOXW, MULTIOP_CHATBOXH);
 
 	addSideText(FRONTEND_SIDETEXT4,MULTIOP_CHATBOXX-3,MULTIOP_CHATBOXY,_("CHAT"));
 
@@ -2589,18 +2553,11 @@ static void addConsoleBox(void)
 		return;
 	}
 
-	W_FORMINIT sFormInit;
+	WIDGET *parent = widgGetFromID(psWScreen, FRONTEND_BACKDROP);
 
-	sFormInit.formID = FRONTEND_BACKDROP;							// add the form
-	sFormInit.id = MULTIOP_CONSOLEBOX;
-	sFormInit.x = MULTIOP_CONSOLEBOXX;
-	sFormInit.y = MULTIOP_CONSOLEBOXY;
-	sFormInit.style = WFORM_PLAIN;
-	sFormInit.width = MULTIOP_CONSOLEBOXW;
-	sFormInit.height = MULTIOP_CONSOLEBOXH;
-	sFormInit.disableChildren = true;								// wait till open!
-	sFormInit.pDisplay = intOpenPlainForm;
-	widgAddForm(psWScreen, &sFormInit);
+	IntFormAnimated *consoleBox = new IntFormAnimated(parent);
+	consoleBox->id = MULTIOP_CONSOLEBOX;
+	consoleBox->setGeometry(MULTIOP_CONSOLEBOXX, MULTIOP_CONSOLEBOXY, MULTIOP_CONSOLEBOXW, MULTIOP_CONSOLEBOXH);
 
 	flushConsoleMessages();											// add the chatbox.
 	initConsoleMessages();

@@ -219,30 +219,11 @@ static bool _intAddTransporter(DROID *psSelected, bool offWorld)
 		Animate = false;
 	}
 
-	W_FORMINIT sFormInit;
-	sFormInit.formID = 0;
-	sFormInit.id = IDTRANS_FORM;
-	sFormInit.style = WFORM_PLAIN;
-	sFormInit.x = (SWORD)TRANS_X;
-	sFormInit.y = (SWORD)TRANS_Y;
-	sFormInit.width = TRANS_WIDTH;
-	sFormInit.height = TRANS_HEIGHT;
-	// If the window was closed then do open animation.
-	if (Animate)
-	{
-		sFormInit.pDisplay = intOpenPlainForm;
-		sFormInit.disableChildren = true;
-	}
-	else
-	{
-		// otherwise just recreate it.
-		sFormInit.pDisplay = intDisplayPlainForm;
-	}
+	WIDGET *parent = psWScreen->psForm;
 
-	if (!widgAddForm(psWScreen, &sFormInit))
-	{
-		return false;
-	}
+	IntFormAnimated *transForm = new IntFormAnimated(parent, Animate);  // Do not animate the opening, if the window was already open.
+	transForm->id = IDTRANS_FORM;
+	transForm->setGeometry(TRANS_X, TRANS_Y, TRANS_WIDTH, TRANS_HEIGHT);
 
 	/* Add the close button */
 	W_BUTINIT sButInit;
@@ -300,30 +281,11 @@ bool intAddTransporterContents(void)
 		Animate = false;
 	}
 
-	W_FORMINIT sFormInit;
-	sFormInit.formID = 0;
-	sFormInit.id = IDTRANS_CONTENTFORM;
-	sFormInit.style = WFORM_PLAIN;
-	sFormInit.x = (SWORD)TRANSCONT_X;
-	sFormInit.y = (SWORD)TRANSCONT_Y;
-	sFormInit.width = TRANSCONT_WIDTH;
-	sFormInit.height = TRANSCONT_HEIGHT;
-	// If the window was closed then do open animation.
-	if (Animate)
-	{
-		sFormInit.pDisplay = intOpenPlainForm;
-		sFormInit.disableChildren = true;
-	}
-	else
-	{
-		// otherwise just recreate it.
-		sFormInit.pDisplay = intDisplayPlainForm;
-	}
+	WIDGET *parent = psWScreen->psForm;
 
-	if (!widgAddForm(psWScreen, &sFormInit))
-	{
-		return false;
-	}
+	IntFormAnimated *transContentForm = new IntFormAnimated(parent, Animate);  // Do not animate the opening, if the window was already open.
+	transContentForm->id = IDTRANS_CONTENTFORM;
+	transContentForm->setGeometry(TRANSCONT_X, TRANSCONT_Y, TRANSCONT_WIDTH, TRANSCONT_HEIGHT);
 
 	/* Add the close button */
 	W_BUTINIT sButInit;
@@ -730,32 +692,12 @@ bool intAddDroidsAvailForm(void)
 		Animate = false;
 	}
 
+	WIDGET *parent = psWScreen->psForm;
+
 	/* Add the droids available form */
-	W_FORMINIT sFormInit;
-	sFormInit.formID = 0;
-	sFormInit.id = IDTRANS_DROIDS;
-	sFormInit.style = WFORM_PLAIN;
-	sFormInit.width = TRANSDROID_WIDTH;
-	sFormInit.height = TRANSDROID_HEIGHT;
-	sFormInit.x = (SWORD)TRANSDROID_X;
-	sFormInit.y = (SWORD)TRANSDROID_Y;
-
-	// If the window was closed then do open animation.
-	if (Animate)
-	{
-		sFormInit.pDisplay = intOpenPlainForm;
-		sFormInit.disableChildren = true;
-	}
-	else
-	{
-		// otherwise just recreate it.
-		sFormInit.pDisplay = intDisplayPlainForm;
-	}
-
-	if (!widgAddForm(psWScreen, &sFormInit))
-	{
-		return false;
-	}
+	IntFormAnimated *transDroids = new IntFormAnimated(parent, Animate);  // Do not animate the opening, if the window was already open.
+	transDroids->id = IDTRANS_DROIDS;
+	transDroids->setGeometry(TRANSDROID_WIDTH, TRANSDROID_HEIGHT, TRANSDROID_X, TRANSDROID_Y);
 
 	/* Add the close button */
 	W_BUTINIT sButInit;
@@ -774,7 +716,7 @@ bool intAddDroidsAvailForm(void)
 	}
 
 	//now add the tabbed droids available form
-	sFormInit = W_FORMINIT();
+	W_FORMINIT sFormInit;
 	sFormInit.formID = IDTRANS_DROIDS;
 	sFormInit.id = IDTRANS_DROIDTAB;
 	sFormInit.style = WFORM_TABBED;
@@ -1088,15 +1030,11 @@ static void _intProcessTransporter(UDWORD id)
 /* Remove the Transporter widgets from the screen */
 void intRemoveTrans(void)
 {
-	W_TABFORM *Form;
-
 	// Start the window close animation.
-	Form = (W_TABFORM *)widgGetFromID(psWScreen, IDTRANS_FORM);
-	if (Form)
+	IntFormAnimated *form = (IntFormAnimated *)widgGetFromID(psWScreen, IDTRANS_FORM);
+	if (form)
 	{
-		Form->displayFunction = intClosePlainForm;
-		Form->disableChildren = true;
-		Form->pUserData = NULL; // Used to signal when the close anim has finished.
+		form->closeAnimate();
 		ClosingTrans = true;
 	}
 
@@ -1118,15 +1056,11 @@ void intRemoveTransNoAnim(void)
 /* Remove the Transporter Content widgets from the screen */
 void intRemoveTransContent(void)
 {
-	W_TABFORM *Form;
-
 	// Start the window close animation.
-	Form = (W_TABFORM *)widgGetFromID(psWScreen, IDTRANS_CONTENTFORM);
-	if (Form)
+	IntFormAnimated *form = (IntFormAnimated *)widgGetFromID(psWScreen, IDTRANS_CONTENTFORM);
+	if (form)
 	{
-		Form->displayFunction = intClosePlainForm;
-		Form->disableChildren = true;
-		Form->pUserData = NULL; // Used to signal when the close anim has finished.
+		form->closeAnimate();
 		ClosingTransCont = true;
 	}
 }
@@ -1141,15 +1075,11 @@ void intRemoveTransContentNoAnim(void)
 /* Remove the Transporter Droids Avail widgets from the screen */
 void intRemoveTransDroidsAvail(void)
 {
-	W_TABFORM *Form;
-
 	// Start the window close animation.
-	Form = (W_TABFORM *)widgGetFromID(psWScreen, IDTRANS_DROIDS);
-	if (Form)
+	IntFormAnimated *form = (IntFormAnimated *)widgGetFromID(psWScreen, IDTRANS_DROIDS);
+	if (form)
 	{
-		Form->displayFunction = intClosePlainForm;
-		Form->disableChildren = true;
-		Form->pUserData = NULL; // Used to signal when the close anim has finished.
+		form->closeAnimate();
 		ClosingTransDroids = true;
 		//remember which tab we were on
 		widgGetTabs(psWScreen, IDTRANS_DROIDTAB, &objMajor);

@@ -306,16 +306,12 @@ bool startKeyMapEditor(bool first)
 	{
 		loadKeyMap();									// get the current mappings.
 	}
-	W_FORMINIT sFormInit;
-	sFormInit.formID	= FRONTEND_BACKDROP;
-	sFormInit.id		= KM_FORM;
-	sFormInit.style		= WFORM_PLAIN;
-	sFormInit.x			= KM_X;
-	sFormInit.y			= KM_Y;
-	sFormInit.width		= KM_W;
-	sFormInit.height	= KM_H;
-	sFormInit.pDisplay	= intDisplayPlainForm;
-	widgAddForm(psWScreen, &sFormInit);
+
+	WIDGET *parent = widgGetFromID(psWScreen, FRONTEND_BACKDROP);
+
+	IntFormAnimated *kmForm = new IntFormAnimated(parent, false);
+	kmForm->id = KM_FORM;
+	kmForm->setGeometry(KM_X, KM_Y, KM_W, KM_H);
 
 	addMultiBut(psWScreen,KM_FORM,KM_RETURN,			// return button.
 					8,5,
@@ -349,7 +345,7 @@ bool startKeyMapEditor(bool first)
 	}
 
 	// add tab form..
-	sFormInit = W_FORMINIT();
+	W_FORMINIT sFormInit;
 	sFormInit.formID		= KM_FORM;
 	sFormInit.id			= KM_FORM_TABS;
 	sFormInit.style			= WFORM_TABBED;

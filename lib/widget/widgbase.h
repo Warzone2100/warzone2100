@@ -118,6 +118,7 @@ struct WIDGET
 	int height() const { return dim.height(); }
 	void move(int x, int y) { dim.moveTo(x, y); }
 	void setGeometry(int x, int y, int w, int h) { dim.setRect(x, y, w, h); }
+	void setGeometry(QRect const &r) { dim = r; }
 
 	void attach(WIDGET *widget);
 	void detach(WIDGET *widget);

@@ -441,7 +441,6 @@ bool intAddOrder(BASE_OBJECT *psObj)
 	bool Animate = true;
 	SECONDARY_STATE State;
 	UWORD OrdIndex;
-	W_FORM *Form;
 	UWORD Height, NumDisplayedOrders;
 	UWORD NumButs;
 	UWORD NumJustifyButs, NumCombineButs, NumCombineBefore;
@@ -535,28 +534,12 @@ bool intAddOrder(BASE_OBJECT *psObj)
 		}
 	}
 
-	/* Create the basic form */
+	WIDGET *parent = psWScreen->psForm;
 
-	W_FORMINIT sFormInit;
-	sFormInit.formID = 0;
-	sFormInit.id = IDORDER_FORM;
-	sFormInit.style = WFORM_PLAIN;
-	sFormInit.x = ORDER_X;
-	sFormInit.y = ORDER_Y;
-	sFormInit.width = ORDER_WIDTH;
-	sFormInit.height = 	ORDER_HEIGHT;
-	// If the window was closed then do open animation.
-	if(Animate) {
-		sFormInit.pDisplay = intOpenPlainForm;
-		sFormInit.disableChildren = true;
-	} else {
-	// otherwise just recreate it.
-		sFormInit.pDisplay = intDisplayPlainForm;
-	}
-	if (!widgAddForm(psWScreen, &sFormInit))
-	{
-		return false;
-	}
+	/* Create the basic form */
+	IntFormAnimated *orderForm = new IntFormAnimated(parent, Animate);  // Do not animate the opening, if the window was already open.
+	orderForm->id = IDORDER_FORM;
+	orderForm->setGeometry(ORDER_X, ORDER_Y, ORDER_WIDTH, ORDER_HEIGHT);
 
 	// Add the close button.
 	W_BUTINIT sButInit;
@@ -621,15 +604,15 @@ bool intAddOrder(BASE_OBJECT *psObj)
 				break;
 
 			case ORD_JUSTIFY_RIGHT:
-				sButInit.x = (SWORD)(sFormInit.width - ORDER_BUTX -
-						( ((NumJustifyButs * GetImageWidth(IntImages,OrderButtons[OrdIndex].ButImageID[0])) +
-						((NumJustifyButs-1) * ORDER_BUTGAP ) ) ));
+				sButInit.x = orderForm->width() - ORDER_BUTX -
+				             (NumJustifyButs * GetImageWidth(IntImages, OrderButtons[OrdIndex].ButImageID[0]) +
+				              (NumJustifyButs - 1) * ORDER_BUTGAP);
 				break;
 
 			case ORD_JUSTIFY_CENTER:
-				sButInit.x = ((SWORD)((sFormInit.width ) -
-						( ((NumJustifyButs * GetImageWidth(IntImages,OrderButtons[OrdIndex].ButImageID[0])) +
-						((NumJustifyButs-1) * ORDER_BUTGAP ) ))))/2;
+				sButInit.x = (orderForm->width() -
+				              (NumJustifyButs * GetImageWidth(IntImages, OrderButtons[OrdIndex].ButImageID[0]) +
+				               (NumJustifyButs - 1) * ORDER_BUTGAP))/2;
 				break;
 
 			case ORD_JUSTIFY_COMBINE:
@@ -667,9 +650,9 @@ bool intAddOrder(BASE_OBJECT *psObj)
 				else
 				{
 					// center the buttons
-					sButInit.x = (SWORD)((sFormInit.width / 2) -
-							( ((NumCombineButs * GetImageWidth(IntImages,OrderButtons[OrdIndex].ButImageID[0])) +
-							((NumCombineButs-1) * ORDER_BUTGAP ) ) / 2 ));
+					sButInit.x = orderForm->width()/2 -
+					             (NumCombineButs * GetImageWidth(IntImages, OrderButtons[OrdIndex].ButImageID[0]) +
+					              (NumCombineButs - 1) * ORDER_BUTGAP)/2;
 					sButInit.x = (SWORD)(sButInit.x +
 						(GetImageWidth(IntImages,OrderButtons[OrdIndex].ButImageID[0]) + ORDER_BUTGAP ) * NumCombineBefore);
 				}
@@ -774,8 +757,7 @@ bool intAddOrder(BASE_OBJECT *psObj)
 
 	// Now we know how many orders there are we can resize the form accordingly.
 	int newHeight = Height + CLOSE_HEIGHT + ORDER_BUTGAP;
-	Form = (W_FORM*)widgGetFromID(psWScreen,IDORDER_FORM);
-	Form->setGeometry(Form->x(), ORDER_BOTTOMY - newHeight, Form->width(), newHeight);
+	orderForm->setGeometry(orderForm->x(), ORDER_BOTTOMY - newHeight, orderForm->width(), newHeight);
 
 	OrderUp = true;
 
@@ -1094,17 +1076,13 @@ bool intRefreshOrder(void)
 //
 void intRemoveOrder(void)
 {
-	W_TABFORM *Form;
-
 	widgDelete(psWScreen, IDORDER_CLOSE);
 
 	// Start the window close animation.
-	Form = (W_TABFORM*)widgGetFromID(psWScreen,IDORDER_FORM);
-	if (Form)
+	IntFormAnimated *form = (IntFormAnimated *)widgGetFromID(psWScreen, IDORDER_FORM);
+	if (form != nullptr)
 	{
-		Form->displayFunction = intClosePlainForm;
-		Form->pUserData = NULL; // Used to signal when the close anim has finished.
-		Form->disableChildren = true;
+		form->closeAnimate();
 		ClosingOrder = true;
 		OrderUp = false;
 		SelectedDroids.clear();

@@ -164,16 +164,11 @@ bool startLimitScreen(void)
 
 	addSideText(FRONTEND_SIDETEXT1,LIMITSX-2,LIMITSY,"LIMITS");	// draw sidetext...
 
-	W_FORMINIT sFormInit;
-	sFormInit.formID	= FRONTEND_BACKDROP;
-	sFormInit.id		= IDLIMITS;
-	sFormInit.style		= WFORM_PLAIN;
-	sFormInit.x			= LIMITSX;
-	sFormInit.y			= LIMITSY;
-	sFormInit.width		= LIMITSW;
-	sFormInit.height	= LIMITSH;
-	sFormInit.pDisplay	= intDisplayPlainForm;
-	widgAddForm(psWScreen, &sFormInit);
+	WIDGET *parent = widgGetFromID(psWScreen, FRONTEND_BACKDROP);
+
+	IntFormAnimated *limitsForm = new IntFormAnimated(parent, false);
+	limitsForm->id = IDLIMITS;
+	limitsForm->setGeometry(LIMITSX, LIMITSY, LIMITSW, LIMITSH);
 
 	// return button.
 	addMultiBut(psWScreen,IDLIMITS,IDLIMITS_RETURN,
@@ -203,7 +198,7 @@ bool startLimitScreen(void)
 	if(numButtons >(4*BUTPERFORM)) numButtons =(4*BUTPERFORM);
 
 	// add tab form..
-	sFormInit = W_FORMINIT();
+	W_FORMINIT sFormInit;
 	sFormInit.formID = IDLIMITS;
 	sFormInit.id = IDLIMITS_TABS;
 	sFormInit.style = WFORM_TABBED;

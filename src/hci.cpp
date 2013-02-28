@@ -2809,30 +2809,22 @@ bool intAddReticule()
 	{
 		return true; // all fine 
 	}
+
+	WIDGET *parent = psWScreen->psForm;
+
 	/* Create the basic form */
-	W_FORMINIT sFormInit;
-	sFormInit.formID = 0;
-	sFormInit.id = IDRET_FORM;
-	sFormInit.style = WFORM_PLAIN;
-	sFormInit.x = RET_X;
-	sFormInit.y = RET_Y;
-	sFormInit.width = RET_FORMWIDTH;
-	sFormInit.height = RET_FORMHEIGHT;
-	sFormInit.pDisplay = intDisplayPlainForm;
-	if (!widgAddForm(psWScreen, &sFormInit))
-	{
-		return false;
-	}
-	else // normal reticule
-	{
-		setReticuleBut(RETBUT_COMMAND, _("Commanders (F6)"), IMAGE_COMMANDDROID_UP, WBUT_PLAIN);
-		setReticuleBut(RETBUT_INTELMAP, _("Intelligence Display (F5)"), IMAGE_INTELMAP_UP, WBUT_SECONDARY);
-		setReticuleBut(RETBUT_FACTORY, _("Manufacture (F1)"), IMAGE_MANUFACTURE_UP, WBUT_SECONDARY);
-		setReticuleBut(RETBUT_DESIGN, _("Design (F4)"), IMAGE_DESIGN_UP, WBUT_PLAIN);
-		setReticuleBut(RETBUT_RESEARCH, _("Research (F2)"), IMAGE_RESEARCH_UP, WBUT_PLAIN);
-		setReticuleBut(RETBUT_BUILD, _("Build (F3)"), IMAGE_BUILD_UP, WBUT_PLAIN);
-		setReticuleBut(RETBUT_CANCEL, _("Close"), IMAGE_CANCEL_UP, WBUT_PLAIN);
-	}
+	IntFormAnimated *retForm = new IntFormAnimated(parent, false);
+	retForm->id = IDRET_FORM;
+	retForm->setGeometry(RET_X, RET_Y, RET_FORMWIDTH, RET_FORMHEIGHT);
+
+	// normal reticule
+	setReticuleBut(RETBUT_COMMAND, _("Commanders (F6)"), IMAGE_COMMANDDROID_UP, WBUT_PLAIN);
+	setReticuleBut(RETBUT_INTELMAP, _("Intelligence Display (F5)"), IMAGE_INTELMAP_UP, WBUT_SECONDARY);
+	setReticuleBut(RETBUT_FACTORY, _("Manufacture (F1)"), IMAGE_MANUFACTURE_UP, WBUT_SECONDARY);
+	setReticuleBut(RETBUT_DESIGN, _("Design (F4)"), IMAGE_DESIGN_UP, WBUT_PLAIN);
+	setReticuleBut(RETBUT_RESEARCH, _("Research (F2)"), IMAGE_RESEARCH_UP, WBUT_PLAIN);
+	setReticuleBut(RETBUT_BUILD, _("Build (F3)"), IMAGE_BUILD_UP, WBUT_PLAIN);
+	setReticuleBut(RETBUT_CANCEL, _("Close"), IMAGE_CANCEL_UP, WBUT_PLAIN);
 	ReticuleUp = true;
 	return true;
 }
@@ -3192,21 +3184,12 @@ static bool intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected, 
 	/* Reset the current object and store the current list */
 	psObjSelected = NULL;
 
-	/* Create the basic form */
+	WIDGET *parent = psWScreen->psForm;
 
-	W_FORMINIT sFormInit;
-	sFormInit.formID = 0;
-	sFormInit.id = IDOBJ_FORM;
-	sFormInit.style = WFORM_PLAIN;
-	sFormInit.x = (SWORD)OBJ_BACKX;
-	sFormInit.y = (SWORD)OBJ_BACKY;
-	sFormInit.width = OBJ_BACKWIDTH;
-	sFormInit.height = 	OBJ_BACKHEIGHT;
-	sFormInit.pDisplay = intDisplayPlainForm;
-	if (!widgAddForm(psWScreen, &sFormInit))
-	{
-		return false;
-	}
+	/* Create the basic form */
+	IntFormAnimated *objForm = new IntFormAnimated(parent, false);
+	objForm->id = IDOBJ_FORM;
+	objForm->setGeometry(OBJ_BACKX, OBJ_BACKY, OBJ_BACKWIDTH, OBJ_BACKHEIGHT);
 
 	/* Add the close button */
 	W_BUTINIT sButInit;
@@ -3225,7 +3208,7 @@ static bool intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected, 
 	}
 
 	/*add the tabbed form */
-	sFormInit = W_FORMINIT();
+	W_FORMINIT sFormInit;
 	sFormInit.formID = IDOBJ_FORM;
 	sFormInit.id = IDOBJ_TABFORM;
 	sFormInit.style = WFORM_TABBED;
@@ -3731,18 +3714,14 @@ static bool intUpdateObject(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected, boo
 /* Remove the build widgets from the widget screen */
 void intRemoveObject(void)
 {
-	W_TABFORM *Form;
-
 	widgDelete(psWScreen, IDOBJ_TABFORM);
 	widgDelete(psWScreen, IDOBJ_CLOSE);
 
 	// Start the window close animation.
-	Form = (W_TABFORM *)widgGetFromID(psWScreen, IDOBJ_FORM);
+	IntFormAnimated *Form = (IntFormAnimated *)widgGetFromID(psWScreen, IDOBJ_FORM);
 	if (Form)
 	{
-		Form->displayFunction = intClosePlainForm;
-		Form->disableChildren = true;
-		Form->pUserData = NULL; // Used to signal when the close anim has finished.
+		Form->closeAnimate();
 		ClosingObject = true;
 	}
 
@@ -3776,18 +3755,14 @@ static void intRemoveObjectNoAnim(void)
 /* Remove the stats widgets from the widget screen */
 void intRemoveStats(void)
 {
-	W_TABFORM *Form;
-
 	widgDelete(psWScreen, IDSTAT_CLOSE);
 	widgDelete(psWScreen, IDSTAT_TABFORM);
 
 	// Start the window close animation.
-	Form = (W_TABFORM *)widgGetFromID(psWScreen, IDSTAT_FORM);
+	IntFormAnimated *Form = (IntFormAnimated *)widgGetFromID(psWScreen, IDSTAT_FORM);
 	if (Form)
 	{
-		Form->displayFunction = intClosePlainForm;
-		Form->pUserData = NULL; // Used to signal when the close anim has finished.
-		Form->disableChildren = true;
+		Form->closeAnimate();
 		ClosingStats = true;
 	}
 
@@ -4162,22 +4137,12 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 
 	ClearStatBuffers();
 
-	/* Create the basic form */
+	WIDGET *parent = psWScreen->psForm;
 
-	W_FORMINIT sFormInit;
-	sFormInit.formID = 0;
-	sFormInit.id = IDSTAT_FORM;
-	sFormInit.style = WFORM_PLAIN;
-	sFormInit.x = STAT_X;
-	sFormInit.y = (SWORD)STAT_Y;
-	sFormInit.width = STAT_WIDTH;
-	sFormInit.height = 	STAT_HEIGHT;
-	sFormInit.pDisplay = intDisplayPlainForm;
-	if (!widgAddForm(psWScreen, &sFormInit))
-	{
-		debug(LOG_ERROR, "intAddStats: Failed to add form");
-		return false;
-	}
+	/* Create the basic form */
+	IntFormAnimated *theStatForm = new IntFormAnimated(parent, false);  // Called theStatForm since there's already a statForm parameter to this function
+	theStatForm->id = IDSTAT_FORM;
+	theStatForm->setGeometry(STAT_X, STAT_Y, STAT_WIDTH, STAT_HEIGHT);
 
 	W_LABINIT sLabInit;
 
@@ -4314,7 +4279,7 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 	}
 	//==============buttons before tabbed form!==========================
 	// Add the tabbed form
-	sFormInit = W_FORMINIT();
+	W_FORMINIT sFormInit;
 	sFormInit.formID = IDSTAT_FORM;
 	sFormInit.id = IDSTAT_TABFORM;
 	sFormInit.style = WFORM_TABBED;

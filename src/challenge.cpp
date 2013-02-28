@@ -169,29 +169,22 @@ bool addChallenges()
 
 	psRequestScreen = new W_SCREEN; // init the screen
 
+	WIDGET *parent = psRequestScreen->psForm;
+
 	/* add a form to place the tabbed form on */
-	W_FORMINIT sFormInit;
-	sFormInit.formID = 0;				//this adds the blue background, and the "box" behind the buttons -Q
-	sFormInit.id = CHALLENGE_FORM;
-	sFormInit.style = WFORM_PLAIN;
-	sFormInit.x = (SWORD) CHALLENGE_X;
-	sFormInit.y = (SWORD) CHALLENGE_Y;
-	sFormInit.width = CHALLENGE_W;
-	// we need the form to be long enough for all resolutions, so we take the total number of items * height
-	// and * the gaps, add the banner, and finally, the fudge factor ;)
-	sFormInit.height = (slotsInColumn * CHALLENGE_ENTRY_H + CHALLENGE_HGAP * slotsInColumn) + CHALLENGE_BANNER_DEPTH + 20;
-	sFormInit.disableChildren = true;
-	sFormInit.pDisplay = intOpenPlainForm;
-	widgAddForm(psRequestScreen, &sFormInit);
+	IntFormAnimated *challengeForm = new IntFormAnimated(parent);
+	challengeForm->id = CHALLENGE_FORM;
+	challengeForm->setGeometry(CHALLENGE_X, CHALLENGE_Y, CHALLENGE_W, (slotsInColumn * CHALLENGE_ENTRY_H + CHALLENGE_HGAP * slotsInColumn) + CHALLENGE_BANNER_DEPTH + 20);
 
 	// Add Banner
+	W_FORMINIT sFormInit;
 	sFormInit.formID = CHALLENGE_FORM;
 	sFormInit.id = CHALLENGE_BANNER;
+	sFormInit.style = WFORM_PLAIN;
 	sFormInit.x = CHALLENGE_HGAP;
 	sFormInit.y = CHALLENGE_VGAP;
 	sFormInit.width = CHALLENGE_W - (2 * CHALLENGE_HGAP);
 	sFormInit.height = CHALLENGE_BANNER_DEPTH;
-	sFormInit.disableChildren = false;
 	sFormInit.pDisplay = displayLoadBanner;
 	sFormInit.UserData = 0;
 	widgAddForm(psRequestScreen, &sFormInit);
