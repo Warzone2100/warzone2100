@@ -1242,8 +1242,11 @@ void	renderProjectile(PROJECTILE *psCurr)
 	missing target, in flight etc - JUST DO IN FLIGHT FOR NOW! */
 	pIMD = psStats->pInFlightGraphic;
 
-	if (clipXY(st.pos.x, st.pos.y))
-		for (; pIMD != NULL; pIMD = pIMD->next)
+	if (!clipXY(st.pos.x, st.pos.y))
+	{
+		return;
+	}
+	for (; pIMD != NULL; pIMD = pIMD->next)
 	{
 		bool rollToCamera = false;
 		bool pitchToCamera = false;
@@ -1340,7 +1343,6 @@ void	renderProjectile(PROJECTILE *psCurr)
 
 		pie_MatEnd();
 	}
-	/* Flush matrices */
 }
 
 /// Draw an animated component
@@ -1351,17 +1353,17 @@ void	renderAnimComponent( const COMPONENT_OBJECT *psObj )
 	const SDWORD posX = spacetime.pos.x + psObj->position.x,
 	             posY = spacetime.pos.y + psObj->position.y;
 
-	ASSERT( psParentObj != NULL, "renderAnimComponent: invalid parent object pointer" );
+	ASSERT(psParentObj, "Invalid parent object pointer");
 
 	/* only draw visible bits */
 	if (psParentObj->type == OBJ_DROID && ((DROID*)psParentObj)->visible[selectedPlayer] != UBYTE_MAX)
 	{
 		return;
 	}
-
-	/* render */
-	if( clipXY( posX, posY ) )
+	if (!clipXY(posX, posY))
 	{
+		return;
+	}
 		/* get parent object translation */
 		const Vector3i dv(
 			spacetime.pos.x - player.p.x,
@@ -1440,7 +1442,6 @@ void	renderAnimComponent( const COMPONENT_OBJECT *psObj )
 
 		/* clear stack */
 		pie_MatEnd();
-	}
 }
 
 /// Draw the buildings
@@ -1458,13 +1459,16 @@ void displayStaticObjects( void )
 
 		/* Now go all buildings for that player */
 		for (; list != NULL; list = list->psNext)
-			if (list->type == OBJ_STRUCTURE && (list->died == 0 || list->died > graphicsTime))
 		{
-			STRUCTURE *psStructure = castStructure(list);
-
 			/* Worth rendering the structure? */
-			if(clipXY(psStructure->pos.x,psStructure->pos.y))
+			if (list->type != OBJ_STRUCTURE
+			    || (list->died != 0 && list->died < graphicsTime)
+			    || !clipXY(list->pos.x, list->pos.y))
 			{
+				continue;
+			}
+				STRUCTURE *psStructure = castStructure(list);
+
 				if ( psStructure->pStructureType->type == REF_RESOURCE_EXTRACTOR &&
 					psStructure->psCurAnim == NULL &&
 					(psStructure->currentBuildPts > (SDWORD)psStructure->pStructureType->buildPoints) )
@@ -1479,10 +1483,8 @@ void displayStaticObjects( void )
 				{
 					renderStructure(psStructure);
 				}
-				else
+				else if (psStructure->visible[selectedPlayer])
 				{
-					if ( psStructure->visible[selectedPlayer] )
-					{
 						//check not a resource extractors
 						if (psStructure->pStructureType->type != REF_RESOURCE_EXTRACTOR)
 						{
@@ -1504,9 +1506,7 @@ void displayStaticObjects( void )
 							audio_StopObjTrack(psStructure, ID_SOUND_OIL_PUMP_2);
 						}
 
-					}
 				}
-			}
 		}
 	}
 	pie_SetDepthOffset(0.0f);
@@ -1714,13 +1714,12 @@ void displayFeatures( void )
 
 		/* Go through all the features */
 		for (; list != NULL; list = list->psNext)
-			if (list->type == OBJ_FEATURE && (list->died == 0 || list->died > graphicsTime))
 		{
-			FEATURE *psFeature = castFeature(list);
-
-			/* Is the feature worth rendering? */
-			if(clipXY(psFeature->pos.x,psFeature->pos.y))
+			if (list->type == OBJ_FEATURE
+			    && (list->died == 0 || list->died > graphicsTime)
+			    && clipXY(list->pos.x, list->pos.y))
 			{
+				FEATURE *psFeature = castFeature(list);
 				renderFeature(psFeature);
 			}
 		}
@@ -1818,16 +1817,18 @@ void displayDynamicObjects( void )
 		BASE_OBJECT *list = player < MAX_PLAYERS? apsDroidLists[player] : psDestroyedObj;
 
 		for (; list != NULL; list = list->psNext)
-			if (list->type == OBJ_DROID && (list->died == 0 || list->died > graphicsTime))
 		{
+			if (list->type != OBJ_DROID
+			    || (list->died != 0 && list->died < graphicsTime)
+			    || !clipXY(list->pos.x, list->pos.y))
+			{
+				continue;
+			}
 			DROID *psDroid = castDroid(list);
 
-			/* Find out whether the droid is worth rendering */
-				if(clipXY(psDroid->pos.x,psDroid->pos.y))
-				{
-					/* No point in adding it if you can't see it? */
-					if (psDroid->visible[selectedPlayer])
-					{
+			/* No point in adding it if you can't see it? */
+			if (psDroid->visible[selectedPlayer])
+			{
 						psDroid->sDisplay.frameNumber = currentGameFrame;
 
 						// NOTE! : anything that has multiple (anim) frames *must* use the bucket to render
@@ -1848,8 +1849,7 @@ void displayDynamicObjects( void )
 						{
 							displayAnimation( psAnimObj, false );
 						}
-					}
-				} // end clipDroid
+			}
 		} // end for
 	} // end for clan
 } // end Fn
@@ -2252,9 +2252,13 @@ void	renderStructure(STRUCTURE *psStructure)
 		pie_Draw3DShape(strImd, animFrame, colour, buildingBrightness, pieFlag, pieFlagData);
 		pie_SetShaderStretchDepth(0);
 
-		// It might have weapons on it
-		if (psStructure->sDisplay.imd->nconnectors > 0)
+		// If no weapons, we are done
+		if (psStructure->sDisplay.imd->nconnectors == 0)
 		{
+			setScreenDisp(&psStructure->sDisplay);
+			pie_MatEnd();
+			return;
+		}
 			iIMDShape	*mountImd[STRUCT_MAXWEAPS];
 			iIMDShape	*weaponImd[STRUCT_MAXWEAPS];
 			iIMDShape	*flashImd[STRUCT_MAXWEAPS];
@@ -2475,7 +2479,6 @@ void	renderStructure(STRUCTURE *psStructure)
 					}
 				}
 			}
-		}
 
 	setScreenDisp(&psStructure->sDisplay);
 	pie_MatEnd();
@@ -3705,8 +3708,10 @@ static void structureEffectsPlayer( UDWORD player )
 
 	for(psStructure = apsStructLists[player]; psStructure; psStructure = psStructure->psNext)
 	{
-		if(psStructure->status == SS_BUILT)
+		if (psStructure->status != SS_BUILT)
 		{
+			continue;
+		}
 			if(psStructure->pStructureType->type == REF_POWER_GEN && psStructure->visible[selectedPlayer])
 			{
 				POWER_GEN* psPowerGen = &psStructure->pFunctionality->powerGenerator;
@@ -3764,10 +3769,8 @@ static void structureEffectsPlayer( UDWORD player )
 			{
 				REARM_PAD* psReArmPad = &psStructure->pFunctionality->rearmPad;
 				psChosenObj = psReArmPad->psObj;
-				if(psChosenObj!=NULL)
+				if (psChosenObj != NULL && (((DROID*)psChosenObj)->visible[selectedPlayer]))
 				{
-					if((((DROID*)psChosenObj)->visible[selectedPlayer]))
-					{
 						bFXSize = 0;
 						psDroid = (DROID*) psChosenObj;
 						if(!psDroid->died && psDroid->action == DACTION_WAITDURINGREARM )
@@ -3788,10 +3791,8 @@ static void structureEffectsPlayer( UDWORD player )
 						pos.z = psStructure->pos.y - yDif;	// buildings are level!
 						effectGiveAuxVar(30+bFXSize);	// half normal plasma size...
 						addEffect(&pos,EFFECT_EXPLOSION, EXPLOSION_TYPE_LASER,false,NULL,0);
-					}
 				}
 			}
-		}
 	}
 }
 
@@ -4000,12 +4001,10 @@ static	void	doConstructionLines( void )
 	{
 		for(psDroid= apsDroidLists[i]; psDroid; psDroid = psDroid->psNext)
 		{
-			if(clipXY(psDroid->pos.x,psDroid->pos.y))
+			if (clipXY(psDroid->pos.x,psDroid->pos.y)
+			    && psDroid->visible[selectedPlayer] == UBYTE_MAX
+			    && psDroid->sMove.Status != MOVESHUFFLE)
 			{
-
-				if( (psDroid->visible[selectedPlayer]==UBYTE_MAX) &&
-					(psDroid->sMove.Status != MOVESHUFFLE) )
-				{
 					if(psDroid->action == DACTION_BUILD)
 					{
 						if (psDroid->order.psObj)
@@ -4026,8 +4025,6 @@ static	void	doConstructionLines( void )
 							addConstructionLine(psDroid, (STRUCTURE*)psDroid->psActionTarget[0]);
 						}
 					}
-				}
-
 			}
 		}
 	}
