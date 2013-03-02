@@ -63,9 +63,15 @@
 #define WLAB_PLAIN		0	///< Plain text only label
 enum WzTextAlignment
 {
-	WLAB_ALIGNLEFT   = 1,  ///< Align the text at the left of the box
-	WLAB_ALIGNCENTRE = 2,  ///< Center the text
-	WLAB_ALIGNRIGHT  = 4,  ///< Align the text at the right of the box
+	WLAB_ALIGNLEFT        = 0,      ///< Align the text at the left of the box
+	WLAB_ALIGNCENTRE      = 1,      ///< Centre the text
+	WLAB_ALIGNRIGHT       = 2,      ///< Align the text at the right of the box
+	WLAB_ALIGNTOPLEFT     = 4,      ///< Align the text at the top left of the box
+	WLAB_ALIGNTOP         = 4 + 1,  ///< Align the text at the top of the box
+	WLAB_ALIGNTOPRIGHT    = 4 + 2,  ///< Align the text at the top right of the box
+	WLAB_ALIGNBOTTOMLEFT  = 8,      ///< Align the text at the bottom left of the box
+	WLAB_ALIGNBOTTOM      = 8 + 1,  ///< Align the text at the bottom of the box
+	WLAB_ALIGNBOTTOMRIGHT = 8 + 2,  ///< Align the text at the bottom rightof the box
 };
 
 /************ Button styles **************/

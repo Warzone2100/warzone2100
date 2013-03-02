@@ -2250,6 +2250,9 @@ static void drawReadyButton(UDWORD player)
 				playerBoxHeight(player),
 				MULTIOP_READY_WIDTH,MULTIOP_READY_HEIGHT);
 
+	WIDGET *parent = widgGetFromID(psWScreen, MULTIOP_READY_FORM_ID + player);
+
+
 	if (!NetPlay.players[player].allocated && NetPlay.players[player].ai >= 0)
 	{
 		int icon = difficultyIcon(NetPlay.players[player].difficulty);
@@ -2275,8 +2278,13 @@ static void drawReadyButton(UDWORD player)
 	// draw 'ready' button
 	addMultiBut(psWScreen, MULTIOP_READY_FORM_ID + player, MULTIOP_READY_START + player, 3, 10, MULTIOP_READY_WIDTH, MULTIOP_READY_HEIGHT,
 	            toolTips[isMe][isReady], images[0][isReady], images[0][isReady], images[isMe][isReady]);
-	addText(MULTIOP_READY_START+MAX_PLAYERS+player, 0, 14,
-	        _("READY?"), MULTIOP_READY_FORM_ID + player);
+
+	W_LABEL *label = new W_LABEL(parent);
+	label->id = MULTIOP_READY_START + MAX_PLAYERS + player;
+	label->setGeometry(0, 0, MULTIOP_READY_WIDTH, 17);
+	label->setTextAlignment(WLAB_ALIGNBOTTOM);
+	label->setFont(font_small, WZCOL_TEXT_BRIGHT);
+	label->setString(_("READY?"));
 }
 
 static bool canChooseTeamFor(int i)

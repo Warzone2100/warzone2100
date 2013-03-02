@@ -43,7 +43,7 @@ W_LABEL::W_LABEL(W_LABINIT const *init)
 	, pTip(QString::fromUtf8(init->pTip))
 	, fontColour(WZCOL_FORM_TEXT)
 {
-	ASSERT((init->style & ~(WLAB_PLAIN | WLAB_ALIGNLEFT | WLAB_ALIGNRIGHT | WLAB_ALIGNCENTRE | WIDG_HIDDEN)) == 0, "Unknown button style");
+	ASSERT((init->style & ~(WLAB_PLAIN | WLAB_ALIGNLEFT | WLAB_ALIGNRIGHT | WLAB_ALIGNCENTRE | WLAB_ALIGNTOP | WLAB_ALIGNBOTTOM | WIDG_HIDDEN)) == 0, "Unknown button style");
 }
 
 W_LABEL::W_LABEL(WIDGET *parent)
@@ -79,7 +79,19 @@ void W_LABEL::display(int xOffset, int yOffset)
 	{
 		fx = xOffset + x();
 	}
-	int fy = yOffset + y() + (height() - iV_GetTextLineSize()) / 2 - iV_GetTextAboveBase();
+	int fy;
+	if ((style & WLAB_ALIGNTOPLEFT) != 0)  // Align top
+	{
+		fy = yOffset + y() - iV_GetTextAboveBase();
+	}
+	else if ((style & WLAB_ALIGNBOTTOMLEFT) != 0)  // Align bottom
+	{
+		fy = yOffset + y() - iV_GetTextAboveBase() + (height() - iV_GetTextLineSize());
+	}
+	else
+	{
+		fy = yOffset + y() - iV_GetTextAboveBase() + (height() - iV_GetTextLineSize())/2;
+	}
 	iV_DrawText(text.constData(), fx, fy);
 }
 

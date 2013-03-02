@@ -924,7 +924,13 @@ static bool startVideoOptionsMenu(void)
 	addBottomForm();
 
 	// Add a note about changes taking effect on restart for certain options
-	addTextHint(FRONTEND_TAKESEFFECT, FRONTEND_POS1X + 48, FRONTEND_POS1Y + 24, _("* Takes effect on game restart"));
+	WIDGET *parent = widgGetFromID(psWScreen, FRONTEND_BOTFORM);
+
+	W_LABEL *label = new W_LABEL(parent);
+	label->setGeometry(FRONTEND_POS1X + 48, FRONTEND_POS1Y, FRONTEND_BUTWIDTH - FRONTEND_POS1X - 48, FRONTEND_BUTHEIGHT);
+	label->setFontColour(WZCOL_TEXT_BRIGHT);
+	label->setString(_("* Takes effect on game restart"));
+	label->setTextAlignment(WLAB_ALIGNBOTTOMLEFT);
 
 	// Fullscreen/windowed
 	addTextButton(FRONTEND_WINDOWMODE, FRONTEND_POS2X-35, FRONTEND_POS2Y, _("Graphics Mode*"), 0);
@@ -1598,35 +1604,6 @@ static void displayAISlider(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	iV_DrawImage(IntImages,IMAGE_SLIDER_BIGBUT,x+3+sx,y+3);								//draw amount
 }
 
-
-// ////////////////////////////////////////////////////////////////////////////
-// show text.
-static void displayText(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
-{
-	SDWORD			fx,fy, fw;
-	W_LABEL		*psLab;
-
-	psLab = (W_LABEL *)psWidget;
-	iV_SetFont(psLab->FontID);
-
-	fw = iV_GetTextWidth(psLab->aText.toUtf8().constData());
-	fy = yOffset + psWidget->y();
-
-	if (psWidget->style & WLAB_ALIGNCENTRE)	//check for centering, calculate offset.
-	{
-		fx = xOffset + psWidget->x() + ((psWidget->width() - fw) / 2);
-	}
-	else
-	{
-		fx = xOffset + psWidget->x();
-	}
-
-	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
-	iV_DrawText(psLab->aText.toUtf8().constData(), fx, fy);
-
-	return;
-}
-
 // ////////////////////////////////////////////////////////////////////////////
 // show text written on its side.
 static void displayTextAt270(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
@@ -1771,42 +1748,16 @@ void addBottomForm(void)
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-void addTextHint(UDWORD id, UDWORD PosX, UDWORD PosY, const char *txt)
-{
-	W_LABINIT sLabInit;
-
-	sLabInit.formID = FRONTEND_BOTFORM;
-	sLabInit.id = id;
-	sLabInit.x = (short)PosX;
-	sLabInit.y = (short)PosY;
-
-	sLabInit.width = MULTIOP_READY_WIDTH;
-	sLabInit.height = FRONTEND_BUTHEIGHT;
-	sLabInit.pDisplay = displayText;
-	sLabInit.pText = txt;
-	widgAddLabel(psWScreen, &sLabInit);
-}
-
-// ////////////////////////////////////////////////////////////////////////////
 void addText(UDWORD id, UDWORD PosX, UDWORD PosY, const char *txt, UDWORD formID)
 {
-	W_LABINIT sLabInit;
+	WIDGET *parent = widgGetFromID(psWScreen, formID);
 
-	sLabInit.formID = formID;
-	sLabInit.id = id;
-	sLabInit.x = (short)PosX;
-	sLabInit.y = (short)PosY;
-	sLabInit.style = WLAB_ALIGNCENTRE;
-
-	// Align
-	sLabInit.width = MULTIOP_READY_WIDTH;
-	//sButInit.x+=35;
-
-	sLabInit.height = FRONTEND_BUTHEIGHT;
-	sLabInit.pDisplay = displayText;
-	sLabInit.FontID = font_small;
-	sLabInit.pText = txt;
-	widgAddLabel(psWScreen, &sLabInit);
+	W_LABEL *label = new W_LABEL(parent);
+	label->id = id;
+	label->setGeometry(PosX, PosY, MULTIOP_READY_WIDTH, FRONTEND_BUTHEIGHT);
+	label->setTextAlignment(WLAB_ALIGNCENTRE);
+	label->setFont(font_small, WZCOL_TEXT_BRIGHT);
+	label->setString(txt);
 }
 
 // ////////////////////////////////////////////////////////////////////////////
