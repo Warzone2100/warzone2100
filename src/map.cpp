@@ -712,7 +712,7 @@ static void generateRiverbed(void)
 			}
 			if (isWaterVertex(i, j))
 			{
-				l = (WATER_MAX_DEPTH + 1 - WATER_MIN_DEPTH) * (maxIdx - idx[i][j] - mt.u32() % (maxIdx / 6));
+				l = (WATER_MAX_DEPTH + 1 - WATER_MIN_DEPTH) * (maxIdx - idx[i][j] - mt.u32() % (maxIdx / 6 + 1));
 				mapTile(i, j)->height -= WATER_MIN_DEPTH - (l / maxIdx);
 			}
 		}
