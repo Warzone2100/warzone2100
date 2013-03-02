@@ -92,7 +92,6 @@
 // ////////////////////////////////////////////////////////////////////////////
 static void displayLoadBanner(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 static void displayLoadSlot(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
-static void displayLoadSaveEdit(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 
 static	W_SCREEN	*psRequestScreen;					// Widget screen for requester
 static	bool		mode;
@@ -436,10 +435,11 @@ bool runLoadSave(bool bResetMissionWidgets)
 	// clicked a load entry
 	if( id >= LOADENTRY_START  &&  id <= LOADENTRY_END )
 	{
+		W_BUTTON *slotButton = (W_BUTTON *)widgGetFromID(psRequestScreen, id);
 
 		if (mode)								// Loading, return that entry.
 		{
-			if (!((W_BUTTON *)widgGetFromID(psRequestScreen,id))->pText.isEmpty())
+			if (!slotButton->pText.isEmpty())
 			{
 				ssprintf(sRequestResult, "%s%s%s", NewSaveGamePath, ((W_BUTTON *)widgGetFromID(psRequestScreen,id))->pText.toUtf8().constData(), sExt);
 			}
@@ -455,30 +455,25 @@ bool runLoadSave(bool bResetMissionWidgets)
 
 			if( ! widgGetFromID(psRequestScreen,SAVEENTRY_EDIT))
 			{
-				// add blank box.
-				W_EDBINIT sEdInit;
-				sEdInit.formID= LOADSAVE_FORM;
-				sEdInit.id    = SAVEENTRY_EDIT;
-				sEdInit.x     = widgGetFromID(psRequestScreen,id)->x();
-				sEdInit.y     = widgGetFromID(psRequestScreen,id)->y();
-				sEdInit.width = widgGetFromID(psRequestScreen,id)->width();
-				sEdInit.height= widgGetFromID(psRequestScreen,id)->height();
-				QByteArray textBytes = ((W_BUTTON *)widgGetFromID(psRequestScreen,id))->pText.toUtf8();
-				sEdInit.pText = textBytes.constData();
-				sEdInit.pBoxDisplay = displayLoadSaveEdit;
-				widgAddEditBox(psRequestScreen, &sEdInit);
+				WIDGET *parent = widgGetFromID(psRequestScreen, LOADSAVE_FORM);
 
-				if (!((W_BUTTON *)widgGetFromID(psRequestScreen,id))->pText.isEmpty())
+				// add blank box.
+				W_EDITBOX *saveEntryEdit = new W_EDITBOX(parent);
+				saveEntryEdit->id = SAVEENTRY_EDIT;
+				saveEntryEdit->setGeometry(slotButton->geometry());
+				saveEntryEdit->setString(slotButton->getString());
+				saveEntryEdit->setBoxColours(WZCOL_MENU_LOAD_BORDER, WZCOL_MENU_LOAD_BORDER, WZCOL_MENU_BACKGROUND);
+
+				if (!slotButton->pText.isEmpty())
 				{
-					snprintf(sDelete, sizeof(sDelete), "%s%s%s", NewSaveGamePath,
-					         ((W_BUTTON *)widgGetFromID(psRequestScreen,id))->pText.toUtf8().constData(), sExt);
+					ssprintf(sDelete, "%s%s%s", NewSaveGamePath, slotButton->pText.toUtf8().constData(), sExt);
 				}
 				else
 				{
 					sstrcpy(sDelete, "");
 				}
 
-				widgHide(psRequestScreen,id);		// hide the old button
+				slotButton->hide();  // hide the old button
 				chosenSlotId = id;
 
 				// auto click in the edit box we just made.
@@ -486,7 +481,7 @@ bool runLoadSave(bool bResetMissionWidgets)
 				context.yOffset		= 0;
 				context.mx			= mouseX();
 				context.my			= mouseY();
-				widgGetFromID(psRequestScreen, SAVEENTRY_EDIT)->clicked(&context);
+				saveEntryEdit->clicked(&context);
 			}
 			else
 			{
@@ -689,19 +684,6 @@ static void displayLoadSlot(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	}
 }
 
-// ////////////////////////////////////////////////////////////////////////////
-static void displayLoadSaveEdit(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
-{
-	int x = xOffset + psWidget->x();
-	int y = yOffset + psWidget->y();
-	int w = psWidget->width();
-	int h = psWidget->height();
-
-	pie_BoxFill(x, y, x + w, y + h, WZCOL_MENU_LOAD_BORDER);
-	pie_BoxFill(x + 1, y + 1, x + w - 1, y + h - 1, WZCOL_MENU_BACKGROUND);
-}
-
-// ////////////////////////////////////////////////////////////////////////////
 void drawBlueBox(UDWORD x,UDWORD y, UDWORD w, UDWORD h)
 {
 	pie_BoxFill(x - 1, y - 1, x + w + 1, y + h + 1, WZCOL_MENU_BORDER);

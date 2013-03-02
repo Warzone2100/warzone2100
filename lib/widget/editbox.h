@@ -43,7 +43,7 @@ struct W_EDITBOX : public WIDGET
 	W_EDITBOX(W_EDBINIT const *init);
 	W_EDITBOX(WIDGET *parent);
 
-	void clicked(W_CONTEXT *psContext, WIDGET_KEY key);
+	void clicked(W_CONTEXT *psContext, WIDGET_KEY key = WKEY_PRIMARY);
 	void highlight(W_CONTEXT *psContext);
 	void highlightLost();
 	void focusLost();
