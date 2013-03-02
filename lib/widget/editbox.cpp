@@ -394,7 +394,6 @@ void W_EDITBOX::run(W_CONTEXT *psContext)
 		case INPBUF_CR :
 		case KEY_KPENTER:                  // either normal return key || keypad enter
 			/* Finish editing */
-			focusLost(psContext->psScreen);
 			screenClearFocus(psContext->psScreen);
 			debug(LOG_INPUT, "EditBox cursor return");
 			return;
