@@ -681,14 +681,6 @@ FUNC_SYMBOL asFuncTable[] =
 		3, { (INTERP_TYPE)ST_GROUP, VAL_INT, VAL_INT },
 		0, 0, NULL, 0, 0, NULL, NULL },
 
-	{ "initIterateCluster", scrInitIterateCluster,	VAL_VOID,
-		1, { VAL_INT },
-		0, 0, NULL, 0, 0, NULL, NULL },
-
-	{ "iterateCluster",		scrIterateCluster,		(INTERP_TYPE)ST_BASEOBJECT,
-		0, { VAL_VOID },
-		0, 0, NULL, 0, 0, NULL, NULL },
-
 	//Commander functions
 	{ "cmdDroidAddDroid",	scrCmdDroidAddDroid,	VAL_VOID,
 		2, { (INTERP_TYPE)ST_DROID, (INTERP_TYPE)ST_DROID },

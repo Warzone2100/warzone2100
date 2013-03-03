@@ -318,39 +318,6 @@ bool scrIterateGroup(void)
 }
 
 
-// initialise iterating a cluster
-bool scrInitIterateCluster(void)
-{
-	SDWORD	clusterID;
-
-	if (!stackPopParams(1, VAL_INT, &clusterID))
-	{
-		return false;
-	}
-
-	clustInitIterate(clusterID);
-
-	return true;
-}
-
-
-// iterate a cluster
-bool scrIterateCluster(void)
-{
-	BASE_OBJECT		*psObj;
-
-	psObj = clustIterate();
-
-	scrFunctionResult.v.oval = psObj;
-	if (!stackPushResult((INTERP_TYPE)ST_BASEOBJECT, &scrFunctionResult))
-	{
-		return false;
-	}
-
-	return true;
-}
-
-
 // remove a droid from a group
 bool scrDroidLeaveGroup(void)
 {

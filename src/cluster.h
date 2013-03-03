@@ -71,12 +71,6 @@ void clustObjectAttacked(BASE_OBJECT *psObj);
 // get the cluster ID for an object
 SDWORD clustGetClusterID(BASE_OBJECT *psObj);
 
-// initialise iterating a cluster
-void clustInitIterate(SDWORD clusterID);
-
-// iterate a cluster
-BASE_OBJECT *clustIterate(void);
-
 // reset the visibility for all clusters for a particular player
 void clustResetVisibility(SDWORD player);
 

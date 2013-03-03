@@ -408,61 +408,6 @@ SDWORD clustGetClusterID(BASE_OBJECT *psObj)
 }
 
 
-// variables for the cluster iteration
-static SDWORD		iterateClusterID;
-static BASE_OBJECT	*psIterateList, *psIterateObj;
-
-// initialise iterating a cluster
-void clustInitIterate(SDWORD clusterID)
-{
-	SDWORD		player, cluster;
-
-	iterateClusterID = clusterID;
-	cluster = aClusterMap[clusterID];
-	player = aClusterInfo[cluster] & CLUSTER_PLAYER_MASK;
-
-	if (aClusterInfo[cluster] & CLUSTER_DROID)
-	{
-		psIterateList = (BASE_OBJECT *)apsDroidLists[player];
-	}
-	else // if (aClusterInfo[cluster] & CLUSTER_STRUCTURE)
-	{
-		psIterateList = (BASE_OBJECT *)apsStructLists[player];
-	}
-
-	psIterateObj = NULL;
-}
-
-// iterate a cluster
-BASE_OBJECT *clustIterate(void)
-{
-	BASE_OBJECT	*psStart;
-	SDWORD		cluster;
-
-	cluster = aClusterMap[iterateClusterID];
-
-	if (psIterateObj == NULL)
-	{
-		psStart = psIterateList;
-	}
-	else
-	{
-		psStart = psIterateObj->psNext;
-	}
-
-	for(psIterateObj=psStart;
-		psIterateObj && psIterateObj->cluster != cluster;
-		psIterateObj = psIterateObj->psNext)
-		;
-
-	if (psIterateObj == NULL)
-	{
-		psIterateList = NULL;
-	}
-
-	return psIterateObj;
-}
-
 // tell the cluster system that an objects visibility has changed
 void clustObjectSeen(BASE_OBJECT *psObj, BASE_OBJECT *psViewer)
 {
