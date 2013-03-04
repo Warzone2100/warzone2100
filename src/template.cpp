@@ -154,6 +154,20 @@ bool initTemplates()
 		design.numWeaps = ini.value("weapons").toInt();
 		design.prefab = false;		// not AI template
 		design.stored = true;
+		if (!(asBodyStats + design.asParts[COMP_BODY])->designable
+		    || !(asPropulsionStats + design.asParts[COMP_PROPULSION])->designable
+		    || (design.asParts[COMP_BRAIN] > 0 && !(asBrainStats + design.asParts[COMP_BRAIN])->designable)
+		    || (design.asParts[COMP_REPAIRUNIT] > 0 && !(asRepairStats + design.asParts[COMP_REPAIRUNIT])->designable)
+		    || (design.asParts[COMP_ECM] > 0 && !(asECMStats + design.asParts[COMP_ECM])->designable)
+		    || (design.asParts[COMP_SENSOR] > 0 && !(asSensorStats + design.asParts[COMP_SENSOR])->designable)
+		    || (design.asParts[COMP_CONSTRUCT] > 0 && !(asConstructStats + design.asParts[COMP_CONSTRUCT])->designable)
+		    || (design.numWeaps > 0 && !(asWeaponStats + design.asWeaps[0])->designable)
+		    || (design.numWeaps > 1 && !(asWeaponStats + design.asWeaps[1])->designable)
+		    || (design.numWeaps > 2 && !(asWeaponStats + design.asWeaps[2])->designable))
+		{
+			debug(LOG_ERROR, "Template %d / %s from stored templates cannot be designed", i, list[i].toUtf8().constData());
+			continue;
+		}
 		bool valid = intValidTemplate(&design, ini.value("name").toString().toUtf8().constData(), false, selectedPlayer);
 		if (!valid)
 		{
