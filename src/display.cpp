@@ -1304,46 +1304,35 @@ bool DrawnInLastFrame(int32_t frame)
 	on MOUSE_LMB. We aren't concerned here with setting selection flags - just what it
 	actually was
 */
-BASE_OBJECT	*mouseTarget( void )
+BASE_OBJECT *mouseTarget()
 {
-UDWORD		i;
-BASE_OBJECT	*psReturn;
-DROID		*psDroid;
-UDWORD		dispX,dispY,dispR;
+	BASE_OBJECT *psReturn = NULL;
+	int dispX, dispY, dispR;
 
-	if( (mouseTileX < 0) ||
-		(mouseTileY < 0) ||
-		(mouseTileX > (SDWORD)(mapWidth-1)) ||
-		(mouseTileY > (SDWORD)(mapHeight-1)) )
+	if (mouseTileX < 0 || mouseTileY < 0 || mouseTileX > mapWidth - 1 || mouseTileY > mapHeight - 1)
 	{
 		return(NULL);
 	}
 
-	/* We haven't found anything yet */
-	psReturn = NULL;
-
 	/* First have a look through the droid lists */
-	for (i=0; i<MAX_PLAYERS; i++)
+	for (int i = 0; i < MAX_PLAYERS; i++)
 	{
 		/* Note the !psObject check isn't really necessary as the goto will jump out */
-		for (psDroid = apsDroidLists[i]; psDroid && !psReturn;
-			psDroid = psDroid->psNext)
+		for (DROID *psDroid = apsDroidLists[i]; psDroid && !psReturn; psDroid = psDroid->psNext)
 		{
-
 			dispX = psDroid->sDisplay.screenX;
 			dispY = psDroid->sDisplay.screenY;
 			dispR = psDroid->sDisplay.screenR;
-			/* Only check droids that're on screen */
 
 			// Has the droid been drawn since the start of the last frame
-			if (psDroid->visible[selectedPlayer] && DrawnInLastFrame(psDroid->sDisplay.frameNumber)==true)
+			if (psDroid->visible[selectedPlayer] && DrawnInLastFrame(psDroid->sDisplay.frameNumber))
 			{
-				if (mouseInBox(dispX-dispR, dispY-dispR, dispX+dispR, dispY+dispR))
+				if (mouseInBox(dispX - dispR, dispY - dispR, dispX + dispR, dispY + dispR))
 				{
 					/* We HAVE clicked on droid! */
 					psReturn = (BASE_OBJECT *) psDroid;
 					/* There's no point in checking other object types */
-					return(psReturn);
+					return psReturn;
 				}
 			}
 		}
@@ -1359,7 +1348,7 @@ UDWORD		dispX,dispY,dispR;
 	}
 
 	/* Send the result back - if it's null then we clicked on an area of terrain */
-	return(psReturn);
+	return psReturn;
 }
 
 // Start repositioning a delivery point.
