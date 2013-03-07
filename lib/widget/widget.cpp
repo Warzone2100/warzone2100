@@ -153,6 +153,16 @@ void WIDGET::deleteLater()
 	   widgetDeletionQueue.push_back(this);
 }
 
+void WIDGET::setGeometry(QRect const &r)
+{
+	if (dim == r)
+	{
+		return;  // Nothing to do.
+	}
+	dim = r;
+	geometryChanged();
+}
+
 void WIDGET::attach(WIDGET *widget)
 {
 	ASSERT_OR_RETURN(, widget != NULL && widget->parentWidget == NULL, "Bad attach.");

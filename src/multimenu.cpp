@@ -114,7 +114,6 @@ UDWORD	current_numplayers = 4;
 /// requester stuff.
 #define M_REQUEST_CLOSE (MULTIMENU+49)
 #define M_REQUEST		(MULTIMENU+50)
-#define M_REQUEST_TAB	(MULTIMENU+51)
 
 #define M_REQUEST_C1	(MULTIMENU+61)
 #define M_REQUEST_C2	(MULTIMENU+62)
@@ -355,17 +354,6 @@ static void displayNumPlayersBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffse
 
 }
 
-#define NBTIPS 512
-
-static unsigned int check_tip_index(unsigned int i) {
-	if (i < NBTIPS) {
-		return i;
-	} else {
-		debug(LOG_MAIN, "Tip window index too high (%ud)", i);
-		return NBTIPS-1;
-	}
-}
-
 /** Searches in the given search directory for files ending with the
  *  given extension. Then will create a window with buttons for each
  *  found file.
@@ -378,12 +366,8 @@ static unsigned int check_tip_index(unsigned int i) {
  */
 void addMultiRequest(const char* searchDir, const char* fileExtension, UDWORD mode, UBYTE mapCam, UBYTE numPlayers)
 {
-	char**             fileList;
-	char**             currFile;
 	const unsigned int extensionLength = strlen(fileExtension);
 	const unsigned int buttonsX = (mode == MULTIOP_MAP) ? 22 : 17;
-	unsigned int       numButtons, count, butPerForm;
-	static char		tips[NBTIPS][MAX_STR_LENGTH];
 
 	context = mode;
 	if(mode == MULTIOP_MAP)
@@ -391,34 +375,9 @@ void addMultiRequest(const char* searchDir, const char* fileExtension, UDWORD mo
 		current_tech = mapCam;
 		current_numplayers = numPlayers;
 	}
-	fileList = PHYSFS_enumerateFiles(searchDir);
-
-	// Count number of required buttons
-	numButtons = 0;
-	for (currFile = fileList; *currFile != NULL; ++currFile)
-	{
-		const unsigned int fileNameLength = strlen(*currFile);
-
-		// Check to see if this file matches the given extension
-		if (fileNameLength > extensionLength
-		 && strcmp(&(*currFile)[fileNameLength - extensionLength], fileExtension) == 0)
-			++numButtons;
-	}
-
-	if (mode == MULTIOP_MAP)	// if its a map, also look in the predone stuff.
-	{
-		bool first = true;
-		while (enumerateMultiMaps(first, mapCam, numPlayers) != NULL)
-		{
-			first = false;
-			numButtons++;
-		}
-	}
+	char **fileList = PHYSFS_enumerateFiles(searchDir);
 
 	psRScreen = new W_SCREEN; ///< move this to intinit or somewhere like that.. (close too.)
-
-	/* Calculate how many buttons will go on a single form */
-	butPerForm = ((M_REQUEST_W - 0 - 4) / (R_BUT_W +4)) * ((M_REQUEST_H - 0- 4) / (R_BUT_H+ 4));
 
 	WIDGET *parent = psRScreen->psForm;
 
@@ -427,37 +386,11 @@ void addMultiRequest(const char* searchDir, const char* fileExtension, UDWORD mo
 	requestForm->id = M_REQUEST;
 	requestForm->setGeometry(M_REQUEST_X + D_W, M_REQUEST_Y + D_H, M_REQUEST_W, M_REQUEST_H);
 
-	/* Add the tabs */
-	W_FORMINIT sFormInit;
-	sFormInit.formID = M_REQUEST;
-	sFormInit.id = M_REQUEST_TAB;
-	sFormInit.style = WFORM_TABBED;
-	sFormInit.x = 2;
-	sFormInit.y = 2;
-	sFormInit.width = M_REQUEST_W;
-	sFormInit.height = M_REQUEST_H-4;
-
-	sFormInit.numMajor = numForms(numButtons, butPerForm);
-
-	sFormInit.majorPos = WFORM_TABTOP;
-	sFormInit.majorSize = OBJ_TABWIDTH+2;
-	sFormInit.majorOffset = OBJ_TABOFFSET;
-	sFormInit.tabVertOffset = (OBJ_TABHEIGHT/2);
-	sFormInit.tabMajorThickness = OBJ_TABHEIGHT;
-	sFormInit.pUserData = &StandardTab;
-	sFormInit.pTabDisplay = intDisplayTab;
-
-	// TABFIXME: 
-	// This appears to be the map pick screen, when we have lots of maps
-	// this will need to change.
-	if (sFormInit.numMajor > MAX_TAB_STD_SHOWN)
-	{
-		ASSERT(sFormInit.numMajor < MAX_TAB_SMALL_SHOWN,"Too many maps! Need scroll tabs here.");
-		sFormInit.pUserData = &SmallTab;
-		sFormInit.majorSize /= 2;
-	}
-
-	widgAddForm(psRScreen, &sFormInit);
+	// Add the button list.
+	IntListTabWidget *requestList = new IntListTabWidget(requestForm);
+	requestList->setChildSize(R_BUT_W, R_BUT_H);
+	requestList->setChildSpacing(4, 4);
+	requestList->setGeometry(2 + buttonsX, 2, M_REQUEST_W - buttonsX, M_REQUEST_H - 4);
 
 	// Add the close button.
 	W_BUTINIT sButInit;
@@ -472,56 +405,39 @@ void addMultiRequest(const char* searchDir, const char* fileExtension, UDWORD mo
 	sButInit.UserData = PACKDWORD_TRI(0,IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
 	widgAddButton(psRScreen, &sButInit);
 
-	/* Put the buttons on it *//* Set up the button struct */
-	sButInit = W_BUTINIT();
-	sButInit.formID		= M_REQUEST_TAB;
-	sButInit.id		= M_REQUEST_BUT;
-	sButInit.x		= buttonsX;
-	sButInit.y		= 4;
-	sButInit.width		= R_BUT_W;
-	sButInit.height		= R_BUT_H;
-	sButInit.pUserData	= NULL;
-	sButInit.pDisplay	= displayRequestOption;
-
-	for (currFile = fileList, count = 0; *currFile != NULL && count < (butPerForm * 4); ++currFile)
+	// Put the buttons on it.
+	int nextButtonId = M_REQUEST_BUT;
+	for (char **currFile = fileList; *currFile != NULL; ++currFile)
 	{
-		const unsigned int tip_index = check_tip_index(sButInit.id - M_REQUEST_BUT);
 		const unsigned int fileNameLength = strlen(*currFile);
-		const unsigned int tipStringLength = fileNameLength - extensionLength;
 
 		// Check to see if this file matches the given extension
-		if (!(fileNameLength > extensionLength)
+		if (fileNameLength <= extensionLength
 		 || strcmp(&(*currFile)[fileNameLength - extensionLength], fileExtension) != 0)
 			continue;
 
+		char *withoutExtension = strdup(*currFile);
+		withoutExtension[fileNameLength - extensionLength] = '\0';
+
 		// Set the tip and add the button
+		W_BUTTON *button = new W_BUTTON(requestList);
+		button->id = nextButtonId;
+		button->setTip(withoutExtension);
+		button->setString(withoutExtension);
+		button->displayFunction = displayRequestOption;
+		requestList->addWidgetToLayout(button);
 
-		// Copy all of the filename except for the extension into the tiptext string
-		strlcpy(tips[tip_index], *currFile, MIN(tipStringLength + 1, sizeof(tips[tip_index])));
-
-		sButInit.pTip		= tips[tip_index];
-		sButInit.pText		= tips[tip_index];
-
-		++count;
-		widgAddButton(psRScreen, &sButInit);
+		free(withoutExtension);
 
 		/* Update the init struct for the next button */
-		sButInit.id += 1;
-		sButInit.x = (SWORD)(sButInit.x + (R_BUT_W+ 4));
-		if (sButInit.x + R_BUT_W+ 2 > M_REQUEST_W)
-		{
-			sButInit.x = buttonsX;
-			sButInit.y = (SWORD)(sButInit.y +R_BUT_H + 4);
-		}
-		if (sButInit.y +R_BUT_H + 4 > M_REQUEST_H)
-		{
-			sButInit.y = 4;
-			sButInit.majorID += 1;
-		}
+		++nextButtonId;
 	}
 
 	// Make sure to return memory back to PhyscisFS
 	PHYSFS_freeList(fileList);
+
+	multiRequestUp = true;
+	hoverPreviewId = 0;
 
 	if(mode == MULTIOP_MAP)
 	{
@@ -531,42 +447,24 @@ void addMultiRequest(const char* searchDir, const char* fileExtension, UDWORD mo
 		{
 			first = false;
 
-			unsigned int tip_index = check_tip_index(sButInit.id-M_REQUEST_BUT);
-
 			// add number of players to string.
-			sstrcpy(tips[tip_index], mapData->pName);
+			W_BUTTON *button = new W_BUTTON(requestList);
+			button->id = nextButtonId;
+			button->setTip(mapData->pName);
+			button->setString(mapData->pName);
+			button->pUserData = mapData;
+			button->displayFunction = displayRequestOption;
+			requestList->addWidgetToLayout(button);
 
-			sButInit.pTip = tips[tip_index];
-			sButInit.pText = tips[tip_index];
-			sButInit.pUserData = mapData;
-
-			widgAddButton(psRScreen, &sButInit);
-
-			sButInit.id += 1;
-			sButInit.x = (SWORD)(sButInit.x + (R_BUT_W+ 4));
-			if (sButInit.x + R_BUT_W+ 2 > M_REQUEST_W)
-			{
-				sButInit.x = buttonsX;
-				sButInit.y = (SWORD)(sButInit.y +R_BUT_H + 4);
-			}
-			if (sButInit.y +R_BUT_H + 4 > M_REQUEST_H)
-			{
-				sButInit.y = 4;
-				sButInit.majorID += 1;
-			}
+			++nextButtonId;
 		}
-	}
-	multiRequestUp = true;
-	hoverPreviewId = 0;
 
-	// if it's map select then add the cam style buttons.
-	if(mode == MULTIOP_MAP)
-	{
+		// if it's map select then add the cam style buttons.
 		sButInit = W_BUTINIT();
-		sButInit.formID		= M_REQUEST_TAB;
+		sButInit.formID		= M_REQUEST;
 		sButInit.id		= M_REQUEST_C1;
-		sButInit.x		= 1;
-		sButInit.y		= 252;
+		sButInit.x              = 3;
+		sButInit.y              = 254;
 		sButInit.width		= 17;
 		sButInit.height		= 17;
 		sButInit.UserData	= 1;

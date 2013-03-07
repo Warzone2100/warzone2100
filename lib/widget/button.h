@@ -28,8 +28,12 @@
 #include "widgbase.h"
 #include "lib/ivis_opengl/textdraw.h"
 
-struct W_BUTTON : public WIDGET
+
+class W_BUTTON : public WIDGET
 {
+	Q_OBJECT
+
+public:
 	W_BUTTON(W_BUTINIT const *init);
 	W_BUTTON(WIDGET *parent);
 
@@ -51,6 +55,10 @@ struct W_BUTTON : public WIDGET
 	void setString(char const *stringUtf8) { WIDGET::setString(stringUtf8); }  // Unhide the WIDGET::setString(char const *) function...
 	void setTip(char const *stringUtf8) { WIDGET::setTip(stringUtf8); }  // Unhide the WIDGET::setString(char const *) function...
 
+signals:
+	void clicked();
+
+public:
 	UDWORD		state;				// The current button state
 	QString         pText;                          // The text for the button
 	Image           image;                          ///< The image for the button.

@@ -32,8 +32,11 @@
 #define SLD_HILITE		0x0002		// Slider is hilited
 
 
-struct W_SLIDER : public WIDGET
+class W_SLIDER : public WIDGET
 {
+	Q_OBJECT
+
+public:
 	W_SLIDER(W_SLDINIT const *init);
 
 	void clicked(W_CONTEXT *psContext, WIDGET_KEY key);

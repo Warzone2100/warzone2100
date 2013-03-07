@@ -29,8 +29,11 @@
 #include "lib/ivis_opengl/textdraw.h"
 
 
-struct W_LABEL : public WIDGET
+class W_LABEL : public WIDGET
 {
+	Q_OBJECT
+
+public:
 	W_LABEL(W_LABINIT const *init);
 	W_LABEL(WIDGET *parent);
 

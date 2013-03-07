@@ -21,6 +21,7 @@
 #define __INCLUDED_INTIMAGE__
 
 #include "intfac.h" // Interface image id's.
+#include "lib/widget/listwidget.h"
 
 #define FILLRED 16
 #define FILLGREEN 16
@@ -39,6 +40,12 @@ struct TABDEF
 	SWORD MajorDown;		//< Index of image to use for tab pressed.
 	SWORD MajorHilight;		//< Index of image to use for tab hilighted by mouse.
 	SWORD MajorSelected;		//< Index of image to use for tab selected (same as pressed).
+};
+
+class IntListTabWidget : public ListTabWidget
+{
+public:
+	IntListTabWidget(WIDGET *parent);
 };
 
 extern IMAGEFILE *IntImages;	//< All the 2d graphics for the user interface.

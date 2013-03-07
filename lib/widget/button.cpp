@@ -135,6 +135,7 @@ void W_BUTTON::released(W_CONTEXT *, WIDGET_KEY key)
 		    ((style & WBUT_SECONDARY) && key == WKEY_SECONDARY))
 		{
 			screenPointer->setReturn(this);
+			emit clicked();
 			state &= ~WBUT_DOWN;
 		}
 	}

@@ -28,8 +28,11 @@
 
 
 /* The standard form */
-struct W_FORM : public WIDGET
+class W_FORM : public WIDGET
 {
+	Q_OBJECT
+
+public:
 	W_FORM(W_FORMINIT const *init);
 	W_FORM(WIDGET *parent);
 
@@ -41,8 +44,11 @@ struct W_FORM : public WIDGET
 };
 
 /* The tabbed form data structure */
-struct W_TABFORM : public W_FORM
+class W_TABFORM : public W_FORM
 {
+	Q_OBJECT
+
+public:
 	W_TABFORM(W_FORMINIT const *init);
 
 	void released(W_CONTEXT *psContext, WIDGET_KEY key);
@@ -90,8 +96,11 @@ private:
 };
 
 /* The clickable form data structure */
-struct W_CLICKFORM : public W_FORM
+class W_CLICKFORM : public W_FORM
 {
+	Q_OBJECT
+
+public:
 	W_CLICKFORM(W_FORMINIT const *init);
 
 	void clicked(W_CONTEXT *psContext, WIDGET_KEY key);

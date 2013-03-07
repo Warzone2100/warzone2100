@@ -38,8 +38,11 @@
 #define WEDBS_DISABLE   0x0020		// disable button from selection
 
 
-struct W_EDITBOX : public WIDGET
+class W_EDITBOX : public WIDGET
 {
+	Q_OBJECT
+
+public:
 	W_EDITBOX(W_EDBINIT const *init);
 	W_EDITBOX(WIDGET *parent);
 

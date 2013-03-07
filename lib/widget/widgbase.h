@@ -28,19 +28,20 @@
 #include "lib/ivis_opengl/piedef.h"
 #include "lib/ivis_opengl/textdraw.h"
 #include <QtCore/QRect>
+#include <QtCore/QObject>
 
 
 /* Forward definitions */
-struct WIDGET;
+class WIDGET;
 struct W_CONTEXT;
-struct W_FORM;
+class W_FORM;
 struct W_INIT;
 struct W_SCREEN;
-struct W_EDITBOX;
-struct W_BARGRAPH;
-struct W_BUTTON;
-struct W_LABEL;
-struct W_SLIDER;
+class W_EDITBOX;
+class W_BARGRAPH;
+class W_BUTTON;
+class W_LABEL;
+class W_SLIDER;
 
 /* The display function prototype */
 typedef void (*WIDGET_DISPLAY)(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
@@ -76,10 +77,12 @@ enum
 };
 
 /* The base widget data type */
-struct WIDGET
+class WIDGET : public QObject
 {
-	typedef std::vector<WIDGET *> Children;
+	Q_OBJECT
 
+public:
+	typedef std::vector<WIDGET *> Children;
 
 	WIDGET(W_INIT const *init, WIDGET_TYPE type);
 	WIDGET(WIDGET *parent, WIDGET_TYPE type = WIDG_UNSPECIFIED_TYPE);
@@ -96,6 +99,7 @@ struct WIDGET
 	virtual void focusLost() {}
 	virtual void run(W_CONTEXT *) {}
 	virtual void display(int, int) {}
+	virtual void geometryChanged() {}
 
 	virtual unsigned getState();
 	virtual void setState(unsigned state);
@@ -118,9 +122,9 @@ struct WIDGET
 	int y() const { return dim.y(); }
 	int width() const { return dim.width(); }
 	int height() const { return dim.height(); }
-	void move(int x, int y) { dim.moveTo(x, y); }
-	void setGeometry(int x, int y, int w, int h) { dim.setRect(x, y, w, h); }
-	void setGeometry(QRect const &r) { dim = r; }
+	void move(int x, int y) { setGeometry(QRect(x, y, width(), height())); }
+	void setGeometry(int x, int y, int w, int h) { setGeometry(QRect(x, y, w, h)); }
+	void setGeometry(QRect const &r);
 
 	void attach(WIDGET *widget);
 	void detach(WIDGET *widget);
