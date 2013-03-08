@@ -130,7 +130,9 @@ public:
 	void setChildSpacing(int width, int height) { widgets->setChildSpacing(width, height); }
 	void setOrder(ListWidget::Order order) { widgets->setOrder(order); } 
 	void addWidgetToLayout(WIDGET *widget);
-	void setCurrentPage(int page) { widgets->setCurrentPage(page); }
+	bool setCurrentPage(int page) { widgets->setCurrentPage(page); return widgets->currentPage() == page; }
+	int currentPage() const { return widgets->currentPage(); }
+	int pages() const { return widgets->pages(); }
 
 	TabSelectionWidget *tabWidget() { return tabs; }
 	ListWidget *listWidget() { return widgets; }

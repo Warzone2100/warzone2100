@@ -102,6 +102,7 @@ class W_CLICKFORM : public W_FORM
 
 public:
 	W_CLICKFORM(W_FORMINIT const *init);
+	W_CLICKFORM(WIDGET *parent);
 
 	void clicked(W_CONTEXT *psContext, WIDGET_KEY key);
 	void released(W_CONTEXT *psContext, WIDGET_KEY key);

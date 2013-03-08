@@ -86,8 +86,6 @@
 #define IDSTAT_TABFORM			14004		// The tab form with the stats buttons
 #define IDSTAT_START			14100		// The first stats ID
 #define IDSTAT_END				14999		// The last stats ID enough for 899 things
-#define IDSTAT_TABSCRL_LEFT		15000		// Our left Tab scroll button
-#define IDSTAT_TABSCRL_RIGHT	15002		// Our right Tab scroll button
 #define IDSTAT_TIMEBARSTART		4300
 #define IDSTAT_TIMEBAREND		4399
 #define IDSTAT_SLIDER			4400

@@ -82,7 +82,6 @@
 #include "keybind.h"
 #include "qtscript.h"
 
-//#define DEBUG_SCROLLTABS 	//enable to see tab scroll button info for buttons
 
 // Empty edit window
 static bool SecondaryWindowUp = false;
@@ -632,7 +631,7 @@ static void intDoScreenRefresh(void)
 			}
 			if (StatsWasUp)
 			{
-				widgGetTabs(psWScreen, IDSTAT_TABFORM, &statMajor);
+				statMajor = ((ListTabWidget *)widgGetFromID(psWScreen, IDSTAT_TABFORM))->currentPage();
 			}
 			// now make sure the stats screen isn't up
 			if (widgGetFromID(psWScreen, IDSTAT_FORM) != NULL)
@@ -694,12 +693,7 @@ static void intDoScreenRefresh(void)
 
 			if (widgGetFromID(psWScreen, IDSTAT_TABFORM) != NULL)
 			{
-				if (statMajor >= widgGetNumTabMajor(psWScreen, IDSTAT_TABFORM))
-				{
-					statMajor = 0;	// reset
-					debug(LOG_ERROR, "Reset tabs since statMajor is too big");
-				}
-				widgSetTabs(psWScreen, IDSTAT_TABFORM, statMajor);
+				((ListTabWidget *)widgGetFromID(psWScreen, IDSTAT_TABFORM))->setCurrentPage(statMajor);
 			}
 
 			if (psFlag != NULL)
@@ -1023,39 +1017,6 @@ static void intProcessEditStats(UDWORD id)
 		intStopStructPosition();
 		intMode = INT_NORMAL;
 		objMode = IOBJ_NONE;
-	}
-	else if (id == IDSTAT_TABSCRL_LEFT)	//user hit left scroll tab from DEBUG menu.
-	{
-		W_TABFORM	*psTForm;
-#ifdef  DEBUG_SCROLLTABS
-		char buf[200];		//only used for debugging
-#endif
-		psTForm = (W_TABFORM *)widgGetFromID(psWScreen, IDSTAT_TABFORM);	//get our form
-		// add routine to update tab widgets now...
-		if (!psTForm->scrollPreviousTabPage())
-		{
-			audio_PlayTrack(ID_SOUND_BUILD_FAIL);
-		}
-#ifdef  DEBUG_SCROLLTABS
-		sprintf(buf, "[debug menu]Clicked LT %d tab #=%d", psTForm->TabMultiplier, psTForm->tab());
-		addConsoleMessage(buf, DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
-#endif
-	}
-	else if (id == IDSTAT_TABSCRL_RIGHT) // user hit right scroll tab from DEBUG menu
-	{
-		W_TABFORM	*psTForm;
-#ifdef  DEBUG_SCROLLTABS
-		char buf[200];					// only used for debugging.
-#endif
-		psTForm = (W_TABFORM *)widgGetFromID(psWScreen, IDSTAT_TABFORM);
-		if (!psTForm->scrollNextTabPage())
-		{
-			audio_PlayTrack(ID_SOUND_BUILD_FAIL);
-		}
-#ifdef  DEBUG_SCROLLTABS		//for debuging
-		sprintf(buf, "[debug menu]Clicked RT %d numtabs %d tab # %d", psTForm->TabMultiplier, numTabs, psTForm->tab());
-		addConsoleMessage(buf, DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
-#endif
 	}
 }
 
@@ -1713,11 +1674,10 @@ static void intRunStats(void)
 static void intAddObjectStats(BASE_OBJECT *psObj, UDWORD id)
 {
 	BASE_STATS		*psStats;
-	UWORD               statMajor = 0, newStatMajor;
+	UWORD               statMajor = 0;
 	UDWORD			i, j, index;
 	UDWORD			count;
 	SDWORD			iconNumber, entryIN;
-	W_TABFORM	    *psForm;
 
 	/* Clear a previous structure pos if there is one */
 	intStopStructPosition();
@@ -1730,7 +1690,7 @@ static void intAddObjectStats(BASE_OBJECT *psObj, UDWORD id)
 	{
 		if (widgGetFromID(psWScreen, IDSTAT_FORM) != NULL)
 		{
-			widgGetTabs(psWScreen, IDSTAT_TABFORM, &statMajor);
+			statMajor = ((ListTabWidget *)widgGetFromID(psWScreen, IDSTAT_TABFORM))->currentPage();
 		}
 		intRemoveStatsNoAnim();
 	}
@@ -1815,20 +1775,11 @@ static void intAddObjectStats(BASE_OBJECT *psObj, UDWORD id)
 	intAddStats(ppsStatsList, numStatsListEntries, psStats, psObj);
 
 	// get the tab positions for the new stat form
-	psForm = (W_TABFORM *)widgGetFromID(psWScreen, IDSTAT_TABFORM);
-	if (psForm != NULL)
-	{
-		newStatMajor = psForm->childTabs.size();
-
 		// Restore the tab positions.
-		if ((!psStats) && (widgGetFromID(psWScreen, IDSTAT_FORM) != NULL))
-		{
 			// only restore if we've still got at least that many tabs
-			if (newStatMajor > statMajor)
-			{
-				widgSetTabs(psWScreen, IDSTAT_TABFORM, statMajor);
-			}
-		}
+	if (psStats == nullptr && widgGetFromID(psWScreen, IDSTAT_TABFORM) != nullptr)
+	{
+		((ListTabWidget *)widgGetFromID(psWScreen, IDSTAT_TABFORM))->setCurrentPage(statMajor);
 	}
 
 	intMode = INT_STAT;
@@ -2323,40 +2274,6 @@ static void intProcessStats(UDWORD id)
 				startDeliveryPosition(psFlag);
 			}
 		}
-	}
-	else if (id == IDSTAT_TABSCRL_LEFT)	//user hit left scroll tab from BUILD menu
-	{
-		W_TABFORM	*psTForm;
-#ifdef  DEBUG_SCROLLTABS
-		char buf[200];		//only used for debugging
-#endif
-		psTForm = (W_TABFORM *)widgGetFromID(psWScreen, IDSTAT_TABFORM);	//get our form
-		//add routine to update tab widgets now...
-		if (!psTForm->scrollPreviousTabPage())
-		{
-			audio_PlayTrack(ID_SOUND_BUILD_FAIL);
-		}
-#ifdef  DEBUG_SCROLLTABS
-		sprintf(buf, "[build menu]Clicked LT %d tab #=%d", psTForm->TabMultiplier, psTForm->majorT);
-		addConsoleMessage(buf, DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
-#endif
-	}
-	else if (id == IDSTAT_TABSCRL_RIGHT)	// user hit right scroll tab from BUILD menu
-	{
-		W_TABFORM	*psTForm;
-#ifdef  DEBUG_SCROLLTABS
-		char buf[200];					// only used for debugging.
-#endif
-		psTForm = (W_TABFORM *)widgGetFromID(psWScreen, IDSTAT_TABFORM);
-		//add routine to update tab widgets now...
-		if (!psTForm->scrollNextTabPage())
-		{
-			audio_PlayTrack(ID_SOUND_BUILD_FAIL);
-		}
-#ifdef  DEBUG_SCROLLTABS		//for debuging
-		sprintf(buf, "[build menu]Clicked RT %d numtabs %d tab # %d", psTForm->TabMultiplier, numTabs, psTForm->tab());
-		addConsoleMessage(buf, DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
-#endif
 	}
 }
 
@@ -3909,9 +3826,8 @@ static void intSetStats(UDWORD id, BASE_STATS *psStats)
 static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
         BASE_STATS *psSelected, BASE_OBJECT *psOwner)
 {
-	UDWORD				i, butPerForm, statForm;
+	UDWORD				i;
 	SDWORD				BufferID;
-	BASE_STATS			*Stat;
 	FACTORY				*psFactory;
 
 	int                             allyResearchIconCount = 0;
@@ -4045,96 +3961,17 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 	{
 		return false;
 	}
-	/* Calculate how many buttons will go on a form */
-	butPerForm = ((STAT_WIDTH - STAT_GAP) /
-	        (STAT_BUTWIDTH + STAT_GAP)) *
-	        ((STAT_HEIGHT - STAT_GAP) /
-	                (STAT_BUTHEIGHT + STAT_GAP));
-	//================== adds L/R Scroll buttons ===================================
-	if (numForms(numStats, butPerForm) > MAX_TAB_SMALL_SHOWN)	//only want these buttons when tab count >8
-	{
-		// Add the left tab scroll button
-		sButInit = W_BUTINIT();
-		sButInit.formID = IDSTAT_FORM;
-		sButInit.id = IDSTAT_TABSCRL_LEFT;
-		sButInit.x = STAT_TABFORMX + 4;
-		sButInit.y = STAT_TABFORMY;
-		sButInit.width = TABSCRL_WIDTH;
-		sButInit.height = TABSCRL_HEIGHT;
-		sButInit.pTip = _("Tab Scroll left");
-		sButInit.pDisplay = intDisplayImageHilight;
-		sButInit.UserData = PACKDWORD_TRI(0, IMAGE_LFTTABD, IMAGE_LFTTAB);
-		if (!widgAddButton(psWScreen, &sButInit))
-		{
-			return false;
-		}
-		// Add the right tab scroll button
-		sButInit = W_BUTINIT();
-		sButInit.formID = IDSTAT_FORM;
-		sButInit.id = IDSTAT_TABSCRL_RIGHT;
-		sButInit.x = STAT_WIDTH - 14;
-		sButInit.y = STAT_TABFORMY;
-		sButInit.width = TABSCRL_WIDTH;
-		sButInit.height = TABSCRL_HEIGHT;
-		sButInit.pTip = _("Tab Scroll right");
-		sButInit.pDisplay = intDisplayImageHilight;
-		sButInit.UserData = PACKDWORD_TRI(0, IMAGE_RGTTABD, IMAGE_RGTTAB);
-		if (!widgAddButton(psWScreen, &sButInit))
-		{
-			return false;
-		}
-	}
-	//==============buttons before tabbed form!==========================
+
 	// Add the tabbed form
-	W_FORMINIT sFormInit;
-	sFormInit.formID = IDSTAT_FORM;
-	sFormInit.id = IDSTAT_TABFORM;
-	sFormInit.style = WFORM_TABBED;
-	sFormInit.x = STAT_TABFORMX;
-	sFormInit.y = STAT_TABFORMY;
-	sFormInit.width = STAT_WIDTH;
-	sFormInit.height = STAT_HEIGHT;
-	sFormInit.numButtons = butPerForm;		// store # of buttons per form
-	sFormInit.numStats = numStats;			// store # of 'stats' (items) in form
-	sFormInit.numMajor = numForms(numStats, butPerForm);	// STUPID name for # of tabs!
-	sFormInit.majorPos = WFORM_TABTOP;
-	sFormInit.majorSize = OBJ_TABWIDTH;
-	sFormInit.majorOffset = OBJ_TABOFFSET;
-	sFormInit.tabVertOffset = (OBJ_TABHEIGHT / 2);
-	sFormInit.tabMajorThickness = OBJ_TABHEIGHT;
-	sFormInit.tabMajorGap = OBJ_TABOFFSET;
-	sFormInit.pUserData = &StandardTab;
-	sFormInit.pTabDisplay = intDisplayTab;
-	// Build menu can have up to 80 stats - so can research now 13/09/99 AB
-	// NOTE, there is really no limit now to the # of menu items we can have,
-	// It is #defined in hci.h to be 200 now. [#define	MAXSTRUCTURES	200]
-	//Same goes for research. [#define	MAXRESEARCH		200]
-	if (sFormInit.numMajor > MAX_TAB_STD_SHOWN)
-	{
-		//Just switching from normal sized tabs to smaller ones to fit more in form.
-		sFormInit.pUserData = &SmallTab;
-		sFormInit.majorSize /= 2;
-		if (sFormInit.numMajor > MAX_TAB_SMALL_SHOWN)		// 7 tabs is all we can fit with current form size.
-		{
-			// make room for new tab item (tab scroll buttons)
-			sFormInit.majorOffset = OBJ_TABOFFSET + 12;
-		}
-	}
-	if (!widgAddForm(psWScreen, &sFormInit))
-	{
-		return false;
-	}
+	IntListTabWidget *statList = new IntListTabWidget(theStatForm);
+	statList->id = IDSTAT_TABFORM;
+	statList->setChildSize(STAT_BUTWIDTH, STAT_BUTHEIGHT);
+	statList->setChildSpacing(STAT_GAP, STAT_GAP);
+	int statListWidth = STAT_BUTWIDTH*2 + STAT_GAP;
+	statList->setGeometry((STAT_WIDTH - statListWidth)/2, STAT_TABFORMY, statListWidth, STAT_HEIGHT - STAT_TABFORMY);
 
 	/* Add the stat buttons */
-	W_FORMINIT sBFormInit;
-	sBFormInit.formID = IDSTAT_TABFORM;
-	sBFormInit.majorID = 0;
-	sBFormInit.id = IDSTAT_START;
-	sBFormInit.style = WFORM_CLICKABLE | WFORM_SECONDARY;
-	sBFormInit.x = STAT_BUTX;
-	sBFormInit.y = STAT_BUTY;
-	sBFormInit.width = STAT_BUTWIDTH;
-	sBFormInit.height = STAT_BUTHEIGHT;
+	int nextButtonId = IDSTAT_START;
 
 	W_BARINIT sBarInit;
 	sBarInit.id = IDSTAT_TIMEBARSTART;
@@ -4146,46 +3983,43 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 	sBarInit.sMinorCol = WZCOL_ACTION_PROGRESS_BAR_MINOR;
 
 	statID = 0;
-	statForm = 0;
 	for (i = 0; i < numStats; i++)
 	{
 		sBarInit.y = STAT_TIMEBARY;
 
-		if (sBFormInit.id > IDSTAT_END)
+		if (nextButtonId > IDSTAT_END)
 		{
 			//can't fit any more on the screen!
 			debug(LOG_WARNING, "This is just a Warning! Max buttons have been allocated");
 			break;
 		}
 
-		Stat = ppsStatsList[i];
-		// If it's a droid the name might not be a stringID
-		if (Stat->ref >= REF_TEMPLATE_START &&
-		    Stat->ref < REF_TEMPLATE_START + REF_RANGE)
-		{
-
-			sBFormInit.pTip = getTemplateName((DROID_TEMPLATE *)ppsStatsList[i]);
-		}
-		else
-		{
-			sBFormInit.pTip = getName(ppsStatsList[i]->pName);
-		}
 		BufferID = i;
 		ASSERT(BufferID < NUM_STATBUFFERS, "BufferID > NUM_STATBUFFERS");
 
 		RENDERBUTTON_INUSE(&StatBuffers[BufferID]);
 		StatBuffers[BufferID].Data = (void *)ppsStatsList[i];
-		sBFormInit.pUserData = &StatBuffers[BufferID];
-		sBFormInit.pDisplay = intDisplayStatsButton;
 
+		W_CLICKFORM *button = new W_CLICKFORM(statList);
+		button->id = nextButtonId;
+		button->style |= WFORM_SECONDARY;
+		button->pUserData = &StatBuffers[BufferID];
+		button->displayFunction = intDisplayStatsButton;
+		statList->addWidgetToLayout(button);
 
-		if (!widgAddForm(psWScreen, &sBFormInit))
+		BASE_STATS *Stat = ppsStatsList[i];
+		// If it's a droid the name might not be a stringID
+		if (Stat->ref >= REF_TEMPLATE_START &&
+		    Stat->ref < REF_TEMPLATE_START + REF_RANGE)
 		{
-			return false;
+			button->setTip(getTemplateName((DROID_TEMPLATE *)ppsStatsList[i]));
 		}
-		W_BARGRAPH *bar;
+		else
+		{
+			button->setTip(getName(ppsStatsList[i]->pName));
+		}
 
-		//Stat = ppsStatsList[i];
+		W_BARGRAPH *bar;
 		if (Stat->ref >= REF_STRUCTURE_START &&
 		    Stat->ref < REF_STRUCTURE_START + REF_RANGE)  		// It's a structure.
 		{
@@ -4199,7 +4033,7 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 				sBarInit.size = 100;
 			}
 
-			sBarInit.formID = sBFormInit.id;
+			sBarInit.formID = nextButtonId;
 			sBarInit.iRange = GAME_TICKS_PER_SEC;
 			bar = widgAddBarGraph(psWScreen, &sBarInit);
 			bar->setBackgroundColour(WZCOL_BLACK);
@@ -4217,13 +4051,13 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 				sBarInit.size = 100;
 			}
 
-			sBarInit.formID = sBFormInit.id;
+			sBarInit.formID = nextButtonId;
 			sBarInit.iRange = GAME_TICKS_PER_SEC;
 			bar = widgAddBarGraph(psWScreen, &sBarInit);
 			bar->setBackgroundColour(WZCOL_BLACK);
 
 			// Add a text label for the quantity to produce.
-			sLabInit.formID = sBFormInit.id;
+			sLabInit.formID = nextButtonId;
 			sLabInit.pUserData = Stat;
 			if (!widgAddLabel(psWScreen, &sLabInit))
 			{
@@ -4231,13 +4065,12 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 			}
 			sLabInit.id++;
 		}
-
 		else if (Stat->ref >= REF_RESEARCH_START &&
 		        Stat->ref < REF_RESEARCH_START + REF_RANGE)				// It's a Research topic.
 		{
 			sLabInit = W_LABINIT();
-			sLabInit.formID = sBFormInit.id ;
-			sLabInit.id = IDSTAT_RESICONSTART + (sBFormInit.id - IDSTAT_START);
+			sLabInit.formID = nextButtonId;
+			sLabInit.id = IDSTAT_RESICONSTART + (nextButtonId - IDSTAT_START);
 
 			sLabInit.x = STAT_BUTWIDTH - 16;
 			sLabInit.y = 3;
@@ -4265,7 +4098,7 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 				{
 					// add a label.
 					sLabInit = W_LABINIT();
-					sLabInit.formID = sBFormInit.id ;
+					sLabInit.formID = nextButtonId;
 					sLabInit.id = IDSTAT_ALLYSTART + allyResearchIconCount;
 					sLabInit.width = iV_GetImageWidth(IntImages, IMAGE_ALLY_RESEARCH);
 					sLabInit.height = iV_GetImageHeight(IntImages, IMAGE_ALLY_RESEARCH);
@@ -4283,7 +4116,7 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 				if (numResearches > 0)
 				{
 					W_BARINIT progress;
-					progress.formID = sBFormInit.id;
+					progress.formID = nextButtonId;
 					progress.id = IDSTAT_ALLYSTART + allyResearchIconCount;
 					progress.width = STAT_PROGBARWIDTH;
 					progress.height = STAT_PROGBARHEIGHT;
@@ -4301,7 +4134,7 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 				}
 			}
 
-			sBarInit.formID = sBFormInit.id;
+			sBarInit.formID = nextButtonId;
 			bar = widgAddBarGraph(psWScreen, &sBarInit);
 			bar->setBackgroundColour(WZCOL_BLACK);
 		}
@@ -4309,32 +4142,15 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 		/* If this matches psSelected note the form and button */
 		if (ppsStatsList[i] == psSelected)
 		{
-			statID = sBFormInit.id;
-			statForm = sBFormInit.majorID;
+			statID = nextButtonId;
+			button->setState(WBUT_CLICKLOCK);
+			statList->setCurrentPage(statList->pages() - 1);
 		}
 
 		/* Update the init struct for the next button */
-		sBFormInit.id += 1;
-		sBFormInit.x += STAT_BUTWIDTH + STAT_GAP;
-		if (sBFormInit.x + STAT_BUTWIDTH + STAT_GAP > STAT_WIDTH)	// - STAT_TABWIDTH)
-		{
-			sBFormInit.x = STAT_BUTX;	//STAT_GAP;
-			sBFormInit.y += STAT_BUTHEIGHT + STAT_GAP;
-		}
-		if (sBFormInit.y + STAT_BUTHEIGHT + STAT_GAP > STAT_HEIGHT) // - STAT_TITLEHEIGHT)
-		{
-			sBFormInit.y = STAT_BUTY;	//STAT_GAP;
-			sBFormInit.majorID += 1;
-		}
+		++nextButtonId;
 
 		sBarInit.id += 1;
-	}
-
-	/* Set the correct page and button if necessary */
-	if (statID)
-	{
-		widgSetTabs(psWScreen, IDSTAT_TABFORM, (UWORD)statForm);
-		widgSetButtonState(psWScreen, statID, WBUT_CLICKLOCK);
 	}
 
 	StatsUp = true;

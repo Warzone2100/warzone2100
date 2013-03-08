@@ -78,6 +78,14 @@ W_CLICKFORM::W_CLICKFORM(W_FORMINIT const *init)
 	, AudioCallback(WidgGetAudioCallback())
 {}
 
+W_CLICKFORM::W_CLICKFORM(WIDGET *parent)
+	: W_FORM(parent)
+	, state(WBUT_PLAIN)
+	, HilightAudioID(WidgGetHilightAudioID())
+	, ClickedAudioID(WidgGetClickedAudioID())
+	, AudioCallback(WidgGetAudioCallback())
+{}
+
 W_TABFORM::W_TABFORM(W_FORMINIT const *init)
 	: W_FORM(init)
 	, majorPos(init->majorPos)
