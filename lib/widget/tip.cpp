@@ -29,6 +29,7 @@
 #include "tip.h"
 // FIXME Direct iVis implementation include!
 #include "lib/ivis_opengl/pieblitfunc.h"
+#include <QtCore/QStringList>
 
 /* Time delay before showing the tool tip */
 #define TIP_PAUSE	200
@@ -55,7 +56,8 @@ static SDWORD		mx, my;				// Last mouse coords
 static SDWORD		wx, wy, ww, wh;		// Position and size of button to place tip by
 static SDWORD		tx, ty, tw, th;		// Position and size of the tip box
 static SDWORD		fx, fy;				// Position of the text
-static QString          pTip;                   // Tip text
+static int              lineHeight;
+static QStringList      pTip;                   // Tip text
 static WIDGET		*psWidget;			// The button the tip is for
 static enum iV_fonts FontID = font_regular;	// ID for the Ivis Font.
 static PIELIGHT TipColour;
@@ -94,7 +96,7 @@ void tipStart(WIDGET *psSource, QString pNewTip, iV_fonts NewFontID, int x, int 
 	my = mouseY();
 	wx = x; wy = y;
 	ww = width; wh = height;
-	pTip = pNewTip;
+	pTip = pNewTip.split('\n');
 	psWidget = psSource;
 	FontID = NewFontID;
 }
@@ -114,13 +116,8 @@ void tipStop(WIDGET *psSource)
 	}
 }
 
-
-#define RIGHTBORDER		(0)
-#define BOTTOMBORDER	(0)
-
-
 /* Update and possibly display the tip */
-void tipDisplay(void)
+void tipDisplay()
 {
 	SDWORD		newMX, newMY;
 	SDWORD		currTime;
@@ -144,39 +141,28 @@ void tipDisplay(void)
 			topGap = TIP_VGAP;
 			iV_SetFont(FontID);
 
-			fw = iV_GetTextWidth(pTip.toUtf8().constData());
+			lineHeight = iV_GetTextLineSize();
+
+			fw = 0;
+			for (int n = 0; n < pTip.size(); ++n)
+			{
+				fw = std::max<int>(fw, iV_GetTextWidth(pTip[n].toUtf8().constData()));
+			}
 			tw = fw + TIP_HGAP * 2;
-			th = topGap * 2 + iV_GetTextLineSize() + iV_GetTextBelowBase();
+			th = topGap * 2 + lineHeight*pTip.size() + iV_GetTextBelowBase();
 
 			/* Position the tip box */
-			tx = wx + (ww >> 1);
-			ty = wy + wh + TIP_VGAP;
-
-			/* Check the box is on screen */
-			if (tx < 0)
-			{
-				tx = 0;
-			}
-			if (tx + tw >= (SDWORD)screenWidth - RIGHTBORDER)
-			{
-				tx = screenWidth - RIGHTBORDER - tw - 1;
-			}
-			if (ty < 0)
-			{
-				ty = 0;
-			}
-			if (ty + th >= (SDWORD)screenHeight - BOTTOMBORDER)
+			tx = clip(wx + ww/2, 0, screenWidth - tw - 1);
+			ty = std::max(wy + wh + TIP_VGAP, 0);
+			if (ty + th >= (int)screenHeight)
 			{
 				/* Position the tip above the button */
 				ty = wy - th - TIP_VGAP;
 			}
 
-
 			/* Position the text */
 			fx = tx + TIP_HGAP;
-
-			fy = ty + (th - iV_GetTextLineSize()) / 2 - iV_GetTextAboveBase();
-
+			fy = ty + (th - lineHeight*pTip.size()) / 2 - iV_GetTextAboveBase();
 
 			/* Note the time */
 			startTime = wzGetTicks();
@@ -201,7 +187,10 @@ void tipDisplay(void)
 
 		iV_SetFont(FontID);
 		iV_SetTextColour(TipColour);
-		iV_DrawText(pTip.toUtf8().constData(), fx, fy);
+		for (int n = 0; n < pTip.size(); ++n)
+		{
+			iV_DrawText(pTip[n].toUtf8().constData(), fx, fy + lineHeight*n);
+		}
 
 		break;
 	default:

@@ -4009,25 +4009,24 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 
 		BASE_STATS *Stat = ppsStatsList[i];
 		// If it's a droid the name might not be a stringID
+		QString tipString;
 		if (Stat->ref >= REF_TEMPLATE_START &&
 		    Stat->ref < REF_TEMPLATE_START + REF_RANGE)
 		{
-			button->setTip(getTemplateName((DROID_TEMPLATE *)ppsStatsList[i]));
+			tipString = QString::fromUtf8(getTemplateName((DROID_TEMPLATE *)ppsStatsList[i]));
 		}
 		else
 		{
-			button->setTip(getName(ppsStatsList[i]->pName));
+			tipString = QString::fromUtf8(getName(ppsStatsList[i]->pName));
 		}
 
+		unsigned powerCost = 0;
 		W_BARGRAPH *bar;
 		if (Stat->ref >= REF_STRUCTURE_START &&
 		    Stat->ref < REF_STRUCTURE_START + REF_RANGE)  		// It's a structure.
 		{
-
-			//sBarInit.pTip = _("Build Speed");
-			//sBarInit.size = (UWORD)(((STRUCTURE_STATS*)Stat)->buildPoints / BUILDPOINTS_STRUCTDIV);
-			sBarInit.size = (UWORD)(((STRUCTURE_STATS *)Stat)->powerToBuild /
-			        POWERPOINTS_DROIDDIV);
+			powerCost = ((STRUCTURE_STATS *)Stat)->powerToBuild;
+			sBarInit.size = powerCost / POWERPOINTS_DROIDDIV;
 			if (sBarInit.size > 100)
 			{
 				sBarInit.size = 100;
@@ -4041,11 +4040,8 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 		else if (Stat->ref >= REF_TEMPLATE_START &&
 		        Stat->ref < REF_TEMPLATE_START + REF_RANGE)  	// It's a droid.
 		{
-
-			//sBarInit.size = (UWORD)(((DROID_TEMPLATE*)Stat)->buildPoints  / BUILDPOINTS_DROIDDIV);
-			sBarInit.size = (UWORD)(((DROID_TEMPLATE *)Stat)->powerPoints /
-			        POWERPOINTS_DROIDDIV);
-			//sBarInit.pTip = _("Power Usage");
+			powerCost = ((DROID_TEMPLATE *)Stat)->powerPoints;
+			sBarInit.size = powerCost / POWERPOINTS_DROIDDIV;
 			if (sBarInit.size > 100)
 			{
 				sBarInit.size = 100;
@@ -4082,8 +4078,8 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 			widgAddLabel(psWScreen, &sLabInit);
 
 			//add power bar as well
-			sBarInit.size = (UWORD)(((RESEARCH *)Stat)->researchPower /
-			        POWERPOINTS_DROIDDIV);
+			powerCost = ((RESEARCH *)Stat)->researchPower;
+			sBarInit.size = powerCost / POWERPOINTS_DROIDDIV;
 			if (sBarInit.size > 100)
 			{
 				sBarInit.size = 100;
@@ -4138,6 +4134,8 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 			bar = widgAddBarGraph(psWScreen, &sBarInit);
 			bar->setBackgroundColour(WZCOL_BLACK);
 		}
+		tipString.append(QString::fromUtf8(_("\nCost: %1")).arg(powerCost));
+		button->setTip(tipString);
 
 		/* If this matches psSelected note the form and button */
 		if (ppsStatsList[i] == psSelected)

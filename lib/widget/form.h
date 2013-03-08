@@ -115,6 +115,9 @@ public:
 	void setFlash(bool enable);
 	void setTip(QString string);
 
+	void setString(char const *stringUtf8) { WIDGET::setString(stringUtf8); }  // Unhide the WIDGET::setString(char const *) function...
+	void setTip(char const *stringUtf8) { WIDGET::setTip(stringUtf8); }  // Unhide the WIDGET::setTip(char const *) function...
+
 	UDWORD		state;					// Button state of the form
 	QString         pTip;                   // Tip for the form
 	SWORD HilightAudioID;				// Audio ID for form clicked sound
