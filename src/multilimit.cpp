@@ -58,7 +58,6 @@
 #define	IDLIMITS				22000
 #define IDLIMITS_RETURN			(IDLIMITS+1)
 #define IDLIMITS_OK				(IDLIMITS+2)
-#define IDLIMITS_TABS			(IDLIMITS+3)
 #define IDLIMITS_ENTRIES_START	(IDLIMITS+4)
 #define IDLIMITS_ENTRIES_END	(IDLIMITS+99)
 
@@ -72,32 +71,11 @@
 
 #define BARWIDTH				480
 #define BARHEIGHT				40
-#define BUTPERFORM				8
 
 // ////////////////////////////////////////////////////////////////////////////
 // protos.
 
 static void displayStructureBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
-
-// ////////////////////////////////////////////////////////////////////////////
-
-static bool useStruct(UDWORD count,UDWORD i)
-{
-	ASSERT(i < numStructureStats, "Bad structure for structure limit: %d", (int)i);
-
-	if(count >= (4*BUTPERFORM))
-	{
-		return false;
-	}
-
-	// now see if we loaded that stat..
-	if(asStructLimits[0][i].globalLimit ==LOTS_OF)
-	{
-		return false;
-	}
-
-	return true;
-}
 
 // ////////////////////////////////////////////////////////////////////////////
 static inline void freeLimitSet(void)
@@ -114,9 +92,6 @@ static inline void freeLimitSet(void)
 // ////////////////////////////////////////////////////////////////////////////
 bool startLimitScreen(void)
 {
-	UDWORD			numButtons = 0;
-	UDWORD			i;
-
 	addBackdrop();//background
 
 	// load stats...
@@ -148,7 +123,7 @@ bool startLimitScreen(void)
 	{
 		// reset the sliders..
 		// it's a HACK since the actual limiter structure was cleared in the startMultiOptions function 
-		for (i = 0; i < numStructureStats ; ++i)
+		for (unsigned i = 0; i < numStructureStats; ++i)
 		{
 			asStructLimits[0][i].limit = asStructLimits[0][i].globalLimit;
 		}
@@ -173,8 +148,8 @@ bool startLimitScreen(void)
 	// return button.
 	addMultiBut(psWScreen,IDLIMITS,IDLIMITS_RETURN,
 					LIMITS_OKX-40,LIMITS_OKY,
-					iV_GetImageWidth(FrontImages,IMAGE_RETURN),
-					iV_GetImageHeight(FrontImages,IMAGE_RETURN),
+	            iV_GetImageWidth(FrontImages, IMAGE_NO),
+	            iV_GetImageHeight(FrontImages, IMAGE_NO),
 					_("Apply Defaults and Return To Previous Screen"),IMAGE_NO,IMAGE_NO,true);
 
 	// ok button
@@ -184,75 +159,30 @@ bool startLimitScreen(void)
 					iV_GetImageHeight(FrontImages,IMAGE_OK),
 					_("Accept Settings"),IMAGE_OK,IMAGE_OK,true);
 
-	// Count the number of minor tabs needed
-	numButtons = 0;
-
-	for(i=0;i<numStructureStats;i++ )
-	{
-		if(useStruct(numButtons,i))
-		{
-			numButtons++;
-		}
-	}
-
-	if(numButtons >(4*BUTPERFORM)) numButtons =(4*BUTPERFORM);
-
 	// add tab form..
-	W_FORMINIT sFormInit;
-	sFormInit.formID = IDLIMITS;
-	sFormInit.id = IDLIMITS_TABS;
-	sFormInit.style = WFORM_TABBED;
-	sFormInit.x = 50;
-	sFormInit.y = 10;
-	sFormInit.width = LIMITSW - 100;
-	sFormInit.height =LIMITSH - 4;
-	sFormInit.numMajor = numForms(numButtons, BUTPERFORM);
-	sFormInit.majorPos = WFORM_TABTOP;
-	sFormInit.majorSize = OBJ_TABWIDTH+3; //!!
-	sFormInit.majorOffset = OBJ_TABOFFSET;
-	sFormInit.tabVertOffset = (OBJ_TABHEIGHT/2);			//(DES_TAB_HEIGHT/2)+2;
-	sFormInit.tabMajorThickness = OBJ_TABHEIGHT;
-	sFormInit.pUserData = &StandardTab;
-	sFormInit.pTabDisplay = intDisplayTab;
-
-	widgAddForm(psWScreen, &sFormInit);
+	IntListTabWidget *limitsList = new IntListTabWidget(limitsForm);
+	limitsList->setChildSize(BARWIDTH, BARHEIGHT);
+	limitsList->setChildSpacing(5, 5);
+	limitsList->setGeometry(50, 10, BARWIDTH, 370);
 
 	//Put the buttons on it
-	W_FORMINIT sButInit;
-	sButInit.formID   = IDLIMITS_TABS;//IDLIMITS;
-	sButInit.style	  = WFORM_PLAIN;
-	sButInit.width    = BARWIDTH;
-	sButInit.height	  = BARHEIGHT;
-	sButInit.pDisplay = displayStructureBar;
-	sButInit.x		  = 2;
-	sButInit.y		  = 5;
-	sButInit.id	 	  = IDLIMITS_ENTRIES_START;
+	int limitsButtonId = IDLIMITS_ENTRIES_START;
 
-	numButtons =0;
-	for(i=0; i<numStructureStats ;i++)
+	for (unsigned i = 0; i < numStructureStats; ++i)
 	{
-		if(useStruct(numButtons,i))
+		if (asStructLimits[0][i].globalLimit != LOTS_OF)
 		{
-			numButtons++;
-			sButInit.UserData= i;
+			W_FORM *button = new W_FORM(limitsList);
+			button->id = limitsButtonId;
+			button->displayFunction = displayStructureBar;
+			button->UserData = i;
+			limitsList->addWidgetToLayout(button);
+			++limitsButtonId;
 
-			widgAddForm(psWScreen, &sButInit);
-			sButInit.id	++;
-
-			addFESlider(sButInit.id,sButInit.id-1, 290,11,
+			addFESlider(limitsButtonId, limitsButtonId - 1, 290, 11,
 						asStructLimits[0][i].globalLimit,
 						asStructLimits[0][i].limit);
-			sButInit.id	++;
-
-			if (sButInit.y + BARHEIGHT + 2 > (BUTPERFORM*(BARHEIGHT+2) - 4) )
-			{
-				sButInit.y = 5;
-				sButInit.majorID += 1;
-			}
-			else
-			{
-				sButInit.y +=  BARHEIGHT +5;
-			}
+			++limitsButtonId;
 		}
 	}
 
