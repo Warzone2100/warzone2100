@@ -447,110 +447,183 @@ static void initModuleStats(unsigned i, STRUCTURE_TYPE type)
 	}
 }
 
-STRUCTURE_STATS::STRUCTURE_STATS(LineView line)
-	: BASE_STATS(REF_STRUCTURE_START + line.line(), line.s(0))
-	, type(line.e(1, map_STRUCTURE_TYPE))
-	, strength(line.e(3, map_STRUCT_STRENGTH))
-	, baseWidth(line.i(5, 0, 100))
-	, baseBreadth(line.i(6, 0, 100))
-	, buildPoints(line.u32(8))
-	, height(line.u32(9))
-	, armourValue(line.u32(10))
-	, bodyPoints(line.u32(11))
-	, powerToBuild(line.u32(13))
-	, resistance(line.u32(15))
-	, pIMD(line.imdShapes(21))
-	, pBaseIMD(line.imdShape(22, true))
-	, pECM(line.stats(18, asECMStats, numECMStats, true))
-	, pSensor(line.stats(19, asSensorStats, numSensorStats, true))
-	, weaponSlots(line.i(20, 0, STRUCT_MAXWEAPS))  // Is this one used anywhere?
-	, numWeaps(line.i(24, 0, weaponSlots))
-	//, psWeapStat
-	, defaultFunc(-1)
-	, asFuncList(line.i(23, 0, 1000), (FUNCTION *)NULL)
-	// Ignored columns: 2, 4, 7, 12, 14, 16, 17
+template <typename T, size_t N>
+inline
+size_t sizeOfArray( const T(&)[ N ] )
 {
-	int types = 0;
-	types += numWeaps != 0;
-	types += pECM != NULL && pECM->location == LOC_TURRET;
-	types += pSensor != NULL && pSensor->location == LOC_TURRET;
-	if (types > 1)
-	{
-		line.setError(-1, "Too many turret types.");
-	}
-
-	std::fill_n(psWeapStat, STRUCT_MAXWEAPS, (WEAPON_STATS *)NULL);
-
-	numWeaps = std::min<unsigned>(numWeaps, STRUCT_MAXWEAPS);
+  return N;
 }
 
-/* load the Structure stats from the Access database */
-bool loadStructureStats(const char *pStructData, UDWORD bufferSize)
+/* load the structure stats from the ini file */
+bool loadStructureStats(QString filename)
 {
-	UDWORD				iID;
-
-	// Skip descriptive header
-	if (strncmp(pStructData,"Structure ",10)==0)
+	QMap<QString, STRUCTURE_TYPE> structType;
+	for (int i = 0; i < sizeOfArray(map_STRUCTURE_TYPE); i++)
 	{
-		pStructData = strchr(pStructData,'\n') + 1;
+		structType.insert(map_STRUCTURE_TYPE[i].string, map_STRUCTURE_TYPE[i].value);
 	}
 
-	TableView table(pStructData, bufferSize);
-
-	asStructureStats = new STRUCTURE_STATS[table.size()];
-	numStructureStats = table.size();
-
-	for (unsigned i = 0; i < table.size(); ++i)
+	QMap<QString, STRUCT_STRENGTH> structStrength;
+	for (int i = 0; i < sizeOfArray(map_STRUCT_STRENGTH); i++)
 	{
-		LineView line(table, i);
+		structStrength.insert(map_STRUCT_STRENGTH[i].string, map_STRUCT_STRENGTH[i].value);
+	}
 
-		asStructureStats[i] = STRUCTURE_STATS(line);
-		if (table.isError())
+	WzConfig ini(filename, WzConfig::ReadOnlyAndRequired);
+	QStringList list = ini.childGroups();
+	asStructureStats = new STRUCTURE_STATS[list.size()];
+	numStructureStats = list.size();
+	QHash<QString,int> checkIDdict;
+	for (int inc = 0; inc < list.size(); ++inc)
+	{
+		ini.beginGroup(list[inc]);
+		STRUCTURE_STATS *psStats = &asStructureStats[inc];
+		psStats->pName = allocateName(list[inc].toUtf8().constData());
+		ASSERT_OR_RETURN(false, psStats->pName != NULL, "Failed allocating structure ID");
+
+		// check that the name has not been used already
+		ASSERT_OR_RETURN(false, !checkIDdict.contains(psStats->pName), "Structure ID '%s' used already", psStats->pName);
+		checkIDdict.insert(psStats->pName,0);
+
+		psStats->ref = REF_STRUCTURE_START + inc;
+
+		// set structure type
+		QString type = ini.value("type", "").toString();
+		ASSERT_OR_RETURN(false, structType.contains(type), "Invalid type '%s' of structure '%s'", type.toUtf8().constData(), psStats->pName);
+		psStats->type = structType[type];
+
+		// save indexes of special structures for futher use
+		initModuleStats(inc, psStats->type);  // This function looks like a hack. But slightly less hacky than before.
+		
+		// set structure strength
+		QString strength = ini.value("strength", "").toString();
+		ASSERT_OR_RETURN(false, structStrength.contains(strength), "Invalid strength '%s' of structure '%s'", strength.toUtf8().constData(), psStats->pName);
+		psStats->strength = structStrength[strength];
+	
+		// set baseWidth
+		psStats->baseWidth = ini.value("baseWidth", 0).toUInt();
+		ASSERT_OR_RETURN(false, psStats->baseWidth <= 100, "Invalid baseWidth '%d' for structure '%s'", psStats->baseWidth, psStats->pName);
+		
+		// set baseBreadth
+		psStats->baseBreadth = ini.value("baseBreadth", 0).toUInt();
+		ASSERT_OR_RETURN(false, psStats->baseBreadth < 100, "Invalid baseBreadth '%d' for structure '%s'", psStats->baseBreadth, psStats->pName);
+		
+		psStats->bodyPoints = ini.value("bodyPoints", 1).toUInt();
+		psStats->armourValue = ini.value("armour").toUInt();
+		psStats->height = ini.value("height").toUInt();
+		psStats->powerToBuild = ini.value("buildPower").toUInt();
+		psStats->buildPoints = ini.value("buildPoints").toUInt();
+		psStats->resistance = ini.value("resistance").toUInt();
+
+		// set structure models
+		QStringList models = ini.value("structureModel").toStringList();
+		for (int j = 0; j < models.size(); j++)
 		{
-			debug(LOG_ERROR, "%s", table.getError().toUtf8().constData());
-			return false;
+			iIMDShape *imd = (iIMDShape *)resGetData("IMD", models[j].trimmed().toUtf8().constData());
+			ASSERT(imd != NULL, "Cannot find the PIE structureModel '%s' for structure '%s'", models[j].toUtf8().constData(), psStats->pName);
+			psStats->pIMD.push_back(imd);
 		}
 
-		initModuleStats(i, asStructureStats[i].type);  // This function looks like a hack. But slightly less hacky than before.
+		// set base model
+		QString baseModel = ini.value("baseModel","").toString();
+		if (baseModel.compare("") != 0)
+		{
+			iIMDShape *imd = (iIMDShape *)resGetData("IMD", baseModel.toUtf8().constData());
+			ASSERT(imd != NULL, "Cannot find the PIE baseModel '%s' for structure '%s'", baseModel.toUtf8().constData(), psStats->pName);
+			psStats->pBaseIMD = imd;
+		}
+		
+		// set ECM
+		QString ecmID = ini.value("ecmID","0").toString();
+		if (ecmID.compare("0") != 0)
+		{
+			ECM_STATS *ret = findStatsByName(ecmID.toUtf8().constData(), asECMStats, numECMStats);
+			ASSERT(ret != NULL, "Cannot find ecmID '%s' for structure '%s'", ecmID.toUtf8().constData(), psStats->pName);
+			psStats->pECM = ret;
+		}
+
+		// set sensor
+		QString sensorID = ini.value("sensorID","0").toString();
+		if (sensorID.compare("0") != 0)
+		{
+			SENSOR_STATS *ret = findStatsByName(sensorID.toUtf8().constData(), asSensorStats, numSensorStats);
+			ASSERT(ret != NULL, "Cannot find sensorID '%s' for structure '%s'", sensorID.toUtf8().constData(), psStats->pName);
+			psStats->pSensor = ret;
+		}
+
+		// set list of weapons
+		std::fill_n(psStats->psWeapStat, STRUCT_MAXWEAPS, (WEAPON_STATS *)NULL);
+		QStringList weapons = ini.value("weapons").toStringList();
+		ASSERT_OR_RETURN(false, weapons.size() <= STRUCT_MAXWEAPS, "Too many weapons are attached to structure '%s'. Maximum is %d", psStats->pName, STRUCT_MAXWEAPS);
+		psStats->numWeaps = weapons.size();
+		for (int j = 0; j < psStats->numWeaps; j++)
+		{
+			QString weaponsID = weapons[j].trimmed();
+			WEAPON_STATS *pWeap = findStatsByName(weaponsID.toUtf8().constData(), asWeaponStats, numWeaponStats);
+			ASSERT_OR_RETURN(false, pWeap, "Invalid item '%s' in list of weapons of structure '%s' ", weaponsID.toUtf8().constData(), psStats->pName);
+			psStats->psWeapStat[j] = pWeap;
+		}
+
+		// set list of functions
+		QStringList functions = ini.value("functions").toStringList();
+		psStats->defaultFunc = functions.size() - 1;
+		for (int j = 0; j < functions.size(); j++)
+		{
+			QString functionID = functions[j].trimmed();
+				
+			FUNCTION *pFunc = findStatsByName(functionID.toUtf8().constData(), asFunctions, numFunctions);
+			ASSERT_OR_RETURN(false, pFunc, "Invalid item '%s' in list of functions of structure '%s' ", functionID.toUtf8().constData(), psStats->pName);
+			psStats->asFuncList.push_back(pFunc);
+		}
+
+		// check used structure turrets
+		int types = 0;
+		types += psStats->numWeaps != 0;
+		types += psStats->pECM != NULL && psStats->pECM->location == LOC_TURRET;
+		types += psStats->pSensor != NULL && psStats->pSensor->location == LOC_TURRET;
+		ASSERT(types <= 1, "Too many turret types for structure '%s'", psStats->pName);
+
+		ini.endGroup();
 	}
 
 	/* get global dummy stat pointer - GJ */
-	for (iID = 0; iID < numStructureStats; iID++)
+	g_psStatDestroyStruct = NULL;
+	for (int iID = 0; iID < numStructureStats; iID++)
 	{
 		if (asStructureStats[iID].type == REF_DEMOLISH)
 		{
+			g_psStatDestroyStruct = asStructureStats + iID;
 			break;
 		}
 	}
-	if (iID >= numStructureStats)
-	{
-		debug(LOG_ERROR, "destroy structure stat not found");
-		return false;
-	}
-	g_psStatDestroyStruct = asStructureStats + iID;
+	ASSERT_OR_RETURN(false, g_psStatDestroyStruct, "Destroy structure stat not found");
 
-	//allocate the structureLimits structure
-	for (unsigned player = 0; player < MAX_PLAYERS; ++player)
+	// allocate the structureLimits structure
+	for (int player = 0; player < MAX_PLAYERS; ++player)
 	{
 		asStructLimits[player] = (STRUCTURE_LIMITS *)malloc(sizeof(STRUCTURE_LIMITS) * numStructureStats);
-		if (asStructLimits[player] == NULL)
-		{
-			debug( LOG_FATAL, "Unable to allocate structure limits" );
-			abort();
-			return false;
-		}
 	}
 	initStructLimits();
 
-	//initialise the structure upgrade arrays
+	// initialise the structure upgrade arrays
 	memset(asStructureUpgrade, 0, MAX_PLAYERS * sizeof(STRUCTURE_UPGRADE));
 	memset(asWallDefenceUpgrade, 0, MAX_PLAYERS * sizeof(WALLDEFENCE_UPGRADE));
 	memset(asResearchUpgrade, 0, MAX_PLAYERS * sizeof(RESEARCH_UPGRADE));
 	memset(asPowerUpgrade, 0, MAX_PLAYERS * sizeof(POWER_UPGRADE));
 	memset(asRepairFacUpgrade, 0, MAX_PLAYERS * sizeof(REPAIR_FACILITY_UPGRADE));
-	memset(asProductionUpgrade, 0, MAX_PLAYERS * NUM_FACTORY_TYPES *
-		sizeof(PRODUCTION_UPGRADE));
+	memset(asProductionUpgrade, 0, MAX_PLAYERS * NUM_FACTORY_TYPES * sizeof(PRODUCTION_UPGRADE));
 	memset(asReArmUpgrade, 0, MAX_PLAYERS * sizeof(REARM_UPGRADE));
+
+	// Wall Function requires a structure stat so can allocate it now
+	for (int i = 0; i < numFunctions; ++i)
+	{
+		if (asFunctions[i]->type == WALL_TYPE)
+		{
+			WALL_FUNCTION *wallFunction = (WALL_FUNCTION *)asFunctions[i];
+			wallFunction->pCornerStat = findStatsByName(wallFunction->pStructName, asStructureStats, numStructureStats);
+			ASSERT_OR_RETURN(false, wallFunction->pCornerStat, "Unknown Corner Wall stat for function %s", wallFunction->pName);
+		}
+	}
 
 	return true;
 }
@@ -609,76 +682,6 @@ void setCurrentStructQuantity(bool displayError)
 			}
 		}
 	}
-}
-
-//Load the weapons assigned to Structure in the Access database
-bool loadStructureWeapons(const char *pWeaponData, UDWORD bufferSize)
-{
-	TableView table(pWeaponData, bufferSize);
-
-	for (unsigned i = 0; i < table.size(); ++i)
-	{
-		LineView line(table, i);
-
-		STRUCTURE_STATS *structureStats = line.stats(0, asStructureStats, numStructureStats);
-		for (unsigned j = 0; !table.isError() && j < structureStats->numWeaps; ++j)
-		{
-			structureStats->psWeapStat[j] = line.stats(1 + j, asWeaponStats, numWeaponStats);
-		}
-		if (table.isError())
-		{
-			debug(LOG_ERROR, "%s", table.getError().toUtf8().constData());
-			return false;
-		}
-	}
-	return true;
-}
-
-//Load the programs assigned to Droids in the Access database
-bool loadStructureFunctions(const char *pFunctionData, UDWORD bufferSize)
-{
-	TableView table(pFunctionData, bufferSize);
-
-	for (unsigned i = 0; i < table.size(); ++i)
-	{
-		LineView line(table, i);
-
-		STRUCTURE_STATS *structureStats = line.stats(0, asStructureStats, numStructureStats);
-		FUNCTION *function = line.stats(1, asFunctions, numFunctions);
-		if (table.isError())
-		{
-			debug(LOG_ERROR, "%s", table.getError().toUtf8().constData());
-			return false;
-		}
-		++structureStats->defaultFunc;
-		if (structureStats->defaultFunc > (int)structureStats->asFuncList.size())
-		{
-			debug(LOG_ERROR, "Trying to allocate more functions than allowed for Structure");
-			return false;
-		}
-		structureStats->asFuncList[structureStats->defaultFunc] = function;
-	}
-
-	/**************************************************************************/
-	//Wall Function requires a structure stat so can allocate it now
-	for (unsigned i = 0; i < numFunctions; ++i)
-	{
-		if (asFunctions[i]->type != WALL_TYPE)
-		{
-			continue;
-		}
-		WALL_FUNCTION *wallFunction = (WALL_FUNCTION *)asFunctions[i];
-
-		wallFunction->pCornerStat = findStatsByName(wallFunction->pStructName, asStructureStats, numStructureStats);
-		//if haven't found the STRUCTURE STAT, then problem
-		if (wallFunction->pCornerStat == NULL)
-		{
-			debug(LOG_ERROR, "Unknown Corner Wall stat for function %s", wallFunction->pName);
-			return false;
-		}
-	}
-
-	return true;
 }
 
 /*Load the Structure Strength Modifiers from the file exported from Access*/

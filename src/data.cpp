@@ -371,12 +371,14 @@ static bool bufferSTEMPWEAPLoad(const char *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load the Structure stats */
-static bool bufferSSTRUCTLoad(const char *pBuffer, UDWORD size, void **ppData)
+static bool bufferSSTRUCTLoad(const char *fileName, void **ppData)
 {
-	calcDataHash((uint8_t *)pBuffer, size, DATA_SSTRUCT);
+	if (!loadStructureStats(QString(fileName)))
+	{
+		return false;
+	}
 
-	if (!loadStructureStats(pBuffer, size)
-	 || !allocStructLists())
+	if (!allocStructLists())
 	{
 		return false;
 	}
@@ -391,36 +393,6 @@ static void dataSSTRUCTRelease(WZ_DECL_UNUSED void *pData)
 {
 	freeStructureLists();
 	structureStatsShutDown();
-}
-
-/* Load the Structure Weapons stats */
-static bool bufferSSTRWEAPLoad(const char *pBuffer, UDWORD size, void **ppData)
-{
-	calcDataHash((uint8_t *)pBuffer, size, DATA_SSTRWEAP);
-
-	if (!loadStructureWeapons(pBuffer, size))
-	{
-		return false;
-	}
-
-	//not interested in this value
-	*ppData = NULL;
-	return true;
-}
-
-/* Load the Structure Functions stats */
-static bool bufferSSTRFUNCLoad(const char *pBuffer, UDWORD size, void **ppData)
-{
-	calcDataHash((uint8_t *)pBuffer, size, DATA_STRFUNC);
-
-	if (!loadStructureFunctions(pBuffer, size))
-	{
-		return false;
-	}
-
-	//not interested in this value
-	*ppData = NULL;
-	return true;
 }
 
 /* Load the Structure strength modifier stats */
@@ -943,9 +915,6 @@ static const RES_TYPE_MIN_BUF BufferResourceTypes[] =
 {
 	{"STEMPL", bufferSTEMPLLoad, dataSTEMPLRelease},               //template and associated files
 	{"STEMPWEAP", bufferSTEMPWEAPLoad, NULL},
-	{"SSTRUCT", bufferSSTRUCTLoad, dataSSTRUCTRelease},            //structure stats and associated files
-	{"SSTRFUNC", bufferSSTRFUNCLoad, NULL},
-	{"SSTRWEAP", bufferSSTRWEAPLoad, NULL},
 	{"SFEAT", bufferSFEATLoad, dataSFEATRelease},                  //feature stats file
 	{"SFUNC", bufferSFUNCLoad, dataSFUNCRelease},                  //function stats file
 	{"SMSG", bufferSMSGLoad, dataSMSGRelease},
@@ -990,6 +959,7 @@ static const RES_TYPE_MIN_FILE FileResourceTypes[] =
 	{"RESEARCHMSG", dataResearchMsgLoad, dataSMSGRelease },
 	{"SSTRMOD", bufferSSTRMODLoad, NULL},
 	{"JAVASCRIPT", jsLoad, NULL},
+	{"SSTRUCT", bufferSSTRUCTLoad, dataSSTRUCTRelease},            //structure stats and associated files
 	{"RESCH", bufferRESCHLoad, dataRESCHRelease},                  //research stats files
 };
 

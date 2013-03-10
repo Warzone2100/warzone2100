@@ -98,9 +98,7 @@ void setMaxConstructors(int player, int value);
 bool IsPlayerDroidLimitReached(int player);
 bool CheckHaltOnMaxUnitsReached(STRUCTURE *psStructure);
 
-extern bool loadStructureStats(const char *pStructData, UDWORD bufferSize);
-extern bool loadStructureWeapons(const char *pWeaponData, UDWORD bufferSize);
-extern bool loadStructureFunctions(const char *pFunctionData, UDWORD bufferSize);
+extern bool loadStructureStats(QString filename);
 /*Load the Structure Strength Modifiers from the file exported from Access*/
 extern bool loadStructureStrengthModifiers(const char *pFileName);
 

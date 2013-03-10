@@ -84,14 +84,6 @@ extern UDWORD	aDefaultRepair[MAX_PLAYERS];
 
 //extern bool loadResearch(void);
 extern bool loadResearch(QString filename);
-//Load the pre-requisites for a research list
-extern bool loadResearchPR(const char *pPRData, UDWORD bufferSize);
-//Load the artefacts for a research list
-extern bool loadResearchArtefacts(const char *pArteData, UDWORD bufferSize, UDWORD listNumber);
-//Load the pre-requisites for a research list
-extern bool loadResearchFunctions(const char *pFunctionData, UDWORD bufferSize);
-//Load the Structures for a research list
-extern bool loadResearchStructures(const char *pStructData, UDWORD bufferSize, UDWORD listNumber);
 
 /*function to check what can be researched for a particular player at any one
   instant. Returns the number to research*/
