@@ -142,9 +142,6 @@
 #define OBJ_TABWIDTH	26
 #define OBJ_TABHEIGHT	11
 #define	OBJ_TABOFFSET	2
-//tab scroll buttons details
-#define TABSCRL_HEIGHT	10
-#define TABSCRL_WIDTH	7
 
 /* close button data */
 #define CLOSE_WIDTH		15

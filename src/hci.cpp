@@ -1284,11 +1284,6 @@ INT_RETVAL intRunWidgets(void)
 			RefreshStatsButtons();
 			break;
 
-		case IDDES_COMPFORM:	// If tab clicked on in design component screen then refresh all rendered buttons.
-			RefreshObjectButtons();
-			RefreshSystem0Buttons();
-			break;
-
 			/* Default case passes remaining IDs to appropriate function */
 		default:
 			switch (intMode)

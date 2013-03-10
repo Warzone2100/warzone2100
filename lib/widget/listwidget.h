@@ -85,10 +85,10 @@ public:
 
 	ListWidget(WIDGET *parent);
 
-	void setChildSize(int width, int height);
-	void setChildSpacing(int width, int height);
-	void setOrder(Order order); 
-	void addWidgetToLayout(WIDGET *widget);
+	void setChildSize(int width, int height);  ///< Sets the size of all child widgets (applied by calling addWidgetToLayout).
+	void setChildSpacing(int width, int height);  ///< Sets the distance between child widgets (applied by calling addWidgetToLayout).
+	void setOrder(Order order);  ///< Sets whether subsequent child widgets are placed in horizontal or vertical lines (applied by calling addWidgetToLayout).
+	void addWidgetToLayout(WIDGET *widget);  ///< Manages the geometry of widget, and shows/hides it when changing tabs.
 
 	int currentPage() const { return currentPage_; }
 	int pages() const { return std::max(((int)myChildren.size() - 1)/widgetsPerPage(), 0) + 1; }
@@ -126,10 +126,10 @@ public:
 
 	virtual void geometryChanged();
 
-	void setChildSize(int width, int height) { widgets->setChildSize(width, height); }
-	void setChildSpacing(int width, int height) { widgets->setChildSpacing(width, height); }
-	void setOrder(ListWidget::Order order) { widgets->setOrder(order); } 
-	void addWidgetToLayout(WIDGET *widget);
+	void setChildSize(int width, int height) { widgets->setChildSize(width, height); }  ///< Sets the size of all child widgets (applied by calling addWidgetToLayout).
+	void setChildSpacing(int width, int height) { widgets->setChildSpacing(width, height); }  ///< Sets the distance between child widgets (applied by calling addWidgetToLayout).
+	void setOrder(ListWidget::Order order) { widgets->setOrder(order); }  ///< Sets whether subsequent child widgets are placed in horizontal or vertical lines (applied by calling addWidgetToLayout).
+	void addWidgetToLayout(WIDGET *widget);  ///< Manages the geometry of widget, and shows/hides it when changing tabs.
 	bool setCurrentPage(int page) { widgets->setCurrentPage(page); return widgets->currentPage() == page; }
 	int currentPage() const { return widgets->currentPage(); }
 	int pages() const { return widgets->pages(); }
