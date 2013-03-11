@@ -53,12 +53,19 @@
  */
 /***************************************************************************/
 
+enum GFXTYPE
+{
+	GFX_TEXTURE,
+	GFX_COLOUR,
+	GFX_COUNT
+};
+
 /// Generic graphics using VBOs drawing class
 class GFX
 {
 public:
 	/// Initialize class and allocate GPU resources
-	GFX(GLenum drawType = GL_TRIANGLES, int coordsPerVertex = 3);
+	GFX(GFXTYPE type, GLenum drawType = GL_TRIANGLES, int coordsPerVertex = 3);
 
 	/// Destroy GPU held resources
 	~GFX();
@@ -80,6 +87,7 @@ public:
 	void draw();
 
 private:
+	GFXTYPE mType;
 	GLenum mFormat;
 	int mWidth;
 	int mHeight;

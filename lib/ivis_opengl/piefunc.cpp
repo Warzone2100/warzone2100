@@ -35,54 +35,53 @@
 #include "lib/ivis_opengl/pieclip.h"
 
 static GFX *skyboxGfx = NULL;
+static GFX *radarViewGfx[2] = { NULL, NULL };
 
 #define VW_VERTICES 5
-static Vector3i pieVrts[VW_VERTICES];
-static PIELIGHT pieColour;
 
 void pie_SetViewingWindow(Vector3i *v, PIELIGHT colour)
 {
-	pieColour = colour;
+	Vector3i pieVrts[VW_VERTICES];
+
+	if (!radarViewGfx[0])
+	{
+		radarViewGfx[0] = new GFX(GFX_COLOUR, GL_TRIANGLE_FAN, 2);
+		radarViewGfx[1] = new GFX(GFX_COLOUR, GL_LINE_STRIP, 2);
+	}
 
 	pieVrts[0] = v[1];
-	pieVrts[0].z = INTERFACE_DEPTH;	// cull triangles with off screen points
-
 	pieVrts[1] = v[0];
-	pieVrts[1].z = INTERFACE_DEPTH;
-
 	pieVrts[2] = v[2];
-	pieVrts[2].z = INTERFACE_DEPTH;
-
 	pieVrts[3] = v[3];
-	pieVrts[3].z = INTERFACE_DEPTH;
+	pieVrts[4] = v[1];
 
-	pieVrts[4] = pieVrts[0];
+	GLfloat vert[VW_VERTICES * 2];
+	GLbyte cols[VW_VERTICES * 4];
+	for (int i = 0; i < VW_VERTICES; i++)
+	{
+		vert[i * 2 + 0] = pieVrts[i].x;
+		vert[i * 2 + 1] = pieVrts[i].y;
+	}
+	for (int i = 0; i < VW_VERTICES * 4; i += 4)
+	{
+		cols[i + 0] = colour.byte.r;
+		cols[i + 1] = colour.byte.g;
+		cols[i + 2] = colour.byte.b;
+		cols[i + 3] = colour.byte.a >> 1;
+	}
+	radarViewGfx[0]->buffers(VW_VERTICES, vert, cols);
+	for (int i = 0; i < VW_VERTICES * 4; i += 4) // set proper alpha
+	{
+		cols[i + 3] = colour.byte.a;
+	}
+	radarViewGfx[1]->buffers(VW_VERTICES, vert, cols);
 }
 
 void pie_DrawViewingWindow()
 {
-	SDWORD i;
-	PIELIGHT colour = pieColour;
-
-	pie_SetTexturePage(TEXPAGE_NONE);
 	pie_SetRendMode(REND_ALPHA);
-
-	glColor4ub(colour.byte.r, colour.byte.g, colour.byte.b, colour.byte.a >> 1);
-	glBegin(GL_TRIANGLE_FAN);
-		for (i = 0; i < VW_VERTICES; i++)
-		{
-			glVertex2f(pieVrts[i].x, pieVrts[i].y);
-		}
-	glEnd();
-
-	glColor4ub(colour.byte.r, colour.byte.g, colour.byte.b, colour.byte.a);
-	glBegin(GL_LINE_STRIP);
-		for (i = 0; i < VW_VERTICES; i++)
-		{
-			glVertex2f(pieVrts[i].x, pieVrts[i].y);
-		}
-		glVertex2f(pieVrts[0].x, pieVrts[0].y);
-	glEnd();
+	radarViewGfx[0]->draw();
+	radarViewGfx[1]->draw();
 }
 
 void pie_TransColouredTriangle(Vector3f *vrt, PIELIGHT c)
@@ -119,7 +118,7 @@ void pie_Skybox_Init()
 	                   u + w * 8, v + h, u + w * 8, v };
 
 	GL_DEBUG("Initializing skybox");
-	skyboxGfx = new GFX(GL_QUAD_STRIP, 3);
+	skyboxGfx = new GFX(GFX_TEXTURE, GL_QUAD_STRIP, 3);
 	skyboxGfx->buffers(10, vert, texc);
 }
 

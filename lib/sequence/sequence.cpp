@@ -668,7 +668,7 @@ bool seq_Play(const char* filename)
 	}
 
 	/* open video */
-	videoGfx = new GFX(GL_TRIANGLE_STRIP, 2);
+	videoGfx = new GFX(GFX_TEXTURE, GL_TRIANGLE_STRIP, 2);
 	if (theora_p)
 	{
 		if (videodata.ti.frame_width > texture_width || videodata.ti.frame_height > texture_height)

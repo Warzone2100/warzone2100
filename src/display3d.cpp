@@ -719,12 +719,14 @@ void draw3DScene( void )
 		pie_SetFogStatus(false);
 		if (getWidgetsStatus())
 		{
+			GL_DEBUG("Draw 3D scene - radar");
 			drawRadar();
 		}
 		pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
 		pie_SetFogStatus(true);
 	}
 
+	GL_DEBUG("Draw 3D scene - text");
 	if (!bRender3DOnly)
 	{
 		/* Ensure that any text messages are displayed at bottom of screen */

@@ -184,7 +184,7 @@ bool screenInitialise()
 	pie_Skybox_Init();
 
 	// Generate backdrop render
-	backdropGfx = new GFX(GL_TRIANGLE_STRIP, 2);
+	backdropGfx = new GFX(GFX_TEXTURE, GL_TRIANGLE_STRIP, 2);
 
 	glErrors();
 	return true;
