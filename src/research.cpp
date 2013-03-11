@@ -1536,6 +1536,8 @@ bool enableResearch(RESEARCH *psResearch, UDWORD player)
 {
 	UDWORD				inc;
 
+	ASSERT_OR_RETURN(false, psResearch, "No such research topic");
+
 	inc = psResearch->index;
 	if (inc > asResearch.size())
 	{

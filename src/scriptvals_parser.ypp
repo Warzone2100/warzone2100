@@ -706,13 +706,11 @@ var_init:		var_entry TYPE var_value
 							YYABORT;
 						}
 						data.v.oval = getResearch($3.pString);	/* store pointer */
-#if 0
 						if (data.v.oval == NULL)
 						{
 							yyerror("Research %s not found", $3.pString);
-							YYABORT;
+							// YYABORT;
 						}
-#endif
 						if(!eventSetContextVar(psCurrContext, $1, &data))
 						{
 							yyerror("Set Value Failed for %u", $1);

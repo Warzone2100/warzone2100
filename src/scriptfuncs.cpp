@@ -3994,6 +3994,7 @@ bool scrEnableResearch(void)
 	}
 
 	ASSERT_OR_RETURN(false, player >= 0 && player < MAX_PLAYERS, "Invalid player number");
+	ASSERT_OR_RETURN(false, psResearch, "Research topic specified not found");
 
 	if (!enableResearch(psResearch, player))
 	{
