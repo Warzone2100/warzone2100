@@ -144,15 +144,9 @@ char StringBuffer[STRING_BUFFER_SIZE];
 /* Design screen positions */
 #define DESIGN_Y				(59 + D_H)	//the top left y value for all forms on the design screen
 
-#define DES_TABTHICKNESS	0
-#define DES_MAJORSIZE		40
-#define DES_MINORSIZE		11
 #define DES_TABBUTGAP		2
 #define DES_TABBUTWIDTH		60
 #define DES_TABBUTHEIGHT	46
-#define	DES_TAB_LEFTOFFSET 	OBJ_TABOFFSET
-#define DES_TAB_WIDTH		OBJ_TABWIDTH
-#define DES_TAB_HEIGHT		OBJ_TABHEIGHT
 
 #define DES_LEFTFORMX		RET_X
 #define DES_LEFTFORMY		DESIGN_Y

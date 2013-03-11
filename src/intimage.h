@@ -52,7 +52,6 @@ extern IMAGEFILE *IntImages;	//< All the 2d graphics for the user interface.
 
 // A few useful defined tabs.
 extern TABDEF StandardTab;
-extern TABDEF SmallTab;
 
 bool imageInitBitmaps(void);
 

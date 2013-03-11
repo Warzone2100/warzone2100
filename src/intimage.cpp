@@ -152,13 +152,6 @@ TABDEF	StandardTab = {
 	IMAGE_TABSELECTED,	// Major tab currently selected.
 };
 
-TABDEF	SmallTab = {
-	IMAGE_TAB1_SM,			// Major tab normal.
-	IMAGE_TAB1DOWN_SM,		// Major tab clicked.
-	IMAGE_TABHILIGHT_SM,	// Major tab hilighted by mouse.
-	IMAGE_TAB1SELECTED_SM,	// Major tab currently selected.
-};
-
 // Read bitmaps used by the interface.
 //
 bool imageInitBitmaps(void)
