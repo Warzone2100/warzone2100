@@ -486,13 +486,10 @@ static void showDroidPaths(void)
 /// Renders the Network Issue form
 static void NetworkDisplayPlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
-	W_TABFORM *Form = (W_TABFORM*)psWidget;
-	UDWORD x0,y0,x1,y1;
-
-	x0 = xOffset+Form->x();
-	y0 = yOffset+Form->y();
-	x1 = x0 + Form->width();
-	y1 = y0 + Form->height();
+	int x0 = xOffset + psWidget->x();
+	int y0 = yOffset + psWidget->y();
+	int x1 = x0 + psWidget->width();
+	int y1 = y0 + psWidget->height();
 
 	// Don't draw anything, a rectangle behind the icon just looks strange, if you notice it.
 	//RenderWindowFrame(FRAME_NORMAL, x0, y0, x1 - x0, y1 - y0);

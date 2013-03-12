@@ -1102,27 +1102,6 @@ void RenderBlankToButton(RENDERED_BUTTON *Buffer, bool Down, UDWORD buttonType)
 	CreateBlankButton(Buffer, Down, buttonType);
 }
 
-static void AdjustTabFormSize(W_TABFORM *Form, int *x0, int *y0, int *x1, int *y1)
-{
-	/* Adjust for where the tabs are */
-	if (Form->majorPos == WFORM_TABLEFT)
-	{
-		*x0 += Form->tabMajorThickness - Form->tabHorzOffset;
-	}
-	if (Form->majorPos == WFORM_TABRIGHT)
-	{
-		*x1 -= Form->tabMajorThickness - Form->tabHorzOffset;
-	}
-	if (Form->majorPos == WFORM_TABTOP)
-	{
-		*y0 += Form->tabMajorThickness - Form->tabVertOffset;
-	}
-	if (Form->majorPos == WFORM_TABBOTTOM)
-	{
-		*y1 -= Form->tabMajorThickness - Form->tabVertOffset;
-	}
-}
-
 IntFormAnimated::IntFormAnimated(WIDGET *parent, bool openAnimate)
 	: W_FORM(parent)
 	, startTime(0)
@@ -1201,21 +1180,6 @@ void IntFormAnimated::display(int xOffset, int yOffset)
 
 	RenderWindowFrame(FRAME_NORMAL, aCur.x(), aCur.y(), aCur.width(), aCur.height());
 }
-
-void intDisplayStatsForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
-{
-	W_TABFORM *Form = (W_TABFORM *)psWidget;
-
-	int x0 = xOffset + Form->x();
-	int y0 = yOffset + Form->y();
-	int x1 = x0 + Form->width();
-	int y1 = y0 + Form->height();
-
-	AdjustTabFormSize(Form, &x0, &y0, &x1, &y1);
-
-	RenderWindowFrame(FRAME_NORMAL, x0, y0, x1 - x0, y1 - y0);
-}
-
 
 // Display an image for a widget.
 //

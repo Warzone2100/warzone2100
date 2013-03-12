@@ -43,58 +43,6 @@ public:
 	bool            disableChildren;        ///< Disable all child widgets if true
 };
 
-/* The tabbed form data structure */
-class W_TABFORM : public W_FORM
-{
-	Q_OBJECT
-
-public:
-	W_TABFORM(W_FORMINIT const *init);
-
-	void released(W_CONTEXT *psContext, WIDGET_KEY key);
-	void highlightLost();
-	void run(W_CONTEXT *psContext);
-	void display(int xOffset, int yOffset);
-
-	int tab() const { return currentTab; }
-	int tabPage() const { return currentTab/maxTabsShown; }
-	bool setTab(int newTab);  ///< Sets the tab, clamped to a valid range. Returns true iff newTab was in the valid range.
-	bool scrollDeltaTab(int delta) { return setTab(tab() + delta); }
-	bool scrollNextTab() { return scrollDeltaTab(1); }
-	bool scrollPreviousTab() { return scrollDeltaTab(-1); }
-	bool scrollNextTabPage() { return scrollDeltaTab(maxTabsShown); }
-	bool scrollPreviousTabPage() { return scrollDeltaTab(-(int)maxTabsShown); }
-	int numTabs() const { return childTabs.size(); }
-	void setNumTabs(int numTabs);  ///< Adds/removes tabs. If removing tabs, widgets on the removed tabs will be deleted.
-	WIDGET *tabWidget() { return childTabs[currentTab]; }
-
-	UWORD           majorPos;                       // Position of the tabs on the form
-	UWORD           majorSize;                      // the size of tabs horizontally and vertically
-	UWORD		tabMajorThickness;			// The thickness of the tabs
-	UWORD		tabMajorGap;					// The gap between tabs
-	SWORD		tabVertOffset;				// Tab form overlap offset.
-	SWORD		tabHorzOffset;				// Tab form overlap offset.
-	SWORD		majorOffset;			// Tab start offset.
-	UWORD		state;					// Current state of the widget
-	UWORD		tabHiLite;				// which tab is hilited.
-	/* NOTE: If tabHiLite is (UWORD)(-1) then there is no hilite.  A bit of a hack I know */
-	/*       but I don't really have the energy to change it.  (Don't design stuff after  */
-	/*       beers at lunch-time :-)                                                      */
-
-	unsigned        maxTabsShown;                   ///< Maximum number of tabs shown at once.
-	UWORD		numStats;				//# of 'stats' (items) in list
-	UWORD		numButtons;				//# of buttons per form
-	Children        childTabs;                      // The major tab information
-	TAB_DISPLAY pTabDisplay;			// Optional callback for display tabs.
-
-private:
-	void fixChildGeometry();
-	QRect tabPos(int index);
-	int pickTab(int clickX, int clickY);
-
-	unsigned currentTab;
-};
-
 /* The clickable form data structure */
 class W_CLICKFORM : public W_FORM
 {
@@ -124,8 +72,5 @@ public:
 	SWORD ClickedAudioID;				// Audio ID for form hilighted sound
 	WIDGET_AUDIOCALLBACK AudioCallback;	// Pointer to audio callback function
 };
-
-/* Add a widget to a form */
-bool formAddWidget(W_FORM *psForm, WIDGET *psWidget, W_INIT const *psInit);
 
 #endif // __INCLUDED_LIB_WIDGET_FORM_H__

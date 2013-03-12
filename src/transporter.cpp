@@ -1328,10 +1328,8 @@ SDWORD	bobTransporterHeight(void)
 /*causes one of the mission buttons (Launch Button or Mission Timer) to start flashing*/
 void flashMissionButton(UDWORD buttonID)
 {
-	W_TABFORM	*psForm;
-
 	//get the button from the id
-	psForm = (W_TABFORM *)widgGetFromID(psWScreen, buttonID);
+	WIDGET *psForm = widgGetFromID(psWScreen, buttonID);
 	if (psForm)
 	{
 		switch (buttonID)
@@ -1353,10 +1351,8 @@ void flashMissionButton(UDWORD buttonID)
 /*stops one of the mission buttons (Launch Button or Mission Timer) flashing*/
 void stopMissionButtonFlash(UDWORD buttonID)
 {
-	W_TABFORM	*psForm;
-
 	//get the button from the id
-	psForm = (W_TABFORM *)widgGetFromID(psWScreen, buttonID);
+	WIDGET *psForm = widgGetFromID(psWScreen, buttonID);
 	if (psForm)
 	{
 		switch (buttonID)

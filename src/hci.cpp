@@ -4624,10 +4624,8 @@ STRUCTURE *interfaceStructList(void)
 /*causes a reticule button to start flashing*/
 void flashReticuleButton(UDWORD buttonID)
 {
-	W_TABFORM		*psButton;
-
 	//get the button for the id
-	psButton = (W_TABFORM *)widgGetFromID(psWScreen, buttonID);
+	WIDGET *psButton = widgGetFromID(psWScreen, buttonID);
 	if (psButton)
 	{
 		//set flashing byte to true

@@ -274,19 +274,15 @@ static bool widgAddWidget(W_SCREEN *psScreen, W_INIT const *psInit, WIDGET *widg
 	}
 	ASSERT_OR_RETURN(false, psParent != NULL && psParent->type == WIDG_FORM, "Could not find parent form from formID");
 
-	bool added = formAddWidget(psParent, widget, psInit);
-	return added;  // Should be true, unless triggering an assertion.
+	psParent->attach(widget);
+	return true;
 }
 
 /* Add a form to the widget screen */
 W_FORM *widgAddForm(W_SCREEN *psScreen, const W_FORMINIT *psInit)
 {
 	W_FORM *psForm;
-	if (psInit->style & WFORM_TABBED)
-	{
-		psForm = new W_TABFORM(psInit);
-	}
-	else if (psInit->style & WFORM_CLICKABLE)
+	if (psInit->style & WFORM_CLICKABLE)
 	{
 		psForm = new W_CLICKFORM(psInit);
 	}

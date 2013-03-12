@@ -43,9 +43,8 @@
 /************ Form styles ****************/
 
 #define WFORM_PLAIN		0	///< Plain form
-#define WFORM_TABBED		1	///< Tabbed form
 
-/** Invisible (i.e. see through) form - can be used in conjunction with WFORM_PLAIN or WFORM_TABBED. */
+/** Invisible (i.e. see through) form - can be used in conjunction with WFORM_PLAIN. */
 #define WFORM_INVISIBLE		2
 
 #define WFORM_CLICKABLE		4	///< Clickable form - return form id when the form is clicked
@@ -120,42 +119,13 @@ struct W_INIT
 	UDWORD                  UserData;               ///< User data (if any)
 };
 
-/*
- * Flags for controlling where the tabs appear on a form -
- * used in the majorPos and minorPos entries of the W_FORMINIT struct
- */
-#define	WFORM_TABNONE		0		///< No tab
-#define WFORM_TABTOP		1
-#define WFORM_TABLEFT		2
-#define WFORM_TABRIGHT		3
-#define WFORM_TABBOTTOM		4
-
-#define MAX_TAB_STD_SHOWN   4		// max # of tabs we can display using standard tab icons.
-#define MAX_TAB_SMALL_SHOWN 8		// max # of tabs we can display using small tab icons.
-#define TAB_SEVEN    7		//*with* tab scroll buttons, we can only (currently) show 7 max!
-
-typedef void (*TAB_DISPLAY)(WIDGET *psWidget, UDWORD Position, UDWORD Number, bool Selected, bool Hilight, UDWORD x, UDWORD y, UDWORD Width, UDWORD Height);
-
 /** Form initialisation structure */
 struct W_FORMINIT : public W_INIT
 {
 	W_FORMINIT();
 
-	/* Data for a tabbed form */
 	bool                    disableChildren;
-	UWORD                   majorPos;                       // Position of the tabs on the form
-	UWORD                   majorSize;                      // Size of the tabs (in pixels)
-	SWORD                   majorOffset;                    // Tab start offset.
-	SWORD			tabVertOffset;			///< Tab form overlap offset.
-	SWORD			tabHorzOffset;			///< Tab form overlap offset.
-	UWORD			tabMajorThickness;		///< The thickness of the tabs
-	UWORD			tabMajorGap;			///< The space between tabs
-	UWORD			numStats;			///< Number of "stats" (items) in list
-	UWORD			numButtons;			///< Number of buttons per form
-	UWORD			numMajor;			///< Number of major tabs
-	unsigned                maxTabsShown;                   ///< Maximum number of tabs shown at once.
 	const char		*pTip;				///< Tool tip for the form itself
-	TAB_DISPLAY		pTabDisplay;			///< Optional callback for displaying a tab.
 };
 
 /** Label initialisation structure */
@@ -284,15 +254,6 @@ extern const char *widgGetString(W_SCREEN *psScreen, UDWORD id);
 
 /** Set the text in a widget */
 extern void widgSetString(W_SCREEN *psScreen, UDWORD id, const char *pText);
-
-/** Set the current tabs for a tab form */
-void widgSetTabs(W_SCREEN *psScreen, UDWORD id, UWORD major);
-
-/** Get the current tabs for a tab form */
-void widgGetTabs(W_SCREEN *psScreen, UDWORD id, UWORD *pMajor);
-
-/** Get the number of major tab in a tab form. */
-int widgGetNumTabMajor(W_SCREEN *psScreen, UDWORD id);
 
 /** Get the current position of a widget */
 extern void widgGetPos(W_SCREEN *psScreen, UDWORD id, SWORD *pX, SWORD *pY);

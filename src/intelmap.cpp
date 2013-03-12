@@ -590,19 +590,18 @@ static bool intDisplaySeqTextViewPage(VIEW_REPLAY *psViewReplay,
  */
 static void intDisplaySeqTextView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
-	W_TABFORM *Form = (W_TABFORM*)psWidget;
-	VIEW_REPLAY *psViewReplay = (VIEW_REPLAY*)Form->pUserData;
+	VIEW_REPLAY *psViewReplay = (VIEW_REPLAY*)psWidget->pUserData;
 	size_t cur_seq, cur_seqpage;
 
-	int x0 = xOffset + Form->x();
-	int y0 = yOffset + Form->y();
+	int x0 = xOffset + psWidget->x();
+	int y0 = yOffset + psWidget->y();
 
-	RenderWindowFrame(FRAME_NORMAL, x0, y0, Form->width(), Form->height());
+	RenderWindowFrame(FRAME_NORMAL, x0, y0, psWidget->width(), psWidget->height());
 
 	/* work out where we're up to in the text */
 	cur_seq = cur_seqpage = 0;
 
-	intDisplaySeqTextViewPage(psViewReplay, x0, y0, Form->width() - 40, Form->height(), true, &cur_seq, &cur_seqpage);
+	intDisplaySeqTextViewPage(psViewReplay, x0, y0, psWidget->width() - 40, psWidget->height(), true, &cur_seq, &cur_seqpage);
 }
 
 
@@ -1043,8 +1042,7 @@ void intDisplayMessageButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 /* displays the PIE view for the current message */
 void intDisplayPIEView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
-	W_TABFORM		*Form = (W_TABFORM*)psWidget;
-	MESSAGE			*psMessage = (MESSAGE *)Form->pUserData;
+	MESSAGE *psMessage = (MESSAGE *)psWidget->pUserData;
 	SWORD			image = -1;
 	RESEARCH        *psResearch;
 
@@ -1056,15 +1054,15 @@ void intDisplayPIEView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 
 	if (psMessage->pViewData)
 	{
-		int x0 = xOffset + Form->x();
-		int y0 = yOffset + Form->y();
-		int x1 = x0 + Form->width();
-		int y1 = y0 + Form->height();
+		int x0 = xOffset + psWidget->x();
+		int y0 = yOffset + psWidget->y();
+		int x1 = x0 + psWidget->width();
+		int y1 = y0 + psWidget->height();
 
 		//moved from after close render
 		RenderWindowFrame(FRAME_NORMAL, x0 - 1, y0 - 1, x1 - x0 + 2, y1 - y0 + 2);
 
-		OpenButtonRender(xOffset + Form->x(), yOffset + Form->y());
+		OpenButtonRender(xOffset + psWidget->x(), yOffset + psWidget->y());
 
 		if (((VIEWDATA *)psMessage->pViewData)->type != VIEW_RES)
 		{
@@ -1088,9 +1086,7 @@ void intDisplayPIEView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 /* displays the FLIC view for the current message */
 void intDisplayFLICView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
-
-	W_TABFORM		*Form = (W_TABFORM*)psWidget;
-	MESSAGE			*psMessage = (MESSAGE *)Form->pUserData;
+	MESSAGE *psMessage = (MESSAGE *)psWidget->pUserData;
 	VIEW_RESEARCH	*psViewResearch;
 
 	//shouldn't have any proximity messages here...
@@ -1101,12 +1097,12 @@ void intDisplayFLICView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 
 	if (psMessage->pViewData)
 	{
-		OpenButtonRender(xOffset + Form->x(), yOffset + Form->y());
+		OpenButtonRender(xOffset + psWidget->x(), yOffset + psWidget->y());
 
-		int x0 = xOffset + Form->x();
-		int y0 = yOffset + Form->y();
-		int x1 = x0 + Form->width();
-		int y1 = y0 + Form->height();
+		int x0 = xOffset + psWidget->x();
+		int y0 = yOffset + psWidget->y();
+		int x1 = x0 + psWidget->width();
+		int y1 = y0 + psWidget->height();
 
 		if (((VIEWDATA *)psMessage->pViewData)->type != VIEW_RES)
 		{
@@ -1130,13 +1126,12 @@ void intDisplayFLICView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
  */
 void intDisplayTEXTView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
-	W_TABFORM		*Form = (W_TABFORM*)psWidget;
-	MESSAGE			*psMessage = (MESSAGE *)Form->pUserData;
+	MESSAGE *psMessage = (MESSAGE *)psWidget->pUserData;
 
-	int x0 = xOffset + Form->x();
-	int y0 = yOffset + Form->y();
-	int x1 = x0 + Form->width();
-	int y1 = y0 + Form->height();
+	int x0 = xOffset + psWidget->x();
+	int y0 = yOffset + psWidget->y();
+	int x1 = x0 + psWidget->width();
+	int y1 = y0 + psWidget->height();
 	int ty = y0;
 
 	RenderWindowFrame(FRAME_NORMAL, x0, y0, x1 - x0, y1 - y0);
@@ -1157,7 +1152,7 @@ void intDisplayTEXTView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 		for (unsigned i = 0; i < ((VIEWDATA *)psMessage->pViewData)->textMsg.size(); i++)
 		{
 			//check haven't run out of room first!
-			if (i * linePitch > Form->height())
+			if (i * linePitch > psWidget->height())
 			{
 				ASSERT( false, "intDisplayTEXTView: Run out of room!" );
 				return;

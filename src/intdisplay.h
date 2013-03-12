@@ -151,8 +151,6 @@ void intDisplayObjectButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 
 void intDisplayStatsButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 
-void intDisplayStatsForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
-
 /// Form which animates opening/closing.
 struct IntFormAnimated : public W_FORM
 {
