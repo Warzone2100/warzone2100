@@ -138,11 +138,6 @@
 #define POW_Y			(OBJ_BACKY + OBJ_BACKHEIGHT + 6)
 #define POW_BARWIDTH	308
 
-//tab details
-#define OBJ_TABWIDTH	26
-#define OBJ_TABHEIGHT	11
-#define	OBJ_TABOFFSET	2
-
 /* close button data */
 #define CLOSE_WIDTH		15
 #define CLOSE_HEIGHT	15
@@ -310,8 +305,6 @@ extern bool intBuildMode(void);
 
 // add the construction interface if a constructor droid is selected
 void intCommanderSelected(DROID *psDroid);
-
-extern UWORD numForms(UDWORD total, UDWORD perForm);
 
 //sets up the Intelligence Screen as far as the interface is concerned
 extern void addIntelScreen(void);

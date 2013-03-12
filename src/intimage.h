@@ -50,9 +50,6 @@ public:
 
 extern IMAGEFILE *IntImages;	//< All the 2d graphics for the user interface.
 
-// A few useful defined tabs.
-extern TABDEF StandardTab;
-
 bool imageInitBitmaps(void);
 
 /** Draws a transparent window. */

@@ -245,6 +245,7 @@ ListTabWidget::ListTabWidget(WIDGET *parent)
 	: WIDGET(parent)
 	, tabs(new TabSelectionWidget(this))
 	, widgets(new ListWidget(this))
+	, tabPos(Top)
 {
 	connect(tabs, SIGNAL(tabChanged(int)), widgets, SLOT(setCurrentPage(int)));
 	connect(widgets, SIGNAL(currentPageChanged(int)), tabs, SLOT(setTab(int)));
@@ -254,8 +255,17 @@ ListTabWidget::ListTabWidget(WIDGET *parent)
 
 void ListTabWidget::geometryChanged()
 {
-	tabs->setGeometry(0, 0, width(), tabs->height());
-	widgets->setGeometry(0, tabs->height(), width(), height() - tabs->height());
+	switch (tabPos)
+	{
+	case Top:
+		tabs->setGeometry(0, 0, width(), tabs->height());
+		widgets->setGeometry(0, tabs->height(), width(), height() - tabs->height());
+		break;
+	case Bottom:
+		tabs->setGeometry(0, height() - tabs->height(), width(), tabs->height());
+		widgets->setGeometry(0, 0, width(), height() - tabs->height());
+		break;
+	}
 }
 
 void ListTabWidget::addWidgetToLayout(WIDGET *widget)
@@ -266,4 +276,10 @@ void ListTabWidget::addWidgetToLayout(WIDGET *widget)
 		widgets->attach(widget);
 	}
 	widgets->addWidgetToLayout(widget);
+}
+
+void ListTabWidget::setTabPosition(TabPosition pos)
+{
+	tabPos = pos;
+	geometryChanged();
 }

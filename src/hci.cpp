@@ -2679,17 +2679,6 @@ void intAlliedResearchChanged()
 	}
 }
 
-/* Do the annoying calculation for how many forms are needed
- * given the total number of buttons and the number of
- * buttons per page.
- * A simple div just doesn't quite do it....
- */
-UWORD numForms(UDWORD total, UDWORD perForm)
-{
-	return std::max((total + perForm - 1) / perForm, 1u);
-}
-
-
 /* Add the reticule widgets to the widget screen */
 bool intAddReticule()
 {

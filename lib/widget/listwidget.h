@@ -122,6 +122,8 @@ class ListTabWidget : public WIDGET
 	Q_OBJECT
 
 public:
+	enum TabPosition {Top, Bottom};
+
 	ListTabWidget(WIDGET *parent);
 
 	virtual void geometryChanged();
@@ -134,12 +136,15 @@ public:
 	int currentPage() const { return widgets->currentPage(); }
 	int pages() const { return widgets->pages(); }
 
+	void setTabPosition(TabPosition pos);
+
 	TabSelectionWidget *tabWidget() { return tabs; }
 	ListWidget *listWidget() { return widgets; }
 
 private:
 	TabSelectionWidget *tabs;
 	ListWidget *widgets;
+	TabPosition tabPos;
 };
 
 #endif //THISISALISTWIDGET_H

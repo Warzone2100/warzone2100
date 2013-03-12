@@ -1437,24 +1437,6 @@ void intDisplayReticuleButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	psWidget->UserData = PACKDWORD_QUAD(flashTime, flashing, DownTime, Index);
 }
 
-
-void intDisplayTab(WIDGET *psWidget, UDWORD Position,
-        UDWORD Number, bool Selected, bool Hilight, UDWORD x, UDWORD y, UDWORD Width, UDWORD Height)
-{
-	TABDEF *Tab = (TABDEF *)psWidget->pUserData;
-
-	iV_DrawImage(IntImages, (UWORD)Tab->MajorUp, x, y);
-
-	if (Hilight)
-	{
-		iV_DrawImage(IntImages, (UWORD)Tab->MajorHilight, x, y);
-	}
-	else if (Selected)
-	{
-		iV_DrawImage(IntImages, (UWORD)Tab->MajorSelected, x, y);
-	}
-}
-
 // Display one of three images depending on if the widget is currently depressed (ah!).
 //
 void intDisplayButtonPressed(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)

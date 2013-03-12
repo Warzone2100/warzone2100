@@ -76,7 +76,6 @@
 #define IDINTMAP_FLICVIEW		6008	//The Flic View part of MSGVIEW
 #define IDINTMAP_TEXTVIEW		6009	//The Text area of MSGVIEW
 #define	IDINTMAP_TITLELABEL		6010	//The title text
-#define IDINTMAP_SEQTEXT		6011	//Sequence subtitle text
 
 #define IDINTMAP_MSGSTART		6100	//The first button on the intelligence form
 #define	IDINTMAP_MSGEND			6139	//The last button on the intelligence form (40 MAX)
@@ -95,9 +94,7 @@
 #define INTMAP_LABELHEIGHT		20
 
 /*tabbed message form screen positions */
-#define INTMAP_MSGX				OBJ_TABX
 #define INTMAP_MSGY				OBJ_TABY
-#define INTMAP_MSGWIDTH			OBJ_WIDTH
 #define INTMAP_MSGHEIGHT		OBJ_HEIGHT
 
 //define the 3D View sizes and positions that are required - relative to INTMAP_FORM
@@ -265,81 +262,24 @@ bool intAddIntelMap(void)
 /* Add the Message sub form */
 static bool intAddMessageForm(bool playCurrent)
 {
-	UDWORD                  numButtons;
-	MESSAGE			*psMessage;
-	RESEARCH		*psResearch;
-	SDWORD			BufferID;
+	WIDGET *msgForm = widgGetFromID(psWScreen, IDINTMAP_FORM);
 
 	/* Add the Message form */
-	W_FORMINIT sFormInit;
-	sFormInit.formID = IDINTMAP_FORM;
-	sFormInit.id = IDINTMAP_MSGFORM;
-	sFormInit.style = WFORM_TABBED;
-	sFormInit.width = INTMAP_MSGWIDTH;
-	sFormInit.height = INTMAP_MSGHEIGHT;
-	sFormInit.x = INTMAP_MSGX;
-	sFormInit.y = INTMAP_MSGY;
-
-	sFormInit.majorPos = WFORM_TABTOP;
-	sFormInit.majorSize = OBJ_TABWIDTH;
-	sFormInit.majorOffset = OBJ_TABOFFSET;
-	sFormInit.tabVertOffset = (OBJ_TABHEIGHT/2);
-	sFormInit.tabMajorThickness = OBJ_TABHEIGHT;
-
-	numButtons = 0;
-	/*work out the number of buttons */
-	for(psMessage = apsMessages[selectedPlayer]; psMessage; psMessage =
-		psMessage->psNext)
-	{
-		//ignore proximity messages here
-		if (psMessage->type != MSG_PROXIMITY)
-		{
-			numButtons++;
-		}
-
-		// stop adding the buttons once max has been reached
-		if (numButtons > (IDINTMAP_MSGEND - IDINTMAP_MSGSTART))
-		{
-			break;
-		}
-	}
-
-	//set the number of tabs required
-	sFormInit.numMajor = numForms((OBJ_BUTWIDTH + OBJ_GAP) * numButtons,
-								  (OBJ_WIDTH - OBJ_GAP)*2);
-
-	sFormInit.pUserData = &StandardTab;
-	sFormInit.pTabDisplay = intDisplayTab;
-
-	if (sFormInit.numMajor > MAX_TAB_STD_SHOWN)
-	{	// we do NOT use smallTab icons here, so be safe and only display max # of
-		// standard sized tab icons.
-		sFormInit.numMajor = MAX_TAB_STD_SHOWN;
-	}
-
-	if (!widgAddForm(psWScreen, &sFormInit))
-	{
-		return false;
-	}
-
+	IntListTabWidget *msgList = new IntListTabWidget(msgForm);
+	msgList->id = IDINTMAP_MSGFORM;
+	msgList->setChildSize(OBJ_BUTWIDTH, OBJ_BUTHEIGHT);
+	msgList->setChildSpacing(OBJ_GAP, OBJ_GAP);
+	int msgListWidth = OBJ_BUTWIDTH*5 + OBJ_GAP*4;
+	msgList->setGeometry((msgForm->width() - msgListWidth)/2, INTMAP_MSGY, msgListWidth, msgForm->height() - INTMAP_MSGY);
 
 	/* Add the message buttons */
-	W_FORMINIT sBFormInit;
-	sBFormInit.formID = IDINTMAP_MSGFORM;
-	sBFormInit.id = IDINTMAP_MSGSTART;
-	sBFormInit.majorID = 0;
-	sBFormInit.style = WFORM_CLICKABLE;
-	sBFormInit.x = OBJ_STARTX;
-	sBFormInit.y = OBJ_STATSTARTY;
-	sBFormInit.width = OBJ_BUTWIDTH;
-	sBFormInit.height = OBJ_BUTHEIGHT;
+	int nextButtonId = IDINTMAP_MSGSTART;
 
 	ClearObjectBuffers();
 
 	//add each button
 	messageID = 0;
-	for(psMessage = apsMessages[selectedPlayer]; psMessage; psMessage =
-		psMessage->psNext)
+	for (MESSAGE *psMessage = apsMessages[selectedPlayer]; psMessage != nullptr; psMessage = psMessage->psNext)
 	{
 		/*if (psMessage->type == MSG_TUTORIAL)
 		{
@@ -353,72 +293,57 @@ static bool intAddMessageForm(bool playCurrent)
 			continue;
 		}
 
+		W_CLICKFORM *button = new W_CLICKFORM(msgList);
+		button->id = nextButtonId;
+		button->displayFunction = intDisplayMessageButton;
+		msgList->addWidgetToLayout(button);
+
 		/* Set the tip and add the button */
+		RESEARCH *psResearch;
 		switch (psMessage->type)
 		{
 			case MSG_RESEARCH:
-				psResearch =  getResearchForMsg((VIEWDATA *)psMessage->pViewData);
+				psResearch = getResearchForMsg((VIEWDATA *)psMessage->pViewData);
 				if (psResearch)
 				{
-					sBFormInit.pTip = getStatName(psResearch);;
+					button->setTip(getStatName(psResearch));
 				}
 				else
 				{
-					sBFormInit.pTip = _("Research Update");
+					button->setTip(_("Research Update"));
 				}
 				break;
 			case MSG_CAMPAIGN:
-				sBFormInit.pTip = _("Project Goals");
+				button->setTip(_("Project Goals"));
 				break;
 			case MSG_MISSION:
-				sBFormInit.pTip = _("Current Objective");
+				button->setTip(_("Current Objective"));
 				break;
 			default:
 				break;
 		}
 
-		BufferID = GetObjectBuffer();
+		int BufferID = GetObjectBuffer();
 		ASSERT( BufferID >= 0,"Unable to acquire object buffer." );
 		RENDERBUTTON_INUSE(&ObjectBuffers[BufferID]);
 		ObjectBuffers[BufferID].Data = (void*)psMessage;
-		sBFormInit.pUserData = &ObjectBuffers[BufferID];
-		sBFormInit.pDisplay = intDisplayMessageButton;
-
-		if (!widgAddForm(psWScreen, &sBFormInit))
-		{
-			return false;
-		}
+		button->pUserData = &ObjectBuffers[BufferID];
 
 		/* if the current message matches psSelected lock the button */
 		if (psMessage == psCurrentMsg)
 		{
-			messageID = sBFormInit.id;
-			widgSetButtonState(psWScreen, messageID, WBUT_LOCK);
-			widgSetTabs(psWScreen, IDINTMAP_MSGFORM, sBFormInit.majorID);
+			messageID = nextButtonId;
+			button->setState(WBUT_LOCK);
+			msgList->setCurrentPage(msgList->pages() - 1);
 		}
 
 		/* Update the init struct for the next button */
-		sBFormInit.id += 1;
+		++nextButtonId;
 
 		// stop adding the buttons when at max
-		if (sBFormInit.id > IDINTMAP_MSGEND)
+		if (nextButtonId > IDINTMAP_MSGEND)
 		{
 			break;
-		}
-
-		ASSERT( sBFormInit.id < (IDINTMAP_MSGEND+1),"Too many message buttons" );
-
-		sBFormInit.x += OBJ_BUTWIDTH + OBJ_GAP;
-		if (sBFormInit.x + OBJ_BUTWIDTH + OBJ_GAP > INTMAP_MSGWIDTH)
-		{
-			sBFormInit.x = OBJ_STARTX;
-			sBFormInit.y += OBJ_BUTHEIGHT + OBJ_GAP;
-		}
-
-		if (sBFormInit.y + OBJ_BUTHEIGHT + OBJ_GAP > INTMAP_MSGHEIGHT)
-		{
-			sBFormInit.y = OBJ_STATSTARTY;
-			sBFormInit.majorID += 1;
 		}
 	}
 	//check to play current message instantly
@@ -480,65 +405,27 @@ bool intAddMessageView(MESSAGE * psMessage)
 	    ((VIEWDATA*)psMessage->pViewData)->type == VIEW_RPL)
 	{
 		VIEW_REPLAY	*psViewReplay;
-		size_t		i, cur_seq, cur_seqpage;
 
 		psViewReplay = (VIEW_REPLAY *)((VIEWDATA *)psMessage->pViewData)->pData;
 
 		/* Add a big tabbed text box for the subtitle text */
-		W_FORMINIT sFormInit;
-		sFormInit.id = IDINTMAP_SEQTEXT;
-		sFormInit.formID = IDINTMAP_MSGVIEW;
-		sFormInit.style = WFORM_TABBED;
-		sFormInit.x = INTMAP_SEQTEXTX;
-		sFormInit.y = INTMAP_SEQTEXTY;
-		sFormInit.width = INTMAP_SEQTEXTWIDTH;
-		sFormInit.height = INTMAP_SEQTEXTHEIGHT;
+		IntListTabWidget *seqList = new IntListTabWidget(intMapMsgView);
+		seqList->setChildSize(INTMAP_SEQTEXTTABWIDTH, INTMAP_SEQTEXTTABHEIGHT);
+		seqList->setChildSpacing(2, 2);
+		seqList->setGeometry(INTMAP_SEQTEXTX, INTMAP_SEQTEXTY, INTMAP_SEQTEXTWIDTH, INTMAP_SEQTEXTHEIGHT);
+		seqList->setTabPosition(ListTabWidget::Bottom);
+		// Don't think the tabs are actually ever used...
 
-		sFormInit.majorPos = WFORM_TABBOTTOM;
-		sFormInit.majorSize = OBJ_TABWIDTH;
-		sFormInit.majorOffset = OBJ_TABOFFSET;
-		sFormInit.tabVertOffset = (OBJ_TABHEIGHT/2);
-		sFormInit.tabMajorThickness = OBJ_TABHEIGHT;
-
-		sFormInit.numMajor = 0;
-
-		cur_seq = cur_seqpage = 0;
+		size_t cur_seq = 0, cur_seqpage = 0;
+		int nextPageId = IDINTMAP_SEQTEXTSTART;
 		do {
-			sFormInit.numMajor++;
+			W_FORM *page = new W_FORM(seqList);
+			page->id = nextPageId++;
+			page->displayFunction = intDisplaySeqTextView;
+			page->pUserData = psViewReplay;
+			seqList->addWidgetToLayout(page);
 		}
-		while (!intDisplaySeqTextViewPage(psViewReplay, 0, 0,
-						  sFormInit.width, sFormInit.height,
-						  false, &cur_seq, &cur_seqpage));
-
-		sFormInit.pUserData = &StandardTab;
-		sFormInit.pTabDisplay = intDisplayTab;
-
-		if (!widgAddForm(psWScreen, &sFormInit))
-		{
-			return false;
-		}
-
-		W_FORMINIT sTabForm;
-		sTabForm.formID = IDINTMAP_SEQTEXT;
-		sTabForm.id = IDINTMAP_SEQTEXTSTART;
-		sTabForm.majorID = 0;
-		sTabForm.style = WFORM_PLAIN;
-		sTabForm.x = INTMAP_SEQTEXTTABX;
-		sTabForm.y = INTMAP_SEQTEXTTABY;
-		sTabForm.width = INTMAP_SEQTEXTTABWIDTH;
-		sTabForm.height = INTMAP_SEQTEXTTABHEIGHT;
-		sTabForm.pDisplay = intDisplaySeqTextView;
-		sTabForm.pUserData = psViewReplay;
-
-		for (i = 0; i < sFormInit.numMajor; i++)
-		{
-			sTabForm.id = IDINTMAP_SEQTEXTSTART + i;
-			sTabForm.majorID = i;
-			if (!widgAddForm(psWScreen, &sTabForm))
-			{
-				return false;
-			}
-		}
+		while (!intDisplaySeqTextViewPage(psViewReplay, 0, 0, INTMAP_SEQTEXTTABWIDTH, INTMAP_SEQTEXTHEIGHT, false, &cur_seq, &cur_seqpage));
 
 		return true;
 	}

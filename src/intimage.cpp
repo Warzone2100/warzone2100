@@ -144,14 +144,6 @@ IMAGEFRAME FrameRadar = {
 	{FR_IGNORE, 0,0, 0,0 ,0}},
 };
 
-// Tab definitions, defines graphics to use for major and minor tabs.
-TABDEF	StandardTab = {
-	IMAGE_TAB1,			// Major tab normal.
-	IMAGE_TAB1DOWN,		// Major tab clicked.
-	IMAGE_TABHILIGHT,	// Major tab hilighted by mouse.
-	IMAGE_TABSELECTED,	// Major tab currently selected.
-};
-
 // Read bitmaps used by the interface.
 //
 bool imageInitBitmaps(void)
