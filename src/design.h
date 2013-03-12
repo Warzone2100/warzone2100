@@ -27,7 +27,6 @@
 /* Design screen ID's */
 #define IDDES_FORM			5000		// The base form for the design screen
 #define IDDES_STATSFORM		5001		// The design screen stats form
-#define IDDES_TEMPLFORM		5002		// The tabbed form of design templates
 #define IDDES_SYSTEMFORM	5006		// The clickable form for the weapon/ecm/sensor
 #define IDDES_BODYFORM		5007		// The clickable form for the body
 #define IDDES_PROPFORM		5008		// The clickable form for the propulsion

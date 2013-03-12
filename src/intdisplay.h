@@ -61,19 +61,11 @@ enum {
 };
 
 #define RENDERBUTTON_INUSE(x)  ((x)->InUse=true)
-#define RENDERBUTTON_NOTINUSE(x)  ((x)->InUse=false)
-
-#define RENDERBUTTON_INITIALISED(x)  ((x)->Initialised=true)
-#define RENDERBUTTON_NOTINITIALISED(x)  ((x)->Initialised=false)
-
-#define IsBufferInUse(x) ((x)->InUse)
 
 struct RENDERED_BUTTON
 {
 	bool InUse;			// Is it in use.
-	bool Initialised;	// Is it initialised.
 	SDWORD ImdRotation;	// Rotation if button is an IMD.
-	UDWORD State;		// Copy of widget's state so we know if state has changed.
 	void *Data;			// Any data we want to attach.
 	void *Data2;		// Any data we want to attach.
 };
@@ -105,12 +97,6 @@ void ClearObjectButtonBuffer(SDWORD BufferID);
 
 // Clear ( make unused ) a RENDERED_BUTTON structure.
 void ClearTopicButtonBuffer(SDWORD BufferID);
-
-void RefreshObjectButtons(void);
-void RefreshSystem0Buttons(void);
-void RefreshTopicButtons(void);
-void RefreshStatsButtons(void);
-
 
 // Get a free RENDERED_BUTTON structure for a stat window button.
 SDWORD GetStatBuffer(void);

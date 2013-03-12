@@ -1270,20 +1270,6 @@ INT_RETVAL intRunWidgets(void)
 			quitting = true;
 			break;
 
-		// Process form tab clicks.
-		case IDOBJ_TABFORM:		// If tab clicked on in object screen then refresh all rendered buttons.
-			RefreshObjectButtons();
-			RefreshTopicButtons();
-			break;
-
-		case IDSTAT_TABFORM:	// If tab clicked on in stats screen then refresh all rendered buttons.
-			RefreshStatsButtons();
-			break;
-
-		case IDDES_TEMPLFORM:	// If tab clicked on in design template screen then refresh all rendered buttons.
-			RefreshStatsButtons();
-			break;
-
 			/* Default case passes remaining IDs to appropriate function */
 		default:
 			switch (intMode)

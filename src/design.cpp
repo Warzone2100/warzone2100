@@ -800,7 +800,6 @@ static bool _intAddTemplateForm(DROID_TEMPLATE *psSelected)
 
 	/* Add the design templates form */
 	IntListTabWidget *templList = new IntListTabWidget(templbaseForm);
-	templList->id = IDDES_TEMPLFORM;
 	templList->setChildSize(DES_TABBUTWIDTH, DES_TABBUTHEIGHT);
 	templList->setChildSpacing(DES_TABBUTGAP, DES_TABBUTGAP);
 	int templListWidth = OBJ_BUTWIDTH*2 + DES_TABBUTGAP;
@@ -2983,7 +2982,6 @@ void intRemoveDesign(void)
 
 	widgDelete(psWScreen, IDDES_POWERFORM);
 	widgDelete(psWScreen, IDDES_NAMEBOX);
-	widgDelete(psWScreen, IDDES_TEMPLFORM);
 	widgDelete(psWScreen, IDDES_TEMPLBASE);
 	widgDelete(psWScreen, IDDES_RIGHTBASE);
 
@@ -3594,7 +3592,6 @@ void intProcessDesign(UDWORD id)
 					desSetupDesignTemplates();
 
 					/* Now update the droid template form */
-					widgDelete(psWScreen, IDDES_TEMPLFORM);
 					widgDelete(psWScreen, IDDES_TEMPLBASE);
 					intAddTemplateForm(psTempl);
 
@@ -4062,7 +4059,6 @@ static bool saveTemplate(void)
 	sstrcpy(psTempl->aName, aCurrName);
 
 	/* Now update the droid template form */
-	widgDelete(psWScreen, IDDES_TEMPLFORM);
 	widgDelete(psWScreen, IDDES_TEMPLBASE);
 	intAddTemplateForm(psTempl);
 

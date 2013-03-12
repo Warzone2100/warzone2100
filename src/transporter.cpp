@@ -58,9 +58,7 @@
 #include "qtscript.h"
 
 //#define IDTRANS_FORM			9000	//The Transporter base form
-#define IDTRANS_TABFORM			9001	//The Transporter tabbed form
 #define IDTRANS_CLOSE			9002	//The close button icon
-#define	IDTRANS_CONTABFORM		9004	//The Transporter Contents tabbed form
 #define IDTRANS_CONTCLOSE		9005	//The close icon on the Contents form
 #define IDTRANS_DROIDTAB		9007	//The Droid tab form
 #define IDTRANS_DROIDCLOSE		9008	//The close icon for the Droid form
@@ -427,7 +425,6 @@ bool intAddTransButtonForm(void)
 
 	/* Add the button form */
 	IntListTabWidget *transList = new IntListTabWidget(transForm);
-	transList->id = IDTRANS_TABFORM;
 	transList->setChildSize(OBJ_BUTWIDTH, OBJ_BUTHEIGHT*2);
 	transList->setChildSpacing(OBJ_GAP, OBJ_GAP);
 	int objListWidth = OBJ_BUTWIDTH*5 + OBJ_GAP*4;
@@ -509,7 +506,6 @@ bool intAddTransContentsForm(void)
 
 	/* Add the contents form */
 	IntListTabWidget *contList = new IntListTabWidget(contForm);
-	contList->id = IDTRANS_CONTABFORM;
 	contList->setChildSize(OBJ_BUTWIDTH, OBJ_BUTHEIGHT);
 	contList->setChildSpacing(OBJ_GAP, OBJ_GAP);
 	int contListWidth = OBJ_BUTWIDTH*2 + OBJ_GAP;
@@ -804,23 +800,6 @@ static void _intProcessTransporter(UDWORD id)
 			/*don't need to explicitly refresh here since intRefreshScreen()
 			is called by intTransporterAddDroid()*/
 		}
-	}
-	// Process form tab clicks.
-	else if (id == IDTRANS_TABFORM)
-	{
-		//If tab clicked on Transporter screen then refresh rendered buttons.
-		RefreshObjectButtons();
-		RefreshTopicButtons();
-	}
-	else if (id == IDTRANS_CONTABFORM)
-	{
-		//If tab clicked on Transporter Contents screen then refresh rendered buttons.
-		RefreshStatsButtons();
-	}
-	else if (id == IDTRANS_DROIDTAB)
-	{
-		//If tab clicked on Droids Available screen then refresh rendered buttons.
-		RefreshSystem0Buttons();
 	}
 }
 

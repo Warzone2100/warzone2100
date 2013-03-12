@@ -669,8 +669,6 @@ void intDisplayStatusButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 		Buffer->ImdRotation += realTimeAdjustedAverage(BUTTONOBJ_ROTSPEED);
 	}
 
-	Buffer->State = Form->state;
-
 	Object = NULL;
 	Image = -1;
 	psObj = (BASE_OBJECT *)Buffer->Data;	// Get the object associated with this widget.
@@ -698,7 +696,6 @@ void intDisplayStatusButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 				{
 					Object = Structure;
 					IMDType = IMDTYPE_STRUCTURE;
-					RENDERBUTTON_INITIALISED(Buffer);
 				}
 			}
 			else if (DroidGoingToBuild(Droid))
@@ -708,7 +705,6 @@ void intDisplayStatusButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 				Object = (void *)Stats;
 				Player = selectedPlayer;
 				IMDType = IMDTYPE_STRUCTURESTAT;
-				RENDERBUTTON_INITIALISED(Buffer);
 			}
 			else if (orderState(Droid, DORDER_DEMOLISH))
 			{
@@ -717,7 +713,6 @@ void intDisplayStatusButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 				Object = (void *)Stats;
 				Player = selectedPlayer;
 				IMDType = IMDTYPE_STRUCTURESTAT;
-				RENDERBUTTON_INITIALISED(Buffer);
 			}
 			else if (Droid->droidType == DROID_COMMAND)
 			{
@@ -726,7 +721,6 @@ void intDisplayStatusButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 				{
 					Object = Structure;
 					IMDType = IMDTYPE_STRUCTURE;
-					RENDERBUTTON_INITIALISED(Buffer);
 				}
 			}
 			break;
@@ -742,7 +736,6 @@ void intDisplayStatusButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 				{
 					IMDType = IMDTYPE_DROIDTEMPLATE;
 					Object = (void *)FactoryGetTemplate(StructureGetFactory(Structure));
-					RENDERBUTTON_INITIALISED(Buffer);
 					bOnHold = StructureIsOnHoldPending(Structure);
 				}
 
@@ -800,7 +793,6 @@ void intDisplayStatusButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 							IMDType = IMDTYPE_RESEARCH;
 						}
 					}
-					RENDERBUTTON_INITIALISED(Buffer);
 				}
 				break;
 			default:
@@ -811,10 +803,6 @@ void intDisplayStatusButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 		default:
 			ASSERT(false, "Invalid structure type");
 		}
-	}
-	else
-	{
-		RENDERBUTTON_INITIALISED(Buffer);
 	}
 
 	// Render the object into the button.
@@ -880,8 +868,6 @@ void intDisplayObjectButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 		Buffer->ImdRotation += realTimeAdjustedAverage(BUTTONOBJ_ROTSPEED);
 	}
 
-	Buffer->State = Form->state;
-
 	Object = NULL;
 	psObj = (BASE_OBJECT *)Buffer->Data;	// Get the object associated with this widget.
 
@@ -920,8 +906,6 @@ void intDisplayObjectButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 		RenderBlankToButton(Buffer, Down, BTMBUTTON);
 	}
 
-	RENDERBUTTON_INITIALISED(Buffer);
-
 	if (Hilight)
 	{
 
@@ -951,8 +935,6 @@ void intDisplayStatsButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	{
 		Buffer->ImdRotation += realTimeAdjustedAverage(BUTTONOBJ_ROTSPEED);
 	}
-
-	Buffer->State = Form->state;
 
 	Object = NULL;
 	Image = -1;
@@ -1076,11 +1058,8 @@ void intDisplayStatsButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 		RenderBlankToButton(Buffer, Down, TOPBUTTON);
 	}
 
-	RENDERBUTTON_INITIALISED(Buffer);
-
 	if (Hilight)
 	{
-
 		iV_DrawImage(IntImages, IMAGE_BUT_HILITE, xOffset + Form->x(), yOffset + Form->y());
 	}
 }
@@ -1584,47 +1563,6 @@ void intInitialiseGraphics(void)
 	imageInitBitmaps();
 }
 
-void RefreshObjectButtons(void)
-{
-	UDWORD i;
-
-	for (i = 0; i < NUM_OBJECTBUFFERS; i++)
-	{
-		RENDERBUTTON_NOTINITIALISED(&ObjectBuffers[i]);
-	}
-}
-
-void RefreshSystem0Buttons(void)
-{
-	UDWORD i;
-
-	for (i = 0; i < NUM_SYSTEM0BUFFERS; i++)
-	{
-		RENDERBUTTON_NOTINITIALISED(&System0Buffers[i]);
-	}
-}
-void RefreshTopicButtons(void)
-{
-	UDWORD i;
-
-	for (i = 0; i < NUM_TOPICBUFFERS; i++)
-	{
-		RENDERBUTTON_NOTINITIALISED(&TopicBuffers[i]);
-	}
-}
-
-
-void RefreshStatsButtons(void)
-{
-	UDWORD i;
-
-	for (i = 0; i < NUM_STATBUFFERS; i++)
-	{
-		RENDERBUTTON_NOTINITIALISED(&StatBuffers[i]);
-	}
-}
-
-
 void ClearObjectBuffers(void)
 {
 	UDWORD i;
@@ -1647,8 +1585,7 @@ void ClearTopicBuffers(void)
 
 void ClearObjectButtonBuffer(SDWORD BufferID)
 {
-	RENDERBUTTON_NOTINITIALISED(&ObjectBuffers[BufferID]);	//  what have I done
-	RENDERBUTTON_NOTINUSE(&ObjectBuffers[BufferID]);
+	ObjectBuffers[BufferID].InUse = false;
 	ObjectBuffers[BufferID].Data = NULL;
 	ObjectBuffers[BufferID].Data2 = NULL;
 	ObjectBuffers[BufferID].ImdRotation = DEFAULT_BUTTON_ROTATION;
@@ -1656,8 +1593,7 @@ void ClearObjectButtonBuffer(SDWORD BufferID)
 
 void ClearTopicButtonBuffer(SDWORD BufferID)
 {
-	RENDERBUTTON_NOTINITIALISED(&TopicBuffers[BufferID]);	//  what have I done
-	RENDERBUTTON_NOTINUSE(&TopicBuffers[BufferID]);
+	TopicBuffers[BufferID].InUse = false;
 	TopicBuffers[BufferID].Data = NULL;
 	TopicBuffers[BufferID].Data2 = NULL;
 	TopicBuffers[BufferID].ImdRotation = DEFAULT_BUTTON_ROTATION;
@@ -1669,7 +1605,7 @@ SDWORD GetObjectBuffer(void)
 
 	for (i = 0; i < NUM_OBJECTBUFFERS; i++)
 	{
-		if (IsBufferInUse(&ObjectBuffers[i]) == false)
+		if (!ObjectBuffers[i].InUse)
 		{
 			return i;
 		}
@@ -1684,8 +1620,7 @@ void ClearStatBuffers(void)
 
 	for (i = 0; i < NUM_STATBUFFERS; i++)
 	{
-		RENDERBUTTON_NOTINITIALISED(&StatBuffers[i]);	//  what have I done
-		RENDERBUTTON_NOTINUSE(&StatBuffers[i]);
+		StatBuffers[i].InUse = false;
 		StatBuffers[i].Data = NULL;
 		StatBuffers[i].ImdRotation = DEFAULT_BUTTON_ROTATION;
 	}
@@ -1697,7 +1632,7 @@ SDWORD GetStatBuffer(void)
 
 	for (i = 0; i < NUM_STATBUFFERS; i++)
 	{
-		if (IsBufferInUse(&StatBuffers[i]) == false)
+		if (!StatBuffers[i].InUse)
 		{
 			return i;
 		}
@@ -1720,8 +1655,7 @@ void ClearSystem0Buffers(void)
 
 void ClearSystem0ButtonBuffer(SDWORD BufferID)
 {
-	RENDERBUTTON_NOTINITIALISED(&System0Buffers[BufferID]);	//  what have I done
-	RENDERBUTTON_NOTINUSE(&System0Buffers[BufferID]);
+	System0Buffers[BufferID].InUse = false;
 	System0Buffers[BufferID].Data = NULL;
 	System0Buffers[BufferID].Data2 = NULL;
 	System0Buffers[BufferID].ImdRotation = DEFAULT_BUTTON_ROTATION;
@@ -1733,7 +1667,7 @@ SDWORD GetSystem0Buffer(void)
 
 	for (i = 0; i < NUM_SYSTEM0BUFFERS; i++)
 	{
-		if (IsBufferInUse(&System0Buffers[i]) == false)
+		if (!System0Buffers[i].InUse)
 		{
 			return i;
 		}
@@ -2641,8 +2575,6 @@ void intDisplayTransportButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 		Buffer->ImdRotation += realTimeAdjustedAverage(BUTTONOBJ_ROTSPEED);
 	}
 
-	Buffer->State = Form->state;
-
 	if (psDroid)
 	{
 		RenderToButton(NULL, 0, psDroid, psDroid->player, Buffer, Down, IMDTYPE_DROID, TOPBUTTON);
@@ -2651,7 +2583,6 @@ void intDisplayTransportButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	{
 		RenderBlankToButton(Buffer, Down, TOPBUTTON);
 	}
-	RENDERBUTTON_INITIALISED(Buffer);
 
 	if (Hilight)
 	{
