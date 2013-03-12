@@ -343,7 +343,8 @@ static UDWORD			desCompID;
 static UDWORD			droidTemplID;
 
 /* The current design being edited on the design screen */
-DROID_TEMPLATE			sCurrDesign;
+static DROID_TEMPLATE sCurrDesign;
+static bool haveCurrentDesign = false;
 
 static void intDisplayStatForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 static void intDisplayViewForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
@@ -400,7 +401,7 @@ static bool _intAddDesign(bool bShowCentreScreen)
 		return false;
 	}
 
-	CurrentStatsTemplate = NULL;
+	haveCurrentDesign = false;
 
 	/* Initialise the current design */
 	sCurrDesign = sDefaultDesignTemplate;
@@ -2971,7 +2972,7 @@ static void desCreateDefaultTemplate(void)
 	intSetDesignStats(&sCurrDesign);
 	widgDelete(psWScreen, IDDES_SYSTEMFORM);
 	desSysMode = IDES_NOSYSTEM;
-	CurrentStatsTemplate = (BASE_STATS *) &sCurrDesign;
+	haveCurrentDesign = true;
 }
 
 /* Remove the design widgets from the widget screen */
@@ -3955,7 +3956,7 @@ static void intDisplayViewForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 
 	RenderWindowFrame(FRAME_NORMAL, x0, y0, x1 - x0, y1 - y0);
 
-	if (CurrentStatsTemplate)
+	if (haveCurrentDesign)
 	{
 		pie_SetGeometricOffset((DES_CENTERFORMX + DES_3DVIEWX) + (DES_3DVIEWWIDTH / 2),
 		                       (DES_CENTERFORMY + DES_3DVIEWY) + (DES_3DVIEWHEIGHT / 4) + 32);
@@ -3973,13 +3974,12 @@ static void intDisplayViewForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 		Position.y = -100;
 		Position.z = BUTTON_DEPTH;
 
-		templateRadius = (SWORD)(getComponentDroidTemplateRadius((DROID_TEMPLATE *)
-		                                                         CurrentStatsTemplate));
+		templateRadius = getComponentDroidTemplateRadius(&sCurrDesign);
 		//scale the object around the OBJECT_RADIUS so that half size objects are draw are draw 75% the size of normal objects
 		falseScale = (DESIGN_DROID_SCALE * OBJECT_RADIUS) / templateRadius;
 
 		//display large droid view in the design screen
-		displayComponentButtonTemplate((DROID_TEMPLATE *)&sCurrDesign, &Rotation, &Position, true, falseScale);
+		displayComponentButtonTemplate(&sCurrDesign, &Rotation, &Position, true, falseScale);
 	}
 }
 
@@ -3992,10 +3992,7 @@ void intDisplayTemplateButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 
 static void intDisplayComponentButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
-	BASE_STATS *OldCurStatsTemplate = CurrentStatsTemplate;
-
 	intDisplayStatsButton(psWidget, xOffset, yOffset);
-	CurrentStatsTemplate = OldCurStatsTemplate;
 }
 
 /* General display window for the design form  SOLID BACKGROUND - NOT TRANSPARENT*/

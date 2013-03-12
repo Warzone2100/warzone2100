@@ -93,8 +93,6 @@ static int FormCloseAudioID; // ID of sfx to play when form closes.
 static int FormOpenCount;	// Count used to ensure only one sfx played when two forms opening.
 static int FormCloseCount;	// Count used to ensure only one sfx played when two forms closeing.
 
-BASE_STATS *CurrentStatsTemplate = NULL;
-
 #define	DEFAULT_BUTTON_ROTATION (45)
 
 static UDWORD ManuPower = 0;	// Power required to manufacture the current item.
@@ -1022,19 +1020,12 @@ void intDisplayStatsButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 				}
 			}
 		}
-
-		if (Down)
-		{
-			CurrentStatsTemplate = Stat;
-		}
-
 	}
 	else
 	{
 		IMDType = IMDTYPE_COMPONENT;
 		//BLANK button for now - AB 9/1/98
 		Object = NULL;
-		CurrentStatsTemplate = NULL;
 	}
 
 

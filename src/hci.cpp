@@ -310,10 +310,6 @@ COMPONENT_STATS	**apsExtraSysList;
 // store the objects that are being used for the object bar
 std::vector<BASE_OBJECT *> apsObjectList;
 
-
-/* The current design being edited on the design screen */
-extern DROID_TEMPLATE	sCurrDesign;
-
 /* Flags to check whether the power bars are currently on the screen */
 static bool				powerBarUp = false;
 static bool				StatsUp = false;

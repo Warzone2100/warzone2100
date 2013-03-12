@@ -75,8 +75,6 @@ extern RENDERED_BUTTON ObjectBuffers[NUM_OBJECTBUFFERS];
 extern RENDERED_BUTTON StatBuffers[NUM_STATBUFFERS];
 extern RENDERED_BUTTON System0Buffers[NUM_SYSTEM0BUFFERS];
 
-extern BASE_STATS *CurrentStatsTemplate;
-
 // Set audio IDs for form opening/closing anims.
 void SetFormAudioIDs(int OpenID,int CloseID);
 
