@@ -217,3 +217,13 @@ void W_CLICKFORM::setTip(QString string)
 {
 	pTip = string;
 }
+
+bool W_CLICKFORM::isDown() const
+{
+	return (state & (WBUT_DOWN | WBUT_LOCK | WBUT_CLICKLOCK)) != 0;
+}
+
+bool W_CLICKFORM::isHighlighted() const
+{
+	return (state & WBUT_HIGHLIGHT) != 0;
+}

@@ -928,21 +928,15 @@ IntMessageButton::IntMessageButton(WIDGET *parent)
 /*Displays the buttons used on the intelligence map */
 void IntMessageButton::display(int xOffset, int yOffset)
 {
-	int image = -1;
 	RESEARCH		*pResearch = NULL;
 	bool MovieButton = false;
-
-	OpenButtonRender(xOffset + x(), yOffset + y());
-
-	bool isDown = (getState() & (WBUT_DOWN | WBUT_CLICKLOCK)) != 0;
-	bool isHighlighted = (getState() & WBUT_HIGHLIGHT) != 0;
 
 	doRotation();
 
 	ImdObject object;
 
-	// Get the object associated with this widget.
-	ASSERT_OR_RETURN( , psMsg != NULL, "psBuffer->Data empty. Why?" );
+	Image image;
+
 	//shouldn't have any proximity messages here...
 	if (psMsg->type == MSG_PROXIMITY)
 	{
@@ -985,11 +979,11 @@ void IntMessageButton::display(int xOffset, int yOffset)
 		}
 		break;
 	case MSG_CAMPAIGN:
-		image = IMAGE_INTEL_CAMPAIGN;
+		image = Image(IntImages, IMAGE_INTEL_CAMPAIGN);
 		MovieButton = true;
 		break;
 	case MSG_MISSION:
-		image = IMAGE_INTEL_MISSION;
+		image = Image(IntImages, IMAGE_INTEL_MISSION);
 		MovieButton = true;
 		break;
 	default:
@@ -1002,38 +996,20 @@ void IntMessageButton::display(int xOffset, int yOffset)
 	{
 		if (pResearch->iconID != NO_RESEARCH_ICON)
 		{
-			image = pResearch->iconID;
+			image = Image(IntImages, pResearch->iconID);
 		}
 
 		//do we have the same icon for the top right hand corner?
-		if (image > 0)
-		{
-			CreateIMDButton(IntImages, image, object, imdRotation, isDown, TOPBUTTON);
-		}
-		else
-		{
-			CreateIMDButton(nullptr, 0, object/*pResearch*/, imdRotation, isDown, TOPBUTTON);
-		}
+		displayIMD(image, object, xOffset, yOffset);
 	}
-	else
+	else if (!image.isNull())
 	//draw buttons for mission and general messages
 	{
-		if (image > 0)
-		{
-
-			if(MovieButton) {
-				// draw the button with the relevant image, don't add Down to the image ID if it's
-				// a movie button.
-				CreateImageButton(IntImages, image, isDown, TOPBUTTON);
-			} else {
-				//draw the button with the relevant image
-				CreateImageButton(IntImages, image + isDown, isDown, TOPBUTTON);
-			}
-
-		}
+		// Draw the button with the relevant image, don't add isDown() to the image ID if it's a movie button.
+		displayImage(MovieButton? image : Image(image.images, image.id + isDown()), xOffset, yOffset);
 	}
 
-	if (isHighlighted)
+	if (isHighlighted())
 	{
 		iV_DrawImage(IntImages, IMAGE_BUT_HILITE, xOffset + x(), yOffset + y());
 	}
@@ -1062,8 +1038,6 @@ void intDisplayPIEView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 
 		//moved from after close render
 		RenderWindowFrame(FRAME_NORMAL, x0 - 1, y0 - 1, x1 - x0 + 2, y1 - y0 + 2);
-
-		OpenButtonRender(xOffset + psWidget->x(), yOffset + psWidget->y());
 
 		if (((VIEWDATA *)psMessage->pViewData)->type != VIEW_RES)
 		{
@@ -1098,8 +1072,6 @@ void intDisplayFLICView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 
 	if (psMessage->pViewData)
 	{
-		OpenButtonRender(xOffset + psWidget->x(), yOffset + psWidget->y());
-
 		int x0 = xOffset + psWidget->x();
 		int y0 = yOffset + psWidget->y();
 		int x1 = x0 + psWidget->width();

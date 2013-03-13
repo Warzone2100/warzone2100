@@ -104,8 +104,15 @@ public:
 	void doRotation();
 
 protected:
+	void displayClear(int xOffset, int yOffset);
+	void displayIMD(Image image, ImdObject imdObject, int xOffset, int yOffset);
+	void displayImage(Image image, int xOffset, int yOffset);
+	void displayBlank(int xOffset, int yOffset);
+	void displayIfHighlight(int xOffset, int yOffset);
+
 	int imdRotation;  // Rotation if button is an IMD.
 	int imdRotationRate;
+	unsigned buttonType;  // TOPBUTTON is square, BTMBUTTON has a little up arrow.
 };
 
 class IntObjectButton : public IntFancyButton
@@ -185,25 +192,11 @@ void intAddLoopQuantity(WIDGET *psWidget, W_CONTEXT *psContext);
 
 void intDisplayEditBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 
-void OpenButtonRender(int XPos, int YPos);
-
-void ClearButton(bool Down,UDWORD Size, UDWORD buttonType);
-
-void CreateIMDButton(IMAGEFILE *ImageFile, UWORD ImageID, ImdObject imdObject, int imdRotation, bool Down, UDWORD buttonType);
-
-void CreateImageButton(IMAGEFILE *ImageFile, UWORD ImageID, bool Down, UDWORD buttonType);
-
-void CreateBlankButton(bool Down, UDWORD buttonType);
-
-
-extern bool DroidIsRepairing(DROID *Droid);
-
 bool DroidIsBuilding(DROID *Droid);
 STRUCTURE *DroidGetBuildStructure(DROID *Droid);
 bool DroidGoingToBuild(DROID *Droid);
 BASE_STATS *DroidGetBuildStats(DROID *Droid);
 iIMDShape *DroidGetIMD(DROID *Droid);
-bool DroidIsDemolishing(DROID *Droid);
 
 bool StructureIsManufacturingPending(STRUCTURE *structure);   ///< Returns true iff the structure is either manufacturing or on hold (even if not yet synchronised). (But ignores research.)
 bool structureIsResearchingPending(STRUCTURE *structure);     ///< Returns true iff the structure is either researching or on hold (even if not yet synchronised). (But ignores manufacturing.)
@@ -222,8 +215,6 @@ SDWORD StatIsComponent(BASE_STATS *Stat);
 bool StatGetComponentIMD(BASE_STATS *Stat, SDWORD compID,iIMDShape **CompIMD,iIMDShape **MountIMD);
 
 bool StatIsResearch(BASE_STATS *Stat);
-void StatGetResearchImage(BASE_STATS *psStat, SDWORD *Image, iIMDShape **Shape,
-                          BASE_STATS **ppGraphicData, bool drawTechIcon);
 
 /* Draws a stats bar for the design screen */
 void intDisplayStatsBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);

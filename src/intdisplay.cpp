@@ -88,6 +88,9 @@
 //the loop default value
 #define DEFAULT_LOOP		1
 
+static void StatGetResearchImage(BASE_STATS *psStat, Image *image, iIMDShape **Shape, BASE_STATS **ppGraphicData, bool drawTechIcon);
+
+
 static int FormOpenAudioID;	// ID of sfx to play when form opens.
 static int FormCloseAudioID; // ID of sfx to play when form closes.
 static int FormOpenCount;	// Count used to ensure only one sfx played when two forms opening.
@@ -637,13 +640,12 @@ IntFancyButton::IntFancyButton(WIDGET *parent)
 	: W_CLICKFORM(parent)
 	, imdRotation(DEFAULT_BUTTON_ROTATION)
 	, imdRotationRate(0)
+	, buttonType(TOPBUTTON)
 {}
 
 void IntFancyButton::doRotation()
 {
-	bool isHighlighted = (getState() & WBUT_HIGHLIGHT) != 0;
-
-	imdRotationRate += realTimeAdjustedAverage(isHighlighted? 2*BUTTONOBJ_ROTSPEED : -4*BUTTONOBJ_ROTSPEED);
+	imdRotationRate += realTimeAdjustedAverage(isHighlighted()? 2*BUTTONOBJ_ROTSPEED : -4*BUTTONOBJ_ROTSPEED);
 	imdRotationRate = clip(imdRotationRate, 0, BUTTONOBJ_ROTSPEED);
 	imdRotation += realTimeAdjustedAverage(imdRotationRate);
 }
@@ -651,7 +653,9 @@ void IntFancyButton::doRotation()
 IntStatusButton::IntStatusButton(WIDGET *parent)
 	: IntObjectButton(parent)
 	, theStats(nullptr)
-{}
+{
+	buttonType = TOPBUTTON;
+}
 
 // Widget callback to display a rendered status button, ie the progress of a manufacturing or  building task.
 void IntStatusButton::display(int xOffset, int yOffset)
@@ -662,15 +666,10 @@ void IntStatusButton::display(int xOffset, int yOffset)
 	UDWORD              compID;
 	bool	            bOnHold = false;
 
-	OpenButtonRender(xOffset + x(), yOffset + y());
-
-	bool isDown = (getState() & (WBUT_DOWN | WBUT_LOCK | WBUT_CLICKLOCK)) != 0;
-	bool isHighlighted = (getState() & WBUT_HIGHLIGHT) != 0;
-
 	doRotation();
 
 	ImdObject object;
-	int Image = -1;
+	Image image;
 
 	if (psObj && isDead(psObj))
 	{
@@ -742,7 +741,7 @@ void IntStatusButton::display(int xOffset, int yOffset)
 						break;
 					}
 					bOnHold = StructureIsOnHoldPending(Structure);
-					StatGetResearchImage(Stats, &Image, &shape, &psResGraphic, false);
+					StatGetResearchImage(Stats, &image, &shape, &psResGraphic, false);
 					if (psResGraphic)
 					{
 						// we have a Stat associated with this research topic
@@ -791,22 +790,15 @@ void IntStatusButton::display(int xOffset, int yOffset)
 	// Render the object into the button.
 	if (!object.empty())
 	{
-		if (Image >= 0)
-		{
-			CreateIMDButton(IntImages, Image, object, imdRotation, isDown, TOPBUTTON);
-		}
-		else
-		{
-			CreateIMDButton(nullptr, 0, object, imdRotation, isDown, TOPBUTTON);
-		}
+		displayIMD(image, object, xOffset, yOffset);
 	}
-	else if (Image >= 0)
+	else if (!image.isNull())
 	{
-		CreateImageButton(IntImages, Image, isDown, TOPBUTTON);
+		displayImage(image, xOffset, yOffset);
 	}
 	else
 	{
-		CreateBlankButton(isDown, TOPBUTTON);
+		displayBlank(xOffset, yOffset);
 	}
 
 	//need to flash the button if a factory is on hold production
@@ -823,7 +815,7 @@ void IntStatusButton::display(int xOffset, int yOffset)
 	}
 	else
 	{
-		if (isHighlighted)
+		if (isHighlighted())
 		{
 			iV_DrawImage(IntImages, IMAGE_BUT_HILITE, xOffset + x(), yOffset + y());
 		}
@@ -833,16 +825,13 @@ void IntStatusButton::display(int xOffset, int yOffset)
 IntObjectButton::IntObjectButton(WIDGET *parent)
 	: IntFancyButton(parent)
 	, psObj(nullptr)
-{}
+{
+	buttonType = BTMBUTTON;
+}
 
 // Widget callback to display a rendered object button.
 void IntObjectButton::display(int xOffset, int yOffset)
 {
-	OpenButtonRender(xOffset + x(), yOffset + y());
-
-	bool isDown = (getState() & (WBUT_DOWN | WBUT_LOCK | WBUT_CLICKLOCK)) != 0;
-	bool isHighlighted = (getState() & WBUT_HIGHLIGHT) != 0;
-
 	doRotation();
 
 	ImdObject object;
@@ -872,14 +861,14 @@ void IntObjectButton::display(int xOffset, int yOffset)
 
 	if (!object.empty())
 	{
-		CreateIMDButton(nullptr, 0, object, imdRotation, isDown, BTMBUTTON);
+		displayIMD(Image(), object, xOffset, yOffset);
 	}
 	else
 	{
-		CreateBlankButton(isDown, BTMBUTTON);
+		displayBlank(xOffset, yOffset);
 	}
 
-	if (isHighlighted)
+	if (isHighlighted())
 	{
 		iV_DrawImage(IntImages, IMAGE_BUTB_HILITE, xOffset + x(), yOffset + y());
 	}
@@ -897,15 +886,10 @@ void IntStatsButton::display(int xOffset, int yOffset)
 	BASE_STATS *    psResGraphic;
 	SDWORD          compID;
 
-	OpenButtonRender(xOffset + x(), yOffset + y());
-
-	bool isDown = (getState() & (WBUT_DOWN | WBUT_LOCK | WBUT_CLICKLOCK)) != 0;
-	bool isHighlighted = (getState() & WBUT_HIGHLIGHT) != 0;
-
 	doRotation();
 
 	ImdObject object;
-	int Image = -1;
+	Image image;
 
 	if (Stat)
 	{
@@ -927,7 +911,7 @@ void IntStatsButton::display(int xOffset, int yOffset)
 			else if (StatIsResearch(Stat))
 			{
 				iIMDShape *shape;
-				StatGetResearchImage(Stat, &Image, &shape, &psResGraphic, true);
+				StatGetResearchImage(Stat, &image, &shape, &psResGraphic, true);
 				if (psResGraphic)
 				{
 					//we have a Stat associated with this research topic
@@ -972,25 +956,18 @@ void IntStatsButton::display(int xOffset, int yOffset)
 
 	if (!object.empty())
 	{
-		if (Image >= 0)
-		{
-			CreateIMDButton(IntImages, Image, object, imdRotation, isDown, TOPBUTTON);
-		}
-		else
-		{
-			CreateIMDButton(nullptr, 0, object, imdRotation, isDown, TOPBUTTON);
-		}
+		displayIMD(image, object, xOffset, yOffset);
 	}
-	else if (Image >= 0)
+	else if (!image.isNull())
 	{
-		CreateImageButton(IntImages, Image, isDown, TOPBUTTON);
+		displayImage(image, xOffset, yOffset);
 	}
 	else
 	{
-		CreateBlankButton(isDown, TOPBUTTON);
+		displayBlank(xOffset, yOffset);
 	}
 
-	if (isHighlighted)
+	if (isHighlighted())
 	{
 		iV_DrawImage(IntImages, IMAGE_BUT_HILITE, xOffset + x(), yOffset + y());
 	}
@@ -1478,41 +1455,32 @@ void intInitialiseGraphics(void)
 	imageInitBitmaps();
 }
 
-static int ButXPos = 0;
-static int ButYPos = 0;
-
-void OpenButtonRender(int XPos, int YPos)
-{
-	ButXPos = XPos;
-	ButYPos = YPos;
-}
-
 // Clear a button bitmap. ( copy the button background ).
-//
-void ClearButton(bool Down, UDWORD Size, UDWORD buttonType)
+void IntFancyButton::displayClear(int xOffset, int yOffset)
 {
-	if (Down)
+	if (isDown())
 	{
-		iV_DrawImage(IntImages, (UWORD)(IMAGE_BUT0_DOWN + (buttonType * 2)), ButXPos, ButYPos);
+		iV_DrawImage(IntImages, IMAGE_BUT0_DOWN + buttonType*2, xOffset + x(), yOffset + y());
 	}
 	else
 	{
-		iV_DrawImage(IntImages, (UWORD)(IMAGE_BUT0_UP + (buttonType * 2)), ButXPos, ButYPos);
+		iV_DrawImage(IntImages, IMAGE_BUT0_UP + buttonType*2, xOffset + x(), yOffset + y());
 	}
 }
 
 // Create a button by rendering an IMD object into it.
-//
-void CreateIMDButton(IMAGEFILE *ImageFile, UWORD ImageID, ImdObject imdObject, int imdRotation, bool Down, UDWORD buttonType)
+void IntFancyButton::displayIMD(Image image, ImdObject imdObject, int xOffset, int yOffset)
 {
-	UDWORD Size;
+	int ButXPos = xOffset + x();
+	int ButYPos = yOffset + y();
+
 	Vector3i Rotation, Position;
 	UDWORD ox, oy;
 	UDWORD Radius;
 	UDWORD basePlateSize;
 	SDWORD scale;
 
-	if (Down)
+	if (isDown())
 	{
 		ox = oy = 2;
 	}
@@ -1523,10 +1491,10 @@ void CreateIMDButton(IMAGEFILE *ImageFile, UWORD ImageID, ImdObject imdObject, i
 
 	ImdType IMDType = imdObject.type;
 	void *Object = imdObject.ptr;
-	if ((IMDType == IMDTYPE_DROID) || (IMDType == IMDTYPE_DROIDTEMPLATE))
+	if (IMDType == IMDTYPE_DROID || IMDType == IMDTYPE_DROIDTEMPLATE)
 	{
 		// The case where we have to render a composite droid.
-		if (Down)
+		if (isDown())
 		{
 			//the top button is smaller than the bottom button
 			if (buttonType == TOPBUTTON)
@@ -1568,11 +1536,10 @@ void CreateIMDButton(IMAGEFILE *ImageFile, UWORD ImageID, ImdObject imdObject, i
 			Radius = getComponentDroidTemplateRadius((DROID_TEMPLATE *)Object);
 		}
 
-		Size = 2;
 		scale = DROID_BUT_SCALE;
 		ASSERT(Radius <= 128, "create PIE button big component found");
 
-		ClearButton(Down, Size, buttonType);
+		displayClear(xOffset, yOffset);
 
 		Rotation.x = -30;
 		Rotation.y = imdRotation;
@@ -1637,7 +1604,7 @@ void CreateIMDButton(IMAGEFILE *ImageFile, UWORD ImageID, ImdObject imdObject, i
 	{
 		// Just drawing a single IMD.
 
-		if (Down)
+		if (isDown())
 		{
 			if (buttonType == TOPBUTTON)
 			{
@@ -1672,7 +1639,6 @@ void CreateIMDButton(IMAGEFILE *ImageFile, UWORD ImageID, ImdObject imdObject, i
 		if (IMDType == IMDTYPE_COMPONENT)
 		{
 			Radius = getComponentRadius((BASE_STATS *)Object);
-			Size = 2;//small structure
 			scale = rescaleButtonObject(Radius, COMP_BUT_SCALE, COMPONENT_RADIUS);
 			// NOTE: The Super transport is huge, and is considered a component type, so refit it to inside the button.
 			const char *const name = ((BASE_STATS *)Object)->pName;
@@ -1690,23 +1656,18 @@ void CreateIMDButton(IMAGEFILE *ImageFile, UWORD ImageID, ImdObject imdObject, i
 			Radius = getResearchRadius((BASE_STATS *)Object);
 			if (Radius <= 100)
 			{
-				Size = 2;//small structure
 				scale = rescaleButtonObject(Radius, COMP_BUT_SCALE, COMPONENT_RADIUS);
-				//scale = COMP_BUT_SCALE;
 			}
 			else if (Radius <= 128)
 			{
-				Size = 2;//small structure
 				scale = SMALL_STRUCT_SCALE;
 			}
 			else if (Radius <= 256)
 			{
-				Size = 1;//med structure
 				scale = MED_STRUCT_SCALE;
 			}
 			else
 			{
-				Size = 0;
 				scale = LARGE_STRUCT_SCALE;
 			}
 		}
@@ -1715,17 +1676,14 @@ void CreateIMDButton(IMAGEFILE *ImageFile, UWORD ImageID, ImdObject imdObject, i
 			basePlateSize = getStructureSizeMax((STRUCTURE *)Object);
 			if (basePlateSize == 1)
 			{
-				Size = 2;//small structure
 				scale = SMALL_STRUCT_SCALE;
 			}
 			else if (basePlateSize == 2)
 			{
-				Size = 1;//med structure
 				scale = MED_STRUCT_SCALE;
 			}
 			else
 			{
-				Size = 0;
 				scale = LARGE_STRUCT_SCALE;
 			}
 		}
@@ -1734,43 +1692,36 @@ void CreateIMDButton(IMAGEFILE *ImageFile, UWORD ImageID, ImdObject imdObject, i
 			basePlateSize = getStructureStatSizeMax((STRUCTURE_STATS *)Object);
 			if (basePlateSize == 1)
 			{
-				Size = 2;//small structure
 				scale = SMALL_STRUCT_SCALE;
 			}
 			else if (basePlateSize == 2)
 			{
-				Size = 1;//med structure
 				scale = MED_STRUCT_SCALE;
 			}
 			else
 			{
-				Size = 0;
 				scale = LARGE_STRUCT_SCALE;
 			}
 		}
 		else
 		{
-
 			Radius = ((iIMDShape *)Object)->sradius;
 
 			if (Radius <= 128)
 			{
-				Size = 2;//small structure
 				scale = SMALL_STRUCT_SCALE;
 			}
 			else if (Radius <= 256)
 			{
-				Size = 1;//med structure
 				scale = MED_STRUCT_SCALE;
 			}
 			else
 			{
-				Size = 0;
 				scale = LARGE_STRUCT_SCALE;
 			}
 		}
 
-		ClearButton(Down, Size, buttonType);
+		displayClear(xOffset, yOffset);
 
 		Rotation.x = -30;
 		Rotation.y = imdRotation;
@@ -1780,9 +1731,9 @@ void CreateIMDButton(IMAGEFILE *ImageFile, UWORD ImageID, ImdObject imdObject, i
 		Position.y = 0;
 		Position.z = BUTTON_DEPTH; //was 		Position.z = Radius*30;
 
-		if (ImageFile)
+		if (!image.isNull())
 		{
-			iV_DrawImage(ImageFile, ImageID, ButXPos + ox, ButYPos + oy);
+			iV_DrawImage(image, ButXPos + ox, ButYPos + oy);
 		}
 
 		pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
@@ -1813,23 +1764,19 @@ void CreateIMDButton(IMAGEFILE *ImageFile, UWORD ImageID, ImdObject imdObject, i
 	}
 }
 
-
 // Create a button by rendering an image into it.
-//
-void CreateImageButton(IMAGEFILE *ImageFile, UWORD ImageID, bool Down, UDWORD buttonType)
+void IntFancyButton::displayImage(Image image, int xOffset, int yOffset)
 {
-	ClearButton(Down, 0, buttonType);
-	iV_DrawImage(ImageFile, ImageID, ButXPos, ButYPos);
+	displayClear(xOffset, yOffset);
+	iV_DrawImage(image, xOffset + x(), yOffset + y());
 }
 
-
 // Create a blank button.
-//
-void CreateBlankButton(bool Down, UDWORD buttonType)
+void IntFancyButton::displayBlank(int xOffset, int yOffset)
 {
 	UDWORD ox, oy;
 
-	if (Down)
+	if (isDown())
 	{
 		ox = oy = 1;
 	}
@@ -1838,52 +1785,10 @@ void CreateBlankButton(bool Down, UDWORD buttonType)
 		ox = oy = 0;
 	}
 
-	ClearButton(Down, 0, buttonType);
+	displayClear(xOffset, yOffset);
 
 	// Draw a question mark, bit of quick hack this.
-	iV_DrawImage(IntImages, IMAGE_QUESTION_MARK, ButXPos + ox + 10, ButYPos + oy + 3);
-}
-
-// Returns true if the droid is currently demolishing something or moving to demolish something.
-//
-bool DroidIsDemolishing(DROID *Droid)
-{
-	BASE_STATS	*Stats;
-	UDWORD x, y;
-
-	if (!(droidType(Droid) == DROID_CONSTRUCT ||
-	      droidType(Droid) == DROID_CYBORG_CONSTRUCT))
-	{
-		return false;
-	}
-
-	if (orderStateStatsLoc(Droid, DORDER_DEMOLISH, &Stats, &x, &y)) // Moving to demolish location?
-	{
-		return true;
-	}
-	else if (orderStateObj(Droid, DORDER_DEMOLISH)) // Is demolishing?
-	{
-		return true;
-	}
-
-	return false;
-}
-
-// Returns true if the droid is currently repairing another droid.
-bool DroidIsRepairing(DROID *Droid)
-{
-	if (!(droidType(Droid) == DROID_REPAIR
-	      || droidType(Droid) == DROID_CYBORG_REPAIR))
-	{
-		return false;
-	}
-
-	if (orderStateObj(Droid, DORDER_DROIDREPAIR))
-	{
-		return true;
-	}
-
-	return false;
+	iV_DrawImage(IntImages, IMAGE_QUESTION_MARK, xOffset + x() + ox + 10, yOffset + y() + oy + 3);
 }
 
 // Returns true if the droid is currently building something.
@@ -2237,16 +2142,11 @@ bool StatIsResearch(BASE_STATS *Stat)
 	        REF_RESEARCH_START + REF_RANGE);
 }
 
-void StatGetResearchImage(BASE_STATS *psStat, SDWORD *Image, iIMDShape **Shape,
-        BASE_STATS **ppGraphicData, bool drawTechIcon)
+static void StatGetResearchImage(BASE_STATS *psStat, Image *image, iIMDShape **Shape, BASE_STATS **ppGraphicData, bool drawTechIcon)
 {
-	*Image = -1;
-	if (drawTechIcon)
+	if (drawTechIcon && ((RESEARCH *)psStat)->iconID != NO_RESEARCH_ICON)
 	{
-		if (((RESEARCH *)psStat)->iconID != NO_RESEARCH_ICON)
-		{
-			*Image = ((RESEARCH *)psStat)->iconID;
-		}
+		*image = Image(IntImages, ((RESEARCH *)psStat)->iconID);
 	}
 	//if the research has a Stat associated with it - use this as display in the button
 	if (((RESEARCH *)psStat)->psStat)
@@ -2361,27 +2261,21 @@ IntTransportButton::IntTransportButton(WIDGET *parent)
 // Widget callback to display a contents button for the Transporter
 void IntTransportButton::display(int xOffset, int yOffset)
 {
-	OpenButtonRender(xOffset + x(), yOffset + y());
-
-	bool isDown = (getState() & (WBUT_DOWN | WBUT_LOCK | WBUT_CLICKLOCK)) != 0;
-
 	// There should always be a droid associated with the button
 	ASSERT(psDroid != NULL, "Invalid droid pointer");
-
-	bool isHighlighted = (getState() & WBUT_HIGHLIGHT) != 0;
 
 	doRotation();
 
 	if (psDroid)
 	{
-		CreateIMDButton(nullptr, 0, ImdObject::Droid(psDroid), imdRotation, isDown, TOPBUTTON);
+		displayIMD(Image(), ImdObject::Droid(psDroid), xOffset, yOffset);
 	}
 	else
 	{
-		CreateBlankButton(isDown, TOPBUTTON);
+		displayBlank(xOffset, yOffset);
 	}
 
-	if (isHighlighted)
+	if (isHighlighted())
 	{
 		iV_DrawImage(IntImages, IMAGE_BUT_HILITE, xOffset + x(), yOffset + y());
 	}
