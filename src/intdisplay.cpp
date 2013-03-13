@@ -650,6 +650,14 @@ void IntFancyButton::doRotation()
 	imdRotation += realTimeAdjustedAverage(imdRotationRate);
 }
 
+void IntFancyButton::displayIfHighlight(int xOffset, int yOffset)
+{
+	if (isHighlighted())
+	{
+		iV_DrawImage(IntImages, buttonType == TOPBUTTON? IMAGE_BUT_HILITE : IMAGE_BUTB_HILITE, xOffset + x(), yOffset + y());
+	}
+}
+
 IntStatusButton::IntStatusButton(WIDGET *parent)
 	: IntObjectButton(parent)
 	, theStats(nullptr)
@@ -788,37 +796,16 @@ void IntStatusButton::display(int xOffset, int yOffset)
 	}
 
 	// Render the object into the button.
-	if (!object.empty())
-	{
-		displayIMD(image, object, xOffset, yOffset);
-	}
-	else if (!image.isNull())
-	{
-		displayImage(image, xOffset, yOffset);
-	}
-	else
-	{
-		displayBlank(xOffset, yOffset);
-	}
+	displayIMD(image, object, xOffset, yOffset);
 
 	//need to flash the button if a factory is on hold production
 	if (bOnHold)
 	{
-		if (((realTime / 250) % 2) == 0)
-		{
-			iV_DrawImage(IntImages, IMAGE_BUT0_DOWN, xOffset + x(), yOffset + y());
-		}
-		else
-		{
-			iV_DrawImage(IntImages, IMAGE_BUT_HILITE, xOffset + x(), yOffset + y());
-		}
+		iV_DrawImage(IntImages, ((realTime / 250) % 2) == 0? IMAGE_BUT0_DOWN : IMAGE_BUT_HILITE, xOffset + x(), yOffset + y());
 	}
 	else
 	{
-		if (isHighlighted())
-		{
-			iV_DrawImage(IntImages, IMAGE_BUT_HILITE, xOffset + x(), yOffset + y());
-		}
+		displayIfHighlight(xOffset, yOffset);
 	}
 }
 
@@ -859,19 +846,8 @@ void IntObjectButton::display(int xOffset, int yOffset)
 		}
 	}
 
-	if (!object.empty())
-	{
-		displayIMD(Image(), object, xOffset, yOffset);
-	}
-	else
-	{
-		displayBlank(xOffset, yOffset);
-	}
-
-	if (isHighlighted())
-	{
-		iV_DrawImage(IntImages, IMAGE_BUTB_HILITE, xOffset + x(), yOffset + y());
-	}
+	displayIMD(Image(), object, xOffset, yOffset);
+	displayIfHighlight(xOffset, yOffset);
 }
 
 IntStatsButton::IntStatsButton(WIDGET *parent)
@@ -953,24 +929,8 @@ void IntStatsButton::display(int xOffset, int yOffset)
 		object = ImdObject::Component(nullptr);
 	}
 
-
-	if (!object.empty())
-	{
-		displayIMD(image, object, xOffset, yOffset);
-	}
-	else if (!image.isNull())
-	{
-		displayImage(image, xOffset, yOffset);
-	}
-	else
-	{
-		displayBlank(xOffset, yOffset);
-	}
-
-	if (isHighlighted())
-	{
-		iV_DrawImage(IntImages, IMAGE_BUT_HILITE, xOffset + x(), yOffset + y());
-	}
+	displayIMD(image, object, xOffset, yOffset);
+	displayIfHighlight(xOffset, yOffset);
 }
 
 IntFormAnimated::IntFormAnimated(WIDGET *parent, bool openAnimate)
@@ -1471,6 +1431,12 @@ void IntFancyButton::displayClear(int xOffset, int yOffset)
 // Create a button by rendering an IMD object into it.
 void IntFancyButton::displayIMD(Image image, ImdObject imdObject, int xOffset, int yOffset)
 {
+	if (imdObject.empty())
+	{
+		displayImage(image, xOffset, yOffset);
+		return;
+	}
+
 	int ButXPos = xOffset + x();
 	int ButYPos = yOffset + y();
 
@@ -1767,6 +1733,12 @@ void IntFancyButton::displayIMD(Image image, ImdObject imdObject, int xOffset, i
 // Create a button by rendering an image into it.
 void IntFancyButton::displayImage(Image image, int xOffset, int yOffset)
 {
+	if (image.isNull())
+	{
+		displayBlank(xOffset, yOffset);
+		return;
+	}
+
 	displayClear(xOffset, yOffset);
 	iV_DrawImage(image, xOffset + x(), yOffset + y());
 }
@@ -2265,20 +2237,8 @@ void IntTransportButton::display(int xOffset, int yOffset)
 	ASSERT(psDroid != NULL, "Invalid droid pointer");
 
 	doRotation();
-
-	if (psDroid)
-	{
-		displayIMD(Image(), ImdObject::Droid(psDroid), xOffset, yOffset);
-	}
-	else
-	{
-		displayBlank(xOffset, yOffset);
-	}
-
-	if (isHighlighted())
-	{
-		iV_DrawImage(IntImages, IMAGE_BUT_HILITE, xOffset + x(), yOffset + y());
-	}
+	displayIMD(Image(), ImdObject::Droid(psDroid), xOffset, yOffset);
+	displayIfHighlight(xOffset, yOffset);
 
 	if (psDroid && missionForReInforcements())
 	{

@@ -36,11 +36,6 @@ power values in the buttons */
 #define BUTTONOBJ_ROTSPEED		90	// Speed to rotate objects rendered in
 									// buttons ( degrees per second )
 
-//the two types of button used in the object display (bottom bar)
-#define		TOPBUTTON			0
-#define		BTMBUTTON			1
-
-
 enum ImdType
 {
 	IMDTYPE_NONE,
@@ -101,9 +96,11 @@ class IntFancyButton : public W_CLICKFORM
 public:
 	IntFancyButton(WIDGET *parent);
 
-	void doRotation();
-
 protected:
+	//the two types of button used in the object display (bottom bar)
+	enum ButtonType {TOPBUTTON = 0, BTMBUTTON = 1};
+
+	void doRotation();
 	void displayClear(int xOffset, int yOffset);
 	void displayIMD(Image image, ImdObject imdObject, int xOffset, int yOffset);
 	void displayImage(Image image, int xOffset, int yOffset);
@@ -112,7 +109,7 @@ protected:
 
 	int imdRotation;  // Rotation if button is an IMD.
 	int imdRotationRate;
-	unsigned buttonType;  // TOPBUTTON is square, BTMBUTTON has a little up arrow.
+	ButtonType buttonType;  // TOPBUTTON is square, BTMBUTTON has a little up arrow.
 };
 
 class IntObjectButton : public IntFancyButton

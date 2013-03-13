@@ -1002,17 +1002,14 @@ void IntMessageButton::display(int xOffset, int yOffset)
 		//do we have the same icon for the top right hand corner?
 		displayIMD(image, object, xOffset, yOffset);
 	}
-	else if (!image.isNull())
+	else
 	//draw buttons for mission and general messages
 	{
 		// Draw the button with the relevant image, don't add isDown() to the image ID if it's a movie button.
 		displayImage(MovieButton? image : Image(image.images, image.id + isDown()), xOffset, yOffset);
 	}
 
-	if (isHighlighted())
-	{
-		iV_DrawImage(IntImages, IMAGE_BUT_HILITE, xOffset + x(), yOffset + y());
-	}
+	displayIfHighlight(xOffset, yOffset);
 }
 
 
