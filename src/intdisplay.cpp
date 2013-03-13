@@ -636,7 +636,17 @@ void intDisplayPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 IntFancyButton::IntFancyButton(WIDGET *parent)
 	: W_CLICKFORM(parent)
 	, imdRotation(DEFAULT_BUTTON_ROTATION)
+	, imdRotationRate(0)
 {}
+
+void IntFancyButton::doRotation()
+{
+	bool isHighlighted = (getState() & WBUT_HIGHLIGHT) != 0;
+
+	imdRotationRate += realTimeAdjustedAverage(isHighlighted? 2*BUTTONOBJ_ROTSPEED : -4*BUTTONOBJ_ROTSPEED);
+	imdRotationRate = clip(imdRotationRate, 0, BUTTONOBJ_ROTSPEED);
+	imdRotation += realTimeAdjustedAverage(imdRotationRate);
+}
 
 IntStatusButton::IntStatusButton(WIDGET *parent)
 	: IntObjectButton(parent)
@@ -657,10 +667,7 @@ void IntStatusButton::display(int xOffset, int yOffset)
 	bool isDown = (getState() & (WBUT_DOWN | WBUT_LOCK | WBUT_CLICKLOCK)) != 0;
 	bool isHighlighted = (getState() & WBUT_HIGHLIGHT) != 0;
 
-	if (isHighlighted)
-	{
-		imdRotation += realTimeAdjustedAverage(BUTTONOBJ_ROTSPEED);
-	}
+	doRotation();
 
 	ImdObject object;
 	int Image = -1;
@@ -836,10 +843,7 @@ void IntObjectButton::display(int xOffset, int yOffset)
 	bool isDown = (getState() & (WBUT_DOWN | WBUT_LOCK | WBUT_CLICKLOCK)) != 0;
 	bool isHighlighted = (getState() & WBUT_HIGHLIGHT) != 0;
 
-	if (isHighlighted)
-	{
-		imdRotation += realTimeAdjustedAverage(BUTTONOBJ_ROTSPEED);
-	}
+	doRotation();
 
 	ImdObject object;
 
@@ -898,10 +902,7 @@ void IntStatsButton::display(int xOffset, int yOffset)
 	bool isDown = (getState() & (WBUT_DOWN | WBUT_LOCK | WBUT_CLICKLOCK)) != 0;
 	bool isHighlighted = (getState() & WBUT_HIGHLIGHT) != 0;
 
-	if (isHighlighted)
-	{
-		imdRotation += realTimeAdjustedAverage(BUTTONOBJ_ROTSPEED);
-	}
+	doRotation();
 
 	ImdObject object;
 	int Image = -1;
@@ -2369,10 +2370,7 @@ void IntTransportButton::display(int xOffset, int yOffset)
 
 	bool isHighlighted = (getState() & WBUT_HIGHLIGHT) != 0;
 
-	if (isHighlighted)
-	{
-		imdRotation += realTimeAdjustedAverage(BUTTONOBJ_ROTSPEED);
-	}
+	doRotation();
 
 	if (psDroid)
 	{

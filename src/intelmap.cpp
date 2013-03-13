@@ -937,6 +937,8 @@ void IntMessageButton::display(int xOffset, int yOffset)
 	bool isDown = (getState() & (WBUT_DOWN | WBUT_CLICKLOCK)) != 0;
 	bool isHighlighted = (getState() & WBUT_HIGHLIGHT) != 0;
 
+	doRotation();
+
 	ImdObject object;
 
 	// Get the object associated with this widget.

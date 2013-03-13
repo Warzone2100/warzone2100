@@ -101,8 +101,11 @@ class IntFancyButton : public W_CLICKFORM
 public:
 	IntFancyButton(WIDGET *parent);
 
+	void doRotation();
+
 protected:
 	int imdRotation;  // Rotation if button is an IMD.
+	int imdRotationRate;
 };
 
 class IntObjectButton : public IntFancyButton
