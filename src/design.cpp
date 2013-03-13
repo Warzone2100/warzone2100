@@ -240,7 +240,6 @@ extern W_SCREEN		*psWScreen;
 DROID_TEMPLATE sDefaultDesignTemplate;
 
 static void desSetupDesignTemplates();
-static void intDisplayTemplateButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 static void setDesignPauseState();
 static void resetDesignPauseState();
 static bool intAddTemplateButtons(ListTabWidget *templList, DROID_TEMPLATE *psSelected);
@@ -348,7 +347,6 @@ static bool haveCurrentDesign = false;
 
 static void intDisplayStatForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 static void intDisplayViewForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
-static void intDisplayComponentButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 
 extern bool bRender3DOnly;
 
@@ -814,10 +812,7 @@ static bool _intAddTemplateForm(DROID_TEMPLATE *psSelected)
 static bool intAddTemplateButtons(ListTabWidget *templList, DROID_TEMPLATE *psSelected)
 {
 	DROID_TEMPLATE	*psTempl = NULL;
-	SDWORD			BufferID;
 	char TempString[256];
-
-	ClearStatBuffers();
 
 	/* Set up the button struct */
 	int nextButtonId = IDDES_TEMPLSTART;
@@ -840,19 +835,10 @@ static bool intAddTemplateButtons(ListTabWidget *templList, DROID_TEMPLATE *psSe
 		psTempl = apsTemplateList[i];
 
 		/* Set the tip and add the button */
-		W_CLICKFORM *button = new W_CLICKFORM(templList);
+		IntStatsButton *button = new IntStatsButton(templList);
 		button->id = nextButtonId;
+		button->setStatsAndTip(psTempl);
 		templList->addWidgetToLayout(button);
-
-		// On the playstation the tips are additionaly setup when they are displayed ... because we only have one text name buffer
-		button->setTip(getTemplateName(psTempl));
-
-		BufferID = GetStatBuffer();
-		ASSERT_OR_RETURN(false, BufferID >= 0, "Unable to aquire stat buffer.");
-		RENDERBUTTON_INUSE(&StatBuffers[BufferID]);
-		StatBuffers[BufferID].Data = (void *)psTempl;
-		button->pUserData = &StatBuffers[BufferID];
-		button->displayFunction = intDisplayTemplateButton;
 
 		sBarInit.iRange = POWERPOINTS_DROIDDIV;
 		sBarInit.size = (UWORD)(psTempl->powerPoints  / POWERPOINTS_DROIDDIV);
@@ -1807,12 +1793,9 @@ static bool intAddComponentButtons(ListTabWidget *compList, COMPONENT_STATS *psS
 {
 	UDWORD				i, maxComponents;
 	COMPONENT_STATS		*psCurrStats;
-	SDWORD				BufferID;
 	PROPULSION_STATS	*psPropStats;
 	bool				bVTol, bWeapon;
 	int bodysize = SIZE_NUM;
-
-	ClearObjectBuffers();
 
 	/* Set up the button struct */
 	int nextButtonId = IDDES_COMPSTART;
@@ -1894,18 +1877,10 @@ static bool intAddComponentButtons(ListTabWidget *compList, COMPONENT_STATS *psS
 		}
 
 		/* Set the tip and add the button */
-		W_CLICKFORM *button = new W_CLICKFORM(compList);
+		IntStatsButton *button = new IntStatsButton(compList);
 		button->id = nextButtonId;
-		button->displayFunction = intDisplayComponentButton;
-		button->setTip(getStatName(psCurrStats));
+		button->setStatsAndTip(psCurrStats);
 		compList->addWidgetToLayout(button);
-
-		BufferID = GetObjectBuffer();
-		ASSERT_OR_RETURN(false, BufferID >= 0, "Unable to acquire Topic buffer.");
-
-		RENDERBUTTON_INUSE(&ObjectBuffers[BufferID]);
-		ObjectBuffers[BufferID].Data = psCurrStats;
-		button->pUserData = &ObjectBuffers[BufferID];
 
 		/* Store the stat pointer in the list */
 		apsComponentList[numComponent++] = psCurrStats;
@@ -1945,7 +1920,6 @@ static bool intAddExtraSystemButtons(ListTabWidget *compList, unsigned sensorInd
 	UDWORD			compIndex = 0, numStats = 0;
 	COMPONENT_STATS	*psCurrStats = 0;
 	UBYTE			*aAvailable = 0;
-	SDWORD			BufferID;
 
 	// Set up the button struct
 	int nextButtonId = IDDES_EXTRASYSSTART;
@@ -2022,26 +1996,16 @@ static bool intAddExtraSystemButtons(ListTabWidget *compList, unsigned sensorInd
 			}
 
 			// Set the tip and add the button
-			W_CLICKFORM *button = new W_CLICKFORM(compList);
+			IntStatsButton *button = new IntStatsButton(compList);
 			button->id = nextButtonId;
-			button->displayFunction = intDisplayComponentButton;
-			button->setTip(getStatName(psCurrStats));
+			button->setStatsAndTip(psCurrStats);
 			compList->addWidgetToLayout(button);
 
-			BufferID = nextButtonId - IDDES_EXTRASYSSTART;
-			ASSERT_OR_RETURN(false, BufferID < NUM_OBJECTBUFFERS, "BufferID > NUM_OBJECTBUFFERS");
-
 			//just use one set of buffers for mixed system form
-			RENDERBUTTON_INUSE(&System0Buffers[BufferID]);
 			if (statType(psCurrStats->ref) == COMP_BRAIN)
 			{
-				System0Buffers[BufferID].Data = ((BRAIN_STATS *)psCurrStats)->psWeaponStat;
+				button->setStats(((BRAIN_STATS *)psCurrStats)->psWeaponStat);
 			}
-			else
-			{
-				System0Buffers[BufferID].Data = psCurrStats;
-			}
-			button->pUserData = &System0Buffers[BufferID];
 
 			// Store the stat pointer in the list
 			apsExtraSysList[numExtraSys++] = psCurrStats;
@@ -3981,18 +3945,6 @@ static void intDisplayViewForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 		//display large droid view in the design screen
 		displayComponentButtonTemplate(&sCurrDesign, &Rotation, &Position, true, falseScale);
 	}
-}
-
-
-void intDisplayTemplateButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
-{
-	intDisplayStatsButton(psWidget, xOffset, yOffset);
-}
-
-
-static void intDisplayComponentButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
-{
-	intDisplayStatsButton(psWidget, xOffset, yOffset);
 }
 
 /* General display window for the design form  SOLID BACKGROUND - NOT TRANSPARENT*/

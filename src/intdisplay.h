@@ -25,16 +25,7 @@
 #include "lib/widget/form.h"
 #include "intimage.h"
 #include "droid.h"
-
-#define NUM_OBJECTSURFACES		(100)
-#define NUM_TOPICSURFACES		(50)
-#define NUM_STATSURFACES		(200)
-#define NUM_SYSTEM0SURFACES		(100)
-#define NUM_OBJECTBUFFERS		(NUM_OBJECTSURFACES*4)
-#define NUM_STATBUFFERS			(NUM_STATSURFACES*4)
-#define NUM_TOPICBUFFERS		(NUM_TOPICSURFACES*4)
-
-#define NUM_SYSTEM0BUFFERS		(NUM_SYSTEM0SURFACES*8)
+#include "template.h"
 
 
 /* Power levels are divided by this for power bar display. The extra factor has
@@ -50,7 +41,8 @@ power values in the buttons */
 #define		BTMBUTTON			1
 
 
-enum {
+enum ImdType
+{
 	IMDTYPE_NONE,
 	IMDTYPE_DROID,
 	IMDTYPE_DROIDTEMPLATE,
@@ -60,55 +52,30 @@ enum {
 	IMDTYPE_STRUCTURESTAT,
 };
 
-#define RENDERBUTTON_INUSE(x)  ((x)->InUse=true)
-
-struct RENDERED_BUTTON
+struct ImdObject
 {
-	bool InUse;			// Is it in use.
-	SDWORD ImdRotation;	// Rotation if button is an IMD.
-	void *Data;			// Any data we want to attach.
-	void *Data2;		// Any data we want to attach.
-};
+	ImdObject() : ptr(nullptr), type(IMDTYPE_NONE) {}
+	static ImdObject Droid(BASE_OBJECT *p) { return ImdObject(p, IMDTYPE_DROID); }
+	static ImdObject DroidTemplate(BASE_STATS *p) { return ImdObject(p, IMDTYPE_DROIDTEMPLATE); }
+	static ImdObject Component(BASE_STATS *p) { return ImdObject(p, IMDTYPE_COMPONENT); }
+	static ImdObject Structure(BASE_OBJECT *p) { return ImdObject(p, IMDTYPE_STRUCTURE); }
+	static ImdObject Research(BASE_STATS *p) { return ImdObject(p, IMDTYPE_RESEARCH); }
+	static ImdObject StructureStat(BASE_STATS *p) { return ImdObject(p, IMDTYPE_STRUCTURESTAT); }
 
-extern RENDERED_BUTTON TopicBuffers[NUM_TOPICBUFFERS];
-extern RENDERED_BUTTON ObjectBuffers[NUM_OBJECTBUFFERS];
-extern RENDERED_BUTTON StatBuffers[NUM_STATBUFFERS];
-extern RENDERED_BUTTON System0Buffers[NUM_SYSTEM0BUFFERS];
+	bool empty() const { return ptr == nullptr; }
+
+	void *ptr;
+	ImdType type;
+
+private:
+	ImdObject(void *ptr, ImdType type) : ptr(ptr), type(type) {}
+};
 
 // Set audio IDs for form opening/closing anims.
 void SetFormAudioIDs(int OpenID,int CloseID);
 
 // Initialise interface graphics.
 void intInitialiseGraphics(void);
-
-// Get a free RENDERED_BUTTON structure for an object window button.
-SDWORD GetObjectBuffer(void);
-
-// Clear ( make unused ) all RENDERED_BUTTON structures for the object window.
-void ClearObjectBuffers(void);
-
-// Clear ( make unused ) all RENDERED_BUTTON structures for the topic window.
-void ClearTopicBuffers(void);
-
-// Clear ( make unused ) a RENDERED_BUTTON structure.
-void ClearObjectButtonBuffer(SDWORD BufferID);
-
-// Clear ( make unused ) a RENDERED_BUTTON structure.
-void ClearTopicButtonBuffer(SDWORD BufferID);
-
-// Get a free RENDERED_BUTTON structure for a stat window button.
-SDWORD GetStatBuffer(void);
-
-// Clear ( make unused ) all RENDERED_BUTTON structures for the stat window.
-void ClearStatBuffers(void);
-
-/*these have been set up for the Transporter - the design screen DOESN'T use them*/
-// Clear ( make unused ) *all* RENDERED_BUTTON structures.
-void ClearSystem0Buffers(void);
-// Clear ( make unused ) a RENDERED_BUTTON structure.
-void ClearSystem0ButtonBuffer(SDWORD BufferID);
-// Get a free RENDERED_BUTTON structure.
-SDWORD GetSystem0Buffer(void);
 
 // callback to update the command droid size label
 void intUpdateCommandSize(WIDGET *psWidget, W_CONTEXT *psContext);
@@ -129,24 +96,69 @@ extern void intAddProdQuantity(WIDGET *psWidget, W_CONTEXT *psContext);
 
 void intDisplayPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 
-void intDisplayStatusButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
+class IntFancyButton : public W_CLICKFORM
+{
+public:
+	IntFancyButton(WIDGET *parent);
 
-void intDisplayObjectButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
+protected:
+	int imdRotation;  // Rotation if button is an IMD.
+};
 
-void intDisplayStatsButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
+class IntObjectButton : public IntFancyButton
+{
+public:
+	IntObjectButton(WIDGET *parent);
+
+	virtual void display(int xOffset, int yOffset);
+
+	void setObject(BASE_OBJECT *object) { psObj = object; }
+	bool clearData() { bool ret = psObj != nullptr; psObj = nullptr; return ret; }
+
+protected:
+	BASE_OBJECT *psObj;
+};
+
+class IntStatusButton : public IntObjectButton
+{
+public:
+	IntStatusButton(WIDGET *parent);
+
+	void setObject(BASE_OBJECT *object) { psObj = object; theStats = nullptr; }
+	void setObjectAndStats(BASE_OBJECT *object, BASE_STATS *stats) { psObj = object; theStats = stats; }
+
+	virtual void display(int xOffset, int yOffset);
+
+protected:
+	BASE_STATS *theStats;
+};
+
+class IntStatsButton : public IntFancyButton
+{
+public:
+	IntStatsButton(WIDGET *parent);
+
+	virtual void display(int xOffset, int yOffset);
+
+	void setStats(BASE_STATS *stats) { Stat = stats; }
+	void setStatsAndTip(BASE_STATS *stats) { setStats(stats); setTip(getStatName(Stat)); }
+	void setStatsAndTip(DROID_TEMPLATE *stats) { setStats(stats); setTip(getTemplateName(stats)); }
+
+protected:
+	BASE_STATS *Stat;
+};
 
 /// Form which animates opening/closing.
-struct IntFormAnimated : public W_FORM
+class IntFormAnimated : public W_FORM
 {
+public:
 	IntFormAnimated(WIDGET *parent, bool openAnimate = true);
 
-	void display(int xOffset, int yOffset);
+	virtual void display(int xOffset, int yOffset);
 
 	void closeAnimateDelete();              ///< Animates the form closing, and deletes itself when done.
 
 private:
-	void displayOpening(int xOffset, int yOffset);
-
 	unsigned        startTime;              ///< Animation start time
 	int             currentAction;          ///< Opening/open/closing/closed.
 };
@@ -174,18 +186,11 @@ void OpenButtonRender(int XPos, int YPos);
 
 void ClearButton(bool Down,UDWORD Size, UDWORD buttonType);
 
-void RenderToButton(IMAGEFILE *ImageFile,UWORD ImageID,void *Object,UDWORD Player,RENDERED_BUTTON *Buffer,
-					bool Down,UDWORD IMDType, UDWORD buttonType);
+void CreateIMDButton(IMAGEFILE *ImageFile, UWORD ImageID, ImdObject imdObject, int imdRotation, bool Down, UDWORD buttonType);
 
-void CreateIMDButton(IMAGEFILE *ImageFile,UWORD ImageID,void *Object,UDWORD Player,RENDERED_BUTTON *Buffer,
-					bool Down,UDWORD IMDType,UDWORD buttonType);
+void CreateImageButton(IMAGEFILE *ImageFile, UWORD ImageID, bool Down, UDWORD buttonType);
 
-void CreateImageButton(IMAGEFILE *ImageFile,UWORD ImageID,RENDERED_BUTTON *Buffer,bool Down, UDWORD buttonType);
-
-void CreateBlankButton(RENDERED_BUTTON *Buffer,bool Down, UDWORD buttonType);
-
-void RenderImageToButton(IMAGEFILE *ImageFile,UWORD ImageID,RENDERED_BUTTON *Buffer,bool Down, UDWORD buttonType);
-void RenderBlankToButton(RENDERED_BUTTON *Buffer,bool Down, UDWORD buttonType);
+void CreateBlankButton(bool Down, UDWORD buttonType);
 
 
 extern bool DroidIsRepairing(DROID *Droid);
@@ -225,8 +230,20 @@ void intDisplayDesignPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 // Widget callback function to play an audio track.
 extern void WidgetAudioCallback(int AudioID);
 
-// Widget callback to display a contents button for the Transporter
-void intDisplayTransportButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
+//void intDisplayTransportButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
+class IntTransportButton : public IntFancyButton
+{
+public:
+	IntTransportButton(WIDGET *parent);
+
+	virtual void display(int xOffset, int yOffset);
+
+	void setObject(DROID *object) { psDroid = object; }
+
+protected:
+	DROID *psDroid;
+};
+
 /*draws blips on radar to represent Proximity Display*/
 extern void drawRadarBlips(int radarX, int radarY, float pixSizeH, float pixSizeV);
 
@@ -236,9 +253,6 @@ extern void drawRadarBlips(int radarX, int radarY, float pixSizeH, float pixSize
 extern void intUpdateQuantitySlider(WIDGET *psWidget, W_CONTEXT *psContext);
 
 void intDisplayDPButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
-
-void intDisplayTime(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
-void intDisplayNum(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 
 void intDisplayResSubGroup(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 

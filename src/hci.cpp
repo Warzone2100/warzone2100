@@ -2405,10 +2405,9 @@ static void intObjectDied(UDWORD objID)
 	UDWORD				statsID, gubbinsID;
 
 	// clear the object button
-	RENDERED_BUTTON *psBut = (RENDERED_BUTTON *)widgGetUserData(psWScreen, objID);
-	if (psBut)
+	IntObjectButton *psBut = (IntObjectButton *)widgGetFromID(psWScreen, objID);
+	if (psBut->clearData())
 	{
-		psBut->Data = NULL;
 		// and its gubbins
 		gubbinsID = IDOBJ_FACTORYSTART + objID - IDOBJ_OBJSTART;
 		widgSetUserData(psWScreen, gubbinsID, NULL);
@@ -2931,7 +2930,6 @@ static bool intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected, 
 	UDWORD                  statID = 0;
 	BASE_OBJECT            *psFirst;
 	BASE_STATS		*psStats;
-	SDWORD			BufferID;
 	DROID			*Droid;
 	STRUCTURE		*Structure;
 	int				compIndex;
@@ -2946,9 +2944,6 @@ static bool intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected, 
 		// reset the object position array
 		asJumpPos.clear();
 	}
-
-	ClearObjectBuffers();
-	ClearTopicBuffers();
 
 	/* See how many objects the player has */
 	apsObjectList.clear();
@@ -3166,13 +3161,14 @@ static bool intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected, 
 		WIDGET *buttonHolder = new WIDGET(objList);
 		objList->addWidgetToLayout(buttonHolder);
 
-		W_CLICKFORM *statButton = new W_CLICKFORM(buttonHolder);
+		IntStatusButton *statButton = new IntStatusButton(buttonHolder);
 		statButton->id = nextStatButtonId;
 		statButton->setGeometry(0, 0, OBJ_BUTWIDTH, OBJ_BUTHEIGHT);
 		statButton->style |= WFORM_SECONDARY;
 
-		W_CLICKFORM *objButton = new W_CLICKFORM(buttonHolder);
+		IntObjectButton *objButton = new IntObjectButton(buttonHolder);
 		objButton->id = nextObjButtonId;
+		objButton->setObject(psObj);
 		objButton->setGeometry(0, OBJ_STARTY, OBJ_BUTWIDTH, OBJ_BUTHEIGHT);
 
 		/* Got an object - set the text and tip for the button */
@@ -3238,14 +3234,6 @@ static bool intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected, 
 		default:
 			break;
 		}
-
-		BufferID = nextObjButtonId - IDOBJ_OBJSTART;
-		ASSERT(BufferID < NUM_TOPICBUFFERS, "BufferID > NUM_TOPICBUFFERS");
-		ClearTopicButtonBuffer(BufferID);
-		RENDERBUTTON_INUSE(&TopicBuffers[BufferID]);
-		TopicBuffers[BufferID].Data = (void *)psObj;
-		objButton->pUserData = &TopicBuffers[BufferID];
-		objButton->displayFunction = intDisplayObjectButton;
 
 		if (IsFactory)
 		{
@@ -3332,34 +3320,16 @@ static bool intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected, 
 				statButton->setTip(getName(psStats->pName));
 			}
 
-			BufferID = (nextStatButtonId - IDOBJ_STATSTART) * 2 + 1;
-			ASSERT(BufferID < NUM_OBJECTBUFFERS, "BufferID > NUM_OBJECTBUFFERS");
-			ClearObjectButtonBuffer(BufferID);
-			RENDERBUTTON_INUSE(&ObjectBuffers[BufferID]);
-			ObjectBuffers[BufferID].Data = (void *)psObj;
-			ObjectBuffers[BufferID].Data2 = (void *)psStats;
-			statButton->pUserData = &ObjectBuffers[BufferID];
+			statButton->setObjectAndStats(psObj, psStats);
 		}
 		else if ((psObj->type == OBJ_DROID) && (((DROID *)psObj)->droidType == DROID_COMMAND))
 		{
-			BufferID = (nextStatButtonId - IDOBJ_STATSTART) * 2 + 1;
-			ASSERT(BufferID < NUM_OBJECTBUFFERS, "BufferID > NUM_OBJECTBUFFERS");
-			ClearObjectButtonBuffer(BufferID);
-			RENDERBUTTON_INUSE(&ObjectBuffers[BufferID]);
-			ObjectBuffers[BufferID].Data = (void *)psObj;
-			ObjectBuffers[BufferID].Data2 = NULL;
-			statButton->pUserData = &ObjectBuffers[BufferID];
+			statButton->setObject(psObj);
 		}
 		else
 		{
-			BufferID = (nextStatButtonId - IDOBJ_STATSTART) * 2 + 1;
-			ASSERT(BufferID < NUM_OBJECTBUFFERS, "BufferID > NUM_OBJECTBUFFERS");
-			ClearObjectButtonBuffer(BufferID);
-			RENDERBUTTON_INUSE(&ObjectBuffers[BufferID]);
-			statButton->pUserData = &ObjectBuffers[BufferID];
+			statButton->setObject(nullptr);
 		}
-
-		statButton->displayFunction = intDisplayStatusButton;
 
 		// Add command droid bits
 		if ((psObj->type == OBJ_DROID) &&
@@ -3523,9 +3493,6 @@ void intRemoveObject(void)
 		Form->closeAnimateDelete();
 	}
 
-	ClearObjectBuffers();
-	ClearTopicBuffers();
-
 	intHidePowerBar();
 
 	if (bInTutorial)
@@ -3542,9 +3509,6 @@ static void intRemoveObjectNoAnim(void)
 	widgDelete(psWScreen, IDOBJ_TABFORM);
 	widgDelete(psWScreen, IDOBJ_CLOSE);
 	widgDelete(psWScreen, IDOBJ_FORM);
-
-	ClearObjectBuffers();
-	ClearTopicBuffers();
 
 	intHidePowerBar();
 }
@@ -3563,8 +3527,6 @@ void intRemoveStats(void)
 		Form->closeAnimateDelete();
 	}
 
-	ClearStatBuffers();
-
 	StatsUp = false;
 	psStatsScreenOwner = NULL;
 }
@@ -3576,8 +3538,6 @@ void intRemoveStatsNoAnim(void)
 	widgDelete(psWScreen, IDSTAT_CLOSE);
 	widgDelete(psWScreen, IDSTAT_TABFORM);
 	widgDelete(psWScreen, IDSTAT_FORM);
-
-	ClearStatBuffers();
 
 	StatsUp = false;
 	psStatsScreenOwner = NULL;
@@ -3607,10 +3567,8 @@ static BASE_OBJECT *intGetObject(UDWORD id)
 /* Reset the stats button for an object */
 static void intSetStats(UDWORD id, BASE_STATS *psStats)
 {
-	SDWORD BufferID;
-
 	/* Update the button on the object screen */
-	W_CLICKFORM *statButton = (W_CLICKFORM *)widgGetFromID(psWScreen, id);
+	IntStatusButton *statButton = (IntStatusButton *)widgGetFromID(psWScreen, id);
 	statButton->setTip("");
 	WIDGET::Children children = statButton->children();
 	for (WIDGET::Children::const_iterator i = children.begin(); i != children.end(); ++i)
@@ -3658,13 +3616,7 @@ static void intSetStats(UDWORD id, BASE_STATS *psStats)
 			statButton->setTip(getName(psStats->pName));
 		}
 
-		BufferID = (statButton->id - IDOBJ_STATSTART) * 2 + 1;
-		ASSERT(BufferID < NUM_OBJECTBUFFERS, "BufferID > NUM_OBJECTBUFFERS");
-		ClearObjectButtonBuffer(BufferID);
-		RENDERBUTTON_INUSE(&ObjectBuffers[BufferID]);
-		ObjectBuffers[BufferID].Data = (void *)intGetObject(id);
-		ObjectBuffers[BufferID].Data2 = (void *)psStats;
-		statButton->pUserData = &ObjectBuffers[BufferID];
+		statButton->setObjectAndStats(intGetObject(id), psStats);
 
 		// Add a text label for the size of the production run.
 		sLabInit.pCallback = intUpdateQuantity;
@@ -3672,11 +3624,7 @@ static void intSetStats(UDWORD id, BASE_STATS *psStats)
 	}
 	else
 	{
-		BufferID = (statButton->id - IDOBJ_STATSTART) * 2 + 1;
-		ASSERT(BufferID < NUM_OBJECTBUFFERS, "BufferID > NUM_OBJECTBUFFERS");
-		ClearObjectButtonBuffer(BufferID);
-		RENDERBUTTON_INUSE(&ObjectBuffers[BufferID]);
-		statButton->pUserData = &ObjectBuffers[BufferID];
+		statButton->setObject(nullptr);
 
 		/* Reset the stats screen button if necessary */
 		if ((INTMODE)objMode == INT_STAT && statID != 0)
@@ -3703,8 +3651,6 @@ static void intSetStats(UDWORD id, BASE_STATS *psStats)
 static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
         BASE_STATS *psSelected, BASE_OBJECT *psOwner)
 {
-	UDWORD				i;
-	SDWORD				BufferID;
 	FACTORY				*psFactory;
 
 	int                             allyResearchIconCount = 0;
@@ -3734,8 +3680,6 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 	}
 	SecondaryWindowUp = true;
 	psStatsScreenOwner = psOwner;
-
-	ClearStatBuffers();
 
 	WIDGET *parent = psWScreen->psForm;
 
@@ -3860,7 +3804,7 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 	sBarInit.sMinorCol = WZCOL_ACTION_PROGRESS_BAR_MINOR;
 
 	statID = 0;
-	for (i = 0; i < numStats; i++)
+	for (unsigned i = 0; i < numStats; i++)
 	{
 		sBarInit.y = STAT_TIMEBARY;
 
@@ -3871,17 +3815,10 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 			break;
 		}
 
-		BufferID = i;
-		ASSERT(BufferID < NUM_STATBUFFERS, "BufferID > NUM_STATBUFFERS");
-
-		RENDERBUTTON_INUSE(&StatBuffers[BufferID]);
-		StatBuffers[BufferID].Data = (void *)ppsStatsList[i];
-
-		W_CLICKFORM *button = new W_CLICKFORM(statList);
+		IntStatsButton *button = new IntStatsButton(statList);
 		button->id = nextButtonId;
 		button->style |= WFORM_SECONDARY;
-		button->pUserData = &StatBuffers[BufferID];
-		button->displayFunction = intDisplayStatsButton;
+		button->setStats(ppsStatsList[i]);
 		statList->addWidgetToLayout(button);
 
 		BASE_STATS *Stat = ppsStatsList[i];

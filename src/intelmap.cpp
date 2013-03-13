@@ -161,7 +161,18 @@ static bool				playCurrent;
 /* functions declarations ****************/
 static bool intAddMessageForm(bool playCurrent);
 /*Displays the buttons used on the intelligence map */
-static void intDisplayMessageButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
+class IntMessageButton : public IntFancyButton
+{
+public:
+	IntMessageButton(WIDGET *parent);
+
+	virtual void display(int xOffset, int yOffset);
+
+	void setMessage(MESSAGE *msg) { psMsg = msg; }
+
+protected:
+	MESSAGE *psMsg;
+};
 
 /*deal with the actual button press - proxMsg is set to true if a proximity
   button has been pressed*/
@@ -275,8 +286,6 @@ static bool intAddMessageForm(bool playCurrent)
 	/* Add the message buttons */
 	int nextButtonId = IDINTMAP_MSGSTART;
 
-	ClearObjectBuffers();
-
 	//add each button
 	messageID = 0;
 	for (MESSAGE *psMessage = apsMessages[selectedPlayer]; psMessage != nullptr; psMessage = psMessage->psNext)
@@ -293,9 +302,9 @@ static bool intAddMessageForm(bool playCurrent)
 			continue;
 		}
 
-		W_CLICKFORM *button = new W_CLICKFORM(msgList);
+		IntMessageButton *button = new IntMessageButton(msgList);
 		button->id = nextButtonId;
-		button->displayFunction = intDisplayMessageButton;
+		button->setMessage(psMessage);
 		msgList->addWidgetToLayout(button);
 
 		/* Set the tip and add the button */
@@ -322,12 +331,6 @@ static bool intAddMessageForm(bool playCurrent)
 			default:
 				break;
 		}
-
-		int BufferID = GetObjectBuffer();
-		ASSERT( BufferID >= 0,"Unable to acquire object buffer." );
-		RENDERBUTTON_INUSE(&ObjectBuffers[BufferID]);
-		ObjectBuffers[BufferID].Data = (void*)psMessage;
-		button->pUserData = &ObjectBuffers[BufferID];
 
 		/* if the current message matches psSelected lock the button */
 		if (psMessage == psCurrentMsg)
@@ -917,26 +920,26 @@ void intRemoveMessageView(bool animated)
 	}
 }
 
+IntMessageButton::IntMessageButton(WIDGET *parent)
+	: IntFancyButton(parent)
+	, psMsg(nullptr)
+{}
 
 /*Displays the buttons used on the intelligence map */
-void intDisplayMessageButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+void IntMessageButton::display(int xOffset, int yOffset)
 {
-	W_CLICKFORM		*psButton = (W_CLICKFORM*)psWidget;
-	RENDERED_BUTTON *psBuffer = (RENDERED_BUTTON*)psButton->pUserData;
-	MESSAGE			*psMsg;
-	UDWORD			Down = 0, IMDType = 0, compID;
-	SDWORD			image = -1;
+	int image = -1;
 	RESEARCH		*pResearch = NULL;
-	BASE_STATS *psResGraphic = NULL;
 	bool MovieButton = false;
 
-	OpenButtonRender(xOffset + psButton->x(), yOffset + psButton->y());
+	OpenButtonRender(xOffset + x(), yOffset + y());
 
-	Down = psButton->state & (WBUT_DOWN | WBUT_CLICKLOCK);
-	bool Hilight = psButton->state & WBUT_HIGHLIGHT;
+	bool isDown = (getState() & (WBUT_DOWN | WBUT_CLICKLOCK)) != 0;
+	bool isHighlighted = (getState() & WBUT_HIGHLIGHT) != 0;
+
+	ImdObject object;
 
 	// Get the object associated with this widget.
-	psMsg = (MESSAGE *)psBuffer->Data;
 	ASSERT_OR_RETURN( , psMsg != NULL, "psBuffer->Data empty. Why?" );
 	//shouldn't have any proximity messages here...
 	if (psMsg->type == MSG_PROXIMITY)
@@ -956,31 +959,27 @@ void intDisplayMessageButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 			if  (StatIsStructure(pResearch->psStat))
 			{
 				//this defines how the button is drawn
-				IMDType = IMDTYPE_STRUCTURESTAT;
-				psResGraphic = pResearch->psStat;
+				object = ImdObject::StructureStat(pResearch->psStat);
 			}
 			else
 			{
-				compID = StatIsComponent(pResearch->psStat);
+				int compID = StatIsComponent(pResearch->psStat);
 				if (compID != COMP_UNKNOWN)
 				{
 					//this defines how the button is drawn
-					IMDType = IMDTYPE_COMPONENT;
-					psResGraphic = pResearch->psStat;
+					object = ImdObject::Component(pResearch->psStat);
 				}
 				else
 				{
 					ASSERT( false, "intDisplayMessageButton: invalid stat" );
-					IMDType = IMDTYPE_RESEARCH;
-					psResGraphic = (BASE_STATS *)pResearch;
+					object = ImdObject::Research(pResearch);
 				}
 			}
 		}
 		else
 		{
 			//no Stat for this research topic so use the research topic to define what is drawn
-			psResGraphic = (BASE_STATS *)pResearch;
-			IMDType = IMDTYPE_RESEARCH;
+			object = ImdObject::Research(pResearch);
 		}
 		break;
 	case MSG_CAMPAIGN:
@@ -1007,11 +1006,11 @@ void intDisplayMessageButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 		//do we have the same icon for the top right hand corner?
 		if (image > 0)
 		{
-			RenderToButton(IntImages, (UWORD)image, psResGraphic, selectedPlayer, psBuffer,Down, IMDType, TOPBUTTON);
+			CreateIMDButton(IntImages, image, object, imdRotation, isDown, TOPBUTTON);
 		}
 		else
 		{
-			RenderToButton(NULL,0,pResearch,selectedPlayer,psBuffer,Down,IMDType,TOPBUTTON); //ajl, changed from 0 to selectedPlayer
+			CreateIMDButton(nullptr, 0, object/*pResearch*/, imdRotation, isDown, TOPBUTTON);
 		}
 	}
 	else
@@ -1023,18 +1022,18 @@ void intDisplayMessageButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 			if(MovieButton) {
 				// draw the button with the relevant image, don't add Down to the image ID if it's
 				// a movie button.
-				RenderImageToButton(IntImages,(UWORD)(image),psBuffer,Down,TOPBUTTON);
+				CreateImageButton(IntImages, image, isDown, TOPBUTTON);
 			} else {
 				//draw the button with the relevant image
-				RenderImageToButton(IntImages,(UWORD)(image+Down),psBuffer,Down,TOPBUTTON);
+				CreateImageButton(IntImages, image + isDown, isDown, TOPBUTTON);
 			}
 
 		}
 	}
 
-	if (Hilight)
+	if (isHighlighted)
 	{
-		iV_DrawImage(IntImages, IMAGE_BUT_HILITE, xOffset + psButton->x(), yOffset + psButton->y());
+		iV_DrawImage(IntImages, IMAGE_BUT_HILITE, xOffset + x(), yOffset + y());
 	}
 }
 

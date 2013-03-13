@@ -23,6 +23,7 @@
  * Code to deal with loading/unloading, interface and flight of transporters.
  */
 #include <string.h>
+#include <sys/stat.h>
 
 #include "lib/framework/frame.h"
 #include "lib/framework/strres.h"
@@ -434,9 +435,6 @@ bool intAddTransButtonForm(void)
 	int nextObjButtonId = IDTRANS_START;
 	int nextStatButtonId = IDTRANS_STATSTART;
 
-	ClearObjectBuffers();
-	ClearTopicBuffers();
-
 	//add each button
 	for (DROID *psDroid = transInterfaceDroidList(); psDroid; psDroid = psDroid->psNext)
 	{
@@ -449,24 +447,17 @@ bool intAddTransButtonForm(void)
 		WIDGET *buttonHolder = new WIDGET(transList);
 		transList->addWidgetToLayout(buttonHolder);
 
-		W_CLICKFORM *statButton = new W_CLICKFORM(buttonHolder);
+		IntStatusButton *statButton = new IntStatusButton(buttonHolder);
 		statButton->id = nextStatButtonId;
 		statButton->setGeometry(0, 0, OBJ_BUTWIDTH, OBJ_BUTHEIGHT);
 
-		W_CLICKFORM *objButton = new W_CLICKFORM(buttonHolder);
+		IntObjectButton *objButton = new IntObjectButton(buttonHolder);
 		objButton->id = nextObjButtonId;
 		objButton->setGeometry(0, OBJ_STARTY, OBJ_BUTWIDTH, OBJ_BUTHEIGHT);
 
 		/* Set the tip and add the button */
 		objButton->setTip(droidGetName(psDroid));
-
-		int BufferID = nextObjButtonId - IDTRANS_START;
-		ASSERT(BufferID < NUM_TOPICBUFFERS, "BufferID > NUM_TOPICBUFFERS");
-		ClearTopicButtonBuffer(BufferID);
-		RENDERBUTTON_INUSE(&TopicBuffers[BufferID]);
-		TopicBuffers[BufferID].Data = (void *)psDroid;
-		objButton->pUserData = &TopicBuffers[BufferID];
-		objButton->displayFunction = intDisplayObjectButton;
+		objButton->setObject(psDroid);
 
 		//set the first Transporter to be the current one if not already set
 		if (psCurrTransporter == nullptr)
@@ -482,12 +473,7 @@ bool intAddTransButtonForm(void)
 		}
 
 		//now do status button
-		BufferID = (nextStatButtonId - IDTRANS_STATSTART) * 2 + 1;
-		ASSERT(BufferID < NUM_OBJECTBUFFERS, "BufferID > NUM_OBJECTBUFFERS");
-		ClearObjectButtonBuffer(BufferID);
-		RENDERBUTTON_INUSE(&ObjectBuffers[BufferID]);
-		statButton->pUserData = &ObjectBuffers[BufferID];
-		statButton->displayFunction = intDisplayStatusButton;
+		statButton->setObject(nullptr);
 
 		/* Update the init struct for the next buttons */
 		++nextObjButtonId;
@@ -514,8 +500,6 @@ bool intAddTransContentsForm(void)
 	/* Add the transporter contents buttons */
 	int nextButtonId = IDTRANS_CONTSTART;
 
-	ClearStatBuffers();
-
 	//add each button
 	if (psCurrTransporter == nullptr)
 	{
@@ -530,17 +514,11 @@ bool intAddTransContentsForm(void)
 		}
 
 		/* Set the tip and add the button */
-		W_CLICKFORM *button = new W_CLICKFORM(contList);
+		IntTransportButton *button = new IntTransportButton(contList);
 		button->id = nextButtonId;
-		button->displayFunction = intDisplayTransportButton;
 		button->setTip(droidGetName(psDroid));
+		button->setObject(psDroid);
 		contList->addWidgetToLayout(button);
-
-		int BufferID = GetStatBuffer();
-		ASSERT(BufferID >= 0, "Unable to acquire stat buffer.");
-		RENDERBUTTON_INUSE(&StatBuffers[BufferID]);
-		StatBuffers[BufferID].Data = (void *)psDroid;
-		button->pUserData = &StatBuffers[BufferID];
 
 		/* Update the init struct for the next button */
 		++nextButtonId;
@@ -599,8 +577,6 @@ bool intAddDroidsAvailForm(void)
 	/* Add the droids available buttons */
 	int nextButtonId = IDTRANS_DROIDSTART;
 
-	ClearSystem0Buffers();
-
 	/* Add the state of repair bar for each droid*/
 	W_BARINIT sBarInit;
 	sBarInit.id = IDTRANS_REPAIRBARSTART;
@@ -624,17 +600,11 @@ bool intAddDroidsAvailForm(void)
 		if ((psDroid->droidType != DROID_TRANSPORTER && psDroid->droidType != DROID_SUPERTRANSPORTER))
 		{
 			/* Set the tip and add the button */
-			W_CLICKFORM *button = new W_CLICKFORM(droidList);
+			IntTransportButton *button = new IntTransportButton(droidList);
 			button->id = nextButtonId;
-			button->displayFunction = intDisplayTransportButton;
 			button->setTip(droidGetName(psDroid));
+			button->setObject(psDroid);
 			droidList->addWidgetToLayout(button);
-
-			int BufferID = GetSystem0Buffer();
-			ASSERT(BufferID >= 0, "Unable to acquire stat buffer.");
-			RENDERBUTTON_INUSE(&System0Buffers[BufferID]);
-			System0Buffers[BufferID].Data = (void *)psDroid;
-			button->pUserData = &System0Buffers[BufferID];
 
 			//add bar to indicate stare of repair
 			sBarInit.size = (UWORD) PERCENT(psDroid->body, psDroid->originalBody);

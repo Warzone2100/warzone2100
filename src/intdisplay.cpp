@@ -97,12 +97,6 @@ static int FormCloseCount;	// Count used to ensure only one sfx played when two 
 
 static UDWORD ManuPower = 0;	// Power required to manufacture the current item.
 
-// Working buffers for rendered buttons.
-RENDERED_BUTTON System0Buffers[NUM_SYSTEM0BUFFERS];	// References ObjectSurfaces.
-RENDERED_BUTTON ObjectBuffers[NUM_OBJECTBUFFERS];	// References ObjectSurfaces.
-RENDERED_BUTTON TopicBuffers[NUM_TOPICBUFFERS];		// References TopicSurfaces.
-RENDERED_BUTTON StatBuffers[NUM_STATBUFFERS];		// References StatSurfaces.
-
 // Get the first factory assigned to a command droid
 static STRUCTURE *droidGetCommandFactory(DROID *psDroid);
 
@@ -639,44 +633,43 @@ void intDisplayPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	iV_DrawText(szVal, iX, iY);
 }
 
+IntFancyButton::IntFancyButton(WIDGET *parent)
+	: W_CLICKFORM(parent)
+	, imdRotation(DEFAULT_BUTTON_ROTATION)
+{}
 
-// Widget callback to display a rendered status button, ie the progress of a manufacturing or
-// building task.
-//
-void intDisplayStatusButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+IntStatusButton::IntStatusButton(WIDGET *parent)
+	: IntObjectButton(parent)
+	, theStats(nullptr)
+{}
+
+// Widget callback to display a rendered status button, ie the progress of a manufacturing or  building task.
+void IntStatusButton::display(int xOffset, int yOffset)
 {
-	W_CLICKFORM         *Form = (W_CLICKFORM *)psWidget;
-	BASE_OBJECT         *psObj;
 	STRUCTURE           *Structure;
 	DROID               *Droid;
-	SDWORD              Image;
 	BASE_STATS          *Stats, *psResGraphic;
-	RENDERED_BUTTON     *Buffer = (RENDERED_BUTTON *)Form->pUserData;
-	UDWORD              IMDType = 0, compID;
-	UDWORD              Player = selectedPlayer;			// changed by AJL for multiplayer.
-	void                *Object;
+	UDWORD              compID;
 	bool	            bOnHold = false;
 
-	OpenButtonRender(xOffset + Form->x(), yOffset + Form->y());
+	OpenButtonRender(xOffset + x(), yOffset + y());
 
-	bool Down = (Form->getState() & (WBUT_DOWN | WBUT_LOCK | WBUT_CLICKLOCK)) != 0;
-	bool Hilight = (Form->getState() & WBUT_HIGHLIGHT) != 0;
+	bool isDown = (getState() & (WBUT_DOWN | WBUT_LOCK | WBUT_CLICKLOCK)) != 0;
+	bool isHighlighted = (getState() & WBUT_HIGHLIGHT) != 0;
 
-	if (Hilight)
+	if (isHighlighted)
 	{
-		Buffer->ImdRotation += realTimeAdjustedAverage(BUTTONOBJ_ROTSPEED);
+		imdRotation += realTimeAdjustedAverage(BUTTONOBJ_ROTSPEED);
 	}
 
-	Object = NULL;
-	Image = -1;
-	psObj = (BASE_OBJECT *)Buffer->Data;	// Get the object associated with this widget.
+	ImdObject object;
+	int Image = -1;
 
 	if (psObj && isDead(psObj))
 	{
 		// this may catch this horrible crash bug we've been having,
 		// who knows?.... Shipping tomorrow, la de da :-)
 		psObj = NULL;
-		Buffer->Data = NULL;
 		intRefreshScreen();
 	}
 
@@ -692,33 +685,27 @@ void intDisplayStatusButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 				Structure = DroidGetBuildStructure(Droid);
 				if (Structure)
 				{
-					Object = Structure;
-					IMDType = IMDTYPE_STRUCTURE;
+					object = ImdObject::Structure(Structure);
 				}
 			}
 			else if (DroidGoingToBuild(Droid))
 			{
 				Stats = DroidGetBuildStats(Droid);
 				ASSERT(Stats != NULL, "NULL Stats pointer.");
-				Object = (void *)Stats;
-				Player = selectedPlayer;
-				IMDType = IMDTYPE_STRUCTURESTAT;
+				object = ImdObject::StructureStat(Stats);
 			}
 			else if (orderState(Droid, DORDER_DEMOLISH))
 			{
-				Stats = (BASE_STATS *)structGetDemolishStat();
+				Stats = structGetDemolishStat();
 				ASSERT(Stats != NULL, "NULL Stats pointer.");
-				Object = (void *)Stats;
-				Player = selectedPlayer;
-				IMDType = IMDTYPE_STRUCTURESTAT;
+				object = ImdObject::StructureStat(Stats);
 			}
 			else if (Droid->droidType == DROID_COMMAND)
 			{
 				Structure = droidGetCommandFactory(Droid);
 				if (Structure)
 				{
-					Object = Structure;
-					IMDType = IMDTYPE_STRUCTURE;
+					object = ImdObject::Structure(Structure);
 				}
 			}
 			break;
@@ -732,8 +719,7 @@ void intDisplayStatusButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 			case REF_VTOL_FACTORY:
 				if (StructureIsManufacturingPending(Structure))
 				{
-					IMDType = IMDTYPE_DROIDTEMPLATE;
-					Object = (void *)FactoryGetTemplate(StructureGetFactory(Structure));
+					object = ImdObject::DroidTemplate(FactoryGetTemplate(StructureGetFactory(Structure)));
 					bOnHold = StructureIsOnHoldPending(Structure);
 				}
 
@@ -742,41 +728,34 @@ void intDisplayStatusButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 			case REF_RESEARCH:
 				if (structureIsResearchingPending(Structure))
 				{
-					iIMDShape *shape = (iIMDShape *)Object;
-					Stats = (BASE_STATS *)Buffer->Data2;
+					iIMDShape *shape;
+					Stats = theStats;
 					if (!Stats)
 					{
 						break;
 					}
 					bOnHold = StructureIsOnHoldPending(Structure);
 					StatGetResearchImage(Stats, &Image, &shape, &psResGraphic, false);
-					Object = shape;
 					if (psResGraphic)
 					{
 						// we have a Stat associated with this research topic
 						if (StatIsStructure(psResGraphic))
 						{
 							// overwrite the Object pointer
-							Object = (void *)psResGraphic;
-							Player = selectedPlayer;
-							// this defines how the button is drawn
-							IMDType = IMDTYPE_STRUCTURESTAT;
+							object = ImdObject::StructureStat(psResGraphic);
 						}
 						else
 						{
 							compID = StatIsComponent(psResGraphic);
 							if (compID != COMP_UNKNOWN)
 							{
-								// this defines how the button is drawn
-								IMDType = IMDTYPE_COMPONENT;
 								// overwrite the Object pointer
-								Object = (void *)psResGraphic;
+								object = ImdObject::Component(psResGraphic);
 							}
 							else
 							{
 								ASSERT(false, "Invalid Stat for research button");
-								Object = NULL;
-								IMDType = IMDTYPE_RESEARCH;
+								object = ImdObject::Research(nullptr);
 							}
 						}
 					}
@@ -785,10 +764,9 @@ void intDisplayStatusButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 						// no Stat for this research topic so just use the graphic provided
 						// if Object != NULL the there must be a IMD so set the object to
 						// equal the Research stat
-						if (Object != NULL)
+						if (shape != nullptr)
 						{
-							Object = (void *)Stats;
-							IMDType = IMDTYPE_RESEARCH;
+							object = ImdObject::Research(Stats);
 						}
 					}
 				}
@@ -804,24 +782,24 @@ void intDisplayStatusButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	}
 
 	// Render the object into the button.
-	if (Object)
+	if (!object.empty())
 	{
 		if (Image >= 0)
 		{
-			RenderToButton(IntImages, (UWORD)Image, Object, Player, Buffer, Down, IMDType, TOPBUTTON);
+			CreateIMDButton(IntImages, Image, object, imdRotation, isDown, TOPBUTTON);
 		}
 		else
 		{
-			RenderToButton(NULL, 0, Object, Player, Buffer, Down, IMDType, TOPBUTTON);
+			CreateIMDButton(nullptr, 0, object, imdRotation, isDown, TOPBUTTON);
 		}
 	}
 	else if (Image >= 0)
 	{
-		RenderImageToButton(IntImages, (UWORD)Image, Buffer, Down, TOPBUTTON);
+		CreateImageButton(IntImages, Image, isDown, TOPBUTTON);
 	}
 	else
 	{
-		RenderBlankToButton(Buffer, Down, TOPBUTTON);
+		CreateBlankButton(isDown, TOPBUTTON);
 	}
 
 	//need to flash the button if a factory is on hold production
@@ -829,52 +807,47 @@ void intDisplayStatusButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	{
 		if (((realTime / 250) % 2) == 0)
 		{
-			iV_DrawImage(IntImages, IMAGE_BUT0_DOWN, xOffset + Form->x(), yOffset + Form->y());
+			iV_DrawImage(IntImages, IMAGE_BUT0_DOWN, xOffset + x(), yOffset + y());
 		}
 		else
 		{
-			iV_DrawImage(IntImages, IMAGE_BUT_HILITE, xOffset + Form->x(), yOffset + Form->y());
+			iV_DrawImage(IntImages, IMAGE_BUT_HILITE, xOffset + x(), yOffset + y());
 		}
 	}
 	else
 	{
-		if (Hilight)
+		if (isHighlighted)
 		{
-			iV_DrawImage(IntImages, IMAGE_BUT_HILITE, xOffset + Form->x(), yOffset + Form->y());
+			iV_DrawImage(IntImages, IMAGE_BUT_HILITE, xOffset + x(), yOffset + y());
 		}
 	}
 }
 
+IntObjectButton::IntObjectButton(WIDGET *parent)
+	: IntFancyButton(parent)
+	, psObj(nullptr)
+{}
 
 // Widget callback to display a rendered object button.
-//
-void intDisplayObjectButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+void IntObjectButton::display(int xOffset, int yOffset)
 {
-	W_CLICKFORM *Form = (W_CLICKFORM *)psWidget;
-	BASE_OBJECT *psObj;
-	RENDERED_BUTTON *Buffer = (RENDERED_BUTTON *)Form->pUserData;
-	UDWORD IMDType = 0;
-	void *Object;
+	OpenButtonRender(xOffset + x(), yOffset + y());
 
-	OpenButtonRender(xOffset + Form->x(), yOffset + Form->y());
+	bool isDown = (getState() & (WBUT_DOWN | WBUT_LOCK | WBUT_CLICKLOCK)) != 0;
+	bool isHighlighted = (getState() & WBUT_HIGHLIGHT) != 0;
 
-	bool Down = (Form->getState() & (WBUT_DOWN | WBUT_LOCK | WBUT_CLICKLOCK)) != 0;
-	bool Hilight = (Form->getState() & WBUT_HIGHLIGHT) != 0;
-
-	if (Hilight)
+	if (isHighlighted)
 	{
-		Buffer->ImdRotation += realTimeAdjustedAverage(BUTTONOBJ_ROTSPEED);
+		imdRotation += realTimeAdjustedAverage(BUTTONOBJ_ROTSPEED);
 	}
 
-	Object = NULL;
-	psObj = (BASE_OBJECT *)Buffer->Data;	// Get the object associated with this widget.
+	ImdObject object;
 
 	if (psObj && isDead(psObj))
 	{
 		// this may catch this horrible crash bug we've been having,
 		// who knows?.... Shipping tomorrow, la de da :-)
 		psObj = NULL;
-		Buffer->Data = NULL;
 		intRefreshScreen();
 	}
 
@@ -883,127 +856,96 @@ void intDisplayObjectButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 		switch (psObj->type)
 		{
 		case OBJ_DROID:						// If it's a droid...
-			IMDType = IMDTYPE_DROID;
-			Object = (void *)psObj;
+			object = ImdObject::Droid(psObj);
 			break;
 		case OBJ_STRUCTURE:					// If it's a structure...
-			IMDType = IMDTYPE_STRUCTURE;
-			Object = (void *)psObj;
+			object = ImdObject::Structure(psObj);
 			break;
 		default:
 			ASSERT(false, "Invalid structure type");
 		}
 	}
 
-	if (Object)
+	if (!object.empty())
 	{
-		RenderToButton(NULL, 0, Object, selectedPlayer, Buffer, Down, IMDType, BTMBUTTON);	// ajl, changed from 0 to selectedPlayer
+		CreateIMDButton(nullptr, 0, object, imdRotation, isDown, BTMBUTTON);
 	}
 	else
 	{
-		RenderBlankToButton(Buffer, Down, BTMBUTTON);
+		CreateBlankButton(isDown, BTMBUTTON);
 	}
 
-	if (Hilight)
+	if (isHighlighted)
 	{
-
-		iV_DrawImage(IntImages, IMAGE_BUTB_HILITE, xOffset + Form->x(), yOffset + Form->y());
+		iV_DrawImage(IntImages, IMAGE_BUTB_HILITE, xOffset + x(), yOffset + y());
 	}
 }
 
+IntStatsButton::IntStatsButton(WIDGET *parent)
+	: IntFancyButton(parent)
+	, Stat(nullptr)
+{}
 
 // Widget callback to display a rendered stats button, ie the job selection window buttons.
 //
-void intDisplayStatsButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+void IntStatsButton::display(int xOffset, int yOffset)
 {
-	W_CLICKFORM     *Form = (W_CLICKFORM *)psWidget;
-	BASE_STATS      *Stat, *psResGraphic;
-	SDWORD          Image, compID;
-	RENDERED_BUTTON *Buffer = (RENDERED_BUTTON *)Form->pUserData;
-	UDWORD          IMDType = 0;
-	UDWORD          Player = selectedPlayer;		// ajl, changed for multiplayer (from 0)
-	void            *Object;
+	BASE_STATS *    psResGraphic;
+	SDWORD          compID;
 
-	OpenButtonRender(xOffset + Form->x(), yOffset + Form->y());
+	OpenButtonRender(xOffset + x(), yOffset + y());
 
-	bool Down = (Form->getState() & (WBUT_DOWN | WBUT_LOCK | WBUT_CLICKLOCK)) != 0;
-	bool Hilight = (Form->getState() & WBUT_HIGHLIGHT) != 0;
+	bool isDown = (getState() & (WBUT_DOWN | WBUT_LOCK | WBUT_CLICKLOCK)) != 0;
+	bool isHighlighted = (getState() & WBUT_HIGHLIGHT) != 0;
 
-	if (Hilight)
+	if (isHighlighted)
 	{
-		Buffer->ImdRotation += realTimeAdjustedAverage(BUTTONOBJ_ROTSPEED);
+		imdRotation += realTimeAdjustedAverage(BUTTONOBJ_ROTSPEED);
 	}
 
-	Object = NULL;
-	Image = -1;
-
-	Stat = (BASE_STATS *)Buffer->Data;
+	ImdObject object;
+	int Image = -1;
 
 	if (Stat)
 	{
 		if (StatIsStructure(Stat))
 		{
-			Object = (void *)Stat;
-			Player = selectedPlayer;
-			IMDType = IMDTYPE_STRUCTURESTAT;
+			object = ImdObject::StructureStat(Stat);
 		}
 		else if (StatIsTemplate(Stat))
 		{
-			IMDType = IMDTYPE_DROIDTEMPLATE;
-			Object = (void *)Stat;
+			object = ImdObject::DroidTemplate(Stat);
 		}
 		else
 		{
-			//if(StatIsComponent(Stat))
-			//{
-			//	IMDType = IMDTYPE_COMPONENT;
-			//	Shape = StatGetComponentIMD(Stat);
-			//}
 			compID = StatIsComponent(Stat); // This failes for viper body.
 			if (compID != COMP_UNKNOWN)
 			{
-				IMDType = IMDTYPE_COMPONENT;
-				Object = (void *)Stat;	//StatGetComponentIMD(Stat, compID);
+				object = ImdObject::Component(Stat);
 			}
 			else if (StatIsResearch(Stat))
 			{
-				iIMDShape *shape = (iIMDShape *)Object;
-				/*IMDType = IMDTYPE_RESEARCH;
-				StatGetResearchImage(Stat,&Image,(iIMDShape**)&Object,true);
-				//if Object != NULL the there must be a IMD so set the object to
-				//equal the Research stat
-				if (Object != NULL)
-				{
-					Object = (void*)Stat;
-				}*/
+				iIMDShape *shape;
 				StatGetResearchImage(Stat, &Image, &shape, &psResGraphic, true);
-				Object = shape;
 				if (psResGraphic)
 				{
 					//we have a Stat associated with this research topic
 					if (StatIsStructure(psResGraphic))
 					{
-						//overwrite the Object pointer
-						Object = (void *)psResGraphic;
-						Player = selectedPlayer;
-						//this defines how the button is drawn
-						IMDType = IMDTYPE_STRUCTURESTAT;
+						object = ImdObject::StructureStat(psResGraphic);
 					}
 					else
 					{
 						compID = StatIsComponent(psResGraphic);
 						if (compID != COMP_UNKNOWN)
 						{
-							//this defines how the button is drawn
-							IMDType = IMDTYPE_COMPONENT;
 							//overwrite the Object pointer
-							Object = (void *)psResGraphic;
+							object = ImdObject::Component(psResGraphic);
 						}
 						else
 						{
 							ASSERT(false, "Invalid Stat for research button");
-							Object = NULL;
-							IMDType = IMDTYPE_RESEARCH;
+							object = ImdObject::Research(nullptr);
 						}
 					}
 				}
@@ -1012,10 +954,9 @@ void intDisplayStatsButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 					//no Stat for this research topic so just use the graphic provided
 					//if Object != NULL the there must be a IMD so set the object to
 					//equal the Research stat
-					if (Object != NULL)
+					if (shape != nullptr)
 					{
-						Object = (void *)Stat;
-						IMDType = IMDTYPE_RESEARCH;
+						object = ImdObject::Research(Stat);
 					}
 				}
 			}
@@ -1023,53 +964,35 @@ void intDisplayStatsButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	}
 	else
 	{
-		IMDType = IMDTYPE_COMPONENT;
 		//BLANK button for now - AB 9/1/98
-		Object = NULL;
+		object = ImdObject::Component(nullptr);
 	}
 
 
-	if (Object)
+	if (!object.empty())
 	{
 		if (Image >= 0)
 		{
-			RenderToButton(IntImages, (UWORD)Image, Object, Player, Buffer, Down, IMDType, TOPBUTTON);
+			CreateIMDButton(IntImages, Image, object, imdRotation, isDown, TOPBUTTON);
 		}
 		else
 		{
-			RenderToButton(NULL, 0, Object, Player, Buffer, Down, IMDType, TOPBUTTON);
+			CreateIMDButton(nullptr, 0, object, imdRotation, isDown, TOPBUTTON);
 		}
 	}
 	else if (Image >= 0)
 	{
-		RenderImageToButton(IntImages, (UWORD)Image, Buffer, Down, TOPBUTTON);
+		CreateImageButton(IntImages, Image, isDown, TOPBUTTON);
 	}
 	else
 	{
-		RenderBlankToButton(Buffer, Down, TOPBUTTON);
+		CreateBlankButton(isDown, TOPBUTTON);
 	}
 
-	if (Hilight)
+	if (isHighlighted)
 	{
-		iV_DrawImage(IntImages, IMAGE_BUT_HILITE, xOffset + Form->x(), yOffset + Form->y());
+		iV_DrawImage(IntImages, IMAGE_BUT_HILITE, xOffset + x(), yOffset + y());
 	}
-}
-
-
-void RenderToButton(IMAGEFILE *ImageFile, UWORD ImageID, void *Object, UDWORD Player,
-        RENDERED_BUTTON *Buffer, bool Down, UDWORD IMDType, UDWORD buttonType)
-{
-	CreateIMDButton(ImageFile, ImageID, Object, Player, Buffer, Down, IMDType, buttonType);
-}
-
-void RenderImageToButton(IMAGEFILE *ImageFile, UWORD ImageID, RENDERED_BUTTON *Buffer, bool Down, UDWORD buttonType)
-{
-	CreateImageButton(ImageFile, ImageID, Buffer, Down, buttonType);
-}
-
-void RenderBlankToButton(RENDERED_BUTTON *Buffer, bool Down, UDWORD buttonType)
-{
-	CreateBlankButton(Buffer, Down, buttonType);
 }
 
 IntFormAnimated::IntFormAnimated(WIDGET *parent, bool openAnimate)
@@ -1554,120 +1477,6 @@ void intInitialiseGraphics(void)
 	imageInitBitmaps();
 }
 
-void ClearObjectBuffers(void)
-{
-	UDWORD i;
-
-	for (i = 0; i < NUM_OBJECTBUFFERS; i++)
-	{
-		ClearObjectButtonBuffer(i);
-	}
-}
-
-void ClearTopicBuffers(void)
-{
-	UDWORD i;
-
-	for (i = 0; i < NUM_TOPICBUFFERS; i++)
-	{
-		ClearTopicButtonBuffer(i);
-	}
-}
-
-void ClearObjectButtonBuffer(SDWORD BufferID)
-{
-	ObjectBuffers[BufferID].InUse = false;
-	ObjectBuffers[BufferID].Data = NULL;
-	ObjectBuffers[BufferID].Data2 = NULL;
-	ObjectBuffers[BufferID].ImdRotation = DEFAULT_BUTTON_ROTATION;
-}
-
-void ClearTopicButtonBuffer(SDWORD BufferID)
-{
-	TopicBuffers[BufferID].InUse = false;
-	TopicBuffers[BufferID].Data = NULL;
-	TopicBuffers[BufferID].Data2 = NULL;
-	TopicBuffers[BufferID].ImdRotation = DEFAULT_BUTTON_ROTATION;
-}
-
-SDWORD GetObjectBuffer(void)
-{
-	SDWORD i;
-
-	for (i = 0; i < NUM_OBJECTBUFFERS; i++)
-	{
-		if (!ObjectBuffers[i].InUse)
-		{
-			return i;
-		}
-	}
-
-	return -1;
-}
-
-void ClearStatBuffers(void)
-{
-	UDWORD i;
-
-	for (i = 0; i < NUM_STATBUFFERS; i++)
-	{
-		StatBuffers[i].InUse = false;
-		StatBuffers[i].Data = NULL;
-		StatBuffers[i].ImdRotation = DEFAULT_BUTTON_ROTATION;
-	}
-}
-
-SDWORD GetStatBuffer(void)
-{
-	SDWORD i;
-
-	for (i = 0; i < NUM_STATBUFFERS; i++)
-	{
-		if (!StatBuffers[i].InUse)
-		{
-			return i;
-		}
-	}
-
-	return -1;
-}
-
-/*these have been set up for the Transporter - the design screen DOESN'T use them
-NB On the PC there are 80!!!!!*/
-void ClearSystem0Buffers(void)
-{
-	UDWORD i;
-
-	for (i = 0; i < NUM_SYSTEM0BUFFERS; i++)
-	{
-		ClearSystem0ButtonBuffer(i);
-	}
-}
-
-void ClearSystem0ButtonBuffer(SDWORD BufferID)
-{
-	System0Buffers[BufferID].InUse = false;
-	System0Buffers[BufferID].Data = NULL;
-	System0Buffers[BufferID].Data2 = NULL;
-	System0Buffers[BufferID].ImdRotation = DEFAULT_BUTTON_ROTATION;
-}
-
-SDWORD GetSystem0Buffer(void)
-{
-	SDWORD i;
-
-	for (i = 0; i < NUM_SYSTEM0BUFFERS; i++)
-	{
-		if (!System0Buffers[i].InUse)
-		{
-			return i;
-		}
-	}
-
-	return -1;
-}
-
-
 static int ButXPos = 0;
 static int ButYPos = 0;
 
@@ -1693,7 +1502,7 @@ void ClearButton(bool Down, UDWORD Size, UDWORD buttonType)
 
 // Create a button by rendering an IMD object into it.
 //
-void CreateIMDButton(IMAGEFILE *ImageFile, UWORD ImageID, void *Object, UDWORD Player, RENDERED_BUTTON *Buffer, bool Down, UDWORD IMDType, UDWORD buttonType)
+void CreateIMDButton(IMAGEFILE *ImageFile, UWORD ImageID, ImdObject imdObject, int imdRotation, bool Down, UDWORD buttonType)
 {
 	UDWORD Size;
 	Vector3i Rotation, Position;
@@ -1711,6 +1520,8 @@ void CreateIMDButton(IMAGEFILE *ImageFile, UWORD ImageID, void *Object, UDWORD P
 		ox = oy = 0;
 	}
 
+	ImdType IMDType = imdObject.type;
+	void *Object = imdObject.ptr;
 	if ((IMDType == IMDTYPE_DROID) || (IMDType == IMDTYPE_DROIDTEMPLATE))
 	{
 		// The case where we have to render a composite droid.
@@ -1763,7 +1574,7 @@ void CreateIMDButton(IMAGEFILE *ImageFile, UWORD ImageID, void *Object, UDWORD P
 		ClearButton(Down, Size, buttonType);
 
 		Rotation.x = -30;
-		Rotation.y = (UDWORD) Buffer->ImdRotation;
+		Rotation.y = imdRotation;
 		Rotation.z = 0;
 
 		if (IMDType == IMDTYPE_DROID)
@@ -1961,7 +1772,7 @@ void CreateIMDButton(IMAGEFILE *ImageFile, UWORD ImageID, void *Object, UDWORD P
 		ClearButton(Down, Size, buttonType);
 
 		Rotation.x = -30;
-		Rotation.y = (UWORD) Buffer->ImdRotation;
+		Rotation.y = imdRotation;
 		Rotation.z = 0;
 
 		Position.x = 0;
@@ -2004,7 +1815,7 @@ void CreateIMDButton(IMAGEFILE *ImageFile, UWORD ImageID, void *Object, UDWORD P
 
 // Create a button by rendering an image into it.
 //
-void CreateImageButton(IMAGEFILE *ImageFile, UWORD ImageID, RENDERED_BUTTON *Buffer, bool Down, UDWORD buttonType)
+void CreateImageButton(IMAGEFILE *ImageFile, UWORD ImageID, bool Down, UDWORD buttonType)
 {
 	ClearButton(Down, 0, buttonType);
 	iV_DrawImage(ImageFile, ImageID, ButXPos, ButYPos);
@@ -2013,7 +1824,7 @@ void CreateImageButton(IMAGEFILE *ImageFile, UWORD ImageID, RENDERED_BUTTON *Buf
 
 // Create a blank button.
 //
-void CreateBlankButton(RENDERED_BUTTON *Buffer, bool Down, UDWORD buttonType)
+void CreateBlankButton(bool Down, UDWORD buttonType)
 {
 	UDWORD ox, oy;
 
@@ -2541,53 +2352,50 @@ void WidgetAudioCallback(int AudioID)
 	}
 }
 
+IntTransportButton::IntTransportButton(WIDGET *parent)
+	: IntFancyButton(parent)
+	, psDroid(nullptr)
+{}
 
 // Widget callback to display a contents button for the Transporter
-void intDisplayTransportButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+void IntTransportButton::display(int xOffset, int yOffset)
 {
-	W_CLICKFORM		*Form = (W_CLICKFORM *)psWidget;
-	RENDERED_BUTTON		*Buffer = (RENDERED_BUTTON *)Form->pUserData;
-	DROID			*psDroid = NULL;
-	UDWORD			gfxId;
+	OpenButtonRender(xOffset + x(), yOffset + y());
 
-	OpenButtonRender(xOffset + Form->x(), yOffset + Form->y());
+	bool isDown = (getState() & (WBUT_DOWN | WBUT_LOCK | WBUT_CLICKLOCK)) != 0;
 
-	bool Down = (Form->getState() & (WBUT_DOWN | WBUT_LOCK | WBUT_CLICKLOCK)) != 0;
-
-	// Allocate this outside of the if so the rank icons are always draw
-	psDroid = (DROID *)Buffer->Data;
 	// There should always be a droid associated with the button
 	ASSERT(psDroid != NULL, "Invalid droid pointer");
 
-	bool Hilight = (Form->getState() & WBUT_HIGHLIGHT) != 0;
+	bool isHighlighted = (getState() & WBUT_HIGHLIGHT) != 0;
 
-	if (Hilight)
+	if (isHighlighted)
 	{
-		Buffer->ImdRotation += realTimeAdjustedAverage(BUTTONOBJ_ROTSPEED);
+		imdRotation += realTimeAdjustedAverage(BUTTONOBJ_ROTSPEED);
 	}
 
 	if (psDroid)
 	{
-		RenderToButton(NULL, 0, psDroid, psDroid->player, Buffer, Down, IMDTYPE_DROID, TOPBUTTON);
+		CreateIMDButton(nullptr, 0, ImdObject::Droid(psDroid), imdRotation, isDown, TOPBUTTON);
 	}
 	else
 	{
-		RenderBlankToButton(Buffer, Down, TOPBUTTON);
+		CreateBlankButton(isDown, TOPBUTTON);
 	}
 
-	if (Hilight)
+	if (isHighlighted)
 	{
-		iV_DrawImage(IntImages, IMAGE_BUT_HILITE, xOffset + Form->x(), yOffset + Form->y());
+		iV_DrawImage(IntImages, IMAGE_BUT_HILITE, xOffset + x(), yOffset + y());
 	}
 
 	if (psDroid && missionForReInforcements())
 	{
 		// Add the experience level for each droid
-		gfxId = getDroidRankGraphic(psDroid);
+		unsigned gfxId = getDroidRankGraphic(psDroid);
 		if (gfxId != UDWORD_MAX)
 		{
 			/* Render the rank graphic at the correct location */
-			iV_DrawImage(IntImages, gfxId, xOffset + Form->x() + 50, yOffset + Form->y() + 30);
+			iV_DrawImage(IntImages, gfxId, xOffset + x() + 50, yOffset + y() + 30);
 		}
 	}
 }
