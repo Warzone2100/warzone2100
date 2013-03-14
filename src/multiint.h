@@ -26,12 +26,51 @@
 
 #include "lib/netplay/netplay.h"
 #include "lib/widget/widgbase.h"
+#include "lib/widget/form.h"
+#include <QtCore/QSignalMapper>
+
 
 #define MAX_LEN_AI_NAME   40
 #define AI_CUSTOM        127
 #define AI_OPEN           -2
 #define AI_CLOSED         -1
 #define AI_NOT_FOUND     -99
+
+
+class MultichoiceWidget : public W_FORM
+{
+	Q_OBJECT
+
+public:
+	MultichoiceWidget(WIDGET *parent, int value = -1);
+
+	virtual void display(int xOffset, int yOffset);
+	virtual void geometryChanged();
+
+	void setLabel(char const *text);
+	void addButton(int value, Image image, Image imageHighlight, char const *tip);
+	void enable(bool enabled = true);
+	void disable() { enable(false); }
+	void setGap(int gap);
+	int currentValue() const { return currentValue_; }
+
+signals:
+	void chosen(int);
+
+public slots:
+	void choose(int value);
+
+private:
+	void stateChanged();
+
+	W_LABEL *label;
+	std::vector<std::pair<W_BUTTON *, int> > buttons;
+	QSignalMapper *mapper;
+	int currentValue_;
+	bool disabled;
+	int gap_;
+};
+
 
 void readAIs();	///< step 1, load AI definition files
 void loadMultiScripts();	///< step 2, load the actual AI scripts
@@ -196,10 +235,6 @@ void loadMapPreview(bool hideInterface);
 #define MULTIOP_ALLIANCE_N		10270
 #define MULTIOP_ALLIANCE_Y		10271
 #define MULTIOP_ALLIANCE_TEAMS	102710		//locked teams
-
-#define MULTIOP_POWLEV_LOW		10272
-#define MULTIOP_POWLEV_MED		10273
-#define MULTIOP_POWLEV_HI		10274
 
 #define MULTIOP_REFRESH			10275
 

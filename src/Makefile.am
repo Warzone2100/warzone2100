@@ -4,7 +4,9 @@ AM_CXXFLAGS = $(WZ_CXXFLAGS) $(QT4_CFLAGS)
 AM_LFLAGS = $(FLEX_FLAGS)
 AM_YFLAGS = -d
 
-MOCHEADER = qtscriptdebug.h
+MOCHEADER = \
+	multiint.h \
+	qtscriptdebug.h
 MOCEDFILES = $(MOCHEADER:%.h=%_moc.cpp)
 
 %_moc.cpp: %.h
@@ -125,7 +127,6 @@ noinst_HEADERS = \
 	projectiledef.h \
 	projectile.h \
 	qtscript.h \
-	qtscriptdebug.h \
 	qtscriptfuncs.h \
 	radar.h \
 	random.h \
@@ -162,6 +163,7 @@ noinst_HEADERS = \
 	$(MOCHEADER)
 
 nodist_warzone2100_SOURCES = \
+	multiint_moc.cpp \
 	qtscriptdebug_moc.cpp
 
 warzone2100_SOURCES = \

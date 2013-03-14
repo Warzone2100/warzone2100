@@ -1311,6 +1311,104 @@ static void showPasswordForm(void)
 
 // ////////////////////////////////////////////////////////////////////////////
 
+MultichoiceWidget::MultichoiceWidget(WIDGET *parent, int value)
+	: W_FORM(parent)
+	, label(nullptr)
+	, mapper(new QSignalMapper(this))
+	, currentValue_(value)
+	, disabled(false)
+	, gap_(3)
+{
+	connect(mapper, SIGNAL(mapped(int)), this, SLOT(choose(int)));
+}
+
+void MultichoiceWidget::display(int xOffset, int yOffset)
+{
+	//drawBlueBox(xOffset + x(), yOffset + y(), width(), height());
+	iV_ShadowBox(xOffset + x(), yOffset + y(), xOffset + x() + width() - 1, yOffset + y() + height() - 1, 0, WZCOL_MENU_BORDER, WZCOL_MENU_BORDER, WZCOL_MENU_BACKGROUND);
+}
+
+void MultichoiceWidget::geometryChanged()
+{
+	int s = width() - gap_;
+	for (std::vector<std::pair<W_BUTTON *, int> >::const_reverse_iterator i = buttons.rbegin(); i != buttons.rend(); ++i)
+	{
+		i->first->move(s - i->first->width(), (height() - i->first->height())/2);
+		s -= i->first->width() + gap_;
+	}
+	if (label != nullptr)
+	{
+		label->setGeometry(gap_, 0, s - gap_, height());
+	}
+}
+
+void MultichoiceWidget::setLabel(char const *text)
+{
+	delete label;
+	label = new W_LABEL(this);
+	label->setString(text);
+
+	geometryChanged();
+}
+
+void MultichoiceWidget::addButton(int value, Image image, Image imageDown, char const *tip)
+{
+	W_BUTTON *button = new W_BUTTON(this);
+	button->setImages(image, imageDown, getFrontHighlightImage(image));
+	button->setTip(tip);
+	button->setState(value == currentValue_? WBUT_LOCK : disabled? WBUT_DISABLE : 0);
+	buttons.push_back(std::make_pair(button, value));
+
+	mapper->setMapping(button, value);
+	connect(button, SIGNAL(clicked()), mapper, SLOT(map()));
+
+	geometryChanged();
+}
+
+void MultichoiceWidget::enable(bool enabled)
+{
+	if (!enabled == disabled)
+	{
+		return;
+	}
+
+	disabled = !enabled;
+	stateChanged();
+}
+
+void MultichoiceWidget::setGap(int gap)
+{
+	if (gap == gap_)
+	{
+		return;
+	}
+
+	gap_ = gap;
+	geometryChanged();
+}
+
+void MultichoiceWidget::choose(int value)
+{
+	if (value == currentValue_)
+	{
+		return;
+	}
+
+	currentValue_ = value;
+	stateChanged();
+
+	emit chosen(currentValue_);
+	screenPointer->setReturn(this);
+}
+
+void MultichoiceWidget::stateChanged()
+{
+	for (std::vector<std::pair<W_BUTTON *, int> >::const_iterator i = buttons.begin(); i != buttons.end(); ++i)
+	{
+		i->first->setState(i->second == currentValue_? WBUT_LOCK : disabled? WBUT_DISABLE : 0);
+	}
+}
+
 static void addBlueForm(UDWORD parent,UDWORD id, const char *txt,UDWORD x,UDWORD y,UDWORD w,UDWORD h)
 {
 	W_FORMINIT sFormInit;                  // draw options box.
@@ -1496,43 +1594,14 @@ static void addGameOptions()
 			break;
 		}
 
-		addBlueForm(MULTIOP_OPTIONS, MULTIOP_POWER, _("Power"), MCOL0, MROW7, MULTIOP_BLUEFORMW, 27);
-		addMultiBut(psWScreen,MULTIOP_POWER,MULTIOP_POWLEV_LOW,MCOL1,2,MULTIOP_BUTW,MULTIOP_BUTH,
-			_("Low Power Levels"),IMAGE_POWLO,IMAGE_POWLO_HI,true);
-		addMultiBut(psWScreen,MULTIOP_POWER,MULTIOP_POWLEV_MED,MCOL2,2,MULTIOP_BUTW,MULTIOP_BUTH,
-			_("Medium Power Levels"),IMAGE_POWMED,IMAGE_POWMED_HI,true);
-		addMultiBut(psWScreen,MULTIOP_POWER,MULTIOP_POWLEV_HI, MCOL3, 2,MULTIOP_BUTW,MULTIOP_BUTH,
-			_("High Power Levels"),IMAGE_POWHI,IMAGE_POWHI_HI,true);
-		widgSetButtonState(psWScreen, MULTIOP_POWLEV_LOW,0);		//hilight correct entry
-		widgSetButtonState(psWScreen, MULTIOP_POWLEV_MED,0);
-		widgSetButtonState(psWScreen, MULTIOP_POWLEV_HI ,0);
-		if (game.power <= LEV_LOW)
-		{
-			widgSetButtonState(psWScreen, MULTIOP_POWLEV_LOW,WBUT_LOCK);
-			if (locked.power)
-			{
-				widgSetButtonState(psWScreen, MULTIOP_POWLEV_MED, WBUT_DISABLE);
-				widgSetButtonState(psWScreen, MULTIOP_POWLEV_HI, WBUT_DISABLE);
-			}
-		}
-		else if (game.power <= LEV_MED)
-		{
-			widgSetButtonState(psWScreen, MULTIOP_POWLEV_MED,WBUT_LOCK);
-			if (locked.power)
-			{
-				widgSetButtonState(psWScreen, MULTIOP_POWLEV_LOW, WBUT_DISABLE);
-				widgSetButtonState(psWScreen, MULTIOP_POWLEV_HI, WBUT_DISABLE);
-			}
-		}
-		else
-		{
-			widgSetButtonState(psWScreen, MULTIOP_POWLEV_HI,WBUT_LOCK);
-			if (locked.power)
-			{
-				widgSetButtonState(psWScreen, MULTIOP_POWLEV_LOW, WBUT_DISABLE);
-				widgSetButtonState(psWScreen, MULTIOP_POWLEV_MED, WBUT_DISABLE);
-			}
-		}
+	MultichoiceWidget *powerChoice = new MultichoiceWidget(optionsForm, game.power);
+	powerChoice->id = MULTIOP_POWER;
+	powerChoice->setLabel(_("Power"));
+	powerChoice->addButton(LEV_LOW, Image(FrontImages, IMAGE_POWLO), Image(FrontImages, IMAGE_POWLO_HI), _("Low Power Levels"));
+	powerChoice->addButton(LEV_MED, Image(FrontImages, IMAGE_POWMED), Image(FrontImages, IMAGE_POWMED_HI), _("Medium Power Levels"));
+	powerChoice->addButton(LEV_HI, Image(FrontImages, IMAGE_POWHI), Image(FrontImages, IMAGE_POWHI_HI), _("High Power Levels"));
+	powerChoice->enable(!locked.power);
+	powerChoice->setGeometry(MCOL0, MROW7, MULTIOP_BLUEFORMW, 27);
 
 		addBlueForm(MULTIOP_OPTIONS, MULTIOP_BASETYPE, _("Base"), MCOL0, MROW8, MULTIOP_BLUEFORMW, 27);
 		addMultiBut(psWScreen,MULTIOP_BASETYPE,MULTIOP_CLEAN,MCOL1,2,MULTIOP_BUTW,MULTIOP_BUTH,
@@ -2602,9 +2671,7 @@ static void disableMultiButs(void)
 			if(game.base != CAMP_BASE)	widgSetButtonState(psWScreen,MULTIOP_BASE ,WBUT_DISABLE);
 			if(game.base != CAMP_WALLS)	widgSetButtonState(psWScreen,MULTIOP_DEFENCE,WBUT_DISABLE);
 
-			if(game.power != LEV_LOW)	widgSetButtonState(psWScreen, MULTIOP_POWLEV_LOW,WBUT_DISABLE);		// pow levels
-			if(game.power != LEV_MED)	widgSetButtonState(psWScreen, MULTIOP_POWLEV_MED,WBUT_DISABLE);
-			if(game.power != LEV_HI )	widgSetButtonState(psWScreen, MULTIOP_POWLEV_HI,WBUT_DISABLE);
+		((MultichoiceWidget *)widgGetFromID(psWScreen, MULTIOP_POWER))->disable();  // pow levels
 
 			if(game.alliance != NO_ALLIANCES)	widgSetButtonState(psWScreen,MULTIOP_ALLIANCE_N ,WBUT_DISABLE);	//alliance settings.
 			if(game.alliance != ALLIANCES)	widgSetButtonState(psWScreen,MULTIOP_ALLIANCE_Y ,WBUT_DISABLE);
@@ -2921,39 +2988,8 @@ static void processMultiopWidgets(UDWORD id)
 			setLockedTeamsMode();
 			break;
 
-		case MULTIOP_POWLEV_LOW:								// set power level to low
-			widgSetButtonState(psWScreen, MULTIOP_POWLEV_LOW,WBUT_LOCK);
-			widgSetButtonState(psWScreen, MULTIOP_POWLEV_MED,0);
-			widgSetButtonState(psWScreen, MULTIOP_POWLEV_HI ,0);
-			game.power = LEV_LOW;
-
-			resetReadyStatus(false);
-
-			if(bHosted)
-			{
-				sendOptions();
-			}
-			break;
-
-		case MULTIOP_POWLEV_MED:								// set power to med
-			widgSetButtonState(psWScreen, MULTIOP_POWLEV_LOW,0);
-			widgSetButtonState(psWScreen, MULTIOP_POWLEV_MED,WBUT_LOCK);
-			widgSetButtonState(psWScreen, MULTIOP_POWLEV_HI ,0);
-			game.power = LEV_MED;
-
-			resetReadyStatus(false);
-
-			if(bHosted)
-			{
-				sendOptions();
-			}
-			break;
-
-		case MULTIOP_POWLEV_HI:									// set power to hi
-			widgSetButtonState(psWScreen, MULTIOP_POWLEV_LOW,0);
-			widgSetButtonState(psWScreen, MULTIOP_POWLEV_MED,0);
-			widgSetButtonState(psWScreen, MULTIOP_POWLEV_HI ,WBUT_LOCK);
-			game.power = LEV_HI;
+		case MULTIOP_POWER:  // set power level
+			game.power = ((MultichoiceWidget *)widgGetFromID(psWScreen, MULTIOP_POWER))->currentValue();
 
 			resetReadyStatus(false);
 
