@@ -37,12 +37,12 @@
 #define AI_NOT_FOUND     -99
 
 
-class MultichoiceWidget : public W_FORM
+class MultibuttonWidget : public W_FORM
 {
 	Q_OBJECT
 
 public:
-	MultichoiceWidget(WIDGET *parent, int value = -1);
+	MultibuttonWidget(WIDGET *parent, int value = -1);
 
 	virtual void display(int xOffset, int yOffset);
 	virtual void geometryChanged();
@@ -63,12 +63,22 @@ public slots:
 private:
 	void stateChanged();
 
+protected:
 	W_LABEL *label;
 	std::vector<std::pair<W_BUTTON *, int> > buttons;
 	QSignalMapper *mapper;
 	int currentValue_;
 	bool disabled;
 	int gap_;
+	bool lockCurrent;
+};
+
+class MultichoiceWidget : public MultibuttonWidget
+{
+	Q_OBJECT
+
+public:
+	MultichoiceWidget(WIDGET *parent, int value = -1);
 };
 
 
@@ -204,12 +214,6 @@ void loadMapPreview(bool hideInterface);
 #define	MROW4					MROW3+MULTIOP_EDITBOXH
 #define MROW5					MROW4+38
 #define	MROW6					MROW5+29
-#define	MROW7					MROW6+29
-#define	MROW8					MROW7+29
-#define	MROW9					MROW8+29
-#define	MROW10					MROW9+32
-#define	MROW11					MROW10+36
-#define	MROW12					MROW11+40
 
 #define MCOL0					50
 #define MCOL1					(MCOL0+26+10)	// rem 10 for 4 lines.
@@ -224,26 +228,12 @@ void loadMapPreview(bool hideInterface);
 #define MULTIOP_MAP_ICON		10258
 #define MULTIOP_MAP				10259
 
-#define MULTIOP_CAMPAIGN		10261
-#define MULTIOP_SKIRMISH		10263
-
-
-#define MULTIOP_CLEAN			10267
-#define MULTIOP_BASE			10268
-#define MULTIOP_DEFENCE			10269
-
-#define MULTIOP_ALLIANCE_N		10270
-#define MULTIOP_ALLIANCE_Y		10271
-#define MULTIOP_ALLIANCE_TEAMS	102710		//locked teams
-
 #define MULTIOP_REFRESH			10275
 
 #define MULTIOP_HOST			10276
-#define MULTIOP_HOST_BUT		0xf0f0
 #define MULTIOP_HOSTX			5
 
 #define MULTIOP_STRUCTLIMITS	21277	// we are using 10277 already
-#define MULTIOP_LIMITS_BUT		0xf0d0
 
 #define MULTIOP_CANCELX			6
 #define MULTIOP_CANCELY			6
@@ -280,7 +270,6 @@ void loadMapPreview(bool hideInterface);
 #define MULTIOP_SKSLIDE_END		102873 //10320
 
 #define MULTIOP_MAP_PREVIEW 920000
-#define MULTIOP_MAP_BUT		920002
 
 #define MULTIOP_PASSWORD	920010
 #define MULTIOP_PASSWORD_BUT 920012

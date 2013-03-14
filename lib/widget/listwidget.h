@@ -85,6 +85,8 @@ public:
 
 	ListWidget(WIDGET *parent);
 
+	virtual void widgetLost(WIDGET *widget);
+
 	void setChildSize(int width, int height);  ///< Sets the size of all child widgets (applied by calling addWidgetToLayout).
 	void setChildSpacing(int width, int height);  ///< Sets the distance between child widgets (applied by calling addWidgetToLayout).
 	void setOrder(Order order);  ///< Sets whether subsequent child widgets are placed in horizontal or vertical lines (applied by calling addWidgetToLayout).

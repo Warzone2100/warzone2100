@@ -173,7 +173,6 @@ static void displayTeamChooser  (WIDGET *psWidget, UDWORD xOffset, UDWORD yOffse
 static void displayAi           (WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 static void displayDifficulty   (WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 static void displayMultiEditBox (WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
-static void setLockedTeamsMode  (void);
 static Image getFrontHighlightImage(Image image);
 
 // find games
@@ -1311,24 +1310,25 @@ static void showPasswordForm(void)
 
 // ////////////////////////////////////////////////////////////////////////////
 
-MultichoiceWidget::MultichoiceWidget(WIDGET *parent, int value)
+MultibuttonWidget::MultibuttonWidget(WIDGET* parent, int value)
 	: W_FORM(parent)
 	, label(nullptr)
 	, mapper(new QSignalMapper(this))
 	, currentValue_(value)
 	, disabled(false)
 	, gap_(3)
+	, lockCurrent(false)
 {
 	connect(mapper, SIGNAL(mapped(int)), this, SLOT(choose(int)));
 }
 
-void MultichoiceWidget::display(int xOffset, int yOffset)
+void MultibuttonWidget::display(int xOffset, int yOffset)
 {
 	//drawBlueBox(xOffset + x(), yOffset + y(), width(), height());
 	iV_ShadowBox(xOffset + x(), yOffset + y(), xOffset + x() + width() - 1, yOffset + y() + height() - 1, 0, WZCOL_MENU_BORDER, WZCOL_MENU_BORDER, WZCOL_MENU_BACKGROUND);
 }
 
-void MultichoiceWidget::geometryChanged()
+void MultibuttonWidget::geometryChanged()
 {
 	int s = width() - gap_;
 	for (std::vector<std::pair<W_BUTTON *, int> >::const_reverse_iterator i = buttons.rbegin(); i != buttons.rend(); ++i)
@@ -1342,7 +1342,7 @@ void MultichoiceWidget::geometryChanged()
 	}
 }
 
-void MultichoiceWidget::setLabel(char const *text)
+void MultibuttonWidget::setLabel(char const *text)
 {
 	delete label;
 	label = new W_LABEL(this);
@@ -1351,12 +1351,12 @@ void MultichoiceWidget::setLabel(char const *text)
 	geometryChanged();
 }
 
-void MultichoiceWidget::addButton(int value, Image image, Image imageDown, char const *tip)
+void MultibuttonWidget::addButton(int value, Image image, Image imageDown, char const *tip)
 {
 	W_BUTTON *button = new W_BUTTON(this);
 	button->setImages(image, imageDown, getFrontHighlightImage(image));
 	button->setTip(tip);
-	button->setState(value == currentValue_? WBUT_LOCK : disabled? WBUT_DISABLE : 0);
+	button->setState(value == currentValue_ && lockCurrent? WBUT_LOCK : disabled? WBUT_DISABLE : 0);
 	buttons.push_back(std::make_pair(button, value));
 
 	mapper->setMapping(button, value);
@@ -1365,7 +1365,7 @@ void MultichoiceWidget::addButton(int value, Image image, Image imageDown, char 
 	geometryChanged();
 }
 
-void MultichoiceWidget::enable(bool enabled)
+void MultibuttonWidget::enable(bool enabled)
 {
 	if (!enabled == disabled)
 	{
@@ -1376,7 +1376,7 @@ void MultichoiceWidget::enable(bool enabled)
 	stateChanged();
 }
 
-void MultichoiceWidget::setGap(int gap)
+void MultibuttonWidget::setGap(int gap)
 {
 	if (gap == gap_)
 	{
@@ -1387,9 +1387,9 @@ void MultichoiceWidget::setGap(int gap)
 	geometryChanged();
 }
 
-void MultichoiceWidget::choose(int value)
+void MultibuttonWidget::choose(int value)
 {
-	if (value == currentValue_)
+	if (value == currentValue_ && lockCurrent)
 	{
 		return;
 	}
@@ -1401,12 +1401,18 @@ void MultichoiceWidget::choose(int value)
 	screenPointer->setReturn(this);
 }
 
-void MultichoiceWidget::stateChanged()
+void MultibuttonWidget::stateChanged()
 {
 	for (std::vector<std::pair<W_BUTTON *, int> >::const_iterator i = buttons.begin(); i != buttons.end(); ++i)
 	{
-		i->first->setState(i->second == currentValue_? WBUT_LOCK : disabled? WBUT_DISABLE : 0);
+		i->first->setState(i->second == currentValue_ && lockCurrent? WBUT_LOCK : disabled? WBUT_DISABLE : 0);
 	}
+}
+
+MultichoiceWidget::MultichoiceWidget(WIDGET *parent, int value)
+	: MultibuttonWidget(parent, value)
+{
+	lockCurrent = true;
 }
 
 static void addBlueForm(UDWORD parent,UDWORD id, const char *txt,UDWORD x,UDWORD y,UDWORD w,UDWORD h)
@@ -1523,128 +1529,75 @@ static void addGameOptions()
 		}
 	}
 
-	// buttons
-	// game type
-	addBlueForm(MULTIOP_OPTIONS,MULTIOP_GAMETYPE,_("Scavengers"),MCOL0,MROW5,MULTIOP_BLUEFORMW,27);
-	addMultiBut(psWScreen, MULTIOP_GAMETYPE, MULTIOP_CAMPAIGN, MCOL2, 2, MULTIOP_BUTW, MULTIOP_BUTH, _("Scavengers"),
-	            IMAGE_SCAVENGERS_ON, IMAGE_SCAVENGERS_ON_HI, true);
-	addMultiBut(psWScreen, MULTIOP_GAMETYPE, MULTIOP_SKIRMISH, MCOL3, 2, MULTIOP_BUTW, MULTIOP_BUTH, _("No Scavengers"),
-	            IMAGE_SCAVENGERS_OFF, IMAGE_SCAVENGERS_OFF_HI, true);
-
-	widgSetButtonState(psWScreen, MULTIOP_CAMPAIGN,	0);
-	widgSetButtonState(psWScreen, MULTIOP_SKIRMISH,	0);
-
-	if (game.scavengers)
-	{
-		widgSetButtonState(psWScreen, MULTIOP_CAMPAIGN, WBUT_LOCK);
-		if (locked.scavengers)
-		{
-			widgSetButtonState(psWScreen, MULTIOP_SKIRMISH, WBUT_DISABLE);
-		}
-	}
-	else
-	{
-		widgSetButtonState(psWScreen, MULTIOP_SKIRMISH, WBUT_LOCK);
-		if (locked.scavengers)
-		{
-			widgSetButtonState(psWScreen, MULTIOP_CAMPAIGN, WBUT_DISABLE);
-		}
-	}
-
-	if (game.maxPlayers == MAX_PLAYERS || !game.mapHasScavengers)
-	{
-		widgSetButtonState(psWScreen, MULTIOP_SKIRMISH, WBUT_LOCK);
-		widgSetButtonState(psWScreen, MULTIOP_CAMPAIGN, WBUT_DISABLE);	// full, cannot enable scavenger player
-	}
-
 	//just display the game options.
 	addMultiEditBox(MULTIOP_OPTIONS, MULTIOP_PNAME, MCOL0, MROW1, _("Select Player Name"), (char*) sPlayer, IMAGE_EDIT_PLAYER, IMAGE_EDIT_PLAYER_HI, MULTIOP_PNAME_ICON);
 
-		// alliances
-		addBlueForm(MULTIOP_OPTIONS, MULTIOP_ALLIANCES, _("Alliances"), MCOL0, MROW6, MULTIOP_BLUEFORMW, 27);
+	ListWidget *optionsList = new ListWidget(optionsForm);
+	optionsList->setChildSize(MULTIOP_BLUEFORMW, 29);
+	optionsList->setChildSpacing(2, 2);
+	optionsList->setGeometry(MCOL0, MROW5, MULTIOP_BLUEFORMW, optionsForm->height() - MROW5);
 
-		addMultiBut(psWScreen,MULTIOP_ALLIANCES,MULTIOP_ALLIANCE_N,MCOL1,2,MULTIOP_BUTW,MULTIOP_BUTH,
-				_("No Alliances"),IMAGE_NOALLI,IMAGE_NOALLI_HI,true);
-		addMultiBut(psWScreen,MULTIOP_ALLIANCES,MULTIOP_ALLIANCE_Y,MCOL2,2,MULTIOP_BUTW,MULTIOP_BUTH,
-				_("Allow Alliances"),IMAGE_ALLI,IMAGE_ALLI_HI,true);
+	MultichoiceWidget *scavengerChoice = new MultichoiceWidget(optionsList, game.scavengers);
+	scavengerChoice->id = MULTIOP_GAMETYPE;
+	scavengerChoice->setLabel(_("Scavengers"));
+	if (game.mapHasScavengers)
+	{
+		scavengerChoice->addButton(true, Image(FrontImages, IMAGE_SCAVENGERS_ON), Image(FrontImages, IMAGE_SCAVENGERS_ON_HI), _("Scavengers"));
+	}
+	scavengerChoice->addButton(false, Image(FrontImages, IMAGE_SCAVENGERS_OFF), Image(FrontImages, IMAGE_SCAVENGERS_OFF_HI), _("No Scavengers"));
+	scavengerChoice->enable(!locked.scavengers);
+	optionsList->addWidgetToLayout(scavengerChoice);
 
-		//add 'Locked Teams' button
-		addMultiBut(psWScreen,MULTIOP_ALLIANCES,MULTIOP_ALLIANCE_TEAMS,MCOL3,2,MULTIOP_BUTW,MULTIOP_BUTH,
-		            _("Locked Teams"), IMAGE_ALLI_TEAMS, IMAGE_ALLI_TEAMS_HI, true);
+	MultichoiceWidget *allianceChoice = new MultichoiceWidget(optionsList, game.alliance);
+	allianceChoice->id = MULTIOP_ALLIANCES;
+	allianceChoice->setLabel(_("Alliances"));
+	allianceChoice->addButton(NO_ALLIANCES, Image(FrontImages, IMAGE_NOALLI), Image(FrontImages, IMAGE_NOALLI_HI), _("No Alliances"));
+	allianceChoice->addButton(ALLIANCES, Image(FrontImages, IMAGE_ALLI), Image(FrontImages, IMAGE_ALLI_HI), _("Allow Alliances"));
+	allianceChoice->addButton(ALLIANCES_TEAMS, Image(FrontImages, IMAGE_ALLI_TEAMS), Image(FrontImages, IMAGE_ALLI_TEAMS_HI), _("Locked Teams"));
+	allianceChoice->enable(!locked.alliances);
+	optionsList->addWidgetToLayout(allianceChoice);
 
-		widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_N,0);				//hilight correct entry
-		widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_Y,0);
-		widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_TEAMS,0);
-		if (locked.alliances)
-		{
-			widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_N, WBUT_DISABLE);
-			widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_Y, WBUT_DISABLE);
-		}
-
-		switch(game.alliance)
-		{
-		case NO_ALLIANCES:
-			widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_N,WBUT_LOCK);
-			break;
-		case ALLIANCES:
-			widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_Y,WBUT_LOCK);
-			break;
-		case ALLIANCES_TEAMS:
-			widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_TEAMS,WBUT_LOCK);
-			break;
-		}
-
-	MultichoiceWidget *powerChoice = new MultichoiceWidget(optionsForm, game.power);
+	MultichoiceWidget *powerChoice = new MultichoiceWidget(optionsList, game.power);
 	powerChoice->id = MULTIOP_POWER;
 	powerChoice->setLabel(_("Power"));
 	powerChoice->addButton(LEV_LOW, Image(FrontImages, IMAGE_POWLO), Image(FrontImages, IMAGE_POWLO_HI), _("Low Power Levels"));
 	powerChoice->addButton(LEV_MED, Image(FrontImages, IMAGE_POWMED), Image(FrontImages, IMAGE_POWMED_HI), _("Medium Power Levels"));
 	powerChoice->addButton(LEV_HI, Image(FrontImages, IMAGE_POWHI), Image(FrontImages, IMAGE_POWHI_HI), _("High Power Levels"));
 	powerChoice->enable(!locked.power);
-	powerChoice->setGeometry(MCOL0, MROW7, MULTIOP_BLUEFORMW, 27);
+	optionsList->addWidgetToLayout(powerChoice);
 
-		addBlueForm(MULTIOP_OPTIONS, MULTIOP_BASETYPE, _("Base"), MCOL0, MROW8, MULTIOP_BLUEFORMW, 27);
-		addMultiBut(psWScreen,MULTIOP_BASETYPE,MULTIOP_CLEAN,MCOL1,2,MULTIOP_BUTW,MULTIOP_BUTH,
-				_("Start with No Bases"), IMAGE_NOBASE,IMAGE_NOBASE_HI,true);
-		addMultiBut(psWScreen,MULTIOP_BASETYPE,MULTIOP_BASE,MCOL2,2,MULTIOP_BUTW,MULTIOP_BUTH,
-				_("Start with Bases"),IMAGE_SBASE,IMAGE_SBASE_HI,true);
-		addMultiBut(psWScreen,MULTIOP_BASETYPE,MULTIOP_DEFENCE,MCOL3,2,MULTIOP_BUTW,MULTIOP_BUTH,
-				_("Start with Advanced Bases"),IMAGE_LBASE,IMAGE_LBASE_HI,true);
-		widgSetButtonState(psWScreen, MULTIOP_CLEAN,0);						//hilight correct entry
-		widgSetButtonState(psWScreen, MULTIOP_BASE,0);
-		widgSetButtonState(psWScreen, MULTIOP_DEFENCE,0);
-		switch(game.base)
-		{
-		case 0:
-			widgSetButtonState(psWScreen, MULTIOP_CLEAN,WBUT_LOCK);
-			if (locked.bases)
-			{
-				widgSetButtonState(psWScreen, MULTIOP_BASE, WBUT_DISABLE);
-				widgSetButtonState(psWScreen, MULTIOP_DEFENCE, WBUT_DISABLE);
-			}
-			break;
-		case 1:
-			widgSetButtonState(psWScreen, MULTIOP_BASE,WBUT_LOCK);
-			if (locked.bases)
-			{
-				widgSetButtonState(psWScreen, MULTIOP_CLEAN, WBUT_DISABLE);
-				widgSetButtonState(psWScreen, MULTIOP_DEFENCE, WBUT_DISABLE);
-			}
-			break;
-		case 2:
-			widgSetButtonState(psWScreen, MULTIOP_DEFENCE,WBUT_LOCK);
-			if (locked.bases)
-			{
-				widgSetButtonState(psWScreen, MULTIOP_CLEAN, WBUT_DISABLE);
-				widgSetButtonState(psWScreen, MULTIOP_BASE, WBUT_DISABLE);
-			}
-			break;
-		}
+	MultichoiceWidget *baseTypeChoice = new MultichoiceWidget(optionsList, game.base);
+	baseTypeChoice->id = MULTIOP_BASETYPE;
+	baseTypeChoice->setLabel(_("Base"));
+	baseTypeChoice->addButton(CAMP_CLEAN, Image(FrontImages, IMAGE_NOBASE), Image(FrontImages, IMAGE_NOBASE_HI), _("Start with No Bases"));
+	baseTypeChoice->addButton(CAMP_BASE, Image(FrontImages, IMAGE_SBASE), Image(FrontImages, IMAGE_SBASE_HI), _("Start with Bases"));
+	baseTypeChoice->addButton(CAMP_WALLS, Image(FrontImages, IMAGE_LBASE), Image(FrontImages, IMAGE_LBASE_HI), _("Start with Advanced Bases"));
+	baseTypeChoice->enable(!locked.bases);
+	optionsList->addWidgetToLayout(baseTypeChoice);
 
-	addBlueForm(MULTIOP_OPTIONS, MULTIOP_MAP_PREVIEW, _("Map Preview"), MCOL0, MROW9, MULTIOP_BLUEFORMW, 27);
-	addMultiBut(psWScreen,MULTIOP_MAP_PREVIEW, MULTIOP_MAP_BUT, MCOL3, 2, MULTIOP_BUTW, MULTIOP_BUTH,
-	            _("Click to see Map"), IMAGE_FOG_OFF, IMAGE_FOG_OFF_HI, true);
-	widgSetButtonState(psWScreen, MULTIOP_MAP_BUT,0); //1 = OFF  0=ON
+	MultibuttonWidget *mapPreviewButton = new MultibuttonWidget(optionsList);
+	mapPreviewButton->id = MULTIOP_MAP_PREVIEW;
+	mapPreviewButton->setLabel(_("Map Preview"));
+	mapPreviewButton->addButton(0, Image(FrontImages, IMAGE_FOG_OFF), Image(FrontImages, IMAGE_FOG_OFF_HI), _("Click to see Map"));
+	optionsList->addWidgetToLayout(mapPreviewButton);
+
+	if (ingame.bHostSetup)
+	{
+		MultibuttonWidget *structLimitsButton = new MultibuttonWidget(optionsList);
+		structLimitsButton->id = MULTIOP_STRUCTLIMITS;
+		structLimitsButton->setLabel(challengeActive ? _("Show Structure Limits") : _("Set Structure Limits"));
+		structLimitsButton->addButton(0, Image(FrontImages, IMAGE_SLIM), Image(FrontImages, IMAGE_SLIM_HI), challengeActive ? _("Show Structure Limits") : _("Set Structure Limits"));
+		optionsList->addWidgetToLayout(structLimitsButton);
+	}
+
+	if (ingame.bHostSetup && !bHosted && !challengeActive)
+	{
+		MultibuttonWidget *hostButton = new MultibuttonWidget(optionsList);
+		hostButton->id = MULTIOP_HOST;
+		hostButton->setLabel(_("Start Hosting Game"));
+		hostButton->addButton(0, Image(FrontImages, IMAGE_HOST), Image(FrontImages, IMAGE_HOST_HI), _("Start Hosting Game"));
+		optionsList->addWidgetToLayout(hostButton);
+	}
 
 	// cancel
 	addMultiBut(psWScreen,MULTIOP_OPTIONS,CON_CANCEL,
@@ -1652,25 +1605,6 @@ static void addGameOptions()
 		iV_GetImageWidth(FrontImages,IMAGE_RETURN),
 		iV_GetImageHeight(FrontImages,IMAGE_RETURN),
 		_("Return To Previous Screen"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
-
-	// host Games button
-	if(ingame.bHostSetup && !bHosted && !challengeActive)
-	{
-		addBlueForm(MULTIOP_OPTIONS, MULTIOP_HOST, _("Start Hosting Game"), MCOL0, MROW11, MULTIOP_BLUEFORMW, 27);
-		addMultiBut(psWScreen, MULTIOP_HOST, MULTIOP_HOST_BUT, MCOL3, 0, MULTIOP_BUTW, MULTIOP_BUTH,
-			_("Start Hosting Game"), IMAGE_HOST, IMAGE_HOST_HI, IMAGE_HOST_HI);
-	}
-
-	// hosted or hosting.
-	// limits button.
-	if (ingame.bHostSetup)
-	{
-		addBlueForm(MULTIOP_OPTIONS, MULTIOP_STRUCTLIMITS, challengeActive ? _("Show Structure Limits") : _("Set Structure Limits"),
-						MCOL0, MROW10, MULTIOP_BLUEFORMW, 27);
-
-		addMultiBut(psWScreen, MULTIOP_STRUCTLIMITS, MULTIOP_LIMITS_BUT, MCOL3, 4, MULTIOP_BUTW, MULTIOP_BUTH,
-					 challengeActive ? _("Show Structure Limits") : _("Set Structure Limits"), IMAGE_SLIM, IMAGE_SLIM_HI, IMAGE_SLIM_HI);
-	}
 
 	// Add any relevant factory disabled icons.
 	updateLimitFlags();
@@ -2664,18 +2598,10 @@ static void disableMultiButs(void)
 
 	if (!NetPlay.isHost)
 	{
-		if(game.scavengers)  widgSetButtonState(psWScreen, MULTIOP_SKIRMISH, WBUT_DISABLE);
-		if(!game.scavengers) widgSetButtonState(psWScreen, MULTIOP_CAMPAIGN, WBUT_DISABLE);
-
-			if(game.base != CAMP_CLEAN)	widgSetButtonState(psWScreen,MULTIOP_CLEAN ,WBUT_DISABLE);	// camapign subtype.
-			if(game.base != CAMP_BASE)	widgSetButtonState(psWScreen,MULTIOP_BASE ,WBUT_DISABLE);
-			if(game.base != CAMP_WALLS)	widgSetButtonState(psWScreen,MULTIOP_DEFENCE,WBUT_DISABLE);
-
+		((MultichoiceWidget *)widgGetFromID(psWScreen, MULTIOP_GAMETYPE))->disable();  // Scavengers.
+		((MultichoiceWidget *)widgGetFromID(psWScreen, MULTIOP_BASETYPE))->disable();  // camapign subtype.
 		((MultichoiceWidget *)widgGetFromID(psWScreen, MULTIOP_POWER))->disable();  // pow levels
-
-			if(game.alliance != NO_ALLIANCES)	widgSetButtonState(psWScreen,MULTIOP_ALLIANCE_N ,WBUT_DISABLE);	//alliance settings.
-			if(game.alliance != ALLIANCES)	widgSetButtonState(psWScreen,MULTIOP_ALLIANCE_Y ,WBUT_DISABLE);
-			if(game.alliance != ALLIANCES_TEAMS)	widgSetButtonState(psWScreen,MULTIOP_ALLIANCE_TEAMS ,WBUT_DISABLE);
+		((MultichoiceWidget *)widgGetFromID(psWScreen, MULTIOP_ALLIANCES))->disable();
 	}
 }
 
@@ -2877,7 +2803,7 @@ static void processMultiopWidgets(UDWORD id)
 			addMultiRequest(MultiCustomMapsPath, ".wrf", MULTIOP_MAP, current_tech, current_numplayers);
 			break;
 
-		case MULTIOP_MAP_BUT:
+		case MULTIOP_MAP_PREVIEW:
 			loadMapPreview(true);
 			break;
 		}
@@ -2888,10 +2814,8 @@ static void processMultiopWidgets(UDWORD id)
 	{
 		switch(id)
 		{
-		case MULTIOP_CAMPAIGN:									// turn on campaign game
-			widgSetButtonState(psWScreen, MULTIOP_CAMPAIGN, WBUT_LOCK);
-			widgSetButtonState(psWScreen, MULTIOP_SKIRMISH,0);
-			game.scavengers = true;
+		case MULTIOP_GAMETYPE:
+			game.scavengers = ((MultichoiceWidget *)widgGetFromID(psWScreen, MULTIOP_GAMETYPE))->currentValue();
 			resetReadyStatus(false);
 			if(bHosted)
 			{
@@ -2899,19 +2823,8 @@ static void processMultiopWidgets(UDWORD id)
 			}
 			break;
 
-		case MULTIOP_SKIRMISH:
-			widgSetButtonState(psWScreen, MULTIOP_CAMPAIGN,0 );
-			widgSetButtonState(psWScreen, MULTIOP_SKIRMISH,WBUT_LOCK);
-			game.scavengers = false;
-			resetReadyStatus(false);
-			if(bHosted)
-			{
-				sendOptions();
-			}
-			break;
-
-		case MULTIOP_CLEAN:
-			game.base = CAMP_CLEAN;
+		case MULTIOP_BASETYPE:
+			game.base = ((MultichoiceWidget *)widgGetFromID(psWScreen, MULTIOP_BASETYPE))->currentValue();
 			addGameOptions();
 
 			resetReadyStatus(false);
@@ -2923,39 +2836,8 @@ static void processMultiopWidgets(UDWORD id)
 			}
 			break;
 
-		case MULTIOP_BASE:
-			game.base = CAMP_BASE;
-			addGameOptions();
-
-			resetReadyStatus(false);
-
-			if(bHosted)
-			{
-				disableMultiButs();
-				sendOptions();
-			}
-			break;
-
-		case MULTIOP_DEFENCE:
-			game.base = CAMP_WALLS;
-			addGameOptions();
-
-			resetReadyStatus(false);
-
-			if(bHosted)
-			{
-				sendOptions();
-				disableMultiButs();
-			}
-			break;
-
-		case MULTIOP_ALLIANCE_N:
-			widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_N,WBUT_LOCK);
-			widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_Y,0);
-
-			widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_TEAMS,0);
-			// Host wants NO alliance, so reset all teams back to default
-			game.alliance = NO_ALLIANCES;	//0;
+		case MULTIOP_ALLIANCES:
+			game.alliance = ((MultichoiceWidget *)widgGetFromID(psWScreen, MULTIOP_ALLIANCES))->currentValue();
 
 			resetReadyStatus(false);
 			netPlayersUpdated = true;
@@ -2964,28 +2846,6 @@ static void processMultiopWidgets(UDWORD id)
 			{
 				sendOptions();
 			}
-			break;
-
-		case MULTIOP_ALLIANCE_Y:
-			widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_N,0);
-			widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_TEAMS,0);
-
-			widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_Y,WBUT_LOCK);
-
-			game.alliance = ALLIANCES;	//1;
-
-			resetReadyStatus(false);
-			netPlayersUpdated = true;
-
-			if(bHosted)
-			{
-				sendOptions();
-			}
-			break;
-
-		case MULTIOP_ALLIANCE_TEAMS:	//locked teams
-			resetReadyStatus(false);
-			setLockedTeamsMode();
 			break;
 
 		case MULTIOP_POWER:  // set power level
@@ -3040,7 +2900,7 @@ static void processMultiopWidgets(UDWORD id)
 	// these work all the time.
 	switch(id)
 	{
-	case MULTIOP_LIMITS_BUT:
+	case MULTIOP_STRUCTLIMITS:
 		changeTitleMode(MULTILIMIT);
 		break;
 
@@ -3074,7 +2934,7 @@ static void processMultiopWidgets(UDWORD id)
 		addMultiRequest(MultiPlayersPath, ".sta", MULTIOP_PNAME, 0, 0);
 		break;
 
-	case MULTIOP_HOST_BUT:
+	case MULTIOP_HOST:
 		debug(LOG_NET, "MULTIOP_HOST enabled");
 		sstrcpy(game.name, widgGetString(psWScreen, MULTIOP_GNAME));	// game name
 		sstrcpy(sPlayer, widgGetString(psWScreen, MULTIOP_PNAME));	// pname
@@ -3130,7 +2990,7 @@ static void processMultiopWidgets(UDWORD id)
 			addChallenges();
 		}
 		break;
-	case MULTIOP_MAP_BUT:
+	case MULTIOP_MAP_PREVIEW:
 		loadMapPreview(true);
 		break;
 	case MULTIOP_AI_CLOSED:
@@ -3200,16 +3060,6 @@ static void processMultiopWidgets(UDWORD id)
 
 		closeTeamChooser();
 		addPlayerBox(  !ingame.bHostSetup || bHosted);	//restore initial options screen
-
-		//enable locked teams mode
-		//-----------------------------
-		if(game.alliance != ALLIANCES_TEAMS && bHosted)		//only if host
-		{
-			resetReadyStatus(false);
-			setLockedTeamsMode();		//update GUI
-
-			addConsoleMessage(_("'Locked Teams' mode enabled"), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
-		}
 	}
 
 	// 'ready' button
@@ -3393,12 +3243,11 @@ void frontendMultiMessages(void)
 			break;
 
 		case NET_FILE_PAYLOAD:
-			widgSetButtonState(psWScreen, MULTIOP_MAP_BUT, 1);	// turn preview button off
-			if (recvMapFileData(queue))
-			{
-				widgSetButtonState(psWScreen, MULTIOP_MAP_BUT, 0);	// turn it back on again
-			}
+		{
+			bool done = recvMapFileData(queue);
+			((MultibuttonWidget *)widgGetFromID(psWScreen, MULTIOP_MAP_PREVIEW))->enable(done);  // turn preview button on or off
 			break;
+		}
 
 		case NET_FILE_CANCELLED:					// host only routine
 			{
@@ -4503,23 +4352,6 @@ bool addMultiBut(W_SCREEN *screen, UDWORD formid, UDWORD id, UDWORD x, UDWORD y,
 	button->doHighlight = hi;
 	button->tc = tc;
 	return true;
-}
-
-/*
- * Set skirmish/multiplayer alliance mode to 'Locked teams',
- * update GUI accordingly and notify other players
- */
-void setLockedTeamsMode(void)
-{
-	widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_N,0);
-	widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_Y,0);
-	widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_TEAMS,WBUT_LOCK);
-	game.alliance = ALLIANCES_TEAMS;		//2
-	netPlayersUpdated = true;
-	if(bHosted)
-	{
-		sendOptions();
-	}
 }
 
 /* Returns true if all human players clicked on the 'ready' button */

@@ -161,6 +161,16 @@ ListWidget::ListWidget(WIDGET *parent)
 	, order(RightThenDown)
 {}
 
+void ListWidget::widgetLost(WIDGET *widget)
+{
+	std::vector<WIDGET *>::iterator i = std::find(myChildren.begin(), myChildren.end(), widget);
+	if (i != myChildren.end())
+	{
+		myChildren.erase(i);
+		doLayoutAll();
+	}
+}
+
 void ListWidget::setChildSize(int width, int height)
 {
 	childSize = QSize(width, height);
