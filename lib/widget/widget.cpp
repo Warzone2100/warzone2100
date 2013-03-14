@@ -650,28 +650,24 @@ void WIDGET::runRecursive(W_CONTEXT *psContext)
 
 void WIDGET::processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed)
 {
-	Vector2i pos(psContext->mx, psContext->my);
-	Vector2i offset(psContext->xOffset, psContext->yOffset);
+	W_CONTEXT shiftedContext;
+	shiftedContext.mx = psContext->mx - x();
+	shiftedContext.my = psContext->my - y();
+	shiftedContext.xOffset = psContext->xOffset + x();
+	shiftedContext.yOffset = psContext->yOffset + y();
 
 	// Process subwidgets.
 	for (WIDGET::Children::const_iterator i = childWidgets.begin(); i != childWidgets.end(); ++i)
 	{
 		WIDGET *psCurr = *i;
 
-		if (!psCurr->visible() || !psCurr->dim.contains(psContext->mx, psContext->my))
+		if (!psCurr->visible() || !psCurr->dim.contains(shiftedContext.mx, shiftedContext.my))
 		{
 			continue;  // Skip any hidden widgets, or widgets the click missed.
 		}
 
-		// Found a subwidget, so set up the context.
-		W_CONTEXT sFormContext;
-		sFormContext.mx = psContext->mx - psCurr->x();
-		sFormContext.my = psContext->my - psCurr->y();
-		sFormContext.xOffset = psContext->xOffset + psCurr->x();
-		sFormContext.yOffset = psContext->yOffset + psCurr->y();
-
 		// Process it (recursively).
-		psCurr->processClickRecursive(&sFormContext, key, wasPressed);
+		psCurr->processClickRecursive(&shiftedContext, key, wasPressed);
 	}
 
 	if (psMouseOverWidget == nullptr)
@@ -685,12 +681,7 @@ void WIDGET::processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wa
 			screenPointer->lastHighlight->highlightLost();
 		}
 		screenPointer->lastHighlight = this;  // Mark that the mouse is over a widget (if we haven't already).
-		W_CONTEXT highlightContext;
-		highlightContext.mx = psContext->mx + x();
-		highlightContext.my = psContext->my + y();
-		highlightContext.xOffset = psContext->xOffset - x();
-		highlightContext.yOffset = psContext->yOffset - y();
-		highlight(&highlightContext);
+		highlight(psContext);
 	}
 
 	if (key == WKEY_NONE)
