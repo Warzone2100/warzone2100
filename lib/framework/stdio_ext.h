@@ -25,25 +25,6 @@
 #include <stdio.h>
 #include <stdarg.h>
 
-/** A variant on snprintf which appends its output string to the given string
- *  buffer, rather than to replace it.
- *  \param str the string to append to
- *  \param size the size of the buffer \c str expressed in bytes
- *  \param format the formatting string
- *  \param ap a variable arguments list of variables to use in the formatting
- *            string
- *  \return the amount of characters appended to the string
- */
-extern int vslcatprintf(char* str, size_t size, const char* format, va_list ap);
-
-
-/** A variant on snprintf which appends its output string to the given string
- *  The function's interface is similar to vslcatprintf(), so look at that
- *  function's description.
- */
-extern int slcatprintf(char* str, size_t size, const char* format, ...) WZ_DECL_FORMAT(printf, 3, 4);
-
-
 #if defined(WZ_OS_WIN) || defined(DOXYGEN)
 // These functions are GNU extensions; so make sure they are available on Windows also
 
