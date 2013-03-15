@@ -49,8 +49,8 @@
 // Make xgettext recognize the context
 #define NP_(Context, String) gettext_noop(String)
 
-extern WZ_DECL_CONST const char* getLanguage(void);
-extern WZ_DECL_CONST const char* getLanguageName(void);
+extern WZ_DECL_PURE const char* getLanguage(void);
+extern WZ_DECL_PURE const char* getLanguageName(void);
 extern bool setLanguage(const char *name);
 extern void setNextLanguage(void);
 extern void initI18n(void);
