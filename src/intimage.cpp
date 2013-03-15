@@ -144,31 +144,6 @@ IMAGEFRAME FrameRadar = {
 	{FR_IGNORE, 0,0, 0,0 ,0}},
 };
 
-// Tab definitions, defines graphics to use for major and minor tabs.
-TABDEF	StandardTab = {
-	IMAGE_TAB1,			// Major tab normal.
-	IMAGE_TAB1DOWN,		// Major tab clicked.
-	IMAGE_TABHILIGHT,	// Major tab hilighted by mouse.
-	IMAGE_TABSELECTED,	// Major tab currently selected.
-
-	IMAGE_TAB1,			// Minor tab tab Normal.
-	IMAGE_TAB1DOWN,		// Minor tab clicked.
-	IMAGE_TABHILIGHT,	// Minor tab hilighted by mouse.
-	IMAGE_TABSELECTED,	// Minor tab currently selected.
-};
-
-TABDEF	SmallTab = {
-	IMAGE_TAB1_SM,			// Major tab normal.
-	IMAGE_TAB1DOWN_SM,		// Major tab clicked.
-	IMAGE_TABHILIGHT_SM,	// Major tab hilighted by mouse.
-	IMAGE_TAB1SELECTED_SM,	// Major tab currently selected.
-
-	IMAGE_TAB1_SM,			// Minor tab tab Normal.
-	IMAGE_TAB1DOWN_SM,		// Minor tab clicked.
-	IMAGE_TABHILIGHT_SM,	// Minor tab hilighted by mouse.
-	IMAGE_TAB1SELECTED_SM,	// Minor tab currently selected.
-};
-
 // Read bitmaps used by the interface.
 //
 bool imageInitBitmaps(void)
@@ -276,4 +251,13 @@ void RenderWindowFrame(FRAMETYPE frame, UDWORD x, UDWORD y, UDWORD Width, UDWORD
 		iV_DrawImageRepeatY(IntImages, Frame->RightEdge, x + Width - iV_GetImageWidth(IntImages, Frame->RightEdge), y + HTopRight,
 		                    Height - HTopRight - HBottomRight);
 	}
+}
+
+IntListTabWidget::IntListTabWidget(WIDGET *parent)
+	: ListTabWidget(parent)
+{
+	tabWidget()->setHeight(15);
+	tabWidget()->addStyle(TabSelectionStyle(Image(IntImages, IMAGE_TAB1),    Image(IntImages, IMAGE_TAB1DOWN),    Image(IntImages, IMAGE_TABHILIGHT),    Image(), Image(), Image(), Image(), Image(), Image(), 2));
+	tabWidget()->addStyle(TabSelectionStyle(Image(IntImages, IMAGE_TAB1_SM), Image(IntImages, IMAGE_TAB1DOWN_SM), Image(IntImages, IMAGE_TABHILIGHT_SM), Image(), Image(), Image(), Image(), Image(), Image(), 2));
+	tabWidget()->addStyle(TabSelectionStyle(Image(IntImages, IMAGE_TAB1_SM), Image(IntImages, IMAGE_TAB1DOWN_SM), Image(IntImages, IMAGE_TABHILIGHT_SM), Image(IntImages, IMAGE_LFTTAB), Image(IntImages, IMAGE_LFTTABD), Image(IntImages, IMAGE_LFTTABD), Image(IntImages, IMAGE_RGTTAB), Image(IntImages, IMAGE_RGTTABD), Image(IntImages, IMAGE_RGTTABD), 2));
 }

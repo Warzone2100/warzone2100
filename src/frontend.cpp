@@ -79,10 +79,6 @@ struct CAMPAIGN_FILE
 // ////////////////////////////////////////////////////////////////////////////
 // Global variables
 
-// Widget code and non-constant strings do not get along
-static char resolution[WIDG_MAXSTR];
-static char textureSize[WIDG_MAXSTR];
-
 tMode titleMode; // the global case
 tMode lastTitleMode; // Since skirmish and multiplayer setup use the same functions, we use this to go back to the corresponding menu.
 
@@ -917,17 +913,24 @@ bool runAudioOptionsMenu(void)
 static bool startVideoOptionsMenu(void)
 {
 	// Generate the resolution string
-	snprintf(resolution, WIDG_MAXSTR, "%d x %d",
-	         war_GetWidth(), war_GetHeight());
+	char resolution[43];
+	char textureSize[20];
+	ssprintf(resolution, "%d x %d", war_GetWidth(), war_GetHeight());
 	// Generate texture size string
-	snprintf(textureSize, WIDG_MAXSTR, "%d", getTextureSize());
+	ssprintf(textureSize, "%d", getTextureSize());
 
 	addBackdrop();
 	addTopForm();
 	addBottomForm();
 
 	// Add a note about changes taking effect on restart for certain options
-	addTextHint(FRONTEND_TAKESEFFECT, FRONTEND_POS1X + 48, FRONTEND_POS1Y + 24, _("* Takes effect on game restart"));
+	WIDGET *parent = widgGetFromID(psWScreen, FRONTEND_BOTFORM);
+
+	W_LABEL *label = new W_LABEL(parent);
+	label->setGeometry(FRONTEND_POS1X + 48, FRONTEND_POS1Y, FRONTEND_BUTWIDTH - FRONTEND_POS1X - 48, FRONTEND_BUTHEIGHT);
+	label->setFontColour(WZCOL_TEXT_BRIGHT);
+	label->setString(_("* Takes effect on game restart"));
+	label->setTextAlignment(WLAB_ALIGNBOTTOMLEFT);
 
 	// Fullscreen/windowed
 	addTextButton(FRONTEND_WINDOWMODE, FRONTEND_POS2X-35, FRONTEND_POS2Y, _("Graphics Mode*"), 0);
@@ -1092,7 +1095,8 @@ bool runVideoOptionsMenu(void)
 			war_SetHeight(modes[current].height());
 
 			// Generate the textual representation of the new width and height
-			snprintf(resolution, WIDG_MAXSTR, "%d x %d", modes[current].width(), modes[current].height());
+			char resolution[43];
+			ssprintf(resolution, "%d x %d", modes[current].width(), modes[current].height());
 
 			// Update the widget
 			widgSetString(psWScreen, FRONTEND_RESOLUTION_R, resolution);
@@ -1128,7 +1132,8 @@ bool runVideoOptionsMenu(void)
 			setTextureSize(newTexSize);
 
 			// Generate the string representation of the new size
-			snprintf(textureSize, WIDG_MAXSTR, "%d", newTexSize);
+			char textureSize[20];
+			ssprintf(textureSize, "%d", newTexSize);
 
 			// Update the widget
 			widgSetString(psWScreen, FRONTEND_TEXTURESZ_R, textureSize);
@@ -1406,7 +1411,7 @@ bool runGameOptionsMenu(void)
 		widgSetString(psWScreen, FRONTEND_LANGUAGE_R, getLanguageName());
 		/* Hack to reset current menu text, which looks fancy. */
 		widgSetString(psWScreen, FRONTEND_SIDETEXT, _("GAME OPTIONS"));
-		widgSetTipText(widgGetFromID(psWScreen, FRONTEND_QUIT), P_("menu", "Return"));
+		widgGetFromID(psWScreen, FRONTEND_QUIT)->setTip(P_("menu", "Return"));
 		widgSetString(psWScreen, FRONTEND_LANGUAGE, _("Language"));
 		widgSetString(psWScreen, FRONTEND_COLOUR, _("Unit Colour:"));
 		widgSetString(psWScreen, FRONTEND_COLOUR_CAM, _("Campaign"));
@@ -1541,7 +1546,7 @@ bool runGameOptionsMenu(void)
 // drawing functions
 
 // show a background piccy (currently used for version and mods labels)
-static void displayTitleBitmap(WZ_DECL_UNUSED WIDGET *psWidget, WZ_DECL_UNUSED UDWORD xOffset, WZ_DECL_UNUSED UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
+static void displayTitleBitmap(WZ_DECL_UNUSED WIDGET *psWidget, WZ_DECL_UNUSED UDWORD xOffset, WZ_DECL_UNUSED UDWORD yOffset)
 {
 	char modListText[MAX_STR_LENGTH] = "";
 
@@ -1567,72 +1572,41 @@ static void displayTitleBitmap(WZ_DECL_UNUSED WIDGET *psWidget, WZ_DECL_UNUSED U
 
 // ////////////////////////////////////////////////////////////////////////////
 // show warzone logo
-static void displayLogo(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
+static void displayLogo(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
-	iV_DrawImageScaled(FrontImages, IMAGE_FE_LOGO, xOffset + psWidget->x, yOffset + psWidget->y, psWidget->width, psWidget->height);
+	iV_DrawImageScaled(FrontImages, IMAGE_FE_LOGO, xOffset + psWidget->x(), yOffset + psWidget->y(), psWidget->width(), psWidget->height());
 }
 
 
 // ////////////////////////////////////////////////////////////////////////////
 // show, well have a guess..
-static void displayBigSlider(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
+static void displayBigSlider(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
 	W_SLIDER *Slider = (W_SLIDER*)psWidget;
-	UDWORD x = xOffset+psWidget->x;
-	UDWORD y = yOffset+psWidget->y;
-	SWORD sx;
+	int x = xOffset + psWidget->x();
+	int y = yOffset + psWidget->y();
 
 	iV_DrawImage(IntImages,IMAGE_SLIDER_BIG,x+STAT_SLD_OX,y+STAT_SLD_OY);			// draw bdrop
 
-	sx = (SWORD)((Slider->width-3 - Slider->barSize) * Slider->pos / Slider->numStops);	// determine pos.
+	int sx = (Slider->width() - 3 - Slider->barSize) * Slider->pos / Slider->numStops;  // determine pos.
 	iV_DrawImage(IntImages,IMAGE_SLIDER_BIGBUT,x+3+sx,y+3);								//draw amount
 }
 
-static void displayAISlider(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
+static void displayAISlider(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
 	W_SLIDER *Slider = (W_SLIDER*)psWidget;
-	UDWORD x = xOffset+psWidget->x;
-	UDWORD y = yOffset+psWidget->y;
-	SWORD sx;
+	int x = xOffset + psWidget->x();
+	int y = yOffset + psWidget->y();
 
 	iV_DrawImage(IntImages,IMAGE_SLIDER_AI,x+STAT_SLD_OX,y+STAT_SLD_OY);			// draw bdrop
 
-	sx = (SWORD)((Slider->width-3 - Slider->barSize) * Slider->pos / Slider->numStops);	// determine pos.
+	int sx = (Slider->width() - 3 - Slider->barSize) * Slider->pos / Slider->numStops;  // determine pos.
 	iV_DrawImage(IntImages,IMAGE_SLIDER_BIGBUT,x+3+sx,y+3);								//draw amount
-}
-
-
-// ////////////////////////////////////////////////////////////////////////////
-// show text.
-static void displayText(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
-{
-	SDWORD			fx,fy, fw;
-	W_LABEL		*psLab;
-
-	psLab = (W_LABEL *)psWidget;
-	iV_SetFont(psLab->FontID);
-
-	fw = iV_GetTextWidth(psLab->aText);
-	fy = yOffset + psWidget->y;
-
-	if (psWidget->style & WLAB_ALIGNCENTRE)	//check for centering, calculate offset.
-	{
-		fx = xOffset + psWidget->x + ((psWidget->width - fw) / 2);
-	}
-	else
-	{
-		fx = xOffset + psWidget->x;
-	}
-
-	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
-	iV_DrawText( psLab->aText, fx, fy);
-
-	return;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
 // show text written on its side.
-static void displayTextAt270(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
+static void displayTextAt270(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
 	SDWORD		fx,fy;
 	W_LABEL		*psLab;
@@ -1641,18 +1615,18 @@ static void displayTextAt270(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, W
 
 	iV_SetFont(font_large);
 
-	fx = xOffset + psWidget->x;
-	fy = yOffset + psWidget->y + iV_GetTextWidth(psLab->aText) ;
+	fx = xOffset + psWidget->x();
+	fy = yOffset + psWidget->y() + iV_GetTextWidth(psLab->aText.toUtf8().constData());
 
 	iV_SetTextColour(WZCOL_GREY);
-	iV_DrawTextRotated(psLab->aText, fx+2, fy+2, 270.f);
+	iV_DrawTextRotated(psLab->aText.toUtf8().constData(), fx+2, fy+2, 270.f);
 	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
-	iV_DrawTextRotated(psLab->aText, fx, fy, 270.f);
+	iV_DrawTextRotated(psLab->aText.toUtf8().constData(), fx, fy, 270.f);
 }
 
 // ////////////////////////////////////////////////////////////////////////////
 // show a text option.
-void displayTextOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
+void displayTextOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
 	SDWORD			fx,fy, fw;
 	W_BUTTON		*psBut;
@@ -1667,16 +1641,16 @@ void displayTextOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL
 		hilight = true;
 	}
 
-  	fw = iV_GetTextWidth(psBut->pText);
-	fy = yOffset + psWidget->y + (psWidget->height - iV_GetTextLineSize())/2 - iV_GetTextAboveBase();
+  	fw = iV_GetTextWidth(psBut->pText.toUtf8().constData());
+	fy = yOffset + psWidget->y() + (psWidget->height() - iV_GetTextLineSize())/2 - iV_GetTextAboveBase();
 
 	if (psWidget->style & WBUT_TXTCENTRE)							//check for centering, calculate offset.
 	{
-		fx = xOffset + psWidget->x + ((psWidget->width - fw) / 2);
+		fx = xOffset + psWidget->x() + ((psWidget->width() - fw) / 2);
 	}
 	else
 	{
-		fx = xOffset + psWidget->x;
+		fx = xOffset + psWidget->x();
 	}
 
 	if(greyOut)														// unavailable
@@ -1699,7 +1673,7 @@ void displayTextOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL
 		}
 	}
 
-	iV_DrawText( psBut->pText, fx, fy);
+	iV_DrawText(psBut->pText.toUtf8().constData(), fx, fy);
 
 	return;
 }
@@ -1727,36 +1701,26 @@ void addBackdrop(void)
 // ////////////////////////////////////////////////////////////////////////////
 void addTopForm(void)
 {
-	W_FORMINIT sFormInit;
+	WIDGET *parent = widgGetFromID(psWScreen, FRONTEND_BACKDROP);
 
-	sFormInit.formID = FRONTEND_BACKDROP;
-	sFormInit.id = FRONTEND_TOPFORM;
-	sFormInit.style = WFORM_PLAIN;
-
-	if(titleMode == MULTIOPTION)
+	IntFormAnimated *topForm = new IntFormAnimated(parent, false);
+	topForm->id = FRONTEND_TOPFORM;
+	if (titleMode == MULTIOPTION)
 	{
-		sFormInit.x		= FRONTEND_TOPFORM_WIDEX;
-		sFormInit.y		= FRONTEND_TOPFORM_WIDEY;
-		sFormInit.width = FRONTEND_TOPFORM_WIDEW;
-		sFormInit.height= FRONTEND_TOPFORM_WIDEH;
+		topForm->setGeometry(FRONTEND_TOPFORM_WIDEX, FRONTEND_TOPFORM_WIDEY, FRONTEND_TOPFORM_WIDEW, FRONTEND_TOPFORM_WIDEH);
 	}
 	else
-
 	{
-		sFormInit.x		= FRONTEND_TOPFORMX;
-		sFormInit.y		= FRONTEND_TOPFORMY;
-		sFormInit.width = FRONTEND_TOPFORMW;
-		sFormInit.height= FRONTEND_TOPFORMH;
+		topForm->setGeometry(FRONTEND_TOPFORMX, FRONTEND_TOPFORMY, FRONTEND_TOPFORMW, FRONTEND_TOPFORMH);
 	}
-	sFormInit.pDisplay = intDisplayPlainForm;
-	widgAddForm(psWScreen, &sFormInit);
 
+	W_FORMINIT sFormInit;
 	sFormInit.formID= FRONTEND_TOPFORM;
 	sFormInit.id	= FRONTEND_LOGO;
 	int imgW = iV_GetImageWidth(FrontImages, IMAGE_FE_LOGO);
 	int imgH = iV_GetImageHeight(FrontImages, IMAGE_FE_LOGO);
-	int dstW = sFormInit.width;
-	int dstH = sFormInit.height;
+	int dstW = topForm->width();
+	int dstH = topForm->height();
 	if (imgW*dstH < imgH*dstW)  // Want to set aspect ratio dstW/dstH = imgW/imgH.
 	{
 		dstW = imgW * dstH/imgH;  // Too wide.
@@ -1765,8 +1729,8 @@ void addTopForm(void)
 	{
 		dstH = imgH * dstW/imgW;  // Too high.
 	}
-	sFormInit.x = (sFormInit.width  - dstW)/2;
-	sFormInit.y = (sFormInit.height - dstH)/2;
+	sFormInit.x = (topForm->width()  - dstW)/2;
+	sFormInit.y = (topForm->height() - dstH)/2;
 	sFormInit.width  = dstW;
 	sFormInit.height = dstH;
 	sFormInit.pDisplay= displayLogo;
@@ -1776,59 +1740,24 @@ void addTopForm(void)
 // ////////////////////////////////////////////////////////////////////////////
 void addBottomForm(void)
 {
-	W_FORMINIT sFormInit;
+	WIDGET *parent = widgGetFromID(psWScreen, FRONTEND_BACKDROP);
 
-	sFormInit.formID = FRONTEND_BACKDROP;
-	sFormInit.id = FRONTEND_BOTFORM;
-	sFormInit.style = WFORM_PLAIN;
-	sFormInit.x = FRONTEND_BOTFORMX;
-	sFormInit.y = FRONTEND_BOTFORMY;
-	sFormInit.width = FRONTEND_BOTFORMW;
-	sFormInit.height = FRONTEND_BOTFORMH;
-
-	sFormInit.pDisplay = intOpenPlainForm;
-	sFormInit.disableChildren = true;
-
-	widgAddForm(psWScreen, &sFormInit);
-}
-
-// ////////////////////////////////////////////////////////////////////////////
-void addTextHint(UDWORD id, UDWORD PosX, UDWORD PosY, const char *txt)
-{
-	W_LABINIT sLabInit;
-
-	sLabInit.formID = FRONTEND_BOTFORM;
-	sLabInit.id = id;
-	sLabInit.x = (short)PosX;
-	sLabInit.y = (short)PosY;
-
-	sLabInit.width = MULTIOP_READY_WIDTH;
-	sLabInit.height = FRONTEND_BUTHEIGHT;
-	sLabInit.pDisplay = displayText;
-	sLabInit.pText = txt;
-	widgAddLabel(psWScreen, &sLabInit);
+	IntFormAnimated *botForm = new IntFormAnimated(parent);
+	botForm->id = FRONTEND_BOTFORM;
+	botForm->setGeometry(FRONTEND_BOTFORMX, FRONTEND_BOTFORMY, FRONTEND_BOTFORMW, FRONTEND_BOTFORMH);
 }
 
 // ////////////////////////////////////////////////////////////////////////////
 void addText(UDWORD id, UDWORD PosX, UDWORD PosY, const char *txt, UDWORD formID)
 {
-	W_LABINIT sLabInit;
+	WIDGET *parent = widgGetFromID(psWScreen, formID);
 
-	sLabInit.formID = formID;
-	sLabInit.id = id;
-	sLabInit.x = (short)PosX;
-	sLabInit.y = (short)PosY;
-	sLabInit.style = WLAB_ALIGNCENTRE;
-
-	// Align
-	sLabInit.width = MULTIOP_READY_WIDTH;
-	//sButInit.x+=35;
-
-	sLabInit.height = FRONTEND_BUTHEIGHT;
-	sLabInit.pDisplay = displayText;
-	sLabInit.FontID = font_small;
-	sLabInit.pText = txt;
-	widgAddLabel(psWScreen, &sLabInit);
+	W_LABEL *label = new W_LABEL(parent);
+	label->id = id;
+	label->setGeometry(PosX, PosY, MULTIOP_READY_WIDTH, FRONTEND_BUTHEIGHT);
+	label->setTextAlignment(WLAB_ALIGNCENTRE);
+	label->setFont(font_small, WZCOL_TEXT_BRIGHT);
+	label->setString(txt);
 }
 
 // ////////////////////////////////////////////////////////////////////////////

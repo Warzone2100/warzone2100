@@ -78,13 +78,11 @@ void addBottomForm(void);
 void addBackdrop(void);
 void addTextButton(UDWORD id, UDWORD PosX, UDWORD PosY, const char *txt, unsigned int style);
 void addSmallTextButton(UDWORD id, UDWORD PosX, UDWORD PosY, const char *txt, unsigned int style);
-void addTextHint(UDWORD id, UDWORD PosX, UDWORD PosY, const char *txt);
-void addText(UDWORD id, UDWORD PosX, UDWORD PosY, const char *txt, UDWORD formID);
 void addSideText(UDWORD id, UDWORD PosX, UDWORD PosY, const char *txt);
 void addFESlider(UDWORD id, UDWORD parent, UDWORD x, UDWORD y, UDWORD stops, UDWORD pos);
 void addFEAISlider(UDWORD id, UDWORD parent, UDWORD x, UDWORD y, UDWORD stops, UDWORD pos);
 
-void displayTextOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+void displayTextOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 
 bool CancelPressed(void);
 
@@ -236,7 +234,6 @@ enum
 	FRONTEND_RESOLUTION_R,
 	FRONTEND_TEXTURESZ,
 	FRONTEND_TEXTURESZ_R,
-	FRONTEND_TAKESEFFECT,
 	FRONTEND_VSYNC,
 	FRONTEND_VSYNC_R,
 	FRONTEND_FSAA,

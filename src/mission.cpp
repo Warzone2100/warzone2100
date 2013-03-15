@@ -576,7 +576,7 @@ void addTransporterTimerInterface(void)
 				psForm = (W_CLICKFORM *)widgGetFromID(psWScreen, IDTRANTIMER_BUTTON);
 				if (psForm)
 				{
-					formSetClickState(psForm, WBUT_LOCK);
+					psForm->setState(WBUT_LOCK);
 				}
 			}
 		}
@@ -1848,9 +1848,8 @@ void missionMoveTransporterOffWorld(DROID *psTransporter)
 			psForm = (W_CLICKFORM *)widgGetFromID(psWScreen, IDTRANTIMER_BUTTON);
 			if (psForm)
 			{
-				formSetClickState(psForm, WCLICK_NORMAL);
+				psForm->setState(WBUT_PLAIN);
 			}
-
 		}
 		//need a callback for when all the selectedPlayers' reinforcements have been delivered
 		if (psTransporter->player == selectedPlayer)
@@ -1999,8 +1998,9 @@ UDWORD  missionGetReinforcementTime(void)
 }
 
 //fills in a hours(if bHours = true), minutes and seconds display for a given time in 1000th sec
-static void fillTimeDisplay(char *psText, UDWORD time, bool bHours)
+static void fillTimeDisplay(QString &text, UDWORD time, bool bHours)
 {
+	char psText[100];
 	//this is only for the transporter timer - never have hours!
 	if (time == LZ_COMPROMISED_TIME)
 	{
@@ -2010,8 +2010,9 @@ static void fillTimeDisplay(char *psText, UDWORD time, bool bHours)
 	{
 		time_t secs = time / GAME_TICKS_PER_SEC;
 		struct tm *tmp = localtime(&secs);
-		strftime(psText, WIDG_MAXSTR, bHours ? "%H:%M:%S" : "%H:%M", tmp);
+		strftime(psText, sizeof(psText), bHours ? "%H:%M:%S" : "%H:%M", tmp);
 	}
+	text = QString::fromUtf8(psText);
 }
 
 
@@ -2046,7 +2047,7 @@ void intUpdateMissionTimer(WIDGET *psWidget, W_CONTEXT *psContext)
 	}
 
 	fillTimeDisplay(Label->aText, timeRemaining, true);
-	Label->style &= ~WIDG_HIDDEN;	// Make sure its visible
+	Label->show();  // Make sure its visible
 
 	if (challengeActive)
 	{
@@ -2182,7 +2183,7 @@ void intUpdateTransporterTimer(WIDGET *psWidget, W_CONTEXT *psContext)
 	Label->aText[3] = (UBYTE)('0'+ calcTime / 10);
 	Label->aText[4] = (UBYTE)('0'+ calcTime % 10);*/
 
-	Label->style &= ~WIDG_HIDDEN;
+	Label->show();
 }
 
 /* Remove the Mission Timer widgets from the screen*/
@@ -2215,7 +2216,7 @@ void intRemoveTransporterTimer(void)
 
 
 
-static void intDisplayMissionBackDrop(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+static void intDisplayMissionBackDrop(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
 	scoreDataToScreen();
 }
@@ -2250,48 +2251,19 @@ static bool _intAddMissionResult(bool result, bool bPlaySuccess)
 	sFormInit.formID		= 0;
 	sFormInit.id			= IDMISSIONRES_BACKFORM;
 	sFormInit.style			= WFORM_PLAIN;
-	sFormInit.x				= (SWORD)(0 + D_W);
-	sFormInit.y				= (SWORD)(0 + D_H);
-	sFormInit.width			= 640;
-	sFormInit.height		= 480;
 	sFormInit.pDisplay		= intDisplayMissionBackDrop;
-	if (!widgAddForm(psWScreen, &sFormInit))
-	{
-		return false;
-	}
+	W_FORM *missionResBackForm = widgAddForm(psWScreen, &sFormInit);
+	missionResBackForm->setGeometry(0 + D_W, 0 + D_H, 640, 480);
 
 	// TITLE
-	sFormInit.formID		= IDMISSIONRES_BACKFORM;
-
-	sFormInit.id			= IDMISSIONRES_TITLE;
-	sFormInit.style			= WFORM_PLAIN;
-	sFormInit.x				= MISSIONRES_TITLE_X;
-	sFormInit.y				= MISSIONRES_TITLE_Y;
-	sFormInit.width			= MISSIONRES_TITLE_W;
-	sFormInit.height		= MISSIONRES_TITLE_H;
-	sFormInit.disableChildren = true;
-	sFormInit.pDisplay		= intOpenPlainForm;	//intDisplayPlainForm;
-
-	if (!widgAddForm(psWScreen, &sFormInit))
-	{
-		return false;
-	}
+	IntFormAnimated *missionResTitle = new IntFormAnimated(missionResBackForm);
+	missionResTitle->id = IDMISSIONRES_TITLE;
+	missionResTitle->setGeometry(MISSIONRES_TITLE_X, MISSIONRES_TITLE_Y, MISSIONRES_TITLE_W, MISSIONRES_TITLE_H);
 
 	// add form
-	sFormInit.formID		= IDMISSIONRES_BACKFORM;
-
-	sFormInit.id			= IDMISSIONRES_FORM;
-	sFormInit.style			= WFORM_PLAIN;
-	sFormInit.x				= MISSIONRES_X;
-	sFormInit.y				= MISSIONRES_Y;
-	sFormInit.width			= MISSIONRES_W;
-	sFormInit.height		= MISSIONRES_H;
-	sFormInit.disableChildren = true;
-	sFormInit.pDisplay		= intOpenPlainForm;	//intDisplayPlainForm;
-	if (!widgAddForm(psWScreen, &sFormInit))
-	{
-		return false;
-	}
+	IntFormAnimated *missionResForm = new IntFormAnimated(missionResBackForm);
+	missionResForm->id = IDMISSIONRES_FORM;
+	missionResForm->setGeometry(MISSIONRES_X, MISSIONRES_Y, MISSIONRES_W, MISSIONRES_H);
 
 	// description of success/fail
 	W_LABINIT sLabInit;

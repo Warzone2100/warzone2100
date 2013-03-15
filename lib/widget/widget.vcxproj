@@ -194,6 +194,7 @@
     <ClCompile Include="editbox.cpp" />
     <ClCompile Include="form.cpp" />
     <ClCompile Include="label.cpp" />
+    <ClCompile Include="listwidget.cpp" />
     <ClCompile Include="slider.cpp" />
     <ClCompile Include="tip.cpp" />
     <ClCompile Include="widget.cpp" />
@@ -204,6 +205,7 @@
     <ClInclude Include="editbox.h" />
     <ClInclude Include="form.h" />
     <ClInclude Include="label.h" />
+    <ClInclude Include="listwidget.h" />
     <ClInclude Include="slider.h" />
     <ClInclude Include="tip.h" />
     <ClInclude Include="widgbase.h" />

@@ -117,8 +117,6 @@ static InputKey	*pStartBuffer, *pEndBuffer;
 /***     Misc support   ***/
 /**************************/
 
-#define WIDG_MAXSTR 80 // HACK, from widget.h
-
 /* Put a character into a text buffer overwriting any text under the cursor */
 QString wzGetSelection()
 {
@@ -127,7 +125,7 @@ QString wzGetSelection()
 	int scraplen;
 
 	get_scrap(T('T','E','X','T'), &scraplen, &scrap);
-	if (scraplen > 0 && scraplen < WIDG_MAXSTR-2)
+	if (scraplen > 0)
 	{
 		retval = QString::fromUtf8(scrap);
 	}

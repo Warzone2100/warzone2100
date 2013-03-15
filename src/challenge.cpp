@@ -80,14 +80,14 @@ static	W_SCREEN	*psRequestScreen;					// Widget screen for requester
 bool		challengesUp = false;		///< True when interface is up and should be run.
 bool		challengeActive = false;	///< Whether we are running a challenge
 
-static void displayLoadBanner(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
+static void displayLoadBanner(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
 	PIELIGHT col = WZCOL_GREEN;
-	UDWORD	x = xOffset + psWidget->x;
-	UDWORD	y = yOffset + psWidget->y;
+	UDWORD	x = xOffset + psWidget->x();
+	UDWORD	y = yOffset + psWidget->y();
 
-	pie_BoxFill(x, y, x + psWidget->width, y + psWidget->height, col);
-	pie_BoxFill(x + 2, y + 2, x + psWidget->width - 2, y + psWidget->height - 2, WZCOL_MENU_BACKGROUND);
+	pie_BoxFill(x, y, x + psWidget->width(), y + psWidget->height(), col);
+	pie_BoxFill(x + 2, y + 2, x + psWidget->width() - 2, y + psWidget->height() - 2, WZCOL_MENU_BACKGROUND);
 }
 
 // quite the hack, game name is stored in global sRequestResult
@@ -126,23 +126,23 @@ void updateChallenge(bool gameWon)
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-static void displayLoadSlot(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
+static void displayLoadSlot(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
 
-	UDWORD	x = xOffset + psWidget->x;
-	UDWORD	y = yOffset + psWidget->y;
+	UDWORD	x = xOffset + psWidget->x();
+	UDWORD	y = yOffset + psWidget->y();
 	char  butString[64];
 
-	drawBlueBox(x, y, psWidget->width, psWidget->height);	//draw box
+	drawBlueBox(x, y, psWidget->width(), psWidget->height());	//draw box
 
-	if (((W_BUTTON *)psWidget)->pText)
+	if (!((W_BUTTON *)psWidget)->pText.isEmpty())
 	{
-		sstrcpy(butString, ((W_BUTTON *)psWidget)->pText);
+		sstrcpy(butString, ((W_BUTTON *)psWidget)->pText.toUtf8().constData());
 
 		iV_SetFont(font_regular);									// font
 		iV_SetTextColour(WZCOL_FORM_TEXT);
 
-		while (iV_GetTextWidth(butString) > psWidget->width)
+		while (iV_GetTextWidth(butString) > psWidget->width())
 		{
 			butString[strlen(butString)-1] = '\0';
 		}
@@ -167,32 +167,24 @@ bool addChallenges()
 
 	(void) PHYSFS_mkdir(sSearchPath); // just in case
 
-	psRequestScreen = widgCreateScreen(); // init the screen
-	widgSetTipFont(psRequestScreen, font_regular);
+	psRequestScreen = new W_SCREEN; // init the screen
+
+	WIDGET *parent = psRequestScreen->psForm;
 
 	/* add a form to place the tabbed form on */
-	W_FORMINIT sFormInit;
-	sFormInit.formID = 0;				//this adds the blue background, and the "box" behind the buttons -Q
-	sFormInit.id = CHALLENGE_FORM;
-	sFormInit.style = WFORM_PLAIN;
-	sFormInit.x = (SWORD) CHALLENGE_X;
-	sFormInit.y = (SWORD) CHALLENGE_Y;
-	sFormInit.width = CHALLENGE_W;
-	// we need the form to be long enough for all resolutions, so we take the total number of items * height
-	// and * the gaps, add the banner, and finally, the fudge factor ;)
-	sFormInit.height = (slotsInColumn * CHALLENGE_ENTRY_H + CHALLENGE_HGAP * slotsInColumn) + CHALLENGE_BANNER_DEPTH + 20;
-	sFormInit.disableChildren = true;
-	sFormInit.pDisplay = intOpenPlainForm;
-	widgAddForm(psRequestScreen, &sFormInit);
+	IntFormAnimated *challengeForm = new IntFormAnimated(parent);
+	challengeForm->id = CHALLENGE_FORM;
+	challengeForm->setGeometry(CHALLENGE_X, CHALLENGE_Y, CHALLENGE_W, (slotsInColumn * CHALLENGE_ENTRY_H + CHALLENGE_HGAP * slotsInColumn) + CHALLENGE_BANNER_DEPTH + 20);
 
 	// Add Banner
+	W_FORMINIT sFormInit;
 	sFormInit.formID = CHALLENGE_FORM;
 	sFormInit.id = CHALLENGE_BANNER;
+	sFormInit.style = WFORM_PLAIN;
 	sFormInit.x = CHALLENGE_HGAP;
 	sFormInit.y = CHALLENGE_VGAP;
 	sFormInit.width = CHALLENGE_W - (2 * CHALLENGE_HGAP);
 	sFormInit.height = CHALLENGE_BANNER_DEPTH;
-	sFormInit.disableChildren = false;
 	sFormInit.pDisplay = displayLoadBanner;
 	sFormInit.UserData = 0;
 	widgAddForm(psRequestScreen, &sFormInit);
@@ -334,8 +326,8 @@ bool addChallenges()
 // ////////////////////////////////////////////////////////////////////////////
 bool closeChallenges()
 {
-	widgDelete(psRequestScreen, CHALLENGE_FORM);
-	widgReleaseScreen(psRequestScreen);
+	delete psRequestScreen;
+	psRequestScreen = NULL;
 	// need to "eat" up the return key so it don't pass back to game.
 	inputLoseFocus();
 	challengesUp = false;
@@ -364,7 +356,7 @@ bool runChallenges(void)
 		// clicked a load entry
 		if (id >= CHALLENGE_ENTRY_START  &&  id <= CHALLENGE_ENTRY_END)
 		{
-			if (((W_BUTTON *)widgGetFromID(psRequestScreen, id))->pText)
+			if (!((W_BUTTON *)widgGetFromID(psRequestScreen, id))->pText.isEmpty())
 			{
 				sstrcpy(sRequestResult, (const char *)((W_BUTTON *)widgGetFromID(psRequestScreen, id))->pUserData);
 			}

@@ -58,82 +58,21 @@ W_BARGRAPH::W_BARGRAPH(W_BARINIT const *init)
 	, majorCol(init->sCol)
 	, minorCol(init->sMinorCol)
 	, textCol(WZCOL_BLACK)
-	, pTip(init->pTip)
+	, pTip(QString::fromUtf8(init->pTip))
+	, backgroundColour(WZCOL_FORM_BACKGROUND)
 {
-	/* Set the display function */
-	if (display == NULL)
-	{
-		if (init->style & WBAR_TROUGH)
-		{
-			display = barGraphDisplayTrough;
-		}
-		else if (init->style & WBAR_DOUBLE)
-		{
-			display = barGraphDisplayDouble;
-		}
-		else
-		{
-			display = barGraphDisplay;
-		}
-	}
-
 	/* Set the minor colour if necessary */
 	// Actually, this sets the major colour to the minor colour. The minor colour used to be left completely uninitialised... Wonder what it was for..?
 	if (style & WBAR_DOUBLE)
 	{
 		majorCol = minorCol;
 	}
+
+	ASSERT((init->style & ~(WBAR_PLAIN | WBAR_TROUGH | WBAR_DOUBLE | WIDG_HIDDEN)) == 0, "Unknown bar graph style");
+	ASSERT(init->orientation >= WBAR_LEFT || init->orientation <= WBAR_BOTTOM, "Unknown orientation");
+	ASSERT(init->size <= WBAR_SCALE, "Bar size out of range");
+	ASSERT((init->style & WBAR_DOUBLE) == 0 || init->minorSize <= WBAR_SCALE, "Minor bar size out of range");
 }
-
-/* Create a barGraph widget data structure */
-W_BARGRAPH *barGraphCreate(const W_BARINIT *psInit)
-{
-	if (psInit->style & ~(WBAR_PLAIN | WBAR_TROUGH | WBAR_DOUBLE | WIDG_HIDDEN))
-	{
-		ASSERT(false, "Unknown bar graph style");
-		return NULL;
-	}
-
-	if (psInit->orientation < WBAR_LEFT
-	    || psInit->orientation > WBAR_BOTTOM)
-	{
-		ASSERT(false, "barGraphCreate: Unknown orientation");
-		return NULL;
-	}
-
-	if (psInit->size > WBAR_SCALE)
-	{
-		ASSERT(false, "barGraphCreate: Bar size out of range");
-		return NULL;
-	}
-	if ((psInit->style & WBAR_DOUBLE)
-	    && (psInit->minorSize > WBAR_SCALE))
-	{
-		ASSERT(false, "barGraphCreate: Minor bar size out of range");
-		return NULL;
-	}
-
-	/* Allocate the required memory */
-	W_BARGRAPH *psWidget = new W_BARGRAPH(psInit);
-	if (psWidget == NULL)
-	{
-		debug(LOG_FATAL, "barGraphCreate: Out of memory");
-		abort();
-		return NULL;
-	}
-
-	return psWidget;
-}
-
-
-/* Free the memory used by a barGraph */
-void barGraphFree(W_BARGRAPH *psWidget)
-{
-	ASSERT(psWidget != NULL, "Invalid widget pointer");
-
-	delete psWidget;
-}
-
 
 /* Set the current size of a bar graph */
 void widgSetBarSize(W_SCREEN *psScreen, UDWORD id, UDWORD iValue)
@@ -194,24 +133,21 @@ void widgSetMinorBarSize(W_SCREEN *psScreen, UDWORD id, UDWORD iValue)
 /* Respond to a mouse moving over a barGraph */
 void W_BARGRAPH::highlight(W_CONTEXT *psContext)
 {
-	if (pTip)
+	if (!pTip.isEmpty())
 	{
-		tipStart(this, pTip, psContext->psScreen->TipFontID,
-		         psContext->psForm->aColours,
-		         x + psContext->xOffset, y + psContext->yOffset,
-		         width, height);
+		tipStart(this, pTip, screenPointer->TipFontID, x() + psContext->xOffset, y() + psContext->yOffset, width(), height());
 	}
 }
 
 
 /* Respond to the mouse moving off a barGraph */
-void W_BARGRAPH::highlightLost(W_CONTEXT *)
+void W_BARGRAPH::highlightLost()
 {
 	tipStop(this);
 }
 
 
-static void barGraphDisplayText(W_BARGRAPH *barGraph, int x0, int x1, int y1, PIELIGHT *pColours)
+static void barGraphDisplayText(W_BARGRAPH *barGraph, int x0, int x1, int y1)
 {
 	if (!barGraph->text.isEmpty())
 	{
@@ -232,7 +168,7 @@ static void barGraphDisplayText(W_BARGRAPH *barGraph, int x0, int x1, int y1, PI
 }
 
 /* The simple bar graph display function */
-void barGraphDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+static void barGraphDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
 	SDWORD		x0 = 0, y0 = 0, x1 = 0, y1 = 0;
 	W_BARGRAPH	*psBGraph;
@@ -243,40 +179,40 @@ void barGraphDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT 
 	switch (psBGraph->barPos)
 	{
 	case WBAR_LEFT:
-		x0 = xOffset + psWidget->x;
-		y0 = yOffset + psWidget->y;
-		x1 = x0 + psWidget->width * psBGraph->majorSize / WBAR_SCALE;
-		y1 = y0 + psWidget->height;
+		x0 = xOffset + psWidget->x();
+		y0 = yOffset + psWidget->y();
+		x1 = x0 + psWidget->width() * psBGraph->majorSize / WBAR_SCALE;
+		y1 = y0 + psWidget->height();
 		break;
 	case WBAR_RIGHT:
-		y0 = yOffset + psWidget->y;
-		x1 = xOffset + psWidget->x + psWidget->width;
-		x0 = x1 - psWidget->width * psBGraph->majorSize / WBAR_SCALE;
-		y1 = y0 + psWidget->height;
+		y0 = yOffset + psWidget->y();
+		x1 = xOffset + psWidget->x() + psWidget->width();
+		x0 = x1 - psWidget->width() * psBGraph->majorSize / WBAR_SCALE;
+		y1 = y0 + psWidget->height();
 		break;
 	case WBAR_TOP:
-		x0 = xOffset + psWidget->x;
-		y0 = yOffset + psWidget->y;
-		x1 = x0 + psWidget->width;
-		y1 = y0 + psWidget->height * psBGraph->majorSize / WBAR_SCALE;
+		x0 = xOffset + psWidget->x();
+		y0 = yOffset + psWidget->y();
+		x1 = x0 + psWidget->width();
+		y1 = y0 + psWidget->height() * psBGraph->majorSize / WBAR_SCALE;
 		break;
 	case WBAR_BOTTOM:
-		x0 = xOffset + psWidget->x;
-		x1 = x0 + psWidget->width;
-		y1 = yOffset + psWidget->y + psWidget->height;
-		y0 = y1 - psWidget->height * psBGraph->majorSize / WBAR_SCALE;
+		x0 = xOffset + psWidget->x();
+		x1 = x0 + psWidget->width();
+		y1 = yOffset + psWidget->y() + psWidget->height();
+		y0 = y1 - psWidget->height() * psBGraph->majorSize / WBAR_SCALE;
 		break;
 	}
 
 	/* Now draw the graph */
-	iV_ShadowBox(x0, y0, x1, y1, 0, pColours[WCOL_LIGHT], pColours[WCOL_DARK], psBGraph->majorCol);
+	iV_ShadowBox(x0, y0, x1, y1, 0, WZCOL_FORM_LIGHT, WZCOL_FORM_DARK, psBGraph->majorCol);
 
-	barGraphDisplayText(psBGraph, x0, x1, y1, pColours);
+	barGraphDisplayText(psBGraph, x0, x1, y1);
 }
 
 
 /* The double bar graph display function */
-void barGraphDisplayDouble(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+static void barGraphDisplayDouble(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
 	SDWORD		x0 = 0, y0 = 0, x1 = 0, y1 = 0, x2 = 0, y2 = 0, x3 = 0, y3 = 0;
 	W_BARGRAPH	*psBGraph = (W_BARGRAPH *)psWidget;
@@ -286,73 +222,73 @@ void barGraphDisplayDouble(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIE
 	{
 	case WBAR_LEFT:
 		/* Calculate the major bar */
-		x0 = xOffset + psWidget->x;
-		y0 = yOffset + psWidget->y;
-		x1 = x0 + psWidget->width * psBGraph->majorSize / WBAR_SCALE;
-		y1 = y0 + 2 * psWidget->height / 3;
+		x0 = xOffset + psWidget->x();
+		y0 = yOffset + psWidget->y();
+		x1 = x0 + psWidget->width() * psBGraph->majorSize / WBAR_SCALE;
+		y1 = y0 + 2 * psWidget->height() / 3;
 
 		/* Calculate the minor bar */
 		x2 = x0;
-		y2 = y0 + psWidget->height / 3;
-		x3 = x2 + psWidget->width * psBGraph->minorSize / WBAR_SCALE;
-		y3 = y0 + psWidget->height;
+		y2 = y0 + psWidget->height() / 3;
+		x3 = x2 + psWidget->width() * psBGraph->minorSize / WBAR_SCALE;
+		y3 = y0 + psWidget->height();
 		break;
 	case WBAR_RIGHT:
 		/* Calculate the major bar */
-		y0 = yOffset + psWidget->y;
-		x1 = xOffset + psWidget->x + psWidget->width;
-		x0 = x1 - psWidget->width * psBGraph->majorSize / WBAR_SCALE;
-		y1 = y0 + 2 * psWidget->height / 3;
+		y0 = yOffset + psWidget->y();
+		x1 = xOffset + psWidget->x() + psWidget->width();
+		x0 = x1 - psWidget->width() * psBGraph->majorSize / WBAR_SCALE;
+		y1 = y0 + 2 * psWidget->height() / 3;
 
 		/* Calculate the minor bar */
 		x3 = x1;
-		y2 = y0 + psWidget->height / 3;
-		x2 = x3 - psWidget->width * psBGraph->minorSize / WBAR_SCALE;
-		y3 = y0 + psWidget->height;
+		y2 = y0 + psWidget->height() / 3;
+		x2 = x3 - psWidget->width() * psBGraph->minorSize / WBAR_SCALE;
+		y3 = y0 + psWidget->height();
 		break;
 	case WBAR_TOP:
 		/* Calculate the major bar */
-		x0 = xOffset + psWidget->x;
-		y0 = yOffset + psWidget->y;
-		x1 = x0 + 2 * psWidget->width / 3;
-		y1 = y0 + psWidget->height * psBGraph->majorSize / WBAR_SCALE;
+		x0 = xOffset + psWidget->x();
+		y0 = yOffset + psWidget->y();
+		x1 = x0 + 2 * psWidget->width() / 3;
+		y1 = y0 + psWidget->height() * psBGraph->majorSize / WBAR_SCALE;
 
 		/* Calculate the minor bar */
-		x2 = x0 + psWidget->width / 3;
+		x2 = x0 + psWidget->width() / 3;
 		y2 = y0;
-		x3 = x0 + psWidget->width;
-		y3 = y2 + psWidget->height * psBGraph->minorSize / WBAR_SCALE;
+		x3 = x0 + psWidget->width();
+		y3 = y2 + psWidget->height() * psBGraph->minorSize / WBAR_SCALE;
 		break;
 	case WBAR_BOTTOM:
 		/* Calculate the major bar */
-		x0 = xOffset + psWidget->x;
-		x1 = x0 + 2 * psWidget->width / 3;
-		y1 = yOffset + psWidget->y + psWidget->height;
-		y0 = y1 - psWidget->height * psBGraph->majorSize / WBAR_SCALE;
+		x0 = xOffset + psWidget->x();
+		x1 = x0 + 2 * psWidget->width() / 3;
+		y1 = yOffset + psWidget->y() + psWidget->height();
+		y0 = y1 - psWidget->height() * psBGraph->majorSize / WBAR_SCALE;
 
 		/* Calculate the minor bar */
-		x2 = x0 + psWidget->width / 3;
-		x3 = x0 + psWidget->width;
+		x2 = x0 + psWidget->width() / 3;
+		x3 = x0 + psWidget->width();
 		y3 = y1;
-		y2 = y3 - psWidget->height * psBGraph->minorSize / WBAR_SCALE;
+		y2 = y3 - psWidget->height() * psBGraph->minorSize / WBAR_SCALE;
 		break;
 	}
 
 	/* Draw the minor bar graph */
 	if (psBGraph->minorSize > 0)
 	{
-		iV_ShadowBox(x2, y2, x3, y3, 0, pColours[WCOL_LIGHT], pColours[WCOL_DARK], psBGraph->minorCol);
+		iV_ShadowBox(x2, y2, x3, y3, 0, WZCOL_FORM_LIGHT, WZCOL_FORM_DARK, psBGraph->minorCol);
 	}
 
 	/* Draw the major bar graph */
-	iV_ShadowBox(x0, y0, x1, y1, 0, pColours[WCOL_LIGHT], pColours[WCOL_DARK], psBGraph->majorCol);
+	iV_ShadowBox(x0, y0, x1, y1, 0, WZCOL_FORM_LIGHT, WZCOL_FORM_DARK, psBGraph->majorCol);
 
-	barGraphDisplayText(psBGraph, x0, x1, y1, pColours);
+	barGraphDisplayText(psBGraph, x0, x1, y1);
 }
 
 
 /* The trough bar graph display function */
-void barGraphDisplayTrough(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+void barGraphDisplayTrough(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
 	SDWORD		x0 = 0, y0 = 0, x1 = 0, y1 = 0;		// Position of the bar
 	SDWORD		tx0 = 0, ty0 = 0, tx1 = 0, ty1 = 0;	// Position of the trough
@@ -363,17 +299,17 @@ void barGraphDisplayTrough(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIE
 	switch (psBGraph->barPos)
 	{
 	case WBAR_LEFT:
-		x0 = xOffset + psWidget->x;
-		y0 = yOffset + psWidget->y;
-		x1 = x0 + psWidget->width * psBGraph->majorSize / WBAR_SCALE;
-		y1 = y0 + psWidget->height;
+		x0 = xOffset + psWidget->x();
+		y0 = yOffset + psWidget->y();
+		x1 = x0 + psWidget->width() * psBGraph->majorSize / WBAR_SCALE;
+		y1 = y0 + psWidget->height();
 		if (x0 == x1)
 		{
 			showBar = false;
 		}
 		tx0 = x1 + 1;
 		ty0 = y0;
-		tx1 = x0 + psWidget->width;
+		tx1 = x0 + psWidget->width();
 		ty1 = y1;
 		if (tx0 >= tx1)
 		{
@@ -381,15 +317,15 @@ void barGraphDisplayTrough(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIE
 		}
 		break;
 	case WBAR_RIGHT:
-		y0 = yOffset + psWidget->y;
-		x1 = xOffset + psWidget->x + psWidget->width;
-		x0 = x1 - psWidget->width * psBGraph->majorSize / WBAR_SCALE;
-		y1 = y0 + psWidget->height;
+		y0 = yOffset + psWidget->y();
+		x1 = xOffset + psWidget->x() + psWidget->width();
+		x0 = x1 - psWidget->width() * psBGraph->majorSize / WBAR_SCALE;
+		y1 = y0 + psWidget->height();
 		if (x0 == x1)
 		{
 			showBar = false;
 		}
-		tx0 = xOffset + psWidget->x;
+		tx0 = xOffset + psWidget->x();
 		ty0 = y0;
 		tx1 = x0 - 1;
 		ty1 = y1;
@@ -399,10 +335,10 @@ void barGraphDisplayTrough(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIE
 		}
 		break;
 	case WBAR_TOP:
-		x0 = xOffset + psWidget->x;
-		y0 = yOffset + psWidget->y;
-		x1 = x0 + psWidget->width;
-		y1 = y0 + psWidget->height * psBGraph->majorSize / WBAR_SCALE;
+		x0 = xOffset + psWidget->x();
+		y0 = yOffset + psWidget->y();
+		x1 = x0 + psWidget->width();
+		y1 = y0 + psWidget->height() * psBGraph->majorSize / WBAR_SCALE;
 		if (y0 == y1)
 		{
 			showBar = false;
@@ -410,23 +346,23 @@ void barGraphDisplayTrough(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIE
 		tx0 = x0;
 		ty0 = y1 + 1;
 		tx1 = x1;
-		ty1 = y0 + psWidget->height;
+		ty1 = y0 + psWidget->height();
 		if (ty0 >= ty1)
 		{
 			showTrough = false;
 		}
 		break;
 	case WBAR_BOTTOM:
-		x0 = xOffset + psWidget->x;
-		x1 = x0 + psWidget->width;
-		y1 = yOffset + psWidget->y + psWidget->height;
-		y0 = y1 - psWidget->height * psBGraph->majorSize / WBAR_SCALE;
+		x0 = xOffset + psWidget->x();
+		x1 = x0 + psWidget->width();
+		y1 = yOffset + psWidget->y() + psWidget->height();
+		y0 = y1 - psWidget->height() * psBGraph->majorSize / WBAR_SCALE;
 		if (y0 == y1)
 		{
 			showBar = false;
 		}
 		tx0 = x0;
-		ty0 = yOffset + psWidget->y;
+		ty0 = yOffset + psWidget->y();
 		tx1 = x1;
 		ty1 = y0 - 1;
 		if (ty0 >= ty1)
@@ -443,8 +379,35 @@ void barGraphDisplayTrough(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIE
 	}
 	if (showTrough)
 	{
-		iV_ShadowBox(tx0, ty0, tx1, ty1, 0, pColours[WCOL_DARK], pColours[WCOL_LIGHT], pColours[WCOL_BKGRND]);
+		iV_ShadowBox(tx0, ty0, tx1, ty1, 0, WZCOL_FORM_DARK, WZCOL_FORM_LIGHT, psBGraph->backgroundColour);
 	}
 
-	barGraphDisplayText(psBGraph, x0, tx1, ty1, pColours);
+	barGraphDisplayText(psBGraph, x0, tx1, ty1);
+}
+
+void W_BARGRAPH::display(int xOffset, int yOffset)
+{
+	if (displayFunction != NULL)
+	{
+		displayFunction(this, xOffset, yOffset);
+		return;
+	}
+
+	if (style & WBAR_TROUGH)
+	{
+		barGraphDisplayTrough(this, xOffset, yOffset);
+	}
+	else if (style & WBAR_DOUBLE)
+	{
+		barGraphDisplayDouble(this, xOffset, yOffset);
+	}
+	else
+	{
+		barGraphDisplay(this, xOffset, yOffset);
+	}
+}
+
+void W_BARGRAPH::setTip(QString string)
+{
+	pTip = string;
 }

@@ -33,7 +33,6 @@ extern void intProcessInGameOptions		(UDWORD);
 extern void intAddInGamePopup(void);
 
 // status bools.
-extern bool	ClosingInGameOp;
 extern bool	InGameOpUp;
 extern bool isInGamePopupUp;
 // ////////////////////////////////////////////////////////////////////////////

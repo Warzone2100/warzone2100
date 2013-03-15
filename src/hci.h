@@ -86,8 +86,6 @@
 #define IDSTAT_TABFORM			14004		// The tab form with the stats buttons
 #define IDSTAT_START			14100		// The first stats ID
 #define IDSTAT_END				14999		// The last stats ID enough for 899 things
-#define IDSTAT_TABSCRL_LEFT		15000		// Our left Tab scroll button
-#define IDSTAT_TABSCRL_RIGHT	15002		// Our right Tab scroll button
 #define IDSTAT_TIMEBARSTART		4300
 #define IDSTAT_TIMEBAREND		4399
 #define IDSTAT_SLIDER			4400
@@ -139,14 +137,6 @@
 #define POW_X			OBJ_BACKX + 12
 #define POW_Y			(OBJ_BACKY + OBJ_BACKHEIGHT + 6)
 #define POW_BARWIDTH	308
-
-//tab details
-#define OBJ_TABWIDTH	26
-#define OBJ_TABHEIGHT	11
-#define	OBJ_TABOFFSET	2
-//tab scroll buttons details
-#define TABSCRL_HEIGHT	10
-#define TABSCRL_WIDTH	7
 
 /* close button data */
 #define CLOSE_WIDTH		15
@@ -255,13 +245,6 @@ extern std::list<DROID_TEMPLATE> localTemplates;       ///< Unsychnronised list,
 /* pointer to hold the imd to use for a new template in the design screen */
 extern iIMDShape	*pNewDesignIMD;
 
-extern bool ClosingMessageView;
-extern bool ClosingIntelMap;
-extern bool	ClosingTrans;
-extern bool	ClosingTransCont;
-extern bool	ClosingTransDroids;
-extern bool ClosingOrder;
-
 /* Initialise the in game interface */
 extern bool intInitialise(void);
 
@@ -322,8 +305,6 @@ extern bool intBuildMode(void);
 
 // add the construction interface if a constructor droid is selected
 void intCommanderSelected(DROID *psDroid);
-
-extern UWORD numForms(UDWORD total, UDWORD perForm);
 
 //sets up the Intelligence Screen as far as the interface is concerned
 extern void addIntelScreen(void);
@@ -392,8 +373,6 @@ extern BASE_OBJECT *getCurrentSelected(void);
 
 //initialise all the previous obj - particularly useful for when go Off world!
 extern void intResetPreviousObj(void);
-
-extern void HandleClosingWindows(void);
 
 extern bool intIsRefreshing(void);
 

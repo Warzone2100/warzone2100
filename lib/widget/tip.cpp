@@ -29,6 +29,7 @@
 #include "tip.h"
 // FIXME Direct iVis implementation include!
 #include "lib/ivis_opengl/pieblitfunc.h"
+#include <QtCore/QStringList>
 
 /* Time delay before showing the tool tip */
 #define TIP_PAUSE	200
@@ -55,8 +56,8 @@ static SDWORD		mx, my;				// Last mouse coords
 static SDWORD		wx, wy, ww, wh;		// Position and size of button to place tip by
 static SDWORD		tx, ty, tw, th;		// Position and size of the tip box
 static SDWORD		fx, fy;				// Position of the text
-static const char *pTip;				// Tip text
-static PIELIGHT		*pColours;			// The colours for the tool tip
+static int              lineHeight;
+static QStringList      pTip;                   // Tip text
 static WIDGET		*psWidget;			// The button the tip is for
 static enum iV_fonts FontID = font_regular;	// ID for the Ivis Font.
 static PIELIGHT TipColour;
@@ -85,15 +86,9 @@ void widgSetTipColour(PIELIGHT colour)
  * x,y,width,height - specify the position of the button to place the
  * tip by.
  */
-void tipStart(WIDGET *psSource, const char *pNewTip, enum iV_fonts NewFontID,
-        PIELIGHT *pNewColours, SDWORD x, SDWORD y, UDWORD width, UDWORD height)
+void tipStart(WIDGET *psSource, QString pNewTip, iV_fonts NewFontID, int x, int y, int width, int height)
 {
-	ASSERT(psSource != NULL,
-	       "tipStart: Invalid widget pointer");
-//	ASSERT( pNewTip != NULL,
-//		"tipStart: Invalid tip pointer" );
-	ASSERT(pNewColours != NULL,
-	       "tipStart: Invalid colours pointer");
+	ASSERT(psSource != NULL, "Invalid widget pointer");
 
 	tipState = TIP_WAIT;
 	startTime = wzGetTicks();
@@ -101,10 +96,9 @@ void tipStart(WIDGET *psSource, const char *pNewTip, enum iV_fonts NewFontID,
 	my = mouseY();
 	wx = x; wy = y;
 	ww = width; wh = height;
-	pTip = pNewTip;
+	pTip = pNewTip.split('\n');
 	psWidget = psSource;
 	FontID = NewFontID;
-	pColours = pNewColours;
 }
 
 
@@ -122,13 +116,8 @@ void tipStop(WIDGET *psSource)
 	}
 }
 
-
-#define RIGHTBORDER		(0)
-#define BOTTOMBORDER	(0)
-
-
 /* Update and possibly display the tip */
-void tipDisplay(void)
+void tipDisplay()
 {
 	SDWORD		newMX, newMY;
 	SDWORD		currTime;
@@ -152,39 +141,28 @@ void tipDisplay(void)
 			topGap = TIP_VGAP;
 			iV_SetFont(FontID);
 
-			fw = iV_GetTextWidth(pTip);
+			lineHeight = iV_GetTextLineSize();
+
+			fw = 0;
+			for (int n = 0; n < pTip.size(); ++n)
+			{
+				fw = std::max<int>(fw, iV_GetTextWidth(pTip[n].toUtf8().constData()));
+			}
 			tw = fw + TIP_HGAP * 2;
-			th = topGap * 2 + iV_GetTextLineSize() + iV_GetTextBelowBase();
+			th = topGap * 2 + lineHeight*pTip.size() + iV_GetTextBelowBase();
 
 			/* Position the tip box */
-			tx = wx + (ww >> 1);
-			ty = wy + wh + TIP_VGAP;
-
-			/* Check the box is on screen */
-			if (tx < 0)
-			{
-				tx = 0;
-			}
-			if (tx + tw >= (SDWORD)screenWidth - RIGHTBORDER)
-			{
-				tx = screenWidth - RIGHTBORDER - tw - 1;
-			}
-			if (ty < 0)
-			{
-				ty = 0;
-			}
-			if (ty + th >= (SDWORD)screenHeight - BOTTOMBORDER)
+			tx = clip(wx + ww/2, 0, screenWidth - tw - 1);
+			ty = std::max(wy + wh + TIP_VGAP, 0);
+			if (ty + th >= (int)screenHeight)
 			{
 				/* Position the tip above the button */
 				ty = wy - th - TIP_VGAP;
 			}
 
-
 			/* Position the text */
 			fx = tx + TIP_HGAP;
-
-			fy = ty + (th - iV_GetTextLineSize()) / 2 - iV_GetTextAboveBase();
-
+			fy = ty + (th - lineHeight*pTip.size()) / 2 - iV_GetTextAboveBase();
 
 			/* Note the time */
 			startTime = wzGetTicks();
@@ -200,16 +178,19 @@ void tipDisplay(void)
 		break;
 	case TIP_ACTIVE:
 		/* Draw the tool tip */
-		pie_BoxFill(tx, ty, tx + tw, ty + th, pColours[WCOL_TIPBKGRND]);
-		iV_Line(tx + 1, ty + th - 2, tx + 1,    ty + 1, pColours[WCOL_DARK]);
-		iV_Line(tx + 2, ty + 1,    tx + tw - 2, ty + 1, pColours[WCOL_DARK]);
-		iV_Line(tx,	  ty + th,   tx + tw,   ty + th, pColours[WCOL_DARK]);
-		iV_Line(tx + tw, ty + th - 1, tx + tw,   ty, pColours[WCOL_DARK]);
-		iV_Box(tx, ty, tx + tw - 1, ty + th - 1, pColours[WCOL_LIGHT]);
+		pie_BoxFill(tx, ty, tx + tw, ty + th, WZCOL_FORM_TIP_BACKGROUND);
+		iV_Line(tx + 1,  ty + th - 2, tx + 1,      ty + 1,  WZCOL_FORM_DARK);
+		iV_Line(tx + 2,  ty + 1,      tx + tw - 2, ty + 1,  WZCOL_FORM_DARK);
+		iV_Line(tx,      ty + th,     tx + tw,     ty + th, WZCOL_FORM_DARK);
+		iV_Line(tx + tw, ty + th - 1, tx + tw,     ty,      WZCOL_FORM_DARK);
+		iV_Box(tx, ty, tx + tw - 1, ty + th - 1, WZCOL_FORM_LIGHT);
 
 		iV_SetFont(FontID);
 		iV_SetTextColour(TipColour);
-		iV_DrawText(pTip, fx, fy);
+		for (int n = 0; n < pTip.size(); ++n)
+		{
+			iV_DrawText(pTip[n].toUtf8().constData(), fx, fy + lineHeight*n);
+		}
 
 		break;
 	default:

@@ -243,15 +243,6 @@ bool addConsoleMessage(const char *Text, CONSOLE_TEXT_JUSTIFICATION jusType, SDW
 		/* Is the string too long? */
 		textLength = strlen(messageText);
 
-		// FIXME: We split the text correctly in the display routine, however, then the console has no idea it was split,
-		// so that is why you sometimes see text that is below the console line limit that was set via setConsoleLineInfo()
-		// As in the display routines, we should check to see if iV_GetTextWidth(lines.c_str()) > mainConsole.width, but that
-		// isn't working the way it should, so right now, we just throw a warning (only in debug mode) that the text it too long.
-		if (textLength > 72)
-		{
-			debug(LOG_NEVER, "This line is too long, and will be split in the display routines! Line is:[%s]", lines.c_str());
-		}
-
 		ASSERT( textLength < MAX_CONSOLE_STRING_LENGTH, "Attempt to add a message to the console that exceeds MAX_CONSOLE_STRING_LENGTH" );
 
 		/* Are we using a defualt justification? */

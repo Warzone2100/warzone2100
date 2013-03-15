@@ -26,12 +26,61 @@
 
 #include "lib/netplay/netplay.h"
 #include "lib/widget/widgbase.h"
+#include "lib/widget/form.h"
+#include <QtCore/QSignalMapper>
+
 
 #define MAX_LEN_AI_NAME   40
 #define AI_CUSTOM        127
 #define AI_OPEN           -2
 #define AI_CLOSED         -1
 #define AI_NOT_FOUND     -99
+
+
+class MultibuttonWidget : public W_FORM
+{
+	Q_OBJECT
+
+public:
+	MultibuttonWidget(WIDGET *parent, int value = -1);
+
+	virtual void display(int xOffset, int yOffset);
+	virtual void geometryChanged();
+
+	void setLabel(char const *text);
+	void addButton(int value, Image image, Image imageHighlight, char const *tip);
+	void enable(bool enabled = true);
+	void disable() { enable(false); }
+	void setGap(int gap);
+	int currentValue() const { return currentValue_; }
+
+signals:
+	void chosen(int);
+
+public slots:
+	void choose(int value);
+
+private:
+	void stateChanged();
+
+protected:
+	W_LABEL *label;
+	std::vector<std::pair<W_BUTTON *, int> > buttons;
+	QSignalMapper *mapper;
+	int currentValue_;
+	bool disabled;
+	int gap_;
+	bool lockCurrent;
+};
+
+class MultichoiceWidget : public MultibuttonWidget
+{
+	Q_OBJECT
+
+public:
+	MultichoiceWidget(WIDGET *parent, int value = -1);
+};
+
 
 void readAIs();	///< step 1, load AI definition files
 void loadMultiScripts();	///< step 2, load the actual AI scripts
@@ -78,8 +127,6 @@ void loadMapPreview(bool hideInterface);
 #define	CON_SETTINGSY		190
 #define CON_SETTINGSWIDTH	200
 #define CON_SETTINGSHEIGHT	100
-
-#define CON_PASSWORD_LABEL	10132
 
 #define CON_OK				10101
 #define CON_OKX				CON_SETTINGSWIDTH-MULTIOP_OKW*2-13
@@ -167,12 +214,6 @@ void loadMapPreview(bool hideInterface);
 #define	MROW4					MROW3+MULTIOP_EDITBOXH
 #define MROW5					MROW4+38
 #define	MROW6					MROW5+29
-#define	MROW7					MROW6+29
-#define	MROW8					MROW7+29
-#define	MROW9					MROW8+29
-#define	MROW10					MROW9+32
-#define	MROW11					MROW10+36
-#define	MROW12					MROW11+40
 
 #define MCOL0					50
 #define MCOL1					(MCOL0+26+10)	// rem 10 for 4 lines.
@@ -187,32 +228,14 @@ void loadMapPreview(bool hideInterface);
 #define MULTIOP_MAP_ICON		10258
 #define MULTIOP_MAP				10259
 
-#define MULTIOP_CAMPAIGN		10261
-#define MULTIOP_SKIRMISH		10263
-
-
-#define MULTIOP_CLEAN			10267
-#define MULTIOP_BASE			10268
-#define MULTIOP_DEFENCE			10269
-
-#define MULTIOP_ALLIANCE_N		10270
-#define MULTIOP_ALLIANCE_Y		10271
-#define MULTIOP_ALLIANCE_TEAMS	102710		//locked teams
-
-#define MULTIOP_POWLEV_LOW		10272
-#define MULTIOP_POWLEV_MED		10273
-#define MULTIOP_POWLEV_HI		10274
-
 #define MULTIOP_REFRESH			10275
 
 #define MULTIOP_HOST			10276
-#define MULTIOP_HOST_BUT		0xf0f0
 #define MULTIOP_HOSTX			5
 
 #define MULTIOP_FILTER_TOGGLE   30277
 
 #define MULTIOP_STRUCTLIMITS	21277	// we are using 10277 already
-#define MULTIOP_LIMITS_BUT		0xf0d0
 
 #define MULTIOP_CANCELX			6
 #define MULTIOP_CANCELY			6
@@ -249,7 +272,6 @@ void loadMapPreview(bool hideInterface);
 #define MULTIOP_SKSLIDE_END		102873 //10320
 
 #define MULTIOP_MAP_PREVIEW 920000
-#define MULTIOP_MAP_BUT		920002
 
 #define MULTIOP_PASSWORD	920010
 #define MULTIOP_PASSWORD_BUT 920012

@@ -68,10 +68,8 @@
 W_SCREEN  *psRScreen;			// requester stuff.
 
 extern char	MultiCustomMapsPath[PATH_MAX];
-extern void	displayMultiBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 
 bool	MultiMenuUp			= false;
-bool	ClosingMultiMenu	= false;
 bool	DebugMenuUp		= false;
 static UDWORD	context = 0;
 UDWORD	current_tech = 1;
@@ -116,7 +114,6 @@ UDWORD	current_numplayers = 4;
 /// requester stuff.
 #define M_REQUEST_CLOSE (MULTIMENU+49)
 #define M_REQUEST		(MULTIMENU+50)
-#define M_REQUEST_TAB	(MULTIMENU+51)
 
 #define M_REQUEST_C1	(MULTIMENU+61)
 #define M_REQUEST_C2	(MULTIMENU+62)
@@ -261,22 +258,22 @@ static LEVEL_DATASET *enumerateMultiMaps(bool first, unsigned camToUse, unsigned
 
 // ////////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////////
-void displayRequestOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+void displayRequestOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
 	LEVEL_DATASET *mapData = (LEVEL_DATASET *)psWidget->pUserData;
 
-	UDWORD	x = xOffset+psWidget->x;
-	UDWORD	y = yOffset+psWidget->y;
+	int x = xOffset + psWidget->x();
+	int y = yOffset + psWidget->y();
 	char  butString[255];
 
-	sstrcpy(butString, ((W_BUTTON *)psWidget)->pTip);
+	sstrcpy(butString, ((W_BUTTON *)psWidget)->pTip.toUtf8().constData());
 
-	drawBlueBox(x,y,psWidget->width,psWidget->height);	//draw box
+	drawBlueBox(x, y, psWidget->width(), psWidget->height());
 
 	iV_SetFont(font_regular);					// font
 	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
 
-	while(iV_GetTextWidth(butString) > psWidget->width -10 )
+	while (iV_GetTextWidth(butString) > psWidget->width() - 10)
 	{
 		butString[strlen(butString)-1]='\0';
 	}
@@ -301,7 +298,7 @@ void displayRequestOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIEL
 			iV_SetFont(font_small);
 			iV_SetTextColour(WZCOL_TEXT_DARK);
 			sstrcpy(butString, hash.toString().c_str());
-			while (iV_GetTextWidth(butString) > psWidget->width - 10 - (8 + mapData->players*6))
+			while (iV_GetTextWidth(butString) > psWidget->width() - 10 - (8 + mapData->players*6))
 			{
 				butString[strlen(butString) - 1] = '\0';
 			}
@@ -319,13 +316,13 @@ void displayRequestOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIEL
 // ////////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////////
 
-static void displayCamTypeBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+static void displayCamTypeBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
-	UDWORD	x = xOffset+psWidget->x;
-	UDWORD	y = yOffset+psWidget->y;
+	int x = xOffset + psWidget->x();
+	int y = yOffset + psWidget->y();
 	char buffer[8];
 
-	drawBlueBox(x,y,psWidget->width,psWidget->height);	//draw box
+	drawBlueBox(x, y, psWidget->width(), psWidget->height());
 	sprintf(buffer, "T%i", (int)(psWidget->UserData));
 	if ((unsigned int)(psWidget->UserData) == current_tech) {
 		iV_SetTextColour(WZCOL_TEXT_BRIGHT);
@@ -335,13 +332,13 @@ static void displayCamTypeBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, 
 	iV_DrawText(buffer, x+2, y+12);
 }
 
-static void displayNumPlayersBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+static void displayNumPlayersBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
-	UDWORD	x = xOffset+psWidget->x;
-	UDWORD	y = yOffset+psWidget->y;
+	int x = xOffset + psWidget->x();
+	int y = yOffset + psWidget->y();
 	char buffer[8];
 
-	drawBlueBox(x,y,psWidget->width,psWidget->height);	//draw box
+	drawBlueBox(x, y, psWidget->width(), psWidget->height());
 	if ((unsigned int)(psWidget->UserData) == current_numplayers) {
 		iV_SetTextColour(WZCOL_TEXT_BRIGHT);
 	} else {
@@ -357,17 +354,6 @@ static void displayNumPlayersBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffse
 
 }
 
-#define NBTIPS 512
-
-static unsigned int check_tip_index(unsigned int i) {
-	if (i < NBTIPS) {
-		return i;
-	} else {
-		debug(LOG_MAIN, "Tip window index too high (%ud)", i);
-		return NBTIPS-1;
-	}
-}
-
 /** Searches in the given search directory for files ending with the
  *  given extension. Then will create a window with buttons for each
  *  found file.
@@ -380,12 +366,8 @@ static unsigned int check_tip_index(unsigned int i) {
  */
 void addMultiRequest(const char* searchDir, const char* fileExtension, UDWORD mode, UBYTE mapCam, UBYTE numPlayers)
 {
-	char**             fileList;
-	char**             currFile;
 	const unsigned int extensionLength = strlen(fileExtension);
 	const unsigned int buttonsX = (mode == MULTIOP_MAP) ? 22 : 17;
-	unsigned int       numButtons, count, butPerForm, i;
-	static char		tips[NBTIPS][MAX_STR_LENGTH];
 
 	context = mode;
 	if(mode == MULTIOP_MAP)
@@ -393,85 +375,22 @@ void addMultiRequest(const char* searchDir, const char* fileExtension, UDWORD mo
 		current_tech = mapCam;
 		current_numplayers = numPlayers;
 	}
-	fileList = PHYSFS_enumerateFiles(searchDir);
+	char **fileList = PHYSFS_enumerateFiles(searchDir);
 
-	// Count number of required buttons
-	numButtons = 0;
-	for (currFile = fileList; *currFile != NULL; ++currFile)
-	{
-		const unsigned int fileNameLength = strlen(*currFile);
+	psRScreen = new W_SCREEN; ///< move this to intinit or somewhere like that.. (close too.)
 
-		// Check to see if this file matches the given extension
-		if (fileNameLength > extensionLength
-		 && strcmp(&(*currFile)[fileNameLength - extensionLength], fileExtension) == 0)
-			++numButtons;
-	}
-
-	if (mode == MULTIOP_MAP)	// if its a map, also look in the predone stuff.
-	{
-		bool first = true;
-		while (enumerateMultiMaps(first, mapCam, numPlayers) != NULL)
-		{
-			first = false;
-			numButtons++;
-		}
-	}
-
-	psRScreen = widgCreateScreen(); ///< move this to intinit or somewhere like that.. (close too.)
-	widgSetTipFont(psRScreen,font_regular);
-
-	/* Calculate how many buttons will go on a single form */
-	butPerForm = ((M_REQUEST_W - 0 - 4) / (R_BUT_W +4)) * ((M_REQUEST_H - 0- 4) / (R_BUT_H+ 4));
+	WIDGET *parent = psRScreen->psForm;
 
 	/* add a form to place the tabbed form on */
-	W_FORMINIT sFormInit;
-	sFormInit.formID = 0;
-	sFormInit.id = M_REQUEST;
-	sFormInit.style = WFORM_PLAIN;
-	sFormInit.x = (SWORD)(M_REQUEST_X+D_W);
-	sFormInit.y = (SWORD)(M_REQUEST_Y+D_H);
-	sFormInit.width = M_REQUEST_W;
-	sFormInit.height = M_REQUEST_H;
-	sFormInit.disableChildren = true;
-	sFormInit.pDisplay = intOpenPlainForm;
-	widgAddForm(psRScreen, &sFormInit);
+	IntFormAnimated *requestForm = new IntFormAnimated(parent);
+	requestForm->id = M_REQUEST;
+	requestForm->setGeometry(M_REQUEST_X + D_W, M_REQUEST_Y + D_H, M_REQUEST_W, M_REQUEST_H);
 
-	/* Add the tabs */
-	sFormInit = W_FORMINIT();
-	sFormInit.formID = M_REQUEST;
-	sFormInit.id = M_REQUEST_TAB;
-	sFormInit.style = WFORM_TABBED;
-	sFormInit.x = 2;
-	sFormInit.y = 2;
-	sFormInit.width = M_REQUEST_W;
-	sFormInit.height = M_REQUEST_H-4;
-
-	sFormInit.numMajor = numForms(numButtons, butPerForm);
-
-	sFormInit.majorPos = WFORM_TABTOP;
-	sFormInit.minorPos = WFORM_TABNONE;
-	sFormInit.majorSize = OBJ_TABWIDTH+2;
-	sFormInit.majorOffset = OBJ_TABOFFSET;
-	sFormInit.tabVertOffset = (OBJ_TABHEIGHT/2);
-	sFormInit.tabMajorThickness = OBJ_TABHEIGHT;
-	sFormInit.pUserData = &StandardTab;
-	sFormInit.pTabDisplay = intDisplayTab;
-
-	// TABFIXME: 
-	// This appears to be the map pick screen, when we have lots of maps
-	// this will need to change.
-	if (sFormInit.numMajor > MAX_TAB_STD_SHOWN)
-	{
-		ASSERT(sFormInit.numMajor < MAX_TAB_SMALL_SHOWN,"Too many maps! Need scroll tabs here.");
-		sFormInit.pUserData = &SmallTab;
-		sFormInit.majorSize /= 2;
-	}
-
-	for (i = 0; i < sFormInit.numMajor; ++i)
-	{
-		sFormInit.aNumMinors[i] = 2;
-	}
-	widgAddForm(psRScreen, &sFormInit);
+	// Add the button list.
+	IntListTabWidget *requestList = new IntListTabWidget(requestForm);
+	requestList->setChildSize(R_BUT_W, R_BUT_H);
+	requestList->setChildSpacing(4, 4);
+	requestList->setGeometry(2 + buttonsX, 2, M_REQUEST_W - buttonsX, M_REQUEST_H - 4);
 
 	// Add the close button.
 	W_BUTINIT sButInit;
@@ -486,56 +405,39 @@ void addMultiRequest(const char* searchDir, const char* fileExtension, UDWORD mo
 	sButInit.UserData = PACKDWORD_TRI(0,IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
 	widgAddButton(psRScreen, &sButInit);
 
-	/* Put the buttons on it *//* Set up the button struct */
-	sButInit = W_BUTINIT();
-	sButInit.formID		= M_REQUEST_TAB;
-	sButInit.id		= M_REQUEST_BUT;
-	sButInit.x		= buttonsX;
-	sButInit.y		= 4;
-	sButInit.width		= R_BUT_W;
-	sButInit.height		= R_BUT_H;
-	sButInit.pUserData	= NULL;
-	sButInit.pDisplay	= displayRequestOption;
-
-	for (currFile = fileList, count = 0; *currFile != NULL && count < (butPerForm * 4); ++currFile)
+	// Put the buttons on it.
+	int nextButtonId = M_REQUEST_BUT;
+	for (char **currFile = fileList; *currFile != NULL; ++currFile)
 	{
-		const unsigned int tip_index = check_tip_index(sButInit.id - M_REQUEST_BUT);
 		const unsigned int fileNameLength = strlen(*currFile);
-		const unsigned int tipStringLength = fileNameLength - extensionLength;
 
 		// Check to see if this file matches the given extension
-		if (!(fileNameLength > extensionLength)
+		if (fileNameLength <= extensionLength
 		 || strcmp(&(*currFile)[fileNameLength - extensionLength], fileExtension) != 0)
 			continue;
 
+		char *withoutExtension = strdup(*currFile);
+		withoutExtension[fileNameLength - extensionLength] = '\0';
+
 		// Set the tip and add the button
+		W_BUTTON *button = new W_BUTTON(requestList);
+		button->id = nextButtonId;
+		button->setTip(withoutExtension);
+		button->setString(withoutExtension);
+		button->displayFunction = displayRequestOption;
+		requestList->addWidgetToLayout(button);
 
-		// Copy all of the filename except for the extension into the tiptext string
-		strlcpy(tips[tip_index], *currFile, MIN(tipStringLength + 1, sizeof(tips[tip_index])));
-
-		sButInit.pTip		= tips[tip_index];
-		sButInit.pText		= tips[tip_index];
-
-		++count;
-		widgAddButton(psRScreen, &sButInit);
+		free(withoutExtension);
 
 		/* Update the init struct for the next button */
-		sButInit.id += 1;
-		sButInit.x = (SWORD)(sButInit.x + (R_BUT_W+ 4));
-		if (sButInit.x + R_BUT_W+ 2 > M_REQUEST_W)
-		{
-			sButInit.x = buttonsX;
-			sButInit.y = (SWORD)(sButInit.y +R_BUT_H + 4);
-		}
-		if (sButInit.y +R_BUT_H + 4 > M_REQUEST_H)
-		{
-			sButInit.y = 4;
-			sButInit.majorID += 1;
-		}
+		++nextButtonId;
 	}
 
 	// Make sure to return memory back to PhyscisFS
 	PHYSFS_freeList(fileList);
+
+	multiRequestUp = true;
+	hoverPreviewId = 0;
 
 	if(mode == MULTIOP_MAP)
 	{
@@ -545,42 +447,24 @@ void addMultiRequest(const char* searchDir, const char* fileExtension, UDWORD mo
 		{
 			first = false;
 
-			unsigned int tip_index = check_tip_index(sButInit.id-M_REQUEST_BUT);
-
 			// add number of players to string.
-			sstrcpy(tips[tip_index], mapData->pName);
+			W_BUTTON *button = new W_BUTTON(requestList);
+			button->id = nextButtonId;
+			button->setTip(mapData->pName);
+			button->setString(mapData->pName);
+			button->pUserData = mapData;
+			button->displayFunction = displayRequestOption;
+			requestList->addWidgetToLayout(button);
 
-			sButInit.pTip = tips[tip_index];
-			sButInit.pText = tips[tip_index];
-			sButInit.pUserData = mapData;
-
-			widgAddButton(psRScreen, &sButInit);
-
-			sButInit.id += 1;
-			sButInit.x = (SWORD)(sButInit.x + (R_BUT_W+ 4));
-			if (sButInit.x + R_BUT_W+ 2 > M_REQUEST_W)
-			{
-				sButInit.x = buttonsX;
-				sButInit.y = (SWORD)(sButInit.y +R_BUT_H + 4);
-			}
-			if (sButInit.y +R_BUT_H + 4 > M_REQUEST_H)
-			{
-				sButInit.y = 4;
-				sButInit.majorID += 1;
-			}
+			++nextButtonId;
 		}
-	}
-	multiRequestUp = true;
-	hoverPreviewId = 0;
 
-	// if it's map select then add the cam style buttons.
-	if(mode == MULTIOP_MAP)
-	{
+		// if it's map select then add the cam style buttons.
 		sButInit = W_BUTINIT();
-		sButInit.formID		= M_REQUEST_TAB;
+		sButInit.formID		= M_REQUEST;
 		sButInit.id		= M_REQUEST_C1;
-		sButInit.x		= 1;
-		sButInit.y		= 252;
+		sButInit.x              = 3;
+		sButInit.y              = 254;
 		sButInit.width		= 17;
 		sButInit.height		= 17;
 		sButInit.UserData	= 1;
@@ -624,14 +508,14 @@ void addMultiRequest(const char* searchDir, const char* fileExtension, UDWORD mo
 
 static void closeMultiRequester(void)
 {
-	widgDelete(psRScreen,M_REQUEST);
 	multiRequestUp = false;
 	resetReadyStatus(false);
-	widgReleaseScreen(psRScreen);		// move this to the frontend shutdown...
+	delete psRScreen;  // move this to the frontend shutdown...
+	psRScreen = NULL;
 	return;
 }
 
-bool runMultiRequester(UDWORD id, UDWORD *mode, char *chosen, LEVEL_DATASET **chosenValue, bool *isHoverPreview)
+bool runMultiRequester(UDWORD id, UDWORD *mode, QString *chosen, LEVEL_DATASET **chosenValue, bool *isHoverPreview)
 {
 	static unsigned hoverId = 0;
 	static unsigned hoverStartTime = 0;
@@ -660,7 +544,7 @@ bool runMultiRequester(UDWORD id, UDWORD *mode, char *chosen, LEVEL_DATASET **ch
 	}
 	if (id >= M_REQUEST_BUT && id <= M_REQUEST_BUTM)  // chose a file.
 	{
-		strcpy(chosen,((W_BUTTON *)widgGetFromID(psRScreen,id))->pText );
+		*chosen = ((W_BUTTON *)widgGetFromID(psRScreen,id))->pText;
 
 		*chosenValue = (LEVEL_DATASET *)((W_BUTTON *)widgGetFromID(psRScreen,id))->pUserData;
 		*mode = context;
@@ -802,16 +686,16 @@ static void displayExtraGubbins(UDWORD height)
 }
 
 
-static void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+static void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
 	char str[128];
-	int x = xOffset + psWidget->x;
-	int y = yOffset + psWidget->y;
+	int x = xOffset + psWidget->x();
+	int y = yOffset + psWidget->y();
 	unsigned player = psWidget->UserData;  // Get the in game player number.
 
 	if (responsibleFor(player, 0))
 	{
-		displayExtraGubbins(widgGetFromID(psWScreen,MULTIMENU_FORM)->height);
+		displayExtraGubbins(widgGetFromID(psWScreen,MULTIMENU_FORM)->height());
 	}
 
 	iV_SetFont(font_regular);  // font
@@ -987,11 +871,11 @@ static void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 	}
 }
 
-static void displayDebugMenu(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+static void displayDebugMenu(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
 	char			str[128];
-	UDWORD			x					= xOffset+psWidget->x;
-	UDWORD			y					= yOffset+psWidget->y;
+	int x = xOffset + psWidget->x();
+	int y = yOffset + psWidget->y();
 	UDWORD			index = psWidget->UserData;
 
 	iV_SetFont(font_regular);											// font
@@ -1008,7 +892,7 @@ static void displayDebugMenu(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, P
 // ////////////////////////////////////////////////////////////////////////////
 // alliance display funcs
 
-static void displayAllianceState(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+static void displayAllianceState(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
 	UDWORD a, b, c, player = psWidget->UserData;
 	switch(alliances[selectedPlayer][player])
@@ -1037,11 +921,11 @@ static void displayAllianceState(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffse
 	}
 
 	psWidget->UserData = PACKDWORD_TRI(a,b,c);
-	intDisplayImageHilight(psWidget,  xOffset,  yOffset, pColours);
+	intDisplayImageHilight(psWidget,  xOffset,  yOffset);
 	psWidget->UserData = player;
 }
 
-static void displayChannelState(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+static void displayChannelState(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
 	UDWORD player = psWidget->UserData;
 
@@ -1053,7 +937,7 @@ static void displayChannelState(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset
 	{
 		psWidget->UserData = PACKDWORD_TRI(0, IMAGE_MULTI_NOCHAN, IMAGE_MULTI_NOCHAN);
 	}
-	intDisplayImageHilight(psWidget, xOffset, yOffset, pColours);
+	intDisplayImageHilight(psWidget, xOffset, yOffset);
 	psWidget->UserData = player;
 }
 
@@ -1210,22 +1094,12 @@ bool addDebugMenu(bool bAdd)
 			formHeight += DEBUGMENU_ENTRY_H;
 	}
 
-	// add form
-	W_FORMINIT sFormInit;
-	sFormInit.formID		  = 0;
-	sFormInit.id			  = DEBUGMENU;
-	sFormInit.style			  = WFORM_PLAIN;
-	sFormInit.x				  =(SWORD)(DEBUGMENU_FORM_X);
-	sFormInit.y				  =(SWORD)(DEBUGMENU_FORM_Y);
-	sFormInit.width			  = DEBUGMENU_FORM_W;
-	sFormInit.height          = formHeight;
-	sFormInit.pDisplay		  = intOpenPlainForm;
-	sFormInit.disableChildren = true;
+	WIDGET *parent = psWScreen->psForm;
 
-	if (!widgAddForm(psWScreen, &sFormInit))
-	{
-		return false;
-	}
+	// add form
+	IntFormAnimated *debugMenu = new IntFormAnimated(parent);
+	debugMenu->id = DEBUGMENU;
+	debugMenu->setGeometry(DEBUGMENU_FORM_X, DEBUGMENU_FORM_Y, DEBUGMENU_FORM_W, formHeight);
 
 	// add debug info
 	pos = 0;
@@ -1234,7 +1108,7 @@ bool addDebugMenu(bool bAdd)
 		if(strcmp(debugMenuEntry[i],""))
 		{
 			// add form
-			sFormInit = W_FORMINIT();
+			W_FORMINIT sFormInit;
 			sFormInit.formID		  = DEBUGMENU;
 			sFormInit.id			  = DEBUGMENU_CLOSE + pos + 1;
 			sFormInit.style			  = WFORM_PLAIN;
@@ -1289,22 +1163,12 @@ bool intAddMultiMenu(void)
 		intResetScreen(false);
 	}
 
-	// add form
-	W_FORMINIT sFormInit;
-	sFormInit.formID		  = 0;
-	sFormInit.id			  = MULTIMENU_FORM;
-	sFormInit.style			  = WFORM_PLAIN;
-	sFormInit.x				  =(SWORD)(MULTIMENU_FORM_X);
-	sFormInit.y				  =(SWORD)(MULTIMENU_FORM_Y);
-	sFormInit.width			  = MULTIMENU_FORM_W;
-	sFormInit.height          = MULTIMENU_PLAYER_H*game.maxPlayers + MULTIMENU_PLAYER_H + 7;
-	sFormInit.pDisplay		  = intOpenPlainForm;
-	sFormInit.disableChildren = true;
+	WIDGET *parent = psWScreen->psForm;
 
-	if (!widgAddForm(psWScreen, &sFormInit))
-	{
-		return false;
-	}
+	// add form
+	IntFormAnimated *multiMenuForm = new IntFormAnimated(parent);
+	multiMenuForm->id = MULTIMENU_FORM;
+	multiMenuForm->setGeometry(MULTIMENU_FORM_X, MULTIMENU_FORM_Y, MULTIMENU_FORM_W, MULTIMENU_PLAYER_H*game.maxPlayers + MULTIMENU_PLAYER_H + 7);
 
 	// add any players
 	for(i=0;i<MAX_PLAYERS;i++)
@@ -1344,12 +1208,11 @@ bool intAddMultiMenu(void)
 // ////////////////////////////////////////////////////////////////////////////
 void intCloseMultiMenuNoAnim(void)
 {
-	if (!MultiMenuUp && !ClosingMultiMenu)
+	widgDelete(psWScreen, MULTIMENU_FORM);
+	if (!MultiMenuUp)
 	{
 		return;
 	}
-	widgDelete(psWScreen, MULTIMENU_CLOSE);
-	widgDelete(psWScreen, MULTIMENU_FORM);
 	MultiMenuUp = false;
 	if (intMode != INT_INTELMAP)
 	{
@@ -1361,22 +1224,16 @@ void intCloseMultiMenuNoAnim(void)
 // ////////////////////////////////////////////////////////////////////////////
 bool intCloseMultiMenu(void)
 {
-	W_TABFORM *Form;
-
 	if (!MultiMenuUp)
 	{
 		return true;
 	}
 
-	widgDelete(psWScreen, MULTIMENU_CLOSE);
-
 	// Start the window close animation.
-	Form = (W_TABFORM*)widgGetFromID(psWScreen,MULTIMENU_FORM);
-	if(Form) {
-		Form->display = intClosePlainForm;
-		Form->pUserData = NULL;	// Used to signal when the close anim has finished.
-		Form->disableChildren = true;
-		ClosingMultiMenu = true;
+	IntFormAnimated *form = (IntFormAnimated *)widgGetFromID(psWScreen, MULTIMENU_FORM);
+	if (form != nullptr)
+	{
+		form->closeAnimateDelete();
 		MultiMenuUp  = false;
 	}
 

@@ -38,105 +38,100 @@ W_LABINIT::W_LABINIT()
 
 W_LABEL::W_LABEL(W_LABINIT const *init)
 	: WIDGET(init, WIDG_LABEL)
+	, aText(QString::fromUtf8(init->pText))
 	, FontID(init->FontID)
-	, pTip(init->pTip)
+	, pTip(QString::fromUtf8(init->pTip))
+	, fontColour(WZCOL_FORM_TEXT)
 {
-	if (display == NULL)
-	{
-		display = labelDisplay;
-	}
-
-	aText[0] = '\0';
-	if (init->pText)
-	{
-		sstrcpy(aText, init->pText);
-	}
+	ASSERT((init->style & ~(WLAB_PLAIN | WLAB_ALIGNLEFT | WLAB_ALIGNRIGHT | WLAB_ALIGNCENTRE | WLAB_ALIGNTOP | WLAB_ALIGNBOTTOM | WIDG_HIDDEN)) == 0, "Unknown button style");
 }
 
+W_LABEL::W_LABEL(WIDGET *parent)
+	: WIDGET(parent, WIDG_LABEL)
+	, FontID(font_regular)
+	, fontColour(WZCOL_FORM_TEXT)
+{}
 
-/* Create a button widget data structure */
-W_LABEL *labelCreate(const W_LABINIT *psInit)
+void W_LABEL::display(int xOffset, int yOffset)
 {
-	/* Do some validation on the initialisation struct */
-	if (psInit->style & ~(WLAB_PLAIN | WLAB_ALIGNLEFT |
-	        WLAB_ALIGNRIGHT | WLAB_ALIGNCENTRE | WIDG_HIDDEN))
+	if (displayFunction != NULL)
 	{
-		ASSERT(false, "Unknown button style");
-		return NULL;
+		displayFunction(this, xOffset, yOffset);
+		return;
 	}
-
-	/* Allocate the required memory */
-	W_LABEL *psWidget = new W_LABEL(psInit);
-	if (psWidget == NULL)
-	{
-		debug(LOG_FATAL, "labelCreate: Out of memory");
-		abort();
-		return NULL;
-	}
-
-	return psWidget;
-}
-
-
-/* Free the memory used by a button */
-void labelFree(W_LABEL *psWidget)
-{
-	ASSERT(psWidget != NULL,
-	       "labelFree: Invalid label pointer");
-
-	delete psWidget;
-}
-
-/* label display function */
-void labelDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
-{
-	unsigned int fx, fy, fw;
-	W_LABEL		*psLabel;
-	enum iV_fonts FontID;
-
-	psLabel = (W_LABEL *)psWidget;
-	FontID = psLabel->FontID;
 
 	iV_SetFont(FontID);
-	iV_SetTextColour(pColours[WCOL_TEXT]);
+	iV_SetTextColour(fontColour);
 
-	if (psLabel->style & WLAB_ALIGNCENTRE)
+	QByteArray text = aText.toUtf8();
+	int fx;
+	if (style & WLAB_ALIGNCENTRE)
 	{
-		fw = iV_GetTextWidth(psLabel->aText);
-		fx = xOffset + psLabel->x + (psLabel->width - fw) / 2;
+		int fw = iV_GetTextWidth(text.constData());
+		fx = xOffset + x() + (width() - fw) / 2;
 	}
-	else if (psLabel->style & WLAB_ALIGNRIGHT)
+	else if (style & WLAB_ALIGNRIGHT)
 	{
-		fw = iV_GetTextWidth(psLabel->aText);
-		fx = xOffset + psLabel->x + psLabel->width - fw;
+		int fw = iV_GetTextWidth(text.constData());
+		fx = xOffset + x() + width() - fw;
 	}
 	else
 	{
-		fx = xOffset + psLabel->x;
+		fx = xOffset + x();
 	}
-	fy = yOffset + psLabel->y + (psLabel->height - iV_GetTextLineSize()) / 2 - iV_GetTextAboveBase();
-	iV_DrawText(psLabel->aText, fx, fy);
+	int fy;
+	if ((style & WLAB_ALIGNTOPLEFT) != 0)  // Align top
+	{
+		fy = yOffset + y() - iV_GetTextAboveBase();
+	}
+	else if ((style & WLAB_ALIGNBOTTOMLEFT) != 0)  // Align bottom
+	{
+		fy = yOffset + y() - iV_GetTextAboveBase() + (height() - iV_GetTextLineSize());
+	}
+	else
+	{
+		fy = yOffset + y() - iV_GetTextAboveBase() + (height() - iV_GetTextLineSize())/2;
+	}
+	iV_DrawText(text.constData(), fx, fy);
 }
 
 /* Respond to a mouse moving over a label */
 void W_LABEL::highlight(W_CONTEXT *psContext)
 {
 	/* If there is a tip string start the tool tip */
-	if (pTip)
+	if (!pTip.isEmpty())
 	{
-		tipStart(this, pTip, psContext->psScreen->TipFontID,
-		         psContext->psForm->aColours,
-		         x + psContext->xOffset, y + psContext->yOffset,
-		         width, height);
+		tipStart(this, pTip, screenPointer->TipFontID, x() + psContext->xOffset, y() + psContext->yOffset, width(), height());
 	}
 }
 
 
 /* Respond to the mouse moving off a label */
-void W_LABEL::highlightLost(W_CONTEXT *)
+void W_LABEL::highlightLost()
 {
-	if (pTip)
+	if (!pTip.isEmpty())
 	{
 		tipStop(this);
 	}
+}
+
+QString W_LABEL::getString() const
+{
+	return aText;
+}
+
+void W_LABEL::setString(QString string)
+{
+	aText = string;
+}
+
+void W_LABEL::setTip(QString string)
+{
+	pTip = string;
+}
+
+void W_LABEL::setTextAlignment(WzTextAlignment align)
+{
+	style &= ~(WLAB_ALIGNLEFT | WLAB_ALIGNCENTRE | WLAB_ALIGNRIGHT);
+	style |= align;
 }

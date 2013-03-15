@@ -25,16 +25,7 @@
 #include "lib/widget/form.h"
 #include "intimage.h"
 #include "droid.h"
-
-#define NUM_OBJECTSURFACES		(100)
-#define NUM_TOPICSURFACES		(50)
-#define NUM_STATSURFACES		(200)
-#define NUM_SYSTEM0SURFACES		(100)
-#define NUM_OBJECTBUFFERS		(NUM_OBJECTSURFACES*4)
-#define NUM_STATBUFFERS			(NUM_STATSURFACES*4)
-#define NUM_TOPICBUFFERS		(NUM_TOPICSURFACES*4)
-
-#define NUM_SYSTEM0BUFFERS		(NUM_SYSTEM0SURFACES*8)
+#include "template.h"
 
 
 /* Power levels are divided by this for power bar display. The extra factor has
@@ -45,12 +36,8 @@ power values in the buttons */
 #define BUTTONOBJ_ROTSPEED		90	// Speed to rotate objects rendered in
 									// buttons ( degrees per second )
 
-//the two types of button used in the object display (bottom bar)
-#define		TOPBUTTON			0
-#define		BTMBUTTON			1
-
-
-enum {
+enum ImdType
+{
 	IMDTYPE_NONE,
 	IMDTYPE_DROID,
 	IMDTYPE_DROIDTEMPLATE,
@@ -60,71 +47,30 @@ enum {
 	IMDTYPE_STRUCTURESTAT,
 };
 
-#define RENDERBUTTON_INUSE(x)  ((x)->InUse=true)
-#define RENDERBUTTON_NOTINUSE(x)  ((x)->InUse=false)
-
-#define RENDERBUTTON_INITIALISED(x)  ((x)->Initialised=true)
-#define RENDERBUTTON_NOTINITIALISED(x)  ((x)->Initialised=false)
-
-#define IsBufferInUse(x) ((x)->InUse)
-
-struct RENDERED_BUTTON
+struct ImdObject
 {
-	bool InUse;			// Is it in use.
-	bool Initialised;	// Is it initialised.
-	SDWORD ImdRotation;	// Rotation if button is an IMD.
-	UDWORD State;		// Copy of widget's state so we know if state has changed.
-	void *Data;			// Any data we want to attach.
-	void *Data2;		// Any data we want to attach.
+	ImdObject() : ptr(nullptr), type(IMDTYPE_NONE) {}
+	static ImdObject Droid(BASE_OBJECT *p) { return ImdObject(p, IMDTYPE_DROID); }
+	static ImdObject DroidTemplate(BASE_STATS *p) { return ImdObject(p, IMDTYPE_DROIDTEMPLATE); }
+	static ImdObject Component(BASE_STATS *p) { return ImdObject(p, IMDTYPE_COMPONENT); }
+	static ImdObject Structure(BASE_OBJECT *p) { return ImdObject(p, IMDTYPE_STRUCTURE); }
+	static ImdObject Research(BASE_STATS *p) { return ImdObject(p, IMDTYPE_RESEARCH); }
+	static ImdObject StructureStat(BASE_STATS *p) { return ImdObject(p, IMDTYPE_STRUCTURESTAT); }
+
+	bool empty() const { return ptr == nullptr; }
+
+	void *ptr;
+	ImdType type;
+
+private:
+	ImdObject(void *ptr, ImdType type) : ptr(ptr), type(type) {}
 };
-
-extern RENDERED_BUTTON TopicBuffers[NUM_TOPICBUFFERS];
-extern RENDERED_BUTTON ObjectBuffers[NUM_OBJECTBUFFERS];
-extern RENDERED_BUTTON StatBuffers[NUM_STATBUFFERS];
-extern RENDERED_BUTTON System0Buffers[NUM_SYSTEM0BUFFERS];
-
-extern BASE_STATS *CurrentStatsTemplate;
 
 // Set audio IDs for form opening/closing anims.
 void SetFormAudioIDs(int OpenID,int CloseID);
 
 // Initialise interface graphics.
 void intInitialiseGraphics(void);
-
-// Get a free RENDERED_BUTTON structure for an object window button.
-SDWORD GetObjectBuffer(void);
-
-// Clear ( make unused ) all RENDERED_BUTTON structures for the object window.
-void ClearObjectBuffers(void);
-
-// Clear ( make unused ) all RENDERED_BUTTON structures for the topic window.
-void ClearTopicBuffers(void);
-
-// Clear ( make unused ) a RENDERED_BUTTON structure.
-void ClearObjectButtonBuffer(SDWORD BufferID);
-
-// Clear ( make unused ) a RENDERED_BUTTON structure.
-void ClearTopicButtonBuffer(SDWORD BufferID);
-
-void RefreshObjectButtons(void);
-void RefreshSystem0Buttons(void);
-void RefreshTopicButtons(void);
-void RefreshStatsButtons(void);
-
-
-// Get a free RENDERED_BUTTON structure for a stat window button.
-SDWORD GetStatBuffer(void);
-
-// Clear ( make unused ) all RENDERED_BUTTON structures for the stat window.
-void ClearStatBuffers(void);
-
-/*these have been set up for the Transporter - the design screen DOESN'T use them*/
-// Clear ( make unused ) *all* RENDERED_BUTTON structures.
-void ClearSystem0Buffers(void);
-// Clear ( make unused ) a RENDERED_BUTTON structure.
-void ClearSystem0ButtonBuffer(SDWORD BufferID);
-// Get a free RENDERED_BUTTON structure.
-SDWORD GetSystem0Buffer(void);
 
 // callback to update the command droid size label
 void intUpdateCommandSize(WIDGET *psWidget, W_CONTEXT *psContext);
@@ -143,71 +89,111 @@ extern void intAddFactoryInc(WIDGET *psWidget, W_CONTEXT *psContext);
 //callback to display the production quantity number for a template
 extern void intAddProdQuantity(WIDGET *psWidget, W_CONTEXT *psContext);
 
-void intDisplayPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+void intDisplayPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 
-void intDisplayStatusButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+class IntFancyButton : public W_CLICKFORM
+{
+public:
+	IntFancyButton(WIDGET *parent);
 
-void intDisplayObjectButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+protected:
+	//the two types of button used in the object display (bottom bar)
+	enum ButtonType {TOPBUTTON = 0, BTMBUTTON = 1};
 
-void intDisplayStatsButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+	void doRotation();
+	void displayClear(int xOffset, int yOffset);
+	void displayIMD(Image image, ImdObject imdObject, int xOffset, int yOffset);
+	void displayImage(Image image, int xOffset, int yOffset);
+	void displayBlank(int xOffset, int yOffset);
+	void displayIfHighlight(int xOffset, int yOffset);
 
-void AdjustTabFormSize(W_TABFORM *Form,UDWORD *x0,UDWORD *y0,UDWORD *x1,UDWORD *y1);
+	int imdRotation;  // Rotation if button is an IMD.
+	int imdRotationRate;
+	ButtonType buttonType;  // TOPBUTTON is square, BTMBUTTON has a little up arrow.
+};
 
-void intDisplayStatsForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+class IntObjectButton : public IntFancyButton
+{
+public:
+	IntObjectButton(WIDGET *parent);
 
-void intOpenPlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+	virtual void display(int xOffset, int yOffset);
 
-void intClosePlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+	void setObject(BASE_OBJECT *object) { psObj = object; }
+	bool clearData() { bool ret = psObj != nullptr; psObj = nullptr; return ret; }
 
-void intDisplayPlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+protected:
+	BASE_OBJECT *psObj;
+};
 
-void intDisplayImage(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+class IntStatusButton : public IntObjectButton
+{
+public:
+	IntStatusButton(WIDGET *parent);
 
-void intDisplayImageHilight(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+	void setObject(BASE_OBJECT *object) { psObj = object; theStats = nullptr; }
+	void setObjectAndStats(BASE_OBJECT *object, BASE_STATS *stats) { psObj = object; theStats = stats; }
 
-void intDisplayButtonHilight(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+	virtual void display(int xOffset, int yOffset);
 
-void intDisplayButtonFlash(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+protected:
+	BASE_STATS *theStats;
+};
 
-void intDisplayButtonPressed(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+class IntStatsButton : public IntFancyButton
+{
+public:
+	IntStatsButton(WIDGET *parent);
 
-void intDisplayReticuleButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+	virtual void display(int xOffset, int yOffset);
 
-void intDisplayTab(WIDGET *psWidget,UDWORD TabType, UDWORD Position,
-					UDWORD Number,bool Selected,bool Hilight,UDWORD x,UDWORD y,UDWORD Width,UDWORD Height);
-void intDisplaySlider(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+	void setStats(BASE_STATS *stats) { Stat = stats; }
+	void setStatsAndTip(BASE_STATS *stats) { setStats(stats); setTip(getStatName(Stat)); }
+	void setStatsAndTip(DROID_TEMPLATE *stats) { setStats(stats); setTip(getTemplateName(stats)); }
 
-void intDisplayNumber(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+protected:
+	BASE_STATS *Stat;
+};
+
+/// Form which animates opening/closing.
+class IntFormAnimated : public W_FORM
+{
+public:
+	IntFormAnimated(WIDGET *parent, bool openAnimate = true);
+
+	virtual void display(int xOffset, int yOffset);
+
+	void closeAnimateDelete();              ///< Animates the form closing, and deletes itself when done.
+
+private:
+	unsigned        startTime;              ///< Animation start time
+	int             currentAction;          ///< Opening/open/closing/closed.
+};
+
+void intDisplayImage(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
+
+void intDisplayImageHilight(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
+
+void intDisplayButtonHilight(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
+
+void intDisplayButtonFlash(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
+
+void intDisplayButtonPressed(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
+
+void intDisplayReticuleButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
+
+void intDisplaySlider(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
+
+void intDisplayNumber(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 void intAddLoopQuantity(WIDGET *psWidget, W_CONTEXT *psContext);
 
-void intDisplayEditBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
-
-void OpenButtonRender(int XPos, int YPos);
-
-void ClearButton(bool Down,UDWORD Size, UDWORD buttonType);
-
-void RenderToButton(IMAGEFILE *ImageFile,UWORD ImageID,void *Object,UDWORD Player,RENDERED_BUTTON *Buffer,
-					bool Down,UDWORD IMDType, UDWORD buttonType);
-
-void CreateIMDButton(IMAGEFILE *ImageFile,UWORD ImageID,void *Object,UDWORD Player,RENDERED_BUTTON *Buffer,
-					bool Down,UDWORD IMDType,UDWORD buttonType);
-
-void CreateImageButton(IMAGEFILE *ImageFile,UWORD ImageID,RENDERED_BUTTON *Buffer,bool Down, UDWORD buttonType);
-
-void CreateBlankButton(RENDERED_BUTTON *Buffer,bool Down, UDWORD buttonType);
-
-void RenderImageToButton(IMAGEFILE *ImageFile,UWORD ImageID,RENDERED_BUTTON *Buffer,bool Down, UDWORD buttonType);
-void RenderBlankToButton(RENDERED_BUTTON *Buffer,bool Down, UDWORD buttonType);
-
-
-extern bool DroidIsRepairing(DROID *Droid);
+void intDisplayEditBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 
 bool DroidIsBuilding(DROID *Droid);
 STRUCTURE *DroidGetBuildStructure(DROID *Droid);
 bool DroidGoingToBuild(DROID *Droid);
 BASE_STATS *DroidGetBuildStats(DROID *Droid);
 iIMDShape *DroidGetIMD(DROID *Droid);
-bool DroidIsDemolishing(DROID *Droid);
 
 bool StructureIsManufacturingPending(STRUCTURE *structure);   ///< Returns true iff the structure is either manufacturing or on hold (even if not yet synchronised). (But ignores research.)
 bool structureIsResearchingPending(STRUCTURE *structure);     ///< Returns true iff the structure is either researching or on hold (even if not yet synchronised). (But ignores manufacturing.)
@@ -226,42 +212,45 @@ SDWORD StatIsComponent(BASE_STATS *Stat);
 bool StatGetComponentIMD(BASE_STATS *Stat, SDWORD compID,iIMDShape **CompIMD,iIMDShape **MountIMD);
 
 bool StatIsResearch(BASE_STATS *Stat);
-void StatGetResearchImage(BASE_STATS *psStat, SDWORD *Image, iIMDShape **Shape,
-                          BASE_STATS **ppGraphicData, bool drawTechIcon);
 
 /* Draws a stats bar for the design screen */
-extern void intDisplayStatsBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
-							   PIELIGHT *pColours);
+void intDisplayStatsBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 /* Draws a Template Power Bar for the Design Screen */
-void intDisplayDesignPowerBar(WIDGET *psWidget, UDWORD xOffset,
-							  UDWORD yOffset, PIELIGHT *pColours);
+void intDisplayDesignPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 
 // Widget callback function to play an audio track.
 extern void WidgetAudioCallback(int AudioID);
 
-// Widget callback to display a contents button for the Transporter
-extern void intDisplayTransportButton(WIDGET *psWidget, UDWORD xOffset,
-						  UDWORD yOffset, PIELIGHT *pColours);
+//void intDisplayTransportButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
+class IntTransportButton : public IntFancyButton
+{
+public:
+	IntTransportButton(WIDGET *parent);
+
+	virtual void display(int xOffset, int yOffset);
+
+	void setObject(DROID *object) { psDroid = object; }
+
+protected:
+	DROID *psDroid;
+};
+
 /*draws blips on radar to represent Proximity Display*/
 extern void drawRadarBlips(int radarX, int radarY, float pixSizeH, float pixSizeV);
 
 /*Displays the proximity messages blips over the world*/
-extern void intDisplayProximityBlips(WIDGET *psWidget, UDWORD xOffset,
-					UDWORD yOffset, PIELIGHT *pColours);
+ void intDisplayProximityBlips(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 
 extern void intUpdateQuantitySlider(WIDGET *psWidget, W_CONTEXT *psContext);
 
-extern void intDisplayDPButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+void intDisplayDPButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 
-extern void intDisplayTime(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
-extern void intDisplayNum(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+void intDisplayResSubGroup(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 
-extern void intDisplayResSubGroup(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+void intDisplayMissionClock(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 
-extern void intDisplayMissionClock(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
-
-extern void intDisplayAllyIcon(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
-void intDisplayAllyBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+void intDisplayAllyIcon(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
+void intDisplayAllyBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 
 void intSetShadowPower(int quantity);
 
