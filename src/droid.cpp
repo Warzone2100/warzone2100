@@ -3282,12 +3282,8 @@ bool cbSensorDroid(DROID *psDroid)
 	{
 		return false;
 	}
-
-	/*Super Sensor works as any type*/
-	if (asSensorStats[psDroid->asBits[COMP_SENSOR].nStat].type ==
-		VTOL_CB_SENSOR ||
-		asSensorStats[psDroid->asBits[COMP_SENSOR].nStat].type ==
-		INDIRECT_CB_SENSOR)
+	if (asSensorStats[psDroid->asBits[COMP_SENSOR].nStat].type == VTOL_CB_SENSOR
+	    || asSensorStats[psDroid->asBits[COMP_SENSOR].nStat].type == INDIRECT_CB_SENSOR)
 	{
 		return true;
 	}
@@ -3302,18 +3298,13 @@ bool standardSensorDroid(DROID *psDroid)
 	{
 		return false;
 	}
-	
-	/*Super Sensor works as any type*/
-	if (asSensorStats[psDroid->asBits[COMP_SENSOR].nStat].type ==
-		VTOL_INTERCEPT_SENSOR ||
-		asSensorStats[psDroid->asBits[COMP_SENSOR].nStat].type ==
-		STANDARD_SENSOR ||
-		asSensorStats[psDroid->asBits[COMP_SENSOR].nStat].type ==
-		SUPER_SENSOR)
+	if (asSensorStats[psDroid->asBits[COMP_SENSOR].nStat].type == VTOL_INTERCEPT_SENSOR
+	    || asSensorStats[psDroid->asBits[COMP_SENSOR].nStat].type == STANDARD_SENSOR
+	    || asSensorStats[psDroid->asBits[COMP_SENSOR].nStat].type == SUPER_SENSOR)
 	{
 		return true;
 	}
-	
+
 	return false;
 }
 

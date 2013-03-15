@@ -1661,8 +1661,7 @@ void actionUpdateDroid(DROID *psDroid)
 		// align the turret
 		actionTargetTurret(psDroid, psDroid->psActionTarget[0], &psDroid->asWeaps[0]);
 
-		// WSS shouldn't get a free pass to hit anything on map
-		if (order->type != DORDER_HOLD && !cbSensorDroid(psDroid) && !asSensorStats[psDroid->asBits[COMP_SENSOR].nStat].type != SUPER_SENSOR)
+		if (order->type != DORDER_HOLD && !cbSensorDroid(psDroid))
 		{
 			// make sure the target is within sensor range
 			const int xdiff = (SDWORD)psDroid->pos.x - (SDWORD)psDroid->psActionTarget[0]->pos.x;

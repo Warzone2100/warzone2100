@@ -526,8 +526,7 @@ static void processVisibilitySelf(BASE_OBJECT *psObj)
 		setSeenByInstantly(psStruct->psTarget[0], psObj->player, UBYTE_MAX);
 	}
 	DROID *psDroid = castDroid(psObj);
-	// WSS shouldn't get a free pass to hit anything on map
-	if (psDroid != NULL && psDroid->action == DACTION_OBSERVE && cbSensorDroid(psDroid) && asSensorStats[psDroid->asBits[COMP_SENSOR].nStat].type != SUPER_SENSOR)
+	if (psDroid != NULL && psDroid->action == DACTION_OBSERVE && cbSensorDroid(psDroid))
 	{
 		// Anyone commenting this out will get a knee capping from John.
 		// You have been warned!!
