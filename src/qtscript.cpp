@@ -192,6 +192,9 @@ static QScriptValue js_setTimer(QScriptContext *context, QScriptEngine *engine)
 	QScriptValue ms = context->argument(1);
 	int player = engine->globalObject().property("me").toInt32();
 	timerNode node(engine, funcName, player, ms.toInt32());
+	QScriptValue value = engine->globalObject().property(funcName); // check existence
+	SCRIPT_ASSERT(context, value.isValid() && value.isFunction(), "No such function: %s",
+	              funcName.toUtf8().constData());
 	if (context->argumentCount() == 3)
 	{
 		QScriptValue obj = context->argument(2);
@@ -251,6 +254,9 @@ static QScriptValue js_queue(QScriptContext *context, QScriptEngine *engine)
 {
 	SCRIPT_ASSERT(context, context->argument(0).isString(), "Queued functions must be quoted");
 	QString funcName = context->argument(0).toString();
+	QScriptValue value = engine->globalObject().property(funcName); // check existence
+	SCRIPT_ASSERT(context, value.isValid() && value.isFunction(), "No such function: %s",
+	              funcName.toUtf8().constData());
 	int ms = 0;
 	if (context->argumentCount() > 1)
 	{
