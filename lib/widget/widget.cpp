@@ -1491,9 +1491,6 @@ WidgetTriggers const &widgRunScreen(W_SCREEN *psScreen)
 	/* Process the screen's widgets */
 	widgProcessForm(&sContext);
 
-	/* Process any user callback functions */
-	widgProcessCallbacks(&sContext);
-
 	/* Return the ID of a pressed button or finished edit box if any */
 	return psScreen->retWidgets;
 }
@@ -1565,6 +1562,16 @@ static void widgDisplayForm(W_FORM *psForm, UDWORD xOffset, UDWORD yOffset)
  */
 void widgDisplayScreen(W_SCREEN *psScreen)
 {
+	/* Process any user callback functions */
+	W_CONTEXT sContext;
+	sContext.psScreen = psScreen;
+	sContext.psForm = psScreen->psForm;
+	sContext.xOffset = 0;
+	sContext.yOffset = 0;
+	sContext.mx = mouseX();
+	sContext.my = mouseY();
+	widgProcessCallbacks(&sContext);
+
 	/* Display the widgets */
 	widgDisplayForm((W_FORM *)psScreen->psForm, 0,0);
 
