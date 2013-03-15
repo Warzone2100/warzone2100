@@ -1140,7 +1140,7 @@ static bool serializeSaveGameV33Data(PHYSFS_file* fileHandle, const SAVE_GAME_V3
 	 || !serializeMultiplayerGame(fileHandle, &serializeGame->sGame)
 	 || !serializeNetPlay(fileHandle, &serializeGame->sNetPlay)
 	 || !PHYSFS_writeUBE32(fileHandle, serializeGame->savePlayer)
-	 || !PHYSFS_write(fileHandle, serializeGame->sPName, 1, 32) == 32
+	 || PHYSFS_write(fileHandle, serializeGame->sPName, 1, 32) != 32
 	 || !PHYSFS_writeSBE32(fileHandle, serializeGame->multiPlayer))
 		return false;
 
