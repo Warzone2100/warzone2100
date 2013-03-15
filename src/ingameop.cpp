@@ -99,7 +99,7 @@ static bool addQuitOptions(void)
 	// add form
 	IntFormAnimated *inGameOp = new IntFormAnimated(parent);
 	inGameOp->id = INTINGAMEOP;
-	inGameOp->setGeometry(INTINGAMEOP3_W, INTINGAMEOP3_H, INTINGAMEOP3_X, INTINGAMEOP3_Y);
+	inGameOp->setGeometry(INTINGAMEOP3_X, INTINGAMEOP3_Y, INTINGAMEOP3_W, INTINGAMEOP3_H);
 
 	addIGTextButton(INTINGAMEOP_RESUME, INTINGAMEOP_1_X, INTINGAMEOP_1_Y, INTINGAMEOP_OP_W, _("Resume Game"), OPALIGN);
 	addIGTextButton(INTINGAMEOP_QUIT_CONFIRM, INTINGAMEOP_1_X, INTINGAMEOP_2_Y, INTINGAMEOP_OP_W, _("Quit"), OPALIGN);
