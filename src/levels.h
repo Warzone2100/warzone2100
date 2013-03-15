@@ -47,6 +47,11 @@ enum LEVEL_TYPE
 	LDS_NONE,			//flags when not got a mission to go back to or when
 						//already on one - ****LEAVE AS LAST ONE****
 	LDS_MULTI_TYPE_START,           ///< Start number for custom type numbers (as used by a `type` instruction)
+
+	CAMPAIGN = 12,
+	SKIRMISH = 14,
+	MULTI_SKIRMISH2 = 18,
+	MULTI_SKIRMISH3 = 19
 };
 
 struct LEVEL_DATASET

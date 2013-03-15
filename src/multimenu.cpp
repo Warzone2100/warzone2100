@@ -198,13 +198,13 @@ static LEVEL_DATASET *enumerateMultiMaps(bool first, unsigned camToUse, unsigned
 	}
 	while(lev)
 	{
-		if(game.type == SKIRMISH)
+		if (game.type == SKIRMISH)
 		{
-			if(lev->type == MULTI_SKIRMISH2)
+			if (lev->type == MULTI_SKIRMISH2)
 			{
 				cam = 2;
 			}
-			else if(lev->type == MULTI_SKIRMISH3)
+			else if (lev->type == MULTI_SKIRMISH3)
 			{
 				cam = 3;
 			}
@@ -212,37 +212,9 @@ static LEVEL_DATASET *enumerateMultiMaps(bool first, unsigned camToUse, unsigned
 			{
 				cam = 1;
 			}
-
 			if((lev->type == SKIRMISH || lev->type == MULTI_SKIRMISH2 || lev->type == MULTI_SKIRMISH3)
 				&& (numPlayers == 0 || numPlayers == lev->players)
 				&& cam == camToUse )
-			{
-				LEVEL_DATASET *found = lev;
-
-				lev = lev->psNext;
-				return found;
-			}
-		}
-		else	//  campaign
-		{
-// 'service pack 1'
-			if(lev->type == MULTI_CAMPAIGN2)
-			{
-				cam = 2;
-			}
-			else if(lev->type == MULTI_CAMPAIGN3)
-			{
-				cam = 3;
-			}
-			else
-			{
-				cam = 1;
-			}
-//	end of service pack
-
-			if ((lev->type == CAMPAIGN || lev->type == MULTI_CAMPAIGN2 || lev->type == MULTI_CAMPAIGN3)
-			    && (numPlayers == 0 || numPlayers == lev->players)
-			    && cam == camToUse )
 			{
 				LEVEL_DATASET *found = lev;
 

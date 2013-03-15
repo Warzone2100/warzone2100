@@ -105,14 +105,6 @@ extern UBYTE				bDisplayMultiJoiningStatus;	// draw load progress?
 
 #define ANYPLAYER				99
 
-#define CAMPAIGN				12
-#define	SKIRMISH				14
-#define MULTI_SKIRMISH2			18
-#define MULTI_SKIRMISH3			19
-
-#define MULTI_CAMPAIGN2			15
-#define MULTI_CAMPAIGN3			16
-
 #define CAMP_CLEAN				0			// campaign subtypes
 #define CAMP_BASE				1
 #define CAMP_WALLS				2
