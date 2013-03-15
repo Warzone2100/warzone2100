@@ -749,9 +749,6 @@ WidgetTriggers const &widgRunScreen(W_SCREEN *psScreen)
 	/* Process the screen's widgets */
 	psScreen->psForm->runRecursive(&sContext);
 
-	/* Process any user callback functions */
-	psScreen->psForm->processCallbacksRecursive(&sContext);
-
 	deleteOldWidgets();  // Delete any widgets that called deleteLater() while being run.
 
 	/* Return the ID of a pressed button or finished edit box if any */
@@ -832,6 +829,14 @@ void widgDisplayScreen(W_SCREEN *psScreen)
 	int debugCode = keyDown(KEY_LCTRL) + 2*keyDown(KEY_LSHIFT);
 	debugLoc = debugLoc[1] == -1? debugSequence : debugLoc[0] == debugCode? debugLoc : debugLoc[1] == debugCode? debugLoc + 1 : debugSequence;
 	debugBoundingBoxes = debugBoundingBoxes ^ (debugLoc[1] == -1);
+
+	/* Process any user callback functions */
+	W_CONTEXT sContext;
+	sContext.xOffset = 0;
+	sContext.yOffset = 0;
+	sContext.mx = mouseX();
+	sContext.my = mouseY();
+	psScreen->psForm->processCallbacksRecursive(&sContext);
 
 	// Display the widgets.
 	psScreen->psForm->displayRecursive(0, 0);
