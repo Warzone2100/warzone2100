@@ -2406,7 +2406,7 @@ static void intObjectDied(UDWORD objID)
 
 	// clear the object button
 	IntObjectButton *psBut = (IntObjectButton *)widgGetFromID(psWScreen, objID);
-	if (psBut->clearData())
+	if (psBut != nullptr && psBut->clearData())
 	{
 		// and its gubbins
 		gubbinsID = IDOBJ_FACTORYSTART + objID - IDOBJ_OBJSTART;
@@ -3569,6 +3569,10 @@ static void intSetStats(UDWORD id, BASE_STATS *psStats)
 {
 	/* Update the button on the object screen */
 	IntStatusButton *statButton = (IntStatusButton *)widgGetFromID(psWScreen, id);
+	if (statButton == nullptr)
+	{
+		return;
+	}
 	statButton->setTip("");
 	WIDGET::Children children = statButton->children();
 	for (WIDGET::Children::const_iterator i = children.begin(); i != children.end(); ++i)
