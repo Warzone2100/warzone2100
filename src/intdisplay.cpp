@@ -1186,7 +1186,6 @@ void intOpenPlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_
 	UDWORD		Range;
 	UDWORD		Duration;
 	UDWORD		APos;
-	SDWORD		Ay0,Ay1;
 
 	Tx0 = xOffset+Form->x;
 	Ty0 = yOffset+Form->y;
@@ -1215,20 +1214,8 @@ void intOpenPlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_
 	Duration = (realTime - Form->startTime) << 16 ;
 	APos = (Range * (Duration / FORM_OPEN_ANIM_DURATION) ) >> 16;
 
-	Ay0 = Ty0 + (Form->height/2) - 4 - APos;
-	Ay1 = Ty0 + (Form->height/2) + 4 + APos;
-
-	if(Ay0 <= (SDWORD)Ty0)
-	{
-		Ay0 = Ty0;
-	}
-
-	if(Ay1 >= (SDWORD)Ty1)
-	{
-		Ay1 = Ty1;
-	}
-	Form->Ay0 = (UWORD)Ay0;
-	Form->Ay1 = (UWORD)Ay1;
+	Form->Ay0 = clip(Ty0 + (Form->height/2) - 4 - APos, Ty0, Ty0 + (Form->height/2) - 4);
+	Form->Ay1 = clip(Ty0 + (Form->height/2) + 4 + APos, Ty0 + (Form->height/2) + 4, Ty1);
 
 	if((Form->Ay0 == Ty0) && (Form->Ay1 == Ty1))
 	{
@@ -1282,15 +1269,8 @@ void intClosePlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL
 	Duration = (realTime - Form->startTime) << 16 ;
 	APos = (Range * (Duration / FORM_OPEN_ANIM_DURATION) ) >> 16;
 
-	Form->Ay0 = (UWORD)(yOffset + Form->y + APos);
-	Form->Ay1 = (UWORD)(yOffset + Form->y + Form->height - APos);
-
-	if(Form->Ay0 >= Ty0) {
-		Form->Ay0 = (UWORD)Ty0;
-	}
-	if(Form->Ay1 <= Ty1) {
-		Form->Ay1 = (UWORD)Ty1;
-	}
+	Form->Ay0 = clip(yOffset + Form->y + APos, yOffset + Form->y, Ty0);
+	Form->Ay1 = clip(yOffset + Form->y + Form->height - APos, Ty1, yOffset + Form->y + Form->height);
 
 	if((Form->Ay0 == Ty0) && (Form->Ay1 == Ty1)) {
 		Form->pUserData = (void*)1;
