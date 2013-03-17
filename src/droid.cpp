@@ -172,7 +172,7 @@ int droidReloadBar(BASE_OBJECT *psObj, WEAPON *psWeap, int weapon_slot)
 			firingStage = gameTime - psWeap->lastFired;
 			interval = bSalvo ? weaponReloadTime(psStats, psObj->player) : weaponFirePause(psStats, psObj->player);
 		}
-		if (firingStage < interval)
+		if (firingStage < interval && interval > 0)
 		{
 			return PERCENT(firingStage, interval);
 		}

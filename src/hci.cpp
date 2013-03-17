@@ -906,7 +906,6 @@ static void intProcessOptions(UDWORD id)
 		int oldSelectedPlayer = selectedPlayer;
 
 		widgSetButtonState(psWScreen, IDOPT_PLAYERSTART + selectedPlayer, 0);
-		oldSelectedPlayer = selectedPlayer;
 		selectedPlayer = id - IDOPT_PLAYERSTART;
 		NetPlay.players[selectedPlayer].allocated = !NetPlay.players[selectedPlayer].allocated;
 		NetPlay.players[oldSelectedPlayer].allocated = !NetPlay.players[oldSelectedPlayer].allocated;

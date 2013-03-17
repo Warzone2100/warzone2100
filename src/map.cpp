@@ -476,7 +476,7 @@ static int determineGroundType(int x, int y, const char *tileset)
 	int weight[2][2];
 	int i,j, tile;
 	int a,b, best;
-	MAPTILE *psTile = mapTile(x,y);
+	MAPTILE *psTile;
 
 	if (x < 0 || y < 0 || x >= mapWidth || y >= mapHeight)
 	{
@@ -490,7 +490,7 @@ static int determineGroundType(int x, int y, const char *tileset)
 		{
 			if (x+i-1 < 0 || y+j-1 < 0 || x+i-1 >= mapWidth || y+j-1 >= mapHeight)
 			{
-				psTile = 0;
+				psTile = NULL;
 				tile = 0;
 			}
 			else

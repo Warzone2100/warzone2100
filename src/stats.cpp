@@ -1512,7 +1512,6 @@ bool loadTerrainTable(const char *pFileName)
 bool loadBodyPropulsionIMDs(const char *pFileName)
 {
 	BODY_STATS *psBodyStat = asBodyStats;
-	PROPULSION_STATS *psPropulsionStat = asPropulsionStats;
 	unsigned int i, numStats;
 	QString propulsionName, leftIMD, rightIMD;
 	iIMDShape **startIMDs;
@@ -1552,7 +1551,7 @@ bool loadBodyPropulsionIMDs(const char *pFileName)
 		{
 			for (numStats = 0; numStats < numPropulsionStats; numStats++)
 			{
-				psPropulsionStat = &asPropulsionStats[numStats];
+				PROPULSION_STATS *psPropulsionStat = &asPropulsionStats[numStats];
 				if (keys[j].compare(psPropulsionStat->pName) == 0)
 				{
 					break;
