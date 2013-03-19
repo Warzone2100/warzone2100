@@ -33,6 +33,7 @@
 #include "lib/ivis_opengl/piestate.h"
 #include "lib/ivis_opengl/piepalette.h"
 #include "lib/ivis_opengl/pieclip.h"
+#include "lib/netplay/netplay.h"
 #include "piematrix.h"
 #include "screen.h"
 
@@ -141,8 +142,10 @@ static std::vector<ShadowcastingShape> scshapes;
 static std::vector<SHAPE> tshapes;
 static std::vector<SHAPE> shapes;
 
-static void pie_Draw3DButton2(iIMDShape *shape, const PIELIGHT &colour, const PIELIGHT &teamcolour)
+static void pie_Draw3DButton(iIMDShape *shape)
 {
+	const PIELIGHT colour = WZCOL_WHITE;
+	const PIELIGHT teamcolour = pal_GetTeamColour(NetPlay.players[selectedPlayer].colour);
 	pie_SetAlphaTest(true);
 	pie_SetFogStatus(false);
 	pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
@@ -395,8 +398,6 @@ void pie_CleanUp( void )
 
 void pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, int pieFlag, int pieFlagData)
 {
-	const PIELIGHT teamcolour = pal_GetTeamColour(team);
-
 	pieCount++;
 
 	ASSERT(frame >= 0, "Negative frame %d", frame);
@@ -404,11 +405,11 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, int
 
 	if (pieFlag & pie_BUTTON)
 	{
-		const PIELIGHT colour = WZCOL_WHITE;
-		pie_Draw3DButton2(shape, colour, teamcolour);
+		pie_Draw3DButton(shape);
 	}
 	else
 	{
+		const PIELIGHT teamcolour = pal_GetTeamColour(team);
 		SHAPE tshape;
 		tshape.shape = shape;
 		tshape.frame = frame;
