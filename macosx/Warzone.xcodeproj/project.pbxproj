@@ -436,6 +436,16 @@
 		4366729613D2122700FE85BA /* QuesoGLC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4366718213D1FD5600FE85BA /* QuesoGLC.framework */; };
 		4371B60F11D93FD1005A67AB /* pngpriv.h in Headers */ = {isa = PBXBuildFile; fileRef = 4371B60D11D93FD0005A67AB /* pngpriv.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		437487CF14AE41C100ABC9C7 /* template.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4343651C149EA04800527137 /* template.cpp */; };
+		4377CF1616F7E89C008B1083 /* listwidget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4377CF1416F7E89B008B1083 /* listwidget.cpp */; };
+		4377CF2416F7EA86008B1083 /* listwidget.h in Sources */ = {isa = PBXBuildFile; fileRef = 4377CF1516F7E89C008B1083 /* listwidget.h */; };
+		4377CF2516F7EA86008B1083 /* bar.h in Sources */ = {isa = PBXBuildFile; fileRef = 0246A17B0BD3CCBD004D1C70 /* bar.h */; };
+		4377CF2616F7EA86008B1083 /* button.h in Sources */ = {isa = PBXBuildFile; fileRef = 0246A17D0BD3CCBD004D1C70 /* button.h */; };
+		4377CF2716F7EA86008B1083 /* editbox.h in Sources */ = {isa = PBXBuildFile; fileRef = 0246A17F0BD3CCBD004D1C70 /* editbox.h */; };
+		4377CF2816F7EA86008B1083 /* form.h in Sources */ = {isa = PBXBuildFile; fileRef = 0246A1810BD3CCBD004D1C70 /* form.h */; };
+		4377CF2916F7EA86008B1083 /* label.h in Sources */ = {isa = PBXBuildFile; fileRef = 0246A1830BD3CCBD004D1C70 /* label.h */; };
+		4377CF2A16F7EA86008B1083 /* slider.h in Sources */ = {isa = PBXBuildFile; fileRef = 0246A1870BD3CCBD004D1C70 /* slider.h */; };
+		4377CF2B16F7EA86008B1083 /* widgbase.h in Sources */ = {isa = PBXBuildFile; fileRef = 0246A18A0BD3CCBD004D1C70 /* widgbase.h */; };
+		4377CF2C16F7EB03008B1083 /* multiint.h in Sources */ = {isa = PBXBuildFile; fileRef = 0246A2360BD3CCDB004D1C70 /* multiint.h */; };
 		437D3360150A53E000B45AAE /* qslint in Copy Additional Executables */ = {isa = PBXBuildFile; fileRef = 437D32D9150A47A800B45AAE /* qslint */; };
 		437DABE714C3345B00DB5F94 /* swapinterval.mm in Sources */ = {isa = PBXBuildFile; fileRef = 437DABE614C3345B00DB5F94 /* swapinterval.mm */; };
 		438BDDF31129DC9A00998660 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 438BDDD71129DC9A00998660 /* InfoPlist.strings */; };
@@ -1750,6 +1760,8 @@
 		436D24DE149642EB00BF74E3 /* SDLMain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SDLMain.h; path = ../3rdparty/SDL/mac/SDLMain.h; sourceTree = SOURCE_ROOT; };
 		436D24DF149642EB00BF74E3 /* SDLMain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SDLMain.m; path = ../3rdparty/SDL/mac/SDLMain.m; sourceTree = SOURCE_ROOT; };
 		4371B60D11D93FD0005A67AB /* pngpriv.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pngpriv.h; path = external/libpng/pngpriv.h; sourceTree = SOURCE_ROOT; };
+		4377CF1416F7E89B008B1083 /* listwidget.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = listwidget.cpp; path = ../lib/widget/listwidget.cpp; sourceTree = SOURCE_ROOT; };
+		4377CF1516F7E89C008B1083 /* listwidget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = listwidget.h; path = ../lib/widget/listwidget.h; sourceTree = SOURCE_ROOT; };
 		437D32BF150A47A800B45AAE /* Tests.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Tests.xcodeproj; path = ../tests/Tests.xcodeproj; sourceTree = SOURCE_ROOT; };
 		437D32C2150A47A800B45AAE /* MapUtilities.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = MapUtilities.xcodeproj; path = ../tools/map/MapUtilities.xcodeproj; sourceTree = SOURCE_ROOT; };
 		437DABE614C3345B00DB5F94 /* swapinterval.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = swapinterval.mm; path = ../lib/sdl/swapinterval.mm; sourceTree = SOURCE_ROOT; };
@@ -2485,6 +2497,8 @@
 		0246A1790BD3CCAB004D1C70 /* Widget */ = {
 			isa = PBXGroup;
 			children = (
+				4377CF1416F7E89B008B1083 /* listwidget.cpp */,
+				4377CF1516F7E89C008B1083 /* listwidget.h */,
 				0246A17A0BD3CCBD004D1C70 /* bar.cpp */,
 				0246A17B0BD3CCBD004D1C70 /* bar.h */,
 				0246A17C0BD3CCBD004D1C70 /* button.cpp */,
@@ -3245,7 +3259,6 @@
 		43BE75E411124A18007DF934 /* lib */ = {
 			isa = PBXGroup;
 			children = (
-				43BE75E711124AB5007DF934 /* betawidget */,
 				02BBB2060DA874CF002D438B /* Exception Handler */,
 				0246A0D00BD3CBE1004D1C70 /* Framework */,
 				0246A0D60BD3CBF6004D1C70 /* Gamelib */,
@@ -3259,13 +3272,6 @@
 				0246A1790BD3CCAB004D1C70 /* Widget */,
 			);
 			name = lib;
-			sourceTree = "<group>";
-		};
-		43BE75E711124AB5007DF934 /* betawidget */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = betawidget;
 			sourceTree = "<group>";
 		};
 		43C18F79114FF38B0028741B /* MiniUPnPc sources */ = {
@@ -4845,6 +4851,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4377CF2416F7EA86008B1083 /* listwidget.h in Sources */,
+				4377CF2516F7EA86008B1083 /* bar.h in Sources */,
+				4377CF2616F7EA86008B1083 /* button.h in Sources */,
+				4377CF2716F7EA86008B1083 /* editbox.h in Sources */,
+				4377CF2816F7EA86008B1083 /* form.h in Sources */,
+				4377CF2916F7EA86008B1083 /* label.h in Sources */,
+				4377CF2A16F7EA86008B1083 /* slider.h in Sources */,
+				4377CF2B16F7EA86008B1083 /* widgbase.h in Sources */,
+				4377CF2C16F7EB03008B1083 /* multiint.h in Sources */,
 				435213E316BD7F97001B3D42 /* qtscriptdebug.h in Sources */,
 				0246A0C90BD3CBD5004D1C70 /* resource_parser.ypp in Sources */,
 				0246A0C80BD3CBD5004D1C70 /* resource_lexer.lpp in Sources */,
@@ -5038,6 +5053,7 @@
 				43CCE06514BA636900B21363 /* netjoin_stub.cpp in Sources */,
 				437DABE714C3345B00DB5F94 /* swapinterval.mm in Sources */,
 				435213DF16BD7F6D001B3D42 /* qtscriptdebug.cpp in Sources */,
+				4377CF1616F7E89C008B1083 /* listwidget.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
