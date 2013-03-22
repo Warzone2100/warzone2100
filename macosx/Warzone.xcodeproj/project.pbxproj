@@ -138,17 +138,11 @@
 		0246A0C20BD3CBD5004D1C70 /* debug.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A09F0BD3CBD5004D1C70 /* debug.cpp */; };
 		0246A0C40BD3CBD5004D1C70 /* frame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A0A30BD3CBD5004D1C70 /* frame.cpp */; };
 		0246A0C50BD3CBD5004D1C70 /* frameresource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A0A60BD3CBD5004D1C70 /* frameresource.cpp */; };
-		0246A0C80BD3CBD5004D1C70 /* resource_lexer.lpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A0B10BD3CBD5004D1C70 /* resource_lexer.lpp */; };
-		0246A0C90BD3CBD5004D1C70 /* resource_parser.ypp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A0B20BD3CBD5004D1C70 /* resource_parser.ypp */; };
-		0246A0CB0BD3CBD5004D1C70 /* strres_lexer.lpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A0B50BD3CBD5004D1C70 /* strres_lexer.lpp */; };
-		0246A0CC0BD3CBD5004D1C70 /* strres_parser.ypp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A0B60BD3CBD5004D1C70 /* strres_parser.ypp */; };
 		0246A0CD0BD3CBD5004D1C70 /* strres.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A0B70BD3CBD5004D1C70 /* strres.cpp */; };
 		0246A0CE0BD3CBD5004D1C70 /* treap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A0BA0BD3CBD5004D1C70 /* treap.cpp */; };
 		0246A0CF0BD3CBD5004D1C70 /* trig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A0BD0BD3CBD5004D1C70 /* trig.cpp */; };
 		0246A0E30BD3CC0B004D1C70 /* anim.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A0D70BD3CC0B004D1C70 /* anim.cpp */; };
 		0246A0E40BD3CC0B004D1C70 /* animobj.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A0D90BD3CC0B004D1C70 /* animobj.cpp */; };
-		0246A0E50BD3CC0B004D1C70 /* audp_lexer.lpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A0DB0BD3CC0B004D1C70 /* audp_lexer.lpp */; };
-		0246A0E60BD3CC0B004D1C70 /* audp_parser.ypp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A0DC0BD3CC0B004D1C70 /* audp_parser.ypp */; };
 		0246A0E70BD3CC0B004D1C70 /* gtime.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A0DD0BD3CC0B004D1C70 /* gtime.cpp */; };
 		0246A1030BD3CC29004D1C70 /* bitimage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A0EA0BD3CC29004D1C70 /* bitimage.cpp */; };
 		0246A1040BD3CC29004D1C70 /* imd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A0EE0BD3CC29004D1C70 /* imd.cpp */; };
@@ -166,12 +160,8 @@
 		0246A1280BD3CC43004D1C70 /* screen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A1180BD3CC43004D1C70 /* screen.cpp */; };
 		0246A1290BD3CC43004D1C70 /* tex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A11A0BD3CC43004D1C70 /* tex.cpp */; };
 		0246A12A0BD3CC43004D1C70 /* textdraw.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A11B0BD3CC43004D1C70 /* textdraw.cpp */; };
-		0246A14D0BD3CC71004D1C70 /* chat_lexer.lpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A13B0BD3CC71004D1C70 /* chat_lexer.lpp */; };
-		0246A14E0BD3CC71004D1C70 /* chat_parser.ypp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A13C0BD3CC71004D1C70 /* chat_parser.ypp */; };
 		0246A14F0BD3CC71004D1C70 /* codeprint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A13E0BD3CC71004D1C70 /* codeprint.cpp */; };
 		0246A1500BD3CC71004D1C70 /* event.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A1400BD3CC71004D1C70 /* event.cpp */; };
-		0246A1530BD3CC71004D1C70 /* script_lexer.lpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A1470BD3CC71004D1C70 /* script_lexer.lpp */; };
-		0246A1540BD3CC71004D1C70 /* script_parser.ypp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A1480BD3CC71004D1C70 /* script_parser.ypp */; };
 		0246A1550BD3CC71004D1C70 /* script.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A1490BD3CC71004D1C70 /* script.cpp */; };
 		0246A1560BD3CC71004D1C70 /* stack.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A14B0BD3CC71004D1C70 /* stack.cpp */; };
 		0246A1730BD3CCA6004D1C70 /* audio_id.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A1660BD3CCA6004D1C70 /* audio_id.cpp */; };
@@ -231,7 +221,6 @@
 		0246A2C10BD3CCDC004D1C70 /* keybind.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A20D0BD3CCDB004D1C70 /* keybind.cpp */; };
 		0246A2C20BD3CCDC004D1C70 /* keyedit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A20F0BD3CCDB004D1C70 /* keyedit.cpp */; };
 		0246A2C30BD3CCDC004D1C70 /* keymap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A2110BD3CCDB004D1C70 /* keymap.cpp */; };
-		0246A2C40BD3CCDC004D1C70 /* level_lexer.lpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A2130BD3CCDB004D1C70 /* level_lexer.lpp */; };
 		0246A2C50BD3CCDC004D1C70 /* levels.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A2150BD3CCDB004D1C70 /* levels.cpp */; };
 		0246A2C60BD3CCDC004D1C70 /* lighting.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A2170BD3CCDB004D1C70 /* lighting.cpp */; };
 		0246A2C70BD3CCDC004D1C70 /* loadsave.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A2190BD3CCDB004D1C70 /* loadsave.cpp */; };
@@ -272,8 +261,6 @@
 		0246A2EC0BD3CCDC004D1C70 /* scriptfuncs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A2670BD3CCDC004D1C70 /* scriptfuncs.cpp */; };
 		0246A2ED0BD3CCDC004D1C70 /* scriptobj.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A2690BD3CCDC004D1C70 /* scriptobj.cpp */; };
 		0246A2EE0BD3CCDC004D1C70 /* scripttabs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A26B0BD3CCDC004D1C70 /* scripttabs.cpp */; };
-		0246A2EF0BD3CCDC004D1C70 /* scriptvals_lexer.lpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A26D0BD3CCDC004D1C70 /* scriptvals_lexer.lpp */; };
-		0246A2F00BD3CCDC004D1C70 /* scriptvals_parser.ypp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A26E0BD3CCDC004D1C70 /* scriptvals_parser.ypp */; };
 		0246A2F10BD3CCDC004D1C70 /* scriptvals.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A26F0BD3CCDC004D1C70 /* scriptvals.cpp */; };
 		0246A2F20BD3CCDC004D1C70 /* selection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A2710BD3CCDC004D1C70 /* selection.cpp */; };
 		0246A2F30BD3CCDC004D1C70 /* seqdisp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A2730BD3CCDC004D1C70 /* seqdisp.cpp */; };
@@ -676,6 +663,19 @@
 		43F300D710D3496D00707B6E /* encode.c in Sources */ = {isa = PBXBuildFile; fileRef = 43F3006710D344AF00707B6E /* encode.c */; };
 		43F30910136BAED700AFD307 /* QtNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4333612011A07FB900380F5E /* QtNetwork.framework */; };
 		43F30913136BAEE900AFD307 /* QtNetwork.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 4333612011A07FB900380F5E /* QtNetwork.framework */; };
+		43F4DA1E16FD0A6600C566E3 /* resource_lexer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43F4DA1816FD0A6600C566E3 /* resource_lexer.cpp */; };
+		43F4DA1F16FD0A6600C566E3 /* resource_parser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43F4DA1916FD0A6600C566E3 /* resource_parser.cpp */; };
+		43F4DA2016FD0A6600C566E3 /* strres_lexer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43F4DA1B16FD0A6600C566E3 /* strres_lexer.cpp */; };
+		43F4DA2116FD0A6600C566E3 /* strres_parser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43F4DA1C16FD0A6600C566E3 /* strres_parser.cpp */; };
+		43F4DA2516FD0A8900C566E3 /* audp_lexer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43F4DA2216FD0A8900C566E3 /* audp_lexer.cpp */; };
+		43F4DA2616FD0A8900C566E3 /* audp_parser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43F4DA2316FD0A8900C566E3 /* audp_parser.cpp */; };
+		43F4DA2D16FD0AD200C566E3 /* chat_lexer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43F4DA2716FD0AD200C566E3 /* chat_lexer.cpp */; };
+		43F4DA2E16FD0AD200C566E3 /* chat_parser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43F4DA2816FD0AD200C566E3 /* chat_parser.cpp */; };
+		43F4DA2F16FD0AD200C566E3 /* script_lexer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43F4DA2A16FD0AD200C566E3 /* script_lexer.cpp */; };
+		43F4DA3016FD0AD200C566E3 /* script_parser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43F4DA2B16FD0AD200C566E3 /* script_parser.cpp */; };
+		43F4DA3516FD0B3D00C566E3 /* level_lexer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43F4DA3116FD0B3D00C566E3 /* level_lexer.cpp */; };
+		43F4DA3616FD0B3D00C566E3 /* scriptvals_lexer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43F4DA3216FD0B3D00C566E3 /* scriptvals_lexer.cpp */; };
+		43F4DA3716FD0B3D00C566E3 /* scriptvals_parser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43F4DA3316FD0B3D00C566E3 /* scriptvals_parser.cpp */; };
 		647D9C571039289A006D37CF /* challenge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 647D9C551039289A006D37CF /* challenge.cpp */; };
 		9742E5730DF9975E000A5D41 /* lexer_input.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9742E5710DF9975E000A5D41 /* lexer_input.cpp */; };
 		974964240F5ABBBB00A38899 /* hashtable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 974964220F5ABBBB00A38899 /* hashtable.cpp */; };
@@ -1263,10 +1263,6 @@
 		0246A0AD0BD3CBD5004D1C70 /* listmacs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = listmacs.h; path = ../lib/framework/listmacs.h; sourceTree = SOURCE_ROOT; };
 		0246A0AE0BD3CBD5004D1C70 /* macros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = macros.h; path = ../lib/framework/macros.h; sourceTree = SOURCE_ROOT; };
 		0246A0B00BD3CBD5004D1C70 /* resly.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = resly.h; path = ../lib/framework/resly.h; sourceTree = SOURCE_ROOT; };
-		0246A0B10BD3CBD5004D1C70 /* resource_lexer.lpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.lex; name = resource_lexer.lpp; path = ../lib/framework/resource_lexer.lpp; sourceTree = SOURCE_ROOT; };
-		0246A0B20BD3CBD5004D1C70 /* resource_parser.ypp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.yacc; name = resource_parser.ypp; path = ../lib/framework/resource_parser.ypp; sourceTree = SOURCE_ROOT; };
-		0246A0B50BD3CBD5004D1C70 /* strres_lexer.lpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.lex; name = strres_lexer.lpp; path = ../lib/framework/strres_lexer.lpp; sourceTree = SOURCE_ROOT; };
-		0246A0B60BD3CBD5004D1C70 /* strres_parser.ypp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.yacc; name = strres_parser.ypp; path = ../lib/framework/strres_parser.ypp; sourceTree = SOURCE_ROOT; };
 		0246A0B70BD3CBD5004D1C70 /* strres.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = strres.cpp; path = ../lib/framework/strres.cpp; sourceTree = SOURCE_ROOT; };
 		0246A0B80BD3CBD5004D1C70 /* strres.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = strres.h; path = ../lib/framework/strres.h; sourceTree = SOURCE_ROOT; };
 		0246A0B90BD3CBD5004D1C70 /* strresly.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = strresly.h; path = ../lib/framework/strresly.h; sourceTree = SOURCE_ROOT; };
@@ -1280,8 +1276,6 @@
 		0246A0D80BD3CC0B004D1C70 /* anim.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = anim.h; path = ../lib/gamelib/anim.h; sourceTree = SOURCE_ROOT; };
 		0246A0D90BD3CC0B004D1C70 /* animobj.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = animobj.cpp; path = ../lib/gamelib/animobj.cpp; sourceTree = SOURCE_ROOT; };
 		0246A0DA0BD3CC0B004D1C70 /* animobj.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = animobj.h; path = ../lib/gamelib/animobj.h; sourceTree = SOURCE_ROOT; };
-		0246A0DB0BD3CC0B004D1C70 /* audp_lexer.lpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.lex; name = audp_lexer.lpp; path = ../lib/gamelib/audp_lexer.lpp; sourceTree = SOURCE_ROOT; };
-		0246A0DC0BD3CC0B004D1C70 /* audp_parser.ypp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.yacc; name = audp_parser.ypp; path = ../lib/gamelib/audp_parser.ypp; sourceTree = SOURCE_ROOT; };
 		0246A0DD0BD3CC0B004D1C70 /* gtime.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gtime.cpp; path = ../lib/gamelib/gtime.cpp; sourceTree = SOURCE_ROOT; };
 		0246A0DE0BD3CC0B004D1C70 /* gtime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gtime.h; path = ../lib/gamelib/gtime.h; sourceTree = SOURCE_ROOT; };
 		0246A0E20BD3CC0B004D1C70 /* parser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = parser.h; path = ../lib/gamelib/parser.h; sourceTree = SOURCE_ROOT; };
@@ -1316,16 +1310,12 @@
 		0246A1190BD3CC43004D1C70 /* screen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = screen.h; path = ../lib/ivis_opengl/screen.h; sourceTree = SOURCE_ROOT; };
 		0246A11A0BD3CC43004D1C70 /* tex.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = tex.cpp; path = ../lib/ivis_opengl/tex.cpp; sourceTree = SOURCE_ROOT; };
 		0246A11B0BD3CC43004D1C70 /* textdraw.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = textdraw.cpp; path = ../lib/ivis_opengl/textdraw.cpp; sourceTree = SOURCE_ROOT; };
-		0246A13B0BD3CC71004D1C70 /* chat_lexer.lpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.lex; name = chat_lexer.lpp; path = ../lib/script/chat_lexer.lpp; sourceTree = SOURCE_ROOT; };
-		0246A13C0BD3CC71004D1C70 /* chat_parser.ypp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.yacc; name = chat_parser.ypp; path = ../lib/script/chat_parser.ypp; sourceTree = SOURCE_ROOT; };
 		0246A13D0BD3CC71004D1C70 /* chat_processing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = chat_processing.h; path = ../lib/script/chat_processing.h; sourceTree = SOURCE_ROOT; };
 		0246A13E0BD3CC71004D1C70 /* codeprint.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = codeprint.cpp; path = ../lib/script/codeprint.cpp; sourceTree = SOURCE_ROOT; };
 		0246A13F0BD3CC71004D1C70 /* codeprint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = codeprint.h; path = ../lib/script/codeprint.h; sourceTree = SOURCE_ROOT; };
 		0246A1400BD3CC71004D1C70 /* event.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = event.cpp; path = ../lib/script/event.cpp; sourceTree = SOURCE_ROOT; };
 		0246A1410BD3CC71004D1C70 /* event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = event.h; path = ../lib/script/event.h; sourceTree = SOURCE_ROOT; };
 		0246A1460BD3CC71004D1C70 /* parse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = parse.h; path = ../lib/script/parse.h; sourceTree = SOURCE_ROOT; };
-		0246A1470BD3CC71004D1C70 /* script_lexer.lpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.lex; name = script_lexer.lpp; path = ../lib/script/script_lexer.lpp; sourceTree = SOURCE_ROOT; };
-		0246A1480BD3CC71004D1C70 /* script_parser.ypp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.yacc; name = script_parser.ypp; path = ../lib/script/script_parser.ypp; sourceTree = SOURCE_ROOT; };
 		0246A1490BD3CC71004D1C70 /* script.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = script.cpp; path = ../lib/script/script.cpp; sourceTree = SOURCE_ROOT; };
 		0246A14A0BD3CC71004D1C70 /* script.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = script.h; path = ../lib/script/script.h; sourceTree = SOURCE_ROOT; };
 		0246A14B0BD3CC71004D1C70 /* stack.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = stack.cpp; path = ../lib/script/stack.cpp; sourceTree = SOURCE_ROOT; };
@@ -1459,7 +1449,6 @@
 		0246A2100BD3CCDB004D1C70 /* keyedit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = keyedit.h; path = ../src/keyedit.h; sourceTree = SOURCE_ROOT; };
 		0246A2110BD3CCDB004D1C70 /* keymap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = keymap.cpp; path = ../src/keymap.cpp; sourceTree = SOURCE_ROOT; };
 		0246A2120BD3CCDB004D1C70 /* keymap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = keymap.h; path = ../src/keymap.h; sourceTree = SOURCE_ROOT; };
-		0246A2130BD3CCDB004D1C70 /* level_lexer.lpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.lex; name = level_lexer.lpp; path = ../src/level_lexer.lpp; sourceTree = SOURCE_ROOT; };
 		0246A2140BD3CCDB004D1C70 /* levelint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = levelint.h; path = ../src/levelint.h; sourceTree = SOURCE_ROOT; };
 		0246A2150BD3CCDB004D1C70 /* levels.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = levels.cpp; path = ../src/levels.cpp; sourceTree = SOURCE_ROOT; };
 		0246A2160BD3CCDB004D1C70 /* levels.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = levels.h; path = ../src/levels.h; sourceTree = SOURCE_ROOT; };
@@ -1544,8 +1533,6 @@
 		0246A26A0BD3CCDC004D1C70 /* scriptobj.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = scriptobj.h; path = ../src/scriptobj.h; sourceTree = SOURCE_ROOT; };
 		0246A26B0BD3CCDC004D1C70 /* scripttabs.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = scripttabs.cpp; path = ../src/scripttabs.cpp; sourceTree = SOURCE_ROOT; };
 		0246A26C0BD3CCDC004D1C70 /* scripttabs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = scripttabs.h; path = ../src/scripttabs.h; sourceTree = SOURCE_ROOT; };
-		0246A26D0BD3CCDC004D1C70 /* scriptvals_lexer.lpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.lex; name = scriptvals_lexer.lpp; path = ../src/scriptvals_lexer.lpp; sourceTree = SOURCE_ROOT; };
-		0246A26E0BD3CCDC004D1C70 /* scriptvals_parser.ypp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.yacc; name = scriptvals_parser.ypp; path = ../src/scriptvals_parser.ypp; sourceTree = SOURCE_ROOT; };
 		0246A26F0BD3CCDC004D1C70 /* scriptvals.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = scriptvals.cpp; path = ../src/scriptvals.cpp; sourceTree = SOURCE_ROOT; };
 		0246A2700BD3CCDC004D1C70 /* scriptvals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = scriptvals.h; path = ../src/scriptvals.h; sourceTree = SOURCE_ROOT; };
 		0246A2710BD3CCDC004D1C70 /* selection.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = selection.cpp; path = ../src/selection.cpp; sourceTree = SOURCE_ROOT; };
@@ -2015,6 +2002,25 @@
 		43F3008C10D344B000707B6E /* x86state.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = x86state.c; path = external/libtheora/lib/x86/x86state.c; sourceTree = SOURCE_ROOT; };
 		43F3FFFE10D33F4D00707B6E /* macosx.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = macosx.c; path = external/physfs/platform/macosx.c; sourceTree = SOURCE_ROOT; };
 		43F3FFFF10D33F6600707B6E /* physfs_unicode.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = physfs_unicode.c; path = external/physfs/physfs_unicode.c; sourceTree = SOURCE_ROOT; };
+		43F4DA1816FD0A6600C566E3 /* resource_lexer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = resource_lexer.cpp; path = ../lib/framework/resource_lexer.cpp; sourceTree = SOURCE_ROOT; };
+		43F4DA1916FD0A6600C566E3 /* resource_parser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = resource_parser.cpp; path = ../lib/framework/resource_parser.cpp; sourceTree = SOURCE_ROOT; };
+		43F4DA1A16FD0A6600C566E3 /* resource_parser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = resource_parser.h; path = ../lib/framework/resource_parser.h; sourceTree = SOURCE_ROOT; };
+		43F4DA1B16FD0A6600C566E3 /* strres_lexer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = strres_lexer.cpp; path = ../lib/framework/strres_lexer.cpp; sourceTree = SOURCE_ROOT; };
+		43F4DA1C16FD0A6600C566E3 /* strres_parser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = strres_parser.cpp; path = ../lib/framework/strres_parser.cpp; sourceTree = SOURCE_ROOT; };
+		43F4DA1D16FD0A6600C566E3 /* strres_parser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = strres_parser.h; path = ../lib/framework/strres_parser.h; sourceTree = SOURCE_ROOT; };
+		43F4DA2216FD0A8900C566E3 /* audp_lexer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = audp_lexer.cpp; path = ../lib/gamelib/audp_lexer.cpp; sourceTree = SOURCE_ROOT; };
+		43F4DA2316FD0A8900C566E3 /* audp_parser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = audp_parser.cpp; path = ../lib/gamelib/audp_parser.cpp; sourceTree = SOURCE_ROOT; };
+		43F4DA2416FD0A8900C566E3 /* audp_parser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = audp_parser.h; path = ../lib/gamelib/audp_parser.h; sourceTree = SOURCE_ROOT; };
+		43F4DA2716FD0AD200C566E3 /* chat_lexer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = chat_lexer.cpp; path = ../lib/script/chat_lexer.cpp; sourceTree = SOURCE_ROOT; };
+		43F4DA2816FD0AD200C566E3 /* chat_parser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = chat_parser.cpp; path = ../lib/script/chat_parser.cpp; sourceTree = SOURCE_ROOT; };
+		43F4DA2916FD0AD200C566E3 /* chat_parser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = chat_parser.h; path = ../lib/script/chat_parser.h; sourceTree = SOURCE_ROOT; };
+		43F4DA2A16FD0AD200C566E3 /* script_lexer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = script_lexer.cpp; path = ../lib/script/script_lexer.cpp; sourceTree = SOURCE_ROOT; };
+		43F4DA2B16FD0AD200C566E3 /* script_parser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = script_parser.cpp; path = ../lib/script/script_parser.cpp; sourceTree = SOURCE_ROOT; };
+		43F4DA2C16FD0AD200C566E3 /* script_parser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = script_parser.h; path = ../lib/script/script_parser.h; sourceTree = SOURCE_ROOT; };
+		43F4DA3116FD0B3D00C566E3 /* level_lexer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = level_lexer.cpp; path = ../src/level_lexer.cpp; sourceTree = SOURCE_ROOT; };
+		43F4DA3216FD0B3D00C566E3 /* scriptvals_lexer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = scriptvals_lexer.cpp; path = ../src/scriptvals_lexer.cpp; sourceTree = SOURCE_ROOT; };
+		43F4DA3316FD0B3D00C566E3 /* scriptvals_parser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = scriptvals_parser.cpp; path = ../src/scriptvals_parser.cpp; sourceTree = SOURCE_ROOT; };
+		43F4DA3416FD0B3D00C566E3 /* scriptvals_parser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = scriptvals_parser.h; path = ../src/scriptvals_parser.h; sourceTree = SOURCE_ROOT; };
 		647D9C551039289A006D37CF /* challenge.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = challenge.cpp; path = ../src/challenge.cpp; sourceTree = SOURCE_ROOT; };
 		647D9C561039289A006D37CF /* challenge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = challenge.h; path = ../src/challenge.h; sourceTree = SOURCE_ROOT; };
 		9742E5710DF9975E000A5D41 /* lexer_input.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = lexer_input.cpp; path = ../lib/framework/lexer_input.cpp; sourceTree = SOURCE_ROOT; };
@@ -2295,6 +2301,12 @@
 		0246A0D00BD3CBE1004D1C70 /* Framework */ = {
 			isa = PBXGroup;
 			children = (
+				43F4DA1816FD0A6600C566E3 /* resource_lexer.cpp */,
+				43F4DA1916FD0A6600C566E3 /* resource_parser.cpp */,
+				43F4DA1A16FD0A6600C566E3 /* resource_parser.h */,
+				43F4DA1B16FD0A6600C566E3 /* strres_lexer.cpp */,
+				43F4DA1C16FD0A6600C566E3 /* strres_parser.cpp */,
+				43F4DA1D16FD0A6600C566E3 /* strres_parser.h */,
 				43436555149EA1F900527137 /* rational.h */,
 				434117201495024C003F06FF /* wzconfig.cpp */,
 				434117211495024C003F06FF /* wzconfig.h */,
@@ -2336,10 +2348,6 @@
 				0246A0AD0BD3CBD5004D1C70 /* listmacs.h */,
 				0246A0AE0BD3CBD5004D1C70 /* macros.h */,
 				0246A0B00BD3CBD5004D1C70 /* resly.h */,
-				0246A0B10BD3CBD5004D1C70 /* resource_lexer.lpp */,
-				0246A0B20BD3CBD5004D1C70 /* resource_parser.ypp */,
-				0246A0B60BD3CBD5004D1C70 /* strres_parser.ypp */,
-				0246A0B50BD3CBD5004D1C70 /* strres_lexer.lpp */,
 				0246A0B70BD3CBD5004D1C70 /* strres.cpp */,
 				0246A0B80BD3CBD5004D1C70 /* strres.h */,
 				0246A0B90BD3CBD5004D1C70 /* strresly.h */,
@@ -2356,14 +2364,15 @@
 		0246A0D60BD3CBF6004D1C70 /* Gamelib */ = {
 			isa = PBXGroup;
 			children = (
+				43F4DA2216FD0A8900C566E3 /* audp_lexer.cpp */,
+				43F4DA2316FD0A8900C566E3 /* audp_parser.cpp */,
+				43F4DA2416FD0A8900C566E3 /* audp_parser.h */,
 				974964220F5ABBBB00A38899 /* hashtable.cpp */,
 				974964230F5ABBBB00A38899 /* hashtable.h */,
 				0246A0D70BD3CC0B004D1C70 /* anim.cpp */,
 				0246A0D80BD3CC0B004D1C70 /* anim.h */,
 				0246A0D90BD3CC0B004D1C70 /* animobj.cpp */,
 				0246A0DA0BD3CC0B004D1C70 /* animobj.h */,
-				0246A0DB0BD3CC0B004D1C70 /* audp_lexer.lpp */,
-				0246A0DC0BD3CC0B004D1C70 /* audp_parser.ypp */,
 				0246A0DD0BD3CC0B004D1C70 /* gtime.cpp */,
 				0246A0DE0BD3CC0B004D1C70 /* gtime.h */,
 				0246A0E20BD3CC0B004D1C70 /* parser.h */,
@@ -2436,20 +2445,22 @@
 		0246A13A0BD3CC5B004D1C70 /* Script */ = {
 			isa = PBXGroup;
 			children = (
+				43F4DA2716FD0AD200C566E3 /* chat_lexer.cpp */,
+				43F4DA2816FD0AD200C566E3 /* chat_parser.cpp */,
+				43F4DA2916FD0AD200C566E3 /* chat_parser.h */,
+				43F4DA2A16FD0AD200C566E3 /* script_lexer.cpp */,
+				43F4DA2B16FD0AD200C566E3 /* script_parser.cpp */,
+				43F4DA2C16FD0AD200C566E3 /* script_parser.h */,
 				9749642F0F5ABC3F00A38899 /* eventsave.cpp */,
 				974964300F5ABC3F00A38899 /* eventsave.h */,
 				974964310F5ABC3F00A38899 /* interpreter.cpp */,
 				974964320F5ABC3F00A38899 /* interpreter.h */,
-				0246A13B0BD3CC71004D1C70 /* chat_lexer.lpp */,
-				0246A13C0BD3CC71004D1C70 /* chat_parser.ypp */,
 				0246A13D0BD3CC71004D1C70 /* chat_processing.h */,
 				0246A13E0BD3CC71004D1C70 /* codeprint.cpp */,
 				0246A13F0BD3CC71004D1C70 /* codeprint.h */,
 				0246A1400BD3CC71004D1C70 /* event.cpp */,
 				0246A1410BD3CC71004D1C70 /* event.h */,
 				0246A1460BD3CC71004D1C70 /* parse.h */,
-				0246A1470BD3CC71004D1C70 /* script_lexer.lpp */,
-				0246A1480BD3CC71004D1C70 /* script_parser.ypp */,
 				0246A1490BD3CC71004D1C70 /* script.cpp */,
 				0246A14A0BD3CC71004D1C70 /* script.h */,
 				0246A14B0BD3CC71004D1C70 /* stack.cpp */,
@@ -2524,6 +2535,10 @@
 		0246A1970BD3CCC3004D1C70 /* Warzone */ = {
 			isa = PBXGroup;
 			children = (
+				43F4DA3116FD0B3D00C566E3 /* level_lexer.cpp */,
+				43F4DA3216FD0B3D00C566E3 /* scriptvals_lexer.cpp */,
+				43F4DA3316FD0B3D00C566E3 /* scriptvals_parser.cpp */,
+				43F4DA3416FD0B3D00C566E3 /* scriptvals_parser.h */,
 				435213DD16BD7F6D001B3D42 /* qtscriptdebug.cpp */,
 				435213DE16BD7F6D001B3D42 /* qtscriptdebug.h */,
 				43DA667414FDDA44004B8B1A /* cursorselection */,
@@ -2645,7 +2660,6 @@
 				0246A2100BD3CCDB004D1C70 /* keyedit.h */,
 				0246A2110BD3CCDB004D1C70 /* keymap.cpp */,
 				0246A2120BD3CCDB004D1C70 /* keymap.h */,
-				0246A2130BD3CCDB004D1C70 /* level_lexer.lpp */,
 				0246A2140BD3CCDB004D1C70 /* levelint.h */,
 				0246A2150BD3CCDB004D1C70 /* levels.cpp */,
 				0246A2160BD3CCDB004D1C70 /* levels.h */,
@@ -2731,8 +2745,6 @@
 				0246A26A0BD3CCDC004D1C70 /* scriptobj.h */,
 				0246A26B0BD3CCDC004D1C70 /* scripttabs.cpp */,
 				0246A26C0BD3CCDC004D1C70 /* scripttabs.h */,
-				0246A26D0BD3CCDC004D1C70 /* scriptvals_lexer.lpp */,
-				0246A26E0BD3CCDC004D1C70 /* scriptvals_parser.ypp */,
 				0246A26F0BD3CCDC004D1C70 /* scriptvals.cpp */,
 				0246A2700BD3CCDC004D1C70 /* scriptvals.h */,
 				0246A2710BD3CCDC004D1C70 /* selection.cpp */,
@@ -4861,19 +4873,6 @@
 				4377CF2B16F7EA86008B1083 /* widgbase.h in Sources */,
 				4377CF2C16F7EB03008B1083 /* multiint.h in Sources */,
 				435213E316BD7F97001B3D42 /* qtscriptdebug.h in Sources */,
-				0246A0C90BD3CBD5004D1C70 /* resource_parser.ypp in Sources */,
-				0246A0C80BD3CBD5004D1C70 /* resource_lexer.lpp in Sources */,
-				0246A0CC0BD3CBD5004D1C70 /* strres_parser.ypp in Sources */,
-				0246A0CB0BD3CBD5004D1C70 /* strres_lexer.lpp in Sources */,
-				0246A0E60BD3CC0B004D1C70 /* audp_parser.ypp in Sources */,
-				0246A0E50BD3CC0B004D1C70 /* audp_lexer.lpp in Sources */,
-				0246A14E0BD3CC71004D1C70 /* chat_parser.ypp in Sources */,
-				0246A14D0BD3CC71004D1C70 /* chat_lexer.lpp in Sources */,
-				0246A1540BD3CC71004D1C70 /* script_parser.ypp in Sources */,
-				0246A1530BD3CC71004D1C70 /* script_lexer.lpp in Sources */,
-				0246A2C40BD3CCDC004D1C70 /* level_lexer.lpp in Sources */,
-				0246A2F00BD3CCDC004D1C70 /* scriptvals_parser.ypp in Sources */,
-				0246A2EF0BD3CCDC004D1C70 /* scriptvals_lexer.lpp in Sources */,
 				0246A0C20BD3CBD5004D1C70 /* debug.cpp in Sources */,
 				0246A0C40BD3CBD5004D1C70 /* frame.cpp in Sources */,
 				0246A0C50BD3CBD5004D1C70 /* frameresource.cpp in Sources */,
@@ -5054,6 +5053,19 @@
 				437DABE714C3345B00DB5F94 /* swapinterval.mm in Sources */,
 				435213DF16BD7F6D001B3D42 /* qtscriptdebug.cpp in Sources */,
 				4377CF1616F7E89C008B1083 /* listwidget.cpp in Sources */,
+				43F4DA1E16FD0A6600C566E3 /* resource_lexer.cpp in Sources */,
+				43F4DA1F16FD0A6600C566E3 /* resource_parser.cpp in Sources */,
+				43F4DA2016FD0A6600C566E3 /* strres_lexer.cpp in Sources */,
+				43F4DA2116FD0A6600C566E3 /* strres_parser.cpp in Sources */,
+				43F4DA2516FD0A8900C566E3 /* audp_lexer.cpp in Sources */,
+				43F4DA2616FD0A8900C566E3 /* audp_parser.cpp in Sources */,
+				43F4DA2D16FD0AD200C566E3 /* chat_lexer.cpp in Sources */,
+				43F4DA2E16FD0AD200C566E3 /* chat_parser.cpp in Sources */,
+				43F4DA2F16FD0AD200C566E3 /* script_lexer.cpp in Sources */,
+				43F4DA3016FD0AD200C566E3 /* script_parser.cpp in Sources */,
+				43F4DA3516FD0B3D00C566E3 /* level_lexer.cpp in Sources */,
+				43F4DA3616FD0B3D00C566E3 /* scriptvals_lexer.cpp in Sources */,
+				43F4DA3716FD0B3D00C566E3 /* scriptvals_parser.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
