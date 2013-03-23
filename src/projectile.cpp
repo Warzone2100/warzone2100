@@ -740,11 +740,10 @@ static void proj_InFlightFunc(PROJECTILE *psProj)
 	}
 
 	/* Calculate movement vector: */
-	int32_t currentDistance;
+	int32_t currentDistance = 0;
 	switch (psStats->movementModel)
 	{
 		case MM_DIRECT:           // Go in a straight line.
-		case MM_ERRATICDIRECT:    // Same as MM_DIRECT, used by bombs for unknown reason.
 		{
 			Vector3i delta = psProj->dst - psProj->src;
 			if (psStats->weaponSubClass == WSC_LAS_SAT)
@@ -831,12 +830,6 @@ static void proj_InFlightFunc(PROJECTILE *psProj)
 			psProj->rot.pitch = iAtan2(delta.z, targetDistance);
 			break;
 		}
-		default:
-		case MM_SWEEP:            // Unused.
-		case NUM_MOVEMENT_MODEL:  // Unused.
-			currentDistance = 1000000;
-			ASSERT(false, "Movement model not implemented.");
-			break;
 	}
 
 	closestCollisionSpacetime.time = 0xFFFFFFFF;
@@ -1447,28 +1440,19 @@ static void proj_checkPeriodicalDamage(PROJECTILE *psProj)
 // return whether a weapon is direct or indirect
 bool proj_Direct(const WEAPON_STATS* psStats)
 {
-	ASSERT(psStats != NULL, "proj_Direct: called with NULL weapon!");
-	if (!psStats)
-	{
-		return true; // arbitrary value in no-debug case
-	}
-	ASSERT(psStats->movementModel < NUM_MOVEMENT_MODEL, "proj_Direct: invalid weapon stat");
+	ASSERT_OR_RETURN(false, psStats, "Called with NULL weapon");
 
 	switch (psStats->movementModel)
 	{
 	case MM_DIRECT:
 	case MM_HOMINGDIRECT:
-	case MM_ERRATICDIRECT:
-	case MM_SWEEP:
 		return true;
 	case MM_INDIRECT:
 	case MM_HOMINGINDIRECT:
 		return false;
-	case NUM_MOVEMENT_MODEL:
-		break; // error checking in assert above; this is for no-debug case
 	}
 
-	return true; // just to satisfy compiler
+	return false; // just to satisfy compiler
 }
 
 /***************************************************************************/

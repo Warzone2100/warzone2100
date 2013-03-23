@@ -312,10 +312,7 @@ enum MOVEMENT_MODEL
 	MM_DIRECT,
 	MM_INDIRECT,
 	MM_HOMINGDIRECT,
-	MM_HOMINGINDIRECT,
-	MM_ERRATICDIRECT,
-	MM_SWEEP,
-	NUM_MOVEMENT_MODEL,			/**  The number of enumerators in this enum. */
+	MM_HOMINGINDIRECT
 };
 
 /**
@@ -472,15 +469,15 @@ struct WEAPON_STATS : public COMPONENT_STATS
 	WEAPON_EFFECT	weaponEffect;			///< which type of warhead is associated with the weapon (propulsion/body damage modifier)
 	WEAPON_SIZE		weaponSize;				///< eg light weapons can be put on light bodies or as sidearms
 	UDWORD			recoilValue;			///< used to compare with weight to see if recoils or not
-	UBYTE			rotate;					///< amount the weapon(turret) can rotate 0	= none
-	UBYTE			maxElevation;			///< max amount the	turret can be elevated up
-	SBYTE			minElevation;			///< min amount the	turret can be elevated down
+	short			rotate;					///< amount the weapon(turret) can rotate 0	= none
+	short			maxElevation;			///< max amount the	turret can be elevated up
+	short			minElevation;			///< min amount the	turret can be elevated down
 	UBYTE			facePlayer;				///< flag to make the (explosion) effect face the	player when	drawn
 	UBYTE			faceInFlight;			///< flag to make the inflight effect	face the player when drawn
 	uint16_t		effectSize;				///< size of the effect 100 = normal,	50 = half etc
 	bool			lightWorld;				///< flag to indicate whether the effect lights up the world
 	UBYTE			surfaceToAir;			///< indicates how good in the air - SHOOT_ON_GROUND, SHOOT_IN_AIR or both
-	UBYTE			vtolAttackRuns;			///< number of attack runs a VTOL droid can	do with this weapon
+	short			vtolAttackRuns;			///< number of attack runs a VTOL droid can	do with this weapon
 	bool			penetrate;				///< flag to indicate whether pentrate droid or not
 
 	/* Graphics control stats */

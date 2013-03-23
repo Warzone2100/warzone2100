@@ -155,12 +155,6 @@ static void printWeaponInfo(const WEAPON_STATS* psStats)
 	case MM_HOMINGINDIRECT:
 		pMM = "MM_HOMINGINDIRECT";
 		break;
-	case MM_ERRATICDIRECT:
-		pMM = "MM_ERRATICDIRECT";
-		break;
-	case MM_SWEEP:
-		pMM = "MM_SWEEP";
-		break;
 	default:
 		pMM = "UNKNOWN MOVE MODEL";
 		break;

@@ -619,9 +619,7 @@ static iIMDShape *statsGetIMD(WzConfig &ini, BASE_STATS *psStats, QString key)
 bool loadWeaponStats(const char *pFileName)
 {
 	WEAPON_STATS	sStats, * const psStats = &sStats;
-	UDWORD			i, rotate, maxElevation, surfaceToAir;
-	SDWORD			minElevation;
-	UDWORD numAttackRuns;
+	UDWORD			i, surfaceToAir;
 
 	WzConfig ini(pFileName, WzConfig::ReadOnlyAndRequired);
 	QStringList list = ini.childGroups();
@@ -661,14 +659,14 @@ bool loadWeaponStats(const char *pFileName)
 		psStats->periodicalDamageRadius = ini.value("periodicalDamageRadius", 0).toUInt();
 		psStats->radiusLife = ini.value("radiusLife").toUInt();
 		psStats->flightSpeed = ini.value("flightSpeed", 1).toUInt();
-		rotate = ini.value("rotate").toUInt();
-		minElevation = ini.value("minElevation").toInt();
-		maxElevation = ini.value("maxElevation").toUInt();
+		psStats->rotate = ini.value("rotate").toUInt();
+		psStats->minElevation = ini.value("minElevation").toInt();
+		psStats->maxElevation = ini.value("maxElevation").toInt();
 		psStats->recoilValue = ini.value("recoilValue").toUInt();
 		psStats->minRange = ini.value("minRange", 0).toUInt();
 		psStats->effectSize = ini.value("effectSize").toUInt();
 		surfaceToAir = ini.value("surfaceToAir", 0).toUInt();
-		numAttackRuns = ini.value("numAttackRuns", 0).toUInt();
+		psStats->vtolAttackRuns = ini.value("numAttackRuns", 0).toUInt();
 		psStats->designable = ini.value("designable").toBool();
 		psStats->penetrate = ini.value("penetrate").toBool();
 		// weapon size limitation
@@ -766,7 +764,6 @@ bool loadWeaponStats(const char *pFileName)
 			return false;
 		}
 
-
 		// set the face Player value
 		psStats->facePlayer = ini.value("facePlayer", false).toBool();
 
@@ -775,33 +772,6 @@ bool loadWeaponStats(const char *pFileName)
 
 		//set the light world value
 		psStats->lightWorld = ini.value("lightWorld", false).toBool();
-
-		//set the rotate angle
-		if (rotate > UBYTE_MAX)
-		{
-			ASSERT(false, "loadWeaponStats: rotate is greater than 255 for weapon %s",
-			       getStatName(psStats));
-			return false;
-		}
-		psStats->rotate = (UBYTE)rotate;
-
-		//set the minElevation
-		if (minElevation > SBYTE_MAX || minElevation < SBYTE_MIN)
-		{
-			ASSERT(false, "loadWeaponStats: minElevation is outside of limits for weapon %s",
-			       getStatName(psStats));
-			return false;
-		}
-		psStats->minElevation = (SBYTE)minElevation;
-
-		//set the maxElevation
-		if (maxElevation > UBYTE_MAX)
-		{
-			ASSERT(false, "loadWeaponStats: maxElevation is outside of limits for weapon %s",
-			       getStatName(psStats));
-			return false;
-		}
-		psStats->maxElevation = (UBYTE)maxElevation;
 
 		//set the surfaceAir
 		if (surfaceToAir > UBYTE_MAX)
@@ -822,15 +792,6 @@ bool loadWeaponStats(const char *pFileName)
 		{
 			psStats->surfaceToAir = (UBYTE)(SHOOT_ON_GROUND | SHOOT_IN_AIR);
 		}
-
-		//set the attackRuns for VTOLs
-		if (numAttackRuns > UBYTE_MAX)
-		{
-			ASSERT(false, "loadWeaponStats: num of attack runs is outside of limits for weapon %s",
-			       getStatName(psStats));
-			return false;
-		}
-		psStats->vtolAttackRuns = (UBYTE)numAttackRuns;
 
 		//set the weapon sounds to default value
 		psStats->iAudioFireID = NO_SOUND;
@@ -2172,14 +2133,6 @@ bool getMovementModel(const char *movementModel, MOVEMENT_MODEL *model)
 	else if (strcmp(movementModel, "HOMING-INDIRECT") == 0)
 	{
 		*model = MM_HOMINGINDIRECT;
-	}
-	else if (strcmp(movementModel, "ERRATIC-DIRECT") == 0)
-	{
-		*model = MM_ERRATICDIRECT;
-	}
-	else if (strcmp(movementModel, "SWEEP") == 0)
-	{
-		*model = MM_SWEEP;
 	}
 	else
 	{
