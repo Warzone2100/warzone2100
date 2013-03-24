@@ -2254,71 +2254,58 @@ UDWORD	weaponFirePause(const WEAPON_STATS *psStats, UBYTE player)
 /* Reload time is reduced for weapons with salvo fire */
 UDWORD	weaponReloadTime(WEAPON_STATS *psStats, UBYTE player)
 {
-	return (psStats->reloadTime - (psStats->reloadTime * asWeaponUpgrade[player][
-	        psStats->weaponSubClass].firePause) / 100);
+	return (psStats->reloadTime - (psStats->reloadTime * asWeaponUpgrade[player][psStats->weaponSubClass].firePause) / 100);
 }
 
 UDWORD	weaponLongHit(const WEAPON_STATS *psStats, UBYTE player)
 {
-	return (psStats->longHit + (psStats->longHit * asWeaponUpgrade[player][
-	        psStats->weaponSubClass].longHit) / 100);
+	return (psStats->longHit + (psStats->longHit * asWeaponUpgrade[player][psStats->weaponSubClass].longHit) / 100);
 }
 
 UDWORD	weaponDamage(const WEAPON_STATS *psStats, UBYTE player)
 {
-	return (psStats->damage + (psStats->damage * asWeaponUpgrade[player][
-	        psStats->weaponSubClass].damage) / 100);
+	return (psStats->damage + (psStats->damage * asWeaponUpgrade[player][psStats->weaponSubClass].damage) / 100);
 }
 
 UDWORD	weaponRadDamage(WEAPON_STATS *psStats, UBYTE player)
 {
-	return (psStats->radiusDamage + (psStats->radiusDamage * asWeaponUpgrade[player][
-	        psStats->weaponSubClass].radiusDamage) / 100);
+	return (psStats->radiusDamage + (psStats->radiusDamage * asWeaponUpgrade[player][psStats->weaponSubClass].radiusDamage) / 100);
 }
 
 UDWORD	weaponPeriodicalDamage(WEAPON_STATS *psStats, UBYTE player)
 {
-	return (psStats->periodicalDamage + (psStats->periodicalDamage * asWeaponUpgrade[player][
-	        psStats->periodicalDamageWeaponSubClass].periodicalDamage) / 100);
+	return (psStats->periodicalDamage + (psStats->periodicalDamage
+	        * asWeaponUpgrade[player][psStats->periodicalDamageWeaponSubClass].periodicalDamage) / 100);
 }
 
 UDWORD	weaponRadiusHit(WEAPON_STATS *psStats, UBYTE player)
 {
-	return (psStats->radiusHit + (psStats->radiusHit * asWeaponUpgrade[player][
-	        psStats->weaponSubClass].radiusHit) / 100);
+	return (psStats->radiusHit + (psStats->radiusHit * asWeaponUpgrade[player][psStats->weaponSubClass].radiusHit) / 100);
 }
 
 UDWORD	sensorRange(SENSOR_STATS *psStats, UBYTE player)
 {
-	return (UWORD)(psStats->range + (psStats->range * asSensorUpgrade[player].
-	        range) / 100);
+	return psStats->range + (psStats->range * asSensorUpgrade[player].range) / 100;
 }
 
-/*Access functions for the upgradeable stats of a ECM*/
 UDWORD	ecmRange(ECM_STATS *psStats, UBYTE player)
 {
-	return (UWORD)(psStats->range + (psStats->range * asECMUpgrade[player].range) / 100);
+	return psStats->range + (psStats->range * asECMUpgrade[player].range) / 100;
 }
 
-/*Access functions for the upgradeable stats of a repair*/
 UDWORD	repairPoints(REPAIR_STATS *psStats, UBYTE player)
 {
-	return (psStats->repairPoints + (psStats->repairPoints *
-	        asRepairUpgrade[player].repairPoints) / 100);
+	return (psStats->repairPoints + (psStats->repairPoints * asRepairUpgrade[player].repairPoints) / 100);
 }
 
-/*Access functions for the upgradeable stats of a constructor*/
 UDWORD	constructorPoints(CONSTRUCT_STATS *psStats, UBYTE player)
 {
-	return (psStats->constructPoints + (psStats->constructPoints *
-	        asConstUpgrade[player].constructPoints) / 100);
+	return (psStats->constructPoints + (psStats->constructPoints * asConstUpgrade[player].constructPoints) / 100);
 }
 
-/*Access functions for the upgradeable stats of a body*/
 UDWORD	bodyPower(BODY_STATS *psStats, UBYTE player, UBYTE bodyType)
 {
-	return (psStats->powerOutput + (psStats->powerOutput *
-	        asBodyUpgrade[player][bodyType].powerOutput) / 100);
+	return (psStats->powerOutput + (psStats->powerOutput * asBodyUpgrade[player][bodyType].powerOutput) / 100);
 }
 
 UDWORD bodyArmour(BODY_STATS *psStats, UBYTE player, UBYTE bodyType, WEAPON_CLASS weaponClass)

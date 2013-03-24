@@ -50,14 +50,12 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	CHECK_OBJECT(psTarget);
 	ASSERT(psWeap != NULL, "Invalid weapon pointer");
 
-	/* Watermelon:dont shoot if the weapon_slot of a vtol is empty */
-	if (psAttacker->type == OBJ_DROID && isVtolDroid(((DROID *)psAttacker)))
+	/* Don't shoot if the weapon_slot of a vtol is empty */
+	if (psAttacker->type == OBJ_DROID && isVtolDroid(((DROID *)psAttacker))
+	    && psWeap->usedAmmo >= getNumAttackRuns(((DROID *)psAttacker), weapon_slot))
 	{
-		if (psWeap->usedAmmo >= getNumAttackRuns(((DROID *)psAttacker), weapon_slot))
-		{
-			objTrace(psAttacker->id, "VTOL slot %d is empty", weapon_slot);
-			return false;
-		}
+		objTrace(psAttacker->id, "VTOL slot %d is empty", weapon_slot);
+		return false;
 	}
 
 	/* Get the stats for the weapon */
@@ -198,7 +196,6 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 
 		// decrease weapon accuracy by EXP_ACCURACY_BONUS % for each experience level
 		resultHitChance -= EXP_ACCURACY_BONUS * level * baseHitChance / 100;
-
 	}
 
 	if (psAttacker->type == OBJ_DROID && ((DROID *)psAttacker)->sMove.Status != MOVEINACTIVE
@@ -208,11 +205,6 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	}
 
 	/* -------!!! From that point we are sure that we are firing !!!------- */
-
-	// Add a random delay to the next shot.
-	// TODO Add deltaFireTime to the time it takes to fire next. If just adding to psWeap->lastFired, it might put it in the future, causing assertions. And if not sometimes putting it in the future, the fire rate would be lower than advertised.
-	//int fireJitter = firePause/100;  // ±1% variation in fire rate.
-	//int deltaFireTime = gameRand(fireJitter*2 + 1) - fireJitter;
 
 	/* note when the weapon fired */
 	psWeap->lastFired = fireTime;
@@ -229,7 +221,7 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	// predicted X,Y offset per sec
 	Vector3i predict = psTarget->pos;
 
-	//Watermelon:Target prediction
+	// Target prediction
 	if (isDroid(psTarget) && castDroid(psTarget)->sMove.bumpTime == 0)
 	{
 		DROID *psDroid = castDroid(psTarget);
