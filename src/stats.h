@@ -38,7 +38,6 @@ extern BRAIN_STATS			*asBrainStats;
 extern PROPULSION_STATS		*asPropulsionStats;
 extern SENSOR_STATS			*asSensorStats;
 extern ECM_STATS			*asECMStats;
-//extern ARMOUR_STATS			*asArmourStats;
 extern REPAIR_STATS			*asRepairStats;
 extern WEAPON_STATS			*asWeaponStats;
 extern CONSTRUCT_STATS		*asConstructStats;
@@ -74,11 +73,9 @@ extern UDWORD		numTerrainTypes;
 /* What number the ref numbers start at for each type of stat */
 #define REF_BODY_START			0x010000
 #define REF_BRAIN_START			0x020000
-//#define REF_POWER_START			0x030000
 #define REF_PROPULSION_START	0x040000
 #define REF_SENSOR_START		0x050000
 #define REF_ECM_START			0x060000
-//#define REF_ARMOUR_START		0x070000
 #define REF_REPAIR_START		0x080000
 #define REF_WEAPON_START		0x0a0000
 #define REF_RESEARCH_START		0x0b0000
@@ -118,9 +115,6 @@ extern bool statsAllocBody(UDWORD numEntries);
 
 /*Allocate Brain stats*/
 extern bool statsAllocBrain(UDWORD numEntries);
-
-/*Allocate Power stats*/
-//extern bool statsAllocPower(UDWORD numEntries);
 
 /*Allocate Propulsion stats*/
 extern bool statsAllocPropulsion(UDWORD numEntries);

@@ -591,7 +591,7 @@ bool statsAllocConstruct(UDWORD	numStats)
 const char *getStatName(const void *Stat)
 {
 	const BASE_STATS *const psStats = (const BASE_STATS *)Stat;
-
+	ASSERT(psStats->pName, "No pName for stats!");
 	return getName(psStats->pName);
 }
 
@@ -1188,7 +1188,6 @@ bool loadECMStats(const char *pFileName)
 		psStats->weight = ini.value("weight", 0).toInt();
 		psStats->body = ini.value("body", 0).toInt();
 		psStats->range = ini.value("range").toInt();
-		psStats->power = ini.value("power").toInt();
 		psStats->designable = ini.value("designable", false).toBool();
 
 		allocateStatName((BASE_STATS *)psStats, list[i].toUtf8().constData());

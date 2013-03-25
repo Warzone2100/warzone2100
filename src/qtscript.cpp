@@ -1074,11 +1074,11 @@ bool triggerEventAttacked(BASE_OBJECT *psVictim, BASE_OBJECT *psAttacker, int la
 	return true;
 }
 
-//__ \subsection{eventResearched(research[, structure])}
+//__ \subsection{eventResearched(research, structure, player)}
 //__ An event that is run whenever a new research is available. The structure
 //__ parameter is set if the research comes from a research lab owned by the
 //__ current player. If an ally does the research, the structure parameter will
-//__ be set to null.
+//__ be set to null. The player parameter gives the player it is called for.
 bool triggerEventResearched(RESEARCH *psResearch, STRUCTURE *psStruct, int player)
 {
 	for (int i = 0; i < scripts.size() && psStruct; ++i)
@@ -1093,6 +1093,11 @@ bool triggerEventResearched(RESEARCH *psResearch, STRUCTURE *psStruct, int playe
 			{
 				args += convStructure(psStruct, engine);
 			}
+			else
+			{
+				args += QScriptValue::NullValue;
+			}
+			args += QScriptValue(player);
 			callFunction(engine, "eventResearched", args);
 		}
 	}
