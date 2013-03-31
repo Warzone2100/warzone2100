@@ -162,6 +162,9 @@ iView	player;
 /// How far away are we from the terrain
 static float distance;
 
+/// Stores the screen coordinates of the transformed terrain tiles
+static Vector3i tileScreenInfo[VISIBLE_YTILES+1][VISIBLE_XTILES+1];
+
 /// Records the present X and Y values for the current mouse tile (in tiles)
 SDWORD mouseTileX, mouseTileY;
 Vector2i mousePos(0, 0);
@@ -993,11 +996,23 @@ static void drawTiles(iView *player)
 		/* Go through the x's */
 		for (j = -visibleTiles.x/2, jdx=0; j <= visibleTiles.x/2; j++,++jdx)
 		{
+			Vector2i screen(0, 0);
+			Position pos;
+
+			pos.x = world_coord(j);
+			pos.z = -world_coord(i);
+			pos.y = 0;
+
 			if (tileOnMap(playerXTile + j, playerZTile + i))
 			{
 				MAPTILE *psTile = mapTile(playerXTile + j, playerZTile + i);
+
+				pos.y = map_TileHeight(playerXTile + j, playerZTile + i);
 				setTileColour(playerXTile + j, playerZTile + i, pal_SetBrightness(psTile->level));
 			}
+			tileScreenInfo[idx][jdx].z = pie_RotateProject(&pos, &screen);
+			tileScreenInfo[idx][jdx].x = screen.x;
+			tileScreenInfo[idx][jdx].y = screen.y;
 		}
 	}
 
@@ -1073,10 +1088,9 @@ static void drawTiles(iView *player)
 		doConstructionLines();
 	}
 
-	locateMouse();
-
 	/* Clear the matrix stack */
 	pie_MatEnd();
+	locateMouse();
 
 	GL_DEBUG("Draw 3D scene - end of tiles");
 }
@@ -3432,24 +3446,6 @@ void calcScreenCoords(DROID *psDroid)
 	psDroid->sDisplay.screenR = radius;
 }
 
-static Vector3i getRotateProject(int x, int y)
-{
-	Vector2i screen(0, 0);
-	Position pos;
-	pos.x = world_coord(x);
-	pos.z = -world_coord(y);
-	pos.y = 0;
-	if (tileOnMap(playerXTile + x, playerZTile + y))
-	{
-		pos.y = map_TileHeight(playerXTile + x, playerZTile + y);
-	}
-	Vector3i ret;
-	ret.z = pie_RotateProject(&pos, &screen);
-	ret.x = screen.x;
-	ret.y = screen.y;
-	return ret;
-}
-
 /**
  * Find the tile the mouse is currently over
  * \todo This is slow - speed it up
@@ -3466,16 +3462,23 @@ static void locateMouse(void)
 	{
 		for (j = -visibleTiles.x/2, jdx=0; j < visibleTiles.x/2; j++,++jdx)
 		{
-			Vector3i pos = getRotateProject(j, i);
+			int tileZ = tileScreenInfo[idx][jdx].z;
 
-			if (pos.z <= nearestZ)
+			if(tileZ <= nearestZ)
 			{
 				QUAD quad;
 
-				quad.coords[0] = pos;
-				quad.coords[1] = getRotateProject(j, i+1);
-				quad.coords[2] = getRotateProject(j+1, i+1);
-				quad.coords[3] = getRotateProject(j+1, i);
+				quad.coords[0].x = tileScreenInfo[idx+0][jdx+0].x;
+				quad.coords[0].y = tileScreenInfo[idx+0][jdx+0].y;
+
+				quad.coords[1].x = tileScreenInfo[idx+0][jdx+1].x;
+				quad.coords[1].y = tileScreenInfo[idx+0][jdx+1].y;
+
+				quad.coords[2].x = tileScreenInfo[idx+1][jdx+1].x;
+				quad.coords[2].y = tileScreenInfo[idx+1][jdx+1].y;
+
+				quad.coords[3].x = tileScreenInfo[idx+1][jdx+0].x;
+				quad.coords[3].y = tileScreenInfo[idx+1][jdx+0].y;
 
 				/* We've got a match for our mouse coords */
 				if (inQuad(&pt, &quad))
@@ -3497,7 +3500,7 @@ static void locateMouse(void)
 					mouseTileY = map_coord(mousePos.y);
 
 					/* Store away z value */
-					nearestZ = pos.z;
+					nearestZ = tileZ;
 				}
 			}
 		}
