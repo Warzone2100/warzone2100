@@ -122,22 +122,13 @@ NX-H-Rail3-Hover			"*NX-H-Rail3-Hover*"
 NX-H-BeamLas-Hover			"*NX-H-BeamLas-Hover*"
 NX-L-Missile-MdArt-Hover		"*NX-L-MdMiss-Hover*"
 NX-H-HvMiss-Hover			"*NX-H-HvMiss-Hover*"
-//NX-L-Missile-BB-VTOL			"*NX-L-BBMiss-VTOL*"
 NX-L-Rail1-VTOL				"*NX-L-Rail1-VTOL*"
 NX-H-Rail2-VTOL				"*NX-H-Rail2-VTOL*"
-//NX-M-HvySAM-Htrack			"*NX-M-HvySAM-Htrack*"
 
 // NEXUS only Cyborgs
-NX-Cyb-HvMiss-JUMP			"*NX-Cyb-HvMiss-JUMP*"
-NX-Cyb-PulseLas-JUMP	  		"*NX-Cyb-PulseLas-JUMP*"
-NX-Cyb-Rail1-JUMP			"*NX-Cyb-JUMP*"
-NX-Cyb-Miss-JUMP			"*NX-Cyb-Miss-JUMP*"
 Cyb-NXCybRail1-GRD			"*Cyb-NXCybRail1-GRD*"
 Cyb-NXCybATmiss-GRD			"*Cyb-NXCybATmiss-GRD*"
 Cyb-NXPulseLas-GRD			"*Cyb-NXPulseLas-GRD*"
-Cyb-NXCybRail1-JUMP			"*Cyb-NXCybRail1-JUMP*"
-Cyb-NXCybATmiss-JUMP			"*Cyb-NXCybATmiss-JUMP*"
-Cyb-NXPulseLas-JUMP			"*Cyb-NXPulseLas-JUMP*"
 
 /* PLAYER 4 - FORCE EDITOR VEHICLES */
 ViperLtCannonWheels			_("Light Cannon Viper Wheels")
@@ -158,7 +149,6 @@ CyborgRotMgGround			_("Assault Gunner")
 
 // new player cyborgs - for Pete
 
-Cyb-CybChnGun-JUMP			"*Cyb-CybChnGun-JUMP*"
 ATESTVEHICLE				"*TEST VEHICLE*"
 ATESTVTOL				"*TEST VTOL*"
 ASPOTTER				"*SPOTTER*"
@@ -274,27 +264,9 @@ NX-CybLasGrnd				"*NX-CybLasGrnd*"
 
 // New Cyborg Bodies - Unique body for EACH template
 CyborgCannonGrd				"*Cyborg Cannon*"
-//				"*Cyborg Machinegun*"
 CyborgFlamerGrd				"*Cyborg Flamer*"
-//CyborgChn01Ground			"*Cyborg Machinegun*"
 CybFlamer01CGrd				"*Cyborg Flamer*"
-//CybRocketGrd				"*Cyborg Rocket*"	
 CybRotMgGrd				"*Cyborg Assault Gun*"
-
-//CyborgNXATMissGrd			"*CyborgNXATMissGrd*"
-//CyborgNXATMissJmp			"*CyborgNXATMissJ*"
-//			"*CybNXCybRail1Grd*"	
-//CybNXCybRail1Jmp			"*CybNXCybRail1J*"
-CybNXPulseLasJmp			"*CybNXPulseLasJ*"
-//CybNXHvMissJmp				"*CybNXHvMissJ*"		
-CybNXMissJmp				"*CybNXMissJmp*"
-//CybNXPulseLasJmp			"*CybNXPulseLasJ*"
-CybNXRail1Jmp				"*CybNXRail1Jmp*"
-//CybNXPulseLaserGrd			"*CybNXPulseLaserJ*"
-//NX-Cyb-HvMissile-JUMP			"*NX-Cyb-HvMissile-J*"
-//NX-Cyb-Missile-JUMP			"*NX-CybMissGrnd*"
-//NX-CybLasGrnd				"*NX-CybLasGrnd*"
-//NX-Cyb-Rail1-JUMP			"*NX-Cyb-J*"
 
 /* BRAIN */
 ZNULLBRAIN				"Z NULL BRAIN"
@@ -673,24 +645,13 @@ R-Cyborg-Wpn-Rail1-Grd			"*NOT USED Needle Gunner Cyborg*"
 R-Cyborg-Wpn-ATMiss-Grd			"*NOT USED Scourge Cyborg*"
 R-Cyborg-Wpn-Laser1-Grd			"*NOT USED Flashlight Gunner Cyborg*"
 
-R-Cyborg-Wpn-BB-Jump			_("Jump Bunker Blaster")
-R-Cyborg-Wpn-Cannon-Jump		_("Jump Heavy Gunner")
-R-Cyborg-Wpn-Rocket-Jump		_("Jump Lancer")
-R-Cyborg-Wpn-RotMG-Jump			_("Jump Assault Gunner")
-R-Cyborg-Wpn-Rail1-Jump			_("Jump Needle Gunner")
-R-Cyborg-Wpn-ATMiss-Jump		_("Jump Scourge")
-R-Cyborg-Wpn-Laser1-Jump		_("Jump Flashlight Gunner")
-
-R-Cyborg-Jump01				_("Cyborg Jump Pack")
 R-Cyborg-Legs01				_("Cyborg Propulsion")
 R-Cyborg-Legs02				_("Cyborg Propulsion II")
 R-Cyborg-Legs03				_("Cyborg Propulsion III")
 
 /* RESEARCH - DEFENSES */
 R-Defense-HardcreteWall			_("Hardcrete")
-//R-Defense-HardcreteWall-CO		_("CO-Hardcrete")
 R-Defense-HardcreteWall-NP		_("NP-Hardcrete")
-//R-Defense-HardcreteWall-NX		_("NX-Hardcrete")
 R-Defense-WallUpgrade01			_("Improved Hardcrete")
 R-Defense-WallUpgrade02			_("Improved Hardcrete Mk2")
 R-Defense-WallUpgrade03			_("Improved Hardcrete Mk3")

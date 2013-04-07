@@ -1,1083 +1,434 @@
-//RESEARCH STRINGS
-//Version 1  (7449 words)
-//16/12/98
-//NOTE:  Lines beginning // should not be translated.
-
-/* COMPUTERS */
-//R-Comp-CommandTurret01		Command Turret
-
-//R-Comp-SynapticLink			Synaptic Link
-
-//R-Sys-Resistance			NEXUS Intruder Program
-
-//R-Sys-Resistance-Upgrade01		NEXUS Resistance Circuits
-
-/* CYBORGS */
-//R-Cyborg-Jump01			Cyborg Jump Pack
-
-//R-Cyborg-Legs01			Cyborg Propulsion
-//RES_CYW_LG1_MSG1			_(" ")
-//RES_CYW_LG1_MSG2			_(" ")
-//RES_CYW_LG1_MSG3			_(" ")
-//RES_CYW_LG1_MSG4			_("All Cyborgs upgraded automatically")
-
-//R-Cyborg-Legs02			Cyborg Propulsion II
-
-//R-Cyborg-Legs03			Cyborg Propulsion III
-
-//R-Cyborg-Transport		Cyborg Transport
-
-//R-SuperTransport		Super Transport
-
-//R-Cyborg-Metals01			Cyborg Composite Alloys 
-
-//R-Cyborg-Metals04			Cyborg Dense Composite Alloys
 RES_CYMET4_MSG1			_("Cyborg Materials Improved")
 RES_CYMET4_MSG2			_("Layered dense composite alloys and energy-absorbing fibres")
 RES_CYMET4_MSG3			_("Increases Kinetic Armor and Body Points")
 RES_CYMET4_MSG4			_("All Cyborgs upgraded automatically")
 
-//R-Cyborg-Metals07			Cyborg Superdense Composite Alloys
-
-//R-Cyborg-Metals10			Cyborg Bonded Laminates
-
-//R-Cyborg-Armor-Heat01			Cyborg Thermal Armor
 RES_CYARM-H1_MSG1			_("Cyborg Thermal Armor Improved")
 RES_CYARM-H1_MSG2			_("Heat resistant armored layers")
 RES_CYARM-H1_MSG3			_("Thermal Armor increased")
 RES_CYARM-H1_MSG4			_("All Cyborgs upgraded automatically")
 
-//R-Cyborg-Armor-Heat04			Cyborg High Intensity Thermal Armour
-
-//R-Cyborg-Wpn-BB			Bunker Blaster
 RES_CYW_BB1_MSG1			_("New Cyborg Available")
 RES_CYW_BB1_MSG2			_("Armed with Bunker Buster rocket")
 RES_CYW_BB1_MSG3			_("Body Points: Medium")
 RES_CYW_BB1_MSG4			_("Requires Cyborg factory to produce")
 
-//R-Cyborg-Wpn-Missile			Revenger
-
-//R-Cyborg-Wpn-MG			Machine Gunner
-
-//R-Cyborg-Wpn-Cannon			Heavy Gunner
-
-//R-Cyborg-Wpn-Flamer			Flamer
-
-//R-Cyborg-Wpn-Thermite			Thermite Flamer
-
-//R-Cyborg-Wpn-Grenade			Grenadier
-
-//R-Cyborg-Hvywpn-Mcannon	   	Medium Cannon Cyborg
-
-//R-Cyborg-Hvywpn-	   	Hyper Velocity Cannon Cyborg
-
-//R-Cyborg-Hvywpn-Acannon	Assault Cannon Cyborg
-
-//R-Cyborg-Hvywpn-TK		Tank Killer Cyborg
-
-//R-Cyborg-Sys-Mechanic			Mechanic
-
-//R-Cyborg-Sys-ComEng			Combat Engineer
-
-//R-Cyborg-Wpn-Rocket			Lancer
-
-//R-Cyborg-Wpn-RotMG-Grd		Assault Gunner
 RES_CYW_MG4_MSG1			_("New Cyborg Available")
 RES_CYW_MG4_MSG2			_("Armed with Cyborg Assault Gun")
 RES_CYW_MG4_MSG3			_("Body Points: Medium")
 RES_CYW_MG4_MSG4			_("Requires Cyborg factory to produce")
 
-//R-Cyborg-Wpn-Rail1-Grd		Needle Gunner
-
-//R-Cyborg-Wpn-ATMiss-Grd		Scourge
-
-//R-Cyborg-Wpn-Laser1-Grd		Flashlight Gunner
-
-// R-Cyborg-Wpn-Missile-Jump		Jump Revenger
 RES_CYJ_MIS_MSG1			_("New Jump Cyborg Available")
 RES_CYJ_MIS_MSG2			_("Armed with Revenger Surface-to-Air missile")
 RES_CYJ_MIS_MSG3			_("Body Points: Medium")
 RES_CYJ_MIS_MSG4			_("Requires Cyborg factory to produce")
 
-//R-Cyborg-Wpn-BB-Jump		Jump Bunker Killer
 RES_CYJ_BB1_MSG1			_("New Jump Cyborg Available")
 RES_CYJ_BB1_MSG2			_("Armed with Bunker Buster rocket")
 RES_CYJ_BB1_MSG3			_("Body Points: Medium")
 RES_CYJ_BB1_MSG4			_("Requires Cyborg factory to produce")
 
-//R-Cyborg-Wpn-Rocket-Jump		Jump Lancer
-
-//R-Cyborg-Wpn-RotMG-Jump		Jump Assault Gunner
-
-//R-Cyborg-Wpn-Rail1-Jump		Jump Needle Gunner
-
-//R-Cyborg-Wpn-ATMiss-Jump		Jump Scourge
-
-//R-Cyborg-Wpn-Laser1-Jump		Jump Flashlight Gunner
-/* DEFENSES */
-//R-Defense-HardcreteWall		Hardcrete
-
-//R-Defense-WallUpgrade01		Improved Hardcrete
-
-//R-Defense-WallUpgrade04		Supercrete	
 RES_DF_WU4_MSG1			_("Defenses Improved")
 RES_DF_WU4_MSG2			_("High-tensile concrete reinforced with boron")
 RES_DF_WU4_MSG3			_("Increases Armor and Body Points")
 RES_DF_WU4_MSG4			_("All defenses and walls upgraded automatically")
 
-//R-Defense-WallUpgrade07		Plascrete
-
-//R-Defense-WallUpgrade10		Plasteel
-
-//R-Defense-AASite-TwinBof		Tornado AA Site
 RES_EMP_AA4_MSG1			_("New Defensive Structure Available")
 RES_EMP_AA4_MSG2			_("AA Site with Tornado Flak Turret")
 RES_EMP_AA4_MSG3			_("Automatically targets VTOLs")
 RES_EMP_AA4_MSG4			_("Defensive Strength: Medium")
 
-//R-Defense-AASite-QuadBof		Cyclone AA Site
 RES_EMP_AA1_MSG1			_("New Defensive Structure Available")
 RES_EMP_AA1_MSG2			_("AA Site with Cyclone Flak Turret")
 RES_EMP_AA1_MSG3			_("Automatically targets VTOLs")
 RES_EMP_AA1_MSG4			_("Defensive Strength: Medium")
 
-//R-Defense-AASite-QuadMg1		Hurricane AA Site
 RES_EMP_AA2_MSG1			_("New Defensive Structure Available")
 RES_EMP_AA2_MSG2			_("AA Site with Hurricane Gun Turret")
 RES_EMP_AA2_MSG3			_("Automatically targets VTOL")
 RES_EMP_AA2_MSG4			_("Defensive Strength: Medium")
 
-//R-Defense-AASite-QuadRotMg		Whirlwind AA Site
 RES_EMP_AA3_MSG1			_("New Defensive Structure Available")
 RES_EMP_AA3_MSG2			_("AA Site with Whirlwind Gun Turret")
 RES_EMP_AA3_MSG3			_("Automatically targets VTOLs")
 RES_EMP_AA3_MSG4			_("Defensive Strength: Medium")
 
-//R-Defense-SamSite1			Avenger SAM Site
-
-//R-Defense-SamSite2			Vindicator SAM Site
-
-//R-Defense-IDFRocket			Ripple Rocket Battery
 RES_EMP_IDFR_MSG1			_("New Defensive Structure Available")
 RES_EMP_IDFR_MSG2			_("Indirect fire rocket battery")
 RES_EMP_IDFR_MSG3			_("Assigned automatically to nearest sensor or CB tower")
 RES_EMP_IDFR_MSG4			_("Defensive Strength: Medium")
 
-//R-Defense-MdArtMissile		Firestorm Missile Battery
-
-//R-Defense-HvyArtMissile		Novastorm Missile Battery
-
-//R-Defense-MortarPit			Mortar Pit
-
-//R-Defense-Mortar-Incendiary	Incendiary Mortar Pit
-
-//R-Defense-HvyMor			Bombard Pit
 RES_EMP_HvyMor_MSG1		_("New Defensive Structure Available")
 RES_EMP_HvyMor_MSG2		_("Armored Bombard battery pit")
 RES_EMP_HvyMor_MSG3		_("Assigned automatically to nearest sensor or CB tower")
 RES_EMP_HvyMor_MSG4		_("Defensive Strength: Medium")
 
-//R-Defense-RotMor			Pepperpot Pit
 RES_EMP_RotMor_MSG1		_("New Defensive Structure Available")
 RES_EMP_RotMor_MSG2		_("Armored Pepperpot mortar battery pit")
 RES_EMP_RotMor_MSG3		_("Assigned automatically to nearest sensor or CB tower")
 RES_EMP_RotMor_MSG4		_("Defensive Strength: Medium")
 
-//R-Defense-MRL			Mini-Rocket Battery
-
-//R-Defense-Howitzer			Howitzer Emplacement
 RES_EMP_HOW_MSG1			_("New Defensive Structure Available")
 RES_EMP_HOW_MSG2			_("Armored howitzer emplacement")
 RES_EMP_HOW_MSG3			_("Assigned automatically to nearest sensor or CB tower")
 RES_EMP_HOW_MSG4			_("Defensive Strength: Medium")
 
-//R-Defense-HvyHowitzer			Ground Shaker Emplacement
 RES_EMP_HvHOW_MSG1		_("New Defensive Structure Available")
 RES_EMP_HvHOW_MSG2		_("Armored Ground Shaker howitzer emplacement")
 RES_EMP_HvHOW_MSG3		_("Assigned automatically to nearest sensor or CB tower")
 RES_EMP_HvHOW_MSG4		_("Defensive Strength: Medium")
 
-//R-Defense-Howitzer-Incendiary		Incendiary Howitzer Emplacement
-
-//R-Defense-RotHow			Hellstorm Emplacement
 RES_EMP_RotHOW_MSG1		_("New Defensive Structure Available")
 RES_EMP_RotHOW_MSG2		_("Armored Hellstorm howitzer emplacement")
 RES_EMP_RotHOW_MSG3		_("Assigned automatically to nearest sensor or CB tower")
 RES_EMP_RotHOW_MSG4		_("Defensive Strength: Medium")
 
-//R-Defense-IncHow	 		Hellfire Emplacement
 RES_EMP_IncHOW_MSG1		_("New Defensive Structure Available")
 RES_EMP_IncHow_MSG2		_("Armored Hellstorm howitzer emplacement")
 RES_EMP_IncHow_MSG3		_("Assigned automatically to nearest sensor or CB tower")
 RES_EMP_IncHow_MSG4		_("Defensive Strength: Medium")
 
-//R-Defense-HvyA-Trocket		Tank Killer Emplacement
 RES_EMP_HVATR_MSG1		_("New Defensive Structure Available")
 RES_EMP_HVATR_MSG2		_("Armored strongpoint with Tank Killer rocket")
 RES_EMP_HVATR_MSG3		_("Automatically targets enemies in range")
 RES_EMP_HVATR_MSG4		_("Defensive Strength: Medium")
 
-//R-Defense-Emp-HPV			Hyper-Velocity Cannon Emplacement
 RES_EMP_HPV_MSG1			_("New Defensive Structure Available")
 RES_EMP_HPV_MSG2			_("Armored strongpoint with Hyper-Velocity Cannon")
 RES_EMP_HPV_MSG3			_("Automatically targets enemies in range")
 RES_EMP_HPV_MSG4			_("Defensive Strength: High")
 	
-//R-Defense-HvyFlamer			Inferno Emplacement
 RES_EMP_HVFL_MSG1			_("New Defensive Structure Available")
 RES_EMP_HVFL_MSG2			_("Armored strongpoint with Inferno Flamer")
 RES_EMP_HVFL_MSG3			_("Automatically targets enemies in range")
 RES_EMP_HVFL_MSG4			_("Defensive Strength: Medium")
 
-//R-Defense-Plasmite-Flamer			Plasmite Flamer Emplacement
-
-//R-Defense-PrisLas			Flashlight Emplacement
-
-//R-Defense-PulseLas			Pulse Laser Emplacement
-
-//R-Defense-HeavyLas			Heavy Laser Emplacement
-
-//R-Defense-Rail2			Rail Gun Emplacement
-
-//R-Defense-Rail3			Gauss Cannon Emplacement
-
-//R-Defense-RotCannon			Assault Cannon Emplacement
 RES_EMP_RotCan_MSG1		_("New Defensive Structure Available")
 RES_EMP_RotCan_MSG2		_("Armored strongpoint with Assault Cannon")
 RES_EMP_RotCan_MSG3		_("Automatically targets enemies in range")
 RES_EMP_RotCan_MSG4		_("Defensive Strength: High")
 
-//R-Defense-RotMG			Assault Gun Emplacement
 RES_DEF_RotMG_MSG1			_("New Defensive Structure Available")
 RES_DEF_RotMG_MSG2			_("Reinforced tower with Assault Gun")
 RES_DEF_RotMG_MSG3			_("Automatically targets enemies in range")
 RES_DEF_RotMG_MSG4			_("Defensive Strength: Medium")
 
-//R-Defense-Tower01		Machinegun Guard Tower	
-
-//R-Defense-Tower02			Twin Machinegun Guard Tower - DELETE
-
-//R-Defense-Tower03			Heavy Machinegun Guard Tower
 RES_EMP_HMGTOW_MSG1		_("New Defensive Structure Available")
 RES_EMP_HMGTOW_MSG2		_("Armored guard tower with Heavy Machinegun")
 RES_EMP_HMGTOW_MSG3		_("Automatically targets enemies within sensor range")
 RES_EMP_HMGTOW_MSG4		_("Defensive Strength: Medium")
 
-//R-Defense-Tower04			Flamer Guard Tower
 RES_EMP_FLTOW_MSG1		_("New Defensive Structure Available")
 RES_EMP_FLTOW_MSG2		_("Armored guard tower with Flamer")
 RES_EMP_FLTOW_MSG3		_("Automatically targets enemies within sensor range")
 RES_EMP_FLTOW_MSG4		_("Defensive Strength: Medium")
 
-//R-Defense-Tower05			Lancer AT Rocket Guard Tower
 RES_EMP_ATRTOW_MSG1		_("New Defensive Structure Available")
 RES_EMP_ATRTOW_MSG2		_("Armored guard tower with Lancer AT Rocket")
 RES_EMP_ATRTOW_MSG3		_("Automatically targets enemies within sensor range")
 RES_EMP_ATRTOW_MSG4		_("Defensive Strength: Medium")
 
-//R-Defense-Tower06			Mini-Pod Rocket Guard Tower
-
-//R-Defense-GuardTower-ATMiss		Scourge Missile Guard Tower
-
-//R-Defense-GuardTower-Rail1		Needle Gun Guard Tower
-
-//R-Defense-Pillbox01			Machinegun Bunker
-
-//R-Defense-Pillbox03			Heavy Machinegun Bunker
 RES_PB_HMG_MSG1			_("New Defensive Structure Available")
 RES_PB_HMG_MSG2			_("Armored bunker with Heavy Machinegun")
 RES_PB_HMG_MSG3			_("Automatically targets enemies within sensor range")
 RES_PB_HMG_MSG4			_("Defensive Strength: High")
 
-//R-Defense-Pillbox04			Light Cannon Bunker
-
-//R-Defense-Pillbox05			Flamer Bunker
-
-//R-Defense-Pillbox06			Lancer Bunker
-
-//R-Defense-WallTower01			Heavy Machinegun Hardpoint
-
-//R-Defense-WallTower02			Light Cannon Hardpoint
-
-//R-Defense-WallTower03			Medium Cannon Hardpoint
-
-//R-Defense-WallTower04			Heavy Cannon Hardpoint
-
-//R-Defense-WallTower05			Flamer Hardpoint
 RES_WT5_FL_MSG1			_("New Defensive Structure Available")
 RES_WT5_FL_MSG2			_("Armored hardpoint with Flamer")
 RES_WT5_FL_MSG3			_("Automatically targets enemies within sensor range")
 RES_WT5_FL_MSG4			_("Defensive Strength: High")
 
-//R-Defense-WallTower06			Lancer Hardpoint
-
-//R-Defense-Wall-RotMg			Assault Gun Hardpoint
 RES_WT7_RMG_MSG1			_("New Defensive Structure Available")
 RES_WT7_RMG_MSG2			_("Armored hardpoint with Assault Gun")
 RES_WT7_RMG_MSG3			_("Automatically targets enemies within sensor range")
 RES_WT7_RMG_MSG4			_("Defensive Strength: High")
 
-//R-Defense-Wall-VulcanCan		Assault Cannon Hardpoint
 RES_WT8_RC_MSG1			_("New Defensive Structure Available")
 RES_WT8_RC_MSG2			_("Armored hardpoint with Assault Cannon")
 RES_WT8_RC_MSG3			_("Automatically targets enemies within sensor range")
 RES_WT8_RC_MSG4			_("Defensive Strength: High")
 
-//R-Defense-WallTower-A-Tmiss		Scourge Missile Hardpoint
-
-//R-Defense-WallTower-HvyFlamer	 Inferno Hardpoint
 RES_WT11_HFL_MSG1			_("New Defensive Structure Available")
 RES_WT11_HFL_MSG2			_("Armored hardpoint with Inferno flamer")
 RES_WT11_HFL_MSG3			_("Automatically targets enemies within sensor range")
 RES_WT11_HFL_MSG4			_("Defensive Strength: High")
 
-//R-Defense-WallTower-HvyA-Trocket	Tank Killer Hardpoint
 RES_WT12_HAT_MSG1			_("New Defensive Structure Available")
 RES_WT12_HAT_MSG2			_("Armored hardpoint with Tank Killer AT missile")
 RES_WT12_HAT_MSG3			_("Automatically targets enemies within sensor range")
 RES_WT12_HAT_MSG4			_("Defensive Strength: High")
 
-//R-Defense-WallTower-HPVcannon	Hyper-Velocity Cannon Hardpoint
-
-//R-Defense-WallTower-PulseLas		Flashlight Hardpoint
-
-//R-Defense-WallTower-Rail2		Rail Gun Hardpoint
-
-//R-Defense-WallTower-Rail3		Gauss Cannon Hardpoint
-
-//R-Defense-TankTrap01			Tank Traps
-
-//R-Defense-TankTrap02			Dragon's Teeth
 RES_TTRAP2_MSG1			_("New Defensive Structure Available")
 RES_TTRAP2_MSG2			_("Reinforced concrete tank traps")
 RES_TTRAP2_MSG3			_("Prevents enemy movement")
 RES_TTRAP2_MSG4			_("Defensive Strength: High")
-/* STRUCTURES */
-//R-Struc-RepairFacility			Repair Facility
 
-//R-Struc-RprFac-Upgrade01		Automated Repair Facility
-
-//R-Struc-RprFac-Upgrade04		Robotic Repair Facility Upgrade
 RES_ST_RFU4_MSG1			_("Repair Facility Improved")
 RES_ST_RFU4_MSG2			_("New robotic repair techniques")
 RES_ST_RFU4_MSG3			_("Increases Repair Speed")
 RES_ST_RFU4_MSG4			_("All repair facilities upgraded automatically")
 
-//R-Struc-RprFac-Upgrade07		Advanced Repair Facility Upgrade
-
-//R-Struc-CommandRelay			Command Relay Post
-
-//R-Struc-Factory-Cyborg			Cyborg Factory
-
-//R-Struc-Factory-Cyborg-U01		Automated Cyborg Production
-
-//R-Struc-Factory-Cyborg-U04		Robotic Cyborg Production
 RES_ST_FCY4_MSG1			_("Cyborg Production Improved")
 RES_ST_FCY4_MSG2			_("Robotic Cyborg Production")
 RES_ST_FCY4_MSG3			_("Increases Cyborg factory output")
 RES_ST_FCY4_MSG4			_("All Cyborg factories upgraded automatically")
 
-//R-Struc-Factory-Cyborg-U07		Advanced Cyborg Production
-
-//R-Struc-Factory-Cyborg-U10		Self-Replicating Cyborg Production
 RES_ST_FCY10_MSG1			_("Cyborg Production Improved")
 RES_ST_FCY10_MSG2			_("Self-Replicating Cyborg Production")
 RES_ST_FCY10_MSG3			_("Increases Cyborg factory output")
 RES_ST_FCY10_MSG4			_("All Cyborg factories upgraded automatically")
 
-//R-Struc-Factory-Module			Factory Module
-
-//R-Struc-Factory-Upgrade01		Automated Factory Production
-
-//R-Struc-Factory-Upgrade04		Robotic Factory Production
 RES_ST_FU4_MSG1			_("Vehicle Production Improved")		
 RES_ST_FU4_MSG2			_("New Robotic Techniques improve factory production")
 RES_ST_FU4_MSG3			_("Increases factory production rate")
 RES_ST_FU4_MSG4			_("All vehicle factories upgraded automatically")
 
-//R-Struc-Factory-Upgrade07		Advanced Factory Production
-
-//R-Struc-Factory-Upgrade10		Self-Replicating Factory Production
 RES_ST_FU10_MSG1			_("Vehicle Production Improved")		
 RES_ST_FU10_MSG2			_("Self-Replicating Factory Production")
 RES_ST_FU10_MSG3			_("Increases factory output")
 RES_ST_FU10_MSG4			_("All vehicle factories upgraded automatically")
 
-//R-Struc-PowerModuleMk1		Power Module
-
-//R-Struc-Power-Upgrade01		Gas Turbine Generator
-
-//R-Struc-Power-Upgrade02		Vapor Turbine Generator
-
-//R-Struc-Research-Module		Research Module
-
-//R-Struc-Research-Upgrade01		Synaptic Link Data Analysis
-
-//R-Struc-Research-Upgrade04		Dedicated Synaptic Link Data Analysis
 RES_ST_RU4_MSG1			_("Research Improved")
 RES_ST_RU4_MSG2			_("Dedicated Synaptic Link Data Analysis")
 RES_ST_RU4_MSG3			_("Increases research speed")
 RES_ST_RU4_MSG4			_("All research facilities upgraded automatically")
 
-//R-Struc-Research-Upgrade07		Neural Synapse Research Brain
-
-//R-Struc-Materials01			Reinforced Base Structure Materials
-
-//R-Struc-Materials04			Hardened Base Structure Materials
 RES_ST_MAT4_MSG1			_("Increases Damage Resistance")	
 RES_ST_MAT4_MSG2			_("Hardened Base Structure Materials")
 RES_ST_MAT4_MSG3			_("Increases Armor and Body Points")
 RES_ST_MAT4_MSG4			_("All base structures upgraded automatically")
 
-//R-Struc-Materials07			Advanced Base Structure Materials
-
-//R-Struc-Materials10			High Density Base Structure Materials
-
-//R-Struc-VTOLFactory			VTOL Factory
-
-//R-Struc-VTOLFactory-U01		Robotic VTOL Production
 RES_ST_VFU1_MSG1			_("Production Improved")
 RES_ST_VFU1_MSG2			_("Robotic VTOL Production")
 RES_ST_VFU1_MSG3			_("Increases VTOL factory output")
 RES_ST_VFU1_MSG4			_("All VTOL factories upgraded automatically")
 
-//R-Struc-VTOLFactory-U	04		Advanced VTOL Production
-
-//R-Struc-VTOLPad			VTOL Rearming Pad
-
-//R-Struc-VTOLPad-U01			Automated VTOL Rearming
 RES_ST_VP1_MSG1			_("VTOL Rearming Times Reduced")		
 RES_ST_VP1_MSG2			_("Automated VTOL Rearming")
 RES_ST_VP1_MSG3			_("Reduces rearming time")
 RES_ST_VP1_MSG4			_("All rearming pads upgraded automatically")
 
-//R-Struc-VTOLPad-U04			Robotic VTOL Rearming
-/* SYSTEMS */
-//R-Sys-Spade1Mk1			Construction Unit
-//RES_SY_SP1MK1_MSG1		_(" ")
-//RES_SY_SP1MK1_MSG2		_(" ")
-//RES_SY_SP1MK1_MSG3		_(" ")
-//RES_SY_SP1MK1_MSG4		_(" ")
-
-//R-Sys-Engineering01			Engineering
-
-//R-Sys-Engineering02			Improved Engineering
-
-//R-Sys-Engineering03			Advanced Engineering
-
-//R-Sys-MobileRepairTurret01		Mobile Repair Turret
-
-//R-Sys-MobileRepairTurret02		Heavy Mobile Repair Turret
 RES_REPTU2_MSG1			_("New Systems Turret Available")
 RES_REPTU2_MSG2			_("Heavy repair unit")
 RES_REPTU2_MSG3			_("Automatically Repairs Damaged Units")
 RES_REPTU2_MSG4			_("Or damaged units may be selected as target")
 
-//R-Sys-MobileRepairTurretHeavy		Heavy Mobile Repair Turret
-
-//R-Sys-MobileRepairTurret01-U01	Mobile Repair Upgrade	
 RES_REPTUP1_MSG1			_("Research Breakthrough Improves Repair Speeds")
 RES_REPTUP1_MSG2			_("Mobile Repair Upgrade")
 RES_REPTUP1_MSG3			_("Increases repair speed")
 RES_REPTUP1_MSG4			_("All mobile repair units upgraded automatically")
 	
-//R-Sys-Sensor-Turret01			Sensor Turret
-
-//R-Sys-Sensor-Tower01			Sensor Tower
-
-//R-Sys-Sensor-Tower02			Hardened Sensor Tower
 RES_SY_STW2_MSG1			_("Improved Sensor Tower Available")
 RES_SY_STW2_MSG2			_("New construction techniques improve tower")
 RES_SY_STW2_MSG3			_("Replaces existing sensor tower")
 RES_SY_STW2_MSG4			_("May be assigned as spotter for indirect fire weapons")
 
-//R-Sys-Sensor-Upgrade01		Sensor Upgrade
-
-//R-Sys-CBSensor-Turret01		CB Turret
-
-//R-Sys-CBSensor-Tower01		CB Tower
-
-//R-Sys-CBSensor-Upgrade01		CB Sensor Upgrade
-
-//R-Sys-CBSensor-Upgrade02		CB Sensor Upgrade 2
-
-//R-Sys-CBSensor-Upgrade03		CB Sensor Upgrade 3
-
-//R-Sys-VTOLCBS-Tower01		VTOL CB Tower
-
-//R-Sys-VTOLCBS-Turret01		VTOL CB Turret
 RES_SY_VCBSTU1_MSG1		_("New Systems Turret Available")
 RES_SY_VCBSTU1_MSG2		_("VTOL CB turret detects enemy indirect fire batteries")
 RES_SY_VCBSTU1_MSG3		_("Orders assigned VTOLs to attack the enemy batteries")
 RES_SY_VCBSTU1_MSG4		_("VTOLs attack until enemy battery is suppressed")
 
-//R-Sys-VTOLCBS-Upgrade01		VTOL CB Upgrade
 RES_SY_VCBSU1_MSG1		_("VTOL CB Improved")
 RES_SY_VCBSU1_MSG2		_("New fire detection systems")
 RES_SY_VCBSU1_MSG3		_("Extends VTOL CB Range")
 RES_SY_VCBSU1_MSG4		_("All VTOL CB sensors upgraded automatically")
 
-//R-Sys-VTOLCBS-Upgrade02		VTOL CB Upgrade 2
-
-//R-Sys-VTOLCBS-Upgrade03		VTOL CB Upgrade 3
-
-//R-Sys-VTOLStrike-Tower01		VTOL Strike Tower
-
-//R-Sys-VTOLStrike-Turret01		VTOL Strike Turret
-
-//R-Sys-VTOLStrike-Upgrade01		VTOL Strike Upgrade
 RES_SY_VS1_MSG1			_("VTOL Strike Improved")
 RES_SY_VS1_MSG2			_("New target recognition systems")
 RES_SY_VS1_MSG3			_("Extends VTOL Strike Range")
 RES_SY_VS1_MSG4			_("All VTOL Strike sensors upgraded automatically")
 
-//R-Sys-VTOLStrike-Upgrade02		VTOL Strike Upgrade Mk2
-
-//R-Sys-VTOLStrike-Upgrade03		VTOL Strike Upgrade Mk3
-
-//R-Sys-SpyTurret			Spy Turret
-
-//R-Sys-SpyTurret-Upgrade01		Improved Scrambler
 RES_SY_STU1_MSG1			_("Scrambler Improved")
 RES_SY_STU1_MSG2			_("Improvement in synaptic link technology")
 RES_SY_STU1_MSG3			_("Increases scrambler rate")
 RES_SY_STU1_MSG4			_("All scramblers upgraded automatically")
 
-//R-Sys-Autorepair-General		Auto-Repair
-
-//R-Sys-Autorepair-Cyborg		Cyborg Self-Repair
-
-//R-Sys-Autorepair-Struc			 Base Structure Self-Repair
-
-//R-Sys-Autorepair-Def			Defenses Self-Repair
-
-//R-Sys-Autorepair-Vehicle		Vehicle Self-Repair
-
-//R-Sys-Resistance-Circuits		Resistance Circuits
-
-/* VEHICLES */
-//R-Vehicle-Body01			Light Body - Viper
-
-//R-Vehicle-Body02			Light Body - Leopard
 RES_V_B02_MSG1			_("Collective Light Body")
 RES_V_B02_MSG2			_("Superior armor and body points to Viper")
 RES_V_B02_MSG3			_("Slower than Viper")
 RES_V_B02_MSG4			_("High power costs and slower to produce than Viper")
 
-//R-Vehicle-Body03			Light Body - Retaliation
-
-//R-Vehicle-Body04			Light Body - Bug
-
-//R-Vehicle-Body05			Medium Body - Cobra
-
-//R-Vehicle-Body06			Medium Body - Panther
 RES_V_B06_MSG1			_("Collective Medium Body")
 RES_V_B06_MSG2			_("Superior armor and body points to Cobra")
 RES_V_B06_MSG3			_("Slower than Cobra")
 RES_V_B06_MSG4			_("High power costs and slower to produce than Cobra")
 
-//R-Vehicle-Body07			Medium Body - Retribution
-
-//R-Vehicle-Body08			Medium Body - Scorpion
-
-//R-Vehicle-Body09			Heavy Body - Tiger
-
-//R-Vehicle-Body10			Heavy Body - Vengeance
-
-//R-Vehicle-Body11			Heavy Body - Python
-
-//R-Vehicle-Body12			Heavy Body - Mantis
-
-//R-Vehicle-Engine01			Fuel Injection Engine
-
-//R-Vehicle-Engine04			Turbo-Charged Engine
 RES_V_EN4_MSG1			_("Vehicle Engine Upgrade")
 RES_V_EN4_MSG2			_("Turbo-Charged Engine")
 RES_V_EN4_MSG3			_("Improves vehicle speed")
 RES_V_EN4_MSG4			_("All vehicles upgraded automatically")
 
-//R-Vehicle-Engine07			Gas Turbine Engine
-
-//R-Vehicle-Engine10			Ionizing Turbine Engine
-
-//R-Vehicle-Metals01			Composite Alloys
-
-//R-Vehicle-Metals04			Dense Composite Alloys
 RES_V_MET4_MSG1			_("Vehicle Bodies Improved")
 RES_V_MET4_MSG2			_("Layered dense composite alloys and energy-absorbing fibres")
 RES_V_MET4_MSG3			_("Increases kinetic armor and body points")
 RES_V_MET4_MSG4			_("All vehicles upgraded automatically")
 
-//R-Vehicle-Metals07			Superdense Composite Alloys
-
-//R-Vehicle-Metals10			Bonded Laminates
-
-//R-Vehicle-Armor-Heat01		Thermal Armor
 RES_V_AH1_MSG1			_("Vehicle Thermal Armor Improved")
 RES_V_AH1_MSG2			_("Heat-resistant armored layers")
 RES_V_AH1_MSG3			_("Increases Thermal Armor")
 RES_V_AH1_MSG4			_("All vehicles upgraded automatically")
 
-//R-Vehicle-Armor-Heat04		High Intensity Thermal Armor
-
-//R-Vehicle-Prop-Halftracks		Half-tracked Propulsion
-
-//R-Vehicle-Prop-Halftracks02		Half-tracked Propulsion II
 RES_HALFT2_MSG1			_("Vehicle Propulsion Improved")
 RES_HALFT2_MSG2			_("New armored construction")
 RES_HALFT2_MSG3			_("Increases Body Points")
 RES_HALFT2_MSG4			_("All half-tracks upgraded automatically")
 
-//R-Vehicle-Prop-Halftracks03		Half-tracked Propulsion III
-
-//R-Vehicle-Prop-Hover			Hover Propulsion
-
-//R-Vehicle-Prop-Hover02			Hover Propulsion II
 RES_V_P_H2_MSG1			_("Vehicle Propulsion Improved")
 RES_V_P_H2_MSG2			_("New armored construction")
 RES_V_P_H2_MSG3			_("Increases Body Points")
 RES_V_P_H2_MSG4			_("All hovers upgraded automatically")
 
-//R-Vehicle-Prop-Hover03 		Hover Propulsion III
-
-//R-Vehicle-Prop-Tracks			Tracked Propulsion
-
-//R-Vehicle-Prop-Tracks02		Tracked Propulsion II
 RES_TRACK2_MSG1			_("Vehicle Propulsion Improved")
 RES_TRACK2_MSG2			_("New armored construction")
 RES_TRACK2_MSG3			_("Increases Body Points")
 RES_TRACK2_MSG4			_("All tracks upgraded automatically")
 
-//R-Vehicle-Prop-Tracks03		Tracked Propulsion III
-
-//R-Vehicle-Prop-Wheels			Wheeled Propulsion
-
-//R-Vehicle-Prop-Wheels02		Wheeled Propulsion II
 RES_V_P_W2_MSG1			_("Vehicle Propulsion Improved")
 RES_V_P_W2_MSG2			_("New armored construction")
 RES_V_P_W2_MSG3			_("Increases Body Points")
 RES_V_P_W2_MSG4			_("All wheels upgraded automatically")
 
-//R-Vehicle-Prop-Wheels03		Wheeled Propulsion III
-
-//R-Vehicle-Prop-VTOL			VTOL Propulsion
-
-//R-Vehicle-Prop-VTOL02		VTOL Propulsion II
-
-//R-Vehicle-Prop-VTOL03		VTOL Propulsion III
-/* WEAPONS */
-//R-Wpn-AAGun01			Tornado Flak Turret
 RES_AA1_MSG1			_("New AA Turret Available")
 RES_AA1_MSG2			_("Twin 80mm flak weapon")
 RES_AA1_MSG3			_("Aerial targets only")
 RES_AA1_MSG4			_("Body Points: Medium")
 
-//R-Wpn-AAGun02			Cyclone Flak Turret
 RES_AA2_MSG1			_("New AA Turret Available")
 RES_AA2_MSG2			_("Quad 80mm flak weapon")
 RES_AA2_MSG3			_("Aerial targets only")
 RES_AA2_MSG4			_("Body Points: Medium")
 
-//R-Wpn-AAGun03			Hurricane AA Turret
 RES_AA3_MSG1			_("New AA Turret Available")
 RES_AA3_MSG2			_("30mm Anti-Aircraft machinegun")
 RES_AA3_MSG3			_("Aerial targets only")
 RES_AA3_MSG4			_("Body Points: Medium")
 
-//R-Wpn-AAGun04			Whirlwind AATurret
 RES_AA4_MSG1			_("New AA Turret Available")
 RES_AA4_MSG2			_("Quad 30mm Anti-Aircraft machinegun")
 RES_AA4_MSG3			_("Aerial targets only")
 RES_AA4_MSG4			_("Body Points: Medium")
 
-//R-Wpn-AAGun-Accuracy01		AA Thermal Imaging Sensor
 RES_AAAC1_MSG1			_("AA Upgrade")
 RES_AAAC1_MSG2			_("Detects and locks-on to VTOL engine emissions")
 RES_AAAC1_MSG3			_("Increases AA accuracy")
 RES_AAAC1_MSG4			_("All AA weapons upgraded automatically")
 
-//R-Wpn-AAGun-Accuracy02		AA Target Acquisition Shells
-
-//R-Wpn-AAGun-Accuracy03		AA Target Prediction Shells
-
-//R-Wpn-AAGun-Damage01		AA HE Flak
 RES_AAD1_MSG1			_("AA Flak Upgrade")
 RES_AAD1_MSG2			_("High Explosive Flak shards")
 RES_AAD1_MSG3			_("Increases AA Flak damage")
 RES_AAD1_MSG4			_("All AA flak weapons upgraded automatically")
 
-//R-Wpn-AAGun-Damage04		AA HEAP Flak
-
-//R-Wpn-AAGun-ROF01		AA Ammunition Hopper
 RES_AAROF1_MSG1			_("AA Upgrade")
 RES_AAROF1_MSG2			_("Recoil loaded AA ammunition hopper")
 RES_AAROF1_MSG3			_("Increases AA ROF")
 RES_AAROF1_MSG4			_("All AA weapons upgraded automatically")
 
-//R-Wpn-AAGun-ROF04		AA Chainfeed Loader
-
-//R-Wpn-PBomb			Proximity Bomb Turret
 RES_PBMB1_MSG1			_("New Proximity Bomb Turret Available")
 RES_PBMB1_MSG2			_("Bomb turret explodes in proximity to enemy")
 RES_PBMB1_MSG3			_("Best Targets: Base Structures and Defenses")
 RES_PBMB1_MSG4			_("Body Points: Medium")
 
-//R-Wpn-SPBomb			Proximity Superbomb Turret
 RES_PBMB2_MSG1			_("New Proximity Bomb Turret Available")
 RES_PBMB2_MSG2			_("Superbomb turret explodes in proximity to enemy")
 RES_PBMB2_MSG3			_("Best Targets: Base Structures and Defenses")
 RES_PBMB2_MSG4			_("Body Points: Medium")
 
-//R-Wpn-Bomb01			Cluster Bomb Bay
 RES_BMB1_MSG1			_("New Bomb Bay Available")
 RES_BMB1_MSG2			_("Drops High Explosive Cluster bombs")
 RES_BMB1_MSG3			_("Best Targets: Base Structures")
 RES_BMB1_MSG4			_("Body Points: Low")
 
-//R-Wpn-Bomb02			HEAP Bomb Bay
 RES_BMB2_MSG1			_("New Bomb Bay Available")
 RES_BMB2_MSG2			_("Drops High Explosive Armor Piercing bombs")
 RES_BMB2_MSG3			_("Best Targets: Defenses")
 RES_BMB2_MSG4			_("Body Points: Low")
 
-//R-Wpn-Bomb03			Phosphor Bomb Bay
-
-//R-Wpn-Bomb04			Thermite Bomb Bay
-
-//R-Wpn-Bomb-Accuracy01		Thermal Imaging Bombsight
 RES_BAC1_MSG1			_("Bombsight Upgrade")
 RES_BAC1_MSG2			_("Locks on to thermal emissions")
 RES_BAC1_MSG3			_("Increases Bombing accuracy")
 RES_BAC1_MSG4			_("All bomb bays upgraded automatically")
 
-//R-Wpn-Bomb-Accuracy02		Laser Guided Bombsight
-
-//R-Wpn-Bomb-Accuracy03		Target Acquisition Bombsight
-
-//R-Wpn-Cannon1Mk1			Light Cannon
-
-//R-Wpn-Cannon2Mk1			Medium Cannon
-
-//R-Wpn-Cannon3Mk1			Heavy Cannon
-	
-//R-Wpn-Cannon4AMk1			Hyper-Velocity Cannon
 RES_W_CN4_MSG1			_("New Weapon Turret Available")
 RES_W_CN4_MSG2			_("Hyper-velocity automatic-cannon firing 88mm rounds")
 RES_W_CN4_MSG3			_("Best Targets: Vehicles")
 RES_W_CN4_MSG4			_("Replaces Medium Cannon")
 
-// R-Wpn-Cannon5			Assault Cannon
 RES_W_CN5_MSG1			_("New Weapon Turret Available")
 RES_W_CN5_MSG2			_("76mm hyper-velocity quad-barrel automatic-cannon")
 RES_W_CN5_MSG3			_("Best Targets: Vehicles")
 RES_W_CN5_MSG4			_("Body Points: High")
 
-// R-Wpn-Cannon6			Assault Cannon
-
-//R-Wpn-Cannon-Accuracy01		Cannon Laser Rangefinder
-
-//R-Wpn-Cannon-Accuracy02		Cannon Laser Designator
-
-//R-Wpn-Cannon-Damage01		HEAT Cannon Shells
-
-//R-Wpn-Cannon-Damage04		APFSDS Cannon Rounds
-
-//R-Wpn-Cannon-Damage07		HVAPFSDS Cannon Rounds
-
-//R-Wpn-Cannon-ROF01			Cannon Auto-Loader
-
-//R-Wpn-Cannon-ROF04			Cannon Rapid Loader
-
-//R-Wpn-Flamer01Mk1			Flamer
-
-//R-Wpn-Plasmite-Flamer			Plasmite Flamer
-
-//R-Wpn-Flame2				Heavy Flamer - Inferno Flamer
 RES_FLAME2_MSG1			_("New Weapon Turret Available")
 RES_FLAME2_MSG2			_("Heavy Flame-thrower firing Propylene Oxide gel")
 RES_FLAME2_MSG3			_("Best Targets: Bunkers, wheeled and hover vehicles")
 RES_FLAME2_MSG4			_("Body Points: Low")
 
-//R-Wpn-Flamer-Damage01		High Temperature Flamer Gel
-
-//R-Wpn-Flamer-Damage04		Superhot Flamer Gel
 RES_W_FL_D4_MSG1			_("Flamer Upgrade")
 RES_W_FL_D4_MSG2			_("Propylene Oxide treated to burn at superhot temperatures")
 RES_W_FL_D4_MSG3			_("Increases Flamer damage")
 RES_W_FL_D4_MSG4			_("All flamers upgraded automatically")
 
-//R-Wpn-Flamer-ROF01			Flamer Autoloader
-
-//R-Wpn-HowitzerMk1			Howitzer
 RES_W_HMK1_MSG1			_("New Indirect Fire Weapon Available")
 RES_W_HMK1_MSG2			_("105mm Howitzer may be assigned to a sensor")
 RES_W_HMK1_MSG3			_("Best Targets: Base Structures, infantry, wheeled vehicles")
 RES_W_HMK1_MSG4			_("Body Points: Low")
 
-//R-Wpn-Howitzer-Incendiary			Incendiary Howitzer
-
-//R-Wpn-HvyHowitzer			Heavy Howitzer - Ground Shaker
 RES_W_HH1_MSG1			_("New Indirect Fire Weapon Available")
 RES_W_HH1_MSG2			_("155mm Howitzer may be assigned to a sensor")
 RES_W_HH1_MSG3			_("Best Targets: Base Structures, infantry, wheeled vehicles")
 RES_W_HH1_MSG4			_("Body Points: Low")
 
-//R-Wpn-Howitzer03-Rot			Rotary Howitzer - Hellstorm
-
-//R-Wpn-Howitzer04-Inc			Incendiary Howitzer - Hellfire
 RES_W_IHOW_MSG1			_("New Indirect Fire Weapon Available")
 RES_W_IHOW_MSG2			_("105m Howitzer firing incendiaries, may be assigned to a sensor")
 RES_W_IHOW_MSG3			_("Best Targets: Base Structures, bunkers")
 RES_W_IHOW_MSG4			_("Body Points: Low")
 
-//R-Wpn-Howitzer-Accuracy01		Target Acquisition Artillery Shells
 RES_HOWAC1_MSG1			_("Howitzer Upgrade")
 RES_HOWAC1_MSG2			_("Self-guided rocket powered shells")
 RES_HOWAC1_MSG3			_("Increases Howitzer accuracy")
 RES_HOWAC1_MSG4			_("All howitzers upgraded automatically")
 
-//R-Wpn-Howitzer-Accuracy03		Target Prediction Artillery Shells
-
-//R-Wpn-Howitzer-Damage01		HE Howitzer Shells
 RES_HOWD1_MSG1			_("Howitzer Upgrade")
 RES_HOWD1_MSG2			_("High Explosive shells")
 RES_HOWD1_MSG3			_("Increases Howitzer damage")
 RES_HOWD1_MSG4			_("All howitzers upgraded automatically")
 
-//R-Wpn-Howitzer-Damage04		HEAP Howitzer Shells
-
-//R-Wpn-Howitzer-ROF01		Howitzer Autoloader
 RES_HOWRF1_MSG1			_("Howitzer Upgrade")
 RES_HOWRF1_MSG2			_("Automatic loading mechanism replaces manual loader")
 RES_HOWRF1_MSG3			_("Increases Howitzer ROF")
 RES_HOWRF1_MSG4			_("All howitzers upgraded automatically")
 
-//R-Wpn-Howitzer-ROF01		Howitzer Fast Loader
-
-//R-Wpn-Laser01				Laser - Flashlight
-
-//R-Wpn-Laser02				Pulse Laser
-
-//R-Wpn-Energy-Accuracy01		Improved Laser Focusing
-
-//R-Won-Energy-Damage01			Hi-Energy Laser Emitter
-
-//R-Wpn-Energy-ROF01			Thermopole Energizer
-
-//R-Wpn-HvyLaser				Heavy Laser
-
-//R-Wpn-MG1Mk1			Machinegun
-
-//R-Wpn-MG2Mk1			Twin Machinegun
-
-//R-Wpn-MG3Mk1			Heavy Machinegun
-
-//R-Wpn-MG4				Assault Gun
-
-//WHAT IS THIS?			???
-//RES_ROFUP1_MSG1			_("Research Breakthrough Improves ROF")
-//RES_ROFUP1_MSG2			_("New Autoloader Increases Rate-of-Fire")
-//RES_ROFUP1_MSG3			_("Increases machinegun and cannon Rates-Of-Fire")
-//RES_ROFUP1_MSG4			_("All machineguns and cannons upgraded automatically")
-
-//R-Wpn-MG-Damage01			Hardened MG Bullets
-
-//R-Wpn-MG-Damage02			APDSB MG Bullets
-
-//R-Wpn-MG-Damage05			Tungsten-Tipped MG Bullets
 RES_W_MG_D5_MSG1			_("Machinegun Upgrade")
 RES_W_MG_D5_MSG2			_("Tungsten-tipped armor-piercing bullets")
 RES_W_MG_D5_MSG3			_("Increases Machinegun damage")
 RES_W_MG_D5_MSG4			_("All machineguns upgraded automatically")
 
-//R-Wpn-MG-Damage08			Depleted Uranium MG Bullets
-
-//R-Wpn-MG-Damage10			C-60 Machinegun Bullets
-
-//R-Wpn-MG-ROF01			Chaingun Upgrade
-
-//R-Wpn-MG-ROF02			Rapid Fire Chaingun
 RES_W_MG_ROF2_MSG1		_("Machinegun Upgrade")
 RES_W_MG_ROF2_MSG2		_("Improved chaingun mechanism")
 RES_W_MG_ROF2_MSG3		_("Increases Machinegun ROF")
 RES_W_MG_ROF2_MSG4		_("All machineguns upgraded automatically")
 
-//R-Wpn-MG-ROF03			Hyper Fire Chaingun Upgrade
-
-//R-Wpn-Missile-ASM-AT		Scourge Missile
-
-//R-Wpn-Misisile-ASM-BB		Devastator Missile
-
-//R-Wpn-Missile-LtSAM			Avenger SAM
-
-//R-Wpn-Missile-HvSAM			Vindicator SAM
-
-//R-Wpn-MdArtMissile			Angel Missile
-
-//R-Wpn-HvArtMissile			Archangel Missile
-
-//R-Wpn-Missile-Accuracy01		Target Prediction Missiles
-
-//R-Wpn-Missile-Accuracy02		Search & Destroy Missiles
-
-//R-Wpn-Missile-Damage01		Advanced Missile Warhead
-
-//R-Wpn-Missile-ROF01			Advanced Missile Allocation System
-
-//R-Wpn-MissileSlow-ROF01		Improved Missile Loading System
-
-//R-Wpn-Mortar01Lt			Light Mortar
-
-//R-Wpn-Mortar02Hvy			Heavy Mortar - Bombard
-
-//R-Wpn-Mortar3				Rotary Mortar - Pepperpot
 RES_W_M3_MSG1			_("New Indirect Fire Weapon Available")
 RES_W_M3_MSG2			_("May be assigned to a sensor")
 RES_W_M3_MSG3			_("Best Targets: Base structures, infantry, wheeled vehicles")
 RES_W_M3_MSG4			_("Body Points: Very Low")
 
-//R-Wpn-Mortar-Incendiary			Incendiary Mortar
-
-//R-Wpn-Mortar-Acc01			Mortar Targeting Computer
-
-//R-Wpn-Mortar-Acc02			Thermal Imaging Mortar Shells
-
-//R-Wpn-Mortar-Acc03			Target Acquisition Mortar Shells
-
-//R-Wpn-Mortar-Damage01		HE Mortar Shells
-
-//R-Wpn-Mortar-Damage04		HEAP Mortar Shells
 RES_W_M_D4_MSG1			_("Mortar Upgrade")
 RES_W_M_D4_MSG2			_("High Explosive Armor-Piercing Shells")
 RES_W_M_D4_MSG3			_("Increases Mortar damage")
 RES_W_M_D4_MSG4			_("All mortars upgraded automatically")
 
-//R-Wpn-Mortar-ROF01			Mortar Autoloader
-
-//R-Wpn-Mortar-ROF04			Mortar Fast Loader
-
-//R-Wpn-RailGun01			Needle Gun
-
-//R-Wpn-RailGun02			Rail Gun
-
-//R-Wpn-RailGun03			Gauss Cannon
-
-//R-Wpn-Rail-Accuracy01			Target Prediction Computer
-
-//R-Wpn-Rail-Damage01			Hardened Rail Dart
-
-//R-Wpn-Rail-ROF01			Rail Gun ROF
-
-//R-Wpn-Rocket01-LtAT			Lancer AT Rocket
-
-//R-Wpn-Rocket02-MRL			Mini-Rocket Artillery
-
-//R-Wpn-Rocket03-HvAT			Bunker Buster Rocket
-
-//R-Wpn-Rocket05-MiniPod		Mini-Pod Rockets
-
-//R-Wpn-Rocket06-IDF			Ripple Rockets
-
-//R-Wpn-Rocket07-Tank-Killer		Tank Killer Rocket
-
-//R-Wpn-Rocket-Accuracy01		Stabilized Mini-Rockets
-
-//R-Wpn-Rocket-Damage01		HE Mini-Rockets
-
-//R-Wpn-Rocket-Damage04		HEAP Mini-Rockets
 RES_W_RK_D4_MSG1			_("Mini-Rocket Upgrade")
 RES_W_RK_D4_MSG2			_("High Explosive Armor-Piercing warheads")
 RES_W_RK_D4_MSG3			_("Increases Mini-Rocket damage")
 RES_W_RK_D4_MSG4			_("All mini-rockets upgraded automatically")
 
-//R-Wpn-Rocket-ROF1			Fast Fire Mini-Rockets
-
-//R-Wpn-Rocket-ROF04			Rapid Fire Mini-Rockets
 RES_W_RK_ROF4_MSG1		_("Mini-Rocket Upgrade")
 RES_W_RK_ROF4_MSG2		_("Robotic reload system")
 RES_W_RK_ROF4_MSG3		_("Increases Mini-Rocket ROF")
 RES_W_RK_ROF4_MSG4		_("All mini-rockets upgraded automatically")
 
-//R-Wpn-RocketSlow-Accuracy01		Improved Rocket Wire Guidance
-
-//R-Wpn-RocketSlow-Accuracy02		Rocket Laser Designator
-
-//R-Wpn-RocketSlow-Accuracy03		Thermal Imaging Rockets
-
-//R-Wpn-RocketSlow-Damage01		HEAT Rocket Warhead
-
-//R-Wpn-RocketSlow-Damage04		HESH Rocket Warhead
 RES_W_SRK_D4_MSG1			_("Rocket Upgrade")
 RES_W_SRK_D4_MSG2			_("High Explosive Squash Head warhead")
 RES_W_SRK_D4_MSG3			_("Increases Rocket damage")
 RES_W_SRK_D4_MSG4			_("All rockets upgraded automatically")
-
-//R-Wpn-RocketSlow-ROF01		Rocket Autoloader
-
-//R-Wpn-TUTMG			Machine Gun Artifact
-
-//R-Defense-EMPCannon		EMP Cannon Guard Tower
-
-//R-Sys-SpyTower		Spy Tower
-
-//R-Sys-Sensor-Uplink		Sensor Uplink
-
-//R-Sys-Sensor-WS			Wide Spectrum Sensor
-
-//R-Wpn-LasSat			Laser Satellite Weapon
-
-//R-Wpn-PlasmaCannon			Plasma Cannon
-
-//R-Defense-PlasmaCannon		Plasma Cannon Emplacement
-
-//R-Cyborg-HvyWpn-AT			Scourge Missile Cyborg
-
-//R-Cyborg-HvyWpn-PulseLsr			Pulse Laser Cyborg
-
-//R-Cyborg-HvyWpn-RailGunner		Rail Gunner Cyborg
-
-//R-Defense-Super-MassDriver
-
-//R-Defense-Super-Cannon
-
-//R-Defense-Super-Rocket
-
-//R-Defense-Super-Missile
-
-//R-Wpn-EMPCannon				EMP Cannon
-
-//R-Sys-Sensor-WS				Wide Spectrum Sensor
-
-//R-Vehicle-Body13			Super Heavy Body Wyvern
-
-//R-Vehicle-Body14			Super Heavy Body Dragon
-
-//R-Defense-WallTower-SamHvy		Vindicator SAM Hardpoint
-
-//R-Defense-WallTower-QuadRotAA	Whirlwind AA Hardpoint
-
-//R-Wpn-Flamer-Damage07			Plasmite Flamer Gel
-
-//R-Defense-EMPMortar			EMP Mortar
-
-//R-Defense-AA-Laser			AA Laser Battery
-
-//R-Vehicle-Armor-Heat07		Improved Heat armours
-
-//R-Defense-WallTower-SamSite		Avenger SAM Hardpoint
-
-//R-Defense-WallTower-DoubleAAgun	Cyclone AA Hardpoint
-
-//R-Wpn-MG5					Twin Assault Gun
-
-//R-Defense-WallTower-TwinAGun	Twin Assault Gun Hardpoint
-
-//R-Wpn-Bomb05				Plasmite Bomb Bay
-
-//R-Wpn-Bomb06				EMP Missile Launcher
-
-//R-Comp-CommandTurret02		Command Turret 2
-
-//R-Comp-CommandTurret03		Command Turret 3
-
-//R-Comp-CommandTurret04		Command Turret 4

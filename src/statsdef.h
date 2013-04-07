@@ -262,28 +262,23 @@ enum WEAPON_SIZE
 };
 
 /**
- * only using KINETIC and HEAT for now
+ * Basic weapon type
  */
 enum WEAPON_CLASS
 {
 	WC_KINETIC,					///< bullets etc
-	//WC_EXPLOSIVE,				///< rockets etc - classed as WC_KINETIC now to save space in DROID
 	WC_HEAT,					///< laser etc
-	//WC_MISC					///< others we haven't thought of! - classed as WC_HEAT now to save space in DROID
 	WC_NUM_WEAPON_CLASSES		/** The number of enumerators in this enum.	 */
 };
 
 /**
  * weapon subclasses used to define which weapons are affected by weapon upgrade
  * functions
- *
- * Watermelon:added a new subclass to do some tests
  */
 enum WEAPON_SUBCLASS
 {
 	WSC_MGUN,
 	WSC_CANNON,
-	//WSC_ARTILLARY,
 	WSC_MORTARS,
 	WSC_MISSILE,
 	WSC_ROCKET,
@@ -425,7 +420,6 @@ struct SENSOR_STATS : public COMPONENT_STATS
 struct ECM_STATS : public COMPONENT_STATS
 {
 	UDWORD		range;			///< ECM range
-	UDWORD		power;			///< ECM power (put against sensor power)
 	UDWORD		location;		///< specifies whether the ECM is default or for the Turret
 	iIMDShape	*pMountGraphic; ///< The turret mount to use
 };

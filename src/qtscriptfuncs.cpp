@@ -276,7 +276,8 @@ static bool groupAddObject(BASE_OBJECT *psObj, int groupId, QScriptEngine *engin
 //;; \item[points] Number of resarch points needed to complete the research.
 //;; \item[started] A boolean saying whether or not this research has been started by current player or any of its allies.
 //;; \item[done] A boolean saying whether or not this research has been completed.
-//;; \item[name] A string containing the canonical name of the research.
+//;; \item[name] A string containing the full name of the research.
+//;; \item[id] A string containing the index name of the research.
 //;; \item[type] The type will always be RESEARCH_DATA.
 //;; \end{description}
 QScriptValue convResearch(RESEARCH *psResearch, QScriptEngine *engine, int player)
@@ -295,7 +296,9 @@ QScriptValue convResearch(RESEARCH *psResearch, QScriptEngine *engine, int playe
 	}
 	value.setProperty("started", started); // including whether an ally has started it
 	value.setProperty("done", IsResearchCompleted(&asPlayerResList[player][psResearch->index]));
-	value.setProperty("name", psResearch->pName);
+	value.setProperty("fullname", getName(psResearch->pName)); // temporary
+	value.setProperty("name", psResearch->pName); // will be changed to contain fullname
+	value.setProperty("id", psResearch->pName);
 	value.setProperty("type", SCRIPT_RESEARCH);
 	return value;
 }

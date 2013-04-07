@@ -1581,6 +1581,7 @@ UDWORD calcTemplateBody(DROID_TEMPLATE *psTemplate, UBYTE player)
 	{
 		return 0;
 	}
+	BODY_STATS *psStats = asBodyStats + psTemplate->asParts[COMP_BODY];
 	/* Get the basic component body points */
 	body =
 		(asBodyStats + psTemplate->asParts[COMP_BODY])->body +
@@ -1591,8 +1592,7 @@ UDWORD calcTemplateBody(DROID_TEMPLATE *psTemplate, UBYTE player)
 		(asConstructStats + psTemplate->asParts[COMP_CONSTRUCT])->body;
 
 	/* propulsion body points are a percentage of the bodys' body points */
-	body += (((asPropulsionStats + psTemplate->asParts[COMP_PROPULSION])->body *
-		(asBodyStats + psTemplate->asParts[COMP_BODY])->body) / 100);
+	body += ((asPropulsionStats + psTemplate->asParts[COMP_PROPULSION])->body * psStats->body) / 100;
 
 	/* Add the weapon body points */
 	for(i=0; i<psTemplate->numWeaps; i++)

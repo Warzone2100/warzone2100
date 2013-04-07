@@ -92,9 +92,6 @@ NP-M-LtMortar-Halftrack,Mortar1Mk1,NULL,NULL,1
 NP-M-MdCannon-Halftrack,Cannon2A-TMk1,NULL,NULL,1
 NP-M-MdCannon-Tracks,Cannon2A-TMk1,NULL,NULL,1
 NP-M-MG3-Hover,MG3Mk1,NULL,NULL,1
-NX-Cyb-Miss-JUMP,NX-CyborgMiss,NULL,NULL,3
-NX-Cyb-PulseLas-JUMP,NX-CyborgPulseLas,NULL,NULL,3
-NX-Cyb-Rail1-JUMP,NX-Cyb-Rail1,NULL,NULL,3
 NX-H-HvMiss-Hover,Missile-HvySAM,NULL,NULL,3
 NX-H-Rail2-VTOL,RailGun2-VTOL,NULL,NULL,3
 NX-H-Rail3-Hover,RailGun3Mk1,NULL,NULL,3
