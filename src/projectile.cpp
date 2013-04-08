@@ -677,8 +677,6 @@ static void proj_InFlightFunc(PROJECTILE *psProj)
 	/* we want a delay between Las-Sats firing and actually hitting in multiPlayer
 	magic number but that's how long the audio countdown message lasts! */
 	const unsigned int LAS_SAT_DELAY = 4;
-	// Projectile is missile:
-	bool bMissile = false;
 	BASE_OBJECT *closestCollisionObject = NULL;
 	Spacetime closestCollisionSpacetime;
 	memset(&closestCollisionSpacetime, 0, sizeof(Spacetime));  // Squelch uninitialised warning.
@@ -702,7 +700,7 @@ static void proj_InFlightFunc(PROJECTILE *psProj)
 	}
 
 	/* Calculate extended lifespan where appropriate */
-	int distanceExtensionFactor; /* Extended lifespan */
+	int distanceExtensionFactor = 0; // max extra distance a projectile can travel if misses target
 	switch (psStats->weaponSubClass)
 	{
 		case WSC_MGUN:
@@ -725,17 +723,13 @@ static void proj_InFlightFunc(PROJECTILE *psProj)
 		case WSC_MISSILE:
 		case WSC_SLOWROCKET:
 		case WSC_SLOWMISSILE:
-			bMissile = true; // Take the same extended targetDistance as artillery
-		case WSC_COUNTER:
 		case WSC_MORTARS:
 		case WSC_HOWITZERS:
 		case WSC_LAS_SAT:
 			distanceExtensionFactor = 150;
 			break;
-		default:
-			// WSC_NUM_WEAPON_SUBCLASSES
+		case WSC_NUM_WEAPON_SUBCLASSES:
 			ASSERT(false, "Bad WSC_NUM_WEAPON_SUBCLASS.");
-			distanceExtensionFactor = 0;
 			break;
 	}
 
@@ -847,35 +841,22 @@ static void proj_InFlightFunc(PROJECTILE *psProj)
 			// Dont damage one target twice
 			continue;
 		}
-
-		if (psTempObj->died)
+		else if (psTempObj->died)
 		{
 			// Do not damage dead objects further
 			continue;
 		}
-
-		if (psTempObj->type == OBJ_PROJECTILE &&
-			!(bMissile || ((PROJECTILE*)psTempObj)->psWStats->weaponSubClass == WSC_COUNTER))
-		{
-			// A projectile should not collide with another projectile unless it's a counter-missile weapon
-			continue;
-		}
-
-		if (psTempObj->type == OBJ_FEATURE &&
-			!((FEATURE*)psTempObj)->psStats->damageable)
+		else if (psTempObj->type == OBJ_FEATURE && !((FEATURE*)psTempObj)->psStats->damageable)
 		{
 			// Ignore oil resources, artifacts and other pickups
 			continue;
 		}
-
-		if (aiCheckAlliances(psTempObj->player, psProj->player)
-			&& psTempObj != psProj->psDest)
+		else if (aiCheckAlliances(psTempObj->player, psProj->player) && psTempObj != psProj->psDest)
 		{
 			// No friendly fire unless intentional
 			continue;
 		}
-		
-		if (!(psStats->surfaceToAir & SHOOT_ON_GROUND) &&
+		else if (!(psStats->surfaceToAir & SHOOT_ON_GROUND) &&
 			(psTempObj->type == OBJ_STRUCTURE ||
 				psTempObj->type == OBJ_FEATURE ||
 				(psTempObj->type == OBJ_DROID && !isFlying((DROID *)psTempObj))

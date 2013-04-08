@@ -295,7 +295,6 @@ enum WEAPON_SUBCLASS
 	WSC_BOMB,
 	WSC_COMMAND,
 	WSC_EMP,
-	WSC_COUNTER,				// Counter missile
 	WSC_NUM_WEAPON_SUBCLASSES,	/** The number of enumerators in this enum.	 */
 };
 
