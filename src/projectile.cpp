@@ -699,40 +699,6 @@ static void proj_InFlightFunc(PROJECTILE *psProj)
 		return;
 	}
 
-	/* Calculate extended lifespan where appropriate */
-	int distanceExtensionFactor = 0; // max extra distance a projectile can travel if misses target
-	switch (psStats->weaponSubClass)
-	{
-		case WSC_MGUN:
-		case WSC_COMMAND:
-			distanceExtensionFactor = 120;
-			break;
-		case WSC_CANNON:
-		case WSC_BOMB:
-		case WSC_ELECTRONIC:
-		case WSC_EMP:
-		case WSC_FLAME:
-		case WSC_ENERGY:
-		case WSC_GAUSS:
-			distanceExtensionFactor = 150;
-			break;
-		case WSC_AAGUN: // No extended distance
-			distanceExtensionFactor = 100;
-			break;
-		case WSC_ROCKET:
-		case WSC_MISSILE:
-		case WSC_SLOWROCKET:
-		case WSC_SLOWMISSILE:
-		case WSC_MORTARS:
-		case WSC_HOWITZERS:
-		case WSC_LAS_SAT:
-			distanceExtensionFactor = 150;
-			break;
-		case WSC_NUM_WEAPON_SUBCLASSES:
-			ASSERT(false, "Bad WSC_NUM_WEAPON_SUBCLASS.");
-			break;
-	}
-
 	/* Calculate movement vector: */
 	int32_t currentDistance = 0;
 	switch (psStats->movementModel)
@@ -925,7 +891,7 @@ static void proj_InFlightFunc(PROJECTILE *psProj)
 		return;
 	}
 
-	if (currentDistance*100u >= psStats->longRange*distanceExtensionFactor)  // We've travelled our maximum range.
+	if (currentDistance*100u >= psStats->longRange * psStats->distanceExtensionFactor)  // We've travelled our maximum range.
 	{
 		psProj->state = PROJ_IMPACT;
 		setProjectileDestination(psProj, NULL); /* miss registered if NULL target */

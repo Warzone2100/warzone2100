@@ -472,6 +472,7 @@ struct WEAPON_STATS : public COMPONENT_STATS
 	UBYTE			surfaceToAir;			///< indicates how good in the air - SHOOT_ON_GROUND, SHOOT_IN_AIR or both
 	short			vtolAttackRuns;			///< number of attack runs a VTOL droid can	do with this weapon
 	bool			penetrate;				///< flag to indicate whether pentrate droid or not
+	int			distanceExtensionFactor;	///< max extra distance a projectile can travel if misses target
 
 	/* Graphics control stats */
 	UDWORD			radiusLife;				///< How long a blast radius is visible
