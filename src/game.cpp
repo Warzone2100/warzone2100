@@ -4829,6 +4829,7 @@ static bool loadSaveStructure2(const char *pFileName, STRUCTURE **ppList)
 		}
 		psStructure->resistance = ini.value("resistance", psStructure->resistance).toInt();
 		capacity = ini.value("modules", 0).toInt();
+		psStructure->capacity = 0; // increased when modules are built
 		switch (psStructure->pStructureType->type)
 		{
 		case REF_FACTORY:
@@ -4836,7 +4837,6 @@ static bool loadSaveStructure2(const char *pFileName, STRUCTURE **ppList)
 		case REF_CYBORG_FACTORY:
 			//if factory save the current build info
 			psFactory = ((FACTORY *)psStructure->pFunctionality);
-			psFactory->capacity = 0; // increased when built
 			psFactory->productionLoops = ini.value("Factory/productionLoops", psFactory->productionLoops).toInt();
 			psFactory->timeStarted = ini.value("Factory/timeStarted", psFactory->timeStarted).toInt();
 			psFactory->buildPointsRemaining = ini.value("Factory/buildPointsRemaining", psFactory->buildPointsRemaining).toInt();
@@ -4890,12 +4890,10 @@ static bool loadSaveStructure2(const char *pFileName, STRUCTURE **ppList)
 			break;
 		case REF_RESEARCH:
 			psResearch = ((RESEARCH_FACILITY *)psStructure->pFunctionality);
-			psResearch->capacity = 0; // increased when built
 			//adjust the module structures IMD
 			if (capacity)
 			{
 				psModule = getModuleStat(psStructure);
-				//build the appropriate number of modules
 				buildStructure(psModule, psStructure->pos.x, psStructure->pos.y, psStructure->player, true);
 			}
 			//clear subject
@@ -5102,7 +5100,7 @@ bool writeStructFile(const char *pFileName)
 				    || psCurr->pStructureType->type == REF_VTOL_FACTORY)
 				{
 					FACTORY *psFactory = (FACTORY *)psCurr->pFunctionality;
-					ini.setValue("modules", psFactory->capacity);
+					ini.setValue("modules", psCurr->capacity);
 					ini.setValue("Factory/productionLoops", psFactory->productionLoops);
 					ini.setValue("Factory/timeStarted", psFactory->timeStarted);
 					ini.setValue("Factory/buildPointsRemaining", psFactory->buildPointsRemaining);
@@ -5140,7 +5138,7 @@ bool writeStructFile(const char *pFileName)
 				}
 				else if (psCurr->pStructureType->type == REF_RESEARCH)
 				{
-					ini.setValue("modules", ((RESEARCH_FACILITY *)psCurr->pFunctionality)->capacity);
+					ini.setValue("modules", psCurr->capacity);
 					ini.setValue("Research/timeStartHold", ((RESEARCH_FACILITY *)psCurr->pFunctionality)->timeStartHold);
 					if (((RESEARCH_FACILITY *)psCurr->pFunctionality)->psSubject)
 					{
@@ -5149,7 +5147,7 @@ bool writeStructFile(const char *pFileName)
 				}
 				else if (psCurr->pStructureType->type == REF_POWER_GEN)
 				{
-					ini.setValue("modules", ((POWER_GEN *)psCurr->pFunctionality)->capacity);
+					ini.setValue("modules", psCurr->capacity);
 				}
 				else if (psCurr->pStructureType->type == REF_REPAIR_FACILITY)
 				{

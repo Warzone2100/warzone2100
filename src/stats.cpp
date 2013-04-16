@@ -2243,7 +2243,7 @@ char *allocateName(const char *name)
 	 */
 	if (!strresGetString(psStringRes, name))
 	{
-		debug(LOG_FATAL, "Unable to find string resource for %s", name);
+		ASSERT(false, "Unable to find string resource for %s", name);
 		return NULL;
 	}
 	return strdup(name);

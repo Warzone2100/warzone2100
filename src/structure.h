@@ -50,11 +50,6 @@
 //used to flag when the Factory is ready to start building
 #define ACTION_START_TIME	0
 
-
-extern iIMDShape * factoryModuleIMDs[NUM_FACTORY_MODULES][NUM_FACMOD_TYPES];
-extern iIMDShape * researchModuleIMDs[NUM_RESEARCH_MODULES];
-extern iIMDShape * powerModuleIMDs[NUM_POWER_MODULES];
-
 extern std::vector<ProductionRun> asProductionRun[NUM_FACTORY_TYPES];
 
 //Value is stored for easy access to this structure stat

@@ -636,7 +636,7 @@ void fillTemplateList(std::vector<DROID_TEMPLATE *> &pList, STRUCTURE *psFactory
 	pList.clear();
 
 	DROID_TEMPLATE	*psCurr;
-	UDWORD			iCapacity = psFactory->pFunctionality->factory.capacity;
+	UDWORD iCapacity = psFactory->capacity;
 
 	/* Add the templates to the list*/
 	for (std::list<DROID_TEMPLATE>::iterator i = localTemplates.begin(); i != localTemplates.end(); ++i)

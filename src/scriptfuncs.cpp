@@ -5003,20 +5003,20 @@ static bool	structHasModule(STRUCTURE *psStruct)
 		switch (psStats->type)
 		{
 		case REF_POWER_GEN:
-			if (((POWER_GEN *)psStruct->pFunctionality)->capacity)
+			if (psStruct->capacity)
 			{
 				bFound = true;
 			}
 			break;
 		case REF_FACTORY:
 		case REF_VTOL_FACTORY:
-			if (((FACTORY *)psStruct->pFunctionality)->capacity)
+			if (psStruct->capacity)
 			{
 				bFound = true;
 			}
 			break;
 		case REF_RESEARCH:
-			if (((RESEARCH_FACILITY *)psStruct->pFunctionality)->capacity)
+			if (psStruct->capacity)
 
 			{
 				bFound = true;

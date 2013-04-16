@@ -253,14 +253,7 @@ bool IsStatExpansionModule(STRUCTURE_STATS const *psStats)
 
 static int numStructureModules(STRUCTURE const *psStruct)
 {
-	switch (psStruct->pStructureType->type)
-	{
-		case REF_POWER_GEN:     return psStruct->pFunctionality->powerGenerator.capacity;
-		case REF_VTOL_FACTORY:
-		case REF_FACTORY:       return psStruct->pFunctionality->factory.capacity;
-		case REF_RESEARCH:      return psStruct->pFunctionality->researchFacility.capacity;
-		default:                return 0;
-	}
+	return psStruct->capacity;
 }
 
 bool structureIsBlueprint(STRUCTURE *psStructure)
@@ -943,58 +936,14 @@ void structureBuild(STRUCTURE *psStruct, DROID *psDroid, int buildPoints, int bu
 
 static bool structureHasModules(STRUCTURE *psStruct)
 {
-	if (psStruct->pStructureType->type == REF_POWER_GEN)
-	{
-		return psStruct->pFunctionality->powerGenerator.capacity != 0;
-	}
-	if (StructIsFactory(psStruct))
-	{
-		return psStruct->pFunctionality->factory.capacity != 0;
-	}
-	if (psStruct->pStructureType->type == REF_RESEARCH)
-	{
-		return psStruct->pFunctionality->researchFacility.capacity != 0;
-	}
-	return false;
+	return psStruct->capacity != 0;
 }
 
+// Power returned on demolish. Not sure why it is done this way. FIXME.
 static int structureTotalReturn(STRUCTURE *psStruct)
 {
-	int result = structPowerToBuild(psStruct)/2;
-
-	if(psStruct->pStructureType->type == REF_POWER_GEN)
-	{
-		//if had module attached - the base must have been completely built
-		if (psStruct->pFunctionality->powerGenerator.capacity)
-		{
-			//so add the power required to build the base struct
-			result += psStruct->pStructureType->powerToBuild/2;
-		}
-	}
-	else
-	{
-		//if it had a module attached, need to add the power for the base struct as well
-		if (StructIsFactory(psStruct))
-		{
-			if (psStruct->pFunctionality->factory.capacity)
-			{
-				//if large factory - add half power for one upgrade
-				if (psStruct->pFunctionality->factory.capacity > SIZE_MEDIUM)
-				{
-					result += structPowerToBuild(psStruct) / 2;
-				}
-			}
-		}
-		else if (psStruct->pStructureType->type == REF_RESEARCH)
-		{
-			if (psStruct->pFunctionality->researchFacility.capacity)
-			{
-				//add half power for base struct
-				result += psStruct->pStructureType->powerToBuild/2;
-			}
-		}
-	}
-	return result;
+	int power = structPowerToBuild(psStruct);
+	return psStruct->capacity ? power : power / 2;
 }
 
 void structureDemolish(STRUCTURE *psStruct, DROID *psDroid, int buildPoints)
@@ -1732,8 +1681,6 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 
 		int prevResearchState = intGetResearchState();
 
-		int capacity = 0;  // Dummy initialisation.
-
 		if (pStructureType->type == REF_FACTORY_MODULE)
 		{
 			if (psBuilding->pStructureType->type != REF_FACTORY &&
@@ -1742,20 +1689,18 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 				return NULL;
 			}
 			//increment the capacity and output for the owning structure
-			if (psBuilding->pFunctionality->factory.capacity < SIZE_SUPER_HEAVY)
+			if (psBuilding->capacity < SIZE_SUPER_HEAVY)
 			{
 				//store the % difference in body points before upgrading
 				bodyDiff = 65536 - getStructureDamage(psBuilding);
 
-				++psBuilding->pFunctionality->factory.capacity;
+				psBuilding->capacity++;
 				bUpgraded = true;
 				//put any production on hold
 				holdProduction(psBuilding, ModeImmediate);
 
 				psBuilding->pFunctionality->factory.productionOutput += ((
 					PRODUCTION_FUNCTION*)pStructureType->asFuncList[0])->productionOutput;
-
-				capacity = psBuilding->pFunctionality->factory.capacity;
 			}
 		}
 
@@ -1766,14 +1711,12 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 				return NULL;
 			}
 			//increment the capacity and research points for the owning structure
-			if (psBuilding->pFunctionality->researchFacility.capacity < NUM_RESEARCH_MODULES)
+			if (psBuilding->capacity == 0)
 			{
 				//store the % difference in body points before upgrading
 				bodyDiff = 65536 - getStructureDamage(psBuilding);
 
-				//add all the research modules in one go AB 24/06/98
-				//((RESEARCH_FACILITY*)psBuilding->pFunctionality)->capacity++;
-				psBuilding->pFunctionality->researchFacility.capacity = NUM_RESEARCH_MODULES;
+				psBuilding->capacity++;
 				psBuilding->pFunctionality->researchFacility.researchPoints += ((
 					RESEARCH_FUNCTION*)pStructureType->asFuncList[0])->
 					researchPoints;
@@ -1784,8 +1727,6 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 					//cancel the topic
 					holdResearch(psBuilding, ModeImmediate);
 				}
-
-				capacity = psBuilding->pFunctionality->researchFacility.capacity;
 			}
 		}
 
@@ -1796,17 +1737,14 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 				return NULL;
 			}
 			//increment the capacity and research points for the owning structure
-			if (psBuilding->pFunctionality->powerGenerator.capacity < NUM_POWER_MODULES)
+			if (psBuilding->capacity == 0)
 			{
 				//store the % difference in body points before upgrading
 				bodyDiff = 65536 - getStructureDamage(psBuilding);
 
 				//increment the power output, multiplier and capacity
-				//add all the research modules in one go AB 24/06/98
-				psBuilding->pFunctionality->powerGenerator.capacity = NUM_POWER_MODULES;
+				psBuilding->capacity++;
 				bUpgraded = true;
-
-				capacity = psBuilding->pFunctionality->powerGenerator.capacity;
 
 				//need to inform any res Extr associated that not digging until complete
 				releasePowerGen(psBuilding);
@@ -1816,7 +1754,7 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 		if (bUpgraded)
 		{
 			std::vector<iIMDShape *> &IMDs = psBuilding->pStructureType->pIMD;
-			int imdIndex = std::min<int>(capacity*2, IMDs.size() - 1) - 1;  // *2-1 because even-numbered IMDs are structures, odd-numbered IMDs are just the modules, and we want just the module since we cache the fully-built part of the building in psBuilding->prebuiltImd.
+			int imdIndex = std::min<int>(psBuilding->capacity * 2, IMDs.size() - 1) - 1;  // *2-1 because even-numbered IMDs are structures, odd-numbered IMDs are just the modules, and we want just the module since we cache the fully-built part of the building in psBuilding->prebuiltImd.
 			psBuilding->prebuiltImd = psBuilding->sDisplay.imd;
 			psBuilding->sDisplay.imd = IMDs[imdIndex];
 
@@ -1976,7 +1914,6 @@ static bool setFunctionality(STRUCTURE	*psBuilding, STRUCTURE_TYPE functionType)
 			FACTORY* psFactory = &psBuilding->pFunctionality->factory;
 			unsigned int x, y;
 
-			psFactory->capacity = ((PRODUCTION_FUNCTION*)psBuilding->pStructureType->asFuncList[0])->capacity;
 			psFactory->psSubject = NULL;
 
 			// Default the secondary order - AB 22/04/99
@@ -2022,10 +1959,6 @@ static bool setFunctionality(STRUCTURE	*psBuilding, STRUCTURE_TYPE functionType)
 		}
 		case REF_POWER_GEN:
 		{
-			POWER_GEN* psPowerGen = &psBuilding->pFunctionality->powerGenerator;
-
-			psPowerGen->capacity = 0;
-
 			// Take advantage of upgrades
 			structurePowerUpgrade(psBuilding);
 			break;
@@ -3884,6 +3817,7 @@ STRUCTURE::STRUCTURE(uint32_t id, unsigned player)
 {
 	pos = Vector3i(0, 0, 0);
 	rot = Vector3i(0, 0, 0);
+	capacity = 0;
 }
 
 /* Release all resources associated with a structure */
@@ -5565,14 +5499,11 @@ STRUCTURE_STATS* getModuleStat(const STRUCTURE* psStruct)
 	{
 		case REF_POWER_GEN:
 			return &asStructureStats[powerModuleStat];
-
 		case REF_FACTORY:
 		case REF_VTOL_FACTORY:
 			return &asStructureStats[factoryModuleStat];
-
 		case REF_RESEARCH:
 			return &asStructureStats[researchModuleStat];
-
 		default:
 			//no other structures can have modules attached
 			return NULL;
@@ -6066,10 +5997,10 @@ UDWORD structureBaseBody(const STRUCTURE *psStructure)
 		case REF_FACTORY:
 		case REF_VTOL_FACTORY:
 			ASSERT_OR_RETURN(0, psStructure->pFunctionality != NULL, "Invalid structure functionality pointer for factory base body");
-			if (psStructure->pFunctionality->factory.capacity > 0)
+			if (psStructure->capacity > 0)
 			{
 				//add on the default for the factory
-				return psStats->bodyPoints + asStructureStats[factoryModuleStat].bodyPoints * psStructure->pFunctionality->factory.capacity;
+				return psStats->bodyPoints + asStructureStats[factoryModuleStat].bodyPoints * psStructure->capacity;
 			}
 			else
 			{
@@ -6078,7 +6009,7 @@ UDWORD structureBaseBody(const STRUCTURE *psStructure)
 			}
 		case REF_RESEARCH:
 			ASSERT_OR_RETURN(0, psStructure->pFunctionality != NULL, "Invalid structure functionality pointer for research base body");
-			if (psStructure->pFunctionality->researchFacility.capacity > 0)
+			if (psStructure->capacity > 0)
 			{
 				//add on the default for the factory
 				return psStats->bodyPoints + asStructureStats[researchModuleStat].bodyPoints;
@@ -6090,7 +6021,7 @@ UDWORD structureBaseBody(const STRUCTURE *psStructure)
 			}
 		case REF_POWER_GEN:
 			ASSERT_OR_RETURN(0, psStructure->pFunctionality != NULL, "Invalid structure functionality pointer for power gen base body");
-			if (psStructure->pFunctionality->powerGenerator.capacity > 0)
+			if (psStructure->capacity > 0)
 			{
 				//add on the default for the factory
 				return psStats->bodyPoints + asStructureStats[powerModuleStat].bodyPoints;
@@ -7271,24 +7202,6 @@ STRUCTURE * giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, bool
 	}
 	//check module not attached
 	psModule = getModuleStat(psStructure);
-	if (psModule)
-	{
-		switch(psType->type)
-		{
-		case REF_POWER_GEN:
-			capacity = (UBYTE)psStructure->pFunctionality->powerGenerator.capacity;
-			break;
-		case REF_RESEARCH:
-			capacity = (UBYTE)psStructure->pFunctionality->researchFacility.capacity;
-			break;
-		case REF_FACTORY:
-		case REF_VTOL_FACTORY:
-			capacity = psStructure->pFunctionality->factory.capacity;
-			break;
-		default:
-			break;
-		}
-	}
 	//get rid of the structure
 	(void)removeStruct(psStructure, true);
 
@@ -7297,6 +7210,7 @@ STRUCTURE * giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, bool
 	powerCalculated = false;
 	//build a new one for the attacking player - set last element to true so it doesn't adjust x/y
 	psNewStruct = buildStructure(psType, x, y, attackPlayer, true);
+	capacity = psStructure->capacity;
 	if (psNewStruct)
 	{
 		psNewStruct->rot.direction = direction;
@@ -7388,46 +7302,13 @@ bool checkStructureStats(void)
 /*returns the power cost to build this structure*/
 UDWORD structPowerToBuild(const STRUCTURE* psStruct)
 {
-	STRUCTURE_STATS     *psStat;
-	UBYTE               capacity;
-
-	//see if this structure can have a module attached
-	psStat = getModuleStat(psStruct);
-	if (psStat)
+	if (psStruct->capacity)
 	{
-		capacity = 0;
-		//are we building the module or the base structure?
-		switch(psStruct->pStructureType->type)
-		{
-		case REF_POWER_GEN:
-			capacity = psStruct->pFunctionality->powerGenerator.capacity;
-			break;
-		case REF_RESEARCH:
-			capacity = psStruct->pFunctionality->researchFacility.capacity;
-			break;
-		case REF_FACTORY:
-		case REF_VTOL_FACTORY:
-			capacity = psStruct->pFunctionality->factory.capacity;
-			break;
-		default:
-			break;
-		}
-		if (capacity)
-		{
-			//return the cost to build the module
-			return psStat->powerToBuild;
-		}
-		else
-		{
-			//no module attached so building the base structure
-			return psStruct->pStructureType->powerToBuild;
-		}
+		STRUCTURE_STATS *psStats = getModuleStat(psStruct);
+		return psStats->powerToBuild; // return the cost to build the module
 	}
-	else
-	{
-		//not a module structure, so power cost is the one associated with the stat
-		return psStruct->pStructureType->powerToBuild;
-	}
+	// no module attached so building the base structure
+	return psStruct->pStructureType->powerToBuild;
 }
 
 

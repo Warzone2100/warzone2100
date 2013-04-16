@@ -952,7 +952,7 @@ void structureProductionUpgrade(STRUCTURE *psBuilding)
 	psStat = getModuleStat(psBuilding);
 	if (psStat)
 	{
-		for (i = 0; i < pFact->capacity; i++)
+		for (i = 0; i < psBuilding->capacity; i++)
 		{
 			baseOutput += ((PRODUCTION_FUNCTION *)psStat->asFuncList[0])->productionOutput;
 		}
@@ -979,12 +979,9 @@ void structureResearchUpgrade(STRUCTURE *psBuilding)
 	//current base value depends on whether there are modules attached to the structure
 	baseOutput = pResFunc->researchPoints;
 	psStat = getModuleStat(psBuilding);
-	if (psStat)
+	if (psStat && psBuilding->capacity)
 	{
-		if (pRes->capacity)
-		{
-			baseOutput += ((RESEARCH_FUNCTION *)psStat->asFuncList[0])->researchPoints;
-		}
+		baseOutput += ((RESEARCH_FUNCTION *)psStat->asFuncList[0])->researchPoints;
 	}
 	pRes->researchPoints = baseOutput + (pResFunc->researchPoints *
 	        asResearchUpgrade[psBuilding->player].modifier) / 100;
@@ -1018,12 +1015,9 @@ void structurePowerUpgrade(STRUCTURE *psBuilding)
 	// Current base value depends on whether there are modules attached to the structure
 	multiplier = pPGFunc->powerMultiplier;
 	psStat = getModuleStat(psBuilding);
-	if (psStat)
+	if (psStat && psBuilding->capacity)
 	{
-		if (pPowerGen->capacity)
-		{
-			multiplier += ((POWER_GEN_FUNCTION *)psStat->asFuncList[0])->powerMultiplier;
-		}
+		multiplier += ((POWER_GEN_FUNCTION *)psStat->asFuncList[0])->powerMultiplier;
 	}
 	pPowerGen->multiplier = multiplier + (pPGFunc->powerMultiplier * asPowerUpgrade[psBuilding->player].modifier) / 100;
 }
@@ -1033,7 +1027,6 @@ void structureRepairUpgrade(STRUCTURE *psBuilding)
 	REPAIR_FACILITY			*pRepair = &psBuilding->pFunctionality->repairFacility;
 	REPAIR_DROID_FUNCTION	*pRepairFunc;
 
-	//upgrade the research points
 	ASSERT(pRepair != NULL, "structureRepairUpgrade: invalid Repair pointer");
 
 	pRepairFunc = (REPAIR_DROID_FUNCTION *)psBuilding->pStructureType->asFuncList[0];

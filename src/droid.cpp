@@ -2722,19 +2722,17 @@ int nextModuleToBuild(STRUCTURE const *psStruct, int lastOrderedModule)
 	{
 		case REF_POWER_GEN:
 			//check room for one more!
-			ASSERT_OR_RETURN(false, psStruct->pFunctionality != NULL, "Functionality missing for power!");
-			max = std::max<int>(psStruct->pFunctionality->powerGenerator.capacity/NUM_POWER_MODULES + next, lastOrderedModule + 1);
+			max = std::max<int>(psStruct->capacity + next, lastOrderedModule + 1);
 			if (max <= 1)
 			{
 				i = powerModuleStat;
-				order = max*NUM_POWER_MODULES;  // Power modules are weird. Build one, get three free.
+				order = max;
 			}
 			break;
 		case REF_FACTORY:
 		case REF_VTOL_FACTORY:
 			//check room for one more!
-			ASSERT_OR_RETURN(false, psStruct->pFunctionality != NULL, "Functionality missing for factory!");
-			max = std::max<int>(psStruct->pFunctionality->factory.capacity + next, lastOrderedModule + 1);
+			max = std::max<int>(psStruct->capacity + next, lastOrderedModule + 1);
 			if (max <= NUM_FACTORY_MODULES)
 			{
 				i = factoryModuleStat;
@@ -2743,12 +2741,11 @@ int nextModuleToBuild(STRUCTURE const *psStruct, int lastOrderedModule)
 			break;
 		case REF_RESEARCH:
 			//check room for one more!
-			ASSERT_OR_RETURN(false, psStruct->pFunctionality != NULL, "Functionality missing for research!");
-			max = std::max<int>(psStruct->pFunctionality->researchFacility.capacity/NUM_RESEARCH_MODULES + next, lastOrderedModule + 1);
+			max = std::max<int>(psStruct->capacity + next, lastOrderedModule + 1);
 			if (max <= 1)
 			{
 				i = researchModuleStat;
-				order = max*NUM_RESEARCH_MODULES;  // Research modules are weird. Build one, get three free.
+				order = max;  // Research modules are weird. Build one, get three free.
 			}
 			break;
 		default:

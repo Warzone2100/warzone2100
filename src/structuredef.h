@@ -33,8 +33,7 @@
 #include <vector>
 
 #define NUM_FACTORY_MODULES	2
-#define NUM_RESEARCH_MODULES 4
-#define NUM_POWER_MODULES 4
+#define NUM_POWER_MODULES	4
 
 #define	REF_ANY	255	// Used to indicate any kind of building when calling intGotoNextStructureType()
 
@@ -164,7 +163,6 @@ struct RESEARCH_FACILITY
 	RESEARCH *      psSubjectPending;               // The subject the structure is going to work on when the GAME_RESEARCHSTATUS message is received.
 	StatusPending   statusPending;                  ///< Pending = not yet synchronised.
 	unsigned        pendingCount;                   ///< Number of messages sent but not yet processed.
-	UDWORD		capacity;				/* Number of upgrade modules added*/
 	UDWORD		researchPoints;			/* Research Points produced per research cycle*/
 	RESEARCH *      psBestTopic;                    // The topic with the most research points that was last performed
 	UDWORD		timeStartHold;		    /* The time the research facility was put on hold*/
@@ -174,8 +172,6 @@ struct DROID_TEMPLATE;
 
 struct FACTORY
 {
-	UBYTE				capacity;			/* The max size of body the factory
-											   can produce*/
 	uint8_t                         productionLoops;        ///< Number of loops to perform. Not synchronised, and only meaningful for selectedPlayer.
 	UBYTE				loopsPerformed;		/* how many times the loop has been performed*/
 	int				productionOutput;	/* Droid Build Points Produced Per
@@ -202,7 +198,6 @@ struct RES_EXTRACTOR
 struct POWER_GEN
 {
 	UDWORD			multiplier;				///< Factor to multiply output by - percentage
-	UDWORD			capacity;				///< Number of upgrade modules added
 	struct STRUCTURE *      apResExtractors[NUM_POWER_MODULES];     ///< Pointers to associated oil derricks
 };
 
@@ -279,6 +274,7 @@ struct STRUCTURE : public BASE_OBJECT
 	ANIM_OBJECT	*psCurAnim;
 
 	float		foundationDepth;		///< Depth of structure's foundation
+	uint8_t		capacity;			///< Number of module upgrades
 
 	STRUCT_ANIM_STATES	state;
 	UDWORD			lastStateTime;

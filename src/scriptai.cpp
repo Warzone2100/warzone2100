@@ -1360,7 +1360,7 @@ bool scrSkCanBuildTemplate(void)
 		goto failTempl;
 	}
 
-	if ((asBodyStats + psTempl->asParts[COMP_BODY])->size > ((FACTORY *)psStructure->pFunctionality)->capacity)
+	if ((asBodyStats + psTempl->asParts[COMP_BODY])->size > psStructure->capacity)
 	{
 		goto failTempl;
 	}
@@ -1674,7 +1674,7 @@ bool scrSkGetFactoryCapacity(void)
 
 	if (psStructure && StructIsFactory(psStructure))
 	{
-		count = ((FACTORY *)psStructure->pFunctionality)->capacity;
+		count = psStructure->capacity;
 	}
 
 	scrFunctionResult.v.ival = count;

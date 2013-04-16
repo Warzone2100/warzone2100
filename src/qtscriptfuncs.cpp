@@ -372,18 +372,11 @@ QScriptValue convStructure(STRUCTURE *psStruct, QScriptEngine *engine)
 		break;
 	}
 	if (psStruct->pStructureType->type == REF_FACTORY || psStruct->pStructureType->type == REF_CYBORG_FACTORY
-	    || psStruct->pStructureType->type == REF_VTOL_FACTORY)
+	    || psStruct->pStructureType->type == REF_VTOL_FACTORY
+	    || psStruct->pStructureType->type == REF_RESEARCH
+	    || psStruct->pStructureType->type == REF_POWER_GEN)
 	{
-		FACTORY *psFactory = (FACTORY *)psStruct->pFunctionality;
-		value.setProperty("modules", psFactory->capacity, QScriptValue::ReadOnly);
-	}
-	else if (psStruct->pStructureType->type == REF_RESEARCH)
-	{
-		value.setProperty("modules", ((RESEARCH_FACILITY *)psStruct->pFunctionality)->capacity, QScriptValue::ReadOnly);
-	}
-	else if (psStruct->pStructureType->type == REF_POWER_GEN)
-	{
-		value.setProperty("modules", ((POWER_GEN *)psStruct->pFunctionality)->capacity);
+		value.setProperty("modules", psStruct->capacity, QScriptValue::ReadOnly);
 	}
 	else
 	{
@@ -1645,7 +1638,7 @@ static QScriptValue js_buildDroid(QScriptContext *context, QScriptEngine *engine
 	SCRIPT_ASSERT(context, (psStruct->pStructureType->type == REF_FACTORY || psStruct->pStructureType->type == REF_CYBORG_FACTORY
 		       || psStruct->pStructureType->type == REF_VTOL_FACTORY), "Structure %s is not a factory", objInfo(psStruct));
 	QString templName = context->argument(1).toString();
-	const int capacity = psStruct->pFunctionality->factory.capacity; // body size limit
+	const int capacity = psStruct->capacity; // body size limit
 	DROID_TEMPLATE *psTemplate = makeTemplate(player, psStruct->pos.x, psStruct->pos.y, templName, context, 2, capacity, true);
 	if (psTemplate)
 	{
