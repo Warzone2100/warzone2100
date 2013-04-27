@@ -52,9 +52,12 @@
 
 #define ATTACK_THROTTLE 1000
 
+typedef QList<QStandardItem *> QStandardItemList;
+
 /// selection changes are too often and too erratic to trigger immediately,
 /// so until we have a queue system for events, delay triggering this way.
 static bool selectionChanged = false;
+extern bool doUpdateModels; // ugh-ly hack; fix with signal when moc-ing this file
 
 enum timerType
 {
@@ -466,9 +469,10 @@ bool updateScripts()
 		callFunction(iter->engine, iter->function, args, true);
 	}
 
-	if (globalDialog)
+	if (globalDialog && doUpdateModels)
 	{
 		updateGlobalModels();
+		doUpdateModels = false;
 	}	
 
 	return true;
@@ -709,6 +713,31 @@ bool loadScriptStates(const char *filename)
 	return true;
 }
 
+static QStandardItemList addModelItem(QScriptValueIterator &it)
+{
+	QStandardItemList l;
+	QStandardItem *key = new QStandardItem(it.name());
+	QStandardItem *value = NULL;
+
+	if (it.value().isObject() || it.value().isArray())
+	{
+		QScriptValueIterator obit(it.value());
+		while (obit.hasNext())
+		{
+			obit.next();
+			key->appendRow(addModelItem(obit));
+		}
+		value = new QStandardItem("[Object]");
+	}
+	else
+	{
+		value = new QStandardItem(it.value().toString());
+	}
+	l += key;
+	l += value;
+	return l;
+}
+
 static void updateGlobalModels()
 {
 	for (int i = 0; i < scripts.size(); ++i)
@@ -721,12 +750,11 @@ static void updateGlobalModels()
 		while (it.hasNext())
 		{
 			it.next();
-			if (!internalNamespace.contains(it.name()) && !it.value().isFunction())
+			if ((!internalNamespace.contains(it.name()) && !it.value().isFunction())
+			    || it.name() == "Upgrades" || it.name() == "Stats")
 			{
-				int nextRow = m->rowCount();
-				m->setRowCount(nextRow);
-				m->setItem(nextRow, 0, new QStandardItem(it.name()));
-				m->setItem(nextRow, 1, new QStandardItem(it.value().toString()));
+				QStandardItemList list = addModelItem(it);
+				m->appendRow(list);
 			}
 		}
 	}

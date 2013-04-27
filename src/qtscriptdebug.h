@@ -61,6 +61,7 @@ protected slots:
 	void labelClickedIdx(const QModelIndex &idx);
 	void labelClicked();
 	void runClicked(QObject *obj);
+	void updateModels();
 };
 
 void jsDebugCreate(const MODELMAP &models, QStandardItemModel *triggerModel);

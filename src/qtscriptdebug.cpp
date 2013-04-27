@@ -51,6 +51,7 @@
 #include "qtscriptfuncs.h"
 
 static ScriptDebugger *globalDialog = NULL;
+bool doUpdateModels = false;
 
 // ----------------------------------------------------------
 
@@ -74,11 +75,14 @@ ScriptDebugger::ScriptDebugger(const MODELMAP &models, QStandardItemModel *trigg
 		QLineEdit *lineEdit = new QLineEdit(this);
 		QVBoxLayout *layout = new QVBoxLayout();
 		QHBoxLayout *layout2 = new QHBoxLayout();
+		QPushButton *updateButton = new QPushButton("Update", this);
 		QPushButton *button = new QPushButton("Run", this);
 		connect(button, SIGNAL(pressed()), signalMapper, SLOT(map()));
+		connect(updateButton, SIGNAL(pressed()), this, SLOT(updateModels()));
 		signalMapper->setMapping(button, engine);
 		editMap.insert(engine, lineEdit); // store this for slot
 		layout->addWidget(view);
+		layout2->addWidget(updateButton);
 		layout2->addWidget(lineEdit);
 		layout2->addWidget(button);
 		layout->addLayout(layout2);
@@ -131,6 +135,11 @@ void ScriptDebugger::runClicked(QObject *obj)
 	{
 		jsEvaluate(engine, line->text());
 	}
+}
+
+void ScriptDebugger::updateModels()
+{
+	doUpdateModels = true;
 }
 
 void ScriptDebugger::labelClicked()
