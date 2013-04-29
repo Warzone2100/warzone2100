@@ -1823,7 +1823,7 @@ std::vector<AllyResearch> const &listAllyResearch(unsigned ref)
 
 		for (int player = 0; player < MAX_PLAYERS; ++player)
 		{
-			if (player == selectedPlayer || !aiCheckAlliances(selectedPlayer, player))
+			if (player == selectedPlayer || !aiCheckAlliances(selectedPlayer, player) || !alliancesSharedResearch(game.alliance))
 			{
 				continue;  // Skip this player, not an ally.
 			}

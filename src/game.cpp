@@ -1764,7 +1764,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 				{
 					alliances[i][j] = saveGameData.alliances[i][j];
 					if (i == j) alliances[i][j] = ALLIANCE_FORMED;	// hack to fix old savegames
-					if (game.alliance == ALLIANCES_TEAMS && alliances[i][j] == ALLIANCE_FORMED)
+					if (alliancesSharedVision(game.alliance) && alliances[i][j] == ALLIANCE_FORMED)
 					{
 			                	alliancebits[i] |= 1 << j;
 					}

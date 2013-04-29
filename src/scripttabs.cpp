@@ -1980,6 +1980,7 @@ CONST_SYMBOL asConstantTable[] =
 	{ "NO_ALLIANCES",	VAL_INT,	false,	NO_ALLIANCES,		NULL, NULL, 0.0f },
 	{ "ALLIANCES",		VAL_INT,	false,	ALLIANCES,			NULL, NULL, 0.0f },
 	{ "ALLIANCES_TEAMS",VAL_INT,	false,	ALLIANCES_TEAMS,	NULL, NULL, 0.0f },
+	{ "ALLIANCES_UNSHARED", VAL_INT,        false,  ALLIANCES_UNSHARED,             NULL, NULL, 0.0f },
 
 	//Group types
 	{ "GT_NORMAL",		VAL_INT,	false,	GT_NORMAL,			NULL, NULL, 0.0f },

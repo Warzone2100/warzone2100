@@ -3167,7 +3167,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 					researchResult(researchIndex, psStructure->player, true, psStructure, true);
 
 					// Update allies research accordingly
-					if (game.type == SKIRMISH)
+					if (game.type == SKIRMISH && alliancesSharedResearch(game.alliance))
 					{
 						for (i = 0; i < MAX_PLAYERS; i++)
 						{

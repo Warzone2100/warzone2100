@@ -1189,7 +1189,7 @@ bool stageThreeInitialise(void)
 	setAllPauseStates(false);
 
 	/* decide if we have to create teams, ONLY in multiplayer mode!*/
-	if (bMultiPlayer && game.alliance == ALLIANCES_TEAMS)
+	if (bMultiPlayer && alliancesSharedVision(game.alliance))
 	{
 		createTeamAlliances();
 

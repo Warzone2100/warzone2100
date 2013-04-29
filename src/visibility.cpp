@@ -463,7 +463,7 @@ bool hasSharedVision(unsigned viewer, unsigned ally)
 {
 	ASSERT_OR_RETURN(false, viewer < MAX_PLAYERS && ally < MAX_PLAYERS, "Bad viewer %u or ally %u.", viewer, ally);
 
-	return viewer == ally || (bMultiPlayer && game.alliance == ALLIANCES_TEAMS && aiCheckAlliances(viewer, ally));
+	return viewer == ally || (bMultiPlayer && alliancesSharedVision(game.alliance) && aiCheckAlliances(viewer, ally));
 }
 
 static void setSeenBy(BASE_OBJECT *psObj, unsigned viewer, int val /*= UBYTE_MAX*/)

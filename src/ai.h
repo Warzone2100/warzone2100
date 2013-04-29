@@ -32,9 +32,13 @@
 #define ALLIANCE_FORMED		3
 #define	ALLIANCE_NULL		4			// for setting values only.
 
-#define NO_ALLIANCES		0			//alliance possibilities for games.
-#define ALLIANCES			1
-#define	ALLIANCES_TEAMS		2			//locked teams
+enum AllianceType
+{
+	NO_ALLIANCES,        // FFA
+	ALLIANCES,           // Players can make and break alliances during the game.
+	ALLIANCES_TEAMS,     // Alliances are set before the game.
+	ALLIANCES_UNSHARED,  // Alliances are set before the game. No shared research.
+};
 
 /// Amount of time to rage at the world when frustrated (10 seconds)
 #define FRUSTRATED_TIME (1000 * 10)
@@ -62,7 +66,6 @@ void aiUpdateDroid(DROID *psDroid);
 // Find the nearest best target for a droid
 // returns integer representing quality of choice, -1 if failed
 int aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot, int extraRange = 0);
-int aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot, void const *extraRange);
 
 // Are there a lot of bullets heading towards the structure?
 bool aiObjectIsProbablyDoomed(BASE_OBJECT *psObject);
@@ -80,5 +83,13 @@ bool aiChooseSensorTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget);
 /*set of rules which determine whether the weapon associated with the object
 can fire on the propulsion type of the target*/
 bool validTarget(BASE_OBJECT *psObject, BASE_OBJECT *psTarget, int weapon_slot);
+
+// Check properties of the AllianceType enum.
+static inline bool alliancesFixed(int t) { return t != ALLIANCES; }
+static inline bool alliancesSharedVision(int t) { return t == ALLIANCES_TEAMS || t == ALLIANCES_UNSHARED; }
+static inline bool alliancesSharedResearch(int t) { return t == ALLIANCES || t == ALLIANCES_TEAMS; }
+static inline bool alliancesSetTeamsBeforeGame(int t) { return t == ALLIANCES_TEAMS || t == ALLIANCES_UNSHARED; }
+static inline bool alliancesCanGiveResearchAndRadar(int t) { return t == ALLIANCES; }
+static inline bool alliancesCanGiveAnything(int t) { return t != NO_ALLIANCES; }
 
 #endif // __INCLUDED_SRC_AI_H__

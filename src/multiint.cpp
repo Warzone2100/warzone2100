@@ -1587,6 +1587,7 @@ static void addGameOptions()
 	allianceChoice->setLabel(_("Alliances"));
 	allianceChoice->addButton(NO_ALLIANCES, Image(FrontImages, IMAGE_NOALLI), Image(FrontImages, IMAGE_NOALLI_HI), _("No Alliances"));
 	allianceChoice->addButton(ALLIANCES, Image(FrontImages, IMAGE_ALLI), Image(FrontImages, IMAGE_ALLI_HI), _("Allow Alliances"));
+	allianceChoice->addButton(ALLIANCES_UNSHARED, Image(FrontImages, IMAGE_ALLI_UNSHARED), Image(FrontImages, IMAGE_ALLI_UNSHARED_HI), _("Locked Teams, No Shared Research"));
 	allianceChoice->addButton(ALLIANCES_TEAMS, Image(FrontImages, IMAGE_ALLI_TEAMS), Image(FrontImages, IMAGE_ALLI_TEAMS_HI), _("Locked Teams"));
 	allianceChoice->enable(!locked.alliances);
 	optionsList->addWidgetToLayout(allianceChoice);
@@ -2372,7 +2373,7 @@ void addPlayerBox(bool players)
 		{
 			if (game.skDiff[i] || isHumanPlayer(i))
 			{
-				int myTeam = game.alliance != ALLIANCES_TEAMS? NetPlay.players[i].team : i;
+				int myTeam = alliancesSetTeamsBeforeGame(game.alliance)? NetPlay.players[i].team : i;
 				if (team == -1)
 				{
 					team = myTeam;
@@ -2441,7 +2442,7 @@ void addPlayerBox(bool players)
 				{
 					addTeamChooser(i);
 				}
-				else if (game.alliance == ALLIANCES_TEAMS)
+				else if (alliancesSetTeamsBeforeGame(game.alliance))
 				{
 					// only if not disabled and in locked teams mode
 					widgAddButton(psWScreen, &sButInit);
@@ -3114,7 +3115,7 @@ static void processMultiopWidgets(UDWORD id)
 			}
 		}
 
-		if (NetPlay.isHost && game.alliance != ALLIANCES_TEAMS)
+		if (NetPlay.isHost && !alliancesSetTeamsBeforeGame(game.alliance))
 		{
 			if(mouseDown(MOUSE_RMB) && player != NetPlay.hostPlayer) // both buttons....
 			{

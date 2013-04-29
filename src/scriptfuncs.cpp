@@ -3663,7 +3663,7 @@ bool scrCreateAlliance(void)
 
 	if (bMultiPlayer)
 	{
-		if (game.alliance == NO_ALLIANCES || game.alliance == ALLIANCES_TEAMS
+		if (alliancesFixed(game.alliance)
 		    || player1 >= game.maxPlayers || player2 >= game.maxPlayers)
 		{
 			return true;
@@ -3684,7 +3684,7 @@ bool scrOfferAlliance(void)
 	{
 		return false;
 	}
-	if (game.alliance == NO_ALLIANCES || game.alliance == ALLIANCES_TEAMS ||
+	if (alliancesFixed(game.alliance) ||
 	    player1 < 0 || player1 >= MAX_PLAYERS ||
 	    player2 < 0 || player2 >= MAX_PLAYERS)
 	{
@@ -3716,7 +3716,7 @@ bool scrBreakAlliance(void)
 
 	if (bMultiPlayer)
 	{
-		if (game.alliance == NO_ALLIANCES || game.alliance == ALLIANCES_TEAMS
+		if (alliancesFixed(game.alliance)
 		    || player1 >= game.maxPlayers || player2 >= game.maxPlayers)
 		{
 			return true;
@@ -9734,7 +9734,7 @@ bool scrAlliancesLocked(void)
 {
 	bool		bResult = true;
 
-	if (bMultiPlayer && (game.alliance == ALLIANCES))
+	if (bMultiPlayer && !alliancesFixed(game.alliance))
 	{
 		bResult = false;
 	}

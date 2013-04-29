@@ -691,11 +691,11 @@ static void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 
 		//c3-7 alliance
 		//manage buttons by showing or hiding them. gifts only in campaign,
-		if (game.alliance != NO_ALLIANCES)
+		if (alliancesCanGiveAnything(game.alliance))
 		{
 			if (isAlly && !isSelectedPlayer && !giftsUp[player] )
 			{
-				if (game.alliance != ALLIANCES_TEAMS)
+				if (alliancesCanGiveResearchAndRadar(game.alliance))
 				{
 					widgReveal(psWScreen, MULTIMENU_GIFT_RAD + player);
 					widgReveal(psWScreen, MULTIMENU_GIFT_RES + player);
@@ -706,7 +706,7 @@ static void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 			}
 			else if (!isAlly && !isSelectedPlayer && giftsUp[player])
 			{
-				if (game.alliance != ALLIANCES_TEAMS)
+				if (alliancesCanGiveResearchAndRadar(game.alliance))
 				{
 					widgHide(psWScreen, MULTIMENU_GIFT_RAD + player);
 					widgHide(psWScreen, MULTIMENU_GIFT_RES + player);
@@ -958,7 +958,7 @@ static void addMultiPlayer(UDWORD player,UDWORD pos)
 		widgAddButton(psWScreen, &sButInit);
 	}
 
-	if(game.alliance!=NO_ALLIANCES && player!=selectedPlayer)
+	if (alliancesCanGiveAnything(game.alliance) && player != selectedPlayer)
 	{
 		//alliance
 		sButInit.x		= MULTIMENU_C3;
@@ -971,7 +971,7 @@ static void addMultiPlayer(UDWORD player,UDWORD pos)
 		sButInit.UserData = player;
 
 		//can't break alliances in 'Locked Teams' mode
-		if(game.alliance != ALLIANCES_TEAMS)
+		if (!alliancesFixed(game.alliance))
 		{
 			widgAddButton(psWScreen, &sButInit);
 		}
@@ -981,7 +981,7 @@ static void addMultiPlayer(UDWORD player,UDWORD pos)
 			// add the gift buttons.
 			sButInit.y		+= 1;	// move down a wee bit.
 
-		if (game.alliance != ALLIANCES_TEAMS)
+		if (alliancesCanGiveResearchAndRadar(game.alliance))
 		{
 			sButInit.id		= MULTIMENU_GIFT_RAD+ player;
 			sButInit.x		= MULTIMENU_C4;

@@ -322,7 +322,7 @@ static void giftResearch(uint8_t from, uint8_t to, bool send)
 			NETuint32_t(&dummy);
 		NETend();
 	}
-	else
+	else if (alliancesCanGiveResearchAndRadar(game.alliance))
 	{
 		if (to == selectedPlayer)
 		{
@@ -479,7 +479,7 @@ void formAlliance(uint8_t p1, uint8_t p2, bool prop, bool allowAudio, bool allow
 	syncDebug("Form alliance %d %d", p1, p2);
 	alliances[p1][p2] = ALLIANCE_FORMED;
 	alliances[p2][p1] = ALLIANCE_FORMED;
-	if (game.alliance == ALLIANCES_TEAMS)	// this is for shared vision only
+	if (alliancesSharedVision(game.alliance))	// this is for shared vision only
 	{
 		alliancebits[p1] |= 1 << p2;
 		alliancebits[p2] |= 1 << p1;
@@ -491,7 +491,7 @@ void formAlliance(uint8_t p1, uint8_t p2, bool prop, bool allowAudio, bool allow
 	}
 
 	// Not campaign and alliances are transitive
-	if (game.alliance == ALLIANCES_TEAMS)
+	if (alliancesSharedVision(game.alliance))
 	{
 		giftRadar(p1, p2, false);
 		giftRadar(p2, p1, false);
