@@ -1286,7 +1286,7 @@ static QScriptValue js_pursueResearch(QScriptContext *context, QScriptEngine *en
 			bool started = false;
 			for (int i = 0; i < game.maxPlayers; i++)
 			{
-				if (aiCheckAlliances(player, i) || i == player)
+				if (i == player || (aiCheckAlliances(player, i) && alliancesSharedResearch(game.alliance)))
 				{
 					int bits = asPlayerResList[i][cur->index].ResearchStatus;
 					started = started || (bits & STARTED_RESEARCH) || (bits & STARTED_RESEARCH_PENDING)
