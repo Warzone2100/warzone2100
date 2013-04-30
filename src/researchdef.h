@@ -24,7 +24,7 @@
 #ifndef __INCLUDED_RESEARCHDEF_H__
 #define __INCLUDED_RESEARCHDEF_H__
 
-#include <QStringList>
+#include <QtCore/QStringList>
 #include "lib/framework/frame.h"
 #include "statsdef.h"
 
