@@ -201,7 +201,7 @@ function checkEndConditions()
 		var gameLost = true;
 
 		/* If teams enabled check if all team members have lost  */
-		if (alliancesType == ALLIANCES_TEAMS)
+		if (alliancesType == ALLIANCES_TEAMS || alliancesType == ALLIANCES_UNSHARED)
 		{
 			for (var playnum = 0; playnum < maxPlayers; playnum++)
 			{
