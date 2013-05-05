@@ -101,7 +101,7 @@ bool loadConfig()
 	game.hash.setZero();
 	game.maxPlayers = 4;
 
-	game.power = ini.value("power", LEV_MED).toInt();
+	game.power = ini.value("powerLevel", LEV_MED).toInt();
 	game.base = ini.value("base", CAMP_BASE).toInt();
 	game.alliance = ini.value("alliance", NO_ALLIANCES).toInt();
 	game.scavengers = ini.value("scavengers", false).toBool();
@@ -206,7 +206,7 @@ bool saveConfig()
 			ini.setValue("mapName", game.map);				//  map name
 			ini.setValue("mapHash", game.hash.toString().c_str());          //  map hash
 			ini.setValue("maxPlayers", game.maxPlayers);		// maxPlayers
-			ini.setValue("power", game.power);				// power
+			ini.setValue("powerLevel", game.power);				// power
 			ini.setValue("base", game.base);				// size of base
 			ini.setValue("alliance", game.alliance);		// allow alliances
 			ini.setValue("scavengers", game.scavengers);
@@ -267,7 +267,7 @@ bool reloadMPConfig(void)
 		game.hash.setZero();
 		game.maxPlayers = 4;
 
-		ini.setValue("power", game.power);				// power
+		ini.setValue("powerLevel", game.power);				// power
 		ini.setValue("base", game.base);				// size of base
 		ini.setValue("alliance", game.alliance);		// allow alliances
 		return true;
@@ -286,7 +286,7 @@ bool reloadMPConfig(void)
 	game.hash.setZero();
 	game.maxPlayers = 4;
 
-	game.power = ini.value("power", LEV_MED).toInt();
+	game.power = ini.value("powerLevel", LEV_MED).toInt();
 	game.base = ini.value("base", CAMP_BASE).toInt();
 	game.alliance = ini.value("alliance", NO_ALLIANCES).toInt();
 

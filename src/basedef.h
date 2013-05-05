@@ -103,11 +103,8 @@ struct BASE_OBJECT : public SIMPLE_OBJECT
 	UDWORD              body;                       ///< Hit points with lame name
 	UDWORD              periodicalDamageStart;                  ///< When the object entered the fire
 	UDWORD              periodicalDamage;                 ///< How much damage has been done since the object entered the fire
-	SDWORD              sensorRange;                ///< Range of sensor
-	SDWORD              ECMMod;                     ///< Ability to conceal others from sensors
 	bool                bTargetted;                 ///< Whether object is targetted by a selectedPlayer droid sensor (quite the hack)
 	TILEPOS             *watchedTiles;              ///< Variable size array of watched tiles, NULL for features
-	UDWORD              armour[WC_NUM_WEAPON_CLASSES];
 
 	NEXTOBJ             psNext;                     ///< Pointer to the next object in the object list
 	NEXTOBJ             psNextFunc;                 ///< Pointer to the next object in the function list

@@ -113,14 +113,7 @@ struct STRUCTURE_STATS : public BASE_STATS
 									  the structure*/
 	UDWORD		height;				/*The height above/below the terrain - negative
 									  values denote below the terrain*/
-	UDWORD		armourValue;		/*The armour value for the structure - can be
-									  upgraded */
-	UDWORD		bodyPoints;			/*The structure's body points - A structure goes
-									  off-line when 50% of its body points are lost*/
 	UDWORD		powerToBuild;		/*How much power the structure requires to build*/
-	UDWORD		resistance;			/*The number used to determine whether a
-									  structure can resist an enemy takeover -
-									  0 = cannot be attacked electrically*/
 	std::vector<iIMDShape *> pIMD;          // The IMDs to draw for this structure, for each possible number of modules.
 	iIMDShape	*pBaseIMD;	/*The base IMD to draw for this structure */
 	struct ECM_STATS	*pECM;		/*Which ECM is standard for the structure -
@@ -133,8 +126,18 @@ struct STRUCTURE_STATS : public BASE_STATS
 
 	struct WEAPON_STATS    *psWeapStat[STRUCT_MAXWEAPS];
 
-	SDWORD		defaultFunc;		/*The default function*/
-	std::vector<struct FUNCTION *> asFuncList;               ///< List of pointers to allowable functions - unalterable
+	struct
+	{
+		short research;
+		short repair;
+		short power;
+		short production;
+		short rearm;
+		short armour;
+		short thermal;
+		short hitpoints;
+		short resistance;	// resist enemy takeover; 0 = immune
+	} upgrade[MAX_PLAYERS], base;
 };
 
 enum STRUCT_STATES
@@ -163,7 +166,6 @@ struct RESEARCH_FACILITY
 	RESEARCH *      psSubjectPending;               // The subject the structure is going to work on when the GAME_RESEARCHSTATUS message is received.
 	StatusPending   statusPending;                  ///< Pending = not yet synchronised.
 	unsigned        pendingCount;                   ///< Number of messages sent but not yet processed.
-	UDWORD		researchPoints;			/* Research Points produced per research cycle*/
 	RESEARCH *      psBestTopic;                    // The topic with the most research points that was last performed
 	UDWORD		timeStartHold;		    /* The time the research facility was put on hold*/
 };
@@ -174,8 +176,6 @@ struct FACTORY
 {
 	uint8_t                         productionLoops;        ///< Number of loops to perform. Not synchronised, and only meaningful for selectedPlayer.
 	UBYTE				loopsPerformed;		/* how many times the loop has been performed*/
-	int				productionOutput;	/* Droid Build Points Produced Per
-											   Build Cycle*/
 	DROID_TEMPLATE *                psSubject;              ///< The subject the structure is working on.
 	DROID_TEMPLATE *                psSubjectPending;       ///< The subject the structure is going to working on. (Pending = not yet synchronised.)
 	StatusPending                   statusPending;          ///< Pending = not yet synchronised.
@@ -197,7 +197,6 @@ struct RES_EXTRACTOR
 
 struct POWER_GEN
 {
-	UDWORD			multiplier;				///< Factor to multiply output by - percentage
 	struct STRUCTURE *      apResExtractors[NUM_POWER_MODULES];     ///< Pointers to associated oil derricks
 };
 
@@ -205,7 +204,6 @@ class DROID_GROUP;
 
 struct REPAIR_FACILITY
 {
-	UDWORD                          power;                  // Repair rate. Nothing to do with power.
 	BASE_OBJECT                     *psObj;                 /* Object being repaired */
 	FLAG_POSITION                   *psDeliveryPoint;       /* Place for the repaired droids to assemble at */
 
@@ -216,7 +214,6 @@ struct REPAIR_FACILITY
 
 struct REARM_PAD
 {
-	UDWORD                          reArmPoints;            /* rearm points per cycle */
 	UDWORD                          timeStarted;            /* Time reArm started on current object */
 	BASE_OBJECT                     *psObj;                 /* Object being rearmed */
 	UDWORD                          timeLastUpdated;        /* Time rearm was last updated */
@@ -324,28 +321,11 @@ struct ProductionRunEntry
 };
 typedef std::vector<ProductionRunEntry> ProductionRun;
 
-/* structure stats which can be upgraded by research*/
-struct STRUCTURE_UPGRADE
-{
-	UWORD			armour;
-	UWORD			body;
-	UWORD			resistance;
-};
-
-/* wall/Defence structure stats which can be upgraded by research*/
-struct WALLDEFENCE_UPGRADE
-{
-	UWORD			armour;
-	UWORD			body;
-};
-
 struct UPGRADE
 {
 	UWORD		modifier;		//% to increase the stat by
 };
 
-typedef UPGRADE		RESEARCH_UPGRADE;
-typedef UPGRADE		PRODUCTION_UPGRADE;
 typedef UPGRADE		REPAIR_FACILITY_UPGRADE;
 typedef UPGRADE		POWER_UPGRADE;
 typedef UPGRADE		REARM_UPGRADE;

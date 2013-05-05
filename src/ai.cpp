@@ -77,12 +77,12 @@ PlayerMask alliancebits[MAX_PLAYER_SLOTS];
 /// A bitfield for the satellite uplink
 PlayerMask satuplinkbits;
 
-static int aiObjRange(DROID *psDroid, int weapon_slot)
+static int aiDroidRange(DROID *psDroid, int weapon_slot)
 {
 	int32_t longRange;
 	if (psDroid->droidType == DROID_SENSOR)
 	{
-		longRange = psDroid->sensorRange;
+		longRange = objSensorRange(psDroid);
 	}
 	else if (psDroid->numWeaps == 0 || psDroid->asWeaps[0].nStat == 0)
 	{
@@ -92,7 +92,7 @@ static int aiObjRange(DROID *psDroid, int weapon_slot)
 	else
 	{
 		WEAPON_STATS *psWStats = psDroid->asWeaps[weapon_slot].nStat + asWeaponStats;
-		longRange = proj_GetLongRange(psWStats);
+		longRange = proj_GetLongRange(psWStats, psDroid->player);
 	}
 
 	return longRange;
@@ -109,13 +109,13 @@ static bool aiStructHasRange(STRUCTURE *psStruct, BASE_OBJECT *psTarget, int wea
 
 	WEAPON_STATS *psWStats = psStruct->asWeaps[weapon_slot].nStat + asWeaponStats;
 
-	int longRange = proj_GetLongRange(psWStats);
+	int longRange = proj_GetLongRange(psWStats, psStruct->player);
 	return objPosDiffSq(psStruct, psTarget) < longRange*longRange && lineOfFire(psStruct, psTarget, weapon_slot, true);
 }
 
 static bool aiDroidHasRange(DROID *psDroid, BASE_OBJECT *psTarget, int weapon_slot)
 {
-	int32_t longRange = aiObjRange(psDroid, weapon_slot);
+	int32_t longRange = aiDroidRange(psDroid, weapon_slot);
 
 	return objPosDiffSq(psDroid, psTarget) < longRange*longRange;
 }
@@ -163,10 +163,10 @@ bool aiShutdown(void)
 /** Search the global list of sensors for a possible target for psObj. */
 static BASE_OBJECT *aiSearchSensorTargets(BASE_OBJECT *psObj, int weapon_slot, WEAPON_STATS *psWStats, UWORD *targetOrigin)
 {
-	int		longRange = proj_GetLongRange(psWStats);
+	int		longRange = proj_GetLongRange(psWStats, psObj->player);
 	int		tarDist = longRange * longRange;
 	bool		foundCB = false;
-	int		minDist = psWStats->minRange * psWStats->minRange;
+	int		minDist = psWStats->upgrade[psObj->player].minRange * psWStats->upgrade[psObj->player].minRange;
 	BASE_OBJECT	*psSensor, *psTarget = NULL;
 
 	if (targetOrigin)
@@ -330,10 +330,10 @@ static SDWORD targetAttackWeight(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker,
 	bEmpWeap = (attackerWeapon->weaponSubClass == WSC_EMP);
 
 	int dist = iHypot(removeZ(psAttacker->pos - psTarget->pos));
-	bool tooClose = dist <= attackerWeapon->minRange;
+	bool tooClose = dist <= attackerWeapon->upgrade[psAttacker->player].minRange;
 	if (tooClose)
 	{
-		dist = psAttacker->sensorRange;  // If object is too close to fire at, consider it to be at maximum range.
+		dist = objSensorRange(psAttacker);  // If object is too close to fire at, consider it to be at maximum range.
 	}
 
 	/* Calculate attack weight */
@@ -394,7 +394,7 @@ static SDWORD targetAttackWeight(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker,
 		/* Now calculate the overall weight */
 		attackWeight = asWeaponModifier[weaponEffect][(asPropulsionStats + targetDroid->asBits[COMP_PROPULSION].nStat)->propulsionType] // Our weapon's effect against target
 				+ asWeaponModifierBody[weaponEffect][(asBodyStats + targetDroid->asBits[COMP_BODY].nStat)->size]
-				+ WEIGHT_DIST_TILE_DROID * psAttacker->sensorRange/TILE_UNITS
+				+ WEIGHT_DIST_TILE_DROID * objSensorRange(psAttacker) / TILE_UNITS
 				- WEIGHT_DIST_TILE_DROID * dist/TILE_UNITS // farther droids are less attractive
 				+ WEIGHT_HEALTH_DROID * damageRatio/100 // we prefer damaged droids
 				+ targetTypeBonus; // some droid types have higher priority
@@ -436,7 +436,7 @@ static SDWORD targetAttackWeight(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker,
 
 		/* Now calculate the overall weight */
 		attackWeight = asStructStrengthModifier[weaponEffect][targetStructure->pStructureType->strength] // Our weapon's effect against target
-				+ WEIGHT_DIST_TILE_STRUCT * psAttacker->sensorRange/TILE_UNITS
+				+ WEIGHT_DIST_TILE_STRUCT * objSensorRange(psAttacker) / TILE_UNITS
 				- WEIGHT_DIST_TILE_STRUCT * dist/TILE_UNITS // farther structs are less attractive
 				+ WEIGHT_HEALTH_STRUCT * damageRatio/100 // we prefer damaged structures
 				+ targetTypeBonus; // some structure types have higher priority
@@ -550,7 +550,7 @@ int aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot, i
 	electronic = electronicDroid(psDroid);
 
 	// Range was previously 9*TILE_UNITS. Increasing this doesn't seem to help much, though. Not sure why.
-	int droidRange = std::min(aiObjRange(psDroid, weapon_slot) + extraRange, psDroid->sensorRange + 6*TILE_UNITS);
+	int droidRange = std::min(aiDroidRange(psDroid, weapon_slot) + extraRange, objSensorRange(psDroid) + 6*TILE_UNITS);
 
 	static GridList gridList;  // static to avoid allocations.
 	gridList = gridStartIterate(psDroid->pos.x, psDroid->pos.y, droidRange);
@@ -839,7 +839,7 @@ bool aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 		ASSERT(((STRUCTURE *)psObj)->asWeaps[weapon_slot].nStat > 0, "no weapons on structure");
 
 		psWStats = ((STRUCTURE *)psObj)->asWeaps[weapon_slot].nStat + asWeaponStats;
-		int longRange = proj_GetLongRange(psWStats);
+		int longRange = proj_GetLongRange(psWStats, psObj->player);
 
 		// see if there is a target from the command droids
 		psTarget = NULL;

@@ -23,6 +23,7 @@
 
 #include "objectdef.h"
 #include "raycast.h"
+#include "stats.h"
 
 #define LINE_OF_FIRE_MINIMUM 5
 
@@ -75,20 +76,28 @@ static inline bool visObjInRange(BASE_OBJECT *psObj1, BASE_OBJECT *psObj2, SDWOR
 
 static inline int objSensorRange(const BASE_OBJECT* psObj)
 {
-	return psObj->sensorRange;
+	if (psObj->type == OBJ_DROID)
+	{
+		return asSensorStats[((DROID*)psObj)->asBits[COMP_SENSOR].nStat].upgrade[psObj->player].range;
+	}
+	else if (psObj->type == OBJ_STRUCTURE)
+	{
+		return ((STRUCTURE *)psObj)->pStructureType->pSensor->upgrade[psObj->player].range;
+	}
+	return 0;
 }
 
 static inline int objJammerPower(const BASE_OBJECT* psObj)
 {
-	return psObj->ECMMod;
+	if (psObj->type == OBJ_DROID)
+	{
+		return asECMStats[((DROID*)psObj)->asBits[COMP_ECM].nStat].upgrade[psObj->player].range;
+	}
+	else if (psObj->type == OBJ_STRUCTURE)
+	{
+		return ((STRUCTURE*)psObj)->pStructureType->pECM->upgrade[psObj->player].range;
+	}
+	return 0;
 }
-
-static inline int objConcealment(const BASE_OBJECT* psObj)
-{
-	return psObj->ECMMod;
-}
-
-void objSensorCache(BASE_OBJECT *psObj, SENSOR_STATS *psSensor);
-void objEcmCache(BASE_OBJECT *psObj, ECM_STATS *psEcm);
 
 #endif // __INCLUDED_SRC_VISIBILITY__

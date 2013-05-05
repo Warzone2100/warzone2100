@@ -72,7 +72,7 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	unsigned fireTime = gameTime - deltaGameTime + 1;  // Can fire earliest at the start of the tick.
 
 	// See if reloadable weapon.
-	if (psStats->reloadTime)
+	if (psStats->upgrade[psAttacker->player].reloadTime)
 	{
 		unsigned reloadTime = psWeap->lastFired + weaponReloadTime(psStats, psAttacker->player);
 		if (psWeap->ammo == 0)  // Out of ammo?
@@ -87,7 +87,7 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 		if (reloadTime <= fireTime)
 		{
 			//reset the ammo level
-			psWeap->ammo = psStats->numRounds;
+			psWeap->ammo = psStats->upgrade[psAttacker->player].numRounds;
 		}
 	}
 
@@ -135,7 +135,7 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 
 	/* Now see if the target is in range  - also check not too near */
 	int dist = iHypot(removeZ(deltaPos));
-	longRange = proj_GetLongRange(psStats);
+	longRange = proj_GetLongRange(psStats, psAttacker->player);
 
 	int min_angle = 0;
 	// Calculate angle for indirect shots
@@ -158,7 +158,7 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	}
 
 	int baseHitChance = 0;
-	if (dist <= longRange && dist >= psStats->minRange)
+	if (dist <= longRange && dist >= psStats->upgrade[psAttacker->player].minRange)
 	{
 		// get weapon chance to hit in the long range
 		baseHitChance = weaponLongHit(psStats,psAttacker->player);
@@ -210,7 +210,7 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	psWeap->lastFired = fireTime;
 
 	/* reduce ammo if salvo */
-	if (psStats->reloadTime)
+	if (psStats->upgrade[psAttacker->player].reloadTime)
 	{
 		psWeap->ammo--;
 	}
@@ -227,7 +227,7 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 		DROID *psDroid = castDroid(psTarget);
 
 		int32_t flightTime;
-		if (proj_Direct(psStats) || dist <= psStats->minRange)
+		if (proj_Direct(psStats) || dist <= psStats->upgrade[psAttacker->player].minRange)
 		{
 			flightTime = dist * GAME_TICKS_PER_SEC / psStats->flightSpeed;
 		}
@@ -340,6 +340,28 @@ void counterBatteryFire(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget)
 	}
 }
 
+int objArmour(BASE_OBJECT *psObj, WEAPON_CLASS weaponClass)
+{
+	int armour = 0;
+	if (psObj->type == OBJ_DROID)
+	{
+		armour = ((DROID *)psObj)->armour[weaponClass];
+	}
+	else if (psObj->type == OBJ_STRUCTURE && weaponClass == WC_KINETIC && ((STRUCTURE *)psObj)->status != SS_BEING_BUILT)
+	{
+		armour = ((STRUCTURE *)psObj)->pStructureType->upgrade[psObj->player].armour;
+	}
+	else if (psObj->type == OBJ_STRUCTURE && weaponClass == WC_HEAT && ((STRUCTURE *)psObj)->status != SS_BEING_BUILT)
+	{
+		armour = ((STRUCTURE *)psObj)->pStructureType->upgrade[psObj->player].thermal;
+	}
+	else if (psObj->type == OBJ_FEATURE && weaponClass == WC_KINETIC)
+	{
+		armour = ((FEATURE *)psObj)->psStats->armourValue;
+	}
+	return armour;
+}
+
 /* Deals damage to an object
  * \param psObj object to deal damage to
  * \param damage amount of damage to deal
@@ -349,7 +371,8 @@ void counterBatteryFire(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget)
  */
 int32_t objDamage(BASE_OBJECT *psObj, unsigned damage, unsigned originalhp, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, bool isDamagePerSecond)
 {
-	int	actualDamage, armour, level = 1, lastHit = psObj->timeLastHit;
+	int	actualDamage, level = 1, lastHit = psObj->timeLastHit;
+	int armour = objArmour(psObj, weaponClass);
 
 	// If the previous hit was by an EMP cannon and this one is not:
 	// don't reset the weapon class and hit time
@@ -369,14 +392,8 @@ int32_t objDamage(BASE_OBJECT *psObj, unsigned damage, unsigned originalhp, WEAP
 	// apply game difficulty setting
 	damage = modifyForDifficultyLevel(damage, psObj->player != selectedPlayer);
 
-	armour = psObj->armour[weaponClass];
-
 	if (psObj->type == OBJ_STRUCTURE || psObj->type == OBJ_DROID)
 	{
-		if (psObj->type == OBJ_STRUCTURE && ((STRUCTURE *)psObj)->status == SS_BEING_BUILT)
-		{
-			armour = 0;
-		}
 		// Force sending messages, even if messages were turned off, since a non-synchronised script will execute here. (Aaargh!)
 		bool bMultiMessagesBackup = bMultiMessages;
 		bMultiMessages = bMultiPlayer;
@@ -450,7 +467,7 @@ int32_t objDamage(BASE_OBJECT *psObj, unsigned damage, unsigned originalhp, WEAP
 unsigned int objGuessFutureDamage(WEAPON_STATS *psStats, unsigned int player, BASE_OBJECT *psTarget)
 {
 	unsigned int damage;
-	int	actualDamage, armour = 0, level = 1;
+	int actualDamage, armour, level = 1;
 
 	if (psTarget == NULL)
 		return 0;  // Hard to destroy the ground. The armour on the mud is very strong and blocks all damage.
@@ -465,8 +482,7 @@ unsigned int objGuessFutureDamage(WEAPON_STATS *psStats, unsigned int player, BA
 
 	// apply game difficulty setting
 	damage = modifyForDifficultyLevel(damage, psTarget->player != selectedPlayer);
-
-	armour = MAX(armour, psTarget->armour[psStats->weaponClass]);
+	armour = objArmour(psTarget, psStats->weaponClass);
 
 	if (psTarget->type == OBJ_DROID)
 	{
@@ -474,10 +490,6 @@ unsigned int objGuessFutureDamage(WEAPON_STATS *psStats, unsigned int player, BA
 
 		// Retrieve highest, applicable, experience level
 		level = getDroidEffectiveLevel(psDroid);
-	}
-	else if (psTarget->type == OBJ_STRUCTURE && ((STRUCTURE *)psTarget)->status == SS_BEING_BUILT)
-	{
-		armour = 0;
 	}
 	//debug(LOG_ATTACK, "objGuessFutureDamage(%d): body %d armour %d damage: %d", psObj->id, psObj->body, armour, damage);
 

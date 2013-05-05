@@ -32,7 +32,6 @@
 
 #include "ai.h"
 #include "move.h"
-#include "function.h"
 #include "stats.h"
 
 /* Initialise the object system */

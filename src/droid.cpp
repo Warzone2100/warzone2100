@@ -58,7 +58,6 @@
 #include "display.h"
 #include "console.h"
 #include "component.h"
-#include "function.h"
 #include "lighting.h"
 #include "multiplay.h"
 #include "warcam.h"
@@ -156,8 +155,10 @@ int droidReloadBar(BASE_OBJECT *psObj, WEAPON *psWeap, int weapon_slot)
 	psStats = asWeaponStats + psWeap->nStat;
 
 	/* Justifiable only when greater than a one second reload or intra salvo time  */
-	bSalvo = (psStats->numRounds > 1);
-	if ((bSalvo && psStats->reloadTime > GAME_TICKS_PER_SEC) || psStats->firePause > GAME_TICKS_PER_SEC || (psObj->type == OBJ_DROID && isVtolDroid((DROID *)psObj)))
+	bSalvo = (psStats->upgrade[psObj->player].numRounds > 1);
+	if ((bSalvo && psStats->upgrade[psObj->player].reloadTime > GAME_TICKS_PER_SEC)
+	    || psStats->upgrade[psObj->player].firePause > GAME_TICKS_PER_SEC
+	    || (psObj->type == OBJ_DROID && isVtolDroid((DROID *)psObj)))
 	{
 		if (psObj->type == OBJ_DROID && isVtolDroid((DROID *)psObj))
 		{
@@ -1276,7 +1277,7 @@ bool droidUpdateRestore( DROID *psDroid )
 	ASSERT_OR_RETURN(false, psDroid->action == DACTION_RESTORE, "unit is not restoring");
 	psStruct = (STRUCTURE *)psDroid->order.psObj;
 	ASSERT_OR_RETURN(false, psStruct->type == OBJ_STRUCTURE, "target is not a structure");
-	ASSERT_OR_RETURN(false, psStruct->pStructureType->resistance != 0, "invalid structure for EW");
+	ASSERT_OR_RETURN(false, psStruct->pStructureType->upgrade[psStruct->player].resistance != 0, "invalid structure for EW");
 
 	ASSERT_OR_RETURN(false, psDroid->asWeaps[0].nStat > 0, "droid doesn't have any weapons");
 
@@ -1601,7 +1602,7 @@ UDWORD calcTemplateBody(DROID_TEMPLATE *psTemplate, UBYTE player)
 	}
 
 	//add on any upgrade value that may need to be applied
-	body += (body * asBodyUpgrade[player]->body / 100);
+	body += body * psStats->upgrade[player].body / 100;
 	return body;
 }
 
@@ -1655,14 +1656,13 @@ UDWORD calcDroidBaseSpeed(DROID_TEMPLATE *psTemplate, UDWORD weight, UBYTE playe
 		speed = (asPropulsionTypes[(asPropulsionStats + psTemplate->
 			asParts[COMP_PROPULSION])->propulsionType].powerRatioMult *
 			bodyPower(asBodyStats + psTemplate->asParts[COMP_BODY],
-			player, CYBORG_BODY_UPGRADE)) / MAX(1, weight);
+			player)) / MAX(1, weight);
 	}
 	else
 	{
 		speed = (asPropulsionTypes[(asPropulsionStats + psTemplate->
 			asParts[COMP_PROPULSION])->propulsionType].powerRatioMult *
-			bodyPower(asBodyStats + psTemplate->asParts[COMP_BODY],
-			player, DROID_BODY_UPGRADE)) / MAX(1, weight);
+			bodyPower(asBodyStats + psTemplate->asParts[COMP_BODY], player)) / MAX(1, weight);
 	}
 
 	// reduce the speed of medium/heavy VTOLs
@@ -1678,8 +1678,8 @@ UDWORD calcDroidBaseSpeed(DROID_TEMPLATE *psTemplate, UDWORD weight, UBYTE playe
 		}
 	}
 
-	// Wateremelon:applies the engine output bonus if output > weight
-	if ( (asBodyStats + psTemplate->asParts[COMP_BODY])->powerOutput > weight )
+	// applies the engine output bonus if output > weight
+	if ((asBodyStats + psTemplate->asParts[COMP_BODY])->base.power > weight)
 	{
 		speed = speed * 3 / 2;
 	}
@@ -1892,15 +1892,12 @@ DROID *reallyBuildDroid(DROID_TEMPLATE *pTemplate, Position pos, UDWORD player, 
 	initDroidMovement(psDroid);
 
 	//allocate 'easy-access' data!
-	objSensorCache((BASE_OBJECT *)psDroid, asSensorStats + pTemplate->asParts[COMP_SENSOR]);
-	objEcmCache((BASE_OBJECT *)psDroid, asECMStats + pTemplate->asParts[COMP_ECM]);
 	psDroid->body = calcTemplateBody(pTemplate, (UBYTE)player);  // Redundant? (Is set in droidSetBits, too.)
 	psDroid->originalBody = psDroid->body;  // Redundant? (Is set in droidSetBits, too.)
 
 	for (inc = 0; inc < WC_NUM_WEAPON_CLASSES; inc++)
 	{
-		psDroid->armour[inc] = bodyArmour(asBodyStats + pTemplate->asParts[COMP_BODY], player, 
-		                                  cyborgDroid(psDroid) ? CYBORG_BODY_UPGRADE : DROID_BODY_UPGRADE, (WEAPON_CLASS)inc);
+		psDroid->armour[inc] = bodyArmour(asBodyStats + pTemplate->asParts[COMP_BODY], player, (WEAPON_CLASS)inc);
 	}
 
 	/* Set droid's initial illumination */
@@ -1989,7 +1986,7 @@ void droidSetBits(DROID_TEMPLATE *pTemplate,DROID *psDroid)
 		if (inc < pTemplate->numWeaps)
 		{
 			psDroid->asWeaps[inc].nStat = pTemplate->asWeaps[inc];
-			psDroid->asWeaps[inc].ammo = (asWeaponStats + psDroid->asWeaps[inc].nStat)->numRounds;
+			psDroid->asWeaps[inc].ammo = (asWeaponStats + psDroid->asWeaps[inc].nStat)->upgrade[psDroid->player].numRounds;
 		}
 		psDroid->asWeaps[inc].usedAmmo = 0;
 	}
@@ -3090,26 +3087,16 @@ bool allVtolsRearmed(DROID *psDroid)
 
 
 /*returns a count of the base number of attack runs for the weapon attached to the droid*/
-//adds int weapon_slot
 UWORD   getNumAttackRuns(DROID *psDroid, int weapon_slot)
 {
-	UWORD   numAttackRuns;
-
 	ASSERT_OR_RETURN(0, isVtolDroid(psDroid), "not a VTOL Droid");
-
-	/*if weapon attached to the droid is a salvo weapon, then number of shots that
-	can be fired = vtolAttackRuns*numRounds */
-	if (asWeaponStats[psDroid->asWeaps[weapon_slot].nStat].reloadTime)
+	// if weapon is a salvo weapon, then number of shots that can be fired = vtolAttackRuns * numRounds
+	if (asWeaponStats[psDroid->asWeaps[weapon_slot].nStat].upgrade[psDroid->player].reloadTime)
 	{
-		numAttackRuns = (UWORD)(asWeaponStats[psDroid->asWeaps[weapon_slot].nStat].numRounds *
-			asWeaponStats[psDroid->asWeaps[weapon_slot].nStat].vtolAttackRuns);
+		return asWeaponStats[psDroid->asWeaps[weapon_slot].nStat].upgrade[psDroid->player].numRounds
+		       * asWeaponStats[psDroid->asWeaps[weapon_slot].nStat].vtolAttackRuns;
 	}
-	else
-	{
-		numAttackRuns = asWeaponStats[psDroid->asWeaps[weapon_slot].nStat].vtolAttackRuns;
-	}
-
-	return numAttackRuns;
+	return asWeaponStats[psDroid->asWeaps[weapon_slot].nStat].vtolAttackRuns;
 }
 
 /*Checks a vtol for being fully armed and fully repaired to see if ready to
@@ -3364,25 +3351,11 @@ DROID *giftSingleDroid(DROID *psD, UDWORD to)
 /*calculates the electronic resistance of a droid based on its experience level*/
 SWORD   droidResistance(DROID *psDroid)
 {
-	unsigned resistance;
-
 	CHECK_DROID(psDroid);
-
-	resistance = psDroid->experience / (65536/DROID_RESISTANCE_FACTOR);
-
-	//ensure base minimum in MP before the upgrade effect
-	if (bMultiPlayer)
-	{
-		//ensure resistance is a base minimum
-		resistance = MAX(resistance, DROID_RESISTANCE_FACTOR);
-	}
-
-	//structure resistance upgrades are passed on to droids
-	resistance = resistance + resistance*asStructureUpgrade[psDroid->player].resistance / 100;
-
-	//ensure resistance is a base minimum
-	resistance = MAX(resistance, DROID_RESISTANCE_FACTOR);
-
+	BODY_STATS *psStats = asBodyStats + psDroid->asBits[COMP_BODY].nStat;
+	int resistance = psDroid->experience / (65536 / MAX(1, psStats->upgrade[psDroid->player].resistance));
+	// ensure resistance is a base minimum
+	resistance = MAX(resistance, psStats->upgrade[psDroid->player].resistance);
 	return MIN(resistance, INT16_MAX);
 }
 

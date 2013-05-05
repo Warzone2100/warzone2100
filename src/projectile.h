@@ -71,7 +71,7 @@ bool proj_SendProjectileAngled(WEAPON *psWeap, SIMPLE_OBJECT *psAttacker, int pl
 bool proj_Direct(const WEAPON_STATS* psStats);
 
 /** Return the maximum range for a weapon. */
-SDWORD	proj_GetLongRange(const WEAPON_STATS* psStats);
+int proj_GetLongRange(const WEAPON_STATS* psStats, int player);
 
 extern UDWORD calcDamage(UDWORD baseDamage, WEAPON_EFFECT weaponEffect, BASE_OBJECT *psTarget);
 extern bool gfxVisible(PROJECTILE *psObj);

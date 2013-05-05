@@ -408,48 +408,58 @@ struct PROPULSION_STATS : public COMPONENT_STATS
 
 struct SENSOR_STATS : public COMPONENT_STATS
 {
-	UDWORD		range;			///< Sensor range
-	UDWORD		power;			///< Sensor power (put against ecm power)
 	UDWORD		location;		///< specifies whether the Sensor is default or for the Turret
 	SENSOR_TYPE type;			///< used for combat
 	UDWORD		time;			///< time delay before associated weapon droids 'know' where the attack is from
 	iIMDShape	*pMountGraphic; ///< The turret mount to use
+
+	struct
+	{
+		int range;
+	} upgrade[MAX_PLAYERS], base;
 };
 
 struct ECM_STATS : public COMPONENT_STATS
 {
-	UDWORD		range;			///< ECM range
 	UDWORD		location;		///< specifies whether the ECM is default or for the Turret
 	iIMDShape	*pMountGraphic; ///< The turret mount to use
+
+	struct
+	{
+		int range;
+	} upgrade[MAX_PLAYERS], base;
 };
 
 struct REPAIR_STATS : public COMPONENT_STATS
 {
-	UDWORD		repairPoints;	///< How much damage is restored to Body Points and armour each Repair Cycle
-	bool		repairArmour;	///< whether armour can be repaired or not
 	UDWORD		location;		///< specifies whether the Repair is default or for the Turret
 	UDWORD		time;			///< time delay for repair cycle
 	iIMDShape	*pMountGraphic; ///< The turret mount to use
+
+	struct
+	{
+		short repairPoints;		///< The number of points contributed each cycle
+	} upgrade[MAX_PLAYERS], base;
 };
 
 struct WEAPON_STATS : public COMPONENT_STATS
 {
-	UDWORD			longRange;				///< Max distance to target for	long range shot
-	UDWORD			minRange;				///< Min distance to target for	shot
-	UDWORD			shortHit;				///< Chance to hit at short range
-	UDWORD			longHit;				///< Chance to hit at long range
-	UDWORD			firePause;				///< Time between each weapon fire
-	UDWORD			numExplosions;			///< The number of explosions per shot
-	UBYTE			numRounds;				///< The number of rounds	per salvo(magazine)
-	UDWORD			reloadTime;				///< Time to reload	the round of ammo	(salvo fire)
-	UDWORD			damage;					///< How much	damage the weapon	causes
-	UDWORD			radius;					///< Basic blast radius of weapon
-	UDWORD			radiusHit;				///< Chance to hit in the	blast	radius
-	UDWORD			radiusDamage;			///< Damage done in	the blast radius
+	struct
+	{
+		short maxRange;
+		short minRange;
+		short hitChance;
+		short firePause;     ///< Pause between each shot
+		short numRounds;     ///< The number of rounds per salvo
+		short reloadTime;    ///< Time to reload the round of ammo
+		short damage;
+		short radius;        ///< Basic blast radius of weapon
+		short radiusDamage;  ///< "Splash damage"
+		short periodicalDamage; ///< Repeat damage each second after hit
+		short periodicalDamageRadius; ///< Repeat damage radius
+		short periodicalDamageTime; ///< How long the round keeps damaging
+	} base, upgrade[MAX_PLAYERS];
 
-	UDWORD			periodicalDamageTime;			///< How long the round damages
-	UDWORD			periodicalDamage;				///< Damage done each time cycle (each second)
-	UDWORD			periodicalDamageRadius;			///< Radius of	the round
 	WEAPON_CLASS	periodicalDamageWeaponClass;	///< Periodical damage weapon class by damage type (KINETIC, HEAT)
 	WEAPON_SUBCLASS	periodicalDamageWeaponSubClass;	///< Periodical damage weapon subclass (research class)
 	WEAPON_EFFECT	periodicalDamageWeaponEffect;	///< Periodical damage weapon effect (propulsion/body damage modifier)
@@ -476,6 +486,7 @@ struct WEAPON_STATS : public COMPONENT_STATS
 
 	/* Graphics control stats */
 	UDWORD			radiusLife;				///< How long a blast radius is visible
+	UDWORD			numExplosions;			///< The number of explosions per shot
 
 	/* Graphics used for the weapon */
 	iIMDShape		*pMountGraphic;			///< The turret mount to use
@@ -493,8 +504,12 @@ struct WEAPON_STATS : public COMPONENT_STATS
 
 struct CONSTRUCT_STATS : public COMPONENT_STATS
 {
-	UDWORD		constructPoints;	///< The number of points contributed each cycle
 	iIMDShape	*pMountGraphic;		///< The turret mount to use
+
+	struct
+	{
+		short constructPoints;		///< The number of points contributed each cycle
+	} upgrade[MAX_PLAYERS], base;
 };
 
 struct BRAIN_STATS : public COMPONENT_STATS
@@ -516,13 +531,21 @@ struct BODY_STATS : public COMPONENT_STATS
 {
 	BODY_SIZE	size;			///< How big the body is - affects how hit
 	UDWORD		weaponSlots;	///< The number of weapon slots on the body
-	UDWORD		armourValue[WC_NUM_WEAPON_CLASSES];	///< A measure of how much protection the armour provides. Cross referenced with the weapon types.
 	DROID_TYPE	droidTypeOverride; // if not DROID_ANY, sets droid type
 
 	// A measure of how much energy the power plant outputs
-	UDWORD		powerOutput;	///< this is the engine output of the body
 	iIMDShape	**ppIMDList;	///< list of IMDs to use for propulsion unit - up to numPropulsionStats
 	iIMDShape	*pFlameIMD;		///< pointer to which flame graphic to use - for VTOLs only at the moment
+	char		bodyClass[40]; // TBD make into QString once this struct is class-safe
+
+	struct
+	{
+		int power;
+		int body;
+		int armour;
+		int thermal;
+		int resistance;
+	} upgrade[MAX_PLAYERS], base;
 };
 
 /************************************************************************************
@@ -557,39 +580,6 @@ struct WEAPON_UPGRADE
 	UWORD	radiusDamage;
 	UWORD	periodicalDamage;
 	UWORD	radiusHit;
-};
-
-/*sensor stats which can be upgraded by research*/
-struct SENSOR_UPGRADE
-{
-	UWORD	power;
-	UWORD	range;
-};
-
-/*ECM stats which can be upgraded by research*/
-struct ECM_UPGRADE
-{
-	UDWORD	range;
-};
-
-/*repair stats which can be upgraded by research*/
-struct REPAIR_UPGRADE
-{
-	UWORD	repairPoints;
-};
-
-/*constructor stats which can be upgraded by research*/
-struct CONSTRUCTOR_UPGRADE
-{
-	UWORD	constructPoints;
-};
-
-/*body stats which can be upgraded by research*/
-struct BODY_UPGRADE
-{
-	UWORD	powerOutput;
-	UWORD	body;
-	UWORD	armourValue[WC_NUM_WEAPON_CLASSES];
 };
 
 #endif // __INCLUDED_STATSDEF_H__

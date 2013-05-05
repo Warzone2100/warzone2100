@@ -176,15 +176,15 @@ static bool actionInAttackRange(DROID *psDroid, BASE_OBJECT *psObj, int weapon_s
 	ASSERT_OR_RETURN( false, compIndex < numWeaponStats, "Invalid range referenced for numWeaponStats, %d > %d", compIndex, numWeaponStats);
 	psStats = asWeaponStats + compIndex;
 
-	longRange = proj_GetLongRange(psStats);
+	longRange = proj_GetLongRange(psStats, psDroid->player);
 	rangeSq = longRange * longRange;
 
 	/* check max range */
 	if ( radSq <= rangeSq )
 	{
 		/* check min range */
-		rangeSq = psStats->minRange * psStats->minRange;
-		if ( radSq >= rangeSq || !proj_Direct( psStats ) )
+		const int minrange = psStats->upgrade[psDroid->player].minRange;
+		if (radSq >= minrange * minrange || !proj_Direct(psStats))
 		{
 			return true;
 		}
@@ -217,15 +217,15 @@ bool actionInRange(DROID *psDroid, BASE_OBJECT *psObj, int weapon_slot)
 
 	radSq = dx*dx + dy*dy;
 
-	longRange = proj_GetLongRange(psStats);
+	longRange = proj_GetLongRange(psStats, psDroid->player);
 	rangeSq = longRange * longRange;
 
 	/* check max range */
 	if ( radSq <= rangeSq )
 	{
 		/* check min range */
-		rangeSq = psStats->minRange * psStats->minRange;
-		if ( radSq >= rangeSq || !proj_Direct( psStats ) )
+		const int minrange = psStats->upgrade[psDroid->player].minRange;
+		if (radSq >= minrange * minrange || !proj_Direct(psStats))
 		{
 			return true;
 		}
@@ -259,7 +259,7 @@ static bool actionInsideMinRange(DROID *psDroid, BASE_OBJECT *psObj, WEAPON_STAT
 
 	radSq = dx*dx + dy*dy;
 
-	minRange = (SDWORD)psStats->minRange;
+	minRange = psStats->upgrade[psDroid->player].minRange;
 	rangeSq = minRange * minRange;
 
 	// check min range
@@ -416,7 +416,7 @@ bool actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, WEAPON *
 	onTarget = abs(angleDelta(targetRotation - (tRotation + psAttacker->rot.direction))) <= rotationTolerance;
 
 	/* Set muzzle pitch if not repairing or outside minimum range */
-	if (!bRepair && objPosDiffSq(psAttacker, psTarget) > psWeapStats->minRange * psWeapStats->minRange)
+	if (!bRepair && objPosDiffSq(psAttacker, psTarget) > psWeapStats->upgrade[psAttacker->player].minRange * psWeapStats->upgrade[psAttacker->player].minRange)
 	{
 		/* get target distance */
 		Vector3i delta = psTarget->pos - attackerMuzzlePos;
@@ -1202,7 +1202,7 @@ void actionUpdateDroid(DROID *psDroid)
 			// in case psWeapStats is still NULL
 			else if (psWeapStats)
 			{	// if the vtol is far enough away head for the target again
-				if (rangeSq > (SDWORD)(psWeapStats->longRange * psWeapStats->longRange))
+				if (rangeSq > psWeapStats->upgrade[psDroid->player].maxRange * psWeapStats->upgrade[psDroid->player].maxRange)
 				{
 					// don't do another attack run if already heading for the target
 					const Vector2i diff = psDroid->sMove.destination - removeZ(psDroid->psActionTarget[0]->pos);
@@ -1715,7 +1715,7 @@ void actionUpdateDroid(DROID *psDroid)
 				(order->psObj->type != OBJ_STRUCTURE))
 			{
 				Vector2i diff = removeZ(psDroid->pos - order->psObj->pos);
-				int rangeSq = asWeaponStats[psDroid->asWeaps[0].nStat].longRange / 2; // move close to sensor
+				int rangeSq = asWeaponStats[psDroid->asWeaps[0].nStat].upgrade[psDroid->player].maxRange / 2; // move close to sensor
 				rangeSq = rangeSq * rangeSq;
 				if (diff*diff < rangeSq)
 				{

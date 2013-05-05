@@ -47,7 +47,6 @@
 #include "edit3d.h"
 #include "structure.h"
 #include "research.h"
-#include "function.h"
 #include "lib/gamelib/gtime.h"
 #include "hci.h"
 #include "stats.h"
@@ -2323,7 +2322,7 @@ static void intSetWeaponStats(WEAPON_STATS *psStats)
 	                 (psStats->ref < REF_WEAPON_START + REF_RANGE), "stats ref is out of range");
 
 	/* range */
-	widgSetBarSize(psWScreen, IDDES_WEAPRANGE, proj_GetLongRange(psStats));
+	widgSetBarSize(psWScreen, IDDES_WEAPRANGE, proj_GetLongRange(psStats, selectedPlayer));
 	/* rate of fire */
 	widgSetBarSize(psWScreen, IDDES_WEAPROF, weaponROF(psStats, (SBYTE)selectedPlayer));
 	/* damage */
@@ -2344,7 +2343,7 @@ static void intSetWeaponShadowStats(WEAPON_STATS *psStats)
 	if (psStats)
 	{
 		/* range */
-		widgSetMinorBarSize(psWScreen, IDDES_WEAPRANGE, proj_GetLongRange(psStats));
+		widgSetMinorBarSize(psWScreen, IDDES_WEAPRANGE, proj_GetLongRange(psStats, selectedPlayer));
 		/* rate of fire */
 		widgSetMinorBarSize(psWScreen, IDDES_WEAPROF, weaponROF(psStats, (SBYTE)selectedPlayer));
 		/* damage */
@@ -2378,12 +2377,11 @@ static void intSetBodyStats(BODY_STATS *psStats)
 
 	/* armour */
 	//do kinetic armour
-	widgSetBarSize(psWScreen, IDDES_BODYARMOUR_K, bodyArmour(psStats, selectedPlayer, DROID_BODY_UPGRADE, WC_KINETIC));
+	widgSetBarSize(psWScreen, IDDES_BODYARMOUR_K, bodyArmour(psStats, selectedPlayer, WC_KINETIC));
 	//do heat armour
-	widgSetBarSize(psWScreen, IDDES_BODYARMOUR_H, bodyArmour(psStats, selectedPlayer, DROID_BODY_UPGRADE, WC_HEAT));
+	widgSetBarSize(psWScreen, IDDES_BODYARMOUR_H, bodyArmour(psStats, selectedPlayer, WC_HEAT));
 	/* power */
-	//widgSetBarSize(psWScreen, IDDES_BODYPOWER, psStats->powerOutput);
-	widgSetBarSize(psWScreen, IDDES_BODYPOWER, bodyPower(psStats, selectedPlayer, DROID_BODY_UPGRADE));
+	widgSetBarSize(psWScreen, IDDES_BODYPOWER, bodyPower(psStats, selectedPlayer));
 	/* weight */
 	widgSetBarSize(psWScreen, IDDES_BODYWEIGHT, psStats->weight);
 
@@ -2406,11 +2404,11 @@ static void intSetBodyShadowStats(BODY_STATS *psStats)
 	if (psStats)
 	{
 		/* armour - kinetic*/
-		widgSetMinorBarSize(psWScreen, IDDES_BODYARMOUR_K, bodyArmour(psStats, selectedPlayer, DROID_BODY_UPGRADE, WC_KINETIC));
+		widgSetMinorBarSize(psWScreen, IDDES_BODYARMOUR_K, bodyArmour(psStats, selectedPlayer, WC_KINETIC));
 		//armour - heat
-		widgSetMinorBarSize(psWScreen, IDDES_BODYARMOUR_H, bodyArmour(psStats, selectedPlayer, DROID_BODY_UPGRADE, WC_HEAT));
+		widgSetMinorBarSize(psWScreen, IDDES_BODYARMOUR_H, bodyArmour(psStats, selectedPlayer, WC_HEAT));
 		/* power */
-		widgSetMinorBarSize(psWScreen, IDDES_BODYPOWER, bodyPower(psStats, selectedPlayer, DROID_BODY_UPGRADE));
+		widgSetMinorBarSize(psWScreen, IDDES_BODYPOWER, bodyPower(psStats, selectedPlayer));
 		/* weight */
 		widgSetMinorBarSize(psWScreen, IDDES_BODYWEIGHT, psStats->weight);
 	}
@@ -2638,7 +2636,7 @@ static void intSetTemplateBodyShadowStats(COMPONENT_STATS *psStats)
 
 	//add weapon HP
 	body += weaponBody1 + weaponBody2 + weaponBody3;
-	body += (body * asBodyUpgrade[selectedPlayer]->body / 100);
+	body += (body * asBodyStats[sCurrDesign.asParts[COMP_BODY]].upgrade[selectedPlayer].body / 100);
 	widgSetMinorBarSize(psWScreen, IDDES_BODYPOINTS, body);
 }
 

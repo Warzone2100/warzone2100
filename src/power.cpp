@@ -54,7 +54,7 @@
 bool	powerCalculated;
 
 /* Updates the current power based on the extracted power and a Power Generator*/
-static void updateCurrentPower(POWER_GEN *psPowerGen, UDWORD player, int ticks);
+static void updateCurrentPower(STRUCTURE *psStruct, UDWORD player, int ticks);
 static int64_t updateExtractedPower(STRUCTURE *psBuilding);
 
 //returns the relevant list based on OffWorld or OnWorld
@@ -276,7 +276,7 @@ void updatePlayerPower(int player, int ticks)
 	{
 		if (psStruct->pStructureType->type == REF_POWER_GEN && psStruct->status == SS_BUILT)
 		{
-			updateCurrentPower((POWER_GEN *)psStruct->pFunctionality, player, ticks);
+			updateCurrentPower(psStruct, player, ticks);
 		}
 	}
 	syncDebug("updatePlayerPower%u %"PRId64"->%"PRId64"", player, powerBefore, asPower[player].currentPower);
@@ -285,8 +285,9 @@ void updatePlayerPower(int player, int ticks)
 }
 
 /* Updates the current power based on the extracted power and a Power Generator*/
-static void updateCurrentPower(POWER_GEN *psPowerGen, UDWORD player, int ticks)
+static void updateCurrentPower(STRUCTURE *psStruct, UDWORD player, int ticks)
 {
+	POWER_GEN *psPowerGen = (POWER_GEN *)psStruct->pFunctionality;
 	int i;
 	int64_t extractedPower;
 
@@ -310,9 +311,10 @@ static void updateCurrentPower(POWER_GEN *psPowerGen, UDWORD player, int ticks)
 		}
 	}
 
-	syncDebug("updateCurrentPower%d = %"PRId64",%u", player, extractedPower, psPowerGen->multiplier);
+	int multiplier = getBuildingPowerPoints(psStruct);
+	syncDebug("updateCurrentPower%d = %"PRId64",%u", player, extractedPower, multiplier);
 
-	asPower[player].currentPower += (extractedPower * psPowerGen->multiplier) / 100 * ticks;
+	asPower[player].currentPower += (extractedPower * multiplier) / 100 * ticks;
 	ASSERT(asPower[player].currentPower >= 0, "negative power");
 	if (asPower[player].currentPower > MAX_POWER*FP_ONE)
 	{

@@ -458,27 +458,27 @@ bool scrWeaponObjGet(UDWORD index)
 	{
 	case WEAPID_LONG_RANGE:
 		type = VAL_INT;
-		scrFunctionResult.v.ival = asWeaponStats[weapIndex].longRange;
+		scrFunctionResult.v.ival = asWeaponStats[weapIndex].base.maxRange;
 		break;
 	case WEAPID_LONG_HIT:
 		type = VAL_INT;
-		scrFunctionResult.v.ival = asWeaponStats[weapIndex].longHit;
+		scrFunctionResult.v.ival = asWeaponStats[weapIndex].base.hitChance;
 		break;
 	case WEAPID_DAMAGE:
 		type = VAL_INT;
-		scrFunctionResult.v.ival = asWeaponStats[weapIndex].damage;
+		scrFunctionResult.v.ival = asWeaponStats[weapIndex].base.damage;
 		break;
 	case WEAPID_FIRE_PAUSE:
 		type = VAL_INT;
-		scrFunctionResult.v.ival = asWeaponStats[weapIndex].firePause;
+		scrFunctionResult.v.ival = asWeaponStats[weapIndex].base.firePause;
 		break;
 	case WEAPID_RELOAD_TIME:
 		type = VAL_INT;
-		scrFunctionResult.v.ival = asWeaponStats[weapIndex].reloadTime;
+		scrFunctionResult.v.ival = asWeaponStats[weapIndex].base.reloadTime;
 		break;
 	case WEAPID_NUM_ROUNDS:
 		type = VAL_INT;
-		scrFunctionResult.v.ival = asWeaponStats[weapIndex].numRounds;
+		scrFunctionResult.v.ival = asWeaponStats[weapIndex].base.numRounds;
 		break;
 	default:
 		ASSERT( false, "unknown variable index" );

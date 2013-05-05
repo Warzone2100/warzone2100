@@ -52,4 +52,6 @@ int32_t objDamage(BASE_OBJECT *psObj, unsigned damage, unsigned originalhp, WEAP
 
 unsigned int objGuessFutureDamage(WEAPON_STATS *psStats, unsigned int player, BASE_OBJECT *psTarget);
 
+int objArmour(BASE_OBJECT *psObj, WEAPON_CLASS weaponClass);
+
 #endif // __INCLUDED_SRC_COMBAT_H__

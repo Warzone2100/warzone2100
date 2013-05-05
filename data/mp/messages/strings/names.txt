@@ -310,6 +310,7 @@ ZNULLECM				"Z NULL ECM"
 ECM1PylonMk1				_("Jammer Tower")
 ECM1TurretMk1				_("Jammer Turret")
 R-Sys-ECM-Upgrade01			_("Electronic Countermeasures")
+R-Sys-ECM-Upgrade02			_("Electronic Countermeasures Mk2")
 
 /* SENSORS */
 ZNULLSENSOR				"Z NULL SENSOR"

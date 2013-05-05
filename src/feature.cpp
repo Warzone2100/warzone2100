@@ -162,7 +162,7 @@ int32_t featureDamage(FEATURE *psFeature, unsigned damage, WEAPON_CLASS weaponCl
 	ASSERT_OR_RETURN(0, psFeature != NULL, "Invalid feature pointer");
 
 	debug(LOG_ATTACK, "feature (id %d): body %d armour %d damage: %d",
-	      psFeature->id, psFeature->body, psFeature->armour[weaponClass], damage);
+	      psFeature->id, psFeature->body, psFeature->psStats->armourValue, damage);
 
 	relativeDamage = objDamage(psFeature, damage, psFeature->psStats->body, weaponClass, weaponSubClass, isDamagePerSecond);
 
@@ -243,16 +243,9 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,bool FromSave)
 	psFeature->body = psStats->body;
 	psFeature->periodicalDamageStart = 0;
 	psFeature->periodicalDamage = 0;
-	objSensorCache(psFeature, NULL);
-	objEcmCache(psFeature, NULL);
 
 	// it has never been drawn
 	psFeature->sDisplay.frameNumber = 0;
-
-	for (int j = 0; j < WC_NUM_WEAPON_CLASSES; j++)
-	{
-		psFeature->armour[j] = psFeature->psStats->armourValue;
-	}
 
 	memset(psFeature->seenThisTick, 0, sizeof(psFeature->seenThisTick));
 	memset(psFeature->visible, 0, sizeof(psFeature->visible));

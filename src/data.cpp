@@ -41,7 +41,6 @@
 #include "data.h"
 #include "droid.h"
 #include "feature.h"
-#include "function.h"
 #include "mechanics.h"
 #include "message.h"
 #include "multiplay.h"
@@ -427,30 +426,6 @@ static bool bufferSFEATLoad(const char *pBuffer, UDWORD size, void **ppData)
 static void dataSFEATRelease(WZ_DECL_UNUSED void *pData)
 {
 	featureStatsShutDown();
-}
-
-/* Load the Functions stats */
-static bool bufferSFUNCLoad(const char *pBuffer, UDWORD size, void **ppData)
-{
-	calcDataHash((uint8_t *)pBuffer, size, DATA_SFUNC);
-
-	if (!loadFunctionStats(pBuffer, size))
-	{
-		return false;
-	}
-
-    //adjust max values of stats used in the design screen due to any possible upgrades
-    adjustMaxDesignStats();
-
-	// set a dummy value so the release function gets called
-	*ppData = (void *)1;
-	return true;
-}
-
-// release the function stats
-static void dataSFUNCRelease(WZ_DECL_UNUSED void *pData)
-{
-	FunctionShutDown();
 }
 
 // release the research stats
@@ -916,7 +891,6 @@ static const RES_TYPE_MIN_BUF BufferResourceTypes[] =
 	{"STEMPL", bufferSTEMPLLoad, dataSTEMPLRelease},               //template and associated files
 	{"STEMPWEAP", bufferSTEMPWEAPLoad, NULL},
 	{"SFEAT", bufferSFEATLoad, dataSFEATRelease},                  //feature stats file
-	{"SFUNC", bufferSFUNCLoad, dataSFUNCRelease},                  //function stats file
 	{"SMSG", bufferSMSGLoad, dataSMSGRelease},
 	{"IMD", dataIMDBufferLoad, (RES_FREE)iV_IMDRelease},
 };

@@ -2732,16 +2732,9 @@ static void loadMapSettings1()
 	game.scavengers = ini.value("scavengers", game.scavengers).toBool();
 	game.base = ini.value("bases", game.base).toInt();
 	game.alliance = ini.value("alliances", game.alliance).toInt();
-	if (ini.contains("power"))
+	if (ini.contains("powerLevel"))
 	{
-		game.power = ini.value("power", game.power).toInt();
-		switch (game.power)
-		{
-		case 0 : game.power = LEV_LOW; break;
-		case 1 : game.power = LEV_MED; break;
-		default: debug(LOG_ERROR, "Illegal power level : %d", game.power); // fall through
-		case 2 : game.power = LEV_HI; break;
-		}
+		game.power = ini.value("powerLevel", game.power).toInt();
 	}
 	ini.endGroup();
 }
@@ -3772,7 +3765,7 @@ bool startMultiOptions(bool bReenter)
 		game.alliance = ALLIANCES_TEAMS;
 		netPlayersUpdated = true;
 		mapDownloadProgress = 100;
-		game.power = ini.value("Power", game.power).toInt();
+		game.power = ini.value("powerLevel", game.power).toInt();
 		game.base = ini.value("Bases", game.base + 1).toInt() - 1;		// count from 1 like the humans do
 		sstrcpy(game.name, ini.value("name").toString().toUtf8().constData());
 		locked.position = ini.value("AllowPositionChange", locked.position).toBool();

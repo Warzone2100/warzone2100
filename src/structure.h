@@ -45,8 +45,6 @@
 /*This should correspond to the structLimits! */
 #define	MAX_FACTORY			5
 
-
-
 //used to flag when the Factory is ready to start building
 #define ACTION_START_TIME	0
 
@@ -67,20 +65,10 @@ extern SBYTE         productionPlayer;
 extern STRUCTURE_STATS		*asStructureStats;
 extern UDWORD				numStructureStats;
 extern STRUCTURE_LIMITS		*asStructLimits[MAX_PLAYERS];
-//holds the upgrades attained through research for structure stats
-extern STRUCTURE_UPGRADE	asStructureUpgrade[MAX_PLAYERS];
-extern WALLDEFENCE_UPGRADE	asWallDefenceUpgrade[MAX_PLAYERS];
-//holds the upgrades for the functionality of structures through research
-extern RESEARCH_UPGRADE	asResearchUpgrade[MAX_PLAYERS];
-extern POWER_UPGRADE		asPowerUpgrade[MAX_PLAYERS];
-extern REPAIR_FACILITY_UPGRADE	asRepairFacUpgrade[MAX_PLAYERS];
-extern PRODUCTION_UPGRADE	asProductionUpgrade[MAX_PLAYERS][NUM_FACTORY_TYPES];
-extern REARM_UPGRADE		asReArmUpgrade[MAX_PLAYERS];
 
 //used to hold the modifiers cross refd by weapon effect and structureStrength
 extern STRUCTSTRENGTH_MODIFIER		asStructStrengthModifier[WE_NUMEFFECTS][
 													NUM_STRUCT_STRENGTH];
-
 extern void handleAbandonedStructures(void);
 
 int getMaxDroids(int player);
@@ -266,8 +254,6 @@ unsigned structureBodyBuilt(STRUCTURE const *psStruct);  ///< Returns the maximu
 extern UDWORD	structureBody(const STRUCTURE *psStruct);
 extern UDWORD	structureArmour(STRUCTURE_STATS *psStats, UBYTE player);
 extern UDWORD	structureResistance(STRUCTURE_STATS *psStats, UBYTE player);
-/*this returns the Base Body points of a structure - regardless of upgrade*/
-extern UDWORD	structureBaseBody(const STRUCTURE *psStructure);
 
 extern void hqReward(UBYTE losingPlayer, UBYTE rewardPlayer);
 
@@ -375,10 +361,6 @@ bool IsStatExpansionModule(STRUCTURE_STATS const *psStats);
 bool structureIsBlueprint(STRUCTURE *psStructure);
 bool isBlueprint(BASE_OBJECT *psObject);
 
-/*checks that the structure stats have loaded up as expected - must be done after
-all StructureStats parts have been loaded*/
-extern bool checkStructureStats(void);
-
 /*returns the power cost to build this structure*/
 extern UDWORD structPowerToBuild(const STRUCTURE* psStruct);
 
@@ -411,11 +393,6 @@ static inline int structSensorRange(const STRUCTURE* psObj)
 static inline int structJammerPower(const STRUCTURE* psObj)
 {
 	return objJammerPower((const BASE_OBJECT*)psObj);
-}
-
-static inline int structConcealment(const STRUCTURE* psObj)
-{
-	return objConcealment((const BASE_OBJECT*)psObj);
 }
 
 static inline Rotation structureGetInterpolatedWeaponRotation(STRUCTURE *psStructure, int weaponSlot, uint32_t time)
@@ -514,5 +491,30 @@ static inline STRUCTURE *castStructure(SIMPLE_OBJECT *psObject)             { re
 // Returns STRUCTURE const * if structure or NULL if not.
 static inline STRUCTURE const *castStructure(SIMPLE_OBJECT const *psObject) { return isStructure(psObject)? (STRUCTURE const *)psObject : (STRUCTURE const *)NULL; }
 
+static inline int getBuildingResearchPoints(STRUCTURE *psStruct)
+{
+	return psStruct->pStructureType->upgrade[psStruct->player].research * (psStruct->capacity + 1);
+}
+
+static inline int getBuildingProductionPoints(STRUCTURE *psStruct)
+{
+	return psStruct->pStructureType->upgrade[psStruct->player].production * (psStruct->capacity + 1);
+}
+
+static inline int getBuildingPowerPoints(STRUCTURE *psStruct)
+{
+	int power = psStruct->pStructureType->upgrade[psStruct->player].power;
+	return power + power * psStruct->capacity / 2;
+}
+
+static inline int getBuildingRepairPoints(STRUCTURE *psStruct)
+{
+	return psStruct->pStructureType->upgrade[psStruct->player].repair;
+}
+
+static inline int getBuildingRearmPoints(STRUCTURE *psStruct)
+{
+	return psStruct->pStructureType->upgrade[psStruct->player].rearm;
+}
 
 #endif // __INCLUDED_SRC_STRUCTURE_H__

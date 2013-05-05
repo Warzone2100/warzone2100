@@ -3864,26 +3864,23 @@ static void showWeaponRange(BASE_OBJECT *psObj)
 {
 	uint32_t weaponRange;
 	uint32_t minRange;
-	int compIndex;
+	WEAPON_STATS *psStats;
 
 	if (psObj->type == OBJ_DROID)
 	{
-		WEAPON_STATS *psStats = NULL;
 		DROID *psDroid = (DROID*)psObj;
-		compIndex = psDroid->asWeaps[0].nStat;	//weapon_slot
+		const int compIndex = psDroid->asWeaps[0].nStat;	// weapon_slot
 		ASSERT_OR_RETURN( , compIndex < numWeaponStats, "Invalid range referenced for numWeaponStats, %d > %d", compIndex, numWeaponStats);
 		psStats = asWeaponStats + compIndex;
-		weaponRange = psStats->longRange;
-		minRange = psStats->minRange;
 	}
 	else
 	{
 		STRUCTURE *psStruct = (STRUCTURE*)psObj;
-		if(psStruct->pStructureType->numWeaps == 0) return;
-		weaponRange = psStruct->pStructureType->psWeapStat[0]->longRange;
-		minRange = psStruct->pStructureType->psWeapStat[0]->minRange;
+		if (psStruct->pStructureType->numWeaps == 0) return;
+		psStats = psStruct->pStructureType->psWeapStat[0];
 	}
-
+	weaponRange = psStats->upgrade[psObj->player].maxRange;
+	minRange = psStats->upgrade[psObj->player].minRange;
 	showEffectCircle(psObj->pos, weaponRange, 40, EFFECT_EXPLOSION, EXPLOSION_TYPE_SMALL);
 	if (minRange > 0)
 	{
@@ -3893,7 +3890,7 @@ static void showWeaponRange(BASE_OBJECT *psObj)
 
 static void showSensorRange2(BASE_OBJECT *psObj)
 {
-	showEffectCircle(psObj->pos, psObj->sensorRange, 80, EFFECT_EXPLOSION, EXPLOSION_TYPE_LASER);
+	showEffectCircle(psObj->pos, objSensorRange(psObj), 80, EFFECT_EXPLOSION, EXPLOSION_TYPE_LASER);
 	showWeaponRange(psObj);
 }
 

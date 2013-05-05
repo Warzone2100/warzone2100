@@ -8500,7 +8500,7 @@ bool scrObjWeaponMaxRange(void)
 		{
 			ASSERT_OR_RETURN(false, psDroid->asWeaps[0].nStat < numWeaponStats, "Invalid range referenced.");
 			psStats = asWeaponStats + psDroid->asWeaps[0].nStat;
-			scrFunctionResult.v.ival = psStats->longRange;
+			scrFunctionResult.v.ival = psStats->base.maxRange;
 			if (!stackPushResult(VAL_INT, &scrFunctionResult))
 			{
 				return false;
@@ -8516,7 +8516,7 @@ bool scrObjWeaponMaxRange(void)
 		{
 			ASSERT_OR_RETURN(false, psStruct->asWeaps[0].nStat < numWeaponStats, "Invalid range referenced.");
 			psStats = asWeaponStats + psStruct->asWeaps[0].nStat;
-			scrFunctionResult.v.ival = psStats->longRange;
+			scrFunctionResult.v.ival = psStats->base.maxRange;
 			if (!stackPushResult(VAL_INT, &scrFunctionResult))
 			{
 				return false;
@@ -10363,19 +10363,17 @@ static DROID_TEMPLATE *scrCheckTemplateExists(SDWORD player, DROID_TEMPLATE *psT
 	return NULL;
 }
 
+// deprecated
 bool scrWeaponLongHitUpgrade(void)
 {
 	SDWORD					player, weapIndex;
-	const WEAPON_STATS		*psWeapStats;
 
 	if (!stackPopParams(2, VAL_INT, &player, ST_WEAPON, &weapIndex))
 	{
 		return false;
 	}
 
-	psWeapStats = &asWeaponStats[weapIndex];
-
-	scrFunctionResult.v.ival = asWeaponUpgrade[player][psWeapStats->weaponSubClass].longHit;
+	scrFunctionResult.v.ival = 0;
 	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
 		return false;
@@ -10384,19 +10382,17 @@ bool scrWeaponLongHitUpgrade(void)
 	return true;
 }
 
+// deprecated
 bool scrWeaponDamageUpgrade(void)
 {
 	SDWORD					player, weapIndex;
-	const WEAPON_STATS		*psWeapStats;
 
 	if (!stackPopParams(2, VAL_INT, &player, ST_WEAPON, &weapIndex))
 	{
 		return false;
 	}
 
-	psWeapStats = &asWeaponStats[weapIndex];
-
-	scrFunctionResult.v.ival = asWeaponUpgrade[player][psWeapStats->weaponSubClass].damage;
+	scrFunctionResult.v.ival = 0;
 	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
 		return false;
@@ -10405,19 +10401,17 @@ bool scrWeaponDamageUpgrade(void)
 	return true;
 }
 
+// deprecated
 bool scrWeaponFirePauseUpgrade(void)
 {
 	SDWORD					player, weapIndex;
-	const WEAPON_STATS		*psWeapStats;
 
 	if (!stackPopParams(2, VAL_INT, &player, ST_WEAPON, &weapIndex))
 	{
 		return false;
 	}
 
-	psWeapStats = &asWeaponStats[weapIndex];
-
-	scrFunctionResult.v.ival = asWeaponUpgrade[player][psWeapStats->weaponSubClass].firePause;
+	scrFunctionResult.v.ival = 0;
 	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
 		return false;

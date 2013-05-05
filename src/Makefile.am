@@ -69,8 +69,6 @@ noinst_HEADERS = \
 	fpath.h \
 	frend.h \
 	frontend.h \
-	functiondef.h \
-	function.h \
 	game.h \
 	gateway.h \
 	geometry.h \
@@ -195,7 +193,6 @@ warzone2100_SOURCES = \
 	feature.cpp \
 	fpath.cpp \
 	frontend.cpp \
-	function.cpp \
 	game.cpp \
 	gateway.cpp \
 	geometry.cpp \

@@ -346,11 +346,6 @@ static inline int droidJammerPower(const DROID* psDroid)
 	return objJammerPower((const BASE_OBJECT*)psDroid);
 }
 
-static inline int droidConcealment(const DROID* psDroid)
-{
-	return objConcealment((const BASE_OBJECT*)psDroid);
-}
-
 /*
  * Component stat helper functions
  */

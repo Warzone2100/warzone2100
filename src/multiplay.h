@@ -111,9 +111,9 @@ extern UBYTE				bDisplayMultiJoiningStatus;	// draw load progress?
 
 #define PING_LIMIT                              4000                    // If ping is bigger than this, then worry and panic, and don't even try showing the ping.
 
-#define LEV_LOW					400			// how many points to allocate for res levels???
-#define LEV_MED					700
-#define LEV_HI					1000
+#define LEV_LOW					0
+#define LEV_MED					1
+#define LEV_HI					2
 
 #define DIFF_SLIDER_STOPS		20			//max number of stops for the multiplayer difficulty slider
 

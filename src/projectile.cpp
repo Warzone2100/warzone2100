@@ -891,8 +891,9 @@ static void proj_InFlightFunc(PROJECTILE *psProj)
 		return;
 	}
 
-	if (currentDistance*100u >= psStats->longRange * psStats->distanceExtensionFactor)  // We've travelled our maximum range.
+	if (currentDistance*100u >= psStats->upgrade[psProj->player].maxRange * psStats->distanceExtensionFactor)
 	{
+		// We've travelled our maximum range.
 		psProj->state = PROJ_IMPACT;
 		setProjectileDestination(psProj, NULL); /* miss registered if NULL target */
 		return;
@@ -910,14 +911,14 @@ static void proj_InFlightFunc(PROJECTILE *psProj)
 			{
 				case WSC_FLAME:
 					posFlip.z -= 8;  // Why?
-					effectGiveAuxVar(PERCENT(currentDistance, psStats->longRange));
+					effectGiveAuxVar(PERCENT(currentDistance, psStats->upgrade[psProj->player].maxRange));
 					addEffect(&posFlip, EFFECT_EXPLOSION, EXPLOSION_TYPE_FLAMETHROWER, false, NULL, 0, effectTime);
 				break;
 				case WSC_COMMAND:
 				case WSC_ELECTRONIC:
 				case WSC_EMP:
 					posFlip.z -= 8;  // Why?
-					effectGiveAuxVar(PERCENT(currentDistance, psStats->longRange)/2);
+					effectGiveAuxVar(PERCENT(currentDistance, psStats->upgrade[psProj->player].maxRange)/2);
 					addEffect(&posFlip, EFFECT_EXPLOSION, EXPLOSION_TYPE_LASER, false, NULL, 0, effectTime);
 				break;
 				case WSC_ROCKET:
@@ -979,13 +980,13 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 		}
 
 		/* Shouldn't need to do this check but the stats aren't all at a value yet... */ // FIXME
-		if (psStats->periodicalDamageRadius && psStats->periodicalDamageTime)
+		if (psStats->upgrade[psObj->player].periodicalDamageRadius != 0 && psStats->upgrade[psObj->player].periodicalDamageTime != 0)
 		{
 			position.x = psObj->pos.x;
 			position.z = psObj->pos.y; // z = y [sic] intentional
 			position.y = map_Height(position.x, position.z);
-			effectGiveAuxVar(psStats->periodicalDamageRadius);
-			effectGiveAuxVarSec(psStats->periodicalDamageTime);
+			effectGiveAuxVar(psStats->upgrade[psObj->player].periodicalDamageRadius);
+			effectGiveAuxVarSec(psStats->upgrade[psObj->player].periodicalDamageTime);
 			addEffect(&position, EFFECT_FIRE, FIRE_TYPE_LOCALISED, false, NULL, 0, psObj->time);
 		}
 
@@ -1003,18 +1004,18 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 		}
 	}
 
-	if (psStats->periodicalDamageRadius != 0 && psStats->periodicalDamageTime != 0)
+	if (psStats->upgrade[psObj->player].periodicalDamageRadius && psStats->upgrade[psObj->player].periodicalDamageTime)
 	{
-		tileSetFire(psObj->pos.x, psObj->pos.y, psStats->periodicalDamageTime);
+		tileSetFire(psObj->pos.x, psObj->pos.y, psStats->upgrade[psObj->player].periodicalDamageTime);
 	}
 
 	// Set the effects position and radius
 	position.x = psObj->pos.x;
 	position.z = psObj->pos.y; // z = y [sic] intentional
 	position.y = psObj->pos.z; // y = z [sic] intentional
-	scatter.x = psStats->radius;
+	scatter.x = psStats->upgrade[psObj->player].radius;
 	scatter.y = 0;
-	scatter.z = psStats->radius;
+	scatter.z = psStats->upgrade[psObj->player].radius;
 
 	// If the projectile missed its target (or the target died)
 	if (psObj->psDest == NULL)
@@ -1142,13 +1143,13 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 	setProjectileDestination(psObj, temp);
 
 	// If the projectile does no splash damage and does not set fire to things
-	if ((psStats->radius == 0) && (psStats->periodicalDamageTime == 0) )
+	if (psStats->upgrade[psObj->player].radius == 0 && psStats->upgrade[psObj->player].periodicalDamageTime == 0)
 	{
 		psObj->state = PROJ_INACTIVE;
 		return;
 	}
 
-	if (psStats->radius != 0)
+	if (psStats->upgrade[psObj->player].radius != 0)
 	{
 		/* An area effect bullet */
 		psObj->state = PROJ_POSTIMPACT;
@@ -1157,7 +1158,7 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 		psObj->born = gameTime;
 
 		static GridList gridList;  // static to avoid allocations.
-		gridList = gridStartIterate(psObj->pos.x, psObj->pos.y, psStats->radius);
+		gridList = gridStartIterate(psObj->pos.x, psObj->pos.y, psStats->upgrade[psObj->player].radius);
 		for (GridIterator gi = gridList.begin(); gi != gridList.end(); ++gi)
 		{
 			BASE_OBJECT *psCurr = *gi;
@@ -1197,14 +1198,9 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 			{
 				continue;  // Target in air, and can't shoot at air, or target on ground, and can't shoot at ground.
 			}
-			if (useSphere && !Vector3i_InSphere(psCurr->pos, psObj->pos, psStats->radius))
+			if (useSphere && !Vector3i_InSphere(psCurr->pos, psObj->pos, psStats->upgrade[psObj->player].radius))
 			{
 				continue;  // Target out of range.
-			}
-			unsigned hitProbability = weaponRadiusHit(psStats, psObj->player);
-			if (hitProbability < 100u && hitProbability <= gameRand(100))  // Avoid unneeded gameRand(100) calls when probability is 100%.
-			{
-				continue;  // Target was lucky, and the tank or structure somehow managed to dodge the explosion.
 			}
 			// The psCurr will get damaged, at this point.
 			unsigned damage = calcDamage(weaponRadDamage(psStats, psObj->player), psStats->weaponEffect, psCurr);
@@ -1218,7 +1214,7 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 		}
 	}
 
-	if (psStats->periodicalDamageTime != 0)
+	if (psStats->upgrade[psObj->player].periodicalDamageTime != 0)
 	{
 		/* Periodical damage round */
 		/* Periodical damage gets done in the bullet update routine */
@@ -1242,14 +1238,14 @@ static void proj_PostImpactFunc( PROJECTILE *psObj )
 	int age = gameTime - psObj->born;
 
 	/* Time to finish postimpact effect? */
-	if (age > (SDWORD)psStats->radiusLife && age > (SDWORD)psStats->periodicalDamageTime)
+	if (age > psStats->radiusLife && age > psStats->upgrade[psObj->player].periodicalDamageTime)
 	{
 		psObj->state = PROJ_INACTIVE;
 		return;
 	}
 
 	/* Periodical damage effect */
-	if (psStats->periodicalDamageTime > 0)
+	if (psStats->upgrade[psObj->player].periodicalDamageTime > 0)
 	{
 		/* See if anything is in the fire and damage it periodically */
 		proj_checkPeriodicalDamage(psObj);
@@ -1343,7 +1339,7 @@ static void proj_checkPeriodicalDamage(PROJECTILE *psProj)
 	WEAPON_STATS *psStats = psProj->psWStats;
 
 	static GridList gridList;  // static to avoid allocations.
-	gridList = gridStartIterate(psProj->pos.x, psProj->pos.y, psStats->periodicalDamageRadius);
+	gridList = gridStartIterate(psProj->pos.x, psProj->pos.y, psStats->upgrade[psProj->player].periodicalDamageRadius);
 	for (GridIterator gi = gridList.begin(); gi != gridList.end(); ++gi)
 	{
 		BASE_OBJECT *psCurr = *gi;
@@ -1405,9 +1401,9 @@ bool proj_Direct(const WEAPON_STATS* psStats)
 /***************************************************************************/
 
 // return the maximum range for a weapon
-SDWORD proj_GetLongRange(const WEAPON_STATS* psStats)
+int proj_GetLongRange(const WEAPON_STATS *psStats, int player)
 {
-	return psStats->longRange;
+	return psStats->upgrade[player].maxRange;
 }
 
 

@@ -769,13 +769,6 @@ static void startGameLoop(void)
 		debug( LOG_FATAL, "Shutting down after failure" );
 		exit(EXIT_FAILURE);
 	}
-	//and check the structure stats are valid
-	if (!checkStructureStats())
-	{
-		debug( LOG_FATAL, "Invalid Structure Stats" );
-		debug( LOG_FATAL, "Shutting down after failure" );
-		exit(EXIT_FAILURE);
-	}
 
 	screen_StopBackDrop();
 

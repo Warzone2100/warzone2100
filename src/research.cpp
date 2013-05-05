@@ -136,20 +136,6 @@ BASE_STATS* get_any_component_from_ID(QString name)
 	return NULL;
 }
 
-//searches for function with given name
-//returns NULL if not found
-FUNCTION* find_function_by_ID(QString FunctionName)
-{
-	for (unsigned int incF = 0; incF < numFunctions; incF++)
-	{
-		if (FunctionName.compare(asFunctions[incF]->pName, Qt::CaseInsensitive) == 0)
-		{
-			return asFunctions[incF];
-		}
-	}
-	return NULL;
-}
-
 /** Load the research stats */
 bool loadResearch(QString filename)
 {
@@ -177,6 +163,8 @@ bool loadResearch(QString filename)
 		ASSERT_OR_RETURN(false, checkResearchName(&research, inc), "Research name '%s' used already", research.pName);
 
 		research.ref = REF_RESEARCH_START + inc;
+
+		research.resultStrings = ini.value("results").toStringList();
 		
 		//set subGroup icon
 		QString subGroup = ini.value("subgroupIconID", "").toString();
@@ -388,19 +376,6 @@ bool loadResearch(QString filename)
 			}
 		}
 
-		//set result functions
-		QStringList resFunc = ini.value("resultFunctions").toStringList();
-		for (int j = 0; j < resFunc.size(); j++)
-		{
-			QString funcID = resFunc[j].trimmed();
-			FUNCTION *pFunc = find_function_by_ID(funcID);
-			ASSERT(pFunc != NULL, "Invalid item '%s' in list of result functions of research '%s' ", funcID.toUtf8().constData(), getResearchName(&research));
-			if (pFunc != NULL)
-			{
-				research.pFunctionList.push_back(pFunc);
-			}
-		}
-
 		asResearch.push_back(research);
 		ini.endGroup();
 	}
@@ -557,9 +532,6 @@ void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE
 {
 	RESEARCH *                                      pResearch = &asResearch[researchIndex];
 	UDWORD						type, inc;
-	STRUCTURE					*psCurr;
-	DROID						*psDroid;
-	FUNCTION					*pFunction;
 	UDWORD						compInc;
 	MESSAGE						*pMessage;
 	//the message gets sent to console
@@ -653,320 +625,6 @@ void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE
 		apCompLists[player][type][pResearch->pRedArtefacts[inc]->ref - statRefStart(type)] = REDUNDANT;
 	}
 
-	//check for technology effects
-	for (inc = 0; inc < pResearch->pFunctionList.size(); inc++)
-	{
-		pFunction = pResearch->pFunctionList[inc];
-
-		switch (pFunction->type)
-		{
-			case PRODUCTION_UPGRADE_TYPE:
-				productionUpgrade(pFunction, player);
-				// search the list of players structures for a Factory
-				for (psCurr = apsStructLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
-				{
-					if ((psCurr->pStructureType->type == REF_FACTORY &&
-						((PRODUCTION_UPGRADE_FUNCTION *)pFunction)->factory) ||
-						(psCurr->pStructureType->type == REF_CYBORG_FACTORY &&
-						((PRODUCTION_UPGRADE_FUNCTION *)pFunction)->cyborgFactory) ||
-						(psCurr->pStructureType->type == REF_VTOL_FACTORY &&
-						((PRODUCTION_UPGRADE_FUNCTION *)pFunction)->vtolFactory))
-					{
-						// upgrade the Output for the structure
-						structureProductionUpgrade(psCurr);
-					}
-				}
-				// and the mission structures
-				for (psCurr = mission.apsStructLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
-				{
-					if ((psCurr->pStructureType->type == REF_FACTORY &&
-						((PRODUCTION_UPGRADE_FUNCTION *)pFunction)->factory) ||
-						(psCurr->pStructureType->type == REF_CYBORG_FACTORY &&
-						((PRODUCTION_UPGRADE_FUNCTION *)pFunction)->cyborgFactory) ||
-						(psCurr->pStructureType->type == REF_VTOL_FACTORY &&
-						((PRODUCTION_UPGRADE_FUNCTION *)pFunction)->vtolFactory))
-					{
-						// upgrade the Output for the structure
-						structureProductionUpgrade(psCurr);
-					}
-				}
-			   	// message/sound in here for production boost
-				break;
-			case RESEARCH_UPGRADE_TYPE:
-				researchUpgrade(pFunction, player);
-				//search the list of players structures for a Research Facility
-				for (psCurr = apsStructLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
-				{
-					if (psCurr->pStructureType->type == REF_RESEARCH)
-					{
-						// upgrade the research points
-						structureResearchUpgrade(psCurr);
-					}
-				}
-				// and the mission structures
-				for (psCurr = mission.apsStructLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
-				{
-					if (psCurr->pStructureType->type == REF_RESEARCH)
-					{
-						// upgrade the research points
-						structureResearchUpgrade(psCurr);
-					}
-				}
-				// Stuff a message in here/sound whatever for research boost.
-				break;
-			case POWER_UPGRADE_TYPE:
-				powerUpgrade(pFunction, player);
-				// search the list of players structures for a Power Gens
-				for (psCurr = apsStructLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
-				{
-					if (psCurr->pStructureType->type == REF_POWER_GEN)
-					{
-						// upgrade the power points
-						structurePowerUpgrade(psCurr);
-					}
-				}
-				// and the mission structure
-				for (psCurr = mission.apsStructLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
-				{
-					if (psCurr->pStructureType->type == REF_POWER_GEN)
-					{
-						// upgrade the power points
-						structurePowerUpgrade(psCurr);
-					}
-				}
-				break;
-			case REARM_UPGRADE_TYPE:
-				reArmUpgrade(pFunction, player);
-				// search the list of players structures for a ReArm pad
-				for (psCurr = apsStructLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
-				{
-					if (psCurr->pStructureType->type == REF_REARM_PAD)
-					{
-						// upgrade the rearm points
-						structureReArmUpgrade(psCurr);
-					}
-				}
-				// and the mission structure
-				for (psCurr = mission.apsStructLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
-				{
-					if (psCurr->pStructureType->type == REF_REARM_PAD)
-					{
-						// upgrade the rearm points
-						structureReArmUpgrade(psCurr);
-					}
-				}
-				break;
-			case REPAIR_UPGRADE_TYPE:
-				repairFacUpgrade(pFunction, player);
-				// search the list of players structures for a Power Gens
-				for (psCurr = apsStructLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
-				{
-					if (psCurr->pStructureType->type == REF_REPAIR_FACILITY)
-					{
-						// upgrade the repair points
-						structureRepairUpgrade(psCurr);
-					}
-				}
-				// and the mission structure
-				for (psCurr = mission.apsStructLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
-				{
-					if (psCurr->pStructureType->type == REF_REPAIR_FACILITY)
-					{
-						// upgrade the repair points
-						structureRepairUpgrade(psCurr);
-					}
-				}
-				break;
-			case WEAPON_UPGRADE_TYPE:
-				// for the current player, upgrade the weapon stats
-				weaponUpgrade(pFunction, player);
-				// message/sound for weapon upgrade
-				break;
-			case DROIDSENSOR_UPGRADE_TYPE:
-				// for the current player, upgrade the sensor stats
-				sensorUpgrade(pFunction, player);
-				// for each structure in the player's list, upgrade the sensor stat
-				for (psCurr = apsStructLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
-				{
-					structureSensorUpgrade(psCurr);
-					visTilesUpdate(psCurr);
-				}
-				for (psCurr = mission.apsStructLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
-				{
-					structureSensorUpgrade(psCurr);
-				}
-				// for each droid in the player's list, upgrade the sensor stat
-				for (psDroid = apsDroidLists[player]; psDroid != NULL; psDroid = psDroid->psNext)
-				{
-					droidSensorUpgrade(psDroid);
-					visTilesUpdate(psDroid);
-					if (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)
-					{
-						upgradeTransporterDroids(psDroid, droidSensorUpgrade);
-					}
-				}
-				for (psDroid = mission.apsDroidLists[player]; psDroid != NULL; psDroid = psDroid->psNext)
-				{
-					droidSensorUpgrade(psDroid);
-					if (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)
-					{
-						upgradeTransporterDroids(psDroid, droidSensorUpgrade);
-					}
-				}
-				for (psDroid = apsLimboDroids[player]; psDroid != NULL; psDroid = psDroid->psNext)
-				{
-					droidSensorUpgrade(psDroid);
-					if (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)
-					{
-						upgradeTransporterDroids(psDroid, droidSensorUpgrade);
-					}
-				}
-				// message/sound for sensor upgrade
-				break;
-			case DROIDECM_UPGRADE_TYPE:
-				// for the current player, upgrade the ecm stats
-				ecmUpgrade(pFunction, player);
-				// for each structure in the player's list, upgrade the ecm stat
-				for (psCurr = apsStructLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
-				{
-					structureECMUpgrade(psCurr);
-				}
-				for (psCurr = mission.apsStructLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
-				{
-					structureECMUpgrade(psCurr);
-				}
-				// for each droid in the player's list, upgrade the ecm stat
-				for (psDroid = apsDroidLists[player]; psDroid != NULL; psDroid = psDroid->psNext)
-				{
-					droidECMUpgrade(psDroid);
-					if (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)
-					{
-						upgradeTransporterDroids(psDroid, droidECMUpgrade);
-					}
-				}
-				for (psDroid = mission.apsDroidLists[player]; psDroid != NULL; psDroid = psDroid->psNext)
-				{
-					droidECMUpgrade(psDroid);
-					if (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)
-					{
-						upgradeTransporterDroids(psDroid, droidECMUpgrade);
-					}
-				}
-				for (psDroid = apsLimboDroids[player]; psDroid != NULL; psDroid = psDroid->psNext)
-				{
-					droidECMUpgrade(psDroid);
-					if (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)
-					{
-						upgradeTransporterDroids(psDroid, droidECMUpgrade);
-					}
-				}
-				// message/sound for ecm upgrade
-				break;
-			case DROIDREPAIR_UPGRADE_TYPE:
-				// for the current player, upgrade the repair stats
-				repairUpgrade(pFunction, player);
-				// message/sound for repair upgrade
-				break;
-			case DROIDCONST_UPGRADE_TYPE:
-				// for the current player, upgrade the constructor stats
-				constructorUpgrade(pFunction, player);
-				// message/sound for constructor upgrade
-				break;
-			case DROIDBODY_UPGRADE_TYPE:
-				// for each droid in the player's list, upgrade the body points
-				for (psDroid = apsDroidLists[player]; psDroid != NULL; psDroid = psDroid->psNext)
-				{
-					droidBodyUpgrade(pFunction, psDroid);
-				}
-				for (psDroid = mission.apsDroidLists[player]; psDroid != NULL; psDroid = psDroid->psNext)
-				{
-					droidBodyUpgrade(pFunction, psDroid);
-					if (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)
-					{
-						upgradeTransporterDroids(psDroid, droidSensorUpgrade);
-					}
-				}
-				for (psDroid = apsLimboDroids[player]; psDroid != NULL; psDroid = psDroid->psNext)
-				{
-					droidBodyUpgrade(pFunction, psDroid);
-					if (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)
-					{
-						upgradeTransporterDroids(psDroid, droidSensorUpgrade);
-					}
-				}
-				// DO THIS AFTER so above calculations can use the previous upgrade values for
-				// the current player, upgrade the body stats
-				bodyUpgrade(pFunction, player);
-				// message/sound for body upgrade
-				break;
-			case STRUCTURE_UPGRADE_TYPE:
-				// for each structure in the player's list, upgrade the stats
-				for (psCurr = apsStructLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
-				{
-					//do this for none wallDefense structs
-					if (!wallDefenceStruct(psCurr->pStructureType))
-					{
-						structureBodyUpgrade(pFunction, psCurr);
-						structureArmourUpgrade(pFunction, psCurr);
-						structureResistanceUpgrade(pFunction, psCurr);
-					}
-					// Defense type can have resistance upgrade now - AB 19/02/99
-					if (psCurr->pStructureType->type == REF_DEFENSE)
-					{
-						structureResistanceUpgrade(pFunction, psCurr);
-					}
-				}
-				for (psCurr = mission.apsStructLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
-				{
-					//do this for none wallDefense structs
-					if (!wallDefenceStruct(psCurr->pStructureType))
-					{
-						structureBodyUpgrade(pFunction, psCurr);
-						structureArmourUpgrade(pFunction, psCurr);
-						structureResistanceUpgrade(pFunction, psCurr);
-					}
-					// Defense type can have resistance upgrade now - AB 19/02/99
-					if (psCurr->pStructureType->type == REF_DEFENSE)
-					{
-						structureResistanceUpgrade(pFunction, psCurr);
-					}
-				}
-				// DO THIS AFTER so above calculations can use the previous upgrade values
-				// for the current player, upgrade the structure stats
-				structureUpgrade(pFunction, player);
-				// message/sound for structure upgrade
-				break;
-			case WALLDEFENCE_UPGRADE_TYPE:
-				//for each structure in the player's list, upgrade the stats
-				for (psCurr = apsStructLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
-				{
-					// do this for wallDefense structs
-					if (wallDefenceStruct(psCurr->pStructureType))
-					{
-						structureBodyUpgrade(pFunction, psCurr);
-						structureArmourUpgrade(pFunction, psCurr);
-					}
-				}
-				for (psCurr = mission.apsStructLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
-				{
-					// do this for wallDefense structs
-					if (wallDefenceStruct(psCurr->pStructureType))
-					{
-						structureBodyUpgrade(pFunction, psCurr);
-						structureArmourUpgrade(pFunction, psCurr);
-					}
-				}
-				// DO THIS AFTER so above calculations can use the previous upgrade values
-				// for the current player, upgrade the wall/defence structure stats
-				wallDefenceUpgrade(pFunction, player);
-				// message/sound for wall/defence structure upgrade
-				break;
-			default:
-				ASSERT(false, "Invalid function type");
-				break;
-		}//end of switch
-	}//end of function loop
-
 	//Add message to player's list if Major Topic
 	if ((pResearch->techCode == TC_MAJOR) && bDisplay)
 	{
@@ -1021,9 +679,8 @@ void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE
 		psCBLastResStructure = NULL;
 		CBResFacilityOwner = -1;
 		psCBLastResearch = NULL;
-
-		triggerEventResearched(pResearch, psResearchFacility, player);
 	}
+	triggerEventResearched(pResearch, psResearchFacility, player, bTrigger);
 }
 
 /*This function is called when the research files are reloaded*/
@@ -1622,11 +1279,6 @@ bool checkResearchStats(void)
 		{
 			ASSERT(asResearch[resInc].pStructList[inc] <= numStructureStats, "Invalid Structure for topic %s", asResearch[resInc].pName);
 		}
-		for (inc = 0; inc < asResearch[resInc].pFunctionList.size(); inc++)
-		{
-			ASSERT(asResearch[resInc].pFunctionList[inc]->ref - REF_FUNCTION_START <= numFunctions,
-			       "Invalid function for %s", asResearch[resInc].pName);
-		}
 		for (inc = 0; inc < asResearch[resInc].pRedStructs.size(); inc++)
 		{
 			ASSERT(asResearch[resInc].pRedStructs[inc] <= numStructureStats,
@@ -1738,12 +1390,6 @@ void replaceStructureComponent(STRUCTURE *pList, UDWORD oldType, UDWORD oldCompI
 	{
 		switch (oldType)
 		{
-			case COMP_ECM:
-				objEcmCache((BASE_OBJECT *)psStructure, asECMStats + newCompInc);
-				break;
-			case COMP_SENSOR:
-				objSensorCache((BASE_OBJECT *)psStructure, asSensorStats + newCompInc);
-				break;
 			case COMP_WEAPON:
 				for (inc=0; inc < psStructure->numWeaps; inc++)
 				{
@@ -1848,7 +1494,8 @@ std::vector<AllyResearch> const &listAllyResearch(unsigned ref)
 				r.timeToResearch = -1;
 				if (r.powerNeeded == -1)
 				{
-					r.timeToResearch = (subject.researchPoints - playerRes.currentPoints) / std::max(res->researchPoints, 1u);
+					r.timeToResearch = (subject.researchPoints - playerRes.currentPoints)
+					                   / MAX(psStruct->pStructureType->base.research, 1u);
 				}
 				r.active = psStruct->status == SS_BUILT;
 				researches[cRef].push_back(r);

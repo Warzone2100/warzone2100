@@ -103,11 +103,6 @@
 //used to calculate how often to increase the resistance level of a structure
 #define RESISTANCE_INTERVAL			2000
 
-//used to calculate the time required for rearming
-#define REARM_FACTOR                10
-//used to calculate the time  required for repairing
-#define VTOL_REPAIR_FACTOR          10
-
 //Value is stored for easy access to this structure stat
 UDWORD			factoryModuleStat;
 UDWORD			powerModuleStat;
@@ -118,17 +113,6 @@ STRUCTURE_STATS		*asStructureStats;
 UDWORD				numStructureStats;
 //holder for the limits of each structure per map
 STRUCTURE_LIMITS	*asStructLimits[MAX_PLAYERS];
-
-//holds the upgrades attained through research for structure stats
-STRUCTURE_UPGRADE	asStructureUpgrade[MAX_PLAYERS];
-WALLDEFENCE_UPGRADE	asWallDefenceUpgrade[MAX_PLAYERS];
-
-//holds the upgrades for the functionality of structures through research
-RESEARCH_UPGRADE	asResearchUpgrade[MAX_PLAYERS];
-POWER_UPGRADE		asPowerUpgrade[MAX_PLAYERS];
-REPAIR_FACILITY_UPGRADE		asRepairFacUpgrade[MAX_PLAYERS];
-PRODUCTION_UPGRADE	asProductionUpgrade[MAX_PLAYERS][NUM_FACTORY_TYPES];
-REARM_UPGRADE		asReArmUpgrade[MAX_PLAYERS];
 
 //used to hold the modifiers cross refd by weapon effect and structureStrength
 STRUCTSTRENGTH_MODIFIER		asStructStrengthModifier[WE_NUMEFFECTS][NUM_STRUCT_STRENGTH];
@@ -487,7 +471,29 @@ bool loadStructureStats(QString filename)
 
 		// save indexes of special structures for futher use
 		initModuleStats(inc, psStats->type);  // This function looks like a hack. But slightly less hacky than before.
-		
+
+		psStats->base.research = ini.value("researchPoints", 0).toInt();
+		psStats->base.production = ini.value("productionPoints", 0).toInt();
+		psStats->base.repair = ini.value("repairPoints", 0).toInt();
+		psStats->base.power = ini.value("powerPoints", 0).toInt();
+		psStats->base.rearm = ini.value("rearmPoints", 0).toInt();
+		psStats->base.resistance = ini.value("resistance", 0).toUInt();
+		psStats->base.hitpoints = ini.value("bodyPoints", 1).toUInt();
+		psStats->base.armour = ini.value("armour", 0).toUInt();
+		psStats->base.thermal = ini.value("thermal", 0).toUInt();
+		for (int i = 0; i < MAX_PLAYERS; i++)
+		{
+			psStats->upgrade[i].research = psStats->base.research;
+			psStats->upgrade[i].power = psStats->base.power;
+			psStats->upgrade[i].repair = psStats->base.repair;
+			psStats->upgrade[i].production = psStats->base.production;
+			psStats->upgrade[i].rearm = psStats->base.rearm;
+			psStats->upgrade[i].resistance = ini.value("resistance", 0).toUInt();
+			psStats->upgrade[i].hitpoints = ini.value("bodyPoints", 1).toUInt();
+			psStats->upgrade[i].armour = ini.value("armour", 0).toUInt();
+			psStats->upgrade[i].thermal = ini.value("thermal", 0).toUInt();
+		}
+
 		// set structure strength
 		QString strength = ini.value("strength", "").toString();
 		ASSERT_OR_RETURN(false, structStrength.contains(strength), "Invalid strength '%s' of structure '%s'", strength.toUtf8().constData(), psStats->pName);
@@ -501,12 +507,9 @@ bool loadStructureStats(QString filename)
 		psStats->baseBreadth = ini.value("baseBreadth", 0).toUInt();
 		ASSERT_OR_RETURN(false, psStats->baseBreadth < 100, "Invalid baseBreadth '%d' for structure '%s'", psStats->baseBreadth, psStats->pName);
 		
-		psStats->bodyPoints = ini.value("bodyPoints", 1).toUInt();
-		psStats->armourValue = ini.value("armour").toUInt();
 		psStats->height = ini.value("height").toUInt();
 		psStats->powerToBuild = ini.value("buildPower").toUInt();
 		psStats->buildPoints = ini.value("buildPoints").toUInt();
-		psStats->resistance = ini.value("resistance").toUInt();
 
 		// set structure models
 		QStringList models = ini.value("structureModel").toStringList();
@@ -557,18 +560,6 @@ bool loadStructureStats(QString filename)
 			psStats->psWeapStat[j] = pWeap;
 		}
 
-		// set list of functions
-		QStringList functions = ini.value("functions").toStringList();
-		psStats->defaultFunc = functions.size() - 1;
-		for (int j = 0; j < functions.size(); j++)
-		{
-			QString functionID = functions[j].trimmed();
-				
-			FUNCTION *pFunc = findStatsByName(functionID.toUtf8().constData(), asFunctions, numFunctions);
-			ASSERT_OR_RETURN(false, pFunc, "Invalid item '%s' in list of functions of structure '%s' ", functionID.toUtf8().constData(), psStats->pName);
-			psStats->asFuncList.push_back(pFunc);
-		}
-
 		// check used structure turrets
 		int types = 0;
 		types += psStats->numWeaps != 0;
@@ -597,26 +588,6 @@ bool loadStructureStats(QString filename)
 		asStructLimits[player] = (STRUCTURE_LIMITS *)malloc(sizeof(STRUCTURE_LIMITS) * numStructureStats);
 	}
 	initStructLimits();
-
-	// initialise the structure upgrade arrays
-	memset(asStructureUpgrade, 0, MAX_PLAYERS * sizeof(STRUCTURE_UPGRADE));
-	memset(asWallDefenceUpgrade, 0, MAX_PLAYERS * sizeof(WALLDEFENCE_UPGRADE));
-	memset(asResearchUpgrade, 0, MAX_PLAYERS * sizeof(RESEARCH_UPGRADE));
-	memset(asPowerUpgrade, 0, MAX_PLAYERS * sizeof(POWER_UPGRADE));
-	memset(asRepairFacUpgrade, 0, MAX_PLAYERS * sizeof(REPAIR_FACILITY_UPGRADE));
-	memset(asProductionUpgrade, 0, MAX_PLAYERS * NUM_FACTORY_TYPES * sizeof(PRODUCTION_UPGRADE));
-	memset(asReArmUpgrade, 0, MAX_PLAYERS * sizeof(REARM_UPGRADE));
-
-	// Wall Function requires a structure stat so can allocate it now
-	for (int i = 0; i < numFunctions; ++i)
-	{
-		if (asFunctions[i]->type == WALL_TYPE)
-		{
-			WALL_FUNCTION *wallFunction = (WALL_FUNCTION *)asFunctions[i];
-			wallFunction->pCornerStat = findStatsByName(wallFunction->pStructName, asStructureStats, numStructureStats);
-			ASSERT_OR_RETURN(false, wallFunction->pCornerStat, "Unknown Corner Wall stat for function %s", wallFunction->pName);
-		}
-	}
 
 	return true;
 }
@@ -774,7 +745,7 @@ int32_t structureDamage(STRUCTURE *psStructure, unsigned damage, WEAPON_CLASS we
 	CHECK_STRUCTURE(psStructure);
 
 	debug(LOG_ATTACK, "structure id %d, body %d, armour %d, damage: %d",
-		  psStructure->id, psStructure->body, psStructure->armour[weaponClass], damage);
+		  psStructure->id, psStructure->body, objArmour(psStructure, weaponClass), damage);
 
 	relativeDamage = objDamage(psStructure, damage, structureBody(psStructure), weaponClass, weaponSubClass, isDamagePerSecond);
 
@@ -799,7 +770,7 @@ int32_t getStructureDamage(const STRUCTURE *psStructure)
 
 	unsigned maxBody = structureBodyBuilt(psStructure);
 
-	int64_t health = (int64_t)65536 * psStructure->body / maxBody;
+	int64_t health = (int64_t)65536 * psStructure->body / MAX(1, maxBody);
 	CLIP(health, 0, 65536);
 
 	return 65536 - health;
@@ -1503,10 +1474,6 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 
 		alignStructure(psBuilding);
 
-		//set up the sensor stats
-		objSensorCache(psBuilding, psBuilding->pStructureType->pSensor);
-		objEcmCache(psBuilding, psBuilding->pStructureType->pECM);
-
 		/* Store the weapons */
 		memset(psBuilding->asWeaps, 0, sizeof(WEAPON));
 		psBuilding->numWeaps = 0;
@@ -1526,7 +1493,7 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 						psBuilding->asWeaps[0].lastFired = gameTime;
 					}
 					psBuilding->asWeaps[weapon].nStat =	pStructureType->psWeapStat[weapon] - asWeaponStats;
-					psBuilding->asWeaps[weapon].ammo = (asWeaponStats + psBuilding->asWeaps[weapon].nStat)->numRounds;
+					psBuilding->asWeaps[weapon].ammo = (asWeaponStats + psBuilding->asWeaps[weapon].nStat)->upgrade[psBuilding->player].numRounds;
 					psBuilding->numWeaps++;
 				}
 			}
@@ -1543,14 +1510,10 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 					psBuilding->asWeaps[0].lastFired = gameTime;
 				}
 				psBuilding->asWeaps[0].nStat =	pStructureType->psWeapStat[0] - asWeaponStats;
-				psBuilding->asWeaps[0].ammo = (asWeaponStats + psBuilding->asWeaps[0].nStat)->numRounds;
+				psBuilding->asWeaps[0].ammo = (asWeaponStats + psBuilding->asWeaps[0].nStat)->upgrade[psBuilding->player].numRounds;
 			}
 		}
 
-		for (int j = 0; j < WC_NUM_WEAPON_CLASSES; j++)
-		{
-			psBuilding->armour[j] = (UWORD)structureArmour(pStructureType, (UBYTE)player);
-		}
 		psBuilding->resistance = (UWORD)structureResistance(pStructureType, (UBYTE)player);
 		psBuilding->lastResistance = ACTION_START_TIME;
 
@@ -1698,9 +1661,6 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 				bUpgraded = true;
 				//put any production on hold
 				holdProduction(psBuilding, ModeImmediate);
-
-				psBuilding->pFunctionality->factory.productionOutput += ((
-					PRODUCTION_FUNCTION*)pStructureType->asFuncList[0])->productionOutput;
 			}
 		}
 
@@ -1717,9 +1677,6 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 				bodyDiff = 65536 - getStructureDamage(psBuilding);
 
 				psBuilding->capacity++;
-				psBuilding->pFunctionality->researchFacility.researchPoints += ((
-					RESEARCH_FUNCTION*)pStructureType->asFuncList[0])->
-					researchPoints;
 				bUpgraded = true;
 				//cancel any research - put on hold now
 				if (psBuilding->pFunctionality->researchFacility.psSubject)
@@ -1748,7 +1705,6 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 
 				//need to inform any res Extr associated that not digging until complete
 				releasePowerGen(psBuilding);
-				structurePowerUpgrade(psBuilding);
 			}
 		}
 		if (bUpgraded)
@@ -1948,19 +1904,12 @@ static bool setFunctionality(STRUCTURE	*psBuilding, STRUCTURE_TYPE functionType)
 				default:
 					ASSERT_OR_RETURN(false, false, "Invalid factory type");
 			}
-
-			structureProductionUpgrade(psBuilding); // set production output
-			break;
-		}
-		case REF_RESEARCH:
-		{
-			structureResearchUpgrade(psBuilding); // set research points
 			break;
 		}
 		case REF_POWER_GEN:
+		case REF_HQ:
+		case REF_REARM_PAD:
 		{
-			// Take advantage of upgrades
-			structurePowerUpgrade(psBuilding);
 			break;
 		}
 		case REF_RESOURCE_EXTRACTOR:
@@ -1970,11 +1919,6 @@ static bool setFunctionality(STRUCTURE	*psBuilding, STRUCTURE_TYPE functionType)
 			// Make the structure inactive
 			psResExtracter->active = false;
 			psResExtracter->psPowerGen = NULL;
-			break;
-		}
-		case REF_HQ:
-		{
-			// If an HQ has just been built make sure the radar is displayed!
 			break;
 		}
 		case REF_REPAIR_FACILITY:
@@ -1988,8 +1932,6 @@ static bool setFunctionality(STRUCTURE	*psBuilding, STRUCTURE_TYPE functionType)
 
 			// Add NULL droid to the group
 			psRepairFac->psGroup->add(NULL);
-
-			structureRepairUpgrade(psBuilding); // set repair power
 
 			// Create an assembly point for repaired droids
 			if (!createFlagPosition(&psRepairFac->psDeliveryPoint, psBuilding->player))
@@ -2010,12 +1952,6 @@ static bool setFunctionality(STRUCTURE	*psBuilding, STRUCTURE_TYPE functionType)
 			setFlagPositionInc(psBuilding->pFunctionality, psBuilding->player, REPAIR_FLAG);
 			break;
 		}
-		case REF_REARM_PAD:
-		{
-			structureReArmUpgrade(psBuilding); // set rearm points
-			break;
-		}
-
 		// Structure types without a FUNCTIONALITY
 		default:
 			break;
@@ -3112,8 +3048,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 			//electronic warfare affects the functionality of some structures in multiPlayer
 			if (bMultiPlayer)
 			{
-				if (psStructure->resistance < (SWORD)structureResistance(psStructure->
-					pStructureType, psStructure->player))
+				if (psStructure->resistance < structureResistance(psStructure->pStructureType, psStructure->player))
 				{
 					return;
 				}
@@ -3127,7 +3062,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 			{
 				pResearch = (RESEARCH *)pSubject;
 
-				pointsToAdd = gameTimeAdjustedAverage(psResFacility->researchPoints);
+				pointsToAdd = gameTimeAdjustedAverage(getBuildingResearchPoints(psStructure));
 				pointsToAdd = MIN(pointsToAdd, pResearch->researchPoints - pPlayerRes->currentPoints);
 
 				if (pointsToAdd > 0 && pPlayerRes->currentPoints == 0)
@@ -3207,8 +3142,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 			//electronic warfare affects the functionality of some structures in multiPlayer
 			if (bMultiPlayer)
 			{
-				if (psStructure->resistance < (SWORD)structureResistance(psStructure->
-					pStructureType, psStructure->player))
+				if (psStructure->resistance < structureResistance(psStructure->pStructureType, psStructure->player))
 				{
 					return;
 				}
@@ -3238,7 +3172,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 
 			if (psFactory->buildPointsRemaining > 0)
 			{
-				int progress = gameTimeAdjustedAverage(psFactory->productionOutput);
+				int progress = gameTimeAdjustedAverage(getBuildingProductionPoints(psStructure));
 				if (psFactory->buildPointsRemaining == psFactory->psSubject->buildPoints && progress > 0)
 				{
 					// We're just starting to build, check for power.
@@ -3317,17 +3251,14 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 					//don't do anything if the resistance is low in multiplayer
 					if (bMultiPlayer)
 					{
-						if (psStructure->resistance < (SWORD)structureResistance(psStructure->
-							pStructureType, psStructure->player))
+						if (psStructure->resistance < structureResistance(psStructure->pStructureType, psStructure->player))
 						{
 							objTrace(psStructure->id, "Resistance too low for repair");
 							return;
 						}
 					}
 
-					// FIXME: duplicate code, make repairing cost power again
-					/* do repairing */
-					psDroid->body += gameTimeAdjustedAverage(psRepairFac->power);
+					psDroid->body += gameTimeAdjustedAverage(getBuildingRepairPoints(psStructure));
 				}
 
 				if (psDroid->body >= psDroid->originalBody)
@@ -3387,17 +3318,12 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 
 			//check hasn't died whilst waiting to be rearmed
 			// also clear out any previously repaired droid
-			if ( psDroid->died ||
-					( psDroid->action != DACTION_MOVETOREARMPOINT &&
-					  psDroid->action != DACTION_WAITDURINGREARM ) )
+			if (psDroid->died || (psDroid->action != DACTION_MOVETOREARMPOINT && psDroid->action != DACTION_WAITDURINGREARM))
 			{
 				psReArmPad->psObj = NULL;
 				return;
 			}
-
-			//if waiting to be rearmed
-			if ( psDroid->action == DACTION_WAITDURINGREARM &&
-				psDroid->sMove.Status == MOVEINACTIVE )
+			if (psDroid->action == DACTION_WAITDURINGREARM && psDroid->sMove.Status == MOVEINACTIVE)
 			{
 				if (psReArmPad->timeStarted == ACTION_START_TIME)
 				{
@@ -3405,67 +3331,47 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 					psReArmPad->timeStarted = gameTime;
 					psReArmPad->timeLastUpdated = gameTime;
 				}
-
-				/* do rearming */
-				UDWORD      pointsRequired;
-
-				//amount required is a factor of the droids' weight
-				pointsRequired = psDroid->weight / REARM_FACTOR;
-				//take numWeaps into consideration
-				pointsToAdd = psReArmPad->reArmPoints * (gameTime - psReArmPad->timeStarted) / GAME_TICKS_PER_SEC;
-				pointsAlreadyAdded = psReArmPad->reArmPoints * (psReArmPad->timeLastUpdated - psReArmPad->timeStarted) / GAME_TICKS_PER_SEC;
-				if (pointsToAdd >= pointsRequired)
+				pointsToAdd = getBuildingRearmPoints(psStructure) * (gameTime - psReArmPad->timeStarted) / GAME_TICKS_PER_SEC;
+				pointsAlreadyAdded = getBuildingRearmPoints(psStructure) * (psReArmPad->timeLastUpdated - psReArmPad->timeStarted) / GAME_TICKS_PER_SEC;
+				if (pointsToAdd >= psDroid->weight) // amount required is a factor of the droid weight
 				{
 					// We should be fully loaded by now.
 					for (i = 0; i < psDroid->numWeaps; i++)
 					{
 						// set rearm value to no runs made
 						psDroid->asWeaps[i].usedAmmo = 0;
-						// reset ammo and lastFired
-						psDroid->asWeaps[i].ammo = asWeaponStats[psDroid->asWeaps[i].nStat].numRounds;
+						psDroid->asWeaps[i].ammo = asWeaponStats[psDroid->asWeaps[i].nStat].upgrade[psDroid->player].numRounds;
 						psDroid->asWeaps[i].lastFired = 0;
 					}
 				}
 				else
 				{
-					for (i = 0; i < psDroid->numWeaps; i++)
+					for (i = 0; i < psDroid->numWeaps; i++)		// rearm one weapon at a time
 					{
 						// Make sure it's a rearmable weapon (and so we don't divide by zero)
-						if (psDroid->asWeaps[i].usedAmmo > 0 && asWeaponStats[psDroid->asWeaps[i].nStat].numRounds > 0)
+						if (psDroid->asWeaps[i].usedAmmo > 0 && asWeaponStats[psDroid->asWeaps[i].nStat].upgrade[psDroid->player].numRounds > 0)
 						{
 							// Do not "simplify" this formula.
 							// It is written this way to prevent rounding errors.
 							int ammoToAddThisTime =
-								pointsToAdd*getNumAttackRuns(psDroid,i)/pointsRequired -
-								pointsAlreadyAdded*getNumAttackRuns(psDroid,i)/pointsRequired;
+								pointsToAdd * getNumAttackRuns(psDroid, i) / psDroid->weight -
+								pointsAlreadyAdded * getNumAttackRuns(psDroid, i) / psDroid->weight;
 							psDroid->asWeaps[i].usedAmmo -= std::min<unsigned>(ammoToAddThisTime, psDroid->asWeaps[i].usedAmmo);
 							if (ammoToAddThisTime)
 							{
 								// reset ammo and lastFired
-								psDroid->asWeaps[i].ammo = asWeaponStats[psDroid->asWeaps[i].nStat].numRounds;
+								psDroid->asWeaps[i].ammo = asWeaponStats[psDroid->asWeaps[i].nStat].upgrade[psDroid->player].numRounds;
 								psDroid->asWeaps[i].lastFired = 0;
 								break;
 							}
 						}
 					}
 				}
-				/* do repairing */
-				if (psDroid->body < psDroid->originalBody)
+				if (psDroid->body < psDroid->originalBody) // do repairs
 				{
-					// Do not "simplify" this formula.
-					// It is written this way to prevent rounding errors.
-					pointsToAdd =  VTOL_REPAIR_FACTOR * (100+asReArmUpgrade[psStructure->player].modifier) * (gameTime -
-					               psReArmPad->timeStarted) / (GAME_TICKS_PER_SEC * 100);
-					pointsAlreadyAdded =  VTOL_REPAIR_FACTOR * (100+asReArmUpgrade[psStructure->player].modifier) * (psReArmPad->timeLastUpdated -
-					               psReArmPad->timeStarted) / (GAME_TICKS_PER_SEC * 100);
-
-					if ((pointsToAdd - pointsAlreadyAdded) > 0)
-					{
-						psDroid->body += (pointsToAdd - pointsAlreadyAdded);
-					}
+					psDroid->body += gameTimeAdjustedAverage(getBuildingRepairPoints(psStructure));
 					if (psDroid->body >= psDroid->originalBody)
 					{
-						/* set droid points to max */
 						psDroid->body = psDroid->originalBody;
 					}
 				}
@@ -3722,8 +3628,7 @@ void structureUpdate(STRUCTURE *psBuilding, bool mission)
 	}
 
 	//check the resistance level of the structure
-	iPointsRequired = structureResistance(psBuilding->pStructureType,
-		psBuilding->player);
+	iPointsRequired = structureResistance(psBuilding->pStructureType, psBuilding->player);
 	if (psBuilding->resistance < (SWORD)iPointsRequired)
 	{
 		//start the resistance increase
@@ -5566,7 +5471,7 @@ void printStructureInfo(STRUCTURE *psStructure)
 		{
 			CONPRINTF(ConsoleString, (ConsoleString, "%s - %d Units assigned - ID %d - sensor range %d - ECM %d",
 					  getStatName(psStructure->pStructureType), countAssignedDroids(psStructure),
-					  psStructure->id, structSensorRange(psStructure), structConcealment(psStructure)));
+					  psStructure->id, structSensorRange(psStructure), structJammerPower(psStructure)));
 		}
 		else
 #endif
@@ -5583,8 +5488,8 @@ void printStructureInfo(STRUCTURE *psStructure)
 		{
 			CONPRINTF(ConsoleString, (ConsoleString, "%s - %d Units assigned - ID %d - armour %d|%d - sensor range %d - ECM %d - born %u - depth %.02f",
 				getStatName(psStructure->pStructureType), countAssignedDroids(psStructure),
-				psStructure->id, psStructure->armour[WC_KINETIC], psStructure->armour[WC_HEAT],
-					structSensorRange(psStructure), structConcealment(psStructure), psStructure->born, psStructure->foundationDepth));
+				psStructure->id, objArmour(psStructure, WC_KINETIC), objArmour(psStructure, WC_HEAT),
+					structSensorRange(psStructure), structJammerPower(psStructure), psStructure->born, psStructure->foundationDepth));
 		} else
 #endif
 		if (psStructure->pStructureType->pSensor != NULL
@@ -5648,7 +5553,7 @@ void printStructureInfo(STRUCTURE *psStructure)
 		{
 			CONPRINTF(ConsoleString, (ConsoleString, "%s -  Connected %u of %u - Unique ID %u - Multiplier: %u",
 					  getStatName(psStructure->pStructureType), numConnected, NUM_POWER_MODULES,
-					  psStructure->id, psPowerGen->multiplier));
+					  psStructure->id, getBuildingPowerPoints(psStructure)));
 		}
 		else
 #endif
@@ -5665,7 +5570,7 @@ void printStructureInfo(STRUCTURE *psStructure)
 		{
 			CONPRINTF(ConsoleString, (ConsoleString, "%s - Damage % 3.2f%% - Unique ID %u - Production Output: %u - BuildPointsRemaining: %u",
 					  getStatName(psStructure->pStructureType), getStructureDamage(psStructure) * (100.f/65536.f), psStructure->id,
-					  psStructure->pFunctionality->factory.productionOutput,
+					  getBuildingProductionPoints(psStructure),
 					  psStructure->pFunctionality->factory.buildPointsRemaining));
 		}
 		else
@@ -5681,7 +5586,7 @@ void printStructureInfo(STRUCTURE *psStructure)
 		{
 			CONPRINTF(ConsoleString, (ConsoleString, "%s - Damage % 3.2f%% - Unique ID %u - Research Points: %u",
 					  getStatName(psStructure->pStructureType), getStructureDamage(psStructure) * (100.f/65536.f), psStructure->id,
-					  psStructure->pFunctionality->researchFacility.researchPoints));
+					  getBuildingResearchPoints(psStructure)));
 		}
 		else
 #endif
@@ -5796,7 +5701,7 @@ bool electronicDamage(BASE_OBJECT *psTarget, UDWORD damage, UBYTE attackPlayer)
 		psStructure = (STRUCTURE *)psTarget;
 		bCompleted = false;
 
-		if (psStructure->pStructureType->resistance == 0)
+		if (psStructure->pStructureType->upgrade[psStructure->player].resistance == 0)
 		{
 			return false;	// this structure type cannot be taken over
 		}
@@ -5913,7 +5818,7 @@ bool validStructResistance(STRUCTURE *psStruct)
 
 	ASSERT_OR_RETURN(false, psStruct != NULL, "Invalid structure pointer");
 
-	if (psStruct->pStructureType->resistance != 0)
+	if (psStruct->pStructureType->upgrade[psStruct->player].resistance != 0)
 	{
 		/*certain structures will only provide rewards in multiplayer so
 		before they can become valid targets their resistance must be at least
@@ -5928,8 +5833,7 @@ bool validStructResistance(STRUCTURE *psStruct)
 			case REF_CYBORG_FACTORY:
 			case REF_HQ:
 			case REF_REPAIR_FACILITY:
-				if (psStruct->resistance >= (SDWORD) (structureResistance(psStruct->
-					pStructureType, psStruct->player) / 2))
+				if (psStruct->resistance >= structureResistance(psStruct->pStructureType, psStruct->player) / 2)
 				{
 					bTarget = true;
 				}
@@ -5965,115 +5869,17 @@ unsigned structureBodyBuilt(STRUCTURE const *psStructure)
 /*Access functions for the upgradeable stats of a structure*/
 UDWORD structureBody(const STRUCTURE *psStructure)
 {
-	const STRUCTURE_STATS *psStats = psStructure->pStructureType;
-	const UBYTE player = psStructure->player;
-
-	switch(psStats->type)
-	{
-		// wall/defence structures:
-		case REF_DEFENSE:
-		case REF_WALL:
-		case REF_WALLCORNER:
-		case REF_GATE:
-		case REF_BLASTDOOR:
-			return psStats->bodyPoints + (psStats->bodyPoints * asWallDefenceUpgrade[player].body)/100;
-		// all other structures:
-		default:
-			return structureBaseBody(psStructure) + (structureBaseBody(psStructure) * asStructureUpgrade[player].body)/100;
-	}
+	return psStructure->pStructureType->upgrade[psStructure->player].hitpoints;
 }
-
-
-/*this returns the Base Body points of a structure - regardless of upgrade*/
-UDWORD structureBaseBody(const STRUCTURE *psStructure)
-{
-	const STRUCTURE_STATS *psStats = psStructure->pStructureType;
-
-	ASSERT_OR_RETURN(0, psStructure != NULL, "Invalid structure pointer");
-
-	switch(psStats->type)
-	{
-		// modules may be attached:
-		case REF_FACTORY:
-		case REF_VTOL_FACTORY:
-			ASSERT_OR_RETURN(0, psStructure->pFunctionality != NULL, "Invalid structure functionality pointer for factory base body");
-			if (psStructure->capacity > 0)
-			{
-				//add on the default for the factory
-				return psStats->bodyPoints + asStructureStats[factoryModuleStat].bodyPoints * psStructure->capacity;
-			}
-			else
-			{
-				//no modules
-				return psStats->bodyPoints;
-			}
-		case REF_RESEARCH:
-			ASSERT_OR_RETURN(0, psStructure->pFunctionality != NULL, "Invalid structure functionality pointer for research base body");
-			if (psStructure->capacity > 0)
-			{
-				//add on the default for the factory
-				return psStats->bodyPoints + asStructureStats[researchModuleStat].bodyPoints;
-			}
-			else
-			{
-				//no modules
-				return psStats->bodyPoints;
-			}
-		case REF_POWER_GEN:
-			ASSERT_OR_RETURN(0, psStructure->pFunctionality != NULL, "Invalid structure functionality pointer for power gen base body");
-			if (psStructure->capacity > 0)
-			{
-				//add on the default for the factory
-				return psStats->bodyPoints + asStructureStats[powerModuleStat].bodyPoints;
-			}
-			else
-			{
-				//no modules
-				return psStats->bodyPoints;
-			}
-		// all other structures:
-		default:
-			return psStats->bodyPoints;
-	}
-}
-
 
 UDWORD	structureArmour(STRUCTURE_STATS *psStats, UBYTE player)
 {
-	switch(psStats->type)
-	{
-	case REF_DEFENSE:
-	case REF_WALL:
-	case REF_WALLCORNER:
-	case REF_GATE:
-	case REF_BLASTDOOR:
-		return (psStats->armourValue + (psStats->armourValue *
-			asWallDefenceUpgrade[player].armour)/100);
-		break;
-	default:
-		return (psStats->armourValue + (psStats->armourValue *
-			asStructureUpgrade[player].armour)/100);
-		break;
-	}
+	return psStats->upgrade[player].armour;
 }
-
 
 UDWORD	structureResistance(STRUCTURE_STATS *psStats, UBYTE player)
 {
-	switch(psStats->type)
-	{
-	case REF_WALL:
-	case REF_GATE:
-	case REF_WALLCORNER:
-	case REF_BLASTDOOR:
-		//not upgradeable
-		return psStats->resistance;
-		break;
-	default:
-		return (psStats->resistance + (psStats->resistance *
-			asStructureUpgrade[player].resistance)/100);
-		break;
-	}
+	return psStats->upgrade[player].resistance;
 }
 
 
@@ -7136,8 +6942,7 @@ STRUCTURE * giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, bool
 			psStructure->player	= (UBYTE)attackPlayer;
 
 			//restore the resistance value
-			psStructure->resistance = (UWORD)structureResistance(psStructure->
-				pStructureType, psStructure->player);
+			psStructure->resistance = (UWORD)structureResistance(psStructure->pStructureType, psStructure->player);
 
 			// add to other list.
 			addStructure(psStructure);
@@ -7279,25 +7084,6 @@ STRUCTURE * giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, bool
 	intNotifyResearchButton(prevState);
 	return psNewStruct;
 }
-
-
-/*checks that the structure stats have loaded up as expected - must be done after
-all StructureStats parts have been loaded*/
-bool checkStructureStats(void)
-{
-	UDWORD	structInc, inc;
-
-	for (structInc=0; structInc < numStructureStats; structInc++)
-	{
-		for (inc = 0; inc < asStructureStats[structInc].asFuncList.size(); inc++)
-		{
-			ASSERT_OR_RETURN(false, asStructureStats[structInc].asFuncList[inc] != NULL, "Invalid function for structure %s", asStructureStats[structInc].pName);
-
-		}
-	}
-	return true;
-}
-
 
 /*returns the power cost to build this structure*/
 UDWORD structPowerToBuild(const STRUCTURE* psStruct)

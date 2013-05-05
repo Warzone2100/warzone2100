@@ -498,7 +498,7 @@ static void processVisibilitySelf(BASE_OBJECT *psObj)
 {
 	int viewer;
 
-	if (psObj->type != OBJ_FEATURE && psObj->sensorRange > 0)
+	if (psObj->type != OBJ_FEATURE && objSensorRange(psObj) > 0)
 	{
 		// one can trivially see oneself
 		setSeenBy(psObj, psObj->player, UBYTE_MAX);
@@ -545,7 +545,7 @@ static void processVisibilityVision(BASE_OBJECT *psViewer)
 	// get all the objects from the grid the droid is in
 	// Will give inconsistent results if hasSharedVision is not an equivalence relation.
 	static GridList gridList;  // static to avoid allocations.
-	gridList = gridStartIterateUnseen(psViewer->pos.x, psViewer->pos.y, psViewer->sensorRange, psViewer->player);
+	gridList = gridStartIterateUnseen(psViewer->pos.x, psViewer->pos.y, objSensorRange(psViewer), psViewer->player);
 	for (GridIterator gi = gridList.begin(); gi != gridList.end(); ++gi)
 	{
 		BASE_OBJECT *psObj = *gi;
@@ -769,7 +769,7 @@ bool lineOfFire(const SIMPLE_OBJECT* psViewer, const BASE_OBJECT* psTarget, int 
 	}
 	// 2d distance
 	int distance = iHypot(removeZ(psTarget->pos - psViewer->pos));
-	int range = proj_GetLongRange(psStats);
+	int range = proj_GetLongRange(psStats, psViewer->player);
 	if (proj_Direct(psStats))
 	{
 		/** direct shots could collide with ground **/
@@ -970,33 +970,4 @@ static int checkFireLine(const SIMPLE_OBJECT* psViewer, const BASE_OBJECT* psTar
 		return DEG(1) + angletan;
 	}
 
-}
-
-void objSensorCache(BASE_OBJECT *psObj, SENSOR_STATS *psSensor)
-{
-	if (psSensor)
-	{
-		psObj->sensorRange = sensorRange(psSensor, psObj->player);
-	}
-	else if (psObj->type == OBJ_DROID || psObj->type == OBJ_STRUCTURE)
-	{
-		// Give them the default sensor if not
-		psObj->sensorRange = sensorRange(asSensorStats + aDefaultSensor[psObj->player], psObj->player);
-	}
-	else
-	{
-		psObj->sensorRange = 0;
-	}
-}
-
-void objEcmCache(BASE_OBJECT *psObj, ECM_STATS *psEcm)
-{
-	if (psEcm)
-	{
-		psObj->ECMMod = ecmRange(psEcm, psObj->player);
-	}
-	else
-	{
-		psObj->ECMMod = 0;
-	}
 }

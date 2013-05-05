@@ -62,7 +62,6 @@
 #include "edit3d.h"
 #include "structure.h"
 #include "research.h"
-#include "function.h"
 #include "hci.h"
 #include "stats.h"
 #include "game.h"
@@ -238,7 +237,7 @@ void intUpdateProgressBar(WIDGET *psWidget, W_CONTEXT *psContext)
 			{
 				// Started production. Set the colour of the bar to yellow.
 				int buildPointsTotal = FactoryGetTemplate(Manufacture)->buildPoints;
-				int buildRate = Manufacture->timeStartHold == 0 ? Manufacture->productionOutput : 0;
+				int buildRate = Manufacture->timeStartHold == 0 ? getBuildingProductionPoints(Structure) : 0;
 				formatTime(BarGraph, buildPointsTotal - Manufacture->buildPointsRemaining, buildPointsTotal, buildRate, _("Construction Progress"));
 			}
 			else
@@ -259,7 +258,7 @@ void intUpdateProgressBar(WIDGET *psWidget, W_CONTEXT *psContext)
 			}
 			if (currentPoints != 0)
 			{
-				int researchRate = Research->timeStartHold == 0 ? Research->researchPoints : 0;
+				int researchRate = Research->timeStartHold == 0 ? getBuildingResearchPoints(Structure) : 0;
 				formatTime(BarGraph, currentPoints, Research->psSubject->researchPoints, researchRate, _("Research Progress"));
 			}
 			else

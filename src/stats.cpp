@@ -57,14 +57,6 @@ static TERRAIN_TABLE	*asTerrainTable;
 WEAPON_MODIFIER		asWeaponModifier[WE_NUMEFFECTS][PROPULSION_TYPE_NUM];
 WEAPON_MODIFIER		asWeaponModifierBody[WE_NUMEFFECTS][SIZE_NUM];
 
-//used to hold the current upgrade level per player per weapon subclass
-WEAPON_UPGRADE		asWeaponUpgrade[MAX_PLAYERS][WSC_NUM_WEAPON_SUBCLASSES];
-SENSOR_UPGRADE		asSensorUpgrade[MAX_PLAYERS];
-ECM_UPGRADE		asECMUpgrade[MAX_PLAYERS];
-REPAIR_UPGRADE		asRepairUpgrade[MAX_PLAYERS];
-CONSTRUCTOR_UPGRADE	asConstUpgrade[MAX_PLAYERS];
-BODY_UPGRADE		asBodyUpgrade[MAX_PLAYERS][BODY_TYPE];
-
 /* The number of different stats stored */
 UDWORD		numBodyStats;
 UDWORD		numBrainStats;
@@ -418,14 +410,6 @@ void statsInitVars(void)
 	numWeaponStats = 0;
 	numConstructStats = 0;
 
-	//initialise the upgrade structures
-	memset(asWeaponUpgrade, 0, sizeof(asWeaponUpgrade));
-	memset(asSensorUpgrade, 0, sizeof(asSensorUpgrade));
-	memset(asECMUpgrade, 0, sizeof(asECMUpgrade));
-	memset(asRepairUpgrade, 0, sizeof(asRepairUpgrade));
-	memset(asConstUpgrade, 0, sizeof(asConstUpgrade));
-	memset(asBodyUpgrade, 0, sizeof(asBodyUpgrade));
-
 	// init the max values
 	maxComponentWeight = maxBodyArmour = maxBodyPower =
 	        maxBodyPoints = maxSensorRange = maxECMRange =
@@ -461,8 +445,6 @@ bool statsShutDown(void)
 	deallocBodyStats();
 	STATS_DEALLOC(asBrainStats, numBrainStats);
 	STATS_DEALLOC(asPropulsionStats, numPropulsionStats);
-	STATS_DEALLOC(asSensorStats, numSensorStats);
-	STATS_DEALLOC(asECMStats, numECMStats);
 	STATS_DEALLOC(asRepairStats, numRepairStats);
 	STATS_DEALLOC(asConstructStats, numConstructStats);
 	deallocPropulsionTypes();
@@ -644,26 +626,37 @@ bool loadWeaponStats(const char *pFileName)
 		psStats->buildPoints = ini.value("buildPoints", 0).toUInt();
 		psStats->weight = ini.value("weight", 0).toUInt();
 		psStats->body = ini.value("body", 0).toUInt();
-		psStats->longRange = ini.value("longRange").toUInt();
-		psStats->longHit = ini.value("longHit").toUInt();
-		psStats->firePause = ini.value("firePause").toUInt();
-		psStats->numExplosions = ini.value("numExplosions").toUInt();
-		psStats->numRounds = ini.value("numRounds").toUInt();
-		psStats->reloadTime = ini.value("reloadTime").toUInt();
-		psStats->damage = ini.value("damage").toUInt();
-		psStats->radius = ini.value("radius").toUInt();
-		psStats->radiusHit = ini.value("radiusHit").toUInt();
-		psStats->radiusDamage = ini.value("radiusDamage").toUInt();
-		psStats->periodicalDamageTime = ini.value("periodicalDamageTime", 0).toUInt();
-		psStats->periodicalDamage = ini.value("periodicalDamage", 0).toUInt();
-		psStats->periodicalDamageRadius = ini.value("periodicalDamageRadius", 0).toUInt();
 		psStats->radiusLife = ini.value("radiusLife").toUInt();
+
+		psStats->base.maxRange = ini.value("longRange").toUInt();
+		psStats->base.minRange = ini.value("minRange", 0).toUInt();
+		psStats->base.hitChance = ini.value("longHit").toUInt();
+		psStats->base.firePause = ini.value("firePause").toUInt();
+		psStats->base.numRounds = ini.value("numRounds").toUInt();
+		psStats->base.reloadTime = ini.value("reloadTime").toUInt();
+		psStats->base.damage = ini.value("damage").toUInt();
+		psStats->base.radius = ini.value("radius").toUInt();
+		psStats->base.radiusDamage = ini.value("radiusDamage").toUInt();
+		psStats->base.periodicalDamageTime = ini.value("periodicalDamageTime", 0).toUInt();
+		psStats->base.periodicalDamage = ini.value("periodicalDamage", 0).toUInt();
+		psStats->base.periodicalDamageRadius = ini.value("periodicalDamageRadius", 0).toUInt();
+		// multiply time stats
+		psStats->base.firePause *= WEAPON_TIME;
+		psStats->base.periodicalDamageTime *= WEAPON_TIME;
+		psStats->radiusLife *= WEAPON_TIME;
+		psStats->base.reloadTime *= WEAPON_TIME;
+		// copy for upgrades
+		for (int j = 0; j < MAX_PLAYERS; j++)
+		{
+			psStats->upgrade[j] = psStats->base;
+		}
+
+		psStats->numExplosions = ini.value("numExplosions").toUInt();
 		psStats->flightSpeed = ini.value("flightSpeed", 1).toUInt();
 		psStats->rotate = ini.value("rotate").toUInt();
 		psStats->minElevation = ini.value("minElevation").toInt();
 		psStats->maxElevation = ini.value("maxElevation").toInt();
 		psStats->recoilValue = ini.value("recoilValue").toUInt();
-		psStats->minRange = ini.value("minRange", 0).toUInt();
 		psStats->effectSize = ini.value("effectSize").toUInt();
 		surfaceToAir = ini.value("surfaceToAir", 0).toUInt();
 		psStats->vtolAttackRuns = ini.value("numAttackRuns", 0).toUInt();
@@ -678,12 +671,6 @@ bool loadWeaponStats(const char *pFileName)
 
 		allocateStatName((BASE_STATS *)psStats, list[i].toUtf8().constData());
 		psStats->ref = REF_WEAPON_START + i;
-
-		//multiply time stats
-		psStats->firePause *= WEAPON_TIME;
-		psStats->periodicalDamageTime *= WEAPON_TIME;
-		psStats->radiusLife *= WEAPON_TIME;
-		psStats->reloadTime *= WEAPON_TIME;
 
 		//get the IMD for the component
 		psStats->pIMD = statsGetIMD(ini, psStats, "model");
@@ -817,9 +804,9 @@ bool loadWeaponStats(const char *pFileName)
 		// Set the max stat values for the design screen
 		if (psStats->designable)
 		{
-			setMaxWeaponRange(psStats->longRange);
-			setMaxWeaponDamage(psStats->damage);
-			setMaxWeaponROF(weaponROF(psStats, -1));
+			setMaxWeaponRange(psStats->base.maxRange);
+			setMaxWeaponDamage(psStats->base.damage);
+			setMaxWeaponROF(weaponROF(psStats, 0));
 			setMaxComponentWeight(psStats->weight);
 		}
 
@@ -852,10 +839,17 @@ bool loadBodyStats(const char *pFileName)
 		psStats->buildPoints = ini.value("buildPoints", 0).toInt();
 		psStats->body = ini.value("hitpoints").toInt();
 		psStats->weaponSlots = ini.value("weaponSlots").toInt();
-		psStats->powerOutput = ini.value("powerOutput").toInt();
-		psStats->armourValue[WC_KINETIC] = ini.value("armourKinetic").toInt();
-		psStats->armourValue[WC_HEAT] = ini.value("armourHeat").toInt();
 		psStats->designable = ini.value("designable", false).toBool();
+		sstrcpy(psStats->bodyClass, ini.value("class").toString().toUtf8().constData());
+		psStats->base.thermal = ini.value("armourHeat").toInt();
+		psStats->base.armour = ini.value("armourKinetic").toInt();
+		psStats->base.power = ini.value("powerOutput").toInt();
+		psStats->base.body = psStats->body; // special exception hack
+		psStats->base.resistance = ini.value("resistance", 30).toInt();
+		for (int j = 0; j < MAX_PLAYERS; j++)
+		{
+			psStats->upgrade[j] = psStats->base;
+		}
 		QString dtype = ini.value("droidType", "DROID").toString();
 		psStats->droidTypeOverride = DROID_DEFAULT;
 		if (dtype.compare("PERSON") == 0)
@@ -899,9 +893,9 @@ bool loadBodyStats(const char *pFileName)
 		//set the max stat values for the design screen
 		if (psStats->designable)
 		{
-			setMaxBodyArmour(psStats->armourValue[WC_KINETIC]);
-			setMaxBodyArmour(psStats->armourValue[WC_HEAT]);
-			setMaxBodyPower(psStats->powerOutput);
+			setMaxBodyArmour(psStats->base.armour);
+			setMaxBodyArmour(psStats->base.thermal);
+			setMaxBodyPower(psStats->base.power);
 			setMaxBodyPoints(psStats->body);
 			setMaxComponentWeight(psStats->weight);
 		}
@@ -1103,9 +1097,12 @@ bool loadSensorStats(const char *pFileName)
 		psStats->buildPoints = ini.value("buildPoints", 0).toInt();
 		psStats->weight = ini.value("weight", 0).toInt();
 		psStats->body = ini.value("bodyPoints", 0).toInt();
-		psStats->range = ini.value("range").toInt();
+		psStats->base.range = ini.value("range").toInt();
+		for (int j = 0; j < MAX_PLAYERS; j++)
+		{
+			psStats->upgrade[j].range = psStats->base.range;
+		}
 		psStats->time = ini.value("time").toInt();
-		psStats->power = ini.value("power").toInt();
 		psStats->designable = ini.value("designable", false).toBool();
 
 		allocateStatName((BASE_STATS *)psStats, list[i].toUtf8().constData());
@@ -1167,7 +1164,7 @@ bool loadSensorStats(const char *pFileName)
 		// set the max stat values for the design screen
 		if (psStats->designable)
 		{
-			setMaxSensorRange(psStats->range);
+			setMaxSensorRange(psStats->base.range);
 			setMaxComponentWeight(psStats->weight);
 		}
 
@@ -1201,7 +1198,11 @@ bool loadECMStats(const char *pFileName)
 		psStats->buildPoints = ini.value("buildPoints", 0).toInt();
 		psStats->weight = ini.value("weight", 0).toInt();
 		psStats->body = ini.value("body", 0).toInt();
-		psStats->range = ini.value("range").toInt();
+		psStats->base.range = ini.value("range").toInt();
+		for (int j = 0; j < MAX_PLAYERS; j++)
+		{
+			psStats->upgrade[j].range = psStats->base.range;
+		}
 		psStats->designable = ini.value("designable", false).toBool();
 
 		allocateStatName((BASE_STATS *)psStats, list[i].toUtf8().constData());
@@ -1232,7 +1233,7 @@ bool loadECMStats(const char *pFileName)
 		// Set the max stat values for the design screen
 		if (psStats->designable)
 		{
-			setMaxECMRange(psStats->range);
+			setMaxECMRange(psStats->base.range);
 			setMaxComponentWeight(psStats->weight);
 		}
 	}
@@ -1265,8 +1266,11 @@ bool loadRepairStats(const char *pFileName)
 		psStats->buildPower = ini.value("buildPower", 0).toInt();
 		psStats->buildPoints = ini.value("buildPoints", 0).toInt();
 		psStats->weight = ini.value("weight", 0).toInt();
-		psStats->repairArmour = ini.value("repairArmour").toBool();
-		psStats->repairPoints = ini.value("repairPoints").toInt();
+		psStats->base.repairPoints = ini.value("repairPoints").toInt();
+		for (int j = 0; j < MAX_PLAYERS; j++)
+		{
+			psStats->upgrade[j].repairPoints = psStats->base.repairPoints;
+		}
 		psStats->time = ini.value("time", 0).toInt() * WEAPON_TIME;
 		psStats->designable = ini.value("designable", false).toBool();
 
@@ -1301,7 +1305,7 @@ bool loadRepairStats(const char *pFileName)
 		//set the max stat values for the design screen
 		if (psStats->designable)
 		{
-			setMaxRepairPoints(psStats->repairPoints);
+			setMaxRepairPoints(psStats->base.repairPoints);
 			setMaxComponentWeight(psStats->weight);
 		}
 
@@ -1335,7 +1339,11 @@ bool loadConstructStats(const char *pFileName)
 		psStats->buildPoints = ini.value("buildPoints", 0).toInt();
 		psStats->weight = ini.value("weight", 0).toInt();
 		psStats->body = ini.value("bodyPoints", 0).toInt();
-		psStats->constructPoints = ini.value("constructPoints").toInt();
+		psStats->base.constructPoints = ini.value("constructPoints").toInt();
+		for (int j = 0; j < MAX_PLAYERS; j++)
+		{
+			psStats->upgrade[j].constructPoints = psStats->base.constructPoints;
+		}
 		psStats->designable = ini.value("designable", false).toBool();
 
 		allocateStatName((BASE_STATS *)psStats, list[i].toUtf8().constData());
@@ -1352,7 +1360,7 @@ bool loadConstructStats(const char *pFileName)
 		// Set the max stat values for the design screen
 		if (psStats->designable)
 		{
-			setMaxConstPoints(psStats->constructPoints);
+			setMaxConstPoints(psStats->base.constructPoints);
 			setMaxComponentWeight(psStats->weight);
 		}
 	}
@@ -2128,6 +2136,34 @@ bool getWeaponSubClass(const char *subClass, WEAPON_SUBCLASS *wclass)
 	return true;
 }
 
+/*returns the weapon sub class based on the string name passed in */
+const char *getWeaponSubClass(WEAPON_SUBCLASS wclass)
+{
+	switch (wclass)
+	{
+	case WSC_CANNON: return "CANNON";
+	case WSC_MORTARS: return "MORTARS";
+	case WSC_MISSILE: return "MISSILE";
+	case WSC_ROCKET: return "ROCKET";
+	case WSC_ENERGY: return "ENERGY";
+	case WSC_GAUSS: return "GAUSS";
+	case WSC_FLAME: return "FLAME";
+	case WSC_HOWITZERS: return "HOWITZERS";
+	case WSC_MGUN: return "MACHINE GUN";
+	case WSC_ELECTRONIC: return "ELECTRONIC";
+	case WSC_AAGUN: return "A-A GUN";
+	case WSC_SLOWMISSILE: return "SLOW MISSILE";
+	case WSC_SLOWROCKET: return "SLOW ROCKET";
+	case WSC_LAS_SAT: return "LAS_SAT";
+	case WSC_BOMB: return "BOMB";
+	case WSC_COMMAND: return "COMMAND";
+	case WSC_EMP: return "EMP";
+	case WSC_NUM_WEAPON_SUBCLASSES: break;
+	}
+	ASSERT(false, "No such weapon subclass");
+	return "Bad weapon subclass";
+}
+
 /*returns the movement model based on the string name passed in */
 bool getMovementModel(const char *movementModel, MOVEMENT_MODEL *model)
 {
@@ -2210,22 +2246,13 @@ bool getWeaponClass(QString weaponClassStr, WEAPON_CLASS *weaponClass)
 	{
 		*weaponClass = WC_KINETIC;
 	}
-	else if (weaponClassStr.compare("EXPLOSIVE") == 0)
-	{
-		//psStats->weaponClass = WC_EXPLOSIVE;
-		*weaponClass = WC_KINETIC; 	// explosives were removed from release version of Warzone
-	}
 	else if (weaponClassStr.compare("HEAT") == 0)
 	{
 		*weaponClass = WC_HEAT;
 	}
-	else if (weaponClassStr.compare("MISC") == 0)
-	{
-		//psStats->weaponClass = WC_MISC;
-		*weaponClass = WC_HEAT;		// removed from release version of Warzone
-	}
 	else
 	{
+		ASSERT(false, "Bad weapon class %s", weaponClassStr.toUtf8().constData());
 		return false;
 	};
 	return true;
@@ -2251,87 +2278,71 @@ char *allocateName(const char *name)
 
 
 /*Access functions for the upgradeable stats of a weapon*/
-UDWORD	weaponFirePause(const WEAPON_STATS *psStats, UBYTE player)
+int weaponFirePause(const WEAPON_STATS *psStats, int player)
 {
-	if (psStats->reloadTime == 0)
-	{
-		return (psStats->firePause - (psStats->firePause * asWeaponUpgrade[player][
-		        psStats->weaponSubClass].firePause) / 100);
-	}
-	else
-	{
-		return psStats->firePause;	//fire pause is neglectable for weapons with reload time
-	}
+	return psStats->upgrade[player].firePause;
 }
 
 /* Reload time is reduced for weapons with salvo fire */
-UDWORD	weaponReloadTime(WEAPON_STATS *psStats, UBYTE player)
+int weaponReloadTime(const WEAPON_STATS *psStats, int player)
 {
-	return (psStats->reloadTime - (psStats->reloadTime * asWeaponUpgrade[player][psStats->weaponSubClass].firePause) / 100);
+	return psStats->upgrade[player].reloadTime;
 }
 
-UDWORD	weaponLongHit(const WEAPON_STATS *psStats, UBYTE player)
+int weaponLongHit(const WEAPON_STATS *psStats, int player)
 {
-	return (psStats->longHit + (psStats->longHit * asWeaponUpgrade[player][psStats->weaponSubClass].longHit) / 100);
+	return psStats->upgrade[player].hitChance;
 }
 
-UDWORD	weaponDamage(const WEAPON_STATS *psStats, UBYTE player)
+int weaponDamage(const WEAPON_STATS *psStats, int player)
 {
-	return (psStats->damage + (psStats->damage * asWeaponUpgrade[player][psStats->weaponSubClass].damage) / 100);
+	return psStats->upgrade[player].damage;
 }
 
-UDWORD	weaponRadDamage(WEAPON_STATS *psStats, UBYTE player)
+int weaponRadDamage(const WEAPON_STATS *psStats, int player)
 {
-	return (psStats->radiusDamage + (psStats->radiusDamage * asWeaponUpgrade[player][psStats->weaponSubClass].radiusDamage) / 100);
+	return psStats->upgrade[player].radiusDamage;
 }
 
-UDWORD	weaponPeriodicalDamage(WEAPON_STATS *psStats, UBYTE player)
+int weaponPeriodicalDamage(const WEAPON_STATS *psStats, int player)
 {
-	return (psStats->periodicalDamage + (psStats->periodicalDamage
-	        * asWeaponUpgrade[player][psStats->periodicalDamageWeaponSubClass].periodicalDamage) / 100);
+	return psStats->upgrade[player].periodicalDamage;
 }
 
-UDWORD	weaponRadiusHit(WEAPON_STATS *psStats, UBYTE player)
+int sensorRange(const SENSOR_STATS *psStats, int player)
 {
-	return (psStats->radiusHit + (psStats->radiusHit * asWeaponUpgrade[player][psStats->weaponSubClass].radiusHit) / 100);
+	return psStats->upgrade[player].range;
 }
 
-UDWORD	sensorRange(SENSOR_STATS *psStats, UBYTE player)
+int ecmRange(const ECM_STATS *psStats, int player)
 {
-	return psStats->range + (psStats->range * asSensorUpgrade[player].range) / 100;
+	return psStats->upgrade[player].range;
 }
 
-UDWORD	ecmRange(ECM_STATS *psStats, UBYTE player)
+int repairPoints(const REPAIR_STATS *psStats, int player)
 {
-	return psStats->range + (psStats->range * asECMUpgrade[player].range) / 100;
+	return psStats->upgrade[player].repairPoints;
 }
 
-UDWORD	repairPoints(REPAIR_STATS *psStats, UBYTE player)
+int constructorPoints(const CONSTRUCT_STATS *psStats, int player)
 {
-	return (psStats->repairPoints + (psStats->repairPoints * asRepairUpgrade[player].repairPoints) / 100);
+	return psStats->upgrade[player].constructPoints;
 }
 
-UDWORD	constructorPoints(CONSTRUCT_STATS *psStats, UBYTE player)
+int bodyPower(const BODY_STATS *psStats, int player)
 {
-	return (psStats->constructPoints + (psStats->constructPoints * asConstUpgrade[player].constructPoints) / 100);
+	return psStats->upgrade[player].power;
 }
 
-UDWORD	bodyPower(BODY_STATS *psStats, UBYTE player, UBYTE bodyType)
-{
-	return (psStats->powerOutput + (psStats->powerOutput * asBodyUpgrade[player][bodyType].powerOutput) / 100);
-}
-
-UDWORD bodyArmour(BODY_STATS *psStats, UBYTE player, UBYTE bodyType, WEAPON_CLASS weaponClass)
+int bodyArmour(const BODY_STATS *psStats, int player, WEAPON_CLASS weaponClass)
 {
 	switch (weaponClass)
 	{
 	case WC_KINETIC:
-		//case WC_EXPLOSIVE:
-		return (psStats->armourValue[WC_KINETIC] + (psStats->armourValue[WC_KINETIC] * asBodyUpgrade[player][bodyType].armourValue[WC_KINETIC]) / 100);
+		return psStats->upgrade[player].armour;
 	case WC_HEAT:
-		//case WC_MISC:
-		return (psStats->armourValue[WC_HEAT] + (psStats->armourValue[WC_HEAT] * asBodyUpgrade[player][bodyType].armourValue[WC_HEAT]) / 100);
-	default:
+		return psStats->upgrade[player].thermal;
+	case WC_NUM_WEAPON_CLASSES:
 		break;
 	}
 	ASSERT(false, "Unknown weapon class");
@@ -2339,23 +2350,22 @@ UDWORD bodyArmour(BODY_STATS *psStats, UBYTE player, UBYTE bodyType, WEAPON_CLAS
 }
 
 //calculates the weapons ROF based on the fire pause and the salvos
-UWORD weaponROF(WEAPON_STATS *psStat, SBYTE player)
+int weaponROF(const WEAPON_STATS *psStat, int player)
 {
-	UWORD rof = 0;
+	int rof = 0;
 
-	//if there are salvos
-	if (psStat->numRounds)
+	if (psStat->upgrade[player].numRounds)	// if there are salvos
 	{
-		if (psStat->reloadTime != 0)
+		if (psStat->upgrade[player].reloadTime != 0)
 		{
 			// Rounds per salvo multiplied with the number of salvos per minute
-			rof = (UWORD)(psStat->numRounds * 60 * GAME_TICKS_PER_SEC  /
-			        (player >= 0 ? weaponReloadTime(psStat, player) : psStat->reloadTime));
+			rof = psStat->upgrade[player].numRounds * 60 * GAME_TICKS_PER_SEC  /
+			        (player >= 0 ? weaponReloadTime(psStat, player) : psStat->upgrade[player].reloadTime);
 		}
 	}
 	if (rof == 0)
 	{
-		rof = (UWORD)weaponFirePause(psStat, (UBYTE)selectedPlayer);
+		rof = weaponFirePause(psStat, selectedPlayer);
 		if (rof != 0)
 		{
 			rof = (UWORD)(60 * GAME_TICKS_PER_SEC / rof);
@@ -2595,73 +2605,47 @@ void updateMaxConstStats(UWORD maxValue)
 	}
 }
 
-//propulsion stats are not upgradeable
-
 void adjustMaxDesignStats(void)
 {
 	UWORD       weaponDamage, sensorRange, repairPoints,
-	            ecmRange, constPoints, bodyPoints, bodyPower, bodyArmour, inc;
+	            ecmRange, constPoints, bodyPoints, bodyPower, bodyArmour;
 
 	// init all the values
 	weaponDamage = sensorRange = repairPoints = ecmRange = constPoints = bodyPoints = bodyPower = bodyArmour = 0;
 
 	//go thru' all the functions getting the max upgrade values for the stats
-	for (inc = 0; inc < numFunctions; inc++)
+
+	for (int j = 0; j < numBodyStats; j++)
 	{
-		switch (asFunctions[inc]->type)
-		{
-		case DROIDREPAIR_UPGRADE_TYPE:
-			if (repairPoints < ((UPGRADE_FUNCTION *)asFunctions[inc])->upgradePoints)
-			{
-				repairPoints = ((UPGRADE_FUNCTION *)asFunctions[inc])->upgradePoints;
-			}
-			break;
-		case DROIDECM_UPGRADE_TYPE:
-			if (ecmRange < ((UPGRADE_FUNCTION *)asFunctions[inc])->upgradePoints)
-			{
-				ecmRange = ((UPGRADE_FUNCTION *)asFunctions[inc])->upgradePoints;
-			}
-			break;
-		case DROIDBODY_UPGRADE_TYPE:
-			if (bodyPoints < ((DROIDBODY_UPGRADE_FUNCTION *)asFunctions[inc])->body)
-			{
-				bodyPoints = ((DROIDBODY_UPGRADE_FUNCTION *)asFunctions[inc])->body;
-			}
-			if (bodyPower < ((DROIDBODY_UPGRADE_FUNCTION *)asFunctions[inc])->upgradePoints)
-			{
-				bodyPower = ((DROIDBODY_UPGRADE_FUNCTION *)asFunctions[inc])->upgradePoints;
-			}
-			if (bodyArmour < ((DROIDBODY_UPGRADE_FUNCTION *)asFunctions[inc])->armourValue[WC_KINETIC])
-			{
-				bodyArmour = ((DROIDBODY_UPGRADE_FUNCTION *)asFunctions[inc])->armourValue[WC_KINETIC];
-			}
-			if (bodyArmour < ((DROIDBODY_UPGRADE_FUNCTION *)asFunctions[inc])->armourValue[WC_HEAT])
-			{
-				bodyArmour = ((DROIDBODY_UPGRADE_FUNCTION *)asFunctions[inc])->armourValue[WC_HEAT];
-			}
-			break;
-		case DROIDSENSOR_UPGRADE_TYPE:
-			if (sensorRange < ((DROIDSENSOR_UPGRADE_FUNCTION *)asFunctions[inc])->range)
-			{
-				sensorRange = ((DROIDSENSOR_UPGRADE_FUNCTION *)asFunctions[inc])->range;
-			}
-			break;
-		case DROIDCONST_UPGRADE_TYPE:
-			if (constPoints < ((UPGRADE_FUNCTION *)asFunctions[inc])->upgradePoints)
-			{
-				constPoints = ((UPGRADE_FUNCTION *)asFunctions[inc])->upgradePoints;
-			}
-			break;
-		case WEAPON_UPGRADE_TYPE:
-			if (weaponDamage < ((WEAPON_UPGRADE_FUNCTION *)asFunctions[inc])->damage)
-			{
-				weaponDamage = ((WEAPON_UPGRADE_FUNCTION *)asFunctions[inc])->damage;
-			}
-			break;
-		default:
-			//not interested in other function types
-			break;
-		}
+		BODY_STATS *psStats = asBodyStats + j;
+		bodyPoints = MAX(bodyPoints, psStats->upgrade[selectedPlayer].body);
+		bodyArmour = MAX(bodyArmour, psStats->upgrade[selectedPlayer].armour);
+		bodyPower = MAX(bodyPower, psStats->upgrade[selectedPlayer].power);
+	}
+	for (int j = 0; j < numSensorStats; j++)
+	{
+		SENSOR_STATS *psStats = asSensorStats + j;
+		sensorRange = MAX(sensorRange, psStats->upgrade[selectedPlayer].range);
+	}
+	for (int j = 0; j < numECMStats; j++)
+	{
+		ECM_STATS *psStats = asECMStats + j;
+		ecmRange = MAX(ecmRange, psStats->upgrade[selectedPlayer].range);
+	}
+	for (int j = 0; j < numRepairStats; j++)
+	{
+		REPAIR_STATS *psStats = asRepairStats + j;
+		repairPoints = MAX(repairPoints, psStats->upgrade[selectedPlayer].repairPoints);
+	}
+	for (int j = 0; j < numConstructStats; j++)
+	{
+		CONSTRUCT_STATS *psStats = asConstructStats + j;
+		constPoints = MAX(constPoints, psStats->upgrade[selectedPlayer].constructPoints);
+	}
+	for (int j = 0; j < numWeaponStats; j++)
+	{
+		WEAPON_STATS *psStats = asWeaponStats + j;
+		weaponDamage = MAX(weaponDamage, psStats->upgrade[selectedPlayer].damage);
 	}
 
 	//determine the effect on the max values for the stats
@@ -2676,7 +2660,6 @@ void adjustMaxDesignStats(void)
 /* Check if an object has a weapon */
 bool objHasWeapon(const BASE_OBJECT *psObj)
 {
-
 	//check if valid type
 	if (psObj->type == OBJ_DROID)
 	{

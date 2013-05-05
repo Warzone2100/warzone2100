@@ -47,18 +47,6 @@ extern PROPULSION_TYPES		*asPropulsionTypes;
 extern WEAPON_MODIFIER		asWeaponModifier[WE_NUMEFFECTS][PROPULSION_TYPE_NUM];
 extern WEAPON_MODIFIER		asWeaponModifierBody[WE_NUMEFFECTS][SIZE_NUM];
 
-//used to hold the current upgrade level per player per weapon subclass
-extern WEAPON_UPGRADE		asWeaponUpgrade[MAX_PLAYERS][WSC_NUM_WEAPON_SUBCLASSES];
-extern SENSOR_UPGRADE		asSensorUpgrade[MAX_PLAYERS];
-extern ECM_UPGRADE			asECMUpgrade[MAX_PLAYERS];
-extern REPAIR_UPGRADE		asRepairUpgrade[MAX_PLAYERS];
-extern CONSTRUCTOR_UPGRADE	asConstUpgrade[MAX_PLAYERS];
-//body upgrades are possible for droids and/or cyborgs
-#define		DROID_BODY_UPGRADE	0
-#define		CYBORG_BODY_UPGRADE	1
-#define		BODY_TYPE		2
-extern BODY_UPGRADE			asBodyUpgrade[MAX_PLAYERS][BODY_TYPE];
-
 /* The number of different stats stored */
 extern UDWORD		numBodyStats;
 extern UDWORD		numBrainStats;
@@ -131,8 +119,6 @@ extern bool statsAllocRepair(UDWORD numEntries);
 /*Allocate Construct Stats*/
 extern bool statsAllocConstruct(UDWORD numEntries);
 
-extern UWORD weaponROF(WEAPON_STATS *psStat, SBYTE player);
-
 /*******************************************************************************
 *		Load stats functions
 *******************************************************************************/
@@ -203,6 +189,7 @@ extern void getStatsDetails(UDWORD compType, BASE_STATS **ppsStats, UDWORD *pnum
 extern SDWORD getCompFromResName(UDWORD compType, const char *pName);
 /*returns the weapon sub class based on the string name passed in */
 extern bool getWeaponSubClass(const char* subClass, WEAPON_SUBCLASS* wclass);
+const char *getWeaponSubClass(WEAPON_SUBCLASS wclass);
 /*either gets the name associated with the resource (if one) or allocates space and copies pName*/
 extern char* allocateName(const char* name);
 /*return the name to display for the interface - valid for OBJECTS and STATS*/
@@ -246,28 +233,20 @@ extern bool getPropulsionType(const char* typeName, PROPULSION_TYPE* type);
  */
 extern const StringToEnumMap<WEAPON_EFFECT> map_WEAPON_EFFECT;
 
-extern UWORD weaponROF(WEAPON_STATS *psStat, SBYTE player);
-/*Access functions for the upgradeable stats of a weapon*/
-extern UDWORD	weaponFirePause(const WEAPON_STATS* psStats, UBYTE player);
-extern UDWORD	weaponReloadTime(WEAPON_STATS *psStats, UBYTE player);
-extern UDWORD	weaponShortHit(const WEAPON_STATS* psStats, UBYTE player);
-extern UDWORD	weaponLongHit(const WEAPON_STATS* psStats, UBYTE player);
-extern UDWORD	weaponDamage(const WEAPON_STATS* psStats, UBYTE player);
-extern UDWORD	weaponRadDamage(WEAPON_STATS *psStats, UBYTE player);
-extern UDWORD	weaponPeriodicalDamage(WEAPON_STATS *psStats, UBYTE player);
-extern UDWORD	weaponRadiusHit(WEAPON_STATS *psStats, UBYTE player);
-/*Access functions for the upgradeable stats of a sensor*/
-extern UDWORD	sensorRange(SENSOR_STATS *psStats, UBYTE player);
-/*Access functions for the upgradeable stats of a ECM*/
-extern UDWORD	ecmRange(ECM_STATS *psStats, UBYTE player);
-/*Access functions for the upgradeable stats of a repair*/
-extern UDWORD	repairPoints(REPAIR_STATS *psStats, UBYTE player);
-/*Access functions for the upgradeable stats of a constructor*/
-extern UDWORD	constructorPoints(CONSTRUCT_STATS *psStats, UBYTE player);
-/*Access functions for the upgradeable stats of a body*/
-extern UDWORD	bodyPower(BODY_STATS *psStats, UBYTE player, UBYTE bodyType);
-extern UDWORD	bodyArmour(BODY_STATS *psStats, UBYTE player, UBYTE bodyType,
-				   WEAPON_CLASS weaponClass);
+WZ_DECL_PURE int weaponROF(const WEAPON_STATS *psStat, int player);
+WZ_DECL_PURE int weaponFirePause(const WEAPON_STATS* psStats, int player);
+WZ_DECL_PURE int weaponReloadTime(const WEAPON_STATS *psStats, int player);
+WZ_DECL_PURE int weaponShortHit(const WEAPON_STATS* psStats, int player);
+WZ_DECL_PURE int weaponLongHit(const WEAPON_STATS* psStats, int player);
+WZ_DECL_PURE int weaponDamage(const WEAPON_STATS* psStats, int player);
+WZ_DECL_PURE int weaponRadDamage(const WEAPON_STATS *psStats, int player);
+WZ_DECL_PURE int weaponPeriodicalDamage(const WEAPON_STATS *psStats, int player);
+WZ_DECL_PURE int sensorRange(const SENSOR_STATS *psStats, int player);
+WZ_DECL_PURE int ecmRange(const ECM_STATS *psStats, int player);
+WZ_DECL_PURE int repairPoints(const REPAIR_STATS *psStats, int player);
+WZ_DECL_PURE int constructorPoints(const CONSTRUCT_STATS *psStats, int player);
+WZ_DECL_PURE int bodyPower(const BODY_STATS *psStats, int player);
+WZ_DECL_PURE int bodyArmour(const BODY_STATS *psStats, int player, WEAPON_CLASS weaponClass);
 
 extern void adjustMaxDesignStats(void);
 
@@ -285,7 +264,7 @@ extern UDWORD getMaxWeaponDamage(void);
 extern UDWORD getMaxWeaponROF(void);
 extern UDWORD getMaxPropulsionSpeed(void);
 
-extern bool objHasWeapon(const BASE_OBJECT *psObj);
+WZ_DECL_PURE bool objHasWeapon(const BASE_OBJECT *psObj);
 
 extern void statsInitVars(void);
 
@@ -295,9 +274,9 @@ bool getWeaponClass(QString weaponClassStr, WEAPON_CLASS *weaponClass);
 /* Wrappers */
 
 /** If object is an active radar (has sensor turret), then return a pointer to its sensor stats. If not, return NULL. */
-SENSOR_STATS *objActiveRadar(const BASE_OBJECT *psObj);
+WZ_DECL_PURE SENSOR_STATS *objActiveRadar(const BASE_OBJECT *psObj);
 
 /** Returns whether object has a radar detector sensor. */
-bool objRadarDetector(const BASE_OBJECT *psObj);
+WZ_DECL_PURE bool objRadarDetector(const BASE_OBJECT *psObj);
 
 #endif // __INCLUDED_SRC_STATS_H__
