@@ -212,6 +212,7 @@ lib/widget/button.cpp
 lib/widget/editbox.cpp
 lib/widget/form.cpp
 lib/widget/label.cpp
+lib/widget/listwidget.cpp
 lib/widget/slider.cpp
 lib/widget/tip.cpp
 lib/widget/widget.cpp
@@ -247,7 +248,6 @@ src/effects.cpp
 src/feature.cpp
 src/fpath.cpp
 src/frontend.cpp
-src/function.cpp
 src/game.cpp
 src/gateway.cpp
 src/geometry.cpp
@@ -294,6 +294,7 @@ src/pointtree.cpp
 src/power.cpp
 src/projectile.cpp
 src/qtscript.cpp
+src/qtscriptdebug.cpp
 src/qtscriptfuncs.cpp
 src/radar.cpp
 src/random.cpp
