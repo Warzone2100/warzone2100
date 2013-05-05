@@ -33,11 +33,11 @@ function eventGameInit()
 		// insane difficulty is meant to be insane...
 		if (playerData[playnum].difficulty == INSANE)
 		{
-			setPowerModifier(200 + 15 * game.power, playnum);
+			setPowerModifier(200 + 15 * powerType, playnum);
 		}
 		else if (playerData[playnum].difficulty == EASY)
 		{
-			setPowerModifier(70 + 5 * game.power, playnum);
+			setPowerModifier(70 + 5 * powerType, playnum);
 		}
 
 		setDroidLimit(playnum, 150, DROID_ANY);
