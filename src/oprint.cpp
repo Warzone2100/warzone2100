@@ -207,8 +207,6 @@ void printDroidInfo(const DROID* psDroid)
 	{
 		switch (i)
 		{
-		case COMP_UNKNOWN:
-			break;
 		case COMP_BODY:
 			if (psDroid->asBits[i].nStat > 0)
 			{

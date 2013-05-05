@@ -104,7 +104,7 @@ void renderResearchToBuffer(RESEARCH *psResearch, UDWORD OriginX, UDWORD OriginY
 		else
 		{
 			compID = StatIsComponent(psResearch->psStat);
-			if (compID != COMP_UNKNOWN)
+			if (compID != COMP_NUMCOMPONENTS)
 			{
 				//this defines how the button is drawn
 				IMDType = IMDTYPE_COMPONENT;

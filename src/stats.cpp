@@ -1828,7 +1828,7 @@ UDWORD statType(UDWORD ref)
 	}
 	//else
 	ASSERT(false, "Invalid stat pointer - cannot determine Stat Type");
-	return COMP_UNKNOWN;
+	return COMP_NUMCOMPONENTS;
 }
 
 //return the REF_START value of this type of stat
@@ -1880,7 +1880,6 @@ UDWORD statRefStart(UDWORD stat)
 		}
 	default:
 		{
-			//COMP_UNKNOWN should be an error
 			debug(LOG_FATAL, "Invalid stat type");
 			start = 0;
 		}
@@ -1982,7 +1981,6 @@ void getStatsDetails(UDWORD compType, BASE_STATS **ppsStats, UDWORD *pnumStats, 
 		*pstatSize = sizeof(WEAPON_STATS);
 		break;
 	default:
-		//COMP_UNKNOWN should be an error
 		debug(LOG_FATAL, "Invalid component type");
 	}
 }

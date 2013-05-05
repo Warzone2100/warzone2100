@@ -2787,7 +2787,7 @@ static void setComponent(QString name, int player, int value)
 {
 	int type = -1;
 	int compInc = -1;
-	for (int j = COMP_BODY; j < COMP_NUMCOMPONENTS && compInc == -1; j++)
+	for (int j = 0; j < COMP_NUMCOMPONENTS && compInc == -1; j++)
 	{
 		// this is very inefficient, but I am so not giving in to the deranged nature of the components code
 		// and convoluting the new script system for its sake

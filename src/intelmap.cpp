@@ -960,7 +960,7 @@ void IntMessageButton::display(int xOffset, int yOffset)
 			else
 			{
 				int compID = StatIsComponent(pResearch->psStat);
-				if (compID != COMP_UNKNOWN)
+				if (compID != COMP_NUMCOMPONENTS)
 				{
 					//this defines how the button is drawn
 					object = ImdObject::Component(pResearch->psStat);

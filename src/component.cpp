@@ -111,7 +111,7 @@ UDWORD getComponentRadius(BASE_STATS *psComponent)
 	SDWORD compID;
 
 	compID = StatIsComponent(psComponent);
-	if (compID > 0)
+	if (compID >= 0)
 	{
 		StatGetComponentIMD(psComponent, compID,&ComponentIMD, &MountIMD);
 		if(ComponentIMD)
@@ -390,7 +390,7 @@ void displayComponentButton(BASE_STATS *Stat, Vector3i *Rotation, Vector3i *Posi
 	iIMDShape *MountIMD = NULL;
 	int compID = StatIsComponent(Stat);
 
-	if (compID > 0)
+	if (compID >= 0)
 	{
 		StatGetComponentIMD(Stat, compID,&ComponentIMD, &MountIMD);
 	}

@@ -77,19 +77,18 @@ struct DROID_TEMPLATE : public BASE_STATS
 	 *
 	 * This array is indexed by COMPONENT_TYPE so the ECM would be accessed
 	 * using asParts[COMP_ECM].
-	 * COMP_BRAIN is an index into the asCommandDroids array NOT asBrainStats
 	 *
 	 * Weapons are stored in asWeaps, _not_ here at index COMP_WEAPON! (Which is the reason we do not have a COMP_NUMCOMPONENTS sized array here.)
 	 */
-	int32_t         asParts[DROID_MAXCOMP];
+	uint8_t         asParts[DROID_MAXCOMP];
 
 	UDWORD          buildPoints;                ///< total build points required to manufacture the droid
 	UDWORD          powerPoints;                ///< total power points required to build/maintain the droid
 	UDWORD          storeCount;                 ///< used to load in weaps and progs
 
 	/* The weapon systems */
-	uint32_t        numWeaps;                   ///< Number of weapons
-	uint32_t        asWeaps[DROID_MAXWEAPS];    ///< weapon indices
+	int8_t          numWeaps;                   ///< Number of weapons
+	uint8_t         asWeaps[DROID_MAXWEAPS];    ///< weapon indices
 
 	DROID_TYPE      droidType;                  ///< The type of droid
 	UDWORD          multiPlayerID;              ///< multiplayer unique descriptor(cant use id's for templates). Used for save games as well now - AB 29/10/98
@@ -116,7 +115,6 @@ struct DROID : public BASE_OBJECT
 	/** Holds the specifics for the component parts - allows damage
 	 *  per part to be calculated. Indexed by COMPONENT_TYPE.
 	 *  Weapons need to be dealt with separately.
-	 *  COMP_BRAIN is an index into the asCommandDroids array NOT asBrainStats
 	 */
 	COMPONENT       asBits[DROID_MAXCOMP];
 

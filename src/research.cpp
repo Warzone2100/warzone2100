@@ -113,9 +113,6 @@ BASE_STATS* get_any_component_from_ID(QString name)
 {
 	for (int compType=0; compType<COMP_NUMCOMPONENTS; compType++)
 	{
-		if (compType == COMP_UNKNOWN)
-			continue;
-
 		BASE_STATS	*psStats = NULL;
 		UDWORD		numStats = 0, statSize = 0;
 

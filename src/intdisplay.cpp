@@ -760,7 +760,7 @@ void IntStatusButton::display(int xOffset, int yOffset)
 						else
 						{
 							compID = StatIsComponent(psResGraphic);
-							if (compID != COMP_UNKNOWN)
+							if (compID != COMP_NUMCOMPONENTS)
 							{
 								// overwrite the Object pointer
 								object = ImdObject::Component(psResGraphic);
@@ -879,7 +879,7 @@ void IntStatsButton::display(int xOffset, int yOffset)
 		else
 		{
 			compID = StatIsComponent(Stat); // This failes for viper body.
-			if (compID != COMP_UNKNOWN)
+			if (compID != COMP_NUMCOMPONENTS)
 			{
 				object = ImdObject::Component(Stat);
 			}
@@ -897,7 +897,7 @@ void IntStatsButton::display(int xOffset, int yOffset)
 					else
 					{
 						compID = StatIsComponent(psResGraphic);
-						if (compID != COMP_UNKNOWN)
+						if (compID != COMP_NUMCOMPONENTS)
 						{
 							//overwrite the Object pointer
 							object = ImdObject::Component(psResGraphic);
@@ -2047,7 +2047,7 @@ SDWORD StatIsComponent(BASE_STATS *Stat)
 		return COMP_REPAIRUNIT;
 	}
 
-	return COMP_UNKNOWN;
+	return COMP_NUMCOMPONENTS;
 }
 
 bool StatGetComponentIMD(BASE_STATS *Stat, SDWORD compID, iIMDShape **CompIMD, iIMDShape **MountIMD)
@@ -2098,8 +2098,7 @@ bool StatGetComponentIMD(BASE_STATS *Stat, SDWORD compID, iIMDShape **CompIMD, i
 		*CompIMD = ((COMPONENT_STATS *)Stat)->pIMD;
 		return true;
 
-	default:
-		//COMP_UNKNOWN should be an error
+	case COMP_NUMCOMPONENTS:
 		ASSERT(false, "Unknown component");
 	}
 

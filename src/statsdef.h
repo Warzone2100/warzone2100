@@ -211,13 +211,8 @@ private:
 	unsigned                lineNumber;
 };
 
-/*
-if any types are added BEFORE 'COMP_BODY' - then Save/Load Game will have to be
-altered since it loops through the components from 1->MAX_COMP
-*/
 enum COMPONENT_TYPE
 {
-	COMP_UNKNOWN,
 	COMP_BODY,
 	COMP_BRAIN,
 	COMP_PROPULSION,

@@ -329,7 +329,6 @@ DROID_TEMPLATE::DROID_TEMPLATE(LineView line)
 	std::string name = line.s(0);
 	sstrcpy(aName, name.c_str());
 
-	asParts[COMP_UNKNOWN]    = 0;  // Is this one useful for anything at all?
 	asParts[COMP_BODY]       = line.stats( 2, asBodyStats,       numBodyStats)       - asBodyStats;
 	asParts[COMP_BRAIN]      = line.stats( 3, asBrainStats,      numBrainStats)      - asBrainStats;
 	asParts[COMP_CONSTRUCT]  = line.stats( 4, asConstructStats,  numConstructStats)  - asConstructStats;
