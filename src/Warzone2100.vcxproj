@@ -459,7 +459,6 @@ call $(ProjectDir)..\build_tools\autorevision.bat $(ProjectDir)</Command>
     <ClCompile Include="feature.cpp" />
     <ClCompile Include="fpath.cpp" />
     <ClCompile Include="frontend.cpp" />
-    <ClCompile Include="function.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="gateway.cpp" />
     <ClCompile Include="geometry.cpp" />
@@ -579,8 +578,6 @@ call $(ProjectDir)..\build_tools\autorevision.bat $(ProjectDir)</Command>
     <ClInclude Include="fpath.h" />
     <ClInclude Include="frend.h" />
     <ClInclude Include="frontend.h" />
-    <ClInclude Include="function.h" />
-    <ClInclude Include="functiondef.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="gateway.h" />
     <ClInclude Include="geometry.h" />

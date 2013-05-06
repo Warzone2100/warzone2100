@@ -100,9 +100,9 @@
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\devpkg\include;$(Qtdir)\include;$(IncludePath)</IncludePath>
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release_SDL_STLport_x32|Win32'">..\devpkg\stlport5.2.1\stlport;..\devpkg\include;$(Qtdir)\include;$(IncludePath)</IncludePath>
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release_QT_STLport_x32|Win32'">..\devpkg\stlport5.2.1\stlport;..\devpkg\include;$(Qtdir)\include;$(IncludePath)</IncludePath>
-    <ExtensionsToDeleteOnClean Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">*.lex.cpp;*.tab.cpp;*.tab.hpp;$(ExtensionsToDeleteOnClean)</ExtensionsToDeleteOnClean>
-    <ExtensionsToDeleteOnClean Condition="'$(Configuration)|$(Platform)'=='Debug_SDL_STLport_x32|Win32'">*.lex.cpp;*.tab.cpp;*.tab.hpp;$(ExtensionsToDeleteOnClean)</ExtensionsToDeleteOnClean>
-    <ExtensionsToDeleteOnClean Condition="'$(Configuration)|$(Platform)'=='Debug_QT_STLport_x32|Win32'">*.lex.cpp;*.tab.cpp;*.tab.hpp;$(ExtensionsToDeleteOnClean)</ExtensionsToDeleteOnClean>
+    <ExtensionsToDeleteOnClean Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ExtensionsToDeleteOnClean)</ExtensionsToDeleteOnClean>
+    <ExtensionsToDeleteOnClean Condition="'$(Configuration)|$(Platform)'=='Debug_SDL_STLport_x32|Win32'">$(ExtensionsToDeleteOnClean)</ExtensionsToDeleteOnClean>
+    <ExtensionsToDeleteOnClean Condition="'$(Configuration)|$(Platform)'=='Debug_QT_STLport_x32|Win32'">$(ExtensionsToDeleteOnClean)</ExtensionsToDeleteOnClean>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <FlexGenerator>

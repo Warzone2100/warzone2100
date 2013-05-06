@@ -105,9 +105,6 @@
     <ClCompile Include="frontend.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="function.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="game.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -456,12 +453,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="frontend.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="function.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="functiondef.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="game.h">
