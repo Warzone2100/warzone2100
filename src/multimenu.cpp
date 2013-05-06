@@ -275,6 +275,7 @@ void displayRequestOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 				butString[strlen(butString) - 1] = '\0';
 			}
 			iV_DrawText(butString, x + 6 + 8 + mapData->players*6, y + 26);
+			iV_SetFont(font_regular);
 		}
 
 		// if map, then draw no. of players.
@@ -294,6 +295,7 @@ static void displayCamTypeBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	int y = yOffset + psWidget->y();
 	char buffer[8];
 
+	iV_SetFont(font_regular);
 	drawBlueBox(x, y, psWidget->width(), psWidget->height());
 	sprintf(buffer, "T%i", (int)(psWidget->UserData));
 	if ((unsigned int)(psWidget->UserData) == current_tech) {
@@ -310,6 +312,7 @@ static void displayNumPlayersBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffse
 	int y = yOffset + psWidget->y();
 	char buffer[8];
 
+	iV_SetFont(font_regular);
 	drawBlueBox(x, y, psWidget->width(), psWidget->height());
 	if ((unsigned int)(psWidget->UserData) == current_numplayers) {
 		iV_SetTextColour(WZCOL_TEXT_BRIGHT);
