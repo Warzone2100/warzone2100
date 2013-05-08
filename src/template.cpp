@@ -294,7 +294,6 @@ DROID_TEMPLATE::DROID_TEMPLATE()  // This constructor replaces a memset in scrAs
 	//, asParts
 	, buildPoints(0)
 	, powerPoints(0)
-	, storeCount(0)
 	, numWeaps(0)
 	//, asWeaps
 	, droidType(DROID_WEAPON)
@@ -315,7 +314,6 @@ DROID_TEMPLATE::DROID_TEMPLATE(LineView line)
 	//, asParts
 	, buildPoints(0)
 	, powerPoints(0)
-	, storeCount(0)
 	, numWeaps(line.i(11, 0, DROID_MAXWEAPS))
 	//, asWeaps
 	, droidType(line.e(9, map_DROID_TYPE))

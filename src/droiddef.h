@@ -84,7 +84,6 @@ struct DROID_TEMPLATE : public BASE_STATS
 
 	UDWORD          buildPoints;                ///< total build points required to manufacture the droid
 	UDWORD          powerPoints;                ///< total power points required to build/maintain the droid
-	UDWORD          storeCount;                 ///< used to load in weaps and progs
 
 	/* The weapon systems */
 	int8_t          numWeaps;                   ///< Number of weapons

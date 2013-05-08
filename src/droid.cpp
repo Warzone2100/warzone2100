@@ -1495,6 +1495,7 @@ bool loadDroidWeapons(const char *pWeaponData, UDWORD bufferSize)
 		for (int player = 0; player < MAX_PLAYERS ; ++player)
 		{
 			DROID_TEMPLATE *pTemplate = getTemplateFromUniqueName(templateName.c_str(), player);
+			int storeCount = 0;
 
 			/* if Template not found - try default design */
 			if (!pTemplate)
@@ -1518,10 +1519,10 @@ bool loadDroidWeapons(const char *pWeaponData, UDWORD bufferSize)
 				ASSERT_OR_RETURN(false, incWpn != -1, "Unable to find Weapon %s for template %s", line.s(1 + j).c_str(), templateName.c_str());
 
 				//Weapon found, alloc this to the current Template
-				pTemplate->asWeaps[pTemplate->storeCount] = incWpn;
+				pTemplate->asWeaps[storeCount] = incWpn;
 
 				//check valid weapon/propulsion
-				ASSERT_OR_RETURN(false, pTemplate->storeCount <= pTemplate->numWeaps, "Allocating more weapons than allowed for Template %s", templateName.c_str());
+				ASSERT_OR_RETURN(false, storeCount <= pTemplate->numWeaps, "Allocating more weapons than allowed for Template %s", templateName.c_str());
 				ASSERT_OR_RETURN(false, checkValidWeaponForProp(pTemplate), "Weapon is invalid for air propulsion for template %s", templateName.c_str());
 				if (player == selectedPlayer)	// FIXME: can you say hack? Why don't we make a list on demmand ? This *will* break on player change!
 				{
@@ -1532,12 +1533,12 @@ bool loadDroidWeapons(const char *pWeaponData, UDWORD bufferSize)
 						{
 							pUITemplate = &*j;
 							// update UI template as well (it already passed the checks above)
-							pUITemplate->asWeaps[pTemplate->storeCount] = incWpn;
+							pUITemplate->asWeaps[storeCount] = incWpn;
 							break;
 						}
 					}
 				}
-				pTemplate->storeCount++;
+				storeCount++;
 			}
 		}
 	}
