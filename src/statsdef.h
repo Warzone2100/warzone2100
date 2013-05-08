@@ -565,16 +565,4 @@ struct TERRAIN_TABLE
 
 typedef UWORD	WEAPON_MODIFIER;
 
-/* weapon stats which can be upgraded by research*/
-struct WEAPON_UPGRADE
-{
-	UBYTE	firePause;
-	UWORD	shortHit;
-	UWORD	longHit;
-	UWORD	damage;
-	UWORD	radiusDamage;
-	UWORD	periodicalDamage;
-	UWORD	radiusHit;
-};
-
 #endif // __INCLUDED_STATSDEF_H__
