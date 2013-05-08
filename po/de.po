@@ -8,12 +8,13 @@
 # Martin Koller <m.koller@surfeu.at>, 2007.
 # Steven \"Kreuvf\" Koenig <kreuvf@wz2100.net>, 2008-2012.
 # raymond, 2011.
+# Markus Enzenberger, 2013.
 msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2014-12-28 21:38+0100\n"
-"PO-Revision-Date: 2012-11-24 19:32+0100\n"
+"PO-Revision-Date: 2014-12-31 14:52+0100\n"
 "Last-Translator: Steven 'Kreuvf' Koenig <translations@kreuvf.de>\n"
 "Language-Team: Deutsch <warzone2100-project@lists.sourceforge.net>\n"
 "Language: \n"
@@ -5209,7 +5210,7 @@ msgstr "Zerstören Sie die Einrichtung und kehren Sie zur Basis zurück."
 
 #: data/base/messages/strings/cam2strings.txt:126
 msgid "TRANSPORT MISSION: Destroy Enemy SAM Sites"
-msgstr "TRASNPORTERMISSION: Feindliche Boden-Luft-Raketenstellungen ausschalten"
+msgstr "TRANSPORTERMISSION: Feindliche Boden-Luft-Raketenstellungen ausschalten"
 
 #: data/base/messages/strings/cam2strings.txt:127
 msgid "If you are to escape, eradicate the surface-to-air missile sites around your base."
