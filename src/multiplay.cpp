@@ -1424,12 +1424,9 @@ static void NETtemplate(DROID_TEMPLATE *pTempl)
 
 	for (unsigned i = 0; i < ARRAY_SIZE(pTempl->asParts); ++i)
 	{
-		// signed, but sent as a bunch of bits...
 		NETuint8_t(&pTempl->asParts[i]);
 	}
 
-	NETuint32_t(&pTempl->buildPoints);
-	NETuint32_t(&pTempl->powerPoints);
 	NETint8_t(&pTempl->numWeaps);
 	NETbool(&pTempl->stored);	// other players don't need to know, but we need to keep the knowledge in the loop somehow...
 

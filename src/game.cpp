@@ -2153,9 +2153,6 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 	//adjust the scroll range for the new map or the expanded map
 	setMapScroll();
 
-	//initialise the Templates' build and power points before loading in any droids
-	initTemplatePoints();
-
 	//if user save game then load up the research BEFORE any droids or structures are loaded
 	if (gameType == GTYPE_SAVE_START || gameType == GTYPE_SAVE_MIDMISSION)
 	{
@@ -4267,8 +4264,6 @@ static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 			psTemplate->asWeaps[1] = getCompFromName(COMP_WEAPON, ini.value("weapon/2", QString("ZNULLWEAPON")).toString().toUtf8().constData());
 			psTemplate->asWeaps[2] = getCompFromName(COMP_WEAPON, ini.value("weapon/3", QString("ZNULLWEAPON")).toString().toUtf8().constData());
 			ini.endGroup();
-			psTemplate->buildPoints = calcTemplateBuild(psTemplate);
-			psTemplate->powerPoints = calcTemplatePower(psTemplate);
 		}
 
 		// If droid is on a mission, calling with the saved position might cause an assertion. Or something like that.
@@ -5506,10 +5501,6 @@ bool loadSaveTemplate(const char *pFileName)
 		psTemplate->numWeaps = ini.value("weapons").toInt();
 		psTemplate->enabled = ini.value("enabled").toBool();
 		psTemplate->prefab = false;		// not AI template
-
-		//calculate the total build points
-		psTemplate->buildPoints = calcTemplateBuild(psTemplate);
-		psTemplate->powerPoints = calcTemplatePower(psTemplate);
 
 		//store it in the apropriate player' list
 		//if a template with the same multiplayerID exists overwrite it

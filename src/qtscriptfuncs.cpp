@@ -644,9 +644,9 @@ QScriptValue convTemplate(DROID_TEMPLATE *psTempl, QScriptEngine *engine)
 	ASSERT_OR_RETURN(value, psTempl, "No object for conversion");
 	value.setProperty("id", psTempl->multiPlayerID, QScriptValue::ReadOnly);
 	value.setProperty("name", psTempl->pName, QScriptValue::ReadOnly);
-	value.setProperty("points", psTempl->buildPoints, QScriptValue::ReadOnly);
-	value.setProperty("power", psTempl->powerPoints, QScriptValue::ReadOnly); // deprecated
-	value.setProperty("cost", psTempl->powerPoints, QScriptValue::ReadOnly);
+	value.setProperty("points", calcTemplateBuild(psTempl), QScriptValue::ReadOnly);
+	value.setProperty("power", calcTemplatePower(psTempl), QScriptValue::ReadOnly); // deprecated, use cost below
+	value.setProperty("cost", calcTemplatePower(psTempl), QScriptValue::ReadOnly);
 	value.setProperty("droidType", psTempl->droidType, QScriptValue::ReadOnly);
 	value.setProperty("body", (asBodyStats + psTempl->asParts[COMP_BODY])->pName, QScriptValue::ReadOnly);
 	value.setProperty("propulsion", (asPropulsionStats + psTempl->asParts[COMP_PROPULSION])->pName, QScriptValue::ReadOnly);

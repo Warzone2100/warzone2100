@@ -67,9 +67,7 @@ struct DROID_TEMPLATE : public BASE_STATS
 	DROID_TEMPLATE();
 	DROID_TEMPLATE(LineView line);
 
-	// On the PC the pName entry in STATS_BASE is redundant and can be assumed to be NULL,
-
-	/// on the PC this contains the full editable UTF-8 encoded name of the template
+	/// this contains the full editable UTF-8 encoded name of the template
 	char            aName[MAX_STR_LENGTH];
 
 	/*!
@@ -81,9 +79,6 @@ struct DROID_TEMPLATE : public BASE_STATS
 	 * Weapons are stored in asWeaps, _not_ here at index COMP_WEAPON! (Which is the reason we do not have a COMP_NUMCOMPONENTS sized array here.)
 	 */
 	uint8_t         asParts[DROID_MAXCOMP];
-
-	UDWORD          buildPoints;                ///< total build points required to manufacture the droid
-	UDWORD          powerPoints;                ///< total power points required to build/maintain the droid
 
 	/* The weapon systems */
 	int8_t          numWeaps;                   ///< Number of weapons

@@ -12,9 +12,6 @@ bool initTemplates();
 bool shutdownTemplates();
 bool storeTemplates();
 
-/** Initialise the template build and power points */
-void initTemplatePoints(void);
-
 bool loadDroidTemplates(const char *pDroidData, UDWORD bufferSize);
 
 /// return whether a template is for an IDF droid

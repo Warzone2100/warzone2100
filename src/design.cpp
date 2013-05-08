@@ -838,13 +838,13 @@ static bool intAddTemplateButtons(ListTabWidget *templList, DROID_TEMPLATE *psSe
 		templList->addWidgetToLayout(button);
 
 		sBarInit.iRange = POWERPOINTS_DROIDDIV;
-		sBarInit.size = (UWORD)(psTempl->powerPoints  / POWERPOINTS_DROIDDIV);
+		sBarInit.size = calcTemplatePower(psTempl) / POWERPOINTS_DROIDDIV;
 		if (sBarInit.size > WBAR_SCALE)
 		{
 			sBarInit.size = WBAR_SCALE;
 		}
 
-		ssprintf(TempString, "%s - %d", _("Power Usage"), psTempl->powerPoints);
+		ssprintf(TempString, "%s - %d", _("Power Usage"), calcTemplatePower(psTempl));
 		sBarInit.pTip = TempString;
 		sBarInit.formID = nextButtonId;
 		if (!widgAddBarGraph(psWScreen, &sBarInit))
@@ -2907,10 +2907,6 @@ bool intValidTemplate(DROID_TEMPLATE *psTempl, const char *newName, bool complai
 	}
 
 	psTempl->ref = REF_TEMPLATE_START;
-
-	/* Calculate build points */
-	psTempl->buildPoints = calcTemplateBuild(psTempl);
-	psTempl->powerPoints = calcTemplatePower(psTempl);
 
 	//set the droidtype
 	psTempl->droidType = droidTemplateType(psTempl);

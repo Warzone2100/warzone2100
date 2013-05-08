@@ -3855,7 +3855,7 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 		else if (Stat->ref >= REF_TEMPLATE_START &&
 		        Stat->ref < REF_TEMPLATE_START + REF_RANGE)  	// It's a droid.
 		{
-			powerCost = ((DROID_TEMPLATE *)Stat)->powerPoints;
+			powerCost = calcTemplatePower((DROID_TEMPLATE *)Stat);
 			sBarInit.size = powerCost / POWERPOINTS_DROIDDIV;
 			if (sBarInit.size > 100)
 			{

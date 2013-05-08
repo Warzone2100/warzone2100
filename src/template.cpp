@@ -263,37 +263,10 @@ bool shutdownTemplates()
 	return storeTemplates();
 }
 
-static void initTemplatePoints(DROID_TEMPLATE *pDroidDesign)
-{
-	//calculate the total build points
-	pDroidDesign->buildPoints = calcTemplateBuild(pDroidDesign);
-	//calc the total power points
-	pDroidDesign->powerPoints = calcTemplatePower(pDroidDesign);
-}
-
-/*initialise the template build and power points */
-void initTemplatePoints(void)
-{
-	for (int player = 0; player < MAX_PLAYERS; ++player)
-	{
-		for (DROID_TEMPLATE *pDroidDesign = apsDroidTemplates[player]; pDroidDesign != NULL; pDroidDesign = pDroidDesign->psNext)
-		{
-			initTemplatePoints(pDroidDesign);
-		}
-	}
-
-	for (std::list<DROID_TEMPLATE>::iterator pDroidDesign = localTemplates.begin(); pDroidDesign != localTemplates.end(); ++pDroidDesign)
-	{
-		initTemplatePoints(&*pDroidDesign);
-	}
-}
-
 DROID_TEMPLATE::DROID_TEMPLATE()  // This constructor replaces a memset in scrAssembleWeaponTemplate(), not needed elsewhere.
 	: BASE_STATS()
 	//, aName
 	//, asParts
-	, buildPoints(0)
-	, powerPoints(0)
 	, numWeaps(0)
 	//, asWeaps
 	, droidType(DROID_WEAPON)
@@ -312,8 +285,6 @@ DROID_TEMPLATE::DROID_TEMPLATE(LineView line)
 	: BASE_STATS(REF_TEMPLATE_START + line.line())
 	//, aName
 	//, asParts
-	, buildPoints(0)
-	, powerPoints(0)
 	, numWeaps(line.i(11, 0, DROID_MAXWEAPS))
 	//, asWeaps
 	, droidType(line.e(9, map_DROID_TYPE))
