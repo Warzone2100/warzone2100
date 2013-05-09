@@ -59,7 +59,6 @@ typedef std::vector<DROID_ORDER_DATA> OrderList;
 struct DROID_TEMPLATE : public BASE_STATS
 {
 	DROID_TEMPLATE();
-	DROID_TEMPLATE(LineView line);
 
 	/// this contains the full editable UTF-8 encoded name of the template
 	char            aName[MAX_STR_LENGTH];

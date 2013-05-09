@@ -93,9 +93,6 @@ UWORD	aDroidExperience[MAX_PLAYERS][MAX_RECYCLED_DROIDS];
 UDWORD	selectedGroup = UBYTE_MAX;
 UDWORD	selectedCommander = UBYTE_MAX;
 
-/* default droid design template */
-extern DROID_TEMPLATE	sDefaultDesignTemplate;
-
 /** Height the transporter hovers at above the terrain. */
 #define TRANSPORTER_HOVER_HEIGHT	10
 
@@ -1480,70 +1477,6 @@ DROID_TYPE droidTemplateType(DROID_TEMPLATE *psTemplate)
 	}
 
 	return type;
-}
-
-//Load the weapons assigned to Droids in the Access database
-bool loadDroidWeapons(const char *pWeaponData, UDWORD bufferSize)
-{
-	TableView table(pWeaponData, bufferSize);
-
-	for (unsigned i = 0; i < table.size(); ++i)
-	{
-		LineView line(table, i);
-		std::string templateName = line.s(0);
-
-		for (int player = 0; player < MAX_PLAYERS ; ++player)
-		{
-			DROID_TEMPLATE *pTemplate = getTemplateFromUniqueName(templateName.c_str(), player);
-			int storeCount = 0;
-
-			/* if Template not found - try default design */
-			if (!pTemplate)
-			{
-				if (templateName == sDefaultDesignTemplate.pName)
-				{
-					pTemplate = &sDefaultDesignTemplate;
-				}
-				else
-				{
-					continue;	// ok, this player did not have this template. that's fine.
-				}
-			}
-
-			ASSERT_OR_RETURN(false, pTemplate->numWeaps <= DROID_MAXWEAPS, "stack corruption unavoidable");
-
-			for (unsigned j = 0; j < pTemplate->numWeaps; j++)
-			{
-				int incWpn = getCompFromName(COMP_WEAPON, line.s(1 + j).c_str());
-
-				ASSERT_OR_RETURN(false, incWpn != -1, "Unable to find Weapon %s for template %s", line.s(1 + j).c_str(), templateName.c_str());
-
-				//Weapon found, alloc this to the current Template
-				pTemplate->asWeaps[storeCount] = incWpn;
-
-				//check valid weapon/propulsion
-				ASSERT_OR_RETURN(false, storeCount <= pTemplate->numWeaps, "Allocating more weapons than allowed for Template %s", templateName.c_str());
-				ASSERT_OR_RETURN(false, checkValidWeaponForProp(pTemplate), "Weapon is invalid for air propulsion for template %s", templateName.c_str());
-				if (player == selectedPlayer)	// FIXME: can you say hack? Why don't we make a list on demmand ? This *will* break on player change!
-				{
-					DROID_TEMPLATE *pUITemplate = NULL;
-					for (std::list<DROID_TEMPLATE>::iterator j = localTemplates.begin(); j != localTemplates.end(); ++j)
-					{
-						if (j->pName == templateName)
-						{
-							pUITemplate = &*j;
-							// update UI template as well (it already passed the checks above)
-							pUITemplate->asWeaps[storeCount] = incWpn;
-							break;
-						}
-					}
-				}
-				storeCount++;
-			}
-		}
-	}
-
-	return true;
 }
 
 /* Calculate the weight of a droid from it's template */

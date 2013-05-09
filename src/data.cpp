@@ -333,11 +333,9 @@ static bool bufferSWEAPMODLoad(const char *fileName, void **ppData)
 
 
 /* Load the Template stats */
-static bool bufferSTEMPLLoad(const char *pBuffer, UDWORD size, void **ppData)
+static bool bufferSTEMPLLoad(const char *fileName, void **ppData)
 {
-	calcDataHash((uint8_t *)pBuffer, size, DATA_STEMP);
-
-	if (!loadDroidTemplates(pBuffer, size))
+	if (!loadDroidTemplates(fileName))
 	{
 		return false;
 	}
@@ -352,21 +350,6 @@ static void dataSTEMPLRelease(WZ_DECL_UNUSED void *pData)
 {
 	//free the storage allocated to the droid templates
 	droidTemplateShutDown();
-}
-
-/* Load the Template weapons stats */
-static bool bufferSTEMPWEAPLoad(const char *pBuffer, UDWORD size, void **ppData)
-{
-	calcDataHash((uint8_t *)pBuffer, size, DATA_STEMPWEAP);
-
-	if (!loadDroidWeapons(pBuffer, size))
-	{
-		return false;
-	}
-
-	//not interested in this value
-	*ppData = NULL;
-	return true;
 }
 
 /* Load the Structure stats */
@@ -888,8 +871,6 @@ struct RES_TYPE_MIN_BUF
 
 static const RES_TYPE_MIN_BUF BufferResourceTypes[] =
 {
-	{"STEMPL", bufferSTEMPLLoad, dataSTEMPLRelease},               //template and associated files
-	{"STEMPWEAP", bufferSTEMPWEAPLoad, NULL},
 	{"SFEAT", bufferSFEATLoad, dataSFEATRelease},                  //feature stats file
 	{"SMSG", bufferSMSGLoad, dataSMSGRelease},
 	{"IMD", dataIMDBufferLoad, (RES_FREE)iV_IMDRelease},
@@ -904,6 +885,7 @@ struct RES_TYPE_MIN_FILE
 
 static const RES_TYPE_MIN_FILE FileResourceTypes[] =
 {
+	{"STEMPL", bufferSTEMPLLoad, dataSTEMPLRelease},               //template and associated files
 	{"WAV", dataAudioLoad, (RES_FREE)sound_ReleaseTrack},
 	{"SWEAPON", bufferSWEAPONLoad, dataReleaseStats},
 	{"SBPIMD", bufferSBPIMDLoad, dataReleaseStats},

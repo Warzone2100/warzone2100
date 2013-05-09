@@ -236,7 +236,7 @@ char StringBuffer[STRING_BUFFER_SIZE];
 extern W_SCREEN		*psWScreen;
 
 /* default droid design template */
-DROID_TEMPLATE sDefaultDesignTemplate;
+static DROID_TEMPLATE sDefaultDesignTemplate;
 
 static void desSetupDesignTemplates();
 static void setDesignPauseState();
@@ -399,6 +399,7 @@ static bool _intAddDesign(bool bShowCentreScreen)
 	haveCurrentDesign = false;
 
 	/* Initialise the current design */
+	sDefaultDesignTemplate.droidType = DROID_ANY;
 	sCurrDesign = sDefaultDesignTemplate;
 	sCurrDesign.pName = NULL;
 	sCurrDesign.stored = false;
@@ -2911,6 +2912,8 @@ bool intValidTemplate(DROID_TEMPLATE *psTempl, const char *newName, bool complai
 	//set the droidtype
 	psTempl->droidType = droidTemplateType(psTempl);
 
+	psTempl->enabled = true;
+
 	/* copy name into template */
 	sstrcpy(psTempl->aName, newName);
 
@@ -3007,7 +3010,8 @@ void intProcessDesign(UDWORD id)
 		{
 			desCreateDefaultTemplate();
 
-			sstrcpy(aCurrName, _("New Vehicle"));
+			aCurrName[0] = '\0';
+			sCurrDesign.aName[0] = '\0';
 			sstrcpy(sCurrDesign.aName, aCurrName);
 
 			/* reveal body button */
@@ -3469,6 +3473,7 @@ void intProcessDesign(UDWORD id)
 		/* update name if not customised */
 		if (bTemplateNameCustomised == false)
 		{
+debug(LOG_ERROR, "12!");
 			sstrcpy(sCurrDesign.aName, GetDefaultTemplateName(&sCurrDesign));
 		}
 
@@ -3517,6 +3522,7 @@ void intProcessDesign(UDWORD id)
 		case IDDES_NAMEBOX:
 			sstrcpy(sCurrDesign.aName, widgGetString(psWScreen, IDDES_NAMEBOX));
 			sstrcpy(aCurrName, sCurrDesign.aName);
+debug(LOG_ERROR, "name SET to %s", sCurrDesign.aName);
 			break;
 		case IDDES_BIN:
 			{

@@ -66,8 +66,6 @@ extern bool droidInit(void);
 
 bool removeDroidBase(DROID *psDel);
 
-extern bool loadDroidWeapons(const char *pWeaponData, UDWORD bufferSize);
-
 struct INITIAL_DROID_ORDERS
 {
 	uint32_t secondaryOrder;

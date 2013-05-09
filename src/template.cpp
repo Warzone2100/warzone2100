@@ -40,26 +40,10 @@
 #include "projectile.h"
 #include "main.h"
 
-/* default droid design template */
-extern DROID_TEMPLATE	sDefaultDesignTemplate;
-extern bool		bInTutorial;
 // Template storage
 DROID_TEMPLATE		*apsDroidTemplates[MAX_PLAYERS];
 
 bool allowDesign = true;
-
-static const StringToEnum<DROID_TYPE> map_DROID_TYPE[] =
-{
-	{"PERSON",              DROID_PERSON            },
-	{"CYBORG",              DROID_CYBORG            },
-	{"CYBORG_SUPER",        DROID_CYBORG_SUPER      },
-	{"CYBORG_CONSTRUCT",    DROID_CYBORG_CONSTRUCT  },
-	{"CYBORG_REPAIR",       DROID_CYBORG_REPAIR     },
-	{"TRANSPORTER",         DROID_TRANSPORTER       },
-	{"SUPERTRANSPORTER",    DROID_SUPERTRANSPORTER  },
-	{"ZNULLDROID",          DROID_ANY               },
-	{"DROID",               DROID_DEFAULT           },
-};
 
 static bool researchedItem(DROID_TEMPLATE *psCurr, int player, COMPONENT_TYPE partIndex, int part, bool allowZero, bool allowRedundant)
 {
@@ -264,7 +248,7 @@ bool shutdownTemplates()
 }
 
 DROID_TEMPLATE::DROID_TEMPLATE()  // This constructor replaces a memset in scrAssembleWeaponTemplate(), not needed elsewhere.
-	: BASE_STATS()
+	: BASE_STATS(REF_TEMPLATE_START)
 	//, aName
 	//, asParts
 	, numWeaps(0)
@@ -281,130 +265,86 @@ DROID_TEMPLATE::DROID_TEMPLATE()  // This constructor replaces a memset in scrAs
 	std::fill_n(asWeaps, DROID_MAXWEAPS, 0);
 }
 
-DROID_TEMPLATE::DROID_TEMPLATE(LineView line)
-	: BASE_STATS(REF_TEMPLATE_START + line.line())
-	//, aName
-	//, asParts
-	, numWeaps(line.i(11, 0, DROID_MAXWEAPS))
-	//, asWeaps
-	, droidType(line.e(9, map_DROID_TYPE))
-	, multiPlayerID(line.u32(1))
-	, psNext(NULL)
-	, prefab(false)
-	, stored(false)
-	, enabled(true)
-	// Ignored columns: 6 - but used later to decide whether the template is for human players.
-{
-	std::string name = line.s(0);
-	sstrcpy(aName, name.c_str());
-
-	asParts[COMP_BODY]       = line.stats( 2, asBodyStats,       numBodyStats)       - asBodyStats;
-	asParts[COMP_BRAIN]      = line.stats( 3, asBrainStats,      numBrainStats)      - asBrainStats;
-	asParts[COMP_CONSTRUCT]  = line.stats( 4, asConstructStats,  numConstructStats)  - asConstructStats;
-	asParts[COMP_ECM]        = line.stats( 5, asECMStats,        numECMStats)        - asECMStats;
-	asParts[COMP_PROPULSION] = line.stats( 7, asPropulsionStats, numPropulsionStats) - asPropulsionStats;
-	asParts[COMP_REPAIRUNIT] = line.stats( 8, asRepairStats,     numRepairStats)     - asRepairStats;
-	asParts[COMP_SENSOR]     = line.stats(10, asSensorStats,     numSensorStats)     - asSensorStats;
-
-	std::fill_n(asWeaps, DROID_MAXWEAPS, 0);
-}
-
 /* load the Droid stats for the components from the Access database */
-bool loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
+bool loadDroidTemplates(const char *filename)
 {
-	bool bDefaultTemplateFound = false;
-
-	TableView table(pDroidData, bufferSize);
-
-	for (unsigned i = 0; i < table.size(); ++i)
+	WzConfig ini(filename, WzConfig::ReadOnlyAndRequired);
+	QStringList list = ini.childGroups();
+	for (int i = 0; i < list.size(); ++i)
 	{
-		LineView line(table, i);
-
-		DROID_TEMPLATE design(line);
-		if (table.isError())
+		ini.beginGroup(list[i]);
+		DROID_TEMPLATE design;
+		QString droidType = ini.value("type").toString();
+		design.pName = strdup(list[i].toUtf8().constData());
+		if (droidType == "PERSON") design.droidType = DROID_PERSON;
+		else if (droidType == "CYBORG") design.droidType = DROID_CYBORG;
+		else if (droidType == "CYBORG_SUPER") design.droidType = DROID_CYBORG_SUPER;
+		else if (droidType == "CYBORG_CONSTRUCT") design.droidType = DROID_CYBORG_CONSTRUCT;
+		else if (droidType == "CYBORG_REPAIR") design.droidType = DROID_CYBORG_REPAIR;
+		else if (droidType == "TRANSPORTER") design.droidType = DROID_TRANSPORTER;
+		else if (droidType == "SUPERTRANSPORTER") design.droidType = DROID_SUPERTRANSPORTER;
+		else if (droidType == "DROID") design.droidType = DROID_DEFAULT;
+		else ASSERT(false, "No such droid type \"%s\" for %s", droidType.toUtf8().constData(), design.pName);
+		design.multiPlayerID = generateNewObjectId();
+		design.asParts[COMP_BODY] = getCompFromName(COMP_BODY, ini.value("compBody", "ZNULLBODY").toString().toUtf8().constData());
+		design.asParts[COMP_BRAIN] = getCompFromName(COMP_BRAIN, ini.value("compBrain", "ZNULLBRAIN").toString().toUtf8().constData());
+		design.asParts[COMP_REPAIRUNIT] = getCompFromName(COMP_REPAIRUNIT, ini.value("compRepair", "ZNULLREPAIR").toString().toUtf8().constData());
+		design.asParts[COMP_CONSTRUCT] = getCompFromName(COMP_CONSTRUCT, ini.value("compConstruct", "ZNULLCONSTRUCT").toString().toUtf8().constData());
+		design.asParts[COMP_ECM] = getCompFromName(COMP_ECM, ini.value("compECM", "ZNULLECM").toString().toUtf8().constData());
+		design.asParts[COMP_SENSOR] = getCompFromName(COMP_SENSOR, ini.value("compSensor", "ZNULLSENSOR").toString().toUtf8().constData());
+		design.asParts[COMP_PROPULSION] = getCompFromName(COMP_PROPULSION, ini.value("compPropulsion", "ZNULLPROP").toString().toUtf8().constData());
+		QStringList weapons = ini.value("weapons").toStringList();
+		for (int j = 0; j < weapons.size(); j++)
 		{
-			debug(LOG_ERROR, "%s", table.getError().toUtf8().constData());
-			return false;
+			design.asWeaps[j] = getCompFromName(COMP_WEAPON, weapons[j].toUtf8().constData());
 		}
-
-		std::string const pNameCache = design.aName;
-		design.pName = const_cast<char *>(pNameCache.c_str());
-
-		if (getTemplateFromUniqueName(design.pName, 0))
-		{
-			debug(LOG_ERROR, "Duplicate template %s", design.pName);
-			continue;
-		}
-
-		// Store translated name in aName
-		char const *droidResourceName = getDroidResourceName(design.aName);
+		design.numWeaps = weapons.size();
+		design.prefab = true;
+		design.stored = false;
+		design.enabled = true;
+		bool available = ini.value("available", false).toBool();
+		char const *droidResourceName = getDroidResourceName(list[i].toUtf8().constData());
 		sstrcpy(design.aName, droidResourceName != NULL? droidResourceName : GetDefaultTemplateName(&design));
+		ini.endGroup();
 
-		// Store global default design if found else store in the appropriate array
-		if (design.droidType == DROID_ANY)
+		for (int i = 0; i < MAX_PLAYERS; ++i)
 		{
-			design.droidType = DROID_DEFAULT;
-			// NOTE: sDefaultDesignTemplate.pName takes ownership
-			//       of the memory allocated to pDroidDesign->pName
-			//       here. Which is good because pDroidDesign leaves
-			//       scope here anyway.
-			sDefaultDesignTemplate = design;
-			sDefaultDesignTemplate.pName = strdup(design.pName);
-			bDefaultTemplateFound = true;
-		}
-		else
-		{
-			std::string playerType = line.s(6);
-
-			for (int i = 0; i < MAX_PLAYERS; ++i)
+			// Give those meant for humans to all human players.
+			if (NetPlay.players[i].allocated && available)
 			{
-				// Give those meant for humans to all human players.
-				// Also support the old template format, in which those meant
-				// for humans were player 0 (in campaign) or 5 (in multiplayer), ("YES" is used in MP stats)
-				if (NetPlay.players[i].allocated &&
-					((!bMultiPlayer && playerType == "0") || (bMultiPlayer && playerType == "5") || playerType == "YES"))
-				{
-					debug(LOG_NEVER, "HUMAN (%d): %s id:%d enabled:%d", i, design.aName, design.multiPlayerID, design.enabled);
-					design.prefab = false;
-					addTemplateToList(&design, &apsDroidTemplates[i]);
+				design.prefab = false;
+				addTemplateToList(&design, &apsDroidTemplates[i]);
 
-					// This sets up the UI templates for display purposes ONLY--we still only use apsDroidTemplates for making them.
-					// FIXME: Why are we doing this here, and not on demmand ?
-					// Only add unique designs to the UI list (Note, perhaps better to use std::map instead?)
-					std::list<DROID_TEMPLATE>::iterator it;
-					for (it = localTemplates.begin(); it != localTemplates.end(); ++it)
+				// This sets up the UI templates for display purposes ONLY--we still only use apsDroidTemplates for making them.
+				// FIXME: Why are we doing this here, and not on demand ?
+				// Only add unique designs to the UI list (Note, perhaps better to use std::map instead?)
+				std::list<DROID_TEMPLATE>::iterator it;
+				for (it = localTemplates.begin(); it != localTemplates.end(); ++it)
+				{
+					DROID_TEMPLATE *psCurr = &*it;
+					if (psCurr->multiPlayerID == design.multiPlayerID)
 					{
-						DROID_TEMPLATE *psCurr = &*it;
-						if (psCurr->multiPlayerID == design.multiPlayerID)
-						{
-							debug(LOG_NEVER, "Design id:%d (%s) *NOT* added to UI list (duplicate), player= %d", design.multiPlayerID, design.aName, i);
-							break;
-						}
-					}
-					if (it == localTemplates.end())
-					{
-						debug(LOG_NEVER, "Design id:%d (%s) added to UI list, player =%d", design.multiPlayerID, design.aName, i);
-						localTemplates.push_front(design);
-						localTemplates.front().pName = strdup(localTemplates.front().pName);
+						debug(LOG_ERROR, "Design id:%d (%s) *NOT* added to UI list (duplicate), player= %d", design.multiPlayerID, design.aName, i);
+						break;
 					}
 				}
-				else if (NetPlay.players[i].allocated)	//skip the ones not meant for puny humans
+				if (it == localTemplates.end())
 				{
-					continue;
-				}
-				else	// assume everything else is for AI
-				{
-					debug(LOG_NEVER, "AI (%d): %s id:%d enabled:%d", i, design.aName, design.multiPlayerID, design.enabled);
-					design.prefab = true;  // prefabricated templates referenced from VLOs
-					addTemplateToList(&design, &apsDroidTemplates[i]);
+					debug(LOG_NEVER, "Design id:%d (%s) added to UI list, player =%d", design.multiPlayerID, design.aName, i);
+					localTemplates.push_front(design);
+					localTemplates.front().pName = strdup(localTemplates.front().pName);
 				}
 			}
+			else if (!NetPlay.players[i].allocated)	// AI template
+			{
+				debug(LOG_NEVER, "AI (%d): %s id:%d enabled:%d", i, design.aName, design.multiPlayerID, design.enabled);
+				design.prefab = true;  // prefabricated templates referenced from VLOs
+				addTemplateToList(&design, &apsDroidTemplates[i]);
+			}
 		}
-		debug(LOG_NEVER, "(default) Droid template found, aName: %s, MP ID: %d, ref: %u, pname: %s, prefab: %s, type:%d (loading)",
-			design.aName, design.multiPlayerID, design.ref, design.pName, design.prefab ? "yes":"no", design.droidType);
+		debug(LOG_NEVER, "Droid template found, aName: %s, MP ID: %d, ref: %u, pname: %s, prefab: %s, type:%d (loading)",
+		      design.aName, design.multiPlayerID, design.ref, design.pName, design.prefab ? "yes":"no", design.droidType);
 	}
-
-	ASSERT_OR_RETURN(false, bDefaultTemplateFound, "Default template not found");
 
 	return true;
 }
@@ -420,17 +360,11 @@ bool droidTemplateShutDown(void)
 		for (pTemplate = apsDroidTemplates[player]; pTemplate != NULL; pTemplate = pNext)
 		{
 			pNext = pTemplate->psNext;
-			if (pTemplate->pName != sDefaultDesignTemplate.pName)	// sanity check probably no longer necessary
-			{
-				free(pTemplate->pName);
-			}
+			free(pTemplate->pName);
 			delete pTemplate;
 		}
 		apsDroidTemplates[player] = NULL;
 	}
-
-	free(sDefaultDesignTemplate.pName);
-	sDefaultDesignTemplate.pName = NULL;
 
 	for (std::list<DROID_TEMPLATE>::iterator i = localTemplates.begin(); i != localTemplates.end(); ++i)
 	{
@@ -439,29 +373,6 @@ bool droidTemplateShutDown(void)
 	localTemplates.clear();
 
 	return true;
-}
-
-/*!
- * Gets a template from its name
- * relies on the name being unique (or it will return the first one it finds!)
- * \param pName Template name
- * \param player Player number
- * \pre pName has to be the unique, untranslated name!
- * \pre player \< MAX_PLAYERS
- */
-DROID_TEMPLATE * getTemplateFromUniqueName(const char *pName, unsigned int player)
-{
-	DROID_TEMPLATE *list = apsDroidTemplates[player];
-
-	for (DROID_TEMPLATE *psCurr = list; psCurr != NULL; psCurr = psCurr->psNext)
-	{
-		if (strcmp(psCurr->pName, pName) == 0)
-		{
-			return psCurr;
-		}
-	}
-
-	return NULL;
 }
 
 /*!
