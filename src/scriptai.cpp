@@ -1039,7 +1039,7 @@ static UDWORD scrDroidTargetMask(DROID *psDroid)
 	}
 
 	// get the body type
-	psBStats = asBodyStats + psDroid->asBits[COMP_BODY].nStat;
+	psBStats = asBodyStats + psDroid->asBits[COMP_BODY];
 	switch (psBStats->size)
 	{
 	case SIZE_LIGHT:
@@ -1061,7 +1061,7 @@ static UDWORD scrDroidTargetMask(DROID *psDroid)
 	}
 
 	// get the propulsion type
-	psPStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
+	psPStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION];
 	switch (psPStats->propulsionType)
 	{
 	case PROPULSION_TYPE_WHEELED:
@@ -2129,7 +2129,7 @@ bool scrDroidCanReach(void)
 	}
 	if (psDroid)
 	{
-		const PROPULSION_STATS *psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
+		const PROPULSION_STATS *psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION];
 		const Vector3i rPos(x, y, 0);
 
 		scrFunctionResult.v.bval = fpathCheck(psDroid->pos, rPos, psPropStats->propulsionType);

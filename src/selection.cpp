@@ -86,7 +86,7 @@ static unsigned int selSelectAllSameProp(unsigned int player, PROPULSION_TYPE pr
 		if (!bOnScreen || droidOnScreen(psDroid, 0))
 		{
 			/* Get the propulsion type */
-			PROPULSION_STATS *psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
+			PROPULSION_STATS *psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION];
 			ASSERT(psPropStats != NULL, "invalid propulsion stats pointer");
 			/* Same as that asked for - don't want Transporters*/
 			if (psPropStats->propulsionType == propType && (psDroid->droidType != DROID_TRANSPORTER && psDroid->droidType != DROID_SUPERTRANSPORTER))
@@ -173,7 +173,7 @@ static unsigned int selSelectAllCombatLand(unsigned int player, bool bOnScreen)
 			if (!bOnScreen || droidOnScreen(psDroid, 0))
 			{
 				/* Get the propulsion type */
-				PROPULSION_STATS *psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
+				PROPULSION_STATS *psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION];
 				ASSERT(psPropStats != NULL, "invalid propulsion stats pointer");
 				if (psPropStats->propulsionType == PROPULSION_TYPE_WHEELED ||
 				    psPropStats->propulsionType == PROPULSION_TYPE_HALF_TRACKED ||
@@ -208,7 +208,7 @@ static unsigned int selSelectAllCombatCyborg(unsigned int player, bool bOnScreen
 			if (!bOnScreen || droidOnScreen(psDroid, 0))
 			{
 				/* Get the propulsion type */
-				PROPULSION_STATS *psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
+				PROPULSION_STATS *psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION];
 				ASSERT(psPropStats != NULL, "invalid propulsion stats pointer");
 				/* Check if cyborg */
 				if (psPropStats->propulsionType == PROPULSION_TYPE_LEGGED)

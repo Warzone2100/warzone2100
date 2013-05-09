@@ -1080,7 +1080,7 @@ UDWORD transporterSpaceRequired(DROID const *psDroid)
 {
 	// all droids are the same weight for campaign games.
 	// TODO - move this into a droid flag
-	return bMultiPlayer ? (asBodyStats + psDroid->asBits[COMP_BODY].nStat)->size : 1;
+	return bMultiPlayer ? (asBodyStats + psDroid->asBits[COMP_BODY])->size : 1;
 }
 
 /*sets which list of droids to use for the transporter interface*/

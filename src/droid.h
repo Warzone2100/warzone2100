@@ -351,37 +351,37 @@ static inline int droidJammerPower(const DROID* psDroid)
  */
 static inline BODY_STATS *getBodyStats(DROID *psDroid)
 {
-	return asBodyStats + psDroid->asBits[COMP_BODY].nStat;
+	return asBodyStats + psDroid->asBits[COMP_BODY];
 }
 
 static inline BRAIN_STATS *getBrainStats(DROID *psDroid)
 {
-	return asBrainStats + psDroid->asBits[COMP_BRAIN].nStat;
+	return asBrainStats + psDroid->asBits[COMP_BRAIN];
 }
 
 static inline PROPULSION_STATS *getPropulsionStats(DROID *psDroid)
 {
-	return asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
+	return asPropulsionStats + psDroid->asBits[COMP_PROPULSION];
 }
 
 static inline SENSOR_STATS *getSensorStats(DROID *psDroid)
 {
-	return asSensorStats + psDroid->asBits[COMP_SENSOR].nStat;
+	return asSensorStats + psDroid->asBits[COMP_SENSOR];
 }
 
 static inline ECM_STATS *getECMStats(DROID *psDroid)
 {
-	return asECMStats + psDroid->asBits[COMP_ECM].nStat;
+	return asECMStats + psDroid->asBits[COMP_ECM];
 }
 
 static inline REPAIR_STATS *getRepairStats(DROID *psDroid)
 {
-	return asRepairStats + psDroid->asBits[COMP_REPAIRUNIT].nStat;
+	return asRepairStats + psDroid->asBits[COMP_REPAIRUNIT];
 }
 
 static inline CONSTRUCT_STATS *getConstructStats(DROID *psDroid)
 {
-	return asConstructStats + psDroid->asBits[COMP_CONSTRUCT].nStat;
+	return asConstructStats + psDroid->asBits[COMP_CONSTRUCT];
 }
 
 static inline WEAPON_STATS *getWeaponStats(DROID *psDroid, int weapon_slot)

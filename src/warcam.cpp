@@ -621,7 +621,7 @@ static void updateCameraAcceleration(UBYTE update)
 		const int angle = 90 - abs((player.r.x / 182) % 90);
 
 		const DROID *psDroid = (DROID *)trackingCamera.target;
-		const PROPULSION_STATS *psPropStats = &asPropulsionStats[psDroid->asBits[COMP_PROPULSION].nStat];
+		const PROPULSION_STATS *psPropStats = &asPropulsionStats[psDroid->asBits[COMP_PROPULSION]];
 
 		if (psPropStats->propulsionType == PROPULSION_TYPE_LIFT)
 		{
@@ -737,7 +737,7 @@ static void updateCameraRotationAcceleration(UBYTE update)
 	if (trackingCamera.target->type == OBJ_DROID)
 	{
 		DROID *psDroid = (DROID *)trackingCamera.target;
-		psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
+		psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION];
 		if (psPropStats->propulsionType == PROPULSION_TYPE_LIFT)
 		{
 			int droidHeight, difHeight, droidMapHeight;
@@ -908,7 +908,7 @@ static bool camTrackCamera()
 	if (trackingCamera.target->type == OBJ_DROID)
 	{
 		psDroid = (DROID *)trackingCamera.target;
-		psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
+		psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION];
 		if (psPropStats->propulsionType == PROPULSION_TYPE_LIFT)
 		{
 			bFlying = true;

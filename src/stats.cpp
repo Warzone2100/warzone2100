@@ -2689,7 +2689,7 @@ SENSOR_STATS *objActiveRadar(const BASE_OBJECT *psObj)
 		{
 			return NULL;
 		}
-		compIndex = ((DROID *)psObj)->asBits[COMP_SENSOR].nStat;
+		compIndex = ((DROID *)psObj)->asBits[COMP_SENSOR];
 		ASSERT_OR_RETURN(NULL, compIndex < numSensorStats, "Invalid range referenced for numSensorStats, %d > %d", compIndex, numSensorStats);
 		psStats = asSensorStats + compIndex;
 		break;

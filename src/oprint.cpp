@@ -208,10 +208,10 @@ void printDroidInfo(const DROID* psDroid)
 		switch (i)
 		{
 		case COMP_BODY:
-			if (psDroid->asBits[i].nStat > 0)
+			if (psDroid->asBits[i] > 0)
 			{
 				CONPRINTF(ConsoleString,(ConsoleString,"Body: "));
-				psBdyStats = asBodyStats + psDroid->asBits[i].nStat;
+				psBdyStats = asBodyStats + psDroid->asBits[i];
 				printComponentInfo((COMPONENT_STATS *)psBdyStats);
 			}
 			else
@@ -222,10 +222,10 @@ void printDroidInfo(const DROID* psDroid)
 		case COMP_BRAIN:
 			break;
 		case COMP_PROPULSION:
-			if (psDroid->asBits[i].nStat > 0)
+			if (psDroid->asBits[i] > 0)
 			{
 				CONPRINTF(ConsoleString,(ConsoleString,"Prop: "));
-				psPropStats = asPropulsionStats + psDroid->asBits[i].nStat;
+				psPropStats = asPropulsionStats + psDroid->asBits[i];
 				printComponentInfo((COMPONENT_STATS *)psPropStats);
 			}
 			else
@@ -234,10 +234,10 @@ void printDroidInfo(const DROID* psDroid)
 			}
 			break;
 		case COMP_ECM:
-			if (psDroid->asBits[i].nStat > 0)
+			if (psDroid->asBits[i] > 0)
 			{
 				CONPRINTF(ConsoleString,(ConsoleString,"ECM: "));
-				psECMStats = asECMStats + psDroid->asBits[i].nStat;
+				psECMStats = asECMStats + psDroid->asBits[i];
 				printComponentInfo((COMPONENT_STATS *)psECMStats);
 				CONPRINTF(ConsoleString,(ConsoleString,"   range %d loc %d imd %p\n",
 					ecmRange(psECMStats, psDroid->player), psECMStats->location,
@@ -249,10 +249,10 @@ void printDroidInfo(const DROID* psDroid)
 			}
 			break;
 		case COMP_SENSOR:
-			if (psDroid->asBits[i].nStat > 0)
+			if (psDroid->asBits[i] > 0)
 			{
 				CONPRINTF(ConsoleString,(ConsoleString,"Sensor: "));
-				psSensStats = asSensorStats + psDroid->asBits[i].nStat;
+				psSensStats = asSensorStats + psDroid->asBits[i];
 				printComponentInfo((COMPONENT_STATS *)psSensStats);
 				CONPRINTF(ConsoleString,(ConsoleString,"   rng %d loc %d imd %p\n",
 					sensorRange(psSensStats,psDroid->player),
@@ -264,10 +264,10 @@ void printDroidInfo(const DROID* psDroid)
 			}
 			break;
 		case COMP_CONSTRUCT:
-			if (psDroid->asBits[i].nStat > 0)
+			if (psDroid->asBits[i] > 0)
 			{
 				CONPRINTF(ConsoleString,(ConsoleString,"Construct: "));
-				psConstStats = asConstructStats + psDroid->asBits[i].nStat;
+				psConstStats = asConstructStats + psDroid->asBits[i];
 				printComponentInfo((COMPONENT_STATS *)psConstStats);
 				CONPRINTF(ConsoleString,(ConsoleString,"   cPnts %d imd %p\n",
 					constructorPoints(psConstStats, psDroid->player),
@@ -275,10 +275,10 @@ void printDroidInfo(const DROID* psDroid)
 			}
 			break;
 		case COMP_REPAIRUNIT:
-			if (psDroid->asBits[i].nStat > 0)
+			if (psDroid->asBits[i] > 0)
 			{
 				CONPRINTF(ConsoleString,(ConsoleString,"Repair: "));
-				psRepairStats = asRepairStats + psDroid->asBits[i].nStat;
+				psRepairStats = asRepairStats + psDroid->asBits[i];
 				printComponentInfo((COMPONENT_STATS *)psRepairStats);
 				CONPRINTF(ConsoleString,(ConsoleString,"   repPnts %d loc %d imd %p\n",
 					repairPoints(psRepairStats, psDroid->player),

@@ -3178,8 +3178,8 @@ static bool intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected, 
 			Droid = (DROID *)psObj;
 			if (Droid->droidType == DROID_CONSTRUCT || Droid->droidType == DROID_CYBORG_CONSTRUCT)
 			{
-				compIndex = Droid->asBits[COMP_CONSTRUCT].nStat;
-				ASSERT_OR_RETURN(false, Droid->asBits[COMP_CONSTRUCT].nStat, "Invalid droid type");
+				compIndex = Droid->asBits[COMP_CONSTRUCT];
+				ASSERT_OR_RETURN(false, Droid->asBits[COMP_CONSTRUCT], "Invalid droid type");
 				ASSERT_OR_RETURN(false, compIndex < numConstructStats, "Invalid range referenced for numConstructStats, %d > %d", compIndex, numConstructStats);
 				psStats = (BASE_STATS *)(asConstructStats + compIndex);
 				sBarInit2.size = (UWORD)constructorPoints((CONSTRUCT_STATS *)psStats, Droid->player);

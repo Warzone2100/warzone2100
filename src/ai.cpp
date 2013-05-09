@@ -392,8 +392,8 @@ static SDWORD targetAttackWeight(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker,
 		}
 
 		/* Now calculate the overall weight */
-		attackWeight = asWeaponModifier[weaponEffect][(asPropulsionStats + targetDroid->asBits[COMP_PROPULSION].nStat)->propulsionType] // Our weapon's effect against target
-				+ asWeaponModifierBody[weaponEffect][(asBodyStats + targetDroid->asBits[COMP_BODY].nStat)->size]
+		attackWeight = asWeaponModifier[weaponEffect][(asPropulsionStats + targetDroid->asBits[COMP_PROPULSION])->propulsionType] // Our weapon's effect against target
+				+ asWeaponModifierBody[weaponEffect][(asBodyStats + targetDroid->asBits[COMP_BODY])->size]
 				+ WEIGHT_DIST_TILE_DROID * objSensorRange(psAttacker) / TILE_UNITS
 				- WEIGHT_DIST_TILE_DROID * dist/TILE_UNITS // farther droids are less attractive
 				+ WEIGHT_HEALTH_DROID * damageRatio/100 // we prefer damaged droids
@@ -1200,7 +1200,7 @@ bool validTarget(BASE_OBJECT *psObject, BASE_OBJECT *psTarget, int weapon_slot)
 	switch (psTarget->type)
 	{
 	case OBJ_DROID:
-		if (asPropulsionTypes[asPropulsionStats[((DROID *)psTarget)->asBits[COMP_PROPULSION].nStat].propulsionType].travel == AIR)
+		if (asPropulsionTypes[asPropulsionStats[((DROID *)psTarget)->asBits[COMP_PROPULSION]].propulsionType].travel == AIR)
 		{
 			if (((DROID *)psTarget)->sMove.Status != MOVEINACTIVE)
 			{

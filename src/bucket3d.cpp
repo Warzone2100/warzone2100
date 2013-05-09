@@ -226,7 +226,7 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void* pObject)
 				position.y+=4;
 			}
 
-			psBStats = asBodyStats + psDroid->asBits[COMP_BODY].nStat;
+			psBStats = asBodyStats + psDroid->asBits[COMP_BODY];
 			droidSize = psBStats->pIMD->radius;
 			z = pie_RotateProject(&position,&pixel) - (droidSize*2);
 

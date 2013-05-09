@@ -4483,13 +4483,13 @@ static bool writeDroid(WzConfig &ini, DROID *psCurr, bool onMission, int &counte
 	if (psCurr->periodicalDamage > 0) ini.setValue("periodicalDamage", psCurr->periodicalDamage);
 	ini.setValue("droidType", psCurr->droidType);
 	ini.setValue("weapons", psCurr->numWeaps);
-	ini.setValue("parts/body", (asBodyStats + psCurr->asBits[COMP_BODY].nStat)->pName);
-	ini.setValue("parts/propulsion", (asPropulsionStats + psCurr->asBits[COMP_PROPULSION].nStat)->pName);
-	ini.setValue("parts/brain", (asBrainStats + psCurr->asBits[COMP_BRAIN].nStat)->pName);
-	ini.setValue("parts/repair", (asRepairStats + psCurr->asBits[COMP_REPAIRUNIT].nStat)->pName);
-	ini.setValue("parts/ecm", (asECMStats + psCurr->asBits[COMP_ECM].nStat)->pName);
-	ini.setValue("parts/sensor", (asSensorStats + psCurr->asBits[COMP_SENSOR].nStat)->pName);
-	ini.setValue("parts/construct", (asConstructStats + psCurr->asBits[COMP_CONSTRUCT].nStat)->pName);
+	ini.setValue("parts/body", (asBodyStats + psCurr->asBits[COMP_BODY])->pName);
+	ini.setValue("parts/propulsion", (asPropulsionStats + psCurr->asBits[COMP_PROPULSION])->pName);
+	ini.setValue("parts/brain", (asBrainStats + psCurr->asBits[COMP_BRAIN])->pName);
+	ini.setValue("parts/repair", (asRepairStats + psCurr->asBits[COMP_REPAIRUNIT])->pName);
+	ini.setValue("parts/ecm", (asECMStats + psCurr->asBits[COMP_ECM])->pName);
+	ini.setValue("parts/sensor", (asSensorStats + psCurr->asBits[COMP_SENSOR])->pName);
+	ini.setValue("parts/construct", (asConstructStats + psCurr->asBits[COMP_CONSTRUCT])->pName);
 	for (int j = 0; j < psCurr->numWeaps; j++)
 	{
 		ini.setValue("parts/weapon/" + QString::number(j + 1), (asWeaponStats + psCurr->asWeaps[j].nStat)->pName);

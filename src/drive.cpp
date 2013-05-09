@@ -556,7 +556,7 @@ void driveUpdate(void)
 
 				for (psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
 				{
-					psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
+					psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION];
 
 					if ((psDroid->selected) &&
 						(psDroid != psDrivenDroid) &&

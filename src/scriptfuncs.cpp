@@ -2441,37 +2441,37 @@ bool scrGetDroid(void)
 		switch ((unsigned)sVal.type)  // Unsigned cast to suppress compiler warnings due to enum abuse.
 		{
 		case ST_BODY:
-			if (psDroid->asBits[COMP_BODY].nStat == (UDWORD)sVal.v.ival)
+			if (psDroid->asBits[COMP_BODY] == (UDWORD)sVal.v.ival)
 			{
 				found = true;
 			}
 			break;
 		case ST_PROPULSION:
-			if (psDroid->asBits[COMP_PROPULSION].nStat == (UDWORD)sVal.v.ival)
+			if (psDroid->asBits[COMP_PROPULSION] == (UDWORD)sVal.v.ival)
 			{
 				found = true;
 			}
 			break;
 		case ST_ECM:
-			if (psDroid->asBits[COMP_ECM].nStat == (UDWORD)sVal.v.ival)
+			if (psDroid->asBits[COMP_ECM] == (UDWORD)sVal.v.ival)
 			{
 				found = true;
 			}
 			break;
 		case ST_SENSOR:
-			if (psDroid->asBits[COMP_SENSOR].nStat == (UDWORD)sVal.v.ival)
+			if (psDroid->asBits[COMP_SENSOR] == (UDWORD)sVal.v.ival)
 			{
 				found = true;
 			}
 			break;
 		case ST_CONSTRUCT:
-			if (psDroid->asBits[COMP_CONSTRUCT].nStat == (UDWORD)sVal.v.ival)
+			if (psDroid->asBits[COMP_CONSTRUCT] == (UDWORD)sVal.v.ival)
 			{
 				found = true;
 			}
 			break;
 		case ST_REPAIR:
-			if (psDroid->asBits[COMP_REPAIRUNIT].nStat == (UDWORD)sVal.v.ival)
+			if (psDroid->asBits[COMP_REPAIRUNIT] == (UDWORD)sVal.v.ival)
 			{
 				found = true;
 			}
@@ -4656,7 +4656,7 @@ bool	scrThreatInArea(void)
 			/* Have we found a droid in this area */
 			if (dX >= x1 && dX <= x2 && dY >= y1 && dY <= y2)
 			{
-				switch ((asBodyStats + psDroid->asBits[COMP_BODY].nStat)->size)
+				switch ((asBodyStats + psDroid->asBits[COMP_BODY])->size)
 				{
 				case SIZE_LIGHT:
 					totalThreat += ldThreat;
@@ -6428,37 +6428,37 @@ bool scrNumDroidsByComponent(void)
 			switch ((unsigned)sVal.type)  // Unsigned cast to suppress compiler warnings due to enum abuse.
 			{
 			case ST_BODY:
-				if (psDroid->asBits[COMP_BODY].nStat == comp)
+				if (psDroid->asBits[COMP_BODY] == comp)
 				{
 					numFound++;
 				}
 				break;
 			case ST_PROPULSION:
-				if (psDroid->asBits[COMP_PROPULSION].nStat == comp)
+				if (psDroid->asBits[COMP_PROPULSION] == comp)
 				{
 					numFound++;
 				}
 				break;
 			case ST_ECM:
-				if (psDroid->asBits[COMP_ECM].nStat == comp)
+				if (psDroid->asBits[COMP_ECM] == comp)
 				{
 					numFound++;
 				}
 				break;
 			case ST_SENSOR:
-				if (psDroid->asBits[COMP_SENSOR].nStat == comp)
+				if (psDroid->asBits[COMP_SENSOR] == comp)
 				{
 					numFound++;
 				}
 				break;
 			case ST_CONSTRUCT:
-				if (psDroid->asBits[COMP_CONSTRUCT].nStat == comp)
+				if (psDroid->asBits[COMP_CONSTRUCT] == comp)
 				{
 					numFound++;
 				}
 				break;
 			case ST_REPAIR:
-				if (psDroid->asBits[COMP_REPAIRUNIT].nStat == comp)
+				if (psDroid->asBits[COMP_REPAIRUNIT] == comp)
 				{
 					numFound++;
 				}
@@ -6471,7 +6471,7 @@ bool scrNumDroidsByComponent(void)
 				}
 				break;
 			case ST_BRAIN:
-				if (psDroid->asBits[COMP_BRAIN].nStat == comp)
+				if (psDroid->asBits[COMP_BRAIN] == comp)
 				{
 					numFound++;
 				}
@@ -6772,7 +6772,7 @@ bool ThreatInRange(SDWORD player, SDWORD range, SDWORD rangeX, SDWORD rangeY, bo
 				}
 
 				//if VTOLs are excluded, skip them
-				if (!bVTOLs && ((asPropulsionStats[psDroid->asBits[COMP_PROPULSION].nStat].propulsionType == PROPULSION_TYPE_LIFT) || (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)))
+				if (!bVTOLs && ((asPropulsionStats[psDroid->asBits[COMP_PROPULSION]].propulsionType == PROPULSION_TYPE_LIFT) || (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)))
 				{
 					continue;
 				}
@@ -7356,7 +7356,7 @@ static UDWORD costOrAmountInRange(SDWORD player, SDWORD lookingPlayer, SDWORD ra
 			}
 
 			//if VTOLs are excluded, skip them
-			if (!bVTOLs && ((asPropulsionStats[psDroid->asBits[COMP_PROPULSION].nStat].propulsionType == PROPULSION_TYPE_LIFT) || (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)))
+			if (!bVTOLs && ((asPropulsionStats[psDroid->asBits[COMP_PROPULSION]].propulsionType == PROPULSION_TYPE_LIFT) || (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)))
 			{
 				continue;
 			}
@@ -7753,7 +7753,7 @@ UDWORD numEnemyObjInRange(SDWORD player, SDWORD range, SDWORD rangeX, SDWORD ran
 			{
 				//if VTOLs are excluded, skip them
 				if (!bVTOLs
-				    && (asPropulsionStats[psDroid->asBits[COMP_PROPULSION].nStat].propulsionType == PROPULSION_TYPE_LIFT
+				    && (asPropulsionStats[psDroid->asBits[COMP_PROPULSION]].propulsionType == PROPULSION_TYPE_LIFT
 				        || psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER))
 				{
 					continue;
@@ -8283,7 +8283,7 @@ bool scrGetClosestEnemy(void)
 				}
 
 				//if VTOLs are excluded, skip them
-				if (!bVTOLs && ((asPropulsionStats[psDroid->asBits[COMP_PROPULSION].nStat].propulsionType == PROPULSION_TYPE_LIFT) || (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)))
+				if (!bVTOLs && ((asPropulsionStats[psDroid->asBits[COMP_PROPULSION]].propulsionType == PROPULSION_TYPE_LIFT) || (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)))
 				{
 					continue;
 				}
@@ -8656,7 +8656,7 @@ bool scrGetClosestEnemyDroidByType(void)
 		for (psDroid = apsDroidLists[i]; psDroid; psDroid = psDroid->psNext)
 		{
 			//if VTOLs are excluded, skip them (don't check for transporter this time)
-			if (!bVTOLs && (asPropulsionStats[psDroid->asBits[COMP_PROPULSION].nStat].propulsionType == PROPULSION_TYPE_LIFT))
+			if (!bVTOLs && (asPropulsionStats[psDroid->asBits[COMP_PROPULSION]].propulsionType == PROPULSION_TYPE_LIFT))
 			{
 				continue;
 			}

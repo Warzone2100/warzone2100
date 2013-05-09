@@ -500,7 +500,7 @@ QScriptValue convDroid(DROID *psDroid, QScriptEngine *engine)
 	bool ga = false;
 	bool indirect = false;
 	int range = -1;
-	const BODY_STATS *psBodyStats = &asBodyStats[psDroid->asBits[COMP_BODY].nStat];
+	const BODY_STATS *psBodyStats = &asBodyStats[psDroid->asBits[COMP_BODY]];
 
 	for (int i = 0; i < psDroid->numWeaps; i++)
 	{
@@ -556,8 +556,8 @@ QScriptValue convDroid(DROID *psDroid, QScriptEngine *engine)
 	value.setProperty("droidType", (int)type, QScriptValue::ReadOnly);
 	value.setProperty("experience", (double)psDroid->experience / 65536.0, QScriptValue::ReadOnly);
 	value.setProperty("health", 100.0 / (double)psDroid->originalBody * (double)psDroid->body, QScriptValue::ReadOnly);
-	value.setProperty("body", asBodyStats[psDroid->asBits[COMP_BODY].nStat].pName, QScriptValue::ReadOnly);
-	value.setProperty("propulsion", asPropulsionStats[psDroid->asBits[COMP_PROPULSION].nStat].pName, QScriptValue::ReadOnly);
+	value.setProperty("body", asBodyStats[psDroid->asBits[COMP_BODY]].pName, QScriptValue::ReadOnly);
+	value.setProperty("propulsion", asPropulsionStats[psDroid->asBits[COMP_PROPULSION]].pName, QScriptValue::ReadOnly);
 	value.setProperty("armed", 0.0, QScriptValue::ReadOnly); // deprecated!
 	QScriptValue weaponlist = engine->newArray(psDroid->numWeaps);
 	for (int j = 0; j < psDroid->numWeaps; j++)
@@ -2245,7 +2245,7 @@ static QScriptValue js_droidCanReach(QScriptContext *context, QScriptEngine *)
 	int y = context->argument(2).toInt32();
 	DROID *psDroid = IdToDroid(id, player);
 	SCRIPT_ASSERT(context, psDroid, "Droid id %d not found belonging to player %d", id, player);
-	const PROPULSION_STATS *psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
+	const PROPULSION_STATS *psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION];
 	return QScriptValue(fpathCheck(psDroid->pos, Vector3i(world_coord(x), world_coord(y), 0), psPropStats->propulsionType));
 }
 

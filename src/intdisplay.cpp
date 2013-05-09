@@ -207,7 +207,7 @@ void intUpdateProgressBar(WIDGET *psWidget, W_CONTEXT *psContext)
 
 		if (DroidIsBuilding(Droid)) // Is it a building.
 		{
-			ASSERT(Droid->asBits[COMP_CONSTRUCT].nStat, "Invalid droid type");
+			ASSERT(Droid->asBits[COMP_CONSTRUCT], "Invalid droid type");
 
 			Structure = DroidGetBuildStructure(Droid);  // Get the structure's building.
 

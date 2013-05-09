@@ -3395,7 +3395,7 @@ static void	drawDroidCmndNo(DROID *psDroid)
 void calcScreenCoords(DROID *psDroid)
 {
 	/* Get it's absolute dimensions */
-	const BODY_STATS *psBStats = asBodyStats + psDroid->asBits[COMP_BODY].nStat;
+	const BODY_STATS *psBStats = asBodyStats + psDroid->asBits[COMP_BODY];
 	Vector3i origin;
 	Vector2i center;
 	int wsRadius = 22; // World space radius, 22 = magic minimum

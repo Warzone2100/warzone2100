@@ -220,7 +220,7 @@ bool scrBaseObjGet(UDWORD index)
 			return false;
 		}
 		type = (INTERP_TYPE)ST_BODY;
-		scrFunctionResult.v.ival = (SDWORD)((DROID *)psObj)->asBits[COMP_BODY].nStat;
+		scrFunctionResult.v.ival = (SDWORD)((DROID *)psObj)->asBits[COMP_BODY];
 		break;
 	case OBJID_PROPULSION:
 		if (psObj->type != OBJ_DROID)
@@ -229,7 +229,7 @@ bool scrBaseObjGet(UDWORD index)
 			return false;
 		}
 		type = (INTERP_TYPE)ST_PROPULSION;
-		scrFunctionResult.v.ival = (SDWORD)((DROID *)psObj)->asBits[COMP_PROPULSION].nStat;
+		scrFunctionResult.v.ival = (SDWORD)((DROID *)psObj)->asBits[COMP_PROPULSION];
 		break;
 	case OBJID_WEAPON:		//TODO: only returns first weapon now
 		type = (INTERP_TYPE)ST_WEAPON;

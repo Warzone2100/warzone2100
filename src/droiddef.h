@@ -54,12 +54,6 @@
 //defines how many times to perform the iteration on looking for a blank location
 #define LOOK_FOR_EMPTY_TILE		20
 
-
-struct COMPONENT
-{
-	UBYTE           nStat;          ///< Allowing a maximum of 255 stats per file
-};
-
 typedef std::vector<DROID_ORDER_DATA> OrderList;
 
 struct DROID_TEMPLATE : public BASE_STATS
@@ -110,7 +104,7 @@ struct DROID : public BASE_OBJECT
 	 *  per part to be calculated. Indexed by COMPONENT_TYPE.
 	 *  Weapons need to be dealt with separately.
 	 */
-	COMPONENT       asBits[DROID_MAXCOMP];
+	uint8_t         asBits[DROID_MAXCOMP];
 
 	/* The other droid data.  These are all derived from the components
 	 * but stored here for easy access

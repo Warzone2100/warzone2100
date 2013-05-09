@@ -1338,7 +1338,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 {
 	UDWORD		iFactoryDistSq;
 	STRUCTURE	*psStruct, *psRepairFac, *psFactory;
-	const PROPULSION_STATS *psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
+	const PROPULSION_STATS *psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION];
 	const Vector3i rPos(psOrder->pos, 0);
 
 	syncDebugDroid(psDroid, '-');
@@ -2627,9 +2627,9 @@ DroidOrder chooseOrderObj(DROID *psDroid, BASE_OBJECT *psObj, bool altOrder)
 			&& !aiCheckAlliances(psObj->player , psDroid->player) )
 	{
 		//check for standard sensor or VTOL intercept sensor
-		if (asSensorStats[psDroid->asBits[COMP_SENSOR].nStat].type == STANDARD_SENSOR
-		    || asSensorStats[psDroid->asBits[COMP_SENSOR].nStat].type == VTOL_INTERCEPT_SENSOR
-		    || asSensorStats[psDroid->asBits[COMP_SENSOR].nStat].type == SUPER_SENSOR)
+		if (asSensorStats[psDroid->asBits[COMP_SENSOR]].type == STANDARD_SENSOR
+		    || asSensorStats[psDroid->asBits[COMP_SENSOR]].type == VTOL_INTERCEPT_SENSOR
+		    || asSensorStats[psDroid->asBits[COMP_SENSOR]].type == SUPER_SENSOR)
 		{
  			// a sensor droid observing an object
 			order = DroidOrder(DORDER_OBSERVE, psObj);

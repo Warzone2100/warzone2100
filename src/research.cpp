@@ -1421,9 +1421,9 @@ static void switchComponent(DROID *psDroid, UDWORD oldType, UDWORD oldCompInc,
 		case COMP_ECM:
 		case COMP_SENSOR:
 		case COMP_CONSTRUCT:
-			if (psDroid->asBits[oldType].nStat == oldCompInc)
+			if (psDroid->asBits[oldType] == oldCompInc)
 			{
-				psDroid->asBits[oldType].nStat = (UBYTE)newCompInc;
+				psDroid->asBits[oldType] = (UBYTE)newCompInc;
 			}
 			break;
 		case COMP_WEAPON:

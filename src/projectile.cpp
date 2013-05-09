@@ -1178,7 +1178,7 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 			switch (psCurr->type)
 			{
 				case OBJ_DROID:
-					bTargetInAir = asPropulsionTypes[asPropulsionStats[((DROID *)psCurr)->asBits[COMP_PROPULSION].nStat].propulsionType].travel == AIR && ((DROID *)psCurr)->sMove.Status != MOVEINACTIVE;
+					bTargetInAir = asPropulsionTypes[asPropulsionStats[((DROID *)psCurr)->asBits[COMP_PROPULSION]].propulsionType].travel == AIR && ((DROID *)psCurr)->sMove.Status != MOVEINACTIVE;
 					useSphere = true;
 					break;
 				case OBJ_STRUCTURE:
@@ -1464,8 +1464,8 @@ UDWORD	calcDamage(UDWORD baseDamage, WEAPON_EFFECT weaponEffect, BASE_OBJECT *ps
 	}
 	else if (psTarget->type == OBJ_DROID)
 	{
-		const int propulsion = (asPropulsionStats + ((DROID *)psTarget)->asBits[COMP_PROPULSION].nStat)->propulsionType;
-		const int body = (asBodyStats + ((DROID *)psTarget)->asBits[COMP_BODY].nStat)->size;
+		const int propulsion = (asPropulsionStats + ((DROID *)psTarget)->asBits[COMP_PROPULSION])->propulsionType;
+		const int body = (asBodyStats + ((DROID *)psTarget)->asBits[COMP_BODY])->size;
 		damage += baseDamage * (asWeaponModifier[weaponEffect][propulsion] - 100);
 		damage += baseDamage * (asWeaponModifierBody[weaponEffect][body] - 100);
 	}
@@ -1614,7 +1614,7 @@ int establishTargetHeight(BASE_OBJECT const *psTarget)
 		case OBJ_DROID:
 		{
 			DROID const *psDroid = (DROID const *)psTarget;
-			unsigned int height = asBodyStats[psDroid->asBits[COMP_BODY].nStat].pIMD->max.y - asBodyStats[psDroid->asBits[COMP_BODY].nStat].pIMD->min.y;
+			unsigned int height = asBodyStats[psDroid->asBits[COMP_BODY]].pIMD->max.y - asBodyStats[psDroid->asBits[COMP_BODY]].pIMD->min.y;
 			unsigned int utilityHeight = 0, yMax = 0, yMin = 0; // Temporaries for addition of utility's height to total height
 
 			// VTOL's don't have pIMD either it seems...
@@ -1638,23 +1638,23 @@ int establishTargetHeight(BASE_OBJECT const *psTarget)
 					break;
 
 				case DROID_SENSOR:
-					yMax = (asSensorStats[psDroid->asBits[COMP_SENSOR].nStat]).pIMD->max.y;
-					yMin = (asSensorStats[psDroid->asBits[COMP_SENSOR].nStat]).pIMD->min.y;
+					yMax = (asSensorStats[psDroid->asBits[COMP_SENSOR]]).pIMD->max.y;
+					yMin = (asSensorStats[psDroid->asBits[COMP_SENSOR]]).pIMD->min.y;
 					break;
 
 				case DROID_ECM:
-					yMax = (asECMStats[psDroid->asBits[COMP_ECM].nStat]).pIMD->max.y;
-					yMin = (asECMStats[psDroid->asBits[COMP_ECM].nStat]).pIMD->min.y;
+					yMax = (asECMStats[psDroid->asBits[COMP_ECM]]).pIMD->max.y;
+					yMin = (asECMStats[psDroid->asBits[COMP_ECM]]).pIMD->min.y;
 					break;
 
 				case DROID_CONSTRUCT:
-					yMax = (asConstructStats[psDroid->asBits[COMP_CONSTRUCT].nStat]).pIMD->max.y;
-					yMin = (asConstructStats[psDroid->asBits[COMP_CONSTRUCT].nStat]).pIMD->min.y;
+					yMax = (asConstructStats[psDroid->asBits[COMP_CONSTRUCT]]).pIMD->max.y;
+					yMin = (asConstructStats[psDroid->asBits[COMP_CONSTRUCT]]).pIMD->min.y;
 					break;
 
 				case DROID_REPAIR:
-					yMax = (asRepairStats[psDroid->asBits[COMP_REPAIRUNIT].nStat]).pIMD->max.y;
-					yMin = (asRepairStats[psDroid->asBits[COMP_REPAIRUNIT].nStat]).pIMD->min.y;
+					yMax = (asRepairStats[psDroid->asBits[COMP_REPAIRUNIT]]).pIMD->max.y;
+					yMin = (asRepairStats[psDroid->asBits[COMP_REPAIRUNIT]]).pIMD->min.y;
 					break;
 
 				case DROID_PERSON:

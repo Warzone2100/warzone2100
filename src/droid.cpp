@@ -890,7 +890,7 @@ void droidUpdate(DROID *psDroid)
 	// -----------------
 
 	// See if we can and need to self repair.
-	if (!isVtolDroid(psDroid) && psDroid->body < psDroid->originalBody && psDroid->asBits[COMP_REPAIRUNIT].nStat != 0 && selfRepairEnabled(psDroid->player))
+	if (!isVtolDroid(psDroid) && psDroid->body < psDroid->originalBody && psDroid->asBits[COMP_REPAIRUNIT] != 0 && selfRepairEnabled(psDroid->player))
 	{
 		droidUpdateDroidSelfRepair(psDroid);
 	}
@@ -1137,7 +1137,7 @@ bool droidUpdateBuild(DROID *psDroid)
 
 	psStruct = (STRUCTURE *)psDroid->order.psObj;
 	ASSERT_OR_RETURN(false, psStruct->type == OBJ_STRUCTURE, "target is not a structure" );
-	ASSERT_OR_RETURN(false, psDroid->asBits[COMP_CONSTRUCT].nStat < numConstructStats, "Invalid construct pointer for unit" );
+	ASSERT_OR_RETURN(false, psDroid->asBits[COMP_CONSTRUCT] < numConstructStats, "Invalid construct pointer for unit" );
 
 	// First check the structure hasn't been completed by another droid
 	if (psStruct->status == SS_BUILT)
@@ -1167,7 +1167,7 @@ bool droidUpdateBuild(DROID *psDroid)
 	}
 
 	constructPoints = constructorPoints(asConstructStats + psDroid->
-		asBits[COMP_CONSTRUCT].nStat, psDroid->player);
+		asBits[COMP_CONSTRUCT], psDroid->player);
 
 	pointsToAdd = constructPoints * (gameTime - psDroid->actionStarted) /
 		GAME_TICKS_PER_SEC;
@@ -1197,7 +1197,7 @@ bool droidUpdateDemolishing( DROID *psDroid )
 	STRUCTURE *psStruct = (STRUCTURE *)psDroid->order.psObj;
 	ASSERT_OR_RETURN(false, psStruct->type == OBJ_STRUCTURE, "target is not a structure");
 
-	int constructRate = 5 * constructorPoints(asConstructStats + psDroid->asBits[COMP_CONSTRUCT].nStat, psDroid->player);
+	int constructRate = 5 * constructorPoints(asConstructStats + psDroid->asBits[COMP_CONSTRUCT], psDroid->player);
 	int pointsToAdd = gameTimeAdjustedAverage(constructRate);
 
 	structureDemolish(psStruct, psDroid, pointsToAdd);
@@ -1342,7 +1342,7 @@ bool droidUpdateRepair( DROID *psDroid )
 	STRUCTURE *psStruct = (STRUCTURE *)psDroid->psActionTarget[0];
 
 	ASSERT_OR_RETURN(false, psStruct->type == OBJ_STRUCTURE, "target is not a structure");
-	int iRepairRate = constructorPoints(asConstructStats + psDroid->asBits[COMP_CONSTRUCT].nStat, psDroid->player);
+	int iRepairRate = constructorPoints(asConstructStats + psDroid->asBits[COMP_CONSTRUCT], psDroid->player);
 
 	/* add points to structure */
 	structureRepair(psStruct, psDroid, iRepairRate);
@@ -1364,14 +1364,14 @@ static bool droidUpdateDroidRepairBase(DROID *psRepairDroid, DROID *psDroidToRep
 {
 	CHECK_DROID(psRepairDroid);
 
-	int iRepairRateNumerator = repairPoints(asRepairStats + psRepairDroid->asBits[COMP_REPAIRUNIT].nStat, psRepairDroid->player);
+	int iRepairRateNumerator = repairPoints(asRepairStats + psRepairDroid->asBits[COMP_REPAIRUNIT], psRepairDroid->player);
 	int iRepairRateDenominator = 1;
 
 	//if self repair then add repair points depending on the time delay for the stat
 	if (psRepairDroid == psDroidToRepair)
 	{
 		iRepairRateNumerator *= GAME_TICKS_PER_SEC;
-		iRepairRateDenominator *= (asRepairStats + psRepairDroid->asBits[COMP_REPAIRUNIT].nStat)->time;
+		iRepairRateDenominator *= (asRepairStats + psRepairDroid->asBits[COMP_REPAIRUNIT])->time;
 	}
 
 	int iPointsToAdd = gameTimeAdjustedAverage(iRepairRateNumerator, iRepairRateDenominator);
@@ -1396,7 +1396,7 @@ static bool droidUpdateDroidRepairBase(DROID *psRepairDroid, DROID *psDroidToRep
 bool droidUpdateDroidRepair(DROID *psRepairDroid)
 {
 	ASSERT_OR_RETURN(false, psRepairDroid->action == DACTION_DROIDREPAIR, "Unit does not have unit repair order");
-	ASSERT_OR_RETURN(false, psRepairDroid->asBits[COMP_REPAIRUNIT].nStat != 0, "Unit does not have a repair turret");
+	ASSERT_OR_RETURN(false, psRepairDroid->asBits[COMP_REPAIRUNIT] != 0, "Unit does not have a repair turret");
 
 	DROID *psDroidToRepair = (DROID *)psRepairDroid->psActionTarget[0];
 	ASSERT_OR_RETURN(false, psDroidToRepair->type == OBJ_DROID, "Target is not a unit");
@@ -1619,16 +1619,16 @@ UDWORD calcDroidBaseBody(DROID *psDroid)
 	}
 	/* Get the basic component body points */
 	body =
-		(asBodyStats + psDroid->asBits[COMP_BODY].nStat)->body +
-		(asBrainStats + psDroid->asBits[COMP_BRAIN].nStat)->body +
-		(asSensorStats + psDroid->asBits[COMP_SENSOR].nStat)->body +
-		(asECMStats + psDroid->asBits[COMP_ECM].nStat)->body +
-		(asRepairStats + psDroid->asBits[COMP_REPAIRUNIT].nStat)->body +
-		(asConstructStats + psDroid->asBits[COMP_CONSTRUCT].nStat)->body;
+		(asBodyStats + psDroid->asBits[COMP_BODY])->body +
+		(asBrainStats + psDroid->asBits[COMP_BRAIN])->body +
+		(asSensorStats + psDroid->asBits[COMP_SENSOR])->body +
+		(asECMStats + psDroid->asBits[COMP_ECM])->body +
+		(asRepairStats + psDroid->asBits[COMP_REPAIRUNIT])->body +
+		(asConstructStats + psDroid->asBits[COMP_CONSTRUCT])->body;
 
 	/* propulsion body points are a percentage of the bodys' body points */
-	body += (((asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat)->body *
-		(asBodyStats + psDroid->asBits[COMP_BODY].nStat)->body) / 100);
+	body += (((asPropulsionStats + psDroid->asBits[COMP_PROPULSION])->body *
+		(asBodyStats + psDroid->asBits[COMP_BODY])->body) / 100);
 
 	/* Add the weapon body points */
 	for(i=0; i<psDroid->numWeaps; i++)
@@ -1777,16 +1777,16 @@ UDWORD	calcDroidPower(DROID *psDroid)
 	UDWORD      power, i;
 
 	//get the component power
-	power = (asBodyStats + psDroid->asBits[COMP_BODY].nStat)->buildPower +
-	(asBrainStats + psDroid->asBits[COMP_BRAIN].nStat)->buildPower +
-	(asSensorStats + psDroid->asBits[COMP_SENSOR].nStat)->buildPower +
-	(asECMStats + psDroid->asBits[COMP_ECM].nStat)->buildPower +
-	(asRepairStats + psDroid->asBits[COMP_REPAIRUNIT].nStat)->buildPower +
-	(asConstructStats + psDroid->asBits[COMP_CONSTRUCT].nStat)->buildPower;
+	power = (asBodyStats + psDroid->asBits[COMP_BODY])->buildPower +
+	(asBrainStats + psDroid->asBits[COMP_BRAIN])->buildPower +
+	(asSensorStats + psDroid->asBits[COMP_SENSOR])->buildPower +
+	(asECMStats + psDroid->asBits[COMP_ECM])->buildPower +
+	(asRepairStats + psDroid->asBits[COMP_REPAIRUNIT])->buildPower +
+	(asConstructStats + psDroid->asBits[COMP_CONSTRUCT])->buildPower;
 
 	/* propulsion power points are a percentage of the bodys' power points */
-	power += (((asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat)->buildPower *
-		(asBodyStats + psDroid->asBits[COMP_BODY].nStat)->buildPower) / 100);
+	power += (((asPropulsionStats + psDroid->asBits[COMP_PROPULSION])->buildPower *
+		(asBodyStats + psDroid->asBits[COMP_BODY])->buildPower) / 100);
 
 	//add weapon power
 	for(i=0; i<psDroid->numWeaps; i++)
@@ -1991,20 +1991,7 @@ void droidSetBits(DROID_TEMPLATE *pTemplate,DROID *psDroid)
 		}
 		psDroid->asWeaps[inc].usedAmmo = 0;
 	}
-	//allocate the components hit points
-	psDroid->asBits[COMP_BODY].nStat = (UBYTE)pTemplate->asParts[COMP_BODY];
-
-	// ajl - changed this to init brains for all droids (crashed)
-	psDroid->asBits[COMP_BRAIN].nStat = 0;
-
-	// This is done by the Command droid stuff - John.
-	// Not any more - John.
-	psDroid->asBits[COMP_BRAIN].nStat = pTemplate->asParts[COMP_BRAIN];
-	psDroid->asBits[COMP_PROPULSION].nStat = pTemplate->asParts[COMP_PROPULSION];
-	psDroid->asBits[COMP_SENSOR].nStat = pTemplate->asParts[COMP_SENSOR];
-	psDroid->asBits[COMP_ECM].nStat = pTemplate->asParts[COMP_ECM];
-	psDroid->asBits[COMP_REPAIRUNIT].nStat = pTemplate->asParts[COMP_REPAIRUNIT];
-	psDroid->asBits[COMP_CONSTRUCT].nStat = pTemplate->asParts[COMP_CONSTRUCT];
+	memcpy(psDroid->asBits, pTemplate->asParts, sizeof(psDroid->asBits));
 
 	switch (getPropulsionStats(psDroid)->propulsionType)  // getPropulsionStats(psDroid) only defined after psDroid->asBits[COMP_PROPULSION] is set.
 	{
@@ -2039,13 +2026,7 @@ void templateSetParts(const DROID *psDroid, DROID_TEMPLATE *psTemplate)
 			psTemplate->asWeaps[inc] = psDroid->asWeaps[inc].nStat;
 		}
 	}
-	psTemplate->asParts[COMP_BODY] = psDroid->asBits[COMP_BODY].nStat;
-	psTemplate->asParts[COMP_BRAIN] = psDroid->asBits[COMP_BRAIN].nStat;
-	psTemplate->asParts[COMP_PROPULSION] = psDroid->asBits[COMP_PROPULSION].nStat;
-	psTemplate->asParts[COMP_SENSOR] = psDroid->asBits[COMP_SENSOR].nStat;
-	psTemplate->asParts[COMP_ECM] = psDroid->asBits[COMP_ECM].nStat;
-	psTemplate->asParts[COMP_REPAIRUNIT] = psDroid->asBits[COMP_REPAIRUNIT].nStat;
-	psTemplate->asParts[COMP_CONSTRUCT] = psDroid->asBits[COMP_CONSTRUCT].nStat;
+	memcpy(psTemplate->asParts, psDroid->asBits, sizeof(psDroid->asBits));
 }
 
 /* Make all the droids for a certain player a member of a specific group */
@@ -2834,9 +2815,7 @@ bool electronicDroid(DROID *psDroid)
 	CHECK_DROID(psDroid);
 
 	//use slot 0 for now
-	//if (psDroid->numWeaps && asWeaponStats[psDroid->asWeaps[0].nStat].
-	if (psDroid->numWeaps > 0 && asWeaponStats[psDroid->asWeaps[0].nStat].
-		weaponSubClass == WSC_ELECTRONIC)
+	if (psDroid->numWeaps > 0 && asWeaponStats[psDroid->asWeaps[0].nStat].weaponSubClass == WSC_ELECTRONIC)
 	{
 		return true;
 	}
@@ -2899,14 +2878,14 @@ UBYTE checkCommandExist(UBYTE player)
 //access functions for vtols
 bool isVtolDroid(const DROID* psDroid)
 {
-	return asPropulsionStats[psDroid->asBits[COMP_PROPULSION].nStat].propulsionType == PROPULSION_TYPE_LIFT
+	return asPropulsionStats[psDroid->asBits[COMP_PROPULSION]].propulsionType == PROPULSION_TYPE_LIFT
 	    && (psDroid->droidType != DROID_TRANSPORTER && psDroid->droidType != DROID_SUPERTRANSPORTER);
 }
 
 /* returns true if the droid has lift propulsion and is moving */ 
 bool isFlying(const DROID* psDroid)
 {
-	return (asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat)->propulsionType == PROPULSION_TYPE_LIFT  
+	return (asPropulsionStats + psDroid->asBits[COMP_PROPULSION])->propulsionType == PROPULSION_TYPE_LIFT  
 			&& (psDroid->sMove.Status != MOVEINACTIVE || psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER);
 }
 
@@ -3207,7 +3186,7 @@ bool droidSensorDroidWeapon(BASE_OBJECT *psObj, DROID *psDroid)
 		{
 			return false;
 		}
-		compIndex = ((DROID *)psObj)->asBits[COMP_SENSOR].nStat;
+		compIndex = ((DROID *)psObj)->asBits[COMP_SENSOR];
 		ASSERT_OR_RETURN( false, compIndex < numSensorStats, "Invalid range referenced for numSensorStats, %d > %d", compIndex, numSensorStats);
 		psStats = asSensorStats + compIndex;
 		break;
@@ -3267,8 +3246,8 @@ bool cbSensorDroid(DROID *psDroid)
 	{
 		return false;
 	}
-	if (asSensorStats[psDroid->asBits[COMP_SENSOR].nStat].type == VTOL_CB_SENSOR
-	    || asSensorStats[psDroid->asBits[COMP_SENSOR].nStat].type == INDIRECT_CB_SENSOR)
+	if (asSensorStats[psDroid->asBits[COMP_SENSOR]].type == VTOL_CB_SENSOR
+	    || asSensorStats[psDroid->asBits[COMP_SENSOR]].type == INDIRECT_CB_SENSOR)
 	{
 		return true;
 	}
@@ -3283,9 +3262,9 @@ bool standardSensorDroid(DROID *psDroid)
 	{
 		return false;
 	}
-	if (asSensorStats[psDroid->asBits[COMP_SENSOR].nStat].type == VTOL_INTERCEPT_SENSOR
-	    || asSensorStats[psDroid->asBits[COMP_SENSOR].nStat].type == STANDARD_SENSOR
-	    || asSensorStats[psDroid->asBits[COMP_SENSOR].nStat].type == SUPER_SENSOR)
+	if (asSensorStats[psDroid->asBits[COMP_SENSOR]].type == VTOL_INTERCEPT_SENSOR
+	    || asSensorStats[psDroid->asBits[COMP_SENSOR]].type == STANDARD_SENSOR
+	    || asSensorStats[psDroid->asBits[COMP_SENSOR]].type == SUPER_SENSOR)
 	{
 		return true;
 	}
@@ -3353,7 +3332,7 @@ DROID *giftSingleDroid(DROID *psD, UDWORD to)
 SWORD   droidResistance(DROID *psDroid)
 {
 	CHECK_DROID(psDroid);
-	BODY_STATS *psStats = asBodyStats + psDroid->asBits[COMP_BODY].nStat;
+	BODY_STATS *psStats = asBodyStats + psDroid->asBits[COMP_BODY];
 	int resistance = psDroid->experience / (65536 / MAX(1, psStats->upgrade[psDroid->player].resistance));
 	// ensure resistance is a base minimum
 	resistance = MAX(resistance, psStats->upgrade[psDroid->player].resistance);
@@ -3521,7 +3500,7 @@ void checkDroid(const DROID *droid, const char *const location, const char *func
 
 int droidSqDist(DROID *psDroid, BASE_OBJECT *psObj)
 {
-	PROPULSION_STATS *psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
+	PROPULSION_STATS *psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION];
 
 	if (!fpathCheck(psDroid->pos, psObj->pos, psPropStats->propulsionType))
 	{

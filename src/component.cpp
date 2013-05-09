@@ -455,8 +455,8 @@ static iIMDShape *getLeftPropulsionIMD(DROID *psDroid)
 	UDWORD			bodyStat, propStat;
 	iIMDShape		**imd;
 
-	bodyStat = psDroid->asBits[COMP_BODY].nStat;
-	propStat = psDroid->asBits[COMP_PROPULSION].nStat;
+	bodyStat = psDroid->asBits[COMP_BODY];
+	propStat = psDroid->asBits[COMP_PROPULSION];
 
 	imd = asBodyStats[bodyStat].ppIMDList;
 	imd += (propStat * NUM_PROP_SIDES + LEFT_PROP);
@@ -470,8 +470,8 @@ static iIMDShape *getRightPropulsionIMD(DROID *psDroid)
 	UDWORD			bodyStat, propStat;
 	iIMDShape		**imd;
 
-	bodyStat = psDroid->asBits[COMP_BODY].nStat;
-	propStat = psDroid->asBits[COMP_PROPULSION].nStat;
+	bodyStat = psDroid->asBits[COMP_BODY];
+	propStat = psDroid->asBits[COMP_PROPULSION];
 
 	imd = asBodyStats[bodyStat].ppIMDList;
 	imd += (propStat * NUM_PROP_SIDES + RIGHT_PROP);
@@ -504,7 +504,7 @@ static void displayCompObj(DROID *psDroid, bool bButton)
 	}
 	
 	/* get propulsion stats */
-	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
+	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION];
 	ASSERT_OR_RETURN( , psPropStats != NULL, "invalid propulsion stats pointer");
 
 	//set pieflag for button object or ingame object
@@ -529,7 +529,7 @@ static void displayCompObj(DROID *psDroid, bool bButton)
 	}
 
 	/* set default components transparent */
-	if ( psDroid->asBits[COMP_PROPULSION].nStat == 0 )
+	if ( psDroid->asBits[COMP_PROPULSION] == 0 )
 	{
 		pieFlag  |= pie_TRANSLUCENT;
 		iPieData  = DEFAULT_COMPONENT_TRANSLUCENCY;
@@ -553,7 +553,7 @@ static void displayCompObj(DROID *psDroid, bool bButton)
 	}
 
 	/* set default components transparent */
-	if ( psDroid->asBits[COMP_BODY].nStat == 0 )
+	if ( psDroid->asBits[COMP_BODY] == 0 )
 	{
 		pieFlag  |= pie_TRANSLUCENT;
 		iPieData  = DEFAULT_COMPONENT_TRANSLUCENCY;
@@ -597,7 +597,7 @@ static void displayCompObj(DROID *psDroid, bool bButton)
 	/* render vtol jet if flying - horrible hack - GJ */
 	if (!bButton && psPropStats->propulsionType == PROPULSION_TYPE_LIFT && !cyborgDroid(psDroid) && psDroid->sMove.Status != MOVEINACTIVE)
 	{
-		psJet = asBodyStats[psDroid->asBits[COMP_BODY].nStat].pFlameIMD;
+		psJet = asBodyStats[psDroid->asBits[COMP_BODY]].pFlameIMD;
 		if (psJet)
 		{
 			pie_Draw3DShape(psJet, getModularScaledGraphicsTime(psJet->animInterval, psJet->numFrames), colour, brightness, pie_ADDITIVE, 200);
@@ -612,12 +612,12 @@ static void displayCompObj(DROID *psDroid, bool bButton)
 	}
 
 	/* set default components transparent */
-	if (psDroid->asWeaps[0].nStat              == 0 &&
-	    psDroid->asBits[COMP_SENSOR].nStat     == 0 &&
-	    psDroid->asBits[COMP_ECM].nStat        == 0 &&
-	    psDroid->asBits[COMP_BRAIN].nStat      == 0 &&
-	    psDroid->asBits[COMP_REPAIRUNIT].nStat == 0 &&
-	    psDroid->asBits[COMP_CONSTRUCT].nStat  == 0)
+	if (psDroid->asWeaps[0].nStat        == 0 &&
+	    psDroid->asBits[COMP_SENSOR]     == 0 &&
+	    psDroid->asBits[COMP_ECM]        == 0 &&
+	    psDroid->asBits[COMP_BRAIN]      == 0 &&
+	    psDroid->asBits[COMP_REPAIRUNIT] == 0 &&
+	    psDroid->asBits[COMP_CONSTRUCT]  == 0)
 	{
 		pieFlag  |= pie_TRANSLUCENT;
 		iPieData  = DEFAULT_COMPONENT_TRANSLUCENCY;
@@ -893,7 +893,7 @@ static void displayCompObj(DROID *psDroid, bool bButton)
 			muzzle flash attachment points - just grab it from psShape->connectors->[x|y|z] */
 
 	/* set default components transparent */
-	if ( psDroid->asBits[COMP_PROPULSION].nStat == 0 )
+	if ( psDroid->asBits[COMP_PROPULSION] == 0 )
 	{
 		pieFlag  |= pie_TRANSLUCENT;
 		iPieData  = DEFAULT_COMPONENT_TRANSLUCENCY;
