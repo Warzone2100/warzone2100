@@ -29,8 +29,7 @@
 
 enum FEATURE_TYPE
 {
-	FEAT_HOVER = 1, // hack since the one prior to this was removed
-	FEAT_TANK,
+	FEAT_TANK = 2, // hack to keep enums the same value
 	FEAT_GEN_ARTE,
 	FEAT_OIL_RESOURCE,
 	FEAT_BOULDER,
@@ -47,7 +46,7 @@ enum FEATURE_TYPE
 struct FEATURE_STATS : public BASE_STATS
 {
 	FEATURE_STATS() {}
-	FEATURE_STATS(LineView line);
+	FEATURE_STATS(int idx, const char *s) : BASE_STATS(idx, s) {}
 
 	FEATURE_TYPE    subType;                ///< type of feature
 

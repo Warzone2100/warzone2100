@@ -25,6 +25,7 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/frameresource.h"
 #include "lib/framework/strres.h"
+#include "lib/framework/wzconfig.h"
 
 #include "lib/gamelib/gtime.h"
 #include "lib/sound/audio.h"
@@ -62,21 +63,6 @@ UDWORD			numFeatureStats;
 //Value is stored for easy access to this feature in destroyDroid()/destroyStruct()
 FEATURE_STATS* oilResFeature = NULL;
 
-static const StringToEnum<FEATURE_TYPE> map_FEATURE_TYPE[] =
-{
-	{ "PROPULSION_TYPE_HOVER WRECK", FEAT_HOVER },
-	{ "TANK WRECK", FEAT_TANK },
-	{ "GENERIC ARTEFACT", FEAT_GEN_ARTE },
-	{ "OIL RESOURCE", FEAT_OIL_RESOURCE },
-	{ "BOULDER", FEAT_BOULDER },
-	{ "VEHICLE", FEAT_VEHICLE },
-	{ "BUILDING", FEAT_BUILDING },
-	{ "OIL DRUM", FEAT_OIL_DRUM },
-	{ "TREE", FEAT_TREE },
-	{ "SKYSCRAPER", FEAT_SKYSCRAPER }
-};
-
-
 void featureInitVars(void)
 {
 	asFeatureStats = NULL;
@@ -84,54 +70,45 @@ void featureInitVars(void)
 	oilResFeature = NULL;
 }
 
-FEATURE_STATS::FEATURE_STATS(LineView line)
-	: BASE_STATS(REF_FEATURE_START + line.line(), line.s(0))
-	, subType(line.e(7, map_FEATURE_TYPE))
-	, psImd(line.imdShape(6))
-	, baseWidth(line.u16(1))
-	, baseBreadth(line.u16(2))
-	, tileDraw(line.b(8))
-	, allowLOS(line.b(9))
-	, visibleAtStart(line.b(10))
-	, damageable(line.b(3))
-	, body(line.u32(5))
-	, armourValue(line.u32(4))
-{
-	if (damageable && body == 0)
-	{
-		debug(LOG_ERROR, "The feature \"%s\", ref %d is damageable, but has no body points!  The files need to be updated / fixed.  Assigning 1 body point to feature.", pName, ref);
-		body = 1;
-	}
-}
-
 /* Load the feature stats */
-bool loadFeatureStats(const char *pFeatureData, UDWORD bufferSize)
+bool loadFeatureStats(const char *pFileName)
 {
-	// Skip descriptive header
-	if (strncmp(pFeatureData,"Feature ",8)==0)
+	WzConfig ini(pFileName, WzConfig::ReadOnlyAndRequired);
+	QStringList list = ini.childGroups();
+	asFeatureStats = new FEATURE_STATS[list.size()];
+	numFeatureStats = list.size();
+	for (int i = 0; i < list.size(); ++i)
 	{
-		pFeatureData = strchr(pFeatureData,'\n') + 1;
-	}
-
-	TableView table(pFeatureData, bufferSize);
-
-	asFeatureStats = new FEATURE_STATS[table.size()];
-	numFeatureStats = table.size();
-
-	for (unsigned i = 0; i < table.size(); ++i)
-	{
-		asFeatureStats[i] = FEATURE_STATS(LineView(table, i));
-		if (table.isError())
-		{
-			debug(LOG_ERROR, "%s", table.getError().toUtf8().constData());
-			return false;
-		}
+		ini.beginGroup(list[i]);
+		asFeatureStats[i] = FEATURE_STATS(REF_FEATURE_START + i, list[i].toUtf8().constData());
+		FEATURE_STATS *p = &asFeatureStats[i];
+		QString subType = ini.value("type").toString();
+		if (subType == "TANK WRECK") p->subType = FEAT_TANK;
+		else if (subType == "GENERIC ARTEFACT") p->subType = FEAT_GEN_ARTE;
+		else if (subType == "OIL RESOURCE") p->subType = FEAT_OIL_RESOURCE;
+		else if (subType == "BOULDER") p->subType = FEAT_BOULDER;
+		else if (subType == "VEHICLE") p->subType = FEAT_VEHICLE;
+		else if (subType == "BUILDING") p->subType = FEAT_BUILDING;
+		else if (subType == "OIL DRUM") p->subType = FEAT_OIL_DRUM;
+		else if (subType == "TREE") p->subType = FEAT_TREE;
+		else if (subType == "SKYSCRAPER") p->subType = FEAT_SKYSCRAPER;
+		else ASSERT(false, "Unknown feature type: %s", subType.toUtf8().constData());
+		p->psImd = (iIMDShape *)resGetData("IMD", ini.value("model").toString().toUtf8().constData());
+		p->baseWidth = ini.value("width", 1).toInt();
+		p->baseBreadth = ini.value("breadth", 1).toInt();
+		p->tileDraw = ini.value("tiledraw", 1).toInt();
+		p->allowLOS = ini.value("lineOfSight", 1).toInt();
+		p->visibleAtStart = ini.value("startVisible", 1).toInt();
+		p->damageable = ini.value("damageable", 1).toInt();
+		p->body = ini.value("hitpoints", 1).toInt();
+		p->armourValue = ini.value("armour", 1).toInt();
 
 		//and the oil resource - assumes only one!
 		if (asFeatureStats[i].subType == FEAT_OIL_RESOURCE)
 		{
 			oilResFeature = &asFeatureStats[i];
 		}
+		ini.endGroup();
 	}
 
 	return true;

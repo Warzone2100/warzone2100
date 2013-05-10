@@ -34,7 +34,7 @@ extern UDWORD			numFeatureStats;
 extern FEATURE_STATS* oilResFeature;
 
 /* Load the feature stats */
-extern bool loadFeatureStats(const char *pFeatureData, UDWORD bufferSize);
+bool loadFeatureStats(const char *pFileName);
 
 /* Release the feature stats memory */
 extern void featureStatsShutDown(void);

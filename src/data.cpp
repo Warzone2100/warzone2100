@@ -391,15 +391,12 @@ static bool bufferSSTRMODLoad(const char *fileName, void **ppData)
 }
 
 /* Load the Feature stats */
-static bool bufferSFEATLoad(const char *pBuffer, UDWORD size, void **ppData)
+static bool bufferSFEATLoad(const char *fileName, void **ppData)
 {
-	calcDataHash((uint8_t *)pBuffer, size, DATA_SFEAT);
-
-	if (!loadFeatureStats(pBuffer, size))
+	if (!loadFeatureStats(fileName))
 	{
 		return false;
 	}
-
 	// set a dummy value so the release function gets called
 	*ppData = (void *)1;
 	return true;
@@ -871,7 +868,6 @@ struct RES_TYPE_MIN_BUF
 
 static const RES_TYPE_MIN_BUF BufferResourceTypes[] =
 {
-	{"SFEAT", bufferSFEATLoad, dataSFEATRelease},                  //feature stats file
 	{"SMSG", bufferSMSGLoad, dataSMSGRelease},
 	{"IMD", dataIMDBufferLoad, (RES_FREE)iV_IMDRelease},
 };
@@ -885,6 +881,7 @@ struct RES_TYPE_MIN_FILE
 
 static const RES_TYPE_MIN_FILE FileResourceTypes[] =
 {
+	{"SFEAT", bufferSFEATLoad, dataSFEATRelease},                  //feature stats file
 	{"STEMPL", bufferSTEMPLLoad, dataSTEMPLRelease},               //template and associated files
 	{"WAV", dataAudioLoad, (RES_FREE)sound_ReleaseTrack},
 	{"SWEAPON", bufferSWEAPONLoad, dataReleaseStats},

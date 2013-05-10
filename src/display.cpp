@@ -1967,7 +1967,6 @@ static void dealWithLMBFeature(FEATURE* psFeature)
 				break;
 			}
 			case FEAT_BOULDER:
-			case FEAT_HOVER:
 			case FEAT_OIL_RESOURCE:
 			case FEAT_VEHICLE:
 			default:
