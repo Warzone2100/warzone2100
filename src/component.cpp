@@ -659,10 +659,9 @@ static void displayCompObj(DROID *psDroid, bool bButton)
 				/* Double check that the weapon droid actually has any */
 				for (i = 0;i < psDroid->numWeaps;i++)
 				{
-					if (psDroid->asWeaps[i].nStat > 0 || psDroid->droidType == DROID_DEFAULT)
+					if ((psDroid->asWeaps[i].nStat > 0 || psDroid->droidType == DROID_DEFAULT)
+					    && psShapeTemp->connectors)
 					{
-						if ( psShapeTemp->connectors )
-						{
 							Rotation rot = getInterpolatedWeaponRotation(psDroid, i, graphicsTime);
 
 							pie_MatBegin(!bButton);
@@ -771,9 +770,8 @@ static void displayCompObj(DROID *psDroid, bool bButton)
 									}
 								}
 							}
-						}
-						/* Pop Matrix */
-						pie_MatEnd();
+							/* Pop Matrix */
+							pie_MatEnd();
 					}
 				}
 				break;
