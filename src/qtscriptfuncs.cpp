@@ -1409,7 +1409,7 @@ static QScriptValue js_componentAvailable(QScriptContext *context, QScriptEngine
 	}
 	else
 	{
-		COMPONENT_TYPE comp = (COMPONENT_TYPE)context->argument(0).toInt32();
+		COMPONENT_TYPE comp = (COMPONENT_TYPE)(context->argument(0).toInt32() + 1); // backwards compat crap
 		QString compName = context->argument(1).toString();
 		int result = getCompFromName(comp, compName.toUtf8().constData());
 		SCRIPT_ASSERT(context, result >= 0, "No such component: %s", compName.toUtf8().constData());
