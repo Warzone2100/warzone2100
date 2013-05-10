@@ -386,7 +386,7 @@ bool loadWeaponStats(const char *pFileName)
 		psStats->buildPoints = ini.value("buildPoints", 0).toUInt();
 		psStats->weight = ini.value("weight", 0).toUInt();
 		psStats->body = ini.value("body", 0).toUInt();
-		psStats->radiusLife = ini.value("radiusLife").toUInt();
+		psStats->radiusLife = ini.value("radiusLife", 0).toUInt();
 
 		psStats->base.maxRange = ini.value("longRange").toUInt();
 		psStats->base.minRange = ini.value("minRange", 0).toUInt();
@@ -395,8 +395,8 @@ bool loadWeaponStats(const char *pFileName)
 		psStats->base.numRounds = ini.value("numRounds").toUInt();
 		psStats->base.reloadTime = ini.value("reloadTime").toUInt();
 		psStats->base.damage = ini.value("damage").toUInt();
-		psStats->base.radius = ini.value("radius").toUInt();
-		psStats->base.radiusDamage = ini.value("radiusDamage").toUInt();
+		psStats->base.radius = ini.value("radius", 0).toUInt();
+		psStats->base.radiusDamage = ini.value("radiusDamage", 0).toUInt();
 		psStats->base.periodicalDamageTime = ini.value("periodicalDamageTime", 0).toUInt();
 		psStats->base.periodicalDamage = ini.value("periodicalDamage", 0).toUInt();
 		psStats->base.periodicalDamageRadius = ini.value("periodicalDamageRadius", 0).toUInt();
@@ -421,7 +421,7 @@ bool loadWeaponStats(const char *pFileName)
 		surfaceToAir = ini.value("surfaceToAir", 0).toUInt();
 		psStats->vtolAttackRuns = ini.value("numAttackRuns", 0).toUInt();
 		psStats->designable = ini.value("designable").toBool();
-		psStats->penetrate = ini.value("penetrate").toBool();
+		psStats->penetrate = ini.value("penetrate", false).toBool();
 		// weapon size limitation
 		int weaponSize = ini.value("weaponSize", WEAPON_SIZE_ANY).toInt();
 		ASSERT(weaponSize <= WEAPON_SIZE_ANY, "Bad weapon size for %s", list[i].toUtf8().constData());

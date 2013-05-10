@@ -529,23 +529,11 @@ bool loadStructureStats(QString filename)
 			psStats->pBaseIMD = imd;
 		}
 		
-		// set ECM
-		QString ecmID = ini.value("ecmID","0").toString();
-		if (ecmID.compare("0") != 0)
-		{
-			ECM_STATS *ret = findStatsByName(ecmID.toUtf8().constData(), asECMStats, numECMStats);
-			ASSERT(ret != NULL, "Cannot find ecmID '%s' for structure '%s'", ecmID.toUtf8().constData(), psStats->pName);
-			psStats->pECM = ret;
-		}
+		psStats->pECM = findStatsByName(ini.value("ecmID", "ZNULLECM").toString().toUtf8().constData(), asECMStats, numECMStats);
+		ASSERT(psStats->pECM != NULL, "Invalid ECM found for '%s'", psStats->pName);
 
-		// set sensor
-		QString sensorID = ini.value("sensorID","0").toString();
-		if (sensorID.compare("0") != 0)
-		{
-			SENSOR_STATS *ret = findStatsByName(sensorID.toUtf8().constData(), asSensorStats, numSensorStats);
-			ASSERT(ret != NULL, "Cannot find sensorID '%s' for structure '%s'", sensorID.toUtf8().constData(), psStats->pName);
-			psStats->pSensor = ret;
-		}
+		psStats->pSensor = findStatsByName(ini.value("sensorID", "ZNULLSENSOR").toString().toUtf8().constData(), asSensorStats, numSensorStats);
+		ASSERT(psStats->pSensor != NULL, "Invalid sensor found for structure '%s'", psStats->pName);
 
 		// set list of weapons
 		std::fill_n(psStats->psWeapStat, STRUCT_MAXWEAPS, (WEAPON_STATS *)NULL);
