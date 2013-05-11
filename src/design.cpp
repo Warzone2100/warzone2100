@@ -3473,7 +3473,6 @@ void intProcessDesign(UDWORD id)
 		/* update name if not customised */
 		if (bTemplateNameCustomised == false)
 		{
-debug(LOG_ERROR, "12!");
 			sstrcpy(sCurrDesign.aName, GetDefaultTemplateName(&sCurrDesign));
 		}
 
@@ -3522,7 +3521,6 @@ debug(LOG_ERROR, "12!");
 		case IDDES_NAMEBOX:
 			sstrcpy(sCurrDesign.aName, widgGetString(psWScreen, IDDES_NAMEBOX));
 			sstrcpy(aCurrName, sCurrDesign.aName);
-debug(LOG_ERROR, "name SET to %s", sCurrDesign.aName);
 			break;
 		case IDDES_BIN:
 			{

@@ -241,11 +241,10 @@ TransporterBody				_("Transport Body")
 ZNULLBODY				"*Z NULL BODY*"
 
 B1BaBaPerson01				"*BaBa Body*"
-B2JeepBody				"*Jeep Body*"
+BabaJeepBody				"*Jeep Body*"
 B3body-sml-buggy01			"*Buggy Body*"
 B4body-sml-trike01			"*Trike Body*"
 B3bodyRKbuggy01				"*Rocket Buggy Body*"
-B2RKJeepBody				"*Rocket Jeep Body*"
 BusBody					"*School Bus Body*"
 FireBody				"*Fire Engine Body*"
 
