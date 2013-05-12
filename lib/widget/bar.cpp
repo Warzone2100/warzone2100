@@ -42,7 +42,6 @@ W_BARINIT::W_BARINIT()
 	, precision(0)
 	//sCol
 	//sMinorCol
-	, pTip(NULL)
 {
 	sCol.rgba = 0;
 	sMinorCol.rgba = 0;
@@ -61,7 +60,7 @@ W_BARGRAPH::W_BARGRAPH(W_BARINIT const *init)
 	, majorCol(init->sCol)
 	, minorCol(init->sMinorCol)
 	, textCol(WZCOL_BLACK)
-	, pTip(QString::fromUtf8(init->pTip))
+	, pTip(init->pTip)
 	, backgroundColour(WZCOL_FORM_BACKGROUND)
 {
 	/* Set the minor colour if necessary */

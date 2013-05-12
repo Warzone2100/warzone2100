@@ -307,9 +307,9 @@ QScriptValue convResearch(RESEARCH *psResearch, QScriptEngine *engine, int playe
 	}
 	value.setProperty("started", started); // including whether an ally has started it
 	value.setProperty("done", IsResearchCompleted(&asPlayerResList[player][psResearch->index]));
-	value.setProperty("fullname", getName(psResearch->pName)); // temporary
-	value.setProperty("name", psResearch->pName); // will be changed to contain fullname
-	value.setProperty("id", psResearch->pName);
+	value.setProperty("fullname", psResearch->name); // temporary
+	value.setProperty("name", psResearch->id); // will be changed to contain fullname
+	value.setProperty("id", psResearch->id);
 	value.setProperty("type", SCRIPT_RESEARCH);
 	QScriptValue results = engine->newArray(psResearch->resultStrings.size());
 	for (int i = 0; i < psResearch->resultStrings.size(); i++)
@@ -404,7 +404,9 @@ QScriptValue convStructure(STRUCTURE *psStruct, QScriptEngine *engine)
 	{
 		QScriptValue weapon = engine->newObject();
 		const WEAPON_STATS *psStats = asWeaponStats + psStruct->asWeaps[j].nStat;
-		weapon.setProperty("name", psStats->pName, QScriptValue::ReadOnly);
+		weapon.setProperty("fullname", psStats->name, QScriptValue::ReadOnly);
+		weapon.setProperty("name", psStats->id, QScriptValue::ReadOnly); // will be changed to contain full name
+		weapon.setProperty("id", psStats->id, QScriptValue::ReadOnly);
 		weapon.setProperty("lastFired", psStruct->asWeaps[j].lastFired, QScriptValue::ReadOnly);
 		weaponlist.setProperty(j, weapon, QScriptValue::ReadOnly);
 	}
@@ -556,8 +558,8 @@ QScriptValue convDroid(DROID *psDroid, QScriptEngine *engine)
 	value.setProperty("droidType", (int)type, QScriptValue::ReadOnly);
 	value.setProperty("experience", (double)psDroid->experience / 65536.0, QScriptValue::ReadOnly);
 	value.setProperty("health", 100.0 / (double)psDroid->originalBody * (double)psDroid->body, QScriptValue::ReadOnly);
-	value.setProperty("body", asBodyStats[psDroid->asBits[COMP_BODY]].pName, QScriptValue::ReadOnly);
-	value.setProperty("propulsion", asPropulsionStats[psDroid->asBits[COMP_PROPULSION]].pName, QScriptValue::ReadOnly);
+	value.setProperty("body", asBodyStats[psDroid->asBits[COMP_BODY]].id, QScriptValue::ReadOnly);
+	value.setProperty("propulsion", asPropulsionStats[psDroid->asBits[COMP_PROPULSION]].id, QScriptValue::ReadOnly);
 	value.setProperty("armed", 0.0, QScriptValue::ReadOnly); // deprecated!
 	QScriptValue weaponlist = engine->newArray(psDroid->numWeaps);
 	for (int j = 0; j < psDroid->numWeaps; j++)
@@ -565,7 +567,9 @@ QScriptValue convDroid(DROID *psDroid, QScriptEngine *engine)
 		int armed = droidReloadBar(psDroid, &psDroid->asWeaps[j], j);
 		QScriptValue weapon = engine->newObject();
 		const WEAPON_STATS *psStats = asWeaponStats + psDroid->asWeaps[j].nStat;
-		weapon.setProperty("name", psStats->pName, QScriptValue::ReadOnly);
+		weapon.setProperty("fullname", psStats->name, QScriptValue::ReadOnly);
+		weapon.setProperty("id", psStats->id, QScriptValue::ReadOnly); // will be changed to full name
+		weapon.setProperty("name", psStats->id, QScriptValue::ReadOnly);
 		weapon.setProperty("lastFired", psDroid->asWeaps[j].lastFired, QScriptValue::ReadOnly);
 		weapon.setProperty("armed", armed, QScriptValue::ReadOnly);
 		weaponlist.setProperty(j, weapon, QScriptValue::ReadOnly);
@@ -626,7 +630,7 @@ QScriptValue convObj(BASE_OBJECT *psObj, QScriptEngine *engine)
 //;; and subject to change.
 //;; The following properties are defined:
 //;; \begin{description}
-//;; \item[id] The unique ID of this object.
+//;; \item[id] The ID of this object.
 //;; \item[name] Name of the template.
 //;; \item[cost] The power cost of the template if put into production.
 //;; \item[droidType] The type of droid that would be created.
@@ -642,23 +646,24 @@ QScriptValue convTemplate(DROID_TEMPLATE *psTempl, QScriptEngine *engine)
 {
 	QScriptValue value = engine->newObject();
 	ASSERT_OR_RETURN(value, psTempl, "No object for conversion");
-	value.setProperty("id", psTempl->multiPlayerID, QScriptValue::ReadOnly);
-	value.setProperty("name", psTempl->pName, QScriptValue::ReadOnly);
+	value.setProperty("fullname", psTempl->name, QScriptValue::ReadOnly);
+	value.setProperty("name", psTempl->id, QScriptValue::ReadOnly);
+	value.setProperty("id", psTempl->id, QScriptValue::ReadOnly);
 	value.setProperty("points", calcTemplateBuild(psTempl), QScriptValue::ReadOnly);
 	value.setProperty("power", calcTemplatePower(psTempl), QScriptValue::ReadOnly); // deprecated, use cost below
 	value.setProperty("cost", calcTemplatePower(psTempl), QScriptValue::ReadOnly);
 	value.setProperty("droidType", psTempl->droidType, QScriptValue::ReadOnly);
-	value.setProperty("body", (asBodyStats + psTempl->asParts[COMP_BODY])->pName, QScriptValue::ReadOnly);
-	value.setProperty("propulsion", (asPropulsionStats + psTempl->asParts[COMP_PROPULSION])->pName, QScriptValue::ReadOnly);
-	value.setProperty("brain", (asBrainStats + psTempl->asParts[COMP_BRAIN])->pName, QScriptValue::ReadOnly);
-	value.setProperty("repair", (asRepairStats + psTempl->asParts[COMP_REPAIRUNIT])->pName, QScriptValue::ReadOnly);
-	value.setProperty("ecm", (asECMStats + psTempl->asParts[COMP_ECM])->pName, QScriptValue::ReadOnly);
-	value.setProperty("sensor", (asSensorStats + psTempl->asParts[COMP_SENSOR])->pName, QScriptValue::ReadOnly);
-	value.setProperty("construct", (asConstructStats + psTempl->asParts[COMP_CONSTRUCT])->pName, QScriptValue::ReadOnly);
+	value.setProperty("body", (asBodyStats + psTempl->asParts[COMP_BODY])->id, QScriptValue::ReadOnly);
+	value.setProperty("propulsion", (asPropulsionStats + psTempl->asParts[COMP_PROPULSION])->id, QScriptValue::ReadOnly);
+	value.setProperty("brain", (asBrainStats + psTempl->asParts[COMP_BRAIN])->id, QScriptValue::ReadOnly);
+	value.setProperty("repair", (asRepairStats + psTempl->asParts[COMP_REPAIRUNIT])->id, QScriptValue::ReadOnly);
+	value.setProperty("ecm", (asECMStats + psTempl->asParts[COMP_ECM])->id, QScriptValue::ReadOnly);
+	value.setProperty("sensor", (asSensorStats + psTempl->asParts[COMP_SENSOR])->id, QScriptValue::ReadOnly);
+	value.setProperty("construct", (asConstructStats + psTempl->asParts[COMP_CONSTRUCT])->id, QScriptValue::ReadOnly);
 	QScriptValue weaponlist = engine->newArray(psTempl->numWeaps);
 	for (int j = 0; j < psTempl->numWeaps; j++)
 	{
-		weaponlist.setProperty(j, QScriptValue((asWeaponStats + psTempl->asWeaps[j])->pName), QScriptValue::ReadOnly);
+		weaponlist.setProperty(j, QScriptValue((asWeaponStats + psTempl->asWeaps[j])->id), QScriptValue::ReadOnly);
 	}
 	value.setProperty("weapons", weaponlist);
 	return value;
@@ -857,7 +862,7 @@ bool writeLabels(const char *filename)
 static QScriptValue js_getWeaponInfo(QScriptContext *context, QScriptEngine *engine)
 {
 	QString id = context->argument(0).toString();
-	int idx = getCompFromName(COMP_WEAPON, id.toUtf8().constData());
+	int idx = getCompFromName(COMP_WEAPON, id);
 	SCRIPT_ASSERT(context, idx >= 0, "No such weapon: %s", id.toUtf8().constData());
 	WEAPON_STATS *psStats = asWeaponStats + idx;
 	QScriptValue info = engine->newObject();
@@ -1213,7 +1218,7 @@ static QScriptValue js_findResearch(QScriptContext *context, QScriptEngine *engi
 	{
 		if (!(asPlayerResList[player][cur->index].ResearchStatus & RESEARCHED))
 		{
-			debug(LOG_SCRIPT, "Added research in %d's %s for %s", player, cur->pName, psTarget->pName);
+			debug(LOG_SCRIPT, "Added research in %d's %s for %s", player, getID(cur), getID(psTarget));
 			list.append(cur);
 		}
 		RESEARCH *prev = cur;
@@ -1314,11 +1319,11 @@ static QScriptValue js_pursueResearch(QScriptContext *context, QScriptEngine *en
 				sendResearchStatus(psStruct, cur->index, player, true);
 #if defined (DEBUG)
 				char sTemp[128];
-				sprintf(sTemp, "player:%d starts topic from script: %s", player, cur->pName);
+				sprintf(sTemp, "player:%d starts topic from script: %s", player, getID(cur));
 				NETlogEntry(sTemp, SYNC_FLAG, 0);
 #endif
 				debug(LOG_SCRIPT, "Started research in %d's %s(%d) of %s", player, 
-				      objInfo(psStruct), psStruct->id, cur->pName);
+				      objInfo(psStruct), psStruct->id, getName(cur));
 				return QScriptValue(true);
 			}
 		}
@@ -1337,7 +1342,7 @@ static QScriptValue js_pursueResearch(QScriptContext *context, QScriptEngine *en
 		{
 			cur = reslist.takeFirst(); // retrieve options from the stack
 		}
-		ASSERT_OR_RETURN(QScriptValue(false), ++iterations < asResearch.size()*100 || !cur, "Possible cyclic dependencies in prerequisites, possibly of research \"%s\".", cur->pName);
+		ASSERT_OR_RETURN(QScriptValue(false), ++iterations < asResearch.size()*100 || !cur, "Possible cyclic dependencies in prerequisites, possibly of research \"%s\".", getName(cur));
 	}
 	debug(LOG_SCRIPT, "No research topic found for %s(%d)", objInfo(psStruct), psStruct->id);
 	return QScriptValue(false); // none found
@@ -1386,35 +1391,10 @@ static QScriptValue js_enumResearch(QScriptContext *context, QScriptEngine *engi
 static QScriptValue js_componentAvailable(QScriptContext *context, QScriptEngine *engine)
 {
 	int player = engine->globalObject().property("me").toInt32();
-	if (context->argumentCount() == 1)
-	{
-		QString id = context->argument(0).toString();
-		int idx = -1;
-#define CHECK_COMPONENT(_comp) \
-		if ((idx = getCompFromName(_comp, id.toUtf8().constData())) >= 0) \
-		{ \
-			return QScriptValue(apCompLists[player][_comp][idx] == AVAILABLE); \
-		}
-		CHECK_COMPONENT(COMP_BODY);
-		CHECK_COMPONENT(COMP_BRAIN);
-		CHECK_COMPONENT(COMP_PROPULSION);
-		CHECK_COMPONENT(COMP_REPAIRUNIT);
-		CHECK_COMPONENT(COMP_ECM);
-		CHECK_COMPONENT(COMP_SENSOR);
-		CHECK_COMPONENT(COMP_CONSTRUCT);
-		CHECK_COMPONENT(COMP_WEAPON);
-#undef CHECK_COMPONENT
-		SCRIPT_ASSERT(context, false, "No such component: %s", id.toUtf8().constData());
-		return QScriptValue::NullValue; // to satisfy compiler
-	}
-	else
-	{
-		COMPONENT_TYPE comp = (COMPONENT_TYPE)(context->argument(0).toInt32() + 1); // backwards compat crap
-		QString compName = context->argument(1).toString();
-		int result = getCompFromName(comp, compName.toUtf8().constData());
-		SCRIPT_ASSERT(context, result >= 0, "No such component: %s", compName.toUtf8().constData());
-		return QScriptValue(apCompLists[player][comp][result] == AVAILABLE);
-	}
+	QString id = (context->argumentCount() == 1) ? context->argument(0).toString() : context->argument(1).toString();
+	COMPONENT_STATS *psComp = getCompStatsFromName(id);
+	SCRIPT_ASSERT(context, psComp, "No such component: %s", id.toUtf8().constData());
+	return QScriptValue(apCompLists[player][psComp->compType][psComp->index] == AVAILABLE);
 }
 
 //-- \subsection{addFeature(name, x, y)}
@@ -1445,7 +1425,7 @@ static int get_first_available_component(int player, int capacity, const QScript
 		for (k = 0; k < length; k++)
 		{
 			QString compName = list.property(k).toString();
-			int result = getCompFromName(type, compName.toUtf8().constData());
+			int result = getCompFromName(type, compName);
 			if (result >= 0 && (apCompLists[player][type][result] == AVAILABLE || !strict)
 			    && (type != COMP_BODY || asBodyStats[result].size <= capacity))
 			{
@@ -1459,7 +1439,7 @@ static int get_first_available_component(int player, int capacity, const QScript
 	}
 	else if (list.isString())
 	{
-		int result = getCompFromName(type, list.toString().toUtf8().constData());
+		int result = getCompFromName(type, list.toString());
 		if (result >= 0 && (apCompLists[player][type][result] == AVAILABLE || !strict)
 		    && (type != COMP_BODY || asBodyStats[result].size <= capacity))
 		{
@@ -1473,7 +1453,7 @@ static int get_first_available_component(int player, int capacity, const QScript
 	return -1; // no available component found in list
 }
 
-static DROID_TEMPLATE *makeTemplate(int player, int x, int y, const QString &templName, QScriptContext *context, int paramstart, int capacity, bool strict)
+static DROID_TEMPLATE *makeTemplate(int player, const QString &templName, QScriptContext *context, int paramstart, int capacity, bool strict)
 {
 	const int firstTurret = paramstart + 4; // index position of first turret parameter
 	DROID_TEMPLATE *psTemplate = new DROID_TEMPLATE;
@@ -1517,12 +1497,19 @@ static DROID_TEMPLATE *makeTemplate(int player, int x, int y, const QString &tem
 	{
 		compName = context->argument(firstTurret).toString();
 	}
-	if ((result = getCompFromName(COMP_WEAPON, compName.toUtf8().constData())) >= 0)
+	COMPONENT_STATS *psComp = getCompStatsFromName(compName);
+	if (psComp == NULL)
+	{
+		debug(LOG_ERROR, "Wanted to build %s but %s does not exist", templName.toUtf8().constData(), compName.toUtf8().constData());
+		delete psTemplate;
+		return NULL;
+	}
+	if (psComp->compType == COMP_WEAPON)
 	{
 		for (int i = 0; i < numTurrets; i++) // may be multi-weapon
 		{
 			result = get_first_available_component(player, SIZE_NUM, context->argument(firstTurret + i), COMP_WEAPON, strict);
-			if (result < 0)
+			if (result < -0)
 			{
 				debug(LOG_SCRIPT, "Wanted to build %s but no weapon available", templName.toUtf8().constData());
 				delete psTemplate;
@@ -1534,43 +1521,18 @@ static DROID_TEMPLATE *makeTemplate(int player, int x, int y, const QString &tem
 	}
 	else
 	{
-		COMPONENT_TYPE compType = COMP_NUMCOMPONENTS;
-
-		if ((result = getCompFromName(COMP_CONSTRUCT, compName.toUtf8().constData())) >= 0)
+		if (psComp->compType == COMP_BRAIN)
 		{
-			compType = COMP_CONSTRUCT;
-		}
-		else if ((result = getCompFromName(COMP_BRAIN, compName.toUtf8().constData())) >= 0)
-		{
-			compType = COMP_BRAIN;
 			psTemplate->numWeaps = 1; // hack, necessary to pass intValidTemplate
 		}
-		else if ((result = getCompFromName(COMP_REPAIRUNIT, compName.toUtf8().constData())) >= 0)
-		{
-			compType = COMP_REPAIRUNIT;
-		}
-		else if ((result = getCompFromName(COMP_ECM, compName.toUtf8().constData())) >= 0)
-		{
-			compType = COMP_ECM;
-		}
-		else if ((result = getCompFromName(COMP_SENSOR, compName.toUtf8().constData())) >= 0)
-		{
-			compType = COMP_SENSOR;
-		}
-		else
-		{
-			debug(LOG_ERROR, "No known component type found for %s", compName.toUtf8().constData());
-			delete psTemplate;
-			return NULL;
-		}
-		result = get_first_available_component(player, SIZE_NUM, context->argument(firstTurret), compType, strict);
+		result = get_first_available_component(player, SIZE_NUM, context->argument(firstTurret), psComp->compType, strict);
 		if (result < 0)
 		{
 			debug(LOG_SCRIPT, "Wanted to build %s but turret unavailable", templName.toUtf8().constData());
 			delete psTemplate;
 			return NULL;
 		}
-		psTemplate->asParts[compType] = result;
+		psTemplate->asParts[psComp->compType] = result;
 	}
 	bool valid = intValidTemplate(psTemplate, templName.toUtf8().constData(), true, player);
 	if (valid)
@@ -1597,7 +1559,7 @@ static QScriptValue js_addDroid(QScriptContext *context, QScriptEngine *engine)
 	int x = context->argument(1).toInt32();
 	int y = context->argument(2).toInt32();
 	QString templName = context->argument(3).toString();
-	DROID_TEMPLATE *psTemplate = makeTemplate(player, x, y, templName, context, 4, SIZE_NUM, false);
+	DROID_TEMPLATE *psTemplate = makeTemplate(player, templName, context, 4, SIZE_NUM, false);
 	if (psTemplate)
 	{
 		bool oldMulti = bMultiMessages;
@@ -1627,7 +1589,7 @@ static QScriptValue js_makeTemplate(QScriptContext *context, QScriptEngine *engi
 {
 	int player = context->argument(0).toInt32();
 	QString templName = context->argument(1).toString();
-	DROID_TEMPLATE *psTemplate = makeTemplate(player, -1, -1, templName, context, 2, SIZE_NUM, true);
+	DROID_TEMPLATE *psTemplate = makeTemplate(player, templName, context, 2, SIZE_NUM, true);
 	if (!psTemplate)
 	{
 		return QScriptValue::NullValue;
@@ -1655,33 +1617,33 @@ static QScriptValue js_buildDroid(QScriptContext *context, QScriptEngine *engine
 		       || psStruct->pStructureType->type == REF_VTOL_FACTORY), "Structure %s is not a factory", objInfo(psStruct));
 	QString templName = context->argument(1).toString();
 	const int capacity = psStruct->capacity; // body size limit
-	DROID_TEMPLATE *psTemplate = makeTemplate(player, psStruct->pos.x, psStruct->pos.y, templName, context, 2, capacity, true);
+	DROID_TEMPLATE *psTemplate = makeTemplate(player, templName, context, 2, capacity, true);
 	if (psTemplate)
 	{
 		SCRIPT_ASSERT(context, validTemplateForFactory(psTemplate, psStruct, true),
 		              "Invalid template %s for factory %s",
-		              psTemplate->aName, psStruct->pStructureType->pName);
+		              getName(psTemplate), getName(psStruct->pStructureType));
 		// Delete similar template from existing list before adding this one
 		for (int j = 0; j < apsTemplateList.size(); j++)
 		{
 			DROID_TEMPLATE *t = apsTemplateList[j];
-			if (strcmp(t->aName, psTemplate->aName) == 0)
+			if (t->name.compare(psTemplate->name) == 0)
 			{
-				debug(LOG_SCRIPT, "deleting %s for player %d", t->aName, player);
+				debug(LOG_SCRIPT, "deleting %s for player %d", getName(t), player);
 				deleteTemplateFromProduction(t, player, ModeQueue); // duplicate? done below?
 				SendDestroyTemplate(t, player);
 				break;
 			}
 		}
 		// Add to list
-		debug(LOG_SCRIPT, "adding template %s for player %d", psTemplate->aName, player);
+		debug(LOG_SCRIPT, "adding template %s for player %d", getName(psTemplate), player);
 		psTemplate->multiPlayerID = generateNewObjectId();
 		psTemplate->psNext = apsDroidTemplates[player];
 		apsDroidTemplates[player] = psTemplate;
 		sendTemplate(player, psTemplate);
 		if (!structSetManufacture(psStruct, psTemplate, ModeQueue))
 		{
-			debug(LOG_ERROR, "Could not produce template %s in %s", psTemplate->aName, objInfo(psStruct));
+			debug(LOG_ERROR, "Could not produce template %s in %s", getName(psTemplate), objInfo(psStruct));
 			return QScriptValue(false);
 		}
 	}
@@ -1727,7 +1689,7 @@ static QScriptValue js_enumStruct(QScriptContext *context, QScriptEngine *engine
 		if ((looking == -1 || psStruct->visible[looking])
 		    && !psStruct->died
 		    && (type == NUM_DIFF_BUILDINGS || type == psStruct->pStructureType->type)
-		    && (statsName.isEmpty() || statsName.compare(psStruct->pStructureType->pName) == 0))
+		    && (statsName.isEmpty() || statsName.compare(psStruct->pStructureType->id) == 0))
 		{
 			matches.push_back(psStruct);
 		}
@@ -1780,7 +1742,7 @@ static QScriptValue js_enumStructOffWorld(QScriptContext *context, QScriptEngine
 		if ((looking == -1 || psStruct->visible[looking])
 		    && !psStruct->died
 		    && (type == NUM_DIFF_BUILDINGS || type == psStruct->pStructureType->type)
-		    && (statsName.isEmpty() || statsName.compare(psStruct->pStructureType->pName) == 0))
+		    && (statsName.isEmpty() || statsName.compare(psStruct->pStructureType->id) == 0))
 		{
 			matches.push_back(psStruct);
 		}
@@ -1812,7 +1774,7 @@ static QScriptValue js_enumFeature(QScriptContext *context, QScriptEngine *engin
 	{
 		if ((looking == -1 || psFeat->visible[looking])
 		    && !psFeat->died
-		    && (statsName.isEmpty() || statsName.compare(psFeat->psStats->pName) == 0))
+		    && (statsName.isEmpty() || statsName.compare(psFeat->psStats->id) == 0))
 		{
 			matches.push_back(psFeat);
 		}
@@ -2060,7 +2022,7 @@ endstructloc:
 	}
 	else
 	{
-		debug(LOG_SCRIPT, "Did not find valid positioning for %s", psStat->pName);
+		debug(LOG_SCRIPT, "Did not find valid positioning for %s", getName(psStat));
 	}
 	return QScriptValue();
 }
@@ -2255,7 +2217,7 @@ static QScriptValue js_droidCanReach(QScriptContext *context, QScriptEngine *)
 static QScriptValue js_propulsionCanReach(QScriptContext *context, QScriptEngine *)
 {
 	QScriptValue propulsionValue = context->argument(0);
-	int propulsion = getCompFromName(COMP_PROPULSION, propulsionValue.toString().toUtf8().constData());
+	int propulsion = getCompFromName(COMP_PROPULSION, propulsionValue.toString());
 	SCRIPT_ASSERT(context, propulsion > 0, "No such propulsion: %s", propulsionValue.toString().toUtf8().constData());
 	int x1 = context->argument(1).toInt32();
 	int y1 = context->argument(2).toInt32();
@@ -2328,7 +2290,7 @@ static QScriptValue js_orderDroidBuild(QScriptContext *context, QScriptEngine *)
 	uint16_t direction = 0;
 
 	SCRIPT_ASSERT(context, order == DORDER_BUILD, "Invalid order");
-	SCRIPT_ASSERT(context, strcmp(psStats->pName, "A0ADemolishStructure") != 0, "Cannot build demolition");
+	SCRIPT_ASSERT(context, psStats->id.compare("A0ADemolishStructure") != 0, "Cannot build demolition");
 	if (context->argumentCount() > 5)
 	{
 		direction = DEG(context->argument(5).toNumber());
@@ -2731,7 +2693,7 @@ static QScriptValue js_enableTemplate(QScriptContext *context, QScriptEngine *en
 	// FIXME: This dual data structure for templates is just plain insane.
 	for (psCurr = apsDroidTemplates[selectedPlayer]; psCurr != NULL; psCurr = psCurr->psNext)
 	{
-		if (!templateName.compare(psCurr->pName))
+		if (templateName.compare(psCurr->id) == 0)
 		{
 			psCurr->enabled = true;
 			found = true;
@@ -2745,7 +2707,7 @@ static QScriptValue js_enableTemplate(QScriptContext *context, QScriptEngine *en
 	for (std::list<DROID_TEMPLATE>::iterator i = localTemplates.begin(); i != localTemplates.end(); ++i)
 	{
 		psCurr = &*i;
-		if (!templateName.compare(psCurr->pName))
+		if (templateName.compare(psCurr->id) == 0)
 		{
 			psCurr->enabled = true;
 		}
@@ -2785,17 +2747,9 @@ static QScriptValue js_applyLimitSet(QScriptContext *context, QScriptEngine *eng
 
 static void setComponent(QString name, int player, int value)
 {
-	int type = -1;
-	int compInc = -1;
-	for (int j = 0; j < COMP_NUMCOMPONENTS && compInc == -1; j++)
-	{
-		// this is very inefficient, but I am so not giving in to the deranged nature of the components code
-		// and convoluting the new script system for its sake
-		compInc = getCompFromName(j, name.toUtf8().constData());
-		type = j;
-	}
-	ASSERT_OR_RETURN(, compInc != -1 && type != -1, "Bad component value");
-	apCompLists[player][type][compInc] = value;
+	COMPONENT_STATS *psComp = getCompStatsFromName(name);
+	ASSERT_OR_RETURN(, psComp, "Bad component %s", name.toUtf8().constData());
+	apCompLists[player][psComp->compType][psComp->index] = value;
 }
 
 //-- \subsection{enableComponent(component, player)}
@@ -3499,7 +3453,7 @@ static QScriptValue js_getDroidProduction(QScriptContext *context, QScriptEngine
 	psDroid->pos = psStruct->pos;
 	psDroid->rot = psStruct->rot;
 	psDroid->experience = 0;
-	droidSetName(psDroid, psTemp->aName);
+	droidSetName(psDroid, getName(psTemp));
 	droidSetBits(psTemp, psDroid);
 	psDroid->weight = calcDroidWeight(psTemp);
 	psDroid->baseSpeed = calcDroidBaseSpeed(psTemp, psDroid->weight, player);
@@ -4118,7 +4072,7 @@ bool registerFunctions(QScriptEngine *engine, QString scriptName)
 		{
 			BODY_STATS *psStats = asBodyStats + j;
 			QScriptValue body = engine->newObject();
-			body.setProperty("Id", psStats->pName, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+			body.setProperty("Id", psStats->id, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 			body.setProperty("Weight", psStats->weight, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 			body.setProperty("BuildPower", psStats->buildPower, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 			body.setProperty("BuildTime", psStats->buildPoints, QScriptValue::ReadOnly | QScriptValue::Undeletable);
@@ -4139,7 +4093,7 @@ bool registerFunctions(QScriptEngine *engine, QString scriptName)
 		{
 			SENSOR_STATS *psStats = asSensorStats + j;
 			QScriptValue sensor = engine->newObject();
-			sensor.setProperty("Id", psStats->pName, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+			sensor.setProperty("Id", psStats->id, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 			sensor.setProperty("Weight", psStats->weight, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 			sensor.setProperty("BuildPower", psStats->buildPower, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 			sensor.setProperty("BuildTime", psStats->buildPoints, QScriptValue::ReadOnly | QScriptValue::Undeletable);
@@ -4154,7 +4108,7 @@ bool registerFunctions(QScriptEngine *engine, QString scriptName)
 		{
 			ECM_STATS *psStats = asECMStats + j;
 			QScriptValue ecm = engine->newObject();
-			ecm.setProperty("Id", psStats->pName, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+			ecm.setProperty("Id", psStats->id, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 			ecm.setProperty("Weight", psStats->weight, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 			ecm.setProperty("BuildPower", psStats->buildPower, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 			ecm.setProperty("BuildTime", psStats->buildPoints, QScriptValue::ReadOnly | QScriptValue::Undeletable);
@@ -4169,7 +4123,7 @@ bool registerFunctions(QScriptEngine *engine, QString scriptName)
 		{
 			REPAIR_STATS *psStats = asRepairStats + j;
 			QScriptValue repair = engine->newObject();
-			repair.setProperty("Id", psStats->pName, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+			repair.setProperty("Id", psStats->id, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 			repair.setProperty("Weight", psStats->weight, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 			repair.setProperty("BuildPower", psStats->buildPower, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 			repair.setProperty("BuildTime", psStats->buildPoints, QScriptValue::ReadOnly | QScriptValue::Undeletable);
@@ -4184,7 +4138,7 @@ bool registerFunctions(QScriptEngine *engine, QString scriptName)
 		{
 			CONSTRUCT_STATS *psStats = asConstructStats + j;
 			QScriptValue con = engine->newObject();
-			con.setProperty("Id", psStats->pName, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+			con.setProperty("Id", psStats->id, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 			con.setProperty("Weight", psStats->weight, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 			con.setProperty("BuildPower", psStats->buildPower, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 			con.setProperty("BuildTime", psStats->buildPoints, QScriptValue::ReadOnly | QScriptValue::Undeletable);
@@ -4199,7 +4153,7 @@ bool registerFunctions(QScriptEngine *engine, QString scriptName)
 		{
 			WEAPON_STATS *psStats = asWeaponStats + j;
 			QScriptValue weap = engine->newObject();
-			weap.setProperty("Id", psStats->pName, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+			weap.setProperty("Id", psStats->id, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 			weap.setProperty("Weight", psStats->weight, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 			weap.setProperty("BuildPower", psStats->buildPower, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 			weap.setProperty("BuildTime", psStats->buildPoints, QScriptValue::ReadOnly | QScriptValue::Undeletable);
@@ -4240,7 +4194,7 @@ bool registerFunctions(QScriptEngine *engine, QString scriptName)
 		{
 			STRUCTURE_STATS *psStats = asStructureStats + j;
 			QScriptValue strct = engine->newObject();
-			strct.setProperty("Id", psStats->pName, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+			strct.setProperty("Id", psStats->id, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 			if (psStats->type == REF_DEFENSE || psStats->type == REF_WALL || psStats->type == REF_WALLCORNER
 			    || psStats->type == REF_BLASTDOOR || psStats->type == REF_GATE)
 			{

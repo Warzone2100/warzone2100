@@ -125,7 +125,7 @@ struct W_FORMINIT : public W_INIT
 	W_FORMINIT();
 
 	bool                    disableChildren;
-	const char		*pTip;				///< Tool tip for the form itself
+	QString	                pTip;			///< Tool tip for the form itself
 };
 
 /** Label initialisation structure */
@@ -134,7 +134,7 @@ struct W_LABINIT : public W_INIT
 	W_LABINIT();
 
 	const char		*pText;			///< label text
-	const char		*pTip;			///< Tool tip for the label.
+	QString	                pTip;			///< Tool tip for the label.
 	enum iV_fonts           FontID;			///< ID of the IVIS font to use for this widget.
 };
 
@@ -144,7 +144,7 @@ struct W_BUTINIT : public W_INIT
 	W_BUTINIT();
 
 	const char *pText;	///< Button text
-	const char *pTip;	///< Tool tip text
+	QString pTip;		///< Tool tip text
 	enum iV_fonts FontID;	//< ID of the IVIS font to use for this widget.
 };
 
@@ -180,7 +180,7 @@ struct W_BARINIT : public W_INIT
 	int             precision;              ///< Number of places after the decimal point to display, 0 by default.
 	PIELIGHT	sCol;			///< Bar colour
 	PIELIGHT	sMinorCol;		///< Minor bar colour
-	const char	*pTip;			///< Tool tip text
+	QString         pTip;			///< Tool tip text
 };
 
 
@@ -202,7 +202,7 @@ struct W_SLDINIT : public W_INIT
 	UWORD		numStops;		///< Number of stops on the slider
 	UWORD		barSize;		///< Size of the bar
 	UWORD		pos;			///< Initial position of the slider bar
-	const char	*pTip;			///< Tip string
+	QString         pTip;			///< Tip string
 };
 
 /***********************************************************************************/
@@ -289,7 +289,7 @@ extern void widgSetUserData2(W_SCREEN *psScreen, UDWORD id, UDWORD UserData);
 extern WIDGET *widgGetFromID(W_SCREEN *psScreen, UDWORD id);
 
 /** Set tip string for a widget */
-extern void widgSetTip(W_SCREEN *psScreen, UDWORD id, const char *pTip);
+extern void widgSetTip(W_SCREEN *psScreen, UDWORD id, QString pTip);
 
 /** Colour numbers */
 enum _w_colour

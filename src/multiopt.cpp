@@ -314,12 +314,6 @@ bool multiShutdown(void)
 bool addTemplateToList(DROID_TEMPLATE *psNew, DROID_TEMPLATE **ppList)
 {
 	DROID_TEMPLATE *psTempl = new DROID_TEMPLATE(*psNew);
-	psTempl->pName = NULL;
-
-	if (psNew->pName)
-	{
-		psTempl->pName = strdup(psNew->pName);
-	}
 
 	psTempl->psNext = *ppList;
 	*ppList = psTempl;

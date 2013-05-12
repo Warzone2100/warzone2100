@@ -67,15 +67,10 @@ UDWORD					aDefaultECM[MAX_PLAYERS];
 UDWORD					aDefaultRepair[MAX_PLAYERS];
 
 //set the iconID based on the name read in in the stats
-static UWORD setIconID(char *pIconName, char *pName);
+static UWORD setIconID(char *pIconName, const char *pName);
 static void replaceComponent(COMPONENT_STATS *pNewComponent, COMPONENT_STATS *pOldComponent,
 					  UBYTE player);
 static bool checkResearchName(RESEARCH *psRes, UDWORD numStats);
-
-static const char *getResearchName(RESEARCH *pResearch)
-{
-	return(getName(pResearch->pName));
-}
 
 //flag that indicates whether the player can self repair
 static UBYTE bSelfRepair[MAX_PLAYERS];
@@ -107,32 +102,6 @@ bool researchInitVars(void)
 	return true;
 }
 
-//searches for component with given name
-//returns NULL if record not found
-BASE_STATS* get_any_component_from_ID(QString name)
-{
-	for (int compType=0; compType<COMP_NUMCOMPONENTS; compType++)
-	{
-		BASE_STATS	*psStats = NULL;
-		UDWORD		numStats = 0, statSize = 0;
-
-		getStatsDetails(compType, &psStats, &numStats, &statSize);
-
-		//find the stat with the same name
-		for (unsigned int count = 0; count < numStats; count++)
-		{
-			if (name.compare(psStats->pName, Qt::CaseInsensitive) == 0)
-			{
-				return psStats;
-			}
-			psStats = (BASE_STATS *)((char *)psStats + statSize);
-		}
-	}
-
-	//return NULL if record not found or an invalid component type is passed in
-	return NULL;
-}
-
 /** Load the research stats */
 bool loadResearch(QString filename)
 {
@@ -153,21 +122,20 @@ bool loadResearch(QString filename)
 		ini.beginGroup(list[inc]);
 		RESEARCH research;
 		research.index = inc;
-		research.pName = allocateName(list[inc].toUtf8().constData());
-		ASSERT_OR_RETURN(false, research.pName != NULL, "Failed allocating research name");
+		research.name = ini.value("name").toString();
+		research.id = list[inc];
 
 		//check the name hasn't been used already
-		ASSERT_OR_RETURN(false, checkResearchName(&research, inc), "Research name '%s' used already", research.pName);
+		ASSERT_OR_RETURN(false, checkResearchName(&research, inc), "Research name '%s' used already", getName(&research));
 
 		research.ref = REF_RESEARCH_START + inc;
-
 		research.resultStrings = ini.value("results").toStringList();
 		
 		//set subGroup icon
 		QString subGroup = ini.value("subgroupIconID", "").toString();
 		if (subGroup.compare("") != 0)
 		{
-			research.subGroup = setIconID(subGroup.toUtf8().data(), research.pName);
+			research.subGroup = setIconID(subGroup.toUtf8().data(), getName(&research));
 		}
 		else
 		{
@@ -176,7 +144,7 @@ bool loadResearch(QString filename)
 
 		//set key topic
 		unsigned int keyTopic = ini.value("keyTopic", 0).toUInt();
-		ASSERT(keyTopic <= 1, "Invalid keyTopic for research topic - '%s' ", getResearchName(&research));
+		ASSERT(keyTopic <= 1, "Invalid keyTopic for research topic - '%s' ", getName(&research));
 		if(keyTopic <= 1)
 			research.keyTopic = ini.value("keyTopic", 0).toUInt();
 		else 
@@ -184,7 +152,7 @@ bool loadResearch(QString filename)
 
 		//set tech code
 		UBYTE techCode = ini.value("techCode", 0).toUInt();
-		ASSERT(techCode <= 1, "Invalid tech code for research topic - '%s' ", getResearchName(&research));
+		ASSERT(techCode <= 1, "Invalid tech code for research topic - '%s' ", getName(&research));
 		if (techCode == 0)
 		{
 			research.techCode = TC_MAJOR;
@@ -198,7 +166,7 @@ bool loadResearch(QString filename)
 		QString iconID = ini.value("iconID", "").toString();
 		if (iconID.compare("") != 0)
 		{
-			research.iconID = setIconID(iconID.toUtf8().data(), research.pName);
+			research.iconID = setIconID(iconID.toUtf8().data(), getName(&research));
 		}
 		else
 		{
@@ -218,20 +186,16 @@ bool loadResearch(QString filename)
 			}else
 			{
 				//try find the component stat with given name
-				BASE_STATS* tmpComp = get_any_component_from_ID(statID);
-				if(tmpComp != NULL)
-				{
-					research.psStat = tmpComp;
-				}
+				research.psStat = getCompStatsFromName(statID);
 			}
-			ASSERT_OR_RETURN(false, research.psStat != NULL, "Cannot find the statID '%s' for Research '%s'", statID.toUtf8().data(), getResearchName(&research));
+			ASSERT_OR_RETURN(false, research.psStat != NULL, "Cannot find the statID '%s' for Research '%s'", statID.toUtf8().data(), getName(&research));
 		}
 
 		QString imdName = ini.value("imdName", "").toString();
 		if (imdName.compare("") != 0)
 		{
 			research.pIMD = (iIMDShape *) resGetData("IMD", imdName.toUtf8().data());
-			ASSERT(research.pIMD != NULL, "Cannot find the research PIE '%s' for record '%s'",imdName.toUtf8().data(), getResearchName(&research));
+			ASSERT(research.pIMD != NULL, "Cannot find the research PIE '%s' for record '%s'",imdName.toUtf8().data(), getName(&research));
 		}
 		else
 		{
@@ -242,7 +206,7 @@ bool loadResearch(QString filename)
 		if (imdName2.compare("") != 0)
 		{
 			research.pIMD2 = (iIMDShape *) resGetData("IMD", imdName2.toUtf8().data());
-			ASSERT(research.pIMD2 != NULL, "Cannot find the 2nd research '%s' PIE for record '%s'",imdName2.toUtf8().data(), getResearchName(&research));
+			ASSERT(research.pIMD2 != NULL, "Cannot find the 2nd research '%s' PIE for record '%s'",imdName2.toUtf8().data(), getName(&research));
 		}
 		else
 		{
@@ -253,7 +217,7 @@ bool loadResearch(QString filename)
 		if (msgName.compare("") != 0)
 		{
 			//check its a major tech code
-			ASSERT(research.techCode == TC_MAJOR, "This research should not have a message associated with it, '%s' the message will be ignored!", getResearchName(&research));
+			ASSERT(research.techCode == TC_MAJOR, "This research should not have a message associated with it, '%s' the message will be ignored!", getName(&research));
 			if (research.techCode == TC_MAJOR)
 			{
 				research.pViewData = getViewData(msgName.toUtf8().data());
@@ -262,12 +226,12 @@ bool loadResearch(QString filename)
 
 		//set the researchPoints
 		unsigned int resPoints = ini.value("researchPoints", 0).toUInt();
-		ASSERT_OR_RETURN(false, resPoints <= UWORD_MAX, "Research Points too high for research topic - '%s' ", getResearchName(&research));
+		ASSERT_OR_RETURN(false, resPoints <= UWORD_MAX, "Research Points too high for research topic - '%s' ", getName(&research));
 		research.researchPoints = resPoints;
 
 		//set the research power
 		unsigned int resPower = ini.value("researchPower", 0).toUInt();
-		ASSERT_OR_RETURN(false, resPower <= UWORD_MAX, "Research Power too high for research topic - '%s' ", getResearchName(&research));
+		ASSERT_OR_RETURN(false, resPower <= UWORD_MAX, "Research Power too high for research topic - '%s' ", getName(&research));
 		research.researchPower = resPower;
 
 		//rememeber research pre-requisites for futher checking
@@ -278,13 +242,13 @@ bool loadResearch(QString filename)
 		for (int j = 0; j < compResults.size(); j++)
 		{
 			QString compID = compResults[j].trimmed();
-			BASE_STATS *pComp = get_any_component_from_ID(compID);
+			COMPONENT_STATS *pComp = getCompStatsFromName(compID);
 			if (pComp != NULL)
 			{
-				research.componentResults.push_back((COMPONENT_STATS*)pComp);
+				research.componentResults.push_back(pComp);
 			}else
 			{
-				ASSERT(false, "Invalid item '%s' in list of result components of research '%s' ", compID.toUtf8().constData(), getResearchName(&research));
+				ASSERT(false, "Invalid item '%s' in list of result components of research '%s' ", compID.toUtf8().constData(), getName(&research));
 			}
 		}
 
@@ -294,23 +258,23 @@ bool loadResearch(QString filename)
 		{
 			//read pair of components oldComponent:newComponent
 			QStringList pair = replacedComp[j].split(':');
-			ASSERT(pair.size() == 2, "Invalid item '%s' in list of replaced components of research '%s'. Required format: 'oldItem:newItem, item1:item2'", replacedComp[j].toUtf8().constData(), getResearchName(&research));
+			ASSERT(pair.size() == 2, "Invalid item '%s' in list of replaced components of research '%s'. Required format: 'oldItem:newItem, item1:item2'", replacedComp[j].toUtf8().constData(), getName(&research));
 			if (pair.size() != 2)
 			{
 				continue; //skip invalid entries
 			}
 			QString oldCompID = pair[0].trimmed();
 			QString newCompID = pair[1].trimmed();
-			COMPONENT_STATS *oldComp = (COMPONENT_STATS *)get_any_component_from_ID(oldCompID);
+			COMPONENT_STATS *oldComp = getCompStatsFromName(oldCompID);
 			if (oldComp == NULL)
 			{
-				ASSERT(false, "Invalid item '%s' in list of replaced components of research '%s'. Wrong component code.", oldCompID.toUtf8().constData(), getResearchName(&research));
+				ASSERT(false, "Invalid item '%s' in list of replaced components of research '%s'. Wrong component code.", oldCompID.toUtf8().constData(), getName(&research));
 				continue;
 			}
-			COMPONENT_STATS *newComp = (COMPONENT_STATS *)get_any_component_from_ID(newCompID);
+			COMPONENT_STATS *newComp = getCompStatsFromName(newCompID);
 			if(newComp == NULL)
 			{
-				ASSERT(false, "Invalid item '%s' in list of replaced components of research '%s'. Wrong component code.", newCompID.toUtf8().constData(), getResearchName(&research));
+				ASSERT(false, "Invalid item '%s' in list of replaced components of research '%s'. Wrong component code.", newCompID.toUtf8().constData(), getName(&research));
 				continue;
 			}
 			RES_COMP_REPLACEMENT replItem;
@@ -324,13 +288,13 @@ bool loadResearch(QString filename)
 		for (int j = 0; j < redComp.size(); j++)
 		{
 			QString compID = redComp[j].trimmed();
-			BASE_STATS *pComp = get_any_component_from_ID(compID);
+			COMPONENT_STATS *pComp = getCompStatsFromName(compID);
 			if (pComp == NULL)
 			{
-				ASSERT(false, "Invalid item '%s' in list of redundant components of research '%s' ", compID.toUtf8().constData(), getResearchName(&research));
+				ASSERT(false, "Invalid item '%s' in list of redundant components of research '%s' ", compID.toUtf8().constData(), getName(&research));
 			}else
 			{
-				research.pRedArtefacts.push_back((COMPONENT_STATS*)pComp);
+				research.pRedArtefacts.push_back(pComp);
 			}
 		}
 
@@ -340,7 +304,7 @@ bool loadResearch(QString filename)
 		{
 			QString strucID = resStruct[j].trimmed();
 			int structIndex = getStructStatFromName(strucID.toUtf8().data());
-			ASSERT(structIndex >= 0, "Invalid item '%s' in list of result structures of research '%s' ", strucID.toUtf8().constData(), getResearchName(&research));
+			ASSERT(structIndex >= 0, "Invalid item '%s' in list of result structures of research '%s' ", strucID.toUtf8().constData(), getName(&research));
 			if (structIndex >= 0)
 			{
 				research.pStructureResults.push_back(structIndex);
@@ -353,7 +317,7 @@ bool loadResearch(QString filename)
 		{
 			QString strucID = reqStruct[j].trimmed();
 			int structIndex = getStructStatFromName(strucID.toUtf8().data());
-			ASSERT(structIndex >= 0, "Invalid item '%s' in list of required structures of research '%s' ", strucID.toUtf8().constData(), getResearchName(&research));
+			ASSERT(structIndex >= 0, "Invalid item '%s' in list of required structures of research '%s' ", strucID.toUtf8().constData(), getName(&research));
 			if(structIndex >= 0)
 			{
 				research.pStructList.push_back(structIndex);
@@ -366,7 +330,7 @@ bool loadResearch(QString filename)
 		{
 			QString strucID = redStruct[j].trimmed();
 			int structIndex = getStructStatFromName(strucID.toUtf8().data());
-			ASSERT(structIndex >= 0, "Invalid item '%s' in list of redundant structures of research '%s' ", strucID.toUtf8().constData(), getResearchName(&research));
+			ASSERT(structIndex >= 0, "Invalid item '%s' in list of redundant structures of research '%s' ", strucID.toUtf8().constData(), getName(&research));
 			if (structIndex >= 0)
 			{
 				research.pRedStructs.push_back(structIndex);
@@ -385,7 +349,7 @@ bool loadResearch(QString filename)
 		{
 			QString resID = preRes[j].trimmed();
 			RESEARCH *preResItem = getResearch(resID.toUtf8().constData());
-			ASSERT(preResItem != NULL, "Invalid item '%s' in list of pre-requisites of research '%s' ", resID.toUtf8().constData(), getResearchName(&asResearch[inc]));
+			ASSERT(preResItem != NULL, "Invalid item '%s' in list of pre-requisites of research '%s' ", resID.toUtf8().constData(), getName(&asResearch[inc]));
 			if (preResItem != NULL)
 				asResearch[inc].pPRList.push_back(preResItem->index);
 		}
@@ -837,7 +801,7 @@ RESEARCH *getResearchForMsg(VIEWDATA *pViewData)
 }
 
 //set the iconID based on the name read in in the stats
-static UWORD setIconID(char *pIconName, char *pName)
+static UWORD setIconID(char *pIconName, const char *pName)
 {
 	//compare the names with those created in 'Framer'
 	if (!strcmp(pIconName, "IMAGE_ROCKET"))
@@ -1087,11 +1051,9 @@ SDWORD	mapIconToRID(UDWORD iconID)
 //return a pointer to a research topic based on the name
 RESEARCH *getResearch(const char *pName)
 {
-	unsigned int inc = 0;
-
-	for (inc = 0; inc < asResearch.size(); inc++)
+	for (int inc = 0; inc < asResearch.size(); inc++)
 	{
-		if (!strcasecmp(asResearch[inc].pName, pName))
+		if (asResearch[inc].id.compare(pName) == 0)
 		{
 			return &asResearch[inc];
 		}
@@ -1168,18 +1130,11 @@ static void replaceComponent(COMPONENT_STATS *pNewComponent, COMPONENT_STATS *pO
 a duplicate*/
 static bool checkResearchName(RESEARCH *psResearch, UDWORD numStats)
 {
-	UDWORD inc;
-	char *pName=psResearch->pName;
-
-	for (inc = 0; inc < numStats; inc++)
+	for (int inc = 0; inc < numStats; inc++)
 	{
 
-		if (!strcmp(asResearch[inc].pName, pName))
-		{
-			//oops! found the name
-			ASSERT( false, "Research name has already been used - %s", pName );
-			return false;
-		}
+		ASSERT_OR_RETURN(false, asResearch[inc].id.compare(psResearch->id) != 0,
+		                 "Research name has already been used - %s", getName(psResearch));
 	}
 	return true;
 }
@@ -1195,7 +1150,7 @@ bool enableResearch(RESEARCH *psResearch, UDWORD player)
 	inc = psResearch->index;
 	if (inc > asResearch.size())
 	{
-		ASSERT( false, "enableResearch: Invalid research topic - %s", getResearchName(psResearch) );
+		ASSERT( false, "enableResearch: Invalid research topic - %s", getName(psResearch) );
 		return false;
 	}
 
@@ -1255,50 +1210,9 @@ void researchReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 			//name the actual reward
 			CONPRINTF(ConsoleString,(ConsoleString,"%s :- %s",
 				_("Research Award"),
-				getName(asResearch[rewardID].pName)));
+				getName(&asResearch[rewardID])));
 		}
 	}
-}
-
-
-/*checks that the research has loaded up as expected - must be done after
-all research parts have been loaded*/
-bool checkResearchStats(void)
-{
-	UDWORD resInc, inc;
-	for (resInc = 0; resInc < asResearch.size(); resInc++)
-	{
-		for (inc = 0; inc < asResearch[resInc].pPRList.size(); inc++)
-		{
-			ASSERT(asResearch[resInc].pPRList[inc] <= asResearch.size(), "Invalid PreReq for topic %s", asResearch[resInc].pName);
-		}
-		for (inc = 0; inc < asResearch[resInc].pStructList.size(); inc++)
-		{
-			ASSERT(asResearch[resInc].pStructList[inc] <= numStructureStats, "Invalid Structure for topic %s", asResearch[resInc].pName);
-		}
-		for (inc = 0; inc < asResearch[resInc].pRedStructs.size(); inc++)
-		{
-			ASSERT(asResearch[resInc].pRedStructs[inc] <= numStructureStats,
-			       "Invalid Redundant Structure for topic %s", asResearch[resInc].pName);
-		}
-		for (inc = 0; inc < asResearch[resInc].pStructureResults.size(); inc++)
-		{
-			ASSERT(asResearch[resInc].pStructureResults[inc] <= numStructureStats,
-			       "Invalid Result Structure for topic %s", asResearch[resInc].pName);
-		}
-		for (inc = 0; inc < asResearch[resInc].componentResults.size(); inc++)
-		{
-			ASSERT(asResearch[resInc].componentResults[inc] != NULL,
-			       "Invalid Comp Result for topic %s", asResearch[resInc].pName);
-		}
-		for (inc = 0; inc < asResearch[resInc].pRedArtefacts.size(); inc++)
-		{
-			ASSERT(asResearch[resInc].pRedArtefacts[inc] != NULL,
-			       "Invalid Redundant Comp for topic %s", asResearch[resInc].pName);
-		}
-	}
-
-	return true;
 }
 
 /*flag self repair so droids can start when idle*/

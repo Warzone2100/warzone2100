@@ -110,12 +110,11 @@ void renderResearchToBuffer(RESEARCH *psResearch, UDWORD OriginX, UDWORD OriginY
 				IMDType = IMDTYPE_COMPONENT;
 				psResGraphic = psResearch->psStat;
 				// FIXME: Another kludge to deal with the superTransport to make it "fit" the display.
-				// Using pName, should be safe to compare, pName doesn't get translated.
-				if (!strcmp("R-SuperTransport", psResearch->pName))
+				if (psResearch->id.compare("R-SuperTransport") == 0)
 				{
 					scale = RESEARCH_COMPONENT_SCALE / 3;
 				}
-				else if (!strcmp("R-Cyborg-Transport", psResearch->pName))
+				else if (psResearch->id.compare("R-Cyborg-Transport") == 0)
 				{
 					scale = RESEARCH_COMPONENT_SCALE / 2;
 				}

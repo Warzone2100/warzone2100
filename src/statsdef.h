@@ -52,32 +52,6 @@ enum DROID_TYPE
 };
 
 static inline bool stringToEnumSortFunction(std::pair<char const *, unsigned> const &a, std::pair<char const *, unsigned> const &b) { return strcmp(a.first, b.first) < 0; }
-template <typename STATS>
-static inline STATS *findStatsByName(std::string const &name, STATS *asStats, unsigned numStats)
-{
-	for (unsigned inc = 0; inc < numStats; ++inc)  // Could be more efficient, if the stats were sorted by name...
-	{
-		//compare the names
-		if (name == asStats[inc].pName)
-		{
-			return &asStats[inc];
-		}
-	}
-	return NULL;  // Not found.
-}
-template <typename STATS>
-static inline STATS *findStatsByName(std::string const &name, STATS **asStats, unsigned numStats)
-{
-	for (unsigned inc = 0; inc < numStats; ++inc)  // Could be more efficient, if the stats were sorted by name...
-	{
-		//compare the names
-		if (name == asStats[inc]->pName)
-		{
-			return asStats[inc];
-		}
-	}
-	return NULL;  // Not found.
-}
 
 template <typename Enum>
 struct StringToEnum
@@ -264,29 +238,38 @@ enum TRAVEL_MEDIUM
 /* Stats common to all stats structs */
 struct BASE_STATS
 {
-	BASE_STATS(unsigned ref = 0) : ref(ref), pName(NULL) {}   ///< Only initialised here when using new/delete! TODO Use new/delete only, not malloc()/free().
-	BASE_STATS(unsigned ref, std::string const &str);   ///< Only initialised here when using new/delete! TODO Use new/delete only, not malloc()/free(). TODO Then pName could be a QString...
-	//Gah, too soon to add destructors to BASE_STATS, thanks to local temporaries that are copied with memcpy()... --- virtual ~BASE_STATS() { free(pName); }  ///< pName is only freed here when using new/delete! TODO Use new/delete only, not malloc()/free().
-	//So this one isn't needed for now, maybe not ever. --- BASE_STATS(BASE_STATS const &stats) : ref(stats.ref), pName(strdup(stats.pName)) {}  // TODO Not needed when pName is a QString...
-	//So this one isn't needed for now, maybe not ever. --- BASE_STATS const &operator =(BASE_STATS const &stats) { ref = stats.ref; free(pName); pName = strdup(stats.pName); return *this; }  // TODO Not needed when pName is a QString...
+	BASE_STATS(unsigned ref = 0) : ref(ref) {}
 
-	UDWORD	ref;	/**< Unique ID of the item */
-	char	*pName; /**< pointer to the text id name (i.e. short language-independant name) */
+	UDWORD	ref;    /**< Unique ID of the item */
+	QString id;     /**< Text id (i.e. short language-independant name) */
+	QString name;   /**< Full / real name of the item */
 };
+
+#define getName(_psStats) (_psStats)->name.toUtf8().constData()
+#define getStatName(_psStats) (_psStats)->name.toUtf8().constData()
+#define getID(_psStats) (_psStats)->id.toUtf8().constData()
 
 /* Stats common to all droid components */
 struct COMPONENT_STATS : public BASE_STATS
 {
+	COMPONENT_STATS() : buildPower(0), buildPoints(0), weight(0), body(0), designable(false), pIMD(NULL),
+	                    compType(COMP_NUMCOMPONENTS), index(0) {}
+
 	UDWORD		buildPower;			/**< Power required to build the component */
 	UDWORD		buildPoints;		/**< Time required to build the component */
 	UDWORD		weight;				/**< Component's weight */
 	UDWORD		body;				/**< Component's body points */
 	bool		designable;			/**< flag to indicate whether this component can be used in the design screen */
 	iIMDShape	*pIMD;				/**< The IMD to draw for this component */
+	COMPONENT_TYPE	compType;
+	int		index;				///< Index into containing array
 };
 
 struct PROPULSION_STATS : public COMPONENT_STATS
 {
+	PROPULSION_STATS() : maxSpeed(0), propulsionType(PROPULSION_TYPE_NUM), turnSpeed(0), spinSpeed(0), 
+	                     spinAngle(0), skidDeceleration(0), deceleration(0), acceleration(0) {}
+
 	UDWORD			maxSpeed;		///< Max speed for the droid
 	PROPULSION_TYPE propulsionType; ///< Type of propulsion used - index into PropulsionTable
 	UDWORD		turnSpeed;
@@ -299,6 +282,12 @@ struct PROPULSION_STATS : public COMPONENT_STATS
 
 struct SENSOR_STATS : public COMPONENT_STATS
 {
+	SENSOR_STATS() : location(0), type(STANDARD_SENSOR), time(0), pMountGraphic(NULL)
+	{
+		memset(&upgrade, 0, sizeof(upgrade));
+		memset(&base, 0, sizeof(base));
+	}
+
 	UDWORD		location;		///< specifies whether the Sensor is default or for the Turret
 	SENSOR_TYPE type;			///< used for combat
 	UDWORD		time;			///< time delay before associated weapon droids 'know' where the attack is from
@@ -312,6 +301,12 @@ struct SENSOR_STATS : public COMPONENT_STATS
 
 struct ECM_STATS : public COMPONENT_STATS
 {
+	ECM_STATS() : location(0), pMountGraphic(NULL)
+	{
+		memset(&upgrade, 0, sizeof(upgrade));
+		memset(&base, 0, sizeof(base));
+	}
+
 	UDWORD		location;		///< specifies whether the ECM is default or for the Turret
 	iIMDShape	*pMountGraphic; ///< The turret mount to use
 
@@ -323,6 +318,12 @@ struct ECM_STATS : public COMPONENT_STATS
 
 struct REPAIR_STATS : public COMPONENT_STATS
 {
+	REPAIR_STATS() : location(0), time(0), pMountGraphic(NULL)
+	{
+		memset(&upgrade, 0, sizeof(upgrade));
+		memset(&base, 0, sizeof(base));
+	}
+
 	UDWORD		location;		///< specifies whether the Repair is default or for the Turret
 	UDWORD		time;			///< time delay for repair cycle
 	iIMDShape	*pMountGraphic; ///< The turret mount to use
@@ -335,6 +336,14 @@ struct REPAIR_STATS : public COMPONENT_STATS
 
 struct WEAPON_STATS : public COMPONENT_STATS
 {
+	WEAPON_STATS() : pMountGraphic(NULL), pMuzzleGraphic(NULL), pInFlightGraphic(NULL), pTargetHitGraphic(NULL),
+	                 pTargetMissGraphic(NULL), pWaterHitGraphic(NULL), pTrailGraphic(NULL), iAudioFireID(0),
+	                 iAudioImpactID(0)
+	{
+		memset(&upgrade, 0, sizeof(upgrade));
+		memset(&base, 0, sizeof(base));
+	}
+
 	struct
 	{
 		short maxRange;
@@ -395,6 +404,12 @@ struct WEAPON_STATS : public COMPONENT_STATS
 
 struct CONSTRUCT_STATS : public COMPONENT_STATS
 {
+	CONSTRUCT_STATS() : pMountGraphic(NULL)
+	{
+		memset(&upgrade, 0, sizeof(upgrade));
+		memset(&base, 0, sizeof(base));
+	}
+
 	iIMDShape	*pMountGraphic;		///< The turret mount to use
 
 	struct
@@ -405,11 +420,12 @@ struct CONSTRUCT_STATS : public COMPONENT_STATS
 
 struct BRAIN_STATS : public COMPONENT_STATS
 {
+	BRAIN_STATS() : psWeaponStat(NULL), maxDroids(0), maxDroidsMult(0) {}
+
        WEAPON_STATS	*psWeaponStat;	///< weapon stats associated with this brain - for Command Droids
        UDWORD          maxDroids;       ///< base maximum number of droids that the commander can control
        UDWORD          maxDroidsMult;   ///< maximum number of controlled droids multiplied by level
 };
-
 
 /*
  * Stats structures type definitions
@@ -417,9 +433,15 @@ struct BRAIN_STATS : public COMPONENT_STATS
 #define SHOOT_ON_GROUND 0x01
 #define SHOOT_IN_AIR	0x02
 
-
 struct BODY_STATS : public COMPONENT_STATS
 {
+	BODY_STATS() : size(SIZE_NUM), weaponSlots(0), droidTypeOverride(DROID_ANY), ppIMDList(NULL), pFlameIMD(NULL)
+	{
+		memset(bodyClass, 0, sizeof(bodyClass));
+		memset(&upgrade, 0, sizeof(upgrade));
+		memset(&base, 0, sizeof(base));
+	}
+
 	BODY_SIZE	size;			///< How big the body is - affects how hit
 	UDWORD		weaponSlots;	///< The number of weapon slots on the body
 	DROID_TYPE	droidTypeOverride; // if not DROID_ANY, sets droid type

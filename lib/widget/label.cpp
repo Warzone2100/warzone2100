@@ -35,7 +35,6 @@
 
 W_LABINIT::W_LABINIT()
 	: pText(NULL)
-	, pTip(NULL)
 	, FontID(font_regular)
 {}
 
@@ -43,7 +42,7 @@ W_LABEL::W_LABEL(W_LABINIT const *init)
 	: WIDGET(init, WIDG_LABEL)
 	, aText(QString::fromUtf8(init->pText))
 	, FontID(init->FontID)
-	, pTip(QString::fromUtf8(init->pTip))
+	, pTip(init->pTip)
 	, fontColour(WZCOL_FORM_TEXT)
 {
 	ASSERT((init->style & ~(WLAB_PLAIN | WLAB_ALIGNLEFT | WLAB_ALIGNRIGHT | WLAB_ALIGNCENTRE | WLAB_ALIGNTOP | WLAB_ALIGNBOTTOM | WIDG_HIDDEN)) == 0, "Unknown button style");

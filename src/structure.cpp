@@ -163,16 +163,6 @@ static int constructorLimit[MAX_PLAYERS];
 
 #define MAX_UNIT_MESSAGE_PAUSE 20000
 
-/*
-Check to see if the stats is some kind of expansion module
-
-... this replaces the thousands of occurance that is spread through out the code
-
-... There were a couple of places where it skipping around a routine if the stat was a expansion module
-	(loadSaveStructureV7 & 9) this code seemed suspect, and to clarify it we replaced it with the routine below
-... the module stuff seemed to work though ...     TJC (& AB) 8-DEC-98
-*/
-
 static void auxStructureNonblocking(STRUCTURE *psStructure)
 {
 	StructureBounds b = getStructureBounds(psStructure);
@@ -455,18 +445,18 @@ bool loadStructureStats(QString filename)
 	{
 		ini.beginGroup(list[inc]);
 		STRUCTURE_STATS *psStats = &asStructureStats[inc];
-		psStats->pName = allocateName(list[inc].toUtf8().constData());
-		ASSERT_OR_RETURN(false, psStats->pName != NULL, "Failed allocating structure ID");
+		psStats->name = ini.value("name").toString();
+		psStats->id = list[inc];
 
 		// check that the name has not been used already
-		ASSERT_OR_RETURN(false, !checkIDdict.contains(psStats->pName), "Structure ID '%s' used already", psStats->pName);
-		checkIDdict.insert(psStats->pName,0);
+		ASSERT_OR_RETURN(false, !checkIDdict.contains(getID(psStats)), "Structure ID '%s' used already", getID(psStats));
+		checkIDdict.insert(psStats->id, inc);
 
 		psStats->ref = REF_STRUCTURE_START + inc;
 
 		// set structure type
 		QString type = ini.value("type", "").toString();
-		ASSERT_OR_RETURN(false, structType.contains(type), "Invalid type '%s' of structure '%s'", type.toUtf8().constData(), psStats->pName);
+		ASSERT_OR_RETURN(false, structType.contains(type), "Invalid type '%s' of structure '%s'", type.toUtf8().constData(), getID(psStats));
 		psStats->type = structType[type];
 
 		// save indexes of special structures for futher use
@@ -496,16 +486,16 @@ bool loadStructureStats(QString filename)
 
 		// set structure strength
 		QString strength = ini.value("strength", "").toString();
-		ASSERT_OR_RETURN(false, structStrength.contains(strength), "Invalid strength '%s' of structure '%s'", strength.toUtf8().constData(), psStats->pName);
+		ASSERT_OR_RETURN(false, structStrength.contains(strength), "Invalid strength '%s' of structure '%s'", strength.toUtf8().constData(), getID(psStats));
 		psStats->strength = structStrength[strength];
 	
 		// set baseWidth
 		psStats->baseWidth = ini.value("baseWidth", 0).toUInt();
-		ASSERT_OR_RETURN(false, psStats->baseWidth <= 100, "Invalid baseWidth '%d' for structure '%s'", psStats->baseWidth, psStats->pName);
+		ASSERT_OR_RETURN(false, psStats->baseWidth <= 100, "Invalid baseWidth '%d' for structure '%s'", psStats->baseWidth, getID(psStats));
 		
 		// set baseBreadth
 		psStats->baseBreadth = ini.value("baseBreadth", 0).toUInt();
-		ASSERT_OR_RETURN(false, psStats->baseBreadth < 100, "Invalid baseBreadth '%d' for structure '%s'", psStats->baseBreadth, psStats->pName);
+		ASSERT_OR_RETURN(false, psStats->baseBreadth < 100, "Invalid baseBreadth '%d' for structure '%s'", psStats->baseBreadth, getID(psStats));
 		
 		psStats->height = ini.value("height").toUInt();
 		psStats->powerToBuild = ini.value("buildPower").toUInt();
@@ -516,7 +506,7 @@ bool loadStructureStats(QString filename)
 		for (int j = 0; j < models.size(); j++)
 		{
 			iIMDShape *imd = (iIMDShape *)resGetData("IMD", models[j].trimmed().toUtf8().constData());
-			ASSERT(imd != NULL, "Cannot find the PIE structureModel '%s' for structure '%s'", models[j].toUtf8().constData(), psStats->pName);
+			ASSERT(imd != NULL, "Cannot find the PIE structureModel '%s' for structure '%s'", models[j].toUtf8().constData(), getID(psStats));
 			psStats->pIMD.push_back(imd);
 		}
 
@@ -525,26 +515,29 @@ bool loadStructureStats(QString filename)
 		if (baseModel.compare("") != 0)
 		{
 			iIMDShape *imd = (iIMDShape *)resGetData("IMD", baseModel.toUtf8().constData());
-			ASSERT(imd != NULL, "Cannot find the PIE baseModel '%s' for structure '%s'", baseModel.toUtf8().constData(), psStats->pName);
+			ASSERT(imd != NULL, "Cannot find the PIE baseModel '%s' for structure '%s'", baseModel.toUtf8().constData(), getID(psStats));
 			psStats->pBaseIMD = imd;
 		}
 		
-		psStats->pECM = findStatsByName(ini.value("ecmID", "ZNULLECM").toString().toUtf8().constData(), asECMStats, numECMStats);
-		ASSERT(psStats->pECM != NULL, "Invalid ECM found for '%s'", psStats->pName);
+		int ecm = getCompFromName(COMP_ECM, ini.value("ecmID", "ZNULLECM").toString());
+		ASSERT(ecm >= 0, "Invalid ECM found for '%s'", getID(psStats));
+		psStats->pECM = asECMStats + ecm;
 
-		psStats->pSensor = findStatsByName(ini.value("sensorID", "ZNULLSENSOR").toString().toUtf8().constData(), asSensorStats, numSensorStats);
-		ASSERT(psStats->pSensor != NULL, "Invalid sensor found for structure '%s'", psStats->pName);
+		int sensor = getCompFromName(COMP_SENSOR, ini.value("sensorID", "ZNULLSENSOR").toString());
+		ASSERT(sensor >= 0, "Invalid sensor found for structure '%s'", getID(psStats));
+		psStats->pSensor = asSensorStats + sensor;
 
 		// set list of weapons
 		std::fill_n(psStats->psWeapStat, STRUCT_MAXWEAPS, (WEAPON_STATS *)NULL);
 		QStringList weapons = ini.value("weapons").toStringList();
-		ASSERT_OR_RETURN(false, weapons.size() <= STRUCT_MAXWEAPS, "Too many weapons are attached to structure '%s'. Maximum is %d", psStats->pName, STRUCT_MAXWEAPS);
+		ASSERT_OR_RETURN(false, weapons.size() <= STRUCT_MAXWEAPS, "Too many weapons are attached to structure '%s'. Maximum is %d", getID(psStats), STRUCT_MAXWEAPS);
 		psStats->numWeaps = weapons.size();
 		for (int j = 0; j < psStats->numWeaps; j++)
 		{
 			QString weaponsID = weapons[j].trimmed();
-			WEAPON_STATS *pWeap = findStatsByName(weaponsID.toUtf8().constData(), asWeaponStats, numWeaponStats);
-			ASSERT_OR_RETURN(false, pWeap, "Invalid item '%s' in list of weapons of structure '%s' ", weaponsID.toUtf8().constData(), psStats->pName);
+			int weapon = getCompFromName(COMP_WEAPON, weaponsID);
+			ASSERT_OR_RETURN(false, weapon >= 0, "Invalid item '%s' in list of weapons of structure '%s' ", weaponsID.toUtf8().constData(), getID(psStats));
+			WEAPON_STATS *pWeap = asWeaponStats + weapon;
 			psStats->psWeapStat[j] = pWeap;
 		}
 
@@ -553,7 +546,7 @@ bool loadStructureStats(QString filename)
 		types += psStats->numWeaps != 0;
 		types += psStats->pECM != NULL && psStats->pECM->location == LOC_TURRET;
 		types += psStats->pSensor != NULL && psStats->pSensor->location == LOC_TURRET;
-		ASSERT(types <= 1, "Too many turret types for structure '%s'", psStats->pName);
+		ASSERT(types <= 1, "Too many turret types for structure '%s'", getID(psStats));
 
 		ini.endGroup();
 	}
@@ -630,7 +623,7 @@ void setCurrentStructQuantity(bool displayError)
 			{
 				//check quantity never exceeds the limit
 				ASSERT(psStructLimits[inc].currentQuantity <= psStructLimits[inc].limit,
-				       "There appears to be too many %s on this map!", asStructureStats[inc].pName);
+				       "There appears to be too many %s on this map!", getName(&asStructureStats[inc]));
 			}
 		}
 	}
@@ -1299,7 +1292,7 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 
 		ASSERT_OR_RETURN(NULL, max <= numStructureStats, "Invalid structure type");
 
-		if (!strcmp(pStructureType->pName, "A0CyborgFactory") && player == 0 && !bMultiPlayer)
+		if (pStructureType->id.compare("A0CyborgFactory") == 0 && player == 0 && !bMultiPlayer)
 		{
 			// HACK: correcting SP bug, needs fixing in script(!!) (only applies for player 0)
 			// should be OK for Skirmish/MP games, since that is set correctly.
@@ -1311,7 +1304,7 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 		if (asStructLimits[player][max].currentQuantity + 1 > asStructLimits[player][max].limit)
 		{
 			debug(LOG_ERROR, "Player %u: Building %s could not be built due to building limits (has %d, max %d)!",
-				  player, pStructureType->pName, asStructLimits[player][max].currentQuantity,
+				  player, getName(pStructureType), asStructLimits[player][max].currentQuantity,
 				  asStructLimits[player][max].limit);
 			return NULL;
 		}
@@ -1417,8 +1410,8 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 				else if (TileHasStructure(psTile))
 				{
 					debug(LOG_ERROR, "Player %u (%s): is building %s at (%d, %d) but found %s already at (%d, %d)",
-						   player, isHumanPlayer(player) ? "Human" : "AI", pStructureType->pName, map.x, map.y,
-						   getTileStructure(map.x + width, map.y + breadth)->pStructureType->pName,
+						   player, isHumanPlayer(player) ? "Human" : "AI", getName(pStructureType), map.x, map.y,
+						   getName(getTileStructure(map.x + width, map.y + breadth)->pStructureType),
 						   map.x + width, map.y + breadth);
 					delete psBuilding;
 					return NULL;
@@ -3857,7 +3850,7 @@ UDWORD fillStructureList(STRUCTURE_STATS **ppList, UDWORD selectedPlayer, UDWORD
 					}
 				}
 
-				debug(LOG_NEVER, "adding %s (%x)", psBuilding->pName, apStructTypeLists[selectedPlayer][inc]);
+				debug(LOG_NEVER, "adding %s (%x)", getName(psBuilding), apStructTypeLists[selectedPlayer][inc]);
 				ppList[count++] = psBuilding;
 				if (count == limit)
 				{
@@ -4699,13 +4692,10 @@ bool destroyStruct(STRUCTURE *psDel, unsigned impactTime)
 return the first one it finds!! */
 int32_t getStructStatFromName(char const *pName)
 {
-	UDWORD				inc;
-	STRUCTURE_STATS		*psStat;
-
-	for (inc = 0; inc < numStructureStats; inc++)
+	for (int inc = 0; inc < numStructureStats; inc++)
 	{
-		psStat = &asStructureStats[inc];
-		if (!strcmp(psStat->pName, pName))
+		STRUCTURE_STATS *psStat = &asStructureStats[inc];
+		if (psStat->id.compare(pName) == 0)
 		{
 			return inc;
 		}
@@ -5934,7 +5924,7 @@ void factoryReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 		{
 			CONPRINTF(ConsoleString,(ConsoleString,"%s :- %s",
 				_("Factory Reward - Propulsion"),
-				getName(asPropulsionStats[comp].pName)));
+				getName(&asPropulsionStats[comp])));
 		}
 		return;
 	}
@@ -5958,7 +5948,7 @@ void factoryReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 		{
 			CONPRINTF(ConsoleString,(ConsoleString,"%s :- %s",
 				_("Factory Reward - Body"),
-				getName(asBodyStats[comp].pName)));
+				getName(&asBodyStats[comp])));
 		}
 		return;
 	}
@@ -5982,7 +5972,7 @@ void factoryReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 		{
 			CONPRINTF(ConsoleString,(ConsoleString,"%s :- %s",
 				_("Factory Reward - Weapon"),
-				getName(asWeaponStats[comp].pName)));
+				getName(&asWeaponStats[comp])));
 		}
 		return;
 	}
@@ -6019,7 +6009,7 @@ void repairFacilityReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 		{
 			CONPRINTF(ConsoleString,(ConsoleString,"%s :- %s",
 				_("Repair Facility Award - Repair"),
-				getName(asRepairStats[comp].pName)));
+				getName(&asRepairStats[comp])));
 		}
 		return;
 	}

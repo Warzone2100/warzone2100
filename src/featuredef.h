@@ -45,8 +45,7 @@ enum FEATURE_TYPE
 /* Stats for a feature */
 struct FEATURE_STATS : public BASE_STATS
 {
-	FEATURE_STATS() {}
-	FEATURE_STATS(int idx, const char *s) : BASE_STATS(idx, s) {}
+	FEATURE_STATS(int idx = 0) : BASE_STATS(idx) {}
 
 	FEATURE_TYPE    subType;                ///< type of feature
 

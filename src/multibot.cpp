@@ -283,14 +283,7 @@ bool SendDroid(DROID_TEMPLATE* pTemplate, uint32_t x, uint32_t y, uint8_t player
 		NETuint8_t(&player);
 		NETuint32_t(&id);
 		NETPosition(&pos);
-		if (pTemplate->pName)
-		{
-			NETstring(pTemplate->pName, strlen(pTemplate->pName) + 1);
-		}
-		else
-		{
-			NETstring(pTemplate->aName, strlen(pTemplate->aName) + 1);
-		}
+		NETqstring(pTemplate->name);
 		NETint32_t(&droidType);
 		NETuint8_t(&pTemplate->asParts[COMP_BODY]);
 		NETuint8_t(&pTemplate->asParts[COMP_BRAIN]);
@@ -337,8 +330,8 @@ bool recvDroid(NETQUEUE queue)
 		NETuint8_t(&player);
 		NETuint32_t(&id);
 		NETPosition(&pos);
-		NETstring(pT->aName, sizeof(pT->aName));
-		pT->pName = pT->aName;
+		NETqstring(pT->name);
+		pT->id = pT->name;
 		NETint32_t(&droidType);
 		NETuint8_t(&pT->asParts[COMP_BODY]);
 		NETuint8_t(&pT->asParts[COMP_BRAIN]);

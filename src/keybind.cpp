@@ -387,7 +387,7 @@ void	kf_CloneSelected( void )
 		{
 			for (DROID_TEMPLATE *psTempl = apsDroidTemplates[selectedPlayer]; psTempl; psTempl = psTempl->psNext)
 			{
-				if (!strcmp(psTempl->aName, psDroid->aName))
+				if (psTempl->name.compare(psDroid->aName) == 0)
 				{
 					sTemplate = psTempl;
 					break;
@@ -415,7 +415,7 @@ void	kf_CloneSelected( void )
 				}
 				else
 				{
-					debug(LOG_ERROR, "Cloning has failed for template:%s id:%d", sTemplate->pName, sTemplate->multiPlayerID);
+					debug(LOG_ERROR, "Cloning has failed for template:%s id:%d", getID(sTemplate), sTemplate->multiPlayerID);
 				}
 			}
 			sasprintf((char**)&msg, _("Player %u is cheating a new droid army of: %s."), selectedPlayer, psDroid->aName);
@@ -1541,7 +1541,7 @@ void	kf_FinishResearch( void )
 				{
 					researchResult(rindex, selectedPlayer, true, psCurr, true);
 				}
-				sasprintf((char**)&cmsg, _("(Player %u) is using cheat :%s %s"), selectedPlayer, _("Researched"), getName(pSubject->pName));
+				sasprintf((char**)&cmsg, _("(Player %u) is using cheat :%s %s"), selectedPlayer, _("Researched"), getName(pSubject));
 				sendTextMessage(cmsg, true);
 				intResearchFinished(psCurr);
 			}

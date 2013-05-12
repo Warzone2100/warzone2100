@@ -105,7 +105,7 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	if (psTarget->visible[psAttacker->player] != UBYTE_MAX)
 	{
 		// Can't see it - can't hit it
-		objTrace(psAttacker->id, "combFire(%u[%s]->%u): Object has no indirect sight of target", psAttacker->id, psStats->pName, psTarget->id);
+		objTrace(psAttacker->id, "combFire(%u[%s]->%u): Object has no indirect sight of target", psAttacker->id, getName(psStats), psTarget->id);
 		return false;
 	}
 
@@ -172,7 +172,7 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	else
 	{
 		/* Out of range */
-		objTrace(psAttacker->id, "combFire(%u[%s]->%u): Out of range", psAttacker->id, psStats->pName, psTarget->id);
+		objTrace(psAttacker->id, "combFire(%u[%s]->%u): Out of range", psAttacker->id, getName(psStats), psTarget->id);
 		return false;
 	}
 
@@ -267,7 +267,7 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	if (isHit)
 	{
 		/* Kerrrbaaang !!!!! a hit */
-		objTrace(psAttacker->id, "combFire: [%s]->%u: resultHitChance=%d, visibility=%d", psStats->pName, psTarget->id, resultHitChance, (int)psTarget->visible[psAttacker->player]);
+		objTrace(psAttacker->id, "combFire: [%s]->%u: resultHitChance=%d, visibility=%d", getName(psStats), psTarget->id, resultHitChance, (int)psTarget->visible[psAttacker->player]);
 		syncDebug("hit=(%d,%d,%d)", predict.x, predict.y, predict.z);
 	}
 	else /* Deal with a missed shot */

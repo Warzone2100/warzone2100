@@ -1608,7 +1608,7 @@ static void setIniStructureStats(WzConfig &ini, QString const &key, STRUCTURE_ST
 {
 	if (stats != NULL)
 	{
-		ini.setValue(key, stats->pName);
+		ini.setValue(key, stats->id);
 	}
 }
 
@@ -1963,10 +1963,6 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 					apsDroidTemplates[inc] = psTempl;
 				}
 			}
-		}
-		for (std::list<DROID_TEMPLATE>::iterator i = localTemplates.begin(); i != localTemplates.end(); ++i)
-		{
-			free(i->pName);
 		}
 		localTemplates.clear();
 
@@ -4248,21 +4244,20 @@ static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 		else
 		{
 			// Create fake template
-			psTemplate->pName = NULL;
-			sstrcpy(templ.aName, ini.value("name", "UNKNOWN").toString().toUtf8().constData());
+			templ.name = ini.value("name", "UNKNOWN").toString();
 			psTemplate->droidType = (DROID_TYPE)ini.value("droidType").toInt();
 			psTemplate->numWeaps = ini.value("weapons", 0).toInt();
 			ini.beginGroup("parts");	// the following is copy-pasted from loadSaveTemplate() -- fixme somehow
-			psTemplate->asParts[COMP_BODY] = getCompFromName(COMP_BODY, ini.value("body", QString("ZNULLBODY")).toString().toUtf8().constData());
-			psTemplate->asParts[COMP_BRAIN] = getCompFromName(COMP_BRAIN, ini.value("brain", QString("ZNULLBRAIN")).toString().toUtf8().constData());
-			psTemplate->asParts[COMP_PROPULSION] = getCompFromName(COMP_PROPULSION, ini.value("propulsion", QString("ZNULLPROP")).toString().toUtf8().constData());
-			psTemplate->asParts[COMP_REPAIRUNIT] = getCompFromName(COMP_REPAIRUNIT, ini.value("repair", QString("ZNULLREPAIR")).toString().toUtf8().constData());
-			psTemplate->asParts[COMP_ECM] = getCompFromName(COMP_ECM, ini.value("ecm", QString("ZNULLECM")).toString().toUtf8().constData());
-			psTemplate->asParts[COMP_SENSOR] = getCompFromName(COMP_SENSOR, ini.value("sensor", QString("ZNULLSENSOR")).toString().toUtf8().constData());
-			psTemplate->asParts[COMP_CONSTRUCT] = getCompFromName(COMP_CONSTRUCT, ini.value("construct", QString("ZNULLCONSTRUCT")).toString().toUtf8().constData());
-			psTemplate->asWeaps[0] = getCompFromName(COMP_WEAPON, ini.value("weapon/1", QString("ZNULLWEAPON")).toString().toUtf8().constData());
-			psTemplate->asWeaps[1] = getCompFromName(COMP_WEAPON, ini.value("weapon/2", QString("ZNULLWEAPON")).toString().toUtf8().constData());
-			psTemplate->asWeaps[2] = getCompFromName(COMP_WEAPON, ini.value("weapon/3", QString("ZNULLWEAPON")).toString().toUtf8().constData());
+			psTemplate->asParts[COMP_BODY] = getCompFromName(COMP_BODY, ini.value("body", "ZNULLBODY").toString());
+			psTemplate->asParts[COMP_BRAIN] = getCompFromName(COMP_BRAIN, ini.value("brain", "ZNULLBRAIN").toString());
+			psTemplate->asParts[COMP_PROPULSION] = getCompFromName(COMP_PROPULSION, ini.value("propulsion", "ZNULLPROP").toString());
+			psTemplate->asParts[COMP_REPAIRUNIT] = getCompFromName(COMP_REPAIRUNIT, ini.value("repair", "ZNULLREPAIR").toString());
+			psTemplate->asParts[COMP_ECM] = getCompFromName(COMP_ECM, ini.value("ecm", "ZNULLECM").toString());
+			psTemplate->asParts[COMP_SENSOR] = getCompFromName(COMP_SENSOR, ini.value("sensor", "ZNULLSENSOR").toString());
+			psTemplate->asParts[COMP_CONSTRUCT] = getCompFromName(COMP_CONSTRUCT, ini.value("construct", "ZNULLCONSTRUCT").toString());
+			psTemplate->asWeaps[0] = getCompFromName(COMP_WEAPON, ini.value("weapon/1", "ZNULLWEAPON").toString());
+			psTemplate->asWeaps[1] = getCompFromName(COMP_WEAPON, ini.value("weapon/2", "ZNULLWEAPON").toString());
+			psTemplate->asWeaps[2] = getCompFromName(COMP_WEAPON, ini.value("weapon/3", "ZNULLWEAPON").toString());
 			ini.endGroup();
 		}
 
@@ -4483,16 +4478,16 @@ static bool writeDroid(WzConfig &ini, DROID *psCurr, bool onMission, int &counte
 	if (psCurr->periodicalDamage > 0) ini.setValue("periodicalDamage", psCurr->periodicalDamage);
 	ini.setValue("droidType", psCurr->droidType);
 	ini.setValue("weapons", psCurr->numWeaps);
-	ini.setValue("parts/body", (asBodyStats + psCurr->asBits[COMP_BODY])->pName);
-	ini.setValue("parts/propulsion", (asPropulsionStats + psCurr->asBits[COMP_PROPULSION])->pName);
-	ini.setValue("parts/brain", (asBrainStats + psCurr->asBits[COMP_BRAIN])->pName);
-	ini.setValue("parts/repair", (asRepairStats + psCurr->asBits[COMP_REPAIRUNIT])->pName);
-	ini.setValue("parts/ecm", (asECMStats + psCurr->asBits[COMP_ECM])->pName);
-	ini.setValue("parts/sensor", (asSensorStats + psCurr->asBits[COMP_SENSOR])->pName);
-	ini.setValue("parts/construct", (asConstructStats + psCurr->asBits[COMP_CONSTRUCT])->pName);
+	ini.setValue("parts/body", (asBodyStats + psCurr->asBits[COMP_BODY])->id);
+	ini.setValue("parts/propulsion", (asPropulsionStats + psCurr->asBits[COMP_PROPULSION])->id);
+	ini.setValue("parts/brain", (asBrainStats + psCurr->asBits[COMP_BRAIN])->id);
+	ini.setValue("parts/repair", (asRepairStats + psCurr->asBits[COMP_REPAIRUNIT])->id);
+	ini.setValue("parts/ecm", (asECMStats + psCurr->asBits[COMP_ECM])->id);
+	ini.setValue("parts/sensor", (asSensorStats + psCurr->asBits[COMP_SENSOR])->id);
+	ini.setValue("parts/construct", (asConstructStats + psCurr->asBits[COMP_CONSTRUCT])->id);
 	for (int j = 0; j < psCurr->numWeaps; j++)
 	{
-		ini.setValue("parts/weapon/" + QString::number(j + 1), (asWeaponStats + psCurr->asWeaps[j].nStat)->pName);
+		ini.setValue("parts/weapon/" + QString::number(j + 1), (asWeaponStats + psCurr->asWeaps[j].nStat)->id);
 	}
 	ini.setValue("moveStatus", psCurr->sMove.Status);
 	ini.setValue("pathIndex", psCurr->sMove.pathIndex);
@@ -4642,7 +4637,7 @@ bool loadSaveStructure(char *pFileData, UDWORD filesize)
 			psStats = asStructureStats + statInc;
 			//loop until find the same name
 
-			if (!strcmp(psStats->pName, psSaveStructure->name))
+			if (psStats->id.compare(psSaveStructure->name) == 0)
 			{
 				found = true;
 				break;
@@ -4721,7 +4716,7 @@ static UDWORD getResearchIdFromName(const char *pName)
 {
 	for (int inc = 0; inc < asResearch.size(); inc++)
 	{
-		if (!strcmp(asResearch[inc].pName, pName))
+		if (asResearch[inc].id.compare(pName) == 0)
 		{
 			return inc;
 		}
@@ -4767,7 +4762,7 @@ static bool loadSaveStructure2(const char *pFileName, STRUCTURE **ppList)
 		{
 			psStats = asStructureStats + statInc;
 			//loop until find the same name
-			if (name.compare(psStats->pName) == 0)
+			if (name.compare(psStats->id) == 0)
 			{
 				found = true;
 				break;
@@ -5046,7 +5041,7 @@ bool writeStructFile(const char *pFileName)
 			ini.beginGroup("structure_" + QString("%1").arg(counter++, 10, 10, QLatin1Char('0')));  // Zero padded so that alphabetical sort works.
 			ini.setValue("id", psCurr->id);
 			setPlayer(ini, psCurr->player);
-			ini.setValue("name", psCurr->pStructureType->pName);
+			ini.setValue("name", psCurr->pStructureType->id);
 			ini.setVector3i("position", psCurr->pos);
 			ini.setVector3i("rotation", psCurr->rot);
 			ini.setValue("health", psCurr->body);
@@ -5065,7 +5060,7 @@ bool writeStructFile(const char *pFileName)
 			ini.setValue("weapons", psCurr->numWeaps);
 			for (int j = 0; j < psCurr->numWeaps; j++)
 			{
-				ini.setValue("parts/weapon/" + QString::number(j + 1), (asWeaponStats + psCurr->asWeaps[j].nStat)->pName);
+				ini.setValue("parts/weapon/" + QString::number(j + 1), (asWeaponStats + psCurr->asWeaps[j].nStat)->id);
 				if (psCurr->asWeaps[j].nStat > 0)
 				{
 					ini.setValue("ammo/" + QString::number(j), psCurr->asWeaps[j].ammo);
@@ -5136,7 +5131,7 @@ bool writeStructFile(const char *pFileName)
 					ini.setValue("Research/timeStartHold", ((RESEARCH_FACILITY *)psCurr->pFunctionality)->timeStartHold);
 					if (((RESEARCH_FACILITY *)psCurr->pFunctionality)->psSubject)
 					{
-						ini.setValue("Research/target", ((RESEARCH_FACILITY *)psCurr->pFunctionality)->psSubject->pName);
+						ini.setValue("Research/target", ((RESEARCH_FACILITY *)psCurr->pFunctionality)->psSubject->id);
 					}
 				}
 				else if (psCurr->pStructureType->type == REF_POWER_GEN)
@@ -5333,7 +5328,7 @@ bool loadSaveFeature(char *pFileData, UDWORD filesize)
 		{
 			psStats = asFeatureStats + statInc;
 			//loop until find the same name
-			if (!strcmp(psStats->pName, psSaveFeature->name))
+			if (psStats->id.compare(psSaveFeature->name) == 0)
 			{
 				found = true;
 				break;
@@ -5399,7 +5394,7 @@ bool loadSaveFeature2(const char *pFileName)
 		{
 			psStats = asFeatureStats + statInc;
 			//loop until find the same name
-			if (!strcmp(psStats->pName, name.toUtf8().constData()))
+			if (psStats->id.compare(name) == 0)
 			{
 				found = true;
 				break;
@@ -5454,7 +5449,7 @@ bool writeFeatureFile(const char *pFileName)
 	{
 		ini.beginGroup("feature_" + QString("%1").arg(counter++, 10, 10, QLatin1Char('0')));  // Zero padded so that alphabetical sort works.
 		ini.setValue("id", psCurr->id);
-		ini.setValue("name", psCurr->psStats->pName);
+		ini.setValue("name", psCurr->psStats->id);
 		ini.setVector3i("position", psCurr->pos);
 		ini.setVector3i("rotation", psCurr->rot);
 		ini.setValue("periodicalDamage", psCurr->periodicalDamage);
@@ -5483,21 +5478,20 @@ bool loadSaveTemplate(const char *pFileName)
 		ini.beginGroup(list[i]);
 		int player = getPlayer(ini);
 		DROID_TEMPLATE *psTemplate = new DROID_TEMPLATE;
-		psTemplate->pName = NULL;
-		sstrcpy(psTemplate->aName, ini.value("name").toString().toUtf8().constData());
+		psTemplate->name = ini.value("name").toString();
 		psTemplate->ref = ini.value("ref").toInt();
 		psTemplate->droidType = (DROID_TYPE)ini.value("droidType").toInt();
 		psTemplate->multiPlayerID = ini.value("multiPlayerID").toInt();
-		psTemplate->asParts[COMP_BODY] = getCompFromName(COMP_BODY, ini.value("body", QString("ZNULLBODY")).toString().toUtf8().constData());
-		psTemplate->asParts[COMP_BRAIN] = getCompFromName(COMP_BRAIN, ini.value("brain", QString("ZNULLBRAIN")).toString().toUtf8().constData());
-		psTemplate->asParts[COMP_PROPULSION] = getCompFromName(COMP_PROPULSION, ini.value("propulsion", QString("ZNULLPROP")).toString().toUtf8().constData());
-		psTemplate->asParts[COMP_REPAIRUNIT] = getCompFromName(COMP_REPAIRUNIT, ini.value("repair", QString("ZNULLREPAIR")).toString().toUtf8().constData());
-		psTemplate->asParts[COMP_ECM] = getCompFromName(COMP_ECM, ini.value("ecm", QString("ZNULLECM")).toString().toUtf8().constData());
-		psTemplate->asParts[COMP_SENSOR] = getCompFromName(COMP_SENSOR, ini.value("sensor", QString("ZNULLSENSOR")).toString().toUtf8().constData());
-		psTemplate->asParts[COMP_CONSTRUCT] = getCompFromName(COMP_CONSTRUCT, ini.value("construct", QString("ZNULLCONSTRUCT")).toString().toUtf8().constData());
-		psTemplate->asWeaps[0] = getCompFromName(COMP_WEAPON, ini.value("weapon/1", QString("ZNULLWEAPON")).toString().toUtf8().constData());
-		psTemplate->asWeaps[1] = getCompFromName(COMP_WEAPON, ini.value("weapon/2", QString("ZNULLWEAPON")).toString().toUtf8().constData());
-		psTemplate->asWeaps[2] = getCompFromName(COMP_WEAPON, ini.value("weapon/3", QString("ZNULLWEAPON")).toString().toUtf8().constData());
+		psTemplate->asParts[COMP_BODY] = getCompFromName(COMP_BODY, ini.value("body", "ZNULLBODY").toString());
+		psTemplate->asParts[COMP_BRAIN] = getCompFromName(COMP_BRAIN, ini.value("brain", "ZNULLBRAIN").toString());
+		psTemplate->asParts[COMP_PROPULSION] = getCompFromName(COMP_PROPULSION, ini.value("propulsion", "ZNULLPROP").toString());
+		psTemplate->asParts[COMP_REPAIRUNIT] = getCompFromName(COMP_REPAIRUNIT, ini.value("repair", "ZNULLREPAIR").toString());
+		psTemplate->asParts[COMP_ECM] = getCompFromName(COMP_ECM, ini.value("ecm", "ZNULLECM").toString());
+		psTemplate->asParts[COMP_SENSOR] = getCompFromName(COMP_SENSOR, ini.value("sensor", "ZNULLSENSOR").toString());
+		psTemplate->asParts[COMP_CONSTRUCT] = getCompFromName(COMP_CONSTRUCT, ini.value("construct", "ZNULLCONSTRUCT").toString());
+		psTemplate->asWeaps[0] = getCompFromName(COMP_WEAPON, ini.value("weapon/1", "ZNULLWEAPON").toString());
+		psTemplate->asWeaps[1] = getCompFromName(COMP_WEAPON, ini.value("weapon/2", "ZNULLWEAPON").toString());
+		psTemplate->asWeaps[2] = getCompFromName(COMP_WEAPON, ini.value("weapon/3", "ZNULLWEAPON").toString());
 		psTemplate->numWeaps = ini.value("weapons").toInt();
 		psTemplate->enabled = ini.value("enabled").toBool();
 		psTemplate->prefab = false;		// not AI template
@@ -5549,23 +5543,23 @@ bool writeTemplateFile(const char *pFileName)
 			for (DROID_TEMPLATE *psCurr = apsDroidTemplates[player]; psCurr != NULL; psCurr = psCurr->psNext)
 			{
 				ini.beginGroup("template_" + QString::number(psCurr->multiPlayerID) + "_player" + QString::number(player));
-				ini.setValue("name", psCurr->aName);
+				ini.setValue("name", psCurr->name);
 				ini.setValue("ref", psCurr->ref);
 				ini.setValue("droidType", psCurr->droidType);
 				ini.setValue("multiPlayerID", psCurr->multiPlayerID);
 				setPlayer(ini, player);
-				ini.setValue("body", (asBodyStats + psCurr->asParts[COMP_BODY])->pName);
-				ini.setValue("propulsion", (asPropulsionStats + psCurr->asParts[COMP_PROPULSION])->pName);
-				ini.setValue("brain", (asBrainStats + psCurr->asParts[COMP_BRAIN])->pName);
-				ini.setValue("repair", (asRepairStats + psCurr->asParts[COMP_REPAIRUNIT])->pName);
-				ini.setValue("ecm", (asECMStats + psCurr->asParts[COMP_ECM])->pName);
-				ini.setValue("sensor", (asSensorStats + psCurr->asParts[COMP_SENSOR])->pName);
-				ini.setValue("construct", (asConstructStats + psCurr->asParts[COMP_CONSTRUCT])->pName);
+				ini.setValue("body", (asBodyStats + psCurr->asParts[COMP_BODY])->id);
+				ini.setValue("propulsion", (asPropulsionStats + psCurr->asParts[COMP_PROPULSION])->id);
+				ini.setValue("brain", (asBrainStats + psCurr->asParts[COMP_BRAIN])->id);
+				ini.setValue("repair", (asRepairStats + psCurr->asParts[COMP_REPAIRUNIT])->id);
+				ini.setValue("ecm", (asECMStats + psCurr->asParts[COMP_ECM])->id);
+				ini.setValue("sensor", (asSensorStats + psCurr->asParts[COMP_SENSOR])->id);
+				ini.setValue("construct", (asConstructStats + psCurr->asParts[COMP_CONSTRUCT])->id);
 				ini.setValue("weapons", psCurr->numWeaps);
 				ini.setValue("enabled", psCurr->enabled);
 				for (int j = 0; j < psCurr->numWeaps; j++)
 				{
-					ini.setValue("weapon/" + QString::number(j + 1), (asWeaponStats + psCurr->asWeaps[j])->pName);
+					ini.setValue("weapon/" + QString::number(j + 1), (asWeaponStats + psCurr->asWeaps[j])->id);
 				}
 				ini.endGroup();
 			}
@@ -5692,20 +5686,12 @@ bool loadSaveCompList(const char *pFileName)
 		{
 			QString name = list[i];
 			int state = ini.value(name, UNAVAILABLE).toInt();
-			int type = -1;
-			int compInc = -1;
-			for (int j = 0; j < COMP_NUMCOMPONENTS && compInc == -1; j++)
-			{
-				// this is very inefficient, but I am so not giving in to the deranged nature of the components code
-				// and convoluting the new savegame format for its sake
-				compInc = getCompFromName(j, name.toUtf8().constData());
-				type = j;
-			}
-			ASSERT(compInc >= 0, "Bad component %d", compInc);
-			ASSERT(type >= 0 && type != COMP_NUMCOMPONENTS, "Bad type %d", type);
+			COMPONENT_STATS *psComp = getCompStatsFromName(name);
+			ASSERT(psComp, "Bad component %s", name.toUtf8().constData());
+			ASSERT(psComp->compType >= 0 && psComp->compType != COMP_NUMCOMPONENTS, "Bad type %d", psComp->compType);
 			ASSERT_OR_RETURN(false, state == UNAVAILABLE || state == AVAILABLE || state == FOUND || state == REDUNDANT,
 					 "Bad state %d for %s", state, name.toUtf8().constData());
-			apCompLists[player][type][compInc] = state;
+			apCompLists[player][psComp->compType][psComp->index] = state;
 		}
 		ini.endGroup();
 	}
@@ -5726,49 +5712,49 @@ static bool writeCompListFile(const char *pFileName)
 		{
 			COMPONENT_STATS *psStats = (COMPONENT_STATS *)(asBodyStats + i);
 			const int state = apCompLists[player][COMP_BODY][i];
-			if (state != UNAVAILABLE) ini.setValue(psStats->pName, state);
+			if (state != UNAVAILABLE) ini.setValue(psStats->id, state);
 		}
 		for (int i = 0; i < numWeaponStats; i++)
 		{
 			COMPONENT_STATS *psStats = (COMPONENT_STATS *)(asWeaponStats + i);
 			const int state = apCompLists[player][COMP_WEAPON][i];
-			if (state != UNAVAILABLE) ini.setValue(psStats->pName, state);
+			if (state != UNAVAILABLE) ini.setValue(psStats->id, state);
 		}
 		for (int i = 0; i < numConstructStats; i++)
 		{
 			COMPONENT_STATS *psStats = (COMPONENT_STATS *)(asConstructStats + i);
 			const int state = apCompLists[player][COMP_CONSTRUCT][i];
-			if (state != UNAVAILABLE) ini.setValue(psStats->pName, state);
+			if (state != UNAVAILABLE) ini.setValue(psStats->id, state);
 		}
 		for (int i = 0; i < numECMStats; i++)
 		{
 			COMPONENT_STATS *psStats = (COMPONENT_STATS *)(asECMStats + i);
 			const int state = apCompLists[player][COMP_ECM][i];
-			if (state != UNAVAILABLE) ini.setValue(psStats->pName, state);
+			if (state != UNAVAILABLE) ini.setValue(psStats->id, state);
 		}
 		for (int i = 0; i < numPropulsionStats; i++)
 		{
 			COMPONENT_STATS *psStats = (COMPONENT_STATS *)(asPropulsionStats + i);
 			const int state = apCompLists[player][COMP_PROPULSION][i];
-			if (state != UNAVAILABLE) ini.setValue(psStats->pName, state);
+			if (state != UNAVAILABLE) ini.setValue(psStats->id, state);
 		}
 		for (int i = 0; i < numSensorStats; i++)
 		{
 			COMPONENT_STATS *psStats = (COMPONENT_STATS *)(asSensorStats + i);
 			const int state = apCompLists[player][COMP_SENSOR][i];
-			if (state != UNAVAILABLE) ini.setValue(psStats->pName, state);
+			if (state != UNAVAILABLE) ini.setValue(psStats->id, state);
 		}
 		for (int i = 0; i < numRepairStats; i++)
 		{
 			COMPONENT_STATS *psStats = (COMPONENT_STATS *)(asRepairStats + i);
 			const int state = apCompLists[player][COMP_REPAIRUNIT][i];
-			if (state != UNAVAILABLE) ini.setValue(psStats->pName, state);
+			if (state != UNAVAILABLE) ini.setValue(psStats->id, state);
 		}
 		for (int i = 0; i < numBrainStats; i++)
 		{
 			COMPONENT_STATS *psStats = (COMPONENT_STATS *)(asBrainStats + i);
 			const int state = apCompLists[player][COMP_BRAIN][i];
-			if (state != UNAVAILABLE) ini.setValue(psStats->pName, state);
+			if (state != UNAVAILABLE) ini.setValue(psStats->id, state);
 		}
 		ini.endGroup();
 	}
@@ -5797,7 +5783,7 @@ static bool loadSaveStructTypeList(const char *pFileName)
 			{
 				STRUCTURE_STATS *psStats = asStructureStats + statInc;
 
-				if (name.compare(psStats->pName) == 0)
+				if (name.compare(psStats->id) == 0)
 				{
 					apStructTypeLists[player][statInc] = state;
 					break;
@@ -5823,7 +5809,7 @@ static bool writeStructTypeListFile(const char *pFileName)
 		STRUCTURE_STATS *psStats = asStructureStats;
 		for (int i = 0; i < numStructureStats; i++, psStats++)
 		{
-			if (apStructTypeLists[player][i] != UNAVAILABLE) ini.setValue(psStats->pName, apStructTypeLists[player][i]);
+			if (apStructTypeLists[player][i] != UNAVAILABLE) ini.setValue(psStats->id, apStructTypeLists[player][i]);
 		}
 		ini.endGroup();
 	}
@@ -5848,7 +5834,7 @@ bool loadSaveResearch(const char *pFileName)
 		{
 			RESEARCH *psStats = &asResearch[statInc];
 			//loop until find the same name
-			if (!strcmp(psStats->pName, name))
+			if (psStats->id.compare(name) == 0)
 
 			{
 				found = true;
@@ -5916,7 +5902,7 @@ static bool writeResearchFile(char *pFileName)
 		if (valid)
 		{
 			ini.beginGroup("research_" + QString::number(i));
-			ini.setValue("name", psStats->pName);
+			ini.setValue("name", psStats->id);
 			ini.setValue("possible", possibles);
 			ini.setValue("researched", researched);
 			ini.setValue("currentPoints", points);
@@ -6145,7 +6131,7 @@ bool loadSaveStructLimits(const char *pFileName)
 			for (statInc = 0; statInc < numStructureStats; statInc++)
 			{
 				STRUCTURE_STATS *psStats = asStructureStats + statInc;
-				if (name.compare(psStats->pName) == 0)
+				if (name.compare(psStats->id) == 0)
 				{
 					asStructLimits[player][statInc].limit = limit != 255? limit : LOTS_OF;
 					break;
@@ -6174,7 +6160,7 @@ bool writeStructLimitsFile(const char *pFileName)
 		for (int i = 0; i < numStructureStats; i++, psStats++)
 		{
 			const int limit = MIN(asStructLimits[player][i].limit, 255);
-			if (limit != 255) ini.setValue(psStats->pName, limit);
+			if (limit != 255) ini.setValue(psStats->id, limit);
 		}
 		ini.endGroup();
 	}

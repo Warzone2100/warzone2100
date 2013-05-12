@@ -333,6 +333,8 @@ DROID::DROID(uint32_t id, unsigned player)
 	, actionPos(0, 0)
 	, psCurAnim(NULL)
 {
+	memset(aName, 0, sizeof(aName));
+	memset(asBits, 0, sizeof(asBits));
 	pos = Vector3i(0, 0, 0);
 	rot = Vector3i(0, 0, 0);
 	order.type = DORDER_NONE;
@@ -1668,7 +1670,7 @@ UDWORD calcTemplateBuild(DROID_TEMPLATE *psTemplate)
 		// FIX ME:
 		ASSERT( psTemplate->asWeaps[i]<numWeaponStats,
 			//"Invalid Template weapon for %s", psTemplate->pName );
-			"Invalid Template weapon for %s", getTemplateName(psTemplate) );
+			"Invalid Template weapon for %s", getName(psTemplate) );
 		build += (asWeaponStats + psTemplate->asWeaps[i])->buildPoints;
 	}
 
@@ -1766,7 +1768,7 @@ DROID *reallyBuildDroid(DROID_TEMPLATE *pTemplate, Position pos, UDWORD player, 
 	ASSERT(!bMultiPlayer || worldOnMap(pos.x, pos.y), "the build locations are not on the map");
 
 	psDroid = new DROID(generateSynchronisedObjectId(), player);
-	droidSetName(psDroid, pTemplate->aName);
+	droidSetName(psDroid, getName(pTemplate));
 
 	// Set the droids type
 	psDroid->droidType = droidTemplateType(pTemplate);  // Is set again later to the same thing, in droidSetBits.
@@ -3232,7 +3234,7 @@ DROID *giftSingleDroid(DROID *psD, UDWORD to)
 		return NULL;
 	}
 	templateSetParts(psD, &sTemplate);	// create a template based on the droid
-	sstrcpy(sTemplate.aName, psD->aName);	// copy the name across
+	sTemplate.name = psD->aName;	// copy the name across
 	// only play the nexus sound if unit being taken over is selectedPlayer's but not going to the selectedPlayer
 	if (psD->player == selectedPlayer && to != selectedPlayer && !bMultiPlayer)
 	{

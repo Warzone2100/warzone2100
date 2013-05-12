@@ -103,7 +103,10 @@ public:
 	{
 		return m_settings.status();
 	}
-	
+	QString group()
+	{
+		return m_settings.group();
+	}
 };
 
 #endif

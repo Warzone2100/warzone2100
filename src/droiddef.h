@@ -60,9 +60,6 @@ struct DROID_TEMPLATE : public BASE_STATS
 {
 	DROID_TEMPLATE();
 
-	/// this contains the full editable UTF-8 encoded name of the template
-	char            aName[MAX_STR_LENGTH];
-
 	/*!
 	 * The droid components.
 	 *

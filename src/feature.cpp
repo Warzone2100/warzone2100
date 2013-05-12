@@ -80,8 +80,10 @@ bool loadFeatureStats(const char *pFileName)
 	for (int i = 0; i < list.size(); ++i)
 	{
 		ini.beginGroup(list[i]);
-		asFeatureStats[i] = FEATURE_STATS(REF_FEATURE_START + i, list[i].toUtf8().constData());
+		asFeatureStats[i] = FEATURE_STATS(REF_FEATURE_START + i);
 		FEATURE_STATS *p = &asFeatureStats[i];
+		p->name = ini.value("name").toString();
+		p->id = list[i];
 		QString subType = ini.value("type").toString();
 		if (subType == "TANK WRECK") p->subType = FEAT_TANK;
 		else if (subType == "GENERIC ARTEFACT") p->subType = FEAT_GEN_ARTE;
@@ -117,10 +119,6 @@ bool loadFeatureStats(const char *pFileName)
 /* Release the feature stats memory */
 void featureStatsShutDown(void)
 {
-	for (unsigned i = 0; i < numFeatureStats; ++i)
-	{
-		free(asFeatureStats[i].pName);
-	}
 	delete[] asFeatureStats;
 	asFeatureStats = NULL;
 	numFeatureStats = 0;
@@ -239,8 +237,8 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,bool FromSave)
 			MAPTILE *psTile = mapTile(b.map.x + width, b.map.y + breadth);
 
 			//check not outside of map - for load save game
-			ASSERT_OR_RETURN(NULL, b.map.x + width < mapWidth, "x coord bigger than map width - %s, id = %d", getName(psFeature->psStats->pName), psFeature->id);
-			ASSERT_OR_RETURN(NULL, b.map.y + breadth < mapHeight, "y coord bigger than map height - %s, id = %d", getName(psFeature->psStats->pName), psFeature->id);
+			ASSERT_OR_RETURN(NULL, b.map.x + width < mapWidth, "x coord bigger than map width - %s, id = %d", getName(psFeature->psStats), psFeature->id);
+			ASSERT_OR_RETURN(NULL, b.map.y + breadth < mapHeight, "y coord bigger than map height - %s, id = %d", getName(psFeature->psStats), psFeature->id);
 
 			if (width != psStats->baseWidth && breadth != psStats->baseBreadth)
 			{
@@ -249,8 +247,8 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,bool FromSave)
 					FEATURE *psBlock = (FEATURE *)psTile->psObject;
 
 					debug(LOG_ERROR, "%s(%d) already placed at (%d+%d, %d+%d) when trying to place %s(%d) at (%d+%d, %d+%d) - removing it",
-					      getName(psBlock->psStats->pName), psBlock->id, map_coord(psBlock->pos.x), psBlock->psStats->baseWidth, map_coord(psBlock->pos.y),
-					      psBlock->psStats->baseBreadth, getName(psFeature->psStats->pName), psFeature->id, b.map.x, b.size.x, b.map.y, b.size.y);
+					      getName(psBlock->psStats), psBlock->id, map_coord(psBlock->pos.x), psBlock->psStats->baseWidth, map_coord(psBlock->pos.y),
+					      psBlock->psStats->baseBreadth, getName(psFeature->psStats), psFeature->id, b.map.x, b.size.x, b.map.y, b.size.y);
 
 					removeFeature(psBlock);
 				}
@@ -490,15 +488,14 @@ bool destroyFeature(FEATURE *psDel, unsigned impactTime)
 }
 
 
-SDWORD getFeatureStatFromName( const char *pName )
+SDWORD getFeatureStatFromName(const char *pName)
 {
-	unsigned int inc;
 	FEATURE_STATS *psStat;
 
-	for (inc = 0; inc < numFeatureStats; inc++)
+	for (int inc = 0; inc < numFeatureStats; inc++)
 	{
 		psStat = &asFeatureStats[inc];
-		if (!strcmp(psStat->pName, pName))
+		if (psStat->id.compare(pName) == 0)
 		{
 			return inc;
 		}

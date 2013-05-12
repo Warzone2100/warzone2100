@@ -1606,12 +1606,12 @@ void IntFancyButton::displayIMD(Image image, ImdObject imdObject, int xOffset, i
 			Radius = getComponentRadius((BASE_STATS *)Object);
 			scale = rescaleButtonObject(Radius, COMP_BUT_SCALE, COMPONENT_RADIUS);
 			// NOTE: The Super transport is huge, and is considered a component type, so refit it to inside the button.
-			const char *const name = ((BASE_STATS *)Object)->pName;
-			if (!strcmp(name, "SuperTransportBody"))
+			BASE_STATS *psStats = (BASE_STATS *)Object;
+			if (psStats->id.compare("SuperTransportBody") == 0)
 			{
 				scale *= .4;
 			}
-			else if (!strcmp(name, "TransporterBody"))
+			else if (psStats->id.compare("TransporterBody") == 0)
 			{
 				scale *= .6;
 			}

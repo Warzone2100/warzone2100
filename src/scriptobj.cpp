@@ -593,70 +593,70 @@ bool scrGroupObjGet(UDWORD index)
 
 
 // get the name from a stat pointer
-static char *scrGetStatName(INTERP_TYPE type, UDWORD data)
+static const QString scrGetStatName(INTERP_TYPE type, UDWORD data)
 {
-	char	*pName = NULL;
+	QString pName;
 
 	switch ((unsigned)type)  // Unsigned cast to suppress compiler warnings due to enum abuse.
 	{
 	case ST_STRUCTURESTAT:
 		if (data < numStructureStats)
 		{
-			pName = asStructureStats[data].pName;
+			pName = asStructureStats[data].id;
 		}
 		break;
 	case ST_FEATURESTAT:
 		if (data < numFeatureStats)
 		{
-			pName = asFeatureStats[data].pName;
+			pName = asFeatureStats[data].id;
 		}
 		break;
 	case ST_BODY:
 		if (data < numBodyStats)
 		{
-			pName = asBodyStats[data].pName;
+			pName = asBodyStats[data].id;
 		}
 		break;
 	case ST_PROPULSION:
 		if (data < numPropulsionStats)
 		{
-			pName = asPropulsionStats[data].pName;
+			pName = asPropulsionStats[data].id;
 		}
 		break;
 	case ST_ECM:
 		if (data < numECMStats)
 		{
-			pName = asECMStats[data].pName;
+			pName = asECMStats[data].id;
 		}
 		break;
 	case ST_SENSOR:
 		if (data < numSensorStats)
 		{
-			pName = asSensorStats[data].pName;
+			pName = asSensorStats[data].id;
 		}
 		break;
 	case ST_CONSTRUCT:
 		if (data < numConstructStats)
 		{
-			pName = asConstructStats[data].pName;
+			pName = asConstructStats[data].id;
 		}
 		break;
 	case ST_WEAPON:
 		if (data < numWeaponStats)
 		{
-			pName = asWeaponStats[data].pName;
+			pName = asWeaponStats[data].id;
 		}
 		break;
 	case ST_REPAIR:
 		if (data < numRepairStats)
 		{
-			pName = asRepairStats[data].pName;
+			pName = asRepairStats[data].id;
 		}
 		break;
 	case ST_BRAIN:
 		if (data < numBrainStats)
 		{
-			pName = asBrainStats[data].pName;
+			pName = asBrainStats[data].id;
 		}
 		break;
 	case ST_BASESTATS:
@@ -667,11 +667,7 @@ static char *scrGetStatName(INTERP_TYPE type, UDWORD data)
 		break;
 	}
 
-	if (pName == NULL)
-	{
-		debug( LOG_FATAL, "scrGetStatName: cannot get name for a base stat" );
-		abort();
-	}
+	ASSERT(!pName.isEmpty(), "cannot get name for a base stat");
 
 	return pName;
 }
@@ -681,7 +677,7 @@ static char *scrGetStatName(INTERP_TYPE type, UDWORD data)
 bool scrValDefSave(INTERP_VAL *psVal, WzConfig &ini)
 {
 	VIEWDATA	*psIntMessage;
-	const char	*pName;
+	QString		pName;
 	RESEARCH	*psResearch;
 	DROID		*psCDroid;
 
@@ -718,7 +714,7 @@ bool scrValDefSave(INTERP_VAL *psVal, WzConfig &ini)
 	case ST_REPAIR:
 	case ST_BRAIN:
 		pName = scrGetStatName(psVal->type, psVal->v.ival);
-		if (pName)
+		if (!pName.isEmpty())
 		{
 			ini.setValue("data", QString(pName));
 		}
@@ -746,10 +742,10 @@ bool scrValDefSave(INTERP_VAL *psVal, WzConfig &ini)
 		break;
 	case ST_RESEARCH:
 		psResearch = (RESEARCH *)psVal->v.oval;
-		if (psResearch && psResearch->pName && psResearch->pName[0] != '\0')
+		if (psResearch && !psResearch->id.isEmpty())
 		{
-			ini.setValue("data", QString(psResearch->pName));
-			ASSERT(psResearch == getResearch(psResearch->pName), "Research %s not found!", psResearch->pName);
+			ini.setValue("data", psResearch->id);
+			ASSERT(psResearch == getResearch(getID(psResearch)), "Research %s not found!", getID(psResearch));
 		}
 		break;
 	case ST_GROUP:
@@ -782,17 +778,13 @@ bool scrValDefSave(INTERP_VAL *psVal, WzConfig &ini)
 			// can also return NULL
 			pName = sound_GetTrackName((UDWORD)psVal->v.ival);
 		}
-		else
-		{
-			pName = NULL;
-		}
-		if (!pName)
+		if (pName.isEmpty())
 		{
 			debug(LOG_WARNING, "Could not get sound track name");
 		}
-		if (pName)
+		else
 		{
-			ini.setValue("data", QString(pName));
+			ini.setValue("data", pName);
 		}
 		break;
 	case ST_STRUCTUREID:

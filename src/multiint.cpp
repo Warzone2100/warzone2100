@@ -1718,7 +1718,6 @@ static void addDifficultyChooser(int player)
 		sButInit.y = (MULTIOP_PLAYERHEIGHT + 5) * i + 4;
 		sButInit.width = MULTIOP_PLAYERWIDTH + 1;
 		sButInit.height = MULTIOP_PLAYERHEIGHT;
-		sButInit.pTip = NULL;
 		switch (i)
 		{
 		case 0: sButInit.pTip = _("Starts disadvantaged"); break;
@@ -2431,10 +2430,6 @@ void addPlayerBox(bool players)
 				{
 					sButInit.pTip = _("Teams locked");
 				}
-				else
-				{
-					sButInit.pTip = NULL;
-				}
 				sButInit.pDisplay = displayTeamChooser;
 				sButInit.UserData = i;
 
@@ -2461,10 +2456,6 @@ void addPlayerBox(bool players)
 			{
 				sColInit.pTip = _("Click to change player colour");
 			}
-			else
-			{
-				sColInit.pTip = NULL;
-			}
 			sColInit.pDisplay = displayColour;
 			sColInit.UserData = i;
 			widgAddButton(psWScreen, &sColInit);
@@ -2484,7 +2475,6 @@ void addPlayerBox(bool players)
 				sButInit.y = playerBoxHeight(i);
 				sButInit.width = MULTIOP_PLAYERWIDTH - MULTIOP_TEAMSWIDTH - MULTIOP_READY_WIDTH - MULTIOP_COLOUR_WIDTH;
 				sButInit.height = MULTIOP_PLAYERHEIGHT;
-				sButInit.pTip = NULL;
 				if ((selectedPlayer == i || NetPlay.isHost) && NetPlay.players[i].allocated && !locked.position)
 				{
 					sButInit.pTip = _("Click to change player position");

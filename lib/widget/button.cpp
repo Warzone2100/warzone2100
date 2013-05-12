@@ -37,7 +37,6 @@
 
 W_BUTINIT::W_BUTINIT()
 	: pText(NULL)
-	, pTip(NULL)
 	, FontID(font_regular)
 {}
 
@@ -45,7 +44,7 @@ W_BUTTON::W_BUTTON(W_BUTINIT const *init)
 	: WIDGET(init, WIDG_BUTTON)
 	, state(WBUT_PLAIN)
 	, pText(QString::fromUtf8(init->pText))
-	, pTip(QString::fromUtf8(init->pTip))
+	, pTip(init->pTip)
 	, HilightAudioID(WidgGetHilightAudioID())
 	, ClickedAudioID(WidgGetClickedAudioID())
 	, AudioCallback(WidgGetAudioCallback())

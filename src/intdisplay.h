@@ -149,7 +149,7 @@ public:
 
 	void setStats(BASE_STATS *stats) { Stat = stats; }
 	void setStatsAndTip(BASE_STATS *stats) { setStats(stats); setTip(getStatName(Stat)); }
-	void setStatsAndTip(DROID_TEMPLATE *stats) { setStats(stats); setTip(getTemplateName(stats)); }
+	void setStatsAndTip(DROID_TEMPLATE *stats) { setStats(stats); setTip(getName(stats)); }
 
 protected:
 	BASE_STATS *Stat;

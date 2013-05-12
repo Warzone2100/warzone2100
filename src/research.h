@@ -125,7 +125,6 @@ extern bool selfRepairEnabled(UBYTE player);
 
 extern SDWORD	mapRIDToIcon( UDWORD rid );
 extern SDWORD	mapIconToRID(UDWORD iconID);
-extern bool checkResearchStats(void);
 
 /*puts research facility on hold*/
 extern void holdResearch(STRUCTURE *psBuilding, QUEUE_MODE mode);

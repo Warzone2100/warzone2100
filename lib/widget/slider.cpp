@@ -42,7 +42,6 @@ W_SLDINIT::W_SLDINIT()
 	, numStops(0)
 	, barSize(0)
 	, pos(0)
-	, pTip(NULL)
 {}
 
 W_SLIDER::W_SLIDER(W_SLDINIT const *init)
@@ -52,7 +51,7 @@ W_SLIDER::W_SLIDER(W_SLDINIT const *init)
 	, barSize(init->barSize)
 	, pos(init->pos)
 	, state(0)
-	, pTip(QString::fromUtf8(init->pTip))
+	, pTip(init->pTip)
 {
 	ASSERT((init->style & ~(WBAR_PLAIN | WIDG_HIDDEN)) == 0, "Unknown style");
 	ASSERT(init->orientation >= WSLD_LEFT || init->orientation <= WSLD_BOTTOM, "Unknown orientation");

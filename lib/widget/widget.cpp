@@ -480,7 +480,7 @@ void WIDGET::setTip(QString)
 }
 
 /* Set tip string for a widget */
-void widgSetTip(W_SCREEN *psScreen, UDWORD id, const char *pTip)
+void widgSetTip(W_SCREEN *psScreen, UDWORD id, QString pTip)
 {
 	WIDGET *psWidget = widgGetFromID(psScreen, id);
 

@@ -379,7 +379,7 @@ static void displayStructureBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset
 	// draw name
 	iV_SetFont(font_regular);											// font
 	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
-	iV_DrawText(_(getName(stat->pName)), x + 80, y + psWidget->height()/2 + 3);
+	iV_DrawText(_(getName(stat)), x + 80, y + psWidget->height()/2 + 3);
 
 	// draw limit
 	ssprintf(str, "%d", ((W_SLIDER *)widgGetFromID(psWScreen, psWidget->id + 1))->pos);

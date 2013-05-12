@@ -1826,7 +1826,6 @@ void addSmallTextButton(UDWORD id,  UDWORD PosX, UDWORD PosY, const char *txt, u
 {
 	W_BUTINIT sButInit;
 
-	memset(&sButInit, 0, sizeof(W_BUTINIT));
 	sButInit.formID = FRONTEND_BOTFORM;
 	sButInit.id = id;
 	sButInit.x = (short)PosX;

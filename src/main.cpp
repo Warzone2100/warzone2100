@@ -762,13 +762,6 @@ static void startGameLoop(void)
 		debug( LOG_FATAL, "Shutting down after failure" );
 		exit(EXIT_FAILURE);
 	}
-	//after data is loaded check the research stats are valid
-	if (!checkResearchStats())
-	{
-		debug( LOG_FATAL, "Invalid Research Stats" );
-		debug( LOG_FATAL, "Shutting down after failure" );
-		exit(EXIT_FAILURE);
-	}
 
 	screen_StopBackDrop();
 

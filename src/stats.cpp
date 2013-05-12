@@ -25,6 +25,7 @@
  */
 #include <string.h>
 #include <algorithm>
+#include <QtCore/QHash>
 
 #include "lib/framework/frame.h"
 #include "lib/framework/strres.h"
@@ -87,6 +88,8 @@ UBYTE		*apCompLists[MAX_PLAYERS][COMP_NUMCOMPONENTS];
 //store for each players Structure states
 UBYTE		*apStructTypeLists[MAX_PLAYERS];
 
+QHash<QString, COMPONENT_STATS *> lookupStatPtr;
+
 static bool getMovementModel(const char *movementModel, MOVEMENT_MODEL *model);
 static void storeSpeedFactor(UDWORD terrainType, UDWORD propulsionType, UDWORD speedFactor);
 
@@ -111,11 +114,6 @@ static void updateMaxRepairStats(UWORD maxValue);
 static void updateMaxECMStats(UWORD maxValue);
 static void updateMaxBodyStats(UWORD maxBody, UWORD maxPower, UWORD maxArmour);
 static void updateMaxConstStats(UWORD maxValue);
-
-BASE_STATS::BASE_STATS(unsigned ref, std::string const &str)
-	: ref(ref)
-	, pName(allocateName(str.c_str()))
-{}
 
 static inline bool stringToEnumFindFunction(std::pair<char const *, unsigned> const &a, char const *b)
 {
@@ -145,16 +143,15 @@ static void deallocTerrainTable(void)
 
 /* Macro to allocate memory for a set of stats */
 #define ALLOC_STATS(numEntries, list, listSize, type) \
-	ASSERT( (numEntries) < REF_RANGE, \
-	        "allocStats: number of stats entries too large for " #type );\
-	if ((list))	free((list));	\
-	(list) = (type *)malloc(sizeof(type) * (numEntries)); \
+	ASSERT((numEntries) < REF_RANGE, "Number of stats entries too large for " #type);\
+	if ((list))	delete [] (list);	\
+	(list) = new type[numEntries]; \
 	(listSize) = (numEntries); \
 	return true
 
 /*Macro to Deallocate stats*/
 #define STATS_DEALLOC(list, listSize) \
-	free((COMPONENT_STATS*)(list)); \
+	delete [] (list); \
 	listSize = 0; \
 	(list) = NULL
 
@@ -177,23 +174,17 @@ void statsInitVars(void)
 	                        maxPropulsionSpeed = 0;
 }
 
-static void allocateStatName(BASE_STATS *pStat, const char *Name)
-{
-	pStat->pName = allocateName(Name);
-}
-
 /* body stats need the extra list removing */
 static void deallocBodyStats(void)
 {
 	BODY_STATS *psStat;
-	UDWORD		inc;
 
-	for (inc = 0; inc < numBodyStats; inc++)
+	for (int inc = 0; inc < numBodyStats; inc++)
 	{
 		psStat = &asBodyStats[inc];
 		free(psStat->ppIMDList);
 	}
-	free(asBodyStats);
+	delete [] asBodyStats;
 	asBodyStats = NULL;
 	numBodyStats = 0;
 }
@@ -201,70 +192,19 @@ static void deallocBodyStats(void)
 /*Deallocate all the stats assigned from input data*/
 bool statsShutDown(void)
 {
+	lookupStatPtr.clear();
+
 	STATS_DEALLOC(asWeaponStats, numWeaponStats);
 	deallocBodyStats();
 	STATS_DEALLOC(asBrainStats, numBrainStats);
 	STATS_DEALLOC(asPropulsionStats, numPropulsionStats);
 	STATS_DEALLOC(asRepairStats, numRepairStats);
 	STATS_DEALLOC(asConstructStats, numConstructStats);
+	STATS_DEALLOC(asECMStats, numECMStats);
 	deallocPropulsionTypes();
 	deallocTerrainTable();
 
 	return true;
-}
-
-/* Macro to set the stats for a particular ref
- * The macro uses the ref number in the stats structure to
- * index the correct array entry
- */
-#define SET_STATS(stats, list, index, type, refStart) \
-	ASSERT( ((stats)->ref >= (refStart)) && ((stats)->ref < (refStart) + REF_RANGE), \
-	        "setStats: Invalid " #type " ref number" ); \
-	memcpy((list) + (index), (stats), sizeof(type))
-
-/*******************************************************************************
-*		Set stats functions
-*******************************************************************************/
-/* Set the stats for a particular weapon type */
-static void statsSetWeapon(WEAPON_STATS	*psStats, UDWORD index)
-{
-	SET_STATS(psStats, asWeaponStats, index, WEAPON_STATS, REF_WEAPON_START);
-}
-/* Set the stats for a particular body type */
-static void statsSetBody(BODY_STATS	*psStats, UDWORD index)
-{
-	SET_STATS(psStats, asBodyStats, index, BODY_STATS, REF_BODY_START);
-}
-/* Set the stats for a particular brain type */
-static void statsSetBrain(BRAIN_STATS	*psStats, UDWORD index)
-{
-	SET_STATS(psStats, asBrainStats, index, BRAIN_STATS, REF_BRAIN_START);
-}
-/* Set the stats for a particular power type */
-static void statsSetPropulsion(PROPULSION_STATS	*psStats, UDWORD index)
-{
-	SET_STATS(psStats, asPropulsionStats, index, PROPULSION_STATS,
-	        REF_PROPULSION_START);
-}
-/* Set the stats for a particular sensor type */
-static void statsSetSensor(SENSOR_STATS	*psStats, UDWORD index)
-{
-	SET_STATS(psStats, asSensorStats, index, SENSOR_STATS, REF_SENSOR_START);
-}
-/* Set the stats for a particular ecm type */
-static void statsSetECM(ECM_STATS	*psStats, UDWORD index)
-{
-	SET_STATS(psStats, asECMStats, index, ECM_STATS, REF_ECM_START);
-}
-/* Set the stats for a particular repair type */
-static void statsSetRepair(REPAIR_STATS	*psStats, UDWORD index)
-{
-	SET_STATS(psStats, asRepairStats, index, REPAIR_STATS, REF_REPAIR_START);
-}
-/* Set the stats for a particular construct type */
-static void statsSetConstruct(CONSTRUCT_STATS	*psStats, UDWORD index)
-{
-	SET_STATS(psStats, asConstructStats, index, CONSTRUCT_STATS, REF_CONSTRUCT_START);
 }
 
 /* Return the number of newlines in a file buffer */
@@ -330,16 +270,6 @@ bool statsAllocConstruct(UDWORD	numStats)
 	ALLOC_STATS(numStats, asConstructStats, numConstructStats, CONSTRUCT_STATS);
 }
 
-const char *getStatName(const void *Stat)
-{
-	const BASE_STATS *const psStats = (const BASE_STATS *)Stat;
-	ASSERT(psStats->pName, "No pName for stats!");
-	return getName(psStats->pName);
-}
-
-
-
-
 /*******************************************************************************
 *		Load stats functions
 *******************************************************************************/
@@ -357,33 +287,37 @@ static iIMDShape *statsGetIMD(WzConfig &ini, BASE_STATS *psStats, QString key)
 	return retval;
 }
 
+void loadCompStats(WzConfig &ini, COMPONENT_STATS *psStats, int index)
+{
+	psStats->name = ini.value("name").toString();
+	psStats->id = ini.group();
+	psStats->buildPower = ini.value("buildPower", 0).toUInt();
+	psStats->buildPoints = ini.value("buildPoints", 0).toUInt();
+	psStats->index = index;
+	ASSERT(!lookupStatPtr.contains(psStats->id), "Duplicate ID found! (%s)", getID(psStats));
+	lookupStatPtr.insert(psStats->id, psStats);
+}
+
 /*Load the weapon stats from the file exported from Access*/
 bool loadWeaponStats(const char *pFileName)
 {
-	WEAPON_STATS	sStats, * const psStats = &sStats;
 	UDWORD			i, surfaceToAir;
 
 	WzConfig ini(pFileName, WzConfig::ReadOnlyAndRequired);
 	QStringList list = ini.childGroups();
-	if (!statsAllocWeapons(list.size()))
-	{
-		return false;
-	}
+	statsAllocWeapons(list.size());
 	// Hack to make sure ZNULLWEAPON is always first in list
 	int nullweapon = list.indexOf("ZNULLWEAPON");
 	ASSERT_OR_RETURN(false, nullweapon >= 0, "ZNULLWEAPON is mandatory");
-	if (nullweapon > 0)
-	{
-		list.swap(nullweapon, 0);
-	}
-
+	list.swap(nullweapon, 0);
 	for (i = 0; i < list.size(); ++i)
 	{
-		ini.beginGroup(list[i]);
-		memset(psStats, 0, sizeof(WEAPON_STATS));
+		WEAPON_STATS *psStats = &asWeaponStats[i];
 
-		psStats->buildPower = ini.value("buildPower", 0).toUInt();
-		psStats->buildPoints = ini.value("buildPoints", 0).toUInt();
+		ini.beginGroup(list[i]);
+		loadCompStats(ini, psStats, i);
+		psStats->compType = COMP_WEAPON;
+
 		psStats->weight = ini.value("weight", 0).toUInt();
 		psStats->body = ini.value("body", 0).toUInt();
 		psStats->radiusLife = ini.value("radiusLife", 0).toUInt();
@@ -429,7 +363,6 @@ bool loadWeaponStats(const char *pFileName)
 
 		ASSERT(psStats->flightSpeed > 0, "Invalid flight speed for %s", list[i].toUtf8().constData());
 
-		allocateStatName((BASE_STATS *)psStats, list[i].toUtf8().constData());
 		psStats->ref = REF_WEAPON_START + i;
 
 		//get the IMD for the component
@@ -558,9 +491,6 @@ bool loadWeaponStats(const char *pFileName)
 		psStats->iAudioFireID = NO_SOUND;
 		psStats->iAudioImpactID = NO_SOUND;
 
-		//save the stats
-		statsSetWeapon(psStats, i);
-
 		// Set the max stat values for the design screen
 		if (psStats->designable)
 		{
@@ -579,24 +509,22 @@ bool loadWeaponStats(const char *pFileName)
 /*Load the Body stats from the file exported from Access*/
 bool loadBodyStats(const char *pFileName)
 {
-	BODY_STATS sStats, * const psStats = &sStats;
 	WzConfig ini(pFileName, WzConfig::ReadOnlyAndRequired);
 	QStringList list = ini.childGroups();
 	statsAllocBody(list.size());
 	// Hack to make sure ZNULLBODY is always first in list
 	int nullbody = list.indexOf("ZNULLBODY");
 	ASSERT_OR_RETURN(false, nullbody >= 0, "ZNULLBODY is mandatory");
-	if (nullbody > 0)
-	{
-		list.swap(nullbody, 0);
-	}
+	list.swap(nullbody, 0);
 	for (int i = 0; i < list.size(); ++i)
 	{
+		BODY_STATS *psStats = &asBodyStats[i];
+
 		ini.beginGroup(list[i]);
-		memset(psStats, 0, sizeof(*psStats));
+		loadCompStats(ini, psStats, i);
+		psStats->compType = COMP_BODY;
+
 		psStats->weight = ini.value("weight", 0).toInt();
-		psStats->buildPower = ini.value("buildPower", 0).toInt();
-		psStats->buildPoints = ini.value("buildPoints", 0).toInt();
 		psStats->body = ini.value("hitpoints").toInt();
 		psStats->weaponSlots = ini.value("weaponSlots").toInt();
 		psStats->designable = ini.value("designable", false).toBool();
@@ -647,9 +575,6 @@ bool loadBodyStats(const char *pFileName)
 
 		ini.endGroup();
 
-		allocateStatName((BASE_STATS *)psStats, list[i].toUtf8().constData());
-		statsSetBody(psStats, i);	// save the stats
-
 		//set the max stat values for the design screen
 		if (psStats->designable)
 		{
@@ -666,42 +591,36 @@ bool loadBodyStats(const char *pFileName)
 /*Load the Brain stats from the file exported from Access*/
 bool loadBrainStats(const char *pFileName)
 {
-	BRAIN_STATS sStats, * const psStats = &sStats;
 	WzConfig ini(pFileName, WzConfig::ReadOnlyAndRequired);
 	QStringList list = ini.childGroups();
 	statsAllocBrain(list.size());
 	// Hack to make sure ZNULLBRAIN is always first in list
 	int nullbrain = list.indexOf("ZNULLBRAIN");
 	ASSERT_OR_RETURN(false, nullbrain >= 0, "ZNULLBRAIN is mandatory");
-	if (nullbrain > 0)
-	{
-		list.swap(nullbrain, 0);
-	}
+	list.swap(nullbrain, 0);
 	for (int i = 0; i < list.size(); ++i)
 	{
-		ini.beginGroup(list[i]);
-		memset(psStats, 0, sizeof(BRAIN_STATS));
+		BRAIN_STATS *psStats = &asBrainStats[i];
 
-		psStats->buildPower = ini.value("buildPower", 0).toInt();
-		psStats->buildPoints = ini.value("buildPoints", 0).toInt();
+		ini.beginGroup(list[i]);
+		loadCompStats(ini, psStats, i);
+		psStats->compType = COMP_BRAIN;
+
 		psStats->weight = ini.value("weight", 0).toInt();
 		psStats->maxDroids = ini.value("maxDroids").toInt();
 		psStats->maxDroidsMult = ini.value("maxDroidsMult").toInt();
 		psStats->ref = REF_BRAIN_START + i;
-		allocateStatName((BASE_STATS *)psStats, list[i].toUtf8().constData());
 
 		// check weapon attached
 		psStats->psWeaponStat = NULL;
 		if (ini.contains("turret"))
 		{
-			int weapon = getCompFromName(COMP_WEAPON, ini.value("turret").toString().toUtf8().constData());
-			ASSERT_OR_RETURN(false, weapon >= 0, "Unable to find weapon for brain %s", psStats->pName);
+			int weapon = getCompFromName(COMP_WEAPON, ini.value("turret").toString());
+			ASSERT_OR_RETURN(false, weapon >= 0, "Unable to find weapon for brain %s", getStatName(psStats));
 			psStats->psWeaponStat = asWeaponStats + weapon;
 		}
 		psStats->designable = ini.value("designable", false).toBool();
 		ini.endGroup();
-		// save the stats
-		statsSetBrain(psStats, i);
 	}
 	return true;
 }
@@ -758,23 +677,21 @@ bool getPropulsionType(const char *typeName, PROPULSION_TYPE *type)
 /*Load the Propulsion stats from the file exported from Access*/
 bool loadPropulsionStats(const char *pFileName)
 {
-	PROPULSION_STATS sStats, *const psStats = &sStats;
 	WzConfig ini(pFileName, WzConfig::ReadOnlyAndRequired);
 	QStringList list = ini.childGroups();
 	statsAllocPropulsion(list.size());
 	// Hack to make sure ZNULLPROP is always first in list
 	int nullprop = list.indexOf("ZNULLPROP");
 	ASSERT_OR_RETURN(false, nullprop >= 0, "ZNULLPROP is mandatory");
-	if (nullprop > 0)
-	{
-		list.swap(nullprop, 0);
-	}
+	list.swap(nullprop, 0);
 	for (int i = 0; i < list.size(); ++i)
 	{
+		PROPULSION_STATS *psStats = &asPropulsionStats[i];
+
 		ini.beginGroup(list[i]);
-		memset(psStats, 0, sizeof(*psStats));
-		psStats->buildPower = ini.value("buildPower").toInt();
-		psStats->buildPoints = ini.value("buildPoints").toInt();
+		loadCompStats(ini, psStats, i);
+		psStats->compType = COMP_PROPULSION;
+
 		psStats->weight = ini.value("weight").toInt();
 		psStats->body = ini.value("hitpoints").toInt();
 		psStats->maxSpeed = ini.value("speed").toInt();
@@ -794,10 +711,6 @@ bool loadPropulsionStats(const char *pFileName)
 			return false;
 		}
 		ini.endGroup();
-
-		allocateStatName((BASE_STATS *)psStats, list[i].toUtf8().constData());
-		// save the stats
-		statsSetPropulsion(psStats, i);
 
 		// set the max stat values for the design screen
 		if (psStats->designable)
@@ -834,27 +747,21 @@ bool loadPropulsionStats(const char *pFileName)
 /*Load the Sensor stats from the file exported from Access*/
 bool loadSensorStats(const char *pFileName)
 {
-	SENSOR_STATS sStats, * const psStats = &sStats;
 	WzConfig ini(pFileName, WzConfig::ReadOnlyAndRequired);
 	QStringList list = ini.childGroups();
-	if (!statsAllocSensor(list.size()))
-	{
-		return false;
-	}
+	statsAllocSensor(list.size());
 	// Hack to make sure ZNULLSENSOR is always first in list
 	int nullsensor = list.indexOf("ZNULLSENSOR");
 	ASSERT_OR_RETURN(false, nullsensor >= 0, "ZNULLSENSOR is mandatory");
-	if (nullsensor > 0)
-	{
-		list.swap(nullsensor, 0);
-	}
-
+	list.swap(nullsensor, 0);
 	for (int i = 0; i < list.size(); ++i)
 	{
+		SENSOR_STATS *psStats = &asSensorStats[i];
+
 		ini.beginGroup(list[i]);
-		memset(psStats, 0, sizeof(SENSOR_STATS));
-		psStats->buildPower = ini.value("buildPower", 0).toInt();
-		psStats->buildPoints = ini.value("buildPoints", 0).toInt();
+		loadCompStats(ini, psStats, i);
+		psStats->compType = COMP_SENSOR;
+
 		psStats->weight = ini.value("weight", 0).toInt();
 		psStats->body = ini.value("bodyPoints", 0).toInt();
 		psStats->base.range = ini.value("range").toInt();
@@ -865,7 +772,6 @@ bool loadSensorStats(const char *pFileName)
 		psStats->time = ini.value("time").toInt();
 		psStats->designable = ini.value("designable", false).toBool();
 
-		allocateStatName((BASE_STATS *)psStats, list[i].toUtf8().constData());
 		psStats->ref = REF_SENSOR_START + i;
 
 		QString location = ini.value("location").toString();
@@ -918,8 +824,6 @@ bool loadSensorStats(const char *pFileName)
 		psStats->pMountGraphic = statsGetIMD(ini, psStats, "mountModel");
 
 		ini.endGroup();
-		//save the stats
-		statsSetSensor(psStats, i);
 
 		// set the max stat values for the design screen
 		if (psStats->designable)
@@ -935,27 +839,21 @@ bool loadSensorStats(const char *pFileName)
 /*Load the ECM stats from the file exported from Access*/
 bool loadECMStats(const char *pFileName)
 {
-	ECM_STATS sStats, * const psStats = &sStats;
 	WzConfig ini(pFileName, WzConfig::ReadOnlyAndRequired);
 	QStringList list = ini.childGroups();
-	if (!statsAllocECM(list.size()))
-	{
-		return false;
-	}
+	statsAllocECM(list.size());
 	// Hack to make sure ZNULLECM is always first in list
 	int nullecm = list.indexOf("ZNULLECM");
 	ASSERT_OR_RETURN(false, nullecm >= 0, "ZNULLECM is mandatory");
-	if (nullecm > 0)
-	{
-		list.swap(nullecm, 0);
-	}
+	list.swap(nullecm, 0);
 	for (int i = 0; i < list.size(); ++i)
 	{
-		ini.beginGroup(list[i]);
-		memset(psStats, 0, sizeof(ECM_STATS));
+		ECM_STATS *psStats = &asECMStats[i];
 
-		psStats->buildPower = ini.value("buildPower", 0).toInt();
-		psStats->buildPoints = ini.value("buildPoints", 0).toInt();
+		ini.beginGroup(list[i]);
+		loadCompStats(ini, psStats, i);
+		psStats->compType = COMP_ECM;
+
 		psStats->weight = ini.value("weight", 0).toInt();
 		psStats->body = ini.value("body", 0).toInt();
 		psStats->base.range = ini.value("range").toInt();
@@ -965,7 +863,6 @@ bool loadECMStats(const char *pFileName)
 		}
 		psStats->designable = ini.value("designable", false).toBool();
 
-		allocateStatName((BASE_STATS *)psStats, list[i].toUtf8().constData());
 		psStats->ref = REF_ECM_START + i;
 
 		QString location = ini.value("location").toString();
@@ -987,8 +884,6 @@ bool loadECMStats(const char *pFileName)
 		psStats->pMountGraphic = statsGetIMD(ini, psStats, "mountModel");
 
 		ini.endGroup();
-		//save the stats
-		statsSetECM(psStats, i);
 
 		// Set the max stat values for the design screen
 		if (psStats->designable)
@@ -1003,28 +898,21 @@ bool loadECMStats(const char *pFileName)
 /*Load the Repair stats from the file exported from Access*/
 bool loadRepairStats(const char *pFileName)
 {
-	REPAIR_STATS sStats, * const psStats = &sStats;
 	WzConfig ini(pFileName, WzConfig::ReadOnlyAndRequired);
 	QStringList list = ini.childGroups();
-	if (!statsAllocRepair(list.size()))
-	{
-		return false;
-	}
+	statsAllocRepair(list.size());
 	// Hack to make sure ZNULLREPAIR is always first in list
 	int nullrepair = list.indexOf("ZNULLREPAIR");
 	ASSERT_OR_RETURN(false, nullrepair >= 0, "ZNULLREPAIR is mandatory");
-	if (nullrepair > 0)
-	{
-		list.swap(nullrepair, 0);
-	}
-
+	list.swap(nullrepair, 0);
 	for (int i = 0; i < list.size(); ++i)
 	{
-		ini.beginGroup(list[i]);
-		memset(psStats, 0, sizeof(REPAIR_STATS));
+		REPAIR_STATS *psStats = &asRepairStats[i];
 
-		psStats->buildPower = ini.value("buildPower", 0).toInt();
-		psStats->buildPoints = ini.value("buildPoints", 0).toInt();
+		ini.beginGroup(list[i]);
+		loadCompStats(ini, psStats, i);
+		psStats->compType = COMP_REPAIRUNIT;
+
 		psStats->weight = ini.value("weight", 0).toInt();
 		psStats->base.repairPoints = ini.value("repairPoints").toInt();
 		for (int j = 0; j < MAX_PLAYERS; j++)
@@ -1034,7 +922,6 @@ bool loadRepairStats(const char *pFileName)
 		psStats->time = ini.value("time", 0).toInt() * WEAPON_TIME;
 		psStats->designable = ini.value("designable", false).toBool();
 
-		allocateStatName((BASE_STATS *)psStats, list[i].toUtf8().constData());
 		psStats->ref = REF_REPAIR_START + i;
 
 		QString location = ini.value("location").toString();
@@ -1059,8 +946,6 @@ bool loadRepairStats(const char *pFileName)
 		psStats->pMountGraphic = statsGetIMD(ini, psStats, "mountModel");
 
 		ini.endGroup();
-		//save the stats
-		statsSetRepair(psStats, i);
 
 		//set the max stat values for the design screen
 		if (psStats->designable)
@@ -1068,7 +953,6 @@ bool loadRepairStats(const char *pFileName)
 			setMaxRepairPoints(psStats->base.repairPoints);
 			setMaxComponentWeight(psStats->weight);
 		}
-
 	}
 	return true;
 }
@@ -1076,27 +960,21 @@ bool loadRepairStats(const char *pFileName)
 /*Load the Construct stats from the file exported from Access*/
 bool loadConstructStats(const char *pFileName)
 {
-	CONSTRUCT_STATS sStats, * const psStats = &sStats;
 	WzConfig ini(pFileName, WzConfig::ReadOnlyAndRequired);
 	QStringList list = ini.childGroups();
-	if (!statsAllocConstruct(list.size()))
-	{
-		return false;
-	}
+	statsAllocConstruct(list.size());
 	// Hack to make sure ZNULLCONSTRUCT is always first in list
 	int nullconstruct = list.indexOf("ZNULLCONSTRUCT");
 	ASSERT_OR_RETURN(false, nullconstruct >= 0, "ZNULLCONSTRUCT is mandatory");
-	if (nullconstruct > 0)
-	{
-		list.swap(nullconstruct, 0);
-	}
+	list.swap(nullconstruct, 0);
 	for (int i = 0; i < list.size(); ++i)
 	{
-		ini.beginGroup(list[i]);
-		memset(psStats, 0, sizeof(CONSTRUCT_STATS));
+		CONSTRUCT_STATS *psStats = &asConstructStats[i];
 
-		psStats->buildPower = ini.value("buildPower", 0).toInt();
-		psStats->buildPoints = ini.value("buildPoints", 0).toInt();
+		ini.beginGroup(list[i]);
+		loadCompStats(ini, psStats, i);
+		psStats->compType = COMP_CONSTRUCT;
+
 		psStats->weight = ini.value("weight", 0).toInt();
 		psStats->body = ini.value("bodyPoints", 0).toInt();
 		psStats->base.constructPoints = ini.value("constructPoints").toInt();
@@ -1105,8 +983,6 @@ bool loadConstructStats(const char *pFileName)
 			psStats->upgrade[j].constructPoints = psStats->base.constructPoints;
 		}
 		psStats->designable = ini.value("designable", false).toBool();
-
-		allocateStatName((BASE_STATS *)psStats, list[i].toUtf8().constData());
 		psStats->ref = REF_CONSTRUCT_START + i;
 
 		//get the IMD for the component
@@ -1114,8 +990,6 @@ bool loadConstructStats(const char *pFileName)
 		psStats->pMountGraphic = statsGetIMD(ini, psStats, "mountModel");
 
 		ini.endGroup();
-		//save the stats
-		statsSetConstruct(psStats, i);
 
 		// Set the max stat values for the design screen
 		if (psStats->designable)
@@ -1278,7 +1152,7 @@ bool loadBodyPropulsionIMDs(const char *pFileName)
 		for (numStats = 0; numStats < numBodyStats; ++numStats)
 		{
 			psBodyStat = &asBodyStats[numStats];
-			if (list[i].compare(psBodyStat->pName) == 0)
+			if (list[i].compare(psBodyStat->id) == 0)
 			{
 				break;
 			}
@@ -1294,7 +1168,7 @@ bool loadBodyPropulsionIMDs(const char *pFileName)
 			for (numStats = 0; numStats < numPropulsionStats; numStats++)
 			{
 				PROPULSION_STATS *psPropulsionStat = &asPropulsionStats[numStats];
-				if (keys[j].compare(psPropulsionStat->pName) == 0)
+				if (keys[j].compare(psPropulsionStat->id) == 0)
 				{
 					break;
 				}
@@ -1393,7 +1267,7 @@ bool loadWeaponSounds(const char *pFileName)
 			}
 			for (inc = 0; inc < (SDWORD)numWeaponStats; ++inc)
 			{
-				if (list[i].compare(asWeaponStats[inc].pName) == 0)
+				if (list[i].compare(asWeaponStats[inc].id) == 0)
 				{
 					asWeaponStats[inc].iAudioFireID = weaponSoundID;
 					asWeaponStats[inc].iAudioImpactID = explosionSoundID;
@@ -1692,97 +1566,23 @@ unsigned int componentType(const char *pType)
 //used in Scripts
 SDWORD	getCompFromResName(UDWORD compType, const char *pName)
 {
-	return getCompFromName(compType, pName);
+	return getCompFromName((COMPONENT_TYPE)compType, pName);
 }
 
-void getStatsDetails(UDWORD compType, BASE_STATS **ppsStats, UDWORD *pnumStats, UDWORD *pstatSize)
+/// Get the component index for a stat based on the name, and verify correct type
+int getCompFromName(COMPONENT_TYPE compType, const QString &name)
 {
-
-	switch (compType)
-	{
-	case COMP_BODY:
-		*ppsStats = (BASE_STATS *)asBodyStats;
-		*pnumStats = numBodyStats;
-		*pstatSize = sizeof(BODY_STATS);
-		break;
-	case COMP_BRAIN:
-		*ppsStats = (BASE_STATS *)asBrainStats;
-		*pnumStats = numBrainStats;
-		*pstatSize = sizeof(BRAIN_STATS);
-		break;
-	case COMP_PROPULSION:
-		*ppsStats = (BASE_STATS *)asPropulsionStats;
-		*pnumStats = numPropulsionStats;
-		*pstatSize = sizeof(PROPULSION_STATS);
-		break;
-	case COMP_REPAIRUNIT:
-		*ppsStats = (BASE_STATS *)asRepairStats;
-		*pnumStats = numRepairStats;
-		*pstatSize = sizeof(REPAIR_STATS);
-		break;
-	case COMP_ECM:
-		*ppsStats = (BASE_STATS *)asECMStats;
-		*pnumStats = numECMStats;
-		*pstatSize = sizeof(ECM_STATS);
-		break;
-	case COMP_SENSOR:
-		*ppsStats = (BASE_STATS *)asSensorStats;
-		*pnumStats = numSensorStats;
-		*pstatSize = sizeof(SENSOR_STATS);
-		break;
-	case COMP_CONSTRUCT:
-		*ppsStats = (BASE_STATS *)asConstructStats;
-		*pnumStats = numConstructStats;
-		*pstatSize = sizeof(CONSTRUCT_STATS);
-		break;
-	case COMP_WEAPON:
-		*ppsStats = (BASE_STATS *)asWeaponStats;
-		*pnumStats = numWeaponStats;
-		*pstatSize = sizeof(WEAPON_STATS);
-		break;
-	default:
-		debug(LOG_FATAL, "Invalid component type");
-	}
+	COMPONENT_STATS *psComp = lookupStatPtr.value(name, NULL);
+	ASSERT_OR_RETURN(-1, psComp, "No such component [%s] found", name.toUtf8().constData());
+	ASSERT_OR_RETURN(-1, compType == psComp->compType, "Wrong component type for %s", name.toUtf8().constData());
+	return psComp->index;
 }
 
-
-//get the component Inc for a stat based on the name and type
-//returns -1 if record not found
-SDWORD getCompFromName(UDWORD compType, const char *pName)
+/// Get the component for a stat based on the name alone.
+/// Returns NULL if record not found
+COMPONENT_STATS *getCompStatsFromName(const QString &name)
 {
-	BASE_STATS	*psStats = NULL;
-	UDWORD		numStats = 0, count, statSize = 0;
-
-	getStatsDetails(compType, &psStats, &numStats, &statSize);
-
-	//find the stat with the same name
-	for (count = 0; count < numStats; count++)
-	{
-		if (!strcmp(pName, psStats->pName))
-		{
-			return count;
-		}
-		psStats = (BASE_STATS *)((char *)psStats + statSize);
-	}
-
-	//return -1 if record not found or an invalid component type is passed in
-	return -1;
-}
-
-/*return the name to display for the interface - valid for OBJECTS and STATS*/
-const char *getName(const char *pNameID)
-{
-	/* See if the name has a string resource associated with it by trying
-	 * to get the string resource.
-	 */
-	const char *const name = strresGetString(psStringRes, pNameID);
-	if (!name)
-	{
-		debug(LOG_ERROR, "Unable to find string resource for %s", pNameID);
-		return "Name Unknown";
-	}
-
-	return name;
+	return lookupStatPtr.value(name, NULL);
 }
 
 /*sets the store to the body size based on the name passed in - returns false
@@ -2015,25 +1815,6 @@ bool getWeaponClass(QString weaponClassStr, WEAPON_CLASS *weaponClass)
 	};
 	return true;
 }
-
-
-/*
-looks up the name to get the resource associated with it - or allocates space
-and stores the name. Eventually ALL names will be 'resourced' for translation
-*/
-char *allocateName(const char *name)
-{
-	/* Check whether the given string has a string resource associated with
-	 * it.
-	 */
-	if (!strresGetString(psStringRes, name))
-	{
-		ASSERT(false, "Unable to find string resource for %s", name);
-		return NULL;
-	}
-	return strdup(name);
-}
-
 
 /*Access functions for the upgradeable stats of a weapon*/
 int weaponFirePause(const WEAPON_STATS *psStats, int player)

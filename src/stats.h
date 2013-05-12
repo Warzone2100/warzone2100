@@ -182,7 +182,8 @@ extern UDWORD statRefStart(UDWORD stat);
 /*Returns the component type based on the string - used for reading in data */
 extern UDWORD componentType(const char* pType);
 //get the component Inc for a stat based on the name
-extern SDWORD getCompFromName(UDWORD compType, const char *pName);
+int getCompFromName(COMPONENT_TYPE compType, const QString &name);
+COMPONENT_STATS *getCompStatsFromName(const QString &name);
 //get details for given component type
 extern void getStatsDetails(UDWORD compType, BASE_STATS **ppsStats, UDWORD *pnumStats, UDWORD *pstatSize);
 //get the component Inc for a stat based on the Resource name held in Names.txt
@@ -190,16 +191,9 @@ extern SDWORD getCompFromResName(UDWORD compType, const char *pName);
 /*returns the weapon sub class based on the string name passed in */
 extern bool getWeaponSubClass(const char* subClass, WEAPON_SUBCLASS* wclass);
 const char *getWeaponSubClass(WEAPON_SUBCLASS wclass);
-/*either gets the name associated with the resource (if one) or allocates space and copies pName*/
-extern char* allocateName(const char* name);
-/*return the name to display for the interface - valid for OBJECTS and STATS*/
-extern const char* getName(const char *pNameID);
 /*sets the store to the body size based on the name passed in - returns false
 if doesn't compare with any*/
 extern bool getBodySize(const char *pSize, BODY_SIZE *pStore);
-
-// Pass in a stat and get its name
-extern const char* getStatName(const void * pStat);
 
 /**
  * Determines the propulsion type indicated by the @c typeName string passed

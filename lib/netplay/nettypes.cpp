@@ -26,6 +26,7 @@
 #include "lib/framework/wzglobal.h"
 #include "lib/framework/string_ext.h"
 #include <string.h>
+#include <QtCore/QStringList>
 
 #ifndef WZ_OS_WIN
 #include <arpa/inet.h>
@@ -620,7 +621,6 @@ void NETbool(bool *bp)
 	*bp = !!i;
 }
 
-
 /** Sends or receives a string to or from the current network package.
  *  \param str    When encoding a packet this is the (NUL-terminated string to
  *                be sent in the current network package. When decoding this
@@ -661,6 +661,31 @@ void NETstring(char *str, uint16_t maxlen)
 	{
 		// NUL-terminate
 		str[len] = '\0';
+	}
+}
+
+void NETqstring(QString &str)
+{
+	uint16_t len = str.size();
+
+	queueAuto(len);
+
+	if (NETgetPacketDir() == PACKET_DECODE)
+	{
+		str.resize(len);
+	}
+	for (unsigned i = 0; i < len; ++i)
+	{
+		uint16_t c;
+		if (NETgetPacketDir() == PACKET_ENCODE)
+		{
+			c = str[i].unicode();
+		}
+		queueAuto(c);
+		if (NETgetPacketDir() == PACKET_DECODE)
+		{
+			str[i] = QChar(c);
+		}
 	}
 }
 

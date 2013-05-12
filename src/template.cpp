@@ -94,7 +94,7 @@ bool researchedTemplate(DROID_TEMPLATE *psCurr, int player, bool allowRedundant,
 	bool researchedEverything = resBody && resBrain && resProp && resSensor && resEcm && resRepair && resConstruct;
 	if (verbose && !researchedEverything)
 	{
-		debug(LOG_ERROR, "%s : not researched : body=%d brai=%d prop=%d sensor=%d ecm=%d rep=%d con=%d", psCurr->aName,
+		debug(LOG_ERROR, "%s : not researched : body=%d brai=%d prop=%d sensor=%d ecm=%d rep=%d con=%d", getName(psCurr),
 		      (int)resBody, (int)resBrain, (int)resProp, (int)resSensor, (int)resEcm, (int)resRepair, (int)resConstruct);
 	}
 	unsigned ignoreFirstWeapon = psCurr->asParts[COMP_BRAIN] != 0? 1 : 0;
@@ -103,7 +103,7 @@ bool researchedTemplate(DROID_TEMPLATE *psCurr, int player, bool allowRedundant,
 		researchedEverything = researchedWeap(psCurr, player, weapIndex, allowRedundant);
 		if (!researchedEverything && verbose)
 		{
-			debug(LOG_ERROR, "%s : not researched weapon %u", psCurr->aName, weapIndex);
+			debug(LOG_ERROR, "%s : not researched weapon %u", getName(psCurr), weapIndex);
 		}
 	}
 	return researchedEverything;
@@ -122,19 +122,18 @@ bool initTemplates()
 	{
 		ini.beginGroup(list[i]);
 		DROID_TEMPLATE design;
-		design.pName = NULL;
 		design.droidType = (DROID_TYPE)ini.value("droidType").toInt();
 		design.multiPlayerID = generateNewObjectId();
-		design.asParts[COMP_BODY] = getCompFromName(COMP_BODY, ini.value("body", QString("ZNULLBODY")).toString().toUtf8().constData());
-		design.asParts[COMP_BRAIN] = getCompFromName(COMP_BRAIN, ini.value("brain", QString("ZNULLBRAIN")).toString().toUtf8().constData());
-		design.asParts[COMP_PROPULSION] = getCompFromName(COMP_PROPULSION, ini.value("propulsion", QString("ZNULLPROP")).toString().toUtf8().constData());
-		design.asParts[COMP_REPAIRUNIT] = getCompFromName(COMP_REPAIRUNIT, ini.value("repair", QString("ZNULLREPAIR")).toString().toUtf8().constData());
-		design.asParts[COMP_ECM] = getCompFromName(COMP_ECM, ini.value("ecm", QString("ZNULLECM")).toString().toUtf8().constData());
-		design.asParts[COMP_SENSOR] = getCompFromName(COMP_SENSOR, ini.value("sensor", QString("ZNULLSENSOR")).toString().toUtf8().constData());
-		design.asParts[COMP_CONSTRUCT] = getCompFromName(COMP_CONSTRUCT, ini.value("construct", QString("ZNULLCONSTRUCT")).toString().toUtf8().constData());
-		design.asWeaps[0] = getCompFromName(COMP_WEAPON, ini.value("weapon/1", QString("ZNULLWEAPON")).toString().toUtf8().constData());
-		design.asWeaps[1] = getCompFromName(COMP_WEAPON, ini.value("weapon/2", QString("ZNULLWEAPON")).toString().toUtf8().constData());
-		design.asWeaps[2] = getCompFromName(COMP_WEAPON, ini.value("weapon/3", QString("ZNULLWEAPON")).toString().toUtf8().constData());
+		design.asParts[COMP_BODY] = getCompFromName(COMP_BODY, ini.value("body", QString("ZNULLBODY")).toString());
+		design.asParts[COMP_BRAIN] = getCompFromName(COMP_BRAIN, ini.value("brain", QString("ZNULLBRAIN")).toString());
+		design.asParts[COMP_PROPULSION] = getCompFromName(COMP_PROPULSION, ini.value("propulsion", QString("ZNULLPROP")).toString());
+		design.asParts[COMP_REPAIRUNIT] = getCompFromName(COMP_REPAIRUNIT, ini.value("repair", QString("ZNULLREPAIR")).toString());
+		design.asParts[COMP_ECM] = getCompFromName(COMP_ECM, ini.value("ecm", QString("ZNULLECM")).toString());
+		design.asParts[COMP_SENSOR] = getCompFromName(COMP_SENSOR, ini.value("sensor", QString("ZNULLSENSOR")).toString());
+		design.asParts[COMP_CONSTRUCT] = getCompFromName(COMP_CONSTRUCT, ini.value("construct", QString("ZNULLCONSTRUCT")).toString());
+		design.asWeaps[0] = getCompFromName(COMP_WEAPON, ini.value("weapon/1", QString("ZNULLWEAPON")).toString());
+		design.asWeaps[1] = getCompFromName(COMP_WEAPON, ini.value("weapon/2", QString("ZNULLWEAPON")).toString());
+		design.asWeaps[2] = getCompFromName(COMP_WEAPON, ini.value("weapon/3", QString("ZNULLWEAPON")).toString());
 		design.numWeaps = ini.value("weapons").toInt();
 		design.prefab = false;		// not AI template
 		design.stored = true;
@@ -163,7 +162,7 @@ bool initTemplates()
 		{
 			// Check if template is identical to a loaded template
 			if (psDestTemplate->droidType == design.droidType
-			    && strcmp(psDestTemplate->aName, design.aName) == 0
+			    && psDestTemplate->name.compare(design.name) == 0
 			    && psDestTemplate->numWeaps == design.numWeaps
 			    && psDestTemplate->asWeaps[0] == design.asWeaps[0]
 			    && psDestTemplate->asWeaps[1] == design.asWeaps[1]
@@ -208,34 +207,34 @@ bool storeTemplates()
 	{
 		if (!psCurr->stored) continue; // not stored
 		ini.beginGroup("template_" + QString::number(psCurr->multiPlayerID));
-		ini.setValue("name", psCurr->aName);
+		ini.setValue("name", psCurr->name);
 		ini.setValue("droidType", psCurr->droidType);
-		ini.setValue("body", (asBodyStats + psCurr->asParts[COMP_BODY])->pName);
-		ini.setValue("propulsion", (asPropulsionStats + psCurr->asParts[COMP_PROPULSION])->pName);
+		ini.setValue("body", (asBodyStats + psCurr->asParts[COMP_BODY])->id);
+		ini.setValue("propulsion", (asPropulsionStats + psCurr->asParts[COMP_PROPULSION])->id);
 		if (psCurr->asParts[COMP_BRAIN] != 0)
 		{
-			ini.setValue("brain", (asBrainStats + psCurr->asParts[COMP_BRAIN])->pName);
+			ini.setValue("brain", (asBrainStats + psCurr->asParts[COMP_BRAIN])->id);
 		}
 		if ((asRepairStats + psCurr->asParts[COMP_REPAIRUNIT])->location == LOC_TURRET) // avoid auto-repair...
 		{
-			ini.setValue("repair", (asRepairStats + psCurr->asParts[COMP_REPAIRUNIT])->pName);
+			ini.setValue("repair", (asRepairStats + psCurr->asParts[COMP_REPAIRUNIT])->id);
 		}
 		if ((asECMStats + psCurr->asParts[COMP_ECM])->location == LOC_TURRET)
 		{
-			ini.setValue("ecm", (asECMStats + psCurr->asParts[COMP_ECM])->pName);
+			ini.setValue("ecm", (asECMStats + psCurr->asParts[COMP_ECM])->id);
 		}
 		if ((asSensorStats + psCurr->asParts[COMP_SENSOR])->location == LOC_TURRET)
 		{
-			ini.setValue("sensor", (asSensorStats + psCurr->asParts[COMP_SENSOR])->pName);
+			ini.setValue("sensor", (asSensorStats + psCurr->asParts[COMP_SENSOR])->id);
 		}
 		if (psCurr->asParts[COMP_CONSTRUCT] != 0)
 		{
-			ini.setValue("construct", (asConstructStats + psCurr->asParts[COMP_CONSTRUCT])->pName);
+			ini.setValue("construct", (asConstructStats + psCurr->asParts[COMP_CONSTRUCT])->id);
 		}
 		ini.setValue("weapons", psCurr->numWeaps);
 		for (int j = 0; j < psCurr->numWeaps; j++)
 		{
-			ini.setValue("weapon/" + QString::number(j + 1), (asWeaponStats + psCurr->asWeaps[j])->pName);
+			ini.setValue("weapon/" + QString::number(j + 1), (asWeaponStats + psCurr->asWeaps[j])->id);
 		}
 		ini.endGroup();
 	}
@@ -249,7 +248,6 @@ bool shutdownTemplates()
 
 DROID_TEMPLATE::DROID_TEMPLATE()  // This constructor replaces a memset in scrAssembleWeaponTemplate(), not needed elsewhere.
 	: BASE_STATS(REF_TEMPLATE_START)
-	//, aName
 	//, asParts
 	, numWeaps(0)
 	//, asWeaps
@@ -260,7 +258,6 @@ DROID_TEMPLATE::DROID_TEMPLATE()  // This constructor replaces a memset in scrAs
 	, stored(false)
 	, enabled(false)
 {
-	aName[0] = '\0';
 	std::fill_n(asParts, DROID_MAXCOMP, 0);
 	std::fill_n(asWeaps, DROID_MAXWEAPS, 0);
 }
@@ -275,7 +272,8 @@ bool loadDroidTemplates(const char *filename)
 		ini.beginGroup(list[i]);
 		DROID_TEMPLATE design;
 		QString droidType = ini.value("type").toString();
-		design.pName = strdup(list[i].toUtf8().constData());
+		design.id = list[i];
+		design.name = ini.value("name").toString();
 		if (droidType == "PERSON") design.droidType = DROID_PERSON;
 		else if (droidType == "CYBORG") design.droidType = DROID_CYBORG;
 		else if (droidType == "CYBORG_SUPER") design.droidType = DROID_CYBORG_SUPER;
@@ -284,19 +282,19 @@ bool loadDroidTemplates(const char *filename)
 		else if (droidType == "TRANSPORTER") design.droidType = DROID_TRANSPORTER;
 		else if (droidType == "SUPERTRANSPORTER") design.droidType = DROID_SUPERTRANSPORTER;
 		else if (droidType == "DROID") design.droidType = DROID_DEFAULT;
-		else ASSERT(false, "No such droid type \"%s\" for %s", droidType.toUtf8().constData(), design.pName);
+		else ASSERT(false, "No such droid type \"%s\" for %s", droidType.toUtf8().constData(), getID(&design));
 		design.multiPlayerID = generateNewObjectId();
-		design.asParts[COMP_BODY] = getCompFromName(COMP_BODY, ini.value("compBody", "ZNULLBODY").toString().toUtf8().constData());
-		design.asParts[COMP_BRAIN] = getCompFromName(COMP_BRAIN, ini.value("compBrain", "ZNULLBRAIN").toString().toUtf8().constData());
-		design.asParts[COMP_REPAIRUNIT] = getCompFromName(COMP_REPAIRUNIT, ini.value("compRepair", "ZNULLREPAIR").toString().toUtf8().constData());
-		design.asParts[COMP_CONSTRUCT] = getCompFromName(COMP_CONSTRUCT, ini.value("compConstruct", "ZNULLCONSTRUCT").toString().toUtf8().constData());
-		design.asParts[COMP_ECM] = getCompFromName(COMP_ECM, ini.value("compECM", "ZNULLECM").toString().toUtf8().constData());
-		design.asParts[COMP_SENSOR] = getCompFromName(COMP_SENSOR, ini.value("compSensor", "ZNULLSENSOR").toString().toUtf8().constData());
-		design.asParts[COMP_PROPULSION] = getCompFromName(COMP_PROPULSION, ini.value("compPropulsion", "ZNULLPROP").toString().toUtf8().constData());
+		design.asParts[COMP_BODY] = getCompFromName(COMP_BODY, ini.value("compBody", "ZNULLBODY").toString());
+		design.asParts[COMP_BRAIN] = getCompFromName(COMP_BRAIN, ini.value("compBrain", "ZNULLBRAIN").toString());
+		design.asParts[COMP_REPAIRUNIT] = getCompFromName(COMP_REPAIRUNIT, ini.value("compRepair", "ZNULLREPAIR").toString());
+		design.asParts[COMP_CONSTRUCT] = getCompFromName(COMP_CONSTRUCT, ini.value("compConstruct", "ZNULLCONSTRUCT").toString());
+		design.asParts[COMP_ECM] = getCompFromName(COMP_ECM, ini.value("compECM", "ZNULLECM").toString());
+		design.asParts[COMP_SENSOR] = getCompFromName(COMP_SENSOR, ini.value("compSensor", "ZNULLSENSOR").toString());
+		design.asParts[COMP_PROPULSION] = getCompFromName(COMP_PROPULSION, ini.value("compPropulsion", "ZNULLPROP").toString());
 		QStringList weapons = ini.value("weapons").toStringList();
 		for (int j = 0; j < weapons.size(); j++)
 		{
-			design.asWeaps[j] = getCompFromName(COMP_WEAPON, weapons[j].toUtf8().constData());
+			design.asWeaps[j] = getCompFromName(COMP_WEAPON, weapons[j]);
 		}
 		design.numWeaps = weapons.size();
 		design.prefab = true;
@@ -304,7 +302,7 @@ bool loadDroidTemplates(const char *filename)
 		design.enabled = true;
 		bool available = ini.value("available", false).toBool();
 		char const *droidResourceName = getDroidResourceName(list[i].toUtf8().constData());
-		sstrcpy(design.aName, droidResourceName != NULL? droidResourceName : GetDefaultTemplateName(&design));
+		design.name = droidResourceName != NULL? droidResourceName : GetDefaultTemplateName(&design);
 		ini.endGroup();
 
 		for (int i = 0; i < MAX_PLAYERS; ++i)
@@ -324,26 +322,25 @@ bool loadDroidTemplates(const char *filename)
 					DROID_TEMPLATE *psCurr = &*it;
 					if (psCurr->multiPlayerID == design.multiPlayerID)
 					{
-						debug(LOG_ERROR, "Design id:%d (%s) *NOT* added to UI list (duplicate), player= %d", design.multiPlayerID, design.aName, i);
+						debug(LOG_ERROR, "Design id:%d (%s) *NOT* added to UI list (duplicate), player= %d", design.multiPlayerID, getName(&design), i);
 						break;
 					}
 				}
 				if (it == localTemplates.end())
 				{
-					debug(LOG_NEVER, "Design id:%d (%s) added to UI list, player =%d", design.multiPlayerID, design.aName, i);
+					debug(LOG_NEVER, "Design id:%d (%s) added to UI list, player =%d", design.multiPlayerID, getName(&design), i);
 					localTemplates.push_front(design);
-					localTemplates.front().pName = strdup(localTemplates.front().pName);
 				}
 			}
 			else if (!NetPlay.players[i].allocated)	// AI template
 			{
-				debug(LOG_NEVER, "AI (%d): %s id:%d enabled:%d", i, design.aName, design.multiPlayerID, design.enabled);
+				debug(LOG_NEVER, "AI (%d): %s id:%d enabled:%d", i, getName(&design), design.multiPlayerID, design.enabled);
 				design.prefab = true;  // prefabricated templates referenced from VLOs
 				addTemplateToList(&design, &apsDroidTemplates[i]);
 			}
 		}
-		debug(LOG_NEVER, "Droid template found, aName: %s, MP ID: %d, ref: %u, pname: %s, prefab: %s, type:%d (loading)",
-		      design.aName, design.multiPlayerID, design.ref, design.pName, design.prefab ? "yes":"no", design.droidType);
+		debug(LOG_NEVER, "Droid template found, Name: %s, MP ID: %d, ref: %u, ID: %s, prefab: %s, type:%d (loading)",
+		      getName(&design), design.multiPlayerID, design.ref, getID(&design), design.prefab ? "yes":"no", design.droidType);
 	}
 
 	return true;
@@ -360,16 +357,11 @@ bool droidTemplateShutDown(void)
 		for (pTemplate = apsDroidTemplates[player]; pTemplate != NULL; pTemplate = pNext)
 		{
 			pNext = pTemplate->psNext;
-			free(pTemplate->pName);
 			delete pTemplate;
 		}
 		apsDroidTemplates[player] = NULL;
 	}
 
-	for (std::list<DROID_TEMPLATE>::iterator i = localTemplates.begin(); i != localTemplates.end(); ++i)
-	{
-		free(i->pName);
-	}
 	localTemplates.clear();
 
 	return true;
@@ -387,8 +379,7 @@ DROID_TEMPLATE *getTemplateFromTranslatedNameNoPlayer(char const *pName)
 	{
 		for (DROID_TEMPLATE *psCurr = apsDroidTemplates[i]; psCurr != NULL; psCurr = psCurr->psNext)
 		{
-			const char *rName = psCurr->pName ? psCurr->pName : psCurr->aName;
-			if (strcmp(rName, pName) == 0)
+			if (psCurr->id.compare(pName) == 0)
 			{
 				return psCurr;
 			}
@@ -414,11 +405,6 @@ DROID_TEMPLATE* getTemplateFromMultiPlayerID(UDWORD multiPlayerID)
 		}
 	}
 	return NULL;
-}
-
-const char* getTemplateName(const DROID_TEMPLATE *psTemplate)
-{
-	return psTemplate->aName;
 }
 
 /*called when a Template is deleted in the Design screen*/

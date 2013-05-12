@@ -611,7 +611,7 @@ bool scrOrderDroidStatsLoc(void)
 	// HACK: FIXME: Looks like a script error in the player*.slo files
 	// buildOnExactLocation() which references previously destroyed buildings from
 	// _stat = rebuildStructStat[_count]  causes this.
-	if (strcmp(psStats->pName, "A0ADemolishStructure") == 0)
+	if (psStats->id.compare("A0ADemolishStructure") == 0)
 	{
 		// I don't feel like spamming a ASSERT here, we *know* it is a issue.
 		return true;
@@ -1612,7 +1612,7 @@ bool scrSkDoResearch(void)
 #if defined (DEBUG)
 		{
 			char	sTemp[128];
-			sprintf(sTemp, "[debug]player:%d starts topic: %s", player, asResearch[i].pName);
+			sprintf(sTemp, "[debug]player:%d starts topic: %s", player, getName(&asResearch[i]));
 			NETlogEntry(sTemp, SYNC_FLAG, 0);
 		}
 #endif

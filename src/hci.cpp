@@ -1476,7 +1476,7 @@ INT_RETVAL intRunWidgets(void)
 							// the fact that we're cheating ourselves a new
 							// structure.
 							sasprintf((char **)&msg, _("Player %u is cheating (debug menu) him/herself a new structure: %s."),
-							        selectedPlayer, psStructure->pStructureType->pName);
+							        selectedPlayer, getName(psStructure->pStructureType));
 							sendTextMessage(msg, true);
 							Cheated = true;
 						}
@@ -1487,7 +1487,7 @@ INT_RETVAL intRunWidgets(void)
 
 						// Send a text message to all players, notifying them of the fact that we're cheating ourselves a new feature.
 						sasprintf((char **)&msg, _("Player %u is cheating (debug menu) him/herself a new feature: %s."),
-						        selectedPlayer, psPositionStats->pName);
+						        selectedPlayer, getName(psPositionStats));
 						sendTextMessage(msg, true);
 						Cheated = true;
 						// Notify the other hosts that we've just built ourselves a feature
@@ -3092,8 +3092,6 @@ static bool intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected, 
 	sBarInit2.x = STAT_POWERBARX;
 	sBarInit2.y = STAT_POWERBARY;
 	sBarInit2.size = 50;
-	// don't set the tip cos we haven't got a suitable text string at this point - 2/2/99
-	sBarInit2.pTip = NULL;
 
 	W_LABINIT sLabInit;
 	sLabInit.id = IDOBJ_COUNTSTART;
@@ -3221,11 +3219,11 @@ static bool intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected, 
 			default:
 				ASSERT(false, "intAddObject: invalid structure type");
 			}
-			objButton->setTip(getName(((STRUCTURE *)psObj)->pStructureType->pName));
+			objButton->setTip(getName(((STRUCTURE *)psObj)->pStructureType));
 			break;
 
 		case OBJ_FEATURE:
-			objButton->setTip(getName(((FEATURE *)psObj)->psStats->pName));
+			objButton->setTip(getName(((FEATURE *)psObj)->psStats));
 			break;
 
 		default:
@@ -3306,17 +3304,7 @@ static bool intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected, 
 
 		if (psStats != NULL)
 		{
-			// If it's a droid the name might not be a stringID
-			if (psStats->ref >= REF_TEMPLATE_START &&
-			    psStats->ref < REF_TEMPLATE_START + REF_RANGE)
-			{
-				statButton->setTip(getTemplateName((DROID_TEMPLATE *)psStats));
-			}
-			else
-			{
-				statButton->setTip(getName(psStats->pName));
-			}
-
+			statButton->setTip(getName(psStats));
 			statButton->setObjectAndStats(psObj, psStats);
 		}
 		else if ((psObj->type == OBJ_DROID) && (((DROID *)psObj)->droidType == DROID_COMMAND))
@@ -3606,17 +3594,7 @@ static void intSetStats(UDWORD id, BASE_STATS *psStats)
 
 	if (psStats)
 	{
-		// If it's a droid the name might not be a stringID
-		if (psStats->ref >= REF_TEMPLATE_START &&
-		    psStats->ref < REF_TEMPLATE_START + REF_RANGE)
-		{
-			statButton->setTip(getTemplateName((DROID_TEMPLATE *)psStats));
-		}
-		else
-		{
-			statButton->setTip(getName(psStats->pName));
-		}
-
+		statButton->setTip(getName(psStats));
 		statButton->setObjectAndStats(intGetObject(id), psStats);
 
 		// Add a text label for the size of the production run.
@@ -3823,18 +3801,7 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 		statList->addWidgetToLayout(button);
 
 		BASE_STATS *Stat = ppsStatsList[i];
-		// If it's a droid the name might not be a stringID
-		QString tipString;
-		if (Stat->ref >= REF_TEMPLATE_START &&
-		    Stat->ref < REF_TEMPLATE_START + REF_RANGE)
-		{
-			tipString = QString::fromUtf8(getTemplateName((DROID_TEMPLATE *)ppsStatsList[i]));
-		}
-		else
-		{
-			tipString = QString::fromUtf8(getName(ppsStatsList[i]->pName));
-		}
-
+		QString tipString = ppsStatsList[i]->name;
 		unsigned powerCost = 0;
 		W_BARGRAPH *bar;
 		if (Stat->ref >= REF_STRUCTURE_START &&

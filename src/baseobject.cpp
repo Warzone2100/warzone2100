@@ -75,9 +75,12 @@ Spacetime interpolateObjectSpacetime(const SIMPLE_OBJECT *obj, uint32_t t)
 SIMPLE_OBJECT::SIMPLE_OBJECT(OBJECT_TYPE type, uint32_t id, unsigned player)
 	: type(type)
 	, id(id)
+	, pos(0, 0, 0)
+	, rot(0, 0, 0)
 	, player(player)
 	, born(gameTime)
 	, died(0)
+	, time(0)
 {}
 
 SIMPLE_OBJECT::~SIMPLE_OBJECT()
@@ -96,9 +99,13 @@ BASE_OBJECT::BASE_OBJECT(OBJECT_TYPE type, uint32_t id, unsigned player)
 	, lastEmission(0)
 	, lastHitWeapon(WSC_NUM_WEAPON_SUBCLASSES)  // No such weapon.
 	, timeLastHit(UDWORD_MAX)
+	, body(0)
+	, periodicalDamageStart(0)
+	, periodicalDamage(0)
 	, bTargetted(false)
 	, watchedTiles(NULL)
 {
+	memset(visible, 0, sizeof(visible));
 	sDisplay.imd = NULL;
 	sDisplay.frameNumber = 0;
 	sDisplay.screenX = 0;

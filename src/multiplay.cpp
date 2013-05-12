@@ -1014,7 +1014,7 @@ bool recvResearchStatus(NETQUEUE queue)
 
 			if (!researchAvailable(index, player, ModeImmediate) && bMultiPlayer)
 			{
-				debug(LOG_ERROR, "Player %d researching impossible topic \"%s\".", player, asResearch[index].pName);
+				debug(LOG_ERROR, "Player %d researching impossible topic \"%s\".", player, getName(&asResearch[index]));
 				return false;
 			}
 
@@ -1420,7 +1420,7 @@ bool recvTextMessageAI(NETQUEUE queue)
 
 static void NETtemplate(DROID_TEMPLATE *pTempl)
 {
-	NETstring(pTempl->aName, sizeof(pTempl->aName));
+	NETqstring(pTempl->name);
 
 	for (unsigned i = 0; i < ARRAY_SIZE(pTempl->asParts); ++i)
 	{
@@ -1468,7 +1468,6 @@ bool recvTemplate(NETQUEUE queue)
 
 	t.prefab = false;
 	t.psNext = NULL;
-	t.pName = NULL;
 	t.ref = REF_TEMPLATE_START;
 
 	psTempl = IdToTemplate(t.multiPlayerID,player);
@@ -1598,7 +1597,7 @@ bool recvDestroyFeature(NETQUEUE queue)
 		return false;
 	}
 
-	debug(LOG_FEATURE, "p%d feature id %d destroyed (%s)", pF->player, pF->id, pF->psStats->pName);
+	debug(LOG_FEATURE, "p%d feature id %d destroyed (%s)", pF->player, pF->id, getName(pF->psStats));
 	// Remove the feature locally
 	turnOffMultiMsg(true);
 	destroyFeature(pF, gameTime - deltaGameTime + 1);  // deltaGameTime is actually 0 here, since we're between updates. However, the value of gameTime - deltaGameTime + 1 will not change when we start the next tick.

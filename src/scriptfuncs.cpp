@@ -1017,7 +1017,7 @@ bool scrAddDroidToMissionList(void)
 	if (IsPlayerDroidLimitReached(player) && (psTemplate->droidType != DROID_TRANSPORTER && psTemplate->droidType != DROID_SUPERTRANSPORTER))
 	{
 		debug(LOG_SCRIPT, "Max units reached for player %d adding %s to mission list (type %d)", 
-		      player, psTemplate->aName, psTemplate->droidType);
+		      player, getName(psTemplate), psTemplate->droidType);
 		psDroid = NULL;
 	}
 	else
@@ -1488,7 +1488,7 @@ bool scrBuildDroid(void)
 	        psFactory->pStructureType->type == REF_VTOL_FACTORY),
 	        "Structure is not a factory");
 	ASSERT_OR_RETURN(false, validTemplateForFactory(psTemplate, psFactory, true), "Invalid template - %s for factory - %s",
-	        psTemplate->aName, psFactory->pStructureType->pName);
+	        getName(psTemplate), getID(psFactory->pStructureType));
 	if (productionRun != 1)
 	{
 		debug(LOG_WARNING, "A wzscript is trying to build a different number (%d) than 1 droid.", productionRun);
@@ -1499,7 +1499,7 @@ bool scrBuildDroid(void)
 	}
 	else
 	{
-		debug(LOG_WARNING, "A wzscript tried to build a template (%s) that has not been researched yet", psTemplate->aName);
+		debug(LOG_WARNING, "A wzscript tried to build a template (%s) that has not been researched yet", getName(psTemplate));
 	}
 	return true;
 }
@@ -3922,7 +3922,7 @@ bool scrStructureBuiltInRange(void)
 			psStruct = (STRUCTURE *)psCurr;
 			if ((psStruct->status == SS_BUILT || player == -1)
 			    && (player == -1 || psStruct->player == player)
-			    && strcmp(psStruct->pStructureType->pName, psTarget->pName) == 0)
+			    && psStruct->pStructureType->id.compare(psTarget->id) == 0)
 			{
 				break;
 			}
@@ -5241,7 +5241,7 @@ endstructloc:
 	}
 	else
 	{
-		debug(LOG_SCRIPT, "Did not find valid positioning for %s", psStat->pName);
+		debug(LOG_SCRIPT, "Did not find valid positioning for %s", getID(psStat));
 	}
 	scrFunctionResult.v.bval = found;
 	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))		// success!
@@ -6054,6 +6054,7 @@ bool scrIsVtol(void)
 // In short, we want to design a ViperLtMGWheels, but it is already available to make, so we must delete it.
 bool scrTutorialTemplates(void)
 {
+#if 0
 	DROID_TEMPLATE	*psCurr, *psPrev;
 
 	// find ViperLtMGWheels
@@ -6061,7 +6062,7 @@ bool scrTutorialTemplates(void)
 
 	for (psCurr = apsDroidTemplates[selectedPlayer], psPrev = NULL; psCurr != NULL;	psCurr = psCurr->psNext)
 	{
-		if (strcmp(pName, psCurr->aName) == 0)
+		if (psCurr->name.compare(pName) == 0)
 		{
 			if (psPrev)
 			{
@@ -6097,13 +6098,9 @@ bool scrTutorialTemplates(void)
 		abort();
 		return false;
 	}
+#endif
 	return true;
 }
-
-
-
-
-
 
 
 //-----------------------------------------
@@ -7828,7 +7825,7 @@ bool scrNumStructsByStatInRange(void)
 		ydiff = (SDWORD)psCurr->pos.y - y;
 		if (xdiff *xdiff + ydiff *ydiff <= rangeSquared)
 		{
-			if (strcmp(psCurr->pStructureType->pName, psTarget->pName) == 0)
+			if (psCurr->pStructureType->id.compare(psTarget->id) == 0)
 			{
 				if (psCurr->visible[lookingPlayer])		//can we see it?
 				{
@@ -9553,7 +9550,7 @@ bool scrPursueResearch(void)
 #if defined (DEBUG)
 		{
 			char	sTemp[128];
-			sprintf(sTemp, "player:%d starts topic: %s", player, asResearch[foundIndex].pName);
+			sprintf(sTemp, "player:%d starts topic: %s", player, getName(&asResearch[foundIndex]));
 			NETlogEntry(sTemp, SYNC_FLAG, 0);
 		}
 #endif

@@ -38,7 +38,6 @@
 
 W_FORMINIT::W_FORMINIT()
 	: disableChildren(false)
-	, pTip(NULL)
 {}
 
 W_FORM::W_FORM(W_FORMINIT const *init)
@@ -58,7 +57,7 @@ W_FORM::W_FORM(WIDGET *parent)
 W_CLICKFORM::W_CLICKFORM(W_FORMINIT const *init)
 	: W_FORM(init)
 	, state(WBUT_PLAIN)
-	, pTip(QString::fromUtf8(init->pTip))
+	, pTip(init->pTip)
 	, HilightAudioID(WidgGetHilightAudioID())
 	, ClickedAudioID(WidgGetClickedAudioID())
 	, AudioCallback(WidgGetAudioCallback())

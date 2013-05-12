@@ -2299,7 +2299,6 @@ static bool _intAddMissionResult(bool result, bool bPlaySuccess)
 	sButInit.style		= WBUT_TXTCENTRE;
 	sButInit.width		= MISSION_TEXT_W;
 	sButInit.height		= MISSION_TEXT_H;
-	sButInit.pTip		= NULL;
 	sButInit.pDisplay	= displayTextOption;
 	// If won or in debug mode
 	if (result || getDebugMappingStatus() || bMultiPlayer)

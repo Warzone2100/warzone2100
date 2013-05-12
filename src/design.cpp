@@ -401,10 +401,9 @@ static bool _intAddDesign(bool bShowCentreScreen)
 	/* Initialise the current design */
 	sDefaultDesignTemplate.droidType = DROID_ANY;
 	sCurrDesign = sDefaultDesignTemplate;
-	sCurrDesign.pName = NULL;
 	sCurrDesign.stored = false;
 	sstrcpy(aCurrName, _("New Vehicle"));
-	sstrcpy(sCurrDesign.aName, aCurrName);
+	sCurrDesign.name = aCurrName;
 
 	/* Add the design templates form */
 	if (!intAddTemplateForm(NULL))  // Was psCurrTemplate instead of NULL, but psCurrTemplate was always NULL. Deleted psCurrTemplate, but leaving this here, in case intAddTemplateForm(NULL) does something useful.
@@ -1065,8 +1064,7 @@ const char *GetDefaultTemplateName(DROID_TEMPLATE *psTemplate)
 	    psTemplate->asParts[COMP_REPAIRUNIT]   != 0 ||
 	    psTemplate->asParts[COMP_BRAIN]		!= 0)
 	{
-		const char *pStr = getStatName(psStats);
-		sstrcpy(aCurrName, pStr);
+		sstrcpy(aCurrName, getName(psStats));
 		sstrcat(aCurrName, " ");
 	}
 
@@ -1080,15 +1078,13 @@ const char *GetDefaultTemplateName(DROID_TEMPLATE *psTemplate)
 	psStats = (COMPONENT_STATS *)(asBodyStats + compIndex);
 	if (psTemplate->asParts[COMP_BODY] != 0)
 	{
-		const char *pStr = getStatName(psStats);
-
-		if (strlen(aCurrName) + strlen(pStr) > MAX_STR_LENGTH)
+		if (strlen(aCurrName) + psStats->name.size() > MAX_STR_LENGTH)
 		{
-			debug(LOG_ERROR, "Name string too long %s+%s > %u", aCurrName, pStr, MAX_STR_LENGTH);
+			debug(LOG_ERROR, "Name string too long %s+%s > %u", aCurrName, getName(psStats), MAX_STR_LENGTH);
 			debug(LOG_ERROR, "Please report what language you are using in the bug report!");
 		}
 
-		sstrcat(aCurrName, pStr);
+		sstrcat(aCurrName, getName(psStats));
 		sstrcat(aCurrName, " ");
 	}
 
@@ -1097,15 +1093,13 @@ const char *GetDefaultTemplateName(DROID_TEMPLATE *psTemplate)
 	psStats = (COMPONENT_STATS *)(asPropulsionStats + compIndex);
 	if (psTemplate->asParts[COMP_PROPULSION] != 0)
 	{
-		const char *pStr = getStatName(psStats);
-
-		if (strlen(aCurrName) + strlen(pStr) > MAX_STR_LENGTH)
+		if (strlen(aCurrName) + psStats->name.size() > MAX_STR_LENGTH)
 		{
-			debug(LOG_ERROR, "Name string too long %s+%s", aCurrName, pStr);
+			debug(LOG_ERROR, "Name string too long %s+%s", aCurrName, getName(psStats));
 			debug(LOG_ERROR, "Please report what language you are using in the bug report!");
 		}
 
-		sstrcat(aCurrName, pStr);
+		sstrcat(aCurrName, getName(psStats));
 	}
 
 	return aCurrName;
@@ -1118,7 +1112,7 @@ static void intSetEditBoxTextFromTemplate(DROID_TEMPLATE *psTemplate)
 	/* show component names if default template else show stat name */
 	if (psTemplate->droidType != DROID_DEFAULT)
 	{
-		sstrcpy(aCurrName, getTemplateName(psTemplate));
+		sstrcpy(aCurrName, getName(psTemplate));
 	}
 	else
 	{
@@ -2915,7 +2909,7 @@ bool intValidTemplate(DROID_TEMPLATE *psTempl, const char *newName, bool complai
 	psTempl->enabled = true;
 
 	/* copy name into template */
-	sstrcpy(psTempl->aName, newName);
+	psTempl->name = newName;
 
 	return true;
 }
@@ -2924,7 +2918,6 @@ static void desCreateDefaultTemplate(void)
 {
 	/* set current design to default */
 	sCurrDesign = sDefaultDesignTemplate;
-	sCurrDesign.pName = NULL;
 	sCurrDesign.stored = false;
 
 	/* reset stats */
@@ -2974,7 +2967,7 @@ static void intSetButtonFlash(UDWORD id, bool bFlash)
 static bool desTemplateNameCustomised(DROID_TEMPLATE *psTemplate)
 {
 	if ((psTemplate->droidType == DROID_DEFAULT) ||
-	    (strcmp(getTemplateName(psTemplate),
+	    (strcmp(getName(psTemplate),
 	            GetDefaultTemplateName(psTemplate)) == 0))
 	{
 		return false;
@@ -3011,8 +3004,7 @@ void intProcessDesign(UDWORD id)
 			desCreateDefaultTemplate();
 
 			aCurrName[0] = '\0';
-			sCurrDesign.aName[0] = '\0';
-			sstrcpy(sCurrDesign.aName, aCurrName);
+			sCurrDesign.name = aCurrName;
 
 			/* reveal body button */
 			widgReveal(psWScreen, IDDES_BODYBUTTON);
@@ -3042,7 +3034,7 @@ void intProcessDesign(UDWORD id)
 			{
 				/* Set the new template */
 				sCurrDesign = *psTempl;
-				sstrcpy(aCurrName, getTemplateName(psTempl));
+				sstrcpy(aCurrName, getName(psTempl));
 
 				/* reveal body/propulsion/turret component buttons */
 				widgReveal(psWScreen, IDDES_BODYBUTTON);
@@ -3343,7 +3335,7 @@ void intProcessDesign(UDWORD id)
 		/* update name if not customised */
 		if (bTemplateNameCustomised == false)
 		{
-			sstrcpy(sCurrDesign.aName, GetDefaultTemplateName(&sCurrDesign));
+			sCurrDesign.name = GetDefaultTemplateName(&sCurrDesign);
 		}
 
 		/* Update the name in the edit box */
@@ -3473,7 +3465,7 @@ void intProcessDesign(UDWORD id)
 		/* update name if not customised */
 		if (bTemplateNameCustomised == false)
 		{
-			sstrcpy(sCurrDesign.aName, GetDefaultTemplateName(&sCurrDesign));
+			sCurrDesign.name = GetDefaultTemplateName(&sCurrDesign);
 		}
 
 		/* Update the name in the edit box */
@@ -3519,8 +3511,8 @@ void intProcessDesign(UDWORD id)
 			break;
 			/* The name edit box */
 		case IDDES_NAMEBOX:
-			sstrcpy(sCurrDesign.aName, widgGetString(psWScreen, IDDES_NAMEBOX));
-			sstrcpy(aCurrName, sCurrDesign.aName);
+			sCurrDesign.name = widgGetString(psWScreen, IDDES_NAMEBOX);
+			sstrcpy(aCurrName, getName(&sCurrDesign));
 			break;
 		case IDDES_BIN:
 			{
@@ -3540,7 +3532,6 @@ void intProcessDesign(UDWORD id)
 							//before deleting the template, need to make sure not being used in production
 							deleteTemplateFromProduction(psTempl, selectedPlayer, ModeQueue);
 							// Delete the template.
-							free(i->pName);
 							localTemplates.erase(i);
 							break;
 						}
@@ -3558,7 +3549,7 @@ void intProcessDesign(UDWORD id)
 
 					/* Set the new template */
 					sCurrDesign = *psTempl;
-					sstrcpy(aCurrName, getTemplateName(psTempl));
+					sstrcpy(aCurrName, getName(psTempl));
 
 					intSetEditBoxTextFromTemplate(psTempl);
 
@@ -4001,7 +3992,6 @@ static bool saveTemplate(void)
 
 	/* Copy the template */
 	*psTempl = sCurrDesign;
-	sstrcpy(psTempl->aName, aCurrName);
 
 	/* Now update the droid template form */
 	widgDelete(psWScreen, IDDES_TEMPLBASE);
