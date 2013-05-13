@@ -148,8 +148,7 @@ public:
 	virtual void display(int xOffset, int yOffset);
 
 	void setStats(BASE_STATS *stats) { Stat = stats; }
-	void setStatsAndTip(BASE_STATS *stats) { setStats(stats); setTip(getStatName(Stat)); }
-	void setStatsAndTip(DROID_TEMPLATE *stats) { setStats(stats); setTip(getName(stats)); }
+	void setStatsAndTip(BASE_STATS *stats) { setStats(stats); setTip(stats->name); }
 
 protected:
 	BASE_STATS *Stat;

@@ -1196,7 +1196,7 @@ static bool _intSetSystemForm(COMPONENT_STATS *psStats)
 	sFormInit.y = DES_BARFORMY;
 	sFormInit.width = DES_BARFORMWIDTH;	//COMPBUTWIDTH;
 	sFormInit.height = DES_BARFORMHEIGHT;	//COMPBUTHEIGHT;
-	sFormInit.pTip = getStatName(psStats);	/* set form tip to stats string */
+	sFormInit.pTip = psStats->name;	/* set form tip to stats string */
 	sFormInit.pUserData = psStats;			/* store component stats */
 	sFormInit.pDisplay = intDisplayStatForm;
 	if (!widgAddForm(psWScreen, &sFormInit))
@@ -1540,7 +1540,7 @@ static bool intSetPropulsionForm(PROPULSION_STATS *psStats)
 	sFormInit.y = DES_BARFORMY;
 	sFormInit.width = DES_BARFORMWIDTH;	//DES_COMPBUTWIDTH;
 	sFormInit.height = DES_BARFORMHEIGHT;	//DES_COMPBUTHEIGHT;
-	sFormInit.pTip = getStatName(psStats);	/* set form tip to stats string */
+	sFormInit.pTip = psStats->name;	/* set form tip to stats string */
 	sFormInit.pDisplay = intDisplayStatForm;
 	if (!widgAddForm(psWScreen, &sFormInit))
 	{
@@ -2032,7 +2032,7 @@ static void intSetSystemStats(COMPONENT_STATS *psStats)
 	ASSERT_OR_RETURN(, psStats != NULL, "Invalid stats pointer");
 
 	/* set form tip to stats string */
-	widgSetTip(psWScreen, IDDES_SYSTEMFORM, getStatName(psStats));
+	widgSetTip(psWScreen, IDDES_SYSTEMFORM, psStats->name);
 
 	/* set form stats for later display in intDisplayStatForm */
 	psForm = (W_FORM *) widgGetFromID(psWScreen, IDDES_SYSTEMFORM);
@@ -2374,7 +2374,7 @@ static void intSetBodyStats(BODY_STATS *psStats)
 	                 "stats ref is out of range");
 
 	/* set form tip to stats string */
-	widgSetTip(psWScreen, IDDES_BODYFORM, getStatName(psStats));
+	widgSetTip(psWScreen, IDDES_BODYFORM, psStats->name);
 
 	/* armour */
 	//do kinetic armour
@@ -2677,7 +2677,7 @@ static void intSetPropulsionStats(PROPULSION_STATS *psStats)
 	                 (psStats->ref < REF_PROPULSION_START + REF_RANGE), "stats ref is out of range");
 
 	/* set form tip to stats string */
-	widgSetTip(psWScreen, IDDES_PROPFORM, getStatName(psStats));
+	widgSetTip(psWScreen, IDDES_PROPFORM, psStats->name);
 
 	/* set form stats for later display in intDisplayStatForm */
 	psForm = (W_FORM *) widgGetFromID(psWScreen, IDDES_PROPFORM);

@@ -133,7 +133,7 @@ struct W_LABINIT : public W_INIT
 {
 	W_LABINIT();
 
-	const char		*pText;			///< label text
+	QString	                pText;			///< label text
 	QString	                pTip;			///< Tool tip for the label.
 	enum iV_fonts           FontID;			///< ID of the IVIS font to use for this widget.
 };

@@ -867,7 +867,7 @@ static QScriptValue js_getWeaponInfo(QScriptContext *context, QScriptEngine *eng
 	WEAPON_STATS *psStats = asWeaponStats + idx;
 	QScriptValue info = engine->newObject();
 	info.setProperty("id", id);
-	info.setProperty("name", getStatName(psStats));
+	info.setProperty("name", psStats->name);
 	info.setProperty("impactClass", psStats->weaponClass == WC_KINETIC ? "KINETIC" : "HEAT");
 	info.setProperty("damage", psStats->base.damage);
 	info.setProperty("firePause", psStats->base.firePause);
@@ -4084,7 +4084,7 @@ bool registerFunctions(QScriptEngine *engine, QString scriptName)
 			body.setProperty("Size", psStats->size, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 			body.setProperty("WeaponSlots", psStats->weaponSlots, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 			body.setProperty("BodyClass", psStats->bodyClass, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			bodybase.setProperty(getStatName(psStats), body, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+			bodybase.setProperty(psStats->name, body, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		}
 		stats.setProperty("Body", bodybase, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		//== \item[Sensor] Sensor turrets
@@ -4099,7 +4099,7 @@ bool registerFunctions(QScriptEngine *engine, QString scriptName)
 			sensor.setProperty("BuildTime", psStats->buildPoints, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 			sensor.setProperty("HitPoints", psStats->body, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 			sensor.setProperty("Range", psStats->base.range, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			sensorbase.setProperty(getStatName(psStats), sensor, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+			sensorbase.setProperty(psStats->name, sensor, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		}
 		stats.setProperty("Sensor", sensorbase, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		//== \item[ECM] ECM (Electronic Counter-Measure) turrets
@@ -4114,7 +4114,7 @@ bool registerFunctions(QScriptEngine *engine, QString scriptName)
 			ecm.setProperty("BuildTime", psStats->buildPoints, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 			ecm.setProperty("HitPoints", psStats->body, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 			ecm.setProperty("Range", psStats->base.range, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			ecmbase.setProperty(getStatName(psStats), ecm, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+			ecmbase.setProperty(psStats->name, ecm, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		}
 		stats.setProperty("ECM", ecmbase, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		//== \item[Repair] Repair turrets (not used, incidentially, for repair centers)
@@ -4129,7 +4129,7 @@ bool registerFunctions(QScriptEngine *engine, QString scriptName)
 			repair.setProperty("BuildTime", psStats->buildPoints, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 			repair.setProperty("HitPoints", psStats->body, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 			repair.setProperty("RepairPoints", psStats->base.repairPoints, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			repairbase.setProperty(getStatName(psStats), repair, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+			repairbase.setProperty(psStats->name, repair, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		}
 		stats.setProperty("Repair", repairbase, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		//== \item[Construct] Constructor turrets (eg for trucks)
@@ -4144,7 +4144,7 @@ bool registerFunctions(QScriptEngine *engine, QString scriptName)
 			con.setProperty("BuildTime", psStats->buildPoints, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 			con.setProperty("HitPoints", psStats->body, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 			con.setProperty("ConstructorPoints", psStats->base.constructPoints, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			conbase.setProperty(getStatName(psStats), con, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+			conbase.setProperty(psStats->name, con, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		}
 		stats.setProperty("Construct", conbase, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		//== \item[Weapon] Weapon turrets
@@ -4178,7 +4178,7 @@ bool registerFunctions(QScriptEngine *engine, QString scriptName)
 			weap.setProperty("RepeatClass", getWeaponSubClass(psStats->periodicalDamageWeaponSubClass), 
 			                 QScriptValue::ReadOnly | QScriptValue::Undeletable);
 			weap.setProperty("FireOnMove", psStats->fireOnMove, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			wbase.setProperty(getStatName(psStats), weap, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+			wbase.setProperty(psStats->name, weap, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		}
 		stats.setProperty("Weapon", wbase, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		//== \item[WeaponClass] Defined weapon classes
@@ -4217,7 +4217,7 @@ bool registerFunctions(QScriptEngine *engine, QString scriptName)
 			strct.setProperty("Thermal", psStats->base.thermal, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 			strct.setProperty("HitPoints", psStats->base.hitpoints, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 			strct.setProperty("Resistance", psStats->base.resistance, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-			structbase.setProperty(getStatName(psStats), strct, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+			structbase.setProperty(psStats->name, strct, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		}
 		stats.setProperty("Building", structbase, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	}
@@ -4244,7 +4244,7 @@ bool registerFunctions(QScriptEngine *engine, QString scriptName)
 			setStatsFunc(body, engine, "Armour", i, COMP_BODY, j, psStats->upgrade[i].armour);
 			setStatsFunc(body, engine, "Thermal", i, COMP_BODY, j, psStats->upgrade[i].thermal);
 			setStatsFunc(body, engine, "Resistance", i, COMP_BODY, j, psStats->upgrade[i].resistance);
-			bodybase.setProperty(getStatName(psStats), body, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+			bodybase.setProperty(psStats->name, body, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		}
 		node.setProperty("Body", bodybase, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		//== \item[Sensor] Sensor turrets
@@ -4254,7 +4254,7 @@ bool registerFunctions(QScriptEngine *engine, QString scriptName)
 			SENSOR_STATS *psStats = asSensorStats + j;
 			QScriptValue sensor = engine->newObject();
 			setStatsFunc(sensor, engine, "Range", i, COMP_SENSOR, j, psStats->upgrade[i].range);
-			sensorbase.setProperty(getStatName(psStats), sensor, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+			sensorbase.setProperty(psStats->name, sensor, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		}
 		node.setProperty("Sensor", sensorbase, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		//== \item[ECM] ECM (Electronic Counter-Measure) turrets
@@ -4264,7 +4264,7 @@ bool registerFunctions(QScriptEngine *engine, QString scriptName)
 			ECM_STATS *psStats = asECMStats + j;
 			QScriptValue ecm = engine->newObject();
 			setStatsFunc(ecm, engine, "Range", i, COMP_ECM, j, psStats->upgrade[i].range);
-			ecmbase.setProperty(getStatName(psStats), ecm, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+			ecmbase.setProperty(psStats->name, ecm, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		}
 		node.setProperty("ECM", ecmbase, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		//== \item[Repair] Repair turrets (not used, incidentially, for repair centers)
@@ -4274,7 +4274,7 @@ bool registerFunctions(QScriptEngine *engine, QString scriptName)
 			REPAIR_STATS *psStats = asRepairStats + j;
 			QScriptValue repair = engine->newObject();
 			setStatsFunc(repair, engine, "RepairPoints", i, COMP_REPAIRUNIT, j, psStats->upgrade[i].repairPoints);
-			repairbase.setProperty(getStatName(psStats), repair, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+			repairbase.setProperty(psStats->name, repair, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		}
 		node.setProperty("Repair", repairbase, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		//== \item[Construct] Constructor turrets (eg for trucks)
@@ -4284,7 +4284,7 @@ bool registerFunctions(QScriptEngine *engine, QString scriptName)
 			CONSTRUCT_STATS *psStats = asConstructStats + j;
 			QScriptValue con = engine->newObject();
 			setStatsFunc(con, engine, "ConstructorPoints", i, COMP_CONSTRUCT, j, psStats->upgrade[i].constructPoints);
-			conbase.setProperty(getStatName(psStats), con, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+			conbase.setProperty(psStats->name, con, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		}
 		node.setProperty("Construct", conbase, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		//== \item[Weapon] Weapon turrets
@@ -4305,7 +4305,7 @@ bool registerFunctions(QScriptEngine *engine, QString scriptName)
 			setStatsFunc(weap, engine, "RepeatDamage", i, COMP_WEAPON, j, psStats->upgrade[i].periodicalDamage);
 			setStatsFunc(weap, engine, "RepeatTime", i, COMP_WEAPON, j, psStats->upgrade[i].periodicalDamageTime);
 			setStatsFunc(weap, engine, "RepeatRadius", i, COMP_WEAPON, j, psStats->upgrade[i].periodicalDamageRadius);
-			wbase.setProperty(getStatName(psStats), weap, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+			wbase.setProperty(psStats->name, weap, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		}
 		node.setProperty("Weapon", wbase, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		//== \item[Building] Buildings
@@ -4323,7 +4323,7 @@ bool registerFunctions(QScriptEngine *engine, QString scriptName)
 			setStatsFunc(strct, engine, "Resistance", i, SCRCB_ELW, j, psStats->upgrade[i].resistance);
 			setStatsFunc(strct, engine, "Thermal", i, SCRCB_HEA, j, psStats->upgrade[i].thermal);
 			setStatsFunc(strct, engine, "HitPoints", i, SCRCB_HIT, j, psStats->upgrade[i].hitpoints);
-			structbase.setProperty(getStatName(psStats), strct, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+			structbase.setProperty(psStats->name, strct, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		}
 		node.setProperty("Building", structbase, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		// Finally

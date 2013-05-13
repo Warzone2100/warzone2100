@@ -283,7 +283,7 @@ static iIMDShape *statsGetIMD(WzConfig &ini, BASE_STATS *psStats, QString key)
 		QString model = ini.value(key).toString();
 		retval = (iIMDShape *)resGetData("IMD", model.toUtf8().constData());
 		ASSERT(retval != NULL, "Cannot find the PIE model %s for stat %s in %s",
-		       model.toUtf8().constData(), getStatName(psStats), ini.fileName().toUtf8().constData());
+		       model.toUtf8().constData(), getName(psStats), ini.fileName().toUtf8().constData());
 	}
 	return retval;
 }
@@ -383,7 +383,7 @@ bool loadWeaponStats(const char *pFileName)
 		//set the weapon class
 		if (!getWeaponClass(ini.value("weaponClass").toString(), &psStats->weaponClass))
 		{
-			debug(LOG_ERROR, "Invalid weapon class for weapon %s - assuming KINETIC", getStatName(psStats));
+			debug(LOG_ERROR, "Invalid weapon class for weapon %s - assuming KINETIC", getName(psStats));
 			psStats->weaponClass = WC_KINETIC;
 		}
 
@@ -410,7 +410,7 @@ bool loadWeaponStats(const char *pFileName)
 		//set the weapon effect
 		if (!getWeaponEffect(ini.value("weaponEffect").toString().toUtf8().constData(), &psStats->weaponEffect))
 		{
-			debug(LOG_FATAL, "loadWepaonStats: Invalid weapon effect for weapon %s", getStatName(psStats));
+			debug(LOG_FATAL, "loadWepaonStats: Invalid weapon effect for weapon %s", getName(psStats));
 			return false;
 		}
 
@@ -423,7 +423,7 @@ bool loadWeaponStats(const char *pFileName)
 		}
 		else if (!getWeaponClass(periodicalDamageWeaponClass, &psStats->periodicalDamageWeaponClass))
 		{
-			debug(LOG_ERROR, "Invalid periodicalDamageWeaponClass for weapon %s - assuming same class as weapon", getStatName(psStats));
+			debug(LOG_ERROR, "Invalid periodicalDamageWeaponClass for weapon %s - assuming same class as weapon", getName(psStats));
 			psStats->periodicalDamageWeaponClass = psStats->weaponClass;
 		}
 
@@ -436,7 +436,7 @@ bool loadWeaponStats(const char *pFileName)
 		}
 		else if (!getWeaponSubClass(periodicalDamageWeaponSubClass.toUtf8().data(), &psStats->periodicalDamageWeaponSubClass))
 		{
-			debug(LOG_ERROR, "Invalid periodicalDamageWeaponSubClass for weapon %s - assuming same subclass as weapon", getStatName(psStats));
+			debug(LOG_ERROR, "Invalid periodicalDamageWeaponSubClass for weapon %s - assuming same subclass as weapon", getName(psStats));
 			psStats->periodicalDamageWeaponSubClass = psStats->weaponSubClass;
 		}
 
@@ -449,7 +449,7 @@ bool loadWeaponStats(const char *pFileName)
 		}
 		else if (!getWeaponEffect(periodicalDamageWeaponEffect.toUtf8().data(), &psStats->periodicalDamageWeaponEffect))
 		{
-			debug(LOG_ERROR, "Invalid periodicalDamageWeaponEffect for weapon %s - assuming same effect as weapon", getStatName(psStats));
+			debug(LOG_ERROR, "Invalid periodicalDamageWeaponEffect for weapon %s - assuming same effect as weapon", getName(psStats));
 			psStats->periodicalDamageWeaponEffect = psStats->weaponEffect;
 		}
 
@@ -472,7 +472,7 @@ bool loadWeaponStats(const char *pFileName)
 		if (surfaceToAir > UBYTE_MAX)
 		{
 			ASSERT(false, "loadWeaponStats: Surface to Air is outside of limits for weapon %s",
-			       getStatName(psStats));
+			       getName(psStats));
 			return false;
 		}
 		if (surfaceToAir == 0)
@@ -568,7 +568,7 @@ bool loadBodyStats(const char *pFileName)
 		psStats->ref = REF_BODY_START + i;
 		if (!getBodySize(ini.value("size").toString().toUtf8().constData(), &psStats->size))
 		{
-			ASSERT(false, "Unknown body size for %s", getStatName(psStats));
+			ASSERT(false, "Unknown body size for %s", getName(psStats));
 			return false;
 		}
 		psStats->pIMD = statsGetIMD(ini, psStats, "model");
@@ -617,7 +617,7 @@ bool loadBrainStats(const char *pFileName)
 		if (ini.contains("turret"))
 		{
 			int weapon = getCompFromName(COMP_WEAPON, ini.value("turret").toString());
-			ASSERT_OR_RETURN(false, weapon >= 0, "Unable to find weapon for brain %s", getStatName(psStats));
+			ASSERT_OR_RETURN(false, weapon >= 0, "Unable to find weapon for brain %s", getName(psStats));
 			psStats->psWeaponStat = asWeaponStats + weapon;
 		}
 		psStats->designable = ini.value("designable", false).toBool();
@@ -708,7 +708,7 @@ bool loadPropulsionStats(const char *pFileName)
 		psStats->pIMD = statsGetIMD(ini, psStats, "model");
 		if (!getPropulsionType(ini.value("type").toString().toUtf8().constData(), &psStats->propulsionType))
 		{
-			debug(LOG_FATAL, "loadPropulsionStats: Invalid Propulsion type for %s", getStatName(psStats));
+			debug(LOG_FATAL, "loadPropulsionStats: Invalid Propulsion type for %s", getName(psStats));
 			return false;
 		}
 		ini.endGroup();
@@ -940,7 +940,7 @@ bool loadRepairStats(const char *pFileName)
 		}
 
 		//check its not 0 since we will be dividing by it at a later stage
-		ASSERT_OR_RETURN(false, psStats->time > 0, "Repair delay cannot be zero for %s", getStatName(psStats));
+		ASSERT_OR_RETURN(false, psStats->time > 0, "Repair delay cannot be zero for %s", getName(psStats));
 
 		//get the IMD for the component
 		psStats->pIMD = statsGetIMD(ini, psStats, "model");

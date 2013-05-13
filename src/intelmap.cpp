@@ -315,7 +315,7 @@ static bool intAddMessageForm(bool playCurrent)
 				psResearch = getResearchForMsg((VIEWDATA *)psMessage->pViewData);
 				if (psResearch)
 				{
-					button->setTip(getStatName(psResearch));
+					button->setTip(psResearch->name);
 				}
 				else
 				{
@@ -450,7 +450,7 @@ bool intAddMessageView(MESSAGE * psMessage)
 
 	ASSERT( psResearch!=NULL,"Research not found" );
 	//sLabInit.pText=psResearch->pName;
-	sLabInit.pText = getStatName(psResearch);
+	sLabInit.pText = psResearch->name;
 
 	sLabInit.FontID = font_regular;
 	if (!widgAddLabel(psWScreen, &sLabInit))

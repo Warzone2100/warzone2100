@@ -2706,7 +2706,7 @@ bool scrSetDefaultSensor(void)
 	if (asSensorStats[sensorInc].location != LOC_DEFAULT)
 	{
 
-		ASSERT(false, "This sensor is not a default one - %s", getStatName(&asSensorStats[sensorInc]));
+		ASSERT(false, "This sensor is not a default one - %s", getName(&asSensorStats[sensorInc]));
 		return false;
 	}
 
@@ -2740,7 +2740,7 @@ bool scrSetDefaultECM(void)
 	//check that this ecm is a default ecm
 	if (asECMStats[ecmInc].location != LOC_DEFAULT)
 	{
-		ASSERT(false, "This ecm is not a default one - %s", getStatName(&asECMStats[ecmInc]));
+		ASSERT(false, "This ecm is not a default one - %s", getName(&asECMStats[ecmInc]));
 		return false;
 	}
 
@@ -2774,7 +2774,7 @@ bool scrSetDefaultRepair(void)
 	//check that this repair is a default repair
 	if (asRepairStats[repairInc].location != LOC_DEFAULT)
 	{
-		ASSERT(false, "This repair is not a default one - %s", getStatName(&asRepairStats[repairInc]));
+		ASSERT(false, "This repair is not a default one - %s", getName(&asRepairStats[repairInc]));
 		return false;
 	}
 

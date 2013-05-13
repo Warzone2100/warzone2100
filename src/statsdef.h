@@ -246,7 +246,6 @@ struct BASE_STATS
 };
 
 #define getName(_psStats) (_psStats)->name.toUtf8().constData()
-#define getStatName(_psStats) (_psStats)->name.toUtf8().constData()
 #define getID(_psStats) (_psStats)->id.toUtf8().constData()
 
 /* Stats common to all droid components */

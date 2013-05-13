@@ -34,13 +34,12 @@
 #include "lib/ivis_opengl/textdraw.h"
 
 W_LABINIT::W_LABINIT()
-	: pText(NULL)
-	, FontID(font_regular)
+	: FontID(font_regular)
 {}
 
 W_LABEL::W_LABEL(W_LABINIT const *init)
 	: WIDGET(init, WIDG_LABEL)
-	, aText(QString::fromUtf8(init->pText))
+	, aText(init->pText)
 	, FontID(init->FontID)
 	, pTip(init->pTip)
 	, fontColour(WZCOL_FORM_TEXT)
