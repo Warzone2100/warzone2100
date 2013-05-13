@@ -201,6 +201,7 @@ bool statsShutDown(void)
 	STATS_DEALLOC(asRepairStats, numRepairStats);
 	STATS_DEALLOC(asConstructStats, numConstructStats);
 	STATS_DEALLOC(asECMStats, numECMStats);
+	STATS_DEALLOC(asSensorStats, numSensorStats);
 	deallocPropulsionTypes();
 	deallocTerrainTable();
 

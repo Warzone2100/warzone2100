@@ -762,7 +762,6 @@ VIEWDATA *getViewData(const char *pName)
 bool messageShutdown(void)
 {
 	freeMessages();
-	apsViewData.clear();
 	return true;
 }
 
