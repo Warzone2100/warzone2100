@@ -1509,7 +1509,7 @@ static DROID_TEMPLATE *makeTemplate(int player, const QString &templName, QScrip
 		for (int i = 0; i < numTurrets; i++) // may be multi-weapon
 		{
 			result = get_first_available_component(player, SIZE_NUM, context->argument(firstTurret + i), COMP_WEAPON, strict);
-			if (result < -0)
+			if (result < 0)
 			{
 				debug(LOG_SCRIPT, "Wanted to build %s but no weapon available", templName.toUtf8().constData());
 				delete psTemplate;

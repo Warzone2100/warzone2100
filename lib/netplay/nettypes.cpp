@@ -666,7 +666,7 @@ void NETstring(char *str, uint16_t maxlen)
 
 void NETqstring(QString &str)
 {
-	uint16_t len = str.size();
+	uint32_t len = str.size();
 
 	queueAuto(len);
 
