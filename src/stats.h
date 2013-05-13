@@ -184,10 +184,6 @@ extern UDWORD componentType(const char* pType);
 //get the component Inc for a stat based on the name
 int getCompFromName(COMPONENT_TYPE compType, const QString &name);
 COMPONENT_STATS *getCompStatsFromName(const QString &name);
-//get details for given component type
-extern void getStatsDetails(UDWORD compType, BASE_STATS **ppsStats, UDWORD *pnumStats, UDWORD *pstatSize);
-//get the component Inc for a stat based on the Resource name held in Names.txt
-extern SDWORD getCompFromResName(UDWORD compType, const char *pName);
 /*returns the weapon sub class based on the string name passed in */
 extern bool getWeaponSubClass(const char* subClass, WEAPON_SUBCLASS* wclass);
 const char *getWeaponSubClass(WEAPON_SUBCLASS wclass);

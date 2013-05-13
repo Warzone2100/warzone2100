@@ -379,7 +379,7 @@ var_init:		var_entry TYPE var_value
 							yyerror("Typemismatch for variable %d", $1);
 							YYABORT;
 						}
-						data.v.ival = getCompFromResName(COMP_BODY, $3.pString);
+						data.v.ival = getCompFromName(COMP_BODY, $3.pString);
 						if (data.v.ival == -1)
 						{
 							yyerror("body component %s not found", $3.pString);
@@ -397,7 +397,7 @@ var_init:		var_entry TYPE var_value
 							yyerror("Typemismatch for variable %d", $1);
 							YYABORT;
 						}
-						data.v.ival = getCompFromResName(COMP_PROPULSION, $3.pString);
+						data.v.ival = getCompFromName(COMP_PROPULSION, $3.pString);
 						if (data.v.ival == -1)
 						{
 							yyerror("Propulsion component %s not found", $3.pString);
@@ -415,7 +415,7 @@ var_init:		var_entry TYPE var_value
 							yyerror("Typemismatch for variable %d", $1);
 							YYABORT;
 						}
-						data.v.ival = getCompFromResName(COMP_ECM, $3.pString);
+						data.v.ival = getCompFromName(COMP_ECM, $3.pString);
 						if (data.v.ival == -1)
 						{
 							yyerror("ECM component %s not found", $3.pString);
@@ -433,7 +433,7 @@ var_init:		var_entry TYPE var_value
 							yyerror("Typemismatch for variable %d", $1);
 							YYABORT;
 						}
-						data.v.ival = getCompFromResName(COMP_SENSOR, $3.pString);
+						data.v.ival = getCompFromName(COMP_SENSOR, $3.pString);
 						if (data.v.ival == -1)
 						{
 							yyerror("Sensor component %s not found", $3.pString);
@@ -451,7 +451,7 @@ var_init:		var_entry TYPE var_value
 							yyerror("Typemismatch for variable %d", $1);
 							YYABORT;
 						}
-						data.v.ival = getCompFromResName(COMP_CONSTRUCT, $3.pString);
+						data.v.ival = getCompFromName(COMP_CONSTRUCT, $3.pString);
 						if (data.v.ival == -1)
 						{
 							yyerror("Construct component %s not found",	$3.pString);
@@ -469,7 +469,7 @@ var_init:		var_entry TYPE var_value
 							yyerror("Typemismatch for variable %d", $1);
 							YYABORT;
 						}
-						data.v.ival = getCompFromResName(COMP_REPAIRUNIT, $3.pString);
+						data.v.ival = getCompFromName(COMP_REPAIRUNIT, $3.pString);
 						if (data.v.ival == -1)
 						{
 							yyerror("Repair component %s not found",	$3.pString);
@@ -487,7 +487,7 @@ var_init:		var_entry TYPE var_value
 							yyerror("Typemismatch for variable %d", $1);
 							YYABORT;
 						}
-						data.v.ival = getCompFromResName(COMP_BRAIN, $3.pString);
+						data.v.ival = getCompFromName(COMP_BRAIN, $3.pString);
 						if (data.v.ival == -1)
 						{
 							yyerror("Brain component %s not found",	$3.pString);
@@ -505,7 +505,7 @@ var_init:		var_entry TYPE var_value
 							yyerror("Typemismatch for variable %d", $1);
 							YYABORT;
 						}
-						data.v.ival = getCompFromResName(COMP_WEAPON, $3.pString);
+						data.v.ival = getCompFromName(COMP_WEAPON, $3.pString);
 						if (data.v.ival == -1)
 						{
 							yyerror("Weapon component %s not found", $3.pString);

@@ -1715,7 +1715,7 @@ yyreduce:
 							yyerror("Typemismatch for variable %d", (yyvsp[(1) - (3)].vindex));
 							YYABORT;
 						}
-						data.v.ival = getCompFromResName(COMP_BODY, (yyvsp[(3) - (3)].sInit).pString);
+						data.v.ival = getCompFromName(COMP_BODY, (yyvsp[(3) - (3)].sInit).pString);
 						if (data.v.ival == -1)
 						{
 							yyerror("body component %s not found", (yyvsp[(3) - (3)].sInit).pString);
@@ -1733,7 +1733,7 @@ yyreduce:
 							yyerror("Typemismatch for variable %d", (yyvsp[(1) - (3)].vindex));
 							YYABORT;
 						}
-						data.v.ival = getCompFromResName(COMP_PROPULSION, (yyvsp[(3) - (3)].sInit).pString);
+						data.v.ival = getCompFromName(COMP_PROPULSION, (yyvsp[(3) - (3)].sInit).pString);
 						if (data.v.ival == -1)
 						{
 							yyerror("Propulsion component %s not found", (yyvsp[(3) - (3)].sInit).pString);
@@ -1751,7 +1751,7 @@ yyreduce:
 							yyerror("Typemismatch for variable %d", (yyvsp[(1) - (3)].vindex));
 							YYABORT;
 						}
-						data.v.ival = getCompFromResName(COMP_ECM, (yyvsp[(3) - (3)].sInit).pString);
+						data.v.ival = getCompFromName(COMP_ECM, (yyvsp[(3) - (3)].sInit).pString);
 						if (data.v.ival == -1)
 						{
 							yyerror("ECM component %s not found", (yyvsp[(3) - (3)].sInit).pString);
@@ -1769,7 +1769,7 @@ yyreduce:
 							yyerror("Typemismatch for variable %d", (yyvsp[(1) - (3)].vindex));
 							YYABORT;
 						}
-						data.v.ival = getCompFromResName(COMP_SENSOR, (yyvsp[(3) - (3)].sInit).pString);
+						data.v.ival = getCompFromName(COMP_SENSOR, (yyvsp[(3) - (3)].sInit).pString);
 						if (data.v.ival == -1)
 						{
 							yyerror("Sensor component %s not found", (yyvsp[(3) - (3)].sInit).pString);
@@ -1787,7 +1787,7 @@ yyreduce:
 							yyerror("Typemismatch for variable %d", (yyvsp[(1) - (3)].vindex));
 							YYABORT;
 						}
-						data.v.ival = getCompFromResName(COMP_CONSTRUCT, (yyvsp[(3) - (3)].sInit).pString);
+						data.v.ival = getCompFromName(COMP_CONSTRUCT, (yyvsp[(3) - (3)].sInit).pString);
 						if (data.v.ival == -1)
 						{
 							yyerror("Construct component %s not found",	(yyvsp[(3) - (3)].sInit).pString);
@@ -1805,7 +1805,7 @@ yyreduce:
 							yyerror("Typemismatch for variable %d", (yyvsp[(1) - (3)].vindex));
 							YYABORT;
 						}
-						data.v.ival = getCompFromResName(COMP_REPAIRUNIT, (yyvsp[(3) - (3)].sInit).pString);
+						data.v.ival = getCompFromName(COMP_REPAIRUNIT, (yyvsp[(3) - (3)].sInit).pString);
 						if (data.v.ival == -1)
 						{
 							yyerror("Repair component %s not found",	(yyvsp[(3) - (3)].sInit).pString);
@@ -1823,7 +1823,7 @@ yyreduce:
 							yyerror("Typemismatch for variable %d", (yyvsp[(1) - (3)].vindex));
 							YYABORT;
 						}
-						data.v.ival = getCompFromResName(COMP_BRAIN, (yyvsp[(3) - (3)].sInit).pString);
+						data.v.ival = getCompFromName(COMP_BRAIN, (yyvsp[(3) - (3)].sInit).pString);
 						if (data.v.ival == -1)
 						{
 							yyerror("Brain component %s not found",	(yyvsp[(3) - (3)].sInit).pString);
@@ -1841,7 +1841,7 @@ yyreduce:
 							yyerror("Typemismatch for variable %d", (yyvsp[(1) - (3)].vindex));
 							YYABORT;
 						}
-						data.v.ival = getCompFromResName(COMP_WEAPON, (yyvsp[(3) - (3)].sInit).pString);
+						data.v.ival = getCompFromName(COMP_WEAPON, (yyvsp[(3) - (3)].sInit).pString);
 						if (data.v.ival == -1)
 						{
 							yyerror("Weapon component %s not found", (yyvsp[(3) - (3)].sInit).pString);

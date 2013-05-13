@@ -1561,14 +1561,6 @@ unsigned int componentType(const char *pType)
 	return 0; // Should never get here.
 }
 
-//get the component Inc for a stat based on the Resource name and type
-//returns -1 if record not found
-//used in Scripts
-SDWORD	getCompFromResName(UDWORD compType, const char *pName)
-{
-	return getCompFromName((COMPONENT_TYPE)compType, pName);
-}
-
 /// Get the component index for a stat based on the name, and verify correct type
 int getCompFromName(COMPONENT_TYPE compType, const QString &name)
 {
