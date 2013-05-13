@@ -492,8 +492,6 @@ UWORD fillResearchList(UWORD *plist, UDWORD playerID, UWORD topic, UWORD limit)
 void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE *psResearchFacility, bool bTrigger)
 {
 	RESEARCH *                                      pResearch = &asResearch[researchIndex];
-	UDWORD						type, inc;
-	UDWORD						compInc;
 	MESSAGE						*pMessage;
 	//the message gets sent to console
 	char						consoleMsg[MAX_RESEARCH_MSG_SIZE];
@@ -503,7 +501,7 @@ void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE
 	MakeResearchCompleted(&asPlayerResList[player][researchIndex]);
 
 	//check for structures to be made available
-	for (inc = 0; inc < pResearch->pStructureResults.size(); inc++)
+	for (int inc = 0; inc < pResearch->pStructureResults.size(); inc++)
 	{
 		if (apStructTypeLists[player][pResearch->pStructureResults[inc]] != REDUNDANT)
 		{
@@ -512,7 +510,7 @@ void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE
 	}
 
 	//check for structures to be made redundant
-	for (inc = 0; inc < pResearch->pRedStructs.size(); inc++)
+	for (int inc = 0; inc < pResearch->pRedStructs.size(); inc++)
 	{
 		apStructTypeLists[player][pResearch->pRedStructs[inc]] = REDUNDANT;
 	}
@@ -524,66 +522,44 @@ void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE
 		{
 			COMPONENT_STATS *pOldComp = pResearch->componentReplacement[ri].pOldComponent;
 			replaceComponent(pResearch->componentReplacement[ri].pNewComponent, pOldComp, player);
-			//set the 'old' component to unavailable
-			type = statType(pOldComp->ref);
-			//set the component state to REDUNDANT
-			compInc = pOldComp->ref - statRefStart(type);
-			apCompLists[player][type][compInc] = REDUNDANT;
+			apCompLists[player][pOldComp->compType][pOldComp->index] = REDUNDANT;
 		}
 	}
 
 	//check for artefacts to be made available
-	for (inc = 0; inc < pResearch->componentResults.size(); inc++)
+	for (int inc = 0; inc < pResearch->componentResults.size(); inc++)
 	{
 		//determine the type of artefact
-		type = statType(pResearch->componentResults[inc]->ref);
+		COMPONENT_TYPE type = pResearch->componentResults[inc]->compType;
 		//set the component state to AVAILABLE
-		compInc = pResearch->componentResults[inc]->ref - statRefStart(type);
+		int compInc = pResearch->componentResults[inc]->index;
 		if (apCompLists[player][type][compInc] != REDUNDANT)
 		{
 			apCompLists[player][type][compInc] = AVAILABLE;
 		}
 		//check for default sensor
-		if (type == COMP_SENSOR)
+		if (type == COMP_SENSOR && (asSensorStats + compInc)->location == LOC_DEFAULT)
 		{
-			if ((asSensorStats + compInc)->location == LOC_DEFAULT)
-			{
-				aDefaultSensor[player] = compInc;
-			}
+			aDefaultSensor[player] = compInc;
 		}
 		//check for default ECM
-		if (type == COMP_ECM)
+		else if (type == COMP_ECM && (asECMStats + compInc)->location == LOC_DEFAULT)
 		{
-			if ((asECMStats + compInc)->location == LOC_DEFAULT)
-			{
-				aDefaultECM[player] = compInc;
-			}
+			aDefaultECM[player] = compInc;
 		}
 		//check for default Repair
-		if (type == COMP_REPAIRUNIT)
+		else if (type == COMP_REPAIRUNIT && (asRepairStats + compInc)->location == LOC_DEFAULT)
 		{
-			if ((asRepairStats + compInc)->location == LOC_DEFAULT)
-			{
-				aDefaultRepair[player] = compInc;
-			}
-		}
-		//check if self repair has come on line
-		if (type == COMP_REPAIRUNIT)
-		{
-			if (asRepairStats[compInc].location == LOC_DEFAULT)
-			{
-				enableSelfRepair(player);
-			}
+			aDefaultRepair[player] = compInc;
+			enableSelfRepair(player);
 		}
 	}
 
 	//check for artefacts to be made redundant
-	for (inc = 0; inc < pResearch->pRedArtefacts.size(); inc++)
+	for (int inc = 0; inc < pResearch->pRedArtefacts.size(); inc++)
 	{
-		// determine the type of artefact
-		type = statType(pResearch->pRedArtefacts[inc]->ref);
-		// set the component state to REDUNDANT
-		apCompLists[player][type][pResearch->pRedArtefacts[inc]->ref - statRefStart(type)] = REDUNDANT;
+		COMPONENT_TYPE type = pResearch->pRedArtefacts[inc]->compType;
+		apCompLists[player][type][pResearch->pRedArtefacts[inc]->index] = REDUNDANT;
 	}
 
 	//Add message to player's list if Major Topic
@@ -605,12 +581,9 @@ void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE
 			}
 		}
 	}
-	else
+	else if (player == selectedPlayer && bDisplay)
 	{
-		if ((player == selectedPlayer) && bDisplay)
-		{
-			audio_QueueTrack(ID_SOUND_RESEARCH_COMPLETED);
-		}
+		audio_QueueTrack(ID_SOUND_RESEARCH_COMPLETED);
 	}
 
 	if (player == selectedPlayer && bDisplay)
@@ -1068,14 +1041,10 @@ static void replaceComponent(COMPONENT_STATS *pNewComponent, COMPONENT_STATS *pO
 					  UBYTE player)
 {
 	DROID_TEMPLATE	*psTemplates;
-	UDWORD			inc, oldType, newType, oldCompInc, newCompInc;
-
-	//get the type and index of the old component
-	oldType = statType(pOldComponent->ref);
-	oldCompInc = pOldComponent->ref - statRefStart(oldType);
-	//get the type and index of the new component
-	newType = statType(pNewComponent->ref);
-	newCompInc = pNewComponent->ref - statRefStart(newType);
+	COMPONENT_TYPE oldType = pOldComponent->compType;
+	int oldCompInc = pOldComponent->index;
+	COMPONENT_TYPE newType = pNewComponent->compType;
+	int newCompInc = pNewComponent->index;
 
 	//check old and new type are the same
 	if (oldType != newType)
@@ -1088,8 +1057,7 @@ static void replaceComponent(COMPONENT_STATS *pNewComponent, COMPONENT_STATS *pO
 	replaceDroidComponent(apsLimboDroids[player], oldType, oldCompInc, newCompInc);
 
 	//check thru the templates
-	for (psTemplates = apsDroidTemplates[player]; psTemplates != NULL;
-		psTemplates = psTemplates->psNext)
+	for (psTemplates = apsDroidTemplates[player]; psTemplates != NULL; psTemplates = psTemplates->psNext)
 	{
 		switch(oldType)
 		{
@@ -1106,7 +1074,7 @@ static void replaceComponent(COMPONENT_STATS *pNewComponent, COMPONENT_STATS *pO
 				}
 				break;
 			case COMP_WEAPON:
-				for (inc=0; inc < psTemplates->numWeaps; inc++)
+				for (int inc = 0; inc < psTemplates->numWeaps; inc++)
 				{
 					if (psTemplates->asWeaps[inc] == oldCompInc)
 					{
@@ -1117,7 +1085,6 @@ static void replaceComponent(COMPONENT_STATS *pNewComponent, COMPONENT_STATS *pO
 			default:
 				//unknown comp type
 				debug( LOG_ERROR, "Unknown component type - invalid Template" );
-				abort();
 				return;
 		}
 	}

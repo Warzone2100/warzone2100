@@ -1146,7 +1146,7 @@ static bool _intSetSystemForm(COMPONENT_STATS *psStats)
 	DES_SYSMODE		newSysMode = (DES_SYSMODE)0;
 
 	/* Figure out what the new mode should be */
-	switch (statType(psStats->ref))
+	switch (psStats->compType)
 	{
 	case COMP_WEAPON:
 		newSysMode = IDES_WEAPON;
@@ -1166,6 +1166,8 @@ static bool _intSetSystemForm(COMPONENT_STATS *psStats)
 	case COMP_REPAIRUNIT:
 		newSysMode = IDES_REPAIR;
 		break;
+	default:
+		ASSERT(false, "Bad choice");
 	}
 
 	/* If the correct form is already displayed just set the stats */
@@ -1886,7 +1888,7 @@ static bool intAddComponentButtons(ListTabWidget *compList, COMPONENT_STATS *psS
 		}
 
 		// if this is a command droid that is in use or dead - make it unavailable
-		if (statType(psCurrStats->ref) == COMP_BRAIN)
+		if (psCurrStats->compType == COMP_BRAIN)
 		{
 			if ((((COMMAND_DROID *)psCurrStats)->psDroid != NULL) ||
 			    ((COMMAND_DROID *)psCurrStats)->died)
@@ -1994,7 +1996,7 @@ static bool intAddExtraSystemButtons(ListTabWidget *compList, unsigned sensorInd
 			compList->addWidgetToLayout(button);
 
 			//just use one set of buffers for mixed system form
-			if (statType(psCurrStats->ref) == COMP_BRAIN)
+			if (psCurrStats->compType == COMP_BRAIN)
 			{
 				button->setStats(((BRAIN_STATS *)psCurrStats)->psWeaponStat);
 			}
@@ -2040,7 +2042,7 @@ static void intSetSystemStats(COMPONENT_STATS *psStats)
 	}
 
 	/* Set the correct system stats */
-	switch (statType(psStats->ref))
+	switch (psStats->compType)
 	{
 	case COMP_SENSOR:
 		intSetSensorStats((SENSOR_STATS *)psStats);
@@ -2057,6 +2059,8 @@ static void intSetSystemStats(COMPONENT_STATS *psStats)
 	case COMP_REPAIRUNIT:
 		intSetRepairStats((REPAIR_STATS *)psStats);
 		break;
+	default:
+		ASSERT(false, "Bad choice");
 	}
 }
 
@@ -2068,7 +2072,7 @@ static void intSetSystemShadowStats(COMPONENT_STATS *psStats)
 	 */
 	if (psStats)
 	{
-		switch (statType(psStats->ref))
+		switch (psStats->compType)
 		{
 		case COMP_SENSOR:
 			if (desSysMode == IDES_SENSOR)
@@ -2123,6 +2127,8 @@ static void intSetSystemShadowStats(COMPONENT_STATS *psStats)
 				psStats = NULL;
 			}
 			break;
+		default:
+			ASSERT(false, "Bad choice");
 		}
 	}
 	else // if !psStats
@@ -2425,7 +2431,7 @@ static void intSetDesignPower(DROID_TEMPLATE *psTemplate)
 }
 
 // work out current system component
-static UDWORD getSystemType(DROID_TEMPLATE *droidTemplate)
+static COMPONENT_TYPE getSystemType(DROID_TEMPLATE *droidTemplate)
 {
 	if (droidTemplate->asParts[COMP_ECM])
 	{
@@ -2464,7 +2470,7 @@ static void intSetTemplatePowerShadowStats(COMPONENT_STATS *psStats)
 		return;
 	}
 
-	UDWORD type = statType(psStats->ref);
+	COMPONENT_TYPE type = psStats->compType;
 	UDWORD power;
 	UDWORD bodyPower        = asBodyStats[sCurrDesign.asParts[COMP_BODY]].buildPower;
 	UDWORD brainPower       = asBrainStats[sCurrDesign.asParts[COMP_BRAIN]].buildPower;
@@ -2526,6 +2532,8 @@ static void intSetTemplatePowerShadowStats(COMPONENT_STATS *psStats)
 			weaponPower1 = newComponentPower;
 		}
 		break;
+	default:
+		ASSERT(false, "Bad choice");
 	}
 
 	// this code is from calcTemplatePower
@@ -2558,7 +2566,7 @@ static void intSetTemplateBodyShadowStats(COMPONENT_STATS *psStats)
 		return;
 	}
 
-	UDWORD type = statType(psStats->ref);
+	COMPONENT_TYPE type = psStats->compType;
 	UDWORD body;
 	UDWORD bodyBody        = asBodyStats[sCurrDesign.asParts[COMP_BODY]].body;
 	UDWORD brainBody       = asBrainStats[sCurrDesign.asParts[COMP_BRAIN]].body;
@@ -2620,6 +2628,8 @@ static void intSetTemplateBodyShadowStats(COMPONENT_STATS *psStats)
 			weaponBody1 = newComponentBody;
 		}
 		break;
+	default:
+		ASSERT(false, "Bad choice");
 	}
 	// this code is from calcTemplateBody
 
@@ -3353,7 +3363,7 @@ void intProcessDesign(UDWORD id)
 		}
 
 		// Now store the new stats
-		switch (statType(apsExtraSysList[id - IDDES_EXTRASYSSTART]->ref))
+		switch (apsExtraSysList[id - IDDES_EXTRASYSSTART]->compType)
 		{
 		case COMP_SENSOR:
 			// Calculate the index of the component
@@ -3447,6 +3457,8 @@ void intProcessDesign(UDWORD id)
 			/* Set the new stats on the display */
 			intSetSystemForm(apsExtraSysList[id - IDDES_EXTRASYSSTART]);
 			break;
+		default:
+			ASSERT(false, "Bad choice");
 		}
 		// Stop the button flashing
 		intSetButtonFlash(IDDES_SYSTEMBUTTON, false);
@@ -3474,7 +3486,7 @@ void intProcessDesign(UDWORD id)
 		// do the callback if in the tutorial
 		if (bInTutorial)
 		{
-			if (statType(apsExtraSysList[id - IDDES_EXTRASYSSTART]->ref) == COMP_BRAIN)
+			if (apsExtraSysList[id - IDDES_EXTRASYSSTART]->compType == COMP_BRAIN)
 			{
 				eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DESIGN_COMMAND);
 			}

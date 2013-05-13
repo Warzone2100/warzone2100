@@ -175,15 +175,13 @@ extern bool loadWeaponModifiers(const char *pFileName);
 extern bool statsShutDown(void);
 
 extern UDWORD getSpeedFactor(UDWORD terrainType, UDWORD propulsionType);
-//return the type of stat this ref refers to!
-extern UDWORD statType(UDWORD ref);
-//return the REF_START value of this type of stat
-extern UDWORD statRefStart(UDWORD stat);
-/*Returns the component type based on the string - used for reading in data */
-extern UDWORD componentType(const char* pType);
-//get the component Inc for a stat based on the name
+
+/// Get the component index for a component based on the name, verifying with type
 int getCompFromName(COMPONENT_TYPE compType, const QString &name);
+
+/// Get the component pointer for a component based on the name
 COMPONENT_STATS *getCompStatsFromName(const QString &name);
+
 /*returns the weapon sub class based on the string name passed in */
 extern bool getWeaponSubClass(const char* subClass, WEAPON_SUBCLASS* wclass);
 const char *getWeaponSubClass(WEAPON_SUBCLASS wclass);

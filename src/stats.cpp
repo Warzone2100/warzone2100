@@ -1521,46 +1521,6 @@ UDWORD statRefStart(UDWORD stat)
 	return start;
 }
 
-/*Returns the component type based on the string - used for reading in data */
-unsigned int componentType(const char *pType)
-{
-	if (!strcmp(pType, "BODY"))
-	{
-		return COMP_BODY;
-	}
-	if (!strcmp(pType, "PROPULSION"))
-	{
-		return COMP_PROPULSION;
-	}
-	if (!strcmp(pType, "BRAIN"))
-	{
-		return COMP_BRAIN;
-	}
-	if (!strcmp(pType, "REPAIR"))
-	{
-		return COMP_REPAIRUNIT;
-	}
-	if (!strcmp(pType, "ECM"))
-	{
-		return COMP_ECM;
-	}
-	if (!strcmp(pType, "SENSOR"))
-	{
-		return COMP_SENSOR;
-	}
-	if (!strcmp(pType, "WEAPON"))
-	{
-		return COMP_WEAPON;
-	}
-	if (!strcmp(pType, "CONSTRUCT"))
-	{
-		return COMP_CONSTRUCT;
-	}
-
-	ASSERT(false, "Unknown Component Type");
-	return 0; // Should never get here.
-}
-
 /// Get the component index for a stat based on the name, and verify correct type
 int getCompFromName(COMPONENT_TYPE compType, const QString &name)
 {

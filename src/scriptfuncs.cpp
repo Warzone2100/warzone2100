@@ -10320,13 +10320,12 @@ static DROID_TEMPLATE *scrCheckTemplateExists(SDWORD player, DROID_TEMPLATE *psT
 
 	for (psCurrent = apsDroidTemplates[player]; psCurrent != NULL; psCurrent = psCurrent->psNext)
 	{
-		unsigned int componentType;
 		unsigned int weaponSlot;
 
 		equal = true;
 
 		// compare components
-		for (componentType = 0; componentType < ARRAY_SIZE(psTempl->asParts); ++componentType)
+		for (int componentType = 0; componentType < ARRAY_SIZE(psTempl->asParts); ++componentType)
 		{
 			if (psTempl->asParts[componentType] != psCurrent->asParts[componentType])
 			{
