@@ -287,8 +287,6 @@ void loadCompStats(WzConfig &ini, COMPONENT_STATS *psStats, int index)
 /*Load the weapon stats from the file exported from Access*/
 bool loadWeaponStats(const char *pFileName)
 {
-	UDWORD			i, surfaceToAir;
-
 	WzConfig ini(pFileName, WzConfig::ReadOnlyAndRequired);
 	QStringList list = ini.childGroups();
 	statsAllocWeapons(list.size());
@@ -296,9 +294,10 @@ bool loadWeaponStats(const char *pFileName)
 	int nullweapon = list.indexOf("ZNULLWEAPON");
 	ASSERT_OR_RETURN(false, nullweapon >= 0, "ZNULLWEAPON is mandatory");
 	list.swap(nullweapon, 0);
-	for (i = 0; i < list.size(); ++i)
+	for (int i = 0; i < list.size(); ++i)
 	{
 		WEAPON_STATS *psStats = &asWeaponStats[i];
+		QStringList flags;
 
 		ini.beginGroup(list[i]);
 		loadCompStats(ini, psStats, i);
@@ -338,7 +337,7 @@ bool loadWeaponStats(const char *pFileName)
 		psStats->maxElevation = ini.value("maxElevation").toInt();
 		psStats->recoilValue = ini.value("recoilValue").toUInt();
 		psStats->effectSize = ini.value("effectSize").toUInt();
-		surfaceToAir = ini.value("surfaceToAir", 0).toUInt();
+		flags = ini.value("flags", 0).toStringList();
 		psStats->vtolAttackRuns = ini.value("numAttackRuns", 0).toUInt();
 		psStats->designable = ini.value("designable").toBool();
 		psStats->penetrate = ini.value("penetrate", false).toBool();
@@ -453,24 +452,15 @@ bool loadWeaponStats(const char *pFileName)
 		//set the light world value
 		psStats->lightWorld = ini.value("lightWorld", false).toBool();
 
-		//set the surfaceAir
-		if (surfaceToAir > UBYTE_MAX)
+		// interpret flags
+		psStats->surfaceToAir = SHOOT_ON_GROUND; // default
+		if (flags.contains("AirOnly", Qt::CaseInsensitive))
 		{
-			ASSERT(false, "loadWeaponStats: Surface to Air is outside of limits for weapon %s",
-			       getName(psStats));
-			return false;
+			psStats->surfaceToAir = SHOOT_IN_AIR;
 		}
-		if (surfaceToAir == 0)
+		else if (flags.contains("ShootAir", Qt::CaseInsensitive))
 		{
-			psStats->surfaceToAir = (UBYTE)SHOOT_ON_GROUND;
-		}
-		else if (surfaceToAir <= 50)
-		{
-			psStats->surfaceToAir = (UBYTE)SHOOT_IN_AIR;
-		}
-		else
-		{
-			psStats->surfaceToAir = (UBYTE)(SHOOT_ON_GROUND | SHOOT_IN_AIR);
+			psStats->surfaceToAir |= SHOOT_IN_AIR;
 		}
 
 		//set the weapon sounds to default value
