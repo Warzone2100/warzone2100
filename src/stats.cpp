@@ -174,34 +174,19 @@ void statsInitVars(void)
 	                        maxPropulsionSpeed = 0;
 }
 
-/* body stats need the extra list removing */
-static void deallocBodyStats(void)
-{
-	BODY_STATS *psStat;
-
-	for (int inc = 0; inc < numBodyStats; inc++)
-	{
-		psStat = &asBodyStats[inc];
-		free(psStat->ppIMDList);
-	}
-	delete [] asBodyStats;
-	asBodyStats = NULL;
-	numBodyStats = 0;
-}
-
 /*Deallocate all the stats assigned from input data*/
 bool statsShutDown(void)
 {
 	lookupStatPtr.clear();
 
 	STATS_DEALLOC(asWeaponStats, numWeaponStats);
-	deallocBodyStats();
 	STATS_DEALLOC(asBrainStats, numBrainStats);
 	STATS_DEALLOC(asPropulsionStats, numPropulsionStats);
 	STATS_DEALLOC(asRepairStats, numRepairStats);
 	STATS_DEALLOC(asConstructStats, numConstructStats);
 	STATS_DEALLOC(asECMStats, numECMStats);
 	STATS_DEALLOC(asSensorStats, numSensorStats);
+	STATS_DEALLOC(asBodyStats, numBodyStats);
 	deallocPropulsionTypes();
 	deallocTerrainTable();
 
@@ -529,7 +514,7 @@ bool loadBodyStats(const char *pFileName)
 		psStats->body = ini.value("hitpoints").toInt();
 		psStats->weaponSlots = ini.value("weaponSlots").toInt();
 		psStats->designable = ini.value("designable", false).toBool();
-		sstrcpy(psStats->bodyClass, ini.value("class").toString().toUtf8().constData());
+		psStats->bodyClass = ini.value("class").toString();
 		psStats->base.thermal = ini.value("armourHeat").toInt();
 		psStats->base.armour = ini.value("armourKinetic").toInt();
 		psStats->base.power = ini.value("powerOutput").toInt();
@@ -1131,7 +1116,6 @@ bool loadBodyPropulsionIMDs(const char *pFileName)
 	BODY_STATS *psBodyStat = asBodyStats;
 	unsigned int i, numStats;
 	QString propulsionName, leftIMD, rightIMD;
-	iIMDShape **startIMDs;
 
 	// check that the body and propulsion stats have already been read in
 	ASSERT(asBodyStats != NULL, "Body Stats have not been set up");
@@ -1141,8 +1125,7 @@ bool loadBodyPropulsionIMDs(const char *pFileName)
 	for (numStats = 0; numStats < numBodyStats; ++numStats)
 	{
 		psBodyStat = &asBodyStats[numStats];
-		psBodyStat->ppIMDList = (iIMDShape **) malloc(numPropulsionStats * NUM_PROP_SIDES * sizeof(iIMDShape *));
-		memset(psBodyStat->ppIMDList, 0, (numPropulsionStats * NUM_PROP_SIDES * sizeof(iIMDShape *)));
+		psBodyStat->ppIMDList.resize(numPropulsionStats * NUM_PROP_SIDES, NULL);
 	}
 	WzConfig ini(pFileName, WzConfig::ReadOnlyAndRequired);
 	QStringList list = ini.childGroups();
@@ -1180,33 +1163,28 @@ bool loadBodyPropulsionIMDs(const char *pFileName)
 				return false;
 			}
 			//allocate the left and right propulsion IMDs
-			startIMDs = psBodyStat->ppIMDList;
-			psBodyStat->ppIMDList += (numStats * NUM_PROP_SIDES);
 			QStringList values = ini.value(keys[j]).toStringList();
-			*psBodyStat->ppIMDList = NULL;
 			if (values[0].compare("0") != 0)
 			{
-				*psBodyStat->ppIMDList = (iIMDShape *) resGetData("IMD", values[0].toUtf8().constData());
-				if (*psBodyStat->ppIMDList == NULL)
+				iIMDShape *psShape = (iIMDShape *)resGetData("IMD", values[0].toUtf8().constData());
+				if (psShape == NULL)
 				{
 					debug(LOG_FATAL, "Cannot find the left propulsion PIE for body %s", list[i].toUtf8().constData());
 					return false;
 				}
+				psBodyStat->ppIMDList[numStats * NUM_PROP_SIDES + LEFT_PROP] = psShape;
 			}
-			psBodyStat->ppIMDList++;
-			*psBodyStat->ppIMDList = NULL;
 			//right IMD might not be there
 			if (values[1].compare("0") != 0)
 			{
-				*psBodyStat->ppIMDList = (iIMDShape *) resGetData("IMD", values[1].toUtf8().constData());
-				if (*psBodyStat->ppIMDList == NULL)
+				iIMDShape *psShape = (iIMDShape *)resGetData("IMD", values[1].toUtf8().constData());
+				if (psShape == NULL)
 				{
 					debug(LOG_FATAL, "Cannot find the right propulsion PIE for body %s", list[i].toUtf8().constData());
 					return false;
 				}
+				psBodyStat->ppIMDList[numStats * NUM_PROP_SIDES + RIGHT_PROP] = psShape;
 			}
-			//reset the IMDList pointer
-			psBodyStat->ppIMDList = startIMDs;
 		}
 		ini.endGroup();
 	}

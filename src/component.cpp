@@ -454,33 +454,18 @@ void displayResearchButton(BASE_STATS *Stat, Vector3i *Rotation, Vector3i *Posit
 }
 
 
-static iIMDShape *getLeftPropulsionIMD(DROID *psDroid)
+static inline iIMDShape *getLeftPropulsionIMD(DROID *psDroid)
 {
-	UDWORD			bodyStat, propStat;
-	iIMDShape		**imd;
-
-	bodyStat = psDroid->asBits[COMP_BODY];
-	propStat = psDroid->asBits[COMP_PROPULSION];
-
-	imd = asBodyStats[bodyStat].ppIMDList;
-	imd += (propStat * NUM_PROP_SIDES + LEFT_PROP);
-
-	return *imd;
+	int bodyStat = psDroid->asBits[COMP_BODY];
+	int propStat = psDroid->asBits[COMP_PROPULSION];
+	return asBodyStats[bodyStat].ppIMDList[propStat * NUM_PROP_SIDES + LEFT_PROP];
 }
 
-
-static iIMDShape *getRightPropulsionIMD(DROID *psDroid)
+static inline iIMDShape *getRightPropulsionIMD(DROID *psDroid)
 {
-	UDWORD			bodyStat, propStat;
-	iIMDShape		**imd;
-
-	bodyStat = psDroid->asBits[COMP_BODY];
-	propStat = psDroid->asBits[COMP_PROPULSION];
-
-	imd = asBodyStats[bodyStat].ppIMDList;
-	imd += (propStat * NUM_PROP_SIDES + RIGHT_PROP);
-
-	return *imd;
+	int bodyStat = psDroid->asBits[COMP_BODY];
+	int propStat = psDroid->asBits[COMP_PROPULSION];
+	return asBodyStats[bodyStat].ppIMDList[propStat * NUM_PROP_SIDES + RIGHT_PROP];
 }
 
 
