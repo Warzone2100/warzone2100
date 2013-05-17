@@ -348,7 +348,7 @@ struct WEAPON_STATS : public COMPONENT_STATS
 		short maxRange;
 		short minRange;
 		short hitChance;
-		short firePause;     ///< Pause between each shot
+		int firePause;     ///< Pause between each shot
 		short numRounds;     ///< The number of rounds per salvo
 		short reloadTime;    ///< Time to reload the round of ammo
 		short damage;
