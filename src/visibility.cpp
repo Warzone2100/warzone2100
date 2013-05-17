@@ -55,6 +55,25 @@ static const int VIS_LEVEL_DEC = 50;
 // integer amount to change visiblility this turn
 static SDWORD			visLevelInc, visLevelDec;
 
+class SPOTTER
+{
+public:
+	SPOTTER(int x, int y, int plr, int radius, int type, uint32_t expiry = 0)
+	 : pos(x, y, 0), player(plr), sensorRadius(radius), sensorType(type), expiryTime(expiry), numWatchedTiles(0), watchedTiles(NULL)
+	 { id = generateSynchronisedObjectId(); }
+	~SPOTTER();
+
+	Position pos;
+	int player;
+	int sensorRadius;
+	int sensorType; // 0 - vision, 1 - radar
+	uint32_t expiryTime; // when to self-destruct, zero if never
+	int numWatchedTiles;
+	TILEPOS *watchedTiles;
+	uint32_t id;
+};
+static std::vector<SPOTTER *> apsInvisibleViewers;
+
 // horrible hack because this code is full of them and I ain't rewriting it all - Per
 #define MAX_SEEN_TILES (29*29 * 355/113)  // Increased hack to support 28 tile sensor radius. - Cyp
 
@@ -63,6 +82,8 @@ static SDWORD			visLevelInc, visLevelDec;
 static int *gNumWalls = NULL;
 static Vector2i *gWall = NULL;
 
+// forward declarations
+static void setSeenBy(BASE_OBJECT *psObj, unsigned viewer, int val);
 
 // initialise the visibility stuff
 bool visInitialise(void)
@@ -96,6 +117,98 @@ static inline void updateTileVis(MAPTILE *psTile)
 			psTile->sensorBits &= ~(1 << i);        // mark as hidden
 		}
 	}
+}
+
+uint32_t addSpotter(int x, int y, int player, int radius, bool radar, uint32_t expiry)
+{
+	SPOTTER *psSpot = new SPOTTER(x, y, player, radius, (int)radar, expiry);
+	size_t size;
+	const WavecastTile *tiles = getWavecastTable(radius, &size);
+	psSpot->watchedTiles = (TILEPOS *)malloc(size * sizeof(*psSpot->watchedTiles));
+	for (int i = 0; i < size; ++i)
+	{
+		const int mapX = x + tiles[i].dx;
+		const int mapY = y + tiles[i].dy;
+		if (mapX < 0 || mapX >= mapWidth || mapY < 0 || mapY >= mapHeight)
+		{
+			continue;
+		}
+		MAPTILE *psTile = mapTile(mapX, mapY);
+		psTile->tileExploredBits |= alliancebits[player];
+		uint8_t *visionType = (!radar) ? psTile->watchers : psTile->sensors;
+		if (visionType[player] < UBYTE_MAX)
+		{
+			TILEPOS tilePos = {uint8_t(mapX), uint8_t(mapY), uint8_t(radar)};
+			visionType[player]++;          // we observe this tile
+			updateTileVis(psTile);
+			psSpot->watchedTiles[psSpot->numWatchedTiles++] = tilePos;    // record having seen it
+		}
+	}
+	apsInvisibleViewers.push_back(psSpot);
+	return psSpot->id;
+}
+
+bool removeSpotter(uint32_t id)
+{
+	for (int i = 0; i < apsInvisibleViewers.size(); i++)
+	{
+		SPOTTER *psSpot = apsInvisibleViewers.at(i);
+		if (psSpot->id == id)
+		{
+			delete psSpot;
+			apsInvisibleViewers.erase(apsInvisibleViewers.begin() + i);
+			return true;
+		}
+	}
+	return false;
+}
+
+void removeSpotters()
+{
+	while (!apsInvisibleViewers.empty())
+	{
+		SPOTTER *psSpot = apsInvisibleViewers.back();
+		delete psSpot;
+		apsInvisibleViewers.pop_back();
+	}
+}
+
+static void updateSpotters()
+{
+	static GridList gridList;  // static to avoid allocations.
+	for (int i = 0; i < apsInvisibleViewers.size(); i++)
+	{
+		SPOTTER *psSpot = apsInvisibleViewers.at(i);
+		if (psSpot->expiryTime != 0 && psSpot->expiryTime < gameTime)
+		{
+			delete psSpot;
+			apsInvisibleViewers.erase(apsInvisibleViewers.begin() + i);
+			continue;
+		}
+		// else, ie if not expired, show objects around it
+		gridList = gridStartIterateUnseen(world_coord(psSpot->pos.x), world_coord(psSpot->pos.y), psSpot->sensorRadius, psSpot->player);
+		for (GridIterator gi = gridList.begin(); gi != gridList.end(); ++gi)
+		{
+			BASE_OBJECT *psObj = *gi;
+
+			// Tell system that this side can see this object
+			setSeenBy(psObj, psSpot->player, UBYTE_MAX);
+		}
+	}
+}
+
+SPOTTER::~SPOTTER()
+{
+	for (int i = 0; i < numWatchedTiles; i++)
+	{
+		const TILEPOS pos = watchedTiles[i];
+		MAPTILE *psTile = mapTile(pos.x, pos.y);
+		uint8_t *visionType = (pos.type == 0) ? psTile->watchers : psTile->sensors;
+		ASSERT(visionType[player] > 0, "Not watching watched tile (%d, %d)", (int)pos.x, (int)pos.y);
+		visionType[player]--;
+		updateTileVis(psTile);
+	}
+	free(watchedTiles);
 }
 
 /* Record all tiles that some object confers visibility to. Only record each tile
@@ -651,6 +764,7 @@ static void processVisibilityLevel(BASE_OBJECT *psObj)
 
 void processVisibility()
 {
+	updateSpotters();
 	for (int player = 0; player < MAX_PLAYERS; ++player)
 	{
 		BASE_OBJECT *lists[] = {apsDroidLists[player], apsStructLists[player], apsFeatureLists[player]};

@@ -100,4 +100,8 @@ static inline int objJammerPower(const BASE_OBJECT* psObj)
 	return 0;
 }
 
+void removeSpotters();
+bool removeSpotter(uint32_t id);
+uint32_t addSpotter(int x, int y, int player, int radius, bool radar, uint32_t expiry = 0);
+
 #endif // __INCLUDED_SRC_VISIBILITY__

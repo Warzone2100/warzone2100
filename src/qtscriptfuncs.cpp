@@ -3764,6 +3764,32 @@ static QScriptValue js_cameraTrack(QScriptContext *context, QScriptEngine *)
 	return QScriptValue();
 }
 
+//-- \subsection{addSpotter(x, y, player, range, type, expiry)}
+//-- Add an invisible viewer at a given position for given player that shows map in given range. \emph{type}
+//-- is zero for vision reveal, or one for radar reveal. The difference is that a radar reveal can be obstructed 
+//-- by ECM jammers. \emph{expiry}, if non-zero, is the game time at which the spotter shall automatically be
+//-- removed. The function returns a unique ID that can be used to remove the spotter with \emph{removeSpotter}.
+static QScriptValue js_addSpotter(QScriptContext *context, QScriptEngine *)
+{
+	int x = context->argument(0).toInt32();
+	int y = context->argument(1).toInt32();
+	int player = context->argument(2).toInt32();
+	int range = context->argument(3).toInt32();
+	bool radar = context->argument(4).toBool();
+	uint32_t expiry = context->argument(5).toUInt32();
+	uint32_t id = addSpotter(x, y, player, range, radar, expiry);
+	return QScriptValue(id);
+}
+
+//-- \subsection{removeSpotter(id)}
+//-- Remove a spotter given its unique ID.
+static QScriptValue js_removeSpotter(QScriptContext *context, QScriptEngine *)
+{
+	uint32_t id = context->argument(0).toUInt32();
+	removeSpotter(id);
+	return QScriptValue();
+}
+
 //-- \subsection{syncRandom(limit)}
 //-- Generate a synchronized random number in range 0...(limit - 1) that will be the same if this function is 
 //-- run on all network peers in the same game frame. If it is called on just one peer (such as would be 
@@ -4355,6 +4381,8 @@ bool registerFunctions(QScriptEngine *engine, QString scriptName)
 	engine->globalObject().setProperty("cameraTrack", engine->newFunction(js_cameraTrack));
 	engine->globalObject().setProperty("cameraZoom", engine->newFunction(js_cameraZoom));
 	engine->globalObject().setProperty("resetArea", engine->newFunction(js_resetArea));
+	engine->globalObject().setProperty("addSpotter", engine->newFunction(js_addSpotter));
+	engine->globalObject().setProperty("removeSpotter", engine->newFunction(js_removeSpotter));
 
 	// horrible hacks follow -- do not rely on these being present!
 	engine->globalObject().setProperty("hackNetOff", engine->newFunction(js_hackNetOff));
