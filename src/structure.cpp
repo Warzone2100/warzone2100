@@ -2465,49 +2465,52 @@ bool IsPlayerDroidLimitReached(int player)
 	return numDroids >= getMaxDroids(player);
 }
 
-static bool maxDroidsByTypeReached(STRUCTURE *psStructure)
-{
-	FACTORY		*psFact = &psStructure->pFunctionality->factory;
-
-	CHECK_STRUCTURE(psStructure);
-
-	if (droidTemplateType((DROID_TEMPLATE *)psFact->psSubject) == DROID_COMMAND
-	 && getNumCommandDroids(psStructure->player) >= getMaxCommanders(psStructure->player))
-	{
-		return true;
-	}
-
-	if ((droidTemplateType((DROID_TEMPLATE *)psFact->psSubject) == DROID_CONSTRUCT
-	  || droidTemplateType((DROID_TEMPLATE *)psFact->psSubject) == DROID_CYBORG_CONSTRUCT)
-	 && getNumConstructorDroids(psStructure->player) >= getMaxConstructors(psStructure->player))
-	{
-		return true;
-	}
-
-	return false;
-}
-
 // Check for max number of units reached and halt production.
 //
 bool CheckHaltOnMaxUnitsReached(STRUCTURE *psStructure)
 {
 	CHECK_STRUCTURE(psStructure);
 
+	char limitMsg[300];
+	bool isLimit = false;
+
+	DROID_TEMPLATE *templ = psStructure->pFunctionality->factory.psSubject;
+
 	// if the players that owns the factory has reached his (or hers) droid limit
 	// then put production on hold & return - we need a message to be displayed here !!!!!!!
-	if (IsPlayerDroidLimitReached(psStructure->player) ||
-		maxDroidsByTypeReached(psStructure))
+	if (IsPlayerDroidLimitReached(psStructure->player))
 	{
-		if ((psStructure->player == selectedPlayer) &&
-			(lastMaxUnitMessage + MAX_UNIT_MESSAGE_PAUSE < gameTime))
-		{
-			addConsoleMessage(_("Can't build anymore units, Command Control Limit Reached - Production Halted"), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
-			lastMaxUnitMessage = gameTime;
-		}
-		return true;
+		isLimit = true;
+		sstrcpy(limitMsg, _("Can't build anymore units, Unit Limit Reached — Production Halted"));
+	}
+	else switch (droidTemplateType(templ))
+	{
+		case DROID_COMMAND:
+			if (getNumCommandDroids(psStructure->player) >= getMaxCommanders(psStructure->player))
+			{
+				isLimit = true;
+				ssprintf(limitMsg, _("Can't build anymore \"%s\", Command Control Limit Reached — Production Halted"), templ->name.toUtf8().constData());
+			}
+			break;
+		case DROID_CONSTRUCT:
+		case DROID_CYBORG_CONSTRUCT:
+			if (getNumConstructorDroids(psStructure->player) >= getMaxConstructors(psStructure->player))
+			{
+				isLimit = true;
+				ssprintf(limitMsg, _("Can't build anymore \"%s\", Construction Unit Limit Reached — Production Halted"), templ->name.toUtf8().constData());
+			}
+			break;
+		default:
+			break;
 	}
 
-	return false;
+	if (psStructure->player == selectedPlayer && lastMaxUnitMessage + MAX_UNIT_MESSAGE_PAUSE < gameTime)
+	{
+		addConsoleMessage(limitMsg, DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+		lastMaxUnitMessage = gameTime;
+	}
+
+	return isLimit;
 }
 
 
