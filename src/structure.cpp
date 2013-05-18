@@ -484,6 +484,16 @@ bool loadStructureStats(QString filename)
 			psStats->upgrade[i].thermal = ini.value("thermal", 0).toUInt();
 		}
 
+		psStats->flags = 0;
+		QStringList flags = ini.value("flags").toStringList();
+		for (int i = 0; i < flags.size(); i++)
+		{
+			if (flags[i] == "Connected")
+			{
+				psStats->flags |= STRUCTURE_CONNECTED;
+			}
+		}
+
 		// set structure strength
 		QString strength = ini.value("strength", "").toString();
 		ASSERT_OR_RETURN(false, structStrength.contains(strength), "Invalid strength '%s' of structure '%s'", strength.toUtf8().constData(), getID(psStats));
@@ -4092,6 +4102,31 @@ bool validLocation(BASE_STATS *psStats, Vector2i pos, uint16_t direction, unsign
 						}
 					}
 				}
+				if (psBuilding->flags & STRUCTURE_CONNECTED)
+				{
+					bool connection = false;
+					for (int j = -1; j < b.size.y + 1; ++j)
+					{
+						for (int i = -1; i < b.size.x + 1; ++i)
+						{
+							//skip the actual area the structure will cover
+							if (i < 0 || i >= b.size.x || j < 0 || j >= b.size.y)
+							{
+								STRUCTURE const *psStruct = getTileStructure(b.map.x + i, b.map.y + j);
+								if (psStruct != NULL && psStruct->player == player && psStruct->status == SS_BUILT)
+								{
+									connection = true;
+									break;
+								}
+							}
+						}
+					}
+					if (!connection)
+					{
+						return false; // needed to be connected to another building
+					}
+				}
+
 				/*need to check each tile the structure will sit on*/
 				for (int j = 0; j < b.size.y; ++j)
 					for (int i = 0; i < b.size.x; ++i)

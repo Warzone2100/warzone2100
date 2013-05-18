@@ -100,6 +100,8 @@ enum STRUCT_ANIM_STATES
 	SAS_CLOSING,
 };
 
+#define STRUCTURE_CONNECTED 0x0001 ///< This structure must be built side by side with another of the same player
+
 //this structure is used to hold the permenant stats for each type of building
 struct STRUCTURE_STATS : public BASE_STATS
 {
@@ -125,6 +127,7 @@ struct STRUCTURE_STATS : public BASE_STATS
 	UDWORD		numWeaps;			/*Number of weapons for default */
 
 	struct WEAPON_STATS    *psWeapStat[STRUCT_MAXWEAPS];
+	uint64_t	flags;
 
 	struct
 	{
