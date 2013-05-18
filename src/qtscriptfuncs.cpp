@@ -1248,7 +1248,7 @@ static QScriptValue js_findResearch(QScriptContext *context, QScriptEngine *engi
 //-- \subsection{pursueResearch(lab, research)}
 //-- Start researching the first available technology on the way to the given technology.
 //-- First parameter is the structure to research in, which must be a research lab. The
-//-- second parameter is the technology to pursue, as a text string as defined in "research.txt".
+//-- second parameter is the technology to pursue, as a text string as defined in "research.ini".
 //-- The second parameter may also be an array of such strings. The first technology that has
 //-- not yet been researched in that list will be pursued.
 static QScriptValue js_pursueResearch(QScriptContext *context, QScriptEngine *engine)
@@ -1350,7 +1350,7 @@ static QScriptValue js_pursueResearch(QScriptContext *context, QScriptEngine *en
 
 //-- \subsection{getResearch(research)}
 //-- Fetch information about a given technology item, given by a string that matches
-//-- its definition in "research.txt". If not found, returns null.
+//-- its definition in "research.ini". If not found, returns null.
 static QScriptValue js_getResearch(QScriptContext *context, QScriptEngine *engine)
 {
 	int player = engine->globalObject().property("me").toInt32();
@@ -1654,7 +1654,7 @@ static QScriptValue js_buildDroid(QScriptContext *context, QScriptEngine *engine
 //-- Returns an array of structure objects. If no parameters given, it will
 //-- return all of the structures for the current player. The second parameter
 //-- can be either a string with the name of the structure type as defined in
-//-- "structures.txt", or a stattype as defined in \ref{objects:structure}. The
+//-- "structures.ini", or a stattype as defined in \ref{objects:structure}. The
 //-- third parameter can be used to filter by visibility, the default is not
 //-- to filter.
 static QScriptValue js_enumStruct(QScriptContext *context, QScriptEngine *engine)
@@ -1707,7 +1707,7 @@ static QScriptValue js_enumStruct(QScriptContext *context, QScriptEngine *engine
 //-- Returns an array of structure objects in your base when on an off-world mission, NULL otherwise.
 //-- If no parameters given, it will return all of the structures for the current player.
 //-- The second parameter can be either a string with the name of the structure type as defined
-//-- in "structures.txt", or a stattype as defined in \ref{objects:structure}.
+//-- in "structures.ini", or a stattype as defined in \ref{objects:structure}.
 //-- The third parameter can be used to filter by visibility, the default is not
 //-- to filter.
 static QScriptValue js_enumStructOffWorld(QScriptContext *context, QScriptEngine *engine)
@@ -1757,7 +1757,7 @@ static QScriptValue js_enumStructOffWorld(QScriptContext *context, QScriptEngine
 }
 
 //-- \subsection{enumFeature(player[, name])}
-//-- Returns an array of all features seen by player of given name, as defined in "features.txt".
+//-- Returns an array of all features seen by player of given name, as defined in "features.ini".
 //-- If player is \emph{ALL_PLAYERS}, it will return all features irrespective of visibility to any player. If
 //-- name is empty, it will return any feature.
 static QScriptValue js_enumFeature(QScriptContext *context, QScriptEngine *engine)
