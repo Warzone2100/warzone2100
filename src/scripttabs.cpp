@@ -2231,8 +2231,6 @@ TYPE_EQUIV asEquivTable[] =
 // Initialise the script system
 bool scrTabInitialise(void)
 {
-	unsigned int i;
-
 	if (!scriptInitialise())
 	{
 		return false;
@@ -2316,10 +2314,6 @@ bool scrTabInitialise(void)
 	// initialise various variables
 	scrGameLevel = 0;
 	bInTutorial = false;
-
-	/* Initialize debug output */
-	for(i=0; i<DEBUGMENU_MAX_ENTRIES; i++)
-		debugMenuEntry[i][0] = '\0';
 
 	/* Initialize chat message struct */
 	chat_msg.numCommands = 0;

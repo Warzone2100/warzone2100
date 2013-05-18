@@ -250,7 +250,7 @@ void kf_TileInfo(void);
 
 void kf_NoAssert(void);
 
-extern void	kf_ToggleWatchWindow( void );
+void kf_RevealMapAtPos();
 
 bool runningMultiplayer(void);
 

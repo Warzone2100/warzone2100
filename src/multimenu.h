@@ -41,24 +41,12 @@ extern bool		intCloseMultiMenu		(void);
 extern void		intCloseMultiMenuNoAnim	(void);
 extern bool		intAddMultiMenu			(void);
 
-extern bool		addDebugMenu			(bool bAdd);
-extern void		intCloseDebugMenuNoAnim	(void);
-extern void		setDebugMenuEntry(char *entry, SDWORD index);
-
 extern bool		MultiMenuUp;
-
-extern bool		DebugMenuUp;
 
 extern UDWORD		current_numplayers;
 extern UDWORD		current_tech;
 
 #define MULTIMENU				10600
 #define MULTIMENU_FORM			MULTIMENU
-
-#define	DEBUGMENU				106000
-#define	DEBUGMENU_CLOSE			(DEBUGMENU+1)
-#define	DEBUGMENU_MAX_ENTRIES	10
-
-extern char		debugMenuEntry[DEBUGMENU_MAX_ENTRIES][MAX_STR_LENGTH];
 
 #endif // __INCLUDED_SRC_MULTIMENU__

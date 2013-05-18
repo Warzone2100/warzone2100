@@ -70,16 +70,9 @@ W_SCREEN  *psRScreen;			// requester stuff.
 extern char	MultiCustomMapsPath[PATH_MAX];
 
 bool	MultiMenuUp			= false;
-bool	DebugMenuUp		= false;
 static UDWORD	context = 0;
 UDWORD	current_tech = 1;
 UDWORD	current_numplayers = 4;
-
-#define DEBUGMENU_FORM_W		200
-#define DEBUGMENU_FORM_X		(screenWidth - DEBUGMENU_FORM_W)		//pie_GetVideoBufferWidth() ?
-#define DEBUGMENU_FORM_Y		110 + D_H
-
-#define DEBUGMENU_ENTRY_H		20
 
 #define MULTIMENU_FORM_X		10 + D_W
 #define MULTIMENU_FORM_Y		23 + D_H
@@ -153,8 +146,6 @@ static const unsigned M_REQUEST_NP[] = {M_REQUEST_2P,    M_REQUEST_3P,    M_REQU
 bool			multiRequestUp = false;				//multimenu is up.
 static unsigned         hoverPreviewId;
 static bool		giftsUp[MAX_PLAYERS] = {true};		//gift buttons for player are up.
-
-char		debugMenuEntry[DEBUGMENU_MAX_ENTRIES][MAX_STR_LENGTH];
 
 // ////////////////////////////////////////////////////////////////////////////
 // Map / force / name load save stuff.
@@ -846,24 +837,6 @@ static void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	}
 }
 
-static void displayDebugMenu(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
-{
-	char			str[128];
-	int x = xOffset + psWidget->x();
-	int y = yOffset + psWidget->y();
-	UDWORD			index = psWidget->UserData;
-
-	iV_SetFont(font_regular);											// font
-	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
-
-	if(strcmp(debugMenuEntry[index],""))
-	{
-		sprintf(str,"%s", debugMenuEntry[index]);
-		iV_DrawText(str, x, y+MULTIMENU_FONT_OSET);
-	}
-}
-
-
 // ////////////////////////////////////////////////////////////////////////////
 // alliance display funcs
 
@@ -1013,113 +986,6 @@ static void addMultiPlayer(UDWORD player,UDWORD pos)
 
 			giftsUp[player] = true;				// note buttons are up!
 	}
-}
-
-/* Output some text to the debug menu */
-void setDebugMenuEntry(char *entry, SDWORD index)
-{
-	bool		bAddingNew = false;
-
-	/* New one? */
-	if(!strcmp(debugMenuEntry[index],""))
-	{
-		bAddingNew = true;
-	}
-
-	/* Set */
-	strcpy(debugMenuEntry[index], entry);
-
-	/* Re-open it if already open to recalculate height */
-	if(DebugMenuUp && bAddingNew)
-	{
-		intCloseDebugMenuNoAnim();
-		(void)addDebugMenu(true);
-	}
-}
-
-void intCloseDebugMenuNoAnim(void)
-{
-	//widgDelete(psWScreen, DEBUGMENU_CLOSE);
-	widgDelete(psWScreen, DEBUGMENU);
-	DebugMenuUp = false;
-	//intMode		= INT_NORMAL;
-}
-
-/* Opens/closes a 'watch' window (Default key combo: Alt+Space),
- * only available in debug mode
- */
-bool addDebugMenu(bool bAdd)
-{
-	UDWORD			i,pos = 0,formHeight=0;
-
-	/* Close */
-	if(!bAdd)	//|| widgGetFromID(psWScreen,DEBUGMENU)
-	{
-		intCloseDebugMenuNoAnim();
-		return true;
-	}
-
-	intResetScreen(false);
-
-	// calculate required height.
-	formHeight = 12;		//DEBUGMENU_ENTRY_H
-	for(i=0;i<DEBUGMENU_MAX_ENTRIES;i++)
-	{
-		if(strcmp(debugMenuEntry[i],""))
-			formHeight += DEBUGMENU_ENTRY_H;
-	}
-
-	WIDGET *parent = psWScreen->psForm;
-
-	// add form
-	IntFormAnimated *debugMenu = new IntFormAnimated(parent);
-	debugMenu->id = DEBUGMENU;
-	debugMenu->setGeometry(DEBUGMENU_FORM_X, DEBUGMENU_FORM_Y, DEBUGMENU_FORM_W, formHeight);
-
-	// add debug info
-	pos = 0;
-	for(i=0;i<DEBUGMENU_MAX_ENTRIES;i++)
-	{
-		if(strcmp(debugMenuEntry[i],""))
-		{
-			// add form
-			W_FORMINIT sFormInit;
-			sFormInit.formID		  = DEBUGMENU;
-			sFormInit.id			  = DEBUGMENU_CLOSE + pos + 1;
-			sFormInit.style			  = WFORM_PLAIN;
-			sFormInit.x				  = 5;
-			sFormInit.y				  = 5 + DEBUGMENU_ENTRY_H * pos;
-			sFormInit.width			  = DEBUGMENU_FORM_W;
-			sFormInit.height		  = DEBUGMENU_ENTRY_H;
-			sFormInit.pDisplay		  = displayDebugMenu;
-			sFormInit.UserData		  = i;
-			widgAddForm(psWScreen, &sFormInit);
-
-			pos++;
-		}
-	}
-
-	// Add the close button.
-	/*
-	sButInit.formID = DEBUGMENU;
-	sButInit.id = DEBUGMENU_CLOSE;
-	sButInit.style = WBUT_PLAIN;
-	sButInit.x = DEBUGMENU_FORM_W - CLOSE_WIDTH;
-	sButInit.y = 0;
-	sButInit.width = CLOSE_WIDTH;
-	sButInit.height = CLOSE_HEIGHT;
-	sButInit.pTip = _("Close");
-	sButInit.FontID = font_regular;
-	sButInit.pDisplay = intDisplayImageHilight;
-	sButInit.pUserData = (void*)PACKDWORD_TRI(0,IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
-	if (!widgAddButton(psWScreen, &sButInit))
-	{
-		return false;
-	} */
-
-	DebugMenuUp = true;
-
-	return true;
 }
 
 bool intAddMultiMenu(void)

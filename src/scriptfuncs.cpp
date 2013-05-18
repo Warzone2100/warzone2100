@@ -9870,35 +9870,17 @@ bool scrLog(void)
 	return true;
 }
 
-/* Show/Hide multiplayer debug menu */
-bool scrDebugMenu(void)
+bool scrDebugMenu() // no-op
 {
-	int32_t		menuUp;		// was SDWORD which happens to be int32_t, but is being used as a VAL_BOOL, so : ** see warning about conversion
-
-	if (!stackPopParams(1, VAL_BOOL, &menuUp))
-	{
-		debug(LOG_ERROR, "scrDebugMenu(): stack failed");
-		return false;
-	}
-
-	(void)addDebugMenu(menuUp);
-
+	int32_t menuUp;
+	stackPopParams(1, VAL_BOOL, &menuUp);
 	return true;
 }
 
-/* Set debug menu output string */
-bool scrSetDebugMenuEntry(void)
+bool scrSetDebugMenuEntry() // no-op
 {
-	SDWORD		index;
-
-	if (!stackPopParams(2, VAL_STRING, &strParam1, VAL_INT, &index))
-	{
-		debug(LOG_ERROR, "scrSetDebugMenuEntry(): stack failed");
-		return false;
-	}
-
-	setDebugMenuEntry(strParam1, index);
-
+	int index;
+	stackPopParams(2, VAL_STRING, &strParam1, VAL_INT, &index);
 	return true;
 }
 

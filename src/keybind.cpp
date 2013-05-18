@@ -835,11 +835,9 @@ void	kf_ToggleCamera( void )
 	camToggleStatus();
 }
 
-/* Toggle 'watch' window on/off */
-void kf_ToggleWatchWindow( void )
+void kf_RevealMapAtPos()
 {
-	addConsoleMessage("WATCH WINDOW!", LEFT_JUSTIFY, SYSTEM_MESSAGE); // what is this? - per
-	(void)addDebugMenu(!DebugMenuUp);
+	addSpotter(mouseTileX, mouseTileY, selectedPlayer, 1024, 0, gameTime + 2000);
 }
 
 // --------------------------------------------------------------------------
