@@ -2059,6 +2059,9 @@ static void intSetSystemStats(COMPONENT_STATS *psStats)
 	case COMP_REPAIRUNIT:
 		intSetRepairStats((REPAIR_STATS *)psStats);
 		break;
+	case COMP_BRAIN:
+		// ??? TBD FIXME
+		break;
 	default:
 		ASSERT(false, "Bad choice");
 	}
