@@ -62,28 +62,13 @@ static bool researchedPart(DROID_TEMPLATE *psCurr, int player, COMPONENT_TYPE pa
 
 static bool researchedWeap(DROID_TEMPLATE *psCurr, int player, int weapIndex, bool allowRedundant)
 {
-	return researchedItem(psCurr, player, COMP_WEAPON, psCurr->asWeaps[weapIndex], false, allowRedundant);
+	int availability = apCompLists[player][COMP_WEAPON][psCurr->asWeaps[weapIndex]];
+	return availability == AVAILABLE || (allowRedundant && availability == REDUNDANT);
 }
 
 bool researchedTemplate(DROID_TEMPLATE *psCurr, int player, bool allowRedundant, bool verbose)
 {
 	ASSERT_OR_RETURN(false, psCurr, "Given a null template");
-	// super hack -- cyborgs and transports are special, only check their body
-	switch (psCurr->droidType)
-	{
-	case DROID_PERSON:
-	case DROID_CYBORG:
-	case DROID_CYBORG_SUPER:
-	case DROID_CYBORG_CONSTRUCT:
-	case DROID_CYBORG_REPAIR:
-	case DROID_TRANSPORTER:
-	case DROID_SUPERTRANSPORTER:
-		return researchedPart(psCurr, player, COMP_BODY, false, allowRedundant);
-	default:
-		break; // now proceed to normal droids...
-	}
-	// Note the ugly special case for commanders - their weapon is unavailable
-	// NOTE: This was one ugly & hard to debug if statement.
 	bool resBody = researchedPart(psCurr, player, COMP_BODY, false, allowRedundant);
 	bool resBrain = researchedPart(psCurr, player, COMP_BRAIN, true, allowRedundant);
 	bool resProp = researchedPart(psCurr, player, COMP_PROPULSION, false, allowRedundant);
@@ -97,8 +82,7 @@ bool researchedTemplate(DROID_TEMPLATE *psCurr, int player, bool allowRedundant,
 		debug(LOG_ERROR, "%s : not researched : body=%d brai=%d prop=%d sensor=%d ecm=%d rep=%d con=%d", getName(psCurr),
 		      (int)resBody, (int)resBrain, (int)resProp, (int)resSensor, (int)resEcm, (int)resRepair, (int)resConstruct);
 	}
-	unsigned ignoreFirstWeapon = psCurr->asParts[COMP_BRAIN] != 0? 1 : 0;
-	for (unsigned weapIndex = ignoreFirstWeapon; weapIndex < psCurr->numWeaps && researchedEverything; ++weapIndex)
+	for (unsigned weapIndex = 0; weapIndex < psCurr->numWeaps && researchedEverything; ++weapIndex)
 	{
 		researchedEverything = researchedWeap(psCurr, player, weapIndex, allowRedundant);
 		if (!researchedEverything && verbose)

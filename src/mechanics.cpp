@@ -64,12 +64,6 @@ bool allocComponentList(COMPONENT_TYPE	type, SDWORD number)
 		}
 
 		apCompLists[inc][type] = (UBYTE *) malloc(sizeof(UBYTE) * number);
-		if (apCompLists[inc][type] == NULL)
-		{
-			debug(LOG_FATAL, "Out of memory assigning Player Component Lists");
-			abort();
-			return false;
-		}
 
 		//initialise the players' lists
 		for (comp = 0; comp < number; comp++)
@@ -141,14 +135,7 @@ bool allocStructLists(void)
 	{
 		if (numStructureStats)
 		{
-			apStructTypeLists[inc] = (UBYTE *) malloc(sizeof(UBYTE) *
-			        numStructureStats);
-			if (apStructTypeLists[inc] == NULL)
-			{
-				debug(LOG_FATAL, "Out of memory assigning Player Structure Lists");
-				abort();
-				return false;
-			}
+			apStructTypeLists[inc] = (UBYTE *) malloc(sizeof(UBYTE) * numStructureStats);
 			for (stat = 0; stat < (SDWORD)numStructureStats; stat++)
 			{
 				apStructTypeLists[inc][stat] = UNAVAILABLE;

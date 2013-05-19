@@ -50,27 +50,6 @@ function eventGameInit()
 		enableStructure("A0PowerGenerator", playnum);
 		enableStructure("A0ResearchFacility", playnum);
 
-		// We need to enable these in order for scripts to be able to generate their templates.
-		makeComponentAvailable("CyborgLegs", playnum);
-		makeComponentAvailable("Cyb-Wpn-Atmiss", playnum);
-		makeComponentAvailable("CyborgCannon", playnum);
-		makeComponentAvailable("CyborgChaingun", playnum);
-		makeComponentAvailable("CyborgFlamer01", playnum);
-		makeComponentAvailable("Cyb-Wpn-Grenade", playnum);
-		makeComponentAvailable("Cyb-Hvywpn-A-T", playnum);
-		makeComponentAvailable("Cyb-Hvywpn-Acannon", playnum);
-		makeComponentAvailable("Cyb-Hvywpn-HPV", playnum);
-		makeComponentAvailable("Cyb-Hvywpn-Mcannon", playnum);
-		makeComponentAvailable("Cyb-Hvywpn-PulseLsr", playnum);
-		makeComponentAvailable("Cyb-Hvywpn-RailGunner", playnum);
-		makeComponentAvailable("Cyb-Hvywpn-TK", playnum);
-		makeComponentAvailable("Cyb-Wpn-Laser", playnum);
-		makeComponentAvailable("Cyb-Wpn-Rail1", playnum);
-		makeComponentAvailable("CyborgRocket", playnum);
-		makeComponentAvailable("CyborgRotMG", playnum);
-		makeComponentAvailable("Cyb-Wpn-Thermite", playnum);
-		makeComponentAvailable("CyborgFlamer01", playnum);
-		
 		setStructureLimits("A0LightFactory", 5, playnum);	// set structure limits
 		setStructureLimits("A0PowerGenerator", 8, playnum);
 		setStructureLimits("A0ResearchFacility", 5, playnum);
