@@ -375,7 +375,7 @@ static const StringToEnum<STRUCTURE_TYPE> map_STRUCTURE_TYPE[] =
 	{ "CYBORG FACTORY",     REF_CYBORG_FACTORY      },
 	{ "VTOL FACTORY",       REF_VTOL_FACTORY        },
 	{ "LAB",                REF_LAB                 },
-	{ "DOOR",               REF_BLASTDOOR           },
+	{ "GENERIC",            REF_GENERIC             },
 	{ "REARM PAD",          REF_REARM_PAD           },
 	{ "MISSILE SILO",       REF_MISSILE_SILO        },
 	{ "SAT UPLINK",         REF_SAT_UPLINK          },
@@ -1047,7 +1047,7 @@ static bool isWallCombiningStructureType(STRUCTURE_STATS const *pStructureType)
 	       type == REF_GATE ||
 	       type == REF_WALLCORNER ||
 	       (type == REF_DEFENSE && strength == STRENGTH_HARD) ||
-	       (type == REF_BLASTDOOR && strength == STRENGTH_HARD);  // fortresses
+	       (type == REF_GENERIC && strength == STRENGTH_HARD);  // fortresses
 }
 
 bool isWall(STRUCTURE_TYPE type)
@@ -4034,7 +4034,7 @@ bool validLocation(BASE_STATS *psStats, Vector2i pos, uint16_t direction, unsign
 			case REF_COMMAND_CONTROL:
 			case REF_CYBORG_FACTORY:
 			case REF_VTOL_FACTORY:
-			case REF_BLASTDOOR:
+			case REF_GENERIC:
 			case REF_REARM_PAD:
 			case REF_MISSILE_SILO:
 			case REF_SAT_UPLINK:

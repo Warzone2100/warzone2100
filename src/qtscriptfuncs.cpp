@@ -375,7 +375,7 @@ QScriptValue convStructure(STRUCTURE *psStruct, QScriptEngine *engine)
 	case REF_GATE:
 		value.setProperty("stattype", (int)REF_WALL, QScriptValue::ReadOnly);
 		break;
-	case REF_BLASTDOOR:
+	case REF_GENERIC:
 	case REF_DEFENSE:
 		if (isLasSat(psStruct->pStructureType))
 		{
@@ -4222,7 +4222,7 @@ bool registerFunctions(QScriptEngine *engine, QString scriptName)
 			QScriptValue strct = engine->newObject();
 			strct.setProperty("Id", psStats->id, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 			if (psStats->type == REF_DEFENSE || psStats->type == REF_WALL || psStats->type == REF_WALLCORNER
-			    || psStats->type == REF_BLASTDOOR || psStats->type == REF_GATE)
+			    || psStats->type == REF_GENERIC || psStats->type == REF_GATE)
 			{
 				strct.setProperty("Type", "Wall", QScriptValue::ReadOnly | QScriptValue::Undeletable);
 			}

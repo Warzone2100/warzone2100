@@ -950,7 +950,7 @@ static UDWORD scrStructTargetMask(STRUCTURE *psStruct)
 	case REF_LAB:
 	case REF_BRIDGE:
 	case REF_DEMOLISH:
-	case REF_BLASTDOOR:
+	case REF_GENERIC:
 	case REF_GATE:
 	default:
 		ASSERT(false,

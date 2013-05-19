@@ -1205,7 +1205,7 @@ bool selfRepairEnabled(UBYTE player)
 bool wallDefenceStruct(STRUCTURE_STATS *psStats)
 {
 	if (psStats->type == REF_DEFENSE || psStats->type == REF_WALL || psStats->type == REF_GATE
-	    || psStats->type == REF_WALLCORNER || psStats->type == REF_BLASTDOOR)
+	    || psStats->type == REF_WALLCORNER || psStats->type == REF_GENERIC)
 	{
 		return true;
 	}
