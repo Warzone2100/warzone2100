@@ -85,6 +85,7 @@ win32/__BUILD_CONFIG.USER
 #*lexer.[ch]
 #*parser.[ch]
 /src/autorevision.h
+/src/autorevision.h.new
 /autorevision.tmp
 /src/autorevision.cache
 *moc.h
