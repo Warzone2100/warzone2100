@@ -92,6 +92,7 @@ QHash<QString, COMPONENT_STATS *> lookupStatPtr;
 
 static bool getMovementModel(const char *movementModel, MOVEMENT_MODEL *model);
 static void storeSpeedFactor(UDWORD terrainType, UDWORD propulsionType, UDWORD speedFactor);
+static bool statsGetAudioIDFromString(const QString &szStatName, const QString &szWavName, int *piWavID);
 
 //Access functions for the max values to be used in the Design Screen
 static void setMaxComponentWeight(UDWORD weight);
@@ -466,6 +467,17 @@ bool loadWeaponStats(const char *pFileName)
 		//set the weapon sounds to default value
 		psStats->iAudioFireID = NO_SOUND;
 		psStats->iAudioImpactID = NO_SOUND;
+
+		// load sounds
+		int weaponSoundID, explosionSoundID;
+		QString szWeaponWav = ini.value("szWeaponWav", "-1").toString();
+		QString szExplosionWav = ini.value("szExplosionWav", "-1").toString();
+		bool result = statsGetAudioIDFromString(list[i], szWeaponWav, &weaponSoundID);
+		ASSERT_OR_RETURN(false, result, "Weapon sound %s not found for %s", szWeaponWav.toUtf8().constData(), getName(psStats));
+		result = statsGetAudioIDFromString(list[i], szExplosionWav, &explosionSoundID);
+		ASSERT_OR_RETURN(false, result, "Explosion sound %s not found for %s", szExplosionWav.toUtf8().constData(), getName(psStats));
+		psStats->iAudioFireID = weaponSoundID;
+		psStats->iAudioImpactID = explosionSoundID;
 
 		// Set the max stat values for the design screen
 		if (psStats->designable)
@@ -1181,73 +1193,22 @@ bool loadBodyPropulsionIMDs(const char *pFileName)
 	return(true);
 }
 
-static bool statsGetAudioIDFromString(const char *szStatName, const char *szWavName, SDWORD *piWavID)
+static bool statsGetAudioIDFromString(const QString &szStatName, const QString &szWavName, int *piWavID)
 {
-	if (strcmp(szWavName, "-1") == 0)
+	if (szWavName.compare("-1") == 0)
 	{
 		*piWavID = NO_SOUND;
 	}
-	else
+	else if ((*piWavID = audio_GetIDFromStr(szWavName.toUtf8().constData())) == NO_SOUND)
 	{
-		if ((*piWavID = audio_GetIDFromStr(szWavName)) == NO_SOUND)
-		{
-			debug(LOG_FATAL, "Could not get ID %d for sound %s", *piWavID, szWavName);
-			return false;
-		}
-	}
-	if ((*piWavID < 0
-	     || *piWavID > ID_MAX_SOUND)
-	    && *piWavID != NO_SOUND)
-	{
-		debug(LOG_FATAL, "Invalid ID - %d for sound %s", *piWavID, szStatName);
+		debug(LOG_FATAL, "Could not get ID %d for sound %s", *piWavID, szWavName.toUtf8().constData());
 		return false;
 	}
-
-	return true;
-}
-
-/*Load the weapon sounds from the file exported from Access*/
-bool loadWeaponSounds(const char *pFileName)
-{
-	SDWORD weaponSoundID, explosionSoundID, inc;
-	QString szWeaponWav, szExplosionWav;
-
-	ASSERT(asWeaponStats != NULL, "loadWeaponSounds: Weapon stats not loaded");
-
-	WzConfig ini(pFileName, WzConfig::ReadOnlyAndRequired);
-	QStringList list = ini.childGroups();
-	for (int i = 0; i < list.size(); ++i)
+	if ((*piWavID < 0 || *piWavID > ID_MAX_SOUND) && *piWavID != NO_SOUND)
 	{
-		ini.beginGroup(list[i]);
-		szWeaponWav = ini.value("szWeaponWav").toString();
-		QStringList szWeaponWavs = szWeaponWav.split(",");
-		szExplosionWav = ini.value("szExplosionWav").toString();
-		QStringList szExplosionWavs = szExplosionWav.split(",");
-
-		for (int x = 0; x < szWeaponWavs.size(); ++x)
-		{
-			if (!statsGetAudioIDFromString(list[i].toUtf8().constData(), szWeaponWavs[x].toUtf8().constData(), &weaponSoundID))
-			{
-				return false;
-			}
-			if (!statsGetAudioIDFromString(list[i].toUtf8().constData(), szExplosionWavs[x].toUtf8().constData(), &explosionSoundID))
-			{
-				return false;
-			}
-			for (inc = 0; inc < (SDWORD)numWeaponStats; ++inc)
-			{
-				if (list[i].compare(asWeaponStats[inc].id) == 0)
-				{
-					asWeaponStats[inc].iAudioFireID = weaponSoundID;
-					asWeaponStats[inc].iAudioImpactID = explosionSoundID;
-					break;
-				}
-			}
-			ASSERT_OR_RETURN(false, inc != (SDWORD)numWeaponStats, "Weapon stat not found - %s", list[i].toUtf8().constData());
-		}
-		ini.endGroup();
+		debug(LOG_FATAL, "Invalid ID - %d for sound %s", *piWavID, szStatName.toUtf8().constData());
+		return false;
 	}
-
 	return true;
 }
 
@@ -1318,27 +1279,27 @@ bool loadPropulsionSounds(const char *pFileName)
 	for (i = 0; i < list.size(); ++i)
 	{
 		ini.beginGroup(list[i]);
-		if (!statsGetAudioIDFromString(list[i].toUtf8().constData(), ini.value("szStart").toString().toUtf8().constData(), &startID))
+		if (!statsGetAudioIDFromString(list[i], ini.value("szStart").toString(), &startID))
 		{
 			return false;
 		}
-		if (!statsGetAudioIDFromString(list[i].toUtf8().constData(), ini.value("szIdle").toString().toUtf8().constData(), &idleID))
+		if (!statsGetAudioIDFromString(list[i], ini.value("szIdle").toString(), &idleID))
 		{
 			return false;
 		}
-		if (!statsGetAudioIDFromString(list[i].toUtf8().constData(), ini.value("szMoveOff").toString().toUtf8().constData(), &moveOffID))
+		if (!statsGetAudioIDFromString(list[i], ini.value("szMoveOff").toString(), &moveOffID))
 		{
 			return false;
 		}
-		if (!statsGetAudioIDFromString(list[i].toUtf8().constData(), ini.value("szMove").toString().toUtf8().constData(), &moveID))
+		if (!statsGetAudioIDFromString(list[i], ini.value("szMove").toString(), &moveID))
 		{
 			return false;
 		}
-		if (!statsGetAudioIDFromString(list[i].toUtf8().constData(), ini.value("szHiss").toString().toUtf8().constData(), &hissID))
+		if (!statsGetAudioIDFromString(list[i], ini.value("szHiss").toString(), &hissID))
 		{
 			return false;
 		}
-		if (!statsGetAudioIDFromString(list[i].toUtf8().constData(), ini.value("szShutDown").toString().toUtf8().constData(), &shutDownID))
+		if (!statsGetAudioIDFromString(list[i], ini.value("szShutDown").toString(), &shutDownID))
 		{
 			return false;
 		}

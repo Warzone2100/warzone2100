@@ -305,19 +305,6 @@ static bool bufferSBPIMDLoad(const char *fileName, void **ppData)
 	return true;
 }
 
-/* Load the weapon sound stats */
-static bool bufferSWEAPSNDLoad(const char *fileName, void **ppData)
-{
-	if (!loadWeaponSounds(fileName))
-	{
-		return false;
-	}
-
-	//not interested in this value
-	*ppData = NULL;
-	return true;
-}
-
 /* Load the Weapon Effect modifier stats */
 static bool bufferSWEAPMODLoad(const char *fileName, void **ppData)
 {
@@ -895,7 +882,6 @@ static const RES_TYPE_MIN_FILE FileResourceTypes[] =
 	{"SPROPTYPES", bufferSPROPTYPESLoad, dataReleaseStats},
 	{"STERRTABLE", bufferSTERRTABLELoad, dataReleaseStats},
 	{"SBODY", bufferSBODYLoad, dataReleaseStats},
-	{"SWEAPSND", bufferSWEAPSNDLoad, dataReleaseStats},
 	{"SWEAPMOD", bufferSWEAPMODLoad, dataReleaseStats},
 	{"SPROPSND", bufferSPROPSNDLoad, dataReleaseStats},
 	{"AUDIOCFG", dataAudioCfgLoad, NULL},

@@ -161,9 +161,6 @@ extern bool loadTerrainTable(const char *pFileName);
 /* load the IMDs to use for each body-propulsion combination */
 extern bool loadBodyPropulsionIMDs(const char *pFileName);
 
-/*Load the weapon sounds from the file exported from Access*/
-extern bool loadWeaponSounds(const char *pFileName);
-
 /*Load the Weapon Effect Modifiers from the file exported from Access*/
 extern bool loadWeaponModifiers(const char *pFileName);
 
