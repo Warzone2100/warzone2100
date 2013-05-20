@@ -1587,6 +1587,26 @@ void AddDerrickBurningMessage(void)
 	audio_PlayTrack( ID_SOUND_BUILD_FAIL );
 }
 
+static void printDroidClickInfo(DROID *psDroid)
+{
+	if (getDebugMappingStatus()) // cheating on, so output debug info
+	{
+		console("%s - Hitpoints %d/%d - ID %d - experience %f, %s - order %s - action %s - sensor range %hu - ECM %u - pitch %.0f - frust %u",
+		        droidGetName(psDroid), psDroid->body, psDroid->originalBody, psDroid->id,
+		        psDroid->experience/65536.f, getDroidLevelName(psDroid), getDroidOrderName(psDroid->order.type), getDroidActionName(psDroid->action),
+		        droidSensorRange(psDroid), droidJammerPower(psDroid), UNDEG(psDroid->rot.pitch), psDroid->lastFrustratedTime);
+		FeedbackOrderGiven();
+	}
+	else if (!psDroid->selected)
+	{
+		console(_("%s - Hitpoints %d/%d - Experience %.1f, %s"), droidGetName(psDroid), psDroid->body, psDroid->originalBody,
+		        psDroid->experience/65536.f, _(getDroidLevelName(psDroid)));
+		FeedbackOrderGiven();
+	}
+	clearSelection();
+	dealWithDroidSelect(psDroid, false);
+}
+
 static void dealWithLMBDroid(DROID* psDroid, SELECTION_TYPE selection)
 {
 	bool ownDroid; // Not an allied droid
@@ -1594,17 +1614,15 @@ static void dealWithLMBDroid(DROID* psDroid, SELECTION_TYPE selection)
 	if (!aiCheckAlliances(selectedPlayer, psDroid->player))
 	{
 		memset(DROIDDOING, 0x0 , sizeof(DROIDDOING)); // take over the other players droid by debug menu.
-		/* We've clicked on somebody else's droid */
-#ifdef DEBUG
+		/* We've clicked on enemy droid */
 		if (getDebugMappingStatus())
 		{
-			CONPRINTF(ConsoleString, (ConsoleString, "(Enemy!) %s - Damage %d%% - ID %d - experience %f, %s - order %s - action %s - sensor range %d - ECM %d - pitch %.0f",
-						droidGetName(psDroid), 	100 - clip(PERCENT(psDroid->body, psDroid->originalBody), 0, 100), psDroid->id,
-						psDroid->experience/65536.f, getDroidLevelName(psDroid), getDroidOrderName(psDroid->order.type), getDroidActionName(psDroid->action),
-						droidSensorRange(psDroid), droidJammerPower(psDroid), UNDEG(psDroid->rot.pitch)));
+			console("(Enemy!) %s - Hitpoints %d/%d - ID %d - experience %f, %s - order %s - action %s - sensor range %d - ECM %d - pitch %.0f",
+			        droidGetName(psDroid),  psDroid->body, psDroid->originalBody, psDroid->id,
+			        psDroid->experience / 65536.f, getDroidLevelName(psDroid), getDroidOrderName(psDroid->order.type), 
+			        getDroidActionName(psDroid->action), droidSensorRange(psDroid), droidJammerPower(psDroid), UNDEG(psDroid->rot.pitch));
 			FeedbackOrderGiven();
 		}
-#endif
 		orderSelectedObjAdd(selectedPlayer, (BASE_OBJECT*)psDroid, ctrlShiftDown());
 
 		//lasSat structure can select a target - in multiPlayer only
@@ -1740,58 +1758,12 @@ static void dealWithLMBDroid(DROID* psDroid, SELECTION_TYPE selection)
 	// Just plain clicked on?
 	else if (ownDroid)
 	{
-		// Display unit info.
-		/* We've clicked on one of our own droids */
-#ifdef DEBUG
-		if (getDebugMappingStatus()) // cheating on, so output debug info
-		{
-			CONPRINTF(ConsoleString, (ConsoleString,
-						"%s - Damage %d%% - ID %d - experience %f, %s - order %s - action %s - sensor range %hu - ECM %u - pitch %.0f - frust %u",
-						droidGetName(psDroid),
-						100 - clip(PERCENT(psDroid->body, psDroid->originalBody), 0, 100), psDroid->id,
-						psDroid->experience/65536.f, getDroidLevelName(psDroid), getDroidOrderName(psDroid->order.type), getDroidActionName(psDroid->action),
-						droidSensorRange(psDroid), droidJammerPower(psDroid), UNDEG(psDroid->rot.pitch), psDroid->lastFrustratedTime));
-			FeedbackOrderGiven();
-		}
-		else
-#endif
-		if (godMode)
-		{
-			CONPRINTF(ConsoleString, (ConsoleString,
-					"%s - Damage %d%% - Serial ID %d - Experience %f order %d action %d, %s",
-					droidGetName(psDroid),
-					100 - clip(PERCENT(psDroid->body, psDroid->originalBody), 0, 100),
-					psDroid->id, psDroid->experience/65536.f, psDroid->order.type,
-					psDroid->action, getDroidLevelName(psDroid)));
-
-			FeedbackOrderGiven();
-		}
-		else
-		{
-			if(!psDroid->selected)
-			{
-				CONPRINTF(ConsoleString, (ConsoleString,
-					_("%s - Damage %d%% - Experience %.1f, %s"),
-					droidGetName(psDroid),
-					100 - clip(PERCENT(psDroid->body,psDroid->originalBody), 0, 100),
-					psDroid->experience/65536.f, _(getDroidLevelName(psDroid))));
-
-				FeedbackOrderGiven();
-			}
-		}
-
-		// select/deselect etc. the droid
-		clearSelection();
-		dealWithDroidSelect(psDroid, false);
+		printDroidClickInfo(psDroid);
 	}
 	else // Clicked on allied unit with no other possible actions
 	{
-		CONPRINTF(ConsoleString, (ConsoleString,
-								  _("%s - Allied - Damage %d%% - Experience %d, %s"),
-								  droidGetName(psDroid),
-								  100 - clip(PERCENT(psDroid->body,psDroid->originalBody), 0, 100),
-								  psDroid->experience/65536, getDroidLevelName(psDroid)));
-
+		console(_("%s - Allied - Hitpoints %d/%d - Experience %d, %s"), droidGetName(psDroid), psDroid->body, psDroid->originalBody,
+		        psDroid->experience / 65536, getDroidLevelName(psDroid));
 		FeedbackOrderGiven();
 	}
 }
@@ -1802,14 +1774,12 @@ static void dealWithLMBStructure(STRUCTURE* psStructure, SELECTION_TYPE selectio
 
 	if (!aiCheckAlliances(psStructure->player, selectedPlayer))
 	{
-		/* We've clicked on somebody else's building */
-#ifdef DEBUG
+		/* We've clicked on an enemy building */
 		if (getDebugMappingStatus())
 		{
-			CONPRINTF(ConsoleString, (ConsoleString, "(Enemy!) %s, ref: %d, ID: %d Damage %d%%", getID(psStructure->pStructureType), psStructure->pStructureType->ref,
-				psStructure->id, 100 - clip(PERCENT(psStructure->body, psStructure->pStructureType->upgrade[psStructure->player].hitpoints), 0, 100)));
+			console("(Enemy!) %s, ref: %d, ID: %d Hitpoints: %d/%d", getID(psStructure->pStructureType), psStructure->pStructureType->ref,
+			        psStructure->id, psStructure->body, psStructure->pStructureType->upgrade[psStructure->player].hitpoints);
 		}
-#endif
 		orderSelectedObjAdd(selectedPlayer, (BASE_OBJECT*)psStructure, ctrlShiftDown());
 		//lasSat structure can select a target - in multiPlayer only
 		if (bMultiPlayer && bLasSatStruct)
@@ -1818,11 +1788,10 @@ static void dealWithLMBStructure(STRUCTURE* psStructure, SELECTION_TYPE selectio
 		}
 		FeedbackOrderGiven();
 		driveDisableTactical();
-
 		return;
 	}
 
-	/* We've clicked on our own building */
+	/* We've clicked on allied or own building */
 
 	//print some info at the top of the screen for the specific structure
 	if (!bRightClickOrders) printStructureInfo(psStructure);
@@ -1973,12 +1942,10 @@ static void dealWithLMBFeature(FEATURE* psFeature)
 				break;
 		}
 	}
-#ifdef DEBUG
-		if (getDebugMappingStatus())
-		{
-			CONPRINTF(ConsoleString, (ConsoleString, "(Feature) %s, ID: %d, ref: %d, body: (%d):%d", getID(psFeature->psStats), psFeature->id, psFeature->psStats->ref, psFeature->psStats->body, psFeature->body ));
-		}
-#endif
+	if (getDebugMappingStatus())
+	{
+		console("(Feature) %s ID: %d ref: %d Hipoints: %d/%d", getID(psFeature->psStats), psFeature->id, psFeature->psStats->ref, psFeature->psStats->body, psFeature->body);
+	}
 	driveDisableTactical();
 }
 
@@ -2062,12 +2029,12 @@ void	dealWithLMB( void )
 			MAPTILE *psTile = mapTile(mouseTileX, mouseTileY);
 			uint8_t aux = auxTile(mouseTileX, mouseTileY, selectedPlayer);
 
-			CONPRINTF(ConsoleString, (ConsoleString, "%s tile %d, %d [%d, %d] continent(l%d, h%d) level %g illum %d %s %s w=%d s=%d j=%d",
+			console("%s tile %d, %d [%d, %d] continent(l%d, h%d) level %g illum %d %s %s w=%d s=%d j=%d",
 			          tileIsExplored(psTile) ? "Explored" : "Unexplored",
 			          mouseTileX, mouseTileY, world_coord(mouseTileX), world_coord(mouseTileY),
 			          (int)psTile->limitedContinent, (int)psTile->hoverContinent, psTile->level, (int)psTile->illumination,
 				  aux & AUXBITS_DANGER ? "danger" : "", aux & AUXBITS_THREAT ? "threat" : "",
-				  (int)psTile->watchers[selectedPlayer], (int)psTile->sensors[selectedPlayer], (int)psTile->jammers[selectedPlayer]));
+				  (int)psTile->watchers[selectedPlayer], (int)psTile->sensors[selectedPlayer], (int)psTile->jammers[selectedPlayer]);
 		}
 
 		driveDisableTactical();
@@ -2236,46 +2203,7 @@ static void dealWithRMB( void )
 					if (bRightClickOrders)
 					{
 						/* We've clicked on one of our own droids */
-						// Display unit info.
-#ifdef DEBUG
-						if (getDebugMappingStatus()) // cheating on, so output debug info
-						{
-							CONPRINTF(ConsoleString, (ConsoleString,
-										"%s - Damage %d%% - ID %d - experience %f, %s - order %s - action %s - sensor range %d - ECM %d",
-										droidGetName(psDroid),
-										100 - clip(PERCENT(psDroid->body, psDroid->originalBody), 0, 100), psDroid->id,
-										psDroid->experience/65536.f, getDroidLevelName(psDroid), getDroidOrderName(psDroid->order.type), getDroidActionName(psDroid->action),
-										droidSensorRange(psDroid), droidJammerPower(psDroid)));
-							FeedbackOrderGiven();
-						}
-						else
-#endif
-						if (godMode)
-						{
-							CONPRINTF(ConsoleString, (ConsoleString,
-									"%s - Damage %d%% - Serial ID %d - Experience %f order %d action %d, %s",
-									droidGetName(psDroid),
-									100 - clip(PERCENT(psDroid->body, psDroid->originalBody), 0, 100),
-									psDroid->id, psDroid->experience/65536.f, psDroid->order.type,
-									psDroid->action, getDroidLevelName(psDroid)));
-
-							FeedbackOrderGiven();
-						}
-						else
-						{
-							if(!psDroid->selected)
-							{
-								CONPRINTF(ConsoleString, (ConsoleString,
-									_("%s - Damage %d%% - Experience %.1f, %s"),
-									droidGetName(psDroid),
-									100 - clip(PERCENT(psDroid->body,psDroid->originalBody), 0, 100),
-									psDroid->experience/65536.f, _(getDroidLevelName(psDroid))));
-
-								FeedbackOrderGiven();
-							}
-						}
-						clearSelection();
-						dealWithDroidSelect(psDroid, false);
+						printDroidClickInfo(psDroid);
 					}
 					else
 					{
@@ -2309,18 +2237,11 @@ static void dealWithRMB( void )
 					}
 				}
 			}
-			else
+			else if (bMultiPlayer && isHumanPlayer(psDroid->player))
 			{
-				if (bMultiPlayer)
-				{
-					if (isHumanPlayer(psDroid->player))
-					{
-						CONPRINTF(ConsoleString, (ConsoleString,"%s",droidGetName(psDroid)));
-						FeedbackOrderGiven();
-					}
-				}
+				console("%s", droidGetName(psDroid));
+				FeedbackOrderGiven();
 			}
-
 		}	// end if its a droid
 		else if (psClickedOn->type == OBJ_STRUCTURE)
 		{

@@ -5469,7 +5469,7 @@ static unsigned int countAssignedDroids(const STRUCTURE* psStructure)
 //print some info at the top of the screen dependant on the structure
 void printStructureInfo(STRUCTURE *psStructure)
 {
-	unsigned int numConnected, i;
+	unsigned int numConnected;
 	POWER_GEN	*psPowerGen;
 
 	ASSERT_OR_RETURN( , psStructure != NULL, "Invalid Structure pointer");
@@ -5482,32 +5482,17 @@ void printStructureInfo(STRUCTURE *psStructure)
 	switch (psStructure->pStructureType->type)
 	{
 	case REF_HQ:
-#ifdef DEBUG
-		if (getDebugMappingStatus())
-		{
-			CONPRINTF(ConsoleString, (ConsoleString, "%s - %d Units assigned - ID %d - sensor range %d - ECM %d",
-					  getName(psStructure->pStructureType), countAssignedDroids(psStructure),
-					  psStructure->id, structSensorRange(psStructure), structJammerPower(psStructure)));
-		}
-		else
-#endif
 		{
 			unsigned int assigned_droids = countAssignedDroids(psStructure);
-
-			CONPRINTF(ConsoleString, (ConsoleString, ngettext("%s - %u Unit assigned - Damage %3.0f%%", "%s - %u Units assigned - Damage %3.0f%%", assigned_droids),
-					  getName(psStructure->pStructureType), assigned_droids, getStructureDamage(psStructure) * (100.f/65536.f)));
+			console(ngettext("%s - %u Unit assigned - Hitpoints %d/%d", "%s - %u Units assigned - Hitpoints %d/%d", assigned_droids),
+			        getName(psStructure->pStructureType), assigned_droids, psStructure->body, structureBody(psStructure));
+			if (getDebugMappingStatus())
+			{
+				console("ID %d - sensor range %d - ECM %d", psStructure->id, structSensorRange(psStructure), structJammerPower(psStructure));
+			}
+			break;
 		}
-		break;
 	case REF_DEFENSE:
-#ifdef DEBUG
-		if (getDebugMappingStatus())
-		{
-			CONPRINTF(ConsoleString, (ConsoleString, "%s - %d Units assigned - ID %d - armour %d|%d - sensor range %d - ECM %d - born %u - depth %.02f",
-				getName(psStructure->pStructureType), countAssignedDroids(psStructure),
-				psStructure->id, objArmour(psStructure, WC_KINETIC), objArmour(psStructure, WC_HEAT),
-					structSensorRange(psStructure), structJammerPower(psStructure), psStructure->born, psStructure->foundationDepth));
-		} else
-#endif
 		if (psStructure->pStructureType->pSensor != NULL
 			   && (psStructure->pStructureType->pSensor->type == STANDARD_SENSOR
 			   || psStructure->pStructureType->pSensor->type == INDIRECT_CB_SENSOR
@@ -5518,111 +5503,73 @@ void printStructureInfo(STRUCTURE *psStructure)
 			   && psStructure->pStructureType->pSensor->location == LOC_TURRET)
 		{
 			unsigned int assigned_droids = countAssignedDroids(psStructure);
-
-			CONPRINTF(ConsoleString, (ConsoleString, ngettext("%s - %u Unit assigned - Damage %3.0f%%", "%s - %u Units assigned - Damage %3.0f%%", assigned_droids),
-				getName(psStructure->pStructureType), assigned_droids, getStructureDamage(psStructure) * (100.f/65536.f)));
+			console(ngettext("%s - %u Unit assigned - Damage %3.0f%%", "%s - %u Units assigned - Hitpoints %d/%d", assigned_droids),
+				getName(psStructure->pStructureType), assigned_droids, psStructure->body, structureBody(psStructure));
 		}
 		else
 		{
-			CONPRINTF(ConsoleString, (ConsoleString, _("%s - Damage %3.0f%%"),
-									  getName(psStructure->pStructureType), getStructureDamage(psStructure) * (100.f/65536.f)));
+			console(_("%s - Hitpoints %d/%d"), getName(psStructure->pStructureType), psStructure->body, structureBody(psStructure));
+		}
+		if (getDebugMappingStatus())
+		{
+			console("ID %d - armour %d|%d - sensor range %d - ECM %d - born %u - depth %.02f",
+			        psStructure->id, objArmour(psStructure, WC_KINETIC), objArmour(psStructure, WC_HEAT),
+			        structSensorRange(psStructure), structJammerPower(psStructure), psStructure->born, psStructure->foundationDepth);
 		}
 		break;
 	case REF_REPAIR_FACILITY:
-#ifdef DEBUG
+		console(_("%s - Hitpoints %d/%d"), getName(psStructure->pStructureType), psStructure->body, structureBody(psStructure));
 		if (getDebugMappingStatus())
 		{
-			CONPRINTF(ConsoleString,(ConsoleString, "%s - Unique ID %d - Queue %d",
-					  getName(psStructure->pStructureType), psStructure->id, psStructure->pFunctionality->repairFacility.droidQueue));
-		}
-		else
-#endif
-		{
-			CONPRINTF(ConsoleString, (ConsoleString, "%s - Damage %3.0f%%", getName(psStructure->pStructureType), getStructureDamage(psStructure) * (100.f/65536.f)));
+			console("ID %d - Queue %d", psStructure->id, psStructure->pFunctionality->repairFacility.droidQueue);
 		}
 		break;
 	case REF_RESOURCE_EXTRACTOR:
-#ifdef DEBUG
+		console(_("%s - Hitpoints %d/%d"), getName(psStructure->pStructureType), psStructure->body, structureBody(psStructure));
 		if (getDebugMappingStatus())
 		{
-			CONPRINTF(ConsoleString,(ConsoleString, "%s - Unique ID %d - %s",
-			          getName(psStructure->pStructureType), psStructure->id, (auxTile(map_coord(psStructure->pos.x), map_coord(psStructure->pos.y), selectedPlayer) & AUXBITS_DANGER) ? "danger" : "safe"));
-		}
-		else
-#endif
-		{
-			CONPRINTF(ConsoleString, (ConsoleString, "%s - Damage %3.0f%%", getName(psStructure->pStructureType), getStructureDamage(psStructure) * (100.f/65536.f)));
+			console("ID %d - %s", psStructure->id, (auxTile(map_coord(psStructure->pos.x), map_coord(psStructure->pos.y), selectedPlayer) & AUXBITS_DANGER) ? "danger" : "safe");
 		}
 		break;
 	case REF_POWER_GEN:
 		psPowerGen = &psStructure->pFunctionality->powerGenerator;
 		numConnected = 0;
-		for (i = 0; i < NUM_POWER_MODULES; i++)
+		for (int i = 0; i < NUM_POWER_MODULES; i++)
 		{
 			if (psPowerGen->apResExtractors[i])
 			{
 				numConnected++;
 			}
 		}
-#ifdef DEBUG
+		console(_("%s - Connected %u of %u - Hitpoints %d/%d"), getName(psStructure->pStructureType), numConnected, 
+		        NUM_POWER_MODULES, psStructure->body, structureBody(psStructure));
 		if (getDebugMappingStatus())
 		{
-			CONPRINTF(ConsoleString, (ConsoleString, "%s -  Connected %u of %u - Unique ID %u - Multiplier: %u",
-					  getName(psStructure->pStructureType), numConnected, NUM_POWER_MODULES,
-					  psStructure->id, getBuildingPowerPoints(psStructure)));
-		}
-		else
-#endif
-		{
-			CONPRINTF(ConsoleString, (ConsoleString, _("%s - Connected %u of %u - Damage %3.0f%%"),
-					  getName(psStructure->pStructureType), numConnected, NUM_POWER_MODULES, getStructureDamage(psStructure) * (100.f/65536.f)));
+			console("ID %u - Multiplier: %u", psStructure->id, getBuildingPowerPoints(psStructure));
 		}
 		break;
 	case REF_CYBORG_FACTORY:
 	case REF_VTOL_FACTORY:
 	case REF_FACTORY:
-#ifdef DEBUG
+		console(_("%s - Hitpoints %d/%d"), getName(psStructure->pStructureType), psStructure->body, structureBody(psStructure));
 		if (getDebugMappingStatus())
 		{
-			CONPRINTF(ConsoleString, (ConsoleString, "%s - Damage % 3.2f%% - Unique ID %u - Production Output: %u - BuildPointsRemaining: %u",
-					  getName(psStructure->pStructureType), getStructureDamage(psStructure) * (100.f/65536.f), psStructure->id,
-					  getBuildingProductionPoints(psStructure),
-					  psStructure->pFunctionality->factory.buildPointsRemaining));
-		}
-		else
-#endif
-		{
-			CONPRINTF(ConsoleString, (ConsoleString, _("%s - Damage %3.0f%%"),
-					  getName(psStructure->pStructureType), getStructureDamage(psStructure) * (100.f/65536.f)));
+			console("ID %u - Production Output: %u - BuildPointsRemaining: %u", psStructure->id,
+			        getBuildingProductionPoints(psStructure), psStructure->pFunctionality->factory.buildPointsRemaining);
 		}
 		break;
 	case REF_RESEARCH:
-#ifdef DEBUG
+		console(_("%s - Hitpoints %d/%d"), getName(psStructure->pStructureType), psStructure->body, structureBody(psStructure));
 		if (getDebugMappingStatus())
 		{
-			CONPRINTF(ConsoleString, (ConsoleString, "%s - Damage % 3.2f%% - Unique ID %u - Research Points: %u",
-					  getName(psStructure->pStructureType), getStructureDamage(psStructure) * (100.f/65536.f), psStructure->id,
-					  getBuildingResearchPoints(psStructure)));
-		}
-		else
-#endif
-		{
-			CONPRINTF(ConsoleString, (ConsoleString, _("%s - Damage %3.0f%%"),
-					  getName(psStructure->pStructureType), getStructureDamage(psStructure) * (100.f/65536.f)));
+			console("ID %u - Research Points: %u", psStructure->id, getBuildingResearchPoints(psStructure));
 		}
 		break;
 	default:
-#ifdef DEBUG
+		console(_("%s - Hitpoints %d/%d"), getName(psStructure->pStructureType), psStructure->body, structureBody(psStructure));
 		if (getDebugMappingStatus())
 		{
-			CONPRINTF(ConsoleString, (ConsoleString, "%s - Damage % 3.2f%% - Unique ID %u",
-					  getName(psStructure->pStructureType), getStructureDamage(psStructure) * (100.f/65536.f), psStructure->id));
-		}
-		else
-#endif
-		{
-			CONPRINTF(ConsoleString, (ConsoleString, _("%s - Damage %3.0f%%"),
-					  getName(psStructure->pStructureType), getStructureDamage(psStructure) * (100.f/65536.f)));
+			 console("ID %u - sensor range %d - ECM %d", psStructure->id, structSensorRange(psStructure), structJammerPower(psStructure));
 		}
 		break;
 	}
@@ -5746,9 +5693,8 @@ bool electronicDamage(BASE_OBJECT *psTarget, UDWORD damage, UBYTE attackPlayer)
 				//add a console message for the selected Player
 				if (psStructure->player == selectedPlayer)
 				{
-					CONPRINTF(ConsoleString,(ConsoleString,
-						_("%s - Electronically Damaged"),
-						getName(psStructure->pStructureType)));
+					console(_("%s - Electronically Damaged"),
+						getName(psStructure->pStructureType));
 					//tell the scripts if selectedPlayer has lost a structure
 					eventFireCallbackTrigger((TRIGGER_TYPE)CALL_ELECTRONIC_TAKEOVER);
 				}
@@ -5794,7 +5740,7 @@ bool electronicDamage(BASE_OBJECT *psTarget, UDWORD damage, UBYTE attackPlayer)
 				//add a console message for the selected Player
 				if (psDroid->player == selectedPlayer)
 				{
-					CONPRINTF(ConsoleString, (ConsoleString, _("%s - Electronically Damaged"), "Unit"));
+					console(_("%s - Electronically Damaged"), "Unit");
 					//tell the scripts if selectedPlayer has lost a droid
 					eventFireCallbackTrigger((TRIGGER_TYPE)CALL_ELECTRONIC_TAKEOVER);
 				}
@@ -5960,9 +5906,7 @@ void factoryReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 		apCompLists[rewardPlayer][COMP_PROPULSION][comp] = AVAILABLE;
 		if (rewardPlayer == selectedPlayer)
 		{
-			CONPRINTF(ConsoleString,(ConsoleString,"%s :- %s",
-				_("Factory Reward - Propulsion"),
-				getName(&asPropulsionStats[comp])));
+			console("%s :- %s", _("Factory Reward - Propulsion"), getName(&asPropulsionStats[comp]));
 		}
 		return;
 	}
@@ -5984,9 +5928,7 @@ void factoryReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 		apCompLists[rewardPlayer][COMP_BODY][comp] = AVAILABLE;
 		if (rewardPlayer == selectedPlayer)
 		{
-			CONPRINTF(ConsoleString,(ConsoleString,"%s :- %s",
-				_("Factory Reward - Body"),
-				getName(&asBodyStats[comp])));
+			console("%s :- %s", _("Factory Reward - Body"), getName(&asBodyStats[comp]));
 		}
 		return;
 	}
@@ -6008,9 +5950,7 @@ void factoryReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 		apCompLists[rewardPlayer][COMP_WEAPON][comp] = AVAILABLE;
 		if (rewardPlayer == selectedPlayer)
 		{
-			CONPRINTF(ConsoleString,(ConsoleString,"%s :- %s",
-				_("Factory Reward - Weapon"),
-				getName(&asWeaponStats[comp])));
+			console("%s :- %s", _("Factory Reward - Weapon"), getName(&asWeaponStats[comp]));
 		}
 		return;
 	}
@@ -6045,9 +5985,7 @@ void repairFacilityReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 		apCompLists[rewardPlayer][COMP_REPAIRUNIT][comp] = AVAILABLE;
 		if (rewardPlayer == selectedPlayer)
 		{
-			CONPRINTF(ConsoleString,(ConsoleString,"%s :- %s",
-				_("Repair Facility Award - Repair"),
-				getName(&asRepairStats[comp])));
+			console("%s :- %s", _("Repair Facility Award - Repair"), getName(&asRepairStats[comp]));
 		}
 		return;
 	}
