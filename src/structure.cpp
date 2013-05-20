@@ -5554,8 +5554,9 @@ void printStructureInfo(STRUCTURE *psStructure)
 		console(_("%s - Hitpoints %d/%d"), getName(psStructure->pStructureType), psStructure->body, structureBody(psStructure));
 		if (getDebugMappingStatus())
 		{
-			console("ID %u - Production Output: %u - BuildPointsRemaining: %u", psStructure->id,
-			        getBuildingProductionPoints(psStructure), psStructure->pFunctionality->factory.buildPointsRemaining);
+			console("ID %u - Production Output: %u - BuildPointsRemaining: %u - Resistance: %d / %d", psStructure->id,
+			        getBuildingProductionPoints(psStructure), psStructure->pFunctionality->factory.buildPointsRemaining, 
+			        psStructure->resistance, structureResistance(psStructure->pStructureType, psStructure->player));
 		}
 		break;
 	case REF_RESEARCH:

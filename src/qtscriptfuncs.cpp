@@ -3969,9 +3969,27 @@ QScriptValue js_stats(QScriptContext *context, QScriptEngine *engine)
 			case SCRCB_POW: psStats->upgrade[player].power = value; break;
 			case SCRCB_CON: psStats->upgrade[player].production = value; break;
 			case SCRCB_REA: psStats->upgrade[player].rearm = value; break;
-			case SCRCB_ELW: psStats->upgrade[player].resistance = value; break;
 			case SCRCB_HEA: psStats->upgrade[player].thermal = value; break;
 			case SCRCB_ARM: psStats->upgrade[player].armour = value; break;
+			case SCRCB_ELW:
+				// Update resistance points for all structures, to avoid making them damaged
+				// FIXME - this is _really_ slow! we could be doing this for dozens of buildings one at a time!
+				for (STRUCTURE *psCurr = apsStructLists[player]; psCurr; psCurr = psCurr->psNext)
+				{
+					if (psStats == psCurr->pStructureType && psStats->upgrade[player].resistance < value)
+					{
+						psCurr->resistance = value;
+					}
+				}
+				for (STRUCTURE *psCurr = mission.apsStructLists[player]; psCurr; psCurr = psCurr->psNext)
+				{
+					if (psStats == psCurr->pStructureType && psStats->upgrade[player].resistance < value)
+					{
+						psCurr->resistance = value;
+					}
+				}
+				psStats->upgrade[player].resistance = value;
+				break;
 			case SCRCB_HIT:
 				// Update body points for all structures, to avoid making them damaged
 				// FIXME - this is _really_ slow! we could be doing this for 
