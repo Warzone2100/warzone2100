@@ -470,8 +470,8 @@ bool loadWeaponStats(const char *pFileName)
 
 		// load sounds
 		int weaponSoundID, explosionSoundID;
-		QString szWeaponWav = ini.value("szWeaponWav", "-1").toString();
-		QString szExplosionWav = ini.value("szExplosionWav", "-1").toString();
+		QString szWeaponWav = ini.value("weaponWav", "-1").toString();
+		QString szExplosionWav = ini.value("explosionWav", "-1").toString();
 		bool result = statsGetAudioIDFromString(list[i], szWeaponWav, &weaponSoundID);
 		ASSERT_OR_RETURN(false, result, "Weapon sound %s not found for %s", szWeaponWav.toUtf8().constData(), getName(psStats));
 		result = statsGetAudioIDFromString(list[i], szExplosionWav, &explosionSoundID);
