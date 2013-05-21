@@ -318,7 +318,6 @@ bool loadDroidTemplates(const char *filename)
 			}
 			else if (!NetPlay.players[i].allocated)	// AI template
 			{
-				debug(LOG_NEVER, "AI (%d): %s id:%d enabled:%d", i, getName(&design), design.multiPlayerID, design.enabled);
 				design.prefab = true;  // prefabricated templates referenced from VLOs
 				addTemplateToList(&design, &apsDroidTemplates[i]);
 			}
