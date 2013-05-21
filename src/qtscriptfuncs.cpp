@@ -3845,29 +3845,32 @@ void prepareLabels()
 	updateLabelModel();
 }
 
-static void droidBodyUpgrade(DROID *psDroid)
+// flag all droids as requiring update on next frame
+static void dirtyAllDroids(int player)
 {
-	BODY_STATS *psStats = getBodyStats(psDroid);
-	int increase = psStats->upgrade[psDroid->player].body;
-	int prevBaseBody = psDroid->originalBody;
-	int base = calcDroidBaseBody(psDroid);
-	int newBaseBody =  base + (base * increase) / 100;
-
-	if (newBaseBody > prevBaseBody)
+	for (DROID *psDroid = apsDroidLists[player]; psDroid != NULL; psDroid = psDroid->psNext)
 	{
-		psDroid->body = (psDroid->body * newBaseBody) / prevBaseBody;
-		psDroid->originalBody = newBaseBody;
+		psDroid->flags |= BASEFLAG_DIRTY;
 	}
-	//if a transporter droid then need to upgrade the contents
-	if (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)
+	for (DROID *psDroid = mission.apsDroidLists[player]; psDroid != NULL; psDroid = psDroid->psNext)
 	{
-		for (DROID *psCurr = psDroid->psGroup->psList; psCurr != NULL; psCurr = psCurr->psGrpNext)
-		{
-			if (psCurr != psDroid)
-			{
-				droidBodyUpgrade(psCurr);
-			}
-		}
+		psDroid->flags |= BASEFLAG_DIRTY;
+	}
+	for (DROID *psDroid = apsLimboDroids[player]; psDroid != NULL; psDroid = psDroid->psNext)
+	{
+		psDroid->flags |= BASEFLAG_DIRTY;
+	}
+}
+
+static void dirtyAllStructures(int player)
+{
+	for (STRUCTURE *psCurr = apsStructLists[player]; psCurr; psCurr = psCurr->psNext)
+	{
+		psCurr->flags |= BASEFLAG_DIRTY;
+	}
+	for (STRUCTURE *psCurr = mission.apsStructLists[player]; psCurr; psCurr = psCurr->psNext)
+	{
+		psCurr->flags |= BASEFLAG_DIRTY;
 	}
 }
 
@@ -3886,21 +3889,8 @@ QScriptValue js_stats(QScriptContext *context, QScriptEngine *engine)
 			BODY_STATS *psStats = asBodyStats + index;
 			if (name == "HitPoints")
 			{
-				// Update body points for all droids, to avoid making them damaged
-				// FIXME -- this is _really_ slow! we could be updating dozens of bodies!
 				psStats->upgrade[player].body = value;
-				for (DROID *psDroid = apsDroidLists[player]; psDroid != NULL; psDroid = psDroid->psNext)
-				{
-					droidBodyUpgrade(psDroid);
-				}
-				for (DROID *psDroid = mission.apsDroidLists[player]; psDroid != NULL; psDroid = psDroid->psNext)
-				{
-					droidBodyUpgrade(psDroid);
-				}
-				for (DROID *psDroid = apsLimboDroids[player]; psDroid != NULL; psDroid = psDroid->psNext)
-				{
-					droidBodyUpgrade(psDroid);
-				}
+				dirtyAllDroids(player);
 			}
 			else if (name == "Armour")
 			{
@@ -3916,6 +3906,7 @@ QScriptValue js_stats(QScriptContext *context, QScriptEngine *engine)
 			}
 			else if (name == "Resistance")
 			{
+				// TBD FIXME - not updating resistance points in droids...
 				psStats->upgrade[player].resistance = value;
 			}
 			else
@@ -3928,12 +3919,16 @@ QScriptValue js_stats(QScriptContext *context, QScriptEngine *engine)
 			SENSOR_STATS *psStats = asSensorStats + index;
 			SCRIPT_ASSERT(context, name == "Range", "Invalid sensor parameter");
 			psStats->upgrade[player].range = value;
+			dirtyAllDroids(player);
+			dirtyAllStructures(player);
 		}
 		else if (type == COMP_ECM)
 		{
 			ECM_STATS *psStats = asECMStats + index;
 			SCRIPT_ASSERT(context, name == "Range", "Invalid ECM parameter");
 			psStats->upgrade[player].range = value;
+			dirtyAllDroids(player);
+			dirtyAllStructures(player);
 		}
 		else if (type == COMP_CONSTRUCT)
 		{

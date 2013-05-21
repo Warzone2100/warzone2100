@@ -3513,6 +3513,12 @@ void structureUpdate(STRUCTURE *psBuilding, bool mission)
 
 	syncDebugStructure(psBuilding, '<');
 
+	if (psBuilding->flags & BASEFLAG_DIRTY)
+	{
+		visTilesUpdate(psBuilding);
+		psBuilding->flags &= ~BASEFLAG_DIRTY;
+	}
+
 	if (psBuilding->pStructureType->type == REF_GATE)
 	{
 		if (psBuilding->state == SAS_OPEN && psBuilding->lastStateTime + SAS_STAY_OPEN_TIME < gameTime)

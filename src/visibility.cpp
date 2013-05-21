@@ -627,7 +627,7 @@ static void processVisibilitySelf(BASE_OBJECT *psObj)
 		}
 	}
 
-	psObj->bTargetted = false;	// Remove any targetting locks from last update.
+	psObj->flags &= ~BASEFLAG_TARGETED;	// Remove any targetting locks from last update.
 
 	// If we're a CB sensor, make our target visible instantly. Although this is actually checking visibility of our target, we do it here anyway.
 	STRUCTURE *psStruct = castStructure(psObj);

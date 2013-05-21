@@ -1113,15 +1113,14 @@ bool triggerEventAttacked(BASE_OBJECT *psVictim, BASE_OBJECT *psAttacker, int la
 //__ parameter is set if the research comes from a research lab owned by the
 //__ current player. If an ally does the research, the structure parameter will
 //__ be set to null. The player parameter gives the player it is called for.
-// trigger - to prevent spam to AI scripts from loading games
-bool triggerEventResearched(RESEARCH *psResearch, STRUCTURE *psStruct, int player, bool trigger)
+bool triggerEventResearched(RESEARCH *psResearch, STRUCTURE *psStruct, int player)
 {
 	for (int i = 0; i < scripts.size(); ++i)
 	{
 		QScriptEngine *engine = scripts.at(i);
 		int me = engine->globalObject().property("me").toInt32();
 		bool receiveAll = engine->globalObject().property("isReceivingAllEvents").toBool();
-		if ((me == player && trigger) || receiveAll)
+		if (me == player || receiveAll)
 		{
 			QScriptValueList args;
 			args += convResearch(psResearch, engine, player);

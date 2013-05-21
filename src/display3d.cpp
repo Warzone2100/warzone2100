@@ -2954,7 +2954,7 @@ static void	drawStructureSelections( void )
 		{
 			/* If it's targetted and on-screen */
 			if (clipXY(psStruct->pos.x,psStruct->pos.y)
-			    && psStruct->bTargetted
+			    && (psStruct->flags & BASEFLAG_TARGETED)
 			    && psStruct->sDisplay.frameNumber == currentGameFrame)
 			{
 				scrX = psStruct->sDisplay.screenX;
@@ -3241,7 +3241,7 @@ static void	drawDroidSelections( void )
 			if(i!=selectedPlayer && !psDroid->died && psDroid->sDisplay.frameNumber == currentGameFrame)
 			{
 				/* If it's selected */
-				if(psDroid->bTargetted && (psDroid->visible[selectedPlayer] == UBYTE_MAX))
+				if ((psDroid->flags & BASEFLAG_TARGETED) && psDroid->visible[selectedPlayer] == UBYTE_MAX)
 				{
 					scrX = psDroid->sDisplay.screenX;
 					scrY = psDroid->sDisplay.screenY;
@@ -3256,7 +3256,7 @@ static void	drawDroidSelections( void )
 	{
 		if(!psFeature->died && psFeature->sDisplay.frameNumber == currentGameFrame)
 		{
-			if(psFeature->bTargetted)
+			if (psFeature->flags & BASEFLAG_TARGETED)
 			{
 				scrX = psFeature->sDisplay.screenX;
 				scrY = psFeature->sDisplay.screenY;

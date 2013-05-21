@@ -293,7 +293,7 @@ function eventResearched(research, structure, player)
 				{
 					// eg Upgrades[0].Body['Tiger']['Armour']
 					Upgrades[player].Body[i][s[1]] += Math.ceil(Stats.Body[i][s[1]] * s[2] / 100);
-					//debug("  upgraded " + i + " to " + Upgrades[player].Body[i][s[1]] + " by " + Math.ceil(Stats.Body[i][s[1]] * s[2] / 100));
+					//debug("  upgraded " + i + " :: " + s[1] + " to " + Upgrades[player].Body[i][s[1]] + " by " + Math.ceil(Stats.Body[i][s[1]] * s[2] / 100));
 				}
 			}
 		}

@@ -105,6 +105,7 @@ static void groupConsoleInformOfCreation(UDWORD groupNumber);
 static void groupConsoleInformOfCentering(UDWORD groupNumber);
 
 static void droidUpdateDroidSelfRepair(DROID *psRepairDroid);
+static UDWORD calcDroidBaseBody(DROID *psDroid);
 
 void cancelBuild(DROID *psDroid)
 {
@@ -127,6 +128,25 @@ void cancelBuild(DROID *psDroid)
 		psScrCBOrder = DORDER_NONE;
 
 		triggerEventDroidIdle(psDroid);
+	}
+}
+
+static void droidBodyUpgrade(DROID *psDroid)
+{
+	const int factor = 10000; // use big numbers to scare away rounding errors
+	int prev = psDroid->originalBody;
+	psDroid->originalBody = calcDroidBaseBody(psDroid);
+	int increase = psDroid->originalBody * factor / prev;
+	psDroid->body = MIN(psDroid->originalBody, (psDroid->body * increase) / factor + 1);
+	if (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)
+	{
+		for (DROID *psCurr = psDroid->psGroup->psList; psCurr != NULL; psCurr = psCurr->psGrpNext)
+		{
+			if (psCurr != psDroid)
+			{
+				droidBodyUpgrade(psCurr);
+			}
+		}
 	}
 }
 
@@ -813,6 +833,13 @@ void droidUpdate(DROID *psDroid)
 
 	syncDebugDroid(psDroid, '<');
 
+	if (psDroid->flags & BASEFLAG_DIRTY)
+	{
+		visTilesUpdate(psDroid);
+		droidBodyUpgrade(psDroid);
+		psDroid->flags &= ~BASEFLAG_DIRTY;
+	}
+
 	// Save old droid position, update time.
 	psDroid->prevSpacetime = getSpacetime(psDroid);
 	psDroid->time = gameTime;
@@ -883,7 +910,7 @@ void droidUpdate(DROID *psDroid)
 		if ((psBeingTargetted = orderStateObj(psDroid, DORDER_ATTACK))
 		    || (psBeingTargetted = orderStateObj(psDroid, DORDER_OBSERVE)))
 		{
-			psBeingTargetted->bTargetted = true;
+			psBeingTargetted->flags |= BASEFLAG_TARGETED;
 		}
 	}
 	// -----------------
@@ -1537,24 +1564,15 @@ UDWORD calcTemplateBody(DROID_TEMPLATE *psTemplate, UBYTE player)
 		body += asWeaponStats[psTemplate->asWeaps[i]].body;
 	}
 
-	//add on any upgrade value that may need to be applied
-	body += body * psStats->upgrade[player].body / 100;
 	return body;
 }
 
 /* Calculate the base body points of a droid without upgrades*/
-UDWORD calcDroidBaseBody(DROID *psDroid)
+static UDWORD calcDroidBaseBody(DROID *psDroid)
 {
-	//re-enabled i;
-	UDWORD      body, i;
-
-	if (psDroid == NULL)
-	{
-		return 0;
-	}
 	/* Get the basic component body points */
-	body =
-		(asBodyStats + psDroid->asBits[COMP_BODY])->body +
+	int body =
+		(asBodyStats + psDroid->asBits[COMP_BODY])->upgrade[psDroid->player].body +
 		(asBrainStats + psDroid->asBits[COMP_BRAIN])->body +
 		(asSensorStats + psDroid->asBits[COMP_SENSOR])->body +
 		(asECMStats + psDroid->asBits[COMP_ECM])->body +
@@ -1566,15 +1584,13 @@ UDWORD calcDroidBaseBody(DROID *psDroid)
 		(asBodyStats + psDroid->asBits[COMP_BODY])->body) / 100);
 
 	/* Add the weapon body points */
-	for(i=0; i<psDroid->numWeaps; i++)
+	for (int i = 0; i < psDroid->numWeaps; i++)
 	{
 		if (psDroid->asWeaps[i].nStat > 0)
 		{
-			//body += (asWeaponStats + psDroid->asWeaps[i].nStat)->body;
 			body += (asWeaponStats + psDroid->asWeaps[i].nStat)->body;
 		}
 	}
-
 	return body;
 }
 
@@ -1828,8 +1844,8 @@ DROID *reallyBuildDroid(DROID_TEMPLATE *pTemplate, Position pos, UDWORD player, 
 	initDroidMovement(psDroid);
 
 	//allocate 'easy-access' data!
-	psDroid->body = calcTemplateBody(pTemplate, (UBYTE)player);  // Redundant? (Is set in droidSetBits, too.)
-	psDroid->originalBody = psDroid->body;  // Redundant? (Is set in droidSetBits, too.)
+	psDroid->body = calcDroidBaseBody(psDroid); // includes upgrades
+	psDroid->originalBody = psDroid->body;
 
 	for (inc = 0; inc < WC_NUM_WEAPON_CLASSES; inc++)
 	{

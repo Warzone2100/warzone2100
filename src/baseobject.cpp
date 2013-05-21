@@ -102,7 +102,7 @@ BASE_OBJECT::BASE_OBJECT(OBJECT_TYPE type, uint32_t id, unsigned player)
 	, body(0)
 	, periodicalDamageStart(0)
 	, periodicalDamage(0)
-	, bTargetted(false)
+	, flags(0)
 	, watchedTiles(NULL)
 {
 	memset(visible, 0, sizeof(visible));

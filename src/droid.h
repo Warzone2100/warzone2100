@@ -94,9 +94,6 @@ extern UDWORD calcDroidPoints(DROID *psDroid);
 /* Calculate the body points of a droid from it's template */
 extern UDWORD calcTemplateBody(DROID_TEMPLATE *psTemplate, UBYTE player);
 
-/* Calculate the base body points of a droid without upgrades*/
-extern UDWORD calcDroidBaseBody(DROID *psDroid);
-
 /* Calculate the base speed of a droid from it's template */
 extern UDWORD calcDroidBaseSpeed(DROID_TEMPLATE *psTemplate, UDWORD weight, UBYTE player);
 
