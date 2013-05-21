@@ -7,6 +7,8 @@
 extern DROID_TEMPLATE			*apsDroidTemplates[MAX_PLAYERS];
 
 extern bool allowDesign;
+extern bool includeRedundantDesigns;
+
 
 bool initTemplates();
 bool shutdownTemplates();

@@ -43,7 +43,10 @@
 // Template storage
 DROID_TEMPLATE		*apsDroidTemplates[MAX_PLAYERS];
 
+
 bool allowDesign = true;
+bool includeRedundantDesigns = false;
+
 
 static bool researchedItem(DROID_TEMPLATE *psCurr, int player, COMPONENT_TYPE partIndex, int part, bool allowZero, bool allowRedundant)
 {
@@ -503,7 +506,7 @@ void fillTemplateList(std::vector<DROID_TEMPLATE *> &pList, STRUCTURE *psFactory
 			}
 
 			if (!psCurr->enabled || !validTemplateForFactory(psCurr, psFactory, false)
-			    || !researchedTemplate(psCurr, player))
+			    || !researchedTemplate(psCurr, player, includeRedundantDesigns))
 			{
 				continue;
 			}

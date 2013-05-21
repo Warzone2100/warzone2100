@@ -48,6 +48,7 @@
 #include "lib/sound/audio.h"
 #include "lib/widget/label.h"
 #include "lib/widget/bar.h"
+#include "lib/widget/button.h"
 #include "console.h"
 #include "design.h"
 #include "display.h"
@@ -2235,6 +2236,13 @@ static void intProcessStats(UDWORD id)
 			}
 		}
 	}
+	else if (id == IDSTAT_OBSOLETE_BUTTON)
+	{
+		includeRedundantDesigns = !includeRedundantDesigns;
+		StateButton *obsoleteButton = (StateButton *)widgGetFromID(psWScreen, IDSTAT_OBSOLETE_BUTTON);
+		obsoleteButton->setState(includeRedundantDesigns);
+		intRefreshScreen();
+	}
 }
 
 
@@ -3624,6 +3632,20 @@ static void intSetStats(UDWORD id, BASE_STATS *psStats)
 	}
 }
 
+StateButton *makeObsoleteButton(WIDGET *parent)
+{
+	StateButton *obsoleteButton = new StateButton(parent);
+	obsoleteButton->id = IDSTAT_OBSOLETE_BUTTON;
+	obsoleteButton->style |= WBUT_SECONDARY;
+	obsoleteButton->setState(includeRedundantDesigns);
+	obsoleteButton->setImages(false, StateButton::Images(Image(IntImages, IMAGE_OBSOLETE_HIDE_UP), Image(IntImages, IMAGE_OBSOLETE_HIDE_DOWN), Image(IntImages, IMAGE_OBSOLETE_HIDE_HI)));
+	obsoleteButton->setTip(false, _("Hiding Obsolete Tech"));
+	obsoleteButton->setImages(true,  StateButton::Images(Image(IntImages, IMAGE_OBSOLETE_SHOW_UP), Image(IntImages, IMAGE_OBSOLETE_SHOW_DOWN), Image(IntImages, IMAGE_OBSOLETE_SHOW_HI)));
+	obsoleteButton->setTip(true, _("Showing Obsolete Tech"));
+	obsoleteButton->move(4 + Image(IntImages, IMAGE_FDP_UP).width() + 4, STAT_SLDY);
+	return obsoleteButton;
+}
+
 /* Add the stats widgets to the widget screen */
 /* If psSelected != NULL it specifies which stat should be hilited
    psOwner specifies which object is hilighted on the object bar for this stat*/
@@ -3670,43 +3692,32 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 	W_LABINIT sLabInit;
 
 	// Add the quantity slider ( if it's a factory ).
-	if (objMode == IOBJ_MANUFACTURE)
+	if (objMode == IOBJ_MANUFACTURE && psOwner != nullptr)
 	{
-		//add the Factory DP button
-		W_BUTINIT sButInit;
-		sButInit.formID = IDSTAT_FORM;
-		sButInit.id = IDSTAT_DP_BUTTON;
-		sButInit.style = WBUT_SECONDARY;
-		sButInit.x = 4;
-		sButInit.y = STAT_SLDY;
-		sButInit.width = iV_GetImageWidth(IntImages, IMAGE_FDP_DOWN);
-		sButInit.height = iV_GetImageHeight(IntImages, IMAGE_FDP_DOWN);
-		sButInit.pTip = _("Factory Delivery Point");
-		sButInit.pDisplay = intDisplayDPButton;
-		sButInit.pUserData = psOwner;
+		STRUCTURE_TYPE factoryType = ((STRUCTURE *)psOwner)->pStructureType->type;
 
-		if (!widgAddButton(psWScreen, &sButInit))
+		//add the Factory DP button
+		W_BUTTON *deliveryPointButton = new W_BUTTON(statForm);
+		deliveryPointButton->id = IDSTAT_DP_BUTTON;
+		deliveryPointButton->style |= WBUT_SECONDARY;
+		switch (factoryType)
 		{
-			return false;
+		default:
+		case REF_FACTORY:        deliveryPointButton->setImages(Image(IntImages, IMAGE_FDP_UP), Image(IntImages, IMAGE_FDP_DOWN), Image(IntImages, IMAGE_FDP_HI)); break;
+		case REF_CYBORG_FACTORY: deliveryPointButton->setImages(Image(IntImages, IMAGE_CDP_UP), Image(IntImages, IMAGE_CDP_DOWN), Image(IntImages, IMAGE_CDP_HI)); break;
+		case REF_VTOL_FACTORY:   deliveryPointButton->setImages(Image(IntImages, IMAGE_VDP_UP), Image(IntImages, IMAGE_VDP_DOWN), Image(IntImages, IMAGE_VDP_HI)); break;
 		}
+		deliveryPointButton->move(4, STAT_SLDY);
+		deliveryPointButton->setTip(_("Factory Delivery Point"));
+		deliveryPointButton->pUserData = psOwner;
 
 		//add the Factory Loop button!
-		sButInit = W_BUTINIT();
-		sButInit.formID = IDSTAT_FORM;
-		sButInit.id = IDSTAT_LOOP_BUTTON;
-		sButInit.style = WBUT_SECONDARY;
-		sButInit.x = STAT_SLDX + STAT_SLDWIDTH + 2;
-		sButInit.y = STAT_SLDY;
-		sButInit.width = iV_GetImageWidth(IntImages, IMAGE_LOOP_DOWN);
-		sButInit.height = iV_GetImageHeight(IntImages, IMAGE_LOOP_DOWN);
-		sButInit.pTip = _("Loop Production");
-		sButInit.pDisplay = intDisplayButtonPressed;
-		sButInit.UserData = PACKDWORD_TRI(IMAGE_LOOP_DOWN, IMAGE_LOOP_HI, IMAGE_LOOP_UP);
-
-		if (!widgAddButton(psWScreen, &sButInit))
-		{
-			return false;
-		}
+		W_BUTTON *loopButton = new W_BUTTON(statForm);
+		loopButton->id = IDSTAT_LOOP_BUTTON;
+		loopButton->style |= WBUT_SECONDARY;
+		loopButton->setImages(Image(IntImages, IMAGE_LOOP_UP), Image(IntImages, IMAGE_LOOP_DOWN), Image(IntImages, IMAGE_LOOP_HI));
+		loopButton->move(STAT_SLDX + STAT_SLDWIDTH + 2, STAT_SLDY);
+		loopButton->setTip(_("Loop Production"));
 
 		if (psOwner != NULL)
 		{
@@ -3721,8 +3732,8 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 		sLabInit.formID = IDSTAT_FORM;
 		sLabInit.id = IDSTAT_LOOP_LABEL;
 		sLabInit.style = WIDG_HIDDEN;
-		sLabInit.x = (UWORD)(sButInit.x - 15);
-		sLabInit.y = sButInit.y;
+		sLabInit.x = loopButton->x() - 15;
+		sLabInit.y = loopButton->y();
 		sLabInit.width = 12;
 		sLabInit.height = 15;
 		sLabInit.pUserData = psOwner;
@@ -3731,7 +3742,10 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 		{
 			return false;
 		}
+	}
 
+	if (objMode == IOBJ_MANUFACTURE)
+	{
 		/* store the common values for the text labels for the quantity
 		to produce (on each button).*/
 		sLabInit = W_LABINIT();
@@ -3744,6 +3758,12 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 		sLabInit.width = 12;
 		sLabInit.height = 15;
 		sLabInit.pCallback = intAddProdQuantity;
+	}
+
+	if ((objMode == IOBJ_MANUFACTURE || objMode == IOBJ_BUILD) && psOwner != nullptr)
+	{
+		// Add the obsolete items button.
+		makeObsoleteButton(statForm);
 	}
 
 	/* Add the close button */

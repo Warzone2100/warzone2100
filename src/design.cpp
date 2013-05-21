@@ -150,7 +150,7 @@ char StringBuffer[STRING_BUFFER_SIZE];
 #define DES_LEFTFORMX		RET_X
 #define DES_LEFTFORMY		DESIGN_Y
 #define DES_LEFTFORMWIDTH	RET_FORMWIDTH
-#define DES_LEFTFORMHEIGHT	258
+#define DES_LEFTFORMHEIGHT	273
 #define	DES_LEFTFORMBUTX	2
 #define	DES_LEFTFORMBUTY	2
 
@@ -245,7 +245,7 @@ static bool intAddTemplateButtons(ListTabWidget *templList, DROID_TEMPLATE *psSe
 static void intDisplayDesignForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 
 /* Set the current mode of the design screen, and display the appropriate component lists */
-static void intSetDesignMode(DES_COMPMODE newCompMode);
+static void intSetDesignMode(DES_COMPMODE newCompMode, bool forceRefresh = false);
 /* Set all the design bar graphs from a design template */
 static void intSetDesignStats(DROID_TEMPLATE *psTemplate);
 /* Set up the system clickable form of the design screen given a set of stats */
@@ -351,7 +351,7 @@ extern bool bRender3DOnly;
 
 
 /* Add the design widgets to the widget screen */
-static bool _intAddDesign(bool bShowCentreScreen)
+bool intAddDesign(bool bShowCentreScreen)
 {
 	W_FORMINIT		sFormInit;
 	W_LABINIT		sLabInit;
@@ -777,7 +777,7 @@ void desSetupDesignTemplates(void)
 		    psTempl->droidType != DROID_CYBORG_CONSTRUCT   &&
 		    psTempl->droidType != DROID_CYBORG_REPAIR      &&
 		    psTempl->droidType != DROID_PERSON             &&
-		    researchedTemplate(psTempl, selectedPlayer))
+		    researchedTemplate(psTempl, selectedPlayer, includeRedundantDesigns))
 		{
 			apsTemplateList.push_back(psTempl);
 		}
@@ -785,21 +785,24 @@ void desSetupDesignTemplates(void)
 }
 
 /* Add the design template form */
-static bool _intAddTemplateForm(DROID_TEMPLATE *psSelected)
+static bool intAddTemplateForm(DROID_TEMPLATE *psSelected)
 {
 	WIDGET *parent = psWScreen->psForm;
 
 	/* add a form to place the tabbed form on */
 	IntFormAnimated *templbaseForm = new IntFormAnimated(parent, false);
 	templbaseForm->id = IDDES_TEMPLBASE;
-	templbaseForm->setGeometry(RET_X, DESIGN_Y, RET_FORMWIDTH, DES_LEFTFORMHEIGHT + 4);
+	templbaseForm->setGeometry(RET_X, DESIGN_Y, RET_FORMWIDTH, DES_LEFTFORMHEIGHT);
+
+	// Add the obsolete items button.
+	makeObsoleteButton(templbaseForm);
 
 	/* Add the design templates form */
 	IntListTabWidget *templList = new IntListTabWidget(templbaseForm);
 	templList->setChildSize(DES_TABBUTWIDTH, DES_TABBUTHEIGHT);
 	templList->setChildSpacing(DES_TABBUTGAP, DES_TABBUTGAP);
 	int templListWidth = OBJ_BUTWIDTH*2 + DES_TABBUTGAP;
-	templList->setGeometry((RET_FORMWIDTH - templListWidth)/2, 2, templListWidth, templbaseForm->height() - 2);
+	templList->setGeometry((RET_FORMWIDTH - templListWidth)/2, 18, templListWidth, templbaseForm->height() - 18);
 
 	/* Put the buttons on it */
 	return intAddTemplateButtons(templList, psSelected);
@@ -878,11 +881,11 @@ static bool intAddTemplateButtons(ListTabWidget *templList, DROID_TEMPLATE *psSe
  * component lists
  * added case IDES_TURRET_A,IDES_TURRET_B
  */
-static void intSetDesignMode(DES_COMPMODE newCompMode)
+static void intSetDesignMode(DES_COMPMODE newCompMode, bool forceRefresh)
 {
 	UDWORD	weaponIndex;
 
-	if (newCompMode == desCompMode)
+	if (newCompMode == desCompMode && !forceRefresh)
 	{
 		return;
 	}
@@ -1141,7 +1144,7 @@ static void intSetDesignStats(DROID_TEMPLATE *psTemplate)
 }
 
 /* Set up the system clickable form of the design screen given a set of stats */
-static bool _intSetSystemForm(COMPONENT_STATS *psStats)
+static bool intSetSystemForm(COMPONENT_STATS *psStats)
 {
 	DES_SYSMODE		newSysMode = (DES_SYSMODE)0;
 
@@ -1709,7 +1712,7 @@ static ListTabWidget *intAddComponentForm()
 	/* add a form to place the tabbed form on */
 	IntFormAnimated *rightBase = new IntFormAnimated(parent, false);
 	rightBase->id = IDDES_RIGHTBASE;
-	rightBase->setGeometry(RADTLX - 2, DESIGN_Y, RET_FORMWIDTH, DES_RIGHTFORMHEIGHT + 4);
+	rightBase->setGeometry(RADTLX - 2, DESIGN_Y, RET_FORMWIDTH, DES_RIGHTFORMHEIGHT);
 
 	//now a single form
 	IntListTabWidget *compList = new IntListTabWidget(rightBase);
@@ -1849,7 +1852,7 @@ static bool intAddComponentButtons(ListTabWidget *compList, COMPONENT_STATS *psS
 		}
 
 		/* Skip unavailable entries and non-design ones*/
-		if (!(aAvailable[i] & AVAILABLE) || !psCurrStats->designable)
+		if (!(aAvailable[i] == AVAILABLE || (includeRedundantDesigns && aAvailable[i] == REDUNDANT)) || !psCurrStats->designable)
 		{
 			/* Update the stats pointer for the next button */
 			psCurrStats = (COMPONENT_STATS *)(((UBYTE *)psCurrStats) + size);
@@ -1980,8 +1983,7 @@ static bool intAddExtraSystemButtons(ListTabWidget *compList, unsigned sensorInd
 			}
 
 			// Skip unavailable entries or non-design ones
-			if (!(aAvailable[i] & AVAILABLE)
-			    || !psCurrStats->designable)
+			if (!(aAvailable[i] == AVAILABLE || (includeRedundantDesigns && aAvailable[i] == REDUNDANT)) || !psCurrStats->designable)
 			{
 				// Update the stats pointer for the next button
 				psCurrStats = (COMPONENT_STATS *)(((UBYTE *)psCurrStats) + size);
@@ -3688,6 +3690,26 @@ void intProcessDesign(UDWORD id)
 			widgReveal(psWScreen, IDDES_PROPFORM);
 
 			break;
+		case IDSTAT_OBSOLETE_BUTTON:
+			includeRedundantDesigns = !includeRedundantDesigns;
+			StateButton *obsoleteButton = (StateButton *)widgGetFromID(psWScreen, IDSTAT_OBSOLETE_BUTTON);
+			obsoleteButton->setState(includeRedundantDesigns);
+			// Refresh lists.
+			if (droidTemplID != IDDES_TEMPLSTART)
+			{
+				intRemoveDesign();
+				intAddDesign(false);
+			}
+			else
+			{
+				desSetupDesignTemplates();
+				widgDelete(psWScreen, IDDES_TEMPLBASE);
+				intAddTemplateForm(templateFromButtonId(droidTemplID));
+				intSetDesignMode(desCompMode, true);
+				droidTemplID = IDDES_TEMPLSTART;
+				widgSetButtonState(psWScreen, droidTemplID, WBUT_LOCK);
+			}
+			break;
 		}
 	}
 
@@ -4132,24 +4154,6 @@ static bool intCheckValidWeaponForProp(void)
 		}
 	}
 	return checkValidWeaponForProp(&sCurrDesign);
-}
-
-bool intAddDesign(bool bShowCentreScreen)
-{
-	return _intAddDesign(bShowCentreScreen);
-}
-
-
-/* Set up the system clickable form of the design screen given a set of stats */
-static bool intSetSystemForm(COMPONENT_STATS *psStats)
-{
-	return _intSetSystemForm(psStats);
-}
-
-
-static bool intAddTemplateForm(DROID_TEMPLATE *psSelected)
-{
-	return _intAddTemplateForm(psSelected);
 }
 
 //checks if the template has PROPULSION_TYPE_LIFT propulsion attached - returns true if it does

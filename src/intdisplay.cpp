@@ -1259,59 +1259,6 @@ void intDisplayButtonPressed(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	}
 }
 
-// Display DP images depending on factory and if the widget is currently depressed
-void intDisplayDPButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
-{
-	W_BUTTON	*psButton = (W_BUTTON *)psWidget;
-	STRUCTURE	*psStruct = (STRUCTURE *)psButton->pUserData;
-	UDWORD		x = xOffset + psButton->x();
-	UDWORD		y = yOffset + psButton->y();
-	UBYTE		hilight = 0, down = 0;
-	UWORD		imageID;
-
-	if (psStruct)
-	{
-		ASSERT(StructIsFactory(psStruct), "Structure is not a factory");
-
-		if (psButton->state & (WBUT_DOWN | WBUT_LOCK | WBUT_CLICKLOCK))
-		{
-			down = true;
-		}
-
-		hilight = (UBYTE)buttonIsHilite(psButton);
-
-		switch (psStruct->pStructureType->type)
-		{
-		case REF_FACTORY:
-			imageID = IMAGE_FDP_UP;
-			break;
-		case REF_CYBORG_FACTORY:
-			imageID = IMAGE_CDP_UP;
-			break;
-		case REF_VTOL_FACTORY:
-			imageID = IMAGE_VDP_UP;
-			break;
-		default:
-			return;
-		}
-
-
-		iV_DrawImage(IntImages, imageID, x, y);
-		if (hilight)
-		{
-			imageID++;
-			iV_DrawImage(IntImages, (UWORD)imageID, x, y);
-		}
-		else if (down)
-		{
-			imageID--;
-			iV_DrawImage(IntImages, (UWORD)imageID, x, y);
-		}
-
-	}
-}
-
-
 void intDisplaySlider(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
 	W_SLIDER *Slider = (W_SLIDER *)psWidget;

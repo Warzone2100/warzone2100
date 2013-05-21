@@ -86,12 +86,13 @@
 #define IDSTAT_TABFORM			14004		// The tab form with the stats buttons
 #define IDSTAT_START			14100		// The first stats ID
 #define IDSTAT_END				14999		// The last stats ID enough for 899 things
-#define IDSTAT_TIMEBARSTART		4300
-#define IDSTAT_TIMEBAREND		4399
+#define IDSTAT_TIMEBARSTART             16205000
+#define IDSTAT_TIMEBAREND               16205999
 #define IDSTAT_SLIDER			4400
 #define IDSTAT_LOOP_BUTTON		4403
 #define IDSTAT_LOOP_LABEL		4404
 #define IDSTAT_DP_BUTTON		4405
+#define IDSTAT_OBSOLETE_BUTTON          4406
 #define IDSTAT_RESICONSTART		4500
 #define IDSTAT_RESICONEND		4599
 #define IDSTAT_PRODSTART		4600
@@ -377,5 +378,7 @@ extern void intResetPreviousObj(void);
 extern bool intIsRefreshing(void);
 
 extern void intDemolishCancel(void);
+
+StateButton *makeObsoleteButton(WIDGET *parent);  ///< Makes a button to toggle showing obsolete items.
 
 #endif // __INCLUDED_SRC_HCI_H__

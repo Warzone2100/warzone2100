@@ -344,6 +344,12 @@
 0,0,image_vdp_down.png
 0,0,image_vdp_up.png
 -1,-1,image_vdp_hi.png
+0,0,image_obsolete_hide_up.png
+0,0,image_obsolete_hide_down.png
+-1,-1,image_obsolete_hide_hi.png
+0,0,image_obsolete_show_up.png
+0,0,image_obsolete_show_down.png
+-1,-1,image_obsolete_show_hi.png
 0,0,image_gn_star.png
 0,0,image_gn_15.png
 0,0,image_gn_14.png

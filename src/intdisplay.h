@@ -242,8 +242,6 @@ extern void drawRadarBlips(int radarX, int radarY, float pixSizeH, float pixSize
 
 extern void intUpdateQuantitySlider(WIDGET *psWidget, W_CONTEXT *psContext);
 
-void intDisplayDPButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
-
 void intDisplayResSubGroup(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 
 void intDisplayMissionClock(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);

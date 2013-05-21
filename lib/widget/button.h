@@ -26,12 +26,24 @@
 
 #include "widget.h"
 #include "widgbase.h"
-#include "lib/ivis_opengl/textdraw.h"
+#include <map>
 
 
 class W_BUTTON : public WIDGET
 {
 	Q_OBJECT
+
+public:
+	struct Images
+	{
+		Images() {}
+		Images(Image normal, Image down, Image highlighted, Image disabled = Image()) : normal(normal), down(down), highlighted(highlighted), disabled(disabled) {}
+
+		Image normal;       ///< The image for the button.
+		Image down;         ///< The image for the button, when down. Is overlaid over image.
+		Image highlighted;  ///< The image for the button, when highlighted. Is overlaid over image.
+		Image disabled;     ///< The image for the button, when disabled. Is overlaid over image.
+	};
 
 public:
 	W_BUTTON(W_BUTINIT const *init);
@@ -50,6 +62,7 @@ public:
 	void setString(QString string);
 	void setTip(QString string);
 
+	void setImages(Images const &images);
 	void setImages(Image image, Image imageDown, Image imageHighlight, Image imageDisabled = Image());
 
 	void setString(char const *stringUtf8) { WIDGET::setString(stringUtf8); }  // Unhide the WIDGET::setString(char const *) function...
@@ -61,15 +74,29 @@ signals:
 public:
 	UDWORD		state;				// The current button state
 	QString         pText;                          // The text for the button
-	Image           image;                          ///< The image for the button.
-	Image           imageDown;                      ///< The image for the button, when down. Is overlaid over image.
-	Image           imageDisabled;                  ///< The image for the button, when disabled. Is overlaid over image.
-	Image           imageHighlight;                 ///< The image for the button, when highlighted. Is overlaid over image.
+	Images          images;                         ///< The images for the button.
 	QString         pTip;                           // The tool tip for the button
 	SWORD HilightAudioID;				// Audio ID for form clicked sound
 	SWORD ClickedAudioID;				// Audio ID for form hilighted sound
 	WIDGET_AUDIOCALLBACK AudioCallback;	// Pointer to audio callback function
 	iV_fonts        FontID;
+};
+
+class StateButton : public W_BUTTON
+{
+	Q_OBJECT
+
+public:
+	StateButton(WIDGET *parent) : W_BUTTON(parent) {}
+	void setState(int state);
+	void setTip(int state, QString string);
+	void setTip(int state, char const *stringUtf8);
+	void setImages(int state, Images const &images);
+
+private:
+	int currentState;
+	std::map<int, QString> tips;
+	std::map<int, Images> imageSets;
 };
 
 #endif // __INCLUDED_LIB_WIDGET_BUTTON_H__

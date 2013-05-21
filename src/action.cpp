@@ -671,7 +671,7 @@ static bool actionRemoveDroidsFromBuildPos(unsigned player, Vector2i pos, uint16
 void actionSanity(DROID *psDroid)
 {
 	// Don't waste ammo unless given a direct attack order.
-	bool avoidOverkill = psDroid->order.type != DORDER_ATTACK && psDroid->order.type != DORDER_ATTACK &&
+	bool avoidOverkill = psDroid->order.type != DORDER_ATTACK &&
 	                     (psDroid->action == DACTION_ATTACK || psDroid->action == DACTION_MOVEFIRE || psDroid->action == DACTION_MOVETOATTACK ||
 	                      psDroid->action == DACTION_ROTATETOATTACK || psDroid->action == DACTION_VTOLATTACK);
 

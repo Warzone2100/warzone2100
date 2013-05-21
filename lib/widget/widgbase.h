@@ -42,6 +42,8 @@ class W_BARGRAPH;
 class W_BUTTON;
 class W_LABEL;
 class W_SLIDER;
+class StateButton;
+class ListWidget;
 
 /* The display function prototype */
 typedef void (*WIDGET_DISPLAY)(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);

@@ -83,11 +83,14 @@ extern UBYTE		*apCompLists[MAX_PLAYERS][COMP_NUMCOMPONENTS];
 //store for each players Structure states
 extern UBYTE		*apStructTypeLists[MAX_PLAYERS];
 
-//flags to fill apCompLists and apStructTypeLists
-#define AVAILABLE				0x01		//this item can be used to design droids
-#define UNAVAILABLE				0x02		//the player does not know about this item
-#define FOUND					0x04		//this item has been found, but is unresearched
-#define REDUNDANT				0x0A		//the player no longer needs this item
+//Values to fill apCompLists and apStructTypeLists. Not a bitfield, values are in case that helps with savegame compatibility.
+enum ItemAvailability
+{
+	AVAILABLE = 1,    // This item can be used to design droids.
+	UNAVAILABLE = 2,  // The player does not know about this item.
+	FOUND = 4,        // This item has been found, but is unresearched.
+	REDUNDANT = 10,   // The player no longer needs this item.
+};
 
 /*******************************************************************************
 *		Allocate stats functions

@@ -192,20 +192,20 @@ void W_BUTTON::display(int xOffset, int yOffset)
 	bool isHighlight = (state & WBUT_HIGHLIGHT) != 0;
 
 	// Display the button.
-	if (!image.isNull())
+	if (!images.normal.isNull())
 	{
-		iV_DrawImage(image, x0, y0);
-		if (isDown && !imageDown.isNull())
+		iV_DrawImage(images.normal, x0, y0);
+		if (isDown && !images.down.isNull())
 		{
-			iV_DrawImage(imageDown, x0, y0);
+			iV_DrawImage(images.down, x0, y0);
 		}
-		if (isDisabled && !imageDisabled.isNull())
+		if (isDisabled && !images.disabled.isNull())
 		{
-			iV_DrawImage(imageDisabled, x0, y0);
+			iV_DrawImage(images.disabled, x0, y0);
 		}
-		if (isHighlight && !imageHighlight.isNull())
+		if (isHighlight && !images.highlighted.isNull())
 		{
-			iV_DrawImage(imageHighlight, x0, y0);
+			iV_DrawImage(images.highlighted, x0, y0);
 		}
 	}
 	else
@@ -238,21 +238,66 @@ void W_BUTTON::display(int xOffset, int yOffset)
 		iV_DrawText(textBytes.constData(), fx, fy);
 	}
 
-	if (isDisabled && !image.isNull() && imageDisabled.isNull())
+	if (isDisabled && !images.normal.isNull() && images.disabled.isNull())
 	{
 		// disabled, render something over it!
 		iV_TransBoxFill(x0, y0, x0 + width(), y0 + height());
 	}
 }
 
-void W_BUTTON::setImages(Image image_, Image imageDown_, Image imageHighlight_, Image imageDisabled_)
+void W_BUTTON::setImages(Images const &images_)
 {
-	image = image_;
-	imageDown = imageDown_;
-	imageDisabled = imageDisabled_;
-	imageHighlight = imageHighlight_;
-	if (!image.isNull())
+	images = images_;
+	if (!images.normal.isNull())
 	{
-		setGeometry(x(), y(), image.width(), image.height());
+		setGeometry(x(), y(), images.normal.width(), images.normal.height());
+	}
+}
+
+void W_BUTTON::setImages(Image image, Image imageDown, Image imageHighlight, Image imageDisabled)
+{
+	setImages(Images(image, imageDown, imageHighlight, imageDisabled));
+}
+
+void StateButton::setState(int state)
+{
+	if (currentState == state)
+	{
+		return;
+	}
+
+	currentState = state;
+	std::map<int, Images>::const_iterator image = imageSets.find(state);
+	if (image != imageSets.end())
+	{
+		W_BUTTON::setImages(image->second);
+	}
+	std::map<int, QString>::const_iterator tip = tips.find(state);
+	if (tip != tips.end())
+	{
+		W_BUTTON::setTip(tip->second);
+	}
+}
+
+void StateButton::setTip(int state, QString string)
+{
+	tips[state] = string;
+	if (currentState == state)
+	{
+		W_BUTTON::setTip(string);
+	}
+}
+
+void StateButton::setTip(int state, char const *stringUtf8)
+{
+	setTip(state, QString::fromUtf8(stringUtf8));
+}
+
+void StateButton::setImages(int state, Images const &images)
+{
+	imageSets[state] = images;
+	if (currentState == state)
+	{
+		W_BUTTON::setImages(images);
 	}
 }
