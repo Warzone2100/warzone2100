@@ -882,6 +882,10 @@ void structureBuild(STRUCTURE *psStruct, DROID *psDroid, int buildPoints, int bu
 	}
 	else
 	{
+		if (psStruct->pStructureType->type == REF_POWER_GEN && psStruct->status == SS_BUILT)
+		{
+			releasePowerGen(psStruct);
+		}
 		psStruct->status = SS_BEING_BUILT;
 	}
 	if (buildPoints < 0 && psStruct->currentBuildPts == 0)
@@ -5123,67 +5127,63 @@ bool calcStructureMuzzleLocation(STRUCTURE *psStructure, Vector3i *muzzle, int w
 resource extractors*/
 void checkForResExtractors(STRUCTURE *psBuilding)
 {
-	STRUCTURE		*psCurr;
-	POWER_GEN		*psPowerGen;
-	RES_EXTRACTOR	*psResExtractor;
-	UDWORD			i;
-	SDWORD			slot;
+	ASSERT_OR_RETURN(, psBuilding->pStructureType->type == REF_POWER_GEN, "invalid structure type");
 
-	if (psBuilding->pStructureType->type != REF_POWER_GEN)
+	// Find derricks, sorted by unused first, then ones attached to power generators without modules.
+	typedef std::pair<int, STRUCTURE *> Derrick;
+	typedef std::vector<Derrick> Derricks;
+	Derricks derricks;
+	derricks.reserve(NUM_POWER_MODULES + 1);
+	for (STRUCTURE *currExtractor = apsExtractorLists[psBuilding->player]; currExtractor != nullptr; currExtractor = currExtractor->psNextFunc)
 	{
-		ASSERT(!"invalid structure type", "invalid structure type");
-		return;
-	}
-	psPowerGen = &psBuilding->pFunctionality->powerGenerator;
-	//count the number of allocated slots
-	slot = 0;//-1;
-	for (i=0; i < NUM_POWER_MODULES; i++)
-	{
-		if (psPowerGen->apResExtractors[i] != NULL)
+		RES_EXTRACTOR *resExtractor = &currExtractor->pFunctionality->resourceExtractor;
+
+		if (currExtractor->status != SS_BUILT)
 		{
-			slot++;
-			//make sure the derrrick is active if any oil left
-			psResExtractor = &psPowerGen->apResExtractors[i]->pFunctionality->resourceExtractor;
-			psResExtractor->active = true;
+			continue;  // Derrick not complete.
 		}
+		int priority = resExtractor->psPowerGen != nullptr? resExtractor->psPowerGen->capacity : -1;
+		//auto d = std::find_if(derricks.begin(), derricks.end(), [priority](Derrick const &v) { return v.first <= priority; });
+		Derricks::iterator d = derricks.begin();
+		while (d != derricks.end() && d->first <= priority)
+		{
+			++d;
+		}
+		derricks.insert(d, Derrick(priority, currExtractor));
+		derricks.resize(std::min<unsigned>(derricks.size(), NUM_POWER_MODULES));  // No point remembering more derricks than this.
 	}
 
-	psResExtractor = NULL;
-	//each Power Gen can cope with 4 Extractors now - 9/6/98 AB
-	//check capacity against number of filled slots
-	if (slot < NUM_POWER_MODULES)
+	// Attach derricks.
+	Derricks::const_iterator d = derricks.begin();
+	for (int i = 0; i < NUM_POWER_MODULES; ++i)
 	{
-		for (psCurr = apsExtractorLists[psBuilding->player]; psCurr != NULL; psCurr = psCurr->psNextFunc)
+		POWER_GEN *powerGen = &psBuilding->pFunctionality->powerGenerator;
+		if (powerGen->apResExtractors[i] != nullptr && !powerGen->apResExtractors[i]->died)
 		{
-				psResExtractor = &psCurr->pFunctionality->resourceExtractor;
-
-				//check not connected and power left and built!
-				if (!psResExtractor->active
-				 && psCurr->status == SS_BUILT)
-				{
-					//assign the extractor to the power generator - use first vacant slot
-					for (i = 0; i < NUM_POWER_MODULES; i++)
-					{
-						if (psPowerGen->apResExtractors[i] == NULL)
-						{
-							psPowerGen->apResExtractors[i] = psCurr;
-							break;
-						}
-					}
-					//set the owning power gen up for the resource extractor
-					psResExtractor->psPowerGen = psBuilding;
-					//set the res Extr to active
-					psResExtractor->active = true;
-					slot++;
-					//each Power Gen can cope with 4 Extractors now - 9/6/98 AB
-					//check to see if any more vacant slots
-					if (slot >= NUM_POWER_MODULES)
-					{
-						//full up so quit out
-						break;
-					}
-				}
+			// Make sure the derrrick is active.
+			RES_EXTRACTOR *resExtractor = &powerGen->apResExtractors[i]->pFunctionality->resourceExtractor;
+			resExtractor->active = true;
+			continue;  // Slot full.
 		}
+
+		int priority = psBuilding->capacity;
+		if (d == derricks.end() || d->first >= priority)
+		{
+			continue;  // No more derricks to transfer to this power generator.
+		}
+
+		STRUCTURE *derrick = d->second;
+		RES_EXTRACTOR *resExtractor = &derrick->pFunctionality->resourceExtractor;
+		if (resExtractor->psPowerGen != nullptr)
+		{
+			informPowerGen(derrick);  // Remove the derrick from the previous power generator.
+		}
+		// Assign the derrick to the power generator.
+		powerGen->apResExtractors[i] = derrick;
+		resExtractor->active = true;
+		resExtractor->psPowerGen = psBuilding;
+
+		++d;
 	}
 }
 
@@ -5192,56 +5192,46 @@ void checkForResExtractors(STRUCTURE *psBuilding)
 with available slots for the new Res Ext*/
 void checkForPowerGen(STRUCTURE *psBuilding)
 {
-	STRUCTURE		*psCurr;
-	UDWORD			i;
-	SDWORD			slot;
-	POWER_GEN		*psPG;
-	RES_EXTRACTOR	*psRE;
+	ASSERT_OR_RETURN(, psBuilding->pStructureType->type == REF_RESOURCE_EXTRACTOR, "invalid structure type");
 
-	if (psBuilding->pStructureType->type != REF_RESOURCE_EXTRACTOR)
-	{
-		ASSERT(!"invalid structure type", "invalid structure type");
-		return;
-	}
-	psRE = &psBuilding->pFunctionality->resourceExtractor;
+	RES_EXTRACTOR *psRE = &psBuilding->pFunctionality->resourceExtractor;
 	if (psRE->active)
 	{
 		return;
 	}
 
-	//loop thru the current structures
-	for (psCurr = apsStructLists[psBuilding->player]; psCurr != NULL;
-		psCurr = psCurr->psNext)
+	// Find a power generator, if possible with a power module.
+	STRUCTURE *bestPowerGen = nullptr;
+	int bestSlot;
+	for (STRUCTURE *psCurr = apsStructLists[psBuilding->player]; psCurr != nullptr; psCurr = psCurr->psNext)
 	{
 		if (psCurr->pStructureType->type == REF_POWER_GEN && psCurr->status == SS_BUILT)
 		{
-			psPG = &psCurr->pFunctionality->powerGenerator;
-			//check capacity against number of filled slots
-			slot = 0;//-1;
-			for (i=0; i < NUM_POWER_MODULES; i++)
+			if (bestPowerGen != nullptr && bestPowerGen->capacity >= psCurr->capacity)
 			{
-				if (psPG->apResExtractors[i] != NULL)
-				{
-					slot++;
-				}
+				continue;  // Power generator not better.
 			}
-			//each Power Gen can cope with 4 Extractors now - 9/6/98 AB
-			//each Power Gen can cope with 4 extractors
-			if (slot < NUM_POWER_MODULES )
+
+			POWER_GEN *psPG = &psCurr->pFunctionality->powerGenerator;
+			for (int i = 0; i < NUM_POWER_MODULES; ++i)
 			{
-				//find the first vacant slot
-				for (i=0; i < NUM_POWER_MODULES; i++)
+				if (psPG->apResExtractors[i] == nullptr)
 				{
-					if (psPG->apResExtractors[i] == NULL)
-					{
-						psPG->apResExtractors[i] = psBuilding;
-						psRE->psPowerGen = psCurr;
-						psRE->active = true;
-						return;
-					}
+					bestPowerGen = psCurr;
+					bestSlot = i;
+					break;
 				}
 			}
 		}
+	}
+
+	if (bestPowerGen != nullptr)
+	{
+		// Attach the derrick to the power generator.
+		POWER_GEN *psPG = &bestPowerGen->pFunctionality->powerGenerator;
+		psPG->apResExtractors[bestSlot] = psBuilding;
+		psRE->psPowerGen = bestPowerGen;
+		psRE->active = true;
 	}
 }
 
