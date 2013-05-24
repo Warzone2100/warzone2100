@@ -97,11 +97,11 @@ function buildTruck(struct)
 function buildCyborg(struct)
 {
 	// Cyborg templates are special -- their bodies, legs and weapons are linked. We should fix this one day...
-	if (!buildDroid(struct, "Cyborg Thermite", "Cyb-Bod-Thermite", "CyborgLegs", null, null, "Cyb-Wpn-Thermite"))
+	if (!buildDroid(struct, "Cyborg Thermite", "CyborgLightBody", "CyborgLegs", null, null, "Cyb-Wpn-Thermite"))
 	{
-		if (!buildDroid(struct, "Cyborg Flamer", "CyborgFlamerGrd", "CyborgLegs", null, null, "CyborgFlamer01"))
+		if (!buildDroid(struct, "Cyborg Flamer", "CyborgLightBody", "CyborgLegs", null, null, "CyborgFlamer01"))
 		{
-			if (!buildDroid(struct, "Cyborg MG", "CyborgChain1Ground", "CyborgLegs", null, null, "CyborgChaingun"))
+			if (!buildDroid(struct, "Cyborg MG", "CyborgLightBody", "CyborgLegs", null, null, "CyborgChaingun"))
 			{
 				log("Failed to construct new cyborg");
 			}
