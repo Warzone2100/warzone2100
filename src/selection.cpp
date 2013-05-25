@@ -44,242 +44,60 @@
 #include "display.h"
 #include "qtscript.h"
 
-// ---------------------------------------------------------------------
-// Selects all units owned by the player - onscreen toggle.
-static unsigned int selSelectAllUnits(unsigned int player, bool bOnScreen)
+
+template <typename T>
+static unsigned selSelectUnitsIf(unsigned player, T condition, bool onlyOnScreen)
 {
-	unsigned int count = 0;
+	unsigned count = 0;
 
 	selDroidDeselect(player);
 
-	/* Go thru' all */
-	for (DROID *psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
+	// Go through all.
+	for (DROID *psDroid = apsDroidLists[player]; psDroid != nullptr; psDroid = psDroid->psNext)
 	{
-		/* Do we care about them being on screen? */
-		if (!bOnScreen || droidOnScreen(psDroid, 0))
+		bool shouldSelect = (!onlyOnScreen || droidOnScreen(psDroid, 0)) &&
+		                    condition(psDroid);
+		count += shouldSelect;
+		if (shouldSelect && !psDroid->selected)
 		{
-			/* can select everything except transporters */
-			if (psDroid->droidType != DROID_TRANSPORTER && psDroid->droidType != DROID_SUPERTRANSPORTER)
-			{
-				SelectDroid(psDroid);
-				count++;
-			}
+			SelectDroid(psDroid);
+		}
+		else if (!shouldSelect && psDroid->selected)
+		{
+			DeSelectDroid(psDroid);
 		}
 	}
 
 	return count;
 }
 
-// ---------------------------------------------------------------------
-// Selects all units owned by the player of a certain propulsion type.
-// On Screen toggle.
-static unsigned int selSelectAllSameProp(unsigned int player, PROPULSION_TYPE propType, bool bOnScreen)
+template <typename T, typename U>
+static unsigned selSelectUnitsIf(unsigned player, T condition, U value, bool onlyOnScreen)
 {
-	unsigned int count = 0;
-
-	selDroidDeselect(player);
-
-	/* Go thru' them all */
-	for (DROID *psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
-	{
-		/* Is on screen important */
-		if (!bOnScreen || droidOnScreen(psDroid, 0))
-		{
-			/* Get the propulsion type */
-			PROPULSION_STATS *psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION];
-			ASSERT(psPropStats != NULL, "invalid propulsion stats pointer");
-			/* Same as that asked for - don't want Transporters*/
-			if (psPropStats->propulsionType == propType && (psDroid->droidType != DROID_TRANSPORTER && psDroid->droidType != DROID_SUPERTRANSPORTER))
-			{
-				SelectDroid(psDroid);
-				count++;
-			}
-		}
-	}
-
-	return count;
+	return selSelectUnitsIf(player, std::bind2nd(std::ptr_fun(condition), value), onlyOnScreen);
 }
 
-static unsigned int selSelectAllSamePropArmed(unsigned int player, PROPULSION_TYPE propType, bool bOnScreen)
+static bool selTransporter(DROID *droid) { return droid->droidType == DROID_TRANSPORTER || droid->droidType == DROID_SUPERTRANSPORTER; }
+static bool selTrue(DROID *droid) { return !selTransporter(droid); }
+static bool selProp(DROID *droid, PROPULSION_TYPE prop) { return asPropulsionStats[droid->asBits[COMP_PROPULSION]].propulsionType == prop && !selTransporter(droid); }
+static bool selPropArmed(DROID *droid, PROPULSION_TYPE prop) { return asPropulsionStats[droid->asBits[COMP_PROPULSION]].propulsionType == prop && vtolFull(droid) && !selTransporter(droid); }
+static bool selType(DROID *droid, DROID_TYPE type) { return droid->droidType == type; }
+static bool selCombat(DROID *droid) { return droid->asWeaps[0].nStat > 0 && !selTransporter(droid); }
+static bool selCombatLand(DROID *droid)
 {
-	unsigned int count = 0;
-
-	selDroidDeselect(player);
-
-	/* Go thru' them all */
-	for (DROID *psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
-	{
-		/* Is on screen important */
-		if (!bOnScreen || droidOnScreen(psDroid, 0))
-		{
-			/* Get the propulsion type */
-			PROPULSION_STATS *psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION];
-			ASSERT(psPropStats != NULL, "invalid propulsion stats pointer");
-			/* Same as that asked for - don't want Transporters*/
-			if (psPropStats->propulsionType == propType && (psDroid->droidType != DROID_TRANSPORTER && psDroid->droidType != DROID_SUPERTRANSPORTER) && vtolFull(psDroid))
-			{
-				SelectDroid(psDroid);
-				count++;
-			}
-		}
-	}
-
-	return count;
+	PROPULSION_TYPE type = asPropulsionStats[droid->asBits[COMP_PROPULSION]].propulsionType;
+	return droid->asWeaps[0].nStat > 0 && (type == PROPULSION_TYPE_WHEELED ||
+	                                       type == PROPULSION_TYPE_HALF_TRACKED ||
+	                                       type == PROPULSION_TYPE_TRACKED ||
+	                                       type == PROPULSION_TYPE_HOVER ||
+	                                       type == PROPULSION_TYPE_LEGGED);
 }
-
-// ---------------------------------------------------------------------
-// Selects all units owned by the player of a certain droid type.
-// On Screen toggle.
-static unsigned int selSelectAllSameDroid(unsigned int player, DROID_TYPE droidType, bool bOnScreen)
+static bool selCombatCyborg(DROID *droid)
 {
-	int count = 0;
-	selDroidDeselect(player);
-
-	/* Go thru' them all */
-	for (DROID *psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
-	{
-		/* Is on screen important */
-		if (!bOnScreen || droidOnScreen(psDroid, 0))
-		{
-			/* Same as the droid type asked for*/
-			if (psDroid->droidType == droidType || (droidType == DROID_TRANSPORTER && psDroid->droidType == DROID_SUPERTRANSPORTER))
-			{
-				SelectDroid(psDroid);
-				count++;
-			}
-		}
-	}
-
-	return count;
+	PROPULSION_TYPE type = asPropulsionStats[droid->asBits[COMP_PROPULSION]].propulsionType;
+	return droid->asWeaps[0].nStat > 0 && type == PROPULSION_TYPE_LEGGED;
 }
-
-// ---------------------------------------------------------------------
-// Selects all units owned by the player that have a weapon. On screen
-// toggle.
-static unsigned int selSelectAllCombat(unsigned int player, bool bOnScreen)
-{
-	unsigned int count = 0;
-
-	selDroidDeselect(player);
-
-	for (DROID *psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
-	{
-		/* Does it have a weapon? */
-		if (psDroid->asWeaps[0].nStat > 0)
-		{
-			/* Is on screen relevant? */
-			if (!bOnScreen || droidOnScreen(psDroid, 0))
-			{
-				// we don't want to get the Transporter
-				if (psDroid->droidType != DROID_TRANSPORTER && psDroid->droidType != DROID_SUPERTRANSPORTER)
-				{
-					SelectDroid(psDroid);
-					count++;
-				}
-			}
-		}
-	}
-
-	return count;
-}
-
-// ---------------------------------------------------------------------
-// Selects all land-based units (Including Hover units) owned by the player that have a weapon. On screen
-// toggle.
-static unsigned int selSelectAllCombatLand(unsigned int player, bool bOnScreen)
-{
-	int count = 0;
-	selDroidDeselect(player);
-
-	for (DROID *psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
-	{
-		/* Does it have a weapon? */
-		if (psDroid->asWeaps[0].nStat > 0)
-		{
-			/* Is on screen relevant? */
-			if (!bOnScreen || droidOnScreen(psDroid, 0))
-			{
-				/* Get the propulsion type */
-				PROPULSION_STATS *psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION];
-				ASSERT(psPropStats != NULL, "invalid propulsion stats pointer");
-				if (psPropStats->propulsionType == PROPULSION_TYPE_WHEELED ||
-				    psPropStats->propulsionType == PROPULSION_TYPE_HALF_TRACKED ||
-				    psPropStats->propulsionType == PROPULSION_TYPE_TRACKED ||
-				    psPropStats->propulsionType == PROPULSION_TYPE_HOVER ||
-				    psPropStats->propulsionType == PROPULSION_TYPE_LEGGED)
-				{
-					SelectDroid(psDroid);
-					count++;
-				}
-			}
-		}
-	}
-
-	return count;
-}
-
-// ---------------------------------------------------------------------
-// Selects all Cyborgs owned by the player that have a weapon. On screen
-// toggle.
-static unsigned int selSelectAllCombatCyborg(unsigned int player, bool bOnScreen)
-{
-	int count = 0;
-	selDroidDeselect(player);
-
-	for (DROID *psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
-	{
-		/* Does it have a weapon? */
-		if (psDroid->asWeaps[0].nStat > 0)
-		{
-			/* Is on screen relevant? */
-			if (!bOnScreen || droidOnScreen(psDroid, 0))
-			{
-				/* Get the propulsion type */
-				PROPULSION_STATS *psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION];
-				ASSERT(psPropStats != NULL, "invalid propulsion stats pointer");
-				/* Check if cyborg */
-				if (psPropStats->propulsionType == PROPULSION_TYPE_LEGGED)
-				{
-					SelectDroid(psDroid);
-					count++;
-				}
-			}
-		}
-	}
-
-	return count;
-}
-// ---------------------------------------------------------------------
-// Selects all damaged units - on screen toggle.
-static unsigned int selSelectAllDamaged(unsigned int player, bool bOnScreen)
-{
-	unsigned int count = 0;
-
-	selDroidDeselect(player);
-
-	for (DROID *psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
-	{
-		/* Get present percent of damage level */
-		int damage = PERCENT(psDroid->body, psDroid->originalBody);
-
-		/* Less than threshold? */
-		if (damage < REPAIRLEV_LOW)
-		{
-			/* Is on screen relevant? */
-			if (!bOnScreen || droidOnScreen(psDroid, 0))
-			{
-				// we don't want to get the Transporter
-				if (psDroid->droidType != DROID_TRANSPORTER && psDroid->droidType != DROID_SUPERTRANSPORTER)
-				{
-					SelectDroid(psDroid);
-					count++;
-				}
-			}
-		}
-	}
-
-	return count;
-}
+static bool selDamaged(DROID *droid) { return PERCENT(droid->body, droid->originalBody) < REPAIRLEV_LOW && !selTransporter(droid); }
 
 // ---------------------------------------------------------------------
 // Deselects all units for the player
@@ -652,61 +470,61 @@ unsigned int selDroidSelection(unsigned int player, SELECTION_CLASS droidClass, 
 	switch (droidClass)
 	{
 		case DS_ALL_UNITS:
-			retVal = selSelectAllUnits(player, bOnScreen);
+			retVal = selSelectUnitsIf(player, selTrue, bOnScreen);
 			break;
 		case DS_BY_TYPE:
 			switch (droidType)
 			{
 				case DST_VTOL:
-					retVal = selSelectAllSameProp(player, PROPULSION_TYPE_LIFT, bOnScreen);
+					retVal = selSelectUnitsIf(player, selProp, PROPULSION_TYPE_LIFT, bOnScreen);
 					break;
 				case DST_VTOL_ARMED:
-					retVal = selSelectAllSamePropArmed(player, PROPULSION_TYPE_LIFT, bOnScreen);
+					retVal = selSelectUnitsIf(player, selPropArmed, PROPULSION_TYPE_LIFT, bOnScreen);
 					break;
 				case DST_HOVER:
-					retVal = selSelectAllSameProp(player, PROPULSION_TYPE_HOVER, bOnScreen);
+					retVal = selSelectUnitsIf(player, selProp, PROPULSION_TYPE_HOVER, bOnScreen);
 					break;
 				case DST_WHEELED:
-					retVal = selSelectAllSameProp(player, PROPULSION_TYPE_WHEELED, bOnScreen);
+					retVal = selSelectUnitsIf(player, selProp, PROPULSION_TYPE_WHEELED, bOnScreen);
 					break;
 				case DST_TRACKED:
-					retVal = selSelectAllSameProp(player, PROPULSION_TYPE_TRACKED, bOnScreen);
+					retVal = selSelectUnitsIf(player, selProp, PROPULSION_TYPE_TRACKED, bOnScreen);
 					break;
 				case DST_HALF_TRACKED:
-					retVal = selSelectAllSameProp(player, PROPULSION_TYPE_HALF_TRACKED, bOnScreen);
+					retVal = selSelectUnitsIf(player, selProp, PROPULSION_TYPE_HALF_TRACKED, bOnScreen);
 					break;
 				case DST_CYBORG:
-					retVal = selSelectAllSameProp(player, PROPULSION_TYPE_LEGGED, bOnScreen);
+					retVal = selSelectUnitsIf(player, selProp, PROPULSION_TYPE_LEGGED, bOnScreen);
 					break;
 				case DST_ENGINEER:
-					retVal = selSelectAllSameDroid(player, DROID_CYBORG_CONSTRUCT, bOnScreen);
+					retVal = selSelectUnitsIf(player, selType, DROID_CYBORG_CONSTRUCT, bOnScreen);
 					break;
 				case DST_MECHANIC:
-					retVal = selSelectAllSameDroid(player, DROID_CYBORG_REPAIR, bOnScreen);
+					retVal = selSelectUnitsIf(player, selType, DROID_CYBORG_REPAIR, bOnScreen);
 					break;
 				case DST_TRANSPORTER:
-					retVal = selSelectAllSameDroid(player, DROID_TRANSPORTER, bOnScreen);
+					retVal = selSelectUnitsIf(player, selTransporter, bOnScreen);
 					break;
 				case DST_REPAIR_TANK:
-					retVal = selSelectAllSameDroid(player, DROID_REPAIR, bOnScreen);
+					retVal = selSelectUnitsIf(player, selType, DROID_REPAIR, bOnScreen);
 					break;
 				case DST_SENSOR:
-					retVal = selSelectAllSameDroid(player, DROID_SENSOR, bOnScreen);
+					retVal = selSelectUnitsIf(player, selType, DROID_SENSOR, bOnScreen);
 					break;
 				case DST_TRUCK:
-					retVal = selSelectAllSameDroid(player, DROID_CONSTRUCT, bOnScreen);
+					retVal = selSelectUnitsIf(player, selType, DROID_CONSTRUCT, bOnScreen);
 					break;
 				case DST_ALL_COMBAT:
-					retVal = selSelectAllCombat(player, bOnScreen);
+					retVal = selSelectUnitsIf(player, selCombat, bOnScreen);
 					break;
 				case DST_ALL_COMBAT_LAND:
-					retVal = selSelectAllCombatLand(player, bOnScreen);
+					retVal = selSelectUnitsIf(player, selCombatLand, bOnScreen);
 					break;
 				case DST_ALL_COMBAT_CYBORG:
-					retVal = selSelectAllCombatCyborg(player, bOnScreen);
+					retVal = selSelectUnitsIf(player, selCombatCyborg, bOnScreen);
 					break;
 				case DST_ALL_DAMAGED:
-					retVal = selSelectAllDamaged(player, bOnScreen);
+					retVal = selSelectUnitsIf(player, selDamaged, bOnScreen);
 					break;
 				case DST_ALL_SAME:
 					retVal = selSelectAllSame(player, bOnScreen);
