@@ -357,6 +357,7 @@ struct WEAPON_STATS : public COMPONENT_STATS
 		short periodicalDamage; ///< Repeat damage each second after hit
 		short periodicalDamageRadius; ///< Repeat damage radius
 		short periodicalDamageTime; ///< How long the round keeps damaging
+		short minimumDamage; ///< Minimum amount of damage done, in percentage of damage
 	} base, upgrade[MAX_PLAYERS];
 
 	WEAPON_CLASS	periodicalDamageWeaponClass;	///< Periodical damage weapon class by damage type (KINETIC, HEAT)

@@ -3946,6 +3946,7 @@ QScriptValue js_stats(QScriptContext *context, QScriptEngine *engine)
 			else if (name == "Rounds") psStats->upgrade[player].numRounds = value;
 			else if (name == "ReloadTime") psStats->upgrade[player].reloadTime = value;
 			else if (name == "Damage") psStats->upgrade[player].damage = value;
+			else if (name == "MinimumDamage") psStats->upgrade[player].minimumDamage = value;
 			else if (name == "Radius") psStats->upgrade[player].radius = value;
 			else if (name == "RadiusDamage") psStats->upgrade[player].radiusDamage = value;
 			else if (name == "RepeatDamage") psStats->upgrade[player].periodicalDamage = value;
@@ -4051,6 +4052,7 @@ QScriptValue js_stats(QScriptContext *context, QScriptEngine *engine)
 		else if (name == "Rounds") return psStats->upgrade[player].numRounds;
 		else if (name == "ReloadTime") return psStats->upgrade[player].reloadTime;
 		else if (name == "Damage") return psStats->upgrade[player].damage;
+		else if (name == "MinimumDamage") return psStats->upgrade[player].minimumDamage;
 		else if (name == "Radius") return psStats->upgrade[player].radius;
 		else if (name == "RadiusDamage") return psStats->upgrade[player].radiusDamage;
 		else if (name == "RepeatDamage") return psStats->upgrade[player].periodicalDamage;
@@ -4203,6 +4205,7 @@ bool registerFunctions(QScriptEngine *engine, QString scriptName)
 			weap.setProperty("ReloadTime", psStats->base.reloadTime, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 			weap.setProperty("Rounds", psStats->base.numRounds, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 			weap.setProperty("Damage", psStats->base.damage, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+			weap.setProperty("MinimumDamage", psStats->base.minimumDamage, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 			weap.setProperty("RadiusDamage", psStats->base.radiusDamage, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 			weap.setProperty("RepeatDamage", psStats->base.periodicalDamage, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 			weap.setProperty("RepeatRadius", psStats->base.periodicalDamageRadius, QScriptValue::ReadOnly | QScriptValue::Undeletable);
@@ -4340,6 +4343,7 @@ bool registerFunctions(QScriptEngine *engine, QString scriptName)
 			setStatsFunc(weap, engine, "Rounds", i, COMP_WEAPON, j, psStats->upgrade[i].numRounds);
 			setStatsFunc(weap, engine, "Radius", i, COMP_WEAPON, j, psStats->upgrade[i].radius);
 			setStatsFunc(weap, engine, "Damage", i, COMP_WEAPON, j, psStats->upgrade[i].damage);
+			setStatsFunc(weap, engine, "MinimumDamage", i, COMP_WEAPON, j, psStats->upgrade[i].minimumDamage);
 			setStatsFunc(weap, engine, "RadiusDamage", i, COMP_WEAPON, j, psStats->upgrade[i].radiusDamage);
 			setStatsFunc(weap, engine, "RepeatDamage", i, COMP_WEAPON, j, psStats->upgrade[i].periodicalDamage);
 			setStatsFunc(weap, engine, "RepeatTime", i, COMP_WEAPON, j, psStats->upgrade[i].periodicalDamageTime);

@@ -39,7 +39,8 @@ extern	BASE_OBJECT	*g_pProjLastAttacker;	///< The last unit that did damage - us
 #define PROJ_ULTIMATE_PITCH  80
 
 #define BURN_TIME	10000	///< How long an object burns for after leaving a fire.
-#define BURN_DAMAGE	15	///< How much damaga a second an object takes when it is burning.
+#define BURN_DAMAGE	15	///< How much damage per second an object takes when it is burning.
+#define BURN_MIN_DAMAGE	30	///< Least percentage of damage an object takes when burning.
 #define ACC_GRAVITY	1000	///< Downward force against projectiles.
 
 /** How long to display a single electronic warfare shimmmer. */

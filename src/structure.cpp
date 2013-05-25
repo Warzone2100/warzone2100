@@ -729,7 +729,7 @@ void handleAbandonedStructures()
  * \param weaponSubClass the subclass of the weapon that deals the damage
  * \return < 0 when the dealt damage destroys the structure, > 0 when the structure survives
  */
-int32_t structureDamage(STRUCTURE *psStructure, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime, bool isDamagePerSecond)
+int32_t structureDamage(STRUCTURE *psStructure, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime, bool isDamagePerSecond, int minDamage)
 {
 	int32_t relativeDamage;
 
@@ -738,7 +738,7 @@ int32_t structureDamage(STRUCTURE *psStructure, unsigned damage, WEAPON_CLASS we
 	debug(LOG_ATTACK, "structure id %d, body %d, armour %d, damage: %d",
 		  psStructure->id, psStructure->body, objArmour(psStructure, weaponClass), damage);
 
-	relativeDamage = objDamage(psStructure, damage, structureBody(psStructure), weaponClass, weaponSubClass, isDamagePerSecond);
+	relativeDamage = objDamage(psStructure, damage, structureBody(psStructure), weaponClass, weaponSubClass, isDamagePerSecond, minDamage);
 
 	// If the shell did sufficient damage to destroy the structure
 	if (relativeDamage < 0)

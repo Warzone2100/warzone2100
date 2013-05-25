@@ -130,7 +130,7 @@ void featureStatsShutDown(void)
  *  \param weaponClass,weaponSubClass the class and subclass of the weapon that deals the damage
  *  \return < 0 never, >= 0 always
  */
-int32_t featureDamage(FEATURE *psFeature, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime, bool isDamagePerSecond)
+int32_t featureDamage(FEATURE *psFeature, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime, bool isDamagePerSecond, int minDamage)
 {
 	int32_t relativeDamage;
 
@@ -139,7 +139,7 @@ int32_t featureDamage(FEATURE *psFeature, unsigned damage, WEAPON_CLASS weaponCl
 	debug(LOG_ATTACK, "feature (id %d): body %d armour %d damage: %d",
 	      psFeature->id, psFeature->body, psFeature->psStats->armourValue, damage);
 
-	relativeDamage = objDamage(psFeature, damage, psFeature->psStats->body, weaponClass, weaponSubClass, isDamagePerSecond);
+	relativeDamage = objDamage(psFeature, damage, psFeature->psStats->body, weaponClass, weaponSubClass, isDamagePerSecond, minDamage);
 
 	// If the shell did sufficient damage to destroy the feature
 	if (relativeDamage < 0)

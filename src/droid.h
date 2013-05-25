@@ -110,7 +110,7 @@ extern UDWORD	calcTemplatePower(DROID_TEMPLATE *psTemplate);
 bool idfDroid(DROID *psDroid);
 
 /* Do damage to a droid */
-int32_t droidDamage(DROID *psDroid, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime, bool isDamagePerSecond);
+int32_t droidDamage(DROID *psDroid, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime, bool isDamagePerSecond, int minDamage);
 
 /* The main update routine for all droids */
 extern void droidUpdate(DROID *psDroid);

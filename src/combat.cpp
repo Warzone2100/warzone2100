@@ -369,7 +369,7 @@ int objArmour(BASE_OBJECT *psObj, WEAPON_CLASS weaponClass)
  * \param weaponSubClass the subclass of the weapon that deals the damage
  * \return < 0 when the dealt damage destroys the object, > 0 when the object survives
  */
-int32_t objDamage(BASE_OBJECT *psObj, unsigned damage, unsigned originalhp, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, bool isDamagePerSecond)
+int32_t objDamage(BASE_OBJECT *psObj, unsigned damage, unsigned originalhp, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, bool isDamagePerSecond, int minDamage)
 {
 	int	actualDamage, level = 1, lastHit = psObj->timeLastHit;
 	int armour = objArmour(psObj, weaponClass);
@@ -416,8 +416,8 @@ int32_t objDamage(BASE_OBJECT *psObj, unsigned damage, unsigned originalhp, WEAP
 	// Reduce damage taken by EXP_REDUCE_DAMAGE % for each experience level
 	actualDamage = (damage * (100 - EXP_REDUCE_DAMAGE * level)) / 100;
 
-	// You always do at least a third of the experience modified damage
-	actualDamage = MAX(actualDamage - armour, actualDamage / 3);
+	// Apply at least the minimum damage amount
+	actualDamage = MAX(actualDamage - armour, actualDamage * minDamage / 100);
 
 	// And at least MIN_WEAPON_DAMAGE points
 	actualDamage = MAX(actualDamage, MIN_WEAPON_DAMAGE);
@@ -497,7 +497,7 @@ unsigned int objGuessFutureDamage(WEAPON_STATS *psStats, unsigned int player, BA
 	actualDamage = (damage * (100 - EXP_REDUCE_DAMAGE * level)) / 100;
 
 	// You always do at least a third of the experience modified damage
-	actualDamage = MAX(actualDamage - armour, actualDamage / 3);
+	actualDamage = MAX(actualDamage - armour, actualDamage * psStats->upgrade[player].minimumDamage / 100);
 
 	// And at least MIN_WEAPON_DAMAGE points
 	actualDamage = MAX(actualDamage, MIN_WEAPON_DAMAGE);

@@ -111,7 +111,7 @@ static void	proj_ImpactFunc( PROJECTILE *psObj );
 static void	proj_PostImpactFunc( PROJECTILE *psObj );
 static void proj_checkPeriodicalDamage(PROJECTILE *psProj);
 
-static int32_t objectDamage(BASE_OBJECT *psObj, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime, bool isDamagePerSecond);
+static int32_t objectDamage(BASE_OBJECT *psObj, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime, bool isDamagePerSecond, int minDamage);
 
 
 static inline void setProjectileDestination(PROJECTILE *psProj, BASE_OBJECT *psObj)
@@ -1125,7 +1125,8 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 			      psObj->psDest->id, psObj->psDest->player);
 
 			// Damage the object
-			relativeDamage = objectDamage(psObj->psDest, damage, psStats->weaponClass, psStats->weaponSubClass, psObj->time, false);
+			relativeDamage = objectDamage(psObj->psDest, damage, psStats->weaponClass, psStats->weaponSubClass,
+			                              psObj->time, false, psStats->upgrade[psObj->player].minimumDamage);
 
 			proj_UpdateKills(psObj, relativeDamage);
 
@@ -1209,7 +1210,8 @@ static void proj_ImpactFunc( PROJECTILE *psObj )
 			{
 				updateMultiStatsDamage(psObj->psSource->player, psCurr->player, damage);
 			}
-			int relativeDamage = objectDamage(psCurr, damage, psStats->weaponClass, psStats->weaponSubClass, psObj->time, false);
+			int relativeDamage = objectDamage(psCurr, damage, psStats->weaponClass, psStats->weaponSubClass, 
+			                                  psObj->time, false, psStats->upgrade[psObj->player].minimumDamage);
 			proj_UpdateKills(psObj, relativeDamage);
 		}
 	}
@@ -1373,7 +1375,9 @@ static void proj_checkPeriodicalDamage(PROJECTILE *psProj)
 		unsigned damageRate = calcDamage(weaponPeriodicalDamage(psStats,psProj->player), psStats->periodicalDamageWeaponEffect, psCurr);
 		debug(LOG_NEVER, "Periodical damage of %d per second to object %d, player %d\n", damageRate, psCurr->id, psCurr->player);
 
-		int relativeDamage = objectDamage(psCurr, damageRate, psStats->periodicalDamageWeaponClass, psStats->periodicalDamageWeaponSubClass, gameTime - deltaGameTime/2 + 1, true);
+		int relativeDamage = objectDamage(psCurr, damageRate, psStats->periodicalDamageWeaponClass, 
+			                          psStats->periodicalDamageWeaponSubClass, gameTime - deltaGameTime/2 + 1, true, 
+		                                  psStats->upgrade[psProj->player].minimumDamage);
 		proj_UpdateKills(psProj, relativeDamage);
 	}
 }
@@ -1494,20 +1498,20 @@ UDWORD	calcDamage(UDWORD baseDamage, WEAPON_EFFECT weaponEffect, BASE_OBJECT *ps
  *    multiplied by -1, resulting in a negative number. Killed features do not
  *    result in negative numbers.
  */
-static int32_t objectDamage(BASE_OBJECT *psObj, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime, bool isDamagePerSecond)
+static int32_t objectDamage(BASE_OBJECT *psObj, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime, bool isDamagePerSecond, int minDamage)
 {
 	switch (psObj->type)
 	{
 		case OBJ_DROID:
-			return droidDamage((DROID *)psObj, damage, weaponClass, weaponSubClass, impactTime, isDamagePerSecond);
+			return droidDamage((DROID *)psObj, damage, weaponClass, weaponSubClass, impactTime, isDamagePerSecond, minDamage);
 			break;
 
 		case OBJ_STRUCTURE:
-			return structureDamage((STRUCTURE *)psObj, damage, weaponClass, weaponSubClass, impactTime, isDamagePerSecond);
+			return structureDamage((STRUCTURE *)psObj, damage, weaponClass, weaponSubClass, impactTime, isDamagePerSecond, minDamage);
 			break;
 
 		case OBJ_FEATURE:
-			return featureDamage((FEATURE *)psObj, damage, weaponClass, weaponSubClass, impactTime, isDamagePerSecond);
+			return featureDamage((FEATURE *)psObj, damage, weaponClass, weaponSubClass, impactTime, isDamagePerSecond, minDamage);
 			break;
 
 		case OBJ_PROJECTILE:

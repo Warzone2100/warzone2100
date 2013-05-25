@@ -210,7 +210,7 @@ int droidReloadBar(BASE_OBJECT *psObj, WEAPON *psWeap, int weapon_slot)
  *
  * NOTE: This function will damage but _never_ destroy transports when in single player (campaign) mode
  */
-int32_t droidDamage(DROID *psDroid, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime, bool isDamagePerSecond)
+int32_t droidDamage(DROID *psDroid, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime, bool isDamagePerSecond, int minDamage)
 {
 	int32_t relativeDamage;
 
@@ -222,7 +222,7 @@ int32_t droidDamage(DROID *psDroid, unsigned damage, WEAPON_CLASS weaponClass, W
 		damage *= 3;
 	}
 
-	relativeDamage = objDamage(psDroid, damage, psDroid->originalBody, weaponClass, weaponSubClass, isDamagePerSecond);
+	relativeDamage = objDamage(psDroid, damage, psDroid->originalBody, weaponClass, weaponSubClass, isDamagePerSecond, minDamage);
 
 	if (relativeDamage > 0)
 	{
@@ -934,7 +934,7 @@ void droidUpdate(DROID *psDroid)
 		else
 		{
 			// do hardcoded burn damage (this damage automatically applied after periodical damage finished)
-			droidDamage(psDroid, BURN_DAMAGE, WC_HEAT, WSC_FLAME, gameTime - deltaGameTime/2 + 1, true);
+			droidDamage(psDroid, BURN_DAMAGE, WC_HEAT, WSC_FLAME, gameTime - deltaGameTime/2 + 1, true, BURN_MIN_DAMAGE);
 		}
 	}
 
