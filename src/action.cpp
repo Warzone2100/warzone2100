@@ -691,7 +691,7 @@ void actionSanity(DROID *psDroid)
 					// if VTOL - return to rearm pad if not patrolling
 					if (isVtolDroid(psDroid))
 					{
-						if ((psDroid->order.type == DORDER_PATROL || psDroid->order.type == DORDER_CIRCLE) && !vtolEmpty(psDroid))
+						if ((psDroid->order.type == DORDER_PATROL || psDroid->order.type == DORDER_CIRCLE) && (!vtolEmpty(psDroid) || (psDroid->secondaryOrder & DSS_ALEV_MASK) == DSS_ALEV_NEVER))
 						{
 							// Back to the patrol.
 							actionDroid(psDroid, DACTION_MOVE, psDroid->order.pos.x, psDroid->order.pos.y);

@@ -569,7 +569,7 @@ void orderUpdateDroid(DROID *psDroid)
 						// started a new order, quit
 						break;
 					}
-					if (isVtolDroid(psDroid) && !vtolFull(psDroid))
+					if (isVtolDroid(psDroid) && !vtolFull(psDroid) && (psDroid->secondaryOrder & DSS_ALEV_MASK) != DSS_ALEV_NEVER)
 					{
 						moveToRearm(psDroid);
 						break;
@@ -599,6 +599,11 @@ void orderUpdateDroid(DROID *psDroid)
 			{
 				actionDroid(psDroid, DACTION_RETURNTOPOS, psDroid->actionPos.x, psDroid->actionPos.y);
 			}
+		}
+		if (psDroid->order.type == DORDER_PATROL && isVtolDroid(psDroid) && vtolEmpty(psDroid) && (psDroid->secondaryOrder & DSS_ALEV_MASK) != DSS_ALEV_NEVER)
+		{
+			moveToRearm(psDroid);  // Completely empty (and we're not set to hold fire), don't bother patrolling.
+			break;
 		}
 		break;
 	case DORDER_CIRCLE:
@@ -649,6 +654,12 @@ void orderUpdateDroid(DROID *psDroid)
 					angle -= DEG(10);
 				} while (!worldOnMap(psDroid->order.pos.x + xoffset, psDroid->order.pos.y + yoffset));  // Don't try to fly off map.
 				actionDroid(psDroid, DACTION_MOVE, psDroid->order.pos.x + xoffset, psDroid->order.pos.y + yoffset);
+			}
+
+			if (isVtolDroid(psDroid) && vtolEmpty(psDroid) && (psDroid->secondaryOrder & DSS_ALEV_MASK) != DSS_ALEV_NEVER)
+			{
+				moveToRearm(psDroid);  // Completely empty (and we're not set to hold fire), don't bother circling.
+				break;
 			}
 		}
 		else if ((psDroid->action == DACTION_ATTACK) ||
