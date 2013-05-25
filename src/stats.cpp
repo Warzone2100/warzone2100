@@ -52,7 +52,7 @@ REPAIR_STATS		*asRepairStats;
 WEAPON_STATS		*asWeaponStats;
 CONSTRUCT_STATS		*asConstructStats;
 PROPULSION_TYPES	*asPropulsionTypes;
-static TERRAIN_TABLE	*asTerrainTable;
+static int		*asTerrainTable;
 
 //used to hold the modifiers cross refd by weapon effect and propulsion type
 WEAPON_MODIFIER		asWeaponModifier[WE_NUMEFFECTS][PROPULSION_TYPE_NUM];
@@ -91,7 +91,6 @@ UBYTE		*apStructTypeLists[MAX_PLAYERS];
 QHash<QString, COMPONENT_STATS *> lookupStatPtr;
 
 static bool getMovementModel(const char *movementModel, MOVEMENT_MODEL *model);
-static void storeSpeedFactor(UDWORD terrainType, UDWORD propulsionType, UDWORD speedFactor);
 static bool statsGetAudioIDFromString(const QString &szStatName, const QString &szWavName, int *piWavID);
 
 //Access functions for the max values to be used in the Design Screen
@@ -1049,59 +1048,23 @@ bool loadPropulsionTypes(const char *pFileName)
 	return true;
 }
 
-
 /*Load the Terrain Table from the file exported from Access*/
 bool loadTerrainTable(const char *pFileName)
 {
-	unsigned int i;
-	UDWORD	terrainType;
-	QString propulsionType, speedFactor;
-
-	//allocate storage for the stats
-	asTerrainTable = (TERRAIN_TABLE *)malloc(sizeof(*asTerrainTable) * PROPULSION_TYPE_NUM * TER_MAX);
-
-	//initialise the storage to 100
-	for (i = 0; i < TER_MAX; ++i)
-	{
-		for (int j = 0; j < PROPULSION_TYPE_NUM; ++j)
-		{
-			TERRAIN_TABLE *const pTerrainTable = &asTerrainTable[i * PROPULSION_TYPE_NUM + j];
-			pTerrainTable->speedFactor = 100;
-		}
-	}
+	asTerrainTable = (int *)malloc(sizeof(*asTerrainTable) * PROPULSION_TYPE_NUM * TER_MAX);
 	WzConfig ini(pFileName, WzConfig::ReadOnlyAndRequired);
 	QStringList list = ini.childGroups();
-	for (i = 0; i < list.size(); ++i)
+	for (int i = 0; i < list.size(); ++i)
 	{
 		ini.beginGroup(list[i]);
-		terrainType = list[i].toUInt();
-		propulsionType = ini.value("propulsionType").toString();
-		speedFactor = ini.value("speedFactor").toString();
-
-		QStringList propulsionTypes = propulsionType.split(",");
-		QStringList speedFactors = speedFactor.split(",");
-		for (int x = 0; x < propulsionTypes.size(); ++x)
+		int terrainType = list[i].toUInt();
+		QStringList speedFactors = ini.value("speedFactor").toStringList();
+		for (int j = 0; j < PROPULSION_TYPE_NUM; j++)
 		{
-			storeSpeedFactor(terrainType, propulsionTypes[x].toUInt(), speedFactors[x].toUInt());
+			asTerrainTable[terrainType * PROPULSION_TYPE_NUM + j] = speedFactors[j].toUInt();
 		}
 		ini.endGroup();
 	}
-
-	//check that none of the entries are 0 otherwise this will stop a droid dead in its tracks
-	//and it will not be able to move again!
-	for (i = 0; i < TER_MAX; ++i)
-	{
-		for (int j = 0; j < PROPULSION_TYPE_NUM; ++j)
-		{
-			TERRAIN_TABLE *const pTerrainTable = asTerrainTable + (i * PROPULSION_TYPE_NUM + j);
-			if (pTerrainTable->speedFactor == 0)
-			{
-				debug(LOG_FATAL, "Invalid propulsion/terrain table entry");
-				return false;
-			}
-		}
-	}
-
 	return true;
 }
 
@@ -1315,29 +1278,11 @@ bool loadPropulsionSounds(const char *pFileName)
 	return(true);
 }
 
-//store the speed Factor in the terrain table
-static void storeSpeedFactor(UDWORD terrainType, UDWORD propulsionType, UDWORD speedFactor)
-{
-	TERRAIN_TABLE *pTerrainTable = asTerrainTable;
-
-	ASSERT(propulsionType < PROPULSION_TYPE_NUM,
-	       "The propulsion type is too large");
-
-	pTerrainTable += (terrainType * PROPULSION_TYPE_NUM + propulsionType);
-	pTerrainTable->speedFactor = speedFactor;
-}
-
 //get the speed factor for a given terrain type and propulsion type
 UDWORD getSpeedFactor(UDWORD type, UDWORD propulsionType)
 {
-	TERRAIN_TABLE *pTerrainTable = asTerrainTable;
-
-	ASSERT(propulsionType < PROPULSION_TYPE_NUM,
-	       "The propulsion type is too large");
-
-	pTerrainTable += (type * PROPULSION_TYPE_NUM + propulsionType);
-
-	return pTerrainTable->speedFactor;
+	ASSERT(propulsionType < PROPULSION_TYPE_NUM, "The propulsion type is too large");
+	return asTerrainTable[type * PROPULSION_TYPE_NUM + propulsionType];
 }
 
 //return the type of stat this stat is!

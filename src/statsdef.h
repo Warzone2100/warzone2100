@@ -473,11 +473,6 @@ struct PROPULSION_TYPES
 	SWORD	shutDownID;		///< sound to play when this prop type shuts down
 };
 
-struct TERRAIN_TABLE
-{
-	UDWORD	speedFactor;	///< factor to multiply the speed by depending on the method of propulsion and the terrain type - to be divided by 100 before use
-};
-
 typedef UWORD	WEAPON_MODIFIER;
 
 #endif // __INCLUDED_STATSDEF_H__
