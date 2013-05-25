@@ -5262,7 +5262,7 @@ msgstr "MISSION LONGUE DISTANCE : Le secteur Nord."
 #: data/base/messages/strings/cam3strings.txt:5
 #: data/base/sequenceaudio/cam3/c003.txa:5
 msgid "Congratulations on your successful evacuation of Beta Base."
-msgstr "Félicitation pour votre réussite de l'évacuation de la base Beta !"
+msgstr "Félicitations pour votre réussite de l'évacuation de la base Beta !"
 
 #: data/base/messages/strings/cam3strings.txt:6
 #: data/base/sequenceaudio/cam3/c003.txa:6
@@ -11925,19 +11925,19 @@ msgstr "Warzone 2100"
 
 #: po/custom/mac-infoplist.txt:3
 msgid "Warzone 2100 Map / Mod File"
-msgstr "Fichier Warzone 2100 (map/mode)"
+msgstr "Fichier Warzone 2100 (map/mod)"
 
 #: po/custom/mac-infoplist.txt:4
 msgid "Warzone 2100 Campaign Mod File"
-msgstr "Fichier Warzone 2100 (mode campagne)"
+msgstr "Fichier Warzone 2100 (mod campagne)"
 
 #: po/custom/mac-infoplist.txt:5
 msgid "Warzone 2100 Multiplayer Mod File"
-msgstr "Fichier Warzone 2100 (mode multi-joueurs)"
+msgstr "Fichier Warzone 2100 (mod multi-joueurs)"
 
 #: po/custom/mac-infoplist.txt:6
 msgid "Warzone 2100 Global Mod File"
-msgstr "Fichier Warzone 2100 (mode global)"
+msgstr "Fichier Warzone 2100 (mod global)"
 
 #: po/custom/mac-infoplist.txt:7
 msgid "Warzone"
@@ -11945,7 +11945,7 @@ msgstr "Warzone"
 
 #: po/custom/mac-infoplist.txt:8
 msgid "Warzone 2100 Music Mod File"
-msgstr "Fichier Warzone 2100 (mode pour la musique)"
+msgstr "Fichier Warzone 2100 (mod pour la musique)"
 
 #: po/custom/warzone2100.desktop.txt:1
 msgid "Postnuclear realtime strategy"
@@ -12044,21 +12044,21 @@ msgstr "Affiche ce message d'aide et quitte"
 
 #: src/clparse.cpp:250
 msgid "Enable a global mod"
-msgstr "Active un mode global"
+msgstr "Active un mod global"
 
 #: src/clparse.cpp:250
 #: src/clparse.cpp:251
 #: src/clparse.cpp:252
 msgid "mod"
-msgstr "Mode"
+msgstr "Mod"
 
 #: src/clparse.cpp:251
 msgid "Enable a campaign only mod"
-msgstr "Active un mode pour campagnes seulement"
+msgstr "Active un mod pour campagnes seulement"
 
 #: src/clparse.cpp:252
 msgid "Enable a multiplay only mod"
-msgstr "Active un mode pour multijoueurs seulement"
+msgstr "Active un mod pour multijoueurs seulement"
 
 #: src/clparse.cpp:253
 msgid "Disable asserts"
@@ -12452,9 +12452,8 @@ msgid "MAIN MENU"
 msgstr "MENU PRINCIPAL"
 
 #: src/frontend.cpp:117
-#, fuzzy
 msgid "Official site: http://wz2100.net/"
-msgstr "Nous vous invitons à visiter notre site officiel : http://wz2100.net"
+msgstr "Site officiel : http://wz2100.net/"
 
 #: src/frontend.cpp:187
 msgid "Fast Play"
@@ -12625,7 +12624,7 @@ msgstr "Noir"
 
 #: src/frontend.cpp:567
 msgid "Screen Shake"
-msgstr "Tremblements de l'écran (explosion)"
+msgstr "Tremblements de l'écran"
 
 #: src/frontend.cpp:570
 #: src/frontend.cpp:586
@@ -12664,7 +12663,7 @@ msgstr "Mini-map"
 #: src/frontend.cpp:716
 #: src/frontend.cpp:1344
 msgid "Rotating"
-msgstr "Tournant avec le point de vue"
+msgstr "Rotatif"
 
 #: src/frontend.cpp:603
 #: src/frontend.cpp:716
@@ -12718,7 +12717,7 @@ msgstr "Résolution des textures"
 
 #: src/frontend.cpp:847
 msgid "Vertical sync"
-msgstr "Fréquence de rafraîchissement vertical*"
+msgstr "Synchronisation verticale"
 
 #: src/frontend.cpp:882
 #: src/frontend.cpp:957
@@ -12739,11 +12738,11 @@ msgstr "Rotation inversée"
 
 #: src/frontend.cpp:1122
 msgid "Trap Cursor"
-msgstr "Piéger le curseur dans les limites de la fenêtre"
+msgstr "Piéger curseur"
 
 #: src/frontend.cpp:1135
 msgid "Switch Mouse Buttons"
-msgstr "Inverser les boutons de la souris"
+msgstr "Inverser boutons de souris"
 
 #: src/frontend.cpp:1147
 msgid "Rotate Screen"
@@ -12811,7 +12810,7 @@ msgstr "Campagne"
 #: src/frontend.cpp:1313
 #: src/frontend.cpp:1340
 msgid "Skirmish/Multiplayer"
-msgstr "Escarmouche/multi-joueurs"
+msgstr "Escarmouche/MP"
 
 #: src/frontend.cpp:1319
 #: src/frontend.cpp:1335
@@ -12821,7 +12820,7 @@ msgstr "OPTIONS"
 #: src/frontend.cpp:1480
 #: src/multiint.cpp:2606
 msgid "Mod: "
-msgstr "Mode(s) : "
+msgstr "Mod(s) : "
 
 #: src/hci.cpp:1234
 msgid "MAP SAVED!"
@@ -13052,7 +13051,7 @@ msgid ""
 "\n"
 "Warzone will try to load the game without it."
 msgstr ""
-"Le mode requis ne peut pas être chargé : %s\n"
+"Le mod requis ne peut pas être chargé : %s\n"
 "\n"
 "Warzone va essayer de charger la partie sans lui."
 
@@ -14042,7 +14041,7 @@ msgstr "Partie sauvegardée :"
 #: src/move.cpp:2278
 #, c-format
 msgid "You found %u power in an oil drum."
-msgstr "Vous avez trouvé %u unités d'énergie dans un baril de pétrole"
+msgstr "Vous avez trouvé %u unités d'énergie dans un baril de pétrole."
 
 #: src/multigifts.cpp:217
 #, c-format
@@ -14172,11 +14171,11 @@ msgstr "Vous avez été exclu !"
 
 #: src/multiint.cpp:1053
 msgid "Wrong Game Version!"
-msgstr "Mauvaise version du jeu!"
+msgstr "Mauvaise version du jeu !"
 
 #: src/multiint.cpp:1056
 msgid "You have an incompatible mod."
-msgstr "Vous avez un mode incompatible."
+msgstr "Vous avez un mod incompatible."
 
 #: src/multiint.cpp:1060
 msgid "Host couldn't send file?"
@@ -14221,23 +14220,23 @@ msgstr "OK"
 
 #: src/multiint.cpp:1426
 msgid "Tanks disabled!!"
-msgstr "Tanks désactivés"
+msgstr "Tanks désactivés!!"
 
 #: src/multiint.cpp:1427
 msgid "Cyborgs disabled."
-msgstr "Cyborgs désactivés"
+msgstr "Cyborgs désactivés."
 
 #: src/multiint.cpp:1428
 msgid "VTOLs disabled."
-msgstr "VTOLs désactivés"
+msgstr "VTOLs désactivés."
 
 #: src/multiint.cpp:1429
 msgid "Satellite Uplink disabled."
-msgstr "Site de télécommunications satellite désactivé"
+msgstr "Site de télécommunications satellite désactivé."
 
 #: src/multiint.cpp:1430
 msgid "Laser Satellite disabled."
-msgstr "Poste de commande pour satellite laser désactivé"
+msgstr "Poste de commande pour satellite laser désactivé."
 
 #: src/multiint.cpp:1477
 #: src/multiint.cpp:1485
@@ -14288,15 +14287,15 @@ msgstr "Verrouiller les équipes"
 
 #: src/multiint.cpp:1580
 msgid "Low Power Levels"
-msgstr "Niveau d'énergie initiale faible"
+msgstr "Niveau d'énergie faible"
 
 #: src/multiint.cpp:1582
 msgid "Medium Power Levels"
-msgstr "Niveau d'énergie initiale moyen"
+msgstr "Niveau d'énergie moyen"
 
 #: src/multiint.cpp:1584
 msgid "High Power Levels"
-msgstr "Niveau d'énergie initiale élevé"
+msgstr "Niveau d'énergie élevé"
 
 #: src/multiint.cpp:1616
 msgid "Base"
@@ -14316,7 +14315,7 @@ msgstr "Commencer avec une base avancée"
 
 #: src/multiint.cpp:1654
 msgid "Map Preview"
-msgstr "Prévisualisation de la carte"
+msgstr "Prévisualiser la carte"
 
 #: src/multiint.cpp:1656
 msgid "Click to see Map"
@@ -14335,7 +14334,7 @@ msgstr "Afficher des limites de construction"
 #: src/multiint.cpp:1678
 #: src/multiint.cpp:1682
 msgid "Set Structure Limits"
-msgstr "Fixer des limites de construction"
+msgstr "Limites de construction"
 
 #: src/multiint.cpp:1759
 msgid "DIFFICULTY"
@@ -14427,7 +14426,7 @@ msgstr "CHAT"
 
 #: src/multiint.cpp:2611
 msgid "All players need to have the same mods to join your game."
-msgstr "Tous les joueurs doivent avoir les mêmes modes pour jouer une partie ensemble."
+msgstr "Tous les joueurs doivent avoir les mêmes mods pour jouer une partie ensemble."
 
 #: src/multiint.cpp:2652
 msgid "Connecting to the lobby server..."
@@ -14468,11 +14467,11 @@ msgstr "La connexion à l'antichambre a échoué !"
 #: src/multiint.cpp:4005
 #, c-format
 msgid "Mods: %s"
-msgstr "Modes : %s"
+msgstr "Mods : %s"
 
 #: src/multiint.cpp:4012
 msgid "Mods: None!"
-msgstr "Modes : aucun"
+msgstr "Mods : aucun"
 
 #: src/multiint.cpp:4022
 #, c-format
@@ -14531,7 +14530,7 @@ msgstr "Le transfert du fichier a été suspendu pour %d."
 #: src/multijoin.cpp:421
 #, c-format
 msgid "%s (%u) has an incompatible mod, and has been kicked."
-msgstr "%s (%u) a un mode incompatible et a été refusé."
+msgstr "%s (%u) a un mod incompatible et a été refusé."
 
 #: src/multijoin.cpp:462
 #, c-format
@@ -15229,7 +15228,7 @@ msgstr "Version %s - %s%s%s%s"
 #~ msgstr " (changé localement)"
 
 #~ msgid "Congratulations your successful evacuation of Beta Base."
-#~ msgstr "Félicitation pour votre réussite de l'évacuation de la base Beta."
+#~ msgstr "Félicitations pour votre réussite de l'évacuation de la base Beta."
 
 #~ msgid "Truck ordered to build Oil Derrick"
 #~ msgstr "Construction d'un puits de pétrole"
@@ -15451,7 +15450,7 @@ msgstr "Version %s - %s%s%s%s"
 #~ msgstr "(Player %u) has detected the borg 'legs' bug! Please enter legs in your console and upload the files to us !"
 
 #~ msgid ", mod: "
-#~ msgstr ", mode : "
+#~ msgstr ", mod : "
 
 #~ msgid "Player %u has the wrong game version. Auto kicking."
 #~ msgstr "Le joueur %u a été éjecté automatiquement car il a une mauvaise version du jeu."
@@ -15475,7 +15474,7 @@ msgstr "Version %s - %s%s%s%s"
 #~ msgstr "Limite de vitesse en formation activée"
 
 #~ msgid "Wrong data/mod detected by Host."
-#~ msgstr "L'hôte à détecté un mode ou des données corrompues."
+#~ msgstr "L'hôte à détecté un mod ou des données corrompues."
 
 #~ msgid "Kicking player %s, game data doesn't match!"
 #~ msgstr "Le joueur %s à été éjecté car les données de jeu ne correspondent pas !"
