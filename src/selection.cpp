@@ -100,6 +100,33 @@ static unsigned int selSelectAllSameProp(unsigned int player, PROPULSION_TYPE pr
 	return count;
 }
 
+static unsigned int selSelectAllSamePropArmed(unsigned int player, PROPULSION_TYPE propType, bool bOnScreen)
+{
+	unsigned int count = 0;
+
+	selDroidDeselect(player);
+
+	/* Go thru' them all */
+	for (DROID *psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
+	{
+		/* Is on screen important */
+		if (!bOnScreen || droidOnScreen(psDroid, 0))
+		{
+			/* Get the propulsion type */
+			PROPULSION_STATS *psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION];
+			ASSERT(psPropStats != NULL, "invalid propulsion stats pointer");
+			/* Same as that asked for - don't want Transporters*/
+			if (psPropStats->propulsionType == propType && (psDroid->droidType != DROID_TRANSPORTER && psDroid->droidType != DROID_SUPERTRANSPORTER) && vtolFull(psDroid))
+			{
+				SelectDroid(psDroid);
+				count++;
+			}
+		}
+	}
+
+	return count;
+}
+
 // ---------------------------------------------------------------------
 // Selects all units owned by the player of a certain droid type.
 // On Screen toggle.
@@ -632,6 +659,9 @@ unsigned int selDroidSelection(unsigned int player, SELECTION_CLASS droidClass, 
 			{
 				case DST_VTOL:
 					retVal = selSelectAllSameProp(player, PROPULSION_TYPE_LIFT, bOnScreen);
+					break;
+				case DST_VTOL_ARMED:
+					retVal = selSelectAllSamePropArmed(player, PROPULSION_TYPE_LIFT, bOnScreen);
 					break;
 				case DST_HOVER:
 					retVal = selSelectAllSameProp(player, PROPULSION_TYPE_HOVER, bOnScreen);

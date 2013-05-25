@@ -128,6 +128,7 @@ extern void	kf_ToggleConsole( void );
 extern void	kf_SelectAllOnScreenUnits( void );
 extern void	kf_SelectAllUnits( void );
 extern void	kf_SelectAllVTOLs( void );
+void kf_SelectAllArmedVTOLs();
 extern void	kf_SelectAllHovers( void );
 extern void	kf_SelectAllWheeled( void );
 extern void	kf_SelectAllTracked( void );

@@ -2226,6 +2226,11 @@ void	kf_SelectAllVTOLs( void )
 	selDroidSelection(selectedPlayer,DS_BY_TYPE,DST_VTOL,false);
 }
 
+void kf_SelectAllArmedVTOLs()
+{
+	selDroidSelection(selectedPlayer, DS_BY_TYPE, DST_VTOL_ARMED, false);
+}
+
 // --------------------------------------------------------------------------
 void	kf_SelectAllHovers( void )
 {
