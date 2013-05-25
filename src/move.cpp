@@ -65,10 +65,6 @@
 #define	VTOL_HEIGHT_LEVEL			300
 #define	VTOL_HEIGHT_MAX				350
 
-/* minimum distance for cyborgs to jump */
-#define	CYBORG_MIN_JUMP_DISTANCE	500
-#define	CYBORG_MAX_JUMP_HEIGHT		200
-
 // Maximum size of an object for collision
 #define OBJ_MAXRADIUS	(TILE_UNITS * 4)
 
@@ -1845,72 +1841,14 @@ static void moveUpdateVtolModel(DROID *psDroid, SDWORD speed, uint16_t direction
 	}
 }
 
-#define CYBORG_VERTICAL_SPEED	((int)psDroid->baseSpeed / 2)
-
-static void
-moveCyborgLaunchAnimDone( ANIM_OBJECT *psObj )
-{
-	DROID	*psDroid = (DROID*)psObj->psParent;
-
-	ASSERT( psDroid != NULL,
-			"moveCyborgLaunchAnimDone: invalid cyborg pointer" );
-
-	/* raise cyborg a little bit so flying - terrible hack - GJ */
-	// Actually, worse than a terrible hack, since it would break synch...
-	//psDroid->pos.z++;
-	//psDroid->sMove.iVertSpeed = CYBORG_VERTICAL_SPEED;
-
-	psDroid->psCurAnim = NULL;
-}
-
-static void
-moveCyborgTouchDownAnimDone( ANIM_OBJECT *psObj )
-{
-	DROID	*psDroid = (DROID*)psObj->psParent;
-
-	ASSERT( psDroid != NULL,
-			"moveCyborgTouchDownAnimDone: invalid cyborg pointer" );
-
-	psDroid->psCurAnim = NULL;
-	// See comment in moveCyborgLaunchAnimDone().
-	//psDroid->pos.z = map_Height( psDroid->pos.x, psDroid->pos.y );
-}
-
-
-static void moveUpdateJumpCyborgModel(DROID *psDroid, SDWORD speed, uint16_t direction)
-{
-	int	fPerpSpeed, fNormalSpeed;
-	uint16_t iDroidDir;
-	int32_t dx, dy;
-
-	// nothing to do if the droid is stopped
-	if ( moveDroidStopped(  psDroid, speed ) == true )
-	{
-		return;
-	}
-
-	// FIXME, fix hardcoded values -- or remove this mis-feature
-
-	moveUpdateDroidDirection(psDroid, &speed, direction, DEG(180), psDroid->baseSpeed*DEG(1), psDroid->baseSpeed*DEG(1)/3, &iDroidDir);
-
-	fNormalSpeed = moveCalcNormalSpeed(psDroid, speed, iDroidDir, 200, 200);
-	fPerpSpeed   = 0;
-	moveCombineNormalAndPerpSpeeds(psDroid, fNormalSpeed, fPerpSpeed, iDroidDir);
-
-	moveGetDroidPosDiffs( psDroid, &dx, &dy );
-	moveUpdateDroidPos( psDroid, dx, dy );
-}
-
 static void moveUpdateCyborgModel(DROID *psDroid, SDWORD moveSpeed, uint16_t moveDir, UBYTE oldStatus)
 {
-	int32_t                 iMapZ = map_Height(removeZ(psDroid->pos));
-
 	CHECK_DROID(psDroid);
 
 	// nothing to do if the droid is stopped
-	if ( moveDroidStopped( psDroid, moveSpeed ) == true )
+	if (moveDroidStopped(psDroid, moveSpeed) == true)
 	{
-		if ( psDroid->psCurAnim != NULL )
+		if (psDroid->psCurAnim != NULL)
 		{
 			if (!animObj_Remove(psDroid->psCurAnim, psDroid->psCurAnim->uwID))
 			{
@@ -1918,114 +1856,34 @@ static void moveUpdateCyborgModel(DROID *psDroid, SDWORD moveSpeed, uint16_t mov
 			}
 			psDroid->psCurAnim = NULL;
 		}
-
 		return;
 	}
 
-	PROPULSION_STATS *psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION];
-	ASSERT( psPropStats != NULL,
-			"moveUpdateCyborgModel: invalid propulsion stats pointer" );
-
-	/* do vertical movement */
-	if (psPropStats->propulsionType == PROPULSION_TYPE_JUMP)
+	if (psDroid->psCurAnim == NULL)
 	{
-		int iDz = gameTimeAdjustedIncrement(psDroid->sMove.iVertSpeed);
-		int iDroidZ = psDroid->pos.z;
-
-		if (iDroidZ + iDz < iMapZ)
+		// Only add the animation if the droid is on screen, saves memory and time.
+		if (clipXY(psDroid->pos.x, psDroid->pos.y))
 		{
-			psDroid->sMove.iVertSpeed = 0;
-			psDroid->pos.z = iMapZ;
-		}
-		else
-		{
-			psDroid->pos.z = psDroid->pos.z + iDz;
-		}
-		if (psDroid->pos.z >= iMapZ + CYBORG_MAX_JUMP_HEIGHT && psDroid->sMove.iVertSpeed > 0)
-		{
-			psDroid->sMove.iVertSpeed = -CYBORG_VERTICAL_SPEED;
-		}
-	}
-
-	/* calculate move distance */
-	Vector2i iD = psDroid->sMove.destination - removeZ(psDroid->pos);
-	int32_t iDist = iHypot(iD);
-
-	/* set jumping cyborg walking short distances */
-	if ( (psPropStats->propulsionType != PROPULSION_TYPE_JUMP) ||
-		 ((psDroid->sMove.iVertSpeed == 0)      &&
-		  (iDist < CYBORG_MIN_JUMP_DISTANCE))       )
-	{
-		if ( psDroid->psCurAnim == NULL )
-		{
-			// Only add the animation if the droid is on screen, saves memory and time.
-			if(clipXY(psDroid->pos.x,psDroid->pos.y))
+			if (psDroid->droidType == DROID_CYBORG_SUPER)
 			{
-				if ( psDroid->droidType == DROID_CYBORG_SUPER )
-				{
-					psDroid->psCurAnim = animObj_Add(psDroid, ID_ANIM_SUPERCYBORG_RUN, 0, 0);
-				}
-				else if (cyborgDroid(psDroid))
-				{
-					psDroid->psCurAnim = animObj_Add(psDroid, ID_ANIM_CYBORG_RUN, 0, 0);
-				}
+				psDroid->psCurAnim = animObj_Add(psDroid, ID_ANIM_SUPERCYBORG_RUN, 0, 0);
 			}
-		} else {
-			// If the droid went off screen then remove the animation, saves memory and time.
-			if(!clipXY(psDroid->pos.x,psDroid->pos.y))
+			else if (cyborgDroid(psDroid))
 			{
-				const bool bRet = animObj_Remove(psDroid->psCurAnim, psDroid->psCurAnim->psAnim->uwID);
-				ASSERT(bRet, "animObj_Remove failed");
-				psDroid->psCurAnim = NULL;
-			}
-		}
-
-		/* use baba person movement */
-		moveUpdatePersonModel(psDroid, moveSpeed, moveDir);
-	}
-	else
-	{
-		/* jumping cyborg: remove walking animation if present */
-		if ( psDroid->psCurAnim != NULL )
-		{
-			if ((psDroid->psCurAnim->uwID == ID_ANIM_CYBORG_RUN
-			  || psDroid->psCurAnim->uwID == ID_ANIM_SUPERCYBORG_RUN
-			  || psDroid->psCurAnim->uwID == ID_ANIM_CYBORG_PACK_RUN)
-			 && !animObj_Remove(psDroid->psCurAnim, psDroid->psCurAnim->uwID))
-			{
-				debug(LOG_NEVER, "couldn't remove walk anim");
-			}
-			psDroid->psCurAnim = NULL;
-		}
-
-		/* add jumping or landing anim */
-		if ( (oldStatus == MOVEPOINTTOPOINT) &&
-				  (psDroid->sMove.Status == MOVEINACTIVE) )
-		{
-			psDroid->psCurAnim = animObj_Add(psDroid, ID_ANIM_CYBORG_PACK_LAND, 0, 1);
-			animObj_SetDoneFunc( psDroid->psCurAnim, moveCyborgTouchDownAnimDone );
-		}
-		else if ( psDroid->sMove.Status == MOVEPOINTTOPOINT )
-		{
-			if ( psDroid->pos.z == iMapZ )
-			{
-				if ( psDroid->sMove.iVertSpeed == 0 )
-				{
-					psDroid->psCurAnim = animObj_Add(psDroid, ID_ANIM_CYBORG_PACK_JUMP, 0, 1);
-					animObj_SetDoneFunc( psDroid->psCurAnim, moveCyborgLaunchAnimDone );
-				}
-				else
-				{
-					psDroid->psCurAnim = animObj_Add(psDroid, ID_ANIM_CYBORG_PACK_LAND, 0, 1);
-					animObj_SetDoneFunc( psDroid->psCurAnim, moveCyborgTouchDownAnimDone );
-				}
-			}
-			else
-			{
-				moveUpdateJumpCyborgModel(psDroid, moveSpeed, moveDir);
+				psDroid->psCurAnim = animObj_Add(psDroid, ID_ANIM_CYBORG_RUN, 0, 0);
 			}
 		}
 	}
+	// If the droid went off screen then remove the animation, saves memory and time
+	else if (!clipXY(psDroid->pos.x, psDroid->pos.y))
+	{
+		const bool bRet = animObj_Remove(psDroid->psCurAnim, psDroid->psCurAnim->psAnim->uwID);
+		ASSERT(bRet, "animObj_Remove failed");
+		psDroid->psCurAnim = NULL;
+	}
+
+	/* use baba person movement */
+	moveUpdatePersonModel(psDroid, moveSpeed, moveDir);
 
 	psDroid->rot.pitch = 0;
 	psDroid->rot.roll  = 0;

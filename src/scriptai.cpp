@@ -1071,7 +1071,6 @@ static UDWORD scrDroidTargetMask(DROID *psDroid)
 		mask |= SCR_DT_TRACK;
 		break;
 	case PROPULSION_TYPE_LEGGED:
-	case PROPULSION_TYPE_JUMP:
 		mask |= SCR_DT_LEGS;
 		break;
 	case PROPULSION_TYPE_HOVER:
@@ -1086,7 +1085,6 @@ static UDWORD scrDroidTargetMask(DROID *psDroid)
 	case PROPULSION_TYPE_PROPELLOR:
 		mask |= SCR_DT_PROPELLOR;
 		break;
-	case PROPULSION_TYPE_SKI:
 	default:
 		ASSERT(false,
 		       "scrUnitTargetMask: unknown or invalid target unit propulsion type");

@@ -634,10 +634,6 @@ bool getPropulsionType(const char *typeName, PROPULSION_TYPE *type)
 	{
 		*type = PROPULSION_TYPE_HOVER;
 	}
-	else if (strcmp(typeName, "Ski") == 0)
-	{
-		*type = PROPULSION_TYPE_SKI;
-	}
 	else if (strcmp(typeName, "Lift") == 0)
 	{
 		*type = PROPULSION_TYPE_LIFT;
@@ -649,10 +645,6 @@ bool getPropulsionType(const char *typeName, PROPULSION_TYPE *type)
 	else if (strcmp(typeName, "Half-Tracked") == 0)
 	{
 		*type = PROPULSION_TYPE_HALF_TRACKED;
-	}
-	else if (strcmp(typeName, "Jump") == 0)
-	{
-		*type = PROPULSION_TYPE_JUMP;
 	}
 	else
 	{
