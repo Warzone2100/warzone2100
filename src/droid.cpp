@@ -1064,6 +1064,15 @@ DroidStartBuild droidStartBuild(DROID *psDroid)
 		STRUCTURE_STATS *psStructStat = psDroid->order.psStats;
 		STRUCTURE_LIMITS *structLimit = &asStructLimits[psDroid->player][psStructStat - asStructureStats];
 
+		ItemAvailability ia = (ItemAvailability)apStructTypeLists[psDroid->player][psStructStat - asStructureStats];
+		if (ia != AVAILABLE && ia != REDUNDANT)
+		{
+			ASSERT(false, "Cannot build \"%s\" for player %d.", psStructStat->name.toUtf8().constData(), psDroid->player);
+			intBuildFinished(psDroid);
+			cancelBuild(psDroid);
+			return DroidStartBuildFailed;
+		}
+
 		//need to check structLimits have not been exceeded
 		if (structLimit->currentQuantity >= structLimit->limit)
 		{
