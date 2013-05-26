@@ -73,6 +73,7 @@ bool	MultiMenuUp			= false;
 static UDWORD	context = 0;
 UDWORD	current_tech = 1;
 UDWORD	current_numplayers = 4;
+static std::string current_searchString;
 
 #define MULTIMENU_FORM_X		10 + D_W
 #define MULTIMENU_FORM_Y		23 + D_H
@@ -320,6 +321,56 @@ static void displayNumPlayersBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffse
 
 }
 
+static int stringRelevance(std::string const &string, std::string const &search)
+{
+	QString str = QString::fromUtf8(string.c_str()).normalized(QString::NormalizationForm_KD);
+	QString sea = QString::fromUtf8(search.c_str()).normalized(QString::NormalizationForm_KD);
+	int strDim = str.size() + 1;
+	int seaDim = sea.size() + 1;
+
+	if (strDim > 10000 || seaDim > 10000 || strDim*seaDim > 100000)
+	{
+		return 0;
+	}
+
+	std::vector<unsigned> scores(strDim*seaDim);
+	for (int sum = 0; sum <= str.size() + sea.size(); ++sum)
+		for (int iStr = std::max(0, sum - sea.size()); iStr <= std::min(str.size(), sum - 0); ++iStr)
+	{
+		int iSea = sum - iStr;
+		unsigned score = 0;
+		if (iStr > 0 && iSea > 0)
+		{
+			score = (scores[iStr - 1 + (iSea - 1)*strDim] + 1) | 1;
+			QChar a = str[iStr - 1], b = sea[iSea - 1];
+			if (a == b)
+			{
+				score += 100;
+			}
+			else if (a.toUpper() == b.toUpper())
+			{
+				score += 80;
+			}
+		}
+		if (iStr > 0)
+		{
+			score = std::max(score, scores[iStr - 1 + iSea*strDim] & ~1);
+		}
+		if (iSea > 0)
+		{
+			score = std::max(score, scores[iStr + (iSea - 1)*strDim] & ~1);
+		}
+		scores[iStr + iSea*strDim] = score;
+	}
+
+	return scores[str.size() + sea.size()*strDim];
+}
+
+static bool reverseSortByFirst(std::pair<int, W_BUTTON *> const &a, std::pair<int, W_BUTTON *> const &b)
+{
+	return a.first > b.first;
+}
+
 /** Searches in the given search directory for files ending with the
  *  given extension. Then will create a window with buttons for each
  *  found file.
@@ -330,7 +381,7 @@ static void displayNumPlayersBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffse
  *  \param mode (purpose unknown)
  *  \param numPlayers (purpose unknown)
  */
-void addMultiRequest(const char* searchDir, const char* fileExtension, UDWORD mode, UBYTE mapCam, UBYTE numPlayers)
+void addMultiRequest(const char* searchDir, const char* fileExtension, UDWORD mode, UBYTE mapCam, UBYTE numPlayers, std::string const &searchString)
 {
 	const unsigned int extensionLength = strlen(fileExtension);
 	const unsigned int buttonsX = (mode == MULTIOP_MAP) ? 22 : 17;
@@ -340,6 +391,7 @@ void addMultiRequest(const char* searchDir, const char* fileExtension, UDWORD mo
 	{	// only save these when they select MAP button
 		current_tech = mapCam;
 		current_numplayers = numPlayers;
+		current_searchString = searchString;
 	}
 	char **fileList = PHYSFS_enumerateFiles(searchDir);
 
@@ -408,6 +460,7 @@ void addMultiRequest(const char* searchDir, const char* fileExtension, UDWORD mo
 	if(mode == MULTIOP_MAP)
 	{
 		LEVEL_DATASET *mapData;
+		std::vector<std::pair<int, W_BUTTON *> > buttons;
 		bool first = true;
 		while ((mapData = enumerateMultiMaps(first, mapCam, numPlayers)) != NULL)
 		{
@@ -420,9 +473,14 @@ void addMultiRequest(const char* searchDir, const char* fileExtension, UDWORD mo
 			button->setString(mapData->pName);
 			button->pUserData = mapData;
 			button->displayFunction = displayRequestOption;
-			requestList->addWidgetToLayout(button);
+			buttons.push_back(std::make_pair(stringRelevance(mapData->pName, searchString), button));
 
 			++nextButtonId;
+		}
+		std::stable_sort(buttons.begin(), buttons.end(), reverseSortByFirst);
+		for (std::vector<std::pair<int, W_BUTTON *> >::const_iterator i = buttons.begin(); i != buttons.end(); ++i)
+		{
+			requestList->addWidgetToLayout(i->second);
 		}
 
 		// if it's map select then add the cam style buttons.
@@ -532,19 +590,19 @@ bool runMultiRequester(UDWORD id, UDWORD *mode, QString *chosen, LEVEL_DATASET *
 	{
 		case M_REQUEST_C1:
 			closeMultiRequester();
-			addMultiRequest(MultiCustomMapsPath, ".wrf", MULTIOP_MAP, 1, current_numplayers);
+			addMultiRequest(MultiCustomMapsPath, ".wrf", MULTIOP_MAP, 1, current_numplayers, current_searchString);
 			break;
 		case M_REQUEST_C2:
 			closeMultiRequester();
-			addMultiRequest(MultiCustomMapsPath, ".wrf", MULTIOP_MAP, 2, current_numplayers);
+			addMultiRequest(MultiCustomMapsPath, ".wrf", MULTIOP_MAP, 2, current_numplayers, current_searchString);
 			break;
 		case M_REQUEST_C3:
 			closeMultiRequester();
-			addMultiRequest(MultiCustomMapsPath, ".wrf", MULTIOP_MAP, 3, current_numplayers);
+			addMultiRequest(MultiCustomMapsPath, ".wrf", MULTIOP_MAP, 3, current_numplayers, current_searchString);
 			break;
 		case M_REQUEST_AP:
 			closeMultiRequester();
-			addMultiRequest(MultiCustomMapsPath, ".wrf", MULTIOP_MAP, current_tech, 0);
+			addMultiRequest(MultiCustomMapsPath, ".wrf", MULTIOP_MAP, current_tech, 0, current_searchString);
 			break;
 		default:
 			for (unsigned numPlayers = 2; numPlayers <= MAX_PLAYERS_IN_GUI; ++numPlayers)
@@ -552,7 +610,7 @@ bool runMultiRequester(UDWORD id, UDWORD *mode, QString *chosen, LEVEL_DATASET *
 				if (id == M_REQUEST_NP[numPlayers - 2])
 				{
 					closeMultiRequester();
-					addMultiRequest(MultiCustomMapsPath, ".wrf", MULTIOP_MAP, current_tech, numPlayers);
+					addMultiRequest(MultiCustomMapsPath, ".wrf", MULTIOP_MAP, current_tech, numPlayers, current_searchString);
 					break;
 				}
 			}

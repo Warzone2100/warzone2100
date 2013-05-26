@@ -2806,11 +2806,17 @@ static void processMultiopWidgets(UDWORD id)
 			sstrcpy(game.name,widgGetString(psWScreen, MULTIOP_GNAME));
 			break;
 
-		case MULTIOP_MAP:
-			widgSetString(psWScreen, MULTIOP_MAP,game.map);
+		case MULTIOP_GNAME_ICON:
 			break;
 
-		case MULTIOP_GNAME_ICON:
+		case MULTIOP_MAP:
+			widgDelete(psWScreen, MULTIOP_PLAYERS);
+			widgDelete(psWScreen, FRONTEND_SIDETEXT2);  // del text too,
+
+			debug(LOG_WZ, "processMultiopWidgets[MULTIOP_MAP_ICON]: %s.wrf", MultiCustomMapsPath);
+			addMultiRequest(MultiCustomMapsPath, ".wrf", MULTIOP_MAP, current_tech, 0, widgGetString(psWScreen, MULTIOP_MAP));
+
+			widgSetString(psWScreen, MULTIOP_MAP, game.map);
 			break;
 
 		case MULTIOP_MAP_ICON:

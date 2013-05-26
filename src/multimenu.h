@@ -28,7 +28,7 @@
 #include "stringdef.h"
 
 // requester
-extern void		addMultiRequest(const char* searchDir, const char* fileExtension, UDWORD id,UBYTE mapCam, UBYTE numPlayers);
+void addMultiRequest(const char* searchDir, const char* fileExtension, UDWORD id,UBYTE mapCam, UBYTE numPlayers, std::string const &searchString = std::string());
 extern bool		multiRequestUp;
 extern W_SCREEN *psRScreen;			// requester stuff.
 bool runMultiRequester(UDWORD id, UDWORD *mode, QString *chosen, LEVEL_DATASET **chosenValue, bool *isHoverPreview);
