@@ -882,11 +882,23 @@ void structureBuild(STRUCTURE *psStruct, DROID *psDroid, int buildPoints, int bu
 	}
 	else
 	{
-		if (psStruct->pStructureType->type == REF_POWER_GEN && psStruct->status == SS_BUILT)
-		{
-			releasePowerGen(psStruct);
-		}
+		STRUCT_STATES prevStatus = psStruct->status;
 		psStruct->status = SS_BEING_BUILT;
+		if (prevStatus == SS_BUILT)
+		{
+			// Starting to demolish.
+			switch (psStruct->pStructureType->type)
+			{
+			case REF_POWER_GEN:
+				releasePowerGen(psStruct);
+				break;
+			case REF_RESOURCE_EXTRACTOR:
+				releaseResExtractor(psStruct);
+				break;
+			default:
+				break;
+			}
+		}
 	}
 	if (buildPoints < 0 && psStruct->currentBuildPts == 0)
 	{
@@ -5284,6 +5296,7 @@ void releaseResExtractor(STRUCTURE *psRelease)
 		informPowerGen(psRelease);
 	}
 
+	psRelease->pFunctionality->resourceExtractor.active = false;
 	psRelease->pFunctionality->resourceExtractor.psPowerGen = NULL;
 
 	//there may be spare resource extractors
