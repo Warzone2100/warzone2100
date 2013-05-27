@@ -1356,7 +1356,12 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 		WallOrientation wallOrientation = WallConnectNone;
 		if (!FromSave && isWallCombiningStructureType(pStructureType))
 		{
-			wallOrientation = structChooseWallType(player, map_coord(Vector2i(x, y)));  // This makes neighbouring walls match us, even if we're a hardpoint, not a wall.
+			for (int dy = 0; dy < size.y; ++dy)
+				for (int dx = 0; dx < size.x; ++dx)
+			{
+				Vector2i pos = map_coord(Vector2i(x, y) - size*TILE_UNITS/2) + Vector2i(dx, dy);
+				wallOrientation = structChooseWallType(player, pos);  // This makes neighbouring walls match us, even if we're a hardpoint, not a wall.
+			}
 		}
 
 		// allocate memory for and initialize a structure object
