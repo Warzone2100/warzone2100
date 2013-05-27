@@ -1924,7 +1924,6 @@ static bool setFunctionality(STRUCTURE	*psBuilding, STRUCTURE_TYPE functionType)
 			RES_EXTRACTOR* psResExtracter = &psBuilding->pFunctionality->resourceExtractor;
 
 			// Make the structure inactive
-			psResExtracter->active = false;
 			psResExtracter->psPowerGen = NULL;
 			break;
 		}
@@ -5170,11 +5169,8 @@ void checkForResExtractors(STRUCTURE *psBuilding)
 	for (int i = 0; i < NUM_POWER_MODULES; ++i)
 	{
 		POWER_GEN *powerGen = &psBuilding->pFunctionality->powerGenerator;
-		if (powerGen->apResExtractors[i] != nullptr && !powerGen->apResExtractors[i]->died)
+		if (powerGen->apResExtractors[i] != nullptr)
 		{
-			// Make sure the derrrick is active.
-			RES_EXTRACTOR *resExtractor = &powerGen->apResExtractors[i]->pFunctionality->resourceExtractor;
-			resExtractor->active = true;
 			continue;  // Slot full.
 		}
 
@@ -5192,7 +5188,6 @@ void checkForResExtractors(STRUCTURE *psBuilding)
 		}
 		// Assign the derrick to the power generator.
 		powerGen->apResExtractors[i] = derrick;
-		resExtractor->active = true;
 		resExtractor->psPowerGen = psBuilding;
 
 		++d;
@@ -5207,7 +5202,7 @@ void checkForPowerGen(STRUCTURE *psBuilding)
 	ASSERT_OR_RETURN(, psBuilding->pStructureType->type == REF_RESOURCE_EXTRACTOR, "invalid structure type");
 
 	RES_EXTRACTOR *psRE = &psBuilding->pFunctionality->resourceExtractor;
-	if (psRE->active)
+	if (psRE->psPowerGen != nullptr)
 	{
 		return;
 	}
@@ -5243,7 +5238,6 @@ void checkForPowerGen(STRUCTURE *psBuilding)
 		POWER_GEN *psPG = &bestPowerGen->pFunctionality->powerGenerator;
 		psPG->apResExtractors[bestSlot] = psBuilding;
 		psRE->psPowerGen = bestPowerGen;
-		psRE->active = true;
 	}
 }
 
@@ -5296,14 +5290,13 @@ void releaseResExtractor(STRUCTURE *psRelease)
 		informPowerGen(psRelease);
 	}
 
-	psRelease->pFunctionality->resourceExtractor.active = false;
 	psRelease->pFunctionality->resourceExtractor.psPowerGen = NULL;
 
 	//there may be spare resource extractors
 	for (psCurr = apsExtractorLists[psRelease->player]; psCurr != NULL; psCurr = psCurr->psNextFunc)
 	{
 		//check not connected and power left and built!
-		if (psCurr != psRelease && !psCurr->pFunctionality->resourceExtractor.active && psCurr->status == SS_BUILT)
+		if (psCurr != psRelease && psCurr->pFunctionality->resourceExtractor.psPowerGen == nullptr && psCurr->status == SS_BUILT)
 		{
 			checkForPowerGen(psCurr);
 		}
@@ -5332,7 +5325,6 @@ void releasePowerGen(STRUCTURE *psRelease)
 	{
 		if (psPowerGen->apResExtractors[i])
 		{
-			psPowerGen->apResExtractors[i]->pFunctionality->resourceExtractor.active = false;
 			psPowerGen->apResExtractors[i]->pFunctionality->resourceExtractor.psPowerGen = NULL;
 			psPowerGen->apResExtractors[i] = NULL;
 		}

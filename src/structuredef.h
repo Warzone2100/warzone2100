@@ -194,7 +194,6 @@ struct FACTORY
 
 struct RES_EXTRACTOR
 {
-	bool				active;				/*indicates when the extractor is on ie digging up oil*/
 	struct STRUCTURE *      psPowerGen;                             ///< owning power generator
 };
 

@@ -238,7 +238,7 @@ static int64_t updateExtractedPower(STRUCTURE *psBuilding)
 
 	//only extracts points whilst its active ie associated with a power gen
 	//and has got some power to extract
-	if (pResExtractor->active)
+	if (pResExtractor->psPowerGen != nullptr)
 	{
 		// include modifier as a %
 		extractedPoints = asPower[psBuilding->player].powerModifier * EXTRACT_POINTS * FP_ONE / (100 * GAME_UPDATES_PER_SEC);

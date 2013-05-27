@@ -238,7 +238,7 @@ static void	effectSetupFire			( EFFECT *psEffect );
 static void	effectSetupSatLaser		( EFFECT *psEffect );
 static void effectSetupFirework		( EFFECT *psEffect );
 
-static void effectStructureUpdates(void);
+static void effectStructureUpdates();
 static void effectDroidUpdates(void);
 
 static UDWORD effectGetNumFrames(EFFECT *psEffect);
@@ -2429,91 +2429,74 @@ static void effectDroidUpdates(void)
 
 
 /** Runs all the structure effect stuff - steam puffing out etc */
-static void effectStructureUpdates(void)
+static void effectStructureUpdates()
 {
-	unsigned int i;
+	unsigned curPartition = frameGetFrameNumber() % EFFECT_STRUCTURE_DIVISION;
+	// Is it the right time?
+	if (graphicsTime <= lastUpdateStructures[curPartition] + STRUCTURE_UPDATE_INTERVAL)
+	{
+		return;
+	}
+	// Store away the last update time.
+	lastUpdateStructures[curPartition] = graphicsTime;
 
 	/* Go thru' all players */
-	for (i = 0; i < MAX_PLAYERS; i++)
+	for (unsigned player = 0; player < MAX_PLAYERS; ++player)
 	{
-		STRUCTURE *psStructure;
-
-		for (psStructure = apsStructLists[i]; psStructure; psStructure = psStructure->psNext)
+		for (STRUCTURE *psStructure = apsStructLists[player]; psStructure != nullptr; psStructure = psStructure->psNext)
 		{
-			/* Find it's group */
+			// Find its group.
 			unsigned int partition = psStructure->id % EFFECT_STRUCTURE_DIVISION;
 
 			/* Is it the right frame? */
-			if (partition == frameGetFrameNumber() % EFFECT_STRUCTURE_DIVISION)
+			if (partition != curPartition)
 			{
-				/* Is it the right time? */
-				if (graphicsTime > lastUpdateStructures[partition] + STRUCTURE_UPDATE_INTERVAL)
+				continue;
+			}
+
+			if (psStructure->status != SS_BUILT || !psStructure->visible[selectedPlayer])
+			{
+				continue;
+			}
+
+			/* Factories puff out smoke, power stations puff out tesla stuff */
+			switch (psStructure->pStructureType->type)
+			{
+			case REF_FACTORY:
+			case REF_CYBORG_FACTORY:
+			case REF_VTOL_FACTORY:
+				/*
+					We're a factory, so better puff out a bit of steam
+					Complete hack with the magic numbers - just for IAN demo
+				*/
+				if (psStructure->sDisplay.imd->nconnectors == 1)
 				{
-					/* Store away the last update time */
-					lastUpdateStructures[partition] = graphicsTime;
+					Vector3i eventPos = swapYZ(psStructure->pos) + Vector3i(
+						psStructure->sDisplay.imd->connectors->x,
+						psStructure->sDisplay.imd->connectors->z,
+						-psStructure->sDisplay.imd->connectors->y
+					);
 
-					/* Factories puff out smoke, power stations puff out tesla stuff */
-					if ( (psStructure->pStructureType->type == REF_FACTORY
-							|| psStructure->pStructureType->type == REF_POWER_GEN)
-						&& psStructure->status == SS_BUILT
-						&& psStructure->visible[selectedPlayer])
-					{
-						/*
-							We're a factory, so better puff out a bit of steam
-							Complete hack with the magic numbers - just for IAN demo
-						*/
-						if (psStructure->pStructureType->type == REF_FACTORY)
-						{
-							if (psStructure->sDisplay.imd->nconnectors == 1)
-							{
-								Vector3i eventPos = swapYZ(psStructure->pos) + Vector3i(
-									psStructure->sDisplay.imd->connectors->x,
-									psStructure->sDisplay.imd->connectors->z,
-									-psStructure->sDisplay.imd->connectors->y
-								);
+					addEffect(&eventPos, EFFECT_SMOKE, SMOKE_TYPE_STEAM, false, NULL, 0);
 
-								addEffect(&eventPos, EFFECT_SMOKE, SMOKE_TYPE_STEAM, false, NULL, 0);
-
-								if (selectedPlayer == psStructure->player)
-								{
-									audio_PlayObjStaticTrack(psStructure, ID_SOUND_STEAM);
-								}
-							}
-						}
-						else if (psStructure->pStructureType->type == REF_POWER_GEN)
-						{
-							POWER_GEN *psPowerGen = &psStructure->pFunctionality->powerGenerator;
-							Vector3i eventPos = swapYZ(psStructure->pos);
-
-							if (psStructure->sDisplay.imd->nconnectors > 0)
-							{
-								eventPos.y += psStructure->sDisplay.imd->connectors->z;
-							}
-
-							/* Add an effect over the central spire - if
-							connected to Res Extractor and it is active*/
-							for (i = 0; i < NUM_POWER_MODULES; i++)
-							{
-								if (psPowerGen->apResExtractors[i]
-								 && psPowerGen->apResExtractors[i]->pFunctionality->resourceExtractor.active)
-								{
-									break;
-								}
-							}
-
-							{
-								eventPos.y = psStructure->pos.z + 48;
-
-								addEffect(&eventPos, EFFECT_EXPLOSION, EXPLOSION_TYPE_TESLA, false, NULL, 0);
-
-								if (selectedPlayer == psStructure->player)
-								{
-									audio_PlayObjStaticTrack(psStructure, ID_SOUND_POWER_SPARK);
-								}
-							}
-						}
-					}
+					audio_PlayObjStaticTrack(psStructure, ID_SOUND_STEAM);
 				}
+				break;
+			case REF_POWER_GEN:
+			 {
+				Vector3i eventPos = swapYZ(psStructure->pos);
+
+				// Add an effect over the central spire.
+
+				eventPos.y = psStructure->pos.z + 48;
+
+				addEffect(&eventPos, EFFECT_EXPLOSION, EXPLOSION_TYPE_TESLA, false, NULL, 0);
+
+				audio_PlayObjStaticTrack(psStructure, ID_SOUND_POWER_SPARK);
+				break;
+			 }
+			default:
+				break;
 			}
 		}
 	}

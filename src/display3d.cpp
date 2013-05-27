@@ -1504,7 +1504,7 @@ void displayStaticObjects( void )
 							displayAnimation( psAnimObj, false );
 						}
 						/*check the building is active*/
-						else if (psStructure->pFunctionality->resourceExtractor.active)
+						else if (psStructure->pFunctionality->resourceExtractor.psPowerGen != nullptr)
 						{
 							displayAnimation( psAnimObj, false );
 							if(selectedPlayer == psStructure->player)
