@@ -274,7 +274,6 @@ void orderUpdateDroid(DROID *psDroid)
 {
 	BASE_OBJECT		*psObj;
 	STRUCTURE		*psStruct, *psWall;
-	REPAIR_FACILITY	*psRepairFac;
 	SDWORD			xdiff,ydiff;
 	bool			bAttack;
 	SDWORD			xoffset,yoffset;
@@ -889,9 +888,6 @@ void orderUpdateDroid(DROID *psDroid)
 			psStruct = (STRUCTURE *)psDroid->order.psObj;
 			ASSERT( psStruct != NULL,
 				"orderUpdateUnit: invalid structure pointer" );
-			psRepairFac = (REPAIR_FACILITY *) psStruct->pFunctionality;
-			ASSERT( psRepairFac != NULL,
-				"orderUpdateUnit: invalid repair facility pointer" );
 
 			if (objPosDiffSq(psDroid->pos, psDroid->order.psObj->pos) < (TILE_UNITS * 8) * (TILE_UNITS * 8))
 			{
@@ -1717,30 +1713,23 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		/* give repair order if repair facility found */
 		if (psRepairFac != NULL)
 		{
-			if (psRepairFac->pStructureType->type == REF_REPAIR_FACILITY)
+			/* move to front of structure */
+			psDroid->order = DroidOrder(psOrder->type, psRepairFac);
+			psDroid->order.pos = removeZ(psRepairFac->pos);
+			/* If in multiPlayer, and the Transporter has been sent to be
+				* repaired, need to find a suitable location to drop down. */
+			if (game.type == SKIRMISH && (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER))
 			{
-				/* move to front of structure */
-				psDroid->order = DroidOrder(psOrder->type, psRepairFac);
-				psDroid->order.pos = removeZ(psRepairFac->pos);
-				/* If in multiPlayer, and the Transporter has been sent to be
-				 * repaired, need to find a suitable location to drop down. */
-				if (game.type == SKIRMISH && (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER))
-				{
-					Vector2i pos = psDroid->order.pos;
+				Vector2i pos = psDroid->order.pos;
 
-					objTrace(psDroid->id, "Repair transport");
-					actionVTOLLandingPos(psDroid, &pos);
-					actionDroid(psDroid, DACTION_MOVE, pos.x, pos.y);
-				}
-				else
-				{
-					objTrace(psDroid->id, "Go to repair facility at (%d, %d) using (%d, %d)!", psRepairFac->pos.x, psRepairFac->pos.y, psDroid->order.pos.x, psDroid->order.pos.y);
-					actionDroid(psDroid, DACTION_MOVE, psRepairFac, psDroid->order.pos.x, psDroid->order.pos.y);
-				}
+				objTrace(psDroid->id, "Repair transport");
+				actionVTOLLandingPos(psDroid, &pos);
+				actionDroid(psDroid, DACTION_MOVE, pos.x, pos.y);
 			}
 			else
 			{
-				orderDroid(psDroid, DORDER_RTB, ModeImmediate);
+				objTrace(psDroid->id, "Go to repair facility at (%d, %d) using (%d, %d)!", psRepairFac->pos.x, psRepairFac->pos.y, psDroid->order.pos.x, psDroid->order.pos.y);
+				actionDroid(psDroid, DACTION_MOVE, psRepairFac, psDroid->order.pos.x, psDroid->order.pos.y);
 			}
 		}
 		else

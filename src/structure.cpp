@@ -2859,9 +2859,13 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 					else if (psTarget && mindist > (TILE_UNITS*8)*(TILE_UNITS*8)
 						   && psTarget != psStructure && psDroid->action == DACTION_WAITFORREPAIR)
 					{
-						REPAIR_FACILITY *stealFrom = &((STRUCTURE *)psTarget)->pFunctionality->repairFacility;
-						// make a wild guess about what is a good distance
-						int distLimit = world_coord(stealFrom->droidQueue) * world_coord(stealFrom->droidQueue) * 10;
+						int distLimit = mindist;
+						if (psTarget->type == OBJ_STRUCTURE && ((STRUCTURE *)psTarget)->pStructureType->type == REF_REPAIR_FACILITY)  // Is a repair facility (not the HQ).
+						{
+							REPAIR_FACILITY *stealFrom = &((STRUCTURE *)psTarget)->pFunctionality->repairFacility;
+							// make a wild guess about what is a good distance
+							distLimit = world_coord(stealFrom->droidQueue) * world_coord(stealFrom->droidQueue) * 10;
+						}
 
 						xdiff = (SDWORD)psDroid->pos.x - (SDWORD)psStructure->pos.x;
 						ydiff = (SDWORD)psDroid->pos.y - (SDWORD)psStructure->pos.y;
@@ -6763,8 +6767,13 @@ STRUCTURE *	findNearestReArmPad(DROID *psDroid, STRUCTURE *psTarget, bool bClear
 	totallyDist = SDWORD_MAX;
 	psNearest = NULL;
 	psTotallyClear = NULL;
+	STRUCTURE *hq = nullptr;
 	for(psStruct = apsStructLists[psDroid->player]; psStruct; psStruct=psStruct->psNext)
 	{
+		if (psStruct->pStructureType->type == REF_HQ)
+		{
+			hq = psStruct;
+		}
 		if ((psStruct->pStructureType->type == REF_REARM_PAD) &&
 			(psTarget == NULL || psTarget->cluster == psStruct->cluster) &&
 			(!bClear || clearRearmPad(psStruct)))
@@ -6795,6 +6804,7 @@ STRUCTURE *	findNearestReArmPad(DROID *psDroid, STRUCTURE *psTarget, bool bClear
 	{
 		psNearest = psTotallyClear;
 	}
+	psNearest = psNearest != nullptr? psNearest : hq;
 
 	return psNearest;
 }
