@@ -32,6 +32,8 @@
 #include "main.h"
 #include "mission.h" // for cheats
 #include "multistat.h"
+#include <QtCore/QSettings>
+
 
 // ////////////////////////////////////////////////////////////////////////////
 // STATS STUFF
@@ -313,4 +315,39 @@ void updateMultiStatsKills(BASE_OBJECT *psKilled,UDWORD player)
 	{
 		ingame.skScores[player][1]++;
 	}
+}
+
+static std::map<std::string, EcKey::Key> knownPlayers;
+static QSettings *knownPlayersIni = nullptr;
+
+std::map<std::string, EcKey::Key> const &getKnownPlayers()
+{
+	if (knownPlayersIni == nullptr)
+	{
+		knownPlayersIni = new QSettings(PHYSFS_getWriteDir() + QString("/") + "knownPlayers.ini", QSettings::IniFormat);
+		QStringList names = knownPlayersIni->allKeys();
+		for (int i = 0; i < names.size(); ++i)
+		{
+			knownPlayers[names[i].toUtf8().constData()] = base64Decode(knownPlayersIni->value(names[i]).toString().toStdString());
+		}
+	}
+	return knownPlayers;
+}
+
+void addKnownPlayer(std::string const &name, EcKey const &key, bool override)
+{
+	if (key.empty())
+	{
+		return;
+	}
+
+	if (!override && knownPlayers.find(name) != knownPlayers.end())
+	{
+		return;
+	}
+
+	getKnownPlayers();  // Init knownPlayersIni.
+	knownPlayers[name] = key.toBytes(EcKey::Public);
+	knownPlayersIni->setValue(QString::fromUtf8(name.c_str()), base64Encode(key.toBytes(EcKey::Public)).c_str());
+	knownPlayersIni->sync();
 }

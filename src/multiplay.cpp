@@ -714,6 +714,10 @@ bool recvMessage(void)
 				break;
 			}
 			// This player is now with us!
+			if (ingame.JoiningInProgress[player_id])
+			{
+				addKnownPlayer(NetPlay.players[player_id].name, getMultiStats(player_id).identity);
+			}
 			ingame.JoiningInProgress[player_id] = false;
 			break;
 		}

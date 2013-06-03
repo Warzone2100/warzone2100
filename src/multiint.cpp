@@ -4030,6 +4030,16 @@ static void displayDifficulty(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	iV_DrawText(gettext(difficultyList[j]), x + 42, y + 22);
 }
 
+static bool isKnownPlayer(std::map<std::string, EcKey::Key> const &knownPlayers, std::string const &name, EcKey const &key)
+{
+	if (key.empty())
+	{
+		return false;
+	}
+	std::map<std::string, EcKey::Key>::const_iterator i = knownPlayers.find(name);
+	return i != knownPlayers.end() && key.toBytes(EcKey::Public) == i->second;
+}
+
 // ////////////////////////////////////////////////////////////////////////////
 void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
@@ -4062,13 +4072,30 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	}
 	else if (ingame.localOptionsReceived && NetPlay.players[j].allocated)					// only draw if real player!
 	{
+		std::string name = NetPlay.players[j].name;
+
 		drawBlueBox(x, y, psWidget->width(), psWidget->height());
 
 		iV_SetFont(font_regular);											// font
-		iV_SetTextColour(WZCOL_FORM_TEXT);
+		std::map<std::string, EcKey::Key> serverPlayers;  // TODO Fill this with players known to the server (needs implementing on the server, too). Currently useless.
+		if (ingame.PingTimes[j] >= PING_LIMIT)
+		{
+			iV_SetTextColour(WZCOL_FORM_PLAYER_NOPING);
+		}
+		else if (isKnownPlayer(serverPlayers, name, getMultiStats(j).identity))
+		{
+			iV_SetTextColour(WZCOL_FORM_PLAYER_KNOWN_BY_SERVER);
+		}
+		else if (isKnownPlayer(getKnownPlayers(), name, getMultiStats(j).identity))
+		{
+			iV_SetTextColour(WZCOL_FORM_PLAYER_KNOWN);
+		}
+		else
+		{
+			iV_SetTextColour(WZCOL_FORM_PLAYER_UNKNOWN);
+		}
 
 		// name
-		std::string name = NetPlay.players[j].name;
 		if (iV_GetTextWidth(name.c_str()) > psWidget->width() - nameX)
 		{
 			while (!name.empty() && iV_GetTextWidth((name + "...").c_str()) > psWidget->width() - nameX)
@@ -4397,7 +4424,7 @@ bool multiplayPlayersReady(bool bNotifyStatus)
 	for(player = 0; player < game.maxPlayers; player++)
 	{
 		// check if this human player is ready, ignore AIs
-		if (NetPlay.players[player].allocated && !NetPlay.players[player].ready)
+		if (NetPlay.players[player].allocated && (!NetPlay.players[player].ready || ingame.PingTimes[player] >= PING_LIMIT))
 		{
 			if(bNotifyStatus)
 			{
