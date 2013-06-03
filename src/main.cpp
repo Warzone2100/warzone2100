@@ -96,6 +96,12 @@
 #  define WZ_DATADIR "data"
 #endif
 
+#include <openssl/conf.h>
+#include <openssl/evp.h>
+#include <openssl/err.h>
+#include <openssl/rand.h>
+
+
 enum FOCUS_STATE
 {
 	FOCUS_OUT,		// Window does not have the focus
@@ -982,6 +988,10 @@ void mainLoop(void)
 		}
 		realTimeUpdate(); // Update realTime.
 	}
+
+	// Feed a bit of randomness into libcrypto.
+	unsigned buf[] = {mouseX(), mouseY(), realTime, graphicsTime, gameTime, rand(), 4};  // http://xkcd.com/221/
+	RAND_add(buf, sizeof(buf), 1);
 }
 
 bool getUTF8CmdLine(int* const utfargc, const char*** const utfargv) // explicitely pass by reference
@@ -1035,6 +1045,14 @@ extern const char *BACKEND;
 
 int realmain(int argc, char *argv[])
 {
+	// The libcrypto startup stuff... May or may not actually be needed for anything at all.
+	ERR_load_crypto_strings();  // This is needed for descriptive error messages.
+	OpenSSL_add_all_algorithms();  // Don't actually use the EVP functions, so probably not needed.
+	OPENSSL_config(nullptr);  // What does this actually do?
+#ifdef WZ_OS_WIN
+	RAND_screen();  // Uses a screenshot as a random seed, on systems lacking /dev/random.
+#endif
+
 	wzMain(argc, argv);
 	int utfargc = argc;
 	const char** utfargv = (const char**)argv;

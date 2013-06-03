@@ -44,4 +44,43 @@ struct Sha256
 };
 Sha256 sha256Sum(void const *data, size_t dataLen);
 
+class EcKey
+{
+public:
+	typedef std::vector<uint8_t> Sig;
+	typedef std::vector<uint8_t> Key;
+	enum Privacy { Public, Private };
+
+	EcKey();
+	EcKey(EcKey const &b);
+#ifdef WZ_CXX11
+	EcKey(EcKey &&b);
+#endif
+	~EcKey();
+	EcKey &operator =(EcKey const &b);
+#ifdef WZ_CXX11
+	EcKey &operator =(EcKey &&b);
+#endif
+
+	void clear();
+
+	bool empty() const;
+	bool hasPrivate() const;
+
+	Sig sign(void const *data, size_t dataLen) const;
+	bool verify(Sig const &sig, void const *data, size_t dataLen) const;
+
+	Key toBytes(Privacy privacy) const;
+	void fromBytes(Key const &key, Privacy privacy);
+
+	static EcKey generate();
+
+private:
+	void *vKey;
+	static const int curveId;
+};
+
+std::string base64Encode(std::vector<uint8_t> const &bytes);
+std::vector<uint8_t> base64Decode(std::string const &str);
+
 #endif //_CRC_H_

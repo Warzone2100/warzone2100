@@ -695,6 +695,34 @@ void NETstring(char const *str, uint16_t maxlen)
 	NETstring(const_cast<char *>(str), maxlen);
 }
 
+void NETbytes(std::vector<uint8_t> *vec, unsigned maxLen)
+{
+	/*
+	 * Strings sent over the network are prefixed with their length, sent as an
+	 * unsigned 16-bit integer, not including \0 termination.
+	 */
+
+	uint32_t len = NETgetPacketDir() == PACKET_ENCODE ? vec->size() : 0;
+	queueAuto(len);
+
+	if (len > maxLen)
+	{
+		debug(LOG_ERROR, "NETstring: %s packet, length %u truncated at %u", NETgetPacketDir() == PACKET_ENCODE ? "Encoding" : "Decoding", len, maxLen);
+	}
+
+	len = std::min<unsigned>(len, maxLen);  // Truncate length if necessary.
+	if (NETgetPacketDir() == PACKET_DECODE)
+	{
+		vec->clear();
+		vec->resize(len);  // vec->assign(len, 0) would call the wrong version of assign, here.
+	}
+
+	for (unsigned i = 0; i < len; ++i)
+	{
+		queueAuto((*vec)[i]);
+	}
+}
+
 void NETbin(uint8_t *str, uint32_t len)
 {
 	for (unsigned i = 0; i < len; ++i)

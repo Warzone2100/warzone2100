@@ -2483,6 +2483,16 @@ void addPlayerBox(bool players)
 				{
 					sButInit.pTip = _("Click to change AI");
 				}
+				if (NetPlay.players[i].allocated && !getMultiStats(i).identity.empty())
+				{
+					if (!sButInit.pTip.isEmpty())
+					{
+						sButInit.pTip += "\n";
+					}
+					EcKey::Key bytes = getMultiStats(i).identity.toBytes(EcKey::Public);
+					sButInit.pTip += _("Player ID: ");
+					sButInit.pTip += sha256Sum(&bytes[0], bytes.size()).toString().substr(0, 20).c_str();
+				}
 				sButInit.pDisplay = displayPlayer;
 				sButInit.UserData = i;
 				widgAddButton(psWScreen, &sButInit);

@@ -138,6 +138,10 @@ template<> class StaticAssert<true>{};
 #define STATIC_ASSERT( expr ) \
 	(void)STATIC_ASSERT_EXPR(expr)
 
+#ifndef WZ_CXX11
+#define static_assert(expr, str) STATIC_ASSERT(expr)
+#endif
+
 
 /***
  ***

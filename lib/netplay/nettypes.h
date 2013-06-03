@@ -92,6 +92,7 @@ void NETqstring(QString &str);
 void NETstring(char *str, uint16_t maxlen);
 void NETstring(char const *str, uint16_t maxlen);  ///< Encode-only version of NETstring.
 void NETbin(uint8_t *str, uint32_t len);
+void NETbytes(std::vector<uint8_t> *vec, unsigned maxLen = 10000);
 
 PACKETDIR NETgetPacketDir(void);
 

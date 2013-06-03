@@ -48,6 +48,7 @@ static UDWORD averagePing(void);
 #define PING_FREQUENCY          4000                            // how often to update pingtimes. in approx millisecs.
 
 static UDWORD				PingSend[MAX_PLAYERS];	//stores the time the ping was called.
+static uint8_t pingChallenge[8];                                // Random data sent with the last ping.
 
 
 // ////////////////////////////////////////////////////////////////////////
@@ -153,9 +154,13 @@ bool sendPing(void)
 		}
 	}
 
+	uint64_t pingChallengei = (uint64_t)rand() << 32 | rand();
+	memcpy(pingChallenge, &pingChallengei, sizeof(pingChallenge));
+
 	NETbeginEncode(NETbroadcastQueue(), NET_PING);
 		NETuint8_t(&player);
 		NETbool(&isNew);
+		NETbin(pingChallenge, sizeof(pingChallenge));
 	NETend();
 
 	// Note when we sent the ping
@@ -172,10 +177,20 @@ bool recvPing(NETQUEUE queue)
 {
 	bool	isNew;
 	uint8_t	sender, us = selectedPlayer;
+	uint8_t challenge[sizeof(pingChallenge)];
+	EcKey::Sig challengeResponse;
 
 	NETbeginDecode(queue, NET_PING);
 		NETuint8_t(&sender);
 		NETbool(&isNew);
+		if (isNew)
+		{
+			NETbin(challenge, sizeof(pingChallenge));
+		}
+		else
+		{
+			NETbytes(&challengeResponse);
+		}
 	NETend();
 
 	if (sender >= MAX_PLAYERS)
@@ -187,17 +202,26 @@ bool recvPing(NETQUEUE queue)
 	// If this is a new ping, respond to it
 	if (isNew)
 	{
+		challengeResponse = getMultiStats(us).identity.sign(&challenge, sizeof(pingChallenge));
+
 		NETbeginEncode(NETnetQueue(sender), NET_PING);
 			// We are responding to a new ping
 			isNew = false;
 
 			NETuint8_t(&us);
 			NETbool(&isNew);
+			NETbytes(&challengeResponse);
 		NETend();
 	}
 	// They are responding to one of our pings
 	else
 	{
+		if (!getMultiStats(sender).identity.empty() && !getMultiStats(sender).identity.verify(challengeResponse, pingChallenge, sizeof(pingChallenge)))
+		{
+			debug(LOG_ERROR, "Bad NET_PING packet, alleged sender is %d", (int)sender);
+			return false;
+		}
+
 		// Work out how long it took them to respond
 		ingame.PingTimes[sender] = (realTime - PingSend[sender]) / 2;
 
