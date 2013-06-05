@@ -371,6 +371,7 @@ PKG_CHECK_MODULES([VORBIS], [vorbis >= 1.1])
 PKG_CHECK_MODULES([VORBISFILE], [vorbisfile >= 1.1])
 
 PKG_CHECK_MODULES([GLEW], [glew >= 1.5.2])
+PKG_CHECK_MODULES([LIBCRYPTO], [libcrypto >= 1.0.0])
 
 # Checks for libraries:
 
