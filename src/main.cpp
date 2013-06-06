@@ -990,7 +990,7 @@ void mainLoop(void)
 	}
 
 	// Feed a bit of randomness into libcrypto.
-	unsigned buf[] = {mouseX(), mouseY(), realTime, graphicsTime, gameTime, rand(), 4};  // http://xkcd.com/221/
+	unsigned buf[] = {mouseX(), mouseY(), realTime, graphicsTime, gameTime, (unsigned) rand(), 4};  // http://xkcd.com/221/
 	RAND_add(buf, sizeof(buf), 1);
 }
 
