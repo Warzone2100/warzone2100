@@ -98,6 +98,21 @@ var allInAttackTargets = [
 	lassat,
 ];
 
+function on31() {
+	// HACK: see if we are on 3.2 or 3.1.
+	return typeof(chat) == "undefined";
+}
+
+// get cyborg body depending on the game version
+function bB(stat) {
+	if (on31())
+		return stat;
+	if (stat.indexOf("Hvy") > -1)
+		return "CyborgHeavyBody";
+	else
+		return "CyborgLightBody";
+}
+
 // some trivial functions useful in personality definitions
 
 // random integer between 0 and max-1 (for convenience)
@@ -754,100 +769,99 @@ const standardTankAA = [
 
 
 const standardCyborgAPNoobOne = [
-	["Cyb-Hvybod-PulseLsr","Cyb-Hvywpn-PulseLsr"], // super pulse
-	["Cyb-Bod-Las1","Cyb-Wpn-Laser"], // flashlight
-	["CybRotMgGrd","CyborgRotMG"], // assault gun
-	["Cyb-Bod-Grenade", "Cyb-Wpn-Grenade"], // mortar
-	["CyborgChain1Ground", "CyborgChaingun"], // machinegun
+	[bB("Cyb-Hvybod-PulseLsr"),"Cyb-Hvywpn-PulseLsr"], // super pulse
+	[bB("Cyb-Bod-Las1"),"Cyb-Wpn-Laser"], // flashlight
+	[bB("CybRotMgGrd"),"CyborgRotMG"], // assault gun
+	[bB("Cyb-Bod-Grenade"), "Cyb-Wpn-Grenade"], // mortar
+	[bB("CyborgChain1Ground"), "CyborgChaingun"], // machinegun
 ];
 
 const standardCyborgAPNoobTwo = [
-	["Cyb-Hvybod-PulseLsr","Cyb-Hvywpn-PulseLsr"], // super pulse
-	["Cyb-Bod-Las1","Cyb-Wpn-Laser"], // flashlight
-	["CybRotMgGrd","CyborgRotMG"], // assault gun
-	["Cyb-Bod-Thermite", "Cyb-Wpn-Thermite"], // thermite
-	["CyborgFlamerGrd", "CyborgFlamer01"], // flamer
-	["CyborgChain1Ground", "CyborgChaingun"], // machinegun
+	[bB("Cyb-Hvybod-PulseLsr"),"Cyb-Hvywpn-PulseLsr"], // super pulse
+	[bB("Cyb-Bod-Las1"),"Cyb-Wpn-Laser"], // flashlight
+	[bB("CybRotMgGrd"),"CyborgRotMG"], // assault gun
+	[bB("Cyb-Bod-Thermite"), "Cyb-Wpn-Thermite"], // thermite
+	[bB("CyborgFlamerGrd"), "CyborgFlamer01"], // flamer
+	[bB("CyborgChain1Ground"), "CyborgChaingun"], // machinegun
 ];
 
 const standardCyborgATNoobOne = [
-	["Cyb-Hvybod-A-T","Cyb-Hvywpn-A-T"], // super scourge
-	["Cyb-Hvybod-RailGunner","Cyb-Hvywpn-RailGunner"], // super rail
-	["Cyb-Bod-Rail1","Cyb-Wpn-Rail1"], // needle
-	["Cyb-Bod-Atmiss","Cyb-Wpn-Atmiss"], // scourge
-	["Cyb-Hvybod-Acannon","Cyb-Hvywpn-Acannon"], // super auto cannon
-	["CyborgRkt1Ground", "CyborgRocket"], // lancer
-	["CyborgCannonGrd", "CyborgCannon"], // cannon
+	[bB("Cyb-Hvybod-A-T"),"Cyb-Hvywpn-A-T"], // super scourge
+	[bB("Cyb-Hvybod-RailGunner"),"Cyb-Hvywpn-RailGunner"], // super rail
+	[bB("Cyb-Bod-Rail1"),"Cyb-Wpn-Rail1"], // needle
+	[bB("Cyb-Bod-Atmiss"),"Cyb-Wpn-Atmiss"], // scourge
+	[bB("Cyb-Hvybod-Acannon"),"Cyb-Hvywpn-Acannon"], // super auto cannon
+	[bB("CyborgRkt1Ground"), "CyborgRocket"], // lancer
+	[bB("CyborgCannonGrd"), "CyborgCannon"], // cannon
 ];
 
 const standardCyborgATNoobTwo = [
-	["Cyb-Hvybod-RailGunner","Cyb-Hvywpn-RailGunner"], // super rail
-	["Cyb-Hvybod-A-T","Cyb-Hvywpn-A-T"], // super scourge
-	["Cyb-Bod-Atmiss","Cyb-Wpn-Atmiss"], // scourge
-	["Cyb-Bod-Rail1","Cyb-Wpn-Rail1"], // needle
-	["Cyb-Hvybod-HPV","Cyb-Hvywpn-HPV"], // super hpv cannon
-	["CyborgRkt1Ground", "CyborgRocket"], // lancer
-	["CyborgCannonGrd", "CyborgCannon"], // cannon
+	[bB("Cyb-Hvybod-RailGunner"),"Cyb-Hvywpn-RailGunner"], // super rail
+	[bB("Cyb-Hvybod-A-T"),"Cyb-Hvywpn-A-T"], // super scourge
+	[bB("Cyb-Bod-Atmiss"),"Cyb-Wpn-Atmiss"], // scourge
+	[bB("Cyb-Bod-Rail1"),"Cyb-Wpn-Rail1"], // needle
+	[bB("Cyb-Hvybod-HPV"),"Cyb-Hvywpn-HPV"], // super hpv cannon
+	[bB("CyborgRkt1Ground"), "CyborgRocket"], // lancer
+	[bB("CyborgCannonGrd"), "CyborgCannon"], // cannon
 ];
 
 const standardCyborgATNoobThree = [
-	["Cyb-Hvybod-A-T","Cyb-Hvywpn-A-T"], // super scourge
-	["Cyb-Hvybod-RailGunner","Cyb-Hvywpn-RailGunner"], // super rail
-	["Cyb-Bod-Rail1","Cyb-Wpn-Rail1"], // needle
-	["Cyb-Bod-Atmiss","Cyb-Wpn-Atmiss"], // scourge
-	["Cyb-Hvybod-TK","Cyb-Hvywpn-TK"], // super tk
-	["Cyb-Hvybod-Mcannon","Cyb-Hvywpn-Mcannon"], // super cannon
-	["CyborgRkt1Ground", "CyborgRocket"], // lancer
-	["CyborgCannonGrd", "CyborgCannon"], // cannon
+	[bB("Cyb-Hvybod-A-T"),"Cyb-Hvywpn-A-T"], // super scourge
+	[bB("Cyb-Hvybod-RailGunner"),"Cyb-Hvywpn-RailGunner"], // super rail
+	[bB("Cyb-Bod-Rail1"),"Cyb-Wpn-Rail1"], // needle
+	[bB("Cyb-Bod-Atmiss"),"Cyb-Wpn-Atmiss"], // scourge
+	[bB("Cyb-Hvybod-TK"),"Cyb-Hvywpn-TK"], // super tk
+	[bB("Cyb-Hvybod-Mcannon"),"Cyb-Hvywpn-Mcannon"], // super cannon
+	[bB("CyborgRkt1Ground"), "CyborgRocket"], // lancer
+	[bB("CyborgCannonGrd"), "CyborgCannon"], // cannon
 ];
 
-
 const standardCyborgCannonOne = [
-	["Cyb-Hvybod-RailGunner","Cyb-Hvywpn-RailGunner"], // super rail
-	["Cyb-Bod-Rail1","Cyb-Wpn-Rail1"], // needle
-	["Cyb-Hvybod-Acannon","Cyb-Hvywpn-Acannon"], // super auto cannon
-	["CyborgCannonGrd", "CyborgCannon"], // cannon
+	[bB("Cyb-Hvybod-RailGunner"),"Cyb-Hvywpn-RailGunner"], // super rail
+	[bB("Cyb-Bod-Rail1"),"Cyb-Wpn-Rail1"], // needle
+	[bB("Cyb-Hvybod-Acannon"),"Cyb-Hvywpn-Acannon"], // super auto cannon
+	[bB("CyborgCannonGrd"), "CyborgCannon"], // cannon
 ];
 
 const standardCyborgCannonTwo = [
-	["Cyb-Hvybod-RailGunner","Cyb-Hvywpn-RailGunner"], // super rail
-	["Cyb-Bod-Rail1","Cyb-Wpn-Rail1"], // needle
-	["Cyb-Hvybod-HPV","Cyb-Hvywpn-HPV"], // super hpv cannon
-	["CyborgCannonGrd", "CyborgCannon"], // cannon
+	[bB("Cyb-Hvybod-RailGunner"),"Cyb-Hvywpn-RailGunner"], // super rail
+	[bB("Cyb-Bod-Rail1"),"Cyb-Wpn-Rail1"], // needle
+	[bB("Cyb-Hvybod-HPV"),"Cyb-Hvywpn-HPV"], // super hpv cannon
+	[bB("CyborgCannonGrd"), "CyborgCannon"], // cannon
 ];
 const standardCyborgCannonThree = [
-	["Cyb-Hvybod-RailGunner","Cyb-Hvywpn-RailGunner"], // super rail
-	["Cyb-Bod-Rail1","Cyb-Wpn-Rail1"], // needle
-	["Cyb-Hvybod-Mcannon","Cyb-Hvywpn-Mcannon"], // super cannon
-	["CyborgCannonGrd", "CyborgCannon"], // cannon
+	[bB("Cyb-Hvybod-RailGunner"),"Cyb-Hvywpn-RailGunner"], // super rail
+	[bB("Cyb-Bod-Rail1"),"Cyb-Wpn-Rail1"], // needle
+	[bB("Cyb-Hvybod-Mcannon"),"Cyb-Hvywpn-Mcannon"], // super cannon
+	[bB("CyborgCannonGrd"), "CyborgCannon"], // cannon
 ];
 
 const standardCyborgRocket = [
-	["Cyb-Hvybod-A-T","Cyb-Hvywpn-A-T"], // super scourge
-	["Cyb-Bod-Atmiss","Cyb-Wpn-Atmiss"], // scourge
-	["Cyb-Hvybod-TK","Cyb-Hvywpn-TK"], // super tk
-	["CyborgRkt1Ground", "CyborgRocket"], // lancer
+	[bB("Cyb-Hvybod-A-T"),"Cyb-Hvywpn-A-T"], // super scourge
+	[bB("Cyb-Bod-Atmiss"),"Cyb-Wpn-Atmiss"], // scourge
+	[bB("Cyb-Hvybod-TK"),"Cyb-Hvywpn-TK"], // super tk
+	[bB("CyborgRkt1Ground"), "CyborgRocket"], // lancer
 ];
 
 const standardCyborgMachinegun = [
-	["CybRotMgGrd","CyborgRotMG"], // assault gun
-	["CyborgChain1Ground", "CyborgChaingun"], // machinegun
+	[bB("CybRotMgGrd"),"CyborgRotMG"], // assault gun
+	[bB("CyborgChain1Ground"), "CyborgChaingun"], // machinegun
 ];
 
 const standardCyborgFlamer = [
-	["Cyb-Bod-Thermite", "Cyb-Wpn-Thermite"], // thermite
-	["CyborgFlamerGrd", "CyborgFlamer01"], // flamer
+	[bB("Cyb-Bod-Thermite"), "Cyb-Wpn-Thermite"], // thermite
+	[bB("CyborgFlamerGrd"), "CyborgFlamer01"], // flamer
 ];
 
 const standardCyborgLaser = [
-	["Cyb-Hvybod-PulseLsr","Cyb-Hvywpn-PulseLsr"], // super pulse
-	["Cyb-Bod-Las1","Cyb-Wpn-Laser"], // flashlight
+	[bB("Cyb-Hvybod-PulseLsr"),"Cyb-Hvywpn-PulseLsr"], // super pulse
+	[bB("Cyb-Bod-Las1"),"Cyb-Wpn-Laser"], // flashlight
 ];
 
 const standardCyborgMachinegunMortar = [
-	["CybRotMgGrd","CyborgRotMG"], // assault gun
-	["Cyb-Bod-Grenade", "Cyb-Wpn-Grenade"], // mortar
-	["CyborgChain1Ground", "CyborgChaingun"], // machinegun
+	[bB("CybRotMgGrd"),"CyborgRotMG"], // assault gun
+	[bB("Cyb-Bod-Grenade"), "Cyb-Wpn-Grenade"], // mortar
+	[bB("CyborgChain1Ground"), "CyborgChaingun"], // machinegun
 ];
 
 // standard build order definitions
@@ -875,7 +889,35 @@ function standardBuildOrderNoob() {
 	return false;
 }
 
+function standardBuildOrder32() {
+	// The standard build order for v3.2
+	var labCount = enumStruct(me, lab).length;
+	var factoryCount = enumStruct(me, factory).length;
+	var commandCount = enumStruct(me, command).length;
+	var genCount = enumStruct(me, generator).length;
+	var derrickCount = enumStruct(me, derrick).length;
+	var borgCount = enumStruct(me, borgfac).length;
+	var vtolCount = enumStruct(me, vtolfac).length;
+	if (derrickCount > 0 && genCount == 0)
+		return buildBasicStructure(generator);
+	if (labCount < 1)
+		return buildBasicStructure(lab);
+	if (factoryCount < 1)
+		return buildBasicStructure(factory);
+	if (derrickCount < 1)
+		return true;
+	if (genCount < 2)
+		return buildBasicStructure(generator);
+	if (commandCount < 1)
+		return buildBasicStructure(command);
+	if (derrickCount < 5)
+		return true;
+	return false;
+}
+
 function standardBuildOrderFRCFR() {
+	if (!on31())
+		return standardBuildOrder32();
 	// Builds initial structures in the following order:
 	//     factory, lab, cc, factory, generator, lab, factory, generator, lab.
 	//     * Doesn't build 3rd lab until 10th minute of the game.
@@ -915,6 +957,8 @@ function standardBuildOrderFRCFR() {
 }
 
 function standardBuildOrderRFFRC() {
+	if (!on31())
+		return standardBuildOrder32();
 	// Builds initial structures in the following order:
 	//     lab, factory, factory, lab, command center, generator, generator, factory, lab.
 	//     * Doesn't build 3rd factory until 8th minute of the game.
@@ -953,6 +997,8 @@ function standardBuildOrderRFFRC() {
 }
 
 function standardBuildOrderRFFCR() {
+	if (!on31())
+		return standardBuildOrder32();
 	// Builds initial structures in the following order:
 	//     lab, factory, factory, command center, lab, generator, generator, factory, factory, lab
 	//     * Doesn't build 3rd lab until 15th minute of the game.

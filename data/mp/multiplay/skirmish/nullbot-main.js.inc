@@ -1820,7 +1820,7 @@ function produceDroids() {
 			if (!personality.fixedTemplates) {
 				if (needMoreTrucks() && truckCount<2 && (!iHaveFactories || !iHaveHovers())) { // don't build borgs when we can build hovers
 					const DROID_CYBORG_CONSTRUCT=10; // HACK: see also http://forums.wz2100.net/viewtopic.php?f=35&t=10341&p=114181#p114184
-					buildDroid(struct, "Construction Droid", "Cyb-Bod-ComEng", "CyborgLegs", "", DROID_CYBORG_CONSTRUCT, "CyborgSpade");
+					buildDroid(struct, "Construction Droid", bB("Cyb-Bod-ComEng"), "CyborgLegs", "", DROID_CYBORG_CONSTRUCT, "CyborgSpade");
 					++truckCount;
 					continue;
 				}
