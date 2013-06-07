@@ -228,6 +228,15 @@ AM_CONDITIONAL(INSTALLER, test "x$enable_installer" = "xyes")
 AC_MSG_CHECKING([whether to build NSIS installer])
 AC_MSG_RESULT([${enable_installer}])
 
+# windows only option at this time
+AC_ARG_ENABLE([portable],
+	AS_HELP_STRING([--enable-portable], [Build portable version of Warzone (windows ONLY!) [no]]),
+	[ enable_portable="${enableval}" ], [ enable_portable=no ])
+AS_IF([test "x$enable_portable" = "xyes"],[
+	AC_DEFINE([WZ_PORTABLE], 1, [Makes builds become portable (windows ONLY)])
+])
+AM_CONDITIONAL(PORTABLE, test $enable_portable = yes)
+
 AC_ARG_ENABLE([static],
 	AS_HELP_STRING([--enable-static], [Link statically [no]]),
 	[ enable_static=${enableval} ], [ enable_static=no ])
@@ -317,6 +326,14 @@ AC_DEFINE_UNQUOTED([PACKAGE_DISTRIBUTOR], ["${with_distributor}"], [Name of dist
 
 AC_ARG_WITH([makensis],
 	AS_HELP_STRING([--with-makensis], [Path to makensis]))
+
+AC_ARG_WITH([videos],
+	AS_HELP_STRING([--with-videos], [Install videos with the portable version of Warzone (windows ONLY!) [no]]),
+	[ with_videos="${withval}" ], [ with_videos=no ])
+#AS_IF([test "x$with_videos" = "xyes"],[
+#	AC_DEFINE([WZ_PORTABLE], 1, [Makes builds become portable (windows ONLY)])
+#])
+AM_CONDITIONAL(VIDEOS, test $with_videos = yes)
 
 AC_ARG_WITH([installer_compression],
 	AS_HELP_STRING([--with-installer-compression], [Compression method to use when building NSIS [lzma]]),
@@ -494,6 +511,17 @@ AS_IF([test -z "$A2X" -o -z "$WKHTMLTOPDF"],[
 	AC_MSG_WARN([a2x (asciidoc) or wkhtmltopdf not found, can't convert documentation. This doesn't affect building the game,
 		but means that things like "make dist" and building a Windows installer will fail.])
 ])
+
+AS_IF([test "x$enable_portable" = "xyes"],[
+	AC_MSG_NOTICE()
+	AC_MSG_NOTICE([*** Creating Portable version of Warzone (this options only affects Windows builds!) ***])
+])
+AS_IF([test "x$with_videos" = "xyes"],[
+	AC_MSG_NOTICE()
+	AC_MSG_NOTICE([*** Creating Portable version of Warzone WITH VIDEOS (this options only affects Windows builds!) ***])
+])
+
+
 
 AC_MSG_NOTICE()
 AC_MSG_NOTICE(Backend used: ${backend})

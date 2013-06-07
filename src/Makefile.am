@@ -29,7 +29,12 @@ EXTRA_DIST = \
 	autorevision.cache \
 	cursorselection
 
+if PORTABLE
+bin_PROGRAMS = warzone2100_portable
+else
 bin_PROGRAMS = warzone2100
+endif
+
 noinst_HEADERS = \
 	action.h \
 	actiondef.h \
@@ -158,11 +163,11 @@ noinst_HEADERS = \
 	wrappers.h \
 	$(MOCHEADER)
 
-nodist_warzone2100_SOURCES = \
+nodist_COMMONSOURCES = \
 	multiint_moc.cpp \
 	qtscriptdebug_moc.cpp
 
-warzone2100_SOURCES = \
+COMMONSOURCES = \
 	action.cpp \
 	advvis.cpp \
 	ai.cpp \
@@ -272,7 +277,9 @@ warzone2100_SOURCES = \
 	wavecast.cpp \
 	wrappers.cpp
 
-warzone2100_LIBS = \
+
+
+COMMONLIBS = \
 	$(top_builddir)/lib/widget/libwidget.a \
 	$(top_builddir)/lib/sequence/libsequence.a \
 	$(top_builddir)/lib/sound/libsound.a \
@@ -285,18 +292,46 @@ warzone2100_LIBS = \
 	$(top_builddir)/3rdparty/miniupnpc/libminiupnpc.a \
 	$(top_builddir)/3rdparty/quesoglc/libquesoglc.a
 
+if PORTABLE
+warzone2100_portable_SOURCES = $(COMMONSOURCES) $(nodist_COMMONSOURCES)
+warzone2100_portable_LIBS = $(COMMONLIBS)
+else
+warzone2100_SOURCES = $(COMMONSOURCES) $(nodist_COMMONSOURCES)
+warzone2100_LIBS = $(COMMONLIBS)
+endif
+
 if BACKEND_QT
+if PORTABLE
+warzone2100_portable_LIBS += $(top_builddir)/lib/qtgame/libqtgame.a
+else
 warzone2100_LIBS += $(top_builddir)/lib/qtgame/libqtgame.a
+endif
 endif
 
 if BACKEND_SDL
+if PORTABLE
+warzone2100_portable_LIBS += $(top_builddir)/lib/sdl/libsdl.a
+else
 warzone2100_LIBS += $(top_builddir)/lib/sdl/libsdl.a
 endif
+endif
 
+
+if PORTABLE
+warzone2100_portable_LDADD = $(warzone2100_portable_LIBS) $(LTLIBINTL) $(SDL_LIBS) $(PHYSFS_LIBS) $(PNG_LIBS) $(VORBISFILE_LIBS) $(VORBIS_LIBS) \
+	$(THEORA_LIBS) $(OPENAL_LIBS) $(OPENGLC_LIBS) $(OPENGL_LIBS) $(QT4_LIBS) $(GLEW_LIBS) \
+	$(X_LIBS) $(X_EXTRA_LIBS) $(LIBCRYPTO_LIBS) $(LDFLAGS)
+else
 warzone2100_LDADD = $(warzone2100_LIBS) $(LTLIBINTL) $(SDL_LIBS) $(PHYSFS_LIBS) $(PNG_LIBS) $(VORBISFILE_LIBS) $(VORBIS_LIBS) \
 	$(THEORA_LIBS) $(OPENAL_LIBS) $(OPENGLC_LIBS) $(OPENGL_LIBS) $(QT4_LIBS) $(GLEW_LIBS) \
 	$(X_LIBS) $(X_EXTRA_LIBS) $(LIBCRYPTO_LIBS) $(LDFLAGS)
+endif
 
 if MINGW32
+if PORTABLE
+warzone2100_portable_LDADD += $(top_builddir)/win32/warzone2100_portable.o $(WIN32_LIBS)
+else
 warzone2100_LDADD += $(top_builddir)/win32/warzone2100.o $(WIN32_LIBS)
 endif
+endif
+

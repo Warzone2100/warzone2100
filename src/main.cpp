@@ -419,12 +419,24 @@ static bool getCurrentDir(char * const dest, size_t const size)
 static void getPlatformUserDir(char * const tmpstr, size_t const size)
 {
 #if defined(WZ_OS_WIN)
+//  When WZ_PORTABLE is passed, that means we want the config directory at the same location as the program file
+	DWORD dwRet;
 	wchar_t tmpWStr[MAX_PATH];
+#ifndef WZ_PORTABLE
 	if ( SUCCEEDED( SHGetFolderPathW( NULL, CSIDL_PERSONAL|CSIDL_FLAG_CREATE, NULL, SHGFP_TYPE_CURRENT, tmpWStr ) ) )
 	{
+#else
+	if (dwRet = GetCurrentDirectoryW(MAX_PATH, tmpWStr))
+	{
+		if(dwRet > MAX_PATH)
+		{
+			debug(LOG_FATAL, "Buffer exceeds maximum path to create directory. Exiting.");
+			exit(1);
+		}
+#endif
 		if (WideCharToMultiByte(CP_UTF8, 0, tmpWStr, -1, tmpstr, size, NULL, NULL) == 0)
 		{
-			debug(LOG_ERROR, "Encoding conversion error.");
+			debug(LOG_FATAL, "Config directory encoding conversion error.");
 			exit(1);
 		}
 		strlcat(tmpstr, PHYSFS_getDirSeparator(), size);
