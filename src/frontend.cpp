@@ -1416,10 +1416,9 @@ bool runGameOptionsMenu(void)
 		widgSetString(psWScreen, FRONTEND_COLOUR, _("Unit Colour:"));
 		widgSetString(psWScreen, FRONTEND_COLOUR_CAM, _("Campaign"));
 		widgSetString(psWScreen, FRONTEND_COLOUR_MP, _("Skirmish/Multiplayer"));
-		widgSetString(psWScreen, FRONTEND_DIFFICULTY, _("Difficulty"));
+		widgSetString(psWScreen, FRONTEND_DIFFICULTY, _("Campaign Difficulty"));
 		widgSetString(psWScreen, FRONTEND_SCROLLSPEED, _("Scroll Speed"));
-		widgSetString(psWScreen, FRONTEND_RADAR, _("Radar"));
-		widgSetString(psWScreen, FRONTEND_RADAR_R, rotateRadar ? _("Rotating") : _("Fixed"));
+
 		switch( getDifficultyLevel() )
 		{
 		case DL_EASY:
