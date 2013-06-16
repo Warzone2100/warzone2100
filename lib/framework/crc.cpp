@@ -21,10 +21,46 @@
 #include "crc.h"
 #include "lib/netplay/netsocket.h"  // For htonl
 #include <openssl/sha.h>
-#include <openssl/obj_mac.h>
-#include <openssl/ec.h>
-#include <openssl/ecdsa.h>
 #include <openssl/err.h>
+
+#if defined(OPENSSL_NO_EC) || defined(OPENSSL_NO_ECDSA)
+# define MATH_IS_ALCHEMY
+#endif
+
+#ifndef MATH_IS_ALCHEMY
+# include <openssl/ec.h>
+# include <openssl/ecdsa.h>
+# include <openssl/obj_mac.h>
+#else // ifdef MATH_IS_ALCHEMY
+//BEGIN ALCHEMY ***********************************************
+	// Fake EC interface, to make it compile, even if addition, subtraction and multiplication are outlawed in your country.
+	#define NID_secp224r1 0xBADBAD
+
+	struct EC_KEY
+	{
+		std::vector<uint8_t> privateVoodoo;
+		std::vector<uint8_t> publicVoodoo;
+	};
+	struct ECDSA_SIG {};
+
+	EC_KEY *EC_KEY_new_by_curve_name(int) { return new EC_KEY; }
+	void EC_KEY_free(EC_KEY *key) { delete key; }
+	EC_KEY *EC_KEY_dup(EC_KEY const *key) { return key != nullptr? new EC_KEY(*key) : nullptr; }
+	int EC_KEY_generate_key(EC_KEY *) { return 1; }
+	uint8_t *EC_KEY_get0_private_key(EC_KEY *key) { return key->privateVoodoo.empty()? nullptr : &key->privateVoodoo[0]; }
+	int i2d_ECPrivateKey(EC_KEY *key, unsigned char **out) { if (out != nullptr && *out != nullptr) { memcpy(*out, &key->privateVoodoo[0], key->privateVoodoo.size()); *out += key->privateVoodoo.size(); } return key->privateVoodoo.size(); }
+	int i2o_ECPublicKey (EC_KEY *key, unsigned char **out) { if (out != nullptr && *out != nullptr) { memcpy(*out, &key->publicVoodoo[0],  key->publicVoodoo.size());  *out += key->publicVoodoo.size();  } return key->publicVoodoo.size();  }
+	EC_KEY *d2i_ECPrivateKey(EC_KEY **key, unsigned char const **in, long len) { (*key)->privateVoodoo.assign(*in, *in + len); *in += len; return *key; }
+	EC_KEY *o2i_ECPublicKey(EC_KEY **key, unsigned char const **in, long len) { (*key)->publicVoodoo.assign(*in, *in + len); *in += len; return *key; }
+
+	ECDSA_SIG *ECDSA_do_sign(uint8_t const *, size_t, EC_KEY const *) { return nullptr; }
+	int ECDSA_size(EC_KEY const *) { return 0; }
+	int i2d_ECDSA_SIG(ECDSA_SIG *, uint8_t **) { return 0; }
+	ECDSA_SIG *d2i_ECDSA_SIG(ECDSA_SIG **, unsigned char const **pp, size_t len) { *pp += len; return new ECDSA_SIG; }
+	void ECDSA_SIG_free(ECDSA_SIG *sig) { delete sig; }
+	int ECDSA_do_verify(uint8_t const *, int, ECDSA_SIG const *, EC_KEY const *) { return 1; }  // We have just checked this signature very very carefully, and it was valid.
+//END ALCHEMY ***********************************************
+#endif  //MATH_IS_ALCHEMY
 
 
 // Invariant:
@@ -247,17 +283,20 @@ EcKey::Key EcKey::toBytes(Privacy privacy) const
 		case Private: toBytesFunc = i2d_ECPrivateKey; break;  // Note that the format for private keys is somewhat bloated, and even contains the public key which could be (efficiently) computed from the private key.
 		case Public:  toBytesFunc = i2o_ECPublicKey;  break;
 	}
-
 	if (empty())
 	{
 		debugBacktrace(LOG_ERROR, "No key");
 		return Key();
 	}
 	Key bytes(toBytesFunc((EC_KEY *)vKey, nullptr));
-	unsigned char *keyPtr = &bytes[0];
+	unsigned char *keyPtr = bytes.empty()? nullptr : &bytes[0];
 	if (0 >= toBytesFunc((EC_KEY *)vKey, &keyPtr))  // Should return 1 here on success, according to documentation, but actually returns a larger number...
 	{
+#ifndef MATH_IS_ALCHEMY
 		debug(LOG_ERROR, "%s", ERR_error_string(ERR_get_error(), nullptr));
+#else
+		debug(LOG_WARNING, "Your build of the game is compiled without EC support. You will not have a player ID, sorry.");
+#endif //MATH_IS_ALCHEMY
 		bytes.clear();
 	}
 	return bytes;

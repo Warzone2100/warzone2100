@@ -2491,7 +2491,14 @@ void addPlayerBox(bool players)
 					}
 					EcKey::Key bytes = getMultiStats(i).identity.toBytes(EcKey::Public);
 					sButInit.pTip += _("Player ID: ");
-					sButInit.pTip += sha256Sum(&bytes[0], bytes.size()).toString().substr(0, 20).c_str();
+					if (!bytes.empty())
+					{
+						sButInit.pTip += sha256Sum(&bytes[0], bytes.size()).toString().substr(0, 20).c_str();
+					}
+					else
+					{
+						sButInit.pTip += _("(none)");
+					}
 				}
 				sButInit.pDisplay = displayPlayer;
 				sButInit.UserData = i;
