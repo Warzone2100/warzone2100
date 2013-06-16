@@ -122,14 +122,12 @@ static bool startTitleMenu(void)
 	addSideText(FRONTEND_SIDETEXT, FRONTEND_SIDEX, FRONTEND_SIDEY, _("MAIN MENU"));
 
 	addSmallTextButton(FRONTEND_HYPERLINK, FRONTEND_POS8X, FRONTEND_POS8Y, _("Official site: http://wz2100.net/"), 0);
-
+	addSmallTextButton(FRONTEND_DONATELINK, FRONTEND_POS8X + 360, FRONTEND_POS8Y, _("Donate: http://donations.wz2100.net/"), 0);
 	return true;
 }
 
 static void runHyperlink(void)
 {
-	//FIXME: There is no decent way we can re-init the display to switch to window or fullscreen within game. refs: screenToggleMode().
-
 #if defined(WZ_OS_WIN)
 	ShellExecuteW(NULL, L"open", L"http://wz2100.net/", NULL, NULL, SW_SHOWNORMAL);
 #elif defined (WZ_OS_MAC)
@@ -142,6 +140,19 @@ static void runHyperlink(void)
 #endif
 }
 
+static void rundonatelink(void)
+{
+#if defined(WZ_OS_WIN)
+	ShellExecuteW(NULL, L"open", L"http://donations.wz2100.net/", NULL, NULL, SW_SHOWNORMAL);
+#elif defined (WZ_OS_MAC)
+	// For the macs
+	system("open http://donations.wz2100.net");
+#else
+	// for linux
+	int stupidWarning = system("xdg-open http://donations.wz2100.net &");
+	(void)stupidWarning;  // Why is system() a warn_unused_result function..?
+#endif
+}
 
 bool runTitleMenu(void)
 {
@@ -171,6 +182,10 @@ bool runTitleMenu(void)
 		case FRONTEND_HYPERLINK:
 			runHyperlink();
 			break;
+		case FRONTEND_DONATELINK:
+			rundonatelink();
+			break;
+			
 		default:
 			break;
 	}
@@ -1662,7 +1677,7 @@ void displayTextOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 		{
 			iV_SetTextColour(WZCOL_TEXT_BRIGHT);
 		}
-		else if (psWidget->id == FRONTEND_HYPERLINK)				// special case for our hyperlink										
+		else if (psWidget->id == FRONTEND_HYPERLINK || psWidget->id == FRONTEND_DONATELINK)				// special case for our hyperlink										
 		{
 			iV_SetTextColour(WZCOL_YELLOW);
 		}
