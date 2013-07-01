@@ -90,7 +90,7 @@ fi
 # Get the sequences
 
 # Comment out the following to skip the high qual seq
-if [ ! -f "${sequencenme}" ]; then
+if [[ ! -f "${sequencenme}" ]] && [[ "${VCS_TICK}" = "0" ]] && [[ ! "${VCS_TAG}" == *_beta* ]] && [[ ! "${VCS_TAG}" == *_rc* ]]; then
 	echo "Fetching ${sequencenme}"
 	if ! curl -L --connect-timeout "30" -o "${sequencenme}" "${sequence}"; then
 		echo "error: Unable to fetch ${sequence}" >&2
@@ -98,12 +98,12 @@ if [ ! -f "${sequencenme}" ]; then
 	fi
 	ckmd5 "${sequencenme}" "${sequencemd5}"
 else
-	echo "${sequencenme} already exists, skipping"
+	echo "${sequencenme} already exists or is not needed, skipping"
 fi
 #
 
 # Comment out the following to skip the low qual seq
-if [ ! -f "${sequencelonme}" ]; then
+if [[ ! -f "${sequencelonme}" ]] && [[ "${VCS_TICK}" = "0" ]] && [[ ! "${VCS_TAG}" == *_beta* ]] && [[ ! "${VCS_TAG}" == *_rc* ]]; then
 	echo "Fetching ${sequencelonme}"
 	if [ -f "/Library/Application Support/Warzone 2100/sequences.wz" ]; then
 		cp -a "/Library/Application Support/Warzone 2100/sequences.wz" "${sequencelonme}"
@@ -113,7 +113,7 @@ if [ ! -f "${sequencelonme}" ]; then
 	fi
 	ckmd5 "${sequencelonme}" "${sequencelomd5}"
 else
-	echo "${sequencelonme} already exists, skipping"
+	echo "${sequencelonme} already exists or is not needed, skipping"
 fi
 #
 
