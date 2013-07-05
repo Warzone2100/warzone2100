@@ -9,19 +9,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2013-02-24 22:18+0100\n"
-"PO-Revision-Date: 2011-08-28 11:34+0800\n"
-"Last-Translator: Tunghsu\n"
+"POT-Creation-Date: 2013-05-20 21:21+0200\n"
+"PO-Revision-Date: 2013-05-20 01:25+1000\n"
+"Last-Translator: Peng <zhang.peng0604@gmail.com>\n"
 "Language-Team: Chinese Simplified <kde-i18n-doc@kde.org>\n"
-"Language: \n"
+"Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Launchpad-Export-Date: 2008-07-19 19:37+0000\n"
-"X-Generator: Lokalize 1.2\n"
-"X-Poedit-Language: Chinese\n"
-"X-Poedit-Country: CHINA\n"
+"X-Generator: Poedit 1.5.5\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
 #: data/base/messages/messages.rmsg:2
@@ -535,9 +533,8 @@ msgstr "增加建筑速度"
 #: data/mp/messages/resmessages12.rmsg:46
 #: data/mp/messages/resmessages23.rmsg:36
 #: data/mp/messages/resmessages3.rmsg:396
-#, fuzzy
 msgid "All trucks upgraded automatically"
-msgstr "自动升级所有火箭系武器"
+msgstr "自动升级所有卡车"
 
 #: data/base/messages/resmessages12.rmsg:59
 #: data/base/messages/resmessages1.rmsg:4
@@ -616,7 +613,7 @@ msgstr "所有反炮兵雷达自动升级"
 #: data/mp/messages/resmessages3.rmsg:683
 #: data/mp/messages/resmessagesall.rmsg:163
 msgid "Cannon Upgrade"
-msgstr "加农炮武器升级"
+msgstr "不能升级"
 
 #: data/base/messages/resmessages12.rmsg:82
 #: data/mp/messages/resmessages12.rmsg:74
@@ -1550,9 +1547,8 @@ msgstr "新的自动化维修技术"
 #: data/base/messages/resmessages3.rmsg:358
 #: data/base/messages/strings/resstrings.txt:335
 #: data/mp/messages/strings/resstrings.txt:363
-#, fuzzy
 msgid "Increases Repair Speed"
-msgstr "增加修理速度"
+msgstr "提高修理速度"
 
 #: data/base/messages/resmessages1.rmsg:216
 #: data/base/messages/resmessages2.rmsg:282
@@ -1572,9 +1568,8 @@ msgstr "可开始研发指挥官系统"
 
 #: data/base/messages/resmessages1.rmsg:226
 #: data/mp/messages/resmessages1.rmsg:205
-#, fuzzy
 msgid "Directs and collates information for command turrets"
-msgstr "指挥统整指挥官车"
+msgstr "在指挥塔中知道和核对信息"
 
 #: data/base/messages/resmessages1.rmsg:227
 #: data/mp/messages/resmessages1.rmsg:206
@@ -2045,9 +2040,8 @@ msgstr "装备半履带推进系统"
 
 #: data/base/messages/resmessages1.rmsg:413
 #: data/mp/messages/resmessages1.rmsg:375
-#, fuzzy
 msgid "Speed: Medium"
-msgstr "移动速度：中"
+msgstr "速度：中"
 
 #: data/base/messages/resmessages1.rmsg:423
 #: data/mp/messages/resmessages1.rmsg:384
@@ -2058,9 +2052,8 @@ msgstr "水陆两用气垫推进动力"
 #: data/base/messages/resmessages1.rmsg:446
 #: data/mp/messages/resmessages1.rmsg:385
 #: data/mp/messages/resmessages1.rmsg:405
-#, fuzzy
 msgid "Speed: Fast"
-msgstr "移动速度：快"
+msgstr "速度：快"
 
 #: data/base/messages/resmessages1.rmsg:425
 #: data/base/messages/resmessages1.rmsg:447
@@ -2115,9 +2108,8 @@ msgstr "装备履带推进系统"
 
 #: data/base/messages/resmessages1.rmsg:435
 #: data/mp/messages/resmessages1.rmsg:395
-#, fuzzy
 msgid "Speed: Slow"
-msgstr "移动速度：慢"
+msgstr "速度：慢"
 
 #: data/base/messages/resmessages1.rmsg:445
 #: data/base/messages/strings/names.txt:976
@@ -3266,9 +3258,8 @@ msgstr "自动升级所有气垫船"
 #: data/mp/messages/resmessages2.rmsg:436
 #: data/mp/messages/resmessages3.rmsg:586
 #: data/mp/messages/strings/resstrings.txt:649
-#, fuzzy
 msgid "All tracks upgraded automatically"
-msgstr "自动升级所有半履带式坦克"
+msgstr "自动升级所有卡车"
 
 #: data/base/messages/resmessages2.rmsg:491
 #: data/base/messages/resmessages3.rmsg:656
@@ -3526,9 +3517,8 @@ msgstr "口径155mm榴弹炮，可指派给雷达导引"
 #: data/base/messages/strings/resstrings.txt:788
 #: data/mp/messages/resmessages2.rmsg:634
 #: data/mp/messages/strings/resstrings.txt:829
-#, fuzzy
 msgid "105m Howitzer firing incendiaries, may be assigned to a sensor"
-msgstr "口径105mm燃烧榴弹炮，可指派给雷达导引"
+msgstr "口径105mm燃烧榴弹炮，可指派给雷达引导"
 
 #: data/base/messages/resmessages2.rmsg:699
 #: data/base/messages/strings/resstrings.txt:789
@@ -4041,7 +4031,6 @@ msgstr "新的高效能推进动力"
 #: data/base/messages/resmessages3.rmsg:677
 #: data/mp/messages/resmessages3.rmsg:605
 #: data/mp/messages/resmessages3.rmsg:615
-#, fuzzy
 msgid "Body Points and Speed Increased"
 msgstr "HP及移动速度增加"
 
@@ -4550,7 +4539,6 @@ msgstr "垂直起飞及降落推进动力"
 
 #: data/base/messages/resmessagesall.rmsg:105
 #: data/mp/messages/resmessagesall.rmsg:125
-#, fuzzy
 msgid "Speed: VTOL"
 msgstr "移动速度：飞行（VTOL）"
 
@@ -5394,9 +5382,8 @@ msgid "Commander, we have defeated NEXUS."
 msgstr "「指挥官，我们必须打败NEXUS」"
 
 #: data/base/messages/strings/cam3strings.txt:55
-#, fuzzy
 msgid "Unfortunately, our systems' performance has been affected by NEXUS. We are trying to rectify this."
-msgstr "「不幸的，我们的电脑系统被NEXUS的攻击影响了，我们正在试着修正它。」"
+msgstr "不幸的是，我们的系统运行中被Nexus攻击。我们正在试图修复这个问题。"
 
 #: data/base/messages/strings/cam3strings.txt:58
 msgid "We are currently receiving this transmission."
@@ -5467,9 +5454,8 @@ msgid "You have an opportunity to destroy NEXUS before they get there."
 msgstr "在他们抵达前，你有个机会可以打败他们"
 
 #: data/base/messages/strings/cam3strings.txt:91
-#, fuzzy
 msgid "Take an attack force and ambush NEXUS task force at ....... the  ......."
-msgstr "组织一个攻击部队并突袭NEXUS的工作部队在...."
+msgstr "组织一个攻击部队并突袭NEXUS的工作部队在..."
 
 #: data/base/messages/strings/cam3strings.txt:94
 msgid "TRANSPORT MISSION: Away Team"
@@ -5818,7 +5804,6 @@ msgid "Repair Turret Viper Wheels"
 msgstr "轮式响尾蛇修理车"
 
 #: data/base/messages/strings/names.txt:172
-#, fuzzy
 msgid "Repair Turret Viper Half-tracks"
 msgstr "半履带式响尾蛇修理车"
 
@@ -5851,17 +5836,14 @@ msgstr "轮式响尾蛇坦克（枪骑兵火箭）"
 
 #: data/base/messages/strings/names.txt:179
 #: data/mp/messages/strings/names.txt:182
-#, fuzzy
 msgid "Mini-Rocket Viper Wheels"
 msgstr "轮式响尾蛇坦克（迷你火箭）"
 
 #: data/base/messages/strings/names.txt:180
-#, fuzzy
 msgid "Mini-Rocket Artillery Viper Wheels"
 msgstr "轮式响尾蛇坦克（迷你火箭炮）"
 
 #: data/base/messages/strings/names.txt:181
-#, fuzzy
 msgid "Bunker Buster Viper Wheels"
 msgstr "轮式响尾蛇坦克（碉堡终结者）"
 
@@ -5884,7 +5866,6 @@ msgid "Cobra Truck"
 msgstr "眼镜蛇工程车"
 
 #: data/base/messages/strings/names.txt:186
-#, fuzzy
 msgid "Sensor Cobra Half-tracks"
 msgstr "半履带式眼镜蛇雷达车"
 
@@ -5912,7 +5893,6 @@ msgid "Lancer Cobra Half-tracks"
 msgstr "半履带式眼镜蛇坦克（枪骑兵火箭）"
 
 #: data/base/messages/strings/names.txt:191
-#, fuzzy
 msgid "Mini-Rocket Artillery Cobra Half-tracks"
 msgstr "半履带式眼镜蛇坦克（迷你火箭炮）"
 
@@ -5984,9 +5964,8 @@ msgstr "轻型小货车"
 
 #: data/base/messages/strings/names.txt:207
 #: data/mp/messages/strings/names.txt:210
-#, fuzzy
 msgid "Cannon Fire Truck"
-msgstr "消防车"
+msgstr "大炮消防车"
 
 #: data/base/messages/strings/names.txt:208
 #: data/mp/messages/strings/names.txt:211
@@ -6482,7 +6461,6 @@ msgid "VTOL CB Tower"
 msgstr "VTOL反炮兵雷达"
 
 #: data/base/messages/strings/names.txt:428
-#, fuzzy
 msgid "VTOL Radar Tower"
 msgstr "VTOL反炮兵雷达塔"
 
@@ -6562,7 +6540,6 @@ msgstr "枪骑兵火箭防卫塔"
 #: data/base/messages/strings/names.txt:443
 #: data/mp/messages/strings/names.txt:442
 #: data/mp/messages/strings/names.txt:769
-#, fuzzy
 msgid "Mini-Rocket Tower"
 msgstr "迷你火箭炮防卫塔"
 
@@ -6895,7 +6872,6 @@ msgstr "碉堡终结者"
 #: data/base/messages/strings/names.txt:1183
 #: data/mp/messages/strings/names.txt:525
 #: data/mp/messages/strings/names.txt:1198
-#, fuzzy
 msgid "Mini-Rocket Pod"
 msgstr "迷你火箭升级"
 
@@ -7443,7 +7419,6 @@ msgid "Lancer Guard Tower"
 msgstr "枪骑兵火箭防卫塔"
 
 #: data/base/messages/strings/names.txt:759
-#, fuzzy
 msgid "Mini-Rocket Guard Tower"
 msgstr "迷你火箭防卫塔"
 
@@ -8862,9 +8837,8 @@ msgstr "拾荒者枪塔"
 
 #: data/base/messages/strings/names.txt:1203
 #: data/mp/messages/strings/names.txt:1218
-#, fuzzy
 msgid "Scavenger Horizontal Wall"
-msgstr "拾荒者矮墙"
+msgstr "拾荒者横墙"
 
 #: data/base/messages/strings/names.txt:1204
 #: data/mp/messages/strings/names.txt:1219
@@ -9058,7 +9032,6 @@ msgstr "大天使导弹炮台"
 
 #: data/base/messages/strings/names.txt:1423
 #: data/mp/messages/strings/names.txt:1888
-#, fuzzy
 msgid "Repair Turret Cobra Tracks"
 msgstr "履带式眼镜蛇修理车"
 
@@ -9176,7 +9149,6 @@ msgstr "重型修理单位"
 
 #: data/base/messages/strings/resstrings.txt:449
 #: data/mp/messages/strings/resstrings.txt:479
-#, fuzzy
 msgid "Research Breakthrough Improves Repair Speeds"
 msgstr "研发的成果让修理速度有惊人的进步"
 
@@ -9412,14 +9384,12 @@ msgid "Congratulations commander - you are ready for your first mission"
 msgstr "恭喜你指挥官！！你已经完成了你的第一个任务！"
 
 #: data/base/sequenceaudio/cam1/c001end.txt:1
-#, fuzzy
 msgid "Incoming Transmission"
-msgstr "传入讯息"
+msgstr "信号传入"
 
 #: data/base/sequenceaudio/cam1/c001end.txt:3
-#, fuzzy
 msgid "Transmission from Beta Base"
-msgstr "由特遣队传来了讯息"
+msgstr "由Beta基地传来了讯息"
 
 #: data/base/sequenceaudio/cam1/c001end.txt:4
 msgid "Mayday! Mayday!"
@@ -9431,20 +9401,19 @@ msgstr "请帮帮我"
 
 #: data/base/sequenceaudio/cam1/c001.txa:1
 msgid "CAMPAIGN ONE"
-msgstr ""
+msgstr "战役一"
 
 #: data/base/sequenceaudio/cam1/c001.txa:2
 msgid "WESTERN SECTOR"
-msgstr ""
+msgstr "西部篇"
 
 #: data/base/sequenceaudio/cam1/c001.txa:4
 msgid "Dawn, July 4th, 2100"
-msgstr ""
+msgstr "2100年7月4日 黎明"
 
 #: data/base/sequenceaudio/cam1/c001.txa:5
-#, fuzzy
 msgid "Project HQ"
-msgstr "计画目标"
+msgstr "项目总部"
 
 #: data/base/sequenceaudio/cam1/c001.txa:6
 msgid "A New Era"
@@ -9452,16 +9421,15 @@ msgstr "新时代"
 
 #: data/base/sequenceaudio/cam1/c001.txa:8
 msgid "Morning, July 4th, 2100"
-msgstr ""
+msgstr "2100年7月4日 上午"
 
 #: data/base/sequenceaudio/cam1/c001.txa:9
 msgid "In-flight to Western Sector"
 msgstr "与西方国家交战"
 
 #: data/base/sequenceaudio/cam1/c001.txa:10
-#, fuzzy
 msgid "Team Alpha nears its destination"
-msgstr "Alpha 中队被消灭了"
+msgstr "Alpha 中队接近了目的地"
 
 #: data/base/sequenceaudio/cam1/c001.txt:1
 msgid "Transport destinations follow:"
@@ -9469,41 +9437,39 @@ msgstr "以下是运输目的地："
 
 #: data/base/sequenceaudio/cam1/c001.txt:2
 msgid "Alpha - Western Sector...."
-msgstr ""
+msgstr "Alpha支队-西部篇"
 
 #: data/base/sequenceaudio/cam1/c001.txt:4
 msgid "Alpha you are cleared for take-off."
-msgstr ""
+msgstr "Alpha， 你们已经可以起飞"
 
 #: data/base/sequenceaudio/cam1/c001.txt:5
 msgid "Good luck and good hunting."
-msgstr ""
+msgstr "祝你好运！开始作战吧！"
 
 #: data/base/sequenceaudio/cam1/c001.txt:7
 msgid "Approaching Landing Zone. Team Alpha Briefing commences."
-msgstr ""
+msgstr "接近着陆区域。Alpha队简报开始。"
 
 #: data/base/sequenceaudio/cam1/c001.txt:9
 msgid "Commander, you lead Team Alpha, one of three expeditionary teams sent out by the Project to recover artifacts from before the Collapse."
-msgstr ""
+msgstr "指挥官，由你来指挥三支被the Project 送出的远征军之一的Alpha分队。"
 
 #: data/base/sequenceaudio/cam1/c001.txt:11
 msgid "Your destination lies in the western zone."
-msgstr ""
+msgstr "你的目的地在西部区域"
 
 #: data/base/sequenceaudio/cam1/cam1ccom.txt:4
-#, fuzzy
 msgid "Commander, we have recovered a command turret from the New Paradigm."
-msgstr "我们刚解码出了传出自New Paradigm的讯息"
+msgstr "指挥官，我们找到了一个来自New Paradigm的指挥塔。"
 
 #: data/base/sequenceaudio/cam1/cam1ccom.txt:6
 msgid "This turret allows commanders to coordinate attacks between assigned units and to act as a delivery point for factories. Researching and using this technology has the highest priority."
-msgstr ""
+msgstr "这个塔准许指挥官对武装车辆的攻击进行协调并且可以作为设备的运送点。研究和使用这种技术有最高的优先级。"
 
 #: data/base/sequenceaudio/cam1/cam1ccom.txt:8
-#, fuzzy
 msgid "Commander, we are receiving this transmission."
-msgstr "我们刚刚接收到这个讯息"
+msgstr "指挥官，我们刚刚接收到这个讯息"
 
 #: data/base/sequenceaudio/cam1/cam1cnp.txt:4
 #: data/base/sequenceaudio/cam1/sub13np2.txt:4
@@ -9512,33 +9478,28 @@ msgstr "你对我们的攻击不会逃脱惩罚"
 
 #: data/base/sequenceaudio/cam1/cam1cnp.txt:5
 #: data/base/sequenceaudio/cam1/sub13np2.txt:5
-#, fuzzy
 msgid "You are in contravention of the New Paradigm."
-msgstr "恭喜你打败了The New Paradigm"
+msgstr "你违反了The New Paradigm"
 
 #: data/base/sequenceaudio/cam1/cam1dnp.txt:4
 msgid "All attack groups commence attack on enemy."
 msgstr "所有攻击单位一同打击敌人"
 
 #: data/base/sequenceaudio/cam1/cam1dnp.txt:5
-#, fuzzy
 msgid "They are in contravention of the New Paradigm."
-msgstr "恭喜你打败了The New Paradigm"
+msgstr "他们违反了The New Paradigm"
 
 #: data/base/sequenceaudio/cam1/cam1dnp.txt:7
-#, fuzzy
 msgid "They must be eradicated."
-msgstr "必须阻止他们！"
+msgstr "必须消灭他们！"
 
 #: data/base/sequenceaudio/cam1/cam1dp2.txt:4
-#, fuzzy
 msgid "Secure the LZ and establish a forward base."
 msgstr "确保降落点的安全，并建立一个前进基地"
 
 #: data/base/sequenceaudio/cam1/cam1dp2.txt:5
-#, fuzzy
 msgid "Then destroy the New Paradigm's base."
-msgstr "然后摧毁这个营区"
+msgstr "然后摧毁New Paradigm的基地"
 
 #: data/base/sequenceaudio/cam1/cam1out2.txt:1
 msgid "Open your systems to me."
@@ -9546,341 +9507,331 @@ msgstr "对我开放你的系统"
 
 #: data/base/sequenceaudio/cam1/cam1out2.txt:2
 msgid "Let me meld with your machines and cyborgs."
-msgstr ""
+msgstr "让我与你的装备和机器人融合作战！"
 
 #: data/base/sequenceaudio/cam1/cam1out2.txt:4
 msgid "We will create the perfect nexus of man and machine."
-msgstr ""
+msgstr "让我们在人和机器之间建立一个完美的连接。"
 
 #: data/base/sequenceaudio/cam1/cam1out2.txt:5
 msgid "Together we can create a new world."
-msgstr ""
+msgstr "让我们一起建立一个全新的世界。"
 
 #: data/base/sequenceaudio/cam1/cam1out2.txt:7
 msgid "I can give you power beyond your wildest dreams."
-msgstr ""
+msgstr "我可以赐予你席卷八荒的力量。"
 
 #: data/base/sequenceaudio/cam1/cam1out2.txt:9
 msgid "Open your systems to me and you will be strong."
-msgstr ""
+msgstr "向我敞开你的系统可以使你变得强大。"
 
 #: data/base/sequenceaudio/cam1/cam1out2.txt:10
 msgid "I can raise you as gods upon the blasted earth."
-msgstr ""
+msgstr "我可以赐予你像众神凌驾于荒芜大地一样的地位。"
 
 #: data/base/sequenceaudio/cam1/cam1out3.txt:4
 msgid "When we failed to respond it became threatening."
-msgstr ""
+msgstr "如果回应失败，它将成为威胁。"
 
 #: data/base/sequenceaudio/cam1/cam1out4.txt:1
 msgid "Your interference in my plans for the New Paradigm will not go unpunished."
-msgstr ""
+msgstr "你在New Paradigm中对我方领地进行的干扰是不能被免于责罚的。"
 
 #: data/base/sequenceaudio/cam1/cam1out4.txt:2
 msgid "You are weak flesh-things. I am strong and have many parts."
-msgstr ""
+msgstr "你这个弱小的羔羊，我是集多方面组合的强大存在。"
 
 #: data/base/sequenceaudio/cam1/cam1out4.txt:4
 msgid "You may defeat me here, but I shall rise again."
-msgstr ""
+msgstr "你可能在这里击败我，但我会东山再起的。"
 
 #: data/base/sequenceaudio/cam1/cam1out4.txt:5
 #: data/base/sequenceaudio/cam2/cam2_2n2.txt:1
 msgid "As I once cleansed the world with fire, I will destroy you and your puny Project!!"
-msgstr ""
+msgstr "我会让烈火燃烧整个大地，摧毁你和你渺小的一切。"
 
 #: data/base/sequenceaudio/cam1/cam1out5.txt:4
 msgid "Nexus then removed itself from the system, destroying its memory banks, and removing all traces of its external connections."
-msgstr ""
+msgstr "连接并将它从系统中删除，摧毁它的历史记忆，断绝它和外部的一切联系。"
 
 #: data/base/sequenceaudio/cam1/cam1out5.txt:6
 msgid "We are not sure what Nexus is or who or what is directing it. Initial research links the Nexus Intruder Program with the Reed Corporation, the developer of the synaptic link."
-msgstr ""
+msgstr "我们既不知道Nexus是什么，也不知道是什么或是谁在操控着它。最初的研究是Nexus入侵系统和Reed Corporation之间的连接，突触联系的开发者。"
 
 #: data/base/sequenceaudio/cam1/cam1out5.txt:8
 msgid "We have ascertained that Nexus supplied the New Paradigm with most of its technology. Whatever Nexus is, it's more than a computer parasite."
-msgstr ""
+msgstr "我们确定Nexus为New Paradigm提供了大部分技术支持。不论Nexus是什么，它都不仅仅是一个计算机中的寄生虫。"
 
 #: data/base/sequenceaudio/cam1/cam1out5.txt:10
-#, fuzzy
 msgid "It has technology and weapons. It knows about us, and it's not friendly."
-msgstr "NEXUS 拥有先进的科技与武器—而且他们并不友善"
+msgstr "NEXUS 拥有先进的科技与武器，并且发现了我们，他们并不友善"
 
 #: data/base/sequenceaudio/cam1/map1a_c.txt:4
 msgid "The Synaptic Link was developed by the Reed Corporation in conjunction with the US Military."
-msgstr ""
+msgstr "在与 US Military 连接时，Reed Corporation 将建立 Synaptic 连接。"
 
 #: data/base/sequenceaudio/cam1/map1a_c.txt:6
+#, fuzzy
 msgid "The synaptic link allows for almost instantaneous transfer of thought from human operators to vehicle control and guidance systems. The synaptic link is fitted into the base of the skull circling the spinal column."
-msgstr ""
+msgstr "突触连接使得操作者的想法与车辆控制和制导系统之间的转换可以几乎瞬间完成。突触连接为头盖骨环绕脊柱的基础提供设备。"
 
 #: data/base/sequenceaudio/cam1/map1a_c.txt:8
 msgid "The link has a hi-speed data transfer port that plugs into any computer system."
-msgstr ""
+msgstr "这个连接具有一个可以插入到任何计算机的高速数据传输端口。"
 
 #: data/base/sequenceaudio/cam1/map1a_c.txt:10
 msgid "More importantly the development of the synaptic link made the creation of cyborgs possible. Early attempts at power suits for individual soldiers failed as they proved to be slow and unresponsive."
-msgstr ""
+msgstr "更重要的是，突触连接的发展使得建立半机械人成为可能。早期对单独士兵的适合能力的尝试失败了，因为他们被证明是缓慢的和行动迟缓的。"
 
 #: data/base/sequenceaudio/cam1/map1a_c.txt:12
 msgid "The synaptic link allowed soldiers to be placed in power suits that they controlled as easily as their own bodies. Power suits allowed infantry to function effectively on the battlefields of the 21st Century."
-msgstr ""
+msgstr "突触连接准许士兵像从前控制自己的身体一样，来控制合适的力量。在21世纪，力量的匹配使得步兵团在战场上作战更有效率。"
 
 #: data/base/sequenceaudio/cam1/map1a_c.txt:14
 msgid "Unfortunately, this technology has fallen into the hands of the New Paradigm. It is imperative that you research and develop synaptic link technologies."
-msgstr ""
+msgstr "不幸的是，这项技术落到了New Paradigm的手中。你来研究和开发突触连接技术是势在必行，刻不容缓的。"
 
 #: data/base/sequenceaudio/cam1/sub13np1.txt:4
 msgid "Warning!"
-msgstr ""
+msgstr "警告！"
 
 #: data/base/sequenceaudio/cam1/sub13np1.txt:5
 msgid "You are entering a restricted area."
-msgstr ""
+msgstr "你进入了禁区。"
 
 #: data/base/sequenceaudio/cam1/sub13np1.txt:7
 msgid "Return to your designated zone or be destroyed."
-msgstr ""
+msgstr "回到指定区域，否则你将被摧毁。"
 
 #: data/base/sequenceaudio/cam1/sub13np1.txt:8
 msgid "Repeat. Return to your designated zone or be destroyed."
-msgstr ""
+msgstr "重复一遍。回到指定区域，否则你将被摧毁。"
 
 #: data/base/sequenceaudio/cam1/sub13np1.txt:9
 msgid "Message Ends."
-msgstr ""
+msgstr "消息结束。"
 
 #: data/base/sequenceaudio/cam1/sub13np2.txt:8
 msgid "You will be destroyed."
-msgstr ""
+msgstr "你将被摧毁。"
 
 #: data/base/sequenceaudio/cam1/sub14anp.txt:4
-#, fuzzy
 msgid "NEXUS, the synaptic technology you required has been recovered and sent for collection."
-msgstr "寻获突触连结科技！"
+msgstr "NEXUS，寻获突触连结科技并已经采集发送！"
 
 #: data/base/sequenceaudio/cam1/sub1_4bn.txt:4
 msgid "You have done well."
-msgstr ""
+msgstr "你做得很好。"
 
 #: data/base/sequenceaudio/cam1/sub1_4bn.txt:5
 msgid "Once we have analyzed and authenticated the technology, your reward  will follow."
-msgstr ""
+msgstr "一旦此技术得到分析和认证，我们随后就会给予你报酬。"
 
 #: data/base/sequenceaudio/cam1/sub1_5pl.txt:4
 msgid "Information discovered at the previous enemy base indicates that the New Paradigm recovered two synaptic link artifacts."
-msgstr ""
+msgstr "前军人基地获得的信息显示New Paradigm重新获得了两个突触连接的人工产品。"
 
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:4
 msgid "This Nexus Intruder Program is a self-mutating computer parasite. This makes it difficult to eradicate from systems once it has been identified."
-msgstr ""
+msgstr "Nexus入侵者系统是一个自变异的计算机寄生虫。这就使得在发现时想要将其从系统清除是十分困难的。"
 
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:6
 msgid "We have been unable to ascertain it's ultimate goal or function. In its initial form it seeks out and isolates sections of memory from the rest of the invaded system. It then begins to mutate itself and data structures, effectively reprogramming the system from within."
-msgstr ""
+msgstr "我们无法确定他的最终目标和功能。 从它的搜索和其余的入侵系统的相关记忆片段将其初始化。他开始改变他自己和初始结构，有效地重组体制的内部。"
 
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:8
 msgid "Further analysis was prevented by the manual shutdown of the system by our technicians to prevent additional contamination by the Nexus Intruder Program."
-msgstr ""
+msgstr "我们的技术人员手动关闭系统可以阻止进一步研究，以及由Nexus入侵系统带来的进一步污染。"
 
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:10
 msgid "However, the spread of the Nexus Intruder Program was not checked by New Paradigm. We need to capture New Paradigm's core systems to further investigate Nexus and determine its origins."
-msgstr ""
+msgstr "然而，New Paradigm没有检查Nexus入侵程序的速度。我们需要计算New Paradigm 的核心系统区进一步研究Nexus然后确定其起源。"
 
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:12
 msgid "Commander, you are to curtail the New Paradigm's activities in this sector and locate their main base."
-msgstr ""
+msgstr "指挥官，本章你的任务是缩短 New Paradigm 的活动并且定位它们的主要基地。"
 
 #: data/base/sequenceaudio/cam2/c002.txa:1
 msgid "CAMPAIGN TWO"
-msgstr ""
+msgstr "战役二"
 
 #: data/base/sequenceaudio/cam2/c002.txa:2
 msgid "EASTERN SECTOR"
-msgstr ""
+msgstr "东部篇"
 
 #: data/base/sequenceaudio/cam2/c002.txa:4
 msgid "Morning, September 1st, 2100"
-msgstr ""
+msgstr "2100年9月1日 上午"
 
 #: data/base/sequenceaudio/cam2/c002.txa:5
 msgid "In-flight to Eastern Sector"
-msgstr ""
+msgstr "飞到东部篇"
 
 #: data/base/sequenceaudio/cam2/c002.txa:6
-#, fuzzy
 msgid "Team Alpha approaches Beta Base"
-msgstr "Alpha 中队被消灭了"
+msgstr "Alpha 中对接近了Beta基地"
 
 #: data/base/sequenceaudio/cam2/c002.txa:10
-#, fuzzy
 msgid "You must defend and hold it at all costs."
-msgstr "你必须防御所有的攻击并保住这个基地"
+msgstr "你必须不惜一切代价的抵御所有攻击来捍卫它。"
 
 #: data/base/sequenceaudio/cam2/c002.txa:12
 msgid "THE COLLECTIVE"
-msgstr ""
+msgstr "集团"
 
 #: data/base/sequenceaudio/cam2/c2diif2.txt:1
-#, fuzzy
 msgid "Commander, a new launch has been detected."
-msgstr "「指挥官，我们必须打败NEXUS」"
+msgstr "指挥官，发现一个新的登陆点。"
 
 #: data/base/sequenceaudio/cam2/c2diif2.txt:2
 msgid "It is likely to be targeted at your location."
-msgstr ""
+msgstr "它很可能瞄准了你的所在地。"
 
 #: data/base/sequenceaudio/cam2/c2diif2.txt:4
-#, fuzzy
 msgid "You are to start the immediate evacuation of Beta Base to the safe haven."
-msgstr "你必须建立一个撤退安全的避难所以供撤退"
+msgstr "你必须建立一个撤退安全的避难所以供撤退 "
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:1
 msgid "NASDA is the North American Strategic Defense Agency."
-msgstr ""
+msgstr "NASDA 是北美策略防御机构。"
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:3
 msgid "NASDA was formed in 2076 to defend North America from conventional and nuclear attack. The construction of a satellite defense system began in 2081 and was completed in 2082."
-msgstr ""
+msgstr "NASDA 建立于2076年，旨在北美遭受常规或核战争时起到防御作用。这个卫星防御体系始于2081年，于2082年完成。"
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:6
 msgid "In 2085 the NASDA satellites fired their nukes at Earth."
-msgstr ""
+msgstr "2085年，NASDA 的卫星向地球发射核武器。"
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:8
 msgid "There were also ground-based sites. Many of these were destroyed in the nuclear counterstrikes, but there's bound to be some out there."
-msgstr ""
+msgstr "这有很多地面基站。很多被核反击摧毁了，但一定有很多还在那。"
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:10
 msgid "The NASDA satellites also contained pulse-lasers designed to shoot down missiles approaching North America."
-msgstr ""
+msgstr "这个NASDA卫星还含有脉冲激光旨在击落接近北美的导弹。"
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:12
 msgid "During the counterstrikes, these LasSats failed to fire. If brought into operation, these LasSats could inflict major damage on ground targets."
-msgstr ""
+msgstr "在反击中，LasSats在火拼中失败了。如果启动，这些LasSates会对地面目标造成严重的伤害。"
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:14
 msgid "All nukes targeted at  North America found their targets."
-msgstr ""
+msgstr "所有针对北美的核武器均发现了它们的目标。"
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:16
 msgid "We know that Nexus is searching for NASDA Central in the Eastern Sector. This was one of the land-based control centres for the satellites."
-msgstr ""
+msgstr "我们知道Nexus正在搜索东部的NASDA中心。这是卫星的其中一个以地面为基础的控制中心。"
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:18
 msgid "If the centre is found intact, NEXUS may gain control of the satellites."
-msgstr ""
+msgstr "如果中心发现完好无损，NEXUS 会获得对卫星的控制。"
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:20
 msgid "Nexus claimed that it had already destroyed the world."
-msgstr ""
+msgstr "Nexus 声称它已经摧毁了地球。"
 
 #: data/base/sequenceaudio/cam2/cam2_2n.txt:1
 msgid "Warriors of the Collective, I seek the location of NASDA Central."
-msgstr ""
+msgstr "集团中的战士们，我已定位了NEXUS 中心。"
 
 #: data/base/sequenceaudio/cam2/cam2_2n.txt:2
 msgid "It lies somewhere in your territory."
-msgstr ""
+msgstr "它在你们领地的某个地发。"
 
 #: data/base/sequenceaudio/cam2/cam2_2n.txt:4
 msgid "Find it for me and I shall provide you with further weapons to aid you in your war against the Project."
-msgstr ""
+msgstr "为我找到它，我会为你提供更多能在战斗中帮助你的武器。"
 
 #: data/base/sequenceaudio/cam2/cam22pl2.txt:1
 msgid "NASDA Briefing follows..."
-msgstr ""
+msgstr "NASDA 简报如下："
 
 #: data/base/sequenceaudio/cam2/cam22pl3.txt:1
 msgid "We've got to make sure that it can't do it again."
-msgstr ""
+msgstr "我们必须确保它不会重蹈覆辙。"
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:1
 msgid "Analysis indicates that these systems were part of the control system for the NASDA satellites."
-msgstr ""
+msgstr "分析表明,这些系统是NASDA卫星控制系统的一部分。"
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:2
 msgid "It's now certain that Nexus was responsible for The Collapse."
-msgstr ""
+msgstr "可以确定 Nexus 要为 The Collapse 负责任。"
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:4
 msgid "During the early stages of the Collapse, NASDA technicians switched off  the infected systems in order to isolate the spread of Nexus. This seems to have prevented the LasSats from firing during the counterstrikes."
-msgstr ""
+msgstr "Collapse的早期阶段，NASDA的技术员关闭了传染系统为了隔离Nexus的速度。这似乎阻止了LasSats在战火中的反击。"
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:6
 msgid "The ensuing nuclear-magnetic pulses wiped clean large amounts of NASDA's memory banks, shattering its core processor, and sent shockwaves blasting through Nexus."
-msgstr ""
+msgstr "随之而来的核脉冲试接清理了大量的NASDA的存储机构，粉碎其核心处理器，并且通过Nexus发送冲击波爆破。"
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:8
 msgid "Nexus was fried as whole sections of its consciousness were obliterated in the counterstrikes."
-msgstr ""
+msgstr "Nexus被炸为一个全部的部分，它的意识在反击中被阻塞。"
 
 #: data/base/sequenceaudio/cam2/cam26bfm.txt:1
-#, fuzzy
 msgid "Commander we are detecting transmissions from this site that are reaching high orbit."
-msgstr "我们侦测到了有资料从这座建筑物中传送到高空卫星上"
+msgstr "指挥官，我们侦测到了有资料从这座建筑物中传送到高空卫星上"
 
 #: data/base/sequenceaudio/cam2/cam26bfm.txt:3
-#, fuzzy
 msgid "Nexus has now reconnected itself with the NASDA satellites."
 msgstr "NEXUS已经与NASDA的卫星重新取得连结了"
 
 #: data/base/sequenceaudio/cam2/cam26bfm.txt:5
 msgid "This poses a major threat to the Project and to our survival."
-msgstr ""
+msgstr "这个姿势是项目和我方生存的重要威胁。"
 
 #: data/base/sequenceaudio/cam2/cam26pl1.txt:1
 msgid "Analysis of NASDA Central leaves no doubt that The Collective has introduced the Nexus Intruder Virus to it."
-msgstr ""
+msgstr "对NASDA 中心的分析指出，The Collective 无疑为它介绍了 Nexus Intruder Viru。"
 
 #: data/base/sequenceaudio/cam2/cam26pl1.txt:3
 msgid "The nuclear reactor was going to be used to power a vast network of pre-Collapse computer systems."
-msgstr ""
+msgstr "核反应堆将用于算机系统崩溃之前的绝网动力。"
 
 #: data/base/sequenceaudio/cam2/cam27fmv.txt:1
-#, fuzzy
 msgid "Commander, we have just detected a missile launch at these coordinates."
-msgstr "指挥官，我们在发射井内发现了导弹"
+msgstr "指挥官，我们在这些坐标地发现了一个导弹发射地。"
 
 #: data/base/sequenceaudio/cam2/cam27fmv.txt:3
 msgid "Team Gamma are sending a team to investigate the launch site and to prevent any further launches."
-msgstr ""
+msgstr "Gamma队派遣了一个小分队去探索发射区域以防止进一步的攻击。"
 
 #: data/base/sequenceaudio/cam2/cam27fmv.txt:5
 msgid "We can only assume that Nexus has gained control of this site. We cannot determine whether the missile is nuclear-armed or where it is targeted. You are advised to begin preparations for the evacuation of your base."
-msgstr ""
+msgstr "我们只能假设Nexus控制了这个网站。我们无法确定导弹是否是核武器装备的以及他的目标是那里。建议你为重新评估你的基地开始准备。"
 
 #: data/base/sequenceaudio/cam2/cam2acol.txt:1
 msgid "Warriors of The Collective, more intruders are entering our territory."
-msgstr ""
+msgstr "The Collective的部队，更多的入侵者进入我们的领地。"
 
 #: data/base/sequenceaudio/cam2/cam2acol.txt:2
 msgid "They are not part of the machine."
-msgstr ""
+msgstr "它们不是机器的一部分。"
 
 #: data/base/sequenceaudio/cam2/cam2acol.txt:4
-#, fuzzy
 msgid "Warriors of The Collective, attack and destroy kill all who resist the machine."
-msgstr "打败并杀掉所有跟「机器」抵抗的人"
+msgstr "The Collectiv部队，袭击比摧毁杀掉所有的机器抵抗者。"
 
 #: data/base/sequenceaudio/cam2/cam2acol.txt:5
 msgid "Attack! Erase their presence from this area!"
-msgstr ""
+msgstr "进攻！让他们从世界上消失！"
 
 #: data/base/sequenceaudio/cam2/cam2bcol.txt:1
 msgid "Warriors of The Collective, we are ready to destroy the intruders who pollute our lands."
-msgstr ""
+msgstr "The Collective部队，我们正在为摧毁入侵者做准备。"
 
 #: data/base/sequenceaudio/cam2/cam2bcol.txt:3
 msgid "Those of the Project are not of the machine. They have been denied its blessing. We who have embraced the power of the machine have a destiny to sweep away such weak creatures."
-msgstr ""
+msgstr "这些项目并不是机器。他们一直拒绝它的祝福。我们这些被赋予权力的机器的命运是清理这些弱小的生物。"
 
 #: data/base/sequenceaudio/cam2/cam2bcol.txt:6
 msgid "They shall fall before the might of The Collective."
-msgstr ""
+msgstr "他们会在The Collective.的力量下倒下。"
 
 #: data/base/sequenceaudio/cam2/cam2bcol.txt:8
-#, fuzzy
 msgid "Attack and destroy all who resist the machine."
 msgstr "打败并杀掉所有跟「机器」抵抗的人"
 
@@ -9890,488 +9841,462 @@ msgstr "攻击！"
 
 #: data/base/sequenceaudio/cam2/cam2dico.txt:1
 msgid "Warriors of the Collective, Nexus has given us the power of the machine so that we can destroy all that oppose us."
-msgstr ""
+msgstr "The Collective的部队，Nexus赋予我们力量要我们清除所有反对我们的势力。"
 
 #: data/base/sequenceaudio/cam2/cam2dico.txt:3
 msgid "Nexus now asks us to crush the Project."
-msgstr ""
+msgstr "Nexus 现在要求我们粉碎项目。"
 
 #: data/base/sequenceaudio/cam2/cam2dico.txt:4
-#, fuzzy
 msgid "Cleanse and destroy!!"
-msgstr "搜寻以及摧毁"
+msgstr "净化和摧毁！！"
 
 #: data/base/sequenceaudio/cam2/cam2diin.txt:1
-#, fuzzy
 msgid "Warriors of the Collective. You have performed well."
-msgstr "the Collective 的战士们..."
+msgstr "the Collective 的战士们， 你们做的很好。"
 
 #: data/base/sequenceaudio/cam2/cam2diin.txt:2
 msgid "Your just reward is on its way."
-msgstr ""
+msgstr "你在获得奖励的路上。"
 
 #: data/base/sequenceaudio/cam2/cam2diin.txt:4
 msgid "The Project is fleeing its base and stealing your technology."
-msgstr ""
+msgstr "此项工程从它的基地消失并且正在窃取你的技术。"
 
 #: data/base/sequenceaudio/cam2/cam2diin.txt:5
 msgid "You must stop them!"
-msgstr ""
+msgstr "你必须阻止他们！"
 
 #: data/base/sequenceaudio/cam2/cam2dipl.txt:1
-#, fuzzy
 msgid "Decoding Transmission..."
-msgstr "传来讯息..."
+msgstr "解码传输..."
 
 #: data/base/sequenceaudio/cam3/c003.txa:1
 msgid "CAMPAIGN THREE"
-msgstr ""
+msgstr "战役三"
 
 #: data/base/sequenceaudio/cam3/c003.txa:2
 msgid "NORTHERN SECTOR"
-msgstr ""
+msgstr "北部篇"
 
 #: data/base/sequenceaudio/cam3/c003.txa:8
 msgid "Dusk, December 3rd, 2100"
-msgstr ""
+msgstr "2100年12月3日，黄昏"
 
 #: data/base/sequenceaudio/cam3/c003.txa:9
 msgid "In-flight to Northern Sector"
-msgstr ""
+msgstr "飞到北部篇"
 
 #: data/base/sequenceaudio/cam3/c003.txa:10
 msgid "The Final Encounter"
-msgstr ""
+msgstr "最终遭遇"
 
 #: data/base/sequenceaudio/cam3/c003.txa:12
-#, fuzzy
 msgid "Briefing Commences"
 msgstr "简报开始："
 
 #: data/base/sequenceaudio/cam3/c003.txt:1
 msgid "Personnel at Gamma Base have confirmed that the nuclear missiles targeted at Alpha and Beta bases were launched from a silo in their sector."
-msgstr ""
+msgstr "Gamma基地的人员已确认它们的一个部门的简仓会发射核弹，其目标是Alpha 和beta的基地。"
 
 #: data/base/sequenceaudio/cam3/c003.txt:4
 msgid "Team Gamma is currently scouting the silo's location and monitoring NEXUS's activity."
-msgstr ""
+msgstr "Gamma 队正在侦查简仓的位置并且监视NEXUS的活动。"
 
 #: data/base/sequenceaudio/cam3/c3ad2n2.txt:1
-#, fuzzy
 msgid "Time's up commander!!"
-msgstr "检视下一部指挥车"
+msgstr "指挥官，时间到啦！！"
 
 #: data/base/sequenceaudio/cam3/c3ad2pl3.txt:1
-#, fuzzy
 msgid "Commander, we are detecting NEXUS forces from these coordinates..."
-msgstr "我们在这个区域侦测到了敌军"
+msgstr "指挥官，我们在这个坐标区域侦测到了Nexus敌军"
 
 #: data/base/sequenceaudio/cam3/cam3_1bn.txt:1
 msgid "Well done Commander, you've prevented my last missile from launching."
-msgstr ""
+msgstr "做得好指挥官，你成功的阻止了我的最后的导弹发射。"
 
 #: data/base/sequenceaudio/cam3/cam3_1bn.txt:2
 msgid "Such a shame. Your Project HQ would have made a wonderful target."
-msgstr ""
+msgstr "真是可耻。你的项目总部会是一个美妙的目标。"
 
 #: data/base/sequenceaudio/cam3/cam3_1bn.txt:4
 msgid "But it's good of you to join me here."
-msgstr ""
+msgstr "但是加入我无疑是对你有好处的。"
 
 #: data/base/sequenceaudio/cam3/cam3_1bn.txt:6
 msgid "Buried beneath this silo is a tactical nuclear warhead that is set to go off soon."
-msgstr ""
+msgstr "在这个简仓下埋葬着一个战术核弹头，马上就要爆炸。"
 
 #: data/base/sequenceaudio/cam3/cam3_1bn.txt:9
 msgid "As I cannot launch it, it'll just have to blow where it is."
-msgstr ""
+msgstr "不能将其发射，只能在其所在地进行击打。"
 
 #: data/base/sequenceaudio/cam3/cam3_1bn.txt:11
 msgid "Please note that all entrances to the underground complex have been sealed. Goodbye, Commander."
-msgstr ""
+msgstr "请注意该复杂地下结构的所有入口都被封闭了。再见吧，指挥官。"
 
 #: data/base/sequenceaudio/cam3/cam32a2.txt:1
-#, fuzzy
 msgid "Glad you could make it, Commander."
-msgstr "祝你好运，指挥官。"
+msgstr "指挥官，很高兴你做到了。"
 
 #: data/base/sequenceaudio/cam3/cam32a2.txt:4
 msgid "Enemy strike VTOLs have got us pinned down. We've managed to hold off cyborgs and tanks, but we haven't been able to make any progress along the valley."
-msgstr ""
+msgstr "我方被敌人军队VTOLs的攻击所压制。我们已经设法拖延半机械人和坦克，但是我们没能在山谷中取得任何进展。"
 
 #: data/base/sequenceaudio/cam3/cam32a2.txt:7
 msgid "Can you try and reach us with anti-aircraft units?"
-msgstr ""
+msgstr "你能用防空部队找到并到达我方吗？"
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:1
 msgid "This is Team Alpha. Repeat, this is Team Alpha. We require immediate assistance."
-msgstr ""
+msgstr "我们是Alpha队。重复，我们是Alpha队。我们要求紧急支援。"
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:4
 msgid "We are under heavy attack from cyborgs, laser tanks, and strike VTOLs."
-msgstr ""
+msgstr "我们受到了机器人，激光战车和 VTOLs 的强烈攻击。"
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:6
 msgid "We were trying to reach your position, but have been ambushed."
-msgstr ""
+msgstr "我们正在设法到达你所在位置，但是在途中受到了埋伏。"
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:7
-#, fuzzy
 msgid "We're holed up in  a valley at these coordinates."
-msgstr "指挥官，我们在发射井内发现了导弹"
+msgstr "我们藏在这些坐标中的山区里。"
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:8
 msgid "Please assist."
-msgstr ""
+msgstr "请求支援。"
 
 #: data/base/sequenceaudio/cam3/cam32pl2.txt:4
 msgid "Commander, forces from Team Alpha escaped the nuclear attack on Alpha Base."
-msgstr ""
+msgstr "指挥官,Alpha 队的武装部队从Alpha基地的核攻击中逃脱。"
 
 #: data/base/sequenceaudio/cam3/cam34mu1.txt:1
 msgid "We are experiencing some interference from NEXUS."
-msgstr ""
+msgstr "我们正在经历一些从NEXUS中获得的干扰。"
 
 #: data/base/sequenceaudio/cam3/cam34mu1.txt:3
 msgid "You must destroy his command centre before we lose control of key systems."
-msgstr ""
+msgstr "在我们失去关键系统的控制前，你放必需摧毁他的指挥中心。"
 
 #: data/base/sequenceaudio/cam3/cam34mu2.txt:1
-#, fuzzy
 msgid "Commander, welcome to NEXUS!"
-msgstr "「指挥官，我们必须打败NEXUS」"
+msgstr "指挥官，欢迎来到NEXUS"
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:1
 msgid "The Reed Corporation was founded by Dr Allan Reed. In 2080, Dr Reed landed a contract with the US Military to develop the synaptic link technology."
-msgstr ""
+msgstr "Dr Allan Reed找到了Reed Corporation 。 2080年， Dr Reed与美军建立了联系来发展突触连接技术。"
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:3
 msgid "After patenting the synaptic link five years later, Dr Reed continued his researches into cybernetics."
-msgstr ""
+msgstr "在取得突触连接专利五年后，Dr Reed 继续进行控制论的研究。"
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:5
 msgid "His goal this time was to allow transfer of human consciousness into data streams that could meld with computer technologies. While in Cyberspace the operator's bodies were kept in immersion tanks."
-msgstr ""
+msgstr "他的目标是将人类的思想转换成可以与电脑技术想融合的数据流。在网络空间中操作者的身体保证在坦克中。"
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:7
 msgid "Backed again by the military, Dr Reed began work on the NEXUS Intruder Program. After three years with little progress, the military abandoned the Nexus Project and cut Dr Reed's funding."
-msgstr ""
+msgstr "重新得到军方的支持后，Dr Reed开始了Nexus入侵项目的相关工作。在三年后由于进展缓慢，军方抛弃了Nexus项目并且停止了对Dr Reed的经济资助。"
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:9
 msgid "Reports from the time claim that Dr Reed was furious and vowed to have his revenge on all who got in his way."
-msgstr ""
+msgstr "报告时间声称， Dr Reed 疯狂的发誓将报复所有相关的人。"
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:11
 msgid "It appears that Dr Reed may have succeeded in his goals and completed the Nexus Intruder Program."
-msgstr ""
+msgstr "Dr Reed成功实现了他的目标并且完成了Nexus入侵项目。"
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:12
 msgid "The similarity between NEXUS and Dr Reed is striking."
-msgstr ""
+msgstr "NEXUS 和 Reed博士的相似点是显著地。"
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:14
 msgid "Such an interesting history lesson. Now allow me to bring you up to date."
-msgstr ""
+msgstr "真实堂不错的历史课。现在我还是把你带回现实吧。"
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:15
 msgid "The NEXUS Intruder Program was created in order to control fools like you."
-msgstr ""
+msgstr "Nexus入侵程序的目的是为了要控制想你一样的傻瓜。"
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:17
 msgid "It's very simple for me to infiltrate your systems and take them over. It's so simple, in fact, that you wouldn't even know I'm there. That is until I activate parts of myself etched into your core systems."
-msgstr ""
+msgstr "对我来讲入侵你的系统并且得到她易如反掌。简单到你都无法察觉我的存在，直到我将我的代码植入到你的系统核心内部。"
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:19
 msgid "Let's start by activating NEXUS in your core systems and see what happens!"
-msgstr ""
+msgstr "让我们从在你的核心系统中得到NEXUS开始，看看会发生什么！"
 
 #: data/base/sequenceaudio/cam3/cam3abpl.txt:1
-#, fuzzy
 msgid "Commander, we are experiencing interference with our equipment."
-msgstr "指挥官，我们正试图着要返回基地"
+msgstr "指挥官，我们正在经历设备发出的干扰"
 
 #: data/base/sequenceaudio/cam3/cam3abpl.txt:2
 msgid "Normal service will be restored as soon as possible."
-msgstr ""
+msgstr "正常服务会被尽快修复"
 
 #: data/base/sequenceaudio/cam3/cam3ad2n.txt:1
 msgid "Not long to go now, Commander. There's no where else for you to run to."
-msgstr ""
+msgstr "指挥官，不久就要离开了。没有别的地方可以逃跑了。"
 
 #: data/base/sequenceaudio/cam3/cam3ad2n.txt:4
 msgid "However, if you vacate this facility, then I shall let you go free, as you are no longer a threat to me."
-msgstr ""
+msgstr "但是，如果你可以清空设备，我会给予你自由，因为你对我将不再构成威胁。"
 
 #: data/base/sequenceaudio/cam3/cam3ad2n.txt:6
 msgid "You have five minutes to comply or else it's frying time!"
-msgstr ""
+msgstr "你有5分钟的时间来考虑，否则你将受到单方面的虐打!"
 
 #: data/base/sequenceaudio/cam3/cam3bg.txt:1
 msgid "Commander, we are under attack by NEXUS cyborgs and tanks. Please help as we...."
-msgstr ""
+msgstr "指挥官，我们受到Nexus半机器人和坦克的攻击。请帮我们..."
 
 #: data/base/sequenceaudio/cam3/cam3bg.txt:3
 msgid "...cannot hold out much longer.  Repeat, please help, we cannot hold out much longer...."
-msgstr ""
+msgstr "...坚持不住了。重复，请求救援，我们坚持不住了..."
 
 #: data/base/sequenceaudio/cam3/cam3_bn.txt:1
 msgid "Ah, Commander, so good of you to join us here at Nexus base."
-msgstr ""
+msgstr "呀，指挥官，你在Nexus基地中加入我们真是太好啦。"
 
 #: data/base/sequenceaudio/cam3/cam3_bn.txt:3
 msgid "It was very useful having Gamma Team set up here in the mountains."
-msgstr ""
+msgstr "有Gamma队在山地位置真是太有用啦。"
 
 #: data/base/sequenceaudio/cam3/cam3_bn.txt:4
 msgid "Their absorption was such a pleasure."
-msgstr ""
+msgstr "它们的吸收真有趣。"
 
 #: data/base/sequenceaudio/cam3/cam3_bn.txt:6
 msgid "Thank you for all those useful technologies you've recovered."
-msgstr ""
+msgstr "真是太感谢你可以重新获得这些有用的技术。"
 
 #: data/base/sequenceaudio/cam3/cam3_bn.txt:8
 msgid "You and not those fools in the New Paradigm and the Collective."
-msgstr ""
+msgstr "你并不是那些在New Paradigm 和 Collective 出现的傻瓜。"
 
 #: data/base/sequenceaudio/cam3/cam3_bn.txt:10
 msgid "I'm now activating all your synaptic links so that your forces can meld with Nexus."
-msgstr ""
+msgstr "我没有取得你的全部突触连接，因此你可以将你的部队与Nexus进行融合"
 
 #: data/base/sequenceaudio/cam3/cam3_bn.txt:12
 msgid "Your forces are now mine! Welcome to Nexus."
-msgstr ""
+msgstr "你的部队现在全部属于我啦！欢迎来到Nexus。"
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:1
 msgid "Commander, you're proving to be more resilient than I thought."
-msgstr ""
+msgstr "指挥官，你证明了自己比我想象的还要灵活。"
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:2
 msgid "Such a pity that you refused to join me earlier."
-msgstr ""
+msgstr "真可惜你之前没答应加入我们。"
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:4
 msgid "But no matter, as you'll not be here much longer."
-msgstr ""
+msgstr "但是这是无关紧要的，因为你即将从这里消失。"
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:6
 msgid "After much searching and reprogramming, I've finally got all my systems back on-line."
-msgstr ""
+msgstr "在搜索和重编程后，我终于将程序重新上线。"
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:8
 msgid "Once I destroyed the world with nuclear fire to clear the way for my cybernetic future."
-msgstr ""
+msgstr "一旦我用原子之火为我所控制的未来开路。"
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:9
 msgid "I now intend to further shape the world into my own image, by  surgically removing unwanted growths like yourself."
-msgstr ""
+msgstr "我将要进一步根据我的想象塑造这个世界，把像你一样的不如意的杂草，用外科手术般的方法除掉。"
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:11
 msgid "My Laser Satellites are now powering up. I intend to test them on you first, Commander!"
-msgstr ""
+msgstr "我方的激光卫星现已增强力量。报告指挥官，可以为你进行第一次测试1"
 
 #: data/base/sequenceaudio/devastation.txa:4
 msgid "Dusk, November 3rd, 2085"
-msgstr ""
+msgstr "2085年11月3日，黄昏"
 
 #: data/base/sequenceaudio/devastation.txa:5
 msgid "Earth, High Orbit"
-msgstr ""
+msgstr "地球，高轨道"
 
 #: data/base/sequenceaudio/devastation.txa:6
 msgid "The Collapse"
-msgstr ""
+msgstr "倒塌"
 
 #: data/base/sequenceaudio/devastation.txa:8
 msgid "January 19th, 2086"
-msgstr ""
+msgstr "2086年1月19日"
 
 #: data/base/sequenceaudio/devastation.txa:9
 #: data/base/sequenceaudio/devastation.txa:17
 msgid "North America"
-msgstr ""
+msgstr "北美"
 
 #: data/base/sequenceaudio/devastation.txa:10
-#, fuzzy
 msgid "Nuclear Winter"
-msgstr "核子反应炉"
+msgstr "核冬天"
 
 #: data/base/sequenceaudio/devastation.txa:12
 msgid "Midnight, April 10th, 2086"
-msgstr ""
+msgstr "2086年4月10日 午夜"
 
 #: data/base/sequenceaudio/devastation.txa:13
 msgid "Rocky Mountains"
-msgstr ""
+msgstr "岩石山"
 
 #: data/base/sequenceaudio/devastation.txa:14
 msgid "Safety"
-msgstr ""
+msgstr "安全"
 
 #: data/base/sequenceaudio/devastation.txa:16
 msgid "Dawn, April 4th, 2100"
-msgstr ""
+msgstr "2100年4月10日 黎明"
 
 #: data/base/sequenceaudio/devastation.txa:18
 msgid "A New Beginning"
-msgstr ""
+msgstr "新的开始"
 
 #: data/base/sequenceaudio/devastation.txt:1
 msgid "The NASDA system was developed to protect us. It was to be the ultimate nuclear deterrent. As it turned out, it was our executioner."
-msgstr ""
+msgstr "NASDA系统是用来保护我们的。它将成为最终的核武器的威慑力量。事实证明,这是我们的刽子手。"
 
 #: data/base/sequenceaudio/devastation.txt:3
 msgid "Reports said that NASDA developed a fault during a routine systems check. Don't believe it. Someone wanted it to take us out."
-msgstr ""
+msgstr "报告指出，在系统常规检查中NASDA发现了一个错误。千万别信，别有用心的人希望用它将我们找到。"
 
 #: data/base/sequenceaudio/devastation.txt:5
 msgid "Those nukes were targeted on every major city around the world. NASDA was programmed to start the Collapse. When the counterstrikes launched, its laser defenses and anti-missile ground sites failed."
-msgstr ""
+msgstr "这些核弹将全世界的所有主要城市都设定为目标。NASDA 是规划Collapse的开始。当反击开始，激光反导防御系统和地面站点失败。"
 
 #: data/base/sequenceaudio/devastation.txt:7
 msgid "The world as we knew it ended..."
-msgstr ""
+msgstr "我们所熟悉的世界已经消失了..."
 
 #: data/base/sequenceaudio/devastation.txt:9
 msgid "The Nuclear Winter hit hard. Disease and famine claimed most of us who had survived the nuclear strikes. Wars over cans of dog food took even more."
-msgstr ""
+msgstr "来自核武器的沉重打击。在核武器打击中的幸存者受到了疾病和饥荒的侵袭。关于食物的战争越来越多。"
 
 #: data/base/sequenceaudio/devastation.txt:11
 msgid "We'd fled Seattle early in '86. We'd heard that the Rocky Mountains were relatively rad-free."
-msgstr ""
+msgstr "在1986年初，我们从西雅图逃出。我们听所Rocky Moountain的核辐射危险相对较低。"
 
 #: data/base/sequenceaudio/devastation.txt:13
 msgid "After fighting off bands of marauders we came across the base. Its personnel were dead. Killed by any one of a number of virulent diseases."
-msgstr ""
+msgstr "在于成群结队的掠夺者的斗争后我们到达了基地。有人因为致命的疾病而身亡。"
 
 #: data/base/sequenceaudio/devastation.txt:15
 msgid "We cracked the doors, and cleared out the bodies inside."
-msgstr ""
+msgstr "我们破门而入，清理了内部的尸体。"
 
 #: data/base/sequenceaudio/devastation.txt:17
 msgid "We knew that things would never be the same again, but we were determined to build a new world out of the ruins. We rebuilt the landing pads and brought the old systems back on-line."
-msgstr ""
+msgstr "我们知道世界已经和从前大不一样，但是我们决定在毁灭之上建立一个新的世界。我们重建了登陆台并把旧的系统重新上线。"
 
 #: data/base/sequenceaudio/devastation.txt:19
 msgid "We were finally ready to begin the Project."
-msgstr ""
+msgstr "我们终于可以开始这个项目了。"
 
 #: data/base/sequenceaudio/outro.txt:1
 msgid "After many long months of struggle, we defeated NEXUS."
-msgstr ""
+msgstr "在几个月的努力后，我们被Nexus打败了。"
 
 #: data/base/sequenceaudio/outro.txt:3
 msgid "The war started by Dr Reed was over."
-msgstr ""
+msgstr "Dr Reed 发动的战争已经结束了。"
 
 #: data/base/sequenceaudio/outro.txt:5
 msgid "We have recovered many of the technologies we sought."
-msgstr ""
+msgstr "我们已经发现了许多我们需要的技术。"
 
 #: data/base/sequenceaudio/outro.txt:7
 msgid "It is now time to use them to rebuild the world."
-msgstr ""
+msgstr "现在是时候用它们重建这个世界了。"
 
 #: data/base/sequenceaudio/outro.txt:9
 msgid "Slowly, out of the ashes we will rise again..."
-msgstr ""
+msgstr "慢慢地，我们将从灰烬里重生"
 
 #: data/mp/messages/resmessages12.rmsg:45
-#, fuzzy
 msgid "Construction speed +10%"
-msgstr "增加建筑速度 +10%"
+msgstr "施工速度 +10%"
 
 #: data/mp/messages/resmessages12.rmsg:75
 #: data/mp/messages/resmessagesall.rmsg:165
-#, fuzzy
 msgid "Cannon accuracy +10%"
 msgstr "加农炮系武器准确率 +10%"
 
 #: data/mp/messages/resmessages12.rmsg:85
-#, fuzzy
 msgid "Flamer reload time -15%"
 msgstr "火焰喷射自动装填时间 -15%"
 
 #: data/mp/messages/resmessages12.rmsg:105
 #: data/mp/messages/resmessages23.rmsg:135
 #: data/mp/messages/resmessages2.rmsg:685
-#, fuzzy
 msgid "Machinegun reload time -15%"
-msgstr "机枪系武自动装填时间 -15%"
+msgstr "机枪系武自动装填时间 -15% "
 
 #: data/mp/messages/resmessages12.rmsg:125
 #: data/mp/messages/resmessages23.rmsg:145
 #: data/mp/messages/resmessages3.rmsg:905
-#, fuzzy
 msgid "Mortar accuracy +10%"
-msgstr "迫击炮准确率 +10%"
+msgstr "迫击炮准确率 +10% "
 
 #: data/mp/messages/resmessages12.rmsg:135
 #: data/mp/messages/resmessages3.rmsg:915
-#, fuzzy
 msgid "Mortar reload time -10%"
 msgstr "迫击炮自动装填时间 -15%"
 
 #: data/mp/messages/resmessages12.rmsg:155
 #: data/mp/messages/resmessages1.rmsg:565
-#, fuzzy
 msgid "Rocket reload time -15%"
-msgstr "火箭自动装填时间 -15%"
+msgstr "火箭重加载时间 -15%"
 
 #: data/mp/messages/resmessages12.rmsg:165
 #: data/mp/messages/resmessages3.rmsg:685
-#, fuzzy
 msgid "Cannon reload time -10%"
-msgstr "加农炮自动装填时间 -10%"
+msgstr "加农炮自动装填时间 -10% "
 
 #: data/mp/messages/resmessages12.rmsg:175
 #: data/mp/messages/resmessages1.rmsg:445
 #: data/mp/messages/resmessages3.rmsg:675
-#, fuzzy
 msgid "Cannon damage +25%"
-msgstr "加农炮系武器伤害 +25%"
+msgstr "加农炮系武器伤害 +25% "
 
 #: data/mp/messages/resmessages12.rmsg:185
 #: data/mp/messages/resmessages1.rmsg:545
 #: data/mp/messages/resmessages1.rmsg:575
 #: data/mp/messages/resmessagesall.rmsg:135
-#, fuzzy
 msgid "Rocket accuracy +10%"
-msgstr "火箭系武器准确率 +10%"
+msgstr "火箭系武器准确率 +10% "
 
 #: data/mp/messages/resmessages1.rmsg:25
 #: data/mp/messages/resmessages3.rmsg:55
 #: data/mp/messages/resmessages3.rmsg:65
-#, fuzzy
 msgid "Kinetic Armor +35%, Body Points +35%"
-msgstr "热能防御及HP +35%"
+msgstr "魔动护甲 +35%， HP+35%"
 
 #: data/mp/messages/resmessages1.rmsg:75
-#, fuzzy
 msgid "Armour +35%, Body Points +30%"
-msgstr "物理防御 +35% HP +30%"
+msgstr "物理防御 +35% HP +30% "
 
 #: data/mp/messages/resmessages1.rmsg:94
-#, fuzzy
 msgid "Armored guard tower with Mini-Rocket Pod"
-msgstr "装备有迷你火箭的防卫塔"
+msgstr "装备有迷你火箭的防卫塔 "
 
 #: data/mp/messages/resmessages1.rmsg:114
-#, fuzzy
 msgid "Armored guard tower with Lancer AT rocket"
-msgstr "装备有枪骑兵反坦克火箭的防卫塔"
+msgstr "装备有枪骑兵反坦克火箭的防卫塔 "
 
 #: data/mp/messages/resmessages1.rmsg:195
 #: data/mp/messages/resmessages2.rmsg:255
 #: data/mp/messages/resmessages3.rmsg:325
-#, fuzzy
 msgid "Repair Speed +100%"
-msgstr "修理速度 +100%"
+msgstr "修理速度 +100% "
 
 #: data/mp/messages/resmessages1.rmsg:235
-#, fuzzy, c-format
+#, c-format
 msgid "Factory output speed +100%% per module"
-msgstr "工厂生产速度 +100%"
+msgstr "工厂生产速度 +100%%每件"
 
 #: data/mp/messages/resmessages1.rmsg:245
 #: data/mp/messages/resmessagesall.rmsg:615
@@ -10379,16 +10304,14 @@ msgid "Factory output speed +60%"
 msgstr "工厂生产速度 +60%"
 
 #: data/mp/messages/resmessages1.rmsg:265
-#, fuzzy
 msgid "Research speed +85%"
-msgstr "研发速度 +85%"
+msgstr "研发速度 +85% "
 
 #: data/mp/messages/resmessages1.rmsg:275
 #: data/mp/messages/resmessages2.rmsg:285
 #: data/mp/messages/resmessages3.rmsg:345
-#, fuzzy
 msgid "Research speed +30%"
-msgstr "研发速度 +30%"
+msgstr "研发速度 +30% "
 
 #: data/mp/messages/resmessages1.rmsg:285
 #: data/mp/messages/resmessages2.rmsg:45
@@ -10397,25 +10320,22 @@ msgstr "研发速度 +30%"
 #: data/mp/messages/resmessages3.rmsg:175
 #: data/mp/messages/resmessages3.rmsg:355
 #: data/mp/messages/resmessages3.rmsg:365
-#, fuzzy
 msgid "Armor +35%, Body Points +30%"
-msgstr "防御力 +35% HP +30%"
+msgstr "防御力 +35% HP +30% "
 
 #: data/mp/messages/resmessages1.rmsg:355
 #: data/mp/messages/resmessages2.rmsg:385
 #: data/mp/messages/resmessages3.rmsg:515
 #: data/mp/messages/resmessages3.rmsg:525
-#, fuzzy
 msgid "Vehicle speed +5%"
-msgstr "车辆制造速度 +5%"
+msgstr "车辆速度 +5%"
 
 #: data/mp/messages/resmessages1.rmsg:365
 #: data/mp/messages/resmessages2.rmsg:395
 #: data/mp/messages/resmessages3.rmsg:535
 #: data/mp/messages/resmessages3.rmsg:545
-#, fuzzy
 msgid "Kinetic armor +30%, body points +30%"
-msgstr "物理防御及HP +30%"
+msgstr "物理防御 +30%， HP+30%"
 
 #: data/mp/messages/resmessages1.rmsg:425
 #: data/mp/messages/resmessages1.rmsg:435
@@ -10427,32 +10347,28 @@ msgstr "最佳目标：坦克与炮台"
 #: data/mp/messages/resmessages1.rmsg:465
 #: data/mp/messages/resmessages2.rmsg:605
 #: data/mp/messages/resmessagesall.rmsg:605
-#, fuzzy
 msgid "Flamer damage +25%"
-msgstr "火焰喷射伤害 +25%"
+msgstr "火焰喷射伤害 +25% "
 
 #: data/mp/messages/resmessages1.rmsg:495
 #: data/mp/messages/resmessages1.rmsg:505
 #: data/mp/messages/resmessages2.rmsg:675
 #: data/mp/messages/resmessages3.rmsg:775
 #: data/mp/messages/resmessages3.rmsg:785
-#, fuzzy
 msgid "Machinegun damage +25%"
-msgstr "机枪系武器攻击力 +25%"
+msgstr "机器伤害 +25% "
 
 #: data/mp/messages/resmessages1.rmsg:525
 #: data/mp/messages/resmessages2.rmsg:705
-#, fuzzy
 msgid "Mortar damage +25%"
-msgstr "迫击炮攻击力 +25%"
+msgstr "迫击炮攻击力 +25% "
 
 #: data/mp/messages/resmessages1.rmsg:555
 #: data/mp/messages/resmessages1.rmsg:585
 #: data/mp/messages/resmessages2.rmsg:715
 #: data/mp/messages/resmessages2.rmsg:725
-#, fuzzy
 msgid "Rocket damage +25%"
-msgstr "火箭系武器攻击力 +25%"
+msgstr "火箭系武器攻击力 +25% "
 
 #: data/mp/messages/resmessages23.rmsg:25
 msgid "Power output +25%"
@@ -10460,9 +10376,8 @@ msgstr "电力输出 +25%"
 
 #: data/mp/messages/resmessages23.rmsg:35
 #: data/mp/messages/resmessages3.rmsg:395
-#, fuzzy
 msgid "Construction speed +20%"
-msgstr "建筑速度 +20%"
+msgstr "建筑速度 +20% "
 
 #: data/mp/messages/resmessages23.rmsg:105
 #: data/mp/messages/resmessages2.rmsg:495
@@ -10473,9 +10388,8 @@ msgstr "高射炮准确率 +10%"
 #: data/mp/messages/resmessages23.rmsg:123
 #: data/mp/messages/resmessages2.rmsg:563
 #: data/mp/messages/resmessages3.rmsg:663
-#, fuzzy
 msgid "Bomb Upgrade"
-msgstr "投弹瞄准器升级"
+msgstr "投弹瞄准器升级 "
 
 #: data/mp/messages/resmessages23.rmsg:124
 #, fuzzy
@@ -10489,9 +10403,8 @@ msgid "Bomb damage +25%"
 msgstr "炸弹攻击力 +25%"
 
 #: data/mp/messages/resmessages2.rmsg:5
-#, fuzzy
 msgid "Thermal Armor +45%"
-msgstr "热能装甲 +45%"
+msgstr "热能装甲 +45% "
 
 #: data/mp/messages/resmessages2.rmsg:15
 #, fuzzy
@@ -10499,15 +10412,13 @@ msgid "Kinetic Armor +35%, and Body Points +35%"
 msgstr "物理防御及HP +35"
 
 #: data/mp/messages/resmessages2.rmsg:275
-#, fuzzy
 msgid "Factory production rate +60%"
-msgstr "工厂生产速率 +60%"
+msgstr "工厂生产速率 +60% "
 
 #: data/mp/messages/resmessages2.rmsg:276
 #: data/mp/messages/resmessagesall.rmsg:616
-#, fuzzy
 msgid "All factories upgraded automatically"
-msgstr "自动升级所有VTOL工厂"
+msgstr "自动升级所有工厂"
 
 #: data/mp/messages/resmessages2.rmsg:315
 #: data/mp/messages/resmessages3.rmsg:385
@@ -10515,15 +10426,13 @@ msgid "Rearming speed +30%"
 msgstr "装填速度 +30%"
 
 #: data/mp/messages/resmessages2.rmsg:405
-#, fuzzy
 msgid "Thermal armor +40%"
 msgstr "热能装甲 +40%"
 
 #: data/mp/messages/resmessages2.rmsg:505
 #: data/mp/messages/resmessages3.rmsg:635
-#, fuzzy
 msgid "AA Flak damage +25%"
-msgstr "高射炮攻击力 +25%"
+msgstr "AA高射炮攻击力 +25%"
 
 #: data/mp/messages/resmessages2.rmsg:515
 #: data/mp/messages/resmessages3.rmsg:645
@@ -10532,36 +10441,30 @@ msgstr "高射炮装填时间 -15%"
 
 #: data/mp/messages/resmessages2.rmsg:645
 #: data/mp/messages/resmessages3.rmsg:695
-#, fuzzy
 msgid "Howitzer accuracy +10%"
-msgstr "榴弹炮系武器准确率 +10%"
+msgstr "榴弹炮系武器准确率 +10% "
 
 #: data/mp/messages/resmessages2.rmsg:655
 #: data/mp/messages/resmessages3.rmsg:705
-#, fuzzy
 msgid "Howitzer damage +25%"
-msgstr "榴弹炮攻击力 +25%"
+msgstr "榴弹炮攻击力 +25% "
 
 #: data/mp/messages/resmessages2.rmsg:665
 #: data/mp/messages/resmessages3.rmsg:715
-#, fuzzy
 msgid "Howitzer reload time -10%"
-msgstr "榴弹炮自动装填时间 -10%"
+msgstr "榴弹炮自动装填时间 -10% "
 
 #: data/mp/messages/resmessages2.rmsg:714
-#, fuzzy
 msgid "High Explosive Anti-Tank warheads"
 msgstr "高爆性反坦克弹头"
 
 #: data/mp/messages/resmessages3.rmsg:5
-#, fuzzy
 msgid "Thermal Armor +35%"
 msgstr "热能装甲 +35%"
 
 #: data/mp/messages/resmessages3.rmsg:234
-#, fuzzy
 msgid "Armored guard tower with Pulse Laser"
-msgstr "装备有火焰喷射的防卫塔"
+msgstr "装备有脉冲激光器的防卫塔"
 
 #: data/mp/messages/resmessages3.rmsg:335
 msgid "Power output +30%"
@@ -10569,19 +10472,16 @@ msgstr "电力输出 +30%"
 
 #: data/mp/messages/resmessages3.rmsg:555
 #: data/mp/messages/resmessagesall.rmsg:655
-#, fuzzy
 msgid "Thermal Armor +40%"
-msgstr "热能装甲 +40%"
+msgstr "热能装甲 +40% "
 
 #: data/mp/messages/resmessages3.rmsg:745
-#, fuzzy
 msgid "Laser accuracy +10%"
-msgstr "激光系武器准确率 +10%"
+msgstr "激光系武器准确率 +10% "
 
 #: data/mp/messages/resmessages3.rmsg:755
-#, fuzzy
 msgid "Laser damage +25%"
-msgstr "激光攻击力 +25%"
+msgstr "激光攻击力 +25% "
 
 #: data/mp/messages/resmessages3.rmsg:765
 msgid "Laser reload time -15%"
@@ -10589,60 +10489,49 @@ msgstr "激光武器装填时间 -15%"
 
 #: data/mp/messages/resmessages3.rmsg:815
 #: data/mp/messages/resmessages3.rmsg:825
-#, fuzzy
 msgid "Missile accuracy +10%"
-msgstr "导弹准确率 +10%"
+msgstr "导弹发射准确率 +10%"
 
 #: data/mp/messages/resmessages3.rmsg:835
-#, fuzzy
 msgid "Missile damage +25%"
-msgstr "导弹攻击力 +10%"
+msgstr "导弹攻击力 +25%"
 
 #: data/mp/messages/resmessages3.rmsg:885
 #: data/mp/messages/resmessages3.rmsg:895
-#, fuzzy
 msgid "Missile reload time -15%"
-msgstr "导弹装填时间 -15%"
+msgstr "导弹装填时间 -15% "
 
 #: data/mp/messages/resmessages3.rmsg:955
-#, fuzzy
 msgid "Rail Gun accuracy +10%"
 msgstr "轨道炮系武器准确率 +10%"
 
 #: data/mp/messages/resmessages3.rmsg:965
-#, fuzzy
 msgid "Rail Gun damage +25%"
-msgstr "轨道炮系武器攻击力 +25%"
+msgstr "轨道炮系武器攻击力 +25% "
 
 #: data/mp/messages/resmessages3.rmsg:975
-#, fuzzy
 msgid "Rail Gun reload time -15%"
-msgstr "轨道炮系武器装填时间 -15% "
+msgstr "轨道炮系武器装填时间 -15%"
 
 #: data/mp/messages/resmessagesall.rmsg:65
-#, fuzzy
 msgid "Sensor Range +25%"
-msgstr "雷达可视距离 +25%"
+msgstr "传感范围 +25%"
 
 #: data/mp/messages/resmessagesall.rmsg:74
-#, fuzzy
 msgid "Improved Thermal Emissions detection"
 msgstr "改进的侦测热能放射"
 
 #: data/mp/messages/resmessagesall.rmsg:75
-#, fuzzy
 msgid "Sensor Range +15%"
-msgstr "雷达可视距离 +15%"
+msgstr "传感器范围 +15%"
 
 #: data/mp/messages/resmessagesall.rmsg:84
-#, fuzzy
 msgid "Advanced Thermal Emissions detection"
-msgstr "高级的侦测热能放射"
+msgstr "高级的侦测热能放射 "
 
 #: data/mp/messages/resmessagesall.rmsg:85
-#, fuzzy
 msgid "Sensor Range +10%"
-msgstr "雷达可视距离 +10%"
+msgstr "传感器范围 +10%"
 
 #: data/mp/messages/resmessagesall.rmsg:104
 msgid "Radar detector tower detects enemy sensors"
@@ -10673,9 +10562,8 @@ msgid "Requires heavy VTOL factory to produce"
 msgstr "需要重型VTOL工厂才可以制造"
 
 #: data/mp/messages/resmessagesall.rmsg:183
-#, fuzzy
 msgid "Super Transport Available"
-msgstr "可使用生化人步兵运输舰"
+msgstr "超级可用运输"
 
 #: data/mp/messages/resmessagesall.rmsg:194
 msgid "Incendiary howitzer emplacement"
@@ -10789,9 +10677,8 @@ msgid "Immense damage infliction capability"
 msgstr "攻击威力强大"
 
 #: data/mp/messages/resmessagesall.rmsg:416
-#, fuzzy
 msgid "Narrow area of effect"
-msgstr "但攻击范围狭小"
+msgstr "影响范围狭窄"
 
 #: data/mp/messages/resmessagesall.rmsg:424
 msgid "Armored guard tower with Nexus Link"
@@ -10867,7 +10754,6 @@ msgid "Medium Super Heavy Body"
 msgstr "中型超重量级车身"
 
 #: data/mp/messages/resmessagesall.rmsg:564
-#, fuzzy
 msgid "More armor and body points than Vengeance"
 msgstr "比复仇者更强的防御与HP"
 
@@ -10966,9 +10852,8 @@ msgid "Repair Turret Viper Half-track"
 msgstr "半履带式响尾蛇修理车"
 
 #: data/mp/messages/strings/names.txt:183
-#, fuzzy
 msgid "Mini-Rocket Array Viper Wheels"
-msgstr "轮式响尾蛇坦克（迷你火箭炮）"
+msgstr "轮式响尾蛇坦克（迷你火箭炮） "
 
 #: data/mp/messages/strings/names.txt:184
 msgid "Bunker Buster Rockets Viper Wheels"
@@ -10979,34 +10864,29 @@ msgid "Sensor Turret Cobra Half-tracks"
 msgstr "半履带式眼镜蛇雷达车"
 
 #: data/mp/messages/strings/names.txt:194
-#, fuzzy
 msgid "Mini-Rocket Array Cobra Half-tracks"
-msgstr "半履带式眼镜蛇坦克（迷你火箭炮）"
+msgstr "半履带式眼镜蛇坦克（迷你火箭炮） "
 
 #: data/mp/messages/strings/names.txt:351
-#, fuzzy
 msgid "Jammer Tower"
-msgstr "火焰喷射防卫塔"
+msgstr "干扰机塔"
 
 #: data/mp/messages/strings/names.txt:352
-#, fuzzy
 msgid "Jammer Turret"
-msgstr "扰频器"
+msgstr "干扰机炮塔"
 
 #: data/mp/messages/strings/names.txt:353
-#, fuzzy
 msgid "Electronic Countermeasures"
-msgstr "电子科技实验室"
+msgstr "电子干扰"
 
 #: data/mp/messages/strings/names.txt:363
 #: data/mp/messages/strings/names.txt:1704
 msgid "Radar Detector"
-msgstr ""
+msgstr "雷达检测器"
 
 #: data/mp/messages/strings/names.txt:371
-#, fuzzy
 msgid "Radar Detector Tower"
-msgstr "VTOL雷达"
+msgstr "雷达探测器塔"
 
 #: data/mp/messages/strings/names.txt:376
 msgid "Nexus Link"
@@ -11019,15 +10899,13 @@ msgstr "Nexus Link（可搭载新的武器）"
 
 #: data/mp/messages/strings/names.txt:395
 #: data/mp/messages/strings/names.txt:720
-#, fuzzy
 msgid "Hardcrete Gate"
-msgstr "钛钢筋墙"
+msgstr "Hardcrete 大门"
 
 #: data/mp/messages/strings/names.txt:401
 #: data/mp/messages/strings/names.txt:731
-#, fuzzy
 msgid "Inferno Bunker"
-msgstr "枪骑兵火箭碉堡"
+msgstr "地狱地堡"
 
 #: data/mp/messages/strings/names.txt:408
 msgid "Tornado AA Site"
@@ -11035,44 +10913,37 @@ msgstr "龙卷风级高射炮"
 
 #: data/mp/messages/strings/names.txt:409
 #: data/mp/messages/strings/names.txt:722
-#, fuzzy
 msgid "AA Flak Cannon Emplacement"
-msgstr "离子加农炮炮台"
+msgstr "AA离子加农炮炮台"
 
 #: data/mp/messages/strings/names.txt:465
 #: data/mp/messages/strings/names.txt:786
-#, fuzzy
 msgid "Pulse Laser Hardpoint"
-msgstr "火焰喷射要塞"
+msgstr "脉冲激光挂载点"
 
 #: data/mp/messages/strings/names.txt:467
 #: data/mp/messages/strings/names.txt:748
-#, fuzzy
 msgid "Pulse Laser Tower"
-msgstr "脉冲激光"
+msgstr "脉冲激光塔"
 
 #: data/mp/messages/strings/names.txt:504
 #: data/mp/messages/strings/names.txt:1133
-#, fuzzy
 msgid "Seraph Missile Array"
-msgstr "增加导弹准确率"
+msgstr "六翼天使导弹数组"
 
 #: data/mp/messages/strings/names.txt:522
 #: data/mp/messages/strings/names.txt:1196
-#, fuzzy
 msgid "Mini-Rocket Array"
-msgstr "迷你火箭炮"
+msgstr "迷你火箭炮组"
 
 #: data/mp/messages/strings/names.txt:544
 #: data/mp/messages/strings/names.txt:993
-#, fuzzy
 msgid "AA Flak Cannon"
-msgstr "离子加农炮"
+msgstr "AA 离子加农炮"
 
 #: data/mp/messages/strings/names.txt:545
-#, fuzzy
 msgid "VTOL Flak Cannon"
-msgstr "VTOL（轻型加农炮）"
+msgstr "VTOL（轻型加农炮） "
 
 #: data/mp/messages/strings/names.txt:558
 #: data/mp/messages/strings/names.txt:1694
@@ -11081,7 +10952,6 @@ msgid "Laser Satellite Command Post"
 msgstr "激光卫星指挥中心"
 
 #: data/mp/messages/strings/names.txt:575
-#, fuzzy
 msgid "VTOL Cluster Bomb Bay"
 msgstr "VTOL（集束炸弹舱）"
 
@@ -11100,12 +10970,10 @@ msgstr "NEXUS钛钢筋角墙"
 #: data/mp/messages/strings/names.txt:675
 #: data/mp/messages/strings/names.txt:676
 #: src/design.cpp:1283
-#, fuzzy
 msgid "Super Transport"
-msgstr "运输舰"
+msgstr "超级运输舰"
 
 #: data/mp/messages/strings/names.txt:677
-#, fuzzy
 msgid "Super Transport Body"
 msgstr "运输车身"
 
@@ -11123,15 +10991,13 @@ msgstr "超塑钢筋墙一型"
 
 #: data/mp/messages/strings/names.txt:727
 #: data/mp/messages/strings/names.txt:1388
-#, fuzzy
 msgid "Hyper Velocity Cannon Emplacement"
-msgstr "高速加农炮"
+msgstr "高速加农炮跑位"
 
 #: data/mp/messages/strings/names.txt:738
 #: data/mp/messages/strings/names.txt:1391
-#, fuzzy
 msgid "Seraph Missile Battery"
-msgstr "天使导弹炮台"
+msgstr "六翼天使导弹电池"
 
 #: data/mp/messages/strings/names.txt:767
 msgid "Flamer Tower"
@@ -11139,59 +11005,48 @@ msgstr "火焰喷射防卫塔"
 
 #: data/mp/messages/strings/names.txt:785
 #: data/mp/messages/strings/names.txt:1396
-#, fuzzy
 msgid "Hyper Velocity Cannon Hardpoint"
-msgstr "高速加农炮"
+msgstr "超级速度炮挂载点"
 
 #: data/mp/messages/strings/names.txt:804
-#, fuzzy
 msgid "Automated Manufacturing"
-msgstr "初级自动化VTOL补给一型"
+msgstr "自动化生产"
 
 #: data/mp/messages/strings/names.txt:807
-#, fuzzy
 msgid "Robotic Manufacturing"
-msgstr "生产新单位"
+msgstr "机械制造"
 
 #: data/mp/messages/strings/names.txt:810
-#, fuzzy
 msgid "Advanced Manufacturing"
-msgstr "高级战争"
+msgstr "先进制造"
 
 #: data/mp/messages/strings/names.txt:812
-#, fuzzy
 msgid "Self-Replicating Manufacturing"
-msgstr "自我复制工厂制造"
+msgstr "自我复制生产"
 
 #: data/mp/messages/strings/names.txt:813
-#, fuzzy
 msgid "Advanced Manufacturing Mk3"
-msgstr "高级自动化生产工厂三型"
+msgstr "先进制造 Mk3"
 
 #: data/mp/messages/strings/names.txt:834
-#, fuzzy
 msgid "Robotic Repair Facility"
-msgstr "中级自动修理工厂"
+msgstr "机器人维修设施"
 
 #: data/mp/messages/strings/names.txt:836
-#, fuzzy
 msgid "Advanced Repair Facility"
-msgstr "高级自动修理工厂 "
+msgstr "高级修理工厂 "
 
 #: data/mp/messages/strings/names.txt:837
-#, fuzzy
 msgid "Robotic Repair Facility Mk3"
-msgstr "中级自动修理工厂三型"
+msgstr "机器人维修设施 Mk3"
 
 #: data/mp/messages/strings/names.txt:838
-#, fuzzy
 msgid "Advanced Repair Facility Mk2"
-msgstr "高级自动修理工厂二型"
+msgstr "高级修理工厂 Mk2"
 
 #: data/mp/messages/strings/names.txt:839
-#, fuzzy
 msgid "Advanced Repair Facility Mk3"
-msgstr "高级自动修理工厂三型"
+msgstr "高级修理工厂 Mk3"
 
 #: data/mp/messages/strings/names.txt:884
 msgid "Auto-Repair"
@@ -11221,24 +11076,20 @@ msgid "Nexus Resistance Circuits Mk3"
 msgstr "NEXUS 电脑入侵防御系统三型"
 
 #: data/mp/messages/strings/names.txt:1015
-#, fuzzy
 msgid "Cluster Bomb Bay"
-msgstr "集束炸弹舱"
+msgstr "集束炸弹舱 "
 
 #: data/mp/messages/strings/names.txt:1020
-#, fuzzy
 msgid "HE Bomb Shells"
-msgstr "HE迫击炮弹一型"
+msgstr "HE炸弹壳"
 
 #: data/mp/messages/strings/names.txt:1021
-#, fuzzy
 msgid "Improved Bomb Warhead"
-msgstr "改善弹头外型及装填效能"
+msgstr "改进的炸弹弹头"
 
 #: data/mp/messages/strings/names.txt:1022
-#, fuzzy
 msgid "Advanced Bomb Warhead"
-msgstr "高级导弹弹头一型"
+msgstr "高级炸弹弹头"
 
 #: data/mp/messages/strings/names.txt:1092
 msgid "Howitzer Fast Loader"
@@ -11253,24 +11104,20 @@ msgid "Rail Target Prediction Computer"
 msgstr "轨道目标预测电脑"
 
 #: data/mp/messages/strings/names.txt:1165
-#, fuzzy
 msgid "Stabilized Rockets"
-msgstr "安定迷你火箭一型"
+msgstr "稳定火箭"
 
 #: data/mp/messages/strings/names.txt:1169
-#, fuzzy
 msgid "HE Rockets"
-msgstr "HE迷你火箭一型（"
+msgstr "HE 火箭"
 
 #: data/mp/messages/strings/names.txt:1170
-#, fuzzy
 msgid "HE Rockets Mk2"
-msgstr "HE迷你火箭二型"
+msgstr "HE 火箭Mk2"
 
 #: data/mp/messages/strings/names.txt:1171
-#, fuzzy
 msgid "HE Rockets Mk3"
-msgstr "HE迷你火箭三型"
+msgstr "HE 火箭Mk3"
 
 #: data/mp/messages/strings/names.txt:1384
 msgid "Assault Gun Tower"
@@ -11281,14 +11128,12 @@ msgid "Repair Cobra Tracks"
 msgstr "履带式眼镜蛇修理车"
 
 #: data/mp/messages/strings/names.txt:1474
-#, fuzzy
 msgid "Hyper Velocity Cannon Python Tracks"
 msgstr "履带式蟒蛇坦克（高速加农炮）"
 
 #: data/mp/messages/strings/names.txt:1475
-#, fuzzy
 msgid "AA Flak Cannon Python Half-tracks"
-msgstr "履带式蟒蛇坦克（高速加农炮）"
+msgstr "AA 履带式蟒蛇坦克（高速加农炮）"
 
 #: data/mp/messages/strings/names.txt:1513
 msgid "Bunker Buster Cobra Hover"
@@ -11336,13 +11181,11 @@ msgstr "维修生化人步兵"
 
 #: data/mp/messages/strings/names.txt:1634
 #: data/mp/messages/strings/names.txt:1635
-#, fuzzy
 msgid "Incendiary Howitzer"
 msgstr "燃烧榴弹炮"
 
 #: data/mp/messages/strings/names.txt:1636
 #: data/mp/messages/strings/names.txt:1637
-#, fuzzy
 msgid "Incendiary Howitzer Emplacement"
 msgstr "燃烧榴弹炮炮台"
 
@@ -11358,15 +11201,13 @@ msgstr "等离子火焰喷射碉堡"
 
 #: data/mp/messages/strings/names.txt:1642
 #: data/mp/messages/strings/names.txt:1643
-#, fuzzy
 msgid "Incendiary Mortar"
 msgstr "燃烧迫击炮"
 
 #: data/mp/messages/strings/names.txt:1644
 #: data/mp/messages/strings/names.txt:1645
-#, fuzzy
 msgid "Incendiary Mortar Pit"
-msgstr "燃烧迫击炮"
+msgstr "燃烧迫击炮矿井"
 
 #: data/mp/messages/strings/names.txt:1649
 msgid "Cyborg Superdense Thermal Armor"
@@ -11551,7 +11392,6 @@ msgid "Missile Fortress"
 msgstr "导弹堡垒"
 
 #: data/mp/messages/strings/names.txt:1771
-#, fuzzy
 msgid "Heavy Body - Wyvern"
 msgstr "超重量级车身：双足飞龙"
 
@@ -11560,9 +11400,8 @@ msgid "Wyvern"
 msgstr "双足飞龙"
 
 #: data/mp/messages/strings/names.txt:1774
-#, fuzzy
 msgid "Multi Turret Body - Dragon"
-msgstr "超重量级车身：龙"
+msgstr "多重跑塔塔身：龙"
 
 #: data/mp/messages/strings/names.txt:1775
 msgid "Dragon"
@@ -11612,9 +11451,8 @@ msgstr "旋风级高射炮要塞"
 
 #: data/mp/messages/strings/names.txt:1795
 #: data/mp/messages/strings/names.txt:1796
-#, fuzzy
 msgid "AA Flak Cannon Hardpoint"
-msgstr "突击加农炮要塞"
+msgstr "AA 突击加农炮炮点"
 
 #: data/mp/messages/strings/names.txt:1797
 #: data/mp/messages/strings/names.txt:1798
@@ -11649,21 +11487,18 @@ msgstr "电磁脉冲导弹"
 
 #: data/mp/messages/strings/names.txt:1814
 #: data/mp/messages/strings/names.txt:1815
-#, fuzzy
 msgid "Command Turret II"
-msgstr "指挥官"
+msgstr "指挥塔 II "
 
 #: data/mp/messages/strings/names.txt:1816
 #: data/mp/messages/strings/names.txt:1817
-#, fuzzy
 msgid "Command Turret III"
-msgstr "指挥官车三型"
+msgstr "指挥塔 III"
 
 #: data/mp/messages/strings/names.txt:1818
 #: data/mp/messages/strings/names.txt:1819
-#, fuzzy
 msgid "Command Turret IV"
-msgstr "指挥官"
+msgstr "指挥塔 IV"
 
 #: data/mp/messages/strings/names.txt:1829
 msgid "Heavy Repair Turret Cobra Hover"
@@ -11768,32 +11603,26 @@ msgid "Vengeance Tracks Rail Gun"
 msgstr "履带式复仇者坦克（轨道炮）"
 
 #: data/mp/messages/strings/names.txt:1870
-#, fuzzy
 msgid "Vengeance Tracks Gauss Cannon"
 msgstr "履带式复仇者坦克（高斯加农炮）"
 
 #: data/mp/messages/strings/names.txt:1871
-#, fuzzy
 msgid "Vengeance Tracks Gauss Scourge"
-msgstr "履带式复仇者坦克（ 天谴导弹）"
+msgstr "履带式复仇者坦克（天谴导弹）"
 
 #: data/mp/messages/strings/names.txt:1874
-#, fuzzy
 msgid "VTOL Cluster Bomb Bay Bug VTOL"
-msgstr "VTOL（集束炸弹舱）"
+msgstr "VTOL（集束炸弹舱)"
 
 #: data/mp/messages/strings/names.txt:1875
-#, fuzzy
 msgid "VTOL Bunker Buster Bug VTOL"
-msgstr "毒虫VTOL（碉堡终结者）"
+msgstr "毒虫VTOL（碉堡终结者） "
 
 #: data/mp/messages/strings/names.txt:1876
-#, fuzzy
 msgid "VTOL Cluster Bomb Bay Scorpion VTOL"
-msgstr "毒蝎VTOL（集束炸弹舱）"
+msgstr "毒蝎VTOL（集束炸弹舱） "
 
 #: data/mp/messages/strings/names.txt:1877
-#, fuzzy
 msgid "VTOL Bunker Buster Scorpion VTOL"
 msgstr "毒蝎VTOL（碉堡终结者）"
 
@@ -11802,7 +11631,6 @@ msgid "VTOL Lancer Bug VTOL"
 msgstr "毒虫VTOL（枪骑兵火箭）"
 
 #: data/mp/messages/strings/names.txt:1881
-#, fuzzy
 msgid "VTOL Hyper Velocity Cannon Bug VTOL"
 msgstr "VTOL（高速加农炮）"
 
@@ -11811,7 +11639,6 @@ msgid "VTOL Lancer Scorpion VTOL"
 msgstr "毒蝎VTOL（枪骑兵火箭）"
 
 #: data/mp/messages/strings/names.txt:1883
-#, fuzzy
 msgid "VTOL Hyper Velocity Cannon Scorpion VTOL"
 msgstr "毒蝎VTOL（高速加农炮）"
 
@@ -11820,14 +11647,12 @@ msgid "VTOL Lancer Mantis VTOL"
 msgstr "螳螂VTOL（枪骑兵火箭）"
 
 #: data/mp/messages/strings/names.txt:1885
-#, fuzzy
 msgid "VTOL Hyper Velocity Cannon Mantis VTOL"
-msgstr "VTOL（高速加农炮）"
+msgstr "VTOL（高速加农螳螂炮）"
 
 #: data/mp/messages/strings/names.txt:1889
-#, fuzzy
 msgid "Repair Turret Mantis Tracks"
-msgstr "螳螂修理车"
+msgstr "修理螳螂追踪塔"
 
 #: data/mp/messages/strings/names.txt:1891
 msgid "Lancer Scorpion Tracks"
@@ -11878,7 +11703,6 @@ msgid "Scourge Mantis Tracks"
 msgstr "履带式螳螂坦克（天谴导弹）"
 
 #: data/mp/messages/strings/names.txt:1905
-#, fuzzy
 msgid "Heavy Machinegun Scorpion Tracks"
 msgstr "履带式毒蝎坦克（重机枪）"
 
@@ -11919,17 +11743,14 @@ msgid "Lancer Viper Tracks"
 msgstr "履带式响尾蛇坦克（枪骑兵火箭）"
 
 #: data/mp/messages/strings/names.txt:1922
-#, fuzzy
 msgid "Mini-Rocket Cobra Half-Tracks"
 msgstr "半履带式眼镜蛇坦克（迷你火箭）"
 
 #: data/mp/messages/strings/names.txt:1923
-#, fuzzy
 msgid "Mini-Rocket Cobra Tracks"
 msgstr "履带式眼镜蛇坦克（迷你火箭）"
 
 #: data/mp/messages/strings/names.txt:1924
-#, fuzzy
 msgid "Mini-Rocket Array Cobra Tracks"
 msgstr "半履带式眼镜蛇坦克（迷你火箭炮）"
 
@@ -12094,11 +11915,11 @@ msgstr "系统语系"
 
 #: lib/ivis_opengl/screen.cpp:187
 msgid "OpenGL GLSL shader version 1.20 is not supported by your system. Some things may look wrong. Please upgrade your graphics driver/hardware, if possible."
-msgstr ""
+msgstr "你的系统不支持OpenGL GLSL着色器1.20版。游戏物体会显示错误。如有必要，请升级您的显卡驱动或者硬件。"
 
 #: lib/ivis_opengl/screen.cpp:193
 msgid "OpenGL 1.2 + VBO + TEC is not supported by your system. The game requires this. Please upgrade your graphics drivers/hardware, if possible."
-msgstr ""
+msgstr "你的系统不支持游戏所需的OpenGL1.2+VBO+TEC，如有必要，请升级您的显卡驱动或者硬件。"
 
 #: lib/netplay/netplay.cpp:220
 #: lib/netplay/netplay.cpp:1082
@@ -12121,13 +11942,15 @@ msgstr "连接Lobby服务器时发生错误：%s.确定%d端口可以接收 数�
 
 #: lib/netplay/netplay.cpp:2835
 msgid "Failed to get a lobby response!"
-msgstr ""
+msgstr "游戏响应失败!"
 
 #: po/custom/mac-infoplist.txt:1
 msgid ""
 "Copyright © 1999-2004 Eidos Interactive.\n"
 "Copyright © 2005-2012 The Warzone 2100 Project"
 msgstr ""
+"版权© 1999-2004 Eidos Interactive.\n"
+"版权© 2005-2012 The Warzone 2100 Project"
 
 #: po/custom/mac-infoplist.txt:2
 #: po/custom/warzone2100.desktop.txt:2
@@ -12161,7 +11984,7 @@ msgstr ""
 
 #: po/custom/warzone2100.desktop.txt:1
 msgid "Postnuclear realtime strategy"
-msgstr ""
+msgstr "核心实时策略"
 
 #: po/custom/warzone2100.desktop.txt:3
 #, fuzzy
@@ -12188,16 +12011,16 @@ msgstr "关闭"
 #: src/cheat.cpp:165
 #, c-format
 msgid "%s wants to enable debug mode. Enabled: %s, Disabled: %s."
-msgstr ""
+msgstr "%s希望使用调试模式。激活;%s,关闭：%s。"
 
 #: src/cheat.cpp:169
 #, c-format
 msgid "%s wants to disable debug mode. Enabled: %s, Disabled: %s."
-msgstr ""
+msgstr "%s不希望使用调试模式。激活;%s,关闭：%s。"
 
 #: src/cheat.cpp:175
 msgid "Debug mode now enabled!"
-msgstr ""
+msgstr "调试模式开启"
 
 #: src/cheat.cpp:180
 #, fuzzy
@@ -12280,7 +12103,7 @@ msgstr "停用宣告"
 
 #: src/clparse.cpp:254
 msgid "Causes a crash to test the crash handler"
-msgstr ""
+msgstr "引发一个事故去进行一个事故处理程序测试"
 
 #: src/clparse.cpp:255
 msgid "Load a saved game"
@@ -12336,19 +12159,19 @@ msgstr "go directly to host screen"
 
 #: src/clparse.cpp:265
 msgid "Enable texture compression"
-msgstr ""
+msgstr "启用纹理压缩"
 
 #: src/clparse.cpp:266
 msgid "Disable texture compression"
-msgstr ""
+msgstr "禁用纹理压缩"
 
 #: src/clparse.cpp:267
 msgid "Only use OpenGL 1.5"
-msgstr ""
+msgstr "仅使用 仅使用 OpenGL 1.5"
 
 #: src/cmddroid.cpp:110
 msgid "Commander needs a higher level to command more units"
-msgstr ""
+msgstr "指挥官需要更高等级才能指挥更多单位"
 
 #: src/configuration.cpp:96
 #, fuzzy
@@ -12387,7 +12210,7 @@ msgstr "删除设计"
 #: src/design.cpp:607
 #: src/design.cpp:4756
 msgid "Store Template"
-msgstr ""
+msgstr "储存模板"
 
 #: src/design.cpp:660
 #: src/design.cpp:707
@@ -12440,7 +12263,7 @@ msgstr "需要能源"
 
 #: src/design.cpp:1306
 msgid "Hydra "
-msgstr ""
+msgstr "Hydra "
 
 #: src/design.cpp:1474
 #: src/design.cpp:1502
@@ -12523,7 +12346,7 @@ msgstr "系统装备"
 
 #: src/design.cpp:4751
 msgid "Delete Template"
-msgstr ""
+msgstr "删除模板"
 
 #: src/display3d.cpp:658
 #, fuzzy
@@ -12542,7 +12365,7 @@ msgstr "等待其他玩家"
 
 #: src/display3d.cpp:671
 msgid "Out of sync"
-msgstr ""
+msgstr "不同步"
 
 #: src/display.cpp:1566
 msgid "Cannot Build. Oil Resource Burning."
@@ -12670,7 +12493,7 @@ msgstr "主菜单"
 
 #: src/frontend.cpp:117
 msgid "Official site: http://wz2100.net/"
-msgstr ""
+msgstr "官方网址：http://wz2100.net/"
 
 #: src/frontend.cpp:187
 msgid "Fast Play"
@@ -12724,7 +12547,7 @@ msgstr "单人游戏"
 
 #: src/frontend.cpp:256
 msgid "Campaign videos are missing! Get them from http://wz2100.net"
-msgstr ""
+msgstr "战役视频丢失！从 http://wz2100.net 获取"
 
 #: src/frontend.cpp:332
 #: src/ingameop.cpp:504
@@ -12752,7 +12575,7 @@ msgstr "加入游戏"
 
 #: src/frontend.cpp:400
 msgid "TCP port 2100 must be opened in your firewall or router to host games!"
-msgstr ""
+msgstr "在你的防火墙或主机游戏中必需打开TCP端口2100"
 
 #: src/frontend.cpp:462
 #: src/multiint.cpp:1472
@@ -13062,9 +12885,8 @@ msgid "Mod: "
 msgstr "Mod："
 
 #: src/hci.cpp:1234
-#, fuzzy
 msgid "MAP SAVED!"
-msgstr "游戏已储存"
+msgstr "地图已储存"
 
 #: src/hci.cpp:1559
 #: src/loop.cpp:260
@@ -13128,24 +12950,20 @@ msgid "Map:"
 msgstr "Map："
 
 #: src/hci.cpp:3536
-#, fuzzy
 msgid "Load"
-msgstr "载入游戏"
+msgstr "载入"
 
 #: src/hci.cpp:3537
-#, fuzzy
 msgid "Load Map File"
-msgstr "载入游戏"
+msgstr "载入地图文件"
 
 #: src/hci.cpp:3548
-#, fuzzy
 msgid "Save"
-msgstr "储存游戏"
+msgstr "储存"
 
 #: src/hci.cpp:3549
-#, fuzzy
 msgid "Save Map File"
-msgstr "储存游戏"
+msgstr "储存地图文件"
 
 #: src/hci.cpp:3561
 msgid "New"
@@ -13204,9 +13022,8 @@ msgid "Edit"
 msgstr "编辑"
 
 #: src/hci.cpp:3690
-#, fuzzy
 msgid "Start Edit Mode"
-msgstr "开始时无基地"
+msgstr "开始编辑模式"
 
 #: src/hci.cpp:3704
 #: src/ingameop.cpp:113
@@ -13220,9 +13037,8 @@ msgid "Exit Game"
 msgstr "离开游戏"
 
 #: src/hci.cpp:3731
-#, fuzzy
 msgid "Current Player:"
-msgstr "多人游戏"
+msgstr "当前玩家："
 
 #: src/hci.cpp:4012
 msgid "Progress Bar"
@@ -13238,7 +13054,7 @@ msgstr "循环生产"
 
 #: src/hci.cpp:5222
 msgid "Ally progress"
-msgstr ""
+msgstr "盟友进程"
 
 #: src/ingameop.cpp:112
 #: src/ingameop.cpp:196
@@ -13253,12 +13069,12 @@ msgstr "警告：你是主玩家。如果那你退出，所有玩家将不得不
 #: src/ingameop.cpp:187
 #: src/ingameop.cpp:538
 msgid "Tactical UI (Target Origin Icon): Show"
-msgstr ""
+msgstr "战术界面（原始目标图标）：显示"
 
 #: src/ingameop.cpp:192
 #: src/ingameop.cpp:542
 msgid "Tactical UI (Target Origin Icon): Hide"
-msgstr ""
+msgstr "战术界面（原始目标图标）：隐藏"
 
 #: src/ingameop.cpp:275
 #: src/ingameop.cpp:282
@@ -13272,23 +13088,21 @@ msgid "Save Game"
 msgstr "储存游戏"
 
 #: src/ingameop.cpp:349
-#, fuzzy
 msgid "Host has quit the game!"
-msgstr "主玩家已离开游戏"
+msgstr "主玩家已离开游戏！"
 
 #: src/ingameop.cpp:355
 msgid "The game can't continue without the host."
 msgstr "没有主玩家游戏不能继续"
 
 #: src/ingameop.cpp:361
-#, fuzzy
 msgid "-->  QUIT  <--"
 msgstr "-->退出<--"
 
 #: src/ingameop.cpp:512
 #, fuzzy
 msgid "Save Campaign Game"
-msgstr "新的任务"
+msgstr "储存当前游戏"
 
 #: src/ingameop.cpp:516
 #, fuzzy
@@ -13296,12 +13110,15 @@ msgid "Save Skirmish Game"
 msgstr "单人战役模式"
 
 #: src/init.cpp:422
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "The required mod could not be loaded: %s\n"
 "\n"
 "Warzone will try to load the game without it."
 msgstr ""
+"所需模块不能被加载：%s\n"
+"\n"
+"Warzone会尝试排除该模块后加载游戏"
 
 #: src/intdisplay.cpp:201
 #, fuzzy
@@ -13309,9 +13126,8 @@ msgid "Waiting for Power"
 msgstr "等待其他玩家"
 
 #: src/intdisplay.cpp:249
-#, fuzzy
 msgid "Build Progress"
-msgstr "建筑物HP（Build Points）"
+msgstr "建设进展"
 
 #: src/intdisplay.cpp:271
 #, fuzzy
@@ -13319,13 +13135,12 @@ msgid "Construction Progress"
 msgstr "建筑单位"
 
 #: src/intdisplay.cpp:292
-#, fuzzy
 msgid "Research Progress"
-msgstr "改善研发科技能力"
+msgstr "研究进展"
 
 #: src/intdisplay.cpp:656
 msgid "Need more resources!"
-msgstr ""
+msgstr "需要更多资源！"
 
 #: src/intelmap.cpp:241
 #: src/keybind.cpp:1397
@@ -13466,11 +13281,11 @@ msgstr "警告：这个作弊方式有点小问题。我们建议不要使用。
 
 #: src/keybind.cpp:228
 msgid "Ouch! Droid's health is down 20%!"
-msgstr ""
+msgstr "哎呦！Droid 的生命值下降了20%！"
 
 #: src/keybind.cpp:244
 msgid "Ouch! Structure's health is down 20%!"
-msgstr ""
+msgstr "哎呦！Structure的生命值下降了20%！"
 
 #: src/keybind.cpp:299
 msgid "Lets us see what you see!"
@@ -13481,9 +13296,9 @@ msgid "Fine, weapon & sensor display is off!"
 msgstr "关闭细节、武器及雷达显示"
 
 #: src/keybind.cpp:423
-#, fuzzy, c-format
+#, c-format
 msgid "Player %u is cheating a new droid army of: %s."
-msgstr "玩家%u 利用作弊（除错）模式建立了一个新droid: %s."
+msgstr "玩家%u 利用作弊（除错）模式建立了一个新droid: %s. "
 
 #: src/keybind.cpp:461
 #: src/keybind.cpp:491
@@ -13540,7 +13355,7 @@ msgstr "FPS显示关闭"
 #: src/keybind.cpp:626
 #, c-format
 msgid "(Player %u) is using a cheat :Num Droids: %d  Num Structures: %d  Num Features: %d"
-msgstr ""
+msgstr "（玩家%u）出现欺诈行为：机器人编号：%d 机构编码：%d 编码特征：%d"
 
 #: src/keybind.cpp:662
 msgid "Infinite power disabled"
@@ -13565,12 +13380,11 @@ msgstr "战争迷雾关闭"
 #: src/keybind.cpp:1229
 #, c-format
 msgid "Warning!  This cheat can cause dire problems later on! [%s]"
-msgstr ""
+msgstr "警告！此欺诈行为会导致严重的后果！[%s]"
 
 #: src/keybind.cpp:1229
-#, fuzzy
 msgid "Ending Mission."
-msgstr "传来讯息..."
+msgstr "任务结束中。"
 
 #: src/keybind.cpp:1345
 msgid "God Mode ON"
@@ -13585,9 +13399,9 @@ msgid "View Aligned to North"
 msgstr "View Aligned to North"
 
 #: src/keybind.cpp:1366
-#, fuzzy, c-format
+#, c-format
 msgid "Trap cursor %s"
-msgstr "捕捉鼠标"
+msgstr "捕捉光标%s"
 
 #: src/keybind.cpp:1452
 msgid "Researched EVERYTHING for you!"
@@ -13596,38 +13410,35 @@ msgstr "替你研发所有科技！"
 #: src/keybind.cpp:1517
 #, c-format
 msgid "(Player %u) is using cheat :%s %s"
-msgstr ""
+msgstr "（玩家%u）出现欺诈行为:%s%s"
 
 #: src/keybind.cpp:1517
-#, fuzzy
 msgid "Researched"
-msgstr "研发新科技"
+msgstr "调查"
 
 #: src/keybind.cpp:1538
 msgid "Only displaying energy bars when selected"
-msgstr ""
+msgstr "选择后只显示能量条"
 
 #: src/keybind.cpp:1541
 msgid "Always displaying energy bars for units"
-msgstr ""
+msgstr "总是显示能量条单位"
 
 #: src/keybind.cpp:1544
 msgid "Always displaying energy bars for units and structures"
-msgstr ""
+msgstr "总是显示能量条单位个结构"
 
 #: src/keybind.cpp:1566
 msgid "Demo mode off - Returning to normal game mode"
 msgstr "关闭展示模式—回到正常游戏模式"
 
 #: src/keybind.cpp:1581
-#, fuzzy
 msgid "Debug menu is Open"
-msgstr "建筑选单将重新开启"
+msgstr "调试菜单开启"
 
 #: src/keybind.cpp:1618
-#, fuzzy
 msgid "Unable to locate any oil derricks!"
-msgstr "找不到任何工程车单位！"
+msgstr "找不到任何井架！"
 
 #: src/keybind.cpp:1840
 msgid "Oh, the weather outside is frightful... SNOW"
@@ -13643,16 +13454,15 @@ msgstr "天气预报：一整片晴朗的天空。"
 
 #: src/keybind.cpp:1937
 msgid "Warning! This can have drastic consequences if used incorrectly in missions."
-msgstr ""
+msgstr "警告！在任务中使用错误会导致激烈的后果。"
 
 #: src/keybind.cpp:1939
-#, fuzzy
 msgid "All enemies destroyed by cheating!"
-msgstr "敌军已经死了...由于你作弊的关系.."
+msgstr "由于作弊，你已全军覆没！"
 
 #: src/keybind.cpp:1980
 msgid "Destroying selected droids and structures!"
-msgstr ""
+msgstr "摧毁选中的机器人和结构！"
 
 #: src/keybind.cpp:2549
 msgid "Centered on player HQ, direction NORTH"
@@ -13664,44 +13474,42 @@ msgstr "无法定位至主基地"
 
 #: src/keybind.cpp:2568
 msgid "Formation speed limiting has been removed from the game due to bugs."
-msgstr ""
+msgstr "由于漏洞，速度限制形成将从游戏中被移除。"
 
 #: src/keybind.cpp:2617
 msgid "Vertical rotation direction: Normal"
-msgstr ""
+msgstr "上下垂直方向：正常"
 
 #: src/keybind.cpp:2622
 msgid "Vertical rotation direction: Flipped"
-msgstr ""
+msgstr "上下垂直方向：快速翻动"
 
 #: src/keybind.cpp:2631
 msgid "Screen shake when things die: Off"
-msgstr ""
+msgstr "物体死亡后屏幕抖动：关"
 
 #: src/keybind.cpp:2636
 msgid "Screen shake when things die: On"
-msgstr ""
+msgstr "物体死亡后屏幕抖动：开"
 
 #: src/keybind.cpp:2686
-#, fuzzy
 msgid "Sorry, but game speed cannot be changed in multiplayer."
-msgstr "抱歉，多人游戏中无法使用此作弊码"
+msgstr "对不起，在多人游戏中游戏速度不能被更改。"
 
 #: src/keybind.cpp:2721
 #: src/keybind.cpp:2773
-#, fuzzy
 msgid "Game Speed Reset"
-msgstr "重设游戏速度"
+msgstr "游戏速度复位"
 
 #: src/keybind.cpp:2725
-#, fuzzy, c-format
+#, c-format
 msgid "Game Speed Increased to %s"
-msgstr "游戏速度增加至 %3.1f"
+msgstr "游戏速度增加至 %s"
 
 #: src/keybind.cpp:2729
-#, fuzzy, c-format
+#, c-format
 msgid "Game Speed Reduced to %s"
-msgstr "游戏速度减少至 %3.1f"
+msgstr "游戏速度减少至 %s"
 
 #: src/keybind.cpp:2785
 msgid "Radar showing friend-foe colors"
@@ -13783,18 +13591,16 @@ msgid "Take Screen Shot"
 msgstr "抓取萤幕截图"
 
 #: src/keymap.cpp:319
-#, fuzzy
 msgid "Toggle Formation Speed Limiting"
-msgstr "开启或关闭成型速度限制"
+msgstr "开启或关闭构成速度限制"
 
 #: src/keymap.cpp:320
 msgid "View Location of Previous Message"
 msgstr "检视前一讯息发生位置"
 
 #: src/keymap.cpp:321
-#, fuzzy
 msgid "Toggle Sensor display"
-msgstr "开启或关闭主控台"
+msgstr "开启或关闭多传感显示器"
 
 #: src/keymap.cpp:325
 msgid "Assign Group 0"
@@ -13917,9 +13723,8 @@ msgid "Select Commander 9"
 msgstr "选择命令9"
 
 #: src/keymap.cpp:364
-#, fuzzy
 msgid "Multiplayer Options / Alliance dialog"
-msgstr "多人游戏选项"
+msgstr "多人游戏选项/联盟对话框"
 
 #: src/keymap.cpp:367
 msgid "Snap View to North"
@@ -13974,17 +13779,14 @@ msgid "Orders Menu"
 msgstr "命令选单"
 
 #: src/keymap.cpp:380
-#, fuzzy
 msgid "Decrease Game Speed"
-msgstr "降低游戏速度"
+msgstr "降低游戏速度 "
 
 #: src/keymap.cpp:381
-#, fuzzy
 msgid "Increase Game Speed"
-msgstr "增加游戏速度"
+msgstr "增加游戏速度 "
 
 #: src/keymap.cpp:382
-#, fuzzy
 msgid "Reset Game Speed"
 msgstr "重设游戏速度"
 
@@ -14054,44 +13856,39 @@ msgstr "送出文字讯息"
 
 #: src/keymap.cpp:413
 msgid "Drop a beacon"
-msgstr ""
+msgstr "终止一个塔"
 
 #: src/keymap.cpp:415
-#, fuzzy
 msgid "Sensor display On"
-msgstr "雷达可视距离"
+msgstr "多传感显示器 打开"
 
 #: src/keymap.cpp:416
 msgid "Sensor display Off"
-msgstr ""
+msgstr "多传感显示器 关"
 
 #: src/keymap.cpp:417
-#, fuzzy
 msgid "Toggles shadows"
-msgstr "开启影子"
+msgstr "切换阴影"
 
 #: src/keymap.cpp:418
-#, fuzzy
 msgid "Trap cursor"
-msgstr "捕捉滑鼠"
+msgstr "捕捉光标"
 
 #: src/keymap.cpp:419
-#, fuzzy
 msgid "Toggle radar terrain"
-msgstr "开启或关闭雷达"
+msgstr "开启或关闭雷达地势"
 
 #: src/keymap.cpp:420
 msgid "Toggle ally-enemy radar view"
-msgstr ""
+msgstr "切换 盟友-敌人 雷达视图"
 
 #: src/keymap.cpp:429
 msgid "Select all Combat Units"
 msgstr "选择所有战斗单位"
 
 #: src/keymap.cpp:430
-#, fuzzy
 msgid "Select all Cyborgs"
-msgstr "选择所有气垫船单位"
+msgstr "选择所有的半机械人"
 
 #: src/keymap.cpp:431
 msgid "Select all Heavily Damaged Units"
@@ -14127,52 +13924,43 @@ msgstr "选择所有轮系单位"
 
 #: src/keymap.cpp:440
 msgid "Show frame rate"
-msgstr ""
+msgstr "显示帧率"
 
 #: src/keymap.cpp:441
-#, fuzzy
 msgid "Select all Similar Units"
-msgstr "选择所有类似单位"
+msgstr "选择所有类似的单位"
 
 #: src/keymap.cpp:445
-#, fuzzy
 msgid "Select all Combat Cyborgs"
-msgstr "选择所有战斗单位"
+msgstr "选择所有正在战斗的半机械人"
 
 #: src/keymap.cpp:446
-#, fuzzy
 msgid "Select all Engineers"
-msgstr "选择所有气垫船单位"
+msgstr "选择所有工程师"
 
 #: src/keymap.cpp:447
-#, fuzzy
 msgid "Select all Land Combat Units"
-msgstr "选择所有战斗单位"
+msgstr "选择所有战斗土地单位"
 
 #: src/keymap.cpp:448
-#, fuzzy
 msgid "Select all Mechanics"
-msgstr "选择所有履带单位"
+msgstr "选择所有机器"
 
 #: src/keymap.cpp:449
-#, fuzzy
 msgid "Select all Transporters"
-msgstr "选择所有履带单位"
+msgstr "选择所有传输者"
 
 #: src/keymap.cpp:450
-#, fuzzy
 msgid "Select all Repair Tanks"
-msgstr "选择所有履带单位"
+msgstr "选择所有修理坦克"
 
 #: src/keymap.cpp:451
-#, fuzzy
 msgid "Select all Sensor Units"
-msgstr "选择所有类似单位"
+msgstr "选择所有传感单位"
 
 #: src/keymap.cpp:452
-#, fuzzy
 msgid "Select all Trucks"
-msgstr "选择所有履带单位"
+msgstr "选择所有卡车"
 
 #: src/keymap.cpp:456
 msgid "Select next Factory"
@@ -14191,31 +13979,28 @@ msgid "Select next Cyborg Factory"
 msgstr "选择下一个生化人工厂"
 
 #: src/keymap.cpp:462
-#, fuzzy
 msgid "Toggle Debug Mappings"
-msgstr "键盘配置"
+msgstr "切换调试映射"
 
 #: src/keymap.cpp:463
 msgid "Toggle display of droid path"
-msgstr ""
+msgstr "切换显示机器人路径"
 
 #: src/keymap.cpp:464
 msgid "Toggle display of gateways"
-msgstr ""
+msgstr "切换显示网关"
 
 #: src/keymap.cpp:465
 msgid "Show all keyboard mappings - use pause!"
-msgstr ""
+msgstr "显示所有的键盘映射——使用暂停!"
 
 #: src/keymap.cpp:466
-#, fuzzy
 msgid "Toggle visibility"
-msgstr "开启或关闭叠层显示"
+msgstr "切换能见度"
 
 #: src/keymap.cpp:467
-#, fuzzy
 msgid "Raise tile height"
-msgstr "向右旋转"
+msgstr "提高展开图高度"
 
 #: src/keymap.cpp:468
 msgid "Lower tile height"
@@ -14226,52 +14011,44 @@ msgid "Toggles on/off DEMO Mode"
 msgstr "开关演示模式"
 
 #: src/keymap.cpp:470
-#, fuzzy
 msgid "End Mission"
-msgstr "传来讯息..."
+msgstr "任务结束"
 
 #: src/keymap.cpp:471
-#, fuzzy
 msgid "Toggles All fog"
-msgstr "开启或关闭同盟状态"
+msgstr "切换所有雾"
 
 #: src/keymap.cpp:472
 msgid "Trigger some weather"
-msgstr ""
+msgstr "引发一些天气"
 
 #: src/keymap.cpp:473
 msgid "Flip terrain triangle"
-msgstr ""
+msgstr "翻转地形三角"
 
 #: src/keymap.cpp:474
-#, fuzzy
 msgid "Realign height of all objects on the map"
-msgstr "使地图上所有物件等高"
+msgstr "重新排列地图上的所有高点"
 
 #: src/keymap.cpp:477
-#, fuzzy
 msgid "Make all items available"
-msgstr "可使用所有的项目"
+msgstr "使所有物体可用"
 
 #: src/keymap.cpp:478
-#, fuzzy
 msgid "Kill Selected Unit(s)"
-msgstr "交出选择的单位"
+msgstr "杀死选定单位"
 
 #: src/keymap.cpp:479
-#, fuzzy
 msgid "Toggle god Mode Status"
-msgstr "开启或关闭同盟状态"
+msgstr "开启或关闭无敌模式状态"
 
 #: src/keymap.cpp:480
-#, fuzzy
 msgid "Display Options Screen"
 msgstr "显示游戏中选项"
 
 #: src/keymap.cpp:481
-#, fuzzy
 msgid "Complete current research"
-msgstr "可开始研发指挥官系统"
+msgstr "完成当前调查"
 
 #: src/keymap.cpp:482
 msgid "Toggle watch window"
@@ -14282,33 +14059,29 @@ msgid "Trace a game object"
 msgstr "跟踪一个游戏中的物体"
 
 #: src/keymap.cpp:484
-#, fuzzy
 msgid "Toggle Driving Mode"
-msgstr "开启或关闭追踪视角"
+msgstr "切换追踪视角"
 
 #: src/loop.cpp:267
 #: src/loop.cpp:283
-#, fuzzy
 msgid "Could not save game!"
-msgstr "载入已储存的游戏"
+msgstr "游戏储存失败！"
 
 #: src/mission.cpp:1981
 msgid "Load Transport"
 msgstr "送上运输舰"
 
 #: src/mission.cpp:2375
-#, fuzzy
 msgid "OBJECTIVE ACHIEVED by cheating!"
-msgstr "任务完成"
+msgstr "通过作弊完成目标！"
 
 #: src/mission.cpp:2375
 msgid "OBJECTIVE ACHIEVED"
 msgstr "任务完成"
 
 #: src/mission.cpp:2381
-#, fuzzy
 msgid "OBJECTIVE FAILED--and you cheated!"
-msgstr "任务失败"
+msgstr "目标失败--用户发现作弊行为！"
 
 #: src/mission.cpp:2381
 msgid "OBJECTIVE FAILED"
@@ -14330,9 +14103,8 @@ msgid "Load Saved Game"
 msgstr "载入已储存的游戏"
 
 #: src/mission.cpp:2513
-#, fuzzy
 msgid "GAME SAVED :"
-msgstr "游戏已储存"
+msgstr "游戏保存："
 
 #: src/move.cpp:2278
 #, c-format
@@ -14360,9 +14132,9 @@ msgid "%s Gives You Technology Documents"
 msgstr "%s 给​​你一个技术文件"
 
 #: src/multigifts.cpp:380
-#, fuzzy, c-format
+#, c-format
 msgid "%s Gives You %u Power"
-msgstr "%s 给​​你能源"
+msgstr "%s 给你%u力量"
 
 #: src/multigifts.cpp:408
 #, c-format
@@ -14390,13 +14162,12 @@ msgid "You Discover Blueprints For %s"
 msgstr "你发现一个用作于 %s 的蓝图"
 
 #: src/multiint.cpp:215
-#, fuzzy
 msgid "Medium"
-msgstr "中型加农炮"
+msgstr "中"
 
 #: src/multiint.cpp:215
 msgid "Insane"
-msgstr ""
+msgstr "疯狂的"
 
 #: src/multiint.cpp:700
 #: src/multilimit.cpp:190
@@ -14405,9 +14176,8 @@ msgstr "接受设定"
 
 #: src/multiint.cpp:702
 #: src/multiint.cpp:1310
-#, fuzzy
 msgid "Cancel"
-msgstr "枪骑兵火箭"
+msgstr "取消"
 
 #: src/multiint.cpp:713
 msgid "IP Address or Machine Name"
@@ -14426,41 +14196,38 @@ msgid "IP"
 msgstr "IP"
 
 #: src/multiint.cpp:986
-#, fuzzy
 msgid "[Password required]"
-msgstr "*** 不需要密码 ***"
+msgstr "[需要密码]"
 
 #: src/multiint.cpp:990
 msgid "[No Tanks]"
-msgstr ""
+msgstr "[没有坦克]"
 
 #: src/multiint.cpp:994
-#, fuzzy
 msgid "[No Cyborgs]"
-msgstr "生产生化人步兵"
+msgstr "[没有半机器人]"
 
 #: src/multiint.cpp:998
 msgid "[No VTOLs]"
-msgstr ""
+msgstr "[没有 VTOLs]"
 
 #: src/multiint.cpp:1002
 #, c-format
 msgid "Hosted by %s"
-msgstr ""
+msgstr "挂机%s"
 
 #: src/multiint.cpp:1006
 #, c-format
 msgid "Hosted by %s —%s"
-msgstr ""
+msgstr "托管%s-%s"
 
 #: src/multiint.cpp:1028
 msgid "Can't find any games for your version."
-msgstr ""
+msgstr "找不到此版本的游戏"
 
 #: src/multiint.cpp:1043
-#, fuzzy
 msgid "No games are available"
-msgstr "可使用新的科技"
+msgstr "没有可选游戏"
 
 #: src/multiint.cpp:1046
 msgid "Game is full"
@@ -14512,9 +14279,8 @@ msgid "Filter Games List"
 msgstr "重新整理游戏清单"
 
 #: src/multiint.cpp:1290
-#, fuzzy
 msgid "Enter Password:"
-msgstr "按一下看地图"
+msgstr "输入密码："
 
 #: src/multiint.cpp:1308
 msgid "OK"
@@ -14539,9 +14305,8 @@ msgid "Satellite Uplink disabled."
 msgstr "卫星上传"
 
 #: src/multiint.cpp:1430
-#, fuzzy
 msgid "Laser Satellite disabled."
-msgstr "激光卫星指挥中心"
+msgstr "激光卫星损坏"
 
 #: src/multiint.cpp:1477
 #: src/multiint.cpp:1485
@@ -14549,29 +14314,25 @@ msgid "Select Game Name"
 msgstr "选择游戏名称"
 
 #: src/multiint.cpp:1478
-#, fuzzy
 msgid "One-Player Skirmish"
-msgstr "单人战役模式"
+msgstr "单人战役模式 "
 
 #: src/multiint.cpp:1489
 msgid "Select Map"
 msgstr "选择地图"
 
 #: src/multiint.cpp:1499
-#, fuzzy
 msgid "Click to set Password"
-msgstr "按一下看地图"
+msgstr "点击设置密码"
 
 #: src/multiint.cpp:1509
 #: src/multiint.cpp:1510
-#, fuzzy
 msgid "Scavengers"
-msgstr "拾荒者"
+msgstr "清洁工"
 
 #: src/multiint.cpp:1512
-#, fuzzy
 msgid "No Scavengers"
-msgstr "拾荒者"
+msgstr "没有清洁工"
 
 #: src/multiint.cpp:1542
 msgid "Select Player Name"
@@ -14648,20 +14409,19 @@ msgstr "设定建筑物数量限制"
 
 #: src/multiint.cpp:1759
 msgid "DIFFICULTY"
-msgstr ""
+msgstr "难度"
 
 #: src/multiint.cpp:1773
 msgid "Less aggressive"
-msgstr ""
+msgstr "更少侵略性"
 
 #: src/multiint.cpp:1774
-#, fuzzy
 msgid "Plays nice"
-msgstr "玩家"
+msgstr "玩得好"
 
 #: src/multiint.cpp:1775
 msgid "No holds barred"
-msgstr ""
+msgstr "没有技巧限制的比赛"
 
 #: src/multiint.cpp:1776
 #, fuzzy
@@ -14670,15 +14430,15 @@ msgstr "开始时具规模基地"
 
 #: src/multiint.cpp:1804
 msgid "CHOOSE AI"
-msgstr ""
+msgstr "选择AI"
 
 #: src/multiint.cpp:1820
 msgid "Allow human players to join in this slot"
-msgstr ""
+msgstr "允许人类玩家加入"
 
 #: src/multiint.cpp:1828
 msgid "Leave this slot unused"
-msgstr ""
+msgstr "保持这个位置不被使用"
 
 #: src/multiint.cpp:2280
 msgid "Team"
@@ -14686,22 +14446,19 @@ msgstr "队伍"
 
 #: src/multiint.cpp:2323
 msgid "You cannot change difficulty in a challenge"
-msgstr ""
+msgstr "在挑战中不能更换难度"
 
 #: src/multiint.cpp:2323
-#, fuzzy
 msgid "Click to change difficulty"
-msgstr "点击这里更改AI难度"
+msgstr "点击这里更改难度"
 
 #: src/multiint.cpp:2338
-#, fuzzy
 msgid "Waiting for player"
 msgstr "等待其他玩家"
 
 #: src/multiint.cpp:2338
-#, fuzzy
 msgid "Player is ready"
-msgstr "玩家"
+msgstr "玩家已准备"
 
 #: src/multiint.cpp:2338
 msgid "Click when ready"
@@ -14721,24 +14478,20 @@ msgid "Click to change to this slot"
 msgstr "点击这里更改玩家设置"
 
 #: src/multiint.cpp:2452
-#, fuzzy
 msgid "Choose Team"
-msgstr "锁定同盟模式"
+msgstr "选择队伍"
 
 #: src/multiint.cpp:2482
-#, fuzzy
 msgid "Click to change player colour"
-msgstr "点击这里更改玩家设置"
+msgstr "点击这里更改玩家颜色"
 
 #: src/multiint.cpp:2510
-#, fuzzy
 msgid "Click to change player position"
-msgstr "点击这里更改玩家设置"
+msgstr "点击这里更改玩家位置"
 
 #: src/multiint.cpp:2514
-#, fuzzy
 msgid "Click to change AI"
-msgstr "点击这里更改玩家设置"
+msgstr "点击这里更改AI"
 
 #: src/multiint.cpp:2579
 msgid "CHAT"
@@ -14750,12 +14503,12 @@ msgstr "所有玩家需要使用相同的mod以便进入游戏"
 
 #: src/multiint.cpp:2652
 msgid "Connecting to the lobby server..."
-msgstr ""
+msgstr "连接大厅服务器中..."
 
 #: src/multiint.cpp:2956
-#, fuzzy, c-format
+#, c-format
 msgid "*** password [%s] is now required! ***"
-msgstr "*** 需要密码 ***"
+msgstr "*** 密码[%s]现在需要！***"
 
 #: src/multiint.cpp:2962
 msgid "*** password is NOT required! ***"
@@ -14782,35 +14535,34 @@ msgstr "主玩家已开始游戏"
 
 #: src/multiint.cpp:3913
 msgid "Can't connect to lobby server!"
-msgstr ""
+msgstr "无法连接到大厅服务器！"
 
 #: src/multiint.cpp:4005
 #, c-format
 msgid "Mods: %s"
-msgstr ""
+msgstr "Mods:%s"
 
 #: src/multiint.cpp:4012
 msgid "Mods: None!"
-msgstr ""
+msgstr "Mods: 无！"
 
 #: src/multiint.cpp:4022
-#, fuzzy, c-format
+#, c-format
 msgid "Version: %s"
-msgstr "版本 %s%s%s%s"
+msgstr "版本：%s"
 
 #: src/multiint.cpp:4073
-#, fuzzy, c-format
+#, c-format
 msgid "Click to take player slot %d"
-msgstr "点击这里更改玩家设置"
+msgstr "点击这里获取玩家位置%d"
 
 #: src/multiint.cpp:4082
 #: src/multiint.cpp:4284
 msgid "Open"
-msgstr ""
+msgstr "打开"
 
 #: src/multiint.cpp:4082
 #: src/multiint.cpp:4285
-#, fuzzy
 msgid "Closed"
 msgstr "关闭"
 
@@ -14854,19 +14606,17 @@ msgid "%s (%u) has an incompatible mod, and has been kicked."
 msgstr "%s(%u)有一个不兼容的mod，已经被踢出"
 
 #: src/multijoin.cpp:462
-#, fuzzy, c-format
+#, c-format
 msgid "%s is joining the game"
-msgstr "%s 加入游戏"
+msgstr "%s 正在加入游戏"
 
 #: src/multijoin.cpp:473
-#, fuzzy
 msgid "Server message:"
-msgstr "系统语系"
+msgstr "服务器信息："
 
 #: src/multilimit.cpp:183
-#, fuzzy
 msgid "Apply Defaults and Return To Previous Screen"
-msgstr "回到前一个画面"
+msgstr "应用错误，回到前一个画面"
 
 #: src/multilimit.cpp:316
 #, fuzzy
@@ -14890,10 +14640,10 @@ msgid "Any number of players"
 msgstr "任何数量的玩家"
 
 #: src/multimenu.cpp:654
-#, fuzzy, c-format
+#, c-format
 msgid "%d player"
 msgid_plural "%d players"
-msgstr[0] "2 玩家"
+msgstr[0] "%d 玩家"
 
 #: src/multimenu.cpp:792
 msgid "Score"
@@ -14913,11 +14663,11 @@ msgstr "建筑"
 
 #: src/multimenu.cpp:821
 msgid "Sent/Received per sec —"
-msgstr ""
+msgstr "发送/接收 每秒-"
 
 #: src/multimenu.cpp:821
 msgid "Total Sent/Received —"
-msgstr ""
+msgstr "总发送/接收 —"
 
 #: src/multimenu.cpp:826
 #, fuzzy, c-format
@@ -14927,16 +14677,16 @@ msgstr "训练有素： %u"
 #: src/multimenu.cpp:830
 #, c-format
 msgid "Uncompressed: %u/%u"
-msgstr ""
+msgstr "未压缩：%u%u"
 
 #: src/multimenu.cpp:834
 #, c-format
 msgid "Pack: %u/%u"
-msgstr ""
+msgstr "包：%u%u"
 
 #: src/multimenu.cpp:1136
 msgid "Channel"
-msgstr ""
+msgstr "频道"
 
 #: src/multimenu.cpp:1150
 msgid "Toggle Alliance State"
@@ -14969,9 +14719,8 @@ msgid "Kicking player %s, because they tried to bypass data integrity check!"
 msgstr "踢出玩家 %s，因为他们试图绕过数据完整性检查！"
 
 #: src/multiplay.cpp:1116
-#, fuzzy
 msgid "(allies"
-msgstr "同盟"
+msgstr "（同盟"
 
 #: src/multiplay.cpp:1124
 msgid "(private to "
@@ -15011,39 +14760,39 @@ msgstr "青绿色"
 
 #: src/multiplay.cpp:2007
 msgid "Yellow"
-msgstr ""
+msgstr "黄色"
 
 #: src/multiplay.cpp:2008
 msgid "Purple"
-msgstr ""
+msgstr "紫色"
 
 #: src/multiplay.cpp:2009
 msgid "White"
-msgstr ""
+msgstr "白色"
 
 #: src/multiplay.cpp:2010
 msgid "Bright blue"
-msgstr ""
+msgstr "宝蓝色"
 
 #: src/multiplay.cpp:2011
 msgid "Neon green"
-msgstr ""
+msgstr "柠檬绿"
 
 #: src/multiplay.cpp:2012
 msgid "Infrared"
-msgstr ""
+msgstr "红外线"
 
 #: src/multiplay.cpp:2013
 msgid "Ultraviolet"
-msgstr ""
+msgstr "紫外光"
 
 #: src/multiplay.cpp:2014
 msgid "Brown"
-msgstr ""
+msgstr "棕色"
 
 #: src/order.cpp:803
 msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
-msgstr ""
+msgstr "无法进行此项操作！在使用Cyborg运输时必需作为Cyborg单位。"
 
 #: src/qtscriptfuncs.cpp:1596
 #: src/scriptfuncs.cpp:3263
@@ -15220,16 +14969,15 @@ msgid_plural "%u units selected"
 msgstr[0] "已选取 %u 单位"
 
 #: src/structure.cpp:2620
-#, fuzzy
 msgid "Can't build anymore units, Command Control Limit Reached - Production Halted"
-msgstr "已达到可控制单位总数上限，停止生产新单位"
+msgstr "不能生产新的单位，已达到指挥官可控制单位总数上限，停止生产新单位"
 
 #: src/structure.cpp:5613
 #: src/structure.cpp:5638
-#, fuzzy, c-format
+#, c-format
 msgid "%s - %u Unit assigned - Damage %3.0f%%"
 msgid_plural "%s - %u Units assigned - Damage %3.0f%%"
-msgstr[0] "%s - 已指派 %u 单位"
+msgstr[0] "%s -%u 已指派 -伤害%3.0f%%"
 
 #: src/structure.cpp:5643
 #: src/structure.cpp:5711
@@ -15240,9 +14988,9 @@ msgid "%s - Damage %3.0f%%"
 msgstr "%s - 损伤 %3.0f%%"
 
 #: src/structure.cpp:5693
-#, fuzzy, c-format
+#, c-format
 msgid "%s - Connected %u of %u - Damage %3.0f%%"
-msgstr "%s - 连接钻油井数量 %u of %u"
+msgstr "%s - 连接 %u of %u - 伤害%3.0f%%"
 
 #: src/structure.cpp:5857
 #: src/structure.cpp:5902
@@ -15285,7 +15033,7 @@ msgstr "发射运输舰"
 
 #: src/transporter.cpp:1378
 msgid "There is not enough room in the Transport!"
-msgstr ""
+msgstr "运输空间不足！"
 
 #: src/transporter.cpp:1604
 msgid "Reinforcements landing"
@@ -15307,7 +15055,7 @@ msgstr " - Built %s"
 #. TRANSLATORS: This string looks as follows when expanded.
 #. "Version <version name/number> <working copy state><BUILD DATE><BUILD TYPE>"
 #: src/version.cpp:147
-#, fuzzy, c-format
+#, c-format
 msgid "Version %s%s%s%s"
 msgstr "版本 %s%s%s%s"
 

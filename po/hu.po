@@ -1,14 +1,14 @@
 # Copyright (c) 2008 Rosetta Contributors and Canonical Ltd 2008
 # This file is distributed under the same license as the warzone2100 package.
-# 
+#
 # Jen Ockwell <jenfraggleubuntu@googlemail.com>, 2008.
 msgid ""
 msgstr ""
 "Project-Id-Version: Warzone 2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2013-02-24 22:18+0100\n"
-"PO-Revision-Date: 2012-11-13 17:18+0100\n"
-"Last-Translator: Kálmán „KAMI” Szalai <kami911@gmail.com>\n"
+"POT-Creation-Date: 2013-05-05 14:45+0200\n"
+"PO-Revision-Date: 2013-03-02 17:18+0100\n"
+"Last-Translator: Tamás Mészáros <tamasm78@invitel.hu>\n"
 "Language-Team: Magyar (Hungary) <meszaros.tomi@hotmail.com>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -4649,7 +4649,7 @@ msgstr "Vegyen egy felderítő egységet, hogy megvizsgálja ezeket a jeleket."
 
 #: data/base/messages/strings/cam1strings.txt:29
 msgid "Use your trucks to build defenses at your LZ."
-msgstr "Landolási ponton használd a munkagépet védművek kiépítésére LZ-nek."
+msgstr "Landolási ponton használd a munkagépet védművek kiépítésére Landoló Zónához."
 
 #: data/base/messages/strings/cam1strings.txt:31
 msgid "TRANSPORT MISSION: Enemy Transmissions Detected"
@@ -4661,7 +4661,7 @@ msgstr "Derítse fel a megjelölt területet, ellenséges kutatóintézetekért.
 
 #: data/base/messages/strings/cam1strings.txt:33
 msgid "Proceed to LZ#2. Do not engage the enemy at this time."
-msgstr "Haladjon tovább LZ#2-re. Ne támadja az ellenséget."
+msgstr "Haladjon tovább Landoló Zóna#2-re. Ne támadja az ellenséget."
 
 #: data/base/messages/strings/cam1strings.txt:35
 msgid "TRANSPORT MISSION: Synaptic Link Location"
@@ -4811,11 +4811,11 @@ msgstr "Ezen a területen, kutassa fel és szerezze meg a tárgyi leleteket."
 
 #: data/base/messages/strings/cam1strings.txt:97
 msgid "ENEMY LZ"
-msgstr "ELLENSÉGES LZ"
+msgstr "ELLENSÉGES Landoló Zóna"
 
 #: data/base/messages/strings/cam1strings.txt:98
 msgid "Destroy this LZ to prevent enemy landings."
-msgstr "Semmisítse meg a LZ-t, az ellenség landolása elött."
+msgstr "Semmisítse meg a Landoló Zóná-t, az ellenség landolása elött."
 
 #: data/base/messages/strings/cam1strings.txt:101
 msgid "ALPHA BASE INTELLIGENCE REPORT: NEXUS"
@@ -5046,11 +5046,11 @@ msgstr "Ezen a helyen, egy ellenséges parancsnok, összegyűjti a szállítmán
 
 #: data/base/messages/strings/cam2strings.txt:52
 msgid "Once at the LZ, eradicate the enemy commander and recover the shipment."
-msgstr "Az LZ-nél, pusztítsa el az ellenséges parancsnokot és szerezze vissza a szállítmányt."
+msgstr "Az Landoló Zónánál, pusztítsa el az ellenséges parancsnokot és szerezze vissza a szállítmányt."
 
 #: data/base/messages/strings/cam2strings.txt:53
 msgid "Then return to the LZ."
-msgstr "Azután térjen vissza az LZ-hez."
+msgstr "Azután térjen vissza a Landoló Zónához."
 
 #: data/base/messages/strings/cam2strings.txt:55
 msgid "Disturbing news regarding NASDA."
@@ -5150,7 +5150,7 @@ msgstr "Meg kell őket állítani."
 
 #: data/base/messages/strings/cam2strings.txt:102
 msgid "Proceed from the LZ to the reactor and destroy it."
-msgstr "Haladjon tovább a reaktorhoz és semmisítse meg."
+msgstr "Haladjon tovább Landoló Zónától a reaktorhoz és semmisítse meg."
 
 #: data/base/messages/strings/cam2strings.txt:103
 msgid "Do not allow the Collective to bring the reactor on-line."
@@ -5204,7 +5204,7 @@ msgstr "Stratégiai visszavonuláskor, számolja fel a bázis körüli föld-lev
 
 #: data/base/messages/strings/cam2strings.txt:128
 msgid "Fly to the LZ, then head overland to destroy the SAM sites."
-msgstr "Repüljön a LZ-re, szárazföldi egységekkel semmisítse meg a SAM rakétaállásokat."
+msgstr "Repüljön a Landoló Zónára, szárazföldi egységekkel semmisítse meg a SAM rakétaállásokat."
 
 #: data/base/messages/strings/cam2strings.txt:131
 #: data/base/messages/strings/cam2strings.txt:136
@@ -5225,7 +5225,7 @@ msgstr "Irtsa ki az ellenséget és biztosítsa a területet."
 
 #: data/base/messages/strings/cam2strings.txt:138
 msgid "Once a safe haven is established, return to the LZ for further orders."
-msgstr "Menedék létesítése után, térjen vissza a LZ-hoz a többiekért."
+msgstr "Menedék létesítése után, térjen vissza a Landoló Zónához a többiekért."
 
 #: data/base/messages/strings/cam2strings.txt:141
 #: data/base/messages/strings/cam2strings.txt:146
@@ -5281,7 +5281,7 @@ msgstr "Vigye erőit az északi szektorba"
 #: data/base/messages/strings/cam3strings.txt:10
 #: data/base/sequenceaudio/cam3/c003.txa:15
 msgid "Once at the mountains secure an LZ. Then establish a forward base."
-msgstr "Biztosítson egy LZ-t a hegyeknél. Azután hozzon létre egy előretolt bázist."
+msgstr "Biztosítson egy Landoló Zónát a hegyeknél. Azután hozzon létre egy előretolt bázist."
 
 #: data/base/messages/strings/cam3strings.txt:11
 #: data/base/sequenceaudio/cam3/c003.txa:16
@@ -5299,7 +5299,7 @@ msgstr "Parancsnok, a terv sikeréért ön a felelős."
 
 #: data/base/messages/strings/cam3strings.txt:16
 msgid "Secure an LZ, then establish a forward base."
-msgstr "Biztosítson egy LZ-t, azután létesítsen előretolt bázist."
+msgstr "Biztosítson egy Landoló Zónát, azután létesítsen előretolt bázist."
 
 #: data/base/messages/strings/cam3strings.txt:19
 #: data/base/messages/strings/cam3strings.txt:28
@@ -5316,7 +5316,7 @@ msgstr "Ezen a NASDA pozíción egy vagy több rakéta volt."
 
 #: data/base/messages/strings/cam3strings.txt:24
 msgid "We are transmitting coordinates of an LZ near the silos."
-msgstr "Átküldjük a silók közelében lévő LZ koordinátáit."
+msgstr "Átküldjük a silók közelében lévő Landoló Zóna koordinátáit."
 
 #: data/base/messages/strings/cam3strings.txt:25
 #: data/base/messages/strings/cam3strings.txt:61
@@ -5326,7 +5326,7 @@ msgstr "Koordináták letöltése befejeződött."
 
 #: data/base/messages/strings/cam3strings.txt:29
 msgid "Secure your LZ, then head overland to destroy the missile silo."
-msgstr "Biztosítsa a LZ-t, majd szárazföldi egységekkel semmisítse meg a rakétasilót."
+msgstr "Biztosítsa a Landoló Zónát, majd szárazföldi egységekkel semmisítse meg a rakétasilót."
 
 #: data/base/messages/strings/cam3strings.txt:33
 #: data/base/messages/strings/cam3strings.txt:38
@@ -5399,11 +5399,11 @@ msgstr "Küldjön felderítő egységet erre a koordinátára és értékelje a 
 
 #: data/base/messages/strings/cam3strings.txt:66
 msgid "Determine whether they are Team Alpha. If so, rescue and escort them back to the LZ."
-msgstr "Állapítsa meg, vajon az Alfa csapat-e az. Amennyiben igen, menekítse ki őket a LZ-hoz."
+msgstr "Állapítsa meg, vajon az Alfa csapat-e az. Amennyiben igen, menekítse ki őket a Landoló Zónához."
 
 #: data/base/messages/strings/cam3strings.txt:68
 msgid "This group are part of Team Alpha, Rescue them and escort them to the LZ."
-msgstr "Ez az csoport az Alfa csapat része, kisérje őket az LZ-hoz."
+msgstr "Ez az csoport az Alfa csapat része, kisérje őket az Landoló Zónához."
 
 #: data/base/messages/strings/cam3strings.txt:71
 msgid "NORTHERN SECTOR MISSION: Team Alpha Debrief"
@@ -5652,7 +5652,7 @@ msgstr "Biztosak vagyunk benne, hogy a NEXUS alaprendszerei itt találhatóak."
 
 #: data/base/messages/strings/cam3strings.txt:188
 msgid "Establish an LZ."
-msgstr "Biztosítson egy LZ-t."
+msgstr "Biztosítson egy Landoló Zónát."
 
 #: data/base/messages/strings/cam3strings.txt:189
 msgid "Begin your attacks on NEXUS. You must destroy his core systems."
@@ -7920,47 +7920,47 @@ msgstr "Könnyű karosszéria - Retaliation"
 #: data/base/messages/strings/names.txt:932
 #: data/mp/messages/strings/names.txt:944
 msgid "Light Body - Bug"
-msgstr "Könnyű karosszéria - Bug"
+msgstr "Könnyű karosszéria - Bogár"
 
 #: data/base/messages/strings/names.txt:933
 #: data/mp/messages/strings/names.txt:945
 msgid "Medium Body - Cobra"
-msgstr "Közepes karosszéria - Cobra"
+msgstr "Közepes karosszéria - Kobra"
 
 #: data/base/messages/strings/names.txt:934
 #: data/mp/messages/strings/names.txt:946
 msgid "Medium Body - Panther"
-msgstr "Közepes karosszéria- Panther"
+msgstr "Közepes karosszéria- Párduc"
 
 #: data/base/messages/strings/names.txt:935
 #: data/mp/messages/strings/names.txt:947
 msgid "Medium Body - Retribution"
-msgstr "Közepes karosszéria - Retribution"
+msgstr "Közepes karosszéria - Megtorlás"
 
 #: data/base/messages/strings/names.txt:936
 #: data/mp/messages/strings/names.txt:948
 msgid "Medium Body - Scorpion"
-msgstr "Közepes karosszéria - Scorpion"
+msgstr "Közepes karosszéria - Skorpió"
 
 #: data/base/messages/strings/names.txt:937
 #: data/mp/messages/strings/names.txt:949
 msgid "Heavy Body - Tiger"
-msgstr "Nehéz karosszéria - Tiger"
+msgstr "Nehéz karosszéria - Tigris"
 
 #: data/base/messages/strings/names.txt:938
 #: data/mp/messages/strings/names.txt:950
 msgid "Heavy Body - Vengeance"
-msgstr "Nehéz karosszéria - Vengeance"
+msgstr "Nehéz karosszéria - Bosszú"
 
 #: data/base/messages/strings/names.txt:939
 #: data/mp/messages/strings/names.txt:951
 msgid "Heavy Body - Python"
-msgstr "Nehéz karosszéria - Python"
+msgstr "Nehéz karosszéria - Piton"
 
 #: data/base/messages/strings/names.txt:940
 #: data/mp/messages/strings/names.txt:952
 msgid "Heavy Body - Mantis"
-msgstr "Nehéz karosszéria - Mantis"
+msgstr "Nehéz karosszéria - Imádkozó sáska"
 
 #: data/base/messages/strings/names.txt:943
 #: data/mp/messages/strings/names.txt:955
@@ -9197,7 +9197,7 @@ msgstr "Megnövekedett kisrakéta tűzgyorsaság"
 #: data/base/script/text/cam1-7.slo:506
 #: data/base/script/text/genexp.slo:892
 msgid "Return to LZ"
-msgstr "Vissza az LZ-re"
+msgstr "Vissza a Landoló Zónára"
 
 #: data/base/script/text/cam1-7.slo:913
 #: data/base/script/text/cam2cx.slo:270
@@ -9495,7 +9495,7 @@ msgstr "Ki kell őket irtani."
 
 #: data/base/sequenceaudio/cam1/cam1dp2.txt:4
 msgid "Secure the LZ and establish a forward base."
-msgstr "Biztosítsd a leszállási területet és létesíts előretolt bázist."
+msgstr "Biztosítsd a Landolási Zónát és létesíts előretolt bázist."
 
 #: data/base/sequenceaudio/cam1/cam1dp2.txt:5
 msgid "Then destroy the New Paradigm's base."
@@ -11307,20 +11307,20 @@ msgstr "Plazmaágyú állás"
 
 #: data/mp/messages/strings/names.txt:1722
 msgid "Sunburst AA Rocket Array"
-msgstr "Sunburst légvédelmi rakétasor"
+msgstr "Napsugár légvédelmi rakétasor"
 
 #: data/mp/messages/strings/names.txt:1723
 msgid "Sunburst AA"
-msgstr "Sunburst légvédelem"
+msgstr "Napsugár légvédelem"
 
 #: data/mp/messages/strings/names.txt:1724
 msgid "VTOL Sunburst AA"
-msgstr "VTOL Sunburst légvédelem"
+msgstr "VTOL Napsugár légvédelem"
 
 #: data/mp/messages/strings/names.txt:1725
 #: data/mp/messages/strings/names.txt:1726
 msgid "Sunburst AA Site"
-msgstr "Sunburst légvédelmi platform"
+msgstr "Napsugár légvédelmi platform"
 
 #: data/mp/messages/strings/names.txt:1728
 #: data/mp/messages/strings/names.txt:1729
@@ -11334,7 +11334,7 @@ msgstr "Cyborg szuper impulzus lézer"
 #: data/mp/messages/strings/names.txt:1735
 #: data/mp/messages/strings/names.txt:1736
 msgid "Super Rail-Gunner"
-msgstr "Szuper sínágyús"
+msgstr "Szuper sínágyú"
 
 #: data/mp/messages/strings/names.txt:1738
 #: data/mp/messages/strings/names.txt:1739
@@ -11387,15 +11387,15 @@ msgstr "Rakéta erődítmény"
 
 #: data/mp/messages/strings/names.txt:1771
 msgid "Heavy Body - Wyvern"
-msgstr "Nehéz karosszéria - Wyvern"
+msgstr "Nehéz karosszéria - Sárkány"
 
 #: data/mp/messages/strings/names.txt:1772
 msgid "Wyvern"
-msgstr "Wyvern"
+msgstr "Sárkány"
 
 #: data/mp/messages/strings/names.txt:1774
 msgid "Multi Turret Body - Dragon"
-msgstr "Több lövegtornyos alváz - Dragon"
+msgstr "Több lövegtornyos alváz - Sárkány"
 
 #: data/mp/messages/strings/names.txt:1775
 msgid "Dragon"
@@ -11496,157 +11496,157 @@ msgstr "Parancsnoki lövegtorony IV"
 
 #: data/mp/messages/strings/names.txt:1829
 msgid "Heavy Repair Turret Cobra Hover"
-msgstr "Cobra légpárnás nehéz szervizkocsi"
+msgstr "Kobra légpárnás nehéz szervizkocsi"
 
 #: data/mp/messages/strings/names.txt:1830
 #: data/mp/messages/strings/names.txt:1841
 msgid "Heavy Machinegun Viper Wheels"
-msgstr "Viper nehéz gépfegyver"
+msgstr "Vipera nehéz gépfegyver"
 
 #: data/mp/messages/strings/names.txt:1831
 msgid "Scourge Mantis Hover"
-msgstr "Mantis légpárnás Scourge rakéta"
+msgstr "Imádkozó sáska légpárnás Scourge rakéta"
 
 #: data/mp/messages/strings/names.txt:1832
 msgid "Tank Killer Mantis Hover"
-msgstr "Mantis légpárnás Tank Killer rakéta"
+msgstr "Imádkozó sáska légpárnás Tankölő rakéta"
 
 #: data/mp/messages/strings/names.txt:1833
 #: data/mp/messages/strings/names.txt:1848
 msgid "Heavy Machinegun Cobra Tracks"
-msgstr "Viper lánctalpas nehéz gépfegyver"
+msgstr "Vipera lánctalpas nehéz gépfegyver"
 
 #: data/mp/messages/strings/names.txt:1834
 msgid "Heavy Cannon Cobra Hover"
-msgstr "Cobra légpárnás nehéz ágyú"
+msgstr "Kobra légpárnás nehéz ágyú"
 
 #: data/mp/messages/strings/names.txt:1842
 msgid "Heavy Machinegun Cobra Wheels"
-msgstr "Cobra nehéz gépfegyver"
+msgstr "Kobra nehéz gépfegyver"
 
 #: data/mp/messages/strings/names.txt:1843
 msgid "Heavy Machinegun Cobra Hover"
-msgstr "Cobra nehéz gépfegyver torony"
+msgstr "Kobra nehéz gépfegyver torony"
 
 #: data/mp/messages/strings/names.txt:1845
 msgid "Machinegun Viper Tracks"
-msgstr "Viper lánctalpas gépfegyver"
+msgstr "Vipera lánctalpas gépfegyver"
 
 #: data/mp/messages/strings/names.txt:1846
 msgid "Twin Machinegun Viper Tracks"
-msgstr "Viper lánctalpas iker gépfegyver"
+msgstr "Vipera lánctalpas iker gépfegyver"
 
 #: data/mp/messages/strings/names.txt:1850
 msgid "Medium Cannon Cobra Hover"
-msgstr "Cobra légpárnás ágyú"
+msgstr "Kobra légpárnás ágyú"
 
 #: data/mp/messages/strings/names.txt:1851
 msgid "Medium Cannon Scorpion Hover"
-msgstr "Scorpion légpárnás ágyú"
+msgstr "Skorpió légpárnás ágyú"
 
 #: data/mp/messages/strings/names.txt:1852
 msgid "Medium Cannon Scorpion Tracks"
-msgstr "Scorpion lánctalpas ágyú"
+msgstr "Skorpió lánctalpas ágyú"
 
 #: data/mp/messages/strings/names.txt:1853
 msgid "Medium Cannon Python Hover"
-msgstr "Python légpárnás ágyú"
+msgstr "Piton légpárnás ágyú"
 
 #: data/mp/messages/strings/names.txt:1854
 msgid "Heavy Cannon Python Hover"
-msgstr "Python lánctalpas nehéz ágyú"
+msgstr "Piton lánctalpas nehéz ágyú"
 
 #: data/mp/messages/strings/names.txt:1856
 msgid "Rail Gun Mantis Tracks"
-msgstr "Mantis lánctalpas sínágyú"
+msgstr "Imádkozó sáska lánctalpas sínágyú"
 
 #: data/mp/messages/strings/names.txt:1857
 msgid "Pulse Laser Mantis Tracks"
-msgstr "Mantis lánctalpas impulzus lézer"
+msgstr "Imádkozó sáska lánctalpas impulzus lézer"
 
 #: data/mp/messages/strings/names.txt:1858
 msgid "Lancer Python Tracks"
-msgstr "Python lánctalpas tankelhárító"
+msgstr "Piton lánctalpas tankelhárító"
 
 #: data/mp/messages/strings/names.txt:1859
 msgid "Lancer Mantis Tracks"
-msgstr "Mantis lánctalpas tankelhárító"
+msgstr "Imádkozó sáska lánctalpas tankelhárító"
 
 #: data/mp/messages/strings/names.txt:1860
 msgid "Tank Killer Vengeance Tracks"
-msgstr "Vengeance lánctalpas Tank Killer rakéta"
+msgstr "Bosszú lánctalpas Tank Killer rakéta"
 
 #: data/mp/messages/strings/names.txt:1865
 msgid "Heavy Cannon Tiger Tracks"
-msgstr "Tiger lánctalpas nehéz ágyú"
+msgstr "Tigris lánctalpas nehéz ágyú"
 
 #: data/mp/messages/strings/names.txt:1866
 msgid "Needle Gun Tiger Tracks"
-msgstr "Tiger lánctalpas nyíllövedékes ágyú"
+msgstr "Tigris lánctalpas nyíllövedékes ágyú"
 
 #: data/mp/messages/strings/names.txt:1867
 msgid "Needle Gun Retribution Tracks"
-msgstr "Retribution lánctalpas nyíllövedékes ágyú"
+msgstr "Megtorlás lánctalpas nyíllövedékes ágyú"
 
 #: data/mp/messages/strings/names.txt:1868
 msgid "Needle Gun Vengeance Tracks"
-msgstr "Vengeance lánctalpas nyíllövedékes ágyú"
+msgstr "Bosszú lánctalpas nyíllövedékes ágyú"
 
 #: data/mp/messages/strings/names.txt:1869
 msgid "Vengeance Tracks Rail Gun"
-msgstr "Vengeance lánctalpas sínágyú"
+msgstr "Bosszú lánctalpas sínágyú"
 
 #: data/mp/messages/strings/names.txt:1870
 msgid "Vengeance Tracks Gauss Cannon"
-msgstr "Vengeance lánctalpas Gauss ágyú"
+msgstr "Bosszú lánctalpas Gauss ágyú"
 
 #: data/mp/messages/strings/names.txt:1871
 msgid "Vengeance Tracks Gauss Scourge"
-msgstr "Vengeance lánctalpas Gauss Scourge rakéta"
+msgstr "Bosszú lánctalpas Gauss Scourge rakéta"
 
 #: data/mp/messages/strings/names.txt:1874
 msgid "VTOL Cluster Bomb Bay Bug VTOL"
-msgstr "VTOL Bug kazettás bomba rekesz"
+msgstr "VTOL Bogár kazettás bomba rekesz"
 
 #: data/mp/messages/strings/names.txt:1875
 msgid "VTOL Bunker Buster Bug VTOL"
-msgstr "VTOL Bug bunkertörő"
+msgstr "VTOL Bogár bunkertörő"
 
 #: data/mp/messages/strings/names.txt:1876
 msgid "VTOL Cluster Bomb Bay Scorpion VTOL"
-msgstr "VTOL Scorpion kazettás bomba rekesz"
+msgstr "VTOL Skorpió kazettás bomba rekesz"
 
 #: data/mp/messages/strings/names.txt:1877
 msgid "VTOL Bunker Buster Scorpion VTOL"
-msgstr "VTOL Scorpion bunkertörő"
+msgstr "VTOL Skorpió bunkertörő"
 
 #: data/mp/messages/strings/names.txt:1880
 msgid "VTOL Lancer Bug VTOL"
-msgstr "VTOL Bug tankelhárító"
+msgstr "VTOL Bogárr tankelhárító"
 
 #: data/mp/messages/strings/names.txt:1881
 msgid "VTOL Hyper Velocity Cannon Bug VTOL"
-msgstr "VTOL Bug nagysebességű ágyú"
+msgstr "VTOL Bogár nagysebességű ágyú"
 
 #: data/mp/messages/strings/names.txt:1882
 msgid "VTOL Lancer Scorpion VTOL"
-msgstr "VTOL Scorpion tankelhárító"
+msgstr "VTOL Skorpió tankelhárító"
 
 #: data/mp/messages/strings/names.txt:1883
 msgid "VTOL Hyper Velocity Cannon Scorpion VTOL"
-msgstr "VTOL Scorpion nagysebességű ágyú"
+msgstr "VTOL Skorpió nagysebességű ágyú"
 
 #: data/mp/messages/strings/names.txt:1884
 msgid "VTOL Lancer Mantis VTOL"
-msgstr "VTOL Mantis tankelhárító"
+msgstr "VTOL Imádkozó sáska tankelhárító"
 
 #: data/mp/messages/strings/names.txt:1885
 msgid "VTOL Hyper Velocity Cannon Mantis VTOL"
-msgstr "VTOL Mantis nagysebességű ágyú"
+msgstr "VTOL Imádkozó sáska nagysebességű ágyú"
 
 #: data/mp/messages/strings/names.txt:1889
 msgid "Repair Turret Mantis Tracks"
-msgstr "Mantis lánctalpas szervizkocsi"
+msgstr "Imádkozó sáska lánctalpas szervizkocsi"
 
 #: data/mp/messages/strings/names.txt:1891
 msgid "Lancer Scorpion Tracks"
@@ -11658,123 +11658,123 @@ msgstr "Scorpion lánctalpas nehéz ágyú"
 
 #: data/mp/messages/strings/names.txt:1893
 msgid "Lancer Scorpion VTOL"
-msgstr "VTOL Scorpion tankelhárító"
+msgstr "VTOL Skorpió tankelhárító"
 
 #: data/mp/messages/strings/names.txt:1894
 msgid "Bunker Buster Scorpion VTOL"
-msgstr "VTOL Scorpion bunkertörő"
+msgstr "VTOL Skorpió bunkertörő"
 
 #: data/mp/messages/strings/names.txt:1896
 msgid "Command Turret Viper Tracks"
-msgstr "Viper parancsnoki lánctalpas"
+msgstr "Vipera parancsnoki lánctalpas"
 
 #: data/mp/messages/strings/names.txt:1897
 msgid "Command Turret Cobra Tracks"
-msgstr "Cobra parancsnoki lánctalpas"
+msgstr "Kobra parancsnoki lánctalpas"
 
 #: data/mp/messages/strings/names.txt:1898
 msgid "Command Turret Scorpion Tracks"
-msgstr "Scorpion parancsnoki lánctalpas"
+msgstr "Skorpió parancsnoki lánctalpas"
 
 #: data/mp/messages/strings/names.txt:1899
 msgid "Command Turret Mantis Tracks"
-msgstr "Mantis parancsnoki lánctalpas"
+msgstr "Imádkozó sáska parancsnoki lánctalpas"
 
 #: data/mp/messages/strings/names.txt:1901
 msgid "Lancer Cobra Tracks"
-msgstr "Cobra lánctalpas tankelhárító"
+msgstr "Kobra lánctalpas tankelhárító"
 
 #: data/mp/messages/strings/names.txt:1902
 msgid "Heavy Cannon Mantis Tracks"
-msgstr "Mantis lánctalpas nehéz ágyú"
+msgstr "Imádkozó sáska lánctalpas nehéz ágyú"
 
 #: data/mp/messages/strings/names.txt:1903
 msgid "Tank Killer Mantis Tracks"
-msgstr "Python lánctalpas Tank Killer rakéta"
+msgstr "Piton lánctalpas tank pusztitó rakéta"
 
 #: data/mp/messages/strings/names.txt:1904
 msgid "Scourge Mantis Tracks"
-msgstr "Mantis lánctalpas Scourge rakéta"
+msgstr "Imátkozó sáska lánctalpas Scourge rakéta"
 
 #: data/mp/messages/strings/names.txt:1905
 msgid "Heavy Machinegun Scorpion Tracks"
-msgstr "Scorpion lánctalpas nehéz gépfegyver"
+msgstr "Skorpió lánctalpas nehéz gépfegyver"
 
 #: data/mp/messages/strings/names.txt:1907
 msgid "Repair Scorpion Tracks"
-msgstr "Scorpion lánctalpas szervizkocsi"
+msgstr "Skorpió lánctalpas szervizkocsi"
 
 #: data/mp/messages/strings/names.txt:1908
 msgid "Heavy Repair Scorpion Hover"
-msgstr "Scorpion nehéz légpárnás szervizkocsi"
+msgstr "Skorpió nehéz légpárnás szervizkocsi"
 
 #: data/mp/messages/strings/names.txt:1911
 msgid "Truck Cobra Hover"
-msgstr "Cobra légpárnás munkagép"
+msgstr "Kobra légpárnás munkagép"
 
 #: data/mp/messages/strings/names.txt:1912
 msgid "Truck Scorpion Hover"
-msgstr "Scorpion légpárnás munkagép"
+msgstr "Skorpió légpárnás munkagép"
 
 #: data/mp/messages/strings/names.txt:1913
 msgid "Truck Mantis Hover"
-msgstr "Mantis légpárnás munkagép"
+msgstr "Imádkozó sáska légpárnás munkagép"
 
 #: data/mp/messages/strings/names.txt:1916
 msgid "Bunker Buster Cobra Tracks"
-msgstr "Cobra lánctalpas bunkertörő"
+msgstr "Kobra lánctalpas bunkertörő"
 
 #: data/mp/messages/strings/names.txt:1917
 msgid "Bunker Buster Scorpion Tracks"
-msgstr "Scorpion lánctalpas bunkertörő"
+msgstr "Skorpió lánctalpas bunkertörő"
 
 #: data/mp/messages/strings/names.txt:1918
 msgid "Bunker Buster Mantis Tracks"
-msgstr "Mantis lánctalpas bunkertörő"
+msgstr "Imádkozó sáska lánctalpas bunkertörő"
 
 #: data/mp/messages/strings/names.txt:1920
 msgid "Lancer Viper Tracks"
-msgstr "Viper lánctalpas tankelhárító"
+msgstr "Vipera lánctalpas tankelhárító"
 
 #: data/mp/messages/strings/names.txt:1922
 msgid "Mini-Rocket Cobra Half-Tracks"
-msgstr "Cobra féllánctalpas kisrakéta"
+msgstr "Kobra féllánctalpas kisrakéta"
 
 #: data/mp/messages/strings/names.txt:1923
 msgid "Mini-Rocket Cobra Tracks"
-msgstr "Cobra lánctalpas kisrakéta"
+msgstr "Kobra lánctalpas kisrakéta"
 
 #: data/mp/messages/strings/names.txt:1924
 msgid "Mini-Rocket Array Cobra Tracks"
-msgstr "Cobra lánctalpas kisrakéta sor"
+msgstr "Kobra lánctalpas kisrakéta sor"
 
 #: data/mp/messages/strings/names.txt:1926
 msgid "Inferno Cobra Half-Tracks"
-msgstr "Cobra féllánctalpas Inferno lángszóró"
+msgstr "Kobra féllánctalpas Inferno lángszóró"
 
 #: data/mp/messages/strings/names.txt:1927
 msgid "Hyper Velocity Cannon Python Hover"
-msgstr "Python légpárnás nagy sebességű ágyú"
+msgstr "Piton légpárnás nagy sebességű ágyú"
 
 #: data/mp/messages/strings/names.txt:1931
 msgid "Scourge Python Tracks"
-msgstr "Python lánctalpas Scourge rakéta"
+msgstr "Piton lánctalpas Scourge rakéta"
 
 #: data/mp/messages/strings/names.txt:1932
 msgid "Gauss Cannon Python Tracks"
-msgstr "Python lánctalpas Gauss ágyú"
+msgstr "Piton lánctalpas Gauss ágyú"
 
 #: data/mp/messages/strings/names.txt:1933
 msgid "Pulse Laser Python Tracks"
-msgstr "Python lánctalpas impulzus lézer"
+msgstr "Piton lánctalpas impulzus lézer"
 
 #: data/mp/messages/strings/names.txt:1934
 msgid "Pulse Laser Tiger Tracks"
-msgstr "Tiger impulzus lézer"
+msgstr "Tigris impulzus lézer"
 
 #: data/mp/messages/strings/names.txt:1935
 msgid "Heavy Laser Tiger Tracks"
-msgstr "Tiger lánctalpas nehéz lézer"
+msgstr "Tigris lánctalpas nehéz lézer"
 
 #: data/mp/messages/strings/names.txt:1936
 msgid "Gauss Cannon Wyvern Tracks"
@@ -11790,27 +11790,27 @@ msgstr "Wyvern lánctalpas nehéz lézer"
 
 #: data/mp/messages/strings/names.txt:1940
 msgid "Machinegun Viper Half-Tracks"
-msgstr "Viper féllánctalpas gépfegyver"
+msgstr "Vipera féllánctalpas gépfegyver"
 
 #: data/mp/messages/strings/names.txt:1941
 msgid "Flamer Viper Half-Tracks"
-msgstr "Viper féllánctalpas lángszóró"
+msgstr "Vipera féllánctalpas lángszóró"
 
 #: data/mp/messages/strings/names.txt:1944
 msgid "Inferno Cobra Hover"
-msgstr "Cobra légpárnás Inferno lángszóró"
+msgstr "Kobra légpárnás Inferno lángszóró"
 
 #: data/mp/messages/strings/names.txt:1945
 msgid "Medium Cannon Cobra Half Track"
-msgstr "Cobra féllánctalpas löveg"
+msgstr "Kobra féllánctalpas löveg"
 
 #: data/mp/messages/strings/names.txt:1946
 msgid "Inferno Python Hover"
-msgstr "Python légpárnás Inferno lángszóró"
+msgstr "Piton légpárnás Inferno lángszóró"
 
 #: data/mp/messages/strings/names.txt:1947
 msgid "Assault Gun Python Hover"
-msgstr "Python légpárnás rohamlöveg"
+msgstr "Piton légpárnás rohamlöveg"
 
 #: data/mp/messages/strings/names.txt:1948
 msgid "Assault Gun Python Half Track"
@@ -11818,27 +11818,27 @@ msgstr "Python féllánctalpas rohamlöveg"
 
 #: data/mp/messages/strings/names.txt:1949
 msgid "Heavy Machinegun Scorpion Half Tracks"
-msgstr "Scorpion féllánctalpas nehéz gépfegyver"
+msgstr "Skórpió féllánctalpas nehéz gépfegyver"
 
 #: data/mp/messages/strings/names.txt:1950
 msgid "Assault Cannon Mantis Hover"
-msgstr "Mantis légpárnás ostromágyú"
+msgstr "Imádkozó sáska légpárnás ostromágyú"
 
 #: data/mp/messages/strings/names.txt:1951
 msgid "Pulse Laser Leopard Hover"
-msgstr "Leopard légpárnás impulzus lézer"
+msgstr "Leopárd légpárnás impulzus lézer"
 
 #: data/mp/messages/strings/names.txt:1952
 msgid "Pulse Laser Panther Hover"
-msgstr "Panther légpárnás impulzus lézer"
+msgstr "Párduc légpárnás impulzus lézer"
 
 #: data/mp/messages/strings/names.txt:1953
 msgid "Rail Gun Tiger Hover"
-msgstr "Tiger légpárnás sínágyú"
+msgstr "Tigris légpárnás sínágyú"
 
 #: data/mp/messages/strings/names.txt:1954
 msgid "Pulse Laser Tiger Hover"
-msgstr "Tiger légpárnás impulzus lézer"
+msgstr "Tigris légpárnás impulzus lézer"
 
 #: data/mp/messages/strings/names.txt:1955
 msgid "Plasma Cannon Wyvern Tracks"
@@ -11850,35 +11850,35 @@ msgstr "Wyvern lánctalpas Scourge rakéta"
 
 #: data/mp/messages/strings/names.txt:1957
 msgid "Flashlight Retribution Hover"
-msgstr "Retribution légpárnás könnyűlézer"
+msgstr "Büntetés légpárnás könnyűlézer"
 
 #: data/mp/messages/strings/names.txt:1958
 msgid "Mini-Rocket Viper Half Track"
-msgstr "Viper féllánctalpas kisrakéta"
+msgstr "Vipera féllánctalpas kisrakéta"
 
 #: data/mp/messages/strings/names.txt:1959
 msgid "Mini-Rocket Array Viper Half Track"
-msgstr "Viper féllánctalpas kisrakéta sor"
+msgstr "Vipera féllánctalpas kisrakéta sor"
 
 #: data/mp/messages/strings/names.txt:1960
 msgid "Phosphor Bomb Bay Mantis VTOL"
-msgstr "VTOL Mantis gyújtóbombás bombázó"
+msgstr "VTOL imádkozó sáska gyújtóbombás bombázó"
 
 #: data/mp/messages/strings/names.txt:1961
 msgid "Heap Bomb Bay Mantis VTOL"
-msgstr "VTOL Mantis szőnyegbombázó"
+msgstr "VTOL imádkozó sáska szőnyegbombázó"
 
 #: data/mp/messages/strings/names.txt:1962
 msgid "Heap Bomb Bay Retribution VTOL"
-msgstr "VTOL Retribution szőnyegbombázó"
+msgstr "VTOL Bütetés szőnyegbombázó"
 
 #: data/mp/messages/strings/names.txt:1963
 msgid "Scourge Retaliation VTOL"
-msgstr "VTOL Retaliation Scourge rakéta"
+msgstr "VTOL Megtorlás Scourge rakéta"
 
 #: data/mp/messages/strings/names.txt:1964
 msgid "Plasmite Retribution VTOL"
-msgstr "VTOL Retribution plazmavető"
+msgstr "VTOL Büntetés plazmavető"
 
 #: lib/framework/i18n.cpp:93
 #: lib/framework/i18n.cpp:155
@@ -11976,7 +11976,7 @@ msgstr "Stratégiai játék"
 #: src/transporter.cpp:346
 #: src/transporter.cpp:806
 msgid "Close"
-msgstr "Bezár"
+msgstr "Bezárás"
 
 #: src/cheat.cpp:165
 #, c-format
@@ -12458,9 +12458,8 @@ msgid "MAIN MENU"
 msgstr "FŐ MENÜ"
 
 #: src/frontend.cpp:117
-#, fuzzy
 msgid "Official site: http://wz2100.net/"
-msgstr "Látogass el a hivatalos oldalra: http://wz2100.net"
+msgstr "Hivatalos oldal: http://wz2100.net"
 
 #: src/frontend.cpp:187
 msgid "Fast Play"
@@ -12503,7 +12502,7 @@ msgstr "Küldetés játék betöltése"
 
 #: src/frontend.cpp:249
 msgid "Load Skirmish Game"
-msgstr "Csata indítása"
+msgstr "Csata játék betöltése"
 
 #: src/frontend.cpp:251
 msgid "SINGLE PLAYER"
@@ -12516,12 +12515,12 @@ msgstr "Küldetés video hiányzik! Látogasd meg a http://wz2100.net oldalt"
 #: src/frontend.cpp:332
 #: src/ingameop.cpp:504
 msgid "Load Campaign Saved Game"
-msgstr "Mentett játék betöltése"
+msgstr "Mentett küldetés játék betöltése"
 
 #: src/frontend.cpp:338
 #: src/ingameop.cpp:508
 msgid "Load Skirmish Saved Game"
-msgstr "Mentett játék betöltése"
+msgstr "Mentett csata játék betöltése"
 
 #: src/frontend.cpp:392
 msgid "MULTI PLAYER"
@@ -12529,7 +12528,7 @@ msgstr "TÖBBJÁTÉKOS"
 
 #: src/frontend.cpp:394
 msgid "Host Game"
-msgstr "Host játék"
+msgstr "Távoli játék"
 
 #: src/frontend.cpp:395
 msgid "Join Game"
@@ -12537,7 +12536,7 @@ msgstr "Játék folytatás"
 
 #: src/frontend.cpp:400
 msgid "TCP port 2100 must be opened in your firewall or router to host games!"
-msgstr ""
+msgstr "2100-as TCP portot kell kinyitni a tűzfaladban vagy a routeredben a távoli játékokhoz!"
 
 #: src/frontend.cpp:462
 #: src/multiint.cpp:1472
@@ -13046,11 +13045,11 @@ msgstr "--> KILÉPÉS <--"
 
 #: src/ingameop.cpp:512
 msgid "Save Campaign Game"
-msgstr "Új küldetés"
+msgstr "Új játék küldetés"
 
 #: src/ingameop.cpp:516
 msgid "Save Skirmish Game"
-msgstr "Csata indítása"
+msgstr "Mentett csata indítása"
 
 #: src/init.cpp:422
 #, c-format
@@ -14163,7 +14162,7 @@ msgstr "Kiszolgáló %s —%s által"
 
 #: src/multiint.cpp:1028
 msgid "Can't find any games for your version."
-msgstr ""
+msgstr "Nem találok egy játékot a te verziódhoz."
 
 #: src/multiint.cpp:1043
 msgid "No games are available"
@@ -14214,9 +14213,8 @@ msgid "Refresh Games List"
 msgstr "Játék lista frissítése"
 
 #: src/multiint.cpp:1265
-#, fuzzy
 msgid "Filter Games List"
-msgstr "Játék lista frissítése"
+msgstr "Játékszűrő lista"
 
 #: src/multiint.cpp:1290
 msgid "Enter Password:"

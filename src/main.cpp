@@ -265,7 +265,7 @@ void setOverrideMods(char * modlist)
 	while ((nextmod = strstr(curmod, ", ")) && i<MAX_MODS-2)
 	{
 		override_mods[i] = (char *)malloc(nextmod-curmod+1);
-		strlcpy(override_mods[i], curmod, nextmod-curmod);
+		strlcpy(override_mods[i], curmod, nextmod-curmod+1);
 		override_mods[i][nextmod-curmod] = '\0';
 		curmod = nextmod + 2;
 		i++;
