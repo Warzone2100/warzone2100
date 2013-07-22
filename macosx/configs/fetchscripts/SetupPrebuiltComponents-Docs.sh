@@ -31,23 +31,26 @@ cp -af macosx/Resources/WarzoneHelp/info.plist macosx/external/WarzoneHelp/Conte
 # ASCIIDoc based docs
 
 # quickstartguide
-a2x -f chunked -D "${mWarzoneHelpLproj}" doc/quickstartguide.asciidoc
-cp -af ${mWarzoneHelpLproj}/quickstartguide.chunked/* ${mWarzoneHelpLproj}
-rm -fr ${mWarzoneHelpLproj}/quickstartguide.chunked
+if a2x -f chunked -D "${mWarzoneHelpLproj}" doc/quickstartguide.asciidoc; then
+	cp -af ${mWarzoneHelpLproj}/quickstartguide.chunked/* ${mWarzoneHelpLproj}
+	rm -fr ${mWarzoneHelpLproj}/quickstartguide.chunked
 
-# man page
-a2x -f xhtml -d manpage -D "${mWarzoneHelpLproj}" doc/warzone2100.6.asciidoc
+	# man page
+	a2x -f xhtml -d manpage -D "${mWarzoneHelpLproj}" doc/warzone2100.6.asciidoc
 
-# Cleanup
-cp -af "${mWarzoneHelpLproj}/docbook-xsl.css" "${mWarzoneHelpLproj}/images" ${mWarzoneHelp}
-rm -fr "${mWarzoneHelpLproj}/docbook-xsl.css" "${mWarzoneHelpLproj}/images"
-sed -i '' -e 's:href="docbook-xsl.css:href="../docbook-xsl.css:g' ${mWarzoneHelpLproj}/*.html
-sed -i '' -e 's:src="images/:src="../images/:g' ${mWarzoneHelpLproj}/*.html
-sed -i '' -e 's:warzone2100:Warzone:g' ${mWarzoneHelpLproj}/warzone2100.6.html
+	# Cleanup
+	cp -af "${mWarzoneHelpLproj}/docbook-xsl.css" "${mWarzoneHelpLproj}/images" ${mWarzoneHelp}
+	rm -fr "${mWarzoneHelpLproj}/docbook-xsl.css" "${mWarzoneHelpLproj}/images"
+	sed -i '' -e 's:href="docbook-xsl.css:href="../docbook-xsl.css:g' ${mWarzoneHelpLproj}/*.html
+	sed -i '' -e 's:src="images/:src="../images/:g' ${mWarzoneHelpLproj}/*.html
+	sed -i '' -e 's:warzone2100:Warzone:g' ${mWarzoneHelpLproj}/warzone2100.6.html
+else
+	echo "warning: Something went wrong with a2x, the quickstart guide and manpage will be skipped."
+fi
 
 
 # LaTeX based docs
-export TEXINPUTS=${TEXINPUTS}:/sw/share/doc/python25/Doc/texinputs/
+export TEXINPUTS=${TEXINPUTS}:${SRCROOT}/../3rdparty/texinputs/
 
 # javascript doc
 grep src/qtscript.cpp -e '//==' | sed 's://==::' > doc/globals.tex
