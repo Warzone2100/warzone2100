@@ -1,22 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   version = "1.8">
+   LastUpgradeVersion = "0460"
+   version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
       buildImplicitDependencies = "YES">
       <BuildActionEntries>
          <BuildActionEntry
-            buildForTesting = "NO"
+            buildForTesting = "YES"
             buildForRunning = "YES"
             buildForProfiling = "YES"
-            buildForArchiving = "NO"
-            buildForAnalyzing = "NO">
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "02356D740BD3BB3400E9A019"
-               BuildableName = "Warzone.app"
-               BlueprintName = "Warzone"
-               ReferencedContainer = "container:Warzone.xcodeproj">
+               BlueprintIdentifier = "438C952C149BD22C001BAF3A"
+               BuildableName = "mapconv"
+               BlueprintName = "mapconv"
+               ReferencedContainer = "container:MapUtilities.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -31,39 +32,35 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "02356D740BD3BB3400E9A019"
-            BuildableName = "Warzone.app"
-            BlueprintName = "Warzone"
-            ReferencedContainer = "container:Warzone.xcodeproj">
+            BlueprintIdentifier = "438C952C149BD22C001BAF3A"
+            BuildableName = "mapconv"
+            BlueprintName = "mapconv"
+            ReferencedContainer = "container:MapUtilities.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
    <LaunchAction
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      displayScaleIsEnabled = "NO"
-      displayScale = "1.00"
       launchStyle = "0"
       useCustomWorkingDirectory = "NO"
-      buildConfiguration = "Release"
+      buildConfiguration = "Debug"
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
       allowLocationSimulation = "YES">
       <BuildableProductRunnable>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "02356D740BD3BB3400E9A019"
-            BuildableName = "Warzone.app"
-            BlueprintName = "Warzone"
-            ReferencedContainer = "container:Warzone.xcodeproj">
+            BlueprintIdentifier = "438C952C149BD22C001BAF3A"
+            BuildableName = "mapconv"
+            BlueprintName = "mapconv"
+            ReferencedContainer = "container:MapUtilities.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>
    <ProfileAction
-      displayScaleIsEnabled = "NO"
-      displayScale = "1.00"
       shouldUseLaunchSchemeArgsEnv = "YES"
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
@@ -72,15 +69,15 @@
       <BuildableProductRunnable>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "02356D740BD3BB3400E9A019"
-            BuildableName = "Warzone.app"
-            BlueprintName = "Warzone"
-            ReferencedContainer = "container:Warzone.xcodeproj">
+            BlueprintIdentifier = "438C952C149BD22C001BAF3A"
+            BuildableName = "mapconv"
+            BlueprintName = "mapconv"
+            ReferencedContainer = "container:MapUtilities.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
    <AnalyzeAction
-      buildConfiguration = "StaticAnalyzer">
+      buildConfiguration = "Debug">
    </AnalyzeAction>
    <ArchiveAction
       buildConfiguration = "Release"
