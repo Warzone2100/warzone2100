@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 45;
+	objectVersion = 46;
 	objects = {
 
 /* Begin PBXAggregateTarget section */
@@ -4023,7 +4023,7 @@
 				ORGANIZATIONNAME = net.wz2100.;
 			};
 			buildConfigurationList = 02356D670BD3BB2600E9A019 /* Build configuration list for PBXProject "Warzone" */;
-			compatibilityVersion = "Xcode 3.1";
+			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
