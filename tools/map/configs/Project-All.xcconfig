@@ -1,7 +1,7 @@
 // Global settings for all configurations
 
 
-ARCHS = i386 x86_64
+ARCHS = x86_64
 SDKROOT = macosx
 DEBUG_INFORMATION_FORMAT = dwarf-with-dsym
 GCC_VERSION = com.apple.compilers.llvm.clang.1_0
