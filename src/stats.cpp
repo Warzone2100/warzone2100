@@ -309,7 +309,7 @@ bool loadWeaponStats(const char *pFileName)
 
 		psStats->base.maxRange = ini.value("longRange").toUInt();
 		psStats->base.minRange = ini.value("minRange", 0).toUInt();
-		psStats->base.hitChance = ini.value("longHit").toUInt();
+		psStats->base.hitChance = ini.value("longHit", 100).toUInt();
 		psStats->base.firePause = ini.value("firePause").toUInt();
 		psStats->base.numRounds = ini.value("numRounds").toUInt();
 		psStats->base.reloadTime = ini.value("reloadTime").toUInt();
