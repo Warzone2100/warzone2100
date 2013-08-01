@@ -8,3 +8,4 @@ PRODUCT_NAME = fribidi
 OTHER_LDFLAGS = -no-undefined
 GCC_ENABLE_BUILTIN_FUNCTIONS = NO
 GCC_PREPROCESSOR_DEFINITIONS =  $(inherited) HAS_FRIBIDI_TAB_CHAR_TYPE_9_I
+WARNING_CFLAGS = -Wno-unknown-warning-option -Wno-invalid-source-encoding
