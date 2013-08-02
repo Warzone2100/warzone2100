@@ -30,6 +30,7 @@
 #include "lib/framework/opengl.h"
 #include <time.h>
 
+#include "lib/ivis_opengl/bitimage.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
 #include "lib/ivis_opengl/piedef.h"
 #include "lib/ivis_opengl/piemode.h"
@@ -338,6 +339,35 @@ static Vector2i makePieImage(IMAGEFILE *imageFile, unsigned id, PIERECT *dest = 
 		dest->h = image.Height;
 	}
 	return pieImage;
+}
+
+void iV_DrawImage2(QString filename, int x, int y)
+{
+	ImageDef *image = iV_GetImage(filename, x, y);
+	const GLfloat invTextureSize = image->invTextureSize;
+	const int tu = image->Tu;
+	const int tv = image->Tv;
+	const int w = image->Width;
+	const int h = image->Height;
+	x += image->XOffset;
+	y += image->YOffset;
+	pie_SetTexturePage(image->textureId);
+	glColor4ubv(WZCOL_WHITE.vector);
+	glBegin(GL_TRIANGLE_STRIP);
+		glTexCoord2f(tu * image->invTextureSize, tv * invTextureSize);
+		glVertex2f(x, y);
+
+		glTexCoord2f((tu + w) * invTextureSize, tv * invTextureSize);
+		glVertex2f(x + w, y);
+
+		glTexCoord2f(tu * invTextureSize, (tv + h) * invTextureSize);
+		glVertex2f(x, y + h);
+
+		glTexCoord2f((tu + w) * invTextureSize, (tv + h) * invTextureSize);
+		glVertex2f(x + w, y + h);
+	glEnd();
+	pie_SetRendMode(REND_ALPHA);
+	pie_SetAlphaTest(true);
 }
 
 void iV_DrawImage(IMAGEFILE *ImageFile, UWORD ID, int x, int y)

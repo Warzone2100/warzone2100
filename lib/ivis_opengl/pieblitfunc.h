@@ -108,6 +108,7 @@ extern void iV_Line(int x0, int y0, int x1, int y1, PIELIGHT colour);
 extern void iV_Box(int x0,int y0, int x1, int y1, PIELIGHT colour);
 extern void pie_BoxFill(int x0,int y0, int x1, int y1, PIELIGHT colour);
 extern void iV_DrawImage(IMAGEFILE *ImageFile, UWORD ID, int x, int y);
+void iV_DrawImage2(QString filename, int x, int y);
 void iV_DrawImageTc(Image image, Image imageTc, int x, int y, PIELIGHT colour);
 void iV_DrawImageRepeatX(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Width);
 void iV_DrawImageRepeatY(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Height);

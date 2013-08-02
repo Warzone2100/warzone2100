@@ -141,6 +141,9 @@ struct ImageDef
 	unsigned int Height;    /**< Height of image */
 	int XOffset;            /**< X offset into source position */
 	int YOffset;            /**< Y offset into source position */
+
+	int textureId;		///< duplicate of below, fix later
+	double invTextureSize;
 };
 
 struct Image;

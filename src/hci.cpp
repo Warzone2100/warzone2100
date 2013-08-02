@@ -83,6 +83,9 @@
 #include "keybind.h"
 #include "qtscript.h"
 
+// Is a button widget highlighted, either because the cursor is over it or it is flashing.
+//
+#define buttonIsHilite(p)  ((p->getState() & WBUT_HIGHLIGHT) != 0)
 
 // Empty edit window
 static bool SecondaryWindowUp = false;
@@ -401,9 +404,90 @@ static SDWORD intNumSelectedDroids(UDWORD droidType);
 
 /***************************GAME CODE ****************************/
 
+struct RETBUTSTATS
+{
+	int downTime;
+	QString filename;
+	QString filenameDown;
+	int flashing;
+	int flashTime;
+};
+static RETBUTSTATS retbutstats[NUMRETBUTS];
+
+static void intDisplayReticuleButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+{
+	int     x = xOffset + psWidget->x();
+	int     y = yOffset + psWidget->y();
+	bool	Hilight = false;
+	bool	Down = false;
+	UBYTE	DownTime = retbutstats[psWidget->UserData].downTime;
+	UBYTE	flashing = retbutstats[psWidget->UserData].flashing;
+	UBYTE	flashTime = retbutstats[psWidget->UserData].flashTime;
+	ASSERT(psWidget->type == WIDG_BUTTON, "Not a button");
+	W_BUTTON *psButton = (W_BUTTON *)psWidget;
+
+	if (psButton->state & WBUT_DISABLE)
+	{
+		iV_DrawImage(IntImages, IMAGE_RETICULE_GREY, x, y);
+		return;
+	}
+
+	Down = psButton->state & (WBUT_DOWN | WBUT_CLICKLOCK);
+	Hilight = buttonIsHilite(psButton);
+
+	if (Down)
+	{
+		if ((DownTime < 1) && (psWidget->UserData != RETBUT_CANCEL))
+		{
+			iV_DrawImage(IntImages, IMAGE_RETICULE_BUTDOWN, x, y);
+		}
+		else
+		{
+			iV_DrawImage2(retbutstats[psWidget->UserData].filenameDown, x, y);
+		}
+		DownTime++;
+		flashing = false;	// stop the reticule from flashing if it was
+	}
+	else
+	{
+		if (flashing)
+		{
+			if (((realTime / 250) % 2) != 0)
+			{
+				iV_DrawImage2(retbutstats[psWidget->UserData].filenameDown, x, y);
+				flashTime = 0;
+			}
+			else
+			{
+				iV_DrawImage2(retbutstats[psWidget->UserData].filename, x, y);
+			}
+			flashTime++;
+		}
+		else
+		{
+			iV_DrawImage2(retbutstats[psWidget->UserData].filename, x, y);
+			DownTime = 0;
+		}
+	}
+	if (Hilight)
+	{
+		if (psWidget->UserData == RETBUT_CANCEL)
+		{
+			iV_DrawImage(IntImages, IMAGE_CANCEL_HILIGHT, x, y);
+		}
+		else
+		{
+			iV_DrawImage(IntImages, IMAGE_RETICULE_HILIGHT, x, y);
+		}
+	}
+	retbutstats[psWidget->UserData].flashTime = flashTime;
+	retbutstats[psWidget->UserData].flashing = flashing;
+	retbutstats[psWidget->UserData].downTime = DownTime;
+}
+
 // Set the x,y members of a button widget initialiser given a reticule button index.
 //
-static void setReticuleBut(UWORD ButId, const char *tip, INTFAC_TYPE image, int style)
+static void setReticuleBut(int ButId, QString tip, QString filename, QString filenameDown)
 {
 	/* Default button data */
 	W_BUTINIT sButInit;
@@ -411,13 +495,17 @@ static void setReticuleBut(UWORD ButId, const char *tip, INTFAC_TYPE image, int 
 	sButInit.id = ReticuleEnabled[ButId].id;
 	sButInit.width = RET_BUTWIDTH;
 	sButInit.height = RET_BUTHEIGHT;
-	sButInit.style = WBUT_PLAIN;
 	sButInit.pDisplay = intDisplayReticuleButton;
 	sButInit.x = ReticuleOffsets[ButId].x + RETXOFFSET;
 	sButInit.y = ReticuleOffsets[ButId].y + RETYOFFSET;
 	sButInit.pTip = tip;
-	sButInit.UserData = image;
-	sButInit.style = style;
+	sButInit.style = WBUT_SECONDARY;
+	sButInit.UserData = ButId;
+	retbutstats[ButId].downTime = 0;
+	retbutstats[ButId].flashing = 0;
+	retbutstats[ButId].flashTime = 0;
+	retbutstats[ButId].filename = filename;
+	retbutstats[ButId].filenameDown = filenameDown;
 	if (!widgAddButton(psWScreen, &sButInit))
 	{
 		debug(LOG_ERROR, "Failed to add reticule button");
@@ -2683,13 +2771,13 @@ bool intAddReticule()
 	retForm->setGeometry(RET_X, RET_Y, RET_FORMWIDTH, RET_FORMHEIGHT);
 
 	// normal reticule
-	setReticuleBut(RETBUT_COMMAND, _("Commanders (F6)"), IMAGE_COMMANDDROID_UP, WBUT_PLAIN);
-	setReticuleBut(RETBUT_INTELMAP, _("Intelligence Display (F5)"), IMAGE_INTELMAP_UP, WBUT_SECONDARY);
-	setReticuleBut(RETBUT_FACTORY, _("Manufacture (F1)"), IMAGE_MANUFACTURE_UP, WBUT_SECONDARY);
-	setReticuleBut(RETBUT_DESIGN, _("Design (F4)"), IMAGE_DESIGN_UP, WBUT_PLAIN);
-	setReticuleBut(RETBUT_RESEARCH, _("Research (F2)"), IMAGE_RESEARCH_UP, WBUT_PLAIN);
-	setReticuleBut(RETBUT_BUILD, _("Build (F3)"), IMAGE_BUILD_UP, WBUT_PLAIN);
-	setReticuleBut(RETBUT_CANCEL, _("Close"), IMAGE_CANCEL_UP, WBUT_PLAIN);
+	setReticuleBut(RETBUT_COMMAND, _("Commanders (F6)"), "image_commanddroid_up.png", "image_commanddroid_down.png");
+	setReticuleBut(RETBUT_INTELMAP, _("Intelligence Display (F5)"), "image_intelmap_up.png", "image_intelmap_down.png");
+	setReticuleBut(RETBUT_FACTORY, _("Manufacture (F1)"), "image_manufacture_up.png", "image_manufacture_down.png");
+	setReticuleBut(RETBUT_DESIGN, _("Design (F4)"), "image_design_up.png", "image_design_down.png");
+	setReticuleBut(RETBUT_RESEARCH, _("Research (F2)"), "image_research_up.png", "image_research_down.png");
+	setReticuleBut(RETBUT_BUILD, _("Build (F3)"), "image_build_up.png", "image_build_down.png");
+	setReticuleBut(RETBUT_CANCEL, _("Close"), "image_cancel_up.png", "image_cancel_down.png");
 	ReticuleUp = true;
 	return true;
 }
@@ -4532,8 +4620,7 @@ void flashReticuleButton(UDWORD buttonID)
 	WIDGET *psButton = widgGetFromID(psWScreen, buttonID);
 	if (psButton)
 	{
-		//set flashing byte to true
-		psButton->UserData = (1 << 24) | psButton->UserData;
+		retbutstats[psButton->UserData].flashing = 1;
 	}
 }
 
@@ -4543,12 +4630,8 @@ void stopReticuleButtonFlash(UDWORD buttonID)
 	WIDGET	*psButton = widgGetFromID(psWScreen, buttonID);
 	if (psButton)
 	{
-		UBYTE DownTime = UNPACKDWORD_QUAD_C(psButton->UserData);
-		UBYTE Index = UNPACKDWORD_QUAD_D(psButton->UserData);
-		// clear flashing byte
-		UBYTE flashing = false;
-		UBYTE flashTime = 0;
-		psButton->UserData = PACKDWORD_QUAD(flashTime, flashing, DownTime, Index);
+		retbutstats[psButton->UserData].flashTime = 0;
+		retbutstats[psButton->UserData].flashing = 0;
 	}
 }
 

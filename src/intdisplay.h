@@ -179,8 +179,6 @@ void intDisplayButtonFlash(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 
 void intDisplayButtonPressed(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 
-void intDisplayReticuleButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
-
 void intDisplaySlider(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 
 void intDisplayNumber(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);

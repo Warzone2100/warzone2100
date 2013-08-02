@@ -27,7 +27,11 @@
 
 #include <set>
 #include <algorithm>
+#include <QHash>
+#include <QString>
 
+static QHash<QString, ImageDef *> images;
+static QList<IMAGEFILE *> files;
 
 struct ImageMergeRectangle
 {
@@ -53,6 +57,16 @@ struct ImageMerge
 	std::vector<ImageMergeRectangle> images;
 	std::vector<int> pages;  // List of page sizes, normally all pageSize, unless an image is too large for a normal page.
 };
+
+ImageDef *iV_GetImage(const QString &filename, int x, int y)
+{
+	if (!images.contains(filename))
+	{
+		debug(LOG_ERROR, "%s not found in image list!", filename.toUtf8().constData());
+		return NULL;
+	}
+	return images.value(filename);
+}
 
 inline void ImageMerge::arrange()
 {
@@ -180,6 +194,8 @@ IMAGEFILE *iV_LoadImageFile(const char *fileName)
 		numImages++;
 		ptr += temp;
 		while (ptr < pFileData + pFileSize && *ptr++ != '\n') {} // skip rest of line
+
+		images.insert(tmpName, ImageDef);
 	}
 	free(pFileData);
 
@@ -257,11 +273,23 @@ IMAGEFILE *iV_LoadImageFile(const char *fileName)
 		imageFile->pages[p].id = pie_AddTexPage(&ivImages[p], arbitraryName, 0, 0, true);
 	}
 
+	// duplicate some data, since we want another access point to these data structures now, FIXME
+	for (unsigned i = 0; i < imageFile->imageDefs.size(); i++)
+	{
+		imageFile->imageDefs[i].textureId = imageFile->pages[imageFile->imageDefs[i].TPageID].id;
+		imageFile->imageDefs[i].invTextureSize = 1.f / imageFile->pages[imageFile->imageDefs[i].TPageID].size;
+	}
+
+	files.append(imageFile);
+
 	return imageFile;
 }
 
 void iV_FreeImageFile(IMAGEFILE *imageFile)
 {
+	// so when we get here, it is time to redo everything. will clean this up later. TODO.
+	files.clear();
+	images.clear();
 	delete imageFile;
 }
 
