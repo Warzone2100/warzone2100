@@ -2718,7 +2718,8 @@ static QScriptValue js_enableTemplate(QScriptContext *context, QScriptEngine *en
 //-- \subsection{setReticuleButton(id, filename, filenameHigh, tooltip, callback)} Add reticule button. id is which
 //-- button to change, where zero is zero is the middle button, then going clockwise from the uppermost
 //-- button. filename is button graphics and filenameHigh is for highlighting. The tooltip is the text you see when you
-//-- mouse over the button. Finally, the callback is which scripting function to call
+//-- mouse over the button. Finally, the callback is which scripting function to call. Hide and show the user interface
+//-- for such changes to take effect.
 static QScriptValue js_setReticuleButton(QScriptContext *context, QScriptEngine *engine)
 {
 	int button = context->argument(0).toInt32();
@@ -2727,6 +2728,22 @@ static QScriptValue js_setReticuleButton(QScriptContext *context, QScriptEngine 
 	QString file = context->argument(2).toString();
 	QString fileDown = context->argument(3).toString();
 	setReticuleStats(button, tip, file, fileDown);
+	return QScriptValue();
+}
+
+//-- \subsection{showInterface()} Show user interface.
+static QScriptValue js_showInterface(QScriptContext *context, QScriptEngine *engine)
+{
+	intAddReticule();
+	intShowPowerBar();
+	return QScriptValue();
+}
+
+//-- \subsection{hideInterface(button type)} Hide user interface.
+static QScriptValue js_hideInterface(QScriptContext *context, QScriptEngine *engine)
+{
+	intRemoveReticule();
+	intHidePowerBar();
 	return QScriptValue();
 }
 
@@ -4487,6 +4504,8 @@ bool registerFunctions(QScriptEngine *engine, QString scriptName)
 	engine->globalObject().setProperty("enableTemplate", engine->newFunction(js_enableTemplate));
 	engine->globalObject().setProperty("setMiniMap", engine->newFunction(js_setMiniMap));
 	engine->globalObject().setProperty("setReticuleButton", engine->newFunction(js_setReticuleButton));
+	engine->globalObject().setProperty("showInterface", engine->newFunction(js_showInterface));
+	engine->globalObject().setProperty("hideInterface", engine->newFunction(js_hideInterface));
 	engine->globalObject().setProperty("addReticuleButton", engine->newFunction(js_removeReticuleButton)); // deprecated!!
 	engine->globalObject().setProperty("removeReticuleButton", engine->newFunction(js_removeReticuleButton));
 	engine->globalObject().setProperty("enableStructure", engine->newFunction(js_enableStructure));

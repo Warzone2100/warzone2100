@@ -333,10 +333,9 @@ extern void flashReticuleButton(UDWORD buttonID);
 extern void stopReticuleButtonFlash(UDWORD buttonID);
 
 //toggles the Power Bar display on and off
-extern void togglePowerBar(void);
-
-//displays the Power Bar
-extern void intShowPowerBar(void);
+void togglePowerBar();
+void intShowPowerBar();
+void intHidePowerBar();
 
 //hides the power bar from the display - regardless of what player requested!
 extern void forceHidePowerBar(void);

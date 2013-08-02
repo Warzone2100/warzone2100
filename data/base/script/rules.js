@@ -16,6 +16,7 @@ function eventGameInit()
 	setReticuleButton(4, _("Design (F4)"), "image_design_up.png", "image_design_down.png");
 	setReticuleButton(5, _("Intelligence Display (F5)"), "image_intelmap_up.png", "image_intelmap_down.png");
 	setReticuleButton(6, _("Commanders (F6)"), "image_commanddroid_up.png", "image_commanddroid_down.png");
+	showInterface();
 }
 
 function eventStartLevel()

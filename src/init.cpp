@@ -1221,7 +1221,6 @@ bool stageThreeInitialise(void)
 		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_GAMEINIT);
 		triggerEvent(TRIGGER_GAME_INIT);
 	}
-	intAddReticule();
 	intAddPower();
 
 	return true;

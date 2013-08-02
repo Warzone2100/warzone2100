@@ -797,7 +797,7 @@ static void intDoScreenRefresh(void)
 
 
 //hides the power bar from the display
-static void intHidePowerBar(void)
+void intHidePowerBar()
 {
 	//only hides the power bar if the player has requested no power bar
 	if (!powerBarUp)
