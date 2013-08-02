@@ -373,8 +373,6 @@ static DROID *CurrentDroid = NULL;
 static DROID_TYPE CurrentDroidType = DROID_ANY;
 
 /******************Power Bar Stuff!**************/
-/* Add the power bars */
-static bool intAddPower(void);
 
 /* Set the shadow for the PowerBar */
 static void intRunPower(void);
@@ -409,10 +407,21 @@ struct RETBUTSTATS
 	int downTime;
 	QString filename;
 	QString filenameDown;
+	QString tip;
 	int flashing;
 	int flashTime;
 };
 static RETBUTSTATS retbutstats[NUMRETBUTS];
+
+void setReticuleStats(int ButId, QString tip, QString filename, QString filenameDown)
+{
+	retbutstats[ButId].tip = tip;
+	retbutstats[ButId].filename = filename;
+	retbutstats[ButId].filenameDown = filenameDown;
+	retbutstats[ButId].downTime = 0;
+	retbutstats[ButId].flashing = 0;
+	retbutstats[ButId].flashTime = 0;
+}
 
 static void intDisplayReticuleButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
@@ -487,7 +496,7 @@ static void intDisplayReticuleButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yO
 
 // Set the x,y members of a button widget initialiser given a reticule button index.
 //
-static void setReticuleBut(int ButId, QString tip, QString filename, QString filenameDown)
+void setReticuleBut(int ButId)
 {
 	/* Default button data */
 	W_BUTINIT sButInit;
@@ -498,14 +507,12 @@ static void setReticuleBut(int ButId, QString tip, QString filename, QString fil
 	sButInit.pDisplay = intDisplayReticuleButton;
 	sButInit.x = ReticuleOffsets[ButId].x + RETXOFFSET;
 	sButInit.y = ReticuleOffsets[ButId].y + RETYOFFSET;
-	sButInit.pTip = tip;
+	sButInit.pTip = retbutstats[ButId].tip;
 	sButInit.style = WBUT_SECONDARY;
 	sButInit.UserData = ButId;
 	retbutstats[ButId].downTime = 0;
 	retbutstats[ButId].flashing = 0;
 	retbutstats[ButId].flashTime = 0;
-	retbutstats[ButId].filename = filename;
-	retbutstats[ButId].filenameDown = filenameDown;
 	if (!widgAddButton(psWScreen, &sButInit))
 	{
 		debug(LOG_ERROR, "Failed to add reticule button");
@@ -560,21 +567,6 @@ bool intInitialise(void)
 	intInitialiseGraphics();
 
 	psWScreen = new W_SCREEN;
-
-	if (GetGameMode() == GS_NORMAL)
-	{
-
-		if (!intAddReticule())
-		{
-			debug(LOG_ERROR, "Couldn't create reticule widgets (Out of memory ?)");
-			return false;
-		}
-		if (!intAddPower())
-		{
-			debug(LOG_ERROR, "Couldn't create power Bar widget(Out of memory ?)");
-			return false;
-		}
-	}
 
 	/* Note the current screen state */
 	intMode = INT_NORMAL;
@@ -2762,22 +2754,14 @@ bool intAddReticule()
 	{
 		return true; // all fine 
 	}
-
 	WIDGET *parent = psWScreen->psForm;
-
-	/* Create the basic form */
 	IntFormAnimated *retForm = new IntFormAnimated(parent, false);
 	retForm->id = IDRET_FORM;
 	retForm->setGeometry(RET_X, RET_Y, RET_FORMWIDTH, RET_FORMHEIGHT);
-
-	// normal reticule
-	setReticuleBut(RETBUT_COMMAND, _("Commanders (F6)"), "image_commanddroid_up.png", "image_commanddroid_down.png");
-	setReticuleBut(RETBUT_INTELMAP, _("Intelligence Display (F5)"), "image_intelmap_up.png", "image_intelmap_down.png");
-	setReticuleBut(RETBUT_FACTORY, _("Manufacture (F1)"), "image_manufacture_up.png", "image_manufacture_down.png");
-	setReticuleBut(RETBUT_DESIGN, _("Design (F4)"), "image_design_up.png", "image_design_down.png");
-	setReticuleBut(RETBUT_RESEARCH, _("Research (F2)"), "image_research_up.png", "image_research_down.png");
-	setReticuleBut(RETBUT_BUILD, _("Build (F3)"), "image_build_up.png", "image_build_down.png");
-	setReticuleBut(RETBUT_CANCEL, _("Close"), "image_cancel_up.png", "image_cancel_down.png");
+	for (int i = 0; i < NUMRETBUTS; i++)
+	{
+		setReticuleBut(i);
+	}
 	ReticuleUp = true;
 	return true;
 }
@@ -2808,7 +2792,7 @@ void togglePowerBar(void)
 }
 
 /* Add the power bars to the screen */
-bool intAddPower(void)
+bool intAddPower()
 {
 	W_BARINIT sBarInit;
 

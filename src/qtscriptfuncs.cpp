@@ -2715,24 +2715,24 @@ static QScriptValue js_enableTemplate(QScriptContext *context, QScriptEngine *en
 	return QScriptValue();
 }
 
-
-//-- \subsection{addReticuleButton(button type)} Add reticule button. FIXME: This currently only works in tutorial.
-//-- Valid parameters for this and \emph{removeReticuleButton}: MANUFACTURE, RESEARCH, BUILD, DESIGN, INTELMAP, COMMAND, CANCEL.
-static QScriptValue js_addReticuleButton(QScriptContext *context, QScriptEngine *engine)
+//-- \subsection{setReticuleButton(id, filename, filenameHigh, tooltip, callback)} Add reticule button. id is which
+//-- button to change, where zero is zero is the middle button, then going clockwise from the uppermost
+//-- button. filename is button graphics and filenameHigh is for highlighting. The tooltip is the text you see when you
+//-- mouse over the button. Finally, the callback is which scripting function to call
+static QScriptValue js_setReticuleButton(QScriptContext *context, QScriptEngine *engine)
 {
 	int button = context->argument(0).toInt32();
-	SCRIPT_ASSERT(context, button != IDRET_OPTIONS, "Invalid button");
-	widgReveal(psWScreen, button);
+	SCRIPT_ASSERT(context, button >= 0 && button <= 6, "Invalid button %d", button);
+	QString tip = context->argument(1).toString();
+	QString file = context->argument(2).toString();
+	QString fileDown = context->argument(3).toString();
+	setReticuleStats(button, tip, file, fileDown);
 	return QScriptValue();
 }
 
-//-- \subsection{removeReticuleButton(button type)} Remove reticule button. FIXME: This currently only works in tutorial.
+//-- \subsection{removeReticuleButton(button type)} Remove reticule button. DO NOT USE FOR ANYTHING.
 static QScriptValue js_removeReticuleButton(QScriptContext *context, QScriptEngine *engine)
 {
-	int button = context->argument(0).toInt32();
-	SCRIPT_ASSERT(context, button != IDRET_OPTIONS, "Invalid button");
-	// if (bInTutorial && bReset) intResetScreen(true);
-	widgHide(psWScreen, button);
 	return QScriptValue();
 }
 
@@ -4486,7 +4486,8 @@ bool registerFunctions(QScriptEngine *engine, QString scriptName)
 	engine->globalObject().setProperty("setDesign", engine->newFunction(js_setDesign));
 	engine->globalObject().setProperty("enableTemplate", engine->newFunction(js_enableTemplate));
 	engine->globalObject().setProperty("setMiniMap", engine->newFunction(js_setMiniMap));
-	engine->globalObject().setProperty("addReticuleButton", engine->newFunction(js_addReticuleButton));
+	engine->globalObject().setProperty("setReticuleButton", engine->newFunction(js_setReticuleButton));
+	engine->globalObject().setProperty("addReticuleButton", engine->newFunction(js_removeReticuleButton)); // deprecated!!
 	engine->globalObject().setProperty("removeReticuleButton", engine->newFunction(js_removeReticuleButton));
 	engine->globalObject().setProperty("enableStructure", engine->newFunction(js_enableStructure));
 	engine->globalObject().setProperty("makeComponentAvailable", engine->newFunction(js_makeComponentAvailable));
@@ -4534,13 +4535,13 @@ bool registerFunctions(QScriptEngine *engine, QString scriptName)
 	engine->globalObject().setProperty("DORDER_STOP", DORDER_STOP, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("DORDER_REARM", DORDER_REARM, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("DORDER_RECYCLE", DORDER_RECYCLE, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("COMMAND", IDRET_COMMAND, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("BUILD", IDRET_BUILD, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("MANUFACTURE", IDRET_MANUFACTURE, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("RESEARCH", IDRET_RESEARCH, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("INTELMAP", IDRET_INTEL_MAP, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("DESIGN", IDRET_DESIGN, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("CANCEL", IDRET_CANCEL, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("COMMAND", IDRET_COMMAND, QScriptValue::ReadOnly | QScriptValue::Undeletable); // deprecated
+	engine->globalObject().setProperty("BUILD", IDRET_BUILD, QScriptValue::ReadOnly | QScriptValue::Undeletable); // deprecated
+	engine->globalObject().setProperty("MANUFACTURE", IDRET_MANUFACTURE, QScriptValue::ReadOnly | QScriptValue::Undeletable); // deprecated
+	engine->globalObject().setProperty("RESEARCH", IDRET_RESEARCH, QScriptValue::ReadOnly | QScriptValue::Undeletable); // deprecated
+	engine->globalObject().setProperty("INTELMAP", IDRET_INTEL_MAP, QScriptValue::ReadOnly | QScriptValue::Undeletable); // deprecated
+	engine->globalObject().setProperty("DESIGN", IDRET_DESIGN, QScriptValue::ReadOnly | QScriptValue::Undeletable); // deprecated
+	engine->globalObject().setProperty("CANCEL", IDRET_CANCEL, QScriptValue::ReadOnly | QScriptValue::Undeletable); // deprecated
 	engine->globalObject().setProperty("CAMP_CLEAN", CAMP_CLEAN, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("CAMP_BASE", CAMP_BASE, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("CAMP_WALLS", CAMP_WALLS, QScriptValue::ReadOnly | QScriptValue::Undeletable);

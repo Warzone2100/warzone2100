@@ -263,8 +263,10 @@ extern INT_RETVAL intRunWidgets(void);
 extern void intDisplayWidgets(void);
 
 /* Add the reticule widgets to the widget screen */
-extern bool intAddReticule(void);
-extern void intRemoveReticule(void);
+bool intAddReticule();
+bool intAddPower();
+void intRemoveReticule();
+void setReticuleStats(int ButId, QString tip, QString filename, QString filenameDown);
 
 /* Set the map view point to the world coordinates x,y */
 extern void intSetMapPos(UDWORD x, UDWORD y);
