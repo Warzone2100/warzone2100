@@ -3630,6 +3630,8 @@ const char *messageTypeToString(unsigned messageType_)
 		case GAME_GAME_TIME:                return "GAME_GAME_TIME";
 		case GAME_PLAYER_LEFT:              return "GAME_PLAYER_LEFT";
 		case GAME_DROIDDISEMBARK:           return "GAME_DROIDDISEMBARK";
+		case GAME_SYNC_REQUEST:             return "GAME_SYNC_REQUEST";
+
 		// The following messages are used for debug mode.
 		case GAME_DEBUG_MODE:               return "GAME_DEBUG_MODE";
 		case GAME_DEBUG_ADD_DROID:          return "GAME_DEBUG_ADD_DROID";

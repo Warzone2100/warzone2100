@@ -1270,8 +1270,6 @@ void actionUpdateDroid(DROID *psDroid)
 							if ( psPropStats->propulsionType == PROPULSION_TYPE_LIFT )
 							{
 								psDroid->action = DACTION_VTOLATTACK;
-								//actionAddVtolAttackRun( psDroid );
-								//actionUpdateVtolAttack( psDroid );
 							}
 							else
 							{

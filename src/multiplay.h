@@ -217,4 +217,6 @@ extern	void resetReadyStatus		(bool bSendOptions);
 
 STRUCTURE *findResearchingFacilityByResearchIndex(unsigned player, unsigned index);
 
+void sendSyncRequest(int32_t req_id, int32_t x, int32_t y, BASE_OBJECT *psObj, BASE_OBJECT *psObj2);
+
 #endif // __INCLUDED_SRC_MULTIPLAY_H__

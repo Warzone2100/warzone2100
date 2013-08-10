@@ -1357,3 +1357,30 @@ bool triggerEventDesignCreated(DROID_TEMPLATE *psTemplate)
 	}
 	return true;
 }
+
+//__ \subsection{eventSyncRequest(req_id, x, y, obj_id, obj_id2)}
+//__ An event that is called from a script and synchronized with all other scripts and hosts
+//__ to prevent desync from happening. Sync requests must be carefully validated to prevent
+//__ cheating!
+bool triggerEventSyncRequest(int from, int req_id, int x, int y, BASE_OBJECT *psObj, BASE_OBJECT *psObj2)
+{
+	for (int i = 0; i < scripts.size(); ++i)
+	{
+		QScriptEngine *engine = scripts.at(i);
+		QScriptValueList args;
+		args += QScriptValue(from);
+		args += QScriptValue(req_id);
+		args += QScriptValue(x);
+		args += QScriptValue(y);
+		if (psObj)
+		{
+			args += convMax(psObj, engine);
+		}
+		if (psObj2)
+		{
+			args += convMax(psObj2, engine);
+		}
+		callFunction(engine, "eventSyncRequest", args);
+	}
+	return true;
+}

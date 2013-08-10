@@ -104,6 +104,7 @@ enum MESSAGE_TYPES
 	GAME_GAME_TIME,                 ///< Game time. Used for synchronising, so that all messages are executed at the same gameTime on all clients.
 	GAME_PLAYER_LEFT,               ///< Player has left or dropped.
 	GAME_DROIDDISEMBARK,            ///< droid disembarked from a Transporter
+	GAME_SYNC_REQUEST,		///< Game event generated from scripts that is meant to be synced
 	// The following messages are used for debug mode.
 	GAME_DEBUG_MODE,                ///< Request enable/disable debug mode.
 	GAME_DEBUG_ADD_DROID,           ///< Add droid.

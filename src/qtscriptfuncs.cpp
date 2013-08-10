@@ -3817,6 +3817,38 @@ static QScriptValue js_syncRandom(QScriptContext *context, QScriptEngine *)
 	return QScriptValue(gameRand(limit));
 }
 
+//-- \subsection{syncRequest(req_id, x, y[, obj[, obj2]])}
+//-- Generate a synchronized event request that is sent over the network to all clients and executed simultaneously.
+//-- Must be caught in an eventSyncRequest() function. All sync requests must be validated when received, and always
+//-- take care only to define sync requests that can be validated against cheating.
+static QScriptValue js_syncRequest(QScriptContext *context, QScriptEngine *)
+{
+	int32_t req_id = context->argument(0).toInt32();
+	int32_t x = world_coord(context->argument(1).toInt32());
+	int32_t y = world_coord(context->argument(2).toInt32());
+	BASE_OBJECT *psObj = NULL, *psObj2 = NULL;
+	if (context->argumentCount() > 3)
+	{
+		QScriptValue objVal = context->argument(3);
+		int oid = objVal.property("id").toInt32();
+		int oplayer = objVal.property("player").toInt32();
+		OBJECT_TYPE otype = (OBJECT_TYPE)objVal.property("type").toInt32();
+		SCRIPT_ASSERT(context, psObj, "No such object id %d belonging to player %d", oid, oplayer);
+		psObj = IdToObject(otype, oid, oplayer);
+	}
+	if (context->argumentCount() > 4)
+	{
+		QScriptValue objVal = context->argument(4);
+		int oid = objVal.property("id").toInt32();
+		int oplayer = objVal.property("player").toInt32();
+		OBJECT_TYPE otype = (OBJECT_TYPE)objVal.property("type").toInt32();
+		SCRIPT_ASSERT(context, psObj, "No such object id %d belonging to player %d", oid, oplayer);
+		psObj2 = IdToObject(otype, oid, oplayer);
+	}
+	sendSyncRequest(req_id, x, y, psObj, psObj2);
+	return QScriptValue();
+}
+
 // ----------------------------------------------------------------------------------------
 // Register functions with scripting system
 
@@ -4417,6 +4449,7 @@ bool registerFunctions(QScriptEngine *engine, QString scriptName)
 	engine->globalObject().setProperty("resetArea", engine->newFunction(js_resetArea));
 	engine->globalObject().setProperty("addSpotter", engine->newFunction(js_addSpotter));
 	engine->globalObject().setProperty("removeSpotter", engine->newFunction(js_removeSpotter));
+	engine->globalObject().setProperty("syncRequest", engine->newFunction(js_syncRequest));
 
 	// horrible hacks follow -- do not rely on these being present!
 	engine->globalObject().setProperty("hackNetOff", engine->newFunction(js_hackNetOff));
