@@ -27,8 +27,8 @@
 
 #include <set>
 #include <algorithm>
-#include <QHash>
-#include <QString>
+#include <QtCore/QHash>
+#include <QtCore/QString>
 
 static QHash<QString, ImageDef *> images;
 static QList<IMAGEFILE *> files;
