@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-// OpenGL Mathematics Copyright (c) 2005 - 2012 G-Truc Creation (www.g-truc.net)
+// OpenGL Mathematics Copyright (c) 2005 - 2013 G-Truc Creation (www.g-truc.net)
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Created : 2009-05-07
 // Updated : 2009-05-07
@@ -452,7 +452,7 @@ GLM_FUNC_QUALIFIER detail::fvec4SIMD mix
 {
 	__m128 Sub0 = _mm_sub_ps(y.Data, x.Data);
 	__m128 Mul0 = _mm_mul_ps(a.Data, Sub0);
-	return _mm_mul_ps(x.Data, Mul0);
+	return _mm_add_ps(x.Data, Mul0);
 }
 
 GLM_FUNC_QUALIFIER detail::fvec4SIMD step

@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////////
 /// OpenGL Mathematics (glm.g-truc.net)
 ///
-/// Copyright (c) 2005 - 2012 G-Truc Creation (www.g-truc.net)
+/// Copyright (c) 2005 - 2013 G-Truc Creation (www.g-truc.net)
 /// Permission is hereby granted, free of charge, to any person obtaining a copy
 /// of this software and associated documentation files (the "Software"), to deal
 /// in the Software without restriction, including without limitation the rights
@@ -79,7 +79,7 @@ namespace gtx
 	typedef detail::uint32						cl_uint1;		//!< \brief 32bit signed integer. (from GLM_GTX_ocl_type extension)
 	typedef detail::uint64						cl_ulong1;		//!< \brief 64bit signed integer. (from GLM_GTX_ocl_type extension)
 
-	//typedef detail::float16						cl_half1;	//!< \brief Half-precision floating-point scalar. (from GLM_GTX_ocl_type extension)
+	//typedef detail::float16					cl_half1;	//!< \brief Half-precision floating-point scalar. (from GLM_GTX_ocl_type extension)
 	typedef detail::float32						cl_float1;	//!< \brief Single-precision floating-point scalar. (from GLM_GTX_ocl_type extension)
 
 
@@ -93,7 +93,7 @@ namespace gtx
 	typedef detail::tvec2<detail::uint32>		cl_uint2;		//!< \brief 32bit signed integer. (from GLM_GTX_ocl_type extension)
 	typedef detail::tvec2<detail::uint64>		cl_ulong2;		//!< \brief 64bit signed integer. (from GLM_GTX_ocl_type extension)
 
-	//typedef detail::tvec2<detail::float16>		cl_half2;	//!< \brief Half-precision floating-point scalar. (from GLM_GTX_ocl_type extension)
+	//typedef detail::tvec2<detail::float16>	cl_half2;	//!< \brief Half-precision floating-point scalar. (from GLM_GTX_ocl_type extension)
 	typedef detail::tvec2<detail::float32>		cl_float2;	//!< \brief Single-precision floating-point scalar. (from GLM_GTX_ocl_type extension)
 
 
@@ -107,7 +107,7 @@ namespace gtx
 	typedef detail::tvec3<detail::uint32>		cl_uint3;		//!< \brief 32bit signed integer. (from GLM_GTX_ocl_type extension)
 	typedef detail::tvec3<detail::uint64>		cl_ulong3;		//!< \brief 64bit signed integer. (from GLM_GTX_ocl_type extension)
 
-	//typedef detail::tvec3<detail::float16>		cl_half3;	//!< \brief Half-precision floating-point scalar. (from GLM_GTX_ocl_type extension)
+	//typedef detail::tvec3<detail::float16>	cl_half3;	//!< \brief Half-precision floating-point scalar. (from GLM_GTX_ocl_type extension)
 	typedef detail::tvec3<detail::float32>		cl_float3;	//!< \brief Single-precision floating-point scalar. (from GLM_GTX_ocl_type extension)
 
 
@@ -120,7 +120,7 @@ namespace gtx
 	typedef detail::tvec4<detail::uint32>		cl_uint4;		//!< \brief 32bit signed integer. (from GLM_GTX_ocl_type extension)
 	typedef detail::tvec4<detail::uint64>		cl_ulong4;		//!< \brief 64bit signed integer. (from GLM_GTX_ocl_type extension)
 
-	//typedef detail::tvec4<detail::float16>		cl_half4;	//!< \brief Half-precision floating-point scalar. (from GLM_GTX_ocl_type extension)
+	//typedef detail::tvec4<detail::float16>	cl_half4;	//!< \brief Half-precision floating-point scalar. (from GLM_GTX_ocl_type extension)
 	typedef detail::tvec4<detail::float32>		cl_float4;	//!< \brief Single-precision floating-point scalar. (from GLM_GTX_ocl_type extension)
 
 	/// @}

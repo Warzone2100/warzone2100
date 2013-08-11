@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////////
 /// OpenGL Mathematics (glm.g-truc.net)
 ///
-/// Copyright (c) 2005 - 2012 G-Truc Creation (www.g-truc.net)
+/// Copyright (c) 2005 - 2013 G-Truc Creation (www.g-truc.net)
 /// Permission is hereby granted, free of charge, to any person obtaining a copy
 /// of this software and associated documentation files (the "Software"), to deal
 /// in the Software without restriction, including without limitation the rights
@@ -36,8 +36,8 @@ namespace detail
 {
 	typedef short hdata;
 
-	float toFloat32(hdata value);
-	hdata toFloat16(float const & value);
+	GLM_FUNC_DECL float toFloat32(hdata value);
+	GLM_FUNC_DECL hdata toFloat16(float const & value);
 
 	class half
 	{
@@ -71,42 +71,42 @@ namespace detail
 		hdata data;
 	};
 
-	half operator+ (half const & s1, half const & s2);
+	GLM_FUNC_DECL half operator+ (half const & s1, half const & s2);
 
-	half operator- (half const & s1, half const & s2);
+	GLM_FUNC_DECL half operator- (half const & s1, half const & s2);
 
-	half operator* (half const & s1, half const & s2);
+	GLM_FUNC_DECL half operator* (half const & s1, half const & s2);
 
-	half operator/ (half const & s1, half const & s2);
+	GLM_FUNC_DECL half operator/ (half const & s1, half const & s2);
 
 	// Unary constant operators
-	half operator- (half const & s);
+	GLM_FUNC_DECL half operator- (half const & s);
 
-	half operator-- (half const & s, int);
+	GLM_FUNC_DECL half operator-- (half const & s, int);
 
-	half operator++ (half const & s, int);
+	GLM_FUNC_DECL half operator++ (half const & s, int);
 
-	bool operator==(
+	GLM_FUNC_DECL bool operator==(
 		detail::half const & x, 
 		detail::half const & y);
 
-	bool operator!=(
+	GLM_FUNC_DECL bool operator!=(
 		detail::half const & x, 
 		detail::half const & y);
 
-	bool operator<(
+	GLM_FUNC_DECL bool operator<(
 		detail::half const & x, 
 		detail::half const & y);
 
-	bool operator<=(
+	GLM_FUNC_DECL bool operator<=(
 		detail::half const & x, 
 		detail::half const & y);
 
-	bool operator>(
+	GLM_FUNC_DECL bool operator>(
 		detail::half const & x, 
 		detail::half const & y);
 
-	bool operator>=(
+	GLM_FUNC_DECL bool operator>=(
 		detail::half const & x, 
 		detail::half const & y);
 

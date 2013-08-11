@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////////
 /// OpenGL Mathematics (glm.g-truc.net)
 ///
-/// Copyright (c) 2005 - 2012 G-Truc Creation (www.g-truc.net)
+/// Copyright (c) 2005 - 2013 G-Truc Creation (www.g-truc.net)
 /// Permission is hereby granted, free of charge, to any person obtaining a copy
 /// of this software and associated documentation files (the "Software"), to deal
 /// in the Software without restriction, including without limitation the rights
@@ -305,8 +305,8 @@ namespace detail
 	//! you would want a threshold function with a smooth
 	//! transition. This is equivalent to:
 	//! genType t;
-	//! t = clamp ((x – edge0) / (edge1 – edge0), 0, 1);
-	//! return t * t * (3 – 2 * t);
+	//! t = clamp ((x - edge0) / (edge1 - edge0), 0, 1);
+	//! return t * t * (3 - 2 * t);
 	//! Results are undefined if edge0 >= edge1.
 	//! (From GLM_GTX_simd_vec4 extension, common function)
 	detail::fvec4SIMD smoothstep(

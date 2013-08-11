@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////////
 /// OpenGL Mathematics (glm.g-truc.net)
 ///
-/// Copyright (c) 2005 - 2012 G-Truc Creation (www.g-truc.net)
+/// Copyright (c) 2005 - 2013 G-Truc Creation (www.g-truc.net)
 /// Permission is hereby granted, free of charge, to any person obtaining a copy
 /// of this software and associated documentation files (the "Software"), to deal
 /// in the Software without restriction, including without limitation the rights
@@ -36,7 +36,7 @@
 #define GLM_VERSION_MAJOR			0
 #define GLM_VERSION_MINOR			9
 #define GLM_VERSION_PATCH			4
-#define GLM_VERSION_REVISION		0
+#define GLM_VERSION_REVISION		3
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Platform
@@ -432,20 +432,19 @@
 #elif(defined(GLM_FORCE_CXX98))
 #	define GLM_LANG GLM_LANG_CXX98
 #else
-//  -std=c++0x or -std=gnu++0x
-#	if(((GLM_COMPILER & GLM_COMPILER_GCC) == GLM_COMPILER_GCC) && defined(__GXX_EXPERIMENTAL_CXX0X__)) 
+#	if(__cplusplus >= 201103L)
+#		define GLM_LANG GLM_LANG_CXX11
+#	elif(((GLM_COMPILER & GLM_COMPILER_GCC) == GLM_COMPILER_GCC) && defined(__GXX_EXPERIMENTAL_CXX0X__)) 
 #		define GLM_LANG GLM_LANG_CXX0X
 #	elif(((GLM_COMPILER & GLM_COMPILER_VC) == GLM_COMPILER_VC) && defined(_MSC_EXTENSIONS))
 #		define GLM_LANG GLM_LANG_CXXMS
 #	elif(((GLM_COMPILER & GLM_COMPILER_VC) == GLM_COMPILER_VC) && !defined(_MSC_EXTENSIONS))
-#		if(GLM_COMPILER >= GLM_COMPILER_VC2010)
+#		if(GLM_COMPILER == GLM_COMPILER_VC2010)
 #			define GLM_LANG GLM_LANG_CXX0X
 #		else
 #			define GLM_LANG GLM_LANG_CXX98
 #		endif//(GLM_COMPILER == GLM_COMPILER_VC2010)
-#	elif((GLM_COMPILER & GLM_COMPILER_GCC) == GLM_COMPILER_GCC) //&& defined(__STRICT_ANSI__))
-#		define GLM_LANG GLM_LANG_CXX98
-#	elif((GLM_COMPILER & GLM_COMPILER_CLANG) == GLM_COMPILER_CLANG) 
+#	elif(__cplusplus >= 199711L)
 #		define GLM_LANG GLM_LANG_CXX98
 #	else
 #		define GLM_LANG GLM_LANG_CXX
@@ -649,29 +648,31 @@
 // User defines: GLM_FORCE_INLINE GLM_FORCE_CUDA
 
 #if(defined(GLM_FORCE_CUDA) || (GLM_COMPILER & GLM_COMPILER_CUDA))
-#   define GLM_CUDA_FUNC_DEF __device__ __host__ 
+#	define GLM_CUDA_FUNC_DEF __device__ __host__ 
 #	define GLM_CUDA_FUNC_DECL __device__ __host__ 
 #else
-#   define GLM_CUDA_FUNC_DEF
+#	define GLM_CUDA_FUNC_DEF
 #	define GLM_CUDA_FUNC_DECL
 #endif
 
 #if GLM_COMPILER & GLM_COMPILER_GCC
-#define GLM_VAR_USED __attribute__ ((unused))
+#	define GLM_VAR_USED __attribute__ ((unused))
 #else
-#define GLM_VAR_USED
+#	define GLM_VAR_USED
 #endif
 
 #if(defined(GLM_FORCE_INLINE))
-#   if((GLM_COMPILER & GLM_COMPILER_VC) && (GLM_COMPILER >= GLM_COMPILER_VC2005))
-#       define GLM_INLINE __forceinline
-#   elif((GLM_COMPILER & GLM_COMPILER_GCC) && (GLM_COMPILER >= GLM_COMPILER_GCC34))
-#       define GLM_INLINE __attribute__((always_inline))
-#   else
-#       define GLM_INLINE inline
-#   endif//GLM_COMPILER
+#	if((GLM_COMPILER & GLM_COMPILER_VC) && (GLM_COMPILER >= GLM_COMPILER_VC2005))
+#		define GLM_INLINE __forceinline
+#	elif((GLM_COMPILER & GLM_COMPILER_GCC) && (GLM_COMPILER >= GLM_COMPILER_GCC34))
+#		define GLM_INLINE __attribute__((always_inline))
+#	elif(GLM_COMPILER & GLM_COMPILER_CLANG)
+#		define GLM_INLINE __attribute__((always_inline))
+#	else
+#		define GLM_INLINE inline
+#	endif//GLM_COMPILER
 #else
-#   define GLM_INLINE inline
+#	define GLM_INLINE inline
 #endif//defined(GLM_FORCE_INLINE)
 
 #define GLM_FUNC_DECL GLM_CUDA_FUNC_DECL

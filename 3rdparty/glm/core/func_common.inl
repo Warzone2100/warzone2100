@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////////
 /// OpenGL Mathematics (glm.g-truc.net)
 ///
-/// Copyright (c) 2005 - 2012 G-Truc Creation (www.g-truc.net)
+/// Copyright (c) 2005 - 2013 G-Truc Creation (www.g-truc.net)
 /// Permission is hereby granted, free of charge, to any person obtaining a copy
 /// of this software and associated documentation files (the "Software"), to deal
 /// in the Software without restriction, including without limitation the rights
@@ -36,7 +36,7 @@ namespace detail
 	template <typename genFIType>
 	struct Abs_<genFIType, true>
 	{
-		static genFIType get(genFIType const & x)
+		GLM_FUNC_QUALIFIER static genFIType get(genFIType const & x)
 		{
 			GLM_STATIC_ASSERT(
 				detail::type<genFIType>::is_float || 
@@ -49,7 +49,7 @@ namespace detail
 	template <typename genFIType>
 	struct Abs_<genFIType, false>
 	{
-		static genFIType get(genFIType const & x)
+		GLM_FUNC_QUALIFIER static genFIType get(genFIType const & x)
 		{
 			GLM_STATIC_ASSERT(
 					detail::type<genFIType>::is_uint, "'abs' only accept floating-point and integer inputs");
@@ -275,7 +275,7 @@ namespace detail
 	//// Only valid if (INT_MIN <= x-y <= INT_MAX)
 	//// min(x,y)
 	//r = y + ((x - y) & ((x - y) >> (sizeof(int) *
-	//CHAR_BIT – 1)));
+	//CHAR_BIT - 1)));
 	//// max(x,y)
 	//r = x - ((x - y) & ((x - y) >> (sizeof(int) *
 	//CHAR_BIT - 1)));
@@ -420,93 +420,87 @@ namespace detail
 	}
 
 	// mix
-	template <typename genTypeT, typename genTypeU>
-	GLM_FUNC_QUALIFIER genTypeT mix
+	template <typename genType>
+	GLM_FUNC_QUALIFIER genType mix
 	(
-		genTypeT const & x, 
-		genTypeT const & y, 
-		genTypeU const & a
+		genType const & x, 
+		genType const & y, 
+		genType const & a
 	)
 	{
-		// It could be a vector too
-		//GLM_STATIC_ASSERT(
-		//	detail::type<genTypeT>::is_float && 
-		//	detail::type<genTypeU>::is_float);
+		GLM_STATIC_ASSERT(detail::type<genType>::is_float , "'genType' is not floating-point type");
 
-		//return x + a * (y - x);
-		return genTypeT(genTypeU(x) + a * genTypeU(y - x));
+		return x + a * (y - x);
 	}
 
-	template <typename valTypeA, typename valTypeB>
-	GLM_FUNC_QUALIFIER detail::tvec2<valTypeA> mix
+	template <typename valType>
+	GLM_FUNC_QUALIFIER detail::tvec2<valType> mix
 	(
-		detail::tvec2<valTypeA> const & x, 
-		detail::tvec2<valTypeA> const & y, 
-		valTypeB const & a
+		detail::tvec2<valType> const & x, 
+		detail::tvec2<valType> const & y, 
+		valType const & a
 	)
 	{
-		return detail::tvec2<valTypeA>(
-			detail::tvec2<valTypeB>(x) + a * detail::tvec2<valTypeB>(y - x));
+		GLM_STATIC_ASSERT(detail::type<valType>::is_float , "'genType' is not floating-point type");
+
+		return x + a * (y - x);
 	}
 
-	template <typename valTypeA, typename valTypeB>
-	GLM_FUNC_QUALIFIER detail::tvec3<valTypeA> mix
+	template <typename valType>
+	GLM_FUNC_QUALIFIER detail::tvec3<valType> mix
 	(
-		detail::tvec3<valTypeA> const & x, 
-		detail::tvec3<valTypeA> const & y, 
-		valTypeB const & a
+		detail::tvec3<valType> const & x, 
+		detail::tvec3<valType> const & y, 
+		valType const & a
 	)
 	{
-		return detail::tvec3<valTypeA>(
-			detail::tvec3<valTypeB>(x) + a * detail::tvec3<valTypeB>(y - x));
+		return x + a * (y - x);
 	}
 
-	template <typename valTypeA, typename valTypeB>
-	GLM_FUNC_QUALIFIER detail::tvec4<valTypeA> mix
+	template <typename valType>
+	GLM_FUNC_QUALIFIER detail::tvec4<valType> mix
 	(
-		detail::tvec4<valTypeA> const & x, 
-		detail::tvec4<valTypeA> const & y, 
-		valTypeB const & a
+		detail::tvec4<valType> const & x, 
+		detail::tvec4<valType> const & y, 
+		valType const & a
 	)
 	{
-		return detail::tvec4<valTypeA>(
-			detail::tvec4<valTypeB>(x) + a * detail::tvec4<valTypeB>(y - x));
+		return x + a * (y - x);
 	}
 
-	template <typename valTypeA, typename valTypeB>
-	GLM_FUNC_QUALIFIER detail::tvec2<valTypeA> mix
+	template <typename valType>
+	GLM_FUNC_QUALIFIER detail::tvec2<valType> mix
 	(
-		detail::tvec2<valTypeA> const & x, 
-		detail::tvec2<valTypeA> const & y, 
-		detail::tvec2<valTypeB> const & a
+		detail::tvec2<valType> const & x, 
+		detail::tvec2<valType> const & y, 
+		detail::tvec2<valType> const & a
 	)
 	{
-		return detail::tvec2<valTypeA>(
-			detail::tvec2<valTypeB>(x) + a * detail::tvec2<valTypeB>(y - x));
+		return x + a * (y - x);
 	}
 
-	template <typename valTypeA, typename valTypeB>
-	GLM_FUNC_QUALIFIER detail::tvec3<valTypeA> mix
+	template <typename valType>
+	GLM_FUNC_QUALIFIER detail::tvec3<valType> mix
 	(
-		detail::tvec3<valTypeA> const & x, 
-		detail::tvec3<valTypeA> const & y, 
-		detail::tvec3<valTypeB> const & a
+		detail::tvec3<valType> const & x, 
+		detail::tvec3<valType> const & y, 
+		detail::tvec3<valType> const & a
 	)
 	{
-		return detail::tvec3<valTypeA>(
-			detail::tvec3<valTypeB>(x) + a * detail::tvec3<valTypeB>(y - x));
+		GLM_STATIC_ASSERT(detail::type<valType>::is_float , "'genType' is not floating-point type");
+
+		return x + a * (y - x);
 	}
 
-	template <typename valTypeA, typename valTypeB>
-	GLM_FUNC_QUALIFIER detail::tvec4<valTypeA> mix
+	template <typename valType>
+	GLM_FUNC_QUALIFIER detail::tvec4<valType> mix
 	(
-		detail::tvec4<valTypeA> const & x, 
-		detail::tvec4<valTypeA> const & y, 
-		detail::tvec4<valTypeB> const & a
+		detail::tvec4<valType> const & x, 
+		detail::tvec4<valType> const & y, 
+		detail::tvec4<valType> const & a
 	)
 	{
-		return detail::tvec4<valTypeA>(
-			detail::tvec4<valTypeB>(x) + a * detail::tvec4<valTypeB>(y - x));
+		return x + a * (y - x);
 	}
 
 	//template <typename genTypeT>
@@ -525,15 +519,63 @@ namespace detail
 	//	return x + a * (y - x);
 	//}
 
-	template <typename genType>
-	GLM_FUNC_QUALIFIER genType mix
+	template <>
+	GLM_FUNC_QUALIFIER float mix
 	(
-		genType const & x, 
-		genType const & y, 
+		float const & x, 
+		float const & y, 
 		bool const & a
 	)
 	{
-		GLM_STATIC_ASSERT(detail::type<genType>::is_float, "'mix' only accept floating-point inputs");
+		return a ? y : x;
+	}
+
+	template <>
+	GLM_FUNC_QUALIFIER double mix
+	(
+		double const & x, 
+		double const & y, 
+		bool const & a
+	)
+	{
+		return a ? y : x;
+	}
+
+	template <typename T>
+	GLM_FUNC_QUALIFIER detail::tvec2<T> mix
+	(
+		detail::tvec2<T> const & x, 
+		detail::tvec2<T> const & y, 
+		bool a
+	)
+	{
+		GLM_STATIC_ASSERT(detail::type<T>::is_float, "'mix' only accept floating-point inputs");
+
+		return a ? y : x;
+	}
+
+	template <typename T>
+	GLM_FUNC_QUALIFIER detail::tvec3<T> mix
+	(
+		detail::tvec3<T> const & x, 
+		detail::tvec3<T> const & y, 
+		bool a
+	)
+	{
+		GLM_STATIC_ASSERT(detail::type<T>::is_float, "'mix' only accept floating-point inputs");
+
+		return a ? y : x;
+	}
+
+	template <typename T>
+	GLM_FUNC_QUALIFIER detail::tvec4<T> mix
+	(
+		detail::tvec4<T> const & x, 
+		detail::tvec4<T> const & y, 
+		bool a
+	)
+	{
+		GLM_STATIC_ASSERT(detail::type<T>::is_float, "'mix' only accept floating-point inputs");
 
 		return a ? y : x;
 	}
@@ -552,8 +594,7 @@ namespace detail
 		for
 		(
 			typename detail::tvec2<T>::size_type i = 0; 
-			i < detail::tvec2<T>::value_size(); 
-			++i
+			i < x.length(); ++i
 		)
 		{
 			result[i] = a[i] ? y[i] : x[i];
@@ -575,8 +616,7 @@ namespace detail
 		for
 		(
 			typename detail::tvec3<T>::size_type i = 0; 
-			i < detail::tvec3<T>::value_size(); 
-			++i
+			i < x.length(); ++i
 		)
 		{
 			result[i] = a[i] ? y[i] : x[i];
@@ -598,8 +638,7 @@ namespace detail
 		for
 		(
 			typename detail::tvec4<T>::size_type i = 0; 
-			i < detail::tvec4<T>::value_size(); 
-			++i
+			i < x.length(); ++i
 		)
 		{
 			result[i] = a[i] ? y[i] : x[i];
@@ -803,17 +842,19 @@ namespace detail
 	{
 		GLM_STATIC_ASSERT(detail::type<genType>::is_float, "'isnan' only accept floating-point inputs");
 
-#       if(GLM_COMPILER & (GLM_COMPILER_VC | GLM_COMPILER_INTEL))
+#		if(GLM_COMPILER & (GLM_COMPILER_VC | GLM_COMPILER_INTEL))
 			return _isnan(x) != 0;
-#		elif(GLM_COMPILER & GLM_COMPILER_GCC)
+#		elif(GLM_COMPILER & (GLM_COMPILER_GCC | GLM_COMPILER_CLANG))
 #			if(GLM_PLATFORM & GLM_PLATFORM_ANDROID)
 				return _isnan(x) != 0;
 #			else
 				return std::isnan(x);
 #			endif
-#       else
+#		elif(GLM_COMPILER & GLM_COMPILER_CUDA)
+			return isnan(x) != 0;
+#		else
 			return std::isnan(x);
-#       endif
+#		endif
 	}
 
 	template <typename T>
@@ -858,32 +899,20 @@ namespace detail
 	{
 		GLM_STATIC_ASSERT(detail::type<genType>::is_float, "'isinf' only accept floating-point inputs");
 
-#       if(GLM_COMPILER & (GLM_COMPILER_INTEL | GLM_COMPILER_VC))
+#		if(GLM_COMPILER & (GLM_COMPILER_INTEL | GLM_COMPILER_VC))
 			return _fpclass(x) == _FPCLASS_NINF || _fpclass(x) == _FPCLASS_PINF;
-#		elif(GLM_COMPILER & GLM_COMPILER_GCC)
+#		elif(GLM_COMPILER & (GLM_COMPILER_GCC | GLM_COMPILER_CLANG))
 #			if(GLM_PLATFORM & GLM_PLATFORM_ANDROID)
 				return _isinf(x) != 0;
 #			else
 				return std::isinf(x);
 #			endif
-#       else
+#		elif(GLM_COMPILER & GLM_COMPILER_CUDA)
+			// http://developer.download.nvidia.com/compute/cuda/4_2/rel/toolkit/docs/online/group__CUDA__MATH__DOUBLE_g13431dd2b40b51f9139cbb7f50c18fab.html#g13431dd2b40b51f9139cbb7f50c18fab
+			return isinf(double(x)) != 0;
+#		else
 			return std::isinf(x);
-#       endif
-/*
-#       if(GLM_COMPILER & GLM_COMPILER_VC)
-			return _fpclass(x) == _FPCLASS_NINF || _fpclass(x) == _FPCLASS_PINF;
-#       elif(GLM_COMPILER & GLM_COMPILER_GCC)
-#           if(GLM_PLATFORM & GLM_PLATFORM_ANDROID)
-				return _isinf(x) != 0;
-#           else
-				return std::isinf(x);
-#           endif
-#       elif(GLM_COMPILER & GLM_COMPILER_INTEL)
-			return isinf(x) != 0;			
-#       else
-			return std::isinf(x);
-#       endif
-*/
+#		endif
 	}
 
 	template <typename T>

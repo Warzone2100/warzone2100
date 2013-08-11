@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////////
 /// OpenGL Mathematics (glm.g-truc.net)
 ///
-/// Copyright (c) 2005 - 2012 G-Truc Creation (www.g-truc.net)
+/// Copyright (c) 2005 - 2013 G-Truc Creation (www.g-truc.net)
 /// Permission is hereby granted, free of charge, to any person obtaining a copy
 /// of this software and associated documentation files (the "Software"), to deal
 /// in the Software without restriction, including without limitation the rights
@@ -480,6 +480,10 @@ namespace detail
 		T const & a
 	)
 	{
+		// Lerp is only defined in [0, 1]
+		assert(a >= T(0));
+		assert(a <= T(1));
+
 		return x * (T(1) - a) + (y * a);
 	}
 
@@ -508,10 +512,10 @@ namespace detail
 		{
 			// Linear interpolation
 			return detail::tquat<T>(
-				mix(x.w, y.w, a),
-				mix(x.x, y.x, a),
-				mix(x.y, y.y, a),
-				mix(x.z, y.z, a));
+				mix(x.w, z.w, a),
+				mix(x.x, z.x, a),
+				mix(x.y, z.y, a),
+				mix(x.z, z.z, a));
 		}
 		else
 		{

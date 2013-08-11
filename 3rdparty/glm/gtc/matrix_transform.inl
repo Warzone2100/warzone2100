@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////////
 /// OpenGL Mathematics (glm.g-truc.net)
 ///
-/// Copyright (c) 2005 - 2012 G-Truc Creation (www.g-truc.net)
+/// Copyright (c) 2005 - 2013 G-Truc Creation (www.g-truc.net)
 /// Permission is hereby granted, free of charge, to any person obtaining a copy
 /// of this software and associated documentation files (the "Software"), to deal
 /// in the Software without restriction, including without limitation the rights
@@ -236,15 +236,19 @@ namespace glm
 		valType const & zFar
 	)
 	{
-		valType range = tan(radians(fovy / valType(2))) * zNear;	
-		valType left = -range * aspect;
-		valType right = range * aspect;
-		valType bottom = -range;
-		valType top = range;
+		assert(aspect != valType(0));
+		assert(zFar != zNear);
 
+#ifdef GLM_FORCE_RADIANS
+		valType const rad = fovy;
+#else
+		valType const rad = glm::radians(fovy);
+#endif
+
+		valType tanHalfFovy = tan(rad / valType(2));
 		detail::tmat4x4<valType> Result(valType(0));
-		Result[0][0] = (valType(2) * zNear) / (right - left);
-		Result[1][1] = (valType(2) * zNear) / (top - bottom);
+		Result[0][0] = valType(1) / (aspect * tanHalfFovy);
+		Result[1][1] = valType(1) / (tanHalfFovy);
 		Result[2][2] = - (zFar + zNear) / (zFar - zNear);
 		Result[2][3] = - valType(1);
 		Result[3][2] = - (valType(2) * zFar * zNear) / (zFar - zNear);

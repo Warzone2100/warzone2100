@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-// OpenGL Mathematics Copyright (c) 2005 - 2012 G-Truc Creation (www.g-truc.net)
+// OpenGL Mathematics Copyright (c) 2005 - 2013 G-Truc Creation (www.g-truc.net)
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Created : 2011-03-05
 // Updated : 2011-03-05
@@ -117,11 +117,12 @@ namespace glm
 		T const delta
 	)
 	{
-		detail::tmat4x4<T> dltRotation = m2 * transpose(m1);
+		detail::tmat4x4<T> m1rot = extractMatrixRotation(m1);
+		detail::tmat4x4<T> dltRotation = m2 * transpose(m1rot);
 		detail::tvec3<T> dltAxis;
 		T dltAngle;
 		axisAngle(dltRotation, dltAxis, dltAngle);
-		detail::tmat4x4<T> out = axisAngleMatrix(dltAxis, dltAngle * delta) * extractMatrixRotation(m1);
+		detail::tmat4x4<T> out = axisAngleMatrix(dltAxis, dltAngle * delta) * m1rot;
 		out[3][0] = m1[3][0] + delta * (m2[3][0] - m1[3][0]);
 		out[3][1] = m1[3][1] + delta * (m2[3][1] - m1[3][1]);
 		out[3][2] = m1[3][2] + delta * (m2[3][2] - m1[3][2]);
