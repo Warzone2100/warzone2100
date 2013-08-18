@@ -1348,12 +1348,20 @@ static QScriptValue js_pursueResearch(QScriptContext *context, QScriptEngine *en
 	return QScriptValue(false); // none found
 }
 
-//-- \subsection{getResearch(research)}
+//-- \subsection{getResearch(research[, player])}
 //-- Fetch information about a given technology item, given by a string that matches
 //-- its definition in "research.ini". If not found, returns null.
 static QScriptValue js_getResearch(QScriptContext *context, QScriptEngine *engine)
 {
-	int player = engine->globalObject().property("me").toInt32();
+	int player = 0;
+	if (context->argumentCount() == 2)
+	{
+		player = context->argument(1).toInt32();
+	}
+	else
+	{
+		player = engine->globalObject().property("me").toInt32();
+	}
 	QString resName = context->argument(0).toString();
 	RESEARCH *psResearch = getResearch(resName.toUtf8().constData());
 	if (!psResearch)
