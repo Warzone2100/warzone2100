@@ -68,13 +68,13 @@
 			buildConfigurationList = 43FA570F10FF8EBB0074E914 /* Build configuration list for PBXAggregateTarget "Setup Prebuilt Components" */;
 			buildPhases = (
 				4345290E1130F84E002AD731 /* msgfmt */,
-				433360B311A079F700380F5E /* Moc */,
 				43B8FF2D127CD57D006F5A13 /* Fonts */,
 				436D24A4149641D200BF74E3 /* SDL */,
 				4311544C14BA01F900332251 /* Docs */,
 				43CEADC3141D6E810001637B /* fontconfig */,
 				43CEADC6141D6EEE0001637B /* freetype */,
 				433360A711A0796D00380F5E /* Qt */,
+				433360B311A079F700380F5E /* Moc */,
 			);
 			dependencies = (
 			);
