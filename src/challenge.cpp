@@ -302,8 +302,8 @@ bool addChallenges()
 		debug(LOG_SAVE, "We found [%s]", *i);
 
 		/* Set the button-text */
-		sstrcpy(sSlotCaps[slotCount], name.toAscii().constData());		// store it!
-		sstrcpy(sSlotTips[slotCount], description.toAscii().constData());	// store it, too!
+		sstrcpy(sSlotCaps[slotCount], name.toUtf8().constData());		// store it!
+		sstrcpy(sSlotTips[slotCount], description.toUtf8().constData());	// store it, too!
 		sstrcpy(sSlotFile[slotCount], sPath);					// store filename
 
 		/* Add button */

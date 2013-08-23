@@ -666,11 +666,11 @@ void readAIs()
 		WzConfig aiconf(path, WzConfig::ReadOnly);
 		AIDATA ai;
 		aiconf.beginGroup("AI");
-		sstrcpy(ai.name, aiconf.value("name", "error").toString().toAscii().constData());
-		sstrcpy(ai.slo, aiconf.value("slo", "").toString().toAscii().constData());
-		sstrcpy(ai.vlo, aiconf.value("vlo", "").toString().toAscii().constData());
-		sstrcpy(ai.js, aiconf.value("js", "").toString().toAscii().constData());
-		sstrcpy(ai.tip, aiconf.value("tip", "Click to choose this AI").toString().toAscii().constData());
+		sstrcpy(ai.name, aiconf.value("name", "error").toString().toUtf8().constData());
+		sstrcpy(ai.slo, aiconf.value("slo", "").toString().toUtf8().constData());
+		sstrcpy(ai.vlo, aiconf.value("vlo", "").toString().toUtf8().constData());
+		sstrcpy(ai.js, aiconf.value("js", "").toString().toUtf8().constData());
+		sstrcpy(ai.tip, aiconf.value("tip", "Click to choose this AI").toString().toUtf8().constData());
 		if (strcmp(ai.name, "Nexus") == 0)
 		{
 			std::vector<AIDATA>::iterator it;

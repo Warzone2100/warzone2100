@@ -871,7 +871,7 @@ void displayProximityMessage(PROXIMITY_DISPLAY *psProxDisp)
 		//display text - if any
 		if (psViewData->textMsg.size() > 0 && psViewData->type != VIEW_BEACON)
 		{
-			addConsoleMessage(psViewData->textMsg[0].toAscii().constData(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+			addConsoleMessage(psViewData->textMsg[0].toUtf8().constData(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 		}
 
 		//play message - if any

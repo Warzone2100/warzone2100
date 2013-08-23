@@ -812,7 +812,7 @@ bool scrValDefLoad(INTERP_VAL *psVal, WzConfig &ini)
 	case ST_INTMESSAGE:
 		if (ini.contains("data"))
 		{
-			psVal->v.oval = (void*)getViewData(ini.value("data").toString().toAscii().constData());
+			psVal->v.oval = (void*)getViewData(ini.value("data").toString().toUtf8().constData());
 		}
 		else
 		{
@@ -839,7 +839,7 @@ bool scrValDefLoad(INTERP_VAL *psVal, WzConfig &ini)
 		index = 0;
 		if (ini.contains("data"))
 		{
-			index = getStructStatFromName(ini.value("data").toString().toAscii().constData());
+			index = getStructStatFromName(ini.value("data").toString().toUtf8().constData());
 			if (index == -1)
 			{
 				debug( LOG_FATAL, "Could not find stat");
@@ -852,7 +852,7 @@ bool scrValDefLoad(INTERP_VAL *psVal, WzConfig &ini)
 		index = 0;
 		if (ini.contains("data"))
 		{
-			index = getFeatureStatFromName(ini.value("data").toString().toAscii().constData());
+			index = getFeatureStatFromName(ini.value("data").toString().toUtf8().constData());
 			if (index == -1)
 			{
 				debug( LOG_FATAL, "Could not find stat");
@@ -949,14 +949,14 @@ bool scrValDefLoad(INTERP_VAL *psVal, WzConfig &ini)
 		psVal->v.sval = NULL;
 		if (ini.contains("data"))
 		{
-			psVal->v.sval = strdup(ini.value("data").toString().toAscii().constData());
+			psVal->v.sval = strdup(ini.value("data").toString().toUtf8().constData());
 		}
 		break;
 	case ST_LEVEL:
 		psVal->v.sval = NULL;
 		if (ini.contains("data"))
 		{
-			psLevel = levFindDataSet(ini.value("data").toString().toAscii().constData());
+			psLevel = levFindDataSet(ini.value("data").toString().toUtf8().constData());
 			if (psLevel == NULL)
 			{
 				debug(LOG_FATAL, "Could not find level dataset");
@@ -1022,16 +1022,16 @@ bool scrValDefLoad(INTERP_VAL *psVal, WzConfig &ini)
 			break;
 		}
 
-		index = audio_GetTrackID(ini.value("data").toString().toAscii().constData());
+		index = audio_GetTrackID(ini.value("data").toString().toUtf8().constData());
 		if (index == SAMPLE_NOT_FOUND)
 		{
 			// find empty id and set track vals
 			QString soundname = ini.value("data").toString();
-			index = audio_SetTrackVals(soundname.toAscii().constData(), false, 100, 1800);
+			index = audio_SetTrackVals(soundname.toUtf8().constData(), false, 100, 1800);
 			if (!index)			// this is a NON fatal error.
 			{
 				// We can't find filename of the sound for some reason.
-				debug(LOG_ERROR, "Sound ID not available %s not found", soundname.toAscii().constData());
+				debug(LOG_ERROR, "Sound ID not available %s not found", soundname.toUtf8().constData());
 				break;
 			}
 		}
