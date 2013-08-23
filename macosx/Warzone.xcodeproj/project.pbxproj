@@ -4695,7 +4695,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cd ${SRCROOT}/external/libvorbis\n\nif [ -f \"vorbis.diff\" ]; then\n\texit 0\nfi\n\nif ! curl -LfOC - --connect-timeout \"30\" \"http://wz2100.net/~dak180/BuildTools/Mac/vorbis.diff\"; then\n\techo \"error: Unable to fetch vorbis.diff\" >&2\n\texit 1\nfi\n\nif ! cat \"vorbis.diff\" | patch --posix -sNfp0; then\n\techo \"error: Unable to apply vorbis.diff\" >&2\n\texit 1\nfi\n\nexit 0\n";
+			shellScript = "cd ${SRCROOT}/external/libvorbis\n\nif [ -f \"vorbis.diff\" ]; then\n\texit 0\nfi\n\nif ! curl -LfOC - --connect-timeout \"30\" \"https://gist.github.com/dak180/5917767/raw/47475c026c73873da7e9f1c4a457173050f87698/vorbis.diff\"; then\n\tif ! curl -LfOC - --connect-timeout \"30\" \"http://wz2100.net/~dak180/BuildTools/Mac/vorbis.diff\"; then\n\t\techo \"error: Unable to fetch vorbis.diff\" >&2\n\t\texit 1\n\tfi\nfi\n\nif ! cat \"vorbis.diff\" | patch --posix -sNfp0; then\n\techo \"error: Unable to apply vorbis.diff\" >&2\n\texit 1\nfi\n\nexit 0\n";
 		};
 		43B8FF2D127CD57D006F5A13 /* Fonts */ = {
 			isa = PBXShellScriptBuildPhase;
