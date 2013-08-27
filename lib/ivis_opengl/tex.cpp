@@ -70,12 +70,11 @@ int pie_ReserveTexture(const char *name)
 	table.  We check first if the given image has already been loaded,
 	as a sanity check (should never happen).  The texture numbers are
 	stored in a special texture table, not in the resource system, for
-	some unknown reason. Start looking for an available slot in the
-	texture table at the given slot number.
+	some unknown reason.
 
 	Returns the texture number of the image.
 **************************************************************************/
-int pie_AddTexPage(iV_Image *s, const char* filename, int slot, int maxTextureSize, bool useMipmaping)
+int pie_AddTexPage(iV_Image *s, const char* filename, int maxTextureSize, bool useMipmaping)
 {
 	unsigned int i = 0;
 	int width, height;
@@ -95,13 +94,13 @@ int pie_AddTexPage(iV_Image *s, const char* filename, int slot, int maxTextureSi
 			pie_PrintLoadedTextures();
 		}
 		ASSERT(strncmp(filename, _TEX_PAGE[i].name, iV_TEXNAME_MAX) != 0,
-		       "pie_AddTexPage: %s loaded again! Already loaded as %s|%u", filename,
+		       "%s loaded again! Already loaded as %s|%u", filename,
 		       _TEX_PAGE[i].name, i);
 		i++;
 	}
 
 	page = _TEX_PAGE.size();
-	debug(LOG_TEXTURE, "pie_AddTexPage: %s page=%d", filename, page);
+	debug(LOG_TEXTURE, "%s page=%d", filename, page);
 
 	/* Stick the name into the tex page structures */
 	sstrcpy(tex.name, filename);
@@ -149,7 +148,7 @@ int pie_AddTexPage(iV_Image *s, const char* filename, int slot, int maxTextureSi
 	}
 	else
 	{
-		debug(LOG_ERROR, "pie_AddTexPage: non POT texture %s", filename);
+		debug(LOG_ERROR, "Non-POT texture %s", filename);
 	}
 	
 	// it is uploaded, we do not need it anymore
@@ -267,7 +266,7 @@ int iV_GetTexture(const char *filename)
 	}
 	sstrcpy(path, filename);
 	pie_MakeTexPageName(path);
-	return pie_AddTexPage(&sSprite, path, 0, -1, true);	// FIXME, -1, use getTextureSize()
+	return pie_AddTexPage(&sSprite, path, -1, true);	// FIXME, -1, use getTextureSize()
 }
 
 
@@ -291,7 +290,7 @@ int pie_ReplaceTexPage(iV_Image *s, const char *texPage, int maxTextureSize, boo
 	glDeleteTextures(1, &_TEX_PAGE[i].id);
 	debug(LOG_TEXTURE, "Reloading texture %s from index %d", texPage, i);
 	_TEX_PAGE[i].name[0] = '\0';
-	pie_AddTexPage(s, texPage, i, maxTextureSize, useMipmaping);
+	pie_AddTexPage(s, texPage, maxTextureSize, useMipmaping);
 
 	return i;
 }

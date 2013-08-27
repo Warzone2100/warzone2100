@@ -270,7 +270,7 @@ IMAGEFILE *iV_LoadImageFile(const char *fileName)
 		char arbitraryName[256];
 		ssprintf(arbitraryName, "%s-%03u", fileName, p);
 		// Now we can set imageFile->pages[p].id. This free()s the ivImages[p].bmp array!
-		imageFile->pages[p].id = pie_AddTexPage(&ivImages[p], arbitraryName, 0, 0, true);
+		imageFile->pages[p].id = pie_AddTexPage(&ivImages[p], arbitraryName, 0, true);
 	}
 
 	// duplicate some data, since we want another access point to these data structures now, FIXME
