@@ -80,18 +80,13 @@ bool iV_loadImage_PNG(const char *fileName, iV_Image *image)
 
 	// Open file
 	PHYSFS_file* fileHandle = PHYSFS_openRead(fileName);
-	if (fileHandle == NULL)
-	{
-		debug(LOG_ERROR, "pie_PNGLoadFile: PHYSFS_openRead(%s) failed with error: %s\n", fileName, PHYSFS_getLastError());
-		PNGReadCleanup(&info_ptr, &png_ptr, fileHandle);
-		return false;
-	}
+	ASSERT_OR_RETURN(false, fileHandle != NULL, "Could not open %s: %s", fileName, PHYSFS_getLastError());
 
 	// Read PNG header from file
 	readSize = PHYSFS_read(fileHandle, PNGheader, 1, PNG_BYTES_TO_CHECK);
 	if (readSize < PNG_BYTES_TO_CHECK)
 	{
-		debug(LOG_ERROR, "pie_PNGLoadFile: PHYSFS_read(%s) failed with error: %s\n", fileName, PHYSFS_getLastError());
+		debug(LOG_FATAL, "pie_PNGLoadFile: PHYSFS_read(%s) failed with error: %s\n", fileName, PHYSFS_getLastError());
 		PNGReadCleanup(&info_ptr, &png_ptr, fileHandle);
 		return false;
 	}
@@ -99,29 +94,32 @@ bool iV_loadImage_PNG(const char *fileName, iV_Image *image)
 	// Verify the PNG header to be correct
 	if (png_sig_cmp(PNGheader, 0, PNG_BYTES_TO_CHECK))
 	{
-		debug(LOG_3D, "pie_PNGLoadMem: Did not recognize PNG header in %s", fileName);
+		debug(LOG_FATAL, "pie_PNGLoadMem: Did not recognize PNG header in %s", fileName);
 		PNGReadCleanup(&info_ptr, &png_ptr, fileHandle);
 		return false;
 	}
 
 	png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
-	if (png_ptr == NULL) {
-		debug(LOG_3D, "pie_PNGLoadMem: Unable to create png struct");
+	if (png_ptr == NULL)
+	{
+		debug(LOG_FATAL, "pie_PNGLoadMem: Unable to create png struct");
 		PNGReadCleanup(&info_ptr, &png_ptr, fileHandle);
 		return false;
 	}
 
 	info_ptr = png_create_info_struct(png_ptr);
-	if (info_ptr == NULL) {
-		debug(LOG_3D, "pie_PNGLoadMem: Unable to create png info struct");
+	if (info_ptr == NULL)
+	{
+		debug(LOG_FATAL, "pie_PNGLoadMem: Unable to create png info struct");
 		PNGReadCleanup(&info_ptr, &png_ptr, fileHandle);
 		return false;
 	}
 
 	// Set libpng's failure jump position to the if branch,
 	// setjmp evaluates to false so the else branch will be executed at first
-	if (setjmp(png_jmpbuf(png_ptr))) {
-		debug(LOG_3D, "pie_PNGLoadMem: Error decoding PNG data in %s", fileName);
+	if (setjmp(png_jmpbuf(png_ptr)))
+	{
+		debug(LOG_FATAL, "pie_PNGLoadMem: Error decoding PNG data in %s", fileName);
 		PNGReadCleanup(&info_ptr, &png_ptr, fileHandle);
 		return false;
 	}
