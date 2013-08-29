@@ -1,9 +1,11 @@
 #!/bin/sh
 
-# Copyright (c) 2012 - 2013 dak180
-# See http://opensource.org/licenses/bsd-license.php for licence terms
+# Copyright (c) 2012 - 2013 dak180 and contributors. See
+# http://opensource.org/licenses/mit-license.php or the included
+# COPYING.md for licence terms.
 #
-# autorevision - extracts metadata about the head version from your repository.
+# autorevision - extracts metadata about the head version from your
+# repository.
 
 # Usage message.
 arUsage() {
@@ -50,7 +52,7 @@ EOF
 }
 
 # Config
-ARVERSION="1.5"
+ARVERSION="1.6"
 TARGETFILE="/dev/stdout"
 while getopts ":t:o:s:Vf" OPTION; do
 	case "${OPTION}" in
@@ -90,6 +92,12 @@ elif [ -z "${VAROUT}" ] && [ -z "${AFILETYPE}" ]; then
 elif [ -z "${CACHEFILE}" ] && [ "${CACHEFORCE}" = "1" ]; then
 	# If -f is specified without -o:
 	arUsage
+fi
+
+# Make sure that the path we are given is one we can source
+# (dash, we are looking at you).
+if ! echo "${CACHEFILE}" | grep -q '^\.*/'; then
+	CACHEFILE="./${CACHEFILE}"
 fi
 
 
