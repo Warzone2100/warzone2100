@@ -1,9 +1,9 @@
 tertilesc1hw,8
-a_yellow,page-82,6.4
-a_red,page-83,5.0
-a_concrete,page-84,5.0
-a_cliff,page-85,6.4
-a_water,page-86,6.4
-a_mud,page-87,3.2
-a_green,page-88,4.0
-a_sand,page-109,6.4
+a_yellow,page-82-yellow-sand-arizona.png,6.4
+a_red,page-83-red-earth-arizona.png,5.0
+a_concrete,page-84-tiles-arizona.png,5.0
+a_cliff,page-85-cliff-arizona.png,6.4
+a_water,page-86-bottom-arizona.png,6.4
+a_mud,page-87-mud-arizona.png,3.2
+a_green,page-88-grass-arizona.png,4.0
+a_sand,page-109-sand-arizona.png,6.4

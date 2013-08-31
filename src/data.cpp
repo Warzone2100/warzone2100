@@ -33,7 +33,7 @@
 #include "lib/framework/resly.h"
 #include "lib/gamelib/parser.h"
 #include "lib/ivis_opengl/bitimage.h"
-#include "lib/ivis_opengl/tex.h"
+#include "lib/ivis_opengl/png_util.h"
 #include "lib/script/script.h"
 #include "lib/sound/audio.h"
 
@@ -50,9 +50,6 @@
 #include "template.h"
 #include "text.h"
 #include "texture.h"
-
-#define DT_TEXPAGE "TEXPAGE"
-#define DT_TCMASK "TCMASK"
 
 // whether a save game is currently being loaded
 static bool saveFlag = false;
@@ -529,74 +526,6 @@ static void dataIMGRelease(void *pData)
 	iV_FreeImageFile((IMAGEFILE*)pData);
 }
 
-
-/* Load a texturepage into memory */
-static bool dataTexPageLoad(const char *fileName, void **ppData)
-{
-	char texpage[PATH_MAX] = {'\0'};
-
-	// This hackery is needed, because fileName will include the directory name, whilst the LastResourceFilename will not, and we need a short name to identify the texpage
-	sstrcpy(texpage, GetLastResourceFilename());
-
-	pie_MakeTexPageName(texpage);
-	if (!dataImageLoad(fileName, ppData))
-	{
-		return false;
-	}
-
-	// see if this texture page has already been loaded
-	if (resPresent(DT_TEXPAGE, texpage))
-	{
-		// replace the old texture page with the new one
-		debug(LOG_TEXTURE, "replacing %s with new texture %s", texpage, fileName);
-		pie_ReplaceTexPage((iV_Image *)*ppData, texpage, getTextureSize(), true);
-	}
-	else
-	{
-		debug(LOG_TEXTURE, "adding page %s with texture %s", texpage, fileName);
-		SetLastResourceFilename(texpage);
-		pie_AddTexPage((iV_Image *)*ppData, texpage, 0, getTextureSize(), true);
-	}
-
-	return true;
-}
-
-/* Load a team colour mask texturepage into memory */
-static bool dataTexPageTCMaskLoad(const char *fileName, void **ppData)
-{
-	char texpage[PATH_MAX] = {'\0'};
-
-	// This hackery is needed, because fileName will include the directory name, whilst the LastResourceFilename will not, and we need a short name to identify the texpage
-	sstrcpy(texpage, GetLastResourceFilename());
-
-	// Check if a corresponding texpage exists, exit if no
-	pie_MakeTexPageName(texpage);
-	ASSERT_OR_RETURN(false, resPresent(DT_TEXPAGE, texpage), "Corresponding texpage %s doesn't exists!", texpage);
-
-	pie_MakeTexPageTCMaskName(texpage);
-		
-	if (!dataImageLoad(fileName, ppData))
-	{
-		return false;
-	}
-
-	// see if this texture page has already been loaded
-	if (resPresent(DT_TCMASK, texpage))
-	{
-		// replace the old texture page with the new one
-		debug(LOG_TEXTURE, "replacing %s with new tcmask %s", texpage, fileName);
-		pie_ReplaceTexPage((iV_Image *)*ppData, texpage, getTextureSize(), false);
-	}
-	else
-	{
-		debug(LOG_TEXTURE, "adding page %s with tcmask %s", texpage, fileName);
-		SetLastResourceFilename(texpage);
-		pie_AddTexPage((iV_Image *)*ppData, texpage, 0, getTextureSize(), false);
-	}
-
-	return true;
-}
-
 /*!
  * Release an Image
  */
@@ -890,8 +819,8 @@ static const RES_TYPE_MIN_FILE FileResourceTypes[] =
 	{"IMGPAGE", dataImageLoad, dataImageRelease},
 	{"TERTILES", dataTERTILESLoad, NULL},
 	{"IMG", dataIMGLoad, dataIMGRelease},
-	{DT_TEXPAGE, dataTexPageLoad, dataImageRelease},
-	{DT_TCMASK, dataTexPageTCMaskLoad, dataImageRelease},
+	{"TEXPAGE", NULL, NULL}, // ignored
+	{"TCMASK", NULL, NULL}, // ignored
 	{"SCRIPT", dataScriptLoad, dataScriptRelease},
 	{"SCRIPTVAL", dataScriptLoadVals, NULL},
 	{"STR_RES", dataStrResLoad, dataStrResRelease},

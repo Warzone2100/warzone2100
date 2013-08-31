@@ -11,6 +11,17 @@ var cheatmode = false;
 
 function eventGameInit()
 {
+	if (tilesetType == "URBAN")
+	{
+		replaceTexture("page-8-player-buildings-bases.png", "page-8-player-buildings-bases-urban.png");
+		replaceTexture("page-9-player-buildings-bases.png", "page-9-player-buildings-bases-urban.png");
+	}
+	else if (tilesetType == "ROCKIES")
+	{
+		replaceTexture("page-8-player-buildings-bases.png", "page-8-player-buildings-bases-rockies.png");
+		replaceTexture("page-9-player-buildings-bases.png", "page-9-player-buildings-bases-rockies.png");
+	}
+
 	receiveAllEvents(true);
 
 	setReticuleButton(0, _("Close"), "image_cancel_up.png", "image_cancel_down.png");

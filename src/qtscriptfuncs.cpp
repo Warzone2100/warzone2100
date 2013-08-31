@@ -3857,6 +3857,17 @@ static QScriptValue js_syncRequest(QScriptContext *context, QScriptEngine *)
 	return QScriptValue();
 }
 
+//-- \subsection{replaceTexture(old_filename, new_filename)}
+//-- Replace one texture with another. This can be used to for example give buildings on a specific tileset different
+//-- looks, or to add variety to the looks of droids in campaign missions.
+static QScriptValue js_replaceTexture(QScriptContext *context, QScriptEngine *)
+{
+	QString oldfile = context->argument(0).toString();
+	QString newfile = context->argument(1).toString();
+	replaceTexture(oldfile, newfile);
+	return QScriptValue();
+}
+
 // ----------------------------------------------------------------------------------------
 // Register functions with scripting system
 
@@ -4458,6 +4469,7 @@ bool registerFunctions(QScriptEngine *engine, QString scriptName)
 	engine->globalObject().setProperty("addSpotter", engine->newFunction(js_addSpotter));
 	engine->globalObject().setProperty("removeSpotter", engine->newFunction(js_removeSpotter));
 	engine->globalObject().setProperty("syncRequest", engine->newFunction(js_syncRequest));
+	engine->globalObject().setProperty("replaceTexture", engine->newFunction(js_replaceTexture));
 
 	// horrible hacks follow -- do not rely on these being present!
 	engine->globalObject().setProperty("hackNetOff", engine->newFunction(js_hackNetOff));

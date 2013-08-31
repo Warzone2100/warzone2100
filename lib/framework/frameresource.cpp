@@ -147,42 +147,24 @@ static RES_TYPE* resAlloc(const char *pType)
 	// Check for a duplicate type
 	for(psT = psResTypes; psT; psT = psT->psNext)
 	{
-		ASSERT( strcmp(psT->aType, pType) != 0,
-			"resAlloc: Duplicate function for type: %s", pType );
+		ASSERT(strcmp(psT->aType, pType) != 0, "Duplicate function for type: %s", pType);
 	}
 #endif
 
-	// Allocate the memory
-	psT = (RES_TYPE *)malloc(sizeof(RES_TYPE));
-	if (!psT)
-	{
-		debug( LOG_FATAL, "resAlloc: Out of memory" );
-		abort();
-		return NULL;
-	}
-
 	// setup the structure
+	psT = (RES_TYPE *)malloc(sizeof(RES_TYPE));
 	sstrcpy(psT->aType, pType);
-
 	psT->HashedType = HashString(psT->aType); // store a hased version for super speed !
-
 	psT->psRes = NULL;
 
 	return psT;
 }
 
 
-
 /* Add a buffer load function for a file type */
-bool resAddBufferLoad(const char *pType, RES_BUFFERLOAD buffLoad,
-					  RES_FREE release)
+bool resAddBufferLoad(const char *pType, RES_BUFFERLOAD buffLoad, RES_FREE release)
 {
 	RES_TYPE	*psT = resAlloc(pType);
-
-	if (!psT)
-	{
-		return false;
-	}
 
 	psT->buffLoad = buffLoad;
 	psT->fileLoad = NULL;
@@ -196,15 +178,9 @@ bool resAddBufferLoad(const char *pType, RES_BUFFERLOAD buffLoad,
 
 
 /* Add a file name load function for a file type */
-bool resAddFileLoad(const char *pType, RES_FILELOAD fileLoad,
-					RES_FREE release)
+bool resAddFileLoad(const char *pType, RES_FILELOAD fileLoad, RES_FREE release)
 {
 	RES_TYPE	*psT = resAlloc(pType);
-
-	if (!psT)
-	{
-		return false;
-	}
 
 	psT->buffLoad = NULL;
 	psT->fileLoad = fileLoad;
@@ -494,11 +470,6 @@ bool resLoadFile(const char *pType, const char *pFile)
 			}
 			return false;
 		}
-	}
-	else
-	{
-		ASSERT(false, "No load functions for this type (%s)", pType);
-		return false;
 	}
 
 	resDoResLoadCallback();		// do callback.

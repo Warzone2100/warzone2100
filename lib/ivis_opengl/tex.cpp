@@ -269,30 +269,48 @@ int iV_GetTexture(const char *filename)
 	return pie_AddTexPage(&sSprite, path, -1, true);	// FIXME, -1, use getTextureSize()
 }
 
-
-/**************************************************************************
-	WRF files may specify overrides for the textures on a map. This
-	is done through an ugly hack involving cutting the texture name
-	down to just "page-NN", where NN is the page number, and
-	replaceing the texture page with the same name if another file
-	with this prefix is loaded.
-**************************************************************************/
-int pie_ReplaceTexPage(iV_Image *s, const char *texPage, int maxTextureSize, bool useMipmaping)
+bool replaceTexture(const QString &oldfile, const QString &newfile)
 {
-	int i = iV_GetTexture(texPage);
+	char tmpname[iV_TEXNAME_MAX];
 
-	ASSERT(i >= 0, "pie_ReplaceTexPage: Cannot find any %s to replace!", texPage);
-	if (i < 0)
+	// Load new one to replace it
+	iV_Image image;
+	if (!iV_loadImage_PNG(QString("texpages/" + newfile).toUtf8().constData(), &image))
 	{
-		return -1;
+		debug(LOG_ERROR, "Failed to load image: %s", newfile.toUtf8().constData());
+		return false;
 	}
-
-	glDeleteTextures(1, &_TEX_PAGE[i].id);
-	debug(LOG_TEXTURE, "Reloading texture %s from index %d", texPage, i);
-	_TEX_PAGE[i].name[0] = '\0';
-	pie_AddTexPage(s, texPage, maxTextureSize, useMipmaping);
-
-	return i;
+	sstrcpy(tmpname, oldfile.toUtf8().constData());
+	pie_MakeTexPageName(tmpname);
+	// Have we already loaded this one?
+	for (int i = 0; i < _TEX_PAGE.size(); i++)
+	{
+		if (strcmp(tmpname, _TEX_PAGE[i].name) == 0)
+		{
+			GL_DEBUG("Replacing texture");
+			debug(LOG_TEXTURE, "Replacing texture %s with %s from index %d (tex id %u)", _TEX_PAGE[i].name, newfile.toUtf8().constData(), i, _TEX_PAGE[i].id);
+			sstrcpy(tmpname, newfile.toUtf8().constData());
+			pie_MakeTexPageName(tmpname);
+			pie_SetTexturePage(TEXPAGE_EXTERN);
+			glDeleteTextures(1, &_TEX_PAGE[i].id);
+			glGenTextures(1, &_TEX_PAGE[i].id);
+			glBindTexture(GL_TEXTURE_2D, _TEX_PAGE[i].id);
+			glErrors();
+			sstrcpy(_TEX_PAGE[i].name, tmpname);
+			gluBuild2DMipmaps(GL_TEXTURE_2D, wz_texture_compression, image.width, image.height, iV_getPixelFormat(&image), GL_UNSIGNED_BYTE, image.bmp);
+			glErrors();
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+			iV_unloadImage(&image);
+			glErrors();
+			return true;
+		}
+	}
+	iV_unloadImage(&image);
+	debug(LOG_ERROR, "Nothing to replace!");
+	return false;
 }
 
 void pie_TexShutDown(void)
@@ -312,7 +330,6 @@ void pie_TexInit(void)
 	debug(LOG_TEXTURE, "pie_TexInit successful");
 }
 
-
 void iV_unloadImage(iV_Image *image)
 {
 	if (image)
@@ -328,7 +345,6 @@ void iV_unloadImage(iV_Image *image)
 		debug(LOG_ERROR, "Tried to free invalid image!");
 	}
 }
-
 
 unsigned int iV_getPixelFormat(const iV_Image *image)
 {

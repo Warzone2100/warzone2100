@@ -40,7 +40,7 @@ extern int iV_GetTexture(const char *filename);
 extern void iV_unloadImage(iV_Image *image);
 extern unsigned int iV_getPixelFormat(const iV_Image *image);
 
-extern int pie_ReplaceTexPage(iV_Image *s, const char *texPage, int maxTextureSize, bool useMipmaping);
+bool replaceTexture(const QString &oldfile, const QString &newfile);
 extern int pie_AddTexPage(iV_Image *s, const char *filename, int maxTextureSize, bool useMipmaping);
 extern void pie_TexInit(void);
 

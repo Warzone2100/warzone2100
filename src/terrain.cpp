@@ -1416,7 +1416,7 @@ void drawWater(void)
 	}
 
 	// first texture unit
-	pie_SetTexturePage(iV_GetTexture("page-80")); glError();
+	pie_SetTexturePage(iV_GetTexture("page-80-water-1.png")); glError();
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);
@@ -1432,7 +1432,7 @@ void drawWater(void)
 
 	// second texture unit
 	glActiveTexture(GL_TEXTURE1);
-	glBindTexture(GL_TEXTURE_2D, pie_Texture(iV_GetTexture("page-81")));
+	glBindTexture(GL_TEXTURE_2D, pie_Texture(iV_GetTexture("page-81-water-2.png")));
 	glError();
 	glEnable(GL_TEXTURE_2D);
 	glEnable(GL_TEXTURE_GEN_S); glError();
