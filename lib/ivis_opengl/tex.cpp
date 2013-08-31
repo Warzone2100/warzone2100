@@ -41,8 +41,6 @@ struct iTexPage
 
 QList<iTexPage> _TEX_PAGE;
 
-static void pie_PrintLoadedTextures(void);
-
 //*************************************************************************
 
 GLuint pie_Texture(int page)
@@ -65,119 +63,52 @@ int pie_ReserveTexture(const char *name)
 	return _TEX_PAGE.size() - 1;
 }
 
-/**************************************************************************
-	Add an image buffer given in s as a new texture page in the texture
-	table.  We check first if the given image has already been loaded,
-	as a sanity check (should never happen).  The texture numbers are
-	stored in a special texture table, not in the resource system, for
-	some unknown reason.
-
-	Returns the texture number of the image.
-**************************************************************************/
-int pie_AddTexPage(iV_Image *s, const char* filename, int maxTextureSize, bool useMipmaping)
+int pie_AddTexPage(iV_Image *s, const char* filename, bool gameTexture, int page)
 {
-	unsigned int i = 0;
-	int width, height;
-	void *bmp;
-	bool scaleDown = false;
-	GLint minfilter;
-	iTexPage tex;
-	int page = -1;
-
 	ASSERT(s && filename, "Bad input parameter");
 
-	/* Have we already loaded this one? Should not happen here. */
-	while (i < _TEX_PAGE.size())
+	if (page < 0)
 	{
-		if (strncmp(filename, _TEX_PAGE[i].name, iV_TEXNAME_MAX) == 0)
-		{
-			pie_PrintLoadedTextures();
-		}
-		ASSERT(strncmp(filename, _TEX_PAGE[i].name, iV_TEXNAME_MAX) != 0,
-		       "%s loaded again! Already loaded as %s|%u", filename,
-		       _TEX_PAGE[i].name, i);
-		i++;
+		iTexPage tex;
+		page = _TEX_PAGE.size();
+		glGenTextures(1, &tex.id);
+		sstrcpy(tex.name, filename);
+		_TEX_PAGE.append(tex);
 	}
+	else // replace
+	{
+		sstrcpy(_TEX_PAGE[page].name, filename);
 
-	page = _TEX_PAGE.size();
+	}
 	debug(LOG_TEXTURE, "%s page=%d", filename, page);
-
-	/* Stick the name into the tex page structures */
-	sstrcpy(tex.name, filename);
-
-	glGenTextures(1, &tex.id);
-
-	_TEX_PAGE.append(tex);
 
 	pie_SetTexturePage(page);
 
-	width = s->width;
-	height = s->height;
-	bmp = s->bmp;
-	if ((width & (width-1)) == 0 && (height & (height-1)) == 0)
+	if (gameTexture) // this is a game texture, use texture compression
 	{
-		if (maxTextureSize > 0 && width > maxTextureSize)
-		{
-			width = maxTextureSize;
-			scaleDown = true;
-		}
-		if (maxTextureSize > 0 && height > maxTextureSize)
-		{
-			height = maxTextureSize;
-			scaleDown = true;
-		}
-		if (scaleDown)
-		{
-			debug(LOG_TEXTURE, "scaling down texture %s from %ix%i to %ix%i", filename, s->width, s->height, width, height);
-			bmp = malloc(4 * width * height); // FIXME: don't know for sure it is 4 bytes per pixel
-			gluScaleImage(iV_getPixelFormat(s), s->width, s->height, GL_UNSIGNED_BYTE, s->bmp,
-			                                    width,    height,    GL_UNSIGNED_BYTE, bmp);
-			free(s->bmp);
-		}
-
-		if (maxTextureSize)
-		{
-			// this is a 3D texture, use texture compression
-			gluBuild2DMipmaps(GL_TEXTURE_2D, wz_texture_compression, width, height, iV_getPixelFormat(s), GL_UNSIGNED_BYTE, bmp);
-		}
-		else
-		{
-			// this is an interface texture, do not use compression
-			gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGBA, width, height, iV_getPixelFormat(s), GL_UNSIGNED_BYTE, bmp);
-		}
+		gluBuild2DMipmaps(GL_TEXTURE_2D, wz_texture_compression, s->width, s->height, iV_getPixelFormat(s), GL_UNSIGNED_BYTE, s->bmp);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	}
-	else
+	else	// this is an interface texture, do not use compression
 	{
-		debug(LOG_ERROR, "Non-POT texture %s", filename);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, s->width, s->height, 0, iV_getPixelFormat(s), GL_UNSIGNED_BYTE, s->bmp);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	}
-	
 	// it is uploaded, we do not need it anymore
-	free(bmp); 
+	free(s->bmp);
 	s->bmp = NULL;
 
-	if (useMipmaping)
-	{
-		minfilter = GL_LINEAR_MIPMAP_LINEAR;
-	}
-	else
-	{
-		minfilter = GL_LINEAR;
-	}
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, minfilter);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	// Use anisotropic filtering, if available, but only max 4.0 to reduce processor burden
 	if (GLEW_EXT_texture_filter_anisotropic)
 	{
 		GLfloat max;
-
 		glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &max);
 		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, MIN(4.0f, max));
 	}
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
 	/* Send back the texpage number so we can store it in the IMD */
 	return page;
@@ -214,18 +145,6 @@ void pie_MakeTexPageTCMaskName(char * filename)
 		for ( i = 5; i < iV_TEXNAME_MAX-1 && isdigit(filename[i]); i++) {}
 		filename[i] = '\0';
 		strcat(filename, iV_TEXNAME_TCSUFFIX);
-	}
-}
-
-/*!
- * Print the names of all loaded textures to LOG_ERROR
- */
-static void pie_PrintLoadedTextures(void)
-{
-	debug(LOG_ERROR, "Texture pages in memory: %u", _TEX_PAGE.size());
-	for (int i = 0; i < _TEX_PAGE.size() && _TEX_PAGE[i].name[0] != '\0'; i++ )
-	{
-		debug(LOG_ERROR, "%02d : %s", i, _TEX_PAGE[i].name);
 	}
 }
 
@@ -266,7 +185,7 @@ int iV_GetTexture(const char *filename)
 	}
 	sstrcpy(path, filename);
 	pie_MakeTexPageName(path);
-	return pie_AddTexPage(&sSprite, path, -1, true);	// FIXME, -1, use getTextureSize()
+	return pie_AddTexPage(&sSprite, path, true);
 }
 
 bool replaceTexture(const QString &oldfile, const QString &newfile)
@@ -291,18 +210,7 @@ bool replaceTexture(const QString &oldfile, const QString &newfile)
 			debug(LOG_TEXTURE, "Replacing texture %s with %s from index %d (tex id %u)", _TEX_PAGE[i].name, newfile.toUtf8().constData(), i, _TEX_PAGE[i].id);
 			sstrcpy(tmpname, newfile.toUtf8().constData());
 			pie_MakeTexPageName(tmpname);
-			pie_SetTexturePage(TEXPAGE_EXTERN);
-			glDeleteTextures(1, &_TEX_PAGE[i].id);
-			glGenTextures(1, &_TEX_PAGE[i].id);
-			glBindTexture(GL_TEXTURE_2D, _TEX_PAGE[i].id);
-			glErrors();
-			sstrcpy(_TEX_PAGE[i].name, tmpname);
-			gluBuild2DMipmaps(GL_TEXTURE_2D, wz_texture_compression, image.width, image.height, iV_getPixelFormat(&image), GL_UNSIGNED_BYTE, image.bmp);
-			glErrors();
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+			pie_AddTexPage(&image, tmpname, true, i);
 			iV_unloadImage(&image);
 			glErrors();
 			return true;
