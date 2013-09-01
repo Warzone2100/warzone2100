@@ -15,11 +15,13 @@ function eventGameInit()
 	{
 		replaceTexture("page-8-player-buildings-bases.png", "page-8-player-buildings-bases-urban.png");
 		replaceTexture("page-9-player-buildings-bases.png", "page-9-player-buildings-bases-urban.png");
+		replaceTexture("page-7-barbarians-arizona.png", "page-7-barbarians-urban.png");
 	}
 	else if (tilesetType == "ROCKIES")
 	{
 		replaceTexture("page-8-player-buildings-bases.png", "page-8-player-buildings-bases-rockies.png");
 		replaceTexture("page-9-player-buildings-bases.png", "page-9-player-buildings-bases-rockies.png");
+		// for some reason rockies will use arizona babas
 	}
 
 	receiveAllEvents(true);
