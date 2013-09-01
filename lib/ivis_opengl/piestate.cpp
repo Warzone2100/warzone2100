@@ -38,7 +38,7 @@
 
 static GLuint shaderProgram[SHADER_MAX];
 static GLfloat shaderStretch = 0;
-static GLint locTeam, locStretch, locTCMask, locFog, locNormalMap, locEcm, locTime;
+static GLint locTeam, locStretch, locTCMask, locFog, locNormalMap, locSpecularMap, locEcm, locTime;
 static SHADER_MODE currentShaderMode = SHADER_NONE;
 unsigned int pieStateCount = 0; // Used in pie_GetResetCounts
 static RENDER_STATE rendStates;
@@ -333,20 +333,23 @@ void pie_ActivateShader(SHADER_MODE shaderMode, iIMDShape* shape, PIELIGHT teamc
 {
 	int maskpage = shape->tcmaskpage;
 	int normalpage = shape->normalpage;
+	int specularpage = shape->specularpage;
 	GLfloat colour4f[4];
 
 	if (shaderMode != currentShaderMode)
 	{
-		GLint locTex0, locTex1, locTex2;
+		GLint locTex0, locTex1, locTex2, locTex3;
 
 		glUseProgram(shaderProgram[shaderMode]);
 		locTex0 = glGetUniformLocation(shaderProgram[shaderMode], "Texture0");
 		locTex1 = glGetUniformLocation(shaderProgram[shaderMode], "Texture1");
 		locTex2 = glGetUniformLocation(shaderProgram[shaderMode], "Texture2");
+		locTex3 = glGetUniformLocation(shaderProgram[shaderMode], "Texture3");
 		locTeam = glGetUniformLocation(shaderProgram[shaderMode], "teamcolour");
 		locStretch = glGetUniformLocation(shaderProgram[shaderMode], "stretch");
 		locTCMask = glGetUniformLocation(shaderProgram[shaderMode], "tcmask");
 		locNormalMap = glGetUniformLocation(shaderProgram[shaderMode], "normalmap");
+		locSpecularMap = glGetUniformLocation(shaderProgram[shaderMode], "specularmap");
 		locFog = glGetUniformLocation(shaderProgram[shaderMode], "fogEnabled");
 		locEcm = glGetUniformLocation(shaderProgram[shaderMode], "ecmEffect");
 		locTime = glGetUniformLocation(shaderProgram[shaderMode], "graphicsCycle");
@@ -355,6 +358,7 @@ void pie_ActivateShader(SHADER_MODE shaderMode, iIMDShape* shape, PIELIGHT teamc
 		glUniform1i(locTex0, 0);
 		glUniform1i(locTex1, 1);
 		glUniform1i(locTex2, 2);
+		glUniform1i(locTex3, 3);
 
 		// These do not change during our drawing pass
 		glUniform1i(locFog, rendStates.fog);
@@ -377,6 +381,10 @@ void pie_ActivateShader(SHADER_MODE shaderMode, iIMDShape* shape, PIELIGHT teamc
 	{
 		glUniform1i(locNormalMap, normalpage != iV_TEX_INVALID);
 	}
+	if (locSpecularMap >= 0)
+	{
+		glUniform1i(locSpecularMap, specularpage != iV_TEX_INVALID);
+	}
 	if (locEcm >= 0)
 	{
 		glUniform1i(locEcm, ecmState);
@@ -391,6 +399,11 @@ void pie_ActivateShader(SHADER_MODE shaderMode, iIMDShape* shape, PIELIGHT teamc
 	{
 		glActiveTexture(GL_TEXTURE2);
 		glBindTexture(GL_TEXTURE_2D, pie_Texture(normalpage));
+	}
+	if (specularpage != iV_TEX_INVALID)
+	{
+		glActiveTexture(GL_TEXTURE3);
+		glBindTexture(GL_TEXTURE_2D, pie_Texture(specularpage));
 	}
 	glActiveTexture(GL_TEXTURE0);
 

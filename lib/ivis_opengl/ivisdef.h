@@ -98,6 +98,7 @@ struct iIMDShape
 	int texpage;
 	int tcmaskpage;
 	int normalpage;
+	int specularpage;
 	int sradius, radius;
 	Vector3i min, max;
 

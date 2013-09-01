@@ -7,9 +7,11 @@ varying vec3 normal, lightDir, eyeVec;
 uniform sampler2D Texture0; // diffuse
 uniform sampler2D Texture1; // tcmask
 uniform sampler2D Texture2; // normal map
+uniform sampler2D Texture3; // specular map
 uniform vec4 teamcolour; // the team colour of the model
 uniform int tcmask; // whether a tcmask texture exists for the model
 uniform int normalmap; // whether a normal map exists for the model
+uniform int specularmap; // whether a specular map exists for the model
 uniform int fogEnabled; // whether fog is enabled
 uniform bool ecmEffect; // whether ECM special effect is enabled
 uniform float graphicsCycle; // a periodically cycling value for special effects

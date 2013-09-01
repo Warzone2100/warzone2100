@@ -37,6 +37,7 @@ iIMDShape::iIMDShape()
 	texpage = iV_TEX_INVALID;
 	tcmaskpage = iV_TEX_INVALID;
 	normalpage = iV_TEX_INVALID;
+	specularpage = iV_TEX_INVALID;
 	numFrames = 0;
 }
 

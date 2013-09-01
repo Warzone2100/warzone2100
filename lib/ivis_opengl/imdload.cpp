@@ -663,7 +663,7 @@ iIMDShape *iV_ProcessIMD( const char **ppFileData, const char *FileDataEnd )
 {
 	const char *pFileName = GetLastResourceFilename(); // Last loaded filename
 	const char *pFileData = *ppFileData;
-	char buffer[PATH_MAX], texfile[PATH_MAX], normalfile[PATH_MAX];
+	char buffer[PATH_MAX], texfile[PATH_MAX], normalfile[PATH_MAX], specfile[PATH_MAX];
 	int cnt, nlevels;
 	iIMDShape *shape, *psShape;
 	UDWORD level;
@@ -672,6 +672,7 @@ iIMDShape *iV_ProcessIMD( const char **ppFileData, const char *FileDataEnd )
 	bool bTextured = false;
 
 	memset(normalfile, 0, sizeof(normalfile));
+	memset(specfile, 0, sizeof(specfile));
 
 	if (sscanf(pFileData, "%255s %d%n", buffer, &imd_version, &cnt) != 2)
 	{
@@ -789,7 +790,46 @@ iIMDShape *iV_ProcessIMD( const char **ppFileData, const char *FileDataEnd )
 		}
 		sstrcat(normalfile, ".png");
 
-		/* -Now- read in LEVELS directive */
+		/* Now read in LEVELS directive */
+		if (sscanf(pFileData, "%255s %d%n", buffer, &nlevels, &cnt) != 2)
+		{
+			debug(LOG_ERROR, "iV_ProcessIMD %s bad levels info: %s", pFileName, buffer);
+			return NULL;
+		}
+		pFileData += cnt;
+	}
+
+	if (strncmp(buffer, "SPECULARMAP", 11) == 0)
+	{
+		char ch, texType[PATH_MAX];
+		int i;
+
+		/* the first parameter for textures is always ignored; which is why we ignore
+		 * nlevels read in above */
+		ch = *pFileData++;
+
+		// Run up to the dot or till the buffer is filled. Leave room for the extension.
+		for (i = 0; i < PATH_MAX-5 && (ch = *pFileData++) != '\0' && ch != '.'; ++i)
+		{
+ 			specfile[i] = ch;
+		}
+		specfile[i] = '\0';
+
+		if (sscanf(pFileData, "%255s%n", texType, &cnt) != 1)
+		{
+			debug(LOG_ERROR, "%s specular map info corrupt: %s", pFileName, buffer);
+			return NULL;
+		}
+		pFileData += cnt;
+
+		if (strcmp(texType, "png") != 0)
+		{
+			debug(LOG_ERROR, "%s: only png specular maps supported", pFileName);
+			return NULL;
+		}
+		sstrcat(specfile, ".png");
+
+		/* Try -again- to read in LEVELS directive */
 		if (sscanf(pFileData, "%255s %d%n", buffer, &nlevels, &cnt) != 2)
 		{
 			debug(LOG_ERROR, "iV_ProcessIMD %s bad levels info: %s", pFileName, buffer);
@@ -830,20 +870,30 @@ iIMDShape *iV_ProcessIMD( const char **ppFileData, const char *FileDataEnd )
 	{
 		int texpage = iV_GetTexture(texfile);
 		int normalpage = iV_TEX_INVALID;
+		int specpage = iV_TEX_INVALID;
+
+		ASSERT_OR_RETURN(NULL, texpage >= 0, "%s could not load tex page %s", pFileName, texfile);
 
 		if (normalfile[0] != '\0')
 		{
-			debug(LOG_WARNING, "Loading normal map %s for %s", normalfile, pFileName);
+			debug(LOG_TEXTURE, "Loading normal map %s for %s", normalfile, pFileName);
 			normalpage = iV_GetTexture(normalfile);
+			ASSERT_OR_RETURN(NULL, normalpage >= 0, "%s could not load tex page %s", pFileName, normalfile);
 		}
 
-		ASSERT_OR_RETURN(NULL, texpage >= 0, "%s could not load tex page %s", pFileName, texfile);
+		if (specfile[0] != '\0')
+		{
+			debug(LOG_TEXTURE, "Loading specular map %s for %s", specfile, pFileName);
+			specpage = iV_GetTexture(specfile);
+			ASSERT_OR_RETURN(NULL, specpage >= 0, "%s could not load tex page %s", pFileName, specfile);
+		}
 
 		// assign tex pages and flags to all levels
 		for (psShape = shape; psShape != NULL; psShape = psShape->next)
 		{
 			psShape->texpage = texpage;
 			psShape->normalpage = normalpage;
+			psShape->specularpage = specpage;
 			psShape->flags = imd_flags;
 		}
 
