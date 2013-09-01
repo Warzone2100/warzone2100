@@ -4,29 +4,30 @@
 varying float vertexDistance;
 varying vec3 normal, lightDir, eyeVec;
 
-uniform sampler2D Texture0;
-uniform sampler2D Texture1;
-uniform sampler2D Texture2;
-uniform vec4 teamcolour;
-uniform int tcmask, normalmap;
-uniform int fogEnabled;
-uniform bool ecmEffect;
-uniform float graphicsCycle;
+uniform sampler2D Texture0; // diffuse
+uniform sampler2D Texture1; // tcmask
+uniform sampler2D Texture2; // normal map
+uniform vec4 teamcolour; // the team colour of the model
+uniform int tcmask; // whether a tcmask texture exists for the model
+uniform int normalmap; // whether a normal map exists for the model
+uniform int fogEnabled; // whether fog is enabled
+uniform bool ecmEffect; // whether ECM special effect is enabled
+uniform float graphicsCycle; // a periodically cycling value for special effects
 
 void main(void)
 {
 	vec4 mask, colour;
-	vec4 light = (gl_FrontLightModelProduct.sceneColor * gl_FrontMaterial.ambient) + (gl_LightSource[0].ambient * gl_FrontMaterial.ambient);
+	vec4 light = gl_FrontLightModelProduct.sceneColor + gl_LightSource[0].ambient;
 	vec3 N = normalize(normal);
 	vec3 L = normalize(lightDir);
 	float lambertTerm = dot(N, L);
 	if (lambertTerm > 0.0)
 	{
-		light += gl_LightSource[0].diffuse * gl_FrontMaterial.diffuse * lambertTerm;
+		light += gl_LightSource[0].diffuse * lambertTerm;
 		vec3 E = normalize(eyeVec);
 		vec3 R = reflect(-L, N);
-		float specular = pow(max(dot(R, E), 0.0), gl_FrontMaterial.shininess);
-		light += gl_LightSource[0].specular * gl_FrontMaterial.specular * specular;
+		float specular = pow(max(dot(R, E), 0.0), 10); // 10 is an arbitrary value for now
+		light += gl_LightSource[0].specular * specular;
 	}
 
 	// Get color from texture unit 0, merge with lighting

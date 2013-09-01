@@ -534,27 +534,26 @@ static iIMDShape *_imd_load_level(const char **ppFileData, const char *FileDataE
 	char buffer[PATH_MAX] = {'\0'};
 	int cnt = 0, n = 0, i;
 	iIMDShape *s = NULL;
+	float dummy;
 
 	if (nlevels == 0)
 	{
 		return NULL;
 	}
 
-	// Load optional MATERIALS directive
 	pTmp = pFileData;	// remember position
 	i = sscanf(pFileData, "%255s %n", buffer, &cnt);
 	ASSERT_OR_RETURN(NULL, i == 1, "Bad directive following LEVEL");
 
 	s = new iIMDShape;
 
+	// Optionally load and ignore deprecated MATERIALS directive
 	if (strcmp(buffer, "MATERIALS") == 0)
 	{
-		i = sscanf(pFileData, "%255s %f %f %f %f %f %f %f %f %f %f%n", buffer,
-		           &s->material[LIGHT_AMBIENT][0], &s->material[LIGHT_AMBIENT][1], &s->material[LIGHT_AMBIENT][2],
-		           &s->material[LIGHT_DIFFUSE][0], &s->material[LIGHT_DIFFUSE][1], &s->material[LIGHT_DIFFUSE][2],
-	                   &s->material[LIGHT_SPECULAR][0], &s->material[LIGHT_SPECULAR][1], &s->material[LIGHT_SPECULAR][2],
-		           &s->shininess, &cnt);
+		i = sscanf(pFileData, "%255s %f %f %f %f %f %f %f %f %f %f%n", buffer, &dummy, &dummy, &dummy, &dummy, 
+		           &dummy, &dummy, &dummy, &dummy, &dummy, &dummy, &cnt);
 		ASSERT_OR_RETURN(NULL, i == 11, "Bad MATERIALS directive");
+		debug(LOG_WARNING, "MATERIALS directive no longer supported!");
 		pFileData += cnt;
 	}
 	else // use defaults

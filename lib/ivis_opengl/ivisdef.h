@@ -110,8 +110,6 @@ struct iIMDShape
 
 	unsigned int nShadowEdges;
 	EDGE *shadowEdgeList;
-	float material[LIGHT_MAX][4];
-	float shininess;
 
 	// The old rendering data
 	unsigned int npoints;

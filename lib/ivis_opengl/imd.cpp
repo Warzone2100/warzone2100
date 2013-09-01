@@ -38,21 +38,6 @@ iIMDShape::iIMDShape()
 	tcmaskpage = iV_TEX_INVALID;
 	normalpage = iV_TEX_INVALID;
 	numFrames = 0;
-	memset(material, 0, sizeof(material));
-	// Set default values
-	material[LIGHT_AMBIENT][0] = 1.0f;
-	material[LIGHT_AMBIENT][1] = 1.0f;
-	material[LIGHT_AMBIENT][2] = 1.0f;
-	material[LIGHT_DIFFUSE][0] = 1.0f;
-	material[LIGHT_DIFFUSE][1] = 1.0f;
-	material[LIGHT_DIFFUSE][2] = 1.0f;
-	material[LIGHT_SPECULAR][0] = 1.0f;
-	material[LIGHT_SPECULAR][1] = 1.0f;
-	material[LIGHT_SPECULAR][2] = 1.0f;
-	shininess = 10;
-	material[LIGHT_AMBIENT][3] = 1.0f;
-	material[LIGHT_DIFFUSE][3] = 1.0f;
-	material[LIGHT_SPECULAR][3] = 1.0f;
 }
 
 //*************************************************************************
