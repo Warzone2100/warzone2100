@@ -40,6 +40,8 @@
  */
 /***************************************************************************/
 
+struct SHADER_PROGRAM;
+
 struct RENDER_STATE
 {
 					bool				fogEnabled;
@@ -83,9 +85,10 @@ extern void pie_SetAlphaTest(bool keyingOn);
 extern void pie_SetRendMode(REND_MODE rendMode);
 
 bool pie_LoadShaders();
+bool pie_LoadShader(SHADER_PROGRAM *program, const char *definitions, const char *vertexPath, const char *fragmentPath);
 
 // Actual shaders (we do not want to export these calls)
-void pie_ActivateShader(SHADER_MODE shaderMode, iIMDShape* shape, PIELIGHT teamcolour, PIELIGHT colour);
+void pie_ActivateShader(int shaderMode, iIMDShape* shape, PIELIGHT teamcolour, PIELIGHT colour);
 void pie_DeactivateShader();
 void pie_SetShaderStretchDepth(float stretch);
 void pie_SetShaderTime(uint32_t shaderTime);

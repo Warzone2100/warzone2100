@@ -36,10 +36,15 @@
  *	Global Variables
  */
 
-static GLuint shaderProgram[SHADER_MAX];
+struct SHADER_PROGRAM
+{
+	GLuint program;
+	GLint locTeam, locStretch, locTCMask, locFog, locNormalMap, locSpecularMap, locEcm, locTime;
+};
+
+static QList<SHADER_PROGRAM> shaderProgram;
 static GLfloat shaderStretch = 0;
-static GLint locTeam, locStretch, locTCMask, locFog, locNormalMap, locSpecularMap, locEcm, locTime;
-static SHADER_MODE currentShaderMode = SHADER_NONE;
+static int currentShaderMode = SHADER_NONE;
 unsigned int pieStateCount = 0; // Used in pie_GetResetCounts
 static RENDER_STATE rendStates;
 static GLint ecmState = 0;
@@ -184,17 +189,41 @@ static void printProgramInfoLog(code_part part, GLuint program)
 	}
 }
 
+static void getLocs(SHADER_PROGRAM *program)
+{
+	GLint locTex0, locTex1, locTex2, locTex3;
+
+	glUseProgram(program->program);
+	locTex0 = glGetUniformLocation(program->program, "Texture0");
+	locTex1 = glGetUniformLocation(program->program, "Texture1");
+	locTex2 = glGetUniformLocation(program->program, "Texture2");
+	locTex3 = glGetUniformLocation(program->program, "Texture3");
+	program->locTeam = glGetUniformLocation(program->program, "teamcolour");
+	program->locStretch = glGetUniformLocation(program->program, "stretch");
+	program->locTCMask = glGetUniformLocation(program->program, "tcmask");
+	program->locNormalMap = glGetUniformLocation(program->program, "normalmap");
+	program->locSpecularMap = glGetUniformLocation(program->program, "specularmap");
+	program->locFog = glGetUniformLocation(program->program, "fogEnabled");
+	program->locEcm = glGetUniformLocation(program->program, "ecmEffect");
+	program->locTime = glGetUniformLocation(program->program, "graphicsCycle");
+
+	// These never change
+	glUniform1i(locTex0, 0);
+	glUniform1i(locTex1, 1);
+	glUniform1i(locTex2, 2);
+	glUniform1i(locTex3, 3);
+}
+
 // Read/compile/link shaders
-static bool loadShaders(GLuint *program, const char *definitions,
-						const char *vertexPath, const char *fragmentPath)
+bool pie_LoadShader(SHADER_PROGRAM *program, const char *definitions, const char *vertexPath, const char *fragmentPath)
 {
 	GLint status;
 	bool success = true; // Assume overall success
 	char *buffer[2];
 
-	*program = glCreateProgram();
+	program->program = glCreateProgram();
 	ASSERT_OR_RETURN(false, definitions != NULL, "Null in preprocessor definitions!");
-	ASSERT_OR_RETURN(false, *program, "Could not create shader program!");
+	ASSERT_OR_RETURN(false, program->program, "Could not create shader program!");
 
 	*buffer = (char *)definitions;
 
@@ -219,7 +248,7 @@ static bool loadShaders(GLuint *program, const char *definitions,
 			else
 			{
 				printShaderInfoLog(LOG_3D, shader);
-				glAttachShader(*program, shader);
+				glAttachShader(program->program, shader);
 				success = true;
 			}
 
@@ -248,7 +277,7 @@ static bool loadShaders(GLuint *program, const char *definitions,
 			else
 			{
 				printShaderInfoLog(LOG_3D, shader);
-				glAttachShader(*program, shader);
+				glAttachShader(program->program, shader);
 				success = true;
 			}
 
@@ -258,48 +287,51 @@ static bool loadShaders(GLuint *program, const char *definitions,
 
 	if (success)
 	{
-		glLinkProgram(*program);
+		glLinkProgram(program->program);
 
 		// Check for linkage errors
-		glGetProgramiv(*program, GL_LINK_STATUS, &status);
+		glGetProgramiv(program->program, GL_LINK_STATUS, &status);
 		if (!status)
 		{
 			debug(LOG_ERROR, "Shader program linkage has failed [%s, %s]", vertexPath, fragmentPath);
-			printProgramInfoLog(LOG_ERROR, *program);
+			printProgramInfoLog(LOG_ERROR, program->program);
 			success = false;
 		}
 		else
 		{
-			printProgramInfoLog(LOG_3D, *program);
+			printProgramInfoLog(LOG_3D, program->program);
 		}
 	}
+
+	getLocs(program);
+	glUseProgram(0);
 
 	return success;
 }
 
-// Run from screen.c on init. FIXME: do some kind of FreeShaders on failure.
+// Run from screen.c on init. Do not change the order of loading here! First ones are enumerated.
 bool pie_LoadShaders()
 {
-	GLuint program;
 	bool result;
+	SHADER_PROGRAM program;
 
-	// Try to load some shaders
-	shaderProgram[SHADER_NONE] = 0;
+	// Load some basic shaders
+	memset(&program, 0, sizeof(program));
+	shaderProgram.append(program);
 
 	// TCMask shader for map-placed models with advanced lighting
 	debug(LOG_3D, "Loading shader: SHADER_COMPONENT");
-	result = loadShaders(&program, "", "shaders/tcmask.vert", "shaders/tcmask.frag");
+	result = pie_LoadShader(&program, "", "shaders/tcmask.vert", "shaders/tcmask.frag");
 	ASSERT_OR_RETURN(false, result, "Failed to load component shader");
-	shaderProgram[SHADER_COMPONENT] = program;
+	shaderProgram.append(program);
 
 	// TCMask shader for buttons with flat lighting
 	debug(LOG_3D, "Loading shader: SHADER_BUTTON");
-	result = loadShaders(&program, "", "shaders/button.vert", "shaders/button.frag");
+	result = pie_LoadShader(&program, "", "shaders/button.vert", "shaders/button.frag");
 	ASSERT_OR_RETURN(false, result, "Failed to load button shader");
-	shaderProgram[SHADER_BUTTON] = program;
+	shaderProgram.append(program);
 
 	currentShaderMode = SHADER_NONE;
-
 	return true;
 }
 
@@ -329,40 +361,21 @@ void pie_SetShaderStretchDepth(float stretch)
 	shaderStretch = stretch;
 }
 
-void pie_ActivateShader(SHADER_MODE shaderMode, iIMDShape* shape, PIELIGHT teamcolour, PIELIGHT colour)
+void pie_ActivateShader(int shaderMode, iIMDShape* shape, PIELIGHT teamcolour, PIELIGHT colour)
 {
 	int maskpage = shape->tcmaskpage;
 	int normalpage = shape->normalpage;
 	int specularpage = shape->specularpage;
 	GLfloat colour4f[4];
+	SHADER_PROGRAM program = shaderProgram[shaderMode];
 
 	if (shaderMode != currentShaderMode)
 	{
-		GLint locTex0, locTex1, locTex2, locTex3;
-
-		glUseProgram(shaderProgram[shaderMode]);
-		locTex0 = glGetUniformLocation(shaderProgram[shaderMode], "Texture0");
-		locTex1 = glGetUniformLocation(shaderProgram[shaderMode], "Texture1");
-		locTex2 = glGetUniformLocation(shaderProgram[shaderMode], "Texture2");
-		locTex3 = glGetUniformLocation(shaderProgram[shaderMode], "Texture3");
-		locTeam = glGetUniformLocation(shaderProgram[shaderMode], "teamcolour");
-		locStretch = glGetUniformLocation(shaderProgram[shaderMode], "stretch");
-		locTCMask = glGetUniformLocation(shaderProgram[shaderMode], "tcmask");
-		locNormalMap = glGetUniformLocation(shaderProgram[shaderMode], "normalmap");
-		locSpecularMap = glGetUniformLocation(shaderProgram[shaderMode], "specularmap");
-		locFog = glGetUniformLocation(shaderProgram[shaderMode], "fogEnabled");
-		locEcm = glGetUniformLocation(shaderProgram[shaderMode], "ecmEffect");
-		locTime = glGetUniformLocation(shaderProgram[shaderMode], "graphicsCycle");
-
-		// These never change
-		glUniform1i(locTex0, 0);
-		glUniform1i(locTex1, 1);
-		glUniform1i(locTex2, 2);
-		glUniform1i(locTex3, 3);
+		glUseProgram(program.program);
 
 		// These do not change during our drawing pass
-		glUniform1i(locFog, rendStates.fog);
-		glUniform1f(locTime, timeState);
+		glUniform1i(program.locFog, rendStates.fog);
+		glUniform1f(program.locTime, timeState);
 
 		currentShaderMode  = shaderMode;
 	}
@@ -371,23 +384,23 @@ void pie_ActivateShader(SHADER_MODE shaderMode, iIMDShape* shape, PIELIGHT teamc
 	pie_SetTexturePage(shape->texpage);
 
 	pal_PIELIGHTtoRGBA4f(&colour4f[0], teamcolour);
-	glUniform4fv(locTeam, 1, &colour4f[0]);
-	glUniform1i(locTCMask, maskpage != iV_TEX_INVALID);
-	if (locStretch >= 0)
+	glUniform4fv(program.locTeam, 1, &colour4f[0]);
+	glUniform1i(program.locTCMask, maskpage != iV_TEX_INVALID);
+	if (program.locStretch >= 0)
 	{
-		glUniform1f(locStretch, shaderStretch);
+		glUniform1f(program.locStretch, shaderStretch);
 	}
-	if (locNormalMap >= 0)
+	if (program.locNormalMap >= 0)
 	{
-		glUniform1i(locNormalMap, normalpage != iV_TEX_INVALID);
+		glUniform1i(program.locNormalMap, normalpage != iV_TEX_INVALID);
 	}
-	if (locSpecularMap >= 0)
+	if (program.locSpecularMap >= 0)
 	{
-		glUniform1i(locSpecularMap, specularpage != iV_TEX_INVALID);
+		glUniform1i(program.locSpecularMap, specularpage != iV_TEX_INVALID);
 	}
-	if (locEcm >= 0)
+	if (program.locEcm >= 0)
 	{
-		glUniform1i(locEcm, ecmState);
+		glUniform1i(program.locEcm, ecmState);
 	}
 
 	if (maskpage != iV_TEX_INVALID)
