@@ -29,6 +29,7 @@
 #include "lib/framework/frameresource.h"
 #include "lib/framework/fixedpoint.h"
 #include "lib/ivis_opengl/piematrix.h"
+#include "lib/ivis_opengl/piestate.h"
 
 #include "ivisdef.h" // for imd structures
 #include "imd.h" // for imd structures
@@ -670,6 +671,7 @@ iIMDShape *iV_ProcessIMD( const char **ppFileData, const char *FileDataEnd )
 	int32_t imd_version;
 	uint32_t imd_flags;
 	bool bTextured = false;
+	GLuint shader = 0;
 
 	memset(normalfile, 0, sizeof(normalfile));
 	memset(specfile, 0, sizeof(specfile));
@@ -804,8 +806,7 @@ iIMDShape *iV_ProcessIMD( const char **ppFileData, const char *FileDataEnd )
 		char ch, texType[PATH_MAX];
 		int i;
 
-		/* the first parameter for textures is always ignored; which is why we ignore
-		 * nlevels read in above */
+		/* the first parameter for textures is always ignored; which is why we ignore nlevels read in above */
 		ch = *pFileData++;
 
 		// Run up to the dot or till the buffer is filled. Leave room for the extension.
@@ -830,6 +831,30 @@ iIMDShape *iV_ProcessIMD( const char **ppFileData, const char *FileDataEnd )
 		sstrcat(specfile, ".png");
 
 		/* Try -again- to read in LEVELS directive */
+		if (sscanf(pFileData, "%255s %d%n", buffer, &nlevels, &cnt) != 2)
+		{
+			debug(LOG_ERROR, "iV_ProcessIMD %s bad levels info: %s", pFileName, buffer);
+			return NULL;
+		}
+		pFileData += cnt;
+	}
+
+	if (strncmp(buffer, "SHADERS", 7) == 0)
+	{
+		char vertex[PATH_MAX], fragment[PATH_MAX];
+
+		/* the first parameter for "textures" is always ignored; which is why we ignore nlevels read in above */
+		pFileData++;
+
+		if (sscanf(pFileData, "%255s %255s%n", vertex, fragment, &cnt) != 2)
+		{
+			debug(LOG_ERROR, "%s shader corrupt: %s", pFileName, buffer);
+			return NULL;
+		}
+		pFileData += cnt;
+		shader = pie_LoadShader("", vertex, fragment);
+
+		/* Try -yet again- to read in LEVELS directive */
 		if (sscanf(pFileData, "%255s %d%n", buffer, &nlevels, &cnt) != 2)
 		{
 			debug(LOG_ERROR, "iV_ProcessIMD %s bad levels info: %s", pFileName, buffer);
@@ -864,6 +889,8 @@ iIMDShape *iV_ProcessIMD( const char **ppFileData, const char *FileDataEnd )
 		debug(LOG_ERROR, "iV_ProcessIMD %s unsuccessful", pFileName);
 		return NULL;
 	}
+
+	shape->shaderProgram = shader;
 
 	// load texture page if specified
 	if (bTextured)

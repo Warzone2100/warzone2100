@@ -39,6 +39,7 @@ iIMDShape::iIMDShape()
 	normalpage = iV_TEX_INVALID;
 	specularpage = iV_TEX_INVALID;
 	numFrames = 0;
+	shaderProgram = 0;
 }
 
 //*************************************************************************
@@ -81,6 +82,7 @@ void iV_IMDRelease(iIMDShape *s)
 			s->shadowEdgeList = NULL;
 		}
 		glDeleteBuffers(VBO_COUNT, s->buffers);
+		// shader deleted later, if any
 		d = s->next;
 		delete s;
 		iV_IMDRelease(d);

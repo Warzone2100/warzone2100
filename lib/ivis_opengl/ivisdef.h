@@ -120,6 +120,7 @@ struct iIMDShape
 
 	// The new rendering data
 	GLuint buffers[VBO_COUNT];
+	GLuint shaderProgram; // if using specialized shader for this model
 
 	iIMDShape *next;  // next pie in multilevel pies (NULL for non multilevel !)
 };

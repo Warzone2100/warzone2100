@@ -934,6 +934,8 @@ bool stageOneShutDown(void)
 {
 	debug(LOG_WZ, "== stageOneShutDown ==");
 
+	pie_FreeShaders();
+
 	if ( audio_Disabled() == false )
 	{
 		sound_CheckAllUnloaded();

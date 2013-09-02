@@ -214,16 +214,28 @@ static void getLocs(SHADER_PROGRAM *program)
 	glUniform1i(locTex3, 3);
 }
 
-// Read/compile/link shaders
-bool pie_LoadShader(SHADER_PROGRAM *program, const char *definitions, const char *vertexPath, const char *fragmentPath)
+void pie_FreeShaders()
 {
+	while (shaderProgram.size() > SHADER_MAX)
+	{
+		SHADER_PROGRAM program = shaderProgram.takeLast();
+		glDeleteShader(program.program);
+	}
+}
+
+// Read/compile/link shaders
+GLuint pie_LoadShader(const char *definitions, const char *vertexPath, const char *fragmentPath)
+{
+	SHADER_PROGRAM program;
 	GLint status;
 	bool success = true; // Assume overall success
 	char *buffer[2];
 
-	program->program = glCreateProgram();
+	memset(&program, 0, sizeof(program));
+
+	program.program = glCreateProgram();
 	ASSERT_OR_RETURN(false, definitions != NULL, "Null in preprocessor definitions!");
-	ASSERT_OR_RETURN(false, program->program, "Could not create shader program!");
+	ASSERT_OR_RETURN(false, program.program, "Could not create shader program!");
 
 	*buffer = (char *)definitions;
 
@@ -248,7 +260,7 @@ bool pie_LoadShader(SHADER_PROGRAM *program, const char *definitions, const char
 			else
 			{
 				printShaderInfoLog(LOG_3D, shader);
-				glAttachShader(program->program, shader);
+				glAttachShader(program.program, shader);
 				success = true;
 			}
 
@@ -277,7 +289,7 @@ bool pie_LoadShader(SHADER_PROGRAM *program, const char *definitions, const char
 			else
 			{
 				printShaderInfoLog(LOG_3D, shader);
-				glAttachShader(program->program, shader);
+				glAttachShader(program.program, shader);
 				success = true;
 			}
 
@@ -287,33 +299,35 @@ bool pie_LoadShader(SHADER_PROGRAM *program, const char *definitions, const char
 
 	if (success)
 	{
-		glLinkProgram(program->program);
+		glLinkProgram(program.program);
 
 		// Check for linkage errors
-		glGetProgramiv(program->program, GL_LINK_STATUS, &status);
+		glGetProgramiv(program.program, GL_LINK_STATUS, &status);
 		if (!status)
 		{
 			debug(LOG_ERROR, "Shader program linkage has failed [%s, %s]", vertexPath, fragmentPath);
-			printProgramInfoLog(LOG_ERROR, program->program);
+			printProgramInfoLog(LOG_ERROR, program.program);
 			success = false;
 		}
 		else
 		{
-			printProgramInfoLog(LOG_3D, program->program);
+			printProgramInfoLog(LOG_3D, program.program);
 		}
 	}
 
-	getLocs(program);
+	getLocs(&program);
 	glUseProgram(0);
 
-	return success;
+	shaderProgram.append(program);
+
+	return shaderProgram.size() - 1;
 }
 
 // Run from screen.c on init. Do not change the order of loading here! First ones are enumerated.
 bool pie_LoadShaders()
 {
-	bool result;
 	SHADER_PROGRAM program;
+	int result;
 
 	// Load some basic shaders
 	memset(&program, 0, sizeof(program));
@@ -321,15 +335,13 @@ bool pie_LoadShaders()
 
 	// TCMask shader for map-placed models with advanced lighting
 	debug(LOG_3D, "Loading shader: SHADER_COMPONENT");
-	result = pie_LoadShader(&program, "", "shaders/tcmask.vert", "shaders/tcmask.frag");
+	result = pie_LoadShader("", "shaders/tcmask.vert", "shaders/tcmask.frag");
 	ASSERT_OR_RETURN(false, result, "Failed to load component shader");
-	shaderProgram.append(program);
 
 	// TCMask shader for buttons with flat lighting
 	debug(LOG_3D, "Loading shader: SHADER_BUTTON");
-	result = pie_LoadShader(&program, "", "shaders/button.vert", "shaders/button.frag");
+	result = pie_LoadShader("", "shaders/button.vert", "shaders/button.frag");
 	ASSERT_OR_RETURN(false, result, "Failed to load button shader");
-	shaderProgram.append(program);
 
 	currentShaderMode = SHADER_NONE;
 	return true;
@@ -377,7 +389,7 @@ void pie_ActivateShader(int shaderMode, iIMDShape* shape, PIELIGHT teamcolour, P
 		glUniform1i(program.locFog, rendStates.fog);
 		glUniform1f(program.locTime, timeState);
 
-		currentShaderMode  = shaderMode;
+		currentShaderMode = shaderMode;
 	}
 
 	glColor4ubv(colour.vector);

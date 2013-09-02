@@ -217,7 +217,14 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 
 	if (light)
 	{
-		pie_ActivateShader(SHADER_COMPONENT, shape, teamcolour, colour);
+		if (shape->shaderProgram)
+		{
+			pie_ActivateShader(shape->shaderProgram, shape, teamcolour, colour);
+		}
+		else
+		{
+			pie_ActivateShader(SHADER_COMPONENT, shape, teamcolour, colour);
+		}
 	}
 	else
 	{
