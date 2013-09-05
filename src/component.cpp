@@ -474,7 +474,7 @@ static inline iIMDShape *getRightPropulsionIMD(DROID *psDroid)
 // removed mountRotation,they get such stuff from psObj directly now
 static void displayCompObj(DROID *psDroid, bool bButton)
 {
-	iIMDShape               *psShape, *psJet, *psShapeTemp = NULL, *psMountShape;
+	iIMDShape               *psShape, *psMoveAnim, *psStillAnim, *psShapeTemp = NULL, *psMountShape;
 	SDWORD				iConnector;
 	PROPULSION_STATS	*psPropStats;
 	SDWORD				frame;
@@ -583,14 +583,16 @@ static void displayCompObj(DROID *psDroid, bool bButton)
 		}
 	}
 
-	/* render vtol jet if flying - horrible hack - GJ */
-	if (!bButton && psPropStats->propulsionType == PROPULSION_TYPE_LIFT && !cyborgDroid(psDroid) && psDroid->sMove.Status != MOVEINACTIVE)
+	/* Render animation effects based on movement or lack thereof, if any */
+	psMoveAnim = asBodyStats[psDroid->asBits[COMP_BODY]].ppMoveIMDList[psDroid->asBits[COMP_PROPULSION]];
+	psStillAnim = asBodyStats[psDroid->asBits[COMP_BODY]].ppStillIMDList[psDroid->asBits[COMP_PROPULSION]];
+	if (!bButton && psMoveAnim && psDroid->sMove.Status != MOVEINACTIVE)
 	{
-		psJet = asBodyStats[psDroid->asBits[COMP_BODY]].pFlameIMD;
-		if (psJet)
-		{
-			pie_Draw3DShape(psJet, getModularScaledGraphicsTime(psJet->animInterval, psJet->numFrames), colour, brightness, pie_ADDITIVE, 200);
-		}
+		pie_Draw3DShape(psMoveAnim, getModularScaledGraphicsTime(psMoveAnim->animInterval, psMoveAnim->numFrames), colour, brightness, pie_ADDITIVE, 200);
+	}
+	else if (!bButton && psStillAnim) // standing still
+	{
+		pie_Draw3DShape(psStillAnim, getModularScaledGraphicsTime(psStillAnim->animInterval, psStillAnim->numFrames), colour, brightness, pie_ADDITIVE, 200);
 	}
 
 	//don't change the screen coords of an object if drawing it in a button

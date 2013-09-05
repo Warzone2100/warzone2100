@@ -559,7 +559,6 @@ bool loadBodyStats(const char *pFileName)
 			return false;
 		}
 		psStats->pIMD = statsGetIMD(ini, psStats, "model");
-		psStats->pFlameIMD = statsGetIMD(ini, psStats, "flameModel");
 
 		ini.endGroup();
 
@@ -1084,6 +1083,8 @@ bool loadBodyPropulsionIMDs(const char *pFileName)
 	{
 		psBodyStat = &asBodyStats[numStats];
 		psBodyStat->ppIMDList.resize(numPropulsionStats * NUM_PROP_SIDES, NULL);
+		psBodyStat->ppMoveIMDList.resize(numPropulsionStats * NUM_PROP_SIDES, NULL);
+		psBodyStat->ppStillIMDList.resize(numPropulsionStats * NUM_PROP_SIDES, NULL);
 	}
 	WzConfig ini(pFileName, WzConfig::ReadOnlyAndRequired);
 	QStringList list = ini.childGroups();
@@ -1133,7 +1134,7 @@ bool loadBodyPropulsionIMDs(const char *pFileName)
 				psBodyStat->ppIMDList[numStats * NUM_PROP_SIDES + LEFT_PROP] = psShape;
 			}
 			//right IMD might not be there
-			if (values[1].compare("0") != 0)
+			if (values.size() > 1 && values[1].compare("0") != 0)
 			{
 				iIMDShape *psShape = (iIMDShape *)resGetData("IMD", values[1].toUtf8().constData());
 				if (psShape == NULL)
@@ -1142,6 +1143,28 @@ bool loadBodyPropulsionIMDs(const char *pFileName)
 					return false;
 				}
 				psBodyStat->ppIMDList[numStats * NUM_PROP_SIDES + RIGHT_PROP] = psShape;
+			}
+			// movement animation effect, if any
+			if (values.size() > 2 && values[2].compare("0") != 0)
+			{
+				iIMDShape *psShape = (iIMDShape *)resGetData("IMD", values[2].toUtf8().constData());
+				if (psShape == NULL)
+				{
+					debug(LOG_FATAL, "Cannot find the movement propulsion PIE for body %s", list[i].toUtf8().constData());
+					return false;
+				}
+				psBodyStat->ppMoveIMDList[numStats] = psShape;
+			}
+			// standing still animation effect, if any
+			if (values.size() > 3 && values[3].compare("0") != 0)
+			{
+				iIMDShape *psShape = (iIMDShape *)resGetData("IMD", values[3].toUtf8().constData());
+				if (psShape == NULL)
+				{
+					debug(LOG_FATAL, "Cannot find the standing still propulsion PIE for body %s", list[i].toUtf8().constData());
+					return false;
+				}
+				psBodyStat->ppStillIMDList[numStats] = psShape;
 			}
 		}
 		ini.endGroup();

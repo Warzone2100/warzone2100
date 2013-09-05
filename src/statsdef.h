@@ -433,7 +433,7 @@ struct BRAIN_STATS : public COMPONENT_STATS
 
 struct BODY_STATS : public COMPONENT_STATS
 {
-	BODY_STATS() : size(SIZE_NUM), weaponSlots(0), droidTypeOverride(DROID_ANY), pFlameIMD(NULL)
+	BODY_STATS() : size(SIZE_NUM), weaponSlots(0), droidTypeOverride(DROID_ANY)
 	{
 		memset(&upgrade, 0, sizeof(upgrade));
 		memset(&base, 0, sizeof(base));
@@ -443,9 +443,9 @@ struct BODY_STATS : public COMPONENT_STATS
 	UDWORD		weaponSlots;	///< The number of weapon slots on the body
 	DROID_TYPE	droidTypeOverride; // if not DROID_ANY, sets droid type
 
-	// A measure of how much energy the power plant outputs
 	std::vector<iIMDShape *> ppIMDList;	///< list of IMDs to use for propulsion unit - up to numPropulsionStats
-	iIMDShape	*pFlameIMD;		///< pointer to which flame graphic to use - for VTOLs only at the moment
+	std::vector<iIMDShape *> ppMoveIMDList;	///< list of IMDs to use when droid is moving - up to numPropulsionStats
+	std::vector<iIMDShape *> ppStillIMDList;///< list of IMDs to use when droid is still - up to numPropulsionStats
 	QString         bodyClass;		///< rules hint to script about its classification
 
 	struct
