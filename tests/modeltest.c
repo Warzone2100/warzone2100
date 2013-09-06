@@ -184,8 +184,8 @@ static void check_pie(const char *input)
 			}
 			if (flags & iV_IMD_TEXANIM)
 			{
-				int frames, rate, width, height;
-				num = fscanf(fp, "%d %d %d %d", &frames, &rate, &width, &height);
+				int frames, rate; float width, height;
+				num = fscanf(fp, "%d %d %f %f", &frames, &rate, &width, &height);
 				if (num != 4)
 				{
 					fprintf(stderr, "File %s - Bad texture animation entry level %d, number %d.\n", input, level, j);
