@@ -599,7 +599,6 @@ bool systemInitialise(void)
 	screen_EnableMissingFunctions();
 
 	pie_InitRadar();
-	iV_Reset();								// Reset the IV library.
 
 	readAIs();
 
@@ -705,8 +704,6 @@ bool frontendInitialise(const char *ResourceFile)
 	{
 		return false;
 	}
-
-	iV_Reset();								// Reset the IV library.
 
 	if (!scrTabInitialise())				// Initialise the script system
 	{
@@ -815,6 +812,7 @@ bool frontendShutdown(void)
 	}
 
 	debug(LOG_TEXTURE, "=== frontendShutdown ===");
+	modelShutdown();
 	pie_TexShutDown();
 	pie_TexInit(); // ready for restart
 	freeComponentLists();
@@ -838,8 +836,6 @@ bool stageOneInitialise(void)
 	{
 		return false;
 	}
-
-	iV_Reset(); // Reset the IV library
 
 	if (!stringsInitialise())	/* Initialise the string system */
 	{
@@ -983,6 +979,7 @@ bool stageOneShutDown(void)
 	}
 
 	debug(LOG_TEXTURE, "=== stageOneShutDown ===");
+	modelShutdown();
 	pie_TexShutDown();
 
 	// Use mod_multiplay as the default (campaign might have set it to mod_singleplayer)

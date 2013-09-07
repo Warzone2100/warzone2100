@@ -455,23 +455,6 @@ static void dataSMSGRelease(void *pData)
 	viewDataShutDown((const char *)pData);
 }
 
-/* Load an imd */
-static bool dataIMDBufferLoad(const char *pBuffer, UDWORD size, void **ppData)
-{
-	iIMDShape	*psIMD;
-	const char *pBufferPosition = pBuffer;
-
-	psIMD = iV_ProcessIMD( &pBufferPosition, pBufferPosition + size );
-	if (psIMD == NULL) {
-		debug( LOG_ERROR, "IMD load failed - %s", GetLastResourceFilename() );
-		return false;
-	}
-
-	*ppData = psIMD;
-	return true;
-}
-
-
 /*!
  * Load an image from file
  */
@@ -785,7 +768,7 @@ struct RES_TYPE_MIN_BUF
 static const RES_TYPE_MIN_BUF BufferResourceTypes[] =
 {
 	{"SMSG", bufferSMSGLoad, dataSMSGRelease},
-	{"IMD", dataIMDBufferLoad, (RES_FREE)iV_IMDRelease},
+	{"IMD", NULL, NULL}, // ignored
 };
 
 struct RES_TYPE_MIN_FILE

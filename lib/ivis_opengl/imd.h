@@ -20,15 +20,7 @@
 #ifndef _imd_
 #define _imd_
 
-#include <QtCore/QString>
-
 #include "ivisdef.h"
-#include "lib/framework/frameresource.h"
-
-static inline iIMDShape *modelGet(const QString &filename)
-{
-	return (iIMDShape *) resGetData("IMD", filename.toUtf8().constData());
-}
 
 #define PIE_NAME				"PIE"  // Pumpkin image export data file
 #define PIE_VER				2
@@ -49,15 +41,12 @@ static inline iIMDShape *modelGet(const QString &filename)
 
 // polygon flags	b0..b7: col, b24..b31: anim index
 
-
 #define iV_IMD_TEX 0x00000200		// this is both a polygon and pie flag
 #define iV_IMD_TEXANIM 0x00004000 // iV_IMD_TEX must be set also
 
 //*************************************************************************
 
-extern iIMDShape *iV_ProcessIMD(const char **ppFileData, const char *FileDataEnd );
-
-extern bool iV_IMDSave(char *filename, iIMDShape *s, bool PieIMD);
-extern void iV_IMDRelease(iIMDShape *s);
+void modelShutdown();
+iIMDShape *modelGet(const QString &filename);
 
 #endif

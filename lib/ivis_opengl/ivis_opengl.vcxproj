@@ -189,7 +189,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="bitimage.cpp" />
-    <ClCompile Include="imd.cpp" />
     <ClCompile Include="imdload.cpp" />
     <ClCompile Include="ivi.cpp" />
     <ClCompile Include="jpeg_encoder.cpp" />

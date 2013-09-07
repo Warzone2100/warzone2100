@@ -160,7 +160,6 @@ lib/gamelib/animobj.cpp
 lib/gamelib/gtime.cpp
 lib/gamelib/hashtable.cpp
 lib/ivis_opengl/bitimage.cpp
-lib/ivis_opengl/imd.cpp
 lib/ivis_opengl/imdload.cpp
 lib/ivis_opengl/ivi.cpp
 lib/ivis_opengl/jpeg_encoder.cpp

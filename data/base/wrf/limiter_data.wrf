@@ -3,9 +3,6 @@
 /*         Load structures and weapons/ecm/sensors         */ 
 /**********       WRF\limiter_data.wrf       ***************/
 
-directory	"structs"
-file		IMD	"blderik.pie"
-
 directory	"stats"
 file		SWEAPON		"weapons.ini"
 file		SSENSOR		"sensor.ini"

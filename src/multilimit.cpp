@@ -99,11 +99,6 @@ bool startLimitScreen(void)
 	{
 		initLoadingScreen(true);
 		
-		if (!resLoad("wrf/piestats.wrf", 502))
-		{
-			return false;
-		}
-
 		if (!resLoad("wrf/limiter_data.wrf", 503))
 		{
 			return false;

@@ -23,10 +23,6 @@
 #include "lib/ivis_opengl/tex.h"
 #include "lib/ivis_opengl/textdraw.h"
 
-void iV_Reset()
-{
-}
-
 void iV_ShutDown(void)
 {
 	pie_ShutDown();

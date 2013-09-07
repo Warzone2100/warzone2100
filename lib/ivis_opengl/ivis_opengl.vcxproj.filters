@@ -14,9 +14,6 @@
     <ClCompile Include="bitimage.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="imd.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="imdload.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

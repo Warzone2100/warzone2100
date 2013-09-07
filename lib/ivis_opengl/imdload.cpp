@@ -24,16 +24,133 @@
  * Load IMD (.pie) files
  */
 
+#include <QtCore/QMap>
+#include <QtCore/QString>
+
 #include "lib/framework/frame.h"
 #include "lib/framework/string_ext.h"
 #include "lib/framework/frameresource.h"
 #include "lib/framework/fixedpoint.h"
+#include "lib/framework/file.h"
+#include "lib/framework/physfs_ext.h"
 #include "lib/ivis_opengl/piematrix.h"
 #include "lib/ivis_opengl/piestate.h"
 
 #include "ivisdef.h" // for imd structures
 #include "imd.h" // for imd structures
 #include "tex.h" // texture page loading
+
+typedef QMap<QString, iIMDShape *> MODELMAP;
+static MODELMAP models;
+
+iIMDShape *iV_ProcessIMD(const char **ppFileData, const char *FileDataEnd);
+
+iIMDShape::iIMDShape()
+{
+	flags = 0;
+	nconnectors = 0; // Default number of connectors must be 0
+	npoints = 0;
+	npolys = 0;
+	points = NULL;
+	polys = NULL;
+	connectors = NULL;
+	next = NULL;
+	shadowEdgeList = NULL;
+	nShadowEdges = 0;
+	texpage = iV_TEX_INVALID;
+	tcmaskpage = iV_TEX_INVALID;
+	normalpage = iV_TEX_INVALID;
+	specularpage = iV_TEX_INVALID;
+	numFrames = 0;
+	shaderProgram = 0;
+}
+
+static void iV_IMDRelease(iIMDShape *s)
+{
+	unsigned int i;
+	iIMDShape *d;
+
+	if (s)
+	{
+		if (s->points)
+		{
+			free(s->points);
+		}
+		if (s->connectors)
+		{
+			free(s->connectors);
+		}
+		if (s->polys)
+		{
+			for (i = 0; i < s->npolys; i++)
+			{
+				if (s->polys[i].texCoord)
+				{
+					free(s->polys[i].texCoord);
+				}
+			}
+			free(s->polys);
+		}
+		if (s->shadowEdgeList)
+		{
+			free(s->shadowEdgeList);
+			s->shadowEdgeList = NULL;
+		}
+		glDeleteBuffers(VBO_COUNT, s->buffers);
+		// shader deleted later, if any
+		d = s->next;
+		delete s;
+		iV_IMDRelease(d);
+	}
+}
+
+void modelShutdown()
+{
+	for (MODELMAP::iterator i = models.begin(); i != models.end(); i = models.erase(i))
+	{
+		iV_IMDRelease(i.value());
+	}
+}
+
+static bool tryLoad(const QString &path, const QString &filename)
+{
+	if (PHYSFS_exists(path + filename))
+	{
+		char *pFileData = NULL, *fileEnd;
+		UDWORD size = 0;
+		if (!loadFile(QString(path + filename).toUtf8().constData(), &pFileData, &size))
+		{
+			debug(LOG_ERROR, "Failed to load model file: %s", QString(path + filename).toUtf8().constData());
+			return false;
+		}
+		fileEnd = pFileData + size;
+		iIMDShape *s = iV_ProcessIMD((const char **)&pFileData, fileEnd);
+		if (s)
+		{
+			models.insert(filename, s);
+		}
+		return true;
+	}
+	return false;
+}
+
+iIMDShape *modelGet(const QString &filename)
+{
+	QString name(filename.toLower());
+	if (models.contains(name))
+	{
+		return models[name]; // cached
+	}
+	else if (tryLoad("structs/", name) || tryLoad("misc/", name) || tryLoad("effects/", name)
+		 || tryLoad("components/prop/", name) || tryLoad("components/weapons/", name)
+		 || tryLoad("components/bodies/", name) || tryLoad("features/", name)
+		 || tryLoad("misc/micnum/", name) || tryLoad("misc/minum/", name) || tryLoad("misc/mivnum/", name) || tryLoad("misc/researchimds/", name))
+	{
+		return models[name];
+	}
+	debug(LOG_ERROR, "Could not find: %s", name.toUtf8().constData());
+	return NULL;
+}
 
 static bool AtEndOfFile(const char *CurPos, const char *EndOfFile)
 {
@@ -65,7 +182,7 @@ static bool AtEndOfFile(const char *CurPos, const char *EndOfFile)
  * \post s->polys allocated (iFSDPoly * s->npolys)
  * \post s->pindex allocated for each poly
  */
-static bool _imd_load_polys( const char **ppFileData, iIMDShape *s, int pieVersion)
+static bool _imd_load_polys(const char **ppFileData, iIMDShape *s, int pieVersion)
 {
 	const char *pFileData = *ppFileData;
 	unsigned int i, j;
@@ -221,7 +338,7 @@ static bool _imd_load_polys( const char **ppFileData, iIMDShape *s, int pieVersi
 }
 
 
-static bool ReadPoints( const char **ppFileData, iIMDShape *s )
+static bool ReadPoints(const char **ppFileData, iIMDShape *s)
 {
 	const char *pFileData = *ppFileData;
 	unsigned int i;
@@ -421,7 +538,7 @@ void _imd_calc_bounds(iIMDShape *s, Vector3f *p, int size)
 // END: tight bounding sphere
 }
 
-static bool _imd_load_points( const char **ppFileData, iIMDShape *s )
+static bool _imd_load_points(const char **ppFileData, iIMDShape *s)
 {
 	//load the points then pass through a second time to setup bounding datavalues
 	s->points = (Vector3f*)malloc(sizeof(Vector3f) * s->npoints);
@@ -652,7 +769,6 @@ static iIMDShape *_imd_load_level(const char **ppFileData, const char *FileDataE
 	return s;
 }
 
-
 /*!
  * Load ppFileData into a shape
  * \param ppFileData Data from the IMD file
@@ -660,7 +776,7 @@ static iIMDShape *_imd_load_level(const char **ppFileData, const char *FileDataE
  * \return The shape, constructed from the data read
  */
 // ppFileData is incremented to the end of the file on exit!
-iIMDShape *iV_ProcessIMD( const char **ppFileData, const char *FileDataEnd )
+iIMDShape *iV_ProcessIMD(const char **ppFileData, const char *FileDataEnd)
 {
 	const char *pFileName = GetLastResourceFilename(); // Last loaded filename
 	const char *pFileData = *ppFileData;

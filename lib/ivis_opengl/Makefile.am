@@ -38,7 +38,6 @@ libivis_opengl_a_SOURCES = \
 	tex.cpp \
 	textdraw.cpp \
 	bitimage.cpp \
-	imd.cpp \
 	imdload.cpp \
 	jpeg_encoder.cpp \
 	pieclip.cpp \

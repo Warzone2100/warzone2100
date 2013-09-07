@@ -3225,12 +3225,7 @@ void startMultiplayerGame(void)
 		{
 			debug(LOG_NET, "limiter was NOT activated, setting defaults");
 
-			// NOTE: master <-> 2.3 difference, we don't load limiter_tex!
-			if (!resLoad("wrf/piestats.wrf", 502))
-			{
-				debug(LOG_INFO, "Unable to load piestats.  Defaults not set.");
-			}
-			else if (!resLoad("wrf/limiter_data.wrf", 503))
+			if (!resLoad("wrf/limiter_data.wrf", 503))
 			{
 				debug(LOG_INFO, "Unable to load limiter_data.");
 			}

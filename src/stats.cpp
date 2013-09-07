@@ -266,7 +266,7 @@ static iIMDShape *statsGetIMD(WzConfig &ini, BASE_STATS *psStats, QString key, i
 	if (ini.contains(key))
 	{
 		QStringList values = ini.value(key).toStringList();
-		if (values[index].compare("0") != 0)
+		if (values.size() > index && values[index].compare("0") != 0)
 		{
 			retval = modelGet(values[index]);
 			ASSERT(retval != NULL, "Cannot find the PIE model %s for stat %s in %s",
