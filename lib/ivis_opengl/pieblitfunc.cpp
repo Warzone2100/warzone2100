@@ -388,7 +388,7 @@ void iV_DrawImage(IMAGEFILE *ImageFile, UWORD ID, int x, int y)
 
 void iV_DrawImageTc(Image image, Image imageTc, int x, int y, PIELIGHT colour)
 {
-	if (!assertValidImage(image.images, image.id) || !assertValidImage(image.images, image.id))
+	if (!assertValidImage(image.images, image.id) || !assertValidImage(imageTc.images, imageTc.id))
 	{
 		return;
 	}

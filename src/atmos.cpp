@@ -45,7 +45,6 @@
 #define	RAIN_SPEED_DRIFT		(rand()%50)
 #define	RAIN_SPEED_FALL			(0-((rand()%300) + 700))
 
-
 enum AP_TYPE
 {
 AP_RAIN,
@@ -63,11 +62,9 @@ static	UDWORD	freeParticle;
 static	UDWORD	weather;
 
 /* Setup all the particles */
-void	atmosInitSystem( void )
+void	atmosInitSystem()
 {
-UDWORD	i;
-
-	for(i=0; i<MAX_ATMOS_PARTICLES; i++)
+	for (int i = 0; i < MAX_ATMOS_PARTICLES; i++)
 	{
 		/* None are being used initially */
 		asAtmosParts[i].status = APS_INACTIVE;
@@ -184,13 +181,12 @@ static void processParticle(ATPART *psPart)
 
 // -----------------------------------------------------------------------------
 /* Adds a particle to the system if it can */
-static void atmosAddParticle(Vector3i *pos, AP_TYPE type)
+static void atmosAddParticle(const Vector3f &pos, AP_TYPE type)
 {
 	UDWORD	activeCount;
 	UDWORD	i;
 
-	for(i=freeParticle,activeCount=0; (asAtmosParts[i].status==APS_ACTIVE)
-		&& activeCount<MAX_ATMOS_PARTICLES; i++)
+	for (i = freeParticle, activeCount = 0; asAtmosParts[i].status == APS_ACTIVE && activeCount < MAX_ATMOS_PARTICLES; i++)
 	{
 		activeCount++;
 		/* Check for wrap around */
@@ -211,7 +207,6 @@ static void atmosAddParticle(Vector3i *pos, AP_TYPE type)
 	{
 		freeParticle = i;
 	}
-
 
 	/* Record it's type */
 	asAtmosParts[freeParticle].type = (UBYTE)type;
@@ -235,32 +230,26 @@ static void atmosAddParticle(Vector3i *pos, AP_TYPE type)
 	}
 
 	/* Setup position */
-	asAtmosParts[freeParticle].position.x = (float)pos->x;
-	asAtmosParts[freeParticle].position.y = (float)pos->y;
-	asAtmosParts[freeParticle].position.z = (float)pos->z;
+	asAtmosParts[freeParticle].position = pos;
 
 	/* Setup its velocity */
 	if(type == AP_RAIN)
 	{
-		asAtmosParts[freeParticle].velocity.x = (float)RAIN_SPEED_DRIFT;
-		asAtmosParts[freeParticle].velocity.y = (float)RAIN_SPEED_FALL;
-		asAtmosParts[freeParticle].velocity.z = (float)RAIN_SPEED_DRIFT;
+		asAtmosParts[freeParticle].velocity = Vector3f(RAIN_SPEED_DRIFT, RAIN_SPEED_FALL, RAIN_SPEED_DRIFT);
 	}
 	else
 	{
-		asAtmosParts[freeParticle].velocity.x = (float)SNOW_SPEED_DRIFT;
-		asAtmosParts[freeParticle].velocity.y = (float)SNOW_SPEED_FALL;
-		asAtmosParts[freeParticle].velocity.z = (float)SNOW_SPEED_DRIFT;
+		asAtmosParts[freeParticle].velocity = Vector3f(SNOW_SPEED_DRIFT, SNOW_SPEED_FALL, SNOW_SPEED_DRIFT);
 	}
 }
 
 // -----------------------------------------------------------------------------
 /* Move the particles */
-void	atmosUpdateSystem( void )
+void atmosUpdateSystem()
 {
 	UDWORD	i;
 	UDWORD	numberToAdd;
-	Vector3i pos;
+	Vector3f pos;
 
 	// we don't want to do any of this while paused.
 	if(!gamePaused() && weather!=WT_NONE)
@@ -295,10 +284,10 @@ void	atmosUpdateSystem( void )
 				switch(weather)
 				{
 				case WT_SNOWING:
-					atmosAddParticle(&pos,AP_SNOW);
+					atmosAddParticle(pos, AP_SNOW);
 					break;
 				case WT_RAINING:
-					atmosAddParticle(&pos,AP_RAIN);
+					atmosAddParticle(pos, AP_RAIN);
 					break;
 				case WT_NONE:
 					break;
