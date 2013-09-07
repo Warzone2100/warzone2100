@@ -194,23 +194,15 @@ bool loadResearch(QString filename)
 		QString imdName = ini.value("imdName", "").toString();
 		if (imdName.compare("") != 0)
 		{
-			research.pIMD = (iIMDShape *) resGetData("IMD", imdName.toUtf8().data());
+			research.pIMD = modelGet(imdName);
 			ASSERT(research.pIMD != NULL, "Cannot find the research PIE '%s' for record '%s'",imdName.toUtf8().data(), getName(&research));
-		}
-		else
-		{
-			research.pIMD = NULL;
 		}
 
 		QString imdName2 = ini.value("imdName2", "").toString();
 		if (imdName2.compare("") != 0)
 		{
-			research.pIMD2 = (iIMDShape *) resGetData("IMD", imdName2.toUtf8().data());
+			research.pIMD2 = modelGet(imdName2);
 			ASSERT(research.pIMD2 != NULL, "Cannot find the 2nd research '%s' PIE for record '%s'",imdName2.toUtf8().data(), getName(&research));
-		}
-		else
-		{
-			research.pIMD2 = NULL;
 		}
 
 		QString msgName = ini.value("msgName", "").toString();

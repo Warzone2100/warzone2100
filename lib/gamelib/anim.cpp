@@ -157,7 +157,7 @@ bool anim_Create3D(char szPieFileName[], UWORD uwStates, UWORD uwFrameRate, UWOR
 	}
 
 	/* get local pointer to shape */
-	psAnim3D->psFrames = (iIMDShape*)resGetData("IMD", szPieFileName);
+	psAnim3D->psFrames = modelGet(szPieFileName);
 
 	/* count frames in imd */
 	psFrames = psAnim3D->psFrames;

@@ -24,9 +24,15 @@
 #else
 # include <physfs.h>
 #endif
+#include <QtCore/QString>
 
 #define PHYSFS_APPEND 1
 #define PHYSFS_PREPEND 0
+
+static inline bool PHYSFS_exists(const QString &filename)
+{
+	return PHYSFS_exists(filename.toUtf8().constData());
+}
 
 static inline bool PHYSFS_writeSLE8(PHYSFS_file* file, int8_t val)
 {

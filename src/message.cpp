@@ -423,7 +423,7 @@ void releaseAllProxDisp(void)
 bool initMessage(void)
 {
 	//set up the imd used for proximity messages
-	pProximityMsgIMD = (iIMDShape *)resGetData("IMD", "arrow.pie");
+	pProximityMsgIMD = modelGet("arrow.pie");
 	if (pProximityMsgIMD == NULL)
 	{
 		ASSERT(false, "Unable to load Proximity Message PIE");
@@ -503,7 +503,7 @@ const char *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 				imdName, imdName2, string, audioName, &dummy, &cnt);
 			pViewMsgData += cnt;
 			psViewRes = (VIEW_RESEARCH *)psViewData->pData;
-			psViewRes->pIMD = (iIMDShape *) resGetData("IMD", imdName);
+			psViewRes->pIMD = modelGet(imdName);
 			if (psViewRes->pIMD == NULL)
 			{
 				ASSERT(false, "Cannot find the PIE for message %s", name);
@@ -512,7 +512,7 @@ const char *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 			}
 			if (strcmp(imdName2, "0"))
 			{
-				psViewRes->pIMD2 = (iIMDShape *) resGetData("IMD", imdName2);
+				psViewRes->pIMD2 = modelGet(imdName2);
 				if (psViewRes->pIMD2 == NULL)
 				{
 					ASSERT(false, "Cannot find the 2nd PIE for message %s", name);
@@ -719,11 +719,11 @@ const char *loadResearchViewData(const char* fileName)
 		v->pData = r;
 		if (ini.contains("imdName"))
 		{
-			r->pIMD = (iIMDShape *) resGetData("IMD", ini.value("imdName").toString().toUtf8().constData());
+			r->pIMD = modelGet(ini.value("imdName").toString());
 		}
 		if (ini.contains("imdName2"))
 		{
-			r->pIMD2 = (iIMDShape *) resGetData("IMD", ini.value("imdName2").toString().toUtf8().constData());
+			r->pIMD2 = modelGet(ini.value("imdName2").toString());
 		}
 		if (ini.contains("sequenceName"))
 		{

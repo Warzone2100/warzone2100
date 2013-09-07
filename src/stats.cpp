@@ -260,15 +260,18 @@ bool statsAllocConstruct(UDWORD	numStats)
 *		Load stats functions
 *******************************************************************************/
 
-static iIMDShape *statsGetIMD(WzConfig &ini, BASE_STATS *psStats, QString key)
+static iIMDShape *statsGetIMD(WzConfig &ini, BASE_STATS *psStats, QString key, int index = 0)
 {
 	iIMDShape *retval = NULL;
 	if (ini.contains(key))
 	{
-		QString model = ini.value(key).toString();
-		retval = (iIMDShape *)resGetData("IMD", model.toUtf8().constData());
-		ASSERT(retval != NULL, "Cannot find the PIE model %s for stat %s in %s",
-		       model.toUtf8().constData(), getName(psStats), ini.fileName().toUtf8().constData());
+		QStringList values = ini.value(key).toStringList();
+		if (values[index].compare("0") != 0)
+		{
+			retval = modelGet(values[index]);
+			ASSERT(retval != NULL, "Cannot find the PIE model %s for stat %s in %s",
+			       values[index].toUtf8().constData(), getName(psStats), ini.fileName().toUtf8().constData());
+		}
 	}
 	return retval;
 }
@@ -1121,51 +1124,11 @@ bool loadBodyPropulsionIMDs(const char *pFileName)
 				debug(LOG_FATAL, "Invalid propulsion name %s", keys[j].toUtf8().constData());
 				return false;
 			}
-			//allocate the left and right propulsion IMDs
-			QStringList values = ini.value(keys[j]).toStringList();
-			if (values[0].compare("0") != 0)
-			{
-				iIMDShape *psShape = (iIMDShape *)resGetData("IMD", values[0].toUtf8().constData());
-				if (psShape == NULL)
-				{
-					debug(LOG_FATAL, "Cannot find the left propulsion PIE for body %s", list[i].toUtf8().constData());
-					return false;
-				}
-				psBodyStat->ppIMDList[numStats * NUM_PROP_SIDES + LEFT_PROP] = psShape;
-			}
-			//right IMD might not be there
-			if (values.size() > 1 && values[1].compare("0") != 0)
-			{
-				iIMDShape *psShape = (iIMDShape *)resGetData("IMD", values[1].toUtf8().constData());
-				if (psShape == NULL)
-				{
-					debug(LOG_FATAL, "Cannot find the right propulsion PIE for body %s", list[i].toUtf8().constData());
-					return false;
-				}
-				psBodyStat->ppIMDList[numStats * NUM_PROP_SIDES + RIGHT_PROP] = psShape;
-			}
-			// movement animation effect, if any
-			if (values.size() > 2 && values[2].compare("0") != 0)
-			{
-				iIMDShape *psShape = (iIMDShape *)resGetData("IMD", values[2].toUtf8().constData());
-				if (psShape == NULL)
-				{
-					debug(LOG_FATAL, "Cannot find the movement propulsion PIE for body %s", list[i].toUtf8().constData());
-					return false;
-				}
-				psBodyStat->ppMoveIMDList[numStats] = psShape;
-			}
-			// standing still animation effect, if any
-			if (values.size() > 3 && values[3].compare("0") != 0)
-			{
-				iIMDShape *psShape = (iIMDShape *)resGetData("IMD", values[3].toUtf8().constData());
-				if (psShape == NULL)
-				{
-					debug(LOG_FATAL, "Cannot find the standing still propulsion PIE for body %s", list[i].toUtf8().constData());
-					return false;
-				}
-				psBodyStat->ppStillIMDList[numStats] = psShape;
-			}
+			//allocate the left and right propulsion IMDs + movement and standing still animations
+			psBodyStat->ppIMDList[numStats * NUM_PROP_SIDES + LEFT_PROP] = statsGetIMD(ini, psBodyStat, keys[j], 0);
+			psBodyStat->ppIMDList[numStats * NUM_PROP_SIDES + RIGHT_PROP] = statsGetIMD(ini, psBodyStat, keys[j], 1);
+			psBodyStat->ppMoveIMDList[numStats] = statsGetIMD(ini, psBodyStat, keys[j], 2);
+			psBodyStat->ppStillIMDList[numStats] = statsGetIMD(ini, psBodyStat, keys[j], 3);
 		}
 		ini.endGroup();
 	}

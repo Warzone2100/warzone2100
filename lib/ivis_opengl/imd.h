@@ -20,8 +20,15 @@
 #ifndef _imd_
 #define _imd_
 
+#include <QtCore/QString>
 
 #include "ivisdef.h"
+#include "lib/framework/frameresource.h"
+
+static inline iIMDShape *modelGet(const QString &filename)
+{
+	return (iIMDShape *) resGetData("IMD", filename.toUtf8().constData());
+}
 
 #define PIE_NAME				"PIE"  // Pumpkin image export data file
 #define PIE_VER				2

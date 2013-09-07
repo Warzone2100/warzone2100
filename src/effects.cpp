@@ -2136,7 +2136,7 @@ void effectSetupExplosion(EFFECT *psEffect)
 			SET_ESSENTIAL(psEffect);		// Landing lights are permanent and cyclic
 			break;
 		case EXPLOSION_TYPE_SHOCKWAVE:
-			psEffect->imd = getImdFromIndex(MI_SHOCK);//resGetData("IMD","blbhq.pie");
+			psEffect->imd = getImdFromIndex(MI_SHOCK);
 			psEffect->size = 50;
 			psEffect->velocity.y = 0.0f;
 			break;
@@ -2586,7 +2586,7 @@ bool readFXData(const char *fileName)
 			QString imd_name = ini.value("imd_name").toString();
 			if (!imd_name.isEmpty())
 			{
-				curEffect->imd = (iIMDShape*)resGetData("IMD", imd_name.toUtf8().constData());
+				curEffect->imd = modelGet(imd_name);
 			}
 		}
 		else

@@ -515,7 +515,7 @@ bool loadStructureStats(QString filename)
 		QStringList models = ini.value("structureModel").toStringList();
 		for (int j = 0; j < models.size(); j++)
 		{
-			iIMDShape *imd = (iIMDShape *)resGetData("IMD", models[j].trimmed().toUtf8().constData());
+			iIMDShape *imd = modelGet(models[j].trimmed());
 			ASSERT(imd != NULL, "Cannot find the PIE structureModel '%s' for structure '%s'", models[j].toUtf8().constData(), getID(psStats));
 			psStats->pIMD.push_back(imd);
 		}
@@ -524,7 +524,7 @@ bool loadStructureStats(QString filename)
 		QString baseModel = ini.value("baseModel","").toString();
 		if (baseModel.compare("") != 0)
 		{
-			iIMDShape *imd = (iIMDShape *)resGetData("IMD", baseModel.toUtf8().constData());
+			iIMDShape *imd = modelGet(baseModel);
 			ASSERT(imd != NULL, "Cannot find the PIE baseModel '%s' for structure '%s'", baseModel.toUtf8().constData(), getID(psStats));
 			psStats->pBaseIMD = imd;
 		}
