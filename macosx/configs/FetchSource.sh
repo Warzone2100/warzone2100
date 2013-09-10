@@ -20,7 +20,7 @@ cd external
 if [ "${ACTION}" = "clean" ]; then
     # Force cleaning when directed
     rm -fRv "${DirectorY}" "${OutDir}"
-    MD5SumLoc=`md5 -q "${FileName}"`
+    MD5SumLoc="$(md5 -q "${FileName}")"
     if [ "${MD5SumLoc}" != "${MD5Sum}" ]; then
         rm -fRv "${FileName}"
     fi
@@ -28,7 +28,7 @@ if [ "${ACTION}" = "clean" ]; then
 elif [ -d "${DirectorY}" ]; then
     # Clean if dirty
     echo "error: ${DirectorY} exists, probably from an earlier failed run" >&2
-    #rm -fRv "${DirectorY}"
+#     rm -fRv "${DirectorY}"
     exit 1
 elif [[ -d "${OutDir}" ]] && [[ ! -f "${FileName}" ]]; then
     # Clean up when updating versions
@@ -36,17 +36,17 @@ elif [[ -d "${OutDir}" ]] && [[ ! -f "${FileName}" ]]; then
     rm -fR "${DirectorY}" "${OutDir}"
 elif [[ -d "${OutDir}" ]] && [[ -f "${FileName}" ]]; then
     # Check to make sure we have the right file
-    MD5SumLoc=`cat "${OutDir}/.MD5SumLoc" 2>/dev/null || echo ""`
+    MD5SumLoc="$(cat "${OutDir}/.MD5SumLoc" 2>/dev/null || echo "")"
     if [ "${MD5SumLoc}" != "${MD5Sum}" ]; then
         echo "warning: Cached file is outdated or incorrect, removing" >&2
         rm -fR "${DirectorY}" "${OutDir}"
-		MD5SumFle=`md5 -q "${FileName}"`
+		MD5SumFle="$(md5 -q "${FileName}")"
 		if [ "${MD5SumFle}" != "${MD5Sum}" ]; then
 			rm -fR "${FileName}"
 		fi
     else
         # Do not do more work then we have to
-        echo "${OutDir} already exists, skipping"
+        echo "${OutDir} already exists, skipping" >&2
         exit 0
     fi
 fi
@@ -61,11 +61,11 @@ if [ ! -r "${FileName}" ]; then
         fi
     fi
 else
-    echo "${FileName} already exists, skipping"
+    echo "${FileName} already exists, skipping" >&2
 fi
 
 # Check our sums
-MD5SumLoc=`md5 -q "${FileName}"`
+MD5SumLoc="$(md5 -q "${FileName}")"
 if [ -z "${MD5SumLoc}" ]; then
     echo "error: Unable to compute md5 for ${FileName}" >&2
     exit 1
@@ -75,7 +75,7 @@ elif [ "${MD5SumLoc}" != "${MD5Sum}" ]; then
 fi
 
 # Unpack
-ExtensioN=`echo ${FileName} | sed -e 's:^.*\.\([^.]*\):\1:'`
+ExtensioN="$(echo "${FileName}" | sed -e 's:^.*\.\([^.]*\):\1:')"
 if [[ "${ExtensioN}" = "gz" ]] || [[ "${ExtensioN}" = "tgz" ]]; then
     if ! tar -zxf "${FileName}"; then
         echo "error: Unpacking ${FileName} failed" >&2

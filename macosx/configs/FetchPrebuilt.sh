@@ -22,7 +22,7 @@ fi
 if [ "${ACTION}" = "clean" ]; then
     # Force cleaning when directed
     rm -fRv "prebuilt/${DirectorY}" "external/${OutDir}"
-    MD5SumLoc=`md5 -q "prebuilt/${FileName}"`
+    MD5SumLoc="$(md5 -q "prebuilt/${FileName}")"
     if [ "${MD5SumLoc}" != "${MD5Sum}" ]; then
         rm -fRv "prebuilt/${FileName}"
     fi
@@ -30,7 +30,7 @@ if [ "${ACTION}" = "clean" ]; then
 elif [ -d "prebuilt/${DirectorY}" ]; then
     # Clean if dirty
     echo "error: ${DirectorY} exists, probably from an earlier failed run" >&2
-    #rm -frv "prebuilt/${DirectorY}"
+#     rm -frv "prebuilt/${DirectorY}"
     exit 1
 elif [[ -d "external/${OutDir}" ]] && [[ ! -f "prebuilt/${FileName}" ]]; then
     # Clean up when updating versions
@@ -38,7 +38,7 @@ elif [[ -d "external/${OutDir}" ]] && [[ ! -f "prebuilt/${FileName}" ]]; then
     rm -fR "prebuilt/${DirectorY}" "external/${OutDir}"
 elif [[ -d "external/${OutDir}" ]] && [[ -f "prebuilt/${FileName}" ]]; then
     # Check to make sure we have the right file
-    MD5SumLoc=`cat "external/${OutDir}/.MD5SumLoc" 2>/dev/null || echo ""`
+    MD5SumLoc="$(cat "external/${OutDir}/.MD5SumLoc" 2>/dev/null || echo "")"
     if [ "${MD5SumLoc}" != "${MD5Sum}" ]; then
         echo "warning: Cached file is outdated or incorrect, removing" >&2
         rm -fR "prebuilt/${DirectorY}" "external/${OutDir}"
@@ -48,7 +48,7 @@ elif [[ -d "external/${OutDir}" ]] && [[ -f "prebuilt/${FileName}" ]]; then
 		fi
     else
         # Do not do more work then we have to
-        echo "${OutDir} already exists, skipping"
+        echo "${OutDir} already exists, skipping" >&2
         exit 0
     fi
 fi
@@ -64,11 +64,11 @@ if [ ! -f "${FileName}" ]; then
         fi
     fi
 else
-    echo "${FileName} already exists, skipping"
+    echo "${FileName} already exists, skipping" >&2
 fi
 
 # MD5 check
-MD5SumLoc=`md5 -q "${FileName}"`
+MD5SumLoc="$(md5 -q "${FileName}")"
 if [ -z "${MD5SumLoc}" ]; then
     echo "error: Unable to compute md5 for ${FileName}" >&2
     exit 1
