@@ -2,7 +2,7 @@
 //
 // * Enable unit design and minimap only when an HQ exists
 
-function eventGameInit()
+function setupGame()
 {
 	if (tilesetType == "URBAN")
 	{
@@ -27,6 +27,16 @@ function eventGameInit()
 	setReticuleButton(5, _("Intelligence Display (F5)"), "image_intelmap_up.png", "image_intelmap_down.png");
 	setReticuleButton(6, _("Commanders (F6)"), "image_commanddroid_up.png", "image_commanddroid_down.png");
 	showInterface();
+}
+
+function eventGameLoaded()
+{
+	setupGame();
+}
+
+function eventGameInit()
+{
+	setupGame();
 }
 
 function eventStartLevel()

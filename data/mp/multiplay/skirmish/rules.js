@@ -9,7 +9,7 @@
 var lastHitTime = 0;
 var cheatmode = false;
 
-function eventGameInit()
+function setupGame()
 {
 	if (tilesetType == "URBAN")
 	{
@@ -23,9 +23,10 @@ function eventGameInit()
 		replaceTexture("page-9-player-buildings-bases.png", "page-9-player-buildings-bases-rockies.png");
 		// for some reason rockies will use arizona babas
 	}
-
-	receiveAllEvents(true);
-
+	if (tilesetType != "ARIZONA")
+	{
+		setSky("texpages/page-25-sky-urban.png", 0.5, 10000.0);
+	}
 	setReticuleButton(0, _("Close"), "image_cancel_up.png", "image_cancel_down.png");
 	setReticuleButton(1, _("Manufacture (F1)"), "image_manufacture_up.png", "image_manufacture_down.png");
 	setReticuleButton(2, _("Research (F2)"), "image_research_up.png", "image_research_down.png");
@@ -34,11 +35,17 @@ function eventGameInit()
 	setReticuleButton(5, _("Intelligence Display (F5)"), "image_intelmap_up.png", "image_intelmap_down.png");
 	setReticuleButton(6, _("Commanders (F6)"), "image_commanddroid_up.png", "image_commanddroid_down.png");
 	showInterface();
+}
 
-	if (tilesetType != "ARIZONA")
-	{
-		setSky("texpages/page-25-sky-urban.png", 0.5, 10000.0);
-	}
+function eventGameLoaded()
+{
+	setupGame();
+}
+
+function eventGameInit()
+{
+	receiveAllEvents(true);
+	setupGame();
 
 	hackNetOff();
 	for (var playnum = 0; playnum < maxPlayers; playnum++)
