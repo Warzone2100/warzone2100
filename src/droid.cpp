@@ -3105,9 +3105,9 @@ void updateVtolAttackRun(DROID *psDroid , int weapon_slot)
 //assign rearmPad to the VTOL
 void assignVTOLPad(DROID *psNewDroid, STRUCTURE *psReArmPad)
 {
-	ASSERT_OR_RETURN( , isVtolDroid(psNewDroid), "not a vtol droid");
-	ASSERT_OR_RETURN( ,  psReArmPad->type == OBJ_STRUCTURE
-		&& psReArmPad->pStructureType->type == REF_REARM_PAD, "not a ReArm Pad" );
+	ASSERT_OR_RETURN( , isVtolDroid(psNewDroid), "%s is not a VTOL droid", objInfo(psNewDroid));
+	ASSERT_OR_RETURN( ,  psReArmPad->type == OBJ_STRUCTURE && psReArmPad->pStructureType->type == REF_REARM_PAD, 
+	                 "%s cannot rearm", objInfo(psReArmPad));
 
 	setDroidBase(psNewDroid, psReArmPad);
 }

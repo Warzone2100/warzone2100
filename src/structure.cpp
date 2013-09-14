@@ -6740,13 +6740,13 @@ bool clearRearmPad(STRUCTURE *psStruct)
 // if bClear is true it tries to find the nearest clear rearm pad in
 // the same cluster as psTarget
 // psTarget can be NULL
-STRUCTURE *	findNearestReArmPad(DROID *psDroid, STRUCTURE *psTarget, bool bClear)
+STRUCTURE *findNearestReArmPad(DROID *psDroid, STRUCTURE *psTarget, bool bClear)
 {
 	STRUCTURE		*psStruct, *psNearest, *psTotallyClear;
 	SDWORD			xdiff,ydiff, mindist, currdist, totallyDist;
 	SDWORD			cx,cy;
 
-	ASSERT_OR_RETURN(NULL, psDroid != NULL, "findNearestReArmPad: No droid was passed.");
+	ASSERT_OR_RETURN(NULL, psDroid != NULL, "No droid was passed.");
 
 	if (psTarget != NULL)
 	{
@@ -6762,18 +6762,12 @@ STRUCTURE *	findNearestReArmPad(DROID *psDroid, STRUCTURE *psTarget, bool bClear
 		cx = (SDWORD)psDroid->pos.x;
 		cy = (SDWORD)psDroid->pos.y;
 	}
-
 	mindist = SDWORD_MAX;
 	totallyDist = SDWORD_MAX;
 	psNearest = NULL;
 	psTotallyClear = NULL;
-	STRUCTURE *hq = nullptr;
 	for(psStruct = apsStructLists[psDroid->player]; psStruct; psStruct=psStruct->psNext)
 	{
-		if (psStruct->pStructureType->type == REF_HQ)
-		{
-			hq = psStruct;
-		}
 		if ((psStruct->pStructureType->type == REF_REARM_PAD) &&
 			(psTarget == NULL || psTarget->cluster == psStruct->cluster) &&
 			(!bClear || clearRearmPad(psStruct)))
@@ -6799,13 +6793,10 @@ STRUCTURE *	findNearestReArmPad(DROID *psDroid, STRUCTURE *psTarget, bool bClear
 			}
 		}
 	}
-
 	if (bClear && (psTotallyClear != NULL))
 	{
 		psNearest = psTotallyClear;
 	}
-	psNearest = psNearest != nullptr? psNearest : hq;
-
 	return psNearest;
 }
 
