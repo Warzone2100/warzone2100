@@ -1613,18 +1613,6 @@ static void displayBigSlider(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	iV_DrawImage(IntImages,IMAGE_SLIDER_BIGBUT,x+3+sx,y+3);								//draw amount
 }
 
-static void displayAISlider(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
-{
-	W_SLIDER *Slider = (W_SLIDER*)psWidget;
-	int x = xOffset + psWidget->x();
-	int y = yOffset + psWidget->y();
-
-	iV_DrawImage(IntImages,IMAGE_SLIDER_AI,x+STAT_SLD_OX,y+STAT_SLD_OY);			// draw bdrop
-
-	int sx = (Slider->width() - 3 - Slider->barSize) * Slider->pos / Slider->numStops;  // determine pos.
-	iV_DrawImage(IntImages,IMAGE_SLIDER_BIGBUT,x+3+sx,y+3);								//draw amount
-}
-
 // ////////////////////////////////////////////////////////////////////////////
 // show text written on its side.
 static void displayTextAt270(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
@@ -1885,6 +1873,7 @@ void addSmallTextButton(UDWORD id,  UDWORD PosX, UDWORD PosY, const char *txt, u
 		widgSetButtonState(psWScreen, id, WBUT_DISABLE);
 	}
 }
+
 // ////////////////////////////////////////////////////////////////////////////
 void addFESlider(UDWORD id, UDWORD parent, UDWORD x, UDWORD y, UDWORD stops, UDWORD pos)
 {
@@ -1902,24 +1891,6 @@ void addFESlider(UDWORD id, UDWORD parent, UDWORD x, UDWORD y, UDWORD stops, UDW
 	sSldInit.pCallback  = intUpdateQuantitySlider;
 	widgAddSlider(psWScreen, &sSldInit);
 }
-
-void addFEAISlider(UDWORD id, UDWORD parent, UDWORD x, UDWORD y, UDWORD stops, UDWORD pos)
-{
-	W_SLDINIT sSldInit;
-	sSldInit.formID		= parent;
-	sSldInit.id			= id;
-	sSldInit.x			= (short)x;
-	sSldInit.y			= (short)y;
-	sSldInit.width		= iV_GetImageWidth(IntImages,IMAGE_SLIDER_BIG);
-	sSldInit.height		= iV_GetImageHeight(IntImages,IMAGE_SLIDER_BIG);
-	sSldInit.numStops	= (UBYTE) stops;
-	sSldInit.barSize	= iV_GetImageHeight(IntImages,IMAGE_SLIDER_BIG);
-	sSldInit.pos		= (UBYTE) pos;
-	sSldInit.pDisplay	= displayAISlider;
-	sSldInit.pCallback  = intUpdateQuantitySlider;
-	widgAddSlider(psWScreen, &sSldInit);
-}
-
 
 // ////////////////////////////////////////////////////////////////////////////
 // Change Mode
