@@ -341,14 +341,14 @@ static Vector2i makePieImage(IMAGEFILE *imageFile, unsigned id, PIERECT *dest = 
 	return pieImage;
 }
 
-void iV_DrawImage2(QString filename, int x, int y)
+void iV_DrawImage2(const QString &filename, float x, float y, float width, float height)
 {
 	ImageDef *image = iV_GetImage(filename, x, y);
 	const GLfloat invTextureSize = image->invTextureSize;
 	const int tu = image->Tu;
 	const int tv = image->Tv;
-	const int w = image->Width;
-	const int h = image->Height;
+	const int w = width > 0 ? width : image->Width;
+	const int h = height > 0 ? height : image->Height;
 	x += image->XOffset;
 	y += image->YOffset;
 	pie_SetTexturePage(image->textureId);
@@ -357,13 +357,13 @@ void iV_DrawImage2(QString filename, int x, int y)
 		glTexCoord2f(tu * image->invTextureSize, tv * invTextureSize);
 		glVertex2f(x, y);
 
-		glTexCoord2f((tu + w) * invTextureSize, tv * invTextureSize);
+		glTexCoord2f((tu + image->Width) * invTextureSize, tv * invTextureSize);
 		glVertex2f(x + w, y);
 
-		glTexCoord2f(tu * invTextureSize, (tv + h) * invTextureSize);
+		glTexCoord2f(tu * invTextureSize, (tv + image->Height) * invTextureSize);
 		glVertex2f(x, y + h);
 
-		glTexCoord2f((tu + w) * invTextureSize, (tv + h) * invTextureSize);
+		glTexCoord2f((tu + image->Width) * invTextureSize, (tv + image->Height) * invTextureSize);
 		glVertex2f(x + w, y + h);
 	glEnd();
 	pie_SetRendMode(REND_ALPHA);
@@ -463,24 +463,6 @@ void iV_DrawImageRepeatY(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Heigh
 		dest.h = vRemainder;
 		pie_DrawImage(ImageFile, ID, pieImage, &dest);
 	}
-}
-
-void iV_DrawImageScaled(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int w, int h)
-{
-	if (!assertValidImage(ImageFile, ID))
-	{
-		return;
-	}
-
-	PIERECT dest;
-	Vector2i pieImage = makePieImage(ImageFile, ID, &dest, x, y);
-	dest.w = w;
-	dest.h = h;
-
-	pie_SetRendMode(REND_ALPHA);
-	pie_SetAlphaTest(true);
-
-	pie_DrawImage(ImageFile, ID, pieImage, &dest);
 }
 
 bool pie_InitRadar(void)
