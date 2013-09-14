@@ -147,7 +147,6 @@ void GFX::draw()
 	}
 	else if (mType == GFX_COLOUR)
 	{
-		pie_SetAlphaTest(false);
 		pie_SetTexturePage(TEXPAGE_NONE);
 		glEnableClientState(GL_COLOR_ARRAY);
 		glBindBuffer(GL_ARRAY_BUFFER, mBuffers[VBO_TEXCOORD]); glColorPointer(4, GL_UNSIGNED_BYTE, 0, NULL);
@@ -179,7 +178,6 @@ GFX::~GFX()
 void iV_Line(int x0, int y0, int x1, int y1, PIELIGHT colour)
 {
 	pie_SetTexturePage(TEXPAGE_NONE);
-	pie_SetAlphaTest(false);
 
 	glColor4ubv(colour.vector);
 	glBegin(GL_LINES);
@@ -193,8 +191,6 @@ void iV_Line(int x0, int y0, int x1, int y1, PIELIGHT colour)
  */
 static void pie_DrawRect(float x0, float y0, float x1, float y1, PIELIGHT colour)
 {
-	pie_SetAlphaTest(false);
-
 	glColor4ubv(colour.vector);
 	glBegin(GL_TRIANGLE_STRIP);
 		glVertex2f(x0, y0);
@@ -217,7 +213,6 @@ void iV_ShadowBox(int x0, int y0, int x1, int y1, int pad, PIELIGHT first, PIELI
 void iV_Box2(int x0,int y0, int x1, int y1, PIELIGHT first, PIELIGHT second)
 {
 	pie_SetTexturePage(TEXPAGE_NONE);
-	pie_SetAlphaTest(false);
 
 	glColor4ubv(first.vector);
 	glBegin(GL_LINES);
@@ -328,6 +323,7 @@ void iV_DrawImage2(const QString &filename, float x, float y, float width, float
 	y += image->YOffset;
 	pie_SetTexturePage(image->textureId);
 	glColor4ubv(WZCOL_WHITE.vector);
+	pie_SetRendMode(REND_ALPHA);
 	glBegin(GL_TRIANGLE_STRIP);
 		glTexCoord2f(tu * image->invTextureSize, tv * invTextureSize);
 		glVertex2f(x, y);
@@ -341,8 +337,6 @@ void iV_DrawImage2(const QString &filename, float x, float y, float width, float
 		glTexCoord2f((tu + image->Width) * invTextureSize, (tv + image->Height) * invTextureSize);
 		glVertex2f(x + w, y + h);
 	glEnd();
-	pie_SetRendMode(REND_ALPHA);
-	pie_SetAlphaTest(true);
 }
 
 void iV_DrawImage(IMAGEFILE *ImageFile, UWORD ID, int x, int y)
@@ -356,7 +350,6 @@ void iV_DrawImage(IMAGEFILE *ImageFile, UWORD ID, int x, int y)
 	Vector2i pieImage = makePieImage(ImageFile, ID, &dest, x, y);
 
 	pie_SetRendMode(REND_ALPHA);
-	pie_SetAlphaTest(true);
 
 	pie_DrawImage(ImageFile, ID, pieImage, &dest);
 }
@@ -373,7 +366,6 @@ void iV_DrawImageTc(Image image, Image imageTc, int x, int y, PIELIGHT colour)
 	Vector2i pieImageTc = makePieImage(imageTc.images, imageTc.id);
 
 	pie_SetRendMode(REND_ALPHA);
-	pie_SetAlphaTest(true);
 
 	pie_DrawImage(image.images, image.id, pieImage, &dest);
 	pie_DrawImage(imageTc.images, imageTc.id, pieImageTc, &dest, colour);
@@ -388,7 +380,6 @@ void iV_DrawImageRepeatX(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Width
 	const ImageDef *Image = &ImageFile->imageDefs[ID];
 
 	pie_SetRendMode(REND_OPAQUE);
-	pie_SetAlphaTest(true);
 
 	PIERECT dest;
 	Vector2i pieImage = makePieImage(ImageFile, ID, &dest, x, y);
@@ -418,7 +409,6 @@ void iV_DrawImageRepeatY(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Heigh
 	const ImageDef *Image = &ImageFile->imageDefs[ID];
 
 	pie_SetRendMode(REND_OPAQUE);
-	pie_SetAlphaTest(true);
 
 	PIERECT dest;
 	Vector2i pieImage = makePieImage(ImageFile, ID, &dest, x, y);

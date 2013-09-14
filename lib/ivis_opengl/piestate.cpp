@@ -76,10 +76,6 @@ void pie_SetDefaultStates(void)//Sets all states
 
 	rendStates.rendMode = REND_ALPHA;	// to force reset to REND_OPAQUE
 	pie_SetRendMode(REND_OPAQUE);
-
-	//chroma keying on black
-	rendStates.keyingOn = false;//to force reset to true
-	pie_SetAlphaTest(true);
 }
 
 //***************************************************************************
@@ -558,22 +554,6 @@ void pie_SetTexturePage(SDWORD num)
 				glBindTexture(GL_TEXTURE_2D, pie_Texture(num));
 		}
 		rendStates.texPage = num;
-	}
-}
-
-void pie_SetAlphaTest(bool keyingOn)
-{
-	if (keyingOn != rendStates.keyingOn)
-	{
-		rendStates.keyingOn = keyingOn;
-		pieStateCount++;
-
-		if (keyingOn == true) {
-			glEnable(GL_ALPHA_TEST);
-			glAlphaFunc(GL_GREATER, 0.1f);
-		} else {
-			glDisable(GL_ALPHA_TEST);
-		}
 	}
 }
 

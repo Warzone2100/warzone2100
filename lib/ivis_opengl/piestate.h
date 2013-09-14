@@ -49,7 +49,6 @@ struct RENDER_STATE
 					PIELIGHT			fogColour;
 					SDWORD				texPage;
 					REND_MODE			rendMode;
-					bool				keyingOn;
 };
 
 void rendStatesRendModeHack();  // Sets rendStates.rendMode = REND_ALPHA; (Added during merge, since the renderStates is now static.)
@@ -81,7 +80,6 @@ extern PIELIGHT pie_GetFogColour(void) WZ_DECL_PURE;
 extern void pie_UpdateFogDistance(float begin, float end);
 //render states
 extern void pie_SetTexturePage(SDWORD num);
-extern void pie_SetAlphaTest(bool keyingOn);
 extern void pie_SetRendMode(REND_MODE rendMode);
 
 bool pie_LoadShaders();

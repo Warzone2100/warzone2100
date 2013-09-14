@@ -1023,7 +1023,6 @@ static void drawTiles(iView *player)
 
 	// now we are about to draw the terrain
 	GL_DEBUG("Draw 3D scene - terrain");
-	pie_SetAlphaTest(false);
 	pie_SetFogStatus(true);
 
 	pie_MatBegin();
@@ -1042,7 +1041,6 @@ static void drawTiles(iView *player)
 	// and prepare for rendering the models
 	GL_DEBUG("Draw 3D scene - models");
 	pie_SetRendMode(REND_OPAQUE);
-	pie_SetAlphaTest(true);
 
 	/* ---------------------------------------------------------------- */
 	/* Now display all the static objects                               */
@@ -1063,7 +1061,6 @@ static void drawTiles(iView *player)
 	atmosDrawParticles();
 
 	// prepare for the water and the lightmap
-	pie_SetAlphaTest(false);
 	pie_SetFogStatus(true);
 
 	pie_MatBegin();

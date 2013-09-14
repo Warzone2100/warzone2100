@@ -146,7 +146,6 @@ static void pie_Draw3DButton(iIMDShape *shape)
 {
 	const PIELIGHT colour = WZCOL_WHITE;
 	const PIELIGHT teamcolour = pal_GetTeamColour(NetPlay.players[selectedPlayer].colour);
-	pie_SetAlphaTest(true);
 	pie_SetFogStatus(false);
 	pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
 	pie_ActivateShader(SHADER_BUTTON, shape, teamcolour, colour);
@@ -174,7 +173,6 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 	bool light = true;
 
 	glLoadMatrixf(&matrix[0][0]);
-	pie_SetAlphaTest((pieFlag & pie_PREMULTIPLIED) == 0);
 
 	/* Set fog status */
 	if (!(pieFlag & pie_FORCE_FOG) && (pieFlag & pie_ADDITIVE || pieFlag & pie_TRANSLUCENT || pieFlag & pie_PREMULTIPLIED))
@@ -486,7 +484,6 @@ static void pie_DrawShadows(void)
 
 	glPushMatrix();
 
-	pie_SetAlphaTest(false);
 	glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
 	glDepthFunc(GL_LESS);
 	glDepthMask(GL_FALSE);

@@ -150,9 +150,6 @@ void pie_DrawSkybox(float scale)
 	// enable alpha
 	pie_SetRendMode(REND_ALPHA);
 
-	// for the nice blend of the sky with the fog
-	glDisable(GL_ALPHA_TEST);
-
 	// Apply scale matrix
 	glScalef(scale, scale/2.0f, scale);
 
