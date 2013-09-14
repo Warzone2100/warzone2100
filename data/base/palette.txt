@@ -93,3 +93,4 @@ ff,00,00,ff	// demolish beam
 98,98,98,ff	// Don't know this player.
 ff,ff,f0,ff	// Seen this player before.
 b0,b0,ff,ff	// Server knows this player.
+10,10,80,80	// Default filled GUI box colour

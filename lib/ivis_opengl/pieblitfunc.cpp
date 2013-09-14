@@ -48,17 +48,21 @@
  */
 /***************************************************************************/
 
-#define pie_FILLRED	 16
-#define pie_FILLGREEN	 16
-#define pie_FILLBLUE	128
-#define pie_FILLTRANS	128
-
 static GFX *radarGfx = NULL;
 
 struct PIERECT  ///< Screen rectangle.
 {
-	SWORD x, y, w, h;
+	float x, y, w, h;
 };
+
+/***************************************************************************/
+/*
+ *	Static function forward declarations
+ */
+/***************************************************************************/
+
+static bool assertValidImage(IMAGEFILE *imageFile, unsigned id);
+static Vector2i makePieImage(IMAGEFILE *imageFile, unsigned id, PIERECT *dest = NULL, int x = 0, int y = 0);
 
 /***************************************************************************/
 /*
@@ -243,13 +247,7 @@ void pie_BoxFill(int x0,int y0, int x1, int y1, PIELIGHT colour)
 
 void iV_TransBoxFill(float x0, float y0, float x1, float y1)
 {
-	PIELIGHT light;
-
-	light.byte.r = pie_FILLRED;
-	light.byte.g = pie_FILLGREEN;
-	light.byte.b = pie_FILLBLUE;
-	light.byte.a = pie_FILLTRANS;
-	pie_UniTransBoxFill(x0, y0, x1, y1, light);
+	pie_UniTransBoxFill(x0, y0, x1, y1, WZCOL_TRANSPARENT_BOX);
 }
 
 /***************************************************************************/
@@ -295,7 +293,7 @@ static void pie_DrawImage(IMAGEFILE *imageFile, int id, Vector2i size, const PIE
 	glEnd();
 }
 
-static Vector2i makePieImage(IMAGEFILE *imageFile, unsigned id, PIERECT *dest = NULL, int x = 0, int y = 0)
+static Vector2i makePieImage(IMAGEFILE *imageFile, unsigned id, PIERECT *dest, int x, int y)
 {
 	ImageDef const &image = imageFile->imageDefs[id];
 	Vector2i pieImage;

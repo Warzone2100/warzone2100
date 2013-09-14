@@ -143,7 +143,7 @@ struct ImageDef
 	int YOffset;            /**< Y offset into source position */
 
 	int textureId;		///< duplicate of below, fix later
-	double invTextureSize;
+	GLfloat invTextureSize;
 };
 
 struct Image;

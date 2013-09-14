@@ -33,6 +33,7 @@
 #include "lib/framework/frame.h"
 #include "lib/ivis_opengl/piepalette.h"
 #include "lib/ivis_opengl/textdraw.h"
+//#include "lib/ivis_opengl/pieblitfunc.h"
 #include "widgbase.h"
 
 /***********************************************************************************

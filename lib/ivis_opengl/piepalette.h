@@ -117,8 +117,9 @@
 #define WZCOL_FORM_PLAYER_UNKNOWN                       psPalette[92]
 #define WZCOL_FORM_PLAYER_KNOWN                         psPalette[93]
 #define WZCOL_FORM_PLAYER_KNOWN_BY_SERVER               psPalette[94]
+#define WZCOL_TRANSPARENT_BOX                           psPalette[95]
 
-#define WZCOL_MAX                                       95
+#define WZCOL_MAX                                       96
 
 //*************************************************************************
 

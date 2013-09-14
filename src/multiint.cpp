@@ -1358,7 +1358,6 @@ MultibuttonWidget::MultibuttonWidget(WIDGET* parent, int value)
 
 void MultibuttonWidget::display(int xOffset, int yOffset)
 {
-	//drawBlueBox(xOffset + x(), yOffset + y(), width(), height());
 	iV_ShadowBox(xOffset + x(), yOffset + y(), xOffset + x() + width() - 1, yOffset + y() + height() - 1, 0, WZCOL_MENU_BORDER, WZCOL_MENU_BORDER, WZCOL_MENU_BACKGROUND);
 }
 
