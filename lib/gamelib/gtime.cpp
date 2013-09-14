@@ -132,17 +132,17 @@ void setGameTime(uint32_t newGameTime)
 
 UDWORD getModularScaledGameTime(UDWORD timePeriod, UDWORD requiredRange)
 {
-	return gameTime%timePeriod * requiredRange/timePeriod;
+	return gameTime%timePeriod * requiredRange / MAX(1, timePeriod);
 }
 
 UDWORD getModularScaledGraphicsTime(UDWORD timePeriod, UDWORD requiredRange)
 {
-	return graphicsTime%timePeriod * requiredRange/timePeriod;
+	return graphicsTime % MAX(1, timePeriod) * requiredRange / MAX(1, timePeriod);
 }
 
 UDWORD getModularScaledRealTime(UDWORD timePeriod, UDWORD requiredRange)
 {
-	return realTime%timePeriod * requiredRange/timePeriod;
+	return realTime % MAX(1, timePeriod) * requiredRange / MAX(1, timePeriod);
 }
 
 /* Call this each loop to update the game timer */
