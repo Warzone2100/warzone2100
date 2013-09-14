@@ -105,7 +105,8 @@ private:
 /***************************************************************************/
 void iV_ShadowBox(int x0, int y0, int x1, int y1, int pad, PIELIGHT first, PIELIGHT second, PIELIGHT fill);
 extern void iV_Line(int x0, int y0, int x1, int y1, PIELIGHT colour);
-extern void iV_Box(int x0,int y0, int x1, int y1, PIELIGHT colour);
+extern void iV_Box2(int x0,int y0, int x1, int y1, PIELIGHT first, PIELIGHT second);
+static inline void iV_Box(int x0,int y0, int x1, int y1, PIELIGHT first) { iV_Box2(x0, y0, x1, y1, first, first); }
 extern void pie_BoxFill(int x0,int y0, int x1, int y1, PIELIGHT colour);
 extern void iV_DrawImage(IMAGEFILE *ImageFile, UWORD ID, int x, int y);
 void iV_DrawImage2(const QString &filename, float x, float y, float width = -0.0f, float height = -0.0f);

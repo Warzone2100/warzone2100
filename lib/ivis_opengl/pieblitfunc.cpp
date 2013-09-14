@@ -209,6 +209,16 @@ void iV_ShadowBox(int x0, int y0, int x1, int y1, int pad, PIELIGHT first, PIELI
 	pie_SetRendMode(REND_OPAQUE);
 	pie_SetTexturePage(TEXPAGE_NONE);
 	pie_DrawRect(x0 + pad, y0 + pad, x1 - pad, y1 - pad, fill); // necessary side-effect: sets alpha test off
+	iV_Box2(x0, y0, x1, y1, first, second);
+}
+
+/***************************************************************************/
+
+void iV_Box2(int x0,int y0, int x1, int y1, PIELIGHT first, PIELIGHT second)
+{
+	pie_SetTexturePage(TEXPAGE_NONE);
+	pie_SetAlphaTest(false);
+
 	glColor4ubv(first.vector);
 	glBegin(GL_LINES);
 	glVertex2i(x0, y1);
@@ -218,41 +228,6 @@ void iV_ShadowBox(int x0, int y0, int x1, int y1, int pad, PIELIGHT first, PIELI
 	glEnd();
 	glColor4ubv(second.vector);
 	glBegin(GL_LINES);
-	glVertex2i(x1, y0);
-	glVertex2i(x1, y1);
-	glVertex2i(x0, y1);
-	glVertex2i(x1, y1);
-	glEnd();
-}
-
-/***************************************************************************/
-
-void iV_Box(int x0,int y0, int x1, int y1, PIELIGHT colour)
-{
-	pie_SetTexturePage(TEXPAGE_NONE);
-	pie_SetAlphaTest(false);
-
-	if (x0>rendSurface.clip.right || x1<rendSurface.clip.left ||
-		y0>rendSurface.clip.bottom || y1<rendSurface.clip.top)
-	{
-		return;
-	}
-
-	if (x0<rendSurface.clip.left)
-		x0 = rendSurface.clip.left;
-	if (x1>rendSurface.clip.right)
-		x1 = rendSurface.clip.right;
-	if (y0<rendSurface.clip.top)
-		y0 = rendSurface.clip.top;
-	if (y1>rendSurface.clip.bottom)
-		y1 = rendSurface.clip.bottom;
-
-	glColor4ubv(colour.vector);
-	glBegin(GL_LINES);
-	glVertex2i(x0, y1);
-	glVertex2i(x0, y0);
-	glVertex2i(x0, y0);
-	glVertex2i(x1, y0);
 	glVertex2i(x1, y0);
 	glVertex2i(x1, y1);
 	glVertex2i(x0, y1);
