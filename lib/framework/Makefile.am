@@ -1,8 +1,6 @@
 AM_CPPFLAGS = -DYY_NO_INPUT $(SDL_CFLAGS) $(WZ_CPPFLAGS) $(QT4_CFLAGS)
 AM_CFLAGS = $(WZ_CFLAGS)
 AM_CXXFLAGS = $(WZ_CXXFLAGS) $(QT4_CFLAGS)
-AM_LFLAGS = $(FLEX_FLAGS)
-AM_YFLAGS = -d
 
 MOCHEADER = \
 	wzconfig.h
@@ -11,9 +9,6 @@ MOCEDFILES = $(MOCHEADER:%.h=%_moc.cpp)
 %_moc.cpp: %.h
 	$(MOC4) -o $@ $<
 
-BUILT_SOURCES = \
-	resource_parser.h \
-	strres_parser.h
 
 CLEANFILES = \
 	$(MOCEDFILES)
@@ -46,9 +41,11 @@ noinst_HEADERS = \
 	physfs_ext.h \
 	rational.h \
 	resly.h \
+	resource_parser.h \
 	stdio_ext.h \
 	string_ext.h \
 	strres.h \
+	strres_parser.h \
 	strresly.h \
 	treap.h \
 	trig.h \
@@ -70,12 +67,12 @@ libframework_a_SOURCES = \
 	geometry.cpp \
 	i18n.cpp \
 	lexer_input.cpp \
-	resource_lexer.lpp \
-	resource_parser.ypp \
+	resource_lexer.cpp \
+	resource_parser.cpp \
 	stdio_ext.cpp \
 	strres.cpp \
-	strres_lexer.lpp \
-	strres_parser.ypp \
+	strres_lexer.cpp \
+	strres_parser.cpp \
 	treap.cpp \
 	trig.cpp \
 	utf.cpp \

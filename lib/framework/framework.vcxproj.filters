@@ -9,9 +9,6 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
-    <Filter Include="FlexBison">
-      <UniqueIdentifier>{558c4d54-ca83-45b2-94bd-a22fe549de35}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="crc.cpp">
@@ -50,6 +47,9 @@
     <ClCompile Include="geometry.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="wzconfig.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="resource_lexer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -60,9 +60,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="strres_parser.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="wzconfig.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -157,30 +154,14 @@
     <ClInclude Include="wzglobal.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="resource_parser.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="strres_parser.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="wzconfig.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <FlexGenerator Include="resource_lexer.lpp">
-      <Filter>FlexBison</Filter>
-    </FlexGenerator>
-    <FlexGenerator Include="strres_lexer.lpp">
-      <Filter>FlexBison</Filter>
-    </FlexGenerator>
-  </ItemGroup>
-  <ItemGroup>
-    <BisonParser Include="resource_parser.ypp">
-      <Filter>FlexBison</Filter>
-    </BisonParser>
-    <BisonParser Include="strres_parser.ypp">
-      <Filter>FlexBison</Filter>
-    </BisonParser>
+    <ClInclude Include="strres_parser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="resource_parser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

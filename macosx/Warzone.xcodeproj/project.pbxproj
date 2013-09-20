@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 45;
+	objectVersion = 46;
 	objects = {
 
 /* Begin PBXAggregateTarget section */
@@ -68,13 +68,13 @@
 			buildConfigurationList = 43FA570F10FF8EBB0074E914 /* Build configuration list for PBXAggregateTarget "Setup Prebuilt Components" */;
 			buildPhases = (
 				4345290E1130F84E002AD731 /* msgfmt */,
-				433360B311A079F700380F5E /* Moc */,
 				43B8FF2D127CD57D006F5A13 /* Fonts */,
 				436D24A4149641D200BF74E3 /* SDL */,
 				4311544C14BA01F900332251 /* Docs */,
 				43CEADC3141D6E810001637B /* fontconfig */,
 				43CEADC6141D6EEE0001637B /* freetype */,
 				433360A711A0796D00380F5E /* Qt */,
+				433360B311A079F700380F5E /* Moc */,
 			);
 			dependencies = (
 			);
@@ -4023,7 +4023,7 @@
 				ORGANIZATIONNAME = net.wz2100.;
 			};
 			buildConfigurationList = 02356D670BD3BB2600E9A019 /* Build configuration list for PBXProject "Warzone" */;
-			compatibilityVersion = "Xcode 3.1";
+			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -4695,7 +4695,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cd ${SRCROOT}/external/libvorbis\n\nif [ -f \"vorbis.diff\" ]; then\n\texit 0\nfi\n\nif ! curl -LfOC - --connect-timeout \"30\" \"http://wz2100.net/~dak180/BuildTools/Mac/vorbis.diff\"; then\n\techo \"error: Unable to fetch vorbis.diff\" >&2\n\texit 1\nfi\n\nif ! cat \"vorbis.diff\" | patch --posix -sNfp0; then\n\techo \"error: Unable to apply vorbis.diff\" >&2\n\texit 1\nfi\n\nexit 0\n";
+			shellScript = "cd ${SRCROOT}/external/libvorbis\n\nif [ -f \"vorbis.diff\" ]; then\n\texit 0\nfi\n\nif ! curl -LfOC - --connect-timeout \"30\" \"https://gist.github.com/dak180/5917767/raw/47475c026c73873da7e9f1c4a457173050f87698/vorbis.diff\"; then\n\tif ! curl -LfOC - --connect-timeout \"30\" \"http://wz2100.net/~dak180/BuildTools/Mac/vorbis.diff\"; then\n\t\techo \"error: Unable to fetch vorbis.diff\" >&2\n\t\texit 1\n\tfi\nfi\n\nif ! cat \"vorbis.diff\" | patch --posix -sNfp0; then\n\techo \"error: Unable to apply vorbis.diff\" >&2\n\texit 1\nfi\n\nexit 0\n";
 		};
 		43B8FF2D127CD57D006F5A13 /* Fonts */ = {
 			isa = PBXShellScriptBuildPhase;

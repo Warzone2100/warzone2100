@@ -80,10 +80,10 @@ win32/__BUILD_CONFIG.USER
 *.tab.[ch]
 *.lex.[ch]pp
 *.tab.[ch]pp
-*lexer.[ch]pp
-*parser.[ch]pp
-*lexer.[ch]
-*parser.[ch]
+#*lexer.[ch]pp
+#*parser.[ch]pp
+#*lexer.[ch]
+#*parser.[ch]
 /src/autorevision.h
 /autorevision.tmp
 /src/autorevision.cache

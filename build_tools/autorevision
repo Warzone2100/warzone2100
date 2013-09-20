@@ -1,9 +1,11 @@
 #!/bin/sh
 
-# Copyright (c) 2012 dak180
-# See http://opensource.org/licenses/bsd-license.php for licence terms
+# Copyright (c) 2012 - 2013 dak180 and contributors. See
+# http://opensource.org/licenses/mit-license.php or the included
+# COPYING.md for licence terms.
 #
-# autorevision - extracts metadata about the head version from your repository.
+# autorevision - extracts metadata about the head version from your
+# repository.
 
 # Usage message.
 arUsage() {
@@ -14,6 +16,7 @@ usage: ./autorevision {-t output-type | -s symbol} [-o cache-file [-f] ] [-V]
 	-s symbol		= specify symbol output
 	-o cache-file		= specify cache file location
 	-f			= force the use of cache data
+	-U			= Check for untracked files in svn
 	-V			= emit version and exit
 	-?			= help message
 
@@ -27,6 +30,7 @@ The folowing are valid output types:
 	php			= PHP file
 	ini			= INI file
 	js			= javascript file
+	json			= JSON file
 	java			= Java file
 	javaprop		= Java properties file
 	tex			= (La)TeX file
@@ -48,7 +52,7 @@ EOF
 }
 
 # Config
-ARVERSION="1.4"
+ARVERSION="1.6"
 TARGETFILE="/dev/stdout"
 while getopts ":t:o:s:Vf" OPTION; do
 	case "${OPTION}" in
@@ -63,6 +67,9 @@ while getopts ":t:o:s:Vf" OPTION; do
 		;;
 		s)
 			VAROUT="${OPTARG}"
+		;;
+		U)
+			UNTRACKEDFILES="1"
 		;;
 		V)
 			echo "autorevision ${ARVERSION}"
@@ -87,6 +94,12 @@ elif [ -z "${CACHEFILE}" ] && [ "${CACHEFORCE}" = "1" ]; then
 	arUsage
 fi
 
+# Make sure that the path we are given is one we can source
+# (dash, we are looking at you).
+if ! echo "${CACHEFILE}" | grep -q '^\.*/'; then
+	CACHEFILE="./${CACHEFILE}"
+fi
+
 
 # Functions to extract data from different repo types.
 # For git repos
@@ -98,7 +111,7 @@ gitRepo() {
 	VCS_BASENAME="$(basename "${PWD}")"
 
 	 # Is the working copy clean?
-	test -z "$(git status -uno --porcelain)"
+	test -z "$(git status --untracked-files=normal --porcelain)"
 	VCS_WC_MODIFIED="${?}"
 
 	# Enumeration of changesets
@@ -108,17 +121,25 @@ gitRepo() {
 		VCS_NUM="$(git rev-list HEAD | wc -l)"
 	fi
 
-	# The full revision hash
-	VCS_FULL_HASH="$(git rev-parse HEAD)"
+	# This may be a git-svn remote.  If so, report the Subversion revision.
+	if [ -z "$(git config svn-remote.svn.url 2>/dev/null)" ]
+	then
+		# The full revision hash
+		VCS_FULL_HASH="$(git rev-parse HEAD)"
 
-	# The short hash
-	VCS_SHORT_HASH="$(echo "${VCS_FULL_HASH}" | cut -b 1-7)"
+		# The short hash
+		VCS_SHORT_HASH="$(echo "${VCS_FULL_HASH}" | cut -b 1-7)"
+	else
+		# The git-svn revision number
+		VCS_FULL_HASH="$(git svn find-rev HEAD)"
+		VCS_SHORT_HASH="${VCS_FULL_HASH}"
+	fi
 
 	# Current branch
 	VCS_BRANCH="$(git rev-parse --symbolic-full-name --verify "$(git name-rev --name-only --no-undefined HEAD 2>/dev/null)" 2>/dev/null | sed -e 's:refs/heads/::' | sed -e 's:refs/::')"
 
 	# Cache the description
-	DESCRIPTION="$(git describe --long --tags 2>/dev/null)"
+	local DESCRIPTION="$(git describe --long --tags 2>/dev/null)"
 
 	# Current or last tag ancestor (empty if no tags)
 	VCS_TAG="$(echo "${DESCRIPTION}" | sed -e "s:-g${VCS_SHORT_HASH}\$::" | sed -e 's:-[0-9]*$::')"
@@ -143,7 +164,7 @@ hgRepo() {
 	VCS_BASENAME="$(basename "${PWD}")"
 
 	# Is the working copy clean?
-	hg sum | grep -q 'commit: (clean)'
+	test -z "$(hg status -duram)"
 	VCS_WC_MODIFIED="${?}"
 
 	# Enumeration of changesets
@@ -221,9 +242,9 @@ svnRepo() {
 
 	case "${PWD}" in
 	/*trunk*|/*branches*|/*tags*)
-		fn="${PWD}"
+		local fn="${PWD}"
 		while [ "$(basename "${fn}")" != 'trunk' ] && [ "$(basename "${fn}")" != 'branches' ] && [ "$(basename "${fn}")" != 'tags' ] && [ "$(basename "${fn}")" != '/' ]; do
-			fn="$(dirname "${fn}")"
+			local fn="$(dirname "${fn}")"
 		done
 		fn="$(dirname "${fn}")"
 		if [ "${fn}" = '/' ]; then
@@ -236,13 +257,24 @@ svnRepo() {
 	esac
 
 	# Cache svnversion output
-	SVNVERSION="$(svnversion)"
+	local SVNVERSION="$(svnversion)"
 
 	# Is the working copy clean?
 	echo "${SVNVERSION}" | grep -q "M"
 	case "${?}" in
-		0) VCS_WC_MODIFIED="1";;
-		1) VCS_WC_MODIFIED="0";;
+		0)
+			VCS_WC_MODIFIED="1"
+		;;
+		1)
+			if [ ! -z "${UNTRACKEDFILES}"]; then
+			# `svnversion` does not detect untracked files and `svn status` is really slow, so only run it if we really have to.
+				if [ -z "$(svn status)" ]; then
+					VCS_WC_MODIFIED="0"
+				else
+					VCS_WC_MODIFIED="1"
+				fi
+			fi
+		;;
 	esac
 
 	# Enumeration of changesets
@@ -257,8 +289,8 @@ svnRepo() {
 	# Current branch
 	case "${PWD}" in
 	/*trunk*|/*branches*|/*tags*)
-		lastbase=""
-		fn="${PWD}"
+		local lastbase=""
+		loacl fn="${PWD}"
 		while :
 		do
 			base="$(basename "${fn}")"
@@ -272,8 +304,8 @@ svnRepo() {
 				VCS_BRANCH=""
 				break
 			fi
-			lastbase="${base}"
-			fn="$(dirname "${fn}")"
+			local lastbase="${base}"
+			local fn="$(dirname "${fn}")"
 		done
 		;;
 	*) VCS_BRANCH="" ;;
@@ -523,6 +555,30 @@ if (typeof module !== 'undefined') {
 EOF
 }
 
+# For JSON output
+jsonOutput() {
+	case "${VCS_WC_MODIFIED}" in
+		1) VCS_WC_MODIFIED="true" ;;
+		0) VCS_WC_MODIFIED="false" ;;
+	esac
+	cat > "${TARGETFILE}" << EOF
+{
+	"VCS_TYPE": "${VCS_TYPE}",
+	"VCS_BASENAME": "${VCS_BASENAME}",
+	"VCS_NUM": ${VCS_NUM},
+	"VCS_DATE": "${VCS_DATE}",
+	"VCS_BRANCH":"${VCS_BRANCH}",
+	"VCS_TAG": "${VCS_TAG}",
+	"VCS_TICK": ${VCS_TICK},
+
+	"VCS_FULL_HASH": "${VCS_FULL_HASH}",
+	"VCS_SHORT_HASH": "${VCS_SHORT_HASH}",
+
+	"VCS_WC_MODIFIED": ${VCS_WC_MODIFIED}
+}
+EOF
+}
+
 # For Java output
 javaOutput() {
 	case "${VCS_WC_MODIFIED}" in
@@ -538,7 +594,7 @@ public class autorevision {
     public static final String VCS_TYPE = "${VCS_TYPE}";
     public static final String VCS_BASENAME = "${VCS_BASENAME}";
     public static final long VCS_NUM = ${VCS_NUM};
-    public static final Date VCS_DATE = new Date($(date -d ${VCS_DATE} +%s));
+    public static final String VCS_DATE = "${VCS_DATE}";
     public static final String VCS_BRANCH = "${VCS_BRANCH}";
     public static final String VCS_TAG = "${VCS_TAG}";
     public static final long VCS_TICK = ${VCS_TICK};
@@ -618,7 +674,7 @@ EOF
 # Detect and collect repo data.
 if [ -f "${CACHEFILE}" ] && [ "${CACHEFORCE}" = "1" ]; then
 	# When requested only read from the cache to populate our symbols.
-	source "${CACHEFILE}"
+	. "${CACHEFILE}"
 elif [ ! -z "$(git rev-parse HEAD 2>/dev/null)" ]; then
 	gitRepo
 elif [ ! -z "$(hg root 2>/dev/null)" ]; then
@@ -630,6 +686,8 @@ elif [ ! -z "$(svn info 2>/dev/null)" ]; then
 elif [ -f "${CACHEFILE}" ]; then
 	# We are not in a repo; try to use a previously generated cache to populate our symbols.
 	. "${CACHEFILE}"
+	# Do not overwrite the cache if we know we are not going to write anything new.
+	CACHEFORCE="1"
 else
 	echo "error: No repo or cache detected." 1>&2
 	exit 1
@@ -658,6 +716,9 @@ if [ ! -z "${VAROUT}" ]; then
 		echo "${VCS_SHORT_HASH}"
 	elif [ "${VAROUT}" = "VCS_WC_MODIFIED" ]; then
 		echo "${VCS_WC_MODIFIED}"
+	else
+		echo "error: Not a valid output symbol." 1>&2
+		exit 1
 	fi
 fi
 
@@ -682,6 +743,8 @@ if [ ! -z "${AFILETYPE}" ]; then
 		iniOutput
 	elif [ "${AFILETYPE}" = "js" ]; then
 		jsOutput
+	elif [ "${AFILETYPE}" = "json" ]; then
+		jsonOutput
 	elif [ "${AFILETYPE}" = "java" ]; then
 		javaOutput
 	elif [ "${AFILETYPE}" = "javaprop" ]; then

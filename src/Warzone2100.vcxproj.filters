@@ -13,9 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
     </Filter>
-    <Filter Include="FlexBison">
-      <UniqueIdentifier>{4af8247e-eb4a-428b-9177-04f2c30a3675}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="action.cpp">
@@ -727,18 +724,5 @@
     <ResourceCompile Include="..\win32\warzone2100.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <FlexGenerator Include="level_lexer.lpp">
-      <Filter>FlexBison</Filter>
-    </FlexGenerator>
-    <FlexGenerator Include="scriptvals_lexer.lpp">
-      <Filter>FlexBison</Filter>
-    </FlexGenerator>
-  </ItemGroup>
-  <ItemGroup>
-    <BisonParser Include="scriptvals_parser.ypp">
-      <Filter>FlexBison</Filter>
-    </BisonParser>
   </ItemGroup>
 </Project>
