@@ -3039,7 +3039,7 @@ static QScriptValue js_addStructure(QScriptContext *context, QScriptEngine *engi
 }
 
 //-- \subsection{getStructureLimit(structure type[, player])}
-//-- Create a structure on the given position. Returns true on success.
+//-- Returns build limits for a structure.
 static QScriptValue js_getStructureLimit(QScriptContext *context, QScriptEngine *engine)
 {
 	QString building = context->argument(0).toString();
