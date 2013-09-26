@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2013-02-24 22:18+0100\n"
-"PO-Revision-Date: 2011-11-07 09:47+0100\n"
+"POT-Creation-Date: 2013-05-20 21:21+0200\n"
+"PO-Revision-Date: 2013-09-25 03:13+0100\n"
 "Last-Translator: Cristian Odorico <generalchris@hotmail.it>\n"
 "Language-Team: Italian <warzone2100-project@lists.sourceforge.net>\n"
 "Language: it\n"
@@ -21,8 +21,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Launchpad-Export-Date: 2008-09-05 09:48+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
-"X-Poedit-Language: Italian\n"
+"X-Generator: Poedit 1.5.7\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Poedit-Basepath: ..\n"
 
@@ -564,7 +563,7 @@ msgstr "Gli ordini assegnati alle unità assegnate sono di sparare contro le bat
 #: data/mp/messages/resmessages12.rmsg:56
 #: data/mp/messages/resmessagesall.rmsg:96
 msgid "Counter-battery fire continues until enemy battery is suppressed"
-msgstr "Il fuoco di contro-batteria continua fino a quando l'artiglieria nemica è distrutta"
+msgstr "Il fuoco di contro-batteria continua fino a quando l'artiglieria nemica non è distrutta"
 
 #: data/base/messages/resmessages12.rmsg:70
 #: data/base/messages/resmessages23.rmsg:48
@@ -1091,7 +1090,7 @@ msgstr "Aggiornamento dei Razzi"
 #: data/base/messages/resmessages12.rmsg:170
 #: data/mp/messages/resmessages12.rmsg:154
 msgid "Autoloader increases reload rate"
-msgstr "L'autocaricatora aumenta la velocità di ricarica"
+msgstr "L'autocaricatore aumenta la velocità di ricarica"
 
 #: data/base/messages/resmessages12.rmsg:171
 msgid "Increases Rocket ROF"
@@ -2267,7 +2266,7 @@ msgstr "Tutti i minirazzi saranno aggiornati automaticamente"
 #: data/base/messages/resmessages1.rmsg:610
 #: data/mp/messages/resmessages1.rmsg:554
 msgid "Improved shaped charge warhead"
-msgstr "Forma della carica della testata migliorata"
+msgstr "Testata a carica cava migliorata"
 
 #: data/base/messages/resmessages1.rmsg:611
 #: data/base/messages/resmessages2.rmsg:787
@@ -2288,7 +2287,7 @@ msgstr "Aumenta il rateo di fuoco dei Minirazzi"
 #: data/base/messages/resmessages1.rmsg:632
 #: data/mp/messages/resmessages1.rmsg:574
 msgid "Tracks and directs in-flight rocket to target"
-msgstr "Tracciano e dirigono il razzo in volo al bersaglio"
+msgstr "Traccia e dirige il razzo in volo al bersaglio"
 
 #: data/base/messages/resmessages1.rmsg:643
 #: data/mp/messages/resmessages1.rmsg:584
@@ -2426,7 +2425,7 @@ msgstr "La Torre di Contro-batteria VTOL rileva le batterie nemiche a fuoco indi
 #: data/mp/messages/resmessages2.rmsg:335
 #: data/mp/messages/strings/resstrings.txt:511
 msgid "Orders assigned VTOLs to attack the enemy batteries"
-msgstr "Gli ordini assegnati ai VTOL assegnati sono di sparare contro le batterie nemiche"
+msgstr "Gli ordini assegnati ai VTOL assegnati sono di attaccare le batterie nemiche"
 
 #: data/base/messages/resmessages23.rmsg:62
 #: data/base/messages/resmessages2.rmsg:370
@@ -2435,7 +2434,7 @@ msgstr "Gli ordini assegnati ai VTOL assegnati sono di sparare contro le batteri
 #: data/mp/messages/resmessages2.rmsg:336
 #: data/mp/messages/strings/resstrings.txt:512
 msgid "VTOLs attack until enemy battery is suppressed"
-msgstr "Gli attacchi dei VTOL continuano finche le batterie nemiche sono distrutte"
+msgstr "Gli attacchi dei VTOL continuano finche le batterie nemiche non sono distrutte"
 
 #: data/base/messages/resmessages23.rmsg:70
 #: data/base/messages/resmessages2.rmsg:378
@@ -2505,7 +2504,7 @@ msgstr "Nuova torretta con sistemi disponibile"
 #: data/base/messages/resmessages23.rmsg:93
 #: data/mp/messages/resmessages23.rmsg:84
 msgid "VTOL Strike turret used to spot targets"
-msgstr "La Torretta d'Attacco VTOL è usata per segnalare i bersagli"
+msgstr "La Torretta d'Attacco VTOL è usata per individuare i bersagli"
 
 #: data/base/messages/resmessages23.rmsg:94
 #: data/mp/messages/resmessages23.rmsg:85
@@ -2638,11 +2637,11 @@ msgstr "Migliori bersagli: Bunker e postazioni"
 #: data/base/messages/strings/resstrings.txt:713
 #: data/mp/messages/strings/resstrings.txt:748
 msgid "Bombsight Upgrade"
-msgstr "Miglioramento delle bombe"
+msgstr "Miglioramento del mirino delle bombe"
 
 #: data/base/messages/resmessages23.rmsg:137
 msgid "Laser designator paints and guides bombs to the target"
-msgstr "Il designatore laser punta e guida le bombe sul bersaglio"
+msgstr "Il designatore laser illumina e guida le bombe sul bersaglio"
 
 #: data/base/messages/resmessages23.rmsg:138
 #: data/base/messages/resmessages2.rmsg:622
@@ -2754,14 +2753,14 @@ msgstr "Armato con razzo Bunker Buster"
 #: data/mp/messages/resmessages2.rmsg:34
 #: data/mp/messages/strings/resstrings.txt:86
 msgid "Armed with Cyborg Assault Gun"
-msgstr "Armato con Cannone d'assalto Cyborg"
+msgstr "Armato con Cannone d'Assalto Cyborg"
 
 #: data/base/messages/resmessages2.rmsg:49
 #: data/base/messages/strings/resstrings.txt:104
 #: data/mp/messages/resmessages2.rmsg:44
 #: data/mp/messages/strings/resstrings.txt:124
 msgid "High-tensile concrete reinforced with boron"
-msgstr "Cemento in tensione rinforzato al boro"
+msgstr "Cemento ad alta resistenza rinforzato al boro"
 
 #: data/base/messages/resmessages2.rmsg:60
 #: data/base/messages/strings/resstrings.txt:120
@@ -2829,7 +2828,7 @@ msgstr "Batteria di razzi a fuoco indiretto"
 #: data/mp/messages/resmessages2.rmsg:104
 #: data/mp/messages/strings/resstrings.txt:176
 msgid "Armored Bombard battery pit"
-msgstr "Postazione corazzata per batteria di bombarde"
+msgstr "Postazione corazzata con batteria di bombarde"
 
 #: data/base/messages/resmessages2.rmsg:126
 #: data/base/messages/strings/resstrings.txt:168
@@ -2850,7 +2849,7 @@ msgstr "Postazione corazzata con Ground Shaker"
 #: data/mp/messages/resmessages2.rmsg:134
 #: data/mp/messages/strings/resstrings.txt:182
 msgid "Armored Pepperpot mortar battery pit"
-msgstr "Postazione corazzata per batteria di mortai Pepperpot"
+msgstr "Postazione corazzata con batteria di mortai Pepperpot"
 
 #: data/base/messages/resmessages2.rmsg:159
 #: data/base/messages/resmessages2.rmsg:170
@@ -2929,7 +2928,7 @@ msgstr "Posizione corazzata con Cannone d'Assalto"
 #: data/mp/messages/resmessages2.rmsg:204
 #: data/mp/messages/strings/resstrings.txt:252
 msgid "Reinforced tower with Assault Gun"
-msgstr "Torre rinforzata con mitragliatrice d'assalto"
+msgstr "Torre rinforzata con Mitragliatrice d'Assalto"
 
 #: data/base/messages/resmessages2.rmsg:236
 #: data/base/messages/strings/resstrings.txt:288
@@ -2972,14 +2971,14 @@ msgstr "Nuove tecniche robotizzate di riparazione"
 #: data/mp/messages/resmessages2.rmsg:264
 #: data/mp/messages/strings/resstrings.txt:376
 msgid "Robotic Cyborg Production"
-msgstr "Produzione di Cyborg robotizzata"
+msgstr "Produzione di Cyborg Robotizzata"
 
 #: data/base/messages/resmessages2.rmsg:302
 #: data/base/messages/strings/resstrings.txt:366
 #: data/mp/messages/resmessages2.rmsg:274
 #: data/mp/messages/strings/resstrings.txt:394
 msgid "New Robotic Techniques improve factory production"
-msgstr "Nuove tecniche robotiche aumentano la produzione della fabbrica"
+msgstr "Nuove tecniche robotiche migliorano la produzione della fabbrica"
 
 #: data/base/messages/resmessages2.rmsg:303
 #: data/base/messages/strings/resstrings.txt:367
@@ -2994,7 +2993,7 @@ msgstr "Aumenta la velocità di produzione della fabbrica"
 #: data/mp/messages/strings/names.txt:845
 #: data/mp/messages/strings/resstrings.txt:418
 msgid "Dedicated Synaptic Link Data Analysis"
-msgstr "Analisi dedicata a collegamento sinaptico"
+msgstr "Analisi a Collegamento Sinaptico Dedicato"
 
 #: data/base/messages/resmessages2.rmsg:324
 #: data/base/messages/strings/names.txt:808
@@ -3003,7 +3002,7 @@ msgstr "Analisi dedicata a collegamento sinaptico"
 #: data/mp/messages/strings/names.txt:818
 #: data/mp/messages/strings/resstrings.txt:428
 msgid "Hardened Base Structure Materials"
-msgstr "Materiali da costruzione blindati"
+msgstr "Materiali da Costruzione Blindati"
 
 #: data/base/messages/resmessages2.rmsg:335
 #: data/base/messages/strings/names.txt:851
@@ -3047,7 +3046,7 @@ msgstr "Tempi di riarmo dei VTOL ridotto"
 #: data/mp/messages/strings/names.txt:853
 #: data/mp/messages/strings/resstrings.txt:450
 msgid "Automated VTOL Rearming"
-msgstr "Riarmo VTOL automatico"
+msgstr "Riarmo VTOL automatizzato"
 
 #: data/base/messages/resmessages2.rmsg:347
 #: data/base/messages/resmessages3.rmsg:424
@@ -3077,14 +3076,14 @@ msgstr "Torre Sensoria migliorata disponibile"
 #: data/mp/messages/resmessages2.rmsg:324
 #: data/mp/messages/strings/resstrings.txt:490
 msgid "New construction techniques improve tower"
-msgstr "Nuove tecniche di costruzione migliorano la Torre Sensoria"
+msgstr "Nuove tecniche di costruzione migliorano la torre"
 
 #: data/base/messages/resmessages2.rmsg:358
 #: data/base/messages/strings/resstrings.txt:461
 #: data/mp/messages/resmessages2.rmsg:325
 #: data/mp/messages/strings/resstrings.txt:491
 msgid "Replaces existing sensor tower"
-msgstr "Rimpiazza l'attutale Torre Sensoria"
+msgstr "Rimpiazza l'esistente Torre Sensoria"
 
 #: data/base/messages/resmessages2.rmsg:359
 #: data/base/messages/resmessagesall.rmsg:51
@@ -3169,7 +3168,7 @@ msgstr "Più lento del cobra"
 #: data/mp/messages/resmessages2.rmsg:376
 #: data/mp/messages/strings/resstrings.txt:577
 msgid "High power costs and slower to produce than Cobra"
-msgstr "Alti costi energetici e più lento del Cobra da produrre"
+msgstr "Alti costi energetici e più lento da produrre rispetto al Cobra"
 
 #: data/base/messages/resmessages2.rmsg:423
 #: data/base/messages/strings/names.txt:945
@@ -3413,7 +3412,7 @@ msgstr "Nuova torretta bomba di prossimità disponbile"
 #: data/mp/messages/resmessages2.rmsg:524
 #: data/mp/messages/strings/resstrings.txt:721
 msgid "Bomb turret explodes in proximity to enemy"
-msgstr "Torretta bomba esplode in prossimità del nemico"
+msgstr "Torretta bomba che esplode in prossimità del nemico"
 
 #: data/base/messages/resmessages2.rmsg:578
 #: data/base/messages/resmessages2.rmsg:589
@@ -3472,7 +3471,7 @@ msgstr "Aggancia le emissioni termiche"
 #: data/mp/messages/resmessages2.rmsg:574
 #: data/mp/messages/strings/resstrings.txt:765
 msgid "Hyper-velocity automatic-cannon firing 88mm rounds"
-msgstr "Cannone da 88mm automatico ad iper velocità"
+msgstr "Cannone automatico da 88mm ad iper velocità"
 
 #: data/base/messages/resmessages2.rmsg:634
 #: data/base/messages/strings/resstrings.txt:732
@@ -3486,7 +3485,7 @@ msgstr "Rimpiazza il cannone medio"
 #: data/mp/messages/resmessages2.rmsg:584
 #: data/mp/messages/strings/resstrings.txt:771
 msgid "76mm hyper-velocity quad-barrel automatic-cannon"
-msgstr "Cannone da 76mm automatico con 4 canne ad alta velocità"
+msgstr "Cannone automatico da 76mm con 4 canne ad alta velocità"
 
 #: data/base/messages/resmessages2.rmsg:654
 #: data/base/messages/strings/resstrings.txt:758
@@ -3600,21 +3599,21 @@ msgstr "Aumenta il danno degli obici"
 #: data/base/messages/strings/resstrings.txt:811
 #: data/mp/messages/strings/resstrings.txt:852
 msgid "Increases Howitzer ROF"
-msgstr "Aumenta il rateo di fuoco degli obicir"
+msgstr "Aumenta il rateo di fuoco degli obici"
 
 #: data/base/messages/resmessages2.rmsg:742
 #: data/base/messages/strings/resstrings.txt:846
 #: data/mp/messages/resmessages2.rmsg:674
 #: data/mp/messages/strings/resstrings.txt:889
 msgid "Tungsten-tipped armor-piercing bullets"
-msgstr "Colpi perforanti con punta di tungsteno"
+msgstr "Proiettili perforanti con punta di tungsteno"
 
 #: data/base/messages/resmessages2.rmsg:753
 #: data/base/messages/strings/resstrings.txt:858
 #: data/mp/messages/resmessages2.rmsg:684
 #: data/mp/messages/strings/resstrings.txt:901
 msgid "Improved chaingun mechanism"
-msgstr "Meccanismo della mitragliatrice migliorati"
+msgstr "Meccanismo della mitragliatrice migliorato"
 
 #: data/base/messages/resmessages2.rmsg:775
 #: data/base/messages/strings/resstrings.txt:906
@@ -3639,7 +3638,7 @@ msgstr "Testata al plastico altamente esplosivo"
 #: data/base/messages/resmessages3.rmsg:16
 #: data/mp/messages/resmessages3.rmsg:14
 msgid "NEXUS Intruder Program analyzed"
-msgstr "Programma Intruso NEXUS analizzato"
+msgstr "Programma d'Intrusione NEXUS analizzato"
 
 #: data/base/messages/resmessages3.rmsg:17
 #: data/mp/messages/resmessages3.rmsg:15
@@ -3758,12 +3757,12 @@ msgstr "Armato con Laser Flashlight"
 #: data/base/messages/resmessages3.rmsg:172
 #: data/mp/messages/resmessages3.rmsg:156
 msgid "Requires cyborg factory to produce"
-msgstr "Richiede la fabbrica di cyborg per essere costruito"
+msgstr "Richiede la fabbrica di cyborg per essere prodotto"
 
 #: data/base/messages/resmessages3.rmsg:181
 #: data/mp/messages/resmessages3.rmsg:164
 msgid "High tensile concrete-plastic composite"
-msgstr "Cemento-plastica in tensione composito"
+msgstr "Composito di cemento-plastica ad alta resistenza"
 
 #: data/base/messages/resmessages3.rmsg:192
 #: data/mp/messages/resmessages3.rmsg:174
@@ -3854,47 +3853,47 @@ msgstr "La turbina a vapore aumenta la produzione di energia"
 #: data/mp/messages/resmessages3.rmsg:344
 #: data/mp/messages/strings/names.txt:848
 msgid "Neural Synapse Research Brain"
-msgstr "Cervello di ricerca a sinapsi neurale"
+msgstr "Cervello di Ricerca a Sinapsi Neurale"
 
 #: data/base/messages/resmessages3.rmsg:390
 #: data/base/messages/strings/names.txt:811
 #: data/mp/messages/resmessages3.rmsg:354
 #: data/mp/messages/strings/names.txt:821
 msgid "Advanced Base Structure Materials"
-msgstr "Materiali da costruzione avanzati"
+msgstr "Materiali da Costruzione Avanzati"
 
 #: data/base/messages/resmessages3.rmsg:401
 #: data/mp/messages/resmessages3.rmsg:364
 msgid "High Density Base Structure Materials"
-msgstr "Materiali da costruzione ad alta densità"
+msgstr "Materiali da Costruzione ad Alta Densità"
 
 #: data/base/messages/resmessages3.rmsg:412
 #: data/base/messages/strings/names.txt:854
 #: data/mp/messages/resmessages3.rmsg:374
 msgid "Advanced VTOL Production"
-msgstr "Produzione di VTOL avanzata"
+msgstr "Produzione di VTOL Avanzata"
 
 #: data/base/messages/resmessages3.rmsg:423
 #: data/base/messages/strings/names.txt:846
 #: data/mp/messages/resmessages3.rmsg:384
 #: data/mp/messages/strings/names.txt:856
 msgid "Robotic VTOL Rearming"
-msgstr "Riarmo VTOL robotizzato"
+msgstr "Riarmo VTOL Robotizzato"
 
 #: data/base/messages/resmessages3.rmsg:434
 #: data/mp/messages/resmessages3.rmsg:394
 msgid "Advanced Engineering Techniques"
-msgstr "Tecnologie d'ingegneria avanzata"
+msgstr "Tecnologie avanzate d'ingegneria"
 
 #: data/base/messages/resmessages3.rmsg:456
 #: data/mp/messages/resmessages3.rmsg:414
 msgid "Advanced fire detection systems"
-msgstr "Sistemi di rilevamento del fuoco avanzati"
+msgstr "Sistemi avanzati di rilevamento del fuoco"
 
 #: data/base/messages/resmessages3.rmsg:467
 #: data/mp/messages/resmessages3.rmsg:424
 msgid "Advanced target recognition systems"
-msgstr "Sistemi di riconoscimento dei bersagli avanzati"
+msgstr "Sistemi avanzati di riconoscimento dei bersagli"
 
 #: data/base/messages/resmessages3.rmsg:478
 #: data/mp/messages/resmessages3.rmsg:434
@@ -3956,7 +3955,7 @@ msgstr "Permette l'autoriparazione in tutti i cyborg"
 #: data/mp/messages/resmessages3.rmsg:455
 #: data/mp/messages/resmessages3.rmsg:465
 msgid "Built-in diagnostic and repair systems"
-msgstr "Diagnostica e sistemi di riparazione costruiti a bordo"
+msgstr "Diagnostica e sistemi di riparazione integrati"
 
 #: data/base/messages/resmessages3.rmsg:502
 #: data/mp/messages/resmessages3.rmsg:456
@@ -4048,17 +4047,17 @@ msgstr "Tutti i VTOL saranno aggiornati automaticamente"
 #: data/base/messages/resmessages3.rmsg:687
 #: data/mp/messages/resmessages3.rmsg:624
 msgid "Computer plots and guides shell to target's position"
-msgstr "Il computer bersaglia e guida il proiettile alla posizione del bersaglio"
+msgstr "Il computer traccia e guida il proiettile alla posizione del bersaglio"
 
 #: data/base/messages/resmessages3.rmsg:698
 #: data/mp/messages/resmessages3.rmsg:634
 msgid "High Explosive Armor Piercing Flak"
-msgstr "Colpi antiaerei perforanti ad alto esplosivo"
+msgstr "Colpi antiaerei Flak perforanti ad alto esplosivo"
 
 #: data/base/messages/resmessages3.rmsg:709
 #: data/mp/messages/resmessages3.rmsg:644
 msgid "Chainfeed loader eradicates jams and improves performance"
-msgstr "Il caricatore a catena elimina i disturbi e migliora le prestazioni"
+msgstr "Il caricatore a catena elimina gli inceppamenti e migliora le prestazioni"
 
 #: data/base/messages/resmessages3.rmsg:720
 #: data/mp/messages/resmessages3.rmsg:654
@@ -4126,7 +4125,7 @@ msgstr "Migliori bersagli: Cyborg"
 #: data/base/messages/resmessages3.rmsg:808
 #: data/mp/messages/resmessages3.rmsg:734
 msgid "Fires pulses of laser light"
-msgstr "Spara impulsi di laser"
+msgstr "Spara impulsi di luce laser"
 
 #: data/base/messages/resmessages3.rmsg:818
 #: data/base/messages/resmessages3.rmsg:829
@@ -4158,7 +4157,7 @@ msgstr "Tutti i laser saranno aggiornati automaticamente"
 #: data/base/messages/resmessages3.rmsg:830
 #: data/mp/messages/resmessages3.rmsg:754
 msgid "Improvement in laser emission density"
-msgstr "Miglioramenti nella densità dell'emissione dei laser"
+msgstr "Miglioramenti nella densità d'emissione dei laser"
 
 #: data/base/messages/resmessages3.rmsg:831
 msgid "Increases Laser damage"
@@ -4284,7 +4283,7 @@ msgstr "Missile pesante terra-aria"
 #: data/mp/messages/resmessages3.rmsg:863
 #: data/mp/messages/resmessages3.rmsg:873
 msgid "New Artillery Missile Turret Available"
-msgstr "Nuova torretta d'artiglieria missilistica"
+msgstr "Nuova torretta d'artiglieria missilistica disponibile"
 
 #: data/base/messages/resmessages3.rmsg:951
 #: data/mp/messages/resmessages3.rmsg:864
@@ -4301,7 +4300,7 @@ msgstr "Migliori bersagli: Strutture e Cyborg"
 #: data/base/messages/resmessages3.rmsg:962
 #: data/mp/messages/resmessages3.rmsg:874
 msgid "High explosive heavy artillery missile"
-msgstr "Missile pesante d'artiglieria ad alto esplosivo"
+msgstr "Missile d'artiglieria pesante ad alto esplosivo"
 
 #: data/base/messages/resmessages3.rmsg:973
 #: data/mp/messages/resmessages3.rmsg:884
@@ -4400,7 +4399,7 @@ msgstr "Nuove opzioni di costruzione disponibili"
 #: data/base/messages/resmessagesall.rmsg:5
 #: data/mp/messages/resmessagesall.rmsg:4
 msgid "Titanium-reinforced concrete"
-msgstr "Cemento rinforzato in anima di titanio"
+msgstr "Cemento rinforzato con anima di titanio"
 
 #: data/base/messages/resmessagesall.rmsg:6
 #: data/mp/messages/resmessagesall.rmsg:5
@@ -4440,7 +4439,7 @@ msgstr "Il VTOL ritorna alla piattaforma selezionata per riarmarsi"
 #: data/base/messages/resmessagesall.rmsg:38
 #: data/mp/messages/resmessagesall.rmsg:34
 msgid "Battlefield repair unit"
-msgstr "Unità di riparazione sul campo"
+msgstr "Unità da riparazione sul campo"
 
 #: data/base/messages/resmessagesall.rmsg:39
 #: data/base/messages/strings/resstrings.txt:445
@@ -4514,7 +4513,7 @@ msgstr "Tutti i sensori saranno aggiornati automaticamente"
 #: data/base/messages/resmessagesall.rmsg:82
 #: data/mp/messages/resmessagesall.rmsg:94
 msgid "Counter-battery tower detects enemy indirect fire batteries"
-msgstr "La Torre di Contro-batteria rileva il fuoco indiretto delle batterie nemiche"
+msgstr "La Torre di Contro-batteria rileva le batterie a fuoco indiretto nemiche"
 
 #: data/base/messages/resmessagesall.rmsg:92
 #: data/mp/messages/resmessagesall.rmsg:113
@@ -4534,7 +4533,7 @@ msgstr "Alti costi energetici e lento da produrre"
 #: data/base/messages/resmessagesall.rmsg:103
 #: data/mp/messages/resmessagesall.rmsg:123
 msgid "New Propulsion Available for Design"
-msgstr "Nuova propulsione disponibile"
+msgstr "Nuova propulsione disponibile per la progettazione"
 
 #: data/base/messages/resmessagesall.rmsg:104
 #: data/mp/messages/resmessagesall.rmsg:124
@@ -4549,7 +4548,7 @@ msgstr "Velocità: VTOL"
 #: data/base/messages/resmessagesall.rmsg:115
 #: data/mp/messages/resmessagesall.rmsg:134
 msgid "Rocket detects and locks on to engine emissions"
-msgstr "I missili localizzano e si agganciano sulle emissioni del motore"
+msgstr "I razzi localizzano e si agganciano sulle emissioni del motore"
 
 #: data/base/messages/resmessagesall.rmsg:126
 #: data/mp/messages/resmessagesall.rmsg:144
@@ -4564,7 +4563,7 @@ msgstr "Missili ad alto esplosivo a punta cava"
 #: data/base/messages/resmessagesall.rmsg:148
 #: data/mp/messages/resmessagesall.rmsg:164
 msgid "Laser designator paints and guides rounds to the target"
-msgstr "Il designatore laser punta e guida i colpi sul bersaglio"
+msgstr "Il designatore laser illumina e guida i colpi sul bersaglio"
 
 #: data/base/messages/strings/cam1strings.txt:3
 #: data/base/sequenceaudio/cam1/c001.txa:12
@@ -4574,7 +4573,7 @@ msgstr "OBIETTIVO: Localizza e recupera la tecnologia della sinapsi neurale"
 #: data/base/messages/strings/cam1strings.txt:4
 #: data/base/sequenceaudio/cam1/c001.txa:13
 msgid "Establish a base, then search for a Pre-Collapse structure."
-msgstr "Stabilisci una base, poi cerca una struttura precedente al Collasso."
+msgstr "Stabilisca una base, poi cerchi una struttura precedente al Collasso."
 
 #: data/base/messages/strings/cam1strings.txt:5
 #: data/base/sequenceaudio/cam1/c001.txa:14
@@ -4591,20 +4590,20 @@ msgstr "Predoni degli Sciacalli sono in avvicinamento alla nostra base."
 
 #: data/base/messages/strings/cam1strings.txt:9
 msgid "Defend the base then destroy the Scavenger camps."
-msgstr "Difendi la base poi distruggi gli accampamenti degli Sciacalli."
+msgstr "Difenda la base poi distrugga gli accampamenti degli Sciacalli."
 
 #: data/base/messages/strings/cam1strings.txt:11
 #: data/base/messages/strings/cam1strings.txt:65
 msgid "ALPHA BASE MISSION: Power Surge Detected"
-msgstr "MISSIONE BASE ALFA: Fonte d'Energia Rilevata"
+msgstr "MISSIONE BASE ALFA: Picco d'Energia Rilevato"
 
 #: data/base/messages/strings/cam1strings.txt:12
 msgid "A power surge has been detected to the south of our position."
-msgstr "Una fonte d'energia è stata localizzata a sud della nostra posizione."
+msgstr "Un picco d'energia è stata localizzato a sud della nostra posizione."
 
 #: data/base/messages/strings/cam1strings.txt:13
 msgid "Investigate and secure the area."
-msgstr "Perlustrare e rendere sicura l'area."
+msgstr "Perlustri e renda sicura l'area."
 
 #: data/base/messages/strings/cam1strings.txt:15
 msgid "ALPHA BASE MISSION: The New Paradigm"
@@ -4612,11 +4611,11 @@ msgstr "MISSIONE BASE ALFA: Il New Paradigm"
 
 #: data/base/messages/strings/cam1strings.txt:16
 msgid "The New Paradigm control superior weapons technology."
-msgstr "Il New Paradigm controlla tecnologie superiori di armamenti."
+msgstr "Il New Paradigm controlla tecnologie di armamento superiori."
 
 #: data/base/messages/strings/cam1strings.txt:17
 msgid "They may have the synaptic link technology, it's vital we retrieve it."
-msgstr "Potrebbero possedere la tecnologia del collegamento sinaptico, è vitale che la recuperiamo."
+msgstr "Potrebbero possedere la tecnologia del collegamento sinaptico, è vitale recuperarla."
 
 #: data/base/messages/strings/cam1strings.txt:19
 msgid "TRANSPORT MISSION: Locate and Recover Artifacts"
@@ -4624,11 +4623,11 @@ msgstr "MISSIONE CON TRASPORTO: Localizza e recupera Manufatti"
 
 #: data/base/messages/strings/cam1strings.txt:20
 msgid "Load an attack force into the transport."
-msgstr "Imbarca una forza d'attacco nel trasporto."
+msgstr "Imbarchi una forza d'attacco nel trasporto."
 
 #: data/base/messages/strings/cam1strings.txt:21
 msgid "On landing, explore the ruins and recover any artifacts."
-msgstr "All'atterraggio, esplora le rovine e recupera qualsiasi manufatto."
+msgstr "All'atterraggio, esplori le rovine e recuperi qualsiasi manufatto."
 
 #: data/base/messages/strings/cam1strings.txt:23
 msgid "TRANSPORT MISSION: Investigate Research Center"
@@ -4636,7 +4635,7 @@ msgstr "MISSIONE CON TRASPORTO: Perlustra il Centro di Ricerca"
 
 #: data/base/messages/strings/cam1strings.txt:24
 msgid "Investigate the area and recover any artifacts present."
-msgstr "Perlustra l'area e recupera qualsiasi manufatto presente."
+msgstr "Perlustri l'area e recuperi qualsiasi manufatto presente."
 
 #: data/base/messages/strings/cam1strings.txt:25
 #: data/base/messages/strings/cam1strings.txt:147
@@ -4649,11 +4648,11 @@ msgstr "MISSIONE CON TRASPORTO: Segnali Criptati Localizzati"
 
 #: data/base/messages/strings/cam1strings.txt:28
 msgid "Take a scout force to investigate these signals."
-msgstr "Prendi una forza di esplorazione e cerca maggiori informazioni su questi segnali."
+msgstr "Prenda una forza di esplorazione e ottenga maggiori informazioni su questi segnali."
 
 #: data/base/messages/strings/cam1strings.txt:29
 msgid "Use your trucks to build defenses at your LZ."
-msgstr "Use i tuoi camion per costruire delle difese sulla tua Zona di Atterraggio."
+msgstr "Usi i camion per costruire delle difese alla vostra Zona di Atterraggio."
 
 #: data/base/messages/strings/cam1strings.txt:31
 msgid "TRANSPORT MISSION: Enemy Transmissions Detected"
@@ -4661,11 +4660,11 @@ msgstr "MISSIONE CON TRASPORTO: Localizzate Trasmissioni Nemiche"
 
 #: data/base/messages/strings/cam1strings.txt:32
 msgid "Scout the designated area for enemy research facilities."
-msgstr "Esplora la zona indicata in cerca di centi di ricerca nemici."
+msgstr "Esplori la zona indicata in cerca di centri di ricerca nemici."
 
 #: data/base/messages/strings/cam1strings.txt:33
 msgid "Proceed to LZ#2. Do not engage the enemy at this time."
-msgstr "Procedi alla Zona di Atterraggio numero 2. Non ingaggiare il nemico ora."
+msgstr "Proceda alla Zona di Atterraggio numero 2. Non ingaggi il nemico ora."
 
 #: data/base/messages/strings/cam1strings.txt:35
 msgid "TRANSPORT MISSION: Synaptic Link Location"
@@ -4677,7 +4676,7 @@ msgstr "Il New Paradigm sta analizzando la tecnologia del collegamento sinaptico
 
 #: data/base/messages/strings/cam1strings.txt:37
 msgid "Assemble an attack team and recover the synaptic link technology."
-msgstr "Metti insieme una squadra d'attacco e recupera la tecnologia del collegamento sinaptico."
+msgstr "Metta insieme una squadra d'attacco e recuperi la tecnologia del collegamento sinaptico."
 
 #: data/base/messages/strings/cam1strings.txt:39
 msgid "TRANSPORT MISSION: New Objectives"
@@ -4689,7 +4688,7 @@ msgstr "Il New Paradigm è in cerca di manufatti nelle vicinanze."
 
 #: data/base/messages/strings/cam1strings.txt:41
 msgid "Intercept them. Do not let any enemies exit this area."
-msgstr "Intercettali. Non permettere ad alcun nemico di uscire da questa area."
+msgstr "Li intercetti. Non permetta ad alcun nemico di uscire da questa area."
 
 #: data/base/messages/strings/cam1strings.txt:43
 msgid "TRANSPORT MISSION: Enemy Base Under Construction"
@@ -4697,11 +4696,11 @@ msgstr "MISSIONE CON TRASPORTO: Base Nemica in Costruzione"
 
 #: data/base/messages/strings/cam1strings.txt:44
 msgid "Enemy forces are establishing a forward base at this location."
-msgstr "Le forze nemiche stanno stabilendo una base avanzata in questa posizione."
+msgstr "Forze nemiche stanno stabilendo una base avanzata in questa posizione."
 
 #: data/base/messages/strings/cam1strings.txt:45
 msgid "Eradicate the base and secure the area."
-msgstr "Distruggi la base e rendi sicura l'area."
+msgstr "Distrugga la base e renda sicura l'area."
 
 #: data/base/messages/strings/cam1strings.txt:48
 msgid "ALPHA BASE MISSION: Establish a Forward Base"
@@ -4709,11 +4708,11 @@ msgstr "MISSIONE BASE ALFA: Stabilisci una Base Avanzata"
 
 #: data/base/messages/strings/cam1strings.txt:49
 msgid "Establish a forward base on the plateau."
-msgstr "Stabilisci una base in posizione avanzata sull'altopiano."
+msgstr "Stabilisca una base in posizione avanzata sull'altopiano."
 
 #: data/base/messages/strings/cam1strings.txt:50
 msgid "Build defensive structures."
-msgstr "Costruisci strutture difensive."
+msgstr "Costruisca strutture difensive."
 
 #: data/base/messages/strings/cam1strings.txt:52
 msgid "ALPHA BASE MISSION: Counter Attack"
@@ -4721,11 +4720,11 @@ msgstr "MISSIONE BASE ALFA: Contrattacco"
 
 #: data/base/messages/strings/cam1strings.txt:53
 msgid "Enemy forces are approaching from the east and north."
-msgstr "Forze nemiche sono in avvicinamento da est e da nord."
+msgstr "Forze nemiche si stanno avvicinando da est e da nord."
 
 #: data/base/messages/strings/cam1strings.txt:54
 msgid "Hold the bases and repulse any attacks."
-msgstr "Tieni le basi e respingi ogno attacco."
+msgstr "Mantenga le basi e respinga ogni attacco."
 
 #: data/base/messages/strings/cam1strings.txt:56
 msgid "ALPHA BASE MISSION: Incoming Transmission"
@@ -4755,7 +4754,7 @@ msgstr "Congratulazioni Comandante."
 
 #: data/base/messages/strings/cam1strings.txt:67
 msgid "We now have a further task for you."
-msgstr "Abbiamo nuovi compiti per te."
+msgstr "Abbiamo nuovi compiti per lei."
 
 #: data/base/messages/strings/cam1strings.txt:70
 msgid "ALPHA BASE MISSION: Locate and Recover Artifacts"
@@ -4799,7 +4798,7 @@ msgstr "RELAZIONE INTELLIGENCE DELLA BASE ALFA: Attacco Nemico"
 
 #: data/base/messages/strings/cam1strings.txt:89
 msgid "We are detecting an enemy attack force at this location."
-msgstr "Localizziamo una forza nemica d'attacco in questa posizione."
+msgstr "Stiamo rilevando una forza d'attacco nemica in questa posizione."
 
 #: data/base/messages/strings/cam1strings.txt:93
 msgid "PRIMARY OBJECTIVE"
@@ -4807,11 +4806,11 @@ msgstr "OBIETTIVO PRIMARIO"
 
 #: data/base/messages/strings/cam1strings.txt:94
 msgid "This structure is your primary objective."
-msgstr "Questa struttura è il tuo obiettivo primario."
+msgstr "Questa struttura è il vostro obiettivo primario."
 
 #: data/base/messages/strings/cam1strings.txt:95
 msgid "Search for and recover any artifacts here."
-msgstr "Cerca e recupera qualsiasi manufatti qui."
+msgstr "Cerchi e recuperi qualsiasi manufatto qui."
 
 #: data/base/messages/strings/cam1strings.txt:97
 msgid "ENEMY LZ"
@@ -4819,7 +4818,7 @@ msgstr "ZONA DI ATTERRAGGIO NEMICA"
 
 #: data/base/messages/strings/cam1strings.txt:98
 msgid "Destroy this LZ to prevent enemy landings."
-msgstr "Distruggi questa Zona di Atterraggio per prevenire atteraggi nemici."
+msgstr "Distrugga questa Zona di Atterraggio per prevenire atteraggi nemici."
 
 #: data/base/messages/strings/cam1strings.txt:101
 msgid "ALPHA BASE INTELLIGENCE REPORT: NEXUS"
@@ -4843,7 +4842,7 @@ msgstr "La tecnologia del collegamento sinaptico era in questa posizione ma è s
 
 #: data/base/messages/strings/cam1strings.txt:111
 msgid "Establish a forward base then continue the search for the synaptic link."
-msgstr "Stabilisci una base in posizione avanzata poi continua la ricerca per il collegamento sinaptico."
+msgstr "Stabilisca una base in posizione avanzata poi continui la ricerca per il collegamento sinaptico."
 
 #: data/base/messages/strings/cam1strings.txt:114
 msgid "INCOMING TRANSMISSION"
@@ -4867,11 +4866,11 @@ msgstr "Distruggi la Base Nemica"
 
 #: data/base/messages/strings/cam1strings.txt:124
 msgid "Assemble an attack force and board the transport."
-msgstr "Organizza una forza d'attacco e caricala nel trasporto."
+msgstr "Organizzi una forza d'attacco e la carichi sul trasporto."
 
 #: data/base/messages/strings/cam1strings.txt:125
 msgid "Destroy the base and recover any artifacts present."
-msgstr "Distruggi la base e recupera ogni manufatto presente."
+msgstr "Distrugga la base e recuperi ogni manufatto presente."
 
 #: data/base/messages/strings/cam1strings.txt:128
 msgid "The synaptic link technology has been recovered!"
@@ -4879,11 +4878,11 @@ msgstr "La tecnologia del collegmaento sinaptico è stata recuperata!"
 
 #: data/base/messages/strings/cam1strings.txt:129
 msgid "Initial research confirms it will be of great benefit to the Project."
-msgstr "Ricerce iniziali confermano che sarà un gran beneficio per il Project."
+msgstr "Ricerce iniziali confermano che sarà di gran beneficio per il Project."
 
 #: data/base/messages/strings/cam1strings.txt:132
 msgid "Base Beta is under heavy attack, they may need assistance."
-msgstr "La base Beta è sotto un pesante attacco, potrebbero aver bisogno del nostro aiuto."
+msgstr "La base Beta è sotto pesante attacco, potrebbero aver bisogno di assistenza."
 
 #: data/base/messages/strings/cam1strings.txt:133
 msgid "We will send further updates as they arrive."
@@ -4907,7 +4906,7 @@ msgstr "Esegui la ricerca del modulo di energia."
 
 #: data/base/messages/strings/cam1strings.txt:142
 msgid "Then use a truck to upgrade your power generator with the module."
-msgstr "Poi utilizza un camion per aggiornare il tuo generatore d'energia con il modulo."
+msgstr "Poi utilizzi un camion per aggiornare il vostro generatore d'energia con il modulo."
 
 #: data/base/messages/strings/cam1strings.txt:145
 msgid "SCAVENGER BASE DETECTED"
@@ -4972,7 +4971,7 @@ msgstr "Sono disponibili nuove tecnologie."
 
 #: data/base/messages/strings/cam2strings.txt:14
 msgid "We are currently detecting coded bitstream signals."
-msgstr "Stiamo attualmente localizzando segnali in codice"
+msgstr "Stiamo attualmente rilevando segnali bitstream in codice."
 
 #: data/base/messages/strings/cam2strings.txt:15
 #: data/base/messages/strings/cam2strings.txt:39
@@ -4990,11 +4989,11 @@ msgstr "Il nostro trasporto contenente unità dalla Base Alfa è stato abbattuto
 
 #: data/base/messages/strings/cam2strings.txt:23
 msgid "It is under attack from The Collective at this location."
-msgstr "È sotto un attacco del Collective in questa posizione."
+msgstr "È sotto attacco del Collective in questa posizione."
 
 #: data/base/messages/strings/cam2strings.txt:24
 msgid "Assemble a rescue team to recover the transport and its cargo."
-msgstr "Organizza una squadra di recupero e recupera il trasporto con il suo carico."
+msgstr "Organizzi una squadra di recupero e recuperi il trasporto con il suo carico."
 
 #: data/base/messages/strings/cam2strings.txt:27
 msgid "IN-FLIGHT BRIEFING"
@@ -5010,7 +5009,7 @@ msgstr "Riteniamo che si trovi in una base aerea precedente al Collasso in quest
 
 #: data/base/messages/strings/cam2strings.txt:32
 msgid "Team Beta under heavy attack"
-msgstr "La squadra Beta è sotto un pesante attacco"
+msgstr "La squadra Beta sotto un pesante attacco"
 
 #: data/base/messages/strings/cam2strings.txt:37
 msgid "BETA BASE MISSION: Hold at all costs"
@@ -5018,7 +5017,7 @@ msgstr "MISSIONE BASE BETA: Resistere ad ogni costo"
 
 #: data/base/messages/strings/cam2strings.txt:38
 msgid "We are detecting coded bitstream signals from the Collective."
-msgstr "Stiamo localizzando segnali in codice da parte del Collective."
+msgstr "Stiamo localizzando segnali bitstream in codice da parte del Collective."
 
 #: data/base/messages/strings/cam2strings.txt:42
 msgid "BETA BASE MISSION: Hold At All Costs"
@@ -5026,7 +5025,7 @@ msgstr "MISSIONE BASE BETA: Resistere ad Ogni Costo"
 
 #: data/base/messages/strings/cam2strings.txt:43
 msgid "We are detecting ground and aerial forces from the north."
-msgstr "Stiamo localizzando forze aeree e terrestri provenienti dal nord."
+msgstr "Stiamo rilevando forze aeree e terrestri provenienti da nord."
 
 #: data/base/messages/strings/cam2strings.txt:44
 msgid "Hold your position and repulse these attacks, then eradicate the enemy's northern base."
@@ -5042,11 +5041,11 @@ msgstr "Dati provenienti dalla base del Collective indicano la presenza del prog
 
 #: data/base/messages/strings/cam2strings.txt:49
 msgid "Before NEXUS switched itself off-line we accessed the following."
-msgstr "Prima che NEXUS si spegnesse e andasse offline siamo acceduti ai seguenti dati."
+msgstr "Prima che NEXUS andasse offline siamo acceduti ai seguenti dati."
 
 #: data/base/messages/strings/cam2strings.txt:51
 msgid "An enemy commander is collecting a shipment from NEXUS at this location."
-msgstr "Un comandante nemico sta terminando le operazioni di imbarco da NEXUS in questa posizione."
+msgstr "Un comandante nemico sta ricevendo un carico da NEXUS in questa località."
 
 #: data/base/messages/strings/cam2strings.txt:52
 msgid "Once at the LZ, eradicate the enemy commander and recover the shipment."
@@ -5054,7 +5053,7 @@ msgstr "Una volta raggiunta la Zona di Atterraggio, sconfiggi il comandante nemi
 
 #: data/base/messages/strings/cam2strings.txt:53
 msgid "Then return to the LZ."
-msgstr "Poi ritorna alla Zona di Atterraggio."
+msgstr "Poi ritorni alla Zona di Atterraggio."
 
 #: data/base/messages/strings/cam2strings.txt:55
 msgid "Disturbing news regarding NASDA."
@@ -5067,7 +5066,7 @@ msgstr "MISSIONE CON TRASPORTO: Cerca e Distruggi il Convoglio"
 
 #: data/base/messages/strings/cam2strings.txt:59
 msgid "The shipment you recovered was a decoy."
-msgstr "Il carico che hai recuperato era un tranello."
+msgstr "Il carico che hai recuperato era un'esca."
 
 #: data/base/messages/strings/cam2strings.txt:60
 msgid "We have detected another convoy proceeding along the river."
@@ -5075,28 +5074,28 @@ msgstr "Abbiamo localizzato un altro convoglio che procede lungo il fiume."
 
 #: data/base/messages/strings/cam2strings.txt:64
 msgid "You are to intercept the convoy and recover its cargo."
-msgstr "Devi intercettare il convoglio e recuperare il carico."
+msgstr "Deve intercettare il convoglio e recuperare il carico."
 
 #: data/base/messages/strings/cam2strings.txt:65
 msgid "Enemy VTOLs are likely to be flying close escort."
-msgstr "VTOL nemici volano probabilmente vicino al convoglio come scorta."
+msgstr "É probabile che VTOL nemici stiano volando come scorta."
 
 #: data/base/messages/strings/cam2strings.txt:68
 #: data/base/messages/strings/cam2strings.txt:72
 msgid "TRANSPORT MISSION: Rescue civilians from Containment Camp"
-msgstr "MISSIONE CON TRASPORTO: Salva i civili dal campo di Contenimento"
+msgstr "MISSIONE CON TRASPORTO: Salva i civili dal Campo di Contenimento"
 
 #: data/base/messages/strings/cam2strings.txt:69
 msgid "The Collective are processing and exterminating civilians at this base."
-msgstr "Il Collective sta processando e sterminando civili alla propria base."
+msgstr "Il Collective sta processando e sterminando civili in questa base."
 
 #: data/base/messages/strings/cam2strings.txt:73
 msgid "You are to rescue the civilians."
-msgstr "Devi salvare i civili."
+msgstr "Deve salvare i civili."
 
 #: data/base/messages/strings/cam2strings.txt:74
 msgid "Then destroy the camp."
-msgstr "Poi distruggi l'accampamento."
+msgstr "Poi distrugga l'accampamento."
 
 #: data/base/messages/strings/cam2strings.txt:77
 msgid "BETA BASE MISSION: Destroy Enemy Air Base and Recover VTOLs."
@@ -5112,11 +5111,11 @@ msgstr "MISSIONE BASE BETA: Distruggi la base aerea nemica e recupera i VTOL."
 
 #: data/base/messages/strings/cam2strings.txt:82
 msgid "The location of the enemy airbase is here; this is your primary objective."
-msgstr "La locazione della base aerea nemica è qui; questo è il tuo obiettivo primario."
+msgstr "La locazione della base aerea nemica è qui; questo è il vostro obiettivo primario."
 
 #: data/base/messages/strings/cam2strings.txt:83
 msgid "Eradicate all Collective forces and recover all artifacts."
-msgstr "Distruggi tutte le forze del Collective e recupera ogni manufatto."
+msgstr "Distrugga tutte le forze del Collective e recuperi ogni manufatto."
 
 #: data/base/messages/strings/cam2strings.txt:86
 #: data/base/messages/strings/cam2strings.txt:91
@@ -5125,11 +5124,11 @@ msgstr "MISSIONE SECONDARIA: Distruggi o Allontana il Trasporto Nemico"
 
 #: data/base/messages/strings/cam2strings.txt:87
 msgid "The Collective are rounding up all civilians in this area."
-msgstr "Il Collective sta circondando i civili in quest'area."
+msgstr "Il Collective sta radunando i civili in quest'area."
 
 #: data/base/messages/strings/cam2strings.txt:88
 msgid "They are then flying them to an unknown location."
-msgstr "Li stanno trasportando in una posizione ignota."
+msgstr "Li sta poi trasportando ad una località ignota."
 
 #: data/base/messages/strings/cam2strings.txt:92
 msgid "Destroy or drive off The Collective's transport."
@@ -5137,7 +5136,7 @@ msgstr "Distruggi o allontana il trasporto del Colelctive."
 
 #: data/base/messages/strings/cam2strings.txt:93
 msgid "Rescue as many civilians as possible."
-msgstr "Salva più civili possibile."
+msgstr "Salvi quanti più civili sia possibile."
 
 #: data/base/messages/strings/cam2strings.txt:96
 #: data/base/messages/strings/cam2strings.txt:101
@@ -5154,11 +5153,11 @@ msgstr "Devono essere fermati."
 
 #: data/base/messages/strings/cam2strings.txt:102
 msgid "Proceed from the LZ to the reactor and destroy it."
-msgstr "Procedi al reattore dalla Zona di Atterraggio e distruggilo."
+msgstr "Proceda dalla Zona di Atterraggio al reattore e lo distrugga"
 
 #: data/base/messages/strings/cam2strings.txt:103
 msgid "Do not allow the Collective to bring the reactor on-line."
-msgstr "Non consentire al Collective di attivare il reattore."
+msgstr "Non consenta al Collective di attivare il reattore."
 
 #: data/base/messages/strings/cam2strings.txt:106
 msgid "BETA BASE MISSION: Capture NASDA Central"
@@ -5172,7 +5171,7 @@ msgstr "Cattura la centrale NASDA prima che NEXUS e il Collective possano utiliz
 #: data/base/messages/strings/cam2strings.txt:116
 #: data/base/messages/strings/cam2strings.txt:121
 msgid "TRANSPORT MISSION: Satellite Uplink Site"
-msgstr "MISSIONE CON TRASPORTO: Sito del Satellite di Aggiornamento"
+msgstr "MISSIONE CON TRASPORTO: Sito del Collegamento Satellitare"
 
 #: data/base/messages/strings/cam2strings.txt:112
 msgid "NEXUS is searching for still functioning memory banks."
@@ -5184,19 +5183,19 @@ msgstr "Parte della sua coscienza si è mossa in un remoto sito di controllo NAS
 
 #: data/base/messages/strings/cam2strings.txt:117
 msgid "We are detecting transmissions from this site that are reaching high orbit."
-msgstr "Stiamo decriptando trasmissioni da questo sito che stanno raggiungendo l'alta orbita."
+msgstr "Stiamo rilevando trasmissioni da questo sito che stanno raggiungendo l'orbita alta"
 
 #: data/base/messages/strings/cam2strings.txt:118
 msgid "NEXUS has now reconnected itself with the NASDA satellites."
-msgstr "NEXUS si sta ora riconnettendo con i satelliti NASDA."
+msgstr "NEXUS si sta è ora riconnesso con i satelliti NASDA."
 
 #: data/base/messages/strings/cam2strings.txt:122
 msgid "Use the transport to carry a strike force to this site."
-msgstr "Usa il trasporto per condurre una forza d'assalto in questo sito."
+msgstr "Usi il trasporto per portare una forza d'assalto a questo sito."
 
 #: data/base/messages/strings/cam2strings.txt:123
 msgid "Destroy the site and return to your base."
-msgstr "Distruggi il sito e ritorna alla tua base."
+msgstr "Distrugga il sito e ritorni alla sua base."
 
 #: data/base/messages/strings/cam2strings.txt:126
 msgid "TRANSPORT MISSION: Destroy Enemy SAM Sites"
@@ -5204,11 +5203,11 @@ msgstr "MISSIONE CON TRASPORTO: Distruggi i siti SAM nemici"
 
 #: data/base/messages/strings/cam2strings.txt:127
 msgid "If you are to escape, eradicate the surface-to-air missile sites around your base."
-msgstr "Se devi scappare, distruggi i missili terra-aria intorno alla tua base."
+msgstr "Se deve scappare, distrugga i missili terra-aria intorno alla sua base."
 
 #: data/base/messages/strings/cam2strings.txt:128
 msgid "Fly to the LZ, then head overland to destroy the SAM sites."
-msgstr "Vola al Punto di Atterraggio, poi muoviti per via di terra per distruggere i siti SAM."
+msgstr "Vola al Punto di Atterraggio, poi si muova via terra per distruggere i siti SAM."
 
 #: data/base/messages/strings/cam2strings.txt:131
 #: data/base/messages/strings/cam2strings.txt:136
@@ -5221,15 +5220,15 @@ msgstr "Possiamo confermare che un missile è diretto verso la Base Alfa."
 
 #: data/base/messages/strings/cam2strings.txt:133
 msgid "You are to establish a safe haven for evacuation of Beta Base."
-msgstr "Devi stabilire un rifugio sicuro per l'evacuazione della Base Beta."
+msgstr "Deve stabilire un rifugio sicuro per l'evacuazione della Base Beta."
 
 #: data/base/messages/strings/cam2strings.txt:137
 msgid "Eradicate any enemy and secure the area."
-msgstr "Distruggi ogni nemico e rendi sicura la zona."
+msgstr "Distrugga ogni nemico e renda sicura la zona."
 
 #: data/base/messages/strings/cam2strings.txt:138
 msgid "Once a safe haven is established, return to the LZ for further orders."
-msgstr "Una volta che il rifugio è stato stabilito, ritorna alla Zona di Atterraggio per ulteriori ordini."
+msgstr "Una volta che il rifugio è stato stabilito, ritorni alla Zona di Atterraggio per ulteriori ordini."
 
 #: data/base/messages/strings/cam2strings.txt:141
 #: data/base/messages/strings/cam2strings.txt:146
@@ -5239,7 +5238,7 @@ msgstr "MISSIONE BASE BETA: Evacuazione!"
 
 #: data/base/messages/strings/cam2strings.txt:142
 msgid "Commander, we have grave news."
-msgstr "Comandante, abbiamo importanti notizie."
+msgstr "Comandante, abbiamo gravi notizie."
 
 #: data/base/messages/strings/cam2strings.txt:143
 msgid "Alpha base has been destroyed by nuclear missile attack."
@@ -5247,7 +5246,7 @@ msgstr "La base Alfa è stata distrutta da un attacco missilistico nucleare."
 
 #: data/base/messages/strings/cam2strings.txt:147
 msgid "The Collective are unaware of the nuclear attack and have air units heading for your base."
-msgstr "Il Collective non è a conoscenza dell'attacco nucleare e sta dirigendo delle unità aeree verso la tua base."
+msgstr "Il Collective non è a conoscenza dell'attacco nucleare e sta dirigendo delle unità aeree verso la vostra base."
 
 #: data/base/messages/strings/cam2strings.txt:148
 msgid "This message was intercepted a few moments ago..."
@@ -5255,7 +5254,7 @@ msgstr "Questo messaggio è stato intercettato pochi momenti fa..."
 
 #: data/base/messages/strings/cam2strings.txt:152
 msgid "You must transport as many of your forces as possible."
-msgstr "Devi trasportare più forze possibili."
+msgstr "Deve trasportare più forze possibili."
 
 #: data/base/messages/strings/cam2strings.txt:153
 #: data/base/messages/strings/cam3strings.txt:30
@@ -5276,21 +5275,21 @@ msgstr "Congratulazioni per la sua riuscita evacuazione della Base Beta."
 #: data/base/messages/strings/cam3strings.txt:6
 #: data/base/sequenceaudio/cam3/c003.txa:6
 msgid "NEXUS has gained access to nuclear weapons and is determined to destroy the Project."
-msgstr "NEXUS ha ottenuto l'accesso ad armi nucleari e è determinato a distruggere il Project."
+msgstr "NEXUS ha ottenuto l'accesso ad armi nucleari ed è determinato a distruggere il Project."
 
 #: data/base/messages/strings/cam3strings.txt:9
 msgid "Take your forces to the Northern Sector"
-msgstr "Porta le tue forze nel settore settentrionale"
+msgstr "Porti le sue forze nel settore settentrionale"
 
 #: data/base/messages/strings/cam3strings.txt:10
 #: data/base/sequenceaudio/cam3/c003.txa:15
 msgid "Once at the mountains secure an LZ. Then establish a forward base."
-msgstr "Una volta alle montagne rendi sicura una Zona di Atterraggio. Poi stabilisci una base in posizione avanzata."
+msgstr "Una volta alle montagne renda sicura una Zona di Atterraggio. Poi stabilisca una base in posizione avanzata."
 
 #: data/base/messages/strings/cam3strings.txt:11
 #: data/base/sequenceaudio/cam3/c003.txa:16
 msgid "Team Gamma will contact you there."
-msgstr "La squadra Gamma ti contatterà lì."
+msgstr "La squadra Gamma vi contatterà lì."
 
 #: data/base/messages/strings/cam3strings.txt:14
 msgid "TRANSPORT MISSION: Establish A Forward Base"
@@ -5299,11 +5298,11 @@ msgstr "MISSIONE CON TRASPORTO: Stabilisci una Base Avanzata"
 #: data/base/messages/strings/cam3strings.txt:15
 #: data/base/sequenceaudio/cam3/c003.txt:7
 msgid "Commander, the success of the Project lies with you."
-msgstr "Comandante, il successo del Project dipende da voi."
+msgstr "Comandante, il successo del Project dipende da lei."
 
 #: data/base/messages/strings/cam3strings.txt:16
 msgid "Secure an LZ, then establish a forward base."
-msgstr "Rendi sicura una Zona di Atterraggio, poi stabilisci una base in posizione avanzata."
+msgstr "Renda sicura una Zona di Atterraggio, poi stabilisca una base in posizione avanzata."
 
 #: data/base/messages/strings/cam3strings.txt:19
 #: data/base/messages/strings/cam3strings.txt:28
@@ -5330,7 +5329,7 @@ msgstr "Download delle Coordinate Completato."
 
 #: data/base/messages/strings/cam3strings.txt:29
 msgid "Secure your LZ, then head overland to destroy the missile silo."
-msgstr "Rendi sicura la Zona di Atterraggio, poi vai a distruggere le basi missilistiche via terra."
+msgstr "Renda sicura la Zona di Atterraggio, poi proceda via terra per distruggere il silo missilistico."
 
 #: data/base/messages/strings/cam3strings.txt:33
 #: data/base/messages/strings/cam3strings.txt:38
@@ -5339,11 +5338,11 @@ msgstr "MISSIONE SETTORE SETTENTRIONALE: Esplosione Atomica"
 
 #: data/base/messages/strings/cam3strings.txt:34
 msgid "All units must escape the area before the warhead detonates."
-msgstr "Tutte le unità devono fuggire dalla zona prima che le testate siano detonate."
+msgstr "Tutte le unità devono fuggire dalla zona prima che le testate detonino."
 
 #: data/base/messages/strings/cam3strings.txt:35
 msgid "Air-lift by transport is not possible. You'll have to head overland."
-msgstr "Non è possibile il trasporto. Dovrai procedere via terra."
+msgstr "Non è possibile il trasporto. Dovrete procedere via terra."
 
 #: data/base/messages/strings/cam3strings.txt:39
 msgid "The mountain range to the east should shield you from the blast."
@@ -5351,11 +5350,11 @@ msgstr "La catena montuosa ad est dovrebbe proteggervi dall'esplosione."
 
 #: data/base/messages/strings/cam3strings.txt:40
 msgid "The valley is your only chance of escape."
-msgstr "La vallata è la vostra unica speranza di fuga."
+msgstr "La valle è la vostra unica speranza di fuga."
 
 #: data/base/messages/strings/cam3strings.txt:43
 msgid "AWAY TEAM UPDATE"
-msgstr "AGGIORNAMENTO DELLA SQUADRA"
+msgstr "AGGIORNAMENTO DELLA SQUADRA IN MISSIONE"
 
 #: data/base/messages/strings/cam3strings.txt:44
 msgid "All communication with the away team was lost after the nuclear explosions."
@@ -5371,7 +5370,7 @@ msgstr "MISSIONE SETTORE SETTENTRIONALE: Assisti la Squadra Gamma"
 
 #: data/base/messages/strings/cam3strings.txt:49
 msgid "You are to assist Team Gamma."
-msgstr "Devi assistere la Squadra Gamma."
+msgstr "Dovete assistere la Squadra Gamma."
 
 #: data/base/messages/strings/cam3strings.txt:50
 msgid "On reaching Gamma Base, help secure the area from further NEXUS attacks."
@@ -5403,15 +5402,15 @@ msgstr "Porta una forza d'attacco a queste coordinate e valuta la situazione."
 
 #: data/base/messages/strings/cam3strings.txt:66
 msgid "Determine whether they are Team Alpha. If so, rescue and escort them back to the LZ."
-msgstr "Determina se sono loro la Squadra Alfa. Se è così, recuperateli e riportateli alla Zona di Atterraggio."
+msgstr "Determina se sono loro la Squadra Alfa. Se è così, salvateli e scortateli alla Zona di Atterraggio."
 
 #: data/base/messages/strings/cam3strings.txt:68
 msgid "This group are part of Team Alpha, Rescue them and escort them to the LZ."
-msgstr "Questo gruppo è parte della Squadra Alfa, Recuperali e portali alla Zona di Atterraggio."
+msgstr "Questo gruppo è parte della Squadra Alfa, salvateli e portateli alla Zona di Atterraggio."
 
 #: data/base/messages/strings/cam3strings.txt:71
 msgid "NORTHERN SECTOR MISSION: Team Alpha Debrief"
-msgstr "MISSIONE SETTORE SETTENTRIONALE: Informazioni dalla Squadra Alfa"
+msgstr "MISSIONE SETTORE SETTENTRIONALE: Debriefing della Squadra Alfa"
 
 #: data/base/messages/strings/cam3strings.txt:72
 msgid "Team Alpha power transfer in progress."
@@ -5435,7 +5434,7 @@ msgstr "Difendi la base e ....... i ......."
 
 #: data/base/messages/strings/cam3strings.txt:81
 msgid "Search and destroy ...."
-msgstr "Ricerca e distruggi ...."
+msgstr "Cerca e distruggi ...."
 
 #: data/base/messages/strings/cam3strings.txt:84
 msgid "TRANSPORT MISSION: Ambush NEXUS Forces"
@@ -5443,7 +5442,7 @@ msgstr "MISSIONE CON TRASPORTO: Agguato alle forze NEXUS"
 
 #: data/base/messages/strings/cam3strings.txt:85
 msgid "Commander, your decisive actions halted the spread of NEXUS."
-msgstr "Comandante, le tue azioni decisive hanno bloccato l'allargamento NEXUS."
+msgstr "Comandante, le tue azioni decisive hanno bloccato l'espansione di NEXUS."
 
 #: data/base/messages/strings/cam3strings.txt:86
 msgid "Before NEXUS was expelled, we intercepted this message - Decoding completed."
@@ -5487,7 +5486,7 @@ msgstr "Questa è la nostra attuale posizione."
 
 #: data/base/messages/strings/cam3strings.txt:106
 msgid "Take control of our forces and lead us."
-msgstr "Prendi il controllo delle nostre forze e guidaci."
+msgstr "Assuma il controllo delle nostre forze e ci guidi."
 
 #: data/base/messages/strings/cam3strings.txt:109
 msgid "Control transfer successful."
@@ -5511,7 +5510,7 @@ msgstr "Dicono di essere liberi da NEXUS, e offrono la loro base come sito delle
 
 #: data/base/messages/strings/cam3strings.txt:118
 msgid "Base coordinates download in progress."
-msgstr "Download in corso delle coordinate della base."
+msgstr "Download delle coordinate della base in corso."
 
 #: data/base/messages/strings/cam3strings.txt:121
 msgid "NORTHERN SECTOR MISSION: Laser Satellites"
@@ -5701,7 +5700,7 @@ msgstr "Centro di Ricerca Precedente al Collasso"
 
 #: data/base/messages/strings/genstrings.txt:17
 msgid "En-route To Mission Site"
-msgstr "In transito al Sito della Missione"
+msgstr "In Rotta al Sito della Missione"
 
 #: data/base/messages/strings/genstrings.txt:18
 msgid "Mission Failed"
@@ -5924,7 +5923,7 @@ msgstr "Cannone Pesante Python Cingoli"
 #: data/mp/messages/strings/names.txt:199
 #: data/mp/messages/strings/names.txt:1437
 msgid "Command Turret Python Tracks"
-msgstr "Torretta di comando Python Cingoli"
+msgstr "Torretta di Comando Python Cingoli"
 
 #: data/base/messages/strings/names.txt:199
 #: data/mp/messages/strings/names.txt:202
@@ -5949,17 +5948,17 @@ msgstr "Buggy"
 #: data/base/messages/strings/names.txt:203
 #: data/mp/messages/strings/names.txt:206
 msgid "Rocket Buggy"
-msgstr "Buggy con Missili"
+msgstr "Buggy con Razzi"
 
 #: data/base/messages/strings/names.txt:204
 #: data/mp/messages/strings/names.txt:207
 msgid "Rocket Jeep"
-msgstr "Jeep con Missili"
+msgstr "Jeep con Razzi"
 
 #: data/base/messages/strings/names.txt:205
 #: data/mp/messages/strings/names.txt:208
 msgid "Fire Truck"
-msgstr "Camion dei pompieri"
+msgstr "Camion dei Pompieri"
 
 #: data/base/messages/strings/names.txt:206
 #: data/mp/messages/strings/names.txt:209
@@ -5969,7 +5968,7 @@ msgstr "Camion Pick-Up"
 #: data/base/messages/strings/names.txt:207
 #: data/mp/messages/strings/names.txt:210
 msgid "Cannon Fire Truck"
-msgstr "Camion dei pompieri con Cannone"
+msgstr "Camion dei Pompieri con Cannone"
 
 #: data/base/messages/strings/names.txt:208
 #: data/mp/messages/strings/names.txt:211
@@ -6019,18 +6018,18 @@ msgstr "Lancer"
 #: data/mp/messages/strings/names.txt:223
 #: data/mp/messages/strings/names.txt:533
 msgid "Heavy Gunner"
-msgstr "Cannoniere pesante"
+msgstr "Cannoniere Pesante"
 
 #: data/base/messages/strings/names.txt:219
 #: data/mp/messages/strings/names.txt:222
 msgid "Cyborg Flamer"
-msgstr "Cyborg Lanciafiamme"
+msgstr "Cyborg con Inceneritore"
 
 #: data/base/messages/strings/names.txt:222
 #: data/mp/messages/strings/names.txt:155
 #: data/mp/messages/strings/names.txt:225
 msgid "Assault Gunner"
-msgstr "Mitragliere D'assalto"
+msgstr "Mitragliere d'Assalto"
 
 #: data/base/messages/strings/names.txt:226
 #: data/mp/messages/strings/names.txt:229
@@ -6259,7 +6258,7 @@ msgstr "Torre CB VTOL"
 #: data/base/messages/strings/names.txt:373
 #: data/mp/messages/strings/names.txt:370
 msgid "Uplink Sensor"
-msgstr "Sensore di collegamento"
+msgstr "Sensore di Collegamento"
 
 #: data/base/messages/strings/names.txt:375
 #: data/mp/messages/strings/names.txt:373
@@ -6319,7 +6318,7 @@ msgstr "Generatore di Potenza"
 #: data/mp/messages/strings/names.txt:386
 #: data/mp/messages/strings/names.txt:826
 msgid "Power Module"
-msgstr "Modulo di potenza"
+msgstr "Modulo di Potenza"
 
 #: data/base/messages/strings/names.txt:389
 #: data/mp/messages/strings/names.txt:387
@@ -6348,7 +6347,7 @@ msgstr "Centro di Riparazione"
 #: data/base/messages/strings/names.txt:394
 #: data/mp/messages/strings/names.txt:392
 msgid "Command Relay Center"
-msgstr "Centro Trasmissione di Comando"
+msgstr "Centro Trasmissione di Comandi"
 
 #: data/base/messages/strings/names.txt:395
 #: data/mp/messages/strings/names.txt:393
@@ -6376,7 +6375,7 @@ msgstr "Postazione con Inferno"
 #: data/base/messages/strings/names.txt:773
 #: data/mp/messages/strings/names.txt:402
 msgid "Inferno Hardpoint"
-msgstr "Postazione corazzata con Inferno"
+msgstr "Postazione Corazzata con Inferno"
 
 #: data/base/messages/strings/names.txt:404
 #: data/base/messages/strings/names.txt:747
@@ -6398,26 +6397,26 @@ msgstr "Postazione con Hellstorm"
 #: data/base/messages/strings/names.txt:715
 #: data/mp/messages/strings/names.txt:725
 msgid "Tornado AA Flak Site"
-msgstr "Sito contraereo Tornado"
+msgstr "Sito Contraereo Flak Tornado"
 
 #: data/base/messages/strings/names.txt:410
 #: data/base/messages/strings/names.txt:712
 msgid "Cyclone AA Flak Site"
-msgstr "Sito contraereo Cyclone"
+msgstr "Sito Contraereo Flak Cyclone"
 
 #: data/base/messages/strings/names.txt:411
 #: data/base/messages/strings/names.txt:713
 #: data/mp/messages/strings/names.txt:410
 #: data/mp/messages/strings/names.txt:723
 msgid "Hurricane AA Site"
-msgstr "Sito contraereo Hurricane"
+msgstr "Sito Contraereo Hurricane"
 
 #: data/base/messages/strings/names.txt:412
 #: data/base/messages/strings/names.txt:714
 #: data/mp/messages/strings/names.txt:411
 #: data/mp/messages/strings/names.txt:724
 msgid "Whirlwind AA Site"
-msgstr "Sito contraereo Whirlwind"
+msgstr "Sito Contraereo Whirlwind"
 
 #: data/base/messages/strings/names.txt:414
 #: data/base/messages/strings/names.txt:726
@@ -6429,26 +6428,26 @@ msgstr "Batteria di Razzi Ripple"
 #: data/base/messages/strings/names.txt:417
 #: data/mp/messages/strings/names.txt:416
 msgid "Assault Cannon Guard Tower"
-msgstr "Torretta di Guardia con Cannone d'Assalto"
+msgstr "Torre di Guardia con Cannone d'Assalto"
 
 #: data/base/messages/strings/names.txt:418
 #: data/base/messages/strings/names.txt:1369
 msgid "Assault Gun Guard Tower"
-msgstr "Torretta di Guardia con Mitragliatrice d'assalto"
+msgstr "Torre di Guardia con Mitragliatrice d'Assalto"
 
 #: data/base/messages/strings/names.txt:419
 #: data/base/messages/strings/names.txt:770
 #: data/mp/messages/strings/names.txt:418
 #: data/mp/messages/strings/names.txt:780
 msgid "Assault Gun Hardpoint"
-msgstr "Postazione corazzata con Mitragliatrice d'assalto"
+msgstr "Postazione corazzata con Mitragliatrice d'Assalto"
 
 #: data/base/messages/strings/names.txt:420
 #: data/base/messages/strings/names.txt:771
 #: data/mp/messages/strings/names.txt:419
 #: data/mp/messages/strings/names.txt:781
 msgid "Assault Cannon Hardpoint"
-msgstr "Postazione corazzata con Cannone d'assalto"
+msgstr "Postazione corazzata con Cannone d'Assalto"
 
 #: data/base/messages/strings/names.txt:426
 #: data/base/messages/strings/names.txt:892
@@ -6466,7 +6465,7 @@ msgstr "Torre VTOL CB"
 
 #: data/base/messages/strings/names.txt:428
 msgid "VTOL Radar Tower"
-msgstr "Torretta Radar VTOL"
+msgstr "Torre Radar VTOL"
 
 #: data/base/messages/strings/names.txt:431
 #: data/base/messages/strings/names.txt:764
@@ -6599,7 +6598,7 @@ msgstr "Bunker con Lancer"
 #: data/mp/messages/strings/names.txt:455
 #: data/mp/messages/strings/names.txt:762
 msgid "Tank Traps"
-msgstr "Trappole per carri"
+msgstr "Trappole per Carri"
 
 #: data/base/messages/strings/names.txt:455
 #: data/base/messages/strings/names.txt:457
@@ -6608,14 +6607,14 @@ msgstr "Trappole per carri"
 #: data/mp/messages/strings/names.txt:456
 #: data/mp/messages/strings/names.txt:763
 msgid "Dragon's Teeth"
-msgstr "Denti di drago"
+msgstr "Denti di Drago"
 
 #: data/base/messages/strings/names.txt:460
 #: data/base/messages/strings/names.txt:842
 #: data/mp/messages/strings/names.txt:459
 #: data/mp/messages/strings/names.txt:852
 msgid "VTOL Rearming Pad"
-msgstr "Piattaforma di riarmo VTOL"
+msgstr "Piattaforma di Riarmo VTOL"
 
 #: data/base/messages/strings/names.txt:463
 #: data/base/messages/strings/names.txt:484
@@ -6659,7 +6658,7 @@ msgstr "Torre con Missile Scourge"
 #: data/mp/messages/strings/names.txt:469
 #: data/mp/messages/strings/names.txt:772
 msgid "Needle Gun Tower"
-msgstr "Torre con Cannone ad ago"
+msgstr "Torre con Cannone ad Ago"
 
 #: data/base/messages/strings/names.txt:471
 #: data/base/messages/strings/names.txt:743
@@ -6846,7 +6845,7 @@ msgstr "Postazione con Pepperpot"
 #: data/mp/messages/strings/names.txt:518
 #: data/mp/messages/strings/names.txt:1154
 msgid "Needle Gun"
-msgstr "Cannone ad ago"
+msgstr "Cannone ad Ago"
 
 #: data/base/messages/strings/names.txt:520
 #: data/base/messages/strings/names.txt:1143
@@ -6916,26 +6915,26 @@ msgstr "Tank Killer VTOL"
 #: data/mp/messages/strings/names.txt:543
 #: data/mp/messages/strings/names.txt:992
 msgid "Tornado Flak Turret"
-msgstr "Torretta contraerea Tornado"
+msgstr "Torretta Contraerea Tornado"
 
 #: data/base/messages/strings/names.txt:545
 #: data/base/messages/strings/names.txt:981
 msgid "Cyclone Flak Turret"
-msgstr "Torretta contraerea Cyclone"
+msgstr "Torretta Contraerea Cyclone"
 
 #: data/base/messages/strings/names.txt:550
 #: data/base/messages/strings/names.txt:983
 #: data/mp/messages/strings/names.txt:550
 #: data/mp/messages/strings/names.txt:995
 msgid "Whirlwind AA Turret"
-msgstr "Torretta contraerea Whirlwind"
+msgstr "Torretta Contraerea Whirlwind"
 
 #: data/base/messages/strings/names.txt:551
 #: data/base/messages/strings/names.txt:982
 #: data/mp/messages/strings/names.txt:551
 #: data/mp/messages/strings/names.txt:994
 msgid "Hurricane AA Turret"
-msgstr "Torretta contraerea Hurricane"
+msgstr "Torretta Contraerea Hurricane"
 
 #: data/base/messages/strings/names.txt:560
 #: data/mp/messages/strings/names.txt:560
@@ -6975,7 +6974,7 @@ msgstr "Mitragliatrice Pesante VTOL"
 #: data/base/messages/strings/names.txt:568
 #: data/mp/messages/strings/names.txt:568
 msgid "VTOL Assault Gun"
-msgstr "Mitragliatrice d'assalto VTOL"
+msgstr "Mitragliatrice d'Assalto VTOL"
 
 #: data/base/messages/strings/names.txt:569
 #: data/mp/messages/strings/names.txt:569
@@ -7023,7 +7022,7 @@ msgstr "Muro del Collective"
 
 #: data/base/messages/strings/names.txt:582
 msgid "Collective CWall"
-msgstr "Angolo di muro del collective"
+msgstr "Angolo di Muro del Collective"
 
 #: data/base/messages/strings/names.txt:604
 msgid "NEXUS Wall"
@@ -7116,92 +7115,92 @@ msgstr "Collegamento Sinaptico"
 #: data/base/messages/strings/names.txt:651
 #: data/mp/messages/strings/names.txt:651
 msgid "Missile Targeting Codes"
-msgstr "Codici di lancio dei missili"
+msgstr "Codici di Lancio dei Missili"
 
 #: data/base/messages/strings/names.txt:652
 #: data/mp/messages/strings/names.txt:652
 msgid "Second Level Missile Targeting Codes"
-msgstr "2° livello dei codici di lancio dei missili"
+msgstr "2° Livello dei Codici di Lancio dei Missili"
 
 #: data/base/messages/strings/names.txt:653
 #: data/mp/messages/strings/names.txt:653
 msgid "Third Level Missile Firing Codes"
-msgstr "3° livello dei codici di lancio dei missili"
+msgstr "3° Livello dei Codici di Lancio dei Missili"
 
 #: data/base/messages/strings/names.txt:655
 #: data/mp/messages/strings/names.txt:655
 msgid "Cyborg Thermal Armor"
-msgstr "Armatura termica Cyborg"
+msgstr "Armatura Termica Cyborg"
 
 #: data/base/messages/strings/names.txt:656
 #: data/mp/messages/strings/names.txt:656
 msgid "Cyborg Thermal Armor Mk2"
-msgstr "Armatura termica Cyborg Mk2"
+msgstr "Armatura Termica Cyborg Mk2"
 
 #: data/base/messages/strings/names.txt:657
 #: data/mp/messages/strings/names.txt:657
 msgid "Cyborg Thermal Armor Mk3"
-msgstr "Armatura termica Cyborg Mk3"
+msgstr "Armatura Termica Cyborg Mk3"
 
 #: data/base/messages/strings/names.txt:658
 #: data/mp/messages/strings/names.txt:658
 msgid "Cyborg High Intensity Thermal Armor"
-msgstr "Armatura termica ad alta intensità Cyborg"
+msgstr "Armatura Termica ad Alta Intensità Cyborg"
 
 #: data/base/messages/strings/names.txt:659
 #: data/mp/messages/strings/names.txt:659
 msgid "Cyborg High Intensity Thermal Armor Mk2"
-msgstr "Armatura termica ad alta intensità Cyborg Mk2"
+msgstr "Armatura Termica ad Alta Intensità Cyborg Mk2"
 
 #: data/base/messages/strings/names.txt:660
 #: data/mp/messages/strings/names.txt:660
 msgid "Cyborg High Intensity Thermal Armor Mk3"
-msgstr "Armatura termica ad alta intensità Cyborg Mk3"
+msgstr "Armatura Termica ad Alta Intensità Cyborg Mk3"
 
 #: data/base/messages/strings/names.txt:662
 #: data/mp/messages/strings/names.txt:662
 msgid "Cyborg Composite Alloys"
-msgstr "Leghe composite Cyborg"
+msgstr "Leghe Composite Cyborg"
 
 #: data/base/messages/strings/names.txt:663
 #: data/mp/messages/strings/names.txt:663
 msgid "Cyborg Composite Alloys Mk2"
-msgstr "Leghe composite Cyborg Mk2"
+msgstr "Leghe Composite Cyborg Mk2"
 
 #: data/base/messages/strings/names.txt:664
 #: data/mp/messages/strings/names.txt:664
 msgid "Cyborg Composite Alloys Mk3"
-msgstr "Leghe composite Cyborg Mk3"
+msgstr "Leghe Composite Cyborg Mk3"
 
 #: data/base/messages/strings/names.txt:665
 #: data/mp/messages/strings/names.txt:665
 msgid "Cyborg Dense Composite Alloys"
-msgstr "Leghe composite dense Cyborg"
+msgstr "Leghe Composite Dense Cyborg"
 
 #: data/base/messages/strings/names.txt:666
 #: data/mp/messages/strings/names.txt:666
 msgid "Cyborg Dense Composite Alloys Mk2"
-msgstr "Leghe composite dense Cyborg Mk2"
+msgstr "Leghe Composite Dense Mk2"
 
 #: data/base/messages/strings/names.txt:667
 #: data/mp/messages/strings/names.txt:667
 msgid "Cyborg Dense Composite Alloys Mk3"
-msgstr "Leghe composite dense Cyborg Mk3"
+msgstr "Leghe Composite Dense Cyborg Mk3"
 
 #: data/base/messages/strings/names.txt:668
 #: data/mp/messages/strings/names.txt:668
 msgid "Cyborg Superdense Composite Alloys"
-msgstr "Leghe composite superdense Cyborg "
+msgstr "Leghe Composite Superdense Cyborg "
 
 #: data/base/messages/strings/names.txt:669
 #: data/mp/messages/strings/names.txt:669
 msgid "Cyborg Superdense Composite Alloys Mk2"
-msgstr "Leghe composite superdense Cyborg Mk2"
+msgstr "Leghe Composite Superdense Cyborg Mk2"
 
 #: data/base/messages/strings/names.txt:670
 #: data/mp/messages/strings/names.txt:670
 msgid "Cyborg Superdense Composite Alloys Mk3"
-msgstr "Leghe composite superdense Cyborg Mk3"
+msgstr "Leghe Composite Superdense Cyborg Mk3"
 
 #: data/base/messages/strings/names.txt:673
 #: data/mp/messages/strings/names.txt:679
@@ -7211,7 +7210,7 @@ msgstr "Cyborg con Bunker Blaster"
 #: data/base/messages/strings/names.txt:674
 #: data/mp/messages/strings/names.txt:680
 msgid "Heavy Gunner Cyborg"
-msgstr "Cannoniere pesante"
+msgstr "Cannoniere Pesante"
 
 #: data/base/messages/strings/names.txt:675
 #: data/mp/messages/strings/names.txt:681
@@ -7256,32 +7255,32 @@ msgstr "Cannoniere Pesante con JetPack"
 #: data/base/messages/strings/names.txt:685
 #: data/mp/messages/strings/names.txt:691
 msgid "Jump Lancer"
-msgstr "JetPack Lancer"
+msgstr "Cyborg con Lancer JetPack"
 
 #: data/base/messages/strings/names.txt:686
 #: data/mp/messages/strings/names.txt:692
 msgid "Jump Assault Gunner"
-msgstr "Mitragliere d'assalto con JetPack"
+msgstr "Mitragliere d'Assalto con JetPack"
 
 #: data/base/messages/strings/names.txt:687
 #: data/mp/messages/strings/names.txt:693
 msgid "Jump Needle Gunner"
-msgstr "JetPack con Cannone ad Ago"
+msgstr "Cybrog con Cannone ad Ago JetPack"
 
 #: data/base/messages/strings/names.txt:688
 #: data/mp/messages/strings/names.txt:694
 msgid "Jump Scourge"
-msgstr "JetPack Scourge"
+msgstr "Cyborg con Scourge JetPack"
 
 #: data/base/messages/strings/names.txt:689
 #: data/mp/messages/strings/names.txt:695
 msgid "Jump Flashlight Gunner"
-msgstr "JetPack Flashlight"
+msgstr "Cyborg con Flashlight JetPack"
 
 #: data/base/messages/strings/names.txt:691
 #: data/mp/messages/strings/names.txt:697
 msgid "Cyborg Jump Pack"
-msgstr "Jet Pack  per Cyborg"
+msgstr "Jet Pack per Cyborg"
 
 #: data/base/messages/strings/names.txt:697
 #: data/mp/messages/strings/names.txt:703
@@ -7341,7 +7340,7 @@ msgstr "Plascrete Mk3"
 #: data/base/messages/strings/names.txt:717
 #: data/base/messages/strings/names.txt:1373
 msgid "HPV Cannon Emplacement"
-msgstr "Postazione con cannone ad ipervelocità"
+msgstr "Postazione con Cannone ad Ipervelocità"
 
 #: data/base/messages/strings/names.txt:720
 #: data/base/messages/strings/names.txt:1371
@@ -7392,12 +7391,12 @@ msgstr "Postazione con Cannone a Massa"
 
 #: data/base/messages/strings/names.txt:744
 msgid "Assault Cannon Emplacement"
-msgstr "Postazione con Cannone d'assalto"
+msgstr "Postazione con Cannone d'Assalto"
 
 #: data/base/messages/strings/names.txt:746
 #: data/mp/messages/strings/names.txt:417
 msgid "Assault Gun Emplacement"
-msgstr "Postazione con Mitragliatrice d'assalto"
+msgstr "Postazione con Mitragliatrice d'Assalto"
 
 #: data/base/messages/strings/names.txt:749
 #: data/base/messages/strings/names.txt:1363
@@ -7415,7 +7414,7 @@ msgstr "Sito SAM Vindicator"
 
 #: data/base/messages/strings/names.txt:756
 msgid "Heavy Machinegun Guard Tower"
-msgstr "Torretta di Guardia Rinforzata con mitragliatrice pesante"
+msgstr "Torretta di Guardia Rinforzata con Mitragliatrice Pesante"
 
 #: data/base/messages/strings/names.txt:758
 msgid "Lancer Guard Tower"
@@ -7430,253 +7429,253 @@ msgstr "Torre di Guardia con Minirazzi"
 #: data/mp/messages/strings/names.txt:782
 #: data/mp/messages/strings/names.txt:1397
 msgid "Scourge Missile Hardpoint"
-msgstr "Postazione corazzata con Missile Scoruge"
+msgstr "Postazione Corazzata con Missile Scoruge"
 
 #: data/base/messages/strings/names.txt:774
 #: data/base/messages/strings/names.txt:1380
 #: data/mp/messages/strings/names.txt:784
 #: data/mp/messages/strings/names.txt:1395
 msgid "Tank Killer Hardpoint"
-msgstr "Postazione corazzata con Tank Killer"
+msgstr "Postazione Corazzata con Tank Killer"
 
 #: data/base/messages/strings/names.txt:775
 #: data/base/messages/strings/names.txt:1381
 msgid "HPV Cannon Hardpoint"
-msgstr "Postazione corazzata con Cannone ad Ipervelocità"
+msgstr "Postazione Corazzata con Cannone ad Ipervelocità"
 
 #: data/base/messages/strings/names.txt:778
 #: data/base/messages/strings/names.txt:1383
 #: data/mp/messages/strings/names.txt:788
 #: data/mp/messages/strings/names.txt:1398
 msgid "Gauss Cannon Hardpoint"
-msgstr "Postazione corazzata con Cannone Gauss"
+msgstr "Postazione Corazzata con Cannone Gauss"
 
 #: data/base/messages/strings/names.txt:780
 #: data/mp/messages/strings/names.txt:790
 msgid "Command Relay Post"
-msgstr "Ripetitore di comandi"
+msgstr "Ripetitore di Comandi"
 
 #: data/base/messages/strings/names.txt:784
 msgid "Automated Cyborg Production Mk2"
-msgstr "Produzione di cyborg automatizzata Mk2"
+msgstr "Produzione di Cyborg Automatizzata Mk2"
 
 #: data/base/messages/strings/names.txt:785
 msgid "Automated Cyborg Production Mk3"
-msgstr "Produzione di cyborg automatizzata Mk3"
+msgstr "Produzione di Cyborg Automatizzata Mk3"
 
 #: data/base/messages/strings/names.txt:787
 msgid "Robotic Cyborg Production Mk2"
-msgstr "Produzione di Cyborg robotizzata Mk2"
+msgstr "Produzione di Cyborg Robotizzata Mk2"
 
 #: data/base/messages/strings/names.txt:788
 msgid "Robotic Cyborg Production Mk3"
-msgstr "Produzione di Cyborg robotizzata Mk3"
+msgstr "Produzione di Cyborg Robotizzata Mk3"
 
 #: data/base/messages/strings/names.txt:789
 #: data/mp/messages/resmessagesall.rmsg:624
 msgid "Advanced Cyborg Production"
-msgstr "Produzione di Cyborg avanzata"
+msgstr "Produzione di Cyborg Avanzata"
 
 #: data/base/messages/strings/names.txt:790
 msgid "Advanced Cyborg Production Mk2"
-msgstr "Produzione di Cyborg avanzata Mk2"
+msgstr "Produzione di Cyborg Avanzata Mk2"
 
 #: data/base/messages/strings/names.txt:791
 msgid "Advanced Cyborg Production Mk3"
-msgstr "Produzione di Cyborg avanzata Mk3"
+msgstr "Produzione di Cyborg Avanzata Mk3"
 
 #: data/base/messages/strings/names.txt:795
 msgid "Automated Factory Production Mk2"
-msgstr "Produzione della fabbrica automatizzata Mk2"
+msgstr "Produzione Automatizzata della Fabbrica Mk2"
 
 #: data/base/messages/strings/names.txt:796
 msgid "Automated Factory Production Mk3"
-msgstr "Produzione della fabbrica automatizzata Mk3"
+msgstr "Produzione Automatizzata della Fabbrica Mk3"
 
 #: data/base/messages/strings/names.txt:797
 msgid "Robotic Factory Production"
-msgstr "Produzione robotizzata"
+msgstr "Produzione Robotizzata della Fabbrica"
 
 #: data/base/messages/strings/names.txt:798
 msgid "Robotic Factory Production Mk2"
-msgstr "Produzione robotizzata Mk2"
+msgstr "Produzione Robotizzata della Fabbrica Mk2"
 
 #: data/base/messages/strings/names.txt:799
 msgid "Robotic Factory Production Mk3"
-msgstr "Produzione robotizzata Mk3"
+msgstr "Produzione Robotizzata della Fabbrica Mk3"
 
 #: data/base/messages/strings/names.txt:800
 #: data/mp/messages/resmessagesall.rmsg:614
 msgid "Advanced Factory Production"
-msgstr "Produzione della fabbrica avanzata"
+msgstr "Produzione Avanzata della Fabbrica"
 
 #: data/base/messages/strings/names.txt:801
 msgid "Advanced Factory Production Mk2"
-msgstr "Produzione della fabbrica avanzata Mk2"
+msgstr "Produzione Avanzata della Fabbrica Mk2"
 
 #: data/base/messages/strings/names.txt:802
 msgid "Advanced Factory Production Mk3"
-msgstr "Produzione della fabbrica avanzata Mk3"
+msgstr "Produzione Avanzata della Fabbrica Mk3"
 
 #: data/base/messages/strings/names.txt:806
 #: data/mp/messages/strings/names.txt:816
 msgid "Reinforced Base Structure Materials Mk2"
-msgstr "Materiali da costruzione rinforzati Mk2"
+msgstr "Materiali da Costruzione Rinforzati Mk2"
 
 #: data/base/messages/strings/names.txt:807
 #: data/mp/messages/strings/names.txt:817
 msgid "Reinforced Base Structure Materials Mk3"
-msgstr "Materiali da costruzione rinforzati Mk3"
+msgstr "Materiali da Costruzione Rinforzati Mk3"
 
 #: data/base/messages/strings/names.txt:809
 #: data/mp/messages/strings/names.txt:819
 msgid "Hardened Base Structure Materials Mk2"
-msgstr "Materiali da costruzione blindati Mk2"
+msgstr "Materiali da Costruzione Blindati Mk2"
 
 #: data/base/messages/strings/names.txt:810
 #: data/mp/messages/strings/names.txt:820
 msgid "Hardened Base Structure Materials Mk3"
-msgstr "Materiali da costruzione blindati Mk3"
+msgstr "Materiali da Costruzione Blindati Mk3"
 
 #: data/base/messages/strings/names.txt:812
 #: data/mp/messages/strings/names.txt:822
 msgid "Advanced Base Structure Materials Mk2"
-msgstr "Materiali da costruzione avanzati Mk2"
+msgstr "Materiali da Costruzione Avanzati Mk2"
 
 #: data/base/messages/strings/names.txt:813
 #: data/mp/messages/strings/names.txt:823
 msgid "Advanced Base Structure Materials Mk3"
-msgstr "Materiali da costruzione avanzati Mk3"
+msgstr "Materiali da Costruzione Avanzati Mk3"
 
 #: data/base/messages/strings/names.txt:817
 #: data/mp/messages/strings/names.txt:827
 msgid "Gas Turbine Generator"
-msgstr "Generatore a turbina a gas"
+msgstr "Generatore a Turbina a Gas"
 
 #: data/base/messages/strings/names.txt:818
 #: data/mp/messages/strings/names.txt:828
 msgid "Vapor Turbine Generator"
-msgstr "Generatore a turbina a vapore"
+msgstr "Generatore a Turbina a Vapore"
 
 #: data/base/messages/strings/names.txt:820
 #: data/base/messages/strings/names.txt:1449
 #: data/mp/messages/strings/names.txt:830
 #: data/mp/messages/strings/names.txt:1464
 msgid "Repair Facility"
-msgstr "Centro di riparazione"
+msgstr "Centro di Riparazione"
 
 #: data/base/messages/strings/names.txt:821
 #: data/mp/messages/strings/names.txt:831
 msgid "Automated Repair Facility"
-msgstr "Centro di riparazione automatizzato"
+msgstr "Centro di Riparazione Automatizzato"
 
 #: data/base/messages/strings/names.txt:822
 msgid "Automated Repair Facility Upgrade Mk2"
-msgstr "Centro di riparazione automatizzato Mk2"
+msgstr "Centro di Riparazione Automatizzato Mk2"
 
 #: data/base/messages/strings/names.txt:823
 msgid "Automated Repair Facility Upgrade Mk3"
-msgstr "Centro di riparazione automatizzato Mk3"
+msgstr "Centro di Riparazione Automatizzato Mk3"
 
 #: data/base/messages/strings/names.txt:824
 msgid "Robotic Repair Facility Upgrade"
-msgstr "Centro di riparazione robotizzato"
+msgstr "Centro di Riparazione Robotizzato"
 
 #: data/base/messages/strings/names.txt:825
 msgid "Robotic Repair Facility Upgrade Mk2"
-msgstr "Centro di riparazione robotizzato Mk2"
+msgstr "Centro di Riparazione Robotizzato Mk2"
 
 #: data/base/messages/strings/names.txt:826
 msgid "Robotic Repair Facility Upgrade Mk3"
-msgstr "Centro di riparazione robotizzato Mk3"
+msgstr "Centro di Riparazione Robotizzato Mk3"
 
 #: data/base/messages/strings/names.txt:827
 msgid "Advanced Repair Facility Upgrade"
-msgstr "Centro di riparazione avanzato"
+msgstr "Centro di Riparazione Avanzato"
 
 #: data/base/messages/strings/names.txt:828
 msgid "Advanced Repair Facility Upgrade Mk2"
-msgstr "Centro di riparazione avanzato Mk2"
+msgstr "Centro di Riparazione Avanzato Mk2"
 
 #: data/base/messages/strings/names.txt:829
 msgid "Advanced Repair Facility Upgrade Mk3"
-msgstr "Centro di riparazione avanzato Mk3"
+msgstr "Centro di Riparazione Avanzato Mk3"
 
 #: data/base/messages/strings/names.txt:832
 #: data/mp/messages/strings/names.txt:842
 msgid "Synaptic Link Data Analysis"
-msgstr "Analisi a collegamento sinaptico"
+msgstr "Analisi a Collegamento Sinaptico"
 
 #: data/base/messages/strings/names.txt:833
 #: data/mp/messages/strings/names.txt:843
 msgid "Synaptic Link Data Analysis Mk2"
-msgstr "Analisi a collegamento sinaptico Mk2"
+msgstr "Analisi a Collegamento Sinaptico Mk2"
 
 #: data/base/messages/strings/names.txt:834
 #: data/mp/messages/strings/names.txt:844
 msgid "Synaptic Link Data Analysis Mk3"
-msgstr "Analisi a collegamento sinaptico Mk3"
+msgstr "Analisi a Collegamento Sinaptico Mk3"
 
 #: data/base/messages/strings/names.txt:836
 #: data/mp/messages/strings/names.txt:846
 msgid "Dedicated Synaptic Link Data Analysis Mk2"
-msgstr "Analisi dedicata a collegamento sinaptico Mk2"
+msgstr "Analisi a Collegamento Sinaptico Dedicato Mk2"
 
 #: data/base/messages/strings/names.txt:837
 #: data/mp/messages/strings/names.txt:847
 msgid "Dedicated Synaptic Link Data Analysis Mk3"
-msgstr "Analisi dedicata a collegamento sinaptico Mk3"
+msgstr "Analisi a Collegamento Sinaptico Dedicato Mk3"
 
 #: data/base/messages/strings/names.txt:839
 #: data/mp/messages/strings/names.txt:849
 msgid "Neural Synapse Research Brain Mk2"
-msgstr "Cervello di ricerca a sinapsi neurale Mk2"
+msgstr "Cervello di Ricerca a Sinapsi Neurale Mk2"
 
 #: data/base/messages/strings/names.txt:840
 #: data/mp/messages/strings/names.txt:850
 msgid "Neural Synapse Research Brain Mk3"
-msgstr "Cervello di ricerca a sinapsi neurale Mk3"
+msgstr "Cervello di Ricerca a Sinapsi Neurale Mk3"
 
 #: data/base/messages/strings/names.txt:844
 #: data/mp/messages/strings/names.txt:854
 msgid "Automated VTOL Rearming Mk2"
-msgstr "Riarmo VTOL automatico Mk2"
+msgstr "Riarmo VTOL Automatizzato Mk2"
 
 #: data/base/messages/strings/names.txt:845
 #: data/mp/messages/strings/names.txt:855
 msgid "Automated VTOL Rearming Mk3"
-msgstr "Riarmo VTOL automatico Mk3"
+msgstr "Riarmo VTOL Automatizzato Mk3"
 
 #: data/base/messages/strings/names.txt:847
 #: data/mp/messages/strings/names.txt:857
 msgid "Robotic VTOL Rearming Mk2"
-msgstr "Riarmo VTOL robotizzato Mk2"
+msgstr "Riarmo VTOL Robotizzato Mk2"
 
 #: data/base/messages/strings/names.txt:848
 #: data/mp/messages/strings/names.txt:858
 msgid "Robotic VTOL Rearming Mk3"
-msgstr "Riarmo VTOL robotizzato Mk3"
+msgstr "Riarmo VTOL Robotizzato Mk3"
 
 #: data/base/messages/strings/names.txt:849
 #: data/mp/messages/strings/names.txt:859
 msgid "Robotic VTOL Rearming Mk4"
-msgstr "Riarmo VTOL robotizzato Mk4"
+msgstr "Riarmo VTOL Robotizzato Mk4"
 
 #: data/base/messages/strings/names.txt:852
 msgid "Robotic VTOL Production Mk2"
-msgstr "Produzione di VTOL robotizzata Mk2"
+msgstr "Produzione di VTOL Robotizzata Mk2"
 
 #: data/base/messages/strings/names.txt:853
 msgid "Robotic VTOL Production Mk3"
-msgstr "Produzione di VTOL robotizzata Mk3"
+msgstr "Produzione di VTOL Robotizzata Mk3"
 
 #: data/base/messages/strings/names.txt:855
 msgid "Advanced VTOL Production Mk2"
-msgstr "Produzione di VTOL avanzata Mk2"
+msgstr "Produzione di VTOL Avanzata Mk2"
 
 #: data/base/messages/strings/names.txt:856
 msgid "Advanced VTOL Production Mk3"
-msgstr "Produzione di VTOL avanzata Mk3"
+msgstr "Produzione di VTOL Avanzata Mk3"
 
 #: data/base/messages/strings/names.txt:858
 #: data/mp/messages/strings/names.txt:868
@@ -7686,12 +7685,12 @@ msgstr "I cyborg si autoriparano"
 #: data/base/messages/strings/names.txt:859
 #: data/mp/messages/strings/names.txt:869
 msgid "Automated Cyborg Repair Mk2"
-msgstr "Riparazione Cyborg automatizzata Mk2"
+msgstr "Riparazione Cyborg Automatizzata Mk2"
 
 #: data/base/messages/strings/names.txt:860
 #: data/mp/messages/strings/names.txt:870
 msgid "Automated Cyborg Repair Mk3"
-msgstr "Riparazione Cyborg automatizzata Mk3"
+msgstr "Riparazione Cyborg Automatizzata Mk3"
 
 #: data/base/messages/strings/names.txt:862
 #: data/mp/messages/strings/names.txt:872
@@ -7701,12 +7700,12 @@ msgstr "Le difese si autoriparano"
 #: data/base/messages/strings/names.txt:863
 #: data/mp/messages/strings/names.txt:873
 msgid "Automated Defenses Repair Mk2"
-msgstr "Riparazione Difese automatizzata Mk2"
+msgstr "Riparazione Difese Automatizzata Mk2"
 
 #: data/base/messages/strings/names.txt:864
 #: data/mp/messages/strings/names.txt:874
 msgid "Automated Defenses Repair Mk3"
-msgstr "Riparazione Difese automatizzata Mk3"
+msgstr "Riparazione Difese Automatizzata Mk3"
 
 #: data/base/messages/strings/names.txt:866
 #: data/mp/messages/strings/names.txt:876
@@ -7716,12 +7715,12 @@ msgstr "Le strutture si autoriparano"
 #: data/base/messages/strings/names.txt:867
 #: data/mp/messages/strings/names.txt:877
 msgid "Automated Base Structure Repair Mk2"
-msgstr "Riparazione Strutture automatizzata Mk2"
+msgstr "Riparazione Strutture Automatizzata Mk2"
 
 #: data/base/messages/strings/names.txt:868
 #: data/mp/messages/strings/names.txt:878
 msgid "Automated Base Structure Repair Mk3"
-msgstr "Riparazione Strutture automatizzata Mk3"
+msgstr "Riparazione Strutture Automatizzata Mk3"
 
 #: data/base/messages/strings/names.txt:870
 #: data/mp/messages/strings/names.txt:880
@@ -7731,22 +7730,22 @@ msgstr "I veicoli si autoriparano"
 #: data/base/messages/strings/names.txt:871
 #: data/mp/messages/strings/names.txt:881
 msgid "Automated Vehicle Repair Mk2"
-msgstr "Riparazione Veicoli automatizzata Mk2"
+msgstr "Riparazione Veicoli Automatizzata Mk2"
 
 #: data/base/messages/strings/names.txt:872
 #: data/mp/messages/strings/names.txt:882
 msgid "Automated Vehicle Repair Mk3"
-msgstr "Riparazione Veicoli automatizzata Mk3"
+msgstr "Riparazione Veicoli Automatizzata Mk3"
 
 #: data/base/messages/strings/names.txt:874
 #: data/mp/messages/strings/names.txt:886
 msgid "Sensor Upgrade"
-msgstr "Miglioramento dei sensori"
+msgstr "Miglioramento dei Sensori"
 
 #: data/base/messages/strings/names.txt:876
 #: data/mp/messages/strings/names.txt:888
 msgid "Construction Unit"
-msgstr "Unità da costruzione"
+msgstr "Unità da Costruzione"
 
 #: data/base/messages/strings/names.txt:878
 #: data/mp/messages/strings/names.txt:890
@@ -7756,12 +7755,12 @@ msgstr "Ingegneria"
 #: data/base/messages/strings/names.txt:879
 #: data/mp/messages/strings/names.txt:891
 msgid "Improved Engineering"
-msgstr "Ingegneria migliorata"
+msgstr "Ingegneria Migliorata"
 
 #: data/base/messages/strings/names.txt:880
 #: data/mp/messages/strings/names.txt:892
 msgid "Advanced Engineering"
-msgstr "Ingegneria avanzata"
+msgstr "Ingegneria Avanzata"
 
 #: data/base/messages/strings/names.txt:882
 #: data/mp/messages/strings/names.txt:894
@@ -7770,19 +7769,19 @@ msgstr "Torretta Riparatrice Mobile"
 
 #: data/base/messages/strings/names.txt:883
 msgid "Heavy Mobile Repair Turret"
-msgstr "Torretta pesante da riparazione mobile"
+msgstr "Torretta Riparatrice Mobile Pesante"
 
 #: data/base/messages/strings/names.txt:884
 #: data/base/messages/strings/resstrings.txt:450
 #: data/mp/messages/strings/names.txt:896
 #: data/mp/messages/strings/resstrings.txt:480
 msgid "Mobile Repair Upgrade"
-msgstr "Miglioramento della riparazione mobile"
+msgstr "Miglioramento della Riparazione Mobile"
 
 #: data/base/messages/strings/names.txt:885
 #: data/mp/messages/strings/names.txt:897
 msgid "Mobile Repair Upgrade Mk2"
-msgstr "Miglioramento della riparazione mobile Mk2"
+msgstr "Miglioramento della Riparazione Mobile Mk2"
 
 #: data/base/messages/strings/names.txt:891
 #: data/mp/messages/strings/names.txt:903
@@ -7792,17 +7791,17 @@ msgstr "Torretta CB"
 #: data/base/messages/strings/names.txt:893
 #: data/mp/messages/strings/names.txt:905
 msgid "CB Sensor Upgrade"
-msgstr "Miglioramento dei sensori CB"
+msgstr "Miglioramento dei Sensori CB"
 
 #: data/base/messages/strings/names.txt:894
 #: data/mp/messages/strings/names.txt:906
 msgid "CB Sensor Upgrade 2"
-msgstr "Miglioramento dei sensori CB 2"
+msgstr "Miglioramento dei Sensori CB 2"
 
 #: data/base/messages/strings/names.txt:895
 #: data/mp/messages/strings/names.txt:907
 msgid "CB Sensor Upgrade 3"
-msgstr "Miglioramento dei sensori CB 3"
+msgstr "Miglioramento dei Sensori CB 3"
 
 #: data/base/messages/strings/names.txt:897
 #: data/mp/messages/strings/names.txt:909
@@ -7812,43 +7811,43 @@ msgstr "Torretta CB VTOL"
 #: data/base/messages/strings/names.txt:900
 #: data/mp/messages/strings/names.txt:912
 msgid "VTOL CB Upgrade"
-msgstr "Miglioramento dei sensori VTOL CB"
+msgstr "Miglioramento dei Sensori CB VTOL"
 
 #: data/base/messages/strings/names.txt:901
 #: data/mp/messages/strings/names.txt:913
 msgid "VTOL CB Upgrade 2"
-msgstr "Miglioramento dei sensori VTOL CB 2"
+msgstr "Miglioramento dei Sensori CB VTOL 2"
 
 #: data/base/messages/strings/names.txt:902
 #: data/mp/messages/strings/names.txt:914
 msgid "VTOL CB Upgrade 3"
-msgstr "Miglioramento dei sensori VTOL CB 3"
+msgstr "Miglioramento dei Sensori CB VTOL 3"
 
 #: data/base/messages/strings/names.txt:903
 #: data/mp/messages/strings/names.txt:915
 msgid "VTOL Strike Upgrade"
-msgstr "Miglioramento dei sensori d'attacco VTOL"
+msgstr "Miglioramento dei Sensori d'Attacco VTOL"
 
 #: data/base/messages/strings/names.txt:904
 #: data/mp/messages/strings/names.txt:916
 msgid "VTOL Strike Upgrade Mk2"
-msgstr "Miglioramento dei sensori d'attacco VTOL Mk2"
+msgstr "Miglioramento dei Sensori d'Attacco VTOL Mk2"
 
 #: data/base/messages/strings/names.txt:905
 #: data/mp/messages/strings/names.txt:917
 msgid "VTOL Strike Upgrade Mk3"
-msgstr "Miglioramento dei sensori d'attacco VTOL Mk3"
+msgstr "Miglioramento dei Sensori d'Attacco VTOL Mk3"
 
 #: data/base/messages/strings/names.txt:907
 #: data/mp/messages/strings/names.txt:427
 #: data/mp/messages/strings/names.txt:919
 msgid "VTOL Strike Tower"
-msgstr "Torre d'attacco VTOL"
+msgstr "Torre d'Attacco VTOL"
 
 #: data/base/messages/strings/names.txt:910
 #: data/mp/messages/strings/names.txt:922
 msgid "Improved Scrambler"
-msgstr "Disturbatore migliorato"
+msgstr "Disturbatore Migliorato"
 
 #: data/base/messages/strings/names.txt:911
 #: data/mp/messages/strings/names.txt:923
@@ -7857,24 +7856,24 @@ msgstr "Torretta di Disturbo Mk2"
 
 #: data/base/messages/strings/names.txt:913
 msgid "NEXUS Intruder Program"
-msgstr "Programma d'intrusione NEXUS"
+msgstr "Programma d'Intrusione NEXUS"
 
 #: data/base/messages/strings/names.txt:914
 msgid "NEXUS Resistance Circuits"
-msgstr "Circuiti resistenti a NEXUS"
+msgstr "Circuiti Resistenti a NEXUS"
 
 #: data/base/messages/strings/names.txt:915
 msgid "NEXUS Resistance Circuits Mk2"
-msgstr "Circuiti resistenti a NEXUS Mk2"
+msgstr "Circuiti Resistenti a NEXUS Mk2"
 
 #: data/base/messages/strings/names.txt:916
 msgid "NEXUS Resistance Circuits Mk3"
-msgstr "Circuiti resistenti a NEXUS Mk3"
+msgstr "Circuiti Resistenti a NEXUS Mk3"
 
 #: data/base/messages/strings/names.txt:918
 #: data/mp/messages/strings/names.txt:930
 msgid "Sensor Lock"
-msgstr "Sensore agganciato"
+msgstr "Sensore Agganciato"
 
 #: data/base/messages/strings/names.txt:922
 #: data/mp/messages/strings/names.txt:934
@@ -7894,17 +7893,17 @@ msgstr "Armatura Termica Mk3"
 #: data/base/messages/strings/names.txt:925
 #: data/mp/messages/strings/names.txt:937
 msgid "High Intensity Thermal Armor"
-msgstr "Armatura termica ad alta intensità"
+msgstr "Armatura Termica ad Alta Intensità"
 
 #: data/base/messages/strings/names.txt:926
 #: data/mp/messages/strings/names.txt:938
 msgid "High Intensity Thermal Armor Mk2"
-msgstr "Armatura termica ad alta intensità Mk2"
+msgstr "Armatura Termica ad Alta Intensità Mk2"
 
 #: data/base/messages/strings/names.txt:927
 #: data/mp/messages/strings/names.txt:939
 msgid "High Intensity Thermal Armor Mk3"
-msgstr "Armatura termica ad alta intensità Mk3"
+msgstr "Armatura Termica ad Alta Intensità Mk3"
 
 #: data/base/messages/strings/names.txt:929
 #: data/mp/messages/strings/names.txt:941
@@ -8089,7 +8088,7 @@ msgstr "Propulsione su ruote II"
 #: data/base/messages/strings/names.txt:984
 #: data/mp/messages/strings/names.txt:996
 msgid "AA Thermal Imaging Sensor"
-msgstr "Sensore termico AA"
+msgstr "Sensore Termico AA"
 
 #: data/base/messages/strings/names.txt:985
 #: data/mp/messages/strings/names.txt:997
@@ -8099,67 +8098,67 @@ msgstr "Colpi AA ad acquisizione di bersagli"
 #: data/base/messages/strings/names.txt:986
 #: data/mp/messages/strings/names.txt:998
 msgid "AA Target Prediction Computer"
-msgstr "Computer AA di previsione dei bersagli"
+msgstr "Computer di Previsione dei Bersagli per AA"
 
 #: data/base/messages/strings/names.txt:987
 #: data/mp/messages/strings/names.txt:999
 msgid "AA HE Flak"
-msgstr "Colpi antiaerei ad alto esplosivo"
+msgstr "Colpi ad Alto Esplosivo per Antiaerea"
 
 #: data/base/messages/strings/names.txt:988
 #: data/mp/messages/strings/names.txt:1000
 msgid "AA HE Flak Mk2"
-msgstr "Colpi antiaerei ad alto esplosivo Mk2"
+msgstr "Colpi ad Alto Esplosivo per Antiaerea Mk2"
 
 #: data/base/messages/strings/names.txt:989
 #: data/mp/messages/strings/names.txt:1001
 msgid "AA HE Flak Mk3"
-msgstr "Colpi antiaerei ad alto esplosivo Mk3"
+msgstr "Colpi ad Alto Esplosivo per Antiaerea Mk3"
 
 #: data/base/messages/strings/names.txt:990
 #: data/mp/messages/strings/names.txt:1002
 msgid "AA HEAP Flak"
-msgstr "Colpi antiaerei perforanti ad alto esplosivo"
+msgstr "Colpi Perforanti ad Alto Esplosivo per AA"
 
 #: data/base/messages/strings/names.txt:991
 #: data/mp/messages/strings/names.txt:1003
 msgid "AA HEAP Flak Mk2"
-msgstr "Colpi antiaerei perforanti ad alto esplosivo Mk2"
+msgstr "Colpi Perforanti ad Alto Esplosivo per AA Mk2"
 
 #: data/base/messages/strings/names.txt:992
 #: data/mp/messages/strings/names.txt:1004
 msgid "AA HEAP Flak Mk3"
-msgstr "Colpi antiaerei perforanti ad alto esplosivo Mk3"
+msgstr "Colpi Perforanti ad Alto Esplosivo per AA Mk3"
 
 #: data/base/messages/strings/names.txt:993
 #: data/mp/messages/strings/names.txt:1005
 msgid "AA Ammunition Hopper"
-msgstr "Tramoggia delle munizioni AA"
+msgstr "Tramoggia delle Munizioni AA"
 
 #: data/base/messages/strings/names.txt:994
 #: data/mp/messages/strings/names.txt:1006
 msgid "AA Ammunition Hopper Mk2"
-msgstr "Tramoggia delle munizioni AA Mk2"
+msgstr "Tramoggia delle Munizioni AA Mk2"
 
 #: data/base/messages/strings/names.txt:995
 #: data/mp/messages/strings/names.txt:1007
 msgid "AA Ammunition Hopper Mk3"
-msgstr "Tramoggia delle munizioni AA Mk3"
+msgstr "Tramoggia delle Munizioni AA Mk3"
 
 #: data/base/messages/strings/names.txt:996
 #: data/mp/messages/strings/names.txt:1008
 msgid "AA Chainfeed Loader"
-msgstr "Caricatore a catena AA"
+msgstr "Caricatore a Catena AA"
 
 #: data/base/messages/strings/names.txt:997
 #: data/mp/messages/strings/names.txt:1009
 msgid "AA Chainfeed Loader Mk2"
-msgstr "Caricatore a catena AA Mk2"
+msgstr "Caricatore a Catena AA Mk2"
 
 #: data/base/messages/strings/names.txt:998
 #: data/mp/messages/strings/names.txt:1010
 msgid "AA Chainfeed Loader Mk3"
-msgstr "Caricatore a catena AA Mk3"
+msgstr "Caricatore a Catena AA Mk3"
 
 #: data/base/messages/strings/names.txt:1003
 msgid "Cluster Bombs Bay"
@@ -8182,70 +8181,70 @@ msgstr "Bombe alla Termite"
 
 #: data/base/messages/strings/names.txt:1008
 msgid "Thermal Imaging Bombsight"
-msgstr "Bombe a puntamento termico"
+msgstr "Mirino Bombe a Puntamento Termico"
 
 #: data/base/messages/strings/names.txt:1009
 msgid "Laser Guided Bombsight"
-msgstr "Bombe laser-guidate"
+msgstr "Mirino Bombe a Guida Laser"
 
 #: data/base/messages/strings/names.txt:1010
 msgid "Target Acquisition Bombsight"
-msgstr "Bombe ad acquisizione di bersagli"
+msgstr "Mirino Bombe ad Acquisizione di Bersagli"
 
 #: data/base/messages/strings/names.txt:1012
 #: data/mp/messages/strings/names.txt:1024
 msgid "Cannon Laser Rangefinder"
-msgstr "Distanziometro laser"
+msgstr "Distanziometro Laser per Cannone"
 
 #: data/base/messages/strings/names.txt:1013
 #: data/mp/messages/strings/names.txt:1025
 msgid "Cannon Laser Designator"
-msgstr "Designatore laser"
+msgstr "Designatore Laser per Cannone"
 
 #: data/base/messages/strings/names.txt:1014
 #: data/mp/messages/strings/names.txt:1026
 msgid "HEAT Cannon Shells"
-msgstr "Colpi di cannone HEAT"
+msgstr "Colpi HEAT per Cannone"
 
 #: data/base/messages/strings/names.txt:1015
 #: data/mp/messages/strings/names.txt:1027
 msgid "HEAT Cannon Shells Mk2"
-msgstr "Colpi di cannone HEAT Mk2"
+msgstr "Colpi HEAT per Cannone Mk2"
 
 #: data/base/messages/strings/names.txt:1016
 #: data/mp/messages/strings/names.txt:1028
 msgid "HEAT Cannon Shells Mk3"
-msgstr "Colpi di cannone HEAT Mk3"
+msgstr "Colpi HEAT per Cannone Mk3"
 
 #: data/base/messages/strings/names.txt:1017
 #: data/mp/messages/strings/names.txt:1029
 msgid "APFSDS Cannon Rounds"
-msgstr "Colpi di cannone APFSDS"
+msgstr "Colpi APFSDS per Cannone"
 
 #: data/base/messages/strings/names.txt:1018
 #: data/mp/messages/strings/names.txt:1030
 msgid "APFSDS Cannon Rounds Mk2"
-msgstr "Colpi di cannone APFSDS Mk2"
+msgstr "Colpi APFSDS per Cannone Mk2"
 
 #: data/base/messages/strings/names.txt:1019
 #: data/mp/messages/strings/names.txt:1031
 msgid "APFSDS Cannon Rounds Mk3"
-msgstr "Colpi di cannone APFSDS Mk3"
+msgstr "Colpi APFSDS per Cannone Mk3"
 
 #: data/base/messages/strings/names.txt:1020
 #: data/mp/messages/strings/names.txt:1032
 msgid "HVAPFSDS Cannon Rounds"
-msgstr "Colpi di cannone HVAPFSDS"
+msgstr "Colpi HVAPFSDS per Cannone"
 
 #: data/base/messages/strings/names.txt:1021
 #: data/mp/messages/strings/names.txt:1033
 msgid "HVAPFSDS Cannon Rounds Mk2"
-msgstr "Colpi di cannone HVAPFSDS Mk2"
+msgstr "Colpi HVAPFSDS per Cannone Mk2"
 
 #: data/base/messages/strings/names.txt:1022
 #: data/mp/messages/strings/names.txt:1034
 msgid "HVAPFSDS Cannon Rounds Mk3"
-msgstr "Colpi di cannone HVAPFSDS Mk3"
+msgstr "Colpi HVAPFSDS per Cannone Mk3"
 
 #: data/base/messages/strings/names.txt:1026
 #: data/mp/messages/strings/names.txt:1038
@@ -8255,117 +8254,117 @@ msgstr "Autocaricatore per cannone"
 #: data/base/messages/strings/names.txt:1027
 #: data/mp/messages/strings/names.txt:1039
 msgid "Cannon Autoloader Mk2"
-msgstr "Autocaricatore per cannone Mk2"
+msgstr "Autocaricatore per Cannone Mk2"
 
 #: data/base/messages/strings/names.txt:1028
 #: data/mp/messages/strings/names.txt:1040
 msgid "Cannon Autoloader Mk3"
-msgstr "Autocaricatore per cannone Mk3"
+msgstr "Autocaricatore per Cannone Mk3"
 
 #: data/base/messages/strings/names.txt:1029
 #: data/mp/messages/strings/names.txt:1041
 msgid "Cannon Rapid Loader"
-msgstr "Caricatore rapido per cannone"
+msgstr "Caricatore Rapido per Cannone"
 
 #: data/base/messages/strings/names.txt:1030
 #: data/mp/messages/strings/names.txt:1042
 msgid "Cannon Rapid Loader Mk2"
-msgstr "Caricatore rapido per cannone Mk2"
+msgstr "Caricatore Rapido per Cannone Mk2"
 
 #: data/base/messages/strings/names.txt:1031
 #: data/mp/messages/strings/names.txt:1043
 msgid "Cannon Rapid Loader Mk3"
-msgstr "Caricatore rapido per cannone Mk3"
+msgstr "Caricatore Rapido per Cannone Mk3"
 
 #: data/base/messages/strings/names.txt:1039
 #: data/mp/messages/strings/names.txt:1051
 msgid "Improved Laser Focusing"
-msgstr "Focalizzatore Laser migliorato"
+msgstr "Focalizzatore Laser Migliorato"
 
 #: data/base/messages/strings/names.txt:1040
 #: data/mp/messages/strings/names.txt:1052
 msgid "Improved Laser Focusing Mk2"
-msgstr "Focalizzatore Laser migliorato Mk2"
+msgstr "Focalizzatore Laser Migliorato Mk2"
 
 #: data/base/messages/strings/names.txt:1041
 #: data/mp/messages/strings/names.txt:1053
 msgid "Improved Laser Focusing Mk3"
-msgstr "Focalizzatore Laser migliorato Mk3"
+msgstr "Focalizzatore Laser Migliorato Mk3"
 
 #: data/base/messages/strings/names.txt:1042
 #: data/mp/messages/strings/names.txt:1054
 msgid "Hi-Energy Laser Emitter"
-msgstr "Emettitore laser ad alta energia"
+msgstr "Emettitore Laser ad Alta Energia"
 
 #: data/base/messages/strings/names.txt:1043
 #: data/mp/messages/strings/names.txt:1055
 msgid "Hi-Energy Laser Emitter Mk2"
-msgstr "Emettitore laser ad alta energia Mk2"
+msgstr "Emettitore Laser ad Alta Energia Mk2"
 
 #: data/base/messages/strings/names.txt:1044
 #: data/mp/messages/strings/names.txt:1056
 msgid "Hi-Energy Laser Emitter Mk3"
-msgstr "Emettitore laser ad alta energia Mk3"
+msgstr "Emettitore Laser ad Alta Energia Mk3"
 
 #: data/base/messages/strings/names.txt:1045
 #: data/mp/messages/strings/names.txt:1057
 msgid "Thermopole Energizer"
-msgstr "Pompa di fotoni"
+msgstr "Pompa di Fotoni"
 
 #: data/base/messages/strings/names.txt:1046
 #: data/mp/messages/strings/names.txt:1058
 msgid "Thermopole Energizer Mk2"
-msgstr "Pompa di fotoni Mk2"
+msgstr "Pompa di Fotoni Mk2"
 
 #: data/base/messages/strings/names.txt:1047
 #: data/mp/messages/strings/names.txt:1059
 msgid "Thermopole Energizer Mk3"
-msgstr "Pompa di fotoni Mk3"
+msgstr "Pompa di Fotoni Mk3"
 
 #: data/base/messages/strings/names.txt:1049
 #: data/mp/messages/strings/names.txt:1061
 msgid "High Temperature Flamer Gel"
-msgstr "Gel dell'inceneritore ad alta temperatura"
+msgstr "Gel dell'Inceneritore ad Alta Temperatura"
 
 #: data/base/messages/strings/names.txt:1050
 #: data/mp/messages/strings/names.txt:1062
 msgid "High Temperature Flamer Gel Mk2"
-msgstr "Gel dell'inceneritore ad alta temperatura Mk2"
+msgstr "Gel dell'Inceneritore ad Alta Temperatura Mk2"
 
 #: data/base/messages/strings/names.txt:1051
 #: data/mp/messages/strings/names.txt:1063
 msgid "High Temperature Flamer Gel Mk3"
-msgstr "Gel dell'inceneritore ad alta temperatura Mk3"
+msgstr "Gel dell'Inceneritore ad Alta Temperatura Mk3"
 
 #: data/base/messages/strings/names.txt:1052
 #: data/mp/messages/strings/names.txt:1064
 msgid "Superhot Flamer Gel"
-msgstr "Gel superinfiammabile"
+msgstr "Gel Superinfiammabile"
 
 #: data/base/messages/strings/names.txt:1053
 #: data/mp/messages/strings/names.txt:1065
 msgid "Superhot Flamer Gel Mk2"
-msgstr "Gel superinfiammabile Mk2"
+msgstr "Gel Superinfiammabile Mk2"
 
 #: data/base/messages/strings/names.txt:1054
 #: data/mp/messages/strings/names.txt:1066
 msgid "Superhot Flamer Gel Mk3"
-msgstr "Gel superinfiammabile Mk3"
+msgstr "Gel Superinfiammabile Mk3"
 
 #: data/base/messages/strings/names.txt:1055
 #: data/mp/messages/strings/names.txt:1067
 msgid "Flamer Autoloader"
-msgstr "Autocaricatore per inceneritore"
+msgstr "Autocaricatore per Inceneritore"
 
 #: data/base/messages/strings/names.txt:1056
 #: data/mp/messages/strings/names.txt:1068
 msgid "Flamer Autoloader Mk2"
-msgstr "Autocaricatore per inceneritore Mk2"
+msgstr "Autocaricatore per Inceneritore Mk2"
 
 #: data/base/messages/strings/names.txt:1057
 #: data/mp/messages/strings/names.txt:1069
 msgid "Flamer Autoloader Mk3"
-msgstr "Autocaricatore per inceneritore Mk3"
+msgstr "Autocaricatore per Inceneritore Mk3"
 
 #: data/base/messages/strings/names.txt:1059
 #: data/mp/messages/strings/names.txt:1071
@@ -8385,47 +8384,47 @@ msgstr "Obice Rotante - Hellstorm"
 #: data/base/messages/strings/names.txt:1066
 #: data/mp/messages/strings/names.txt:1078
 msgid "Target Acquisition Artillery Shells"
-msgstr "Proiettili d'artiglieria ad acquisizione di bersagli"
+msgstr "Proiettili d'Artiglieria ad Acquisizione di Bersagli"
 
 #: data/base/messages/strings/names.txt:1067
 #: data/mp/messages/strings/names.txt:1079
 msgid "Target Acquisition Artillery Shells Mk2"
-msgstr "Proiettili d'artiglieria ad acquisizione di bersagli Mk2"
+msgstr "Proiettili d'Artiglieria ad Acquisizione di Bersagli Mk2"
 
 #: data/base/messages/strings/names.txt:1068
 #: data/mp/messages/strings/names.txt:1080
 msgid "Target Prediction Artillery Shells"
-msgstr "Colpi d'artiglieria a predizione del bersaglio"
+msgstr "Proiettili d'Artiglieria a Predizione del Bersaglio"
 
 #: data/base/messages/strings/names.txt:1070
 #: data/mp/messages/strings/names.txt:1082
 msgid "HE Howitzer Shells"
-msgstr "Colpi dell'obice HE"
+msgstr "Proiettili HE per Obice"
 
 #: data/base/messages/strings/names.txt:1071
 #: data/mp/messages/strings/names.txt:1083
 msgid "HE Howitzer Shells Mk2"
-msgstr "Colpi dell'obice HE Mk2"
+msgstr "Proiettili HE per Obice Mk2"
 
 #: data/base/messages/strings/names.txt:1072
 #: data/mp/messages/strings/names.txt:1084
 msgid "HE Howitzer Shells Mk3"
-msgstr "Colpi dell'obice HE Mk3"
+msgstr "Proiettili HE per Obice Mk3"
 
 #: data/base/messages/strings/names.txt:1073
 #: data/mp/messages/strings/names.txt:1085
 msgid "HEAP Howitzer Shells"
-msgstr "Colpi dell'obice HEAP"
+msgstr "Proiettili HEAP per Obice HEAP"
 
 #: data/base/messages/strings/names.txt:1074
 #: data/mp/messages/strings/names.txt:1086
 msgid "HEAP Howitzer Shells Mk2"
-msgstr "Colpi dell'obice HEAP Mk2"
+msgstr "Proiettili HEAP per Obice Mk2"
 
 #: data/base/messages/strings/names.txt:1075
 #: data/mp/messages/strings/names.txt:1087
 msgid "HEAP Howitzer Shells Mk3"
-msgstr "Colpi dell'obice HEAP Mk3"
+msgstr "Proiettili HEAP per Obice Mk3"
 
 #: data/base/messages/strings/names.txt:1077
 #: data/mp/messages/strings/names.txt:1089
@@ -8459,42 +8458,42 @@ msgstr "Proiettili Blindati"
 #: data/base/messages/strings/names.txt:1086
 #: data/mp/messages/strings/names.txt:1098
 msgid "APDSB MG Bullets"
-msgstr "Colpi APDSB"
+msgstr "Proiettili APDSB"
 
 #: data/base/messages/strings/names.txt:1087
 #: data/mp/messages/strings/names.txt:1099
 msgid "APDSB MG Bullets Mk2"
-msgstr "Colpi APDSB Mk2"
+msgstr "Proiettili APDSB Mk2"
 
 #: data/base/messages/strings/names.txt:1088
 #: data/mp/messages/strings/names.txt:1100
 msgid "APDSB MG Bullets Mk3"
-msgstr "Colpi APDSB Mk3"
+msgstr "Proiettili APDSB Mk3"
 
 #: data/base/messages/strings/names.txt:1089
 #: data/mp/messages/strings/names.txt:1101
 msgid "Tungsten-Tipped MG Bullets"
-msgstr "Proiettili con punta in tungsteno"
+msgstr "Proiettili con Punta in Tungsteno"
 
 #: data/base/messages/strings/names.txt:1090
 #: data/mp/messages/strings/names.txt:1102
 msgid "Tungsten-Tipped MG Bullets Mk2"
-msgstr "Proiettili con punta in tungsteno Mk2"
+msgstr "Proiettili con Punta in Tungsteno Mk2"
 
 #: data/base/messages/strings/names.txt:1091
 #: data/mp/messages/strings/names.txt:1103
 msgid "Tungsten-Tipped MG Bullets Mk3"
-msgstr "Proiettili con punta in tungsteno Mk3"
+msgstr "Proiettili con Punta in Tungsteno Mk3"
 
 #: data/base/messages/strings/names.txt:1092
 #: data/mp/messages/strings/names.txt:1104
 msgid "Depleted Uranium MG Bullets"
-msgstr "Colpi di mitragliatrice ad uranio impoverito"
+msgstr "Proiettili di Mitragliatrice ad Uranio Impoverito"
 
 #: data/base/messages/strings/names.txt:1093
 #: data/mp/messages/strings/names.txt:1105
 msgid "Depleted Uranium MG Bullets Mk2"
-msgstr "Colpi di mitragliatrice ad uranio impoverito Mk2"
+msgstr "Proiettili di Mitragliatrice ad Uranio Impoverito Mk2"
 
 #: data/base/messages/strings/names.txt:1095
 #: data/mp/messages/strings/names.txt:1107
@@ -8513,127 +8512,127 @@ msgstr "Miglioramento Mitragliatrice a Fuoco Iper Rapido"
 #: data/base/messages/strings/names.txt:1103
 #: data/mp/messages/strings/names.txt:1115
 msgid "Target Prediction Missiles"
-msgstr "Missili a predizione del bersaglio"
+msgstr "Missili a Predizione del Bersaglio"
 
 #: data/base/messages/strings/names.txt:1104
 #: data/mp/messages/strings/names.txt:1116
 msgid "Search & Destroy Missiles"
-msgstr "Missili a ricerca"
+msgstr "Missili a Ricerca"
 
 #: data/base/messages/strings/names.txt:1105
 #: data/mp/messages/strings/names.txt:1117
 msgid "Advanced Missile Warhead"
-msgstr "Testata Missili avanzata"
+msgstr "Testata Avanzata per Missili"
 
 #: data/base/messages/strings/names.txt:1106
 #: data/mp/messages/strings/names.txt:1118
 msgid "Advanced Missile Warhead Mk2"
-msgstr "Testata Missili avanzata Mk2"
+msgstr "Testata Avanzata per Missili Mk2"
 
 #: data/base/messages/strings/names.txt:1107
 #: data/mp/messages/strings/names.txt:1119
 msgid "Advanced Missile Warhead Mk3"
-msgstr "Testata Missili avanzata Mk3"
+msgstr "Testata Avanzata per Missili Mk3"
 
 #: data/base/messages/strings/names.txt:1108
 #: data/mp/messages/strings/names.txt:1120
 msgid "Advanced Missile Allocation System"
-msgstr "Sistema Avanzato di Allocazione dei missili"
+msgstr "Sistema Avanzato di Allocazione dei Missili"
 
 #: data/base/messages/strings/names.txt:1109
 #: data/mp/messages/strings/names.txt:1121
 msgid "Advanced Missile Allocation System Mk2"
-msgstr "Sistema Avanzato di Allocazione dei missili Mk2"
+msgstr "Sistema Avanzato di Allocazione dei Missili Mk2"
 
 #: data/base/messages/strings/names.txt:1110
 #: data/mp/messages/strings/names.txt:1122
 msgid "Advanced Missile Allocation System Mk3"
-msgstr "Sistema Avanzato di Allocazione dei missili Mk3"
+msgstr "Sistema Avanzato di Allocazione dei Missili Mk3"
 
 #: data/base/messages/strings/names.txt:1111
 #: data/mp/messages/strings/names.txt:1123
 msgid "HEAP Missile Warhead"
-msgstr "Testata missili HEAP"
+msgstr "Testata HEAP per Missili"
 
 #: data/base/messages/strings/names.txt:1112
 #: data/mp/messages/strings/names.txt:1124
 msgid "HEAP Missile Warhead Mk2"
-msgstr "Testata missili HEAP Mk2"
+msgstr "Testata HEAP per Missili Mk2"
 
 #: data/base/messages/strings/names.txt:1113
 #: data/mp/messages/strings/names.txt:1125
 msgid "HEAP Missile Warhead Mk3"
-msgstr "Testata missili HEAP Mk3"
+msgstr "Testata HEAP per Missili Mk3"
 
 #: data/base/messages/strings/names.txt:1114
 #: data/mp/messages/strings/names.txt:1126
 msgid "Improved Missile Loading System"
-msgstr "Sistema di caricamento missili migliorato"
+msgstr "Sistema di Caricamento Missili Migliorato"
 
 #: data/base/messages/strings/names.txt:1125
 #: data/mp/messages/strings/names.txt:1137
 msgid "Mortar Targeting Computer"
-msgstr "Computer di puntamento del mortaio"
+msgstr "Computer di Puntamento del Mortaio"
 
 #: data/base/messages/strings/names.txt:1126
 #: data/mp/messages/strings/names.txt:1138
 msgid "Thermal Imaging Mortar Shells"
-msgstr "Colpi di mortaio a puntamento termico"
+msgstr "Granate di Mortaio a Puntamento Termico"
 
 #: data/base/messages/strings/names.txt:1127
 #: data/mp/messages/strings/names.txt:1139
 msgid "Target Acquisition Mortar Shells"
-msgstr "Colpi di mortaio ad acquisizione di bersagli"
+msgstr "Granate di Mortaio ad Acquisizione di Bersagli"
 
 #: data/base/messages/strings/names.txt:1128
 #: data/mp/messages/strings/names.txt:1140
 msgid "HE Mortar Shells"
-msgstr "Colpi mortaio HE"
+msgstr "Granate HE per Mortaio"
 
 #: data/base/messages/strings/names.txt:1129
 #: data/mp/messages/strings/names.txt:1141
 msgid "HE Mortar Shells Mk2"
-msgstr "Colpi mortaio HE Mk2"
+msgstr "Granate HE per Mortaio Mk2"
 
 #: data/base/messages/strings/names.txt:1130
 #: data/mp/messages/strings/names.txt:1142
 msgid "HE Mortar Shells Mk3"
-msgstr "Colpi mortaio HE Mk3"
+msgstr "Granate HE per Mortaio Mk3"
 
 #: data/base/messages/strings/names.txt:1131
 #: data/mp/messages/strings/names.txt:1143
 msgid "HEAP Mortar Shells"
-msgstr "Colpi mortaio HEAP"
+msgstr "Granate HEAP per Mortaio"
 
 #: data/base/messages/strings/names.txt:1132
 #: data/mp/messages/strings/names.txt:1144
 msgid "HEAP Mortar Shells Mk2"
-msgstr "Colpi mortaio HEAP Mk2"
+msgstr "Granate HEAP per Mortaio Mk2"
 
 #: data/base/messages/strings/names.txt:1133
 #: data/mp/messages/strings/names.txt:1145
 msgid "HEAP Mortar Shells Mk3"
-msgstr "Colpi mortaio HEAP Mk3"
+msgstr "Granate HEAP per Mortaio Mk3"
 
 #: data/base/messages/strings/names.txt:1134
 #: data/mp/messages/strings/names.txt:1146
 msgid "Mortar Autoloader"
-msgstr "Autocaricatore per mortaio"
+msgstr "Autocaricatore per Mortaio"
 
 #: data/base/messages/strings/names.txt:1135
 #: data/mp/messages/strings/names.txt:1147
 msgid "Mortar Autoloader Mk2"
-msgstr "Autocaricatore per mortaio Mk2"
+msgstr "Autocaricatore per Mortaio Mk2"
 
 #: data/base/messages/strings/names.txt:1136
 #: data/mp/messages/strings/names.txt:1148
 msgid "Mortar Autoloader Mk3"
-msgstr "Autocaricatore per mortaio Mk3"
+msgstr "Autocaricatore per Mortaio Mk3"
 
 #: data/base/messages/strings/names.txt:1137
 #: data/mp/messages/strings/names.txt:1149
 msgid "Mortar Fast Loader"
-msgstr "Caricatore rapido per mortaio"
+msgstr "Caricatore Rapido per Mortaio"
 
 #: data/base/messages/strings/names.txt:1139
 #: data/mp/messages/strings/names.txt:1151
@@ -8647,7 +8646,7 @@ msgstr "Mortaio Rotante-Pepperpot"
 
 #: data/base/messages/strings/names.txt:1145
 msgid "Target Prediction Computer"
-msgstr "Computer di previsione dei bersagli"
+msgstr "Computer di Previsione dei Bersagli"
 
 #: data/base/messages/strings/names.txt:1146
 #: data/mp/messages/strings/names.txt:1158
@@ -8681,11 +8680,11 @@ msgstr "Rateo di fuoco del Cannone a Massa Mk3"
 
 #: data/base/messages/strings/names.txt:1153
 msgid "Stabilized Mini-Rockets"
-msgstr "Minirazzi stabilizzati"
+msgstr "Minirazzi Stabilizzati"
 
 #: data/base/messages/strings/names.txt:1154
 msgid "Stabilized Mini-Rockets Mk2"
-msgstr "Minirazzi stabilizzati Mk2"
+msgstr "Minirazzi Stabilizzati Mk2"
 
 #: data/base/messages/strings/names.txt:1155
 msgid "HE Mini-Rockets"
@@ -8713,95 +8712,95 @@ msgstr "Minirazzi HEAP Mk3"
 
 #: data/base/messages/strings/names.txt:1161
 msgid "Fast Fire Mini-Rockets"
-msgstr "Minirazzi a fuoco veloce"
+msgstr "Minirazzi a Fuoco Veloce"
 
 #: data/base/messages/strings/names.txt:1162
 msgid "Fast Fire Mini-Rockets Mk2"
-msgstr "Minirazzi a fuoco veloce Mk2"
+msgstr "Minirazzi a Fuoco Veloce Mk2"
 
 #: data/base/messages/strings/names.txt:1163
 msgid "Fast Fire Mini-Rockets Mk3"
-msgstr "Minirazzi a fuoco veloce Mk3"
+msgstr "Minirazzi a Fuoco Veloce Mk3"
 
 #: data/base/messages/strings/names.txt:1164
 #: data/mp/messages/strings/names.txt:1181
 msgid "Rapid Fire Mini-Rockets"
-msgstr "Minirazzi a fuoco rapido"
+msgstr "Minirazzi a Fuoco Rapido"
 
 #: data/base/messages/strings/names.txt:1165
 #: data/mp/messages/strings/names.txt:1182
 msgid "Rapid Fire Mini-Rockets Mk2"
-msgstr "Minirazzi a fuoco rapido Mk2"
+msgstr "Minirazzi a Fuoco Rapido Mk2"
 
 #: data/base/messages/strings/names.txt:1166
 #: data/mp/messages/strings/names.txt:1183
 msgid "Rapid Fire Mini-Rockets Mk3"
-msgstr "Minirazzi a fuoco rapido Mk3"
+msgstr "Minirazzi a Fuoco Rapido Mk3"
 
 #: data/base/messages/strings/names.txt:1167
 #: data/mp/messages/strings/names.txt:1166
 msgid "Improved Rocket Wire Guidance"
-msgstr "Filoguida per razzi migliorata"
+msgstr "Filoguida per Razzi Migliorata"
 
 #: data/base/messages/strings/names.txt:1168
 #: data/mp/messages/strings/names.txt:1167
 msgid "Rocket Laser Designator"
-msgstr "Designatore laser per razzi"
+msgstr "Designatore Laser per Razzi"
 
 #: data/base/messages/strings/names.txt:1169
 #: data/mp/messages/strings/names.txt:1168
 msgid "Thermal Imaging Rockets"
-msgstr "Razzi a Visione termica"
+msgstr "Razzi a Visione Termica"
 
 #: data/base/messages/strings/names.txt:1170
 #: data/mp/messages/strings/names.txt:1172
 msgid "HEAT Rocket Warhead"
-msgstr "Razzi HEAT"
+msgstr "Testata HEAT per Razzi"
 
 #: data/base/messages/strings/names.txt:1171
 #: data/mp/messages/strings/names.txt:1173
 msgid "HEAT Rocket Warhead Mk2"
-msgstr "Razzi HEAT Mk2"
+msgstr "Testata HEAT per Razzi Mk2"
 
 #: data/base/messages/strings/names.txt:1172
 #: data/mp/messages/strings/names.txt:1174
 msgid "HEAT Rocket Warhead Mk3"
-msgstr "Razzi HEAT Mk3"
+msgstr "Testata HEAT per Razzi Mk3"
 
 #: data/base/messages/strings/names.txt:1173
 #: data/mp/messages/strings/names.txt:1175
 msgid "HESH Rocket Warhead"
-msgstr "Razzi HESH"
+msgstr "Testata HESH per Razzi"
 
 #: data/base/messages/strings/names.txt:1174
 #: data/mp/messages/strings/names.txt:1176
 msgid "HESH Rocket Warhead Mk2"
-msgstr "Razzi HESH Mk2"
+msgstr "Testata HESH per Razzi Mk2"
 
 #: data/base/messages/strings/names.txt:1175
 #: data/mp/messages/strings/names.txt:1177
 msgid "HESH Rocket Warhead Mk3"
-msgstr "Razzi HESH Mk3"
+msgstr "Testata HESH per Razzi Mk3"
 
 #: data/base/messages/strings/names.txt:1176
 #: data/mp/messages/strings/names.txt:1178
 msgid "Rocket Autoloader"
-msgstr "Autocaricatore per razzi"
+msgstr "Autocaricatore per Razzi"
 
 #: data/base/messages/strings/names.txt:1177
 #: data/mp/messages/strings/names.txt:1179
 msgid "Rocket Autoloader Mk2"
-msgstr "Autocaricatore per razzi Mk2"
+msgstr "Autocaricatore per Razzi Mk2"
 
 #: data/base/messages/strings/names.txt:1178
 #: data/mp/messages/strings/names.txt:1180
 msgid "Rocket Autoloader Mk3"
-msgstr "Autocaricatore per razzi Mk3"
+msgstr "Autocaricatore per Razzi Mk3"
 
 #: data/base/messages/strings/names.txt:1180
 #: data/mp/messages/strings/names.txt:1195
 msgid "Lancer AT Rocket"
-msgstr "Razzo Lancer AT"
+msgstr "Razzo AT Lancer"
 
 #: data/base/messages/strings/names.txt:1182
 #: data/mp/messages/strings/names.txt:1197
@@ -8821,72 +8820,72 @@ msgstr "Manufatto della Mitragliatrice"
 #: data/base/messages/strings/names.txt:1190
 #: data/mp/messages/strings/names.txt:1205
 msgid "New Paradigm Command Center"
-msgstr "Centro di comando del New Paradigm"
+msgstr "Centro di Comando del New Paradigm"
 
 #: data/base/messages/strings/names.txt:1191
 #: data/mp/messages/strings/names.txt:1206
 msgid "Collective Command Center"
-msgstr "Centro di comando del Collective"
+msgstr "Centro di Comando del Collective"
 
 #: data/base/messages/strings/names.txt:1201
 #: data/mp/messages/strings/names.txt:1216
 msgid "Scavenger Factory"
-msgstr "Fabbrica degli sciacalli"
+msgstr "Fabbrica degli Sciacalli"
 
 #: data/base/messages/strings/names.txt:1202
 #: data/mp/messages/strings/names.txt:1217
 msgid "Scavenger Gun Tower"
-msgstr "Torre con mitragliatrice degli sciacalli"
+msgstr "Torre con Mitragliatrice degli Sciacalli"
 
 #: data/base/messages/strings/names.txt:1203
 #: data/mp/messages/strings/names.txt:1218
 msgid "Scavenger Horizontal Wall"
-msgstr "Muro degli sciacalli"
+msgstr "Muro degli Sciacalli"
 
 #: data/base/messages/strings/names.txt:1204
 #: data/mp/messages/strings/names.txt:1219
 msgid "Scavenger Power Generator"
-msgstr "Generatore degli sciacalli"
+msgstr "Generatore degli Sciacalli"
 
 #: data/base/messages/strings/names.txt:1205
 #: data/mp/messages/strings/names.txt:1220
 msgid "Scavenger Rocket Pit"
-msgstr "Lanciarazzi degli sciacalli"
+msgstr "Lanciarazzi degli Sciacalli"
 
 #: data/base/messages/strings/names.txt:1206
 #: data/mp/messages/strings/names.txt:1221
 msgid "Scavenger AT-Rocket Pit"
-msgstr "Lanciarazzi anticarro degli sciacalli"
+msgstr "Lanciarazzi anticarro degli Sciacalli"
 
 #: data/base/messages/strings/names.txt:1207
 #: data/mp/messages/strings/names.txt:1222
 msgid "Scavenger Bunker"
-msgstr "Bunker degli sciacalli"
+msgstr "Bunker degli Sciacalli"
 
 #: data/base/messages/strings/names.txt:1208
 #: data/mp/messages/strings/names.txt:1223
 msgid "Scavenger CornerWall"
-msgstr "Angolo di muro degli sciacalli"
+msgstr "Angolo di muro degli Sciacalli"
 
 #: data/base/messages/strings/names.txt:1209
 #: data/mp/messages/strings/names.txt:1224
 msgid "Scavenger Flame Tower"
-msgstr "Torre con inceneritore degli sciacalli"
+msgstr "Torre con inceneritore degli Sciacalli"
 
 #: data/base/messages/strings/names.txt:1210
 #: data/mp/messages/strings/names.txt:1225
 msgid "Scavenger Flame Tower End"
-msgstr "Fine della Torre con Inceneritore degli sciacalli"
+msgstr "Fine della Torre con Inceneritore degli Sciacalli"
 
 #: data/base/messages/strings/names.txt:1211
 #: data/mp/messages/strings/names.txt:1226
 msgid "Look-Out Tower"
-msgstr "Torre di vedetta"
+msgstr "Torre di Vedetta"
 
 #: data/base/messages/strings/names.txt:1212
 #: data/mp/messages/strings/names.txt:1227
 msgid "Cannon Tower"
-msgstr "Torre con cannone"
+msgstr "Torre con Cannone"
 
 #: data/base/messages/strings/names.txt:1235
 #: data/mp/messages/strings/names.txt:1250
@@ -8896,7 +8895,7 @@ msgstr "Manufatto"
 #: data/base/messages/strings/names.txt:1236
 #: data/mp/messages/strings/names.txt:1251
 msgid "Oil Resource"
-msgstr "Risorsa di petrolio"
+msgstr "Risorsa di Petrolio"
 
 #: data/base/messages/strings/names.txt:1262
 #: data/mp/messages/strings/names.txt:1277
@@ -9432,7 +9431,7 @@ msgstr "In volo verso il Settore Occidentale"
 
 #: data/base/sequenceaudio/cam1/c001.txa:10
 msgid "Team Alpha nears its destination"
-msgstr "Team Alpha in avvicinamento alla propria destinazione"
+msgstr "Team Alpha in avvicinamneto alla propria destinazione"
 
 #: data/base/sequenceaudio/cam1/c001.txt:1
 msgid "Transport destinations follow:"
@@ -9440,7 +9439,7 @@ msgstr "Le destinazioni dei trasporti seguono:"
 
 #: data/base/sequenceaudio/cam1/c001.txt:2
 msgid "Alpha - Western Sector...."
-msgstr "Alpha - Settore Occidentale"
+msgstr "Alpha - Settore Occidentale..."
 
 #: data/base/sequenceaudio/cam1/c001.txt:4
 msgid "Alpha you are cleared for take-off."
@@ -9452,11 +9451,11 @@ msgstr "Buona fortuna e buona caccia."
 
 #: data/base/sequenceaudio/cam1/c001.txt:7
 msgid "Approaching Landing Zone. Team Alpha Briefing commences."
-msgstr "In avvicinamento alla Zona di Atterraggio. Inizia il briefing del Team Alpha."
+msgstr "In avvicinamento alla Zona di Atterraggio. Il briefing del Team Alpha comincia."
 
 #: data/base/sequenceaudio/cam1/c001.txt:9
 msgid "Commander, you lead Team Alpha, one of three expeditionary teams sent out by the Project to recover artifacts from before the Collapse."
-msgstr "Comandante, lei guida il Team Alpha, uno dei tre team di spedizione mandati dal Progetto "
+msgstr "Comandante, lei guida il Team Alpha, uno dei tre team di spedizione mandati dal Progetto per recuperare manufatti del periodo precedente al Collasso."
 
 #: data/base/sequenceaudio/cam1/c001.txt:11
 msgid "Your destination lies in the western zone."
@@ -9619,7 +9618,7 @@ msgstr "Sarete distrutti."
 
 #: data/base/sequenceaudio/cam1/sub14anp.txt:4
 msgid "NEXUS, the synaptic technology you required has been recovered and sent for collection."
-msgstr "NEXUS, la tecnologia del collegmaento sinaptico che avete richiesto è stata recuperata e inviata per la collezione."
+msgstr "NEXUS, la tecnologia del collegmaento sinaptico che avete richiesto è stata recuperata e inviata per il recupero."
 
 #: data/base/sequenceaudio/cam1/sub1_4bn.txt:4
 msgid "You have done well."
@@ -9827,7 +9826,7 @@ msgstr "Guerrieri del Collective, siamo pronti a distruggere gli intrusi che avv
 
 #: data/base/sequenceaudio/cam2/cam2bcol.txt:3
 msgid "Those of the Project are not of the machine. They have been denied its blessing. We who have embraced the power of the machine have a destiny to sweep away such weak creatures."
-msgstr "Quelli del Project non sono parte della macchina. Essi hanno rifiutato la sua benedizione. Noi che abbiamo abbracciato il potere della macchina siamo destinati a spazzare via queste deboli creature."
+msgstr "Quelli del Project non sono parte della macchina. Ad essi è stata negata la sua benedizione. Noi che abbiamo abbracciato il potere della macchina siamo destinati a spazzare via queste deboli creature."
 
 #: data/base/sequenceaudio/cam2/cam2bcol.txt:6
 msgid "They shall fall before the might of The Collective."
@@ -9931,7 +9930,7 @@ msgstr "Sotto questo silo c'è una testa nucleare tattica innescata che esploder
 
 #: data/base/sequenceaudio/cam3/cam3_1bn.txt:9
 msgid "As I cannot launch it, it'll just have to blow where it is."
-msgstr "Siccome non la posso lanciare, dovrà esplodere dove si trova."
+msgstr "Siccome non la posso lanciare, dovrà semplicemente esplodere dove si trova."
 
 #: data/base/sequenceaudio/cam3/cam3_1bn.txt:11
 msgid "Please note that all entrances to the underground complex have been sealed. Goodbye, Commander."
@@ -9959,7 +9958,7 @@ msgstr "Siamo sotto pesante attacco da cyborg, carri laser, e VTOL d'attacco."
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:6
 msgid "We were trying to reach your position, but have been ambushed."
-msgstr "Stavamo cercando di raggiungere le vostre posizioni, ma siamo stati vittima di un imboscata."
+msgstr "Stavamo cercando di raggiungere le vostre posizioni, ma siamo caduti vittima di un imboscata."
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:7
 msgid "We're holed up in  a valley at these coordinates."
@@ -10023,7 +10022,7 @@ msgstr "Il Programma Intruso NEXUS fu creato per controllare gli stupidi come vo
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:17
 msgid "It's very simple for me to infiltrate your systems and take them over. It's so simple, in fact, that you wouldn't even know I'm there. That is until I activate parts of myself etched into your core systems."
-msgstr "E' molto semplice per me infiltrarmi nei vostri sistemi e prendere il controllo. E' così semplice, infatti, che non sapreste nemmeno che sono qua. Ciò almeno fino a quando non attivo mie parti inserite nei vostri sistemi centrali."
+msgstr "E' molto semplice per me infiltrarmi nei vostri sistemi e prendere il controllo. E' così semplice, infatti, che non sapreste nemmeno che sono qua. Almeno fino a quando non attivo mie parti inserite nei vostri sistemi centrali."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:19
 msgid "Let's start by activating NEXUS in your core systems and see what happens!"
@@ -10031,7 +10030,7 @@ msgstr "Iniziamo attivando NEXUS nei vostri sistemi centrali e vediamo cosa succ
 
 #: data/base/sequenceaudio/cam3/cam3abpl.txt:1
 msgid "Commander, we are experiencing interference with our equipment."
-msgstr "Comandante, stiamo subendo interferenza con il nostro equipaggiamento."
+msgstr "Comandante, stiamo subendo interferenze con il nostro equipaggiamento."
 
 #: data/base/sequenceaudio/cam3/cam3abpl.txt:2
 msgid "Normal service will be restored as soon as possible."
@@ -10047,7 +10046,7 @@ msgstr "Comunque, se lascierete questa installazione, vi lascierò andare, in qu
 
 #: data/base/sequenceaudio/cam3/cam3ad2n.txt:6
 msgid "You have five minutes to comply or else it's frying time!"
-msgstr "Avete 5 minuti per riuscire o sarete fritti!"
+msgstr "Avete 5 minuti per farlo o sarete fritti!"
 
 #: data/base/sequenceaudio/cam3/cam3bg.txt:1
 msgid "Commander, we are under attack by NEXUS cyborgs and tanks. Please help as we...."
@@ -10176,7 +10175,7 @@ msgstr "Il mondo come lo conoscevamo finì..."
 
 #: data/base/sequenceaudio/devastation.txt:9
 msgid "The Nuclear Winter hit hard. Disease and famine claimed most of us who had survived the nuclear strikes. Wars over cans of dog food took even more."
-msgstr "L'Inverno Nucleare colpì duro. Malattie e carestie uccisero molti di quelli che erano sopravvissuti agli attacchi nucleari. Guerre per scatole di cibo per cani ne portarono altri."
+msgstr "L'Inverno Nucleare colpì duramente. Malattie e carestie uccisero molti di quelli che erano sopravvissuti agli attacchi nucleari. Guerre per scatole di cibo per cani ne portarono altri."
 
 #: data/base/sequenceaudio/devastation.txt:11
 msgid "We'd fled Seattle early in '86. We'd heard that the Rocky Mountains were relatively rad-free."
@@ -10296,9 +10295,9 @@ msgid "Repair Speed +100%"
 msgstr "Velocità di Riparazione +100%"
 
 #: data/mp/messages/resmessages1.rmsg:235
-#, fuzzy, c-format
+#, c-format
 msgid "Factory output speed +100%% per module"
-msgstr "Velocità di produzione +100% per modulo"
+msgstr "Velocità di produzione della fabbrica +100%% per ogni modulo"
 
 #: data/mp/messages/resmessages1.rmsg:245
 #: data/mp/messages/resmessagesall.rmsg:615
@@ -11890,11 +11889,11 @@ msgstr "System locale"
 
 #: lib/ivis_opengl/screen.cpp:187
 msgid "OpenGL GLSL shader version 1.20 is not supported by your system. Some things may look wrong. Please upgrade your graphics driver/hardware, if possible."
-msgstr ""
+msgstr "La versione 1.20 dell'OpenGL GLSL shader non è supportata dal tuo sistema. Alcune cose potrebbero apparire sbagliate. Aggiorna il tuo hardware o i tuoi driver video, se possibile."
 
 #: lib/ivis_opengl/screen.cpp:193
 msgid "OpenGL 1.2 + VBO + TEC is not supported by your system. The game requires this. Please upgrade your graphics drivers/hardware, if possible."
-msgstr ""
+msgstr "OpenGL 1.2 + VBO + TEC non è supportata dal tuo sistema. Il gioco richiede questo. Aggiorna il tuo hardware o i tuoi driver video, se possibile."
 
 #: lib/netplay/netplay.cpp:220
 #: lib/netplay/netplay.cpp:1082
@@ -11907,7 +11906,7 @@ msgid "Could not resolve masterserver name (%s)!"
 msgstr "Non posso decidere il nome del server master (%s)!"
 
 #: lib/netplay/netplay.cpp:2160
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error connecting to the lobby server: %s.\n"
 "Make sure port %d can receive incoming connections.\n"
@@ -11917,10 +11916,9 @@ msgstr "Errore nella connessione al server della lobby: %s. Fai in modo che la p
 
 #: lib/netplay/netplay.cpp:2835
 msgid "Failed to get a lobby response!"
-msgstr ""
+msgstr "Fallita la ricezione della risposta dalla lobby."
 
 #: po/custom/mac-infoplist.txt:1
-#, fuzzy
 msgid ""
 "Copyright © 1999-2004 Eidos Interactive.\n"
 "Copyright © 2005-2012 The Warzone 2100 Project"
@@ -11985,21 +11983,20 @@ msgstr "Chiudi"
 #: src/cheat.cpp:165
 #, c-format
 msgid "%s wants to enable debug mode. Enabled: %s, Disabled: %s."
-msgstr ""
+msgstr "%s vuole abilitare la modalità debug. Abilitata: %s, Disabilitata: %s."
 
 #: src/cheat.cpp:169
 #, c-format
 msgid "%s wants to disable debug mode. Enabled: %s, Disabled: %s."
-msgstr ""
+msgstr "%s vuole disabilitare la modalità debug. Abilitata: %s, Disabilitata: %s."
 
 #: src/cheat.cpp:175
 msgid "Debug mode now enabled!"
-msgstr ""
+msgstr "Modalità debug abilitata!"
 
 #: src/cheat.cpp:180
-#, fuzzy
 msgid "Debug mode now disabled!"
-msgstr "Il menu Debug è aperto"
+msgstr "Modalità Debug disabilitata!"
 
 #: src/clparse.cpp:242
 msgid "Set configuration directory"
@@ -12141,11 +12138,11 @@ msgstr "Disabilita la compressione delle texture"
 
 #: src/clparse.cpp:267
 msgid "Only use OpenGL 1.5"
-msgstr ""
+msgstr "Usa solo OpenGL 1.5"
 
 #: src/cmddroid.cpp:110
 msgid "Commander needs a higher level to command more units"
-msgstr ""
+msgstr "Il comandante ha bisogno di un livello più alto per comandare più unità"
 
 #: src/configuration.cpp:96
 msgid "My Game"
@@ -12183,7 +12180,7 @@ msgstr "Cancella il Progetto"
 #: src/design.cpp:607
 #: src/design.cpp:4756
 msgid "Store Template"
-msgstr ""
+msgstr "Salva design"
 
 #: src/design.cpp:660
 #: src/design.cpp:707
@@ -12315,7 +12312,7 @@ msgstr "Sistemi"
 
 #: src/design.cpp:4751
 msgid "Delete Template"
-msgstr ""
+msgstr "Cancella design"
 
 #: src/display3d.cpp:658
 msgid "Player left"
@@ -12463,9 +12460,8 @@ msgid "MAIN MENU"
 msgstr "MENU PRINCIPALE"
 
 #: src/frontend.cpp:117
-#, fuzzy
 msgid "Official site: http://wz2100.net/"
-msgstr "Visita il nostro sito ufficiale: http//wz2100.net"
+msgstr "Sito ufficiale: http://wz2100.net"
 
 #: src/frontend.cpp:187
 msgid "Fast Play"
@@ -12503,14 +12499,12 @@ msgid "Challenges"
 msgstr "Sfide"
 
 #: src/frontend.cpp:248
-#, fuzzy
 msgid "Load Campaign Game"
-msgstr "Carica Partita"
+msgstr "Carica Campagna"
 
 #: src/frontend.cpp:249
-#, fuzzy
 msgid "Load Skirmish Game"
-msgstr "Inizia schermaglia"
+msgstr "Carica schermaglia"
 
 #: src/frontend.cpp:251
 msgid "SINGLE PLAYER"
@@ -12518,19 +12512,17 @@ msgstr "GIOCATORE SINGOLO"
 
 #: src/frontend.cpp:256
 msgid "Campaign videos are missing! Get them from http://wz2100.net"
-msgstr ""
+msgstr "I video della campagna non sono presenti! Ottienili da http://wz2100.net"
 
 #: src/frontend.cpp:332
 #: src/ingameop.cpp:504
-#, fuzzy
 msgid "Load Campaign Saved Game"
-msgstr "Carica Partita"
+msgstr "Carica una campagna salvata"
 
 #: src/frontend.cpp:338
 #: src/ingameop.cpp:508
-#, fuzzy
 msgid "Load Skirmish Saved Game"
-msgstr "Carica Partita"
+msgstr "Carica una schermaglia salvata"
 
 #: src/frontend.cpp:392
 msgid "MULTI PLAYER"
@@ -12546,7 +12538,7 @@ msgstr "Unisciti a una partita"
 
 #: src/frontend.cpp:400
 msgid "TCP port 2100 must be opened in your firewall or router to host games!"
-msgstr ""
+msgstr "La porta TCP 2100 deve essere aperta sul tuo firewall o router per ospitare partite!"
 
 #: src/frontend.cpp:462
 #: src/multiint.cpp:1472
@@ -12741,9 +12733,8 @@ msgid "Unsupported"
 msgstr "Non supportato"
 
 #: src/frontend.cpp:887
-#, fuzzy
 msgid "Shaders"
-msgstr "Ombre"
+msgstr "Shaders"
 
 #: src/frontend.cpp:899
 msgid "VIDEO OPTIONS"
@@ -12816,21 +12807,18 @@ msgstr "Velocità di Scorrimento"
 
 #: src/frontend.cpp:1283
 #: src/frontend.cpp:1338
-#, fuzzy
 msgid "Unit Colour:"
-msgstr "Colore delle Unità"
+msgstr "Colore delle Unità:"
 
 #: src/frontend.cpp:1303
 #: src/frontend.cpp:1339
-#, fuzzy
 msgid "Campaign"
-msgstr "Nuova Campagna"
+msgstr "Campagna"
 
 #: src/frontend.cpp:1313
 #: src/frontend.cpp:1340
-#, fuzzy
 msgid "Skirmish/Multiplayer"
-msgstr "Multi Player"
+msgstr "Schermaglia/Multiplayer"
 
 #: src/frontend.cpp:1319
 #: src/frontend.cpp:1335
@@ -13057,14 +13045,12 @@ msgid "-->  QUIT  <--"
 msgstr "--> ABBANDONA <--"
 
 #: src/ingameop.cpp:512
-#, fuzzy
 msgid "Save Campaign Game"
-msgstr "Nuova Campagna"
+msgstr "Salva campagna"
 
 #: src/ingameop.cpp:516
-#, fuzzy
 msgid "Save Skirmish Game"
-msgstr "Inizia schermaglia"
+msgstr "Salva schermaglia"
 
 #: src/init.cpp:422
 #, c-format
@@ -13078,9 +13064,8 @@ msgstr ""
 "Warzone proverà a caricare il gioco senza di esso."
 
 #: src/intdisplay.cpp:201
-#, fuzzy
 msgid "Waiting for Power"
-msgstr "In attesa degli altri giocatori"
+msgstr "In attesa di Energia"
 
 #: src/intdisplay.cpp:249
 msgid "Build Progress"
@@ -13091,13 +13076,12 @@ msgid "Construction Progress"
 msgstr "Progresso della costruzione"
 
 #: src/intdisplay.cpp:292
-#, fuzzy
 msgid "Research Progress"
-msgstr "Ricerca migliorata"
+msgstr "Progresso della ricerca"
 
 #: src/intdisplay.cpp:656
 msgid "Need more resources!"
-msgstr ""
+msgstr "Necessiti di più risorse!"
 
 #: src/intelmap.cpp:241
 #: src/keybind.cpp:1397
@@ -13237,11 +13221,11 @@ msgstr "Attenzione! Questo trucco è buggato. Raccomandiamo di NON usarlo."
 
 #: src/keybind.cpp:228
 msgid "Ouch! Droid's health is down 20%!"
-msgstr ""
+msgstr "Ouch! La vita dell'unità è minore del 20%!"
 
 #: src/keybind.cpp:244
 msgid "Ouch! Structure's health is down 20%!"
-msgstr ""
+msgstr "Ouch! La vita della struttra è minore del 20!"
 
 #: src/keybind.cpp:299
 msgid "Lets us see what you see!"
@@ -13252,9 +13236,9 @@ msgid "Fine, weapon & sensor display is off!"
 msgstr "Va bene,il display delle armi e dei sensor è spento!"
 
 #: src/keybind.cpp:423
-#, fuzzy, c-format
+#, c-format
 msgid "Player %u is cheating a new droid army of: %s."
-msgstr "Il giocatore %u sta ottenendo per mezzo di trucchi un nuovo esercito di %s(s)"
+msgstr "Il giocatore %u sta ottenendo un nuovo esercito di: %s per mezzo di trucchi."
 
 #: src/keybind.cpp:461
 #: src/keybind.cpp:491
@@ -13458,14 +13442,14 @@ msgid "Game Speed Reset"
 msgstr "Velocità di Gioco Reimpostata"
 
 #: src/keybind.cpp:2725
-#, fuzzy, c-format
+#, c-format
 msgid "Game Speed Increased to %s"
-msgstr "Velocità di Gioco Aumentata a %3.1f"
+msgstr "Velocità di Gioco Aumentata a %s"
 
 #: src/keybind.cpp:2729
-#, fuzzy, c-format
+#, c-format
 msgid "Game Speed Reduced to %s"
-msgstr "Velocità di Gioco Ridotta a %3.1f"
+msgstr "Velocità di Gioco Ridotta a %s"
 
 #: src/keybind.cpp:2785
 msgid "Radar showing friend-foe colors"
@@ -13843,9 +13827,8 @@ msgid "Select all Combat Units"
 msgstr "Seleziona tutte le unità combattenti"
 
 #: src/keymap.cpp:430
-#, fuzzy
 msgid "Select all Cyborgs"
-msgstr "Seleziona tutti gli Hover"
+msgstr "Seleziona tutti i Cyborg"
 
 #: src/keymap.cpp:431
 msgid "Select all Heavily Damaged Units"
@@ -13888,44 +13871,36 @@ msgid "Select all Similar Units"
 msgstr "Seleziona tutte le unità simili"
 
 #: src/keymap.cpp:445
-#, fuzzy
 msgid "Select all Combat Cyborgs"
-msgstr "Seleziona tutte le unità combattenti"
+msgstr "Seleziona tutte i Cyborg da combattimento"
 
 #: src/keymap.cpp:446
-#, fuzzy
 msgid "Select all Engineers"
-msgstr "Seleziona tutti gli Hover"
+msgstr "Seleziona tutti gli Ingegneri"
 
 #: src/keymap.cpp:447
-#, fuzzy
 msgid "Select all Land Combat Units"
-msgstr "Seleziona tutte le unità combattenti"
+msgstr "Seleziona tutte le unità di terra da combattimento"
 
 #: src/keymap.cpp:448
-#, fuzzy
 msgid "Select all Mechanics"
-msgstr "Seleziona tutti i Cingoli"
+msgstr "Seleziona tutti i meccanici"
 
 #: src/keymap.cpp:449
-#, fuzzy
 msgid "Select all Transporters"
-msgstr "Seleziona tutti i Cingoli"
+msgstr "Seleziona tutti i Trasporti"
 
 #: src/keymap.cpp:450
-#, fuzzy
 msgid "Select all Repair Tanks"
-msgstr "Seleziona tutti i Cingoli"
+msgstr "Seleziona tutti i Carri da Riparazione"
 
 #: src/keymap.cpp:451
-#, fuzzy
 msgid "Select all Sensor Units"
-msgstr "Seleziona tutte le unità simili"
+msgstr "Seleziona tutte le unità con sensori"
 
 #: src/keymap.cpp:452
-#, fuzzy
 msgid "Select all Trucks"
-msgstr "Seleziona tutti i Cingoli"
+msgstr "Seleziona tutti i Camion"
 
 #: src/keymap.cpp:456
 msgid "Select next Factory"
@@ -14161,36 +14136,34 @@ msgid "IP"
 msgstr "IP"
 
 #: src/multiint.cpp:986
-#, fuzzy
 msgid "[Password required]"
-msgstr "*** La password non è richiesta! ***"
+msgstr "[Password richiesta]"
 
 #: src/multiint.cpp:990
 msgid "[No Tanks]"
-msgstr ""
+msgstr "[No carri]"
 
 #: src/multiint.cpp:994
-#, fuzzy
 msgid "[No Cyborgs]"
-msgstr "Produce cyborg"
+msgstr "[No Cyborg]"
 
 #: src/multiint.cpp:998
 msgid "[No VTOLs]"
-msgstr ""
+msgstr "[No VTOL]"
 
 #: src/multiint.cpp:1002
 #, c-format
 msgid "Hosted by %s"
-msgstr ""
+msgstr "Hostato da %s"
 
 #: src/multiint.cpp:1006
 #, c-format
 msgid "Hosted by %s —%s"
-msgstr ""
+msgstr "Hostato da %s —%s"
 
 #: src/multiint.cpp:1028
 msgid "Can't find any games for your version."
-msgstr ""
+msgstr "Impossibile trovare partite per la tua versione."
 
 #: src/multiint.cpp:1043
 msgid "No games are available"
@@ -14241,9 +14214,8 @@ msgid "Refresh Games List"
 msgstr "Aggiorna la Lista Partite"
 
 #: src/multiint.cpp:1265
-#, fuzzy
 msgid "Filter Games List"
-msgstr "Aggiorna la Lista Partite"
+msgstr "Filtra la lista delle partite"
 
 #: src/multiint.cpp:1290
 msgid "Enter Password:"
@@ -14266,14 +14238,12 @@ msgid "VTOLs disabled."
 msgstr "VTOL disabilitati."
 
 #: src/multiint.cpp:1429
-#, fuzzy
 msgid "Satellite Uplink disabled."
-msgstr "Aggiornamento Satellitare"
+msgstr "Collegamento Satellitare disabilitato."
 
 #: src/multiint.cpp:1430
-#, fuzzy
 msgid "Laser Satellite disabled."
-msgstr "Centro di Comando per il Laser Satellitare"
+msgstr "Centro di Comando per il Laser Satellitare disabilitato."
 
 #: src/multiint.cpp:1477
 #: src/multiint.cpp:1485
@@ -14379,7 +14349,7 @@ msgstr "DIFFICOLTA'"
 
 #: src/multiint.cpp:1773
 msgid "Less aggressive"
-msgstr ""
+msgstr "Meno aggressivo"
 
 #: src/multiint.cpp:1774
 msgid "Plays nice"
@@ -14390,9 +14360,8 @@ msgid "No holds barred"
 msgstr "Senza esclusione di colpi"
 
 #: src/multiint.cpp:1776
-#, fuzzy
 msgid "Starts with advantages"
-msgstr "Inizia con Basi Avanzate"
+msgstr "Inizia avvantaggiato"
 
 #: src/multiint.cpp:1804
 msgid "CHOOSE AI"
@@ -14419,14 +14388,12 @@ msgid "Click to change difficulty"
 msgstr "Clicca per modificare la difficoltà"
 
 #: src/multiint.cpp:2338
-#, fuzzy
 msgid "Waiting for player"
-msgstr "In attesa degli altri giocatori"
+msgstr "In attesa del giocatore"
 
 #: src/multiint.cpp:2338
-#, fuzzy
 msgid "Player is ready"
-msgstr "Giocatore"
+msgstr "Il giocatore è pronto"
 
 #: src/multiint.cpp:2338
 msgid "Click when ready"
@@ -14470,7 +14437,7 @@ msgstr "Tutti i giocatori devono avere gli stessi mod per entrare nella tua part
 
 #: src/multiint.cpp:2652
 msgid "Connecting to the lobby server..."
-msgstr ""
+msgstr "Connessione alla lobby..."
 
 #: src/multiint.cpp:2956
 #, c-format
@@ -14502,21 +14469,21 @@ msgstr "L'host sta avviando la partita"
 
 #: src/multiint.cpp:3913
 msgid "Can't connect to lobby server!"
-msgstr ""
+msgstr "Impossibile connettersi alla lobby!"
 
 #: src/multiint.cpp:4005
 #, c-format
 msgid "Mods: %s"
-msgstr ""
+msgstr "Mods: %s"
 
 #: src/multiint.cpp:4012
 msgid "Mods: None!"
-msgstr ""
+msgstr "Mods: Nessuna!"
 
 #: src/multiint.cpp:4022
-#, fuzzy, c-format
+#, c-format
 msgid "Version: %s"
-msgstr "Versione %s%s%s%s"
+msgstr "Versione: %s"
 
 #: src/multiint.cpp:4073
 #, c-format
@@ -14573,14 +14540,13 @@ msgid "%s (%u) has an incompatible mod, and has been kicked."
 msgstr "%s (%u) ha un mod incompatibile, ed è stato espulso."
 
 #: src/multijoin.cpp:462
-#, fuzzy, c-format
+#, c-format
 msgid "%s is joining the game"
 msgstr "%s si sta unendo alla partita"
 
 #: src/multijoin.cpp:473
-#, fuzzy
 msgid "Server message:"
-msgstr "Messaggio di Sistema"
+msgstr "Messaggio del server:"
 
 #: src/multilimit.cpp:183
 msgid "Apply Defaults and Return To Previous Screen"
@@ -14607,11 +14573,11 @@ msgid "Any number of players"
 msgstr "Qualsiasi numero di giocatori"
 
 #: src/multimenu.cpp:654
-#, fuzzy, c-format
+#, c-format
 msgid "%d player"
 msgid_plural "%d players"
-msgstr[0] "2 giocatori"
-msgstr[1] "2 giocatori"
+msgstr[0] "%d giocatore"
+msgstr[1] "%d giocatori"
 
 #: src/multimenu.cpp:792
 msgid "Score"
@@ -14631,26 +14597,26 @@ msgstr "Strutture"
 
 #: src/multimenu.cpp:821
 msgid "Sent/Received per sec —"
-msgstr ""
+msgstr "Inviati/Ricevuto al secondo"
 
 #: src/multimenu.cpp:821
 msgid "Total Sent/Received —"
-msgstr ""
+msgstr "Totale inviati/ricevuti —"
 
 #: src/multimenu.cpp:826
-#, fuzzy, c-format
+#, c-format
 msgid "Traf: %u/%u"
-msgstr "Addestrata: %u"
+msgstr "Traf: %u/%u"
 
 #: src/multimenu.cpp:830
 #, c-format
 msgid "Uncompressed: %u/%u"
-msgstr ""
+msgstr "Non compresso: %u/%u"
 
 #: src/multimenu.cpp:834
 #, c-format
 msgid "Pack: %u/%u"
-msgstr ""
+msgstr "Pacchetti: %u/%u"
 
 #: src/multimenu.cpp:1136
 msgid "Channel"
@@ -14938,9 +14904,8 @@ msgstr[0] "%u unità selezionata"
 msgstr[1] "%u unità selezionate"
 
 #: src/structure.cpp:2620
-#, fuzzy
 msgid "Can't build anymore units, Command Control Limit Reached - Production Halted"
-msgstr "Limite di Controllo Raggiunto - Produzione Arrestata"
+msgstr "Non si possono produrre ulteriori unità, limite di controllo raggiunto - Produzione Arrestata"
 
 #: src/structure.cpp:5613
 #: src/structure.cpp:5638
@@ -15026,7 +14991,7 @@ msgstr " - Costruito %s"
 #. TRANSLATORS: This string looks as follows when expanded.
 #. "Version <version name/number> <working copy state><BUILD DATE><BUILD TYPE>"
 #: src/version.cpp:147
-#, fuzzy, c-format
+#, c-format
 msgid "Version %s%s%s%s"
 msgstr "Versione %s%s%s%s"
 
