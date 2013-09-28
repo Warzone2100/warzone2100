@@ -53,27 +53,24 @@ enum AP_TYPE
 
 enum AP_STATUS
 {
-    APS_ACTIVE,
-    APS_INACTIVE
+    APS_INACTIVE,
+    APS_ACTIVE
 };
 
-static ATPART	asAtmosParts[MAX_ATMOS_PARTICLES];
+static ATPART	*asAtmosParts = NULL;
 static UDWORD	freeParticle;
-static UDWORD	weather;
+static WT_CLASS	weather = WT_NONE;
 
 /* Setup all the particles */
 void atmosInitSystem()
 {
-	for (int i = 0; i < MAX_ATMOS_PARTICLES; i++)
+	if (!asAtmosParts && weather != WT_NONE)
 	{
-		/* None are being used initially */
-		asAtmosParts[i].status = APS_INACTIVE;
+		// calloc sets all to APS_INACTIVE initially
+		asAtmosParts = (ATPART *)calloc(MAX_ATMOS_PARTICLES, sizeof(*asAtmosParts));
 	}
 	/* Start at the beginning */
 	freeParticle = 0;
-
-	/* No weather to start with */
-	weather	= WT_NONE;
 }
 
 /*	Makes a particle wrap around - if it goes off the grid, then it returns
@@ -287,8 +284,6 @@ void atmosUpdateSystem()
 					break;
 				case WT_NONE:
 					break;
-				default:
-					break;
 				}
 			}
 		}
@@ -341,17 +336,19 @@ void renderParticle(ATPART *psPart)
 
 void atmosSetWeatherType(WT_CLASS type)
 {
-	if (type == WT_NONE)
-	{
-		atmosInitSystem();
-	}
-	else
+	if (type != weather)
 	{
 		weather = type;
+		atmosInitSystem();
+	}
+	if (type == WT_NONE && asAtmosParts)
+	{
+		free(asAtmosParts);
+		asAtmosParts = NULL;
 	}
 }
 
 WT_CLASS atmosGetWeatherType()
 {
-	return (WT_CLASS)weather;
+	return weather;
 }
