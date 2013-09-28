@@ -427,7 +427,7 @@ void bucketRenderCurrentList(void)
 		switch(thisTag->objectType)
 		{
 			case RENDER_PARTICLE:
-				renderParticle((ATPART*)thisTag->pObject);
+				Atmosphere::getInstance().renderParticle((ATPART*)thisTag->pObject);
 				break;
 			case RENDER_EFFECT:
 				renderEffect((EFFECT*)thisTag->pObject);
