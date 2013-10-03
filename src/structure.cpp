@@ -500,7 +500,7 @@ bool loadStructureStats(QString filename)
 		psStats->strength = structStrength[strength];
 	
 		// set baseWidth
-		psStats->baseWidth = ini.value("baseWidth", 0).toUInt();
+		psStats->baseWidth = ini.value("width", 0).toUInt();
 		ASSERT_OR_RETURN(false, psStats->baseWidth <= 100, "Invalid baseWidth '%d' for structure '%s'", psStats->baseWidth, getID(psStats));
 		
 		// set baseBreadth
