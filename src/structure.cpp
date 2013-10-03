@@ -501,11 +501,11 @@ bool loadStructureStats(QString filename)
 	
 		// set baseWidth
 		psStats->baseWidth = ini.value("width", 0).toUInt();
-		ASSERT_OR_RETURN(false, psStats->baseWidth <= 100, "Invalid baseWidth '%d' for structure '%s'", psStats->baseWidth, getID(psStats));
+		ASSERT_OR_RETURN(false, psStats->baseWidth <= 100, "Invalid width '%d' for structure '%s'", psStats->baseWidth, getID(psStats));
 		
 		// set baseBreadth
-		psStats->baseBreadth = ini.value("baseBreadth", 0).toUInt();
-		ASSERT_OR_RETURN(false, psStats->baseBreadth < 100, "Invalid baseBreadth '%d' for structure '%s'", psStats->baseBreadth, getID(psStats));
+		psStats->baseBreadth = ini.value("breadth", 0).toUInt();
+		ASSERT_OR_RETURN(false, psStats->baseBreadth < 100, "Invalid breadth '%d' for structure '%s'", psStats->baseBreadth, getID(psStats));
 		
 		psStats->height = ini.value("height").toUInt();
 		psStats->powerToBuild = ini.value("buildPower").toUInt();
