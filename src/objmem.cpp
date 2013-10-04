@@ -119,8 +119,8 @@ static bool objmemDestroy(BASE_OBJECT *psObj)
 		default:
 			ASSERT(!"unknown object type", "objmemDestroy: unknown object type in destroyed list at 0x%p", psObj);
 	}
-	delete psObj;
 	debug(LOG_MEMORY, "BASE_OBJECT* 0x%p is freed.", psObj);
+	delete psObj;
 	return true;
 }
 

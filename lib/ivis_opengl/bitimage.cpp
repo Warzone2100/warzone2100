@@ -176,6 +176,7 @@ IMAGEFILE *iV_LoadImageFile(const char *fileName)
 		if (retval != 3)
 		{
 			debug(LOG_ERROR, "Bad line in \"%s\".", fileName);
+			delete imageFile;
 			return NULL;
 		}
 		imageFile->imageNames[numImages].first = tmpName;

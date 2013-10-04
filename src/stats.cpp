@@ -1698,16 +1698,15 @@ int bodyArmour(const BODY_STATS *psStats, int player, WEAPON_CLASS weaponClass)
 int weaponROF(const WEAPON_STATS *psStat, int player)
 {
 	int rof = 0;
+	// if there are salvos
+	if (player >= 0
+	    && psStat->upgrade[player].numRounds
+	    && psStat->upgrade[player].reloadTime != 0)
+    {
+        // Rounds per salvo multiplied with the number of salvos per minute
+        rof = psStat->upgrade[player].numRounds * 60 * GAME_TICKS_PER_SEC / weaponReloadTime(psStat, player);
+    }
 
-	if (psStat->upgrade[player].numRounds)	// if there are salvos
-	{
-		if (psStat->upgrade[player].reloadTime != 0)
-		{
-			// Rounds per salvo multiplied with the number of salvos per minute
-			rof = psStat->upgrade[player].numRounds * 60 * GAME_TICKS_PER_SEC  /
-			        (player >= 0 ? weaponReloadTime(psStat, player) : psStat->upgrade[player].reloadTime);
-		}
-	}
 	if (rof == 0)
 	{
 		rof = weaponFirePause(psStat, selectedPlayer);

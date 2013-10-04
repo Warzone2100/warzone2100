@@ -1410,7 +1410,7 @@ void finishDeliveryPosition()
 			setAssemblyPoint(psStruct->pFunctionality->factory.psAssemblyPoint,
 							 flagPos.coords.x, flagPos.coords.y, selectedPlayer, true);
 		}
-		else if (psStruct->pStructureType->type == REF_REPAIR_FACILITY)
+		else if (psStruct->pStructureType->type == REF_REPAIR_FACILITY && psStruct->pFunctionality != NULL)
 		{
 			setAssemblyPoint(psStruct->pFunctionality->repairFacility.psDeliveryPoint,
 							 flagPos.coords.x, flagPos.coords.y, selectedPlayer, true);
@@ -2614,8 +2614,8 @@ static SELECTION_TYPE	establishSelection(UDWORD selectedPlayer)
 			ASSERT( psDroid->droidType < NUM_DROID_WEIGHTS,
 				"establishSelection : droidType exceeds NUM_DROID_WEIGHTS" );
 
-			atLeastOne = true;
 			if(DroidSelectionWeights[psDroid->droidType] < CurrWeight) {
+			    atLeastOne = true;
 				CurrWeight = DroidSelectionWeights[psDroid->droidType];
 				psDominant = psDroid;
 			}
