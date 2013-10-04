@@ -239,7 +239,7 @@ bool recvLasSat(NETQUEUE queue)
 	if (psStruct && !canGiveOrdersFor(queue.index, psStruct->player))
 	{
 		syncDebug("Wrong player.");
-		return !"Meow";  // Return value meaningless and ignored.
+		return false;
 	}
 
 	if (psStruct && psObj && psStruct->pStructureType->psWeapStat[0]->weaponSubClass == WSC_LAS_SAT)

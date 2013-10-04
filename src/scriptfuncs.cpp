@@ -118,7 +118,7 @@ std::vector<Vector2i> derricks;
 bool scriptOperatorEquals(INTERP_VAL const &v1, INTERP_VAL const &v2)
 {
 	ASSERT_OR_RETURN(false, scriptTypeIsPointer(v1.type) && scriptTypeIsPointer(v2.type), "Bad types.");
-	if (v1.type == (INTERP_TYPE)ST_RESEARCH && v1.type == (INTERP_TYPE)ST_RESEARCH)
+	if (v1.type == (INTERP_TYPE)ST_RESEARCH && v2.type == (INTERP_TYPE)ST_RESEARCH)
 	{
 		return ((RESEARCH *)v1.v.oval)->ref == ((RESEARCH *)v2.v.oval)->ref;
 	}
@@ -9138,6 +9138,7 @@ VIEWDATA *CreateBeaconViewData(SDWORD sender, UDWORD LocX, UDWORD LocY)
 	if (psViewData->pData == NULL)
 	{
 		ASSERT(false, "prepairHelpViewData() - Unable to allocate memory");
+		delete psViewData;
 		return NULL;
 	}
 
@@ -10245,6 +10246,7 @@ bool scrAssembleWeaponTemplate(void)
 	// finalize template and set its name
 	if (!intValidTemplate(pNewTemplate, GetDefaultTemplateName(pNewTemplate), false, player))
 	{
+	    delete pNewTemplate;
 		return false;
 	}
 
