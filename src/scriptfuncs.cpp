@@ -3520,11 +3520,11 @@ bool scrSetSnow(void)
 
 	if (bState)
 	{
-	    Atmosphere::setWeatherType(WT_SNOWING);
+		atmosSetWeatherType(WT_SNOWING);
 	}
 	else
 	{
-	    Atmosphere::setWeatherType(WT_NONE);
+		atmosSetWeatherType(WT_NONE);
 	}
 
 	return true;
@@ -3544,11 +3544,11 @@ bool scrSetRain(void)
 
 	if (bState)
 	{
-	    Atmosphere::setWeatherType(WT_RAINING);
+		atmosSetWeatherType(WT_RAINING);
 	}
 	else
 	{
-	    Atmosphere::setWeatherType(WT_NONE);
+		atmosSetWeatherType(WT_NONE);
 	}
 
 	return true;

@@ -21,12 +21,8 @@
 #ifndef __INCLUDED_SRC_ATMOS_H__
 #define __INCLUDED_SRC_ATMOS_H__
 
-#include "map.h"
 #include "lib/framework/vector.h"
 #include "lib/ivis_opengl/ivisdef.h"
-
-/* Roughly one particle per tile */
-#define MAX_ATMOS_PARTICLES     (MAP_MAXWIDTH * MAP_MAXHEIGHT)
 
 struct ATPART
 {
@@ -40,39 +36,16 @@ struct ATPART
 
 enum WT_CLASS
 {
-    WT_NONE,
 	WT_RAINING,
-	WT_SNOWING
+	WT_SNOWING,
+	WT_NONE
 };
 
-enum AP_TYPE
-{
-    AP_RAIN,
-    AP_SNOW
-};
-
-class Atmosphere
-{
-public:
-    static   Atmosphere& getInstance();
-    void     renderParticle(ATPART *psPart);
-    void     updateSystem();
-    void     drawParticles(void);
-
-    static   void     setWeatherType(WT_CLASS type);
-    static   WT_CLASS getWeatherType(void);
-
-private:
-    ATPART asAtmosParts[MAX_ATMOS_PARTICLES];
-    UDWORD freeParticle;
-
-    Atmosphere();
-    Atmosphere(Atmosphere const&);      // Don't Implement
-    void operator=(Atmosphere const&);  // Don't implement
-
-    void     testParticleWrap(ATPART *psPart);
-    void     addParticle(const Vector3f &pos, AP_TYPE type);
-    void     processParticle(ATPART *psPart);
-};
+void atmosInitSystem(void);
+void atmosUpdateSystem(void);
+void renderParticle(ATPART *psPart);
+void atmosDrawParticles(void);
+void atmosSetWeatherType(WT_CLASS type);
+WT_CLASS atmosGetWeatherType(void);
 
 #endif // __INCLUDED_SRC_ATMOS_H__

@@ -20,11 +20,8 @@
 /**
  * @file atmos.c
  *
- * Handles atmospherics such as snow and rain. The class Atmosphere is a singleton.
- * It will be created lazily (on need, whenever the weather changes to show or rain)
- * and it will be created only once. The lazy initialization will help to avoid
- * unneccessary allocation, thus saving few megabytes of RAM.
- */
+ * Handles atmospherics such as snow and rain.
+*/
 
 #include "lib/framework/frame.h"
 #include "lib/ivis_opengl/piematrix.h"
@@ -37,12 +34,22 @@
 #include "map.h"
 #include "miscimd.h"
 
-#define SNOW_SPEED_DRIFT        (40 - rand() % 80)
-#define SNOW_SPEED_FALL         (0 - (rand() % 40 + 80))
-#define RAIN_SPEED_DRIFT        (rand() % 50)
-#define RAIN_SPEED_FALL         (0 - ((rand() % 300) + 700))
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// Shift all this gubbins into a .h file if it makes it into game
+// -----------------------------------------------------------------------------
+/* Roughly one per tile */
+#define	MAX_ATMOS_PARTICLES		(MAP_MAXWIDTH * MAP_MAXHEIGHT)
+#define	SNOW_SPEED_DRIFT		(40 - rand() % 80)
+#define SNOW_SPEED_FALL			(0 - (rand() % 40 + 80))
+#define	RAIN_SPEED_DRIFT		(rand() % 50)
+#define	RAIN_SPEED_FALL			(0 - ((rand() % 300) + 700))
 
-static WT_CLASS currentWeather = WT_NONE;
+enum AP_TYPE
+{
+    AP_RAIN,
+    AP_SNOW
+};
 
 enum AP_STATUS
 {
@@ -50,9 +57,13 @@ enum AP_STATUS
     APS_INACTIVE
 };
 
-Atmosphere::Atmosphere()
+static ATPART	asAtmosParts[MAX_ATMOS_PARTICLES];
+static UDWORD	freeParticle;
+static UDWORD	weather;
+
+/* Setup all the particles */
+void atmosInitSystem()
 {
-    /* Setup all the particles */
 	for (int i = 0; i < MAX_ATMOS_PARTICLES; i++)
 	{
 		/* None are being used initially */
@@ -61,19 +72,13 @@ Atmosphere::Atmosphere()
 	/* Start at the beginning */
 	freeParticle = 0;
 
+	/* No weather to start with */
+	weather	= WT_NONE;
 }
 
-/* used for lazy initialization of the Atmosphere object */
-Atmosphere& Atmosphere::getInstance()
-{
-    /* Instantiated on first use. Guaranteed to be destroyed. */
-    static Atmosphere instance;
-    return instance;
-}
-
-/*  Makes a particle wrap around - if it goes off the grid, then it returns
-    on the other side - provided it's still on world... Which it should be */
-void Atmosphere::testParticleWrap(ATPART *psPart)
+/*	Makes a particle wrap around - if it goes off the grid, then it returns
+	on the other side - provided it's still on world... Which it should be */
+static void testParticleWrap(ATPART *psPart)
 {
 	/* Gone off left side */
 	if (psPart->position.x < player.p.x - world_coord(visibleTiles.x) / 2)
@@ -101,15 +106,15 @@ void Atmosphere::testParticleWrap(ATPART *psPart)
 }
 
 /* Moves one of the particles */
-void Atmosphere::processParticle(ATPART *psPart)
+static void processParticle(ATPART *psPart)
 {
-	int32_t  groundHeight;
+	SDWORD	groundHeight;
 	Vector3i pos;
-	uint32_t x, y;
-	MAPTILE  *psTile;
+	UDWORD	x, y;
+	MAPTILE	*psTile;
 
 	/* Only move if the game isn't paused */
-	if (gamePaused() == false)
+	if (!gamePaused())
 	{
 		/* Move the particle - frame rate controlled */
 		psPart->position.x += graphicsTimeAdjustedIncrement(psPart->velocity.x);
@@ -136,12 +141,11 @@ void Atmosphere::processParticle(ATPART *psPart)
 			groundHeight = map_Height(psPart->position.x, psPart->position.z);
 
 			/* Are we below ground? */
-			if (psPart->position.y < groundHeight ||
-                psPart->position.y < 0.f)
+			if ((int)psPart->position.y < groundHeight
+			    || psPart->position.y < 0.f)
 			{
 				/* Kill it and return */
 				psPart->status = APS_INACTIVE;
-                /* if it's rain, make a small explosion(splash) upon impact on water */
 				if (psPart->type == AP_RAIN)
 				{
 					x = map_coord(psPart->position.x);
@@ -174,10 +178,10 @@ void Atmosphere::processParticle(ATPART *psPart)
 }
 
 /* Adds a particle to the system if it can */
-void Atmosphere::addParticle(const Vector3f &pos, AP_TYPE type)
+static void atmosAddParticle(const Vector3f &pos, AP_TYPE type)
 {
-	uint32_t  activeCount;
-	uint32_t  i;
+	UDWORD	activeCount;
+	UDWORD	i;
 
 	for (i = freeParticle, activeCount = 0; asAtmosParts[i].status == APS_ACTIVE && activeCount < MAX_ATMOS_PARTICLES; i++)
 	{
@@ -236,15 +240,15 @@ void Atmosphere::addParticle(const Vector3f &pos, AP_TYPE type)
 	}
 }
 
-/* Move all weather particles */
-void Atmosphere::updateSystem()
+/* Move the particles */
+void atmosUpdateSystem()
 {
-	uint32_t  i;
-	uint32_t  numberToAdd;
-	Vector3f  pos;
+	UDWORD	i;
+	UDWORD	numberToAdd;
+	Vector3f pos;
 
 	// we don't want to do any of this while paused.
-	if (gamePaused() == false)
+	if (!gamePaused() && weather != WT_NONE)
 	{
 		for (i = 0; i < MAX_ATMOS_PARTICLES; i++)
 		{
@@ -256,7 +260,7 @@ void Atmosphere::updateSystem()
 		}
 
 		/* This bit below needs to go into a "precipitation function" */
-		numberToAdd = ((currentWeather == WT_SNOWING) ? 2 : 4);
+		numberToAdd = ((weather == WT_SNOWING) ? 2 : 4);
 
 		/* Temporary stuff - just adds a few particles! */
 		for (i = 0; i < numberToAdd; i++)
@@ -273,13 +277,13 @@ void Atmosphere::updateSystem()
 			    pos.z < (SDWORD)world_coord(mapHeight - 1))
 			{
 				/* On grid, so which particle shall we add? */
-				switch (currentWeather)
+				switch (weather)
 				{
 				case WT_SNOWING:
-					this->addParticle(pos, AP_SNOW);
+					atmosAddParticle(pos, AP_SNOW);
 					break;
 				case WT_RAINING:
-					this->addParticle(pos, AP_RAIN);
+					atmosAddParticle(pos, AP_RAIN);
 					break;
 				case WT_NONE:
 					break;
@@ -291,12 +295,11 @@ void Atmosphere::updateSystem()
 	}
 }
 
-/* Render all weather particles */
-void Atmosphere::drawParticles()
+void atmosDrawParticles()
 {
 	UDWORD	i;
 
-	if (currentWeather == WT_NONE)
+	if (weather == WT_NONE)
 	{
 		return;
 	}
@@ -316,8 +319,7 @@ void Atmosphere::drawParticles()
 	}
 }
 
-/* renders an individual weather particle */
-void Atmosphere::renderParticle(ATPART *psPart)
+void renderParticle(ATPART *psPart)
 {
 	Vector3i dv;
 
@@ -325,8 +327,7 @@ void Atmosphere::renderParticle(ATPART *psPart)
 	dv.x = psPart->position.x - player.p.x;
 	dv.y = psPart->position.y;
 	dv.z = -(psPart->position.z - player.p.z);
-	pie_MatBegin();
-    /* Push the current matrix */
+	pie_MatBegin();					/* Push the current matrix */
 	pie_TRANSLATE(dv.x, dv.y, dv.z);
 	/* Make it face camera */
 	pie_MatRotY(-player.r.y);
@@ -338,12 +339,19 @@ void Atmosphere::renderParticle(ATPART *psPart)
 	pie_MatEnd();
 }
 
-void Atmosphere::setWeatherType(WT_CLASS type)
+void atmosSetWeatherType(WT_CLASS type)
 {
-    currentWeather = type;
+	if (type == WT_NONE)
+	{
+		atmosInitSystem();
+	}
+	else
+	{
+		weather = type;
+	}
 }
 
-WT_CLASS Atmosphere::getWeatherType()
+WT_CLASS atmosGetWeatherType()
 {
-    return currentWeather;
+	return (WT_CLASS)weather;
 }

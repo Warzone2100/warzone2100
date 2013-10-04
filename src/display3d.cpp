@@ -1018,11 +1018,7 @@ static void drawTiles(iView *player)
 
 	/* This is done here as effects can light the terrain - pause mode problems though */
 	processEffects();
-    /* if the weather is show or rain, update all particles */
-    if (Atmosphere::getWeatherType() != WT_NONE)
-    {
-        Atmosphere::getInstance().updateSystem();
-    }
+	atmosUpdateSystem();
 	avUpdateTiles();
 
 	// now we are about to draw the terrain
@@ -1062,11 +1058,8 @@ static void drawTiles(iView *player)
 	pie_MatEnd();
 
 	GL_DEBUG("Draw 3D scene - particles");
-    /* if the weather is show or rain, render all particles */
-    if (Atmosphere::getWeatherType() != WT_NONE)
-    {
-        Atmosphere::getInstance().drawParticles();
-    }
+	atmosDrawParticles();
+
 	// prepare for the water and the lightmap
 	pie_SetFogStatus(true);
 
@@ -1115,6 +1108,8 @@ bool init3DView(void)
 
 	/* Init the game messaging system */
 	initConsoleMessages();
+
+	atmosInitSystem();
 
 	// Set the initial fog distance
 	UpdateFogDistance(distance);

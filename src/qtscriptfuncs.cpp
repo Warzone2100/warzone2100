@@ -3681,7 +3681,7 @@ static QScriptValue js_setWeather(QScriptContext *context, QScriptEngine *)
 {
 	WT_CLASS weather = (WT_CLASS)context->argument(0).toInt32();
 	SCRIPT_ASSERT(context, weather >= 0 && weather <= WT_NONE, "Bad weather type");
-	Atmosphere::setWeatherType(weather);
+	atmosSetWeatherType(weather);
 	return QScriptValue();
 }
 
