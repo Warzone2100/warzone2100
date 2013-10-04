@@ -307,7 +307,7 @@ bool loadWeaponStats(const char *pFileName)
 		psStats->compType = COMP_WEAPON;
 
 		psStats->weight = ini.value("weight", 0).toUInt();
-		psStats->body = ini.value("body", 0).toUInt();
+		psStats->body = ini.value("hitpoints", 0).toUInt();
 		psStats->radiusLife = ini.value("radiusLife", 0).toUInt();
 
 		psStats->base.maxRange = ini.value("longRange").toUInt();
@@ -745,7 +745,7 @@ bool loadSensorStats(const char *pFileName)
 		psStats->compType = COMP_SENSOR;
 
 		psStats->weight = ini.value("weight", 0).toInt();
-		psStats->body = ini.value("bodyPoints", 0).toInt();
+		psStats->body = ini.value("hitpoints", 0).toInt();
 		psStats->base.range = ini.value("range").toInt();
 		for (int j = 0; j < MAX_PLAYERS; j++)
 		{
@@ -837,7 +837,7 @@ bool loadECMStats(const char *pFileName)
 		psStats->compType = COMP_ECM;
 
 		psStats->weight = ini.value("weight", 0).toInt();
-		psStats->body = ini.value("body", 0).toInt();
+		psStats->body = ini.value("hitpoints", 0).toInt();
 		psStats->base.range = ini.value("range").toInt();
 		for (int j = 0; j < MAX_PLAYERS; j++)
 		{
@@ -958,7 +958,7 @@ bool loadConstructStats(const char *pFileName)
 		psStats->compType = COMP_CONSTRUCT;
 
 		psStats->weight = ini.value("weight", 0).toInt();
-		psStats->body = ini.value("bodyPoints", 0).toInt();
+		psStats->body = ini.value("hitpoints", 0).toInt();
 		psStats->base.constructPoints = ini.value("constructPoints").toInt();
 		for (int j = 0; j < MAX_PLAYERS; j++)
 		{
