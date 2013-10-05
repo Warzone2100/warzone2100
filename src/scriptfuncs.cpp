@@ -10246,7 +10246,7 @@ bool scrAssembleWeaponTemplate(void)
 	// finalize template and set its name
 	if (!intValidTemplate(pNewTemplate, GetDefaultTemplateName(pNewTemplate), false, player))
 	{
-	    delete pNewTemplate;
+		delete pNewTemplate;
 		return false;
 	}
 
