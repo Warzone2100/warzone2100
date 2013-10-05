@@ -433,7 +433,7 @@ void bucketRenderCurrentList(void)
 				renderEffect((EFFECT*)thisTag->pObject);
 				break;
 			case RENDER_DROID:
-				renderDroid((DROID*)thisTag->pObject);
+				displayComponentObject((DROID*)thisTag->pObject);
 				break;
 			case RENDER_SHADOW:
 				renderShadow((DROID*)thisTag->pObject, getImdFromIndex(MI_SHADOW));
