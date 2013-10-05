@@ -814,21 +814,6 @@ void	kf_ToggleFog( void )
 
 // --------------------------------------------------------------------------
 
-void	kf_ToggleWidgets( void )
-{
-	if(getWidgetsStatus())
-	{
-		setWidgetsStatus(false);
-	}
-	else
-	{
-		setWidgetsStatus(true);
-	}
-//	addConsoleMessage("Widgets display toggled",DEFAULT_JUSTIFY,SYSTEM_MESSAGE);
-}
-
-// --------------------------------------------------------------------------
-
 /* Toggle camera on/off */
 void	kf_ToggleCamera( void )
 {
@@ -1660,10 +1645,6 @@ void	kf_JumpToUnassignedUnits( void )
 
 void	kf_ToggleOverlays( void )
 {
-		/* Make sure they're both the same */
-		/* Flip their states */
-//		radarOnScreen = !radarOnScreen;
-
 	if(getWidgetsStatus())
 	{
 		setWidgetsStatus(false);
@@ -1672,30 +1653,7 @@ void	kf_ToggleOverlays( void )
 	{
 		setWidgetsStatus(true);
 	}
-
 }
-
-void	kf_SensorDisplayOn( void )
-{
-	// Now a placeholder for future stuff
-}
-
-void	kf_SensorDisplayOff( void )
-{
-	// Now a placeholder for future stuff
-}
-
-
-// --------------------------------------------------------------------------
-/*
-#define IDRET_OPTIONS		2		// option button
-#define IDRET_BUILD			3		// build button
-#define IDRET_MANUFACTURE	4		// manufacture button
-#define IDRET_RESEARCH		5		// research button
-#define IDRET_INTEL_MAP		6		// intelligence map button
-#define IDRET_DESIGN		7		// design droids button
-#define IDRET_CANCEL		8		// central cancel button
-*/
 
 // --------------------------------------------------------------------------
 void	kf_ChooseCommand( void )
@@ -1789,7 +1747,6 @@ void	kf_ToggleDrivingMode( void )
 // --------------------------------------------------------------------------
 void	kf_MovePause( void )
 {
-
 	if(!bMultiPlayer)	// can't do it in multiplay
 	{
 		if(!bMovePause)

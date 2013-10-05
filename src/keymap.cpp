@@ -208,8 +208,8 @@ _keymapsave keyMapSaveTable[] =
 	kf_ToggleRadarJump,
 	kf_MovePause,
 	kf_NOOP,
-	kf_SensorDisplayOn,
-	kf_SensorDisplayOff,
+	kf_NOOP,
+	kf_NOOP,
 	kf_ToggleRadarTerrain,          //radar terrain on/off
 	kf_ToggleRadarAllyEnemy,        //enemy/ally radar color toggle
 	kf_ToggleSensorDisplay,		//  Was commented out below. moved also!.  Re-enabled --Q 5/10/05
@@ -410,8 +410,6 @@ void	keyInitMappings( bool bForceDefaults )
 
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LALT, KEY_H, KEYMAP_PRESSED, kf_AddHelpBlip, N_("Drop a beacon"));
 
-	keyAddMapping(KEYMAP_ALWAYS,     KEY_IGNORE, KEY_Z,   KEYMAP_PRESSED,  kf_SensorDisplayOn,      N_("Sensor display On"));
-	keyAddMapping(KEYMAP_ALWAYS,     KEY_IGNORE, KEY_Z,   KEYMAP_RELEASED, kf_SensorDisplayOff,     N_("Sensor display Off"));
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LALT,   KEY_S,   KEYMAP_PRESSED,  kf_ToggleShadows,        N_("Toggles shadows"));
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LALT,   KEY_T,   KEYMAP_PRESSED,  kf_toggleTrapCursor,     N_("Trap cursor"));
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL,  KEY_TAB, KEYMAP_PRESSED,  kf_ToggleRadarTerrain,   N_("Toggle radar terrain"));

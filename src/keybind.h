@@ -40,7 +40,6 @@ extern void	kf_RecalcLighting( void );
 extern void	kf_ScreenDump( void );
 extern void	kf_AllAvailable( void );
 extern void	kf_TriFlip( void );
-extern void	kf_ToggleWidgets( void );
 extern void	kf_ToggleBackgroundFog( void );
 extern void	kf_ToggleDistanceFog( void );
 extern void	kf_ToggleMistFog( void );
@@ -176,8 +175,6 @@ extern bool	bAllowOtherKeyPresses;
 extern void	kf_TriggerRayCast( void );
 extern void	kf_ToggleFormationSpeedLimiting( void );
 extern void	kf_ToggleSensorDisplay( void );		//Was commented out.  Re-enabled --Q 5/10/05
-extern void	kf_SensorDisplayOn( void );
-extern void	kf_SensorDisplayOff( void );
 extern void	kf_JumpToResourceExtractor( void );
 extern void	kf_JumpToRepairUnits( void );
 extern void	kf_JumpToConstructorUnits( void );
