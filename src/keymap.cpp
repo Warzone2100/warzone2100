@@ -252,7 +252,7 @@ _keymapsave keyMapSaveTable[] =
 	kf_ToggleDrivingMode,
 	kf_ToggleShowGateways,
 	kf_ToggleShowPath,
-	kf_MapCheck,
+	kf_PerformanceSample,
 	kf_SetDroidGoToTransport,
 	kf_NOOP,
 	kf_toggleTrapCursor,
@@ -469,7 +469,7 @@ void	keyInitMappings( bool bForceDefaults )
 	keyAddMapping(KEYMAP__DEBUG, KEY_LCTRL,  KEY_J,         KEYMAP_PRESSED, kf_ToggleFog,           N_("Toggles All fog"));
 	keyAddMapping(KEYMAP__DEBUG, KEY_LCTRL,  KEY_Q,         KEYMAP_PRESSED, kf_ToggleWeather,       N_("Trigger some weather"));
 	keyAddMapping(KEYMAP__DEBUG, KEY_IGNORE, KEY_K,         KEYMAP_PRESSED, kf_TriFlip,             N_("Flip terrain triangle"));
-	keyAddMapping(KEYMAP__DEBUG, KEY_LCTRL,  KEY_K,         KEYMAP_PRESSED, kf_MapCheck,            N_("Realign height of all objects on the map"));
+	keyAddMapping(KEYMAP__DEBUG, KEY_LCTRL,  KEY_K,         KEYMAP_PRESSED, kf_PerformanceSample,   N_("Make a performance measurement sample"));
 
 	//These ones are necessary for debugging
 	keyAddMapping(KEYMAP__DEBUG, KEY_LALT,   KEY_A, KEYMAP_PRESSED, kf_AllAvailable,      N_("Make all items available"));

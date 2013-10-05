@@ -96,6 +96,7 @@ void pie_ScreenFlip(int clearMode)
 
 	screenDoDumpToDiskIfRequired();
 	wzScreenFlip();
+	wzPerfFrame();
 	if (clearMode & CLEAR_OFF_AND_NO_BUFFER_DOWNLOAD)
 	{
 		return;

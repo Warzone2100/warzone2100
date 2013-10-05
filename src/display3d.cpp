@@ -38,6 +38,7 @@
 #include "lib/ivis_opengl/piemode.h"
 #include "lib/framework/fixedpoint.h"
 #include "lib/ivis_opengl/piefunc.h"
+#include "lib/ivis_opengl/screen.h"
 
 #include "lib/gamelib/gtime.h"
 #include "lib/gamelib/animobj.h"
@@ -677,7 +678,7 @@ static void setupConnectionStatusForm(void)
 /// Render the 3D world
 void draw3DScene( void )
 {
-	GL_DEBUG("Draw 3D scene - start");
+	wzPerfBegin(PERF_START_FRAME, "Start 3D scene");
 
 	/* What frame number are we on? */
 	currentGameFrame = frameGetFrameNumber();
@@ -704,10 +705,12 @@ void draw3DScene( void )
 	pie_Begin3DScene();
 	/* Set 3D world origins */
 	pie_SetGeometricOffset(rendSurface.width / 2, geoOffset);
+	wzPerfEnd(PERF_START_FRAME);
 
 	// draw terrain
 	displayTerrain();
 
+	wzPerfBegin(PERF_MISC, "3D scene - misc text");
 	pie_BeginInterface();
 	drawDroidSelections();
 
@@ -726,7 +729,6 @@ void draw3DScene( void )
 		pie_SetFogStatus(true);
 	}
 
-	GL_DEBUG("Draw 3D scene - text");
 	if (!bRender3DOnly)
 	{
 		/* Ensure that any text messages are displayed at bottom of screen */
@@ -856,6 +858,7 @@ void draw3DScene( void )
 		showDroidPaths();
 	}
 
+	wzPerfEnd(PERF_MISC);
 	GL_DEBUG("Draw 3D scene - end");
 }
 
@@ -1017,12 +1020,14 @@ static void drawTiles(iView *player)
 	}
 
 	/* This is done here as effects can light the terrain - pause mode problems though */
+	wzPerfBegin(PERF_EFFECTS, "3D scene - effects");
 	processEffects();
 	atmosUpdateSystem();
 	avUpdateTiles();
+	wzPerfEnd(PERF_EFFECTS);
 
 	// now we are about to draw the terrain
-	GL_DEBUG("Draw 3D scene - terrain");
+	wzPerfBegin(PERF_TERRAIN, "3D scene - terrain");
 	pie_SetFogStatus(true);
 
 	pie_MatBegin();
@@ -1034,12 +1039,13 @@ static void drawTiles(iView *player)
 
 	// and to the warzone modelview transform
 	pie_MatEnd();
+	wzPerfEnd(PERF_TERRAIN);
 
 	// draw skybox
 	renderSurroundings();
 
 	// and prepare for rendering the models
-	GL_DEBUG("Draw 3D scene - models");
+	wzPerfBegin(PERF_MODEL_INIT, "Draw 3D scene - model init");
 	pie_SetRendMode(REND_OPAQUE);
 
 	/* ---------------------------------------------------------------- */
@@ -1056,10 +1062,13 @@ static void drawTiles(iView *player)
 	displayDelivPoints();
 	display3DProjectiles(); // may be bucket render implemented
 	pie_MatEnd();
+	wzPerfEnd(PERF_MODEL_INIT);
 
-	GL_DEBUG("Draw 3D scene - particles");
+	wzPerfBegin(PERF_PARTICLES, "3D scene - particles");
 	atmosDrawParticles();
+	wzPerfEnd(PERF_PARTICLES);
 
+	wzPerfBegin(PERF_WATER, "3D scene - water");
 	// prepare for the water and the lightmap
 	pie_SetFogStatus(true);
 
@@ -1071,11 +1080,12 @@ static void drawTiles(iView *player)
 
 	// and to the warzone modelview transform
 	pie_MatEnd();
+	wzPerfEnd(PERF_WATER);
 
-	GL_DEBUG("Draw 3D scene - bucket render");
+	wzPerfBegin(PERF_MODELS, "3D scene - models");
 	bucketRenderCurrentList();
 
-	GL_DEBUG("Draw 3D scene - blue prints");
+	GL_DEBUG("Draw 3D scene - blueprints");
 	displayBlueprints();
 
 	pie_RemainingPasses(); // draws shadows and transparent shapes
@@ -1088,8 +1098,7 @@ static void drawTiles(iView *player)
 	/* Clear the matrix stack */
 	pie_MatEnd();
 	locateMouse();
-
-	GL_DEBUG("Draw 3D scene - end of tiles");
+	wzPerfEnd(PERF_MODELS);
 }
 
 /// Initialise the fog, skybox and some other stuff

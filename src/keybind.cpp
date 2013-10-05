@@ -182,6 +182,11 @@ void	kf_ToggleShowPath(void)
 	showPath = !showPath;
 }
 
+void kf_PerformanceSample()
+{
+	wzPerfStart();
+}
+
 // --------------------------------------------------------------------------
 void	kf_ToggleRadarJump( void )
 {

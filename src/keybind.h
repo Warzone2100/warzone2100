@@ -262,4 +262,6 @@ void	kf_BuildPrevPage( void );
 extern void kf_DamageMe(void);
 extern void kf_AutoGame(void);
 
+void kf_PerformanceSample();
+
 #endif // __INCLUDED_SRC_KEYBIND_H__

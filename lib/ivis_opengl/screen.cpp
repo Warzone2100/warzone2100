@@ -24,6 +24,7 @@
  *
  */
 
+#include <QFile>
 
 #include "lib/framework/frame.h"
 #include "lib/framework/opengl.h"
@@ -54,6 +55,12 @@ static char		screendump_filename[PATH_MAX];
 static bool		screendump_required = false;
 
 static GFX *backdropGfx = NULL;
+
+static bool perfStarted = false;
+static GLuint perfpos[PERF_COUNT];
+struct PERF_STORE { GLuint64 counters[PERF_COUNT]; };
+static QList<PERF_STORE> perfList;
+static PERF_POINT queryActive = PERF_COUNT;
 
 static int preview_width = 0, preview_height = 0;
 static Vector2i player_pos[MAX_PLAYERS];
@@ -139,6 +146,7 @@ bool screenInitialise()
 	debug(LOG_3D, "  * texture cube_map %s supported.", GLEW_ARB_texture_cube_map ? "is" : "is NOT");
 	glGetIntegerv(GL_MAX_TEXTURE_UNITS, &glMaxTUs);
 	debug(LOG_3D, "  * Total number of Texture Units (TUs) supported is %d.", (int) glMaxTUs);
+	debug(LOG_3D, "  * GL_ARB_timer_query %s supported!", GLEW_ARB_timer_query ? "is" : "is NOT");
 
 	screenWidth = MAX(screenWidth, 640);
 	screenHeight = MAX(screenHeight, 480);
@@ -186,8 +194,110 @@ bool screenInitialise()
 	// Generate backdrop render
 	backdropGfx = new GFX(GFX_TEXTURE, GL_TRIANGLE_STRIP, 2);
 
+	if (GLEW_ARB_timer_query)
+	{
+		glGenQueries(PERF_COUNT, perfpos);
+	}
+
 	glErrors();
 	return true;
+}
+
+bool wzPerfAvailable()
+{
+	return GLEW_ARB_timer_query;
+}
+
+void wzPerfStart()
+{
+	if (GLEW_ARB_timer_query)
+	{
+		char text[80];
+		ssprintf(text, "Starting performance sample %02d", perfList.size());
+		GL_DEBUG(text);
+		perfStarted = true;
+	}
+}
+
+void wzPerfShutdown()
+{
+	if (perfList.size() == 0)
+	{
+		return;
+	}
+	// write performance counter list to file
+	QFile perf("gfx-performance.csv");
+	perf.open(QIODevice::WriteOnly);
+	perf.write("START, EFF, TERRAIN, LOAD, PRTCL, WATER, MODELS, MISC\n");
+	for (int i = 0; i < perfList.size(); i++)
+	{
+		QString line;
+		line += QString::number(perfList[i].counters[PERF_START_FRAME]);
+		for (int j = 1; j < PERF_COUNT; j++)
+		{
+			line += ", " + QString::number(perfList[i].counters[j]);
+		}
+		line += "\n";
+		perf.write(line.toUtf8());
+	}
+	// all done, clear data
+	perfStarted = false;
+	perfList.clear();
+	queryActive = PERF_COUNT;
+}
+
+// call after swap buffers
+void wzPerfFrame()
+{
+	if (!perfStarted)
+	{
+		return; // not started yet
+	}
+	ASSERT(queryActive == PERF_COUNT, "Missing wfPerfEnd() call");
+	PERF_STORE store;
+	for (int i = 0; i < PERF_COUNT; i++)
+	{
+		glGetQueryObjectui64v(perfpos[i], GL_QUERY_RESULT, &store.counters[i]);
+	}
+	glErrors();
+	perfList.append(store);
+	perfStarted = false;
+
+	// Make a screenshot to document sample content
+	time_t aclock;
+	struct tm *t;
+
+	time(&aclock);           /* Get time in seconds */
+	t = localtime(&aclock);  /* Convert time to struct */
+
+	ssprintf(screendump_filename, "screenshots/wz2100-perf-sample-%02d-%04d%02d%02d_%02d%02d%02d-%s.png", perfList.size() - 1, 
+	         t->tm_year + 1900, t->tm_mon + 1, t->tm_mday, t->tm_hour, t->tm_min, t->tm_sec, getLevelName());
+	screendump_required = true;
+	GL_DEBUG("Performance sample complete");
+}
+
+void wzPerfBegin(PERF_POINT pp, const char *descr)
+{
+	GL_DEBUG(descr);
+	if (!perfStarted)
+	{
+		return;
+	}
+	ASSERT(queryActive == PERF_COUNT || pp > queryActive, "Out of order timer query call");
+	glBeginQuery(GL_TIME_ELAPSED, perfpos[pp]);
+	queryActive = pp;
+	glErrors();
+}
+
+void wzPerfEnd(PERF_POINT pp)
+{
+	if (!perfStarted)
+	{
+		return;
+	}
+	ASSERT(queryActive == pp, "Mismatched wzPerfBegin...End");
+	glEndQuery(GL_TIME_ELAPSED);
+	queryActive = PERF_COUNT;
 }
 
 void screenShutDown(void)
@@ -198,6 +308,7 @@ void screenShutDown(void)
 
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_ACCUM_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+	glErrors();
 }
 
 // Make OpenGL's VBO functions available under the core names for drivers that support OpenGL 1.4 only but have the VBO extension

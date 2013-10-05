@@ -63,6 +63,28 @@ void screen_enableMapPreview(int width, int height, Vector2i *playerpositions);
 void screen_disableMapPreview(void);
 void screen_EnableMissingFunctions();
 
+/// gaphics performance measurement points
+enum PERF_POINT
+{
+	PERF_START_FRAME,
+	PERF_EFFECTS,
+	PERF_TERRAIN,
+	PERF_MODEL_INIT,
+	PERF_PARTICLES,
+	PERF_WATER,
+	PERF_MODELS,
+	PERF_MISC,
+	PERF_COUNT
+};
+
+void wzPerfBegin(PERF_POINT pp, const char *descr);
+void wzPerfEnd(PERF_POINT pp);
+void wzPerfStart();
+void wzPerfShutdown();
+void wzPerfFrame();
+/// Are performance measurements available?
+bool wzPerfAvailable();
+
 struct OPENGL_DATA
 {
 	char vendor[256];
