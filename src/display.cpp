@@ -2615,7 +2615,7 @@ static SELECTION_TYPE	establishSelection(UDWORD selectedPlayer)
 				"establishSelection : droidType exceeds NUM_DROID_WEIGHTS" );
 
 			if(DroidSelectionWeights[psDroid->droidType] < CurrWeight) {
-			    atLeastOne = true;
+				atLeastOne = true;
 				CurrWeight = DroidSelectionWeights[psDroid->droidType];
 				psDominant = psDroid;
 			}
