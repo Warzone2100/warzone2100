@@ -206,6 +206,13 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 	{
 		pie_SetRendMode(REND_OPAQUE);
 	}
+
+	if ((pieFlag & pie_PREMULTIPLIED) == 0)
+	{
+		glEnable(GL_ALPHA_TEST);
+		glAlphaFunc(GL_GREATER, 0.1f);
+	}
+
 	if (pieFlag & pie_ECM)
 	{
 		pie_SetRendMode(REND_ALPHA);
@@ -243,6 +250,7 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 	polyCount += shape->npolys;
 
 	pie_SetShaderEcmEffect(false);
+	glDisable(GL_ALPHA_TEST);
 }
 
 static inline bool edgeLessThan(EDGE const &e1, EDGE const &e2)
