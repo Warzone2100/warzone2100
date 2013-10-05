@@ -49,6 +49,10 @@
 /* global used to indicate preferred internal OpenGL format */
 int wz_texture_compression = 0;
 
+// for compatibility with older versions of GLEW
+#ifndef GLEW_ARB_timer_query
+#define GLEW_ARB_timer_query false
+#endif
 
 static bool		bBackDrop = false;
 static char		screendump_filename[PATH_MAX];
