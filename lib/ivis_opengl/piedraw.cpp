@@ -210,7 +210,7 @@ static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELI
 	if ((pieFlag & pie_PREMULTIPLIED) == 0)
 	{
 		glEnable(GL_ALPHA_TEST);
-		glAlphaFunc(GL_GREATER, 0.1f);
+		glAlphaFunc(GL_GREATER, 0.001f);
 	}
 
 	if (pieFlag & pie_ECM)
