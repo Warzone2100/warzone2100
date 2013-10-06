@@ -317,7 +317,7 @@ bool loadWeaponStats(const char *pFileName)
 		psStats->base.numRounds = ini.value("numRounds").toUInt();
 		psStats->base.reloadTime = ini.value("reloadTime").toUInt();
 		psStats->base.damage = ini.value("damage").toUInt();
-		psStats->base.minimumDamage = ini.value("minimumDamage", 0).toInt();
+		psStats->base.minimumDamage = ini.value("minimumDamage", 33).toInt();
 		psStats->base.radius = ini.value("radius", 0).toUInt();
 		psStats->base.radiusDamage = ini.value("radiusDamage", 0).toUInt();
 		psStats->base.periodicalDamageTime = ini.value("periodicalDamageTime", 0).toUInt();
