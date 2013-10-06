@@ -24,7 +24,7 @@
  *
  */
 
-#include <QFile>
+#include <QtCore/QFile>
 
 #include "lib/framework/frame.h"
 #include "lib/framework/opengl.h"
