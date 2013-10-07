@@ -2,10 +2,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2013-02-24 22:18+0100\n"
-"PO-Revision-Date: 2012-11-10 00:45-0300\n"
+"POT-Creation-Date: 2013-10-05 15:20+0200\n"
+"PO-Revision-Date: 2013-09-29 01:50-0300\n"
 "Last-Translator: Tucalipe <tucalipe@hotmail.com>\n"
-"Language-Team: Brazilian Portugese <warzone2100-project@lists.sourceforge.net>\n"
+"Language-Team: Brazilian Portugese <warzone2100-project@lists.sourceforge.net>;\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Launchpad-Export-Date: 2008-05-10 13:56+0000\n"
 "X-Generator: Poedit 1.5.4\n"
-"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: ..\n"
 
 #: data/base/messages/messages.rmsg:2
@@ -3792,7 +3792,7 @@ msgstr "Defesa Reforçada de Pulso Laser"
 #: data/base/messages/resmessages3.rmsg:269
 #: data/mp/messages/resmessages3.rmsg:244
 msgid "Armored strongpoint with Rail Gun"
-msgstr "Defesa Reforçada de Acelerador de Partículas"
+msgstr "Defesa Reforçada de Canhão Elétrico"
 
 #: data/base/messages/resmessages3.rmsg:280
 #: data/mp/messages/resmessages3.rmsg:254
@@ -3822,7 +3822,7 @@ msgstr "Muro equipado com Laser Médio"
 #: data/base/messages/resmessages3.rmsg:335
 #: data/mp/messages/resmessages3.rmsg:304
 msgid "Armored hardpoint with Rail Gun"
-msgstr "Muro equipado com Acelerador de Partículas"
+msgstr "Muro equipado com Canhão Elétrico"
 
 #: data/base/messages/resmessages3.rmsg:346
 #: data/mp/messages/resmessages3.rmsg:314
@@ -4320,22 +4320,22 @@ msgstr "Munição auto-propulsionada auto-guiada"
 #: data/mp/messages/resmessages3.rmsg:933
 #: data/mp/messages/resmessages3.rmsg:943
 msgid "New Rail Gun Available"
-msgstr "Novo Acelerador de Partículas Disponível"
+msgstr "Novo Canhão Elétrico Disponível"
 
 #: data/base/messages/resmessages3.rmsg:1017
 #: data/mp/messages/resmessages3.rmsg:924
 msgid "Rapid fire rail gun firing needle darts"
-msgstr "Acelerador de partículas de velocidade disparando dardos"
+msgstr "Canhão Elétrico de velocidade disparando dardos"
 
 #: data/base/messages/resmessages3.rmsg:1028
 #: data/mp/messages/resmessages3.rmsg:934
 msgid "Rail gun firing armor-piercing darts"
-msgstr "Acelerador de partículas disparando dardos perfurantes"
+msgstr "Canhão Elétrico disparando dardos perfurantes"
 
 #: data/base/messages/resmessages3.rmsg:1039
 #: data/mp/messages/resmessages3.rmsg:944
 msgid "Heavy rail gun firing large kinetic energy darts"
-msgstr "Acelerador de partículas pesado disparando dardos de alta energia cinética"
+msgstr "Canhão Elétrico pesado disparando dardos de alta energia cinética"
 
 #: data/base/messages/resmessages3.rmsg:1049
 #: data/base/messages/resmessages3.rmsg:1060
@@ -4344,7 +4344,7 @@ msgstr "Acelerador de partículas pesado disparando dardos de alta energia ciné
 #: data/mp/messages/resmessages3.rmsg:963
 #: data/mp/messages/resmessages3.rmsg:973
 msgid "Rail Gun Upgrade"
-msgstr "Melhoria de Acelerador de Partículas"
+msgstr "Melhoria de Canhão Elétrico"
 
 #: data/base/messages/resmessages3.rmsg:1050
 #: data/mp/messages/resmessages3.rmsg:954
@@ -4353,7 +4353,7 @@ msgstr "Computador prevê e compensa o movimento do alvo"
 
 #: data/base/messages/resmessages3.rmsg:1051
 msgid "Increases Rail Gun accuracy"
-msgstr "Aumenta a precisão dos Aceleradores de Partículas"
+msgstr "Aumenta a precisão dos Canhões Elétricos"
 
 #: data/base/messages/resmessages3.rmsg:1052
 #: data/base/messages/resmessages3.rmsg:1063
@@ -4371,7 +4371,7 @@ msgstr "Dardo perfurante atualizado"
 
 #: data/base/messages/resmessages3.rmsg:1062
 msgid "Increases Rail Gun damage"
-msgstr "Aumenta o dano dos aceleradores de partículas"
+msgstr "Aumenta o dano dos Canhões Elétricos"
 
 #: data/base/messages/resmessages3.rmsg:1072
 #: data/mp/messages/resmessages3.rmsg:974
@@ -4380,7 +4380,7 @@ msgstr "Maior taxa de aceleração diminui o tempo entre recargas"
 
 #: data/base/messages/resmessages3.rmsg:1073
 msgid "Increases Rail Gun ROF"
-msgstr "Aumenta a TDT dos Aceleradores de Partículas"
+msgstr "Aumenta a TDT dos Canhões Elétricos"
 
 #: data/base/messages/resmessagesall.rmsg:4
 #: data/mp/messages/resmessagesall.rmsg:3
@@ -6131,7 +6131,7 @@ msgstr "Tanque"
 #: data/base/messages/strings/names.txt:319
 #: data/mp/messages/strings/names.txt:322
 msgid "Tracks II"
-msgstr "Tanqu II"
+msgstr "Tanque II"
 
 #: data/base/messages/strings/names.txt:320
 #: data/mp/messages/strings/names.txt:323
@@ -6635,7 +6635,7 @@ msgstr "Muro Laser Médio"
 #: data/mp/messages/strings/names.txt:466
 #: data/mp/messages/strings/names.txt:787
 msgid "Rail Gun Hardpoint"
-msgstr "Muro Acelerador de Partículas"
+msgstr "Muro Canhão Elétrico"
 
 #: data/base/messages/strings/names.txt:469
 #: data/base/messages/strings/names.txt:761
@@ -6843,7 +6843,7 @@ msgstr "Perfuratriz"
 #: data/mp/messages/strings/names.txt:519
 #: data/mp/messages/strings/names.txt:1155
 msgid "Rail Gun"
-msgstr "Acelerador de Partículas"
+msgstr "Canhão Elétrico"
 
 #: data/base/messages/strings/names.txt:521
 #: data/base/messages/strings/names.txt:1144
@@ -6975,7 +6975,7 @@ msgstr "Perfuratriz VTOL"
 #: data/base/messages/strings/names.txt:570
 #: data/mp/messages/strings/names.txt:570
 msgid "VTOL Rail Gun"
-msgstr "Acelerador de Partículas VTOL"
+msgstr "Canhão Elétrico VTOL"
 
 #: data/base/messages/strings/names.txt:572
 #: data/mp/messages/strings/names.txt:572
@@ -7378,7 +7378,7 @@ msgstr "Defesa de Pulso Laser"
 #: data/base/messages/strings/names.txt:742
 #: data/mp/messages/strings/names.txt:752
 msgid "Rail Gun Emplacement"
-msgstr "Defesa de Acelerador de Partículas"
+msgstr "Defesa de Canhão Elétrico"
 
 #: data/base/messages/strings/names.txt:744
 msgid "Assault Cannon Emplacement"
@@ -8508,7 +8508,7 @@ msgstr "Mísseis com Predição de Alvos"
 #: data/base/messages/strings/names.txt:1104
 #: data/mp/messages/strings/names.txt:1116
 msgid "Search & Destroy Missiles"
-msgstr "Mísseis Procure & Destrua"
+msgstr "Mísseis Rastreadores"
 
 #: data/base/messages/strings/names.txt:1105
 #: data/mp/messages/strings/names.txt:1117
@@ -8657,17 +8657,17 @@ msgstr "Dardo Reforçado Mk3"
 #: data/base/messages/strings/names.txt:1149
 #: data/mp/messages/strings/names.txt:1161
 msgid "Rail Gun ROF"
-msgstr "TDT do Acelerador de Partículas"
+msgstr "TDT do Canhão Elétrico"
 
 #: data/base/messages/strings/names.txt:1150
 #: data/mp/messages/strings/names.txt:1162
 msgid "Rail Gun ROF Mk2"
-msgstr "TDT do Acelerador de Partículas Mk2"
+msgstr "TDT do Canhão Elétrico Mk2"
 
 #: data/base/messages/strings/names.txt:1151
 #: data/mp/messages/strings/names.txt:1163
 msgid "Rail Gun ROF Mk3"
-msgstr "TDT do Acelerador de Partículas Mk3"
+msgstr "TDT do Canhão Elétrico Mk3"
 
 #: data/base/messages/strings/names.txt:1153
 msgid "Stabilized Mini-Rockets"
@@ -9012,7 +9012,7 @@ msgstr "Defesa de Artilharia de Mini-Foguetes"
 #: data/base/messages/strings/names.txt:1375
 #: data/mp/messages/strings/names.txt:1390
 msgid "Railgun Emplacement"
-msgstr "Defesa de Acelerador de Partículas"
+msgstr "Defesa de Canhão Elétrico"
 
 #: data/base/messages/strings/names.txt:1376
 msgid "Angel Missile Emplacement"
@@ -10219,13 +10219,13 @@ msgstr "Precisão de canhões +10%"
 
 #: data/mp/messages/resmessages12.rmsg:85
 msgid "Flamer reload time -15%"
-msgstr "Interv. de recarga de incend. -15%"
+msgstr "Recarga de incendiário -15%"
 
 #: data/mp/messages/resmessages12.rmsg:105
 #: data/mp/messages/resmessages23.rmsg:135
 #: data/mp/messages/resmessages2.rmsg:685
 msgid "Machinegun reload time -15%"
-msgstr "Interv. de recarga de metralhadora -15%"
+msgstr "Recarga de metralhadora -15%"
 
 #: data/mp/messages/resmessages12.rmsg:125
 #: data/mp/messages/resmessages23.rmsg:145
@@ -10236,17 +10236,17 @@ msgstr "Precisão de morteiros +10%"
 #: data/mp/messages/resmessages12.rmsg:135
 #: data/mp/messages/resmessages3.rmsg:915
 msgid "Mortar reload time -10%"
-msgstr "Interv. de recarga de morteiros -10%"
+msgstr "Recarga de morteiros -10%"
 
 #: data/mp/messages/resmessages12.rmsg:155
 #: data/mp/messages/resmessages1.rmsg:565
 msgid "Rocket reload time -15%"
-msgstr "Interv. de recarga de foguetes -15%"
+msgstr "Recarga de foguetes -15%"
 
 #: data/mp/messages/resmessages12.rmsg:165
 #: data/mp/messages/resmessages3.rmsg:685
 msgid "Cannon reload time -10%"
-msgstr "Interv. de recarga de canhões -10%"
+msgstr "Recarga de canhões -10%"
 
 #: data/mp/messages/resmessages12.rmsg:175
 #: data/mp/messages/resmessages1.rmsg:445
@@ -10421,12 +10421,12 @@ msgstr "Armadura Térmica +40%"
 #: data/mp/messages/resmessages2.rmsg:505
 #: data/mp/messages/resmessages3.rmsg:635
 msgid "AA Flak damage +25%"
-msgstr "Dano da AA explosiva +25"
+msgstr "Dano da AA explosiva +25%"
 
 #: data/mp/messages/resmessages2.rmsg:515
 #: data/mp/messages/resmessages3.rmsg:645
 msgid "AA reload time -15%"
-msgstr "Intervalo de recarga da AA -15%"
+msgstr "Recarga da AA -15%"
 
 #: data/mp/messages/resmessages2.rmsg:645
 #: data/mp/messages/resmessages3.rmsg:695
@@ -10441,7 +10441,7 @@ msgstr "Dano do Obus +10%"
 #: data/mp/messages/resmessages2.rmsg:665
 #: data/mp/messages/resmessages3.rmsg:715
 msgid "Howitzer reload time -10%"
-msgstr "Interv. de Recarga de Obus -10%"
+msgstr "Recarga de Obus -10%"
 
 #: data/mp/messages/resmessages2.rmsg:714
 msgid "High Explosive Anti-Tank warheads"
@@ -10449,7 +10449,7 @@ msgstr "Ogivas Anti-Tanque Altamente Explosivas"
 
 #: data/mp/messages/resmessages3.rmsg:5
 msgid "Thermal Armor +35%"
-msgstr "Armadúra Térmica +35%"
+msgstr "Armadura Térmica +35%"
 
 #: data/mp/messages/resmessages3.rmsg:234
 msgid "Armored guard tower with Pulse Laser"
@@ -10474,7 +10474,7 @@ msgstr "Dano de Laseres +25%"
 
 #: data/mp/messages/resmessages3.rmsg:765
 msgid "Laser reload time -15%"
-msgstr "Intervalo de recarga de laseres -15%"
+msgstr "Recarga de laseres -15%"
 
 #: data/mp/messages/resmessages3.rmsg:815
 #: data/mp/messages/resmessages3.rmsg:825
@@ -10483,28 +10483,28 @@ msgstr "Precisão de mísseis +10%"
 
 #: data/mp/messages/resmessages3.rmsg:835
 msgid "Missile damage +25%"
-msgstr "Dano de mísseis +25"
+msgstr "Dano de mísseis +25%"
 
 #: data/mp/messages/resmessages3.rmsg:885
 #: data/mp/messages/resmessages3.rmsg:895
 msgid "Missile reload time -15%"
-msgstr "Interv. de recarga de mísseis -15%"
+msgstr "Recarga de mísseis -15%"
 
 #: data/mp/messages/resmessages3.rmsg:955
 msgid "Rail Gun accuracy +10%"
-msgstr "Precisão de Acel. de Part. +10%"
+msgstr "Precisão do Canhão Elétrico +10%"
 
 #: data/mp/messages/resmessages3.rmsg:965
 msgid "Rail Gun damage +25%"
-msgstr "Dano de Acel. de Part. +25"
+msgstr "Dano do Canhão Elétrico +25%"
 
 #: data/mp/messages/resmessages3.rmsg:975
 msgid "Rail Gun reload time -15%"
-msgstr "Inter. de Recarga de Acel. de Part. -15%"
+msgstr "Recarga do Canhão Elét. -15%"
 
 #: data/mp/messages/resmessagesall.rmsg:65
 msgid "Sensor Range +25%"
-msgstr "Alcance de Sensor +25"
+msgstr "Alcance de Sensor +25%"
 
 #: data/mp/messages/resmessagesall.rmsg:74
 msgid "Improved Thermal Emissions detection"
@@ -10699,7 +10699,7 @@ msgstr "Armado com o Pulso Laser"
 
 #: data/mp/messages/resmessagesall.rmsg:484
 msgid "Armed with Cyborg Rail Gun"
-msgstr "Armago com o Acelerador de Partículas"
+msgstr "Armado com o Canhão Elétrico Ciborgue"
 
 #: data/mp/messages/resmessagesall.rmsg:494
 msgid "Armed with Cyborg Scourge Missile Launcher"
@@ -11551,7 +11551,7 @@ msgstr "Aerobarco Canhão Pesado Píton"
 
 #: data/mp/messages/strings/names.txt:1856
 msgid "Rail Gun Mantis Tracks"
-msgstr "Tanque Acelerador de Partículas Mantis"
+msgstr "Tanque Canhão Elétrico Mantis"
 
 #: data/mp/messages/strings/names.txt:1857
 msgid "Pulse Laser Mantis Tracks"
@@ -11587,7 +11587,7 @@ msgstr "Tanque Perfuratriz Vingança"
 
 #: data/mp/messages/strings/names.txt:1869
 msgid "Vengeance Tracks Rail Gun"
-msgstr "Tanque Acelerador de Partículas Vingança"
+msgstr "Tanque Canhão Elétrico Vingança"
 
 #: data/mp/messages/strings/names.txt:1870
 msgid "Vengeance Tracks Gauss Cannon"
@@ -11827,7 +11827,7 @@ msgstr "Aerobarco Pulso Laser Pantera"
 
 #: data/mp/messages/strings/names.txt:1953
 msgid "Rail Gun Tiger Hover"
-msgstr "Aerobarco Acelerador de Partículas Tigre"
+msgstr "Aerobarco Canhão Elétrico Tigre"
 
 #: data/mp/messages/strings/names.txt:1954
 msgid "Pulse Laser Tiger Hover"
@@ -12456,7 +12456,7 @@ msgstr "MENU PRINCIPAL"
 
 #: src/frontend.cpp:117
 msgid "Official site: http://wz2100.net/"
-msgstr ""
+msgstr "Site Oficial: http://wz2100.net/"
 
 #: src/frontend.cpp:187
 msgid "Fast Play"
@@ -12533,7 +12533,7 @@ msgstr "Conectar-se a um jogo"
 
 #: src/frontend.cpp:400
 msgid "TCP port 2100 must be opened in your firewall or router to host games!"
-msgstr ""
+msgstr "A porta TCP 2100 deve estar aberta em seu firewall/roteador para hospedar jogos!"
 
 #: src/frontend.cpp:462
 #: src/multiint.cpp:1472
@@ -14158,7 +14158,7 @@ msgstr "Hospedado por %s —%s"
 
 #: src/multiint.cpp:1028
 msgid "Can't find any games for your version."
-msgstr ""
+msgstr "Impossível encontrar jogos para a sua versão."
 
 #: src/multiint.cpp:1043
 msgid "No games are available"
@@ -14209,9 +14209,8 @@ msgid "Refresh Games List"
 msgstr "Atualizar Lista de Jogos"
 
 #: src/multiint.cpp:1265
-#, fuzzy
 msgid "Filter Games List"
-msgstr "Atualizar Lista de Jogos"
+msgstr "Filtrar Lista de Jogos"
 
 #: src/multiint.cpp:1290
 msgid "Enter Password:"
