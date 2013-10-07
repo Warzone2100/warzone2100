@@ -131,6 +131,8 @@ Makefile.in
 /po/remove-potcdate.sed
 /po/stamp-po
 /po/warzone2100.pot
+/compile
+/test-driver
 
 # Include this one Makefile
 !/pkg/dpkg/videos/Makefile
