@@ -53,9 +53,6 @@ void renderResearchToBuffer(RESEARCH *psResearch, UDWORD OriginX, UDWORD OriginY
 
 	pie_SetGeometricOffset(OriginX+10, OriginY+10);
 
-	// Pitch down a bit
-	//pie_MatRotX(-65536/12);
-
 	// Rotate round
 	// full rotation once every 2 seconds..
 	angle = (realTime % ROTATE_TIME) * 360 / ROTATE_TIME;
@@ -163,15 +160,15 @@ void renderResearchToBuffer(RESEARCH *psResearch, UDWORD OriginX, UDWORD OriginY
 	/* display the IMDs */
 	if(IMDType == IMDTYPE_COMPONENT)
 	{
-		displayComponentButton(psResGraphic, &Rotation, &Position, true, scale);
+		displayComponentButton(psResGraphic, &Rotation, &Position, scale);
 	}
 	else if(IMDType == IMDTYPE_RESEARCH)
 	{
-		displayResearchButton(psResGraphic, &Rotation, &Position, true, scale);
+		displayResearchButton(psResGraphic, &Rotation, &Position, scale);
 	}
 	else if(IMDType == IMDTYPE_STRUCTURESTAT)
 	{
-		displayStructureStatButton((STRUCTURE_STATS *)psResGraphic, &Rotation, &Position, true, scale);
+		displayStructureStatButton((STRUCTURE_STATS *)psResGraphic, &Rotation, &Position, scale);
 	}
 	else
 	{

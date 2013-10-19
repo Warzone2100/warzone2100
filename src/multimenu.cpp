@@ -867,7 +867,7 @@ static void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 			position.z = 4100;
 		}
 
-		displayComponentButtonObject(displayDroid, &rotation, &position, false, 100);
+		displayComponentButtonObject(displayDroid, &rotation, &position, 100);
 	}
 	else if (apsDroidLists[player])
 	{

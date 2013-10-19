@@ -65,25 +65,15 @@ UBYTE getPlayerColour(UDWORD pl)
 }
 
 
-static void setMatrix(Vector3i *Position, Vector3i *Rotation, bool RotXYZ, int scale)
+static void setMatrix(Vector3i *Position, Vector3i *Rotation, int scale)
 {
 	pie_PerspectiveBegin();
 	pie_MatBegin();
 
 	pie_TRANSLATE(Position->x, Position->y, Position->z);
-
-	if (RotXYZ)
-	{
-		pie_MatRotX(DEG(Rotation->x));
-		pie_MatRotY(DEG(Rotation->y));
-		pie_MatRotZ(DEG(Rotation->z));
-	}
-	else
-	{
-		pie_MatRotY(DEG(Rotation->y));
-		pie_MatRotX(DEG(Rotation->x));
-		pie_MatRotZ(DEG(Rotation->z));
-	}
+	pie_MatRotX(DEG(Rotation->x));
+	pie_MatRotY(DEG(Rotation->y));
+	pie_MatRotZ(DEG(Rotation->z));
 	pie_MatScale(scale / 100.f);
 }
 
@@ -178,16 +168,16 @@ UDWORD getStructureStatHeight(STRUCTURE_STATS *psStat)
 }
 
 
-void displayIMDButton(iIMDShape *IMDShape, Vector3i *Rotation, Vector3i *Position, bool RotXYZ, SDWORD scale)
+void displayIMDButton(iIMDShape *IMDShape, Vector3i *Rotation, Vector3i *Position, SDWORD scale)
 {
-	setMatrix(Position, Rotation, RotXYZ, scale);
+	setMatrix(Position, Rotation, scale);
 	pie_Draw3DShape(IMDShape, 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, pie_BUTTON, 0);
 	unsetMatrix();
 }
 
 
 //changed it to loop thru and draw all weapons
-void displayStructureButton(STRUCTURE *psStructure, Vector3i *rotation, Vector3i *Position, bool RotXYZ, SDWORD scale)
+void displayStructureButton(STRUCTURE *psStructure, Vector3i *rotation, Vector3i *Position, SDWORD scale)
 {
 	iIMDShape *baseImd, *strImd;
 	iIMDShape *mountImd[STRUCT_MAXWEAPS];
@@ -204,7 +194,7 @@ void displayStructureButton(STRUCTURE *psStructure, Vector3i *rotation, Vector3i
 		Position->y -= 20;
 	}
 
-	setMatrix(Position, rotation, RotXYZ, scale);
+	setMatrix(Position, rotation, scale);
 
 	/* Draw the building's base first */
 	baseImd = psStructure->pStructureType->pBaseIMD;
@@ -284,7 +274,7 @@ void displayStructureButton(STRUCTURE *psStructure, Vector3i *rotation, Vector3i
 	unsetMatrix();
 }
 
-void displayStructureStatButton(STRUCTURE_STATS *Stats, Vector3i *Rotation, Vector3i *Position, bool RotXYZ, SDWORD scale)
+void displayStructureStatButton(STRUCTURE_STATS *Stats, Vector3i *Rotation, Vector3i *Position, SDWORD scale)
 {
 	iIMDShape *baseImd, *strImd;
 	iIMDShape *mountImd[STRUCT_MAXWEAPS];
@@ -299,7 +289,7 @@ void displayStructureStatButton(STRUCTURE_STATS *Stats, Vector3i *Rotation, Vect
 		Position->y -= 20;
 	}
 
-	setMatrix(Position, Rotation, RotXYZ, scale);
+	setMatrix(Position, Rotation, scale);
 
 	/* Draw the building's base first */
 	baseImd = Stats->pBaseIMD;
@@ -388,7 +378,7 @@ void displayStructureStatButton(STRUCTURE_STATS *Stats, Vector3i *Rotation, Vect
 
 // Render a component given a BASE_STATS structure.
 //
-void displayComponentButton(BASE_STATS *Stat, Vector3i *Rotation, Vector3i *Position, bool RotXYZ, SDWORD scale)
+void displayComponentButton(BASE_STATS *Stat, Vector3i *Rotation, Vector3i *Position, SDWORD scale)
 {
 	iIMDShape *ComponentIMD = NULL;
 	iIMDShape *MountIMD = NULL;
@@ -402,7 +392,7 @@ void displayComponentButton(BASE_STATS *Stat, Vector3i *Rotation, Vector3i *Posi
 	{
 		return;
 	}
-	setMatrix(Position, Rotation, RotXYZ, scale);
+	setMatrix(Position, Rotation, scale);
 
 	/* VTOL bombs are only stats allowed to have NULL ComponentIMD */
 	if (StatIsComponent(Stat) != COMP_WEAPON
@@ -433,7 +423,7 @@ void displayComponentButton(BASE_STATS *Stat, Vector3i *Rotation, Vector3i *Posi
 
 // Render a research item given a BASE_STATS structure.
 //
-void displayResearchButton(BASE_STATS *Stat, Vector3i *Rotation, Vector3i *Position, bool RotXYZ, SDWORD scale)
+void displayResearchButton(BASE_STATS *Stat, Vector3i *Rotation, Vector3i *Position, SDWORD scale)
 {
 	iIMDShape *ResearchIMD = ((RESEARCH *)Stat)->pIMD;
 	iIMDShape *MountIMD = ((RESEARCH *)Stat)->pIMD2;
@@ -441,7 +431,7 @@ void displayResearchButton(BASE_STATS *Stat, Vector3i *Rotation, Vector3i *Posit
 	ASSERT(ResearchIMD, "ResearchIMD is NULL");
 	if (ResearchIMD)
 	{
-		setMatrix(Position, Rotation, RotXYZ, scale);
+		setMatrix(Position, Rotation, scale);
 
 		if (MountIMD)
 		{
@@ -903,9 +893,9 @@ static void displayCompObj(DROID *psDroid, bool bButton)
 
 // Render a composite droid given a DROID_TEMPLATE structure.
 //
-void displayComponentButtonTemplate(DROID_TEMPLATE *psTemplate, Vector3i *Rotation, Vector3i *Position, bool RotXYZ, SDWORD scale)
+void displayComponentButtonTemplate(DROID_TEMPLATE *psTemplate, Vector3i *Rotation, Vector3i *Position, SDWORD scale)
 {
-	setMatrix(Position, Rotation, RotXYZ, scale);
+	setMatrix(Position, Rotation, scale);
 
 	// Decide how to sort it.
 	leftFirst = angleDelta(DEG(Rotation->y)) < 0;
@@ -926,11 +916,11 @@ void displayComponentButtonTemplate(DROID_TEMPLATE *psTemplate, Vector3i *Rotati
 
 // Render a composite droid given a DROID structure.
 //
-void displayComponentButtonObject(DROID *psDroid, Vector3i *Rotation, Vector3i *Position, bool RotXYZ, SDWORD scale)
+void displayComponentButtonObject(DROID *psDroid, Vector3i *Rotation, Vector3i *Position, SDWORD scale)
 {
 	SDWORD		difference;
 
-	setMatrix(Position, Rotation, RotXYZ, scale);
+	setMatrix(Position, Rotation, scale);
 
 	// Decide how to sort it.
 	difference = Rotation->y % 360;

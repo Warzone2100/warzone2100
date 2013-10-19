@@ -363,7 +363,7 @@ static void displayStructureBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset
 	}
 
 	pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
-	displayStructureStatButton(stat, &rotation, &position, true, scale);
+	displayStructureStatButton(stat, &rotation, &position, scale);
 	pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
 
 	// draw name
