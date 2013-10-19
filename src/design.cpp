@@ -3924,7 +3924,7 @@ static void intDisplayStatForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	}
 
 	//display component in bottom design screen window
-	displayComponentButton(psStats, &Rotation, &Position, true, falseScale);
+	displayComponentButton(psStats, &Rotation, &Position, falseScale);
 }
 
 /* Displays the 3D view of the droid in a window on the design form */
@@ -3967,7 +3967,7 @@ static void intDisplayViewForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 		falseScale = (DESIGN_DROID_SCALE * OBJECT_RADIUS) / templateRadius;
 
 		//display large droid view in the design screen
-		displayComponentButtonTemplate(&sCurrDesign, &Rotation, &Position, true, falseScale);
+		displayComponentButtonTemplate(&sCurrDesign, &Rotation, &Position, falseScale);
 	}
 }
 

@@ -1428,11 +1428,11 @@ void IntFancyButton::displayIMD(Image image, ImdObject imdObject, int xOffset, i
 		//lefthand display droid buttons
 		if (IMDType == IMDTYPE_DROID)
 		{
-			displayComponentButtonObject((DROID *)Object, &Rotation, &Position, true, scale);
+			displayComponentButtonObject((DROID *)Object, &Rotation, &Position, scale);
 		}
 		else
 		{
-			displayComponentButtonTemplate((DROID_TEMPLATE *)Object, &Rotation, &Position, true, scale);
+			displayComponentButtonTemplate((DROID_TEMPLATE *)Object, &Rotation, &Position, scale);
 		}
 	}
 	else
@@ -1576,23 +1576,23 @@ void IntFancyButton::displayIMD(Image image, ImdObject imdObject, int xOffset, i
 		/* all non droid buttons */
 		if (IMDType == IMDTYPE_COMPONENT)
 		{
-			displayComponentButton((BASE_STATS *)Object, &Rotation, &Position, true, scale);
+			displayComponentButton((BASE_STATS *)Object, &Rotation, &Position, scale);
 		}
 		else if (IMDType == IMDTYPE_RESEARCH)
 		{
-			displayResearchButton((BASE_STATS *)Object, &Rotation, &Position, true, scale);
+			displayResearchButton((BASE_STATS *)Object, &Rotation, &Position, scale);
 		}
 		else if (IMDType == IMDTYPE_STRUCTURE)
 		{
-			displayStructureButton((STRUCTURE *)Object, &Rotation, &Position, true, scale);
+			displayStructureButton((STRUCTURE *)Object, &Rotation, &Position, scale);
 		}
 		else if (IMDType == IMDTYPE_STRUCTURESTAT)
 		{
-			displayStructureStatButton((STRUCTURE_STATS *)Object, &Rotation, &Position, true, scale);
+			displayStructureStatButton((STRUCTURE_STATS *)Object, &Rotation, &Position, scale);
 		}
 		else
 		{
-			displayIMDButton((iIMDShape *)Object, &Rotation, &Position, true, scale);
+			displayIMDButton((iIMDShape *)Object, &Rotation, &Position, scale);
 		}
 
 		pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
