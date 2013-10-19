@@ -152,11 +152,6 @@ UDWORD getStructureStatSizeMax(STRUCTURE_STATS *Stats)
 	return MAX(Stats->baseWidth, Stats->baseBreadth);
 }
 
-static UDWORD getStructureHeight(STRUCTURE *psStructure)
-{
-	return (getStructureStatHeight(psStructure->pStructureType));
-}
-
 UDWORD getStructureStatHeight(STRUCTURE_STATS *psStat)
 {
 	if (psStat->pIMD[0])
@@ -176,115 +171,14 @@ void displayIMDButton(iIMDShape *IMDShape, Vector3i *Rotation, Vector3i *Positio
 }
 
 
-//changed it to loop thru and draw all weapons
-void displayStructureButton(STRUCTURE *psStructure, Vector3i *rotation, Vector3i *Position, SDWORD scale)
+static void sharedStructureButton(STRUCTURE_STATS *Stats, iIMDShape *strImd, Vector3i *Rotation, Vector3i *Position, SDWORD scale)
 {
-	iIMDShape *baseImd, *strImd;
-	iIMDShape *mountImd[STRUCT_MAXWEAPS];
-	iIMDShape *weaponImd[STRUCT_MAXWEAPS];
-	UDWORD			nWeaponStat;
-	int		i;
-
-	/*HACK HACK HACK!
-	if its a 'tall thin (ie tower)' structure with something on the top - offset the
-	position to show the object on top*/
-	if (psStructure->pStructureType->pIMD[0]->nconnectors && scale == SMALL_STRUCT_SCALE &&
-	    getStructureHeight(psStructure) > TOWER_HEIGHT)
-	{
-		Position->y -= 20;
-	}
-
-	setMatrix(Position, rotation, scale);
-
-	/* Draw the building's base first */
-	baseImd = psStructure->pStructureType->pBaseIMD;
-	if (baseImd != NULL)
-	{
-		pie_Draw3DShape(baseImd, 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, pie_BUTTON, 0);
-	}
-	pie_Draw3DShape(psStructure->sDisplay.imd, 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, pie_BUTTON, 0);
-	//and draw the turret
-	if (psStructure->sDisplay.imd->nconnectors)
-	{
-		for (i = 0; i < STRUCT_MAXWEAPS; i++)
-		{
-			weaponImd[i] = NULL;//weapon is gun ecm or sensor
-			mountImd[i] = NULL;
-		}
-
-		strImd = psStructure->sDisplay.imd;
-		//get an imd to draw on the connector priority is weapon, ECM, sensor
-		//check for weapon
-		for (i = 0; i < MAX(1, psStructure->numWeaps); i++)
-		{
-			if (psStructure->asWeaps[i].nStat > 0)
-			{
-				nWeaponStat = psStructure->asWeaps[i].nStat;
-				weaponImd[i] =  asWeaponStats[nWeaponStat].pIMD;
-				mountImd[i] =  asWeaponStats[nWeaponStat].pMountGraphic;
-			}
-
-			if (weaponImd[i] == NULL)
-			{
-				//check for ECM
-				if (psStructure->pStructureType->pECM != NULL)
-				{
-					weaponImd[i] =  psStructure->pStructureType->pECM->pIMD;
-					mountImd[i] =  psStructure->pStructureType->pECM->pMountGraphic;
-				}
-			}
-
-			if (weaponImd[i] == NULL)
-			{
-				//check for sensor
-				if (psStructure->pStructureType->pSensor != NULL)
-				{
-					weaponImd[i] =  psStructure->pStructureType->pSensor->pIMD;
-					mountImd[i]  =  psStructure->pStructureType->pSensor->pMountGraphic;
-				}
-			}
-		}
-
-		//draw Weapon/ECM/Sensor for structure
-		//uses 0
-		if (weaponImd[0] != NULL)
-		{
-			for (i = 0; i < MAX(1, psStructure->numWeaps); i++)
-			{
-				Rotation rot = structureGetInterpolatedWeaponRotation(psStructure, i, graphicsTime);
-
-				pie_MatBegin();
-				pie_TRANSLATE(strImd->connectors[i].x, strImd->connectors[i].z, strImd->connectors[i].y);
-				pie_MatRotY(-rot.direction);
-				if (mountImd[i] != NULL)
-				{
-					pie_Draw3DShape(mountImd[i], 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, pie_BUTTON, 0);
-					if (mountImd[i]->nconnectors)
-					{
-						pie_TRANSLATE(mountImd[i]->connectors->x, mountImd[i]->connectors->z, mountImd[i]->connectors->y);
-					}
-				}
-				pie_MatRotX(rot.pitch);
-				pie_Draw3DShape(weaponImd[i], 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, pie_BUTTON, 0);
-				//we have a droid weapon so do we draw a muzzle flash
-				pie_MatEnd();
-			}
-		}
-	}
-	unsetMatrix();
-}
-
-void displayStructureStatButton(STRUCTURE_STATS *Stats, Vector3i *Rotation, Vector3i *Position, SDWORD scale)
-{
-	iIMDShape *baseImd, *strImd;
-	iIMDShape *mountImd[STRUCT_MAXWEAPS];
-	iIMDShape *weaponImd[STRUCT_MAXWEAPS];
-	UBYTE	i;
+	iIMDShape *baseImd, *mountImd[STRUCT_MAXWEAPS], *weaponImd[STRUCT_MAXWEAPS];
 
 	/*HACK HACK HACK!
 	if its a 'tall thin (ie tower)' structure stat with something on the top - offset the
 	position to show the object on top*/
-	if (Stats->pIMD[0]->nconnectors && scale == SMALL_STRUCT_SCALE && getStructureStatHeight(Stats) > TOWER_HEIGHT)
+	if (strImd->nconnectors && scale == SMALL_STRUCT_SCALE && getStructureStatHeight(Stats) > TOWER_HEIGHT)
 	{
 		Position->y -= 20;
 	}
@@ -298,29 +192,22 @@ void displayStructureStatButton(STRUCTURE_STATS *Stats, Vector3i *Rotation, Vect
 	{
 		pie_Draw3DShape(baseImd, 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, pie_BUTTON, 0);
 	}
-	pie_Draw3DShape(Stats->pIMD[0], 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, pie_BUTTON, 0);
+	pie_Draw3DShape(strImd, 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, pie_BUTTON, 0);
 
 	//and draw the turret
-	if (Stats->pIMD[0]->nconnectors)
+	if (strImd->nconnectors)
 	{
-		if (Stats->numWeaps > 0)
+		weaponImd[0] = NULL;
+		mountImd[0] = NULL;
+		for (int i = 0; i < Stats->numWeaps; i++)
 		{
-			for (i = 0; i < Stats->numWeaps; i++)
-			{
-				weaponImd[i] = NULL;//weapon is gun ecm or sensor
-				mountImd[i] = NULL;
-			}
+			weaponImd[i] = NULL;//weapon is gun ecm or sensor
+			mountImd[i] = NULL;
 		}
-		else
-		{
-			weaponImd[0] = NULL;
-			mountImd[0] = NULL;
-		}
-		strImd = Stats->pIMD[0];
 		//get an imd to draw on the connector priority is weapon, ECM, sensor
 		//check for weapon
 		//can only have the STRUCT_MAXWEAPS
-		for (i = 0; i < MAX(1, Stats->numWeaps); i++)
+		for (int i = 0; i < MAX(1, Stats->numWeaps); i++)
 		{
 			//can only have the one
 			if (Stats->psWeapStat[i] != NULL)
@@ -353,7 +240,7 @@ void displayStructureStatButton(STRUCTURE_STATS *Stats, Vector3i *Rotation, Vect
 		//draw Weapon/ECM/Sensor for structure
 		if (weaponImd[0] != NULL)
 		{
-			for (i = 0; i < MAX(1, Stats->numWeaps); i++)
+			for (int i = 0; i < MAX(1, Stats->numWeaps); i++)
 			{
 				pie_MatBegin();
 				pie_TRANSLATE(strImd->connectors[i].x, strImd->connectors[i].z, strImd->connectors[i].y);
@@ -375,6 +262,15 @@ void displayStructureStatButton(STRUCTURE_STATS *Stats, Vector3i *Rotation, Vect
 	unsetMatrix();
 }
 
+void displayStructureButton(STRUCTURE *psStructure, Vector3i *rotation, Vector3i *Position, SDWORD scale)
+{
+	sharedStructureButton(psStructure->pStructureType, psStructure->sDisplay.imd, rotation, Position, scale);
+}
+
+void displayStructureStatButton(STRUCTURE_STATS *Stats, Vector3i *rotation, Vector3i *Position, SDWORD scale)
+{
+	sharedStructureButton(Stats, Stats->pIMD[0], rotation, Position, scale);
+}
 
 // Render a component given a BASE_STATS structure.
 //
