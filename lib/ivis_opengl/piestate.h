@@ -94,8 +94,12 @@ void pie_SetShaderTime(uint32_t shaderTime);
 void pie_SetShaderEcmEffect(bool value);
 
 /* Errors control routine */
+#ifdef DEBUG
 #define glErrors() \
 	_glerrors(__FUNCTION__, __FILE__, __LINE__)
+#else
+#define glErrors()
+#endif
 
 extern bool _glerrors(const char *, const char *, int);
 
