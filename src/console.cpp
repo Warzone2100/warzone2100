@@ -119,9 +119,6 @@ static UDWORD	consoleVisibleLines;
 /** Whether new messages are allowed to be added */
 static int allowNewMessages;
 
-/** What's the default justification? */
-static CONSOLE_TEXT_JUSTIFICATION	defJustification;
-
 static UDWORD	messageId;	// unique ID
 
 /// Global string for new console messages.
@@ -177,9 +174,6 @@ void	initConsoleMessages( void )
 
 	/* Turn on the console display */
 	enableConsoleDisplay(true);
-
-	/* Set left justification as default */
-	setDefaultConsoleJust(LEFT_JUSTIFY);
 
 	/*	Set up the console size and postion
 		x,y,width */
@@ -244,13 +238,6 @@ bool addConsoleMessage(const char *Text, CONSOLE_TEXT_JUSTIFICATION jusType, SDW
 		textLength = strlen(messageText);
 
 		ASSERT( textLength < MAX_CONSOLE_STRING_LENGTH, "Attempt to add a message to the console that exceeds MAX_CONSOLE_STRING_LENGTH" );
-
-		/* Are we using a defualt justification? */
-		if(jusType == DEFAULT_JUSTIFY)
-		{
-			/* Then set it */
-			jusType = defJustification;
-		}
 
 		debug(LOG_CONSOLE, "(to player %d): %s", (int)player, messageText);
 
@@ -519,8 +506,7 @@ static int displayOldMessages(void)
 		/* there are messages - just no old ones yet */
 		return(0);
 	}
-
-	if(count)
+	else
 	{
 		/* Get the line pitch */
 		linePitch = iV_GetTextLineSize();
@@ -530,17 +516,6 @@ static int displayOldMessages(void)
 		iV_TransBoxFill(mainConsole.topX - CON_BORDER_WIDTH,mainConsole.topY-mainConsole.textDepth-CON_BORDER_HEIGHT,
 			mainConsole.topX+mainConsole.width ,mainConsole.topY+((count)*linePitch)+CON_BORDER_HEIGHT-linePitch);
 	}
-	/*
-	if(count)
-	{
-		sprintf(buildData,"%s,%s",__TIME__,__DATE__);
-
-		buildWidth = iV_GetTextWidth(buildData);
-
-		iV_DrawText(buildData,((mainConsole.topX+mainConsole.width) - buildWidth - 16),
-			mainConsole.topY);
-	}
-	*/
 	MesY = mainConsole.topY;
 	/* Render what we found */
 	for(i=count-1; i>0; i--)
@@ -567,14 +542,7 @@ static int displayOldMessages(void)
 	                     consoleStorage[history[0]].JustifyType);
 
 	/* Return how much to drop the existing console by... Fix this for lines>screenWIDTH */
-	if(count)
-	{
-		return((count)*linePitch);
-	}
-	else
-	{
-		return(0);
-	}
+	return count;
 }
 
 
@@ -685,23 +653,6 @@ void	setConsoleBackdropStatus(bool state)
 void	enableConsoleDisplay(bool state)
 {
 	bConsoleDisplayEnabled = state;
-}
-
-/** Sets the default justification for text */
-void	setDefaultConsoleJust(CONSOLE_TEXT_JUSTIFICATION defJ)
-{
-	switch(defJ)
-	{
-	case LEFT_JUSTIFY:
-	case RIGHT_JUSTIFY:
-	case CENTRE_JUSTIFY:
-		defJustification = defJ;
-		break;
-	default:
-		debug( LOG_FATAL, "Weird default text justification for console" );
-		abort();
-		break;
-	}
 }
 
 /** Allows positioning of the console on screen */

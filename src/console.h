@@ -28,9 +28,9 @@
 enum CONSOLE_TEXT_JUSTIFICATION
 {
 	LEFT_JUSTIFY,
+	DEFAULT_JUSTIFY = LEFT_JUSTIFY,
 	RIGHT_JUSTIFY,
-	CENTRE_JUSTIFY,
-	DEFAULT_JUSTIFY
+	CENTRE_JUSTIFY
 };
 
 /* ID to use for addConsoleMessage() in case of a system message */
@@ -48,7 +48,6 @@ void flushConsoleMessages(void);
 void setConsoleBackdropStatus(bool state);
 void enableConsoleDisplay(bool state);
 bool getConsoleDisplayStatus(void);
-void setDefaultConsoleJust(CONSOLE_TEXT_JUSTIFICATION defJ);
 void setConsoleSizePos(UDWORD x, UDWORD y, UDWORD width);
 void setConsolePermanence(bool state, bool bClearOld);
 bool mouseOverConsoleBox(void);
