@@ -2537,8 +2537,8 @@ bool writeFXData(const char *fileName)
 		ini.setValue("lifeSpan", it->lifeSpan);
 		ini.setValue("radius", it->radius);
 
-		const char *imd_name = resGetNamefromData("IMD", it->imd);
-		if (imd_name && *imd_name)
+		const QString &imd_name = modelName(it->imd);
+		if (!imd_name.isEmpty())
 		{
 			ini.setValue("imd_name", imd_name);
 		}
