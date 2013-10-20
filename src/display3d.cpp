@@ -2377,41 +2377,9 @@ void	renderStructure(STRUCTURE *psStructure)
 								}
 							}
 						}
-						// we have a weapon so we draw a muzzle flash
-						if( weaponImd[i]->nconnectors && flashImd[i] && psStructure->pStructureType->type != REF_REPAIR_FACILITY)
+						else // we have a weapon so we draw a muzzle flash
 						{
-							unsigned int connector_num = 0;
-
-							// which barrel is firing if model have multiple muzzle connectors?
-							if (psStructure->asWeaps[i].shotsFired && (weaponImd[i]->nconnectors > 1))
-							{
-								// shoot first, draw later - substract one shot to get correct results
-								connector_num = (psStructure->asWeaps[i].shotsFired - 1) % (weaponImd[i]->nconnectors);
-							}
-
-							/* Now we need to move to the end of the firing barrel */
-							pie_TRANSLATE(weaponImd[i]->connectors[connector_num].x,
-											weaponImd[i]->connectors[connector_num].z,
-											weaponImd[i]->connectors[connector_num].y);
-
-							// assume no clan colours for muzzle effects
-							if (flashImd[i]->numFrames == 0 || flashImd[i]->animInterval <= 0)
-							{
-								// no anim so display one frame for a fixed time
-								if (graphicsTime >= psStructure->asWeaps[i].lastFired && graphicsTime < psStructure->asWeaps[i].lastFired + BASE_MUZZLE_FLASH_DURATION)
-								{
-									pie_Draw3DShape(flashImd[i], 0, colour, buildingBrightness, pieFlag | pie_ADDITIVE, EFFECT_MUZZLE_ADDITIVE);
-								}
-							}
-							else if (graphicsTime >= psStructure->asWeaps[i].lastFired)
-							{
-								// animated muzzle
-								frame = (graphicsTime - psStructure->asWeaps[i].lastFired)/flashImd[i]->animInterval;
-								if (frame < flashImd[i]->numFrames)
-								{
-									pie_Draw3DShape(flashImd[i], frame, colour, buildingBrightness, pieFlag | pie_ADDITIVE, EFFECT_MUZZLE_ADDITIVE);
-								}
-							}
+							drawMuzzleFlash(psStructure->asWeaps[i], weaponImd[i], flashImd[i], buildingBrightness, pieFlag, pieFlagData, colour);
 						}
 					}
 					pie_MatEnd();
