@@ -354,6 +354,46 @@ static inline iIMDShape *getRightPropulsionIMD(DROID *psDroid)
 	return asBodyStats[bodyStat].ppIMDList[propStat * NUM_PROP_SIDES + RIGHT_PROP];
 }
 
+void drawMuzzleFlash(WEAPON sWeap, iIMDShape *weaponImd, iIMDShape *flashImd, PIELIGHT buildingBrightness, int pieFlag, int iPieData, UBYTE colour)
+{
+	if (!weaponImd || !flashImd || !weaponImd->nconnectors || graphicsTime < sWeap.lastFired)
+	{
+		return;
+	}
+
+	int connector_num = 0;
+
+	// which barrel is firing if model have multiple muzzle connectors?
+	if (sWeap.shotsFired && (weaponImd->nconnectors > 1))
+	{
+		// shoot first, draw later - substract one shot to get correct results
+		connector_num = (sWeap.shotsFired - 1) % (weaponImd->nconnectors);
+	}
+
+	/* Now we need to move to the end of the firing barrel */
+	pie_TRANSLATE(weaponImd->connectors[connector_num].x,
+		      weaponImd->connectors[connector_num].z,
+		      weaponImd->connectors[connector_num].y);
+
+	// assume no clan colours for muzzle effects
+	if (flashImd->numFrames == 0 || flashImd->animInterval <= 0)
+	{
+		// no anim so display one frame for a fixed time
+		if (graphicsTime >= sWeap.lastFired && graphicsTime < sWeap.lastFired + BASE_MUZZLE_FLASH_DURATION)
+		{
+			pie_Draw3DShape(flashImd, 0, colour, buildingBrightness, pieFlag | pie_ADDITIVE, EFFECT_MUZZLE_ADDITIVE);
+		}
+	}
+	else if (graphicsTime >= sWeap.lastFired)
+	{
+		// animated muzzle
+		int frame = (graphicsTime - sWeap.lastFired) / flashImd->animInterval;
+		if (frame < flashImd->numFrames)
+		{
+			pie_Draw3DShape(flashImd, frame, colour, buildingBrightness, pieFlag | pie_ADDITIVE, EFFECT_MUZZLE_ADDITIVE);
+		}
+	}
+}
 
 /* Assumes matrix context is already set */
 // this is able to handle multiple weapon graphics now
@@ -363,7 +403,6 @@ static void displayCompObj(DROID *psDroid, bool bButton)
 	iIMDShape               *psShape, *psMoveAnim, *psStillAnim, *psShapeTemp = NULL, *psMountShape;
 	SDWORD				iConnector;
 	PROPULSION_STATS	*psPropStats;
-	SDWORD				frame;
 	SDWORD				pieFlag, iPieData;
 	PIELIGHT			brightness;
 	UDWORD				colour;
@@ -604,48 +643,7 @@ static void displayCompObj(DROID *psDroid, bool bButton)
 					if (psShape)
 					{
 						pie_Draw3DShape(psShape, 0, colour, brightness, pieFlag, iPieData);
-
-						if (psShape->nconnectors)
-						{
-							unsigned int connector_num = 0;
-
-							// which barrel is firing if model have multiple muzzle connectors?
-							if (psDroid->asWeaps[i].shotsFired && (psShape->nconnectors > 1))
-							{
-								// shoot first, draw later - substract one shot to get correct results
-								connector_num = (psDroid->asWeaps[i].shotsFired - 1) % (psShape->nconnectors);
-							}
-
-							/* Now we need to move to the end of the firing barrel (there maybe multiple barrels) */
-							pie_TRANSLATE(psShape->connectors[connector_num].x,
-							              psShape->connectors[connector_num].z,
-							              psShape->connectors[connector_num].y);
-
-							//and draw the muzzle flash
-							psShape = MUZZLE_FLASH_PIE(psDroid, i);
-
-							if (psShape && graphicsTime >= psDroid->asWeaps[i].lastFired)
-							{
-								//assume no clan colours for muzzle effects
-								if ((psShape->numFrames == 0) || (psShape->animInterval <= 0))
-								{
-									//no anim so display one frame for a fixed time
-									if (graphicsTime < psDroid->asWeaps[i].lastFired + BASE_MUZZLE_FLASH_DURATION)
-									{
-										pie_Draw3DShape(psShape, 0, 0, brightness, pieFlag | pie_ADDITIVE, EFFECT_MUZZLE_ADDITIVE);
-									}
-								}
-								else
-								{
-									// animated muzzle
-									frame = (graphicsTime - psDroid->asWeaps[i].lastFired) / psShape->animInterval;
-									if (frame < psShape->numFrames)
-									{
-										pie_Draw3DShape(psShape, frame, 0, brightness, pieFlag | pie_ADDITIVE, EFFECT_MUZZLE_ADDITIVE);
-									}
-								}
-							}
-						}
+						drawMuzzleFlash(psDroid->asWeaps[i], psShape, MUZZLE_FLASH_PIE(psDroid, i), brightness, pieFlag, iPieData);
 					}
 					/* Pop Matrix */
 					pie_MatEnd();
