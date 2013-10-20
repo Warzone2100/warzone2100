@@ -47,6 +47,11 @@
 //*************************************************************************
 
 void modelShutdown();
+
+/// Get filename of model pointer. This is really slow, so do not abuse for logging
+/// purposes, for example.
+const QString &modelName(iIMDShape *model);
+
 iIMDShape *modelGet(const QString &filename);
 
 #endif

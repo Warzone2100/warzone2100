@@ -110,6 +110,7 @@ void modelShutdown()
 	{
 		iV_IMDRelease(i.value());
 	}
+	models.clear();
 }
 
 static bool tryLoad(const QString &path, const QString &filename)
@@ -132,6 +133,20 @@ static bool tryLoad(const QString &path, const QString &filename)
 		return true;
 	}
 	return false;
+}
+
+const QString &modelName(iIMDShape *model)
+{
+	for (MODELMAP::iterator i = models.begin(); i != models.end(); i = models.erase(i))
+	{
+		if (i.value() == model)
+		{
+			return i.key();
+		}
+	}
+	ASSERT(false, "An IMD pointer could not be backtraced to a filename!");
+	static QString error;
+	return error;
 }
 
 iIMDShape *modelGet(const QString &filename)
