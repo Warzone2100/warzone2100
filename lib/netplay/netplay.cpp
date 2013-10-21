@@ -1409,7 +1409,7 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 				debug(LOG_ERROR, "Incomplete NET_SEND_TO_PLAYER.");
 				break;
 			}
-			if (sender > MAX_PLAYERS || (receiver > MAX_PLAYERS && receiver != NET_ALL_PLAYERS))
+			if (sender >= MAX_PLAYERS || (receiver >= MAX_PLAYERS && receiver != NET_ALL_PLAYERS))
 			{
 				debug(LOG_ERROR, "Bad NET_SEND_TO_PLAYER.");
 				break;
@@ -1489,7 +1489,7 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 				NETuint32_t(&num);
 				bool isSentByCorrectClient = responsibleFor(playerQueue.index, player);
 				isSentByCorrectClient = isSentByCorrectClient || (playerQueue.index == NET_HOST_ONLY && playerQueue.index != selectedPlayer);  // Let host spoof other people's NET_SHARE_GAME_QUEUE messages, but not our own. This allows the host to spoof a GAME_PLAYER_LEFT message (but spoofing any message when the player is still there will fail with desynch).
-				if (!isSentByCorrectClient || player > MAX_PLAYERS)
+				if (!isSentByCorrectClient || player >= MAX_PLAYERS)
 				{
 					break;
 				}
@@ -1530,7 +1530,7 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 
 			NETbeginDecode(playerQueue, NET_PLAYER_INFO);
 				NETuint32_t(&indexLen);
-				if (indexLen > MAX_PLAYERS || (playerQueue.index != NET_HOST_ONLY && indexLen > 1))
+				if (indexLen >= MAX_PLAYERS || (playerQueue.index != NET_HOST_ONLY && indexLen > 1))
 				{
 					debug(LOG_ERROR, "MSG_PLAYER_INFO: Bad number of players updated");
 					NETend();
@@ -2671,7 +2671,8 @@ bool NEThostGame(const char* SessionName, const char* PlayerName,
 	gamestruct.future3 = 0xBAD03;								// for future use
 	gamestruct.future4 = 0xBAD04;								// for future use
 
-	selectedPlayer= NET_CreatePlayer(PlayerName);
+	selectedPlayer = NET_CreatePlayer(PlayerName);
+	ASSERT_OR_RETURN(false, selectedPlayer < MAX_PLAYERS, "Failed to create player");
 	realSelectedPlayer = selectedPlayer;
 	NetPlay.isHost	= true;
 	NetPlay.isHostAlive = true;
@@ -2822,7 +2823,8 @@ bool NETfindGame(void)
 
 		if (NetPlay.games[gamecount].desc.host[0] == '\0')
 		{
-			strncpy(NetPlay.games[gamecount].desc.host, getSocketTextAddress(tcp_socket), sizeof(NetPlay.games[gamecount].desc.host));
+			memset(NetPlay.games[gamecount].desc.host, 0, sizeof(NetPlay.games[gamecount].desc.host));
+			strncpy(NetPlay.games[gamecount].desc.host, getSocketTextAddress(tcp_socket), sizeof(NetPlay.games[gamecount].desc.host) - 1);
 		}
 
 		++gamecount;

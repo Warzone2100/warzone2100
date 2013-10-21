@@ -469,6 +469,7 @@ static bool dataImageLoad(const char *fileName, void **ppData)
 	if (!iV_loadImage_PNG(fileName, psSprite))
 	{
 		debug( LOG_ERROR, "IMGPAGE load failed" );
+		free(psSprite);
 		return false;
 	}
 
