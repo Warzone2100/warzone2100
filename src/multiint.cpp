@@ -1964,7 +1964,7 @@ bool recvTeamRequest(NETQUEUE queue)
 	NETuint8_t(&team);
 	NETend();
 
-	if (player > MAX_PLAYERS || team > MAX_PLAYERS)
+	if (player >= MAX_PLAYERS || team >= MAX_PLAYERS)
 	{
 		debug(LOG_NET, "NET_TEAMREQUEST invalid, player %d team, %d", (int) player, (int) team);
 		debug(LOG_ERROR, "Invalid NET_TEAMREQUEST from player %d: Tried to change player %d (team %d)",
@@ -2020,7 +2020,7 @@ bool recvReadyRequest(NETQUEUE queue)
 		NETbool(&bReady);
 	NETend();
 
-	if (player > MAX_PLAYERS)
+	if (player >= MAX_PLAYERS)
 	{
 		debug(LOG_ERROR, "Invalid NET_READY_REQUEST from player %d: player id = %d",
 		      queue.index, (int)player);
@@ -2179,7 +2179,7 @@ bool recvColourRequest(NETQUEUE queue)
 		NETuint8_t(&col);
 	NETend();
 
-	if (player > MAX_PLAYERS)
+	if (player >= MAX_PLAYERS)
 	{
 		debug(LOG_ERROR, "Invalid NET_COLOURREQUEST from player %d: Tried to change player %d to colour %d",
 		      queue.index, (int)player, (int)col);
@@ -2213,7 +2213,7 @@ bool recvPositionRequest(NETQUEUE queue)
 	NETend();
 	debug(LOG_NET, "Host received position request from player %d to %d", player, position);
 
-	if (player > MAX_PLAYERS || position > MAX_PLAYERS)
+	if (player >= MAX_PLAYERS || position >= MAX_PLAYERS)
 	{
 		debug(LOG_ERROR, "Invalid NET_POSITIONREQUEST from player %d: Tried to change player %d to %d",
 		      queue.index, (int)player, (int)position);
