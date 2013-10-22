@@ -1358,6 +1358,8 @@ static void intProcessEditStats(UDWORD id)
 			debugMenuDroidDeliveryPoint.factoryType = REPAIR_FLAG;
 			debugMenuDroidDeliveryPoint.factoryInc = 0;
 			debugMenuDroidDeliveryPoint.player = selectedPlayer;
+			debugMenuDroidDeliveryPoint.selected = false;
+			debugMenuDroidDeliveryPoint.psNext = NULL;
 			startDeliveryPosition(&debugMenuDroidDeliveryPoint);
 		}
 		else

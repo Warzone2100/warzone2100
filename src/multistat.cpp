@@ -269,7 +269,7 @@ void updateMultiStatsLoses(void)
 // update kills
 void updateMultiStatsKills(BASE_OBJECT *psKilled,UDWORD player)
 {
-	if (Cheated || player > MAX_PLAYERS)
+	if (Cheated || player >= MAX_PLAYERS)
 	{
 		return;
 	}

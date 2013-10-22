@@ -161,6 +161,7 @@ IMAGEFILE *iV_LoadImageFile(const char *fileName)
 		if (retval != 3)
 		{
 			debug(LOG_ERROR, "Bad line in \"%s\".", fileName);
+			delete imageFile;
 			return NULL;
 		}
 		std::string spriteName = imageDir + tmpName;
@@ -171,6 +172,7 @@ IMAGEFILE *iV_LoadImageFile(const char *fileName)
 		if (!iV_loadImage_PNG(spriteName.c_str(), imageRect->data))
 		{
 			debug(LOG_ERROR, "Failed to find image \"%s\" listed in \"%s\".", spriteName.c_str(), fileName);
+			delete imageFile;
 			return NULL;
 		}
 		imageRect->siz = Vector2i(imageRect->data->width, imageRect->data->height);

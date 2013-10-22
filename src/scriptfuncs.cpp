@@ -6243,9 +6243,9 @@ bool scrResetPlayerVisibility(void)
 		return false;
 	}
 
-	if (player < 0 || player > MAX_PLAYERS)
+	if (player < 0 || player >= MAX_PLAYERS)
 	{
-		ASSERT( false, "scrResetPlayerVisibility: invalid player" );
+		ASSERT(false, "Invalid player %d", player);
 		return false;
 	}
 
