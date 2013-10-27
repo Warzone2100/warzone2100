@@ -1,6 +1,5 @@
 2013-xx-xx: Version 3.1.1
  * General:
-   * Change: Simplify build process by getting rid of bison/flex dependencies (commit:d13bc0de7dd0588351af24dc45d55110d0eed6e8)
    * Change: Filter out bad maps (commit:acfe83cdf6f44660276ba73931e2cebdc8a250ac)
    * Change: Also show in the bottom menu, if allies are researching the same as us (commit:b6b6265e4e430486ea44a200bce870b115dfc37f)
    * Change: Keep showing allied research even while facilities are upgraded (commit:423e358b6715c12dda70ff5f6f2bd0348c09f699)
@@ -26,6 +25,7 @@
  * Maps:
    * Fix: Remove lop-sided oil barrels from 4c-pyramidal (commit:6092fe1194529f0c7fe023d9c98973e44f9f9f24)
  * Build system:
+   * Change: Simplify build process by getting rid of bison/flex dependencies (commit:d13bc0de7dd0588351af24dc45d55110d0eed6e8)
    * Fix: Building on OpenBSD (commit:9b9383500fb4c1dd5270a68e3490dc358e2da55f, ticket:3917, commit:47a6d6d4684b993d15e378f6d0877fa043b26ca0, ticket:3845)
 
 2012-12-09: Version 3.1.0
