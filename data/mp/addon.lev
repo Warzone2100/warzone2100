@@ -793,3 +793,39 @@ players 9
 type    19
 dataset MULTI_T3_C3
 game    "multiplay/maps/9c-WindFury.gam"
+
+level   Gamma-T1
+players 3
+type    14
+dataset MULTI_CAM_1
+game    "multiplay/maps/3c-Gamma.gam"
+
+level   Gamma-T2
+players 3
+type    18
+dataset MULTI_T2_C1
+game    "multiplay/maps/3c-Gamma.gam"
+
+level   Gamma-T3
+players 3
+type    19
+dataset MULTI_T3_C1
+game    "multiplay/maps/3c-Gamma.gam"
+
+level   Melting-T1
+players 6
+type    14
+dataset MULTI_CAM_3
+game    "multiplay/maps/6c-Melting.gam"
+
+level   Melting-T2
+players 6
+type    18
+dataset MULTI_T2_C3
+game    "multiplay/maps/6c-Melting.gam"
+
+level   Melting-T3
+players 6
+type    19
+dataset MULTI_T3_C3
+game    "multiplay/maps/6c-Melting.gam"

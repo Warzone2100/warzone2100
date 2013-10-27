@@ -1,3 +1,33 @@
+2013-xx-xx: Version 3.1.1
+ * General:
+   * Change: Simplify build process by getting rid of bison/flex dependencies (commit:d13bc0de7dd0588351af24dc45d55110d0eed6e8)
+   * Change: Filter out bad maps (commit:acfe83cdf6f44660276ba73931e2cebdc8a250ac)
+   * Change: Also show in the bottom menu, if allies are researching the same as us (commit:b6b6265e4e430486ea44a200bce870b115dfc37f)
+   * Change: Keep showing allied research even while facilities are upgraded (commit:423e358b6715c12dda70ff5f6f2bd0348c09f699)
+   * Change: Retreat buttons now should health bar colours (commit:4e2f4bbf3cd5e03e58b9b67fcf370bff088e6d91)
+   * Fix: Bug that made droids produced by scripts get human player's upgrades (commit:8149dc94c0b61117982281cdaf2aac1bec2525e9)
+   * Fix: Backwards terrain shadows (commit:85ecd9a3937e7843d9eb4798572651f950bd7555)
+   * Fix: Mod loading bug (commit:87cade1a684f3da0572f13e92539100f35b4f6fe, ticket:3567)
+   * Fix: Memory leak in effects code (commit:6c90810776e3c9780f0faac793c0fb966ce315dd)
+   * Fix: GUI bug where scav button pretends to be clickable even when not the host (commit:781a81c94bb0df46f4475ca409e43f40a22e95c9)
+   * Fix: Medal calculations (commit:fc894f31335fbdf328984ad595accdd0c8467c3f, commit:3bada3ce4fa2157c788d0fdc27287c84291676bd)
+ * Multiplayer:
+   * Change: Only show games that are newer or same version (commit:303fba6bf5a94df31b070e09f2a5122183c74964)
+   * Change: Allocate joining players in topmost available slot (commit:259e07ee77b22e45a7ae9848a30279a081589482)
+   * Fix: Various security and cheating related fixes (commit:2faeb8ffb444647b39c52727c7e8f1a0d04e0f0e)
+   * Fix: Don't keep trying to query server if we get a error message (commit:1215889fab06089a261ce1d93364d2d1a44ebf31, ticket:3762)
+ * Scripting:
+   * Change: Updated NullBot AI (commit:06f50c21d4c10fe210f93c30b2321cac2d69770c)
+   * Fix: Group counting off-by-one bug (commit:2cfb42e541c7c76ce828749e286ea9aa3c9f259c)
+   * Fix: Fix scavenger script issues (commit:6736d68ffe74510d77037733f15839b58e2c05ce)
+   * Fix: Error in structure health calculation (commit:0633524b763835f02350c5a5facd613066db509b, ticket:3930)
+   * Fix: Change map iteration to safely allow recursive calls (commit:5c7788784b653cae0fdf80ad687c4aec2c58a3f5, ticket:3894)
+   * Fix: Add parameter checking for buildings that do not exist (commit:e38de7b64242a547acd77c7775dbfae10c74ca3d)
+ * Maps:
+   * Fix: Remove lop-sided oil barrels from 4c-pyramidal (commit:6092fe1194529f0c7fe023d9c98973e44f9f9f24)
+ * Build system:
+   * Fix: Building on OpenBSD (commit:9b9383500fb4c1dd5270a68e3490dc358e2da55f, ticket:3917, commit:47a6d6d4684b993d15e378f6d0877fa043b26ca0, ticket:3845)
+
 2012-12-09: Version 3.1.0
  * General:
    * Fix: Mod loading on Windows problem (commit:1fd7036f25949dfd465e8ac2e694f7c32c63f6cf, ticket:3759)

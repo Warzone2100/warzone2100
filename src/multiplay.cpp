@@ -1788,7 +1788,7 @@ UDWORD msgStackPush(SDWORD CBtype, SDWORD plFrom, SDWORD plTo, const char *tStr,
 {
 	debug(LOG_WZ, "msgStackPush: pushing message type %d to pos %d", CBtype, msgStackPos + 1);
 
-	if (msgStackPos >= MAX_MSG_STACK)
+	if (msgStackPos + 1 >= MAX_MSG_STACK)
 	{
 		debug(LOG_ERROR, "msgStackPush() - stack full");
 		return false;
