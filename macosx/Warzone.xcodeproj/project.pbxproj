@@ -476,6 +476,11 @@
 		43C3B9BF118BEB63000BBE59 /* setup_44p51.h in Headers */ = {isa = PBXBuildFile; fileRef = 43C3B9BD118BEB63000BBE59 /* setup_44p51.h */; };
 		43C3B9C5118BEBE0000BBE59 /* tone.c in Sources */ = {isa = PBXBuildFile; fileRef = 43C3B9C2118BEBE0000BBE59 /* tone.c */; };
 		43C3B9E0118BEC40000BBE59 /* res_books_51.h in Headers */ = {isa = PBXBuildFile; fileRef = 43C3B9B4118BEA9D000BBE59 /* res_books_51.h */; };
+		43CB73D8181E0E0100D1D1DD /* miniupnpctypes.h in Headers */ = {isa = PBXBuildFile; fileRef = 43CB73D3181E0E0100D1D1DD /* miniupnpctypes.h */; };
+		43CB73D9181E0E0100D1D1DD /* portlistingparse.c in Sources */ = {isa = PBXBuildFile; fileRef = 43CB73D4181E0E0100D1D1DD /* portlistingparse.c */; };
+		43CB73DA181E0E0100D1D1DD /* portlistingparse.h in Headers */ = {isa = PBXBuildFile; fileRef = 43CB73D5181E0E0100D1D1DD /* portlistingparse.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		43CB73DB181E0E0100D1D1DD /* receivedata.c in Sources */ = {isa = PBXBuildFile; fileRef = 43CB73D6181E0E0100D1D1DD /* receivedata.c */; };
+		43CB73DC181E0E0100D1D1DD /* receivedata.h in Headers */ = {isa = PBXBuildFile; fileRef = 43CB73D7181E0E0100D1D1DD /* receivedata.h */; };
 		43CCDC9514BA3AC800B21363 /* glc.h in Headers */ = {isa = PBXBuildFile; fileRef = 43CCDC9414BA3AC800B21363 /* glc.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		43CCDCB514BA3B2100B21363 /* context.c in Sources */ = {isa = PBXBuildFile; fileRef = 43CCDC9614BA3B2100B21363 /* context.c */; };
 		43CCDCB614BA3B2100B21363 /* database.c in Sources */ = {isa = PBXBuildFile; fileRef = 43CCDC9714BA3B2100B21363 /* database.c */; };
@@ -1852,6 +1857,11 @@
 		43C3B9C0118BEBE0000BBE59 /* barkmel.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = barkmel.c; path = external/libvorbis/lib/barkmel.c; sourceTree = SOURCE_ROOT; };
 		43C3B9C1118BEBE0000BBE59 /* psytune.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = psytune.c; path = external/libvorbis/lib/psytune.c; sourceTree = SOURCE_ROOT; };
 		43C3B9C2118BEBE0000BBE59 /* tone.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = tone.c; path = external/libvorbis/lib/tone.c; sourceTree = SOURCE_ROOT; };
+		43CB73D3181E0E0100D1D1DD /* miniupnpctypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = miniupnpctypes.h; path = ../3rdparty/miniupnpc/miniupnpctypes.h; sourceTree = SOURCE_ROOT; };
+		43CB73D4181E0E0100D1D1DD /* portlistingparse.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = portlistingparse.c; path = ../3rdparty/miniupnpc/portlistingparse.c; sourceTree = SOURCE_ROOT; };
+		43CB73D5181E0E0100D1D1DD /* portlistingparse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = portlistingparse.h; path = ../3rdparty/miniupnpc/portlistingparse.h; sourceTree = SOURCE_ROOT; };
+		43CB73D6181E0E0100D1D1DD /* receivedata.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = receivedata.c; path = ../3rdparty/miniupnpc/receivedata.c; sourceTree = SOURCE_ROOT; };
+		43CB73D7181E0E0100D1D1DD /* receivedata.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = receivedata.h; path = ../3rdparty/miniupnpc/receivedata.h; sourceTree = SOURCE_ROOT; };
 		43CCDC9414BA3AC800B21363 /* glc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = glc.h; path = ../3rdparty/quesoglc/GL/glc.h; sourceTree = SOURCE_ROOT; };
 		43CCDC9614BA3B2100B21363 /* context.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = context.c; path = ../3rdparty/quesoglc/context.c; sourceTree = SOURCE_ROOT; };
 		43CCDC9714BA3B2100B21363 /* database.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = database.c; path = ../3rdparty/quesoglc/database.c; sourceTree = SOURCE_ROOT; };
@@ -3283,6 +3293,11 @@
 		43C18F79114FF38B0028741B /* MiniUPnPc sources */ = {
 			isa = PBXGroup;
 			children = (
+				43CB73D3181E0E0100D1D1DD /* miniupnpctypes.h */,
+				43CB73D4181E0E0100D1D1DD /* portlistingparse.c */,
+				43CB73D5181E0E0100D1D1DD /* portlistingparse.h */,
+				43CB73D6181E0E0100D1D1DD /* receivedata.c */,
+				43CB73D7181E0E0100D1D1DD /* receivedata.h */,
 				43D338561364F5A8005F6725 /* connecthostport.c */,
 				43D338571364F5A8005F6725 /* connecthostport.h */,
 				43C18F7A114FF38B0028741B /* bsdqueue.h */,
@@ -3682,6 +3697,9 @@
 				431843DB136395C400BA2BC5 /* upnperrors.h in Headers */,
 				431843DD136395C600BA2BC5 /* upnpreplyparse.h in Headers */,
 				43D338591364F5A8005F6725 /* connecthostport.h in Headers */,
+				43CB73D8181E0E0100D1D1DD /* miniupnpctypes.h in Headers */,
+				43CB73DA181E0E0100D1D1DD /* portlistingparse.h in Headers */,
+				43CB73DC181E0E0100D1D1DD /* receivedata.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5178,6 +5196,8 @@
 				431843DA136395C300BA2BC5 /* upnperrors.c in Sources */,
 				431843DC136395C500BA2BC5 /* upnpreplyparse.c in Sources */,
 				43D338581364F5A8005F6725 /* connecthostport.c in Sources */,
+				43CB73D9181E0E0100D1D1DD /* portlistingparse.c in Sources */,
+				43CB73DB181E0E0100D1D1DD /* receivedata.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
