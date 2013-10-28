@@ -1,4 +1,4 @@
-/* $Id: upnperrors.c,v 1.3 2008/04/27 17:21:51 nanard Exp $ */
+/* $Id: upnperrors.c,v 1.6 2012/03/15 01:02:03 nanard Exp $ */
 /* Project : miniupnp
  * Author : Thomas BERNARD
  * copyright (c) 2007 Thomas Bernard
@@ -9,6 +9,7 @@
 #include <string.h>
 #include "upnperrors.h"
 #include "upnpcommands.h"
+#include "miniupnpc.h"
 
 const char * strupnperror(int err)
 {
@@ -23,6 +24,12 @@ const char * strupnperror(int err)
 	case UPNPCOMMAND_INVALID_ARGS:
 		s = "Miniupnpc Invalid Arguments";
 		break;
+	case UPNPDISCOVER_SOCKET_ERROR:
+		s = "Miniupnpc Socket error";
+		break;
+	case UPNPDISCOVER_MEMORY_ERROR:
+		s = "Miniupnpc Memory allocation error";
+		break;
 	case 401:
 		s = "Invalid Action";
 		break;
@@ -31,6 +38,36 @@ const char * strupnperror(int err)
 		break;
 	case 501:
 		s = "Action Failed";
+		break;
+	case 606:
+		s = "Action not authorized";
+		break;
+	case 701:
+		s = "PinholeSpaceExhausted";
+		break;
+	case 702:
+		s = "FirewallDisabled";
+		break;
+	case 703:
+		s = "InboundPinholeNotAllowed";
+		break;
+	case 704:
+		s = "NoSuchEntry";
+		break;
+	case 705:
+		s = "ProtocolNotSupported";
+		break;
+	case 706:
+		s = "InternalPortWildcardingNotAllowed";
+		break;
+	case 707:
+		s = "ProtocolWildcardingNotAllowed";
+		break;
+	case 708:
+		s = "WildcardNotPermittedInSrcIP";
+		break;
+	case 709:
+		s = "NoPacketSent";
 		break;
 	case 713:
 		s = "SpecifiedArrayIndexInvalid";
@@ -60,7 +97,8 @@ const char * strupnperror(int err)
 		s = "ExternalPortOnlySupportsWildcard";
 		break;
 	default:
-		s = NULL;
+		s = "UnknownError";
+		break;
 	}
 	return s;
 }

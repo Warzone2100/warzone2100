@@ -43,6 +43,7 @@
 #include "lib/ivis_opengl/pieclip.h"
 #include "lib/ivis_opengl/piemode.h"
 #include "lib/ivis_opengl/piepalette.h"
+#include "lib/ivis_opengl/piematrix.h"			// for setgeometricoffset
 #include "lib/ivis_opengl/screen.h"
 
 #include "lib/gamelib/gtime.h"
@@ -84,9 +85,6 @@
 
 #include "multiplay.h"
 #include "multiint.h"
-#if defined(WZ_CC_MSVC)
-#include "multiint_moc.h"	// this is generated on the pre-build event.
-#endif
 #include "multijoin.h"
 #include "multistat.h"
 #include "multirecv.h"
@@ -155,6 +153,7 @@ static bool disableLobbyRefresh = false;	// if we allow lobby to be refreshed or
 static UDWORD hideTime=0;
 static bool EnablePasswordPrompt = false;	// if we need the password prompt
 LOBBY_ERROR_TYPES LobbyError = ERROR_NOERROR;
+static bool allowChangePosition = true;
 static char tooltipbuffer[MaxGames][256] = {{'\0'}};
 static bool toggleFilter = true;	// Used to show all games or only games that are of the same version
 /// end of globals.
@@ -165,19 +164,21 @@ static bool toggleFilter = true;	// Used to show all games or only games that ar
 static bool addMultiEditBox(UDWORD formid, UDWORD id, UDWORD x, UDWORD y, char const *tip, char const *tipres, UDWORD icon, UDWORD iconhi, UDWORD iconid);
 static void addBlueForm					(UDWORD parent,UDWORD id, const char *txt,UDWORD x,UDWORD y,UDWORD w,UDWORD h);
 static void drawReadyButton(UDWORD player);
+static void displayPasswordEditBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours);
 
 // Drawing Functions
-static void displayChatEdit     (WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
-static void intDisplayFeBox     (WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
-static void displayRemoteGame   (WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
-static void displayPlayer       (WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
-static void displayPosition     (WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
-static void displayColour       (WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
-static void displayTeamChooser  (WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
-static void displayAi           (WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
-static void displayDifficulty   (WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
-static void displayMultiEditBox (WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
-static Image getFrontHighlightImage(Image image);
+static void displayChatEdit     (WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+static void displayMultiBut     (WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+static void intDisplayFeBox     (WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+static void displayRemoteGame   (WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+static void displayPlayer       (WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+static void displayPosition     (WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+static void displayColour       (WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+static void displayTeamChooser  (WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+static void displayAi           (WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+static void displayDifficulty   (WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+static void displayMultiEditBox (WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+static void setLockedTeamsMode  (void);
 
 // find games
 static void addGames				(void);
@@ -213,17 +214,6 @@ static int difficultyIcon(int difficulty);
 
 static const char *difficultyList[] = { N_("Easy"), N_("Medium"), N_("Hard"), N_("Insane") };
 static const int difficultyValue[] = { 1, 10, 15, 20 };
-static struct
-{
-	bool scavengers;
-	bool alliances;
-	bool teams;
-	bool power;
-	bool difficulty;
-	bool ai;
-	bool position;
-	bool bases;
-} locked;
 
 struct AIDATA
 {
@@ -238,18 +228,6 @@ static std::vector<AIDATA> aidata;
 
 /// Player name overrides
 static char nameOverrides[MAX_PLAYERS][MAX_LEN_AI_NAME];
-
-struct WzMultiButton : public W_BUTTON
-{
-	WzMultiButton(WIDGET *parent) : W_BUTTON(parent) {}
-
-	void display(int xOffset, int yOffset);
-
-	Image imNormal;
-	Image imDown;
-	unsigned doHighlight;
-	unsigned tc;
-};
 
 const char *getAIName(int player)
 {
@@ -287,17 +265,6 @@ int getNextAIAssignment(const char *name)
 void loadMultiScripts()
 {
 	bool defaultRules = true;
-	char aFileName[256];
-	char aPathName[256];
-	const char *ininame = challengeActive ? sRequestResult : aFileName;
-	const char *path = challengeActive ? "challenges/" : aPathName;
-	LEVEL_DATASET *psLevel = levFindDataSet(game.map, &game.hash);
-	ASSERT_OR_RETURN(, psLevel, "No level found for %s", game.map);
-	sstrcpy(aFileName, psLevel->apDataFiles[psLevel->game]);
-	aFileName[strlen(aFileName) - 4] = '\0';
-	sstrcpy(aPathName, aFileName);
-	sstrcat(aFileName, ".ini");
-	sstrcat(aPathName, "/");
 
 	// Reset assigned counter
 	std::vector<AIDATA>::iterator it;
@@ -306,22 +273,22 @@ void loadMultiScripts()
 		(*it).assigned = 0;
 	}
 
-	// Load map scripts
-	WzConfig ini(ininame, WzConfig::ReadOnly);
-	if (PHYSFS_exists(ininame))
+	// Load extra script for challenges
+	if (challengeActive)
 	{
-		debug(LOG_SAVE, "Loading map scripts");
-		ini.beginGroup("scripts");
-		if (ini.contains("extra"))
+		debug(LOG_SAVE, "Loading challenge scripts");
+		WzConfig challenge(sRequestResult);
+		challenge.beginGroup("scripts");
+		if (challenge.contains("extra"))
 		{
-			loadGlobalScript(path + ini.value("extra").toString());
+			loadGlobalScript("challenges/" + challenge.value("extra").toString());
 		}
-		if (ini.contains("rules"))
+		if (challenge.contains("rules"))
 		{
-			loadGlobalScript(path + ini.value("rules").toString());
+			loadGlobalScript("challenges/" + challenge.value("rules").toString());
 			defaultRules = false;
 		}
-		ini.endGroup();
+		challenge.endGroup();
 	}
 
 	// Load multiplayer rules
@@ -349,13 +316,14 @@ void loadMultiScripts()
 		if (bMultiPlayer && game.type == SKIRMISH && (!NetPlay.players[i].allocated || i == selectedPlayer)
 		    && NetPlay.players[i].ai >= 0 && myResponsibility(i))
 		{
-			if (PHYSFS_exists(ininame)) // challenge file may override AI
+			if (challengeActive) // challenge file may override
 			{
-				ini.beginGroup("player_" + QString::number(i + 1));
-				if (ini.contains("ai"))
+				WzConfig challenge(sRequestResult); // so inefficient, but no other way
+				challenge.beginGroup("player_" + QString::number(i + 1));
+				if (challenge.contains("ai"))
 				{
-					QString val = ini.value("ai").toString();
-					ini.endGroup();
+					QString val = challenge.value("ai").toString();
+					challenge.endGroup();
 					if (val.compare("null") == 0)
 					{
 						continue; // no AI
@@ -364,7 +332,7 @@ void loadMultiScripts()
 					NetPlay.players[i].ai = AI_CUSTOM;
 					continue;
 				}
-				ini.endGroup();
+				challenge.endGroup();
 			}
 			if (aidata[NetPlay.players[i].ai].slo[0] != '\0')
 			{
@@ -445,9 +413,9 @@ static void loadEmptyMapPreview()
 	Vector2i playerpos[MAX_PLAYERS];
 	memset(playerpos, 0x77, sizeof(playerpos));
 
-	screen_enableMapPreview(ex, ey, playerpos);
+	screen_enableMapPreview((char *)"This string is written somewhere and then ignored.", ex, ey, playerpos);
 
-	screen_Upload(imageData);
+	screen_Upload(imageData, true);
 	free(imageData);
 }
 
@@ -483,6 +451,7 @@ void loadMapPreview(bool hideInterface)
 		loadEmptyMapPreview();
 		return;
 	}
+	setCurrentMap(psLevel->realFileName, psLevel->players);
 	if (psLevel->realFileName == NULL)
 	{
 		debug(LOG_INFO, "Loading map preview: \"%s\" builtin t%d", psLevel->pName, psLevel->dataDir);
@@ -491,8 +460,8 @@ void loadMapPreview(bool hideInterface)
 	{
 		debug(LOG_INFO, "Loading map preview: \"%s\" in (%s)\"%s\"  %s t%d", psLevel->pName, PHYSFS_getRealDir(psLevel->realFileName), psLevel->realFileName, psLevel->realFileHash.toString().c_str(), psLevel->dataDir);
 	}
-	rebuildSearchPath(psLevel->dataDir, false, psLevel->realFileName);
-	sstrcpy(aFileName, psLevel->apDataFiles[psLevel->game]);
+	rebuildSearchPath(psLevel->dataDir, false);
+	sstrcpy(aFileName,psLevel->apDataFiles[0]);
 	aFileName[strlen(aFileName)-4] = '\0';
 	sstrcat(aFileName, "/ttypes.ttp");
 	pFileData = fileLoadBuffer;
@@ -607,9 +576,9 @@ void loadMapPreview(bool hideInterface)
 	// color our texture with clancolors @ correct position
 	plotStructurePreview16(imageData, playerpos);
 
-	screen_enableMapPreview(mapWidth, mapHeight, playerpos);
+	screen_enableMapPreview(aFileName, mapWidth, mapHeight, playerpos);
 
-	screen_Upload(imageData);
+	screen_Upload(imageData, true);
 
 	free(imageData);
 
@@ -663,14 +632,20 @@ void readAIs()
 
 		sstrcpy(path, basepath);
 		sstrcat(path, *i);
-		WzConfig aiconf(path, WzConfig::ReadOnly);
+		WzConfig aiconf(path);
+		if (aiconf.status() != QSettings::NoError)
+		{
+			debug(LOG_ERROR, "Failed to open AI %s", path);
+			continue;
+		}
+
 		AIDATA ai;
 		aiconf.beginGroup("AI");
-		sstrcpy(ai.name, aiconf.value("name", "error").toString().toUtf8().constData());
-		sstrcpy(ai.slo, aiconf.value("slo", "").toString().toUtf8().constData());
-		sstrcpy(ai.vlo, aiconf.value("vlo", "").toString().toUtf8().constData());
-		sstrcpy(ai.js, aiconf.value("js", "").toString().toUtf8().constData());
-		sstrcpy(ai.tip, aiconf.value("tip", "Click to choose this AI").toString().toUtf8().constData());
+		sstrcpy(ai.name, aiconf.value("name", "error").toString().toAscii().constData());
+		sstrcpy(ai.slo, aiconf.value("slo", "").toString().toAscii().constData());
+		sstrcpy(ai.vlo, aiconf.value("vlo", "").toString().toAscii().constData());
+		sstrcpy(ai.js, aiconf.value("js", "").toString().toAscii().constData());
+		sstrcpy(ai.tip, aiconf.value("tip", "Click to choose this AI").toString().toAscii().constData());
 		if (strcmp(ai.name, "Nexus") == 0)
 		{
 			std::vector<AIDATA>::iterator it;
@@ -707,7 +682,8 @@ static void decideWRF(void)
 
 static bool OptionsInet(void)			//internet options
 {
-	psConScreen = new W_SCREEN;
+	psConScreen = widgCreateScreen();
+	widgSetTipFont(psConScreen,font_regular);
 
 	W_FORMINIT sFormInit;           //Connection Settings
 	sFormInit.formID = 0;
@@ -753,6 +729,8 @@ static bool OptionsInet(void)			//internet options
 	}
 	// auto click in the text box
 	W_CONTEXT sContext;
+	sContext.psScreen	= psConScreen;
+	sContext.psForm		= (W_FORM *)psConScreen->psForm;
 	sContext.xOffset	= 0;
 	sContext.yOffset	= 0;
 	sContext.mx			= 0;
@@ -823,8 +801,7 @@ void runConnectionScreen(void)
 
 			if(SettingsUp == true)
 			{
-				delete psConScreen;
-				psConScreen = NULL;
+				widgReleaseScreen(psConScreen);
 				SettingsUp = false;
 			}
 
@@ -833,8 +810,7 @@ void runConnectionScreen(void)
 		case CON_IP_CANCEL:
 			if (SettingsUp == true)
 			{
-				delete psConScreen;
-				psConScreen = NULL;
+				widgReleaseScreen(psConScreen);
 				SettingsUp = false;
 			}
 			break;
@@ -1227,17 +1203,53 @@ void runGameFind(void )
 	displayConsoleMessages();
 }
 
+// Used to draw the password box for the lobby screen
+static void displayPasswordEditBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
+{
+	UDWORD	x = xOffset+psWidget->x;
+	UDWORD	y = yOffset+psWidget->y;
+	UDWORD	w = psWidget->width;
+	UDWORD  h = psWidget->height;
+
+	pie_BoxFill(x, y, x + w, y + h, WZCOL_MENU_BORDER);
+	pie_BoxFill(x + 1, y + 1, x + w - 1, y + h - 1, WZCOL_MENU_BACKGROUND);
+}
+
+static void showPasswordLabel( WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
+{
+	SDWORD	fx,fy;
+	W_LABEL	*psLab;
+
+	psLab = (W_LABEL *)psWidget;
+
+	fx = xOffset + psWidget->x;
+	fy = yOffset + psWidget->y;
+
+	iV_SetFont(font_large);
+	iV_SetTextColour(WZCOL_FORM_TEXT);
+
+	iV_DrawText(psLab->aText, fx, fy);
+	iV_SetTextColour(WZCOL_TEXT_MEDIUM);
+}
+
 // This is what starts the lobby screen
 void startGameFind(void)
 {
 	addBackdrop();										//background image
 
-	WIDGET *parent = widgGetFromID(psWScreen, FRONTEND_BACKDROP);
-
 	// draws the background of the games listed
-	IntFormAnimated *botForm = new IntFormAnimated(parent);
-	botForm->id = FRONTEND_BOTFORM;
-	botForm->setGeometry(MULTIOP_OPTIONSX, MULTIOP_OPTIONSY, MULTIOP_CHATBOXW, 415);  // FIXME: Add box at bottom for server messages
+	W_FORMINIT sFormInit;
+	sFormInit.formID = FRONTEND_BACKDROP;
+	sFormInit.id = FRONTEND_BOTFORM;
+	sFormInit.style = WFORM_PLAIN;
+	sFormInit.x = MULTIOP_OPTIONSX;
+	sFormInit.y = MULTIOP_OPTIONSY;
+	sFormInit.width = MULTIOP_CHATBOXW;
+	sFormInit.height = 415;	// FIXME: Add box at bottom for server messages
+	sFormInit.pDisplay = intOpenPlainForm;
+	sFormInit.disableChildren = true;
+
+	widgAddForm(psWScreen, &sFormInit);
 
 	addSideText(FRONTEND_SIDETEXT,  MULTIOP_OPTIONSX-3, MULTIOP_OPTIONSY,_("GAMES"));
 
@@ -1266,36 +1278,56 @@ void startGameFind(void)
 
 	// Password stuff. Hidden by default.
 
-	// draws the background of the password box
-	IntFormAnimated *passwordForm = new IntFormAnimated(parent);
-	passwordForm->id = FRONTEND_PASSWORDFORM;
-	passwordForm->setGeometry(FRONTEND_BOTFORMX, 160, FRONTEND_TOPFORMW, FRONTEND_TOPFORMH - 40);
-
 	// password label.
-	W_LABEL *enterPasswordLabel = new W_LABEL(passwordForm);
-	enterPasswordLabel->setTextAlignment(WLAB_ALIGNCENTRE);
-	enterPasswordLabel->setGeometry(130, 0, 280, 40);
-	enterPasswordLabel->setFont(font_large, WZCOL_FORM_TEXT);
-	enterPasswordLabel->setString(_("Enter Password:"));
+	W_LABINIT sLabInit;
+	sLabInit.formID = FRONTEND_BACKDROP;
+	sLabInit.id		= CON_PASSWORD_LABEL;
+	sLabInit.style	= WLAB_ALIGNCENTRE;
+	sLabInit.x		= 180;
+	sLabInit.y		= 195;
+	sLabInit.width	= CON_SETTINGSWIDTH;
+	sLabInit.height = 20;
+	sLabInit.pText	= _("Enter Password:");
+	sLabInit.pDisplay = showPasswordLabel;
+	widgAddLabel(psWScreen, &sLabInit);
 
 	// and finally draw the password entry box
-	W_EDITBOX *passwordBox = new W_EDITBOX(passwordForm);
-	passwordBox->id = CON_PASSWORD;
-	passwordBox->setGeometry(130, 40, 280, 20);
-	passwordBox->setBoxColours(WZCOL_MENU_BORDER, WZCOL_MENU_BORDER, WZCOL_MENU_BACKGROUND);
+	W_EDBINIT sEdInit;
+	sEdInit.formID = FRONTEND_BACKDROP;
+	sEdInit.id = CON_PASSWORD;
+	sEdInit.x = 180;
+	sEdInit.y = 200;
+	sEdInit.width = 280;
+	sEdInit.height = 20;
+	sEdInit.pText = "";
+	sEdInit.pBoxDisplay = displayPasswordEditBox;
 
-	W_BUTTON *buttonYes = new W_BUTTON(passwordForm);
-	buttonYes->id = CON_PASSWORDYES;
-	buttonYes->setImages(Image(FrontImages, IMAGE_OK), Image(FrontImages, IMAGE_OK), getFrontHighlightImage(Image(FrontImages, IMAGE_OK)));
-	buttonYes->move(180, 65);
-	buttonYes->setTip(_("OK"));
-	W_BUTTON *buttonNo = new W_BUTTON(passwordForm);
-	buttonNo->id = CON_PASSWORDNO;
-	buttonNo->setImages(Image(FrontImages, IMAGE_NO), Image(FrontImages, IMAGE_NO), getFrontHighlightImage(Image(FrontImages, IMAGE_NO)));
-	buttonNo->move(230, 65);
-	buttonNo->setTip(_("Cancel"));
+	widgAddEditBox(psWScreen, &sEdInit);
 
-	passwordForm->hide();
+	addMultiBut(psWScreen, FRONTEND_BACKDROP,CON_PASSWORDYES,230,225,MULTIOP_OKW,MULTIOP_OKH,
+	            _("OK"),IMAGE_OK,IMAGE_OK,true);
+	addMultiBut(psWScreen, FRONTEND_BACKDROP,CON_PASSWORDNO,280,225,MULTIOP_OKW,MULTIOP_OKH,
+	            _("Cancel"),IMAGE_NO,IMAGE_NO,true);
+
+	// draws the background of the password box
+	sFormInit = W_FORMINIT();
+	sFormInit.formID = FRONTEND_BACKDROP;
+	sFormInit.id = FRONTEND_PASSWORDFORM;
+	sFormInit.style = WFORM_PLAIN;
+	sFormInit.x = FRONTEND_BOTFORMX;
+	sFormInit.y = 160;
+	sFormInit.width = FRONTEND_TOPFORMW;
+	sFormInit.height = FRONTEND_TOPFORMH-40;
+	sFormInit.pDisplay = intOpenPlainForm;
+	sFormInit.disableChildren = true;
+
+	widgAddForm(psWScreen, &sFormInit);
+
+	widgHide(psWScreen, FRONTEND_PASSWORDFORM);
+	widgHide(psWScreen, CON_PASSWORD_LABEL);
+	widgHide(psWScreen, CON_PASSWORD);
+	widgHide(psWScreen, CON_PASSWORDYES);
+	widgHide(psWScreen, CON_PASSWORDNO);
 
 	EnablePasswordPrompt = false;
 }
@@ -1305,6 +1337,10 @@ static void hidePasswordForm(void)
 	EnablePasswordPrompt = false;
 
 	if (widgGetFromID(psWScreen, FRONTEND_PASSWORDFORM)) widgHide(psWScreen, FRONTEND_PASSWORDFORM);
+	if (widgGetFromID(psWScreen, CON_PASSWORD_LABEL)) widgHide(psWScreen, CON_PASSWORD_LABEL);
+	if (widgGetFromID(psWScreen, CON_PASSWORD)) widgHide(psWScreen, CON_PASSWORD);
+	if (widgGetFromID(psWScreen, CON_PASSWORDYES))widgHide(psWScreen, CON_PASSWORDYES);
+	if (widgGetFromID(psWScreen, CON_PASSWORDNO)) 	widgHide(psWScreen, CON_PASSWORDNO);
 
 	widgReveal(psWScreen, FRONTEND_SIDETEXT);
 	widgReveal(psWScreen, FRONTEND_BOTFORM);
@@ -1329,8 +1365,14 @@ static void showPasswordForm(void)
 	removeGames();
 
 	widgReveal(psWScreen, FRONTEND_PASSWORDFORM);
+	widgReveal(psWScreen, CON_PASSWORD_LABEL);
+	widgReveal(psWScreen, CON_PASSWORD);
+	widgReveal(psWScreen, CON_PASSWORDYES);
+	widgReveal(psWScreen, CON_PASSWORDNO);
 
 	// auto click in the password box
+	sContext.psScreen	= psWScreen;
+	sContext.psForm		= (W_FORM *)psWScreen->psForm;
 	sContext.xOffset	= 0;
 	sContext.yOffset	= 0;
 	sContext.mx			= 0;
@@ -1343,110 +1385,6 @@ static void showPasswordForm(void)
 // Game Options Screen.
 
 // ////////////////////////////////////////////////////////////////////////////
-
-MultibuttonWidget::MultibuttonWidget(WIDGET* parent, int value)
-	: W_FORM(parent)
-	, label(nullptr)
-	, mapper(new QSignalMapper(this))
-	, currentValue_(value)
-	, disabled(false)
-	, gap_(3)
-	, lockCurrent(false)
-{
-	connect(mapper, SIGNAL(mapped(int)), this, SLOT(choose(int)));
-}
-
-void MultibuttonWidget::display(int xOffset, int yOffset)
-{
-	iV_ShadowBox(xOffset + x(), yOffset + y(), xOffset + x() + width() - 1, yOffset + y() + height() - 1, 0, WZCOL_MENU_BORDER, WZCOL_MENU_BORDER, WZCOL_MENU_BACKGROUND);
-}
-
-void MultibuttonWidget::geometryChanged()
-{
-	int s = width() - gap_;
-	for (std::vector<std::pair<W_BUTTON *, int> >::const_reverse_iterator i = buttons.rbegin(); i != buttons.rend(); ++i)
-	{
-		i->first->move(s - i->first->width(), (height() - i->first->height())/2);
-		s -= i->first->width() + gap_;
-	}
-	if (label != nullptr)
-	{
-		label->setGeometry(gap_, 0, s - gap_, height());
-	}
-}
-
-void MultibuttonWidget::setLabel(char const *text)
-{
-	delete label;
-	label = new W_LABEL(this);
-	label->setString(text);
-
-	geometryChanged();
-}
-
-void MultibuttonWidget::addButton(int value, Image image, Image imageDown, char const *tip)
-{
-	W_BUTTON *button = new W_BUTTON(this);
-	button->setImages(image, imageDown, getFrontHighlightImage(image));
-	button->setTip(tip);
-	button->setState(value == currentValue_ && lockCurrent? WBUT_LOCK : disabled? WBUT_DISABLE : 0);
-	buttons.push_back(std::make_pair(button, value));
-
-	mapper->setMapping(button, value);
-	connect(button, SIGNAL(clicked()), mapper, SLOT(map()));
-
-	geometryChanged();
-}
-
-void MultibuttonWidget::enable(bool enabled)
-{
-	if (!enabled == disabled)
-	{
-		return;
-	}
-
-	disabled = !enabled;
-	stateChanged();
-}
-
-void MultibuttonWidget::setGap(int gap)
-{
-	if (gap == gap_)
-	{
-		return;
-	}
-
-	gap_ = gap;
-	geometryChanged();
-}
-
-void MultibuttonWidget::choose(int value)
-{
-	if (value == currentValue_ && lockCurrent)
-	{
-		return;
-	}
-
-	currentValue_ = value;
-	stateChanged();
-
-	emit chosen(currentValue_);
-	screenPointer->setReturn(this);
-}
-
-void MultibuttonWidget::stateChanged()
-{
-	for (std::vector<std::pair<W_BUTTON *, int> >::const_iterator i = buttons.begin(); i != buttons.end(); ++i)
-	{
-		i->first->setState(i->second == currentValue_ && lockCurrent? WBUT_LOCK : disabled? WBUT_DISABLE : 0);
-	}
-}
-
-MultichoiceWidget::MultichoiceWidget(WIDGET *parent, int value)
-	: MultibuttonWidget(parent, value)
-{
-	lockCurrent = true;
-}
 
 static void addBlueForm(UDWORD parent,UDWORD id, const char *txt,UDWORD x,UDWORD y,UDWORD w,UDWORD h)
 {
@@ -1520,20 +1458,24 @@ static void addGameOptions()
 
 	iV_SetFont(font_regular);
 
-	WIDGET *parent = widgGetFromID(psWScreen, FRONTEND_BACKDROP);
-
-	// draw options box.
-	IntFormAnimated *optionsForm = new IntFormAnimated(parent, false);
-	optionsForm->id = MULTIOP_OPTIONS;
-	optionsForm->setGeometry(MULTIOP_OPTIONSX, MULTIOP_OPTIONSY, MULTIOP_OPTIONSW, MULTIOP_OPTIONSH);
+	W_FORMINIT sFormInit;                          // draw options box.
+	sFormInit.formID = FRONTEND_BACKDROP;
+	sFormInit.id = MULTIOP_OPTIONS;
+	sFormInit.x = MULTIOP_OPTIONSX;
+	sFormInit.y = MULTIOP_OPTIONSY;
+	sFormInit.style = WFORM_PLAIN;
+	sFormInit.width = MULTIOP_OPTIONSW;
+	sFormInit.height = MULTIOP_OPTIONSH;
+	sFormInit.pDisplay = intDisplayPlainForm;
+	widgAddForm(psWScreen, &sFormInit);
 
 	addSideText(FRONTEND_SIDETEXT3, MULTIOP_OPTIONSX-3 , MULTIOP_OPTIONSY,_("OPTIONS"));
 
 	// game name box
 	if (!NetPlay.bComms)
 	{
-		addMultiEditBox(MULTIOP_OPTIONS, MULTIOP_GNAME, MCOL0, MROW2, _("Game Name"),
-		                challengeActive ? game.name : _("One-Player Skirmish"), IMAGE_EDIT_GAME,
+		addMultiEditBox(MULTIOP_OPTIONS, MULTIOP_GNAME, MCOL0, MROW2, _("Select Game Name"), 
+		                challengeActive ? game.name : _("One-Player Skirmish"), IMAGE_EDIT_GAME, 
 		                IMAGE_EDIT_GAME_HI, MULTIOP_GNAME_ICON);
 		// disable for one-player skirmish
 		widgSetButtonState(psWScreen, MULTIOP_GNAME, WEDBS_DISABLE);
@@ -1562,76 +1504,157 @@ static void addGameOptions()
 		}
 	}
 
+	// buttons
+	// game type
+	addBlueForm(MULTIOP_OPTIONS,MULTIOP_GAMETYPE,_("Scavengers"),MCOL0,MROW5,MULTIOP_BLUEFORMW,27);
+	addMultiBut(psWScreen, MULTIOP_GAMETYPE, MULTIOP_CAMPAIGN, MCOL2, 2, MULTIOP_BUTW, MULTIOP_BUTH, _("Scavengers"),
+	            IMAGE_SCAVENGERS_ON, IMAGE_SCAVENGERS_ON_HI, true);
+	addMultiBut(psWScreen, MULTIOP_GAMETYPE, MULTIOP_SKIRMISH, MCOL3, 2, MULTIOP_BUTW, MULTIOP_BUTH, _("No Scavengers"),
+	            IMAGE_SCAVENGERS_OFF, IMAGE_SCAVENGERS_OFF_HI, true);
+
+	widgSetButtonState(psWScreen, MULTIOP_CAMPAIGN,	0);
+	widgSetButtonState(psWScreen, MULTIOP_SKIRMISH,	0);
+
+	if (game.scavengers)
+	{
+		widgSetButtonState(psWScreen, MULTIOP_CAMPAIGN, WBUT_LOCK);
+		if (challengeActive)
+		{
+			widgSetButtonState(psWScreen, MULTIOP_SKIRMISH, WBUT_DISABLE);
+		}
+	}
+	else
+	{
+		widgSetButtonState(psWScreen, MULTIOP_SKIRMISH, WBUT_LOCK);
+		if (challengeActive)
+		{
+			widgSetButtonState(psWScreen, MULTIOP_CAMPAIGN, WBUT_DISABLE);
+		}
+	}
+
+	if (game.maxPlayers == MAX_PLAYERS || !game.mapHasScavengers)
+	{
+		widgSetButtonState(psWScreen, MULTIOP_SKIRMISH, WBUT_LOCK);
+		widgSetButtonState(psWScreen, MULTIOP_CAMPAIGN, WBUT_DISABLE);	// full, cannot enable scavenger player
+	}
+
 	//just display the game options.
 	addMultiEditBox(MULTIOP_OPTIONS, MULTIOP_PNAME, MCOL0, MROW1, _("Select Player Name"), (char*) sPlayer, IMAGE_EDIT_PLAYER, IMAGE_EDIT_PLAYER_HI, MULTIOP_PNAME_ICON);
 
-	ListWidget *optionsList = new ListWidget(optionsForm);
-	optionsList->setChildSize(MULTIOP_BLUEFORMW, 29);
-	optionsList->setChildSpacing(2, 2);
-	optionsList->setGeometry(MCOL0, MROW5, MULTIOP_BLUEFORMW, optionsForm->height() - MROW5);
+		// alliances
+		addBlueForm(MULTIOP_OPTIONS, MULTIOP_ALLIANCES, _("Alliances"), MCOL0, MROW6, MULTIOP_BLUEFORMW, 27);
 
-	MultichoiceWidget *scavengerChoice = new MultichoiceWidget(optionsList, game.scavengers);
-	scavengerChoice->id = MULTIOP_GAMETYPE;
-	scavengerChoice->setLabel(_("Scavengers"));
-	if (game.mapHasScavengers)
-	{
-		scavengerChoice->addButton(true, Image(FrontImages, IMAGE_SCAVENGERS_ON), Image(FrontImages, IMAGE_SCAVENGERS_ON_HI), _("Scavengers"));
-	}
-	scavengerChoice->addButton(false, Image(FrontImages, IMAGE_SCAVENGERS_OFF), Image(FrontImages, IMAGE_SCAVENGERS_OFF_HI), _("No Scavengers"));
-	scavengerChoice->enable(!locked.scavengers);
-	optionsList->addWidgetToLayout(scavengerChoice);
+		addMultiBut(psWScreen,MULTIOP_ALLIANCES,MULTIOP_ALLIANCE_N,MCOL1,2,MULTIOP_BUTW,MULTIOP_BUTH,
+				_("No Alliances"),IMAGE_NOALLI,IMAGE_NOALLI_HI,true);
+		addMultiBut(psWScreen,MULTIOP_ALLIANCES,MULTIOP_ALLIANCE_Y,MCOL2,2,MULTIOP_BUTW,MULTIOP_BUTH,
+				_("Allow Alliances"),IMAGE_ALLI,IMAGE_ALLI_HI,true);
 
-	MultichoiceWidget *allianceChoice = new MultichoiceWidget(optionsList, game.alliance);
-	allianceChoice->id = MULTIOP_ALLIANCES;
-	allianceChoice->setLabel(_("Alliances"));
-	allianceChoice->addButton(NO_ALLIANCES, Image(FrontImages, IMAGE_NOALLI), Image(FrontImages, IMAGE_NOALLI_HI), _("No Alliances"));
-	allianceChoice->addButton(ALLIANCES, Image(FrontImages, IMAGE_ALLI), Image(FrontImages, IMAGE_ALLI_HI), _("Allow Alliances"));
-	allianceChoice->addButton(ALLIANCES_UNSHARED, Image(FrontImages, IMAGE_ALLI_UNSHARED), Image(FrontImages, IMAGE_ALLI_UNSHARED_HI), _("Locked Teams, No Shared Research"));
-	allianceChoice->addButton(ALLIANCES_TEAMS, Image(FrontImages, IMAGE_ALLI_TEAMS), Image(FrontImages, IMAGE_ALLI_TEAMS_HI), _("Locked Teams"));
-	allianceChoice->enable(!locked.alliances);
-	optionsList->addWidgetToLayout(allianceChoice);
+		//add 'Locked Teams' button
+		addMultiBut(psWScreen,MULTIOP_ALLIANCES,MULTIOP_ALLIANCE_TEAMS,MCOL3,2,MULTIOP_BUTW,MULTIOP_BUTH,
+		            _("Locked Teams"), IMAGE_ALLI_TEAMS, IMAGE_ALLI_TEAMS_HI, true);
 
-	MultichoiceWidget *powerChoice = new MultichoiceWidget(optionsList, game.power);
-	powerChoice->id = MULTIOP_POWER;
-	powerChoice->setLabel(_("Power"));
-	powerChoice->addButton(LEV_LOW, Image(FrontImages, IMAGE_POWLO), Image(FrontImages, IMAGE_POWLO_HI), _("Low Power Levels"));
-	powerChoice->addButton(LEV_MED, Image(FrontImages, IMAGE_POWMED), Image(FrontImages, IMAGE_POWMED_HI), _("Medium Power Levels"));
-	powerChoice->addButton(LEV_HI, Image(FrontImages, IMAGE_POWHI), Image(FrontImages, IMAGE_POWHI_HI), _("High Power Levels"));
-	powerChoice->enable(!locked.power);
-	optionsList->addWidgetToLayout(powerChoice);
+		widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_N,0);				//hilight correct entry
+		widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_Y,0);
+		widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_TEAMS,0);
+		if (challengeActive)
+		{
+			widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_N, WBUT_DISABLE);
+			widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_Y, WBUT_DISABLE);
+		}
 
-	MultichoiceWidget *baseTypeChoice = new MultichoiceWidget(optionsList, game.base);
-	baseTypeChoice->id = MULTIOP_BASETYPE;
-	baseTypeChoice->setLabel(_("Base"));
-	baseTypeChoice->addButton(CAMP_CLEAN, Image(FrontImages, IMAGE_NOBASE), Image(FrontImages, IMAGE_NOBASE_HI), _("Start with No Bases"));
-	baseTypeChoice->addButton(CAMP_BASE, Image(FrontImages, IMAGE_SBASE), Image(FrontImages, IMAGE_SBASE_HI), _("Start with Bases"));
-	baseTypeChoice->addButton(CAMP_WALLS, Image(FrontImages, IMAGE_LBASE), Image(FrontImages, IMAGE_LBASE_HI), _("Start with Advanced Bases"));
-	baseTypeChoice->enable(!locked.bases);
-	optionsList->addWidgetToLayout(baseTypeChoice);
+		switch(game.alliance)
+		{
+		case NO_ALLIANCES:
+			widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_N,WBUT_LOCK);
+			break;
+		case ALLIANCES:
+			widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_Y,WBUT_LOCK);
+			break;
+		case ALLIANCES_TEAMS:
+			widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_TEAMS,WBUT_LOCK);
+			break;
+		}
 
-	MultibuttonWidget *mapPreviewButton = new MultibuttonWidget(optionsList);
-	mapPreviewButton->id = MULTIOP_MAP_PREVIEW;
-	mapPreviewButton->setLabel(_("Map Preview"));
-	mapPreviewButton->addButton(0, Image(FrontImages, IMAGE_FOG_OFF), Image(FrontImages, IMAGE_FOG_OFF_HI), _("Click to see Map"));
-	optionsList->addWidgetToLayout(mapPreviewButton);
+		addBlueForm(MULTIOP_OPTIONS, MULTIOP_POWER, _("Power"), MCOL0, MROW7, MULTIOP_BLUEFORMW, 27);
+		addMultiBut(psWScreen,MULTIOP_POWER,MULTIOP_POWLEV_LOW,MCOL1,2,MULTIOP_BUTW,MULTIOP_BUTH,
+			_("Low Power Levels"),IMAGE_POWLO,IMAGE_POWLO_HI,true);
+		addMultiBut(psWScreen,MULTIOP_POWER,MULTIOP_POWLEV_MED,MCOL2,2,MULTIOP_BUTW,MULTIOP_BUTH,
+			_("Medium Power Levels"),IMAGE_POWMED,IMAGE_POWMED_HI,true);
+		addMultiBut(psWScreen,MULTIOP_POWER,MULTIOP_POWLEV_HI, MCOL3, 2,MULTIOP_BUTW,MULTIOP_BUTH,
+			_("High Power Levels"),IMAGE_POWHI,IMAGE_POWHI_HI,true);
+		widgSetButtonState(psWScreen, MULTIOP_POWLEV_LOW,0);		//hilight correct entry
+		widgSetButtonState(psWScreen, MULTIOP_POWLEV_MED,0);
+		widgSetButtonState(psWScreen, MULTIOP_POWLEV_HI ,0);
+		if (game.power <= LEV_LOW)
+		{
+			widgSetButtonState(psWScreen, MULTIOP_POWLEV_LOW,WBUT_LOCK);
+			if (challengeActive)
+			{
+				widgSetButtonState(psWScreen, MULTIOP_POWLEV_MED, WBUT_DISABLE);
+				widgSetButtonState(psWScreen, MULTIOP_POWLEV_HI, WBUT_DISABLE);
+			}
+		}
+		else if (game.power <= LEV_MED)
+		{
+			widgSetButtonState(psWScreen, MULTIOP_POWLEV_MED,WBUT_LOCK);
+			if (challengeActive)
+			{
+				widgSetButtonState(psWScreen, MULTIOP_POWLEV_LOW, WBUT_DISABLE);
+				widgSetButtonState(psWScreen, MULTIOP_POWLEV_HI, WBUT_DISABLE);
+			}
+		}
+		else
+		{
+			widgSetButtonState(psWScreen, MULTIOP_POWLEV_HI,WBUT_LOCK);
+			if (challengeActive)
+			{
+				widgSetButtonState(psWScreen, MULTIOP_POWLEV_LOW, WBUT_DISABLE);
+				widgSetButtonState(psWScreen, MULTIOP_POWLEV_MED, WBUT_DISABLE);
+			}
+		}
 
-	if (ingame.bHostSetup)
-	{
-		MultibuttonWidget *structLimitsButton = new MultibuttonWidget(optionsList);
-		structLimitsButton->id = MULTIOP_STRUCTLIMITS;
-		structLimitsButton->setLabel(challengeActive ? _("Show Structure Limits") : _("Set Structure Limits"));
-		structLimitsButton->addButton(0, Image(FrontImages, IMAGE_SLIM), Image(FrontImages, IMAGE_SLIM_HI), challengeActive ? _("Show Structure Limits") : _("Set Structure Limits"));
-		optionsList->addWidgetToLayout(structLimitsButton);
-	}
+		addBlueForm(MULTIOP_OPTIONS, MULTIOP_BASETYPE, _("Base"), MCOL0, MROW8, MULTIOP_BLUEFORMW, 27);
+		addMultiBut(psWScreen,MULTIOP_BASETYPE,MULTIOP_CLEAN,MCOL1,2,MULTIOP_BUTW,MULTIOP_BUTH,
+				_("Start with No Bases"), IMAGE_NOBASE,IMAGE_NOBASE_HI,true);
+		addMultiBut(psWScreen,MULTIOP_BASETYPE,MULTIOP_BASE,MCOL2,2,MULTIOP_BUTW,MULTIOP_BUTH,
+				_("Start with Bases"),IMAGE_SBASE,IMAGE_SBASE_HI,true);
+		addMultiBut(psWScreen,MULTIOP_BASETYPE,MULTIOP_DEFENCE,MCOL3,2,MULTIOP_BUTW,MULTIOP_BUTH,
+				_("Start with Advanced Bases"),IMAGE_LBASE,IMAGE_LBASE_HI,true);
+		widgSetButtonState(psWScreen, MULTIOP_CLEAN,0);						//hilight correct entry
+		widgSetButtonState(psWScreen, MULTIOP_BASE,0);
+		widgSetButtonState(psWScreen, MULTIOP_DEFENCE,0);
+		switch(game.base)
+		{
+		case 0:
+			widgSetButtonState(psWScreen, MULTIOP_CLEAN,WBUT_LOCK);
+			if (challengeActive)
+			{
+				widgSetButtonState(psWScreen, MULTIOP_BASE, WBUT_DISABLE);
+				widgSetButtonState(psWScreen, MULTIOP_DEFENCE, WBUT_DISABLE);
+			}
+			break;
+		case 1:
+			widgSetButtonState(psWScreen, MULTIOP_BASE,WBUT_LOCK);
+			if (challengeActive)
+			{
+				widgSetButtonState(psWScreen, MULTIOP_CLEAN, WBUT_DISABLE);
+				widgSetButtonState(psWScreen, MULTIOP_DEFENCE, WBUT_DISABLE);
+			}
+			break;
+		case 2:
+			widgSetButtonState(psWScreen, MULTIOP_DEFENCE,WBUT_LOCK);
+			if (challengeActive)
+			{
+				widgSetButtonState(psWScreen, MULTIOP_CLEAN, WBUT_DISABLE);
+				widgSetButtonState(psWScreen, MULTIOP_BASE, WBUT_DISABLE);
+			}
+			break;
+		}
 
-	if (ingame.bHostSetup && !bHosted && !challengeActive)
-	{
-		MultibuttonWidget *hostButton = new MultibuttonWidget(optionsList);
-		hostButton->id = MULTIOP_HOST;
-		hostButton->setLabel(_("Start Hosting Game"));
-		hostButton->addButton(0, Image(FrontImages, IMAGE_HOST), Image(FrontImages, IMAGE_HOST_HI), _("Start Hosting Game"));
-		optionsList->addWidgetToLayout(hostButton);
-	}
+	addBlueForm(MULTIOP_OPTIONS, MULTIOP_MAP_PREVIEW, _("Map Preview"), MCOL0, MROW9, MULTIOP_BLUEFORMW, 27);
+	addMultiBut(psWScreen,MULTIOP_MAP_PREVIEW, MULTIOP_MAP_BUT, MCOL3, 2, MULTIOP_BUTW, MULTIOP_BUTH,
+	            _("Click to see Map"), IMAGE_FOG_OFF, IMAGE_FOG_OFF_HI, true);
+	widgSetButtonState(psWScreen, MULTIOP_MAP_BUT,0); //1 = OFF  0=ON
 
 	// cancel
 	addMultiBut(psWScreen,MULTIOP_OPTIONS,CON_CANCEL,
@@ -1640,12 +1663,33 @@ static void addGameOptions()
 		iV_GetImageHeight(FrontImages,IMAGE_RETURN),
 		_("Return To Previous Screen"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
 
+	// host Games button
+	if(ingame.bHostSetup && !bHosted && !challengeActive)
+	{
+		addBlueForm(MULTIOP_OPTIONS, MULTIOP_HOST, _("Start Hosting Game"), MCOL0, MROW11, MULTIOP_BLUEFORMW, 27);
+		addMultiBut(psWScreen, MULTIOP_HOST, MULTIOP_HOST_BUT, MCOL3, 0, MULTIOP_BUTW, MULTIOP_BUTH,
+			_("Start Hosting Game"), IMAGE_HOST, IMAGE_HOST_HI, IMAGE_HOST_HI);
+	}
+
+	// hosted or hosting.
+	// limits button.
+	if (ingame.bHostSetup)
+	{
+		addBlueForm(MULTIOP_OPTIONS, MULTIOP_STRUCTLIMITS, challengeActive ? _("Show Structure Limits") : _("Set Structure Limits"),
+						MCOL0, MROW10, MULTIOP_BLUEFORMW, 27);
+
+		addMultiBut(psWScreen, MULTIOP_STRUCTLIMITS, MULTIOP_LIMITS_BUT, MCOL3, 4, MULTIOP_BUTW, MULTIOP_BUTH,
+					 challengeActive ? _("Show Structure Limits") : _("Set Structure Limits"), IMAGE_SLIM, IMAGE_SLIM_HI, IMAGE_SLIM_HI);
+	}
+
 	// Add any relevant factory disabled icons.
 	updateLimitFlags();
-
+	{
+		int i;
 		int y = 2;
 		bool skip = false;
-		for (int i = 0; i < ARRAY_SIZE(limitIcons); ++i)
+
+		for (i = 0; i < ARRAY_SIZE(limitIcons); ++i)
 		{
 			if ((ingame.flags & 1<<i) != 0)
 			{
@@ -1661,6 +1705,7 @@ static void addGameOptions()
 				skip = true;
 			}
 		}
+	}
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -1700,11 +1745,16 @@ static void addDifficultyChooser(int player)
 	widgDelete(psWScreen, FRONTEND_SIDETEXT2);
 	difficultyChooserUp = player;
 
-	WIDGET *parent = widgGetFromID(psWScreen, FRONTEND_BACKDROP);
-
-	IntFormAnimated *aiForm = new IntFormAnimated(parent, false);
-	aiForm->id = MULTIOP_AI_FORM;
-	aiForm->setGeometry(MULTIOP_PLAYERSX, MULTIOP_PLAYERSY, MULTIOP_PLAYERSW, MULTIOP_PLAYERSH);
+	W_FORMINIT sFormInit;
+	sFormInit.formID = FRONTEND_BACKDROP;
+	sFormInit.id = MULTIOP_AI_FORM;	// reuse
+	sFormInit.x = MULTIOP_PLAYERSX;
+	sFormInit.y = MULTIOP_PLAYERSY;
+	sFormInit.style = WFORM_PLAIN;
+	sFormInit.width = MULTIOP_PLAYERSW;
+	sFormInit.height = MULTIOP_PLAYERSH;
+	sFormInit.pDisplay = intDisplayPlainForm;
+	widgAddForm(psWScreen, &sFormInit);
 
 	addSideText(FRONTEND_SIDETEXT2, MULTIOP_PLAYERSX - 3, MULTIOP_PLAYERSY, _("DIFFICULTY"));
 
@@ -1717,9 +1767,10 @@ static void addDifficultyChooser(int player)
 		sButInit.y = (MULTIOP_PLAYERHEIGHT + 5) * i + 4;
 		sButInit.width = MULTIOP_PLAYERWIDTH + 1;
 		sButInit.height = MULTIOP_PLAYERHEIGHT;
+		sButInit.pTip = NULL;
 		switch (i)
 		{
-		case 0: sButInit.pTip = _("Starts disadvantaged"); break;
+		case 0: sButInit.pTip = _("Less aggressive"); break;
 		case 1: sButInit.pTip = _("Plays nice"); break;
 		case 2: sButInit.pTip = _("No holds barred"); break;
 		case 3: sButInit.pTip = _("Starts with advantages"); break;
@@ -1739,11 +1790,16 @@ static void addAiChooser(int player)
 	widgDelete(psWScreen, FRONTEND_SIDETEXT2);
 	aiChooserUp = player;
 
-	WIDGET *parent = widgGetFromID(psWScreen, FRONTEND_BACKDROP);
-
-	IntFormAnimated *aiForm = new IntFormAnimated(parent, false);
-	aiForm->id = MULTIOP_AI_FORM;
-	aiForm->setGeometry(MULTIOP_PLAYERSX, MULTIOP_PLAYERSY, MULTIOP_PLAYERSW, MULTIOP_PLAYERSH);
+	W_FORMINIT sFormInit;
+	sFormInit.formID = FRONTEND_BACKDROP;
+	sFormInit.id = MULTIOP_AI_FORM;
+	sFormInit.x = MULTIOP_PLAYERSX;
+	sFormInit.y = MULTIOP_PLAYERSY;
+	sFormInit.style = WFORM_PLAIN;
+	sFormInit.width = MULTIOP_PLAYERSW;
+	sFormInit.height = MULTIOP_PLAYERSH;
+	sFormInit.pDisplay = intDisplayPlainForm;
+	widgAddForm(psWScreen, &sFormInit);
 
 	addSideText(FRONTEND_SIDETEXT2, MULTIOP_PLAYERSX - 3, MULTIOP_PLAYERSY, _("CHOOSE AI"));
 
@@ -1751,41 +1807,20 @@ static void addAiChooser(int player)
 	sButInit.formID = MULTIOP_AI_FORM;
 	sButInit.x = 7;
 	sButInit.width = MULTIOP_PLAYERWIDTH + 1;
-	// Try to fit as many as possible, just got to make sure text fits in the 'box'.
-	// NOTE: Correct way would be to get the actual font size, render the text, and see what fits.
-	if (aidata.size() > 8)
-	{
-		sButInit.height = MULTIOP_PLAYERHEIGHT - 7;
-	}
-	else
-	{
-		sButInit.height = MULTIOP_PLAYERHEIGHT;
-	}
+	sButInit.height = MULTIOP_PLAYERHEIGHT;
 	sButInit.pDisplay = displayAi;
 
-	// only need this button in (true) mp games
-	int mpbutton = NetPlay.bComms ? 1 : 0;
-	// cap AI's that are shown, since it looks a bit ugly.  *FIXME*
-	int capAIs = aidata.size();
-	if (aidata.size() > 8)
-	{
-		debug(LOG_INFO, "You have too many AI's loaded for the GUI to handle.  Only the first 8 will be shown.");
-		addConsoleMessage("You have too many AI's loaded for the GUI to handle.  Only the first 8 will be shown.", DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
-		capAIs = 10;
-	}
-
-	// button height * how many AI + possible buttons (openclosed)
-	int gap = MULTIOP_PLAYERSH - ((sButInit.height)* (capAIs + 1 + mpbutton));
-	int gapDiv = capAIs - 1;
-	gap = std::min(gap, 5*gapDiv);
+	int y = 4;
+	const int step = (MULTIOP_PLAYERHEIGHT + 5);
 
 	// Open button
-	if (mpbutton)
+	if (NetPlay.bComms)
 	{
 		sButInit.id = MULTIOP_AI_OPEN;
 		sButInit.pTip = _("Allow human players to join in this slot");
 		sButInit.UserData = (UDWORD)AI_OPEN;
-		sButInit.y = 3;	//Top most position
+		sButInit.y = y;
+		y += step;
 		widgAddButton(psWScreen, &sButInit);
 	}
 
@@ -1793,19 +1828,14 @@ static void addAiChooser(int player)
 	sButInit.pTip = _("Leave this slot unused");
 	sButInit.id = MULTIOP_AI_CLOSED;
 	sButInit.UserData = (UDWORD)AI_CLOSED;
-	if (mpbutton)
-	{
-		sButInit.y = sButInit.height;
-	}
-	else
-	{
-		sButInit.y = 0; //since we don't have the lone mpbutton, we can start at position 0
-	}
+	sButInit.y = y;
+	y += step + 8;
 	widgAddButton(psWScreen, &sButInit);
 
-	for (int i = 0; i < capAIs; i++)
+	for (int i = 0; i < aidata.size(); i++)
 	{
-		sButInit.y = (sButInit.height*gapDiv + gap)*(i+1+mpbutton)/gapDiv; // +1 for 'closed', and possible +1 more for 'open' for MP games)
+		sButInit.y = y;
+		y += step;
 		sButInit.pTip = aidata[i].tip;
 		sButInit.id = MULTIOP_AI_START + i;
 		sButInit.UserData = i;
@@ -2286,14 +2316,11 @@ static void drawReadyButton(UDWORD player)
 				playerBoxHeight(player),
 				MULTIOP_READY_WIDTH,MULTIOP_READY_HEIGHT);
 
-	WIDGET *parent = widgGetFromID(psWScreen, MULTIOP_READY_FORM_ID + player);
-
-
 	if (!NetPlay.players[player].allocated && NetPlay.players[player].ai >= 0)
 	{
 		int icon = difficultyIcon(NetPlay.players[player].difficulty);
 		addMultiBut(psWScreen, MULTIOP_READY_FORM_ID + player, MULTIOP_DIFFICULTY_INIT_START + player, 6, 4, MULTIOP_READY_WIDTH, MULTIOP_READY_HEIGHT,
-		            locked.difficulty ? _("Difficulty locked") : (NetPlay.isHost ? _("Click to change difficulty") : NULL), icon, icon, icon);
+		            challengeActive ? _("You cannot change difficulty in a challenge") : NetPlay.isHost? _("Click to change difficulty") : NULL, icon, icon, icon);
 		return;
 	}
 	else if (!NetPlay.players[player].allocated)
@@ -2314,13 +2341,8 @@ static void drawReadyButton(UDWORD player)
 	// draw 'ready' button
 	addMultiBut(psWScreen, MULTIOP_READY_FORM_ID + player, MULTIOP_READY_START + player, 3, 10, MULTIOP_READY_WIDTH, MULTIOP_READY_HEIGHT,
 	            toolTips[isMe][isReady], images[0][isReady], images[0][isReady], images[isMe][isReady]);
-
-	W_LABEL *label = new W_LABEL(parent);
-	label->id = MULTIOP_READY_START + MAX_PLAYERS + player;
-	label->setGeometry(0, 0, MULTIOP_READY_WIDTH, 17);
-	label->setTextAlignment(WLAB_ALIGNBOTTOM);
-	label->setFont(font_small, WZCOL_TEXT_BRIGHT);
-	label->setString(_("READY?"));
+	addText(MULTIOP_READY_START+MAX_PLAYERS+player, 0, 14,
+	        _("READY?"), MULTIOP_READY_FORM_ID + player);
 }
 
 static bool canChooseTeamFor(int i)
@@ -2353,12 +2375,16 @@ void addPlayerBox(bool players)
 		return;
 	}
 
-	// draw player window
-	WIDGET *parent = widgGetFromID(psWScreen, FRONTEND_BACKDROP);
-
-	IntFormAnimated *playersForm = new IntFormAnimated(parent, false);
-	playersForm->id = MULTIOP_PLAYERS;
-	playersForm->setGeometry(MULTIOP_PLAYERSX, MULTIOP_PLAYERSY, MULTIOP_PLAYERSW, MULTIOP_PLAYERSH);
+	W_FORMINIT sFormInit;                           // draw player window
+	sFormInit.formID = FRONTEND_BACKDROP;
+	sFormInit.id = MULTIOP_PLAYERS;
+	sFormInit.x = MULTIOP_PLAYERSX;
+	sFormInit.y = MULTIOP_PLAYERSY;
+	sFormInit.style = WFORM_PLAIN;
+	sFormInit.width = MULTIOP_PLAYERSW;
+	sFormInit.height = MULTIOP_PLAYERSH;
+	sFormInit.pDisplay = intDisplayPlainForm;
+	widgAddForm(psWScreen, &sFormInit);
 
 	addSideText(FRONTEND_SIDETEXT2, MULTIOP_PLAYERSX-3, MULTIOP_PLAYERSY,_("PLAYERS"));
 
@@ -2371,7 +2397,7 @@ void addPlayerBox(bool players)
 		{
 			if (game.skDiff[i] || isHumanPlayer(i))
 			{
-				int myTeam = alliancesSetTeamsBeforeGame(game.alliance)? NetPlay.players[i].team : i;
+				int myTeam = game.alliance != ALLIANCES_TEAMS? NetPlay.players[i].team : i;
 				if (team == -1)
 				{
 					team = myTeam;
@@ -2421,13 +2447,13 @@ void addPlayerBox(bool players)
 				sButInit.y = playerBoxHeight(i);
 				sButInit.width = MULTIOP_TEAMSWIDTH;
 				sButInit.height = MULTIOP_TEAMSHEIGHT;
-				if (canChooseTeamFor(i) && !locked.teams)
+				if (canChooseTeamFor(i))
 				{
 					sButInit.pTip = _("Choose Team");
 				}
-				else if (locked.teams)
+				else
 				{
-					sButInit.pTip = _("Teams locked");
+					sButInit.pTip = NULL;
 				}
 				sButInit.pDisplay = displayTeamChooser;
 				sButInit.UserData = i;
@@ -2436,7 +2462,7 @@ void addPlayerBox(bool players)
 				{
 					addTeamChooser(i);
 				}
-				else if (alliancesSetTeamsBeforeGame(game.alliance))
+				else if (game.alliance == ALLIANCES_TEAMS)
 				{
 					// only if not disabled and in locked teams mode
 					widgAddButton(psWScreen, &sButInit);
@@ -2454,6 +2480,10 @@ void addPlayerBox(bool players)
 			if (selectedPlayer == i || NetPlay.isHost)
 			{
 				sColInit.pTip = _("Click to change player colour");
+			}
+			else
+			{
+				sColInit.pTip = NULL;
 			}
 			sColInit.pDisplay = displayColour;
 			sColInit.UserData = i;
@@ -2474,30 +2504,14 @@ void addPlayerBox(bool players)
 				sButInit.y = playerBoxHeight(i);
 				sButInit.width = MULTIOP_PLAYERWIDTH - MULTIOP_TEAMSWIDTH - MULTIOP_READY_WIDTH - MULTIOP_COLOUR_WIDTH;
 				sButInit.height = MULTIOP_PLAYERHEIGHT;
-				if ((selectedPlayer == i || NetPlay.isHost) && NetPlay.players[i].allocated && !locked.position)
+				sButInit.pTip = NULL;
+				if ((selectedPlayer == i || NetPlay.isHost) && NetPlay.players[i].allocated && allowChangePosition)
 				{
 					sButInit.pTip = _("Click to change player position");
 				}
-				else if (!NetPlay.players[i].allocated && NetPlay.isHost && !locked.ai)
+				else if (!NetPlay.players[i].allocated && NetPlay.isHost && !challengeActive)
 				{
 					sButInit.pTip = _("Click to change AI");
-				}
-				if (NetPlay.players[i].allocated && !getMultiStats(i).identity.empty())
-				{
-					if (!sButInit.pTip.isEmpty())
-					{
-						sButInit.pTip += "\n";
-					}
-					EcKey::Key bytes = getMultiStats(i).identity.toBytes(EcKey::Public);
-					sButInit.pTip += _("Player ID: ");
-					if (!bytes.empty())
-					{
-						sButInit.pTip += sha256Sum(&bytes[0], bytes.size()).toString().substr(0, 20).c_str();
-					}
-					else
-					{
-						sButInit.pTip += _("(none)");
-					}
 				}
 				sButInit.pDisplay = displayPlayer;
 				sButInit.UserData = i;
@@ -2549,11 +2563,18 @@ static void addChatBox(void)
 		return;
 	}
 
-	WIDGET *parent = widgGetFromID(psWScreen, FRONTEND_BACKDROP);
+	W_FORMINIT sFormInit;
 
-	IntFormAnimated *chatBox = new IntFormAnimated(parent);
-	chatBox->id = MULTIOP_CHATBOX;
-	chatBox->setGeometry(MULTIOP_CHATBOXX, MULTIOP_CHATBOXY, MULTIOP_CHATBOXW, MULTIOP_CHATBOXH);
+	sFormInit.formID = FRONTEND_BACKDROP;							// add the form
+	sFormInit.id = MULTIOP_CHATBOX;
+	sFormInit.x = MULTIOP_CHATBOXX;
+	sFormInit.y = MULTIOP_CHATBOXY;
+	sFormInit.style = WFORM_PLAIN;
+	sFormInit.width = MULTIOP_CHATBOXW;
+	sFormInit.height = MULTIOP_CHATBOXH;
+	sFormInit.disableChildren = true;								// wait till open!
+	sFormInit.pDisplay = intOpenPlainForm;//intDisplayPlainForm;
+	widgAddForm(psWScreen, &sFormInit);
 
 	addSideText(FRONTEND_SIDETEXT4,MULTIOP_CHATBOXX-3,MULTIOP_CHATBOXY,_("CHAT"));
 
@@ -2561,6 +2582,7 @@ static void addChatBox(void)
 	initConsoleMessages();
 	enableConsoleDisplay(true);
 	setConsoleBackdropStatus(false);
+	setDefaultConsoleJust(LEFT_JUSTIFY);
 	setConsoleSizePos(MULTIOP_CHATBOXX+4+D_W, MULTIOP_CHATBOXY+14+D_H, MULTIOP_CHATBOXW-4);
 	setConsolePermanence(true,true);
 	setConsoleLineInfo(5);											// use x lines on chat window
@@ -2580,9 +2602,10 @@ static void addChatBox(void)
 
 	if (*getModList())
 	{
-		std::string modListMessage = _("Mod: ");
-		modListMessage += getModList();
-		addConsoleMessage(modListMessage.c_str(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+		char modListMessage[WIDG_MAXSTR] = "";
+		sstrcat(modListMessage, _("Mod: "));
+		sstrcat(modListMessage, getModList());
+		addConsoleMessage(modListMessage,DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 		if (NetPlay.bComms)
 		{
 			addConsoleMessage(_("All players need to have the same mods to join your game."),DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
@@ -2604,16 +2627,24 @@ static void addConsoleBox(void)
 		return;
 	}
 
-	WIDGET *parent = widgGetFromID(psWScreen, FRONTEND_BACKDROP);
+	W_FORMINIT sFormInit;
 
-	IntFormAnimated *consoleBox = new IntFormAnimated(parent);
-	consoleBox->id = MULTIOP_CONSOLEBOX;
-	consoleBox->setGeometry(MULTIOP_CONSOLEBOXX, MULTIOP_CONSOLEBOXY, MULTIOP_CONSOLEBOXW, MULTIOP_CONSOLEBOXH);
+	sFormInit.formID = FRONTEND_BACKDROP;							// add the form
+	sFormInit.id = MULTIOP_CONSOLEBOX;
+	sFormInit.x = MULTIOP_CONSOLEBOXX;
+	sFormInit.y = MULTIOP_CONSOLEBOXY;
+	sFormInit.style = WFORM_PLAIN;
+	sFormInit.width = MULTIOP_CONSOLEBOXW;
+	sFormInit.height = MULTIOP_CONSOLEBOXH;
+	sFormInit.disableChildren = true;								// wait till open!
+	sFormInit.pDisplay = intOpenPlainForm;
+	widgAddForm(psWScreen, &sFormInit);
 
 	flushConsoleMessages();											// add the chatbox.
 	initConsoleMessages();
 	enableConsoleDisplay(true);
 	setConsoleBackdropStatus(false);
+	setDefaultConsoleJust(LEFT_JUSTIFY);
 	setConsoleSizePos(MULTIOP_CONSOLEBOXX + 4 + D_W, MULTIOP_CONSOLEBOXY + 14 + D_H, MULTIOP_CONSOLEBOXW - 4);
 	setConsolePermanence(true, true);
 	setConsoleLineInfo(3);											// use x lines on chat window
@@ -2637,10 +2668,20 @@ static void disableMultiButs(void)
 
 	if (!NetPlay.isHost)
 	{
-		((MultichoiceWidget *)widgGetFromID(psWScreen, MULTIOP_GAMETYPE))->disable();  // Scavengers.
-		((MultichoiceWidget *)widgGetFromID(psWScreen, MULTIOP_BASETYPE))->disable();  // camapign subtype.
-		((MultichoiceWidget *)widgGetFromID(psWScreen, MULTIOP_POWER))->disable();  // pow levels
-		((MultichoiceWidget *)widgGetFromID(psWScreen, MULTIOP_ALLIANCES))->disable();
+		if(game.scavengers)  widgSetButtonState(psWScreen, MULTIOP_SKIRMISH, WBUT_DISABLE);
+		if(!game.scavengers) widgSetButtonState(psWScreen, MULTIOP_CAMPAIGN, WBUT_DISABLE);
+
+			if(game.base != CAMP_CLEAN)	widgSetButtonState(psWScreen,MULTIOP_CLEAN ,WBUT_DISABLE);	// camapign subtype.
+			if(game.base != CAMP_BASE)	widgSetButtonState(psWScreen,MULTIOP_BASE ,WBUT_DISABLE);
+			if(game.base != CAMP_WALLS)	widgSetButtonState(psWScreen,MULTIOP_DEFENCE,WBUT_DISABLE);
+
+			if(game.power != LEV_LOW)	widgSetButtonState(psWScreen, MULTIOP_POWLEV_LOW,WBUT_DISABLE);		// pow levels
+			if(game.power != LEV_MED)	widgSetButtonState(psWScreen, MULTIOP_POWLEV_MED,WBUT_DISABLE);
+			if(game.power != LEV_HI )	widgSetButtonState(psWScreen, MULTIOP_POWLEV_HI,WBUT_DISABLE);
+
+			if(game.alliance != NO_ALLIANCES)	widgSetButtonState(psWScreen,MULTIOP_ALLIANCE_N ,WBUT_DISABLE);	//alliance settings.
+			if(game.alliance != ALLIANCES)	widgSetButtonState(psWScreen,MULTIOP_ALLIANCE_Y ,WBUT_DISABLE);
+			if(game.alliance != ALLIANCES_TEAMS)	widgSetButtonState(psWScreen,MULTIOP_ALLIANCE_TEAMS ,WBUT_DISABLE);
 	}
 }
 
@@ -2704,105 +2745,6 @@ static void stopJoining(void)
 		}
 }
 
-static void loadMapSettings1()
-{
-	char aFileName[256];
-	const char *ininame = challengeActive ? sRequestResult : aFileName;
-	LEVEL_DATASET *psLevel = levFindDataSet(game.map, &game.hash);
-
-	ASSERT_OR_RETURN(, psLevel, "No level found for %s", game.map);
-	sstrcpy(aFileName, psLevel->apDataFiles[psLevel->game]);
-	aFileName[strlen(aFileName) - 4] = '\0';
-	sstrcat(aFileName, ".ini");
-	WzConfig ini(ininame, WzConfig::ReadOnly);
-
-	if (!PHYSFS_exists(ininame))
-	{
-		return;
-	}
-
-	ini.beginGroup("locked"); // GUI lockdown
-	locked.power = ini.value("power", challengeActive).toBool();
-	locked.alliances = ini.value("alliances", challengeActive).toBool();
-	locked.teams = ini.value("teams", challengeActive).toBool();
-	locked.difficulty = ini.value("difficulty", challengeActive).toBool();
-	locked.ai = ini.value("ai", challengeActive).toBool();
-	locked.scavengers = ini.value("scavengers", challengeActive).toBool();
-	locked.position = ini.value("position", challengeActive).toBool();
-	locked.bases = ini.value("bases", challengeActive).toBool();
-	ini.endGroup();
-
-	ini.beginGroup("defaults");
-	game.scavengers = ini.value("scavengers", game.scavengers).toBool();
-	game.base = ini.value("bases", game.base).toInt();
-	game.alliance = ini.value("alliances", game.alliance).toInt();
-	if (ini.contains("powerLevel"))
-	{
-		game.power = ini.value("powerLevel", game.power).toInt();
-	}
-	ini.endGroup();
-}
-
-static void loadMapSettings2()
-{
-	char aFileName[256];
-	const char *ininame = challengeActive ? sRequestResult : aFileName;
-	LEVEL_DATASET *psLevel = levFindDataSet(game.map, &game.hash);
-
-	ASSERT_OR_RETURN(, psLevel, "No level found for %s", game.map);
-	sstrcpy(aFileName, psLevel->apDataFiles[psLevel->game]);
-	aFileName[strlen(aFileName) - 4] = '\0';
-	sstrcat(aFileName, ".ini");
-	WzConfig ini(ininame, WzConfig::ReadOnly);
-
-	if (!PHYSFS_exists(ininame))
-	{
-		return;
-	}
-	int offbyone = 0; // for compatibility with 3.1 and earlier challenges
-
-	ini.beginGroup("challenge"); // backwards compatibility mode
-	if (challengeActive && ini.value("version", 1).toInt() <= 1)
-	{
-		offbyone = 1; // old version, counts from 1
-	}
-	ini.endGroup();
-
-	for (int i = 0; i < MAX_PLAYERS; i++)
-	{
-		ini.beginGroup("player_" + QString::number(i + offbyone));
-		if (ini.contains("team"))
-		{
-			NetPlay.players[i].team = ini.value("team").toInt() - offbyone;
-		}
-		else if (challengeActive) // team is a required key for challenges
-		{
-			NetPlay.players[i].ai = AI_CLOSED;
-		}
-		if (ini.contains("name"))
-		{
-			sstrcpy(nameOverrides[i], ini.value("name").toString().toUtf8().constData());
-		}
-		if (ini.contains("position"))
-		{
-			changePosition(i, ini.value("position", NetPlay.players[i].position).toInt());
-		}
-		if (ini.contains("difficulty"))
-		{
-			QString value = ini.value("difficulty", "Medium").toString();
-			for (int j = 0; j < ARRAY_SIZE(difficultyList); j++)
-			{
-				if (strcasecmp(difficultyList[j], value.toUtf8().constData()) == 0)
-				{
-					game.skDiff[i] = difficultyValue[j];
-					NetPlay.players[i].difficulty = j;
-				}
-			}
-		}
-		ini.endGroup();
-	}
-}
-
 /*
  * Process click events on the multiplayer/skirmish options screen
  * 'id' is id of the button that was pressed
@@ -2820,17 +2762,11 @@ static void processMultiopWidgets(UDWORD id)
 			sstrcpy(game.name,widgGetString(psWScreen, MULTIOP_GNAME));
 			break;
 
-		case MULTIOP_GNAME_ICON:
+		case MULTIOP_MAP:
+			widgSetString(psWScreen, MULTIOP_MAP,game.map);
 			break;
 
-		case MULTIOP_MAP:
-			widgDelete(psWScreen, MULTIOP_PLAYERS);
-			widgDelete(psWScreen, FRONTEND_SIDETEXT2);  // del text too,
-
-			debug(LOG_WZ, "processMultiopWidgets[MULTIOP_MAP_ICON]: %s.wrf", MultiCustomMapsPath);
-			addMultiRequest(MultiCustomMapsPath, ".wrf", MULTIOP_MAP, current_tech, 0, widgGetString(psWScreen, MULTIOP_MAP));
-
-			widgSetString(psWScreen, MULTIOP_MAP, game.map);
+		case MULTIOP_GNAME_ICON:
 			break;
 
 		case MULTIOP_MAP_ICON:
@@ -2841,7 +2777,7 @@ static void processMultiopWidgets(UDWORD id)
 			addMultiRequest(MultiCustomMapsPath, ".wrf", MULTIOP_MAP, current_tech, current_numplayers);
 			break;
 
-		case MULTIOP_MAP_PREVIEW:
+		case MULTIOP_MAP_BUT:
 			loadMapPreview(true);
 			break;
 		}
@@ -2852,8 +2788,10 @@ static void processMultiopWidgets(UDWORD id)
 	{
 		switch(id)
 		{
-		case MULTIOP_GAMETYPE:
-			game.scavengers = ((MultichoiceWidget *)widgGetFromID(psWScreen, MULTIOP_GAMETYPE))->currentValue();
+		case MULTIOP_CAMPAIGN:									// turn on campaign game
+			widgSetButtonState(psWScreen, MULTIOP_CAMPAIGN, WBUT_LOCK);
+			widgSetButtonState(psWScreen, MULTIOP_SKIRMISH,0);
+			game.scavengers = true;
 			resetReadyStatus(false);
 			if(bHosted)
 			{
@@ -2861,8 +2799,19 @@ static void processMultiopWidgets(UDWORD id)
 			}
 			break;
 
-		case MULTIOP_BASETYPE:
-			game.base = ((MultichoiceWidget *)widgGetFromID(psWScreen, MULTIOP_BASETYPE))->currentValue();
+		case MULTIOP_SKIRMISH:
+			widgSetButtonState(psWScreen, MULTIOP_CAMPAIGN,0 );
+			widgSetButtonState(psWScreen, MULTIOP_SKIRMISH,WBUT_LOCK);
+			game.scavengers = false;
+			resetReadyStatus(false);
+			if(bHosted)
+			{
+				sendOptions();
+			}
+			break;
+
+		case MULTIOP_CLEAN:
+			game.base = CAMP_CLEAN;
 			addGameOptions();
 
 			resetReadyStatus(false);
@@ -2874,8 +2823,39 @@ static void processMultiopWidgets(UDWORD id)
 			}
 			break;
 
-		case MULTIOP_ALLIANCES:
-			game.alliance = ((MultichoiceWidget *)widgGetFromID(psWScreen, MULTIOP_ALLIANCES))->currentValue();
+		case MULTIOP_BASE:
+			game.base = CAMP_BASE;
+			addGameOptions();
+
+			resetReadyStatus(false);
+
+			if(bHosted)
+			{
+				disableMultiButs();
+				sendOptions();
+			}
+			break;
+
+		case MULTIOP_DEFENCE:
+			game.base = CAMP_WALLS;
+			addGameOptions();
+
+			resetReadyStatus(false);
+
+			if(bHosted)
+			{
+				sendOptions();
+				disableMultiButs();
+			}
+			break;
+
+		case MULTIOP_ALLIANCE_N:
+			widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_N,WBUT_LOCK);
+			widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_Y,0);
+
+			widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_TEAMS,0);
+			// Host wants NO alliance, so reset all teams back to default
+			game.alliance = NO_ALLIANCES;	//0;
 
 			resetReadyStatus(false);
 			netPlayersUpdated = true;
@@ -2886,8 +2866,61 @@ static void processMultiopWidgets(UDWORD id)
 			}
 			break;
 
-		case MULTIOP_POWER:  // set power level
-			game.power = ((MultichoiceWidget *)widgGetFromID(psWScreen, MULTIOP_POWER))->currentValue();
+		case MULTIOP_ALLIANCE_Y:
+			widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_N,0);
+			widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_TEAMS,0);
+
+			widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_Y,WBUT_LOCK);
+
+			game.alliance = ALLIANCES;	//1;
+
+			resetReadyStatus(false);
+			netPlayersUpdated = true;
+
+			if(bHosted)
+			{
+				sendOptions();
+			}
+			break;
+
+		case MULTIOP_ALLIANCE_TEAMS:	//locked teams
+			resetReadyStatus(false);
+			setLockedTeamsMode();
+			break;
+
+		case MULTIOP_POWLEV_LOW:								// set power level to low
+			widgSetButtonState(psWScreen, MULTIOP_POWLEV_LOW,WBUT_LOCK);
+			widgSetButtonState(psWScreen, MULTIOP_POWLEV_MED,0);
+			widgSetButtonState(psWScreen, MULTIOP_POWLEV_HI ,0);
+			game.power = LEV_LOW;
+
+			resetReadyStatus(false);
+
+			if(bHosted)
+			{
+				sendOptions();
+			}
+			break;
+
+		case MULTIOP_POWLEV_MED:								// set power to med
+			widgSetButtonState(psWScreen, MULTIOP_POWLEV_LOW,0);
+			widgSetButtonState(psWScreen, MULTIOP_POWLEV_MED,WBUT_LOCK);
+			widgSetButtonState(psWScreen, MULTIOP_POWLEV_HI ,0);
+			game.power = LEV_MED;
+
+			resetReadyStatus(false);
+
+			if(bHosted)
+			{
+				sendOptions();
+			}
+			break;
+
+		case MULTIOP_POWLEV_HI:									// set power to hi
+			widgSetButtonState(psWScreen, MULTIOP_POWLEV_LOW,0);
+			widgSetButtonState(psWScreen, MULTIOP_POWLEV_MED,0);
+			widgSetButtonState(psWScreen, MULTIOP_POWLEV_HI ,WBUT_LOCK);
+			game.power = LEV_HI;
 
 			resetReadyStatus(false);
 
@@ -2938,7 +2971,7 @@ static void processMultiopWidgets(UDWORD id)
 	// these work all the time.
 	switch(id)
 	{
-	case MULTIOP_STRUCTLIMITS:
+	case MULTIOP_LIMITS_BUT:
 		changeTitleMode(MULTILIMIT);
 		break;
 
@@ -2953,6 +2986,7 @@ static void processMultiopWidgets(UDWORD id)
 
 		// update string.
 		widgSetString(psWScreen, MULTIOP_PNAME,sPlayer);
+
 
 		removeWildcards((char*)sPlayer);
 
@@ -2972,10 +3006,12 @@ static void processMultiopWidgets(UDWORD id)
 		addMultiRequest(MultiPlayersPath, ".sta", MULTIOP_PNAME, 0, 0);
 		break;
 
-	case MULTIOP_HOST:
+	case MULTIOP_HOST_BUT:
 		debug(LOG_NET, "MULTIOP_HOST enabled");
 		sstrcpy(game.name, widgGetString(psWScreen, MULTIOP_GNAME));	// game name
 		sstrcpy(sPlayer, widgGetString(psWScreen, MULTIOP_PNAME));	// pname
+		// Should not set game.map or game.hash here, since MULTIOP_MAP's string came from game.map in the first place, anyway. Wouldn't know what to set the hash to, and clearing it means selecting the first map with the right name.
+		//sstrcpy(game.map, widgGetString(psWScreen, MULTIOP_MAP));  // add the name
 
 		resetReadyStatus(false);
 		resetDataHash();
@@ -2987,7 +3023,6 @@ static void processMultiopWidgets(UDWORD id)
 			break;
 		}
 		bHosted = true;
-		loadMapSettings2();
 
 		widgDelete(psWScreen,MULTIOP_REFRESH);
 		widgDelete(psWScreen,MULTIOP_HOST);
@@ -3028,7 +3063,7 @@ static void processMultiopWidgets(UDWORD id)
 			addChallenges();
 		}
 		break;
-	case MULTIOP_MAP_PREVIEW:
+	case MULTIOP_MAP_BUT:
 		loadMapPreview(true);
 		break;
 	case MULTIOP_AI_CLOSED:
@@ -3071,7 +3106,7 @@ static void processMultiopWidgets(UDWORD id)
 	}
 
 	STATIC_ASSERT(MULTIOP_TEAMS_START + MAX_PLAYERS - 1 <= MULTIOP_TEAMS_END);
-	if (id >= MULTIOP_TEAMS_START && id <= MULTIOP_TEAMS_START + MAX_PLAYERS - 1 && !locked.teams)  // Clicked on a team chooser
+	if (id >= MULTIOP_TEAMS_START && id <= MULTIOP_TEAMS_START + MAX_PLAYERS - 1 && !challengeActive)  // Clicked on a team chooser
 	{
 		int clickedMenuID = id - MULTIOP_TEAMS_START;
 
@@ -3098,6 +3133,16 @@ static void processMultiopWidgets(UDWORD id)
 
 		closeTeamChooser();
 		addPlayerBox(  !ingame.bHostSetup || bHosted);	//restore initial options screen
+
+		//enable locked teams mode
+		//-----------------------------
+		if(game.alliance != ALLIANCES_TEAMS && bHosted)		//only if host
+		{
+			resetReadyStatus(false);
+			setLockedTeamsMode();		//update GUI
+
+			addConsoleMessage(_("'Locked Teams' mode enabled"), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+		}
 	}
 
 	// 'ready' button
@@ -3118,7 +3163,7 @@ static void processMultiopWidgets(UDWORD id)
 			}
 		}
 
-		if (NetPlay.isHost && !alliancesSetTeamsBeforeGame(game.alliance))
+		if (NetPlay.isHost && game.alliance != ALLIANCES_TEAMS)
 		{
 			if(mouseDown(MOUSE_RMB) && player != NetPlay.hostPlayer) // both buttons....
 			{
@@ -3143,7 +3188,7 @@ static void processMultiopWidgets(UDWORD id)
 	// clicked on a player
 	STATIC_ASSERT(MULTIOP_PLAYER_START + MAX_PLAYERS - 1 <= MULTIOP_PLAYER_END);
 	if (id >= MULTIOP_PLAYER_START && id <= MULTIOP_PLAYER_START + MAX_PLAYERS - 1
-	    && !locked.position
+	    && allowChangePosition
 	    && (id - MULTIOP_PLAYER_START == selectedPlayer || NetPlay.isHost
 	        || (positionChooserUp >= 0 && !isHumanPlayer(id - MULTIOP_PLAYER_START))))
 	{
@@ -3166,7 +3211,7 @@ static void processMultiopWidgets(UDWORD id)
 			closePositionChooser();
 			addPlayerBox(!ingame.bHostSetup || bHosted);
 		}
-		else if (!NetPlay.players[player].allocated && !locked.ai && NetPlay.isHost
+		else if (!NetPlay.players[player].allocated && !challengeActive && NetPlay.isHost
 		         && positionChooserUp < 0 && teamChooserUp < 0 && colourChooserUp < 0)
 		{
 			addAiChooser(player);
@@ -3174,7 +3219,7 @@ static void processMultiopWidgets(UDWORD id)
 	}
 
 	if (id >= MULTIOP_DIFFICULTY_INIT_START && id <= MULTIOP_DIFFICULTY_INIT_END
-	    && !locked.difficulty && NetPlay.isHost && positionChooserUp < 0 && teamChooserUp < 0 && colourChooserUp < 0)
+	    && !challengeActive && NetPlay.isHost && positionChooserUp < 0 && teamChooserUp < 0 && colourChooserUp < 0)
 	{
 		addDifficultyChooser(id - MULTIOP_DIFFICULTY_INIT_START);
 		addPlayerBox(!ingame.bHostSetup || bHosted);
@@ -3222,7 +3267,16 @@ void startMultiplayerGame(void)
 		{
 			debug(LOG_NET, "limiter was NOT activated, setting defaults");
 
-			if (!resLoad("wrf/limiter_data.wrf", 503))
+			// NOTE: master <-> 2.3 difference, we don't load limiter_tex!
+			if (!resLoad("wrf/limiter_tex.wrf", 501))
+			{
+				debug(LOG_INFO, "Unable to load limiter_tex.  Defaults not set.");
+			}
+			if (!resLoad("wrf/piestats.wrf", 502))
+			{
+				debug(LOG_INFO, "Unable to load piestats.  Defaults not set.");
+			}
+			else if (!resLoad("wrf/limiter_data.wrf", 503))
 			{
 				debug(LOG_INFO, "Unable to load limiter_data.");
 			}
@@ -3272,11 +3326,12 @@ void frontendMultiMessages(void)
 			break;
 
 		case NET_FILE_PAYLOAD:
-		{
-			bool done = recvMapFileData(queue);
-			((MultibuttonWidget *)widgGetFromID(psWScreen, MULTIOP_MAP_PREVIEW))->enable(done);  // turn preview button on or off
+			widgSetButtonState(psWScreen, MULTIOP_MAP_BUT, 1);	// turn preview button off
+			if (recvMapFileData(queue))
+			{
+				widgSetButtonState(psWScreen, MULTIOP_MAP_BUT, 0);	// turn it back on again
+			}
 			break;
-		}
 
 		case NET_FILE_CANCELLED:					// host only routine
 			{
@@ -3474,6 +3529,8 @@ void frontendMultiMessages(void)
 			{
 				setLobbyError(KICK_TYPE);
 				stopJoining();
+				//screen_RestartBackDrop();
+				//changeTitleMode(TITLE);
 				pie_LoadBackDrop(SCREEN_RANDOMBDROP);
 				debug(LOG_ERROR, "You have been kicked, because %s ", reason);
 			}
@@ -3510,7 +3567,7 @@ void frontendMultiMessages(void)
 void runMultiOptions(void)
 {
 	static UDWORD	lastrefresh = 0;
-	char                    oldGameMap[128];
+	char                    sTemp[128], oldGameMap[128];
 	int                     oldMaxPlayers;
 	PLAYERSTATS		playerStats;
 	W_CONTEXT		context;
@@ -3555,6 +3612,8 @@ void runMultiOptions(void)
 	k = getQwertyKey();
 	if(	k && psWScreen->psFocus == NULL)
 	{
+		context.psScreen	= psWScreen;
+		context.psForm		= (W_FORM *)psWScreen->psForm;
 		context.xOffset		= 0;
 		context.yOffset		= 0;
 		context.mx			= mouseX();
@@ -3587,16 +3646,15 @@ void runMultiOptions(void)
 
 		LEVEL_DATASET *mapData;
 		bool isHoverPreview;
-		QString sTemp;
-		if (runMultiRequester(id, &id, &sTemp, &mapData, &isHoverPreview))
+		if (runMultiRequester(id, &id, (char *)&sTemp, &mapData, &isHoverPreview))
 		{
 			Sha256 oldGameHash;
 
 			switch(id)
 			{
 			case MULTIOP_PNAME:
-				sstrcpy(sPlayer, sTemp.toUtf8().constData());
-				widgSetString(psWScreen, MULTIOP_PNAME, sTemp.toUtf8().constData());
+				sstrcpy(sPlayer, sTemp);
+				widgSetString(psWScreen,MULTIOP_PNAME,sTemp);
 
 				removeWildcards((char*)sPlayer);
 
@@ -3624,10 +3682,6 @@ void runMultiOptions(void)
 					sstrcpy(game.map, oldGameMap);
 					game.hash = oldGameHash;
 					game.maxPlayers = oldMaxPlayers;
-				}
-				else
-				{
-					loadMapSettings1();
 				}
 
 				widgSetString(psWScreen, MULTIOP_MAP, mapData->pName);
@@ -3704,6 +3758,7 @@ bool startMultiOptions(bool bReenter)
 	}
 
 	// free limiter structure
+	// challengeActive can be removed when challenge will set the limits from some config file
 	if(!bReenter || challengeActive)
 	{
 		if(ingame.numStructureLimits)
@@ -3716,14 +3771,12 @@ bool startMultiOptions(bool bReenter)
 
 	if(!bReenter)
 	{
-		memset(nameOverrides, 0, sizeof(nameOverrides));
-		memset(&locked, 0, sizeof(locked)); // nothing is locked by default
-
 		teamChooserUp = -1;
 		aiChooserUp = -1;
 		difficultyChooserUp = -1;
 		positionChooserUp = -1;
 		colourChooserUp = -1;
+		allowChangePosition = true;
 		for(i=0; i < MAX_PLAYERS; i++)
 		{
 			game.skDiff[i] = (DIFF_SLIDER_STOPS / 2);	// reset AI (turn it on again)
@@ -3734,6 +3787,7 @@ bool startMultiOptions(bool bReenter)
 		if(!NetPlay.bComms)			// force skirmish if no comms.
 		{
 			game.type = SKIRMISH;
+			game.scavengers = false;
 			sstrcpy(game.map, DEFAULTSKIRMISHMAP);
 			game.hash = levGetMapNameHash(game.map);
 			game.maxPlayers = 4;
@@ -3742,48 +3796,95 @@ bool startMultiOptions(bool bReenter)
 		ingame.localOptionsReceived = false;
 
 		loadMultiStats((char*)sPlayer,&nullStats);
-	}
-	if (!bReenter && challengeActive)
-	{
-		resetReadyStatus(false);
-		removeWildcards((char*)sPlayer);
-		if (!hostCampaign((char*)game.name,(char*)sPlayer))
+
+		memset(nameOverrides, 0, sizeof(nameOverrides));
+		if (challengeActive)
 		{
-			debug(LOG_ERROR, "Failed to host the challenge.");
-			return false;
+			WzConfig challenge(sRequestResult);
+
+			resetReadyStatus(false);
+			removeWildcards((char*)sPlayer);
+
+			if (!hostCampaign((char*)game.name,(char*)sPlayer))
+			{
+				debug(LOG_ERROR, "Failed to host the challenge.");
+				return false;
+			}
+			bHosted = true;
+
+			challenge.beginGroup("challenge");
+			sstrcpy(game.map, challenge.value("Map", game.map).toString().toAscii().constData());
+			game.hash = levGetMapNameHash(game.map);
+			game.maxPlayers = challenge.value("MaxPlayers", game.maxPlayers).toInt();	// TODO, read from map itself, not here!!
+			game.scavengers = challenge.value("Scavengers", game.scavengers).toBool();
+			game.alliance = ALLIANCES_TEAMS;
+			netPlayersUpdated = true;
+			mapDownloadProgress = 100;
+			game.power = challenge.value("Power", game.power).toInt();
+			game.base = challenge.value("Bases", game.base + 1).toInt() - 1;		// count from 1 like the humans do
+			sstrcpy(game.name, challenge.value("name").toString().toUtf8().constData());
+			allowChangePosition = challenge.value("AllowPositionChange", false).toBool();
+			challenge.endGroup();
+
+			for (int i = 0; i < MAX_PLAYERS; i++)
+			{
+				challenge.beginGroup("player_" + QString::number(i + 1));
+				if (challenge.contains("team"))
+				{
+					NetPlay.players[i].team = challenge.value("team").toInt() - 1;
+				}
+				else // team is a required key!
+				{
+					NetPlay.players[i].ai = AI_CLOSED;
+				}
+				if (challenge.contains("name"))
+				{
+					sstrcpy(nameOverrides[i], challenge.value("name").toString().toUtf8().constData());
+				}
+				if (challenge.contains("position"))
+				{
+					changePosition(i, challenge.value("position", NetPlay.players[i].position).toInt());
+				}
+				if (i != 0)	// player index zero is always the challenger
+				{
+					QString value = challenge.value("difficulty", "Medium").toString();
+					for (int j = 0; j < ARRAY_SIZE(difficultyList); j++)
+					{
+						if (strcasecmp(difficultyList[j], value.toAscii().constData()) == 0)
+						{
+							game.skDiff[i] = difficultyValue[j];
+							NetPlay.players[i].difficulty = j;
+						}
+					}
+				}
+				challenge.endGroup();
+			}
+
+			ingame.localOptionsReceived = true;
+			addGameOptions();									// update game options box.
+			addChatBox();
+			disableMultiButs();
+			addPlayerBox(true);
 		}
-		bHosted = true;
+	}
 
-		loadMapSettings1();
-		loadMapSettings2();
+	addPlayerBox(false);								// Players
+	addGameOptions();
+	addChatBox();
 
-		WzConfig ini(sRequestResult, WzConfig::ReadOnly);
-		ini.beginGroup("challenge");
-		sstrcpy(game.map, ini.value("Map", game.map).toString().toUtf8().constData());
-		game.hash = levGetMapNameHash(game.map);
-		game.maxPlayers = ini.value("MaxPlayers", game.maxPlayers).toInt();	// TODO, read from map itself, not here!!
-		game.scavengers = ini.value("Scavengers", game.scavengers).toBool();
-		game.alliance = ALLIANCES_TEAMS;
-		netPlayersUpdated = true;
-		mapDownloadProgress = 100;
-		game.power = ini.value("powerLevel", game.power).toInt();
-		game.base = ini.value("Bases", game.base + 1).toInt() - 1;		// count from 1 like the humans do
-		sstrcpy(game.name, ini.value("name").toString().toUtf8().constData());
-		locked.position = ini.value("AllowPositionChange", locked.position).toBool();
-		ini.endGroup();
-
-		ingame.localOptionsReceived = true;
-		addGameOptions();									// update game options box.
-		addChatBox();
-		disableMultiButs();
-		addPlayerBox(true);
+	char buf[512]={'\0'};
+	if (NetPlay.isUPNP)
+	{
+		ssprintf(buf, _("UPnP detection is in progress..."));
+		addConsoleMessage(buf, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
 	}
 	else
 	{
-		addPlayerBox(false);								// Players
-		addGameOptions();
-		addChatBox();
+		ssprintf(buf, _("UPnP detection disabled by user. Autoconfig of port 2100 will not happen."));
+		addConsoleMessage(buf, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
 	}
+	ssprintf(buf, _("Press the start hosting button to begin hosting a game."));
+	addConsoleMessage(buf, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
 
 	// going back to multiop after setting limits up..
 	if(bReenter && bHosted)
@@ -3800,23 +3901,23 @@ bool startMultiOptions(bool bReenter)
 /////////////////////////////////////////////////////////////////////////////////////////
 // Drawing functions
 
-void displayChatEdit(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+void displayChatEdit(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {
-	int x = xOffset + psWidget->x();
-	int y = yOffset + psWidget->y() - 4;  // 4 is the magic number.
+	UDWORD x = xOffset+psWidget->x;
+	UDWORD y = yOffset+psWidget->y -4;			// 4 is the magic number.
 
 	// draws the line at the bottom of the multiplayer join dialog separating the chat
 	// box from the input box
-	iV_Line(x, y, x + psWidget->width(), y, WZCOL_MENU_SEPARATOR);
+	iV_Line(x, y, x + psWidget->width, y, WZCOL_MENU_SEPARATOR);
 
 	return;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {
-	int x = xOffset + psWidget->x();
-	int y = yOffset + psWidget->y();
+	UDWORD x = xOffset + psWidget->x;
+	UDWORD y = yOffset + psWidget->y;
 	UDWORD	gameID = psWidget->UserData;
 	char tmp[80], name[StringSize];
 
@@ -3827,10 +3928,10 @@ void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	}
 
 	// Draw blue boxes for games (buttons) & headers
-	drawBlueBox(x, y, psWidget->width(), psWidget->height());
-	drawBlueBox(x, y, GAMES_STATUS_START - 4 ,psWidget->height());
-	drawBlueBox(x, y, GAMES_PLAYERS_START - 4 ,psWidget->height());
-	drawBlueBox(x, y, GAMES_MAPNAME_START - 4, psWidget->height());
+	drawBlueBox(x, y, psWidget->width, psWidget->height);
+	drawBlueBox(x, y, GAMES_STATUS_START - 4 ,psWidget->height);
+	drawBlueBox(x, y, GAMES_PLAYERS_START - 4 ,psWidget->height);
+	drawBlueBox(x, y, GAMES_MAPNAME_START - 4, psWidget->height);
 
 	//draw game info
 	iV_SetFont(font_regular);
@@ -3956,15 +4057,15 @@ void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	}
 }
 
-void displayTeamChooser(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+void displayTeamChooser(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {
-	int x = xOffset + psWidget->x();
-	int y = yOffset + psWidget->y();
+	UDWORD		x = xOffset+psWidget->x;
+	UDWORD		y = yOffset+psWidget->y;
 	UDWORD		i = psWidget->UserData;
 
 	ASSERT(i < MAX_PLAYERS && NetPlay.players[i].team >= 0 && NetPlay.players[i].team < MAX_PLAYERS, "Team index out of bounds" );
 
-	drawBlueBox(x, y, psWidget->width(), psWidget->height());
+	drawBlueBox(x,y,psWidget->width,psWidget->height);							// right
 
 	if (game.skDiff[i])
 	{
@@ -3972,28 +4073,28 @@ void displayTeamChooser(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	}
 }
 
-void displayPosition(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+void displayPosition(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {
-	const int x = xOffset + psWidget->x();
-	const int y = yOffset + psWidget->y();
+	const int x = xOffset + psWidget->x;
+	const int y = yOffset + psWidget->y;
 	const int i = psWidget->UserData;
 	char text[80];
 
-	drawBlueBox(x, y, psWidget->width(), psWidget->height());
+	drawBlueBox(x, y, psWidget->width, psWidget->height);
 	iV_SetFont(font_regular);
 	iV_SetTextColour(WZCOL_FORM_TEXT);
 	ssprintf(text, _("Click to take player slot %d"), NetPlay.players[i].position);
 	iV_DrawText(text, x + 10, y + 22);
 }
 
-static void displayAi(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+static void displayAi(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {
-	const int x = xOffset + psWidget->x();
-	const int y = yOffset + psWidget->y();
+	const int x = xOffset + psWidget->x;
+	const int y = yOffset + psWidget->y;
 	const int j = psWidget->UserData;
 	const char *commsText[] = { N_("Open"), N_("Closed") };
 
-	drawBlueBox(x, y, psWidget->width(), psWidget->height());
+	drawBlueBox(x, y, psWidget->width, psWidget->height);
 	iV_SetFont(font_regular);
 	iV_SetTextColour(WZCOL_FORM_TEXT);
 	iV_DrawText((j >= 0) ? aidata[j].name : gettext(commsText[j + 2]), x + 10, y + 22);
@@ -4011,41 +4112,31 @@ static int difficultyIcon(int difficulty)
 	}
 }
 
-static void displayDifficulty(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+static void displayDifficulty(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {
-	const int x = xOffset + psWidget->x();
-	const int y = yOffset + psWidget->y();
+	const int x = xOffset + psWidget->x;
+	const int y = yOffset + psWidget->y;
 	const int j = psWidget->UserData;
 
 	ASSERT_OR_RETURN(, j < ARRAY_SIZE(difficultyList), "Bad difficulty found: %d", j);
-	drawBlueBox(x, y, psWidget->width(), psWidget->height());
+	drawBlueBox(x, y, psWidget->width, psWidget->height);
 	iV_SetFont(font_regular);
 	iV_SetTextColour(WZCOL_FORM_TEXT);
 	iV_DrawImage(FrontImages, difficultyIcon(j), x + 5, y + 5);
 	iV_DrawText(gettext(difficultyList[j]), x + 42, y + 22);
 }
 
-static bool isKnownPlayer(std::map<std::string, EcKey::Key> const &knownPlayers, std::string const &name, EcKey const &key)
-{
-	if (key.empty())
-	{
-		return false;
-	}
-	std::map<std::string, EcKey::Key>::const_iterator i = knownPlayers.find(name);
-	return i != knownPlayers.end() && key.toBytes(EcKey::Public) == i->second;
-}
-
 // ////////////////////////////////////////////////////////////////////////////
-void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {
-	int x = xOffset + psWidget->x();
-	int y = yOffset + psWidget->y();
+	UDWORD		x = xOffset+psWidget->x;
+	UDWORD		y = yOffset+psWidget->y;
 	UDWORD		j = psWidget->UserData, eval;
 
 	const int nameX = 32;
 
 	//bluboxes.
-	drawBlueBox(x, y, psWidget->width(), psWidget->height());
+	drawBlueBox(x,y,psWidget->width,psWidget->height);							// right
 	if (NetPlay.isHost && NetPlay.players[j].wzFile.isSending)
 	{
 		static char mapProgressString[MAX_STR_LENGTH] = {'\0'};
@@ -4067,33 +4158,16 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	}
 	else if (ingame.localOptionsReceived && NetPlay.players[j].allocated)					// only draw if real player!
 	{
-		std::string name = NetPlay.players[j].name;
-
-		drawBlueBox(x, y, psWidget->width(), psWidget->height());
+		drawBlueBox(x,y,psWidget->width,psWidget->height);							// right
 
 		iV_SetFont(font_regular);											// font
-		std::map<std::string, EcKey::Key> serverPlayers;  // TODO Fill this with players known to the server (needs implementing on the server, too). Currently useless.
-		if (ingame.PingTimes[j] >= PING_LIMIT)
-		{
-			iV_SetTextColour(WZCOL_FORM_PLAYER_NOPING);
-		}
-		else if (isKnownPlayer(serverPlayers, name, getMultiStats(j).identity))
-		{
-			iV_SetTextColour(WZCOL_FORM_PLAYER_KNOWN_BY_SERVER);
-		}
-		else if (isKnownPlayer(getKnownPlayers(), name, getMultiStats(j).identity))
-		{
-			iV_SetTextColour(WZCOL_FORM_PLAYER_KNOWN);
-		}
-		else
-		{
-			iV_SetTextColour(WZCOL_FORM_PLAYER_UNKNOWN);
-		}
+		iV_SetTextColour(WZCOL_FORM_TEXT);
 
 		// name
-		if (iV_GetTextWidth(name.c_str()) > psWidget->width() - nameX)
+		std::string name = NetPlay.players[j].name;
+		if (iV_GetTextWidth(name.c_str()) > psWidget->width - nameX)
 		{
-			while (!name.empty() && iV_GetTextWidth((name + "...").c_str()) > psWidget->width() - nameX)
+			while (!name.empty() && iV_GetTextWidth((name + "...").c_str()) > psWidget->width - nameX)
 			{
 				name.resize(name.size() - 1);  // Clip name.
 			}
@@ -4138,7 +4212,7 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 		}
 		else
 		{
-			PLAYERSTATS stat = getMultiStats(j);
+			stat = getMultiStats(j);
 
 			// star 1 total droid kills
 			eval = stat.totalKills;
@@ -4228,13 +4302,13 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	}
 }
 
-void displayColour(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+void displayColour(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {
-	const int x = xOffset + psWidget->x();
-	const int y = yOffset + psWidget->y();
+	const int x = xOffset + psWidget->x;
+	const int y = yOffset + psWidget->y;
 	const int j = psWidget->UserData;
 
-	drawBlueBox(x, y, psWidget->width(), psWidget->height());
+	drawBlueBox(x, y, psWidget->width, psWidget->height);
 	if (!NetPlay.players[j].wzFile.isSending && game.skDiff[j])
 	{
 		int player = getPlayerColour(j);
@@ -4245,24 +4319,24 @@ void displayColour(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Display blue box
-void intDisplayFeBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+void intDisplayFeBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {
-	int x = xOffset + psWidget->x();
-	int y = yOffset + psWidget->y();
-	int w = psWidget->width();
-	int h = psWidget->height();
+	UDWORD	x = xOffset+psWidget->x;
+	UDWORD	y = yOffset+psWidget->y;
+	UDWORD	w = psWidget->width;
+	UDWORD	h = psWidget->height;
 
 	drawBlueBox(x,y,w,h);
 }
 
 // ////////////////////////////////////////////////////////////////////////////
 // Display edit box
-void displayMultiEditBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+void displayMultiEditBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {
-	int x = xOffset + psWidget->x();
-	int y = yOffset + psWidget->y();
+	UDWORD	x = xOffset+psWidget->x;
+	UDWORD	y = yOffset+psWidget->y;
 
-	drawBlueBox(x, y, psWidget->width(), psWidget->height());
+	drawBlueBox(x,y,psWidget->width,psWidget->height);
 
 	if( ((W_EDITBOX*)psWidget)->state & WEDBS_DISABLE)					// disabled
 	{
@@ -4272,78 +4346,111 @@ void displayMultiEditBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 		colour.byte.b = FILLBLUE;
 		colour.byte.g = FILLGREEN;
 		colour.byte.a = FILLTRANS;
-		pie_UniTransBoxFill(x, y, x + psWidget->width() + psWidget->height(), y + psWidget->height(), colour);
+		pie_UniTransBoxFill(x, y, x + psWidget->width + psWidget->height, y+psWidget->height, colour);
 	}
 }
 
-static Image getFrontHighlightImage(Image image)
+// ////////////////////////////////////////////////////////////////////////////
+// Display one of two images depending on if the widget is hilighted by the mouse.
+void displayMultiBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
 {
-	if (image.isNull())
-	{
-		return Image();
-	}
-	switch (image.width())
-	{
-	case 30: return Image(FrontImages, IMAGE_HI34);
-	case 60: return Image(FrontImages, IMAGE_HI64);
-	case 19: return Image(FrontImages, IMAGE_HI23);
-	case 27: return Image(FrontImages, IMAGE_HI31);
-	case 35: return Image(FrontImages, IMAGE_HI39);
-	case 37: return Image(FrontImages, IMAGE_HI41);
-	case 56: return Image(FrontImages, IMAGE_HI56);
-	}
-	return Image();
-}
-
-void WzMultiButton::display(int xOffset, int yOffset)
-{
-	int x0 = xOffset + x();
-	int y0 = yOffset + y();
-	Image hiToUse(NULL, 0);
+	UDWORD	x = xOffset+psWidget->x;
+	UDWORD	y = yOffset+psWidget->y;
+	bool	Hilight = false;
+	UDWORD	Down = 0;
+	UDWORD	Grey = 0;
+	UWORD	im_norm = UNPACKDWORD_QUAD_A((UDWORD)psWidget->UserData);
+	UWORD	im_down = UNPACKDWORD_QUAD_B((UDWORD)psWidget->UserData);
+	UWORD	im_hili = UNPACKDWORD_QUAD_C((UDWORD)psWidget->UserData);
+	unsigned tc     = UNPACKDWORD_QUAD_D(psWidget->UserData);
+	UWORD	hiToUse = im_hili;
 
 	// FIXME: This seems to be a way to conserve space, so you can use a
 	// transparent icon with these edit boxes.
 	// hack for multieditbox
-	if (imNormal.id == IMAGE_EDIT_MAP || imNormal.id == IMAGE_EDIT_GAME || imNormal.id == IMAGE_EDIT_PLAYER
-	    || imNormal.id == IMAGE_LOCK_BLUE || imNormal.id == IMAGE_UNLOCK_BLUE)
+	if (im_norm == IMAGE_EDIT_MAP || im_norm == IMAGE_EDIT_GAME || im_norm == IMAGE_EDIT_PLAYER
+		|| im_norm == IMAGE_LOCK_BLUE || im_norm == IMAGE_UNLOCK_BLUE)
 	{
-		drawBlueBox(x0 - 2, y0 - 2, height(), height());  // box on end.
+		drawBlueBox(x - 2, y - 2, psWidget->height, psWidget->height);	// box on end.
 	}
 
 	// evaluate auto-frame
-	bool highlight = (getState() & WBUT_HIGHLIGHT) != 0;
-
-	// evaluate auto-frame
-	if (doHighlight == 1 && highlight)
+	if (((W_BUTTON*)psWidget)->state & WBUTS_HILITE)
 	{
-		hiToUse = getFrontHighlightImage(imNormal);
+		Hilight = true;
 	}
 
-	bool down = (getState() & (WBUT_DOWN | WBUT_LOCK | WBUT_CLICKLOCK)) != 0;
-	bool grey = (getState() & WBUT_DISABLE) != 0;
+	// evaluate auto-frame
+	if (im_hili == 1 && Hilight && im_norm != IMAGE_WEE_GUY)
+	{
+		Hilight = true;
+		switch(iV_GetImageWidth(FrontImages, im_norm))			//pick a hilight.
+		{
+		case 30:
+			hiToUse = IMAGE_HI34;
+			break;
+		case 60:
+			hiToUse = IMAGE_HI64;
+			break;
+		case 19:
+			hiToUse = IMAGE_HI23;
+			break;
+		case 27:
+			hiToUse = IMAGE_HI31;
+			break;
+		case 35:
+			hiToUse = IMAGE_HI39;
+			break;
+		case 37:
+			hiToUse = IMAGE_HI41;
+			break;
+		case 56:
+			hiToUse = IMAGE_HI56;
+			break;
+		default:
+			hiToUse = 0;
+			break;
+		}
+	}
 
-	Image toDraw[3];
+	if (im_norm == IMAGE_WEE_GUY)
+	{
+		// fugly hack for adding player number to the wee guy (whoever that is)
+		iV_DrawImage(IntImages, IMAGE_ASCII48 - 10 + im_hili, x + 11, y + 8);
+		Hilight = false;
+	}
+
+	if( ((W_BUTTON*)psWidget)->state & (WCLICK_DOWN | WCLICK_LOCKED | WCLICK_CLICKLOCK))
+	{
+		Down = 1;
+	}
+
+	if( ((W_BUTTON*)psWidget)->state & WBUTS_GREY)
+	{
+		Grey = 1;
+	}
+
+	int toDraw[3];
 	int numToDraw = 0;
 
 	// now display
-	toDraw[numToDraw++] = imNormal;
+	toDraw[numToDraw++] = im_norm;
 
 	// hilights etc..
-	if (down)
+	if (Down)
 	{
-		toDraw[numToDraw++] = imDown;
+		toDraw[numToDraw++] = im_down;
 	}
-	if (highlight && !grey && hiToUse.images != NULL)
+	if(Hilight && !Grey && hiToUse)
 	{
 		toDraw[numToDraw++] = hiToUse;
 	}
 
 	for (int n = 0; n < numToDraw; ++n)
 	{
-		Image tcImage(toDraw[n].images, toDraw[n].id + 1);
 		if (tc == MAX_PLAYERS)
 		{
-			iV_DrawImage(toDraw[n], x0, y0);
+			iV_DrawImage(FrontImages, toDraw[n], x, y);
 		}
 		else if (tc == MAX_PLAYERS + 1)
 		{
@@ -4354,20 +4461,21 @@ void WzMultiButton::display(int xOffset, int yOffset)
 			mix.byte.g = 128 + iSinR(65536*f/scale + 65536*1/3, 127);
 			mix.byte.b = 128 + iSinR(65536*f/scale + 65536*2/3, 127);
 			mix.byte.a = 255;
-			iV_DrawImageTc(toDraw[n], tcImage, x0, y0, mix);
+			iV_DrawImageTc(FrontImages, toDraw[n], toDraw[n] + 1, x, y, mix);
 		}
 		else
 		{
-			iV_DrawImageTc(toDraw[n], tcImage, x0, y0, pal_GetTeamColour(tc));
+			iV_DrawImageTc(FrontImages, toDraw[n], toDraw[n] + 1, x, y, pal_GetTeamColour(tc));
 		}
 	}
 
-	if (grey)
+	if (Grey)
 	{
 		// disabled, render something over it!
-		iV_TransBoxFill(x0, y0, x0 + width(), y0 + height());
+		iV_TransBoxFill(x, y, x + psWidget->width, y + psWidget->height);
 	}
 }
+
 
 /////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -4397,15 +4505,35 @@ static bool addMultiEditBox(UDWORD formid, UDWORD id, UDWORD x, UDWORD y, char c
 
 bool addMultiBut(W_SCREEN *screen, UDWORD formid, UDWORD id, UDWORD x, UDWORD y, UDWORD width, UDWORD height, const char* tipres, UDWORD norm, UDWORD down, UDWORD hi, unsigned tc)
 {
-	WzMultiButton *button = new WzMultiButton(widgGetFromID(screen, formid));
-	button->id = id;
-	button->setGeometry(x, y, width, height);
-	button->setTip(QString::fromUtf8(tipres));
-	button->imNormal = Image(FrontImages, norm);
-	button->imDown = Image(FrontImages, down);
-	button->doHighlight = hi;
-	button->tc = tc;
-	return true;
+	W_BUTINIT sButInit;
+	sButInit.formID = formid;
+	sButInit.id = id;
+	sButInit.x = (short) x;
+	sButInit.y = (short) y;
+	sButInit.width = (unsigned short) width;
+	sButInit.height= (unsigned short) height;
+	sButInit.pTip = tipres;
+	sButInit.pDisplay = displayMultiBut;
+	sButInit.UserData = PACKDWORD_QUAD(norm, down, hi, tc);
+
+	return widgAddButton(screen, &sButInit);
+}
+
+/*
+ * Set skirmish/multiplayer alliance mode to 'Locked teams',
+ * update GUI accordingly and notify other players
+ */
+void setLockedTeamsMode(void)
+{
+	widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_N,0);
+	widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_Y,0);
+	widgSetButtonState(psWScreen, MULTIOP_ALLIANCE_TEAMS,WBUT_LOCK);
+	game.alliance = ALLIANCES_TEAMS;		//2
+	netPlayersUpdated = true;
+	if(bHosted)
+	{
+		sendOptions();
+	}
 }
 
 /* Returns true if all human players clicked on the 'ready' button */
@@ -4419,7 +4547,7 @@ bool multiplayPlayersReady(bool bNotifyStatus)
 	for(player = 0; player < game.maxPlayers; player++)
 	{
 		// check if this human player is ready, ignore AIs
-		if (NetPlay.players[player].allocated && (!NetPlay.players[player].ready || ingame.PingTimes[player] >= PING_LIMIT))
+		if (NetPlay.players[player].allocated && !NetPlay.players[player].ready)
 		{
 			if(bNotifyStatus)
 			{

@@ -68,6 +68,12 @@
     <ClCompile Include="netjoin_stub.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\3rdparty\miniupnpc\portlistingparse.c">
+      <Filter>Source Files\miniUPnP\src files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdparty\miniupnpc\receivedata.c">
+      <Filter>Source Files\miniUPnP\src files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\3rdparty\miniupnpc\bsdqueue.h">
@@ -126,6 +132,15 @@
     </ClInclude>
     <ClInclude Include="nettypes.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rdparty\miniupnpc\miniupnpctypes.h">
+      <Filter>Source Files\miniUPnP\header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rdparty\miniupnpc\portlistingparse.h">
+      <Filter>Source Files\miniUPnP\header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rdparty\miniupnpc\receivedata.h">
+      <Filter>Source Files\miniUPnP\header files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
