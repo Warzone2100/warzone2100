@@ -1,4 +1,4 @@
-/* $Id: igd_desc_parse.h,v 1.7 2010/04/05 20:36:59 nanard Exp $ */
+/* $Id: igd_desc_parse.h,v 1.11 2012/10/16 16:49:02 nanard Exp $ */
 /* Project : miniupnp
  * http://miniupnp.free.fr/
  * Author : Thomas Bernard
@@ -6,8 +6,8 @@
  * This software is subject to the conditions detailed in the
  * LICENCE file provided in this distribution.
  * */
-#ifndef __IGD_DESC_PARSE_H__
-#define __IGD_DESC_PARSE_H__
+#ifndef IGD_DESC_PARSE_H_INCLUDED
+#define IGD_DESC_PARSE_H_INCLUDED
 
 /* Structure to store the result of the parsing of UPnP
  * descriptions of Internet Gateway Devices */
@@ -23,6 +23,7 @@ struct IGDdatas_service {
 struct IGDdatas {
 	char cureltname[MINIUPNPC_URL_MAXSIZE];
 	char urlbase[MINIUPNPC_URL_MAXSIZE];
+	char presentationurl[MINIUPNPC_URL_MAXSIZE];
 	int level;
 	/*int state;*/
 	/* "urn:schemas-upnp-org:service:WANCommonInterfaceConfig:1" */
@@ -32,6 +33,8 @@ struct IGDdatas {
 	struct IGDdatas_service first;
 	/* if both WANIPConnection and WANPPPConnection are present */
 	struct IGDdatas_service second;
+	/* "urn:schemas-upnp-org:service:WANIPv6FirewallControl:1" */
+	struct IGDdatas_service IPv6FC;
 	/* tmp */
 	struct IGDdatas_service tmp;
 };

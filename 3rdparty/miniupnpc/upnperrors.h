@@ -1,12 +1,12 @@
-/* $Id: upnperrors.h,v 1.2 2008/07/02 23:31:15 nanard Exp $ */
+/* $Id: upnperrors.h,v 1.4 2012/09/27 15:42:11 nanard Exp $ */
 /* (c) 2007 Thomas Bernard
  * All rights reserved.
  * MiniUPnP Project.
  * http://miniupnp.free.fr/ or http://miniupnp.tuxfamily.org/
  * This software is subjet to the conditions detailed in the
  * provided LICENCE file. */
-#ifndef __UPNPERRORS_H__
-#define __UPNPERRORS_H__
+#ifndef UPNPERRORS_H_INCLUDED
+#define UPNPERRORS_H_INCLUDED
 
 #include "declspec.h"
 
@@ -15,7 +15,7 @@ extern "C" {
 #endif
 
 /* strupnperror()
- * Return a string description of the UPnP error code 
+ * Return a string description of the UPnP error code
  * or NULL for undefinded errors */
 LIBSPEC const char * strupnperror(int err);
 

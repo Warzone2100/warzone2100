@@ -207,6 +207,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\3rdparty\miniupnpc\connecthostport.c" />
+    <ClCompile Include="..\..\3rdparty\miniupnpc\portlistingparse.c" />
+    <ClCompile Include="..\..\3rdparty\miniupnpc\receivedata.c" />
     <ClCompile Include="netjoin_stub.cpp" />
     <ClCompile Include="netlog.cpp" />
     <ClCompile Include="netplay.cpp" />
@@ -246,8 +248,11 @@
     <ClInclude Include="..\..\3rdparty\miniupnpc\minissdpc.h" />
     <ClInclude Include="..\..\3rdparty\miniupnpc\miniupnpc.h" />
     <ClInclude Include="..\..\3rdparty\miniupnpc\miniupnpcstrings.h" />
+    <ClInclude Include="..\..\3rdparty\miniupnpc\miniupnpctypes.h" />
     <ClInclude Include="..\..\3rdparty\miniupnpc\miniwget.h" />
     <ClInclude Include="..\..\3rdparty\miniupnpc\minixml.h" />
+    <ClInclude Include="..\..\3rdparty\miniupnpc\portlistingparse.h" />
+    <ClInclude Include="..\..\3rdparty\miniupnpc\receivedata.h" />
     <ClInclude Include="..\..\3rdparty\miniupnpc\upnpcommands.h" />
     <ClInclude Include="..\..\3rdparty\miniupnpc\upnperrors.h" />
     <ClInclude Include="..\..\3rdparty\miniupnpc\upnpreplyparse.h" />
