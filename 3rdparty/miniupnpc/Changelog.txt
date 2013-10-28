@@ -1,5 +1,204 @@
-$Id: Changelog.txt,v 1.125 2010/12/21 16:13:13 nanard Exp $
+$Id: Changelog.txt,v 1.189 2013/10/07 10:04:55 nanard Exp $
 miniUPnP client Changelog.
+
+2013/10/07:
+  fixed potential buffer overrun in miniwget.c
+  Modified UPNP_GetValidIGD() to check for ExternalIpAddress
+
+2013/08/01:
+  define MAXHOSTNAMELEN if not already done
+
+2013/06/06:
+  update upnpreplyparse to allow larger values (128 chars instead of 64)
+
+2013/05/14:
+  Update upnpreplyparse to take into account "empty" elements
+  validate upnpreplyparse.c code with "make check"
+
+2013/05/03:
+  Fix Solaris build thanks to Maciej Małecki
+
+2013/04/27:
+  Fix testminiwget.sh for BSD
+
+2013/03/23:
+  Fixed Makefile for *BSD
+
+2013/03/11:
+  Update Makefile to use JNAerator version 0.11
+
+2013/02/11:
+  Fix testminiwget.sh for use with dash
+  Use $(DESTDIR) in Makefile
+
+VERSION 1.8 : released 2013/02/06
+
+2012/10/16:
+  fix testminiwget with no IPv6 support
+
+2012/09/27:
+  Rename all include guards to not clash with C99
+  (7.1.3 Reserved identifiers).
+
+2012/08/30:
+  Added -e option to upnpc program (set description for port mappings)
+
+2012/08/29:
+  Python 3 support (thanks to Christopher Foo)
+
+2012/08/11:
+  Fix a memory link in UPNP_GetValidIGD()
+  Try to handle scope id in link local IPv6 URL under MS Windows
+
+2012/07/20:
+  Disable HAS_IP_MREQN on DragonFly BSD
+
+2012/06/28:
+  GetUPNPUrls() now inserts scope into link-local IPv6 addresses
+
+2012/06/23:
+  More error return checks in upnpc.c
+  #define MINIUPNPC_GET_SRC_ADDR enables receivedata() to get scope_id
+  parseURL() now parses IPv6 addresses scope
+  new parameter for miniwget() : IPv6 address scope
+  increment API_VERSION to 9
+
+2012/06/20:
+  fixed CMakeLists.txt
+
+2012/05/29
+  Improvements in testminiwget.sh
+
+VERSION 1.7 : released 2012/05/24
+
+2012/05/01:
+  Cleanup settings of CFLAGS in Makefile
+  Fix signed/unsigned integer comparaisons
+
+2012/04/20:
+  Allow to specify protocol with TCP or UDP for -A option
+
+2012/04/09:
+  Only try to fetch XML description once in UPNP_GetValidIGD()
+  Added -ansi flag to compilation, and fixed C++ comments to ANSI C comments.
+
+2012/04/05:
+  minor improvements to minihttptestserver.c
+
+2012/03/15:
+  upnperrors.c returns valid error string for unrecognized error codes
+
+2012/03/08:
+  make minihttptestserver listen on loopback interface instead of 0.0.0.0
+
+2012/01/25:
+  Maven installation thanks to Alexey Kuznetsov
+
+2012/01/21:
+  Replace WIN32 macro by _WIN32
+
+2012/01/19:
+  Fixes in java wrappers thanks to Alexey Kuznetsov :
+    https://github.com/axet/miniupnp/tree/fix-javatest/miniupnpc
+  Make and install .deb packages (python) thanks to Alexey Kuznetsov :
+    https://github.com/axet/miniupnp/tree/feature-debbuild/miniupnpc
+
+2012/01/07:
+  The multicast interface can now be specified by name with IPv4.
+
+2012/01/02:
+  Install man page
+
+2011/11/25:
+  added header to Port Mappings list in upnpc.c
+
+2011/10/09:
+  Makefile : make clean now removes jnaerator generated files.
+  MINIUPNPC_VERSION in miniupnpc.h (updated by make)
+
+2011/09/12:
+  added rootdescURL to UPNPUrls structure.
+
+VERSION 1.6 : released 2011/07/25
+
+2011/07/25:
+  Update doc for version 1.6 release
+
+2011/06/18:
+  Fix for windows in miniwget.c
+
+2011/06/04:
+  display remote host in port mapping listing
+
+2011/06/03:
+  Fix in make install : there were missing headers
+
+2011/05/26:
+  Fix the socket leak in miniwget thanks to Richard Marsh.
+  Permit to add leaseduration in -a command. Display lease duration.
+
+2011/05/15:
+  Try both LinkLocal and SiteLocal multicast address for SSDP in IPv6
+
+2011/05/09:
+  add a test in testminiwget.sh.
+  more error checking in miniwget.c
+
+2011/05/06:
+  Adding some tool to test and validate miniwget.c
+  simplified and debugged miniwget.c
+
+2011/04/11:
+  moving ReceiveData() to a receivedata.c file.
+  parsing presentation url
+  adding IGD v2 WANIPv6FirewallControl commands
+
+2011/04/10:
+  update of miniupnpcmodule.c
+  comments in miniwget.c, update in testminiwget
+  Adding errors codes from IGD v2
+  new functions in upnpc.c for IGD v2
+
+2011/04/09:
+  Support for litteral ip v6 address in miniwget
+
+2011/04/08:
+  Adding support for urn:schemas-upnp-org:service:WANIPv6FirewallControl:1
+  Updating APIVERSION
+  Supporting IPV6 in upnpDiscover()
+  Adding a -6 option to upnpc command line tool
+
+2011/03/18:
+  miniwget/parseURL() : return an error when url param is null.
+  fixing GetListOfPortMappings()
+
+2011/03/14:
+  upnpDiscover() now reporting an error code.
+  improvements in comments.
+
+2011/03/11:
+  adding miniupnpcstrings.h.cmake and CMakeLists.txt files.
+
+2011/02/15:
+  Implementation of GetListOfPortMappings()
+
+2011/02/07:
+  updates to minixml to support character data starting with spaces
+  minixml now support CDATA
+  upnpreplyparse treats <NewPortListing> specificaly
+  change in simpleUPnPcommand to return the buffer (simplification)
+
+2011/02/06:
+  Added leaseDuration argument to AddPortMapping()
+  Starting to implement GetListOfPortMappings()
+
+2011/01/11:
+  updating wingenminiupnpcstrings.c
+
+2011/01/04:
+  improving updateminiupnpcstrings.sh
+
+VERSION 1.5 : released 2011/01/01
 
 2010/12/21:
   use NO_GETADDRINFO macro to disable the use of getaddrinfo/freeaddrinfo
@@ -155,7 +354,7 @@ VERSION 1.2 :
   small modif to make Clang happy :)
 
 2008/07/17:
-  #define SOAPPREFIX "s" in miniupnpc.c in order to remove SOAP-ENV... 
+  #define SOAPPREFIX "s" in miniupnpc.c in order to remove SOAP-ENV...
 
 2008/07/14:
   include declspec.h in installation (to /usr/include/miniupnpc)
@@ -177,7 +376,7 @@ VERSION 1.1 :
   improved python module error/exception reporting.
 
 2008/04/23:
-  Completely rewrite igd_desc_parse.c in order to be compatible with 
+  Completely rewrite igd_desc_parse.c in order to be compatible with
   Linksys WAG200G
   Added testigddescparse
   updated python module
@@ -200,7 +399,7 @@ VERSION 1.0 :
   improved make install :)
 
 2007/12/22:
-  Adding upnperrors.c/h to provide a strupnperror() function 
+  Adding upnperrors.c/h to provide a strupnperror() function
   used to translate UPnP error codes to string.
 
 2007/12/19:

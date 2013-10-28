@@ -3780,9 +3780,22 @@ bool startMultiOptions(bool bReenter)
 	}
 	else
 	{
+		char buf[512] = {'\0'};
 		addPlayerBox(false);								// Players
 		addGameOptions();
 		addChatBox();
+		if (NetPlay.isUPNP)
+		{
+			ssprintf(buf, _("UPnP detection is in progress..."));
+			addConsoleMessage(buf, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
+		}
+		else
+		{
+			ssprintf(buf, _("UPnP detection disabled by user. Autoconfig of port 2100 will not happen."));
+			addConsoleMessage(buf, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
+		}
+		ssprintf(buf, _("Press the start hosting button to begin hosting a game."));
+		addConsoleMessage(buf, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
 	}
 
 	// going back to multiop after setting limits up..

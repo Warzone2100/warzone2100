@@ -537,11 +537,11 @@ bool runMultiPlayerMenu(void)
 	case FRONTEND_HOST:
 		// don't pretend we are running a network game. Really do it!
 		NetPlay.bComms = true; // use network = true
-		NETdiscoverUPnPDevices();
 		ingame.bHostSetup = true;
 		bMultiPlayer = true;
 		bMultiMessages = true;
 		NETinit(true);
+		NETdiscoverUPnPDevices();
 		game.type = SKIRMISH;		// needed?
 		lastTitleMode = MULTI;
 		changeTitleMode(MULTIOPTION);
