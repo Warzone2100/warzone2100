@@ -3,7 +3,7 @@
    * Change: Filter out bad maps (commit:acfe83cdf6f44660276ba73931e2cebdc8a250ac)
    * Change: Also show in the bottom menu, if allies are researching the same as us (commit:b6b6265e4e430486ea44a200bce870b115dfc37f)
    * Change: Keep showing allied research even while facilities are upgraded (commit:423e358b6715c12dda70ff5f6f2bd0348c09f699)
-   * Change: Retreat buttons now should health bar colours (commit:4e2f4bbf3cd5e03e58b9b67fcf370bff088e6d91)
+   * Change: Retreat buttons now show health bar colours (commit:4e2f4bbf3cd5e03e58b9b67fcf370bff088e6d91)
    * Fix: Bug that made droids produced by scripts get human player's upgrades (commit:8149dc94c0b61117982281cdaf2aac1bec2525e9)
    * Fix: Backwards terrain shadows (commit:85ecd9a3937e7843d9eb4798572651f950bd7555)
    * Fix: Mod loading bug (commit:87cade1a684f3da0572f13e92539100f35b4f6fe, ticket:3567)
@@ -24,6 +24,7 @@
    * Fix: Add parameter checking for buildings that do not exist (commit:e38de7b64242a547acd77c7775dbfae10c74ca3d)
  * Maps:
    * Fix: Remove lop-sided oil barrels from 4c-pyramidal (commit:6092fe1194529f0c7fe023d9c98973e44f9f9f24)
+   * Add: Gamma (3p) and Melting (6p) by NoQ (commit:b8bdf44737e1d9423c2581b1377cf1be9c4a3666)
  * Build system:
    * Change: Simplify build process by getting rid of bison/flex dependencies (commit:d13bc0de7dd0588351af24dc45d55110d0eed6e8)
    * Fix: Building on OpenBSD (commit:9b9383500fb4c1dd5270a68e3490dc358e2da55f, ticket:3917, commit:47a6d6d4684b993d15e378f6d0877fa043b26ca0, ticket:3845)
