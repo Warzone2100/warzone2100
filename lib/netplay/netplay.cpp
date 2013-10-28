@@ -142,14 +142,15 @@ static SocketSet* socket_set = NULL;
 
 // UPnP
 static int upnp = false;
-static bool upnp_done = false;
+
 WZ_THREAD *upnpdiscover;
 
 static struct UPNPUrls urls;
 static struct IGDdatas data;
 
 // local ip address
-static char lanaddr[16];
+static char lanaddr[40];
+static char externalIPAddress[40];
 /**
  * Used for connections with clients.
  */
@@ -934,7 +935,6 @@ static bool NETrecvGAMESTRUCT(GAMESTRUCT* ourgamestruct)
 }
 
 
-
 static int upnp_init(void *asdf)
 {
 	struct UPNPDev *devlist;
@@ -942,14 +942,14 @@ static int upnp_init(void *asdf)
 	char *descXML;
 	int descXMLsize = 0;
 	char buf[255];
-
+	int result;
 	memset(&urls, 0, sizeof(struct UPNPUrls));
 	memset(&data, 0, sizeof(struct IGDdatas));
 
 	if (NetPlay.isUPNP)
 	{
 		debug(LOG_NET, "Searching for UPnP devices for automatic port forwarding...");
-		devlist = upnpDiscover(2000, NULL, NULL, 0);
+		devlist = upnpDiscover(3000, NULL, NULL, 0, 0, &result);
 		debug(LOG_NET, "UPnP device search finished.");
 		if (devlist)
 		{
@@ -967,13 +967,13 @@ static int upnp_init(void *asdf)
 
 			debug(LOG_NET, "UPnP device found: %s %s\n", dev->descURL, dev->st);
 
-			descXML = (char *)miniwget_getaddr(dev->descURL, &descXMLsize, lanaddr, sizeof(lanaddr));
+			descXML = (char *)miniwget_getaddr(dev->descURL, &descXMLsize, lanaddr, sizeof(lanaddr), dev->scope_id);
 			debug(LOG_NET, "LAN address: %s", lanaddr);
 			if (descXML)
 			{
 				parserootdesc (descXML, descXMLsize, &data);
 				free (descXML); descXML = 0;
-				GetUPNPUrls (&urls, &data, dev->descURL);
+				GetUPNPUrls (&urls, &data, dev->descURL, dev->scope_id);
 			}
 			ssprintf(buf, "UPnP device found: %s %s LAN address %s", dev->descURL, dev->st, lanaddr);
 			addDumpInfo(buf);
@@ -983,13 +983,20 @@ static int upnp_init(void *asdf)
 			{
 				ssprintf(buf, "controlURL not available, UPnP disabled");
 				addDumpInfo(buf);
+				ssprintf(buf, _("Your router doesn't support UPnP, you must manually configure your router & firewall to open port 2100 before you can host a game."));
+				addConsoleMessage(buf, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
 				return false;
 			}
+
+			NETaddRedirects();
+			upnp = true;
 			return true;
 		}
 		ssprintf(buf, "UPnP device not found.");
 		addDumpInfo(buf);
 		debug(LOG_NET, "No UPnP devices found.");
+		ssprintf(buf, _("No UPnP device was found. You must manually configure your router & firewall to open port 2100 before you can host a game."));
+		addConsoleMessage(buf, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
 		return false;
 	}
 	else
@@ -999,55 +1006,74 @@ static int upnp_init(void *asdf)
 		debug(LOG_NET, "UPnP detection routine disabled by user.");
 		return false;
 	}
+
 }
 
 static bool upnp_add_redirect(int port)
 {
-	char externalIP[16];
 	char port_str[16];
+	char buf[512]={'\0'};
 	int r;
 
-	debug(LOG_NET, "upnp_add_redir(%d)\n", port);
-	UPNP_GetExternalIPAddress(urls.controlURL, data.first.servicetype, externalIP);
+	debug(LOG_NET, "upnp_add_redir(%d)", port);
 	sprintf(port_str, "%d", port);
 	r = UPNP_AddPortMapping(urls.controlURL, data.first.servicetype,
-			port_str, port_str, lanaddr, "Warzone 2100", "TCP", 0);
+			port_str, port_str, lanaddr, "Warzone 2100", "TCP", 0, "0");	// "0" = lease time unlimited
 	if (r != UPNPCOMMAND_SUCCESS)
 	{
-		debug(LOG_NET, "AddPortMapping(%s, %s, %s) failed\n", port_str, port_str, lanaddr);
+		ssprintf(buf, _("Could not open require port (%s) on  (%s)"), port_str, lanaddr);
+		debug(LOG_NET, "%s", buf);
+		addConsoleMessage(buf, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
+		ssprintf(buf, _("You must manually configure your router & firewall to open port 2100 before you can host a game."));
+		addConsoleMessage(buf, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
 		return false;
 	}
-	return true;
 
+	r = UPNP_GetExternalIPAddress(urls.controlURL, data.first.servicetype, externalIPAddress);
+	if(r != UPNPCOMMAND_SUCCESS)
+	{
+		ssprintf(externalIPAddress, "???");
+	}
+	ssprintf(buf, _("Game configured port (%s) correctly on (%s). Your external IP is %s"), port_str, lanaddr, externalIPAddress);
+	addConsoleMessage(buf, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
+
+	return true;
 }
 
-static void upnp_rem_redirect(int port)
+static int upnp_rem_redirect(int port)
 {
 	char port_str[16];
 	debug(LOG_NET, "upnp_rem_redir(%d)", port);
 	sprintf(port_str, "%d", port);
-	UPNP_DeletePortMapping(urls.controlURL, data.first.servicetype, port_str, "TCP", 0);
+	return UPNP_DeletePortMapping(urls.controlURL, data.first.servicetype, port_str, "TCP", NULL);
 }
 
 void NETaddRedirects(void)
 {
-	debug(LOG_NET, "%s\n", __FUNCTION__);
-	if (!upnp_done)
+	if (upnp_add_redirect(gameserver_port))
 	{
-		upnp = wzThreadJoin(upnpdiscover);
-		upnp_done = true;
+		debug(LOG_NET, "successful!");
 	}
-	if (upnp) {
-		upnp_add_redirect(gameserver_port);
+	else
+	{
+		debug(LOG_NET, "failed!");
 	}
 }
 
 void NETremRedirects(void)
 {
-	debug(LOG_NET, "%s\n", __FUNCTION__);
+	debug(LOG_NET, "upnp is %d", upnp);
 	if (upnp)
 	{
-		upnp_rem_redirect(gameserver_port);
+		int result = upnp_rem_redirect(gameserver_port);
+		if (!result)
+		{
+			debug(LOG_NET, "removed UPnP entry.");
+		}
+		else
+		{
+			debug(LOG_ERROR, "Failed to remove UPnP entry for the game. You must manually remove it from your router. (%d)", result);
+		}
 	}
 }
 
@@ -1096,6 +1122,10 @@ int NETshutdown(void)
 {
 	debug( LOG_NET, "NETshutdown" );
 	NETlogEntry("NETshutdown", SYNC_FLAG, selectedPlayer);
+	if (NetPlay.bComms && NetPlay.isUPNP)
+	{
+		NETremRedirects();
+	}
 	NETstopLogging();
 	if (IPlist)
 		free(IPlist);
@@ -1107,11 +1137,6 @@ int NETshutdown(void)
 	NetPlay.MOTD = NULL;
 	NETdeleteQueue();
 	SOCKETshutdown();
-
-	if (NetPlay.bComms && NetPlay.isUPNP)
-	{
-		NETremRedirects();
-	}
 
 	// Reset net usage statistics.
 	nStats = nZeroStats;
@@ -2587,10 +2612,6 @@ bool NEThostGame(const char* SessionName, const char* PlayerName,
 	mapDownloadProgress = 100;
 	netPlayersUpdated = true;
 
-	if (NetPlay.bComms && NetPlay.isUPNP)
-	{
-		NETaddRedirects();
-	}
 	NET_InitPlayers();
 	for (unsigned n = 0; n < MAX_PLAYERS_IN_GUI; ++n)
 	{
