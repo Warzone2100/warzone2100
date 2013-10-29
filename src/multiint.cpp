@@ -1823,10 +1823,10 @@ static void addAiChooser(int player)
 	int mpbutton = NetPlay.bComms ? 1 : 0;
 	// cap AI's that are shown, since it looks a bit ugly.  *FIXME*
 	int capAIs = aidata.size();
-	if (aidata.size() > 8)
+	if (aidata.size() > 9)
 	{
-		debug(LOG_INFO, "You have too many AI's loaded for the GUI to handle.  Only the first 8 will be shown.");
-		addConsoleMessage("You have too many AI's loaded for the GUI to handle.  Only the first 8 will be shown.", DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
+		debug(LOG_INFO, "You have too many AI's loaded for the GUI to handle.  Only the first 10 will be shown.");
+		addConsoleMessage("You have too many AI's loaded for the GUI to handle.  Only the first 10 will be shown.", DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
 		capAIs = 10;
 	}
 
