@@ -97,18 +97,19 @@
 #include "design.h"
 #include "random.h"
 #include "template.h"
+#include "qtscript.h" // this is fun...
 
 static INTERP_VAL	scrFunctionResult;	//function return value to be pushed to stack
 
 // If this is defined then check max number of units not reached before adding more.
 #define SCRIPT_CHECK_MAX_UNITS
 
-static SDWORD	bitMask[] = {0x01,0x02,0x04,0x08,0x10,0x20,0x40,0x80};
+static SDWORD	bitMask[] = {0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80};
 static char		strParam1[MAXSTRLEN], strParam2[MAXSTRLEN];		//these should be used as string parameters for stackPopParams()
 
 static bool	structHasModule(STRUCTURE *psStruct);
 
-static DROID_TEMPLATE* scrCheckTemplateExists(SDWORD player, DROID_TEMPLATE *psTempl);
+static DROID_TEMPLATE *scrCheckTemplateExists(SDWORD player, DROID_TEMPLATE *psTempl);
 
 /// Hold the previously assigned player
 Vector2i positions[MAX_PLAYERS];
@@ -117,7 +118,7 @@ std::vector<Vector2i> derricks;
 bool scriptOperatorEquals(INTERP_VAL const &v1, INTERP_VAL const &v2)
 {
 	ASSERT_OR_RETURN(false, scriptTypeIsPointer(v1.type) && scriptTypeIsPointer(v2.type), "Bad types.");
-	if (v1.type == (INTERP_TYPE)ST_RESEARCH && v1.type == (INTERP_TYPE)ST_RESEARCH)
+	if (v1.type == (INTERP_TYPE)ST_RESEARCH && v2.type == (INTERP_TYPE)ST_RESEARCH)
 	{
 		return ((RESEARCH *)v1.v.oval)->ref == ((RESEARCH *)v2.v.oval)->ref;
 	}
@@ -248,8 +249,8 @@ bool scrSetSunIntensity(void)
 	// One day we should add support for vectors to our scripting language to cut
 	// down on such noise.
 	if (!stackPopParams(9, VAL_FLOAT, &ambient[0], VAL_FLOAT, &ambient[1], VAL_FLOAT, &ambient[2],
-	                       VAL_FLOAT, &diffuse[0], VAL_FLOAT, &diffuse[1], VAL_FLOAT, &diffuse[2],
-	                       VAL_FLOAT, &specular[0], VAL_FLOAT, &specular[1], VAL_FLOAT, &specular[2]))
+	        VAL_FLOAT, &diffuse[0], VAL_FLOAT, &diffuse[1], VAL_FLOAT, &diffuse[2],
+	        VAL_FLOAT, &specular[0], VAL_FLOAT, &specular[1], VAL_FLOAT, &specular[2]))
 	{
 		return false;
 	}
@@ -259,6 +260,7 @@ bool scrSetSunIntensity(void)
 	pie_Lighting0(LIGHT_AMBIENT, ambient);
 	pie_Lighting0(LIGHT_DIFFUSE, diffuse);
 	pie_Lighting0(LIGHT_SPECULAR, specular);
+	pie_SetupLighting();
 	return true;
 }
 
@@ -302,7 +304,7 @@ bool scrGetPlayerStartPosition(void)
 {
 	SDWORD	*x, *y, player;
 
-	if (!stackPopParams(3, VAL_INT, &player, VAL_REF|VAL_INT, &x, VAL_REF|VAL_INT, &y))
+	if (!stackPopParams(3, VAL_INT, &player, VAL_REF | VAL_INT, &x, VAL_REF | VAL_INT, &y))
 	{
 		return false;
 	}
@@ -338,26 +340,26 @@ bool objectInRange(BASE_OBJECT *psList, SDWORD x, SDWORD y, SDWORD range)
 
 	// See if there is a droid in range
 	rangeSq = range * range;
-	for(psCurr = psList; psCurr; psCurr = psCurr->psNext)
+	for (psCurr = psList; psCurr; psCurr = psCurr->psNext)
 	{
 		// skip partially build structures
-		if ( (psCurr->type == OBJ_STRUCTURE) &&
-			 (((STRUCTURE *)psCurr)->status != SS_BUILT) )
+		if ((psCurr->type == OBJ_STRUCTURE) &&
+		    (((STRUCTURE *)psCurr)->status != SS_BUILT))
 		{
 			continue;
 		}
 
 		// skip flying vtols
-		if ( (psCurr->type == OBJ_DROID) &&
-			 isVtolDroid((DROID *)psCurr) &&
-			 ((DROID *)psCurr)->sMove.Status != MOVEINACTIVE )
+		if ((psCurr->type == OBJ_DROID) &&
+		    isVtolDroid((DROID *)psCurr) &&
+		    ((DROID *)psCurr)->sMove.Status != MOVEINACTIVE)
 		{
 			continue;
 		}
 
 		xdiff = (SDWORD)psCurr->pos.x - x;
 		ydiff = (SDWORD)psCurr->pos.y - y;
-		if (xdiff*xdiff + ydiff*ydiff < rangeSq)
+		if (xdiff * xdiff + ydiff * ydiff < rangeSq)
 		{
 			return true;
 		}
@@ -370,7 +372,7 @@ bool objectInRange(BASE_OBJECT *psList, SDWORD x, SDWORD y, SDWORD range)
 // Check for any player object being within a certain range of a position
 bool scrObjectInRange(void)
 {
-	SDWORD		range, player, x,y;
+	SDWORD		range, player, x, y;
 	bool		found;
 
 	if (!stackPopParams(4, VAL_INT, &player, VAL_INT, &x, VAL_INT, &y, VAL_INT, &range))
@@ -378,14 +380,10 @@ bool scrObjectInRange(void)
 		return false;
 	}
 
-	if (player < 0 || player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrObjectInRange: invalid player number" );
-		return false;
-	}
+	ASSERT_OR_RETURN(false, player >= 0 && player < MAX_PLAYERS, "Invalid player number");
 
-	found = objectInRange((BASE_OBJECT *)apsDroidLists[player], x,y, range) ||
-			objectInRange((BASE_OBJECT *)apsStructLists[player], x,y, range);
+	found = objectInRange((BASE_OBJECT *)apsDroidLists[player], x, y, range) ||
+	        objectInRange((BASE_OBJECT *)apsStructLists[player], x, y, range);
 
 	scrFunctionResult.v.bval = found;
 	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
@@ -400,7 +398,7 @@ bool scrObjectInRange(void)
 // Check for a droid being within a certain range of a position
 bool scrDroidInRange(void)
 {
-	SDWORD		range, player, x,y;
+	SDWORD		range, player, x, y;
 	bool		found;
 
 	if (!stackPopParams(4, VAL_INT, &player, VAL_INT, &x, VAL_INT, &y, VAL_INT, &range))
@@ -408,13 +406,9 @@ bool scrDroidInRange(void)
 		return false;
 	}
 
-	if (player < 0 || player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrUnitInRange: invalid player number" );
-		return false;
-	}
+	ASSERT_OR_RETURN(false, player >= 0 && player < MAX_PLAYERS, "Invalid player number");
 
-	found = objectInRange((BASE_OBJECT *)apsDroidLists[player], x,y, range);
+	found = objectInRange((BASE_OBJECT *)apsDroidLists[player], x, y, range);
 
 	scrFunctionResult.v.bval = found;
 	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
@@ -429,7 +423,7 @@ bool scrDroidInRange(void)
 // Check for a struct being within a certain range of a position
 bool scrStructInRange(void)
 {
-	SDWORD		range, player, x,y;
+	SDWORD		range, player, x, y;
 	bool		found;
 
 	if (!stackPopParams(4, VAL_INT, &player, VAL_INT, &x, VAL_INT, &y, VAL_INT, &range))
@@ -437,13 +431,9 @@ bool scrStructInRange(void)
 		return false;
 	}
 
-	if (player < 0 || player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrStructInRange: invalid player number" );
-		return false;
-	}
+	ASSERT_OR_RETURN(false, player >= 0 && player < MAX_PLAYERS, "Invalid player number");
 
-	found = objectInRange((BASE_OBJECT *)apsStructLists[player], x,y, range);
+	found = objectInRange((BASE_OBJECT *)apsStructLists[player], x, y, range);
 
 	scrFunctionResult.v.bval = found;
 	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
@@ -463,12 +453,7 @@ bool scrPlayerPower(void)
 	{
 		return false;
 	}
-	if (player < 0 || player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrPlayerPower: invalid player number" );
-		return false;
-	}
-
+	ASSERT_OR_RETURN(false, player >= 0 && player < MAX_PLAYERS, "Invalid player number");
 	scrFunctionResult.v.ival = getPower(player);
 	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
@@ -483,14 +468,14 @@ bool scrPlayerPower(void)
 static bool objectInArea(BASE_OBJECT *psList, SDWORD x1, SDWORD y1, SDWORD x2, SDWORD y2)
 {
 	BASE_OBJECT		*psCurr;
-	SDWORD			ox,oy;
+	SDWORD			ox, oy;
 
 	// See if there is a droid in Area
-	for(psCurr = psList; psCurr; psCurr = psCurr->psNext)
+	for (psCurr = psList; psCurr; psCurr = psCurr->psNext)
 	{
 		// skip partially build structures
-		if ( (psCurr->type == OBJ_STRUCTURE) &&
-			 (((STRUCTURE *)psCurr)->status != SS_BUILT) )
+		if ((psCurr->type == OBJ_STRUCTURE) &&
+		    (((STRUCTURE *)psCurr)->status != SS_BUILT))
 		{
 			continue;
 		}
@@ -498,7 +483,7 @@ static bool objectInArea(BASE_OBJECT *psList, SDWORD x1, SDWORD y1, SDWORD x2, S
 		ox = (SDWORD)psCurr->pos.x;
 		oy = (SDWORD)psCurr->pos.y;
 		if (ox >= x1 && ox <= x2 &&
-			oy >= y1 && oy <= y2)
+		    oy >= y1 && oy <= y2)
 		{
 			return true;
 		}
@@ -511,7 +496,7 @@ static bool objectInArea(BASE_OBJECT *psList, SDWORD x1, SDWORD y1, SDWORD x2, S
 // Check for any player object being within a certain area
 bool scrObjectInArea(void)
 {
-	SDWORD		player, x1,y1, x2,y2;
+	SDWORD		player, x1, y1, x2, y2;
 	bool		found;
 
 	if (!stackPopParams(5, VAL_INT, &player, VAL_INT, &x1, VAL_INT, &y1, VAL_INT, &x2, VAL_INT, &y2))
@@ -519,14 +504,10 @@ bool scrObjectInArea(void)
 		return false;
 	}
 
-	if (player < 0 || player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrObjectInArea: invalid player number" );
-		return false;
-	}
+	ASSERT_OR_RETURN(false, player >= 0 && player < MAX_PLAYERS, "Invalid player number");
 
-	found = objectInArea((BASE_OBJECT *)apsDroidLists[player], x1,y1, x2,y2) ||
-			objectInArea((BASE_OBJECT *)apsStructLists[player], x1,y1, x2,y2);
+	found = objectInArea((BASE_OBJECT *)apsDroidLists[player], x1, y1, x2, y2) ||
+	        objectInArea((BASE_OBJECT *)apsStructLists[player], x1, y1, x2, y2);
 
 	scrFunctionResult.v.bval = found;
 	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
@@ -541,7 +522,7 @@ bool scrObjectInArea(void)
 // Check for a droid being within a certain area
 bool scrDroidInArea(void)
 {
-	SDWORD		player, x1,y1, x2,y2;
+	SDWORD		player, x1, y1, x2, y2;
 	bool		found;
 
 	if (!stackPopParams(5, VAL_INT, &player, VAL_INT, &x1, VAL_INT, &y1, VAL_INT, &x2, VAL_INT, &y2))
@@ -549,13 +530,9 @@ bool scrDroidInArea(void)
 		return false;
 	}
 
-	if (player < 0 || player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrUnitInArea: invalid player number" );
-		return false;
-	}
+	ASSERT_OR_RETURN(false, player >= 0 && player < MAX_PLAYERS, "Invalid player number");
 
-	found = objectInArea((BASE_OBJECT *)apsDroidLists[player], x1,y1, x2,y2);
+	found = objectInArea((BASE_OBJECT *)apsDroidLists[player], x1, y1, x2, y2);
 
 	scrFunctionResult.v.bval = found;
 	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
@@ -570,7 +547,7 @@ bool scrDroidInArea(void)
 // Check for a struct being within a certain Area of a position
 bool scrStructInArea(void)
 {
-	SDWORD		player, x1,y1, x2,y2;
+	SDWORD		player, x1, y1, x2, y2;
 	bool		found;
 
 	if (!stackPopParams(5, VAL_INT, &player, VAL_INT, &x1, VAL_INT, &y1, VAL_INT, &x2, VAL_INT, &y2))
@@ -578,13 +555,9 @@ bool scrStructInArea(void)
 		return false;
 	}
 
-	if (player < 0 || player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrStructInArea: invalid player number" );
-		return false;
-	}
+	ASSERT_OR_RETURN(false, player >= 0 && player < MAX_PLAYERS, "Invalid player number");
 
-	found = objectInArea((BASE_OBJECT *)apsStructLists[player], x1,y1, x2,y2);
+	found = objectInArea((BASE_OBJECT *)apsStructLists[player], x1, y1, x2, y2);
 
 	scrFunctionResult.v.bval = found;
 	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
@@ -599,35 +572,30 @@ bool scrStructInArea(void)
 // -----------------------------------------------------------------------------------------
 bool scrSeenStructInArea(void)
 {
-	int32_t	walls=false;	// was BOOL (int) ** see warning about conversion
+	int32_t	walls = false;	// was BOOL (int) ** see warning about conversion
 	bool	found = false;
-	SDWORD		player,enemy,x1,y1, x2,y2;
+	SDWORD		player, enemy, x1, y1, x2, y2;
 	STRUCTURE	*psCurr;
-	SDWORD		ox,oy;
+	SDWORD		ox, oy;
 
 	// player, enemyplayer, walls, x1,r1,x2,y2
-	if (!stackPopParams(7, VAL_INT, &player, VAL_INT, &enemy, VAL_BOOL,&walls,VAL_INT, &x1, VAL_INT, &y1, VAL_INT, &x2, VAL_INT, &y2))
+	if (!stackPopParams(7, VAL_INT, &player, VAL_INT, &enemy, VAL_BOOL, &walls, VAL_INT, &x1, VAL_INT, &y1, VAL_INT, &x2, VAL_INT, &y2))
 	{
 		return false;
 	}
 
+	ASSERT_OR_RETURN(false, player >= 0 && player < MAX_PLAYERS, "Invalid player number");
 
-	if (player < 0 || player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrSeenStructInArea: invalid player number" );
-		return false;
-	}
-
-	for(psCurr = apsStructLists[enemy]; psCurr; psCurr = psCurr->psNext)
+	for (psCurr = apsStructLists[enemy]; psCurr; psCurr = psCurr->psNext)
 	{
 		// skip partially build structures
-		if ( (psCurr->type == OBJ_STRUCTURE) && (((STRUCTURE *)psCurr)->status != SS_BUILT) )
+		if ((psCurr->type == OBJ_STRUCTURE) && (((STRUCTURE *)psCurr)->status != SS_BUILT))
 		{
 			continue;
 		}
 
 		// possible skip walls
-		if(walls && (psCurr->pStructureType->type != REF_WALL  || psCurr->pStructureType->type !=REF_WALLCORNER))
+		if (walls && (psCurr->pStructureType->type != REF_WALL  || psCurr->pStructureType->type != REF_WALLCORNER))
 		{
 			continue;
 		}
@@ -637,7 +605,7 @@ bool scrSeenStructInArea(void)
 		if (ox >= x1 && ox <= x2 &&	oy >= y1 && oy <= y2)
 		{
 			// structure is in area.
-			if(psCurr->visible[player])
+			if (psCurr->visible[player])
 			{
 				found = true;
 			}
@@ -657,8 +625,8 @@ bool scrSeenStructInArea(void)
 // Check for a players structures but no walls being within a certain area
 bool scrStructButNoWallsInArea(void)
 {
-	SDWORD		player, x1,y1, x2,y2;
-	SDWORD		ox,oy;
+	SDWORD		player, x1, y1, x2, y2;
+	SDWORD		ox, oy;
 	STRUCTURE	*psStruct;
 	SDWORD		found = false;
 
@@ -667,22 +635,18 @@ bool scrStructButNoWallsInArea(void)
 		return false;
 	}
 
-	if (player < 0 || player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrStructButNoWallsInArea: invalid player number" );
-		return false;
-	}
+	ASSERT_OR_RETURN(false, player >= 0 && player < MAX_PLAYERS, "Invalid player number");
 
-	for(psStruct = apsStructLists[player]; psStruct; psStruct = psStruct->psNext)
+	for (psStruct = apsStructLists[player]; psStruct; psStruct = psStruct->psNext)
 	{
 		if ((psStruct->pStructureType->type != REF_WALL) &&
-			(psStruct->pStructureType->type != REF_WALLCORNER) &&
-			(psStruct->status == SS_BUILT) )
+		    (psStruct->pStructureType->type != REF_WALLCORNER) &&
+		    (psStruct->status == SS_BUILT))
 		{
 			ox = (SDWORD)psStruct->pos.x;
 			oy = (SDWORD)psStruct->pos.y;
 			if ((ox >= x1) && (ox <= x2) &&
-				(oy >= y1) && (oy <= y2))
+			    (oy >= y1) && (oy <= y2))
 			{
 				found = true;
 				break;
@@ -705,16 +669,16 @@ bool scrStructButNoWallsInArea(void)
 static SDWORD numObjectsInArea(BASE_OBJECT *psList, SDWORD x1, SDWORD y1, SDWORD x2, SDWORD y2)
 {
 	BASE_OBJECT		*psCurr;
-	SDWORD			ox,oy;
+	SDWORD			ox, oy;
 	SDWORD			count;
 
 	// See if there is a droid in Area
 	count = 0;
-	for(psCurr = psList; psCurr; psCurr = psCurr->psNext)
+	for (psCurr = psList; psCurr; psCurr = psCurr->psNext)
 	{
 		// skip partially build structures
-		if ( (psCurr->type == OBJ_STRUCTURE) &&
-			 (((STRUCTURE *)psCurr)->status != SS_BUILT) )
+		if ((psCurr->type == OBJ_STRUCTURE) &&
+		    (((STRUCTURE *)psCurr)->status != SS_BUILT))
 		{
 			continue;
 		}
@@ -722,7 +686,7 @@ static SDWORD numObjectsInArea(BASE_OBJECT *psList, SDWORD x1, SDWORD y1, SDWORD
 		ox = (SDWORD)psCurr->pos.x;
 		oy = (SDWORD)psCurr->pos.y;
 		if (ox >= x1 && ox <= x2 &&
-			oy >= y1 && oy <= y2)
+		    oy >= y1 && oy <= y2)
 		{
 			count += 1;
 		}
@@ -735,7 +699,7 @@ static SDWORD numObjectsInArea(BASE_OBJECT *psList, SDWORD x1, SDWORD y1, SDWORD
 // Count the number of player objects within a certain area
 bool scrNumObjectsInArea(void)
 {
-	SDWORD		player, x1,y1, x2,y2;
+	SDWORD		player, x1, y1, x2, y2;
 	SDWORD		count;
 
 	if (!stackPopParams(5, VAL_INT, &player, VAL_INT, &x1, VAL_INT, &y1, VAL_INT, &x2, VAL_INT, &y2))
@@ -743,14 +707,10 @@ bool scrNumObjectsInArea(void)
 		return false;
 	}
 
-	if (player < 0 || player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrNumObjectsInArea: invalid player number" );
-		return false;
-	}
+	ASSERT_OR_RETURN(false, player >= 0 && player < MAX_PLAYERS, "Invalid player number");
 
-	count = numObjectsInArea((BASE_OBJECT *)apsDroidLists[player], x1,y1, x2,y2) +
-			numObjectsInArea((BASE_OBJECT *)apsStructLists[player], x1,y1, x2,y2);
+	count = numObjectsInArea((BASE_OBJECT *)apsDroidLists[player], x1, y1, x2, y2) +
+	        numObjectsInArea((BASE_OBJECT *)apsStructLists[player], x1, y1, x2, y2);
 
 	scrFunctionResult.v.ival = count;
 	if (!stackPushResult(VAL_INT, &scrFunctionResult))
@@ -766,7 +726,7 @@ bool scrNumObjectsInArea(void)
 // Count the number of player droids within a certain area
 bool scrNumDroidsInArea(void)
 {
-	SDWORD		player, x1,y1, x2,y2;
+	SDWORD		player, x1, y1, x2, y2;
 	SDWORD		count;
 
 	if (!stackPopParams(5, VAL_INT, &player, VAL_INT, &x1, VAL_INT, &y1, VAL_INT, &x2, VAL_INT, &y2))
@@ -774,13 +734,9 @@ bool scrNumDroidsInArea(void)
 		return false;
 	}
 
-	if (player < 0 || player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrNumUnitInArea: invalid player number" );
-		return false;
-	}
+	ASSERT_OR_RETURN(false, player >= 0 && player < MAX_PLAYERS, "Invalid player number");
 
-	count = numObjectsInArea((BASE_OBJECT *)apsDroidLists[player], x1,y1, x2,y2);
+	count = numObjectsInArea((BASE_OBJECT *)apsDroidLists[player], x1, y1, x2, y2);
 
 	scrFunctionResult.v.ival = count;
 	if (!stackPushResult(VAL_INT, &scrFunctionResult))
@@ -796,7 +752,7 @@ bool scrNumDroidsInArea(void)
 // Count the number of player structures within a certain area
 bool scrNumStructsInArea(void)
 {
-	SDWORD		player, x1,y1, x2,y2;
+	SDWORD		player, x1, y1, x2, y2;
 	SDWORD		count;
 
 	if (!stackPopParams(5, VAL_INT, &player, VAL_INT, &x1, VAL_INT, &y1, VAL_INT, &x2, VAL_INT, &y2))
@@ -804,13 +760,9 @@ bool scrNumStructsInArea(void)
 		return false;
 	}
 
-	if (player < 0 || player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrNumStructsInArea: invalid player number" );
-		return false;
-	}
+	ASSERT_OR_RETURN(false, player >= 0 && player < MAX_PLAYERS, "Invalid player number");
 
-	count = numObjectsInArea((BASE_OBJECT *)apsStructLists[player], x1,y1, x2,y2);
+	count = numObjectsInArea((BASE_OBJECT *)apsStructLists[player], x1, y1, x2, y2);
 
 	scrFunctionResult.v.ival = count;
 	if (!stackPushResult(VAL_INT, &scrFunctionResult))
@@ -826,8 +778,8 @@ bool scrNumStructsInArea(void)
 // Count the number of player structures but not walls within a certain area
 bool scrNumStructsButNotWallsInArea(void)
 {
-	SDWORD		player, x1,y1, x2,y2;
-	SDWORD		count, ox,oy;
+	SDWORD		player, x1, y1, x2, y2;
+	SDWORD		count, ox, oy;
 	STRUCTURE	*psStruct;
 
 	if (!stackPopParams(5, VAL_INT, &player, VAL_INT, &x1, VAL_INT, &y1, VAL_INT, &x2, VAL_INT, &y2))
@@ -835,23 +787,19 @@ bool scrNumStructsButNotWallsInArea(void)
 		return false;
 	}
 
-	if (player < 0 || player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrNumStructsButNotWallsInArea: invalid player number" );
-		return false;
-	}
+	ASSERT_OR_RETURN(false, player >= 0 && player < MAX_PLAYERS, "Invalid player number");
 
 	count = 0;
-	for(psStruct = apsStructLists[player]; psStruct; psStruct = psStruct->psNext)
+	for (psStruct = apsStructLists[player]; psStruct; psStruct = psStruct->psNext)
 	{
 		if ((psStruct->pStructureType->type != REF_WALL) &&
-			(psStruct->pStructureType->type != REF_WALLCORNER) &&
-			(psStruct->status == SS_BUILT))
+		    (psStruct->pStructureType->type != REF_WALLCORNER) &&
+		    (psStruct->status == SS_BUILT))
 		{
 			ox = (SDWORD)psStruct->pos.x;
 			oy = (SDWORD)psStruct->pos.y;
 			if ((ox >= x1) && (ox <= x2) &&
-				(oy >= y1) && (oy <= y2))
+			    (oy >= y1) && (oy <= y2))
 			{
 				count += 1;
 			}
@@ -872,32 +820,28 @@ bool scrNumStructsButNotWallsInArea(void)
 // Count the number of structures in an area of a certain type
 bool scrNumStructsByTypeInArea(void)
 {
-	SDWORD		player, type, x1,y1, x2,y2;
-	SDWORD		count, ox,oy;
+	SDWORD		player, type, x1, y1, x2, y2;
+	SDWORD		count, ox, oy;
 	STRUCTURE	*psStruct;
 
 	if (!stackPopParams(6, VAL_INT, &player, VAL_INT, &type,
-					VAL_INT, &x1, VAL_INT, &y1, VAL_INT, &x2, VAL_INT, &y2))
+	        VAL_INT, &x1, VAL_INT, &y1, VAL_INT, &x2, VAL_INT, &y2))
 	{
 		return false;
 	}
 
-	if (player < 0 || player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrNumStructsByTypeInArea: invalid player number" );
-		return false;
-	}
+	ASSERT_OR_RETURN(false, player >= 0 && player < MAX_PLAYERS, "Invalid player number");
 
 	count = 0;
-	for(psStruct = apsStructLists[player]; psStruct; psStruct = psStruct->psNext)
+	for (psStruct = apsStructLists[player]; psStruct; psStruct = psStruct->psNext)
 	{
 		if ((psStruct->pStructureType->type == (UDWORD)type) &&
-			(psStruct->status == SS_BUILT))
+		    (psStruct->status == SS_BUILT))
 		{
 			ox = (SDWORD)psStruct->pos.x;
 			oy = (SDWORD)psStruct->pos.y;
 			if ((ox >= x1) && (ox <= x2) &&
-				(oy >= y1) && (oy <= y2))
+			    (oy >= y1) && (oy <= y2))
 			{
 				count += 1;
 			}
@@ -927,17 +871,8 @@ bool scrDroidHasSeen(void)
 		return false;
 	}
 
-	if (psObj == NULL)
-	{
-		ASSERT( false, "scrUnitHasSeen: NULL object" );
-		return false;
-	}
-
-	if (player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrUnitHasSeen:player number is too high" );
-		return false;
-	}
+	ASSERT_OR_RETURN(false, psObj != NULL, "NULL object");
+	ASSERT_OR_RETURN(false, player >= 0 && player < MAX_PLAYERS, "Invalid player number");
 
 	// See if any droid has seen this object
 	seen = false;
@@ -971,11 +906,7 @@ bool scrEnableComponent(void)
 		return false;
 	}
 
-	if (player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrEnableComponent:player number is too high" );
-		return false;
-	}
+	ASSERT_OR_RETURN(false, player >= 0 && player < MAX_PLAYERS, "Invalid player number");
 
 	// enable the appropriate component
 	switch ((unsigned)sVal.type)  // Unsigned cast to suppress compiler warnings due to enum abuse.
@@ -1005,7 +936,7 @@ bool scrEnableComponent(void)
 		apCompLists[player][COMP_BRAIN][sVal.v.ival] = FOUND;
 		break;
 	default:
-		ASSERT( false, "scrEnableComponent: unknown type" );
+		ASSERT(false, "Unknown type");
 		return false;
 	}
 
@@ -1028,11 +959,7 @@ bool scrMakeComponentAvailable(void)
 		return false;
 	}
 
-	if (player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrMakeComponentAvailable:player number is too high" );
-		return false;
-	}
+	ASSERT_OR_RETURN(false, player >= 0 && player < MAX_PLAYERS, "Invalid player number");
 
 	// make the appropriate component available
 	switch ((unsigned)sVal.type)  // Unsigned cast to suppress compiler warnings due to enum abuse.
@@ -1062,7 +989,7 @@ bool scrMakeComponentAvailable(void)
 		apCompLists[player][COMP_BRAIN][sVal.v.ival] = AVAILABLE;
 		break;
 	default:
-		ASSERT( false, "scrEnableComponent: unknown type" );
+		ASSERT(false, "Unknown type");
 		return false;
 	}
 
@@ -1082,25 +1009,21 @@ bool scrAddDroidToMissionList(void)
 		return false;
 	}
 
-	if (player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrAddUnitToMissionList:player number is too high" );
-		return false;
-	}
-
-	ASSERT( psTemplate != NULL,
-		"scrAddUnitToMissionList: Invalid template pointer" );
+	ASSERT_OR_RETURN(false, player >= 0 && player < MAX_PLAYERS, "Invalid player number");
+	ASSERT(psTemplate != NULL, "Invalid template pointer");
 
 #ifdef SCRIPT_CHECK_MAX_UNITS
 	// Don't build a new droid if player limit reached, unless it's a transporter.
-	if( IsPlayerDroidLimitReached(player) && (psTemplate->droidType != DROID_TRANSPORTER && psTemplate->droidType != DROID_SUPERTRANSPORTER))
+	if (IsPlayerDroidLimitReached(player) && (psTemplate->droidType != DROID_TRANSPORTER && psTemplate->droidType != DROID_SUPERTRANSPORTER))
 	{
-		debug( LOG_NEVER, "scrAddUnit : Max units reached ,player %d\n", player );
+		debug(LOG_SCRIPT, "Max units reached for player %d adding %s to mission list (type %d)", 
+		      player, getName(psTemplate), psTemplate->droidType);
 		psDroid = NULL;
-	} else
+	}
+	else
 #endif
 	{
-		psDroid = buildMissionDroid( psTemplate, 128, 128, player );
+		psDroid = buildMissionDroid(psTemplate, 128, 128, player);
 	}
 
 	scrFunctionResult.v.oval = psDroid;
@@ -1124,29 +1047,24 @@ bool scrAddDroid(void)
 	{
 		return false;
 	}
-	if (player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrAddUnit:player number is too high" );
-		return false;
-	}
-
-	ASSERT( psTemplate != NULL,
-		"scrAddUnit: Invalid template pointer" );
+	ASSERT_OR_RETURN(false, player >= 0 && player < MAX_PLAYERS, "Invalid player number");
+	ASSERT(psTemplate != NULL, "Invalid template pointer");
 
 #ifdef SCRIPT_CHECK_MAX_UNITS
 	// Don't build a new droid if player limit reached, unless it's a transporter.
-	if( IsPlayerDroidLimitReached(player) && (psTemplate->droidType != DROID_TRANSPORTER && psTemplate->droidType != DROID_SUPERTRANSPORTER) )
+	if (IsPlayerDroidLimitReached(player) && (psTemplate->droidType != DROID_TRANSPORTER && psTemplate->droidType != DROID_SUPERTRANSPORTER))
 	{
-		debug( LOG_NEVER, "scrAddUnit : Max units reached ,player %d\n", player );
+		debug(LOG_NEVER, "scrAddUnit : Max units reached ,player %d\n", player);
 		psDroid = NULL;
-	} else
+	}
+	else
 #endif
 	{
 		psDroid = buildDroid(psTemplate, x, y, player, false, NULL);
 		if (psDroid)
 		{
 			addDroid(psDroid, apsDroidLists);
-			debug( LOG_LIFE, "created droid for AI player %d %u", player, psDroid->id );
+			debug(LOG_LIFE, "created droid for AI player %d %u", player, psDroid->id);
 			if (isVtolDroid(psDroid))
 			{
 				// vtols start in the air
@@ -1155,7 +1073,7 @@ bool scrAddDroid(void)
 		}
 		else
 		{
-			debug(LOG_LIFE, "send droid create message to game queue for AI player %d", player );
+			debug(LOG_LIFE, "send droid create message to game queue for AI player %d", player);
 		}
 	}
 
@@ -1182,7 +1100,7 @@ bool scrAddDroidToTransporter(void)
 
 	if (psTransporter == NULL || psDroid == NULL)
 	{
-		ASSERT(false, "scrAddUnitToTransporter: null unit passed");
+		ASSERT(false, "Null unit passed");
 		return true; // allow to continue
 	}
 
@@ -1215,11 +1133,7 @@ bool scrBuildingDestroyed(void)
 	{
 		return false;
 	}
-	if (player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrBuildingDestroyed:player number is too high" );
-		return false;
-	}
+	ASSERT_OR_RETURN(false, player >= 0 && player < MAX_PLAYERS, "Invalid player number");
 
 	destroyed = true;
 	//look thru the players list to see if the structure still exists
@@ -1250,15 +1164,10 @@ bool scrEnableStructure(void)
 	{
 		return false;
 	}
-	if (player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrEnableStructure:player number is too high" );
-		return false;
-	}
-
+	ASSERT_OR_RETURN(false, player >= 0 && player < MAX_PLAYERS, "Invalid player number");
 	if (index < (SDWORD)0 || index > (SDWORD)numStructureStats)
 	{
-		ASSERT( false, "scrEnableStructure:invalid structure stat" );
+		ASSERT(false, "Invalid structure stat");
 		return false;
 	}
 
@@ -1312,11 +1221,7 @@ bool scrSelectDroidByID(void)
 	{
 		return false;
 	}
-	if (player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrSelectUnitByID:player number is too high" );
-		return false;
-	}
+	ASSERT_OR_RETURN(false, player >= 0 && player < MAX_PLAYERS, "Invalid player number");
 
 	selected = false;
 	if (selectDroidByID(droidID, player))
@@ -1418,7 +1323,7 @@ bool scrAddReticuleButton(void)
 		widgReveal(psWScreen, IDRET_CANCEL);
 		break;
 	default:
-		ASSERT( false, "scrAddReticuleButton: Invalid reticule Button ID" );
+		ASSERT(false, "Invalid reticule Button ID");
 		return false;
 	}
 
@@ -1432,14 +1337,14 @@ bool scrRemoveReticuleButton(void)
 	SDWORD	val;
 	int32_t	bReset;		// was BOOL (int) ** see warning about conversion
 
-	if (!stackPopParams(2, VAL_INT, &val,VAL_BOOL, &bReset))
+	if (!stackPopParams(2, VAL_INT, &val, VAL_BOOL, &bReset))
 	{
 		return false;
 	}
 
-	if(bInTutorial)
+	if (bInTutorial)
 	{
-		if(bReset)	// not always desirable
+		if (bReset)	// not always desirable
 		{
 			intResetScreen(true);
 		}
@@ -1472,7 +1377,7 @@ bool scrRemoveReticuleButton(void)
 		widgHide(psWScreen, IDRET_CANCEL);
 		break;
 	default:
-		ASSERT( false, "scrAddReticuleButton: Invalid reticule Button ID" );
+		ASSERT(false, "Invalid reticule Button ID");
 		return false;
 	}
 
@@ -1492,16 +1397,12 @@ bool scrAddMessage(void)
 
 
 	if (!stackPopParams(4, ST_INTMESSAGE, &psViewData , VAL_INT, &msgType,
-				VAL_INT, &player, VAL_BOOL, &playImmediate))
+	        VAL_INT, &player, VAL_BOOL, &playImmediate))
 	{
 		return false;
 	}
 
-	if (player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrAddMessage:player number is too high" );
-		return false;
-	}
+	ASSERT_OR_RETURN(false, player >= 0 && player < MAX_PLAYERS, "Invalid player number");
 
 	//create the message
 	psMessage = addMessage(msgType, false, player);
@@ -1514,7 +1415,7 @@ bool scrAddMessage(void)
 		{
 			//check the z value is at least the height of the terrain
 			height = map_Height(((VIEW_PROXIMITY *)psViewData->pData)->x,
-				((VIEW_PROXIMITY *)psViewData->pData)->y);
+			        ((VIEW_PROXIMITY *)psViewData->pData)->y);
 			if (((VIEW_PROXIMITY *)psViewData->pData)->z < height)
 			{
 				((VIEW_PROXIMITY *)psViewData->pData)->z = height;
@@ -1547,11 +1448,7 @@ bool scrRemoveMessage(void)
 		return false;
 	}
 
-	ASSERT(player < MAX_PLAYERS && player >= 0, "bad player number");
-	if (player >= MAX_PLAYERS || player < 0)
-	{
-		return false;
-	}
+	ASSERT_OR_RETURN(false, player >= 0 && player < MAX_PLAYERS, "Invalid player number");
 
 	//find the message
 	psMessage = findMessage((MSG_VIEWDATA *)psViewData, msgType, player);
@@ -1587,18 +1484,23 @@ bool scrBuildDroid(void)
 	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "Invalid player number");
 	ASSERT_OR_RETURN(false, productionRun <= UBYTE_MAX, "Production run too high");
 	ASSERT_OR_RETURN(false, (psFactory->pStructureType->type == REF_FACTORY ||
-	                         psFactory->pStructureType->type == REF_CYBORG_FACTORY ||
-	                         psFactory->pStructureType->type == REF_VTOL_FACTORY),
-	                 "Structure is not a factory");
-	ASSERT_OR_RETURN(false, validTemplateForFactory(psTemplate, psFactory), "Invalid template - %s for factory - %s",
-	                 psTemplate->aName, psFactory->pStructureType->pName);
-
+	        psFactory->pStructureType->type == REF_CYBORG_FACTORY ||
+	        psFactory->pStructureType->type == REF_VTOL_FACTORY),
+	        "Structure is not a factory");
+	ASSERT_OR_RETURN(false, validTemplateForFactory(psTemplate, psFactory, true), "Invalid template - %s for factory - %s",
+	        getName(psTemplate), getID(psFactory->pStructureType));
 	if (productionRun != 1)
 	{
-		debug(LOG_WARNING, "A script is trying to build a different number (%d) than 1 droid.", productionRun);
+		debug(LOG_WARNING, "A wzscript is trying to build a different number (%d) than 1 droid.", productionRun);
 	}
-	structSetManufacture(psFactory, psTemplate, ModeQueue);
-
+	if (researchedTemplate(psTemplate, psFactory->player, true, true))
+	{
+		structSetManufacture(psFactory, psTemplate, ModeQueue);
+	}
+	else
+	{
+		debug(LOG_WARNING, "A wzscript tried to build a template (%s) that has not been researched yet", getName(psTemplate));
+	}
 	return true;
 }
 
@@ -1616,20 +1518,20 @@ bool	scrSetAssemblyPoint(void)
 
 	if (psBuilding == NULL)
 	{
-		ASSERT( false, "scrSetAssemblyPoint: NULL structure" );
+		ASSERT(false, "NULL structure");
 		return false;
 	}
 
 	if (psBuilding->pStructureType->type != REF_FACTORY &&
-		psBuilding->pStructureType->type != REF_CYBORG_FACTORY &&
-		psBuilding->pStructureType->type != REF_VTOL_FACTORY)
+	    psBuilding->pStructureType->type != REF_CYBORG_FACTORY &&
+	    psBuilding->pStructureType->type != REF_VTOL_FACTORY)
 	{
-		ASSERT( false, "scrSetAssemblyPoint: structure is not a factory" );
+		ASSERT(false, "Structure is not a factory");
 		return false;
 	}
 
-	setAssemblyPoint(((FACTORY *)psBuilding->pFunctionality)->psAssemblyPoint,x,y,
-        psBuilding->player, true);
+	setAssemblyPoint(((FACTORY *)psBuilding->pFunctionality)->psAssemblyPoint, x, y,
+	        psBuilding->player, true);
 
 	return true;
 }
@@ -1647,7 +1549,7 @@ bool	scrStructureIdle(void)
 	}
 	if (psBuilding == NULL)
 	{
-		ASSERT( false, "scrStructureIdle: NULL structure" );
+		ASSERT(false, "NULL structure");
 		return false;
 	}
 
@@ -1672,11 +1574,7 @@ bool	scrAttackLocation(void)
 		return false;
 	}
 
-	if (player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrAttackLocation:player number is too high" );
-		return false;
-	}
+	ASSERT_OR_RETURN(false, player >= 0 && player < MAX_PLAYERS, "Invalid player number");
 
 	debug(LOG_ERROR, "UNUSED FUNCTION attackLocation called - do not use!");
 
@@ -1688,17 +1586,14 @@ bool	scrAttackLocation(void)
 bool scrDestroyFeature(void)
 {
 	FEATURE		*psFeature;
-//	INTERP_VAL	sVal;
 
 	if (!stackPopParams(1, ST_FEATURE, &psFeature))
 	{
 		return false;
 	}
-
 	if (psFeature == NULL)
 	{
-		ASSERT( psFeature != NULL,
-			"scrDestroyFeature: Invalid feature pointer" );
+		ASSERT(psFeature != NULL, "Invalid feature pointer");
 	}
 
 	removeFeature(psFeature);
@@ -1710,14 +1605,14 @@ bool scrDestroyFeature(void)
 // static vars to enum features.
 static	FEATURE_STATS	*psFeatureStatToFind[MAX_PLAYERS];
 static	SDWORD			playerToEnum[MAX_PLAYERS];
-static  SDWORD			getFeatureCount[MAX_PLAYERS]={0};
+static  SDWORD			getFeatureCount[MAX_PLAYERS] = {0};
 static	FEATURE			*psCurrEnumFeature[MAX_PLAYERS];
 
 // -----------------------------------------------------------------------------------------
 // Init enum visible features. May use player==-1 to ignore visibility check.
 bool scrInitGetFeature(void)
 {
-	SDWORD			player,iFeat,bucket;
+	SDWORD			player, iFeat, bucket;
 
 	if (!stackPopParams(3, ST_FEATURESTAT, &iFeat, VAL_INT, &player, VAL_INT, &bucket))
 	{
@@ -1742,62 +1637,61 @@ bool scrInitGetFeature(void)
 //			Skirmish Only, dunno if kev uses this?
 bool scrGetFeature(void)
 {
-	SDWORD	bucket,count;
+	SDWORD	bucket, count;
 	FEATURE	*psFeat;
 
-	if ( !stackPopParams(1,VAL_INT,&bucket) )
+	if (!stackPopParams(1, VAL_INT, &bucket))
 	{
-		ASSERT( false, "scrGetFeature: Failed to pop player number from stack" );
+		ASSERT(false, "Failed to pop player number from stack");
 		return false;
 	}
 
-	ASSERT(bucket >= 0 && bucket < MAX_PLAYERS,
-		"scrGetFeature: bucket out of bounds: %d", bucket);
+	ASSERT(bucket >= 0 && bucket < MAX_PLAYERS, "Bucket out of bounds: %d", bucket);
 
-	count =0;
+	count = 0;
 	// go to the correct start point in the feature list.
-	for(psFeat=apsFeatureLists[0];psFeat && count<getFeatureCount[bucket] ;count++)
+	for (psFeat = apsFeatureLists[0]; psFeat && count < getFeatureCount[bucket] ; count++)
 	{
 		psFeat = psFeat->psNext;
 	}
 
-	if(psFeat == NULL)		// no more to find.
+	if (psFeat == NULL)		// no more to find.
 	{
 		scrFunctionResult.v.oval = NULL;
 		if (!stackPushResult((INTERP_TYPE)ST_FEATURE, &scrFunctionResult))
 		{
-			ASSERT( false, "scrGetFeature: Failed to push result" );
+			ASSERT(false, "Failed to push result");
 			return false;
 		}
 		return true;
 	}
 
 	// check to see if badly called
-	if(psFeatureStatToFind[bucket] == NULL)
+	if (psFeatureStatToFind[bucket] == NULL)
 	{
-		debug( LOG_NEVER, "invalid feature to find. possibly due to save game\n" );
+		debug(LOG_NEVER, "invalid feature to find. possibly due to save game\n");
 		scrFunctionResult.v.oval = NULL;
-		if(!stackPushResult((INTERP_TYPE)ST_FEATURE, &scrFunctionResult))
+		if (!stackPushResult((INTERP_TYPE)ST_FEATURE, &scrFunctionResult))
 		{
-			ASSERT( false, "scrGetFeature: Failed to push result" );
+			ASSERT(false, "Failed to push result");
 			return false;
 		}
 		return true;
 	}
 
 	// begin searching the feature list for the required stat.
-	while(psFeat)
+	while (psFeat)
 	{
 		if (psFeat->psStats->subType == psFeatureStatToFind[bucket]->subType
-		 && (playerToEnum[bucket] < 0 || psFeat->visible[playerToEnum[bucket]] != 0)
-		 && !TileHasStructure(mapTile(map_coord(psFeat->pos.x), map_coord(psFeat->pos.y)))
-		 && !fireOnLocation(psFeat->pos.x,psFeat->pos.y)		// not burning.
+		    && (playerToEnum[bucket] < 0 || psFeat->visible[playerToEnum[bucket]] != 0)
+		    && !TileHasStructure(mapTile(map_coord(psFeat->pos.x), map_coord(psFeat->pos.y)))
+		    && !fireOnLocation(psFeat->pos.x, psFeat->pos.y)		// not burning.
 		   )
 		{
 			scrFunctionResult.v.oval = psFeat;
 			if (!stackPushResult((INTERP_TYPE)ST_FEATURE, &scrFunctionResult))	//	push scrFunctionResult
 			{
-				ASSERT( false, "scrGetFeature: Failed to push result" );
+				ASSERT(false, "Failed to push result");
 				return false;
 			}
 
@@ -1805,14 +1699,14 @@ bool scrGetFeature(void)
 			return true;
 		}
 		getFeatureCount[bucket]++;
-		psFeat=psFeat->psNext;
+		psFeat = psFeat->psNext;
 	}
 
 	// none found
 	scrFunctionResult.v.oval = NULL;
 	if (!stackPushResult((INTERP_TYPE)ST_FEATURE,  &scrFunctionResult))
 	{
-		ASSERT( false, "scrGetFeature: Failed to push result" );
+		ASSERT(false, "Failed to push result");
 		return false;
 	}
 	return true;
@@ -1823,41 +1717,40 @@ bool scrGetFeatureB(void)
 {
 	SDWORD	bucket;
 
-	if ( !stackPopParams(1,VAL_INT,&bucket) )
+	if (!stackPopParams(1, VAL_INT, &bucket))
 	{
-		ASSERT( false, "scrGetFeatureB: Failed to pop player number from stack" );
+		ASSERT(false, "Failed to pop player number from stack");
 		return false;
 	}
 
-	ASSERT(bucket >= 0 && bucket < MAX_PLAYERS,
-		"scrGetFeatureB: bucket out of bounds: %d", bucket);
+	ASSERT(bucket >= 0 && bucket < MAX_PLAYERS, "Bucket out of bounds: %d", bucket);
 
 	// check to see if badly called
-	if(psFeatureStatToFind[bucket] == NULL)
+	if (psFeatureStatToFind[bucket] == NULL)
 	{
-		debug( LOG_NEVER, "invalid feature to find. possibly due to save game\n" );
+		debug(LOG_NEVER, "invalid feature to find. possibly due to save game\n");
 		scrFunctionResult.v.oval = NULL;
-		if(!stackPushResult((INTERP_TYPE)ST_FEATURE, &scrFunctionResult))
+		if (!stackPushResult((INTERP_TYPE)ST_FEATURE, &scrFunctionResult))
 		{
-			ASSERT( false, "scrGetFeatureB: Failed to push result" );
+			ASSERT(false, "Failed to push result");
 			return false;
 		}
 		return true;
 	}
 
 	// begin searching the feature list for the required stat.
-	while(psCurrEnumFeature[bucket])
+	while (psCurrEnumFeature[bucket])
 	{
 		if (psCurrEnumFeature[bucket]->psStats->subType == psFeatureStatToFind[bucket]->subType
 		    && (playerToEnum[bucket] < 0 || psCurrEnumFeature[bucket]->visible[playerToEnum[bucket]] != 0)
 		    && !TileHasStructure(mapTile(map_coord(psCurrEnumFeature[bucket]->pos.x), map_coord(psCurrEnumFeature[bucket]->pos.y)))
-		    && !fireOnLocation(psCurrEnumFeature[bucket]->pos.x,psCurrEnumFeature[bucket]->pos.y )		// not burning.
-			)
+		    && !fireOnLocation(psCurrEnumFeature[bucket]->pos.x, psCurrEnumFeature[bucket]->pos.y)		// not burning.
+		   )
 		{
 			scrFunctionResult.v.oval = psCurrEnumFeature[bucket];
 			if (!stackPushResult((INTERP_TYPE)ST_FEATURE, &scrFunctionResult))	//	push scrFunctionResult
 			{
-				ASSERT( false, "scrGetFeatureB: Failed to push result" );
+				ASSERT(false, "Failed to push result");
 				return false;
 			}
 			psCurrEnumFeature[bucket] = psCurrEnumFeature[bucket]->psNext;
@@ -1871,7 +1764,7 @@ bool scrGetFeatureB(void)
 	scrFunctionResult.v.oval = NULL;
 	if (!stackPushResult((INTERP_TYPE)ST_FEATURE,  &scrFunctionResult))
 	{
-		ASSERT( false, "scrGetFeatureB: Failed to push result" );
+		ASSERT(false, "Failed to push result");
 		return false;
 	}
 	return true;
@@ -1885,8 +1778,8 @@ bool scrAddFeature(void)
 	FEATURE			*psFeat = NULL;
 	SDWORD			iX, iY, iMapX, iMapY, iTestX, iTestY, iFeat;
 
-	if ( !stackPopParams(3, ST_FEATURESTAT, &iFeat,
-		 VAL_INT, &iX, VAL_INT, &iY ) )
+	if (!stackPopParams(3, ST_FEATURESTAT, &iFeat,
+	        VAL_INT, &iX, VAL_INT, &iY))
 	{
 		return false;
 	}
@@ -1895,13 +1788,13 @@ bool scrAddFeature(void)
 
 	ASSERT(psStat != NULL, "Invalid feature pointer");
 
-	if ( psStat != NULL )
+	if (psStat != NULL)
 	{
 		iMapX = map_coord(iX);
 		iMapY = map_coord(iY);
 
 		/* check for wrecked feature already on-tile and remove */
-		for(psFeat = apsFeatureLists[0]; psFeat; psFeat = psFeat->psNext)
+		for (psFeat = apsFeatureLists[0]; psFeat; psFeat = psFeat->psNext)
 		{
 			iTestX = map_coord(psFeat->pos.x);
 			iTestY = map_coord(psFeat->pos.y);
@@ -1909,7 +1802,7 @@ bool scrAddFeature(void)
 			ASSERT(iTestX != iMapX || iTestY != iMapY, "Building feature on tile already occupied");
 		}
 
-		psFeat = buildFeature( psStat, iX, iY, false );
+		psFeat = buildFeature(psStat, iX, iY, false);
 	}
 
 	scrFunctionResult.v.oval = psFeat;
@@ -1930,44 +1823,42 @@ bool scrAddStructure(void)
 	SDWORD				iX, iY, iMapX, iMapY;//, iWidth, iBreadth;
 	SDWORD				iStruct, iPlayer;//, iW, iB;
 
-	if ( !stackPopParams( 4, ST_STRUCTURESTAT, &iStruct, VAL_INT, &iPlayer,
-							 VAL_INT, &iX, VAL_INT, &iY ) )
+	if (!stackPopParams(4, ST_STRUCTURESTAT, &iStruct, VAL_INT, &iPlayer,
+	        VAL_INT, &iX, VAL_INT, &iY))
 	{
 		return false;
 	}
 
 	psStat = (STRUCTURE_STATS *)(asStructureStats + iStruct);
 
-	ASSERT( psStat != NULL,
-			"scrAddStructure: Invalid feature pointer" );
+	ASSERT(psStat != NULL, "Invalid feature pointer");
 
-	if ( psStat != NULL )
+	if (psStat != NULL)
 	{
 		/* offset coords so building centre at (iX, iY) */
-/*		no longer necessary - buildStruct no longer uses top left
-		iX -= psStat->baseWidth*TILE_UNITS/2;
-		iY -= psStat->baseBreadth*TILE_UNITS/2;*/
+		/*		no longer necessary - buildStruct no longer uses top left
+				iX -= psStat->baseWidth*TILE_UNITS/2;
+				iY -= psStat->baseBreadth*TILE_UNITS/2;*/
 
 		iMapX = map_coord(iX);
 		iMapY = map_coord(iY);
 
 		/* check for structure already on-tile */
-		if(TileHasStructure(mapTile(iMapX,iMapY)))
+		if (TileHasStructure(mapTile(iMapX, iMapY)))
 		{
-			ASSERT( false,
-			"scrAddStructure: tile already occupied by structure\n" );
+			ASSERT(false, "Tile already occupied by structure");
 		}
 
-		psStruct = buildStructure( psStat, iX, iY, iPlayer, false );
-		if ( psStruct != NULL )
+		psStruct = buildStructure(psStat, iX, iY, iPlayer, false);
+		if (psStruct != NULL)
 		{
 			psStruct->status = SS_BUILT;
 			buildingComplete(psStruct);
 
-            /*
-            Apart from this being wrong (iWidth = 0 when psStat->baseWidth = 1
-            and you end up in an infinite loop) we don't need to do this here
-            since the map is flattened as part of buildStructure
+			/*
+			Apart from this being wrong (iWidth = 0 when psStat->baseWidth = 1
+			and you end up in an infinite loop) we don't need to do this here
+			since the map is flattened as part of buildStructure
 
 			iWidth   = psStat->baseWidth/2;
 			iBreadth = psStat->baseBreadth/2;
@@ -2005,11 +1896,10 @@ bool scrDestroyStructure(void)
 
 	if (psStruct == NULL)
 	{
-		ASSERT( psStruct != NULL,
-			"scrDestroyStructure: Invalid structure pointer" );
+		ASSERT(psStruct != NULL, "Invalid structure pointer");
 	}
 
-	removeStruct( psStruct, true );
+	removeStruct(psStruct, true);
 
 	return true;
 }
@@ -2034,19 +1924,19 @@ static	SDWORD			playerVisibleStructB[MAX_PLAYERS];		//player whose structures mu
 // init enum visible structures.
 bool scrInitEnumStruct(void)
 {
-	SDWORD		lookingPlayer,iStat,targetPlayer;
+	SDWORD		lookingPlayer, iStat, targetPlayer;
 	int32_t		any; // was BOOL (int) ** see warning about conversion
 
-	if ( !stackPopParams(4,VAL_BOOL,&any, ST_STRUCTURESTAT, &iStat,  VAL_INT, &targetPlayer, VAL_INT, &lookingPlayer) )
+	if (!stackPopParams(4, VAL_BOOL, &any, ST_STRUCTURESTAT, &iStat,  VAL_INT, &targetPlayer, VAL_INT, &lookingPlayer))
 	{
 		return false;
 	}
 
 	ASSERT(targetPlayer >= 0 && targetPlayer < MAX_PLAYERS,
-		"scrInitEnumStructB: targetPlayer out of bounds: %d", targetPlayer);
+	       "targetPlayer out of bounds: %d", targetPlayer);
 
 	ASSERT(lookingPlayer >= 0 && lookingPlayer < MAX_PLAYERS,
-		"scrInitEnumStructB: lookingPlayer out of bounds: %d", lookingPlayer);
+	       "lookingPlayer out of bounds: %d", lookingPlayer);
 
 	structfindany = any;
 
@@ -2065,12 +1955,12 @@ bool scrEnumStruct(void)
 
 	// go to the correct start point in the structure list.
 	count = 0;
-	for(psStruct=apsStructLists[playerToEnumStruct];psStruct && count<enumStructCount;count++)
+	for (psStruct = apsStructLists[playerToEnumStruct]; psStruct && count < enumStructCount; count++)
 	{
 		psStruct = psStruct->psNext;
 	}
 
-	if(psStruct == NULL)		// no more to find.
+	if (psStruct == NULL)		// no more to find.
 	{
 		scrFunctionResult.v.oval = NULL;
 		if (!stackPushResult((INTERP_TYPE)ST_STRUCTURE, &scrFunctionResult))
@@ -2080,13 +1970,12 @@ bool scrEnumStruct(void)
 		return true;
 	}
 
-	while(psStruct)	// find a visible structure of required type.
+	while (psStruct)	// find a visible structure of required type.
 	{
-//		if(	(structfindany || (psStruct->pStructureType->type == psStructStatToFind->type))
-		if(	(structfindany || (psStruct->pStructureType->ref == psStructStatToFind->ref))
-			&&
-			((playerVisibleStruct < 0) || (psStruct->visible[playerVisibleStruct]))	//fix: added playerVisibleStruct for visibility test
-			)
+		if ((structfindany || (psStruct->pStructureType->ref == psStructStatToFind->ref))
+		    &&
+		    ((playerVisibleStruct < 0) || (psStruct->visible[playerVisibleStruct]))	//fix: added playerVisibleStruct for visibility test
+		   )
 		{
 			scrFunctionResult.v.oval = psStruct;
 			if (!stackPushResult((INTERP_TYPE)ST_STRUCTURE, &scrFunctionResult))			//	push scrFunctionResult
@@ -2112,23 +2001,23 @@ bool scrEnumStruct(void)
 // init enum visible structures - takes bucket as additional parameter
 bool scrInitEnumStructB(void)
 {
-	SDWORD		lookingPlayer,iStat,targetPlayer,bucket;
+	SDWORD		lookingPlayer, iStat, targetPlayer, bucket;
 	int32_t		any; // was BOOL (int) ** see warning about conversion
 
-	if ( !stackPopParams(5,VAL_BOOL,&any, ST_STRUCTURESTAT, &iStat,
-		VAL_INT, &targetPlayer, VAL_INT, &lookingPlayer, VAL_INT, &bucket) )
+	if (!stackPopParams(5, VAL_BOOL, &any, ST_STRUCTURESTAT, &iStat,
+	        VAL_INT, &targetPlayer, VAL_INT, &lookingPlayer, VAL_INT, &bucket))
 	{
 		return false;
 	}
 
 	ASSERT(targetPlayer >= 0 && targetPlayer < MAX_PLAYERS,
-		"scrInitEnumStructB: targetPlayer out of bounds: %d", targetPlayer);
+	       "targetPlayer out of bounds: %d", targetPlayer);
 
 	ASSERT(lookingPlayer >= 0 && lookingPlayer < MAX_PLAYERS,
-		"scrInitEnumStructB: lookingPlayer out of bounds: %d", lookingPlayer);
+	       "lookingPlayer out of bounds: %d", lookingPlayer);
 
 	ASSERT(bucket >= 0 && bucket < MAX_PLAYERS,
-		"scrInitEnumStructB: bucket out of bounds: %d", bucket);
+	       "bucket out of bounds: %d", bucket);
 
 	/* Any structure type regardless of the passed type? */
 	structfindanyB[bucket] = any;
@@ -2148,22 +2037,21 @@ bool scrEnumStructB(void)
 	UDWORD		count;
 	STRUCTURE	*psStruct;
 
-	if ( !stackPopParams(1, VAL_INT, &bucket) )
+	if (!stackPopParams(1, VAL_INT, &bucket))
 	{
 		return false;
 	}
 
-	ASSERT(bucket >= 0 && bucket < MAX_PLAYERS,
-		"scrEnumStructB: bucket out of bounds: %d", bucket);
+	ASSERT(bucket >= 0 && bucket < MAX_PLAYERS, "Bucket out of bounds: %d", bucket);
 
 	// go to the correct start point in the structure list.
 	count = 0;
-	for(psStruct=apsStructLists[playerToEnumStructB[bucket]];psStruct && count<enumStructCountB[bucket];count++)
+	for (psStruct = apsStructLists[playerToEnumStructB[bucket]]; psStruct && count < enumStructCountB[bucket]; count++)
 	{
 		psStruct = psStruct->psNext;
 	}
 
-	if(psStruct == NULL)		// no more to find.
+	if (psStruct == NULL)		// no more to find.
 	{
 		scrFunctionResult.v.oval = NULL;
 		if (!stackPushResult((INTERP_TYPE)ST_STRUCTURE, &scrFunctionResult))
@@ -2173,12 +2061,12 @@ bool scrEnumStructB(void)
 		return true;
 	}
 
-	while(psStruct)	// find a visible structure of required type.
+	while (psStruct)	// find a visible structure of required type.
 	{
-		if(	(structfindanyB[bucket] || (psStruct->pStructureType->ref == psStructStatToFindB[bucket]->ref))
-			&&
-			((playerVisibleStructB[bucket] < 0) || (psStruct->visible[playerVisibleStructB[bucket]]))	//perform visibility test
-			)
+		if ((structfindanyB[bucket] || (psStruct->pStructureType->ref == psStructStatToFindB[bucket]->ref))
+		    &&
+		    ((playerVisibleStructB[bucket] < 0) || (psStruct->visible[playerVisibleStructB[bucket]]))	//perform visibility test
+		   )
 		{
 			scrFunctionResult.v.oval = psStruct;
 			if (!stackPushResult((INTERP_TYPE)ST_STRUCTURE, &scrFunctionResult))			//	push scrFunctionResult
@@ -2205,7 +2093,6 @@ bool scrEnumStructB(void)
 /*looks to see if a structure (specified by type) exists and is being built*/
 bool scrStructureBeingBuilt(void)
 {
-//	INTERP_VAL			sVal;
 	UDWORD				structInc;
 	STRUCTURE_STATS		*psStats;
 	SDWORD				player;
@@ -2216,25 +2103,8 @@ bool scrStructureBeingBuilt(void)
 		return false;
 	}
 
-/*	if (!stackPop(&sVal))
-	{
-		return false;
-	}
-
-	if (sVal.type != ST_STRUCTURESTAT)
-	{
-		ASSERT( false, "scrStructureBeingBuilt: type mismatch for object" );
-		return false;
-	}
-	psStats = (STRUCTURE_STATS *)(asStructureStats + sVal.v.ival);
-*/
-	if (player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrStructureBeingBuilt:player number is too high" );
-		return false;
-	}
-
-	ASSERT_OR_RETURN( false, structInc < numStructureStats, "Invalid range referenced for numStructureStats, %d > %d", structInc, numStructureStats);
+	ASSERT_OR_RETURN(false, player >= 0 && player < MAX_PLAYERS, "Invalid player number");
+	ASSERT_OR_RETURN(false, structInc < numStructureStats, "Invalid range referenced for numStructureStats, %d > %d", structInc, numStructureStats);
 	psStats = (STRUCTURE_STATS *)(asStructureStats + structInc);
 	beingBuilt = false;
 	if (checkStructureStatus(psStats, player, SS_BEING_BUILT))
@@ -2252,7 +2122,6 @@ bool scrStructureBeingBuilt(void)
 }
 
 
-
 // -----------------------------------------------------------------------------------------
 // multiplayer skirmish only for now.
 // returns true if a specific struct is complete. I know it's like the previous func,
@@ -2265,7 +2134,7 @@ bool scrStructureComplete(void)
 	{
 		return false;
 	}
-	if(psStruct->status == SS_BUILT)
+	if (psStruct->status == SS_BUILT)
 	{
 		bResult = true;
 	}
@@ -2299,13 +2168,8 @@ bool scrStructureBuilt(void)
 		return false;
 	}
 
-	if (player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrStructureBuilt:player number is too high" );
-		return false;
-	}
-
-	ASSERT_OR_RETURN( false, structInc < numStructureStats, "Invalid range referenced for numStructureStats, %d > %d", structInc, numStructureStats);
+	ASSERT_OR_RETURN(false, player >= 0 && player < MAX_PLAYERS, "Invalid player number");
+	ASSERT_OR_RETURN(false, structInc < numStructureStats, "Invalid range referenced for numStructureStats, %d > %d", structInc, numStructureStats);
 	psStats = (STRUCTURE_STATS *)(asStructureStats + structInc);
 
 	built = false;
@@ -2335,7 +2199,7 @@ bool scrCentreView(void)
 
 	if (psObj == NULL)
 	{
-		ASSERT( false, "scrCentreView: NULL object" );
+		ASSERT(false, "NULL object");
 		return false;
 	}
 
@@ -2349,17 +2213,17 @@ bool scrCentreView(void)
 /*centre the view on a position */
 bool scrCentreViewPos(void)
 {
-	SDWORD		x,y;
+	SDWORD		x, y;
 
 	if (!stackPopParams(2, VAL_INT, &x, VAL_INT, &y))
 	{
 		return false;
 	}
 
-	if ( (x < 0) || (x >= (SDWORD)mapWidth*TILE_UNITS) ||
-		 (y < 0) || (y >= (SDWORD)mapHeight*TILE_UNITS))
+	if ((x < 0) || (x >= (SDWORD)mapWidth * TILE_UNITS) ||
+	    (y < 0) || (y >= (SDWORD)mapHeight * TILE_UNITS))
 	{
-		ASSERT( false, "scrCenterViewPos: coords off map" );
+		ASSERT(false, "coords off map");
 		return false;
 	}
 
@@ -2385,7 +2249,10 @@ bool scrEnumUnbuilt(void)
 
 bool scrIterateUnbuilt(void)
 {
-	for (; unbuiltIter && unbuiltIter->status != SS_BEING_BUILT; unbuiltIter = unbuiltIter->psNext) ;
+	for (; unbuiltIter && unbuiltIter->status != SS_BEING_BUILT; unbuiltIter = unbuiltIter->psNext)
+	{
+		;
+	}
 	scrFunctionResult.v.oval = unbuiltIter;
 	if (unbuiltIter)
 	{
@@ -2412,18 +2279,14 @@ bool scrGetStructure(void)
 		return false;
 	}
 
-	if (player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrGetStructure:player number is too high" );
-		return false;
-	}
+	ASSERT_OR_RETURN(false, player >= 0 && player < MAX_PLAYERS, "Invalid player number");	
 
 	structType = asStructureStats[index].ref;
 
 	//search the players' list of built structures to see if one exists
 	found = false;
 	for (psStruct = apsStructLists[player]; psStruct != NULL; psStruct =
-		psStruct->psNext)
+	        psStruct->psNext)
 	{
 		if (psStruct->pStructureType->ref == structType)
 		{
@@ -2462,11 +2325,7 @@ bool scrGetTemplate(void)
 		return false;
 	}
 
-	if (player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrGetTemplate:player number is too high" );
-		return false;
-	}
+	ASSERT_OR_RETURN(false, player >= 0 && player < MAX_PLAYERS, "Invalid player number");
 
 	if (!stackPop(&sVal))
 	{
@@ -2476,7 +2335,7 @@ bool scrGetTemplate(void)
 	//search the players' list of templates to see if one exists
 	found = false;
 	for (psTemplate = apsDroidTemplates[player]; psTemplate != NULL; psTemplate =
-		psTemplate->psNext)
+	        psTemplate->psNext)
 	{
 		switch ((unsigned)sVal.type)  // Unsigned cast to suppress compiler warnings due to enum abuse.
 		{
@@ -2517,7 +2376,7 @@ bool scrGetTemplate(void)
 			}
 			break;
 		case ST_WEAPON:
-			for (i=0; i < DROID_MAXWEAPS; i++)
+			for (i = 0; i < DROID_MAXWEAPS; i++)
 			{
 				if (psTemplate->asWeaps[i] == (UDWORD)sVal.v.ival)
 				{
@@ -2527,7 +2386,7 @@ bool scrGetTemplate(void)
 			}
 			break;
 		default:
-			ASSERT( false, "scrGetTemplate: unknown type" );
+			ASSERT(false, "Unknown type");
 			return false;
 		}
 
@@ -2567,11 +2426,7 @@ bool scrGetDroid(void)
 		return false;
 	}
 
-	if (player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrGetUnit:player number is too high" );
-		return false;
-	}
+	ASSERT_OR_RETURN(false, player >= 0 && player < MAX_PLAYERS, "Invalid player number");
 
 	if (!stackPop(&sVal))
 	{
@@ -2581,48 +2436,48 @@ bool scrGetDroid(void)
 	//search the players' list of droid to see if one exists
 	found = false;
 	for (psDroid = apsDroidLists[player]; psDroid != NULL; psDroid =
-		psDroid->psNext)
+	        psDroid->psNext)
 	{
 		switch ((unsigned)sVal.type)  // Unsigned cast to suppress compiler warnings due to enum abuse.
 		{
 		case ST_BODY:
-			if (psDroid->asBits[COMP_BODY].nStat == (UDWORD)sVal.v.ival)
+			if (psDroid->asBits[COMP_BODY] == (UDWORD)sVal.v.ival)
 			{
 				found = true;
 			}
 			break;
 		case ST_PROPULSION:
-			if (psDroid->asBits[COMP_PROPULSION].nStat == (UDWORD)sVal.v.ival)
+			if (psDroid->asBits[COMP_PROPULSION] == (UDWORD)sVal.v.ival)
 			{
 				found = true;
 			}
 			break;
 		case ST_ECM:
-			if (psDroid->asBits[COMP_ECM].nStat == (UDWORD)sVal.v.ival)
+			if (psDroid->asBits[COMP_ECM] == (UDWORD)sVal.v.ival)
 			{
 				found = true;
 			}
 			break;
 		case ST_SENSOR:
-			if (psDroid->asBits[COMP_SENSOR].nStat == (UDWORD)sVal.v.ival)
+			if (psDroid->asBits[COMP_SENSOR] == (UDWORD)sVal.v.ival)
 			{
 				found = true;
 			}
 			break;
 		case ST_CONSTRUCT:
-			if (psDroid->asBits[COMP_CONSTRUCT].nStat == (UDWORD)sVal.v.ival)
+			if (psDroid->asBits[COMP_CONSTRUCT] == (UDWORD)sVal.v.ival)
 			{
 				found = true;
 			}
 			break;
 		case ST_REPAIR:
-			if (psDroid->asBits[COMP_REPAIRUNIT].nStat == (UDWORD)sVal.v.ival)
+			if (psDroid->asBits[COMP_REPAIRUNIT] == (UDWORD)sVal.v.ival)
 			{
 				found = true;
 			}
 			break;
 		case ST_WEAPON:
-			for (i=0; i < DROID_MAXWEAPS; i++)
+			for (i = 0; i < DROID_MAXWEAPS; i++)
 			{
 				if (psDroid->asWeaps[i].nStat == (UDWORD)sVal.v.ival)
 				{
@@ -2632,7 +2487,7 @@ bool scrGetDroid(void)
 			}
 			break;
 		default:
-			ASSERT( false, "scrGetUnit: unknown type" );
+			ASSERT(false, "Unknown type");
 			return false;
 		}
 
@@ -2686,9 +2541,9 @@ bool scrSetScrollParams(void)
 
 	// When the scroll limits change midgame - need to redo the lighting
 	initLighting(prevMinX < scrollMinX ? prevMinX : scrollMinX,
-				 prevMinY < scrollMinY ? prevMinY : scrollMinY,
-				 prevMaxX < scrollMaxX ? prevMaxX : scrollMaxX,
-				 prevMaxY < scrollMaxY ? prevMaxY : scrollMaxY);
+	        prevMinY < scrollMinY ? prevMinY : scrollMinY,
+	        prevMaxX < scrollMaxX ? prevMaxX : scrollMaxX,
+	        prevMaxY < scrollMaxY ? prevMaxY : scrollMaxY);
 
 	// need to reset radar to take into account of new size
 	resizeRadar();
@@ -2710,7 +2565,7 @@ bool scrSetScrollMinX(void)
 	//check the value entered are valid
 	if (minX < 0)
 	{
-		ASSERT( false, "Minimum scroll x value %d is less than zero - ", minX );
+		ASSERT(false, "Minimum scroll x value %d is less than zero - ", minX);
 		return false;
 	}
 
@@ -2720,7 +2575,7 @@ bool scrSetScrollMinX(void)
 
 	//when the scroll limits change midgame - need to redo the lighting
 	initLighting(prevMinX < scrollMinX ? prevMinX : scrollMinX,
-		scrollMinY, scrollMaxX, scrollMaxY);
+	        scrollMinY, scrollMaxX, scrollMaxY);
 
 	// need to reset radar to take into account of new size
 	resizeRadar();
@@ -2742,7 +2597,7 @@ bool scrSetScrollMinY(void)
 	//check the value entered are valid
 	if (minY < 0)
 	{
-		ASSERT( false, "Minimum scroll y value %d is less than zero - ", minY );
+		ASSERT(false, "Minimum scroll y value %d is less than zero - ", minY);
 		return false;
 	}
 
@@ -2752,8 +2607,8 @@ bool scrSetScrollMinY(void)
 
 	//when the scroll limits change midgame - need to redo the lighting
 	initLighting(scrollMinX,
-		prevMinY < scrollMinY ? prevMinY : scrollMinY,
-		scrollMaxX, scrollMaxY);
+	        prevMinY < scrollMinY ? prevMinY : scrollMinY,
+	        scrollMaxX, scrollMaxY);
 
 	// need to reset radar to take into account of new size
 	resizeRadar();
@@ -2775,7 +2630,7 @@ bool scrSetScrollMaxX(void)
 	//check the value entered are valid
 	if (maxX > (SDWORD)mapWidth)
 	{
-		ASSERT( false, "Maximum scroll x value %d is greater than mapWidth - ", maxX );
+		ASSERT(false, "Maximum scroll x value %d is greater than mapWidth - ", maxX);
 		return false;
 	}
 
@@ -2785,8 +2640,8 @@ bool scrSetScrollMaxX(void)
 
 	//when the scroll limits change midgame - need to redo the lighting
 	initLighting(scrollMinX,  scrollMinY,
-		prevMaxX < scrollMaxX ? prevMaxX : scrollMaxX,
-		scrollMaxY);
+	        prevMaxX < scrollMaxX ? prevMaxX : scrollMaxX,
+	        scrollMaxY);
 
 	// need to reset radar to take into account of new size
 	resizeRadar();
@@ -2808,7 +2663,7 @@ bool scrSetScrollMaxY(void)
 	//check the value entered are valid
 	if (maxY > (SDWORD)mapHeight)
 	{
-		ASSERT( false, "Maximum scroll y value %d is greater than mapWidth - ", maxY );
+		ASSERT(false, "Maximum scroll y value %d is greater than mapWidth - ", maxY);
 		return false;
 	}
 
@@ -2818,7 +2673,7 @@ bool scrSetScrollMaxY(void)
 
 	//when the scroll limits change midgame - need to redo the lighting
 	initLighting(scrollMinX, scrollMinY, scrollMaxX,
-		prevMaxY < scrollMaxY ? prevMaxY : scrollMaxY);
+	        prevMaxY < scrollMaxY ? prevMaxY : scrollMaxY);
 
 	// need to reset radar to take into account of new size
 	resizeRadar();
@@ -2838,16 +2693,12 @@ bool scrSetDefaultSensor(void)
 		return false;
 	}
 
-	if (player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrSetDefaultSensor:player number is too high" );
-		return false;
-	}
+	ASSERT_OR_RETURN(false, player >= 0 && player < MAX_PLAYERS, "Invalid player number");
 
 	//check is a valid sensor Inc
 	if (sensorInc > numSensorStats)
 	{
-		ASSERT( false, "scrSetDefaultSensor: Sensor Inc is too high - %d", sensorInc );
+		ASSERT(false, "Sensor Inc is too high - %d", sensorInc);
 		return false;
 	}
 
@@ -2855,8 +2706,7 @@ bool scrSetDefaultSensor(void)
 	if (asSensorStats[sensorInc].location != LOC_DEFAULT)
 	{
 
-		ASSERT( false, "scrSetDefaultSensor: This sensor is not a default one - %s",
-			getStatName(&asSensorStats[sensorInc]) );
+		ASSERT(false, "This sensor is not a default one - %s", getName(&asSensorStats[sensorInc]));
 		return false;
 	}
 
@@ -2878,24 +2728,19 @@ bool scrSetDefaultECM(void)
 		return false;
 	}
 
-	if (player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrSetDefaultECM:player number is too high" );
-		return false;
-	}
+	ASSERT_OR_RETURN(false, player >= 0 && player < MAX_PLAYERS, "Invalid player number");
 
 	//check is a valid ecmInc
 	if (ecmInc > numECMStats)
 	{
-		ASSERT( false, "scrSetDefaultECM: ECM Inc is too high - %d", ecmInc );
+		ASSERT(false, "ECM Inc is too high - %d", ecmInc);
 		return false;
 	}
 
 	//check that this ecm is a default ecm
 	if (asECMStats[ecmInc].location != LOC_DEFAULT)
 	{
-		ASSERT( false, "scrSetDefaultECM: This ecm is not a default one - %s",
-			getStatName(&asECMStats[ecmInc]) );
+		ASSERT(false, "This ecm is not a default one - %s", getName(&asECMStats[ecmInc]));
 		return false;
 	}
 
@@ -2917,24 +2762,19 @@ bool scrSetDefaultRepair(void)
 		return false;
 	}
 
-	if (player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrSetDefaultRepair:player number is too high" );
-		return false;
-	}
+	ASSERT_OR_RETURN(false, player >= 0 && player < MAX_PLAYERS, "Invalid player number");
 
 	//check is a valid repairInc
 	if (repairInc > numRepairStats)
 	{
-		ASSERT( false, "scrSetDefaultRepair: Repair Inc is too high - %d", repairInc );
+		ASSERT(false, "Repair Inc is too high - %d", repairInc);
 		return false;
 	}
 
 	//check that this repair is a default repair
 	if (asRepairStats[repairInc].location != LOC_DEFAULT)
 	{
-		ASSERT( false, "scrSetDefaultRepair: This repair is not a default one - %s",
-			getStatName(&asRepairStats[repairInc]) );
+		ASSERT(false, "This repair is not a default one - %s", getName(&asRepairStats[repairInc]));
 		return false;
 	}
 
@@ -2957,28 +2797,24 @@ bool scrSetStructureLimits(void)
 		return false;
 	}
 
-	if (player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrSetStructureLimits:player number is too high" );
-		return false;
-	}
+	ASSERT_OR_RETURN(false, player >= 0 && player < MAX_PLAYERS, "Invalid player number");
 
 	if (structInc > numStructureStats)
 	{
-		ASSERT( false, "scrSetStructureLimits: Structure stat is too high - %d", structInc );
+		ASSERT(false, "Structure stat is too high - %d", structInc);
 		return false;
 	}
 
 	if (limit < 0)
 	{
-		ASSERT( false, "scrSetStructureLimits: limit is less than zero - %d", limit );
+		ASSERT(false, "limit is less than zero - %d", limit);
 		return false;
 	}
 
 	if (limit > LOTS_OF)
 	{
-		ASSERT( false, "scrSetStructureLimits: limit is too high - %d - must be less than %d",
-			limit, LOTS_OF );
+		ASSERT(false, "limit is too high - %d - must be less than %d",
+		       limit, LOTS_OF);
 		return false;
 	}
 
@@ -3014,16 +2850,12 @@ bool scrPlaySound(void)
 		return false;
 	}
 
-	if (player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrPlaySound:player number is too high" );
-		return false;
-	}
+	ASSERT_OR_RETURN(false, player >= 0 && player < MAX_PLAYERS, "Invalid player number");
 
 	if (player == (SDWORD)selectedPlayer)
 	{
 		audio_QueueTrack(soundID);
-		if(bInTutorial)
+		if (bInTutorial)
 		{
 			audio_QueueTrack(ID_SOUND_OF_SILENCE);
 		}
@@ -3039,16 +2871,12 @@ bool scrPlaySoundPos(void)
 	SDWORD	player, soundID, iX, iY, iZ;
 
 	if (!stackPopParams(5, ST_SOUND, &soundID, VAL_INT, &player,
-							VAL_INT, &iX, VAL_INT, &iY, VAL_INT, &iZ))
+	        VAL_INT, &iX, VAL_INT, &iY, VAL_INT, &iZ))
 	{
 		return false;
 	}
 
-	if (player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrPlaySoundPos:player number is too high" );
-		return false;
-	}
+	ASSERT_OR_RETURN(false, player >= 0 && player < MAX_PLAYERS, "Invalid player number");
 
 	if (player == (SDWORD)selectedPlayer)
 	{
@@ -3070,11 +2898,7 @@ bool scrShowConsoleText(void)
 		return false;
 	}
 
-	if (player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrAddConsoleText:player number is too high" );
-		return false;
-	}
+	ASSERT_OR_RETURN(false, player >= 0 && player < MAX_PLAYERS, "Invalid player number");
 
 	if (player == (SDWORD)selectedPlayer)
 	{
@@ -3097,16 +2921,12 @@ bool scrAddConsoleText(void)
 		return false;
 	}
 
-	if (player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrAddConsoleText:player number is too high" );
-		return false;
-	}
+	ASSERT_OR_RETURN(false, player >= 0 && player < MAX_PLAYERS, "Invalid player number");
 
 	if (player == (SDWORD)selectedPlayer)
 	{
 		permitNewConsoleMessages(true);
-		setConsolePermanence(true,true);
+		setConsolePermanence(true, true);
 		addConsoleMessage(pText, CENTRE_JUSTIFY, SYSTEM_MESSAGE);
 		permitNewConsoleMessages(false);
 	}
@@ -3128,16 +2948,12 @@ bool scrTagConsoleText(void)
 		return false;
 	}
 
-	if (player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrAddConsoleText:player number is too high" );
-		return false;
-	}
+	ASSERT_OR_RETURN(false, player >= 0 && player < MAX_PLAYERS, "Invalid player number");
 
 	if (player == (SDWORD)selectedPlayer)
 	{
 		permitNewConsoleMessages(true);
-		setConsolePermanence(true,false);
+		setConsolePermanence(true, false);
 		addConsoleMessage(pText, CENTRE_JUSTIFY, SYSTEM_MESSAGE);
 		permitNewConsoleMessages(false);
 	}
@@ -3194,9 +3010,9 @@ bool scrPlayVideo(void)
 		return false;
 	}
 
-		seq_ClearSeqList();
-		seq_AddSeqToList(pVideo, NULL, pText, false);		// Arpzzzzzzzzzzzzzzzlksht!
-		seq_StartNextFullScreenVideo();
+	seq_ClearSeqList();
+	seq_AddSeqToList(pVideo, NULL, pText, false);		// Arpzzzzzzzzzzzzzzzlksht!
+	seq_StartNextFullScreenVideo();
 
 	return true;
 }
@@ -3213,11 +3029,7 @@ bool scrAnyDroidsLeft(void)
 		return false;
 	}
 
-	if (player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrAnyUnitsLeft:player number is too high" );
-		return false;
-	}
+	ASSERT_OR_RETURN(false, player >= 0 && player < MAX_PLAYERS, "Invalid player number");
 
 	//check the players list for any droid
 	droidsLeft = true;
@@ -3247,30 +3059,26 @@ bool scrGameOverMessage(void)
 	VIEWDATA		*psViewData;
 
 	if (!stackPopParams(4, ST_INTMESSAGE, &psViewData , VAL_INT, &msgType,
-				VAL_INT, &player, VAL_BOOL, &gameWon))
+	        VAL_INT, &player, VAL_BOOL, &gameWon))
 	{
 		return false;
 	}
 
-	if (player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrGameOverMessage:player number is too high" );
-		return false;
-	}
+	ASSERT_OR_RETURN(false, player >= 0 && player < MAX_PLAYERS, "Invalid player number");
 
-	if(gameWon)
+	if (gameWon)
 	{
-		addConsoleMessage(_("YOU ARE VICTORIOUS!"),DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+		addConsoleMessage(_("YOU ARE VICTORIOUS!"), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 	}
 	else
 	{
-		addConsoleMessage(_("YOU WERE DEFEATED!"),DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+		addConsoleMessage(_("YOU WERE DEFEATED!"), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 	}
 
 	//create the message
 	psMessage = addMessage(msgType, false, player);
 
-	ASSERT( msgType != MSG_PROXIMITY, "scrGameOverMessage: Bad message type (MSG_PROXIMITY)" );
+	ASSERT(msgType != MSG_PROXIMITY, "Bad message type (MSG_PROXIMITY)");
 
 	if (psMessage)
 	{
@@ -3284,8 +3092,8 @@ bool scrGameOverMessage(void)
 	}
 	debug(LOG_MSG, "Game over message");
 
-    // this should be called when the video Quit is processed
-    // not always is tough, so better be sure
+	// this should be called when the video Quit is processed
+	// not always is tough, so better be sure
 	displayGameOver(gameWon);
 
 	if (challengeActive)
@@ -3308,25 +3116,25 @@ bool scrGameOver(void)
 		return false;
 	}
 
-    /*this function will only be called with gameOver = true when at the end of
-    the game so we'll just hard-code what happens!*/
+	/*this function will only be called with gameOver = true when at the end of
+	the game so we'll just hard-code what happens!*/
 
-    //don't want this in multiplayer...
-    if (!bMultiPlayer)
+	//don't want this in multiplayer...
+	if (!bMultiPlayer)
 
-    {
-        if (gameOver == true && !bInTutorial)
-        {
-            //we need to set this here so the VIDEO_QUIT callback is not called
-		    setScriptWinLoseVideo(PLAY_WIN);
+	{
+		if (gameOver == true && !bInTutorial)
+		{
+			//we need to set this here so the VIDEO_QUIT callback is not called
+			setScriptWinLoseVideo(PLAY_WIN);
 
-    	    seq_ClearSeqList();
+			seq_ClearSeqList();
 
-	        seq_AddSeqToList("outro.ogg", NULL, "outro.txa", false);
-	        seq_StartNextFullScreenVideo();
+			seq_AddSeqToList("outro.ogg", NULL, "outro.txa", false);
+			seq_StartNextFullScreenVideo();
 
-        }
-    }
+		}
+	}
 
 	return true;
 }
@@ -3343,22 +3151,15 @@ bool scrAnyFactoriesLeft(void)
 		return false;
 	}
 
-	if (player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrAnyFactorysLeft:player number is too high" );
-		return false;
-	}
+	ASSERT_OR_RETURN(false, player >= 0 && player < MAX_PLAYERS, "Invalid player number");
 
 	//check the players list for any structures
 	bResult = false;
-	if(apsStructLists[player])
+	if (apsStructLists[player])
 	{
 		for (psCurr = apsStructLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
 		{
-//			if (psCurr->pStructureType->type	== REF_FACTORY ||
-//				psCurr->pStructureType->type == REF_CYBORG_FACTORY ||
-//				psCurr->pStructureType->type == REF_VTOL_FACTORY )
-			if(StructIsFactory(psCurr))
+			if (StructIsFactory(psCurr))
 			{
 				bResult = true;
 				break;
@@ -3389,18 +3190,14 @@ bool scrAnyStructButWallsLeft(void)
 		return false;
 	}
 
-	if (player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrAnyStructuresButWallsLeft:player number is too high" );
-		return false;
-	}
+	ASSERT_OR_RETURN(false, player >= 0 && player < MAX_PLAYERS, "Invalid player number");
 
 	//check the players list for any structures
 	structuresLeft = false;
 	for (psCurr = apsStructLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
 	{
 		if (psCurr->pStructureType->type != REF_WALL && psCurr->pStructureType->
-				type != REF_WALLCORNER)
+		    type != REF_WALLCORNER)
 		{
 			structuresLeft = true;
 			break;
@@ -3470,22 +3267,18 @@ bool scrResumeCDAudio(void)
 // set the retreat point for a player
 bool scrSetRetreatPoint(void)
 {
-	SDWORD	player, x,y;
+	SDWORD	player, x, y;
 
 	if (!stackPopParams(3, VAL_INT, &player, VAL_INT, &x, VAL_INT, &y))
 	{
 		return false;
 	}
 
-	if (player >= MAX_PLAYERS)
+	ASSERT_OR_RETURN(false, player >= 0 && player < MAX_PLAYERS, "Invalid player number");
+	if (x < 0 || x >= (SDWORD)mapWidth * TILE_UNITS ||
+	    y < 0 || y >= (SDWORD)mapHeight * TILE_UNITS)
 	{
-		ASSERT( false, "scrSetRetreatPoint: player out of range" );
-		return false;
-	}
-	if (x < 0 || x >= (SDWORD)mapWidth*TILE_UNITS ||
-		y < 0 || y >= (SDWORD)mapHeight*TILE_UNITS)
-	{
-		ASSERT( false, "scrSetRetreatPoint: coords off map" );
+		ASSERT(false, "coords off map");
 		return false;
 	}
 
@@ -3507,21 +3300,17 @@ bool scrSetRetreatForce(void)
 		return false;
 	}
 
-	if (player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrSetRetreatForce: player out of range" );
-		return false;
-	}
+	ASSERT_OR_RETURN(false, player >= 0 && player < MAX_PLAYERS, "Invalid player number");
 
 	if (level > 100 || level < 0)
 	{
-		ASSERT( false, "scrSetRetreatForce: level out of range" );
+		ASSERT(false, "level out of range");
 		return false;
 	}
 
 	// count up the current number of droids
 	numDroids = 0;
-	for(psCurr = apsDroidLists[player]; psCurr; psCurr=psCurr->psNext)
+	for (psCurr = apsDroidLists[player]; psCurr; psCurr = psCurr->psNext)
 	{
 		numDroids += 1;
 	}
@@ -3542,15 +3331,11 @@ bool scrSetRetreatLeadership(void)
 		return false;
 	}
 
-	if (player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrSetRetreatLeadership: player out of range" );
-		return false;
-	}
+	ASSERT_OR_RETURN(false, player >= 0 && player < MAX_PLAYERS, "Invalid player number");
 
 	if (level > 100 || level < 0)
 	{
-		ASSERT( false, "scrSetRetreatLeadership: level out of range" );
+		ASSERT(false, "level out of range");
 		return false;
 	}
 
@@ -3563,7 +3348,7 @@ bool scrSetRetreatLeadership(void)
 // set the retreat point for a group
 bool scrSetGroupRetreatPoint(void)
 {
-	SDWORD		x,y;
+	SDWORD		x, y;
 	DROID_GROUP	*psGroup;
 
 	if (!stackPopParams(3, ST_GROUP, &psGroup, VAL_INT, &x, VAL_INT, &y))
@@ -3571,10 +3356,10 @@ bool scrSetGroupRetreatPoint(void)
 		return false;
 	}
 
-	if (x < 0 || x >= (SDWORD)mapWidth*TILE_UNITS ||
-		y < 0 || y >= (SDWORD)mapHeight*TILE_UNITS)
+	if (x < 0 || x >= (SDWORD)mapWidth * TILE_UNITS ||
+	    y < 0 || y >= (SDWORD)mapHeight * TILE_UNITS)
 	{
-		ASSERT( false, "scrSetRetreatPoint: coords off map" );
+		ASSERT(false, "coords off map");
 		return false;
 	}
 
@@ -3598,13 +3383,13 @@ bool scrSetGroupRetreatForce(void)
 
 	if (level > 100 || level < 0)
 	{
-		ASSERT( false, "scrSetRetreatForce: level out of range" );
+		ASSERT(false, "level out of range");
 		return false;
 	}
 
 	// count up the current number of droids
 	numDroids = 0;
-	for(psCurr = psGroup->psList; psCurr; psCurr=psCurr->psGrpNext)
+	for (psCurr = psGroup->psList; psCurr; psCurr = psCurr->psGrpNext)
 	{
 		numDroids += 1;
 	}
@@ -3625,15 +3410,10 @@ bool scrSetRetreatHealth(void)
 		return false;
 	}
 
-	if (player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrSetHealthForce: player out of range" );
-		return false;
-	}
-
+	ASSERT_OR_RETURN(false, player >= 0 && player < MAX_PLAYERS, "Invalid player number");
 	if (health > 100 || health < 0)
 	{
-		ASSERT( false, "scrSetHealthForce: health out of range" );
+		ASSERT(false, "health out of range");
 		return false;
 	}
 
@@ -3655,7 +3435,7 @@ bool scrSetGroupRetreatHealth(void)
 
 	if (health > 100 || health < 0)
 	{
-		ASSERT( false, "scrSetGroupRetreatHealth: health out of range" );
+		ASSERT(false, "health out of range");
 		return false;
 	}
 
@@ -3678,7 +3458,7 @@ bool scrSetGroupRetreatLeadership(void)
 
 	if (level > 100 || level < 0)
 	{
-		ASSERT( false, "scrSetRetreatLeadership: level out of range" );
+		ASSERT(false, "level out of range");
 		return false;
 	}
 
@@ -3703,7 +3483,7 @@ bool scrStartMission(void)
 	//if (missionType > MISSION_NONE)
 	if (missionType > LDS_NONE)
 	{
-		ASSERT( false, "Invalid Mission Type" );
+		ASSERT(false, "Invalid Mission Type");
 		return false;
 	}
 
@@ -3713,7 +3493,7 @@ bool scrStartMission(void)
 	psNewLevel = levFindDataSet(pGame);
 	if (psNewLevel == NULL)
 	{
-		debug( LOG_FATAL, "scrStartMission: couldn't find level data" );
+		debug(LOG_FATAL, "scrStartMission: couldn't find level data");
 		abort();
 		return false;
 	}
@@ -3738,7 +3518,7 @@ bool scrSetSnow(void)
 	}
 
 
-	if(bState)
+	if (bState)
 	{
 		atmosSetWeatherType(WT_SNOWING);
 	}
@@ -3762,7 +3542,7 @@ bool scrSetRain(void)
 	}
 
 
-	if(bState)
+	if (bState)
 	{
 		atmosSetWeatherType(WT_RAINING);
 	}
@@ -3810,7 +3590,7 @@ bool scrSetDepthFog(void)
 //set Mission Fog colour, may be modified by weather effects
 bool scrSetFogColour(void)
 {
-	SDWORD	red,green,blue;
+	SDWORD	red, green, blue;
 	PIELIGHT scrFogColour;
 
 	if (!stackPopParams(3, VAL_INT, &red, VAL_INT, &green, VAL_INT, &blue))
@@ -3833,12 +3613,12 @@ bool scrRefTest(void)
 {
 	SDWORD		Num = 0;
 
-	if (!stackPopParams(1,VAL_INT, Num))
+	if (!stackPopParams(1, VAL_INT, Num))
 	{
 		return false;
 	}
 
-	debug( LOG_NEVER, "scrRefTest: num: %d \n", Num );
+	debug(LOG_NEVER, "scrRefTest: num: %d \n", Num);
 
 	return true;
 }
@@ -3867,7 +3647,7 @@ bool scrIsHumanPlayer(void)
 // Set an alliance between two players
 bool scrCreateAlliance(void)
 {
-	SDWORD	player1,player2;
+	SDWORD	player1, player2;
 
 	if (!stackPopParams(2, VAL_INT, &player1, VAL_INT, &player2))
 	{
@@ -3875,22 +3655,22 @@ bool scrCreateAlliance(void)
 	}
 
 	if (player1 < 0 || player1 >= MAX_PLAYERS ||
-		player2 < 0 || player2 >= MAX_PLAYERS)
+	    player2 < 0 || player2 >= MAX_PLAYERS)
 	{
-		ASSERT( false, "scrCreateAlliance: player out of range p1=%d p2=%d", player1, player2 );
+		ASSERT(false, "player out of range p1=%d p2=%d", player1, player2);
 		return false;
 	}
 
-	if(bMultiPlayer)
+	if (bMultiPlayer)
 	{
-		if(game.alliance==NO_ALLIANCES || game.alliance==ALLIANCES_TEAMS
-			|| player1 >= game.maxPlayers || player2>=game.maxPlayers)
+		if (alliancesFixed(game.alliance)
+		    || player1 >= game.maxPlayers || player2 >= game.maxPlayers)
 		{
 			return true;
 		}
 	}
 
-	formAlliance((UBYTE)player1, (UBYTE)player2,true,false,true);
+	formAlliance((UBYTE)player1, (UBYTE)player2, true, false, true);
 
 	return true;
 }
@@ -3899,21 +3679,21 @@ bool scrCreateAlliance(void)
 // offer an alliance
 bool scrOfferAlliance(void)
 {
-	SDWORD	player1,player2;
+	SDWORD	player1, player2;
 	if (!stackPopParams(2, VAL_INT, &player1, VAL_INT, &player2))
 	{
 		return false;
 	}
-	if (game.alliance==NO_ALLIANCES || game.alliance==ALLIANCES_TEAMS ||
-		player1 < 0 || player1 >= MAX_PLAYERS ||
-		player2 < 0 || player2 >= MAX_PLAYERS)
+	if (alliancesFixed(game.alliance) ||
+	    player1 < 0 || player1 >= MAX_PLAYERS ||
+	    player2 < 0 || player2 >= MAX_PLAYERS)
 	{
-		ASSERT( false, "scrOfferAlliance: player out of range p1=%d p2=%d", player1, player2 );
+		ASSERT(false, "player out of range p1=%d p2=%d", player1, player2);
 		return false;
 	}
 
 
-	requestAlliance((UBYTE)player1,(UBYTE)player2,true,true);
+	requestAlliance((UBYTE)player1, (UBYTE)player2, true, true);
 	return true;
 }
 
@@ -3921,7 +3701,7 @@ bool scrOfferAlliance(void)
 // Break an alliance between two players
 bool scrBreakAlliance(void)
 {
-	SDWORD	player1,player2;
+	SDWORD	player1, player2;
 
 	if (!stackPopParams(2, VAL_INT, &player1, VAL_INT, &player2))
 	{
@@ -3930,22 +3710,22 @@ bool scrBreakAlliance(void)
 
 	if (player1 < 0 || player1 >= MAX_PLAYERS || player2 < 0 || player2 >= MAX_PLAYERS)
 	{
-		ASSERT( false, "scrBreakAlliance: player out of range p1=%d p2=%d", player1, player2 );
+		ASSERT(false, "player out of range p1=%d p2=%d", player1, player2);
 		return false;
 	}
 
-	if(bMultiPlayer)
+	if (bMultiPlayer)
 	{
-		if(game.alliance==NO_ALLIANCES || game.alliance==ALLIANCES_TEAMS
-			|| player1 >= game.maxPlayers || player2>=game.maxPlayers)
+		if (alliancesFixed(game.alliance)
+		    || player1 >= game.maxPlayers || player2 >= game.maxPlayers)
 		{
 			return true;
 		}
-		breakAlliance(player1,player2,true,true);
+		breakAlliance(player1, player2, true, true);
 	}
 	else
 	{
-		breakAlliance(player1,player2,false,true);
+		breakAlliance(player1, player2, false, true);
 	}
 
 	return true;
@@ -3957,12 +3737,12 @@ bool scrBreakAlliance(void)
 bool scrAllianceExists(void)
 {
 
-	UDWORD i,j;
-	for(i=0;i<MAX_PLAYERS;i++)
+	UDWORD i, j;
+	for (i = 0; i < MAX_PLAYERS; i++)
 	{
-		for(j=0;j<MAX_PLAYERS;j++)
+		for (j = 0; j < MAX_PLAYERS; j++)
 		{
-			if(alliances[i][j] == ALLIANCE_FORMED)
+			if (alliances[i][j] == ALLIANCE_FORMED)
 			{
 				scrFunctionResult.v.bval = true;
 				if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
@@ -3985,9 +3765,9 @@ bool scrAllianceExists(void)
 
 bool scrAllianceExistsBetween(void)
 {
-	UDWORD i,j;
+	UDWORD i, j;
 
-	if (!stackPopParams(2, VAL_INT, &i,VAL_INT, &j))
+	if (!stackPopParams(2, VAL_INT, &i, VAL_INT, &j))
 	{
 		return false;
 	}
@@ -4012,16 +3792,17 @@ bool scrAllianceExistsBetween(void)
 // -----------------------------------------------------------------------------------------
 bool scrPlayerInAlliance(void)
 {
-	UDWORD player,j;
+	SDWORD player, j;
 
 	if (!stackPopParams(1, VAL_INT, &player))
 	{
 		return false;
 	}
+	ASSERT_OR_RETURN(false, player >= 0 && player < MAX_PLAYERS, "Invalid player number");
 
-	for(j=0;j<MAX_PLAYERS;j++)
+	for (j = 0; j < MAX_PLAYERS; j++)
 	{
-		if(alliances[player][j] == ALLIANCE_FORMED)
+		if (alliances[player][j] == ALLIANCE_FORMED)
 		{
 			scrFunctionResult.v.bval = true;
 			if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
@@ -4044,16 +3825,16 @@ bool scrPlayerInAlliance(void)
 // returns true if a single alliance is dominant.
 bool scrDominatingAlliance(void)
 {
-	UDWORD i,j;
+	UDWORD i, j;
 
-	for(i=0;i<MAX_PLAYERS;i++)
+	for (i = 0; i < MAX_PLAYERS; i++)
 	{
-		for(j=0;j<MAX_PLAYERS;j++)
+		for (j = 0; j < MAX_PLAYERS; j++)
 		{
-			if(   isHumanPlayer(j)
-			   && isHumanPlayer(i)
-			   && i != j
-			   && alliances[i][j] != ALLIANCE_FORMED)
+			if (isHumanPlayer(j)
+			    && isHumanPlayer(i)
+			    && i != j
+			    && alliances[i][j] != ALLIANCE_FORMED)
 			{
 				scrFunctionResult.v.bval = false;
 				if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
@@ -4085,7 +3866,7 @@ bool scrMyResponsibility(void)
 		return false;
 	}
 
-	if(	myResponsibility(player) )
+	if (myResponsibility(player))
 	{
 		scrFunctionResult.v.bval = true;
 		if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
@@ -4141,7 +3922,7 @@ bool scrStructureBuiltInRange(void)
 			psStruct = (STRUCTURE *)psCurr;
 			if ((psStruct->status == SS_BUILT || player == -1)
 			    && (player == -1 || psStruct->player == player)
-			    && strcmp(psStruct->pStructureType->pName, psTarget->pName) == 0)
+			    && psStruct->pStructureType->id.compare(psTarget->id) == 0)
 			{
 				break;
 			}
@@ -4176,7 +3957,7 @@ bool scrRandom(void)
 	}
 	else
 	{
-		iResult = rand()%abs(range);
+		iResult = rand() % abs(range);
 	}
 
 	scrFunctionResult.v.ival = iResult;
@@ -4212,11 +3993,8 @@ bool scrEnableResearch(void)
 		return false;
 	}
 
-	if (player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrEnableResearch:player number is too high" );
-		return false;
-	}
+	ASSERT_OR_RETURN(false, player >= 0 && player < MAX_PLAYERS, "Invalid player number");
+	ASSERT_OR_RETURN(false, psResearch, "Research topic specified not found");
 
 	if (!enableResearch(psResearch, player))
 	{
@@ -4238,15 +4016,11 @@ bool scrCompleteResearch(void)
 		return false;
 	}
 
-	if (player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrCompleteResearch:player number is too high" );
-		return false;
-	}
+	ASSERT_OR_RETURN(false, player >= 0 && player < MAX_PLAYERS, "Invalid player number");
 
 	if (psResearch == NULL)
 	{
-		// hack to make T2 and T3 work even though the research lists 
+		// hack to make T2 and T3 work even though the research lists
 		// are polluted with tons of non-existent techs :(
 		return true;
 	}
@@ -4254,11 +4028,11 @@ bool scrCompleteResearch(void)
 	researchIndex = psResearch->index;
 	if (researchIndex > asResearch.size())
 	{
-		ASSERT( false, "scrCompleteResearch: invalid research index" );
+		ASSERT(false, "Invalid research index");
 		return false;
 	}
 
-	if(bMultiMessages && (gameTime > 2 ))
+	if (bMultiMessages && (gameTime > 2))
 	{
 		SendResearch(player, researchIndex, false);
 		// Wait for our message before doing anything.
@@ -4292,9 +4066,9 @@ bool scrFlashOn(void)
 	}
 
 
-	if(widgGetFromID(psWScreen,button) != NULL)
+	if (widgGetFromID(psWScreen, button) != NULL)
 	{
-		widgSetButtonFlash(psWScreen,button);
+		widgSetButtonFlash(psWScreen, button);
 	}
 	return true;
 }
@@ -4318,9 +4092,9 @@ bool scrFlashOff(void)
 	}
 
 
-	if(widgGetFromID(psWScreen,button) != NULL)
+	if (widgGetFromID(psWScreen, button) != NULL)
 	{
-		widgClearButtonFlash(psWScreen,button);
+		widgClearButtonFlash(psWScreen, button);
 	}
 	return true;
 }
@@ -4336,11 +4110,7 @@ bool scrSetPowerLevel(void)
 		return false;
 	}
 
-	if (player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrSetPowerLevel:player number is too high" );
-		return false;
-	}
+	ASSERT_OR_RETURN(false, player >= 0 && player < MAX_PLAYERS, "Invalid player number");
 
 	setPower(player, power);
 
@@ -4358,11 +4128,7 @@ bool scrAddPower(void)
 		return false;
 	}
 
-	if (player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrAddPower:player number is too high" );
-		return false;
-	}
+	ASSERT_OR_RETURN(false, player >= 0 && player < MAX_PLAYERS, "Invalid player number");
 
 	giftPower(ANYPLAYER, player, power, true);
 
@@ -4384,28 +4150,28 @@ bool scrSetLandingZone(void)
 	//check the values - check against max possible since can set in one mission for the next
 	if (x1 > (SDWORD)MAP_MAXWIDTH)
 	{
-		ASSERT( false, "scrSetLandingZone: x1 is greater than max mapWidth" );
+		ASSERT(false, "x1 is greater than max mapWidth");
 		return false;
 	}
 	if (x2 > (SDWORD)MAP_MAXWIDTH)
 	{
-		ASSERT( false, "scrSetLandingZone: x2 is greater than max mapWidth" );
+		ASSERT(false, "x2 is greater than max mapWidth");
 		return false;
 	}
 	if (y1 > (SDWORD)MAP_MAXHEIGHT)
 	{
-		ASSERT( false, "scrSetLandingZone: y1 is greater than max mapHeight" );
+		ASSERT(false, "y1 is greater than max mapHeight");
 		return false;
 	}
 	if (y2 > (SDWORD)MAP_MAXHEIGHT)
 	{
-		ASSERT( false, "scrSetLandingZone: y2 is greater than max mapHeight" );
+		ASSERT(false, "y2 is greater than max mapHeight");
 		return false;
 	}
 	//check won't overflow!
 	if (x1 > UBYTE_MAX || y1 > UBYTE_MAX || x2 > UBYTE_MAX || y2 > UBYTE_MAX)
 	{
-		ASSERT( false, "scrSetLandingZone: one coord is greater than %d", UBYTE_MAX );
+		ASSERT(false, "one coord is greater than %d", UBYTE_MAX);
 		return false;
 	}
 
@@ -4428,28 +4194,28 @@ bool scrSetLimboLanding(void)
 	//check the values - check against max possible since can set in one mission for the next
 	if (x1 > (SDWORD)MAP_MAXWIDTH)
 	{
-		ASSERT( false, "scrSetLimboLanding: x1 is greater than max mapWidth" );
+		ASSERT(false, "x1 is greater than max mapWidth");
 		return false;
 	}
 	if (x2 > (SDWORD)MAP_MAXWIDTH)
 	{
-		ASSERT( false, "scrSetLimboLanding: x2 is greater than max mapWidth" );
+		ASSERT(false, "x2 is greater than max mapWidth");
 		return false;
 	}
 	if (y1 > (SDWORD)MAP_MAXHEIGHT)
 	{
-		ASSERT( false, "scrSetLimboLanding: y1 is greater than max mapHeight" );
+		ASSERT(false, "y1 is greater than max mapHeight");
 		return false;
 	}
 	if (y2 > (SDWORD)MAP_MAXHEIGHT)
 	{
-		ASSERT( false, "scrSetLimboLanding: y2 is greater than max mapHeight" );
+		ASSERT(false, "y2 is greater than max mapHeight");
 		return false;
 	}
 	//check won't overflow!
 	if (x1 > UBYTE_MAX || y1 > UBYTE_MAX || x2 > UBYTE_MAX || y2 > UBYTE_MAX)
 	{
-		ASSERT( false, "scrSetLimboLanding: one coord is greater than %d", UBYTE_MAX );
+		ASSERT(false, "one coord is greater than %d", UBYTE_MAX);
 		return false;
 	}
 
@@ -4477,52 +4243,48 @@ bool scrSetNoGoArea(void)
 	SDWORD		x1, x2, y1, y2, area;
 
 	if (!stackPopParams(5, VAL_INT, &x1, VAL_INT, &y1, VAL_INT, &x2, VAL_INT, &y2,
-		VAL_INT, &area))
+	        VAL_INT, &area))
 	{
 		return false;
 	}
 
-    if (area == LIMBO_LANDING)
-    {
-        ASSERT( false, "scrSetNoGoArea: Cannot set the Limbo Landing area with this function" );
-        return false;
-    }
+	if (area == LIMBO_LANDING)
+	{
+		ASSERT(false, "Cannot set the Limbo Landing area with this function");
+		return false;
+	}
 
 	//check the values - check against max possible since can set in one mission for the next
-	//if (x1 > (SDWORD)mapWidth)
 	if (x1 > (SDWORD)MAP_MAXWIDTH)
 	{
-		ASSERT( false, "scrSetNoGoArea: x1 is greater than max mapWidth" );
+		ASSERT(false, "x1 is greater than max mapWidth");
 		return false;
 	}
-	//if (x2 > (SDWORD)mapWidth)
 	if (x2 > (SDWORD)MAP_MAXWIDTH)
 	{
-		ASSERT( false, "scrSetNoGoArea: x2 is greater than max mapWidth" );
+		ASSERT(false, "x2 is greater than max mapWidth");
 		return false;
 	}
-	//if (y1 > (SDWORD)mapHeight)
 	if (y1 > (SDWORD)MAP_MAXHEIGHT)
 	{
-		ASSERT( false, "scrSetNoGoArea: y1 is greater than max mapHeight" );
+		ASSERT(false, "y1 is greater than max mapHeight");
 		return false;
 	}
-	//if (y2 > (SDWORD)mapHeight)
 	if (y2 > (SDWORD)MAP_MAXHEIGHT)
 	{
-		ASSERT( false, "scrSetNoGoArea: y2 is greater than max mapHeight" );
+		ASSERT(false, "y2 is greater than max mapHeight");
 		return false;
 	}
 	//check won't overflow!
 	if (x1 > UBYTE_MAX || y1 > UBYTE_MAX || x2 > UBYTE_MAX || y2 > UBYTE_MAX)
 	{
-		ASSERT( false, "scrSetNoGoArea: one coord is greater than %d", UBYTE_MAX );
+		ASSERT(false, "one coord is greater than %d", UBYTE_MAX);
 		return false;
 	}
 
 	if (area >= MAX_NOGO_AREAS)
 	{
-		ASSERT( false, "scrSetNoGoArea: max num of areas is %d", MAX_NOGO_AREAS );
+		ASSERT(false, "max num of areas is %d", MAX_NOGO_AREAS);
 		return false;
 	}
 
@@ -4545,7 +4307,7 @@ bool scrSetRadarZoom(void)
 
 	if (level < 0 || level > 2)
 	{
-		ASSERT( false, "scrSetRadarZoom: zoom level out of range" );
+		ASSERT(false, "zoom level out of range");
 		return false;
 	}
 
@@ -4570,16 +4332,16 @@ bool scrSetMissionTime(void)
 	//check not more than one hour - the mission timers cannot cope at present! - (visually)
 	//if (time > 60*60*GAME_TICKS_PER_SEC)
 	//check not more than 99 mins - the mission timers cannot cope at present! - (visually)
-    //we're allowing up to 5 hours now!
-    if (time > 5*60*60*GAME_TICKS_PER_SEC)
+	//we're allowing up to 5 hours now!
+	if (time > 5 * 60 * 60 * GAME_TICKS_PER_SEC)
 	{
-		ASSERT( false,"The mission timer cannot be set to more than 99!" );
+		ASSERT(false, "The mission timer cannot be set to more than 99!");
 		time = -1;
 	}
 	//store the value
 	mission.time = time;
-		// ffs ab    ... but shouldn't this be on the psx ?
-    setMissionCountDown();
+	// ffs ab    ... but shouldn't this be on the psx ?
+	setMissionCountDown();
 
 
 	//add the timer to the interface
@@ -4588,13 +4350,13 @@ bool scrSetMissionTime(void)
 		mission.startTime = gameTime;
 		addMissionTimerInterface();
 	}
-    else
-    {
-        //make sure its not up if setting to -1
-        intRemoveMissionTimer();
-        //make sure the cheat time is not set
-        mission.cheatTime = 0;
-    }
+	else
+	{
+		//make sure its not up if setting to -1
+		intRemoveMissionTimer();
+		//make sure the cheat time is not set
+		mission.cheatTime = 0;
+	}
 
 	return true;
 }
@@ -4602,21 +4364,21 @@ bool scrSetMissionTime(void)
 // this returns how long is left for the current mission time is 1/100th sec - same units as passed in
 bool scrMissionTimeRemaining(void)
 {
-    SDWORD      timeRemaining;
+	SDWORD      timeRemaining;
 
 	timeRemaining = mission.time - (gameTime - mission.startTime);
 
-    if (timeRemaining < 0)
-    {
-        timeRemaining = 0;
-    }
-    else
-    {
-        timeRemaining /= 100;
-    }
+	if (timeRemaining < 0)
+	{
+		timeRemaining = 0;
+	}
+	else
+	{
+		timeRemaining /= 100;
+	}
 
 	scrFunctionResult.v.ival = timeRemaining;
-	if(!stackPushResult(VAL_INT, &scrFunctionResult))
+	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
 		return(false);
 	}
@@ -4628,19 +4390,19 @@ bool scrMissionTimeRemaining(void)
 bool scrSetReinforcementTime(void)
 {
 	SDWORD		time;
-    DROID       *psDroid;
+	DROID       *psDroid;
 
 	if (!stackPopParams(1, VAL_INT, &time))
 	{
 		return false;
 	}
 
-    time *= 100;
+	time *= 100;
 
 	//check not more than one hour - the mission timers cannot cope at present!
-	if (time != LZ_COMPROMISED_TIME && time > 60*60*GAME_TICKS_PER_SEC)
+	if (time != LZ_COMPROMISED_TIME && time > 60 * 60 * GAME_TICKS_PER_SEC)
 	{
-		ASSERT( false,"The transport timer cannot be set to more than 1 hour!" );
+		ASSERT(false, "The transport timer cannot be set to more than 1 hour!");
 		time = -1;
 	}
 
@@ -4648,34 +4410,34 @@ bool scrSetReinforcementTime(void)
 	mission.ETA = time;
 
 	//if offworld or campaign change mission, then add the timer
-    if (missionCanReEnforce())
+	if (missionCanReEnforce())
 	{
 		addTransporterTimerInterface();
 	}
 
-    //make sure the timer is not there if the reinforcement time has been set to < 0
-    if (time < 0)
-    {
+	//make sure the timer is not there if the reinforcement time has been set to < 0
+	if (time < 0)
+	{
 
-        intRemoveTransporterTimer();
+		intRemoveTransporterTimer();
 
-        /*only remove the launch if haven't got a transporter droid since the
-        scripts set the time to -1 at the between stage if there are not going
-        to be reinforcements on the submap  */
-        for (psDroid = apsDroidLists[selectedPlayer]; psDroid != NULL; psDroid =
-            psDroid->psNext)
-        {
-            if (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)
-            {
-                break;
-            }
-        }
-        //if not found a transporter, can remove the launch button
-        if (psDroid ==  NULL)
-        {
-            intRemoveTransporterLaunch();
-        }
-    }
+		/*only remove the launch if haven't got a transporter droid since the
+		scripts set the time to -1 at the between stage if there are not going
+		to be reinforcements on the submap  */
+		for (psDroid = apsDroidLists[selectedPlayer]; psDroid != NULL; psDroid =
+		        psDroid->psNext)
+		{
+			if (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)
+			{
+				break;
+			}
+		}
+		//if not found a transporter, can remove the launch button
+		if (psDroid ==  NULL)
+		{
+			intRemoveTransporterLaunch();
+		}
+	}
 
 	return true;
 }
@@ -4693,22 +4455,16 @@ bool scrSetAllStructureLimits(void)
 		return false;
 	}
 
-	if (player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrSetStructureLimits:player number is too high" );
-		return false;
-	}
-
+	ASSERT_OR_RETURN(false, player >= 0 && player < MAX_PLAYERS, "Invalid player number");
 	if (limit < 0)
 	{
-		ASSERT( false, "scrSetStructureLimits: limit is less than zero - %d", limit );
+		ASSERT(false, "limit is less than zero - %d", limit);
 		return false;
 	}
-
 	if (limit > LOTS_OF)
 	{
-		ASSERT( false, "scrSetStructureLimits: limit is too high - %d - must be less than %d",
-			limit, LOTS_OF );
+		ASSERT(false, "limit is too high - %d - must be less than %d",
+		       limit, LOTS_OF);
 		return false;
 	}
 
@@ -4737,21 +4493,21 @@ bool scrFlushConsoleMessages(void)
 
 // -----------------------------------------------------------------------------------------
 // Establishes the distance between two points - uses an approximation
-bool scrDistanceTwoPts( void )
+bool scrDistanceTwoPts(void)
 {
-	SDWORD	x1,y1,x2,y2;
+	SDWORD	x1, y1, x2, y2;
 
-	if(!stackPopParams(4,VAL_INT,&x1,VAL_INT,&y1,VAL_INT,&x2,VAL_INT,&y2))
+	if (!stackPopParams(4, VAL_INT, &x1, VAL_INT, &y1, VAL_INT, &x2, VAL_INT, &y2))
 	{
-		ASSERT( false,"SCRIPT : Distance between two points - cannot get parameters" );
+		ASSERT(false, "Distance between two points - cannot get parameters");
 		return(false);
 	}
 
 	/* Approximate the distance */
 	scrFunctionResult.v.ival = hypotf(x1 - x2, y1 - y2);
-	if(!stackPushResult(VAL_INT, &scrFunctionResult))
+	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
-		ASSERT( false,"SCRIPT : Distance between two points - cannot return scrFunctionResult" );
+		ASSERT(false, "Distance between two points - cannot return scrFunctionResult");
 		return(false);
 	}
 	return(true);
@@ -4759,24 +4515,24 @@ bool scrDistanceTwoPts( void )
 
 // -----------------------------------------------------------------------------------------
 // Returns whether two objects can see each other
-bool	scrLOSTwoBaseObjects( void )
+bool	scrLOSTwoBaseObjects(void)
 {
-BASE_OBJECT	*psSource,*psDest;
-int32_t		bWallsBlock;		// was BOOL (int) ** see warning about conversion
-bool		retVal;
+	BASE_OBJECT	*psSource, *psDest;
+	int32_t		bWallsBlock;		// was BOOL (int) ** see warning about conversion
+	bool		retVal;
 
-	if(!stackPopParams(3,ST_BASEOBJECT,&psSource,ST_BASEOBJECT,&psDest,VAL_BOOL,&bWallsBlock))
+	if (!stackPopParams(3, ST_BASEOBJECT, &psSource, ST_BASEOBJECT, &psDest, VAL_BOOL, &bWallsBlock))
 	{
-		ASSERT( false,"SCRIPT : scrLOSTwoBaseObjects - cannot get parameters" );
+		ASSERT(false, "Cannot get parameters");
 		return(false);
 	}
 
 	retVal = visibleObject(psSource, psDest, bWallsBlock);
 
 	scrFunctionResult.v.bval = retVal;
-	if(!stackPushResult(VAL_BOOL, &scrFunctionResult))
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 	{
-		ASSERT( false,"SCRIPT : scrLOSTwoBaseObjects - cannot return scrFunctionResult" );
+		ASSERT(false, "Cannot return scrFunctionResult");
 		return(false);
 	}
 	return(true);
@@ -4784,29 +4540,26 @@ bool		retVal;
 
 // -----------------------------------------------------------------------------------------
 // Destroys all structures within a certain bounding area.
-bool	scrDestroyStructuresInArea( void )
+bool	scrDestroyStructuresInArea(void)
 {
-SDWORD		x1,y1,x2,y2;
-UDWORD		typeRef;
-UDWORD		player;
-STRUCTURE	*psStructure,*psNextS;
-FEATURE		*psFeature,*psNextF;
-int32_t		bVisible,bTakeFeatures;		// was BOOL (int) ** see warning about conversion
-SDWORD		sX,sY;
+	SDWORD		x1, y1, x2, y2;
+	UDWORD		typeRef;
+	int		player;
+	STRUCTURE	*psStructure, *psNextS;
+	FEATURE		*psFeature, *psNextF;
+	int32_t		bVisible, bTakeFeatures;		// was BOOL (int) ** see warning about conversion
+	SDWORD		sX, sY;
 
-	if(!stackPopParams(8, VAL_INT, &player, VAL_INT, &typeRef, VAL_INT, &x1, VAL_INT, &y1, VAL_INT, &x2,
-						VAL_INT, &y2, VAL_BOOL, &bVisible, VAL_BOOL, &bTakeFeatures))
+	if (!stackPopParams(8, VAL_INT, &player, VAL_INT, &typeRef, VAL_INT, &x1, VAL_INT, &y1, VAL_INT, &x2,
+	        VAL_INT, &y2, VAL_BOOL, &bVisible, VAL_BOOL, &bTakeFeatures))
 	{
-		ASSERT( false,"SCRIPT : scrDestroyStructuresInArea - Cannot get parameters" );
+		ASSERT(false, "Cannot get parameters");
 		return(false);
 	}
 
-	if(player>=MAX_PLAYERS)
-	{
-		ASSERT( false,"Player number too high in scrDestroyStructuresInArea" );
-	}
+	ASSERT_OR_RETURN(false, player >= 0 && player < MAX_PLAYERS, "Invalid player number");
 
-	for(psStructure = apsStructLists[player]; psStructure; psStructure = psNextS)
+	for (psStructure = apsStructLists[player]; psStructure; psStructure = psNextS)
 	{
 		/* Keep a copy */
 		psNextS = psStructure->psNext;
@@ -4814,11 +4567,11 @@ SDWORD		sX,sY;
 		sX = psStructure->pos.x;
 		sY = psStructure->pos.y;
 
-		if(psStructure->pStructureType->type == typeRef)
+		if (psStructure->pStructureType->type == typeRef)
 		{
-			if(sX >= x1 && sX <=x2 && sY >= y1 && sY <= y2)
+			if (sX >= x1 && sX <= x2 && sY >= y1 && sY <= y2)
 			{
-				if(bVisible)
+				if (bVisible)
 				{
 					SendDestroyStructure(psStructure);
 				}
@@ -4830,9 +4583,9 @@ SDWORD		sX,sY;
 		}
 	}
 
-	if(bTakeFeatures)
+	if (bTakeFeatures)
 	{
-		for(psFeature = apsFeatureLists[0]; psFeature; psFeature = psNextF)
+		for (psFeature = apsFeatureLists[0]; psFeature; psFeature = psNextF)
 		{
 			/* Keep a copy */
 			psNextF = psFeature->psNext;
@@ -4840,14 +4593,14 @@ SDWORD		sX,sY;
 			sX = psFeature->pos.x;
 			sY = psFeature->pos.y;
 
-		  	if( psFeature->psStats->subType == FEAT_BUILDING)
-		  //		(psFeature->psStats->subType != FEAT_OIL_DRUM) &&
-		  //		(psFeature->psStats->subType != FEAT_OIL_RESOURCE) )
+			if (psFeature->psStats->subType == FEAT_BUILDING)
+				//		(psFeature->psStats->subType != FEAT_OIL_DRUM) &&
+				//		(psFeature->psStats->subType != FEAT_OIL_RESOURCE) )
 
 			{
-				if(sX >= x1 && sX <=x2 && sY >= y1 && sY <= y2)
+				if (sX >= x1 && sX <= x2 && sY >= y1 && sY <= y2)
 				{
-					if(bVisible)
+					if (bVisible)
 					{
 						destroyFeature(psFeature, gameTime);
 					}
@@ -4863,32 +4616,32 @@ SDWORD		sX,sY;
 }
 // -----------------------------------------------------------------------------------------
 // Returns a value representing the threat from droids in a given area
-bool	scrThreatInArea( void )
+bool	scrThreatInArea(void)
 {
-SDWORD	x1,y1,x2,y2;
-SDWORD	ldThreat,mdThreat,hdThreat;
-UDWORD	playerLooking,playerTarget;
-SDWORD	totalThreat;
-DROID	*psDroid;
-SDWORD	dX,dY;
-int32_t	bVisible;		// was BOOL (int) ** see warning about conversion
+	SDWORD	x1, y1, x2, y2;
+	SDWORD	ldThreat, mdThreat, hdThreat;
+	UDWORD	playerLooking, playerTarget;
+	SDWORD	totalThreat;
+	DROID	*psDroid;
+	SDWORD	dX, dY;
+	int32_t	bVisible;		// was BOOL (int) ** see warning about conversion
 
-	if(!stackPopParams(10,VAL_INT,&playerLooking,VAL_INT,&playerTarget,VAL_INT,&x1,VAL_INT,&y1,VAL_INT,&x2,VAL_INT,&y2,
-		VAL_INT,&ldThreat,VAL_INT,&mdThreat,VAL_INT,&hdThreat, VAL_BOOL, &bVisible))
+	if (!stackPopParams(10, VAL_INT, &playerLooking, VAL_INT, &playerTarget, VAL_INT, &x1, VAL_INT, &y1, VAL_INT, &x2, VAL_INT, &y2,
+	        VAL_INT, &ldThreat, VAL_INT, &mdThreat, VAL_INT, &hdThreat, VAL_BOOL, &bVisible))
 	{
-		ASSERT( false,"SCRIPT : scrThreatInArea - Cannot get parameters" );
+		ASSERT(false, "Cannot get parameters");
 		return(false);
 	}
 
-	if(playerLooking>=MAX_PLAYERS || playerTarget >= MAX_PLAYERS)
+	if (playerLooking >= MAX_PLAYERS || playerTarget >= MAX_PLAYERS)
 	{
-		ASSERT( false,"Player number too high in scrThreatInArea" );
+		ASSERT(false, "Player number too high");
 		return(false);
 	}
 
 	totalThreat = 0;
 
-	for(psDroid = apsDroidLists[playerTarget]; psDroid; psDroid = psDroid->psNext)
+	for (psDroid = apsDroidLists[playerTarget]; psDroid; psDroid = psDroid->psNext)
 	{
 		if (!objHasWeapon((BASE_OBJECT *)psDroid))
 		{
@@ -4898,12 +4651,12 @@ int32_t	bVisible;		// was BOOL (int) ** see warning about conversion
 		dX = psDroid->pos.x;
 		dY = psDroid->pos.y;
 		/* Do we care if the droid is visible or not */
-		if(bVisible ? psDroid->visible[playerLooking] : true)
+		if (bVisible ? psDroid->visible[playerLooking] : true)
 		{
 			/* Have we found a droid in this area */
-			if(dX >= x1 && dX <=x2 && dY >= y1 && dY <= y2)
+			if (dX >= x1 && dX <= x2 && dY >= y1 && dY <= y2)
 			{
-				switch ((asBodyStats + psDroid->asBits[COMP_BODY].nStat)->size)
+				switch ((asBodyStats + psDroid->asBits[COMP_BODY])->size)
 				{
 				case SIZE_LIGHT:
 					totalThreat += ldThreat;
@@ -4916,42 +4669,41 @@ int32_t	bVisible;		// was BOOL (int) ** see warning about conversion
 					totalThreat += hdThreat;
 					break;
 				default:
-					ASSERT( false, "Weird droid size in threat assessment" );
+					ASSERT(false, "Weird droid size in threat assessment");
 					break;
 				}
 			}
 		}
 	}
-//	DBPRINTF(("scrThreatInArea: returning %d\n", totalThreat));
 	scrFunctionResult.v.ival = totalThreat;
-	if(!stackPushResult(VAL_INT, &scrFunctionResult))
+	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
-		ASSERT( false,"SCRIPT : Cannot push scrFunctionResult in scrThreatInArea" );
+		ASSERT(false, "Cannot push scrFunctionResult");
 		return(false);
 	}
 	return(true);
 }
 // -----------------------------------------------------------------------------------------
 // returns the nearest gateway bottleneck to a specified point
-bool scrGetNearestGateway( void )
+bool scrGetNearestGateway(void)
 {
-	SDWORD	x,y;
+	SDWORD	x, y;
 	UDWORD	nearestSoFar;
 	UDWORD	dist;
 	GATEWAY	*psGateway;
-	SDWORD	retX,retY;
-	SDWORD	*rX,*rY;
+	SDWORD	retX, retY;
+	SDWORD	*rX, *rY;
 	bool	success;
 
-	if(!stackPopParams(4, VAL_INT, &x, VAL_INT, &y, VAL_REF|VAL_INT, &rX, VAL_REF|VAL_INT, &rY))
+	if (!stackPopParams(4, VAL_INT, &x, VAL_INT, &y, VAL_REF | VAL_INT, &rX, VAL_REF | VAL_INT, &rY))
 	{
-		ASSERT( false,"SCRIPT : Cannot get parameters for scrGetNearestGateway" );
+		ASSERT(false, "Cannot get parameters");
 		return(false);
 	}
 
-	if(x<0 || x>(SDWORD)mapWidth || y<0 || y>(SDWORD)mapHeight)
+	if (x < 0 || x > (SDWORD)mapWidth || y < 0 || y > (SDWORD)mapHeight)
 	{
-		ASSERT( false,"SCRIPT : Invalid coordinates in getNearestGateway" );
+		ASSERT(false, "Invalid coordinates");
 		return(false);
 	}
 
@@ -4961,14 +4713,14 @@ bool scrGetNearestGateway( void )
 	for (psGateway = gwGetGateways(); psGateway; psGateway = psGateway->psNext)
 	{
 		/* Get gateway midpoint */
-		const int gX = (psGateway->x1 + psGateway->x2)/2;
-		const int gY = (psGateway->y1 + psGateway->y2)/2;
+		const int gX = (psGateway->x1 + psGateway->x2) / 2;
+		const int gY = (psGateway->y1 + psGateway->y2) / 2;
 
 		/* Estimate the distance to it */
 		dist = hypotf(x - gX, y - gY);
 
 		/* Is it best we've found? */
-		if(dist<nearestSoFar)
+		if (dist < nearestSoFar)
 		{
 			success = true;
 			/* Yes, then keep a record of it */
@@ -4982,9 +4734,9 @@ bool scrGetNearestGateway( void )
 	*rY = retY;
 
 	scrFunctionResult.v.bval = success;
-	if(!stackPushResult(VAL_BOOL, &scrFunctionResult))
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 	{
-		ASSERT( false,"SCRIPT : Cannot return scrFunctionResult for stackPushResult" );
+		ASSERT(false, "Cannot return scrFunctionResult");
 		return(false);
 	}
 
@@ -4994,18 +4746,18 @@ bool scrGetNearestGateway( void )
 // -----------------------------------------------------------------------------------------
 bool	scrSetWaterTile(void)
 {
-UDWORD	tileNum;
+	UDWORD	tileNum;
 
-	if(!stackPopParams(1,VAL_INT, &tileNum))
+	if (!stackPopParams(1, VAL_INT, &tileNum))
 	{
-		ASSERT( false,"SCRIPT : Cannot get parameter for scrSetWaterTile" );
+		ASSERT(false, "Cannot get parameter");
 		return(false);
 	}
 
 
-	if(tileNum > 96)
+	if (tileNum > 96)
 	{
-		ASSERT( false,"SCRIPT : Water tile number too high in scrSetWaterTile" );
+		ASSERT(false, "Water tile number too high");
 		return(false);
 	}
 
@@ -5016,18 +4768,18 @@ UDWORD	tileNum;
 // -----------------------------------------------------------------------------------------
 bool	scrSetRubbleTile(void)
 {
-UDWORD	tileNum;
+	UDWORD	tileNum;
 
-	if(!stackPopParams(1,VAL_INT, &tileNum))
+	if (!stackPopParams(1, VAL_INT, &tileNum))
 	{
-		ASSERT( false,"SCRIPT : Cannot get parameter for scrSetRubbleTile" );
+		ASSERT(false, "Cannot get parameter");
 		return(false);
 	}
 
 
-	if(tileNum > 96)
+	if (tileNum > 96)
 	{
-		ASSERT( false,"SCRIPT : Rubble tile number too high in scrSetWaterTile" );
+		ASSERT(false, "Rubble tile number too high in scrSetWaterTile");
 		return(false);
 	}
 
@@ -5038,14 +4790,13 @@ UDWORD	tileNum;
 // -----------------------------------------------------------------------------------------
 bool	scrSetCampaignNumber(void)
 {
-UDWORD	campaignNumber;
+	UDWORD	campaignNumber;
 
-	if(!stackPopParams(1,VAL_INT, &campaignNumber))
+	if (!stackPopParams(1, VAL_INT, &campaignNumber))
 	{
-		ASSERT( false,"SCRIPT : Cannot get parameter for scrSetCampaignNumber" );
+		ASSERT(false, "Cannot get parameter for scrSetCampaignNumber");
 		return(false);
 	}
-
 
 	setCampaignNumber(campaignNumber);
 
@@ -5057,19 +4808,19 @@ UDWORD	campaignNumber;
 // has this module if structure is null
 bool	scrTestStructureModule(void)
 {
-SDWORD	player,refId;
-STRUCTURE	*psStructure,*psStruct;
-bool	bFound;
+	SDWORD	player, refId;
+	STRUCTURE	*psStructure, *psStruct;
+	bool	bFound;
 
-	if(!stackPopParams(3,VAL_INT,&player,ST_STRUCTURE,&psStructure,VAL_INT,&refId))
+	if (!stackPopParams(3, VAL_INT, &player, ST_STRUCTURE, &psStructure, VAL_INT, &refId))
 	{
-		ASSERT( false,"SCRIPT : Cannot get parameters in scrTestStructureModule" );
+		ASSERT(false, "SCRIPT : Cannot get parameters in scrTestStructureModule");
 		return(false);
 	}
 
-	if(player>=MAX_PLAYERS)
+	if (player >= MAX_PLAYERS)
 	{
-		ASSERT( false,"SCRIPT : Player number too high in scrTestStructureModule" );
+		ASSERT(false, "SCRIPT : Player number too high in scrTestStructureModule");
 		return(false);
 
 	}
@@ -5078,9 +4829,9 @@ bool	bFound;
 	bFound = false;
 
 	/* Check the specified case first */
-	if(psStructure)
+	if (psStructure)
 	{
-		if(structHasModule(psStructure))
+		if (structHasModule(psStructure))
 		{
 			bFound = true;
 		}
@@ -5089,10 +4840,10 @@ bool	bFound;
 	else
 	{
 		// Search them all, but exit if we get one!!
-		for(psStruct = apsStructLists[player],bFound = false;
-			psStruct && !bFound; psStruct = psStruct->psNext)
+		for (psStruct = apsStructLists[player], bFound = false;
+		     psStruct && !bFound; psStruct = psStruct->psNext)
 		{
-			if(structHasModule(psStruct))
+			if (structHasModule(psStruct))
 			{
 				bFound = true;
 			}
@@ -5101,9 +4852,9 @@ bool	bFound;
 
 	/* Send back the scrFunctionResult */
 	scrFunctionResult.v.bval = bFound;
-	if(!stackPushResult(VAL_BOOL, &scrFunctionResult))
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 	{
-		ASSERT( false,"SCRIPT : Cannot push scrFunctionResult for scrTestStructureModule" );
+		ASSERT(false, "SCRIPT : Cannot push scrFunctionResult for scrTestStructureModule");
 		return(false);
 	}
 
@@ -5112,36 +4863,36 @@ bool	bFound;
 
 
 // -----------------------------------------------------------------------------------------
-bool	scrForceDamage( void )
+bool	scrForceDamage(void)
 {
-DROID		*psDroid;
-STRUCTURE	*psStructure;
-FEATURE		*psFeature;
-BASE_OBJECT	*psObj;
-UDWORD		damagePercent;
-float		divisor;
-UDWORD		newVal;
+	DROID		*psDroid;
+	STRUCTURE	*psStructure;
+	FEATURE		*psFeature;
+	BASE_OBJECT	*psObj;
+	UDWORD		damagePercent;
+	float		divisor;
+	UDWORD		newVal;
 
 	/* OK - let's get the vars */
-	if(!stackPopParams(2,ST_BASEOBJECT,&psObj,VAL_INT,&damagePercent))
+	if (!stackPopParams(2, ST_BASEOBJECT, &psObj, VAL_INT, &damagePercent))
 	{
-		ASSERT( false,"Cannot pop params for scrForceDamage" );
+		ASSERT(false, "Cannot pop params for scrForceDamage");
 		return(false);
 	}
 
 	/* Got to be a percent, so must be less than or equal to 100 */
-	if(damagePercent > 100)
+	if (damagePercent > 100)
 	{
-		ASSERT( false,"scrForceDamage : You're supposed to be passing in a PERCENTAGE VALUE, \
-			instead I got given %d, which is clearly no good, now is it!?", damagePercent );
+		ASSERT(false, "scrForceDamage : You're supposed to be passing in a PERCENTAGE VALUE, \
+			instead I got given %d, which is clearly no good, now is it!?", damagePercent);
 		return(false);
 	}
 
 	/* Get percentage in range [0.1] */
-	divisor =  (float)damagePercent / 100.f;
+	divisor = (float)damagePercent / 100.f;
 
 	/* See what we're dealing with */
-	switch(psObj->type)
+	switch (psObj->type)
 	{
 	case OBJ_DROID:
 		psDroid = (DROID *) psObj;
@@ -5156,14 +4907,14 @@ UDWORD		newVal;
 	case OBJ_FEATURE:
 		psFeature = (FEATURE *) psObj;
 		/* Some features cannot be damaged */
-		if(psFeature->psStats->damageable)
+		if (psFeature->psStats->damageable)
 		{
 			newVal = divisor * psFeature->psStats->body;
 			psFeature->body = newVal;
 		}
 		break;
 	default:
-		ASSERT( false,"Unsupported base object type in scrForceDamage" );
+		ASSERT(false, "Unsupported base object type in scrForceDamage");
 		return(false);
 		break;
 	}
@@ -5173,29 +4924,29 @@ UDWORD		newVal;
 }
 // Kills of a droid without spawning any explosion effects.
 // -----------------------------------------------------------------------------------------
-bool	scrDestroyUnitsInArea( void )
+bool	scrDestroyUnitsInArea(void)
 {
-DROID	*psDroid,*psNext;
-SDWORD	x1,y1,x2,y2;
-UDWORD	player;
-UDWORD	count=0;
+	DROID	*psDroid, *psNext;
+	SDWORD	x1, y1, x2, y2;
+	UDWORD	player;
+	UDWORD	count = 0;
 
-	if(!stackPopParams(5,VAL_INT,&x1,VAL_INT,&y1,VAL_INT,&x2,VAL_INT,&y2,VAL_INT, &player))
+	if (!stackPopParams(5, VAL_INT, &x1, VAL_INT, &y1, VAL_INT, &x2, VAL_INT, &y2, VAL_INT, &player))
 	{
-		ASSERT( false,"Cannot get params for scrDestroyUnitsInArea" );
+		ASSERT(false, "Cannot get params for scrDestroyUnitsInArea");
 		return(false);
 	}
 
-	if(player>=MAX_PLAYERS)
+	if (player >= MAX_PLAYERS)
 	{
-		ASSERT( false,"Invalid player number in scrKillDroidsInArea" );
+		ASSERT(false, "Invalid player number in scrKillDroidsInArea");
 	}
 
-	for(psDroid = apsDroidLists[player]; psDroid; psDroid = psNext)
+	for (psDroid = apsDroidLists[player]; psDroid; psDroid = psNext)
 	{
 		psNext = psDroid->psNext;	// get a copy cos pointer will be lost
-		if( (psDroid->pos.x > x1) && (psDroid->pos.x < x2) &&
-			(psDroid->pos.y > y1) && (psDroid->pos.y < y2) )
+		if ((psDroid->pos.x > x1) && (psDroid->pos.x < x2) &&
+		    (psDroid->pos.y > y1) && (psDroid->pos.y < y2))
 		{
 			/* then it's inside the area */
 			SendDestroyDroid(psDroid);
@@ -5204,7 +4955,7 @@ UDWORD	count=0;
 	}
 
 	scrFunctionResult.v.ival = count;
-	if(!stackPushResult(VAL_INT, &scrFunctionResult))
+	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
 		return(false);
 	}
@@ -5212,85 +4963,76 @@ UDWORD	count=0;
 	return(true);
 }
 // -----------------------------------------------------------------------------------------
-bool	scrRemoveDroid( void )
+bool	scrRemoveDroid(void)
 {
-DROID	*psDroid;
+	DROID	*psDroid;
 
-	if(!stackPopParams(1,ST_DROID,&psDroid))
-	{		ASSERT( false,"Cannot get vars for scrRemoveDroid!" );
+	if (!stackPopParams(1, ST_DROID, &psDroid))
+	{
+		ASSERT(false, "Cannot get vars for scrRemoveDroid!");
 		return(false);
 	}
 
-	if(psDroid)
+	if (psDroid)
 	{
 		vanishDroid(psDroid);
 	}
 
 	return(true);
 }
+
 // -----------------------------------------------------------------------------------------
 static bool	structHasModule(STRUCTURE *psStruct)
 {
-STRUCTURE_STATS	*psStats;
-bool			bFound;
+	STRUCTURE_STATS	*psStats;
+	bool bFound = false;
+
+	ASSERT_OR_RETURN(false, psStruct != NULL, "Testing for a module from a NULL struct");
 
 	/* Fail if the structure isn't built yet */
-	if(psStruct->status != SS_BUILT)
+	if (psStruct->status != SS_BUILT)
 	{
 		return(false);
 	}
 
-	/* Not found yet */
-	bFound = false;
-
-
-	if(psStruct==NULL)
+	/* Grab a stats pointer */
+	psStats = psStruct->pStructureType;
+	if (StructIsFactory(psStruct)
+	    || psStats->type == REF_POWER_GEN || psStats->type == REF_RESEARCH)
 	{
-		ASSERT( psStruct!=NULL,"structHasModule - Testing for a module from a NULL struct - huh!?" );
-		return(false);
-	}
-
-	if(psStruct)
-	{
-		/* Grab a stats pointer */
-		psStats = psStruct->pStructureType;
-		if(StructIsFactory(psStruct)
-			|| psStats->type == REF_POWER_GEN || psStats->type == REF_RESEARCH)
+		switch (psStats->type)
 		{
-			switch(psStats->type)
+		case REF_POWER_GEN:
+			if (psStruct->capacity)
 			{
-				case REF_POWER_GEN:
-					if (((POWER_GEN *)psStruct->pFunctionality)->capacity)
-					{
-						bFound = true;
-					}
-					break;
-				case REF_FACTORY:
-				case REF_VTOL_FACTORY:
-					if (((FACTORY *)psStruct->pFunctionality)->capacity)
-					{
-						bFound = true;
-					}
-					break;
-				case REF_RESEARCH:
-					if (((RESEARCH_FACILITY *)psStruct->pFunctionality)->capacity)
-
-					{
-						bFound = true;
-					}
-					break;
-				default:
-					//no other structures can have modules attached
-					break;
+				bFound = true;
 			}
-		}
-		else
-		{
-			/* Wrong type of building - cannot have a module */
-			bFound = false;
-		}
+			break;
+		case REF_FACTORY:
+		case REF_VTOL_FACTORY:
+			if (psStruct->capacity)
+			{
+				bFound = true;
+			}
+			break;
+		case REF_RESEARCH:
+			if (psStruct->capacity)
 
+			{
+				bFound = true;
+			}
+			break;
+		default:
+			//no other structures can have modules attached
+			break;
+		}
 	}
+	else
+	{
+		/* Wrong type of building - cannot have a module */
+		bFound = false;
+	}
+
 	return(bFound);
 }
 
@@ -5308,13 +5050,13 @@ bool scrAddTemplate(void)
 
 	if (player >= MAX_PLAYERS)
 	{
-		ASSERT( false, "scrAddTemplate:player number is too high" );
+		ASSERT(false, "scrAddTemplate:player number is too high");
 		return false;
 	}
 
-	ASSERT( psTemplate != NULL, "scrAddTemplate: Invalid template pointer" );
+	ASSERT(psTemplate != NULL, "scrAddTemplate: Invalid template pointer");
 
-	if(	addTemplate(player,psTemplate))
+	if (addTemplate(player, psTemplate))
 	{
 		scrFunctionResult.v.bval = true;
 		if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
@@ -5339,24 +5081,24 @@ bool scrAddTemplate(void)
 // -----------------------------------------------------------------------------------------
 
 // additional structure check
-bool structDoubleCheck(BASE_STATS *psStat,UDWORD xx,UDWORD yy, SDWORD maxBlockingTiles)
+bool structDoubleCheck(BASE_STATS *psStat, UDWORD xx, UDWORD yy, SDWORD maxBlockingTiles)
 {
 	UDWORD		x, y, xTL, yTL, xBR, yBR;
 	UBYTE		count = 0;
 	STRUCTURE_STATS	*psBuilding = (STRUCTURE_STATS *)psStat;
 	GATEWAY		*psGate;
 
-	xTL = xx-1;
-	yTL = yy-1;
-	xBR = (xx + psBuilding->baseWidth );
-	yBR = (yy + psBuilding->baseBreadth );
+	xTL = xx - 1;
+	yTL = yy - 1;
+	xBR = (xx + psBuilding->baseWidth);
+	yBR = (yy + psBuilding->baseBreadth);
 
 	// check against building in a gateway, as this can seriously block AI passages
 	for (psGate = gwGetGateways(); psGate; psGate = psGate->psNext)
 	{
 		for (x = xx; x <= xBR; x++)
 		{
-			for (y =yy; y <= yBR; y++)
+			for (y = yy; y <= yBR; y++)
 			{
 				if ((x >= psGate->x1 && x <= psGate->x2) && (y >= psGate->y1 && y <= psGate->y2))
 				{
@@ -5368,7 +5110,7 @@ bool structDoubleCheck(BASE_STATS *psStat,UDWORD xx,UDWORD yy, SDWORD maxBlockin
 
 	// can you get past it?
 	y = yTL;	// top
-	for(x = xTL;x!=xBR+1;x++)
+	for (x = xTL; x != xBR + 1; x++)
 	{
 		if (fpathBlockingTile(x, y, PROPULSION_TYPE_WHEELED))
 		{
@@ -5378,7 +5120,7 @@ bool structDoubleCheck(BASE_STATS *psStat,UDWORD xx,UDWORD yy, SDWORD maxBlockin
 	}
 
 	y = yBR;	// bottom
-	for(x = xTL;x!=xBR+1;x++)
+	for (x = xTL; x != xBR + 1; x++)
 	{
 		if (fpathBlockingTile(x, y, PROPULSION_TYPE_WHEELED))
 		{
@@ -5388,7 +5130,7 @@ bool structDoubleCheck(BASE_STATS *psStat,UDWORD xx,UDWORD yy, SDWORD maxBlockin
 	}
 
 	x = xTL;	// left
-	for(y = yTL+1; y!=yBR; y++)
+	for (y = yTL + 1; y != yBR; y++)
 	{
 		if (fpathBlockingTile(x, y, PROPULSION_TYPE_WHEELED))
 		{
@@ -5398,7 +5140,7 @@ bool structDoubleCheck(BASE_STATS *psStat,UDWORD xx,UDWORD yy, SDWORD maxBlockin
 	}
 
 	x = xBR;	// right
-	for(y = yTL+1; y!=yBR; y++)
+	for (y = yTL + 1; y != yBR; y++)
 	{
 		if (fpathBlockingTile(x, y, PROPULSION_TYPE_WHEELED))
 		{
@@ -5408,7 +5150,7 @@ bool structDoubleCheck(BASE_STATS *psStat,UDWORD xx,UDWORD yy, SDWORD maxBlockin
 	}
 
 	//make sure this location is not blocked from too many sides
-	if((count <= maxBlockingTiles) || (maxBlockingTiles == -1))
+	if ((count <= maxBlockingTiles) || (maxBlockingTiles == -1))
 	{
 		return true;
 	}
@@ -5439,9 +5181,9 @@ static bool pickStructLocation(DROID *psDroid, int index, int *pX, int *pY, int 
 	y = startY;
 
 	// save a lot of typing... checks whether a position is valid
-	#define LOC_OK(_x, _y) (tileOnMap(_x, _y) && \
-				(!psDroid || fpathCheck(psDroid->pos, Vector3i(world_coord(_x), world_coord(_y), 0), PROPULSION_TYPE_WHEELED)) \
-				&& validLocation(psStat, world_coord(Vector2i(_x, _y)) + offset, 0, player, false) && structDoubleCheck(psStat, _x, _y, maxBlockingTiles))
+#define LOC_OK(_x, _y) (tileOnMap(_x, _y) && \
+        (!psDroid || fpathCheck(psDroid->pos, Vector3i(world_coord(_x), world_coord(_y), 0), PROPULSION_TYPE_WHEELED)) \
+        && validLocation(psStat, world_coord(Vector2i(_x, _y)) + offset, 0, player, false) && structDoubleCheck(psStat, _x, _y, maxBlockingTiles))
 
 	// first try the original location
 	if (LOC_OK(startX, startY))
@@ -5499,7 +5241,7 @@ endstructloc:
 	}
 	else
 	{
-		debug(LOG_SCRIPT, "Did not find valid positioning for %s", psStat->pName);
+		debug(LOG_SCRIPT, "Did not find valid positioning for %s", getID(psStat));
 	}
 	scrFunctionResult.v.bval = found;
 	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))		// success!
@@ -5512,11 +5254,11 @@ endstructloc:
 // pick a structure location(only used in skirmish game at 27Aug) ajl.
 bool scrPickStructLocation(void)
 {
-	SDWORD			*pX,*pY;
+	SDWORD			*pX, *pY;
 	SDWORD			index;
 	UDWORD			player;
 
-	if (!stackPopParams(4, ST_STRUCTURESTAT, &index, VAL_REF|VAL_INT, &pX, VAL_REF|VAL_INT, &pY, VAL_INT, &player))
+	if (!stackPopParams(4, ST_STRUCTURESTAT, &index, VAL_REF | VAL_INT, &pX, VAL_REF | VAL_INT, &pY, VAL_INT, &player))
 	{
 		return false;
 	}
@@ -5529,7 +5271,7 @@ bool scrPickStructLocationC(void)
 	int			*pX, *pY, index, player, maxBlockingTiles;
 	DROID			*psDroid;
 
-	if (!stackPopParams(6, ST_DROID, &psDroid, ST_STRUCTURESTAT, &index, VAL_REF|VAL_INT, &pX , VAL_REF|VAL_INT, &pY, VAL_INT, &player, VAL_INT, &maxBlockingTiles))
+	if (!stackPopParams(6, ST_DROID, &psDroid, ST_STRUCTURESTAT, &index, VAL_REF | VAL_INT, &pX , VAL_REF | VAL_INT, &pY, VAL_INT, &player, VAL_INT, &maxBlockingTiles))
 	{
 		return false;
 	}
@@ -5540,13 +5282,13 @@ bool scrPickStructLocationC(void)
 // Max number of blocking tiles is passed as parameter for this one
 bool scrPickStructLocationB(void)
 {
-	SDWORD			*pX,*pY;
+	SDWORD			*pX, *pY;
 	SDWORD			index;
 	UDWORD			player;
 	SDWORD			maxBlockingTiles;
 
-	if (!stackPopParams(5, ST_STRUCTURESTAT, &index, VAL_REF|VAL_INT, &pX ,
-        VAL_REF|VAL_INT, &pY, VAL_INT, &player, VAL_INT, &maxBlockingTiles))
+	if (!stackPopParams(5, ST_STRUCTURESTAT, &index, VAL_REF | VAL_INT, &pX ,
+	        VAL_REF | VAL_INT, &pY, VAL_INT, &player, VAL_INT, &maxBlockingTiles))
 	{
 		return false;
 	}
@@ -5564,7 +5306,7 @@ bool scrSetTransporterExit(void)
 		return false;
 	}
 
-	missionSetTransporterExit( iPlayer, iExitTileX, iExitTileY );
+	missionSetTransporterExit(iPlayer, iExitTileX, iExitTileY);
 
 	return true;
 }
@@ -5577,13 +5319,13 @@ bool scrFlyTransporterIn(void)
 	int32_t	bTrackTransporter;		// was BOOL (int) ** see warning about conversion
 
 	if (!stackPopParams(4, VAL_INT, &iPlayer, VAL_INT, &iEntryTileX, VAL_INT, &iEntryTileY,
-							VAL_BOOL, &bTrackTransporter))
+	        VAL_BOOL, &bTrackTransporter))
 	{
 		return false;
 	}
 
-	missionSetTransporterEntry( iPlayer, iEntryTileX, iEntryTileY );
-	missionFlyTransportersIn( iPlayer, bTrackTransporter );
+	missionSetTransporterEntry(iPlayer, iEntryTileX, iEntryTileY);
+	missionFlyTransportersIn(iPlayer, bTrackTransporter);
 
 	return true;
 }
@@ -5614,39 +5356,38 @@ bool scrGetGameStatus(void)
 		return false;
 	}
 
-//	DBPRINTF(("getgamestatus choice=%d\n",GameChoice));
-
-	bResult=false;		// the default scrFunctionResult is false
+	bResult = false;		// the default scrFunctionResult is false
 
 	switch (GameChoice)
 	{
 
-		case STATUS_ReticuleIsOpen:
-			if(widgGetFromID(psWScreen,IDRET_FORM) != NULL) bResult=true;
-			break;
+	case STATUS_ReticuleIsOpen:
+		if (widgGetFromID(psWScreen, IDRET_FORM) != NULL)
+		{
+			bResult = true;
+		}
+		break;
 
-		case STATUS_BattleMapViewEnabled:
-//			if (driveTacticalActive()==true) scrFunctionResult=true;
+	case STATUS_BattleMapViewEnabled:
+		if (bResult == true)
+		{
+			debug(LOG_NEVER, "battle map active");
+		}
+		else
+		{
+			debug(LOG_NEVER, "battle map not active");
+		}
+		break;
 
+	case STATUS_DeliveryReposInProgress:
+		if (deliveryReposValid())
+		{
+			bResult = true;
+		}
+		break;
 
-			if (bResult==true)
-			{
-				debug( LOG_NEVER, "battle map active" );
-			}
-			else
-			{
-				debug( LOG_NEVER, "battle map not active" );
-			}
-
-
-			break;
-		case STATUS_DeliveryReposInProgress:
-			if (deliveryReposValid())
-				bResult=true;
-			break;
-
-		default:
-		ASSERT( false,"ScrGetGameStatus. Invalid STATUS_ variable" );
+	default:
+		ASSERT(false, "ScrGetGameStatus. Invalid STATUS_ variable");
 		break;
 	}
 
@@ -5670,7 +5411,7 @@ bool scrGetPlayerColour(void)
 
 	if (player >= MAX_PLAYERS)
 	{
-		ASSERT( false, "scrGetPlayerColour: player number is too high" );
+		ASSERT(false, "scrGetPlayerColour: player number is too high");
 		return false;
 	}
 
@@ -5695,14 +5436,14 @@ bool scrGetPlayerColourName(void)
 
 	if (player >= MAX_PLAYERS || player < 0)
 	{
-		ASSERT( false, "scrGetPlayerColourName: wrong player index" );
+		ASSERT(false, "scrGetPlayerColourName: wrong player index");
 		return false;
 	}
 
 	/* Casting away constness because stackPushResult doesn't modify it's
 	 * value (i.e. in this case it's not const correct).
 	 */
-	scrFunctionResult.v.sval = (char*)getPlayerColourName(player);
+	scrFunctionResult.v.sval = (char *)getPlayerColourName(player);
 	if (!stackPushResult(VAL_STRING, &scrFunctionResult))
 	{
 		debug(LOG_ERROR, "scrGetPlayerColourName(): failed to push result");
@@ -5724,18 +5465,18 @@ bool scrSetPlayerColour(void)
 
 	if (player >= MAX_PLAYERS)
 	{
-		ASSERT( false, "scrSetPlayerColour:player number is too high" );
+		ASSERT(false, "scrSetPlayerColour:player number is too high");
 		return false;
 	}
 
 	if (colour >= MAX_PLAYERS)
 	{
-		ASSERT( false, "scrSetPlayerColour:colour number is too high" );
+		ASSERT(false, "scrSetPlayerColour:colour number is too high");
 		return false;
 	}
 
-    //not the end of the world if this doesn't work so don't check the return code
-    (void)setPlayerColour(player, colour);
+	//not the end of the world if this doesn't work so don't check the return code
+	(void)setPlayerColour(player, colour);
 
 	return true;
 }
@@ -5744,102 +5485,70 @@ bool scrSetPlayerColour(void)
 bool scrTakeOverDroidsInArea(void)
 {
 	SDWORD		fromPlayer, toPlayer, x1, x2, y1, y2, numChanged;
-    DROID       *psDroid, *psNext;
+	DROID       *psDroid, *psNext;
 
-	if (!stackPopParams(6, VAL_INT, &fromPlayer, VAL_INT, &toPlayer,
-        VAL_INT, &x1, VAL_INT, &y1, VAL_INT, &x2, VAL_INT, &y2))
+	if (!stackPopParams(6, VAL_INT, &fromPlayer, VAL_INT, &toPlayer, VAL_INT, &x1, VAL_INT, &y1, VAL_INT, &x2, VAL_INT, &y2))
 	{
 		return false;
 	}
-
-	if (fromPlayer >= MAX_PLAYERS || toPlayer >= MAX_PLAYERS)
+	ASSERT_OR_RETURN(false, fromPlayer < MAX_PLAYERS && toPlayer < MAX_PLAYERS, "player number is too high");
+	ASSERT_OR_RETURN(false, x1 < world_coord(MAP_MAXWIDTH) && x2 < world_coord(MAP_MAXWIDTH) && y1 < world_coord(MAP_MAXHEIGHT)
+	        && y2 < world_coord(MAP_MAXHEIGHT), "coordinate outside map");
+	numChanged = 0;
+	for (psDroid = apsDroidLists[fromPlayer]; psDroid != NULL; psDroid = psNext)
 	{
-		ASSERT( false, "scrTakeOverUnitsInArea:player number is too high" );
-		return false;
+		psNext = psDroid->psNext;
+		// check if within area specified
+		if (psDroid->pos.x >= x1 && psDroid->pos.x <= x2 && psDroid->pos.y >= y1 && psDroid->pos.y <= y2
+		    && psDroid->player != toPlayer)
+		{
+			if (giftSingleDroid(psDroid, toPlayer))	// give the droid away
+			{
+				numChanged++;
+			}
+		}
 	}
-
-	if (x1 > world_coord(MAP_MAXWIDTH))
-	{
-		ASSERT( false, "scrTakeOverUnitsInArea: x1 is greater than max mapWidth" );
-		return false;
-	}
-
-    if (x2 > world_coord(MAP_MAXWIDTH))
-	{
-		ASSERT( false, "scrTakeOverUnitsInArea: x2 is greater than max mapWidth" );
-		return false;
-	}
-
-    if (y1 > world_coord(MAP_MAXHEIGHT))
-	{
-		ASSERT( false, "scrTakeOverUnitsInArea: y1 is greater than max mapHeight" );
-		return false;
-	}
-
-    if (y2 > world_coord(MAP_MAXHEIGHT))
-	{
-		ASSERT( false, "scrTakeOverUnitsInArea: y2 is greater than max mapHeight" );
-		return false;
-	}
-
-    numChanged = 0;
-    for (psDroid = apsDroidLists[fromPlayer]; psDroid != NULL; psDroid = psNext)
-    {
-        psNext = psDroid->psNext;
-        //check if within area specified
-        if (psDroid->pos.x >= x1 && psDroid->pos.x <= x2 &&
-            psDroid->pos.y >= y1 && psDroid->pos.y <= y2)
-        {
-            //give the droid away
-            if (giftSingleDroid(psDroid, toPlayer))
-            {
-                numChanged++;
-            }
-        }
-    }
-
 	scrFunctionResult.v.ival = numChanged;
 	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
 		return false;
 	}
-
-    return true;
+	return true;
 }
 
 /*this takes over a single droid and passes a pointer back to the new one*/
 bool scrTakeOverSingleDroid(void)
 {
 	SDWORD			playerToGain;
-    DROID           *psDroidToTake, *psNewDroid;
+	DROID           *psDroidToTake, *psNewDroid;
 
-    if (!stackPopParams(2, ST_DROID, &psDroidToTake, VAL_INT, &playerToGain))
-    {
-		return false;
-    }
-
-	if (playerToGain >= MAX_PLAYERS)
+	if (!stackPopParams(2, ST_DROID, &psDroidToTake, VAL_INT, &playerToGain))
 	{
-		ASSERT( false, "scrTakeOverSingleUnit:player number is too high" );
 		return false;
 	}
 
-    if (psDroidToTake == NULL)
-    {
-        ASSERT( false, "scrTakeOverSingleUnit: Null unit" );
-        return false;
-    }
+	if (playerToGain >= MAX_PLAYERS)
+	{
+		ASSERT(false, "scrTakeOverSingleUnit:player number is too high");
+		return false;
+	}
 
-	ASSERT( psDroidToTake != NULL,
-		"scrTakeOverSingleUnit: Invalid unit pointer" );
+	if (psDroidToTake == NULL)
+	{
+		ASSERT(false, "scrTakeOverSingleUnit: Null unit");
+		return false;
+	}
 
-    psNewDroid = giftSingleDroid(psDroidToTake, playerToGain);
+	ASSERT(psDroidToTake != NULL,
+	       "scrTakeOverSingleUnit: Invalid unit pointer");
+
+	psNewDroid = giftSingleDroid(psDroidToTake, playerToGain);
 
 	scrFunctionResult.v.oval = psNewDroid;
 	if (!stackPushResult((INTERP_TYPE)ST_DROID, &scrFunctionResult))
 	{
 		return false;
-    }
+	}
 	return true;
 }
 
@@ -5848,70 +5557,69 @@ bool scrTakeOverSingleDroid(void)
 bool scrTakeOverDroidsInAreaExp(void)
 {
 	SDWORD		fromPlayer, toPlayer, x1, x2, y1, y2, numChanged, level, maxUnits;
-    DROID       *psDroid, *psNext;
+	DROID       *psDroid, *psNext;
 
 	if (!stackPopParams(8, VAL_INT, &fromPlayer, VAL_INT, &toPlayer,
-        VAL_INT, &x1, VAL_INT, &y1, VAL_INT, &x2, VAL_INT, &y2, VAL_INT, &level, VAL_INT, &maxUnits))
+	        VAL_INT, &x1, VAL_INT, &y1, VAL_INT, &x2, VAL_INT, &y2, VAL_INT, &level, VAL_INT, &maxUnits))
 	{
 		return false;
 	}
 
 	if (fromPlayer >= MAX_PLAYERS || toPlayer >= MAX_PLAYERS)
 	{
-		ASSERT( false, "scrTakeOverUnitsInArea:player number is too high" );
+		ASSERT(false, "scrTakeOverUnitsInArea:player number is too high");
 		return false;
 	}
 
 	if (x1 > world_coord(MAP_MAXWIDTH))
 	{
-		ASSERT( false, "scrTakeOverUnitsInArea: x1 is greater than max mapWidth" );
+		ASSERT(false, "scrTakeOverUnitsInArea: x1 is greater than max mapWidth");
 		return false;
 	}
 
-    if (x2 > world_coord(MAP_MAXWIDTH))
+	if (x2 > world_coord(MAP_MAXWIDTH))
 	{
-		ASSERT( false, "scrTakeOverUnitsInArea: x2 is greater than max mapWidth" );
+		ASSERT(false, "scrTakeOverUnitsInArea: x2 is greater than max mapWidth");
 		return false;
 	}
 
-    if (y1 > world_coord(MAP_MAXHEIGHT))
+	if (y1 > world_coord(MAP_MAXHEIGHT))
 	{
-		ASSERT( false, "scrTakeOverUnitsInArea: y1 is greater than max mapHeight" );
+		ASSERT(false, "scrTakeOverUnitsInArea: y1 is greater than max mapHeight");
 		return false;
 	}
 
-    if (y2 > world_coord(MAP_MAXHEIGHT))
+	if (y2 > world_coord(MAP_MAXHEIGHT))
 	{
-		ASSERT( false, "scrTakeOverUnitsInArea: y2 is greater than max mapHeight" );
+		ASSERT(false, "scrTakeOverUnitsInArea: y2 is greater than max mapHeight");
 		return false;
 	}
 
-    numChanged = 0;
-    for (psDroid = apsDroidLists[fromPlayer]; psDroid != NULL; psDroid = psNext)
-    {
-        psNext = psDroid->psNext;
-        //check if within area specified
-        if ((psDroid->droidType != DROID_CONSTRUCT) &&
-			(psDroid->droidType != DROID_REPAIR) &&
-            (psDroid->droidType != DROID_CYBORG_CONSTRUCT) &&
-            (psDroid->droidType != DROID_CYBORG_REPAIR) &&
-//			((SDWORD)getDroidLevel(psDroid) <= level) &&
-			((SDWORD)psDroid->experience/65536 <= level) &&
-			psDroid->pos.x >= x1 && psDroid->pos.x <= x2 &&
-            psDroid->pos.y >= y1 && psDroid->pos.y <= y2)
-        {
-            //give the droid away
-            if (giftSingleDroid(psDroid, toPlayer))
-            {
-                numChanged++;
-            }
-        }
+	numChanged = 0;
+	for (psDroid = apsDroidLists[fromPlayer]; psDroid != NULL; psDroid = psNext)
+	{
+		psNext = psDroid->psNext;
+		//check if within area specified
+		if ((psDroid->droidType != DROID_CONSTRUCT) &&
+		    (psDroid->droidType != DROID_REPAIR) &&
+		    (psDroid->droidType != DROID_CYBORG_CONSTRUCT) &&
+		    (psDroid->droidType != DROID_CYBORG_REPAIR) &&
+		    ((SDWORD)psDroid->experience / 65536 <= level) &&
+		    psDroid->pos.x >= x1 && psDroid->pos.x <= x2 &&
+		    psDroid->pos.y >= y1 && psDroid->pos.y <= y2)
+		{
+			//give the droid away
+			if (giftSingleDroid(psDroid, toPlayer))
+			{
+				numChanged++;
+			}
+		}
 
 		if (numChanged >= maxUnits)
 		{
 			break;
 		}
-    }
+	}
 
 	scrFunctionResult.v.ival = numChanged;
 	if (!stackPushResult(VAL_INT, &scrFunctionResult))
@@ -5919,68 +5627,68 @@ bool scrTakeOverDroidsInAreaExp(void)
 		return false;
 	}
 
-    return true;
+	return true;
 }
 
 /*this takes over a single structure and passes a pointer back to the new one*/
 bool scrTakeOverSingleStructure(void)
 {
 	SDWORD			playerToGain;
-    STRUCTURE       *psStructToTake, *psNewStruct;
-    UDWORD          structureInc;
+	STRUCTURE       *psStructToTake, *psNewStruct;
+	UDWORD          structureInc;
 
-    if (!stackPopParams(2, ST_STRUCTURE, &psStructToTake, VAL_INT, &playerToGain))
-    {
-		return false;
-    }
-
-	if (playerToGain >= MAX_PLAYERS)
+	if (!stackPopParams(2, ST_STRUCTURE, &psStructToTake, VAL_INT, &playerToGain))
 	{
-		ASSERT( false, "scrTakeOverSingleStructure:player number is too high" );
 		return false;
 	}
 
-    if (psStructToTake == NULL)
-    {
-        ASSERT( false, "scrTakeOverSingleStructure: Null structure" );
-        return false;
-    }
+	if (playerToGain >= MAX_PLAYERS)
+	{
+		ASSERT(false, "scrTakeOverSingleStructure:player number is too high");
+		return false;
+	}
 
-	ASSERT( psStructToTake != NULL,
-		"scrTakeOverSingleStructure: Invalid structure pointer" );
+	if (psStructToTake == NULL)
+	{
+		ASSERT(false, "scrTakeOverSingleStructure: Null structure");
+		return false;
+	}
 
-    structureInc = psStructToTake->pStructureType->ref - REF_STRUCTURE_START;
-    if (playerToGain == (SDWORD)selectedPlayer && StructIsFactory(psStructToTake) &&
-        asStructLimits[playerToGain][structureInc].currentQuantity >= MAX_FACTORY)
-    {
-		debug( LOG_NEVER, "scrTakeOverSingleStructure - factory ignored for selectedPlayer\n" );
-        psNewStruct = NULL;
-    }
-    else
-    {
-        psNewStruct = giftSingleStructure(psStructToTake, (UBYTE)playerToGain, true);
-        if (psNewStruct)
-        {
-            //check the structure limits aren't compromised
-            if (asStructLimits[playerToGain][structureInc].currentQuantity >
-                asStructLimits[playerToGain][structureInc].limit)
-            {
-                asStructLimits[playerToGain][structureInc].limit = asStructLimits[
-                    playerToGain][structureInc].currentQuantity;
-            }
-            //for each structure taken - add graphical effect if the selectedPlayer
-            if (playerToGain == (SDWORD)selectedPlayer)
-            {
-                assignSensorTarget((BASE_OBJECT *)psNewStruct);
-            }
-        }
-    }
+	ASSERT(psStructToTake != NULL,
+	       "scrTakeOverSingleStructure: Invalid structure pointer");
+
+	structureInc = psStructToTake->pStructureType->ref - REF_STRUCTURE_START;
+	if (playerToGain == (SDWORD)selectedPlayer && StructIsFactory(psStructToTake) &&
+	    asStructLimits[playerToGain][structureInc].currentQuantity >= MAX_FACTORY)
+	{
+		debug(LOG_NEVER, "scrTakeOverSingleStructure - factory ignored for selectedPlayer\n");
+		psNewStruct = NULL;
+	}
+	else
+	{
+		psNewStruct = giftSingleStructure(psStructToTake, (UBYTE)playerToGain, true);
+		if (psNewStruct)
+		{
+			//check the structure limits aren't compromised
+			if (asStructLimits[playerToGain][structureInc].currentQuantity >
+			    asStructLimits[playerToGain][structureInc].limit)
+			{
+				asStructLimits[playerToGain][structureInc].limit = asStructLimits[
+				        playerToGain][structureInc].currentQuantity;
+			}
+			//for each structure taken - add graphical effect if the selectedPlayer
+			if (playerToGain == (SDWORD)selectedPlayer)
+			{
+				assignSensorTarget((BASE_OBJECT *)psNewStruct);
+			}
+		}
+	}
 
 	scrFunctionResult.v.oval = psNewStruct;
 	if (!stackPushResult((INTERP_TYPE)ST_STRUCTURE, &scrFunctionResult))
 	{
 		return false;
-    }
+	}
 	return true;
 }
 
@@ -5989,85 +5697,85 @@ bool scrTakeOverSingleStructure(void)
 bool scrTakeOverStructsInArea(void)
 {
 	SDWORD		fromPlayer, toPlayer, x1, x2, y1, y2, numChanged;
-    STRUCTURE   *psStruct, *psNext, *psNewStruct;
-    UDWORD      structureInc;
+	STRUCTURE   *psStruct, *psNext, *psNewStruct;
+	UDWORD      structureInc;
 
 	if (!stackPopParams(6, VAL_INT, &fromPlayer, VAL_INT, &toPlayer,
-        VAL_INT, &x1, VAL_INT, &y1, VAL_INT, &x2, VAL_INT, &y2))
+	        VAL_INT, &x1, VAL_INT, &y1, VAL_INT, &x2, VAL_INT, &y2))
 	{
 		return false;
 	}
 
 	if (fromPlayer >= MAX_PLAYERS || toPlayer >= MAX_PLAYERS)
 	{
-		ASSERT( false, "scrTakeOverStructsInArea:player number is too high" );
+		ASSERT(false, "scrTakeOverStructsInArea:player number is too high");
 		return false;
 	}
 
 	if (x1 > world_coord(MAP_MAXWIDTH))
 	{
-		ASSERT( false, "scrTakeOverStructsInArea: x1 is greater than max mapWidth" );
+		ASSERT(false, "scrTakeOverStructsInArea: x1 is greater than max mapWidth");
 		return false;
 	}
 
-    if (x2 > world_coord(MAP_MAXWIDTH))
+	if (x2 > world_coord(MAP_MAXWIDTH))
 	{
-		ASSERT( false, "scrTakeOverStructsInArea: x2 is greater than max mapWidth" );
+		ASSERT(false, "scrTakeOverStructsInArea: x2 is greater than max mapWidth");
 		return false;
 	}
 
-    if (y1 > world_coord(MAP_MAXHEIGHT))
+	if (y1 > world_coord(MAP_MAXHEIGHT))
 	{
-		ASSERT( false, "scrTakeOverStructsInArea: y1 is greater than max mapHeight" );
+		ASSERT(false, "scrTakeOverStructsInArea: y1 is greater than max mapHeight");
 		return false;
 	}
 
-    if (y2 > world_coord(MAP_MAXHEIGHT))
+	if (y2 > world_coord(MAP_MAXHEIGHT))
 	{
-		ASSERT( false, "scrTakeOverStructsInArea: y2 is greater than max mapHeight" );
+		ASSERT(false, "scrTakeOverStructsInArea: y2 is greater than max mapHeight");
 		return false;
 	}
 
-    numChanged = 0;
-    for (psStruct = apsStructLists[fromPlayer]; psStruct != NULL; psStruct = psNext)
-    {
-        psNext = psStruct->psNext;
-        //check if within area specified
-        if (psStruct->pos.x >= x1 && psStruct->pos.x <= x2 &&
-            psStruct->pos.y >= y1 && psStruct->pos.y <= y2)
-        {
-            //changed this so allows takeOver is have less than 5 factories
-            //don't work on factories for the selectedPlayer
-            structureInc = psStruct->pStructureType->ref - REF_STRUCTURE_START;
-            if (toPlayer == (SDWORD)selectedPlayer && StructIsFactory(psStruct) &&
-                asStructLimits[toPlayer][structureInc].currentQuantity >= MAX_FACTORY)
-            {
-				debug( LOG_NEVER, "scrTakeOverStructsInArea - factory ignored for selectedPlayer\n" );
-            }
-            else
-            {
-                //give the structure away
-                psNewStruct = giftSingleStructure(psStruct, (UBYTE)toPlayer, true);
-                if (psNewStruct)
-                {
-                    numChanged++;
-                    //check the structure limits aren't compromised
-                    //structureInc = psNewStruct->pStructureType->ref - REF_STRUCTURE_START;
-                    if (asStructLimits[toPlayer][structureInc].currentQuantity >
-                        asStructLimits[toPlayer][structureInc].limit)
-                    {
-                        asStructLimits[toPlayer][structureInc].limit = asStructLimits[
-                            toPlayer][structureInc].currentQuantity;
-                    }
-                    //for each structure taken - add graphical effect if the selectedPlayer
-                    if (toPlayer == (SDWORD)selectedPlayer)
-                    {
-                        assignSensorTarget((BASE_OBJECT *)psNewStruct);
-                    }
-                }
-            }
-        }
-    }
+	numChanged = 0;
+	for (psStruct = apsStructLists[fromPlayer]; psStruct != NULL; psStruct = psNext)
+	{
+		psNext = psStruct->psNext;
+		//check if within area specified
+		if (psStruct->pos.x >= x1 && psStruct->pos.x <= x2 &&
+		    psStruct->pos.y >= y1 && psStruct->pos.y <= y2)
+		{
+			//changed this so allows takeOver is have less than 5 factories
+			//don't work on factories for the selectedPlayer
+			structureInc = psStruct->pStructureType->ref - REF_STRUCTURE_START;
+			if (toPlayer == (SDWORD)selectedPlayer && StructIsFactory(psStruct) &&
+			    asStructLimits[toPlayer][structureInc].currentQuantity >= MAX_FACTORY)
+			{
+				debug(LOG_NEVER, "scrTakeOverStructsInArea - factory ignored for selectedPlayer\n");
+			}
+			else
+			{
+				//give the structure away
+				psNewStruct = giftSingleStructure(psStruct, (UBYTE)toPlayer, true);
+				if (psNewStruct)
+				{
+					numChanged++;
+					//check the structure limits aren't compromised
+					//structureInc = psNewStruct->pStructureType->ref - REF_STRUCTURE_START;
+					if (asStructLimits[toPlayer][structureInc].currentQuantity >
+					    asStructLimits[toPlayer][structureInc].limit)
+					{
+						asStructLimits[toPlayer][structureInc].limit = asStructLimits[
+						        toPlayer][structureInc].currentQuantity;
+					}
+					//for each structure taken - add graphical effect if the selectedPlayer
+					if (toPlayer == (SDWORD)selectedPlayer)
+					{
+						assignSensorTarget((BASE_OBJECT *)psNewStruct);
+					}
+				}
+			}
+		}
+	}
 
 	scrFunctionResult.v.ival = numChanged;
 	if (!stackPushResult(VAL_INT, &scrFunctionResult))
@@ -6075,7 +5783,7 @@ bool scrTakeOverStructsInArea(void)
 		return false;
 	}
 
-    return true;
+	return true;
 }
 
 //set Flag for defining what happens to the droids in a Transporter
@@ -6088,7 +5796,7 @@ bool scrSetDroidsToSafetyFlag(void)
 		return false;
 	}
 
-    setDroidsToSafetyFlag(bState);
+	setDroidsToSafetyFlag(bState);
 
 	return true;
 }
@@ -6104,7 +5812,7 @@ bool scrSetPlayCountDown(void)
 	}
 
 
-    setPlayCountDown((UBYTE)bState);
+	setPlayCountDown((UBYTE)bState);
 
 
 	return true;
@@ -6122,7 +5830,7 @@ bool scrGetDroidCount(void)
 
 	if (player >= MAX_PLAYERS)
 	{
-		ASSERT( false, "scrGetUnitCount:player number is too high" );
+		ASSERT(false, "scrGetUnitCount:player number is too high");
 		return false;
 	}
 
@@ -6151,7 +5859,7 @@ bool scrFireWeaponAtObj(void)
 
 	if (psTarget == NULL)
 	{
-		ASSERT( false,"scrFireWeaponAtObj: Null target pointer" );
+		ASSERT(false, "scrFireWeaponAtObj: Null target pointer");
 		return false;
 	}
 
@@ -6195,9 +5903,9 @@ bool scrSetDroidKills(void)
 	}
 
 	if ((psDroid == NULL) ||
-		(psDroid->type != OBJ_DROID))
+	    (psDroid->type != OBJ_DROID))
 	{
-		ASSERT( false, "scrSetUnitKills: NULL/invalid unit pointer" );
+		ASSERT(false, "scrSetUnitKills: NULL/invalid unit pointer");
 		return false;
 	}
 
@@ -6217,13 +5925,13 @@ bool scrGetDroidKills(void)
 	}
 
 	if ((psDroid == NULL) ||
-		(psDroid->type != OBJ_DROID))
+	    (psDroid->type != OBJ_DROID))
 	{
-		ASSERT( false, "scrGetDroidKills: NULL/invalid unit pointer" );
+		ASSERT(false, "scrGetDroidKills: NULL/invalid unit pointer");
 		return false;
 	}
 
-	scrFunctionResult.v.ival = psDroid->experience/65536;
+	scrFunctionResult.v.ival = psDroid->experience / 65536;
 	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
 		return false;
@@ -6249,25 +5957,25 @@ bool scrResetPlayerVisibility(void)
 		return false;
 	}
 
-	for(i=0; i< MAX_PLAYERS; i++)
+	for (i = 0; i < MAX_PLAYERS; i++)
 	{
 		if (i == player)
 		{
 			continue;
 		}
 
-		for(psObj = (BASE_OBJECT *)apsDroidLists[i]; psObj; psObj = psObj->psNext)
+		for (psObj = (BASE_OBJECT *)apsDroidLists[i]; psObj; psObj = psObj->psNext)
 		{
 			psObj->visible[player] = 0;
 		}
 
-		for(psObj = (BASE_OBJECT *)apsStructLists[i]; psObj; psObj = psObj->psNext)
+		for (psObj = (BASE_OBJECT *)apsStructLists[i]; psObj; psObj = psObj->psNext)
 		{
 			psObj->visible[player] = 0;
 		}
 	}
 
-	for(psObj = (BASE_OBJECT *)apsFeatureLists[0]; psObj; psObj = psObj->psNext)
+	for (psObj = (BASE_OBJECT *)apsFeatureLists[0]; psObj; psObj = psObj->psNext)
 	{
 		psObj->visible[player] = 0;
 	}
@@ -6281,7 +5989,7 @@ bool scrResetPlayerVisibility(void)
 // set the vtol return pos for a player
 bool scrSetVTOLReturnPos(void)
 {
-	SDWORD		player, tx,ty;
+	SDWORD		player, tx, ty;
 
 	if (!stackPopParams(3, VAL_INT, &player, VAL_INT, &tx, VAL_INT, &ty))
 	{
@@ -6290,12 +5998,12 @@ bool scrSetVTOLReturnPos(void)
 
 	if (player < 0 || player >= MAX_PLAYERS)
 	{
-		ASSERT( false, "scrSetVTOLReturnPos: invalid player" );
-			return false;
+		ASSERT(false, "scrSetVTOLReturnPos: invalid player");
+		return false;
 	}
 
-	asVTOLReturnPos[player].x = (tx * TILE_UNITS) + TILE_UNITS/2;
-	asVTOLReturnPos[player].y = (ty * TILE_UNITS) + TILE_UNITS/2;
+	asVTOLReturnPos[player].x = (tx * TILE_UNITS) + TILE_UNITS / 2;
+	asVTOLReturnPos[player].y = (ty * TILE_UNITS) + TILE_UNITS / 2;
 
 	return true;
 }
@@ -6303,17 +6011,17 @@ bool scrSetVTOLReturnPos(void)
 //called via the script in a Limbo Expand level to set the level to plain ol' expand
 bool scrResetLimboMission(void)
 {
-    //check currently on a Limbo expand mission
-    if (!missionLimboExpand())
-    {
-        ASSERT( false, "scrResetLimboMission: current mission type invalid" );
-        return false;
-    }
+	//check currently on a Limbo expand mission
+	if (!missionLimboExpand())
+	{
+		ASSERT(false, "scrResetLimboMission: current mission type invalid");
+		return false;
+	}
 
-    //turn it into an expand mission
-    resetLimboMission();
+	//turn it into an expand mission
+	resetLimboMission();
 
-    return true;
+	return true;
 }
 
 
@@ -6328,9 +6036,9 @@ bool scrIsVtol(void)
 		return true;
 	}
 
-	if(psDroid == NULL)
+	if (psDroid == NULL)
 	{
-		ASSERT( false,"scrIsVtol: null droid passed in." );
+		ASSERT(false, "scrIsVtol: null droid passed in.");
 	}
 
 	scrFunctionResult.v.bval = isVtolDroid(psDroid) ;
@@ -6346,6 +6054,7 @@ bool scrIsVtol(void)
 // In short, we want to design a ViperLtMGWheels, but it is already available to make, so we must delete it.
 bool scrTutorialTemplates(void)
 {
+#if 0
 	DROID_TEMPLATE	*psCurr, *psPrev;
 
 	// find ViperLtMGWheels
@@ -6353,7 +6062,7 @@ bool scrTutorialTemplates(void)
 
 	for (psCurr = apsDroidTemplates[selectedPlayer], psPrev = NULL; psCurr != NULL;	psCurr = psCurr->psNext)
 	{
-		if (strcmp(pName, psCurr->aName)==0)
+		if (psCurr->name.compare(pName) == 0)
 		{
 			if (psPrev)
 			{
@@ -6369,7 +6078,7 @@ bool scrTutorialTemplates(void)
 	}
 
 	// Delete the template in *both* lists!
-	if(psCurr)
+	if (psCurr)
 	{
 		for (std::list<DROID_TEMPLATE>::iterator i = localTemplates.begin(); i != localTemplates.end(); ++i)
 		{
@@ -6385,17 +6094,13 @@ bool scrTutorialTemplates(void)
 	}
 	else
 	{
-		debug( LOG_FATAL, "tutorial template setup failed" );
+		debug(LOG_FATAL, "tutorial template setup failed");
 		abort();
 		return false;
 	}
+#endif
 	return true;
 }
-
-
-
-
-
 
 
 //-----------------------------------------
@@ -6430,7 +6135,7 @@ bool scrConsole(void)
 		return false;
 	}
 
-	addConsoleMessage(strParam1,DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+	addConsoleMessage(strParam1, DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 
 	return true;
 }
@@ -6445,15 +6150,11 @@ bool scrDbgMsgOn(void)
 
 	if (!stackPopParams(2, VAL_INT, &player, VAL_BOOL, &bOn))
 	{
-		debug(LOG_ERROR, "scrDbgMsgOn(): stack failed");
+		debug(LOG_ERROR, "stack failed");
 		return false;
 	}
 
-	if (player < 0 || player >= MAX_PLAYERS)
-	{
-		debug(LOG_ERROR, "scrDbgMsgOn(): wrong player number");
-		return false;
-	}
+	ASSERT_OR_RETURN(false, player >= 0 && player < MAX_PLAYERS, "Invalid player number");
 
 	scrDebug[player] = bOn;
 
@@ -6462,7 +6163,7 @@ bool scrDbgMsgOn(void)
 
 bool scrMsg(void)
 {
-	SDWORD	playerTo,playerFrom;
+	SDWORD	playerTo, playerFrom;
 	char tmp[255];
 
 	if (!stackPopParams(3, VAL_STRING, &strParam1, VAL_INT, &playerFrom, VAL_INT, &playerTo))
@@ -6471,25 +6172,25 @@ bool scrMsg(void)
 		return false;
 	}
 
-	if(playerFrom < 0 || playerFrom >= MAX_PLAYERS)
+	if (playerFrom < 0 || playerFrom >= MAX_PLAYERS)
 	{
 		debug(LOG_ERROR, "scrMsg(): playerFrom out of range");
 		return false;
 	}
 
-	if(playerTo < 0 || playerTo >= MAX_PLAYERS)
+	if (playerTo < 0 || playerTo >= MAX_PLAYERS)
 	{
 		debug(LOG_ERROR, "scrMsg(): playerTo out of range");
 		return false;
 	}
 
-	sendAIMessage(strParam1, playerFrom, playerTo);
-
+	ssprintf(tmp, "%d%s", playerTo, strParam1);
+	sendTextMessage(tmp, false, playerFrom);
 
 	//show the message we sent on our local console as well (even in skirmish, if player plays as this AI)
-	if(playerFrom == selectedPlayer)
+	if (playerFrom == selectedPlayer)
 	{
-		sprintf(tmp,"[%d-%d] : %s",playerFrom, playerTo, strParam1);											// add message
+		ssprintf(tmp, "[%d-%d] : %s", playerFrom, playerTo, strParam1);	// add message
 		addConsoleMessage(tmp, RIGHT_JUSTIFY, playerFrom);
 	}
 
@@ -6506,11 +6207,11 @@ bool scrDbg(void)
 		return false;
 	}
 
-	if(scrDebug[player])
+	if (scrDebug[player])
 	{
 		char	sTmp[255];
-		sprintf(sTmp,"%d) %s",player,strParam1);
-		addConsoleMessage(sTmp,DEFAULT_JUSTIFY, player);
+		sprintf(sTmp, "%d) %s", player, strParam1);
+		addConsoleMessage(sTmp, DEFAULT_JUSTIFY, player);
 	}
 
 	return true;
@@ -6536,11 +6237,10 @@ static	UDWORD			enumDroidCount;
 /* Prepare the droid iteration */
 bool scrInitEnumDroids(void)
 {
-	SDWORD	targetplayer,playerVisible;
+	SDWORD	targetplayer, playerVisible;
 
-	if ( !stackPopParams(2,  VAL_INT, &targetplayer, VAL_INT, &playerVisible) )
+	if (!stackPopParams(2,  VAL_INT, &targetplayer, VAL_INT, &playerVisible))
 	{
-		//DbgMsg("scrInitEnumDroids() - failed to pop params");
 		return false;
 	}
 
@@ -6557,15 +6257,15 @@ bool scrEnumDroid(void)
 	DROID		 *psDroid;
 
 	count = 0;
-	for(psDroid=apsDroidLists[playerToEnumDroid];psDroid && count<enumDroidCount;count++)
+	for (psDroid = apsDroidLists[playerToEnumDroid]; psDroid && count < enumDroidCount; count++)
 	{
 		psDroid = psDroid->psNext;
 	}
 
 	//search the players' list of droid to see if one exists and is visible
-	while(psDroid)
+	while (psDroid)
 	{
-		if(psDroid->visible[playerVisibleDroid])
+		if (psDroid->visible[playerVisibleDroid])
 		{
 			scrFunctionResult.v.oval = psDroid;
 			if (!stackPushResult((INTERP_TYPE)ST_DROID, &scrFunctionResult))			//	push scrFunctionResult
@@ -6607,27 +6307,27 @@ bool scrFactoryGetTemplate(void)
 	if (psStructure == NULL)
 	{
 		debug(LOG_ERROR, "scrFactoryGetTemplate() - NULL factory object");
-		ASSERT( false, "scrFactoryGetTemplate: NULL factory object" );
+		ASSERT(false, "scrFactoryGetTemplate: NULL factory object");
 		return false;
 	}
 
-	ASSERT( psStructure != NULL,
-		"scrFactoryGetTemplate: Invalid structure pointer" );
-	ASSERT( (psStructure->pStructureType->type == REF_FACTORY ||
-		psStructure->pStructureType->type == REF_CYBORG_FACTORY ||
-		psStructure->pStructureType->type == REF_VTOL_FACTORY),
-		"scrFactoryGetTemplate: structure is not a factory" );
+	ASSERT(psStructure != NULL,
+	       "scrFactoryGetTemplate: Invalid structure pointer");
+	ASSERT((psStructure->pStructureType->type == REF_FACTORY ||
+	        psStructure->pStructureType->type == REF_CYBORG_FACTORY ||
+	        psStructure->pStructureType->type == REF_VTOL_FACTORY),
+	       "scrFactoryGetTemplate: structure is not a factory");
 
-	if(!StructIsFactory(psStructure))
+	if (!StructIsFactory(psStructure))
 	{
 		debug(LOG_ERROR, "scrFactoryGetTemplate: structure not a factory.");
 		return false;
 	}
 
-	psTemplate = (DROID_TEMPLATE *)((FACTORY*)psStructure->pFunctionality)->psSubject;
+	psTemplate = (DROID_TEMPLATE *)((FACTORY *)psStructure->pFunctionality)->psSubject;
 
-	ASSERT( psTemplate != NULL,
-		"scrFactoryGetTemplate: Invalid template pointer" );
+	ASSERT(psTemplate != NULL,
+	       "scrFactoryGetTemplate: Invalid template pointer");
 
 	scrFunctionResult.v.oval = psTemplate;
 	if (!stackPushResult((INTERP_TYPE)ST_TEMPLATE, &scrFunctionResult))
@@ -6641,9 +6341,9 @@ bool scrFactoryGetTemplate(void)
 
 bool scrNumTemplatesInProduction(void)
 {
-	SDWORD			player,numTemplates = 0;
+	SDWORD			player, numTemplates = 0;
 	DROID_TEMPLATE	*psTemplate;
-    STRUCTURE		*psStruct;
+	STRUCTURE		*psStruct;
 	STRUCTURE		*psList;
 	BASE_STATS		*psBaseStats;
 
@@ -6656,12 +6356,12 @@ bool scrNumTemplatesInProduction(void)
 	if (player >= MAX_PLAYERS)
 	{
 		debug(LOG_ERROR, "scrNumTemplatesInProduction: player number is too high");
-		ASSERT( false, "scrNumTemplatesInProduction: player number is too high" );
+		ASSERT(false, "scrNumTemplatesInProduction: player number is too high");
 		return false;
 	}
 
-	ASSERT( psTemplate != NULL,
-		"scrNumTemplatesInProduction: Invalid template pointer" );
+	ASSERT(psTemplate != NULL,
+	       "scrNumTemplatesInProduction: Invalid template pointer");
 
 	psBaseStats = (BASE_STATS *)psTemplate; //Convert
 
@@ -6694,7 +6394,7 @@ bool scrNumTemplatesInProduction(void)
 // Returns number of units based on a component a certain player has
 bool scrNumDroidsByComponent(void)
 {
-	SDWORD				player,lookingPlayer,comp;
+	SDWORD				player, lookingPlayer, comp;
 	UDWORD				numFound;
 	INTERP_VAL			sVal;
 	DROID				*psDroid;
@@ -6705,12 +6405,7 @@ bool scrNumDroidsByComponent(void)
 		return false;
 	}
 
-	if (player >= MAX_PLAYERS)
-	{
-		debug(LOG_ERROR, "scrNumDroidsByComponent(): player number is too high");
-		ASSERT( false, "scrNumDroidsByComponent:player number is too high" );
-		return false;
-	}
+	ASSERT_OR_RETURN(false, player >= 0 && player < MAX_PLAYERS, "Invalid player number");
 
 	if (!stackPop(&sVal))
 	{
@@ -6723,44 +6418,44 @@ bool scrNumDroidsByComponent(void)
 	comp = (SDWORD)sVal.v.ival;	 //cache access
 
 	//check droids
-	for(psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
+	for (psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
 	{
-		if(psDroid->visible[lookingPlayer])		//can see this droid?
+		if (psDroid->visible[lookingPlayer])		//can see this droid?
 		{
 			switch ((unsigned)sVal.type)  // Unsigned cast to suppress compiler warnings due to enum abuse.
 			{
 			case ST_BODY:
-				if (psDroid->asBits[COMP_BODY].nStat == comp)
+				if (psDroid->asBits[COMP_BODY] == comp)
 				{
 					numFound++;
 				}
 				break;
 			case ST_PROPULSION:
-				if (psDroid->asBits[COMP_PROPULSION].nStat == comp)
+				if (psDroid->asBits[COMP_PROPULSION] == comp)
 				{
 					numFound++;
 				}
 				break;
 			case ST_ECM:
-				if (psDroid->asBits[COMP_ECM].nStat == comp)
+				if (psDroid->asBits[COMP_ECM] == comp)
 				{
 					numFound++;
 				}
 				break;
 			case ST_SENSOR:
-				if (psDroid->asBits[COMP_SENSOR].nStat == comp)
+				if (psDroid->asBits[COMP_SENSOR] == comp)
 				{
 					numFound++;
 				}
 				break;
 			case ST_CONSTRUCT:
-				if (psDroid->asBits[COMP_CONSTRUCT].nStat == comp)
+				if (psDroid->asBits[COMP_CONSTRUCT] == comp)
 				{
 					numFound++;
 				}
 				break;
 			case ST_REPAIR:
-				if (psDroid->asBits[COMP_REPAIRUNIT].nStat == comp)
+				if (psDroid->asBits[COMP_REPAIRUNIT] == comp)
 				{
 					numFound++;
 				}
@@ -6773,14 +6468,14 @@ bool scrNumDroidsByComponent(void)
 				}
 				break;
 			case ST_BRAIN:
-				if (psDroid->asBits[COMP_BRAIN].nStat == comp)
+				if (psDroid->asBits[COMP_BRAIN] == comp)
 				{
 					numFound++;
 				}
 				break;
 			default:
 				debug(LOG_ERROR, "scrNumDroidsByComponent(): unknown component type");
-				ASSERT( false, "scrNumDroidsByComponent: unknown component type" );
+				ASSERT(false, "scrNumDroidsByComponent: unknown component type");
 				return false;
 			}
 		}
@@ -6798,7 +6493,7 @@ bool scrNumDroidsByComponent(void)
 
 bool scrGetStructureLimit(void)
 {
-	SDWORD				player,limit;
+	SDWORD				player, limit;
 	UDWORD				structInc;
 	STRUCTURE_LIMITS	*psStructLimits;
 
@@ -6811,14 +6506,16 @@ bool scrGetStructureLimit(void)
 	if (player >= MAX_PLAYERS)
 	{
 		debug(LOG_ERROR, "scrGetStructureLimit(): player number is too high");
-		ASSERT( false, "scrSetStructureLimits: player number is too high" );
-		return false;}
+		ASSERT(false, "scrSetStructureLimits: player number is too high");
+		return false;
+	}
 
 	if (structInc > numStructureStats)
 	{
 		debug(LOG_ERROR, "scrGetStructureLimit(): tructure stat is too high - %d", structInc);
-		ASSERT( false, "scrSetStructureLimits: Structure stat is too high - %d", structInc );
-		return false;}
+		ASSERT(false, "scrSetStructureLimits: Structure stat is too high - %d", structInc);
+		return false;
+	}
 
 	psStructLimits = asStructLimits[player];
 	limit = (SDWORD)psStructLimits[structInc].limit;
@@ -6850,19 +6547,23 @@ bool scrStructureLimitReached(void)
 	if (player >= MAX_PLAYERS)
 	{
 		debug(LOG_ERROR, "scrStructureLimitReached(): player number is too high");
-		ASSERT( false, "scrSetStructureLimits: player number is too high" );
+		ASSERT(false, "scrSetStructureLimits: player number is too high");
 		return false;
 	}
 
 	if (structInc > numStructureStats)
 	{
 		debug(LOG_ERROR, "scrStructureLimitReached(): Structure stat is too high - %d", structInc);
-		ASSERT( false, "scrSetStructureLimits: Structure stat is too high - %d", structInc );
-		return false;}
+		ASSERT(false, "scrSetStructureLimits: Structure stat is too high - %d", structInc);
+		return false;
+	}
 
 	psStructLimits = asStructLimits[player];
 
-	if(psStructLimits[structInc].currentQuantity >= psStructLimits[structInc].limit) bLimit = true;
+	if (psStructLimits[structInc].currentQuantity >= psStructLimits[structInc].limit)
+	{
+		bLimit = true;
+	}
 
 	scrFunctionResult.v.bval = bLimit;
 	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
@@ -6877,24 +6578,27 @@ bool scrStructureLimitReached(void)
 // How many structures of a given type a player has
 bool scrGetNumStructures(void)
 {
-	SDWORD				player,numStructures;
+	SDWORD				player, numStructures;
 	UDWORD				structInc;
 	STRUCTURE_LIMITS	*psStructLimits;
 
 	if (!stackPopParams(2, ST_STRUCTURESTAT, &structInc, VAL_INT, &player))
 	{
 		debug(LOG_ERROR, "scrSetStructureLimits: failed to pop");
-		return false;}
+		return false;
+	}
 
 	if (player >= MAX_PLAYERS)
 	{
 		debug(LOG_ERROR, "scrSetStructureLimits:player number is too high");
-		return false;}
+		return false;
+	}
 
 	if (structInc > numStructureStats)
 	{
 		debug(LOG_ERROR, "scrSetStructureLimits: Structure stat is too high");
-		return false;}
+		return false;
+	}
 
 	psStructLimits = asStructLimits[player];
 	numStructures = (SDWORD)psStructLimits[structInc].currentQuantity;
@@ -6916,12 +6620,14 @@ bool scrGetUnitLimit(void)
 	if (!stackPopParams(1, VAL_INT, &player))
 	{
 		debug(LOG_ERROR, "scrGetUnitLimit: failed to pop");
-		return false;}
+		return false;
+	}
 
 	if (player >= MAX_PLAYERS)
 	{
-		ASSERT( false, "scrSetStructureLimits:player number is too high" );
-		return false;}
+		ASSERT(false, "scrSetStructureLimits:player number is too high");
+		return false;
+	}
 
 	scrFunctionResult.v.ival = getMaxDroids(player);
 	if (!stackPushResult(VAL_INT, &scrFunctionResult))
@@ -6935,7 +6641,7 @@ bool scrGetUnitLimit(void)
 // Return minimum of 2 vals
 bool scrMin(void)
 {
-	SDWORD				val1,val2;
+	SDWORD				val1, val2;
 
 	if (!stackPopParams(2, VAL_INT, &val1, VAL_INT, &val2))
 	{
@@ -6954,7 +6660,7 @@ bool scrMin(void)
 // Return maximum of 2 vals
 bool scrMax(void)
 {
-	SDWORD				val1,val2;
+	SDWORD				val1, val2;
 
 	if (!stackPopParams(2, VAL_INT, &val1, VAL_INT, &val2))
 	{
@@ -6972,7 +6678,7 @@ bool scrMax(void)
 
 bool scrFMin(void)
 {
-	float				fval1,fval2;
+	float				fval1, fval2;
 
 	if (!stackPopParams(2, VAL_FLOAT, &fval1, VAL_FLOAT, &fval2))
 	{
@@ -6991,7 +6697,7 @@ bool scrFMin(void)
 // Return maximum of 2 floats
 bool scrFMax(void)
 {
-	float				fval1,fval2;
+	float				fval1, fval2;
 
 	if (!stackPopParams(2, VAL_FLOAT, &fval1, VAL_FLOAT, &fval2))
 	{
@@ -7009,39 +6715,39 @@ bool scrFMax(void)
 
 bool ThreatInRange(SDWORD player, SDWORD range, SDWORD rangeX, SDWORD rangeY, bool bVTOLs)
 {
-	UDWORD				i,structType;
+	UDWORD				i, structType;
 	STRUCTURE			*psStruct;
 	DROID				*psDroid;
 
 	const int tx = map_coord(rangeX);
 	const int ty = map_coord(rangeY);
 
-	for(i=0;i<MAX_PLAYERS;i++)
+	for (i = 0; i < MAX_PLAYERS; i++)
 	{
-		if((alliances[player][i] == ALLIANCE_FORMED) || (i == player))
+		if ((alliances[player][i] == ALLIANCE_FORMED) || (i == player))
 		{
 			continue;
 		}
 
 		//check structures
-		for(psStruct = apsStructLists[i]; psStruct; psStruct=psStruct->psNext)
+		for (psStruct = apsStructLists[i]; psStruct; psStruct = psStruct->psNext)
 		{
 			if (psStruct->visible[player] || psStruct->born == 2)	// if can see it or started there
 			{
-				if(psStruct->status == SS_BUILT)
+				if (psStruct->status == SS_BUILT)
 				{
 					structType = psStruct->pStructureType->type;
 
-					switch(structType)		//dangerous to get near these structures
+					switch (structType)		//dangerous to get near these structures
 					{
-						case REF_DEFENSE:
-						case REF_CYBORG_FACTORY:
-						case REF_FACTORY:
-						case REF_VTOL_FACTORY:
-						case REF_REARM_PAD:
+					case REF_DEFENSE:
+					case REF_CYBORG_FACTORY:
+					case REF_FACTORY:
+					case REF_VTOL_FACTORY:
+					case REF_REARM_PAD:
 
 						if (range < 0
-						 || world_coord(hypotf(tx - map_coord(psStruct->pos.x), ty - map_coord(psStruct->pos.y))) < range)	//enemy in range
+						    || world_coord(hypotf(tx - map_coord(psStruct->pos.x), ty - map_coord(psStruct->pos.y))) < range)	//enemy in range
 						{
 							return true;
 						}
@@ -7063,13 +6769,13 @@ bool ThreatInRange(SDWORD player, SDWORD range, SDWORD rangeX, SDWORD rangeY, bo
 				}
 
 				//if VTOLs are excluded, skip them
-				if (!bVTOLs && ((asPropulsionStats[psDroid->asBits[COMP_PROPULSION].nStat].propulsionType == PROPULSION_TYPE_LIFT) || (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)))
+				if (!bVTOLs && ((asPropulsionStats[psDroid->asBits[COMP_PROPULSION]].propulsionType == PROPULSION_TYPE_LIFT) || (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)))
 				{
 					continue;
 				}
 
 				if (range < 0
-				 || world_coord(hypotf(tx - map_coord(psDroid->pos.x), ty - map_coord(psDroid->pos.y))) < range)	//enemy in range
+				    || world_coord(hypotf(tx - map_coord(psDroid->pos.x), ty - map_coord(psDroid->pos.y))) < range)	//enemy in range
 				{
 					return true;
 				}
@@ -7083,25 +6789,26 @@ bool ThreatInRange(SDWORD player, SDWORD range, SDWORD rangeX, SDWORD rangeY, bo
 //find unrevealed tile closest to pwLooker within the range of wRange
 bool scrFogTileInRange(void)
 {
-	SDWORD		pwLookerX,pwLookerY,tBestX,tBestY,threadRange;
-	SDWORD		wRangeX,wRangeY,tRangeX,tRangeY,wRange,player;
-	UDWORD		tx,ty,i,j,wDist,wBestDist;
+	SDWORD		pwLookerX, pwLookerY, tBestX, tBestY, threadRange;
+	SDWORD		wRangeX, wRangeY, tRangeX, tRangeY, wRange, player;
+	UDWORD		tx, ty, i, j, wDist, wBestDist;
 	MAPTILE		*psTile;
 	bool		ok = false;
-	SDWORD		*wTileX,*wTileY;
+	SDWORD		*wTileX, *wTileY;
 
-	if (!stackPopParams(9, VAL_REF|VAL_INT, &wTileX, VAL_REF|VAL_INT, &wTileY,
-		VAL_INT, &pwLookerX, VAL_INT, &pwLookerY, VAL_INT, &wRangeX, VAL_INT, &wRangeY,
-		VAL_INT, &wRange, VAL_INT, &player, VAL_INT, &threadRange))
+	if (!stackPopParams(9, VAL_REF | VAL_INT, &wTileX, VAL_REF | VAL_INT, &wTileY,
+	        VAL_INT, &pwLookerX, VAL_INT, &pwLookerY, VAL_INT, &wRangeX, VAL_INT, &wRangeY,
+	        VAL_INT, &wRange, VAL_INT, &player, VAL_INT, &threadRange))
 	{
 		debug(LOG_ERROR, "scrFogTileInRange: failed to pop");
-		return false;}
+		return false;
+	}
 
-    //Check coords
-	if(		pwLookerX < 0
-		||	pwLookerX > world_coord(mapWidth)
-		||	pwLookerY < 0
-		||	pwLookerY > world_coord(mapHeight))
+	//Check coords
+	if (pwLookerX < 0
+	    ||	pwLookerX > world_coord(mapWidth)
+	    ||	pwLookerY < 0
+	    ||	pwLookerY > world_coord(mapHeight))
 	{
 		debug(LOG_ERROR, "scrFogTileInRange: coords off map");
 		return false;
@@ -7116,40 +6823,40 @@ bool scrFogTileInRange(void)
 	wBestDist = 99999;
 	tBestX = -1; tBestY = -1;
 
-	for(i=0; i<mapWidth;i++)
+	for (i = 0; i < mapWidth; i++)
 	{
-		for(j=0; j<mapHeight; j++)
+		for (j = 0; j < mapHeight; j++)
 		{
-			psTile = mapTile(i,j);
-		   	if(!TEST_TILE_VISIBLE(player,psTile))	//not vis
-		  	{
+			psTile = mapTile(i, j);
+			if (!TEST_TILE_VISIBLE(player, psTile))	//not vis
+			{
 				//within base range
 				if (wRange <= 0
-				 || world_coord(iHypot(tRangeX - i, tRangeY - j)) < wRange)		//dist in world units between baseX/baseY and the tile
+				    || world_coord(iHypot(tRangeX - i, tRangeY - j)) < wRange)		//dist in world units between baseX/baseY and the tile
 				{
 					//calc dist between this tile and looker
 					wDist = world_coord(iHypot(tx - i, ty - j));
 
 					//closer than last one?
-					if(wDist < wBestDist)
+					if (wDist < wBestDist)
 					{
-						if(zonedPAT(i,j))	//Can reach this tile
+						if (zonedPAT(i, j))	//Can reach this tile
 						{
-							if((threadRange <= 0) || (!ThreatInRange(player, threadRange, world_coord(i), world_coord(j), false)))
+							if ((threadRange <= 0) || (!ThreatInRange(player, threadRange, world_coord(i), world_coord(j), false)))
 							{
-									wBestDist = wDist;
-									tBestX = i;
-									tBestY = j;
-									ok = true;
+								wBestDist = wDist;
+								tBestX = i;
+								tBestY = j;
+								ok = true;
 							}
 						}
 					}
 				}
-		  	}
+			}
 		}
 	}
 
-	if(ok)	//something found
+	if (ok)	//something found
 	{
 		*wTileX = world_coord(tBestX);
 		*wTileY = world_coord(tBestY);
@@ -7176,21 +6883,21 @@ bool scrFogTileInRange(void)
 
 bool scrMapRevealedInRange(void)
 {
-	SDWORD		wRangeX,wRangeY,tRangeX,tRangeY,wRange,tRange,player;
+	SDWORD		wRangeX, wRangeY, tRangeX, tRangeY, wRange, tRange, player;
 	int             i, j;
 
 	if (!stackPopParams(4, VAL_INT, &wRangeX, VAL_INT, &wRangeY,
-		VAL_INT, &wRange, VAL_INT, &player))
+	        VAL_INT, &wRange, VAL_INT, &player))
 	{
 		debug(LOG_ERROR,  "scrMapRevealedInRange: failed to pop");
 		return false;
 	}
 
-    //Check coords
+	//Check coords
 	if (wRangeX < 0
-	 || wRangeX > world_coord(mapWidth)
-	 || wRangeY < 0
-	 || wRangeY > world_coord(mapHeight))
+	    || wRangeX > world_coord(mapWidth)
+	    || wRangeY < 0
+	    || wRangeY > world_coord(mapHeight))
 	{
 		debug(LOG_ERROR,  "scrMapRevealedInRange: coords off map");
 		return false;
@@ -7201,16 +6908,16 @@ bool scrMapRevealedInRange(void)
 	tRangeX = map_coord(wRangeX);				//cache to tile coords, for faster calculations
 	tRangeY = map_coord(wRangeY);
 
-	for(i=0; i<mapWidth;i++)
+	for (i = 0; i < mapWidth; i++)
 	{
-		for(j=0; j<mapHeight; j++)
+		for (j = 0; j < mapHeight; j++)
 		{
 			// don't bother checking if out of range
-			if(abs(tRangeX-i) < tRange && abs(tRangeY-j) < tRange)
+			if (abs(tRangeX - i) < tRange && abs(tRangeY - j) < tRange)
 			{
 				//within range
 				if (world_coord(iHypot(tRangeX - i, tRangeY - j)) < wRange  //dist in world units between x/y and the tile
-				 && TEST_TILE_VISIBLE(player, mapTile(i, j)))		//not visible
+				    && TEST_TILE_VISIBLE(player, mapTile(i, j)))		//not visible
 				{
 					scrFunctionResult.v.bval = true;
 					if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
@@ -7219,7 +6926,7 @@ bool scrMapRevealedInRange(void)
 					}
 
 					return true;
-		  		}
+				}
 			}
 		}
 	}
@@ -7237,7 +6944,7 @@ bool scrMapRevealedInRange(void)
 /* Returns true if a certain map tile was revealed, ie fog of war was removed */
 bool scrMapTileVisible(void)
 {
-	SDWORD		tileX,tileY,player;
+	SDWORD		tileX, tileY, player;
 
 	if (!stackPopParams(3, VAL_INT, &tileX, VAL_INT, &tileY, VAL_INT, &player))
 	{
@@ -7245,17 +6952,17 @@ bool scrMapTileVisible(void)
 		return false;
 	}
 
-    //Check coords
+	//Check coords
 	if (tileX < 0
-	 || tileX > world_coord(mapWidth)
-	 || tileY < 0
-	 || tileY > world_coord(mapHeight))
+	    || tileX > world_coord(mapWidth)
+	    || tileY < 0
+	    || tileY > world_coord(mapHeight))
 	{
 		debug(LOG_ERROR,  "scrMapTileVisible: coords off map");
 		return false;
 	}
 
-	if(TEST_TILE_VISIBLE( player,mapTile(tileX,tileY) ))
+	if (TEST_TILE_VISIBLE(player, mapTile(tileX, tileY)))
 	{
 		scrFunctionResult.v.bval = true;
 
@@ -7282,48 +6989,48 @@ bool scrMapTileVisible(void)
 bool scrNumResearchLeft(void)
 {
 	RESEARCH			*psResearch;
-	SDWORD				player,iResult;
-	UWORD				cur,index,tempIndex;
+	SDWORD				player, iResult;
+	UWORD				cur, index, tempIndex;
 	SWORD				top;
 
 	UWORD				Stack[400];
 
-	if (!stackPopParams(2, VAL_INT, &player, ST_RESEARCH, &psResearch ))
+	if (!stackPopParams(2, VAL_INT, &player, ST_RESEARCH, &psResearch))
 	{
 		debug(LOG_ERROR,  "scrNumResearchLeft(): stack failed");
 		return false;
 	}
 
-	if(psResearch == NULL)
+	if (psResearch == NULL)
 	{
-		ASSERT( false, "scrNumResearchLeft(): no such research topic" );
+		ASSERT(false, "scrNumResearchLeft(): no such research topic");
 		return false;
 	}
 
 	index = psResearch->index;
 	if (index >= asResearch.size())
 	{
-		ASSERT( false, "scrNumResearchLeft(): invalid research index" );
+		ASSERT(false, "scrNumResearchLeft(): invalid research index");
 		return false;
 	}
 
-	if(beingResearchedByAlly(index, player))
+	if (beingResearchedByAlly(index, player))
 	{
 		iResult = 1;
 	}
-	else if(IsResearchCompleted(&asPlayerResList[player][index]))
+	else if (IsResearchCompleted(&asPlayerResList[player][index]))
 	{
 		iResult = 0;
 	}
-	else if(IsResearchStarted(&asPlayerResList[player][index]))
+	else if (IsResearchStarted(&asPlayerResList[player][index]))
 	{
 		iResult = 1;
 	}
-	else if(IsResearchPossible(&asPlayerResList[player][index]) || IsResearchCancelled(&asPlayerResList[player][index]))
+	else if (IsResearchPossible(&asPlayerResList[player][index]) || IsResearchCancelled(&asPlayerResList[player][index]))
 	{
 		iResult = 1;
 	}
-	else if(skTopicAvail(index,player))
+	else if (skTopicAvail(index, player))
 	{
 		iResult = 1;
 	}
@@ -7333,12 +7040,12 @@ bool scrNumResearchLeft(void)
 		top = -1;
 
 		cur = 0;				//start with first index's PR
-		while(true)			//do
+		while (true)			//do
 		{
 			if (cur >= asResearch[index].pPRList.size())		//this one has no PRs or end of PRs reached
 			{
 				top = top - 2;
-				if(top < (-1))
+				if (top < (-1))
 				{
 					break;		//end of stack
 				}
@@ -7353,14 +7060,14 @@ bool scrNumResearchLeft(void)
 				tempIndex = asResearch[index].pPRList[cur];		//get cur node's index
 
 				//decide if has to check its PRs
-				if(!IsResearchCompleted(&asPlayerResList[player][tempIndex]) &&	//don't touch if completed already
-					!skTopicAvail(index,player) &&					//has no unresearched PRs left if available
-					!beingResearchedByAlly(index, player))			//will become available soon anyway
+				if (!IsResearchCompleted(&asPlayerResList[player][tempIndex]) &&	//don't touch if completed already
+				    !skTopicAvail(index, player) &&					//has no unresearched PRs left if available
+				    !beingResearchedByAlly(index, player))			//will become available soon anyway
 				{
-					if(asResearch[tempIndex].pPRList.size() > 0)	//node has any nodes itself
+					if (asResearch[tempIndex].pPRList.size() > 0)	//node has any nodes itself
 					{
-						Stack[top+1] = cur;								//so can go back to it further
-						Stack[top+2] = index;
+						Stack[top + 1] = cur;								//so can go back to it further
+						Stack[top + 2] = index;
 						top = top + 2;
 
 						index = tempIndex;		//go 1 level further
@@ -7370,7 +7077,7 @@ bool scrNumResearchLeft(void)
 			}
 
 			cur++;				//try next node of the main node
-			if((cur >= asResearch[index].pPRList.size()) && (top <= (-1)))	//nothing left
+			if ((cur >= asResearch[index].pPRList.size()) && (top <= (-1)))	//nothing left
 			{
 				break;
 			}
@@ -7392,9 +7099,9 @@ bool beingResearchedByAlly(SDWORD resIndex, SDWORD player)
 {
 	SDWORD	i;
 
-	for(i=0;i<MAX_PLAYERS;i++)
+	for (i = 0; i < MAX_PLAYERS; i++)
 	{
-		if(i != player && aiCheckAlliances(player,i))
+		if (i != player && aiCheckAlliances(player, i))
 		{
 			//check each research facility to see if they are doing this topic.
 			if (IsResearchStartedPending(&asPlayerResList[i][resIndex]))
@@ -7414,26 +7121,26 @@ bool scrResearchCompleted(void)
 	SDWORD				player;
 	UWORD				index;
 
-	if (!stackPopParams(2,ST_RESEARCH, &psResearch, VAL_INT, &player ))
+	if (!stackPopParams(2, ST_RESEARCH, &psResearch, VAL_INT, &player))
 	{
 		debug(LOG_ERROR,   "scrResearchCompleted: stack failed");
 		return false;
 	}
 
-	if(psResearch == NULL)
+	if (psResearch == NULL)
 	{
-		debug( LOG_ERROR, "scrResearchCompleted: no such research topic" );
+		debug(LOG_ERROR, "scrResearchCompleted: no such research topic");
 		return false;
 	}
 
 	index = psResearch->index;
 	if (index >= asResearch.size())
 	{
-		debug( LOG_ERROR, "scrResearchCompleted: invalid research index" );
+		debug(LOG_ERROR, "scrResearchCompleted: invalid research index");
 		return false;
 	}
 
-	if(IsResearchCompleted(&asPlayerResList[player][index]))
+	if (IsResearchCompleted(&asPlayerResList[player][index]))
 	{
 		scrFunctionResult.v.bval = true;
 		if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
@@ -7460,22 +7167,22 @@ bool scrResearchStarted(void)
 	SDWORD				player;
 	UWORD				index;
 
-	if (!stackPopParams(2,ST_RESEARCH, &psResearch, VAL_INT, &player ))
+	if (!stackPopParams(2, ST_RESEARCH, &psResearch, VAL_INT, &player))
 	{
 		debug(LOG_ERROR,  "scrResearchStarted(): stack failed");
 		return false;
 	}
 
-	if(psResearch == NULL)
+	if (psResearch == NULL)
 	{
-		ASSERT( false, ": no such research topic" );
+		ASSERT(false, ": no such research topic");
 		return false;
 	}
 
 	index = psResearch->index;
 	if (index >= asResearch.size())
 	{
-		ASSERT( false, "scrResearchCompleted: invalid research index" );
+		ASSERT(false, "scrResearchCompleted: invalid research index");
 		return false;
 	}
 
@@ -7506,7 +7213,7 @@ bool scrThreatInRange(void)
 	int32_t		bVTOLs;		// was BOOL (int) ** see warning about conversion
 
 	if (!stackPopParams(5, VAL_INT, &player, VAL_INT, &rangeX,
-		VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bVTOLs))
+	        VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bVTOLs))
 	{
 		debug(LOG_ERROR,  "scrThreatInRange(): stack failed");
 		return false;
@@ -7529,16 +7236,16 @@ bool scrNumEnemyWeapObjInRange(void)
 	int32_t		bVTOLs, bFinished;		// was BOOL (int) ** see warning about conversion
 
 	if (!stackPopParams(6, VAL_INT, &lookingPlayer, VAL_INT, &rangeX,
-		VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bVTOLs, VAL_BOOL, &bFinished))
+	        VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bVTOLs, VAL_BOOL, &bFinished))
 	{
 		debug(LOG_ERROR,  "scrNumEnemyWeapObjInRange(): stack failed");
 		return false;
 	}
 
 
-	for(i=0;i<MAX_PLAYERS;i++)
+	for (i = 0; i < MAX_PLAYERS; i++)
 	{
-		if((alliances[lookingPlayer][i] == ALLIANCE_FORMED) || (i == lookingPlayer))	//skip allies and myself
+		if ((alliances[lookingPlayer][i] == ALLIANCE_FORMED) || (i == lookingPlayer))	//skip allies and myself
 		{
 			continue;
 		}
@@ -7565,15 +7272,15 @@ bool scrEnemyWeapObjCostInRange(void)
 	int32_t		bVTOLs, bFinished; // was BOOL (int) ** see warning about conversion
 
 	if (!stackPopParams(6, VAL_INT, &lookingPlayer, VAL_INT, &rangeX,
-		VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bVTOLs, VAL_BOOL, &bFinished))
+	        VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bVTOLs, VAL_BOOL, &bFinished))
 	{
 		debug(LOG_ERROR,  "scrEnemyWeapObjCostInRange(): stack failed");
 		return false;
 	}
 
-	for(i=0;i<MAX_PLAYERS;i++)
+	for (i = 0; i < MAX_PLAYERS; i++)
 	{
-		if((alliances[lookingPlayer][i] == ALLIANCE_FORMED) || (i == lookingPlayer))	//skip allies and myself
+		if ((alliances[lookingPlayer][i] == ALLIANCE_FORMED) || (i == lookingPlayer))	//skip allies and myself
 		{
 			continue;
 		}
@@ -7602,18 +7309,18 @@ bool scrFriendlyWeapObjCostInRange(void)
 	int32_t		bVTOLs, bFinished;		// was BOOL (int) ** see warning about conversion
 
 	if (!stackPopParams(6, VAL_INT, &player, VAL_INT, &rangeX,
-		VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bVTOLs, VAL_BOOL, &bFinished))
+	        VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bVTOLs, VAL_BOOL, &bFinished))
 	{
 		debug(LOG_ERROR,  "scrFriendlyWeapObjCostInRange(): stack failed");
 		return false;
 	}
 
-	for(i=0;i<MAX_PLAYERS;i++)
+	for (i = 0; i < MAX_PLAYERS; i++)
 	{
-		if((alliances[player][i] == ALLIANCE_FORMED) || (i == player))	//skip enemies
+		if ((alliances[player][i] == ALLIANCE_FORMED) || (i == player))	//skip enemies
 		{
 			friendlyCost += numPlayerWeapDroidsInRange(i, player, range, rangeX, rangeY, bVTOLs);
-			friendlyCost += numPlayerWeapStructsInRange(i, player, range, rangeX, rangeY,bFinished);
+			friendlyCost += numPlayerWeapStructsInRange(i, player, range, rangeX, rangeY, bFinished);
 		}
 	}
 
@@ -7631,7 +7338,7 @@ bool scrFriendlyWeapObjCostInRange(void)
  * Will either count the number of droids or calculate the total costs.
  */
 static UDWORD costOrAmountInRange(SDWORD player, SDWORD lookingPlayer, SDWORD range,
-								   SDWORD rangeX, SDWORD rangeY, bool bVTOLs, bool justCount)
+        SDWORD rangeX, SDWORD rangeY, bool bVTOLs, bool justCount)
 {
 	UDWORD	droidCost = 0;
 
@@ -7646,13 +7353,13 @@ static UDWORD costOrAmountInRange(SDWORD player, SDWORD lookingPlayer, SDWORD ra
 			}
 
 			//if VTOLs are excluded, skip them
-			if (!bVTOLs && ((asPropulsionStats[psDroid->asBits[COMP_PROPULSION].nStat].propulsionType == PROPULSION_TYPE_LIFT) || (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)))
+			if (!bVTOLs && ((asPropulsionStats[psDroid->asBits[COMP_PROPULSION]].propulsionType == PROPULSION_TYPE_LIFT) || (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)))
 			{
 				continue;
 			}
 
 			if (range < 0
-			 || iHypot(rangeX - psDroid->pos.x, rangeY - psDroid->pos.y) < range)  //enemy in range
+			    || iHypot(rangeX - psDroid->pos.x, rangeY - psDroid->pos.y) < range)  //enemy in range
 			{
 				if (justCount)
 				{
@@ -7675,7 +7382,7 @@ UDWORD numPlayerWeapDroidsInRange(SDWORD player, SDWORD lookingPlayer, SDWORD ra
 }
 
 UDWORD playerWeapDroidsCostInRange(SDWORD player, SDWORD lookingPlayer, SDWORD range,
-								   SDWORD rangeX, SDWORD rangeY, bool bVTOLs)
+        SDWORD rangeX, SDWORD rangeY, bool bVTOLs)
 {
 	return costOrAmountInRange(player, lookingPlayer, range, rangeX, rangeY, bVTOLs, false /*total cost*/);
 }
@@ -7683,9 +7390,9 @@ UDWORD playerWeapDroidsCostInRange(SDWORD player, SDWORD lookingPlayer, SDWORD r
 
 
 UDWORD numPlayerWeapStructsInRange(SDWORD player, SDWORD lookingPlayer, SDWORD range,
-								   SDWORD rangeX, SDWORD rangeY, bool bFinished)
+        SDWORD rangeX, SDWORD rangeY, bool bFinished)
 {
-	const STRUCTURE* psStruct;
+	const STRUCTURE *psStruct;
 
 	const int tx = map_coord(rangeX);
 	const int ty = map_coord(rangeY);
@@ -7696,12 +7403,12 @@ UDWORD numPlayerWeapStructsInRange(SDWORD player, SDWORD lookingPlayer, SDWORD r
 	for (psStruct = apsStructLists[player]; psStruct; psStruct = psStruct->psNext)
 	{
 		if (psStruct->visible[lookingPlayer]	//if can see it
-		 && objHasWeapon((BASE_OBJECT *) psStruct)) // check whether this structure is "dangerous"
+		    && objHasWeapon((BASE_OBJECT *) psStruct)) // check whether this structure is "dangerous"
 		{
 			if (!bFinished || psStruct->status == SS_BUILT)
 			{
 				if (range < 0
-				 || world_coord(hypotf(tx - map_coord(psStruct->pos.x), ty - map_coord(psStruct->pos.y))) < range)	//enemy in range
+				    || world_coord(hypotf(tx - map_coord(psStruct->pos.x), ty - map_coord(psStruct->pos.y))) < range)	//enemy in range
 				{
 					++numStructs;
 				}
@@ -7713,9 +7420,9 @@ UDWORD numPlayerWeapStructsInRange(SDWORD player, SDWORD lookingPlayer, SDWORD r
 }
 
 UDWORD playerWeapStructsCostInRange(SDWORD player, SDWORD lookingPlayer, SDWORD range,
-								   SDWORD rangeX, SDWORD rangeY, bool bFinished)
+        SDWORD rangeX, SDWORD rangeY, bool bFinished)
 {
-	const STRUCTURE* psStruct;
+	const STRUCTURE *psStruct;
 
 	unsigned int structsCost = 0;
 
@@ -7723,13 +7430,13 @@ UDWORD playerWeapStructsCostInRange(SDWORD player, SDWORD lookingPlayer, SDWORD 
 	for (psStruct = apsStructLists[player]; psStruct; psStruct = psStruct->psNext)
 	{
 		if (psStruct->visible[lookingPlayer]	//if can see it
-		 && objHasWeapon((BASE_OBJECT *) psStruct))
+		    && objHasWeapon((BASE_OBJECT *) psStruct))
 		{
 			if (!bFinished
-			 || psStruct->status == SS_BUILT)
+			    || psStruct->status == SS_BUILT)
 			{
 				if (range < 0
-				 || world_coord(hypotf(map_coord(rangeX) - map_coord(psStruct->pos.x), map_coord(rangeY) - map_coord(psStruct->pos.y))) < range)	//enemy in range
+				    || world_coord(hypotf(map_coord(rangeX) - map_coord(psStruct->pos.x), map_coord(rangeY) - map_coord(psStruct->pos.y))) < range)	//enemy in range
 				{
 					structsCost += structPowerToBuild(psStruct);
 				}
@@ -7742,20 +7449,20 @@ UDWORD playerWeapStructsCostInRange(SDWORD player, SDWORD lookingPlayer, SDWORD 
 
 bool scrNumEnemyWeapDroidsInRange(void)
 {
-	SDWORD				lookingPlayer,range,rangeX,rangeY,i;
+	SDWORD				lookingPlayer, range, rangeX, rangeY, i;
 	UDWORD				numEnemies = 0;
 	int32_t				bVTOLs;		// was BOOL (int) ** see warning about conversion
 
 	if (!stackPopParams(5, VAL_INT, &lookingPlayer, VAL_INT, &rangeX,
-		VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bVTOLs))
+	        VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bVTOLs))
 	{
 		debug(LOG_ERROR,  "scrNumEnemyWeapDroidsInRange(): stack failed");
 		return false;
 	}
 
-	for(i=0;i<MAX_PLAYERS;i++)
+	for (i = 0; i < MAX_PLAYERS; i++)
 	{
-		if((alliances[lookingPlayer][i] == ALLIANCE_FORMED) || (i == lookingPlayer))	//skip allies and myself
+		if ((alliances[lookingPlayer][i] == ALLIANCE_FORMED) || (i == lookingPlayer))	//skip allies and myself
 		{
 			continue;
 		}
@@ -7782,15 +7489,15 @@ bool scrNumEnemyWeapStructsInRange(void)
 	int32_t			bFinished;	// was BOOL (int) ** see warning about conversion
 
 	if (!stackPopParams(5, VAL_INT, &lookingPlayer, VAL_INT, &rangeX,
-		VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bFinished))
+	        VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bFinished))
 	{
 		debug(LOG_ERROR,  "scrNumEnemyWeapStructsInRange(): stack failed");
 		return false;
 	}
 
-	for(i=0;i<MAX_PLAYERS;i++)
+	for (i = 0; i < MAX_PLAYERS; i++)
 	{
-		if((alliances[lookingPlayer][i] == ALLIANCE_FORMED) || (i == lookingPlayer))	//skip allies and myself
+		if ((alliances[lookingPlayer][i] == ALLIANCE_FORMED) || (i == lookingPlayer))	//skip allies and myself
 		{
 			continue;
 		}
@@ -7815,18 +7522,18 @@ bool scrNumFriendlyWeapObjInRange(void)
 	int32_t				bVTOLs, bFinished;	// was BOOL (int) ** see warning about conversion
 
 	if (!stackPopParams(6, VAL_INT, &player, VAL_INT, &rangeX,
-		VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bVTOLs, VAL_BOOL, &bFinished))
+	        VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bVTOLs, VAL_BOOL, &bFinished))
 	{
 		debug(LOG_ERROR,  "scrNumFriendlyWeapObjInRange(): stack failed");
 		return false;
 	}
 
-	for(i=0;i<MAX_PLAYERS;i++)
+	for (i = 0; i < MAX_PLAYERS; i++)
 	{
-		if((alliances[player][i] == ALLIANCE_FORMED) || (i == player))	//skip enemies
+		if ((alliances[player][i] == ALLIANCE_FORMED) || (i == player))	//skip enemies
 		{
 			numFriends += numPlayerWeapDroidsInRange(i, player, range, rangeX, rangeY, bVTOLs);
-			numFriends += numPlayerWeapStructsInRange(i, player, range, rangeX, rangeY,bFinished);
+			numFriends += numPlayerWeapStructsInRange(i, player, range, rangeX, rangeY, bFinished);
 		}
 	}
 
@@ -7846,15 +7553,15 @@ bool scrNumFriendlyWeapDroidsInRange(void)
 	int32_t		bVTOLs;		// was BOOL (int) ** see warning about conversion
 
 	if (!stackPopParams(5, VAL_INT, &lookingPlayer, VAL_INT, &rangeX,
-		VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bVTOLs))
+	        VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bVTOLs))
 	{
 		debug(LOG_ERROR,  "scrNumFriendlyWeapDroidsInRange(): stack failed");
 		return false;
 	}
 
-	for(i=0;i<MAX_PLAYERS;i++)
+	for (i = 0; i < MAX_PLAYERS; i++)
 	{
-		if((alliances[lookingPlayer][i] == ALLIANCE_FORMED) || (i == lookingPlayer))
+		if ((alliances[lookingPlayer][i] == ALLIANCE_FORMED) || (i == lookingPlayer))
 		{
 			numEnemies += numPlayerWeapDroidsInRange(i, lookingPlayer, range, rangeX, rangeY, bVTOLs);
 		}
@@ -7880,15 +7587,15 @@ bool scrNumFriendlyWeapStructsInRange(void)
 	int32_t				bFinished;		// was BOOL (int) ** see warning about conversion
 
 	if (!stackPopParams(5, VAL_INT, &lookingPlayer, VAL_INT, &rangeX,
-		VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bFinished))
+	        VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bFinished))
 	{
 		debug(LOG_ERROR, "scrNumFriendlyWeapStructsInRange(): stack failed");
 		return false;
 	}
 
-	for(i=0; i<MAX_PLAYERS; i++)
+	for (i = 0; i < MAX_PLAYERS; i++)
 	{
-		if((alliances[lookingPlayer][i] == ALLIANCE_FORMED) || (i == lookingPlayer))	//skip enemies
+		if ((alliances[lookingPlayer][i] == ALLIANCE_FORMED) || (i == lookingPlayer))	//skip enemies
 		{
 			numEnemies += numPlayerWeapStructsInRange(i, lookingPlayer, range, rangeX, rangeY, bFinished);
 		}
@@ -7897,7 +7604,7 @@ bool scrNumFriendlyWeapStructsInRange(void)
 	scrFunctionResult.v.ival = numEnemies;
 	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
-		debug(LOG_ERROR,"scrNumFriendlyWeapStructsInRange(): failed to push result");
+		debug(LOG_ERROR, "scrNumFriendlyWeapStructsInRange(): failed to push result");
 		return false;
 	}
 
@@ -7910,9 +7617,9 @@ bool scrNumPlayerWeapDroidsInRange(void)
 	int32_t		bVTOLs;		// was BOOL (int) ** see warning about conversion
 
 	if (!stackPopParams(6, VAL_INT, &targetPlayer, VAL_INT, &lookingPlayer,
-		VAL_INT, &rangeX, VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bVTOLs))
+	        VAL_INT, &rangeX, VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bVTOLs))
 	{
-		debug(LOG_ERROR,"scrNumPlayerWeapDroidsInRange(): stack failed");
+		debug(LOG_ERROR, "scrNumPlayerWeapDroidsInRange(): stack failed");
 		return false;
 	}
 
@@ -7933,9 +7640,9 @@ bool scrNumPlayerWeapStructsInRange(void)
 	int32_t		bFinished;		// was BOOL (int) ** see warning about conversion
 
 	if (!stackPopParams(6, VAL_INT, &targetPlayer, VAL_INT, &lookingPlayer,
-		VAL_INT, &rangeX, VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bFinished))
+	        VAL_INT, &rangeX, VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bFinished))
 	{
-		debug(LOG_ERROR,"scrNumPlayerWeapStructsInRange(): stack failed");
+		debug(LOG_ERROR, "scrNumPlayerWeapStructsInRange(): stack failed");
 		return false;
 	}
 
@@ -7957,10 +7664,10 @@ bool scrNumPlayerWeapObjInRange(void)
 	int32_t				bVTOLs, bFinished;		// was BOOL (int) ** see warning about conversion
 
 	if (!stackPopParams(7, VAL_INT, &targetPlayer, VAL_INT, &lookingPlayer,
-						VAL_INT, &rangeX, VAL_INT, &rangeY, VAL_INT, &range,
-						VAL_BOOL, &bVTOLs, VAL_BOOL, &bFinished))
+	        VAL_INT, &rangeX, VAL_INT, &rangeY, VAL_INT, &range,
+	        VAL_BOOL, &bVTOLs, VAL_BOOL, &bFinished))
 	{
-		debug(LOG_ERROR,"scrNumPlayerWeapObjInRange(): stack failed");
+		debug(LOG_ERROR, "scrNumPlayerWeapObjInRange(): stack failed");
 		return false;
 	}
 
@@ -7983,7 +7690,7 @@ bool scrNumEnemyObjInRange(void)
 	int32_t				bVTOLs, bFinished;		// was BOOL (int) ** see warning about conversion
 
 	if (!stackPopParams(6, VAL_INT, &lookingPlayer, VAL_INT, &rangeX,
-		VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bVTOLs, VAL_BOOL, &bFinished))
+	        VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bVTOLs, VAL_BOOL, &bFinished))
 	{
 		debug(LOG_ERROR, "scrNumEnemyObjInRange(): stack failed");
 		return false;
@@ -8000,21 +7707,21 @@ bool scrNumEnemyObjInRange(void)
 }
 
 UDWORD numEnemyObjInRange(SDWORD player, SDWORD range, SDWORD rangeX, SDWORD rangeY,
-						  bool bVTOLs, bool bFinished)
+        bool bVTOLs, bool bFinished)
 {
 	unsigned int i;
-	const STRUCTURE* psStruct;
-	const DROID* psDroid;
+	const STRUCTURE *psStruct;
+	const DROID *psDroid;
 
 	const int tx = map_coord(rangeX);
 	const int ty = map_coord(rangeY);
 
 	unsigned int numEnemies = 0;
 
-	for (i = 0; i < MAX_PLAYERS;i++)
+	for (i = 0; i < MAX_PLAYERS; i++)
 	{
 		if (alliances[player][i] == ALLIANCE_FORMED
-		 || i == player)
+		    || i == player)
 		{
 			continue;
 		}
@@ -8025,10 +7732,10 @@ UDWORD numEnemyObjInRange(SDWORD player, SDWORD range, SDWORD rangeX, SDWORD ran
 			if (psStruct->visible[player])	//if can see it
 			{
 				if (!bFinished
-				 || psStruct->status == SS_BUILT)
+				    || psStruct->status == SS_BUILT)
 				{
 					if (range < 0
-					 || world_coord(hypotf(tx - map_coord(psStruct->pos.x), ty - map_coord(psStruct->pos.y))) < range)	//enemy in range
+					    || world_coord(hypotf(tx - map_coord(psStruct->pos.x), ty - map_coord(psStruct->pos.y))) < range)	//enemy in range
 					{
 						numEnemies++;
 					}
@@ -8043,14 +7750,14 @@ UDWORD numEnemyObjInRange(SDWORD player, SDWORD range, SDWORD rangeX, SDWORD ran
 			{
 				//if VTOLs are excluded, skip them
 				if (!bVTOLs
-				 && (asPropulsionStats[psDroid->asBits[COMP_PROPULSION].nStat].propulsionType == PROPULSION_TYPE_LIFT
-				  || psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER))
+				    && (asPropulsionStats[psDroid->asBits[COMP_PROPULSION]].propulsionType == PROPULSION_TYPE_LIFT
+				        || psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER))
 				{
 					continue;
 				}
 
 				if (range < 0
-				 || world_coord(hypotf(tx - map_coord(psDroid->pos.x), ty - map_coord(psDroid->pos.y))) < range)	//enemy in range
+				    || world_coord(hypotf(tx - map_coord(psDroid->pos.x), ty - map_coord(psDroid->pos.y))) < range)	//enemy in range
 				{
 					numEnemies++;
 				}
@@ -8065,13 +7772,13 @@ UDWORD numEnemyObjInRange(SDWORD player, SDWORD range, SDWORD rangeX, SDWORD ran
 bool scrNumStructsByStatInRange(void)
 {
 	SDWORD		player, lookingPlayer, index, x, y, range;
-	SDWORD		rangeSquared,NumStruct;
+	SDWORD		rangeSquared, NumStruct;
 	STRUCTURE	*psCurr;
 	SDWORD		xdiff, ydiff;
 	STRUCTURE_STATS *psTarget;
 
 	if (!stackPopParams(6, ST_STRUCTURESTAT, &index, VAL_INT, &x, VAL_INT, &y,
-		VAL_INT, &range, VAL_INT, &lookingPlayer, VAL_INT, &player))
+	        VAL_INT, &range, VAL_INT, &lookingPlayer, VAL_INT, &player))
 	{
 		debug(LOG_ERROR, "scrNumStructsByStatInRange(): stack failed");
 		return false;
@@ -8079,30 +7786,30 @@ bool scrNumStructsByStatInRange(void)
 
 	if (player >= MAX_PLAYERS)
 	{
-		ASSERT( false, "scrNumStructsByStatInRange:player number is too high" );
+		ASSERT(false, "scrNumStructsByStatInRange:player number is too high");
 		return false;
 	}
 
 	if (x < 0
-	 || map_coord(x) > (SDWORD)mapWidth)
+	    || map_coord(x) > (SDWORD)mapWidth)
 	{
-		ASSERT( false, "scrNumStructsByStatInRange : invalid X coord" );
+		ASSERT(false, "scrNumStructsByStatInRange : invalid X coord");
 		return false;
 	}
 	if (y < 0
-	 || map_coord(y) > (SDWORD)mapHeight)
+	    || map_coord(y) > (SDWORD)mapHeight)
 	{
-		ASSERT( false,"scrNumStructsByStatInRange : invalid Y coord" );
+		ASSERT(false, "scrNumStructsByStatInRange : invalid Y coord");
 		return false;
 	}
 	if (index < (SDWORD)0 || index > (SDWORD)numStructureStats)
 	{
-		ASSERT( false, "scrNumStructsByStatInRange : Invalid structure stat" );
+		ASSERT(false, "scrNumStructsByStatInRange : Invalid structure stat");
 		return false;
 	}
 	if (range < (SDWORD)0)
 	{
-		ASSERT( false, "scrNumStructsByStatInRange : Rnage is less than zero" );
+		ASSERT(false, "scrNumStructsByStatInRange : Rnage is less than zero");
 		return false;
 	}
 
@@ -8112,15 +7819,15 @@ bool scrNumStructsByStatInRange(void)
 	//exists within range
 	psTarget = &asStructureStats[index];
 	rangeSquared = range * range;
-	for(psCurr = apsStructLists[player]; psCurr; psCurr = psCurr->psNext)
+	for (psCurr = apsStructLists[player]; psCurr; psCurr = psCurr->psNext)
 	{
 		xdiff = (SDWORD)psCurr->pos.x - x;
 		ydiff = (SDWORD)psCurr->pos.y - y;
-		if (xdiff*xdiff + ydiff*ydiff <= rangeSquared)
+		if (xdiff *xdiff + ydiff *ydiff <= rangeSquared)
 		{
-			if( strcmp(psCurr->pStructureType->pName,psTarget->pName) == 0 )
+			if (psCurr->pStructureType->id.compare(psTarget->id) == 0)
 			{
-				if(psCurr->visible[lookingPlayer])		//can we see it?
+				if (psCurr->visible[lookingPlayer])		//can we see it?
 				{
 					NumStruct++;
 				}
@@ -8146,16 +7853,16 @@ bool scrNumStructsByStatInArea(void)
 	STRUCTURE_STATS		*psStats;
 
 	if (!stackPopParams(7, ST_STRUCTURESTAT, &index, VAL_INT, &x1, VAL_INT, &y1,
-		VAL_INT, &x2, VAL_INT, &y2, VAL_INT, &lookingPlayer, VAL_INT, &player))
+	        VAL_INT, &x2, VAL_INT, &y2, VAL_INT, &lookingPlayer, VAL_INT, &player))
 	{
-		debug(LOG_ERROR,"scrNumStructsByStatInArea: failed to pop");
+		debug(LOG_ERROR, "scrNumStructsByStatInArea: failed to pop");
 		return false;
 	}
 
 	if (player >= MAX_PLAYERS)
 	{
-		debug(LOG_ERROR,"scrNumStructsByStatInArea: player number too high");
-		ASSERT( false, "scrStructureBuiltInRange:player number is too high" );
+		debug(LOG_ERROR, "scrNumStructsByStatInArea: player number too high");
+		ASSERT(false, "scrStructureBuiltInRange:player number is too high");
 		return false;
 	}
 
@@ -8163,28 +7870,40 @@ bool scrNumStructsByStatInArea(void)
 	if (index < (SDWORD)0 || index > (SDWORD)numStructureStats)
 	{
 		debug(LOG_ERROR, "scrNumStructsByStatInArea: invalid structure stat");
-		ASSERT( false, "scrStructureBuiltInRange : Invalid structure stat" );
+		ASSERT(false, "scrStructureBuiltInRange : Invalid structure stat");
 		return false;
 	}
 
-	ASSERT_OR_RETURN( false, index < numStructureStats, "Invalid range referenced for numStructureStats, %d > %d", index, numStructureStats);
+	ASSERT_OR_RETURN(false, index < numStructureStats, "Invalid range referenced for numStructureStats, %d > %d", index, numStructureStats);
 	psStats = (STRUCTURE_STATS *)(asStructureStats + index);
 
-	ASSERT_OR_RETURN( false, psStats != NULL, "Invalid structure pointer" );
+	ASSERT_OR_RETURN(false, psStats != NULL, "Invalid structure pointer");
 
 	NumStruct = 0;
 
 	for (psCurr = apsStructLists[player]; psCurr != NULL;
-		psCurr = psCurr->psNext)
+	     psCurr = psCurr->psNext)
 	{
 		if (psCurr->pStructureType == psStats)
 		{
-			if(psCurr->visible[lookingPlayer])		//can we see it?
+			if (psCurr->visible[lookingPlayer])		//can we see it?
 			{
-				if(psCurr->pos.x < x1) continue;		//not in bounds
-				if(psCurr->pos.y < y1) continue;		//not in bounds
-				if(psCurr->pos.x > x2) continue;		//not in bounds
-				if(psCurr->pos.y > y2) continue;		//not in bounds
+				if (psCurr->pos.x < x1)
+				{
+					continue;    //not in bounds
+				}
+				if (psCurr->pos.y < y1)
+				{
+					continue;    //not in bounds
+				}
+				if (psCurr->pos.x > x2)
+				{
+					continue;    //not in bounds
+				}
+				if (psCurr->pos.y > y2)
+				{
+					continue;    //not in bounds
+				}
 				NumStruct++;
 			}
 		}
@@ -8202,40 +7921,40 @@ bool scrNumStructsByStatInArea(void)
 bool scrNumStructsByTypeInRange(void)
 {
 	SDWORD		targetPlayer, lookingPlayer, type, x, y, range;
-	SDWORD		rangeSquared,NumStruct;
+	SDWORD		rangeSquared, NumStruct;
 	STRUCTURE	*psCurr;
 	SDWORD		xdiff, ydiff;
 
 	if (!stackPopParams(6, VAL_INT, &lookingPlayer, VAL_INT, &targetPlayer,
-		VAL_INT, &type, VAL_INT, &x, VAL_INT, &y, VAL_INT, &range))
+	        VAL_INT, &type, VAL_INT, &x, VAL_INT, &y, VAL_INT, &range))
 	{
-		debug(LOG_ERROR,"scrNumStructsByTypeInRange: failed to pop");
+		debug(LOG_ERROR, "scrNumStructsByTypeInRange: failed to pop");
 		return false;
 	}
 
 	if (lookingPlayer >= MAX_PLAYERS || targetPlayer >= MAX_PLAYERS)
 	{
-		ASSERT( false, "scrNumStructsByTypeInRange:player number is too high" );
+		ASSERT(false, "scrNumStructsByTypeInRange:player number is too high");
 		return false;
 	}
 
 	if (x < 0
-	 || map_coord(x) > (SDWORD)mapWidth)
+	    || map_coord(x) > (SDWORD)mapWidth)
 	{
-		ASSERT( false, "scrNumStructsByTypeInRange : invalid X coord" );
+		ASSERT(false, "scrNumStructsByTypeInRange : invalid X coord");
 		return false;
 	}
 
 	if (y < 0
-	 || map_coord(y) > (SDWORD)mapHeight)
+	    || map_coord(y) > (SDWORD)mapHeight)
 	{
-		ASSERT( false,"scrNumStructsByTypeInRange : invalid Y coord" );
+		ASSERT(false, "scrNumStructsByTypeInRange : invalid Y coord");
 		return false;
 	}
 
 	if (range < (SDWORD)0)
 	{
-		ASSERT( false, "scrNumStructsByTypeInRange : Rnage is less than zero" );
+		ASSERT(false, "scrNumStructsByTypeInRange : Rnage is less than zero");
 		return false;
 	}
 
@@ -8244,15 +7963,15 @@ bool scrNumStructsByTypeInRange(void)
 	//now look through the players list of structures to see if this type
 	//exists within range
 	rangeSquared = range * range;
-	for(psCurr = apsStructLists[targetPlayer]; psCurr; psCurr = psCurr->psNext)
+	for (psCurr = apsStructLists[targetPlayer]; psCurr; psCurr = psCurr->psNext)
 	{
 		xdiff = (SDWORD)psCurr->pos.x - x;
 		ydiff = (SDWORD)psCurr->pos.y - y;
-		if (xdiff*xdiff + ydiff*ydiff <= rangeSquared)
+		if (xdiff *xdiff + ydiff *ydiff <= rangeSquared)
 		{
-			if((type < 0) ||(psCurr->pStructureType->type == type))
+			if ((type < 0) || (psCurr->pStructureType->type == type))
 			{
-				if(psCurr->visible[lookingPlayer])		//can we see it?
+				if (psCurr->visible[lookingPlayer])		//can we see it?
 				{
 					NumStruct++;
 				}
@@ -8272,12 +7991,12 @@ bool scrNumStructsByTypeInRange(void)
 bool scrNumFeatByTypeInRange(void)
 {
 	SDWORD		lookingPlayer, type, x, y, range;
-	SDWORD		rangeSquared,NumFeat;
+	SDWORD		rangeSquared, NumFeat;
 	FEATURE		*psCurr;
 	SDWORD		xdiff, ydiff;
 
 	if (!stackPopParams(5, VAL_INT, &lookingPlayer,
-		VAL_INT, &type, VAL_INT, &x, VAL_INT, &y, VAL_INT, &range))
+	        VAL_INT, &type, VAL_INT, &x, VAL_INT, &y, VAL_INT, &range))
 	{
 		debug(LOG_ERROR, "scrNumFeatByTypeInRange(): failed to pop");
 		return false;
@@ -8285,27 +8004,27 @@ bool scrNumFeatByTypeInRange(void)
 
 	if (lookingPlayer >= MAX_PLAYERS)
 	{
-		ASSERT( false, "scrNumFeatByTypeInRange:player number is too high" );
+		ASSERT(false, "scrNumFeatByTypeInRange:player number is too high");
 		return false;
 	}
 
 	if (x < 0
-	 || map_coord(x) > (SDWORD)mapWidth)
+	    || map_coord(x) > (SDWORD)mapWidth)
 	{
-		ASSERT( false, "scrNumFeatByTypeInRange : invalid X coord" );
+		ASSERT(false, "scrNumFeatByTypeInRange : invalid X coord");
 		return false;
 	}
 
 	if (y < 0
-	 || map_coord(y) > (SDWORD)mapHeight)
+	    || map_coord(y) > (SDWORD)mapHeight)
 	{
-		ASSERT( false,"scrNumFeatByTypeInRange : invalid Y coord" );
+		ASSERT(false, "scrNumFeatByTypeInRange : invalid Y coord");
 		return false;
 	}
 
 	if (range < (SDWORD)0)
 	{
-		ASSERT( false, "scrNumFeatByTypeInRange : Rnage is less than zero" );
+		ASSERT(false, "scrNumFeatByTypeInRange : Rnage is less than zero");
 		return false;
 	}
 
@@ -8314,15 +8033,15 @@ bool scrNumFeatByTypeInRange(void)
 	//now look through the players list of structures to see if this type
 	//exists within range
 	rangeSquared = range * range;
-	for(psCurr = apsFeatureLists[0]; psCurr; psCurr = psCurr->psNext)
+	for (psCurr = apsFeatureLists[0]; psCurr; psCurr = psCurr->psNext)
 	{
 		xdiff = (SDWORD)psCurr->pos.x - x;
 		ydiff = (SDWORD)psCurr->pos.y - y;
-		if (xdiff*xdiff + ydiff*ydiff <= rangeSquared)
+		if (xdiff *xdiff + ydiff *ydiff <= rangeSquared)
 		{
-			if((type < 0) ||(psCurr->psStats->subType == type))	//like FEAT_OIL_RESOURCE
+			if ((type < 0) || (psCurr->psStats->subType == type))	//like FEAT_OIL_RESOURCE
 			{
-				if(psCurr->visible[lookingPlayer])		//can we see it?
+				if (psCurr->visible[lookingPlayer])		//can we see it?
 				{
 					NumFeat++;
 				}
@@ -8343,38 +8062,38 @@ bool scrNumFeatByTypeInRange(void)
 bool scrNumStructsButNotWallsInRangeVis(void)
 {
 	SDWORD		player, lookingPlayer, x, y, range;
-	SDWORD		rangeSquared,NumStruct;
+	SDWORD		rangeSquared, NumStruct;
 	STRUCTURE	*psCurr;
 	SDWORD		xdiff, ydiff;
 
 	if (!stackPopParams(5, VAL_INT, &x, VAL_INT, &y,
-		VAL_INT, &range, VAL_INT, &lookingPlayer, VAL_INT, &player))
+	        VAL_INT, &range, VAL_INT, &lookingPlayer, VAL_INT, &player))
 	{
-		debug(LOG_ERROR,"scrNumStructsButNotWallsInRangeVis: failed to pop");
+		debug(LOG_ERROR, "scrNumStructsButNotWallsInRangeVis: failed to pop");
 		return false;
 	}
 
 	if ((player >= MAX_PLAYERS) || (lookingPlayer >= MAX_PLAYERS))
 	{
-		ASSERT( false, "scrNumStructsButNotWallsInRangeVis:player number is too high" );
+		ASSERT(false, "scrNumStructsButNotWallsInRangeVis:player number is too high");
 		return false;
 	}
 
 	if (x < 0
-	 || map_coord(x) > (SDWORD)mapWidth)
+	    || map_coord(x) > (SDWORD)mapWidth)
 	{
-		ASSERT( false, "scrNumStructsButNotWallsInRangeVis : invalid X coord" );
+		ASSERT(false, "scrNumStructsButNotWallsInRangeVis : invalid X coord");
 		return false;
 	}
 	if (y < 0
-	 || map_coord(y) > (SDWORD)mapHeight)
+	    || map_coord(y) > (SDWORD)mapHeight)
 	{
-		ASSERT( false,"scrNumStructsButNotWallsInRangeVis : invalid Y coord" );
+		ASSERT(false, "scrNumStructsButNotWallsInRangeVis : invalid Y coord");
 		return false;
 	}
 	if (range < (SDWORD)0)
 	{
-		ASSERT( false, "scrNumStructsButNotWallsInRangeVis : Rnage is less than zero" );
+		ASSERT(false, "scrNumStructsButNotWallsInRangeVis : Rnage is less than zero");
 		return false;
 	}
 
@@ -8382,16 +8101,16 @@ bool scrNumStructsButNotWallsInRangeVis(void)
 
 	//now look through the players list of structures
 	rangeSquared = range * range;
-	for(psCurr = apsStructLists[player]; psCurr; psCurr = psCurr->psNext)
+	for (psCurr = apsStructLists[player]; psCurr; psCurr = psCurr->psNext)
 	{
 		if ((psCurr->pStructureType->type != REF_WALL) &&
-		(psCurr->pStructureType->type != REF_WALLCORNER))
+		    (psCurr->pStructureType->type != REF_WALLCORNER))
 		{
-			if(psCurr->visible[lookingPlayer])		//can we see it?
+			if (psCurr->visible[lookingPlayer])		//can we see it?
 			{
 				xdiff = (SDWORD)psCurr->pos.x - x;
 				ydiff = (SDWORD)psCurr->pos.y - y;
-				if (xdiff*xdiff + ydiff*ydiff <= rangeSquared)
+				if (xdiff *xdiff + ydiff *ydiff <= rangeSquared)
 				{
 					NumStruct++;
 				}
@@ -8418,13 +8137,13 @@ bool scrGetStructureVis(void)
 
 	if (!stackPopParams(3, ST_STRUCTURESTAT, &index, VAL_INT, &player, VAL_INT, &lookingPlayer))
 	{
-		debug(LOG_ERROR,"scrGetStructureVis: failed to pop");
+		debug(LOG_ERROR, "scrGetStructureVis: failed to pop");
 		return false;
 	}
 
 	if ((player >= MAX_PLAYERS) || (lookingPlayer >= MAX_PLAYERS))
 	{
-		ASSERT( false, "scrGetStructureVis:player number is too high" );
+		ASSERT(false, "scrGetStructureVis:player number is too high");
 		return false;
 	}
 
@@ -8433,11 +8152,11 @@ bool scrGetStructureVis(void)
 	//search the players' list of built structures to see if one exists
 	found = false;
 	for (psStruct = apsStructLists[player]; psStruct != NULL; psStruct =
-		psStruct->psNext)
+	        psStruct->psNext)
 	{
 		if (psStruct->pStructureType->ref == structType)
 		{
-			if(psStruct->visible[lookingPlayer])
+			if (psStruct->visible[lookingPlayer])
 			{
 				found = true;
 				break;
@@ -8464,20 +8183,20 @@ bool scrGetStructureVis(void)
 bool scrChooseValidLoc(void)
 {
 	SDWORD sendY, sendX, *x, *y, player, threatRange;
-	UDWORD tx,ty;
+	UDWORD tx, ty;
 
-	if (!stackPopParams(6, VAL_REF|VAL_INT, &x, VAL_REF|VAL_INT, &y,
-		VAL_INT, &sendX, VAL_INT, &sendY, VAL_INT, &player, VAL_INT, &threatRange))
+	if (!stackPopParams(6, VAL_REF | VAL_INT, &x, VAL_REF | VAL_INT, &y,
+	        VAL_INT, &sendX, VAL_INT, &sendY, VAL_INT, &player, VAL_INT, &threatRange))
 	{
-		debug(LOG_ERROR,"scrChooseValidLoc: failed to pop");
+		debug(LOG_ERROR, "scrChooseValidLoc: failed to pop");
 		return false;
 	}
 
-    //Check coords
+	//Check coords
 	if (sendX < 0
-	 || sendX > world_coord(mapWidth)
-	 || sendY < 0
-	 || sendY > world_coord(mapHeight))
+	    || sendX > world_coord(mapWidth)
+	    || sendY < 0
+	    || sendY > world_coord(mapHeight))
 	{
 		debug(LOG_ERROR, "scrChooseValidLoc: coords off map");
 		return false;
@@ -8486,7 +8205,7 @@ bool scrChooseValidLoc(void)
 	tx = map_coord(sendX);
 	ty = map_coord(sendY);
 
-	if(pickATileGenThreat(&tx, &ty, LOOK_FOR_EMPTY_TILE, threatRange, player, zonedPAT))
+	if (pickATileGenThreat(&tx, &ty, LOOK_FOR_EMPTY_TILE, threatRange, player, zonedPAT))
 	{
 		*x = world_coord(tx);
 		*y = world_coord(ty);
@@ -8520,19 +8239,19 @@ bool scrGetClosestEnemy(void)
 	DROID				*psDroid = NULL;
 
 	if (!stackPopParams(6, VAL_INT, &x, VAL_INT, &y,
-		 VAL_INT, &range,  VAL_BOOL, &weaponOnly, VAL_BOOL, &bVTOLs, VAL_INT, &player))
+	        VAL_INT, &range,  VAL_BOOL, &weaponOnly, VAL_BOOL, &bVTOLs, VAL_INT, &player))
 	{
-		debug(LOG_ERROR,"scrGetClosestEnemy: stack failed");
+		debug(LOG_ERROR, "scrGetClosestEnemy: stack failed");
 		return false;
 	}
 
-    //Check coords
+	//Check coords
 	if (x < 0
-	 || x > world_coord(mapWidth)
-	 || y < 0
-	 || y > world_coord(mapHeight))
+	    || x > world_coord(mapWidth)
+	    || y < 0
+	    || y > world_coord(mapHeight))
 	{
-		debug(LOG_ERROR,"scrGetClosestEnemy: coords off map");
+		debug(LOG_ERROR, "scrGetClosestEnemy: coords off map");
 		return false;
 	}
 
@@ -8541,7 +8260,7 @@ bool scrGetClosestEnemy(void)
 
 	bestDist = 99999;
 
-	for (i=0;i<MAX_PLAYERS;i++)
+	for (i = 0; i < MAX_PLAYERS; i++)
 	{
 		if ((alliances[player][i] == ALLIANCE_FORMED) || (i == player))
 		{
@@ -8561,7 +8280,7 @@ bool scrGetClosestEnemy(void)
 				}
 
 				//if VTOLs are excluded, skip them
-				if (!bVTOLs && ((asPropulsionStats[psDroid->asBits[COMP_PROPULSION].nStat].propulsionType == PROPULSION_TYPE_LIFT) || (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)))
+				if (!bVTOLs && ((asPropulsionStats[psDroid->asBits[COMP_PROPULSION]].propulsionType == PROPULSION_TYPE_LIFT) || (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)))
 				{
 					continue;
 				}
@@ -8569,11 +8288,11 @@ bool scrGetClosestEnemy(void)
 				dist = world_coord(hypotf(tx - map_coord(psDroid->pos.x), ty - map_coord(psDroid->pos.y)));
 				if (dist < bestDist)
 				{
-					if((range < 0) || (dist < range))	//enemy in range
+					if ((range < 0) || (dist < range))	//enemy in range
 					{
 						bestDist = dist;
 						bFound = true;
-						psObj = (BASE_OBJECT*)psDroid;
+						psObj = (BASE_OBJECT *)psDroid;
 					}
 				}
 			}
@@ -8581,12 +8300,12 @@ bool scrGetClosestEnemy(void)
 
 
 		//check structures
-		for (psStruct = apsStructLists[i]; psStruct; psStruct=psStruct->psNext)
+		for (psStruct = apsStructLists[i]; psStruct; psStruct = psStruct->psNext)
 		{
 			if (psStruct->visible[player])	//if can see it
 			{
 				//only need defenses?
-				if (weaponOnly && (!objHasWeapon((BASE_OBJECT *) psStruct) || (psStruct->status != SS_BUILT) ))	//non-weapon-structures	or not finished
+				if (weaponOnly && (!objHasWeapon((BASE_OBJECT *) psStruct) || (psStruct->status != SS_BUILT)))	//non-weapon-structures	or not finished
 				{
 					continue;
 				}
@@ -8598,7 +8317,7 @@ bool scrGetClosestEnemy(void)
 					{
 						bestDist = dist;
 						bFound = true;
-						psObj = (BASE_OBJECT*)psStruct;
+						psObj = (BASE_OBJECT *)psStruct;
 					}
 				}
 			}
@@ -8637,13 +8356,13 @@ bool scrTransporterCapacity(void)
 		return false;
 	}
 
-	if(psDroid == NULL)
+	if (psDroid == NULL)
 	{
-		debug(LOG_ERROR,"scrTransporterCapacity(): NULLOBJECT passed");
+		debug(LOG_ERROR, "scrTransporterCapacity(): NULLOBJECT passed");
 		return false;
 	}
 
-	if(psDroid->droidType != DROID_TRANSPORTER && psDroid->droidType != DROID_SUPERTRANSPORTER)
+	if (psDroid->droidType != DROID_TRANSPORTER && psDroid->droidType != DROID_SUPERTRANSPORTER)
 	{
 		debug(LOG_ERROR, "scrTransporterCapacity(): passed droid is not a transporter");
 		return false;
@@ -8670,22 +8389,22 @@ bool scrTransporterFlying(void)
 		return false;
 	}
 
-	if(psDroid == NULL)
+	if (psDroid == NULL)
 	{
-		debug(LOG_ERROR,"scrTransporterFlying(): NULLOBJECT passed");
+		debug(LOG_ERROR, "scrTransporterFlying(): NULLOBJECT passed");
 		return false;
 	}
 
-	if(psDroid->droidType != DROID_TRANSPORTER && psDroid->droidType != DROID_SUPERTRANSPORTER)
+	if (psDroid->droidType != DROID_TRANSPORTER && psDroid->droidType != DROID_SUPERTRANSPORTER)
 	{
-		debug(LOG_ERROR,"scrTransporterFlying(): passed droid is not a transporter");
+		debug(LOG_ERROR, "scrTransporterFlying(): passed droid is not a transporter");
 		return false;
 	}
 
 	scrFunctionResult.v.bval = transporterFlying(psDroid);
 	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 	{
-		debug(LOG_ERROR,"scrTransporterFlying(): failed to push result");
+		debug(LOG_ERROR, "scrTransporterFlying(): failed to push result");
 		return false;
 	}
 
@@ -8695,27 +8414,27 @@ bool scrTransporterFlying(void)
 bool scrUnloadTransporter(void)
 {
 	DROID			*psDroid;
-	SDWORD			x,y;
+	SDWORD			x, y;
 
 	if (!stackPopParams(3, ST_DROID, &psDroid, VAL_INT, &x, VAL_INT, &y))
 	{
-		debug(LOG_ERROR,"scrUnloadTransporter(): failed to pop params");
+		debug(LOG_ERROR, "scrUnloadTransporter(): failed to pop params");
 		return false;
 	}
 
-	if(psDroid == NULL)
+	if (psDroid == NULL)
 	{
-		debug(LOG_ERROR,"scrUnloadTransporter(): NULLOBJECT passed");
+		debug(LOG_ERROR, "scrUnloadTransporter(): NULLOBJECT passed");
 		return false;
 	}
 
-	if(psDroid->droidType != DROID_TRANSPORTER && psDroid->droidType != DROID_SUPERTRANSPORTER)
+	if (psDroid->droidType != DROID_TRANSPORTER && psDroid->droidType != DROID_SUPERTRANSPORTER)
 	{
-		debug(LOG_ERROR,"scrUnloadTransporter(): passed droid is not a transporter");
+		debug(LOG_ERROR, "scrUnloadTransporter(): passed droid is not a transporter");
 		return false;
 	}
 
-	unloadTransporter(psDroid,x,y, false);
+	unloadTransporter(psDroid, x, y, false);
 
 	return true;
 }
@@ -8728,13 +8447,13 @@ bool scrHasGroup(void)
 
 	if (!stackPopParams(1, ST_DROID, &psDroid))
 	{
-		debug( LOG_ERROR,"scrHasGroup: failed to pop" );
+		debug(LOG_ERROR, "scrHasGroup: failed to pop");
 		return false;
 	}
 
 	if (psDroid == NULL)
 	{
-		debug( LOG_ERROR, "scrHasGroup: droid is NULLOBJECT" );
+		debug(LOG_ERROR, "scrHasGroup: droid is NULLOBJECT");
 		return false;
 	}
 
@@ -8771,14 +8490,14 @@ bool scrObjWeaponMaxRange(void)
 	}
 
 	//check if valid type
-	if(psObj->type == OBJ_DROID)
+	if (psObj->type == OBJ_DROID)
 	{
-		psDroid = (DROID*)psObj;
+		psDroid = (DROID *)psObj;
 		if (psDroid->asWeaps[0].nStat != 0)
 		{
 			ASSERT_OR_RETURN(false, psDroid->asWeaps[0].nStat < numWeaponStats, "Invalid range referenced.");
 			psStats = asWeaponStats + psDroid->asWeaps[0].nStat;
-			scrFunctionResult.v.ival = psStats->longRange;
+			scrFunctionResult.v.ival = psStats->base.maxRange;
 			if (!stackPushResult(VAL_INT, &scrFunctionResult))
 			{
 				return false;
@@ -8787,14 +8506,14 @@ bool scrObjWeaponMaxRange(void)
 			return true;
 		}
 	}
-	else if(psObj->type == OBJ_STRUCTURE)
+	else if (psObj->type == OBJ_STRUCTURE)
 	{
-		psStruct = (STRUCTURE*)psObj;
+		psStruct = (STRUCTURE *)psObj;
 		if (psStruct->asWeaps[0].nStat != 0)
 		{
 			ASSERT_OR_RETURN(false, psStruct->asWeaps[0].nStat < numWeaponStats, "Invalid range referenced.");
 			psStats = asWeaponStats + psStruct->asWeaps[0].nStat;
-			scrFunctionResult.v.ival = psStats->longRange;
+			scrFunctionResult.v.ival = psStats->base.maxRange;
 			if (!stackPushResult(VAL_INT, &scrFunctionResult))
 			{
 				return false;
@@ -8807,7 +8526,7 @@ bool scrObjWeaponMaxRange(void)
 	scrFunctionResult.v.ival = 0;
 	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
-		debug(LOG_ERROR,"scrObjWeaponMaxRange: wrong object type");
+		debug(LOG_ERROR, "scrObjWeaponMaxRange: wrong object type");
 		return false;
 	}
 
@@ -8825,7 +8544,7 @@ bool scrObjHasWeapon(void)
 	}
 
 	//check if valid type
-	if(objHasWeapon(psObj))
+	if (objHasWeapon(psObj))
 	{
 		scrFunctionResult.v.bval = true;
 		if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
@@ -8860,12 +8579,12 @@ bool scrObjectHasIndirectWeapon(void)
 
 	if (psObj == NULL)
 	{
-		debug(LOG_ERROR,"scrHasIndirectWeapon(): NULLOBJECT passed");
+		debug(LOG_ERROR, "scrHasIndirectWeapon(): NULLOBJECT passed");
 		return false;
 	}
 
 	bIndirect = false;
-	if(psObj->type == OBJ_DROID)
+	if (psObj->type == OBJ_DROID)
 	{
 		if (((DROID *)psObj)->asWeaps[0].nStat > 0)
 		{
@@ -8873,7 +8592,7 @@ bool scrObjectHasIndirectWeapon(void)
 			bIndirect = !proj_Direct(psWeapStats);
 		}
 	}
-	else if(psObj->type == OBJ_STRUCTURE)
+	else if (psObj->type == OBJ_STRUCTURE)
 	{
 		if (((STRUCTURE *)psObj)->asWeaps[0].nStat > 0)
 		{
@@ -8885,7 +8604,7 @@ bool scrObjectHasIndirectWeapon(void)
 	scrFunctionResult.v.bval = bIndirect;
 	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 	{
-		debug(LOG_ERROR,"scrHasIndirectWeapon(): failed to push result");
+		debug(LOG_ERROR, "scrHasIndirectWeapon(): failed to push result");
 		return false;
 	}
 
@@ -8895,26 +8614,26 @@ bool scrObjectHasIndirectWeapon(void)
 //returns closest droid by type
 bool scrGetClosestEnemyDroidByType(void)
 {
-	SDWORD				x,y,tx,ty, player, range,i,type;
-	UDWORD				dist,bestDist;
+	SDWORD				x, y, tx, ty, player, range, i, type;
+	UDWORD				dist, bestDist;
 	bool				bFound = false;	//only military objects?
 	int32_t				bVTOLs;			// was BOOL (int) ** see warning about conversion
 	DROID				*psDroid = NULL, *foundDroid = NULL;
 
 	if (!stackPopParams(6, VAL_INT, &x, VAL_INT, &y,
-		 VAL_INT, &range,  VAL_INT, &type, VAL_BOOL, &bVTOLs, VAL_INT, &player))
+	        VAL_INT, &range,  VAL_INT, &type, VAL_BOOL, &bVTOLs, VAL_INT, &player))
 	{
 		debug(LOG_ERROR, "scrGetClosestEnemyDroidByType: stack failed");
 		return false;
 	}
 
-    //Check coords
+	//Check coords
 	if (x < 0
-	 || x > world_coord(mapWidth)
-	 || y < 0
-	 || y > world_coord(mapHeight))
+	    || x > world_coord(mapWidth)
+	    || y < 0
+	    || y > world_coord(mapHeight))
 	{
-		debug(LOG_ERROR,"scrGetClosestEnemyDroidByType: coords off map");
+		debug(LOG_ERROR, "scrGetClosestEnemyDroidByType: coords off map");
 		return false;
 	}
 
@@ -8923,23 +8642,23 @@ bool scrGetClosestEnemyDroidByType(void)
 
 	bestDist = 99999;
 
-	for(i=0;i<MAX_PLAYERS;i++)
+	for (i = 0; i < MAX_PLAYERS; i++)
 	{
-		if((alliances[player][i] == ALLIANCE_FORMED) || (i == player))
+		if ((alliances[player][i] == ALLIANCE_FORMED) || (i == player))
 		{
 			continue;
 		}
 
 		//check droids
-		for(psDroid = apsDroidLists[i]; psDroid; psDroid = psDroid->psNext)
+		for (psDroid = apsDroidLists[i]; psDroid; psDroid = psDroid->psNext)
 		{
 			//if VTOLs are excluded, skip them (don't check for transporter this time)
-			if(!bVTOLs && (asPropulsionStats[psDroid->asBits[COMP_PROPULSION].nStat].propulsionType == PROPULSION_TYPE_LIFT) )
+			if (!bVTOLs && (asPropulsionStats[psDroid->asBits[COMP_PROPULSION]].propulsionType == PROPULSION_TYPE_LIFT))
 			{
 				continue;
 			}
 
-			if(psDroid->visible[player])		//can see this droid?
+			if (psDroid->visible[player])		//can see this droid?
 			{
 				//skip?
 				if ((type != (-1)) && (psDroid->droidType != type))
@@ -8948,9 +8667,9 @@ bool scrGetClosestEnemyDroidByType(void)
 				}
 
 				dist = world_coord(hypotf(tx - map_coord(psDroid->pos.x), ty - map_coord(psDroid->pos.y)));
-				if(dist < bestDist)
+				if (dist < bestDist)
 				{
-					if(dist < range)	//enemy in range
+					if (dist < range)	//enemy in range
 					{
 						bestDist = dist;
 						bFound = true;
@@ -8961,7 +8680,7 @@ bool scrGetClosestEnemyDroidByType(void)
 		}
 	}
 
-	if(bFound)
+	if (bFound)
 	{
 		scrFunctionResult.v.oval = foundDroid;
 		if (!stackPushResult((INTERP_TYPE)ST_DROID, &scrFunctionResult))
@@ -8984,25 +8703,26 @@ bool scrGetClosestEnemyDroidByType(void)
 //returns closest structure by type
 bool scrGetClosestEnemyStructByType(void)
 {
-	SDWORD				x,y,tx,ty, player, range,i,type,dist;
+	SDWORD				x, y, tx, ty, player, range, i, type, dist;
 	UDWORD				bestDist;
 	bool				bFound = false;	//only military objects?
 	STRUCTURE			*psStruct = NULL, *foundStruct = NULL;
 
 	if (!stackPopParams(5, VAL_INT, &x, VAL_INT, &y,
-		 VAL_INT, &range,  VAL_INT, &type, VAL_INT, &player))
+	        VAL_INT, &range,  VAL_INT, &type, VAL_INT, &player))
 	{
 		debug(LOG_ERROR, "scrGetClosestEnemyStructByType: stack failed");
 		return false;
 	}
+	ASSERT_OR_RETURN(false, player >= 0 && player < MAX_PLAYERS, "Invalid player number");
 
-    //Check coords
+	//Check coords
 	if (x < 0
-	 || x > world_coord(mapWidth)
-	 || y < 0
-	 || y > world_coord(mapHeight))
+	    || x > world_coord(mapWidth)
+	    || y < 0
+	    || y > world_coord(mapHeight))
 	{
-		debug(LOG_ERROR,"scrGetClosestEnemyStructByType: coords off map");
+		debug(LOG_ERROR, "scrGetClosestEnemyStructByType: coords off map");
 		return false;
 	}
 
@@ -9011,28 +8731,28 @@ bool scrGetClosestEnemyStructByType(void)
 
 	bestDist = 99999;
 
-	for(i=0;i<MAX_PLAYERS;i++)
+	for (i = 0; i < MAX_PLAYERS; i++)
 	{
-		if((alliances[player][i] == ALLIANCE_FORMED) || (i == player))
+		if ((alliances[player][i] == ALLIANCE_FORMED) || (i == player))
 		{
 			continue;
 		}
 
 		//check structures
-		for(psStruct = apsStructLists[i]; psStruct; psStruct=psStruct->psNext)
+		for (psStruct = apsStructLists[i]; psStruct; psStruct = psStruct->psNext)
 		{
-			if(psStruct->visible[player])	//if can see it
+			if (psStruct->visible[player])	//if can see it
 			{
 				//only need defenses?
-				if((type != (-1)) && (psStruct->pStructureType->type != type))	//non-weapon-structures
+				if ((type != (-1)) && (psStruct->pStructureType->type != type))	//non-weapon-structures
 				{
 					continue;
 				}
 
 				dist = world_coord(hypotf(tx - map_coord(psStruct->pos.x), ty - map_coord(psStruct->pos.y)));
-				if(dist < bestDist)
+				if (dist < bestDist)
 				{
-					if((range < 0) || (dist < range))	//in range or no range check
+					if ((range < 0) || (dist < range))	//in range or no range check
 					{
 						bestDist = dist;
 						bFound = true;
@@ -9044,7 +8764,7 @@ bool scrGetClosestEnemyStructByType(void)
 
 	}
 
-	if(bFound)
+	if (bFound)
 	{
 		scrFunctionResult.v.oval = foundStruct;
 		if (!stackPushResult((INTERP_TYPE)ST_STRUCTURE, &scrFunctionResult))
@@ -9064,24 +8784,22 @@ bool scrGetClosestEnemyStructByType(void)
 	return true;
 }
 
-
-
 //Approx point of intersection of a circle and a line with start loc being circle's center point
 bool scrCirclePerimPoint(void)
 {
-	SDWORD				basex,basey,*grx,*gry,radius;
+	SDWORD				basex, basey, *grx, *gry, radius;
 	float factor, deltaX, deltaY;
 
-	if (!stackPopParams(5, VAL_INT, &basex, VAL_INT, &basey, VAL_REF|VAL_INT, &grx,
-		VAL_REF|VAL_INT, &gry, VAL_INT, &radius))
+	if (!stackPopParams(5, VAL_INT, &basex, VAL_INT, &basey, VAL_REF | VAL_INT, &grx,
+	        VAL_REF | VAL_INT, &gry, VAL_INT, &radius))
 	{
-		debug(LOG_ERROR,"scrCirclePerimPoint(): stack failed");
+		debug(LOG_ERROR, "scrCirclePerimPoint(): stack failed");
 		return false;
 	}
 
-	if(radius == 0)
+	if (radius == 0)
 	{
-		debug(LOG_ERROR,"scrCirclePerimPoint: radius == 0.");
+		debug(LOG_ERROR, "scrCirclePerimPoint: radius == 0.");
 		return true;
 	}
 
@@ -9091,7 +8809,7 @@ bool scrCirclePerimPoint(void)
 	factor =  hypotf(deltaX, deltaY) / (float)radius;			//by what factor is distance > radius?
 
 	//if point was inside of the circle, don't modify passed parameter
-	if(factor == 0)
+	if (factor == 0)
 	{
 		debug_console("scrCirclePerimPoint: division by zero.");
 		return true;
@@ -9116,27 +8834,26 @@ bool scrGiftRadar(void)
 
 	if (!stackPopParams(3, VAL_INT, &playerFrom, VAL_INT, &playerTo, VAL_BOOL, &playMsg))
 	{
-		debug(LOG_ERROR,"scrGiftRadar(): stack failed");
+		debug(LOG_ERROR, "scrGiftRadar(): stack failed");
 		return false;
 	}
 
-	if (playerFrom >= MAX_PLAYERS || playerTo >= MAX_PLAYERS)
+	ASSERT_OR_RETURN(false, playerFrom >= 0 && playerFrom < MAX_PLAYERS, "Invalid player number");
+	ASSERT_OR_RETURN(false, playerTo >= 0 && playerTo < MAX_PLAYERS, "Invalid player number");
+
+	giftRadar(playerFrom, playerTo, true);
+
+	if (playMsg)
 	{
-		debug(LOG_ERROR,"scrGiftRadar: player out of range");
-		return false;
-	}
-
-	giftRadar(playerFrom,playerTo,true);
-
-	if(playMsg)
 		audio_QueueTrack(ID_SENSOR_DOWNLOAD);
+	}
 
 	return true;
 }
 
 bool scrNumAllies(void)
 {
-	SDWORD			player,numAllies,i;
+	SDWORD			player, numAllies, i;
 
 	if (!stackPopParams(1, VAL_INT, &player))
 	{
@@ -9144,24 +8861,14 @@ bool scrNumAllies(void)
 		return false;
 	}
 
-	if (player < 0)
-	{
-		debug(LOG_ERROR, "scrNumAllies: player < 0");
-		return false;
-	}
-
-	if (player >= MAX_PLAYERS)
-	{
-		debug(LOG_ERROR,"scrNumAllies: player index too high");
-		return false;
-	}
+	ASSERT_OR_RETURN(false, player >= 0 && player < MAX_PLAYERS, "Invalid player number");
 
 	numAllies = 0;
-	for(i=0;i<MAX_PLAYERS;i++)
+	for (i = 0; i < MAX_PLAYERS; i++)
 	{
-		if(i != player)
+		if (i != player)
 		{
-			if(alliances[i][player] == ALLIANCE_FORMED)
+			if (alliances[i][player] == ALLIANCE_FORMED)
 			{
 				numAllies++;
 			}
@@ -9181,15 +8888,15 @@ bool scrNumAllies(void)
 //num aa defenses in range
 bool scrNumAAinRange(void)
 {
-	SDWORD				targetPlayer,lookingPlayer,range,rangeX,rangeY;
-	SDWORD				tx,ty;
+	SDWORD				targetPlayer, lookingPlayer, range, rangeX, rangeY;
+	SDWORD				tx, ty;
 	UDWORD				numFound = 0;
 	STRUCTURE	*psStruct;
 
 	if (!stackPopParams(5, VAL_INT, &targetPlayer, VAL_INT, &lookingPlayer,
-		VAL_INT, &rangeX, VAL_INT, &rangeY, VAL_INT, &range))
+	        VAL_INT, &rangeX, VAL_INT, &rangeY, VAL_INT, &range))
 	{
-		debug(LOG_ERROR,"scrNumAAinRange(): stack failed");
+		debug(LOG_ERROR, "scrNumAAinRange(): stack failed");
 		return false;
 	}
 
@@ -9199,14 +8906,14 @@ bool scrNumAAinRange(void)
 	numFound = 0;
 
 	//check structures
-	for(psStruct = apsStructLists[targetPlayer]; psStruct; psStruct=psStruct->psNext)
+	for (psStruct = apsStructLists[targetPlayer]; psStruct; psStruct = psStruct->psNext)
 	{
-		if(psStruct->visible[lookingPlayer])	//if can see it
+		if (psStruct->visible[lookingPlayer])	//if can see it
 		{
 			if (objHasWeapon((BASE_OBJECT *) psStruct) && (asWeaponStats[psStruct->asWeaps[0].nStat].surfaceToAir & SHOOT_IN_AIR))
 			{
 				if (range < 0
-				 || world_coord(hypotf(tx - map_coord(psStruct->pos.x), ty - map_coord(psStruct->pos.y))) < range)	//enemy in range
+				    || world_coord(hypotf(tx - map_coord(psStruct->pos.x), ty - map_coord(psStruct->pos.y))) < range)	//enemy in range
 				{
 					numFound++;
 				}
@@ -9217,7 +8924,7 @@ bool scrNumAAinRange(void)
 	scrFunctionResult.v.ival = numFound;
 	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
-		debug(LOG_ERROR,"scrNumAAinRange(): failed to push result");
+		debug(LOG_ERROR, "scrNumAAinRange(): failed to push result");
 		return false;
 	}
 
@@ -9236,9 +8943,9 @@ bool scrSelectDroid(void)
 		return false;
 	}
 
-	if(psDroid == NULL)
+	if (psDroid == NULL)
 	{
-		debug(LOG_ERROR,"scrSelectDroid(): droid is NULLOBJECT");
+		debug(LOG_ERROR, "droid is NULLOBJECT");
 		return false;
 	}
 
@@ -9260,7 +8967,7 @@ bool scrSelectGroup(void)
 		return false;
 	}
 
-	for(psCurr = psGroup->psList; psCurr; psCurr=psCurr->psGrpNext)
+	for (psCurr = psGroup->psList; psCurr; psCurr = psCurr->psGrpNext)
 	{
 		psCurr->selected = bSelect;
 	}
@@ -9270,18 +8977,18 @@ bool scrSelectGroup(void)
 
 bool scrModulo(void)
 {
-	SDWORD				num1,num2;
+	SDWORD				num1, num2;
 
 	if (!stackPopParams(2, VAL_INT, &num1, VAL_INT, &num2))
 	{
-		debug(LOG_ERROR,"scrModulo(): stack failed");
+		debug(LOG_ERROR, "scrModulo(): stack failed");
 		return false;
 	}
 
-	scrFunctionResult.v.ival =  (num1 % num2);
+	scrFunctionResult.v.ival = (num1 % num2);
 	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
-		debug(LOG_ERROR,"scrModulo(): failed to push result");
+		debug(LOG_ERROR, "scrModulo(): failed to push result");
 		return false;
 	}
 
@@ -9291,7 +8998,7 @@ bool scrModulo(void)
 bool scrPlayerLoaded(void)
 {
 	SDWORD			player;
-	bool			bPlayerHasFactories=false;
+	bool			bPlayerHasFactories = false;
 	STRUCTURE		*psCurr;
 
 	if (!stackPopParams(1, VAL_INT, &player))
@@ -9299,13 +9006,14 @@ bool scrPlayerLoaded(void)
 		debug(LOG_ERROR, "scrPlayerLoaded(): stack failed");
 		return false;
 	}
+	ASSERT_OR_RETURN(false, player >= 0 && player < MAX_PLAYERS, "Invalid player number");
 
 	/* see if there are any player factories left */
-	if(apsStructLists[player])
+	if (apsStructLists[player])
 	{
 		for (psCurr = apsStructLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
 		{
-			if(StructIsFactory(psCurr))
+			if (StructIsFactory(psCurr))
 			{
 				bPlayerHasFactories = true;
 				break;
@@ -9318,7 +9026,7 @@ bool scrPlayerLoaded(void)
 
 	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 	{
-		debug(LOG_ERROR,"scrPlayerLoaded(): failed to push result");
+		debug(LOG_ERROR, "scrPlayerLoaded(): failed to push result");
 		return false;
 	}
 
@@ -9326,7 +9034,7 @@ bool scrPlayerLoaded(void)
 }
 
 /* Add a beacon (blip) */
-bool addBeaconBlip(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, char * textMsg)
+bool addBeaconBlip(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, const char *textMsg)
 {
 	MESSAGE			*psMessage;
 	VIEWDATA		*pTempData;
@@ -9359,45 +9067,47 @@ bool addBeaconBlip(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, ch
 	}
 	else
 	{
-		debug(LOG_MSG, "call failed");
+		debug(LOG_WARNING, "call failed");
 	}
 
 	//Received a blip message from a player callback
 	//store and call later
 	//-------------------------------------------------
 	//call beacon callback only if not adding for ourselves
-	if(forPlayer != sender)
+	if (forPlayer != sender)
 	{
-		if(!msgStackPush(CALL_BEACON,sender,forPlayer,textMsg,locX,locY,NULL))
+		triggerEventBeacon(sender, forPlayer, textMsg, locX, locY);
+
+		if (!msgStackPush(CALL_BEACON, sender, forPlayer, textMsg, locX, locY, NULL))
 		{
-			debug(LOG_ERROR, "addBeaconBlip() - msgStackPush - stack failed");
+			debug(LOG_ERROR, "msgStackPush - stack failed");
 			return false;
 		}
 
-		if(selectedPlayer == forPlayer)
+		if (selectedPlayer == forPlayer)
 		{
 			// show console message
-			CONPRINTF(ConsoleString,(ConsoleString, _("Beacon received from %s!"),
-				getPlayerName(sender)));
+			CONPRINTF(ConsoleString, (ConsoleString, _("Beacon received from %s!"),
+			        getPlayerName(sender)));
 
 			// play audio
-			audio_QueueTrackPos( ID_SOUND_BEACON, locX, locY, 0);
+			audio_QueueTrackPos(ID_SOUND_BEACON, locX, locY, 0);
 		}
 	}
 
 	return true;
 }
 
-bool sendBeaconToPlayer(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, char * beaconMsg)
+bool sendBeaconToPlayer(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, const char *beaconMsg)
 {
-	if(sender == forPlayer || myResponsibility(forPlayer))	//if destination player is on this machine
+	if (sender == forPlayer || myResponsibility(forPlayer))	//if destination player is on this machine
 	{
-		debug(LOG_WZ,"sending beacon to player %d (local player) from %d", forPlayer, sender);
+		debug(LOG_WZ, "sending beacon to player %d (local player) from %d", forPlayer, sender);
 		return addBeaconBlip(locX, locY, forPlayer, sender, beaconMsg);
 	}
 	else
 	{
-		debug(LOG_WZ,"sending beacon to player %d (remote player) from %d", forPlayer, sender);
+		debug(LOG_WZ, "sending beacon to player %d (remote player) from %d", forPlayer, sender);
 		return sendBeacon(locX, locY, forPlayer, sender, beaconMsg);
 	}
 }
@@ -9415,7 +9125,7 @@ VIEWDATA *CreateBeaconViewData(SDWORD sender, UDWORD LocX, UDWORD LocY)
 
 	//store name
 	sprintf(name, _("Beacon %d"), sender);
- 	psViewData->pName = name;
+	psViewData->pName = name;
 
 	//store text message, hardcoded for now
 	psViewData->textMsg.push_back(QString::fromUtf8(getPlayerName(sender)));
@@ -9428,6 +9138,7 @@ VIEWDATA *CreateBeaconViewData(SDWORD sender, UDWORD LocX, UDWORD LocY)
 	if (psViewData->pData == NULL)
 	{
 		ASSERT(false, "prepairHelpViewData() - Unable to allocate memory");
+		delete psViewData;
 		return NULL;
 	}
 
@@ -9458,7 +9169,7 @@ VIEWDATA *CreateBeaconViewData(SDWORD sender, UDWORD LocX, UDWORD LocY)
 }
 
 /* Looks through the players list of messages to find VIEW_BEACON (one per player!) pointer */
-MESSAGE * findBeaconMsg(UDWORD player, SDWORD sender)
+MESSAGE *findBeaconMsg(UDWORD player, SDWORD sender)
 {
 	MESSAGE					*psCurr;
 
@@ -9467,10 +9178,10 @@ MESSAGE * findBeaconMsg(UDWORD player, SDWORD sender)
 		//look for VIEW_BEACON, should only be 1 per player
 		if (psCurr->dataType == MSG_DATA_BEACON)
 		{
-			if(((VIEWDATA *)psCurr->pViewData)->type == VIEW_BEACON)
+			if (((VIEWDATA *)psCurr->pViewData)->type == VIEW_BEACON)
 			{
 				debug(LOG_WZ, "findBeaconMsg: %d ALREADY HAS A MESSAGE STORED", player);
-				if(((VIEW_PROXIMITY *)((VIEWDATA *)psCurr->pViewData)->pData)->sender == sender)
+				if (((VIEW_PROXIMITY *)((VIEWDATA *)psCurr->pViewData)->pData)->sender == sender)
 				{
 					debug(LOG_WZ, "findBeaconMsg: %d ALREADY HAS A MESSAGE STORED from %d", player, sender);
 					return psCurr;
@@ -9486,14 +9197,14 @@ MESSAGE * findBeaconMsg(UDWORD player, SDWORD sender)
 /* Add beacon (radar blip) */
 bool scrDropBeacon(void)
 {
-	SDWORD			forPlayer,sender;
+	SDWORD			forPlayer, sender;
 	char					ssval2[255];
-	UDWORD			locX,locY,locZ;
+	UDWORD			locX, locY, locZ;
 
 	if (!stackPopParams(6, VAL_STRING, &strParam1 , VAL_INT, &forPlayer,
-				VAL_INT, &sender, VAL_INT, &locX, VAL_INT, &locY, VAL_INT, &locZ))
+	        VAL_INT, &sender, VAL_INT, &locX, VAL_INT, &locY, VAL_INT, &locZ))
 	{
-		debug(LOG_ERROR,"scrDropBeacon failed to pop parameters");
+		debug(LOG_ERROR, "scrDropBeacon failed to pop parameters");
 		return false;
 	}
 
@@ -9510,21 +9221,12 @@ bool scrRemoveBeacon(void)
 
 	if (!stackPopParams(2, VAL_INT, &player, VAL_INT, &sender))
 	{
-		debug(LOG_ERROR,"scrRemoveBeacon: failed to pop parameters");
+		debug(LOG_ERROR, "scrRemoveBeacon: failed to pop parameters");
 		return false;
 	}
 
-	if (player >= MAX_PLAYERS)
-	{
-		debug(LOG_ERROR,"scrRemoveBeacon:player number is too high");
-		return false;
-	}
-
-	if (sender >= MAX_PLAYERS)
-	{
-		debug(LOG_ERROR,"scrRemoveBeacon:sender number is too high");
-		return false;
-	}
+	ASSERT_OR_RETURN(false, player >= 0 && player < MAX_PLAYERS, "Invalid player number");
+	ASSERT_OR_RETURN(false, sender >= 0 && sender < MAX_PLAYERS, "Invalid player number");
 
 	//find the message
 	psMessage = findBeaconMsg(player, sender);
@@ -9532,6 +9234,7 @@ bool scrRemoveBeacon(void)
 	{
 		//delete it
 		removeMessage(psMessage, player);
+		triggerEventBeaconRemoved(sender, player);
 	}
 
 	return true;
@@ -9540,11 +9243,11 @@ bool scrRemoveBeacon(void)
 bool scrClosestDamagedGroupDroid(void)
 {
 	DROID_GROUP	*psGroup;
-	DROID		*psDroid,*psClosestDroid;
-	SDWORD		x,y,healthLeft,wBestDist,wDist,maxRepairedBy,player;
+	DROID		*psDroid, *psClosestDroid;
+	SDWORD		x, y, healthLeft, wBestDist, wDist, maxRepairedBy, player;
 
 	if (!stackPopParams(6, VAL_INT, &player, ST_GROUP, &psGroup, VAL_INT, &healthLeft,
-		VAL_INT, &x, VAL_INT, &y, VAL_INT, &maxRepairedBy))
+	        VAL_INT, &x, VAL_INT, &y, VAL_INT, &maxRepairedBy))
 	{
 		debug(LOG_ERROR, "scrClosestDamagedGroupDroid: failed to pop");
 		return false;
@@ -9552,14 +9255,14 @@ bool scrClosestDamagedGroupDroid(void)
 
 	wBestDist = 999999;
 	psClosestDroid = NULL;
-	for(psDroid = psGroup->psList;psDroid; psDroid = psDroid->psGrpNext)
+	for (psDroid = psGroup->psList; psDroid; psDroid = psDroid->psGrpNext)
 	{
-		if((psDroid->body * 100 / psDroid->originalBody) <= healthLeft)	//in%
+		if ((psDroid->body * 100 / psDroid->originalBody) <= healthLeft)	//in%
 		{
 			wDist = map_coord(iHypot(psDroid->pos.x - x, psDroid->pos.y - y));  //in tiles
-			if(wDist < wBestDist)
+			if (wDist < wBestDist)
 			{
-				if((maxRepairedBy < 0) || (getNumRepairedBy(psDroid, player) <= maxRepairedBy))
+				if ((maxRepairedBy < 0) || (getNumRepairedBy(psDroid, player) <= maxRepairedBy))
 				{
 					psClosestDroid = psDroid;
 					wBestDist = wDist;
@@ -9582,9 +9285,9 @@ SDWORD getNumRepairedBy(DROID *psDroidToCheck, SDWORD player)
 	DROID		*psDroid;
 	SDWORD		numRepaired = 0;
 
-	for(psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
+	for (psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
 	{
-		if((psDroid->droidType != DROID_REPAIR) && (psDroid->droidType != DROID_CYBORG_REPAIR))
+		if ((psDroid->droidType != DROID_REPAIR) && (psDroid->droidType != DROID_CYBORG_REPAIR))
 		{
 			continue;
 		}
@@ -9610,7 +9313,7 @@ bool scrMsgBox(void)
 		return false;
 	}
 
-	debug_console("DEBUG: %s",strParam1);
+	debug_console("DEBUG: %s", strParam1);
 
 	return true;
 }
@@ -9619,7 +9322,7 @@ bool scrMsgBox(void)
 // Check for a struct being within a certain range of a position (must be visible)
 bool scrStructInRangeVis(void)
 {
-	SDWORD		range, player,lookingPlayer, x,y;
+	SDWORD		range, player, lookingPlayer, x, y;
 	bool		found;
 
 	if (!stackPopParams(5, VAL_INT, &lookingPlayer, VAL_INT, &player , VAL_INT, &x, VAL_INT, &y, VAL_INT, &range))
@@ -9628,13 +9331,9 @@ bool scrStructInRangeVis(void)
 		return false;
 	}
 
-	if (player < 0 || player >= MAX_PLAYERS)
-	{
-		ASSERT(false, "scrStructInRange: invalid player number");
-		return false;
-	}
+	ASSERT_OR_RETURN(false, player >= 0 && player < MAX_PLAYERS, "Invalid player number");
 
-	found = objectInRangeVis((BASE_OBJECT *)apsStructLists[player], x,y, range, lookingPlayer);
+	found = objectInRangeVis((BASE_OBJECT *)apsStructLists[player], x, y, range, lookingPlayer);
 
 	scrFunctionResult.v.bval = found;
 	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
@@ -9648,7 +9347,7 @@ bool scrStructInRangeVis(void)
 // Check for a droid being within a certain range of a position (must be visible)
 bool scrDroidInRangeVis(void)
 {
-	SDWORD		range, player,lookingPlayer, x,y;
+	SDWORD		range, player, lookingPlayer, x, y;
 	bool		found;
 
 	if (!stackPopParams(5, VAL_INT, &lookingPlayer, VAL_INT, &player , VAL_INT, &x, VAL_INT, &y, VAL_INT, &range))
@@ -9663,7 +9362,7 @@ bool scrDroidInRangeVis(void)
 		return false;
 	}
 
-	found = objectInRangeVis((BASE_OBJECT *)apsDroidLists[player], x,y, range, lookingPlayer);
+	found = objectInRangeVis((BASE_OBJECT *)apsDroidLists[player], x, y, range, lookingPlayer);
 
 	scrFunctionResult.v.bval = found;
 	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
@@ -9682,38 +9381,35 @@ bool objectInRangeVis(BASE_OBJECT *psList, SDWORD x, SDWORD y, SDWORD range, SDW
 
 	// See if there is a droid in range
 	rangeSq = range * range;
-	for(psCurr = psList; psCurr; psCurr = psCurr->psNext)
+	for (psCurr = psList; psCurr; psCurr = psCurr->psNext)
 	{
-		if(psCurr->type == OBJ_STRUCTURE)
+		if (psCurr->type == OBJ_STRUCTURE)
 		{
-			if(!((STRUCTURE *)psCurr)->visible[lookingPlayer])
+			if (!((STRUCTURE *)psCurr)->visible[lookingPlayer])
+			{
 				continue;
+			}
 		}
 
-		if(psCurr->type == OBJ_DROID)
+		if (psCurr->type == OBJ_DROID)
 		{
-			if(!((DROID *)psCurr)->visible[lookingPlayer])
+			if (!((DROID *)psCurr)->visible[lookingPlayer])
+			{
 				continue;
+			}
 		}
-
-		// skip partially build structures
-		//if ( (psCurr->type == OBJ_STRUCTURE) &&
-		//	 (((STRUCTURE *)psCurr)->status != SS_BUILT) )
-		//{
-		//	continue;
-		//}
 
 		// skip flying vtols
-		if ( (psCurr->type == OBJ_DROID) &&
-			isVtolDroid((DROID *)psCurr) &&
-			((DROID *)psCurr)->sMove.Status != MOVEINACTIVE )
+		if ((psCurr->type == OBJ_DROID) &&
+		    isVtolDroid((DROID *)psCurr) &&
+		    ((DROID *)psCurr)->sMove.Status != MOVEINACTIVE)
 		{
 			continue;
 		}
 
 		xdiff = (SDWORD)psCurr->pos.x - x;
 		ydiff = (SDWORD)psCurr->pos.y - y;
-		if (xdiff*xdiff + ydiff*ydiff < rangeSq)
+		if (xdiff * xdiff + ydiff * ydiff < rangeSq)
 		{
 			return true;
 		}
@@ -9733,7 +9429,7 @@ bool scrPursueResearch(void)
 	STRUCTURE			*psBuilding;
 	RESEARCH_FACILITY	*psResFacilty;
 
-	if (!stackPopParams(3,ST_STRUCTURE, &psBuilding, VAL_INT, &player, ST_RESEARCH, &psResearch ))
+	if (!stackPopParams(3, ST_STRUCTURE, &psBuilding, VAL_INT, &player, ST_RESEARCH, &psResearch))
 	{
 		debug(LOG_ERROR, "scrPursueResearch(): stack failed");
 		return false;
@@ -9745,7 +9441,7 @@ bool scrPursueResearch(void)
 		return false;
 	}
 
-	psResFacilty =	(RESEARCH_FACILITY*)psBuilding->pFunctionality;
+	psResFacilty =	(RESEARCH_FACILITY *)psBuilding->pFunctionality;
 
 	if (psResFacilty->psSubject != NULL)		// not finished yet
 	{
@@ -9773,41 +9469,33 @@ bool scrPursueResearch(void)
 	else if (IsResearchCompleted(&asPlayerResList[player][index]))
 	{
 		found = false;
-		//DbgMsg("Research already completed: %d", index);
 	}
 	else if (IsResearchStartedPending(&asPlayerResList[player][index]))
 	{
 		found = false;
-		//DbgMsg("Research already in progress, %d", index);
 	}
 	else if (IsResearchPossible(&asPlayerResList[player][index]) || IsResearchCancelled(&asPlayerResList[player][index]))
 	{
 		foundIndex = index;
 		found = true;
-		//DbgMsg("Research possible or cancelled: %d", index);
 	}
 	else if (skTopicAvail(index, player))
 	{
 		foundIndex = index;
 		found = true;
-		//DbgMsg("Research available: %d",index);
 	}
 	else
 	{
-		//DbgMsg("starting to search for: %d, %s", index, asResearch[index].pName);
 		top = -1;
 
 		cur = 0;				//start with first index's PR
-		while(true)	//do
+		while (true)	//do
 		{
-			//DbgMsg("Going on with %d, numPR: %d, %s", index, asResearch[index].pPRList.size(), asResearch[index].pName);
-
 			if (cur >= asResearch[index].pPRList.size())		//node has nodes?
 			{
 				top = top - 2;
 				if (top < (-1))
 				{
-					//DbgMsg("Nothing on stack");
 					break;		//end of stack
 				}
 				index = Stack[top + 2];	//if index = -1, then exit
@@ -9817,23 +9505,20 @@ bool scrPursueResearch(void)
 			else		//end of nodes not reached
 			{
 				tempIndex = asResearch[index].pPRList[cur];		//get cur node's index
-				//DbgMsg("evaluating node: %d, (cur = %d), %s", tempIndex, cur, asResearch[tempIndex].pName);
 
-				if (skTopicAvail(tempIndex,player) && (!beingResearchedByAlly(tempIndex, player)))	//<NEW> - ally check added
+				if (skTopicAvail(tempIndex, player) && (!beingResearchedByAlly(tempIndex, player)))	//<NEW> - ally check added
 				{
-					//DbgMsg("avail: %d (cur=%d), %s", tempIndex, cur, asResearch[tempIndex].pName);
 					found = true;
 					foundIndex = tempIndex;		//done
 					break;
 				}
 				else if (!IsResearchCompleted(&asPlayerResList[player][tempIndex])
-				         && !IsResearchStartedPending(&asPlayerResList[player][tempIndex]))  //not avail and not busy with it, can check this PR's PR
+				        && !IsResearchStartedPending(&asPlayerResList[player][tempIndex]))  //not avail and not busy with it, can check this PR's PR
 				{
-					//DbgMsg("node not complete, not started: %d, (cur=%d), %s", tempIndex,cur, asResearch[tempIndex].pName);
 					if (!asResearch[tempIndex].pPRList.empty())	//node has any nodes itself
 					{
-						Stack[top+1] = cur;								//so can go back to it further
-						Stack[top+2] = index;
+						Stack[top + 1] = cur;								//so can go back to it further
+						Stack[top + 2] = index;
 						top = top + 2;
 
 						index = tempIndex;		//go 1 level further
@@ -9841,9 +9526,8 @@ bool scrPursueResearch(void)
 					}
 					else		//has no PRs, choose it (?)
 					{
-						if(!beingResearchedByAlly(tempIndex, player))	//<NEW> ally check added
+						if (!beingResearchedByAlly(tempIndex, player))	//<NEW> ally check added
 						{
-							//DbgMsg("PR has no PRs, choosing it: %d (cur=%d), %s", tempIndex, cur, asResearch[tempIndex].pName);
 							found = true;
 							foundIndex = tempIndex;	//done
 							break;
@@ -9853,7 +9537,7 @@ bool scrPursueResearch(void)
 			}
 
 			cur++;				//try next node of the main node
-			if((cur >= asResearch[index].pPRList.size()) && (top <= (-1)))	//nothing left
+			if ((cur >= asResearch[index].pPRList.size()) && (top <= (-1)))	//nothing left
 			{
 				break;
 			}
@@ -9867,7 +9551,7 @@ bool scrPursueResearch(void)
 #if defined (DEBUG)
 		{
 			char	sTemp[128];
-			sprintf(sTemp,"player:%d starts topic: %s",player, asResearch[foundIndex].pName );
+			sprintf(sTemp, "player:%d starts topic: %s", player, getName(&asResearch[foundIndex]));
 			NETlogEntry(sTemp, SYNC_FLAG, 0);
 		}
 #endif
@@ -9913,16 +9597,12 @@ bool scrGetPlayerName(void)
 		return false;
 	}
 
-	if (player < 0 || player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrGetPlayerName: invalid player number" );
-		return false;
-	}
+	ASSERT_OR_RETURN(false, player >= 0 && player < MAX_PLAYERS, "Invalid player number");
 
 	/* Casting away constness because stackPushResult doesn't modify it's
 	 * value (i.e. in this case it's not const correct).
 	 */
-	scrFunctionResult.v.sval = (char*)getPlayerName((UDWORD)player);
+	scrFunctionResult.v.sval = (char *)getPlayerName((UDWORD)player);
 	if (!stackPushResult(VAL_STRING, &scrFunctionResult))
 	{
 		debug(LOG_ERROR, "scrGetPlayerName(): failed to push result");
@@ -9943,11 +9623,7 @@ bool scrSetPlayerName(void)
 		return false;
 	}
 
-	if (player < 0 || player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "scrSetPlayerName: invalid player number" );
-		return false;
-	}
+	ASSERT_OR_RETURN(false, player >= 0 && player < MAX_PLAYERS, "Invalid player number");
 
 	scrFunctionResult.v.bval = setPlayerName(player, strParam1);
 	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
@@ -9964,7 +9640,7 @@ SDWORD getPlayerFromString(char *playerName)
 	UDWORD	playerIndex;
 	char	sPlayerNumber[255];
 
-	for( playerIndex=0; playerIndex<MAX_PLAYERS; playerIndex++ )
+	for (playerIndex = 0; playerIndex < MAX_PLAYERS; playerIndex++)
 	{
 		/* check name */
 		//debug(LOG_SCRIPT, "checking  (%s,%s)",getPlayerName(playerIndex), playerName);
@@ -9983,9 +9659,9 @@ SDWORD getPlayerFromString(char *playerName)
 		}
 
 		/* check player number */
-		sprintf(sPlayerNumber,"%d",playerIndex);
+		sprintf(sPlayerNumber, "%d", playerIndex);
 		//debug(LOG_SCRIPT, "checking (%s,%s)",sPlayerNumber, playerName);
-		if (strncasecmp(sPlayerNumber,playerName, 255) == 0)
+		if (strncasecmp(sPlayerNumber, playerName, 255) == 0)
 		{
 			//debug(LOG_SCRIPT, "matched, returning %d", playerIndex);
 			return playerIndex;
@@ -9999,7 +9675,7 @@ SDWORD getPlayerFromString(char *playerName)
 /* Checks if a particular bit is set in an integer */
 bool scrGetBit(void)
 {
-	SDWORD				val1,val2;
+	SDWORD				val1, val2;
 
 	if (!stackPopParams(2, VAL_INT, &val1, VAL_INT, &val2))
 	{
@@ -10021,11 +9697,11 @@ bool scrGetBit(void)
 /* Sets a particular bit in an integer */
 bool scrSetBit(void)
 {
-	SDWORD				base,position;
+	SDWORD				base, position;
 	int32_t				bSet;	// was BOOL (int) ** see warning about conversion
 
 	if (!stackPopParams(3, VAL_INT, &base,
-		VAL_INT, &position, VAL_BOOL, &bSet))
+	        VAL_INT, &position, VAL_BOOL, &bSet))
 	{
 		debug(LOG_ERROR, "scrSetBit(): failed to pop");
 		return false;
@@ -10033,7 +9709,7 @@ bool scrSetBit(void)
 
 	ASSERT(position < MAX_PLAYERS && position >= 0, "scrSetBit(): wrong position index (%d)", position);
 
-	if(bSet)
+	if (bSet)
 	{
 		base |= bitMask[position];
 	}
@@ -10056,8 +9732,10 @@ bool scrAlliancesLocked(void)
 {
 	bool		bResult = true;
 
-	if(bMultiPlayer && (game.alliance == ALLIANCES))
+	if (bMultiPlayer && !alliancesFixed(game.alliance))
+	{
 		bResult = false;
+	}
 
 	scrFunctionResult.v.bval = bResult;
 	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
@@ -10083,15 +9761,15 @@ bool scrASSERT(void)
 
 #ifdef DEBUG
 	/* Just pass the expression and message from script */
-	sprintf(sTmp,"%d) %s",player,strParam1);
+	sprintf(sTmp, "%d) %s", player, strParam1);
 	ASSERT(bExpression, "%s", sTmp);
 #else
-	if(scrDebug[player])
+	if (scrDebug[player])
 	{
-		if(!bExpression)
+		if (!bExpression)
 		{
-			sprintf(sTmp,"%d) %s",player,strParam1);
-			addConsoleMessage(sTmp,RIGHT_JUSTIFY,player);
+			sprintf(sTmp, "%d) %s", player, strParam1);
+			addConsoleMessage(sTmp, RIGHT_JUSTIFY, player);
 		}
 	}
 #endif
@@ -10102,7 +9780,7 @@ bool scrASSERT(void)
 /* Visualize radius at position */
 bool scrShowRangeAtPos(void)
 {
-	SDWORD		x,y,radius;
+	SDWORD		x, y, radius;
 
 	if (!stackPopParams(3, VAL_INT, &x, VAL_INT, &y, VAL_INT, &radius))
 	{
@@ -10111,14 +9789,14 @@ bool scrShowRangeAtPos(void)
 	}
 
 	//Turn on/off drawing
-	showRangeAtPos(x,y,radius);
+	showRangeAtPos(x, y, radius);
 
 	return true;
 }
 
 bool scrToPow(void)
 {
-	float		x,y;
+	float		x, y;
 
 	if (!stackPopParams(2, VAL_FLOAT, &x, VAL_FLOAT, &y))
 	{
@@ -10126,7 +9804,7 @@ bool scrToPow(void)
 		return false;
 	}
 
-	scrFunctionResult.v.fval = (float)pow(x,y);
+	scrFunctionResult.v.fval = (float)pow(x, y);
 	if (!stackPushResult(VAL_FLOAT, &scrFunctionResult))
 	{
 		debug(LOG_ERROR, "scrToPow(): failed to push result");
@@ -10193,35 +9871,17 @@ bool scrLog(void)
 	return true;
 }
 
-/* Show/Hide multiplayer debug menu */
-bool scrDebugMenu(void)
+bool scrDebugMenu() // no-op
 {
-	int32_t		menuUp;		// was SDWORD which happens to be int32_t, but is being used as a VAL_BOOL, so : ** see warning about conversion
-
-	if (!stackPopParams(1, VAL_BOOL, &menuUp))
-	{
-		debug(LOG_ERROR, "scrDebugMenu(): stack failed");
-		return false;
-	}
-
-	(void)addDebugMenu(menuUp);
-
+	int32_t menuUp;
+	stackPopParams(1, VAL_BOOL, &menuUp);
 	return true;
 }
 
-/* Set debug menu output string */
-bool scrSetDebugMenuEntry(void)
+bool scrSetDebugMenuEntry() // no-op
 {
-	SDWORD		index;
-
-	if (!stackPopParams(2, VAL_STRING, &strParam1, VAL_INT, &index))
-	{
-		debug(LOG_ERROR, "scrSetDebugMenuEntry(): stack failed");
-		return false;
-	}
-
-	setDebugMenuEntry(strParam1, index);
-
+	int index;
+	stackPopParams(2, VAL_STRING, &strParam1, VAL_INT, &index);
 	return true;
 }
 
@@ -10266,10 +9926,10 @@ bool scrGetNumArgsInCmd(void)
 	}
 
 	/* Check command bounds */
-	if(cmdIndex < 0 || cmdIndex >= chat_msg.numCommands)
+	if (cmdIndex < 0 || cmdIndex >= chat_msg.numCommands)
 	{
 		ASSERT(false, "scrGetNumArgsInCmd: command inxed out of bounds: %d (num commands: %d)",
-			cmdIndex, chat_msg.numCommands);
+		       cmdIndex, chat_msg.numCommands);
 		return false;
 	}
 
@@ -10290,7 +9950,7 @@ bool scrGetNumArgsInCmd(void)
 bool scrGetChatCmdDescription(void)
 {
 	SDWORD			cmdIndex;
-	char			*pChatCommand=NULL;
+	char			*pChatCommand = NULL;
 
 	if (!stackPopParams(1, VAL_INT, &cmdIndex))
 	{
@@ -10299,15 +9959,15 @@ bool scrGetChatCmdDescription(void)
 	}
 
 	/* Check command bounds */
-	if(cmdIndex < 0 || cmdIndex >= chat_msg.numCommands)
+	if (cmdIndex < 0 || cmdIndex >= chat_msg.numCommands)
 	{
 		ASSERT(false, "scrGetCommandDescription: command inxed out of bounds: %d (num commands: %d)",
-			cmdIndex, chat_msg.numCommands);
+		       cmdIndex, chat_msg.numCommands);
 		return false;
 	}
 
 	/* Allocate memory for the comamnd string */
-	pChatCommand = (char*)malloc(MAXSTRLEN);
+	pChatCommand = (char *)malloc(MAXSTRLEN);
 	if (pChatCommand == NULL)
 	{
 		debug(LOG_FATAL, "scrGetCmdDescription: Out of memory!");
@@ -10339,15 +9999,9 @@ bool scrGetChatCmdDescription(void)
 bool scrGetChatCmdParam(void)
 {
 	SDWORD			cmdIndex, argIndex;
-	void			*pArgument=NULL;
-	INTERP_TYPE		argType=VAL_VOID;
-	bool			bSuccess=true;		//failure on type mismatch
-
-	//if (!stackPopParams(3, VAL_INT, &cmdIndex, VAL_INT, &argIndex, VAL_REF | VAL_VOID, &pArgument))
-	//{
-	//	debug(LOG_ERROR, "scrGetChatCmdParam(): stack failed");
-	//	return false;
-	//}
+	void			*pArgument = NULL;
+	INTERP_TYPE		argType = VAL_VOID;
+	bool			bSuccess = true;		//failure on type mismatch
 
 	if (!stackPopParams(2, VAL_INT, &cmdIndex, VAL_INT, &argIndex))
 	{
@@ -10355,13 +10009,13 @@ bool scrGetChatCmdParam(void)
 		return false;
 	}
 
-	if(cmdIndex < 0 || cmdIndex >= chat_msg.numCommands)
+	if (cmdIndex < 0 || cmdIndex >= chat_msg.numCommands)
 	{
 		ASSERT(false, "scrGetChatCmdParam: command index out of bounds: %d", cmdIndex);
 		return false;
 	}
 
-	if(argIndex < 0 || argIndex >= chat_msg.cmdData[cmdIndex].numCmdParams )
+	if (argIndex < 0 || argIndex >= chat_msg.cmdData[cmdIndex].numCmdParams)
 	{
 		ASSERT(false, "scrGetChatCmdParam: argument index for command %d is out of bounds: %d", cmdIndex, argIndex);
 		return false;
@@ -10377,15 +10031,15 @@ bool scrGetChatCmdParam(void)
 		//return false;
 	}
 
-	if(pArgument == NULL)
+	if (pArgument == NULL)
 	{
 		ASSERT(false, "scrGetChatCmdParam: nullpointer check failed");
 		bSuccess = false;
-		//return false;
 	}
 
 	/* Return command argument to the script */
-	if(bSuccess){
+	if (bSuccess)
+	{
 		memcpy(pArgument, &(chat_msg.cmdData[cmdIndex].parameter[argIndex].v), sizeof(chat_msg.cmdData[cmdIndex].parameter[argIndex].v));
 	}
 
@@ -10401,7 +10055,7 @@ bool scrGetChatCmdParam(void)
 /* Returns true if a certain command was addressed to a certain player */
 bool scrChatCmdIsPlayerAddressed(void)
 {
-	SDWORD		cmdIndex,playerInQuestion;
+	SDWORD		cmdIndex, playerInQuestion;
 
 	if (!stackPopParams(2, VAL_INT, &cmdIndex, VAL_INT, &playerInQuestion))
 	{
@@ -10410,15 +10064,15 @@ bool scrChatCmdIsPlayerAddressed(void)
 	}
 
 	/* Check command bounds */
-	if(cmdIndex < 0 || cmdIndex >= chat_msg.numCommands)
+	if (cmdIndex < 0 || cmdIndex >= chat_msg.numCommands)
 	{
 		ASSERT(false, "scrChatCmdIsPlayerAddressed: command inxed out of bounds: %d (num commands: %d)",
-			cmdIndex, chat_msg.numCommands);
+		       cmdIndex, chat_msg.numCommands);
 		return false;
 	}
 
 	/* Check player bounds */
-	if(playerInQuestion < 0 || playerInQuestion >= MAX_PLAYERS)
+	if (playerInQuestion < 0 || playerInQuestion >= MAX_PLAYERS)
 	{
 		ASSERT(false, "scrChatCmdIsPlayerAddressed: player inxed out of bounds: %d", playerInQuestion);
 		return false;
@@ -10437,7 +10091,7 @@ bool scrChatCmdIsPlayerAddressed(void)
 /* Modifies height of a tile */
 bool scrSetTileHeight(void)
 {
-	UDWORD		tileX,tileY,newHeight;
+	UDWORD		tileX, tileY, newHeight;
 	MAPTILE		*psTile;
 
 	if (!stackPopParams(3, VAL_INT, &tileX, VAL_INT, &tileY, VAL_INT, &newHeight))
@@ -10448,7 +10102,7 @@ bool scrSetTileHeight(void)
 
 	ASSERT(newHeight <= 255, "scrSetTileHeight: height out of bounds");
 
-	psTile = mapTile(tileX,tileY);
+	psTile = mapTile(tileX, tileY);
 
 	psTile->height = (UBYTE)newHeight * ELEVATION_SCALE;
 
@@ -10460,7 +10114,7 @@ bool scrSetTileHeight(void)
  */
 bool scrGetTileStructure(void)
 {
-	SDWORD		structureX,structureY;
+	SDWORD		structureX, structureY;
 
 	if (!stackPopParams(2, VAL_INT, &structureX, VAL_INT, &structureY))
 	{
@@ -10492,7 +10146,6 @@ bool scrPrintCallStack(void)
  */
 bool scrDebugModeEnabled(void)
 {
-
 	scrFunctionResult.v.bval = getDebugMappingStatus();
 	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 	{
@@ -10515,8 +10168,7 @@ bool scrCalcDroidPower(void)
 		return false;
 	}
 
-	ASSERT(psDroid != NULL,
-		"scrCalcDroidPower: can't calculate cost of a null-droid");
+	ASSERT(psDroid != NULL, "can't calculate cost of a null-droid");
 
 	scrFunctionResult.v.ival = (SDWORD)calcDroidPower(psDroid);
 	if (!stackPushResult(VAL_INT, &scrFunctionResult))
@@ -10540,8 +10192,7 @@ bool scrGetDroidLevel(void)
 		return false;
 	}
 
-	ASSERT(psDroid != NULL,
-		"scrGetDroidLevel: null-pointer passed");
+	ASSERT(psDroid != NULL, "null-pointer passed");
 
 	scrFunctionResult.v.ival = (SDWORD)getDroidLevel(psDroid);
 	if (!stackPushResult(VAL_INT, &scrFunctionResult))
@@ -10556,11 +10207,11 @@ bool scrGetDroidLevel(void)
 /* Assembles a template from components and returns it */
 bool scrAssembleWeaponTemplate(void)
 {
-	SDWORD					player,bodyIndex,weapIndex,propIndex;
+	SDWORD					player, bodyIndex, weapIndex, propIndex;
 	DROID_TEMPLATE			*pNewTemplate = NULL;
 
 	if (!stackPopParams(4, VAL_INT, &player, ST_BODY, &bodyIndex,
-		ST_PROPULSION, &propIndex, ST_WEAPON, &weapIndex))
+	        ST_PROPULSION, &propIndex, ST_WEAPON, &weapIndex))
 	{
 		return false;
 	}
@@ -10595,11 +10246,12 @@ bool scrAssembleWeaponTemplate(void)
 	// finalize template and set its name
 	if (!intValidTemplate(pNewTemplate, GetDefaultTemplateName(pNewTemplate), false, player))
 	{
+		delete pNewTemplate;
 		return false;
 	}
 
 	// make sure we have a valid weapon
-	if(!checkValidWeaponForProp(pNewTemplate))
+	if (!checkValidWeaponForProp(pNewTemplate))
 	{
 		scrFunctionResult.v.oval = NULL;		// failure
 	}
@@ -10609,7 +10261,7 @@ bool scrAssembleWeaponTemplate(void)
 
 		// check if an identical template already exists for this player
 		tempTemplate = scrCheckTemplateExists(player, pNewTemplate);
-		if(tempTemplate == NULL)
+		if (tempTemplate == NULL)
 		{
 			// set template id
 			pNewTemplate->multiPlayerID = generateNewObjectId();
@@ -10645,20 +10297,19 @@ bool scrAssembleWeaponTemplate(void)
 }
 
 /* Checks if template already exists, returns it if yes */
-static DROID_TEMPLATE* scrCheckTemplateExists(SDWORD player, DROID_TEMPLATE *psTempl)
+static DROID_TEMPLATE *scrCheckTemplateExists(SDWORD player, DROID_TEMPLATE *psTempl)
 {
-	DROID_TEMPLATE* psCurrent;
+	DROID_TEMPLATE *psCurrent;
 	bool equal;
 
 	for (psCurrent = apsDroidTemplates[player]; psCurrent != NULL; psCurrent = psCurrent->psNext)
 	{
-		unsigned int componentType;
 		unsigned int weaponSlot;
 
 		equal = true;
 
 		// compare components
-		for (componentType = 0; componentType < ARRAY_SIZE(psTempl->asParts); ++componentType)
+		for (int componentType = 0; componentType < ARRAY_SIZE(psTempl->asParts); ++componentType)
 		{
 			if (psTempl->asParts[componentType] != psCurrent->asParts[componentType])
 			{
@@ -10674,7 +10325,7 @@ static DROID_TEMPLATE* scrCheckTemplateExists(SDWORD player, DROID_TEMPLATE *psT
 		}
 
 		// compare all weapons separately
-		for(weaponSlot = 0; equal && weaponSlot < psTempl->numWeaps; ++weaponSlot)
+		for (weaponSlot = 0; equal && weaponSlot < psTempl->numWeaps; ++weaponSlot)
 		{
 			if (psTempl->asWeaps[weaponSlot] != psCurrent->asWeaps[weaponSlot])
 			{
@@ -10692,40 +10343,17 @@ static DROID_TEMPLATE* scrCheckTemplateExists(SDWORD player, DROID_TEMPLATE *psT
 	return NULL;
 }
 
-bool scrWeaponShortHitUpgrade(void)
-{
-	SDWORD					player,weapIndex;
-	const WEAPON_STATS		*psWeapStats;
-
-	if (!stackPopParams(2, VAL_INT, &player, ST_WEAPON, &weapIndex))
-	{
-		return false;
-	}
-
-	psWeapStats = &asWeaponStats[weapIndex];
-
-	scrFunctionResult.v.ival = asWeaponUpgrade[player][psWeapStats->weaponSubClass].shortHit;
-	if (!stackPushResult(VAL_INT, &scrFunctionResult))
-	{
-		return false;
-	}
-
-	return true;
-}
-
+// deprecated
 bool scrWeaponLongHitUpgrade(void)
 {
-	SDWORD					player,weapIndex;
-	const WEAPON_STATS		*psWeapStats;
+	SDWORD					player, weapIndex;
 
 	if (!stackPopParams(2, VAL_INT, &player, ST_WEAPON, &weapIndex))
 	{
 		return false;
 	}
 
-	psWeapStats = &asWeaponStats[weapIndex];
-
-	scrFunctionResult.v.ival = asWeaponUpgrade[player][psWeapStats->weaponSubClass].longHit;
+	scrFunctionResult.v.ival = 0;
 	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
 		return false;
@@ -10734,20 +10362,17 @@ bool scrWeaponLongHitUpgrade(void)
 	return true;
 }
 
-
+// deprecated
 bool scrWeaponDamageUpgrade(void)
 {
-	SDWORD					player,weapIndex;
-	const WEAPON_STATS		*psWeapStats;
+	SDWORD					player, weapIndex;
 
 	if (!stackPopParams(2, VAL_INT, &player, ST_WEAPON, &weapIndex))
 	{
 		return false;
 	}
 
-	psWeapStats = &asWeaponStats[weapIndex];
-
-	scrFunctionResult.v.ival = asWeaponUpgrade[player][psWeapStats->weaponSubClass].damage;
+	scrFunctionResult.v.ival = 0;
 	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
 		return false;
@@ -10756,19 +10381,17 @@ bool scrWeaponDamageUpgrade(void)
 	return true;
 }
 
+// deprecated
 bool scrWeaponFirePauseUpgrade(void)
 {
-	SDWORD					player,weapIndex;
-	const WEAPON_STATS		*psWeapStats;
+	SDWORD					player, weapIndex;
 
 	if (!stackPopParams(2, VAL_INT, &player, ST_WEAPON, &weapIndex))
 	{
 		return false;
 	}
 
-	psWeapStats = &asWeaponStats[weapIndex];
-
-	scrFunctionResult.v.ival = asWeaponUpgrade[player][psWeapStats->weaponSubClass].firePause;
+	scrFunctionResult.v.ival = 0;
 	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
 		return false;
@@ -10794,11 +10417,7 @@ bool scrIsComponentAvailable(void)
 		return false;
 	}
 
-	if (player >= MAX_PLAYERS)
-	{
-		ASSERT( false, "player number is too high" );
-		return false;
-	}
+	ASSERT_OR_RETURN(false, player >= 0 && player < MAX_PLAYERS, "Invalid player number");
 
 	switch ((unsigned)sVal.type)  // Unsigned cast to suppress compiler warnings due to enum abuse.
 	{
@@ -10827,7 +10446,7 @@ bool scrIsComponentAvailable(void)
 		bAvailable = (apCompLists[player][COMP_BRAIN][sVal.v.ival] == AVAILABLE);
 		break;
 	default:
-		ASSERT( false, "unknown component type" );
+		ASSERT(false, "unknown component type");
 		return false;
 	}
 
@@ -10844,7 +10463,7 @@ bool scrGetBodySize(void)
 {
 	SDWORD		bodyIndex;
 
-	if (!stackPopParams(1,ST_BODY, &bodyIndex))
+	if (!stackPopParams(1, ST_BODY, &bodyIndex))
 	{
 		return false;
 	}
@@ -10864,7 +10483,7 @@ bool scrGettext()
 		return false;
 	}
 
-	scrFunctionResult.v.sval = (char*)gettext(strParam1);
+	scrFunctionResult.v.sval = (char *)gettext(strParam1);
 
 	return stackPushResult((INTERP_TYPE)ST_TEXTSTRING, &scrFunctionResult);
 }
@@ -10883,8 +10502,8 @@ bool scrGettext_noop()
 
 bool scrPgettext()
 {
-	char* msg_ctxt_id;
-	char* translation;
+	char *msg_ctxt_id;
+	char *translation;
 
 	if (!stackPopParams(2, VAL_STRING, &strParam1, VAL_STRING, &strParam2))
 	{
@@ -10899,9 +10518,9 @@ bool scrPgettext()
 	}
 
 #ifdef DEFAULT_TEXT_DOMAIN
-	translation = (char*)dcgettext(DEFAULT_TEXT_DOMAIN, msg_ctxt_id, LC_MESSAGES);
+	translation = (char *)dcgettext(DEFAULT_TEXT_DOMAIN, msg_ctxt_id, LC_MESSAGES);
 #else
-	translation = (char*)dcgettext(NULL,                msg_ctxt_id, LC_MESSAGES);
+	translation = (char *)dcgettext(NULL,                msg_ctxt_id, LC_MESSAGES);
 #endif
 
 	/* Due to the way dcgettext works a pointer comparison is enough, hence
@@ -10928,7 +10547,7 @@ bool scrPgettext_expr()
 		return false;
 	}
 
-	scrFunctionResult.v.sval = (char*)pgettext_expr(strParam1, strParam2);
+	scrFunctionResult.v.sval = (char *)pgettext_expr(strParam1, strParam2);
 
 	return stackPushResult((INTERP_TYPE)ST_TEXTSTRING, &scrFunctionResult);
 }
