@@ -83,7 +83,7 @@ struct DROID_ACTION_DATA
 	 psDroid->sMove.Status == MOVESHUFFLE)
 
 /** Radius for search when looking for VTOL landing position */
-static const int vtolLandingRadius = 23;
+static const int vtolLandingRadius = 43;
 
 /**
  * @typedef tileMatchFunction

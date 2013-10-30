@@ -216,8 +216,8 @@ int32_t droidDamage(DROID *psDroid, unsigned damage, WEAPON_CLASS weaponClass, W
 
 	CHECK_DROID(psDroid);
 
-	// VTOLs on the ground take triple damage
-	if (isVtolDroid(psDroid) && psDroid->sMove.Status == MOVEINACTIVE)
+	// VTOLs (and transporters in MP) on the ground take triple damage
+	if ((isVtolDroid(psDroid) || (((psDroid->droidType == DROID_TRANSPORTER) || (psDroid->droidType == DROID_SUPERTRANSPORTER)) && bMultiPlayer)) && (psDroid->sMove.Status == MOVEINACTIVE))
 	{
 		damage *= 3;
 	}
@@ -620,7 +620,14 @@ static void removeDroidFX(DROID *psDel, unsigned impactTime)
 		pos.x = psDel->pos.x;
 		pos.z = psDel->pos.y;
 		pos.y = psDel->pos.z;
-		addEffect(&pos, EFFECT_DESTRUCTION, DESTRUCTION_TYPE_DROID, false, NULL, 0, impactTime);
+		if (psDel->droidType == DROID_SUPERTRANSPORTER)
+		{
+			addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_LARGE, false, NULL, 0, impactTime);
+		}
+		else
+		{
+			addEffect(&pos, EFFECT_DESTRUCTION, DESTRUCTION_TYPE_DROID, false, NULL, 0, impactTime);
+		}
 		audio_PlayStaticTrack( psDel->pos.x, psDel->pos.y, ID_SOUND_EXPLOSION );
 	}
 }
