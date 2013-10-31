@@ -1,0 +1,47 @@
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+1 VERSIONINFO
+ FILEVERSION 9,9,9,9
+ PRODUCTVERSION 9,9,9,9
+ FILEFLAGSMASK 0x0L
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x40004L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+	BLOCK "StringFileInfo"
+	BEGIN
+		BLOCK "040904b0"
+		BEGIN
+			VALUE "CompanyName", "Warzone 2100 Project"
+			VALUE "FileDescription", "Warzone 2100 portable"
+			VALUE "FileVersion", "master"
+			VALUE "InternalName", "Warzone 2100"
+			VALUE "LegalCopyright", "Copyright © 2005-2013 Warzone 2100 Project"
+			VALUE "OriginalFilename", "warzone2100_portable.exe"
+			VALUE "ProductName", "Warzone 2100 portable"
+			VALUE "ProductVersion", "master"
+		END
+	END
+	BLOCK "VarFileInfo"
+	BEGIN
+		VALUE "Translation", 0x0409, 0x04b0
+	END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+2 ICON "../icons/wz2100portable.ico"

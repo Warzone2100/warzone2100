@@ -37,6 +37,12 @@
 #  define LOCALEDIR "locale"
 #endif
 
+#ifdef PORTABLE
+#  ifdef PACKAGE
+#   undef PACKAGE
+#   define PACKAGE "warzone2100_portable"
+#  endif
+#endif
 // Language names (http://en.wikipedia.org/wiki/List_of_ISO_639-2_codes)
 #define LANG_NAME_BASQUE "euskara"
 #define LANG_NAME_CATALAN "català"
