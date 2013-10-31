@@ -1159,6 +1159,11 @@ void runGameFind(void )
 		if (id == MULTIOP_FILTER_TOGGLE)
 		{
 			toggleFilter = !toggleFilter;
+			toggleFilter ? widgSetButtonState(psWScreen, MULTIOP_FILTER_TOGGLE, WBUT_CLICKLOCK) : widgSetButtonState(psWScreen, MULTIOP_FILTER_TOGGLE, 0);
+		}
+		else
+		{
+			widgSetButtonState(psWScreen, MULTIOP_FILTER_TOGGLE, 0);
 		}
 		ingame.localOptionsReceived = true;
 		if (!NETfindGame())							// find games synchronously
@@ -1246,11 +1251,12 @@ void startGameFind(void)
 		IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
 
 	//refresh
-	addMultiBut(psWScreen,FRONTEND_BOTFORM,MULTIOP_REFRESH, MULTIOP_CHATBOXW-MULTIOP_OKW-5,5,MULTIOP_OKW,MULTIOP_OKH,
-	            _("Refresh Games List"),IMAGE_REFRESH,IMAGE_REFRESH,false);			// Find Games button
+	addMultiBut(psWScreen, FRONTEND_BOTFORM, MULTIOP_REFRESH, MULTIOP_CHATBOXW-MULTIOP_OKW-5, 5, MULTIOP_OKW, MULTIOP_OKH,
+	            _("Refresh Games List"), IMAGE_RELOAD_HI, IMAGE_RELOAD, IMAGE_RELOAD);
 	//filter toggle
-	addMultiBut(psWScreen,FRONTEND_BOTFORM,MULTIOP_FILTER_TOGGLE, MULTIOP_CHATBOXW-MULTIOP_OKW-45,5,MULTIOP_OKW,MULTIOP_OKH,
-	            _("Filter Games List"),IMAGE_FOG_OFF,IMAGE_FOG_OFF_HI,false);			// Find Games button
+	addMultiBut(psWScreen, FRONTEND_BOTFORM, MULTIOP_FILTER_TOGGLE, MULTIOP_CHATBOXW-MULTIOP_OKW-45, 5, MULTIOP_OKW, MULTIOP_OKH,
+	            _("Filter Games List"),IMAGE_FILTER, IMAGE_FILTER_ON, IMAGE_FILTER_ON);
+
 	if (safeSearch || disableLobbyRefresh)
 	{
 		widgHide(psWScreen, MULTIOP_REFRESH);
