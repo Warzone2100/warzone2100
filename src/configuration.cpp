@@ -113,7 +113,14 @@ bool loadConfig()
 	bEnemyAllyRadarColor = ini.value("radarObjectMode").toBool();
 	radarDrawMode = (RADAR_DRAW_MODE)ini.value("radarTerrainMode", RADAR_MODE_DEFAULT).toInt();
 	radarDrawMode = (RADAR_DRAW_MODE)MIN(NUM_RADAR_MODES - 1, radarDrawMode); // restrict to allowed values
-	if (ini.contains("textureSize")) setTextureSize(ini.value("textureSize").toInt());
+	if (ini.contains("textureSize"))
+	{
+		setTextureSize(ini.value("textureSize").toInt());
+	}
+	else
+	{
+		setTextureSize(512);	//default size for textures
+	}
 	NetPlay.isUPNP = ini.value("UPnP", true).toBool();
 	if (ini.contains("FSAA")) war_setFSAA(ini.value("FSAA").toInt());
 	if (ini.contains("shaders")) war_SetShaders(ini.value("shaders").toInt());
