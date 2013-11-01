@@ -2577,6 +2577,7 @@ void kickPlayer(uint32_t player_id, const char *reason, LOBBY_ERROR_TYPES type)
 		NETenum(&type);
 	NETend();
 	NETflush();
+	wzDelay(300);
 	debug(LOG_NET, "Kicking player %u (%s).",
 	      (unsigned int)player_id, getPlayerName(player_id));
 
