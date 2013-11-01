@@ -361,6 +361,11 @@ void wzReleaseMouse()
 	SDL_WM_GrabInput(SDL_GRAB_OFF);
 }
 
+void wzDelay(unsigned int delay)
+{
+	SDL_Delay(delay);
+}
+
 /**************************/
 /***    Thread support  ***/
 /**************************/
