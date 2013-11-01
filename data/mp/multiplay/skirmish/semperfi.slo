@@ -1674,7 +1674,14 @@ event droidBuiltAssign(droidBuiltTr)
 		{
 			if(droid.droidType == DROID_CYBORG)
 			{
-				groupAddDroid(defendGroup, droid);
+				if (random(2) == 1) 
+				{
+					groupAddDroid(attackGroup, droid);
+				}
+				else
+				{
+					groupAddDroid(defendGroup, droid);
+				}
 			}
 			else
 			{
