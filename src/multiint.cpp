@@ -3563,7 +3563,7 @@ void frontendMultiMessages(void)
 				setLobbyError(KICK_TYPE);
 				stopJoining();
 				//screen_RestartBackDrop();
-				//changeTitleMode(TITLE);
+				changeTitleMode(GAMEFIND);
 				pie_LoadBackDrop(SCREEN_RANDOMBDROP);
 				debug(LOG_ERROR, "You have been kicked, because %s ", reason);
 			}
@@ -3579,6 +3579,7 @@ void frontendMultiMessages(void)
 			stopJoining();
 			debug(LOG_NET, "The host has quit!");
 			setLobbyError(ERROR_HOSTDROPPED);
+			changeTitleMode(GAMEFIND);
 			break;
 
 		case NET_TEXTMSG:					// Chat message
