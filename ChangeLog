@@ -8,26 +8,36 @@
    * Fix: Backwards terrain shadows (commit:85ecd9a3937e7843d9eb4798572651f950bd7555)
    * Fix: Mod loading bug (commit:87cade1a684f3da0572f13e92539100f35b4f6fe, ticket:3567)
    * Fix: Memory leak in effects code (commit:6c90810776e3c9780f0faac793c0fb966ce315dd)
+   * Fix: AI picking to show at most 10 AIs(commit:c2ded00ed4dc6a8ffbb2c1e2a608b92132baa111, ticket:3147)
    * Fix: GUI bug where scav button pretends to be clickable even when not the host (commit:781a81c94bb0df46f4475ca409e43f40a22e95c9)
    * Fix: Medal calculations (commit:fc894f31335fbdf328984ad595accdd0c8467c3f, commit:3bada3ce4fa2157c788d0fdc27287c84291676bd)
+   * Change: Have the default texture size be 512. (commit:899d60e2ffed26d90670b4cc5dd8d797f28b810c)
+   * Change: Both transporter types now take 3X damage while on ground, & not moving.  This is the same behavior for all VTOLs. (commit:e3279f6d033b4967b955dcaaf2ce3c5e21ed7579)
+   * Change: Try harder to avoid both transporters from clustering up on each other. (commit:e3279f6d033b4967b955dcaaf2ce3c5e21ed7579)
  * Multiplayer:
    * Change: Only show games that are newer or same version (commit:303fba6bf5a94df31b070e09f2a5122183c74964)
    * Change: Allocate joining players in topmost available slot (commit:259e07ee77b22e45a7ae9848a30279a081589482)
    * Fix: Various security and cheating related fixes (commit:2faeb8ffb444647b39c52727c7e8f1a0d04e0f0e)
    * Fix: Don't keep trying to query server if we get a error message (commit:1215889fab06089a261ce1d93364d2d1a44ebf31, ticket:3762)
- * Scripting:
+   * Fix: Show kick message when kicked, and show host has quit message if host quit (in lobby). (commit:76ed7aed41ed59931f6d5a5982b13483e7cb9de4)
+   * Fix: Update to miniupnpc-1.8 to fix security issues, and also have support for more devices (commit:8f4adda206597754163f7400f9542512ae862d39)
+   * Add: Have the ability to filter out game versions that don't match yours.  Filter icon by Duda. (commit:854b22c77094f446e983ffeb7d4b4d3bc4ecc8dc)
+   * Change: New refresh icon by Slate. (commit:854b22c77094f446e983ffeb7d4b4d3bc4ecc8dc)
+   * Scripting:
    * Change: Updated NullBot AI (commit:06f50c21d4c10fe210f93c30b2321cac2d69770c)
    * Fix: Group counting off-by-one bug (commit:2cfb42e541c7c76ce828749e286ea9aa3c9f259c)
    * Fix: Fix scavenger script issues (commit:6736d68ffe74510d77037733f15839b58e2c05ce)
    * Fix: Error in structure health calculation (commit:0633524b763835f02350c5a5facd613066db509b, ticket:3930)
    * Fix: Change map iteration to safely allow recursive calls (commit:5c7788784b653cae0fdf80ad687c4aec2c58a3f5, ticket:3894)
    * Fix: Add parameter checking for buildings that do not exist (commit:e38de7b64242a547acd77c7775dbfae10c74ca3d)
+   * Change: The Super Transporter now has 500HP, armor types changed to 35 & 20 and make weapon MG1-VTOL (commit:e3279f6d033b4967b955dcaaf2ce3c5e21ed7579)
  * Maps:
    * Fix: Remove lop-sided oil barrels from 4c-pyramidal (commit:6092fe1194529f0c7fe023d9c98973e44f9f9f24)
    * Add: Gamma (3p) and Melting (6p) by NoQ (commit:b8bdf44737e1d9423c2581b1377cf1be9c4a3666)
  * Build system:
    * Change: Simplify build process by getting rid of bison/flex dependencies (commit:d13bc0de7dd0588351af24dc45d55110d0eed6e8)
    * Fix: Building on OpenBSD (commit:9b9383500fb4c1dd5270a68e3490dc358e2da55f, ticket:3917, commit:47a6d6d4684b993d15e378f6d0877fa043b26ca0, ticket:3845)
+   * Add: Enable portable builds for Windows. New icons & images by Duda, Berg, and Aubergine (commit:4086e93c16a74491e3b6a58efb2df5e3714b0079)
 
 2012-12-09: Version 3.1.0
  * General:
