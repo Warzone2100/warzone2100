@@ -48,6 +48,7 @@ QList<QSize> wzAvailableResolutions();  ///< Get list of available resolutions.
 void wzSetSwapInterval(int swap);
 int wzGetSwapInterval();
 QString wzGetSelection();
+void wzDelay(unsigned int delay);	//delay in ms
 
 // Thread related
 WZ_THREAD *wzThreadCreate(int (*threadFunc)(void *), void *data);

@@ -1260,6 +1260,7 @@ void startGameFind(void)
 	if (safeSearch || disableLobbyRefresh)
 	{
 		widgHide(psWScreen, MULTIOP_REFRESH);
+		widgHide(psWScreen, MULTIOP_FILTER_TOGGLE);
 	}
 
 	if (!NETfindGame())
@@ -1318,6 +1319,7 @@ static void hidePasswordForm(void)
 	if (!safeSearch && (!disableLobbyRefresh))
 	{
 		if (widgGetFromID(psWScreen, MULTIOP_REFRESH)) widgReveal(psWScreen, MULTIOP_REFRESH);
+		if (widgGetFromID(psWScreen, MULTIOP_FILTER_TOGGLE)) widgReveal(psWScreen,MULTIOP_FILTER_TOGGLE);
 	}
 	addGames();
 	addConsoleBox();
@@ -1332,6 +1334,8 @@ static void showPasswordForm(void)
 	widgHide(psWScreen, FRONTEND_BOTFORM);
 	widgHide(psWScreen, CON_CANCEL);
 	widgHide(psWScreen, MULTIOP_REFRESH);
+	widgHide(psWScreen, MULTIOP_FILTER_TOGGLE);
+
 	removeGames();
 
 	widgReveal(psWScreen, FRONTEND_PASSWORDFORM);
@@ -2537,6 +2541,7 @@ void kickPlayer(uint32_t player_id, const char *reason, LOBBY_ERROR_TYPES type)
 		NETenum(&type);
 	NETend();
 	NETflush();
+	wzDelay(300);
 	debug(LOG_NET, "Kicking player %u (%s).",
 	      (unsigned int)player_id, getPlayerName(player_id));
 
@@ -2995,8 +3000,9 @@ static void processMultiopWidgets(UDWORD id)
 		bHosted = true;
 		loadMapSettings2();
 
-		widgDelete(psWScreen,MULTIOP_REFRESH);
-		widgDelete(psWScreen,MULTIOP_HOST);
+		widgDelete(psWScreen, MULTIOP_REFRESH);
+		widgDelete(psWScreen, MULTIOP_HOST);
+		widgDelete(psWScreen, MULTIOP_FILTER_TOGGLE);
 
 		ingame.localOptionsReceived = true;
 
@@ -3480,6 +3486,8 @@ void frontendMultiMessages(void)
 			{
 				setLobbyError(KICK_TYPE);
 				stopJoining();
+				//screen_RestartBackDrop();
+				changeTitleMode(GAMEFIND);
 				pie_LoadBackDrop(SCREEN_RANDOMBDROP);
 				debug(LOG_ERROR, "You have been kicked, because %s ", reason);
 			}
@@ -3495,6 +3503,7 @@ void frontendMultiMessages(void)
 			stopJoining();
 			debug(LOG_NET, "The host has quit!");
 			setLobbyError(ERROR_HOSTDROPPED);
+			changeTitleMode(GAMEFIND);
 			break;
 
 		case NET_TEXTMSG:					// Chat message
