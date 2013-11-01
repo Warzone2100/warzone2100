@@ -23,6 +23,8 @@ var	NUM_HARASS=4;		// the number of units to maintain in the harass group
 var	NUM_VTOL_GROUPS = MIN_VTOL_GROUPS;
 var	ABS_MAX_TRUCKS = 10;			// try not to make too many trucks
 
+var NO_VTOL = 0;		// the script will set it to 1 if VTOLs are disabled via structure limits
+
 var	RATE_AP = 2;		// these values affect the amount of a certain weapon class in the mix
 var	RATE_AT = 1;		// this is for anti-tank
 var	RATE_AA = 0;		// how much more AA do we need
@@ -135,6 +137,8 @@ function dontRunOutOfPower() {
 
 // checks if a structure is a dedicated anti-air defense
 function isDedicatedAA(struct) {
+	if (NO_VTOL)
+		return false;
 	if (typeof(struct.canHitAir)!="undefined" && typeof(struct.canHitGround)!="undefined") {
 		return struct.canHitAir && !struct.canHitGround;
 	} else {
@@ -164,7 +168,7 @@ function enemyCountBalance(enemy) {
 			borg:16,
 			vtol:4,
 			defs:2,
-			aa:7
+			aa:(NO_VTOL ? 0 : 7)
 		};
 	// the rest involves deity cheating
 	if (typeof(enemyInfo[enemy])!="undefined") {
@@ -226,7 +230,7 @@ function groupCountBalance(gr) {
 // the heart of the AI adaptation algorithm
 function adaptationMatrix(ap, at, aa, ab, tank, borg, vtol, defs) {
 	if (difficulty == EASY || difficulty == MEDIUM)
-		return {ap:8,at:4,aa:2,ab:1};
+		return {ap:8,at:4,aa:(NO_VTOL?0:2),ab:1};
 	// the rest involves deity cheating
 	var newAP, newAT, newAA, newAB;
 	var totalMe=ap+at+aa+ab; 
@@ -241,6 +245,8 @@ function adaptationMatrix(ap, at, aa, ab, tank, borg, vtol, defs) {
 	newAT = Math.floor(newAT); if (newAT < 1) newAT=1;
 	newAA = Math.floor(newAA); if (newAA < 0) newAA=0;
 	newAB = Math.floor(newAB); if (newAB < 0) newAB=0;
+	if (NO_VTOL)
+		newAA = 0;
 	return {ap:newAP,at:newAT,aa:newAA,ab:newAB};
 }
 
@@ -263,7 +269,7 @@ function adapt() {
 	if (difficulty == EASY || difficulty == MEDIUM) {
 		RATE_AP = 16;
 		RATE_AT = 7;
-		RATE_AA = 3;
+		RATE_AA = (NO_VTOL ? 0 : 3);
 		RATE_AB = 3;
 	} else { // the rest involves deity cheating
 		var enemyBorgCount = 0, enemyTankCount = 0, enemyVtolCount = 0, enemyBuildingCount = 0;
@@ -689,6 +695,8 @@ function buildCB() {
 
 // build anti-air defenses at specific spots
 function buildAA() {
+	if (NO_VTOL)
+		return false;
 	var x=lastAirAttackX, y = lastAirAttackY;
 	if (x == -1 || y == -1)
 		return false;
@@ -1247,6 +1255,8 @@ function doResearch() {
 				ret.vtol = 1;
 				ret.defs = 1;
 			}
+			if (NO_VTOL)
+				ret.vtol = 0;
 			var total=ret.tank+ret.borg+ret.vtol+ret.defs;
 			if (random(total)<ret.borg)
 				if (followResearchPath(lablist[i],personality.researchPathAP)) {
@@ -2503,6 +2513,9 @@ function eventGameInit() {
 function eventStartLevel() {
 	if (typeof(global.scavengerPlayer)=="undefined") // HACK: until scavengerPlayer is exposed to scripts.
 		global.scavengerPlayer=Math.max(7,maxPlayers)
+    if (getStructureLimit(vtolfac, me) == 0) {
+        NO_VTOL = 1;
+    }
 	personality=new constructPersonality();
 	basePosition=startPositions[me];
 	if (isStructureAvailable(fmod,me)) {
