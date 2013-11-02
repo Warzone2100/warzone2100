@@ -140,9 +140,6 @@ static Socket *bsocket = NULL;                  ///< Socket used to talk to the 
 static Socket *connected_bsocket[MAX_CONNECTED_PLAYERS] = { NULL };  ///< Sockets used to talk to clients (host only).
 static SocketSet* socket_set = NULL;
 
-// UPnP
-static int upnp = false;
-
 WZ_THREAD *upnpdiscover;
 
 static struct UPNPUrls urls;
@@ -983,20 +980,25 @@ static int upnp_init(void *asdf)
 			{
 				ssprintf(buf, "controlURL not available, UPnP disabled");
 				addDumpInfo(buf);
-				ssprintf(buf, _("Your router doesn't support UPnP, you must manually configure your router & firewall to open port 2100 before you can host a game."));
+				// beware of writing a line too long, it screws up console line count. \n is safe for line split
+				ssprintf(buf, _("Your router doesn't support UPnP, you must manually configure your router & firewall to\nopen port 2100 before you can host a game."));
 				addConsoleMessage(buf, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
+				NetPlay.isUPNP_CONFIGURED = false;
+				NetPlay.isUPNP_ERROR = true;
 				return false;
 			}
 
 			NETaddRedirects();
-			upnp = true;
 			return true;
 		}
 		ssprintf(buf, "UPnP device not found.");
 		addDumpInfo(buf);
 		debug(LOG_NET, "No UPnP devices found.");
-		ssprintf(buf, _("No UPnP device was found. You must manually configure your router & firewall to open port 2100 before you can host a game."));
+		// beware of writing a line too long, it screws up console line count. \n is safe for line split
+		ssprintf(buf, _("No UPnP device was found. You must manually configure your router & firewall to\nopen port 2100 before you can host a game."));
 		addConsoleMessage(buf, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
+		NetPlay.isUPNP_CONFIGURED = false;
+		NetPlay.isUPNP_ERROR = true;
 		return false;
 	}
 	else
@@ -1024,7 +1026,8 @@ static bool upnp_add_redirect(int port)
 		ssprintf(buf, _("Could not open require port (%s) on  (%s)"), port_str, lanaddr);
 		debug(LOG_NET, "%s", buf);
 		addConsoleMessage(buf, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
-		ssprintf(buf, _("You must manually configure your router & firewall to open port 2100 before you can host a game."));
+		// beware of writing a line too long, it screws up console line count. \n is safe for line split
+		ssprintf(buf, _("You must manually configure your router & firewall to\n open port 2100 before you can host a game."));
 		addConsoleMessage(buf, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
 		return false;
 	}
@@ -1034,7 +1037,7 @@ static bool upnp_add_redirect(int port)
 	{
 		ssprintf(externalIPAddress, "???");
 	}
-	ssprintf(buf, _("Game configured port (%s) correctly on (%s). Your external IP is %s"), port_str, lanaddr, externalIPAddress);
+	ssprintf(buf, _("Game configured port (%s) correctly on (%s)\nYour external IP is %s"), port_str, lanaddr, externalIPAddress);
 	addConsoleMessage(buf, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
 
 	return true;
@@ -1053,17 +1056,21 @@ void NETaddRedirects(void)
 	if (upnp_add_redirect(gameserver_port))
 	{
 		debug(LOG_NET, "successful!");
+		NetPlay.isUPNP_CONFIGURED = true;
+		NetPlay.isUPNP_ERROR = false;
 	}
 	else
 	{
 		debug(LOG_NET, "failed!");
+		NetPlay.isUPNP_CONFIGURED = false;
+		NetPlay.isUPNP_ERROR = true;
 	}
 }
 
 void NETremRedirects(void)
 {
-	debug(LOG_NET, "upnp is %d", upnp);
-	if (upnp)
+	debug(LOG_NET, "upnp is %d", NetPlay.isUPNP_CONFIGURED);
+	if (NetPlay.isUPNP_CONFIGURED)
 	{
 		int result = upnp_rem_redirect(gameserver_port);
 		if (!result)
@@ -1079,8 +1086,11 @@ void NETremRedirects(void)
 
 void NETdiscoverUPnPDevices(void)
 {
-	upnpdiscover = wzThreadCreate(&upnp_init, NULL);
-	wzThreadStart(upnpdiscover);
+	if (!NetPlay.isUPNP_CONFIGURED)
+	{
+		upnpdiscover = wzThreadCreate(&upnp_init, NULL);
+		wzThreadStart(upnpdiscover);
+	}
 }
 
 // ////////////////////////////////////////////////////////////////////////
@@ -1125,6 +1135,8 @@ int NETshutdown(void)
 	if (NetPlay.bComms && NetPlay.isUPNP)
 	{
 		NETremRedirects();
+		NetPlay.isUPNP_CONFIGURED = false;
+		NetPlay.isUPNP_ERROR = false;
 	}
 	NETstopLogging();
 	if (IPlist)
