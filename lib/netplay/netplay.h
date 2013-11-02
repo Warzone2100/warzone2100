@@ -255,7 +255,9 @@ struct NETPLAY
 	uint32_t	hostPlayer;		///< Index of host in player array
 	uint32_t	bComms;			///< Actually do the comms?
 	bool		isHost;			///< True if we are hosting the game
-	bool		isUPNP;					// if we want the UPnP detection routines to run
+	bool		isUPNP;				// if we want the UPnP detection routines to run
+	bool		isUPNP_CONFIGURED;	// if UPnP was successful
+	bool		isUPNP_ERROR;		//If we had a error during detection/config process
 	bool		isHostAlive;	/// if the host is still alive
 	PHYSFS_file *   pMapFileHandle;         ///< Only non-NULL during map download.
 	char mapFileName[255];            ///< Only valid during map download.

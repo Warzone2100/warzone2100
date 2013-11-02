@@ -2742,7 +2742,6 @@ static void stopJoining(void)
 			widgDelete(psWScreen,FRONTEND_BACKDROP);		// refresh options screen.
 			startMultiOptions(false);
 			ingame.localJoiningInProgress = false;
-			NETremRedirects();
 			return;
 		}
 		else if(ingame.localJoiningInProgress)				// cancel a joined game.
@@ -3918,7 +3917,21 @@ bool startMultiOptions(bool bReenter)
 		{
 			if (NetPlay.isUPNP)
 			{
-				ssprintf(buf, _("UPnP detection is in progress..."));
+				if (NetPlay.isUPNP_CONFIGURED)
+				{
+					ssprintf(buf, _("UPnP has been enabled."));
+				}
+				else
+				{
+					if (NetPlay.isUPNP_ERROR)
+					{
+						ssprintf(buf, _("UPnP detection faled. You must manually configure router yourself."));
+					}
+					else
+					{
+						ssprintf(buf, _("UPnP detection is in progress..."));
+					}
+				}
 				addConsoleMessage(buf, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
 			}
 			else
