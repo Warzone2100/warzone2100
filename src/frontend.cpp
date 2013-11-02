@@ -412,6 +412,8 @@ bool runMultiPlayerMenu(void)
 	case FRONTEND_HOST:
 		// don't pretend we are running a network game. Really do it!
 		NetPlay.bComms = true; // use network = true
+		NetPlay.isUPNP_CONFIGURED = false;
+		NetPlay.isUPNP_ERROR = false;
 		ingame.bHostSetup = true;
 		bMultiPlayer = true;
 		bMultiMessages = true;
