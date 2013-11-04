@@ -135,7 +135,9 @@ data/mp/multiplay/script/camtech.slo
 data/mp/multiplay/script/multilim.slo
 data/mp/multiplay/script/scavfact.js
 data/mp/multiplay/skirmish/nexus.slo
+data/mp/multiplay/skirmish/nullbot-hover.js
 data/mp/multiplay/skirmish/nullbot.js
+data/mp/multiplay/skirmish/nullbot-turtle.js
 data/mp/multiplay/skirmish/rules.js
 data/mp/multiplay/skirmish/semperfi.js
 data/mp/multiplay/skirmish/semperfi.slo
