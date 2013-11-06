@@ -1651,7 +1651,7 @@ static void missionResetDroids(void)
 				psFactory = (FACTORY *)psStruct->pFunctionality;
 			}
 			//find a location next to the factory
-			if (psStruct)
+			if (psFactory)
 			{
 				PICKTILE	pickRes;
 				UDWORD		x, y;
