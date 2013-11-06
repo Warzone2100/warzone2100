@@ -524,25 +524,12 @@ void screenDoDumpToDiskIfRequired(void)
 	iV_Image image = { 0, 0, 8, NULL };
 
 	if (!screendump_required) return;
-	debug( LOG_3D, "Saving screenshot %s\n", fileName );
+	debug(LOG_3D, "Saving screenshot %s", fileName);
 
-	if (image.width != screenWidth || image.height != screenHeight)
-	{
-		if (image.bmp != NULL)
-		{
-			free(image.bmp);
-		}
+	image.width = screenWidth;
+	image.height = screenHeight;
+	image.bmp = (unsigned char *)malloc(channelsPerPixel * image.width * image.height);
 
-		image.width = screenWidth;
-		image.height = screenHeight;
-		image.bmp = (unsigned char *)malloc(channelsPerPixel * image.width * image.height);
-		if (image.bmp == NULL)
-		{
-			image.width = 0; image.height = 0;
-			debug(LOG_ERROR, "Couldn't allocate memory");
-			return;
-		}
-	}
 	glPixelStorei(GL_PACK_ALIGNMENT, 1);
 	glReadPixels(0, 0, image.width, image.height, GL_RGB, GL_UNSIGNED_BYTE, image.bmp);
 

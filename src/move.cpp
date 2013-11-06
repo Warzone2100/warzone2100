@@ -1255,7 +1255,7 @@ static Vector2i moveGetObstacleVector(DROID *psDroid, Vector2i dest)
 		numObst += 1;
 	}
 
-	if (dir == Vector2i(0, 0))
+	if (dir == Vector2i(0, 0) || numObst == 0)
 	{
 		return dest;
 	}

@@ -591,10 +591,6 @@ bool scrOrderDroidStatsLoc(void)
 
 	ASSERT_OR_RETURN(false, psDroid != NULL, "Invalid Unit pointer");
 	ASSERT_OR_RETURN(false, psStats != NULL, "Invalid object pointer");
-	if (psDroid == NULL)
-	{
-		return false;
-	}
 
 	if ((x < 0) || (x > (SDWORD)mapWidth * TILE_UNITS) ||
 	    (y < 0) || (y > (SDWORD)mapHeight * TILE_UNITS))

@@ -872,6 +872,7 @@ bool lineOfFire(const SIMPLE_OBJECT* psViewer, const BASE_OBJECT* psTarget, int 
 
 	ASSERT_OR_RETURN(false, psViewer != NULL, "Invalid shooter pointer!");
 	ASSERT_OR_RETURN(false, psTarget != NULL, "Invalid target pointer!");
+	ASSERT_OR_RETURN(false, psViewer->type == OBJ_DROID || psViewer->type == OBJ_STRUCTURE, "Bad viewer type");
 
 	if (psViewer->type == OBJ_DROID)
 	{

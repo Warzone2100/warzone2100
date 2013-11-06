@@ -3440,13 +3440,6 @@ bool gameLoadV(PHYSFS_file* fileHandle, unsigned int version)
 	}
 
 	debug(LOG_SAVE, "Savegame is of type: %u", saveGameData.sGame.type);
-
-	// Campaign games are fine, only skirmish games are broken in v36
-	if (saveGameData.sGame.type != CAMPAIGN && version == VERSION_36)
-	{
-		debug(LOG_ERROR, "Skirmish savegames of version %u are not supported in this release.", version);
-		return false;
-	}
 	game.type = saveGameData.sGame.type;
 	/* Test mod list */
 	if (version >= VERSION_38)

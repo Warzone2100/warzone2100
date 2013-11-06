@@ -65,10 +65,6 @@ static inline MESSAGE* createMessage(MESSAGE_TYPE msgType, UDWORD player)
 
 	ASSERT_OR_RETURN(NULL, player < MAX_PLAYERS, "Bad player");
 	ASSERT_OR_RETURN(NULL, msgType < MSG_TYPES, "Bad message");
-	if (player >= MAX_PLAYERS || msgType >= MSG_TYPES)
-	{
-		return NULL;
-	}
 
 	// Allocate memory for the message, and on failure return a NULL pointer
 	newMsg = (MESSAGE *)malloc(sizeof(MESSAGE));

@@ -100,7 +100,7 @@ void updateChallenge(bool gameWon)
 
 	fStr = strrchr(sRequestResult, '/');
 	fStr++;	// skip slash
-	if (fStr == '\0')
+	if (*fStr == '\0')
 	{
 		debug(LOG_ERROR, "Bad path to challenge file (%s)", sRequestResult);
 		return;
