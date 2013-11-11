@@ -12,55 +12,24 @@
 ZNULLDESIGN				_("New Design")
 
 /* PLAYER 0 VEHICLES */
-Transporter				_("Transport")
-ConstructionDroid			_("Truck")
-ViperLtMGWheels				_("Machinegun Viper Wheels")
 
 /* PLAYER 1 - NP VEHICLES */
 ConstructionDroidNP			"*NP - Scorpion Constructor*"
-NP-L-RocketPod-Wheels			"*NP-L-RocketPod-Wheels*"
-NP-L-MRLS-Halftrack			"*NP-L-MRLS-Half-track*"
-NP-L-HMG-Halftrack			"*NP-L-HMG-Half-track*"
-NP-L-LtAT-Halftrack			"*NP-L-LtAT-Half-track*"
-NP-L-Sensor-Wheels			"*NP-L-Sensor-Wheels*"
-NP-M-Command-Halftrack			"*NP-M-Command-Half-track*"
-NP-M-Sensor-Wheels			"*NP-M-Sensor-Wheels*"
-NP-M-LitCannon-Halftrack			"*NP-M-LtCannon-Half-track*"
-NP-M-MdCannon-Halftrack			"*NP-M-MdCannon-Half-track*"
-NP-M-MdCannon-Tracks			"*NP-M-MdCannon-Tracks*"
-NP-M-LtMortar-Halftrack			"*NP-M-LtMortar-Half-track*"
-NP-M-HvyMortar-Halftrack		"*NP-M-HvyMortar-Half-track*"
-NP-M-BB-Halftrack				"*NP-M-BB-Half-track*"
-NP-H-MdCannon-Tracks			"*NP-H-MdCannon-Tracks*"
-NP-H-HvyCannon-Tracks			"*NP-H-HvyCannon-Tracks*"
 //NP-Light-test-vehicle			"*NP-L-MdCannon-Tracks*"
 
-NP-M-LtAT-Hover				"*NP-M-LtAT-Hover*"
-NP-H-HvyCannon-Hover			"*NP-H-HvyCannon-Hover*"
-NP-M-MG3-Hover				"*NP-M-MG3-Hover*"
-NP-M-CON-HalfTrack			"*NP-M-CON-Half-track*"
-NP-M-CON-Track				"*NP-M-CON-Track*"
-NP-M-Repair-HalfTrack			"*NP-M-Repair-Half-track*"
 
-NP-M-Command-Track			"*NP-M-Command-Track*"
 //NP-M-Command-Hover			"*NP-M-Command-Hover*"
-NP-M-CBS-Halftrack			"*NP-M-CBS-Halftrack*"
-NP-L-LtCannon-Halftrack			"*NP-L-LtCannon-Halftrack*"
 //NP-H-MdCannon-Hover			"*NP-H-MdCannon-Hover*"
 
 /* PLAYER 2 - CO VEHICLES */
 CO-M-Con-Htrack				"*CO-M-Con-Htrack*"
 
 CO-M-Mortar1-Halftrack			"*CO-M-Mortar1-Halftrack*"
-CO-H-How105-Tracks			"*CO-H-How105-Tracks*"
-CO-H-How150-Tracks			"*CO-H-How150-Tracks*"
 
 CO-M-AA1-HalfTrack			"*CO-M-AA1-HalfTrack*"
 CO-H-AA2-HalfTrack			"*CO-H-AA2-HalfTrack*"
 
 CO-L-RotMG-Wheels				"*CO-S-RotMG-Wheels*"
-CO-M-MedCan-Tracks			"*CO-M-MedCan-Tracks*"
-CO-H-HvyCan-Tracks			"*CO-H-HvyCan-Tracks*"
 
 CO-L-Rocket-VTOL-Pod-VTOL		"*CO-L-POD-VTOL*"
 //CO-L-RotCan-VTOL			"*CO-L-RotCan-VTOL*"
@@ -77,25 +46,15 @@ CO-M-CBS-Halftrack			"*CO-M-CBS-Halftrack*"
 CO-M-Vstrike-Halftrack			"*CO-M-Vstrike-Halftrack*"
 CO-M-VTOLCBS-Halftrack			"*CO-M-VTOLCBS-Halftrack*"
 CO-M-Command-Track			"*CO-M-Command-Track*"
-CO-H-Command-Track			"*CO-H-Command-Track*"
 CO-L-HMG-Wheels				"*CO-L-HMG-Wheels*"
 CO-L-POD-Wheels				"*CO-L-POD-Wheels*"
-CO-M-HPVCannon-Tracks			"*CO-M-HPVCannon-Tracks*"
 CO-M-MRL-Halftrack			"*CO-M-MRL-Halftrack*"
 CO-M-Rocket-LtA-T-Halftrack		"*CO-M-Rocket-LtA-T-Halftrack*"
 CO-M-Rocket-BB-Halftrack		"*CO-M-Rocket-BB-Halftrack*"
-CO-M-Rocket-HvyA-T-Track		"*CO-M-Rocket-HvyA-T-Track*"
-CO-H-RotCan-Track			"*CO-H-RotCan-Track*"
-CO-H-HPVCannon-Tracks			"*CO-H-HPVCannon-Tracks*"
 CO-H-Rocket-BB-Halftrack		"*CO-H-BB-Halftrack*"
 CO-M-HvMortar-Halftrack			"*CO-M-HvMortar-Halftrack*"
 CO-M-RotMortar-Halftrack		"*CO-M-RotMortar-Halftrack*"
-CO-H-RotHow-Track			"*CO-H-RotHow-Track*"
-CO-L-Rocket-LtA-T-VTOL			"*CO-L-LtATRkt-VTOL*"
 CO-L-MG2-VTOL				"*CO-L-MG2-VTOL*"
-CO-L-RotMG-VTOL				"*CO-L-RotMG-VTOL*"
-CO-M-Bomb1-VTOL				"*CO-M-Bomb1-VTOL*"
-CO-M-Bomb2-VTOL				"*CO-M-Bomb2-VTOL*"
 CO-M-QuadMG1AA-Halftrack		"*CO-M-QuadMG1AA-Halftrack*"
 CO-H-QuadRotAA-Halftrack		"*CO-H-QuadRotAA-Halftrack*"
 CO-L-Rocket-LtA-T-Hover			"*CO-L-Rocket-LtA-T-Hover*"
@@ -104,34 +63,13 @@ CO-L-Rocket-LtA-T-Hover			"*CO-L-Rocket-LtA-T-Hover*"
 
 //NX-M-Missile-LtSAM-HT			"*NX-M-SAMissle1-HT*"
 //NX-M-PulseLas1-Track 			"*NX-M-PulseLas1-Track*"
-NX-M-Rail2-Hover			"*NX-M-Rail2-Hover*"
-NX-L-PulseLas-VTOL			"*NX-L-PulseLas-VTOL*"
-NX-L-Missile-A-T-VTOL			"*NX-L-ASMiss-VTOL*"
 //NX-L-Rail1-Whl				"*NX-L-Rail1-Whl*"
-NX-L-Sens-Hov				"*NX-L-Sens-Hov*"
-NX-M-Missile-A-T-Hover			"*NX-M-ATMiss-Hov*"
-NX-M-Com-Hover				"*NX-M-Com-Track*"
-NX-M-Con-Hover				"*NX-M-Con-Hover*"
-NX-L-Repair-Hover			"*NX-L-Repair-Hover*"
-NX-M-Link-Hover				"*NX-M-Link-Hover*"
-NX-M-Strike-Hover			"*NX-M-Strike-Hover*"
-NX-H-CBS-Hover				"*NX-H-CBS-Hover*"
-NX-M-VTOLCBS-Hover			"*NX-M-VTOLCBS-Hover*"
-NX-M-PulseLas-Hover			"*NX-M-Laser2-Hover*"
-NX-H-Rail3-Hover			"*NX-H-Rail3-Hover*"
 NX-H-BeamLas-Hover			"*NX-H-BeamLas-Hover*"
-NX-L-Missile-MdArt-Hover		"*NX-L-MdMiss-Hover*"
-NX-H-HvMiss-Hover			"*NX-H-HvMiss-Hover*"
 //NX-L-Missile-BB-VTOL			"*NX-L-BBMiss-VTOL*"
-NX-L-Rail1-VTOL				"*NX-L-Rail1-VTOL*"
-NX-H-Rail2-VTOL				"*NX-H-Rail2-VTOL*"
 //NX-M-HvySAM-Htrack			"*NX-M-HvySAM-Htrack*"
 
 // NEXUS only Cyborgs
 NX-Cyb-HvMiss-JUMP			"*NX-Cyb-HvMiss-JUMP*"
-NX-Cyb-PulseLas-JUMP	  		"*NX-Cyb-PulseLas-JUMP*"
-NX-Cyb-Rail1-JUMP			"*NX-Cyb-JUMP*"
-NX-Cyb-Miss-JUMP			"*NX-Cyb-Miss-JUMP*"
 Cyb-NXCybRail1-GRD			"*Cyb-NXCybRail1-GRD*"
 Cyb-NXCybATmiss-GRD			"*Cyb-NXCybATmiss-GRD*"
 Cyb-NXPulseLas-GRD			"*Cyb-NXPulseLas-GRD*"
@@ -140,83 +78,25 @@ Cyb-NXCybATmiss-JUMP			"*Cyb-NXCybATmiss-JUMP*"
 Cyb-NXPulseLas-JUMP			"*Cyb-NXPulseLas-JUMP*"
 
 /* PLAYER 4 - FORCE EDITOR VEHICLES */
-ViperLtCannonWheels			_("Light Cannon Viper Wheels")
-ViperFlameWheels			_("Flamer Viper Wheels")
-ViperSensorWheels			_("Sensor Turret Viper Wheels")
-ViperLtCannonTracks			_("Light Cannon Viper Tracks")
 
-CobraHMGHalfTrack			_("Heavy Machinegun Cobra Half-tracks")
-CobraMortarHalfTrack			_("Mortar Cobra Half-tracks")
-CobraLtCnTrks				_("Light Cannon Cobra Tracks")
 
 /* PLAYER 5 - MULTIPLAYER VEHICLES */
-ConstructorDroid			_("Truck")
 
 /* PLAYER 6 - TEST VEHICLES */
 
 // new player cyborgs - for Pete
 
 Cyb-CybChnGun-JUMP			"*Cyb-CybChnGun-JUMP*"
-ATESTVEHICLE				"*TEST VEHICLE*"
-ATESTVTOL				"*TEST VTOL*"
-ASPOTTER				"*SPOTTER*"
 AVTOLSPOTTER				"*VTOL SPOTTER*"
-SuperTank				"*Kev's Super Tank*"
-SuperTank2				"*Alex's Killa*"
 
-ViperMedCnTrks				_("Medium Cannon Viper Tracks")
-ViperRepairWheels			_("Repair Turret Viper Wheels")
-ViperRepairHalftrack			_("Repair Turret Viper Half-tracks")
-ViperMG01Wheels				_("Machinegun Viper Wheels")
-ViperMG02Wheels				_("Twin Machinegun Viper Wheels")
-ViperMG02Halftrack			_("Twin Machinegun Viper Half-tracks")
-ViperHMGHalftrack			_("Heavy Machinegun Viper Half-tracks")
-ViperHMGTracks				_("Heavy Machinegun Viper Tracks")
-ViperLtA-Twheels			_("Lancer Viper Wheels")
-ViperPODWheels				_("Mini-Rocket Viper Wheels")
-ViperMRLWheels				_("Mini-Rocket Artillery Viper Wheels")
-ViperBBWheels				_("Bunker Buster Viper Wheels")
 
-CobraMedCnTrks				_("Medium Cannon Cobra Tracks")
-CobraHvyCnTrks				_("Heavy Cannon Cobra Tracks")
-CobraSpadeTracks			_("Cobra Truck")
-CobraSensorHalftrack			_("Sensor Cobra Half-tracks")
-CobraFlameTracks			_("Flamer Cobra Tracks")
-CobraHvyMortarHalftrack			_("Bombard Cobra Half-tracks")
-CobraComHalftrack			_("Command Turret Cobra Half-tracks")
-CobraLtA-Thalftrack			_("Lancer Cobra Half-tracks")
-CobraMRLHalftrack			_("Mini-Rocket Artillery Cobra Half-tracks")
 
-PythonLtCnTrks				_("Light Cannon Python Tracks")
-PythonMedCnTrks				_("Medium Cannon Python Tracks")
-PythonHvyCnTrks				_("Heavy Cannon Python Tracks")
-PythonComTracks				_("Command Turret Python Tracks")
 
 /* PLAYER 7 - SCAVENGER VEHICLES */
-BaBaPeople				_("Scavenger")
-BabaJeep				_("Jeep")
-BarbarianTrike				_("Trike")
-BarbarianBuggy				_("Buggy")
-BarbarianRKBuggy			_("Rocket Buggy")
-BabaRKJeep				_("Rocket Jeep")
-BabaFireTruck				_("Fire Truck")
-BabaPickUp				_("Pick-Up Truck")
-BabaFireCan				_("Cannon Fire Truck")
-BabaBusCan				_("School Bus")
-BaBaCivilian				_("Civilian")
 
 /* FINAL CYBORGS */
-CyborgChain01Ground			_("Machinegunner")
-CyborgFlamer01Grd			_("Flamer")
-CyborgRkt01Ground			_("Lancer")
-CyborgCannon01Grd			_("Heavy Gunner")
 
 // Cyborgs - shared 
-Cyb-Chain-GROUND			_("Machinegunner")
-Cyb-Flamer-GROUND			_("Cyborg Flamer")
-Cyb-Cannon-GROUND			_("Heavy Gunner")
-Cyb-Rocket-GROUND			_("Lancer")
-Cyb-RotMG-GROUND			_("Assault Gunner")
 
 /* TEST CYBORGS */	
 CyborgCan01Air				"*TEST - Cyborg Cannon01 Air*"
@@ -627,10 +507,6 @@ R-Lab-Robotics				_("Robotics Laboratory")
 
 // *New Names...... Keith
 
-P0PythonHvyCnTrks		_("Python Heavy Cannon Tracks")
-P0CobraSpadeTracks		_("Cobra Truck")
-P0CobraFlameTracks		_("Cobra Flamer Tracks")
-P0CobraMedCnTrks		_("Cobra Medium Cannon Tracks")
 
 //CyborgChain01GroundP0	_("Gunner")
 //CyborgRkt01GroundP0		_("Lancer")
@@ -660,54 +536,23 @@ Missile-HvyArt-pit		"*Missile-HvyArt-pit*"
 //ResMod-Cyb-MG-GRD		"*ResMod-Cyb-MG-GRD*"
 
 //NEW VEHICLES
-CO-M-HvFlame-Track 	"*CO-M-HvFlame-Track*"
-CO-M-RR-HT			"*CO-M-RR-HT*"
-CO-H-Rkt-BB-T		"*CO-H-Rkt-BB-T*"
-CO-M-HMG-T			"*CO-M-HMG-T*"
-CO-H-COM-H			"*CO-H-COM-H*"
-CO-M-LTAT-Hover		"*CCO-M-LTAT-Hover*"
-CO-M-HVAT-Hover		"*CCO-M-HVAT-Hover*"
-CO-M-HvMortar-T		"*CO-M-HvMortar-T*"
-CO-M-Repair-T		"*CO-M-Repair-T*"
 CO-M-Rocket-BB-T		"*CO-M-Rocket-BB-T*"
-CO-M-Rocket-LtA-T-T	"*CO-M-Rocket-LtA-T-T*"
-CO-M-RotMortar-T		"*CO-M-RotMortar-T*"
-CO-M-Sensor-T		"*CO-M-Sensor-T*"
-CO-M-Vstrike-T		"*CO-M-Vstrike-T*"
-CO-M-VTOLCBS-T		"*CO-M-VTOLCBS-T*"
-CO-M-Con-T			"*CO-M-Con-T*"
-CO-M-CBS-T			"*CO-M-CBS-T*"
-CO-M-ROTMG-T		"*CO-M-ROTMG-T*"
-CO-M-HVAT-V			"*CO-M-HVAT-V*"
-CO-L-Bomb1-VTOL		"*CO-L-Bomb1-VTOL*"
 
-CO-H-QuadRotAA-T		"*CO-H-QuadRotAA-T*"
-CO-H-QuadBofAA-T		"*CO-H-QuadBofAA-T*"
 
 Rocket-IDF-Emp		"*Rocket-IDF-Emp*"
 
 
 // Additional templates for Player 0 entering start of cam2
 
-P0CobraLtATRktHtrack	_("Lancer Cobra Half-tracks")
-P0CobraHvyMGHtrack	_("Heavy Machinegun Cobra Half-tracks")
-P0PythonComTracks		_("Command Turret Python Tracks")
-P0CobraRepairTrks		_("Repair Turret Cobra Tracks")
 
 // New Cyborg Bodies
 Cyb-Bod-BB-Rkt		"*Cyb-Bod-BB-Rkt*"
 
 Cyb-Wpn-BB-Rkt		"*Cyb-Wpn-BB-Rkt*"
 
-Cyb-Atmiss-GROUND		_("Scourge")
 Cyb-BB-Rkt-GROUND		_("Bunker Blaster")
-Cyb-Laser1-GROUND		_("Flashlight Gunner")
-Cyb-Rail1-GROUND		_("Needle Gunner")
 
 // Multiplayer VTOLs
-P6-L-LTAT-V			"*Skirmish ATVTOL*"
-P6-L-Bomb1-V		"*Skirmish BOMBVTOL*"
-P6-M-QMG1-HT		"*P6-M-QMG1-HT*"
 
 // New Style Repair Center - replaces all instances of A0RepairCentre
 A0RepairCentre2		_("Repair Center")
@@ -715,28 +560,18 @@ A0RepairCentre2		_("Repair Center")
 
 
 // CAM3 Start - Available Units
-P0cam3CobCONTrk		_("Truck")
-P0cam3PyHvyATTrk	_("Tank Killer Python Tracks")
-P0cam3PyHPVcanTrk	_("HPV Cannon Python Tracks")
-P0cam3PyFlakHT		_("Cyclone AA Python Half-tracks")
-P0cam3PyAsltGnTrk	_("Assault Gun Python Tracks")
 
 
 // name change - moved to bottom of Names.TXT by Keith 9/2/99
 
 
-NX-M-Bomb4-VTOL				"*NX-M-Bomb4-VTOL*"
 
 // Added Cruise Missile Launcher Struc (CAM3-1) and ANTI-SAT Launcher (CAM3-4)
 
 
 // Added 21st Feb 99 - New NEXUS Versions of Sensor Towers, etc.
 
-NX-M-HvSam-Hover				"*NX-M-HvSam-Hover*"
-NX-L-Link-Hov					"*NX-L-Link-Hov*"
-NX-M-Bomb2-VTOL				"*NX-M-Bomb2-VTOL*"
 
 // Latest Additions
-NX-L-Flash-Hover			"*NX-L-Flash-Hover*"
 
 // new features by Mysteryem

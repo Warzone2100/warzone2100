@@ -12,8 +12,6 @@
 ZNULLDESIGN				_("New Design")
 
 /* PLAYER 0 VEHICLES */
-Transporter				_("Cyborg Transport")
-ConstructionDroid			_("Truck")
 ViperLtMGWheels				_("Machinegun Viper Wheels")
 
 /* PLAYER 1 - NP VEHICLES */
@@ -131,27 +129,15 @@ Cyb-NXCybATmiss-GRD			"*Cyb-NXCybATmiss-GRD*"
 Cyb-NXPulseLas-GRD			"*Cyb-NXPulseLas-GRD*"
 
 /* PLAYER 4 - FORCE EDITOR VEHICLES */
-ViperLtCannonWheels			_("Light Cannon Viper Wheels")
-ViperLtCannonHTracks		_("Light Cannon Viper Half-tracks")
-ViperFlameWheels			_("Flamer Viper Wheels")
-ViperSensorWheels			_("Sensor Turret Viper Wheels")
-ViperLtCannonTracks			_("Light Cannon Viper Tracks")
 
-CobraHMGHalfTrack			_("Heavy Machinegun Cobra Half-tracks")
-CobraMortarHalfTrack			_("Mortar Cobra Half-tracks")
-CobraLtCnTrks				_("Light Cannon Cobra Tracks")
 
 /* PLAYER 5 - MULTIPLAYER VEHICLES */
-ConstructorDroid			_("Truck")
-CyborgRotMgGround			_("Assault Gunner")
 
 /* PLAYER 6 - TEST VEHICLES */
 
 // new player cyborgs - for Pete
 
 ATESTVEHICLE				"*TEST VEHICLE*"
-ATESTVTOL				"*TEST VTOL*"
-ASPOTTER				"*SPOTTER*"
 AVTOLSPOTTER				"*VTOL SPOTTER*"
 Superbody				"Kev's Super Body"
 Superbody2				"Alex's Super Body"
@@ -160,59 +146,14 @@ Superweapon2				"Alex's Super Weapon"
 SuperTank				"Kev's Super Tank"
 SuperTank2				"Alex's Killa"
 
-ViperMedCnTrks				_("Medium Cannon Viper Tracks")
-ViperRepairWheels			_("Repair Turret Viper Wheels")
-ViperRepairHalftrack			_("Repair Turret Viper Half-track")
-ViperMG01Wheels				_("Machinegun Viper Wheels")
-ViperMG02Wheels				_("Twin Machinegun Viper Wheels")
-ViperMG02Halftrack			_("Twin Machinegun Viper Half-tracks")
-ViperHMGHalftrack			_("Heavy Machinegun Viper Half-tracks")
-ViperHMGTracks				_("Heavy Machinegun Viper Tracks")
-ViperLtA-Twheels			_("Lancer Viper Wheels")
-ViperPODWheels				_("Mini-Rocket Viper Wheels")
-ViperMRLWheels				_("Mini-Rocket Array Viper Wheels")
-ViperBBWheels				_("Bunker Buster Rockets Viper Wheels")
 
-CobraMedCnTrks				_("Medium Cannon Cobra Tracks")
-CobraHvyCnTrks				_("Heavy Cannon Cobra Tracks")
-CobraSpadeTracks			_("Cobra Truck")
-CobraSensorHalftrack			_("Sensor Turret Cobra Half-tracks")
-CobraFlameTracks			_("Flamer Cobra Tracks")
-CobraHvyMortarHalftrack			_("Bombard Cobra Half-tracks")
-CobraComHalftrack			_("Command Turret Cobra Half-tracks")
-CobraLtA-Thalftrack			_("Lancer Cobra Half-tracks")
-CobraMRLHalftrack			_("Mini-Rocket Array Cobra Half-tracks")
 
-PythonLtCnTrks				_("Light Cannon Python Tracks")
-PythonMedCnTrks				_("Medium Cannon Python Tracks")
-PythonHvyCnTrks				_("Heavy Cannon Python Tracks")
-PythonComTracks				_("Command Turret Python Tracks")
 
 /* PLAYER 7 - SCAVENGER VEHICLES */
-BaBaPeople				_("Scavenger")
-BabaJeep				_("Jeep")
-BarbarianTrike				_("Trike")
-BarbarianBuggy				_("Buggy")
-BarbarianRKBuggy			_("Rocket Buggy")
-BabaRKJeep				_("Rocket Jeep")
-BabaFireTruck				_("Fire Truck")
-BabaPickUp				_("Pick-Up Truck")
-BabaFireCan				_("Cannon Fire Truck")
-BabaBusCan				_("School Bus")
-BaBaCivilian				_("Civilian")
 
 /* FINAL CYBORGS */
-CyborgChain01Ground			_("Machinegunner")
-CyborgFlamer01Grd			_("Flamer")
-CyborgRkt01Ground			_("Lancer")
-CyborgCannon01Grd			_("Heavy Gunner")
 
 // Cyborgs - shared 
-Cyb-Chain-GROUND			_("Machinegunner")
-Cyb-Flamer-GROUND			_("Cyborg Flamer")
-Cyb-Cannon-GROUND			_("Heavy Gunner")
-Cyb-Rocket-GROUND			_("Lancer")
-Cyb-RotMG-GROUND			_("Assault Gunner")
 
 /* TEST CYBORGS */	
 CyborgCan01Air				"*TEST - Cyborg Cannon01 Air*"
@@ -425,7 +366,6 @@ R-Comp-MissileCodes03			_("Third Level Missile Firing Codes")
 //R-Cyborg-Metals10				_("Cyborg Bonded Laminates")
 
 
-SuperTransport			_("Super Transport")
 
 R-Cyborg-Wpn-BB				_("Bunker Blaster Cyborg")
 R-Cyborg-Wpn-Cannon			_("Heavy Gunner Cyborg")
@@ -693,10 +633,6 @@ R-Lab-Robotics				_("Robotics Laboratory")
 
 // *New Names...... Keith
 
-P0PythonHvyCnTrks		_("Heavy Cannon Python Tracks")
-P0CobraSpadeTracks		_("Cobra Truck")
-P0CobraFlameTracks		_("Flamer Cobra Tracks")
-P0CobraMedCnTrks		_("Medium Cannon Cobra Tracks")
 
 //CyborgChain01GroundP0	_("Gunner")
 //CyborgRkt01GroundP0		_("Lancer")
@@ -755,10 +691,6 @@ Rocket-IDF-Emp		"*Rocket-IDF-Emp*"
 
 // Additional templates for Player 0 entering start of cam2
 
-P0CobraLtATRktHtrack	_("Lancer Cobra Half-tracks")
-P0CobraHvyMGHtrack	_("Heavy Machinegun Cobra Half-tracks")
-P0PythonComTracks		_("Command Turret Python Tracks")
-P0CobraRepairTrks		_("Repair Cobra Tracks")
 
 // New Cyborg Bodies
 Cyb-Bod-Atmiss		"*Cyb-Bod-Atmiss*"
@@ -768,15 +700,9 @@ Cyb-Bod-Rail1			"*Cyb-Bod-Rail1*"
 
 Cyb-Wpn-BB-Rkt		"*Cyb-Wpn-BB-Rkt*"
 
-Cyb-Atmiss-GROUND		_("Scourge")
 Cyb-BB-Rkt-GROUND		_("Bunker Blaster")
-Cyb-Laser1-GROUND		_("Flashlight Gunner")
-Cyb-Rail1-GROUND		_("Needle Gunner")
 
 // Multiplayer VTOLs
-P6-L-LTAT-V			"*Skirmish ATVTOL*"
-P6-L-Bomb1-V		"*Skirmish BOMBVTOL*"
-P6-M-QMG1-HT		"*P6-M-QMG1-HT*"
 
 // New Style Repair Center - replaces all instances of A0RepairCentre
 A0RepairCentre2		_("Repair Center")
@@ -784,11 +710,6 @@ A0RepairCentre2		_("Repair Center")
 
 
 // CAM3 Start - Available Units
-P0cam3CobCONTrk		_("Truck")
-P0cam3PyHvyATTrk	_("Tank Killer Python Tracks")
-P0cam3PyHPVcanTrk	_("Hyper Velocity Cannon Python Tracks")
-P0cam3PyFlakHT		_("AA Flak Cannon Python Half-tracks")
-P0cam3PyAsltGnTrk	_("Assault Gun Python Tracks")
 
 R-Sys-NEXUSrepair		"*R-Sys-NEXUSrepair*"
 
@@ -819,115 +740,30 @@ NX-L-Flash-Hover			"*NX-L-Flash-Hover*"
 
 
 //New Skirmish Units
-Sk-PythonHvCanTrack			_("Heavy Cannon Python Tracks")
-Sk-CobraBBHover				_("Bunker Buster Cobra Hover")
 
-MP-Cyb-ATmiss-GRD			_("Scourge")
-MP-Cyb-Laser1-GRD			_("Flashlight Gunner")
 
 
 // Cam3NewTech starts here
 
 // New Skirmish Units May28th wdg
 
-SK-Bug-Hover-HMG				"*SK-Bug-Hover-HMG*"
-SK-Cobra-Hover-BB				"*SK-Cobra-Hover-BB*"
-SK-Cobra-Hover-HMG			"*SK-Cobra-Hover-HMG*"
-SK-Cobra-Hover-Lancer			"*SK-Cobra-Hover-Lancer*"
-SK-Cobra-Track-HVC			"*SK-Cobra-Track-HVC*"
-SK-Cobra-Track-TK				"*SK-Cobra-Track-TK*"
-SK-Leopard-Hover-Needle			"*SK-Leopard-Hover-Needle*"
-SK-Leopard-HTrk-ASGun			"*SK-Leopard-HTrk-ASGun*"
-SK-Leopard-Htrk-Needle			"*SK-Leopard-Htrk-Needle*"
-SK-Leopard-Track-Lancer			"*SK-Leopard-Track-Lancer*"
-SK-Mantis-Hover-Hcannon			"*SK-Mantis-Hover-Hcannon*"
-SK-Mantis-Hover-HVC			"*SK-Mantis-Hover-HVC*"
-SK-Panther-Hover-HVC			"*SK-Panther-Hover-HVC*"
-SK-Panther-Hover-TK			"*SK-Panther-Hover-TK*"
-SK-Panther-Htrk-ASGun			"*SK-Panther-Htrk-ASGun*"
-SK-Panther-Htrk-BB			"*SK-Panther-Htrk-BB*"
-SK-Panther-Track-HVC			"*SK-Panther-Track-HVC*"
-SK-Panther-Track-RailGun		"*SK-Panther-Track-RailGun*"
-SK-Panther-Track-TK			"*SK-Panther-Track-TK*"
-SK-Python-Hover-Hcannon			"*SK-Python-Hover-Hcannon*"
-SK-Python-Hover-Lancer			"*SK-Python-Hover-Lancer*"
-SK-Python-Hover-Mcannon			"*SK-Python-Hover-Mcannon*"
-SK-Python-Track-Hcannon			"*SK-Python-Track-Hcannon*"
-SK-Retal-Track-Needle			"*SK-Retal-Track-Needle*"
-SK-Retre-Hover-RailGun			"*SK-Retre-Hover-RailGun*"
-SK-Retre-Hover-Scourge			"*SK-Retre-Hover-Scourge*"
-SK-Retre-Htrk-Pepper			"*SK-Retre-Htrk-Pepper*"
-SK-Retre-Track-FlashLight		"*SK-Retre-Track-FlashLight*"
-SK-Retre-Track-PulseLsr			"*SK-Retre-Track-PulseLsr*"
-SK-Retre-Track-RailGun			"*SK-Retre-Track-RailGun*"
-SK-Retre-Track-Scourge			"*SK-Retre-Track-Scourge*"
-SK-Scorp-Hover-ASGUN			"*SK-Scorp-Hover-ASGUN*"
-SK-Scorp-Hover-BB				"*SK-Scorp-Hover-BB*"
-SK-Scorp-Hover-Bombard			"*SK-Scorp-Hover-Bombard*"
-SK-Scorp-Hover-Lancer			"*SK-Scorp-Hover-Lancer*"
-SK-Scorp-Hover-Mcannon			"*SK-Scorp-Hover-Mcannon*"
-SK-Tiger-Hover-ASCannon			"*SK-Tiger-Hover-ASCannon*"
-SK-Tiger-Hover-Gauss			"*SK-Tiger-Hover-Gauss*"
-SK-Tiger-Hover-Hcannon			"*SK-Tiger-Hover-Hcannon*"
-SK-Tiger-Hover-HVC			"*SK-Tiger-Hover-HVC*"
-SK-Tiger-Hover-Scourge			"*SK-Tiger-Hover-Scourge*"
-SK-Tiger-Hover-TK				"*SK-Tiger-Hover-TK*"
-SK-Tiger-Track-ASCannon			"*SK-Tiger-Track-ASCannon*"
-SK-Tiger-Track-Gauss			"*SK-Tiger-Track-Gauss*"
-SK-Tiger-Track-Hcannon			"*SK-Tiger-Track-Hcannon*"
-SK-Tiger-Track-HVC			"*SK-Tiger-Track-HVC*"
-SK-Tiger-Track-Scourge			"*SK-Tiger-Track-Scourge*"
-SK-Tiger-Track-TK				"*SK-Tiger-Track-TK*"
-SK-Veng-Hover-Gauss			"*SK-Veng-Hover-Gauss*"
-SK-Veng-Hover-PulseLsr			"*SK-Veng-Hover-PulseLsr*"
-SK-Veng-Hover-Scourge			"*SK-Veng-Hover-Scourge*"
-SK-Veng-Track-Gauss			"*SK-Veng-Track-Gauss*"
-SK-Veng-Track-PulseLsr			"*SK-Veng-Track-PulseLsr*"
-SK-Veng-Track-Scourge			"*SK-Veng-Track-Scourge*"
-SK-Bug-Hover-Sensor			"*SK-Bug-Hover-Sensor*"
-SK-Bug-Hover-Repair			"*SK-Bug-Hover-Repair*"
-SK-Leopard-Hover-Sensor			"*SK-Leopard-Hover-Sensor*"
-SK-Leopard-Hover-Repair			"*SK-Leopard-Hover-Repair*"
-SK-Panther-Track-Repair			"*SK-Panther-Track-Repair*"
-SK-Retal-Hover-Repair			"*SK-Retal-Hover-Repair*"
-SK-Retal-Hover-Sensor			"*SK-Retal-Hover-Sensor*"
-SK-Bug-VTOL-CLBomb			"*SK-Bug-VTOL-CLBomb*"
-SK-Bug-VTOL-BB				"*SK-Bug-VTOL-BB*"
-SK-Scorpion-VTOL-BB			"*SK-Scorpion-VTOL-BB*"
-SK-Scorpion-VTOL-Hbomb			"*SK-Scorpion-VTOL-Hbomb*"
-SK-Mantis-VTOL-BB				"*SK-Mantis-VTOL-BB*"
-SK-Leopard-VTOL-BB			"*SK-Leopard-VTOL-BB*"
-SK-Leopard-VTOL-PhosBomb		"*SK-Leopard-VTOL-PhosBomb*"
-SK-Panther-VTOL-Thermite		"*SK-Panther-VTOL-Thermite*"
-SK-Panther-VTOL-BB			"*SK-Panther-VTOL-BB*"
-SK-Panther-VTOL-Phosbomb		"*SK-Panther-VTOL-Phosbomb*"
-SK-Panther-VTOL-TK			"*SK-Panther-VTOL-TK*"
-SK-Retal-VTOL-Phosbomb			"*SK-Retal-VTOL-Phosbomb*"
-SK-Retre-VTOL-Thermite			"*SK-Retre-VTOL-Thermite*"
-SK-Retre-VTOL-PulseLsr			"*SK-Retre-VTOL-PulseLsr*"
-SK-Retre-VTOL-Scourge			"*SK-Retre-VTOL-Scourge*"
 
 // added by keith 26th may 1999 for 005 patch
-MP-Cyb-Needle-GRD				_("Needle Gunner")
 
 // New Cyborgs - Thermite and Grenadier
 R-Cyborg-Wpn-Thermite			"*NOT USED Thermite Flamer Cyborg*"
 Cyb-Bod-Thermite				"*Thermite Body*"
-Cyb-Thermite				_("Thermite Flamer")
 
 R-Cyborg-Wpn-Grenade			"*NOT USED Grenadier Cyborg*"
 Cyb-Bod-Grenade				"*Grenadier Body*"
-Cyb-Gren					_("Grenadier")
 
 // New Cyborgs - added by Marc 8th June 1999 Combat Engineer & Mechanic
 
 R-Cyborg-Sys-ComEng			"*NOT USED Combat Engineer*"
 Cyb-Bod-ComEng				"*Combat Engineer*"
-Cyb-ComEng					_("Combat Engineer")
 
 R-Cyborg-Sys-Mechanic			"*NOT USED Cyborg Mechanic*"
 Cyb-Bod-Mechanic				"*Cyborg Mechanic*"
-Cyb-Mechanic				_("Cyborg Mechanic")
 
 // added by Marc 9th June 1999 Incendiary Howitzer/Incendiary Mortar/Plasmite Flamer/Heavy Repair
 
@@ -936,16 +772,12 @@ Cyb-Mechanic				_("Cyborg Mechanic")
 
 // added by Marc 15th June 1999 Tech 2 Super-Cyborgs and Heavy Laser
 
-Cyb-Hvy-Mcannon				_("Super Heavy-Gunner")
 Cyb-Hvybod-Mcannon			_("Super Heavy-Gunner")
 
-Cyb-Hvy-Acannon				_("Super Auto-Cannon Cyborg")
 Cyb-Hvybod-Acannon			_("Super Auto-Cannon Cyborg")
 
-Cyb-Hvy-HPV					_("Super HPV Cyborg")
 Cyb-Hvybod-HPV				_("Super HPV Cyborg")
 
-Cyb-Hvy-TK					_("Super Tank-Killer Cyborg")
 Cyb-Hvybod-TK				_("Super Tank-Killer Cyborg")
 
 
@@ -958,23 +790,16 @@ LasSatCommandSensor			"*LasSatCommandSensor*"
 
 // added by SEBG 5 July 1999
 
-SK-Veng-Track-C6TwinAslt	"*SK-Veng-Track-C6TwinAslt*"
-SK-Veng-Track-HvyLaser		"*SK-Veng-Track-HvyLaser*"
-SK-Veng-Hover-Seraph		"*SK-Veng-Hover-Seraph*"
-Dragon-Hover-SeraphGauss	"*SK-Dragon-Hover-SeraphGauss*"
 
 
 // added by Marc 23rd June 1999 Tech 3 Super-Cyborgs, Plasma Cannon and EMP Cannon
 
 
 
-Cyb-Hvy-PulseLsr				_("Super Pulse Laser Cyborg")
 Cyb-Hvybod-PulseLsr			_("Super Pulse Laser Cyborg")
 
-Cyb-Hvy-RailGunner			_("Super Rail-Gunner")
 Cyb-Hvybod-RailGunner			_("Super Rail-Gunner")
 
-Cyb-Hvy-A-T					_("Super Scourge Cyborg")
 Cyb-Hvybod-A-T				_("Super Scourge Cyborg")
 
 
@@ -1014,142 +839,37 @@ R-Comp-CommandTurret04			_("Command Turret IV")
 //TransporterU				_("Unit transport")
 //TransporterBodyU			_("Unit transport Body")
 //R-Cyborg-TransportU			_("Unit transport")
-CobraHRepairHover			_("Heavy Repair Turret Cobra Hover")
-ViperHMGWheels				_("Heavy Machinegun Viper Wheels")
-Scourge-Mantis-H			_("Scourge Mantis Hover")
-TK-Mantis-H				_("Tank Killer Mantis Hover")
-CobraHMGTracks				_("Heavy Machinegun Cobra Tracks")
-Cobra-Hover-HC				_("Heavy Cannon Cobra Hover")
 
 //======================================================================
 //GK
 //======================================================================
-A-Viper-Wheels-MG			_("Machinegun Viper Wheels")
-A-Viper-Wheels-TMG			_("Twin Machinegun Viper Wheels")
-A-Viper-Wheels-HMG			_("Heavy Machinegun Viper Wheels")
-A-Cobra-Wheels-HMG			_("Heavy Machinegun Cobra Wheels")
-A-Cobra-Hover-HMG			_("Heavy Machinegun Cobra Hover")
 
-A-Viper-Trk-MG				_("Machinegun Viper Tracks")
-A-Viper-Trk-TMG				_("Twin Machinegun Viper Tracks")
-A-Viper-Trk-HMG				_("Heavy Machinegun Viper Tracks")
-A-Cobra-Trk-HMG				_("Heavy Machinegun Cobra Tracks")
 
-A-Cobra-Hover-MC			_("Medium Cannon Cobra Hover")
-A-Scorp-Hover-MC			_("Medium Cannon Scorpion Hover")
-A-Scorp-Trk-MC				_("Medium Cannon Scorpion Tracks")
-A-Python-Hover-MC			_("Medium Cannon Python Hover")
-A-Python-Hover-HC			_("Heavy Cannon Python Hover")
-A-Python-Trk-HC				_("Heavy Cannon Python Tracks")
-A-Mantis-Trk-Rail			_("Rail Gun Mantis Tracks")
-A-Mantis-Trk-Pulse			_("Pulse Laser Mantis Tracks")
-A-Python-Trk-Lancer			_("Lancer Python Tracks")
-A-Mantis-Trk-Lancer			_("Lancer Mantis Tracks")
-A-Veng-Trk-TK				_("Tank Killer Vengeance Tracks")
 
 //A-Python-Trk-HLaser			_("Heavy Laser Python Tracks")
 //A-Python-Trk-Scour			_("Scourge Python Tracks")
 
-A-Tiger-Trk-HC				_("Heavy Cannon Tiger Tracks")
-A-Tiger-Trk-Needle			_("Needle Gun Tiger Tracks")
-A-Retrib-Trk-Needle			_("Needle Gun Retribution Tracks")
-A-Veng-Trk-Needle			_("Needle Gun Vengeance Tracks")
-A-Veng-Trk-Rail				_("Vengeance Tracks Rail Gun")
-A-Veng-Trk-Guass			_("Vengeance Tracks Gauss Cannon")
-A-Veng-Trk-Scourge			_("Vengeance Tracks Gauss Scourge")
 
 //Anti Structure VTOLs
-V-Bug-ClusterBomb			_("VTOL Cluster Bomb Bay Bug VTOL")
-V-Bug-BB				_("VTOL Bunker Buster Bug VTOL")
-V-Scor-ClusterBomb			_("VTOL Cluster Bomb Bay Scorpion VTOL")
-V-Scor-BB				_("VTOL Bunker Buster Scorpion VTOL")
 
 //Anti Tank VTOLs
-V-Bug-Lancer				_("VTOL Lancer Bug VTOL")
-V-Bug-HPV				_("VTOL Hyper Velocity Cannon Bug VTOL")
-V-Scor-Lancer				_("VTOL Lancer Scorpion VTOL")
-V-Scor-HPV				_("VTOL Hyper Velocity Cannon Scorpion VTOL")
-V-Mantis-Lancer				_("VTOL Lancer Mantis VTOL")
-V-Mantis-HPV				_("VTOL Hyper Velocity Cannon Mantis VTOL")
 
 //Repair
-A-Rep-Cobra-Trk				_("Repair Turret Cobra Tracks")
-A-Rep-Mantis-Trk			_("Repair Turret Mantis Tracks")
 
-H-Scorp-Trk-Lancer			_("Lancer Scorpion Tracks")
-H-Scorp-Trk-HC				_("Heavy Cannon Scorpion Tracks")
-H-Scorp-VTOL-Lancer			_("Lancer Scorpion VTOL")
-H-Scorp-VTOL-BB				_("Bunker Buster Scorpion VTOL")
 
-Viper-Trk-Com				_("Command Turret Viper Tracks")
-Cobra-Trk-Com				_("Command Turret Cobra Tracks")
-Scorp-Trk-Com				_("Command Turret Scorpion Tracks")
-Mantis-Trk-Com				_("Command Turret Mantis Tracks")
 
-CobraTrkLancer				_("Lancer Cobra Tracks")
-MantisTrkHC				_("Heavy Cannon Mantis Tracks")
-MantisTKTracks				_("Tank Killer Mantis Tracks")
-MantisScourgeTracks			_("Scourge Mantis Tracks")
-ScorpTrkHMG				_("Heavy Machinegun Scorpion Tracks")
 
-ScorpRepairTrk				_("Repair Scorpion Tracks")
-ScorpHRepairHover			_("Heavy Repair Scorpion Hover")
 
 // Hover Truck Templates
-CobraHoverTruck				_("Truck Cobra Hover")
-ScorpHoverTruck				_("Truck Scorpion Hover")
-MantisHoverTruck			_("Truck Mantis Hover")
 
 // Bunker Buster Templates
-CobraBBTracks				_("Bunker Buster Cobra Tracks")
-ScorpBBTracks				_("Bunker Buster Scorpion Tracks")
-MantisBBTracks				_("Bunker Buster Mantis Tracks")
 
-ViperTrkLancer				_("Lancer Viper Tracks")
 
-CobraPODHTracks				_("Mini-Rocket Cobra Half-Tracks")
-CobraPODTracks				_("Mini-Rocket Cobra Tracks")
-CobraMRLTracks				_("Mini-Rocket Array Cobra Tracks")
 
-CobraInfernoHTracks			_("Inferno Cobra Half-Tracks")
-PythonHoverHVC				_("Hyper Velocity Cannon Python Hover")
 
-PythonTKTracks				_("Tank Killer Python Tracks")
-PythonMedCanTracks			_("Medium Cannon Python Tracks")
-PythonScourgeTracks			_("Scourge Python Tracks")
-PythonGaussTracks			_("Gauss Cannon Python Tracks")
-PythonPulseTracks			_("Pulse Laser Python Tracks")
-TigerPulseTracks			_("Pulse Laser Tiger Tracks")
-TigerHvLaserTracks			_("Heavy Laser Tiger Tracks")
-WyvernGaussTracks			_("Gauss Cannon Wyvern Tracks")
-WyvernPulseTracks			_("Pulse Laser Wyvern Tracks")
-WyvernHvLaserTracks			_("Heavy Laser Wyvern Tracks")
 
-ViperLtMGHalfTracks			_("Machinegun Viper Half-Tracks")
-ViperFlameHalfTracks		_("Flamer Viper Half-Tracks")
 
 //Added for DyDo-AI
-CobraInfernoHover			_("Inferno Cobra Hover")
-CobraMedCnHTrks			  _("Medium Cannon Cobra Half Track")
-PythonHoverInferno		_("Inferno Python Hover")
-PhytonHoverAssGun     _("Assault Gun Python Hover")
-PhytonHTrackAssGun    _("Assault Gun Python Half Track")
-ScorpHTrackHMG			  _("Heavy Machinegun Scorpion Half Tracks")
-MantisHoverAC         _("Assault Cannon Mantis Hover")
-LeopardHoverPulseLas  _("Pulse Laser Leopard Hover")
-PantherHoverPulseLas  _("Pulse Laser Panther Hover")
-TigerHoverRailGun     _("Rail Gun Tiger Hover")
-TigerHoverPulseLas  	_("Pulse Laser Tiger Hover")
-WyvernPlasmaCTracks  	_("Plasma Cannon Wyvern Tracks")
-WyvernScourgeTracks  	_("Scourge Missile Wyvern Tracks")
-RetreHoverFlashLight  _("Flashlight Retribution Hover")
-ViperPODHalfTracks    _("Mini-Rocket Viper Half Track")
-ViperMRLHalfTracks    _("Mini-Rocket Array Viper Half Track")
-SK-Mantis-VTOL-PBB    _("Phosphor Bomb Bay Mantis VTOL")
-SK-Mantis-VTOL-HBB    _("Heap Bomb Bay Mantis VTOL")
-SK-Retre-VTOL-HBB     _("Heap Bomb Bay Retribution VTOL")
-SK-Retal-VTOL-Scourge _("Scourge Retaliation VTOL")
-SK-Retre-VTOL-Plasmite	_("Plasmite Retribution VTOL")
 
 
 // new features by Mysteryem
