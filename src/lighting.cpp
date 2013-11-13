@@ -216,8 +216,8 @@ static void calcTileIllum(UDWORD tileX, UDWORD tileY)
 	{
 		finalVector = finalVector + normals[i];
 	}
-	Vector3f sunVector(theSun.x, theSun.y, -theSun.z);
-	dotProduct = normalise(finalVector) * sunVector;
+
+	dotProduct = normalise(finalVector) * theSun;
 
 	val = abs(dotProduct) / 16;
 	if (val == 0) val = 1;
