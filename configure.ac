@@ -1,5 +1,5 @@
 AC_PREREQ([2.56])
-AC_INIT([Warzone 2100],[3.1.0],[http://wz2100.net/],[warzone2100])
+AC_INIT([Warzone 2100],[3.1.1_rc1],[http://wz2100.net/],[warzone2100])
 
 AM_INIT_AUTOMAKE([1.11 tar-ustar no-dist-gzip dist-xz])
 
