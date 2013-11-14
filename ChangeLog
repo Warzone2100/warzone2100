@@ -1,11 +1,10 @@
-2013-xx-xx: Version 3.1.1
+2013-11-13: Version 3.1.1_rc1
  * General:
    * Change: Filter out bad maps (commit:acfe83cdf6f44660276ba73931e2cebdc8a250ac)
    * Change: Also show in the bottom menu, if allies are researching the same as us (commit:b6b6265e4e430486ea44a200bce870b115dfc37f)
    * Change: Keep showing allied research even while facilities are upgraded (commit:423e358b6715c12dda70ff5f6f2bd0348c09f699)
    * Change: Retreat buttons now show health bar colours (commit:4e2f4bbf3cd5e03e58b9b67fcf370bff088e6d91)
    * Fix: Bug that made droids produced by scripts get human player's upgrades (commit:8149dc94c0b61117982281cdaf2aac1bec2525e9)
-   * Fix: Backwards terrain shadows (commit:85ecd9a3937e7843d9eb4798572651f950bd7555)
    * Fix: Mod loading bug (commit:87cade1a684f3da0572f13e92539100f35b4f6fe, ticket:3567)
    * Fix: Memory leak in effects code (commit:6c90810776e3c9780f0faac793c0fb966ce315dd)
    * Fix: AI picking to show at most 10 AIs(commit:c2ded00ed4dc6a8ffbb2c1e2a608b92132baa111, ticket:3147)
@@ -31,9 +30,104 @@
    * Fix: Change map iteration to safely allow recursive calls (commit:5c7788784b653cae0fdf80ad687c4aec2c58a3f5, ticket:3894)
    * Fix: Add parameter checking for buildings that do not exist (commit:e38de7b64242a547acd77c7775dbfae10c74ca3d)
    * Change: The Super Transporter now has 500HP, armor types changed to 35 & 20 and make weapon MG1-VTOL (commit:e3279f6d033b4967b955dcaaf2ce3c5e21ed7579)
+ * Multiplayer balance (commit:c9e76aa05c61a801af7aad1f3ad1b45a9c164944)
+   * Cyborg transporter weapon removed.
+   * Machine gun upgrades:
+     *First ROF Upgrade 17->20.
+     *Second ROF Upgrade 34->38.
+     *Third ROF Upgrade 50->46.
+   * Hovercraft
+     *Price 100->150.
+     *Hit Points 150->100.
+   * Lasers
+     *Pre-requisites: NSRB Mk2->NSRB Mk1  (move up on tech tree, available earlier)
+   * Cannons
+     *Research Points 2400->1800.
+   * Laserstcomponent.txt
+     *Don't auto-upgrade to Pulse Laser
+   * Strucutre Modifiers (ANTI PERSONNEL)
+     *vs. Medium structures: 80->65.
+     *vs. Hard structures: 50->40.
+     *vs. Bunkers: 75->50
+   * Weapon Modifiers (ANTI PERSONNEL)
+     *vs. Halftracks: 60->50.
+     *vs. Tracks: 50->40.
+   * PlasmiteFlamer
+     *Price 130->160.
+     *Weight 750->5000.
+     *Incendiary Damage 50->42.
+   * Mortar-Incenediary
+     *Incendiary Radius 192->128
+     *Splash Damage 70->50
+     *Damage 90->80
+   * Twin Assault Gun (MG5TWINROTARY)
+     *Hit Points 300->125.
+   * Assault Gun (MG4ROTARYMk1)
+     *Hit Points 250->125.
+   * VTOL Assault Gun (MG4ROTARY-VTOL)
+     *Hit Points 250->185.
+   * Pillbox (MG4ROTARY-Pillbox)
+     *Hit Points 250->175.
+   * Heavy Machinegun (MG3Mk1)
+     *Hit Points 150->75.
+   * VTOL Heavy Machinegun (MG3-VTOL)
+     *Hit Points 150->95.
+   * Heavy Machinegun Bunker (MG3-Pillbox)
+     *Hit Points 150->95.
+   * Twin Machinegun (MG2Mk1)
+     *Hit Points 125->75.
+   * VTOL Twin Machinegun (MG2-VTOL)
+     *Hit Points 125->95.
+   * Twin Machinegun Bunker (MG2-Pillbox)
+     *Hit Points 125->95.
+   * Flashlight (Laser3BEAMMk1)
+     *Damage 80->100.
+   * Ground Shaker (Howitzer150Mk1)
+     *Long range 9984->8192.
+   * Howitzer (Howitzer105Mk1)
+     *Long range 4992->5120.
+     *Fire Pause 150->110.
+   * Incendiary Howitzer (Howitzer-Incenediary)
+     *Incendiary Damage 32->24.
+     *Radius 256->192.
+   * Inferno (Flame2)
+     *Weight 500->5000.
+     *Incendiary Damage 32->28.
+     *Hit Points 75->45.
+   * Flamer (Flame1Mk1)
+     *Hit points 40->10.
+     *Price 40->60.
+     *Incendiary Damage 28->20.
+   * Flamer (CyborgFlamer01)
+     *Hit Points 40->10.
+     *Incendiary Damage 22->16.
+     *Price 50->65.
+   * Cybrog Thermite Weapon (Cyb-Wpn-Thermite)
+     *Price 80->100.
+     *Incendiary Damage 32->26.
+   * Cyb-Wpn-Laser (Cyb-Wpn-Laser)
+     *Damage 70->90.
+   * Assault Cannon (Cannon5VulcanMk1)
+     *Damage 35->40.
+     *Splash Damage 25->35.
+   * Hyper Velocity Cannon (Cannon4AUTOMk1)
+     *Fire Pause 50->43.
+   * Light Cannon (Cannon1Mk1)
+     *Hit Points 200->250.
+   * VTOL Cannon (Cannon1-VTOL)
+     *HitPoints 200->250.
+   * VTOL Plasmite Bomb Bay (Bomb5-VTOL-Plasmite)
+     *Change back to ARTILLERY ROUND
+     *Build Points 1000->2000.
+     *Incendiary Damage 140->115.
+     *Splash Damage 1000 -> 875.
+   * VTOL Thermite Bomb Bay (Bomb4-VTOL-HvyINC)
+     *Build Points 1000->1500.
+     *Incendiary Damage 120->95.
+     *Damage 400->370
  * Maps:
    * Fix: Remove lop-sided oil barrels from 4c-pyramidal (commit:6092fe1194529f0c7fe023d9c98973e44f9f9f24)
-   * Add: Gamma (3p) and Melting (6p) by NoQ (commit:b8bdf44737e1d9423c2581b1377cf1be9c4a3666)
+   * Add: Gamma (3p) and Melted (6p) by NoQ (commit:b8bdf44737e1d9423c2581b1377cf1be9c4a3666)
  * Build system:
    * Change: Simplify build process by getting rid of bison/flex dependencies (commit:d13bc0de7dd0588351af24dc45d55110d0eed6e8)
    * Fix: Building on OpenBSD (commit:9b9383500fb4c1dd5270a68e3490dc358e2da55f, ticket:3917, commit:47a6d6d4684b993d15e378f6d0877fa043b26ca0, ticket:3845)
