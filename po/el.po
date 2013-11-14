@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: el_002_warzone2100 3.1git\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2013-11-04 14:36+0100\n"
+"POT-Creation-Date: 2013-11-13 21:04-0500\n"
 "PO-Revision-Date: 2012-12-10 15:44+0200\n"
 "Last-Translator: nikos papadopoulos <231036448@freemail.gr>\n"
 "Language-Team: el <www.mageia-gr.org/forum/>\n"
@@ -11897,7 +11897,8 @@ msgid "OpenGL GLSL shader version 1.20 is not supported by your system. Some thi
 msgstr "Το σύστημά σου δεν υποστηρίζει την OpenGL GLSL shader, έκδοση 1.20 . Κάποια στοιχεία ίσως να δείχνουν λάθος. Παρακαλώ, αν είναι δυνατό, αναβάθμισε τον οδηγό, ή τη συσκευή, των γραφικών."
 
 #: lib/ivis_opengl/screen.cpp:193
-msgid "OpenGL 1.2 + VBO + TEC is not supported by your system. The game requires this. Please upgrade your graphics drivers/hardware, if possible."
+#, fuzzy
+msgid "OpenGL 1.2 + TEC is not supported by your system. The game requires this. Please upgrade your graphics drivers/hardware, if possible."
 msgstr "Το σύστημά σου δεν υποστηρίζει τα OpenGL 1.2 + VBO + TEC . Αυτά είναι απαραίτητα για το παιχνίδι. Παρακαλώ, αν είναι δυνατό, αναβάθμισε τον οδηγό, ή τη συσκευή, των γραφικών."
 
 #: lib/netplay/netplay.cpp:218
@@ -12038,147 +12039,152 @@ msgstr "Τώρα, έχει ενεργοποιηθεί η κατάσταση λε
 msgid "Debug mode now disabled!"
 msgstr "Τώρα, έχει ενεργοποιηθεί η κατάσταση λειτουργίας αποσφαλμάτωσης."
 
-#: src/clparse.cpp:242
+#: src/clparse.cpp:243
 msgid "Set configuration directory"
 msgstr "Όρισε τον κατάλογο των ρυθμίσεων"
 
-#: src/clparse.cpp:242
+#: src/clparse.cpp:243
 msgid "configuration directory"
 msgstr "κατάλογος ρυθμίσεων"
 
-#: src/clparse.cpp:243
+#: src/clparse.cpp:244
 msgid "Set default data directory"
 msgstr "Όρισε τον προεπιλεγμένο κατάλογο των δεδομένων"
 
-#: src/clparse.cpp:243
+#: src/clparse.cpp:244
 msgid "data directory"
 msgstr "κατάλογος δεδομένων"
 
-#: src/clparse.cpp:244
+#: src/clparse.cpp:245
 msgid "Show debug for given level"
 msgstr "Εμφάνιση της αποσφαλμάτωσης για το συγκεκριμένο επίπεδο"
 
-#: src/clparse.cpp:244
+#: src/clparse.cpp:245
 msgid "debug level"
 msgstr "επίπεδο αποσφαλμάτωσης"
 
-#: src/clparse.cpp:245
+#: src/clparse.cpp:246
 msgid "Log debug output to file"
 msgstr "Καταγραφή σε ένα αρχείο της εξαγωγής της αποσφαλμάτωσης"
 
-#: src/clparse.cpp:245
+#: src/clparse.cpp:246
 msgid "file"
 msgstr "αρχείο"
 
-#: src/clparse.cpp:246
+#: src/clparse.cpp:247
 msgid "Flush all debug output written to stderr"
 msgstr "Απόρριψη όλων των εξαγωγών αποσφαλμάτωσης που έχουν εγγραφεί στο stderr"
 
-#: src/clparse.cpp:247
+#: src/clparse.cpp:248
 msgid "Play in fullscreen mode"
 msgstr "Παίξιμο σε λειτουργία πλήρους οθόνης"
 
-#: src/clparse.cpp:248
+#: src/clparse.cpp:249
 msgid "Load a specific game"
 msgstr "Φόρτωση ενός συγκεκριμένου παιχνιδιού"
 
-#: src/clparse.cpp:248
+#: src/clparse.cpp:249
 msgid "game-name"
 msgstr "όνομα-παιχνιδιού"
 
-#: src/clparse.cpp:249
+#: src/clparse.cpp:250
 msgid "Show this help message and exit"
 msgstr "Εμφάνιση αυτού του μηνύματος βοήθειας και έξοδος"
 
-#: src/clparse.cpp:250
+#: src/clparse.cpp:251
 msgid "Enable a global mod"
 msgstr "Ενεργοποίηση μιας καθολικής μετατροπής"
 
-#: src/clparse.cpp:250
 #: src/clparse.cpp:251
 #: src/clparse.cpp:252
+#: src/clparse.cpp:253
 msgid "mod"
 msgstr "διασκευή"
 
-#: src/clparse.cpp:251
+#: src/clparse.cpp:252
 msgid "Enable a campaign only mod"
 msgstr "Ενεργοποίηση μιας μετατροπής μονάχα εκστρατείας"
 
-#: src/clparse.cpp:252
+#: src/clparse.cpp:253
 msgid "Enable a multiplay only mod"
 msgstr "Ενεργοποίηση μόνο μιας μετατροπής για πολλούς παίχτες"
 
-#: src/clparse.cpp:253
+#: src/clparse.cpp:254
 msgid "Disable asserts"
 msgstr "Απενεργοποίηση των προκαθορισμών"
 
-#: src/clparse.cpp:254
+#: src/clparse.cpp:255
 msgid "Causes a crash to test the crash handler"
 msgstr "Προκαλεί κατάρρευση για να ελεγχθεί ο διαχειριστής κατάρρευσης"
 
-#: src/clparse.cpp:255
+#: src/clparse.cpp:256
 msgid "Load a saved game"
 msgstr "Φόρτωση ενός αποθηκευμένου παιχνιδιού"
 
-#: src/clparse.cpp:255
+#: src/clparse.cpp:256
 msgid "savegame"
 msgstr "αποθηκευσηπαιχνιδιού"
 
-#: src/clparse.cpp:256
+#: src/clparse.cpp:257
 msgid "Play in windowed mode"
 msgstr "Παίξιμο σε κατάσταση λειτουργίας παραθύρου"
 
-#: src/clparse.cpp:257
+#: src/clparse.cpp:258
 msgid "Show version information and exit"
 msgstr "Εμφάνιση πληροφοριών έκδοσης και έξοδος"
 
-#: src/clparse.cpp:258
+#: src/clparse.cpp:259
 msgid "Set the resolution to use"
 msgstr "Όρισε την ανάλυση που θα χρησιμοποιηθεί"
 
-#: src/clparse.cpp:258
+#: src/clparse.cpp:259
 msgid "WIDTHxHEIGHT"
 msgstr "ΠΛΑΤΟΣΧΥΨΟΣ"
 
-#: src/clparse.cpp:259
+#: src/clparse.cpp:260
 msgid "Enable shadows"
 msgstr "Ενεργοποίηση των σκιών"
 
-#: src/clparse.cpp:260
+#: src/clparse.cpp:261
 msgid "Disable shadows"
 msgstr "Απενεργοποίηση των σκιών"
 
-#: src/clparse.cpp:261
+#: src/clparse.cpp:262
 msgid "Enable sound"
 msgstr "Ενεργοποίηση του ήχου"
 
-#: src/clparse.cpp:262
+#: src/clparse.cpp:263
 msgid "Disable sound"
 msgstr "Απενεργοποίηση του ήχου"
 
-#: src/clparse.cpp:263
+#: src/clparse.cpp:264
 msgid "connect directly to IP/hostname"
 msgstr "κατευθείαν σύνδεση με διεύθυνση IP ή όνομα οικοδεσπότη"
 
-#: src/clparse.cpp:263
+#: src/clparse.cpp:264
 msgid "host"
 msgstr "οικοδεσπότης"
 
-#: src/clparse.cpp:264
+#: src/clparse.cpp:265
 msgid "go directly to host screen"
 msgstr "κατευθείαν μετάβαση στην οθόνη φιλοξενίας"
 
-#: src/clparse.cpp:265
+#: src/clparse.cpp:266
 msgid "Enable texture compression"
 msgstr "Ενεργοποίηση συμπίεσης υφασμάτων"
 
-#: src/clparse.cpp:266
+#: src/clparse.cpp:267
 msgid "Disable texture compression"
 msgstr "Απενεργοποίηση συμπίεσης υφασμάτων"
 
-#: src/clparse.cpp:267
-msgid "Only use OpenGL 1.5"
-msgstr "Χρήση μόνο της ΌπενΤζιΕλ 1.5"
+#: src/clparse.cpp:268
+#, fuzzy
+msgid "Disable the use of OpenGL shaders"
+msgstr "Απενεργοποίηση συμπίεσης υφασμάτων"
+
+#: src/clparse.cpp:269
+msgid "Disable the use of OpenGL Vertex Buffer Objects"
+msgstr ""
 
 #: src/cmddroid.cpp:110
 msgid "Commander needs a higher level to command more units"
@@ -12357,20 +12363,20 @@ msgstr "Συστήματα"
 msgid "Delete Template"
 msgstr "Διαγραφή Προτύπου"
 
-#: src/display3d.cpp:658
+#: src/display3d.cpp:676
 msgid "Player left"
 msgstr "Ο παίχτης έφηγε"
 
-#: src/display3d.cpp:662
+#: src/display3d.cpp:680
 msgid "Player dropped"
 msgstr "Ο παίχτης αποσυνδέθηκε"
 
-#: src/display3d.cpp:666
+#: src/display3d.cpp:684
 #: src/multiint.cpp:2374
 msgid "Waiting for other players"
 msgstr "Αναμονή για άλλους παίχτες"
 
-#: src/display3d.cpp:671
+#: src/display3d.cpp:689
 msgid "Out of sync"
 msgstr "Εκτός συγχρονισμού"
 
@@ -14795,12 +14801,12 @@ msgstr "Καφές"
 msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
 msgstr "Δεν μπορούμε να το κάνουμε αυτό. Για να χρησιμοποιήσουμε έναν μεταφορέα Ανθρωπομηχανών, θα πρέπει και εμείς να είμαστε Ανθρωπομηχανές."
 
-#: src/qtscriptfuncs.cpp:1596
+#: src/qtscriptfuncs.cpp:1597
 #: src/scriptfuncs.cpp:3263
 msgid "YOU ARE VICTORIOUS!"
 msgstr "ΝΙΚΗΣΕΣ!"
 
-#: src/qtscriptfuncs.cpp:1601
+#: src/qtscriptfuncs.cpp:1602
 #: src/scriptfuncs.cpp:3267
 msgid "YOU WERE DEFEATED!"
 msgstr "ΗΤΤΗΘΗΚΕΣ."
@@ -15061,6 +15067,9 @@ msgstr " - Σύνθεση %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Έκδοση %s%s%s%s"
+
+#~ msgid "Only use OpenGL 1.5"
+#~ msgstr "Χρήση μόνο της ΌπενΤζιΕλ 1.5"
 
 #~ msgid "Warzone 2100 is completely free and open source (FLOSS). Official site: http://wz2100.net/"
 #~ msgstr "Η Ζώνη Πολέμου είναι απολύτως ελεύθερη και ανοιχτού κώδικα (FLOSS). Ο επίσημος ιστότοπος είναι: http://wz2100.net/"
