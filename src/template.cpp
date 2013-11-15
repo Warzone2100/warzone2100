@@ -629,7 +629,7 @@ void fillTemplateList(std::vector<DROID_TEMPLATE *> &pList, STRUCTURE *psFactory
 	pList.clear();
 
 	DROID_TEMPLATE	*psCurr;
-	UDWORD			iCapacity = psFactory->pFunctionality->factory.capacity;
+	BODY_SIZE	iCapacity = (BODY_SIZE)psFactory->pFunctionality->factory.capacity;
 
 	/* Add the templates to the list*/
 	for (std::list<DROID_TEMPLATE>::iterator i = localTemplates.begin(); i != localTemplates.end(); ++i)
@@ -654,9 +654,17 @@ void fillTemplateList(std::vector<DROID_TEMPLATE *> &pList, STRUCTURE *psFactory
 		}
 
 		//check the factory can cope with this sized body
-		if (!((asBodyStats + psCurr->asParts[COMP_BODY])->size > iCapacity) )
+		if (((asBodyStats + psCurr->asParts[COMP_BODY])->size <= iCapacity))
 		{
 			pList.push_back(psCurr);
+		}
+		else if (bMultiPlayer && (iCapacity == SIZE_HEAVY))
+		{
+			// Special case for Super heavy bodyies (Super Transporter)
+			if((asBodyStats + psCurr->asParts[COMP_BODY])->size == SIZE_SUPER_HEAVY)
+			{
+				pList.push_back(psCurr);
+			}
 		}
 	}
 }
