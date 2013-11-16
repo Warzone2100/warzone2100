@@ -66,8 +66,8 @@ R-Wpn-Howitzer-Incenediary,Howitzer-Incenediary,WEAPON,0,0,10
 R-Wpn-Howitzer03-Rot,Howitzer03-Rot,WEAPON,0,0,10
 R-Wpn-HowitzerMk1,Howitzer105Mk1,WEAPON,0,0,10
 R-Wpn-HvyHowitzer,Howitzer150Mk1,WEAPON,0,0,10
-R-Wpn-Laser02,Laser2PULSE-VTOL,WEAPON,Laser3BEAM-VTOL,WEAPON,10
-R-Wpn-Laser02,Laser2PULSEMk1,WEAPON,Laser3BEAMMk1,WEAPON,10
+R-Wpn-Laser02,Laser2PULSE-VTOL,WEAPON,0,0,10
+R-Wpn-Laser02,Laser2PULSEMk1,WEAPON,0,0,10
 R-Wpn-Laser01,Laser3BEAM-VTOL,WEAPON,0,0,10
 R-Wpn-Laser01,Laser3BEAMMk1,WEAPON,0,0,10
 R-Wpn-PlasmaCannon,Laser4-PlasmaCannon,WEAPON,0,0,10
