@@ -6,10 +6,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone 2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2013-11-04 14:36+0100\n"
-"PO-Revision-Date: 2012-11-13 17:18+0100\n"
+"POT-Creation-Date: 2013-11-16 03:55+0100\n"
+"PO-Revision-Date: 2023-11-14 20:18+0100\n"
 "Last-Translator: Kálmán „KAMI” Szalai <kami911@gmail.com>\n"
-"Language-Team: Magyar (Hungary) <meszaros.tomi@hotmail.com>\n"
+"Language-Team: Magyar (Hungary) <tamasm78@invitel.hu>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -11891,7 +11891,7 @@ msgstr "OpenGL 2.0-t nem támogatja a te rendszered. Néhány dolgot rossznak l�
 
 #: lib/ivis_opengl/screen.cpp:193
 msgid "OpenGL 1.2 + VBO + TEC is not supported by your system. The game requires this. Please upgrade your graphics drivers/hardware, if possible."
-msgstr "OpenGL 1.4 nem támogatja a rendszerd. A játéknak szüksége van rá. Kérlek frissítsd fel a drivert vagy hardware videokártyád, ha ez lehetséges."
+msgstr "OpenGL 1.4 nem támogatja a rendszered. A játéknak szüksége van rá. Kérlek frissítsd fel a drivert vagy hardware videokártyád, ha ez lehetséges."
 
 #: lib/netplay/netplay.cpp:218
 #: lib/netplay/netplay.cpp:1118
@@ -11903,23 +11903,29 @@ msgid ""
 "Your router doesn't support UPnP, you must manually configure your router & firewall to\n"
 "open port 2100 before you can host a game."
 msgstr ""
+"A routered nem támogatja az UPnP-t, és kézzel kell konfigurálni a routered & tűzfalad \n"
+"nyisd a 2100 portot mielőtt csatalkozol távoli játékhoz."
 
 #: lib/netplay/netplay.cpp:998
 msgid ""
 "No UPnP device was found. You must manually configure your router & firewall to\n"
 "open port 2100 before you can host a game."
 msgstr ""
+"UPnP eszköz nem található, és kézzel kell konfigurálni a routered & tűzfalad \n"
+"nyisd a 2100 portot mielőtt csatalkozol távoli játékhoz."
 
 #: lib/netplay/netplay.cpp:1026
 #, fuzzy, c-format
 msgid "Could not open require port (%s) on  (%s)"
-msgstr "Nem lehet feloldani a masterserver nevét (%s)!"
+msgstr "Nem lehet feloldani a mester szerver nevét (%s)!"
 
 #: lib/netplay/netplay.cpp:1030
 msgid ""
 "You must manually configure your router & firewall to\n"
 " open port 2100 before you can host a game."
 msgstr ""
+"Kézzel konfigurálhatod a routered & tűzfalad \n"
+"nyisd a 2100 portot mielőtt csatalkozol távoli játékhoz."
 
 #: lib/netplay/netplay.cpp:1040
 #, c-format
@@ -11927,11 +11933,13 @@ msgid ""
 "Game configured port (%s) correctly on (%s)\n"
 "Your external IP is %s"
 msgstr ""
+"Játék konfigurált port (%s) korrigálva (%s)\n"
+"Külső IP elérhetőséged %s"
 
 #: lib/netplay/netplay.cpp:2175
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
-msgstr "Nem lehet feloldani a masterserver nevét (%s)!"
+msgstr "Nem lehet feloldani a mester szerver nevét (%s)!"
 
 #: lib/netplay/netplay.cpp:2197
 #, c-format
@@ -12568,7 +12576,7 @@ msgstr "Játék folytatás"
 
 #: src/frontend.cpp:400
 msgid "TCP port 2100 must be opened in your firewall or router to host games!"
-msgstr ""
+msgstr "TCP 2100 port megnyitotta a tűzfalad vagy routered a távoli játékokhoz!"
 
 #: src/frontend.cpp:464
 #: src/multiint.cpp:1482
@@ -14077,7 +14085,7 @@ msgstr "Mentett játék betöltése"
 msgid "GAME SAVED :"
 msgstr "JÁTÉK MENTVE:"
 
-#: src/move.cpp:2284
+#: src/move.cpp:2290
 #, c-format
 msgid "You found %u power in an oil drum."
 msgstr "%u energiát találtál egy olajkúton."
@@ -14194,7 +14202,7 @@ msgstr "Kiszolgáló %s —%s által"
 
 #: src/multiint.cpp:1028
 msgid "Can't find any games for your version."
-msgstr ""
+msgstr "Nem talál játékokat a verziódhoz."
 
 #: src/multiint.cpp:1043
 msgid "No games are available"
@@ -14501,11 +14509,11 @@ msgstr "A játékmester elindította a játékot"
 
 #: src/multiint.cpp:3922
 msgid "UPnP has been enabled."
-msgstr ""
+msgstr "UPnP be lett kapcsolva"
 
 #: src/multiint.cpp:3928
 msgid "UPnP detection faled. You must manually configure router yourself."
-msgstr ""
+msgstr "UPnP detektálás hibás. Kézzel kell a routert konfigurálnod."
 
 #: src/multiint.cpp:3932
 #, fuzzy
@@ -14514,11 +14522,11 @@ msgstr "Dekódolás folyamatban....."
 
 #: src/multiint.cpp:3939
 msgid "UPnP detection disabled by user. Autoconfig of port 2100 will not happen."
-msgstr ""
+msgstr "UPnP vizsgálatot kikapcsolta a felhasználó. Automatikus beállítás a 2100 portra nem történt meg."
 
 #: src/multiint.cpp:3943
 msgid "Press the start hosting button to begin hosting a game."
-msgstr ""
+msgstr "Nyomd meg a távoli start gombot a távoli játék indításához "
 
 #: src/multiint.cpp:3984
 msgid "Can't connect to lobby server!"
