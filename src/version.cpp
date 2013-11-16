@@ -37,7 +37,7 @@ unsigned int version_getRevision()
 
 const char* version_getVersionString()
 {
-	static const char* version_string = "3.1.1_rc1";
+	static const char* version_string = "3.1.1_rc2";
 
 	if (version_string == NULL)
 	{
