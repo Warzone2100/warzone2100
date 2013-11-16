@@ -1141,12 +1141,15 @@ static void moveCalcDroidSlide(DROID *psDroid, int *pmx, int *pmy)
 				if (psObst->type == OBJ_DROID)
 				{
 					DROID *psShuffleDroid = (DROID *)psObst;
-
-					if (aiCheckAlliances(psObst->player, psDroid->player)
-					    && psShuffleDroid->action != DACTION_WAITDURINGREARM
-					    && psShuffleDroid->sMove.Status == MOVEINACTIVE)
+					// if we are a VTOL, and 'ground unit' isn't, then don't bother moving them
+					if ((isVtolDroid(psDroid) && isVtolDroid(psShuffleDroid)) || !isVtolDroid(psDroid))
 					{
-						moveShuffleDroid(psShuffleDroid, psDroid->sMove.target - removeZ(psDroid->pos));
+						if (aiCheckAlliances(psObst->player, psDroid->player)
+							&& psShuffleDroid->action != DACTION_WAITDURINGREARM
+							&& psShuffleDroid->sMove.Status == MOVEINACTIVE)
+						{
+							moveShuffleDroid(psShuffleDroid, psDroid->sMove.target - removeZ(psDroid->pos));
+						}
 					}
 				}
 			}
@@ -1155,8 +1158,11 @@ static void moveCalcDroidSlide(DROID *psDroid, int *pmx, int *pmy)
 
 	if (psObst != NULL)
 	{
-		// Try to slide round it
-		moveCalcSlideVector(psDroid, psObst->pos.x, psObst->pos.y, pmx, pmy);
+		// Try to slide round it (unless we are a VTOL, and it isn't another VTOL (still trying to prevent clustering)
+		if ((isVtolDroid(psDroid) && isVtolDroid((DROID *)psObst)) || !isVtolDroid(psDroid))
+		{
+			moveCalcSlideVector(psDroid, psObst->pos.x, psObst->pos.y, pmx, pmy);
+		}
 	}
 	CHECK_DROID(psDroid);
 }
