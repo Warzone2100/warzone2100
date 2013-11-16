@@ -6,10 +6,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone 2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2013-11-13 21:04-0500\n"
-"PO-Revision-Date: 2012-11-13 17:18+0100\n"
+"POT-Creation-Date: 2013-11-16 03:55+0100\n"
+"PO-Revision-Date: 2023-11-14 20:18+0100\n"
 "Last-Translator: Kálmán „KAMI” Szalai <kami911@gmail.com>\n"
-"Language-Team: Magyar (Hungary) <meszaros.tomi@hotmail.com>\n"
+"Language-Team: Magyar (Hungary) <tamasm78@invitel.hu>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -11890,9 +11890,8 @@ msgid "OpenGL GLSL shader version 1.20 is not supported by your system. Some thi
 msgstr "OpenGL 2.0-t nem támogatja a te rendszered. Néhány dolgot rossznak látok. Kérlek frissítsd fel a drivert vagy hardware videokártyád, ha ez lehetséges."
 
 #: lib/ivis_opengl/screen.cpp:193
-#, fuzzy
-msgid "OpenGL 1.2 + TEC is not supported by your system. The game requires this. Please upgrade your graphics drivers/hardware, if possible."
-msgstr "OpenGL 1.4 nem támogatja a rendszerd. A játéknak szüksége van rá. Kérlek frissítsd fel a drivert vagy hardware videokártyád, ha ez lehetséges."
+msgid "OpenGL 1.2 + VBO + TEC is not supported by your system. The game requires this. Please upgrade your graphics drivers/hardware, if possible."
+msgstr "OpenGL 1.4 nem támogatja a rendszered. A játéknak szüksége van rá. Kérlek frissítsd fel a drivert vagy hardware videokártyád, ha ez lehetséges."
 
 #: lib/netplay/netplay.cpp:218
 #: lib/netplay/netplay.cpp:1118
@@ -11904,23 +11903,29 @@ msgid ""
 "Your router doesn't support UPnP, you must manually configure your router & firewall to\n"
 "open port 2100 before you can host a game."
 msgstr ""
+"A routered nem támogatja az UPnP-t, és kézzel kell konfigurálni a routered & tűzfalad \n"
+"nyisd a 2100 portot mielőtt csatalkozol távoli játékhoz."
 
 #: lib/netplay/netplay.cpp:998
 msgid ""
 "No UPnP device was found. You must manually configure your router & firewall to\n"
 "open port 2100 before you can host a game."
 msgstr ""
+"UPnP eszköz nem található, és kézzel kell konfigurálni a routered & tűzfalad \n"
+"nyisd a 2100 portot mielőtt csatalkozol távoli játékhoz."
 
 #: lib/netplay/netplay.cpp:1026
 #, fuzzy, c-format
 msgid "Could not open require port (%s) on  (%s)"
-msgstr "Nem lehet feloldani a masterserver nevét (%s)!"
+msgstr "Nem lehet feloldani a mester szerver nevét (%s)!"
 
 #: lib/netplay/netplay.cpp:1030
 msgid ""
 "You must manually configure your router & firewall to\n"
 " open port 2100 before you can host a game."
 msgstr ""
+"Kézzel konfigurálhatod a routered & tűzfalad \n"
+"nyisd a 2100 portot mielőtt csatalkozol távoli játékhoz."
 
 #: lib/netplay/netplay.cpp:1040
 #, c-format
@@ -11928,11 +11933,13 @@ msgid ""
 "Game configured port (%s) correctly on (%s)\n"
 "Your external IP is %s"
 msgstr ""
+"Játék konfigurált port (%s) korrigálva (%s)\n"
+"Külső IP elérhetőséged %s"
 
 #: lib/netplay/netplay.cpp:2175
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
-msgstr "Nem lehet feloldani a masterserver nevét (%s)!"
+msgstr "Nem lehet feloldani a mester szerver nevét (%s)!"
 
 #: lib/netplay/netplay.cpp:2197
 #, c-format
@@ -12028,152 +12035,147 @@ msgstr "Hibamentesítés bekapcsolva!"
 msgid "Debug mode now disabled!"
 msgstr "Hibakeresés menü nyitva"
 
-#: src/clparse.cpp:243
+#: src/clparse.cpp:242
 msgid "Set configuration directory"
 msgstr "Konfigurációs könyvtár beállítása"
 
-#: src/clparse.cpp:243
+#: src/clparse.cpp:242
 msgid "configuration directory"
 msgstr "konfigurációs könyvtár"
 
-#: src/clparse.cpp:244
+#: src/clparse.cpp:243
 msgid "Set default data directory"
 msgstr "Alapértelmezett könyvtár beállítása"
 
-#: src/clparse.cpp:244
+#: src/clparse.cpp:243
 msgid "data directory"
 msgstr "adat könyvtár"
 
-#: src/clparse.cpp:245
+#: src/clparse.cpp:244
 msgid "Show debug for given level"
 msgstr "Hibakeresés megjelenítése az adott szinten"
 
-#: src/clparse.cpp:245
+#: src/clparse.cpp:244
 msgid "debug level"
 msgstr "hibakeresési szint"
 
-#: src/clparse.cpp:246
+#: src/clparse.cpp:245
 msgid "Log debug output to file"
 msgstr "Hiba naplózása fájlba"
 
-#: src/clparse.cpp:246
+#: src/clparse.cpp:245
 msgid "file"
 msgstr "fájl"
 
-#: src/clparse.cpp:247
+#: src/clparse.cpp:246
 msgid "Flush all debug output written to stderr"
 msgstr "Ömlesztve az összes hiba naplózásra került a stderr -be"
 
-#: src/clparse.cpp:248
+#: src/clparse.cpp:247
 msgid "Play in fullscreen mode"
 msgstr "Lejátszás teljesképernyős módba"
 
-#: src/clparse.cpp:249
+#: src/clparse.cpp:248
 msgid "Load a specific game"
 msgstr "Adott játék betöltése"
 
-#: src/clparse.cpp:249
+#: src/clparse.cpp:248
 msgid "game-name"
 msgstr "játék-név"
 
-#: src/clparse.cpp:250
+#: src/clparse.cpp:249
 msgid "Show this help message and exit"
 msgstr "Megmutatja ezt az üzenetet és kilép"
 
-#: src/clparse.cpp:251
+#: src/clparse.cpp:250
 msgid "Enable a global mod"
 msgstr "Engedélyezi a a teljes eljárást"
 
+#: src/clparse.cpp:250
 #: src/clparse.cpp:251
 #: src/clparse.cpp:252
-#: src/clparse.cpp:253
 msgid "mod"
 msgstr "mód"
 
-#: src/clparse.cpp:252
+#: src/clparse.cpp:251
 msgid "Enable a campaign only mod"
 msgstr "Csak a küldetéssorozat engedélyezése"
 
-#: src/clparse.cpp:253
+#: src/clparse.cpp:252
 msgid "Enable a multiplay only mod"
 msgstr "Csak többjátékos mód engedélyezése"
 
-#: src/clparse.cpp:254
+#: src/clparse.cpp:253
 msgid "Disable asserts"
 msgstr "Árnyékok tiltása"
 
-#: src/clparse.cpp:255
+#: src/clparse.cpp:254
 msgid "Causes a crash to test the crash handler"
 msgstr "Összeomláshoz vezetett az összeomlás kezelő tesztje"
 
-#: src/clparse.cpp:256
+#: src/clparse.cpp:255
 msgid "Load a saved game"
 msgstr "Egy mentett játék betöltése"
 
-#: src/clparse.cpp:256
+#: src/clparse.cpp:255
 msgid "savegame"
 msgstr "játék mentés"
 
-#: src/clparse.cpp:257
+#: src/clparse.cpp:256
 msgid "Play in windowed mode"
 msgstr "Lejátszás ablakos módba"
 
-#: src/clparse.cpp:258
+#: src/clparse.cpp:257
 msgid "Show version information and exit"
 msgstr "Mutatja a verzió információt és kilép"
 
-#: src/clparse.cpp:259
+#: src/clparse.cpp:258
 msgid "Set the resolution to use"
 msgstr "A használandó felbontás beállítása"
 
-#: src/clparse.cpp:259
+#: src/clparse.cpp:258
 msgid "WIDTHxHEIGHT"
 msgstr "SZÉLESSÉGxMAGASSÁG"
 
-#: src/clparse.cpp:260
+#: src/clparse.cpp:259
 msgid "Enable shadows"
 msgstr "Árnyékok bekapcsolása"
 
-#: src/clparse.cpp:261
+#: src/clparse.cpp:260
 msgid "Disable shadows"
 msgstr "Árnyékok kikapcsolása"
 
-#: src/clparse.cpp:262
+#: src/clparse.cpp:261
 msgid "Enable sound"
 msgstr "Hang bekapcsolás"
 
-#: src/clparse.cpp:263
+#: src/clparse.cpp:262
 msgid "Disable sound"
 msgstr "Hang kikapcsolása"
 
-#: src/clparse.cpp:264
+#: src/clparse.cpp:263
 msgid "connect directly to IP/hostname"
 msgstr "Kapcsolódás közvetlenül a(z) IP/gazdagép"
 
-#: src/clparse.cpp:264
+#: src/clparse.cpp:263
 msgid "host"
 msgstr "játékmester"
 
-#: src/clparse.cpp:265
+#: src/clparse.cpp:264
 msgid "go directly to host screen"
 msgstr "közvetlenül a fogadó képernyőre"
 
-#: src/clparse.cpp:266
+#: src/clparse.cpp:265
 msgid "Enable texture compression"
 msgstr "Szöveg tömörítés bekapcsolása"
 
-#: src/clparse.cpp:267
+#: src/clparse.cpp:266
 msgid "Disable texture compression"
 msgstr "Szöveg tömörítés kikapcsolása"
 
-#: src/clparse.cpp:268
-#, fuzzy
-msgid "Disable the use of OpenGL shaders"
-msgstr "Szöveg tömörítés kikapcsolása"
-
-#: src/clparse.cpp:269
-msgid "Disable the use of OpenGL Vertex Buffer Objects"
-msgstr ""
+#: src/clparse.cpp:267
+msgid "Only use OpenGL 1.5"
+msgstr "Használj OpenGL 1.5-öt"
 
 #: src/cmddroid.cpp:110
 msgid "Commander needs a higher level to command more units"
@@ -12349,20 +12351,20 @@ msgstr "Rendszerek"
 msgid "Delete Template"
 msgstr "Ideiglenes törlés"
 
-#: src/display3d.cpp:676
+#: src/display3d.cpp:658
 msgid "Player left"
 msgstr "Játékos marad"
 
-#: src/display3d.cpp:680
+#: src/display3d.cpp:662
 msgid "Player dropped"
 msgstr "Játékos kiszállt"
 
-#: src/display3d.cpp:684
+#: src/display3d.cpp:666
 #: src/multiint.cpp:2374
 msgid "Waiting for other players"
 msgstr "Várakozás további játékosra"
 
-#: src/display3d.cpp:689
+#: src/display3d.cpp:671
 msgid "Out of sync"
 msgstr "Szinkronizációból kilépett"
 
@@ -12574,7 +12576,7 @@ msgstr "Játék folytatás"
 
 #: src/frontend.cpp:400
 msgid "TCP port 2100 must be opened in your firewall or router to host games!"
-msgstr ""
+msgstr "TCP 2100 port megnyitotta a tűzfalad vagy routered a távoli játékokhoz!"
 
 #: src/frontend.cpp:464
 #: src/multiint.cpp:1482
@@ -14083,7 +14085,7 @@ msgstr "Mentett játék betöltése"
 msgid "GAME SAVED :"
 msgstr "JÁTÉK MENTVE:"
 
-#: src/move.cpp:2284
+#: src/move.cpp:2290
 #, c-format
 msgid "You found %u power in an oil drum."
 msgstr "%u energiát találtál egy olajkúton."
@@ -14200,7 +14202,7 @@ msgstr "Kiszolgáló %s —%s által"
 
 #: src/multiint.cpp:1028
 msgid "Can't find any games for your version."
-msgstr ""
+msgstr "Nem talál játékokat a verziódhoz."
 
 #: src/multiint.cpp:1043
 msgid "No games are available"
@@ -14507,11 +14509,11 @@ msgstr "A játékmester elindította a játékot"
 
 #: src/multiint.cpp:3922
 msgid "UPnP has been enabled."
-msgstr ""
+msgstr "UPnP be lett kapcsolva"
 
 #: src/multiint.cpp:3928
 msgid "UPnP detection faled. You must manually configure router yourself."
-msgstr ""
+msgstr "UPnP detektálás hibás. Kézzel kell a routert konfigurálnod."
 
 #: src/multiint.cpp:3932
 #, fuzzy
@@ -14520,11 +14522,11 @@ msgstr "Dekódolás folyamatban....."
 
 #: src/multiint.cpp:3939
 msgid "UPnP detection disabled by user. Autoconfig of port 2100 will not happen."
-msgstr ""
+msgstr "UPnP vizsgálatot kikapcsolta a felhasználó. Automatikus beállítás a 2100 portra nem történt meg."
 
 #: src/multiint.cpp:3943
 msgid "Press the start hosting button to begin hosting a game."
-msgstr ""
+msgstr "Nyomd meg a távoli start gombot a távoli játék indításához "
 
 #: src/multiint.cpp:3984
 msgid "Can't connect to lobby server!"
@@ -14787,12 +14789,12 @@ msgstr "Barna"
 msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
 msgstr "Ezt nem teheti meg: Cyborg egységnek kell lennie, hogy használhassa a Cyborg szállítást."
 
-#: src/qtscriptfuncs.cpp:1597
+#: src/qtscriptfuncs.cpp:1596
 #: src/scriptfuncs.cpp:3263
 msgid "YOU ARE VICTORIOUS!"
 msgstr "GYŐZELEM!"
 
-#: src/qtscriptfuncs.cpp:1602
+#: src/qtscriptfuncs.cpp:1601
 #: src/scriptfuncs.cpp:3267
 msgid "YOU WERE DEFEATED!"
 msgstr "VERESÉGET SZENVEDETT!"
@@ -15055,9 +15057,6 @@ msgstr " - Felépítés %s"
 #, c-format
 msgid "Version %s%s%s%s"
 msgstr "Verzió %s%s%s%s"
-
-#~ msgid "Only use OpenGL 1.5"
-#~ msgstr "Használj OpenGL 1.5-öt"
 
 #~ msgid "Warzone 2100 is completely free and open source (FLOSS). Official site: http://wz2100.net/"
 #~ msgstr "Warzone 2100 egy teljesen szabad és nyitott forrású játék (FLOSS). Hivatalos oldal: http://wz 2100.net"
