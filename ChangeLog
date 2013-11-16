@@ -1,3 +1,8 @@
+2013-11-15: Version 3.1.1_rc2
+ * Multiplayer:
+   * Fix: Allow VTOL factories to produce SUPER_HEAVY units. (commit:4458c8b2edece39175bda25ecf8ac84c2633feca)
+   * Fix: VTOL's now can fly over ground units instead of flying around them. (commit:75ede1da1d77b6326b9897b59d5d394d3ef533f0)
+
 2013-11-13: Version 3.1.1_rc1
  * General:
    * Change: Filter out bad maps (commit:acfe83cdf6f44660276ba73931e2cebdc8a250ac)
