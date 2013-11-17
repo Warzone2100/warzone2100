@@ -602,8 +602,6 @@ bool systemInitialise(void)
 
 	iV_Reset();								// Reset the IV library.
 
-	readAIs();
-
 	return true;
 }
 
@@ -699,12 +697,14 @@ init_ObjectDead( void * psObj )
 
 bool frontendInitialise(const char *ResourceFile)
 {
-	debug(LOG_MAIN, "Initialising frontend : %s", ResourceFile);
+	debug(LOG_WZ, "== Initializing frontend == : %s", ResourceFile);
 
 	if(!InitialiseGlobals())				// Initialise all globals and statics everywhere.
 	{
 		return false;
 	}
+
+	readAIs();
 
 	iV_Reset();								// Reset the IV library.
 
