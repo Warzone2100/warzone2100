@@ -137,7 +137,7 @@ static bool tryLoad(const QString &path, const QString &filename)
 
 const QString &modelName(iIMDShape *model)
 {
-	for (MODELMAP::iterator i = models.begin(); i != models.end(); i = models.erase(i))
+	for (MODELMAP::iterator i = models.begin(); i != models.end(); ++i)
 	{
 		if (i.value() == model)
 		{
