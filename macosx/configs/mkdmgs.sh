@@ -1,6 +1,8 @@
 #!/bin/bash
 
 # Config
+export COPYFILE_DISABLE=1
+
 bsurl="http://downloads.sf.net/project/warzone2100"
 
 simgflnme="wztemplate.sparseimage"
