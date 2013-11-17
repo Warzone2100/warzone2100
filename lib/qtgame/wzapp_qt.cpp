@@ -758,6 +758,11 @@ void wzReleaseMouse()
 	WzMainWindow::instance()->freeMouse();
 }
 
+void wzDelay(unsigned int delay)
+{
+	//SDL_Delay(delay);
+}
+
 bool wzActiveWindow()
 {
 	return WzMainWindow::instance()->underMouse();
