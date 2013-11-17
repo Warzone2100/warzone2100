@@ -229,8 +229,10 @@ void wzPerfShutdown()
 	{
 		return;
 	}
+	QString ourfile = PHYSFS_getWriteDir();
+	ourfile.append("gfx-performance.csv");
 	// write performance counter list to file
-	QFile perf("gfx-performance.csv");
+	QFile perf(ourfile);
 	perf.open(QIODevice::WriteOnly);
 	perf.write("START, EFF, TERRAIN, LOAD, PRTCL, WATER, MODELS, MISC\n");
 	for (int i = 0; i < perfList.size(); i++)
