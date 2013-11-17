@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone 2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2013-11-16 03:55+0100\n"
+"POT-Creation-Date: 2013-11-04 14:36+0100\n"
 "PO-Revision-Date: 2023-11-14 20:18+0100\n"
 "Last-Translator: Kálmán „KAMI” Szalai <kami911@gmail.com>\n"
 "Language-Team: Magyar (Hungary) <tamasm78@invitel.hu>\n"
@@ -11887,11 +11887,11 @@ msgstr "Helyi rendszer"
 
 #: lib/ivis_opengl/screen.cpp:187
 msgid "OpenGL GLSL shader version 1.20 is not supported by your system. Some things may look wrong. Please upgrade your graphics driver/hardware, if possible."
-msgstr "OpenGL 2.0-t nem támogatja a te rendszered. Néhány dolgot rossznak látok. Kérlek frissítsd fel a drivert vagy hardware videokártyád, ha ez lehetséges."
+msgstr "OpenGL GLSL 1.20árnyékolási verziót nem támogatja a te rendszered. Néhány dolgot rossznak látok. Kérlek frissítsd fel a drivert vagy hardware videokártyád, ha ez lehetséges."
 
 #: lib/ivis_opengl/screen.cpp:193
 msgid "OpenGL 1.2 + VBO + TEC is not supported by your system. The game requires this. Please upgrade your graphics drivers/hardware, if possible."
-msgstr "OpenGL 1.4 nem támogatja a rendszered. A játéknak szüksége van rá. Kérlek frissítsd fel a drivert vagy hardware videokártyád, ha ez lehetséges."
+msgstr "OpenGL 1.2 + VBO + TEC használatát nem támogatja a rendszered. A játéknak szüksége van rá. Kérlek frissítsd fel a drivert vagy hardware videokártyád, ha ez lehetséges."
 
 #: lib/netplay/netplay.cpp:218
 #: lib/netplay/netplay.cpp:1118
@@ -11902,16 +11902,14 @@ msgstr "Jelszó begépelés"
 msgid ""
 "Your router doesn't support UPnP, you must manually configure your router & firewall to\n"
 "open port 2100 before you can host a game."
-msgstr ""
-"A routered nem támogatja az UPnP-t, és kézzel kell konfigurálni a routered & tűzfalad \n"
+msgstr "A routered nem támogatja az UPnP-t, és kézzel kell konfigurálni a routered & tűzfalad \n"
 "nyisd a 2100 portot mielőtt csatalkozol távoli játékhoz."
 
 #: lib/netplay/netplay.cpp:998
 msgid ""
 "No UPnP device was found. You must manually configure your router & firewall to\n"
 "open port 2100 before you can host a game."
-msgstr ""
-"UPnP eszköz nem található, és kézzel kell konfigurálni a routered & tűzfalad \n"
+msgstr "UPnP eszköz nem található, és kézzel kell konfigurálni a routered & tűzfalad \n"
 "nyisd a 2100 portot mielőtt csatalkozol távoli játékhoz."
 
 #: lib/netplay/netplay.cpp:1026
@@ -11923,8 +11921,7 @@ msgstr "Nem lehet feloldani a mester szerver nevét (%s)!"
 msgid ""
 "You must manually configure your router & firewall to\n"
 " open port 2100 before you can host a game."
-msgstr ""
-"Kézzel konfigurálhatod a routered & tűzfalad \n"
+msgstr "Kézzel konfigurálhatod a routered & tűzfalad \n"
 "nyisd a 2100 portot mielőtt csatalkozol távoli játékhoz."
 
 #: lib/netplay/netplay.cpp:1040
@@ -11932,8 +11929,7 @@ msgstr ""
 msgid ""
 "Game configured port (%s) correctly on (%s)\n"
 "Your external IP is %s"
-msgstr ""
-"Játék konfigurált port (%s) korrigálva (%s)\n"
+msgstr "Játék konfigurált port (%) korrigálva (%s)\n"
 "Külső IP elérhetőséged %s"
 
 #: lib/netplay/netplay.cpp:2175
@@ -11948,7 +11944,10 @@ msgid ""
 "Make sure port %d can receive incoming connections.\n"
 "If you're using a router configure it to use UPnP\n"
 " or to forward the port to your system."
-msgstr "Hibás kapcsolódás a lobbi szerverhez: %s. Készíts megfelelő portot %d ahová beérkezik a bejövő kapcsolat. Ha rutert konfigurálod haszlnáld UPnP, vagy további portokat a rendszeredhez."
+msgstr "Hibás kapcsolódás a lobbi szerverhez: %s.\n"
+"Készíts megfelelő portot %d ahová beérkezik a bejövő kapcsolat.\n" 
+"Ha routert konfigurálod haszlnáld UPnP\n"
+", vagy további portokat a rendszeredhez."
 
 #: lib/netplay/netplay.cpp:2870
 msgid "Failed to get a lobby response!"
@@ -12499,7 +12498,7 @@ msgstr "FŐ MENÜ"
 #: src/frontend.cpp:117
 #, fuzzy
 msgid "Official site: http://wz2100.net/"
-msgstr "Látogass el a hivatalos oldalra: http://wz2100.net"
+msgstr "Látogass el a hivatalos oldalra: http://wz2100.net/"
 
 #: src/frontend.cpp:187
 msgid "Fast Play"
@@ -13085,11 +13084,11 @@ msgstr "--> KILÉPÉS <--"
 
 #: src/ingameop.cpp:512
 msgid "Save Campaign Game"
-msgstr "Új küldetés"
+msgstr "Új küldetés mentése"
 
 #: src/ingameop.cpp:516
 msgid "Save Skirmish Game"
-msgstr "Csata indítása"
+msgstr "Csata indítás mentése"
 
 #: src/init.cpp:422
 #, c-format
@@ -14085,7 +14084,7 @@ msgstr "Mentett játék betöltése"
 msgid "GAME SAVED :"
 msgstr "JÁTÉK MENTVE:"
 
-#: src/move.cpp:2290
+#: src/move.cpp:2284
 #, c-format
 msgid "You found %u power in an oil drum."
 msgstr "%u energiát találtál egy olajkúton."
@@ -14482,11 +14481,11 @@ msgstr "Kapcsolódás a kiszolgáló szerverhez..."
 #: src/multiint.cpp:2992
 #, c-format
 msgid "*** password [%s] is now required! ***"
-msgstr "*** jelszót [%s] kötelező. ***"
+msgstr "*** jelszót [%s] kötelező! ***"
 
 #: src/multiint.cpp:2998
 msgid "*** password is NOT required! ***"
-msgstr " *** jelszó NEM kötelező. ***"
+msgstr " *** jelszó NEM kötelező! ***"
 
 #: src/multiint.cpp:3058
 msgid "Sorry! Failed to host the game."
@@ -15537,3 +15536,4 @@ msgstr "Verzió %s%s%s%s"
 
 #~ msgid "Python Tank Killer Tracks"
 #~ msgstr "Piton Tank ölő"
+
