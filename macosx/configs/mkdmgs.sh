@@ -19,7 +19,7 @@ relbuild="${CONFIGURATION_BUILD_DIR}"
 dmgout="${OBJROOT}/dmgout"
 
 . "${PROJECT_DIR}/../src/autorevision.cache"
-bldtg="$(echo "${VCS_TAG}" | sed 's:/:_:g')_[${VCS_SHORT_HASH}]"
+bldtg="$(echo "${VCS_TAG}" | sed -e 's:/:_:g' -e 's:^v::')_[${VCS_SHORT_HASH}]"
 
 # Fail if not release
 if [ ! "${CONFIGURATION}" = "Release" ]; then
