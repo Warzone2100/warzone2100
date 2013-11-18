@@ -298,80 +298,17 @@ width=640
 
 3.3 Command-line options
 ------------------------
-Additionally to the configuration-file Warzone 2100 can be started with dif-
-ferent options and arguments.
+Additionally to the configuration-file Warzone 2100 can be started with different
+options and arguments. For a list of these options, run the game with the 
+--help option.
 
 Notes: These options all have two dashes (--), not one dash only (-). Trying to
 use the options with one dash only will not work. The game will display a notice
 when trying to use invalid command-line options. Arguments that need paths need
 them in the form they are used on the operating system.
 
---fullscreen
-       Starts the game in fullscreen-mode.
-
---window
-       Starts the game in windowed mode.
-
---resolution WIDTHxHEIGHT
-       Sets the resolution Warzone 2100 will use; usable for fullscreen mode and
-       windowed mode.
-
---shadows
-       Enables shadows.
-
---noshadows
-       Disables shadows.
-
---sound
-       Enables sound.
-
---nosound
-       Disables sound.
-
---datadir path
-       Sets the data-directory to the path specified.
-
---configdir path
-       Sets the configuration-directory to the path specified.
-
---savegame name
-       Loads a saved game.
-
---cheat
-       Enables the usage of cheats and debug-keys, see cheats and debug-keys.
-
---help
-       Outputs a help message and exits; only useful when run from command-line.
-
---debug option
-       Shows debug information; option can be any of the following: all, main,
-       sound, video, wz, 3d, texture, net, memory, error, script. If you want
-       more than one option, you will have to use another --debug. The option
-       "all" contains every other option.
-
---debugfile file
-       Directs debug output to the specified file.
-
---version
-       Outputs the Warzone 2100 version and exits.
-
---mod_ca mod-file
-       Enables the specified campaign mod. You have to specify the full name of
-       the mod-file.
-
---mod_mp mod-file
-       Enables the specified multiplayer mod. You have to specify the full name
-       of the mod-file.
-
---mod mod-file
-       Enables the specified mod globally - for campaign and multiplayer. You
-       have to specify the full name of the mod-file. Global mods are only
-       useful when things are changed that affect both, campaign and multi-
-       player.
-
-
 Note: Some options have corresponding entries in the configuration-file and will
-persist from one start of Warzone 2100 to the next. For example starting the
+persist from one start of Warzone 2100 to the next. For example, starting the
 game with --nosound only once will silence it as long as you do not start it
 with --sound or change the corresponding value in the configuration file. Fur-
 ther information on command-line options can be found at the Wiki of the War-

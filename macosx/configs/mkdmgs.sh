@@ -1,6 +1,8 @@
 #!/bin/bash
 
 # Config
+export COPYFILE_DISABLE=1
+
 bsurl="http://downloads.sf.net/project/warzone2100"
 
 simgflnme="wztemplate.sparseimage"
@@ -18,8 +20,8 @@ sequencelomd5="ab2bbc28cef2a3f2ea3c186e18158acd"
 relbuild="${CONFIGURATION_BUILD_DIR}"
 dmgout="${OBJROOT}/dmgout"
 
-. "${OBJROOT}/autorevision.tmp"
-bldtg="$(echo "${VCS_TAG}" | sed 's:/:_:g')_[${VCS_SHORT_HASH}]"
+. "${PROJECT_DIR}/../src/autorevision.cache"
+bldtg="$(echo "${VCS_TAG}" | sed -e 's:/:_:g' -e 's:^v::')_[${VCS_SHORT_HASH}]"
 
 # Fail if not release
 if [ ! "${CONFIGURATION}" = "Release" ]; then
@@ -128,8 +130,9 @@ fi
 
 # Make the dSYM Bundle
 mkdir -p "${dmgout}/warzone2100-${bldtg}-dSYM"
-cp -a "${relbuild}"/*.dSYM "${dmgout}/warzone2100-${bldtg}-dSYM"
+cp -af "${relbuild}"/*.dSYM "${dmgout}/warzone2100-${bldtg}-dSYM"
 cd "${dmgout}"
+rm -f "warzone2100-${bldtg}-dSYM.tgz"
 tar -czf "warzone2100-${bldtg}-dSYM.tgz" --exclude '.DS_Store' "warzone2100-${bldtg}-dSYM"
 
 # mkredist.bash
@@ -186,33 +189,40 @@ done
 cd "${dmgout}"
 
 rm -rf ./out ./temp
-mkdir temp/
-mkdir out/
-mv warzone2100-${bldtg}-dSYM temp/warzone2100-${bldtg}-dSYM
-mv warzone2100-${bldtg}-dSYM.tgz out/warzone2100-${bldtg}-dSYM.tgz
+mkdir "temp/"
+mkdir "out/"
+mv "warzone2100-${bldtg}-dSYM" "temp/warzone2100-${bldtg}-dSYM"
+mv "warzone2100-${bldtg}-dSYM.tgz" "out/warzone2100-${bldtg}-dSYM.tgz"
 
 echo "== Creating DMG =="
-cp -a wztemplate.sparseimage temp/wztemplatecopy.sparseimage
-hdiutil resize -size 220m temp/wztemplatecopy.sparseimage
-hdiutilOut="$(hdiutil mount temp/wztemplatecopy.sparseimage | tr -d "\t")"
-mountpnt="$(echo "${hdiutilOut}" | sed -E 's:(/dev/disk[0-9])( +)(/Volumes/Warzone 2100):\1:')"
+cp -a "wztemplate.sparseimage" "temp/wztemplatecopy.sparseimage"
+hdiutil resize -size 220m "temp/wztemplatecopy.sparseimage"
+
+hdiutilOut="$(hdiutil mount "temp/wztemplatecopy.sparseimage" | tr -d "\t")"
+
 mountpth="$(echo "${hdiutilOut}" | sed -E 's:(/dev/disk[0-9])( +)::')"
+
 cp -a Warzone.app/* "${mountpth}/Warzone.app"
 signd "${mountpth}/Warzone.app"
-hdiutil detach "${mountpnt}"
-hdiutil convert temp/wztemplatecopy.sparseimage -format UDZO -o out/warzone2100-${bldtg}-novideo.dmg
+
+hdiutil detach "${mountpth}"
+hdiutil convert "temp/wztemplatecopy.sparseimage" -format UDZO -o "out/warzone2100-${bldtg}-novideo.dmg"
+
 
 if [ -f "${sequencelonme}" ]; then
 	echo "== Creating LQ DMG =="
-	hdiutil resize -size 770m temp/wztemplatecopy.sparseimage
-	hdiutilOut="$(hdiutil mount temp/wztemplatecopy.sparseimage | tr -d "\t")"
-	mountpnt="$(echo "${hdiutilOut}" | sed -E 's:(/dev/disk[0-9])( +)(/Volumes/Warzone 2100):\1:')"
+	hdiutil resize -size 770m "temp/wztemplatecopy.sparseimage"
+
+	hdiutilOut="$(hdiutil mount "temp/wztemplatecopy.sparseimage" | tr -d "\t")"
+
 	mountpth="$(echo "${hdiutilOut}" | sed -E 's:(/dev/disk[0-9])( +)::')"
-	rm "${mountpth}/Warzone.app/Contents/Resources/data/sequences.wz"
-	cp -a sequences-lo.wz "${mountpth}/Warzone.app/Contents/Resources/data/sequences.wz"
+
+	rm -f "${mountpth}/Warzone.app/Contents/Resources/data/sequences.wz"
+	cp -a "sequences-lo.wz" "${mountpth}/Warzone.app/Contents/Resources/data/sequences.wz"
+
 	signd "${mountpth}/Warzone.app"
-	hdiutil detach "${mountpnt}"
-	hdiutil convert temp/wztemplatecopy.sparseimage -format UDZO -o out/warzone2100-${bldtg}-lqvideo.dmg
+	hdiutil detach "${mountpth}"
+	hdiutil convert "temp/wztemplatecopy.sparseimage" -format UDZO -o "out/warzone2100-${bldtg}-lqvideo.dmg"
 else
 	echo "${sequencelonme} does not exist, skipping"
 fi
@@ -220,21 +230,24 @@ fi
 
 if [ -f "${sequencenme}" ]; then
 	echo "== Creating HQ DMG =="
-	hdiutil resize -size 1145m temp/wztemplatecopy.sparseimage
-	hdiutilOut="$(hdiutil mount temp/wztemplatecopy.sparseimage | tr -d "\t")"
-	mountpnt="$(echo "${hdiutilOut}" | sed -E 's:(/dev/disk[0-9])( +)(/Volumes/Warzone 2100):\1:')"
+	hdiutil resize -size 1145m "temp/wztemplatecopy.sparseimage"
+
+	hdiutilOut="$(hdiutil mount "temp/wztemplatecopy.sparseimage" | tr -d "\t")"
+
 	mountpth="$(echo "${hdiutilOut}" | sed -E 's:(/dev/disk[0-9])( +)::')"
-	rm "${mountpth}/Warzone.app/Contents/Resources/data/sequences.wz"
-	cp -a sequences.wz "${mountpth}/Warzone.app/Contents/Resources/data/sequences.wz"
+
+	rm -f "${mountpth}/Warzone.app/Contents/Resources/data/sequences.wz"
+	cp -a "sequences.wz" "${mountpth}/Warzone.app/Contents/Resources/data/sequences.wz"
+
 	signd "${mountpth}/Warzone.app"
-	hdiutil detach "${mountpnt}"
-	hdiutil convert temp/wztemplatecopy.sparseimage -format UDZO  -o out/warzone2100-${bldtg}-hqvideo.dmg
+	hdiutil detach "${mountpth}"
+	hdiutil convert "temp/wztemplatecopy.sparseimage" -format UDZO  -o "out/warzone2100-${bldtg}-hqvideo.dmg"
 else
 	echo "${sequencenme} does not exist, skipping"
 fi
 
 echo "== Cleaning up =="
-rm -f temp/wztemplatecopy.sparseimage
+rm -f "temp/wztemplatecopy.sparseimage"
 
 # Open the dir
 open "out"

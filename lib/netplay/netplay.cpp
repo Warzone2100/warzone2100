@@ -328,6 +328,7 @@ void NET_InitPlayers()
 	for (i = 0; i < MAX_CONNECTED_PLAYERS; ++i)
 	{
 		NET_InitPlayer(i, true);
+		NetPlay.players[i].name[0] = '\0';
 		NETinitQueue(NETnetQueue(i));
 	}
 	NETinitQueue(NETbroadcastQueue());

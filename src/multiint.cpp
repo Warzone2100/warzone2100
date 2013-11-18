@@ -217,6 +217,7 @@ static const int difficultyValue[] = { 1, 10, 15, 20 };
 
 struct AIDATA
 {
+	AIDATA() : assigned(0) {}
 	char name[MAX_LEN_AI_NAME];
 	char slo[MAX_LEN_AI_NAME];
 	char vlo[MAX_LEN_AI_NAME];

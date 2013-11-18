@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone 2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2013-11-16 03:55+0100\n"
+"POT-Creation-Date: 2013-11-17 16:23+0100\n"
 "PO-Revision-Date: 2023-11-14 20:18+0100\n"
 "Last-Translator: Kálmán „KAMI” Szalai <kami911@gmail.com>\n"
 "Language-Team: Magyar (Hungary) <tamasm78@invitel.hu>\n"
@@ -11887,18 +11887,18 @@ msgstr "Helyi rendszer"
 
 #: lib/ivis_opengl/screen.cpp:187
 msgid "OpenGL GLSL shader version 1.20 is not supported by your system. Some things may look wrong. Please upgrade your graphics driver/hardware, if possible."
-msgstr "OpenGL 2.0-t nem támogatja a te rendszered. Néhány dolgot rossznak látok. Kérlek frissítsd fel a drivert vagy hardware videokártyád, ha ez lehetséges."
+msgstr "OpenGL GLSL 1.20árnyékolási verziót nem támogatja a te rendszered. Néhány dolgot rossznak látok. Kérlek frissítsd fel a drivert vagy hardware videokártyád, ha ez lehetséges."
 
 #: lib/ivis_opengl/screen.cpp:193
 msgid "OpenGL 1.2 + VBO + TEC is not supported by your system. The game requires this. Please upgrade your graphics drivers/hardware, if possible."
-msgstr "OpenGL 1.4 nem támogatja a rendszered. A játéknak szüksége van rá. Kérlek frissítsd fel a drivert vagy hardware videokártyád, ha ez lehetséges."
+msgstr "OpenGL 1.2 + VBO + TEC használatát nem támogatja a rendszered. A játéknak szüksége van rá. Kérlek frissítsd fel a drivert vagy hardware videokártyád, ha ez lehetséges."
 
 #: lib/netplay/netplay.cpp:218
-#: lib/netplay/netplay.cpp:1118
+#: lib/netplay/netplay.cpp:1119
 msgid "Enter password here"
 msgstr "Jelszó begépelés"
 
-#: lib/netplay/netplay.cpp:984
+#: lib/netplay/netplay.cpp:985
 msgid ""
 "Your router doesn't support UPnP, you must manually configure your router & firewall to\n"
 "open port 2100 before you can host a game."
@@ -11906,7 +11906,7 @@ msgstr ""
 "A routered nem támogatja az UPnP-t, és kézzel kell konfigurálni a routered & tűzfalad \n"
 "nyisd a 2100 portot mielőtt csatalkozol távoli játékhoz."
 
-#: lib/netplay/netplay.cpp:998
+#: lib/netplay/netplay.cpp:999
 msgid ""
 "No UPnP device was found. You must manually configure your router & firewall to\n"
 "open port 2100 before you can host a game."
@@ -11914,12 +11914,12 @@ msgstr ""
 "UPnP eszköz nem található, és kézzel kell konfigurálni a routered & tűzfalad \n"
 "nyisd a 2100 portot mielőtt csatalkozol távoli játékhoz."
 
-#: lib/netplay/netplay.cpp:1026
+#: lib/netplay/netplay.cpp:1027
 #, fuzzy, c-format
 msgid "Could not open require port (%s) on  (%s)"
 msgstr "Nem lehet feloldani a mester szerver nevét (%s)!"
 
-#: lib/netplay/netplay.cpp:1030
+#: lib/netplay/netplay.cpp:1031
 msgid ""
 "You must manually configure your router & firewall to\n"
 " open port 2100 before you can host a game."
@@ -11927,7 +11927,7 @@ msgstr ""
 "Kézzel konfigurálhatod a routered & tűzfalad \n"
 "nyisd a 2100 portot mielőtt csatalkozol távoli játékhoz."
 
-#: lib/netplay/netplay.cpp:1040
+#: lib/netplay/netplay.cpp:1041
 #, c-format
 msgid ""
 "Game configured port (%s) correctly on (%s)\n"
@@ -11936,21 +11936,25 @@ msgstr ""
 "Játék konfigurált port (%s) korrigálva (%s)\n"
 "Külső IP elérhetőséged %s"
 
-#: lib/netplay/netplay.cpp:2175
+#: lib/netplay/netplay.cpp:2176
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr "Nem lehet feloldani a mester szerver nevét (%s)!"
 
-#: lib/netplay/netplay.cpp:2197
+#: lib/netplay/netplay.cpp:2198
 #, c-format
 msgid ""
 "Error connecting to the lobby server: %s.\n"
 "Make sure port %d can receive incoming connections.\n"
 "If you're using a router configure it to use UPnP\n"
 " or to forward the port to your system."
-msgstr "Hibás kapcsolódás a lobbi szerverhez: %s. Készíts megfelelő portot %d ahová beérkezik a bejövő kapcsolat. Ha rutert konfigurálod haszlnáld UPnP, vagy további portokat a rendszeredhez."
+msgstr ""
+"Hibás kapcsolódás a lobbi szerverhez: %s.\n"
+"Készíts megfelelő portot %d ahová beérkezik a bejövő kapcsolat.\n"
+"Ha routert konfigurálod haszlnáld UPnP\n"
+", vagy további portokat a rendszeredhez."
 
-#: lib/netplay/netplay.cpp:2870
+#: lib/netplay/netplay.cpp:2871
 msgid "Failed to get a lobby response!"
 msgstr "Képtelenség, hogy kapjon egy támogatói választ!"
 
@@ -12002,10 +12006,10 @@ msgstr "Stratégiai játék"
 
 #: src/challenge.cpp:222
 #: src/hci.cpp:915
-#: src/hci.cpp:3378
-#: src/hci.cpp:3501
-#: src/hci.cpp:3937
-#: src/hci.cpp:4971
+#: src/hci.cpp:3379
+#: src/hci.cpp:3502
+#: src/hci.cpp:3938
+#: src/hci.cpp:4972
 #: src/intelmap.cpp:530
 #: src/intorder.cpp:727
 #: src/loadsave.cpp:250
@@ -12330,12 +12334,12 @@ msgid "Water Speed"
 msgstr "Sebesség vizen"
 
 #: src/design.cpp:2003
-#: src/hci.cpp:4994
+#: src/hci.cpp:4995
 msgid "Tab Scroll left"
 msgstr "Tab görgetés balra"
 
 #: src/design.cpp:2018
-#: src/hci.cpp:5009
+#: src/hci.cpp:5010
 msgid "Tab Scroll right"
 msgstr "Tab görgetés jobbra"
 
@@ -12360,7 +12364,7 @@ msgid "Player dropped"
 msgstr "Játékos kiszállt"
 
 #: src/display3d.cpp:666
-#: src/multiint.cpp:2374
+#: src/multiint.cpp:2375
 msgid "Waiting for other players"
 msgstr "Várakozás további játékosra"
 
@@ -12480,7 +12484,7 @@ msgid "Tutorial"
 msgstr "Gyakorlás"
 
 #: src/frontend.cpp:111
-#: src/hci.cpp:3487
+#: src/hci.cpp:3488
 msgid "Options"
 msgstr "Beállítások"
 
@@ -12499,7 +12503,7 @@ msgstr "FŐ MENÜ"
 #: src/frontend.cpp:117
 #, fuzzy
 msgid "Official site: http://wz2100.net/"
-msgstr "Látogass el a hivatalos oldalra: http://wz2100.net"
+msgstr "Látogass el a hivatalos oldalra: http://wz2100.net/"
 
 #: src/frontend.cpp:187
 msgid "Fast Play"
@@ -12579,7 +12583,7 @@ msgid "TCP port 2100 must be opened in your firewall or router to host games!"
 msgstr "TCP 2100 port megnyitotta a tűzfalad vagy routered a távoli játékokhoz!"
 
 #: src/frontend.cpp:464
-#: src/multiint.cpp:1482
+#: src/multiint.cpp:1483
 msgid "OPTIONS"
 msgstr "BEÁLLÍTÁSOK"
 
@@ -12865,7 +12869,7 @@ msgid "GAME OPTIONS"
 msgstr "JÁTÉK OPCIÓK"
 
 #: src/frontend.cpp:1482
-#: src/multiint.cpp:2643
+#: src/multiint.cpp:2644
 msgid "Mod: "
 msgstr "Mód:"
 
@@ -12899,144 +12903,144 @@ msgstr "%u csalt (hibakeresés menü), egy új droidja lett: %s."
 msgid "Player %u is cheating (debug menu) him/herself a new droid."
 msgstr "%u csalt (hibakeresés menü), egy új droidja lett."
 
-#: src/hci.cpp:3298
+#: src/hci.cpp:3299
 msgid "Commanders (F6)"
 msgstr "Parancsnokok (F6)"
 
-#: src/hci.cpp:3311
+#: src/hci.cpp:3312
 msgid "Intelligence Display (F5)"
 msgstr "Inteligens kijelző (F5)"
 
-#: src/hci.cpp:3324
+#: src/hci.cpp:3325
 msgid "Manufacture (F1)"
 msgstr "Gyártás (F1)"
 
-#: src/hci.cpp:3337
+#: src/hci.cpp:3338
 msgid "Design (F4)"
 msgstr "Tervezés (F4)"
 
-#: src/hci.cpp:3350
+#: src/hci.cpp:3351
 msgid "Research (F2)"
 msgstr "Kutatás (F2)"
 
-#: src/hci.cpp:3363
+#: src/hci.cpp:3364
 msgid "Build (F3)"
 msgstr "Építés (F3)"
 
-#: src/hci.cpp:3434
-#: src/multiint.cpp:1588
+#: src/hci.cpp:3435
+#: src/multiint.cpp:1589
 #: src/multimenu.cpp:798
 msgid "Power"
 msgstr "Energia"
 
-#: src/hci.cpp:3525
+#: src/hci.cpp:3526
 msgid "Map:"
 msgstr "Térkép:"
 
-#: src/hci.cpp:3538
+#: src/hci.cpp:3539
 msgid "Load"
 msgstr "Játék beolvasása"
 
-#: src/hci.cpp:3539
+#: src/hci.cpp:3540
 msgid "Load Map File"
 msgstr "Mentett játék betöltése"
 
-#: src/hci.cpp:3550
+#: src/hci.cpp:3551
 msgid "Save"
 msgstr "Mentés"
 
-#: src/hci.cpp:3551
+#: src/hci.cpp:3552
 msgid "Save Map File"
 msgstr "Térképfájl mentés"
 
-#: src/hci.cpp:3563
+#: src/hci.cpp:3564
 msgid "New"
 msgstr "Új"
 
-#: src/hci.cpp:3564
+#: src/hci.cpp:3565
 msgid "New Blank Map"
 msgstr "Új üres térkép"
 
-#: src/hci.cpp:3612
+#: src/hci.cpp:3613
 msgid "Tile"
 msgstr "Egymás mellé rak"
 
-#: src/hci.cpp:3613
+#: src/hci.cpp:3614
 msgid "Place tiles on map"
 msgstr "Terep felhelyezése a térképre"
 
-#: src/hci.cpp:3626
+#: src/hci.cpp:3627
 msgid "Unit"
 msgstr "Egység"
 
-#: src/hci.cpp:3627
+#: src/hci.cpp:3628
 msgid "Place Unit on map"
 msgstr "Egységek elhelyezése a térképen"
 
-#: src/hci.cpp:3635
+#: src/hci.cpp:3636
 msgid "Struct"
 msgstr "Szerkezet"
 
-#: src/hci.cpp:3636
+#: src/hci.cpp:3637
 msgid "Place Structures on map"
 msgstr "Építési korlátok meghatározása"
 
-#: src/hci.cpp:3644
+#: src/hci.cpp:3645
 msgid "Feat"
 msgstr "Tett"
 
-#: src/hci.cpp:3645
+#: src/hci.cpp:3646
 msgid "Place Features on map"
 msgstr "Technológiák elhelyezése a térképen"
 
-#: src/hci.cpp:3659
+#: src/hci.cpp:3660
 msgid "Pause"
 msgstr "Szünet"
 
-#: src/hci.cpp:3660
+#: src/hci.cpp:3661
 msgid "Pause or unpause the game"
 msgstr "Szünetelteti vagy folytatja a játékot"
 
-#: src/hci.cpp:3678
+#: src/hci.cpp:3679
 msgid "Align height of all map objects"
 msgstr "Egymáshoz igazítja az összes objektum magasságát a térképen"
 
-#: src/hci.cpp:3691
+#: src/hci.cpp:3692
 msgid "Edit"
 msgstr "Szerkesztés"
 
-#: src/hci.cpp:3692
+#: src/hci.cpp:3693
 msgid "Start Edit Mode"
 msgstr "Szerkesztő indítása"
 
-#: src/hci.cpp:3706
+#: src/hci.cpp:3707
 #: src/ingameop.cpp:113
 #: src/ingameop.cpp:257
 #: src/ingameop.cpp:261
 msgid "Quit"
 msgstr "Kilépés"
 
-#: src/hci.cpp:3707
+#: src/hci.cpp:3708
 msgid "Exit Game"
 msgstr "Kilépés a játékból"
 
-#: src/hci.cpp:3733
+#: src/hci.cpp:3734
 msgid "Current Player:"
 msgstr "Jelenlegi játék:"
 
-#: src/hci.cpp:4014
+#: src/hci.cpp:4015
 msgid "Progress Bar"
 msgstr "Eszköztár sor"
 
-#: src/hci.cpp:4896
+#: src/hci.cpp:4897
 msgid "Factory Delivery Point"
 msgstr "Gyár szállító pont"
 
-#: src/hci.cpp:4914
+#: src/hci.cpp:4915
 msgid "Loop Production"
 msgstr "Külső értékesítés"
 
-#: src/hci.cpp:5224
+#: src/hci.cpp:5225
 msgid "Ally progress"
 msgstr "Szövetséges állomány"
 
@@ -13085,11 +13089,11 @@ msgstr "--> KILÉPÉS <--"
 
 #: src/ingameop.cpp:512
 msgid "Save Campaign Game"
-msgstr "Új küldetés"
+msgstr "Új küldetés mentése"
 
 #: src/ingameop.cpp:516
 msgid "Save Skirmish Game"
-msgstr "Csata indítása"
+msgstr "Csata indítás mentése"
 
 #: src/init.cpp:422
 #, c-format
@@ -13519,9 +13523,9 @@ msgid "KEY MAPPING"
 msgstr "Kulcsfontosságú megfeleltetés"
 
 #: src/keyedit.cpp:377
-#: src/multiint.cpp:762
-#: src/multiint.cpp:1262
-#: src/multiint.cpp:1674
+#: src/multiint.cpp:763
+#: src/multiint.cpp:1263
+#: src/multiint.cpp:1675
 msgid "Return To Previous Screen"
 msgstr "Vissza az előző képernyőre"
 
@@ -14148,434 +14152,434 @@ msgstr "Közepes"
 msgid "Insane"
 msgstr "Örült"
 
-#: src/multiint.cpp:700
+#: src/multiint.cpp:701
 #: src/multilimit.cpp:190
 msgid "Accept Settings"
 msgstr "Beállítások elfogadása"
 
-#: src/multiint.cpp:702
-#: src/multiint.cpp:1317
+#: src/multiint.cpp:703
+#: src/multiint.cpp:1318
 msgid "Cancel"
 msgstr "Mégse"
 
-#: src/multiint.cpp:713
+#: src/multiint.cpp:714
 msgid "IP Address or Machine Name"
 msgstr "IP cím vagy gépnév"
 
-#: src/multiint.cpp:759
+#: src/multiint.cpp:760
 msgid "CONNECTION"
 msgstr "KAPCSOLAT"
 
-#: src/multiint.cpp:764
+#: src/multiint.cpp:765
 msgid "Lobby"
 msgstr "Előcsarnok"
 
-#: src/multiint.cpp:765
+#: src/multiint.cpp:766
 msgid "IP"
 msgstr "IP"
 
-#: src/multiint.cpp:986
+#: src/multiint.cpp:987
 msgid "[Password required]"
 msgstr " *** jelszó  kötelező! ***"
 
-#: src/multiint.cpp:990
+#: src/multiint.cpp:991
 msgid "[No Tanks]"
 msgstr "[Nincsenek Tankok]"
 
-#: src/multiint.cpp:994
+#: src/multiint.cpp:995
 msgid "[No Cyborgs]"
 msgstr "[Nincsenek Cyborgok]"
 
-#: src/multiint.cpp:998
+#: src/multiint.cpp:999
 msgid "[No VTOLs]"
 msgstr "[Nincs VTOLS]"
 
-#: src/multiint.cpp:1002
+#: src/multiint.cpp:1003
 #, c-format
 msgid "Hosted by %s"
 msgstr "Kiszolgáló %s által"
 
-#: src/multiint.cpp:1006
+#: src/multiint.cpp:1007
 #, c-format
 msgid "Hosted by %s —%s"
 msgstr "Kiszolgáló %s —%s által"
 
-#: src/multiint.cpp:1028
+#: src/multiint.cpp:1029
 msgid "Can't find any games for your version."
 msgstr "Nem talál játékokat a verziódhoz."
 
-#: src/multiint.cpp:1043
+#: src/multiint.cpp:1044
 msgid "No games are available"
 msgstr "Nincs rendelkezésre álló játék"
 
-#: src/multiint.cpp:1046
+#: src/multiint.cpp:1047
 msgid "Game is full"
 msgstr "Maximális játékosszám"
 
-#: src/multiint.cpp:1050
+#: src/multiint.cpp:1051
 msgid "You were kicked!"
 msgstr "Kiütöttek!"
 
-#: src/multiint.cpp:1053
+#: src/multiint.cpp:1054
 msgid "Wrong Game Version!"
 msgstr "Rossz játékverzió."
 
-#: src/multiint.cpp:1056
+#: src/multiint.cpp:1057
 msgid "You have an incompatible mod."
 msgstr "Inkompatibilis módban vagy."
 
-#: src/multiint.cpp:1060
+#: src/multiint.cpp:1061
 msgid "Host couldn't send file?"
 msgstr "Gazdagép nem tudott fájlt küldeni?"
 
-#: src/multiint.cpp:1064
+#: src/multiint.cpp:1065
 msgid "Incorrect Password!"
 msgstr "Helytelen Jelszó."
 
-#: src/multiint.cpp:1067
+#: src/multiint.cpp:1068
 msgid "Host has dropped connection!"
 msgstr "Gazdagéppel a kapcsolata elveszett."
 
-#: src/multiint.cpp:1071
+#: src/multiint.cpp:1072
 msgid "Connection Error"
 msgstr "Kapcsolódási hiba."
 
-#: src/multiint.cpp:1190
+#: src/multiint.cpp:1191
 msgid "Searching"
 msgstr "Keresés"
 
-#: src/multiint.cpp:1259
+#: src/multiint.cpp:1260
 msgid "GAMES"
 msgstr "JÁTÉKOK"
 
-#: src/multiint.cpp:1267
+#: src/multiint.cpp:1268
 msgid "Refresh Games List"
 msgstr "Játék lista frissítése"
 
-#: src/multiint.cpp:1270
+#: src/multiint.cpp:1271
 #, fuzzy
 msgid "Filter Games List"
 msgstr "Játék lista frissítése"
 
-#: src/multiint.cpp:1297
+#: src/multiint.cpp:1298
 msgid "Enter Password:"
 msgstr "Jelszó megadása:"
 
-#: src/multiint.cpp:1315
+#: src/multiint.cpp:1316
 msgid "OK"
 msgstr "OK"
 
-#: src/multiint.cpp:1436
+#: src/multiint.cpp:1437
 msgid "Tanks disabled!!"
 msgstr "Tankok tiltva!!"
 
-#: src/multiint.cpp:1437
+#: src/multiint.cpp:1438
 msgid "Cyborgs disabled."
 msgstr "Cyborgok tiltva"
 
-#: src/multiint.cpp:1438
+#: src/multiint.cpp:1439
 msgid "VTOLs disabled."
 msgstr "VTOL tiltva."
 
-#: src/multiint.cpp:1439
+#: src/multiint.cpp:1440
 msgid "Satellite Uplink disabled."
 msgstr "Műhold parabola központ"
 
-#: src/multiint.cpp:1440
+#: src/multiint.cpp:1441
 msgid "Laser Satellite disabled."
 msgstr "Lézerműhold parancsnoki állás"
 
-#: src/multiint.cpp:1487
-#: src/multiint.cpp:1495
+#: src/multiint.cpp:1488
+#: src/multiint.cpp:1496
 msgid "Select Game Name"
 msgstr "Játéknév kiválasztása"
 
-#: src/multiint.cpp:1488
+#: src/multiint.cpp:1489
 msgid "One-Player Skirmish"
 msgstr "Egyjátékos csata"
 
-#: src/multiint.cpp:1499
+#: src/multiint.cpp:1500
 msgid "Select Map"
 msgstr "Térkép kiválasztása"
 
-#: src/multiint.cpp:1509
+#: src/multiint.cpp:1510
 msgid "Click to set Password"
 msgstr "Kattintson ide a jelszó beállításához"
 
-#: src/multiint.cpp:1519
 #: src/multiint.cpp:1520
+#: src/multiint.cpp:1521
 msgid "Scavengers"
 msgstr "Dögevők"
 
-#: src/multiint.cpp:1522
+#: src/multiint.cpp:1523
 msgid "No Scavengers"
 msgstr "Nincsenek dögevők"
 
-#: src/multiint.cpp:1552
+#: src/multiint.cpp:1553
 msgid "Select Player Name"
 msgstr "Játékos nevének kiválasztása"
 
-#: src/multiint.cpp:1555
+#: src/multiint.cpp:1556
 #: src/multimenu.cpp:791
 msgid "Alliances"
 msgstr "Szövetségek"
 
-#: src/multiint.cpp:1558
+#: src/multiint.cpp:1559
 msgid "No Alliances"
 msgstr "Nincsenek szövetségek"
 
-#: src/multiint.cpp:1560
+#: src/multiint.cpp:1561
 msgid "Allow Alliances"
 msgstr "Megengedi szövetséget"
 
-#: src/multiint.cpp:1564
+#: src/multiint.cpp:1565
 msgid "Locked Teams"
 msgstr "Zárolt csapatok"
 
-#: src/multiint.cpp:1590
+#: src/multiint.cpp:1591
 msgid "Low Power Levels"
 msgstr "Alacsony energia szint"
 
-#: src/multiint.cpp:1592
+#: src/multiint.cpp:1593
 msgid "Medium Power Levels"
 msgstr "Közepes energia szint"
 
-#: src/multiint.cpp:1594
+#: src/multiint.cpp:1595
 msgid "High Power Levels"
 msgstr "Magas energia szint"
 
-#: src/multiint.cpp:1626
+#: src/multiint.cpp:1627
 msgid "Base"
 msgstr "Bázis"
 
-#: src/multiint.cpp:1628
+#: src/multiint.cpp:1629
 msgid "Start with No Bases"
 msgstr "Kezdés bázis nélkül"
 
-#: src/multiint.cpp:1630
+#: src/multiint.cpp:1631
 msgid "Start with Bases"
 msgstr "Kezdés bázissal"
 
-#: src/multiint.cpp:1632
+#: src/multiint.cpp:1633
 msgid "Start with Advanced Bases"
 msgstr "Kezdés fejlesztett bázissal"
 
-#: src/multiint.cpp:1664
+#: src/multiint.cpp:1665
 msgid "Map Preview"
 msgstr "Térkép előnézet"
 
-#: src/multiint.cpp:1666
+#: src/multiint.cpp:1667
 msgid "Click to see Map"
 msgstr "Kattints ide a térkép megtekintéséhez"
 
-#: src/multiint.cpp:1679
-#: src/multiint.cpp:1681
+#: src/multiint.cpp:1680
+#: src/multiint.cpp:1682
 msgid "Start Hosting Game"
 msgstr "Központi játék elindítása"
 
-#: src/multiint.cpp:1688
-#: src/multiint.cpp:1692
+#: src/multiint.cpp:1689
+#: src/multiint.cpp:1693
 msgid "Show Structure Limits"
 msgstr "Építési korlátozás"
 
-#: src/multiint.cpp:1688
-#: src/multiint.cpp:1692
+#: src/multiint.cpp:1689
+#: src/multiint.cpp:1693
 msgid "Set Structure Limits"
 msgstr "Épületek maximális számának beállítása"
 
-#: src/multiint.cpp:1769
+#: src/multiint.cpp:1770
 msgid "DIFFICULTY"
 msgstr "NEHÉZSÉG"
 
-#: src/multiint.cpp:1783
+#: src/multiint.cpp:1784
 msgid "Less aggressive"
 msgstr "Kevésbé agresszív"
 
-#: src/multiint.cpp:1784
+#: src/multiint.cpp:1785
 msgid "Plays nice"
 msgstr "Kedvelt játékosok"
 
-#: src/multiint.cpp:1785
+#: src/multiint.cpp:1786
 msgid "No holds barred"
 msgstr "Nincs fedetlen hatalom"
 
-#: src/multiint.cpp:1786
+#: src/multiint.cpp:1787
 msgid "Starts with advantages"
 msgstr "Kezdés fejlesztett bázissal"
 
-#: src/multiint.cpp:1814
+#: src/multiint.cpp:1815
 msgid "CHOOSE AI"
 msgstr "AI választás"
 
-#: src/multiint.cpp:1852
+#: src/multiint.cpp:1853
 msgid "Allow human players to join in this slot"
 msgstr "Emberi játékosok kapcsolódnak a nyomhoz"
 
-#: src/multiint.cpp:1859
+#: src/multiint.cpp:1860
 msgid "Leave this slot unused"
 msgstr "Elhagyom ezt a nem használt nyomot"
 
-#: src/multiint.cpp:2316
+#: src/multiint.cpp:2317
 msgid "Team"
 msgstr "Csapat"
 
-#: src/multiint.cpp:2359
+#: src/multiint.cpp:2360
 msgid "You cannot change difficulty in a challenge"
 msgstr "Nem tudsz változtatni a nehézségen mozgásnál"
 
-#: src/multiint.cpp:2359
+#: src/multiint.cpp:2360
 msgid "Click to change difficulty"
 msgstr "Kattintson a nehézség beállításához"
 
-#: src/multiint.cpp:2374
+#: src/multiint.cpp:2375
 msgid "Waiting for player"
 msgstr "Várakozás további játékosra"
 
-#: src/multiint.cpp:2374
+#: src/multiint.cpp:2375
 msgid "Player is ready"
 msgstr "Játékos kiszállt"
 
-#: src/multiint.cpp:2374
+#: src/multiint.cpp:2375
 msgid "Click when ready"
 msgstr "Kattintson, ha kész"
 
-#: src/multiint.cpp:2381
+#: src/multiint.cpp:2382
 msgid "READY?"
 msgstr "KÉSZ?"
 
-#: src/multiint.cpp:2425
+#: src/multiint.cpp:2426
 msgid "PLAYERS"
 msgstr "JÁTÉKOSOK"
 
-#: src/multiint.cpp:2460
+#: src/multiint.cpp:2461
 msgid "Click to change to this slot"
 msgstr "Kattintson a játékosok betöltésének változtatásához"
 
-#: src/multiint.cpp:2488
+#: src/multiint.cpp:2489
 msgid "Choose Team"
 msgstr "Csapatválasztás"
 
-#: src/multiint.cpp:2518
+#: src/multiint.cpp:2519
 msgid "Click to change player colour"
 msgstr "Kattintson a játékos színeinek változtatásához"
 
-#: src/multiint.cpp:2546
+#: src/multiint.cpp:2547
 msgid "Click to change player position"
 msgstr "Kattintson a játékos pozíciójának beállításához"
 
-#: src/multiint.cpp:2550
+#: src/multiint.cpp:2551
 msgid "Click to change AI"
 msgstr "Kattintson a játékos AI beállítás változtatásához"
 
-#: src/multiint.cpp:2616
+#: src/multiint.cpp:2617
 msgid "CHAT"
 msgstr "CSEVEGÉS"
 
-#: src/multiint.cpp:2648
+#: src/multiint.cpp:2649
 msgid "All players need to have the same mods to join your game."
 msgstr "Minden játékosnak ugyanazokkal a mod-okkal kell rendelkeznie, hogy csatlakozhassanak a játékhoz."
 
-#: src/multiint.cpp:2689
+#: src/multiint.cpp:2690
 msgid "Connecting to the lobby server..."
 msgstr "Kapcsolódás a kiszolgáló szerverhez..."
 
-#: src/multiint.cpp:2992
+#: src/multiint.cpp:2993
 #, c-format
 msgid "*** password [%s] is now required! ***"
-msgstr "*** jelszót [%s] kötelező. ***"
+msgstr "*** jelszót [%s] kötelező! ***"
 
-#: src/multiint.cpp:2998
+#: src/multiint.cpp:2999
 msgid "*** password is NOT required! ***"
-msgstr " *** jelszó NEM kötelező. ***"
+msgstr " *** jelszó NEM kötelező! ***"
 
-#: src/multiint.cpp:3058
+#: src/multiint.cpp:3059
 msgid "Sorry! Failed to host the game."
 msgstr "Nem sikerült a játékot létrehoznia."
 
-#: src/multiint.cpp:3181
+#: src/multiint.cpp:3182
 msgid "'Locked Teams' mode enabled"
 msgstr "„Fix csapatok” mód engedélyezve"
 
-#: src/multiint.cpp:3209
-#: src/multiint.cpp:3278
+#: src/multiint.cpp:3210
+#: src/multiint.cpp:3279
 #: src/multimenu.cpp:1486
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "A játékmester kirúgta %s a játékból!"
 
-#: src/multiint.cpp:3344
+#: src/multiint.cpp:3345
 msgid "Host is Starting Game"
 msgstr "A játékmester elindította a játékot"
 
-#: src/multiint.cpp:3922
+#: src/multiint.cpp:3923
 msgid "UPnP has been enabled."
 msgstr "UPnP be lett kapcsolva"
 
-#: src/multiint.cpp:3928
+#: src/multiint.cpp:3929
 msgid "UPnP detection faled. You must manually configure router yourself."
 msgstr "UPnP detektálás hibás. Kézzel kell a routert konfigurálnod."
 
-#: src/multiint.cpp:3932
+#: src/multiint.cpp:3933
 #, fuzzy
 msgid "UPnP detection is in progress..."
 msgstr "Dekódolás folyamatban....."
 
-#: src/multiint.cpp:3939
+#: src/multiint.cpp:3940
 msgid "UPnP detection disabled by user. Autoconfig of port 2100 will not happen."
 msgstr "UPnP vizsgálatot kikapcsolta a felhasználó. Automatikus beállítás a 2100 portra nem történt meg."
 
-#: src/multiint.cpp:3943
+#: src/multiint.cpp:3944
 msgid "Press the start hosting button to begin hosting a game."
 msgstr "Nyomd meg a távoli start gombot a távoli játék indításához "
 
-#: src/multiint.cpp:3984
+#: src/multiint.cpp:3985
 msgid "Can't connect to lobby server!"
 msgstr "Nem tud kapcsolódni a kiszolgáló szerverhez!"
 
-#: src/multiint.cpp:4076
+#: src/multiint.cpp:4077
 #, c-format
 msgid "Mods: %s"
 msgstr "Mód: %s"
 
-#: src/multiint.cpp:4083
+#: src/multiint.cpp:4084
 msgid "Mods: None!"
 msgstr "Mód: Nincs!"
 
-#: src/multiint.cpp:4093
+#: src/multiint.cpp:4094
 #, c-format
 msgid "Version: %s"
 msgstr "Verzió: %s"
 
-#: src/multiint.cpp:4144
+#: src/multiint.cpp:4145
 #, c-format
 msgid "Click to take player slot %d"
 msgstr "Kattintson a játékosok betöltéséhez %d"
 
-#: src/multiint.cpp:4153
-#: src/multiint.cpp:4355
+#: src/multiint.cpp:4154
+#: src/multiint.cpp:4356
 msgid "Open"
 msgstr "Megnyitás"
 
-#: src/multiint.cpp:4153
-#: src/multiint.cpp:4356
+#: src/multiint.cpp:4154
+#: src/multiint.cpp:4357
 msgid "Closed"
 msgstr "Bezárás"
 
-#: src/multiint.cpp:4203
+#: src/multiint.cpp:4204
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr "Térkép küldés: %d%%"
 
-#: src/multiint.cpp:4211
+#: src/multiint.cpp:4212
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr "Térkép: %d%% letöltött"
 
-#: src/multiint.cpp:4237
+#: src/multiint.cpp:4238
 msgid "HOST"
 msgstr "GAZDAGÉP"
 
-#: src/multiint.cpp:4244
+#: src/multiint.cpp:4245
 #: src/multimenu.cpp:805
 msgid "Ping"
 msgstr "Pingelés"

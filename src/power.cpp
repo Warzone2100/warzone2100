@@ -173,7 +173,7 @@ static void syncDebugEconomy(unsigned player, char ch)
 {
 	ASSERT_OR_RETURN(, player < MAX_PLAYERS, "Bad player (%d)", player);
 
-	syncDebug("%c economy%u = %"PRId64"", ch, player, asPower[player].currentPower);
+	syncDebug("%c economy%u = %" PRId64"", ch, player, asPower[player].currentPower);
 }
 
 /*check the current power - if enough return true, else return false */
@@ -193,14 +193,14 @@ bool checkPower(int player, uint32_t quantity)
 void usePower(int player, uint32_t quantity)
 {
 	ASSERT_OR_RETURN(, player < MAX_PLAYERS, "Bad player (%d)", player);
-	syncDebug("usePower%d %"PRId64"-=%u", player, asPower[player].currentPower, quantity);
+	syncDebug("usePower%d %" PRId64"-=%u", player, asPower[player].currentPower, quantity);
 	asPower[player].currentPower = MAX(0, asPower[player].currentPower - quantity*FP_ONE);
 }
 
 void addPower(int player, int32_t quantity)
 {
 	ASSERT_OR_RETURN(, player < MAX_PLAYERS, "Bad player (%d)", player);
-	syncDebug("addPower%d %"PRId64"+=%d", player, asPower[player].currentPower, quantity);
+	syncDebug("addPower%d %" PRId64"+=%d", player, asPower[player].currentPower, quantity);
 	asPower[player].currentPower += quantity*FP_ONE;
 	CLIP(asPower[player].currentPower, 0, MAX_POWER*FP_ONE);
 }
@@ -237,7 +237,7 @@ static int64_t updateExtractedPower(STRUCTURE *psBuilding)
 		}
 		// include modifier as a %
 		extractedPoints = modifier * EXTRACT_POINTS * FP_ONE / (100 * GAME_UPDATES_PER_SEC);
-		syncDebug("updateExtractedPower%d = %"PRId64"", psBuilding->player, extractedPoints);
+		syncDebug("updateExtractedPower%d = %" PRId64"", psBuilding->player, extractedPoints);
 	}
 	ASSERT(extractedPoints >= 0, "extracted negative amount of power");
 	return extractedPoints;
@@ -274,7 +274,7 @@ void updatePlayerPower(UDWORD player)
 			updateCurrentPower((POWER_GEN *)psStruct->pFunctionality, player);
 		}
 	}
-	syncDebug("updatePlayerPower%u %"PRId64"->%"PRId64"", player, powerBefore, asPower[player].currentPower);
+	syncDebug("updatePlayerPower%u %" PRId64"->%" PRId64"", player, powerBefore, asPower[player].currentPower);
 
 	syncDebugEconomy(player, '<');
 }
@@ -305,7 +305,7 @@ static void updateCurrentPower(POWER_GEN *psPowerGen, UDWORD player)
 		}
 	}
 
-	syncDebug("updateCurrentPower%d = %"PRId64",%u", player, extractedPower, psPowerGen->multiplier);
+	syncDebug("updateCurrentPower%d = %" PRId64",%u", player, extractedPower, psPowerGen->multiplier);
 
 	asPower[player].currentPower += (extractedPower * psPowerGen->multiplier) / 100;
 	ASSERT(asPower[player].currentPower >= 0, "negative power");
@@ -319,7 +319,7 @@ void setPower(unsigned player, int32_t power)
 {
 	ASSERT(player < MAX_PLAYERS, "Bad player (%u)", player);
 
-	syncDebug("setPower%d %"PRId64"->%d", player, asPower[player].currentPower, power);
+	syncDebug("setPower%d %" PRId64"->%d", player, asPower[player].currentPower, power);
 	asPower[player].currentPower = power*FP_ONE;
 	ASSERT(asPower[player].currentPower >= 0, "negative power");
 }
@@ -328,7 +328,7 @@ void setPrecisePower(unsigned player, int64_t power)
 {
 	ASSERT(player < MAX_PLAYERS, "Bad player (%u)", player);
 
-	syncDebug("setPower%d %"PRId64"->%"PRId64"", player, asPower[player].currentPower, power);
+	syncDebug("setPower%d %" PRId64"->%" PRId64"", player, asPower[player].currentPower, power);
 	asPower[player].currentPower = power;
 	ASSERT(asPower[player].currentPower >= 0, "negative power");
 }
@@ -372,9 +372,9 @@ bool requestPrecisePowerFor(STRUCTURE *psStruct, int64_t amount)
 		// you can have it
 		asPower[psStruct->player].currentPower -= amount;
 		delPowerRequest(psStruct);
-		syncDebug("requestPrecisePowerFor%d,%u amount%"PRId64"", psStruct->player, psStruct->id, amount);
+		syncDebug("requestPrecisePowerFor%d,%u amount%" PRId64"", psStruct->player, psStruct->id, amount);
 		return true;
 	}
-	syncDebug("requestPrecisePowerFor%d,%u wait,amount%"PRId64"", psStruct->player, psStruct->id, amount);
+	syncDebug("requestPrecisePowerFor%d,%u wait,amount%" PRId64"", psStruct->player, psStruct->id, amount);
 	return false;  // Not enough power in the queue.
 }
