@@ -201,8 +201,9 @@ void recvOptions(NETQUEUE queue)
 	setCurrentMap(NULL, 42);
 	rebuildSearchPath(mod_multiplay, true);	// MUST rebuild search path for the new maps we just got!
 	buildMapList();
+	LEVEL_DATASET *mapData = levFindDataSet(game.map, &game.hash);
 	// See if we have the map or not
-	if (levFindDataSet(game.map, &game.hash) == NULL)
+	if (mapData == NULL)
 	{
 		uint32_t player = selectedPlayer;
 
@@ -216,6 +217,14 @@ void recvOptions(NETQUEUE queue)
 	}
 	else
 	{
+		if (CheckForMod(mapData->realFileName))
+		{
+			char buf[256];
+			ssprintf(buf, "Warning, this is a map-mod, it could alter normal gameplay.");
+			addConsoleMessage(buf,  DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
+			game.isMapMod = true;	// add alert button
+		}
+//		LEVEL_DATASET *mapData = levFindDataSet(game.map, &game.hash);
 		loadMapPreview(false);
 	}
 }

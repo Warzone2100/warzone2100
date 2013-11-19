@@ -46,6 +46,7 @@ struct MULTIPLAYERGAME
 	uint8_t		alliance;					// no/yes/AIs vs Humans
 	uint8_t		skDiff[MAX_PLAYERS];		// skirmish game difficulty settings. 0x0=OFF 0xff=HUMAN
 	bool		mapHasScavengers;
+	bool		isMapMod;					// if a map has mods
 };
 
 struct MULTISTRUCTLIMITS

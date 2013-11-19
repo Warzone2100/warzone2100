@@ -1712,6 +1712,16 @@ bool recvMapFileData(NETQUEUE queue)
 		{
 			return false;
 		}
+
+		LEVEL_DATASET *mapData = levFindDataSet(game.map, &game.hash);
+		if (CheckForMod(mapData->realFileName))
+		{
+			char buf[256];
+			ssprintf(buf, "Warning, this is a map-mod, it could alter normal gameplay.");
+			addConsoleMessage(buf,  DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
+			game.isMapMod = true;
+			widgReveal(psWScreen, MULTIOP_MAP_MOD);
+		}
 		loadMapPreview(false);
 		return true;
 	}
