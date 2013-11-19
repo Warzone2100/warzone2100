@@ -1123,8 +1123,7 @@ static void moveCalcDroidSlide(DROID *psDroid, int *pmx, int *pmy)
 		{
 			if (((DROID *)psObj)->droidType == DROID_TRANSPORTER || ((DROID *)psObj)->droidType == DROID_SUPERTRANSPORTER)
 			{
-				// ignore transporters in campaign
-				if (!bMultiPlayer)
+				// ignore transporters
 				continue;
 			}
 			if (!bLegs && ((DROID *)psObj)->droidType == DROID_PERSON)
@@ -1884,15 +1883,10 @@ static void moveUpdateVtolModel(DROID *psDroid, SDWORD speed, uint16_t direction
 
 	moveGetDroidPosDiffs( psDroid, &dx, &dy );
 
-	// set slide blocking tile for map edge
-	// and in MP, try not to have transports cluster together as much
-	if (((psDroid->droidType != DROID_TRANSPORTER && psDroid->droidType != DROID_SUPERTRANSPORTER))|| bMultiPlayer)
+	/* set slide blocking tile for map edge */
+	if ( psDroid->droidType != DROID_TRANSPORTER && psDroid->droidType != DROID_SUPERTRANSPORTER)
 	{
 		moveCalcBlockingSlide(psDroid, &dx, &dy, direction, &slideDir);
-		if (bMultiPlayer)
-		{
-			moveCalcDroidSlide(psDroid, &dx, &dy);
-		}
 	}
 
 	moveUpdateDroidPos( psDroid, dx, dy );
