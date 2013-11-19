@@ -1123,8 +1123,7 @@ static void moveCalcDroidSlide(DROID *psDroid, int *pmx, int *pmy)
 		{
 			if (((DROID *)psObj)->droidType == DROID_TRANSPORTER || ((DROID *)psObj)->droidType == DROID_SUPERTRANSPORTER)
 			{
-				// ignore transporters in campaign
-				if (!bMultiPlayer)
+				// ignore transporters
 				continue;
 			}
 			if (!bLegs && ((DROID *)psObj)->droidType == DROID_PERSON)
@@ -1191,15 +1190,12 @@ static void moveCalcDroidSlide(DROID *psDroid, int *pmx, int *pmy)
 				if (psObst->type == OBJ_DROID)
 				{
 					DROID *psShuffleDroid = (DROID *)psObst;
-					// if we are a VTOL, and 'ground unit' isn't, then don't bother moving them
-					if ((isVtolDroid(psDroid) && isVtolDroid(psShuffleDroid)) || !isVtolDroid(psDroid))
+
+					if (aiCheckAlliances(psObst->player, psDroid->player)
+					    && psShuffleDroid->action != DACTION_WAITDURINGREARM
+					    && psShuffleDroid->sMove.Status == MOVEINACTIVE)
 					{
-						if (aiCheckAlliances(psObst->player, psDroid->player)
-							&& psShuffleDroid->action != DACTION_WAITDURINGREARM
-							&& psShuffleDroid->sMove.Status == MOVEINACTIVE)
-						{
-							moveShuffleDroid(psShuffleDroid, psDroid->sMove.target - removeZ(psDroid->pos));
-						}
+						moveShuffleDroid(psShuffleDroid, psDroid->sMove.target - removeZ(psDroid->pos));
 					}
 				}
 			}
@@ -1208,11 +1204,8 @@ static void moveCalcDroidSlide(DROID *psDroid, int *pmx, int *pmy)
 
 	if (psObst != NULL)
 	{
-		// Try to slide round it (unless we are a VTOL, and it isn't another VTOL (still trying to prevent clustering)
-		if ((isVtolDroid(psDroid) && isVtolDroid((DROID *)psObst)) || !isVtolDroid(psDroid))
-		{
-			moveCalcSlideVector(psDroid, psObst->pos.x, psObst->pos.y, pmx, pmy);
-		}
+		// Try to slide round it
+		moveCalcSlideVector(psDroid, psObst->pos.x, psObst->pos.y, pmx, pmy);
 	}
 	CHECK_DROID(psDroid);
 }
@@ -1890,15 +1883,10 @@ static void moveUpdateVtolModel(DROID *psDroid, SDWORD speed, uint16_t direction
 
 	moveGetDroidPosDiffs( psDroid, &dx, &dy );
 
-	// set slide blocking tile for map edge
-	// and in MP, try not to have transports cluster together as much
-	if (((psDroid->droidType != DROID_TRANSPORTER && psDroid->droidType != DROID_SUPERTRANSPORTER))|| bMultiPlayer)
+	/* set slide blocking tile for map edge */
+	if ( psDroid->droidType != DROID_TRANSPORTER && psDroid->droidType != DROID_SUPERTRANSPORTER)
 	{
 		moveCalcBlockingSlide(psDroid, &dx, &dy, direction, &slideDir);
-		if (bMultiPlayer)
-		{
-			moveCalcDroidSlide(psDroid, &dx, &dy);
-		}
 	}
 
 	moveUpdateDroidPos( psDroid, dx, dy );

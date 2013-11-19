@@ -162,7 +162,7 @@ int32_t droidDamage(DROID *psDroid, unsigned damage, WEAPON_CLASS weaponClass, W
 	CHECK_DROID(psDroid);
 
 	// VTOLs (and transporters in MP) on the ground take triple damage
-	if ((isVtolDroid(psDroid) || (((psDroid->droidType == DROID_TRANSPORTER) || (psDroid->droidType == DROID_SUPERTRANSPORTER)) && bMultiPlayer)) && (psDroid->sMove.Status == MOVEINACTIVE))
+	if (isVtolDroid(psDroid) || ((psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER) && bMultiPlayer) && (psDroid->sMove.Status == MOVEINACTIVE))
 	{
 		damage *= 3;
 	}
