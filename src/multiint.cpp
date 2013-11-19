@@ -3941,7 +3941,14 @@ bool startMultiOptions(bool bReenter)
 				addConsoleMessage(buf, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
 			}
 		}
-		ssprintf(buf, _("Press the start hosting button to begin hosting a game."));
+		if (challengeActive)
+		{
+			ssprintf(buf, _("Hit the ready box to begin your challenge!"));
+		}
+		else
+		{
+			ssprintf(buf, _("Press the start hosting button to begin hosting a game."));
+		}
 		addConsoleMessage(buf, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
 	}
 
