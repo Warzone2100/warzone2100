@@ -1037,7 +1037,7 @@ static void addGames(void)
 				widgAddButton(psWScreen, &sButInit);
 			}
 		}
-		if (added < gcount)
+		if (!added)
 		{
 			sButInit = W_BUTINIT();
 			sButInit.formID = FRONTEND_BOTFORM;
