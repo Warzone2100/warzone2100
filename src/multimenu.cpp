@@ -25,7 +25,6 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/wzapp.h"
 #include "lib/framework/strres.h"
-#include "lib/framework/physfs_ext.h"
 #include "lib/widget/button.h"
 #include "lib/widget/widget.h"
 
@@ -275,16 +274,7 @@ void displayRequestOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIEL
 	drawBlueBox(x,y,psWidget->width,psWidget->height);	//draw box
 
 	iV_SetFont(font_regular);					// font
-
-	if (mapData && CheckForMod(mapData->realFileName))
-	{
-		iV_SetTextColour(WZCOL_RED);
-	}
-	else
-	{
-		iV_SetTextColour(WZCOL_TEXT_BRIGHT);
-	}
-
+	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
 
 	while(iV_GetTextWidth(butString) > psWidget->width -10 )
 	{
@@ -295,7 +285,6 @@ void displayRequestOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIEL
 
 	if (mapData != NULL)
 	{
-
 		// Display map hash, so we can see the difference between identically named maps.
 		Sha256 hash = mapData->realFileHash;  // levGetFileHash can be slightly expensive.
 		static uint32_t lastHashTime = 0;

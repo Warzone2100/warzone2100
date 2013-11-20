@@ -456,7 +456,7 @@ static MapFileList listMapFiles()
 			continue;
 		}
 
-		std::string realFileName = std::string("maps/")  + *i;//+ std::string(PHYSFS_getDirSeparator())
+		std::string realFileName = std::string("maps/") + *i;
 		ret.push_back(realFileName);
 	}
 	PHYSFS_freeList(subdirlist);
@@ -513,39 +513,6 @@ static MapFileList listMapFiles()
 	return filtered;
 }
 
-// Map processing
-struct WZmaps
-{
-	std::string MapName;
-	bool isMapMod;
-};
-
-std::vector<struct WZmaps> WZ_Maps;
-
-struct FindMap
-{
-	const std::string map;
-	FindMap(const std::string& name) : map(name) {};
-	bool operator()(const WZmaps& wzm) const { return wzm.MapName == map; };
-};
-
-bool CheckForMod(char *theMap)
-{
-	std::vector<struct WZmaps>::iterator it;
-	if (theMap == NULL)
-	{
-		return false;
-	}
-	it = std::find_if(WZ_Maps.begin(), WZ_Maps.end(), FindMap(theMap));
-	if(it != WZ_Maps.end())
-	{
-		return it->isMapMod;
-	}
-	debug(LOG_ERROR, "Couldn't find map %s", theMap);
-
-	return false;
-}
-
 
 bool buildMapList()
 {
@@ -554,20 +521,16 @@ bool buildMapList()
 		return false;
 	}
 	loadLevFile("addon.lev", mod_multiplay, false, NULL);
-	WZ_Maps.clear();
+
 	MapFileList realFileNames = listMapFiles();
 	for (MapFileList::iterator realFileName = realFileNames.begin(); realFileName != realFileNames.end(); ++realFileName)
 	{
-		bool mapmod = false;
-		struct WZmaps CurrentMap;
 		std::string realFilePathAndName = PHYSFS_getRealDir(realFileName->c_str()) + *realFileName;
-
 		PHYSFS_addToSearchPath(realFilePathAndName.c_str(), PHYSFS_APPEND);
 
 		char **filelist = PHYSFS_enumerateFiles("");
 		for (char **file = filelist; *file != NULL; ++file)
 		{
-			std::string checkfile = *file;
 			size_t len = strlen(*file);
 			if (len > 10 && !strcasecmp(*file + (len - 10), ".addon.lev"))  // Do not add addon.lev again
 			{
@@ -578,44 +541,11 @@ bool buildMapList()
 			{
 				loadLevFile(*file, mod_multiplay, true, realFileName->c_str());
 			}
+
 		}
 		PHYSFS_freeList(filelist);
 
-		if (PHYSFS_removeFromSearchPath(realFilePathAndName.c_str()) == 0)
-		{
-			debug(LOG_ERROR, "Could not unmount %s",PHYSFS_getLastError());
-		}
-		// check what kind of map it is
-		if (!PHYSFS_mount(realFilePathAndName.c_str(),"WZMap",PHYSFS_APPEND))
-		{
-			debug(LOG_FATAL,"Could not mount %s, game will exit.", realFilePathAndName.c_str());
-			exit(-1);
-		}
-
-		filelist = PHYSFS_enumerateFiles("WZMap");
-		for (char **file = filelist; *file != NULL; ++file)
-		{
-			std::string checkfile = *file;
-			if (checkfile.compare("wrf")==0 || checkfile.compare("stats")==0 ||checkfile.compare("components")==0
-				|| checkfile.compare("anims")==0 || checkfile.compare("effects")==0 ||checkfile.compare("messages")==0
-				|| checkfile.compare("audio")==0 || checkfile.compare("sequenceaudio")==0 ||checkfile.compare("misc")==0
-				|| checkfile.compare("features")==0 || checkfile.compare("script")==0 ||checkfile.compare("structs")==0
-				|| checkfile.compare("tileset")==0 || checkfile.compare("images")==0 || checkfile.compare("texpages")==0 )
-			{
-				mapmod = true;
-				break;
-			}
-		}
-		PHYSFS_freeList(filelist);
-
-		CurrentMap.MapName = realFileName->c_str();
-		CurrentMap.isMapMod = mapmod;
-		WZ_Maps.push_back(CurrentMap);
-
-		if (PHYSFS_removeFromSearchPath(realFilePathAndName.c_str()) == 0)
-		{
-			debug(LOG_ERROR, "Could not unmount %s",PHYSFS_getLastError());
-		}
+		PHYSFS_removeFromSearchPath(realFilePathAndName.c_str());
 	}
 
 	return true;

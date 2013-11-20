@@ -61,7 +61,6 @@ void registerSearchPath( const char path[], unsigned int priority );
 bool rebuildSearchPath( searchPathMode mode, bool force );
 
 bool buildMapList(void);
-bool CheckForMod(char *theMap);
 
 extern IMAGEFILE	*FrontImages;
 

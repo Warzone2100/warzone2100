@@ -771,7 +771,7 @@ static bool NETsendGAMESTRUCT(Socket* sock, const GAMESTRUCT* ourgamestruct)
 	buffer += sizeof(uint32_t);
 
 	// Copy 32bit large big endian numbers
-	*(uint32_t*)buffer = htonl(ourgamestruct->pureMap);
+	*(uint32_t*)buffer = htonl(ourgamestruct->pureGame);
 	buffer += sizeof(uint32_t);
 
 	// Copy 32bit large big endian numbers
@@ -914,7 +914,7 @@ static bool NETrecvGAMESTRUCT(GAMESTRUCT* ourgamestruct)
 	buffer += sizeof(uint32_t);
 	ourgamestruct->privateGame = ntohl(*(uint32_t*)buffer);
 	buffer += sizeof(uint32_t);
-	ourgamestruct->pureMap = ntohl(*(uint32_t*)buffer);
+	ourgamestruct->pureGame = ntohl(*(uint32_t*)buffer);
 	buffer += sizeof(uint32_t);
 	ourgamestruct->Mods = ntohl(*(uint32_t*)buffer);
 	buffer += sizeof(uint32_t);
@@ -2698,7 +2698,7 @@ bool NEThostGame(const char* SessionName, const char* PlayerName,
 	gamestruct.game_version_major = NETCODE_VERSION_MAJOR;	// Netcode Major version
 	gamestruct.game_version_minor = NETCODE_VERSION_MINOR;	// NetCode Minor version
 //	gamestruct.privateGame = 0;								// if true, it is a private game
-	gamestruct.pureMap = game.isMapMod;								// If map-mod...
+	gamestruct.pureGame = 0;									// NO mods allowed if true
 	gamestruct.Mods = 0;										// number of concatenated mods?
 	gamestruct.gameId  = 0;
 	gamestruct.limits = 0x0;									// used for limits
