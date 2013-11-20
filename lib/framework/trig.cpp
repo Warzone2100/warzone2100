@@ -73,15 +73,15 @@ bool trigInitialise(void)
 	{
 		uint64_t lower = test*test;
 		uint64_t upper = (test + 1)*(test + 1) - 1;
-		ASSERT((uint32_t)iSqrt(lower) == test, "Sanity check failed, sqrt(%"PRIu64") gave %"PRIu32" instead of %"PRIu64"!", lower, i64Sqrt(lower), test);
-		ASSERT((uint32_t)iSqrt(upper) == test, "Sanity check failed, sqrt(%"PRIu64") gave %"PRIu32" instead of %"PRIu64"!", upper, i64Sqrt(upper), test);
+		ASSERT((uint32_t)iSqrt(lower) == test, "Sanity check failed, sqrt(%" PRIu64") gave %" PRIu32" instead of %" PRIu64"!", lower, i64Sqrt(lower), test);
+		ASSERT((uint32_t)iSqrt(upper) == test, "Sanity check failed, sqrt(%" PRIu64") gave %" PRIu32" instead of %" PRIu64"!", upper, i64Sqrt(upper), test);
 	}
 	for (test = 0xFFFE0000; test != 0x00020000; test = (test + 1)&0xFFFFFFFF)
 	{
 		uint64_t lower = test*test;
 		uint64_t upper = (test + 1)*(test + 1) - 1;
-		ASSERT((uint32_t)i64Sqrt(lower) == test, "Sanity check failed, sqrt(%"PRIu64") gave %"PRIu32" instead of %"PRIu64"!", lower, i64Sqrt(lower), test);
-		ASSERT((uint32_t)i64Sqrt(upper) == test, "Sanity check failed, sqrt(%"PRIu64") gave %"PRIu32" instead of %"PRIu64"!", upper, i64Sqrt(upper), test);
+		ASSERT((uint32_t)i64Sqrt(lower) == test, "Sanity check failed, sqrt(%" PRIu64") gave %" PRIu32" instead of %" PRIu64"!", lower, i64Sqrt(lower), test);
+		ASSERT((uint32_t)i64Sqrt(upper) == test, "Sanity check failed, sqrt(%" PRIu64") gave %" PRIu32" instead of %" PRIu64"!", upper, i64Sqrt(upper), test);
 	}
 
 	return true;
@@ -174,7 +174,7 @@ int32_t i64Sqrt(uint64_t n)
 	r -= (int64_t)(r*r - n) > 0;   // If we rounded up, subtract 1.
 
 	// Check that we got the right result.
-	ASSERT((int64_t)(r*r - n) <= 0 && (int64_t)((r + 1)*(r + 1) - n) > 0, "Too badly broken sqrt function, i64Sqrt(%"PRIu64") = %"PRIu64".", n, r);
+	ASSERT((int64_t)(r*r - n) <= 0 && (int64_t)((r + 1)*(r + 1) - n) > 0, "Too badly broken sqrt function, i64Sqrt(%" PRIu64") = %" PRIu64".", n, r);
 
 	return r;
 }

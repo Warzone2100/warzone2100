@@ -1912,7 +1912,7 @@ static void intProcessObject(UDWORD id)
 		{
 			statButID = id;
 		}
-		if (psObj->selected)
+		if (psObj && psObj->selected)
 		{
 			psObj->selected = false;
 			widgSetButtonState(psWScreen, statButID, 0);
@@ -2032,6 +2032,7 @@ static void intProcessObject(UDWORD id)
 		{
 			/* Find the object that the stats ID refers to */
 			psObj = intGetObject(id);
+			ASSERT_OR_RETURN(, psObj, "Missing referred to object id %u", id);
 
 			intResetWindows(psObj);
 

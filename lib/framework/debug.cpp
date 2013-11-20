@@ -182,7 +182,7 @@ void debug_callback_file( void ** data, const char * outputBuffer )
 	}
 }
 
-
+char WZ_DBGFile[PATH_MAX];		//Used to save path of the created log file
 /**
  * Setup the file callback
  *
@@ -202,7 +202,7 @@ bool debug_callback_file_init(void **data)
 		fprintf(stderr, "Could not open %s for appending!\n", WZDebugfilename);
 		return false;
 	}
-
+	snprintf(WZ_DBGFile, sizeof(WZ_DBGFile), "%s", WZDebugfilename);
 	setbuf(logfile, NULL);
 	fprintf(logfile, "\n--- Starting log [%s]---\n", WZDebugfilename);
 	*data = logfile;
@@ -467,7 +467,7 @@ void _debug( int line, code_part part, const char *function, const char *str, ..
 #if defined(WZ_OS_WIN)
 			char wbuf[512];
 			ssprintf(wbuf, "%s\n\nPlease check the file (%s) in your configuration directory for more details. \
-				\nDo not forget to upload the %s file, WZdebuginfo.txt and the warzone2100.rpt files in your bug reports at http://developer.wz2100.net/newticket!", useInputBuffer1 ? inputBuffer[1] : inputBuffer[0], WZDebugfilename, WZDebugfilename);
+				\nDo not forget to upload the %s file, WZdebuginfo.txt and the warzone2100.rpt files in your bug reports at http://developer.wz2100.net/newticket!", useInputBuffer1 ? inputBuffer[1] : inputBuffer[0], WZ_DBGFile, WZ_DBGFile);
 			MessageBoxA( NULL, wbuf, "Warzone has terminated unexpectedly", MB_OK|MB_ICONERROR);
 #elif defined(WZ_OS_MAC)
 			int clickedIndex = \

@@ -328,6 +328,7 @@ void NET_InitPlayers()
 	for (i = 0; i < MAX_CONNECTED_PLAYERS; ++i)
 	{
 		NET_InitPlayer(i, true);
+		NetPlay.players[i].name[0] = '\0';
 		NETinitQueue(NETnetQueue(i));
 	}
 	NETinitQueue(NETbroadcastQueue());
@@ -1567,9 +1568,9 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 
 			NETbeginDecode(playerQueue, NET_PLAYER_INFO);
 				NETuint32_t(&indexLen);
-				if (indexLen >= MAX_PLAYERS || (playerQueue.index != NET_HOST_ONLY && indexLen > 1))
+				if (indexLen > MAX_PLAYERS || (playerQueue.index != NET_HOST_ONLY && indexLen > 1))
 				{
-					debug(LOG_ERROR, "MSG_PLAYER_INFO: Bad number of players updated");
+					debug(LOG_ERROR, "MSG_PLAYER_INFO: Bad number of players updated: %u", indexLen);
 					NETend();
 					break;
 				}
