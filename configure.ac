@@ -1,5 +1,5 @@
 AC_PREREQ([2.56])
-AC_INIT([Warzone 2100],[3.1.0],[http://wz2100.net/],[warzone2100])
+AC_INIT([Warzone 2100],[3.1git],[http://wz2100.net/],[warzone2100])
 
 AM_INIT_AUTOMAKE([1.11 tar-ustar no-dist-gzip dist-xz])
 
@@ -257,7 +257,7 @@ AS_IF([test "x$enable_sound" != "xyes"],[
 # Add later for stricter checking: -Wextra -Wmissing-declarations -Wstrict-prototypes
 AC_ARG_ENABLE([debug],
 	AS_HELP_STRING([--enable-debug[=yes/relaxed/profile/debugprofile/optimised/no]],[Compile debug version [[yes]]]),
-	[ enable_debug=${enableval} ], [ enable_debug=no ])
+	[ enable_debug=${enableval} ], [ enable_debug=yes ])
 AC_MSG_CHECKING([whether to compile in debug mode])
 AC_MSG_RESULT([${enable_debug}])
 
