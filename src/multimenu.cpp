@@ -25,6 +25,7 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/wzapp.h"
 #include "lib/framework/strres.h"
+#include "lib/framework/physfs_ext.h"
 #include "lib/widget/button.h"
 #include "lib/widget/widget.h"
 
@@ -274,7 +275,16 @@ void displayRequestOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIEL
 	drawBlueBox(x,y,psWidget->width,psWidget->height);	//draw box
 
 	iV_SetFont(font_regular);					// font
-	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
+
+	if (mapData && CheckForMod(mapData->realFileName))
+	{
+		iV_SetTextColour(WZCOL_RED);
+	}
+	else
+	{
+		iV_SetTextColour(WZCOL_TEXT_BRIGHT);
+	}
+
 
 	while(iV_GetTextWidth(butString) > psWidget->width -10 )
 	{
