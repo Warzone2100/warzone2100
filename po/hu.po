@@ -6,10 +6,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone 2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2013-11-17 16:23+0100\n"
-"PO-Revision-Date: 2023-11-14 20:18+0100\n"
+"POT-Creation-Date: 2013-11-20 19:01+0100\n"
+"PO-Revision-Date: 2023-11-17 20:18+0100\n"
 "Last-Translator: Kálmán „KAMI” Szalai <kami911@gmail.com>\n"
-"Language-Team: Magyar (Hungary) <tamasm78@invitel.hu>\n"
+"Language-Team: Magyar (Hungary) Mészáros Tamás <tamasm78@invitel.hu>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -12951,7 +12951,7 @@ msgstr "Mentés"
 
 #: src/hci.cpp:3552
 msgid "Save Map File"
-msgstr "Térképfájl mentés"
+msgstr "Térkép fájl mentés"
 
 #: src/hci.cpp:3564
 msgid "New"
@@ -14089,7 +14089,7 @@ msgstr "Mentett játék betöltése"
 msgid "GAME SAVED :"
 msgstr "JÁTÉK MENTVE:"
 
-#: src/move.cpp:2290
+#: src/move.cpp:2278
 #, c-format
 msgid "You found %u power in an oil drum."
 msgstr "%u energiát találtál egy olajkúton."
@@ -14528,58 +14528,62 @@ msgstr "Dekódolás folyamatban....."
 msgid "UPnP detection disabled by user. Autoconfig of port 2100 will not happen."
 msgstr "UPnP vizsgálatot kikapcsolta a felhasználó. Automatikus beállítás a 2100 portra nem történt meg."
 
-#: src/multiint.cpp:3944
+#: src/multiint.cpp:3946
+msgid "Hit the ready box to begin your challenge!"
+msgstr ""
+
+#: src/multiint.cpp:3950
 msgid "Press the start hosting button to begin hosting a game."
 msgstr "Nyomd meg a távoli start gombot a távoli játék indításához "
 
-#: src/multiint.cpp:3985
+#: src/multiint.cpp:3992
 msgid "Can't connect to lobby server!"
 msgstr "Nem tud kapcsolódni a kiszolgáló szerverhez!"
 
-#: src/multiint.cpp:4077
+#: src/multiint.cpp:4084
 #, c-format
 msgid "Mods: %s"
 msgstr "Mód: %s"
 
-#: src/multiint.cpp:4084
+#: src/multiint.cpp:4091
 msgid "Mods: None!"
 msgstr "Mód: Nincs!"
 
-#: src/multiint.cpp:4094
+#: src/multiint.cpp:4101
 #, c-format
 msgid "Version: %s"
 msgstr "Verzió: %s"
 
-#: src/multiint.cpp:4145
+#: src/multiint.cpp:4152
 #, c-format
 msgid "Click to take player slot %d"
 msgstr "Kattintson a játékosok betöltéséhez %d"
 
-#: src/multiint.cpp:4154
-#: src/multiint.cpp:4356
+#: src/multiint.cpp:4161
+#: src/multiint.cpp:4363
 msgid "Open"
 msgstr "Megnyitás"
 
-#: src/multiint.cpp:4154
-#: src/multiint.cpp:4357
+#: src/multiint.cpp:4161
+#: src/multiint.cpp:4364
 msgid "Closed"
 msgstr "Bezárás"
 
-#: src/multiint.cpp:4204
+#: src/multiint.cpp:4211
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr "Térkép küldés: %d%%"
 
-#: src/multiint.cpp:4212
+#: src/multiint.cpp:4219
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr "Térkép: %d%% letöltött"
 
-#: src/multiint.cpp:4238
+#: src/multiint.cpp:4245
 msgid "HOST"
 msgstr "GAZDAGÉP"
 
-#: src/multiint.cpp:4245
+#: src/multiint.cpp:4252
 #: src/multimenu.cpp:805
 msgid "Ping"
 msgstr "Pingelés"

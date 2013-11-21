@@ -60,6 +60,7 @@ void registerSearchPath( const char path[], unsigned int priority );
 bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map = NULL);
 
 bool buildMapList(void);
+bool CheckForMod(char *theMap);
 
 bool loadLevFile(const char* filename, searchPathMode datadir, bool ignoreWrf, char const *realFileName);
 

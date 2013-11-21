@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2013-11-04 14:36+0100\n"
+"POT-Creation-Date: 2013-11-20 19:01+0100\n"
 "PO-Revision-Date: 2011-09-11 13:13+0100\n"
 "Last-Translator: Cyp <Cyp>\n"
 "Language-Team: Dansk <da@li.org>\n"
@@ -12131,46 +12131,46 @@ msgid "OpenGL 1.2 + VBO + TEC is not supported by your system. The game requires
 msgstr ""
 
 #: lib/netplay/netplay.cpp:218
-#: lib/netplay/netplay.cpp:1118
+#: lib/netplay/netplay.cpp:1119
 msgid "Enter password here"
 msgstr "Indtast kodeord her"
 
-#: lib/netplay/netplay.cpp:984
+#: lib/netplay/netplay.cpp:985
 msgid ""
 "Your router doesn't support UPnP, you must manually configure your router & firewall to\n"
 "open port 2100 before you can host a game."
 msgstr ""
 
-#: lib/netplay/netplay.cpp:998
+#: lib/netplay/netplay.cpp:999
 msgid ""
 "No UPnP device was found. You must manually configure your router & firewall to\n"
 "open port 2100 before you can host a game."
 msgstr ""
 
-#: lib/netplay/netplay.cpp:1026
+#: lib/netplay/netplay.cpp:1027
 #, fuzzy, c-format
 msgid "Could not open require port (%s) on  (%s)"
 msgstr "Kunne ikke gemme spillet!"
 
-#: lib/netplay/netplay.cpp:1030
+#: lib/netplay/netplay.cpp:1031
 msgid ""
 "You must manually configure your router & firewall to\n"
 " open port 2100 before you can host a game."
 msgstr ""
 
-#: lib/netplay/netplay.cpp:1040
+#: lib/netplay/netplay.cpp:1041
 #, c-format
 msgid ""
 "Game configured port (%s) correctly on (%s)\n"
 "Your external IP is %s"
 msgstr ""
 
-#: lib/netplay/netplay.cpp:2175
+#: lib/netplay/netplay.cpp:2176
 #, fuzzy, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr "Kunne ikke gemme spillet!"
 
-#: lib/netplay/netplay.cpp:2197
+#: lib/netplay/netplay.cpp:2198
 #, c-format
 msgid ""
 "Error connecting to the lobby server: %s.\n"
@@ -12179,7 +12179,7 @@ msgid ""
 " or to forward the port to your system."
 msgstr ""
 
-#: lib/netplay/netplay.cpp:2870
+#: lib/netplay/netplay.cpp:2871
 msgid "Failed to get a lobby response!"
 msgstr ""
 
@@ -12230,10 +12230,10 @@ msgstr "Gem spil"
 
 #: src/challenge.cpp:222
 #: src/hci.cpp:915
-#: src/hci.cpp:3378
-#: src/hci.cpp:3501
-#: src/hci.cpp:3937
-#: src/hci.cpp:4971
+#: src/hci.cpp:3379
+#: src/hci.cpp:3502
+#: src/hci.cpp:3938
+#: src/hci.cpp:4972
 #: src/intelmap.cpp:530
 #: src/intorder.cpp:727
 #: src/loadsave.cpp:250
@@ -12562,12 +12562,12 @@ msgid "Water Speed"
 msgstr "Vandhastighed"
 
 #: src/design.cpp:2003
-#: src/hci.cpp:4994
+#: src/hci.cpp:4995
 msgid "Tab Scroll left"
 msgstr ""
 
 #: src/design.cpp:2018
-#: src/hci.cpp:5009
+#: src/hci.cpp:5010
 msgid "Tab Scroll right"
 msgstr ""
 
@@ -12592,7 +12592,7 @@ msgid "Player dropped"
 msgstr "Spiller mistet"
 
 #: src/display3d.cpp:666
-#: src/multiint.cpp:2374
+#: src/multiint.cpp:2375
 msgid "Waiting for other players"
 msgstr "Venter på andre spillere"
 
@@ -12712,7 +12712,7 @@ msgid "Tutorial"
 msgstr "Gennemgang"
 
 #: src/frontend.cpp:111
-#: src/hci.cpp:3487
+#: src/hci.cpp:3488
 msgid "Options"
 msgstr "Indstillinger"
 
@@ -12816,7 +12816,7 @@ msgid "TCP port 2100 must be opened in your firewall or router to host games!"
 msgstr ""
 
 #: src/frontend.cpp:464
-#: src/multiint.cpp:1482
+#: src/multiint.cpp:1483
 msgid "OPTIONS"
 msgstr "TILVALG"
 
@@ -13108,7 +13108,7 @@ msgid "GAME OPTIONS"
 msgstr "SPIL INDSTILLINGER"
 
 #: src/frontend.cpp:1482
-#: src/multiint.cpp:2643
+#: src/multiint.cpp:2644
 msgid "Mod: "
 msgstr ""
 
@@ -13143,147 +13143,147 @@ msgstr "Spiller %u snyder (debugmenu) sig selv til en ny droid: %s."
 msgid "Player %u is cheating (debug menu) him/herself a new droid."
 msgstr "Spiller %u snyder (debugmenu) sig selv til en ny droid: %s."
 
-#: src/hci.cpp:3298
+#: src/hci.cpp:3299
 msgid "Commanders (F6)"
 msgstr "Kommandører (F6)"
 
-#: src/hci.cpp:3311
+#: src/hci.cpp:3312
 #, fuzzy
 msgid "Intelligence Display (F5)"
 msgstr "Kommando Pult"
 
-#: src/hci.cpp:3324
+#: src/hci.cpp:3325
 msgid "Manufacture (F1)"
 msgstr "Fabrikere (F1)"
 
-#: src/hci.cpp:3337
+#: src/hci.cpp:3338
 msgid "Design (F4)"
 msgstr "Design (F4)"
 
-#: src/hci.cpp:3350
+#: src/hci.cpp:3351
 msgid "Research (F2)"
 msgstr "Forskning (F2)"
 
-#: src/hci.cpp:3363
+#: src/hci.cpp:3364
 msgid "Build (F3)"
 msgstr "Konstruktion (F3)"
 
-#: src/hci.cpp:3434
-#: src/multiint.cpp:1588
+#: src/hci.cpp:3435
+#: src/multiint.cpp:1589
 #: src/multimenu.cpp:798
 msgid "Power"
 msgstr "Kraft"
 
-#: src/hci.cpp:3525
+#: src/hci.cpp:3526
 msgid "Map:"
 msgstr "Kort:"
 
-#: src/hci.cpp:3538
+#: src/hci.cpp:3539
 msgid "Load"
 msgstr "Indlæs"
 
-#: src/hci.cpp:3539
+#: src/hci.cpp:3540
 msgid "Load Map File"
 msgstr "Indlæs kortfil"
 
-#: src/hci.cpp:3550
+#: src/hci.cpp:3551
 msgid "Save"
 msgstr "Gem"
 
-#: src/hci.cpp:3551
+#: src/hci.cpp:3552
 msgid "Save Map File"
 msgstr "Gem kortfil"
 
-#: src/hci.cpp:3563
+#: src/hci.cpp:3564
 msgid "New"
 msgstr "Nyt"
 
-#: src/hci.cpp:3564
+#: src/hci.cpp:3565
 msgid "New Blank Map"
 msgstr "Nyt tomt kort"
 
-#: src/hci.cpp:3612
+#: src/hci.cpp:3613
 msgid "Tile"
 msgstr "Klinke"
 
-#: src/hci.cpp:3613
+#: src/hci.cpp:3614
 msgid "Place tiles on map"
 msgstr "Placer klinker på kortet"
 
-#: src/hci.cpp:3626
+#: src/hci.cpp:3627
 msgid "Unit"
 msgstr "Enhed"
 
-#: src/hci.cpp:3627
+#: src/hci.cpp:3628
 msgid "Place Unit on map"
 msgstr "Placer enhed på kortet"
 
-#: src/hci.cpp:3635
+#: src/hci.cpp:3636
 msgid "Struct"
 msgstr ""
 
-#: src/hci.cpp:3636
+#: src/hci.cpp:3637
 msgid "Place Structures on map"
 msgstr "Placer bygninger på kortet"
 
-#: src/hci.cpp:3644
+#: src/hci.cpp:3645
 msgid "Feat"
 msgstr ""
 
-#: src/hci.cpp:3645
+#: src/hci.cpp:3646
 #, fuzzy
 msgid "Place Features on map"
 msgstr "Placer Features på kortet"
 
-#: src/hci.cpp:3659
+#: src/hci.cpp:3660
 msgid "Pause"
 msgstr "Pause"
 
-#: src/hci.cpp:3660
+#: src/hci.cpp:3661
 msgid "Pause or unpause the game"
 msgstr "Pause eller fortsætte spillet"
 
-#: src/hci.cpp:3678
+#: src/hci.cpp:3679
 msgid "Align height of all map objects"
 msgstr ""
 
-#: src/hci.cpp:3691
+#: src/hci.cpp:3692
 msgid "Edit"
 msgstr ""
 
-#: src/hci.cpp:3692
+#: src/hci.cpp:3693
 #, fuzzy
 msgid "Start Edit Mode"
 msgstr "Start uden baser"
 
-#: src/hci.cpp:3706
+#: src/hci.cpp:3707
 #: src/ingameop.cpp:113
 #: src/ingameop.cpp:257
 #: src/ingameop.cpp:261
 msgid "Quit"
 msgstr "Afslut"
 
-#: src/hci.cpp:3707
+#: src/hci.cpp:3708
 msgid "Exit Game"
 msgstr "Forlad spil"
 
-#: src/hci.cpp:3733
+#: src/hci.cpp:3734
 msgid "Current Player:"
 msgstr "Nuværende spiller:"
 
-#: src/hci.cpp:4014
+#: src/hci.cpp:4015
 msgid "Progress Bar"
 msgstr "Statuslinje"
 
-#: src/hci.cpp:4896
+#: src/hci.cpp:4897
 msgid "Factory Delivery Point"
 msgstr "Leveringspunkt"
 
-#: src/hci.cpp:4914
+#: src/hci.cpp:4915
 msgid "Loop Production"
 msgstr "Gentag produktion"
 
-#: src/hci.cpp:5224
+#: src/hci.cpp:5225
 msgid "Ally progress"
 msgstr ""
 
@@ -13774,9 +13774,9 @@ msgid "KEY MAPPING"
 msgstr "TASTATUR MAPPING"
 
 #: src/keyedit.cpp:377
-#: src/multiint.cpp:762
-#: src/multiint.cpp:1262
-#: src/multiint.cpp:1674
+#: src/multiint.cpp:763
+#: src/multiint.cpp:1263
+#: src/multiint.cpp:1675
 msgid "Return To Previous Screen"
 msgstr "Tilbage"
 
@@ -14358,7 +14358,7 @@ msgstr "Indlæs gemt spil"
 msgid "GAME SAVED :"
 msgstr "SPIL GEMT :"
 
-#: src/move.cpp:2284
+#: src/move.cpp:2278
 #, c-format
 msgid "You found %u power in an oil drum."
 msgstr ""
@@ -14422,451 +14422,455 @@ msgstr "Hastighed: Mellem"
 msgid "Insane"
 msgstr ""
 
-#: src/multiint.cpp:700
+#: src/multiint.cpp:701
 #: src/multilimit.cpp:190
 msgid "Accept Settings"
 msgstr "Akceptér opsætning"
 
-#: src/multiint.cpp:702
-#: src/multiint.cpp:1317
+#: src/multiint.cpp:703
+#: src/multiint.cpp:1318
 msgid "Cancel"
 msgstr "Annuler"
 
-#: src/multiint.cpp:713
+#: src/multiint.cpp:714
 msgid "IP Address or Machine Name"
 msgstr "IP adressse eller computernavn"
 
-#: src/multiint.cpp:759
+#: src/multiint.cpp:760
 msgid "CONNECTION"
 msgstr "FORBINDELSE"
 
-#: src/multiint.cpp:764
+#: src/multiint.cpp:765
 msgid "Lobby"
 msgstr ""
 
-#: src/multiint.cpp:765
+#: src/multiint.cpp:766
 msgid "IP"
 msgstr "IP"
 
-#: src/multiint.cpp:986
+#: src/multiint.cpp:987
 #, fuzzy
 msgid "[Password required]"
 msgstr "*** kodeord er Unødvendig! ***"
 
-#: src/multiint.cpp:990
+#: src/multiint.cpp:991
 msgid "[No Tanks]"
 msgstr ""
 
-#: src/multiint.cpp:994
+#: src/multiint.cpp:995
 #, fuzzy
 msgid "[No Cyborgs]"
 msgstr "Fremstiller cyborger"
 
-#: src/multiint.cpp:998
+#: src/multiint.cpp:999
 msgid "[No VTOLs]"
 msgstr ""
 
-#: src/multiint.cpp:1002
+#: src/multiint.cpp:1003
 #, c-format
 msgid "Hosted by %s"
 msgstr ""
 
-#: src/multiint.cpp:1006
+#: src/multiint.cpp:1007
 #, c-format
 msgid "Hosted by %s —%s"
 msgstr ""
 
-#: src/multiint.cpp:1028
+#: src/multiint.cpp:1029
 msgid "Can't find any games for your version."
 msgstr ""
 
-#: src/multiint.cpp:1043
+#: src/multiint.cpp:1044
 msgid "No games are available"
 msgstr "Ingen spil er tilgængelige"
 
-#: src/multiint.cpp:1046
+#: src/multiint.cpp:1047
 msgid "Game is full"
 msgstr "Spillet er fuld"
 
-#: src/multiint.cpp:1050
+#: src/multiint.cpp:1051
 msgid "You were kicked!"
 msgstr "Du er blevet smidt ud!"
 
-#: src/multiint.cpp:1053
+#: src/multiint.cpp:1054
 msgid "Wrong Game Version!"
 msgstr "Forkert spilversion!"
 
-#: src/multiint.cpp:1056
+#: src/multiint.cpp:1057
 msgid "You have an incompatible mod."
 msgstr "Du har et inkompatibelt mod."
 
-#: src/multiint.cpp:1060
+#: src/multiint.cpp:1061
 msgid "Host couldn't send file?"
 msgstr "Værten kunne ikke sende en fil?"
 
-#: src/multiint.cpp:1064
+#: src/multiint.cpp:1065
 msgid "Incorrect Password!"
 msgstr "Forkert kodeord!"
 
-#: src/multiint.cpp:1067
+#: src/multiint.cpp:1068
 msgid "Host has dropped connection!"
 msgstr "Værten har slukket forbindelsen!"
 
-#: src/multiint.cpp:1071
+#: src/multiint.cpp:1072
 msgid "Connection Error"
 msgstr "Forbindelsesfejl"
 
-#: src/multiint.cpp:1190
+#: src/multiint.cpp:1191
 msgid "Searching"
 msgstr "Søger"
 
-#: src/multiint.cpp:1259
+#: src/multiint.cpp:1260
 msgid "GAMES"
 msgstr "SPIL"
 
-#: src/multiint.cpp:1267
+#: src/multiint.cpp:1268
 msgid "Refresh Games List"
 msgstr "Opdatér spilliste"
 
-#: src/multiint.cpp:1270
+#: src/multiint.cpp:1271
 #, fuzzy
 msgid "Filter Games List"
 msgstr "Opdatér spilliste"
 
-#: src/multiint.cpp:1297
+#: src/multiint.cpp:1298
 msgid "Enter Password:"
 msgstr "Indtast kodeord:"
 
-#: src/multiint.cpp:1315
+#: src/multiint.cpp:1316
 msgid "OK"
 msgstr "OK"
 
-#: src/multiint.cpp:1436
+#: src/multiint.cpp:1437
 msgid "Tanks disabled!!"
 msgstr "Tanks slået fra!!"
 
-#: src/multiint.cpp:1437
+#: src/multiint.cpp:1438
 msgid "Cyborgs disabled."
 msgstr "Cyborger slået fra."
 
-#: src/multiint.cpp:1438
+#: src/multiint.cpp:1439
 msgid "VTOLs disabled."
 msgstr "VTOLer slået fra."
 
-#: src/multiint.cpp:1439
+#: src/multiint.cpp:1440
 msgid "Satellite Uplink disabled."
 msgstr ""
 
-#: src/multiint.cpp:1440
+#: src/multiint.cpp:1441
 #, fuzzy
 msgid "Laser Satellite disabled."
 msgstr "Gør alt tilgængeligt"
 
-#: src/multiint.cpp:1487
-#: src/multiint.cpp:1495
+#: src/multiint.cpp:1488
+#: src/multiint.cpp:1496
 msgid "Select Game Name"
 msgstr "Vælg spilnavn"
 
-#: src/multiint.cpp:1488
+#: src/multiint.cpp:1489
 #, fuzzy
 msgid "One-Player Skirmish"
 msgstr "Spil mod computeren"
 
-#: src/multiint.cpp:1499
+#: src/multiint.cpp:1500
 msgid "Select Map"
 msgstr "Vælg kort"
 
-#: src/multiint.cpp:1509
+#: src/multiint.cpp:1510
 msgid "Click to set Password"
 msgstr "Klik for at vælge kodeord"
 
-#: src/multiint.cpp:1519
 #: src/multiint.cpp:1520
+#: src/multiint.cpp:1521
 #, fuzzy
 msgid "Scavengers"
 msgstr "Hestekrafter"
 
-#: src/multiint.cpp:1522
+#: src/multiint.cpp:1523
 #, fuzzy
 msgid "No Scavengers"
 msgstr "Hestekrafter"
 
-#: src/multiint.cpp:1552
+#: src/multiint.cpp:1553
 msgid "Select Player Name"
 msgstr "Vælg spillernavn"
 
-#: src/multiint.cpp:1555
+#: src/multiint.cpp:1556
 #: src/multimenu.cpp:791
 msgid "Alliances"
 msgstr "Aliancer"
 
-#: src/multiint.cpp:1558
+#: src/multiint.cpp:1559
 msgid "No Alliances"
 msgstr "Uden alliancer"
 
-#: src/multiint.cpp:1560
+#: src/multiint.cpp:1561
 msgid "Allow Alliances"
 msgstr "Med alliancer"
 
-#: src/multiint.cpp:1564
+#: src/multiint.cpp:1565
 msgid "Locked Teams"
 msgstr "Låste hold"
 
-#: src/multiint.cpp:1590
+#: src/multiint.cpp:1591
 msgid "Low Power Levels"
 msgstr "Sparsom energi"
 
-#: src/multiint.cpp:1592
+#: src/multiint.cpp:1593
 msgid "Medium Power Levels"
 msgstr "Medium energi"
 
-#: src/multiint.cpp:1594
+#: src/multiint.cpp:1595
 msgid "High Power Levels"
 msgstr "Meget energi"
 
-#: src/multiint.cpp:1626
+#: src/multiint.cpp:1627
 msgid "Base"
 msgstr "Base"
 
-#: src/multiint.cpp:1628
+#: src/multiint.cpp:1629
 msgid "Start with No Bases"
 msgstr "Start uden baser"
 
-#: src/multiint.cpp:1630
+#: src/multiint.cpp:1631
 msgid "Start with Bases"
 msgstr "Start med baser"
 
-#: src/multiint.cpp:1632
+#: src/multiint.cpp:1633
 msgid "Start with Advanced Bases"
 msgstr "Start med advancerede baser"
 
-#: src/multiint.cpp:1664
+#: src/multiint.cpp:1665
 #, fuzzy
 msgid "Map Preview"
 msgstr "Preview af kort"
 
-#: src/multiint.cpp:1666
+#: src/multiint.cpp:1667
 msgid "Click to see Map"
 msgstr "Klik for at se kort"
 
-#: src/multiint.cpp:1679
-#: src/multiint.cpp:1681
+#: src/multiint.cpp:1680
+#: src/multiint.cpp:1682
 #, fuzzy
 msgid "Start Hosting Game"
 msgstr "Værten starter spillet"
 
-#: src/multiint.cpp:1688
-#: src/multiint.cpp:1692
+#: src/multiint.cpp:1689
+#: src/multiint.cpp:1693
 msgid "Show Structure Limits"
 msgstr "Vis bygningsbegrænsninger"
 
-#: src/multiint.cpp:1688
-#: src/multiint.cpp:1692
+#: src/multiint.cpp:1689
+#: src/multiint.cpp:1693
 msgid "Set Structure Limits"
 msgstr "Vælg bygningsbegrænsinger"
 
-#: src/multiint.cpp:1769
+#: src/multiint.cpp:1770
 msgid "DIFFICULTY"
 msgstr ""
 
-#: src/multiint.cpp:1783
+#: src/multiint.cpp:1784
 msgid "Less aggressive"
 msgstr ""
 
-#: src/multiint.cpp:1784
+#: src/multiint.cpp:1785
 #, fuzzy
 msgid "Plays nice"
 msgstr "Spiller"
 
-#: src/multiint.cpp:1785
+#: src/multiint.cpp:1786
 msgid "No holds barred"
 msgstr ""
 
-#: src/multiint.cpp:1786
+#: src/multiint.cpp:1787
 #, fuzzy
 msgid "Starts with advantages"
 msgstr "Start med advancerede baser"
 
-#: src/multiint.cpp:1814
+#: src/multiint.cpp:1815
 msgid "CHOOSE AI"
 msgstr ""
 
-#: src/multiint.cpp:1852
+#: src/multiint.cpp:1853
 msgid "Allow human players to join in this slot"
 msgstr ""
 
-#: src/multiint.cpp:1859
+#: src/multiint.cpp:1860
 msgid "Leave this slot unused"
 msgstr ""
 
-#: src/multiint.cpp:2316
+#: src/multiint.cpp:2317
 msgid "Team"
 msgstr "Hold"
 
-#: src/multiint.cpp:2359
+#: src/multiint.cpp:2360
 msgid "You cannot change difficulty in a challenge"
 msgstr ""
 
-#: src/multiint.cpp:2359
+#: src/multiint.cpp:2360
 #, fuzzy
 msgid "Click to change difficulty"
 msgstr "Klik for at justere AI-sværhedsgraden"
 
-#: src/multiint.cpp:2374
+#: src/multiint.cpp:2375
 #, fuzzy
 msgid "Waiting for player"
 msgstr "Venter på andre spillere"
 
-#: src/multiint.cpp:2374
+#: src/multiint.cpp:2375
 #, fuzzy
 msgid "Player is ready"
 msgstr "Spiller mistet"
 
-#: src/multiint.cpp:2374
+#: src/multiint.cpp:2375
 msgid "Click when ready"
 msgstr "Klik når klar"
 
-#: src/multiint.cpp:2381
+#: src/multiint.cpp:2382
 msgid "READY?"
 msgstr "KLAR?"
 
-#: src/multiint.cpp:2425
+#: src/multiint.cpp:2426
 msgid "PLAYERS"
 msgstr "SPILLERE"
 
-#: src/multiint.cpp:2460
+#: src/multiint.cpp:2461
 #, fuzzy
 msgid "Click to change to this slot"
 msgstr "Klik for at ændre spiller-settings."
 
-#: src/multiint.cpp:2488
+#: src/multiint.cpp:2489
 msgid "Choose Team"
 msgstr "Vælg hold"
 
-#: src/multiint.cpp:2518
+#: src/multiint.cpp:2519
 #, fuzzy
 msgid "Click to change player colour"
 msgstr "Klik for at ændre spiller-settings."
 
-#: src/multiint.cpp:2546
+#: src/multiint.cpp:2547
 #, fuzzy
 msgid "Click to change player position"
 msgstr "Klik for at ændre spiller-settings."
 
-#: src/multiint.cpp:2550
+#: src/multiint.cpp:2551
 #, fuzzy
 msgid "Click to change AI"
 msgstr "Klik for at ændre spiller-settings."
 
-#: src/multiint.cpp:2616
+#: src/multiint.cpp:2617
 msgid "CHAT"
 msgstr "BESKEDER"
 
-#: src/multiint.cpp:2648
+#: src/multiint.cpp:2649
 msgid "All players need to have the same mods to join your game."
 msgstr "Alle spillere skal have samme mods for at gå ind i dit spil."
 
-#: src/multiint.cpp:2689
+#: src/multiint.cpp:2690
 msgid "Connecting to the lobby server..."
 msgstr ""
 
-#: src/multiint.cpp:2992
+#: src/multiint.cpp:2993
 #, c-format
 msgid "*** password [%s] is now required! ***"
 msgstr "*** kodeord [%s] er nu nødvendig! ***"
 
-#: src/multiint.cpp:2998
+#: src/multiint.cpp:2999
 msgid "*** password is NOT required! ***"
 msgstr "*** kodeord er Unødvendig! ***"
 
-#: src/multiint.cpp:3058
+#: src/multiint.cpp:3059
 msgid "Sorry! Failed to host the game."
 msgstr ""
 
-#: src/multiint.cpp:3181
+#: src/multiint.cpp:3182
 msgid "'Locked Teams' mode enabled"
 msgstr "'Låste hold' slået til"
 
-#: src/multiint.cpp:3209
-#: src/multiint.cpp:3278
+#: src/multiint.cpp:3210
+#: src/multiint.cpp:3279
 #: src/multimenu.cpp:1486
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "Værten har smidt %s fra spillet"
 
-#: src/multiint.cpp:3344
+#: src/multiint.cpp:3345
 msgid "Host is Starting Game"
 msgstr "Værten starter spillet"
 
-#: src/multiint.cpp:3922
+#: src/multiint.cpp:3923
 msgid "UPnP has been enabled."
 msgstr ""
 
-#: src/multiint.cpp:3928
+#: src/multiint.cpp:3929
 msgid "UPnP detection faled. You must manually configure router yourself."
 msgstr ""
 
-#: src/multiint.cpp:3932
+#: src/multiint.cpp:3933
 msgid "UPnP detection is in progress..."
 msgstr ""
 
-#: src/multiint.cpp:3939
+#: src/multiint.cpp:3940
 msgid "UPnP detection disabled by user. Autoconfig of port 2100 will not happen."
 msgstr ""
 
-#: src/multiint.cpp:3943
+#: src/multiint.cpp:3946
+msgid "Hit the ready box to begin your challenge!"
+msgstr ""
+
+#: src/multiint.cpp:3950
 msgid "Press the start hosting button to begin hosting a game."
 msgstr ""
 
-#: src/multiint.cpp:3984
+#: src/multiint.cpp:3992
 msgid "Can't connect to lobby server!"
 msgstr ""
 
-#: src/multiint.cpp:4076
+#: src/multiint.cpp:4084
 #, c-format
 msgid "Mods: %s"
 msgstr ""
 
-#: src/multiint.cpp:4083
+#: src/multiint.cpp:4091
 msgid "Mods: None!"
 msgstr ""
 
-#: src/multiint.cpp:4093
+#: src/multiint.cpp:4101
 #, fuzzy, c-format
 msgid "Version: %s"
 msgstr "Version %s%s%s%s"
 
-#: src/multiint.cpp:4144
+#: src/multiint.cpp:4152
 #, fuzzy, c-format
 msgid "Click to take player slot %d"
 msgstr "Klik for at ændre spiller-settings."
 
-#: src/multiint.cpp:4153
-#: src/multiint.cpp:4355
+#: src/multiint.cpp:4161
+#: src/multiint.cpp:4363
 msgid "Open"
 msgstr ""
 
-#: src/multiint.cpp:4153
-#: src/multiint.cpp:4356
+#: src/multiint.cpp:4161
+#: src/multiint.cpp:4364
 #, fuzzy
 msgid "Closed"
 msgstr "Luk"
 
-#: src/multiint.cpp:4203
+#: src/multiint.cpp:4211
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr "Sender kort: %d%% "
 
-#: src/multiint.cpp:4211
+#: src/multiint.cpp:4219
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr "Kort: %d%% nedhentet"
 
-#: src/multiint.cpp:4237
+#: src/multiint.cpp:4245
 msgid "HOST"
 msgstr "VÆRT"
 
-#: src/multiint.cpp:4244
+#: src/multiint.cpp:4252
 #: src/multimenu.cpp:805
 msgid "Ping"
 msgstr "Ping"

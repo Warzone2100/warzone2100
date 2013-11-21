@@ -168,7 +168,7 @@ struct GAMESTRUCT
 	uint32_t	game_version_major;				// 
 	uint32_t	game_version_minor;				// 
 	uint32_t	privateGame;					// if true, it is a private game
-	uint32_t	pureGame;						// NO mods allowed if true
+	uint32_t	pureMap;						// If this map has mods in it.
 	uint32_t	Mods;							// number of concatenated mods?
 	// Game ID, used on the lobby server to link games with multiple address families to eachother
 	uint32_t	gameId;
