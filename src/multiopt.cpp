@@ -79,6 +79,7 @@ void sendOptions()
 	NETuint8_t(&game.base);
 	NETuint8_t(&game.alliance);
 	NETbool(&game.scavengers);
+	NETbool(&game.isMapMod);
 
 	for (i = 0; i < MAX_PLAYERS; i++)
 	{
@@ -136,6 +137,7 @@ void recvOptions(NETQUEUE queue)
 	NETuint8_t(&game.base);
 	NETuint8_t(&game.alliance);
 	NETbool(&game.scavengers);
+	NETbool(&game.isMapMod);
 
 	for (i = 0; i < MAX_PLAYERS; i++)
 	{
@@ -201,12 +203,13 @@ void recvOptions(NETQUEUE queue)
 	setCurrentMap(NULL, 42);
 	rebuildSearchPath(mod_multiplay, true);	// MUST rebuild search path for the new maps we just got!
 	buildMapList();
+	LEVEL_DATASET *mapData = levFindDataSet(game.map, &game.hash);
 	// See if we have the map or not
-	if (levFindDataSet(game.map, &game.hash) == NULL)
+	if (mapData == NULL)
 	{
 		uint32_t player = selectedPlayer;
 
-		debug(LOG_INFO, "Map was not found, requesting map %s from host.", game.map);
+		debug(LOG_INFO, "Map was not found, requesting map %s from host, type %d", game.map, game.isMapMod);
 		// Request the map from the host
 		NETbeginEncode(NETnetQueue(NET_HOST_ONLY), NET_FILE_REQUESTED);
 		NETuint32_t(&player);
@@ -216,6 +219,21 @@ void recvOptions(NETQUEUE queue)
 	}
 	else
 	{
+		if (mapData && CheckForMod(mapData->realFileName))
+		{
+			char buf[256];
+			if (game.isMapMod)
+			{
+				ssprintf(buf, _("Warning, this is a map-mod, it could alter normal gameplay."));
+			}
+			else
+			{
+				ssprintf(buf, _("Warning, HOST has altered the game code, and can't be trusted!"));
+			}
+			addConsoleMessage(buf, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
+			game.isMapMod = true;
+		}
+
 		loadMapPreview(false);
 	}
 }

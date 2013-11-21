@@ -1496,12 +1496,19 @@ static void addGameOptions()
 		addMultiEditBox(MULTIOP_OPTIONS, MULTIOP_GNAME, MCOL0, MROW2, _("Select Game Name"), game.name, IMAGE_EDIT_GAME, IMAGE_EDIT_GAME_HI, MULTIOP_GNAME_ICON);
 	}
 	widgSetButtonState(psWScreen, MULTIOP_GNAME_ICON, WBUT_DISABLE);
+
 	// map chooser
-	addMultiEditBox(MULTIOP_OPTIONS, MULTIOP_MAP  , MCOL0, MROW3, _("Select Map"), game.map, IMAGE_EDIT_MAP, IMAGE_EDIT_MAP_HI, MULTIOP_MAP_ICON);
+
+	addBlueForm(MULTIOP_OPTIONS, MULTIOP_MAP, game.map, MCOL0, MROW3, MULTIOP_BLUEFORMW, 29);
+	addMultiBut(psWScreen, MULTIOP_MAP, MULTIOP_MAP_ICON, MCOL4, 2, 20, MULTIOP_BUTH, _("Select Map"), IMAGE_EDIT_MAP, IMAGE_EDIT_MAP_HI, true);
+	addMultiBut(psWScreen, MULTIOP_MAP, MULTIOP_MAP_MOD, MCOL3+11, 10, 12, 12, _("Map-Mod!"), IMAGE_LAMP_RED, IMAGE_LAMP_AMBER, false);
+	if (!game.isMapMod)
+	{
+		widgHide(psWScreen, MULTIOP_MAP_MOD);
+	}
 	// disable for challenges
 	if (challengeActive)
 	{
-		widgSetButtonState(psWScreen, MULTIOP_MAP, WEDBS_DISABLE);
 		widgSetButtonState(psWScreen, MULTIOP_MAP_ICON, WBUT_DISABLE);
 	}
 	// password box
@@ -2702,7 +2709,6 @@ static void disableMultiButs(void)
 
 	// edit boxes
 	widgSetButtonState(psWScreen,MULTIOP_GNAME,WEDBS_DISABLE);
-	widgSetButtonState(psWScreen,MULTIOP_MAP,WEDBS_DISABLE);
 
 	if (!NetPlay.isHost)
 	{
@@ -2800,7 +2806,8 @@ static void processMultiopWidgets(UDWORD id)
 			break;
 
 		case MULTIOP_MAP:
-			widgSetString(psWScreen, MULTIOP_MAP,game.map);
+			widgSetString(psWScreen, MULTIOP_MAP+1 ,game.map); //What a horrible hack! FIX ME! (See addBlueForm())
+			widgReveal(psWScreen, MULTIOP_MAP_MOD);
 			break;
 
 		case MULTIOP_GNAME_ICON:
@@ -3008,6 +3015,12 @@ static void processMultiopWidgets(UDWORD id)
 	// these work all the time.
 	switch(id)
 	{
+	case MULTIOP_MAP_MOD:
+			char buf[256];
+			ssprintf(buf, _("This is a map-mod, it can change your playing experience!"));
+			addConsoleMessage(buf, DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+			break;
+
 	case MULTIOP_LIMITS_BUT:
 		changeTitleMode(MULTILIMIT);
 		break;
@@ -3714,6 +3727,7 @@ void runMultiOptions(void)
 				sstrcpy(game.map, mapData->pName);
 				game.hash = levGetFileHash(mapData);
 				game.maxPlayers = mapData->players;
+				game.isMapMod = CheckForMod(mapData->realFileName);
 				loadMapPreview(!isHoverPreview);
 
 				if (isHoverPreview)
@@ -3723,7 +3737,7 @@ void runMultiOptions(void)
 					game.maxPlayers = oldMaxPlayers;
 				}
 
-				widgSetString(psWScreen, MULTIOP_MAP, mapData->pName);
+				widgSetString(psWScreen, MULTIOP_MAP+1, mapData->pName); //What a horrible, horrible way to do this! FIX ME! (See addBlueForm)
 				addGameOptions();
 				break;
 			}
@@ -3821,7 +3835,7 @@ bool startMultiOptions(bool bReenter)
 			game.skDiff[i] = (DIFF_SLIDER_STOPS / 2);	// reset AI (turn it on again)
 			setPlayerColour(i,i);						//reset all colors as well
 		}
-
+		game.isMapMod = false;			// reset map-mod status
 		game.mapHasScavengers = true; // FIXME, should default to false
 		if(!NetPlay.bComms)			// force skirmish if no comms.
 		{
@@ -4066,6 +4080,14 @@ void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGH
 	}
 	iV_DrawText(name, x + GAMES_GAMENAME_START, y + 12);
 
+	if (NetPlay.games[gameID].pureMap)
+	{
+		iV_SetTextColour(WZCOL_RED);
+	}
+	else
+	{
+		iV_SetTextColour(WZCOL_FORM_TEXT);
+	}
 	// draw map name, chop when we get a too long name
 	sstrcpy(name, NetPlay.games[gameID].mapname);
 	// box size in pixels
@@ -4075,6 +4097,7 @@ void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGH
 	}
 	iV_DrawText(name, x + GAMES_MAPNAME_START, y + 12);	// map name
 
+	iV_SetTextColour(WZCOL_FORM_TEXT);
 	iV_SetFont(font_small);
 	// draw mod name (if any)
 	if (strlen(NetPlay.games[gameID].modlist))

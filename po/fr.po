@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2013-11-04 14:36+0100\n"
+"POT-Creation-Date: 2013-11-20 19:01+0100\n"
 "PO-Revision-Date: 2012-09-16 17:52+0100\n"
 "Last-Translator: Amiral JCDG <freddys3@hotmail.fr>\n"
 "Language-Team: French <warzone2100-project@lists.sourceforge.net>\n"
@@ -11888,46 +11888,54 @@ msgid "OpenGL 1.2 + VBO + TEC is not supported by your system. The game requires
 msgstr "OpenGL 1.2 + VBO + TEC n'est pas supporté par votre système. Le jeu ne peut pas être lancé sans. Vous devez mettre à niveau votre carte/driver graphique si vous voulez profiter des performances optimales pour le jeu."
 
 #: lib/netplay/netplay.cpp:218
-#: lib/netplay/netplay.cpp:1118
+#: lib/netplay/netplay.cpp:1119
 msgid "Enter password here"
 msgstr "Entrez le mot de passe ici"
 
-#: lib/netplay/netplay.cpp:984
+#: lib/netplay/netplay.cpp:985
 msgid ""
 "Your router doesn't support UPnP, you must manually configure your router & firewall to\n"
 "open port 2100 before you can host a game."
 msgstr ""
+"Votre routeur ne supporte pas l'UPnP, veuillez configurer manuellement votre routeur/pare-feu pour\n"
+"ouvrir le port 2100 avant d'héberger une partie."
 
-#: lib/netplay/netplay.cpp:998
+#: lib/netplay/netplay.cpp:999
 msgid ""
 "No UPnP device was found. You must manually configure your router & firewall to\n"
 "open port 2100 before you can host a game."
 msgstr ""
+"Aucun périphérique UPnP trouvé, veuillez configurer manuellement votre routeur/pare-feu pour\n"
+"ouvrir le port 2100 avant d'héberger une partie."
 
-#: lib/netplay/netplay.cpp:1026
-#, fuzzy, c-format
+#: lib/netplay/netplay.cpp:1027
+#, c-format
 msgid "Could not open require port (%s) on  (%s)"
-msgstr "Impossible de résoudre le DNS du serveur maître (%s)!"
+msgstr "Impossible d'ouvrir le port (%s) sur (%s)"
 
-#: lib/netplay/netplay.cpp:1030
+#: lib/netplay/netplay.cpp:1031
 msgid ""
 "You must manually configure your router & firewall to\n"
 " open port 2100 before you can host a game."
 msgstr ""
+"Veuillez configurer manuellement votre routeur/pare-feu pour\n"
+" ouvrir le port 2100 avant d'héberger une partie."
 
-#: lib/netplay/netplay.cpp:1040
+#: lib/netplay/netplay.cpp:1041
 #, c-format
 msgid ""
 "Game configured port (%s) correctly on (%s)\n"
 "Your external IP is %s"
 msgstr ""
+"Port (%s) correctrement configuré sur (%s)\n"
+"Votre IP externe est %s"
 
-#: lib/netplay/netplay.cpp:2175
+#: lib/netplay/netplay.cpp:2176
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr "Impossible de résoudre le DNS du serveur maître (%s)!"
 
-#: lib/netplay/netplay.cpp:2197
+#: lib/netplay/netplay.cpp:2198
 #, c-format
 msgid ""
 "Error connecting to the lobby server: %s.\n"
@@ -11936,7 +11944,7 @@ msgid ""
 " or to forward the port to your system."
 msgstr "Une erreur est survenue lors de la connexion à l'antichambre : %s. Assurez-vous que le port %d peut être connecté. Si vous utilisez un routeur, configurez-le pour qu'il utilise UPnP, ou pour qu'il se connecte au port de votre ordinateur."
 
-#: lib/netplay/netplay.cpp:2870
+#: lib/netplay/netplay.cpp:2871
 msgid "Failed to get a lobby response!"
 msgstr "L'antichambre le répond pas !"
 
@@ -11988,10 +11996,10 @@ msgstr "Jeu de stratégie"
 
 #: src/challenge.cpp:222
 #: src/hci.cpp:915
-#: src/hci.cpp:3378
-#: src/hci.cpp:3501
-#: src/hci.cpp:3937
-#: src/hci.cpp:4971
+#: src/hci.cpp:3379
+#: src/hci.cpp:3502
+#: src/hci.cpp:3938
+#: src/hci.cpp:4972
 #: src/intelmap.cpp:530
 #: src/intorder.cpp:727
 #: src/loadsave.cpp:250
@@ -12316,12 +12324,12 @@ msgid "Water Speed"
 msgstr "Vitesse sur l'eau"
 
 #: src/design.cpp:2003
-#: src/hci.cpp:4994
+#: src/hci.cpp:4995
 msgid "Tab Scroll left"
 msgstr "Défilement à gauche"
 
 #: src/design.cpp:2018
-#: src/hci.cpp:5009
+#: src/hci.cpp:5010
 msgid "Tab Scroll right"
 msgstr "Défilement à droite"
 
@@ -12346,7 +12354,7 @@ msgid "Player dropped"
 msgstr "Le joueur a perdu"
 
 #: src/display3d.cpp:666
-#: src/multiint.cpp:2374
+#: src/multiint.cpp:2375
 msgid "Waiting for other players"
 msgstr "Attente des autres joueurs"
 
@@ -12466,7 +12474,7 @@ msgid "Tutorial"
 msgstr "Tutoriel"
 
 #: src/frontend.cpp:111
-#: src/hci.cpp:3487
+#: src/hci.cpp:3488
 msgid "Options"
 msgstr "Options"
 
@@ -12564,7 +12572,7 @@ msgid "TCP port 2100 must be opened in your firewall or router to host games!"
 msgstr "Le port TCP 2100 doit être ouvert dans votre pare-feu/routeur pour pouvoir héberger des parties !"
 
 #: src/frontend.cpp:464
-#: src/multiint.cpp:1482
+#: src/multiint.cpp:1483
 msgid "OPTIONS"
 msgstr "OPTIONS"
 
@@ -12849,7 +12857,7 @@ msgid "GAME OPTIONS"
 msgstr "OPTIONS"
 
 #: src/frontend.cpp:1482
-#: src/multiint.cpp:2643
+#: src/multiint.cpp:2644
 msgid "Mod: "
 msgstr "Mod(s) : "
 
@@ -12883,144 +12891,144 @@ msgstr "Le joueur %u Triche (Il se sert du menu debug pour se faire une nouvelle
 msgid "Player %u is cheating (debug menu) him/herself a new droid."
 msgstr "Le joueur %u triche (Il se sert du menu debug pour se faire une nouvelle unité)"
 
-#: src/hci.cpp:3298
+#: src/hci.cpp:3299
 msgid "Commanders (F6)"
 msgstr "Commandants (F6)"
 
-#: src/hci.cpp:3311
+#: src/hci.cpp:3312
 msgid "Intelligence Display (F5)"
 msgstr "Panneau d'informations (F5)"
 
-#: src/hci.cpp:3324
+#: src/hci.cpp:3325
 msgid "Manufacture (F1)"
 msgstr "Assemblage (F1)"
 
-#: src/hci.cpp:3337
+#: src/hci.cpp:3338
 msgid "Design (F4)"
 msgstr "Conception (F4)"
 
-#: src/hci.cpp:3350
+#: src/hci.cpp:3351
 msgid "Research (F2)"
 msgstr "Recherche (F2)"
 
-#: src/hci.cpp:3363
+#: src/hci.cpp:3364
 msgid "Build (F3)"
 msgstr "Construction (F3)"
 
-#: src/hci.cpp:3434
-#: src/multiint.cpp:1588
+#: src/hci.cpp:3435
+#: src/multiint.cpp:1589
 #: src/multimenu.cpp:798
 msgid "Power"
 msgstr "Énergie"
 
-#: src/hci.cpp:3525
+#: src/hci.cpp:3526
 msgid "Map:"
 msgstr "Map :"
 
-#: src/hci.cpp:3538
+#: src/hci.cpp:3539
 msgid "Load"
 msgstr "Charger"
 
-#: src/hci.cpp:3539
+#: src/hci.cpp:3540
 msgid "Load Map File"
 msgstr "Charger le fichier d'une map"
 
-#: src/hci.cpp:3550
+#: src/hci.cpp:3551
 msgid "Save"
 msgstr "Sauvegarder"
 
-#: src/hci.cpp:3551
+#: src/hci.cpp:3552
 msgid "Save Map File"
 msgstr "Sauvegarder le fichier map"
 
-#: src/hci.cpp:3563
+#: src/hci.cpp:3564
 msgid "New"
 msgstr "Nouveau"
 
-#: src/hci.cpp:3564
+#: src/hci.cpp:3565
 msgid "New Blank Map"
 msgstr "Nouvelle map vierge"
 
-#: src/hci.cpp:3612
+#: src/hci.cpp:3613
 msgid "Tile"
 msgstr "Tuile"
 
-#: src/hci.cpp:3613
+#: src/hci.cpp:3614
 msgid "Place tiles on map"
 msgstr "Placer des tuiles sur la carte"
 
-#: src/hci.cpp:3626
+#: src/hci.cpp:3627
 msgid "Unit"
 msgstr "Unité"
 
-#: src/hci.cpp:3627
+#: src/hci.cpp:3628
 msgid "Place Unit on map"
 msgstr "Placer des unités sur la carte"
 
-#: src/hci.cpp:3635
+#: src/hci.cpp:3636
 msgid "Struct"
 msgstr "Structure"
 
-#: src/hci.cpp:3636
+#: src/hci.cpp:3637
 msgid "Place Structures on map"
 msgstr "Placer des bâtiments sur la carte"
 
-#: src/hci.cpp:3644
+#: src/hci.cpp:3645
 msgid "Feat"
 msgstr "Fonction"
 
-#: src/hci.cpp:3645
+#: src/hci.cpp:3646
 msgid "Place Features on map"
 msgstr "Placer les éléments sur la carte"
 
-#: src/hci.cpp:3659
+#: src/hci.cpp:3660
 msgid "Pause"
 msgstr "Pause"
 
-#: src/hci.cpp:3660
+#: src/hci.cpp:3661
 msgid "Pause or unpause the game"
 msgstr "Mettre en pause ou reprendre"
 
-#: src/hci.cpp:3678
+#: src/hci.cpp:3679
 msgid "Align height of all map objects"
 msgstr "Harmoniser la hauteur de tous les objets de la map"
 
-#: src/hci.cpp:3691
+#: src/hci.cpp:3692
 msgid "Edit"
 msgstr "Éditer"
 
-#: src/hci.cpp:3692
+#: src/hci.cpp:3693
 msgid "Start Edit Mode"
 msgstr "Démarrer le mode édition"
 
-#: src/hci.cpp:3706
+#: src/hci.cpp:3707
 #: src/ingameop.cpp:113
 #: src/ingameop.cpp:257
 #: src/ingameop.cpp:261
 msgid "Quit"
 msgstr "Quitter"
 
-#: src/hci.cpp:3707
+#: src/hci.cpp:3708
 msgid "Exit Game"
 msgstr "Quitter le jeu"
 
-#: src/hci.cpp:3733
+#: src/hci.cpp:3734
 msgid "Current Player:"
 msgstr "Joueur actuel :"
 
-#: src/hci.cpp:4014
+#: src/hci.cpp:4015
 msgid "Progress Bar"
 msgstr "Barre de progression"
 
-#: src/hci.cpp:4896
+#: src/hci.cpp:4897
 msgid "Factory Delivery Point"
 msgstr "Point de livraison"
 
-#: src/hci.cpp:4914
+#: src/hci.cpp:4915
 msgid "Loop Production"
 msgstr "Nombre de livraisons"
 
-#: src/hci.cpp:5224
+#: src/hci.cpp:5225
 msgid "Ally progress"
 msgstr "Progression des alliés"
 
@@ -13057,7 +13065,7 @@ msgstr "Sauvegarder"
 
 #: src/ingameop.cpp:349
 msgid "Host has quit the game!"
-msgstr "L'hôte à quitté la partie !"
+msgstr "L'hôte a quitté la partie !"
 
 #: src/ingameop.cpp:355
 msgid "The game can't continue without the host."
@@ -13503,9 +13511,9 @@ msgid "KEY MAPPING"
 msgstr "RACOURCIS CLAVIER"
 
 #: src/keyedit.cpp:377
-#: src/multiint.cpp:762
-#: src/multiint.cpp:1262
-#: src/multiint.cpp:1674
+#: src/multiint.cpp:763
+#: src/multiint.cpp:1263
+#: src/multiint.cpp:1675
 msgid "Return To Previous Screen"
 msgstr "Revenir à l'écran précédent"
 
@@ -14069,7 +14077,7 @@ msgstr "Charger une partie enregistrée"
 msgid "GAME SAVED :"
 msgstr "Partie sauvegardée :"
 
-#: src/move.cpp:2284
+#: src/move.cpp:2278
 #, c-format
 msgid "You found %u power in an oil drum."
 msgstr "Vous avez trouvé %u unités d'énergie dans un baril de pétrole."
@@ -14132,433 +14140,436 @@ msgstr "Moyen"
 msgid "Insane"
 msgstr "Démént"
 
-#: src/multiint.cpp:700
+#: src/multiint.cpp:701
 #: src/multilimit.cpp:190
 msgid "Accept Settings"
 msgstr "Accepter les réglages"
 
-#: src/multiint.cpp:702
-#: src/multiint.cpp:1317
+#: src/multiint.cpp:703
+#: src/multiint.cpp:1318
 msgid "Cancel"
 msgstr "Annuler"
 
-#: src/multiint.cpp:713
+#: src/multiint.cpp:714
 msgid "IP Address or Machine Name"
 msgstr "Adresse IP ou nom du serveur"
 
-#: src/multiint.cpp:759
+#: src/multiint.cpp:760
 msgid "CONNECTION"
 msgstr "CONNEXION"
 
-#: src/multiint.cpp:764
+#: src/multiint.cpp:765
 msgid "Lobby"
 msgstr "Antichambre"
 
-#: src/multiint.cpp:765
+#: src/multiint.cpp:766
 msgid "IP"
 msgstr "IP"
 
-#: src/multiint.cpp:986
+#: src/multiint.cpp:987
 msgid "[Password required]"
 msgstr "[Mot de passe requis]"
 
-#: src/multiint.cpp:990
+#: src/multiint.cpp:991
 msgid "[No Tanks]"
 msgstr "[Pas de tanks]"
 
-#: src/multiint.cpp:994
+#: src/multiint.cpp:995
 msgid "[No Cyborgs]"
 msgstr "[Pas de Cyborgs]"
 
-#: src/multiint.cpp:998
+#: src/multiint.cpp:999
 msgid "[No VTOLs]"
 msgstr "[Pas de VTOLs]"
 
-#: src/multiint.cpp:1002
+#: src/multiint.cpp:1003
 #, c-format
 msgid "Hosted by %s"
 msgstr "Hébergé par %s"
 
-#: src/multiint.cpp:1006
+#: src/multiint.cpp:1007
 #, c-format
 msgid "Hosted by %s —%s"
 msgstr "Hébergé par %s - %s"
 
-#: src/multiint.cpp:1028
+#: src/multiint.cpp:1029
 msgid "Can't find any games for your version."
-msgstr "Aucune partie disponible pour votre version."
+msgstr "Aucune partie dispo. pour votre version."
 
-#: src/multiint.cpp:1043
+#: src/multiint.cpp:1044
 msgid "No games are available"
 msgstr "Aucune partie disponible"
 
-#: src/multiint.cpp:1046
+#: src/multiint.cpp:1047
 msgid "Game is full"
 msgstr "La partie est pleine"
 
-#: src/multiint.cpp:1050
+#: src/multiint.cpp:1051
 msgid "You were kicked!"
 msgstr "Vous avez été exclu !"
 
-#: src/multiint.cpp:1053
+#: src/multiint.cpp:1054
 msgid "Wrong Game Version!"
 msgstr "Mauvaise version du jeu !"
 
-#: src/multiint.cpp:1056
+#: src/multiint.cpp:1057
 msgid "You have an incompatible mod."
 msgstr "Vous avez un mod incompatible."
 
-#: src/multiint.cpp:1060
+#: src/multiint.cpp:1061
 msgid "Host couldn't send file?"
 msgstr "L'hôte ne peut-il pas envoyer le fichier ?"
 
-#: src/multiint.cpp:1064
+#: src/multiint.cpp:1065
 msgid "Incorrect Password!"
 msgstr "Mot de passe incorrect !"
 
-#: src/multiint.cpp:1067
+#: src/multiint.cpp:1068
 msgid "Host has dropped connection!"
 msgstr "L'hôte a fermé la connexion !"
 
-#: src/multiint.cpp:1071
+#: src/multiint.cpp:1072
 msgid "Connection Error"
 msgstr "Erreur de connexion"
 
-#: src/multiint.cpp:1190
+#: src/multiint.cpp:1191
 msgid "Searching"
 msgstr "Recherche"
 
-#: src/multiint.cpp:1259
+#: src/multiint.cpp:1260
 msgid "GAMES"
 msgstr "PARTIES"
 
-#: src/multiint.cpp:1267
+#: src/multiint.cpp:1268
 msgid "Refresh Games List"
 msgstr "Rafraîchir la liste des parties"
 
-#: src/multiint.cpp:1270
+#: src/multiint.cpp:1271
 msgid "Filter Games List"
 msgstr "Filtrer la liste des parties"
 
-#: src/multiint.cpp:1297
+#: src/multiint.cpp:1298
 msgid "Enter Password:"
 msgstr "Entrez le mot de passe :"
 
-#: src/multiint.cpp:1315
+#: src/multiint.cpp:1316
 msgid "OK"
 msgstr "OK"
 
-#: src/multiint.cpp:1436
+#: src/multiint.cpp:1437
 msgid "Tanks disabled!!"
 msgstr "Tanks désactivés!!"
 
-#: src/multiint.cpp:1437
+#: src/multiint.cpp:1438
 msgid "Cyborgs disabled."
 msgstr "Cyborgs désactivés."
 
-#: src/multiint.cpp:1438
+#: src/multiint.cpp:1439
 msgid "VTOLs disabled."
 msgstr "VTOLs désactivés."
 
-#: src/multiint.cpp:1439
+#: src/multiint.cpp:1440
 msgid "Satellite Uplink disabled."
 msgstr "Site de télécommunications satellite désactivé."
 
-#: src/multiint.cpp:1440
+#: src/multiint.cpp:1441
 msgid "Laser Satellite disabled."
 msgstr "Poste de commande pour satellite laser désactivé."
 
-#: src/multiint.cpp:1487
-#: src/multiint.cpp:1495
+#: src/multiint.cpp:1488
+#: src/multiint.cpp:1496
 msgid "Select Game Name"
 msgstr "Sélectionnez le nom de la partie"
 
-#: src/multiint.cpp:1488
+#: src/multiint.cpp:1489
 msgid "One-Player Skirmish"
 msgstr "Escarmouche un joueur"
 
-#: src/multiint.cpp:1499
+#: src/multiint.cpp:1500
 msgid "Select Map"
 msgstr "Sélectionnez la carte à utiliser"
 
-#: src/multiint.cpp:1509
+#: src/multiint.cpp:1510
 msgid "Click to set Password"
 msgstr "Cliquez pour définir un mot de passe"
 
-#: src/multiint.cpp:1519
 #: src/multiint.cpp:1520
+#: src/multiint.cpp:1521
 msgid "Scavengers"
 msgstr "Pillards"
 
-#: src/multiint.cpp:1522
+#: src/multiint.cpp:1523
 msgid "No Scavengers"
 msgstr "Aucun pillard"
 
-#: src/multiint.cpp:1552
+#: src/multiint.cpp:1553
 msgid "Select Player Name"
 msgstr "Choisir le nom du joueur"
 
-#: src/multiint.cpp:1555
+#: src/multiint.cpp:1556
 #: src/multimenu.cpp:791
 msgid "Alliances"
 msgstr "Alliances"
 
-#: src/multiint.cpp:1558
+#: src/multiint.cpp:1559
 msgid "No Alliances"
 msgstr "Pas d'alliances"
 
-#: src/multiint.cpp:1560
+#: src/multiint.cpp:1561
 msgid "Allow Alliances"
 msgstr "Autoriser les alliances"
 
-#: src/multiint.cpp:1564
+#: src/multiint.cpp:1565
 msgid "Locked Teams"
 msgstr "Verrouiller les équipes"
 
-#: src/multiint.cpp:1590
+#: src/multiint.cpp:1591
 msgid "Low Power Levels"
 msgstr "Niveau d'énergie faible"
 
-#: src/multiint.cpp:1592
+#: src/multiint.cpp:1593
 msgid "Medium Power Levels"
 msgstr "Niveau d'énergie moyen"
 
-#: src/multiint.cpp:1594
+#: src/multiint.cpp:1595
 msgid "High Power Levels"
 msgstr "Niveau d'énergie élevé"
 
-#: src/multiint.cpp:1626
+#: src/multiint.cpp:1627
 msgid "Base"
 msgstr "Base"
 
-#: src/multiint.cpp:1628
+#: src/multiint.cpp:1629
 msgid "Start with No Bases"
 msgstr "Commencer sans base"
 
-#: src/multiint.cpp:1630
+#: src/multiint.cpp:1631
 msgid "Start with Bases"
 msgstr "Commencer avec une petite base"
 
-#: src/multiint.cpp:1632
+#: src/multiint.cpp:1633
 msgid "Start with Advanced Bases"
 msgstr "Commencer avec une base avancée"
 
-#: src/multiint.cpp:1664
+#: src/multiint.cpp:1665
 msgid "Map Preview"
 msgstr "Prévisualiser la carte"
 
-#: src/multiint.cpp:1666
+#: src/multiint.cpp:1667
 msgid "Click to see Map"
 msgstr "Cliquez pour voir la carte"
 
-#: src/multiint.cpp:1679
-#: src/multiint.cpp:1681
+#: src/multiint.cpp:1680
+#: src/multiint.cpp:1682
 msgid "Start Hosting Game"
 msgstr "Démarrer le serveur"
 
-#: src/multiint.cpp:1688
-#: src/multiint.cpp:1692
+#: src/multiint.cpp:1689
+#: src/multiint.cpp:1693
 msgid "Show Structure Limits"
 msgstr "Afficher des limites de construction"
 
-#: src/multiint.cpp:1688
-#: src/multiint.cpp:1692
+#: src/multiint.cpp:1689
+#: src/multiint.cpp:1693
 msgid "Set Structure Limits"
 msgstr "Limites de construction"
 
-#: src/multiint.cpp:1769
+#: src/multiint.cpp:1770
 msgid "DIFFICULTY"
 msgstr "DIFFICULTÉ"
 
-#: src/multiint.cpp:1783
+#: src/multiint.cpp:1784
 msgid "Less aggressive"
 msgstr "Peu agressif"
 
-#: src/multiint.cpp:1784
+#: src/multiint.cpp:1785
 msgid "Plays nice"
 msgstr "Joue gentiment"
 
-#: src/multiint.cpp:1785
+#: src/multiint.cpp:1786
 msgid "No holds barred"
 msgstr "Pas de quartier"
 
-#: src/multiint.cpp:1786
+#: src/multiint.cpp:1787
 msgid "Starts with advantages"
 msgstr "Commence avec des avantages"
 
-#: src/multiint.cpp:1814
+#: src/multiint.cpp:1815
 msgid "CHOOSE AI"
 msgstr "CHOISIR L' IA"
 
-#: src/multiint.cpp:1852
+#: src/multiint.cpp:1853
 msgid "Allow human players to join in this slot"
 msgstr "Autorise des joueurs humains à prendre cette position"
 
-#: src/multiint.cpp:1859
+#: src/multiint.cpp:1860
 msgid "Leave this slot unused"
 msgstr "Laisser cette position inoccupée"
 
-#: src/multiint.cpp:2316
+#: src/multiint.cpp:2317
 msgid "Team"
 msgstr "Équipe"
 
-#: src/multiint.cpp:2359
+#: src/multiint.cpp:2360
 msgid "You cannot change difficulty in a challenge"
 msgstr "Vous ne pouvez pas changer la difficulté dans une partie défi"
 
-#: src/multiint.cpp:2359
+#: src/multiint.cpp:2360
 msgid "Click to change difficulty"
 msgstr "Cliquer pour changer la difficulté"
 
-#: src/multiint.cpp:2374
+#: src/multiint.cpp:2375
 msgid "Waiting for player"
 msgstr "Attente des autres joueurs"
 
-#: src/multiint.cpp:2374
+#: src/multiint.cpp:2375
 msgid "Player is ready"
 msgstr "Le joueur est prêt"
 
-#: src/multiint.cpp:2374
+#: src/multiint.cpp:2375
 msgid "Click when ready"
 msgstr "Cliquez une fois prêt"
 
-#: src/multiint.cpp:2381
+#: src/multiint.cpp:2382
 msgid "READY?"
 msgstr "PRÊT ?"
 
-#: src/multiint.cpp:2425
+#: src/multiint.cpp:2426
 msgid "PLAYERS"
 msgstr "JOUEURS"
 
-#: src/multiint.cpp:2460
+#: src/multiint.cpp:2461
 msgid "Click to change to this slot"
 msgstr "Cliquez pour prendre cette position"
 
-#: src/multiint.cpp:2488
+#: src/multiint.cpp:2489
 msgid "Choose Team"
 msgstr "Choisir l'équipe"
 
-#: src/multiint.cpp:2518
+#: src/multiint.cpp:2519
 msgid "Click to change player colour"
 msgstr "Cliquez pour changer la couleur du joueur"
 
-#: src/multiint.cpp:2546
+#: src/multiint.cpp:2547
 msgid "Click to change player position"
 msgstr "Cliquez pour changer la position du joueur"
 
-#: src/multiint.cpp:2550
+#: src/multiint.cpp:2551
 msgid "Click to change AI"
 msgstr "Cliquez pour modifier l'intelligence artificielle"
 
-#: src/multiint.cpp:2616
+#: src/multiint.cpp:2617
 msgid "CHAT"
 msgstr "CHAT"
 
-#: src/multiint.cpp:2648
+#: src/multiint.cpp:2649
 msgid "All players need to have the same mods to join your game."
 msgstr "Tous les joueurs doivent avoir les mêmes mods pour jouer une partie ensemble."
 
-#: src/multiint.cpp:2689
+#: src/multiint.cpp:2690
 msgid "Connecting to the lobby server..."
 msgstr "Connexion à l'antichambre..."
 
-#: src/multiint.cpp:2992
+#: src/multiint.cpp:2993
 #, c-format
 msgid "*** password [%s] is now required! ***"
 msgstr "*** Un mot de passe [%s] est désormais requis ***"
 
-#: src/multiint.cpp:2998
+#: src/multiint.cpp:2999
 msgid "*** password is NOT required! ***"
 msgstr "*** Mot de passe NON requis ***"
 
-#: src/multiint.cpp:3058
+#: src/multiint.cpp:3059
 msgid "Sorry! Failed to host the game."
 msgstr "Désolé ! Impossible d'héberger la partie."
 
-#: src/multiint.cpp:3181
+#: src/multiint.cpp:3182
 msgid "'Locked Teams' mode enabled"
 msgstr "Le mode 'Equipes verrouillées' est activé"
 
-#: src/multiint.cpp:3209
-#: src/multiint.cpp:3278
+#: src/multiint.cpp:3210
+#: src/multiint.cpp:3279
 #: src/multimenu.cpp:1486
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "L'hôte a exclu %s de la partie !"
 
-#: src/multiint.cpp:3344
+#: src/multiint.cpp:3345
 msgid "Host is Starting Game"
 msgstr "L'hôte démarre la partie"
 
-#: src/multiint.cpp:3922
+#: src/multiint.cpp:3923
 msgid "UPnP has been enabled."
-msgstr ""
+msgstr "UPnP activé"
 
-#: src/multiint.cpp:3928
+#: src/multiint.cpp:3929
 msgid "UPnP detection faled. You must manually configure router yourself."
-msgstr ""
+msgstr "La détection UPnP a échouée, veuillez configurer votre routeur manuellement."
 
-#: src/multiint.cpp:3932
-#, fuzzy
+#: src/multiint.cpp:3933
 msgid "UPnP detection is in progress..."
-msgstr "Décryptage en cours....."
+msgstr "Détection UPnP en cours..."
 
-#: src/multiint.cpp:3939
+#: src/multiint.cpp:3940
 msgid "UPnP detection disabled by user. Autoconfig of port 2100 will not happen."
+msgstr "La détection UPnP est désactivée. La configuration auto. du port 2100 ne sera pas possible."
+
+#: src/multiint.cpp:3946
+msgid "Hit the ready box to begin your challenge!"
 msgstr ""
 
-#: src/multiint.cpp:3943
+#: src/multiint.cpp:3950
 msgid "Press the start hosting button to begin hosting a game."
-msgstr ""
+msgstr "Appuyez sur le bouton Démarrer la partie pour créer le serveur"
 
-#: src/multiint.cpp:3984
+#: src/multiint.cpp:3992
 msgid "Can't connect to lobby server!"
 msgstr "La connexion à l'antichambre a échoué !"
 
-#: src/multiint.cpp:4076
+#: src/multiint.cpp:4084
 #, c-format
 msgid "Mods: %s"
 msgstr "Mods : %s"
 
-#: src/multiint.cpp:4083
+#: src/multiint.cpp:4091
 msgid "Mods: None!"
 msgstr "Mods : aucun"
 
-#: src/multiint.cpp:4093
+#: src/multiint.cpp:4101
 #, c-format
 msgid "Version: %s"
 msgstr "Version : %s"
 
-#: src/multiint.cpp:4144
+#: src/multiint.cpp:4152
 #, c-format
 msgid "Click to take player slot %d"
 msgstr "Cliquez pour prendre la position %d"
 
-#: src/multiint.cpp:4153
-#: src/multiint.cpp:4355
+#: src/multiint.cpp:4161
+#: src/multiint.cpp:4363
 msgid "Open"
 msgstr "Ouvert"
 
-#: src/multiint.cpp:4153
-#: src/multiint.cpp:4356
+#: src/multiint.cpp:4161
+#: src/multiint.cpp:4364
 msgid "Closed"
 msgstr "Fermé"
 
-#: src/multiint.cpp:4203
+#: src/multiint.cpp:4211
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr "Map envoyée : %d%% "
 
-#: src/multiint.cpp:4211
+#: src/multiint.cpp:4219
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr "Map %d%% téléchargée"
 
-#: src/multiint.cpp:4237
+#: src/multiint.cpp:4245
 msgid "HOST"
 msgstr "HOTE"
 
-#: src/multiint.cpp:4244
+#: src/multiint.cpp:4252
 #: src/multimenu.cpp:805
 msgid "Ping"
 msgstr "Ping"
@@ -14689,12 +14700,12 @@ msgstr "Donner de l'énergie au joueur"
 #: src/multimenu.cpp:1488
 #, c-format
 msgid "kicked %s : %s from the game, and added them to the banned list!"
-msgstr "%s : %s a été exclu du jeu et inscrit sur la liste des indésirables"
+msgstr "%s : %s a été exclu du jeu et inscrit sur la liste des indésirables !"
 
 #: src/multiplay.cpp:263
 #, c-format
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
-msgstr "Le joueur %s à été exclu car il a essayé de contourner le contrôle d'intégrité des données !"
+msgstr "Le joueur %s a été exclu car il a essayé de contourner le contrôle d'intégrité des données !"
 
 #: src/multiplay.cpp:1116
 msgid "(allies"
@@ -15046,7 +15057,7 @@ msgstr "Version %s - %s%s%s%s"
 #~ msgstr "Le port TCP 2100 doit être ouvert dans votre pare-feu/routeur pour pouvoir héberger des parties !"
 
 #~ msgid "Password is already set!"
-#~ msgstr "Le mot de passe a déjà été défini !"
+#~ msgstr "Le mot de passe est déjà défini !"
 
 #~ msgid "OpenGL 2.0 is not supported by your system. Some things may look wrong. Please upgrade your graphics driver/hardware, if possible."
 #~ msgstr "OpenGL 2.0 n'est pas supporté par votre système. Vous devez mettre à niveau votre carte/driver graphique si vous voulez profiter des performances optimales pour le jeu."
@@ -15525,10 +15536,10 @@ msgstr "Version %s - %s%s%s%s"
 #~ msgstr "Limite de vitesse en formation activée"
 
 #~ msgid "Wrong data/mod detected by Host."
-#~ msgstr "L'hôte à détecté un mod ou des données corrompues."
+#~ msgstr "L'hôte a détecté un mod ou des données corrompues."
 
 #~ msgid "Kicking player %s, game data doesn't match!"
-#~ msgstr "Le joueur %s à été exclu car les données de jeu ne correspondent pas !"
+#~ msgstr "Le joueur %s a été exclu car les données de jeu ne correspondent pas !"
 
 #~ msgid "you are unwanted by the host"
 #~ msgstr "Vous êtes un indésirable pour l'hôte"
