@@ -463,8 +463,9 @@ R-Wpn-HvyHowitzer,R-Wpn-Howitzer-Damage02,472
 R-Wpn-HvyHowitzer,R-Wpn-HowitzerMk1,472
 R-Wpn-HvyLaser,R-Wpn-Energy-Damage01,1103
 R-Wpn-Laser01,R-Struc-Research-Upgrade07,531
-R-Wpn-Laser01,R-Sys-Sensor-Upgrade03,531
+R-Wpn-Laser01,R-Sys-Sensor-Upgrade02,531
 R-Wpn-Laser02,R-Wpn-Laser01,532
+R-Wpn-Laser02,R-Sys-Sensor-Upgrade03,533
 R-Wpn-LasSat,R-Struc-Research-Upgrade09,1108
 R-Wpn-LasSat,R-Sys-Sensor-UpLink,1108
 R-Wpn-MdArtMissile,R-Wpn-Missile2A-T,1031
