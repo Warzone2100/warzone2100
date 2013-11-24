@@ -1,8 +1,9 @@
-2013-11-xx: Version xxxx
+2013-11-23: Version 3.1.1_rc3
 
  *Multiplayer:
-   * Revert VTOL avoidance & collision checks (commit:e3279f6d033b4967b955dcaaf2ce3c5e21ed7579 commit:75ede1da1d77b6326b9897b59d5d394d3ef533f0)
-
+   * Change: Differentiate between maps and maps that have mods in them. Map-mods will now be shown in red. (commit:fdd2524f1b9d425955e40c03c1447ccea6e02872)
+   * Change: Revert VTOL avoidance & collision checks (commit:e3279f6d033b4967b955dcaaf2ce3c5e21ed7579 commit:75ede1da1d77b6326b9897b59d5d394d3ef533f0)
+   * Change: Flashlight now requires sensor upgrade Mk2, while Pulse Laser still requires sensor upgrade Mk3. (commit:109ee4d7b9598a6696211338599eff6b1a891173)
 
 2013-11-15: Version 3.1.1_rc2
  * Multiplayer:
