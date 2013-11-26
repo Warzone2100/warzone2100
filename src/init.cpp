@@ -583,12 +583,12 @@ bool buildMapList()
 
 		if (PHYSFS_removeFromSearchPath(realFilePathAndName.c_str()) == 0)
 		{
-			debug(LOG_ERROR, "Could not unmount %s",PHYSFS_getLastError());
+			debug(LOG_ERROR, "Could not unmount %s", PHYSFS_getLastError());
 		}
 		// check what kind of map it is
-		if (!PHYSFS_mount(realFilePathAndName.c_str(),"WZMap",PHYSFS_APPEND))
+		if (!PHYSFS_mount(realFilePathAndName.c_str(), "WZMap", PHYSFS_APPEND))
 		{
-			debug(LOG_FATAL,"Could not mount %s, game will exit.", realFilePathAndName.c_str());
+			debug(LOG_FATAL, "Could not mount %s, because: %s. Please delete the file, and run the game again. Game will now exit.", realFilePathAndName.c_str(), PHYSFS_getLastError());
 			exit(-1);
 		}
 
@@ -617,7 +617,7 @@ bool buildMapList()
 
 		if (PHYSFS_removeFromSearchPath(realFilePathAndName.c_str()) == 0)
 		{
-			debug(LOG_ERROR, "Could not unmount %s",PHYSFS_getLastError());
+			debug(LOG_ERROR, "Could not unmount %s", PHYSFS_getLastError());
 		}
 	}
 
