@@ -474,32 +474,38 @@ static MapFileList listMapFiles()
 	for (MapFileList::iterator realFileName = ret.begin(); realFileName != ret.end(); ++realFileName)
 	{
 		std::string realFilePathAndName = PHYSFS_getWriteDir() + *realFileName;
-		PHYSFS_addToSearchPath(realFilePathAndName.c_str(), PHYSFS_APPEND);
-		int unsafe = 0;
-		char **filelist = PHYSFS_enumerateFiles("multiplay/maps");
-
-		for (char **file = filelist; *file != NULL; ++file)
+		if (PHYSFS_addToSearchPath(realFilePathAndName.c_str(), PHYSFS_APPEND))
 		{
-			std::string isDir = std::string("multiplay/maps/") + *file;
-			if (PHYSFS_isDirectory(isDir.c_str()))
-				continue;
-			std::string checkfile = *file;
-			debug(LOG_WZ,"checking ... %s", *file);
-			if (checkfile.substr(checkfile.find_last_of(".")+ 1) == "gam")
+			int unsafe = 0;
+			char **filelist = PHYSFS_enumerateFiles("multiplay/maps");
+
+			for (char **file = filelist; *file != NULL; ++file)
 			{
-				if (unsafe++ > 1)
+				std::string isDir = std::string("multiplay/maps/") + *file;
+				if (PHYSFS_isDirectory(isDir.c_str()))
+					continue;
+				std::string checkfile = *file;
+				debug(LOG_WZ,"checking ... %s", *file);
+				if (checkfile.substr(checkfile.find_last_of(".")+ 1) == "gam")
 				{
-					debug(LOG_ERROR, "Map packs are not supported! %s NOT added.", realFilePathAndName.c_str());
-					break;
+					if (unsafe++ > 1)
+					{
+						debug(LOG_ERROR, "Map packs are not supported! %s NOT added.", realFilePathAndName.c_str());
+						break;
+					}
 				}
 			}
+			PHYSFS_freeList(filelist);
+			if (unsafe < 2)
+			{
+				filtered.push_back(realFileName->c_str());
+			}
+			PHYSFS_removeFromSearchPath(realFilePathAndName.c_str());
 		}
-		PHYSFS_freeList(filelist);
-		if (unsafe < 2)
+		else
 		{
-			filtered.push_back(realFileName->c_str());
+			debug(LOG_POPUP, "Could not mount %s, because: %s.\nPlease delete or move the file specified.", realFilePathAndName.c_str(), PHYSFS_getLastError());
 		}
-		PHYSFS_removeFromSearchPath(realFilePathAndName.c_str());
 	}
 
 	// restore our search path(s) again
