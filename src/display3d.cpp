@@ -343,7 +343,6 @@ void NotifyUserOfError(char *msg)
 {
 	errorWaiting = true;
 	ssprintf(errorMessage, "%s", msg);
-	lastErrorTime = realTime;
 }
 
 static Blueprint getTileBlueprint(int mapX, int mapY)
@@ -752,13 +751,14 @@ void draw3DScene( void )
 	}
 	if (errorWaiting)
 	{
-		if (lastErrorTime + (60 * GAME_TICKS_PER_SEC) < realTime)
+		if (lastErrorTime == 0 || lastErrorTime + (60 * GAME_TICKS_PER_SEC) < realTime)
 		{
 			char trimMsg[255];
 			audio_PlayTrack(ID_SOUND_BUILD_FAIL);
 			ssprintf(trimMsg, "Error! (Check your logs!): %.78s", errorMessage);
 			addConsoleMessage(trimMsg, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
 			errorWaiting = false;
+			lastErrorTime = realTime;
 		}
 	}
 	if (showSAMPLES)		//Displays the number of sound samples we currently have
