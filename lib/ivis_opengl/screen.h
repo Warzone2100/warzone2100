@@ -38,11 +38,8 @@
 
 /* ------------------------------------------------------------------------------------------- */
 
-/* Legacy stuff
- * - only used in the sequence video code we have not yet decided whether to port or to junk */
-
-/* Set the colour for text */
-extern void screenSetTextColour(UBYTE red, UBYTE green, UBYTE blue);
+extern unsigned screenWidth;
+extern unsigned screenHeight;
 
 /* backDrop */
 extern void screen_SetBackDropFromFile(const char* filename);
@@ -76,6 +73,9 @@ enum PERF_POINT
 	PERF_MISC,
 	PERF_COUNT
 };
+
+bool screenInitialise();
+void screenShutDown();
 
 void wzPerfBegin(PERF_POINT pp, const char *descr);
 void wzPerfEnd(PERF_POINT pp);

@@ -32,7 +32,6 @@
 
 #include <physfs.h>
 
-#include "frameint.h"
 #include "frameresource.h"
 #include "input.h"
 #include "physfs_ext.h"
@@ -91,11 +90,6 @@ bool frameInitialise()
 		return false;
 	}
 
-	if (!screenInitialise())
-	{
-		return false;
-	}
-
 	/* Initialise the input system */
 	inputInitialise();
 
@@ -135,9 +129,6 @@ void frameUpdate(void)
  */
 void frameShutDown(void)
 {
-	debug(LOG_NEVER, "Screen shutdown!");
-	screenShutDown();
-
 	// Shutdown the resource stuff
 	debug(LOG_NEVER, "No more resources!");
 	resShutDown();

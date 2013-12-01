@@ -33,7 +33,6 @@
 #include <png.h>
 #include "lib/ivis_opengl/png_util.h"
 #include "lib/ivis_opengl/tex.h"
-#include "lib/framework/frameint.h"
 #include "lib/ivis_opengl/textdraw.h"
 #include "lib/ivis_opengl/piestate.h"
 #include "lib/ivis_opengl/pieblitfunc.h"

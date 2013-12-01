@@ -105,8 +105,8 @@ static bool mouseInWindow = false;
 static CURSOR lastCursor = CURSOR_ARROW;
 static bool crashing = false;
 
-unsigned screenWidth = 0;   // Declared in frameint.h.
-unsigned screenHeight = 0;  // Declared in frameint.h.
+unsigned screenWidth = 0;   // Declared in screen.h
+unsigned screenHeight = 0;  // Declared in screen.h
 static void inputAddBuffer(UDWORD key, utf_32_char unicode);
 static int WZkeyToQtKey(int code);
 

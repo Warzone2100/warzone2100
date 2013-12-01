@@ -23,11 +23,11 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/string_ext.h"
-#include "lib/framework/frameint.h"
 #include "lib/framework/utf.h"
 #include "lib/ivis_opengl/textdraw.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
 #include "lib/ivis_opengl/piestate.h"
+#include "lib/ivis_opengl/screen.h"
 #include "lib/gamelib/gtime.h"
 
 #include "widget.h"

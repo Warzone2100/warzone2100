@@ -27,7 +27,6 @@ noinst_HEADERS = \
 	file.h \
 	fixedpoint.h \
 	frame.h \
-	frameint.h \
 	frameresource.h \
 	geometry.h \
 	gettext.h \

@@ -28,7 +28,6 @@
 #include "lib/framework/endian_hack.h"
 #include "lib/framework/wzconfig.h"
 #include "lib/framework/file.h"
-#include "lib/framework/frameint.h"
 #include "lib/framework/physfs_ext.h"
 #include "lib/framework/strres.h"
 #include "lib/framework/opengl.h"

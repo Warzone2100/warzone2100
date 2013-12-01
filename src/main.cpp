@@ -35,7 +35,6 @@
 #endif // WZ_OS_WIN
 
 #include "lib/framework/input.h"
-#include "lib/framework/frameint.h"
 #include "lib/framework/physfs_ext.h"
 #include "lib/exceptionhandler/exceptionhandler.h"
 #include "lib/exceptionhandler/dumpinfo.h"
@@ -1259,6 +1258,10 @@ int realmain(int argc, char *argv[])
 
 	debug(LOG_MAIN, "Final initialization");
 	if (!frameInitialise())
+	{
+		return EXIT_FAILURE;
+	}
+	if (!screenInitialise())
 	{
 		return EXIT_FAILURE;
 	}

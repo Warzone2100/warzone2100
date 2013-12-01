@@ -31,7 +31,6 @@
 #include <time.h>
 
 #include "lib/framework/frameresource.h"
-#include "lib/framework/frameint.h"
 #include "lib/framework/file.h"
 #include "lib/framework/stdio_ext.h"
 

@@ -26,7 +26,6 @@
 #include "lib/framework/frame.h"
 #include "lib/ivis_opengl/pieclip.h"
 #include "src/warzoneconfig.h"
-#include "lib/framework/frameint.h"
 #include "wzapp_qt.h"
 
 // used in crash reports & version info

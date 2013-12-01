@@ -23,11 +23,10 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/wzapp.h"
-#include "lib/framework/frameint.h"
+#include "lib/ivis_opengl/screen.h"
 #include "widget.h"
 #include "widgint.h"
 #include "tip.h"
-// FIXME Direct iVis implementation include!
 #include "lib/ivis_opengl/pieblitfunc.h"
 #include <QtCore/QStringList>
 

@@ -56,13 +56,13 @@
  */
 
 #include "lib/framework/frame.h"
-#include "lib/framework/frameint.h"
 #include "lib/framework/opengl.h"
 #include "sequence.h"
 #include "timer.h"
 #include "lib/framework/math_ext.h"
 #include "lib/ivis_opengl/piestate.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
+#include "lib/ivis_opengl/screen.h"
 #include "lib/sound/audio.h"
 #include "lib/sound/openal_error.h"
 #include "lib/sound/mixer.h"

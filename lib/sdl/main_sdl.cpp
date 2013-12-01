@@ -48,8 +48,8 @@ int main(int argc, char *argv[])
 	return realmain(argc, argv);
 }
 
-unsigned                screenWidth = 0;   // Declared in frameint.h.
-unsigned                screenHeight = 0;  // Declared in frameint.h.
+unsigned                screenWidth = 0;   // Declared in screen.h
+unsigned                screenHeight = 0;  // Declared in screen.h
 static unsigned         screenDepth = 0;
 static SDL_Surface *    screen = NULL;
 
