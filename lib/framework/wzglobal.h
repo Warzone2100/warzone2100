@@ -514,7 +514,9 @@
 /*! \def WZ_DECL_THREAD
  * Declares a variable to be local to the running thread, and not shared between threads.
  */
-#if defined(WZ_CC_GNU) || defined(WZ_CC_INTEL)
+#if defined(__MACOSX__)
+#  define WZ_DECL_THREAD // nothing, MacOSX does not yet support this
+#elif defined(WZ_CC_GNU) || defined(WZ_CC_INTEL)
 #  define WZ_DECL_THREAD __thread
 #elif defined(WZ_CC_MSVC)
 #  define WZ_DECL_THREAD __declspec(thread)
