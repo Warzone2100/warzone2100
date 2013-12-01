@@ -43,7 +43,6 @@
 #include "game.h"
 #include "lib/ivis_opengl/piestate.h"
 #include "data.h"
-#include "lib/ivis_opengl/ivi.h"
 #include "lib/script/script.h"
 #include "scripttabs.h"
 #include "research.h"

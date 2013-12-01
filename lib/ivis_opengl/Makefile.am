@@ -8,7 +8,6 @@ noinst_HEADERS = \
 	screen.h \
 	bitimage.h \
 	imd.h \
-	ivi.h \
 	ivisdef.h \
 	jpeg_encoder.h \
 	pieblitfunc.h \
@@ -25,7 +24,6 @@ noinst_HEADERS = \
 	textdraw.h
 
 libivis_opengl_a_SOURCES = \
-	ivi.cpp \
 	pieblitfunc.cpp \
 	piedraw.cpp \
 	piefunc.cpp \

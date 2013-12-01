@@ -38,7 +38,6 @@
 #include "lib/ivis_opengl/screen.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
 #include "lib/ivis_opengl/tex.h"
-#include "lib/ivis_opengl/ivi.h"
 #include "lib/netplay/netplay.h"
 #include "lib/script/script.h"
 #include "lib/sound/audio_id.h"
@@ -720,7 +719,6 @@ void systemShutdown(void)
 	}
 
 	debug(LOG_MAIN, "shutting down graphics subsystem");
-	iV_ShutDown();
 	levShutDown();
 	widgShutDown();
 	fpathShutdown();
@@ -1098,7 +1096,6 @@ bool stageTwoInitialise(void)
 
 	if(!initMiscImds())			/* Set up the explosions */
 	{
-		iV_ShutDown();
 		debug( LOG_FATAL, "Can't find all the explosions graphics?" );
 		abort();
 		return false;

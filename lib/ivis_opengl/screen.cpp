@@ -38,6 +38,8 @@
 #include "lib/ivis_opengl/pieblitfunc.h"
 #include "lib/ivis_opengl/pieclip.h"
 #include "lib/ivis_opengl/piefunc.h"
+#include "lib/ivis_opengl/piemode.h"
+#include "lib/ivis_opengl/pieblitfunc.h"
 
 #include "screen.h"
 #include "src/console.h"
@@ -307,6 +309,10 @@ void wzPerfEnd(PERF_POINT pp)
 
 void screenShutDown(void)
 {
+	pie_ShutDown();
+	pie_TexShutDown();
+	iV_TextShutdown();
+
 	pie_Skybox_Shutdown();
 
 	delete backdropGfx;

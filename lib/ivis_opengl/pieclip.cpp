@@ -17,8 +17,8 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
+
 #include "pieclip.h"
-#include "ivi.h"
 
 static UDWORD videoBufferDepth = 32, videoBufferWidth = 0, videoBufferHeight = 0;
 
