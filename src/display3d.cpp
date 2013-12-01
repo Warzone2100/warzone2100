@@ -133,7 +133,6 @@ static PIELIGHT getBlueprintColour(STRUCT_STATES state);
 
 static void NetworkDisplayPlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 static void NetworkDisplayImage(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
-void NotifyUserOfError(char *msg);
 extern bool writeGameInfo(const char *pFileName); // Used to help debug issues when we have fatal errors & crash handler testing.
 /********************  Variables  ********************/
 // Should be cleaned up properly and be put in structures.
@@ -223,8 +222,7 @@ bool showORDERS = false;
 bool showLevelName = true;
 /** When we have a connection issue, we will flash a message on screen
 */
-static bool errorWaiting = false;
-static char errorMessage[512];
+static const char *errorWaiting = NULL;
 static uint32_t lastErrorTime = 0;
 
 #define NETWORK_FORM_ID 0xFAAA
@@ -336,13 +334,6 @@ static inline void rotateSomething(int &x, int &y, uint16_t angle)
 	int newY = (x*sra + y*cra)>>16;
 	x = newX;
 	y = newY;
-}
-
-
-void NotifyUserOfError(char *msg)
-{
-	errorWaiting = true;
-	ssprintf(errorMessage, "%s", msg);
 }
 
 static Blueprint getTileBlueprint(int mapX, int mapY)
@@ -751,15 +742,20 @@ void draw3DScene( void )
 	}
 	if (errorWaiting)
 	{
+		// print the error message if none have been printed for one minute
 		if (lastErrorTime == 0 || lastErrorTime + (60 * GAME_TICKS_PER_SEC) < realTime)
 		{
 			char trimMsg[255];
 			audio_PlayTrack(ID_SOUND_BUILD_FAIL);
-			ssprintf(trimMsg, "Error! (Check your logs!): %.78s", errorMessage);
+			ssprintf(trimMsg, "Error! (Check your logs!): %.78s", errorWaiting);
 			addConsoleMessage(trimMsg, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
-			errorWaiting = false;
+			errorWaiting = NULL;
 			lastErrorTime = realTime;
 		}
+	}
+	else
+	{
+		errorWaiting = debugLastError();
 	}
 	if (showSAMPLES)		//Displays the number of sound samples we currently have
 	{

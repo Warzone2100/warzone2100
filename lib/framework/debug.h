@@ -222,6 +222,9 @@ void debug_exit( void );
  */
 extern void debugFlushStderr(void);
 
+/// Return the last set error message, or NULL is none set since last time we were called.
+const char *debugLastError();
+
 /**
  * Register a callback to be called on every call to debug()
  *

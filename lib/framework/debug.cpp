@@ -40,8 +40,6 @@
 #include <execinfo.h>  // Nonfatal runtime backtraces.
 #endif //WZ_OS_LINUX
 
-extern void NotifyUserOfError(char *);		// will throw up a notifier on error
-
 #define MAX_LEN_LOG_LINE 512
 
 char last_called_script_event[MAX_EVENT_NAME_LEN];
@@ -376,6 +374,24 @@ void _realObjTrace(int id, const char *function, const char *str, ...)
 	printToDebugCallbacks(outputBuffer);
 }
 
+// Thread local to prevent a race condition on read and write to this buffer if multiple
+// threads log errors. This means we will not be reporting any errors to console from threads 
+// other than main. If we want to fix this, make sure accesses are protected by a mutex.
+static WZ_DECL_THREAD char errorStore[512];
+static WZ_DECL_THREAD bool errorWaiting = false;
+const char *debugLastError()
+{
+	if (errorWaiting)
+	{
+		errorWaiting = false;
+		return errorStore;
+	}
+	else
+	{
+		return NULL;
+	}
+}
+
 void _debug( int line, code_part part, const char *function, const char *str, ... )
 {
 	va_list ap;
@@ -454,7 +470,8 @@ void _debug( int line, code_part part, const char *function, const char *str, ..
 		if (part == LOG_ERROR)
 		{
 			// used to signal user that there was a error condition, and to check the logs.
-			NotifyUserOfError(useInputBuffer1 ? inputBuffer[1] : inputBuffer[0]);
+			sstrcpy(errorStore, useInputBuffer1 ? inputBuffer[1] : inputBuffer[0]);
+			errorWaiting = true;
 		}
 
 		// Throw up a dialog box for users since most don't have a clue to check the dump file for information. Use for (duh) Fatal errors, that force us to terminate the game.
