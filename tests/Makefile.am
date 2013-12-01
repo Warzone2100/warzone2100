@@ -9,9 +9,12 @@ qslint_SOURCES = qslint.cpp lint.cpp
 qslint_LDADD = $(PHYSFS_LIBS) $(QT4_LIBS)
 endif
 
-check_PROGRAMS = maptest modeltest qtscripttest
+check_PROGRAMS = maptest modeltest qtscripttest framework_linktest
 qtscripttest_SOURCES = qtscripttest.cpp lint.cpp
 qtscripttest_LDADD = $(PHYSFS_LIBS) $(QT4_LIBS)
+
+framework_linktest_SOURCES = framework_linktest.cpp
+framework_linktest_LDADD = $(PHYSFS_LIBS) $(LIBCRYPTO_LIBS) $(top_builddir)/lib/framework/libframework.a
 
 modeltest_SOURCES = modeltest.c
 
