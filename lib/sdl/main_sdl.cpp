@@ -29,7 +29,6 @@
 #include "lib/framework/opengl.h"
 #include "lib/ivis_opengl/pieclip.h"
 #include "lib/gamelib/gtime.h"
-#include "src/warzoneconfig.h"
 #include <SDL.h>
 #include <QtCore/QSize>
 #include <QtCore/QString>
@@ -338,8 +337,12 @@ void wzScreenFlip()
 
 void wzToggleFullscreen()
 {
-	war_setFullscreen(!war_getFullscreen());
 	SDL_WM_ToggleFullScreen(screen);
+}
+
+bool wzIsFullscreen()
+{
+	return screen->flags & SDL_FULLSCREEN;
 }
 
 void wzQuit()
@@ -1094,7 +1097,7 @@ void wzMain(int &argc, char **argv)
 	appPtr = new QApplication(argc, argv);  // For Qt-script.
 }
 
-bool wzMain2()
+bool wzMain2(int antialiasing, bool fullscreen, bool vsync)
 {
 	//BEGIN **** Was in old frameInitialise. ****
 
@@ -1131,9 +1134,6 @@ bool wzMain2()
 	unsigned        width = pie_GetVideoBufferWidth();
 	unsigned        height = pie_GetVideoBufferHeight();
 	unsigned        bitDepth = pie_GetVideoBufferDepth();
-	unsigned        fsaa = war_getFSAA();
-	bool            fullScreen = war_getFullscreen();
-	bool            vsync = war_GetVsync();
 
 	// Fetch the video info.
 	const SDL_VideoInfo* video_info = SDL_GetVideoInfo();
@@ -1163,7 +1163,7 @@ bool wzMain2()
 	int video_flags  = SDL_OPENGL;    // Enable OpenGL in SDL.
 	video_flags |= SDL_ANYFORMAT; // Don't emulate requested BPP if not available.
 
-	if (fullScreen)
+	if (fullscreen)
 	{
 		video_flags |= SDL_FULLSCREEN;
 	}
@@ -1175,10 +1175,10 @@ bool wzMain2()
 	SDL_GL_SetAttribute(SDL_GL_SWAP_CONTROL, vsync);
 
 	// Enable FSAA anti-aliasing if and at the level requested by the user
-	if (fsaa)
+	if (antialiasing)
 	{
 		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
-		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, fsaa);
+		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, antialiasing);
 	}
 
 	int bpp = SDL_VideoModeOK(width, height, bitDepth, video_flags);

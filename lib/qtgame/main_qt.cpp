@@ -25,7 +25,6 @@
 
 #include "lib/framework/frame.h"
 #include "lib/ivis_opengl/pieclip.h"
-#include "src/warzoneconfig.h"
 #include "wzapp_qt.h"
 
 // used in crash reports & version info
@@ -45,7 +44,7 @@ void wzMain(int &argc, char **argv)
 	appPtr = new QApplication(argc, argv);
 }
 
-bool wzMain2()
+bool wzMain2(int antialiasing, bool fullscreen, bool vsync)
 {
 	debug(LOG_MAIN, "Qt initialization");
 	QGL::setPreferredPaintEngine(QPaintEngine::OpenGL); // Workaround for incorrect text rendering on nany platforms.
@@ -57,10 +56,10 @@ bool wzMain2()
 	int w = pie_GetVideoBufferWidth();
 	int h = pie_GetVideoBufferHeight();
 
-	if (war_getFSAA())
+	if (antialiasing)
 	{
 		format.setSampleBuffers(true);
-		format.setSamples(war_getFSAA());
+		format.setSamples(antialiasing);
 	}
 	mainWindowPtr = new WzMainWindow(QSize(w, h), format);
 	WzMainWindow &mainwindow = *mainWindowPtr;
@@ -73,7 +72,7 @@ bool wzMain2()
 
 	screenWidth = w;
 	screenHeight = h;
-	if (war_getFullscreen())
+	if (fullscreen)
 	{
 		mainwindow.resize(w,h);
 		mainwindow.showFullScreen();
@@ -93,9 +92,7 @@ bool wzMain2()
 		mainwindow.setMaximumSize(w, h);
 	}
 
-	mainwindow.setSwapInterval(war_GetVsync());
-	war_SetVsync(mainwindow.swapInterval() > 0);
-
+	mainwindow.setSwapInterval(vsync);
 	mainwindow.setReadyToPaint();
 
 	return true;
@@ -115,6 +112,11 @@ void wzShutdown()
 	mainWindowPtr = NULL;
 	delete appPtr;
 	appPtr = NULL;
+}
+
+void wzIsFullscreen()
+{
+	return false; // for relevant intents and purposes, we are never in that kind of fullscreen
 }
 
 void wzToggleFullscreen()

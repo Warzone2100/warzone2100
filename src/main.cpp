@@ -1245,7 +1245,7 @@ int realmain(int argc, char *argv[])
 		}
 	}
 
-	if (!wzMain2())
+	if (!wzMain2(war_getFSAA(), war_getFullscreen(), war_GetVsync()))
 	{
 		return EXIT_FAILURE;
 	}

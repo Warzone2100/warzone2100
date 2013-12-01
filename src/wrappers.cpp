@@ -258,9 +258,9 @@ TITLECODE titleLoop(void)
 	pie_SetFogStatus(false);
 	pie_ScreenFlip(CLEAR_BLACK);//title loop
 
-	if ((keyDown(KEY_LALT) || keyDown(KEY_RALT))
-	    /* Check for toggling display mode */
-	    && keyPressed(KEY_RETURN)) {
+	if ((keyDown(KEY_LALT) || keyDown(KEY_RALT)) && keyPressed(KEY_RETURN))
+	{
+		war_setFullscreen(!war_getFullscreen());
 		wzToggleFullscreen();
 	}
 	return RetCode;
