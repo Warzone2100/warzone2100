@@ -19,7 +19,6 @@ noinst_HEADERS = \
 	piestate.h \
 	pietypes.h \
 	png_util.h \
-	rendmode.h \
 	tex.h \
 	textdraw.h
 
@@ -31,7 +30,6 @@ libivis_opengl_a_SOURCES = \
 	piemode.cpp \
 	piepalette.cpp \
 	piestate.cpp \
-	rendmode.cpp \
 	screen.cpp \
 	tex.cpp \
 	textdraw.cpp \

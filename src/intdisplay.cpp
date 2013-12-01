@@ -38,7 +38,6 @@
 
 // FIXME Direct iVis implementation include!
 #include "lib/ivis_opengl/bitimage.h"
-#include "lib/ivis_opengl/rendmode.h"
 #include "lib/ivis_opengl/piematrix.h"
 
 #include "lib/framework/input.h"
