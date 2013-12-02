@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2013-11-20 19:01+0100\n"
+"POT-Creation-Date: 2013-11-29 18:34+0100\n"
 "PO-Revision-Date: 2013-05-20 01:25+1000\n"
 "Last-Translator: Peng <zhang.peng0604@gmail.com>\n"
 "Language-Team: Chinese Simplified <kde-i18n-doc@kde.org>\n"
@@ -12031,8 +12031,8 @@ msgstr "储存游戏"
 #: src/intelmap.cpp:530
 #: src/intorder.cpp:727
 #: src/loadsave.cpp:250
-#: src/multimenu.cpp:496
-#: src/multimenu.cpp:1363
+#: src/multimenu.cpp:506
+#: src/multimenu.cpp:1373
 #: src/transporter.cpp:264
 #: src/transporter.cpp:346
 #: src/transporter.cpp:806
@@ -12390,7 +12390,7 @@ msgid "Player dropped"
 msgstr "玩家"
 
 #: src/display3d.cpp:666
-#: src/multiint.cpp:2375
+#: src/multiint.cpp:2382
 msgid "Waiting for other players"
 msgstr "等待其他玩家"
 
@@ -12694,7 +12694,7 @@ msgstr "50%"
 
 #: src/frontend.cpp:563
 #: src/frontend.cpp:706
-#: src/multiplay.cpp:2002
+#: src/multiplay.cpp:2020
 msgid "Black"
 msgstr "黑色"
 
@@ -12911,7 +12911,7 @@ msgid "GAME OPTIONS"
 msgstr "游戏选项"
 
 #: src/frontend.cpp:1482
-#: src/multiint.cpp:2644
+#: src/multiint.cpp:2651
 msgid "Mod: "
 msgstr "Mod："
 
@@ -12971,8 +12971,8 @@ msgid "Build (F3)"
 msgstr "建造新的建筑物 （F3）"
 
 #: src/hci.cpp:3435
-#: src/multiint.cpp:1589
-#: src/multimenu.cpp:798
+#: src/multiint.cpp:1596
+#: src/multimenu.cpp:808
 msgid "Power"
 msgstr "能源"
 
@@ -13573,7 +13573,7 @@ msgstr "键盘配置"
 #: src/keyedit.cpp:377
 #: src/multiint.cpp:763
 #: src/multiint.cpp:1263
-#: src/multiint.cpp:1675
+#: src/multiint.cpp:1682
 msgid "Return To Previous Screen"
 msgstr "回到前一个画面"
 
@@ -14348,296 +14348,304 @@ msgstr "选择游戏名称"
 msgid "One-Player Skirmish"
 msgstr "单人战役模式 "
 
-#: src/multiint.cpp:1500
+#: src/multiint.cpp:1503
 msgid "Select Map"
 msgstr "选择地图"
 
-#: src/multiint.cpp:1510
+#: src/multiint.cpp:1504
+msgid "Map-Mod!"
+msgstr ""
+
+#: src/multiint.cpp:1517
 msgid "Click to set Password"
 msgstr "点击设置密码"
 
-#: src/multiint.cpp:1520
-#: src/multiint.cpp:1521
+#: src/multiint.cpp:1527
+#: src/multiint.cpp:1528
 msgid "Scavengers"
 msgstr "清洁工"
 
-#: src/multiint.cpp:1523
+#: src/multiint.cpp:1530
 msgid "No Scavengers"
 msgstr "没有清洁工"
 
-#: src/multiint.cpp:1553
+#: src/multiint.cpp:1560
 msgid "Select Player Name"
 msgstr "选择玩家名称"
 
-#: src/multiint.cpp:1556
-#: src/multimenu.cpp:791
+#: src/multiint.cpp:1563
+#: src/multimenu.cpp:801
 msgid "Alliances"
 msgstr "同盟"
 
-#: src/multiint.cpp:1559
+#: src/multiint.cpp:1566
 msgid "No Alliances"
 msgstr "不允许同盟"
 
-#: src/multiint.cpp:1561
+#: src/multiint.cpp:1568
 msgid "Allow Alliances"
 msgstr "允许同盟"
 
-#: src/multiint.cpp:1565
+#: src/multiint.cpp:1572
 msgid "Locked Teams"
 msgstr "锁定同盟模式"
 
-#: src/multiint.cpp:1591
+#: src/multiint.cpp:1598
 msgid "Low Power Levels"
 msgstr "生产能源速度：慢"
 
-#: src/multiint.cpp:1593
+#: src/multiint.cpp:1600
 msgid "Medium Power Levels"
 msgstr "生产能源速度：中"
 
-#: src/multiint.cpp:1595
+#: src/multiint.cpp:1602
 msgid "High Power Levels"
 msgstr "生产能源速度：快"
 
-#: src/multiint.cpp:1627
+#: src/multiint.cpp:1634
 msgid "Base"
 msgstr "基地"
 
-#: src/multiint.cpp:1629
+#: src/multiint.cpp:1636
 msgid "Start with No Bases"
 msgstr "开始时无基地"
 
-#: src/multiint.cpp:1631
+#: src/multiint.cpp:1638
 msgid "Start with Bases"
 msgstr "开始时有基地"
 
-#: src/multiint.cpp:1633
+#: src/multiint.cpp:1640
 msgid "Start with Advanced Bases"
 msgstr "开始时具规模基地"
 
-#: src/multiint.cpp:1665
+#: src/multiint.cpp:1672
 msgid "Map Preview"
 msgstr "预览地图"
 
-#: src/multiint.cpp:1667
+#: src/multiint.cpp:1674
 msgid "Click to see Map"
 msgstr "按一下看地图"
 
-#: src/multiint.cpp:1680
-#: src/multiint.cpp:1682
+#: src/multiint.cpp:1687
+#: src/multiint.cpp:1689
 msgid "Start Hosting Game"
 msgstr "开始游戏"
 
-#: src/multiint.cpp:1689
-#: src/multiint.cpp:1693
+#: src/multiint.cpp:1696
+#: src/multiint.cpp:1700
 #, fuzzy
 msgid "Show Structure Limits"
 msgstr "设定建筑物数量限制"
 
-#: src/multiint.cpp:1689
-#: src/multiint.cpp:1693
+#: src/multiint.cpp:1696
+#: src/multiint.cpp:1700
 msgid "Set Structure Limits"
 msgstr "设定建筑物数量限制"
 
-#: src/multiint.cpp:1770
+#: src/multiint.cpp:1777
 msgid "DIFFICULTY"
 msgstr "难度"
 
-#: src/multiint.cpp:1784
+#: src/multiint.cpp:1791
 msgid "Less aggressive"
 msgstr "更少侵略性"
 
-#: src/multiint.cpp:1785
+#: src/multiint.cpp:1792
 msgid "Plays nice"
 msgstr "玩得好"
 
-#: src/multiint.cpp:1786
+#: src/multiint.cpp:1793
 msgid "No holds barred"
 msgstr "没有技巧限制的比赛"
 
-#: src/multiint.cpp:1787
+#: src/multiint.cpp:1794
 #, fuzzy
 msgid "Starts with advantages"
 msgstr "开始时具规模基地"
 
-#: src/multiint.cpp:1815
+#: src/multiint.cpp:1822
 msgid "CHOOSE AI"
 msgstr "选择AI"
 
-#: src/multiint.cpp:1853
+#: src/multiint.cpp:1860
 msgid "Allow human players to join in this slot"
 msgstr "允许人类玩家加入"
 
-#: src/multiint.cpp:1860
+#: src/multiint.cpp:1867
 msgid "Leave this slot unused"
 msgstr "保持这个位置不被使用"
 
-#: src/multiint.cpp:2317
+#: src/multiint.cpp:2324
 msgid "Team"
 msgstr "队伍"
 
-#: src/multiint.cpp:2360
+#: src/multiint.cpp:2367
 msgid "You cannot change difficulty in a challenge"
 msgstr "在挑战中不能更换难度"
 
-#: src/multiint.cpp:2360
+#: src/multiint.cpp:2367
 msgid "Click to change difficulty"
 msgstr "点击这里更改难度"
 
-#: src/multiint.cpp:2375
+#: src/multiint.cpp:2382
 msgid "Waiting for player"
 msgstr "等待其他玩家"
 
-#: src/multiint.cpp:2375
+#: src/multiint.cpp:2382
 msgid "Player is ready"
 msgstr "玩家已准备"
 
-#: src/multiint.cpp:2375
+#: src/multiint.cpp:2382
 msgid "Click when ready"
 msgstr "按一下开始"
 
-#: src/multiint.cpp:2382
+#: src/multiint.cpp:2389
 msgid "READY?"
 msgstr "准备好了吗？"
 
-#: src/multiint.cpp:2426
+#: src/multiint.cpp:2433
 msgid "PLAYERS"
 msgstr "玩家"
 
-#: src/multiint.cpp:2461
+#: src/multiint.cpp:2468
 #, fuzzy
 msgid "Click to change to this slot"
 msgstr "点击这里更改玩家设置"
 
-#: src/multiint.cpp:2489
+#: src/multiint.cpp:2496
 msgid "Choose Team"
 msgstr "选择队伍"
 
-#: src/multiint.cpp:2519
+#: src/multiint.cpp:2526
 msgid "Click to change player colour"
 msgstr "点击这里更改玩家颜色"
 
-#: src/multiint.cpp:2547
+#: src/multiint.cpp:2554
 msgid "Click to change player position"
 msgstr "点击这里更改玩家位置"
 
-#: src/multiint.cpp:2551
+#: src/multiint.cpp:2558
 msgid "Click to change AI"
 msgstr "点击这里更改AI"
 
-#: src/multiint.cpp:2617
+#: src/multiint.cpp:2624
 msgid "CHAT"
 msgstr "聊天"
 
-#: src/multiint.cpp:2649
+#: src/multiint.cpp:2656
 msgid "All players need to have the same mods to join your game."
 msgstr "所有玩家需要使用相同的mod以便进入游戏"
 
-#: src/multiint.cpp:2690
+#: src/multiint.cpp:2697
 msgid "Connecting to the lobby server..."
 msgstr "连接大厅服务器中..."
 
-#: src/multiint.cpp:2993
+#: src/multiint.cpp:3000
 #, c-format
 msgid "*** password [%s] is now required! ***"
 msgstr "*** 密码[%s]现在需要！***"
 
-#: src/multiint.cpp:2999
+#: src/multiint.cpp:3006
 msgid "*** password is NOT required! ***"
 msgstr "*** 不需要密码 ***"
 
-#: src/multiint.cpp:3059
+#: src/multiint.cpp:3020
+msgid "This is a map-mod, it can change your playing experience!"
+msgstr ""
+
+#: src/multiint.cpp:3072
 msgid "Sorry! Failed to host the game."
 msgstr "对不起！本机无法作为游戏主要服务器"
 
-#: src/multiint.cpp:3182
+#: src/multiint.cpp:3195
 msgid "'Locked Teams' mode enabled"
 msgstr "锁定同盟模式"
 
-#: src/multiint.cpp:3210
-#: src/multiint.cpp:3279
-#: src/multimenu.cpp:1486
+#: src/multiint.cpp:3223
+#: src/multiint.cpp:3292
+#: src/multimenu.cpp:1496
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "主玩家将 %s 踢出游戏！"
 
-#: src/multiint.cpp:3345
+#: src/multiint.cpp:3358
 msgid "Host is Starting Game"
 msgstr "主玩家已开始游戏"
 
-#: src/multiint.cpp:3923
+#: src/multiint.cpp:3937
 msgid "UPnP has been enabled."
 msgstr ""
 
-#: src/multiint.cpp:3929
+#: src/multiint.cpp:3943
 msgid "UPnP detection faled. You must manually configure router yourself."
 msgstr ""
 
-#: src/multiint.cpp:3933
+#: src/multiint.cpp:3947
 #, fuzzy
 msgid "UPnP detection is in progress..."
 msgstr "解码中......"
 
-#: src/multiint.cpp:3940
+#: src/multiint.cpp:3954
 msgid "UPnP detection disabled by user. Autoconfig of port 2100 will not happen."
 msgstr ""
 
-#: src/multiint.cpp:3946
+#: src/multiint.cpp:3960
 msgid "Hit the ready box to begin your challenge!"
 msgstr ""
 
-#: src/multiint.cpp:3950
+#: src/multiint.cpp:3964
 msgid "Press the start hosting button to begin hosting a game."
 msgstr ""
 
-#: src/multiint.cpp:3992
+#: src/multiint.cpp:4006
 msgid "Can't connect to lobby server!"
 msgstr "无法连接到大厅服务器！"
 
-#: src/multiint.cpp:4084
+#: src/multiint.cpp:4107
 #, c-format
 msgid "Mods: %s"
 msgstr "Mods:%s"
 
-#: src/multiint.cpp:4091
+#: src/multiint.cpp:4114
 msgid "Mods: None!"
 msgstr "Mods: 无！"
 
-#: src/multiint.cpp:4101
+#: src/multiint.cpp:4124
 #, c-format
 msgid "Version: %s"
 msgstr "版本：%s"
 
-#: src/multiint.cpp:4152
+#: src/multiint.cpp:4175
 #, c-format
 msgid "Click to take player slot %d"
 msgstr "点击这里获取玩家位置%d"
 
-#: src/multiint.cpp:4161
-#: src/multiint.cpp:4363
+#: src/multiint.cpp:4184
+#: src/multiint.cpp:4386
 msgid "Open"
 msgstr "打开"
 
-#: src/multiint.cpp:4161
-#: src/multiint.cpp:4364
+#: src/multiint.cpp:4184
+#: src/multiint.cpp:4387
 msgid "Closed"
 msgstr "关闭"
 
-#: src/multiint.cpp:4211
+#: src/multiint.cpp:4234
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr "发送地图：%d%%"
 
-#: src/multiint.cpp:4219
+#: src/multiint.cpp:4242
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr "地图：%d%%下载完成"
 
-#: src/multiint.cpp:4245
+#: src/multiint.cpp:4268
 msgid "HOST"
 msgstr "主玩家"
 
-#: src/multiint.cpp:4252
-#: src/multimenu.cpp:805
+#: src/multiint.cpp:4275
+#: src/multimenu.cpp:815
 msgid "Ping"
 msgstr "Ping"
 
@@ -14679,95 +14687,105 @@ msgstr "应用错误，回到前一个画面"
 msgid "Limits reset to default values"
 msgstr "重置限制至默认状态"
 
-#: src/multimenu.cpp:623
+#: src/multimenu.cpp:633
 msgid "Technology level 1"
 msgstr "第一阶科技"
 
-#: src/multimenu.cpp:631
+#: src/multimenu.cpp:641
 msgid "Technology level 2"
 msgstr "第二阶科技"
 
-#: src/multimenu.cpp:637
+#: src/multimenu.cpp:647
 msgid "Technology level 3"
 msgstr "第三阶科技"
 
-#: src/multimenu.cpp:643
+#: src/multimenu.cpp:653
 msgid "Any number of players"
 msgstr "任何数量的玩家"
 
-#: src/multimenu.cpp:654
+#: src/multimenu.cpp:664
 #, c-format
 msgid "%d player"
 msgid_plural "%d players"
 msgstr[0] "%d 玩家"
 
-#: src/multimenu.cpp:792
+#: src/multimenu.cpp:802
 msgid "Score"
 msgstr "分数"
 
-#: src/multimenu.cpp:793
+#: src/multimenu.cpp:803
 msgid "Kills"
 msgstr "杀敌数"
 
-#: src/multimenu.cpp:794
+#: src/multimenu.cpp:804
 msgid "Units"
 msgstr "单位"
 
-#: src/multimenu.cpp:809
+#: src/multimenu.cpp:819
 msgid "Structs"
 msgstr "建筑"
 
-#: src/multimenu.cpp:821
+#: src/multimenu.cpp:831
 msgid "Sent/Received per sec —"
 msgstr "发送/接收 每秒-"
 
-#: src/multimenu.cpp:821
+#: src/multimenu.cpp:831
 msgid "Total Sent/Received —"
 msgstr "总发送/接收 —"
 
-#: src/multimenu.cpp:826
+#: src/multimenu.cpp:836
 #, fuzzy, c-format
 msgid "Traf: %u/%u"
 msgstr "训练有素： %u"
 
-#: src/multimenu.cpp:830
+#: src/multimenu.cpp:840
 #, c-format
 msgid "Uncompressed: %u/%u"
 msgstr "未压缩：%u%u"
 
-#: src/multimenu.cpp:834
+#: src/multimenu.cpp:844
 #, c-format
 msgid "Pack: %u/%u"
 msgstr "包：%u%u"
 
-#: src/multimenu.cpp:1136
+#: src/multimenu.cpp:1146
 msgid "Channel"
 msgstr "频道"
 
-#: src/multimenu.cpp:1150
+#: src/multimenu.cpp:1160
 msgid "Toggle Alliance State"
 msgstr "开启或关闭同盟状态"
 
-#: src/multimenu.cpp:1169
+#: src/multimenu.cpp:1179
 msgid "Give Visibility Report"
 msgstr "提供可检视的报告"
 
-#: src/multimenu.cpp:1175
+#: src/multimenu.cpp:1185
 msgid "Leak Technology Documents"
 msgstr "泄漏科技技术文件"
 
-#: src/multimenu.cpp:1182
+#: src/multimenu.cpp:1192
 msgid "Hand Over Selected Units"
 msgstr "交出选择的单位"
 
-#: src/multimenu.cpp:1188
+#: src/multimenu.cpp:1198
 msgid "Give Power To Player"
 msgstr "提供玩家能源"
 
-#: src/multimenu.cpp:1488
+#: src/multimenu.cpp:1498
 #, c-format
 msgid "kicked %s : %s from the game, and added them to the banned list!"
 msgstr "%s : %s 被踢出，并加入黑名单"
+
+#: src/multiopt.cpp:227
+#: src/multiplay.cpp:1722
+msgid "Warning, this is a map-mod, it could alter normal gameplay."
+msgstr ""
+
+#: src/multiopt.cpp:231
+#: src/multiplay.cpp:1726
+msgid "Warning, HOST has altered the game code, and can't be trusted!"
+msgstr ""
 
 #: src/multiplay.cpp:263
 #, c-format
@@ -14786,63 +14804,63 @@ msgstr "私密"
 msgid "[invalid]"
 msgstr "[无效]"
 
-#: src/multiplay.cpp:1999
+#: src/multiplay.cpp:2017
 msgid "Green"
 msgstr "绿色"
 
-#: src/multiplay.cpp:2000
+#: src/multiplay.cpp:2018
 msgid "Orange"
 msgstr "橙色"
 
-#: src/multiplay.cpp:2001
+#: src/multiplay.cpp:2019
 msgid "Grey"
 msgstr "灰色"
 
-#: src/multiplay.cpp:2003
+#: src/multiplay.cpp:2021
 msgid "Red"
 msgstr "红色"
 
-#: src/multiplay.cpp:2004
+#: src/multiplay.cpp:2022
 msgid "Blue"
 msgstr "蓝色"
 
-#: src/multiplay.cpp:2005
+#: src/multiplay.cpp:2023
 msgid "Pink"
 msgstr "粉红色"
 
-#: src/multiplay.cpp:2006
+#: src/multiplay.cpp:2024
 msgid "Cyan"
 msgstr "青绿色"
 
-#: src/multiplay.cpp:2007
+#: src/multiplay.cpp:2025
 msgid "Yellow"
 msgstr "黄色"
 
-#: src/multiplay.cpp:2008
+#: src/multiplay.cpp:2026
 msgid "Purple"
 msgstr "紫色"
 
-#: src/multiplay.cpp:2009
+#: src/multiplay.cpp:2027
 msgid "White"
 msgstr "白色"
 
-#: src/multiplay.cpp:2010
+#: src/multiplay.cpp:2028
 msgid "Bright blue"
 msgstr "宝蓝色"
 
-#: src/multiplay.cpp:2011
+#: src/multiplay.cpp:2029
 msgid "Neon green"
 msgstr "柠檬绿"
 
-#: src/multiplay.cpp:2012
+#: src/multiplay.cpp:2030
 msgid "Infrared"
 msgstr "红外线"
 
-#: src/multiplay.cpp:2013
+#: src/multiplay.cpp:2031
 msgid "Ultraviolet"
 msgstr "紫外光"
 
-#: src/multiplay.cpp:2014
+#: src/multiplay.cpp:2032
 msgid "Brown"
 msgstr "棕色"
 
