@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2013-11-29 18:34+0100\n"
-"PO-Revision-Date: 2013-12-01 02:58+0100\n"
+"PO-Revision-Date: 2013-12-02 03:36+0100\n"
 "Last-Translator: Volkan Gezer\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -4595,7 +4595,7 @@ msgstr "Bir üs kur, ardından yıkılmak üzere olan bir yapı aramaya başla."
 msgid ""
 "This structure contains technology vital for the success of the Project."
 msgstr ""
-"Bu yapı Projenin başarısı için hayati önemde bir teknoloji barındırıyor."
+"Bu yapı Proje'nin başarısı için hayati önemde bir teknoloji barındırıyor."
 
 #: data/base/messages/strings/cam1strings.txt:7
 msgid "ALPHA BASE MISSION: Scavenger Raiders"
@@ -4903,7 +4903,7 @@ msgstr "Sinaptik bağlantı teknolojisi kurtarıldı!"
 
 #: data/base/messages/strings/cam1strings.txt:129
 msgid "Initial research confirms it will be of great benefit to the Project."
-msgstr "İlk araştırma, bunun Projeye büyük katkı sağlayacağını onayladı."
+msgstr "İlk araştırma, bunun Proje'ye büyük katkı sağlayacağını onayladı."
 
 #: data/base/messages/strings/cam1strings.txt:132
 msgid "Base Beta is under heavy attack, they may need assistance."
@@ -5331,7 +5331,7 @@ msgstr ""
 msgid ""
 "NEXUS has gained access to nuclear weapons and is determined to destroy the "
 "Project."
-msgstr "NEXUS Nükleer silahlara erişti ve Projeyi yıkmayı amaç edindi."
+msgstr "NEXUS Nükleer silahlara erişti ve Proje'yi yıkmayı amaç edindi."
 
 #: data/base/messages/strings/cam3strings.txt:9
 msgid "Take your forces to the Northern Sector"
@@ -5356,7 +5356,7 @@ msgstr "TAŞIMA GÖREVİ: Bir Yönlendirme Üssü Kur"
 #: data/base/messages/strings/cam3strings.txt:15
 #: data/base/sequenceaudio/cam3/c003.txt:7
 msgid "Commander, the success of the Project lies with you."
-msgstr "Komutanım, Projenin başarısı size bağlı."
+msgstr "Komutanım, Proje'nin başarısı size bağlı."
 
 #: data/base/messages/strings/cam3strings.txt:16
 msgid "Secure an LZ, then establish a forward base."
@@ -9681,7 +9681,7 @@ msgid ""
 "As I once cleansed the world with fire, I will destroy you and your puny "
 "Project!!"
 msgstr ""
-"Ateşle dünyayı temizlediğim gibi, seni ve zavallı Projeni de yok edeceğim!!"
+"Ateşle dünyayı temizlediğim gibi, seni ve zavallı Proje'ni de yok edeceğim!!"
 
 #: data/base/sequenceaudio/cam1/cam1out5.txt:4
 msgid ""
@@ -9978,7 +9978,7 @@ msgid ""
 "Find it for me and I shall provide you with further weapons to aid you in "
 "your war against the Project."
 msgstr ""
-"Benim için onu bulun ve bende size Projeye karşı size güç kazandıracak "
+"Benim için onu bulun ve bende size Proje'ye karşı size güç kazandıracak "
 "gelişmiş silahlar vereyim."
 
 #: data/base/sequenceaudio/cam2/cam22pl2.txt:1
@@ -10037,7 +10037,7 @@ msgstr "Nexus KASSA uydularına yeniden bağlandı."
 
 #: data/base/sequenceaudio/cam2/cam26bfm.txt:5
 msgid "This poses a major threat to the Project and to our survival."
-msgstr "Bu bizim ve Projenin hayatta kalması için çok büyük bir tehlike."
+msgstr "Bu bizim ve Proje'nin hayatta kalması için çok büyük bir tehlike."
 
 #: data/base/sequenceaudio/cam2/cam26pl1.txt:1
 msgid ""
@@ -10134,7 +10134,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam2/cam2dico.txt:3
 msgid "Nexus now asks us to crush the Project."
-msgstr "Şimdi de Nexus bizden Projeyi ezmemizi istiyor."
+msgstr "Şimdi de Nexus bizden Proje'yi ezmemizi istiyor."
 
 #: data/base/sequenceaudio/cam2/cam2dico.txt:4
 msgid "Cleanse and destroy!!"
@@ -10333,7 +10333,7 @@ msgid ""
 msgstr ""
 "Askeri yardımı yeniden kazanınca, Dr. Reed NEXUS Davetsiz Misafir Programı "
 "üzerinde çalışmaya başladı. Küçük gelişmeler ile geçen 3 yıl sonra, askeriye "
-"Nexus projesinden vazgeçti ve Dr. Reed'e askeri fon desteği kapandı."
+"Nexus Proje'sinden vazgeçti ve Dr. Reed'e askeri fon desteği kapandı."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:9
 msgid ""
@@ -10614,7 +10614,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/devastation.txt:19
 msgid "We were finally ready to begin the Project."
-msgstr "Ve sonunda Projeyi başlatmak için hazırdık."
+msgstr "Ve sonunda Proje'yi başlatmak için hazırdık."
 
 #: data/base/sequenceaudio/outro.txt:1
 msgid "After many long months of struggle, we defeated NEXUS."
@@ -15475,7 +15475,7 @@ msgstr "%s - Hasar %%%3.0f"
 #: src/structure.cpp:5693
 #, c-format
 msgid "%s - Connected %u of %u - Damage %3.0f%%"
-msgstr "%s - Bağlandı %u de %u - Hasar %%%3.0f"
+msgstr "%s - Bağlı %u/%u - Hasar %%%3.0f"
 
 #: src/structure.cpp:5857
 #: src/structure.cpp:5902
