@@ -1025,7 +1025,7 @@ void orderUpdateDroid(DROID *psDroid)
 				psFireTarget = psSpotter->psTarget[0];
 			}
 
-			if (psFireTarget && !psFireTarget->died)
+			if (psFireTarget && !psFireTarget->died && checkAnyWeaponsTarget(psDroid, psFireTarget))
 			{
 				bAttack = false;
 				if (isVtolDroid(psDroid))
