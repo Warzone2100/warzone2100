@@ -290,7 +290,6 @@
     <ClInclude Include="file.h" />
     <ClInclude Include="fixedpoint.h" />
     <ClInclude Include="frame.h" />
-    <ClInclude Include="frameint.h" />
     <ClInclude Include="frameresource.h" />
     <ClInclude Include="gettext.h" />
     <ClInclude Include="i18n.h" />

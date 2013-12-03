@@ -190,7 +190,6 @@
   <ItemGroup>
     <ClCompile Include="bitimage.cpp" />
     <ClCompile Include="imdload.cpp" />
-    <ClCompile Include="ivi.cpp" />
     <ClCompile Include="jpeg_encoder.cpp" />
     <ClCompile Include="pieblitfunc.cpp" />
     <ClCompile Include="pieclip.cpp" />
@@ -201,14 +200,12 @@
     <ClCompile Include="piepalette.cpp" />
     <ClCompile Include="piestate.cpp" />
     <ClCompile Include="png_util.cpp" />
-    <ClCompile Include="rendmode.cpp" />
     <ClCompile Include="screen.cpp" />
     <ClCompile Include="tex.cpp" />
     <ClCompile Include="textdraw.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="imd.h" />
-    <ClInclude Include="ivi.h" />
     <ClInclude Include="ivisdef.h" />
     <ClInclude Include="jpeg_encoder.h" />
     <ClInclude Include="pieblitfunc.h" />
@@ -221,7 +218,6 @@
     <ClInclude Include="piestate.h" />
     <ClInclude Include="pietypes.h" />
     <ClInclude Include="png_util.h" />
-    <ClInclude Include="rendmode.h" />
     <ClInclude Include="screen.h" />
     <ClInclude Include="tex.h" />
     <ClInclude Include="textdraw.h" />

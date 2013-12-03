@@ -82,9 +82,6 @@
     <ClInclude Include="frame.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="frameint.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="frameresource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
