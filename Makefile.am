@@ -36,6 +36,9 @@ dist_doc_DATA = \
 
 ACLOCAL_AMFLAGS = -I m4
 
+# ignore the autorevision.cache file on make distcheck
+distcleancheck_listfiles =  find . -type f -print | grep -v 'autorevision.cache'
+
 EXTRA_DIST= \
 	build_tools/autorevision \
 	autogen.sh \
