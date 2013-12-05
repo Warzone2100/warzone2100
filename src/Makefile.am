@@ -10,7 +10,6 @@ autorevision.h autorevision.cache:
 
 CLEANFILES = \
 	$(BUILT_SOURCES) \
-	autorevision.cache \
 	autorevision.h.new
 
 BUILT_SOURCES = \
