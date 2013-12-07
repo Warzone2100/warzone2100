@@ -552,6 +552,44 @@ bool CheckForMod(char *theMap)
 	return false;
 }
 
+// Mount the archive under the mountpoint, and enumerate the archive according to lookin
+static bool CheckInMap(const char *archive, const char *mountpoint,const char *lookin)
+{
+	bool mapmod = false;
+
+	if (!PHYSFS_mount(archive, mountpoint, PHYSFS_APPEND))
+	{
+		// We already checked to see if this was valid before, and now, something went seriously wrong.
+		debug(LOG_FATAL, "Could not mount %s, because: %s. Please delete the file, and run the game again. Game will now exit.", archive, PHYSFS_getLastError());
+		exit(-1);
+	}
+
+	char **filelist = PHYSFS_enumerateFiles(lookin);
+	for (char **file = filelist; *file != NULL; ++file)
+	{
+		if (PHYSFS_isDirectory(*file))
+		{
+			std::string checkfile = *file;
+			if (checkfile.compare("wrf")==0 || checkfile.compare("stats")==0 ||checkfile.compare("components")==0
+				|| checkfile.compare("anims")==0 || checkfile.compare("effects")==0 ||checkfile.compare("messages")==0
+				|| checkfile.compare("audio")==0 || checkfile.compare("sequenceaudio")==0 ||checkfile.compare("misc")==0
+				|| checkfile.compare("features")==0 || checkfile.compare("script")==0 ||checkfile.compare("structs")==0
+				|| checkfile.compare("tileset")==0 || checkfile.compare("images")==0 || checkfile.compare("texpages")==0 )
+			{
+				debug(LOG_WZ, "Detected: %s %s" , archive, checkfile.c_str());
+				mapmod = true;
+				break;
+			}
+		}
+	}
+	PHYSFS_freeList(filelist);
+
+	if (!PHYSFS_removeFromSearchPath(archive))
+	{
+		debug(LOG_ERROR, "Could not unmount %s, %s", archive, PHYSFS_getLastError());
+	}
+	return mapmod;
+}
 
 bool buildMapList()
 {
@@ -589,42 +627,18 @@ bool buildMapList()
 
 		if (PHYSFS_removeFromSearchPath(realFilePathAndName.c_str()) == 0)
 		{
-			debug(LOG_ERROR, "Could not unmount %s", PHYSFS_getLastError());
-		}
-		// check what kind of map it is
-		if (!PHYSFS_mount(realFilePathAndName.c_str(), "WZMap", PHYSFS_APPEND))
-		{
-			debug(LOG_FATAL, "Could not mount %s, because: %s. Please delete the file, and run the game again. Game will now exit.", realFilePathAndName.c_str(), PHYSFS_getLastError());
-			exit(-1);
+			debug(LOG_ERROR, "Could not unmount %s, %s", realFilePathAndName.c_str(), PHYSFS_getLastError());
 		}
 
-		filelist = PHYSFS_enumerateFiles("WZMap");
-		for (char **file = filelist; *file != NULL; ++file)
-		{
-			if (PHYSFS_isDirectory(*file))
-			{
-				std::string checkfile = *file;
-				if (checkfile.compare("wrf")==0 || checkfile.compare("stats")==0 ||checkfile.compare("components")==0
-					|| checkfile.compare("anims")==0 || checkfile.compare("effects")==0 ||checkfile.compare("messages")==0
-					|| checkfile.compare("audio")==0 || checkfile.compare("sequenceaudio")==0 ||checkfile.compare("misc")==0
-					|| checkfile.compare("features")==0 || checkfile.compare("script")==0 ||checkfile.compare("structs")==0
-					|| checkfile.compare("tileset")==0 || checkfile.compare("images")==0 || checkfile.compare("texpages")==0 )
-				{
-					mapmod = true;
-					break;
-				}
-			}
-		}
-		PHYSFS_freeList(filelist);
+		 mapmod = CheckInMap(realFilePathAndName.c_str(), "WZMap", "WZMap");
+		 if (!mapmod)
+		 {
+			mapmod = CheckInMap(realFilePathAndName.c_str(), "WZMap", "WZMap/multiplay");
+		 }
 
 		CurrentMap.MapName = realFileName->c_str();
 		CurrentMap.isMapMod = mapmod;
 		WZ_Maps.push_back(CurrentMap);
-
-		if (PHYSFS_removeFromSearchPath(realFilePathAndName.c_str()) == 0)
-		{
-			debug(LOG_ERROR, "Could not unmount %s", PHYSFS_getLastError());
-		}
 	}
 
 	return true;
