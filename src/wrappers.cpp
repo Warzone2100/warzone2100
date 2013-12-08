@@ -135,15 +135,22 @@ TITLECODE titleLoop(void)
 		// then check --join and if neither, run the normal game menu.
 		if( hostlaunch )
 		{
+			NetPlay.bComms = true; // use network = true
+			NetPlay.isUPNP_CONFIGURED = false;
+			NetPlay.isUPNP_ERROR = false;
 			ingame.bHostSetup = true;
 			bMultiPlayer = true;
 			bMultiMessages = true;
-			game.type = SKIRMISH;		// needed?
+			NETinit(true);
+			NETdiscoverUPnPDevices();
+			game.type = SKIRMISH;
 			changeTitleMode(MULTIOPTION);
 			hostlaunch = false;			// reset the bool to default state.
 		}
 		else if(strlen(iptoconnect) )
 		{
+			NetPlay.bComms = true; // use network = true
+			NETinit(true);
 			joinGame(iptoconnect, 0);
 		}
 		else

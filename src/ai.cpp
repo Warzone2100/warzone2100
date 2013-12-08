@@ -1185,6 +1185,20 @@ void aiUpdateDroid(DROID *psDroid)
 	}
 }
 
+/* Check if any of our weapons can hit the target... */
+bool checkAnyWeaponsTarget(BASE_OBJECT *psObject, BASE_OBJECT *psTarget)
+{
+	DROID *psDroid = (DROID *) psObject;
+	for (int i = 0;i < psDroid->numWeaps;i++)
+	{
+		if (validTarget(psObject, psTarget, i))
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
 /* Set of rules which determine whether the weapon associated with the object can fire on the propulsion type of the target. */
 bool validTarget(BASE_OBJECT *psObject, BASE_OBJECT *psTarget, int weapon_slot)
 {

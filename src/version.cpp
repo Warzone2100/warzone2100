@@ -27,90 +27,41 @@
 
 #include "src/autorevision.h"
 
-static const char vcs_date_cstr[] = VCS_DATE;
 static const char vcs_branch_cstr[] = VCS_BRANCH;
+static const char vcs_tag[] = VCS_TAG;
 
-unsigned int version_getRevision()
-{
-	return VCS_NUM;
-}
-
-const char* version_getVersionString()
+/** Composes a nicely formatted version string.
+* Determine if we are on a tag (which will NOT show the hash)
+* or a branch (which WILL show the hash)
+* or in a detached state (which WILL show the hash)
+*/
+const char *version_getVersionString()
 {
 	static const char* version_string = NULL;
 
 	if (version_string == NULL)
 	{
-		if (strncmp(vcs_branch_cstr, "tags/", strlen("tags/")) == 0)
+		if (strlen(vcs_tag))
 		{
-			version_string = vcs_branch_cstr + strlen("tags/");
+			version_string = vcs_tag;
 		}
-		else if (strcmp(vcs_branch_cstr, "trunk") == 0)
+		else if (strlen(vcs_branch_cstr))
 		{
-			version_string = "TRUNK " VCS_SHORT_HASH;
-		}
-		else if (strncmp(vcs_branch_cstr, "branches/", strlen("branches/")) == 0)
-		{
-			version_string = (VCS_BRANCH " branch " VCS_SHORT_HASH) + strlen("branches/");
-		}
-		else if (strncmp(vcs_branch_cstr, "refs/heads/", strlen("refs/heads/")) == 0)
-		{
-			version_string = (VCS_BRANCH " branch " VCS_SHORT_HASH) + strlen("refs/heads/");
-		}
-		else if (VCS_NUM != 0)
-		{
-			version_string = VCS_BRANCH " " VCS_SHORT_HASH;
+			version_string = (VCS_BRANCH " " VCS_SHORT_HASH);
 		}
 		else
-		{
-			version_string = VCS_SHORT_HASH;
+		{	// not a branch or a tag, so we are detached most likely.
+			version_string = VCS_EXTRA;
 		}
 	}
 
 	return version_string;
 }
 
-bool version_modified()
-{
-	return VCS_WC_MODIFIED;
-}
-
-const char* version_getBuildDate()
-{
-	return __DATE__;
-}
-
-const char* version_getBuildTime()
-{
-	return __TIME__;
-}
-
-const char* version_getVcsDate()
-{
-#if (VCS_NUM == 0)
-	return "";
-#else
-	static char vcs_date[sizeof(vcs_date_cstr) - 9] = { '\0' };
-
-	if (vcs_date[0] == '\0')
-	{
-		sstrcpy(vcs_date, vcs_date_cstr);
-	}
-
-	return vcs_date;
-#endif
-}
-
-const char* version_getVcsTime()
-{
-#if (VCS_NUM == 0)
-	return "";
-#else
-	return VCS_DATE + sizeof(VCS_DATE) - 8 - 1;
-#endif
-}
-
-const char* version_getFormattedVersionString()
+/** Composes a nicely formatted version string.
+*
+*/
+const char *version_getFormattedVersionString()
 {
 	static char versionString[MAX_STR_LENGTH] = {'\0'};
 
@@ -122,7 +73,6 @@ const char* version_getFormattedVersionString()
 #else
 		const char* wc_state = "";
 #endif
-
 		// Compose the build type string
 #ifdef DEBUG
 		const char* build_type = _(" - DEBUG");
@@ -130,21 +80,10 @@ const char* version_getFormattedVersionString()
 		const char* build_type = "";
 #endif
 
-		const char* build_date = NULL;
-
-		if (strncmp(vcs_branch_cstr, "tags/", strlen("tags/")) != 0)
-		{
-			sasprintf((char**)&build_date, _(" - Built %s"), version_getBuildDate());
-		}
-		else
-		{
-			build_date = "";
-		}
-
 		// Construct the version string
 		// TRANSLATORS: This string looks as follows when expanded.
 		// "Version <version name/number> <working copy state><BUILD DATE><BUILD TYPE>"
-		snprintf(versionString, MAX_STR_LENGTH, _("Version %s%s%s%s"), version_getVersionString(), wc_state, build_date, build_type);
+		snprintf(versionString, MAX_STR_LENGTH, _("Version: %s,%s Built:%s%s"), version_getVersionString(), wc_state, __DATE__, build_type);
 	}
 
 	return versionString;

@@ -18,7 +18,6 @@ autorevision.h autorevision.cache:
 
 CLEANFILES = \
 	$(BUILT_SOURCES) \
-	autorevision.cache \
 	autorevision.h.new \
 	$(MOCEDFILES)
 
