@@ -1,5 +1,7 @@
-AM_CPPFLAGS = $(SDL_CFLAGS) $(PHYSFS_CFLAGS) $(PNG_CFLAGS) $(OPENGL_CFLAGS) $(WZ_CPPFLAGS) -I$(top_srcdir)/tools -I. -I$(top_srcdir)/lib/framework $(QT4_CFLAGS)
-AM_CFLAGS = -g
+AM_CPPFLAGS = $(SDL_CFLAGS) $(PHYSFS_CFLAGS) $(PNG_CFLAGS) $(OPENGL_CFLAGS) $(WZ_CPPFLAGS) -I$(top_srcdir)/tools \
+	-I. -I$(top_srcdir)/lib/framework $(QT4_CFLAGS) $(LIBCRYPTO_CFLAGS)
+AM_CFLAGS = $(WZ_CFLAGS)
+AM_CXXFLAGS = $(WZ_CXXFLAGS)
 
 BUILT_SOURCES = maplist.txt modellist.txt jslist.txt
 
@@ -14,7 +16,7 @@ qtscripttest_SOURCES = qtscripttest.cpp lint.cpp
 qtscripttest_LDADD = $(PHYSFS_LIBS) $(QT4_LIBS)
 
 framework_linktest_SOURCES = framework_linktest.cpp
-framework_linktest_LDADD = $(PHYSFS_LIBS) $(LIBCRYPTO_LIBS) $(top_builddir)/lib/framework/libframework.a
+framework_linktest_LDADD = $(top_builddir)/lib/framework/libframework.a $(PHYSFS_LIBS) $(LIBCRYPTO_LIBS) $(LDFLAGS)
 
 modeltest_SOURCES = modeltest.c
 
