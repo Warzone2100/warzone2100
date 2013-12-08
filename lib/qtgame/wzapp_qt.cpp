@@ -239,8 +239,6 @@ void WzMainWindow::resizeGL(int width, int height)
 	glLoadIdentity();
 	glCullFace(GL_FRONT);
 	glEnable(GL_CULL_FACE);
-
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 }
 
 void WzMainWindow::paintGL()

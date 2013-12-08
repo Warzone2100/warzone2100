@@ -511,10 +511,8 @@ void pie_SetFogStatus(bool val)
 				glFogf(GL_FOG_DENSITY, 0.35f);
 				glHint(GL_FOG_HINT, GL_DONT_CARE);
 				glEnable(GL_FOG);
-				glClearColor(fog_colour[0], fog_colour[1], fog_colour[2], fog_colour[3]);
 			} else {
 				glDisable(GL_FOG);
-				glClearColor(0, 0, 0, 0);
 			}
 		}
 	}

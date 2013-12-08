@@ -1245,9 +1245,6 @@ bool wzMain2(int antialiasing, bool fullscreen, bool vsync)
 	glCullFace(GL_FRONT);
 	glEnable(GL_CULL_FACE);
 
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-	//END **** Was in old screenInitialise. ****
-
 	init_scrap();
 	return true;
 }
