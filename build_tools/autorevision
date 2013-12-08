@@ -95,9 +95,13 @@ gitRepo() {
 	VCS_TYPE="git"
 	VCS_BASENAME="$(basename "${PWD}")"
 
-	 # Is the working copy clean?
+	# Check if working copy is clean, however, we will ignore any and all po files
+	# when we determine if modifications were done.
+	git update-index --assume-unchanged po/*.po
 	test -z "$(git status --untracked-files=no --porcelain)"
 	VCS_WC_MODIFIED="${?}"
+	# now, reset index back to normal
+	git update-index --no-assume-unchanged po/*.po
 
 	# The full revision hash
 	VCS_FULL_HASH="$(git rev-parse HEAD)"
