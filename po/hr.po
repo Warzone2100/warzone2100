@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WZ2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2013-11-29 18:34+0100\n"
+"POT-Creation-Date: 2013-12-11 22:22-0500\n"
 "PO-Revision-Date: \n"
 "Last-Translator: metalwarrior95 <metalwarrioroften@gmail.com>\n"
 "Language-Team: \n"
@@ -11934,7 +11934,7 @@ msgid "OpenGL GLSL shader version 1.20 is not supported by your system. Some thi
 msgstr ""
 
 #: lib/ivis_opengl/screen.cpp:193
-msgid "OpenGL 1.2 + VBO + TEC is not supported by your system. The game requires this. Please upgrade your graphics drivers/hardware, if possible."
+msgid "OpenGL 1.2 + TEC is not supported by your system. The game requires this. Please upgrade your graphics drivers/hardware, if possible."
 msgstr ""
 
 #: lib/netplay/netplay.cpp:218
@@ -12070,146 +12070,150 @@ msgstr ""
 msgid "Debug mode now disabled!"
 msgstr "Meni za varanje je otvoren."
 
-#: src/clparse.cpp:242
+#: src/clparse.cpp:243
 msgid "Set configuration directory"
 msgstr ""
 
-#: src/clparse.cpp:242
+#: src/clparse.cpp:243
 msgid "configuration directory"
 msgstr ""
 
-#: src/clparse.cpp:243
+#: src/clparse.cpp:244
 msgid "Set default data directory"
 msgstr ""
 
-#: src/clparse.cpp:243
+#: src/clparse.cpp:244
 msgid "data directory"
 msgstr ""
 
-#: src/clparse.cpp:244
+#: src/clparse.cpp:245
 msgid "Show debug for given level"
 msgstr ""
 
-#: src/clparse.cpp:244
+#: src/clparse.cpp:245
 msgid "debug level"
 msgstr ""
 
-#: src/clparse.cpp:245
+#: src/clparse.cpp:246
 msgid "Log debug output to file"
 msgstr ""
 
-#: src/clparse.cpp:245
+#: src/clparse.cpp:246
 msgid "file"
 msgstr "Dosije"
 
-#: src/clparse.cpp:246
+#: src/clparse.cpp:247
 msgid "Flush all debug output written to stderr"
 msgstr ""
 
-#: src/clparse.cpp:247
+#: src/clparse.cpp:248
 msgid "Play in fullscreen mode"
 msgstr "Igraj u punom ekranu"
 
-#: src/clparse.cpp:248
+#: src/clparse.cpp:249
 msgid "Load a specific game"
 msgstr "Učitaj specifičnu igru"
 
-#: src/clparse.cpp:248
+#: src/clparse.cpp:249
 msgid "game-name"
 msgstr "ime-igre"
 
-#: src/clparse.cpp:249
+#: src/clparse.cpp:250
 msgid "Show this help message and exit"
 msgstr ""
 
-#: src/clparse.cpp:250
+#: src/clparse.cpp:251
 msgid "Enable a global mod"
 msgstr ""
 
-#: src/clparse.cpp:250
 #: src/clparse.cpp:251
 #: src/clparse.cpp:252
+#: src/clparse.cpp:253
 msgid "mod"
 msgstr "mod"
 
-#: src/clparse.cpp:251
+#: src/clparse.cpp:252
 msgid "Enable a campaign only mod"
 msgstr "Ukljući samo kampanjski modul"
 
-#: src/clparse.cpp:252
+#: src/clparse.cpp:253
 msgid "Enable a multiplay only mod"
 msgstr "Ukljući samo višeigraća modul"
 
-#: src/clparse.cpp:253
+#: src/clparse.cpp:254
 msgid "Disable asserts"
 msgstr ""
 
-#: src/clparse.cpp:254
+#: src/clparse.cpp:255
 msgid "Causes a crash to test the crash handler"
 msgstr ""
 
-#: src/clparse.cpp:255
+#: src/clparse.cpp:256
 msgid "Load a saved game"
 msgstr "Učitaj sačuvanu igru"
 
-#: src/clparse.cpp:255
+#: src/clparse.cpp:256
 msgid "savegame"
 msgstr "sačuvaj igru"
 
-#: src/clparse.cpp:256
+#: src/clparse.cpp:257
 msgid "Play in windowed mode"
 msgstr "Igraju u Prozorskom modu"
 
-#: src/clparse.cpp:257
+#: src/clparse.cpp:258
 msgid "Show version information and exit"
 msgstr "Pokaži verziju i izađi"
 
-#: src/clparse.cpp:258
+#: src/clparse.cpp:259
 msgid "Set the resolution to use"
 msgstr "Postavite rezoluciju za korištenje"
 
-#: src/clparse.cpp:258
+#: src/clparse.cpp:259
 msgid "WIDTHxHEIGHT"
 msgstr "ŠIRINAxVISINA"
 
-#: src/clparse.cpp:259
+#: src/clparse.cpp:260
 msgid "Enable shadows"
 msgstr "Ukljući sjene"
 
-#: src/clparse.cpp:260
+#: src/clparse.cpp:261
 msgid "Disable shadows"
 msgstr "Iskljući sjene"
 
-#: src/clparse.cpp:261
+#: src/clparse.cpp:262
 msgid "Enable sound"
 msgstr "Ukljući zvuk"
 
-#: src/clparse.cpp:262
+#: src/clparse.cpp:263
 msgid "Disable sound"
 msgstr "Iskljući zvuk"
 
-#: src/clparse.cpp:263
+#: src/clparse.cpp:264
 msgid "connect directly to IP/hostname"
 msgstr ""
 
-#: src/clparse.cpp:263
+#: src/clparse.cpp:264
 msgid "host"
 msgstr "host"
 
-#: src/clparse.cpp:264
+#: src/clparse.cpp:265
 msgid "go directly to host screen"
 msgstr ""
 
-#: src/clparse.cpp:265
+#: src/clparse.cpp:266
 msgid "Enable texture compression"
 msgstr ""
 
-#: src/clparse.cpp:266
+#: src/clparse.cpp:267
 msgid "Disable texture compression"
 msgstr ""
 
-#: src/clparse.cpp:267
-msgid "Only use OpenGL 1.5"
+#: src/clparse.cpp:268
+msgid "Disable the use of OpenGL shaders"
+msgstr ""
+
+#: src/clparse.cpp:269
+msgid "Disable the use of OpenGL Vertex Buffer Objects"
 msgstr ""
 
 #: src/cmddroid.cpp:110
@@ -12387,20 +12391,20 @@ msgstr "Sistemi"
 msgid "Delete Template"
 msgstr ""
 
-#: src/display3d.cpp:658
+#: src/display3d.cpp:676
 msgid "Player left"
 msgstr "Igrač otišao"
 
-#: src/display3d.cpp:662
+#: src/display3d.cpp:680
 msgid "Player dropped"
 msgstr "Igrač Pao"
 
-#: src/display3d.cpp:666
+#: src/display3d.cpp:684
 #: src/multiint.cpp:2382
 msgid "Waiting for other players"
 msgstr "Čekanje na ostale igrače"
 
-#: src/display3d.cpp:671
+#: src/display3d.cpp:689
 msgid "Out of sync"
 msgstr ""
 
@@ -12511,7 +12515,7 @@ msgid "Multi Player"
 msgstr "Više Igrača"
 
 #: src/frontend.cpp:110
-#: src/frontend.cpp:186
+#: src/frontend.cpp:193
 msgid "Tutorial"
 msgstr "Vježbe"
 
@@ -12520,397 +12524,402 @@ msgstr "Vježbe"
 msgid "Options"
 msgstr "Opcije"
 
-#: src/frontend.cpp:112
+#: src/frontend.cpp:114
+#: src/frontend.cpp:118
 msgid "View Intro"
 msgstr "Prikaži Uvod"
 
-#: src/frontend.cpp:114
+#: src/frontend.cpp:119
+msgid "Videos are missing, download them from http://wz2100.net"
+msgstr ""
+
+#: src/frontend.cpp:121
 msgid "Quit Game"
 msgstr "Izaći iz Igre"
 
-#: src/frontend.cpp:115
+#: src/frontend.cpp:122
 msgid "MAIN MENU"
 msgstr "GLAVNI MENI"
 
-#: src/frontend.cpp:117
+#: src/frontend.cpp:124
 msgid "Official site: http://wz2100.net/"
 msgstr ""
 
-#: src/frontend.cpp:187
+#: src/frontend.cpp:194
 msgid "Fast Play"
 msgstr "Brzo Igranje"
 
-#: src/frontend.cpp:188
+#: src/frontend.cpp:195
 msgid "TUTORIALS"
 msgstr "Vježbe"
 
 #. TRANSLATORS: "Return", in this context, means "return to previous screen/menu"
-#: src/frontend.cpp:190
-#: src/frontend.cpp:252
-#: src/frontend.cpp:397
-#: src/frontend.cpp:471
-#: src/frontend.cpp:612
-#: src/frontend.cpp:758
-#: src/frontend.cpp:904
-#: src/frontend.cpp:1163
-#: src/frontend.cpp:1318
-#: src/frontend.cpp:1338
+#: src/frontend.cpp:197
+#: src/frontend.cpp:259
+#: src/frontend.cpp:404
+#: src/frontend.cpp:478
+#: src/frontend.cpp:619
+#: src/frontend.cpp:765
+#: src/frontend.cpp:911
+#: src/frontend.cpp:1170
+#: src/frontend.cpp:1325
+#: src/frontend.cpp:1345
 msgctxt "menu"
 msgid "Return"
 msgstr "Natrag"
 
-#: src/frontend.cpp:245
+#: src/frontend.cpp:252
 msgid "New Campaign"
 msgstr "Nova Kampanja"
 
-#: src/frontend.cpp:246
+#: src/frontend.cpp:253
 msgid "Start Skirmish Game"
 msgstr "Početi Trening Igru"
 
-#: src/frontend.cpp:247
+#: src/frontend.cpp:254
 msgid "Challenges"
 msgstr "Izazovi"
 
-#: src/frontend.cpp:248
+#: src/frontend.cpp:255
 #, fuzzy
 msgid "Load Campaign Game"
 msgstr "Učitaj Igru"
 
-#: src/frontend.cpp:249
+#: src/frontend.cpp:256
 #, fuzzy
 msgid "Load Skirmish Game"
 msgstr "Početi Trening Igru"
 
-#: src/frontend.cpp:251
+#: src/frontend.cpp:258
 msgid "SINGLE PLAYER"
 msgstr "JEDAN IGRAČ"
 
-#: src/frontend.cpp:256
+#: src/frontend.cpp:263
 msgid "Campaign videos are missing! Get them from http://wz2100.net"
 msgstr ""
 
-#: src/frontend.cpp:332
+#: src/frontend.cpp:339
 #: src/ingameop.cpp:504
 #, fuzzy
 msgid "Load Campaign Saved Game"
 msgstr "Učitaj Sačuvanu Igru"
 
-#: src/frontend.cpp:338
+#: src/frontend.cpp:345
 #: src/ingameop.cpp:508
 #, fuzzy
 msgid "Load Skirmish Saved Game"
 msgstr "Učitaj Sačuvanu Igru"
 
-#: src/frontend.cpp:392
+#: src/frontend.cpp:399
 msgid "MULTI PLAYER"
 msgstr "VIŠE IGRAČA"
 
-#: src/frontend.cpp:394
+#: src/frontend.cpp:401
 msgid "Host Game"
 msgstr "Napravi Igru"
 
-#: src/frontend.cpp:395
+#: src/frontend.cpp:402
 msgid "Join Game"
 msgstr "Pridruži se Igri"
 
-#: src/frontend.cpp:400
+#: src/frontend.cpp:407
 msgid "TCP port 2100 must be opened in your firewall or router to host games!"
 msgstr ""
 
-#: src/frontend.cpp:464
+#: src/frontend.cpp:471
 #: src/multiint.cpp:1483
 msgid "OPTIONS"
 msgstr "POSTAVKE"
 
-#: src/frontend.cpp:465
+#: src/frontend.cpp:472
 msgid "Game Options"
 msgstr "Opcije Igre"
 
-#: src/frontend.cpp:466
+#: src/frontend.cpp:473
 msgid "Graphics Options"
 msgstr "Grafičke opcije"
 
-#: src/frontend.cpp:467
+#: src/frontend.cpp:474
 msgid "Video Options"
 msgstr "Video opcije"
 
-#: src/frontend.cpp:468
+#: src/frontend.cpp:475
 #: src/ingameop.cpp:268
 msgid "Audio Options"
 msgstr "Audio opcije"
 
-#: src/frontend.cpp:469
+#: src/frontend.cpp:476
 msgid "Mouse Options"
 msgstr "Opcije miša"
 
-#: src/frontend.cpp:470
+#: src/frontend.cpp:477
 msgid "Key Mappings"
 msgstr ""
 
-#: src/frontend.cpp:530
+#: src/frontend.cpp:537
 msgid "Video Playback"
 msgstr "Video reprodukcija"
 
-#: src/frontend.cpp:534
-#: src/frontend.cpp:686
+#: src/frontend.cpp:541
+#: src/frontend.cpp:693
 msgid "1X"
 msgstr ""
 
-#: src/frontend.cpp:538
-#: src/frontend.cpp:676
+#: src/frontend.cpp:545
+#: src/frontend.cpp:683
 msgid "2X"
 msgstr ""
 
-#: src/frontend.cpp:542
-#: src/frontend.cpp:681
-#: src/frontend.cpp:832
-#: src/frontend.cpp:929
+#: src/frontend.cpp:549
+#: src/frontend.cpp:688
+#: src/frontend.cpp:839
+#: src/frontend.cpp:936
 msgid "Fullscreen"
 msgstr "Puni Ekran"
 
-#: src/frontend.cpp:551
+#: src/frontend.cpp:558
 msgid "Scanlines"
 msgstr ""
 
-#: src/frontend.cpp:555
-#: src/frontend.cpp:576
-#: src/frontend.cpp:584
-#: src/frontend.cpp:600
-#: src/frontend.cpp:630
-#: src/frontend.cpp:648
-#: src/frontend.cpp:666
-#: src/frontend.cpp:711
-#: src/frontend.cpp:857
-#: src/frontend.cpp:867
-#: src/frontend.cpp:897
-#: src/frontend.cpp:953
-#: src/frontend.cpp:1014
-#: src/frontend.cpp:1057
-#: src/frontend.cpp:1070
-#: src/frontend.cpp:1120
-#: src/frontend.cpp:1132
-#: src/frontend.cpp:1144
-#: src/frontend.cpp:1180
-#: src/frontend.cpp:1193
-#: src/frontend.cpp:1207
+#: src/frontend.cpp:562
+#: src/frontend.cpp:583
+#: src/frontend.cpp:591
+#: src/frontend.cpp:607
+#: src/frontend.cpp:637
+#: src/frontend.cpp:655
+#: src/frontend.cpp:673
+#: src/frontend.cpp:718
+#: src/frontend.cpp:864
+#: src/frontend.cpp:874
+#: src/frontend.cpp:904
+#: src/frontend.cpp:960
+#: src/frontend.cpp:1021
+#: src/frontend.cpp:1064
+#: src/frontend.cpp:1077
+#: src/frontend.cpp:1127
+#: src/frontend.cpp:1139
+#: src/frontend.cpp:1151
+#: src/frontend.cpp:1187
+#: src/frontend.cpp:1200
+#: src/frontend.cpp:1214
 msgid "Off"
 msgstr "Isključeno"
 
-#: src/frontend.cpp:559
-#: src/frontend.cpp:701
+#: src/frontend.cpp:566
+#: src/frontend.cpp:708
 msgid "50%"
 msgstr ""
 
-#: src/frontend.cpp:563
-#: src/frontend.cpp:706
+#: src/frontend.cpp:570
+#: src/frontend.cpp:713
 #: src/multiplay.cpp:2020
 msgid "Black"
 msgstr "Crni"
 
-#: src/frontend.cpp:569
+#: src/frontend.cpp:576
 msgid "Screen Shake"
 msgstr "Drmati Zaslon"
 
-#: src/frontend.cpp:572
-#: src/frontend.cpp:588
-#: src/frontend.cpp:596
-#: src/frontend.cpp:635
-#: src/frontend.cpp:653
-#: src/frontend.cpp:662
-#: src/frontend.cpp:853
-#: src/frontend.cpp:893
-#: src/frontend.cpp:1019
-#: src/frontend.cpp:1053
-#: src/frontend.cpp:1075
-#: src/frontend.cpp:1116
-#: src/frontend.cpp:1128
-#: src/frontend.cpp:1140
-#: src/frontend.cpp:1185
-#: src/frontend.cpp:1198
-#: src/frontend.cpp:1212
+#: src/frontend.cpp:579
+#: src/frontend.cpp:595
+#: src/frontend.cpp:603
+#: src/frontend.cpp:642
+#: src/frontend.cpp:660
+#: src/frontend.cpp:669
+#: src/frontend.cpp:860
+#: src/frontend.cpp:900
+#: src/frontend.cpp:1026
+#: src/frontend.cpp:1060
+#: src/frontend.cpp:1082
+#: src/frontend.cpp:1123
+#: src/frontend.cpp:1135
+#: src/frontend.cpp:1147
+#: src/frontend.cpp:1192
+#: src/frontend.cpp:1205
+#: src/frontend.cpp:1219
 msgid "On"
 msgstr "Uključeno"
 
-#: src/frontend.cpp:581
+#: src/frontend.cpp:588
 msgid "Subtitles"
 msgstr "Titlovi"
 
-#: src/frontend.cpp:593
+#: src/frontend.cpp:600
 msgid "Shadows"
 msgstr "Sjene"
 
-#: src/frontend.cpp:604
-#: src/frontend.cpp:1345
+#: src/frontend.cpp:611
+#: src/frontend.cpp:1352
 msgid "Radar"
 msgstr ""
 
-#: src/frontend.cpp:605
-#: src/frontend.cpp:718
-#: src/frontend.cpp:1346
+#: src/frontend.cpp:612
+#: src/frontend.cpp:725
+#: src/frontend.cpp:1353
 #, fuzzy
 msgid "Rotating"
 msgstr "Zakreni u desno"
 
-#: src/frontend.cpp:605
-#: src/frontend.cpp:718
-#: src/frontend.cpp:1346
+#: src/frontend.cpp:612
+#: src/frontend.cpp:725
+#: src/frontend.cpp:1353
 msgid "Fixed"
 msgstr ""
 
-#: src/frontend.cpp:608
+#: src/frontend.cpp:615
 msgid "GRAPHICS OPTIONS"
 msgstr "OPCIJE SLIKE"
 
-#: src/frontend.cpp:746
+#: src/frontend.cpp:753
 #: src/ingameop.cpp:168
 msgid "Voice Volume"
 msgstr "Glasovna jačina"
 
-#: src/frontend.cpp:750
+#: src/frontend.cpp:757
 #: src/ingameop.cpp:173
 msgid "FX Volume"
 msgstr "FX jačina"
 
-#: src/frontend.cpp:754
+#: src/frontend.cpp:761
 #: src/ingameop.cpp:178
 msgid "Music Volume"
 msgstr "Jačina glazbe"
 
-#: src/frontend.cpp:761
+#: src/frontend.cpp:768
 msgid "AUDIO OPTIONS"
 msgstr "OPCIJE ZVUKA"
 
-#: src/frontend.cpp:825
+#: src/frontend.cpp:832
 msgid "* Takes effect on game restart"
 msgstr "* Radi tek nakon ponovnog pokretanja igre"
 
-#: src/frontend.cpp:828
+#: src/frontend.cpp:835
 msgid "Graphics Mode*"
 msgstr "Grafički način"
 
-#: src/frontend.cpp:836
-#: src/frontend.cpp:924
+#: src/frontend.cpp:843
+#: src/frontend.cpp:931
 msgid "Windowed"
 msgstr "U prozoru"
 
-#: src/frontend.cpp:840
+#: src/frontend.cpp:847
 msgid "Resolution*"
 msgstr "Rezolucija*"
 
-#: src/frontend.cpp:845
+#: src/frontend.cpp:852
 msgid "Texture size"
 msgstr "Veličina tekstura*"
 
-#: src/frontend.cpp:849
+#: src/frontend.cpp:856
 #, fuzzy
 msgid "Vertical sync"
 msgstr "Verikarno osvježivanje*"
 
-#: src/frontend.cpp:884
-#: src/frontend.cpp:959
+#: src/frontend.cpp:891
+#: src/frontend.cpp:966
 #, fuzzy
 msgid "Unsupported"
 msgstr "Transport"
 
-#: src/frontend.cpp:889
+#: src/frontend.cpp:896
 #, fuzzy
 msgid "Shaders"
 msgstr "Sjene"
 
-#: src/frontend.cpp:901
+#: src/frontend.cpp:908
 msgid "VIDEO OPTIONS"
 msgstr "OPCIJE VIDEA"
 
-#: src/frontend.cpp:1113
+#: src/frontend.cpp:1120
 msgid "Reverse Rotation"
 msgstr "Obrni rotaciju"
 
-#: src/frontend.cpp:1124
+#: src/frontend.cpp:1131
 msgid "Trap Cursor"
 msgstr "Zarobi Kursor"
 
-#: src/frontend.cpp:1137
+#: src/frontend.cpp:1144
 msgid "Switch Mouse Buttons"
 msgstr "Zamjeni Tipke Miša"
 
-#: src/frontend.cpp:1149
+#: src/frontend.cpp:1156
 #, fuzzy
 msgid "Rotate Screen"
 msgstr "Zakreni u lijevo"
 
-#: src/frontend.cpp:1152
-#: src/frontend.cpp:1226
+#: src/frontend.cpp:1159
+#: src/frontend.cpp:1233
 msgid "Middle Mouse"
 msgstr ""
 
-#: src/frontend.cpp:1156
-#: src/frontend.cpp:1221
+#: src/frontend.cpp:1163
+#: src/frontend.cpp:1228
 msgid "Right Mouse"
 msgstr ""
 
-#: src/frontend.cpp:1160
+#: src/frontend.cpp:1167
 msgid "MOUSE OPTIONS"
 msgstr "OPCIJE MIŠA"
 
-#: src/frontend.cpp:1261
-#: src/frontend.cpp:1339
+#: src/frontend.cpp:1268
+#: src/frontend.cpp:1346
 msgid "Language"
 msgstr "Jezik"
 
-#: src/frontend.cpp:1265
-#: src/frontend.cpp:1343
+#: src/frontend.cpp:1272
+#: src/frontend.cpp:1350
 msgid "Difficulty"
 msgstr "Težina"
 
-#: src/frontend.cpp:1269
-#: src/frontend.cpp:1350
-#: src/frontend.cpp:1382
+#: src/frontend.cpp:1276
+#: src/frontend.cpp:1357
+#: src/frontend.cpp:1389
 #: src/multiint.cpp:215
 msgid "Easy"
 msgstr "Lagano"
 
-#: src/frontend.cpp:1272
-#: src/frontend.cpp:1353
-#: src/frontend.cpp:1374
+#: src/frontend.cpp:1279
+#: src/frontend.cpp:1360
+#: src/frontend.cpp:1381
 msgid "Normal"
 msgstr "Srednje"
 
-#: src/frontend.cpp:1276
-#: src/frontend.cpp:1356
-#: src/frontend.cpp:1378
+#: src/frontend.cpp:1283
+#: src/frontend.cpp:1363
+#: src/frontend.cpp:1385
 #: src/multiint.cpp:215
 msgid "Hard"
 msgstr "Teško"
 
-#: src/frontend.cpp:1281
-#: src/frontend.cpp:1344
+#: src/frontend.cpp:1288
+#: src/frontend.cpp:1351
 msgid "Scroll Speed"
 msgstr "Brzina "
 
-#: src/frontend.cpp:1285
-#: src/frontend.cpp:1340
+#: src/frontend.cpp:1292
+#: src/frontend.cpp:1347
 #, fuzzy
 msgid "Unit Colour:"
 msgstr "Boja"
 
-#: src/frontend.cpp:1305
-#: src/frontend.cpp:1341
+#: src/frontend.cpp:1312
+#: src/frontend.cpp:1348
 #, fuzzy
 msgid "Campaign"
 msgstr "Nova Kampanja"
 
-#: src/frontend.cpp:1315
-#: src/frontend.cpp:1342
+#: src/frontend.cpp:1322
+#: src/frontend.cpp:1349
 #, fuzzy
 msgid "Skirmish/Multiplayer"
 msgstr "Više Igrača"
 
-#: src/frontend.cpp:1321
-#: src/frontend.cpp:1337
+#: src/frontend.cpp:1328
+#: src/frontend.cpp:1344
 msgid "GAME OPTIONS"
 msgstr "OPCIJE IGRE"
 
-#: src/frontend.cpp:1482
+#: src/frontend.cpp:1489
 #: src/multiint.cpp:2651
 msgid "Mod: "
 msgstr "Modifikacija:"
@@ -14911,12 +14920,12 @@ msgstr ""
 msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
 msgstr ""
 
-#: src/qtscriptfuncs.cpp:1596
+#: src/qtscriptfuncs.cpp:1597
 #: src/scriptfuncs.cpp:3263
 msgid "YOU ARE VICTORIOUS!"
 msgstr "POBJEDIO SI!!!"
 
-#: src/qtscriptfuncs.cpp:1601
+#: src/qtscriptfuncs.cpp:1602
 #: src/scriptfuncs.cpp:3267
 msgid "YOU WERE DEFEATED!"
 msgstr "IZGUBIO SI!!!"
@@ -15159,25 +15168,23 @@ msgstr ""
 msgid "Reinforcements landing"
 msgstr "Pojačanja dolaze"
 
-#: src/version.cpp:121
+#: src/version.cpp:72
 msgid " (modified locally)"
 msgstr " (lokalno promjenjena)"
 
-#: src/version.cpp:128
+#: src/version.cpp:78
 msgid " - DEBUG"
 msgstr " - DEBUG"
 
-#: src/version.cpp:137
-#, c-format
-msgid " - Built %s"
-msgstr " - Kompajlirano %s"
-
 #. TRANSLATORS: This string looks as follows when expanded.
 #. "Version <version name/number> <working copy state><BUILD DATE><BUILD TYPE>"
-#: src/version.cpp:147
+#: src/version.cpp:86
 #, fuzzy, c-format
-msgid "Version %s%s%s%s"
+msgid "Version: %s,%s Built:%s%s"
 msgstr "Verzija %s%s%s%s"
+
+#~ msgid " - Built %s"
+#~ msgstr " - Kompajlirano %s"
 
 #, fuzzy
 #~ msgid "Password is already set!"

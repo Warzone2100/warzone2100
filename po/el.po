@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: el_002_warzone2100 3.1git\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2013-11-29 18:34+0100\n"
+"POT-Creation-Date: 2013-12-11 22:22-0500\n"
 "PO-Revision-Date: 2012-12-10 15:44+0200\n"
 "Last-Translator: nikos papadopoulos <231036448@freemail.gr>\n"
 "Language-Team: el <www.mageia-gr.org/forum/>\n"
@@ -11897,7 +11897,8 @@ msgid "OpenGL GLSL shader version 1.20 is not supported by your system. Some thi
 msgstr "Το σύστημά σου δεν υποστηρίζει την OpenGL GLSL shader, έκδοση 1.20 . Κάποια στοιχεία ίσως να δείχνουν λάθος. Παρακαλώ, αν είναι δυνατό, αναβάθμισε τον οδηγό, ή τη συσκευή, των γραφικών."
 
 #: lib/ivis_opengl/screen.cpp:193
-msgid "OpenGL 1.2 + VBO + TEC is not supported by your system. The game requires this. Please upgrade your graphics drivers/hardware, if possible."
+#, fuzzy
+msgid "OpenGL 1.2 + TEC is not supported by your system. The game requires this. Please upgrade your graphics drivers/hardware, if possible."
 msgstr "Το σύστημά σου δεν υποστηρίζει τα OpenGL 1.2 + VBO + TEC . Αυτά είναι απαραίτητα για το παιχνίδι. Παρακαλώ, αν είναι δυνατό, αναβάθμισε τον οδηγό, ή τη συσκευή, των γραφικών."
 
 #: lib/netplay/netplay.cpp:218
@@ -12038,147 +12039,152 @@ msgstr "Τώρα, έχει ενεργοποιηθεί η κατάσταση λε
 msgid "Debug mode now disabled!"
 msgstr "Τώρα, έχει ενεργοποιηθεί η κατάσταση λειτουργίας αποσφαλμάτωσης."
 
-#: src/clparse.cpp:242
+#: src/clparse.cpp:243
 msgid "Set configuration directory"
 msgstr "Όρισε τον κατάλογο των ρυθμίσεων"
 
-#: src/clparse.cpp:242
+#: src/clparse.cpp:243
 msgid "configuration directory"
 msgstr "κατάλογος ρυθμίσεων"
 
-#: src/clparse.cpp:243
+#: src/clparse.cpp:244
 msgid "Set default data directory"
 msgstr "Όρισε τον προεπιλεγμένο κατάλογο των δεδομένων"
 
-#: src/clparse.cpp:243
+#: src/clparse.cpp:244
 msgid "data directory"
 msgstr "κατάλογος δεδομένων"
 
-#: src/clparse.cpp:244
+#: src/clparse.cpp:245
 msgid "Show debug for given level"
 msgstr "Εμφάνιση της αποσφαλμάτωσης για το συγκεκριμένο επίπεδο"
 
-#: src/clparse.cpp:244
+#: src/clparse.cpp:245
 msgid "debug level"
 msgstr "επίπεδο αποσφαλμάτωσης"
 
-#: src/clparse.cpp:245
+#: src/clparse.cpp:246
 msgid "Log debug output to file"
 msgstr "Καταγραφή σε ένα αρχείο της εξαγωγής της αποσφαλμάτωσης"
 
-#: src/clparse.cpp:245
+#: src/clparse.cpp:246
 msgid "file"
 msgstr "αρχείο"
 
-#: src/clparse.cpp:246
+#: src/clparse.cpp:247
 msgid "Flush all debug output written to stderr"
 msgstr "Απόρριψη όλων των εξαγωγών αποσφαλμάτωσης που έχουν εγγραφεί στο stderr"
 
-#: src/clparse.cpp:247
+#: src/clparse.cpp:248
 msgid "Play in fullscreen mode"
 msgstr "Παίξιμο σε λειτουργία πλήρους οθόνης"
 
-#: src/clparse.cpp:248
+#: src/clparse.cpp:249
 msgid "Load a specific game"
 msgstr "Φόρτωση ενός συγκεκριμένου παιχνιδιού"
 
-#: src/clparse.cpp:248
+#: src/clparse.cpp:249
 msgid "game-name"
 msgstr "όνομα-παιχνιδιού"
 
-#: src/clparse.cpp:249
+#: src/clparse.cpp:250
 msgid "Show this help message and exit"
 msgstr "Εμφάνιση αυτού του μηνύματος βοήθειας και έξοδος"
 
-#: src/clparse.cpp:250
+#: src/clparse.cpp:251
 msgid "Enable a global mod"
 msgstr "Ενεργοποίηση μιας καθολικής μετατροπής"
 
-#: src/clparse.cpp:250
 #: src/clparse.cpp:251
 #: src/clparse.cpp:252
+#: src/clparse.cpp:253
 msgid "mod"
 msgstr "διασκευή"
 
-#: src/clparse.cpp:251
+#: src/clparse.cpp:252
 msgid "Enable a campaign only mod"
 msgstr "Ενεργοποίηση μιας μετατροπής μονάχα εκστρατείας"
 
-#: src/clparse.cpp:252
+#: src/clparse.cpp:253
 msgid "Enable a multiplay only mod"
 msgstr "Ενεργοποίηση μόνο μιας μετατροπής για πολλούς παίχτες"
 
-#: src/clparse.cpp:253
+#: src/clparse.cpp:254
 msgid "Disable asserts"
 msgstr "Απενεργοποίηση των προκαθορισμών"
 
-#: src/clparse.cpp:254
+#: src/clparse.cpp:255
 msgid "Causes a crash to test the crash handler"
 msgstr "Προκαλεί κατάρρευση για να ελεγχθεί ο διαχειριστής κατάρρευσης"
 
-#: src/clparse.cpp:255
+#: src/clparse.cpp:256
 msgid "Load a saved game"
 msgstr "Φόρτωση ενός αποθηκευμένου παιχνιδιού"
 
-#: src/clparse.cpp:255
+#: src/clparse.cpp:256
 msgid "savegame"
 msgstr "αποθηκευσηπαιχνιδιού"
 
-#: src/clparse.cpp:256
+#: src/clparse.cpp:257
 msgid "Play in windowed mode"
 msgstr "Παίξιμο σε κατάσταση λειτουργίας παραθύρου"
 
-#: src/clparse.cpp:257
+#: src/clparse.cpp:258
 msgid "Show version information and exit"
 msgstr "Εμφάνιση πληροφοριών έκδοσης και έξοδος"
 
-#: src/clparse.cpp:258
+#: src/clparse.cpp:259
 msgid "Set the resolution to use"
 msgstr "Όρισε την ανάλυση που θα χρησιμοποιηθεί"
 
-#: src/clparse.cpp:258
+#: src/clparse.cpp:259
 msgid "WIDTHxHEIGHT"
 msgstr "ΠΛΑΤΟΣΧΥΨΟΣ"
 
-#: src/clparse.cpp:259
+#: src/clparse.cpp:260
 msgid "Enable shadows"
 msgstr "Ενεργοποίηση των σκιών"
 
-#: src/clparse.cpp:260
+#: src/clparse.cpp:261
 msgid "Disable shadows"
 msgstr "Απενεργοποίηση των σκιών"
 
-#: src/clparse.cpp:261
+#: src/clparse.cpp:262
 msgid "Enable sound"
 msgstr "Ενεργοποίηση του ήχου"
 
-#: src/clparse.cpp:262
+#: src/clparse.cpp:263
 msgid "Disable sound"
 msgstr "Απενεργοποίηση του ήχου"
 
-#: src/clparse.cpp:263
+#: src/clparse.cpp:264
 msgid "connect directly to IP/hostname"
 msgstr "κατευθείαν σύνδεση με διεύθυνση IP ή όνομα οικοδεσπότη"
 
-#: src/clparse.cpp:263
+#: src/clparse.cpp:264
 msgid "host"
 msgstr "οικοδεσπότης"
 
-#: src/clparse.cpp:264
+#: src/clparse.cpp:265
 msgid "go directly to host screen"
 msgstr "κατευθείαν μετάβαση στην οθόνη φιλοξενίας"
 
-#: src/clparse.cpp:265
+#: src/clparse.cpp:266
 msgid "Enable texture compression"
 msgstr "Ενεργοποίηση συμπίεσης υφασμάτων"
 
-#: src/clparse.cpp:266
+#: src/clparse.cpp:267
 msgid "Disable texture compression"
 msgstr "Απενεργοποίηση συμπίεσης υφασμάτων"
 
-#: src/clparse.cpp:267
-msgid "Only use OpenGL 1.5"
-msgstr "Χρήση μόνο της ΌπενΤζιΕλ 1.5"
+#: src/clparse.cpp:268
+#, fuzzy
+msgid "Disable the use of OpenGL shaders"
+msgstr "Απενεργοποίηση συμπίεσης υφασμάτων"
+
+#: src/clparse.cpp:269
+msgid "Disable the use of OpenGL Vertex Buffer Objects"
+msgstr ""
 
 #: src/cmddroid.cpp:110
 msgid "Commander needs a higher level to command more units"
@@ -12357,20 +12363,20 @@ msgstr "Συστήματα"
 msgid "Delete Template"
 msgstr "Διαγραφή Προτύπου"
 
-#: src/display3d.cpp:658
+#: src/display3d.cpp:676
 msgid "Player left"
 msgstr "Ο παίχτης έφηγε"
 
-#: src/display3d.cpp:662
+#: src/display3d.cpp:680
 msgid "Player dropped"
 msgstr "Ο παίχτης αποσυνδέθηκε"
 
-#: src/display3d.cpp:666
+#: src/display3d.cpp:684
 #: src/multiint.cpp:2382
 msgid "Waiting for other players"
 msgstr "Αναμονή για άλλους παίχτες"
 
-#: src/display3d.cpp:671
+#: src/display3d.cpp:689
 msgid "Out of sync"
 msgstr "Εκτός συγχρονισμού"
 
@@ -12481,7 +12487,7 @@ msgid "Multi Player"
 msgstr "ομαδικό"
 
 #: src/frontend.cpp:110
-#: src/frontend.cpp:186
+#: src/frontend.cpp:193
 msgid "Tutorial"
 msgstr "παρουσίαση"
 
@@ -12490,386 +12496,392 @@ msgstr "παρουσίαση"
 msgid "Options"
 msgstr "επιλογές"
 
-#: src/frontend.cpp:112
+#: src/frontend.cpp:114
+#: src/frontend.cpp:118
 msgid "View Intro"
 msgstr "πρόλογος"
 
-#: src/frontend.cpp:114
+#: src/frontend.cpp:119
+#, fuzzy
+msgid "Videos are missing, download them from http://wz2100.net"
+msgstr "Τα βίντεο τς εκστρατείας λείπουν. Μπορείς να τα κατεβάσεις από την http://wz2100.net"
+
+#: src/frontend.cpp:121
 msgid "Quit Game"
 msgstr "τερματισμός"
 
-#: src/frontend.cpp:115
+#: src/frontend.cpp:122
 msgid "MAIN MENU"
 msgstr "ΚΥΡΙΟ ΜΕΝΟΥ"
 
-#: src/frontend.cpp:117
+#: src/frontend.cpp:124
 #, fuzzy
 msgid "Official site: http://wz2100.net/"
 msgstr "Δες τον επίσημο ιστότοπό μας: http://wz2100.net"
 
-#: src/frontend.cpp:187
+#: src/frontend.cpp:194
 msgid "Fast Play"
 msgstr "γρήγορο παιχνίδι"
 
-#: src/frontend.cpp:188
+#: src/frontend.cpp:195
 msgid "TUTORIALS"
 msgstr "ΕΚΜΑΘΗΣΗ"
 
 #. TRANSLATORS: "Return", in this context, means "return to previous screen/menu"
-#: src/frontend.cpp:190
-#: src/frontend.cpp:252
-#: src/frontend.cpp:397
-#: src/frontend.cpp:471
-#: src/frontend.cpp:612
-#: src/frontend.cpp:758
-#: src/frontend.cpp:904
-#: src/frontend.cpp:1163
-#: src/frontend.cpp:1318
-#: src/frontend.cpp:1338
+#: src/frontend.cpp:197
+#: src/frontend.cpp:259
+#: src/frontend.cpp:404
+#: src/frontend.cpp:478
+#: src/frontend.cpp:619
+#: src/frontend.cpp:765
+#: src/frontend.cpp:911
+#: src/frontend.cpp:1170
+#: src/frontend.cpp:1325
+#: src/frontend.cpp:1345
 msgctxt "menu"
 msgid "Return"
 msgstr "Επιστροφή"
 
-#: src/frontend.cpp:245
+#: src/frontend.cpp:252
 msgid "New Campaign"
 msgstr "εκστρατεία"
 
-#: src/frontend.cpp:246
+#: src/frontend.cpp:253
 msgid "Start Skirmish Game"
 msgstr "μάχη"
 
-#: src/frontend.cpp:247
+#: src/frontend.cpp:254
 msgid "Challenges"
 msgstr "προκλήσεις"
 
-#: src/frontend.cpp:248
+#: src/frontend.cpp:255
 msgid "Load Campaign Game"
 msgstr "Φόρτωση Παιχνιδιού Εκστρατείας"
 
-#: src/frontend.cpp:249
+#: src/frontend.cpp:256
 msgid "Load Skirmish Game"
 msgstr "Φόρτωση Μάχης"
 
-#: src/frontend.cpp:251
+#: src/frontend.cpp:258
 msgid "SINGLE PLAYER"
 msgstr "ΓΙΑ ΕΝΑΝ ΠΑΙΚΤΗ"
 
-#: src/frontend.cpp:256
+#: src/frontend.cpp:263
 msgid "Campaign videos are missing! Get them from http://wz2100.net"
 msgstr "Τα βίντεο τς εκστρατείας λείπουν. Μπορείς να τα κατεβάσεις από την http://wz2100.net"
 
-#: src/frontend.cpp:332
+#: src/frontend.cpp:339
 #: src/ingameop.cpp:504
 msgid "Load Campaign Saved Game"
 msgstr "Φόρτωση Αποθηκευμένου Παιχνιδιού Εκστρατείας"
 
-#: src/frontend.cpp:338
+#: src/frontend.cpp:345
 #: src/ingameop.cpp:508
 msgid "Load Skirmish Saved Game"
 msgstr "Φόρτωση της Αποθηκευμένης Μάχης"
 
-#: src/frontend.cpp:392
+#: src/frontend.cpp:399
 msgid "MULTI PLAYER"
 msgstr "ΓΙΑ ΠΟΛΛΟΥΣ ΠΑΙΚΤΕΣ"
 
-#: src/frontend.cpp:394
+#: src/frontend.cpp:401
 msgid "Host Game"
 msgstr "Φιλοξενία Παιχνιδιού"
 
-#: src/frontend.cpp:395
+#: src/frontend.cpp:402
 msgid "Join Game"
 msgstr "Συμμετοχή σε Παιχνίδι"
 
-#: src/frontend.cpp:400
+#: src/frontend.cpp:407
 msgid "TCP port 2100 must be opened in your firewall or router to host games!"
 msgstr ""
 
-#: src/frontend.cpp:464
+#: src/frontend.cpp:471
 #: src/multiint.cpp:1483
 msgid "OPTIONS"
 msgstr "ΕΠΙΛΟΓΕΣ"
 
-#: src/frontend.cpp:465
+#: src/frontend.cpp:472
 msgid "Game Options"
 msgstr "παιχνίδι"
 
-#: src/frontend.cpp:466
+#: src/frontend.cpp:473
 msgid "Graphics Options"
 msgstr "γραφικά"
 
-#: src/frontend.cpp:467
+#: src/frontend.cpp:474
 msgid "Video Options"
 msgstr "βίντεο"
 
-#: src/frontend.cpp:468
+#: src/frontend.cpp:475
 #: src/ingameop.cpp:268
 msgid "Audio Options"
 msgstr "ήχος"
 
-#: src/frontend.cpp:469
+#: src/frontend.cpp:476
 msgid "Mouse Options"
 msgstr "ποντίκι"
 
-#: src/frontend.cpp:470
+#: src/frontend.cpp:477
 msgid "Key Mappings"
 msgstr "πλήκτρα"
 
-#: src/frontend.cpp:530
+#: src/frontend.cpp:537
 msgid "Video Playback"
 msgstr "αναπαραγωγή"
 
-#: src/frontend.cpp:534
-#: src/frontend.cpp:686
+#: src/frontend.cpp:541
+#: src/frontend.cpp:693
 msgid "1X"
 msgstr "1Χ"
 
-#: src/frontend.cpp:538
-#: src/frontend.cpp:676
+#: src/frontend.cpp:545
+#: src/frontend.cpp:683
 msgid "2X"
 msgstr "2Χ"
 
-#: src/frontend.cpp:542
-#: src/frontend.cpp:681
-#: src/frontend.cpp:832
-#: src/frontend.cpp:929
+#: src/frontend.cpp:549
+#: src/frontend.cpp:688
+#: src/frontend.cpp:839
+#: src/frontend.cpp:936
 msgid "Fullscreen"
 msgstr "πλήρης οθόνη"
 
-#: src/frontend.cpp:551
+#: src/frontend.cpp:558
 msgid "Scanlines"
 msgstr "γραμμές σάρωσης"
 
-#: src/frontend.cpp:555
-#: src/frontend.cpp:576
-#: src/frontend.cpp:584
-#: src/frontend.cpp:600
-#: src/frontend.cpp:630
-#: src/frontend.cpp:648
-#: src/frontend.cpp:666
-#: src/frontend.cpp:711
-#: src/frontend.cpp:857
-#: src/frontend.cpp:867
-#: src/frontend.cpp:897
-#: src/frontend.cpp:953
-#: src/frontend.cpp:1014
-#: src/frontend.cpp:1057
-#: src/frontend.cpp:1070
-#: src/frontend.cpp:1120
-#: src/frontend.cpp:1132
-#: src/frontend.cpp:1144
-#: src/frontend.cpp:1180
-#: src/frontend.cpp:1193
-#: src/frontend.cpp:1207
+#: src/frontend.cpp:562
+#: src/frontend.cpp:583
+#: src/frontend.cpp:591
+#: src/frontend.cpp:607
+#: src/frontend.cpp:637
+#: src/frontend.cpp:655
+#: src/frontend.cpp:673
+#: src/frontend.cpp:718
+#: src/frontend.cpp:864
+#: src/frontend.cpp:874
+#: src/frontend.cpp:904
+#: src/frontend.cpp:960
+#: src/frontend.cpp:1021
+#: src/frontend.cpp:1064
+#: src/frontend.cpp:1077
+#: src/frontend.cpp:1127
+#: src/frontend.cpp:1139
+#: src/frontend.cpp:1151
+#: src/frontend.cpp:1187
+#: src/frontend.cpp:1200
+#: src/frontend.cpp:1214
 msgid "Off"
 msgstr "όχι"
 
-#: src/frontend.cpp:559
-#: src/frontend.cpp:701
+#: src/frontend.cpp:566
+#: src/frontend.cpp:708
 msgid "50%"
 msgstr "50%"
 
-#: src/frontend.cpp:563
-#: src/frontend.cpp:706
+#: src/frontend.cpp:570
+#: src/frontend.cpp:713
 #: src/multiplay.cpp:2020
 msgid "Black"
 msgstr "Σκότος"
 
-#: src/frontend.cpp:569
+#: src/frontend.cpp:576
 msgid "Screen Shake"
 msgstr "ταρακούνημα"
 
-#: src/frontend.cpp:572
-#: src/frontend.cpp:588
-#: src/frontend.cpp:596
-#: src/frontend.cpp:635
-#: src/frontend.cpp:653
-#: src/frontend.cpp:662
-#: src/frontend.cpp:853
-#: src/frontend.cpp:893
-#: src/frontend.cpp:1019
-#: src/frontend.cpp:1053
-#: src/frontend.cpp:1075
-#: src/frontend.cpp:1116
-#: src/frontend.cpp:1128
-#: src/frontend.cpp:1140
-#: src/frontend.cpp:1185
-#: src/frontend.cpp:1198
-#: src/frontend.cpp:1212
+#: src/frontend.cpp:579
+#: src/frontend.cpp:595
+#: src/frontend.cpp:603
+#: src/frontend.cpp:642
+#: src/frontend.cpp:660
+#: src/frontend.cpp:669
+#: src/frontend.cpp:860
+#: src/frontend.cpp:900
+#: src/frontend.cpp:1026
+#: src/frontend.cpp:1060
+#: src/frontend.cpp:1082
+#: src/frontend.cpp:1123
+#: src/frontend.cpp:1135
+#: src/frontend.cpp:1147
+#: src/frontend.cpp:1192
+#: src/frontend.cpp:1205
+#: src/frontend.cpp:1219
 msgid "On"
 msgstr "ναι"
 
-#: src/frontend.cpp:581
+#: src/frontend.cpp:588
 msgid "Subtitles"
 msgstr "υπότιτλοι"
 
-#: src/frontend.cpp:593
+#: src/frontend.cpp:600
 msgid "Shadows"
 msgstr "σκιάσεις"
 
-#: src/frontend.cpp:604
-#: src/frontend.cpp:1345
+#: src/frontend.cpp:611
+#: src/frontend.cpp:1352
 msgid "Radar"
 msgstr "υποχάρτης"
 
-#: src/frontend.cpp:605
-#: src/frontend.cpp:718
-#: src/frontend.cpp:1346
+#: src/frontend.cpp:612
+#: src/frontend.cpp:725
+#: src/frontend.cpp:1353
 msgid "Rotating"
 msgstr "περιστρ/νος"
 
-#: src/frontend.cpp:605
-#: src/frontend.cpp:718
-#: src/frontend.cpp:1346
+#: src/frontend.cpp:612
+#: src/frontend.cpp:725
+#: src/frontend.cpp:1353
 msgid "Fixed"
 msgstr "σταθερός"
 
-#: src/frontend.cpp:608
+#: src/frontend.cpp:615
 msgid "GRAPHICS OPTIONS"
 msgstr "ΕΠΙΛΟΓΕΣ ΤΩΝ ΓΡΑΦΙΚΩΝ"
 
-#: src/frontend.cpp:746
+#: src/frontend.cpp:753
 #: src/ingameop.cpp:168
 msgid "Voice Volume"
 msgstr "ένταση της φωνής"
 
-#: src/frontend.cpp:750
+#: src/frontend.cpp:757
 #: src/ingameop.cpp:173
 msgid "FX Volume"
 msgstr "ένταση των εφέ"
 
-#: src/frontend.cpp:754
+#: src/frontend.cpp:761
 #: src/ingameop.cpp:178
 msgid "Music Volume"
 msgstr "ένταση της μουσικής"
 
-#: src/frontend.cpp:761
+#: src/frontend.cpp:768
 msgid "AUDIO OPTIONS"
 msgstr "ΕΠΙΛΟΓΕΣ ΗΧΟΥ"
 
-#: src/frontend.cpp:825
+#: src/frontend.cpp:832
 msgid "* Takes effect on game restart"
 msgstr "* Εφαρμόζεται μετά από επανεκκίνηση του παιχνιδιού"
 
-#: src/frontend.cpp:828
+#: src/frontend.cpp:835
 msgid "Graphics Mode*"
 msgstr "κατάσταση*"
 
-#: src/frontend.cpp:836
-#: src/frontend.cpp:924
+#: src/frontend.cpp:843
+#: src/frontend.cpp:931
 msgid "Windowed"
 msgstr "παράθυρο"
 
-#: src/frontend.cpp:840
+#: src/frontend.cpp:847
 msgid "Resolution*"
 msgstr "ανάλυση*"
 
-#: src/frontend.cpp:845
+#: src/frontend.cpp:852
 msgid "Texture size"
 msgstr "μέγεθος υφασμάτων"
 
-#: src/frontend.cpp:849
+#: src/frontend.cpp:856
 msgid "Vertical sync"
 msgstr "κάθετος συγχ/μός"
 
-#: src/frontend.cpp:884
-#: src/frontend.cpp:959
+#: src/frontend.cpp:891
+#: src/frontend.cpp:966
 msgid "Unsupported"
 msgstr "μη υποστηριζόμενο"
 
-#: src/frontend.cpp:889
+#: src/frontend.cpp:896
 msgid "Shaders"
 msgstr "Σκιάσεις"
 
-#: src/frontend.cpp:901
+#: src/frontend.cpp:908
 msgid "VIDEO OPTIONS"
 msgstr "ΕΠΙΛΟΓΕΣ ΒΙΝΤΕΟ"
 
-#: src/frontend.cpp:1113
+#: src/frontend.cpp:1120
 msgid "Reverse Rotation"
 msgstr "αντίστροφη περι/φή"
 
-#: src/frontend.cpp:1124
+#: src/frontend.cpp:1131
 msgid "Trap Cursor"
 msgstr "παγίδευση δείκτη"
 
-#: src/frontend.cpp:1137
+#: src/frontend.cpp:1144
 msgid "Switch Mouse Buttons"
 msgstr "εναλλαγή πλήκτρων"
 
-#: src/frontend.cpp:1149
+#: src/frontend.cpp:1156
 msgid "Rotate Screen"
 msgstr "περιστροφή οθόνης"
 
-#: src/frontend.cpp:1152
-#: src/frontend.cpp:1226
+#: src/frontend.cpp:1159
+#: src/frontend.cpp:1233
 msgid "Middle Mouse"
 msgstr "μεσαίο πλήκτρο"
 
-#: src/frontend.cpp:1156
-#: src/frontend.cpp:1221
+#: src/frontend.cpp:1163
+#: src/frontend.cpp:1228
 msgid "Right Mouse"
 msgstr "δεξί πλήκτρο"
 
-#: src/frontend.cpp:1160
+#: src/frontend.cpp:1167
 msgid "MOUSE OPTIONS"
 msgstr "ΕΠΙΛΟΓΕΣ ΠΟΝΤΙΚΙΟΥ"
 
-#: src/frontend.cpp:1261
-#: src/frontend.cpp:1339
+#: src/frontend.cpp:1268
+#: src/frontend.cpp:1346
 msgid "Language"
 msgstr "γλώσσα"
 
-#: src/frontend.cpp:1265
-#: src/frontend.cpp:1343
+#: src/frontend.cpp:1272
+#: src/frontend.cpp:1350
 msgid "Difficulty"
 msgstr "δυσκολία"
 
-#: src/frontend.cpp:1269
-#: src/frontend.cpp:1350
-#: src/frontend.cpp:1382
+#: src/frontend.cpp:1276
+#: src/frontend.cpp:1357
+#: src/frontend.cpp:1389
 #: src/multiint.cpp:215
 msgid "Easy"
 msgstr "εύκολο"
 
-#: src/frontend.cpp:1272
-#: src/frontend.cpp:1353
-#: src/frontend.cpp:1374
+#: src/frontend.cpp:1279
+#: src/frontend.cpp:1360
+#: src/frontend.cpp:1381
 msgid "Normal"
 msgstr "κανονικό"
 
-#: src/frontend.cpp:1276
-#: src/frontend.cpp:1356
-#: src/frontend.cpp:1378
+#: src/frontend.cpp:1283
+#: src/frontend.cpp:1363
+#: src/frontend.cpp:1385
 #: src/multiint.cpp:215
 msgid "Hard"
 msgstr "δύσκολο"
 
-#: src/frontend.cpp:1281
-#: src/frontend.cpp:1344
+#: src/frontend.cpp:1288
+#: src/frontend.cpp:1351
 msgid "Scroll Speed"
 msgstr "ταχύτητα κύλισης"
 
-#: src/frontend.cpp:1285
-#: src/frontend.cpp:1340
+#: src/frontend.cpp:1292
+#: src/frontend.cpp:1347
 msgid "Unit Colour:"
 msgstr "Χρώμα Μονάδας:"
 
-#: src/frontend.cpp:1305
-#: src/frontend.cpp:1341
+#: src/frontend.cpp:1312
+#: src/frontend.cpp:1348
 msgid "Campaign"
 msgstr "Εκστρατεία"
 
-#: src/frontend.cpp:1315
-#: src/frontend.cpp:1342
+#: src/frontend.cpp:1322
+#: src/frontend.cpp:1349
 msgid "Skirmish/Multiplayer"
 msgstr "Μάχη/Για Πολλούς Παίχτες"
 
-#: src/frontend.cpp:1321
-#: src/frontend.cpp:1337
+#: src/frontend.cpp:1328
+#: src/frontend.cpp:1344
 msgid "GAME OPTIONS"
 msgstr "ΕΠΙΛΟΓΕΣ ΠΑΙΧΝΙΔΙΟΥ"
 
-#: src/frontend.cpp:1482
+#: src/frontend.cpp:1489
 #: src/multiint.cpp:2651
 msgid "Mod: "
 msgstr "διασκευή: "
@@ -14817,12 +14829,12 @@ msgstr "Καφές"
 msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
 msgstr "Δεν μπορούμε να το κάνουμε αυτό. Για να χρησιμοποιήσουμε έναν μεταφορέα Ανθρωπομηχανών, θα πρέπει και εμείς να είμαστε Ανθρωπομηχανές."
 
-#: src/qtscriptfuncs.cpp:1596
+#: src/qtscriptfuncs.cpp:1597
 #: src/scriptfuncs.cpp:3263
 msgid "YOU ARE VICTORIOUS!"
 msgstr "ΝΙΚΗΣΕΣ!"
 
-#: src/qtscriptfuncs.cpp:1601
+#: src/qtscriptfuncs.cpp:1602
 #: src/scriptfuncs.cpp:3267
 msgid "YOU WERE DEFEATED!"
 msgstr "ΗΤΤΗΘΗΚΕΣ."
@@ -15064,25 +15076,26 @@ msgstr "Δεν υπάρχει αρκετός χώρος στον Μεταφορ�
 msgid "Reinforcements landing"
 msgstr "Προσγειώνονται Ενισχύσεις"
 
-#: src/version.cpp:121
+#: src/version.cpp:72
 msgid " (modified locally)"
 msgstr " (τροποποιήθηκε τοπικά)"
 
-#: src/version.cpp:128
+#: src/version.cpp:78
 msgid " - DEBUG"
 msgstr " - ΑΠΑΣΦΑΛΜΑΤΩΣΗ"
 
-#: src/version.cpp:137
-#, c-format
-msgid " - Built %s"
-msgstr " - Σύνθεση %s"
-
 #. TRANSLATORS: This string looks as follows when expanded.
 #. "Version <version name/number> <working copy state><BUILD DATE><BUILD TYPE>"
-#: src/version.cpp:147
-#, c-format
-msgid "Version %s%s%s%s"
+#: src/version.cpp:86
+#, fuzzy, c-format
+msgid "Version: %s,%s Built:%s%s"
 msgstr "Έκδοση %s%s%s%s"
+
+#~ msgid "Only use OpenGL 1.5"
+#~ msgstr "Χρήση μόνο της ΌπενΤζιΕλ 1.5"
+
+#~ msgid " - Built %s"
+#~ msgstr " - Σύνθεση %s"
 
 #~ msgid "Warzone 2100 is completely free and open source (FLOSS). Official site: http://wz2100.net/"
 #~ msgstr "Η Ζώνη Πολέμου είναι απολύτως ελεύθερη και ανοιχτού κώδικα (FLOSS). Ο επίσημος ιστότοπος είναι: http://wz2100.net/"

@@ -1,6 +1,20 @@
-2013-11-23: Version 3.1.1_rc3
+2013-12-11: Version 3.1.1
+ * General:
+   * Change: Updated textures by Christian Scholz (cnceo) (commit:1f5432d81c621f28dc091ba50aa0fb16b6e5d1e1)
+   * Fix: VTOL strike towers now send correct units after the target (commit:af746f570c8b43d98b4b29fd68a36bf9e1f699ed, ticket:4134)
+   * Fix: When unsupported or corrupted maps are detected, throw up a non-fatal dialog about the issue, and continue on. (commit:205016160000614f0393f665a99a820f4e4cc424)
+ * Multiplayer:
+   * Fix: Command line options for host & join (commit:8cba7f3463db890999c3ada48dcc384c77523d4b, ticket:4094)
+   * Change: Decrease cannons production time 375->250. (commit:72a73175bbd915e1083f5ed5ffbd8b174bb49b88)
+   * Change: Needle Gun: weight 400 -> 1000 (commit:ffcc03f1418afabd9c58c284787a79e6301429b1)
+ * Translations:
+   * Update: Hungarian translation by mtomi78 (commit:4868883811bf7dc01efc91454bb86968a8722bcc)
+   * Update: Spanish translation by Saberuneko (commit:4f37b25b91e9b1bd8589c056ca8b2c0cdd81ef57)
+   * Update: Italian translation by Alpha93 (commit:82d77b700cc82372122c2e61ffebf05e8d470d5a)
+   * Update: Turkish translation by wakeup (commit:2673956a896bd9cf5b85cbd55c0fbfcb76300778)
 
- *Multiplayer:
+2013-11-23: Version 3.1.1_rc3
+ * Multiplayer:
    * Change: Differentiate between maps and maps that have mods in them. Map-mods will now be shown in red. (commit:fdd2524f1b9d425955e40c03c1447ccea6e02872)
    * Change: Revert VTOL avoidance & collision checks (commit:e3279f6d033b4967b955dcaaf2ce3c5e21ed7579 commit:75ede1da1d77b6326b9897b59d5d394d3ef533f0)
    * Change: Flashlight now requires sensor upgrade Mk2, while Pulse Laser still requires sensor upgrade Mk3. (commit:109ee4d7b9598a6696211338599eff6b1a891173)

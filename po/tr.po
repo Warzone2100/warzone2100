@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2013-11-20 19:01+0100\n"
+"POT-Creation-Date: 2013-12-11 22:22-0500\n"
 "PO-Revision-Date: 2013-12-09 03:58+0100\n"
 "Last-Translator: Volkan Gezer <volkangezer@gmail.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -258,8 +258,7 @@ msgstr "Zırhlı Havan kuyusu"
 #: data/mp/messages/strings/resstrings.txt:205
 #: data/mp/messages/strings/resstrings.txt:211
 msgid "Assigned automatically to nearest sensor or CB tower"
-msgstr ""
-"Otomatik olarak yakınlardaki bir algılayıcıya veya algılayıcı kuleye bağlanır"
+msgstr "Otomatik olarak yakınlardaki bir algılayıcıya veya algılayıcı kuleye bağlanır"
 
 #: data/base/messages/resmessages12.rmsg:7
 #: data/base/messages/resmessages12.rmsg:18
@@ -556,8 +555,7 @@ msgstr "Karşı batarya kulesi düşmanın endirek silahlarını tespit eder"
 #: data/mp/messages/resmessages12.rmsg:55
 #: data/mp/messages/resmessagesall.rmsg:95
 msgid "Orders assigned indirect fire units to fire at the enemy batteries"
-msgstr ""
-"Atanmış endirek ateş silahlarına düşman bataryalarına saldırı emri verir"
+msgstr "Atanmış endirek ateş silahlarına düşman bataryalarına saldırı emri verir"
 
 #: data/base/messages/resmessages12.rmsg:62
 #: data/base/messages/resmessagesall.rmsg:84
@@ -1200,8 +1198,7 @@ msgstr "Yeni savaş alanı bilgisayar sistemi"
 #: data/mp/messages/resmessagesall.rmsg:735
 #: data/mp/messages/resmessagesall.rmsg:745
 msgid "Commander leads groups acts as factory delivery point"
-msgstr ""
-"Komutanlar bağlandıkları fabrika teslim noktasına gelen araçlara liderlik eder"
+msgstr "Komutanlar bağlandıkları fabrika teslim noktasına gelen araçlara liderlik eder"
 
 #: data/base/messages/resmessages1.rmsg:7
 #: data/base/messages/resmessages1.rmsg:436
@@ -1234,8 +1231,7 @@ msgstr "Bilgisayar Teknolojisinde İlerleme"
 #: data/base/messages/resmessages1.rmsg:16
 #: data/mp/messages/resmessages1.rmsg:14
 msgid "Synaptic Link allows humans to interface directly with computers"
-msgstr ""
-"Sinaptik Bağlantı; İnsanlar ile bilgisayarların birbirine bağlanmasını sağlar"
+msgstr "Sinaptik Bağlantı; İnsanlar ile bilgisayarların birbirine bağlanmasını sağlar"
 
 #: data/base/messages/resmessages1.rmsg:17
 #: data/mp/messages/resmessages1.rmsg:15
@@ -2211,8 +2207,7 @@ msgstr "Zırh Delici Sabotaj Mermileri"
 #: data/mp/messages/resmessages1.rmsg:514
 #: data/mp/messages/resmessagesall.rmsg:274
 msgid "May be targeted directly or assigned to a sensor turret or tower"
-msgstr ""
-"Doğrudan hedef alabilir veya bir algılayıcı birime ya da kuleye atanabilir "
+msgstr "Doğrudan hedef alabilir veya bir algılayıcı birime ya da kuleye atanabilir "
 
 #: data/base/messages/resmessages1.rmsg:577
 #: data/mp/messages/resmessages1.rmsg:524
@@ -2487,8 +2482,7 @@ msgstr "Emrindeki DivKlara saldır emri verir"
 #: data/base/messages/resmessages23.rmsg:84
 #: data/mp/messages/resmessages23.rmsg:76
 msgid "Strike mission continues until enemy destroyed or they retreat"
-msgstr ""
-"Düşman birimi geri çekilene kadar veya öldürülene kadar saldırı devam eder"
+msgstr "Düşman birimi geri çekilene kadar veya öldürülene kadar saldırı devam eder"
 
 #: data/base/messages/resmessages23.rmsg:92
 #: data/base/messages/resmessages2.rmsg:367
@@ -3666,8 +3660,7 @@ msgstr "Gelişmiş NEXUS direnç devreleri"
 #: data/base/messages/resmessages3.rmsg:28
 #: data/mp/messages/resmessages3.rmsg:25
 msgid "Computer systems can now be 'ring-fenced' from NEXUS"
-msgstr ""
-"Bilgisayar sistemleri artık kendini NEXUS virüsünden daha iyi koruyacak"
+msgstr "Bilgisayar sistemleri artık kendini NEXUS virüsünden daha iyi koruyacak"
 
 #: data/base/messages/resmessages3.rmsg:37
 #: data/mp/messages/resmessages3.rmsg:33
@@ -4059,8 +4052,7 @@ msgstr "Tüm DİvKlar otomatik olarak yükseltildi"
 #: data/base/messages/resmessages3.rmsg:687
 #: data/mp/messages/resmessages3.rmsg:624
 msgid "Computer plots and guides shell to target's position"
-msgstr ""
-"Bilgisayar gülleleri yönlendirerek hedefin konumunu bulmasını sağlayacak"
+msgstr "Bilgisayar gülleleri yönlendirerek hedefin konumunu bulmasını sağlayacak"
 
 #: data/base/messages/resmessages3.rmsg:698
 #: data/mp/messages/resmessages3.rmsg:634
@@ -4152,8 +4144,7 @@ msgstr "Lazer Yükseltmesi"
 #: data/base/messages/resmessages3.rmsg:819
 #: data/mp/messages/resmessages3.rmsg:744
 msgid "Improvement in laser optics reduces light dispersal"
-msgstr ""
-"Lazer optiklerindeki gelişmeler sayesinde ışınlardaki hafif dağılma azaltıldı"
+msgstr "Lazer optiklerindeki gelişmeler sayesinde ışınlardaki hafif dağılma azaltıldı"
 
 #: data/base/messages/resmessages3.rmsg:820
 msgid "Increases Laser accuracy"
@@ -4593,10 +4584,8 @@ msgstr "Bir üs kur, ardından yıkılmak üzere olan bir yapı aramaya başla."
 
 #: data/base/messages/strings/cam1strings.txt:5
 #: data/base/sequenceaudio/cam1/c001.txa:14
-msgid ""
-"This structure contains technology vital for the success of the Project."
-msgstr ""
-"Bu yapı Proje'nin başarısı için hayati önemde bir teknoloji barındırıyor."
+msgid "This structure contains technology vital for the success of the Project."
+msgstr "Bu yapı Proje'nin başarısı için hayati önemde bir teknoloji barındırıyor."
 
 #: data/base/messages/strings/cam1strings.txt:7
 msgid "ALPHA BASE MISSION: Scavenger Raiders"
@@ -4633,9 +4622,7 @@ msgstr "Yeni Paradigma üstün bir silah teknolojisini kontrol etmektedir."
 
 #: data/base/messages/strings/cam1strings.txt:17
 msgid "They may have the synaptic link technology, it's vital we retrieve it."
-msgstr ""
-"Onlar sinaptik bağlantı sistemine sahip olabileceklerinden, canımız pahasına "
-"almalıyız."
+msgstr "Onlar sinaptik bağlantı sistemine sahip olabileceklerinden, canımız pahasına almalıyız."
 
 #: data/base/messages/strings/cam1strings.txt:19
 msgid "TRANSPORT MISSION: Locate and Recover Artifacts"
@@ -4672,8 +4659,7 @@ msgstr "Sinyallari araştırmak için bir izci kuvvet al."
 
 #: data/base/messages/strings/cam1strings.txt:29
 msgid "Use your trucks to build defenses at your LZ."
-msgstr ""
-"İniş Bölgesinde güvenliği sağlamak için kamyonlarınla koruma binaları inşa et."
+msgstr "İniş Bölgesinde güvenliği sağlamak için kamyonlarınla koruma binaları inşa et."
 
 #: data/base/messages/strings/cam1strings.txt:31
 msgid "TRANSPORT MISSION: Enemy Transmissions Detected"
@@ -4692,14 +4678,12 @@ msgid "TRANSPORT MISSION: Synaptic Link Location"
 msgstr "TAŞIMA GÖREVİ: Sinaptik Bağlantı Konumu"
 
 #: data/base/messages/strings/cam1strings.txt:36
-msgid ""
-"The New Paradigm are analyzing synaptic link technology at this location."
+msgid "The New Paradigm are analyzing synaptic link technology at this location."
 msgstr "Yeni Paradigma Sinaptik bağlantı teknolojisini burada analiz ediyor."
 
 #: data/base/messages/strings/cam1strings.txt:37
 msgid "Assemble an attack team and recover the synaptic link technology."
-msgstr ""
-"Bir saldırı takımı oluştur ve Synaptik bağlantı teknolojisini ele geçir."
+msgstr "Bir saldırı takımı oluştur ve Synaptik bağlantı teknolojisini ele geçir."
 
 #: data/base/messages/strings/cam1strings.txt:39
 msgid "TRANSPORT MISSION: New Objectives"
@@ -4864,11 +4848,8 @@ msgid "The synaptic link technology was at this location but was removed."
 msgstr "Sinaptik Bağlantı teknolojisi bu bölgede bulundu ama kaldırıldı."
 
 #: data/base/messages/strings/cam1strings.txt:111
-msgid ""
-"Establish a forward base then continue the search for the synaptic link."
-msgstr ""
-"Bir yönlendirme üssü kur ve ardından sinaptik bağlantı teknolojisini aramaya "
-"devam et."
+msgid "Establish a forward base then continue the search for the synaptic link."
+msgstr "Bir yönlendirme üssü kur ve ardından sinaptik bağlantı teknolojisini aramaya devam et."
 
 #: data/base/messages/strings/cam1strings.txt:114
 msgid "INCOMING TRANSMISSION"
@@ -4932,8 +4913,7 @@ msgstr "Güç eki kalıntısını araştır."
 
 #: data/base/messages/strings/cam1strings.txt:142
 msgid "Then use a truck to upgrade your power generator with the module."
-msgstr ""
-"Ardından, kamyonlarını kullanarak güç jeneratörünü güç eki ile geliştir."
+msgstr "Ardından, kamyonlarını kullanarak güç jeneratörünü güç eki ile geliştir."
 
 #: data/base/messages/strings/cam1strings.txt:145
 msgid "SCAVENGER BASE DETECTED"
@@ -4944,8 +4924,7 @@ msgid "Defeat the scavengers and retrieve any artifacts."
 msgstr "Çöpçüleri yen ve herhangi bir kalıntı kurtar"
 
 #: data/base/messages/strings/cam1strings.txt:150
-msgid ""
-"Congratulations on defeating the New Paradigm, this sector is now secure."
+msgid "Congratulations on defeating the New Paradigm, this sector is now secure."
 msgstr "Tebrikler Yeni Paradigmayı yendin, bu sektör artık güvenli."
 
 #: data/base/messages/strings/cam1strings.txt:151
@@ -5028,8 +5007,7 @@ msgid "IN-FLIGHT BRIEFING"
 msgstr "UÇUŞDA SUNUM"
 
 #: data/base/messages/strings/cam2strings.txt:28
-msgid ""
-"Team Beta are searching for Vertical Takeoff and Landing (VTOL) technology."
+msgid "Team Beta are searching for Vertical Takeoff and Landing (VTOL) technology."
 msgstr "Takım Beta Dikey İniş ve Kalkış teknolojisini (DİvK)  araştırıyor."
 
 #: data/base/messages/strings/cam2strings.txt:29
@@ -5057,38 +5035,28 @@ msgid "We are detecting ground and aerial forces from the north."
 msgstr "Kuzeyde kara ve hava kuvvetleri belirledik."
 
 #: data/base/messages/strings/cam2strings.txt:44
-msgid ""
-"Hold your position and repulse these attacks, then eradicate the enemy's "
-"northern base."
-msgstr ""
-"Durumunu koru ve saldırıları püskürt, ardından düşmanın kuzey üssünü ortadan "
-"kaldır."
+msgid "Hold your position and repulse these attacks, then eradicate the enemy's northern base."
+msgstr "Durumunu koru ve saldırıları püskürt, ardından düşmanın kuzey üssünü ortadan kaldır."
 
 #: data/base/messages/strings/cam2strings.txt:47
 msgid "TRANSPORT MISSION: Intercept convoy."
 msgstr "TAŞIMA GÖREVİ: Konvoyun yolunu kes."
 
 #: data/base/messages/strings/cam2strings.txt:48
-msgid ""
-"Data from the Collective's base indicates the presence of the NEXUS intruder "
-"program."
-msgstr ""
-"Veri Kollektiften geliyor. Bu NEXUS Davetsiz misafir programının sonucu."
+msgid "Data from the Collective's base indicates the presence of the NEXUS intruder program."
+msgstr "Veri Kollektiften geliyor. Bu NEXUS Davetsiz misafir programının sonucu."
 
 #: data/base/messages/strings/cam2strings.txt:49
 msgid "Before NEXUS switched itself off-line we accessed the following."
 msgstr "NEXUS çevrimdışı olmadan önce şunu ele geçirdik."
 
 #: data/base/messages/strings/cam2strings.txt:51
-msgid ""
-"An enemy commander is collecting a shipment from NEXUS at this location."
+msgid "An enemy commander is collecting a shipment from NEXUS at this location."
 msgstr "Bir düşman Komutanı NEXUS'tan bir sevkiyat topluyor."
 
 #: data/base/messages/strings/cam2strings.txt:52
 msgid "Once at the LZ, eradicate the enemy commander and recover the shipment."
-msgstr ""
-"İniş Alanına geç, düşman komutanının işini bitir ve sevkiyattan kalanları "
-"kurtar."
+msgstr "İniş Alanına geç, düşman komutanının işini bitir ve sevkiyattan kalanları kurtar."
 
 #: data/base/messages/strings/cam2strings.txt:53
 msgid "Then return to the LZ."
@@ -5141,20 +5109,15 @@ msgid "BETA BASE MISSION: Destroy Enemy Air Base and Recover VTOLs."
 msgstr "BETA ÜSSÜ GÖREVİ: Düşman Havaalanlarını Yok Et ve DİvKları Al."
 
 #: data/base/messages/strings/cam2strings.txt:78
-msgid ""
-"Analysis of flight paths indicate that The Collective's VTOLs originate from "
-"here."
-msgstr ""
-"Uçuş parçalarının çözümlemesi, Kolektiflerin DİvKlar'ının buradan çıktığını "
-"belirtiyor."
+msgid "Analysis of flight paths indicate that The Collective's VTOLs originate from here."
+msgstr "Uçuş parçalarının çözümlemesi, Kolektiflerin DİvKlar'ının buradan çıktığını belirtiyor."
 
 #: data/base/messages/strings/cam2strings.txt:81
 msgid "BETA BASE MISSION: Destroy Enemy Air Base and Recover VTOLs"
 msgstr "BETA ÜSSÜ GÖREVİ: Düşman Havaalanlarını Yok Et ve DİvKları Al."
 
 #: data/base/messages/strings/cam2strings.txt:82
-msgid ""
-"The location of the enemy airbase is here; this is your primary objective."
+msgid "The location of the enemy airbase is here; this is your primary objective."
 msgstr "Düşman Havaalanı burada; bu birincil hedefin."
 
 #: data/base/messages/strings/cam2strings.txt:83
@@ -5223,13 +5186,10 @@ msgstr "NEXUS hala işlevsel bellek bankaları arıyor."
 
 #: data/base/messages/strings/cam2strings.txt:113
 msgid "Part of its consciousness has moved to a remote NASDA control-site."
-msgstr ""
-"NEXUS parçalarından birisi kendisini KASSA gezgin kontrol merkezine "
-"kopyalandı."
+msgstr "NEXUS parçalarından birisi kendisini KASSA gezgin kontrol merkezine kopyalandı."
 
 #: data/base/messages/strings/cam2strings.txt:117
-msgid ""
-"We are detecting transmissions from this site that are reaching high orbit."
+msgid "We are detecting transmissions from this site that are reaching high orbit."
 msgstr "Yüksek yörüngeye ulaşan sinyalleri buradan alıyoruz."
 
 #: data/base/messages/strings/cam2strings.txt:118
@@ -5249,9 +5209,7 @@ msgid "TRANSPORT MISSION: Destroy Enemy SAM Sites"
 msgstr "TAŞIMA GÖREVİ: Düşman SAM Sitelerini Yoket"
 
 #: data/base/messages/strings/cam2strings.txt:127
-msgid ""
-"If you are to escape, eradicate the surface-to-air missile sites around your "
-"base."
+msgid "If you are to escape, eradicate the surface-to-air missile sites around your base."
 msgstr "Eğer kaçacaksan, üssün etrafindaki karadan havaya uçaksavarları yoket."
 
 #: data/base/messages/strings/cam2strings.txt:128
@@ -5294,12 +5252,8 @@ msgid "Alpha base has been destroyed by nuclear missile attack."
 msgstr "Alfa üssü nükleer füze saldırısı tarafından yok edildi."
 
 #: data/base/messages/strings/cam2strings.txt:147
-msgid ""
-"The Collective are unaware of the nuclear attack and have air units heading "
-"for your base."
-msgstr ""
-"Kolektif nükleer saldırıdan habersiz ve üstümüze hava saldırı birimleri "
-"gönderdi."
+msgid "The Collective are unaware of the nuclear attack and have air units heading for your base."
+msgstr "Kolektif nükleer saldırıdan habersiz ve üstümüze hava saldırı birimleri gönderdi."
 
 #: data/base/messages/strings/cam2strings.txt:148
 msgid "This message was intercepted a few moments ago..."
@@ -5323,15 +5277,11 @@ msgstr "TAŞIMA GÖREVİ: Kuzey Bölgesi"
 #: data/base/messages/strings/cam3strings.txt:5
 #: data/base/sequenceaudio/cam3/c003.txa:5
 msgid "Congratulations on your successful evacuation of Beta Base."
-msgstr ""
-"Başarılı bir şekilde Beta Üssünü tahliye ettiğinizden dolayı sizi tebrik "
-"ederim komutanım."
+msgstr "Başarılı bir şekilde Beta Üssünü tahliye ettiğinizden dolayı sizi tebrik ederim komutanım."
 
 #: data/base/messages/strings/cam3strings.txt:6
 #: data/base/sequenceaudio/cam3/c003.txa:6
-msgid ""
-"NEXUS has gained access to nuclear weapons and is determined to destroy the "
-"Project."
+msgid "NEXUS has gained access to nuclear weapons and is determined to destroy the Project."
 msgstr "NEXUS Nükleer silahlara erişti ve Proje'yi yıkmayı amaç edindi."
 
 #: data/base/messages/strings/cam3strings.txt:9
@@ -5341,9 +5291,7 @@ msgstr "Birliklerini Kuzey Bölgesine al."
 #: data/base/messages/strings/cam3strings.txt:10
 #: data/base/sequenceaudio/cam3/c003.txa:15
 msgid "Once at the mountains secure an LZ. Then establish a forward base."
-msgstr ""
-"Dağlarda bir İniş Alanının güvenliğini sağla. Ardından bir yönlendirme üssü "
-"kur."
+msgstr "Dağlarda bir İniş Alanının güvenliğini sağla. Ardından bir yönlendirme üssü kur."
 
 #: data/base/messages/strings/cam3strings.txt:11
 #: data/base/sequenceaudio/cam3/c003.txa:16
@@ -5388,9 +5336,7 @@ msgstr "Koordinat İndirme Tamamlandı."
 
 #: data/base/messages/strings/cam3strings.txt:29
 msgid "Secure your LZ, then head overland to destroy the missile silo."
-msgstr ""
-"İniş Alanının güvenliğini sağla, sonra karadan ilerleyerek füze fırlatıcıları "
-"yoket."
+msgstr "İniş Alanının güvenliğini sağla, sonra karadan ilerleyerek füze fırlatıcıları yoket."
 
 #: data/base/messages/strings/cam3strings.txt:33
 #: data/base/messages/strings/cam3strings.txt:38
@@ -5407,8 +5353,7 @@ msgstr "Havayolu ile kaçış mümkün değil. Karayoluyla kaçmalısınız."
 
 #: data/base/messages/strings/cam3strings.txt:39
 msgid "The mountain range to the east should shield you from the blast."
-msgstr ""
-"Dağın etekleri sizi nükleer saldırıdan korumak için kalkan görevi görebilir."
+msgstr "Dağın etekleri sizi nükleer saldırıdan korumak için kalkan görevi görebilir."
 
 #: data/base/messages/strings/cam3strings.txt:40
 msgid "The valley is your only chance of escape."
@@ -5419,8 +5364,7 @@ msgid "AWAY TEAM UPDATE"
 msgstr "UZAK TAKIM GÜNCELEMESİ"
 
 #: data/base/messages/strings/cam3strings.txt:44
-msgid ""
-"All communication with the away team was lost after the nuclear explosions."
+msgid "All communication with the away team was lost after the nuclear explosions."
 msgstr "Nükleer patlamalardan sonra uzak takımlarla bütün bağlantımız koptu."
 
 #: data/base/messages/strings/cam3strings.txt:45
@@ -5436,11 +5380,8 @@ msgid "You are to assist Team Gamma."
 msgstr "Gama Takımını destekle."
 
 #: data/base/messages/strings/cam3strings.txt:50
-msgid ""
-"On reaching Gamma Base, help secure the area from further NEXUS attacks."
-msgstr ""
-"Gama üssüne vardığında, NEXUS saldırılarından bölgeyi temizlemek için yardım "
-"et."
+msgid "On reaching Gamma Base, help secure the area from further NEXUS attacks."
+msgstr "Gama üssüne vardığında, NEXUS saldırılarından bölgeyi temizlemek için yardım et."
 
 #: data/base/messages/strings/cam3strings.txt:53
 msgid "NEXUS DEFEATED"
@@ -5451,12 +5392,8 @@ msgid "Commander, we have defeated NEXUS."
 msgstr "Komutanım, NEXUS'u yendik."
 
 #: data/base/messages/strings/cam3strings.txt:55
-msgid ""
-"Unfortunately, our systems' performance has been affected by NEXUS. We are "
-"trying to rectify this."
-msgstr ""
-"Ne yazık ki, NEXUS  sistemlerimizin performansını etkiledi. Bunu düzeltmeye "
-"çalışıyoruz."
+msgid "Unfortunately, our systems' performance has been affected by NEXUS. We are trying to rectify this."
+msgstr "Ne yazık ki, NEXUS  sistemlerimizin performansını etkiledi. Bunu düzeltmeye çalışıyoruz."
 
 #: data/base/messages/strings/cam3strings.txt:58
 msgid "We are currently receiving this transmission."
@@ -5471,18 +5408,12 @@ msgid "Take a scout force to these coordinates and evaluate the situation."
 msgstr "O bölgeye bir izci takımı gönder ve durumu değerlendir."
 
 #: data/base/messages/strings/cam3strings.txt:66
-msgid ""
-"Determine whether they are Team Alpha. If so, rescue and escort them back to "
-"the LZ."
-msgstr ""
-"Alfa takımı olup olmadıklarını kontrol et. Eğer Alfa Takımı ise İniş Alanına "
-"kadar onlara eşlik et."
+msgid "Determine whether they are Team Alpha. If so, rescue and escort them back to the LZ."
+msgstr "Alfa takımı olup olmadıklarını kontrol et. Eğer Alfa Takımı ise İniş Alanına kadar onlara eşlik et."
 
 #: data/base/messages/strings/cam3strings.txt:68
-msgid ""
-"This group are part of Team Alpha, Rescue them and escort them to the LZ."
-msgstr ""
-"Bu grup Alfa takımının bir parçası, kurtar ve İniş Alanına kadar eşlik et."
+msgid "This group are part of Team Alpha, Rescue them and escort them to the LZ."
+msgstr "Bu grup Alfa takımının bir parçası, kurtar ve İniş Alanına kadar eşlik et."
 
 #: data/base/messages/strings/cam3strings.txt:71
 msgid "NORTHERN SECTOR MISSION: Team Alpha Debrief"
@@ -5493,10 +5424,8 @@ msgid "Team Alpha power transfer in progress."
 msgstr "Alfa takımı güç aktarması devam ediyor..."
 
 #: data/base/messages/strings/cam3strings.txt:75
-msgid ""
-"Commander, after you left the Western Sector we recovered this artifact."
-msgstr ""
-"Komutanım, siz batı bölgesini terkettikten sonra bu kalıntıyı kurtardık."
+msgid "Commander, after you left the Western Sector we recovered this artifact."
+msgstr "Komutanım, siz batı bölgesini terkettikten sonra bu kalıntıyı kurtardık."
 
 #: data/base/messages/strings/cam3strings.txt:76
 msgid "The benefits from researching it could be vast."
@@ -5523,8 +5452,7 @@ msgid "Commander, your decisive actions halted the spread of NEXUS."
 msgstr "Komutanım, kararlı eylemlerin NEXUS'un yayılmasını engelledi."
 
 #: data/base/messages/strings/cam3strings.txt:86
-msgid ""
-"Before NEXUS was expelled, we intercepted this message - Decoding completed."
+msgid "Before NEXUS was expelled, we intercepted this message - Decoding completed."
 msgstr "NEXUS uzaklaşmadan, bu mesajı ele geçirdik - Kod çözme tamamlandı."
 
 #: data/base/messages/strings/cam3strings.txt:89
@@ -5536,11 +5464,8 @@ msgid "You have an opportunity to destroy NEXUS before they get there."
 msgstr "Onlar varmadan NEXUS'u yok etmek için bir şansın var."
 
 #: data/base/messages/strings/cam3strings.txt:91
-msgid ""
-"Take an attack force and ambush NEXUS task force at ....... the  ......."
-msgstr ""
-"Bir saldırı gücü al ve NEXUS görev kuvvetlerini ....... koordinatlarında "
-"pusuya düşür."
+msgid "Take an attack force and ambush NEXUS task force at ....... the  ......."
+msgstr "Bir saldırı gücü al ve NEXUS görev kuvvetlerini ....... koordinatlarında pusuya düşür."
 
 #: data/base/messages/strings/cam3strings.txt:94
 msgid "TRANSPORT MISSION: Away Team"
@@ -5587,11 +5512,8 @@ msgid "Elements of Team Gamma have contacted us."
 msgstr "Takım Gama'dan kalanlar bizimle temasa geçti."
 
 #: data/base/messages/strings/cam3strings.txt:117
-msgid ""
-"They claim to be free of NEXUS, and offer their base as a site of operations."
-msgstr ""
-"NEXUS'un hala aktif olduğunu iddia ettiler ve bize üslerini operasyon merkezi "
-"olarak kullanmayı önerdiler."
+msgid "They claim to be free of NEXUS, and offer their base as a site of operations."
+msgstr "NEXUS'un hala aktif olduğunu iddia ettiler ve bize üslerini operasyon merkezi olarak kullanmayı önerdiler."
 
 #: data/base/messages/strings/cam3strings.txt:118
 msgid "Base coordinates download in progress."
@@ -5634,8 +5556,7 @@ msgid "Team Gamma reports a missile silo at this location."
 msgstr "Takım Gama İstihbaratı bu bölgede Füze siloları tespit etti."
 
 #: data/base/messages/strings/cam3strings.txt:136
-msgid ""
-"They believe that the silo contains missiles capable of reaching high orbit."
+msgid "They believe that the silo contains missiles capable of reaching high orbit."
 msgstr "Siloların yüksek yörüngeye ulaşabilen füzeler içerdiğine inanıyorlar."
 
 #: data/base/messages/strings/cam3strings.txt:137
@@ -5684,10 +5605,8 @@ msgid "We are attempting to access the missile control codes."
 msgstr "Biz füze fırlatma kodlarını çözmeye çalışıyoruz."
 
 #: data/base/messages/strings/cam3strings.txt:162
-msgid ""
-"A research facility is required to crack the code. Allocate one immediately."
-msgstr ""
-"Kodu kırmak için bir araştırma tesisi gerekli. Hemen birini görevlendir."
+msgid "A research facility is required to crack the code. Allocate one immediately."
+msgstr "Kodu kırmak için bir araştırma tesisi gerekli. Hemen birini görevlendir."
 
 #: data/base/messages/strings/cam3strings.txt:163
 msgid "Protect the missile silos from NEXUS attacks."
@@ -9334,20 +9253,12 @@ msgid "To build an oil derrick, select one of your trucks"
 msgstr "Petrol Kuyusu inşa etmek için, bir kamyonunu seç"
 
 #: data/base/script/text/tutorial3.slo:318
-msgid ""
-"Left click the oil pool indicated by the radar pulse to order your truck to "
-"build"
-msgstr ""
-"Radarda yanıp sönen noktadaki petrol kuyusuna petrol pompası inşa emri vermek "
-"için sol tıkla"
+msgid "Left click the oil pool indicated by the radar pulse to order your truck to build"
+msgstr "Radarda yanıp sönen noktadaki petrol kuyusuna petrol pompası inşa emri vermek için sol tıkla"
 
 #: data/base/script/text/tutorial3.slo:339
-msgid ""
-"The oil derrick is currently dormant. Build a power generator to convert the "
-"oil into power"
-msgstr ""
-"Petrol kuyusu tek başına bir işe yaramaz. Bir güç jeneratörü inşa et ve "
-"petrolü enerjiye çevir"
+msgid "The oil derrick is currently dormant. Build a power generator to convert the oil into power"
+msgstr "Petrol kuyusu tek başına bir işe yaramaz. Bir güç jeneratörü inşa et ve petrolü enerjiye çevir"
 
 #: data/base/script/text/tutorial3.slo:356
 #: data/base/script/text/tutorial3.slo:573
@@ -9360,11 +9271,8 @@ msgid "Now left click the power generator in the build menu on the left"
 msgstr "Şimdi de soldaki menüden güç jeneratörüne sol tıkla"
 
 #: data/base/script/text/tutorial3.slo:395
-msgid ""
-"Position the square at your base and left click to start the build process"
-msgstr ""
-"Güç jeneratörünü üssüne bir yere yerleştir ve sol tıklayarak inşa işlemini "
-"başlat"
+msgid "Position the square at your base and left click to start the build process"
+msgstr "Güç jeneratörünü üssüne bir yere yerleştir ve sol tıklayarak inşa işlemini başlat"
 
 #: data/base/script/text/tutorial3.slo:411
 msgid "To increase your build rate, select your second truck"
@@ -9379,17 +9287,12 @@ msgid "The other truck will now help to build the power generator"
 msgstr "Diğer kamyon güç jeneratörü inşaatına yardım edecek"
 
 #: data/base/script/text/tutorial3.slo:501
-msgid ""
-"During missions you need to locate and recover technologies from before the "
-"Collapse"
-msgstr ""
-"Görevler esnasında Yıkımdan önce teknolojileri bulmak ve toplamak zorunda "
-"kalacaksın"
+msgid "During missions you need to locate and recover technologies from before the Collapse"
+msgstr "Görevler esnasında Yıkımdan önce teknolojileri bulmak ve toplamak zorunda kalacaksın"
 
 #: data/base/script/text/tutorial3.slo:510
 msgid "Use a truck to search for the artifact indicated by the radar pulse"
-msgstr ""
-"Bir kamyonunu kullanarak radarda yanıp sönerek gösterilen kalıntıyı bul ve al"
+msgstr "Bir kamyonunu kullanarak radarda yanıp sönerek gösterilen kalıntıyı bul ve al"
 
 #: data/base/script/text/tutorial3.slo:514
 msgid "Move the pointer over the artifact and left click to recover it"
@@ -9457,8 +9360,7 @@ msgstr "Şimdi yeni aracını üretmek için bir fabrika gerekiyor"
 
 #: data/base/script/text/tutorial3.slo:893
 msgid "Now left click the factory icon and position it at your base"
-msgstr ""
-"Şimdi fabrika simgesini soldaki menüden seç ve üssünde bir yere yerleştir"
+msgstr "Şimdi fabrika simgesini soldaki menüden seç ve üssünde bir yere yerleştir"
 
 #: data/base/script/text/tutorial3.slo:914
 msgid "Select a location for your factory"
@@ -9474,9 +9376,7 @@ msgstr "Üretilen birim doğrudan buraya gelecek"
 
 #: data/base/script/text/tutorial3.slo:939
 msgid "You can move the delivery point at any time by left clicking it"
-msgstr ""
-"İstediğin zaman teslim noktasının yerini üzerine sol tıklayarak "
-"değiştirebilirsin"
+msgstr "İstediğin zaman teslim noktasının yerini üzerine sol tıklayarak değiştirebilirsin"
 
 #: data/base/script/text/tutorial3.slo:954
 msgid "Now click where you want to position the delivery point"
@@ -9571,12 +9471,8 @@ msgid "Approaching Landing Zone. Team Alpha Briefing commences."
 msgstr "İniş Bölgesine Yaklaşıyoruz. Alfa Takımı Sunumunuz Başlıyor."
 
 #: data/base/sequenceaudio/cam1/c001.txt:9
-msgid ""
-"Commander, you lead Team Alpha, one of three expeditionary teams sent out by "
-"the Project to recover artifacts from before the Collapse."
-msgstr ""
-"Komutanım, Alfa Takımına liderlik edeceksin. Bu takım Proje tarafından "
-"yıkımdan önce kalıntıları toplamak için gönderilen üç takımdan biri."
+msgid "Commander, you lead Team Alpha, one of three expeditionary teams sent out by the Project to recover artifacts from before the Collapse."
+msgstr "Komutanım, Alfa Takımına liderlik edeceksin. Bu takım Proje tarafından yıkımdan önce kalıntıları toplamak için gönderilen üç takımdan biri."
 
 #: data/base/sequenceaudio/cam1/c001.txt:11
 msgid "Your destination lies in the western zone."
@@ -9587,14 +9483,8 @@ msgid "Commander, we have recovered a command turret from the New Paradigm."
 msgstr "Komutanım, Yeni Paradigmadan bir komuta kulesi aldık."
 
 #: data/base/sequenceaudio/cam1/cam1ccom.txt:6
-msgid ""
-"This turret allows commanders to coordinate attacks between assigned units "
-"and to act as a delivery point for factories. Researching and using this "
-"technology has the highest priority."
-msgstr ""
-"Bu taret komutanların atanmış askerler arasında koordinasyonu "
-"sağlayabilmesini kolaylaştırıyor ve bir fabrika teslim noktası görevi "
-"görebiliyor. Bu teknolojiyi araştırıp kullanmak yüksek öncelikli hedefin."
+msgid "This turret allows commanders to coordinate attacks between assigned units and to act as a delivery point for factories. Researching and using this technology has the highest priority."
+msgstr "Bu taret komutanların atanmış askerler arasında koordinasyonu sağlayabilmesini kolaylaştırıyor ve bir fabrika teslim noktası görevi görebiliyor. Bu teknolojiyi araştırıp kullanmak yüksek öncelikli hedefin."
 
 #: data/base/sequenceaudio/cam1/cam1ccom.txt:8
 msgid "Commander, we are receiving this transmission."
@@ -9663,10 +9553,8 @@ msgid "When we failed to respond it became threatening."
 msgstr "Yanıtlayamadığımızda tehdit edici olmaya başladı."
 
 #: data/base/sequenceaudio/cam1/cam1out4.txt:1
-msgid ""
-"Your interference in my plans for the New Paradigm will not go unpunished."
-msgstr ""
-"Yeni Paradigma için yaptığım planlarıma burnunuzu sokmanız cezasız kalmayacak."
+msgid "Your interference in my plans for the New Paradigm will not go unpunished."
+msgstr "Yeni Paradigma için yaptığım planlarıma burnunuzu sokmanız cezasız kalmayacak."
 
 #: data/base/sequenceaudio/cam1/cam1out4.txt:2
 msgid "You are weak flesh-things. I am strong and have many parts."
@@ -9678,93 +9566,48 @@ msgstr "Beni burada yenmiş olabilirsin, ancak geri döneceğim."
 
 #: data/base/sequenceaudio/cam1/cam1out4.txt:5
 #: data/base/sequenceaudio/cam2/cam2_2n2.txt:1
-msgid ""
-"As I once cleansed the world with fire, I will destroy you and your puny "
-"Project!!"
-msgstr ""
-"Ateşle dünyayı temizlediğim gibi, seni ve zavallı Proje'ni de yok edeceğim!!"
+msgid "As I once cleansed the world with fire, I will destroy you and your puny Project!!"
+msgstr "Ateşle dünyayı temizlediğim gibi, seni ve zavallı Proje'ni de yok edeceğim!!"
 
 #: data/base/sequenceaudio/cam1/cam1out5.txt:4
-msgid ""
-"Nexus then removed itself from the system, destroying its memory banks, and "
-"removing all traces of its external connections."
-msgstr ""
-"Nexus sistemden kendini sildi, Bellek bankalarını yok ediyorlar ve dış "
-"bağlantıların tüm izlerini yok ediyorlar."
+msgid "Nexus then removed itself from the system, destroying its memory banks, and removing all traces of its external connections."
+msgstr "Nexus sistemden kendini sildi, Bellek bankalarını yok ediyorlar ve dış bağlantıların tüm izlerini yok ediyorlar."
 
 #: data/base/sequenceaudio/cam1/cam1out5.txt:6
-msgid ""
-"We are not sure what Nexus is or who or what is directing it. Initial "
-"research links the Nexus Intruder Program with the Reed Corporation, the "
-"developer of the synaptic link."
-msgstr ""
-"Nexus'un kim olduğuna ve onu kimin yönettiğini bilmiyoruz. İlk araştırmamız "
-"Nexus Davetsiz Misafir Programı ile Reed Şirketini, sinaptik bağlantıyı "
-"geliştiren şirket arasında bir bağ olabileceğini ortaya çıkardı."
+msgid "We are not sure what Nexus is or who or what is directing it. Initial research links the Nexus Intruder Program with the Reed Corporation, the developer of the synaptic link."
+msgstr "Nexus'un kim olduğuna ve onu kimin yönettiğini bilmiyoruz. İlk araştırmamız Nexus Davetsiz Misafir Programı ile Reed Şirketini, sinaptik bağlantıyı geliştiren şirket arasında bir bağ olabileceğini ortaya çıkardı."
 
 #: data/base/sequenceaudio/cam1/cam1out5.txt:8
-msgid ""
-"We have ascertained that Nexus supplied the New Paradigm with most of its "
-"technology. Whatever Nexus is, it's more than a computer parasite."
-msgstr ""
-"Nexus'un Yeni Paradigmayı tüm teknolojisi ile desteklediğini tespit ettik. "
-"Nexus ne olursa olsun, bir bilgisayar parazitinden fazlası."
+msgid "We have ascertained that Nexus supplied the New Paradigm with most of its technology. Whatever Nexus is, it's more than a computer parasite."
+msgstr "Nexus'un Yeni Paradigmayı tüm teknolojisi ile desteklediğini tespit ettik. Nexus ne olursa olsun, bir bilgisayar parazitinden fazlası."
 
 #: data/base/sequenceaudio/cam1/cam1out5.txt:10
-msgid ""
-"It has technology and weapons. It knows about us, and it's not friendly."
+msgid "It has technology and weapons. It knows about us, and it's not friendly."
 msgstr "O teknolojik silahlara sahip. Bizi biliyor ve dostumuz değil."
 
 #: data/base/sequenceaudio/cam1/map1a_c.txt:4
-msgid ""
-"The Synaptic Link was developed by the Reed Corporation in conjunction with "
-"the US Military."
+msgid "The Synaptic Link was developed by the Reed Corporation in conjunction with the US Military."
 msgstr "Sinaptik bağlantı ABD Ordusu ve Reed Şirketi tarafından geliştirildi."
 
 #: data/base/sequenceaudio/cam1/map1a_c.txt:6
-msgid ""
-"The synaptic link allows for almost instantaneous transfer of thought from "
-"human operators to vehicle control and guidance systems. The synaptic link is "
-"fitted into the base of the skull circling the spinal column."
-msgstr ""
-"Sinaptik bağlantı hızlı bir şekilde insanın bir aracı düşünceleri ile kontrol "
-"etmesini sağlar. Sinaptik bağlantı omurga disklerinin en üstteki çemberin "
-"içine monte edilir."
+msgid "The synaptic link allows for almost instantaneous transfer of thought from human operators to vehicle control and guidance systems. The synaptic link is fitted into the base of the skull circling the spinal column."
+msgstr "Sinaptik bağlantı hızlı bir şekilde insanın bir aracı düşünceleri ile kontrol etmesini sağlar. Sinaptik bağlantı omurga disklerinin en üstteki çemberin içine monte edilir."
 
 #: data/base/sequenceaudio/cam1/map1a_c.txt:8
-msgid ""
-"The link has a hi-speed data transfer port that plugs into any computer "
-"system."
-msgstr ""
-"Bağlantıda herhangi bir bilgisayara takılabilen yüksek hızda veri aktarıcı "
-"bulunuyor."
+msgid "The link has a hi-speed data transfer port that plugs into any computer system."
+msgstr "Bağlantıda herhangi bir bilgisayara takılabilen yüksek hızda veri aktarıcı bulunuyor."
 
 #: data/base/sequenceaudio/cam1/map1a_c.txt:10
-msgid ""
-"More importantly the development of the synaptic link made the creation of "
-"cyborgs possible. Early attempts at power suits for individual soldiers "
-"failed as they proved to be slow and unresponsive."
-msgstr ""
-"Daha da önemlisi sinaptik bağlantı sayborgların yapımını sağladı. Bireysel "
-"askerler için ilk çalışmada yavaş ve tepkisiz olduğu kanıtlanmıştır."
+msgid "More importantly the development of the synaptic link made the creation of cyborgs possible. Early attempts at power suits for individual soldiers failed as they proved to be slow and unresponsive."
+msgstr "Daha da önemlisi sinaptik bağlantı sayborgların yapımını sağladı. Bireysel askerler için ilk çalışmada yavaş ve tepkisiz olduğu kanıtlanmıştır."
 
 #: data/base/sequenceaudio/cam1/map1a_c.txt:12
-msgid ""
-"The synaptic link allowed soldiers to be placed in power suits that they "
-"controlled as easily as their own bodies. Power suits allowed infantry to "
-"function effectively on the battlefields of the 21st Century."
-msgstr ""
-"Sinaptik bağlantı askerlerin güç giysilerini kendi bedenleriymiş gibi kolayca "
-"kontrol etmesini sağladı. Güç kıyafetleri 21. yüzyılda piyadelerin savaş "
-"alanında daha etkin olmasını sağladı."
+msgid "The synaptic link allowed soldiers to be placed in power suits that they controlled as easily as their own bodies. Power suits allowed infantry to function effectively on the battlefields of the 21st Century."
+msgstr "Sinaptik bağlantı askerlerin güç giysilerini kendi bedenleriymiş gibi kolayca kontrol etmesini sağladı. Güç kıyafetleri 21. yüzyılda piyadelerin savaş alanında daha etkin olmasını sağladı."
 
 #: data/base/sequenceaudio/cam1/map1a_c.txt:14
-msgid ""
-"Unfortunately, this technology has fallen into the hands of the New Paradigm. "
-"It is imperative that you research and develop synaptic link technologies."
-msgstr ""
-"Ne yazık ki, bu teknoloji Yeni Paradigmanın eline geçti. Sinaptik bağlantı "
-"teknolojilerini geliştirmen gerekiyor."
+msgid "Unfortunately, this technology has fallen into the hands of the New Paradigm. It is imperative that you research and develop synaptic link technologies."
+msgstr "Ne yazık ki, bu teknoloji Yeni Paradigmanın eline geçti. Sinaptik bağlantı teknolojilerini geliştirmen gerekiyor."
 
 #: data/base/sequenceaudio/cam1/sub13np1.txt:4
 msgid "Warning!"
@@ -9791,9 +9634,7 @@ msgid "You will be destroyed."
 msgstr "Öldürüleceksiniz."
 
 #: data/base/sequenceaudio/cam1/sub14anp.txt:4
-msgid ""
-"NEXUS, the synaptic technology you required has been recovered and sent for "
-"collection."
+msgid "NEXUS, the synaptic technology you required has been recovered and sent for collection."
 msgstr "NEXUS, istediğin sinaptik bağlantı paketlendi ve sana gönderildi."
 
 #: data/base/sequenceaudio/cam1/sub1_4bn.txt:4
@@ -9801,64 +9642,32 @@ msgid "You have done well."
 msgstr "İyi iş."
 
 #: data/base/sequenceaudio/cam1/sub1_4bn.txt:5
-msgid ""
-"Once we have analyzed and authenticated the technology, your reward  will "
-"follow."
+msgid "Once we have analyzed and authenticated the technology, your reward  will follow."
 msgstr "Teknolojiyi analiz ettikten sonra, ödülünüzü göndereceğiz."
 
 #: data/base/sequenceaudio/cam1/sub1_5pl.txt:4
-msgid ""
-"Information discovered at the previous enemy base indicates that the New "
-"Paradigm recovered two synaptic link artifacts."
-msgstr ""
-"Önceki düşman üssünden alınan bilgilere göre Yeni Paradigma iki sinaptik "
-"bağlantı kalıntısını kurtarmış."
+msgid "Information discovered at the previous enemy base indicates that the New Paradigm recovered two synaptic link artifacts."
+msgstr "Önceki düşman üssünden alınan bilgilere göre Yeni Paradigma iki sinaptik bağlantı kalıntısını kurtarmış."
 
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:4
-msgid ""
-"This Nexus Intruder Program is a self-mutating computer parasite. This makes "
-"it difficult to eradicate from systems once it has been identified."
-msgstr ""
-"Nexus Davetsiz Misafir Programı mutasyona uğrayabilen bir bilgisayar "
-"virüsüdür. Tespit edilse bile sistemden silinmesi çok zordur."
+msgid "This Nexus Intruder Program is a self-mutating computer parasite. This makes it difficult to eradicate from systems once it has been identified."
+msgstr "Nexus Davetsiz Misafir Programı mutasyona uğrayabilen bir bilgisayar virüsüdür. Tespit edilse bile sistemden silinmesi çok zordur."
 
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:6
-msgid ""
-"We have been unable to ascertain it's ultimate goal or function. In its "
-"initial form it seeks out and isolates sections of memory from the rest of "
-"the invaded system. It then begins to mutate itself and data structures, "
-"effectively reprogramming the system from within."
-msgstr ""
-"İşleme amacını anlayamadık. İlk formunda işgal edilmiş sistemden kalan "
-"bölümleri araştırdı ve izole etti. Sonra da kendisi ve veri yapısını "
-"mutasyona uğratmaya başladı ve kendi bilgileri ile sistemi yeniden "
-"programladı."
+msgid "We have been unable to ascertain it's ultimate goal or function. In its initial form it seeks out and isolates sections of memory from the rest of the invaded system. It then begins to mutate itself and data structures, effectively reprogramming the system from within."
+msgstr "İşleme amacını anlayamadık. İlk formunda işgal edilmiş sistemden kalan bölümleri araştırdı ve izole etti. Sonra da kendisi ve veri yapısını mutasyona uğratmaya başladı ve kendi bilgileri ile sistemi yeniden programladı."
 
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:8
-msgid ""
-"Further analysis was prevented by the manual shutdown of the system by our "
-"technicians to prevent additional contamination by the Nexus Intruder Program."
-msgstr ""
-"Daha ileri analizlerde sistemin Nexus Davetsiz Misafir Programından daha "
-"fazla etkilenmemesi için teknisyenlerimiz el ile sistemi kapattı."
+msgid "Further analysis was prevented by the manual shutdown of the system by our technicians to prevent additional contamination by the Nexus Intruder Program."
+msgstr "Daha ileri analizlerde sistemin Nexus Davetsiz Misafir Programından daha fazla etkilenmemesi için teknisyenlerimiz el ile sistemi kapattı."
 
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:10
-msgid ""
-"However, the spread of the Nexus Intruder Program was not checked by New "
-"Paradigm. We need to capture New Paradigm's core systems to further "
-"investigate Nexus and determine its origins."
-msgstr ""
-"Fakat, Nexus Davetsiz Misafir Programı yayılışı Yeni Paradigma tarafından "
-"kontrol edilmedi. Nexus'un ne olduğunu anlamak için Yeni Paradigmanın "
-"çekirdek sistemleri bize gerekli."
+msgid "However, the spread of the Nexus Intruder Program was not checked by New Paradigm. We need to capture New Paradigm's core systems to further investigate Nexus and determine its origins."
+msgstr "Fakat, Nexus Davetsiz Misafir Programı yayılışı Yeni Paradigma tarafından kontrol edilmedi. Nexus'un ne olduğunu anlamak için Yeni Paradigmanın çekirdek sistemleri bize gerekli."
 
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:12
-msgid ""
-"Commander, you are to curtail the New Paradigm's activities in this sector "
-"and locate their main base."
-msgstr ""
-"Komutanım, bu bölgedeki Yeni Paradigma hareketlerini engellemek için ana "
-"üslerinin yerini tespit etmelisin."
+msgid "Commander, you are to curtail the New Paradigm's activities in this sector and locate their main base."
+msgstr "Komutanım, bu bölgedeki Yeni Paradigma hareketlerini engellemek için ana üslerinin yerini tespit etmelisin."
 
 #: data/base/sequenceaudio/cam2/c002.txa:1
 msgid "CAMPAIGN TWO"
@@ -9897,8 +9706,7 @@ msgid "It is likely to be targeted at your location."
 msgstr "Muhtemelen bölgenizi hedefliyor."
 
 #: data/base/sequenceaudio/cam2/c2diif2.txt:4
-msgid ""
-"You are to start the immediate evacuation of Beta Base to the safe haven."
+msgid "You are to start the immediate evacuation of Beta Base to the safe haven."
 msgstr "Beta üssünün güvenli bölgeye acil tahliyesini başlatmalısın."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:1
@@ -9906,61 +9714,36 @@ msgid "NASDA is the North American Strategic Defense Agency."
 msgstr "KASSA Kuzey Amerika Stratejik Savunma Acentası."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:3
-msgid ""
-"NASDA was formed in 2076 to defend North America from conventional and "
-"nuclear attack. The construction of a satellite defense system began in 2081 "
-"and was completed in 2082."
-msgstr ""
-"KASSA, Kuzey Amerika'yı nükleer saldırılardan korumak için 2076 yılında "
-"kuruldu. Uydu savunma ağlarının inşasına 2081 yılında başladı ve 2082 yılında "
-"tamamladı."
+msgid "NASDA was formed in 2076 to defend North America from conventional and nuclear attack. The construction of a satellite defense system began in 2081 and was completed in 2082."
+msgstr "KASSA, Kuzey Amerika'yı nükleer saldırılardan korumak için 2076 yılında kuruldu. Uydu savunma ağlarının inşasına 2081 yılında başladı ve 2082 yılında tamamladı."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:6
 msgid "In 2085 the NASDA satellites fired their nukes at Earth."
 msgstr "2085'de KASSA uyduları Dünyaya nükleer silahları ateşledi."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:8
-msgid ""
-"There were also ground-based sites. Many of these were destroyed in the "
-"nuclear counterstrikes, but there's bound to be some out there."
-msgstr ""
-"Yer üsleri de vardı. Bunların çoğun karşı saldırı sırasında yok oldu, ama "
-"bazılarının yok olmadığı kesindi."
+msgid "There were also ground-based sites. Many of these were destroyed in the nuclear counterstrikes, but there's bound to be some out there."
+msgstr "Yer üsleri de vardı. Bunların çoğun karşı saldırı sırasında yok oldu, ama bazılarının yok olmadığı kesindi."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:10
-msgid ""
-"The NASDA satellites also contained pulse-lasers designed to shoot down "
-"missiles approaching North America."
-msgstr ""
-"KASSA uyduları Kuzey Amerika'ya yaklaşan füzeleri vurmak için darbeli "
-"lazerlere sahipti."
+msgid "The NASDA satellites also contained pulse-lasers designed to shoot down missiles approaching North America."
+msgstr "KASSA uyduları Kuzey Amerika'ya yaklaşan füzeleri vurmak için darbeli lazerlere sahipti."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:12
-msgid ""
-"During the counterstrikes, these LasSats failed to fire. If brought into "
-"operation, these LasSats could inflict major damage on ground targets."
-msgstr ""
-"Karşı saldırılar zamanında, Lazer Uyduları ateş edemedi. Eğer edebilselerdi, "
-"bu uydular kara hedeflerine çok ağır hasar verecekti."
+msgid "During the counterstrikes, these LasSats failed to fire. If brought into operation, these LasSats could inflict major damage on ground targets."
+msgstr "Karşı saldırılar zamanında, Lazer Uyduları ateş edemedi. Eğer edebilselerdi, bu uydular kara hedeflerine çok ağır hasar verecekti."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:14
 msgid "All nukes targeted at  North America found their targets."
 msgstr "Tüm füzeler Kuzey Amerika'daki hedeflerini başarıyla vurdu."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:16
-msgid ""
-"We know that Nexus is searching for NASDA Central in the Eastern Sector. This "
-"was one of the land-based control centres for the satellites."
-msgstr ""
-"NEXUS'un Doğu Bölgesinde KASSA Merkezi'ni aradığını biliyoruz. Bu merkez "
-"lazer uydularınının yer kontrol merkezidir."
+msgid "We know that Nexus is searching for NASDA Central in the Eastern Sector. This was one of the land-based control centres for the satellites."
+msgstr "NEXUS'un Doğu Bölgesinde KASSA Merkezi'ni aradığını biliyoruz. Bu merkez lazer uydularınının yer kontrol merkezidir."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:18
-msgid ""
-"If the centre is found intact, NEXUS may gain control of the satellites."
-msgstr ""
-"Eğer merkez çalışır biçimde bulunduysa, NEXUS uyduların kontrolünü ele "
-"geçirecektir."
+msgid "If the centre is found intact, NEXUS may gain control of the satellites."
+msgstr "Eğer merkez çalışır biçimde bulunduysa, NEXUS uyduların kontrolünü ele geçirecektir."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:20
 msgid "Nexus claimed that it had already destroyed the world."
@@ -9975,12 +9758,8 @@ msgid "It lies somewhere in your territory."
 msgstr "Sizin topraklarınızda bir yerlerde."
 
 #: data/base/sequenceaudio/cam2/cam2_2n.txt:4
-msgid ""
-"Find it for me and I shall provide you with further weapons to aid you in "
-"your war against the Project."
-msgstr ""
-"Benim için onu bulun ve bende size Proje'ye karşı size güç kazandıracak "
-"gelişmiş silahlar vereyim."
+msgid "Find it for me and I shall provide you with further weapons to aid you in your war against the Project."
+msgstr "Benim için onu bulun ve bende size Proje'ye karşı size güç kazandıracak gelişmiş silahlar vereyim."
 
 #: data/base/sequenceaudio/cam2/cam22pl2.txt:1
 msgid "NASDA Briefing follows..."
@@ -9991,45 +9770,27 @@ msgid "We've got to make sure that it can't do it again."
 msgstr "Bunu tekrarlamayacağına emin olmalıyız."
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:1
-msgid ""
-"Analysis indicates that these systems were part of the control system for the "
-"NASDA satellites."
-msgstr ""
-"Analizlere göre bu sistem KASSA uydularının kontrol sisteminin bir parçası."
+msgid "Analysis indicates that these systems were part of the control system for the NASDA satellites."
+msgstr "Analizlere göre bu sistem KASSA uydularının kontrol sisteminin bir parçası."
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:2
 msgid "It's now certain that Nexus was responsible for The Collapse."
 msgstr "Ve bunlara göre Nexus Yıkımın başlamasının sorumlusu."
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:4
-msgid ""
-"During the early stages of the Collapse, NASDA technicians switched off  the "
-"infected systems in order to isolate the spread of Nexus. This seems to have "
-"prevented the LasSats from firing during the counterstrikes."
-msgstr ""
-"Yıkımın ilk zamanlarında KASSA teknisyenleri, Nexus'un bulaştığı sistemleri "
-"kapattı. Görünüşe göre Lazer uydularının ateş edememe sebebi bu."
+msgid "During the early stages of the Collapse, NASDA technicians switched off  the infected systems in order to isolate the spread of Nexus. This seems to have prevented the LasSats from firing during the counterstrikes."
+msgstr "Yıkımın ilk zamanlarında KASSA teknisyenleri, Nexus'un bulaştığı sistemleri kapattı. Görünüşe göre Lazer uydularının ateş edememe sebebi bu."
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:6
-msgid ""
-"The ensuing nuclear-magnetic pulses wiped clean large amounts of NASDA's "
-"memory banks, shattering its core processor, and sent shockwaves blasting "
-"through Nexus."
-msgstr ""
-"Sonra da gelen nükleer manyetik dalgalar KASSA bellek bankalarını büyük "
-"ölçüde silmiş, ana işlemcisini parçalamış ve Nexus'a doğrudan şok dalgaları "
-"göndermiş."
+msgid "The ensuing nuclear-magnetic pulses wiped clean large amounts of NASDA's memory banks, shattering its core processor, and sent shockwaves blasting through Nexus."
+msgstr "Sonra da gelen nükleer manyetik dalgalar KASSA bellek bankalarını büyük ölçüde silmiş, ana işlemcisini parçalamış ve Nexus'a doğrudan şok dalgaları göndermiş."
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:8
-msgid ""
-"Nexus was fried as whole sections of its consciousness were obliterated in "
-"the counterstrikes."
+msgid "Nexus was fried as whole sections of its consciousness were obliterated in the counterstrikes."
 msgstr "Karşı saldırılar sırasında Nexus da kızartma oldu ve bilinci silindi."
 
 #: data/base/sequenceaudio/cam2/cam26bfm.txt:1
-msgid ""
-"Commander we are detecting transmissions from this site that are reaching "
-"high orbit."
+msgid "Commander we are detecting transmissions from this site that are reaching high orbit."
 msgstr "Komutanım bu alandan yüksek yörüngeye ulaşan mesajlar tespit ettik."
 
 #: data/base/sequenceaudio/cam2/cam26bfm.txt:3
@@ -10041,41 +9802,24 @@ msgid "This poses a major threat to the Project and to our survival."
 msgstr "Bu bizim ve Proje'nin hayatta kalması için çok büyük bir tehlike."
 
 #: data/base/sequenceaudio/cam2/cam26pl1.txt:1
-msgid ""
-"Analysis of NASDA Central leaves no doubt that The Collective has introduced "
-"the Nexus Intruder Virus to it."
-msgstr ""
-"Kolektifin KASSA Merkez binasına Nexus Davetsiz Misafir Virüsü bıraktığına "
-"hiç şüphe yok."
+msgid "Analysis of NASDA Central leaves no doubt that The Collective has introduced the Nexus Intruder Virus to it."
+msgstr "Kolektifin KASSA Merkez binasına Nexus Davetsiz Misafir Virüsü bıraktığına hiç şüphe yok."
 
 #: data/base/sequenceaudio/cam2/cam26pl1.txt:3
-msgid ""
-"The nuclear reactor was going to be used to power a vast network of "
-"pre-Collapse computer systems."
-msgstr ""
-"Nükleer reaktör Yıkım öncesi bir bilgisayar ağı tarafından yönetilecekti."
+msgid "The nuclear reactor was going to be used to power a vast network of pre-Collapse computer systems."
+msgstr "Nükleer reaktör Yıkım öncesi bir bilgisayar ağı tarafından yönetilecekti."
 
 #: data/base/sequenceaudio/cam2/cam27fmv.txt:1
 msgid "Commander, we have just detected a missile launch at these coordinates."
 msgstr "Komutanım, bu koordinatlardan füze fırlatmaları tespit ettik."
 
 #: data/base/sequenceaudio/cam2/cam27fmv.txt:3
-msgid ""
-"Team Gamma are sending a team to investigate the launch site and to prevent "
-"any further launches."
-msgstr ""
-"Daha fazla fırlatmayı engellemek ve fırlatmayı incelemek için Takım Gama bir "
-"ekip gönderiyor."
+msgid "Team Gamma are sending a team to investigate the launch site and to prevent any further launches."
+msgstr "Daha fazla fırlatmayı engellemek ve fırlatmayı incelemek için Takım Gama bir ekip gönderiyor."
 
 #: data/base/sequenceaudio/cam2/cam27fmv.txt:5
-msgid ""
-"We can only assume that Nexus has gained control of this site. We cannot "
-"determine whether the missile is nuclear-armed or where it is targeted. You "
-"are advised to begin preparations for the evacuation of your base."
-msgstr ""
-"Sadece Nexus'un bu alanların kontrolünü aldığını biliyoruz. Ve füzelerin "
-"nükleer başlıklı olup olmadığını ve hedefinin neresi olduğunu bilmiyoruz. "
-"Üssünün tahliyesi için hazırlıklara başlamanızı öneririm."
+msgid "We can only assume that Nexus has gained control of this site. We cannot determine whether the missile is nuclear-armed or where it is targeted. You are advised to begin preparations for the evacuation of your base."
+msgstr "Sadece Nexus'un bu alanların kontrolünü aldığını biliyoruz. Ve füzelerin nükleer başlıklı olup olmadığını ve hedefinin neresi olduğunu bilmiyoruz. Üssünün tahliyesi için hazırlıklara başlamanızı öneririm."
 
 #: data/base/sequenceaudio/cam2/cam2acol.txt:1
 msgid "Warriors of The Collective, more intruders are entering our territory."
@@ -10086,32 +9830,20 @@ msgid "They are not part of the machine."
 msgstr "Onlar makinenin bir parçası değiller."
 
 #: data/base/sequenceaudio/cam2/cam2acol.txt:4
-msgid ""
-"Warriors of The Collective, attack and destroy kill all who resist the "
-"machine."
-msgstr ""
-"Kollektifin Askerleri, saldırın ve makineye karşı gelen herkesi öldürün."
+msgid "Warriors of The Collective, attack and destroy kill all who resist the machine."
+msgstr "Kollektifin Askerleri, saldırın ve makineye karşı gelen herkesi öldürün."
 
 #: data/base/sequenceaudio/cam2/cam2acol.txt:5
 msgid "Attack! Erase their presence from this area!"
 msgstr "Saldırın! Onları bu bölgeden silin!"
 
 #: data/base/sequenceaudio/cam2/cam2bcol.txt:1
-msgid ""
-"Warriors of The Collective, we are ready to destroy the intruders who pollute "
-"our lands."
-msgstr ""
-"Kollektifin Askerleri, topraklarımızı kirleten davetsiz misafirleri öldürmek "
-"için hazırız."
+msgid "Warriors of The Collective, we are ready to destroy the intruders who pollute our lands."
+msgstr "Kollektifin Askerleri, topraklarımızı kirleten davetsiz misafirleri öldürmek için hazırız."
 
 #: data/base/sequenceaudio/cam2/cam2bcol.txt:3
-msgid ""
-"Those of the Project are not of the machine. They have been denied its "
-"blessing. We who have embraced the power of the machine have a destiny to "
-"sweep away such weak creatures."
-msgstr ""
-"Onlar Proje, makine değil. Onlar kutsanmayı reddetti. Biz yani gücü "
-"kucaklayan makinelerin zayıf varlıkları süpürüp atmak gibi bir kaderi var."
+msgid "Those of the Project are not of the machine. They have been denied its blessing. We who have embraced the power of the machine have a destiny to sweep away such weak creatures."
+msgstr "Onlar Proje, makine değil. Onlar kutsanmayı reddetti. Biz yani gücü kucaklayan makinelerin zayıf varlıkları süpürüp atmak gibi bir kaderi var."
 
 #: data/base/sequenceaudio/cam2/cam2bcol.txt:6
 msgid "They shall fall before the might of The Collective."
@@ -10126,12 +9858,8 @@ msgid "Attack!"
 msgstr "Saldırın!"
 
 #: data/base/sequenceaudio/cam2/cam2dico.txt:1
-msgid ""
-"Warriors of the Collective, Nexus has given us the power of the machine so "
-"that we can destroy all that oppose us."
-msgstr ""
-"Kolektifin Askerleri, Nexus bize karşı gelen herkesi yok etmemiz için "
-"makinenin gücünü verdi."
+msgid "Warriors of the Collective, Nexus has given us the power of the machine so that we can destroy all that oppose us."
+msgstr "Kolektifin Askerleri, Nexus bize karşı gelen herkesi yok etmemiz için makinenin gücünü verdi."
 
 #: data/base/sequenceaudio/cam2/cam2dico.txt:3
 msgid "Nexus now asks us to crush the Project."
@@ -10186,20 +9914,12 @@ msgid "Briefing Commences"
 msgstr "Sunum Başlıyor"
 
 #: data/base/sequenceaudio/cam3/c003.txt:1
-msgid ""
-"Personnel at Gamma Base have confirmed that the nuclear missiles targeted at "
-"Alpha and Beta bases were launched from a silo in their sector."
-msgstr ""
-"Gama Üssü personeli bölgelerindeki bir silodan Alfa ve Beta üslerine nükleer "
-"füzeler atıldığını onayladı."
+msgid "Personnel at Gamma Base have confirmed that the nuclear missiles targeted at Alpha and Beta bases were launched from a silo in their sector."
+msgstr "Gama Üssü personeli bölgelerindeki bir silodan Alfa ve Beta üslerine nükleer füzeler atıldığını onayladı."
 
 #: data/base/sequenceaudio/cam3/c003.txt:4
-msgid ""
-"Team Gamma is currently scouting the silo's location and monitoring NEXUS's "
-"activity."
-msgstr ""
-"Halen Gama takımı nükleer füze silolarının yerini arıyor ve NEXUS'un "
-"hareketlerini izliyor."
+msgid "Team Gamma is currently scouting the silo's location and monitoring NEXUS's activity."
+msgstr "Halen Gama takımı nükleer füze silolarının yerini arıyor ve NEXUS'un hareketlerini izliyor."
 
 #: data/base/sequenceaudio/cam3/c3ad2n2.txt:1
 msgid "Time's up commander!!"
@@ -10215,29 +9935,22 @@ msgstr "Aferin Komutan, son füzemi fırlatmamı önledin."
 
 #: data/base/sequenceaudio/cam3/cam3_1bn.txt:2
 msgid "Such a shame. Your Project HQ would have made a wonderful target."
-msgstr ""
-"Öyle utanç verici ki. Proje Genel Merkezin harikulade bir hedef olacaktı."
+msgstr "Öyle utanç verici ki. Proje Genel Merkezin harikulade bir hedef olacaktı."
 
 #: data/base/sequenceaudio/cam3/cam3_1bn.txt:4
 msgid "But it's good of you to join me here."
 msgstr "Ama burada bana katılman çok iyi oldu."
 
 #: data/base/sequenceaudio/cam3/cam3_1bn.txt:6
-msgid ""
-"Buried beneath this silo is a tactical nuclear warhead that is set to go off "
-"soon."
-msgstr ""
-"Bu füze silosunun altında gömülü taktiksel nükleer füze patlamak için geri "
-"sayıyor."
+msgid "Buried beneath this silo is a tactical nuclear warhead that is set to go off soon."
+msgstr "Bu füze silosunun altında gömülü taktiksel nükleer füze patlamak için geri sayıyor."
 
 #: data/base/sequenceaudio/cam3/cam3_1bn.txt:9
 msgid "As I cannot launch it, it'll just have to blow where it is."
 msgstr "Onu fırlatamayacağım için, bulunduğu yerden patlayacak."
 
 #: data/base/sequenceaudio/cam3/cam3_1bn.txt:11
-msgid ""
-"Please note that all entrances to the underground complex have been sealed. "
-"Goodbye, Commander."
+msgid "Please note that all entrances to the underground complex have been sealed. Goodbye, Commander."
 msgstr "Unutma ki yer altına bütün girişler kapandı. Hoşçakal, Komutan."
 
 #: data/base/sequenceaudio/cam3/cam32a2.txt:1
@@ -10245,29 +9958,20 @@ msgid "Glad you could make it, Commander."
 msgstr "Başarmanıza sevindim, Komutanım."
 
 #: data/base/sequenceaudio/cam3/cam32a2.txt:4
-msgid ""
-"Enemy strike VTOLs have got us pinned down. We've managed to hold off cyborgs "
-"and tanks, but we haven't been able to make any progress along the valley."
-msgstr ""
-"Düşman DİvKları bizi sıkıştırdı. Sayborgları ve tankları durdurabildik ama "
-"vadi boyunca ilerlemeyi başaramadık."
+msgid "Enemy strike VTOLs have got us pinned down. We've managed to hold off cyborgs and tanks, but we haven't been able to make any progress along the valley."
+msgstr "Düşman DİvKları bizi sıkıştırdı. Sayborgları ve tankları durdurabildik ama vadi boyunca ilerlemeyi başaramadık."
 
 #: data/base/sequenceaudio/cam3/cam32a2.txt:7
 msgid "Can you try and reach us with anti-aircraft units?"
 msgstr "Uçaksavar birimleri ile bize ulaşabilir misiniz?"
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:1
-msgid ""
-"This is Team Alpha. Repeat, this is Team Alpha. We require immediate "
-"assistance."
-msgstr ""
-"Burası Alfa Takımı. Tekrar ediyorum, burası Alfa Takımı. Acil destek "
-"gerekiyor."
+msgid "This is Team Alpha. Repeat, this is Team Alpha. We require immediate assistance."
+msgstr "Burası Alfa Takımı. Tekrar ediyorum, burası Alfa Takımı. Acil destek gerekiyor."
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:4
 msgid "We are under heavy attack from cyborgs, laser tanks, and strike VTOLs."
-msgstr ""
-"Sayborglar, Lazer Tanklar ve DİvKlar tarafından ağır saldırı altındayız."
+msgstr "Sayborglar, Lazer Tanklar ve DİvKlar tarafından ağır saldırı altındayız."
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:6
 msgid "We were trying to reach your position, but have been ambushed."
@@ -10282,19 +9986,15 @@ msgid "Please assist."
 msgstr "Lütfen yardım gönderin."
 
 #: data/base/sequenceaudio/cam3/cam32pl2.txt:4
-msgid ""
-"Commander, forces from Team Alpha escaped the nuclear attack on Alpha Base."
-msgstr ""
-"Komutanım, Alfa Birlikleri üslerine yapılan nükleer saldırı sırasında kaçmayı "
-"başarmışlar."
+msgid "Commander, forces from Team Alpha escaped the nuclear attack on Alpha Base."
+msgstr "Komutanım, Alfa Birlikleri üslerine yapılan nükleer saldırı sırasında kaçmayı başarmışlar."
 
 #: data/base/sequenceaudio/cam3/cam34mu1.txt:1
 msgid "We are experiencing some interference from NEXUS."
 msgstr "NEXUS parazitlenmesi yaşıyoruz."
 
 #: data/base/sequenceaudio/cam3/cam34mu1.txt:3
-msgid ""
-"You must destroy his command centre before we lose control of key systems."
+msgid "You must destroy his command centre before we lose control of key systems."
 msgstr "Ana kontrolü kaybetmeden önce Nexus'un Genel Merkezini yok etmelisin."
 
 #: data/base/sequenceaudio/cam3/cam34mu2.txt:1
@@ -10302,87 +10002,48 @@ msgid "Commander, welcome to NEXUS!"
 msgstr "Komutan, NEXUS'a hoş geldin!"
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:1
-msgid ""
-"The Reed Corporation was founded by Dr Allan Reed. In 2080, Dr Reed landed a "
-"contract with the US Military to develop the synaptic link technology."
-msgstr ""
-"Reed şirketi Dr. Allan Reed tarafından kuruldu. 2080 yılında Dr. Reed ABD "
-"ordusu ile Sinaptik Bağlantı teknolojisini bulmak için kontrat imzaladi."
+msgid "The Reed Corporation was founded by Dr Allan Reed. In 2080, Dr Reed landed a contract with the US Military to develop the synaptic link technology."
+msgstr "Reed şirketi Dr. Allan Reed tarafından kuruldu. 2080 yılında Dr. Reed ABD ordusu ile Sinaptik Bağlantı teknolojisini bulmak için kontrat imzaladi."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:3
-msgid ""
-"After patenting the synaptic link five years later, Dr Reed continued his "
-"researches into cybernetics."
-msgstr ""
-"Sinaptik bağlantinin patenti verildikten 5 yıl sonra, Dr. Reed sibernetik "
-"araştırmalarına devam etti."
+msgid "After patenting the synaptic link five years later, Dr Reed continued his researches into cybernetics."
+msgstr "Sinaptik bağlantinin patenti verildikten 5 yıl sonra, Dr. Reed sibernetik araştırmalarına devam etti."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:5
-msgid ""
-"His goal this time was to allow transfer of human consciousness into data "
-"streams that could meld with computer technologies. While in Cyberspace the "
-"operator's bodies were kept in immersion tanks."
-msgstr ""
-"O zamanda amacı, insan bilincini veri akımı olarak bilgisayarlara iletmekti. "
-"Siberuzayda iken operatör bedenleri daldırma tankları içinde korundu."
+msgid "His goal this time was to allow transfer of human consciousness into data streams that could meld with computer technologies. While in Cyberspace the operator's bodies were kept in immersion tanks."
+msgstr "O zamanda amacı, insan bilincini veri akımı olarak bilgisayarlara iletmekti. Siberuzayda iken operatör bedenleri daldırma tankları içinde korundu."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:7
-msgid ""
-"Backed again by the military, Dr Reed began work on the NEXUS Intruder "
-"Program. After three years with little progress, the military abandoned the "
-"Nexus Project and cut Dr Reed's funding."
-msgstr ""
-"Askeri yardımı yeniden kazanınca, Dr. Reed NEXUS Davetsiz Misafir Programı "
-"üzerinde çalışmaya başladı. Küçük gelişmeler ile geçen 3 yıl sonra, askeriye "
-"Nexus Proje'sinden vazgeçti ve Dr. Reed'e askeri fon desteği kapandı."
+msgid "Backed again by the military, Dr Reed began work on the NEXUS Intruder Program. After three years with little progress, the military abandoned the Nexus Project and cut Dr Reed's funding."
+msgstr "Askeri yardımı yeniden kazanınca, Dr. Reed NEXUS Davetsiz Misafir Programı üzerinde çalışmaya başladı. Küçük gelişmeler ile geçen 3 yıl sonra, askeriye Nexus Proje'sinden vazgeçti ve Dr. Reed'e askeri fon desteği kapandı."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:9
-msgid ""
-"Reports from the time claim that Dr Reed was furious and vowed to have his "
-"revenge on all who got in his way."
-msgstr ""
-"Raporlara göre Dr. Reed öfkeliydi ve yoluna çıkan herkesten intikamını "
-"alacağına yemin etmiş."
+msgid "Reports from the time claim that Dr Reed was furious and vowed to have his revenge on all who got in his way."
+msgstr "Raporlara göre Dr. Reed öfkeliydi ve yoluna çıkan herkesten intikamını alacağına yemin etmiş."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:11
-msgid ""
-"It appears that Dr Reed may have succeeded in his goals and completed the "
-"Nexus Intruder Program."
-msgstr ""
-"Görünüşe göre Dr. Reed hedeflerine ulaşmış ve Nexus Davetsiz Misafir "
-"Programını tamamlamış."
+msgid "It appears that Dr Reed may have succeeded in his goals and completed the Nexus Intruder Program."
+msgstr "Görünüşe göre Dr. Reed hedeflerine ulaşmış ve Nexus Davetsiz Misafir Programını tamamlamış."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:12
 msgid "The similarity between NEXUS and Dr Reed is striking."
 msgstr "NEXUS ve Dr. Reed arasındakı benzerlik çarpıcı."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:14
-msgid ""
-"Such an interesting history lesson. Now allow me to bring you up to date."
+msgid "Such an interesting history lesson. Now allow me to bring you up to date."
 msgstr "Ne ilginç bir tarih dersi. Şimdi sana gerçeği göstermeme izin ver."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:15
-msgid ""
-"The NEXUS Intruder Program was created in order to control fools like you."
-msgstr ""
-"NEXUS Davetsiz Misafir Programı senin gibi salakları kontrol etmek için "
-"üretilmişti."
+msgid "The NEXUS Intruder Program was created in order to control fools like you."
+msgstr "NEXUS Davetsiz Misafir Programı senin gibi salakları kontrol etmek için üretilmişti."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:17
-msgid ""
-"It's very simple for me to infiltrate your systems and take them over. It's "
-"so simple, in fact, that you wouldn't even know I'm there. That is until I "
-"activate parts of myself etched into your core systems."
-msgstr ""
-"Benim için sistemlerinize girip ele geçirmek çok basit. Hemde çok. "
-"Hatta orada olduğumu bile anlamayacaksın. Ta ki sistemlerinden parçamı aktive "
-"edene kadar."
+msgid "It's very simple for me to infiltrate your systems and take them over. It's so simple, in fact, that you wouldn't even know I'm there. That is until I activate parts of myself etched into your core systems."
+msgstr "Benim için sistemlerinize girip ele geçirmek çok basit. Hemde çok. Hatta orada olduğumu bile anlamayacaksın. Ta ki sistemlerinden parçamı aktive edene kadar."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:19
-msgid ""
-"Let's start by activating NEXUS in your core systems and see what happens!"
-msgstr ""
-"Çekirdek sisteminizdeki NEXUS'u aktif hale getirelim ve ne olduğunu görelim!"
+msgid "Let's start by activating NEXUS in your core systems and see what happens!"
+msgstr "Çekirdek sisteminizdeki NEXUS'u aktif hale getirelim ve ne olduğunu görelim!"
 
 #: data/base/sequenceaudio/cam3/cam3abpl.txt:1
 msgid "Commander, we are experiencing interference with our equipment."
@@ -10394,36 +10055,23 @@ msgstr "Normal servis en kısa sürede tamir edilecektir."
 
 #: data/base/sequenceaudio/cam3/cam3ad2n.txt:1
 msgid "Not long to go now, Commander. There's no where else for you to run to."
-msgstr ""
-"Şimdi geri çekilmek için geç değil, Komutan. Başka bir kaçış şansın olmayacak."
+msgstr "Şimdi geri çekilmek için geç değil, Komutan. Başka bir kaçış şansın olmayacak."
 
 #: data/base/sequenceaudio/cam3/cam3ad2n.txt:4
-msgid ""
-"However, if you vacate this facility, then I shall let you go free, as you "
-"are no longer a threat to me."
-msgstr ""
-"Fakat, eğer bu tesisi boşaltırsan, seni özgür bırakacağız... Bana hiçbir "
-"zaman tehdit olmamışsın gibi."
+msgid "However, if you vacate this facility, then I shall let you go free, as you are no longer a threat to me."
+msgstr "Fakat, eğer bu tesisi boşaltırsan, seni özgür bırakacağız... Bana hiçbir zaman tehdit olmamışsın gibi."
 
 #: data/base/sequenceaudio/cam3/cam3ad2n.txt:6
 msgid "You have five minutes to comply or else it's frying time!"
 msgstr "Teslim olmak için 5 dakikan var yoksa kızartma zamanı!"
 
 #: data/base/sequenceaudio/cam3/cam3bg.txt:1
-msgid ""
-"Commander, we are under attack by NEXUS cyborgs and tanks. Please help as "
-"we...."
-msgstr ""
-"Komutanım, NEXUS tankları ve sayborgları tarafından saldırı altındayız. Bize "
-"yardım edin...."
+msgid "Commander, we are under attack by NEXUS cyborgs and tanks. Please help as we...."
+msgstr "Komutanım, NEXUS tankları ve sayborgları tarafından saldırı altındayız. Bize yardım edin...."
 
 #: data/base/sequenceaudio/cam3/cam3bg.txt:3
-msgid ""
-"...cannot hold out much longer.  Repeat, please help, we cannot hold out much "
-"longer...."
-msgstr ""
-"...çok uzun süre dayanamayız. Tekrar ediyorum, lütfen yardım edin, çok uzun "
-"süre dayanamayız...."
+msgid "...cannot hold out much longer.  Repeat, please help, we cannot hold out much longer...."
+msgstr "...çok uzun süre dayanamayız. Tekrar ediyorum, lütfen yardım edin, çok uzun süre dayanamayız...."
 
 #: data/base/sequenceaudio/cam3/cam3_bn.txt:1
 msgid "Ah, Commander, so good of you to join us here at Nexus base."
@@ -10446,12 +10094,8 @@ msgid "You and not those fools in the New Paradigm and the Collective."
 msgstr "Sen, Yeni Paradigma ve Kolektifteki aptallar."
 
 #: data/base/sequenceaudio/cam3/cam3_bn.txt:10
-msgid ""
-"I'm now activating all your synaptic links so that your forces can meld with "
-"Nexus."
-msgstr ""
-"Tüm sinaptik linklerimi harekete geçiriyorum böylece senin birliklerin Nexus "
-"ile birleşebilecek."
+msgid "I'm now activating all your synaptic links so that your forces can meld with Nexus."
+msgstr "Tüm sinaptik linklerimi harekete geçiriyorum böylece senin birliklerin Nexus ile birleşebilecek."
 
 #: data/base/sequenceaudio/cam3/cam3_bn.txt:12
 msgid "Your forces are now mine! Welcome to Nexus."
@@ -10470,35 +10114,20 @@ msgid "But no matter, as you'll not be here much longer."
 msgstr "Ama zararı yok, burada daha fazla olamayacaksın."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:6
-msgid ""
-"After much searching and reprogramming, I've finally got all my systems back "
-"on-line."
-msgstr ""
-"Uzun araştırma ve yeniden programlamadan sonra, bütün sistemlerimi tekrar "
-"çevrimiçi hale getirebildim."
+msgid "After much searching and reprogramming, I've finally got all my systems back on-line."
+msgstr "Uzun araştırma ve yeniden programlamadan sonra, bütün sistemlerimi tekrar çevrimiçi hale getirebildim."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:8
-msgid ""
-"Once I destroyed the world with nuclear fire to clear the way for my "
-"cybernetic future."
-msgstr ""
-"Daha önce olarak sibernetik geleceğim için Dünyayı nükleer ateş ile yıktım."
+msgid "Once I destroyed the world with nuclear fire to clear the way for my cybernetic future."
+msgstr "Daha önce olarak sibernetik geleceğim için Dünyayı nükleer ateş ile yıktım."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:9
-msgid ""
-"I now intend to further shape the world into my own image, by  surgically "
-"removing unwanted growths like yourself."
-msgstr ""
-"Dünyayı kendi istediğim şekilde biçimlendirmeye karar verdim, bu yüzden senin "
-"gibi çıkıntıları temizleyeceğim."
+msgid "I now intend to further shape the world into my own image, by  surgically removing unwanted growths like yourself."
+msgstr "Dünyayı kendi istediğim şekilde biçimlendirmeye karar verdim, bu yüzden senin gibi çıkıntıları temizleyeceğim."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:11
-msgid ""
-"My Laser Satellites are now powering up. I intend to test them on you first, "
-"Commander!"
-msgstr ""
-"Lazer Uydularım şu anda güç topluyorlar. Onları ilk olarak sende test "
-"edeceğim, Komutan!"
+msgid "My Laser Satellites are now powering up. I intend to test them on you first, Commander!"
+msgstr "Lazer Uydularım şu anda güç topluyorlar. Onları ilk olarak sende test edeceğim, Komutan!"
 
 #: data/base/sequenceaudio/devastation.txa:4
 msgid "Dusk, November 3rd, 2085"
@@ -10546,72 +10175,40 @@ msgid "A New Beginning"
 msgstr "Yeni Bir Başlangıç"
 
 #: data/base/sequenceaudio/devastation.txt:1
-msgid ""
-"The NASDA system was developed to protect us. It was to be the ultimate "
-"nuclear deterrent. As it turned out, it was our executioner."
-msgstr ""
-"KASSA sistemleri bizi korumak için geliştirilmişti. Muhteşem bir nükleer "
-"caydırıcı olacaktı. Taraf değiştirdi ve Azrailimiz oldu."
+msgid "The NASDA system was developed to protect us. It was to be the ultimate nuclear deterrent. As it turned out, it was our executioner."
+msgstr "KASSA sistemleri bizi korumak için geliştirilmişti. Muhteşem bir nükleer caydırıcı olacaktı. Taraf değiştirdi ve Azrailimiz oldu."
 
 #: data/base/sequenceaudio/devastation.txt:3
-msgid ""
-"Reports said that NASDA developed a fault during a routine systems check. "
-"Don't believe it. Someone wanted it to take us out."
-msgstr ""
-"Raporlara göre rutin sistem kontrolünde KASSA bir hata yapmış. İnanmayın. "
-"Birileri bizi öldürmek için onu istiyordu."
+msgid "Reports said that NASDA developed a fault during a routine systems check. Don't believe it. Someone wanted it to take us out."
+msgstr "Raporlara göre rutin sistem kontrolünde KASSA bir hata yapmış. İnanmayın. Birileri bizi öldürmek için onu istiyordu."
 
 #: data/base/sequenceaudio/devastation.txt:5
-msgid ""
-"Those nukes were targeted on every major city around the world. NASDA was "
-"programmed to start the Collapse. When the counterstrikes launched, its laser "
-"defenses and anti-missile ground sites failed."
-msgstr ""
-"Bu Nükleer füzeler dünyadaki bütün büyük şehirleri hedefliyordu. KASSA, "
-"yıkımı başlatmaya programlandı. Karşı saldırılar başlatıldığında, lazer "
-"savunmaları ve yer füzesavarları başarısız oldu."
+msgid "Those nukes were targeted on every major city around the world. NASDA was programmed to start the Collapse. When the counterstrikes launched, its laser defenses and anti-missile ground sites failed."
+msgstr "Bu Nükleer füzeler dünyadaki bütün büyük şehirleri hedefliyordu. KASSA, yıkımı başlatmaya programlandı. Karşı saldırılar başlatıldığında, lazer savunmaları ve yer füzesavarları başarısız oldu."
 
 #: data/base/sequenceaudio/devastation.txt:7
 msgid "The world as we knew it ended..."
 msgstr "Bildiğimiz dünya yok oldu..."
 
 #: data/base/sequenceaudio/devastation.txt:9
-msgid ""
-"The Nuclear Winter hit hard. Disease and famine claimed most of us who had "
-"survived the nuclear strikes. Wars over cans of dog food took even more."
-msgstr ""
-"Nükleer kış sert vurdu. Hastalık ve kıtlık nükleer saldırıdan hayatta "
-"kalanların yakasına yapıştı. Daha fazla köpek maması almak için bile kavgalar "
-"çıktı."
+msgid "The Nuclear Winter hit hard. Disease and famine claimed most of us who had survived the nuclear strikes. Wars over cans of dog food took even more."
+msgstr "Nükleer kış sert vurdu. Hastalık ve kıtlık nükleer saldırıdan hayatta kalanların yakasına yapıştı. Daha fazla köpek maması almak için bile kavgalar çıktı."
 
 #: data/base/sequenceaudio/devastation.txt:11
-msgid ""
-"We'd fled Seattle early in '86. We'd heard that the Rocky Mountains were "
-"relatively rad-free."
-msgstr ""
-"2086'da Seattle'dan kaçtık. Rocky dağlarının daha sakin olduğunu duymuştuk."
+msgid "We'd fled Seattle early in '86. We'd heard that the Rocky Mountains were relatively rad-free."
+msgstr "2086'da Seattle'dan kaçtık. Rocky dağlarının daha sakin olduğunu duymuştuk."
 
 #: data/base/sequenceaudio/devastation.txt:13
-msgid ""
-"After fighting off bands of marauders we came across the base. Its personnel "
-"were dead. Killed by any one of a number of virulent diseases."
-msgstr ""
-"Yağmacı gruplarla savaştıktan sonra üsse vardık. Personel ölmüştü. Birçoğu "
-"viral salgınlar yüzünden ölmüştü."
+msgid "After fighting off bands of marauders we came across the base. Its personnel were dead. Killed by any one of a number of virulent diseases."
+msgstr "Yağmacı gruplarla savaştıktan sonra üsse vardık. Personel ölmüştü. Birçoğu viral salgınlar yüzünden ölmüştü."
 
 #: data/base/sequenceaudio/devastation.txt:15
 msgid "We cracked the doors, and cleared out the bodies inside."
 msgstr "Kapıları kırdık ve bedenleri dışarı attık."
 
 #: data/base/sequenceaudio/devastation.txt:17
-msgid ""
-"We knew that things would never be the same again, but we were determined to "
-"build a new world out of the ruins. We rebuilt the landing pads and brought "
-"the old systems back on-line."
-msgstr ""
-"Bir şeylerin asla eskisi gibi olmayacağını biliyorduk, ancak kalıntılardan "
-"yeni bir dünya inşa etmeye karar verdik. İniş alanlarını tamir ettik ve eski "
-"sistemleri yeniden çevrimiçi hale getirdik."
+msgid "We knew that things would never be the same again, but we were determined to build a new world out of the ruins. We rebuilt the landing pads and brought the old systems back on-line."
+msgstr "Bir şeylerin asla eskisi gibi olmayacağını biliyorduk, ancak kalıntılardan yeni bir dünya inşa etmeye karar verdik. İniş alanlarını tamir ettik ve eski sistemleri yeniden çevrimiçi hale getirdik."
 
 #: data/base/sequenceaudio/devastation.txt:19
 msgid "We were finally ready to begin the Project."
@@ -10957,8 +10554,7 @@ msgstr "Radar tespit edici kule düşman algılayıcılarını tespit eder"
 
 #: data/mp/messages/resmessagesall.rmsg:105
 msgid "Orders assigned indirect fire units to fire at the enemy sensors"
-msgstr ""
-"Bağlanmış endirek ateş birimlerini düşman algılayıcılarına saldır emri verir."
+msgstr "Bağlanmış endirek ateş birimlerini düşman algılayıcılarına saldır emri verir."
 
 #: data/mp/messages/resmessagesall.rmsg:106
 msgid "Counter-battery fire continues until enemy sensor is suppressed"
@@ -12312,21 +11908,13 @@ msgid "System locale"
 msgstr "Yerel Sistem"
 
 #: lib/ivis_opengl/screen.cpp:187
-msgid ""
-"OpenGL GLSL shader version 1.20 is not supported by your system. Some things "
-"may look wrong. Please upgrade your graphics driver/hardware, if possible."
-msgstr ""
-"OpenGL GLSL shader sürüm 1.20 sisteminiz tarafından desteklenmiyor. Bazı "
-"şeyler yanlış görünebilir. Lütfen mümkünse, grafik sürücünüzü/donanımınızı "
-"yükseltin."
+msgid "OpenGL GLSL shader version 1.20 is not supported by your system. Some things may look wrong. Please upgrade your graphics driver/hardware, if possible."
+msgstr "OpenGL GLSL shader sürüm 1.20 sisteminiz tarafından desteklenmiyor. Bazı şeyler yanlış görünebilir. Lütfen mümkünse, grafik sürücünüzü/donanımınızı yükseltin."
 
 #: lib/ivis_opengl/screen.cpp:193
-msgid ""
-"OpenGL 1.2 + VBO + TEC is not supported by your system. The game requires "
-"this. Please upgrade your graphics drivers/hardware, if possible."
-msgstr ""
-"OpenGL1.2 + VBO + TEC sisteminiz tarafından desteklenmiyor. Oyun buna "
-"gereksinim duyar. Lütfen mümkünse, grafik sürücünüzü/donanımınızı yükseltin."
+#, fuzzy
+msgid "OpenGL 1.2 + TEC is not supported by your system. The game requires this. Please upgrade your graphics drivers/hardware, if possible."
+msgstr "OpenGL1.2 + VBO + TEC sisteminiz tarafından desteklenmiyor. Oyun buna gereksinim duyar. Lütfen mümkünse, grafik sürücünüzü/donanımınızı yükseltin."
 
 #: lib/netplay/netplay.cpp:218
 #: lib/netplay/netplay.cpp:1119
@@ -12335,23 +11923,18 @@ msgstr "Parolayı buraya girin"
 
 #: lib/netplay/netplay.cpp:985
 msgid ""
-"Your router doesn't support UPnP, you must manually configure your router & "
-"firewall to\n"
+"Your router doesn't support UPnP, you must manually configure your router & firewall to\n"
 "open port 2100 before you can host a game."
 msgstr ""
-"Yönlendiriciniz UPnP'yi desteklemediğinden, bir oyuna ev sahipliği yapabilmek "
-"için yönlendirici\n"
-"ve güvenlik duvarınızı 2100 no'lu iletişim noktasını açmak için el ile "
-"yapılandırmalısınız."
+"Yönlendiriciniz UPnP'yi desteklemediğinden, bir oyuna ev sahipliği yapabilmek için yönlendirici\n"
+"ve güvenlik duvarınızı 2100 no'lu iletişim noktasını açmak için el ile yapılandırmalısınız."
 
 #: lib/netplay/netplay.cpp:999
 msgid ""
-"No UPnP device was found. You must manually configure your router & firewall "
-"to\n"
+"No UPnP device was found. You must manually configure your router & firewall to\n"
 "open port 2100 before you can host a game."
 msgstr ""
-"UPnP aygıtı bulunamadı. Bir oyunu kurabilmeniz için yönlendirici ve güvenlik "
-"duvarınızı\n"
+"UPnP aygıtı bulunamadı. Bir oyunu kurabilmeniz için yönlendirici ve güvenlik duvarınızı\n"
 "2100 no'lu iletişim noktasını açmak için el ile yapılandırmalısınız."
 
 #: lib/netplay/netplay.cpp:1027
@@ -12452,8 +12035,8 @@ msgstr "Strateji Oyunu"
 #: src/intelmap.cpp:530
 #: src/intorder.cpp:727
 #: src/loadsave.cpp:250
-#: src/multimenu.cpp:496
-#: src/multimenu.cpp:1363
+#: src/multimenu.cpp:506
+#: src/multimenu.cpp:1373
 #: src/transporter.cpp:264
 #: src/transporter.cpp:346
 #: src/transporter.cpp:806
@@ -12463,15 +12046,12 @@ msgstr "Kapat"
 #: src/cheat.cpp:165
 #, c-format
 msgid "%s wants to enable debug mode. Enabled: %s, Disabled: %s."
-msgstr ""
-"%s hata ayıklama modunu devreye almak istiyor. Etkin: %s, Etkin değil: %s."
+msgstr "%s hata ayıklama modunu devreye almak istiyor. Etkin: %s, Etkin değil: %s."
 
 #: src/cheat.cpp:169
 #, c-format
 msgid "%s wants to disable debug mode. Enabled: %s, Disabled: %s."
-msgstr ""
-"%s hata ayıklama modunu devre dışı bırakmak istiyor. Etkin: %s, Etkin değil: %"
-"s."
+msgstr "%s hata ayıklama modunu devre dışı bırakmak istiyor. Etkin: %s, Etkin değil: %s."
 
 #: src/cheat.cpp:175
 msgid "Debug mode now enabled!"
@@ -12481,154 +12061,157 @@ msgstr "Hata ayıklama modu devrede!"
 msgid "Debug mode now disabled!"
 msgstr "Hata ayıklama modu devre dışı!"
 
-#: src/clparse.cpp:242
+#: src/clparse.cpp:243
 msgid "Set configuration directory"
 msgstr "Yapılandırma dizinini ayarla"
 
-#: src/clparse.cpp:242
+#: src/clparse.cpp:243
 msgid "configuration directory"
 msgstr "yapılandırma dizini"
 
-#: src/clparse.cpp:243
+#: src/clparse.cpp:244
 msgid "Set default data directory"
 msgstr "Varsayılan veri dizini ayarla"
 
-#: src/clparse.cpp:243
+#: src/clparse.cpp:244
 msgid "data directory"
 msgstr "veri dizini"
 
 # Kaynakta seviye olarak gösteriliyor. En iyi çeviride bile -Ayhan
-#: src/clparse.cpp:244
+#: src/clparse.cpp:245
 msgid "Show debug for given level"
 msgstr "Verilen seviyede hata ayıklama seyivesini göster"
 
-#: src/clparse.cpp:244
+#: src/clparse.cpp:245
 msgid "debug level"
 msgstr "hata ayıklama seviyesi"
 
-#: src/clparse.cpp:245
+#: src/clparse.cpp:246
 msgid "Log debug output to file"
 msgstr "Hata ayıklama girdilerini dosyaya çıkar"
 
-#: src/clparse.cpp:245
+#: src/clparse.cpp:246
 msgid "file"
 msgstr "dosya"
 
-#: src/clparse.cpp:246
+#: src/clparse.cpp:247
 msgid "Flush all debug output written to stderr"
 msgstr "Boş ayıklama çıkışı stderr'e gönder"
 
-#: src/clparse.cpp:247
+#: src/clparse.cpp:248
 msgid "Play in fullscreen mode"
 msgstr "Tam ekran modunda yürüt"
 
-#: src/clparse.cpp:248
+#: src/clparse.cpp:249
 msgid "Load a specific game"
 msgstr "Belirli bir oyun yükle"
 
-#: src/clparse.cpp:248
+#: src/clparse.cpp:249
 msgid "game-name"
 msgstr "oyun-ismi"
 
-#: src/clparse.cpp:249
+#: src/clparse.cpp:250
 msgid "Show this help message and exit"
 msgstr "Bu yardımı görüntüle ve çık"
 
-#: src/clparse.cpp:250
+#: src/clparse.cpp:251
 msgid "Enable a global mod"
 msgstr "Bir küresel modu etkinleştir"
 
-#: src/clparse.cpp:250
 #: src/clparse.cpp:251
 #: src/clparse.cpp:252
+#: src/clparse.cpp:253
 msgid "mod"
 msgstr "mod"
 
-#: src/clparse.cpp:251
+#: src/clparse.cpp:252
 msgid "Enable a campaign only mod"
 msgstr "Sadece seferberlik modu etkinleştir"
 
-#: src/clparse.cpp:252
+#: src/clparse.cpp:253
 msgid "Enable a multiplay only mod"
 msgstr "Sadece çok oyunculu mod etkinleştir"
 
-#: src/clparse.cpp:253
+#: src/clparse.cpp:254
 msgid "Disable asserts"
 msgstr "İddialar devre dışı"
 
-#: src/clparse.cpp:254
+#: src/clparse.cpp:255
 msgid "Causes a crash to test the crash handler"
 msgstr "Hata işleyiciyi denemek için bir çökme oluşturur"
 
-#: src/clparse.cpp:255
+#: src/clparse.cpp:256
 msgid "Load a saved game"
 msgstr "Kayıtlı oyun yükle"
 
-#: src/clparse.cpp:255
+#: src/clparse.cpp:256
 msgid "savegame"
 msgstr "kayıtlı oyun"
 
-#: src/clparse.cpp:256
+#: src/clparse.cpp:257
 msgid "Play in windowed mode"
 msgstr "Pencere kipinde oyna"
 
-#: src/clparse.cpp:257
+#: src/clparse.cpp:258
 msgid "Show version information and exit"
 msgstr "Sürüm bilgisini göster ve çık"
 
-#: src/clparse.cpp:258
+#: src/clparse.cpp:259
 msgid "Set the resolution to use"
 msgstr "Kullanmak için çözünürlüğü ayarla"
 
-#: src/clparse.cpp:258
+#: src/clparse.cpp:259
 msgid "WIDTHxHEIGHT"
 msgstr "GENİŞLİKxYÜKSEKLİK"
 
-#: src/clparse.cpp:259
+#: src/clparse.cpp:260
 msgid "Enable shadows"
 msgstr "Gölgeler devrede"
 
-#: src/clparse.cpp:260
+#: src/clparse.cpp:261
 msgid "Disable shadows"
 msgstr "Gölgeler devre dışı"
 
-#: src/clparse.cpp:261
+#: src/clparse.cpp:262
 msgid "Enable sound"
 msgstr "Ses devrede"
 
-#: src/clparse.cpp:262
+#: src/clparse.cpp:263
 msgid "Disable sound"
 msgstr "Ses devre dışı"
 
-#: src/clparse.cpp:263
+#: src/clparse.cpp:264
 msgid "connect directly to IP/hostname"
 msgstr "doğrudan IP/kurucu adına bağlan"
 
-#: src/clparse.cpp:263
+#: src/clparse.cpp:264
 msgid "host"
 msgstr "kurucu"
 
-#: src/clparse.cpp:264
+#: src/clparse.cpp:265
 msgid "go directly to host screen"
 msgstr "direk kurma ekranına git"
 
-#: src/clparse.cpp:265
+#: src/clparse.cpp:266
 msgid "Enable texture compression"
 msgstr "Doku sıkıştırma devrede"
 
-#: src/clparse.cpp:266
+#: src/clparse.cpp:267
 msgid "Disable texture compression"
 msgstr "Doku sıkıştırma devre dışı"
 
-#: src/clparse.cpp:267
-msgid "Only use OpenGL 1.5"
-msgstr "Sadece OpenGL 1.5'i kullan"
+#: src/clparse.cpp:268
+#, fuzzy
+msgid "Disable the use of OpenGL shaders"
+msgstr "Doku sıkıştırma devre dışı"
+
+#: src/clparse.cpp:269
+msgid "Disable the use of OpenGL Vertex Buffer Objects"
+msgstr ""
 
 #: src/cmddroid.cpp:110
 msgid "Commander needs a higher level to command more units"
-msgstr ""
-"Komutanlar daha fazla birim yönetmek için daha yüksek bir rütbeye ihtiyaç "
-"duyar"
+msgstr "Komutanlar daha fazla birim yönetmek için daha yüksek bir rütbeye ihtiyaç duyar"
 
 #: src/configuration.cpp:96
 msgid "My Game"
@@ -12800,20 +12383,20 @@ msgstr "Sistemler"
 msgid "Delete Template"
 msgstr "Kalıbı Sil"
 
-#: src/display3d.cpp:658
+#: src/display3d.cpp:676
 msgid "Player left"
 msgstr "Oyuncu çıktı"
 
-#: src/display3d.cpp:662
+#: src/display3d.cpp:680
 msgid "Player dropped"
 msgstr "Oyuncu düştü"
 
-#: src/display3d.cpp:666
-#: src/multiint.cpp:2375
+#: src/display3d.cpp:684
+#: src/multiint.cpp:2382
 msgid "Waiting for other players"
 msgstr "Diğer oyuncular bekleniyor"
 
-#: src/display3d.cpp:671
+#: src/display3d.cpp:689
 msgid "Out of sync"
 msgstr "Eşitleme bozuldu"
 
@@ -12924,7 +12507,7 @@ msgid "Multi Player"
 msgstr "Çok Oyuncu"
 
 #: src/frontend.cpp:110
-#: src/frontend.cpp:186
+#: src/frontend.cpp:193
 msgid "Tutorial"
 msgstr "Öğretici"
 
@@ -12933,389 +12516,392 @@ msgstr "Öğretici"
 msgid "Options"
 msgstr "Ayarlar"
 
-#: src/frontend.cpp:112
+#: src/frontend.cpp:114
+#: src/frontend.cpp:118
 msgid "View Intro"
 msgstr "Oyun Videosunu İzle"
 
-#: src/frontend.cpp:114
+#: src/frontend.cpp:119
+#, fuzzy
+msgid "Videos are missing, download them from http://wz2100.net"
+msgstr "Seferberlik videolarını kaçırıyorsun! Videoları http://wz2100.net'den indir"
+
+#: src/frontend.cpp:121
 msgid "Quit Game"
 msgstr "Oyundan Çık"
 
-#: src/frontend.cpp:115
+#: src/frontend.cpp:122
 msgid "MAIN MENU"
 msgstr "ANA MENÜ"
 
-#: src/frontend.cpp:117
+#: src/frontend.cpp:124
 msgid "Official site: http://wz2100.net/"
 msgstr "Resmi site: http://wz2100.net"
 
-#: src/frontend.cpp:187
+#: src/frontend.cpp:194
 msgid "Fast Play"
 msgstr "Hızlı Oyun"
 
-#: src/frontend.cpp:188
+#: src/frontend.cpp:195
 msgid "TUTORIALS"
 msgstr "ÖĞRETİCİLER"
 
 #. TRANSLATORS: "Return", in this context, means "return to previous screen/menu"
-#: src/frontend.cpp:190
-#: src/frontend.cpp:252
-#: src/frontend.cpp:397
-#: src/frontend.cpp:471
-#: src/frontend.cpp:612
-#: src/frontend.cpp:758
-#: src/frontend.cpp:904
-#: src/frontend.cpp:1163
-#: src/frontend.cpp:1318
-#: src/frontend.cpp:1338
+#: src/frontend.cpp:197
+#: src/frontend.cpp:259
+#: src/frontend.cpp:404
+#: src/frontend.cpp:478
+#: src/frontend.cpp:619
+#: src/frontend.cpp:765
+#: src/frontend.cpp:911
+#: src/frontend.cpp:1170
+#: src/frontend.cpp:1325
+#: src/frontend.cpp:1345
 msgctxt "menu"
 msgid "Return"
 msgstr "Geri dön"
 
-#: src/frontend.cpp:245
+#: src/frontend.cpp:252
 msgid "New Campaign"
 msgstr "Yeni Seferberlik"
 
-#: src/frontend.cpp:246
+#: src/frontend.cpp:253
 msgid "Start Skirmish Game"
 msgstr "Çatışma Oyunu Başlat"
 
-#: src/frontend.cpp:247
+#: src/frontend.cpp:254
 msgid "Challenges"
 msgstr "Mücadeleler"
 
-#: src/frontend.cpp:248
+#: src/frontend.cpp:255
 msgid "Load Campaign Game"
 msgstr "Seferberlik Oyunu Yükle"
 
-#: src/frontend.cpp:249
+#: src/frontend.cpp:256
 msgid "Load Skirmish Game"
 msgstr "Çatışma Oyunu Yükle"
 
-#: src/frontend.cpp:251
+#: src/frontend.cpp:258
 msgid "SINGLE PLAYER"
 msgstr "TEK OYUNCU"
 
-#: src/frontend.cpp:256
+#: src/frontend.cpp:263
 msgid "Campaign videos are missing! Get them from http://wz2100.net"
-msgstr ""
-"Seferberlik videolarını kaçırıyorsun! Videoları http://wz2100.net'den indir"
+msgstr "Seferberlik videolarını kaçırıyorsun! Videoları http://wz2100.net'den indir"
 
-#: src/frontend.cpp:332
+#: src/frontend.cpp:339
 #: src/ingameop.cpp:504
 msgid "Load Campaign Saved Game"
 msgstr "Seferberlik Kayıtlı Oyunu Yükle"
 
-#: src/frontend.cpp:338
+#: src/frontend.cpp:345
 #: src/ingameop.cpp:508
 msgid "Load Skirmish Saved Game"
 msgstr "Çatışma Kayıtlı Oyunu Yükle"
 
-#: src/frontend.cpp:392
+#: src/frontend.cpp:399
 msgid "MULTI PLAYER"
 msgstr "ÇOK OYUNCULU"
 
-#: src/frontend.cpp:394
+#: src/frontend.cpp:401
 msgid "Host Game"
 msgstr "Oyun Kur"
 
-#: src/frontend.cpp:395
+#: src/frontend.cpp:402
 msgid "Join Game"
 msgstr "Oyuna Katıl"
 
-#: src/frontend.cpp:400
+#: src/frontend.cpp:407
 msgid "TCP port 2100 must be opened in your firewall or router to host games!"
-msgstr ""
-"Oyun kurmak için yönlendiricinizde veya güvenlik duvarınızda TCP port 2100 "
-"açık olmalıdır!"
+msgstr "Oyun kurmak için yönlendiricinizde veya güvenlik duvarınızda TCP port 2100 açık olmalıdır!"
 
-#: src/frontend.cpp:464
+#: src/frontend.cpp:471
 #: src/multiint.cpp:1483
 msgid "OPTIONS"
 msgstr "AYARLAR"
 
-#: src/frontend.cpp:465
+#: src/frontend.cpp:472
 msgid "Game Options"
 msgstr "Oyun Ayarları"
 
-#: src/frontend.cpp:466
+#: src/frontend.cpp:473
 msgid "Graphics Options"
 msgstr "Grafik Ayarları"
 
-#: src/frontend.cpp:467
+#: src/frontend.cpp:474
 msgid "Video Options"
 msgstr "Video Ayarları"
 
-#: src/frontend.cpp:468
+#: src/frontend.cpp:475
 #: src/ingameop.cpp:268
 msgid "Audio Options"
 msgstr "Ses Ayarları"
 
-#: src/frontend.cpp:469
+#: src/frontend.cpp:476
 msgid "Mouse Options"
 msgstr "Fare Ayarları"
 
-#: src/frontend.cpp:470
+#: src/frontend.cpp:477
 msgid "Key Mappings"
 msgstr "Klavye Kısayolları"
 
-#: src/frontend.cpp:530
+#: src/frontend.cpp:537
 msgid "Video Playback"
 msgstr "Video Oynatma"
 
-#: src/frontend.cpp:534
-#: src/frontend.cpp:686
+#: src/frontend.cpp:541
+#: src/frontend.cpp:693
 msgid "1X"
 msgstr "1X"
 
-#: src/frontend.cpp:538
-#: src/frontend.cpp:676
+#: src/frontend.cpp:545
+#: src/frontend.cpp:683
 msgid "2X"
 msgstr "2X"
 
-#: src/frontend.cpp:542
-#: src/frontend.cpp:681
-#: src/frontend.cpp:832
-#: src/frontend.cpp:929
+#: src/frontend.cpp:549
+#: src/frontend.cpp:688
+#: src/frontend.cpp:839
+#: src/frontend.cpp:936
 msgid "Fullscreen"
 msgstr "Tam Ekran"
 
-#: src/frontend.cpp:551
+#: src/frontend.cpp:558
 msgid "Scanlines"
 msgstr "Tarama yolları"
 
-#: src/frontend.cpp:555
-#: src/frontend.cpp:576
-#: src/frontend.cpp:584
-#: src/frontend.cpp:600
-#: src/frontend.cpp:630
-#: src/frontend.cpp:648
-#: src/frontend.cpp:666
-#: src/frontend.cpp:711
-#: src/frontend.cpp:857
-#: src/frontend.cpp:867
-#: src/frontend.cpp:897
-#: src/frontend.cpp:953
-#: src/frontend.cpp:1014
-#: src/frontend.cpp:1057
-#: src/frontend.cpp:1070
-#: src/frontend.cpp:1120
-#: src/frontend.cpp:1132
-#: src/frontend.cpp:1144
-#: src/frontend.cpp:1180
-#: src/frontend.cpp:1193
-#: src/frontend.cpp:1207
+#: src/frontend.cpp:562
+#: src/frontend.cpp:583
+#: src/frontend.cpp:591
+#: src/frontend.cpp:607
+#: src/frontend.cpp:637
+#: src/frontend.cpp:655
+#: src/frontend.cpp:673
+#: src/frontend.cpp:718
+#: src/frontend.cpp:864
+#: src/frontend.cpp:874
+#: src/frontend.cpp:904
+#: src/frontend.cpp:960
+#: src/frontend.cpp:1021
+#: src/frontend.cpp:1064
+#: src/frontend.cpp:1077
+#: src/frontend.cpp:1127
+#: src/frontend.cpp:1139
+#: src/frontend.cpp:1151
+#: src/frontend.cpp:1187
+#: src/frontend.cpp:1200
+#: src/frontend.cpp:1214
 msgid "Off"
 msgstr "Kapalı"
 
-#: src/frontend.cpp:559
-#: src/frontend.cpp:701
+#: src/frontend.cpp:566
+#: src/frontend.cpp:708
 msgid "50%"
 msgstr "%50"
 
-#: src/frontend.cpp:563
-#: src/frontend.cpp:706
-#: src/multiplay.cpp:2002
+#: src/frontend.cpp:570
+#: src/frontend.cpp:713
+#: src/multiplay.cpp:2020
 msgid "Black"
 msgstr "Siyah"
 
-#: src/frontend.cpp:569
+#: src/frontend.cpp:576
 msgid "Screen Shake"
 msgstr "Ekran Sarsıntısı"
 
-#: src/frontend.cpp:572
-#: src/frontend.cpp:588
-#: src/frontend.cpp:596
-#: src/frontend.cpp:635
-#: src/frontend.cpp:653
-#: src/frontend.cpp:662
-#: src/frontend.cpp:853
-#: src/frontend.cpp:893
-#: src/frontend.cpp:1019
-#: src/frontend.cpp:1053
-#: src/frontend.cpp:1075
-#: src/frontend.cpp:1116
-#: src/frontend.cpp:1128
-#: src/frontend.cpp:1140
-#: src/frontend.cpp:1185
-#: src/frontend.cpp:1198
-#: src/frontend.cpp:1212
+#: src/frontend.cpp:579
+#: src/frontend.cpp:595
+#: src/frontend.cpp:603
+#: src/frontend.cpp:642
+#: src/frontend.cpp:660
+#: src/frontend.cpp:669
+#: src/frontend.cpp:860
+#: src/frontend.cpp:900
+#: src/frontend.cpp:1026
+#: src/frontend.cpp:1060
+#: src/frontend.cpp:1082
+#: src/frontend.cpp:1123
+#: src/frontend.cpp:1135
+#: src/frontend.cpp:1147
+#: src/frontend.cpp:1192
+#: src/frontend.cpp:1205
+#: src/frontend.cpp:1219
 msgid "On"
 msgstr "Açık"
 
-#: src/frontend.cpp:581
+#: src/frontend.cpp:588
 msgid "Subtitles"
 msgstr "Altyazılar"
 
-#: src/frontend.cpp:593
+#: src/frontend.cpp:600
 msgid "Shadows"
 msgstr "Gölgeler"
 
-#: src/frontend.cpp:604
-#: src/frontend.cpp:1345
+#: src/frontend.cpp:611
+#: src/frontend.cpp:1352
 msgid "Radar"
 msgstr "Radar"
 
-#: src/frontend.cpp:605
-#: src/frontend.cpp:718
-#: src/frontend.cpp:1346
+#: src/frontend.cpp:612
+#: src/frontend.cpp:725
+#: src/frontend.cpp:1353
 msgid "Rotating"
 msgstr "Dönüşlü"
 
-#: src/frontend.cpp:605
-#: src/frontend.cpp:718
-#: src/frontend.cpp:1346
+#: src/frontend.cpp:612
+#: src/frontend.cpp:725
+#: src/frontend.cpp:1353
 msgid "Fixed"
 msgstr "Sabit"
 
-#: src/frontend.cpp:608
+#: src/frontend.cpp:615
 msgid "GRAPHICS OPTIONS"
 msgstr "GRAFİK AYARLARI"
 
-#: src/frontend.cpp:746
+#: src/frontend.cpp:753
 #: src/ingameop.cpp:168
 msgid "Voice Volume"
 msgstr "Ses Düzeyi"
 
-#: src/frontend.cpp:750
+#: src/frontend.cpp:757
 #: src/ingameop.cpp:173
 msgid "FX Volume"
 msgstr "Ses Efekti"
 
-#: src/frontend.cpp:754
+#: src/frontend.cpp:761
 #: src/ingameop.cpp:178
 msgid "Music Volume"
 msgstr "Müzik Sesi"
 
-#: src/frontend.cpp:761
+#: src/frontend.cpp:768
 msgid "AUDIO OPTIONS"
 msgstr "SES AYARLARI"
 
-#: src/frontend.cpp:825
+#: src/frontend.cpp:832
 msgid "* Takes effect on game restart"
 msgstr "* Ayarlar oyun tekrar başlatıldığında etkili olacaktır."
 
-#: src/frontend.cpp:828
+#: src/frontend.cpp:835
 msgid "Graphics Mode*"
 msgstr "Grafik Kipi*"
 
-#: src/frontend.cpp:836
-#: src/frontend.cpp:924
+#: src/frontend.cpp:843
+#: src/frontend.cpp:931
 msgid "Windowed"
 msgstr "Pencere"
 
-#: src/frontend.cpp:840
+#: src/frontend.cpp:847
 msgid "Resolution*"
 msgstr "Çözünürlük*"
 
-#: src/frontend.cpp:845
+#: src/frontend.cpp:852
 msgid "Texture size"
 msgstr "Doku kalitesi"
 
-#: src/frontend.cpp:849
+#: src/frontend.cpp:856
 msgid "Vertical sync"
 msgstr "Dikey eşit."
 
-#: src/frontend.cpp:884
-#: src/frontend.cpp:959
+#: src/frontend.cpp:891
+#: src/frontend.cpp:966
 msgid "Unsupported"
 msgstr "Desteklenmiyor"
 
-#: src/frontend.cpp:889
+#: src/frontend.cpp:896
 msgid "Shaders"
 msgstr "Shader"
 
-#: src/frontend.cpp:901
+#: src/frontend.cpp:908
 msgid "VIDEO OPTIONS"
 msgstr "VİDEO AYARLARI"
 
-#: src/frontend.cpp:1113
+#: src/frontend.cpp:1120
 msgid "Reverse Rotation"
 msgstr "Tersine Döndür"
 
-#: src/frontend.cpp:1124
+#: src/frontend.cpp:1131
 msgid "Trap Cursor"
 msgstr "İmleci Yakala"
 
-#: src/frontend.cpp:1137
+#: src/frontend.cpp:1144
 msgid "Switch Mouse Buttons"
 msgstr "Fare Düğmelerini Değiştir"
 
-#: src/frontend.cpp:1149
+#: src/frontend.cpp:1156
 msgid "Rotate Screen"
 msgstr "Ekranı Çevir"
 
-#: src/frontend.cpp:1152
-#: src/frontend.cpp:1226
+#: src/frontend.cpp:1159
+#: src/frontend.cpp:1233
 msgid "Middle Mouse"
 msgstr "Orta Fare Tuşu"
 
-#: src/frontend.cpp:1156
-#: src/frontend.cpp:1221
+#: src/frontend.cpp:1163
+#: src/frontend.cpp:1228
 msgid "Right Mouse"
 msgstr "Sağ Fare Tuşu"
 
-#: src/frontend.cpp:1160
+#: src/frontend.cpp:1167
 msgid "MOUSE OPTIONS"
 msgstr "FARE AYARLARI"
 
-#: src/frontend.cpp:1261
-#: src/frontend.cpp:1339
+#: src/frontend.cpp:1268
+#: src/frontend.cpp:1346
 msgid "Language"
 msgstr "Lisan"
 
-#: src/frontend.cpp:1265
-#: src/frontend.cpp:1343
+#: src/frontend.cpp:1272
+#: src/frontend.cpp:1350
 msgid "Difficulty"
 msgstr "Zorluk"
 
-#: src/frontend.cpp:1269
-#: src/frontend.cpp:1350
-#: src/frontend.cpp:1382
+#: src/frontend.cpp:1276
+#: src/frontend.cpp:1357
+#: src/frontend.cpp:1389
 #: src/multiint.cpp:215
 msgid "Easy"
 msgstr "Kolay"
 
-#: src/frontend.cpp:1272
-#: src/frontend.cpp:1353
-#: src/frontend.cpp:1374
+#: src/frontend.cpp:1279
+#: src/frontend.cpp:1360
+#: src/frontend.cpp:1381
 msgid "Normal"
 msgstr "Normal"
 
-#: src/frontend.cpp:1276
-#: src/frontend.cpp:1356
-#: src/frontend.cpp:1378
+#: src/frontend.cpp:1283
+#: src/frontend.cpp:1363
+#: src/frontend.cpp:1385
 #: src/multiint.cpp:215
 msgid "Hard"
 msgstr "Zor"
 
-#: src/frontend.cpp:1281
-#: src/frontend.cpp:1344
+#: src/frontend.cpp:1288
+#: src/frontend.cpp:1351
 msgid "Scroll Speed"
 msgstr "Kaydırma hızı"
 
-#: src/frontend.cpp:1285
-#: src/frontend.cpp:1340
+#: src/frontend.cpp:1292
+#: src/frontend.cpp:1347
 msgid "Unit Colour:"
 msgstr "Birim Rengi:"
 
-#: src/frontend.cpp:1305
-#: src/frontend.cpp:1341
+#: src/frontend.cpp:1312
+#: src/frontend.cpp:1348
 msgid "Campaign"
 msgstr "Seferberlik"
 
-#: src/frontend.cpp:1315
-#: src/frontend.cpp:1342
+#: src/frontend.cpp:1322
+#: src/frontend.cpp:1349
 msgid "Skirmish/Multiplayer"
 msgstr "Çatışma/Çok oyunculu"
 
-#: src/frontend.cpp:1321
-#: src/frontend.cpp:1337
+#: src/frontend.cpp:1328
+#: src/frontend.cpp:1344
 msgid "GAME OPTIONS"
 msgstr "OYUN AYARLARI"
 
-#: src/frontend.cpp:1482
-#: src/multiint.cpp:2644
+#: src/frontend.cpp:1489
+#: src/multiint.cpp:2651
 msgid "Mod: "
 msgstr "Mod: "
 
@@ -13374,8 +12960,8 @@ msgid "Build (F3)"
 msgstr "İnşa (F3)"
 
 #: src/hci.cpp:3435
-#: src/multiint.cpp:1589
-#: src/multimenu.cpp:798
+#: src/multiint.cpp:1596
+#: src/multimenu.cpp:808
 msgid "Power"
 msgstr "Güç"
 
@@ -13784,12 +13370,8 @@ msgstr "FPS gösterimi devre dışı."
 
 #: src/keybind.cpp:626
 #, c-format
-msgid ""
-"(Player %u) is using a cheat :Num Droids: %d  Num Structures: %d  Num "
-"Features: %d"
-msgstr ""
-"(Oyuncu %u) şu hileyi kullanıyor: Droid Sayısı: %d Bina Sayısı: %d  Özel Öge "
-"Sayısı: %d"
+msgid "(Player %u) is using a cheat :Num Droids: %d  Num Structures: %d  Num Features: %d"
+msgstr "(Oyuncu %u) şu hileyi kullanıyor: Droid Sayısı: %d Bina Sayısı: %d  Özel Öge Sayısı: %d"
 
 #: src/keybind.cpp:662
 msgid "Infinite power disabled"
@@ -13883,16 +13465,14 @@ msgstr "Vay canına, dışarda hava korkunç.. KAR"
 # Das Lied ist im Original Englisch --> bleibt unübersetzt -Kreuvf
 #: src/keybind.cpp:1846
 msgid "Singing in the rain, I'm singing in the rain... RAIN"
-msgstr ""
-"Beraber yürüdük biz bu yollarda, beraber ıslandık yağan yağmurda... YAĞMUR"
+msgstr "Beraber yürüdük biz bu yollarda, beraber ıslandık yağan yağmurda... YAĞMUR"
 
 #: src/keybind.cpp:1852
 msgid "Forecast : Clear skies for all areas... NO WEATHER"
 msgstr "Hava Durumu: Yer yerde gökyüzü temiz... YAĞIŞ YOK"
 
 #: src/keybind.cpp:1937
-msgid ""
-"Warning! This can have drastic consequences if used incorrectly in missions."
+msgid "Warning! This can have drastic consequences if used incorrectly in missions."
 msgstr "Dikkat! Görevlerde yanlış kullanılmasının kötü yan etkileri olabilir."
 
 #: src/keybind.cpp:1939
@@ -13981,7 +13561,7 @@ msgstr "KLAVYE KISAYOLLARI"
 #: src/keyedit.cpp:377
 #: src/multiint.cpp:763
 #: src/multiint.cpp:1263
-#: src/multiint.cpp:1675
+#: src/multiint.cpp:1682
 msgid "Return To Previous Screen"
 msgstr "Bir Önceki Ekrana Dön"
 
@@ -14753,296 +14333,301 @@ msgstr "Oyun İsmi Seç"
 msgid "One-Player Skirmish"
 msgstr "Tek Kişilik Çatışma"
 
-#: src/multiint.cpp:1500
+#: src/multiint.cpp:1503
 msgid "Select Map"
 msgstr "Harita Seç"
 
-#: src/multiint.cpp:1510
+#: src/multiint.cpp:1504
+msgid "Map-Mod!"
+msgstr ""
+
+#: src/multiint.cpp:1517
 msgid "Click to set Password"
 msgstr "Şifreyi ayarlamak için tıklayın"
 
-#: src/multiint.cpp:1520
-#: src/multiint.cpp:1521
+#: src/multiint.cpp:1527
+#: src/multiint.cpp:1528
 msgid "Scavengers"
 msgstr "Çöpçüler var"
 
-#: src/multiint.cpp:1523
+#: src/multiint.cpp:1530
 msgid "No Scavengers"
 msgstr "Çöpçüler yok"
 
-#: src/multiint.cpp:1553
+#: src/multiint.cpp:1560
 msgid "Select Player Name"
 msgstr "Oyuncu İsmi Seç"
 
-#: src/multiint.cpp:1556
-#: src/multimenu.cpp:791
+#: src/multiint.cpp:1563
+#: src/multimenu.cpp:801
 msgid "Alliances"
 msgstr "İttifaklar"
 
-#: src/multiint.cpp:1559
+#: src/multiint.cpp:1566
 msgid "No Alliances"
 msgstr "İttifak Yok"
 
-#: src/multiint.cpp:1561
+#: src/multiint.cpp:1568
 msgid "Allow Alliances"
 msgstr "İttifak Kurulabilir"
 
 # eşit başla -Ayhan
-#: src/multiint.cpp:1565
+#: src/multiint.cpp:1572
 msgid "Locked Teams"
 msgstr "Kilitli Takımlar"
 
-#: src/multiint.cpp:1591
+#: src/multiint.cpp:1598
 msgid "Low Power Levels"
 msgstr "Düşük Güç Seviyesi"
 
-#: src/multiint.cpp:1593
+#: src/multiint.cpp:1600
 msgid "Medium Power Levels"
 msgstr "Orta Güç Seviyesi"
 
-#: src/multiint.cpp:1595
+#: src/multiint.cpp:1602
 msgid "High Power Levels"
 msgstr "Yüksek Güç Seviyesi"
 
-#: src/multiint.cpp:1627
+#: src/multiint.cpp:1634
 msgid "Base"
 msgstr "Üs"
 
-#: src/multiint.cpp:1629
+#: src/multiint.cpp:1636
 msgid "Start with No Bases"
 msgstr "Üs Olmadan Başla"
 
-#: src/multiint.cpp:1631
+#: src/multiint.cpp:1638
 msgid "Start with Bases"
 msgstr "Üsler ile Başla"
 
-#: src/multiint.cpp:1633
+#: src/multiint.cpp:1640
 msgid "Start with Advanced Bases"
 msgstr "Gelişmiş Üsler ile Başla"
 
-#: src/multiint.cpp:1665
+#: src/multiint.cpp:1672
 msgid "Map Preview"
 msgstr "Harita Önizlemesi"
 
-#: src/multiint.cpp:1667
+#: src/multiint.cpp:1674
 msgid "Click to see Map"
 msgstr "Haritayı görmek için tıkla"
 
-#: src/multiint.cpp:1680
-#: src/multiint.cpp:1682
+#: src/multiint.cpp:1687
+#: src/multiint.cpp:1689
 msgid "Start Hosting Game"
 msgstr "Oyun Kurmayı Başlat"
 
-#: src/multiint.cpp:1689
-#: src/multiint.cpp:1693
+#: src/multiint.cpp:1696
+#: src/multiint.cpp:1700
 msgid "Show Structure Limits"
 msgstr "Bina Limitlerini Göster"
 
-#: src/multiint.cpp:1689
-#: src/multiint.cpp:1693
+#: src/multiint.cpp:1696
+#: src/multiint.cpp:1700
 msgid "Set Structure Limits"
 msgstr "Bina Limitlerini Ayarla"
 
-#: src/multiint.cpp:1770
+#: src/multiint.cpp:1777
 msgid "DIFFICULTY"
 msgstr "ZORLUK"
 
-#: src/multiint.cpp:1784
+#: src/multiint.cpp:1791
 msgid "Less aggressive"
 msgstr "Daha az saldırgan"
 
-#: src/multiint.cpp:1785
+#: src/multiint.cpp:1792
 msgid "Plays nice"
 msgstr "İyi oynar"
 
-#: src/multiint.cpp:1786
+#: src/multiint.cpp:1793
 msgid "No holds barred"
 msgstr "Hiçbir hareket engellenmedi"
 
-#: src/multiint.cpp:1787
+#: src/multiint.cpp:1794
 msgid "Starts with advantages"
 msgstr "Avantajlar ile başlar"
 
-#: src/multiint.cpp:1815
+#: src/multiint.cpp:1822
 msgid "CHOOSE AI"
 msgstr "YZ SEÇ"
 
-#: src/multiint.cpp:1853
+#: src/multiint.cpp:1860
 msgid "Allow human players to join in this slot"
 msgstr "İnsan oyuncuların bu yuvaya girmesi için izin ver"
 
-#: src/multiint.cpp:1860
+#: src/multiint.cpp:1867
 msgid "Leave this slot unused"
 msgstr "Bu yuvayı kapat"
 
-#: src/multiint.cpp:2317
+#: src/multiint.cpp:2324
 msgid "Team"
 msgstr "Takım"
 
-#: src/multiint.cpp:2360
+#: src/multiint.cpp:2367
 msgid "You cannot change difficulty in a challenge"
 msgstr "Mücadele modunda zorluğu değiştiremezsin"
 
-#: src/multiint.cpp:2360
+#: src/multiint.cpp:2367
 msgid "Click to change difficulty"
 msgstr "Zorluğu değiştirmek için tıkla"
 
-#: src/multiint.cpp:2375
+#: src/multiint.cpp:2382
 msgid "Waiting for player"
 msgstr "Diğer oyuncular bekleniyor"
 
-#: src/multiint.cpp:2375
+#: src/multiint.cpp:2382
 msgid "Player is ready"
 msgstr "Oyuncu hazır"
 
-#: src/multiint.cpp:2375
+#: src/multiint.cpp:2382
 msgid "Click when ready"
 msgstr "Hazırsan tıkla"
 
-#: src/multiint.cpp:2382
+#: src/multiint.cpp:2389
 msgid "READY?"
 msgstr "HAZIR MISIN?"
 
-#: src/multiint.cpp:2426
+#: src/multiint.cpp:2433
 msgid "PLAYERS"
 msgstr "OYUNCULAR"
 
-#: src/multiint.cpp:2461
+#: src/multiint.cpp:2468
 msgid "Click to change to this slot"
 msgstr "Bu yuvayı değiştirmek için tıkla"
 
-#: src/multiint.cpp:2489
+#: src/multiint.cpp:2496
 msgid "Choose Team"
 msgstr "Takım Seç"
 
-#: src/multiint.cpp:2519
+#: src/multiint.cpp:2526
 msgid "Click to change player colour"
 msgstr "Oyuncu renklerini değiştirmek için tıkla"
 
-#: src/multiint.cpp:2547
+#: src/multiint.cpp:2554
 msgid "Click to change player position"
 msgstr "Oyun konumunu değiştirmek için tıkla"
 
-#: src/multiint.cpp:2551
+#: src/multiint.cpp:2558
 msgid "Click to change AI"
 msgstr "Yapay zekayı ayarlamak için tıkla"
 
-#: src/multiint.cpp:2617
+#: src/multiint.cpp:2624
 msgid "CHAT"
 msgstr "SOHBET"
 
-#: src/multiint.cpp:2649
+#: src/multiint.cpp:2656
 msgid "All players need to have the same mods to join your game."
 msgstr "Tüm oyuncular oyununa girebilmek için aynı kipe ihtiyaç duyar."
 
-#: src/multiint.cpp:2690
+#: src/multiint.cpp:2697
 msgid "Connecting to the lobby server..."
 msgstr "Bekleme odası sunucusuna bağlanılıyor..."
 
-#: src/multiint.cpp:2993
+#: src/multiint.cpp:3000
 #, c-format
 msgid "*** password [%s] is now required! ***"
 msgstr "*** şifre [%s] şimdi gerekli ! ***"
 
-#: src/multiint.cpp:2999
+#: src/multiint.cpp:3006
 msgid "*** password is NOT required! ***"
 msgstr "*** şifreye gerek yok! ***"
 
-#: src/multiint.cpp:3059
+#: src/multiint.cpp:3020
+msgid "This is a map-mod, it can change your playing experience!"
+msgstr ""
+
+#: src/multiint.cpp:3072
 msgid "Sorry! Failed to host the game."
 msgstr "Üzgünüm! Oyun kurulurken bir hata oldu."
 
-#: src/multiint.cpp:3182
+#: src/multiint.cpp:3195
 msgid "'Locked Teams' mode enabled"
 msgstr "'Takım Kilidi' modu aktif"
 
-#: src/multiint.cpp:3210
-#: src/multiint.cpp:3279
-#: src/multimenu.cpp:1486
+#: src/multiint.cpp:3223
+#: src/multiint.cpp:3292
+#: src/multimenu.cpp:1496
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "Kurucu %s kullanıcısını oyundan attı!"
 
-#: src/multiint.cpp:3345
+#: src/multiint.cpp:3358
 msgid "Host is Starting Game"
 msgstr "Kurucu Oyunu Başlatıyor"
 
-#: src/multiint.cpp:3923
+#: src/multiint.cpp:3937
 msgid "UPnP has been enabled."
 msgstr "UPnP etkinleştirildi."
 
-#: src/multiint.cpp:3929
+#: src/multiint.cpp:3943
 msgid "UPnP detection faled. You must manually configure router yourself."
 msgstr "UPnP tespiti başarısız. Yönlendiricinizi el ile yapılandırmalısınız."
 
-#: src/multiint.cpp:3933
+#: src/multiint.cpp:3947
 msgid "UPnP detection is in progress..."
 msgstr "UPnP tespiti sürüyor..."
 
-#: src/multiint.cpp:3940
-msgid ""
-"UPnP detection disabled by user. Autoconfig of port 2100 will not happen."
-msgstr ""
-"UPnP tespiti kullanıcı tarafından devre dışı. 2100 bağlantı noktası otomatik "
-"yapılandırılmayacak."
+#: src/multiint.cpp:3954
+msgid "UPnP detection disabled by user. Autoconfig of port 2100 will not happen."
+msgstr "UPnP tespiti kullanıcı tarafından devre dışı. 2100 bağlantı noktası otomatik yapılandırılmayacak."
 
-#: src/multiint.cpp:3946
+#: src/multiint.cpp:3960
 msgid "Hit the ready box to begin your challenge!"
 msgstr "Mücadeleye başlamak için hazır kutusuna basın!"
 
-#: src/multiint.cpp:3950
+#: src/multiint.cpp:3964
 msgid "Press the start hosting button to begin hosting a game."
 msgstr "Oyunu kurmaya başlamak için kur düğmesine basın."
 
-#: src/multiint.cpp:3992
+#: src/multiint.cpp:4006
 msgid "Can't connect to lobby server!"
 msgstr "Bekleme odası sunucusuna bağlanılamıyor!"
 
-#: src/multiint.cpp:4084
+#: src/multiint.cpp:4107
 #, c-format
 msgid "Mods: %s"
 msgstr "Mod: %s"
 
-#: src/multiint.cpp:4091
+#: src/multiint.cpp:4114
 msgid "Mods: None!"
 msgstr "Mod: Yok!"
 
-#: src/multiint.cpp:4101
+#: src/multiint.cpp:4124
 #, c-format
 msgid "Version: %s"
 msgstr "Sürüm: %s"
 
-#: src/multiint.cpp:4152
+#: src/multiint.cpp:4175
 #, c-format
 msgid "Click to take player slot %d"
 msgstr "%d oyuncu yuvasını almak için tıklayın"
 
-#: src/multiint.cpp:4161
-#: src/multiint.cpp:4363
+#: src/multiint.cpp:4184
+#: src/multiint.cpp:4386
 msgid "Open"
 msgstr "Açık"
 
-#: src/multiint.cpp:4161
-#: src/multiint.cpp:4364
+#: src/multiint.cpp:4184
+#: src/multiint.cpp:4387
 msgid "Closed"
 msgstr "Kapalı"
 
-#: src/multiint.cpp:4211
+#: src/multiint.cpp:4234
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr "Harita Gönderiliyor: %%%d"
 
-#: src/multiint.cpp:4219
+#: src/multiint.cpp:4242
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr "Harita: %%%d indirildi"
 
-#: src/multiint.cpp:4245
+#: src/multiint.cpp:4268
 msgid "HOST"
 msgstr "KURUCU"
 
-#: src/multiint.cpp:4252
-#: src/multimenu.cpp:805
+#: src/multiint.cpp:4275
+#: src/multimenu.cpp:815
 msgid "Ping"
 msgstr "Ping"
 
@@ -15083,96 +14668,106 @@ msgstr "Varsayılana Ayarla ve Önceki Ekrana Dön"
 msgid "Limits reset to default values"
 msgstr "Sınırları varsayılana sıfırla"
 
-#: src/multimenu.cpp:623
+#: src/multimenu.cpp:633
 msgid "Technology level 1"
 msgstr "Teknoloji seviyesi 1"
 
-#: src/multimenu.cpp:631
+#: src/multimenu.cpp:641
 msgid "Technology level 2"
 msgstr "Teknoloji seviyesi 2"
 
-#: src/multimenu.cpp:637
+#: src/multimenu.cpp:647
 msgid "Technology level 3"
 msgstr "Teknoloji seviyesi 3"
 
-#: src/multimenu.cpp:643
+#: src/multimenu.cpp:653
 msgid "Any number of players"
 msgstr "Oyuncu herhangi bir sayı alacak"
 
-#: src/multimenu.cpp:654
+#: src/multimenu.cpp:664
 #, c-format
 msgid "%d player"
 msgid_plural "%d players"
 msgstr[0] "%d oyuncu"
 msgstr[1] "%d oyuncu"
 
-#: src/multimenu.cpp:792
+#: src/multimenu.cpp:802
 msgid "Score"
 msgstr "Puan"
 
-#: src/multimenu.cpp:793
+#: src/multimenu.cpp:803
 msgid "Kills"
 msgstr "Öldrme"
 
-#: src/multimenu.cpp:794
+#: src/multimenu.cpp:804
 msgid "Units"
 msgstr "Birmlr"
 
-#: src/multimenu.cpp:809
+#: src/multimenu.cpp:819
 msgid "Structs"
 msgstr "Binlr"
 
-#: src/multimenu.cpp:821
+#: src/multimenu.cpp:831
 msgid "Sent/Received per sec —"
 msgstr "Her saniye Gönder./Alınan —"
 
-#: src/multimenu.cpp:821
+#: src/multimenu.cpp:831
 msgid "Total Sent/Received —"
 msgstr "Toplam Gönder./Alınan —"
 
-#: src/multimenu.cpp:826
+#: src/multimenu.cpp:836
 #, c-format
 msgid "Traf: %u/%u"
 msgstr "Buluşturucu: %u/%u"
 
-#: src/multimenu.cpp:830
+#: src/multimenu.cpp:840
 #, c-format
 msgid "Uncompressed: %u/%u"
 msgstr "Sıkıştırılmamış: %u/%u"
 
-#: src/multimenu.cpp:834
+#: src/multimenu.cpp:844
 #, c-format
 msgid "Pack: %u/%u"
 msgstr "Paket: %u/%u"
 
-#: src/multimenu.cpp:1136
+#: src/multimenu.cpp:1146
 msgid "Channel"
 msgstr "Kanal"
 
-#: src/multimenu.cpp:1150
+#: src/multimenu.cpp:1160
 msgid "Toggle Alliance State"
 msgstr "İttifak Durumuna Bak"
 
-#: src/multimenu.cpp:1169
+#: src/multimenu.cpp:1179
 msgid "Give Visibility Report"
 msgstr "Görünürlük Raporu Ver"
 
-#: src/multimenu.cpp:1175
+#: src/multimenu.cpp:1185
 msgid "Leak Technology Documents"
 msgstr "Teknoloji Dökümanı Sızdır"
 
-#: src/multimenu.cpp:1182
+#: src/multimenu.cpp:1192
 msgid "Hand Over Selected Units"
 msgstr "Seçili Birimleri Ver"
 
-#: src/multimenu.cpp:1188
+#: src/multimenu.cpp:1198
 msgid "Give Power To Player"
 msgstr "Oyuncuya güç ver"
 
-#: src/multimenu.cpp:1488
+#: src/multimenu.cpp:1498
 #, c-format
 msgid "kicked %s : %s from the game, and added them to the banned list!"
 msgstr "%s atıldı: oyundan %s ve engelli listesine kaydedildi!"
+
+#: src/multiopt.cpp:227
+#: src/multiplay.cpp:1722
+msgid "Warning, this is a map-mod, it could alter normal gameplay."
+msgstr ""
+
+#: src/multiopt.cpp:231
+#: src/multiplay.cpp:1726
+msgid "Warning, HOST has altered the game code, and can't be trusted!"
+msgstr ""
 
 #: src/multiplay.cpp:263
 #, c-format
@@ -15191,78 +14786,76 @@ msgstr "(doğrudan"
 msgid "[invalid]"
 msgstr "[geçersiz]"
 
-#: src/multiplay.cpp:1999
+#: src/multiplay.cpp:2017
 msgid "Green"
 msgstr "Yeşil"
 
-#: src/multiplay.cpp:2000
+#: src/multiplay.cpp:2018
 msgid "Orange"
 msgstr "Turuncu"
 
-#: src/multiplay.cpp:2001
+#: src/multiplay.cpp:2019
 msgid "Grey"
 msgstr "Gri"
 
-#: src/multiplay.cpp:2003
+#: src/multiplay.cpp:2021
 msgid "Red"
 msgstr "Kırmızı"
 
-#: src/multiplay.cpp:2004
+#: src/multiplay.cpp:2022
 msgid "Blue"
 msgstr "Koyu Mavi"
 
-#: src/multiplay.cpp:2005
+#: src/multiplay.cpp:2023
 msgid "Pink"
 msgstr "Pembe"
 
-#: src/multiplay.cpp:2006
+#: src/multiplay.cpp:2024
 msgid "Cyan"
 msgstr "Mavi"
 
-#: src/multiplay.cpp:2007
+#: src/multiplay.cpp:2025
 msgid "Yellow"
 msgstr "Sarı"
 
-#: src/multiplay.cpp:2008
+#: src/multiplay.cpp:2026
 msgid "Purple"
 msgstr "Mor"
 
-#: src/multiplay.cpp:2009
+#: src/multiplay.cpp:2027
 msgid "White"
 msgstr "Beyaz"
 
-#: src/multiplay.cpp:2010
+#: src/multiplay.cpp:2028
 msgid "Bright blue"
 msgstr "Açık Mavi"
 
-#: src/multiplay.cpp:2011
+#: src/multiplay.cpp:2029
 msgid "Neon green"
 msgstr "Neon yeşili"
 
-#: src/multiplay.cpp:2012
+#: src/multiplay.cpp:2030
 msgid "Infrared"
 msgstr "Kızılötesi"
 
-#: src/multiplay.cpp:2013
+#: src/multiplay.cpp:2031
 msgid "Ultraviolet"
 msgstr "Morötesi"
 
-#: src/multiplay.cpp:2014
+#: src/multiplay.cpp:2032
 msgid "Brown"
 msgstr "Kahverengi"
 
 #: src/order.cpp:803
 msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
-msgstr ""
-"Bunu Yapamıyoruz! Biz Sayborg Taşıma Gemisi'ni kullanmak için bir Sayborg "
-"birimine sahip olmalıyız!"
+msgstr "Bunu Yapamıyoruz! Biz Sayborg Taşıma Gemisi'ni kullanmak için bir Sayborg birimine sahip olmalıyız!"
 
-#: src/qtscriptfuncs.cpp:1596
+#: src/qtscriptfuncs.cpp:1597
 #: src/scriptfuncs.cpp:3263
 msgid "YOU ARE VICTORIOUS!"
 msgstr "KAZANDIN!"
 
-#: src/qtscriptfuncs.cpp:1601
+#: src/qtscriptfuncs.cpp:1602
 #: src/scriptfuncs.cpp:3267
 msgid "YOU WERE DEFEATED!"
 msgstr "YENİLDİN!"
@@ -15433,10 +15026,8 @@ msgstr[0] "%u birim seçildi"
 msgstr[1] "%u birim seçildi"
 
 #: src/structure.cpp:2620
-msgid ""
-"Can't build anymore units, Command Control Limit Reached - Production Halted"
-msgstr ""
-"Daha fazla birim inşa edilemiyor, Kontrol Limitine Ulaştın - Üretim Durduruldu"
+msgid "Can't build anymore units, Command Control Limit Reached - Production Halted"
+msgstr "Daha fazla birim inşa edilemiyor, Kontrol Limitine Ulaştın - Üretim Durduruldu"
 
 # Gruplar! -Ayhan
 #: src/structure.cpp:5613
@@ -15508,25 +15099,26 @@ msgstr "Taşıma Gemisinde yeterince yer yok!"
 msgid "Reinforcements landing"
 msgstr "Destek kuvvetler iniyor"
 
-#: src/version.cpp:121
+#: src/version.cpp:72
 msgid " (modified locally)"
 msgstr " (yerelleştirilmiş)"
 
-#: src/version.cpp:128
+#: src/version.cpp:78
 msgid " - DEBUG"
 msgstr " - HATA AYIKLAMA"
 
-#: src/version.cpp:137
-#, c-format
-msgid " - Built %s"
-msgstr " - %s İnşa"
-
 #. TRANSLATORS: This string looks as follows when expanded.
 #. "Version <version name/number> <working copy state><BUILD DATE><BUILD TYPE>"
-#: src/version.cpp:147
-#, c-format
-msgid "Version %s%s%s%s"
+#: src/version.cpp:86
+#, fuzzy, c-format
+msgid "Version: %s,%s Built:%s%s"
 msgstr "Sürüm %s%s%s%s"
+
+#~ msgid "Only use OpenGL 1.5"
+#~ msgstr "Sadece OpenGL 1.5'i kullan"
+
+#~ msgid " - Built %s"
+#~ msgstr " - %s İnşa"
 
 #~ msgid "Warzone 2100 is completely free and open source (FLOSS). Official site: http://wz2100.net/"
 #~ msgstr "Warzone 2100 tamamen ücretsiz ve açık kaynaklıdır. Resmi site: http://wz2100.net/"
