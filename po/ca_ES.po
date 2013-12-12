@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100-master_20110320qt\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2013-11-29 18:34+0100\n"
+"POT-Creation-Date: 2013-12-11 22:22-0500\n"
 "PO-Revision-Date: 2012-06-24 12:17+0200\n"
 "Last-Translator: Àngel Mompó <mecatxis@gmail.com>\n"
 "Language-Team: Catalan <ca@dodds.net> <>\n"
@@ -11887,7 +11887,7 @@ msgstr "La versió 1.2 del OepnGL GLSL shader no està implementada en el vostre
 
 #: lib/ivis_opengl/screen.cpp:193
 #, fuzzy
-msgid "OpenGL 1.2 + VBO + TEC is not supported by your system. The game requires this. Please upgrade your graphics drivers/hardware, if possible."
+msgid "OpenGL 1.2 + TEC is not supported by your system. The game requires this. Please upgrade your graphics drivers/hardware, if possible."
 msgstr "El vostre sistema no és compatible amb OpenGL 1.2 + TEC. Aquest joc el necessita. Si podeu, actualitzeu la vostra tarja gràfica o el controlador."
 
 #: lib/netplay/netplay.cpp:218
@@ -12028,147 +12028,151 @@ msgstr "El mode de depuració ara està habilitat!"
 msgid "Debug mode now disabled!"
 msgstr "El mode de depuració ara està deshabilitat!"
 
-#: src/clparse.cpp:242
+#: src/clparse.cpp:243
 msgid "Set configuration directory"
 msgstr "Estableix la carpeta de configuració"
 
-#: src/clparse.cpp:242
+#: src/clparse.cpp:243
 msgid "configuration directory"
 msgstr "carpeta-configuració"
 
-#: src/clparse.cpp:243
+#: src/clparse.cpp:244
 msgid "Set default data directory"
 msgstr "Estableix la carpeta de dades per defecte"
 
-#: src/clparse.cpp:243
+#: src/clparse.cpp:244
 msgid "data directory"
 msgstr "carpeta-dades"
 
-#: src/clparse.cpp:244
+#: src/clparse.cpp:245
 msgid "Show debug for given level"
 msgstr "Mostra la depuració al nivell indicat"
 
-#: src/clparse.cpp:244
+#: src/clparse.cpp:245
 msgid "debug level"
 msgstr "nivell de depuració"
 
-#: src/clparse.cpp:245
+#: src/clparse.cpp:246
 msgid "Log debug output to file"
 msgstr "Desa la sortida de depuració en un fitxer"
 
-#: src/clparse.cpp:245
+#: src/clparse.cpp:246
 msgid "file"
 msgstr "fitxer"
 
-#: src/clparse.cpp:246
+#: src/clparse.cpp:247
 msgid "Flush all debug output written to stderr"
 msgstr "Buida tota la sortida de depuració a stderr"
 
-#: src/clparse.cpp:247
+#: src/clparse.cpp:248
 msgid "Play in fullscreen mode"
 msgstr "Juga en mode de pantalla completa"
 
-#: src/clparse.cpp:248
+#: src/clparse.cpp:249
 msgid "Load a specific game"
 msgstr "Carrega una partida especifica"
 
-#: src/clparse.cpp:248
+#: src/clparse.cpp:249
 msgid "game-name"
 msgstr "nom-partida"
 
-#: src/clparse.cpp:249
+#: src/clparse.cpp:250
 msgid "Show this help message and exit"
 msgstr "Mostra aquesta ajuda i surt"
 
-#: src/clparse.cpp:250
+#: src/clparse.cpp:251
 msgid "Enable a global mod"
 msgstr "Habilita un mod global"
 
-#: src/clparse.cpp:250
 #: src/clparse.cpp:251
 #: src/clparse.cpp:252
+#: src/clparse.cpp:253
 msgid "mod"
 msgstr "mod"
 
-#: src/clparse.cpp:251
+#: src/clparse.cpp:252
 msgid "Enable a campaign only mod"
 msgstr "Habilita un mod només per la campanya"
 
-#: src/clparse.cpp:252
+#: src/clparse.cpp:253
 msgid "Enable a multiplay only mod"
 msgstr "Habilita un mod només pel mode multijug."
 
-#: src/clparse.cpp:253
+#: src/clparse.cpp:254
 msgid "Disable asserts"
 msgstr "Deshabilita les assercions"
 
-#: src/clparse.cpp:254
+#: src/clparse.cpp:255
 msgid "Causes a crash to test the crash handler"
 msgstr "Provoca una fallada per provar-ne el gestor"
 
-#: src/clparse.cpp:255
+#: src/clparse.cpp:256
 msgid "Load a saved game"
 msgstr "Carrega una partida desada"
 
-#: src/clparse.cpp:255
+#: src/clparse.cpp:256
 msgid "savegame"
 msgstr "partida-desada"
 
-#: src/clparse.cpp:256
+#: src/clparse.cpp:257
 msgid "Play in windowed mode"
 msgstr "Juga en mode finestra"
 
-#: src/clparse.cpp:257
+#: src/clparse.cpp:258
 msgid "Show version information and exit"
 msgstr "Mostra informació de la versió i surt"
 
-#: src/clparse.cpp:258
+#: src/clparse.cpp:259
 msgid "Set the resolution to use"
 msgstr "Estableix la resolució que es farà servir"
 
-#: src/clparse.cpp:258
+#: src/clparse.cpp:259
 msgid "WIDTHxHEIGHT"
 msgstr "AMPLADAxALÇADA"
 
-#: src/clparse.cpp:259
+#: src/clparse.cpp:260
 msgid "Enable shadows"
 msgstr "Habilita les ombres"
 
-#: src/clparse.cpp:260
+#: src/clparse.cpp:261
 msgid "Disable shadows"
 msgstr "Deshabilita les ombres"
 
-#: src/clparse.cpp:261
+#: src/clparse.cpp:262
 msgid "Enable sound"
 msgstr "Habilita el so"
 
-#: src/clparse.cpp:262
+#: src/clparse.cpp:263
 msgid "Disable sound"
 msgstr "Deshabilita el so"
 
-#: src/clparse.cpp:263
+#: src/clparse.cpp:264
 msgid "connect directly to IP/hostname"
 msgstr "Connecta directament a la IP/nom de l'amfitrió"
 
-#: src/clparse.cpp:263
+#: src/clparse.cpp:264
 msgid "host"
 msgstr "amfitrió"
 
-#: src/clparse.cpp:264
+#: src/clparse.cpp:265
 msgid "go directly to host screen"
 msgstr "Va directament a la pantalla d'amfitrió"
 
-#: src/clparse.cpp:265
+#: src/clparse.cpp:266
 msgid "Enable texture compression"
 msgstr "Habilita la compressió de textures"
 
-#: src/clparse.cpp:266
+#: src/clparse.cpp:267
 msgid "Disable texture compression"
 msgstr "Deshabilita la compressió de textures"
 
-#: src/clparse.cpp:267
-msgid "Only use OpenGL 1.5"
-msgstr ""
+#: src/clparse.cpp:268
+msgid "Disable the use of OpenGL shaders"
+msgstr "Deshabilita l'ús de OpenGL shaders"
+
+#: src/clparse.cpp:269
+msgid "Disable the use of OpenGL Vertex Buffer Objects"
+msgstr "Deshabilita l'ús de la memòria intermèdia d'objectes OpenGL Vertex"
 
 #: src/cmddroid.cpp:110
 msgid "Commander needs a higher level to command more units"
@@ -12344,20 +12348,20 @@ msgstr "Sistemes"
 msgid "Delete Template"
 msgstr "Esborra plantilla"
 
-#: src/display3d.cpp:658
+#: src/display3d.cpp:676
 msgid "Player left"
 msgstr "Ha marxat un jugador"
 
-#: src/display3d.cpp:662
+#: src/display3d.cpp:680
 msgid "Player dropped"
 msgstr "Ha caigut un jugador"
 
-#: src/display3d.cpp:666
+#: src/display3d.cpp:684
 #: src/multiint.cpp:2382
 msgid "Waiting for other players"
 msgstr "S'està esperant els altres jugadors"
 
-#: src/display3d.cpp:671
+#: src/display3d.cpp:689
 msgid "Out of sync"
 msgstr "S'ha perdut el sincronisme"
 
@@ -12468,7 +12472,7 @@ msgid "Multi Player"
 msgstr "Partida en xarxa"
 
 #: src/frontend.cpp:110
-#: src/frontend.cpp:186
+#: src/frontend.cpp:193
 msgid "Tutorial"
 msgstr "Aprenentatge"
 
@@ -12477,385 +12481,391 @@ msgstr "Aprenentatge"
 msgid "Options"
 msgstr "Opcions"
 
-#: src/frontend.cpp:112
+#: src/frontend.cpp:114
+#: src/frontend.cpp:118
 msgid "View Intro"
 msgstr "Veure la introducció"
 
-#: src/frontend.cpp:114
+#: src/frontend.cpp:119
+#, fuzzy
+msgid "Videos are missing, download them from http://wz2100.net"
+msgstr "Falten els vídeos de la campanya! Obteniu-los a http://wz2100.net"
+
+#: src/frontend.cpp:121
 msgid "Quit Game"
 msgstr "Sortir"
 
-#: src/frontend.cpp:115
+#: src/frontend.cpp:122
 msgid "MAIN MENU"
 msgstr "MENÚ PRINCIPAL"
 
-#: src/frontend.cpp:117
+#: src/frontend.cpp:124
 msgid "Official site: http://wz2100.net/"
 msgstr ""
 
-#: src/frontend.cpp:187
+#: src/frontend.cpp:194
 msgid "Fast Play"
 msgstr "Partida ràpida"
 
-#: src/frontend.cpp:188
+#: src/frontend.cpp:195
 msgid "TUTORIALS"
 msgstr "APRENENTATGE"
 
 #. TRANSLATORS: "Return", in this context, means "return to previous screen/menu"
-#: src/frontend.cpp:190
-#: src/frontend.cpp:252
-#: src/frontend.cpp:397
-#: src/frontend.cpp:471
-#: src/frontend.cpp:612
-#: src/frontend.cpp:758
-#: src/frontend.cpp:904
-#: src/frontend.cpp:1163
-#: src/frontend.cpp:1318
-#: src/frontend.cpp:1338
+#: src/frontend.cpp:197
+#: src/frontend.cpp:259
+#: src/frontend.cpp:404
+#: src/frontend.cpp:478
+#: src/frontend.cpp:619
+#: src/frontend.cpp:765
+#: src/frontend.cpp:911
+#: src/frontend.cpp:1170
+#: src/frontend.cpp:1325
+#: src/frontend.cpp:1345
 msgctxt "menu"
 msgid "Return"
 msgstr "Torna"
 
-#: src/frontend.cpp:245
+#: src/frontend.cpp:252
 msgid "New Campaign"
 msgstr "Campanya nova"
 
-#: src/frontend.cpp:246
+#: src/frontend.cpp:253
 msgid "Start Skirmish Game"
 msgstr "﻿Escaramussa"
 
-#: src/frontend.cpp:247
+#: src/frontend.cpp:254
 msgid "Challenges"
 msgstr "Desafiaments"
 
-#: src/frontend.cpp:248
+#: src/frontend.cpp:255
 msgid "Load Campaign Game"
 msgstr "Carrega una campanya"
 
-#: src/frontend.cpp:249
+#: src/frontend.cpp:256
 msgid "Load Skirmish Game"
 msgstr "Carrega una ﻿escaramussa"
 
-#: src/frontend.cpp:251
+#: src/frontend.cpp:258
 msgid "SINGLE PLAYER"
 msgstr "UN JUGADOR"
 
-#: src/frontend.cpp:256
+#: src/frontend.cpp:263
 msgid "Campaign videos are missing! Get them from http://wz2100.net"
 msgstr "Falten els vídeos de la campanya! Obteniu-los a http://wz2100.net"
 
-#: src/frontend.cpp:332
+#: src/frontend.cpp:339
 #: src/ingameop.cpp:504
 msgid "Load Campaign Saved Game"
 msgstr "Carrega una campanya desada"
 
-#: src/frontend.cpp:338
+#: src/frontend.cpp:345
 #: src/ingameop.cpp:508
 msgid "Load Skirmish Saved Game"
 msgstr "Carrega una escaramussa desada"
 
-#: src/frontend.cpp:392
+#: src/frontend.cpp:399
 msgid "MULTI PLAYER"
 msgstr "JOC EN XARXA"
 
-#: src/frontend.cpp:394
+#: src/frontend.cpp:401
 msgid "Host Game"
 msgstr "Crea una partida"
 
-#: src/frontend.cpp:395
+#: src/frontend.cpp:402
 msgid "Join Game"
 msgstr "Uneix-te a una partida"
 
-#: src/frontend.cpp:400
+#: src/frontend.cpp:407
 msgid "TCP port 2100 must be opened in your firewall or router to host games!"
 msgstr ""
 
-#: src/frontend.cpp:464
+#: src/frontend.cpp:471
 #: src/multiint.cpp:1483
 msgid "OPTIONS"
 msgstr "OPCIONS"
 
-#: src/frontend.cpp:465
+#: src/frontend.cpp:472
 msgid "Game Options"
 msgstr "Opcions del joc"
 
-#: src/frontend.cpp:466
+#: src/frontend.cpp:473
 msgid "Graphics Options"
 msgstr "Opcions dels gràfics"
 
-#: src/frontend.cpp:467
+#: src/frontend.cpp:474
 msgid "Video Options"
 msgstr "Opcions dels vídeos"
 
-#: src/frontend.cpp:468
+#: src/frontend.cpp:475
 #: src/ingameop.cpp:268
 msgid "Audio Options"
 msgstr "Opcions de l'àudio"
 
-#: src/frontend.cpp:469
+#: src/frontend.cpp:476
 msgid "Mouse Options"
 msgstr "Opcions del ratolí"
 
-#: src/frontend.cpp:470
+#: src/frontend.cpp:477
 msgid "Key Mappings"
 msgstr "Mapatge de tecles"
 
-#: src/frontend.cpp:530
+#: src/frontend.cpp:537
 msgid "Video Playback"
 msgstr "Reprod. dels vídeos"
 
-#: src/frontend.cpp:534
-#: src/frontend.cpp:686
+#: src/frontend.cpp:541
+#: src/frontend.cpp:693
 msgid "1X"
 msgstr "1X"
 
-#: src/frontend.cpp:538
-#: src/frontend.cpp:676
+#: src/frontend.cpp:545
+#: src/frontend.cpp:683
 msgid "2X"
 msgstr "2X"
 
-#: src/frontend.cpp:542
-#: src/frontend.cpp:681
-#: src/frontend.cpp:832
-#: src/frontend.cpp:929
+#: src/frontend.cpp:549
+#: src/frontend.cpp:688
+#: src/frontend.cpp:839
+#: src/frontend.cpp:936
 msgid "Fullscreen"
 msgstr "Pant. completa"
 
-#: src/frontend.cpp:551
+#: src/frontend.cpp:558
 msgid "Scanlines"
 msgstr "Línies d'escaneig"
 
-#: src/frontend.cpp:555
-#: src/frontend.cpp:576
-#: src/frontend.cpp:584
-#: src/frontend.cpp:600
-#: src/frontend.cpp:630
-#: src/frontend.cpp:648
-#: src/frontend.cpp:666
-#: src/frontend.cpp:711
-#: src/frontend.cpp:857
-#: src/frontend.cpp:867
-#: src/frontend.cpp:897
-#: src/frontend.cpp:953
-#: src/frontend.cpp:1014
-#: src/frontend.cpp:1057
-#: src/frontend.cpp:1070
-#: src/frontend.cpp:1120
-#: src/frontend.cpp:1132
-#: src/frontend.cpp:1144
-#: src/frontend.cpp:1180
-#: src/frontend.cpp:1193
-#: src/frontend.cpp:1207
+#: src/frontend.cpp:562
+#: src/frontend.cpp:583
+#: src/frontend.cpp:591
+#: src/frontend.cpp:607
+#: src/frontend.cpp:637
+#: src/frontend.cpp:655
+#: src/frontend.cpp:673
+#: src/frontend.cpp:718
+#: src/frontend.cpp:864
+#: src/frontend.cpp:874
+#: src/frontend.cpp:904
+#: src/frontend.cpp:960
+#: src/frontend.cpp:1021
+#: src/frontend.cpp:1064
+#: src/frontend.cpp:1077
+#: src/frontend.cpp:1127
+#: src/frontend.cpp:1139
+#: src/frontend.cpp:1151
+#: src/frontend.cpp:1187
+#: src/frontend.cpp:1200
+#: src/frontend.cpp:1214
 msgid "Off"
 msgstr "Inactiu"
 
-#: src/frontend.cpp:559
-#: src/frontend.cpp:701
+#: src/frontend.cpp:566
+#: src/frontend.cpp:708
 msgid "50%"
 msgstr "50%"
 
-#: src/frontend.cpp:563
-#: src/frontend.cpp:706
+#: src/frontend.cpp:570
+#: src/frontend.cpp:713
 #: src/multiplay.cpp:2020
 msgid "Black"
 msgstr "Negre"
 
-#: src/frontend.cpp:569
+#: src/frontend.cpp:576
 msgid "Screen Shake"
 msgstr "Tremolor de pant."
 
-#: src/frontend.cpp:572
-#: src/frontend.cpp:588
-#: src/frontend.cpp:596
-#: src/frontend.cpp:635
-#: src/frontend.cpp:653
-#: src/frontend.cpp:662
-#: src/frontend.cpp:853
-#: src/frontend.cpp:893
-#: src/frontend.cpp:1019
-#: src/frontend.cpp:1053
-#: src/frontend.cpp:1075
-#: src/frontend.cpp:1116
-#: src/frontend.cpp:1128
-#: src/frontend.cpp:1140
-#: src/frontend.cpp:1185
-#: src/frontend.cpp:1198
-#: src/frontend.cpp:1212
+#: src/frontend.cpp:579
+#: src/frontend.cpp:595
+#: src/frontend.cpp:603
+#: src/frontend.cpp:642
+#: src/frontend.cpp:660
+#: src/frontend.cpp:669
+#: src/frontend.cpp:860
+#: src/frontend.cpp:900
+#: src/frontend.cpp:1026
+#: src/frontend.cpp:1060
+#: src/frontend.cpp:1082
+#: src/frontend.cpp:1123
+#: src/frontend.cpp:1135
+#: src/frontend.cpp:1147
+#: src/frontend.cpp:1192
+#: src/frontend.cpp:1205
+#: src/frontend.cpp:1219
 msgid "On"
 msgstr "Actiu"
 
-#: src/frontend.cpp:581
+#: src/frontend.cpp:588
 msgid "Subtitles"
 msgstr "Subtitols"
 
-#: src/frontend.cpp:593
+#: src/frontend.cpp:600
 msgid "Shadows"
 msgstr "Ombres"
 
-#: src/frontend.cpp:604
-#: src/frontend.cpp:1345
+#: src/frontend.cpp:611
+#: src/frontend.cpp:1352
 msgid "Radar"
 msgstr "Radar"
 
-#: src/frontend.cpp:605
-#: src/frontend.cpp:718
-#: src/frontend.cpp:1346
+#: src/frontend.cpp:612
+#: src/frontend.cpp:725
+#: src/frontend.cpp:1353
 msgid "Rotating"
 msgstr "Giratori"
 
-#: src/frontend.cpp:605
-#: src/frontend.cpp:718
-#: src/frontend.cpp:1346
+#: src/frontend.cpp:612
+#: src/frontend.cpp:725
+#: src/frontend.cpp:1353
 msgid "Fixed"
 msgstr "Fixe"
 
-#: src/frontend.cpp:608
+#: src/frontend.cpp:615
 msgid "GRAPHICS OPTIONS"
 msgstr "OPCIONS DELS GRÀFICS"
 
-#: src/frontend.cpp:746
+#: src/frontend.cpp:753
 #: src/ingameop.cpp:168
 msgid "Voice Volume"
 msgstr "Volum veu"
 
-#: src/frontend.cpp:750
+#: src/frontend.cpp:757
 #: src/ingameop.cpp:173
 msgid "FX Volume"
 msgstr "Volum efectes"
 
-#: src/frontend.cpp:754
+#: src/frontend.cpp:761
 #: src/ingameop.cpp:178
 msgid "Music Volume"
 msgstr "Volum música"
 
-#: src/frontend.cpp:761
+#: src/frontend.cpp:768
 msgid "AUDIO OPTIONS"
 msgstr "OPCIONS DE L'ÀUDIO"
 
-#: src/frontend.cpp:825
+#: src/frontend.cpp:832
 msgid "* Takes effect on game restart"
 msgstr "* Té efecte quan reinicieu"
 
-#: src/frontend.cpp:828
+#: src/frontend.cpp:835
 msgid "Graphics Mode*"
 msgstr "Mode gràfic*"
 
-#: src/frontend.cpp:836
-#: src/frontend.cpp:924
+#: src/frontend.cpp:843
+#: src/frontend.cpp:931
 msgid "Windowed"
 msgstr "Finestra"
 
-#: src/frontend.cpp:840
+#: src/frontend.cpp:847
 msgid "Resolution*"
 msgstr "Resolució*"
 
-#: src/frontend.cpp:845
+#: src/frontend.cpp:852
 msgid "Texture size"
 msgstr "Mida de la textura"
 
-#: src/frontend.cpp:849
+#: src/frontend.cpp:856
 msgid "Vertical sync"
 msgstr "Sincro. vertical"
 
-#: src/frontend.cpp:884
-#: src/frontend.cpp:959
+#: src/frontend.cpp:891
+#: src/frontend.cpp:966
 msgid "Unsupported"
 msgstr "No és compatible"
 
-#: src/frontend.cpp:889
+#: src/frontend.cpp:896
 msgid "Shaders"
 msgstr "Shaders"
 
-#: src/frontend.cpp:901
+#: src/frontend.cpp:908
 msgid "VIDEO OPTIONS"
 msgstr "OPCIONS DE VIDEO"
 
-#: src/frontend.cpp:1113
+#: src/frontend.cpp:1120
 msgid "Reverse Rotation"
 msgstr "Rotació inversa"
 
-#: src/frontend.cpp:1124
+#: src/frontend.cpp:1131
 msgid "Trap Cursor"
 msgstr "Captura el cursor"
 
-#: src/frontend.cpp:1137
+#: src/frontend.cpp:1144
 msgid "Switch Mouse Buttons"
 msgstr "Intercanvia els botons"
 
-#: src/frontend.cpp:1149
+#: src/frontend.cpp:1156
 msgid "Rotate Screen"
 msgstr "Rota la pantalla"
 
-#: src/frontend.cpp:1152
-#: src/frontend.cpp:1226
+#: src/frontend.cpp:1159
+#: src/frontend.cpp:1233
 msgid "Middle Mouse"
 msgstr "Botó del mig"
 
-#: src/frontend.cpp:1156
-#: src/frontend.cpp:1221
+#: src/frontend.cpp:1163
+#: src/frontend.cpp:1228
 msgid "Right Mouse"
 msgstr "Botó dret"
 
-#: src/frontend.cpp:1160
+#: src/frontend.cpp:1167
 msgid "MOUSE OPTIONS"
 msgstr "OPCIONS DEL RATOLÍ"
 
-#: src/frontend.cpp:1261
-#: src/frontend.cpp:1339
+#: src/frontend.cpp:1268
+#: src/frontend.cpp:1346
 msgid "Language"
 msgstr "Idioma"
 
-#: src/frontend.cpp:1265
-#: src/frontend.cpp:1343
+#: src/frontend.cpp:1272
+#: src/frontend.cpp:1350
 msgid "Difficulty"
 msgstr "Dificultat"
 
-#: src/frontend.cpp:1269
-#: src/frontend.cpp:1350
-#: src/frontend.cpp:1382
+#: src/frontend.cpp:1276
+#: src/frontend.cpp:1357
+#: src/frontend.cpp:1389
 #: src/multiint.cpp:215
 msgid "Easy"
 msgstr "Fàcil"
 
-#: src/frontend.cpp:1272
-#: src/frontend.cpp:1353
-#: src/frontend.cpp:1374
+#: src/frontend.cpp:1279
+#: src/frontend.cpp:1360
+#: src/frontend.cpp:1381
 msgid "Normal"
 msgstr "Normal"
 
-#: src/frontend.cpp:1276
-#: src/frontend.cpp:1356
-#: src/frontend.cpp:1378
+#: src/frontend.cpp:1283
+#: src/frontend.cpp:1363
+#: src/frontend.cpp:1385
 #: src/multiint.cpp:215
 msgid "Hard"
 msgstr "Difícil"
 
-#: src/frontend.cpp:1281
-#: src/frontend.cpp:1344
+#: src/frontend.cpp:1288
+#: src/frontend.cpp:1351
 msgid "Scroll Speed"
 msgstr "Veloc. desplaçament"
 
-#: src/frontend.cpp:1285
-#: src/frontend.cpp:1340
+#: src/frontend.cpp:1292
+#: src/frontend.cpp:1347
 msgid "Unit Colour:"
 msgstr "Color de les unitats:"
 
-#: src/frontend.cpp:1305
-#: src/frontend.cpp:1341
+#: src/frontend.cpp:1312
+#: src/frontend.cpp:1348
 msgid "Campaign"
 msgstr "Campanya"
 
-#: src/frontend.cpp:1315
-#: src/frontend.cpp:1342
+#: src/frontend.cpp:1322
+#: src/frontend.cpp:1349
 msgid "Skirmish/Multiplayer"
 msgstr "Escaramussa/multijugador"
 
-#: src/frontend.cpp:1321
-#: src/frontend.cpp:1337
+#: src/frontend.cpp:1328
+#: src/frontend.cpp:1344
 msgid "GAME OPTIONS"
 msgstr "OPCIONS DE JOC"
 
-#: src/frontend.cpp:1482
+#: src/frontend.cpp:1489
 #: src/multiint.cpp:2651
 msgid "Mod: "
 msgstr "Mod:"
@@ -14804,12 +14814,12 @@ msgstr "Marró"
 msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
 msgstr "No ho podem fer! Hem de ser una unitat ciborg per utilitzar un transport ciborg!"
 
-#: src/qtscriptfuncs.cpp:1596
+#: src/qtscriptfuncs.cpp:1597
 #: src/scriptfuncs.cpp:3263
 msgid "YOU ARE VICTORIOUS!"
 msgstr "HEU GUANYAT!"
 
-#: src/qtscriptfuncs.cpp:1601
+#: src/qtscriptfuncs.cpp:1602
 #: src/scriptfuncs.cpp:3267
 msgid "YOU WERE DEFEATED!"
 msgstr "HEU ESTAT DERROTAT!"
@@ -15051,25 +15061,23 @@ msgstr "No hi ha prou espai al transport!"
 msgid "Reinforcements landing"
 msgstr "Estan aterrant els reforços"
 
-#: src/version.cpp:121
+#: src/version.cpp:72
 msgid " (modified locally)"
 msgstr " (modificat de manera local)"
 
-#: src/version.cpp:128
+#: src/version.cpp:78
 msgid " - DEBUG"
 msgstr " - DEPURACIÓ"
 
-#: src/version.cpp:137
-#, c-format
-msgid " - Built %s"
-msgstr " - Construcció %s"
-
 #. TRANSLATORS: This string looks as follows when expanded.
 #. "Version <version name/number> <working copy state><BUILD DATE><BUILD TYPE>"
-#: src/version.cpp:147
+#: src/version.cpp:86
 #, fuzzy, c-format
-msgid "Version %s%s%s%s"
+msgid "Version: %s,%s Built:%s%s"
 msgstr "Versió %s-%s%s%s%s"
+
+#~ msgid " - Built %s"
+#~ msgstr " - Construcció %s"
 
 #~ msgid "Warzone 2100 is completely free and open source (FLOSS). Official site: http://wz2100.net/"
 #~ msgstr "Warzone 2100 és completament lliure i de codi obert (FLOSS). Pàgina oficial: http://wz2100.net/"
@@ -15079,12 +15087,6 @@ msgstr "Versió %s-%s%s%s%s"
 
 #~ msgid "Password is already set!"
 #~ msgstr "Ja heu posat la contrasenya!"
-
-#~ msgid "Disable the use of OpenGL shaders"
-#~ msgstr "Deshabilita l'ús de OpenGL shaders"
-
-#~ msgid "Disable the use of OpenGL Vertex Buffer Objects"
-#~ msgstr "Deshabilita l'ús de la memòria intermèdia d'objectes OpenGL Vertex"
 
 #, fuzzy
 #~ msgid "Unit Colour (SP)"
