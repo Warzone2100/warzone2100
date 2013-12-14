@@ -71,7 +71,6 @@ static int preview_width = 0, preview_height = 0;
 static Vector2i player_pos[MAX_PLAYERS];
 static bool mappreview = false;
 OPENGL_DATA opengl;
-extern bool writeGameInfo(const char *pFileName); // Used to help debug issues when we have fatal errors.
 
 /* Initialise the double buffered display */
 bool screenInitialise()
@@ -153,43 +152,35 @@ bool screenInitialise()
 	debug(LOG_3D, "  * Total number of Texture Units (TUs) supported is %d.", (int) glMaxTUs);
 	debug(LOG_3D, "  * GL_ARB_timer_query %s supported!", GLEW_ARB_timer_query ? "is" : "is NOT");
 
+	if (!GLEW_VERSION_2_0)
+	{
+		debug(LOG_FATAL, "OpenGL 2.0 not supported! Please upgrade your drivers.");
+		return false;
+	}
+
 	screenWidth = MAX(screenWidth, 640);
 	screenHeight = MAX(screenHeight, 480);
 
 	std::pair<int, int> glslVersion(0, 0);
-	if (GLEW_ARB_shading_language_100 && GLEW_ARB_shader_objects)
-	{
-		sscanf((char const *)glGetString(GL_SHADING_LANGUAGE_VERSION), "%d.%d", &glslVersion.first, &glslVersion.second);
+	sscanf((char const *)glGetString(GL_SHADING_LANGUAGE_VERSION), "%d.%d", &glslVersion.first, &glslVersion.second);
 
-		/* Dump information about OpenGL 2.0+ implementation to the console and the dump file */
-		GLint glMaxTIUs, glMaxTCs, glMaxTIUAs, glmaxSamples, glmaxSamplesbuf;
+	/* Dump information about OpenGL 2.0+ implementation to the console and the dump file */
+	GLint glMaxTIUs, glMaxTCs, glMaxTIUAs, glmaxSamples, glmaxSamplesbuf;
 
-		debug(LOG_3D, "  * OpenGL GLSL Version : %s", glGetString(GL_SHADING_LANGUAGE_VERSION));
-		ssprintf(opengl.GLSLversion, "OpenGL GLSL Version : %s", glGetString(GL_SHADING_LANGUAGE_VERSION));
-		addDumpInfo(opengl.GLSLversion);
+	debug(LOG_3D, "  * OpenGL GLSL Version : %s", glGetString(GL_SHADING_LANGUAGE_VERSION));
+	ssprintf(opengl.GLSLversion, "OpenGL GLSL Version : %s", glGetString(GL_SHADING_LANGUAGE_VERSION));
+	addDumpInfo(opengl.GLSLversion);
 
-		glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &glMaxTIUs);
-		debug(LOG_3D, "  * Total number of Texture Image Units (TIUs) supported is %d.", (int) glMaxTIUs);
-		glGetIntegerv(GL_MAX_TEXTURE_COORDS, &glMaxTCs);
-		debug(LOG_3D, "  * Total number of Texture Coords (TCs) supported is %d.", (int) glMaxTCs);
-		glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS_ARB,&glMaxTIUAs);
-		debug(LOG_3D, "  * Total number of Texture Image Units ARB(TIUAs) supported is %d.", (int) glMaxTIUAs);
-		glGetIntegerv(GL_SAMPLE_BUFFERS, &glmaxSamplesbuf);
-		debug(LOG_3D, "  * (current) Max Sample buffer is %d.", (int) glmaxSamplesbuf);
-		glGetIntegerv(GL_SAMPLES, &glmaxSamples);
-		debug(LOG_3D, "  * (current) Max Sample level is %d.", (int) glmaxSamples);
-	}
-
-	bool haveARB_vertex_buffer_object = GLEW_ARB_vertex_buffer_object || GLEW_VERSION_1_5;
-	bool canRunShaders = GLEW_VERSION_1_2 && haveARB_vertex_buffer_object && glslVersion >= std::make_pair(1, 20);  // glGetString(GL_SHADING_LANGUAGE_VERSION) >= "1.20"
-
-	screen_EnableMissingFunctions();  // We need to do this before pie_LoadShaders(), but the effect of this call will be undone later by iV_TextInit(), so we will need to call it again.
-	if (!canRunShaders || !pie_LoadShaders())
-	{
-		writeGameInfo("WZdebuginfo.txt");
-		debug(LOG_FATAL, _("OpenGL GLSL shader version 1.20 is not supported by your system. The game requires this. Please upgrade your graphics drivers/hardware, if possible."));
-		exit(1);
-	}
+	glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &glMaxTIUs);
+	debug(LOG_3D, "  * Total number of Texture Image Units (TIUs) supported is %d.", (int) glMaxTIUs);
+	glGetIntegerv(GL_MAX_TEXTURE_COORDS, &glMaxTCs);
+	debug(LOG_3D, "  * Total number of Texture Coords (TCs) supported is %d.", (int) glMaxTCs);
+	glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS_ARB,&glMaxTIUAs);
+	debug(LOG_3D, "  * Total number of Texture Image Units ARB(TIUAs) supported is %d.", (int) glMaxTIUAs);
+	glGetIntegerv(GL_SAMPLE_BUFFERS, &glmaxSamplesbuf);
+	debug(LOG_3D, "  * (current) Max Sample buffer is %d.", (int) glmaxSamplesbuf);
+	glGetIntegerv(GL_SAMPLES, &glmaxSamples);
+	debug(LOG_3D, "  * (current) Max Sample level is %d.", (int) glmaxSamples);
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
@@ -276,8 +267,8 @@ void wzPerfFrame()
 	time(&aclock);           /* Get time in seconds */
 	t = localtime(&aclock);  /* Convert time to struct */
 
-	ssprintf(screendump_filename, "screenshots/wz2100-perf-sample-%02d-%04d%02d%02d_%02d%02d%02d-%s.png", perfList.size() - 1, 
-	         t->tm_year + 1900, t->tm_mon + 1, t->tm_mday, t->tm_hour, t->tm_min, t->tm_sec, getLevelName());
+	ssprintf(screendump_filename, "screenshots/wz2100-perf-sample-%02d-%04d%02d%02d_%02d%02d%02d.png", perfList.size() - 1, 
+	         t->tm_year + 1900, t->tm_mon + 1, t->tm_mday, t->tm_hour, t->tm_min, t->tm_sec);
 	screendump_required = true;
 	GL_DEBUG("Performance sample complete");
 }
@@ -318,66 +309,6 @@ void screenShutDown(void)
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	glErrors();
-}
-
-// Make OpenGL's VBO functions available under the core names for drivers that support OpenGL 1.4 only but have the VBO extension
-void screen_EnableMissingFunctions()
-{
-	if (!GLEW_VERSION_1_3 && GLEW_ARB_multitexture)
-	{
-		debug(LOG_WARNING, "Pre-OpenGL 1.3: Fixing ARB_multitexture extension function names.");
-
-		__glewActiveTexture = __glewActiveTextureARB;
-		__glewMultiTexCoord2fv = __glewMultiTexCoord2fvARB;
-	}
-
-	if (!GLEW_VERSION_1_5 && GLEW_ARB_vertex_buffer_object)
-	{
-		debug(LOG_WARNING, "Pre-OpenGL 1.5: Fixing ARB_vertex_buffer_object extension function names.");
-
-		__glewBindBuffer = __glewBindBufferARB;
-		__glewBufferData = __glewBufferDataARB;
-		__glewBufferSubData = __glewBufferSubDataARB;
-		__glewDeleteBuffers = __glewDeleteBuffersARB;
-		__glewGenBuffers = __glewGenBuffersARB;
-		__glewGetBufferParameteriv = __glewGetBufferParameterivARB;
-		__glewGetBufferPointerv = __glewGetBufferPointervARB;
-		__glewGetBufferSubData = __glewGetBufferSubDataARB;
-		__glewIsBuffer = __glewIsBufferARB;
-		__glewMapBuffer = __glewMapBufferARB;
-		__glewUnmapBuffer = __glewUnmapBufferARB;
-	}
-
-	if (!GLEW_VERSION_2_0 && GLEW_ARB_shader_objects)
-	{
-		debug(LOG_WARNING, "Pre-OpenGL 2.0: Fixing ARB_shader_objects extension function names.");
-
-		__glewGetUniformLocation = __glewGetUniformLocationARB;
-		__glewAttachShader = __glewAttachObjectARB;
-		__glewCompileShader = __glewCompileShaderARB;
-		__glewCreateProgram = __glewCreateProgramObjectARB;
-		__glewCreateShader = __glewCreateShaderObjectARB;
-		__glewGetProgramInfoLog = __glewGetInfoLogARB;
-		__glewGetShaderInfoLog = __glewGetInfoLogARB;  // Same as previous.
-		__glewGetProgramiv = __glewGetObjectParameterivARB;
-		__glewUseProgram = __glewUseProgramObjectARB;
-		__glewGetShaderiv = __glewGetObjectParameterivARB;
-		__glewLinkProgram = __glewLinkProgramARB;
-		__glewShaderSource = __glewShaderSourceARB;
-		__glewUniform1f = __glewUniform1fARB;
-		__glewUniform1i = __glewUniform1iARB;
-		__glewUniform4fv = __glewUniform4fvARB;
-	}
-
-	if ((GLEW_ARB_imaging || GLEW_EXT_blend_color) && __glewBlendColor == NULL)
-	{
-		__glewBlendColor = __glewBlendColorEXT;  // Shouldn't be needed if GLEW_ARB_imaging is true, but apparently is needed even in that case, with some drivers..?
-		if (__glewBlendColor == NULL)
-		{
-			debug(LOG_ERROR, "Your graphics driver is broken, and claims to support ARB_imaging or EXT_blend_color without exporting glBlendColor[EXT].");
-			__GLEW_ARB_imaging = __GLEW_EXT_blend_color = 0;
-		}
-	}
 }
 
 void screen_SetBackDropFromFile(const char* filename)
@@ -558,7 +489,7 @@ void screenDoDumpToDiskIfRequired(void)
  *
  *  \param path The directory path to save the screenshot in.
  */
-void screenDumpToDisk(const char* path)
+void screenDumpToDisk(const char* path, const char *level)
 {
 	unsigned int screendump_num = 0;
 	time_t aclock;
@@ -567,11 +498,11 @@ void screenDumpToDisk(const char* path)
 	time(&aclock);           /* Get time in seconds */
 	t = localtime(&aclock);  /* Convert time to struct */
 
-	ssprintf(screendump_filename, "%s/wz2100-%04d%02d%02d_%02d%02d%02d-%s.png", path, t->tm_year + 1900, t->tm_mon + 1, t->tm_mday, t->tm_hour, t->tm_min, t->tm_sec, getLevelName());
+	ssprintf(screendump_filename, "%s/wz2100-%04d%02d%02d_%02d%02d%02d-%s.png", path, t->tm_year + 1900, t->tm_mon + 1, t->tm_mday, t->tm_hour, t->tm_min, t->tm_sec, level);
 
         while (PHYSFS_exists(screendump_filename))
 	{
-		ssprintf(screendump_filename, "%s/wz2100-%04d%02d%02d_%02d%02d%02d-%s-%d.png", path, t->tm_year + 1900, t->tm_mon + 1, t->tm_mday, t->tm_hour, t->tm_min, t->tm_sec, getLevelName(), ++screendump_num);
+		ssprintf(screendump_filename, "%s/wz2100-%04d%02d%02d_%02d%02d%02d-%s-%d.png", path, t->tm_year + 1900, t->tm_mon + 1, t->tm_mday, t->tm_hour, t->tm_min, t->tm_sec, level, ++screendump_num);
 	}
 	screendump_required = true;
 }

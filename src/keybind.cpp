@@ -680,8 +680,7 @@ void	kf_RecalcLighting( void )
 /* Sends the screen buffer to disk */
 void	kf_ScreenDump( void )
 {
-	//CONPRINTF(ConsoleString,(ConsoleString,"Screen dump written to working directory : %s", screenDumpToDisk()));
-	screenDumpToDisk(ScreenDumpPath);
+	screenDumpToDisk(ScreenDumpPath, getLevelName());
 }
 
 // --------------------------------------------------------------------------

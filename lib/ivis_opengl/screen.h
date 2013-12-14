@@ -50,7 +50,7 @@ extern void screen_Upload(const char *newBackDropBmp);
 void screen_Display();
 
 /* screendump */
-extern void screenDumpToDisk(const char* path);
+void screenDumpToDisk(const char *path, const char *level);
 
 extern int wz_texture_compression;
 
@@ -58,7 +58,6 @@ extern void screenDoDumpToDiskIfRequired(void);
 
 void screen_enableMapPreview(int width, int height, Vector2i *playerpositions);
 void screen_disableMapPreview(void);
-void screen_EnableMissingFunctions();
 
 /// gaphics performance measurement points
 enum PERF_POINT
