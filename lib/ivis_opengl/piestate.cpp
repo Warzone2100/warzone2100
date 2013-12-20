@@ -448,12 +448,6 @@ void pie_SetDepthBufferStatus(DEPTH_MODE depthMode)
 			glDepthMask(GL_TRUE);
 			break;
 
-		case DEPTH_CMP_LEQ_WRT_OFF:
-			glEnable(GL_DEPTH_TEST);
-			glDepthFunc(GL_LEQUAL);
-			glDepthMask(GL_FALSE);
-			break;
-
 		case DEPTH_CMP_ALWAYS_WRT_OFF:
 			glDisable(GL_DEPTH_TEST);
 			glDepthMask(GL_FALSE);
