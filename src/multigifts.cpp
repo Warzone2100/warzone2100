@@ -663,53 +663,6 @@ void recvMultiPlayerFeature(NETQUEUE queue)
 	}
 }
 
-bool addOilDrum(uint8_t count)
-{
-	syncDebug("Adding %d oil drums.", count);
-
-	int featureIndex;
-	for (featureIndex = 0; featureIndex < numFeatureStats && asFeatureStats[featureIndex].subType != FEAT_OIL_DRUM; ++featureIndex) {}
-	if (featureIndex >= numFeatureStats)
-	{
-		debug(LOG_WARNING, "No oil drum feature!");
-		return false;  // Return value ignored.
-	}
-
-	for (unsigned n = 0; n < count; ++n)
-	{
-		uint32_t x, y;
-		for (int i = 0; i < 3; ++i)  // try three times
-		{
-			// Between 10 and mapwidth - 10
-			x = gameRand(mapWidth - 20) + 10;
-			y = gameRand(mapHeight - 20) + 10;
-
-			if (pickATileGen(&x, &y, LOOK_FOR_EMPTY_TILE, zonedPAT))
-			{
-				break;
-			}
-			x = INVALID_XY;
-		}
-		if (x == INVALID_XY)
-		{
-			syncDebug("Did not find location for oil drum.");
-			debug(LOG_FEATURE, "Unable to find a free location.");
-			continue;
-		}
-		FEATURE *pF = buildFeature(&asFeatureStats[featureIndex], world_coord(x), world_coord(y), false);
-		if (pF)
-		{
-			pF->player = ANYPLAYER;
-			syncDebugFeature(pF, '+');
-		}
-		else
-		{
-			debug(LOG_ERROR, "Couldn't build oil drum?");
-		}
-	}
-	return true;
-}
-
 // ///////////////////////////////////////////////////////////////
 bool pickupArtefact(int toPlayer, int fromPlayer)
 {

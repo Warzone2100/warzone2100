@@ -977,12 +977,6 @@ bool stageOneInitialise(void)
 		return false;
 	}
 
-	/* Initialise the movement system */
-	if (!moveInitialise())
-	{
-		return false;
-	}
-
 	if (!proj_InitSystem())
 	{
 		return false;

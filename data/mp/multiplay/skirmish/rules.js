@@ -8,6 +8,7 @@
 
 var lastHitTime = 0;
 var cheatmode = false;
+var maxOilDrums = 0;
 
 function setupGame()
 {
@@ -46,6 +47,14 @@ function eventGameInit()
 {
 	receiveAllEvents(true);
 	setupGame();
+
+	// always at least one oil drum, and one more for every 64x64 tiles of map area
+	maxOilDrums = (mapWidth * mapHeight) >> 12; // replace float division with shift for sync-safety
+	for (var i = 0; i < maxOilDrums; ++i)
+	{
+		queue("placeOilDrum", 10000 * i);
+	}
+
 
 	hackNetOff();
 	for (var playnum = 0; playnum < maxPlayers; playnum++)
@@ -395,5 +404,60 @@ function eventChat(from, to, message)
 			}
 		}
 		console("Made player " + from + "'s units SUPERIOR!");
+	}
+}
+
+function placeOilDrum()
+{
+	var drums = enumFeature(-1, "OilDrum").length;
+	if (drums >= maxOilDrums)
+	{
+		return;
+	}
+
+	var x = syncRandom(mapWidth - 20) + 10;
+	var y = syncRandom(mapHeight - 20) + 10;
+
+	// see if the random position is valid
+	var occupied = (enumRange(x, y, 2, ALL_PLAYERS, false).length > 0);
+	var unreachable = true;
+	for (var i = 0; i < maxPlayers; ++i)
+	{
+		if (propulsionCanReach("wheeled01", x, y, startPositions[i].x, startPositions[i].y))
+		{
+			unreachable = false;
+			break;
+		}
+	}
+	var terrain = terrainType(x, y);
+	if (terrain == TER_WATER || terrain == TER_CLIFFFACE)
+	{
+		unreachable = true;
+	}
+	if (occupied || unreachable)
+	{
+		// try again in a different position after 1 second
+		queue("placeOilDrum", 1000);
+		return;
+	}
+
+	addFeature("OilDrum", x, y);
+}
+
+function eventPickup(feature, droid)
+{
+	if (feature.stattype == OIL_DRUM)
+	{
+		var delay;
+		// generate Geom(1/6) distribution for oil drum respawn delay
+		for (delay = 0; ; ++delay)
+		{
+			if (syncRandom(6) == 0)
+			{
+				break;
+			}
+		}
+		// amounts to 10 minutes average respawn time
+		queue("placeOilDrum", delay * 120000);
 	}
 }

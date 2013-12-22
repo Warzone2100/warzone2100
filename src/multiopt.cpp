@@ -394,7 +394,6 @@ static bool gameInit(void)
 	{
 		playerCount += NetPlay.players[index].ai >= 0 || NetPlay.players[index].allocated;
 	}
-	addOilDrum(playerCount * 2);  // Calculating playerCount instead of using NetPlay.playercount, since the latter seems to be 0 for non-hosts.
 
 	playerResponding();			// say howdy!
 

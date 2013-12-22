@@ -104,9 +104,6 @@
 #define EXTRA_PRECISION                         (1 << EXTRA_BITS)
 
 
-static uint32_t oilTimer = 0;
-static unsigned drumCount = 0;
-
 /* Function prototypes */
 static void	moveUpdatePersonModel(DROID *psDroid, SDWORD speed, uint16_t direction);
 
@@ -126,16 +123,6 @@ const char *moveDescription(MOVE_STATUS status)
 	case MOVESHUFFLE : return "Shuffle";
 	}
 	return "Error";	// satisfy compiler
-}
-
-/** Initialise the movement system
- */
-bool moveInitialise(void)
-{
-	oilTimer = 0;
-	drumCount = 0;
-
-	return true;
 }
 
 /** Set a target location in world coordinates for a droid to move to
@@ -2077,21 +2064,6 @@ static bool pickupOilDrum(int toPlayer, int fromPlayer)
 		CONPRINTF(ConsoleString, (ConsoleString, _("You found %u power in an oil drum."), OILDRUM_POWER));
 	}
 
-	// fromPlayer == ANYPLAYER seems to mean that the drum was not pre-placed on the map.
-	if (bMultiPlayer && fromPlayer == ANYPLAYER)
-	{
-		// when player finds oil, we init the timer, and flag that we need a drum
-		if (!oilTimer)
-		{
-			oilTimer = gameTime;
-		}
-		// if player finds more than one drum (before timer expires), then we tack on ~50 sec to timer.
-		if (drumCount++ == 0)
-		{
-			oilTimer += GAME_TICKS_PER_SEC * 50;
-		}
-	}
-
 	return true;
 }
 
@@ -2140,14 +2112,6 @@ static void checkLocalFeatures(DROID *psDroid)
 		turnOffMultiMsg(true);
 		removeFeature((FEATURE *)psObj);  // remove artifact+.
 		turnOffMultiMsg(false);
-	}
-
-	// once they found a oil drum, we then wait ~600 secs before we pop up new one(s).
-	if (oilTimer + GAME_TICKS_PER_SEC * 600u < gameTime && drumCount > 0)
-	{
-		addOilDrum(drumCount);
-		oilTimer = 0;
-		drumCount = 0;
 	}
 }
 

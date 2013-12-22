@@ -39,7 +39,6 @@ extern void recvMultiPlayerFeature              (NETQUEUE queue);
 extern void sendMultiPlayerFeature(FEATURE_TYPE type, uint32_t x, uint32_t y, uint32_t id);
 
 bool pickupArtefact(int toPlayer, int fromPlayer);
-extern bool	addOilDrum						(uint8_t count);
 void giftPower                          (uint8_t from, uint8_t to, uint32_t amount, bool send);
 extern void giftRadar						(uint8_t from, uint8_t to, bool send);
 
