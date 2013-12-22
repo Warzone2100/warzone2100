@@ -2235,6 +2235,16 @@ static QScriptValue js_propulsionCanReach(QScriptContext *context, QScriptEngine
 	return QScriptValue(fpathCheck(Vector3i(world_coord(x1), world_coord(y1), 0), Vector3i(world_coord(x2), world_coord(y2), 0), psPropStats->propulsionType));
 }
 
+//-- \subsection{terrainType(x, y)}
+//-- Returns tile type of a given map tile, such as TER_WATER for water tiles or TER_CLIFFFACE for cliffs.
+//-- Tile types regulate which units may pass through this tile.
+static QScriptValue js_terrainType(QScriptContext *context, QScriptEngine *)
+{
+	int x = context->argument(0).toInt32();
+	int y = context->argument(1).toInt32();
+	return QScriptValue(terrainType(mapTile(x, y)));
+}
+
 //-- \subsection{orderDroid(droid, order)}
 //-- Give a droid an order to do something.
 static QScriptValue js_orderDroid(QScriptContext *context, QScriptEngine *)
@@ -4513,6 +4523,7 @@ bool registerFunctions(QScriptEngine *engine, QString scriptName)
 	engine->globalObject().setProperty("pickStructLocation", engine->newFunction(js_pickStructLocation));
 	engine->globalObject().setProperty("droidCanReach", engine->newFunction(js_droidCanReach));
 	engine->globalObject().setProperty("propulsionCanReach", engine->newFunction(js_propulsionCanReach));
+	engine->globalObject().setProperty("terrainType", engine->newFunction(js_terrainType));
 	engine->globalObject().setProperty("orderDroidBuild", engine->newFunction(js_orderDroidBuild));
 	engine->globalObject().setProperty("orderDroidObj", engine->newFunction(js_orderDroidObj));
 	engine->globalObject().setProperty("orderDroid", engine->newFunction(js_orderDroid));
@@ -4583,6 +4594,8 @@ bool registerFunctions(QScriptEngine *engine, QString scriptName)
 	engine->globalObject().setProperty("setTransporterExit", engine->newFunction(js_setTransporterExit));
 
 	// Set some useful constants
+	engine->globalObject().setProperty("TER_WATER", TER_WATER, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("TER_CLIFFFACE", TER_CLIFFFACE, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("WEATHER_CLEAR", WT_NONE, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("WEATHER_RAIN", WT_RAINING, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("WEATHER_SNOW", WT_SNOWING, QScriptValue::ReadOnly | QScriptValue::Undeletable);
