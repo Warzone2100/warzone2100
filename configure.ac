@@ -286,30 +286,35 @@ if test "x$enable_debug" = "xyes" ; then
 		WZ_CXXFLAGS="${WZ_CXXFLAGS} -O0 -g -Wcheck -Werror"
 		WZ_CPPFLAGS="${WZ_CPPFLAGS} -DDEBUG"
 	else
-		WZ_CFLAGS="${WZ_CFLAGS} -O0 -g -Werror ${WZ_WARNINGS_GCC_C}"
-		WZ_CXXFLAGS="${WZ_CXXFLAGS} -O0 -g -Werror ${WZ_WARNINGS_GCC_CXX}"
+		# -ggdb is very useful when running the linux perf tool
+		WZ_CFLAGS="${WZ_CFLAGS} -O0 -ggdb -Werror ${WZ_WARNINGS_GCC_C}"
+		WZ_CXXFLAGS="${WZ_CXXFLAGS} -O0 -ggdb -Werror ${WZ_WARNINGS_GCC_CXX}"
 		WZ_C99FLAGS="${WZ_C99FLAGS} -Wno-declaration-after-statement"
 		WZ_CPPFLAGS="${WZ_CPPFLAGS} -DDEBUG"
 	fi
+# debugging with optimizations for gcc or clang
 elif test "x$enable_debug" = "xoptimised" ; then
-	WZ_CFLAGS="${WZ_CFLAGS} -O2 -g -Werror ${WZ_WARNINGS_GCC_C}"
-	WZ_CXXFLAGS="${WZ_CXXFLAGS} -O2 -g -Werror ${WZ_WARNINGS_GCC_CXX}"
+	WZ_CFLAGS="${WZ_CFLAGS} -O2 -ggdb -fno-omit-frame-pointer -Werror ${WZ_WARNINGS_GCC_C}"
+	WZ_CXXFLAGS="${WZ_CXXFLAGS} -O2 -ggdb -fno-omit-frame-pointer -Werror ${WZ_WARNINGS_GCC_CXX}"
 	WZ_C99FLAGS="${WZ_C99FLAGS} -Wno-declaration-after-statement"
 	WZ_CPPFLAGS="${WZ_CPPFLAGS} -DDEBUG"
+# debug build while ignoring warnings for gcc or clang
 elif test "x$enable_debug" = "xrelaxed" ; then
-	WZ_CFLAGS="${WZ_CFLAGS} -g -O0 ${WZ_WARNINGS_GCC_C}"
-	WZ_CXXFLAGS="${WZ_CXXFLAGS} -g -O0 ${WZ_WARNINGS_GCC_CXX}"
+	WZ_CFLAGS="${WZ_CFLAGS} -ggdb -O0 ${WZ_WARNINGS_GCC_C}"
+	WZ_CXXFLAGS="${WZ_CXXFLAGS} -ggdb -O0 ${WZ_WARNINGS_GCC_CXX}"
 	WZ_CPPFLAGS="${WZ_CPPFLAGS} -DDEBUG"
+# profiling builds using gprof (probably a better idea to use perf, if you can)
 elif test "x$enable_debug" = "xdebugprofile" ; then
-	WZ_CFLAGS="${WZ_CFLAGS} -g -O0 -pg ${WZ_WARNINGS_GCC_C}"
-	WZ_CXXFLAGS="${WZ_CXXFLAGS} -g -O0 -pg ${WZ_WARNINGS_GCC_CXX}"
+	WZ_CFLAGS="${WZ_CFLAGS} -ggdb -O0 -pg ${WZ_WARNINGS_GCC_C}"
+	WZ_CXXFLAGS="${WZ_CXXFLAGS} -ggdb -O0 -pg ${WZ_WARNINGS_GCC_CXX}"
 	WZ_CPPFLAGS="${WZ_CPPFLAGS} -DDEBUG"
 	LDFLAGS="-pg ${LDFLAGS}"
 elif test "x$enable_debug" = "xprofile" ; then
-	WZ_CFLAGS="${WZ_CFLAGS} -g -Os -pg ${WZ_WARNINGS_GCC_C}"
-	WZ_CXXFLAGS="${WZ_CXXFLAGS} -g -Os -pg ${WZ_WARNINGS_GCC_CXX}"
+	WZ_CFLAGS="${WZ_CFLAGS} -ggdb -Os -fno-omit-frame-pointer -pg ${WZ_WARNINGS_GCC_C}"
+	WZ_CXXFLAGS="${WZ_CXXFLAGS} -ggdb -Os -fno-omit-frame-pointer -pg ${WZ_WARNINGS_GCC_CXX}"
 	WZ_CPPFLAGS="${WZ_CPPFLAGS} -DNDEBUG"
 	LDFLAGS="-pg ${LDFLAGS}"
+# normal, non-debug build
 else
 	WZ_CFLAGS="${WZ_CFLAGS} -g ${WZ_WARNINGS_GCC_C}"
 	WZ_CXXFLAGS="${WZ_CXXFLAGS} -g ${WZ_WARNINGS_GCC_CXX}"
