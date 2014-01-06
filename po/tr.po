@@ -12207,7 +12207,7 @@ msgstr "Doku sıkıştırma devre dışı"
 
 #: src/clparse.cpp:269
 msgid "Disable the use of OpenGL Vertex Buffer Objects"
-msgstr ""
+msgstr "OpenGL Vertex Tampon Nesneleri kullanımını devre dışı bırak"
 
 #: src/cmddroid.cpp:110
 msgid "Commander needs a higher level to command more units"
@@ -14339,7 +14339,7 @@ msgstr "Harita Seç"
 
 #: src/multiint.cpp:1504
 msgid "Map-Mod!"
-msgstr ""
+msgstr "Harita Kipi!"
 
 #: src/multiint.cpp:1517
 msgid "Click to set Password"
@@ -14534,7 +14534,7 @@ msgstr "*** şifreye gerek yok! ***"
 
 #: src/multiint.cpp:3020
 msgid "This is a map-mod, it can change your playing experience!"
-msgstr ""
+msgstr "Bu bir harita kipi olduğundan, oynama deneyiminizi değiştirebilir!"
 
 #: src/multiint.cpp:3072
 msgid "Sorry! Failed to host the game."
@@ -14762,12 +14762,12 @@ msgstr "%s atıldı: oyundan %s ve engelli listesine kaydedildi!"
 #: src/multiopt.cpp:227
 #: src/multiplay.cpp:1722
 msgid "Warning, this is a map-mod, it could alter normal gameplay."
-msgstr ""
+msgstr "Uyarı, bu bir harita kipi ve normal oynanışı değiştirebilir."
 
 #: src/multiopt.cpp:231
 #: src/multiplay.cpp:1726
 msgid "Warning, HOST has altered the game code, and can't be trusted!"
-msgstr ""
+msgstr "Uyarı, EV SAHİBİ oyun kodunu değiştirmiş ve güvenilmiyor!"
 
 #: src/multiplay.cpp:263
 #, c-format
