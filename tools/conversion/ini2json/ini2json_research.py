@@ -21,7 +21,8 @@ fp = open(sys.argv[2])
 ids = json.load(fp)
 opts = ['researchPoints', 'researchPower', 'keyTopic', 'msgName', 'iconID', 'statID', 'requiredResearch', 'resultComponents', 
 	'techCode', 'imdName', 'subgroupIconID', 'requiredStructures', 'redStructures', 'redComponents', 'resultComponents',
-	'replacedComponents']
+	'replacedComponents', 'resultStructures']
+listopts = ['requiredResearch', 'resultComponents', 'requiredStructures', 'redStructures', 'redComponents', 'resultComponents', 'replacedComponents', 'resultStructures']
 for section in config.sections():
 	name = config.get(section, 'name')
 	if name.startswith('"') and name.endswith('"'):
@@ -41,10 +42,11 @@ for section in config.sections():
 					accum.append(ids[result]) # change ID to real name
 				else:
 					accum.append(result)
-			if len(accum) == 1:
+			if not opt in listopts:
+				assert len(accum) == 1, "Wrong number of items in %s:%s - %s" % (section, opt, str(accum))
 				entry[opt] = accum[0]
 			else:
-				entry[opt] = accum
+				entry[opt] = accum # is a list
 	if config.has_option(section, 'results'):
 		value = config.get(section, 'results')
 		value = value.split(',')
@@ -72,7 +74,7 @@ for section in config.sections():
 				tmp[comps[0]] = int(comps[1])
 			accum.append(tmp)
 		entry['results'] = accum
+	entry['id'] = section # for backwards compatibility
 	data[name] = entry
-	data['id'] = section # for backwards compatibility
 fp.close()
-print json.dumps(data, indent=4, separators=(',', ': '))
+print json.dumps(data, indent=4, separators=(',', ': '), sort_keys=True)

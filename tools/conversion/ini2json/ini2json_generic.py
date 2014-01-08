@@ -27,6 +27,7 @@ translation = {
 data = {}
 fp = open(sys.argv[2])
 ids = json.load(fp)
+listopts = ['structureModel', 'weapons']
 for section in config.sections():
 	name = config.get(section, 'name')
 	if name.startswith('"') and name.endswith('"'):
@@ -49,11 +50,12 @@ for section in config.sections():
 				accum.append(ids[result]) # change ID to real name
 			else:
 				accum.append(result)
-		if len(accum) == 1 and key != 'weapons':
-			entry[key] = accum[0]
-		else:
+		if key in listopts:
 			entry[key] = accum
+		else:
+			assert len(accum) == 1, "Wrong number of items in %s:%s - %s" % (section, opt, str(accum))
+			entry[key] = accum[0]
+	entry['id'] = section # for backwards compatibility
 	data[name] = entry
-	data['id'] = section # for backwards compatibility
 fp.close()
-print json.dumps(data, indent=4, separators=(',', ': '))
+print json.dumps(data, indent=4, separators=(',', ': '), sort_keys=True)
