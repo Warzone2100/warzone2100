@@ -564,17 +564,20 @@ static bool CheckInMap(const char *archive, const char *mountpoint,const char *l
 		exit(-1);
 	}
 
+	std::string checkpath = lookin;
+	checkpath.append("/");
 	char **filelist = PHYSFS_enumerateFiles(lookin);
 	for (char **file = filelist; *file != NULL; ++file)
 	{
-		if (PHYSFS_isDirectory(*file))
+		std::string checkfile = *file;
+		if (PHYSFS_isDirectory((checkpath+checkfile).c_str()))
 		{
-			std::string checkfile = *file;
 			if (checkfile.compare("wrf")==0 || checkfile.compare("stats")==0 ||checkfile.compare("components")==0
 				|| checkfile.compare("anims")==0 || checkfile.compare("effects")==0 ||checkfile.compare("messages")==0
 				|| checkfile.compare("audio")==0 || checkfile.compare("sequenceaudio")==0 ||checkfile.compare("misc")==0
 				|| checkfile.compare("features")==0 || checkfile.compare("script")==0 ||checkfile.compare("structs")==0
-				|| checkfile.compare("tileset")==0 || checkfile.compare("images")==0 || checkfile.compare("texpages")==0 )
+				|| checkfile.compare("tileset")==0 || checkfile.compare("images")==0 || checkfile.compare("texpages")==0
+				|| checkfile.compare("skirmish")==0 )
 			{
 				debug(LOG_WZ, "Detected: %s %s" , archive, checkfile.c_str());
 				mapmod = true;
