@@ -1,7 +1,7 @@
 #!/bin/bash
 # Convert all stats to JSON format. Run it from its directory.
 #
-# Missing : bodypropulsionimd.ini propulsionsounds.ini propulsiontype.ini structuremodifier.ini weaponmodifier.ini
+# Missing : propulsionsounds.ini propulsiontype.ini structuremodifier.ini weaponmodifier.ini
 #
 
 BASE="../../../data"
@@ -39,8 +39,9 @@ generic repair
 generic construction
 generic propulsion
 generic structure
-generic body
 generic templates
+python ini2json_body.py ${BASE}/base/stats/body.ini ${BASE}/base/stats/bodypropulsionimd.ini id_dict_base.json > ${BASE}/base/stats/body.json
+python ini2json_body.py ${BASE}/mp/stats/body.ini ${BASE}/mp/stats/bodypropulsionimd.ini id_dict_base.json > ${BASE}/mp/stats/body.json
 python ini2json_research.py ${BASE}/base/stats/research_cam1.ini id_dict_base.json > ${BASE}/base/stats/research_cam1.json
 python ini2json_research.py ${BASE}/base/stats/research_cam2.ini id_dict_base.json > ${BASE}/base/stats/research_cam2.json
 python ini2json_research.py ${BASE}/base/stats/research_cam3.ini id_dict_base.json > ${BASE}/base/stats/research_cam3.json
