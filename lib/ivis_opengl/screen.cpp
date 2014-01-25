@@ -49,6 +49,13 @@
 
 #include <GL/glext.h>
 
+#include <iostream>
+#include <string>
+#include <vector>
+#include <cstring>
+
+//using namespace std;
+
 /* global used to indicate preferred internal OpenGL format */
 int wz_texture_compression = 0;
 
@@ -355,6 +362,32 @@ void screenShutDown(void)
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	glErrors();
+}
+
+/// Display a random backdrop from files in dirname starting with basename.
+/// dirname must have a trailing slash.
+void screen_SetRandomBackdrop(const char *dirname, const char *basename)
+{
+	std::vector<std::string> names;  // vector to hold the strings we want
+	char **rc = PHYSFS_enumerateFiles(dirname); // all the files in dirname
+
+	// Walk thru the files in our dir, adding the ones that start with basename to our vector of strings
+	size_t len = strlen(basename);
+	for (char **i = rc; *i != NULL; i++)
+	{
+		// does our filename start with basename?
+		if (!strncmp(*i, basename, len))
+		{
+			names.push_back(*i);
+		}
+	}
+	PHYSFS_freeList(rc);
+
+	// pick a random name from our vector of names
+	int ran = rand() % names.size();
+	std::string full_path = std::string(dirname) + names[ran];
+
+	screen_SetBackDropFromFile(full_path.c_str());
 }
 
 void screen_SetBackDropFromFile(const char* filename)

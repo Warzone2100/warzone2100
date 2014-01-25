@@ -42,6 +42,7 @@
 #include "piematrix.h"
 #include "screen.h"
 
+
 /***************************************************************************/
 /*
  *	Local Variables
@@ -463,27 +464,19 @@ void pie_RenderRadar()
 	radarGfx->draw();
 }
 
+/// Load and display a random backdrop picture.
 void pie_LoadBackDrop(SCREENTYPE screenType)
 {
-	char backd[128];
-
-	//randomly load in a backdrop piccy.
-	srand( (unsigned)time(NULL) + 17 ); // Use offset since time alone doesn't work very well
-
 	switch (screenType)
 	{
-		case SCREEN_RANDOMBDROP:
-			snprintf(backd, sizeof(backd), "texpages/bdrops/backdrop%i.png", rand() % NUM_BACKDROPS); // Range: 0 to (NUM_BACKDROPS-1)
-			break;
-		case SCREEN_MISSIONEND:
-			sstrcpy(backd, "texpages/bdrops/missionend.png");
-			break;
-
-		case SCREEN_CREDITS:
-		default:
-			sstrcpy(backd, "texpages/bdrops/credits.png");
-			break;
+	case SCREEN_RANDOMBDROP:
+		screen_SetRandomBackdrop("texpages/bdrops/", "backdrop");
+		break;
+	case SCREEN_MISSIONEND:
+		screen_SetRandomBackdrop("textpages/bdrops/", "missionend");
+		break;
+	case SCREEN_CREDITS:
+		screen_SetRandomBackdrop("texpages/bdrops/", "credits");
+		break;
 	}
-
-	screen_SetBackDropFromFile(backd);
 }
