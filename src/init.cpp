@@ -688,6 +688,7 @@ bool systemInitialise(void)
 	}
 
 	// Initialize the iVis text rendering module
+	wzSceneBegin("Main menu loop");
 	iV_TextInit();
 
 	pie_InitRadar();
@@ -710,6 +711,7 @@ void systemShutdown(void)
 	}
 
 	shutdownEffectsSystem();
+	wzSceneEnd("Main menu loop");
 	keyClearMappings();
 
 	// free up all the load functions (all the data should already have been freed)
@@ -922,6 +924,8 @@ bool frontendShutdown(void)
 bool stageOneInitialise(void)
 {
 	debug(LOG_WZ, "== stageOneInitalise ==");
+	wzSceneEnd("Main menu loop");
+	wzSceneBegin("Main game loop");
 
 	// Initialise all globals and statics everwhere.
 	if(!InitialiseGlobals())
@@ -1076,6 +1080,8 @@ bool stageOneShutDown(void)
 	pie_TexInit(); // restart it
 
 	initMiscVars();
+	wzSceneEnd("Main game loop");
+	wzSceneBegin("Main menu loop");
 
 	return true;
 }

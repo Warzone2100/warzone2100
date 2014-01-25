@@ -65,11 +65,13 @@ enum PERF_POINT
 	PERF_START_FRAME,
 	PERF_EFFECTS,
 	PERF_TERRAIN,
+	PERF_SKYBOX,
 	PERF_MODEL_INIT,
 	PERF_PARTICLES,
 	PERF_WATER,
 	PERF_MODELS,
 	PERF_MISC,
+	PERF_GUI,
 	PERF_COUNT
 };
 
@@ -83,6 +85,11 @@ void wzPerfShutdown();
 void wzPerfFrame();
 /// Are performance measurements available?
 bool wzPerfAvailable();
+
+#define wzSceneBegin(x) (WZ_ASSERT_STATIC_STRING(x), _wzSceneBegin(x))
+void _wzSceneBegin(const char *descr);
+#define wzSceneEnd(x) (WZ_ASSERT_STATIC_STRING(x), _wzSceneEnd(x))
+void _wzSceneEnd(const char *descr);
 
 struct OPENGL_DATA
 {

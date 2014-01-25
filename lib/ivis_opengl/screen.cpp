@@ -47,12 +47,17 @@
 #include <vector>
 #include <algorithm>
 
+#include <GL/glext.h>
+
 /* global used to indicate preferred internal OpenGL format */
 int wz_texture_compression = 0;
 
 // for compatibility with older versions of GLEW
 #ifndef GLEW_ARB_timer_query
 #define GLEW_ARB_timer_query false
+#endif
+#ifndef GLEW_KHR_debug
+#define GLEW_KHR_debug false
 #endif
 
 static bool		bBackDrop = false;
@@ -71,6 +76,7 @@ static int preview_width = 0, preview_height = 0;
 static Vector2i player_pos[MAX_PLAYERS];
 static bool mappreview = false;
 OPENGL_DATA opengl;
+static bool khr_debug = false;
 
 /* Initialise the double buffered display */
 bool screenInitialise()
@@ -98,6 +104,15 @@ bool screenInitialise()
 	addDumpInfo(opengl.version);
 	debug(LOG_3D, "%s", opengl.version);
 	ssprintf(opengl.GLEWversion, "GLEW Version: %s", glewGetString(GLEW_VERSION));
+	if (strncmp(opengl.GLEWversion, "1.9.", 4) == 0) // work around known bug with KHR_debug extension support in this release
+	{
+		debug(LOG_WARNING, "Your version of GLEW is old and buggy, please upgrade to at least version 1.10.");
+		khr_debug = false;
+	}
+	else
+	{
+		khr_debug = GLEW_KHR_debug;
+	}
 	addDumpInfo(opengl.GLEWversion);
 	debug(LOG_3D, "%s", opengl.GLEWversion);
 
@@ -151,6 +166,7 @@ bool screenInitialise()
 	glGetIntegerv(GL_MAX_TEXTURE_UNITS, &glMaxTUs);
 	debug(LOG_3D, "  * Total number of Texture Units (TUs) supported is %d.", (int) glMaxTUs);
 	debug(LOG_3D, "  * GL_ARB_timer_query %s supported!", GLEW_ARB_timer_query ? "is" : "is NOT");
+	debug(LOG_3D, "  * KHR_DEBUG support %s detected", khr_debug ? "was" : "was NOT");
 
 	if (!GLEW_VERSION_2_0)
 	{
@@ -225,7 +241,7 @@ void wzPerfShutdown()
 	// write performance counter list to file
 	QFile perf(ourfile);
 	perf.open(QIODevice::WriteOnly);
-	perf.write("START, EFF, TERRAIN, LOAD, PRTCL, WATER, MODELS, MISC\n");
+	perf.write("START, EFF, TERRAIN, SKY, LOAD, PRTCL, WATER, MODELS, MISC, GUI\n");
 	for (int i = 0; i < perfList.size(); i++)
 	{
 		QString line;
@@ -273,28 +289,58 @@ void wzPerfFrame()
 	GL_DEBUG("Performance sample complete");
 }
 
+static const char *sceneActive = NULL;
+void _wzSceneBegin(const char *descr)
+{
+	ASSERT(sceneActive == NULL, "Out of order scenes: Wanted to start %s, was in %s", descr, sceneActive);
+	if (khr_debug)
+	{
+		// enable when https://github.com/apitrace/apitrace/issues/218 has been fixed
+		//glPushDebugGroup(GL_DEBUG_SOURCE_APPLICATION, PERF_COUNT, -1, descr);
+	}
+	sceneActive = descr;
+}
+
+void _wzSceneEnd(const char *descr)
+{
+	ASSERT(descr == sceneActive, "Out of order scenes: Wanted to stop %s, was in %s", descr, sceneActive);
+	if (khr_debug)
+	{
+		// enable when https://github.com/apitrace/apitrace/issues/218 has been fixed
+		//glPopDebugGroup();
+	}
+	sceneActive = NULL;
+}
+
 void wzPerfBegin(PERF_POINT pp, const char *descr)
 {
-	GL_DEBUG(descr);
+	ASSERT(queryActive == PERF_COUNT || pp > queryActive, "Out of order timer query call");
+	queryActive = pp;
+	if (khr_debug)
+	{
+		glPushDebugGroup(GL_DEBUG_SOURCE_APPLICATION, pp, -1, descr);
+	}
 	if (!perfStarted)
 	{
 		return;
 	}
-	ASSERT(queryActive == PERF_COUNT || pp > queryActive, "Out of order timer query call");
 	glBeginQuery(GL_TIME_ELAPSED, perfpos[pp]);
-	queryActive = pp;
 	glErrors();
 }
 
 void wzPerfEnd(PERF_POINT pp)
 {
+	ASSERT(queryActive == pp, "Mismatched wzPerfBegin...End");
+	queryActive = PERF_COUNT;
+	if (khr_debug)
+	{
+		glPopDebugGroup();
+	}
 	if (!perfStarted)
 	{
 		return;
 	}
-	ASSERT(queryActive == pp, "Mismatched wzPerfBegin...End");
 	glEndQuery(GL_TIME_ELAPSED);
-	queryActive = PERF_COUNT;
 }
 
 void screenShutDown(void)

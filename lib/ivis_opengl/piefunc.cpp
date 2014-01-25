@@ -134,8 +134,6 @@ void pie_Skybox_Shutdown()
 
 void pie_DrawSkybox(float scale)
 {
-	GL_DEBUG("Drawing skybox");
-
 	glPushAttrib(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_ENABLE_BIT | GL_FOG_BIT);
 	// no use in updating the depth buffer
 	glDepthMask(GL_FALSE);

@@ -108,7 +108,6 @@ static void	locateMouse(void);
 static bool	renderWallSection(STRUCTURE *psStructure);
 static void	drawDragBox(void);
 static void	calcFlagPosScreenCoords(SDWORD *pX, SDWORD *pY, SDWORD *pR);
-static void	displayTerrain(void);
 static void	drawTiles(iView *player);
 static void	display3DProjectiles(void);
 static void	drawDroidSelections(void);
@@ -700,12 +699,21 @@ void draw3DScene( void )
 	pie_Begin3DScene();
 	/* Set 3D world origins */
 	pie_SetGeometricOffset(rendSurface.width / 2, geoOffset);
-	wzPerfEnd(PERF_START_FRAME);
 
-	// draw terrain
-	displayTerrain();
+	/* Now, draw the terrain */
+	drawTiles(&player);
 
-	wzPerfBegin(PERF_MISC, "3D scene - misc text");
+	wzPerfBegin(PERF_MISC, "3D scene - misc and text");
+
+	/* Show the drag Box if necessary */
+	drawDragBox();
+
+	/* Have we released the drag box? */
+	if(dragBox3D.status == DRAG_RELEASED)
+	{
+		dragBox3D.status = DRAG_INACTIVE;
+	}
+
 	pie_BeginInterface();
 	drawDroidSelections();
 
@@ -860,29 +868,8 @@ void draw3DScene( void )
 	}
 
 	wzPerfEnd(PERF_MISC);
-	GL_DEBUG("Draw 3D scene - end");
 }
 
-
-/// Draws the 3D textured terrain
-static void displayTerrain(void)
-{
-	pie_PerspectiveBegin();
-
-	/* Now, draw the terrain */
-	drawTiles(&player);
-
-	pie_PerspectiveEnd();
-
-	/* Show the drag Box if necessary */
-	drawDragBox();
-
-	/* Have we released the drag box? */
-	if(dragBox3D.status == DRAG_RELEASED)
-	{
-		dragBox3D.status = DRAG_INACTIVE;
-	}
-}
 
 /***************************************************************************/
 bool	doWeDrawProximitys( void )
@@ -943,7 +930,8 @@ static void drawTiles(iView *player)
 	int idx, jdx;
 	Vector3f theSun;
 
-	GL_DEBUG("Draw 3D scene - drawTiles");
+	// draw terrain
+	pie_PerspectiveBegin();
 
 	/* ---------------------------------------------------------------- */
 	/* Do boundary and extent checking                                  */
@@ -1019,6 +1007,7 @@ static void drawTiles(iView *player)
 			tileScreenInfo[idx][jdx].y = screen.y;
 		}
 	}
+	wzPerfEnd(PERF_START_FRAME);
 
 	/* This is done here as effects can light the terrain - pause mode problems though */
 	wzPerfBegin(PERF_EFFECTS, "3D scene - effects");
@@ -1043,7 +1032,9 @@ static void drawTiles(iView *player)
 	wzPerfEnd(PERF_TERRAIN);
 
 	// draw skybox
+	wzPerfBegin(PERF_SKYBOX, "3D scene - skybox");
 	renderSurroundings();
+	wzPerfEnd(PERF_SKYBOX);
 
 	// and prepare for rendering the models
 	wzPerfBegin(PERF_MODEL_INIT, "Draw 3D scene - model init");
@@ -1099,6 +1090,9 @@ static void drawTiles(iView *player)
 	/* Clear the matrix stack */
 	pie_MatEnd();
 	locateMouse();
+
+	pie_PerspectiveEnd();
+
 	wzPerfEnd(PERF_MODELS);
 }
 

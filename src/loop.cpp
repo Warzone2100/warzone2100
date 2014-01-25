@@ -324,6 +324,7 @@ static GAMECODE renderLoop()
 			}
 			displayWorld();
 		}
+		wzPerfBegin(PERF_GUI, "User interface");
 		/* Display the in game interface */
 		pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
 		pie_SetFogStatus(false);
@@ -340,6 +341,7 @@ static GAMECODE renderLoop()
 		}
 		pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
 		pie_SetFogStatus(true);
+		wzPerfEnd(PERF_GUI);
 	}
 
 	pie_GetResetCounts(&loopPieCount, &loopPolyCount, &loopStateChanges);
