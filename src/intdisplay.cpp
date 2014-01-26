@@ -875,6 +875,10 @@ void IntStatsButton::display(int xOffset, int yOffset)
 		{
 			object = ImdObject::DroidTemplate(Stat);
 		}
+		else if (StatIsFeature(Stat))
+		{
+			object = ImdObject::Feature(Stat);
+		}
 		else
 		{
 			compID = StatIsComponent(Stat); // This failes for viper body.
@@ -1537,6 +1541,31 @@ void IntFancyButton::displayIMD(Image image, ImdObject imdObject, int xOffset, i
 				scale = LARGE_STRUCT_SCALE;
 			}
 		}
+		else if (IMDType == IMDTYPE_FEATURE)
+		{
+			int imdRadius = ((iIMDShape *)Object)->radius;
+
+			if (imdRadius <= 40)
+			{
+				scale = ULTRA_SMALL_FEATURE_SCALE;
+			}
+			else if (imdRadius <= 64)
+			{
+				scale = REALLY_SMALL_FEATURE_SCALE;
+			}
+			else if (imdRadius <= 128)
+			{
+				scale = SMALL_FEATURE_SCALE;
+			}
+			else if (imdRadius <= 256)
+			{
+				scale = MED_FEATURE_SCALE;
+			}
+			else
+			{
+				scale = LARGE_FEATURE_SCALE;
+			}
+		}
 		else
 		{
 			Radius = ((iIMDShape *)Object)->sradius;
@@ -1588,6 +1617,10 @@ void IntFancyButton::displayIMD(Image image, ImdObject imdObject, int xOffset, i
 		else if (IMDType == IMDTYPE_STRUCTURESTAT)
 		{
 			displayStructureStatButton((STRUCTURE_STATS *)Object, &Rotation, &Position, scale);
+		}
+		else if (IMDType == IMDTYPE_FEATURE)
+		{
+			displayIMDButton((iIMDShape *)Object, &Rotation, &Position, scale);
 		}
 		else
 		{

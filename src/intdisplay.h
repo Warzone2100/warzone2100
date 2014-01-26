@@ -45,6 +45,7 @@ enum ImdType
 	IMDTYPE_STRUCTURE,
 	IMDTYPE_RESEARCH,
 	IMDTYPE_STRUCTURESTAT,
+	IMDTYPE_FEATURE,
 };
 
 struct ImdObject
@@ -56,6 +57,7 @@ struct ImdObject
 	static ImdObject Structure(BASE_OBJECT *p) { return ImdObject(p, IMDTYPE_STRUCTURE); }
 	static ImdObject Research(BASE_STATS *p) { return ImdObject(p, IMDTYPE_RESEARCH); }
 	static ImdObject StructureStat(BASE_STATS *p) { return ImdObject(p, IMDTYPE_STRUCTURESTAT); }
+	static ImdObject Feature(BASE_STATS *p) { FEATURE_STATS *fStat = (FEATURE_STATS *)p; return ImdObject(fStat->psImd, IMDTYPE_FEATURE); }
 
 	bool empty() const { return ptr == nullptr; }
 
