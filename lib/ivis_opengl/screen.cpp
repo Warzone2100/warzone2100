@@ -65,6 +65,9 @@ int wz_texture_compression = 0;
 #endif
 #ifndef GLEW_KHR_debug
 #define GLEW_KHR_debug false
+#define GL_DEBUG_SOURCE_APPLICATION 0x824A
+static void glPopDebugGroup() {}
+static void glPushDebugGroup(int, unsigned, unsigned, const char *) {}
 #endif
 
 static bool		bBackDrop = false;
