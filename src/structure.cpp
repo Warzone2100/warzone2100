@@ -91,6 +91,7 @@
 #include "gateway.h"
 
 #include "random.h"
+#include <functional>
 
 //Maximium slope of the terrin for building a structure
 #define MAX_INCLINE		50//80//40
