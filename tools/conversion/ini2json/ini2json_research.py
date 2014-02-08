@@ -9,6 +9,9 @@ if len(sys.argv) < 3:
 config = ConfigParser.ConfigParser()
 config.read(sys.argv[1])
 
+def lowcase_first_letter(s):
+    return s[0].lower() + s[1:]
+
 def is_number(s):
 	try:
 		int(s)
@@ -58,20 +61,20 @@ for section in config.sections():
 			tmp = {}
 			comps = result.split(':')
 			if comps[0].isupper():
-				tmp['weaponSubClass'] = comps[0]
+				tmp['filterWeaponSubClass'] = [ comps[0] ]
 			elif comps[0] in ['Cyborgs', 'Droids', 'Transport']:
-				tmp['bodyClass'] = comps[0]
+				tmp['filterBodyClass'] = [ comps[0] ]
 			elif comps[0] in ['Wall', 'Structure', 'Defense']:
-				tmp['structureType'] = comps[0]
+				tmp['filterStructureType'] = [ comps[0] ]
 			elif comps[0] in ['RearmPoints', 'ProductionPoints', 'ResearchPoints', 'RepairPoints', 'Sensor', 'ECM', 'PowerPoints', 'Construct']:
 				pass # affects a global state
 			else: # forgot something...
 				print 'Unknown filter: %s' % comps[0]
 				sys.exit(1)
 			if len(comps) > 2:
-				tmp[comps[1]] = int(comps[2])
+				tmp[lowcase_first_letter(comps[1])] = int(comps[2])
 			else:
-				tmp[comps[0]] = int(comps[1])
+				tmp[lowcase_first_letter(comps[0])] = int(comps[1])
 			accum.append(tmp)
 		entry['results'] = accum
 	entry['id'] = section # for backwards compatibility
