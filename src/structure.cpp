@@ -2236,28 +2236,24 @@ static bool structClearTile(UWORD x, UWORD y)
 	return true;
 }
 
-/*find a location near to a structure to start the droid of*/
+/* An auxiliary function for std::stable_sort in placeDroid */
+static bool comparePlacementPoints(Vector2i a, Vector2i b)
+{
+	return abs(a.x) + abs(a.y) < abs(b.x) + abs(b.y);
+}
+
+/* Find a location near to a structure to start the droid of */
 bool placeDroid(STRUCTURE *psStructure, UDWORD *droidX, UDWORD *droidY)
 {
-	SWORD			sx,sy, xmin,xmax, ymin,ymax, x,y, xmid;
-	bool			placed;
-	unsigned sWidth   = getStructureWidth(psStructure);
-	unsigned sBreadth = getStructureBreadth(psStructure);
 
 	CHECK_STRUCTURE(psStructure);
 
-	/* Get the tile coords for the top left of the structure */
-	sx = (SWORD)(psStructure->pos.x - sWidth * TILE_UNITS/2);
-	sx = map_coord(sx);
-	sy = (SWORD)(psStructure->pos.y - sBreadth * TILE_UNITS/2);
-	sy = map_coord(sy);
-
 	/* Find the four corners of the square */
-	xmin = (SWORD)(sx - 1);
-	xmax = (SWORD)(sx + sWidth);
-	xmid = (SWORD)(sx + (sWidth-1)/2);
-	ymin = (SWORD)(sy - 1);
-	ymax = (SWORD)(sy + sBreadth);
+	StructureBounds bounds = getStructureBounds(psStructure);
+	int xmin = bounds.map.x - 1;
+	int xmax = bounds.map.x + bounds.size.x;
+	int ymin = bounds.map.y - 1;
+	int ymax = bounds.map.y + bounds.size.y;
 	if (xmin < 0)
 	{
 		xmin = 0;
@@ -2275,73 +2271,86 @@ bool placeDroid(STRUCTURE *psStructure, UDWORD *droidX, UDWORD *droidY)
 		ymax = (SWORD)mapHeight;
 	}
 
-	/* Look for a clear location for the droid across the bottom */
-	/* start in the middle */
-	placed = false;
-	y = ymax;
-	/* middle to right */
-	for(x = xmid; x < xmax; x++)
+	/* Round direction to nearest 90°. */
+	uint16_t direction = (psStructure->rot.direction + 0x2000)&0xC000;
+
+	/* We sort all adjacent tiles by their Manhattan distance to the
+	target droid exit tile, misplaced by (1/3, 1/4) tiles.
+	Since only whole coordinates are sorted, this makes sure sorting
+	is deterministic. Target coordinates, multiplied by 12 to eliminate
+	floats, are stored in (sx, sy). */
+	int sx, sy;
+
+	if (direction == 0x0)
 	{
-		if (structClearTile(x, y))
-		{
-			placed = true;
-			break;
-		}
+		sx = 12 * (xmin + 1) + 4;
+		sy = 12 * ymax + 3;
 	}
-	/* left to middle */
-	if (!placed)
+	else if (direction == 0x4000)
 	{
-		for(x = xmin; x < xmid; x++)
-		{
-			if (structClearTile(x, y))
-			{
-				placed = true;
-				break;
-			}
-		}
+		sx = 12 * xmax + 3;
+		sy = 12 * (ymax - 1) - 4;
 	}
-	/* across the top */
-	if (!placed)
+	else if (direction == 0x8000)
 	{
-		y = ymin;
-		for(x = xmin; x < xmax; x++)
-		{
-			if (structClearTile(x, y))
-			{
-				placed = true;
-				break;
-			}
-		}
+		sx = 12 * (xmax - 1) - 4;
+		sy = 12 * ymin - 3;
 	}
-	/* the left */
-	if (!placed)
+	else
 	{
-		x = xmin;
-		for(y = ymin; y < ymax; y++)
+		sx = 12 * xmin - 3;
+		sy = 12 * (ymin + 1) + 4;
+	}
+
+	std::vector<Vector2i> tiles;
+	for (int x = xmin; x <= xmax; ++x)
+	{
+		for (int y = ymin; y <= ymax; ++y)
 		{
 			if (structClearTile(x, y))
 			{
-				placed = true;
-				break;
+				tiles.push_back(Vector2i(12 * x - sx, 12 * y - sy));
 			}
 		}
 	}
-	/* the right */
-	if (!placed)
+
+	if (tiles.size() == 0)
 	{
-		x = xmax;
-		for(y = ymin; y < ymax; y++)
-		{
-			if (structClearTile(x, y))
-			{
-				placed = true;
-				break;
-			}
-		}
+		return false;
 	}
-	*droidX = x;
-	*droidY = y;
-	return placed;
+
+	std::sort(tiles.begin(), tiles.end(), comparePlacementPoints);
+
+	/* Store best tile coordinates in (sx, sy),
+	which are also map coordinates of its north-west corner.
+	Store world coordinates of this tile's center in (wx, wy) */
+	sx = (tiles[0].x + sx) / 12;
+	sy = (tiles[0].y + sy) / 12;
+	int wx = world_coord(sx) + TILE_UNITS / 2;
+	int wy = world_coord(sy) + TILE_UNITS / 2;
+
+	/* Finally, find world coordinates of the structure point closest to (mx, my).
+	For simplicity, round to grid vertices. */
+	if (2 * sx <= xmin + xmax)
+	{
+		wx += TILE_UNITS / 2;
+	}
+	if (2 * sx >= xmin + xmax)
+	{
+		wx -= TILE_UNITS / 2;
+	}
+	if (2 * sy <= ymin + ymax)
+	{
+		wy += TILE_UNITS / 2;
+	}
+	if (2 * sy >= ymin + ymax)
+	{
+		wy -= TILE_UNITS / 2;
+	}
+
+	*droidX = wx;
+	*droidY = wy;
+	return true;
 }
 
 /* Place a newly manufactured droid next to a factory  and then send if off
@@ -2367,7 +2376,7 @@ static bool structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl, DR
 		//create a droid near to the structure
 		syncDebug("Placing new droid at (%d,%d)", x, y);
 		turnOffMultiMsg(true);
-		psNewDroid = buildDroid(psTempl, world_coord(x), world_coord(y), psStructure->player, false, &initialOrders);
+		psNewDroid = buildDroid(psTempl, x, y, psStructure->player, false, &initialOrders);
 		turnOffMultiMsg(false);
 		if (!psNewDroid)
 		{
