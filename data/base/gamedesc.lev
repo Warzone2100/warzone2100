@@ -10,10 +10,10 @@
 
 level		PROG
 data		"wrf/vidmem.wrf"
-data		"wrf/basic.wrf"
+data		"wrf/stats.wrf"
 data		"wrf/cam1.wrf"
 data		"wrf/audio.wrf"
-data		"wrf/stats.wrf"
+data		"wrf/basic.wrf"
 game		"multiplay/maps/4c-rush.gam"
 data		"wrf/prog.wrf"
 
@@ -22,11 +22,11 @@ data		"wrf/prog.wrf"
 
 campaign	CAM_TUT3
 data		"wrf/vidmem3.wrf"
-data		"wrf/basic.wrf"
+data		"wrf/stats.wrf"
 data		"wrf/tut.wrf"
 data 		"wrf/audio.wrf"
 data		"wrf/tutorial/tutaudio.wrf"
-data		"wrf/stats.wrf"
+data		"wrf/basic.wrf"
 data 		"wrf/cam1res.wrf"
 
 /* Tutorial Level 3 - Base Building. */
@@ -41,10 +41,10 @@ data		"wrf/tutorial/newtut.wrf"
 
 campaign	CAM_1
 data		"wrf/vidmem.wrf"
-data		"wrf/basic.wrf"
+data		"wrf/stats.wrf"
 data		"wrf/cam1.wrf"
 data		"wrf/audio.wrf"
-data		"wrf/stats.wrf"
+data		"wrf/basic.wrf"
 data		"wrf/cam1res.wrf"
 
 /* Campaign 1 now starts with 1A */
@@ -158,10 +158,10 @@ data		"wrf/cam1/cam1end.wrf"
 
 campaign	CAM_2
 data		"wrf/vidmem2.wrf"
-data		"wrf/basic.wrf"
+data		"wrf/stats.wrf"
 data		"wrf/cam2.wrf"
 data		"wrf/audio.wrf"
-data		"wrf/stats.wrf"
+data		"wrf/basic.wrf"
 data		"wrf/cam2res.wrf"
 
 camstart	CAM_2A
@@ -265,10 +265,10 @@ data		"wrf/cam2/cam2end.wrf"
 
 campaign	CAM_3
 data		"wrf/vidmem3.wrf"
-data		"wrf/basic.wrf"
+data		"wrf/stats.wrf"
 data		"wrf/cam3.wrf"
 data		"wrf/audio.wrf"
-data		"wrf/stats.wrf"
+data		"wrf/basic.wrf"
 data		"wrf/cam3res.wrf"
 
 camstart	CAM_3A
