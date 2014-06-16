@@ -207,10 +207,7 @@
 #  if !defined(__STDC__)
 #    define __STDC__ 1
 #  endif
-/* Visual C++.Net issues for _MSC_VER >= 1300 */
-#  if _MSC_VER >= 1300
-#    define WZ_CC_MSVC_NET
-#  endif
+
 /* Intel C++ disguising as Visual C++: the `using' keyword avoids warnings */
 #  if defined(__INTEL_COMPILER)
 #    define WZ_CC_INTEL
@@ -308,9 +305,10 @@
 
      98       - ISO/IEC 14882:1998 / C++98
 */
+// VS 2013 aka _MSC_VER == 1800 still has __cplusplus == 199711L for some odd reason.
 #if defined(__cplusplus)
 # define WZ_CXX98
-# if __cplusplus >= 201103L || defined(__GXX_EXPERIMENTAL_CXX0X__)
+# if __cplusplus >= 201103L || defined(__GXX_EXPERIMENTAL_CXX0X__) || (_MSC_VER >= 1800)
 #  define WZ_CXX11
 # endif
 #endif /* WZ_CXXxx */
@@ -384,7 +382,7 @@
  */
 #if WZ_CC_GNU_PREREQ(3,2) || WZ_CC_INTEL_PREREQ(10,0)
 #  define WZ_DECL_DEPRECATED __attribute__((__deprecated__))
-#elif defined(WZ_CC_MSVC) && defined(WZ_CC_MSVC_NET)
+#elif defined(WZ_CC_MSVC)
 #  define WZ_DECL_DEPRECATED __declspec(deprecated)
 #else
 #  define WZ_DECL_DEPRECATED
@@ -504,7 +502,7 @@
  */
 #if defined(WZ_C99) && WZ_CC_GNU_PREREQ(4,1) && !defined(WZ_CC_INTEL)
 #  define WZ_DECL_RESTRICT restrict
-#elif defined(WZ_CC_MSVC) && defined(WZ_CC_MSVC_NET)
+#elif defined(WZ_CC_MSVC)
 #  define WZ_DECL_RESTRICT __restrict
 #else
 #  define WZ_DECL_RESTRICT
@@ -592,8 +590,7 @@
 #ifndef PACKAGE
 # define PACKAGE "Warzone"
 #endif
-// Apparently flex declares isatty with C++ linkage on Windows. Don't ask why. Declaring here instead.
-//extern "C" int isatty(int);
+
 
 #  endif /* WZ_CC_MSVC */
 

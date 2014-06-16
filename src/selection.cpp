@@ -43,7 +43,7 @@
 #include "warcam.h"
 #include "display.h"
 #include "qtscript.h"
-
+#include <functional>
 
 template <typename T>
 static unsigned selSelectUnitsIf(unsigned player, T condition, bool onlyOnScreen)

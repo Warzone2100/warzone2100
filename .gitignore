@@ -257,6 +257,7 @@ data/config/*
 data/etc/*
 data/fonts/
 devpkg/*
+[Dd]ebug/
 *.opensdf
 *.aps
 *.sdf

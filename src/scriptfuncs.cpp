@@ -595,7 +595,7 @@ bool scrSeenStructInArea(void)
 		}
 
 		// possible skip walls
-		if (walls && (psCurr->pStructureType->type != REF_WALL  || psCurr->pStructureType->type != REF_WALLCORNER))
+		if (walls && (psCurr->pStructureType->type == REF_WALL || psCurr->pStructureType->type == REF_WALLCORNER))
 		{
 			continue;
 		}

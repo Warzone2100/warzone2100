@@ -47,8 +47,6 @@
 #include <vector>
 #include <algorithm>
 
-#include <GL/glext.h>
-
 #include <iostream>
 #include <string>
 #include <vector>
