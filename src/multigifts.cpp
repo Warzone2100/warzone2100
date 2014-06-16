@@ -608,11 +608,11 @@ void  technologyGiveAway(const STRUCTURE *pS)
  *  \param subType the type of feature to build
  *  \param x,y the coordinates to place the feature at
  */
-void sendMultiPlayerFeature(FEATURE_TYPE subType, uint32_t x, uint32_t y, uint32_t id)
+void sendMultiPlayerFeature(uint32_t ref, uint32_t x, uint32_t y, uint32_t id)
 {
 	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_DEBUG_ADD_FEATURE);
 	{
-		NETenum(&subType);
+		NETuint32_t(&ref);
 		NETuint32_t(&x);
 		NETuint32_t(&y);
 		NETuint32_t(&id);
@@ -622,13 +622,12 @@ void sendMultiPlayerFeature(FEATURE_TYPE subType, uint32_t x, uint32_t y, uint32
 
 void recvMultiPlayerFeature(NETQUEUE queue)
 {
-	FEATURE_TYPE subType = FEAT_TREE;  // Dummy initialisation.
-	uint32_t     x, y, id;
+	uint32_t ref = 0xff, x =0, y = 0, id = 0;
 	unsigned int i;
 
 	NETbeginDecode(queue, GAME_DEBUG_ADD_FEATURE);
 	{
-		NETenum(&subType);
+		NETuint32_t(&ref);
 		NETuint32_t(&x);
 		NETuint32_t(&y);
 		NETuint32_t(&id);
@@ -645,7 +644,7 @@ void recvMultiPlayerFeature(NETQUEUE queue)
 	for (i = 0; i < numFeatureStats; ++i)
 	{
 		// If we found the correct feature type
-		if (asFeatureStats[i].subType == subType)
+		if (asFeatureStats[i].ref == ref)
 		{
 			// Create a feature of the specified type at the given location
 			FEATURE *result = buildFeature(&asFeatureStats[i], x, y, false);

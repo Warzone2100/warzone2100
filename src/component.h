@@ -50,6 +50,11 @@ UDWORD getStructureStatSizeMax(STRUCTURE_STATS *Stats);
 #define SMALL_STRUCT_SCALE			(55)
 #define MED_STRUCT_SCALE			(25)//reduced from 30 to fit command centre in window
 #define LARGE_STRUCT_SCALE			(25)
+#define ULTRA_SMALL_FEATURE_SCALE	(146)
+#define REALLY_SMALL_FEATURE_SCALE	(116)
+#define SMALL_FEATURE_SCALE			(55)
+#define MED_FEATURE_SCALE			(26)
+#define LARGE_FEATURE_SCALE			(16)
 
 #define TOWER_HEIGHT    100
 UDWORD getStructureStatHeight(STRUCTURE_STATS *psStat);

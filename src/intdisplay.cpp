@@ -1113,8 +1113,14 @@ void intDisplayStatsButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_
 			}
 		} else if(Image >= 0) {
 			RenderImageToButton(IntImages,(UWORD)Image,Buffer,Down,TOPBUTTON);
-		} else {
-			RenderBlankToButton(Buffer,Down,TOPBUTTON);
+		} else
+		{
+			FEATURE_STATS *fStat = (FEATURE_STATS *)Stat;
+			Object = (void *)fStat->psImd;
+			Player = selectedPlayer;
+			IMDType = IMDTYPE_FEATURE;
+			RenderToButton(NULL, 0, Object, Player, Buffer, Down, IMDType, TOPBUTTON);
+			// NOTE: we would use  RenderBlankToButton(Buffer, Down, TOPBUTTON); when we don't want to show an image
 		}
 
 		RENDERBUTTON_INITIALISED(Buffer);
@@ -2379,6 +2385,36 @@ void CreateIMDButton(IMAGEFILE *ImageFile, UWORD ImageID, void *Object, UDWORD P
 			{
 				Size = 0;
 				scale = LARGE_STRUCT_SCALE;
+			}
+		}
+		else if (IMDType == IMDTYPE_FEATURE)
+		{
+			int imdRadius = ((iIMDShape *)Object)->radius;
+
+			if (imdRadius <= 40)
+			{
+				Size = 4;	// very, very small feature
+				scale = ULTRA_SMALL_FEATURE_SCALE;
+			}
+			else if (imdRadius <= 64)
+			{
+				Size = 3;	//really small feature
+				scale = REALLY_SMALL_FEATURE_SCALE;
+			}
+			else if (imdRadius <= 128)
+			{
+				Size = 2;	//small feature
+				scale = SMALL_FEATURE_SCALE;
+			}
+			else if (imdRadius <= 256)
+			{
+				Size = 1;	//med feature
+				scale = MED_FEATURE_SCALE;
+			}
+			else
+			{
+				Size = 0;	// large feature
+				scale = LARGE_FEATURE_SCALE;
 			}
 		}
 		else
