@@ -40,6 +40,7 @@
 #endif
 
 #if (!defined(WZ_C99) && !defined(__cplusplus) && !defined(WZ_CC_GNU)) || (defined _MSC_VER)
+#if (_MSC_VER <= 1600)
 # include <float.h>
 
 
@@ -88,6 +89,7 @@ static inline WZ_DECL_CONST float hypotf(float x, float y)
 {
 	return sqrtf(x * x + y * y);
 }
+#endif
 #endif
 #endif
 

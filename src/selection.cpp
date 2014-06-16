@@ -42,7 +42,7 @@
 #include "display3d.h"
 #include "warcam.h"
 #include "display.h"
-
+#include <functional>
 
 // ---------------------------------------------------------------------
 // Selects all units owned by the player - onscreen toggle.

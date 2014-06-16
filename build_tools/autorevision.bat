@@ -1,3 +1,5 @@
+setlocal
+set PATH=%PATH%;D:\Git\bin
 echo "Building autorevision.h... (msysgit must be in system path)"
 cd %1..\
 echo %1
@@ -14,4 +16,5 @@ echo "Failed! Is msysgit in your system path?"
 exit
 :good
 echo "File has been generated."
+endlocal
 exit

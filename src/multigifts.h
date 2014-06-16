@@ -36,7 +36,7 @@ extern bool recvGift                            (NETQUEUE queue);
 
 extern void technologyGiveAway				(const STRUCTURE* pS);
 extern void recvMultiPlayerFeature              (NETQUEUE queue);
-extern void sendMultiPlayerFeature(FEATURE_TYPE type, uint32_t x, uint32_t y, uint32_t id);
+extern void sendMultiPlayerFeature(uint32_t ref, uint32_t x, uint32_t y, uint32_t id);
 
 bool pickupArtefact(int toPlayer, int fromPlayer);
 extern bool	addOilDrum						(uint8_t count);
