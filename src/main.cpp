@@ -24,8 +24,8 @@
 // Get platform defines before checking for them!
 #include "lib/framework/wzapp.h"
 #include <QtCore/QTextCodec>
-#include <QtGui/QApplication>
-#include <QtGui/QMessageBox>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QMessageBox>
 
 #if defined(WZ_OS_WIN)
 #  include <shlobj.h> /* For SHGetFolderPath */
@@ -38,7 +38,6 @@
 #include "lib/framework/physfs_ext.h"
 #include "lib/exceptionhandler/exceptionhandler.h"
 #include "lib/exceptionhandler/dumpinfo.h"
-#include "lib/framework/wzfs.h"
 
 #include "lib/sound/playlist.h"
 #include "lib/gamelib/gtime.h"
@@ -140,22 +139,6 @@ static GS_GAMEMODE gameStatus = GS_TITLE_SCREEN;
 // Status of the gameloop
 static int gameLoopStatus = 0;
 static FOCUS_STATE focusState = FOCUS_IN;
-
-class PhysicsEngineHandler : public QAbstractFileEngineHandler
-{
-public:
-	QAbstractFileEngine *create(const QString &fileName) const;
-};
-
-inline QAbstractFileEngine *PhysicsEngineHandler::create(const QString &fileName) const
-{
-	if (fileName.toLower().startsWith("wz::"))
-	{
-		QString newPath = fileName;
-		return new PhysicsFileSystem(newPath.remove(0, 4));
-	}
-	return NULL;
-}
 
 extern void debug_callback_stderr( void**, const char * );
 extern void debug_callback_win32debug( void**, const char * );
@@ -1085,7 +1068,6 @@ int realmain(int argc, char *argv[])
 	{
 		return EXIT_FAILURE;
 	}
-	QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));	// make Qt treat all C strings in Warzone as UTF-8
 
 	setupExceptionHandler(utfargc, utfargv, version_getFormattedVersionString());
 
@@ -1157,8 +1139,6 @@ int realmain(int argc, char *argv[])
 	war_SetDefaultStates();
 
 	debug(LOG_MAIN, "initializing");
-
-	PhysicsEngineHandler engine;	// register abstract physfs filesystem
 
 	loadConfig();
 

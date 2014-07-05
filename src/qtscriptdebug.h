@@ -34,9 +34,9 @@ class QLineEdit;
 
 #include <QtCore/QHash>
 #include <QtCore/QSignalMapper>
-#include <QtGui/QDialog>
-#include <QtGui/QTableWidget>
-#include <QtGui/QTreeView>
+#include <QtWidgets/QDialog>
+#include <QtWidgets/QTableWidget>
+#include <QtWidgets/QTreeView>
 
 typedef QHash<QScriptEngine *, QStandardItemModel *> MODELMAP;
 typedef QHash<QScriptEngine *, QLineEdit *> EDITMAP;

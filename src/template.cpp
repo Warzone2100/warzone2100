@@ -96,32 +96,51 @@ bool researchedTemplate(DROID_TEMPLATE *psCurr, int player, bool allowRedundant,
 	return researchedEverything;
 }
 
+static DROID_TEMPLATE loadTemplateCommon(WzConfig &ini)
+{
+	DROID_TEMPLATE design;
+	QString droidType = ini.value("type").toString();
+
+	if (droidType == "PERSON") design.droidType = DROID_PERSON;
+	else if (droidType == "CYBORG") design.droidType = DROID_CYBORG;
+	else if (droidType == "CYBORG_SUPER") design.droidType = DROID_CYBORG_SUPER;
+	else if (droidType == "CYBORG_CONSTRUCT") design.droidType = DROID_CYBORG_CONSTRUCT;
+	else if (droidType == "CYBORG_REPAIR") design.droidType = DROID_CYBORG_REPAIR;
+	else if (droidType == "TRANSPORTER") design.droidType = DROID_TRANSPORTER;
+	else if (droidType == "SUPERTRANSPORTER") design.droidType = DROID_SUPERTRANSPORTER;
+	else if (droidType == "DROID") design.droidType = DROID_DEFAULT;
+	else ASSERT(false, "No such droid type \"%s\" for %s", droidType.toUtf8().constData(), getID(&design));
+
+	design.asParts[COMP_BODY] = getCompFromName(COMP_BODY, ini.value("body").toString());
+	design.asParts[COMP_BRAIN] = getCompFromName(COMP_BRAIN, ini.value("brain", QString("ZNULLBRAIN")).toString());
+	design.asParts[COMP_PROPULSION] = getCompFromName(COMP_PROPULSION, ini.value("propulsion", QString("ZNULLPROP")).toString());
+	design.asParts[COMP_REPAIRUNIT] = getCompFromName(COMP_REPAIRUNIT, ini.value("repair", QString("ZNULLREPAIR")).toString());
+	design.asParts[COMP_ECM] = getCompFromName(COMP_ECM, ini.value("ecm", QString("ZNULLECM")).toString());
+	design.asParts[COMP_SENSOR] = getCompFromName(COMP_SENSOR, ini.value("sensor", QString("ZNULLSENSOR")).toString());
+	design.asParts[COMP_CONSTRUCT] = getCompFromName(COMP_CONSTRUCT, ini.value("construct", QString("ZNULLCONSTRUCT")).toString());
+	QStringList weapons = ini.value("weapons").toStringList();
+	design.numWeaps = weapons.size();
+	design.asWeaps[0] = getCompFromName(COMP_WEAPON, weapons.value(0, QString("ZNULLWEAPON")));
+	design.asWeaps[1] = getCompFromName(COMP_WEAPON, weapons.value(1, QString("ZNULLWEAPON")));
+	design.asWeaps[2] = getCompFromName(COMP_WEAPON, weapons.value(2, QString("ZNULLWEAPON")));
+
+	return design;
+}
+
 bool initTemplates()
 {
-	WzConfig ini("userdata/" + QString(rulesettag) + "/templates.ini");
-	if (ini.status() != QSettings::NoError)
+	WzConfig ini("userdata/" + QString(rulesettag) + "/templates.json", WzConfig::ReadOnly);
+	if (!ini.status())
 	{
-		debug(LOG_FATAL, "Could not open templates.ini");
+		debug(LOG_FATAL, "Could not open %s", ini.fileName().toUtf8().constData());
 		return false;
 	}
 	QStringList list = ini.childGroups();
 	for (int i = 0; i < list.size(); ++i)
 	{
 		ini.beginGroup(list[i]);
-		DROID_TEMPLATE design;
-		design.droidType = (DROID_TYPE)ini.value("droidType").toInt();
+		DROID_TEMPLATE design = loadTemplateCommon(ini);
 		design.multiPlayerID = generateNewObjectId();
-		design.asParts[COMP_BODY] = getCompFromName(COMP_BODY, ini.value("body", QString("ZNULLBODY")).toString());
-		design.asParts[COMP_BRAIN] = getCompFromName(COMP_BRAIN, ini.value("brain", QString("ZNULLBRAIN")).toString());
-		design.asParts[COMP_PROPULSION] = getCompFromName(COMP_PROPULSION, ini.value("propulsion", QString("ZNULLPROP")).toString());
-		design.asParts[COMP_REPAIRUNIT] = getCompFromName(COMP_REPAIRUNIT, ini.value("repair", QString("ZNULLREPAIR")).toString());
-		design.asParts[COMP_ECM] = getCompFromName(COMP_ECM, ini.value("ecm", QString("ZNULLECM")).toString());
-		design.asParts[COMP_SENSOR] = getCompFromName(COMP_SENSOR, ini.value("sensor", QString("ZNULLSENSOR")).toString());
-		design.asParts[COMP_CONSTRUCT] = getCompFromName(COMP_CONSTRUCT, ini.value("construct", QString("ZNULLCONSTRUCT")).toString());
-		design.asWeaps[0] = getCompFromName(COMP_WEAPON, ini.value("weapon/1", QString("ZNULLWEAPON")).toString());
-		design.asWeaps[1] = getCompFromName(COMP_WEAPON, ini.value("weapon/2", QString("ZNULLWEAPON")).toString());
-		design.asWeaps[2] = getCompFromName(COMP_WEAPON, ini.value("weapon/3", QString("ZNULLWEAPON")).toString());
-		design.numWeaps = ini.value("weapons").toInt();
 		design.prefab = false;		// not AI template
 		design.stored = true;
 		if (!(asBodyStats + design.asParts[COMP_BODY])->designable
@@ -184,10 +203,10 @@ bool initTemplates()
 bool storeTemplates()
 {
 	// Write stored templates (back) to file
-	WzConfig ini("userdata/" + QString(rulesettag) + "/templates.ini");
-	if (ini.status() != QSettings::NoError || !ini.isWritable())
+	WzConfig ini("userdata/" + QString(rulesettag) + "/templates.json");
+	if (!ini.status() || !ini.isWritable())
 	{
-		debug(LOG_FATAL, "Could not open templates.ini");
+		debug(LOG_FATAL, "Could not open %s", ini.fileName().toUtf8().constData());
 		return false;
 	}
 	for (DROID_TEMPLATE *psCurr = apsDroidTemplates[selectedPlayer]; psCurr != NULL; psCurr = psCurr->psNext)
@@ -195,7 +214,18 @@ bool storeTemplates()
 		if (!psCurr->stored) continue; // not stored
 		ini.beginGroup("template_" + QString::number(psCurr->multiPlayerID));
 		ini.setValue("name", psCurr->name);
-		ini.setValue("droidType", psCurr->droidType);
+		switch (psCurr->droidType)
+		{
+		case DROID_PERSON: ini.setValue("type", "PERSON"); break;
+		case DROID_CYBORG: ini.setValue("type", "CYBORG"); break;
+		case DROID_CYBORG_SUPER: ini.setValue("type", "CYBORG_SUPER"); break;
+		case DROID_CYBORG_CONSTRUCT: ini.setValue("type", "CYBORG_CONSTRUCT"); break;
+		case DROID_CYBORG_REPAIR: ini.setValue("type", "CYBORG_REPAIR"); break;
+		case DROID_TRANSPORTER: ini.setValue("type", "TRANSPORTER"); break;
+		case DROID_SUPERTRANSPORTER: ini.setValue("type", "SUPERTRANSPORTER"); break;
+		case DROID_DEFAULT: ini.setValue("type", "DROID"); break;
+		default: ASSERT(false, "No such droid type \"%d\" for %s", psCurr->droidType, psCurr->name.toUtf8().constData());
+		}
 		ini.setValue("body", (asBodyStats + psCurr->asParts[COMP_BODY])->id);
 		ini.setValue("propulsion", (asPropulsionStats + psCurr->asParts[COMP_PROPULSION])->id);
 		if (psCurr->asParts[COMP_BRAIN] != 0)
@@ -249,7 +279,6 @@ DROID_TEMPLATE::DROID_TEMPLATE()  // This constructor replaces a memset in scrAs
 	std::fill_n(asWeaps, DROID_MAXWEAPS, 0);
 }
 
-/* load the Droid stats for the components from the Access database */
 bool loadDroidTemplates(const char *filename)
 {
 	WzConfig ini(filename, WzConfig::ReadOnlyAndRequired);
@@ -257,33 +286,10 @@ bool loadDroidTemplates(const char *filename)
 	for (int i = 0; i < list.size(); ++i)
 	{
 		ini.beginGroup(list[i]);
-		DROID_TEMPLATE design;
-		QString droidType = ini.value("type").toString();
+		DROID_TEMPLATE design = loadTemplateCommon(ini);
 		design.id = list[i];
 		design.name = ini.value("name").toString();
-		if (droidType == "PERSON") design.droidType = DROID_PERSON;
-		else if (droidType == "CYBORG") design.droidType = DROID_CYBORG;
-		else if (droidType == "CYBORG_SUPER") design.droidType = DROID_CYBORG_SUPER;
-		else if (droidType == "CYBORG_CONSTRUCT") design.droidType = DROID_CYBORG_CONSTRUCT;
-		else if (droidType == "CYBORG_REPAIR") design.droidType = DROID_CYBORG_REPAIR;
-		else if (droidType == "TRANSPORTER") design.droidType = DROID_TRANSPORTER;
-		else if (droidType == "SUPERTRANSPORTER") design.droidType = DROID_SUPERTRANSPORTER;
-		else if (droidType == "DROID") design.droidType = DROID_DEFAULT;
-		else ASSERT(false, "No such droid type \"%s\" for %s", droidType.toUtf8().constData(), getID(&design));
 		design.multiPlayerID = generateNewObjectId();
-		design.asParts[COMP_BODY] = getCompFromName(COMP_BODY, ini.value("compBody", "ZNULLBODY").toString());
-		design.asParts[COMP_BRAIN] = getCompFromName(COMP_BRAIN, ini.value("compBrain", "ZNULLBRAIN").toString());
-		design.asParts[COMP_REPAIRUNIT] = getCompFromName(COMP_REPAIRUNIT, ini.value("compRepair", "ZNULLREPAIR").toString());
-		design.asParts[COMP_CONSTRUCT] = getCompFromName(COMP_CONSTRUCT, ini.value("compConstruct", "ZNULLCONSTRUCT").toString());
-		design.asParts[COMP_ECM] = getCompFromName(COMP_ECM, ini.value("compECM", "ZNULLECM").toString());
-		design.asParts[COMP_SENSOR] = getCompFromName(COMP_SENSOR, ini.value("compSensor", "ZNULLSENSOR").toString());
-		design.asParts[COMP_PROPULSION] = getCompFromName(COMP_PROPULSION, ini.value("compPropulsion", "ZNULLPROP").toString());
-		QStringList weapons = ini.value("weapons").toStringList();
-		for (int j = 0; j < weapons.size(); j++)
-		{
-			design.asWeaps[j] = getCompFromName(COMP_WEAPON, weapons[j]);
-		}
-		design.numWeaps = weapons.size();
 		design.prefab = true;
 		design.stored = false;
 		design.enabled = true;

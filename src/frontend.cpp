@@ -295,7 +295,7 @@ static QList<CAMPAIGN_FILE> readCampaignFiles()
 		CAMPAIGN_FILE c;
 		QString filename("campaigns/");
 		filename += *i;
-		if (!filename.endsWith(".ini"))
+		if (!filename.endsWith(".json"))
 		{
 			continue;
 		}

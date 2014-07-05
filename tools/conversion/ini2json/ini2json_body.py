@@ -2,8 +2,8 @@ import ConfigParser
 import json
 import sys
 
-if len(sys.argv) < 4:
-	print 'Need body.ini, bodypropulsionimd.ini, and dictionary parameters'
+if len(sys.argv) < 3:
+	print 'Need body.ini and bodypropulsionimd.ini parameters'
 	sys.exit(1)
 
 config = ConfigParser.ConfigParser()
@@ -29,15 +29,9 @@ translation = {
 }
 
 data = {}
-fp = open(sys.argv[3])
-ids = json.load(fp)
 for section in config.sections():
-	name = config.get(section, 'name')
-	if name.startswith('"') and name.endswith('"'):
-		name = name[1:-1]
 	entry = {}
 	for opt in config.items(section):
-		if opt[0] == 'name': continue
 		key = opt[0]
 		if key in translation:
 			key = translation[key]
@@ -46,8 +40,6 @@ for section in config.sections():
 		for result in value: # convert numbers
 			if is_number(result):
 				accum.append(int(result))
-			elif result in ids:
-				accum.append(ids[result]) # change ID to real name
 			elif '.PIE' in result:
 				accum.append(result.lower())
 			else:
@@ -66,11 +58,9 @@ for section in config.sections():
 				key2 = l[0]
 				if key2 in translation:
 					key2 = translation[key2]
-				if key2 in ids:
-					key2 = ids[key2]
 				propmodels[key2] = models
 			entry['propulsionExtraModels'] = propmodels
-	entry['id'] = section # for backwards compatibility
-	data[name] = entry
-fp.close()
+	entry['id'] = section
+	assert not section in data, '%s conflicts' % section
+	data[section] = entry
 print json.dumps(data, indent=4, separators=(',', ': '), sort_keys=True)

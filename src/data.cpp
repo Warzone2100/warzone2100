@@ -289,14 +289,9 @@ static bool bufferSTERRTABLELoad(const char *fileName, void **ppData)
 	return true;
 }
 
-/* Load the body/propulsion IMDs stats */
+/* Load the body/propulsion IMDs stats -- FIXME, REMOVE IT, NOT USED */
 static bool bufferSBPIMDLoad(const char *fileName, void **ppData)
 {
-	if (!loadBodyPropulsionIMDs(fileName))
-	{
-		return false;
-	}
-
 	//not interested in this value
 	*ppData = NULL;
 	return true;

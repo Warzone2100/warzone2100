@@ -22,7 +22,7 @@
  * SDL backend code
  */
 
-#include <QtGui/QApplication>
+#include <QtWidgets/QApplication>
 #include "lib/framework/wzapp.h"
 #include "lib/framework/input.h"
 #include "lib/framework/utf.h"

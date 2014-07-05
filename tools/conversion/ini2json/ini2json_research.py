@@ -2,8 +2,8 @@ import ConfigParser
 import json
 import sys
 
-if len(sys.argv) < 3:
-	print 'Need file and dictionary parameters'
+if len(sys.argv) < 2:
+	print 'Need file parameters'
 	sys.exit(1)
 
 config = ConfigParser.ConfigParser()
@@ -20,16 +20,11 @@ def is_number(s):
 		return False
 
 data = {}
-fp = open(sys.argv[2])
-ids = json.load(fp)
 opts = ['researchPoints', 'researchPower', 'keyTopic', 'msgName', 'iconID', 'statID', 'requiredResearch', 'resultComponents', 
 	'techCode', 'imdName', 'subgroupIconID', 'requiredStructures', 'redStructures', 'redComponents', 'resultComponents',
-	'replacedComponents', 'resultStructures']
+	'replacedComponents', 'resultStructures', 'name']
 listopts = ['requiredResearch', 'resultComponents', 'requiredStructures', 'redStructures', 'redComponents', 'resultComponents', 'replacedComponents', 'resultStructures']
 for section in config.sections():
-	name = config.get(section, 'name')
-	if name.startswith('"') and name.endswith('"'):
-		name = name[1:-1]
 	entry = {}
 	for opt in opts:
 		if config.has_option(section, opt):
@@ -41,8 +36,6 @@ for section in config.sections():
 			for result in value: # convert numbers
 				if is_number(result):
 					accum.append(int(result))
-				elif result in ids:
-					accum.append(ids[result]) # change ID to real name
 				else:
 					accum.append(result)
 			if not opt in listopts:
@@ -69,7 +62,7 @@ for section in config.sections():
 			elif comps[0] in ['RearmPoints', 'ProductionPoints', 'ResearchPoints', 'RepairPoints', 'Sensor', 'ECM', 'PowerPoints', 'Construct']:
 				pass # affects a global state
 			else: # forgot something...
-				print 'Unknown filter: %s' % comps[0]
+				print >> sys.stderr, 'Unknown filter in %s: %s (%s)' % (section, comps[0], str(comps))
 				sys.exit(1)
 			if len(comps) > 2:
 				tmp[lowcase_first_letter(comps[1])] = int(comps[2])
@@ -78,6 +71,6 @@ for section in config.sections():
 			accum.append(tmp)
 		entry['results'] = accum
 	entry['id'] = section # for backwards compatibility
-	data[name] = entry
-fp.close()
+	assert not section in data, '%s conflicts' % section
+	data[section] = entry
 print json.dumps(data, indent=4, separators=(',', ': '), sort_keys=True)

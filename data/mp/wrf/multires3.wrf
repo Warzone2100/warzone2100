@@ -1,5 +1,5 @@
 directory	"stats"
-file		RESCH	"research.ini"
+file		RESCH	"research.json"
 directory	"multiplay/script"
 file		SCRIPT	"camtech.slo"
 directory	"multiplay/script"

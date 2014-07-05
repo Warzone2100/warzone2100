@@ -20,8 +20,8 @@
 #ifndef WZAPP_H
 #define WZAPP_H
 
-#include <QtGui/QApplication>
-#include <QtGui/QImage>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QImage>
 #include <QtCore/QBuffer>
 #include <QtCore/QTime>
 #include <QtCore/QThread>

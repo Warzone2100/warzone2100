@@ -21,7 +21,7 @@
 #ifndef __INCLUDED_SRC_CHALLENGE_H__
 #define __INCLUDED_SRC_CHALLENGE_H__
 
-#define CHALLENGE_SCORES "scores.ini"
+#define CHALLENGE_SCORES "scores.json"
 
 bool addChallenges(void);
 bool closeChallenges(void);

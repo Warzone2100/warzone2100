@@ -20,52 +20,33 @@
 #ifndef WZCONFIG_H
 #define WZCONFIG_H
 
-#include <QtCore/QSettings>
 #include <QtCore/QStringList>
+#include <QtCore/QVariant>
+#include <QtCore/QJsonDocument>
+#include <QtCore/QJsonObject>
 #include <physfs.h>
+#include <stdbool.h>
 
 // Get platform defines before checking for them.
 // Qt headers MUST come before platform specific stuff!
 #include "lib/framework/frame.h"
 #include "lib/framework/vector.h"
 
-// QSettings is totally the wrong class to use for this, but it is so shiny!
-// The amount of hacks needed are escalating. So clearly Something Needs To Be Done.
-class WzConfigHack
-{
-public:
-	WzConfigHack(const QString &fileName, int readOnly)
-	{
-		if (readOnly == 1 || PHYSFS_exists(fileName.toUtf8().constData())) return;
-		if (readOnly == 0)
-		{
-			PHYSFS_file *fileHandle = PHYSFS_openWrite(fileName.toUtf8().constData());
-			if (!fileHandle) debug(LOG_ERROR, "%s could not be created: %s", fileName.toUtf8().constData(), PHYSFS_getLastError());
-			PHYSFS_close(fileHandle);
-		}
-		else if (readOnly == 2 && !PHYSFS_exists(fileName.toUtf8().constData()))
-		{
-			debug(LOG_FATAL, "Could not find required file \"%s\"", fileName.toUtf8().constData());
-		}
-	}
-};
-
-class WzConfig : private WzConfigHack
+class WzConfig
 {
 private:
-	QSettings m_settings;
-	QMap<QString,QVariant> m_overrides;
-	
-	QString slashedGroup() const 
-	{
-		if (m_settings.group() == "") 
-			return "";
-		return m_settings.group()+"/";
-	}
+	QJsonDocument mJson;
+	QJsonObject mObj;
+	QString mName;
+	QList<QJsonObject> mObjStack;
+	QStringList mObjNameStack;
+	QString mFilename;
+	bool mStatus;
 
 public:
 	enum warning { ReadAndWrite, ReadOnly, ReadOnlyAndRequired };
 	WzConfig(const QString &name, WzConfig::warning warning = ReadAndWrite, QObject *parent = 0);
+	~WzConfig();
 
 	Vector3f vector3f(const QString &name);
 	void setVector3f(const QString &name, const Vector3f &v);
@@ -79,34 +60,13 @@ public:
 	bool contains(const QString &key) const;
 	QVariant value(const QString &key, const QVariant &defaultValue = QVariant()) const;
 
-	void beginGroup(const QString &prefix)
-	{
-		m_settings.beginGroup(prefix);
-	}
-	void endGroup()
-	{
-		m_settings.endGroup();
-	}
-	QString fileName() const
-	{
-		return m_settings.fileName();
-	}
-	bool isWritable() const
-	{
-		return m_settings.isWritable();
-	}
-	void setValue(const QString &key, const QVariant &value) 
-	{
-		m_settings.setValue(key,value);
-	}
-	QSettings::Status status() const
-	{
-		return m_settings.status();
-	}
-	QString group()
-	{
-		return m_settings.group();
-	}
+	void beginGroup(const QString &prefix);
+	void endGroup();
+	QString fileName() const { return mFilename; }
+	bool isWritable() const { return true; } // FIXME
+	void setValue(const QString &key, const QVariant &value);
+	QString group() { return mName; }
+	bool status() { return mStatus; }
 };
 
 #endif

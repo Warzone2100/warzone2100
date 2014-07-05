@@ -20,7 +20,7 @@
 #define GLX_SWAP_INTERVAL_EXT 0x20F1
 #endif // GLX_SWAP_INTERVAL_EXT
 
-#include <QtGui/QX11Info>
+#include <QtWidgets/QX11Info>
 #include <QtOpenGL/QGLWidget>
 
 

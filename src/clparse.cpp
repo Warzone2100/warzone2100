@@ -69,6 +69,7 @@ typedef struct _poptContext
 } *poptContext;
 
 /// TODO: Find a way to use the real qFatal from Qt
+#undef qFatal
 #define qFatal(...) { fprintf(stderr, __VA_ARGS__); fprintf(stderr, "\n"); exit(1); }
 
 static void poptPrintHelp(poptContext ctx, FILE *output, WZ_DECL_UNUSED int unused)

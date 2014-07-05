@@ -441,17 +441,11 @@ bool loadStructureStats(QString filename)
 	QStringList list = ini.childGroups();
 	asStructureStats = new STRUCTURE_STATS[list.size()];
 	numStructureStats = list.size();
-	QHash<QString,int> checkIDdict;
 	for (int inc = 0; inc < list.size(); ++inc)
 	{
 		ini.beginGroup(list[inc]);
 		STRUCTURE_STATS *psStats = &asStructureStats[inc];
-		psStats->name = ini.value("name").toString();
-		psStats->id = list[inc];
-
-		// check that the name has not been used already
-		ASSERT_OR_RETURN(false, !checkIDdict.contains(getID(psStats)), "Structure ID '%s' used already", getID(psStats));
-		checkIDdict.insert(psStats->id, inc);
+		loadStats(ini, psStats, inc);
 
 		psStats->ref = REF_STRUCTURE_START + inc;
 
@@ -4769,13 +4763,10 @@ bool destroyStruct(STRUCTURE *psDel, unsigned impactTime)
 return the first one it finds!! */
 int32_t getStructStatFromName(char const *pName)
 {
-	for (int inc = 0; inc < numStructureStats; inc++)
+	BASE_STATS *psStat = getCompStatsFromName(pName);
+	if (psStat)
 	{
-		STRUCTURE_STATS *psStat = &asStructureStats[inc];
-		if (psStat->id.compare(pName) == 0)
-		{
-			return inc;
-		}
+		return psStat->index;
 	}
 	return -1;
 }

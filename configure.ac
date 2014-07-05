@@ -13,8 +13,8 @@ AC_CONFIG_SRCDIR([lib/framework/frame.cpp])
 # HACK
 # Workaround stupid autoconf CFLAGS default
 # (Bash considers set but empty variables different from null for the ${VAR:+alt} operator)
-CFLAGS="${CFLAGS}"
-CXXFLAGS="${CXXFLAGS}"
+CFLAGS="${CFLAGS} -fPIC"
+CXXFLAGS="${CXXFLAGS} -fPIC"
 
 
 # Make cross compilation options available in --help
@@ -91,22 +91,22 @@ AM_CONDITIONAL([BACKEND_SDL], test "$backend" = "sdl")
 # Check for Qt
 if test "$backend" = "qt"; then
 	AC_MSG_RESULT([Qt])
-	PKG_CHECK_MODULES(QT4, QtCore QtGui QtOpenGL QtNetwork QtScript,,[:])
+	PKG_CHECK_MODULES(QT5, Qt5Core Qt5Gui Qt5Widgets Qt5Network Qt5Script Qt5OpenGL,,[:])
 else
 	AC_MSG_RESULT([SDL])
-	PKG_CHECK_MODULES(QT4, QtCore QtGui QtNetwork QtScript,,[:])
+	PKG_CHECK_MODULES(QT5, Qt5Core Qt5Gui Qt5Widgets Qt5Network Qt5Script,,[:])
 fi
 if test "$pkg_failed" = "yes" ; then
 	AC_MSG_ERROR([Qt not found - required!])
 fi
-QT4_INCLUDES=$QT4_FRONTEND_CFLAGS
-QT4_LDFLAGS=$QT4_FRONTEND_LIBS
-QT4_LIB=$QT4_FRONTEND_LIBS
-QT4_VERSION=`$PKG_CONFIG --modversion QtCore`
-AC_SUBST(QT4_VERSION)
-AC_PATH_PROGS(MOC4, [moc-qt4 moc])
-AC_PATH_PROGS(UIC4, [uic-qt4 uic])
-AC_PATH_PROGS(RCC4, [rcc-qt4 rcc])
+QT5_INCLUDES=$QT5_FRONTEND_CFLAGS
+QT5_LDFLAGS=$QT5_FRONTEND_LIBS
+QT5_LIB=$QT5_FRONTEND_LIBS
+QT5_VERSION=`$PKG_CONFIG --modversion Qt5Core`
+AC_SUBST(QT5_VERSION)
+AC_PATH_PROGS(MOC5, [moc-qt5 moc])
+AC_PATH_PROGS(UIC5, [uic-qt5 uic])
+AC_PATH_PROGS(RCC5, [rcc-qt5 rcc])
 
 # Check for compiler
 case ${CC} in
@@ -267,7 +267,7 @@ AX_C_CHECK_FLAG([-Werror -Wno-enum-compare], , , CFLAGS_IGNORE_WARNINGS="${CFLAG
 WZ_CPPFLAGS="${WZ_CPPFLAGS} -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS"
 
 # zlib
-LDFLAGS="-lz ${LDFLAGS}"
+LDFLAGS="-lz ${LDFLAGS} -fPIC"
 
 if test "x$enable_warnings" = "xyes" ; then
 	# Only disable -Werror for the warning.

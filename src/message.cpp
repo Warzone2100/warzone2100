@@ -706,8 +706,6 @@ const char *loadResearchViewData(const char* fileName)
 		for (int j = 0; j < v->textMsg.size(); j++)
 		{
 			v->textMsg[j].remove('\t');
-			v->textMsg[j].remove(0, 2); // initial _(
-			v->textMsg[j].remove(v->textMsg[j].length() - 1, 1); // final )
 			v->textMsg[j] = QString(_(v->textMsg[j].toUtf8().constData()));
 			v->textMsg[j].replace("%%", "%");
 		}

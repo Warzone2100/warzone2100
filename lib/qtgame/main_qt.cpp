@@ -21,7 +21,7 @@
  *
  * Qt backend
  */
-#include <QtGui/QMessageBox>
+#include <QtWidgets/QMessageBox>
 
 #include "lib/framework/frame.h"
 #include "lib/ivis_opengl/pieclip.h"

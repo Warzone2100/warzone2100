@@ -1,6 +1,6 @@
-AM_CPPFLAGS = $(SDL_CFLAGS) $(WZ_CPPFLAGS) $(QT4_CFLAGS)
+AM_CPPFLAGS = $(SDL_CFLAGS) $(WZ_CPPFLAGS) $(QT5_CFLAGS)
 AM_CFLAGS = $(WZ_CFLAGS)
-AM_CXXFLAGS = $(WZ_CXXFLAGS) $(QT4_CFLAGS)
+AM_CXXFLAGS = $(WZ_CXXFLAGS) $(QT5_CFLAGS)
 
 # Signals/slots
 MOCHEADER = \
@@ -17,7 +17,7 @@ MOCHEADER = \
 	widgint.h
 MOCEDFILES = $(MOCHEADER:%.h=%_moc.cpp)
 %_moc.cpp: %.h
-	$(MOC4) -o $@ $<
+	$(MOC5) -o $@ $<
 CLEANFILES = \
 	$(MOCEDFILES)
 

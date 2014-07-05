@@ -296,7 +296,7 @@ void loadMultiScripts()
 	sstrcpy(aFileName, psLevel->apDataFiles[psLevel->game]);
 	aFileName[strlen(aFileName) - 4] = '\0';
 	sstrcpy(aPathName, aFileName);
-	sstrcat(aFileName, ".ini");
+	sstrcat(aFileName, ".json");
 	sstrcat(aPathName, "/");
 
 	// Reset assigned counter
@@ -307,9 +307,9 @@ void loadMultiScripts()
 	}
 
 	// Load map scripts
-	WzConfig ini(ininame, WzConfig::ReadOnly);
 	if (PHYSFS_exists(ininame))
 	{
+		WzConfig ini(ininame, WzConfig::ReadOnly);
 		debug(LOG_SAVE, "Loading map scripts");
 		ini.beginGroup("scripts");
 		if (ini.contains("extra"))
@@ -351,6 +351,7 @@ void loadMultiScripts()
 		{
 			if (PHYSFS_exists(ininame)) // challenge file may override AI
 			{
+				WzConfig ini(ininame, WzConfig::ReadOnly);
 				ini.beginGroup("player_" + QString::number(i + 1));
 				if (ini.contains("ai"))
 				{
@@ -656,11 +657,10 @@ void readAIs()
 	{
 		char path[PATH_MAX];
 		// See if this filename contains the extension we're looking for
-		if (!strstr(*i, ".ai"))
+		if (!strstr(*i, ".json"))
 		{
 			continue;
 		}
-
 		sstrcpy(path, basepath);
 		sstrcat(path, *i);
 		WzConfig aiconf(path, WzConfig::ReadOnly);
@@ -681,6 +681,7 @@ void readAIs()
 		{
 			aidata.push_back(ai);
 		}
+		aiconf.endGroup();
 	}
 	PHYSFS_freeList(files);
 }
@@ -2729,7 +2730,7 @@ static void loadMapSettings1()
 	ASSERT_OR_RETURN(, psLevel, "No level found for %s", game.map);
 	sstrcpy(aFileName, psLevel->apDataFiles[psLevel->game]);
 	aFileName[strlen(aFileName) - 4] = '\0';
-	sstrcat(aFileName, ".ini");
+	sstrcat(aFileName, ".json");
 	WzConfig ini(ininame, WzConfig::ReadOnly);
 
 	if (!PHYSFS_exists(ininame))
@@ -2768,13 +2769,13 @@ static void loadMapSettings2()
 	ASSERT_OR_RETURN(, psLevel, "No level found for %s", game.map);
 	sstrcpy(aFileName, psLevel->apDataFiles[psLevel->game]);
 	aFileName[strlen(aFileName) - 4] = '\0';
-	sstrcat(aFileName, ".ini");
-	WzConfig ini(ininame, WzConfig::ReadOnly);
+	sstrcat(aFileName, ".json");
 
 	if (!PHYSFS_exists(ininame))
 	{
 		return;
 	}
+	WzConfig ini(ininame, WzConfig::ReadOnly);
 	int offbyone = 0; // for compatibility with 3.1 and earlier challenges
 
 	ini.beginGroup("challenge"); // backwards compatibility mode

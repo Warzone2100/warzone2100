@@ -254,7 +254,6 @@ void createLimitSet(void)
 	freeLimitSet();
 
 	// don't bother creating if a challenge mode is active
-	// there are no settings loaded from the .ini file for now...
 	if (challengeActive)
 	{
 		return;

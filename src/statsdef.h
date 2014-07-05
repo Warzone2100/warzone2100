@@ -236,11 +236,12 @@ enum TRAVEL_MEDIUM
 /* Stats common to all stats structs */
 struct BASE_STATS
 {
-	BASE_STATS(unsigned ref = 0) : ref(ref) {}
+	BASE_STATS(unsigned ref = 0) : ref(ref), index(0) {}
 
 	UDWORD	ref;    /**< Unique ID of the item */
 	QString id;     /**< Text id (i.e. short language-independant name) */
 	QString name;   /**< Full / real name of the item */
+	int	index;	///< Index into containing array
 };
 
 #define getName(_psStats) (_psStats)->name.toUtf8().constData()
@@ -250,7 +251,7 @@ struct BASE_STATS
 struct COMPONENT_STATS : public BASE_STATS
 {
 	COMPONENT_STATS() : buildPower(0), buildPoints(0), weight(0), body(0), designable(false), pIMD(NULL),
-	                    compType(COMP_NUMCOMPONENTS), index(0) {}
+	                    compType(COMP_NUMCOMPONENTS) {}
 
 	UDWORD		buildPower;			/**< Power required to build the component */
 	UDWORD		buildPoints;		/**< Time required to build the component */
@@ -259,7 +260,6 @@ struct COMPONENT_STATS : public BASE_STATS
 	bool		designable;			/**< flag to indicate whether this component can be used in the design screen */
 	iIMDShape	*pIMD;				/**< The IMD to draw for this component */
 	COMPONENT_TYPE	compType;
-	int		index;				///< Index into containing array
 };
 
 struct PROPULSION_STATS : public COMPONENT_STATS

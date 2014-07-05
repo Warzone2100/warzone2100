@@ -4,4 +4,4 @@
 
 
 directory 	"stats"
-file		RESCH	"research_cam3.ini"
+file		RESCH	"research_cam3.json"

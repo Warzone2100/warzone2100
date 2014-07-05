@@ -3,4 +3,4 @@
 /*******************       wrf/cam1res.wrf      *******************/
 
 directory 	"stats"
-file		RESCH	"research_cam1.ini"
+file		RESCH	"research_cam1.json"

@@ -30,7 +30,6 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/strres.h"
 #include "lib/framework/frameresource.h"
-#include "lib/framework/wzconfig.h"
 #include "lib/gamelib/gtime.h"
 #include "objects.h"
 #include "stats.h"
@@ -88,7 +87,7 @@ UBYTE		*apCompLists[MAX_PLAYERS][COMP_NUMCOMPONENTS];
 //store for each players Structure states
 UBYTE		*apStructTypeLists[MAX_PLAYERS];
 
-QHash<QString, COMPONENT_STATS *> lookupStatPtr;
+static QHash<QString, BASE_STATS *> lookupStatPtr;
 
 static bool getMovementModel(const char *movementModel, MOVEMENT_MODEL *model);
 static bool statsGetAudioIDFromString(const QString &szStatName, const QString &szWavName, int *piWavID);
@@ -260,31 +259,36 @@ bool statsAllocConstruct(UDWORD	numStats)
 *		Load stats functions
 *******************************************************************************/
 
-static iIMDShape *statsGetIMD(WzConfig &ini, BASE_STATS *psStats, QString key, int index = 0)
+static iIMDShape *statsGetIMD(WzConfig &json, BASE_STATS *psStats, QString key, int index = 0)
 {
 	iIMDShape *retval = NULL;
-	if (ini.contains(key))
+	if (json.contains(key))
 	{
-		QStringList values = ini.value(key).toStringList();
+		QStringList values = json.value(key).toStringList();
 		if (values.size() > index && values[index].compare("0") != 0)
 		{
 			retval = modelGet(values[index]);
 			ASSERT(retval != NULL, "Cannot find the PIE model %s for stat %s in %s",
-			       values[index].toUtf8().constData(), getName(psStats), ini.fileName().toUtf8().constData());
+			       values[index].toUtf8().constData(), getName(psStats), json.fileName().toUtf8().constData());
 		}
 	}
 	return retval;
 }
 
-void loadCompStats(WzConfig &ini, COMPONENT_STATS *psStats, int index)
+void loadStats(WzConfig &json, BASE_STATS *psStats, int index)
 {
-	psStats->name = ini.value("name").toString();
-	psStats->id = ini.group();
-	psStats->buildPower = ini.value("buildPower", 0).toUInt();
-	psStats->buildPoints = ini.value("buildPoints", 0).toUInt();
+	psStats->id = json.group();
+	psStats->name = json.value("name").toString();
 	psStats->index = index;
-	ASSERT(!lookupStatPtr.contains(psStats->id), "Duplicate ID found! (%s)", getID(psStats));
+	ASSERT(!lookupStatPtr.contains(psStats->id), "Duplicate ID found! (%s)", psStats->id.toUtf8().constData());
 	lookupStatPtr.insert(psStats->id, psStats);
+}
+
+static void loadCompStats(WzConfig &json, COMPONENT_STATS *psStats, int index)
+{
+	loadStats(json, psStats, index);
+	psStats->buildPower = json.value("buildPower", 0).toUInt();
+	psStats->buildPoints = json.value("buildPoints", 0).toUInt();
 }
 
 /*Load the weapon stats from the file exported from Access*/
@@ -497,7 +501,6 @@ bool loadWeaponStats(const char *pFileName)
 	return true;
 }
 
-/*Load the Body stats from the file exported from Access*/
 bool loadBodyStats(const char *pFileName)
 {
 	WzConfig ini(pFileName, WzConfig::ReadOnlyAndRequired);
@@ -575,6 +578,74 @@ bool loadBodyStats(const char *pFileName)
 			setMaxComponentWeight(psStats->weight);
 		}
 	}
+
+	// now get the extra stuff ... hack it together with above later, moved here from
+	// separate function
+
+	// allocate space
+	for (int numStats = 0; numStats < numBodyStats; ++numStats)
+	{
+		BODY_STATS *psBodyStat = &asBodyStats[numStats];
+		psBodyStat->ppIMDList.resize(numPropulsionStats * NUM_PROP_SIDES, NULL);
+		psBodyStat->ppMoveIMDList.resize(numPropulsionStats * NUM_PROP_SIDES, NULL);
+		psBodyStat->ppStillIMDList.resize(numPropulsionStats * NUM_PROP_SIDES, NULL);
+	}
+	debug(LOG_ERROR, "found %d bodies", numBodyStats);
+	for (int i = 0; i < list.size(); ++i)
+	{
+		QString propulsionName, leftIMD, rightIMD;
+		BODY_STATS *psBodyStat = NULL;
+		int numStats;
+
+		ini.beginGroup(list[i]);
+		if (!ini.contains("propulsionExtraModels"))
+		{
+			debug(LOG_ERROR, "skipping %s", list[i].toUtf8().constData());
+			ini.endGroup();
+			continue;
+		}
+		ini.beginGroup("propulsionExtraModels");
+		//get the body stats
+		for (numStats = 0; numStats < numBodyStats; ++numStats)
+		{
+			psBodyStat = &asBodyStats[numStats];
+			if (list[i].compare(psBodyStat->id) == 0)
+			{
+				break;
+			}
+		}
+		if (numStats == numBodyStats) // not found
+		{
+			debug(LOG_FATAL, "Invalid body name %s", list[i].toUtf8().constData());
+			return false;
+		}
+		debug(LOG_ERROR, "%s --> %d [%d, %p]", list[i].toUtf8().constData(), psBodyStat->base.body, numStats, psBodyStat);
+		QStringList keys = ini.childKeys();
+		for (int j = 0; j < keys.size(); j++)
+		{
+			for (numStats = 0; numStats < numPropulsionStats; numStats++)
+			{
+				PROPULSION_STATS *psPropulsionStat = &asPropulsionStats[numStats];
+				if (keys[j].compare(psPropulsionStat->id) == 0)
+				{
+					break;
+				}
+			}
+			if (numStats == numPropulsionStats)
+			{
+				debug(LOG_FATAL, "Invalid propulsion name %s", keys[j].toUtf8().constData());
+				return false;
+			}
+			//allocate the left and right propulsion IMDs + movement and standing still animations
+			psBodyStat->ppIMDList[numStats * NUM_PROP_SIDES + LEFT_PROP] = statsGetIMD(ini, psBodyStat, keys[j], 0);
+			psBodyStat->ppIMDList[numStats * NUM_PROP_SIDES + RIGHT_PROP] = statsGetIMD(ini, psBodyStat, keys[j], 1);
+			psBodyStat->ppMoveIMDList[numStats] = statsGetIMD(ini, psBodyStat, keys[j], 2);
+			psBodyStat->ppStillIMDList[numStats] = statsGetIMD(ini, psBodyStat, keys[j], 3);
+		}
+		ini.endGroup();
+		ini.endGroup();
+	}
+
 	return true;
 }
 
@@ -1070,71 +1141,6 @@ bool loadTerrainTable(const char *pFileName)
 	return true;
 }
 
-/* load the IMDs to use for each body-propulsion combination */
-bool loadBodyPropulsionIMDs(const char *pFileName)
-{
-	BODY_STATS *psBodyStat = asBodyStats;
-	unsigned int i, numStats;
-	QString propulsionName, leftIMD, rightIMD;
-
-	// check that the body and propulsion stats have already been read in
-	ASSERT(asBodyStats != NULL, "Body Stats have not been set up");
-	ASSERT(asPropulsionStats != NULL, "Propulsion Stats have not been set up");
-
-	// allocate space
-	for (numStats = 0; numStats < numBodyStats; ++numStats)
-	{
-		psBodyStat = &asBodyStats[numStats];
-		psBodyStat->ppIMDList.resize(numPropulsionStats * NUM_PROP_SIDES, NULL);
-		psBodyStat->ppMoveIMDList.resize(numPropulsionStats * NUM_PROP_SIDES, NULL);
-		psBodyStat->ppStillIMDList.resize(numPropulsionStats * NUM_PROP_SIDES, NULL);
-	}
-	WzConfig ini(pFileName, WzConfig::ReadOnlyAndRequired);
-	QStringList list = ini.childGroups();
-	for (i = 0; i < list.size(); ++i)
-	{
-		ini.beginGroup(list[i]);
-		//get the body stats
-		for (numStats = 0; numStats < numBodyStats; ++numStats)
-		{
-			psBodyStat = &asBodyStats[numStats];
-			if (list[i].compare(psBodyStat->id) == 0)
-			{
-				break;
-			}
-		}
-		if (numStats == numBodyStats) // not found
-		{
-			debug(LOG_FATAL, "Invalid body name %s", list[i].toUtf8().constData());
-			return false;
-		}
-		QStringList keys = ini.childKeys();
-		for (int j = 0; j < keys.size(); j++)
-		{
-			for (numStats = 0; numStats < numPropulsionStats; numStats++)
-			{
-				PROPULSION_STATS *psPropulsionStat = &asPropulsionStats[numStats];
-				if (keys[j].compare(psPropulsionStat->id) == 0)
-				{
-					break;
-				}
-			}
-			if (numStats == numPropulsionStats)
-			{
-				debug(LOG_FATAL, "Invalid propulsion name %s", keys[j].toUtf8().constData());
-				return false;
-			}
-			//allocate the left and right propulsion IMDs + movement and standing still animations
-			psBodyStat->ppIMDList[numStats * NUM_PROP_SIDES + LEFT_PROP] = statsGetIMD(ini, psBodyStat, keys[j], 0);
-			psBodyStat->ppIMDList[numStats * NUM_PROP_SIDES + RIGHT_PROP] = statsGetIMD(ini, psBodyStat, keys[j], 1);
-			psBodyStat->ppMoveIMDList[numStats] = statsGetIMD(ini, psBodyStat, keys[j], 2);
-			psBodyStat->ppStillIMDList[numStats] = statsGetIMD(ini, psBodyStat, keys[j], 3);
-		}
-		ini.endGroup();
-	}
-	return(true);
-}
-
 static bool statsGetAudioIDFromString(const QString &szStatName, const QString &szWavName, int *piWavID)
 {
 	if (szWavName.compare("-1") == 0)
@@ -1375,12 +1381,16 @@ UDWORD statRefStart(UDWORD stat)
 	return start;
 }
 
-/// Get the component index for a stat based on the name, and verify correct type
 int getCompFromName(COMPONENT_TYPE compType, const QString &name)
 {
-	COMPONENT_STATS *psComp = lookupStatPtr.value(name, NULL);
-	ASSERT_OR_RETURN(-1, psComp, "No such component [%s] found", name.toUtf8().constData());
-	ASSERT_OR_RETURN(-1, compType == psComp->compType, "Wrong component type for %s", name.toUtf8().constData());
+	return getCompFromID(compType, name);
+}
+
+int getCompFromID(COMPONENT_TYPE compType, const QString &name)
+{
+	COMPONENT_STATS *psComp = (COMPONENT_STATS *)lookupStatPtr.value(name, NULL);
+	ASSERT_OR_RETURN(-1, psComp, "No such component ID [%s] found", name.toUtf8().constData());
+	ASSERT_OR_RETURN(-1, compType == psComp->compType, "Wrong component type for ID %s", name.toUtf8().constData());
 	return psComp->index;
 }
 
@@ -1388,7 +1398,16 @@ int getCompFromName(COMPONENT_TYPE compType, const QString &name)
 /// Returns NULL if record not found
 COMPONENT_STATS *getCompStatsFromName(const QString &name)
 {
-	return lookupStatPtr.value(name, NULL);
+	COMPONENT_STATS *psComp = (COMPONENT_STATS *)lookupStatPtr.value(name, NULL);
+	/*if (!psComp)
+	{
+		debug(LOG_ERROR, "Not found: %s", name.toUtf8().constData());
+		foreach(BASE_STATS *psStat, lookupStatPtr)
+		{
+			debug(LOG_ERROR, "    %s", psStat->name.toUtf8().constData());
+		}
+	}*/
+	return psComp;
 }
 
 /*sets the store to the body size based on the name passed in - returns false

@@ -4,11 +4,11 @@
 /**********       WRF\limiter_data.wrf       ***************/
 
 directory	"stats"
-file		SWEAPON		"weapons.ini"
-file		SSENSOR		"sensor.ini"
-file		SECM		"ecm.ini"
-file		SREPAIR		"repair.ini"
-file		SSTRUCT		"structure.ini"
+file		SWEAPON		"weapons.json"
+file		SSENSOR		"sensor.json"
+file		SECM		"ecm.json"
+file		SREPAIR		"repair.json"
+file		SSTRUCT		"structure.json"
 directory	"multiplay/script"
 file		SCRIPT		"multilim.slo"
 file		SCRIPTVAL	"multilim.vlo"

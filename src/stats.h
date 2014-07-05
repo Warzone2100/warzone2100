@@ -23,6 +23,8 @@
 #ifndef __INCLUDED_SRC_STATS_H__
 #define __INCLUDED_SRC_STATS_H__
 
+#include "lib/framework/wzconfig.h"
+
 #include <utility>
 
 #include "objectdef.h"
@@ -125,6 +127,8 @@ extern bool statsAllocConstruct(UDWORD numEntries);
 /*******************************************************************************
 *		Load stats functions
 *******************************************************************************/
+void loadStats(WzConfig &json, BASE_STATS *psStats, int index);
+
 /* Return the number of newlines in a file buffer */
 extern UDWORD numCR(const char *pFileBuffer, UDWORD fileSize);
 
@@ -161,9 +165,6 @@ extern bool loadPropulsionSounds(const char *pFileName);
 /*Load the Terrain Table from the file exported from Access*/
 extern bool loadTerrainTable(const char *pFileName);
 
-/* load the IMDs to use for each body-propulsion combination */
-extern bool loadBodyPropulsionIMDs(const char *pFileName);
-
 /*Load the Weapon Effect Modifiers from the file exported from Access*/
 extern bool loadWeaponModifiers(const char *pFileName);
 
@@ -176,8 +177,12 @@ extern bool statsShutDown(void);
 
 extern UDWORD getSpeedFactor(UDWORD terrainType, UDWORD propulsionType);
 
-/// Get the component index for a component based on the name, verifying with type
+/// Get the component index for a component based on the name, verifying with type.
+/// It is currently identical to getCompFromID, but may not be in the future.
 int getCompFromName(COMPONENT_TYPE compType, const QString &name);
+
+/// This function only allows you to use the old, deprecated ID name.
+int getCompFromID(COMPONENT_TYPE compType, const QString &name);
 
 /// Get the component pointer for a component based on the name
 COMPONENT_STATS *getCompStatsFromName(const QString &name);

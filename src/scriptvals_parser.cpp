@@ -2491,7 +2491,6 @@ void yyerror(const char* fmt, ...)
 	vsprintf(txtBuf, fmt, args);
 	va_end(args);
 
-	debug(LOG_ERROR, "VLO parse error: %s at line %d, text: '%s'",
-	      txtBuf, scrv_get_lineno(), scrv_get_text());
+	ASSERT(false, "VLO parse error: %s at line %d, text: '%s'", txtBuf, scrv_get_lineno(), scrv_get_text());
 }
 

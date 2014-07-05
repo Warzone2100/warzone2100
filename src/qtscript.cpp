@@ -36,7 +36,7 @@
 #include <QtCore/QStringList>
 #include <QtCore/QFileInfo>
 #include <QtGui/QStandardItemModel>
-#include <QtGui/QFileDialog>
+#include <QtWidgets/QFileDialog>
 
 #include "lib/framework/wzapp.h"
 #include "lib/framework/wzconfig.h"

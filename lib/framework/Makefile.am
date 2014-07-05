@@ -1,13 +1,13 @@
-AM_CPPFLAGS = -DYY_NO_INPUT $(SDL_CFLAGS) $(WZ_CPPFLAGS) $(QT4_CFLAGS)
+AM_CPPFLAGS = -DYY_NO_INPUT $(SDL_CFLAGS) $(WZ_CPPFLAGS) $(QT5_CFLAGS)
 AM_CFLAGS = $(WZ_CFLAGS)
-AM_CXXFLAGS = $(WZ_CXXFLAGS) $(QT4_CFLAGS)
+AM_CXXFLAGS = $(WZ_CXXFLAGS) $(QT5_CFLAGS)
 
 MOCHEADER = \
 	wzconfig.h
 MOCEDFILES = $(MOCHEADER:%.h=%_moc.cpp)
 
 %_moc.cpp: %.h
-	$(MOC4) -o $@ $<
+	$(MOC5) -o $@ $<
 
 
 CLEANFILES = \
@@ -52,7 +52,6 @@ noinst_HEADERS = \
 	utf.h \
 	vector.h \
 	wzapp.h \
-	wzfs.h \
 	wzglobal.h
 
 nodist_libframework_a_SOURCES = \

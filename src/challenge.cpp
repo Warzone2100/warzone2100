@@ -106,7 +106,7 @@ void updateChallenge(bool gameWon)
 		return;
 	}
 	sstrcpy(sPath, fStr);
-	sPath[strlen(sPath) - 4] = '\0';	// remove .ini
+	sPath[strlen(sPath) - 5] = '\0';	// remove .json
 	scores.beginGroup(sPath);
 	victory = scores.value("Victory", false).toBool();
 	seconds = scores.value("Seconds", 0).toInt();
@@ -251,7 +251,7 @@ bool addChallenges()
 	slotCount = 0;
 
 	sstrcpy(sPath, sSearchPath);
-	sstrcat(sPath, "/*.ini");
+	sstrcat(sPath, "/*.json");
 
 	debug(LOG_SAVE, "Searching \"%s\" for challenges", sPath);
 
@@ -265,7 +265,7 @@ bool addChallenges()
 		int seconds;
 
 		// See if this filename contains the extension we're looking for
-		if (!strstr(*i, ".ini"))
+		if (!strstr(*i, ".json"))
 		{
 			// If it doesn't, move on to the next filename
 			continue;
@@ -273,13 +273,13 @@ bool addChallenges()
 
 		/* First grab any high score associated with this challenge */
 		sstrcpy(sPath, *i);
-		sPath[strlen(sPath) - 4] = '\0';	// remove .ini
+		sPath[strlen(sPath) - 5] = '\0';	// remove .json
 		highscore = "no score";
 		WzConfig scores(CHALLENGE_SCORES, WzConfig::ReadOnly);
 		scores.beginGroup(sPath);
-		name = scores.value("Player", "NO NAME").toString();
-		victory = scores.value("Victory", false).toBool();
-		seconds = scores.value("Seconds", -1).toInt();
+		name = scores.value("player", "NO NAME").toString();
+		victory = scores.value("victory", false).toBool();
+		seconds = scores.value("seconds", -1).toInt();
 		if (seconds > 0)
 		{
 			QTime format = QTime(0, 0, 0).addSecs(seconds);
@@ -287,14 +287,10 @@ bool addChallenges()
 		}
 		ssprintf(sPath, "%s/%s", sSearchPath, *i);
 		WzConfig challenge(sPath);
-		if (challenge.status() != QSettings::NoError)
-		{
-			debug(LOG_ERROR, "failure to open %s", sPath);
-		}
 		challenge.beginGroup("challenge");
-		name = challenge.value("Name", "BAD NAME").toString();
-		map = challenge.value("Map", "BAD MAP").toString();
-		difficulty = challenge.value("Difficulty", "BAD DIFFICULTY").toString();
+		name = challenge.value("name", "BAD NAME").toString();
+		map = challenge.value("map", "BAD MAP").toString();
+		difficulty = challenge.value("difficulty", "BAD DIFFICULTY").toString();
 		description = map + ", " + difficulty + ", " + highscore + ". " + challenge.value("Description", "").toString();
 
 		button = (W_BUTTON*)widgGetFromID(psRequestScreen, CHALLENGE_ENTRY_START + slotCount);
