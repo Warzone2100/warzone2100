@@ -1108,7 +1108,7 @@ QScriptValue js_enumSelected(QScriptContext *, QScriptEngine *engine)
 
 //-- \subsection{enumGateways()}
 //-- Return an array containing all the gateways on the current map. The array contains object with the properties
-//-- x1, y1, x2 and y2.
+//-- x1, y1, x2 and y2. (3.2+ only)
 static QScriptValue js_enumGateways(QScriptContext *, QScriptEngine *engine)
 {
 	QScriptValue result = engine->newArray(gwNumGateways());
@@ -2246,7 +2246,7 @@ static QScriptValue js_terrainType(QScriptContext *context, QScriptEngine *)
 }
 
 //-- \subsection{orderDroid(droid, order)}
-//-- Give a droid an order to do something.
+//-- Give a droid an order to do something. (3.2+ only)
 static QScriptValue js_orderDroid(QScriptContext *context, QScriptEngine *)
 {
 	QScriptValue droidVal = context->argument(0);
