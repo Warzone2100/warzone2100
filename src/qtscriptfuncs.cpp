@@ -858,7 +858,7 @@ bool writeLabels(const char *filename)
 // All script functions should be prefixed with "js_" then followed by same name as in script.
 
 //-- \subsection{getWeaponInfo(weapon id)}
-//-- Return information about a particular weapon type. DEPRECATED - query the Stats object instead.
+//-- Return information about a particular weapon type. DEPRECATED - query the Stats object instead. (3.2+ only)
 static QScriptValue js_getWeaponInfo(QScriptContext *context, QScriptEngine *engine)
 {
 	QString id = context->argument(0).toString();
@@ -879,7 +879,7 @@ static QScriptValue js_getWeaponInfo(QScriptContext *context, QScriptEngine *eng
 //-- Reset the trigger on an area. Next time a unit enters the area, it will trigger
 //-- an area event. Optionally add a filter on it in the second parameter, which can
 //-- be a specific player to watch for, or ALL_PLAYERS by default.
-//-- This is a fast operation of O(log n) algorithmic complexity.
+//-- This is a fast operation of O(log n) algorithmic complexity. (3.2+ only)
 static QScriptValue js_resetArea(QScriptContext *context, QScriptEngine *)
 {
 	QString labelName = context->argument(0).toString();
@@ -925,7 +925,7 @@ static QScriptValue js_enumLabels(QScriptContext *context, QScriptEngine *engine
 
 //-- \subsection{addLabel(object, label)}
 //-- Add a label to a game object. If there already is a label by that name, it is overwritten.
-//-- This is a fast operation of O(log n) algorithmic complexity.
+//-- This is a fast operation of O(log n) algorithmic complexity. (3.2+ only)
 static QScriptValue js_addLabel(QScriptContext *context, QScriptEngine *engine)
 {
 	struct labeltype value;
@@ -950,7 +950,7 @@ static QScriptValue js_addLabel(QScriptContext *context, QScriptEngine *engine)
 
 //-- \subsection{removeLabel(label)}
 //-- Remove a label from the game. Returns the number of labels removed, which should normally be
-//-- either 1 (label found) or 0 (label not found).
+//-- either 1 (label found) or 0 (label not found). (3.2+ only)
 static QScriptValue js_removeLabel(QScriptContext *context, QScriptEngine *engine)
 {
 	QString key = context->argument(0).toString();
@@ -962,7 +962,7 @@ static QScriptValue js_removeLabel(QScriptContext *context, QScriptEngine *engin
 //-- \subsection{getLabel(object)}
 //-- Get a label string belonging to a game object. If the object has multiple labels, only the first
 //-- label found will be returned. If the object has no labels, null is returned.
-//-- This is a relatively slow operation of O(n) algorithmic complexity.
+//-- This is a relatively slow operation of O(n) algorithmic complexity. (3.2+ only)
 static QScriptValue js_getLabel(QScriptContext *context, QScriptEngine *engine)
 {
 	struct labeltype value;
@@ -993,7 +993,7 @@ static QScriptValue js_getLabel(QScriptContext *context, QScriptEngine *engine)
 //-- This is a very fast operation of O(1) algorithmic complexity. Droids cannot be fetched in this
 //-- manner, since they do not a unique placement on map tiles. Finally, you can fetch an object using 
 //-- its ID, in which case you need to pass its type, owner and unique object ID. This is an
-//-- operation of O(n) algorithmic complexity.
+//-- operation of O(n) algorithmic complexity. (3.2+ only)
 static QScriptValue js_getObject(QScriptContext *context, QScriptEngine *engine)
 {
 	if (context->argumentCount() == 2) // get at position case
@@ -1079,7 +1079,7 @@ static QScriptValue js_enumBlips(QScriptContext *context, QScriptEngine *engine)
 }
 
 //-- \subsection{enumSelected()}
-//-- Return an array containing all game objects currently selected by the host player.
+//-- Return an array containing all game objects currently selected by the host player. (3.2+ only)
 QScriptValue js_enumSelected(QScriptContext *, QScriptEngine *engine)
 {
 	QList<BASE_OBJECT *> matches;
@@ -1126,7 +1126,7 @@ static QScriptValue js_enumGateways(QScriptContext *, QScriptEngine *engine)
 }
 
 //-- \subsection{enumTemplates(player)}
-//-- Return an array containing all the buildable templates for the given player.
+//-- Return an array containing all the buildable templates for the given player. (3.2+ only)
 static QScriptValue js_enumTemplates(QScriptContext *context, QScriptEngine *engine)
 {
 	int player = context->argument(0).toInt32();
@@ -1592,7 +1592,7 @@ static QScriptValue js_addDroid(QScriptContext *context, QScriptEngine *engine)
 //-- \subsection{makeTemplate(player, name, body, propulsion, reserved, turrets...)}
 //-- Create a template (virtual droid) with the given components. Can be useful for calculating the cost 
 //-- of droids before putting them into production, for instance. Will fail and return null if template
-//-- could not possibly be built using current research.
+//-- could not possibly be built using current research. (3.2+ only)
 static QScriptValue js_makeTemplate(QScriptContext *context, QScriptEngine *engine)
 {
 	int player = context->argument(0).toInt32();
@@ -1797,7 +1797,7 @@ static QScriptValue js_enumFeature(QScriptContext *context, QScriptEngine *engin
 }
 
 //-- \subsection{enumCargo(transport droid)}
-//-- Returns an array of droid objects inside given transport.
+//-- Returns an array of droid objects inside given transport. (3.2+ only)
 static QScriptValue js_enumCargo(QScriptContext *context, QScriptEngine *engine)
 {
 	QScriptValue droidVal = context->argument(0);
@@ -1885,7 +1885,7 @@ void dumpScriptLog(const QString &scriptName, int me, const QString &info)
 }
 
 //-- \subsection{dump(string...)}
-//-- Output text to a debug file.
+//-- Output text to a debug file. (3.2+ only)
 static QScriptValue js_dump(QScriptContext *context, QScriptEngine *engine)
 {
 	QString result;
@@ -2131,7 +2131,7 @@ static QScriptValue js_console(QScriptContext *context, QScriptEngine *engine)
 }
 
 //-- \subsection{groupAddArea(group, x1, y1, x2, y2)}
-//-- Add any droids inside the given area to the given group.
+//-- Add any droids inside the given area to the given group. (3.2+ only)
 static QScriptValue js_groupAddArea(QScriptContext *context, QScriptEngine *engine)
 {
 	int groupId = context->argument(0).toInt32();
@@ -2221,7 +2221,7 @@ static QScriptValue js_droidCanReach(QScriptContext *context, QScriptEngine *)
 
 //-- \subsection{propulsionCanReach(propulsion, x1, y1, x2, y2)}
 //-- Return true if a droid with a given propulsion is able to travel from (x1, y1) to (x2, y2).
-//-- Does not take player built blockades into account.
+//-- Does not take player built blockades into account. (3.2+ only)
 static QScriptValue js_propulsionCanReach(QScriptContext *context, QScriptEngine *)
 {
 	QScriptValue propulsionValue = context->argument(0);
@@ -2237,7 +2237,7 @@ static QScriptValue js_propulsionCanReach(QScriptContext *context, QScriptEngine
 
 //-- \subsection{terrainType(x, y)}
 //-- Returns tile type of a given map tile, such as TER_WATER for water tiles or TER_CLIFFFACE for cliffs.
-//-- Tile types regulate which units may pass through this tile.
+//-- Tile types regulate which units may pass through this tile. (3.2+ only)
 static QScriptValue js_terrainType(QScriptContext *context, QScriptEngine *)
 {
 	int x = context->argument(0).toInt32();
@@ -2356,14 +2356,14 @@ static QScriptValue js_setMissionTime(QScriptContext *context, QScriptEngine *)
 	return QScriptValue();
 }
 
-//-- \subsection{getMissionTime()} Get time remaining on mission countdown in seconds.
+//-- \subsection{getMissionTime()} Get time remaining on mission countdown in seconds. (3.2+ only)
 static QScriptValue js_getMissionTime(QScriptContext *, QScriptEngine *)
 {
 	return QScriptValue((mission.time - (gameTime - mission.startTime)) / GAME_TICKS_PER_SEC);
 }
 
 //-- \subsection{setTransporterExit(x, y, player)}
-//-- Set the exit position for the mission transporter.
+//-- Set the exit position for the mission transporter. (3.2+ only)
 static QScriptValue js_setTransporterExit(QScriptContext *context, QScriptEngine *)
 {
 	int x = context->argument(0).toInt32();
@@ -2378,7 +2378,7 @@ static QScriptValue js_setTransporterExit(QScriptContext *context, QScriptEngine
 //-- Set the entry position for the mission transporter, and make it start flying in
 //-- reinforcements. If you want the camera to follow it in, use cameraTrack() on it.
 //-- The transport needs to be set up with the mission droids, and the first transport
-//-- found will be used.
+//-- found will be used. (3.2+ only)
 static QScriptValue js_startTransporterEntry(QScriptContext *context, QScriptEngine *)
 {
 	int x = context->argument(0).toInt32();
@@ -2588,7 +2588,7 @@ static QScriptValue js_enableResearch(QScriptContext *context, QScriptEngine *en
 
 //-- \subsection{extraPowerTime(time, player)}
 //-- Increase a player's power as if that player had power income equal to current income
-//-- over the given amount of extra time.
+//-- over the given amount of extra time. (3.2+ only)
 static QScriptValue js_extraPowerTime(QScriptContext *context, QScriptEngine *engine)
 {
 	int ticks = context->argument(0).toInt32() * GAME_UPDATES_PER_SEC;
@@ -2626,7 +2626,7 @@ static QScriptValue js_setPower(QScriptContext *context, QScriptEngine *engine)
 }
 
 //-- \subsection{setPowerModifier(power[, player])}
-//-- Set a player's power modifier percentage. (Do not use this in an AI script.)
+//-- Set a player's power modifier percentage. (Do not use this in an AI script.) (3.2+ only)
 static QScriptValue js_setPowerModifier(QScriptContext *context, QScriptEngine *engine)
 {
 	int power = context->argument(0).toInt32();
@@ -2737,7 +2737,7 @@ static QScriptValue js_enableTemplate(QScriptContext *context, QScriptEngine *en
 //-- button to change, where zero is zero is the middle button, then going clockwise from the uppermost
 //-- button. filename is button graphics and filenameHigh is for highlighting. The tooltip is the text you see when you
 //-- mouse over the button. Finally, the callback is which scripting function to call. Hide and show the user interface
-//-- for such changes to take effect.
+//-- for such changes to take effect. (3.2+ only)
 static QScriptValue js_setReticuleButton(QScriptContext *context, QScriptEngine *engine)
 {
 	int button = context->argument(0).toInt32();
@@ -2749,7 +2749,7 @@ static QScriptValue js_setReticuleButton(QScriptContext *context, QScriptEngine 
 	return QScriptValue();
 }
 
-//-- \subsection{showInterface()} Show user interface.
+//-- \subsection{showInterface()} Show user interface. (3.2+ only)
 static QScriptValue js_showInterface(QScriptContext *context, QScriptEngine *engine)
 {
 	intAddReticule();
@@ -2757,7 +2757,7 @@ static QScriptValue js_showInterface(QScriptContext *context, QScriptEngine *eng
 	return QScriptValue();
 }
 
-//-- \subsection{hideInterface(button type)} Hide user interface.
+//-- \subsection{hideInterface(button type)} Hide user interface. (3.2+ only)
 static QScriptValue js_hideInterface(QScriptContext *context, QScriptEngine *engine)
 {
 	intRemoveReticule();
@@ -2840,7 +2840,7 @@ static QScriptValue js_playerPower(QScriptContext *context, QScriptEngine *engin
 }
 
 //-- \subsection{queuedPower(player)}
-//-- Return amount of power queued up for production by the given player.
+//-- Return amount of power queued up for production by the given player. (3.2+ only)
 static QScriptValue js_queuedPower(QScriptContext *context, QScriptEngine *engine)
 {
 	int player = context->argument(0).toInt32();
@@ -2882,7 +2882,7 @@ static QScriptValue js_isVTOL(QScriptContext *context, QScriptEngine *engine)
 
 //-- \subsection{hackGetObj(type, player, id)}
 //-- Function to find and return a game object of DROID, FEATURE or STRUCTURE types, if it exists.
-//-- Otherwise, it will return null. This function is deprecated by getObject().
+//-- Otherwise, it will return null. This function is deprecated by getObject(). (3.2+ only)
 static QScriptValue js_hackGetObj(QScriptContext *context, QScriptEngine *engine)
 {
 	OBJECT_TYPE type = (OBJECT_TYPE)context->argument(0).toInt32();
@@ -2896,7 +2896,7 @@ static QScriptValue js_hackGetObj(QScriptContext *context, QScriptEngine *engine
 //-- Change the 'me' who owns this script to the given player. This needs to be run
 //-- first in \emph{eventGameInit} to make sure things do not get out of control.
 // This is only intended for use in campaign scripts until we get a way to add
-// scripts for each player.
+// scripts for each player. (3.2+ only)
 static QScriptValue js_hackChangeMe(QScriptContext *context, QScriptEngine *engine)
 {
 	int me = context->argument(0).toInt32();
@@ -2906,7 +2906,7 @@ static QScriptValue js_hackChangeMe(QScriptContext *context, QScriptEngine *engi
 }
 
 //-- \subsection{receiveAllEvents(bool)}
-//-- Make the current script receive all events, even those not meant for 'me'.
+//-- Make the current script receive all events, even those not meant for 'me'. (3.2+ only)
 static QScriptValue js_receiveAllEvents(QScriptContext *context, QScriptEngine *engine)
 {
 	if (context->argumentCount() > 0)
@@ -2918,7 +2918,7 @@ static QScriptValue js_receiveAllEvents(QScriptContext *context, QScriptEngine *
 }
 
 //-- \subsection{hackAssert(condition, message...)}
-//-- Function to perform unit testing. It will throw a script error and a game assert.
+//-- Function to perform unit testing. It will throw a script error and a game assert. (3.2+ only)
 static QScriptValue js_hackAssert(QScriptContext *context, QScriptEngine *engine)
 {
 	bool condition = context->argument(0).toBool();
@@ -2973,7 +2973,7 @@ static QScriptValue js_setDroidExperience(QScriptContext *context, QScriptEngine
 //-- \subsection{donateObject(object, to)}
 //-- Donate a game object (currently restricted to droids) to another player. Returns true if
 //-- donation was successful. May return false if this donation would push the receiving player
-//-- over unit limits.
+//-- over unit limits. (3.2+ only)
 static QScriptValue js_donateObject(QScriptContext *context, QScriptEngine *engine)
 {
 	QScriptValue val = context->argument(0);
@@ -3004,7 +3004,7 @@ static QScriptValue js_donateObject(QScriptContext *context, QScriptEngine *engi
 }
 
 //-- \subsection{donatePower(amount, to)}
-//-- Donate power to another player. Returns true.
+//-- Donate power to another player. Returns true. (3.2+ only)
 static QScriptValue js_donatePower(QScriptContext *context, QScriptEngine *engine)
 {
 	int amount = context->argument(0).toInt32();
@@ -3169,7 +3169,7 @@ static QScriptValue js_setNoGoArea(QScriptContext *context, QScriptEngine *)
 }
 
 //-- \subsection{setScrollLimits(x1, y1, x2, y2)}
-//-- Limit the scrollable area of the map to the given rectangle.
+//-- Limit the scrollable area of the map to the given rectangle. (3.2+ only)
 static QScriptValue js_setScrollLimits(QScriptContext *context, QScriptEngine *)
 {
 	const int minX = context->argument(0).toInt32();
@@ -3204,7 +3204,7 @@ static QScriptValue js_setScrollLimits(QScriptContext *context, QScriptEngine *)
 }
 
 //-- \subsection{getScrollLimits()}
-//-- Get the limits of the scrollable area of the map as an area object.
+//-- Get the limits of the scrollable area of the map as an area object. (3.2+ only)
 static QScriptValue js_getScrollLimits(QScriptContext *context, QScriptEngine *engine)
 {
 	QScriptValue ret = engine->newObject();
@@ -3470,7 +3470,7 @@ static QScriptValue js_hackNetOn(QScriptContext *, QScriptEngine *)
 
 //-- \subsection{getDroidProduction(factory)}
 //-- Return droid in production in given factory. Note that this droid is fully
-//-- virtual, and should never be passed anywhere.
+//-- virtual, and should never be passed anywhere. (3.2+ only)
 static QScriptValue js_getDroidProduction(QScriptContext *context, QScriptEngine *engine)
 {
 	QScriptValue structVal = context->argument(0);
@@ -3573,7 +3573,7 @@ static QScriptValue js_setDroidLimit(QScriptContext *context, QScriptEngine *)
 
 //-- \subsection{setCommanderLimit(player, value)}
 //-- Set the maximum number of commanders that this player can produce.
-//-- THIS FUNCTION IS DEPRECATED AND WILL BE REMOVED!
+//-- THIS FUNCTION IS DEPRECATED AND WILL BE REMOVED! (3.2+ only)
 static QScriptValue js_setCommanderLimit(QScriptContext *context, QScriptEngine *)
 {
 	int player = context->argument(0).toInt32();
@@ -3584,7 +3584,7 @@ static QScriptValue js_setCommanderLimit(QScriptContext *context, QScriptEngine 
 
 //-- \subsection{setConstructorLimit(player, value)}
 //-- Set the maximum number of constructors that this player can produce.
-//-- THIS FUNCTION IS DEPRECATED AND WILL BE REMOVED!
+//-- THIS FUNCTION IS DEPRECATED AND WILL BE REMOVED! (3.2+ only)
 static QScriptValue js_setConstructorLimit(QScriptContext *context, QScriptEngine *)
 {
 	int player = context->argument(0).toInt32();
@@ -3709,7 +3709,7 @@ static QScriptValue js_setSky(QScriptContext *context, QScriptEngine *)
 //-- \subsection{hackMarkTiles([label | x, y[, x2, y2]])}
 //-- Mark the given tile(s) on the map. Either give a POSITION or AREA label,
 //-- or a tile x, y position, or four positions for a square area. If no parameter 
-//-- is given, all marked tiles are cleared.
+//-- is given, all marked tiles are cleared. (3.2+ only)
 static QScriptValue js_hackMarkTiles(QScriptContext *context, QScriptEngine *)
 {
 	if (context->argumentCount() == 4) // square area
@@ -3766,7 +3766,7 @@ static QScriptValue js_cameraSlide(QScriptContext *context, QScriptEngine *)
 }
 
 //-- \subsection{cameraZoom(z, speed)}
-//-- Slide the camera to the given zoom distance. Normal camera zoom ranges between 500 and 5000.
+//-- Slide the camera to the given zoom distance. Normal camera zoom ranges between 500 and 5000. (3.2+ only)
 static QScriptValue js_cameraZoom(QScriptContext *context, QScriptEngine *)
 {
 	float z = context->argument(0).toNumber();
@@ -3803,7 +3803,7 @@ static QScriptValue js_cameraTrack(QScriptContext *context, QScriptEngine *)
 //-- Add an invisible viewer at a given position for given player that shows map in given range. \emph{type}
 //-- is zero for vision reveal, or one for radar reveal. The difference is that a radar reveal can be obstructed 
 //-- by ECM jammers. \emph{expiry}, if non-zero, is the game time at which the spotter shall automatically be
-//-- removed. The function returns a unique ID that can be used to remove the spotter with \emph{removeSpotter}.
+//-- removed. The function returns a unique ID that can be used to remove the spotter with \emph{removeSpotter}. (3.2+ only)
 static QScriptValue js_addSpotter(QScriptContext *context, QScriptEngine *)
 {
 	int x = context->argument(0).toInt32();
@@ -3817,7 +3817,7 @@ static QScriptValue js_addSpotter(QScriptContext *context, QScriptEngine *)
 }
 
 //-- \subsection{removeSpotter(id)}
-//-- Remove a spotter given its unique ID.
+//-- Remove a spotter given its unique ID. (3.2+ only)
 static QScriptValue js_removeSpotter(QScriptContext *context, QScriptEngine *)
 {
 	uint32_t id = context->argument(0).toUInt32();
@@ -3828,7 +3828,7 @@ static QScriptValue js_removeSpotter(QScriptContext *context, QScriptEngine *)
 //-- \subsection{syncRandom(limit)}
 //-- Generate a synchronized random number in range 0...(limit - 1) that will be the same if this function is 
 //-- run on all network peers in the same game frame. If it is called on just one peer (such as would be 
-//-- the case for AIs, for instance), then game sync will break.
+//-- the case for AIs, for instance), then game sync will break. (3.2+ only)
 static QScriptValue js_syncRandom(QScriptContext *context, QScriptEngine *)
 {
 	uint32_t limit = context->argument(0).toInt32();
@@ -3838,7 +3838,7 @@ static QScriptValue js_syncRandom(QScriptContext *context, QScriptEngine *)
 //-- \subsection{syncRequest(req_id, x, y[, obj[, obj2]])}
 //-- Generate a synchronized event request that is sent over the network to all clients and executed simultaneously.
 //-- Must be caught in an eventSyncRequest() function. All sync requests must be validated when received, and always
-//-- take care only to define sync requests that can be validated against cheating.
+//-- take care only to define sync requests that can be validated against cheating. (3.2+ only)
 static QScriptValue js_syncRequest(QScriptContext *context, QScriptEngine *)
 {
 	int32_t req_id = context->argument(0).toInt32();
@@ -3869,7 +3869,7 @@ static QScriptValue js_syncRequest(QScriptContext *context, QScriptEngine *)
 
 //-- \subsection{replaceTexture(old_filename, new_filename)}
 //-- Replace one texture with another. This can be used to for example give buildings on a specific tileset different
-//-- looks, or to add variety to the looks of droids in campaign missions.
+//-- looks, or to add variety to the looks of droids in campaign missions. (3.2+ only)
 static QScriptValue js_replaceTexture(QScriptContext *context, QScriptEngine *)
 {
 	QString oldfile = context->argument(0).toString();
