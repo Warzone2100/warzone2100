@@ -113,6 +113,12 @@ QVariant WzConfig::value(const QString &key, const QVariant &defaultValue) const
 	else return mObj.value(key).toVariant();
 }
 
+QJsonValue WzConfig::json(const QString &key, const QJsonValue &defaultValue) const
+{
+	if (!contains(key)) return defaultValue;
+	else return mObj.value(key);
+}
+
 void WzConfig::setVector3f(const QString &name, const Vector3f &v)
 {
 	QStringList l;

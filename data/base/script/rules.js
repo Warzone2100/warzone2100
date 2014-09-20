@@ -93,67 +93,26 @@ function eventDestroyed(victim)
 
 function eventResearched(research, structure, player)
 {
-	//debug("RESEARCH : " + research.fullname + "(" + research.name + ") for " + player + " results=" + research.results);
-	for (var v = 0; v < research.results.length; v++)
+	//debug("RESEARCH : " + research.fullname + "(" + research.name + ") for " + player);
+	// iterate over all results
+	for (var i = 0; i < research.results.length; i++)
 	{
-		var s = research.results[v].split(":");
-		if (['Droids', 'Cyborgs'].indexOf(s[0]) >= 0) // research result applies to droids and cyborgs
+		var v = research.results[i];
+		//debug("    RESULT : class=" + v['class'] + " parameter=" + v['parameter'] + " value=" + v['value'] + " filter=" + v['filterParameter'] + " filterparam=" + v['filterParameter']);
+		for (var cname in Upgrades[player][v['class']]) // iterate over all components of this type
 		{
-			for (var i in Upgrades[player].Body) // loop over all bodies
+			var parameter = v['parameter'];
+			var ctype = v['class'];
+			var filterparam = v['filterParameter'];
+			if ('filterParameter' in v && Stats[ctype][cname][filterparam] != v['filterValue']) // more specific filter
 			{
-				if (Stats.Body[i].BodyClass === s[0]) // if match against hint in ini file, change it
-				{
-					// eg Upgrades[0].Body['Tiger']['Armour']
-					Upgrades[player].Body[i][s[1]] += Math.ceil(Stats.Body[i][s[1]] * s[2] / 100);
-					//debug("  upgraded " + i + " :: " + s[1] + " to " + Upgrades[player].Body[i][s[1]] + " by " + Math.ceil(Stats.Body[i][s[1]] * s[2] / 100));
-				}
+				continue;
 			}
-		}
-		else if (['ResearchPoints', 'ProductionPoints', 'PowerPoints', 'RepairPoints', 'RearmPoints'].indexOf(s[0]) >= 0)
-		{
-			for (var i in Upgrades[player].Building)
+			if (Stats[ctype][cname][parameter] > 0) // only applies if stat has above zero value already
 			{
-				if (Stats.Building[i][s[0]] > 0) // only applies if building has this stat already
-				{
-					Upgrades[player].Building[i][s[0]] += Math.ceil(Stats.Building[i][s[0]] * s[1] / 100);
-					//debug("  upgraded " + i + " to " + Upgrades[player].Building[i][s[0]] + " by " + Math.ceil(Stats.Building[i][s[0]] * s[1] / 100));
-				}
+				Upgrades[player][ctype][cname][parameter] += Math.ceil(Stats[ctype][cname][parameter] * v['value'] / 100);
+				//debug("      upgraded " + cname + " to " + Upgrades[player][ctype][cname][parameter] + " by " + Math.ceil(Stats[ctype][cname][parameter] * v['value'] / 100));
 			}
-		}
-		else if (['Wall', 'Structure'].indexOf(s[0]) >= 0)
-		{
-			for (var i in Upgrades[player].Building)
-			{
-				if (Stats.Building[i].Type === s[0]) // applies to specific building type
-				{
-					Upgrades[player].Building[i][s[1]] += Math.ceil(Stats.Building[i][s[1]] * s[2] / 100);
-					//debug("  upgraded " + i + " to " + Upgrades[player].Building[i][s[1]] + " by " + Math.ceil(Stats.Building[i][s[1]] * s[2] / 100));
-				}
-			}
-		}
-		else if (['ECM', 'Sensor', 'Repair', 'Construct'].indexOf(s[0]) >= 0)
-		{
-			for (var i in Upgrades[player][s[0]])
-			{
-				// Upgrades.player.type.buildingName.parameter ... hard to read but short and flexible
-				Upgrades[player][s[0]][i][s[1]] += Math.ceil(Stats[s[0]][i][s[1]] * s[2] / 100);
-				//debug("  upgraded " + i + " to " + Upgrades[player][s[0]][i][s[1]] + " by " + Math.ceil(Stats[s[0]][i][s[1]] * s[2] / 100));
-			}
-		}
-		else if (Stats.WeaponClass.indexOf(s[0]) >= 0) // if first field is a weapon class
-		{
-			for (var i in Upgrades[player].Weapon)
-			{
-				if (Stats.Weapon[i][s[1]] > 0 && Stats.Weapon[i].ImpactClass === s[0])
-				{
-					Upgrades[player].Weapon[i][s[1]] += Math.ceil(Stats.Weapon[i][s[1]] * s[2] / 100);
-					//debug("  upgraded " + i + " to " + Upgrades[player].Weapon[i][s[1]] + " by " + Math.ceil(Stats.Weapon[i][s[1]] * s[2] / 100));
-				}
-			}
-		}
-		else
-		{
-			debug("(error) Unrecognized research hint=" + s[0]);
 		}
 	}
 }

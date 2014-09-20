@@ -31,6 +31,7 @@
 
 #include <QtScript/QScriptValue>
 #include <QtCore/QStringList>
+#include <QtCore/QJsonArray>
 #include <QtGui/QStandardItemModel>
 
 #include "action.h"
@@ -109,6 +110,46 @@ static QStandardItemModel *labelModel = NULL;
 
 // ----------------------------------------------------------------------------------------
 // Utility functions -- not called directly from scripts
+
+static QScriptValue mapJsonToQScriptValue(QScriptEngine *engine, const QJsonValue &instance); // forward decl
+
+static QScriptValue mapJsonObjectToQScriptValue(QScriptEngine *engine, const QJsonObject &obj)
+{
+	QScriptValue value = engine->newObject();
+	QStringList const keys = obj.keys();
+	for (int i = 0; i < keys.size(); i++)
+	{
+		QScriptValue::PropertyFlags flags = QScriptValue::ReadOnly | QScriptValue::Undeletable;
+		value.setProperty(keys[i], mapJsonToQScriptValue(engine, obj.value(keys[i])), flags);
+	}
+	return value;
+}
+
+static QScriptValue mapJsonArrayToQScriptValue(QScriptEngine *engine, const QJsonArray &array)
+{
+	QScriptValue value = engine->newArray(array.size());
+	for (int i = 0; i < array.size(); i++)
+	{
+		QScriptValue::PropertyFlags flags = QScriptValue::Undeletable | QScriptValue::ReadOnly;
+		value.setProperty(i, mapJsonToQScriptValue(engine, array[i]), flags);
+	}
+	return value;
+}
+
+static QScriptValue mapJsonToQScriptValue(QScriptEngine *engine, const QJsonValue &instance)
+{
+	switch (instance.type())
+	{
+	case QJsonValue::Null : return QScriptValue::NullValue;
+	case QJsonValue::Bool : return instance.toBool();
+	case QJsonValue::Double	: return instance.toDouble();
+	case QJsonValue::String	: return instance.toString();
+	case QJsonValue::Array : return mapJsonArrayToQScriptValue(engine, instance.toArray());
+	case QJsonValue::Object : return mapJsonObjectToQScriptValue(engine, instance.toObject());
+	case QJsonValue::Undefined : return QScriptValue::UndefinedValue;
+	}
+	return QScriptValue::UndefinedValue; // should never be reached
+}
 
 static void updateLabelModel()
 {
@@ -311,12 +352,7 @@ QScriptValue convResearch(RESEARCH *psResearch, QScriptEngine *engine, int playe
 	value.setProperty("name", psResearch->id); // will be changed to contain fullname
 	value.setProperty("id", psResearch->id);
 	value.setProperty("type", SCRIPT_RESEARCH);
-	QScriptValue results = engine->newArray(psResearch->resultStrings.size());
-	for (int i = 0; i < psResearch->resultStrings.size(); i++)
-	{
-		results.setProperty(i, psResearch->resultStrings[i]);
-	}
-	value.setProperty("results", results);
+	value.setProperty("results", mapJsonToQScriptValue(engine, psResearch->results));
 	return value;
 }
 

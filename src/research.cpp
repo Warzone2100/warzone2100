@@ -25,6 +25,7 @@
  */
 #include <string.h>
 #include <map>
+#include <QJsonArray>
 
 #include "lib/framework/frame.h"
 #include "lib/framework/strres.h"
@@ -129,7 +130,8 @@ bool loadResearch(QString filename)
 		ASSERT_OR_RETURN(false, checkResearchName(&research, inc), "Research name '%s' used already", getName(&research));
 
 		research.ref = REF_RESEARCH_START + inc;
-		research.resultStrings = ini.value("results").toStringList();
+
+		research.results = ini.json("results", QJsonArray());
 		
 		//set subGroup icon
 		QString subGroup = ini.value("subgroupIconID", "").toString();

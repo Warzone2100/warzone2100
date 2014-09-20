@@ -59,6 +59,7 @@ public:
 	QStringList childKeys() const;
 	bool contains(const QString &key) const;
 	QVariant value(const QString &key, const QVariant &defaultValue = QVariant()) const;
+	QJsonValue json(const QString &key, const QJsonValue &defaultValue = QJsonValue()) const;
 
 	void beginGroup(const QString &prefix);
 	void endGroup();
