@@ -25,7 +25,7 @@ translation = {
 }
 
 data = {}
-listopts = ['structureModel', 'weapons', 'speedFactor', 'text']
+listopts = ['structureModel', 'weapons', 'speedFactor', 'text', 'pos1', 'pos2', 'members', 'pos']
 for section in config.sections():
 	entry = {}
 	for opt in config.items(section):

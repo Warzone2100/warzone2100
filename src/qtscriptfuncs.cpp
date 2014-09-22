@@ -1052,6 +1052,7 @@ static QScriptValue js_getObject(QScriptContext *context, QScriptEngine *engine)
 	BASE_OBJECT *psObj;
 	QString label = context->argument(0).toString();
 	QScriptValue ret;
+	SCRIPT_ASSERT(context, labels.size() > 0, "Map contains no labels!");
 	if (labels.contains(label))
 	{
 		ret = engine->newObject();
@@ -1078,9 +1079,13 @@ static QScriptValue js_getObject(QScriptContext *context, QScriptEngine *engine)
 			psObj = IdToObject((OBJECT_TYPE)p.type, p.id, p.player);
 			return convMax(psObj, engine);
 		default:
-			ASSERT(false, "Bad object label type found for label %s!", label.toUtf8().constData());
+			SCRIPT_ASSERT(context, false, "Bad object label type found for label %s!", label.toUtf8().constData());
 			break;
 		}
+	}
+	else
+	{
+		SCRIPT_ASSERT(context, false, "Could not find label %s (among %d entries)", label.toUtf8().constData(), labels.size());
 	}
 	return ret;
 }

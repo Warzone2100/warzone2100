@@ -259,18 +259,25 @@ bool statsAllocConstruct(UDWORD	numStats)
 *		Load stats functions
 *******************************************************************************/
 
-static iIMDShape *statsGetIMD(WzConfig &json, BASE_STATS *psStats, QString key, int index = 0)
+static iIMDShape *statsGetIMD(WzConfig &json, BASE_STATS *psStats, QString key, QString key2 = QString())
 {
 	iIMDShape *retval = NULL;
 	if (json.contains(key))
 	{
-		QStringList values = json.value(key).toStringList();
-		if (values.size() > index && values[index].compare("0") != 0)
+		QJsonValue value = json.json(key);
+		if (value.isObject())
 		{
-			retval = modelGet(values[index]);
-			ASSERT(retval != NULL, "Cannot find the PIE model %s for stat %s in %s",
-			       values[index].toUtf8().constData(), getName(psStats), json.fileName().toUtf8().constData());
+			ASSERT(!key2.isEmpty(), "Cannot look up a JSON object with an empty key!");
+			QJsonObject obj = value.toObject();
+			if (!obj.contains(key2))
+			{
+				return NULL;
+			}
+			value = obj[key2];
 		}
+		retval = modelGet(value.toString());
+		ASSERT(retval != NULL, "Cannot find the PIE model %s for stat %s in %s",
+		       value.toString().toUtf8().constData(), getName(psStats), json.fileName().toUtf8().constData());
 	}
 	return retval;
 }
@@ -590,7 +597,6 @@ bool loadBodyStats(const char *pFileName)
 		psBodyStat->ppMoveIMDList.resize(numPropulsionStats * NUM_PROP_SIDES, NULL);
 		psBodyStat->ppStillIMDList.resize(numPropulsionStats * NUM_PROP_SIDES, NULL);
 	}
-	debug(LOG_ERROR, "found %d bodies", numBodyStats);
 	for (int i = 0; i < list.size(); ++i)
 	{
 		QString propulsionName, leftIMD, rightIMD;
@@ -600,7 +606,6 @@ bool loadBodyStats(const char *pFileName)
 		ini.beginGroup(list[i]);
 		if (!ini.contains("propulsionExtraModels"))
 		{
-			debug(LOG_ERROR, "skipping %s", list[i].toUtf8().constData());
 			ini.endGroup();
 			continue;
 		}
@@ -619,7 +624,6 @@ bool loadBodyStats(const char *pFileName)
 			debug(LOG_FATAL, "Invalid body name %s", list[i].toUtf8().constData());
 			return false;
 		}
-		debug(LOG_ERROR, "%s --> %d [%d, %p]", list[i].toUtf8().constData(), psBodyStat->base.body, numStats, psBodyStat);
 		QStringList keys = ini.childKeys();
 		for (int j = 0; j < keys.size(); j++)
 		{
@@ -637,10 +641,10 @@ bool loadBodyStats(const char *pFileName)
 				return false;
 			}
 			//allocate the left and right propulsion IMDs + movement and standing still animations
-			psBodyStat->ppIMDList[numStats * NUM_PROP_SIDES + LEFT_PROP] = statsGetIMD(ini, psBodyStat, keys[j], 0);
-			psBodyStat->ppIMDList[numStats * NUM_PROP_SIDES + RIGHT_PROP] = statsGetIMD(ini, psBodyStat, keys[j], 1);
-			psBodyStat->ppMoveIMDList[numStats] = statsGetIMD(ini, psBodyStat, keys[j], 2);
-			psBodyStat->ppStillIMDList[numStats] = statsGetIMD(ini, psBodyStat, keys[j], 3);
+			psBodyStat->ppIMDList[numStats * NUM_PROP_SIDES + LEFT_PROP] = statsGetIMD(ini, psBodyStat, keys[j], "left");
+			psBodyStat->ppIMDList[numStats * NUM_PROP_SIDES + RIGHT_PROP] = statsGetIMD(ini, psBodyStat, keys[j], "right");
+			psBodyStat->ppMoveIMDList[numStats] = statsGetIMD(ini, psBodyStat, keys[j], "moving");
+			psBodyStat->ppStillIMDList[numStats] = statsGetIMD(ini, psBodyStat, keys[j], "still");
 		}
 		ini.endGroup();
 		ini.endGroup();

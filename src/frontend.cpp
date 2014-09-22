@@ -300,16 +300,12 @@ static QList<CAMPAIGN_FILE> readCampaignFiles()
 			continue;
 		}
 		WzConfig ini(filename, WzConfig::ReadOnlyAndRequired);
-		ini.beginGroup("campaign");
 		c.name = ini.value("name").toString();
 		c.level = ini.value("level").toString();
 		c.package = ini.value("package").toString();
 		c.loading = ini.value("loading").toString();
-		ini.endGroup();
-		ini.beginGroup("intro");
 		c.video = ini.value("video").toString();
 		c.captions = ini.value("captions").toString();
-		ini.endGroup();
 		result += c;
 	}
 	PHYSFS_freeList(files);

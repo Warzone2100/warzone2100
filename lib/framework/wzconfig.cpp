@@ -24,6 +24,7 @@
 
 #include <QtCore/QJsonParseError>
 #include <QtCore/QJsonValue>
+#include <QtCore/QJsonDocument>
 
 // Get platform defines before checking for them.
 // Qt headers MUST come before platform specific stuff!
@@ -32,6 +33,12 @@
 
 WzConfig::~WzConfig()
 {
+	if (mWarning == ReadAndWrite)
+	{
+		QJsonDocument doc(mObj);
+		QByteArray json = doc.toJson();
+		saveFile(mFilename.toUtf8().constData(), json.constData(), json.size());
+	}
 }
 
 WzConfig::WzConfig(const QString &name, WzConfig::warning warning, QObject *parent)
@@ -42,6 +49,7 @@ WzConfig::WzConfig(const QString &name, WzConfig::warning warning, QObject *pare
 
 	mFilename = name;
 	mStatus = true;
+	mWarning = warning;
 
 	if (!PHYSFS_exists(name.toUtf8().constData()))
 	{
@@ -184,18 +192,33 @@ void WzConfig::beginGroup(const QString &prefix)
 {
 	mObjNameStack.append(prefix);
 	mObjStack.append(mObj);
-	ASSERT(contains(prefix), "beginGroup() on non-existing key %s", prefix.toUtf8().constData());
+	mName = prefix;
+	if (mWarning == ReadAndWrite)
+	{
+		mObj = QJsonObject();
+		return;
+	}
+	ASSERT(mWarning == ReadAndWrite || contains(prefix), "beginGroup() on non-existing key %s", prefix.toUtf8().constData());
 	QJsonValue value = mObj.value(prefix);
 	ASSERT(value.isObject(), "beginGroup() on non-object key %s", prefix.toUtf8().constData());
 	mObj = value.toObject();
-	mName = prefix;
 }
 
 void WzConfig::endGroup()
 {
 	ASSERT(mObjStack.size() > 0, "An endGroup() too much!");
-	mObj = mObjStack.takeLast();
-	mName = mObjNameStack.takeLast();
+	if (mWarning == ReadAndWrite)
+	{
+		QJsonObject latestObj = mObj;
+		mObj = mObjStack.takeLast();
+		mObj[mName] = latestObj;
+		mName = mObjNameStack.takeLast();
+	}
+	else
+	{
+		mName = mObjNameStack.takeLast();
+		mObj = mObjStack.takeLast();
+	}
 }
 
 void WzConfig::setValue(const QString &key, const QVariant &value)

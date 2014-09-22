@@ -16,6 +16,8 @@ generic construction
 generic propulsion
 generic structure
 generic templates
+python -t ini2json_generic.py ${BASE}/base/wrf/cam1/cam1a/labels.ini > ${BASE}/base/wrf/cam1/cam1a/labels.json
+python -t ini2json_generic.py ${BASE}/mp/multiplay/maps/4c-rush/labels.ini > ${BASE}/mp/multiplay/maps/4c-rush/labels.json
 python -t ini2json_generic.py ${BASE}/base/stats/features.ini > ${BASE}/base/stats/features.json
 python -t ini2json_generic.py ${BASE}/base/stats/brain.ini > ${BASE}/base/stats/brain.json
 python -t ini2json_body.py ${BASE}/base/stats/body.ini ${BASE}/base/stats/bodypropulsionimd.ini > ${BASE}/base/stats/body.json

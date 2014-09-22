@@ -34,6 +34,9 @@
 
 class WzConfig
 {
+public:
+	enum warning { ReadAndWrite, ReadOnly, ReadOnlyAndRequired };
+
 private:
 	QJsonDocument mJson;
 	QJsonObject mObj;
@@ -42,9 +45,9 @@ private:
 	QStringList mObjNameStack;
 	QString mFilename;
 	bool mStatus;
+	warning mWarning;
 
 public:
-	enum warning { ReadAndWrite, ReadOnly, ReadOnlyAndRequired };
 	WzConfig(const QString &name, WzConfig::warning warning = ReadAndWrite, QObject *parent = 0);
 	~WzConfig();
 
@@ -64,7 +67,7 @@ public:
 	void beginGroup(const QString &prefix);
 	void endGroup();
 	QString fileName() const { return mFilename; }
-	bool isWritable() const { return true; } // FIXME
+	bool isWritable() const { return mWarning == ReadAndWrite && mStatus; }
 	void setValue(const QString &key, const QVariant &value);
 	QString group() { return mName; }
 	bool status() { return mStatus; }

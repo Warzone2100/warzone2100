@@ -1559,6 +1559,7 @@ UDWORD calcTemplateBody(DROID_TEMPLATE *psTemplate, UBYTE player)
 
 	if (psTemplate == NULL)
 	{
+		ASSERT(false, "null template");
 		return 0;
 	}
 	BODY_STATS *psStats = asBodyStats + psTemplate->asParts[COMP_BODY];
@@ -1937,9 +1938,7 @@ void droidSetBits(DROID_TEMPLATE *pTemplate,DROID *psDroid)
 	psDroid->droidType = droidTemplateType(pTemplate);
 	psDroid->numWeaps = pTemplate->numWeaps;
 	psDroid->body = calcTemplateBody(pTemplate, psDroid->player);
-	ASSERT(psDroid->body > 0, "Invalid number of hipoints: %d", psDroid->body);
 	psDroid->originalBody = psDroid->body;
-	ASSERT(psDroid->originalBody > 0, "Invalid number of hipoints: %d", psDroid->originalBody);
 	psDroid->expectedDamage = 0;  // Begin life optimistically.
 	psDroid->time = gameTime - deltaGameTime + 1;         // Start at beginning of tick.
 	psDroid->prevSpacetime.time = psDroid->time - 1;  // -1 for interpolation.
