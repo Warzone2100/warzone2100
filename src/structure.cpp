@@ -3803,8 +3803,7 @@ void structureUpdate(STRUCTURE *psBuilding, bool mission)
 		//if selfrepair has been researched then check the health level of the
 		//structure once resistance is fully up
 		iPointsRequired = structureBody(psBuilding);
-		if (selfRepairEnabled(psBuilding->player) && (psBuilding->body < (SWORD)
-			iPointsRequired))
+		if (selfRepairEnabled(psBuilding->player) && psBuilding->body < iPointsRequired && psBuilding->status != SS_BEING_BUILT)
 		{
 			//start the self repair off
 			if (psBuilding->lastResistance == ACTION_START_TIME)
