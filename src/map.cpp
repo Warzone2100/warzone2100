@@ -1807,6 +1807,7 @@ static int dangerThreadFunc(WZ_DECL_UNUSED void *data)
 	while (lastDangerPlayer != -1)
 	{
 		dangerFloodFill(lastDangerPlayer);	// Do the actual work
+		lastDangerUpdate = gameTime;
 		wzSemaphorePost(dangerDoneSemaphore);   // Signal that we are done
 		wzSemaphoreWait(dangerSemaphore);	// Go to sleep until needed.
 	}
