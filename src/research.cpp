@@ -181,16 +181,8 @@ bool loadResearch(QString filename)
 		if (statID.compare("") != 0)
 		{
 			//try find the structure stat with given name
-			int32_t structID = getStructStatFromName(statID.toUtf8().data());
-			if (structID >= 0)
-			{
-				research.psStat = (BASE_STATS *)(asStructureStats + structID);
-			}else
-			{
-				//try find the component stat with given name
-				research.psStat = getCompStatsFromName(statID);
-			}
-			ASSERT_OR_RETURN(false, research.psStat != NULL, "Cannot find the statID '%s' for Research '%s'", statID.toUtf8().data(), getName(&research));
+			research.psStat = getCompStatsFromName(statID);
+			ASSERT_OR_RETURN(false, research.psStat, "Could not find stats for %s research %s", statID.toUtf8().constData(), getName(&research));
 		}
 
 		QString imdName = ini.value("imdName", "").toString();
