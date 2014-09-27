@@ -797,7 +797,7 @@ static int get_first_available_component(STRUCTURE *psFactory, const QScriptValu
 			QString compName = list.property(k).toString();
 			int result = getCompFromName(type, compName.toUtf8().constData());
 			if (result >= 0 && apCompLists[player][type][result] == AVAILABLE
-			    && (asBodyStats[result].size <= capacity || type != COMP_BODY))
+			    && (type != COMP_BODY || asBodyStats[result].size <= capacity))
 			{
 				return result; // found one!
 			}
@@ -811,7 +811,7 @@ static int get_first_available_component(STRUCTURE *psFactory, const QScriptValu
 	{
 		int result = getCompFromName(type, list.toString().toUtf8().constData());
 		if (result >= 0 && apCompLists[player][type][result] == AVAILABLE
-		    && (asBodyStats[result].size <= capacity || type != COMP_BODY))
+		    && (type != COMP_BODY || asBodyStats[result].size <= capacity))
 		{
 			return result; // found it!
 		}
