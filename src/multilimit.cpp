@@ -367,7 +367,6 @@ void createLimitSet(void)
 	memset(pEntry, 255, bufSize);
 
 	// Prepare chunk
-	ASSERT(numStructureStats < UBYTE_MAX, "Too many structure stats");
 	for (i = 0; i < numStructureStats; i++)
 	{
 		if (asStructLimits[0][i].limit != LOTS_OF)
@@ -392,7 +391,6 @@ void createLimitSet(void)
 void applyLimitSet(void)
 {
 	MULTISTRUCTLIMITS *pEntry = ingame.pStructureLimits;
-	unsigned int i;
 
 	if (ingame.numStructureLimits == 0)
 	{
@@ -400,15 +398,14 @@ void applyLimitSet(void)
 	}
 
 	// Get the limits and decode
-	for (i = 0; i < ingame.numStructureLimits; ++i)
+	for (int i = 0; i < ingame.numStructureLimits; ++i)
  	{
-		UBYTE id = pEntry[i].id;
+		int id = pEntry[i].id;
 		
 		// So long as the ID is valid
 		if (id < numStructureStats)
 		{
-			unsigned int j;
-			for (j = 0; j < MAX_PLAYERS; ++j)
+			for (int j = 0; j < MAX_PLAYERS; ++j)
 			{
 				asStructLimits[j][id].limit = pEntry[i].limit;
 			}
