@@ -547,6 +547,7 @@ int iV_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWORD Width, U
 			// maximum width and this isn't caused by the appended space then
 			// rewind to the start of this word and finish this line.
 			if (GotSpace
+			 && i != 0
 			 && WWidth > Width
 			 && FWord[i - 1] != ' ')
 			{
