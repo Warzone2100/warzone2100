@@ -5607,7 +5607,10 @@ static bool intAddBuild(DROID *psSelected)
 static bool intAddManufacture(STRUCTURE *psSelected)
 {
 	/* Store the correct stats list for future reference */
-	ppsStatsList = (BASE_STATS**)&apsTemplateList[0];  // FIXME Ugly cast, and is undefined behaviour (strict-aliasing violation) in C/C++.
+	if (!apsTemplateList.empty())
+	{
+		ppsStatsList = (BASE_STATS**)&apsTemplateList[0];  // FIXME Ugly cast, and is undefined behaviour (strict-aliasing violation) in C/C++.
+	}
 
 	objSelectFunc = selectManufacture;
 	objGetStatsFunc = getManufactureStats;
