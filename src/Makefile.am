@@ -14,7 +14,7 @@ MOCEDFILES = $(MOCHEADER:%.h=%_moc.cpp)
 
 autorevision.h autorevision.cache:
 	cd $(top_srcdir) && ./build_tools/autorevision -t h -o $(abs_builddir)/autorevision.cache > $(abs_builddir)/autorevision.h.new
-	cmp -s autorevision.h.new autorevision.h || mv -f autorevision.h.new autorevision.h
+	cmp -s autorevision.h.new autorevision.h && rm autorevision.h.new || mv -f autorevision.h.new autorevision.h
 
 CLEANFILES = \
 	$(BUILT_SOURCES) \

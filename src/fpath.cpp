@@ -99,9 +99,9 @@ static int fpathThreadFunc(void *)
 		result.retval = FPR_FAILED;
 		result.originalDest = Vector2i(job.destX, job.destY);
 
-		fpathExecute(&job, &result);
-
+		// we need to lock BEFORE we fiddle with the data, or we get ugly data race conditions.
 		wzMutexLock(fpathMutex);
+		fpathExecute(&job, &result);
 
 		ASSERT(pathJobs.front().droidID == job.droidID, "Bug");  // The front of pathJobs may have .deleted set to true, but should not otherwise have been modified or deleted.
 		if (!pathJobs.front().deleted)
@@ -306,6 +306,7 @@ static Position findNonblockingPosition(Position pos, PROPULSION_TYPE propulsion
 	// Return point on tile closest to the original pos.
 	Vector2i minCoord = world_coord(bestTile);
 	Vector2i maxCoord = minCoord + Vector2i(TILE_UNITS - 1, TILE_UNITS - 1);
+
 	return Position(std::min(std::max(pos.x, minCoord.x), maxCoord.x), std::min(std::max(pos.y, minCoord.y), maxCoord.y), pos.z);
 }
 
@@ -402,7 +403,7 @@ static FPATH_RETVAL fpathRoute(MOVE_CONTROL *psMove, int id, int startX, int sta
 			ASSERT(retval != FPR_OK || psMove->numPoints > 0, "Ok result but path empty after copy");
 
 			// Remove it from the result list
-			pathResults.erase(psResult);
+			psResult = pathResults.erase(psResult);
 
 			wzMutexUnlock(fpathMutex);
 
@@ -441,6 +442,7 @@ queuePathfinding:
 	job.deleted = false;
 	fpathSetBlockingMap(&job);
 
+	debug(LOG_NEVER, "starting new job for droid %d 0x%x", id, id);
 	// Clear any results or jobs waiting already. It is a vital assumption that there is only one
 	// job or result for each droid in the system at any time.
 	fpathRemoveDroidData(id);
@@ -687,5 +689,7 @@ bool fpathCheck(Position orig, Position dest, PROPULSION_TYPE propulsion)
 	case PROPULSION_TYPE_NUM:
 		break;
 	}
+
+	ASSERT(false, "Should never get here, unknown propulsion !");
 	return true;	// should never get here
 }

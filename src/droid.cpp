@@ -1901,6 +1901,8 @@ DROID *reallyBuildDroid(DROID_TEMPLATE *pTemplate, Position pos, UDWORD player, 
 		scoreUpdateVar(WD_UNITS_BUILT);
 	}
 
+	debug(LOG_LIFE, "created droid for player %d, droid = %p, id=%d (%s): position: x(%d)y(%d)z(%d)", player, psDroid, (int)psDroid->id, psDroid->aName, psDroid->pos.x, psDroid->pos.y, psDroid->pos.z);
+
 	return psDroid;
 }
 
