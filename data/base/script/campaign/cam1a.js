@@ -1,9 +1,9 @@
-var timercoming = 0; // start mission timer after first power gen and derrick is built
-var lastHitTime = 0;
-var scav1group, scav2group, scav3group, scav4group; // premade groups
-var cheatmode = false;
-var stage = 0;
-var numArtifact = 0;
+
+include("script/campaign/libcampaign.js");
+include("script/campaign/templates.js");
+
+var timerComing = 0; // start mission timer after first power gen
+                     // and derrick is built
 
 function gameLost()
 {
@@ -13,107 +13,88 @@ function gameLost()
 // player zero's droid enteres this area
 function eventAreaLaunchScavAttack(droid)
 {
-	stage++;
 	var spos = getObject("scav1soundpos");
 	playSound("pcv375.ogg", spos.x, spos.y, 0);
 	playSound("pcv456.ogg");
 	hackAddMessage("MB1A_MSG", MISS_MSG, 0, true);
 	hackAddMessage("C1A_OBJ1", PROX_MSG, 0, false);
-	hackMarkTiles(); // clear any marked tiles from debugging
-	var droids = enumArea("ScavAttack1", ALL_PLAYERS, false);
 	// send scavengers on war path if triggered above
-	var startpos = getObject("playerBase");
-	for (var i = 0; i < droids.length; i++)
-	{
-		if ((droids[i].player == 7 || droids[i].player == 6) && droids[i].type == DROID)
-		{
-			orderDroidLoc(droids[i], DORDER_SCOUT, startpos.x, startpos.y);
-		}
-	}
-	if (cheatmode)
-	{
-		hackMarkTiles("ScavAttack1"); // mark next area
-	}
+	camManageGroup(
+		camMakeGroup("ScavAttack1", ENEMIES), CAM_ORDER_ATTACK,
+		{ pos: camMakePos("playerBase") }
+	);
+	camMarkTiles();
+	camMarkTiles("ScavAttack1");
+}
+
+function runAway()
+{
+	var oilPatch = getObject("oilPatch");
+	var droids = enumRange(oilPatch.x, oilPatch.y, 7, 7, false);
+	camManageGroup(camMakeGroup(droids), CAM_ORDER_ATTACK, {
+		pos: camMakePos("ScavAttack1"),
+		fallback: camMakePos("retreat1"),
+		morale: 20 // will run away after losing a few people
+	});
+}
+
+function doAmbush()
+{
+	camManageGroup(camMakeGroup("RoadblockArea"), CAM_ORDER_ATTACK, {
+		pos: camMakePos("oilPatch"),
+		fallback: camMakePos("retreat2"),
+		morale: 50 // will mostly die
+	});
 }
 
 // player zero's droid enteres this area
 function eventAreaScavAttack1(droid)
 {
-	stage++;
 	hackRemoveMessage("C1A_OBJ1", PROX_MSG, 0);
-	hackMarkTiles(); // clear marks
+	camMarkTiles();
 	hackAddMessage("C1A_BASE0", PROX_MSG, 0, false);
+	camMarkTiles();
+	camMarkTiles("RoadblockArea");
+	queue("runAway", 1000);
+	queue("doAmbush", 5000);
 }
 
-function eventCheatMode(entered)
+function eventAreaRoadblockArea(droid)
 {
-	cheatmode = entered; // remember this setting
-	if (entered)
-	{
-		if (stage == 0)
-		{
-			hackMarkTiles("LaunchScavAttack");
-		}
-		else if (stage == 1)
-		{
-			hackMarkTiles("ScavAttack1");
-		}
-		else
-		{
-			hackMarkTiles(); // clear marks
-		}
-	}
-	else
-	{
-		hackMarkTiles(); // clear any marked tiles
-	}
+	camEnableFactory("base1factory");
+	camMarkTiles();
+	camMarkTiles("raidTrigger");
+}
+
+function eventArearaidTrigger(droid)
+{
+	camManageGroup(
+		camMakeGroup("raidTrigger", ENEMIES),
+		CAM_ORDER_ATTACK, { pos: camMakePos("scavbase3area") }
+	);
+	camManageGroup(
+		camMakeGroup("raidGroup", ENEMIES),
+		CAM_ORDER_ATTACK, { pos: camMakePos("scavbase3area") }
+	);
+	camManageGroup(
+		camMakeGroup("scavbase3area", ENEMIES),
+		CAM_ORDER_DEFEND, { pos: camMakePos("scavbase3area") }
+	);
+	camEnableFactory("base2factory1");
+	camMarkTiles();
+	camMarkTiles("scavbase3area");
+}
+
+function eventAreascavbase3area(droid)
+{
+	camEnableFactory("base2factory2");
+	camMarkTiles();
 }
 
 // proceed to next level
 function gameWon()
 {
-	enableResearch("R-Wpn-MG1Mk1"); // bonus research topic on level end
-	var bonusTime = getMissionTime();
-	if (bonusTime > 0)
-	{
-		setPowerModifier(125); // 25% bonus to completing fast
-		extraPowerTime(bonusTime);
-		setPowerModifier(100);
-	}
-	loadLevel("CAM_1B");
-}
-
-function removeobject(name)
-{
-	var artifact = getObject(name);
-	if (artifact)
-	{
-		removeObject(artifact);
-	}
-}
-
-// listen to chat messages from player
-function eventChat(from, to, message)
-{
-	if (message == "let me win" && cheatmode)
-	{
-		enableResearch("R-Wpn-MG-Damage01");
-		enableResearch("R-Sys-Engineering01");
-		enableResearch("R-Defense-Tower01");
-		enableResearch("R-Wpn-Flamer01Mk1");
-		enableResearch("R-Wpn-MG1Mk1");
-		// TODO, finish some/all of the above techs
-		removeobject("artifact1");
-		removeobject("artifact2");
-		removeobject("artifact3");
-		removeobject("artifact4");
-		queue("gameWon");
-	}
-	else if (message == "status" && cheatmode)
-	{
-		console("numArtifact = " + numArtifact);
-		console("stage = " + stage);
-	}
+	camNextLevel("CAM_1B");
 }
 
 // things that need checking every second
@@ -123,86 +104,63 @@ function tick()
 	var factories = countStruct("A0LightFactory") + countStruct("A0CyborgFactory");
 	var droids = countDroid(DROID_CONSTRUCT);
 	if (droids == 0 && factories == 0)
-	{
 		queue("gameLost", 4000); // wait 4 secs before throwing the game
-	}
 	// check if game is won
-	var hostiles = countStruct("A0BaBaFactory", 6) + countStruct("A0BaBaFactory", 7)
-	               + countDroid(DROID_ANY, 6) + countDroid(DROID_ANY, 7);
-	if (!hostiles && numArtifact >= 4 && stage >= 6)
-	{
+	if (camAllArtifactsPickedUp() && camAllEnemyBasesEliminated())
 		queue("gameWon", 6000); // wait 6 secs before giving it
-	}
 }
 
 function playDelayed374(where)
 {
-	var spos = getObject("scav2soundpos");
 	var spos = getObject(where);
 	playSound("pcv374.ogg", spos.x, spos.y, 0);
 }
 
-function eventGroupLoss(obj, groupid, newsize)
+function camEnemyBaseEliminated_scavgroup1()
 {
-	var leftovers;
-	if (groupid == scav1group && newsize == 0)
-	{
-		// eliminated scav base 1
-		leftovers = enumArea("scavbase1area");
-		hackRemoveMessage("C1A_BASE0", PROX_MSG, 0);
-		hackAddMessage("C1A_BASE1", PROX_MSG, 0, false);
-		var spos = getObject("scav1soundpos");
-		playSound("pcv391.ogg", spos.x, spos.y, 0);
-		queue("playDelayed374", 2000, "scav2soundpos");
-		stage++;
-	}
-	else if (groupid == scav2group && newsize == 0)
-	{
-		// eliminated scav base 2
-		leftovers = enumArea("scavbase2area");
-		hackRemoveMessage("C1A_BASE1", PROX_MSG, 0);
-		hackAddMessage("C1A_BASE2", PROX_MSG, 0, false);
-		var spos = getObject("scav2soundpos");
-		playSound("pcv392.ogg", spos.x, spos.y, 0);
-		queue("playDelayed374", 2000, "scav3soundpos");
-		stage++;
-	}
-	else if (groupid == scav3group && newsize == 0)
-	{
-		// eliminated scav base 3
-		leftovers = enumArea("scavbase3area");
-		hackRemoveMessage("C1A_BASE2", PROX_MSG, 0);
-		hackAddMessage("C1A_BASE3", PROX_MSG, 0, false);
-		var spos = getObject("scav3soundpos");
-		playSound("pcv392.ogg", spos.x, spos.y, 0);
-		queue("playDelayed374", 2000, "retreat4");
-		stage++;
-	}
-	else if (groupid == scav4group && newsize == 0)
-	{
-		// eliminated scav base 4
-		leftovers = enumArea("scavbase4area");
-		hackRemoveMessage("C1A_BASE3", PROX_MSG, 0);
-		var spos = getObject("retreat4");
-		playSound("pcv392.ogg", spos.x, spos.y, 0);
-		stage++;
-	}
-	// if scav group gone, nuke any leftovers, such as scav walls
-	for (var i = 0; leftovers && i < leftovers.length; i++)
-	{
-		if (((leftovers[i].player == 6 || leftovers[i].player == 7) && leftovers[i].type == STRUCTURE)
-		    || (leftovers[i].type == FEATURE && leftovers[i].stattype == BUILDING))
-		{
-			removeObject(leftovers[i], true); // remove with special effect
-		}
-	}
+	hackRemoveMessage("C1A_BASE0", PROX_MSG, 0);
+	hackAddMessage("C1A_BASE1", PROX_MSG, 0, false);
+	var spos = getObject("scav1soundpos");
+	playSound("pcv391.ogg", spos.x, spos.y, 0);
+	queue("playDelayed374", 2000, "scav2soundpos");
 }
 
-function addartifact(poslabel, artilabel)
+function camEnemyBaseEliminated_scavgroup2()
 {
-	var artpos = getObject(poslabel);
-	var artifact = addFeature("Crate", artpos.x, artpos.y);
-	addLabel(artifact, artilabel);
+	hackRemoveMessage("C1A_BASE1", PROX_MSG, 0);
+	hackAddMessage("C1A_BASE2", PROX_MSG, 0, false);
+	var spos = getObject("scav2soundpos");
+	playSound("pcv392.ogg", spos.x, spos.y, 0);
+	queue("playDelayed374", 2000, "scav3soundpos");
+}
+
+function camEnemyBaseEliminated_scavgroup3()
+{
+	leftovers = enumArea("scavbase3area");
+	hackRemoveMessage("C1A_BASE2", PROX_MSG, 0);
+	hackAddMessage("C1A_BASE3", PROX_MSG, 0, false);
+	var spos = getObject("scav3soundpos");
+	playSound("pcv392.ogg", spos.x, spos.y, 0);
+	queue("playDelayed374", 2000, "retreat4");
+	camEnableFactory("base2factory2");
+}
+
+function camEnemyBaseEliminated_scavgroup4()
+{
+	leftovers = enumArea("scavbase4area");
+	hackRemoveMessage("C1A_BASE3", PROX_MSG, 0);
+	var spos = getObject("retreat4");
+	playSound("pcv392.ogg", spos.x, spos.y, 0);
+}
+
+function eventStructureBuilt(structure, droid)
+{
+	if (structure.stattype == POWER_GEN)
+		timerComing++;
+	else if (structure.stattype == RESOURCE_EXTRACTOR)
+		timerComing++;
+	if (timerComing == 2)
+		setMissionTime(3600);
 }
 
 function eventStartLevel()
@@ -210,28 +168,22 @@ function eventStartLevel()
 	var startpos = getObject("startPosition");
 	var lz = label("landingZone");
 
-	scav1group = getObject("scavgroup1").id;
-	scav2group = getObject("scavgroup2").id;
-	scav3group = getObject("scavgroup3").id;
-	scav4group = getObject("scavgroup4").id;
-
 	centreView(startpos.x, startpos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, 0);
 	setPower(1300);
+	setPower(200, 6);
+	setPower(200, 7);
 
 	// allow to build stuff
-	setStructureLimits("A0PowerGenerator", 5, 0);
-	setStructureLimits("A0ResourceExtractor", 200, 0);
-	setStructureLimits("A0ResearchFacility", 5, 0);
-	setStructureLimits("A0LightFactory", 5, 0);
-	setStructureLimits("A0CommandCentre", 1, 0);
 	enableStructure("A0CommandCentre", 0);
 	enableStructure("A0PowerGenerator", 0);
 	enableStructure("A0ResourceExtractor", 0);
 	enableStructure("A0ResearchFacility", 0);
 	enableStructure("A0LightFactory", 0);
 
-	makeComponentAvailable("MG1Mk1", me);	// needs to be done this way so doesn't enable rest of tree!
+	// needs to be done this way so doesn't enable rest of tree!
+	makeComponentAvailable("MG1Mk1", me);
+
 	completeResearch("R-Vehicle-Body01", me);
 	completeResearch("R-Sys-Spade1Mk1", me);
 	completeResearch("R-Vehicle-Prop-Wheels", me);
@@ -242,83 +194,50 @@ function eventStartLevel()
 	setReinforcementTime(-1);
 	setMissionTime(-1);
 
-	// Add artifacts
-	addartifact("artifact4pos", "artifact1");
-	addartifact("artifact1pos", "artifact2");
-	addartifact("artifact3pos", "artifact3");
-	addartifact("artifact2pos", "artifact4");
-
 	setTimer("tick", 1000);
-}
 
-function eventStructureBuilt(structure, droid)
-{
-	if (structure.stattype == POWER_GEN)
-	{
-		timercoming++;
-	}
-	else if (structure.stattype == RESOURCE_EXTRACTOR)
-	{
-		timercoming++;
-	}
-	if (timercoming == 2)
-	{
-		setMissionTime(3600);
-	}
-}
+	setStructureLimits("A0PowerGenerator", 5, 0);
+	setStructureLimits("A0ResourceExtractor", 200, 0);
+	setStructureLimits("A0ResearchFacility", 5, 0);
+	setStructureLimits("A0LightFactory", 5, 0);
+	setStructureLimits("A0CommandCentre", 1, 0);
 
-// Called when a human droid moves close to a crate.
-function eventPickup(feature, droid)
-{
-	if (feature.stattype != ARTIFACT)
-	{
-		return; // not interested!
-	}
-	playSound("pcv352.ogg", feature.x, feature.y, feature.z);
-	var lab = getLabel(feature);
-	removeObject(feature); // artifacts are not self-removing...
-	if (lab == "artifact1") // first artifact
-	{
-		enableResearch("R-Wpn-MG-Damage01");
-		numArtifact++;
-	}
-	else if (lab == "artifact2") // second artifact
-	{
-		enableResearch("R-Sys-Engineering01");
-		numArtifact++;
-	}
-	else if (lab == "artifact3") // third artifact
-	{
-		enableResearch("R-Defense-Tower01");
-		numArtifact++;
-	}
-	else if (lab == "artifact4") // final artifact
-	{
-		enableResearch("R-Wpn-Flamer01Mk1");
-		numArtifact++;
-	}
-	else
-	{
-		debug("Bad artifact found in cam1a!");
-	}
-}
-
-// /////////////////////////////////////////////////////////////////
-// WARNING MESSAGES
-// Base Under Attack
-// FIXME -- if this is present in every script, put it in rules.js instead?
-function eventAttacked(victimObj, attackerObj)
-{
-	if (gameTime > lastHitTime + 5000)
-	{
-		lastHitTime = gameTime;
-		if (victimObj.type == STRUCTURE)
-		{
-			playSound("pcv337.ogg", victimObj.x, victimObj.y, victimObj.z);	// show position if still alive
-		}
-		else
-		{
-			playSound("pcv399.ogg", victimObj.x, victimObj.y, victimObj.z);
-		}
-	}
+	// feed libcampaign.js with data to do the rest
+	camSetEnemyBases({
+		"scavgroup1": { area: "scavbase1area" },
+		"scavgroup2": { area: "scavbase2area" },
+		"scavgroup3": { area: "scavbase3area" },
+		"scavgroup4": { area: "scavbase4area" },
+	});
+	camSetArtifacts({
+		"base1factory": { tech: "R-Wpn-Flamer01Mk1" },
+		"base2factory2": { tech: "R-Sys-Engineering01" },
+		"base2factory1": { tech: "R-Defense-Tower01" },
+		"artifact4pos": { tech: "R-Wpn-MG-Damage01" },
+	});
+	var t = camTemplates;
+	camSetFactories({
+		"base1factory": {
+			assembly: "assembly1",
+			groupSize: 4,
+			order: CAM_ORDER_ATTACK,
+			data: "playerBase",
+			templates: [ t.trike, t.bloke ]
+		},
+		"base2factory1": {
+			assembly: "assembly2",
+			groupSize: 4,
+			order: CAM_ORDER_ATTACK,
+			data: "playerBase",
+			templates: [ t.bloke, t.buggy, t.bloke ]
+		},
+		"base2factory2": {
+			assembly: "assembly3",
+			groupSize: 4,
+			order: CAM_ORDER_ATTACK,
+			data: "playerBase",
+			templates: [ t.bjeep, t.bloke, t.trike, t.bloke ]
+		},
+	});
+	camMarkTiles("LaunchScavAttack");
 }

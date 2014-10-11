@@ -65,6 +65,7 @@ javascript-doc-base:
 	grep $(top_srcdir)/src/qtscript.cpp -e '//--' | sed 's/\/\/--//' > doc/functions.tex
 	grep $(top_srcdir)/src/qtscriptfuncs.cpp -e '//--' | sed 's/\/\/--//' >> doc/functions.tex
 	grep $(top_srcdir)/src/qtscriptfuncs.cpp -e '//;;' | sed 's/\/\/;;//' > doc/objects.tex
+	grep $(top_srcdir)/data/base/script/campaign/libcampaign.js -e '//;;' | sed 's/\/\/;;//' > doc/campaign.tex
 	test $(abs_top_srcdir) = $(abs_top_builddir) || cp $(top_srcdir)/doc/javascript.tex doc/
 
 javascript-doc: javascript-doc-base
