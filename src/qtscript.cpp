@@ -31,6 +31,7 @@
 #include <QtScript/QScriptValueIterator>
 #include <QtScript/QScriptSyntaxCheckResult>
 #include <QtCore/QList>
+#include <QtCore/QQueue>
 #include <QtCore/QString>
 #include <QtCore/QStringList>
 #include <QtCore/QFileInfo>
@@ -93,6 +94,21 @@ static QList<timerNode> timers;
 
 /// Scripting engine (what others call the scripting context, but QtScript's nomenclature is different).
 static QList<QScriptEngine *> scripts;
+
+/// Whether the scripts have been set up or not
+static bool scriptsReady = false;
+
+/// Structure for research events put on hold
+struct researchEvent
+{
+	RESEARCH *research;
+	STRUCTURE *structure;
+	int player;
+
+	researchEvent(RESEARCH *r, STRUCTURE *s, int p): research(r), structure(s), player(p) {}
+};
+/// Research events that are put on hold until the scripts are ready
+static QQueue<struct researchEvent> eventQueue;
 
 /// Remember what names are used internally in the scripting engine, we don't want to save these to the savegame
 static QHash<QString, int> internalNamespace;
@@ -352,10 +368,20 @@ static QScriptValue js_include(QScriptContext *context, QScriptEngine *engine)
 }
 
 // do not want to call this 'init', since scripts are often loaded before we get here
-bool prepareScripts()
+bool prepareScripts(bool loadGame)
 {
 	debug(LOG_WZ, "Scripts prepared");
-	prepareLabels();
+	if (!loadGame) // labels saved in savegame
+	{
+		prepareLabels();
+	}
+	// Assume that by this point all scripts are loaded
+	scriptsReady = true;
+	while (!eventQueue.isEmpty())
+	{
+		researchEvent resEvent = eventQueue.dequeue();
+		triggerEventResearched(resEvent.research, resEvent.structure, resEvent.player);
+	}
 	return true;
 }
 
@@ -366,6 +392,7 @@ bool initScripts()
 
 bool shutdownScripts()
 {
+	scriptsReady = false;
 	jsDebugShutdown();
 	globalDialog = false;
 	models.clear();
@@ -896,6 +923,8 @@ void jsShowDebug()
 //__ An event that is run when the mission transporter has landed with reinforcements.
 bool triggerEvent(SCRIPT_TRIGGER_TYPE trigger, BASE_OBJECT *psObj)
 {
+	// HACK: TRIGGER_VIDEO_QUIT is called before scripts for initial campaign video
+	ASSERT(scriptsReady || trigger == TRIGGER_VIDEO_QUIT, "Scripts not initialized yet");
 	for (int i = 0; i < scripts.size(); ++i)
 	{
 		QScriptEngine *engine = scripts.at(i);
@@ -965,6 +994,7 @@ bool triggerEvent(SCRIPT_TRIGGER_TYPE trigger, BASE_OBJECT *psObj)
 //__ An event that is run after a player has left the game.
 bool triggerEventPlayerLeft(int id)
 {
+	ASSERT(scriptsReady, "Scripts not initialized yet");
 	for (int i = 0; i < scripts.size(); ++i)
 	{
 		QScriptEngine *engine = scripts.at(i);
@@ -979,6 +1009,7 @@ bool triggerEventPlayerLeft(int id)
 //__ The entered parameter is true if cheat mode entered, false otherwise.
 bool triggerEventCheatMode(bool entered)
 {
+	ASSERT(scriptsReady, "Scripts not initialized yet");
 	for (int i = 0; i < scripts.size(); ++i)
 	{
 		QScriptEngine *engine = scripts.at(i);
@@ -992,6 +1023,7 @@ bool triggerEventCheatMode(bool entered)
 //__ \subsection{eventDroidIdle(droid)} A droid should be given new orders.
 bool triggerEventDroidIdle(DROID *psDroid)
 {
+	ASSERT(scriptsReady, "Scripts not initialized yet");
 	for (int i = 0; i < scripts.size(); ++i)
 	{
 		QScriptEngine *engine = scripts.at(i);
@@ -1012,6 +1044,7 @@ bool triggerEventDroidIdle(DROID *psDroid)
 //__ gift (check \emph{eventObjectTransfer} for that).
 bool triggerEventDroidBuilt(DROID *psDroid, STRUCTURE *psFactory)
 {
+	ASSERT(scriptsReady, "Scripts not initialized yet");
 	for (int i = 0; i < scripts.size(); ++i)
 	{
 		QScriptEngine *engine = scripts.at(i);
@@ -1037,6 +1070,7 @@ bool triggerEventDroidBuilt(DROID *psDroid, STRUCTURE *psFactory)
 //__ (check \emph{eventObjectTransfer} for that).
 bool triggerEventStructBuilt(STRUCTURE *psStruct, DROID *psDroid)
 {
+	ASSERT(scriptsReady, "Scripts not initialized yet");
 	for (int i = 0; i < scripts.size(); ++i)
 	{
 		QScriptEngine *engine = scripts.at(i);
@@ -1062,6 +1096,7 @@ bool triggerEventStructBuilt(STRUCTURE *psStruct, DROID *psDroid)
 //__ register your own timer to keep checking.
 bool triggerEventStructureReady(STRUCTURE *psStruct)
 {
+	ASSERT(scriptsReady, "Scripts not initialized yet");
 	for (int i = 0; i < scripts.size(); ++i)
 	{
 		QScriptEngine *engine = scripts.at(i);
@@ -1082,6 +1117,7 @@ bool triggerEventStructureReady(STRUCTURE *psStruct)
 //__ attacked. The attacker parameter may be either a structure or a droid.
 bool triggerEventAttacked(BASE_OBJECT *psVictim, BASE_OBJECT *psAttacker, int lastHit)
 {
+	ASSERT(scriptsReady, "Scripts not initialized yet");
 	if (!psAttacker)
 	{
 		// do not fire off this event if there is no attacker -- nothing do respond to
@@ -1115,6 +1151,13 @@ bool triggerEventAttacked(BASE_OBJECT *psVictim, BASE_OBJECT *psAttacker, int la
 //__ be set to null. The player parameter gives the player it is called for.
 bool triggerEventResearched(RESEARCH *psResearch, STRUCTURE *psStruct, int player)
 {
+	//HACK: This event can be triggered when loading savegames, before the script engines are initialized.
+	// if this is the case, we need to store these events and replay them later
+	if (!scriptsReady)
+	{
+		eventQueue.enqueue(researchEvent(psResearch, psStruct, player));
+		return true;
+	}
 	for (int i = 0; i < scripts.size(); ++i)
 	{
 		QScriptEngine *engine = scripts.at(i);
@@ -1144,6 +1187,7 @@ bool triggerEventResearched(RESEARCH *psResearch, STRUCTURE *psStruct, int playe
 //__ the parameter object around, since it is about to vanish!
 bool triggerEventDestroyed(BASE_OBJECT *psVictim)
 {
+	ASSERT(scriptsReady, "Scripts not initialized yet");
 	for (int i = 0; i < scripts.size() && psVictim; ++i)
 	{
 		QScriptEngine *engine = scripts.at(i);
@@ -1160,6 +1204,7 @@ bool triggerEventDestroyed(BASE_OBJECT *psVictim)
 //__ Careful passing the parameter object around, since it is about to vanish! (3.2+ only)
 bool triggerEventPickup(FEATURE *psFeat, DROID *psDroid)
 {
+	ASSERT(scriptsReady, "Scripts not initialized yet");
 	for (int i = 0; i < scripts.size(); ++i)
 	{
 		QScriptEngine *engine = scripts.at(i);
@@ -1177,6 +1222,7 @@ bool triggerEventPickup(FEATURE *psFeat, DROID *psDroid)
 //__ object being seen. This is event is throttled, and so is not called every time.
 bool triggerEventSeen(BASE_OBJECT *psViewer, BASE_OBJECT *psSeen)
 {
+	ASSERT(scriptsReady, "Scripts not initialized yet");
 	for (int i = 0; i < scripts.size() && psSeen && psViewer; ++i)
 	{
 		QScriptEngine *engine = scripts.at(i);
@@ -1200,6 +1246,7 @@ bool triggerEventSeen(BASE_OBJECT *psViewer, BASE_OBJECT *psSeen)
 //__ The event is called for both players.
 bool triggerEventObjectTransfer(BASE_OBJECT *psObj, int from)
 {
+	ASSERT(scriptsReady, "Scripts not initialized yet");
 	for (int i = 0; i < scripts.size() && psObj; ++i)
 	{
 		QScriptEngine *engine = scripts.at(i);
@@ -1222,7 +1269,7 @@ bool triggerEventObjectTransfer(BASE_OBJECT *psObj, int from)
 //__ player.
 bool triggerEventChat(int from, int to, const char *message)
 {
-	for (int i = 0; i < scripts.size() && message; ++i)
+	for (int i = 0; scriptsReady && message && i < scripts.size(); ++i)
 	{
 		QScriptEngine *engine = scripts.at(i);
 		int me = engine->globalObject().property("me").toInt32();
@@ -1273,6 +1320,7 @@ bool triggerEventBeacon(int from, int to, const char *message, int x, int y)
 //__ player sending the beacon. For the moment, the \emph{to} parameter is always the script player.
 bool triggerEventBeaconRemoved(int from, int to)
 {
+	ASSERT(scriptsReady, "Scripts not initialized yet");
 	for (int i = 0; i < scripts.size(); ++i)
 	{
 		QScriptEngine *engine = scripts.at(i);
@@ -1299,6 +1347,7 @@ bool triggerEventBeaconRemoved(int from, int to)
 //__ be empty.
 bool triggerEventSelected()
 {
+	ASSERT(scriptsReady, "Scripts not initialized yet");
 	selectionChanged = true;
 	return true;
 }
@@ -1309,6 +1358,7 @@ bool triggerEventSelected()
 // Since groups are entities local to one context, we do not iterate over them here.
 bool triggerEventGroupLoss(BASE_OBJECT *psObj, int group, int size, QScriptEngine *engine)
 {
+	ASSERT(scriptsReady, "Scripts not initialized yet");
 	QScriptValueList args;
 	args += convMax(psObj, engine);
 	args += QScriptValue(group);
@@ -1329,6 +1379,7 @@ bool triggerEventDroidMoved(DROID *psDroid, int oldx, int oldy)
 //__ eventArea + the name of the label.
 bool triggerEventArea(QString label, DROID *psDroid)
 {
+	ASSERT(scriptsReady, "Scripts not initialized yet");
 	for (int i = 0; i < scripts.size(); ++i)
 	{
 		QScriptEngine *engine = scripts.at(i);
@@ -1348,6 +1399,7 @@ bool triggerEventArea(QString label, DROID *psDroid)
 //__ run on the client of the player designing the template.
 bool triggerEventDesignCreated(DROID_TEMPLATE *psTemplate)
 {
+	ASSERT(scriptsReady, "Scripts not initialized yet");
 	for (int i = 0; i < scripts.size(); ++i)
 	{
 		QScriptEngine *engine = scripts.at(i);
@@ -1364,6 +1416,7 @@ bool triggerEventDesignCreated(DROID_TEMPLATE *psTemplate)
 //__ cheating!
 bool triggerEventSyncRequest(int from, int req_id, int x, int y, BASE_OBJECT *psObj, BASE_OBJECT *psObj2)
 {
+	ASSERT(scriptsReady, "Scripts not initialized yet");
 	for (int i = 0; i < scripts.size(); ++i)
 	{
 		QScriptEngine *engine = scripts.at(i);

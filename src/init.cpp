@@ -1257,7 +1257,7 @@ bool stageThreeInitialise(void)
 	// Load any stored templates; these need to be available ASAP
 	initTemplates();
 
-	prepareScripts();
+	prepareScripts(getLevelLoadType() == GTYPE_SAVE_MIDMISSION || getLevelLoadType() == GTYPE_SAVE_START);
 
 	if (!fpathInitialise())
 	{
