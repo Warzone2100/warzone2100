@@ -307,8 +307,7 @@ void _wzSceneBegin(const char *descr)
 	ASSERT(sceneActive == NULL, "Out of order scenes: Wanted to start %s, was in %s", descr, sceneActive);
 	if (khr_debug)
 	{
-		// enable when https://github.com/apitrace/apitrace/issues/218 has been fixed
-		//glPushDebugGroup(GL_DEBUG_SOURCE_APPLICATION, PERF_COUNT, -1, descr);
+		glPushDebugGroup(GL_DEBUG_SOURCE_APPLICATION, 0, -1, descr);
 	}
 	sceneActive = descr;
 }
@@ -318,8 +317,7 @@ void _wzSceneEnd(const char *descr)
 	ASSERT(descr == sceneActive, "Out of order scenes: Wanted to stop %s, was in %s", descr, sceneActive);
 	if (khr_debug)
 	{
-		// enable when https://github.com/apitrace/apitrace/issues/218 has been fixed
-		//glPopDebugGroup();
+		glPopDebugGroup();
 	}
 	sceneActive = NULL;
 }
