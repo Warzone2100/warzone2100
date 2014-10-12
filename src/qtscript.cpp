@@ -77,9 +77,9 @@ struct timerNode
 	int player;
 	int calls;
 	timerType type;
-	timerNode() {}
+	timerNode() : engine(NULL), baseobjtype(OBJ_NUM_TYPES) {}
 	timerNode(QScriptEngine *caller, QString val, int plr, int frame)
-		: function(val), engine(caller), baseobj(-1), frameTime(frame + gameTime), ms(frame), player(plr), calls(0), type(TIMER_REPEAT) {}
+		: function(val), engine(caller), baseobj(-1), baseobjtype(OBJ_NUM_TYPES), frameTime(frame + gameTime), ms(frame), player(plr), calls(0), type(TIMER_REPEAT) {}
 	bool operator== (const timerNode &t) { return function == t.function && player == t.player; }
 	// implement operator less TODO
 };

@@ -40,12 +40,13 @@ enum FEATURE_TYPE
 	FEAT_OIL_DRUM,
 	FEAT_TREE,
 	FEAT_SKYSCRAPER,
+	FEAT_COUNT
 };
 
 /* Stats for a feature */
 struct FEATURE_STATS : public BASE_STATS
 {
-	FEATURE_STATS(int idx = 0) : BASE_STATS(idx) {}
+	FEATURE_STATS(int idx = 0) : BASE_STATS(idx), subType(FEAT_COUNT), psImd(NULL), tileDraw(false), allowLOS(false), visibleAtStart(false), damageable(false) {}
 
 	FEATURE_TYPE    subType;                ///< type of feature
 
