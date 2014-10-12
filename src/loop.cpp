@@ -136,9 +136,6 @@ LOOP_MISSION_STATE		loopMissionState = LMS_NORMAL;
 // this is set by scrStartMission to say what type of new level is to be started
 LEVEL_TYPE nextMissionType = LDS_NONE;
 
- /* Force 3D display */
-UDWORD	mcTime;
-
 static GAMECODE renderLoop()
 {
 	if (bMultiPlayer && !NetPlay.isHostAlive && NetPlay.bComms && !NetPlay.isHost)

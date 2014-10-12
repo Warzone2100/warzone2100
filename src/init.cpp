@@ -98,7 +98,7 @@
 #include "qtscript.h"
 #include "template.h"
 
-static void	initMiscVars(void);
+static void initMiscVars();
 
 static const char UserMusicPath[] = "music";
 
@@ -1032,7 +1032,7 @@ bool stageOneShutDown(void)
 
 	proj_Shutdown();
 
-    releaseMission();
+	releaseMission();
 
 	if (!aiShutdown())
 	{
@@ -1308,7 +1308,6 @@ bool stageThreeInitialise(void)
 		}
 	}
 
-	// ffs JS   (and its a global!)
 	if (getLevelLoadType() != GTYPE_SAVE_MIDMISSION)
 	{
 		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_GAMEINIT);
@@ -1364,14 +1363,10 @@ bool stageThreeShutDown(void)
 		return false;
 	}
 
-	/*
-		When this line wasn't at this point. The PSX version always failed on the next script after the tutorial ... unexplained why?
-	*/
-//	bInTutorial=false;
 	scrExternReset();
 
-    //reset the run data so that doesn't need to be initialised in the scripts
-    initRunData();
+	// reset the run data so that doesn't need to be initialised in the scripts
+	initRunData();
 
 	resetVTOLLandingPos();
 
@@ -1418,14 +1413,13 @@ bool saveGameReset(void)
 		return false;
 	}
 
-    //clear out any messages
-    freeMessages();
+	freeMessages();
 
 	return true;
 }
 
 // --- Miscellaneous Initialisation stuff that really should be done each restart
-static void	initMiscVars(void)
+static void initMiscVars()
 {
 	selectedPlayer = 0;
 	realSelectedPlayer = 0;

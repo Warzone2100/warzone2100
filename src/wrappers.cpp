@@ -347,12 +347,9 @@ void initLoadingScreen( bool drawbdrop )
 // fill buffers with the static screen
 void startCreditsScreen(void)
 {
-	SCREENTYPE	screen = SCREEN_CREDITS;
-
 	lastChange = gameTime;
-	// fill buffers
 
-	pie_LoadBackDrop(screen);
+	pie_LoadBackDrop(SCREEN_CREDITS);
 
 	pie_SetFogStatus(false);
 	pie_ScreenFlip(CLEAR_BLACK);//init loading
