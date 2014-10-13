@@ -1,3 +1,12 @@
+2014-??-??: Version 3.1.2
+ * General:
+   * Change: Some updated textures and models (commit:90f9ef01e8c684792507c49c86c99b1f72db473b)
+   * Change: No longer enforce a 255 max limit on number of structure types (commit:8f7b9c8f07502c2e0cb86fd2c7d6085dfae1896d, ticket:4205)
+   * Fix: Race condition bugs (commit:4986580f0845f47553713c2b3afbdfa82296d12a, ticket:4213, ticket:3228)
+   * Fix: Throttling of danger function was not working (commit:9827d7a2a99602016d55c9cc8cb18d375fb7b5a8, ticket:4212)
+   * Fix: Stop auto-repair from repairing unfinished structures (commit:8f7b9c8f07502c2e0cb86fd2c7d6085dfae1896d, ticket:4205)
+   * Fix: Fix wall rotation bug (commit: b562febeec102801e098a69c484fdc5c65fbdec3)
+
 2013-12-11: Version 3.1.1
  * General:
    * Change: Updated textures by Christian Scholz (cnceo) (commit:1f5432d81c621f28dc091ba50aa0fb16b6e5d1e1)

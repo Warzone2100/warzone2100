@@ -105,8 +105,8 @@ bool inQuad(const Vector2i *pt, const QUAD *quad)
 
 Vector2i positionInQuad(Vector2i const &pt, QUAD const &quad)
 {
-	int lenSq[4];
-	int ptDot[4];
+	long lenSq[4];
+	long ptDot[4];
 	for (int i = 0, j = 3; i < 4; j = i++)
 	{
 		Vector2i edge = quad.coords[j] - quad.coords[i];
@@ -118,8 +118,8 @@ Vector2i positionInQuad(Vector2i const &pt, QUAD const &quad)
 	int ret[2];
 	for (int i = 0; i < 2; ++i)
 	{
-		int d1 = ptDot[i]*lenSq[i + 2];
-		int d2 = ptDot[i + 2]*lenSq[i];
+		long d1 = ptDot[i]*lenSq[i + 2];
+		long d2 = ptDot[i + 2]*lenSq[i];
 		ret[i] = d1 + d2 != 0? (int64_t)TILE_UNITS*d1 / (d1 + d2) : TILE_UNITS/2;
 	}
 	return Vector2i(ret[0], ret[1]);
