@@ -116,7 +116,7 @@ struct BASE_OBJECT : public SIMPLE_OBJECT
 /// Space-time coordinate, including orientation.
 struct Spacetime
 {
-	Spacetime() {}
+	Spacetime() : time(0), pos(0, 0, 0), rot(0, 0, 0) {}
 	Spacetime(Position pos_, Rotation rot_, uint32_t time_) : time(time_), pos(pos_), rot(rot_) {}
 
 	uint32_t  time;        ///< Game time

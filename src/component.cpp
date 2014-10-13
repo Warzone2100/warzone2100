@@ -61,6 +61,11 @@ bool setPlayerColour(UDWORD player, UDWORD col)
 
 UBYTE getPlayerColour(UDWORD pl)
 {
+	if (pl == MAX_PLAYERS)
+	{
+		return 0; // baba
+	}
+	ASSERT_OR_RETURN(0, pl < MAX_PLAYERS, "Invalid player number %u", pl);
 	return NetPlay.players[pl].colour;
 }
 

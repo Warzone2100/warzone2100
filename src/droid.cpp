@@ -1806,6 +1806,8 @@ DROID *reallyBuildDroid(DROID_TEMPLATE *pTemplate, Position pos, UDWORD player, 
 	psDroid->droidType = droidTemplateType(pTemplate);  // Is set again later to the same thing, in droidSetBits.
 	psDroid->pos = pos;
 	psDroid->rot = rot;
+	psDroid->prevSpacetime.pos = pos;
+	psDroid->prevSpacetime.rot = rot;
 
 	//don't worry if not on homebase cos not being drawn yet
 	if (!onMission)
