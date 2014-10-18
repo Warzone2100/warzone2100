@@ -5,11 +5,6 @@ include("script/campaign/templates.js");
 var timerComing = 0; // start mission timer after first power gen
                      // and derrick is built
 
-function gameLost()
-{
-	gameOverMessage(false);
-}
-
 // player zero's droid enteres this area
 function eventAreaLaunchScavAttack(droid)
 {
@@ -91,25 +86,6 @@ function eventAreascavbase3area(droid)
 	camMarkTiles();
 }
 
-// proceed to next level
-function gameWon()
-{
-	camNextLevel("CAM_1B");
-}
-
-// things that need checking every second
-function tick()
-{
-	// check if game is lost
-	var factories = countStruct("A0LightFactory") + countStruct("A0CyborgFactory");
-	var droids = countDroid(DROID_CONSTRUCT);
-	if (droids == 0 && factories == 0)
-		queue("gameLost", 4000); // wait 4 secs before throwing the game
-	// check if game is won
-	if (camAllArtifactsPickedUp() && camAllEnemyBasesEliminated())
-		queue("gameWon", 6000); // wait 6 secs before giving it
-}
-
 function playDelayed374(where)
 {
 	var spos = getObject(where);
@@ -120,8 +96,6 @@ function camEnemyBaseEliminated_scavgroup1()
 {
 	hackRemoveMessage("C1A_BASE0", PROX_MSG, 0);
 	hackAddMessage("C1A_BASE1", PROX_MSG, 0, false);
-	var spos = getObject("scav1soundpos");
-	playSound("pcv391.ogg", spos.x, spos.y, 0);
 	queue("playDelayed374", 2000, "scav2soundpos");
 }
 
@@ -129,28 +103,20 @@ function camEnemyBaseEliminated_scavgroup2()
 {
 	hackRemoveMessage("C1A_BASE1", PROX_MSG, 0);
 	hackAddMessage("C1A_BASE2", PROX_MSG, 0, false);
-	var spos = getObject("scav2soundpos");
-	playSound("pcv392.ogg", spos.x, spos.y, 0);
 	queue("playDelayed374", 2000, "scav3soundpos");
 }
 
 function camEnemyBaseEliminated_scavgroup3()
 {
-	leftovers = enumArea("scavbase3area");
 	hackRemoveMessage("C1A_BASE2", PROX_MSG, 0);
 	hackAddMessage("C1A_BASE3", PROX_MSG, 0, false);
-	var spos = getObject("scav3soundpos");
-	playSound("pcv392.ogg", spos.x, spos.y, 0);
 	queue("playDelayed374", 2000, "retreat4");
 	camEnableFactory("base2factory2");
 }
 
 function camEnemyBaseEliminated_scavgroup4()
 {
-	leftovers = enumArea("scavbase4area");
 	hackRemoveMessage("C1A_BASE3", PROX_MSG, 0);
-	var spos = getObject("retreat4");
-	playSound("pcv392.ogg", spos.x, spos.y, 0);
 }
 
 function eventStructureBuilt(structure, droid)
@@ -165,11 +131,13 @@ function eventStructureBuilt(structure, droid)
 
 function eventStartLevel()
 {
+	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, "CAM_1B");
+
 	var startpos = getObject("startPosition");
 	var lz = label("landingZone");
-
 	centreView(startpos.x, startpos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, 0);
+
 	setPower(1300);
 	setPower(200, 6);
 	setPower(200, 7);
@@ -194,50 +162,73 @@ function eventStartLevel()
 	setReinforcementTime(-1);
 	setMissionTime(-1);
 
-	setTimer("tick", 1000);
-
 	setStructureLimits("A0PowerGenerator", 5, 0);
 	setStructureLimits("A0ResourceExtractor", 200, 0);
 	setStructureLimits("A0ResearchFacility", 5, 0);
 	setStructureLimits("A0LightFactory", 5, 0);
 	setStructureLimits("A0CommandCentre", 1, 0);
 
+	camMarkTiles("LaunchScavAttack");
+
 	// feed libcampaign.js with data to do the rest
 	camSetEnemyBases({
-		"scavgroup1": { area: "scavbase1area" },
-		"scavgroup2": { area: "scavbase2area" },
-		"scavgroup3": { area: "scavbase3area" },
-		"scavgroup4": { area: "scavbase4area" },
+		"scavgroup1": {
+			cleanup: "scavbase1area",
+			detectSnd: "pcv375.ogg",
+			eliminateSnd: "pcv391.ogg"
+		},
+		"scavgroup2": {
+			cleanup: "scavbase2area",
+			detectSnd: "pcv374.ogg",
+			eliminateSnd: "pcv392.ogg"
+		},
+		"scavgroup3": {
+			cleanup: "scavbase3area",
+			detectSnd: "pcv374.ogg",
+			eliminateSnd: "pcv392.ogg"
+		},
+		"scavgroup4": {
+			cleanup: "scavbase4area",
+			detectSnd: "pcv374.ogg",
+			eliminateSnd: "pcv392.ogg"
+		},
 	});
+
 	camSetArtifacts({
 		"base1factory": { tech: "R-Wpn-Flamer01Mk1" },
 		"base2factory2": { tech: "R-Sys-Engineering01" },
 		"base2factory1": { tech: "R-Defense-Tower01" },
 		"artifact4pos": { tech: "R-Wpn-MG-Damage01" },
 	});
+
 	var t = camTemplates;
 	camSetFactories({
 		"base1factory": {
 			assembly: "assembly1",
-			groupSize: 4,
 			order: CAM_ORDER_ATTACK,
-			data: "playerBase",
+			data: { pos: "playerBase" },
+			groupSize: 3,
+			maxSize: 3,
+			throttle: 20000,
 			templates: [ t.trike, t.bloke ]
 		},
 		"base2factory1": {
 			assembly: "assembly2",
-			groupSize: 4,
 			order: CAM_ORDER_ATTACK,
-			data: "playerBase",
+			data: { pos: "playerBase" },
+			groupSize: 4,
+			maxSize: 4,
+			throttle: 16000,
 			templates: [ t.bloke, t.buggy, t.bloke ]
 		},
 		"base2factory2": {
 			assembly: "assembly3",
-			groupSize: 4,
 			order: CAM_ORDER_ATTACK,
-			data: "playerBase",
+			data: { pos: "playerBase" },
+			groupSize: 4,
+			maxSize: 4,
+			throttle: 13000,
 			templates: [ t.bjeep, t.bloke, t.trike, t.bloke ]
 		},
 	});
-	camMarkTiles("LaunchScavAttack");
 }

@@ -24,7 +24,7 @@
 //;; your attention.
 
 /*
-	Private vars and functions are prefixed with `\texttt{__cam}'.
+	Private vars and functions are prefixed with `__cam'.
 	Please do not use private stuff in scenario code, use only public API.
 
 	We CANNOT put our private vars into an anonymous namespace, even though
@@ -60,13 +60,15 @@
 	printed.
 
 	In cheat mode, more warnings make sense, explaining what's going on
-	under the hood. Use camHiddenDebug() for such warnings - they'd auto-hide
+	under the hood. Use camTrace() for such warnings - they'd auto-hide
 	outside cheat mode.
 
 	Lines prefixed with // followed by ;; are docstrings for JavaScript API
 	documentation. Visit
 		http://buildbot.wz2100.net/files/javascript/javascript.html
-	to see how it looks.
+	to see how it looks. The documentation is coded in TeX; but please
+	use only very simple TeX, because it would then be compiled to
+	HTML by HeVeA, which fails to support most of the complicated stuff.
 */
 
 
@@ -106,7 +108,7 @@ function camSafeRemoveObject(obj, flashy)
 {
 	if (camIsString(obj))
 		obj = getObject(obj);
-	if (obj)
+	if (camDef(obj) && obj)
 		removeObject(obj, flashy);
 }
 
@@ -125,6 +127,11 @@ function camMakePos(xx, yy)
 	var obj = xx;
 	if (camIsString(xx))
 		obj = getObject(xx);
+	if (!camDef(obj))
+	{
+		camDebug("Failed at", xx);
+		return undefined;
+	}
 	switch (obj.type)
 	{
 		case DROID:
@@ -224,6 +231,11 @@ function camMakeGroup(what, filter)
 		for (var i = 0; i < array.length; ++i)
 		{
 			var obj = array[i];
+			if (!camDef(obj) || !obj)
+			{
+				camDebug("Trying to add", obj);
+				continue;
+			}
 			if (obj.type === DROID && camPlayerMatchesFilter(obj.player, filter))
 				groupAdd(group, array[i]);
 		}
@@ -253,14 +265,19 @@ function camMarkTiles(label)
 
 //;; \subsection{camDebug(string...)}
 //;; Pretty debug prints - a wrapper around \texttt{debug()}.
-//;; Prints a "DEBUG" prefix, then caller function name,
-//;; then argument strings. Only use this function to indicate
+//;; Prints a function call stack and the argument message,
+//;; prefixed with "DEBUG". Only use this function to indicate
 //;; actual bugs in the scenario script, because game shouldn't
-//;; print things when nothing is broken. For easier debugging,
-//;; use \texttt{camTrace()}.
+//;; print things when nothing is broken. If you want to keep
+//;; some prints around to make debugging easier without distracting
+//;; the user, use \texttt{camTrace()}.
 function camDebug()
 {
-	__camGenericDebug("DEBUG", arguments.callee.caller.name, arguments);
+	__camGenericDebug("DEBUG",
+	                  arguments.callee.caller.name,
+	                  arguments,
+	                  true,
+	                  __camBacktrace());
 }
 
 //;; \subsection{camDebugOnce(string...)}
@@ -273,7 +290,11 @@ function camDebugOnce()
 	if (!__camDebuggedOnce[str])
 		return;
 	__camDebuggedOnce[str] = true;
-	__camGenericDebug("DEBUG", arguments.callee.caller.name, str);
+	__camGenericDebug("DEBUG",
+	                  arguments.callee.caller.name,
+	                  arguments,
+	                  true,
+	                  __camBacktrace());
 }
 
 //;; \subsection{camTrace(string...)}
@@ -284,7 +305,9 @@ function camTrace()
 {
 	if (!__camCheatMode)
 		return;
-	__camGenericDebug("TRACE", arguments.callee.caller.name, arguments);
+	__camGenericDebug("TRACE",
+	                  arguments.callee.caller.name,
+	                  arguments);
 }
 
 //////////// privates
@@ -303,13 +326,45 @@ function __camUpdateMarkedTiles()
 function __camLetMeWin()
 {
 	__camLetMeWinArtifacts();
+	__camGameWon();
 }
 
-function __camGenericDebug(flag, func, args)
+function __camWinInfo()
 {
-	debug(flag + ": " + func + ": " + Array.prototype.join.call(args, " "));
+	chat(CAM_HUMAN_PLAYER, "Picked up " + __camNumArtifacts
+		+ " artifacts out of " + Object.keys(__camArtifacts).length);
+	chat(CAM_HUMAN_PLAYER, "Eliminated " + __camNumEnemyBases
+		+ " enemy bases out of " + Object.keys(__camEnemyBases).length);
 }
 
+function __camGenericDebug(flag, func, args, err, bt)
+{
+	if (camDef(bt) && bt)
+		for (var i = bt.length - 1; i >= 0; --i)
+			debug("STACK: from", [bt[i]]);
+	if (!func)
+		func = "<anonymous>";
+	var str = flag + ": " + func + ": " +
+	      Array.prototype.join.call(args, " ");
+	debug(str);
+	if (camDef(err) && err)
+		dump(str);
+}
+
+function __camBacktrace()
+{
+	var func = arguments.callee.caller;
+	var list = [];
+	while (camDef(func) && func)
+	{
+		if (func.name)
+			list[list.length] = func.name;
+		else
+			list[list.length] = "<anonymous>";
+		func = func.caller;
+	}
+	return list;
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Artifacts management.
@@ -431,7 +486,7 @@ function __camLetMeWinArtifacts()
 		var ai = __camArtifacts[alabel];
 		if (ai.placed)
 		{
-			var label = __camGetArtifactLabel(ai.pos);
+			var label = __camGetArtifactLabel(alabel);
 			var artifact = getObject(label);
 			if (!camDef(artifact))
 				continue;
@@ -445,7 +500,7 @@ function __camLetMeWinArtifacts()
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-// Enemy base destruction management.
+// Enemy base management.
 ////////////////////////////////////////////////////////////////////////////////
 
 //;; \subsection{camSetEnemyBases(bases)}
@@ -455,9 +510,22 @@ function __camLetMeWinArtifacts()
 //;; The argument is a JavaScript map from group labels to base descriptions.
 //;; Each label points to a group of vital base structures. Once this group
 //;; is eradicated, the base is considered to be destroyed. Base description
-//;; is a JavaScript object with the following fields:
+//;; is a JavaScript object with the following optional fields:
 //;; \begin{description}
-//;; 	\item[area] An area label to clean up features in once base is destroyed.
+//;; 	\item[cleanup] An area label to clean up features in once base is destroyed.
+//;; 	\item[detectSnd] A sound file to play when the base is detected.
+//;; 	\item[eliminateSnd] A sound file to play when the base is eliminated.
+//;; 	The sound is played in the center of the cleanup area,
+//;; 	which needs to be defined.
+//;; \end{description}
+//;; Additionally, this function would call special event callbacks if they are
+//;; defined in your script, which should be named as follows,
+//;; where LABEL is the label of the base group:
+//;; \begin{description}
+//;; 	\item[camEnemyBaseDetected_LABEL] Called when the player sees an object from
+//;; 	the enemy base group for the first time.
+//;; 	\item[camEnemyBaseEliminated_LABEL] Called when the base is eliminated,
+//;; 	right after leftovers were cleaned up.
 //;; \end{description}
 function camSetEnemyBases(bases)
 {
@@ -468,6 +536,7 @@ function camSetEnemyBases(bases)
 	{
 		var bi = __camEnemyBases[blabel];
 		bi.group = getObject(blabel).id;
+		bi.seen = false;
 	}
 }
 
@@ -484,6 +553,29 @@ function camAllEnemyBasesEliminated()
 
 var __camEnemyBases;
 var __camNumEnemyBases;
+
+function __camCheckBaseSeen(seen)
+{
+	var group = seen.group;
+	if (!camDef(group) || !group)
+		return;
+	// FIXME: O(n) lookup here
+	for (var blabel in __camEnemyBases)
+	{
+		var bi = __camEnemyBases[blabel];
+		if (bi.group !== group)
+			continue;
+		if (bi.seen)
+			break;
+		camTrace("Enemy base", blabel, "detected");
+		bi.seen = true;
+		if (camDef(bi.detectSnd) && camDef(seen))
+			playSound(bi.detectSnd, seen.x, seen.y, 0);
+		var callback = __camGlobalContext["camEnemyBaseDetected_" + blabel];
+		if (camDef(callback))
+			callback();
+	}
+}
 
 function __camIsValidLeftover(obj)
 {
@@ -504,19 +596,27 @@ function __camCheckBaseEliminated(group)
 		var bi = __camEnemyBases[blabel];
 		if (bi.group !== group)
 			continue;
-		var leftovers = enumArea(bi.area);
-		for (var i = 0; i < leftovers.length; i++)
+		camTrace("Enemy base", blabel, "eliminated");
+		if (camDef(bi.cleanup))
 		{
-			obj = leftovers[i];
-			if (__camIsValidLeftover(obj))
-				camSafeRemoveObject(obj, true); // remove with special effect
+			var leftovers = enumArea(bi.cleanup);
+			for (var i = 0; i < leftovers.length; i++)
+			{
+				obj = leftovers[i];
+				if (__camIsValidLeftover(obj))
+				{
+					// remove with special effect
+					camSafeRemoveObject(obj, true);
+				}
+			}
+			if (camDef(bi.eliminateSnd))
+			{
+				// play sound
+				var pos = camMakePos(bi.cleanup);
+				playSound(bi.eliminateSnd, pos.x, pos.y, 0);
+			}
 		}
-		var callback;
-		try
-		{
-			callback = eval("camEnemyBaseEliminated_" + blabel);
-		}
-		catch(e) {};
+		var callback = __camGlobalContext["camEnemyBaseEliminated_" + blabel];
 		if (camDef(callback))
 			callback();
 		++__camNumEnemyBases;
@@ -532,6 +632,7 @@ function __camCheckBaseEliminated(group)
 
 const CAM_ORDER_ATTACK = 0;
 const CAM_ORDER_DEFEND = 1;
+const CAM_ORDER_PATROL = 2;
 
 //;; \subsection{camManageGroup(group, order, data)}
 //;; Tell \texttt{libcampaign.js} to manage a certain group. The group
@@ -541,7 +642,7 @@ const CAM_ORDER_DEFEND = 1;
 //;; \begin{description}
 //;; 	\item[CAM_ORDER_ATTACK] Pursue human player, preferably around
 //;; 	the given position. The following optional data object fields are
-//;; 	available:
+//;; 	available, none of which is required:
 //;; 	\begin{description}
 //;; 		\item[pos] Position to attack.
 //;; 		\item[fallback] Position to retreat.
@@ -549,25 +650,39 @@ const CAM_ORDER_DEFEND = 1;
 //;; 		of the original group dies, fall back to the fallback position.
 //;; 		If new droids are added to the group, it can recover and attack
 //;; 		again.
+//;; 		\item[count] Override size of the original group. If unspecified,
+//;; 		number of doids in the group at call time. Retreat on low morale
+//;; 		is counted against this value.
 //;; 	\end{description}
 //;; 	\item[CAM_ORDER_DEFEND] Protect the given position. If too far, retreat
-//;; 	back there ignoring fire. The following optional data object fields are
-//;; 	available:
+//;; 	back there ignoring fire. The following data object fields are
+//;; 	required:
 //;; 	\begin{description}
 //;; 		\item[pos] Position to defend.
+//;; 	\end{description}
+//;; 	\item[CAM_ORDER_PATROL] Move droids randomly between a given list of
+//;; 	positions. The following data object fields are required:
+//;; 	\begin{description}
+//;; 		\item[pos] An array of positions to patrol between.
+//;; 		\item[interval] Change positions every this many milliseconds.
 //;; 	\end{description}
 //;; \end{description} 
 function camManageGroup(group, order, data)
 {
+	if (camDef(__camGroupInfo[group])
+	    && order !== __camGroupInfo[group].order)
+	{
+		camTrace("Group", group, "receives a new order:",
+		         camOrderToString(order));
+	}
 	__camGroupInfo[group] = {
 		target: undefined,
 		order: order,
 		data: data,
-		count: groupSize(group) // initial droid count
+		count: camDef(data.count) ? data.count : groupSize(group)
 	};
+	// apply orders instantly
 	__camTacticsTick();
-	camTrace("Group", group, "receives new order:",
-	         camOrderToString(order));
 }
 
 //;; \subsection{camStopManagingGroup(group)}
@@ -592,6 +707,8 @@ function camOrderToString(order)
 		case CAM_ORDER_ATTACK:
 			return "ATTACK";
 		case CAM_ORDER_DEFEND:
+			return "DEFEND";
+		case CAM_ORDER_PATROL:
 			return "DEFEND";
 		default:
 			return "UNKNOWN";
@@ -647,6 +764,7 @@ function __camPickTarget(group)
 			break;
 		default:
 			camDebug("Unknown group order", gi.order);
+			break;
 	}
 	if (!targets.length)
 		return undefined;
@@ -663,11 +781,6 @@ function __camTacticsTick()
 	{
 		var gi = __camGroupInfo[group];
 		var droids = enumGroup(group);
-		if (!droids.length)
-		{
-			camStopManagingGroup(group);
-			continue;
-		}
 		switch(gi.order)
 		{
 			case CAM_ORDER_ATTACK:
@@ -681,6 +794,7 @@ function __camTacticsTick()
 					var done = false;
 					if (gi.order === CAM_ORDER_DEFEND)
 					{
+						// fall back to defense position
 						var dist = camDist(droid, gi.data.pos);
 						if (dist > __CAM_DEFENSE_RADIUS)
 						{
@@ -697,8 +811,33 @@ function __camTacticsTick()
 					}
 				}
 				break;
+			case CAM_ORDER_PATROL:
+				if (!camDef(gi.lastmove) || !camDef(gi.lastspot))
+				{
+					gi.lastspot = 0;
+				}
+				else
+				{
+					if (gameTime - gi.lastmove < gi.data.interval)
+						continue;
+					// find random new position to visit
+					var list = [];
+					for (var i = 0; i < gi.data.pos.length; ++i)
+						if (i !==gi.lastpos)
+							list[list.length] = i;
+					gi.lastspot = list[camRand(list.length)];
+				}
+				gi.lastmove = gameTime;
+				var pos = camMakePos(gi.data.pos[gi.lastspot]);
+				for (var i = 0; i < droids.length; ++i)
+				{
+					var droid = droids[i];
+					orderDroidLoc(droid, DORDER_MOVE, pos.x, pos.y);
+				}
+				break;
 			default:
 				camDebug("Unknown group order", gi.order);
+				break;
 		}
 	}
 }
@@ -738,6 +877,7 @@ function __camCheckGroupMorale(group) {
 			break;
 		default:
 			camDebug("Unknown group order", gi.order);
+			break;
 	}
 }
 
@@ -760,11 +900,21 @@ function __camCheckGroupMorale(group) {
 //;; \begin{description}
 //;; 	\item[assembly] A rally point position label, where the group would
 //;; 	gather.
-//;; 	\item[groupSize] Number of droids to produce before executing the order.
 //;; 	\item[order] An order to execute for every group produced in the
 //;; 	factory. Same as the order parameter for \texttt{camManageGroup()}.
 //;; 	\item[data] Order data. Same as the data parameter for
 //;; 	\texttt{camManageGroup()}.
+//;; 	\item[groupSize] Number of droids to produce before executing the order.
+//;; 	Also, if order is CAM_ORDER_ATTACK, data.count defaults to this value.
+//;; 	\item[maxSize] Halt production when reaching that many droids in the
+//;; 	factory group. Resume when some droids die. Unlimited if unspecified.
+//;; 	\item[throttle] If defined, produce droids only every that many
+//;; 	milliseconds, and keep the factory idle between ticks.
+//;; 	\item[group] If defined, make the factory manage this group,
+//;; 	otherwise create a new empty group to manage.
+//;; 	Droids produced in the factory would automatically be
+//;; 	added to the group, and order and data parameters
+//;; 	would be applied to this group.
 //;; 	\item[templates] List of droid templates to produce in the factory.
 //;; 	Each template is a JavaScript object with the following fields:
 //;; 	\begin{description}
@@ -773,30 +923,59 @@ function __camCheckGroupMorale(group) {
 //;; 		\item[weap] Weapon stat name. Only single-turret droids are
 //;; 		currently supported.
 //;; 	\end{description}
+//;; 	Note that all template components are automatically made available
+//;; 	to the factory owner.
 //;; \end{description}
 //;; Factories won't start production immediately; call
 //;; \texttt{camEnableFactory()} to turn them on when necessary.
 function camSetFactories(factories)
 {
-	__camFactoryInfo = factories;
-	for (var flabel in __camFactoryInfo)
+	for (var flabel in factories)
+		camSetFactoryData(flabel, factories[flabel]);
+}
+
+//;; \subsection{camSetFactoryData(factory label, factory description)}
+//;; Similar to \texttt{camSetFactories()}, but one factory at a time.
+//;; If the factory was already managing a group of droids, it keeps
+//;; managing it. If a new group is specified in the description,
+//;; the old group is merged into it.
+function camSetFactoryData(flabel, fdata)
+{
+	// remember the old factory group, if any
+	var droids = [];
+	if (camDef(__camFactoryInfo[flabel]))
+		droids = enumGroup(__camFactoryInfo[flabel].group);
+	__camFactoryInfo[flabel] = fdata;
+	var structure = getObject(flabel);
+	if (!camDef(structure) || !structure)
 	{
-		var fi = __camFactoryInfo[flabel];
-		fi.enabled = false;
-		fi.state = 0;
+		camDebug("Factory", flabel, "not found");
+		continue;
+	}
+	var fi = __camFactoryInfo[flabel];
+	fi.enabled = false;
+	fi.state = 0;
+	if (!camDef(fi.group))
 		fi.group = newGroup();
-		// automatically make templates available.
-		var p = getObject(flabel).player;
-		for (var j = 0; j < fi.templates.length; ++j)
-		{
-			makeComponentAvailable(fi.templates[j].body, p);
-			makeComponentAvailable(fi.templates[j].prop, p);
-			makeComponentAvailable(fi.templates[j].weap, p);
-		}
+	for (var i = 0; i < droids.length; ++i)
+		groupAdd(fi.group, droids[i]);
+	if (!camDef(fi.data.count))
+		fi.data.count = fi.groupSize;
+	if (camDef(fi.assembly))
+	{
+		var pos = camMakePos(fi.assembly);
+		setAssemblyPoint(structure, pos.x, pos.y);
+	}
+	// automatically make templates available.
+	for (var i = 0; i < fi.templates.length; ++i)
+	{
+		makeComponentAvailable(fi.templates[i].body, structure.player);
+		makeComponentAvailable(fi.templates[i].prop, structure.player);
+		makeComponentAvailable(fi.templates[i].weap, structure.player);
 	}
 }
 
-//;; \subsection{camEnableFactory(factoryLabel)}
+//;; \subsection{camEnableFactory(factory label)}
 //;; Enable a managed factory by the given label. Once the factory is enabled,
 //;; it starts producing units and executing orders as given.
 function camEnableFactory(flabel)
@@ -821,7 +1000,7 @@ function camEnableFactory(flabel)
 		return;
 	}
 	camTrace("Enabling", flabel);
-	__camContinueProduction(getObject(flabel));
+	__camContinueProduction(flabel);
 }
 
 //////////// privates
@@ -839,44 +1018,79 @@ function __camAddDroidToFactoryGroup(droid, structure)
 	var droids = enumGroup(fi.group);
 	if (droids.length >= fi.groupSize)
 	{
-		camManageGroup(camMakeGroup(droids),
-		               fi.order, fi.data);
+		camManageGroup(fi.group, fi.order, fi.data);
 	}
 	else
 	{
-		var pos = fi.assembly;
-		orderDroidLoc(droid, DORDER_SCOUT, pos.x, pos.y);
+		var pos = camMakePos(fi.assembly);
+		if (!camDef(pos))
+			pos = camMakePos(factory);
+		camManageGroup(fi.group, CAM_ORDER_DEFEND, { pos: pos });
 	}
 }
 
 function __camContinueProduction(structure)
 {
-	if (!structureIdle(structure))
+	var flabel, struct;
+	if (camIsString(structure))
+	{
+		flabel = structure;
+		struct = getObject(flabel);
+		if (!camDef(struct) || !struct)
+		{
+			camTrace("Factory not found");
+			return;
+		}
+	}
+	else
+	{
+		// FIXME: O(n) lookup here
+		flabel = getLabel(structure);
+		struct = structure;
+	}
+	if (!structureIdle(struct))
 	{
 		camDebug("Already enabled?");
 		return;
 	}
-	// FIXME: O(n) lookup here
-	var flabel = getLabel(structure);
 	if (!camDef(flabel) || !flabel)
 		return;
 	var fi = __camFactoryInfo[flabel];
+	if (camDef(fi.maxSize) && groupSize(fi.group) >= fi.maxSize)
+	{
+		// retry in 5 seconds
+		queue("__camContinueProduction", 5000, flabel);
+		return;
+	}
+	if (camDef(fi.throttle) && camDef(fi.lastprod))
+	{
+		var throttle = gameTime - fi.lastprod;
+		if (throttle < fi.throttle)
+		{
+			// do throttle
+			queue("__camContinueProduction",
+			      fi.throttle - throttle, flabel);
+			return;
+		}
+	}
 	var t = fi.templates[fi.state];
-	var n = [ structure.name, structure.id, fi.state ].join(" ");
+	var n = [ struct.name, struct.id, fi.state ].join(" ");
 	// multi-turret templates are not supported yet
-	buildDroid(structure, n, t.body, t.prop, 0, 0, t.weap);
+	buildDroid(struct, n, t.body, t.prop, 0, 0, t.weap);
 	// loop through templates
 	++fi.state;
 	if (fi.state >= fi.templates.length)
 		fi.state = 0;
+	fi.lastprod = gameTime;
 }
 
 
 ////////////////////////////////////////////////////////////////////////////////
-// Victory celebration helper.
+// Victory celebration helpers.
 ////////////////////////////////////////////////////////////////////////////////
 
-//;; \subsection{camNextLevel(nextLevel)}
+
+//;; \subsection{camNextLevel(next level)}
 //;; A wrapper around \texttt{loadLevel()}. Remembers to give bonus power
 //;; for completing the mission faster - 25 percent more than what you could have
 //;; received by milking this time limit down.
@@ -891,6 +1105,69 @@ function camNextLevel(nextLevel)
 		setPowerModifier(100);
 	}
 	loadLevel(nextLevel);
+}
+
+const CAM_VICTORY_STANDARD = 0;
+
+//;; \subsection{camSetStandardWinLossConditions(kind, nextLevel)}
+//;; Set victory and defeat conditions to one of the common
+//;; options. On victory, load nextLevel. The following
+//;; options are available:
+//;; \begin{description}
+//;; 	\item[CAM_VICTORY_STANDARD] Defeat if all ground factories
+//;; 	and construction droids are lost. Victory when all enemy bases
+//;; 	are destroyed and all artifacts are recovered.
+//;; \end{description}
+function camSetStandardWinLossConditions(kind, nextLevel)
+{
+	switch(kind)
+	{
+		case CAM_VICTORY_STANDARD:
+			__camWinLossCallback = "__camVictoryStandard";
+			break;
+		default:
+			camDebug("Unknown standard victory condition", kind);
+			break;
+	}
+	__camNextLevel = nextLevel;
+}
+
+//////////// privates
+
+var __camWinLossCallback;
+var __camNextLevel;
+var __camWinLossAlreadyFired;
+
+function __camGameLost()
+{
+	camTrace();
+	gameOverMessage(false);
+}
+
+function __camGameWon()
+{
+	camTrace(__camNextLevel);
+	if (camDef(__camNextLevel))
+		camNextLevel(__camNextLevel);
+}
+
+function __camVictoryStandard()
+{
+	if (__camWinLossAlreadyFired)
+		return;
+	// check if game is lost
+	var factories = countStruct("A0LightFactory")
+	              + countStruct("A0CyborgFactory");
+	var droids = countDroid(DROID_CONSTRUCT);
+	if (droids === 0 && factories === 0) {
+		queue("__camGameLost", 4000); // wait 4 secs before throwing the game
+		__camWinLossAlreadyFired = true;
+	}
+	// check if game is won
+	if (camAllArtifactsPickedUp() && camAllEnemyBasesEliminated()) {
+		queue("__camGameWon", 6000); // wait 6 secs before giving it
+		__camWinLossAlreadyFired = true;
+	}
 }
 
 
@@ -921,6 +1198,8 @@ function __camPreHookEvent(eventname, hookcode)
 function __camTick()
 {
 	__camTacticsTick();
+	if (camDef(__camWinLossCallback))
+		__camGlobalContext[__camWinLossCallback]();
 }
 
 var __camLastHitTime = 0;
@@ -972,18 +1251,24 @@ __camPreHookEvent("eventCheatMode", function(entered)
 
 __camPreHookEvent("eventChat", function(from, to, message)
 {
+	if (!__camCheatMode)
+		return;
 	camTrace(from, to, message);
-	if (message === "let me win" && cheatmode)
+	if (message === "let me win")
 		__camLetMeWin();
+	if (message === "win info")
+		__camWinInfo();
 });
 
 __camPreHookEvent("eventStartLevel", function()
 {
 	// Variables initialized here are the ones that should not be
 	// re-initialized on save-load. Otherwise, they are initialized
-	// on the global scope (or whenever).
+	// on the global scope (or wherever necessary).
 	__camGroupInfo = {};
+	__camFactoryInfo = {};
 	isReceivingAllEvents = true;
+	__camWinLossAlreadyFired = false;
 	setTimer("__camTick", 5000);
 });
 
@@ -1000,4 +1285,9 @@ __camPreHookEvent("eventDroidBuilt", function(droid, structure)
 __camPreHookEvent("eventDestroyed", function(obj)
 {
 	__camCheckPlaceArtifact(obj);
+});
+
+__camPreHookEvent("eventObjectSeen", function(viewer, seen)
+{
+	__camCheckBaseSeen(seen);
 });
