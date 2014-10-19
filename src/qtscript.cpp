@@ -1281,7 +1281,6 @@ bool triggerEventChat(int from, int to, const char *message)
 			args += QScriptValue(to);
 			args += QScriptValue(message);
 			callFunction(engine, "eventChat", args);
-			break; // only call once
 		}
 	}
 	return true;
