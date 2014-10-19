@@ -3524,7 +3524,7 @@ static QScriptValue js_getDroidLimit(QScriptContext *context, QScriptEngine *eng
 }
 
 //-- \subsection{getExperienceModifier(player)}
-//-- Get the % of experience this player droids are going to gain. (3.2+ only)
+//-- Get the percentage of experience this player droids are going to gain. (3.2+ only)
 static QScriptValue js_getExperienceModifier(QScriptContext *context, QScriptEngine *)
 {
 	int player = context->argument(0).toInt32();
@@ -3532,7 +3532,7 @@ static QScriptValue js_getExperienceModifier(QScriptContext *context, QScriptEng
 }
 
 //-- \subsection{setExperienceModifier(player, percent)}
-//-- Set the % of experience this player droids are going to gain. (3.2+ only)
+//-- Set the percentage of experience this player droids are going to gain. (3.2+ only)
 static QScriptValue js_setExperienceModifier(QScriptContext *context, QScriptEngine *)
 {
 	int player = context->argument(0).toInt32();
