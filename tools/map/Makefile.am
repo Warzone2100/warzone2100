@@ -1,6 +1,6 @@
 AM_CPPFLAGS = -DYY_NO_INPUT $(PHYSFS_CFLAGS) $(PNG_CFLAGS) $(WZ_CPPFLAGS)
 AM_CFLAGS = $(WZ_CFLAGS)
-AM_CXXFLAGS = $(WZ_CXXFLAGS) $(QT4_CFLAGS) -I../..
+AM_CXXFLAGS = $(WZ_CXXFLAGS) $(QT5_CFLAGS) -I../..
 
 BUILT_SOURCES = 
 CLEANFILES = $(BUILT_SOURCES)
@@ -11,7 +11,7 @@ EXTRA_DIST = \
 noinst_PROGRAMS = mapconv mapinfo map2lnd map2preview map2png
 noinst_HEADERS = maplib.h mapload.h pngsave.h vector.h
 
-LIBLIST = $(LTLIBINTL) $(PHYSFS_LIBS) $(PNG_LIBS) $(QT4_LIBS)
+LIBLIST = $(LTLIBINTL) $(PHYSFS_LIBS) $(PNG_LIBS) $(QT5_LIBS)
 
 mapconv_SOURCES = mapconv.cpp mapload.cpp maplib.cpp pngsave.cpp
 mapconv_LDADD = $(LIBLIST)
