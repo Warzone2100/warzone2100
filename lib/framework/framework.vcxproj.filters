@@ -145,9 +145,6 @@
     <ClInclude Include="wzapp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="wzfs.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="wzglobal.h">
       <Filter>Header Files</Filter>
     </ClInclude>

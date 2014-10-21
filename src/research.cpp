@@ -25,7 +25,7 @@
  */
 #include <string.h>
 #include <map>
-#include <QJsonArray>
+#include <QtCore/QJsonArray>
 
 #include "lib/framework/frame.h"
 #include "lib/framework/strres.h"
