@@ -1,4 +1,0 @@
-[AI]
-name = "Turtle AI"
-js = nullbot-turtle.js
-tip = "Tower wars AI, based on NullBot"

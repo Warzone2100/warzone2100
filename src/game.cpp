@@ -2877,11 +2877,11 @@ static bool gameLoad(const char* fileName)
 	else
 	{
 		WzConfig ruleset("ruleset.json", WzConfig::ReadOnly);
-		if (!ruleset.contains("ruleset/tag"))
+		if (!ruleset.contains("tag"))
 		{
 			debug(LOG_ERROR, "ruleset tag not found in ruleset.json!"); // fall-through
 		}
-		QString tag = ruleset.value("ruleset/tag", "[]").toString();
+		QString tag = ruleset.value("tag", "[]").toString();
 		sstrcpy(rulesettag, tag.toUtf8().constData());
 		if (strspn(rulesettag, "abcdefghijklmnopqrstuvwxyz") != strlen(rulesettag)) // for safety
 		{

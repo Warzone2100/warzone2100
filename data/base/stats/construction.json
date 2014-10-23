@@ -1,0 +1,19 @@
+{
+    "Spade1Mk1": {
+        "buildPoints": 85,
+        "buildPower": 17,
+        "constructPoints": 10,
+        "designable": 1,
+        "hitpoints": 50,
+        "id": "Spade1Mk1",
+        "name": "Truck",
+        "sensorModel": "TRLCON.PIE",
+        "weight": 600
+    },
+    "ZNULLCONSTRUCT": {
+        "id": "ZNULLCONSTRUCT",
+        "mountModel": "TRLCON.PIE",
+        "name": "Z NULL CONSTRUCT",
+        "sensorModel": "TRLCON.PIE"
+    }
+}

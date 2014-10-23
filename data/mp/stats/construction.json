@@ -1,0 +1,30 @@
+{
+    "CyborgSpade": {
+        "buildPoints": 65,
+        "buildPower": 10,
+        "constructPoints": 5,
+        "hitpoints": 35,
+        "id": "CyborgSpade",
+        "mountModel": "cybody.pie",
+        "name": "*Combat Engineer*",
+        "sensorModel": "cy_con.pie",
+        "weight": 150
+    },
+    "Spade1Mk1": {
+        "buildPoints": 85,
+        "buildPower": 17,
+        "constructPoints": 8,
+        "designable": 1,
+        "hitpoints": 25,
+        "id": "Spade1Mk1",
+        "name": "Truck",
+        "sensorModel": "TRLCON.PIE",
+        "weight": 800
+    },
+    "ZNULLCONSTRUCT": {
+        "id": "ZNULLCONSTRUCT",
+        "mountModel": "TRLCON.PIE",
+        "name": "ZNULLCONSTRUCT",
+        "sensorModel": "TRLCON.PIE"
+    }
+}

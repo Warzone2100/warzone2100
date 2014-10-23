@@ -1,5 +1,0 @@
-[AI]
-name = "Nexus"
-vlo = nexus.vlo
-slo = nexus.slo
-tip = "Default AI"

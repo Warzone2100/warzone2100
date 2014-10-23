@@ -1,0 +1,157 @@
+{
+    "RES_DF_HCW1": {
+        "id": "RES_DF_HCW1",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_struttech.ogg",
+        "text": [
+            "New Construction Options Available",
+            "Titanium-reinforced concrete",
+            "Enables Hardcrete walls",
+            "Defensive Strength: Medium"
+        ]
+    },
+    "RES_REPTU1": {
+        "id": "RES_REPTU1",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_systech.ogg",
+        "text": [
+            "New Systems Turret Available",
+            "Battlefield repair unit",
+            "Automatically Repairs Damaged Units",
+            "Or damaged units may be selected as target"
+        ]
+    },
+    "RES_SENSO1": {
+        "id": "RES_SENSO1",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_systech.ogg",
+        "text": [
+            "New Systems Turret Available For Design",
+            "Improved sensor range",
+            "Makes excellent scout vehicle",
+            "May be assigned as spotter for indirect fire weapons"
+        ]
+    },
+    "RES_ST_VF": {
+        "id": "RES_ST_VF",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_struttech.ogg",
+        "text": [
+            "New Base Structure Available",
+            "VTOL factory enables VTOL production",
+            "VTOL rearming pads required to keep VTOLs flying",
+            "May be upgraded using factory modules"
+        ]
+    },
+    "RES_ST_VP": {
+        "id": "RES_ST_VP",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_struttech.ogg",
+        "text": [
+            "New Base Structure Available",
+            "\n\"Refuels",
+            " rearms and repairs VTOLs\"",
+            "Assign a VTOL by selecting the rearming pad as its target",
+            "The VTOL returns to the selected pad for rearming"
+        ]
+    },
+    "RES_SY_CBSTW1": {
+        "id": "RES_SY_CBSTW1",
+        "imdName": "MICAPSUL.PIE",
+        "sequenceName": "res_systech.ogg",
+        "text": [
+            "New Systems Tower Available",
+            "Counter-battery tower detects enemy indirect fire batteries",
+            "Orders assigned indirect fire units to fire at the enemy batteries",
+            "Counter-battery fire continues until enemy battery is suppressed"
+        ]
+    },
+    "RES_SY_STW1": {
+        "id": "RES_SY_STW1",
+        "imdName": "MICAPSUL.PIE",
+        "sequenceName": "res_systech.ogg",
+        "text": [
+            "New Systems Tower Available",
+            "Extended sensor range",
+            "Keeps map areas under constant surveillance",
+            "May be assigned as spotter for indirect fire weapons"
+        ]
+    },
+    "RES_SY_SU1": {
+        "id": "RES_SY_SU1",
+        "imdName": "MICAPSUL.PIE",
+        "sequenceName": "res_systech.ogg",
+        "text": [
+            "Sensors Improved",
+            "New Thermal Emissions detection",
+            "Extends Sensor Range",
+            "All sensors upgraded automatically"
+        ]
+    },
+    "RES_V_B09": {
+        "id": "RES_V_B09",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_droid.ogg",
+        "text": [
+            "Collective Heavy Body",
+            "More armor and body points than Python",
+            "Slower than Python",
+            "High power costs and slow to produce"
+        ]
+    },
+    "RES_V_P_V1": {
+        "id": "RES_V_P_V1",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_droid.ogg",
+        "text": [
+            "New Propulsion Available for Design",
+            "Vertical Take Off and Landing Propulsion",
+            "Speed: VTOL",
+            "Body Points: Low"
+        ]
+    },
+    "RES_W_CNAC2": {
+        "id": "RES_W_CNAC2",
+        "imdName": "MICAPSUL.PIE",
+        "sequenceName": "res_weapons.ogg",
+        "text": [
+            "Cannon Upgrade",
+            "Laser designator paints and guides rounds to the target",
+            "Increases Cannon accuracy",
+            "All cannons upgraded automatically"
+        ]
+    },
+    "RES_W_RK_HVAT1": {
+        "id": "RES_W_RK_HVAT1",
+        "imdName": "MICAPSUL.PIE",
+        "sequenceName": "res_weapons.ogg",
+        "text": [
+            "New Rocket Available",
+            "High explosive shaped charge missile",
+            "Best Targets: Bunkers and hardpoints",
+            "Body Points: Very Low"
+        ]
+    },
+    "RES_W_RK_LTAT1": {
+        "id": "RES_W_RK_LTAT1",
+        "imdName": "MICAPSUL.PIE",
+        "sequenceName": "res_weapons.ogg",
+        "text": [
+            "New Rocket Available",
+            "Anti-tank rocket",
+            "Best Targets: Vehicles",
+            "Body Points: Very Low"
+        ]
+    },
+    "RES_W_SRK_AC3": {
+        "id": "RES_W_SRK_AC3",
+        "imdName": "MICAPSUL.PIE",
+        "sequenceName": "res_weapons.ogg",
+        "text": [
+            "Rocket Upgrade",
+            "Rocket detects and locks on to engine emissions",
+            "Increases Rocket accuracy",
+            "All rockets upgraded automatically"
+        ]
+    }
+}

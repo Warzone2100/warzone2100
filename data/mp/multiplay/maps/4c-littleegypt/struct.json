@@ -1,0 +1,1518 @@
+{
+    "structure_0001": {
+        "id": "A0LightFactory",
+        "name": "A0LightFactory",
+        "position": [
+            3136,
+            12480,
+            148
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 0
+    },
+    "structure_0002": {
+        "id": "A0LightFactory",
+        "modules": 1,
+        "name": "A0LightFactory",
+        "position": [
+            3136,
+            13504,
+            148
+        ],
+        "rotation": [
+            32768,
+            0,
+            0
+        ],
+        "startpos": 0
+    },
+    "structure_0004": {
+        "id": "A0CyborgFactory",
+        "name": "A0CyborgFactory",
+        "position": [
+            2752,
+            12544,
+            148
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 0
+    },
+    "structure_0005": {
+        "id": "A0ResearchFacility",
+        "modules": 1,
+        "name": "A0ResearchFacility",
+        "position": [
+            2688,
+            12160,
+            148
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 0
+    },
+    "structure_0006": {
+        "id": "A0ResearchFacility",
+        "modules": 1,
+        "name": "A0ResearchFacility",
+        "position": [
+            2304,
+            12160,
+            148
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 0
+    },
+    "structure_0010": {
+        "id": "A0PowerGenerator",
+        "modules": 1,
+        "name": "A0PowerGenerator",
+        "position": [
+            2304,
+            12544,
+            148
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 0
+    },
+    "structure_0012": {
+        "id": "A0ComDroidControl",
+        "name": "A0ComDroidControl",
+        "position": [
+            2688,
+            13824,
+            148
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 0
+    },
+    "structure_0017": {
+        "id": "A0ResourceExtractor",
+        "name": "A0ResourceExtractor",
+        "position": [
+            3008,
+            13888,
+            148
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 0
+    },
+    "structure_0018": {
+        "id": "A0ResourceExtractor",
+        "name": "A0ResourceExtractor",
+        "position": [
+            3008,
+            12096,
+            148
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 0
+    },
+    "structure_0019": {
+        "id": "A0ResourceExtractor",
+        "name": "A0ResourceExtractor",
+        "position": [
+            3264,
+            13888,
+            148
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 0
+    },
+    "structure_0020": {
+        "id": "A0ResourceExtractor",
+        "name": "A0ResourceExtractor",
+        "position": [
+            3264,
+            12096,
+            148
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 0
+    },
+    "structure_0030": {
+        "id": "WallTower02",
+        "name": "WallTower02",
+        "position": [
+            6336,
+            12736,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 0
+    },
+    "structure_0031": {
+        "id": "WallTower02",
+        "name": "WallTower02",
+        "position": [
+            6464,
+            13376,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 0
+    },
+    "structure_0032": {
+        "id": "WallTower02",
+        "name": "WallTower02",
+        "position": [
+            5952,
+            12352,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 0
+    },
+    "structure_0033": {
+        "id": "WallTower02",
+        "name": "WallTower02",
+        "position": [
+            6208,
+            13760,
+            3
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 0
+    },
+    "structure_0037": {
+        "id": "A0HardcreteMk1Wall",
+        "name": "A0HardcreteMk1Wall",
+        "position": [
+            5952,
+            12480,
+            0
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ],
+        "startpos": 0
+    },
+    "structure_0044": {
+        "id": "A0HardcreteMk1CWall",
+        "name": "A0HardcreteMk1CWall",
+        "position": [
+            5952,
+            12736,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 0
+    },
+    "structure_0046": {
+        "id": "A0HardcreteMk1Wall",
+        "name": "A0HardcreteMk1Wall",
+        "position": [
+            6080,
+            12736,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 0
+    },
+    "structure_0047": {
+        "id": "A0HardcreteMk1Wall",
+        "name": "A0HardcreteMk1Wall",
+        "position": [
+            5952,
+            12608,
+            0
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ],
+        "startpos": 0
+    },
+    "structure_0048": {
+        "id": "A0HardcreteMk1Wall",
+        "name": "A0HardcreteMk1Wall",
+        "position": [
+            6336,
+            13376,
+            1
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 0
+    },
+    "structure_0049": {
+        "id": "A0HardcreteMk1Wall",
+        "name": "A0HardcreteMk1Wall",
+        "position": [
+            6208,
+            13632,
+            15
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ],
+        "startpos": 0
+    },
+    "structure_0050": {
+        "id": "A0HardcreteMk1Wall",
+        "name": "A0HardcreteMk1Wall",
+        "position": [
+            6208,
+            12736,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 0
+    },
+    "structure_0051": {
+        "id": "A0HardcreteMk1Wall",
+        "name": "A0HardcreteMk1Wall",
+        "position": [
+            6208,
+            13504,
+            1
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ],
+        "startpos": 0
+    },
+    "structure_0052": {
+        "id": "A0HardcreteMk1CWall",
+        "name": "A0HardcreteMk1CWall",
+        "position": [
+            6208,
+            13376,
+            2
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 0
+    },
+    "structure_0053": {
+        "id": "A0CommandCentre",
+        "name": "A0CommandCentre",
+        "position": [
+            21760,
+            13568,
+            148
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 1
+    },
+    "structure_0054": {
+        "id": "A0LightFactory",
+        "name": "A0LightFactory",
+        "position": [
+            21312,
+            12480,
+            148
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 1
+    },
+    "structure_0055": {
+        "id": "A0LightFactory",
+        "modules": 1,
+        "name": "A0LightFactory",
+        "position": [
+            21312,
+            13504,
+            148
+        ],
+        "rotation": [
+            32768,
+            0,
+            0
+        ],
+        "startpos": 1
+    },
+    "structure_0057": {
+        "id": "A0CyborgFactory",
+        "name": "A0CyborgFactory",
+        "position": [
+            21824,
+            12544,
+            148
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 1
+    },
+    "structure_0058": {
+        "id": "A0ResearchFacility",
+        "modules": 1,
+        "name": "A0ResearchFacility",
+        "position": [
+            21760,
+            12160,
+            148
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 1
+    },
+    "structure_0059": {
+        "id": "A0ResearchFacility",
+        "modules": 1,
+        "name": "A0ResearchFacility",
+        "position": [
+            22144,
+            12160,
+            148
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 1
+    },
+    "structure_0062": {
+        "id": "A0PowerGenerator",
+        "modules": 1,
+        "name": "A0PowerGenerator",
+        "position": [
+            22144,
+            12544,
+            148
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 1
+    },
+    "structure_0064": {
+        "id": "A0ComDroidControl",
+        "name": "A0ComDroidControl",
+        "position": [
+            21760,
+            13824,
+            148
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 1
+    },
+    "structure_0069": {
+        "id": "A0ResourceExtractor",
+        "name": "A0ResourceExtractor",
+        "position": [
+            21440,
+            13888,
+            148
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 1
+    },
+    "structure_0071": {
+        "id": "A0ResourceExtractor",
+        "name": "A0ResourceExtractor",
+        "position": [
+            21184,
+            13888,
+            148
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 1
+    },
+    "structure_0072": {
+        "id": "A0ResourceExtractor",
+        "name": "A0ResourceExtractor",
+        "position": [
+            21184,
+            12096,
+            148
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 1
+    },
+    "structure_0074": {
+        "id": "WallTower02",
+        "name": "WallTower02",
+        "position": [
+            17984,
+            13376,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 1
+    },
+    "structure_0075": {
+        "id": "WallTower02",
+        "name": "WallTower02",
+        "position": [
+            18496,
+            12352,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 1
+    },
+    "structure_0076": {
+        "id": "WallTower02",
+        "name": "WallTower02",
+        "position": [
+            18240,
+            13888,
+            6
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 1
+    },
+    "structure_0079": {
+        "id": "A0HardcreteMk1Wall",
+        "name": "A0HardcreteMk1Wall",
+        "position": [
+            18496,
+            12480,
+            0
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ],
+        "startpos": 1
+    },
+    "structure_0080": {
+        "id": "A0HardcreteMk1CWall",
+        "name": "A0HardcreteMk1CWall",
+        "position": [
+            18496,
+            12736,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 1
+    },
+    "structure_0082": {
+        "id": "A0HardcreteMk1Wall",
+        "name": "A0HardcreteMk1Wall",
+        "position": [
+            18496,
+            12608,
+            0
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ],
+        "startpos": 1
+    },
+    "structure_0083": {
+        "id": "A0HardcreteMk1Wall",
+        "name": "A0HardcreteMk1Wall",
+        "position": [
+            18112,
+            13376,
+            1
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 1
+    },
+    "structure_0084": {
+        "id": "A0HardcreteMk1Wall",
+        "name": "A0HardcreteMk1Wall",
+        "position": [
+            18240,
+            13760,
+            3
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ],
+        "startpos": 1
+    },
+    "structure_0085": {
+        "id": "A0HardcreteMk1Wall",
+        "name": "A0HardcreteMk1Wall",
+        "position": [
+            18240,
+            13632,
+            15
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ],
+        "startpos": 1
+    },
+    "structure_0086": {
+        "id": "A0HardcreteMk1Wall",
+        "name": "A0HardcreteMk1Wall",
+        "position": [
+            18240,
+            13504,
+            1
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ],
+        "startpos": 1
+    },
+    "structure_0107": {
+        "id": "A0ResourceExtractor",
+        "name": "A0ResourceExtractor",
+        "position": [
+            21440,
+            12096,
+            148
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 1
+    },
+    "structure_0108": {
+        "id": "WallTower02",
+        "name": "WallTower02",
+        "position": [
+            18240,
+            12736,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 1
+    },
+    "structure_0112": {
+        "id": "A0HardcreteMk1Wall",
+        "name": "A0HardcreteMk1Wall",
+        "position": [
+            18368,
+            12736,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 1
+    },
+    "structure_0129": {
+        "id": "A0CommandCentre",
+        "name": "A0CommandCentre",
+        "position": [
+            12672,
+            2688,
+            148
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 2
+    },
+    "structure_0130": {
+        "id": "A0LightFactory",
+        "name": "A0LightFactory",
+        "position": [
+            11584,
+            3648,
+            148
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ],
+        "startpos": 2
+    },
+    "structure_0131": {
+        "id": "A0LightFactory",
+        "modules": 1,
+        "name": "A0LightFactory",
+        "position": [
+            12480,
+            3648,
+            148
+        ],
+        "rotation": [
+            49152,
+            0,
+            0
+        ],
+        "startpos": 2
+    },
+    "structure_0133": {
+        "id": "A0CyborgFactory",
+        "name": "A0CyborgFactory",
+        "position": [
+            12352,
+            2688,
+            148
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 2
+    },
+    "structure_0134": {
+        "id": "A0ResearchFacility",
+        "modules": 1,
+        "name": "A0ResearchFacility",
+        "position": [
+            11008,
+            3072,
+            148
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 2
+    },
+    "structure_0135": {
+        "id": "A0ResearchFacility",
+        "modules": 1,
+        "name": "A0ResearchFacility",
+        "position": [
+            11008,
+            2688,
+            148
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 2
+    },
+    "structure_0137": {
+        "id": "A0PowerGenerator",
+        "modules": 1,
+        "name": "A0PowerGenerator",
+        "position": [
+            11392,
+            2688,
+            148
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 2
+    },
+    "structure_0139": {
+        "id": "A0ComDroidControl",
+        "name": "A0ComDroidControl",
+        "position": [
+            11392,
+            3072,
+            148
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 2
+    },
+    "structure_0143": {
+        "id": "A0ResourceExtractor",
+        "name": "A0ResourceExtractor",
+        "position": [
+            12736,
+            3008,
+            148
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 2
+    },
+    "structure_0144": {
+        "id": "A0ResourceExtractor",
+        "name": "A0ResourceExtractor",
+        "position": [
+            12480,
+            3008,
+            148
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 2
+    },
+    "structure_0145": {
+        "id": "A0ResourceExtractor",
+        "name": "A0ResourceExtractor",
+        "position": [
+            11072,
+            3776,
+            148
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 2
+    },
+    "structure_0147": {
+        "id": "A0ResourceExtractor",
+        "name": "A0ResourceExtractor",
+        "position": [
+            11072,
+            3520,
+            148
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 2
+    },
+    "structure_0151": {
+        "id": "WallTower02",
+        "name": "WallTower02",
+        "position": [
+            11968,
+            6720,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 2
+    },
+    "structure_0152": {
+        "id": "WallTower02",
+        "name": "WallTower02",
+        "position": [
+            11584,
+            6336,
+            3
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 2
+    },
+    "structure_0154": {
+        "id": "A0HardcreteMk1Wall",
+        "name": "A0HardcreteMk1Wall",
+        "position": [
+            12480,
+            6592,
+            0
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ],
+        "startpos": 2
+    },
+    "structure_0155": {
+        "id": "A0HardcreteMk1CWall",
+        "name": "A0HardcreteMk1CWall",
+        "position": [
+            11968,
+            6336,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 2
+    },
+    "structure_0156": {
+        "id": "A0HardcreteMk1Wall",
+        "name": "A0HardcreteMk1Wall",
+        "position": [
+            11968,
+            6464,
+            0
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ],
+        "startpos": 2
+    },
+    "structure_0157": {
+        "id": "A0HardcreteMk1Wall",
+        "name": "A0HardcreteMk1Wall",
+        "position": [
+            12608,
+            6464,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 2
+    },
+    "structure_0158": {
+        "id": "A0HardcreteMk1Wall",
+        "name": "A0HardcreteMk1Wall",
+        "position": [
+            12736,
+            6464,
+            5
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 2
+    },
+    "structure_0159": {
+        "id": "A0HardcreteMk1Wall",
+        "name": "A0HardcreteMk1Wall",
+        "position": [
+            11712,
+            6336,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 2
+    },
+    "structure_0160": {
+        "id": "A0HardcreteMk1Wall",
+        "name": "A0HardcreteMk1Wall",
+        "position": [
+            11968,
+            6592,
+            0
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ],
+        "startpos": 2
+    },
+    "structure_0161": {
+        "id": "WallTower02",
+        "name": "WallTower02",
+        "position": [
+            12480,
+            6720,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 2
+    },
+    "structure_0162": {
+        "id": "WallTower02",
+        "name": "WallTower02",
+        "position": [
+            12864,
+            6464,
+            15
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 2
+    },
+    "structure_0163": {
+        "id": "A0HardcreteMk1Wall",
+        "name": "A0HardcreteMk1Wall",
+        "position": [
+            11840,
+            6336,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 2
+    },
+    "structure_0164": {
+        "id": "WallTower02",
+        "name": "WallTower02",
+        "position": [
+            12480,
+            17984,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 3
+    },
+    "structure_0165": {
+        "id": "WallTower02",
+        "name": "WallTower02",
+        "position": [
+            12096,
+            18368,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 3
+    },
+    "structure_0166": {
+        "id": "WallTower02",
+        "name": "WallTower02",
+        "position": [
+            13120,
+            18112,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 3
+    },
+    "structure_0167": {
+        "id": "A0HardcreteMk1Wall",
+        "name": "A0HardcreteMk1Wall",
+        "position": [
+            13120,
+            18240,
+            0
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ],
+        "startpos": 3
+    },
+    "structure_0168": {
+        "id": "A0HardcreteMk1CWall",
+        "name": "A0HardcreteMk1CWall",
+        "position": [
+            12480,
+            18368,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 3
+    },
+    "structure_0169": {
+        "id": "A0HardcreteMk1Wall",
+        "name": "A0HardcreteMk1Wall",
+        "position": [
+            12480,
+            18112,
+            0
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ],
+        "startpos": 3
+    },
+    "structure_0170": {
+        "id": "A0HardcreteMk1Wall",
+        "name": "A0HardcreteMk1Wall",
+        "position": [
+            13248,
+            18368,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 3
+    },
+    "structure_0171": {
+        "id": "A0HardcreteMk1Wall",
+        "name": "A0HardcreteMk1Wall",
+        "position": [
+            13376,
+            18368,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 3
+    },
+    "structure_0172": {
+        "id": "A0HardcreteMk1Wall",
+        "name": "A0HardcreteMk1Wall",
+        "position": [
+            12224,
+            18368,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 3
+    },
+    "structure_0173": {
+        "id": "A0HardcreteMk1Wall",
+        "name": "A0HardcreteMk1Wall",
+        "position": [
+            12480,
+            18240,
+            0
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ],
+        "startpos": 3
+    },
+    "structure_0175": {
+        "id": "WallTower02",
+        "name": "WallTower02",
+        "position": [
+            13504,
+            18368,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 3
+    },
+    "structure_0176": {
+        "id": "A0HardcreteMk1Wall",
+        "name": "A0HardcreteMk1Wall",
+        "position": [
+            12352,
+            18368,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 3
+    },
+    "structure_0177": {
+        "id": "A0CommandCentre",
+        "name": "A0CommandCentre",
+        "position": [
+            13312,
+            22144,
+            148
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 3
+    },
+    "structure_0178": {
+        "id": "A0LightFactory",
+        "name": "A0LightFactory",
+        "position": [
+            13120,
+            21184,
+            148
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ],
+        "startpos": 3
+    },
+    "structure_0179": {
+        "id": "A0LightFactory",
+        "modules": 1,
+        "name": "A0LightFactory",
+        "position": [
+            11968,
+            21184,
+            148
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ],
+        "startpos": 3
+    },
+    "structure_0181": {
+        "id": "A0CyborgFactory",
+        "name": "A0CyborgFactory",
+        "position": [
+            12992,
+            22144,
+            148
+        ],
+        "rotation": [
+            32768,
+            0,
+            0
+        ],
+        "startpos": 3
+    },
+    "structure_0182": {
+        "id": "A0ResearchFacility",
+        "modules": 1,
+        "name": "A0ResearchFacility",
+        "position": [
+            11648,
+            22144,
+            148
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 3
+    },
+    "structure_0183": {
+        "id": "A0ResearchFacility",
+        "modules": 1,
+        "name": "A0ResearchFacility",
+        "position": [
+            11648,
+            21760,
+            148
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 3
+    },
+    "structure_0185": {
+        "id": "A0PowerGenerator",
+        "modules": 1,
+        "name": "A0PowerGenerator",
+        "position": [
+            12032,
+            21760,
+            148
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 3
+    },
+    "structure_0187": {
+        "id": "A0ComDroidControl",
+        "name": "A0ComDroidControl",
+        "position": [
+            12032,
+            22144,
+            148
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 3
+    },
+    "structure_0191": {
+        "id": "A0ResourceExtractor",
+        "name": "A0ResourceExtractor",
+        "position": [
+            13376,
+            21824,
+            148
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 3
+    },
+    "structure_0192": {
+        "id": "A0ResourceExtractor",
+        "name": "A0ResourceExtractor",
+        "position": [
+            13120,
+            21824,
+            148
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 3
+    },
+    "structure_0193": {
+        "id": "A0ResourceExtractor",
+        "name": "A0ResourceExtractor",
+        "position": [
+            11584,
+            21056,
+            148
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 3
+    },
+    "structure_0195": {
+        "id": "A0ResourceExtractor",
+        "name": "A0ResourceExtractor",
+        "position": [
+            11584,
+            21312,
+            148
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 3
+    },
+    "structure_0219": {
+        "id": "A0HardcreteMk1CWall",
+        "name": "A0HardcreteMk1CWall",
+        "position": [
+            18240,
+            13376,
+            2
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 1
+    },
+    "structure_0220": {
+        "id": "A0HardcreteMk1CWall",
+        "name": "A0HardcreteMk1CWall",
+        "position": [
+            13120,
+            18368,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 3
+    },
+    "structure_0221": {
+        "id": "A0HardcreteMk1CWall",
+        "name": "A0HardcreteMk1CWall",
+        "position": [
+            12480,
+            6464,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 2
+    },
+    "structure_4275817112": {
+        "id": "A0CommandCentre",
+        "name": "A0CommandCentre",
+        "position": [
+            2688,
+            13440,
+            148
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 0
+    }
+}

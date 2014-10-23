@@ -1,0 +1,34 @@
+{
+    "Hover": {
+        "szHiss": -1,
+        "szIdle": -1,
+        "szMove": "hovmove.ogg",
+        "szMoveOff": -1,
+        "szShutDown": "hovstop.ogg",
+        "szStart": "hovstart.ogg"
+    },
+    "Lift": {
+        "szHiss": -1,
+        "szIdle": -1,
+        "szMove": "vtol-move.ogg",
+        "szMoveOff": -1,
+        "szShutDown": "vtolland.ogg",
+        "szStart": "vtoloff.ogg"
+    },
+    "Tracked": {
+        "szHiss": -1,
+        "szIdle": -1,
+        "szMove": "tread.ogg",
+        "szMoveOff": -1,
+        "szShutDown": -1,
+        "szStart": -1
+    },
+    "Wheeled": {
+        "szHiss": -1,
+        "szIdle": -1,
+        "szMove": "con-move.ogg",
+        "szMoveOff": -1,
+        "szShutDown": "con-shut-down.ogg",
+        "szStart": "con-move-off.ogg"
+    }
+}

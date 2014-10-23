@@ -1,0 +1,841 @@
+{
+    "RES_CYS_CEN": {
+        "id": "RES_CYS_CEN",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_droid.ogg",
+        "text": [
+            "New Cyborg Available",
+            "Combat engineer with construction ability",
+            "Body Points: Medium",
+            "Requires Cyborg factory to produce"
+        ]
+    },
+    "RES_CYS_MCH": {
+        "id": "RES_CYS_MCH",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_droid.ogg",
+        "text": [
+            "New Cyborg Available",
+            "Mechanic with repair ability",
+            "Body Points: Medium",
+            "Requires Cyborg factory to produce"
+        ]
+    },
+    "RES_CYTRANS": {
+        "id": "RES_CYTRANS",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_droid.ogg",
+        "text": [
+            "Cyborg Transport Available",
+            "Armed with Machinegun",
+            "Body Points: Medium",
+            "Requires heavy VTOL factory to produce"
+        ]
+    },
+    "RES_CYW_GRN": {
+        "id": "RES_CYW_GRN",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_droid.ogg",
+        "text": [
+            "New Cyborg Available",
+            "Armed with grenades",
+            "Body Points: Medium",
+            "Requires Cyborg factory to produce"
+        ]
+    },
+    "RES_CYW_H_AC": {
+        "id": "RES_CYW_H_AC",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_droid.ogg",
+        "text": [
+            "New Cyborg Available",
+            "Armed with hyper velocity cannon",
+            "Body Points: Medium",
+            "Requires Cyborg factory to produce"
+        ]
+    },
+    "RES_CYW_H_AT": {
+        "id": "RES_CYW_H_AT",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_droid.ogg",
+        "text": [
+            "New Cyborg Available",
+            "Armed with Cyborg Scourge Missile Launcher",
+            "Body Points: Medium",
+            "Requires Cyborg factory to produce"
+        ]
+    },
+    "RES_CYW_H_HPV": {
+        "id": "RES_CYW_H_HPV",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_droid.ogg",
+        "text": [
+            "New Cyborg Available",
+            "Armed with hyper velocity cannon",
+            "Body Points: Medium",
+            "Requires Cyborg factory to produce"
+        ]
+    },
+    "RES_CYW_H_MC": {
+        "id": "RES_CYW_H_MC",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_droid.ogg",
+        "text": [
+            "New Cyborg Available",
+            "Armed with medium cannon",
+            "Body Points: Medium",
+            "Requires Cyborg factory to produce"
+        ]
+    },
+    "RES_CYW_H_PLAS": {
+        "id": "RES_CYW_H_PLAS",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_droid.ogg",
+        "text": [
+            "New Cyborg Available",
+            "Armed with Cyborg Pulse Laser",
+            "Body Points: Medium",
+            "Requires Cyborg factory to produce"
+        ]
+    },
+    "RES_CYW_H_RG": {
+        "id": "RES_CYW_H_RG",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_droid.ogg",
+        "text": [
+            "New Cyborg Available",
+            "Armed with Cyborg Rail Gun",
+            "Body Points: Medium",
+            "Requires Cyborg factory to produce"
+        ]
+    },
+    "RES_CYW_H_TK": {
+        "id": "RES_CYW_H_TK",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_droid.ogg",
+        "text": [
+            "New Cyborg Available",
+            "Armed with tank killer rockets",
+            "Body Points: Medium",
+            "Requires Cyborg factory to produce"
+        ]
+    },
+    "RES_CYW_TFL": {
+        "id": "RES_CYW_TFL",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_droid.ogg",
+        "text": [
+            "New Cyborg Available",
+            "Armed with Cyborg Thermite Flamer",
+            "Body Points: Medium",
+            "Requires Cyborg factory to produce"
+        ]
+    },
+    "RES_C_CT2": {
+        "id": "RES_C_CT2",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_systech.ogg",
+        "text": [
+            "Stronger Commander Turret Available for Design",
+            "Upgraded battlefield computer system",
+            "Commander leads groups acts as factory delivery point",
+            "Body Points: High"
+        ]
+    },
+    "RES_C_CT3": {
+        "id": "RES_C_CT3",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_systech.ogg",
+        "text": [
+            "Stronger Commander Turret Available for Design",
+            "Upgraded battlefield computer system",
+            "Commander leads groups acts as factory delivery point",
+            "Body Points: High"
+        ]
+    },
+    "RES_C_CT4": {
+        "id": "RES_C_CT4",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_systech.ogg",
+        "text": [
+            "Stronger Commander Turret Available for Design",
+            "Upgraded battlefield computer system",
+            "Commander leads groups acts as factory delivery point",
+            "Body Points: High"
+        ]
+    },
+    "RES_DEF_AALAS": {
+        "id": "RES_DEF_AALAS",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_struttech.ogg",
+        "text": [
+            "Laser AA Gun Available",
+            "Twin Medium Anti-Aircraft Laser",
+            "Aerial targets only",
+            "Body Points: Medium"
+        ]
+    },
+    "RES_DEF_EMP": {
+        "id": "RES_DEF_EMP",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_struttech.ogg",
+        "text": [
+            "New Defensive Structure Available",
+            "Armored guard tower with EMP Cannon",
+            "Automatically targets enemies within sensor range",
+            "Defensive Strength: Medium"
+        ]
+    },
+    "RES_DEF_EMPM": {
+        "id": "RES_DEF_EMPM",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_struttech.ogg",
+        "text": [
+            "New Defensive Structure Available",
+            "Armored EMP Mortar battery pit",
+            "Assigned automatically to nearest sensor or CB tower",
+            "Defensive Strength: Medium"
+        ]
+    },
+    "RES_DF_HCW1": {
+        "id": "RES_DF_HCW1",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_struttech.ogg",
+        "text": [
+            "New Construction Options Available",
+            "Titanium-reinforced concrete",
+            "Enables Hardcrete walls",
+            "Defensive Strength: Medium"
+        ]
+    },
+    "RES_EMP_CAN": {
+        "id": "RES_EMP_CAN",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_struttech.ogg",
+        "text": [
+            "New Defensive Structure Available",
+            "Uses advanced cannon technology",
+            "Best Targets : Vehicles",
+            "Defensive Strength : High"
+        ]
+    },
+    "RES_EMP_CANT": {
+        "id": "RES_EMP_CANT",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_weapons.ogg",
+        "text": [
+            "New Weapon Turret Available",
+            "Powerful Electronic magnetic pulse weapon",
+            "Best Targets : Vehicles",
+            "Defensive Strength: Medium"
+        ]
+    },
+    "RES_EMP_HEAVYLAS": {
+        "id": "RES_EMP_HEAVYLAS",
+        "imdName": "MICAPSUL.PIE",
+        "sequenceName": "res_struttech.ogg",
+        "text": [
+            "New Defensive Structure Available",
+            "Armored strongpoint with Heavy Laser",
+            "Automatically targets enemies in range",
+            "Defensive Strength: Medium"
+        ]
+    },
+    "RES_EMP_IMP": {
+        "id": "RES_EMP_IMP",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_struttech.ogg",
+        "text": [
+            "New Defensive Structure Available",
+            "Armored Incendiary Mortar battery pit",
+            "Assigned automatically to nearest sensor or CB tower",
+            "Defensive Strength: Medium"
+        ]
+    },
+    "RES_EMP_INH": {
+        "id": "RES_EMP_INH",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_struttech.ogg",
+        "text": [
+            "New Defensive Structure Available",
+            "Incendiary howitzer emplacement",
+            "Assigned automatically to nearest sensor or CB tower",
+            "Defensive Strength: Medium"
+        ]
+    },
+    "RES_EMP_MD": {
+        "id": "RES_EMP_MD",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_struttech.ogg",
+        "text": [
+            "New Defensive Structure Available",
+            "Uses advanced mass driver railgun technology",
+            "Best Targets : Vehicles",
+            "Defensive Strength : High"
+        ]
+    },
+    "RES_EMP_MSL": {
+        "id": "RES_EMP_MSL",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_struttech.ogg",
+        "text": [
+            "New Defensive Structure Available",
+            "Uses advanced missile gun technology",
+            "Best Targets : Vehicles",
+            "Defensive Strength : High"
+        ]
+    },
+    "RES_EMP_PFL": {
+        "id": "RES_EMP_PFL",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_struttech.ogg",
+        "text": [
+            "New Defensive Structure Available",
+            "Armored strongpoint with Plasmite Flamer",
+            "Automatically targets enemies in range",
+            "Defensive Strength: Medium"
+        ]
+    },
+    "RES_EMP_PLASCAN": {
+        "id": "RES_EMP_PLASCAN",
+        "imdName": "MICAPSUL.PIE",
+        "sequenceName": "res_struttech.ogg",
+        "text": [
+            "New Defensive Structure Available",
+            "Plasma Cannon firing plasma",
+            "Best Targets : Vehicles",
+            "Defensive Strength: Medium"
+        ]
+    },
+    "RES_EMP_RKT": {
+        "id": "RES_EMP_RKT",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_struttech.ogg",
+        "text": [
+            "New Defensive Structure Available",
+            "Uses advanced rocket gun technology",
+            "Best Targets : Vehicles",
+            "Defensive Strength : High"
+        ]
+    },
+    "RES_IMORT": {
+        "id": "RES_IMORT",
+        "imdName": "MICAPSUL.PIE",
+        "sequenceName": "res_weapons.ogg",
+        "text": [
+            "New Indirect Fire Weapon Available",
+            "May be targeted directly or assigned to a sensor turret or tower",
+            "\n\"Best Targets: Base structures",
+            " infantry",
+            " wheeled vehicles\"",
+            "Body Points: Very Low"
+        ]
+    },
+    "RES_MS_SAM1WT": {
+        "id": "RES_MS_SAM1WT",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_struttech.ogg",
+        "text": [
+            "Hardpoint Avenger SAM Site Available",
+            "Surface-to-air missile",
+            "Best Targets: Aerial targets only",
+            "Body Points: Medium"
+        ]
+    },
+    "RES_MS_SAM2WT": {
+        "id": "RES_MS_SAM2WT",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_struttech.ogg",
+        "text": [
+            "Hardpoint Vindicator SAM Site Available",
+            "Heavy surface-to-air missile",
+            "Best Targets: Aerial targets only",
+            "Body Points: Medium"
+        ]
+    },
+    "RES_PLFL": {
+        "id": "RES_PLFL",
+        "imdName": "MICAPSUL.PIE",
+        "sequenceName": "res_weapons.ogg",
+        "text": [
+            "New Weapon Turret Available",
+            "Plasmite Flame-thrower",
+            "\n\"Best Targets: Bunkers",
+            " wheeled and hover vehicles\"",
+            "Body Points: Very low"
+        ]
+    },
+    "RES_REPTU1": {
+        "id": "RES_REPTU1",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_systech.ogg",
+        "text": [
+            "New Systems Turret Available",
+            "Battlefield repair unit",
+            "Automatically Repairs Damaged Units",
+            "Or damaged units may be selected as target"
+        ]
+    },
+    "RES_REPTUHVY": {
+        "id": "RES_REPTUHVY",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_systech.ogg",
+        "text": [
+            "New Systems Turret Available",
+            "Heavy repair unit",
+            "Automatically Repairs Damaged Units",
+            "Or damaged units may be selected as target"
+        ]
+    },
+    "RES_SENSO1": {
+        "id": "RES_SENSO1",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_systech.ogg",
+        "text": [
+            "New Systems Turret Available For Design",
+            "Improved sensor range",
+            "Makes excellent scout vehicle",
+            "May be assigned as spotter for indirect fire weapons"
+        ]
+    },
+    "RES_ST_FCY7": {
+        "id": "RES_ST_FCY7",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_struttech.ogg",
+        "text": [
+            "Cyborg Production Improved",
+            "Advanced Cyborg Production",
+            "Increases Cyborg factory output",
+            "All Cyborg factories upgraded automatically"
+        ]
+    },
+    "RES_ST_FU7": {
+        "id": "RES_ST_FU7",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_struttech.ogg",
+        "text": [
+            "Production Improved",
+            "Advanced Factory Production",
+            "Factory output speed +60%",
+            "All factories upgraded automatically"
+        ]
+    },
+    "RES_ST_VF": {
+        "id": "RES_ST_VF",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_struttech.ogg",
+        "text": [
+            "New Base Structure Available",
+            "VTOL factory enables VTOL production",
+            "VTOL rearming pads required to keep VTOLs flying",
+            "May be upgraded using factory modules"
+        ]
+    },
+    "RES_ST_VP": {
+        "id": "RES_ST_VP",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_struttech.ogg",
+        "text": [
+            "New Base Structure Available",
+            "\n\"Refuels",
+            " rearms and repairs VTOLs\"",
+            "Assign a VTOL by selecting the rearming pad as its target",
+            "The VTOL returns to the selected pad for rearming"
+        ]
+    },
+    "RES_SUPERTRANS": {
+        "id": "RES_SUPERTRANS",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_droid.ogg",
+        "text": [
+            "Super Transport Available",
+            "Armed with Machinegun",
+            "Body Points: Medium",
+            "Requires heavy VTOL factory to produce"
+        ]
+    },
+    "RES_SY_AR": {
+        "id": "RES_SY_AR",
+        "imdName": "MICAPSUL.PIE",
+        "sequenceName": "res_systech.ogg",
+        "text": [
+            "New Repair Technology Discovered",
+            "Synaptic Link technology breakthrough",
+            "On-board diagnostic and repair systems",
+            "Enables self-repair"
+        ]
+    },
+    "RES_SY_CBSTW1": {
+        "id": "RES_SY_CBSTW1",
+        "imdName": "MICAPSUL.PIE",
+        "sequenceName": "res_systech.ogg",
+        "text": [
+            "New Systems Tower Available",
+            "Counter-battery tower detects enemy indirect fire batteries",
+            "Orders assigned indirect fire units to fire at the enemy batteries",
+            "Counter-battery fire continues until enemy battery is suppressed"
+        ]
+    },
+    "RES_SY_RC": {
+        "id": "RES_SY_RC",
+        "imdName": "MICAPSUL.PIE",
+        "sequenceName": "res_systech.ogg",
+        "text": [
+            "New Electronic Technology Discovered",
+            "Synaptic Link technology breakthrough",
+            "On-board resistance circuit systems",
+            "Enables resistance to Nexus Link technology"
+        ]
+    },
+    "RES_SY_RDST1": {
+        "id": "RES_SY_RDST1",
+        "imdName": "MICAPSUL.PIE",
+        "sequenceName": "res_systech.ogg",
+        "text": [
+            "New Systems Tower Available",
+            "Radar detector tower detects enemy sensors",
+            "Orders assigned indirect fire units to fire at the enemy sensors",
+            "Counter-battery fire continues until enemy sensor is suppressed"
+        ]
+    },
+    "RES_SY_SPT": {
+        "id": "RES_SY_SPT",
+        "imdName": "MICAPSUL.PIE",
+        "sequenceName": "res_systech.ogg",
+        "text": [
+            "New Systems Turret Available",
+            "Synaptic Link Scrambler technology",
+            "Electronically attacks and disrupts enemy structures",
+            "Steals technology from structures and takes control of weapons"
+        ]
+    },
+    "RES_SY_SPYT": {
+        "id": "RES_SY_SPYT",
+        "imdName": "MICAPSUL.PIE",
+        "sequenceName": "res_systech.ogg",
+        "text": [
+            "New Defensive Structure Available",
+            "Armored guard tower with Nexus Link",
+            "Automatically targets enemies within sensor range",
+            "Defensive Strength: Medium"
+        ]
+    },
+    "RES_SY_STW1": {
+        "id": "RES_SY_STW1",
+        "imdName": "MICAPSUL.PIE",
+        "sequenceName": "res_systech.ogg",
+        "text": [
+            "New Systems Tower Available",
+            "Extended sensor range",
+            "Keeps map areas under constant surveillance",
+            "May be assigned as spotter for indirect fire weapons"
+        ]
+    },
+    "RES_SY_SU1": {
+        "id": "RES_SY_SU1",
+        "imdName": "MICAPSUL.PIE",
+        "sequenceName": "res_systech.ogg",
+        "text": [
+            "Sensors Improved",
+            "New Thermal Emissions detection",
+            "Sensor Range +25%",
+            "All sensors upgraded automatically"
+        ]
+    },
+    "RES_SY_SU2": {
+        "id": "RES_SY_SU2",
+        "imdName": "MICAPSUL.PIE",
+        "sequenceName": "res_systech.ogg",
+        "text": [
+            "Sensors Improved",
+            "Improved Thermal Emissions detection",
+            "Sensor Range +15%",
+            "All sensors upgraded automatically"
+        ]
+    },
+    "RES_SY_SU3": {
+        "id": "RES_SY_SU3",
+        "imdName": "MICAPSUL.PIE",
+        "sequenceName": "res_systech.ogg",
+        "text": [
+            "Sensors Improved",
+            "Advanced Thermal Emissions detection",
+            "Sensor Range +10%",
+            "All sensors upgraded automatically"
+        ]
+    },
+    "RES_SY_S_UP": {
+        "id": "RES_SY_S_UP",
+        "imdName": "MICAPSUL.PIE",
+        "sequenceName": "res_systech.ogg",
+        "text": [
+            "New Systems Structure Available",
+            "Complete battlefield visibility",
+            "Keeps map areas under constant surveillance",
+            "Does not offer sensor targeting"
+        ]
+    },
+    "RES_SY_S_WS": {
+        "id": "RES_SY_S_WS",
+        "imdName": "MICAPSUL.PIE",
+        "sequenceName": "res_systech.ogg",
+        "text": [
+            "New Systems Structure Available",
+            "\n\"Combines standard",
+            " counter battery and VTOL sensors\"",
+            "Keeps map areas under constant surveillance",
+            "Improved sensor range"
+        ]
+    },
+    "RES_SY_S_WST": {
+        "id": "RES_SY_S_WST",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_systech.ogg",
+        "text": [
+            "New System Available",
+            "\n\"Combines standard",
+            " counter battery and VTOL sensors\"",
+            "Keeps map areas under constant surveillance",
+            "Improved sensor range"
+        ]
+    },
+    "RES_V_AH7": {
+        "id": "RES_V_AH7",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_droid.ogg",
+        "text": [
+            "Vehicle Thermal Armor Improved",
+            "Heat-resistant armored layers",
+            "Thermal Armor +40%",
+            "All vehicles upgraded automatically"
+        ]
+    },
+    "RES_V_B09": {
+        "id": "RES_V_B09",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_droid.ogg",
+        "text": [
+            "Collective Heavy Body",
+            "More armor and body points than Python",
+            "Slower than Python",
+            "High power costs and slow to produce"
+        ]
+    },
+    "RES_V_B13": {
+        "id": "RES_V_B13",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_droid.ogg",
+        "text": [
+            "Medium Super Heavy Body",
+            "More armor and body points than Vengeance",
+            "Slow moving Body",
+            "Very expensive to produce"
+        ]
+    },
+    "RES_V_B14": {
+        "id": "RES_V_B14",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_droid.ogg",
+        "text": [
+            "Large Super Heavy Body",
+            "Maximum armor and body points",
+            "Very slow moving Body",
+            "Very expensive to produce"
+        ]
+    },
+    "RES_V_P_V1": {
+        "id": "RES_V_P_V1",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_droid.ogg",
+        "text": [
+            "New Propulsion Available for Design",
+            "Vertical Take Off and Landing Propulsion",
+            "Speed: VTOL",
+            "Body Points: Low"
+        ]
+    },
+    "RES_WT_DOUBLEAA": {
+        "id": "RES_WT_DOUBLEAA",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_struttech.ogg",
+        "text": [
+            "Hardpoint Cyclone AA Gun Available",
+            "Quad 80mm Anti-Aircraft machinegun",
+            "Aerial targets only",
+            "Body Points: Medium"
+        ]
+    },
+    "RES_WT_QUADAA": {
+        "id": "RES_WT_QUADAA",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_struttech.ogg",
+        "text": [
+            "Hardpoint Whirlwind AA Gun Available",
+            "Quad 30mm Anti-Aircraft machinegun",
+            "Aerial targets only",
+            "Body Points: Medium"
+        ]
+    },
+    "RES_WT_TWINAGHP": {
+        "id": "RES_WT_TWINAGHP",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_struttech.ogg",
+        "text": [
+            "Hardpoint Twin Assault Gun Available",
+            "\n\"Twin Multi-barrel",
+            " rapid-fire machinegun\"",
+            "\n\"Best Targets: Infantry",
+            " base structures",
+            " wheeled vehicles\"",
+            "Replaces all machineguns"
+        ]
+    },
+    "RES_WT_TWINAGUN": {
+        "id": "RES_WT_TWINAGUN",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_weapons.ogg",
+        "text": [
+            "New Weapon Turret Available",
+            "\n\"Twin Multi-barrel",
+            " rapid-fire machinegun\"",
+            "\n\"Best Targets: Infantry",
+            " base structures",
+            " wheeled vehicles\"",
+            "Replaces all machineguns"
+        ]
+    },
+    "RES_W_BMB5": {
+        "id": "RES_W_BMB5",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_weapons.ogg",
+        "text": [
+            "New Bomb Bay Available",
+            "Drops high intensity Plasmite bombs",
+            "Best Targets: Bunkers and hardpoints",
+            "Body Points: Low"
+        ]
+    },
+    "RES_W_BMB6": {
+        "id": "RES_W_BMB6",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_weapons.ogg",
+        "text": [
+            "New VTOL Missile Launcher",
+            "Fires Electronic Magnetic Pulse Missiles",
+            "Best Targets: Vehicles",
+            "Body Points: Low"
+        ]
+    },
+    "RES_W_CN6_T_A": {
+        "id": "RES_W_CN6_T_A",
+        "imdName": "MICAPSUL.PIE",
+        "sequenceName": "res_weapons.ogg",
+        "text": [
+            "New Weapon Turret Available",
+            "76mm twin-barrel automatic-cannon",
+            "Best Targets: Vehicles",
+            "Body Points: High"
+        ]
+    },
+    "RES_W_CNAC2": {
+        "id": "RES_W_CNAC2",
+        "imdName": "MICAPSUL.PIE",
+        "sequenceName": "res_weapons.ogg",
+        "text": [
+            "Cannon Upgrade",
+            "Laser designator paints and guides rounds to the target",
+            "Cannon accuracy +10%",
+            "All cannons upgraded automatically"
+        ]
+    },
+    "RES_W_FL_D7": {
+        "id": "RES_W_FL_D7",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_weapons.ogg",
+        "text": [
+            "Flamer Upgrade",
+            "Propylene Oxide treated to burn at superhot temperatures",
+            "Flamer damage +25%",
+            "All flamers upgraded automatically"
+        ]
+    },
+    "RES_W_HLAS": {
+        "id": "RES_W_HLAS",
+        "imdName": "MICAPSUL.PIE",
+        "sequenceName": "res_weapons.ogg",
+        "text": [
+            "New Laser Weapon Available",
+            "Fires heavy pulses of laser light",
+            "Best Targets: Heavy cyborgs",
+            "Body Points: Medium"
+        ]
+    },
+    "RES_W_INH": {
+        "id": "RES_W_INH",
+        "imdName": "MICAPSUL.PIE",
+        "sequenceName": "res_weapons.ogg",
+        "text": [
+            "New Indirect Fire Weapon Available",
+            "Incendiary Howitzer may be assigned to a sensor",
+            "\n\"Best Targets: Base Structures",
+            " infantry",
+            " wheeled vehicles\"",
+            "Body Points: Low"
+        ]
+    },
+    "RES_W_LASSAT": {
+        "id": "RES_W_LASSAT",
+        "imdName": "MICAPSUL.PIE",
+        "sequenceName": "res_weapons.ogg",
+        "text": [
+            "New Advanced Weapon Available",
+            "Very slow recharge time",
+            "Immense damage infliction capability",
+            "Narrow area of effect"
+        ]
+    },
+    "RES_W_PLASCAN": {
+        "id": "RES_W_PLASCAN",
+        "imdName": "MICAPSUL.PIE",
+        "sequenceName": "res_weapons.ogg",
+        "text": [
+            "New Weapon Turret Available",
+            "Plasma Cannon firing plasma",
+            "Best Targets: Vehicles",
+            "Body Points: Medium"
+        ]
+    },
+    "RES_W_RK_HVAT1": {
+        "id": "RES_W_RK_HVAT1",
+        "imdName": "MICAPSUL.PIE",
+        "sequenceName": "res_weapons.ogg",
+        "text": [
+            "New Rocket Available",
+            "High explosive shaped charge missile",
+            "Best Targets: Bunkers and hardpoints",
+            "Body Points: Very Low"
+        ]
+    },
+    "RES_W_RK_LTAT1": {
+        "id": "RES_W_RK_LTAT1",
+        "imdName": "MICAPSUL.PIE",
+        "sequenceName": "res_weapons.ogg",
+        "text": [
+            "New Rocket Available",
+            "Anti-tank rocket",
+            "Best Targets: Vehicles",
+            "Body Points: Very Low"
+        ]
+    },
+    "RES_W_SRK_AC3": {
+        "id": "RES_W_SRK_AC3",
+        "imdName": "MICAPSUL.PIE",
+        "sequenceName": "res_weapons.ogg",
+        "text": [
+            "Rocket Upgrade",
+            "Rocket detects and locks on to engine emissions",
+            "Rocket accuracy +10%",
+            "All rockets upgraded automatically"
+        ]
+    }
+}

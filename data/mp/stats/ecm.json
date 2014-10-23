@@ -1,0 +1,26 @@
+{
+    "ECM1TurretMk1": {
+        "buildPoints": 100,
+        "buildPower": 20,
+        "designable": 1,
+        "hitpoints": 200,
+        "id": "ECM1TurretMk1",
+        "location": "TURRET",
+        "mountModel": "trmecm2.pie",
+        "name": "Jammer Turret",
+        "range": 1024,
+        "sensorModel": "gnmecm1.pie",
+        "weight": 100
+    },
+    "RepairCentre": {
+        "id": "RepairCentre",
+        "location": "TURRET",
+        "name": "Repair Center Turret",
+        "sensorModel": "GNHREPAR.PIE"
+    },
+    "ZNULLECM": {
+        "id": "ZNULLECM",
+        "location": "DEFAULT",
+        "name": "ZNULLECM"
+    }
+}

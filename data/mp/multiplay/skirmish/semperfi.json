@@ -1,0 +1,8 @@
+{
+    "AI": {
+        "name": "Semperfi",
+        "slo": "semperfi.slo",
+        "tip": "Experimental AI",
+        "vlo": "semperfi.vlo"
+    }
+}

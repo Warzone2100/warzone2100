@@ -1,0 +1,4188 @@
+{
+    "feature_0068": {
+        "id": "OilResource",
+        "name": "OilResource",
+        "position": [
+            1728,
+            704,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0069": {
+        "id": "OilResource",
+        "name": "OilResource",
+        "position": [
+            1984,
+            704,
+            252
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0070": {
+        "id": "OilResource",
+        "name": "OilResource",
+        "position": [
+            1984,
+            1728,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0071": {
+        "id": "OilResource",
+        "name": "OilResource",
+        "position": [
+            1984,
+            1984,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0093": {
+        "id": "OilResource",
+        "name": "OilResource",
+        "position": [
+            22848,
+            1984,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0094": {
+        "id": "OilResource",
+        "name": "OilResource",
+        "position": [
+            24000,
+            1216,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0095": {
+        "id": "OilResource",
+        "name": "OilResource",
+        "position": [
+            23744,
+            1216,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0096": {
+        "id": "OilResource",
+        "name": "OilResource",
+        "position": [
+            22592,
+            1984,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0117": {
+        "id": "OilResource",
+        "name": "OilResource",
+        "position": [
+            1088,
+            23616,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0118": {
+        "id": "OilResource",
+        "name": "OilResource",
+        "position": [
+            1088,
+            23232,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0119": {
+        "id": "OilResource",
+        "name": "OilResource",
+        "position": [
+            832,
+            23232,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0120": {
+        "id": "OilResource",
+        "name": "OilResource",
+        "position": [
+            832,
+            23616,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0141": {
+        "id": "OilResource",
+        "name": "OilResource",
+        "position": [
+            23744,
+            23360,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0142": {
+        "id": "OilResource",
+        "name": "OilResource",
+        "position": [
+            24000,
+            23360,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0143": {
+        "id": "OilResource",
+        "name": "OilResource",
+        "position": [
+            24000,
+            23104,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0144": {
+        "id": "OilResource",
+        "name": "OilResource",
+        "position": [
+            23744,
+            23104,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0165": {
+        "id": "OilResource",
+        "name": "OilResource",
+        "position": [
+            1472,
+            12096,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0166": {
+        "id": "OilResource",
+        "name": "OilResource",
+        "position": [
+            1344,
+            13504,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0167": {
+        "id": "OilResource",
+        "name": "OilResource",
+        "position": [
+            1600,
+            13504,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0168": {
+        "id": "OilResource",
+        "name": "OilResource",
+        "position": [
+            1472,
+            12352,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0189": {
+        "id": "OilResource",
+        "name": "OilResource",
+        "position": [
+            23744,
+            12736,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0190": {
+        "id": "OilResource",
+        "name": "OilResource",
+        "position": [
+            23744,
+            13120,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0191": {
+        "id": "OilResource",
+        "name": "OilResource",
+        "position": [
+            23744,
+            13376,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0192": {
+        "id": "OilResource",
+        "name": "OilResource",
+        "position": [
+            23744,
+            12480,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0207": {
+        "id": "building1",
+        "name": "building1",
+        "position": [
+            6208,
+            23360,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0208": {
+        "id": "building2",
+        "name": "building2",
+        "position": [
+            6208,
+            22720,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0211": {
+        "id": "building8",
+        "name": "building8",
+        "position": [
+            5824,
+            22720,
+            268
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0214": {
+        "id": "building3",
+        "name": "building3",
+        "position": [
+            6592,
+            23360,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0216": {
+        "id": "building1",
+        "name": "building1",
+        "position": [
+            6592,
+            22720,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0217": {
+        "id": "building1",
+        "name": "building1",
+        "position": [
+            5952,
+            24128,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0218": {
+        "id": "building10",
+        "name": "building10",
+        "position": [
+            5632,
+            24128,
+            264
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0219": {
+        "id": "building12",
+        "name": "building12",
+        "position": [
+            7168,
+            23232,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0220": {
+        "id": "building7",
+        "name": "building7",
+        "position": [
+            5824,
+            23360,
+            260
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0222": {
+        "id": "building1",
+        "name": "building1",
+        "position": [
+            6208,
+            20160,
+            318
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0223": {
+        "id": "building2",
+        "name": "building2",
+        "position": [
+            6592,
+            20160,
+            318
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0224": {
+        "id": "building3",
+        "name": "building3",
+        "position": [
+            6208,
+            19648,
+            318
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0227": {
+        "id": "building10",
+        "name": "building10",
+        "position": [
+            6656,
+            19776,
+            318
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0228": {
+        "id": "building11",
+        "name": "building11",
+        "position": [
+            5696,
+            19776,
+            318
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0229": {
+        "id": "building12",
+        "name": "building12",
+        "position": [
+            6144,
+            20544,
+            318
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0231": {
+        "id": "building10",
+        "name": "building10",
+        "position": [
+            7424,
+            21184,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0232": {
+        "id": "building2",
+        "name": "building2",
+        "position": [
+            7104,
+            21312,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0236": {
+        "id": "building12",
+        "name": "building12",
+        "position": [
+            5376,
+            21312,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0238": {
+        "id": "building10",
+        "name": "building10",
+        "position": [
+            7424,
+            19392,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0239": {
+        "id": "building11",
+        "name": "building11",
+        "position": [
+            7488,
+            19776,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0240": {
+        "id": "WaterBuilding2",
+        "name": "WaterBuilding2",
+        "position": [
+            6272,
+            21760,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0246": {
+        "id": "building10",
+        "name": "building10",
+        "position": [
+            6144,
+            19008,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0247": {
+        "id": "building2",
+        "name": "building2",
+        "position": [
+            5696,
+            18880,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0261": {
+        "id": "building10",
+        "name": "building10",
+        "position": [
+            1536,
+            21056,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0262": {
+        "id": "building11",
+        "name": "building11",
+        "position": [
+            1600,
+            20416,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0263": {
+        "id": "building12",
+        "name": "building12",
+        "position": [
+            1536,
+            20800,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0264": {
+        "id": "building1",
+        "name": "building1",
+        "position": [
+            2240,
+            20544,
+            318
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0267": {
+        "id": "building12",
+        "name": "building12",
+        "position": [
+            2560,
+            20800,
+            318
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0269": {
+        "id": "building1",
+        "name": "building1",
+        "position": [
+            1856,
+            21440,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0273": {
+        "id": "building8",
+        "name": "building8",
+        "position": [
+            832,
+            20544,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0275": {
+        "id": "building3",
+        "name": "building3",
+        "position": [
+            832,
+            21056,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0276": {
+        "id": "building2",
+        "name": "building2",
+        "position": [
+            2624,
+            19392,
+            170
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0284": {
+        "id": "building1",
+        "name": "building1",
+        "position": [
+            2112,
+            19392,
+            170
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0312": {
+        "id": "building11",
+        "name": "building11",
+        "position": [
+            11456,
+            20800,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0315": {
+        "id": "building2",
+        "name": "building2",
+        "position": [
+            10944,
+            20800,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0316": {
+        "id": "building12",
+        "name": "building12",
+        "position": [
+            9984,
+            20928,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0320": {
+        "id": "building8",
+        "name": "building8",
+        "position": [
+            10048,
+            20288,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0324": {
+        "id": "Pipe",
+        "name": "Pipe",
+        "position": [
+            8256,
+            20544,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0328": {
+        "id": "building10",
+        "name": "building10",
+        "position": [
+            11520,
+            19648,
+            328
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0330": {
+        "id": "building12",
+        "name": "building12",
+        "position": [
+            11520,
+            19904,
+            328
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0332": {
+        "id": "WreckedBuilding17",
+        "name": "WreckedBuilding17",
+        "position": [
+            10880,
+            20224,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0342": {
+        "id": "building11",
+        "name": "building11",
+        "position": [
+            9280,
+            15296,
+            328
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0344": {
+        "id": "building3",
+        "name": "building3",
+        "position": [
+            8896,
+            15296,
+            328
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0345": {
+        "id": "building2",
+        "name": "building2",
+        "position": [
+            9408,
+            17216,
+            148
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0348": {
+        "id": "WreckedBuilding17",
+        "name": "WreckedBuilding17",
+        "position": [
+            8832,
+            16000,
+            328
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0358": {
+        "id": "WreckedBuilding16",
+        "name": "WreckedBuilding16",
+        "position": [
+            8896,
+            16320,
+            328
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0361": {
+        "id": "building12",
+        "name": "building12",
+        "position": [
+            9472,
+            17728,
+            148
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0368": {
+        "id": "building1",
+        "name": "building1",
+        "position": [
+            5440,
+            17600,
+            308
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0369": {
+        "id": "building2",
+        "name": "building2",
+        "position": [
+            5952,
+            17472,
+            308
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0370": {
+        "id": "building3",
+        "name": "building3",
+        "position": [
+            6848,
+            16576,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0372": {
+        "id": "WreckedBuilding17",
+        "name": "WreckedBuilding17",
+        "position": [
+            6528,
+            16640,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0373": {
+        "id": "WreckedBuilding16",
+        "name": "WreckedBuilding16",
+        "position": [
+            5440,
+            16576,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0374": {
+        "id": "building1",
+        "name": "building1",
+        "position": [
+            6080,
+            16576,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0375": {
+        "id": "building2",
+        "name": "building2",
+        "position": [
+            5440,
+            16064,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0386": {
+        "id": "building2",
+        "name": "building2",
+        "position": [
+            6720,
+            15552,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0389": {
+        "id": "WreckedBuilding17",
+        "name": "WreckedBuilding17",
+        "position": [
+            6272,
+            15616,
+            268
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0390": {
+        "id": "building12",
+        "name": "building12",
+        "position": [
+            6784,
+            16192,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0393": {
+        "id": "WreckedBuilding9",
+        "name": "WreckedBuilding9",
+        "position": [
+            7040,
+            17664,
+            308
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0395": {
+        "id": "building1",
+        "name": "building1",
+        "position": [
+            1984,
+            16192,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0396": {
+        "id": "building2",
+        "name": "building2",
+        "position": [
+            960,
+            16192,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0397": {
+        "id": "building3",
+        "name": "building3",
+        "position": [
+            1472,
+            16192,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0398": {
+        "id": "building7",
+        "name": "building7",
+        "position": [
+            2496,
+            15552,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0400": {
+        "id": "building11",
+        "name": "building11",
+        "position": [
+            1984,
+            15552,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0401": {
+        "id": "building12",
+        "name": "building12",
+        "position": [
+            2048,
+            16576,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0402": {
+        "id": "WreckedBuilding17",
+        "name": "WreckedBuilding17",
+        "position": [
+            1536,
+            15616,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0404": {
+        "id": "WreckedBuilding16",
+        "name": "WreckedBuilding16",
+        "position": [
+            960,
+            16704,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0407": {
+        "id": "WreckedBuilding9",
+        "name": "WreckedBuilding9",
+        "position": [
+            2048,
+            16896,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0408": {
+        "id": "building10",
+        "name": "building10",
+        "position": [
+            1536,
+            16832,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0417": {
+        "id": "building1",
+        "name": "building1",
+        "position": [
+            15296,
+            20288,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0418": {
+        "id": "building2",
+        "name": "building2",
+        "position": [
+            14656,
+            20288,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0419": {
+        "id": "building3",
+        "name": "building3",
+        "position": [
+            15296,
+            20800,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0422": {
+        "id": "building10",
+        "name": "building10",
+        "position": [
+            15744,
+            20160,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0423": {
+        "id": "building11",
+        "name": "building11",
+        "position": [
+            14656,
+            20928,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0424": {
+        "id": "building12",
+        "name": "building12",
+        "position": [
+            15744,
+            20416,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0433": {
+        "id": "building1",
+        "name": "building1",
+        "position": [
+            16064,
+            19008,
+            292
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0434": {
+        "id": "building2",
+        "name": "building2",
+        "position": [
+            16064,
+            19392,
+            292
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0438": {
+        "id": "building10",
+        "name": "building10",
+        "position": [
+            15232,
+            19520,
+            256
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "feature_0439": {
+        "id": "building12",
+        "name": "building12",
+        "position": [
+            15232,
+            19264,
+            256
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "feature_0444": {
+        "id": "building1",
+        "name": "building1",
+        "position": [
+            14656,
+            19264,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0446": {
+        "id": "building10",
+        "name": "building10",
+        "position": [
+            14592,
+            19648,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0447": {
+        "id": "building1",
+        "name": "building1",
+        "position": [
+            14144,
+            17216,
+            148
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0448": {
+        "id": "building2",
+        "name": "building2",
+        "position": [
+            14656,
+            17216,
+            148
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0449": {
+        "id": "building3",
+        "name": "building3",
+        "position": [
+            14656,
+            17728,
+            148
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0451": {
+        "id": "building1",
+        "name": "building1",
+        "position": [
+            18240,
+            23616,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0452": {
+        "id": "building2",
+        "name": "building2",
+        "position": [
+            18752,
+            23616,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0456": {
+        "id": "building10",
+        "name": "building10",
+        "position": [
+            19712,
+            23744,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0457": {
+        "id": "building11",
+        "name": "building11",
+        "position": [
+            18240,
+            23104,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0458": {
+        "id": "building12",
+        "name": "building12",
+        "position": [
+            17664,
+            22976,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0461": {
+        "id": "WreckedBuilding16",
+        "name": "WreckedBuilding16",
+        "position": [
+            18880,
+            23104,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0465": {
+        "id": "building1",
+        "name": "building1",
+        "position": [
+            19392,
+            23104,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0467": {
+        "id": "building10",
+        "name": "building10",
+        "position": [
+            18176,
+            22720,
+            256
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "feature_0471": {
+        "id": "building1",
+        "name": "building1",
+        "position": [
+            18368,
+            20672,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0472": {
+        "id": "building2",
+        "name": "building2",
+        "position": [
+            18496,
+            20160,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0473": {
+        "id": "building12",
+        "name": "building12",
+        "position": [
+            19072,
+            20416,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0475": {
+        "id": "WreckedBuilding17",
+        "name": "WreckedBuilding17",
+        "position": [
+            18560,
+            21248,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0481": {
+        "id": "WreckedBuilding16",
+        "name": "WreckedBuilding16",
+        "position": [
+            19136,
+            20672,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0482": {
+        "id": "building3",
+        "name": "building3",
+        "position": [
+            19136,
+            19904,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0483": {
+        "id": "building1",
+        "name": "building1",
+        "position": [
+            18880,
+            19264,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0484": {
+        "id": "building2",
+        "name": "building2",
+        "position": [
+            19392,
+            19264,
+            252
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0487": {
+        "id": "building10",
+        "name": "building10",
+        "position": [
+            19840,
+            19392,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0488": {
+        "id": "building1",
+        "name": "building1",
+        "position": [
+            22464,
+            19904,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0489": {
+        "id": "building2",
+        "name": "building2",
+        "position": [
+            22464,
+            20672,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0490": {
+        "id": "building3",
+        "name": "building3",
+        "position": [
+            21824,
+            20416,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0492": {
+        "id": "building8",
+        "name": "building8",
+        "position": [
+            21824,
+            19904,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0493": {
+        "id": "building10",
+        "name": "building10",
+        "position": [
+            22400,
+            20288,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0496": {
+        "id": "building12",
+        "name": "building12",
+        "position": [
+            21888,
+            20800,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0498": {
+        "id": "WreckedBuilding17",
+        "name": "WreckedBuilding17",
+        "position": [
+            22528,
+            21248,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0499": {
+        "id": "building1",
+        "name": "building1",
+        "position": [
+            23104,
+            19904,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0501": {
+        "id": "building3",
+        "name": "building3",
+        "position": [
+            23104,
+            20288,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0502": {
+        "id": "building12",
+        "name": "building12",
+        "position": [
+            23040,
+            20800,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0503": {
+        "id": "building12",
+        "name": "building12",
+        "position": [
+            23552,
+            20160,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0508": {
+        "id": "building2",
+        "name": "building2",
+        "position": [
+            9408,
+            9792,
+            148
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0512": {
+        "id": "building10",
+        "name": "building10",
+        "position": [
+            9088,
+            10304,
+            148
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0513": {
+        "id": "building12",
+        "name": "building12",
+        "position": [
+            9472,
+            10304,
+            148
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0514": {
+        "id": "building1",
+        "name": "building1",
+        "position": [
+            14144,
+            9792,
+            148
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0516": {
+        "id": "building3",
+        "name": "building3",
+        "position": [
+            14656,
+            10304,
+            148
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0517": {
+        "id": "building11",
+        "name": "building11",
+        "position": [
+            9408,
+            8768,
+            148
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0518": {
+        "id": "building10",
+        "name": "building10",
+        "position": [
+            9088,
+            8256,
+            148
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0519": {
+        "id": "building12",
+        "name": "building12",
+        "position": [
+            9472,
+            8256,
+            148
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0520": {
+        "id": "building2",
+        "name": "building2",
+        "position": [
+            6208,
+            9152,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0521": {
+        "id": "building11",
+        "name": "building11",
+        "position": [
+            6208,
+            9792,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0522": {
+        "id": "building10",
+        "name": "building10",
+        "position": [
+            6784,
+            8640,
+            256
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "feature_0523": {
+        "id": "building12",
+        "name": "building12",
+        "position": [
+            6784,
+            8256,
+            256
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "feature_0524": {
+        "id": "building1",
+        "name": "building1",
+        "position": [
+            6208,
+            8256,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0525": {
+        "id": "building10",
+        "name": "building10",
+        "position": [
+            6144,
+            8640,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0532": {
+        "id": "WaterBuilding",
+        "name": "WaterBuilding",
+        "position": [
+            4608,
+            10624,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0541": {
+        "id": "WreckedBuilding16",
+        "name": "WreckedBuilding16",
+        "position": [
+            4800,
+            10048,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0542": {
+        "id": "building1",
+        "name": "building1",
+        "position": [
+            5312,
+            8256,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0543": {
+        "id": "building2",
+        "name": "building2",
+        "position": [
+            5696,
+            8512,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0544": {
+        "id": "building1",
+        "name": "building1",
+        "position": [
+            6848,
+            9152,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0545": {
+        "id": "building1",
+        "name": "building1",
+        "position": [
+            5440,
+            5440,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0546": {
+        "id": "building2",
+        "name": "building2",
+        "position": [
+            5952,
+            5440,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0547": {
+        "id": "building3",
+        "name": "building3",
+        "position": [
+            6592,
+            5440,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0549": {
+        "id": "WreckedBuilding17",
+        "name": "WreckedBuilding17",
+        "position": [
+            7040,
+            5504,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0550": {
+        "id": "building11",
+        "name": "building11",
+        "position": [
+            5696,
+            6080,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0551": {
+        "id": "building12",
+        "name": "building12",
+        "position": [
+            6144,
+            5952,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0556": {
+        "id": "building2",
+        "name": "building2",
+        "position": [
+            18880,
+            9152,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0557": {
+        "id": "building11",
+        "name": "building11",
+        "position": [
+            18880,
+            9792,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0558": {
+        "id": "building10",
+        "name": "building10",
+        "position": [
+            19456,
+            8640,
+            256
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "feature_0559": {
+        "id": "building12",
+        "name": "building12",
+        "position": [
+            19456,
+            8256,
+            256
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "feature_0560": {
+        "id": "building1",
+        "name": "building1",
+        "position": [
+            18880,
+            8256,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0561": {
+        "id": "building10",
+        "name": "building10",
+        "position": [
+            18816,
+            8640,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0562": {
+        "id": "WaterBuilding",
+        "name": "WaterBuilding",
+        "position": [
+            17280,
+            10624,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0563": {
+        "id": "WreckedBuilding16",
+        "name": "WreckedBuilding16",
+        "position": [
+            17472,
+            10048,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0564": {
+        "id": "building1",
+        "name": "building1",
+        "position": [
+            17984,
+            8256,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0565": {
+        "id": "building2",
+        "name": "building2",
+        "position": [
+            18368,
+            8512,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0566": {
+        "id": "building1",
+        "name": "building1",
+        "position": [
+            19520,
+            9152,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0567": {
+        "id": "building1",
+        "name": "building1",
+        "position": [
+            18112,
+            5440,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0568": {
+        "id": "building2",
+        "name": "building2",
+        "position": [
+            18624,
+            5440,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0569": {
+        "id": "building3",
+        "name": "building3",
+        "position": [
+            19264,
+            5440,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0570": {
+        "id": "WreckedBuilding17",
+        "name": "WreckedBuilding17",
+        "position": [
+            19712,
+            5504,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0571": {
+        "id": "building11",
+        "name": "building11",
+        "position": [
+            18368,
+            6080,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0572": {
+        "id": "building12",
+        "name": "building12",
+        "position": [
+            18816,
+            5952,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0573": {
+        "id": "WreckedBuilding16",
+        "name": "WreckedBuilding16",
+        "position": [
+            19264,
+            4160,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0576": {
+        "id": "building1",
+        "name": "building1",
+        "position": [
+            23104,
+            5312,
+            318
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0577": {
+        "id": "building2",
+        "name": "building2",
+        "position": [
+            23488,
+            5312,
+            318
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0578": {
+        "id": "building3",
+        "name": "building3",
+        "position": [
+            23104,
+            4800,
+            318
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0579": {
+        "id": "building10",
+        "name": "building10",
+        "position": [
+            23552,
+            4928,
+            318
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0580": {
+        "id": "building11",
+        "name": "building11",
+        "position": [
+            22592,
+            4928,
+            318
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0581": {
+        "id": "building12",
+        "name": "building12",
+        "position": [
+            23040,
+            5696,
+            318
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0584": {
+        "id": "building12",
+        "name": "building12",
+        "position": [
+            22272,
+            6464,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0589": {
+        "id": "building1",
+        "name": "building1",
+        "position": [
+            22464,
+            8384,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0590": {
+        "id": "building3",
+        "name": "building3",
+        "position": [
+            22976,
+            8384,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0591": {
+        "id": "building2",
+        "name": "building2",
+        "position": [
+            23488,
+            8384,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0594": {
+        "id": "building10",
+        "name": "building10",
+        "position": [
+            22784,
+            8896,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0595": {
+        "id": "building11",
+        "name": "building11",
+        "position": [
+            23232,
+            9024,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0596": {
+        "id": "building12",
+        "name": "building12",
+        "position": [
+            22400,
+            8896,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0597": {
+        "id": "building1",
+        "name": "building1",
+        "position": [
+            18880,
+            16448,
+            318
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0598": {
+        "id": "building2",
+        "name": "building2",
+        "position": [
+            19264,
+            16448,
+            318
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0599": {
+        "id": "building3",
+        "name": "building3",
+        "position": [
+            18880,
+            15936,
+            318
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0600": {
+        "id": "building10",
+        "name": "building10",
+        "position": [
+            19328,
+            16064,
+            318
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0601": {
+        "id": "building11",
+        "name": "building11",
+        "position": [
+            18368,
+            16064,
+            318
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0602": {
+        "id": "building12",
+        "name": "building12",
+        "position": [
+            18816,
+            16832,
+            318
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0603": {
+        "id": "building10",
+        "name": "building10",
+        "position": [
+            20096,
+            17472,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0604": {
+        "id": "building2",
+        "name": "building2",
+        "position": [
+            19776,
+            17600,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0605": {
+        "id": "building10",
+        "name": "building10",
+        "position": [
+            18304,
+            17728,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0606": {
+        "id": "building12",
+        "name": "building12",
+        "position": [
+            18048,
+            17600,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0607": {
+        "id": "building10",
+        "name": "building10",
+        "position": [
+            20096,
+            15680,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0608": {
+        "id": "building11",
+        "name": "building11",
+        "position": [
+            20160,
+            16064,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0609": {
+        "id": "WaterBuilding2",
+        "name": "WaterBuilding2",
+        "position": [
+            18944,
+            18048,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0610": {
+        "id": "building10",
+        "name": "building10",
+        "position": [
+            18816,
+            15296,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0611": {
+        "id": "building2",
+        "name": "building2",
+        "position": [
+            18368,
+            15168,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0612": {
+        "id": "building1",
+        "name": "building1",
+        "position": [
+            1472,
+            5312,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0614": {
+        "id": "building3",
+        "name": "building3",
+        "position": [
+            2368,
+            5184,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0616": {
+        "id": "WreckedBuilding17",
+        "name": "WreckedBuilding17",
+        "position": [
+            2048,
+            4608,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0618": {
+        "id": "WreckedBuilding16",
+        "name": "WreckedBuilding16",
+        "position": [
+            3008,
+            4928,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0619": {
+        "id": "building11",
+        "name": "building11",
+        "position": [
+            3008,
+            6080,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0627": {
+        "id": "building3",
+        "name": "building3",
+        "position": [
+            22976,
+            15424,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0628": {
+        "id": "building10",
+        "name": "building10",
+        "position": [
+            23424,
+            15552,
+            258
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0629": {
+        "id": "building3",
+        "name": "building3",
+        "position": [
+            1856,
+            8000,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0630": {
+        "id": "building10",
+        "name": "building10",
+        "position": [
+            2304,
+            8128,
+            258
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0631": {
+        "id": "building1",
+        "name": "building1",
+        "position": [
+            6208,
+            12864,
+            280
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0632": {
+        "id": "building2",
+        "name": "building2",
+        "position": [
+            6208,
+            12224,
+            261
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0635": {
+        "id": "building10",
+        "name": "building10",
+        "position": [
+            6272,
+            12608,
+            282
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0636": {
+        "id": "building2",
+        "name": "building2",
+        "position": [
+            6848,
+            13504,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0638": {
+        "id": "building3",
+        "name": "building3",
+        "position": [
+            5696,
+            12224,
+            276
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0639": {
+        "id": "building1",
+        "name": "building1",
+        "position": [
+            10176,
+            6208,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0640": {
+        "id": "building2",
+        "name": "building2",
+        "position": [
+            9664,
+            5312,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0641": {
+        "id": "building3",
+        "name": "building3",
+        "position": [
+            10176,
+            5184,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0644": {
+        "id": "WreckedBuilding17",
+        "name": "WreckedBuilding17",
+        "position": [
+            10624,
+            6272,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0646": {
+        "id": "building1",
+        "name": "building1",
+        "position": [
+            15296,
+            832,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0647": {
+        "id": "building2",
+        "name": "building2",
+        "position": [
+            15296,
+            1344,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0648": {
+        "id": "building3",
+        "name": "building3",
+        "position": [
+            15296,
+            1728,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0651": {
+        "id": "building11",
+        "name": "building11",
+        "position": [
+            14784,
+            1728,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0652": {
+        "id": "building1",
+        "name": "building1",
+        "position": [
+            14016,
+            5952,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0653": {
+        "id": "building2",
+        "name": "building2",
+        "position": [
+            14528,
+            6208,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0654": {
+        "id": "building1",
+        "name": "building1",
+        "position": [
+            18112,
+            12608,
+            332
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0655": {
+        "id": "building3",
+        "name": "building3",
+        "position": [
+            18112,
+            13120,
+            332
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0656": {
+        "id": "building2",
+        "name": "building2",
+        "position": [
+            14144,
+            13376,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0658": {
+        "id": "building1",
+        "name": "building1",
+        "position": [
+            15296,
+            12864,
+            148
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0660": {
+        "id": "building2",
+        "name": "building2",
+        "position": [
+            14144,
+            12736,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0661": {
+        "id": "building11",
+        "name": "building11",
+        "position": [
+            15296,
+            13376,
+            148
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0662": {
+        "id": "building1",
+        "name": "building1",
+        "position": [
+            15296,
+            12352,
+            148
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0665": {
+        "id": "building11",
+        "name": "building11",
+        "position": [
+            18880,
+            12480,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0666": {
+        "id": "building12",
+        "name": "building12",
+        "position": [
+            19456,
+            11840,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0669": {
+        "id": "WreckedBuilding17",
+        "name": "WreckedBuilding17",
+        "position": [
+            18944,
+            11776,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0670": {
+        "id": "WreckedBuilding16",
+        "name": "WreckedBuilding16",
+        "position": [
+            13760,
+            12736,
+            275
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0671": {
+        "id": "WreckedBuilding17",
+        "name": "WreckedBuilding17",
+        "position": [
+            14208,
+            12160,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0673": {
+        "id": "building1",
+        "name": "building1",
+        "position": [
+            14144,
+            11712,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0674": {
+        "id": "building3",
+        "name": "building3",
+        "position": [
+            13760,
+            11712,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0676": {
+        "id": "WreckedBuilding17",
+        "name": "WreckedBuilding17",
+        "position": [
+            15232,
+            11904,
+            148
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0677": {
+        "id": "building11",
+        "name": "building11",
+        "position": [
+            14144,
+            7872,
+            148
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0680": {
+        "id": "building1",
+        "name": "building1",
+        "position": [
+            14656,
+            7872,
+            148
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0681": {
+        "id": "building2",
+        "name": "building2",
+        "position": [
+            15296,
+            8384,
+            153
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0682": {
+        "id": "building2",
+        "name": "building2",
+        "position": [
+            15296,
+            7872,
+            144
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0684": {
+        "id": "WreckedBuilding17",
+        "name": "WreckedBuilding17",
+        "position": [
+            14720,
+            8832,
+            148
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0685": {
+        "id": "building12",
+        "name": "building12",
+        "position": [
+            14080,
+            6336,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0686": {
+        "id": "WreckedBuilding16",
+        "name": "WreckedBuilding16",
+        "position": [
+            13760,
+            4416,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0688": {
+        "id": "building10",
+        "name": "building10",
+        "position": [
+            18816,
+            6336,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0689": {
+        "id": "building1",
+        "name": "building1",
+        "position": [
+            19264,
+            6080,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0691": {
+        "id": "building2",
+        "name": "building2",
+        "position": [
+            18752,
+            4800,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0700": {
+        "id": "Pipe",
+        "name": "Pipe",
+        "position": [
+            15552,
+            18112,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0702": {
+        "id": "Pipe",
+        "name": "Pipe",
+        "position": [
+            20928,
+            13376,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0703": {
+        "id": "Pipe",
+        "name": "Pipe",
+        "position": [
+            18880,
+            14144,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0704": {
+        "id": "Pipe",
+        "name": "Pipe",
+        "position": [
+            15552,
+            14400,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0707": {
+        "id": "Pipe",
+        "name": "Pipe",
+        "position": [
+            10304,
+            14400,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0710": {
+        "id": "Pipe",
+        "name": "Pipe",
+        "position": [
+            1472,
+            14400,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0711": {
+        "id": "Pipe",
+        "name": "Pipe",
+        "position": [
+            7104,
+            10688,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0712": {
+        "id": "Pipe",
+        "name": "Pipe",
+        "position": [
+            10304,
+            10688,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0714": {
+        "id": "Pipe",
+        "name": "Pipe",
+        "position": [
+            11584,
+            9408,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0716": {
+        "id": "Pipe",
+        "name": "Pipe",
+        "position": [
+            18496,
+            10688,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0718": {
+        "id": "Pipe",
+        "name": "Pipe",
+        "position": [
+            23488,
+            10688,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0724": {
+        "id": "Pipe",
+        "name": "Pipe",
+        "position": [
+            11968,
+            6464,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0727": {
+        "id": "OilResource",
+        "name": "OilResource",
+        "position": [
+            6336,
+            24000,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0728": {
+        "id": "OilResource",
+        "name": "OilResource",
+        "position": [
+            704,
+            19520,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0729": {
+        "id": "OilResource",
+        "name": "OilResource",
+        "position": [
+            23872,
+            20288,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0730": {
+        "id": "OilResource",
+        "name": "OilResource",
+        "position": [
+            19136,
+            23616,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0731": {
+        "id": "OilResource",
+        "name": "OilResource",
+        "position": [
+            22592,
+            5824,
+            318
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0732": {
+        "id": "OilResource",
+        "name": "OilResource",
+        "position": [
+            17984,
+            832,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0733": {
+        "id": "OilResource",
+        "name": "OilResource",
+        "position": [
+            832,
+            4544,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0734": {
+        "id": "OilResource",
+        "name": "OilResource",
+        "position": [
+            6464,
+            1216,
+            328
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0735": {
+        "id": "OilResource",
+        "name": "OilResource",
+        "position": [
+            10048,
+            16192,
+            148
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0737": {
+        "id": "OilResource",
+        "name": "OilResource",
+        "position": [
+            15680,
+            7872,
+            148
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0738": {
+        "id": "OilResource",
+        "name": "OilResource",
+        "position": [
+            9152,
+            9024,
+            148
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0755": {
+        "id": "OilResource",
+        "name": "OilResource",
+        "position": [
+            15424,
+            23488,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0756": {
+        "id": "OilResource",
+        "name": "OilResource",
+        "position": [
+            15680,
+            23744,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0757": {
+        "id": "OilResource",
+        "name": "OilResource",
+        "position": [
+            15680,
+            23488,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0758": {
+        "id": "OilResource",
+        "name": "OilResource",
+        "position": [
+            15424,
+            23744,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0781": {
+        "id": "OilResource",
+        "name": "OilResource",
+        "position": [
+            9408,
+            1728,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0782": {
+        "id": "OilResource",
+        "name": "OilResource",
+        "position": [
+            11072,
+            960,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0783": {
+        "id": "OilResource",
+        "name": "OilResource",
+        "position": [
+            11072,
+            704,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0784": {
+        "id": "OilResource",
+        "name": "OilResource",
+        "position": [
+            9664,
+            1728,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0791": {
+        "id": "OilResource",
+        "name": "OilResource",
+        "position": [
+            13760,
+            12096,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0792": {
+        "id": "OilResource",
+        "name": "OilResource",
+        "position": [
+            10432,
+            20928,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0794": {
+        "id": "OilResource",
+        "name": "OilResource",
+        "position": [
+            15168,
+            19776,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0796": {
+        "id": "OilResource",
+        "name": "OilResource",
+        "position": [
+            23744,
+            16704,
+            252
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0797": {
+        "id": "OilResource",
+        "name": "OilResource",
+        "position": [
+            18368,
+            16576,
+            318
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0798": {
+        "id": "OilResource",
+        "name": "OilResource",
+        "position": [
+            1216,
+            17088,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0799": {
+        "id": "OilResource",
+        "name": "OilResource",
+        "position": [
+            5696,
+            12736,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0800": {
+        "id": "OilResource",
+        "name": "OilResource",
+        "position": [
+            10304,
+            5824,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0801": {
+        "id": "OilResource",
+        "name": "OilResource",
+        "position": [
+            19776,
+            5952,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0802": {
+        "id": "OilResource",
+        "name": "OilResource",
+        "position": [
+            23616,
+            8896,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0803": {
+        "id": "OilResource",
+        "name": "OilResource",
+        "position": [
+            18240,
+            13376,
+            332
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0804": {
+        "id": "OilResource",
+        "name": "OilResource",
+        "position": [
+            1088,
+            8384,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0805": {
+        "id": "OilResource",
+        "name": "OilResource",
+        "position": [
+            6080,
+            4928,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    }
+}

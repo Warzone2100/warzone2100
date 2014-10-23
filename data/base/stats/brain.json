@@ -1,0 +1,15 @@
+{
+    "CommandBrain01": {
+        "designable": 1,
+        "id": "CommandBrain01",
+        "maxDroids": 6,
+        "maxDroidsMult": 2,
+        "name": "Command Turret",
+        "turret": "CommandTurret1"
+    },
+    "ZNULLBRAIN": {
+        "id": "ZNULLBRAIN",
+        "name": "Z NULL BRAIN",
+        "turret": "ZNULLWEAPON"
+    }
+}
