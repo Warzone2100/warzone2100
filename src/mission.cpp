@@ -2008,9 +2008,81 @@ static void fillTimeDisplay(QString &text, UDWORD time, bool bHours)
 	}
 	else
 	{
-		time_t secs = time / GAME_TICKS_PER_SEC;
-		struct tm *tmp = localtime(&secs);
-		strftime(psText, sizeof(psText), bHours ? "%H:%M:%S" : "%H:%M", tmp);
+		//hardcode conversion from time to string to avoid strftie malfunction
+		long secs = time / GAME_TICKS_PER_SEC;
+		long hh = secs / 3600;
+		long mm = (secs / 60) % 60;
+		long ss = secs % 60;
+		if (bHours)
+		{
+			if (hh==0) psText[0] = psText[1] = '0';
+			else if (hh<10)
+			{
+				psText[0] = '0';
+				psText[1] = '0' + hh;
+			}
+			else
+			{
+				psText[0] = '0' + hh / 10;
+				psText[1] = '0' + hh % 10;
+			}
+			psText[2] = ':';
+
+			if (mm==0) psText[3] = psText[4] = '0';
+			else if (mm<10)
+			{
+				psText[3] = '0';
+				psText[4] = '0' + mm;
+			}
+			else
+			{
+				psText[3] = '0' + mm / 10;
+				psText[4] = '0' + mm % 10;
+			}
+			psText[5] = ':';
+
+			if (ss==0) psText[6] = psText[7] = '0';
+			else if (ss<10)
+			{
+				psText[6] = '0';
+				psText[7] = '0' + ss;
+			}
+			else
+			{
+				psText[6] = '0' + ss / 10;
+				psText[7] = '0' + ss % 10;
+			}
+			psText[8]='\0';
+		}
+		else
+		{
+			if (mm==0) psText[0] = psText[1] = '0';
+			else if (mm<10)
+			{
+				psText[0] = '0';
+				psText[1] = '0' + mm;
+			}
+			else
+			{
+				psText[0] = '0' + mm / 10;
+				psText[1] = '0' + mm % 10;
+			}
+			psText[2] = ':';
+
+			if (ss==0) psText[3] = psText[4] = '0';
+			else if (ss<10)
+			{
+				psText[3] = '0';
+				psText[4] = '0' + ss;
+			}
+			else
+			{
+				psText[3] = '0' + ss / 10;
+				psText[4] = '0' + ss % 10;
+			}
+			psText[5]='\0';
+		}
+
 	}
 	text = QString::fromUtf8(psText);
 }
