@@ -2,6 +2,14 @@ AM_CPPFLAGS = -DYY_NO_INPUT $(SDL_CFLAGS) $(PHYSFS_CFLAGS) $(PNG_CFLAGS) $(VORBI
 AM_CFLAGS = $(WZ_CFLAGS)
 AM_CXXFLAGS = $(WZ_CXXFLAGS) $(QT5_CFLAGS)
 
+# Here, we need to set "plugins" for Qt5 to be static
+# FIXME: At a future date, we should check if they want static builds, but, since we only support those for now...
+if MINGW32
+AM_CFLAGS += -DQT_STATICPLUGIN
+AM_CPPFLAGS += -DQT_STATICPLUGIN
+AM_CXXFLAGS += -DQT_STATICPLUGIN
+endif
+
 MOCHEADER = \
 	multiint.h \
 	qtscriptdebug.h
@@ -315,14 +323,21 @@ warzone2100_LIBS += $(top_builddir)/lib/sdl/libsdl.a
 endif
 endif
 
+# Here, we need to bring in the "plugins" for Qt5 and they MUST come before the other QT libs.
+# FIXME: At a future date, we should check if they want static builds, but, since we only support those for now...
+if MINGW32
+SQT5_LIBS = -lQt5PlatformSupport -lqwindows
+else
+SQT5_LIBS =
+endif
 
 if PORTABLE
 warzone2100_portable_LDADD = $(warzone2100_portable_LIBS) $(LTLIBINTL) $(SDL_LIBS) $(PHYSFS_LIBS) $(PNG_LIBS) $(VORBISFILE_LIBS) $(VORBIS_LIBS) \
-	$(THEORA_LIBS) $(OPENAL_LIBS) $(OPENGLC_LIBS) $(OPENGL_LIBS) $(QT5_LIBS) $(GLEW_LIBS) \
+	$(THEORA_LIBS) $(OPENAL_LIBS) $(OPENGLC_LIBS) $(OPENGL_LIBS) $(SQT5_LIBS) $(QT5_LIBS) $(GLEW_LIBS) \
 	$(X_LIBS) $(X_EXTRA_LIBS) $(LIBCRYPTO_LIBS) $(LDFLAGS)
 else
 warzone2100_LDADD = $(warzone2100_LIBS) $(LTLIBINTL) $(SDL_LIBS) $(PHYSFS_LIBS) $(PNG_LIBS) $(VORBISFILE_LIBS) $(VORBIS_LIBS) \
-	$(THEORA_LIBS) $(OPENAL_LIBS) $(OPENGLC_LIBS) $(OPENGL_LIBS) $(QT5_LIBS) $(GLEW_LIBS) \
+	$(THEORA_LIBS) $(OPENAL_LIBS) $(OPENGLC_LIBS) $(OPENGL_LIBS) $(SQT5_LIBS) $(QT5_LIBS) $(GLEW_LIBS) \
 	$(X_LIBS) $(X_EXTRA_LIBS) $(LIBCRYPTO_LIBS) $(LDFLAGS)
 endif
 
@@ -331,7 +346,7 @@ if MINGW32
 if PORTABLE
 warzone2100_portable_LDADD += $(top_builddir)/win32/warzone2100_portable.o $(WIN32_LIBS)
 else
-warzone2100_LDADD += $(top_builddir)/win32/warzone2100.o $(WIN32_LIBS)
+warzone2100_LDADD += $(top_builddir)/win32/warzone2100.o  $(WIN32_LIBS)
 endif
 endif
 

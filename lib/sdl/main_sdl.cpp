@@ -22,8 +22,19 @@
  * SDL backend code
  */
 
-#include <QtWidgets/QApplication>
+// Get platform defines before checking for them!
 #include "lib/framework/wzapp.h"
+
+// Needed for cross compiler static builds
+#if defined(WZ_CC_MINGW) && !defined(QT_STATICPLUGIN)
+#error "We only support static builds at this time!"
+#endif
+
+#include <QtWidgets/QApplication>
+// This is for the cross-compiler, for static QT 5 builds to avoid the 'plugins' crap on windows
+#if defined(QT_STATICPLUGIN)
+#include <QtCore/QtPlugin>
+#endif
 #include "lib/framework/input.h"
 #include "lib/framework/utf.h"
 #include "lib/framework/opengl.h"
@@ -36,6 +47,11 @@
 #include "wz2100icon.h"
 #include "cursors_sdl.h"
 #include <algorithm>
+
+// This is for the cross-compiler, for static QT 5 builds to avoid the 'plugins' crap on windows
+#if defined(QT_STATICPLUGIN)
+Q_IMPORT_PLUGIN(QWindowsIntegrationPlugin)
+#endif
 
 extern void mainLoop();
 // used in crash reports & version info

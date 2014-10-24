@@ -91,13 +91,13 @@ AM_CONDITIONAL([BACKEND_SDL], test "$backend" = "sdl")
 # Check for Qt
 if test "$backend" = "qt"; then
 	AC_MSG_RESULT([Qt])
-	PKG_CHECK_MODULES(QT5, Qt5Core Qt5Gui Qt5Widgets Qt5Network Qt5Script Qt5OpenGL,,[:])
+	PKG_CHECK_MODULES(QT5, Qt5Core Qt5Gui Qt5Widgets Qt5Script Qt5OpenGL,,[:])
 else
 	AC_MSG_RESULT([SDL])
-	PKG_CHECK_MODULES(QT5, Qt5Core Qt5Gui Qt5Widgets Qt5Network Qt5Script,,[:])
+	PKG_CHECK_MODULES(QT5, Qt5Core Qt5Gui Qt5Widgets Qt5Script,,[:])
 fi
 if test "$pkg_failed" = "yes" ; then
-	AC_MSG_ERROR([Qt not found - required!])
+	AC_MSG_ERROR([Qt 5 not found - required!])
 fi
 QT5_INCLUDES=$QT5_FRONTEND_CFLAGS
 QT5_LDFLAGS=$QT5_FRONTEND_LIBS
