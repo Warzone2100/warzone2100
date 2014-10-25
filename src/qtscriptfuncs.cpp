@@ -1025,9 +1025,10 @@ static QScriptValue js_getLabel(QScriptContext *context, QScriptEngine *engine)
 //-- This is a fast operation of O(log n) algorithmic complexity. If the label is not found, an
 //-- undefined value is returned. If whatever object the label should point at no longer exists,
 //-- a null value is returned.
+//--
 //-- You can also fetch a STRUCTURE or FEATURE type game object from a given map position (if any). 
 //-- This is a very fast operation of O(1) algorithmic complexity. Droids cannot be fetched in this
-//-- manner, since they do not a unique placement on map tiles. Finally, you can fetch an object using 
+//-- manner, since they do not have a unique placement on map tiles. Finally, you can fetch an object using 
 //-- its ID, in which case you need to pass its type, owner and unique object ID. This is an
 //-- operation of O(n) algorithmic complexity. (3.2+ only)
 static QScriptValue js_getObject(QScriptContext *context, QScriptEngine *engine)
@@ -1051,10 +1052,9 @@ static QScriptValue js_getObject(QScriptContext *context, QScriptEngine *engine)
 	// get by label case
 	BASE_OBJECT *psObj;
 	QString label = context->argument(0).toString();
-	QScriptValue ret;
-	SCRIPT_ASSERT(context, labels.size() > 0, "Map contains no labels!");
 	if (labels.contains(label))
 	{
+		QScriptValue ret;
 		ret = engine->newObject();
 		labeltype p = labels.value(label);
 		switch (p.type)
@@ -1083,11 +1083,7 @@ static QScriptValue js_getObject(QScriptContext *context, QScriptEngine *engine)
 			break;
 		}
 	}
-	else
-	{
-		SCRIPT_ASSERT(context, false, "Could not find label %s (among %d entries)", label.toUtf8().constData(), labels.size());
-	}
-	return ret;
+	return QScriptValue::UndefinedValue;
 }
 
 //-- \subsection{enumBlips(player)}
