@@ -25,6 +25,7 @@
 #include <stdio.h>
 #include <stdarg.h>
 
+#if defined(WZ_CC_MSVC) || defined(DOXYGEN)
 /** A variant on snprintf which appends its output string to the given string
  *  buffer, rather than to replace it.
  *  \param str the string to append to
@@ -44,7 +45,6 @@ extern int vslcatprintf(char* str, size_t size, const char* format, va_list ap);
 extern int slcatprintf(char* str, size_t size, const char* format, ...) WZ_DECL_FORMAT(printf, 3, 4);
 
 
-#if defined(WZ_OS_WIN) || defined(DOXYGEN)
 // These functions are GNU extensions; so make sure they are available on Windows also
 
 /**
