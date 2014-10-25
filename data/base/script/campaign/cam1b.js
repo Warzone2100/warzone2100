@@ -2,9 +2,14 @@
 include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
+var NPScout; // Sensor scout (initialized when droid is created)
+var NPRetreating = false;
+
 camAreaEvent("AttackArea1", me, function(droid)
 {
-	camManageGroup(camMakeGroup("enemy1Force1"), CAM_ORDER_ATTACK, {
+	// call this manually because eventObjectSeen is unreliable
+	eventObjectSeen(0, NPScout);
+	camManageGroup(camMakeGroup("enemy1Force1", 6), CAM_ORDER_ATTACK, {
 		pos: camMakePos("enemy1Force1Pos"),
 		fallback: camMakePos("enemy1Force1Fallback"),
 		morale: 50
@@ -33,6 +38,27 @@ function camEnemyBaseEliminated_base4group()
 	hackRemoveMessage("C1B_BASE2", PROX_MSG, 0);
 }
 
+function eventObjectSeen(viewer, seen)
+{
+	if (NPRetreating || viewer !== 0 || seen.id !== NPScout.id)
+		return;
+	camTrace("New Paradigm sensor droid is retreating");
+	NPRetreating = true;
+	var pos = camMakePos("NPSensorTurn");
+	orderDroidLoc(NPScout, DORDER_MOVE, pos.x, pos.y);
+}
+
+camAreaEvent("NPSensorTurn", 1, function(droid)
+{
+	var pos = camMakePos("NPSensorRemove");
+	orderDroidLoc(NPScout, DORDER_MOVE, pos.x, pos.y);
+});
+
+camAreaEvent("NPSensorRemove", 1, function(droid)
+{
+	removeObject(NPScout, false);
+});
+
 function eventStartLevel()
 {
 	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, "SUB_1_1S");
@@ -43,6 +69,8 @@ function eventStartLevel()
 
 	setReinforcementTime(-1);
 	setMissionTime(3600);
+	setAlliance(1, 6, true);
+	setAlliance(1, 7, true);
 	setAlliance(6, 7, true);
 
 	setPower(200, 6);
@@ -113,6 +141,14 @@ function eventStartLevel()
 		},
 	});
 	camEnableFactory("base2factory");
+
 	//Timed attacks if player dawdles
 	queue("eventAreaAttackArea2", 360000);
+
+	// New Paradigm sensor scout
+	var pos = getObject("NPSensorAppear");
+	NPScout = addDroid(1, pos.x, pos.y, "Scout",
+	                   "Body4ABT", "wheeled01", 0, 0, "SensorTurret1Mk1");
+	pos = getObject("NPSensorWatch");
+	orderDroidLoc(NPScout, DORDER_MOVE, pos.x, pos.y);
 }

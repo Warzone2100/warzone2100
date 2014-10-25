@@ -87,6 +87,28 @@
             9536
         ]
     },
+    "area10": {
+        "label": "NPSensorTurn",
+        "pos1": [
+            4600,
+            13376
+        ],
+        "pos2": [
+            5300,
+            14528
+        ]
+    },
+    "area11": {
+        "label": "NPSensorRemove",
+        "pos1": [
+            6272,
+            13568
+        ],
+        "pos2": [
+            7040,
+            14336
+        ]
+    },
     "group_2": {
         "id": "group_2",
         "label": "base3group",
@@ -200,6 +222,20 @@
         "pos": [
             4928,
             9024
+        ]
+    },
+    "position_14": {
+        "label": "NPSensorAppear",
+        "pos": [
+            4928,
+            8896
+        ]
+    },
+    "position_15": {
+        "label": "NPSensorWatch",
+        "pos": [
+            4800,
+            9200
         ]
     }
 }
