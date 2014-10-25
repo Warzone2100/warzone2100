@@ -111,51 +111,6 @@
             7232
         ]
     },
-    "group_0": {
-        "label": "scavgroup1",
-        "members": [
-            914,
-            912,
-            915,
-            3418,
-            928
-        ],
-        "player": 7
-    },
-    "group_1": {
-        "label": "scavgroup2",
-        "members": [
-            8,
-            7,
-            927,
-            802,
-            800
-        ],
-        "player": 7
-    },
-    "group_2": {
-        "label": "scavgroup3",
-        "members": [
-            840,
-            845,
-            31,
-            39,
-            20
-        ],
-        "player": 6
-    },
-    "group_3": {
-        "label": "scavgroup4",
-        "members": [
-            1249,
-            3448,
-            3474,
-            3473,
-            1255,
-            1256
-        ],
-        "player": 6
-    },
     "object_0": {
         "id": 8,
         "label": "base1factory",

@@ -546,11 +546,15 @@ function __camLetMeWinArtifacts()
 //;; Management assumes auto-cleanup of leftovers on destruction, and also
 //;; counting how many bases have been successfully destroyed by the player.
 //;; The argument is a JavaScript map from group labels to base descriptions.
-//;; Each label points to a group of vital base structures. Once this group
-//;; is eradicated, the base is considered to be destroyed. Base description
+//;; Each label points to a group of vital base structures. If no group label
+//;; with this name is defined, a group is created automatically
+//;; based on \textbf{cleanup} area and labeled. Base description
 //;; is a JavaScript object with the following optional fields:
 //;; \begin{description}
-//;; 	\item[cleanup] An area label to clean up features in once base is destroyed.
+//;; 	\item[cleanup] An area label to clean up features in once base is
+//;; 	destroyed. If base id is not a group label, this field is required
+//;; 	in order to auto-create the group of stuff in the area which doesn't
+//;; 	qualify as a valid leftover.
 //;; 	\item[detectSnd] A sound file to play when the base is detected.
 //;; 	\item[eliminateSnd] A sound file to play when the base is eliminated.
 //;; 	The sound is played in the center of the cleanup area,
@@ -573,7 +577,34 @@ function camSetEnemyBases(bases)
 	for (var blabel in __camEnemyBases)
 	{
 		var bi = __camEnemyBases[blabel];
-		bi.group = getObject(blabel).id;
+		var obj = getObject(blabel);
+		if (camDef(obj) && obj) // group already defined
+		{
+			bi.group = obj.id;
+		}
+		else // define a group automatically
+		{
+			if (!camDef(bi.cleanup))
+			{
+				camDebug("Neither group nor cleanup area found for", blabel);
+				continue;
+			}
+			bi.group = newGroup();
+			addLabel({
+				type: GROUP,
+				id: bi.group,
+				player: 0,
+			}, blabel);
+			var structs = enumArea(bi.cleanup, ENEMIES, false);
+			for (var i = 0; i < structs.length; ++i)
+			{
+				var s = structs[i];
+				if (s.type !== STRUCTURE || __camIsValidLeftover(s))
+					continue;
+				camTrace("Auto-adding" + s.id + "to base" + blabel);
+				groupAdd(bi.group, s);
+			}
+		}
 		bi.seen = false;
 	}
 }
@@ -618,7 +649,7 @@ function __camCheckBaseSeen(seen)
 function __camIsValidLeftover(obj)
 {
 	if (camPlayerMatchesFilter(obj.player, ENEMIES))
-		if (obj.type === STRUCTURE)
+		if (obj.type === STRUCTURE && obj.stattype === WALL)
 			return true;
 	if (obj.type === FEATURE)
 		if (obj.stattype === BUILDING)
