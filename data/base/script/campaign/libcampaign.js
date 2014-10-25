@@ -126,15 +126,8 @@ function camMakePos(xx, yy)
 		return undefined;
 	var obj = xx;
 	if (camIsString(xx))
-	{
 		obj = getObject(xx);
-		if (!camDef(obj) || !obj)
-		{
-			camDebug("Broken label", xx);
-			return undefined;
-		}
-	}
-	if (!camDef(obj))
+	if (!camDef(obj) || !obj)
 	{
 		camDebug("Failed at", xx);
 		return undefined;
@@ -261,12 +254,30 @@ var __camGlobalContext = this;
 ////////////////////////////////////////////////////////////////////////////////
 
 
-//;; \subsection{camMarkTiles(label)}
-//;; Mark area on the map by label, but only if debug mode is enabled.
-//;; Otherwise, remember what to mark when it will be.
+//;; \subsection{camMarkTiles(label | array of labels)}
+//;; Mark area on the map by label(s), but only if debug mode is enabled.
+//;; Otherwise, remember what to mark in case it is going to be.
 function camMarkTiles(label)
 {
-	__camMarkedTiles = label;
+	if (camIsString(label))
+		__camMarkedTiles[label] = true;
+	else
+		for (var i = 0; i < label.length; ++i)
+			__camMarkedTiles[label[i]] = true;
+	// apply instantly
+	__camUpdateMarkedTiles();
+}
+
+//;; \subsection{camUnmarkTiles(label | array of labels)}
+//;; No longer mark area(s) with given label(s) in debug mode.
+function camUnmarkTiles(label)
+{
+	if (camIsString(label))
+		delete __camMarkedTiles[label];
+	else
+		for (var i = 0; i < label.length; ++i)
+			delete __camMarkedTiles[label[i]];
+	// apply instantly
 	__camUpdateMarkedTiles();
 }
 
@@ -294,7 +305,7 @@ function camDebugOnce()
 {
 	var str = arguments.callee.caller.name
 		+ ": " + Array.prototype.join.call(arguments, " ");
-	if (!__camDebuggedOnce[str])
+	if (camDef(__camDebuggedOnce[str]))
 		return;
 	__camDebuggedOnce[str] = true;
 	__camGenericDebug("DEBUG",
@@ -317,17 +328,37 @@ function camTrace()
 	                  arguments);
 }
 
+//;; \subsection{camTraceOnce(string...)}
+//;; Same as \texttt{camTrace()}, but prints each message only once
+//;; during script lifetime.
+function camTraceOnce()
+{
+	if (!__camCheatMode)
+		return;
+	var str = arguments.callee.caller.name
+		+ ": " + Array.prototype.join.call(arguments, " ");
+	if (camDef(__camTracedOnce[str]))
+		return;
+	__camTracedOnce[str] = true;
+	__camGenericDebug("TRACE",
+	                  arguments.callee.caller.name,
+	                  arguments);
+}
+
+
 //////////// privates
 
-var __camMarkedTiles;
+var __camMarkedTiles = {};
 var __camCheatMode = false;
 var __camDebuggedOnce = {};
+var __camTracedOnce = {};
 
 function __camUpdateMarkedTiles()
 {
 	hackMarkTiles();
 	if (__camCheatMode && camDef(__camMarkedTiles))
-		hackMarkTiles(__camMarkedTiles);
+		for (var label in __camMarkedTiles)
+			hackMarkTiles(label);
 }
 
 function __camLetMeWin()
@@ -1186,6 +1217,33 @@ function __camVictoryStandard()
 ////////////////////////////////////////////////////////////////////////////////
 
 
+//;; \subsection{camAreaEvent(label, filter, function(droid))}
+//;; Implement eventArea<label> in a convenient way. The function callback
+//;; would be executed every time a droid (belonging to a player
+//;; that matches the filter) enters the area for the first time
+//;; (use \texttt{resetArea()} to restart anew). \textbf{filter} can be one of
+//;; a player index, ALL_PLAYERS, ALLIES or ENEMIES. The function
+//;; marks the area until the event is triggered.
+function camAreaEvent(label, filter, code)
+{
+	var eventName = "eventArea" + label;
+	camMarkTiles(label);
+	__camPreHookEvent(eventName, function(droid)
+	{
+		if (!camPlayerMatchesFilter(droid.player, filter))
+		{
+			camTraceOnce("Suppressing", label, "for player", droid.player);
+			resetArea(label);
+			return;
+		}
+		camTrace("Player", droid.player, "enters", label);
+		camUnmarkTiles(label);
+		code(droid);
+	});
+}
+
+//////////// privates
+
 var __camOriginalEvents = {};
 
 function __camPreHookEvent(eventname, hookcode)
@@ -1200,6 +1258,7 @@ function __camPreHookEvent(eventname, hookcode)
 			__camOriginalEvents[eventname].apply(__camGlobalContext, arguments);
 	};
 }
+
 
 /* Called every second after eventStartLevel(). */
 function __camTick()

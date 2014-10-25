@@ -2,7 +2,7 @@
 include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
-function eventAreaAttackArea1(droid)
+camAreaEvent("AttackArea1", me, function(droid)
 {
 	camManageGroup(camMakeGroup("enemy1Force1"), CAM_ORDER_ATTACK, {
 		pos: camMakePos("enemy1Force1Pos"),
@@ -20,15 +20,12 @@ function eventAreaAttackArea1(droid)
 		throttle: 40000,
 		templates: [ t.trike, t.bloke, t.buggy, t.bloke, ] // changes
 	});
-	camMarkTiles();
-	camMarkTiles("AttackArea2");
-}
+});
 
-function eventAreaAttackArea2(droid)
+camAreaEvent("AttackArea2", me, function(droid)
 {
 	camEnableFactory("base4factory");
-	camMarkTiles();
-}
+});
 
 function camEnemyBaseEliminated_base4group()
 {
@@ -52,8 +49,6 @@ function eventStartLevel()
 
 	hackAddMessage("MB1B_MSG", MISS_MSG, 0, true);
 	hackAddMessage("C1B_BASE2", PROX_MSG, 0, false);
-
-	camMarkTiles("AttackArea1");
 
 	camSetArtifacts({
 		"base1factory": { tech: "R-Wpn-Flamer-Damage01" },

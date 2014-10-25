@@ -6,7 +6,7 @@ var timerComing = 0; // start mission timer after first power gen
                      // and derrick is built
 
 // player zero's droid enteres this area
-function eventAreaLaunchScavAttack(droid)
+camAreaEvent("LaunchScavAttack", me, function(droid)
 {
 	var spos = getObject("scav1soundpos");
 	playSound("pcv375.ogg", spos.x, spos.y, 0);
@@ -18,9 +18,7 @@ function eventAreaLaunchScavAttack(droid)
 		camMakeGroup("ScavAttack1", ENEMIES), CAM_ORDER_ATTACK,
 		{ pos: camMakePos("playerBase") }
 	);
-	camMarkTiles();
-	camMarkTiles("ScavAttack1");
-}
+});
 
 function runAway()
 {
@@ -43,25 +41,20 @@ function doAmbush()
 }
 
 // player zero's droid enteres this area
-function eventAreaScavAttack1(droid)
+camAreaEvent("ScavAttack1", me, function(droid)
 {
 	hackRemoveMessage("C1A_OBJ1", PROX_MSG, 0);
-	camMarkTiles();
 	hackAddMessage("C1A_BASE0", PROX_MSG, 0, false);
-	camMarkTiles();
-	camMarkTiles("RoadblockArea");
 	queue("runAway", 1000);
 	queue("doAmbush", 5000);
-}
+});
 
-function eventAreaRoadblockArea(droid)
+camAreaEvent("RoadblockArea", me, function(droid)
 {
 	camEnableFactory("base1factory");
-	camMarkTiles();
-	camMarkTiles("raidTrigger");
-}
+});
 
-function eventArearaidTrigger(droid)
+camAreaEvent("raidTrigger", me, function(droid)
 {
 	camManageGroup(
 		camMakeGroup("raidTrigger", ENEMIES),
@@ -76,15 +69,12 @@ function eventArearaidTrigger(droid)
 		CAM_ORDER_DEFEND, { pos: camMakePos("scavbase3area") }
 	);
 	camEnableFactory("base2factory1");
-	camMarkTiles();
-	camMarkTiles("scavbase3area");
-}
+});
 
-function eventAreascavbase3area(droid)
+camAreaEvent("scavbase3area", me, function(droid)
 {
 	camEnableFactory("base2factory2");
-	camMarkTiles();
-}
+});
 
 function playDelayed374(where)
 {
@@ -167,8 +157,6 @@ function eventStartLevel()
 	setStructureLimits("A0ResearchFacility", 5, 0);
 	setStructureLimits("A0LightFactory", 5, 0);
 	setStructureLimits("A0CommandCentre", 1, 0);
-
-	camMarkTiles("LaunchScavAttack");
 
 	// feed libcampaign.js with data to do the rest
 	camSetEnemyBases({
