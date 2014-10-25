@@ -126,7 +126,14 @@ function camMakePos(xx, yy)
 		return undefined;
 	var obj = xx;
 	if (camIsString(xx))
+	{
 		obj = getObject(xx);
+		if (!camDef(obj) || !obj)
+		{
+			camDebug("Broken label", xx);
+			return undefined;
+		}
+	}
 	if (!camDef(obj))
 	{
 		camDebug("Failed at", xx);

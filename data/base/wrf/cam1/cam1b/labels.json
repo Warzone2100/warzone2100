@@ -1,6 +1,5 @@
 {
     "area_0": {
-        "id": "area_0",
         "label": "landingZone",
         "pos1": [
             1280,
@@ -12,7 +11,6 @@
         ]
     },
     "area_1": {
-        "id": "area_1",
         "label": "enemybase1",
         "pos1": [
             3840,
@@ -24,7 +22,6 @@
         ]
     },
     "area_2": {
-        "id": "area_2",
         "label": "enemybase2",
         "pos1": [
             704,
@@ -36,7 +33,6 @@
         ]
     },
     "area_4": {
-        "id": "area_4",
         "label": "enemybase4",
         "pos1": [
             2240,
@@ -48,7 +44,6 @@
         ]
     },
     "area_5": {
-        "id": "area_5",
         "label": "AttackArea1",
         "pos1": [
             4032,
@@ -60,7 +55,6 @@
         ]
     },
     "area_6": {
-        "id": "area_6",
         "label": "AttackArea2",
         "pos1": [
             320,
@@ -72,7 +66,6 @@
         ]
     },
     "area_7": {
-        "id": "area_7",
         "label": "enemy1Force1",
         "pos1": [
             4288,
@@ -84,7 +77,6 @@
         ]
     },
     "area_9": {
-        "id": "area_9",
         "label": "hillForce",
         "pos1": [
             1088,
@@ -96,7 +88,6 @@
         ]
     },
     "group_0": {
-        "id": "group_0",
         "label": "base1group",
         "members": [
             43,
@@ -109,7 +100,6 @@
         "player": 6
     },
     "group_1": {
-        "id": "group_1",
         "label": "base2group",
         "members": [
             3434,
@@ -131,7 +121,6 @@
         "player": 7
     },
     "group_3": {
-        "id": "group_3",
         "label": "base4group",
         "members": [
             97,
@@ -152,37 +141,36 @@
         "player": 7
     },
     "object_0": {
-        "id": "object_0",
+        "id": 43,
         "label": "base1factory",
         "player": 6,
         "type": 1
     },
     "object_1": {
-        "id": "object_1",
+        "id": 3434,
         "label": "base2factory",
         "player": 7,
         "type": 1
     },
     "object_2": {
-        "id": "object_2",
+        "id": 97,
         "label": "base4factory",
         "player": 7,
         "type": 1
     },
     "object_3": {
-        "id": "object_3",
+        "id": 62,
         "label": "base4gen",
         "player": 7,
         "type": 1
     },
     "object_4": {
-        "id": "object_4",
+        "id": 3236,
         "label": "base3sensor",
         "player": 7,
         "type": 1
     },
     "position_0": {
-        "id": "position_0",
         "label": "playerBase",
         "pos": [
             2100,
@@ -190,7 +178,6 @@
         ]
     },
     "position_1": {
-        "id": "position_1",
         "label": "startPosition",
         "pos": [
             1728,
@@ -198,7 +185,6 @@
         ]
     },
     "position_10": {
-        "id": "position_10",
         "label": "enemy1Force1Fallback",
         "pos": [
             2240,
@@ -206,7 +192,6 @@
         ]
     },
     "position_11": {
-        "id": "position_11",
         "label": "assembly1",
         "pos": [
             4544,
@@ -214,7 +199,6 @@
         ]
     },
     "position_12": {
-        "id": "position_12",
         "label": "assembly2",
         "pos": [
             1344,
@@ -222,7 +206,6 @@
         ]
     },
     "position_13": {
-        "id": "position_13",
         "label": "assembly4",
         "pos": [
             3904,
@@ -230,7 +213,6 @@
         ]
     },
     "position_5": {
-        "id": "position_5",
         "label": "patrol1",
         "pos": [
             1024,
@@ -238,7 +220,6 @@
         ]
     },
     "position_6": {
-        "id": "position_6",
         "label": "patrol2",
         "pos": [
             1536,
@@ -246,7 +227,6 @@
         ]
     },
     "position_7": {
-        "id": "position_7",
         "label": "patrol3",
         "pos": [
             2688,
@@ -254,7 +234,6 @@
         ]
     },
     "position_8": {
-        "id": "position_8",
         "label": "patrol4",
         "pos": [
             3712,
@@ -262,7 +241,6 @@
         ]
     },
     "position_9": {
-        "id": "position_9",
         "label": "enemy1Force1Pos",
         "pos": [
             4928,

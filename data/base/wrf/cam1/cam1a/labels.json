@@ -1,6 +1,5 @@
 {
     "area_1": {
-        "id": "area_1",
         "label": "raidGroup",
         "pos1": [
             3392,
@@ -11,20 +10,29 @@
             1088
         ]
     },
-    "area_2": {
-        "id": "area_2",
-        "label": "raidTrigger",
+    "area_10": {
+        "label": "RoadblockArea",
         "pos1": [
-            4416,
-            1600
+            4500,
+            3600
         ],
         "pos2": [
-            5824,
-            3008
+            5500,
+            4700
+        ]
+    },
+    "area_11": {
+        "label": "raidTrigger",
+        "pos1": [
+            2900,
+            500
+        ],
+        "pos2": [
+            3800,
+            3000
         ]
     },
     "area_3": {
-        "id": "area_3",
         "label": "landingZone",
         "pos1": [
             1280,
@@ -36,7 +44,6 @@
         ]
     },
     "area_4": {
-        "id": "area_4",
         "label": "LaunchScavAttack",
         "player": 0,
         "pos1": [
@@ -49,7 +56,6 @@
         ]
     },
     "area_5": {
-        "id": "area_5",
         "label": "scavbase1area",
         "pos1": [
             3520,
@@ -61,7 +67,6 @@
         ]
     },
     "area_6": {
-        "id": "area_6",
         "label": "scavbase2area",
         "pos1": [
             4544,
@@ -73,7 +78,6 @@
         ]
     },
     "area_7": {
-        "id": "area_7",
         "label": "scavbase3area",
         "pos1": [
             1088,
@@ -85,7 +89,6 @@
         ]
     },
     "area_8": {
-        "id": "area_8",
         "label": "scavbase4area",
         "pos1": [
             1472,
@@ -97,12 +100,11 @@
         ]
     },
     "area_9": {
-        "id": "area_9",
         "label": "ScavAttack1",
         "player": 0,
         "pos1": [
             4416,
-            6336
+            6500
         ],
         "pos2": [
             5696,
@@ -110,7 +112,6 @@
         ]
     },
     "group_0": {
-        "id": "group_0",
         "label": "scavgroup1",
         "members": [
             914,
@@ -122,7 +123,6 @@
         "player": 7
     },
     "group_1": {
-        "id": "group_1",
         "label": "scavgroup2",
         "members": [
             8,
@@ -134,10 +134,8 @@
         "player": 7
     },
     "group_2": {
-        "id": "group_2",
         "label": "scavgroup3",
         "members": [
-            923,
             840,
             845,
             31,
@@ -147,7 +145,6 @@
         "player": 6
     },
     "group_3": {
-        "id": "group_3",
         "label": "scavgroup4",
         "members": [
             1249,
@@ -160,65 +157,24 @@
         "player": 6
     },
     "object_0": {
-        "id": "object_0",
+        "id": 8,
         "label": "base1factory",
         "player": 7,
         "type": 1
     },
     "object_1": {
-        "id": "object_1",
+        "id": 1256,
         "label": "base2factory2",
         "player": 6,
         "type": 1
     },
     "object_2": {
-        "id": "object_2",
+        "id": 20,
         "label": "base2factory1",
         "player": 6,
         "type": 1
     },
-    "object_3": {
-        "id": "object_3",
-        "label": "seen1",
-        "player": 7,
-        "type": 0
-    },
-    "object_4": {
-        "id": "object_4",
-        "label": "seenbase3",
-        "player": 6,
-        "type": 0
-    },
-    "object_5": {
-        "id": "object_5",
-        "label": "seenbase2",
-        "player": 7,
-        "type": 0
-    },
-    "object_6": {
-        "id": "object_6",
-        "label": "seenbase4",
-        "player": 6,
-        "type": 0
-    },
-    "position_0": {
-        "id": "position_0",
-        "label": "artifact1pos",
-        "pos": [
-            5184,
-            2112
-        ]
-    },
-    "position_1": {
-        "id": "position_1",
-        "label": "artifact2pos",
-        "pos": [
-            2496,
-            4032
-        ]
-    },
     "position_10": {
-        "id": "position_10",
         "label": "retreat1",
         "pos": [
             3904,
@@ -226,39 +182,20 @@
         ]
     },
     "position_11": {
-        "id": "position_11",
         "label": "retreat2",
         "pos": [
             5440,
             2368
         ]
     },
-    "position_12": {
-        "id": "position_12",
-        "label": "retreat3",
-        "pos": [
-            2112,
-            1088
-        ]
-    },
     "position_13": {
-        "id": "position_13",
         "label": "retreat4",
         "pos": [
             2112,
             4544
         ]
     },
-    "position_14": {
-        "id": "position_14",
-        "label": "raidPosition",
-        "pos": [
-            5056,
-            2496
-        ]
-    },
     "position_15": {
-        "id": "position_15",
         "label": "startPosition",
         "pos": [
             1728,
@@ -266,7 +203,6 @@
         ]
     },
     "position_16": {
-        "id": "position_16",
         "label": "scav1soundpos",
         "pos": [
             3904,
@@ -274,7 +210,6 @@
         ]
     },
     "position_17": {
-        "id": "position_17",
         "label": "scav2soundpos",
         "pos": [
             5002,
@@ -282,39 +217,20 @@
         ]
     },
     "position_18": {
-        "id": "position_18",
         "label": "scav3soundpos",
         "pos": [
             1600,
             1728
         ]
     },
-    "position_2": {
-        "id": "position_2",
-        "label": "artifact3pos",
-        "pos": [
-            1856,
-            1600
-        ]
-    },
     "position_3": {
-        "id": "position_3",
         "label": "artifact4pos",
         "pos": [
             3776,
             4544
         ]
     },
-    "position_4": {
-        "id": "position_4",
-        "label": "roadblock",
-        "pos": [
-            5120,
-            4352
-        ]
-    },
     "position_5": {
-        "id": "position_5",
         "label": "oilPatch",
         "pos": [
             4928,
@@ -322,7 +238,6 @@
         ]
     },
     "position_6": {
-        "id": "position_6",
         "label": "playerBase",
         "pos": [
             2100,
@@ -330,7 +245,6 @@
         ]
     },
     "position_7": {
-        "id": "position_7",
         "label": "assembly1",
         "pos": [
             5056,
@@ -338,7 +252,6 @@
         ]
     },
     "position_8": {
-        "id": "position_8",
         "label": "assembly2",
         "pos": [
             1600,
@@ -346,7 +259,6 @@
         ]
     },
     "position_9": {
-        "id": "position_9",
         "label": "assembly3",
         "pos": [
             2112,
