@@ -44,7 +44,6 @@ function doAmbush()
 camAreaEvent("ScavAttack1", me, function(droid)
 {
 	hackRemoveMessage("C1A_OBJ1", PROX_MSG, 0);
-	hackAddMessage("C1A_BASE0", PROX_MSG, 0, false);
 	queue("runAway", 1000);
 	queue("doAmbush", 5000);
 });
@@ -76,37 +75,9 @@ camAreaEvent("scavbase3area", me, function(droid)
 	camEnableFactory("base2factory2");
 });
 
-function playDelayed374(where)
-{
-	var spos = getObject(where);
-	playSound("pcv374.ogg", spos.x, spos.y, 0);
-}
-
-function camEnemyBaseEliminated_scavgroup1()
-{
-	hackRemoveMessage("C1A_BASE0", PROX_MSG, 0);
-	hackAddMessage("C1A_BASE1", PROX_MSG, 0, false);
-	queue("playDelayed374", 2000, "scav2soundpos");
-}
-
 function camEnemyBaseEliminated_scavgroup2()
 {
-	hackRemoveMessage("C1A_BASE1", PROX_MSG, 0);
-	hackAddMessage("C1A_BASE2", PROX_MSG, 0, false);
-	queue("playDelayed374", 2000, "scav3soundpos");
-}
-
-function camEnemyBaseEliminated_scavgroup3()
-{
-	hackRemoveMessage("C1A_BASE2", PROX_MSG, 0);
-	hackAddMessage("C1A_BASE3", PROX_MSG, 0, false);
-	queue("playDelayed374", 2000, "retreat4");
-	camEnableFactory("base2factory2");
-}
-
-function camEnemyBaseEliminated_scavgroup4()
-{
-	hackRemoveMessage("C1A_BASE3", PROX_MSG, 0);
+	queue("camDetectEnemyBase", 2000, "scavgroup3");
 }
 
 function eventStructureBuilt(structure, droid)
@@ -162,21 +133,25 @@ function eventStartLevel()
 	camSetEnemyBases({
 		"scavgroup1": {
 			cleanup: "scavbase1area",
+			detectMsg: "C1A_BASE0",
 			detectSnd: "pcv375.ogg",
 			eliminateSnd: "pcv391.ogg"
 		},
 		"scavgroup2": {
 			cleanup: "scavbase2area",
+			detectMsg: "C1A_BASE1",
 			detectSnd: "pcv374.ogg",
 			eliminateSnd: "pcv392.ogg"
 		},
 		"scavgroup3": {
 			cleanup: "scavbase3area",
+			detectMsg: "C1A_BASE2",
 			detectSnd: "pcv374.ogg",
 			eliminateSnd: "pcv392.ogg"
 		},
 		"scavgroup4": {
 			cleanup: "scavbase4area",
+			detectMsg: "C1A_BASE3",
 			detectSnd: "pcv374.ogg",
 			eliminateSnd: "pcv392.ogg"
 		},

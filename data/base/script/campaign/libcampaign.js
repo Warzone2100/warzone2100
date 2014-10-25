@@ -555,6 +555,7 @@ function __camLetMeWinArtifacts()
 //;; 	destroyed. If base id is not a group label, this field is required
 //;; 	in order to auto-create the group of stuff in the area which doesn't
 //;; 	qualify as a valid leftover.
+//;; 	\item[detectMsg] A PROX_MSG message id to play when the base is detected.
 //;; 	\item[detectSnd] A sound file to play when the base is detected.
 //;; 	\item[eliminateSnd] A sound file to play when the base is eliminated.
 //;; 	The sound is played in the center of the cleanup area,
@@ -581,6 +582,33 @@ function camSetEnemyBases(bases)
 		if (camDef(obj) && obj) // group already defined
 		{
 			bi.group = obj.id;
+			if (!camDef(bi.cleanup)) // auto-detect cleanup area
+			{
+				var objs = enumGroup(bi.group);
+				if (objs.length > 0) {
+					var a = {
+						type: AREA,
+						x: mapWidth, y: mapHeight,
+						x2: 0, y2: 0
+					};
+					// smallest rectangle to contain all objects
+					for (var i = 0; i < objs.length; ++i)
+					{
+						var o = objs[i];
+						if (o.x < a.x) a.x = o.x;
+						if (o.y < a.y) a.y = o.y;
+						if (o.x > a.x2) a.x2 = o.x;
+						if (o.y > a.y2) a.y2 = o.y;
+					}
+					// but a bit wider
+					a.x -= 2; a.y -= 2; a.x2 += 2; a.y2 += 2;
+					camTrace("Auto-detected cleanup area for", blabel, ":",
+					         a.x, a.y,
+					         a.x2, a.y2);
+					bi.cleanup = "__cam_enemy_base_cleanup__" + blabel
+					addLabel(a, bi.cleanup);
+				}
+			}
 		}
 		else // define a group automatically
 		{
@@ -605,8 +633,39 @@ function camSetEnemyBases(bases)
 				groupAdd(bi.group, s);
 			}
 		}
-		bi.seen = false;
+		bi.detected = false;
+		bi.eliminated = false;
 	}
+}
+
+//;; \subsection{camDetectEnemyBase(base label)}
+//;; Plays the "enemy base detected" message and places a beacon
+//;; for the enemy base defined by the label, as if the base
+//;; was actually found by the player.
+function camDetectEnemyBase(blabel)
+{
+	var bi = __camEnemyBases[blabel];
+	if (bi.detected || bi.eliminated)
+		return;
+	camTrace("Enemy base", blabel, "detected");
+	bi.detected = true;
+	if (camDef(bi.detectSnd))
+	{
+		var pos = camMakePos(bi.cleanup);
+		if (!camDef(pos)) // auto-detect sound position by group object pos
+		{
+			var objs = enumGroup(bi.group);
+			if (objs.length > 0)
+				pos = camMakePos(objs[0]);
+		}
+		if (camDef(pos))
+			playSound(bi.detectSnd, pos.x, pos.y, 0);
+		if (camDef(bi.detectMsg))
+			hackAddMessage(bi.detectMsg, PROX_MSG, 0, false);
+	}
+	var callback = __camGlobalContext["camEnemyBaseDetected_" + blabel];
+	if (camDef(callback))
+		callback();
 }
 
 //;; \subsection{camAllEnemyBasesEliminated()}
@@ -634,15 +693,7 @@ function __camCheckBaseSeen(seen)
 		var bi = __camEnemyBases[blabel];
 		if (bi.group !== group)
 			continue;
-		if (bi.seen)
-			break;
-		camTrace("Enemy base", blabel, "detected");
-		bi.seen = true;
-		if (camDef(bi.detectSnd) && camDef(seen))
-			playSound(bi.detectSnd, seen.x, seen.y, 0);
-		var callback = __camGlobalContext["camEnemyBaseDetected_" + blabel];
-		if (camDef(callback))
-			callback();
+		camDetectEnemyBase(blabel);
 	}
 }
 
@@ -666,6 +717,7 @@ function __camCheckBaseEliminated(group)
 		if (bi.group !== group)
 			continue;
 		camTrace("Enemy base", blabel, "eliminated");
+		bi.eliminated = true;
 		if (camDef(bi.cleanup))
 		{
 			var leftovers = enumArea(bi.cleanup);
@@ -685,14 +737,32 @@ function __camCheckBaseEliminated(group)
 				playSound(bi.eliminateSnd, pos.x, pos.y, 0);
 			}
 		}
+		if (camDef(bi.detectMsg) && bi.detected) // remove the beacon
+			hackRemoveMessage(bi.detectMsg, PROX_MSG, 0);
+		// bump counter before the callback, so that it was
+		// actual during the callback
+		++__camNumEnemyBases;
 		var callback = __camGlobalContext["camEnemyBaseEliminated_" + blabel];
 		if (camDef(callback))
 			callback();
-		++__camNumEnemyBases;
 		break;
 	}
 }
 
+// we need this because eventObjectSeen is unreliable
+function __camBasesTick()
+{
+	for (var blabel in __camEnemyBases)
+	{
+		var bi = __camEnemyBases[blabel];
+		if (bi.detected)
+			continue;
+		var objs = enumArea(bi.cleanup, ENEMIES, true); // "true" for "seen"
+		if (!objs.length)
+			continue;
+		camDetectEnemyBase(blabel);
+	}
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // AI droid movement automation.
@@ -1295,6 +1365,7 @@ function __camPreHookEvent(eventname, hookcode)
 function __camTick()
 {
 	__camTacticsTick();
+	__camBasesTick();
 	if (camDef(__camWinLossCallback))
 		__camGlobalContext[__camWinLossCallback]();
 }

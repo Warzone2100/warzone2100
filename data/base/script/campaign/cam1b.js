@@ -33,11 +33,6 @@ camAreaEvent("AttackArea2", me, function(droid)
 	camEnableFactory("base4factory");
 });
 
-function camEnemyBaseEliminated_base4group()
-{
-	hackRemoveMessage("C1B_BASE2", PROX_MSG, 0);
-}
-
 function eventObjectSeen(viewer, seen)
 {
 	if (NPRetreating || viewer !== 0 || seen.id !== NPScout.id)
@@ -76,9 +71,6 @@ function eventStartLevel()
 	setPower(200, 6);
 	setPower(200, 7);
 
-	hackAddMessage("MB1B_MSG", MISS_MSG, 0, true);
-	hackAddMessage("C1B_BASE2", PROX_MSG, 0, false);
-
 	camSetArtifacts({
 		"base1factory": { tech: "R-Wpn-Flamer-Damage01" },
 		"base2factory": { tech: "R-Wpn-MG2Mk1" },
@@ -89,23 +81,31 @@ function eventStartLevel()
 	camSetEnemyBases({
 		"base1group": {
 			cleanup: "enemybase1",
+			detectMsg: "C1B_BASE1",
 			detectSnd: "pcv374.ogg",
 			eliminateSnd: "pcv392.ogg",
 		},
 		"base2group": {
 			cleanup: "enemybase2",
+			detectMsg: "C1B_BASE0",
 			detectSnd: "pcv374.ogg",
 			eliminateSnd: "pcv392.ogg",
 		},
 		"base3group": {
-			// sensor tower; no cleanup
+			detectMsg: "C1B_OBJ1",
 			detectSnd: "pcv375.ogg",
+			eliminateSnd: "pcv391.ogg",
 		},
 		"base4group": {
 			cleanup: "enemybase4",
+			detectMsg: "C1B_BASE2",
+			detectSnd: "pcv374.ogg",
 			eliminateSnd: "pcv392.ogg",
 		},
 	});
+
+	hackAddMessage("MB1B_MSG", MISS_MSG, 0, true);
+	camDetectEnemyBase("base4group"); // power surge detected
 
 	with (camTemplates) camSetFactories({
 		"base1factory": {
