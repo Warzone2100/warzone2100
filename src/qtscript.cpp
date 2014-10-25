@@ -1383,7 +1383,6 @@ bool triggerEventArea(QString label, DROID *psDroid)
 	{
 		QScriptEngine *engine = scripts.at(i);
 		QScriptValueList args;
-		args += QScriptValue(label);
 		args += convDroid(psDroid, engine);
 		QString funcname = QString("eventArea" + label);
 		debug(LOG_SCRIPT, "Triggering %s for %s", funcname.toUtf8().constData(),
