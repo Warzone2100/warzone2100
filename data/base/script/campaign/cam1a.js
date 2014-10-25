@@ -189,8 +189,7 @@ function eventStartLevel()
 		"artifact4pos": { tech: "R-Wpn-MG-Damage01" },
 	});
 
-	var t = camTemplates;
-	camSetFactories({
+	with (camTemplates) camSetFactories({
 		"base1factory": {
 			assembly: "assembly1",
 			order: CAM_ORDER_ATTACK,
@@ -198,7 +197,7 @@ function eventStartLevel()
 			groupSize: 3,
 			maxSize: 3,
 			throttle: 20000,
-			templates: [ t.trike, t.bloke ]
+			templates: [ trike, bloke ]
 		},
 		"base2factory1": {
 			assembly: "assembly2",
@@ -207,7 +206,7 @@ function eventStartLevel()
 			groupSize: 4,
 			maxSize: 4,
 			throttle: 16000,
-			templates: [ t.bloke, t.buggy, t.bloke ]
+			templates: [ bloke, buggy, bloke ]
 		},
 		"base2factory2": {
 			assembly: "assembly3",
@@ -216,7 +215,7 @@ function eventStartLevel()
 			groupSize: 4,
 			maxSize: 4,
 			throttle: 13000,
-			templates: [ t.bjeep, t.bloke, t.trike, t.bloke ]
+			templates: [ bjeep, bloke, trike, bloke ]
 		},
 	});
 }
