@@ -1052,9 +1052,9 @@ static QScriptValue js_getObject(QScriptContext *context, QScriptEngine *engine)
 	// get by label case
 	BASE_OBJECT *psObj;
 	QString label = context->argument(0).toString();
+	QScriptValue ret;
 	if (labels.contains(label))
 	{
-		QScriptValue ret;
 		ret = engine->newObject();
 		labeltype p = labels.value(label);
 		switch (p.type)
@@ -1083,7 +1083,7 @@ static QScriptValue js_getObject(QScriptContext *context, QScriptEngine *engine)
 			break;
 		}
 	}
-	return QScriptValue::UndefinedValue;
+	return ret;
 }
 
 //-- \subsection{enumBlips(player)}
