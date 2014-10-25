@@ -2803,6 +2803,8 @@ static void processMultiopWidgets(UDWORD id)
 		{
 		case MULTIOP_GNAME:										// we get this when nec.
 			sstrcpy(game.name,widgGetString(psWScreen, MULTIOP_GNAME));
+			removeWildcards(game.name);
+			widgSetString(psWScreen, MULTIOP_GNAME, game.name);
 			break;
 
 		case MULTIOP_MAP:
@@ -3033,13 +3035,9 @@ static void processMultiopWidgets(UDWORD id)
 		{
 			sPlayer[strlen(sPlayer)-1]='\0';
 		}
-
+		removeWildcards(sPlayer);
 		// update string.
 		widgSetString(psWScreen, MULTIOP_PNAME,sPlayer);
-
-
-		removeWildcards((char*)sPlayer);
-
 		printConsoleNameChange(NetPlay.players[selectedPlayer].name, sPlayer);
 
 		NETchangePlayerName(selectedPlayer, (char*)sPlayer);			// update if joined.
