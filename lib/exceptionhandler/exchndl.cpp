@@ -81,8 +81,11 @@ DWORD GetModuleBase(DWORD dwAddress)
 extern "C"
 {
 #include "include/demangle.h"
-#include "include/coff/internal.h"
-#include "include/libcoff.h"
+// cross compiler does not like these...
+#if !defined(WZ_CC_MINGW)
+  #include "include/coff/internal.h"
+  #include "include/libcoff.h"
+#endif
 }
 
 // Read in the symbol table.

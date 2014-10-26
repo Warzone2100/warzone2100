@@ -24,7 +24,7 @@
 #include <string.h>
 #include <assert.h>
 
-
+#if defined(WZ_CC_MSVC)
 int vslcatprintf(char* str, size_t size, const char* format, va_list ap)
 {
 	size_t str_len;
@@ -56,7 +56,6 @@ int slcatprintf(char* str, size_t size, const char* format, ...)
 }
 
 
-#if defined(WZ_OS_WIN)
 int vasprintf(char** strp, const char* format, va_list ap)
 {
 	int count;

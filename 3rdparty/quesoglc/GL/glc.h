@@ -47,7 +47,11 @@
 #  define __WIN32__
 #endif
 
-#ifdef __WIN32__
+// NOTE: For mingw-w64, we must define _GDI32_ otherwise we would be making WINGDIAPI DECLSPEC_IMPORT
+// which we do not want (that is for shared libs, aka dlls).  See wingdi.h to see where the check is.
+// refs: http://sourceforge.net/p/mingw-w64/patches/41/
+#if defined(__WIN32__) && !defined(WINGDIAPI)
+#  define _GDI32_
 #  include <windows.h>
 #endif
 
