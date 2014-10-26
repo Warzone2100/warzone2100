@@ -522,7 +522,7 @@ static void displayCompObj(DROID *psDroid, bool bButton)
 	}
 	else if (!bButton && psStillAnim) // standing still
 	{
-		pie_Draw3DShape(psStillAnim, getModularScaledGraphicsTime(psStillAnim->animInterval, psStillAnim->numFrames), colour, brightness, pie_ADDITIVE, 200);
+		pie_Draw3DShape(psStillAnim, getModularScaledGraphicsTime(psStillAnim->animInterval, psStillAnim->numFrames), colour, brightness, 0, 0);
 	}
 
 	//don't change the screen coords of an object if drawing it in a button

@@ -56,7 +56,7 @@
         "designable": 1,
         "hitpoints": 100,
         "id": "Helicopter",
-        "model": "DPVTOL.PIE",
+        "model": "PRLHELI1.PIE",
         "name": "Helicopter",
         "speed": 700,
         "spinSpeed": 200,
