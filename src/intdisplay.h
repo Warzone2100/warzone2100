@@ -179,11 +179,6 @@ void intDisplayButtonHilight(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 
 void intDisplayButtonFlash(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 
-void intDisplayButtonPressed(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
-
-void intDisplaySlider(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
-
-void intDisplayNumber(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 void intAddLoopQuantity(WIDGET *psWidget, W_CONTEXT *psContext);
 
 void intDisplayEditBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);

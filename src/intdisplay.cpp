@@ -1157,48 +1157,6 @@ void intDisplayButtonFlash(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	iV_DrawImage(IntImages, ImageID, x, y);
 }
 
-// Display one of three images depending on if the widget is currently depressed (ah!).
-//
-void intDisplayButtonPressed(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
-{
-	W_BUTTON	*psButton = (W_BUTTON *)psWidget;
-	UDWORD		x = xOffset + psButton->x();
-	UDWORD		y = yOffset + psButton->y();
-	UBYTE		Hilight = 0;
-	UWORD		ImageID;
-
-	if (psButton->state & (WBUT_DOWN | WBUT_LOCK | WBUT_CLICKLOCK))
-	{
-		ImageID = UNPACKDWORD_TRI_A(psWidget->UserData);
-	}
-	else
-	{
-		ImageID = UNPACKDWORD_TRI_C(psWidget->UserData);
-	}
-
-	Hilight = (UBYTE)buttonIsHilite(psButton);
-
-	iV_DrawImage(IntImages, ImageID, x, y);
-	if (Hilight)
-	{
-		iV_DrawImage(IntImages, UNPACKDWORD_TRI_B(psWidget->UserData), x, y);
-	}
-}
-
-void intDisplaySlider(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
-{
-	W_SLIDER *Slider = (W_SLIDER *)psWidget;
-	int x = xOffset + psWidget->x();
-	int y = yOffset + psWidget->y();
-
-	iV_DrawImage(IntImages, IMAGE_SLIDER_BACK, x + STAT_SLD_OX, y + STAT_SLD_OY);
-
-	int sx = (Slider->width() - Slider->barSize) * Slider->pos / Slider->numStops;
-
-	iV_DrawImage(IntImages, IMAGE_SLIDER_BUT, x + sx, y - 2);
-}
-
-
 /* display highlighted edit box from left, middle and end edit box graphics */
 void intDisplayEditBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
@@ -1239,44 +1197,6 @@ void intDisplayEditBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 
 	/* draw right side of bar */
 	iV_DrawImage(IntImages, iImageIDRight, iXRight, iY);
-}
-
-
-void intDisplayNumber(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
-{
-	W_LABEL		*Label = (W_LABEL *)psWidget;
-	UDWORD		x = Label->x() + xOffset;
-	UDWORD		y = Label->y() + yOffset;
-	UDWORD		Quantity = 1;
-
-	//Quantity depends on the factory
-	if (Label->pUserData != NULL)
-	{
-		STRUCTURE	*psStruct = (STRUCTURE *)Label->pUserData;
-		FACTORY		*psFactory = (FACTORY *)psStruct->pFunctionality;
-
-		if (psFactory && !psStruct->died)
-		{
-			Quantity = psFactory->productionLoops;
-		}
-	}
-
-	if (Quantity >= STAT_SLDSTOPS)
-	{
-		iV_DrawImage(IntImages, IMAGE_SLIDER_INFINITY, x + 4, y);
-	}
-	else
-	{
-		char tmp[20];
-		ssprintf(tmp, "%02u", Quantity);
-		Label->aText = QString::fromUtf8(tmp);
-
-		for (int i = 0; i < Label->aText.size(); ++i)
-		{
-			iV_DrawImage(IntImages, (UWORD)(IMAGE_0 + (Label->aText.toUtf8()[i] - '0')), x, y);
-			x += iV_GetImageWidth(IntImages, (UWORD)(IMAGE_0 + (Label->aText.toUtf8()[i] - '0'))) + 1;
-		}
-	}
 }
 
 // Initialise all the surfaces,graphics etc. used by the interface.
