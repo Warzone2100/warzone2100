@@ -1,11 +1,4 @@
 # List of source files which contain translatable strings.
-data/base/messages/messages.rmsg
-data/base/messages/resmessages12.rmsg
-data/base/messages/resmessages1.rmsg
-data/base/messages/resmessages23.rmsg
-data/base/messages/resmessages2.rmsg
-data/base/messages/resmessages3.rmsg
-data/base/messages/resmessagesall.rmsg
 data/base/messages/strings/cam1strings.txt
 data/base/messages/strings/cam2strings.txt
 data/base/messages/strings/cam3strings.txt
@@ -34,7 +27,6 @@ data/base/script/text/cam1-5s.slo
 data/base/script/text/cam1-7.slo
 data/base/script/text/cam1-7s.slo
 data/base/script/text/cam1a-c.slo
-data/base/script/text/cam1bx.slo
 data/base/script/text/cam1ca.slo
 data/base/script/text/cam1c.slo
 data/base/script/text/cam1daynight.slo
@@ -120,12 +112,6 @@ data/base/sequenceaudio/cam3/cam3_cn.txt
 data/base/sequenceaudio/devastation.txa
 data/base/sequenceaudio/devastation.txt
 data/base/sequenceaudio/outro.txt
-data/mp/messages/resmessages12.rmsg
-data/mp/messages/resmessages1.rmsg
-data/mp/messages/resmessages23.rmsg
-data/mp/messages/resmessages2.rmsg
-data/mp/messages/resmessages3.rmsg
-data/mp/messages/resmessagesall.rmsg
 data/mp/messages/strings/names.txt
 data/mp/messages/strings/resstrings.txt
 data/mp/multiplay/script/camtech.slo
