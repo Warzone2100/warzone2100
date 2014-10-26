@@ -75,6 +75,11 @@ camAreaEvent("scavbase3area", me, function(droid)
 	camEnableFactory("base2factory2");
 });
 
+function camEnemyBaseEliminated_scavgroup1()
+{
+	camEnableFactory("base1factory");
+}
+
 function camEnemyBaseEliminated_scavgroup2()
 {
 	queue("camDetectEnemyBase", 2000, "scavgroup3");

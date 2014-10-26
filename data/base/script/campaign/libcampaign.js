@@ -115,7 +115,7 @@ function camSafeRemoveObject(obj, flashy)
 //;; \subsection{camMakePos(x, y | label | object)}
 //;; Make a POSITION-like object, unless already done. Often useful
 //;; for making functions that would accept positions in both xx,yy and {x:xx,y:yy} forms.
-//;; Also accepts labels. If label of AREA is given, returns a random spot in the area.
+//;; Also accepts labels. If label of AREA is given, returns the center of the area.
 //;; If an existing object or label of such is given, returns a safe JavaScript
 //;; object containing its x, y and id.
 function camMakePos(xx, yy)
@@ -143,8 +143,8 @@ function camMakePos(xx, yy)
 			return obj;
 		case AREA:
 			return {
-				x: obj.x + camRand(obj.x2 - obj.x + 1),
-				y: obj.y + camRand(obj.y2 - obj.y + 1)
+				x: Math.floor((obj.x + obj.x2) / 2),
+				y: Math.floor((obj.y + obj.y2) / 2)
 			};
 		case GROUP:
 		default:
