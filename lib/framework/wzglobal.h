@@ -222,7 +222,7 @@
 
 #elif defined(__GNUC__)
 #  define WZ_CC_GNU
-#  if defined(__MINGW32__)
+#  if defined(__MINGW32__) || defined(__MINGW64__)
 #    define WZ_CC_MINGW
 #  endif
 #  if defined(__INTEL_COMPILER)
@@ -532,6 +532,10 @@
 
 #if defined(WZ_OS_WIN)
 #  if defined(WZ_CC_MINGW)
+// NOTE: For mingw-w64, we must define _GDI32_ otherwise we would be making WINGDIAPI DECLSPEC_IMPORT
+// which we do not want (that is for shared libs, aka dlls).  See wingdi.h to see where the check is.
+// refs: http://sourceforge.net/p/mingw-w64/patches/41/
+#    define _GDI32_
 #    include <unistd.h>
 #    include <sys/param.h>
 #    include <w32api.h>

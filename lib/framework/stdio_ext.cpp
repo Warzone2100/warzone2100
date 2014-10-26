@@ -24,7 +24,38 @@
 #include <string.h>
 #include <assert.h>
 
-#if defined(WZ_OS_WIN)
+#if defined(WZ_CC_MSVC)
+int vslcatprintf(char* str, size_t size, const char* format, va_list ap)
+{
+	size_t str_len;
+
+	if (str == NULL
+	 || size == 0)
+	{
+		return vsnprintf(NULL, 0, format, ap);
+	}
+
+	str_len = strlen(str);
+
+	assert(str_len < size);
+
+	return vsnprintf(&str[str_len], size - str_len, format, ap);
+}
+
+
+int slcatprintf(char* str, size_t size, const char* format, ...)
+{
+	va_list ap;
+	int count;
+
+	va_start(ap, format);
+		count = vslcatprintf(str, size, format, ap);
+	va_end(ap);
+
+	return count;
+}
+
+
 int vasprintf(char** strp, const char* format, va_list ap)
 {
 	int count;
