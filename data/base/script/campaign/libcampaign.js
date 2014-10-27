@@ -227,17 +227,17 @@ function camMakeGroup(what, filter)
 	}
 	if (camDef(array))
 	{
-		var group = newGroup()
+		var group = newGroup();
 		for (var i = 0; i < array.length; ++i)
 		{
-			var obj = array[i];
-			if (!camDef(obj) || !obj)
+			var o = array[i];
+			if (!camDef(o) || !o)
 			{
-				camDebug("Trying to add", obj);
+				camDebug("Trying to add", o);
 				continue;
 			}
-			if (obj.type === DROID && camPlayerMatchesFilter(obj.player, filter))
-				groupAdd(group, array[i]);
+			if (o.type === DROID && camPlayerMatchesFilter(o.player, filter))
+				groupAdd(group, o);
 		}
 		return group;
 	}
@@ -439,8 +439,7 @@ function camSetArtifacts(artifacts)
 		{
 			// received position or area, place immediately
 			var acrate = addFeature("Crate", pos.x, pos.y);
-			var alabel = __camGetArtifactLabel(alabel);
-			addLabel(acrate, alabel);
+			addLabel(acrate, __camGetArtifactLabel(alabel));
 			ai.placed = true;
 		}
 	}
@@ -488,8 +487,7 @@ function __camCheckPlaceArtifact(obj)
 	}
 	camTrace("Placing", ai.tech);
 	var acrate = addFeature("Crate", obj.x, obj.y);
-	var alabel = __camGetArtifactLabel(alabel);
-	addLabel(acrate, alabel);
+	addLabel(acrate, __camGetArtifactLabel(alabel));
 	ai.placed = true;
 }
 
@@ -605,7 +603,7 @@ function camSetEnemyBases(bases)
 					camTrace("Auto-detected cleanup area for", blabel, ":",
 					         a.x, a.y,
 					         a.x2, a.y2);
-					bi.cleanup = "__cam_enemy_base_cleanup__" + blabel
+					bi.cleanup = "__cam_enemy_base_cleanup__" + blabel;
 					addLabel(a, bi.cleanup);
 				}
 			}
@@ -909,14 +907,14 @@ function __camPickTarget(group)
 		return undefined;
 	var target = targets[camRand(targets.length)];
 	// sanitize data to make sure no bad things happen when object dies
-	target = { x : target.x, y : target.y }
+	target = { x : target.x, y : target.y };
 	__camGroupInfo[group].target = target;
 	return target;
 }
 
 function __camTacticsTick()
 {
-	for (group in __camGroupInfo)
+	for (var group in __camGroupInfo)
 	{
 		var gi = __camGroupInfo[group];
 		var droids = enumGroup(group);
@@ -1089,7 +1087,7 @@ function camSetFactoryData(flabel, fdata)
 	if (!camDef(structure) || !structure)
 	{
 		camDebug("Factory", flabel, "not found");
-		continue;
+		return;
 	}
 	var fi = __camFactoryInfo[flabel];
 	fi.enabled = false;
