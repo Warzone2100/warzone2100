@@ -1,9 +1,0 @@
---- $sourcebase/glew.pc.in.old	2010-11-03 16:55:35.000000000 -0400
-+++ $sourcebase/glew.pc.in	2011-02-20 22:29:58.675048129 -0500
-@@ -7,4 +7,4 @@
- Description: The OpenGL Extension Wrangler library
- Version: @version@
- Cflags: -I${includedir}
--Libs: -L${libdir} -lGLEW
-+Libs: -L${libdir} -lglew32
-
