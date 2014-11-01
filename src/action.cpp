@@ -837,7 +837,7 @@ void actionUpdateDroid(DROID *psDroid)
 				{
 					//the script can call startMission for this callback for offworld missions
 					eventFireCallbackTrigger((TRIGGER_TYPE)CALL_START_NEXT_LEVEL);
-					triggerEvent(TRIGGER_START_LEVEL);
+					triggerEvent(TRIGGER_TRANSPORTER_EXIT, psDroid);
 				}
 			}
 		}

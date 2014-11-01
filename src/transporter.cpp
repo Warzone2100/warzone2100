@@ -1172,7 +1172,7 @@ bool updateTransporter(DROID *psTransporter)
 
 			//the script can call startMission for this callback for offworld missions
 			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_START_NEXT_LEVEL);
-			triggerEvent(TRIGGER_START_LEVEL);
+			triggerEvent(TRIGGER_TRANSPORTER_EXIT, psTransporter);
 
 			// clear order
 			psTransporter->order = DroidOrder(DORDER_NONE);
