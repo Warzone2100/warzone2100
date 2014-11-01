@@ -1310,6 +1310,8 @@ bool stageThreeInitialise(void)
 
 	if (getLevelLoadType() != GTYPE_SAVE_MIDMISSION)
 	{
+		if (getDebugMappingStatus())
+			triggerEventCheatMode(true);
 		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_GAMEINIT);
 		triggerEvent(TRIGGER_GAME_INIT);
 	}
