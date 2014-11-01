@@ -187,6 +187,3 @@ file		ANI	"cybdpjmp.ani"
 file		ANI	"cybdplnd.ani"
 file		ANI	"cybdprun.ani"
 file		ANIMCFG	"anim.cfg"
-
-directory "script"
-file    JAVASCRIPT      "rules.js"

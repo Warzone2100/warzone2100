@@ -25,3 +25,6 @@ file		SCRIPTVAL	"start.vlo"
 directory       "script/data"
 file            SCRIPTVAL       "cam1day.vlo"
 
+/* Directory for javascript files*/
+directory "script"
+file JAVASCRIPT "rules.js"

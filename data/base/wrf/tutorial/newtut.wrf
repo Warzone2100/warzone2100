@@ -16,3 +16,7 @@ file		SCRIPT		"cam3daynight.slo"
 directory       "script/data"
 file            SCRIPTVAL       "tutorial3.vlo"
 file            SCRIPTVAL       "cam3day.vlo"
+
+/* Directory for javascript files*/
+directory "script"
+file JAVASCRIPT "rules.js"

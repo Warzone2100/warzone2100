@@ -18,5 +18,8 @@ file		SCRIPT		"cam1daynight.slo"
 directory       "script/data"
 file            SCRIPTVAL       "cam1day.vlo"
 
-directory       "script/campaign"
-file		JAVASCRIPT	"cam1a.js"
+/* Directory for javascript files*/
+directory "script"
+file JAVASCRIPT "rules.js"
+directory "script/campaign"
+file JAVASCRIPT "cam1a.js"

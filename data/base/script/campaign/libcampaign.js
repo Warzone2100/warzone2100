@@ -524,7 +524,7 @@ function __camLetMeWinArtifacts()
 		{
 			var label = __camGetArtifactLabel(alabel);
 			var artifact = getObject(label);
-			if (!camDef(artifact))
+			if (!camDef(artifact) || !artifact)
 				continue;
 			__camPickupArtifact(artifact);
 		}
@@ -627,7 +627,7 @@ function camSetEnemyBases(bases)
 				var s = structs[i];
 				if (s.type !== STRUCTURE || __camIsValidLeftover(s))
 					continue;
-				camTrace("Auto-adding" + s.id + "to base" + blabel);
+				camTrace("Auto-adding", s.id, "to base", blabel);
 				groupAdd(bi.group, s);
 			}
 		}
@@ -1233,18 +1233,22 @@ function __camContinueProduction(structure)
 //;; received by milking this time limit down.
 function camNextLevel(nextLevel)
 {
-	var bonusTime = getMissionTime();
-	if (bonusTime > 0)
+	if (__camNeedBonusTime)
 	{
-		camTrace("Bonus time", bonusTime);
-		setPowerModifier(125); // 25% bonus to completing fast
-		extraPowerTime(bonusTime);
-		setPowerModifier(100);
+		var bonusTime = getMissionTime();
+		if (bonusTime > 0)
+		{
+			camTrace("Bonus time", bonusTime);
+			setPowerModifier(125); // 25% bonus to completing fast
+			extraPowerTime(bonusTime);
+			setPowerModifier(100);
+		}
 	}
 	loadLevel(nextLevel);
 }
 
 const CAM_VICTORY_STANDARD = 0;
+const CAM_VICTORY_PRE_OFFWORLD = 1;
 
 //;; \subsection{camSetStandardWinLossConditions(kind, nextLevel)}
 //;; Set victory and defeat conditions to one of the common
@@ -1252,8 +1256,11 @@ const CAM_VICTORY_STANDARD = 0;
 //;; options are available:
 //;; \begin{description}
 //;; 	\item[CAM_VICTORY_STANDARD] Defeat if all ground factories
-//;; 	and construction droids are lost. Victory when all enemy bases
-//;; 	are destroyed and all artifacts are recovered.
+//;; 	and construction droids are lost, or on mission timeout.
+//;; 	Victory when all enemy bases are destroyed and all artifacts
+//;; 	are recovered.
+//;; 	\item[CAM_VICTORY_PRE_OFFWORLD] Defeat on timeout. Victory on
+//;; 	transporter launch, then load the sub-level.
 //;; \end{description}
 function camSetStandardWinLossConditions(kind, nextLevel)
 {
@@ -1261,6 +1268,13 @@ function camSetStandardWinLossConditions(kind, nextLevel)
 	{
 		case CAM_VICTORY_STANDARD:
 			__camWinLossCallback = "__camVictoryStandard";
+			__camNeedBonusTime = true;
+			__camDefeatOnTimeout = true;
+			break;
+		case CAM_VICTORY_PRE_OFFWORLD:
+			__camWinLossCallback = "__camVictoryPreOffworld";
+			__camNeedBonusTime = false;
+			__camDefeatOnTimeout = true;
 			break;
 		default:
 			camDebug("Unknown standard victory condition", kind);
@@ -1274,6 +1288,8 @@ function camSetStandardWinLossConditions(kind, nextLevel)
 var __camWinLossCallback;
 var __camNextLevel;
 var __camWinLossAlreadyFired;
+var __camNeedBonusTime;
+var __camDefeatOnTimeout;
 
 function __camGameLost()
 {
@@ -1288,25 +1304,52 @@ function __camGameWon()
 		camNextLevel(__camNextLevel);
 }
 
+function __camPlayerDead()
+{
+	if (countStruct("A0LightFactory") + countStruct("A0CyborgFactory") > 0)
+		return false;
+	return (countDroid(DROID_CONSTRUCT) === 0);
+}
+
+function __camVictoryPreOffworld()
+{
+	if (__camPlayerDead())
+	{
+		queue("__camGameLost", 4000); // wait 4 secs before throwing the game
+		__camWinLossAlreadyFired = true;
+	}
+}
+
 function __camVictoryStandard()
 {
-	if (__camWinLossAlreadyFired)
-		return;
 	// check if game is lost
-	var factories = countStruct("A0LightFactory")
-	              + countStruct("A0CyborgFactory");
-	var droids = countDroid(DROID_CONSTRUCT);
-	if (droids === 0 && factories === 0) {
+	if (__camPlayerDead())
+	{
 		queue("__camGameLost", 4000); // wait 4 secs before throwing the game
 		__camWinLossAlreadyFired = true;
 	}
 	// check if game is won
-	if (camAllArtifactsPickedUp() && camAllEnemyBasesEliminated()) {
+	if (camAllArtifactsPickedUp() && camAllEnemyBasesEliminated())
+	{
 		queue("__camGameWon", 6000); // wait 6 secs before giving it
 		__camWinLossAlreadyFired = true;
 	}
 }
 
+////////////////////////////////////////////////////////////////////////////////
+// Transporter management.
+////////////////////////////////////////////////////////////////////////////////
+
+//;; \subsection{camSetupTransport(place x, place y, exit x, exit y)}
+//;; A convenient function for placing the standard campaign transport
+//;; for loading in pre-away missions. The exit point for the transport
+//;; is set up as well.
+function camSetupTransporter(x, y, x1, y1)
+{
+	addDroid(CAM_HUMAN_PLAYER, x, y, "Transport",
+	         "TransporterBody", "V-Tol", 0, 0, "MG3-VTOL");
+	setTransporterExit(x1, y1, CAM_HUMAN_PLAYER);
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Event hooks magic. This makes all the library catch all the necessary events
@@ -1359,12 +1402,12 @@ function __camPreHookEvent(eventname, hookcode)
 }
 
 
-/* Called every second after eventStartLevel(). */
+/* Called every 5 seconds after eventStartLevel(). */
 function __camTick()
 {
 	__camTacticsTick();
 	__camBasesTick();
-	if (camDef(__camWinLossCallback))
+	if (camDef(__camWinLossCallback) && !__camWinLossAlreadyFired)
 		__camGlobalContext[__camWinLossCallback]();
 }
 
@@ -1435,6 +1478,8 @@ __camPreHookEvent("eventStartLevel", function()
 	__camFactoryInfo = {};
 	isReceivingAllEvents = true;
 	__camWinLossAlreadyFired = false;
+	__camNeedBonusTime = false;
+	__camDefeatOnTimeout = false;
 	setTimer("__camTick", 5000);
 });
 
@@ -1456,4 +1501,22 @@ __camPreHookEvent("eventDestroyed", function(obj)
 __camPreHookEvent("eventObjectSeen", function(viewer, seen)
 {
 	__camCheckBaseSeen(seen);
+});
+
+__camPreHookEvent("eventTransporterExit", function(transport)
+{
+	if (__camWinLossCallback === "__camVictoryPreOffworld")
+	{
+		camTrace("Transporter is away.");
+		camNextLevel(__camNextLevel);
+	}
+});
+
+__camPreHookEvent("eventMissionTimeout", function()
+{
+	if (__camDefeatOnTimeout)
+	{
+		camTrace("0 minutes remaining.");
+		__camGameLost();
+	}
 });
