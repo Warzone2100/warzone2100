@@ -2432,7 +2432,7 @@ static QScriptValue js_startTransporterEntry(QScriptContext *context, QScriptEng
 static QScriptValue js_setReinforcementTime(QScriptContext *context, QScriptEngine *)
 {
 	int value = context->argument(0).toInt32() * GAME_TICKS_PER_SEC;
-	SCRIPT_ASSERT(context, value == LZ_COMPROMISED_TIME || value < 60 * 60,
+	SCRIPT_ASSERT(context, value == LZ_COMPROMISED_TIME || value < 60 * 60 * GAME_TICKS_PER_SEC,
 	              "The transport timer cannot be set to more than 1 hour!");
 	mission.ETA = value;
 	if (missionCanReEnforce())
