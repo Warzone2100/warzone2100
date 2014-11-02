@@ -5,7 +5,7 @@ include("script/campaign/templates.js");
 var NPScout; // Sensor scout (initialized when droid is created)
 var NPRetreating = false;
 
-camAreaEvent("AttackArea1", me, function(droid)
+camAreaEvent("AttackArea1", 0, function(droid)
 {
 	// call this manually because eventObjectSeen is unreliable
 	eventObjectSeen(0, NPScout);
@@ -26,21 +26,26 @@ camAreaEvent("AttackArea1", me, function(droid)
 		throttle: 40000,
 		templates: [ trike, bloke, buggy, bloke, ] // changes
 	});
+	camEnableFactory("base2factory"); // re-enable
 });
 
-camAreaEvent("AttackArea2", me, function(droid)
+camAreaEvent("AttackArea2", 0, function(droid)
 {
 	camEnableFactory("base4factory");
 });
+
+function doNPRetreat() {
+	var pos = camMakePos("NPSensorTurn");
+	camTrace("New Paradigm sensor droid is retreating");
+	orderDroidLoc(NPScout, DORDER_MOVE, pos.x, pos.y);
+}
 
 function eventObjectSeen(viewer, seen)
 {
 	if (NPRetreating || viewer !== 0 || seen.id !== NPScout.id)
 		return;
-	camTrace("New Paradigm sensor droid is retreating");
 	NPRetreating = true;
-	var pos = camMakePos("NPSensorTurn");
-	orderDroidLoc(NPScout, DORDER_MOVE, pos.x, pos.y);
+	queue("doNPRetreat", 2000);
 }
 
 camAreaEvent("NPSensorTurn", 1, function(droid)
@@ -58,7 +63,7 @@ function eventStartLevel()
 {
 	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, "SUB_1_1S");
 	var startpos = getObject("startPosition");
-	var lz = label("landingZone");
+	var lz = getObject("landingZone");
 	centreView(startpos.x, startpos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, 0);
 

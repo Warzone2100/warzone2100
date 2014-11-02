@@ -190,7 +190,7 @@ function camPlayerMatchesFilter(player, filter)
 //;; Make a new group out of array of droids, single game object,
 //;; or label string, with fuzzy auto-detection of argument type.
 //;; Only droids would be added to the group. \textbf{filter} can be one of
-//;; a player index, ALL_PLAYERS, ALLIES or ENEMIES. 
+//;; a player index, ALL_PLAYERS, ALLIES or ENEMIES; defaults to ALL_PLAYERS.
 function camMakeGroup(what, filter)
 {
 	if (!camDef(filter))
@@ -369,10 +369,10 @@ function __camLetMeWin()
 
 function __camWinInfo()
 {
-	chat(CAM_HUMAN_PLAYER, "Picked up " + __camNumArtifacts
-		+ " artifacts out of " + Object.keys(__camArtifacts).length);
-	chat(CAM_HUMAN_PLAYER, "Eliminated " + __camNumEnemyBases
-		+ " enemy bases out of " + Object.keys(__camEnemyBases).length);
+	console("Picked up", __camNumArtifacts,
+	        "artifacts out of", Object.keys(__camArtifacts).length);
+	console("Eliminated", __camNumEnemyBases,
+	        "enemy bases out of", Object.keys(__camEnemyBases).length);
 }
 
 function __camGenericDebug(flag, func, args, err, bt)
@@ -421,6 +421,13 @@ function __camBacktrace()
 //;; \end{description}
 //;; On \textbf{let me win} cheat, all technologies stored in the artifacts
 //;; managed by this function are automatically granted.
+//;; Additionally, this function would call special event callbacks if they are
+//;; defined in your script, which should be named as follows,
+//;; where LABEL is the artifact label:
+//;; \begin{description}
+//;; 	\item[camArtifactPickup_LABEL] Called when the player picks up
+//;; 	the artifact.
+//;; \end{description}
 function camSetArtifacts(artifacts)
 {
 	__camArtifacts = artifacts;
@@ -512,7 +519,12 @@ function __camPickupArtifact(artifact)
 	// artifacts are not self-removing...
 	camSafeRemoveObject(artifact);
 	enableResearch(ai.tech);
+	// bump counter before the callback, so that it was
+	// actual during the callback
 	++__camNumArtifacts;
+	var callback = __camGlobalContext["camArtifactPickup_" + alabel];
+	if (camDef(callback))
+		callback();
 }
 
 function __camLetMeWinArtifacts()
@@ -631,6 +643,8 @@ function camSetEnemyBases(bases)
 				groupAdd(bi.group, s);
 			}
 		}
+		if (groupSize(bi.group) === 0)
+			camDebug("Base", blabel, "defined as empty group");
 		bi.detected = false;
 		bi.eliminated = false;
 	}
@@ -658,9 +672,9 @@ function camDetectEnemyBase(blabel)
 		}
 		if (camDef(pos))
 			playSound(bi.detectSnd, pos.x, pos.y, 0);
-		if (camDef(bi.detectMsg))
-			hackAddMessage(bi.detectMsg, PROX_MSG, 0, false);
 	}
+	if (camDef(bi.detectMsg))
+		hackAddMessage(bi.detectMsg, PROX_MSG, 0, false);
 	var callback = __camGlobalContext["camEnemyBaseDetected_" + blabel];
 	if (camDef(callback))
 		callback();
@@ -770,6 +784,7 @@ function __camBasesTick()
 const CAM_ORDER_ATTACK = 0;
 const CAM_ORDER_DEFEND = 1;
 const CAM_ORDER_PATROL = 2;
+const CAM_ORDER_COMPROMISE = 3;
 
 //;; \subsection{camManageGroup(group, order, data)}
 //;; Tell \texttt{libcampaign.js} to manage a certain group. The group
@@ -781,7 +796,9 @@ const CAM_ORDER_PATROL = 2;
 //;; 	the given position. The following optional data object fields are
 //;; 	available, none of which is required:
 //;; 	\begin{description}
-//;; 		\item[pos] Position to attack.
+//;; 		\item[pos] Position or list of positions to attack. If pos is a list,
+//;; 		first positions in the list will be attacked first.
+//;; 		\item[radius] Circle radius around \textbf{pos} to scan for targets.
 //;; 		\item[fallback] Position to retreat.
 //;; 		\item[morale] An integer from 1 to 100. If that high percentage
 //;; 		of the original group dies, fall back to the fallback position.
@@ -803,9 +820,17 @@ const CAM_ORDER_PATROL = 2;
 //;; 		\item[pos] An array of positions to patrol between.
 //;; 		\item[interval] Change positions every this many milliseconds.
 //;; 	\end{description}
+//;; \item[CAM_ORDER_COMPROMISE] Same as CAM_ORDER_ATTACK, just stay near the
+//;; last (or only) attack position instead of looking for the player
+//;; around the whole map. Useful for offworld missions,
+//;; with player's LZ as the final position. The \textbf{pos} parameter
+//;; is required.
 //;; \end{description} 
 function camManageGroup(group, order, data)
 {
+	var saneData = data;
+	if (!camDef(saneData))
+		saneData = {};
 	if (camDef(__camGroupInfo[group])
 	    && order !== __camGroupInfo[group].order)
 	{
@@ -815,8 +840,8 @@ function camManageGroup(group, order, data)
 	__camGroupInfo[group] = {
 		target: undefined,
 		order: order,
-		data: data,
-		count: camDef(data.count) ? data.count : groupSize(group)
+		data: saneData,
+		count: camDef(saneData.count) ? saneData.count : groupSize(group)
 	};
 	// apply orders instantly
 	__camTacticsTick();
@@ -846,7 +871,9 @@ function camOrderToString(order)
 		case CAM_ORDER_DEFEND:
 			return "DEFEND";
 		case CAM_ORDER_PATROL:
-			return "DEFEND";
+			return "PATROL";
+		case CAM_ORDER_COMPROMISE:
+			return "COMPROMISE";
 		default:
 			return "UNKNOWN";
 	}
@@ -874,11 +901,33 @@ function __camPickTarget(group)
 									__CAM_TARGET_TRACKING_RADIUS,
 									CAM_HUMAN_PLAYER, false);
 			}
-			if (!targets.length && camDef(gi.data.pos))
-				targets = enumRange(gi.data.pos.x,
-				                    gi.data.pos.y,
-				                    __CAM_PLAYER_BASE_RADIUS,
-				                    CAM_HUMAN_PLAYER, false);
+			// fall-through! we just don't track targets on COMPROMISE
+		case CAM_ORDER_COMPROMISE:
+			var list = [];
+			if (camDef(gi.data.pos))
+			{
+				if (camDef(gi.data.pos.length))
+					list = gi.data.pos;
+				else
+					list = [ gi.data.pos ];
+				for (var i = 0; i < list.length && !targets.length; ++i)
+				{
+					var radius = gi.data.radius;
+					if (!camDef(radius))
+						radius = __CAM_PLAYER_BASE_RADIUS;
+					targets = enumRange(list[i].x,
+										list[i].y,
+										radius,
+										CAM_HUMAN_PLAYER, false);
+				}
+			}
+			if (gi.order === CAM_ORDER_COMPROMISE)
+			{
+				if (!list.length)
+					camDebug("`pos' is required for COMPROMISE order")
+				else
+					targets = list[list.length - 1];
+			}
 			if (!targets.length)
 				targets = enumStruct(CAM_HUMAN_PLAYER);
 			if (!targets.length)
@@ -922,6 +971,7 @@ function __camTacticsTick()
 		{
 			case CAM_ORDER_ATTACK:
 			case CAM_ORDER_DEFEND:
+			case CAM_ORDER_COMPROMISE:
 				var target = __camPickTarget(group);
 				if (!camDef(target))
 					continue;
@@ -989,6 +1039,7 @@ function __camCheckGroupMorale(group) {
 	switch(gi.order)
 	{
 		case CAM_ORDER_ATTACK:
+		case CAM_ORDER_COMPROMISE:
 			if (gsize > msize)
 				break;
 			camTrace("Group", group, "falls back");
@@ -1075,7 +1126,8 @@ function camSetFactories(factories)
 //;; Similar to \texttt{camSetFactories()}, but one factory at a time.
 //;; If the factory was already managing a group of droids, it keeps
 //;; managing it. If a new group is specified in the description,
-//;; the old group is merged into it.
+//;; the old group is merged into it. NOTE: This function disables the
+//;; factory. You would need to call \texttt{camEnableFactory()} again.
 function camSetFactoryData(flabel, fdata)
 {
 	// remember the old factory group, if any
@@ -1129,6 +1181,7 @@ function camEnableFactory(flabel)
 		camTrace("Factory", flabel, "enabled twice");
 		return;
 	}
+	camTrace("Enabling", flabel);
 	fi.enabled = true;
 	var obj = getObject(flabel);
 	if (!camDef(obj) || !obj)
@@ -1136,22 +1189,22 @@ function camEnableFactory(flabel)
 		camTrace("Factory", flabel, "not found, probably already dead");
 		return;
 	}
-	camTrace("Enabling", flabel);
 	__camContinueProduction(flabel);
+	__camFactoryUpdateTactics(flabel);
 }
 
 //////////// privates
 
 var __camFactoryInfo;
 
-function __camAddDroidToFactoryGroup(droid, structure)
+function __camFactoryUpdateTactics(flabel)
 {
-	// FIXME: O(n) lookup here
-	var flabel = getLabel(structure);
-	if (!camDef(flabel) || !flabel)
-		return;
 	var fi = __camFactoryInfo[flabel];
-	groupAdd(fi.group, droid);
+	if (!fi.enabled)
+	{
+		camDebug("Factory", flabel, "was not enabled");
+		return;
+	}
 	var droids = enumGroup(fi.group);
 	if (droids.length >= fi.groupSize)
 	{
@@ -1164,6 +1217,17 @@ function __camAddDroidToFactoryGroup(droid, structure)
 			pos = camMakePos(factory);
 		camManageGroup(fi.group, CAM_ORDER_DEFEND, { pos: pos });
 	}
+}
+
+function __camAddDroidToFactoryGroup(droid, structure)
+{
+	// FIXME: O(n) lookup here
+	var flabel = getLabel(structure);
+	if (!camDef(flabel) || !flabel)
+		return;
+	var fi = __camFactoryInfo[flabel];
+	groupAdd(fi.group, droid);
+	__camFactoryUpdateTactics(flabel);
 }
 
 function __camContinueProduction(structure)
@@ -1249,20 +1313,33 @@ function camNextLevel(nextLevel)
 
 const CAM_VICTORY_STANDARD = 0;
 const CAM_VICTORY_PRE_OFFWORLD = 1;
+const CAM_VICTORY_OFFWORLD = 2;
 
-//;; \subsection{camSetStandardWinLossConditions(kind, nextLevel)}
+//;; \subsection{camSetStandardWinLossConditions(kind, nextLevel, data)}
 //;; Set victory and defeat conditions to one of the common
-//;; options. On victory, load nextLevel. The following
-//;; options are available:
+//;; options. On victory, load nextLevel. The extra data parameter
+//;; contains extra data required to define some of the vicrory
+//;; conditions. The following options are available:
 //;; \begin{description}
 //;; 	\item[CAM_VICTORY_STANDARD] Defeat if all ground factories
 //;; 	and construction droids are lost, or on mission timeout.
-//;; 	Victory when all enemy bases are destroyed and all artifacts
+//;; 	Victory when all enemies are destroyed and all artifacts
 //;; 	are recovered.
 //;; 	\item[CAM_VICTORY_PRE_OFFWORLD] Defeat on timeout. Victory on
 //;; 	transporter launch, then load the sub-level.
+//;; 	\item[CAM_VICTORY_OFFWORLD] Defeat on timeout or all units lost.
+//;; 	Victory when all artifacts are recovered and either all enemies
+//;; 	are dead (not just bases) or all droids are at the LZ.
+//;; 	Also automatically handles the "LZ compromised" message,
+//;; 	which is why it needs to know reinforcement interval to restore.
+//;; 	The following data parameter fields are available:
+//;; 	\begin{description}
+//;; 		\item[area] The landing zone to return to.
+//;; 		\item[message] The "Return to LZ" message ID. Optional.
+//;; 		\item[reinforcements] Reinforcements interval, in seconds.
+//;; 	\end{description}
 //;; \end{description}
-function camSetStandardWinLossConditions(kind, nextLevel)
+function camSetStandardWinLossConditions(kind, nextLevel, data)
 {
 	switch(kind)
 	{
@@ -1276,6 +1353,13 @@ function camSetStandardWinLossConditions(kind, nextLevel)
 			__camNeedBonusTime = false;
 			__camDefeatOnTimeout = true;
 			break;
+		case CAM_VICTORY_OFFWORLD:
+			__camWinLossCallback = "__camVictoryOffworld";
+			__camNeedBonusTime = true;
+			__camDefeatOnTimeout = true;
+			__camVictoryData = data;
+			setReinforcementTime(__camVictoryData.reinforcements);
+			break;
 		default:
 			camDebug("Unknown standard victory condition", kind);
 			break;
@@ -1287,9 +1371,12 @@ function camSetStandardWinLossConditions(kind, nextLevel)
 
 var __camWinLossCallback;
 var __camNextLevel;
-var __camWinLossAlreadyFired;
 var __camNeedBonusTime;
 var __camDefeatOnTimeout;
+var __camVictoryData;
+var __camRTLZTicker;
+var __camLZCompromisedTicker;
+var __camLastAttackTriggered;
 
 function __camGameLost()
 {
@@ -1311,12 +1398,14 @@ function __camPlayerDead()
 	return (countDroid(DROID_CONSTRUCT) === 0);
 }
 
-function __camVictoryPreOffworld()
+function __camTriggerLastAttack()
 {
-	if (__camPlayerDead())
+	if (!__camLastAttackTriggered)
 	{
-		queue("__camGameLost", 4000); // wait 4 secs before throwing the game
-		__camWinLossAlreadyFired = true;
+		var enemies = enumArea(0, 0, mapWidth, mapHeight, ENEMIES, false);
+		camTrace(enemies.length, "enemy droids remaining");
+		camManageGroup(camMakeGroup(enemies), CAM_ORDER_ATTACK);
+		__camLastAttackTriggered = true;
 	}
 }
 
@@ -1325,14 +1414,99 @@ function __camVictoryStandard()
 	// check if game is lost
 	if (__camPlayerDead())
 	{
-		queue("__camGameLost", 4000); // wait 4 secs before throwing the game
-		__camWinLossAlreadyFired = true;
+		__camGameLost()
+		return;
 	}
 	// check if game is won
 	if (camAllArtifactsPickedUp() && camAllEnemyBasesEliminated())
 	{
-		queue("__camGameWon", 6000); // wait 6 secs before giving it
-		__camWinLossAlreadyFired = true;
+		if (enumArea(0, 0, mapWidth, mapHeight, ENEMIES, false).length === 0)
+		{
+			__camGameWon();
+			return;
+		}
+		else
+			__camTriggerLastAttack();
+	}
+}
+
+function __camVictoryPreOffworld()
+{
+	if (__camPlayerDead())
+	{
+		__camGameLost();
+		return;
+	}
+	// victory hooked from eventTransporterExit
+}
+
+function __camVictoryOffworld()
+{
+	var lz = __camVictoryData.area;
+	if (!camDef(lz))
+	{
+		camDebug("Landing zone area is required for OFFWORLD")
+		return;
+	}
+	var total = countDroid(DROID_ANY, CAM_HUMAN_PLAYER); // for future use
+	if (total === 0)
+		__camGameLost();
+	if (camAllArtifactsPickedUp())
+	{
+		if (enumArea(0, 0, mapWidth, mapHeight, ENEMIES, false).length === 0)
+		{
+			// if there are no more enemies, win instantly
+			__camGameWon();
+			return;
+		}
+
+		var atlz = enumArea(lz, CAM_HUMAN_PLAYER, false).length;
+		if (atlz === total)
+		{
+			__camGameWon();
+			return;
+		}
+		else
+			__camTriggerLastAttack();
+		if (__camRTLZTicker === 0 && camDef(__camVictoryData.message))
+		{
+			camTrace("Return to LZ message displayed");
+			camMarkTiles(lz);
+			if (camDef(__camVictoryData.message))
+				hackAddMessage(__camVictoryData.message, PROX_MSG,
+				               CAM_HUMAN_PLAYER, false);
+		}
+		if (__camRTLZTicker % 6 === 0) // every 30 seconds
+		{
+			var pos = camMakePos(lz);
+			playSound("pcv427.ogg", pos.x, pos.y, 0);
+			console("Return to LZ");
+		}
+		++__camRTLZTicker;
+	}
+	if (enumArea(lz, ENEMIES, false).length > 0)
+	{
+		if (__camLZCompromisedTicker === 0)
+			camTrace("LZ compromised");
+		if (__camLZCompromisedTicker % 7 === 1) // every 35 seconds
+		{
+			var pos = camMakePos(lz);
+			playSound("pcv445.ogg", pos.x, pos.y, 0);
+			setReinforcementTime(-1);
+		}
+		++__camLZCompromisedTicker;
+		if (__camRTLZTicker === 0)
+			camMarkTiles(lz);
+	}
+	else if (__camLZCompromisedTicker > 0)
+	{
+		camTrace("LZ clear");
+		var pos = camMakePos(lz);
+		playSound("lz-clear.ogg", pos.x, pos.y, 0);
+		setReinforcementTime(__camVictoryData.reinforcements);
+		__camLZCompromisedTicker = 0;
+		if (__camRTLZTicker === 0)
+			camUnmarkTiles(lz);
 	}
 }
 
@@ -1401,13 +1575,12 @@ function __camPreHookEvent(eventname, hookcode)
 	};
 }
 
-
 /* Called every 5 seconds after eventStartLevel(). */
 function __camTick()
 {
 	__camTacticsTick();
 	__camBasesTick();
-	if (camDef(__camWinLossCallback) && !__camWinLossAlreadyFired)
+	if (camDef(__camWinLossCallback))
 		__camGlobalContext[__camWinLossCallback]();
 }
 
@@ -1467,6 +1640,11 @@ __camPreHookEvent("eventChat", function(from, to, message)
 		__camLetMeWin();
 	if (message === "win info")
 		__camWinInfo();
+	if (message.lastIndexOf("ascend ", 0) === 0)
+	{
+		__camNextLevel = message.substring(7).toUpperCase().replace(/-/g, "_");
+		__camLetMeWin();
+	}
 });
 
 __camPreHookEvent("eventStartLevel", function()
@@ -1477,15 +1655,19 @@ __camPreHookEvent("eventStartLevel", function()
 	__camGroupInfo = {};
 	__camFactoryInfo = {};
 	isReceivingAllEvents = true;
-	__camWinLossAlreadyFired = false;
 	__camNeedBonusTime = false;
 	__camDefeatOnTimeout = false;
+	__camRTLZTicker = 0;
+	__camLZCompromisedTicker = 0;
+	__camLastAttackTriggered = false;
 	setTimer("__camTick", 5000);
 });
 
 __camPreHookEvent("eventDroidBuilt", function(droid, structure)
 {
 	if (!camPlayerMatchesFilter(structure.player, ENEMIES))
+		return;
+	if (!camPlayerMatchesFilter(droid.player, ENEMIES))
 		return;
 	if (!camDef(__camFactoryInfo))
 		return;
@@ -1508,7 +1690,8 @@ __camPreHookEvent("eventTransporterExit", function(transport)
 	if (__camWinLossCallback === "__camVictoryPreOffworld")
 	{
 		camTrace("Transporter is away.");
-		camNextLevel(__camNextLevel);
+		__camGameWon();
+		return;
 	}
 });
 

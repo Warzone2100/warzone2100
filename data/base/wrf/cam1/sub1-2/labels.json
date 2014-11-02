@@ -1,0 +1,24 @@
+{
+	"position_0": { "label": "StartPosition", "pos": [ 6656, 7040 ] },
+	"position_1": { "label": "TransporterEntry", "pos": [ 7936, 7424 ] },
+	"position_2": { "label": "TransporterExit", "pos": [ 7424, 7936 ] },
+	"area_0": { "label": "LandingZone", "pos1": [ 6656, 6912 ], "pos2": [ 6912, 7168 ] },
+	"area_1": { "label": "RTLZ", "pos1": [ 6080, 6464 ], "pos2": [ 8192, 8192 ] },
+
+	"area_3": { "label": "NorthBase", "pos1": [ 3136, 1728 ], "pos2": [ 5440, 2624 ] },
+	"object_0": { "label": "NorthFactory", "id": 108, "player": 7, "type": 1 },
+	"position_3": { "label": "NorthAssembly", "pos": [ 3392, 2240 ] },
+	"group_0": { "label": "NorthTankGroup", "members": [ 147, 227, 279, 280, 281, 282 ], "player": 7 },
+	"area_4": { "label": "NorthBaseTrigger", "pos1": [ 2000, 300 ], "pos2": [ 6000, 4600 ] },
+
+	"area_5": { "label": "WestBase", "pos1": [ 1600, 6464 ], "pos2": [ 2368, 7232 ] },
+	"object_1": { "label": "WestFactory", "id": 323, "player": 7, "type": 1 },
+	"position_4": { "label": "WestAssembly", "pos": [ 3008, 6848 ] },
+	"group_1": { "label": "WestTankGroup", "members": [ 57, 66, 67, 68 ], "player": 7 },
+
+	"object_2": { "label": "ScavLab", "id": 340, "player": 7, "type": 1 },
+	"group_2": { "label": "ScavLabGroup", "members": [ 340 ], "player": 7 },
+
+	"position_5": { "label": "GatesPos", "pos": [ 5440, 3904 ] },
+	"position_6": { "label": "ScavLabPos", "pos": [ 2752, 3904 ] }
+}

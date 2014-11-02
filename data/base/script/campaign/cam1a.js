@@ -6,7 +6,7 @@ var timerComing = 0; // start mission timer after first power gen
                      // and derrick is built
 
 // player zero's droid enteres this area
-camAreaEvent("LaunchScavAttack", me, function(droid)
+camAreaEvent("LaunchScavAttack", 0, function(droid)
 {
 	var spos = getObject("scav1soundpos");
 	playSound("pcv375.ogg", spos.x, spos.y, 0);
@@ -16,7 +16,11 @@ camAreaEvent("LaunchScavAttack", me, function(droid)
 	// send scavengers on war path if triggered above
 	camManageGroup(
 		camMakeGroup("ScavAttack1", ENEMIES), CAM_ORDER_ATTACK,
-		{ pos: camMakePos("playerBase") }
+		{
+			pos: camMakePos("playerBase"),
+			fallback: camMakePos("retreat1"),
+			morale: 50
+		}
 	);
 });
 
@@ -41,19 +45,19 @@ function doAmbush()
 }
 
 // player zero's droid enteres this area
-camAreaEvent("ScavAttack1", me, function(droid)
+camAreaEvent("ScavAttack1", 0, function(droid)
 {
 	hackRemoveMessage("C1A_OBJ1", PROX_MSG, 0);
 	queue("runAway", 1000);
 	queue("doAmbush", 5000);
 });
 
-camAreaEvent("RoadblockArea", me, function(droid)
+camAreaEvent("RoadblockArea", 0, function(droid)
 {
 	camEnableFactory("base1factory");
 });
 
-camAreaEvent("raidTrigger", me, function(droid)
+camAreaEvent("raidTrigger", 0, function(droid)
 {
 	camManageGroup(
 		camMakeGroup("raidTrigger", ENEMIES),
@@ -70,7 +74,7 @@ camAreaEvent("raidTrigger", me, function(droid)
 	camEnableFactory("base2factory1");
 });
 
-camAreaEvent("scavbase3area", me, function(droid)
+camAreaEvent("scavbase3area", 0, function(droid)
 {
 	camEnableFactory("base2factory2");
 });
@@ -100,7 +104,7 @@ function eventStartLevel()
 	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, "CAM_1B");
 
 	var startpos = getObject("startPosition");
-	var lz = label("landingZone");
+	var lz = getObject("landingZone");
 	centreView(startpos.x, startpos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, 0);
 
