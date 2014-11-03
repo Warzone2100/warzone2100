@@ -34,9 +34,11 @@
 
 //used to set the reinforcement time on hold whilst the Transporter is unable to land
 //hopefully they'll never need to set it this high for other reasons!
-#define SCR_LZ_COMPROMISED_TIME     999999
+#define SCR_LZ_COMPROMISED_TIME     999990
 //this is used to compare the value passed in from the scripts with which is multiplied by 100
-#define LZ_COMPROMISED_TIME         99999900
+#define LZ_COMPROMISED_TIME         99999000
+//same value in seconds, as passed from JavaScript
+#define JS_LZ_COMPROMISED_TIME         99999
 
 struct LANDING_ZONE
 {
