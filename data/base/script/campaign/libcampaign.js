@@ -44,8 +44,7 @@
 // Section name.
 ////////////////////////////////////////////////////////////////////////////////
 
-	yeah, like that. Also, it's exactly 80 characters wide. Code shouldn't be
-	wider than that.
+	yeah, like that. Also, it's exactly 80 characters wide.
 
 	In each section, public stuff is on TOP, and private stuff
 	is below, split from the public stuff with:
@@ -898,8 +897,8 @@ function __camPickTarget(group)
 			if (camDef(gi.target))
 			{
 				targets = enumRange(gi.target.x, gi.target.y,
-									__CAM_TARGET_TRACKING_RADIUS,
-									CAM_HUMAN_PLAYER, false);
+				                    __CAM_TARGET_TRACKING_RADIUS,
+				                    CAM_HUMAN_PLAYER, false);
 			}
 			// fall-through! we just don't track targets on COMPROMISE
 		case CAM_ORDER_COMPROMISE:
@@ -916,9 +915,9 @@ function __camPickTarget(group)
 					if (!camDef(radius))
 						radius = __CAM_PLAYER_BASE_RADIUS;
 					targets = enumRange(list[i].x,
-										list[i].y,
-										radius,
-										CAM_HUMAN_PLAYER, false);
+					                    list[i].y,
+					                    radius,
+					                    CAM_HUMAN_PLAYER, false);
 				}
 			}
 			if (gi.order === CAM_ORDER_COMPROMISE)
@@ -938,8 +937,8 @@ function __camPickTarget(group)
 				&& camDist(gi.target, gi.data.pos) < __CAM_DEFENSE_RADIUS)
 			{
 				targets = enumRange(gi.target.x, gi.target.y,
-									__CAM_TARGET_TRACKING_RADIUS,
-									CAM_HUMAN_PLAYER, false);
+				                    __CAM_TARGET_TRACKING_RADIUS,
+				                    CAM_HUMAN_PLAYER, false);
 			}
 			if (!targets.length)
 				targets = enumRange(gi.data.pos.x, gi.data.pos.y,
@@ -1665,6 +1664,8 @@ __camPreHookEvent("eventStartLevel", function()
 
 __camPreHookEvent("eventDroidBuilt", function(droid, structure)
 {
+	if (!camDef(structure)) // "clone wars" cheat
+		return;
 	if (!camPlayerMatchesFilter(structure.player, ENEMIES))
 		return;
 	if (!camPlayerMatchesFilter(droid.player, ENEMIES))
