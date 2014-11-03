@@ -920,12 +920,12 @@ function __camPickTarget(group)
 					                    CAM_HUMAN_PLAYER, false);
 				}
 			}
-			if (gi.order === CAM_ORDER_COMPROMISE)
+			if (gi.order === CAM_ORDER_COMPROMISE && !targets.length)
 			{
 				if (!list.length)
 					camDebug("`pos' is required for COMPROMISE order")
 				else
-					targets = list[list.length - 1];
+					targets = [ list[list.length - 1] ];
 			}
 			if (!targets.length)
 				targets = enumStruct(CAM_HUMAN_PLAYER);
@@ -1491,7 +1491,7 @@ function __camVictoryOffworld()
 		{
 			var pos = camMakePos(lz);
 			playSound("pcv445.ogg", pos.x, pos.y, 0);
-			setReinforcementTime(-1);
+			setReinforcementTime(LZ_COMPROMISED_TIME);
 		}
 		++__camLZCompromisedTicker;
 		if (__camRTLZTicker === 0)

@@ -14,6 +14,23 @@ function exposeNorthBase() {
 
 function camArtifactPickup_ScavLab() {
 	exposeNorthBase();
+	with (camTemplates) camSetFactoryData("WestFactory", {
+		assembly: "WestAssembly",
+		order: CAM_ORDER_COMPROMISE,
+		data: {
+			pos: [
+				camMakePos("WestAssembly"),
+				camMakePos("GatesPos"),
+				camMakePos("RTLZ"), // changes
+			],
+			radius: 8
+		},
+		groupSize: 5,
+		maxSize: 9,
+		throttle: 10000,
+		templates: [ trike, bloke, buggy, bjeep ]
+	});
+	camEnableFactory("WestFactory");
 }
 
 function camEnemyBaseDetected_NorthGroup() {
@@ -25,6 +42,16 @@ camAreaEvent("NorthBaseTrigger", 0, function(droid)
 	// frankly, this one happens silently
 	camEnableFactory("NorthFactory");
 });
+
+function enableWestFactory()
+{
+	camEnableFactory("WestFactory");
+	camManageGroup(camMakeGroup("RaidGroup"), CAM_ORDER_ATTACK, {
+		pos: camMakePos("RTLZ"),
+		morale: 80,
+		fallback: camMakePos("ScavLab")
+	});
+}
 
 function eventStartLevel()
 {
@@ -41,7 +68,7 @@ function eventStartLevel()
 	startTransporterEntry(62, 58, 0);
 	var text = getObject("TransporterExit");
 	setTransporterExit(58, 62, 0);
-	setPower(200, 7);
+	setPower(400, 7);
 
 	camSetEnemyBases({
 		"NorthGroup": {
@@ -76,14 +103,13 @@ function eventStartLevel()
 			data: {
 				pos: [
 					camMakePos("NorthAssembly"),
-					camMakePos("GatesPos"),
 					camMakePos("ScavLabPos"),
 					camMakePos("RTLZ"),
 				],
 				radius: 8
 			},
 			groupSize: 5,
-			maxSize: 8,
+			maxSize: 9,
 			throttle: 15000,
 			group: camMakeGroup("NorthTankGroup"),
 			templates: [ trike, bloke, buggy, bjeep ]
@@ -96,17 +122,15 @@ function eventStartLevel()
 					camMakePos("WestAssembly"),
 					camMakePos("GatesPos"),
 					camMakePos("ScavLabPos"),
-					camMakePos("RTLZ"),
 				],
 				radius: 8
 			},
 			groupSize: 5,
-			maxSize: 8,
+			maxSize: 9,
 			throttle: 10000,
-			group: camMakeGroup("WestTankGroup"),
 			templates: [ trike, bloke, buggy, bjeep ]
 		},
 	});
 
-	queue("camEnableFactory", 30000, "WestFactory");
+	queue("enableWestFactory", 30000);
 }

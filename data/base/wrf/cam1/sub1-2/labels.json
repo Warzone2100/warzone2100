@@ -8,17 +8,18 @@
 	"area_3": { "label": "NorthBase", "pos1": [ 3136, 1728 ], "pos2": [ 5440, 2624 ] },
 	"object_0": { "label": "NorthFactory", "id": 108, "player": 7, "type": 1 },
 	"position_3": { "label": "NorthAssembly", "pos": [ 3392, 2240 ] },
-	"group_0": { "label": "NorthTankGroup", "members": [ 147, 227, 279, 280, 281, 282 ], "player": 7 },
+	"group_0": { "label": "NorthTankGroup", "members": [ 57, 66, 67, 68 ], "player": 7 },
 	"area_4": { "label": "NorthBaseTrigger", "pos1": [ 2000, 300 ], "pos2": [ 6000, 4600 ] },
 
 	"area_5": { "label": "WestBase", "pos1": [ 1600, 6464 ], "pos2": [ 2368, 7232 ] },
 	"object_1": { "label": "WestFactory", "id": 323, "player": 7, "type": 1 },
 	"position_4": { "label": "WestAssembly", "pos": [ 3008, 6848 ] },
-	"group_1": { "label": "WestTankGroup", "members": [ 57, 66, 67, 68 ], "player": 7 },
 
 	"object_2": { "label": "ScavLab", "id": 340, "player": 7, "type": 1 },
 	"group_2": { "label": "ScavLabGroup", "members": [ 340 ], "player": 7 },
 
 	"position_5": { "label": "GatesPos", "pos": [ 5440, 3904 ] },
-	"position_6": { "label": "ScavLabPos", "pos": [ 2752, 3904 ] }
+	"position_6": { "label": "ScavLabPos", "pos": [ 2752, 3904 ] },
+
+	"group_1": { "label": "RaidGroup", "members": [ 147, 225, 227, 235, 279, 280, 281, 282 ], "player": 7 }
 }
