@@ -1358,6 +1358,7 @@ function camSetStandardWinLossConditions(kind, nextLevel, data)
 			__camDefeatOnTimeout = true;
 			__camVictoryData = data;
 			setReinforcementTime(__camVictoryData.reinforcements);
+			queue("__camSetOffworldLimits", 100);
 			break;
 		default:
 			camDebug("Unknown standard victory condition", kind);
@@ -1376,6 +1377,13 @@ var __camVictoryData;
 var __camRTLZTicker;
 var __camLZCompromisedTicker;
 var __camLastAttackTriggered;
+
+function __camSetOffworldLimits()
+{
+	// That's the only structure that doesn't get
+	// auto-disabled by the engine in off-world missions.
+	setStructureLimits("A0CommandCentre", 0, 0);
+}
 
 function __camGameLost()
 {
@@ -1592,18 +1600,6 @@ __camPreHookEvent("eventPickup", function(feature, droid)
 	if (feature.stattype === ARTIFACT)
 	{
 		__camPickupArtifact(feature);
-	}
-});
-
-__camPreHookEvent("eventAttacked", function(victim, attacker)
-{
-	if (gameTime > __camLastHitTime + __CAM_EVENT_ATTACKED_INTENSITY)
-	{
-		__camLastHitTime = gameTime;
-		if (victim.type === STRUCTURE)
-			playSound("pcv337.ogg", victim.x, victim.y, victim.z);
-		else
-			playSound("pcv399.ogg", victim.x, victim.y, victim.z);
 	}
 });
 

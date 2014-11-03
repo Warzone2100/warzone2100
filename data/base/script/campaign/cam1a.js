@@ -132,12 +132,6 @@ function eventStartLevel()
 	setReinforcementTime(-1);
 	setMissionTime(-1);
 
-	setStructureLimits("A0PowerGenerator", 5, 0);
-	setStructureLimits("A0ResourceExtractor", 200, 0);
-	setStructureLimits("A0ResearchFacility", 5, 0);
-	setStructureLimits("A0LightFactory", 5, 0);
-	setStructureLimits("A0CommandCentre", 1, 0);
-
 	// feed libcampaign.js with data to do the rest
 	camSetEnemyBases({
 		"scavgroup1": {

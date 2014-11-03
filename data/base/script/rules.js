@@ -48,6 +48,15 @@ function eventStartLevel()
 	setDroidLimit(0, 10, DROID_COMMAND);
 	setDroidLimit(0, 15, DROID_CONSTRUCT);
 
+	setStructureLimits("A0PowerGenerator", 5, 0);
+	setStructureLimits("A0ResourceExtractor", 200, 0);
+	setStructureLimits("A0ResearchFacility", 5, 0);
+	setStructureLimits("A0LightFactory", 5, 0);
+	setStructureLimits("A0CommandCentre", 1, 0);
+	setStructureLimits("A0ComDroidControl", 1, 0);
+	setStructureLimits("A0CyborgFactory", 5, 0);
+	setStructureLimits("A0VTolFactory1", 5, 0);
+
 	var structlist = enumStruct(me, HQ);
 	for (var i = 0; i < structlist.length; i++)
 	{
@@ -114,5 +123,17 @@ function eventResearched(research, structure, player)
 				//debug("      upgraded " + cname + " to " + Upgrades[player][ctype][cname][parameter] + " by " + Math.ceil(Stats[ctype][cname][parameter] * v['value'] / 100));
 			}
 		}
+	}
+}
+
+var lastHitTime = 0;
+function eventAttacked(victim, attacker) {
+	if (gameTime > lastHitTime + 5000)
+	{
+		lastHitTime = gameTime;
+		if (victim.type === STRUCTURE)
+			playSound("pcv337.ogg", victim.x, victim.y, victim.z);
+		else
+			playSound("pcv399.ogg", victim.x, victim.y, victim.z);
 	}
 }
