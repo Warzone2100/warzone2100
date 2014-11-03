@@ -2010,7 +2010,7 @@ static void fillTimeDisplay(QString &text, UDWORD time, bool bHours)
 	{
 		time_t secs = time / GAME_TICKS_PER_SEC;
 		struct tm *tmp = gmtime(&secs);
-		strftime(psText, sizeof(psText), bHours ? "%H:%M:%S" : "%H:%M", tmp);
+		strftime(psText, sizeof(psText), bHours ? "%H:%M:%S" : "%M:%S", tmp);
 	}
 	text = QString::fromUtf8(psText);
 }
