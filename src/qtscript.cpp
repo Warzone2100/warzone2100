@@ -1133,7 +1133,8 @@ bool triggerEventAttacked(BASE_OBJECT *psVictim, BASE_OBJECT *psAttacker, int la
 	{
 		QScriptEngine *engine = scripts.at(i);
 		int player = engine->globalObject().property("me").toInt32();
-		if (player == psVictim->player)
+		bool receiveAll = engine->globalObject().property("isReceivingAllEvents").toBool();
+		if (player == psVictim->player || receiveAll)
 		{
 			QScriptValueList args;
 			args += convMax(psVictim, engine);
