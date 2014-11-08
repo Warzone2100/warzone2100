@@ -2,18 +2,15 @@
 include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
-var northSeen = false;
-
-function exposeNorthBase() {
-	if (northSeen)
-		return;
-	northSeen = true;
+function exposeNorthBase()
+{
 	camDetectEnemyBase("NorthGroup"); // no problem if already detected
 	hackAddMessage("SB1_2_MSG2", MISS_MSG, 0, true); // that's what it was for
 }
 
-function camArtifactPickup_ScavLab() {
-	exposeNorthBase();
+function camArtifactPickup_ScavLab()
+{
+	camCallOnce("exposeNorthBase");
 	with (camTemplates) camSetFactoryData("WestFactory", {
 		assembly: "WestAssembly",
 		order: CAM_ORDER_COMPROMISE,
@@ -33,8 +30,9 @@ function camArtifactPickup_ScavLab() {
 	camEnableFactory("WestFactory");
 }
 
-function camEnemyBaseDetected_NorthGroup() {
-	exposeNorthBase();
+function camEnemyBaseDetected_NorthGroup()
+{
+	camCallOnce("exposeNorthBase");
 }
 
 camAreaEvent("NorthBaseTrigger", 0, function(droid)
@@ -65,9 +63,9 @@ function eventStartLevel()
 	var lz = getObject("LandingZone");
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, 0);
 	var tent = getObject("TransporterEntry");
-	startTransporterEntry(62, 58, 0);
+	startTransporterEntry(tent.x, tent.y, 0);
 	var text = getObject("TransporterExit");
-	setTransporterExit(58, 62, 0);
+	setTransporterExit(text.x, text.y, 0);
 	setPower(400, 7);
 
 	camSetEnemyBases({

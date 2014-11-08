@@ -3,7 +3,6 @@ include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
 var NPScout; // Sensor scout (initialized when droid is created)
-var NPRetreating = false;
 
 camAreaEvent("AttackArea1", 0, function(droid)
 {
@@ -42,10 +41,9 @@ function doNPRetreat() {
 
 function eventObjectSeen(viewer, seen)
 {
-	if (NPRetreating || viewer !== 0 || seen.id !== NPScout.id)
+	if (viewer !== 0 || seen.id !== NPScout.id)
 		return;
-	NPRetreating = true;
-	queue("doNPRetreat", 2000);
+	queue("camCallOnce", 2000, "doNPRetreat");
 }
 
 camAreaEvent("NPSensorTurn", 1, function(droid)

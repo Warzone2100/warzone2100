@@ -101,6 +101,16 @@ function camRand(max)
 		return Math.floor(Math.random() * max);
 }
 
+//;; \subsection{camOnce(function name}
+//;; Call a function by name, but only if it has not been called yet.
+function camCallOnce(callback)
+{
+	if (camDef(__camCalledOnce[callback]) && __camCalledOnce[callback])
+		return;
+	__camCalledOnce[callback] = true;
+	__camGlobalContext[callback]();
+}
+
 //;; \subsection{camSafeRemoveObject(obj[, special effects?])}
 //;; Remove a game object (by value or label) if it exists, do nothing otherwise.
 function camSafeRemoveObject(obj, flashy)
@@ -246,6 +256,7 @@ function camMakeGroup(what, filter)
 //////////// privates
 
 var __camGlobalContext = this;
+var __camCalledOnce = {};
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -784,6 +795,7 @@ const CAM_ORDER_ATTACK = 0;
 const CAM_ORDER_DEFEND = 1;
 const CAM_ORDER_PATROL = 2;
 const CAM_ORDER_COMPROMISE = 3;
+const CAM_ORDER_FOLLOW = 4;
 
 //;; \subsection{camManageGroup(group, order, data)}
 //;; Tell \texttt{libcampaign.js} to manage a certain group. The group
@@ -806,18 +818,35 @@ const CAM_ORDER_COMPROMISE = 3;
 //;; 		\item[count] Override size of the original group. If unspecified,
 //;; 		number of doids in the group at call time. Retreat on low morale
 //;; 		is counted against this value.
+//;; 		\item[repair] Health percentage to fall back to repair facility,
+//;; 		if any.
 //;; 	\end{description}
 //;; 	\item[CAM_ORDER_DEFEND] Protect the given position. If too far, retreat
 //;; 	back there ignoring fire. The following data object fields are
 //;; 	required:
 //;; 	\begin{description}
 //;; 		\item[pos] Position to defend.
+//;; 		\item[radius] Circle radius around \textbf{pos} to scan for targets.
+//;; 		\item[repair] Health percentage to fall back to repair facility,
+//;; 		if any.
 //;; 	\end{description}
 //;; 	\item[CAM_ORDER_PATROL] Move droids randomly between a given list of
 //;; 	positions. The following data object fields are required:
 //;; 	\begin{description}
 //;; 		\item[pos] An array of positions to patrol between.
 //;; 		\item[interval] Change positions every this many milliseconds.
+//;; 		\item[repair] Health percentage to fall back to repair facility,
+//;; 		if any.
+//;; 	\end{description}
+//;; 	\item[CAM_ORDER_FOLLOW] Assign the group to commander. The sub-order
+//;; 	is defined to be given to the commander. When commander dies,
+//;; 	the group continues to execute the order.
+//;; 	\begin{description}
+//;; 		\item[droid] Commander droid label.
+//;; 		\item[order] The order to give to the commander.
+//;; 		\item[data] Data of the commander's order.
+//;; 		\item[repair] Health percentage to fall back to repair facility,
+//;; 		if any.
 //;; 	\end{description}
 //;; \item[CAM_ORDER_COMPROMISE] Same as CAM_ORDER_ATTACK, just stay near the
 //;; last (or only) attack position instead of looking for the player
@@ -842,8 +871,13 @@ function camManageGroup(group, order, data)
 		data: saneData,
 		count: camDef(saneData.count) ? saneData.count : groupSize(group)
 	};
+	if (order === CAM_ORDER_FOLLOW)
+	{
+		var commanderGroup = camMakeGroup([getObject(data.droid)]);
+		camManageGroup(commanderGroup, data.order, data.data);
+	}
 	// apply orders instantly
-	__camTacticsTick();
+	queue("__camTacticsTick");
 }
 
 //;; \subsection{camStopManagingGroup(group)}
@@ -873,6 +907,8 @@ function camOrderToString(order)
 			return "PATROL";
 		case CAM_ORDER_COMPROMISE:
 			return "COMPROMISE";
+		case CAM_ORDER_FOLLOW:
+			return "FOLLOW";
 		default:
 			return "UNKNOWN";
 	}
@@ -933,8 +969,11 @@ function __camPickTarget(group)
 				targets = enumDroid(CAM_HUMAN_PLAYER);
 			break;
 		case CAM_ORDER_DEFEND:
+			var radius = gi.data.radius;
+			if (!camDef(radius))
+				radius = __CAM_DEFENSE_RADIUS;
 			if (camDef(gi.target)
-				&& camDist(gi.target, gi.data.pos) < __CAM_DEFENSE_RADIUS)
+				&& camDist(gi.target, gi.data.pos) < radius)
 			{
 				targets = enumRange(gi.target.x, gi.target.y,
 				                    __CAM_TARGET_TRACKING_RADIUS,
@@ -942,10 +981,11 @@ function __camPickTarget(group)
 			}
 			if (!targets.length)
 				targets = enumRange(gi.data.pos.x, gi.data.pos.y,
-				                    __CAM_DEFENSE_RADIUS,
-				                    CAM_HUMAN_PLAYER, false);
+				                    radius, CAM_HUMAN_PLAYER, false);
 			if (!targets.length)
 				targets = [ gi.data.pos ];
+			break;
+		case CAM_ORDER_FOLLOW:
 			break;
 		default:
 			camDebug("Unknown group order", gi.order);
@@ -965,7 +1005,29 @@ function __camTacticsTick()
 	for (var group in __camGroupInfo)
 	{
 		var gi = __camGroupInfo[group];
-		var droids = enumGroup(group);
+		var rawDroids = enumGroup(group);
+		var droids = [];
+		// Handle the case when we need to repair
+		if (rawDroids.length > 0 && camDef(gi.data.repair)
+		            && countStruct("A0RepairCentre3", rawDroids[0].player))
+		{
+			for (var i = 0; i < rawDroids.length; ++i)
+			{
+				var droid = rawDroids[i];
+				if (droid.order === DORDER_RTR)
+					continue;
+				if (droid.health < gi.data.repair)
+				{
+					orderDroid(droid, DORDER_RTR);
+					continue;
+				}
+				droids[droids.length] = droid;
+			}
+		}
+		else
+		{
+			droids = enumGroup(group);
+		}
 		switch(gi.order)
 		{
 			case CAM_ORDER_ATTACK:
@@ -982,7 +1044,10 @@ function __camTacticsTick()
 					{
 						// fall back to defense position
 						var dist = camDist(droid, gi.data.pos);
-						if (dist > __CAM_DEFENSE_RADIUS)
+						var radius = gi.data.radius;
+						if (!camDef(radius))
+							radius = __CAM_DEFENSE_RADIUS;
+						if (dist > radius)
 						{
 							orderDroidLoc(droid, DORDER_MOVE,
 							              gi.data.pos.x, gi.data.pos.y);
@@ -1009,7 +1074,7 @@ function __camTacticsTick()
 					// find random new position to visit
 					var list = [];
 					for (var i = 0; i < gi.data.pos.length; ++i)
-						if (i !==gi.lastpos)
+						if (i !== gi.lastpos)
 							list[list.length] = i;
 					gi.lastspot = list[camRand(list.length)];
 				}
@@ -1019,6 +1084,27 @@ function __camTacticsTick()
 				{
 					var droid = droids[i];
 					orderDroidLoc(droid, DORDER_MOVE, pos.x, pos.y);
+				}
+				break;
+			case CAM_ORDER_FOLLOW:
+				var commander = getObject(gi.data.droid);
+				if (!camDef(commander) || !commander)
+				{
+					// the commander is dead? let the group execute
+					// his last will.
+					camManageGroup(group, gi.data.order, gi.data.data);
+					break;
+				}
+				for (var i = 0; i < droids.length; ++i)
+				{
+					var droid = droids[i];
+					if (droid.order !== DORDER_COMMANDERSUPPORT)
+					{
+						camTrace("Droid", droid.name, droid.id,
+						         "supports", commander.name, commander.id);
+						orderDroidObj(droid, DORDER_COMMANDERSUPPORT,
+						              commander);
+					}
 				}
 				break;
 			default:
@@ -1038,7 +1124,6 @@ function __camCheckGroupMorale(group) {
 	switch(gi.order)
 	{
 		case CAM_ORDER_ATTACK:
-		case CAM_ORDER_COMPROMISE:
 			if (gsize > msize)
 				break;
 			camTrace("Group", group, "falls back");
@@ -1048,7 +1133,7 @@ function __camCheckGroupMorale(group) {
 			gi.data.pos = gi.data.fallback;
 			gi.data.fallback = temp;
 			// apply orders instantly
-			__camTacticsTick();
+			queue("__camTacticsTick");
 			break;
 		case CAM_ORDER_DEFEND:
 			if (gsize <= msize)
@@ -1060,10 +1145,11 @@ function __camCheckGroupMorale(group) {
 			gi.data.pos = gi.data.fallback;
 			gi.data.fallback = temp;
 			// apply orders instantly
-			__camTacticsTick();
+			queue("__camTacticsTick");
 			break;
 		default:
-			camDebug("Unknown group order", gi.order);
+			camDebug("Group order doesn't support morale",
+			         camOrderToString(gi.order));
 			break;
 	}
 }
@@ -1141,6 +1227,8 @@ function camSetFactoryData(flabel, fdata)
 		return;
 	}
 	var fi = __camFactoryInfo[flabel];
+	if (!camDef(fi.data))
+		fi.data = {};
 	fi.enabled = false;
 	fi.state = 0;
 	if (!camDef(fi.group))
@@ -1483,7 +1571,7 @@ function __camVictoryOffworld()
 				hackAddMessage(__camVictoryData.message, PROX_MSG,
 				               CAM_HUMAN_PLAYER, false);
 		}
-		if (__camRTLZTicker % 6 === 0) // every 30 seconds
+		if (__camRTLZTicker % 30 === 0) // every 30 seconds
 		{
 			var pos = camMakePos(lz);
 			playSound("pcv427.ogg", pos.x, pos.y, 0);
@@ -1495,7 +1583,7 @@ function __camVictoryOffworld()
 	{
 		if (__camLZCompromisedTicker === 0)
 			camTrace("LZ compromised");
-		if (__camLZCompromisedTicker % 7 === 1) // every 35 seconds
+		if (__camLZCompromisedTicker % 30 === 1) // every 30 seconds
 		{
 			var pos = camMakePos(lz);
 			playSound("pcv445.ogg", pos.x, pos.y, 0);
@@ -1582,7 +1670,7 @@ function __camPreHookEvent(eventname, hookcode)
 	};
 }
 
-/* Called every 5 seconds after eventStartLevel(). */
+/* Called every second after eventStartLevel(). */
 function __camTick()
 {
 	__camTacticsTick();
@@ -1655,7 +1743,7 @@ __camPreHookEvent("eventStartLevel", function()
 	__camRTLZTicker = 0;
 	__camLZCompromisedTicker = 0;
 	__camLastAttackTriggered = false;
-	setTimer("__camTick", 5000);
+	setTimer("__camTick", 1000);
 });
 
 __camPreHookEvent("eventDroidBuilt", function(droid, structure)
@@ -1700,3 +1788,4 @@ __camPreHookEvent("eventMissionTimeout", function()
 		__camGameLost();
 	}
 });
+

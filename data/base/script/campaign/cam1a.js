@@ -2,9 +2,6 @@
 include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
-var timerComing = 0; // start mission timer after first power gen
-                     // and derrick is built
-
 // player zero's droid enteres this area
 camAreaEvent("LaunchScavAttack", 0, function(droid)
 {
@@ -22,6 +19,8 @@ camAreaEvent("LaunchScavAttack", 0, function(droid)
 			morale: 50
 		}
 	);
+	// activate mission timer, unlike the original campaign.
+	setMissionTime(3600);
 });
 
 function runAway()
@@ -89,16 +88,6 @@ function camEnemyBaseEliminated_scavgroup2()
 	queue("camDetectEnemyBase", 2000, "scavgroup3");
 }
 
-function eventStructureBuilt(structure, droid)
-{
-	if (structure.stattype == POWER_GEN)
-		timerComing++;
-	else if (structure.stattype == RESOURCE_EXTRACTOR)
-		timerComing++;
-	if (timerComing == 2)
-		setMissionTime(3600);
-}
-
 function eventStartLevel()
 {
 	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, "CAM_1B");
@@ -111,6 +100,7 @@ function eventStartLevel()
 	setPower(1300);
 	setPower(200, 6);
 	setPower(200, 7);
+	setAlliance(6, 7, true);
 
 	// allow to build stuff
 	enableStructure("A0CommandCentre", 0);
