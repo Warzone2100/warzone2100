@@ -132,7 +132,7 @@ bool initTemplates()
 	WzConfig ini("userdata/" + QString(rulesettag) + "/templates.json", WzConfig::ReadOnly);
 	if (!ini.status())
 	{
-		debug(LOG_FATAL, "Could not open %s", ini.fileName().toUtf8().constData());
+		debug(LOG_WZ, "Could not open %s", ini.fileName().toUtf8().constData());
 		return false;
 	}
 	QStringList list = ini.childGroups();
@@ -206,7 +206,7 @@ bool storeTemplates()
 	WzConfig ini("userdata/" + QString(rulesettag) + "/templates.json");
 	if (!ini.status() || !ini.isWritable())
 	{
-		debug(LOG_FATAL, "Could not open %s", ini.fileName().toUtf8().constData());
+		debug(LOG_ERROR, "Could not open %s", ini.fileName().toUtf8().constData());
 		return false;
 	}
 	for (DROID_TEMPLATE *psCurr = apsDroidTemplates[selectedPlayer]; psCurr != NULL; psCurr = psCurr->psNext)

@@ -4232,12 +4232,10 @@ static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 				ini.endGroup();
 				continue;
 			}
-debug(LOG_ERROR, "%s : %d template=%s==%s, %p", pFileName, i, templName.toUtf8().constData(), psTemplate->id.toUtf8().constData(), psTemplate);
 		}
 		else
 		{
 			// Create fake template
-debug(LOG_ERROR, "%s : %d -- fake template, really?!", pFileName, i);
 			templ.name = ini.value("name", "UNKNOWN").toString();
 			psTemplate->droidType = (DROID_TYPE)ini.value("droidType").toInt();
 			psTemplate->numWeaps = ini.value("weapons", 0).toInt();

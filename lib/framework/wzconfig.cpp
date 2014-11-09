@@ -75,7 +75,6 @@ WzConfig::WzConfig(const QString &name, WzConfig::warning warning, QObject *pare
 	ASSERT(!mJson.isNull(), "JSON document from %s is invalid: %s", name.toUtf8().constData(), error.errorString().toUtf8().constData());
 	ASSERT(mJson.isObject(), "JSON document from %s is not an object. Read: \n%s", name.toUtf8().constData(), data);
 	mObj = mJson.object();
-	debug(LOG_ERROR, "LOADED %s", name.toUtf8().constData());
 #if 0
 	char **diffList = PHYSFS_enumerateFiles("diffs");
 	char **i;
