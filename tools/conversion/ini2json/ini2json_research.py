@@ -63,7 +63,7 @@ for section in config.sections():
 				tmp['filterValue'] = comps[0]
 				tmp['filterParameter'] = 'Type'
 			elif comps[0] in ['RearmPoints', 'ProductionPoints', 'ResearchPoints', 'RepairPoints', 'Sensor', 'ECM', 'PowerPoints', 'Construct']:
-				tmp['class'] = comps[0]
+				tmp['class'] = 'Building'
 			else: # forgot something...
 				print >> sys.stderr, 'Unknown filter in %s: %s (%s)' % (section, comps[0], str(comps))
 				sys.exit(1)

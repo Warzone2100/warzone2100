@@ -54,7 +54,7 @@
         ],
         "results": [
             {
-                "class": "ProductionPoints",
+                "class": "Building",
                 "parameter": "ProductionPoints",
                 "value": 30
             }
@@ -735,7 +735,7 @@
         "researchPower": 75,
         "results": [
             {
-                "class": "ProductionPoints",
+                "class": "Building",
                 "parameter": "ProductionPoints",
                 "value": 30
             }
@@ -754,7 +754,7 @@
         "researchPower": 150,
         "results": [
             {
-                "class": "ProductionPoints",
+                "class": "Building",
                 "parameter": "ProductionPoints",
                 "value": 30
             }
@@ -775,7 +775,7 @@
         "researchPower": 225,
         "results": [
             {
-                "class": "ProductionPoints",
+                "class": "Building",
                 "parameter": "ProductionPoints",
                 "value": 30
             }
@@ -886,7 +886,7 @@
         ],
         "results": [
             {
-                "class": "PowerPoints",
+                "class": "Building",
                 "parameter": "PowerPoints",
                 "value": 20
             }
@@ -940,7 +940,7 @@
         "researchPower": 37,
         "results": [
             {
-                "class": "ResearchPoints",
+                "class": "Building",
                 "parameter": "ResearchPoints",
                 "value": 30
             }
@@ -959,7 +959,7 @@
         "researchPower": 75,
         "results": [
             {
-                "class": "ResearchPoints",
+                "class": "Building",
                 "parameter": "ResearchPoints",
                 "value": 30
             }
@@ -979,7 +979,7 @@
         "researchPower": 112,
         "results": [
             {
-                "class": "ResearchPoints",
+                "class": "Building",
                 "parameter": "ResearchPoints",
                 "value": 30
             }
@@ -1000,7 +1000,7 @@
         "researchPower": 75,
         "results": [
             {
-                "class": "RepairPoints",
+                "class": "Building",
                 "parameter": "RepairPoints",
                 "value": 50
             }
@@ -1020,7 +1020,7 @@
         "researchPower": 112,
         "results": [
             {
-                "class": "RepairPoints",
+                "class": "Building",
                 "parameter": "RepairPoints",
                 "value": 50
             }
@@ -1041,7 +1041,7 @@
         "researchPower": 150,
         "results": [
             {
-                "class": "RepairPoints",
+                "class": "Building",
                 "parameter": "RepairPoints",
                 "value": 50
             }

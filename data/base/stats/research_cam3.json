@@ -764,7 +764,7 @@
         "researchPower": 412,
         "results": [
             {
-                "class": "ProductionPoints",
+                "class": "Building",
                 "parameter": "ProductionPoints",
                 "value": 30
             }
@@ -896,7 +896,7 @@
         "researchPower": 187,
         "results": [
             {
-                "class": "PowerPoints",
+                "class": "Building",
                 "parameter": "PowerPoints",
                 "value": 30
             }
@@ -917,7 +917,7 @@
         "researchPower": 281,
         "results": [
             {
-                "class": "PowerPoints",
+                "class": "Building",
                 "parameter": "PowerPoints",
                 "value": 10
             }
@@ -933,7 +933,7 @@
         "researchPower": 250,
         "results": [
             {
-                "class": "ResearchPoints",
+                "class": "Building",
                 "parameter": "ResearchPoints",
                 "value": 30
             }
@@ -955,7 +955,7 @@
         "researchPower": 312,
         "results": [
             {
-                "class": "ResearchPoints",
+                "class": "Building",
                 "parameter": "ResearchPoints",
                 "value": 30
             }
@@ -974,7 +974,7 @@
         "researchPower": 375,
         "results": [
             {
-                "class": "ResearchPoints",
+                "class": "Building",
                 "parameter": "ResearchPoints",
                 "value": 30
             }
@@ -994,7 +994,7 @@
         "researchPower": 437,
         "results": [
             {
-                "class": "ResearchPoints",
+                "class": "Building",
                 "parameter": "ResearchPoints",
                 "value": 30
             }
@@ -1010,7 +1010,7 @@
         "researchPower": 312,
         "results": [
             {
-                "class": "RepairPoints",
+                "class": "Building",
                 "parameter": "RepairPoints",
                 "value": 50
             }
@@ -1077,7 +1077,7 @@
         "researchPower": 250,
         "results": [
             {
-                "class": "RearmPoints",
+                "class": "Building",
                 "parameter": "RearmPoints",
                 "value": 30
             }
@@ -1098,7 +1098,7 @@
         "researchPower": 312,
         "results": [
             {
-                "class": "RearmPoints",
+                "class": "Building",
                 "parameter": "RearmPoints",
                 "value": 30
             }
@@ -1117,7 +1117,7 @@
         "researchPower": 375,
         "results": [
             {
-                "class": "RearmPoints",
+                "class": "Building",
                 "parameter": "RearmPoints",
                 "value": 30
             }
@@ -1137,7 +1137,7 @@
         "researchPower": 437,
         "results": [
             {
-                "class": "RearmPoints",
+                "class": "Building",
                 "parameter": "RearmPoints",
                 "value": 30
             }

@@ -816,7 +816,7 @@
         "researchPower": 225,
         "results": [
             {
-                "class": "ProductionPoints",
+                "class": "Building",
                 "parameter": "ProductionPoints",
                 "value": 30
             }
@@ -835,7 +835,7 @@
         "researchPower": 287,
         "results": [
             {
-                "class": "ProductionPoints",
+                "class": "Building",
                 "parameter": "ProductionPoints",
                 "value": 30
             }
@@ -854,7 +854,7 @@
         "researchPower": 350,
         "results": [
             {
-                "class": "ProductionPoints",
+                "class": "Building",
                 "parameter": "ProductionPoints",
                 "value": 30
             }
@@ -874,7 +874,7 @@
         "researchPower": 412,
         "results": [
             {
-                "class": "ProductionPoints",
+                "class": "Building",
                 "parameter": "ProductionPoints",
                 "value": 30
             }
@@ -1009,7 +1009,7 @@
         "researchPower": 187,
         "results": [
             {
-                "class": "PowerPoints",
+                "class": "Building",
                 "parameter": "PowerPoints",
                 "value": 30
             }
@@ -1025,7 +1025,7 @@
         "researchPower": 112,
         "results": [
             {
-                "class": "ResearchPoints",
+                "class": "Building",
                 "parameter": "ResearchPoints",
                 "value": 30
             }
@@ -1047,7 +1047,7 @@
         "researchPower": 150,
         "results": [
             {
-                "class": "ResearchPoints",
+                "class": "Building",
                 "parameter": "ResearchPoints",
                 "value": 30
             }
@@ -1066,7 +1066,7 @@
         "researchPower": 187,
         "results": [
             {
-                "class": "ResearchPoints",
+                "class": "Building",
                 "parameter": "ResearchPoints",
                 "value": 30
             }
@@ -1086,7 +1086,7 @@
         "researchPower": 250,
         "results": [
             {
-                "class": "ResearchPoints",
+                "class": "Building",
                 "parameter": "ResearchPoints",
                 "value": 30
             }
@@ -1102,7 +1102,7 @@
         "researchPower": 150,
         "results": [
             {
-                "class": "RepairPoints",
+                "class": "Building",
                 "parameter": "RepairPoints",
                 "value": 50
             }
@@ -1123,7 +1123,7 @@
         "researchPower": 187,
         "results": [
             {
-                "class": "RepairPoints",
+                "class": "Building",
                 "parameter": "RepairPoints",
                 "value": 50
             }
@@ -1142,7 +1142,7 @@
         "researchPower": 250,
         "results": [
             {
-                "class": "RepairPoints",
+                "class": "Building",
                 "parameter": "RepairPoints",
                 "value": 50
             }
@@ -1162,7 +1162,7 @@
         "researchPower": 312,
         "results": [
             {
-                "class": "RepairPoints",
+                "class": "Building",
                 "parameter": "RepairPoints",
                 "value": 50
             }
@@ -1254,7 +1254,7 @@
         "researchPower": 150,
         "results": [
             {
-                "class": "RearmPoints",
+                "class": "Building",
                 "parameter": "RearmPoints",
                 "value": 30
             }
@@ -1273,7 +1273,7 @@
         "researchPower": 187,
         "results": [
             {
-                "class": "RearmPoints",
+                "class": "Building",
                 "parameter": "RearmPoints",
                 "value": 30
             }
@@ -1293,7 +1293,7 @@
         "researchPower": 250,
         "results": [
             {
-                "class": "RearmPoints",
+                "class": "Building",
                 "parameter": "RearmPoints",
                 "value": 30
             }
