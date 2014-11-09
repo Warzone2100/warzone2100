@@ -779,7 +779,8 @@ static void updateGlobalModels()
 		while (it.hasNext())
 		{
 			it.next();
-			if ((!internalNamespace.contains(it.name()) && !it.value().isFunction())
+			if ((!internalNamespace.contains(it.name()) && !it.value().isFunction()
+			     && !it.value().equals(engine->globalObject()))
 			    || it.name() == "Upgrades" || it.name() == "Stats")
 			{
 				QStandardItemList list = addModelItem(it);
