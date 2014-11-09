@@ -817,9 +817,11 @@ const CAM_ORDER_FOLLOW = 4;
 //;; 		again.
 //;; 		\item[count] Override size of the original group. If unspecified,
 //;; 		number of doids in the group at call time. Retreat on low morale
-//;; 		is counted against this value.
+//;; 		and regroup is calculated against this value.
 //;; 		\item[repair] Health percentage to fall back to repair facility,
 //;; 		if any.
+//;; 		\item[regroup] If set to true, the group will not move forward unless
+//;; 		it has at least \textbf{count} droids in its biggest cluster.
 //;; 	\end{description}
 //;; 	\item[CAM_ORDER_DEFEND] Protect the given position. If too far, retreat
 //;; 	back there ignoring fire. The following data object fields are
@@ -827,20 +829,46 @@ const CAM_ORDER_FOLLOW = 4;
 //;; 	\begin{description}
 //;; 		\item[pos] Position to defend.
 //;; 		\item[radius] Circle radius around \textbf{pos} to scan for targets.
+//;; 		\item[count] Override size of the original group. If unspecified,
+//;; 		number of doids in the group at call time. Regroup is calculated
+//;; 		against this value.
 //;; 		\item[repair] Health percentage to fall back to repair facility,
 //;; 		if any.
+//;; 		\item[regroup] If set to true, the group will not move forward unless
+//;; 		it has at least \textbf{count} droids in its biggest cluster.
 //;; 	\end{description}
 //;; 	\item[CAM_ORDER_PATROL] Move droids randomly between a given list of
 //;; 	positions. The following data object fields are required:
 //;; 	\begin{description}
 //;; 		\item[pos] An array of positions to patrol between.
 //;; 		\item[interval] Change positions every this many milliseconds.
+//;; 		\item[count] Override size of the original group. If unspecified,
+//;; 		number of doids in the group at call time. Regroup is calculated
+//;; 		against this value.
 //;; 		\item[repair] Health percentage to fall back to repair facility,
 //;; 		if any.
+//;; 		\item[regroup] If set to true, the group will not move forward unless
+//;; 		it has at least \textbf{count} droids in its biggest cluster.
+//;; 	\end{description}
+//;; 	\item[CAM_ORDER_COMPROMISE] Same as CAM_ORDER_ATTACK, just stay near the
+//;; 	last (or only) attack position instead of looking for the player
+//;; 	around the whole map. Useful for offworld missions,
+//;; 	with player's LZ as the final position.
+//;; 	\begin{description}
+//;; 		\item[pos] Position or list of positions to compromise. If pos is a list,
+//;; 		first positions in the list will be compromised first.
+//;; 		\item[radius] Circle radius around \textbf{pos} to scan for targets.
+//;; 		\item[count] Override size of the original group. If unspecified,
+//;; 		number of doids in the group at call time. Regroup is calculated
+//;; 		against this value.
+//;; 		\item[repair] Health percentage to fall back to repair facility,
+//;; 		if any.
+//;; 		\item[regroup] If set to true, the group will not move forward unless
+//;; 		it has at least \textbf{count} droids in its biggest cluster.
 //;; 	\end{description}
 //;; 	\item[CAM_ORDER_FOLLOW] Assign the group to commander. The sub-order
 //;; 	is defined to be given to the commander. When commander dies,
-//;; 	the group continues to execute the order.
+//;; 	the group continues to execute the sub-order.
 //;; 	\begin{description}
 //;; 		\item[droid] Commander droid label.
 //;; 		\item[order] The order to give to the commander.
@@ -848,11 +876,6 @@ const CAM_ORDER_FOLLOW = 4;
 //;; 		\item[repair] Health percentage to fall back to repair facility,
 //;; 		if any.
 //;; 	\end{description}
-//;; \item[CAM_ORDER_COMPROMISE] Same as CAM_ORDER_ATTACK, just stay near the
-//;; last (or only) attack position instead of looking for the player
-//;; around the whole map. Useful for offworld missions,
-//;; with player's LZ as the final position. The \textbf{pos} parameter
-//;; is required.
 //;; \end{description} 
 function camManageGroup(group, order, data)
 {
@@ -1469,7 +1492,7 @@ const CAM_VICTORY_OFFWORLD = 2;
 //;; \subsection{camSetStandardWinLossConditions(kind, nextLevel, data)}
 //;; Set victory and defeat conditions to one of the common
 //;; options. On victory, load nextLevel. The extra data parameter
-//;; contains extra data required to define some of the vicrory
+//;; contains extra data required to define some of the victory
 //;; conditions. The following options are available:
 //;; \begin{description}
 //;; 	\item[CAM_VICTORY_STANDARD] Defeat if all ground factories
