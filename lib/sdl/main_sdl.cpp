@@ -892,25 +892,6 @@ bool mouseDrag(MOUSE_KEY_CODE code, UDWORD *px, UDWORD *py)
 	return false;
 }
 
-// TODO: Rewrite this silly thing
-void setMousePos(uint16_t x, uint16_t y)
-{
-	static int mousewarp = -1;
-
-	if (mousewarp == -1)
-	{
-		int val;
-
-		mousewarp = 1;
-		if ((val = getMouseWarp()))
-		{
-			mousewarp = !val;
-		}
-	}
-	if (mousewarp)
-		SDL_WarpMouse(x, y);
-}
-
 /*!
  * Handle keyboard events
  */

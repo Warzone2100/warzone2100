@@ -791,14 +791,6 @@ Vector2i mouseReleasePos_DEPRECATED(MOUSE_KEY_CODE code)
 	return aMouseState[code].releasePos;
 }
 
-void setMousePos(uint16_t x, uint16_t y)
-{
-	if (getMouseWarp())
-	{
-		WzMainWindow::instance()->cursor().setPos(x, y);
-	}
-}
-
 /* This returns true if the mouse key is currently depressed */
 bool mouseDown(MOUSE_KEY_CODE code)
 {

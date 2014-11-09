@@ -2260,14 +2260,6 @@ void intDisplayProximityBlips(WIDGET *psWidget, WZ_DECL_UNUSED UDWORD xOffset, W
 	}
 }
 
-
-static UDWORD sliderMousePos(W_SLIDER *Slider)
-{
-	return (Slider->parent()->x() + Slider->x())
-	       + ((Slider->pos * Slider->width()) / Slider->numStops);
-}
-
-
 static UWORD sliderMouseUnit(W_SLIDER *Slider)
 {
 	UWORD posStops = (UWORD)(Slider->numStops / 20);
@@ -2300,7 +2292,6 @@ void intUpdateQuantitySlider(WIDGET *psWidget, W_CONTEXT *psContext)
 			if (Slider->pos > 0)
 			{
 				Slider->pos = (UWORD)(Slider->pos - sliderMouseUnit(Slider));
-				setMousePos(sliderMousePos(Slider), mouseY());	// move mouse
 			}
 		}
 		else if (keyDown(KEY_RIGHTARROW))
@@ -2308,7 +2299,6 @@ void intUpdateQuantitySlider(WIDGET *psWidget, W_CONTEXT *psContext)
 			if (Slider->pos < Slider->numStops)
 			{
 				Slider->pos = (UWORD)(Slider->pos + sliderMouseUnit(Slider));
-				setMousePos(sliderMousePos(Slider), mouseY());	// move mouse
 			}
 		}
 	}

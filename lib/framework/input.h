@@ -218,9 +218,6 @@ extern bool mouseReleased(MOUSE_KEY_CODE code);
 /** Check for a mouse drag, return the drag start coords if dragging. */
 extern bool mouseDrag(MOUSE_KEY_CODE code, UDWORD *px, UDWORD *py);
 
-/** Warps the mouse to the given position. */
-extern void setMousePos(uint16_t x, uint16_t y);
-
 extern void setMouseWarp(bool value);
 extern bool getMouseWarp();
 
