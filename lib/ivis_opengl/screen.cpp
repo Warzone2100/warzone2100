@@ -90,6 +90,53 @@ static bool mappreview = false;
 OPENGL_DATA opengl;
 static bool khr_debug = false;
 
+static const char *cbsource(GLenum source)
+{
+	switch (source)
+	{
+	case GL_DEBUG_SOURCE_API: return "API";
+	case GL_DEBUG_SOURCE_WINDOW_SYSTEM: return "WM";
+	case GL_DEBUG_SOURCE_SHADER_COMPILER: return "SC";
+	case GL_DEBUG_SOURCE_THIRD_PARTY: return "3P";
+	case GL_DEBUG_SOURCE_APPLICATION: return "WZ";
+	default: case GL_DEBUG_SOURCE_OTHER: return "OTHER";
+	}
+}
+
+static const char *cbtype(GLenum type)
+{
+	switch (type)
+	{
+	case GL_DEBUG_TYPE_ERROR: return "Error";
+	case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR: return "Deprecated";
+	case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR: return "Undefined";
+	case GL_DEBUG_TYPE_PORTABILITY: return "Portability";
+	case GL_DEBUG_TYPE_PERFORMANCE: return "Performance";
+	case GL_DEBUG_TYPE_MARKER: return "Marker";
+	default: case GL_DEBUG_TYPE_OTHER: return "Other";
+	}
+}
+
+static const char *cbseverity(GLenum severity)
+{
+	switch (severity)
+	{
+	case GL_DEBUG_SEVERITY_HIGH: return "High";
+	case GL_DEBUG_SEVERITY_MEDIUM: return "Medium";
+	case GL_DEBUG_SEVERITY_LOW: return "Low";
+	case GL_DEBUG_SEVERITY_NOTIFICATION: return "Notification";
+	default: return "Other";
+	}
+}
+
+static void khr_callback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar *message, const void *userParam)
+{
+	(void)userParam; // we pass in NULL here
+	(void)length; // length of message, buggy on some drivers, don't use
+	(void)id; // message id
+	debug(LOG_ERROR, "GL::%s(%s:%s) : %s", cbsource(source), cbtype(type), cbseverity(severity), message);
+}
+
 /* Initialise the double buffered display */
 bool screenInitialise()
 {
@@ -220,6 +267,15 @@ bool screenInitialise()
 	if (GLEW_ARB_timer_query)
 	{
 		glGenQueries(PERF_COUNT, perfpos);
+	}
+
+	if (khr_debug)
+	{
+		glDebugMessageCallback((GLDEBUGPROC)khr_callback, NULL);
+		glEnable(GL_DEBUG_OUTPUT);
+		// Do not want to output notifications. Some drivers spam them too much.
+		glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DEBUG_SEVERITY_NOTIFICATION, 0, NULL, GL_FALSE);
+		debug(LOG_3D, "Enabling KHR_debug message callback");
 	}
 
 	glErrors();

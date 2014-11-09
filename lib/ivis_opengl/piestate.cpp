@@ -220,7 +220,7 @@ void pie_FreeShaders()
 }
 
 // Read/compile/link shaders
-GLuint pie_LoadShader(const char *definitions, const char *vertexPath, const char *fragmentPath)
+GLuint pie_LoadShader(const char *programName, const char *vertexPath, const char *fragmentPath)
 {
 	SHADER_PROGRAM program;
 	GLint status;
@@ -230,10 +230,9 @@ GLuint pie_LoadShader(const char *definitions, const char *vertexPath, const cha
 	memset(&program, 0, sizeof(program));
 
 	program.program = glCreateProgram();
-	ASSERT_OR_RETURN(false, definitions != NULL, "Null in preprocessor definitions!");
 	ASSERT_OR_RETURN(false, program.program, "Could not create shader program!");
 
-	*buffer = (char *)definitions;
+	*buffer = (char *)"";
 
 	if (vertexPath)
 	{
@@ -259,7 +258,10 @@ GLuint pie_LoadShader(const char *definitions, const char *vertexPath, const cha
 				glAttachShader(program.program, shader);
 				success = true;
 			}
-
+			if (GLEW_VERSION_4_3 || GLEW_KHR_debug)
+			{
+				glObjectLabel(GL_SHADER, shader, -1, vertexPath);
+			}
 			free(*(buffer + 1));
 		}
 	}
@@ -288,7 +290,10 @@ GLuint pie_LoadShader(const char *definitions, const char *vertexPath, const cha
 				glAttachShader(program.program, shader);
 				success = true;
 			}
-
+			if (GLEW_VERSION_4_3 || GLEW_KHR_debug)
+			{
+				glObjectLabel(GL_SHADER, shader, -1, fragmentPath);
+			}
 			free(*(buffer + 1));
 		}
 	}
@@ -308,6 +313,10 @@ GLuint pie_LoadShader(const char *definitions, const char *vertexPath, const cha
 		else
 		{
 			printProgramInfoLog(LOG_3D, program.program);
+		}
+		if (GLEW_VERSION_4_3 || GLEW_KHR_debug)
+		{
+			glObjectLabel(GL_PROGRAM, program.program, -1, programName);
 		}
 	}
 
@@ -331,12 +340,12 @@ bool pie_LoadShaders()
 
 	// TCMask shader for map-placed models with advanced lighting
 	debug(LOG_3D, "Loading shader: SHADER_COMPONENT");
-	result = pie_LoadShader("", "shaders/tcmask.vert", "shaders/tcmask.frag");
+	result = pie_LoadShader("Component program", "shaders/tcmask.vert", "shaders/tcmask.frag");
 	ASSERT_OR_RETURN(false, result, "Failed to load component shader");
 
 	// TCMask shader for buttons with flat lighting
 	debug(LOG_3D, "Loading shader: SHADER_BUTTON");
-	result = pie_LoadShader("", "shaders/button.vert", "shaders/button.frag");
+	result = pie_LoadShader("Button program", "shaders/button.vert", "shaders/button.frag");
 	ASSERT_OR_RETURN(false, result, "Failed to load button shader");
 
 	currentShaderMode = SHADER_NONE;

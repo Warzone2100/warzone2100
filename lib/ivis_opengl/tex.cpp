@@ -83,6 +83,10 @@ int pie_AddTexPage(iV_Image *s, const char* filename, bool gameTexture, int page
 	debug(LOG_TEXTURE, "%s page=%d", filename, page);
 
 	pie_SetTexturePage(page);
+	if (GLEW_VERSION_4_3 || GLEW_KHR_debug)
+	{
+		glObjectLabel(GL_TEXTURE, pie_Texture(page), -1, filename);
+	}
 
 	if (gameTexture) // this is a game texture, use texture compression
 	{

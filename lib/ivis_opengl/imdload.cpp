@@ -983,7 +983,7 @@ iIMDShape *iV_ProcessIMD(const char **ppFileData, const char *FileDataEnd)
 			return NULL;
 		}
 		pFileData += cnt;
-		shader = pie_LoadShader("", vertex, fragment);
+		shader = pie_LoadShader(pFileName, vertex, fragment);
 
 		/* Try -yet again- to read in LEVELS directive */
 		if (sscanf(pFileData, "%255s %d%n", buffer, &nlevels, &cnt) != 2)

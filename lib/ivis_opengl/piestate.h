@@ -84,7 +84,7 @@ extern void pie_SetRendMode(REND_MODE rendMode);
 
 bool pie_LoadShaders();
 void pie_FreeShaders();
-GLuint pie_LoadShader(const char *definitions, const char *vertexPath, const char *fragmentPath);
+GLuint pie_LoadShader(const char *programName, const char *vertexPath, const char *fragmentPath);
 
 // Actual shaders (we do not want to export these calls)
 void pie_ActivateShader(int shaderMode, iIMDShape* shape, PIELIGHT teamcolour, PIELIGHT colour);
