@@ -922,6 +922,41 @@ const __CAM_TARGET_TRACKING_RADIUS = 10;
 const __CAM_PLAYER_BASE_RADIUS = 20;
 const __CAM_DEFENSE_RADIUS = 4;
 const __CAM_CLOSE_RADIUS = 2;
+const __CAM_CLUSTER_SIZE = 4;
+const __CAM_FALLBACK_TIME_ON_REGROUP = 5000;
+
+function __camFindClusters(list, size) {
+	var ret = { clusters: [], xav: [], yav: [], maxIdx: 0, maxCount: 0 };
+	for (var i = list.length - 1; i >= 0; --i) {
+		var x = list[i].x, y = list[i].y;
+		var found = false;
+		for (var j = 0; j < ret.clusters.length; ++j) {
+			if (camDist(ret.xav[j], ret.yav[j], x, y) < size) {
+				var n = ret.clusters[j].length;
+				ret.clusters[j][n] = list[i];
+				ret.xav[j] = (n * ret.xav[j] + x) / (n + 1);
+				ret.yav[j] = (n * ret.yav[j] + y) / (n + 1);
+				if (ret.clusters[j].length > ret.maxCount) {
+					ret.maxIdx = j;
+					ret.maxCount = ret.clusters[j].length;
+				}
+				found = true;
+				break;
+			}
+		}
+		if (!found) {
+			var n = ret.clusters.length;
+			ret.clusters[n] = [list[i]];
+			ret.xav[n] = x;
+			ret.yav[n] = y;
+			if (1 > ret.maxCount) {
+				ret.maxIdx = n;
+				ret.maxCount = 1
+			}
+		}
+	}
+	return ret;
+}
 
 function __camPickTarget(group)
 {
@@ -985,10 +1020,9 @@ function __camPickTarget(group)
 			if (!targets.length)
 				targets = [ gi.data.pos ];
 			break;
-		case CAM_ORDER_FOLLOW:
-			break;
 		default:
-			camDebug("Unknown group order", gi.order);
+			camDebug("Unsupported group order", gi.order,
+			         camOrderToString(gi.order));
 			break;
 	}
 	if (!targets.length)
@@ -1006,7 +1040,8 @@ function __camTacticsTick()
 	{
 		var gi = __camGroupInfo[group];
 		var rawDroids = enumGroup(group);
-		var droids = [];
+		var healthyDroids = [];
+
 		// Handle the case when we need to repair
 		if (rawDroids.length > 0 && camDef(gi.data.repair)
 		            && countStruct("A0RepairCentre3", rawDroids[0].player))
@@ -1021,13 +1056,46 @@ function __camTacticsTick()
 					orderDroid(droid, DORDER_RTR);
 					continue;
 				}
-				droids[droids.length] = droid;
+				healthyDroids[healthyDroids.length] = droid;
 			}
 		}
 		else
 		{
-			droids = enumGroup(group);
+			healthyDroids = rawDroids
 		}
+
+		// Handle regrouping
+		var droids = healthyDroids;
+		if (camDef(gi.data.regroup) && gi.data.regroup
+		              && healthyDroids.length > 0)
+		{
+			var ret = __camFindClusters(healthyDroids, __CAM_CLUSTER_SIZE);
+			var groupX = ret.xav[ret.maxIdx];
+			var groupY = ret.yav[ret.maxIdx];
+			droids = ret.clusters[ret.maxIdx];
+			for (var i = 0; i < ret.clusters.length; ++i)
+				if (i != ret.maxIdx) // move other droids towards main cluster
+					for (var j = 0; j < ret.clusters[i].length; ++j)
+					{
+						var droid = ret.clusters[i][j];
+						orderDroidLoc(droid, DORDER_MOVE, groupX, groupY);
+					}
+			var back = (gameTime - gi.lastHit < __CAM_FALLBACK_TIME_ON_REGROUP);
+			// not enough droids grouped?
+			if (ret.maxCount < gi.count)
+			{
+				for (var i = 0; i < droids.length; ++i)
+				{
+					var droid = droids[i];
+					if (back)
+						orderDroid(droid, DORDER_RTB);
+					else
+						orderDroid(droid, DORDER_STOP);
+				}
+				continue;
+			}
+		}
+
 		switch(gi.order)
 		{
 			case CAM_ORDER_ATTACK:
@@ -1099,12 +1167,8 @@ function __camTacticsTick()
 				{
 					var droid = droids[i];
 					if (droid.order !== DORDER_COMMANDERSUPPORT)
-					{
-						camTrace("Droid", droid.name, droid.id,
-						         "supports", commander.name, commander.id);
 						orderDroidObj(droid, DORDER_COMMANDERSUPPORT,
 						              commander);
-					}
 				}
 				break;
 			default:
@@ -1673,8 +1737,8 @@ function __camPreHookEvent(eventname, hookcode)
 /* Called every second after eventStartLevel(). */
 function __camTick()
 {
-	__camTacticsTick();
-	__camBasesTick();
+	queue("__camTacticsTick", 100);
+	queue("__camBasesTick", 200);
 	if (camDef(__camWinLossCallback))
 		__camGlobalContext[__camWinLossCallback]();
 }
@@ -1789,3 +1853,11 @@ __camPreHookEvent("eventMissionTimeout", function()
 	}
 });
 
+__camPreHookEvent("eventAttacked", function(victim, attacker)
+{
+	if (camDef(victim) && victim &&
+	    victim.type === DROID && camDef(__camGroupInfo[victim.group]))
+	{
+		__camGroupInfo[victim.group].lastHit = gameTime;
+	}
+});

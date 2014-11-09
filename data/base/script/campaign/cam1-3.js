@@ -19,12 +19,13 @@ camAreaEvent("NorthConvoyTrigger", 0, function(droid)
 camAreaEvent("SouthConvoyTrigger", 0, function(droid)
 {
 	camManageGroup(camMakeGroup("SouthConvoyForce"), CAM_ORDER_DEFEND, {
-		pos: camMakePos("SouthConvoyLoc")
+		pos: camMakePos("SouthConvoyLoc"),
+		regroup: true,
 	});
 	var scout = getObject("ScoutDroid");
 	if (camDef(scout) && scout) {
 		camTrace("New Paradigm sensor scout retreating");
-		var pos = camMakePos("NPAssembly");
+		var pos = camMakePos("ScoutDroidTarget");
 		orderDroidLoc(scout, DORDER_MOVE, pos.x, pos.y);
 	}
 });
@@ -41,16 +42,17 @@ function playYouAreInContraventionOfTheNewParadigm()
 	hackAddMessage("SB1_3_MSG4", MISS_MSG, 0, true);
 	camManageGroup(NPScoutGroup, CAM_ORDER_COMPROMISE, {
 		pos: camMakePos("RTLZ"),
-		repair: 30
+		repair: 30,
+		regroup: true,
 	});
-	camManageGroup(NPDefenseGroup, CAM_ORDER_DEFEND, {
-		pos: camMakePos("NPCommander"),
-		radius: 17,
-		repair: 30
-	});
-	camManageGroup(camMakeGroup([NPCommander]), CAM_ORDER_DEFEND, {
-		pos: camMakePos("NPCommander"),
-		radius: 17,
+	camManageGroup(NPDefenseGroup, CAM_ORDER_FOLLOW, {
+		droid: "NPCommander",
+		order: CAM_ORDER_DEFEND,
+		data: {
+			pos: camMakePos("NPCommander"),
+			radius: 15,
+			repair: 30,
+		},
 		repair: 30
 	});
 }
@@ -128,7 +130,7 @@ function eventDroidBuilt(droid, structure)
 	// An example of manually managing factory groups.
 	if (!camDef(structure) || !structure || structure.id !== NPFactory.id)
 		return;
-	if (groupSize(NPDefenseGroup) < 6)
+	if (groupSize(NPDefenseGroup) < 6) // watch out! commander control limit
 		groupAdd(NPDefenseGroup, droid);
 	else if (groupSize(NPScoutGroup) < 4 && droid.body !== camTemplates.npsmc.body)
 		groupAdd(NPScoutGroup, droid);// heavy tanks don't go scouting
@@ -203,6 +205,9 @@ function eventStartLevel()
 		"NPFactory": {
 			assembly: "NPAssembly",
 			order: CAM_ORDER_ATTACK,
+			data: {
+				regroup: true,
+			},
 			groupSize: 4, // sic! scouts, at most
 			maxSize: 20,
 			throttle: 60000,
