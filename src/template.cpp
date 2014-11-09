@@ -109,6 +109,7 @@ static DROID_TEMPLATE loadTemplateCommon(WzConfig &ini)
 	else if (droidType == "TRANSPORTER") design.droidType = DROID_TRANSPORTER;
 	else if (droidType == "SUPERTRANSPORTER") design.droidType = DROID_SUPERTRANSPORTER;
 	else if (droidType == "DROID") design.droidType = DROID_DEFAULT;
+	else if (droidType == "DROID_COMMAND") design.droidType = DROID_COMMAND;
 	else ASSERT(false, "No such droid type \"%s\" for %s", droidType.toUtf8().constData(), getID(&design));
 
 	design.asParts[COMP_BODY] = getCompFromName(COMP_BODY, ini.value("body").toString());

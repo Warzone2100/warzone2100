@@ -150,10 +150,11 @@
     "CO-H-COM-H": {
         "available": 2,
         "body": "Body9REC",
+        "brain": "CommandBrain01",
         "id": "CO-H-COM-H",
         "name": "*CO-H-COM-H*",
         "propulsion": "hover01",
-        "type": "DROID",
+        "type": "DROID_COMMAND",
         "weapons": [
             "CommandTurret1"
         ]
@@ -161,10 +162,11 @@
     "CO-H-Command-Track": {
         "available": 2,
         "body": "Body9REC",
+        "brain": "CommandBrain01",
         "id": "CO-H-Command-Track",
         "name": "*CO-H-Command-Track*",
         "propulsion": "tracked01",
-        "type": "DROID",
+        "type": "DROID_COMMAND",
         "weapons": [
             "CommandTurret1"
         ]
@@ -527,7 +529,7 @@
         "id": "CobraComHalftrack",
         "name": "Command Turret Cobra Half-tracks",
         "propulsion": "HalfTrack",
-        "type": "DROID",
+        "type": "DROID_COMMAND",
         "weapons": [
             "CommandTurret1"
         ]
@@ -930,10 +932,11 @@
     "NP-M-Command-Halftrack": {
         "available": 1,
         "body": "Body8MBT",
+        "brain": "CommandBrain01",
         "id": "NP-M-Command-Halftrack",
         "name": "*NP-M-Command-Half-track*",
         "propulsion": "HalfTrack",
-        "type": "DROID",
+        "type": "DROID_COMMAND",
         "weapons": [
             "CommandTurret1"
         ]
@@ -941,10 +944,11 @@
     "NP-M-Command-Track": {
         "available": 1,
         "body": "Body8MBT",
+        "brain": "CommandBrain01",
         "id": "NP-M-Command-Track",
         "name": "*NP-M-Command-Track*",
         "propulsion": "tracked01",
-        "type": "DROID",
+        "type": "DROID_COMMAND",
         "weapons": [
             "CommandTurret1"
         ]
@@ -1248,7 +1252,7 @@
         "name": "*NX-M-Com-Track*",
         "propulsion": "hover01",
         "sensor": "NavGunSensor",
-        "type": "DROID",
+        "type": "DROID_COMMAND",
         "weapons": [
             "CommandTurret1"
         ]
@@ -1410,7 +1414,7 @@
         "id": "P0PythonComTracks",
         "name": "Command Turret Python Tracks",
         "propulsion": "HalfTrack",
-        "type": "DROID",
+        "type": "DROID_COMMAND",
         "weapons": [
             "CommandTurret1"
         ]
@@ -1519,7 +1523,7 @@
         "id": "PythonComTracks",
         "name": "Command Turret Python Tracks",
         "propulsion": "tracked01",
-        "type": "DROID",
+        "type": "DROID_COMMAND",
         "weapons": [
             "CommandTurret1"
         ]
