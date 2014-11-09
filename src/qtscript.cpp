@@ -404,16 +404,15 @@ bool shutdownScripts()
 		QString scriptName = engine->globalObject().property("scriptName").toString();
 		int me = engine->globalObject().property("me").toInt32();
 		dumpScriptLog(scriptName, me, "=== PERFORMANCE DATA ===\n");
+		dumpScriptLog(scriptName, me, "    calls | avg ms | worst ms | worst ms at | >=limit | >=limit/2 | function\n");
 		for (MONITOR::const_iterator iter = monitor->constBegin(); iter != monitor->constEnd(); ++iter)
 		{
 			QString function = iter.key();
 			MONITOR_BIN m = iter.value();
-			QString info = function;
-			info += " : " + QString::number(m.calls) + " calls; ";
-			info += QString::number(m.time / m.calls) + "ms average; ";
-			info += QString::number(m.worst) + "ms worst (at " + QString::number(m.worstGameTime) + "); ";
-			info += QString::number(m.overMaxTimeCalls) + " calls over limit; ";
-			info += QString::number(m.overHalfMaxTimeCalls) + " calls over half limit.\n";
+			QString info = QString("%1 | %2 | %3 | %4 | %5 | %6 | %7\n")
+				.arg(m.calls, 9).arg(m.time / m.calls, 6).arg(m.worst, 8)
+				.arg(m.worstGameTime, 11).arg(m.overMaxTimeCalls, 7)
+				.arg(m.overHalfMaxTimeCalls, 9).arg(function);
 			dumpScriptLog(scriptName, me, info);
 		}
 		monitor->clear();
