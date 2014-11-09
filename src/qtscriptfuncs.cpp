@@ -629,7 +629,7 @@ QScriptValue convDroid(DROID *psDroid, QScriptEngine *engine)
 //;; \item[player] The player owning this object.
 //;; \item[selected] A boolean saying whether 'selectedPlayer' has selected this object.
 //;; \item[name] A user-friendly name for this object.
-//;; \item[health] Percentage that this object is damaged (where 100% means not damaged at all).
+//;; \item[health] Percentage that this object is damaged (where 100 means not damaged at all).
 //;; \item[armour] Amount of armour points that protect against kinetic weapons.
 //;; \item[thermal] Amount of thermal protection that protect against heat based weapons.
 //;; \item[born] The game time at which this object was produced or came into the world. (3.2+ only)

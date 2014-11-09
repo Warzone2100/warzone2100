@@ -101,7 +101,7 @@ function camRand(max)
 		return Math.floor(Math.random() * max);
 }
 
-//;; \subsection{camOnce(function name}
+//;; \subsection{camCallOnce(function name)}
 //;; Call a function by name, but only if it has not been called yet.
 function camCallOnce(callback)
 {
