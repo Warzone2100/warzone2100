@@ -484,11 +484,7 @@ bool intInitialise(void)
 
 	widgSetTipColour(WZCOL_TOOLTIP_TEXT);
 
-	if(GetGameMode() == GS_NORMAL) {
-		WidgSetAudio(WidgetAudioCallback,-1,ID_SOUND_SELECT);
-	} else {
-		WidgSetAudio(WidgetAudioCallback,-1,ID_SOUND_SELECT);
-	}
+	WidgSetAudio(WidgetAudioCallback,-1,ID_SOUND_SELECT);
 
 	/* Create storage for Structures that can be built */
 	apsStructStatsList = (STRUCTURE_STATS **)malloc(sizeof(STRUCTURE_STATS *) *
