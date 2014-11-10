@@ -1315,7 +1315,6 @@ bool stageThreeInitialise(void)
 		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_GAMEINIT);
 		triggerEvent(TRIGGER_GAME_INIT);
 	}
-	intAddPower();
 
 	return true;
 }

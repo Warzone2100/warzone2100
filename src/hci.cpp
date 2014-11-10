@@ -568,6 +568,15 @@ bool intInitialise(void)
 
 	psWScreen = new W_SCREEN;
 
+	if (GetGameMode() == GS_NORMAL)
+	{
+		if (!intAddPower())
+		{
+			debug(LOG_ERROR, "Couldn't create power Bar widget(Out of memory ?)");
+			return false;
+		}
+	}
+
 	/* Note the current screen state */
 	intMode = INT_NORMAL;
 
