@@ -2,7 +2,7 @@
 include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
-var NPDefenseGroup, NPScoutGroup, NPCommander, NPFactory;
+var NPDefenseGroup, NPScoutGroup, NPFactory;
 
 camAreaEvent("RemoveBeacon", 0, function(droid)
 {
@@ -19,8 +19,7 @@ camAreaEvent("NorthConvoyTrigger", 0, function(droid)
 camAreaEvent("SouthConvoyTrigger", 0, function(droid)
 {
 	camManageGroup(camMakeGroup("SouthConvoyForce"), CAM_ORDER_DEFEND, {
-		pos: camMakePos("SouthConvoyLoc"),
-		regroup: true,
+		pos: camMakePos("SouthConvoyLoc")
 	});
 	var scout = getObject("ScoutDroid");
 	if (camDef(scout) && scout) {
@@ -86,7 +85,15 @@ function eventAttacked(victim, attacker) {
 	if (!camDef(victim) || !victim || victim.player === 0)
 		return;
 	if (victim.player === 1)
+	{
 		camCallOnce("enableNP");
+		var commander = getObject("NPCommander");
+		if (camDef(attacker) && attacker && camDef(commander) && commander
+		    && commander.order !== DORDER_SCOUT && commander.order !== DORDER_RTR)
+		{
+			orderDroidLoc(commander, DORDER_SCOUT, attacker.x, attacker.y);
+		}
+	}
 }
 
 function enableReinforcements()
@@ -217,7 +224,6 @@ function eventStartLevel()
 
 	NPScoutGroup = camMakeGroup("NPScoutForce");
 	NPDefenseGroup = camMakeGroup("NPDefense");
-	NPCommander = getObject("NPCommander");
 	NPFactory = getObject("NPFactory");
 
 	queue("playNPWarningSound", 3000);
