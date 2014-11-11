@@ -2353,7 +2353,12 @@ void moveUpdateDroid(DROID *psDroid)
 		visTilesUpdate((BASE_OBJECT *)psDroid);
 
 		// object moved from one tile to next, check to see if droid is near stuff.(oil)
-		checkLocalFeatures(psDroid);
+		// The transporter should not be able to get anything.
+		// FIXME: When we fix campaign scripts to use DROID_SUPERTRANSPORTER
+		if ((game.type == CAMPAIGN) && !bMultiPlayer && (psDroid->droidType != DROID_TRANSPORTER))
+		{
+			checkLocalFeatures(psDroid);
+		}
 
 		triggerEventDroidMoved(psDroid, oldx, oldy);
 	}
