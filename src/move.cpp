@@ -2301,7 +2301,7 @@ static bool pickupOilDrum(int toPlayer, int fromPlayer)
 static void checkLocalFeatures(DROID *psDroid)
 {
 	// NOTE: Why not do this for AI units also?
-	if ((!isHumanPlayer(psDroid->player) && psDroid->order.type != DORDER_RECOVER) || isVtolDroid(psDroid))  // VTOLs can't pick up features!
+	if ((!isHumanPlayer(psDroid->player) && psDroid->order.type != DORDER_RECOVER) || isVtolDroid(psDroid) || isTransporter(psDroid))  // VTOLs or transporters can't pick up features!
 	{
 		return;
 	}
