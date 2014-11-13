@@ -1106,7 +1106,7 @@ bool scrAddDroidToTransporter(void)
 
 	ASSERT(psTransporter != NULL, "scrAddUnitToTransporter: invalid transporter pointer");
 	ASSERT(psDroid != NULL, "scrAddUnitToTransporter: invalid unit pointer");
-	ASSERT((psTransporter->droidType == DROID_TRANSPORTER || psTransporter->droidType == DROID_SUPERTRANSPORTER), "scrAddUnitToTransporter: invalid transporter type");
+	ASSERT(isTransporter(psTransporter), "scrAddUnitToTransporter: invalid transporter type");
 
 	/* check for space */
 	if (checkTransporterSpace(psTransporter, psDroid))
@@ -4424,10 +4424,9 @@ bool scrSetReinforcementTime(void)
 		/*only remove the launch if haven't got a transporter droid since the
 		scripts set the time to -1 at the between stage if there are not going
 		to be reinforcements on the submap  */
-		for (psDroid = apsDroidLists[selectedPlayer]; psDroid != NULL; psDroid =
-		        psDroid->psNext)
+		for (psDroid = apsDroidLists[selectedPlayer]; psDroid != NULL; psDroid = psDroid->psNext)
 		{
-			if (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)
+			if (isTransporter(psDroid))
 			{
 				break;
 			}
@@ -6769,7 +6768,7 @@ bool ThreatInRange(SDWORD player, SDWORD range, SDWORD rangeX, SDWORD rangeY, bo
 				}
 
 				//if VTOLs are excluded, skip them
-				if (!bVTOLs && ((asPropulsionStats[psDroid->asBits[COMP_PROPULSION]].propulsionType == PROPULSION_TYPE_LIFT) || (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)))
+				if (!bVTOLs && ((asPropulsionStats[psDroid->asBits[COMP_PROPULSION]].propulsionType == PROPULSION_TYPE_LIFT) || isTransporter(psDroid)))
 				{
 					continue;
 				}
@@ -7353,7 +7352,7 @@ static UDWORD costOrAmountInRange(SDWORD player, SDWORD lookingPlayer, SDWORD ra
 			}
 
 			//if VTOLs are excluded, skip them
-			if (!bVTOLs && ((asPropulsionStats[psDroid->asBits[COMP_PROPULSION]].propulsionType == PROPULSION_TYPE_LIFT) || (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)))
+			if (!bVTOLs && ((asPropulsionStats[psDroid->asBits[COMP_PROPULSION]].propulsionType == PROPULSION_TYPE_LIFT) || isTransporter(psDroid)))
 			{
 				continue;
 			}
@@ -7751,7 +7750,7 @@ UDWORD numEnemyObjInRange(SDWORD player, SDWORD range, SDWORD rangeX, SDWORD ran
 				//if VTOLs are excluded, skip them
 				if (!bVTOLs
 				    && (asPropulsionStats[psDroid->asBits[COMP_PROPULSION]].propulsionType == PROPULSION_TYPE_LIFT
-				        || psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER))
+					|| isTransporter(psDroid)))
 				{
 					continue;
 				}
@@ -8280,7 +8279,7 @@ bool scrGetClosestEnemy(void)
 				}
 
 				//if VTOLs are excluded, skip them
-				if (!bVTOLs && ((asPropulsionStats[psDroid->asBits[COMP_PROPULSION]].propulsionType == PROPULSION_TYPE_LIFT) || (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)))
+				if (!bVTOLs && ((asPropulsionStats[psDroid->asBits[COMP_PROPULSION]].propulsionType == PROPULSION_TYPE_LIFT) || isTransporter(psDroid)))
 				{
 					continue;
 				}
@@ -8362,7 +8361,7 @@ bool scrTransporterCapacity(void)
 		return false;
 	}
 
-	if (psDroid->droidType != DROID_TRANSPORTER && psDroid->droidType != DROID_SUPERTRANSPORTER)
+	if (!isTransporter(psDroid))
 	{
 		debug(LOG_ERROR, "scrTransporterCapacity(): passed droid is not a transporter");
 		return false;
@@ -8395,7 +8394,7 @@ bool scrTransporterFlying(void)
 		return false;
 	}
 
-	if (psDroid->droidType != DROID_TRANSPORTER && psDroid->droidType != DROID_SUPERTRANSPORTER)
+	if (!isTransporter(psDroid))
 	{
 		debug(LOG_ERROR, "scrTransporterFlying(): passed droid is not a transporter");
 		return false;
@@ -8428,7 +8427,7 @@ bool scrUnloadTransporter(void)
 		return false;
 	}
 
-	if (psDroid->droidType != DROID_TRANSPORTER && psDroid->droidType != DROID_SUPERTRANSPORTER)
+	if (!isTransporter(psDroid))
 	{
 		debug(LOG_ERROR, "scrUnloadTransporter(): passed droid is not a transporter");
 		return false;

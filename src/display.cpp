@@ -1651,7 +1651,7 @@ static void dealWithLMBDroid(DROID* psDroid, SELECTION_TYPE selection)
 		FeedbackOrderGiven();
 		driveDisableTactical();
 	}
-	else if (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)
+	else if (isTransporter(psDroid))
 	{
 		if (selection == SC_INVALID)
 		{
@@ -2198,7 +2198,7 @@ static void dealWithRMB( void )
 					dealWithDroidSelect(psDroid, false);
 				}
 				// Not a transporter
-				else if (psDroid->droidType != DROID_TRANSPORTER && psDroid->droidType != DROID_SUPERTRANSPORTER)
+				else if (!isTransporter(psDroid))
 				{
 					if (bRightClickOrders)
 					{
@@ -2412,7 +2412,7 @@ STRUCTURE	*psStructure;
 								retVal = MT_SENSOR;
 							}
 						}
-						else if ((psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER) &&
+						else if (isTransporter(psDroid) &&
 								 selectedPlayer == psDroid->player)
 						{
 							//check the transporter is not full

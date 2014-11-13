@@ -1212,7 +1212,7 @@ void replaceDroidComponent(DROID *pList, UDWORD oldType, UDWORD oldCompInc,
 	{
 		switchComponent(psDroid, oldType, oldCompInc, newCompInc);
 		// Need to replace the units inside the transporter
-		if (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)
+		if (isTransporter(psDroid))
 		{
 			replaceTransDroidComponents(psDroid, oldType, oldCompInc, newCompInc);
 		}
@@ -1225,7 +1225,7 @@ void replaceTransDroidComponents(DROID *psTransporter, UDWORD oldType,
 {
     DROID       *psCurr;
 
-    ASSERT ((psTransporter->droidType == DROID_TRANSPORTER || psTransporter->droidType == DROID_SUPERTRANSPORTER), "invalid unit type" );
+	ASSERT(isTransporter(psTransporter), "invalid unit type");
 
     for (psCurr = psTransporter->psGroup->psList; psCurr != NULL; psCurr =
         psCurr->psGrpNext)

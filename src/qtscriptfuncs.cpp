@@ -580,7 +580,7 @@ QScriptValue convDroid(DROID *psDroid, QScriptEngine *engine)
 		break;
 	}
 	value.setProperty("bodySize", psBodyStats->size, QScriptValue::ReadOnly);
-	if (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)
+	if (isTransporter(psDroid))
 	{
 		value.setProperty("cargoCapacity", TRANSPORTER_CAPACITY, QScriptValue::ReadOnly);
 		value.setProperty("cargoLeft", calcRemainingCapacity(psDroid), QScriptValue::ReadOnly);
@@ -1843,7 +1843,7 @@ static QScriptValue js_enumCargo(QScriptContext *context, QScriptEngine *engine)
 	int player = droidVal.property("player").toInt32();
 	DROID *psDroid = IdToDroid(id, player);
 	SCRIPT_ASSERT(context, psDroid, "No such droid id %d belonging to player %d", id, player);
-	SCRIPT_ASSERT(context, psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER, "Wrong droid type");
+	SCRIPT_ASSERT(context, isTransporter(psDroid), "Wrong droid type");
 	QScriptValue result = engine->newArray(psDroid->psGroup->getNumMembers());
 	int i = 0;
 	for (DROID *psCurr = psDroid->psGroup->psList; psCurr; psCurr = psCurr->psGrpNext, i++)
@@ -2452,7 +2452,7 @@ static QScriptValue js_setReinforcementTime(QScriptContext *context, QScriptEngi
 		 * time to -1 at the between stage if there are not going to be reinforcements on the submap  */
 		for (psDroid = apsDroidLists[selectedPlayer]; psDroid != NULL; psDroid = psDroid->psNext)
 		{
-			if (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)
+			if (isTransporter(psDroid))
 			{
 				break;
 			}

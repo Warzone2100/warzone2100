@@ -614,7 +614,7 @@ int aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot, i
 					// if not electronic then valid target
 					if (!electronic
 					    || (electronic
-					        && (((DROID *)targetInQuestion)->droidType != DROID_TRANSPORTER && ((DROID *)targetInQuestion)->droidType != DROID_SUPERTRANSPORTER)))
+						&& !isTransporter((DROID *)targetInQuestion)))
 					{
 						//only a valid target if NOT a transporter
 						psTarget = targetInQuestion;

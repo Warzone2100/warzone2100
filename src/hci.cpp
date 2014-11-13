@@ -5100,7 +5100,7 @@ DROID *intGotoNextDroidType(DROID *CurrDroid, DROID_TYPE droidType, bool AllowGr
 	for (; psDroid != NULL; psDroid = psDroid->psNext)
 	{
 		if ((psDroid->droidType == droidType
-		     || (droidType == DROID_ANY && (psDroid->droidType != DROID_TRANSPORTER && psDroid->droidType != DROID_SUPERTRANSPORTER)))
+		     || (droidType == DROID_ANY && !isTransporter(psDroid)))
 		    && (psDroid->group == UBYTE_MAX || AllowGroup))
 		{
 			if (psDroid != CurrentDroid)
@@ -5120,7 +5120,7 @@ DROID *intGotoNextDroidType(DROID *CurrDroid, DROID_TYPE droidType, bool AllowGr
 		for (psDroid = apsDroidLists[selectedPlayer]; (psDroid != CurrentDroid) && (psDroid != NULL); psDroid = psDroid->psNext)
 		{
 			if ((psDroid->droidType == droidType ||
-			     ((droidType == DROID_ANY) && (psDroid->droidType != DROID_TRANSPORTER && psDroid->droidType != DROID_SUPERTRANSPORTER))) &&
+			     ((droidType == DROID_ANY) && !isTransporter(psDroid))) &&
 			    ((psDroid->group == UBYTE_MAX) || AllowGroup))
 			{
 				if (psDroid != CurrentDroid)

@@ -253,10 +253,11 @@ extern UBYTE checkCommandExist(UBYTE player);
 /*For a given repair droid, check if there are any damaged droids within
 a defined range*/
 extern BASE_OBJECT * checkForRepairRange(DROID *psDroid,DROID *psTarget);
-
-/// Returns true iff the droid has VTOL propulsion, and is not a transport.
+// Returns true if the droid is a transporter.
+extern bool isTransporter(const DROID* psDroid);
+/// Returns true if the droid has VTOL propulsion, and is not a transport.
 extern bool isVtolDroid(const DROID* psDroid);
-/// Returns true iff the droid has VTOL propulsion and is moving.
+/// Returns true if the droid has VTOL propulsion and is moving.
 extern bool isFlying(const DROID* psDroid);
 /*returns true if a VTOL weapon droid which has completed all runs*/
 extern bool vtolEmpty(DROID *psDroid);

@@ -2408,7 +2408,7 @@ static void kfsf_SetSelectedDroidsState( SECONDARY_ORDER sec, SECONDARY_STATE st
 	for(psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
 	{
 		// Only set the state if it's not a transporter.
-		if (psDroid->selected && psDroid->droidType != DROID_TRANSPORTER && psDroid->droidType != DROID_SUPERTRANSPORTER)
+		if (psDroid->selected && !isTransporter(psDroid))
 		{
 			secondarySetState(psDroid,sec,state);
 		}

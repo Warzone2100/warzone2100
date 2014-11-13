@@ -550,7 +550,7 @@ void addTransporterTimerInterface(void)
 		//check the player has at least one Transporter back at base
 		for (DROID *psDroid = mission.apsDroidLists[selectedPlayer]; psDroid != NULL; psDroid = psDroid->psNext)
 		{
-			if (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)
+			if (isTransporter(psDroid))
 			{
 				psTransporter = psDroid;
 				break;
@@ -963,7 +963,7 @@ void placeLimboDroids(void)
 		{
 			addDroid(psDroid, apsDroidLists);
 			//KILL OFF TRANSPORTER - should never be one but....
-			if (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)
+			if (isTransporter(psDroid))
 			{
 				vanishDroid(psDroid);
 				continue;
@@ -1038,7 +1038,7 @@ void saveCampaignData(void)
 		while (psDroid != NULL)
 		{
 			psNext = psDroid->psNext;
-			if (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)
+			if (isTransporter(psDroid))
 			{
 				// Empty the transporter into the mission list
 				ASSERT(psDroid->psGroup != NULL, "saveCampaignData: Transporter does not have a group");
@@ -1091,7 +1091,7 @@ void saveCampaignData(void)
 		//find the *first* transporter
 		for (psDroid = mission.apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
 		{
-			if (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)
+			if (isTransporter(psDroid))
 			{
 				//fill it with droids from the mission list
 				for (psSafeDroid = mission.apsDroidLists[selectedPlayer]; psSafeDroid; psSafeDroid = psNextSafe)
@@ -1335,7 +1335,7 @@ void processMissionLimbo(void)
 	{
 		psNext = psDroid->psNext;
 		//KILL OFF TRANSPORTER - should never be one but....
-		if (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)
+		if (isTransporter(psDroid))
 		{
 			vanishDroid(psDroid);
 		}
@@ -1552,14 +1552,14 @@ void missionDroidUpdate(DROID *psDroid)
 	/*This is required for Transporters that are moved offWorld so the
 	saveGame doesn't try to set their position in the map - especially important
 	for endCam2 where there isn't a valid map!*/
-	if (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)
+	if (isTransporter(psDroid))
 	{
 		psDroid->pos.x = INVALID_XY;
 		psDroid->pos.y = INVALID_XY;
 	}
 
 	//ignore all droids except Transporters
-	if ((psDroid->droidType != DROID_TRANSPORTER && psDroid->droidType != DROID_SUPERTRANSPORTER)
+	if (!isTransporter(psDroid)
 	    || !(orderState(psDroid, DORDER_TRANSPORTOUT)  ||
 	            orderState(psDroid, DORDER_TRANSPORTIN)     ||
 	            orderState(psDroid, DORDER_TRANSPORTRETURN)))
@@ -1601,7 +1601,7 @@ static void missionResetDroids(void)
 			}
 
 			//KILL OFF TRANSPORTER
-			if (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)
+			if (isTransporter(psDroid))
 			{
 				vanishDroid(psDroid);
 			}
@@ -1733,7 +1733,7 @@ void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, bool goingHome)
 	}
 
 	//unload all the droids from within the current Transporter
-	if (psTransporter->droidType == DROID_TRANSPORTER || psTransporter->droidType == DROID_SUPERTRANSPORTER)
+	if (isTransporter(psTransporter))
 	{
 		// reset the transporter cluster
 		psTransporter->cluster = 0;
@@ -1857,7 +1857,7 @@ void missionMoveTransporterOffWorld(DROID *psTransporter)
 			psDroid = NULL;
 			for (psDroid = mission.apsDroidLists[selectedPlayer]; psDroid != NULL; psDroid = psDroid->psNext)
 			{
-				if (psDroid->droidType != DROID_TRANSPORTER && psDroid->droidType != DROID_SUPERTRANSPORTER)
+				if (!isTransporter(psDroid))
 				{
 					break;
 				}
@@ -3007,7 +3007,7 @@ bool missionDroidsRemaining(UDWORD player)
 {
 	for (DROID *psDroid = apsDroidLists[player]; psDroid != NULL; psDroid = psDroid->psNext)
 	{
-		if (psDroid->droidType != DROID_TRANSPORTER && psDroid->droidType != DROID_SUPERTRANSPORTER)
+		if (!isTransporter(psDroid))
 		{
 			return true;
 		}
@@ -3022,7 +3022,7 @@ void moveDroidsToSafety(DROID *psTransporter)
 {
 	DROID       *psDroid, *psNext;
 
-	ASSERT((psTransporter->droidType == DROID_TRANSPORTER || psTransporter->droidType == DROID_SUPERTRANSPORTER), "unit not a Transporter");
+	ASSERT(isTransporter(psTransporter), "unit not a Transporter");
 
 	//move droids out of Transporter into mission list
 	for (psDroid = psTransporter->psGroup->psList; psDroid != NULL && psDroid != psTransporter; psDroid = psNext)
@@ -3078,7 +3078,7 @@ void resetMissionWidgets(void)
 	{
 		for (psDroid = apsDroidLists[selectedPlayer]; psDroid != NULL; psDroid = psDroid->psNext)
 		{
-			if (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)
+			if (isTransporter(psDroid))
 			{
 				intAddTransporterLaunch(psDroid);
 				break;
@@ -3090,7 +3090,7 @@ void resetMissionWidgets(void)
 		{
 			for (psDroid = mission.apsDroidLists[selectedPlayer]; psDroid != NULL; psDroid = psDroid->psNext)
 			{
-				if ((psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER) &&
+				if (isTransporter(psDroid) &&
 				    psDroid->action == DACTION_TRANSPORTWAITTOFLYIN)
 				{
 					intAddTransporterLaunch(psDroid);
@@ -3123,7 +3123,7 @@ void emptyTransporters(bool bOffWorld)
 	for (psTransporter = apsDroidLists[selectedPlayer]; psTransporter != NULL; psTransporter = psNextTrans)
 	{
 		psNextTrans = psTransporter->psNext;
-		if (psTransporter->droidType == DROID_TRANSPORTER || psTransporter->droidType == DROID_SUPERTRANSPORTER)
+		if (isTransporter(psTransporter))
 		{
 			//if flying in, empty the contents
 			if (orderState(psTransporter, DORDER_TRANSPORTIN))
@@ -3165,7 +3165,7 @@ void emptyTransporters(bool bOffWorld)
 	for (psTransporter = mission.apsDroidLists[selectedPlayer]; psTransporter !=
 	     NULL; psTransporter = psTransporter->psNext)
 	{
-		if (psTransporter->droidType == DROID_TRANSPORTER || psTransporter->droidType == DROID_SUPERTRANSPORTER)
+		if (isTransporter(psTransporter))
 		{
 			//for each droid within the transporter...
 			for (psDroid = psTransporter->psGroup->psList; psDroid != NULL
