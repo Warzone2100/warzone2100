@@ -256,7 +256,7 @@ static void ChangeDriver(void)
 		{
 			if (psDroid->sMove.Status == MOVEDRIVE)
 			{
-				ASSERT((psDroid->droidType != DROID_TRANSPORTER && psDroid->droidType != DROID_SUPERTRANSPORTER), "Tried to control a transporter" );
+				ASSERT(!isTransporter(psDroid), "Tried to control a transporter");
 				secondarySetState(psDroid, DSO_HALTTYPE, DSS_HALT_GUARD);
 				psDroid->sMove.Status = MOVEINACTIVE;
 			}
@@ -286,7 +286,7 @@ void StopDriverMode(void)
 		{
 			if (psDroid->sMove.Status == MOVEDRIVE)
 			{
-				ASSERT((psDroid->droidType != DROID_TRANSPORTER && psDroid->droidType != DROID_SUPERTRANSPORTER), "Tried to control a transporter");
+				ASSERT(!isTransporter(psDroid), "Tried to control a transporter");
 				secondarySetState(psDroid, DSO_HALTTYPE, DSS_HALT_GUARD);
 				psDroid->sMove.Status = MOVEINACTIVE;
 			}
@@ -542,7 +542,7 @@ void driveUpdate(void)
 				if (psDrivenDroid->sMove.Status != MOVEDRIVE)
 				{
 					psDrivenDroid->sMove.Status = MOVEDRIVE;
-					ASSERT((psDrivenDroid->droidType != DROID_TRANSPORTER && psDrivenDroid->droidType != DROID_SUPERTRANSPORTER), "Tried to control a transporter");
+					ASSERT(!isTransporter(psDrivenDroid), "Tried to control a transporter");
 					driveDir = UNDEG(psDrivenDroid->rot.direction);
 				}
 				DoFollowRangeCheck = true;
@@ -564,7 +564,7 @@ void driveUpdate(void)
 
 					if ((psDroid->selected) &&
 						(psDroid != psDrivenDroid) &&
-						(psDroid->droidType != DROID_TRANSPORTER && psDroid->droidType != DROID_SUPERTRANSPORTER) &&
+						!isTransporter(psDroid) &&
 						//((psPropStats->propulsionType != PROPULSION_TYPE_LIFT) || (psDroid->droidType == DROID_CYBORG)) ) {
                         ((psPropStats->propulsionType != PROPULSION_TYPE_LIFT) || cyborgDroid(psDroid)) )
                     {

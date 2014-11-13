@@ -320,7 +320,7 @@ void orderUpdateDroid(DROID *psDroid)
 		{
 			orderDroidObj(psDroid, DORDER_GUARD, psDroid->psGroup->psCommander, ModeImmediate);
 		}
-		else if ((psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER) && !bMultiPlayer)
+		else if (isTransporter(psDroid) && !bMultiPlayer)
 		{
 			//check transporter isn't sitting there waiting to be filled when nothing exists!
 			if (psDroid->player == selectedPlayer && getDroidsToSafetyFlag()
@@ -844,7 +844,7 @@ void orderUpdateDroid(DROID *psDroid)
 		if (bMultiPlayer)
 		{
 			//this order can only be given to Transporter droids
-			if (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)
+			if (isTransporter(psDroid))
 			{
 				/*once the Transporter has reached its destination (and landed),
 				get all the units to disembark*/
@@ -1120,7 +1120,7 @@ void orderUpdateDroid(DROID *psDroid)
 			// repairing something, make sure the droid doesn't go too far
 			orderCheckGuardPosition(psDroid, CONSTRUCT_MAXDIST);
 		}
-		else if (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)
+		else if (isTransporter(psDroid))
 		{
 			// check transporter isn't sitting there waiting to be filled when nothing exists!
 			if (psDroid->player == selectedPlayer && getDroidsToSafetyFlag() &&
@@ -1435,7 +1435,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		}
 		//in multiPlayer, cannot move Transporter to blocking tile either
 		if (game.type == SKIRMISH
-		    && (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)
+		    && isTransporter(psDroid)
 		    && fpathBlockingTile(map_coord(psOrder->pos), getPropulsionStats(psDroid)->propulsionType))
 		{
 			break;
@@ -1472,7 +1472,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 	case DORDER_ATTACKTARGET:
 		if (psDroid->numWeaps == 0
 		    || psDroid->asWeaps[0].nStat == 0
-		    || psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)
+			|| isTransporter(psDroid))
 		{
 			break;
 		}
@@ -1486,7 +1486,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 			//cannot attack a Transporter with EW in multiPlayer
 			// FIXME: Why not ?
 			if (game.type == SKIRMISH && electronicDroid(psDroid)
-			    && psOrder->psObj->type == OBJ_DROID && (((DROID *)psOrder->psObj)->droidType == DROID_TRANSPORTER || ((DROID *)psOrder->psObj)->droidType == DROID_SUPERTRANSPORTER))
+				&& psOrder->psObj->type == OBJ_DROID && isTransporter((DROID *)psOrder->psObj))
 			{
 				break;
 			}
@@ -1570,7 +1570,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		actionDroid(psDroid, DACTION_OBSERVE, psOrder->psObj);
 		break;
 	case DORDER_FIRESUPPORT:
-		if (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)
+		if (isTransporter(psDroid))
 		{
 			debug(LOG_ERROR, "Sorry, transports cannot be assigned to commanders.");
 			psDroid->order = DroidOrder(DORDER_NONE);
@@ -1593,7 +1593,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		}
 		break;
 	case DORDER_COMMANDERSUPPORT:
-		if (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)
+		if (isTransporter(psDroid))
 		{
 			debug(LOG_ERROR, "Sorry, transports cannot be assigned to commanders.");
 			psDroid->order = DroidOrder(DORDER_NONE);
@@ -1644,7 +1644,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 
 				psDroid->order = *psOrder;
 				// Find a place to land for vtols. And Transporters in a multiPlay game.
-				if (isVtolDroid(psDroid) || (game.type == SKIRMISH && (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)))
+				if (isVtolDroid(psDroid) || (game.type == SKIRMISH && isTransporter(psDroid)))
 				{
 					actionVTOLLandingPos(psDroid, &pos);
 				}
@@ -1730,7 +1730,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 				psDroid->order.pos = removeZ(psRepairFac->pos);
 				/* If in multiPlayer, and the Transporter has been sent to be
 				 * repaired, need to find a suitable location to drop down. */
-				if (game.type == SKIRMISH && (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER))
+				if (game.type == SKIRMISH && isTransporter(psDroid))
 				{
 					Vector2i pos = psDroid->order.pos;
 
@@ -1761,8 +1761,8 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 	case DORDER_EMBARK:
 	{
 		DROID *embarkee = castDroid(psOrder->psObj);
-		if (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER  // Embarker must not be transporter.
-		    || embarkee == NULL || !(embarkee->droidType == DROID_TRANSPORTER || embarkee->droidType == DROID_SUPERTRANSPORTER))  // Embarkee must be a transporter.
+		if (isTransporter(psDroid)  // Embarker must not be transporter.
+			|| embarkee == NULL || !isTransporter(embarkee))  // Embarkee must be a transporter.
 		{
 			debug(LOG_ERROR, "Sorry, can only load things that aren't transporters into things that are.");
 			psDroid->order = DroidOrder(DORDER_NONE);
@@ -1779,7 +1779,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		if (bMultiPlayer)
 		{
 			//this order can only be given to Transporter droids
-			if (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)
+			if (isTransporter(psDroid))
 			{
 				psDroid->order = *psOrder;
 				//move the Transporter to the requested location
@@ -2436,7 +2436,7 @@ DROID_ORDER chooseOrderLoc(DROID *psDroid, UDWORD x,UDWORD y, bool altOrder)
 	DROID_ORDER		order = DORDER_NONE;
 	PROPULSION_TYPE		propulsion = getPropulsionStats(psDroid)->propulsionType;
 
-	if ((psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER) && game.type == CAMPAIGN)
+	if (isTransporter(psDroid) && game.type == CAMPAIGN)
 	{
 		// transports can't be controlled in campaign
 		return DORDER_NONE;
@@ -2465,7 +2465,7 @@ DROID_ORDER chooseOrderLoc(DROID *psDroid, UDWORD x,UDWORD y, bool altOrder)
 	}
 
 	// and now we want Transporters to fly! - in multiPlayer!!
-	if ((psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER) && game.type == SKIRMISH)
+	if (isTransporter(psDroid) && game.type == SKIRMISH)
 	{
 		/* in MultiPlayer - if ALT-key is pressed then need to get the Transporter
 		 * to fly to location and all units disembark */
@@ -2577,7 +2577,7 @@ DroidOrder chooseOrderObj(DROID *psDroid, BASE_OBJECT *psObj, bool altOrder)
 	DroidOrder order(DORDER_NONE);
 	STRUCTURE		*psStruct;
 
-	if (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)
+	if (isTransporter(psDroid))
 	{
         //in multiPlayer, need to be able to get Transporter repaired
         if (bMultiPlayer)
@@ -2616,7 +2616,7 @@ DroidOrder chooseOrderObj(DROID *psDroid, BASE_OBJECT *psObj, bool altOrder)
 		}
 	}
 	//check for transporters first
-	if (psObj->type == OBJ_DROID && (((DROID *)psObj)->droidType == DROID_TRANSPORTER || ((DROID *)psObj)->droidType == DROID_SUPERTRANSPORTER) && psObj->player == psDroid->player)
+	if (psObj->type == OBJ_DROID && isTransporter((DROID *)psObj) && psObj->player == psDroid->player)
 	{
 		order = DroidOrder(DORDER_EMBARK, psObj);
 	}
@@ -2940,7 +2940,7 @@ DROID *FindATransporter(DROID const *embarkee)
 
 	for (DROID *psDroid = apsDroidLists[embarkee->player]; psDroid != NULL; psDroid = psDroid->psNext)
 	{
-		if ((isCyborg && psDroid->droidType == DROID_TRANSPORTER) || psDroid->droidType == DROID_SUPERTRANSPORTER)
+		if (isCyborg && isTransporter(psDroid))
 		{
 			unsigned dist = iHypot(removeZ(psDroid->pos - embarkee->pos));
 			if (!checkTransporterSpace(psDroid, embarkee, false))
@@ -3678,7 +3678,7 @@ bool secondaryGotPrimaryOrder(DROID *psDroid, DROID_ORDER order)
 {
 	UDWORD	oldState;
 
-	if (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)
+	if (isTransporter(psDroid))
 	{
 		return false;
 	}
@@ -3938,7 +3938,7 @@ void orderHealthCheck(DROID *psDroid)
 	SBYTE       healthLevel = 0;
 	UDWORD      retreatX = 0, retreatY = 0;
 
-	if (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)
+	if (isTransporter(psDroid))
 	{
 		return;
 	}

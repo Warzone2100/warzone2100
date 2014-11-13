@@ -59,7 +59,7 @@ static unsigned int selSelectAllUnits(unsigned int player, bool bOnScreen)
 		if (!bOnScreen || droidOnScreen(psDroid, 0))
 		{
 			/* can select everything except transporters */
-			if (psDroid->droidType != DROID_TRANSPORTER && psDroid->droidType != DROID_SUPERTRANSPORTER)
+			if (!isTransporter(psDroid))
 			{
 				SelectDroid(psDroid);
 				count++;
@@ -89,7 +89,7 @@ static unsigned int selSelectAllSameProp(unsigned int player, PROPULSION_TYPE pr
 			PROPULSION_STATS *psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
 			ASSERT(psPropStats != NULL, "invalid propulsion stats pointer");
 			/* Same as that asked for - don't want Transporters*/
-			if (psPropStats->propulsionType == propType && (psDroid->droidType != DROID_TRANSPORTER && psDroid->droidType != DROID_SUPERTRANSPORTER))
+			if (psPropStats->propulsionType == propType && !isTransporter(psDroid))
 			{
 				SelectDroid(psDroid);
 				count++;
@@ -115,7 +115,7 @@ static unsigned int selSelectAllSameDroid(unsigned int player, DROID_TYPE droidT
 		if (!bOnScreen || droidOnScreen(psDroid, 0))
 		{
 			/* Same as the droid type asked for*/
-			if (psDroid->droidType == droidType || (droidType == DROID_TRANSPORTER && psDroid->droidType == DROID_SUPERTRANSPORTER))
+			if (isTransporter(psDroid))
 			{
 				SelectDroid(psDroid);
 				count++;
@@ -144,7 +144,7 @@ static unsigned int selSelectAllCombat(unsigned int player, bool bOnScreen)
 			if (!bOnScreen || droidOnScreen(psDroid, 0))
 			{
 				// we don't want to get the Transporter
-				if (psDroid->droidType != DROID_TRANSPORTER && psDroid->droidType != DROID_SUPERTRANSPORTER)
+				if (!isTransporter(psDroid))
 				{
 					SelectDroid(psDroid);
 					count++;
@@ -242,7 +242,7 @@ static unsigned int selSelectAllDamaged(unsigned int player, bool bOnScreen)
 			if (!bOnScreen || droidOnScreen(psDroid, 0))
 			{
 				// we don't want to get the Transporter
-				if (psDroid->droidType != DROID_TRANSPORTER && psDroid->droidType != DROID_SUPERTRANSPORTER)
+				if (!isTransporter(psDroid))
 				{
 					SelectDroid(psDroid);
 					count++;

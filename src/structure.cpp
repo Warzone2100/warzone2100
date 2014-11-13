@@ -2459,8 +2459,7 @@ static bool structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl, DR
 			assignCommander = true;
 		}
 
-		bool isTransporter = psNewDroid->droidType == DROID_TRANSPORTER || psNewDroid->droidType == DROID_SUPERTRANSPORTER;
-		if (isVtolDroid(psNewDroid) && !isTransporter)
+		if (isVtolDroid(psNewDroid) && !isTransporter(psNewDroid))
 		{
 			moveToRearm(psNewDroid);
 		}
@@ -2468,7 +2467,7 @@ static bool structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl, DR
 		{
 			// TODO: Should synchronise .psCommander in all cases.
 			//syncDebug("Has commander.");
-			if (isTransporter)
+			if (isTransporter(psNewDroid))
 			{
 				// Transporters can't be assigned to commanders, due to abuse of .psGroup. Try to land on the commander instead. Hopefully the transport is heavy enough to crush the commander.
 				orderDroidLoc(psNewDroid, DORDER_MOVE, psFact->psCommander->pos.x, psFact->psCommander->pos.y, ModeQueue);
@@ -3347,7 +3346,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 				if (psDroid->body < psDroid->originalBody)
 				{
 					//if in multiPlayer, and a Transporter - make sure its on the ground before repairing
-					if (bMultiPlayer && (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER))
+					if (bMultiPlayer && isTransporter(psDroid))
 					{
 						if (!(psDroid->sMove.Status == MOVEINACTIVE &&
 							psDroid->sMove.iVertSpeed == 0))
@@ -5883,7 +5882,7 @@ bool electronicDamage(BASE_OBJECT *psTarget, UDWORD damage, UBYTE attackPlayer)
 		//in multiPlayer cannot attack a Transporter with EW
 		if (bMultiPlayer)
 		{
-			ASSERT_OR_RETURN(true, (psDroid->droidType != DROID_TRANSPORTER && psDroid->droidType != DROID_SUPERTRANSPORTER), "Cannot attack a Transporter in multiPlayer");
+			ASSERT_OR_RETURN(true, !isTransporter(psDroid), "Cannot attack a Transporter in multiPlayer");
 		}
 
 		if (psDroid->resistance == ACTION_START_TIME)

@@ -540,7 +540,7 @@ static void displayCompObj(DROID *psDroid, bool bButton)
 		pieFlag = pie_SHADOW;
 		brightness = pal_SetBrightness(psDroid->illumination);
 		// NOTE: Beware of transporters that are offscreen, on a mission!  We should *not* be checking tiles at this point in time!
-		if (psDroid->droidType != DROID_TRANSPORTER && !missionIsOffworld())
+		if (!isTransporter(psDroid) && !missionIsOffworld())
 		{
 			MAPTILE *psTile = worldTile(psDroid->pos.x, psDroid->pos.y);
 			if (psTile->jammerBits & alliancebits[psDroid->player])
@@ -1013,7 +1013,7 @@ void displayComponentObject(DROID *psDroid)
 	position.z = -(st.pos.y - player.p.z);
 	position.y = st.pos.z;
 
-	if(psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)
+	if (isTransporter(psDroid))
 	{
 		position.y += bobTransporterHeight();
 	}

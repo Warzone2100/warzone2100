@@ -1123,7 +1123,7 @@ void droidBodyUpgrade(FUNCTION *pFunction, DROID *psDroid)
 		psDroid->originalBody = newBaseBody;
 	}
 	//if a transporter droid then need to upgrade the contents
-	if (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)
+	if (isTransporter(psDroid))
 	{
 		for (psCurr = psDroid->psGroup->psList; psCurr != NULL; psCurr =
 		        psCurr->psGrpNext)
@@ -1341,7 +1341,7 @@ void wallDefenceUpgrade(FUNCTION *pFunction, UBYTE player)
 /*upgrades the droids inside a Transporter uwith the appropriate upgrade function*/
 void upgradeTransporterDroids(DROID *psTransporter, void(*pUpgradeFunction)(DROID *psDroid))
 {
-	ASSERT(psTransporter->droidType == DROID_TRANSPORTER || psTransporter->droidType == DROID_SUPERTRANSPORTER, "upgradeTransporterUnits: invalid unit type");
+	ASSERT(isTransporter(psTransporter), "upgradeTransporterUnits: invalid unit type");
 
 	//loop thru' each unit in the Transporter
 	for (DROID *psCurr = psTransporter->psGroup->psList; psCurr != NULL; psCurr = psCurr->psGrpNext)
