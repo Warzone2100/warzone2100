@@ -2723,7 +2723,7 @@ void renderShadow( DROID *psDroid, iIMDShape *psShadowIMD )
 	Vector3i dv;
 
 	dv.x = psDroid->pos.x - player.p.x;
-	if(psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)
+	if (isTransporter(psDroid))
 	{
 		dv.x -= bobTransporterHeight()/2;
 	}
@@ -3593,7 +3593,7 @@ void calcScreenCoords(DROID *psDroid)
 		{
 			//don't allow Transporter Droids to be selected here
 			//unless we're in multiPlayer mode!!!!
-			if ((psDroid->droidType != DROID_TRANSPORTER && psDroid->droidType != DROID_SUPERTRANSPORTER) || bMultiPlayer)
+			if (!isTransporter(psDroid) || bMultiPlayer)
 			{
 				dealWithDroidSelect(psDroid, true);
 			}

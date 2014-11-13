@@ -6362,9 +6362,9 @@ DROID *intGotoNextDroidType(DROID *CurrDroid,UDWORD droidType,bool AllowGroup)
 
 	for(; psDroid != NULL; psDroid = psDroid->psNext)
 	{
-		if ((((UDWORD)psDroid->droidType == droidType) ||
-				  ((droidType == DROID_ANY) && (psDroid->droidType != DROID_TRANSPORTER && psDroid->droidType != DROID_SUPERTRANSPORTER)) ) &&
-				  ((psDroid->group == UBYTE_MAX) || AllowGroup))
+		if ((((UDWORD)psDroid->droidType == droidType)
+		     || (droidType == DROID_ANY && !isTransporter(psDroid)))
+		    && (psDroid->group == UBYTE_MAX || AllowGroup))
 		{
 			if(psDroid != CurrentDroid)
 			{
@@ -6383,8 +6383,8 @@ DROID *intGotoNextDroidType(DROID *CurrDroid,UDWORD droidType,bool AllowGroup)
 		for(psDroid = apsDroidLists[selectedPlayer]; (psDroid != CurrentDroid) && (psDroid != NULL); psDroid = psDroid->psNext)
 		{
 			if( ( ((UDWORD)psDroid->droidType == droidType) ||
-				  ((droidType == DROID_ANY) && (psDroid->droidType != DROID_TRANSPORTER && psDroid->droidType != DROID_SUPERTRANSPORTER)) ) &&
-				  ((psDroid->group == UBYTE_MAX) || AllowGroup) )
+			     ((droidType == DROID_ANY) && !isTransporter(psDroid))) &&
+			    ((psDroid->group == UBYTE_MAX) || AllowGroup))
 			{
 				if(psDroid != CurrentDroid)
 				{

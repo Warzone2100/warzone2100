@@ -1006,7 +1006,7 @@ static bool SetSecondaryState(SECONDARY_ORDER sec, unsigned State)
 		if (SelectedDroids[i])
 		{
 			//Only set the state if it's not a transporter.
-			if (SelectedDroids[i]->droidType != DROID_TRANSPORTER && SelectedDroids[i]->droidType != DROID_SUPERTRANSPORTER)
+			if (!isTransporter(SelectedDroids[i]))
 			{
 				if (!secondarySetState(SelectedDroids[i], sec, (SECONDARY_STATE)State))
 				{

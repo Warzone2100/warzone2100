@@ -2197,7 +2197,7 @@ void CreateIMDButton(IMAGEFILE *ImageFile, UWORD ImageID, void *Object, UDWORD P
 
 		if(IMDType == IMDTYPE_DROID)
 		{
-			if (((DROID*)Object)->droidType == DROID_TRANSPORTER || ((DROID*)Object)->droidType == DROID_SUPERTRANSPORTER)
+			if (isTransporter((DROID *)Object))
 			{
 				Position.x = 0;
 				Position.y = 0;

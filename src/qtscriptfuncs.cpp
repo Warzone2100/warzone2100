@@ -1324,7 +1324,7 @@ static QScriptValue js_groupAddArea(QScriptContext *context, QScriptEngine *engi
 	for (DROID *psDroid = apsDroidLists[player]; psGroup && psDroid; psDroid = psDroid->psNext)
 	{
 		if (psDroid->pos.x >= x1 && psDroid->pos.x <= x2 && psDroid->pos.y >= y1 && psDroid->pos.y <= y2
-		    && psDroid->droidType != DROID_COMMAND && (psDroid->droidType != DROID_TRANSPORTER && psDroid->droidType != DROID_SUPERTRANSPORTER))
+		    && psDroid->droidType != DROID_COMMAND && !isTransporter(psDroid))
 		{
 			psGroup->add(psDroid);
 		}
@@ -1499,7 +1499,7 @@ static QScriptValue js_setReinforcementTime(QScriptContext *context, QScriptEngi
 		 * time to -1 at the between stage if there are not going to be reinforcements on the submap  */
 		for (psDroid = apsDroidLists[selectedPlayer]; psDroid != NULL; psDroid = psDroid->psNext)
 		{
-			if (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER)
+			if (isTransporter(psDroid))
 			{
 				break;
 			}
