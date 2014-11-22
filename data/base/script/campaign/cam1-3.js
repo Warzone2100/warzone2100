@@ -4,19 +4,19 @@ include("script/campaign/templates.js");
 
 var NPDefenseGroup, NPScoutGroup, NPFactory;
 
-camAreaEvent("RemoveBeacon", 0, function(droid)
+camAreaEvent("RemoveBeacon", function(droid)
 {
 	hackRemoveMessage("C1-3_OBJ1", PROX_MSG, 0);
 });
 
-camAreaEvent("NorthConvoyTrigger", 0, function(droid)
+camAreaEvent("NorthConvoyTrigger", function(droid)
 {
 	camManageGroup(camMakeGroup("NorthConvoyForce"), CAM_ORDER_DEFEND, {
 		pos: camMakePos("NorthConvoyLoc")
 	});
 });
 
-camAreaEvent("SouthConvoyTrigger", 0, function(droid)
+camAreaEvent("SouthConvoyTrigger", function(droid)
 {
 	camManageGroup(camMakeGroup("SouthConvoyForce"), CAM_ORDER_DEFEND, {
 		pos: camMakePos("SouthConvoyLoc")
@@ -29,7 +29,7 @@ camAreaEvent("SouthConvoyTrigger", 0, function(droid)
 	}
 });
 
-camAreaEvent("WestConvoyTrigger", 0, function(droid)
+camAreaEvent("WestConvoyTrigger", function(droid)
 {
 	camManageGroup(camMakeGroup("WestConvoyForce"), CAM_ORDER_DEFEND, {
 		pos: camMakePos("WestConvoyLoc")
@@ -70,12 +70,12 @@ function sendScouts()
 	               { pos: camMakePos("RTLZ") });
 }
 
-camAreaEvent("ScavTrigger", 0, function(droid)
+camAreaEvent("ScavTrigger", function(droid)
 {
 	camEnableFactory("ScavFactory");
 });
 
-camAreaEvent("NPTrigger", 0, function(droid)
+camAreaEvent("NPTrigger", function(droid)
 {
 	camCallOnce("enableReinforcements");
 	camCallOnce("enableNP");

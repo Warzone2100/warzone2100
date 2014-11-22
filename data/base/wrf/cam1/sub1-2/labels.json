@@ -9,7 +9,7 @@
 	"object_0": { "label": "NorthFactory", "id": 108, "player": 7, "type": 1 },
 	"position_3": { "label": "NorthAssembly", "pos": [ 3392, 2240 ] },
 	"group_0": { "label": "NorthTankGroup", "members": [ 57, 66, 67, 68 ], "player": 7 },
-	"area_4": { "label": "NorthBaseTrigger", "pos1": [ 2000, 300 ], "pos2": [ 6000, 4600 ] },
+	"radius_0": { "label": "NorthBaseTrigger", "subscriber": 0, "pos": [ 3968, 1792 ], "radius": 2000 },
 
 	"area_5": { "label": "WestBase", "pos1": [ 1600, 6464 ], "pos2": [ 2368, 7232 ] },
 	"object_1": { "label": "WestFactory", "id": 323, "player": 7, "type": 1 },

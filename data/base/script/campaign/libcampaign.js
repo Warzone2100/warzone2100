@@ -149,6 +149,7 @@ function camMakePos(xx, yy)
 			// store ID for those as well.
 			return { x: obj.x, y: obj.y, id: obj.id };
 		case POSITION:
+		case RADIUS:
 			return obj;
 		case AREA:
 			return {
@@ -225,6 +226,10 @@ function camMakeGroup(what, filter)
 				break;
 			case AREA:
 				array = enumArea(obj.x, obj.y, obj.x2, obj.y2,
+				                 ALL_PLAYERS, false);
+				break;
+			case RADIUS:
+				array = enumRange(obj.x, obj.y, obj.radius,
 				                 ALL_PLAYERS, false);
 				break;
 			case GROUP:
@@ -638,11 +643,7 @@ function camSetEnemyBases(bases)
 				continue;
 			}
 			bi.group = newGroup();
-			addLabel({
-				type: GROUP,
-				id: bi.group,
-				player: 0,
-			}, blabel);
+			addLabel({ type: GROUP, id: bi.group }, blabel);
 			var structs = enumArea(bi.cleanup, ENEMIES, false);
 			for (var i = 0; i < structs.length; ++i)
 			{
@@ -657,6 +658,8 @@ function camSetEnemyBases(bases)
 			camDebug("Base", blabel, "defined as empty group");
 		bi.detected = false;
 		bi.eliminated = false;
+		camTrace("Resetting label", blabel);
+		resetLabel(blabel, CAM_HUMAN_PLAYER); // subscribe for eventGroupSeen
 	}
 }
 
@@ -706,7 +709,9 @@ var __camNumEnemyBases;
 
 function __camCheckBaseSeen(seen)
 {
-	var group = seen.group;
+	var group = seen; // group?
+	if (camDef(seen.group)) // object?
+		group = seen.group;
 	if (!camDef(group) || !group)
 		return;
 	// FIXME: O(n) lookup here
@@ -771,20 +776,6 @@ function __camCheckBaseEliminated(group)
 	}
 }
 
-// we need this because eventObjectSeen is unreliable
-function __camBasesTick()
-{
-	for (var blabel in __camEnemyBases)
-	{
-		var bi = __camEnemyBases[blabel];
-		if (bi.detected)
-			continue;
-		var objs = enumArea(bi.cleanup, ENEMIES, true); // "true" for "seen"
-		if (!objs.length)
-			continue;
-		camDetectEnemyBase(blabel);
-	}
-}
 
 ////////////////////////////////////////////////////////////////////////////////
 // AI droid movement automation.
@@ -1715,26 +1706,18 @@ function camSetupTransporter(x, y, x1, y1)
 ////////////////////////////////////////////////////////////////////////////////
 
 
-//;; \subsection{camAreaEvent(label, filter, function(droid))}
-//;; Implement eventArea<label> in a convenient way. The function callback
-//;; would be executed every time a droid (belonging to a player
-//;; that matches the filter) enters the area for the first time
-//;; (use \texttt{resetArea()} to restart anew). \textbf{filter} can be one of
-//;; a player index, ALL_PLAYERS, ALLIES or ENEMIES. The function
-//;; marks the area until the event is triggered.
-function camAreaEvent(label, filter, code)
+//;; \subsection{camAreaEvent(label, function(droid))}
+//;; Implement eventArea<label> in a debugging-friendly way. The function
+//;; marks the area until the event is triggered, and traces entering the area
+//;; in the TRACE log.
+function camAreaEvent(label, code)
 {
 	var eventName = "eventArea" + label;
 	camMarkTiles(label);
 	__camPreHookEvent(eventName, function(droid)
 	{
-		if (!camPlayerMatchesFilter(droid.player, filter))
-		{
-			camTraceOnce("Suppressing", label, "for player", droid.player);
-			resetArea(label);
-			return;
-		}
-		camTrace("Player", droid.player, "enters", label);
+		if (camDef(droid))
+			camTrace("Player", droid.player, "enters", label);
 		camUnmarkTiles(label);
 		code(droid);
 	});
@@ -1761,7 +1744,6 @@ function __camPreHookEvent(eventname, hookcode)
 function __camTick()
 {
 	queue("__camTacticsTick", 100);
-	queue("__camBasesTick", 200);
 	if (camDef(__camWinLossCallback))
 		__camGlobalContext[__camWinLossCallback]();
 }
@@ -1855,6 +1837,11 @@ __camPreHookEvent("eventDestroyed", function(obj)
 __camPreHookEvent("eventObjectSeen", function(viewer, seen)
 {
 	__camCheckBaseSeen(seen);
+});
+
+__camPreHookEvent("eventGroupSeen", function(viewer, group)
+{
+	__camCheckBaseSeen(group);
 });
 
 __camPreHookEvent("eventTransporterExit", function(transport)

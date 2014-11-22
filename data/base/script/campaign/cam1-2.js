@@ -35,7 +35,7 @@ function camEnemyBaseDetected_NorthGroup()
 	camCallOnce("exposeNorthBase");
 }
 
-camAreaEvent("NorthBaseTrigger", 0, function(droid)
+camAreaEvent("NorthBaseTrigger", function(droid)
 {
 	// frankly, this one happens silently
 	camEnableFactory("NorthFactory");

@@ -4,7 +4,7 @@ include("script/campaign/templates.js");
 
 var NPScout; // Sensor scout (initialized when droid is created)
 
-camAreaEvent("AttackArea1", 0, function(droid)
+camAreaEvent("AttackArea1", function(droid)
 {
 	// call this manually because eventObjectSeen is unreliable
 	eventObjectSeen(0, NPScout);
@@ -28,7 +28,7 @@ camAreaEvent("AttackArea1", 0, function(droid)
 	camEnableFactory("base2factory"); // re-enable
 });
 
-camAreaEvent("AttackArea2", 0, function(droid)
+camAreaEvent("AttackArea2", function(droid)
 {
 	camEnableFactory("base4factory");
 });
@@ -46,13 +46,13 @@ function eventObjectSeen(viewer, seen)
 	queue("camCallOnce", 2000, "doNPRetreat");
 }
 
-camAreaEvent("NPSensorTurn", 1, function(droid)
+camAreaEvent("NPSensorTurn", function(droid)
 {
 	var pos = camMakePos("NPSensorRemove");
 	orderDroidLoc(NPScout, DORDER_MOVE, pos.x, pos.y);
 });
 
-camAreaEvent("NPSensorRemove", 1, function(droid)
+camAreaEvent("NPSensorRemove", function(droid)
 {
 	removeObject(NPScout, false);
 });

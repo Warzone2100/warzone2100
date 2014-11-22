@@ -3,7 +3,7 @@ include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
 // player zero's droid enteres this area
-camAreaEvent("LaunchScavAttack", 0, function(droid)
+camAreaEvent("LaunchScavAttack", function(droid)
 {
 	var spos = getObject("scav1soundpos");
 	playSound("pcv375.ogg", spos.x, spos.y, 0);
@@ -44,19 +44,19 @@ function doAmbush()
 }
 
 // player zero's droid enteres this area
-camAreaEvent("ScavAttack1", 0, function(droid)
+camAreaEvent("ScavAttack1", function(droid)
 {
 	hackRemoveMessage("C1A_OBJ1", PROX_MSG, 0);
 	queue("runAway", 1000);
 	queue("doAmbush", 5000);
 });
 
-camAreaEvent("RoadblockArea", 0, function(droid)
+camAreaEvent("RoadblockArea", function(droid)
 {
 	camEnableFactory("base1factory");
 });
 
-camAreaEvent("raidTrigger", 0, function(droid)
+camAreaEvent("raidTrigger", function(droid)
 {
 	camManageGroup(
 		camMakeGroup("raidTrigger", ENEMIES),
@@ -73,7 +73,7 @@ camAreaEvent("raidTrigger", 0, function(droid)
 	camEnableFactory("base2factory1");
 });
 
-camAreaEvent("scavbase3area", 0, function(droid)
+camAreaEvent("scavbase3area", function(droid)
 {
 	camEnableFactory("base2factory2");
 });
