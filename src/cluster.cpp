@@ -32,7 +32,6 @@
 #include "scriptcb.h"
 #include "scripttabs.h"
 #include "projectile.h"
-#include "qtscript.h"
 
 // distance between units for them to be in the same cluster
 #define CLUSTER_DIST	(TILE_UNITS*8)
@@ -425,7 +424,6 @@ void clustObjectSeen(BASE_OBJECT *psObj, BASE_OBJECT *psViewer)
 			psScrCBObjSeen = psObj;
 			psScrCBObjViewer = psViewer;
 			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_OBJ_SEEN);
-			triggerEventSeen(psViewer, psObj);
 
 			switch (psObj->type)
 			{

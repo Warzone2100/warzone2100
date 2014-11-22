@@ -42,10 +42,9 @@
 #include "scriptextern.h"
 #include "structure.h"
 #include "projectile.h"
-
 #include "display.h"
 #include "multiplay.h"
-
+#include "qtscript.h"
 #include "wavecast.h"
 
 // rate to change visibility level
@@ -660,7 +659,10 @@ static void processVisibilityVision(BASE_OBJECT *psViewer)
 			// Tell system that this side can see this object
 			setSeenBy(psObj, psViewer->player, val);
 
-			// This looks like some kind of weird hack.
+			// Check if scripting system wants to trigger an event for this
+			triggerEventSeen(psViewer, psObj);
+
+			// This looks like some kind of weird hack. Only used by wzscript.
 			if(psObj->type != OBJ_FEATURE && psObj->visible[psViewer->player] <= 0)
 			{
 				// features are not in the cluster system

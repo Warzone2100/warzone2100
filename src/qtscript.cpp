@@ -1218,24 +1218,37 @@ bool triggerEventPickup(FEATURE *psFeat, DROID *psDroid)
 }
 
 //__ \subsection{eventObjectSeen(viewer, seen)}
-//__ An event that is run sometimes when an object goes from not seen to seen.
+//__ An event that is run sometimes when an object, which was marked by an object label,
+//__ which was reset through resetLabel() to subscribe for events, goes from not seen to seen.
+//__ An event that is run sometimes when an objectm  goes from not seen to seen.
 //__ First parameter is \emph{game object} doing the seeing, the next the game
-//__ object being seen. This is event is throttled, and so is not called every time.
+//__ object being seen.
+//__ \subsection{eventGroupSeen(viewer, group)}
+//__ An event that is run sometimes when a member of a group, which was marked by a group label,
+//__ which was reset through resetLabel() to subscribe for events, goes from not seen to seen.
+//__ First parameter is \emph{game object} doing the seeing, the next the id of the group
+//__ being seen.
 bool triggerEventSeen(BASE_OBJECT *psViewer, BASE_OBJECT *psSeen)
 {
 	ASSERT(scriptsReady, "Scripts not initialized yet");
 	for (int i = 0; i < scripts.size() && psSeen && psViewer; ++i)
 	{
 		QScriptEngine *engine = scripts.at(i);
-		int me = engine->globalObject().property("me").toInt32();
-		bool receiveAll = engine->globalObject().property("isReceivingAllEvents").toBool();
-		if (me == psViewer->player || receiveAll)
+		int seen = seenLabelCheck(engine, psSeen, psViewer);
+		if (seen == SCRIPT_OBJECT_SEEN)
 		{
 			QScriptValueList args;
 			args += convMax(psViewer, engine);
 			args += convMax(psSeen, engine);
 			callFunction(engine, "eventObjectSeen", args);
 		}
+		else if (seen > 0)
+		{
+			QScriptValueList args;
+			args += convMax(psViewer, engine);
+			args += QScriptValue(seen); // group id
+			callFunction(engine, "eventGroupSeen", args);
+		} // else do nothing
 	}
 	return true;
 }

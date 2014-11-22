@@ -97,7 +97,9 @@ struct labeltype
 	int id;
 	int type;
 	int player;
+	int subscriber;
 	QList<int> idlist;
+	int triggered;
 
 	bool operator==(const labeltype &o) const { return id == o.id && type == o.type && player == o.player; }
 };
@@ -162,7 +164,7 @@ static void updateLabelModel()
 	int nextRow = 0;
 	for (LABELMAP::iterator i = labels.begin(); i != labels.end(); i++)
 	{
-		labeltype &l = (*i);
+		const labeltype &l = i.value();
 		labelModel->setItem(nextRow, 0, new QStandardItem(i.key()));
 		const char *c = "?";
 		switch (l.type)
@@ -172,6 +174,7 @@ static void updateLabelModel()
 		case OBJ_STRUCTURE: c = "STRUCTURE"; break;
 		case SCRIPT_POSITION: c = "POSITION"; break;
 		case SCRIPT_AREA: c = "AREA"; break;
+		case SCRIPT_RADIUS: c = "RADIUS"; break;
 		case SCRIPT_GROUP: c = "GROUP"; break;
 		case SCRIPT_PLAYER:
 		case SCRIPT_RESEARCH:
@@ -180,15 +183,40 @@ static void updateLabelModel()
 		case SCRIPT_COUNT: c = "ERROR"; break;
 		}
 		labelModel->setItem(nextRow, 1, new QStandardItem(QString(c)));
+		switch (l.triggered)
+		{
+		case -1: labelModel->setItem(nextRow, 2, new QStandardItem("N/A")); break;
+		case 0: labelModel->setItem(nextRow, 2, new QStandardItem("Active")); break;
+		default: labelModel->setItem(nextRow, 2, new QStandardItem("Done")); break;
+		}
+		if (l.player == ALL_PLAYERS)
+		{
+			labelModel->setItem(nextRow, 3, new QStandardItem("ALL"));
+		}
+		else
+		{
+			labelModel->setItem(nextRow, 3, new QStandardItem(QString::number(l.player)));
+		}
+		if (l.subscriber == ALL_PLAYERS)
+		{
+			labelModel->setItem(nextRow, 4, new QStandardItem("ALL"));
+		}
+		else
+		{
+			labelModel->setItem(nextRow, 4, new QStandardItem(QString::number(l.subscriber)));
+		}
 		nextRow++;
 	}
 }
 
 QStandardItemModel *createLabelModel()
 {
-	labelModel = new QStandardItemModel(0, 2);
+	labelModel = new QStandardItemModel(0, 5);
 	labelModel->setHeaderData(0, Qt::Horizontal, QString("Label"));
 	labelModel->setHeaderData(1, Qt::Horizontal, QString("Type"));
+	labelModel->setHeaderData(2, Qt::Horizontal, QString("Trigger"));
+	labelModel->setHeaderData(3, Qt::Horizontal, QString("Owner"));
+	labelModel->setHeaderData(4, Qt::Horizontal, QString("Subscriber"));
 	updateLabelModel();
 	return labelModel;
 }
@@ -233,6 +261,38 @@ void showLabel(const QString &key)
 			}
 		}
 	}
+	else if (l.type == SCRIPT_RADIUS)
+	{
+		setViewPos(map_coord(l.p1.x), map_coord(l.p1.y), false); // move camera position
+		clearMarks();
+		for (int x = MAX(map_coord(l.p1.x - l.p2.x), 0); x < MIN(map_coord(l.p1.x + l.p2.x), mapWidth); x++)
+		{
+			for (int y = MAX(map_coord(l.p1.y - l.p2.x), 0); y < MIN(map_coord(l.p1.y + l.p2.x), mapHeight); y++) // l.p2.x is radius, not a bug
+			{
+				if (iHypot(map_coord(l.p1) - Vector2i(x, y)) < map_coord(l.p2.x))
+				{
+					MAPTILE *psTile = mapTile(x, y);
+					psTile->tileInfoBits |= BITS_MARKED;
+				}
+			}
+		}
+	}
+	else if (l.type == SCRIPT_RADIUS)
+	{
+		setViewPos(map_coord(l.p1.x), map_coord(l.p1.y), false); // move camera position
+		clearMarks();
+		for (int x = MAX(map_coord(l.p1.x - l.p2.x), 0); x < MIN(map_coord(l.p1.x + l.p2.x), mapWidth); x++)
+		{
+			for (int y = MAX(map_coord(l.p1.y - l.p2.x), 0); y < MIN(map_coord(l.p1.y + l.p2.x), mapHeight); y++) // l.p2.x is radius, not a bug
+			{
+				if (iHypot(map_coord(l.p1) - Vector2i(x, y)) < map_coord(l.p2.x))
+				{
+					MAPTILE *psTile = mapTile(x, y);
+					psTile->tileInfoBits |= BITS_MARKED;
+				}
+			}
+		}
+	}
 	else if (l.type == OBJ_DROID || l.type == OBJ_FEATURE || l.type == OBJ_STRUCTURE)
 	{
 		clearMarks();
@@ -268,24 +328,52 @@ void showLabel(const QString &key)
 	}
 }
 
+// Returns zero for no action, SCRIPT_OBJECT_SEEN for object seen callback, positive for group callback
+int seenLabelCheck(QScriptEngine *engine, BASE_OBJECT *seen, BASE_OBJECT *viewer)
+{
+	GROUPMAP *psMap = groups.value(engine);
+	int groupId = psMap->value(seen);
+	for (LABELMAP::iterator i = labels.begin(); i != labels.end(); i++)
+	{
+		labeltype &l = (*i);
+		if (l.id == seen->id && l.triggered == 0)
+		{
+			l.triggered = viewer->id; // record who made the discovery
+			return SCRIPT_OBJECT_SEEN;
+		}
+		else if (l.type == SCRIPT_GROUP && l.id == groupId && l.triggered == 0
+		         && (l.subscriber == ALL_PLAYERS || l.subscriber == viewer->player))
+		{
+			l.triggered = viewer->id; // record who made the discovery
+			return groupId;
+		}
+	}
+	return 0;
+}
+
 bool areaLabelCheck(DROID *psDroid)
 {
 	int x = psDroid->pos.x;
 	int y = psDroid->pos.y;
+	bool activated = false;
 	for (LABELMAP::iterator i = labels.begin(); i != labels.end(); i++)
 	{
-		labeltype &l = (*i);
-		if (l.id == -1 && l.p1.x < x && l.p1.y < y && l.p2.x > x && l.p2.y > y
-		    && (l.player == ALL_PLAYERS || l.player == psDroid->player)
-		    && l.type == SCRIPT_AREA)
+		labeltype &l = i.value();
+		if (l.triggered == 0 && (l.subscriber == ALL_PLAYERS || l.subscriber == psDroid->player)
+		    && ((l.type == SCRIPT_AREA && l.p1.x < x && l.p1.y < y && l.p2.x > x && l.p2.y > y)
+			|| (l.type == SCRIPT_RADIUS && iHypot(l.p1 - removeZ(psDroid->pos)) < l.p2.x)))
 		{
 			// We're inside an untriggered area
-			l.id = 1; // deactivate it
+			activated = true;
+			l.triggered = psDroid->id;
 			triggerEventArea(i.key(), psDroid);
-			return true;
 		}
 	}
-	return false;
+	if (activated)
+	{
+		updateLabelModel();
+	}
+	return activated;
 }
 
 static void removeFromGroup(QScriptEngine *engine, GROUPMAP *psMap, BASE_OBJECT *psObj)
@@ -794,7 +882,9 @@ bool loadLabels(const char *filename)
 			p.type = SCRIPT_POSITION;
 			p.player = ALL_PLAYERS;
 			p.id = -1;
+			p.triggered = -1; // always deactivated
 			labels.insert(label, p);
+			p.triggered = ini.value("triggered", -1).toInt(); // deactivated by default
 		}
 		else if (list[i].startsWith("area"))
 		{
@@ -802,8 +892,23 @@ bool loadLabels(const char *filename)
 			p.p2 = ini.vector2i("pos2");
 			p.type = SCRIPT_AREA;
 			p.player = ini.value("player", ALL_PLAYERS).toInt();
-			p.id = ini.value("triggered", -1).toInt();
+			p.triggered = ini.value("triggered", 0).toInt(); // activated by default
+			p.id = -1;
+			p.subscriber = ini.value("subscriber", ALL_PLAYERS).toInt();
 			labels.insert(label, p);
+		}
+		else if (list[i].startsWith("radius"))
+		{
+			p.p1 = ini.vector2i("pos");
+			p.p2.x = ini.value("radius").toInt();
+			p.p2.y = 0; // unused
+			p.type = SCRIPT_RADIUS;
+			p.player = ini.value("player", ALL_PLAYERS).toInt();
+			p.triggered = ini.value("triggered", 0).toInt(); // activated by default
+			p.subscriber = ini.value("subscriber", ALL_PLAYERS).toInt();
+			p.id = -1;
+			labels.insert(label, p);
+			p.triggered = ini.value("triggered", -1).toInt(); // deactivated by default
 		}
 		else if (list[i].startsWith("object"))
 		{
@@ -811,6 +916,8 @@ bool loadLabels(const char *filename)
 			p.type = ini.value("type").toInt();
 			p.player = ini.value("player").toInt();
 			labels.insert(label, p);
+			p.triggered = ini.value("triggered", -1).toInt(); // deactivated by default
+			p.subscriber = ini.value("subscriber", ALL_PLAYERS).toInt();
 		}
 		else if (list[i].startsWith("group"))
 		{
@@ -827,6 +934,7 @@ bool loadLabels(const char *filename)
 				p.idlist += id;
 			}
 			labels.insert(label, p);
+			p.triggered = ini.value("triggered", -1).toInt(); // deactivated by default
 		}
 		else
 		{
@@ -839,13 +947,14 @@ bool loadLabels(const char *filename)
 
 bool writeLabels(const char *filename)
 {
-	int c[4]; // make unique, incremental section names
+	int c[5]; // make unique, incremental section names
 	memset(c, 0, sizeof(c));
 	WzConfig ini(filename);
 	for (LABELMAP::const_iterator i = labels.constBegin(); i != labels.constEnd(); i++)
 	{
 		QString key = i.key();
 		labeltype l = i.value();
+		ini.setValue("triggered", l.triggered);
 		if (l.type == SCRIPT_POSITION)
 		{
 			ini.beginGroup("position_" + QString::number(c[0]++));
@@ -860,13 +969,26 @@ bool writeLabels(const char *filename)
 			ini.setVector2i("pos2", l.p2);
 			ini.setValue("label", key);
 			ini.setValue("player", l.player);
-			ini.setValue("triggered", l.id);
+			ini.setValue("triggered", l.triggered);
+			ini.setValue("subscriber", l.subscriber);
+			ini.endGroup();
+		}
+		else if (l.type == SCRIPT_RADIUS)
+		{
+			ini.beginGroup("radius_" + QString::number(c[2]++));
+			ini.setVector2i("pos", l.p1);
+			ini.setValue("radius", l.p2.x);
+			ini.setValue("label", key);
+			ini.setValue("player", l.player);
+			ini.setValue("triggered", l.triggered);
+			ini.setValue("subscriber", l.subscriber);
 			ini.endGroup();
 		}
 		else if (l.type == SCRIPT_GROUP)
 		{
-			ini.beginGroup("group_" + QString::number(c[2]++));
+			ini.beginGroup("group_" + QString::number(c[3]++));
 			ini.setValue("player", l.player);
+			ini.setValue("triggered", l.triggered);
 			QStringList list;
 			for (int i = 0; i < l.idlist.size(); i++)
 			{
@@ -874,11 +996,12 @@ bool writeLabels(const char *filename)
 			}
 			ini.setValue("members", list);
 			ini.setValue("label", key);
+			ini.setValue("subscriber", l.subscriber);
 			ini.endGroup();
 		}
 		else
 		{
-			ini.beginGroup("object_" + QString::number(c[3]++));
+			ini.beginGroup("object_" + QString::number(c[4]++));
 			ini.setValue("id", l.id);
 			ini.setValue("player", l.player);
 			ini.setValue("type", l.type);
@@ -912,20 +1035,26 @@ static QScriptValue js_getWeaponInfo(QScriptContext *context, QScriptEngine *eng
 	return QScriptValue(info);
 }
 
+//-- \subsection{resetLabel(label[, filter])}
+//-- Reset the trigger on an label. Next time a unit enters the area, it will trigger
+//-- an area event. Next time an object or a group is seen, it will trigger a seen event.
+//-- Optionally add a filter on it in the second parameter, which can
+//-- be a specific player to watch for, or ALL_PLAYERS by default.
+//-- This is a fast operation of O(log n) algorithmic complexity. (3.2+ only)
 //-- \subsection{resetArea(label[, filter])}
 //-- Reset the trigger on an area. Next time a unit enters the area, it will trigger
 //-- an area event. Optionally add a filter on it in the second parameter, which can
 //-- be a specific player to watch for, or ALL_PLAYERS by default.
-//-- This is a fast operation of O(log n) algorithmic complexity. (3.2+ only)
-static QScriptValue js_resetArea(QScriptContext *context, QScriptEngine *)
+//-- This is a fast operation of O(log n) algorithmic complexity. DEPRECATED - use resetLabel instead. (3.2+ only)
+static QScriptValue js_resetLabel(QScriptContext *context, QScriptEngine *)
 {
 	QString labelName = context->argument(0).toString();
 	SCRIPT_ASSERT(context, labels.contains(labelName), "Label %s not found", labelName.toUtf8().constData());
 	labeltype &l = labels[labelName];
-	l.id = -1; // make active again
+	l.triggered = 0; // make active again
 	if (context->argumentCount() > 1)
 	{
-		l.player = context->argument(1).toInt32();
+		l.subscriber = context->argument(1).toInt32();
 	}
 	return QScriptValue();
 }
@@ -972,8 +1101,19 @@ static QScriptValue js_addLabel(QScriptContext *context, QScriptEngine *engine)
 	value.player = qval.property("player").toInt32();
 	value.p1.x = world_coord(qval.property("x").toInt32());
 	value.p1.y = world_coord(qval.property("y").toInt32());
-	value.p2.x = world_coord(qval.property("x2").toInt32());
-	value.p2.y = world_coord(qval.property("y2").toInt32());
+	if (value.type == SCRIPT_AREA) {
+		value.p2.x = world_coord(qval.property("x2").toInt32());
+		value.p2.y = world_coord(qval.property("y2").toInt32());
+	} else if (value.type == SCRIPT_RADIUS) {
+		value.p2.x = world_coord(qval.property("radius").toInt32());
+	}
+	value.triggered = -1; // default off
+	QScriptValue triggered = qval.property("triggered");
+	if (triggered.isNumber())
+	{
+		SCRIPT_ASSERT(context, value.type != SCRIPT_POSITION, "Cannot assign a trigger to a position");
+		value.triggered = triggered.toInt32();
+	}
 	if (value.type == OBJ_DROID || value.type == OBJ_STRUCTURE || value.type == OBJ_FEATURE)
 	{
 		BASE_OBJECT *psObj = IdToObject((OBJECT_TYPE)value.type, value.id, value.player);
@@ -1058,21 +1198,30 @@ static QScriptValue js_getObject(QScriptContext *context, QScriptEngine *engine)
 	{
 		ret = engine->newObject();
 		labeltype p = labels.value(label);
+		ret.setProperty("type", p.type, QScriptValue::ReadOnly);
 		switch (p.type)
 		{
+		case SCRIPT_RADIUS:
+			ret.setProperty("x", map_coord(p.p1.x), QScriptValue::ReadOnly);
+			ret.setProperty("y", map_coord(p.p1.y), QScriptValue::ReadOnly);
+			ret.setProperty("radius", map_coord(p.p2.x), QScriptValue::ReadOnly);
+			ret.setProperty("triggered", p.triggered);
+			ret.setProperty("subscriber", p.subscriber);
+			break;
 		case SCRIPT_AREA:
 			ret.setProperty("x2", map_coord(p.p2.x), QScriptValue::ReadOnly);
 			ret.setProperty("y2", map_coord(p.p2.y), QScriptValue::ReadOnly);
-			ret.setProperty("type", p.type, QScriptValue::ReadOnly);
+			ret.setProperty("subscriber", p.subscriber);
 			// fall through
 		case SCRIPT_POSITION:
+			ret.setProperty("triggered", p.triggered);
 			ret.setProperty("x", map_coord(p.p1.x), QScriptValue::ReadOnly);
 			ret.setProperty("y", map_coord(p.p1.y), QScriptValue::ReadOnly);
-			ret.setProperty("type", p.type, QScriptValue::ReadOnly);
 			break;
 		case SCRIPT_GROUP:
+			ret.setProperty("triggered", p.triggered);
+			ret.setProperty("subscriber", p.subscriber);
 			ret.setProperty("id", p.id, QScriptValue::ReadOnly);
-			ret.setProperty("type", p.type, QScriptValue::ReadOnly);
 			break;
 		case OBJ_DROID:
 		case OBJ_FEATURE:
@@ -3780,12 +3929,28 @@ static QScriptValue js_hackMarkTiles(QScriptContext *context, QScriptEngine *)
 		QString label = context->argument(0).toString();
 		SCRIPT_ASSERT(context, labels.contains(label), "Label %s not found", label.toUtf8().constData());
 		labeltype &l = labels[label];
-		for (int x = map_coord(l.p1.x); x < map_coord(l.p2.x); x++)
+		if (l.type == SCRIPT_AREA)
 		{
-			for (int y = map_coord(l.p1.y); y < map_coord(l.p2.y); y++)
+			for (int x = map_coord(l.p1.x); x < map_coord(l.p2.x); x++)
 			{
-				MAPTILE *psTile = mapTile(x, y);
-				psTile->tileInfoBits |= BITS_MARKED;
+				for (int y = map_coord(l.p1.y); y < map_coord(l.p2.y); y++)
+				{
+					MAPTILE *psTile = mapTile(x, y);
+					psTile->tileInfoBits |= BITS_MARKED;
+				}
+			}
+		} else if (l.type == SCRIPT_RADIUS)
+		{
+			for (int x = map_coord(l.p1.x - l.p2.x); x < map_coord(l.p1.x + l.p2.x); x++)
+			{
+				for (int y = map_coord(l.p1.y - l.p2.x); y < map_coord(l.p1.y + l.p2.x); y++)
+				{
+					if (x >= -1 && x < mapWidth + 1 && y >= -1 && y < mapWidth + 1 && iHypot(map_coord(l.p1) - Vector2i(x, y)) < map_coord(l.p2.x))
+					{
+						MAPTILE *psTile = mapTile(x, y);
+						psTile->tileInfoBits |= BITS_MARKED;
+					}
+				}
 			}
 		}
 	}
@@ -4516,7 +4681,8 @@ bool registerFunctions(QScriptEngine *engine, QString scriptName)
 	engine->globalObject().setProperty("cameraSlide", engine->newFunction(js_cameraSlide));
 	engine->globalObject().setProperty("cameraTrack", engine->newFunction(js_cameraTrack));
 	engine->globalObject().setProperty("cameraZoom", engine->newFunction(js_cameraZoom));
-	engine->globalObject().setProperty("resetArea", engine->newFunction(js_resetArea));
+	engine->globalObject().setProperty("resetArea", engine->newFunction(js_resetLabel)); // deprecated
+	engine->globalObject().setProperty("resetLabel", engine->newFunction(js_resetLabel));
 	engine->globalObject().setProperty("addSpotter", engine->newFunction(js_addSpotter));
 	engine->globalObject().setProperty("removeSpotter", engine->newFunction(js_removeSpotter));
 	engine->globalObject().setProperty("syncRequest", engine->newFunction(js_syncRequest));
@@ -4720,6 +4886,7 @@ bool registerFunctions(QScriptEngine *engine, QString scriptName)
 	engine->globalObject().setProperty("ENEMIES", ENEMIES, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("POSITION", SCRIPT_POSITION, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("AREA", SCRIPT_AREA, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("RADIUS", SCRIPT_RADIUS, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("GROUP", SCRIPT_GROUP, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("PLAYER_DATA", SCRIPT_PLAYER, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("RESEARCH_DATA", SCRIPT_RESEARCH, QScriptValue::ReadOnly | QScriptValue::Undeletable);
