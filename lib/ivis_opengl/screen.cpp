@@ -370,7 +370,7 @@ void _wzSceneBegin(const char *descr)
 
 void _wzSceneEnd(const char *descr)
 {
-	ASSERT(descr == sceneActive, "Out of order scenes: Wanted to stop %s, was in %s", descr, sceneActive);
+	ASSERT(strcmp(descr, sceneActive) == 0, "Out of order scenes: Wanted to stop %s, was in %s", descr, sceneActive);
 	if (khr_debug)
 	{
 		glPopDebugGroup();
