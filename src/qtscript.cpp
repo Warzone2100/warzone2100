@@ -135,7 +135,7 @@ static void updateGlobalModels();
 // ----------------------------------------------------------
 
 // Call a function by name
-static bool callFunction(QScriptEngine *engine, const QString &function, const QScriptValueList &args, bool required = false)
+static QScriptValue callFunction(QScriptEngine *engine, const QString &function, const QScriptValueList &args, bool required = false)
 {
 	code_part level = required ? LOG_ERROR : LOG_SCRIPT;
 	QScriptValue value = engine->globalObject().property(function);
@@ -183,9 +183,9 @@ static bool callFunction(QScriptEngine *engine, const QString &function, const Q
 		ASSERT(false, "Uncaught exception calling function \"%s\" at line %d: %s",
 		       function.toUtf8().constData(), line, result.toString().toUtf8().constData());
 		engine->clearExceptions();
-		return false;
+		return QScriptValue();
 	}
-	return true;
+	return result;
 }
 
 //-- \subsection{setTimer(function, milliseconds[, object])}
@@ -299,6 +299,23 @@ static QScriptValue js_queue(QScriptContext *context, QScriptEngine *engine)
 	node.type = TIMER_ONESHOT_READY;
 	timers.push_back(node);
 	return QScriptValue();
+}
+
+//-- \subsection{profile(function[, arguments])}
+//-- Calls a function with given arguments, measures time it took to evaluate the function,
+//-- and adds this time to performance monitor statistics. Transparently returns the
+//-- function's return value. The function to run is the first parameter, and it
+//-- \underline{must be quoted}. (3.2+ only)
+static QScriptValue js_profile(QScriptContext *context, QScriptEngine *engine)
+{
+	SCRIPT_ASSERT(context, context->argument(0).isString(), "Profiled functions must be quoted");
+	QString funcName = context->argument(0).toString();
+	QScriptValueList args;
+	for (int i = 1; i < context->argumentCount(); ++i)
+	{
+		args.push_back(context->argument(i));
+	}
+	return callFunction(engine, funcName, args);
 }
 
 void scriptRemoveObject(BASE_OBJECT *psObj)
@@ -524,6 +541,7 @@ QScriptEngine *loadPlayerScript(QString path, int player, int difficulty)
 	engine->globalObject().setProperty("setTimer", engine->newFunction(js_setTimer));
 	engine->globalObject().setProperty("queue", engine->newFunction(js_queue));
 	engine->globalObject().setProperty("removeTimer", engine->newFunction(js_removeTimer));
+	engine->globalObject().setProperty("profile", engine->newFunction(js_profile));
 	engine->globalObject().setProperty("include", engine->newFunction(js_include));
 
 	// Special global variables
