@@ -35,6 +35,7 @@
 #include <QtCore/QString>
 #include <QtCore/QStringList>
 #include <QtCore/QFileInfo>
+#include <QtCore/QElapsedTimer>
 #include <QtGui/QStandardItemModel>
 #include <QtWidgets/QFileDialog>
 
@@ -84,8 +85,8 @@ struct timerNode
 	// implement operator less TODO
 };
 
-#define MAX_MS 20
-#define HALF_MAX_MS 10
+#define MAX_US 20000
+#define HALF_MAX_US 10000
 
 /// List of timer events for scripts. Before running them, we sort the list then run as many as we have time for.
 /// In this way, we implement load balancing of events and keep frame rates tidy for users. Since scripts run on the
@@ -146,21 +147,22 @@ static QScriptValue callFunction(QScriptEngine *engine, const QString &function,
 		debug(level, "called function (%s) not defined", function.toUtf8().constData());
 		return false;
 	}
-	int ticks = wzGetTicks();
+	QElapsedTimer timer;
+	timer.start();
 	QScriptValue result = value.call(QScriptValue(), args);
-	ticks = wzGetTicks() - ticks;
+	int ticks = timer.nsecsElapsed() / 1000;
 	MONITOR *monitor = monitors.value(engine); // pick right one for this engine
 	MONITOR_BIN m;
 	if (monitor->contains(function))
 	{
 		m = monitor->value(function);
 	}
-	if (ticks > MAX_MS)
+	if (ticks > MAX_US)
 	{
-		debug(LOG_SCRIPT, "%s took %d ms at time %d", function.toUtf8().constData(), ticks, wzGetTicks());
+		debug(LOG_SCRIPT, "%s took %dus at time %d", function.toUtf8().constData(), ticks, wzGetTicks());
 		m.overMaxTimeCalls++;
 	}
-	else if (ticks > HALF_MAX_MS)
+	else if (ticks > HALF_MAX_US)
 	{
 		 m.overHalfMaxTimeCalls++;
 	}
@@ -421,14 +423,14 @@ bool shutdownScripts()
 		QString scriptName = engine->globalObject().property("scriptName").toString();
 		int me = engine->globalObject().property("me").toInt32();
 		dumpScriptLog(scriptName, me, "=== PERFORMANCE DATA ===\n");
-		dumpScriptLog(scriptName, me, "    calls | avg ms | worst ms | worst ms at | >=limit | >=limit/2 | function\n");
+		dumpScriptLog(scriptName, me, "    calls | avg (usec) | worst (usec) | worst call at | >=limit | >=limit/2 | function\n");
 		for (MONITOR::const_iterator iter = monitor->constBegin(); iter != monitor->constEnd(); ++iter)
 		{
 			QString function = iter.key();
 			MONITOR_BIN m = iter.value();
 			QString info = QString("%1 | %2 | %3 | %4 | %5 | %6 | %7\n")
-				.arg(m.calls, 9).arg(m.time / m.calls, 6).arg(m.worst, 8)
-				.arg(m.worstGameTime, 11).arg(m.overMaxTimeCalls, 7)
+				.arg(m.calls, 9).arg(m.time / m.calls, 10).arg(m.worst, 12)
+				.arg(m.worstGameTime, 13).arg(m.overMaxTimeCalls, 7)
 				.arg(m.overHalfMaxTimeCalls, 9).arg(function);
 			dumpScriptLog(scriptName, me, info);
 		}
