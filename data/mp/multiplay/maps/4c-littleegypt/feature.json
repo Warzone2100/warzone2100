@@ -1,6 +1,5 @@
 {
     "feature_0013": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             3008,
@@ -14,7 +13,6 @@
         ]
     },
     "feature_0014": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             3264,
@@ -28,7 +26,6 @@
         ]
     },
     "feature_0015": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             3008,
@@ -42,7 +39,6 @@
         ]
     },
     "feature_0016": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             3264,
@@ -56,7 +52,6 @@
         ]
     },
     "feature_0066": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             21184,
@@ -70,7 +65,6 @@
         ]
     },
     "feature_0067": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             21440,
@@ -84,7 +78,6 @@
         ]
     },
     "feature_0068": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             21184,
@@ -98,7 +91,6 @@
         ]
     },
     "feature_0103": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             21440,
@@ -112,7 +104,6 @@
         ]
     },
     "feature_0140": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             12480,
@@ -126,7 +117,6 @@
         ]
     },
     "feature_0141": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             12736,
@@ -140,7 +130,6 @@
         ]
     },
     "feature_0142": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             11072,
@@ -154,7 +143,6 @@
         ]
     },
     "feature_0146": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             11072,
@@ -168,7 +156,6 @@
         ]
     },
     "feature_0188": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             13120,
@@ -182,7 +169,6 @@
         ]
     },
     "feature_0189": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             13376,
@@ -196,7 +182,6 @@
         ]
     },
     "feature_0190": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             11584,
@@ -210,7 +195,6 @@
         ]
     },
     "feature_0194": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             11584,
@@ -224,7 +208,6 @@
         ]
     },
     "feature_0199": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             576,
@@ -238,7 +221,6 @@
         ]
     },
     "feature_0200": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             704,
@@ -252,7 +234,6 @@
         ]
     },
     "feature_0201": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             23872,
@@ -266,7 +247,6 @@
         ]
     },
     "feature_0202": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             24000,
@@ -280,7 +260,6 @@
         ]
     },
     "feature_0203": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             23872,
@@ -294,7 +273,6 @@
         ]
     },
     "feature_0204": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             23872,
@@ -308,7 +286,6 @@
         ]
     },
     "feature_0205": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             576,
@@ -322,7 +299,6 @@
         ]
     },
     "feature_0206": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             704,
@@ -336,7 +312,6 @@
         ]
     },
     "feature_0207": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             1088,
@@ -350,7 +325,6 @@
         ]
     },
     "feature_0208": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             7232,
@@ -364,7 +338,6 @@
         ]
     },
     "feature_0209": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             17216,
@@ -378,7 +351,6 @@
         ]
     },
     "feature_0210": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             20800,
@@ -392,7 +364,6 @@
         ]
     },
     "feature_0211": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             21568,
@@ -406,7 +377,6 @@
         ]
     },
     "feature_0212": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             15424,
@@ -420,7 +390,6 @@
         ]
     },
     "feature_0213": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             8128,
@@ -434,7 +403,6 @@
         ]
     },
     "feature_0214": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             2752,
@@ -448,7 +416,6 @@
         ]
     },
     "feature_0215": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             12352,
@@ -462,7 +429,6 @@
         ]
     },
     "feature_0216": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             11968,
@@ -476,7 +442,6 @@
         ]
     },
     "feature_0217": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             11840,
@@ -490,7 +455,6 @@
         ]
     },
     "feature_0218": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             11968,
@@ -504,7 +468,6 @@
         ]
     },
     "feature_0224": {
-        "id": "Ruin4",
         "name": "Ruin4",
         "position": [
             11584,
@@ -518,7 +481,6 @@
         ]
     },
     "feature_0225": {
-        "id": "Ruin3",
         "name": "Ruin3",
         "position": [
             11712,
@@ -532,7 +494,6 @@
         ]
     },
     "feature_0226": {
-        "id": "Ruin1",
         "name": "Ruin1",
         "position": [
             11456,
@@ -546,7 +507,6 @@
         ]
     },
     "feature_0227": {
-        "id": "miruin2",
         "name": "miruin2",
         "position": [
             11328,
@@ -560,7 +520,6 @@
         ]
     },
     "feature_0228": {
-        "id": "BarbTechRuin",
         "name": "BarbTechRuin",
         "position": [
             12288,
@@ -574,7 +533,6 @@
         ]
     },
     "feature_0230": {
-        "id": "BarbWarehouse1",
         "name": "BarbWarehouse1",
         "position": [
             12032,
@@ -588,7 +546,6 @@
         ]
     },
     "feature_0231": {
-        "id": "BarbWarehouse1",
         "name": "BarbWarehouse1",
         "position": [
             12032,
@@ -602,7 +559,6 @@
         ]
     },
     "feature_0232": {
-        "id": "BarbHUT",
         "name": "BarbHUT",
         "position": [
             12224,
@@ -616,7 +572,6 @@
         ]
     },
     "feature_0233": {
-        "id": "BarbHUT",
         "name": "BarbHUT",
         "position": [
             13120,
@@ -630,7 +585,6 @@
         ]
     },
     "feature_0234": {
-        "id": "Ruin1",
         "name": "Ruin1",
         "position": [
             13248,
@@ -644,7 +598,6 @@
         ]
     },
     "feature_0235": {
-        "id": "Ruin4",
         "name": "Ruin4",
         "position": [
             12096,
@@ -658,7 +611,6 @@
         ]
     },
     "feature_0236": {
-        "id": "Ruin1",
         "name": "Ruin1",
         "position": [
             11968,
@@ -672,7 +624,6 @@
         ]
     },
     "feature_0237": {
-        "id": "BarbHUT",
         "name": "BarbHUT",
         "position": [
             12224,
@@ -686,7 +637,6 @@
         ]
     },
     "feature_0238": {
-        "id": "Ruin4",
         "name": "Ruin4",
         "position": [
             12096,
@@ -700,7 +650,6 @@
         ]
     },
     "feature_0239": {
-        "id": "Ruin3",
         "name": "Ruin3",
         "position": [
             11456,
@@ -714,7 +663,6 @@
         ]
     },
     "feature_0240": {
-        "id": "miruin2",
         "name": "miruin2",
         "position": [
             11840,
@@ -728,7 +676,6 @@
         ]
     },
     "feature_0241": {
-        "id": "Ruin4",
         "name": "Ruin4",
         "position": [
             12352,
@@ -742,7 +689,6 @@
         ]
     },
     "feature_0242": {
-        "id": "Ruin4",
         "name": "Ruin4",
         "position": [
             12608,
@@ -756,7 +702,6 @@
         ]
     },
     "feature_0243": {
-        "id": "BarbWarehouse2",
         "name": "BarbWarehouse2",
         "position": [
             11648,
@@ -770,7 +715,6 @@
         ]
     },
     "feature_0244": {
-        "id": "BarbWarehouse2",
         "name": "BarbWarehouse2",
         "position": [
             11648,
@@ -784,7 +728,6 @@
         ]
     },
     "feature_0245": {
-        "id": "Ruin3",
         "name": "Ruin3",
         "position": [
             12736,
@@ -798,7 +741,6 @@
         ]
     },
     "feature_0246": {
-        "id": "miruin2",
         "name": "miruin2",
         "position": [
             12352,
@@ -812,7 +754,6 @@
         ]
     },
     "feature_0247": {
-        "id": "miruin2",
         "name": "miruin2",
         "position": [
             13248,
@@ -826,7 +767,6 @@
         ]
     },
     "feature_0248": {
-        "id": "Ruin3",
         "name": "Ruin3",
         "position": [
             10944,
@@ -840,7 +780,6 @@
         ]
     },
     "feature_0249": {
-        "id": "Ruin3",
         "name": "Ruin3",
         "position": [
             10816,
@@ -854,7 +793,6 @@
         ]
     },
     "feature_0250": {
-        "id": "BarbHUT",
         "name": "BarbHUT",
         "position": [
             11072,
@@ -868,7 +806,6 @@
         ]
     },
     "feature_0251": {
-        "id": "miruin2",
         "name": "miruin2",
         "position": [
             10816,
@@ -882,7 +819,6 @@
         ]
     },
     "feature_0252": {
-        "id": "miruin2",
         "name": "miruin2",
         "position": [
             10560,
@@ -896,7 +832,6 @@
         ]
     },
     "feature_0253": {
-        "id": "miruin2",
         "name": "miruin2",
         "position": [
             12992,
@@ -910,7 +845,6 @@
         ]
     },
     "feature_0254": {
-        "id": "Ruin3",
         "name": "Ruin3",
         "position": [
             12864,
@@ -924,7 +858,6 @@
         ]
     },
     "feature_0255": {
-        "id": "Ruin3",
         "name": "Ruin3",
         "position": [
             12992,
@@ -938,7 +871,6 @@
         ]
     },
     "feature_0256": {
-        "id": "Ruin3",
         "name": "Ruin3",
         "position": [
             12992,
@@ -952,7 +884,6 @@
         ]
     },
     "feature_0257": {
-        "id": "Ruin4",
         "name": "Ruin4",
         "position": [
             14400,
@@ -966,7 +897,6 @@
         ]
     },
     "feature_0258": {
-        "id": "Ruin4",
         "name": "Ruin4",
         "position": [
             14528,
@@ -980,7 +910,6 @@
         ]
     },
     "feature_0259": {
-        "id": "Ruin4",
         "name": "Ruin4",
         "position": [
             14784,
@@ -994,7 +923,6 @@
         ]
     },
     "feature_0260": {
-        "id": "miruin2",
         "name": "miruin2",
         "position": [
             14784,
@@ -1008,7 +936,6 @@
         ]
     },
     "feature_0261": {
-        "id": "miruin2",
         "name": "miruin2",
         "position": [
             14784,
@@ -1022,7 +949,6 @@
         ]
     },
     "feature_0262": {
-        "id": "Ruin1",
         "name": "Ruin1",
         "position": [
             14784,
@@ -1036,7 +962,6 @@
         ]
     },
     "feature_0263": {
-        "id": "BarbHUT",
         "name": "BarbHUT",
         "position": [
             14912,
@@ -1050,7 +975,6 @@
         ]
     },
     "feature_0264": {
-        "id": "BarbHUT",
         "name": "BarbHUT",
         "position": [
             14784,
@@ -1064,7 +988,6 @@
         ]
     },
     "feature_0265": {
-        "id": "BarbHUT",
         "name": "BarbHUT",
         "position": [
             14528,
@@ -1078,7 +1001,6 @@
         ]
     },
     "feature_0266": {
-        "id": "miruin2",
         "name": "miruin2",
         "position": [
             14528,
@@ -1092,7 +1014,6 @@
         ]
     },
     "feature_0267": {
-        "id": "miruin2",
         "name": "miruin2",
         "position": [
             14528,
@@ -1106,7 +1027,6 @@
         ]
     },
     "feature_0268": {
-        "id": "miruin2",
         "name": "miruin2",
         "position": [
             14528,
@@ -1120,7 +1040,6 @@
         ]
     },
     "feature_0269": {
-        "id": "Ruin4",
         "name": "Ruin4",
         "position": [
             14784,
@@ -1134,7 +1053,6 @@
         ]
     },
     "feature_0270": {
-        "id": "Ruin4",
         "name": "Ruin4",
         "position": [
             14528,
@@ -1148,7 +1066,6 @@
         ]
     },
     "feature_0271": {
-        "id": "Ruin4",
         "name": "Ruin4",
         "position": [
             15040,
@@ -1162,7 +1079,6 @@
         ]
     },
     "feature_0272": {
-        "id": "Ruin4",
         "name": "Ruin4",
         "position": [
             14528,
@@ -1176,7 +1092,6 @@
         ]
     },
     "feature_0273": {
-        "id": "Ruin3",
         "name": "Ruin3",
         "position": [
             14528,
@@ -1190,7 +1105,6 @@
         ]
     },
     "feature_0274": {
-        "id": "Ruin3",
         "name": "Ruin3",
         "position": [
             15168,
@@ -1204,7 +1118,6 @@
         ]
     },
     "feature_0275": {
-        "id": "Ruin5",
         "name": "Ruin5",
         "position": [
             12352,
@@ -1218,7 +1131,6 @@
         ]
     },
     "feature_0276": {
-        "id": "Ruin4",
         "name": "Ruin4",
         "position": [
             12608,
@@ -1232,7 +1144,6 @@
         ]
     },
     "feature_0277": {
-        "id": "Ruin1",
         "name": "Ruin1",
         "position": [
             12736,
@@ -1246,7 +1157,6 @@
         ]
     },
     "feature_0278": {
-        "id": "miruin2",
         "name": "miruin2",
         "position": [
             12608,
@@ -1260,7 +1170,6 @@
         ]
     },
     "feature_0279": {
-        "id": "BarbHUT",
         "name": "BarbHUT",
         "position": [
             12480,
@@ -1274,7 +1183,6 @@
         ]
     },
     "feature_0280": {
-        "id": "BarbHUT",
         "name": "BarbHUT",
         "position": [
             12992,
@@ -1288,7 +1196,6 @@
         ]
     },
     "feature_0281": {
-        "id": "BarbHUT",
         "name": "BarbHUT",
         "position": [
             12736,
@@ -1302,7 +1209,6 @@
         ]
     },
     "feature_0282": {
-        "id": "Ruin5",
         "name": "Ruin5",
         "position": [
             13248,
@@ -1316,7 +1222,6 @@
         ]
     },
     "feature_0283": {
-        "id": "Ruin5",
         "name": "Ruin5",
         "position": [
             13248,
@@ -1330,7 +1235,6 @@
         ]
     },
     "feature_0284": {
-        "id": "Ruin3",
         "name": "Ruin3",
         "position": [
             13248,
@@ -1344,7 +1248,6 @@
         ]
     },
     "feature_0285": {
-        "id": "Ruin3",
         "name": "Ruin3",
         "position": [
             13504,
@@ -1358,7 +1261,6 @@
         ]
     },
     "feature_0286": {
-        "id": "Ruin3",
         "name": "Ruin3",
         "position": [
             14016,
@@ -1372,7 +1274,6 @@
         ]
     },
     "feature_0287": {
-        "id": "Ruin3",
         "name": "Ruin3",
         "position": [
             12096,
@@ -1386,7 +1287,6 @@
         ]
     },
     "feature_0288": {
-        "id": "BarbHUT",
         "name": "BarbHUT",
         "position": [
             12736,
@@ -1400,7 +1300,6 @@
         ]
     },
     "feature_0289": {
-        "id": "miruin2",
         "name": "miruin2",
         "position": [
             12352,
@@ -1414,7 +1313,6 @@
         ]
     },
     "feature_0290": {
-        "id": "BarbWarehouse3",
         "name": "BarbWarehouse3",
         "position": [
             11456,
@@ -1428,7 +1326,6 @@
         ]
     },
     "feature_0291": {
-        "id": "BarbWarehouse2",
         "name": "BarbWarehouse2",
         "position": [
             11136,
@@ -1442,7 +1339,6 @@
         ]
     },
     "feature_0292": {
-        "id": "BarbWarehouse2",
         "name": "BarbWarehouse2",
         "position": [
             11136,
@@ -1456,7 +1352,6 @@
         ]
     },
     "feature_0294": {
-        "id": "BarbHUT",
         "name": "BarbHUT",
         "position": [
             10944,
@@ -1470,7 +1365,6 @@
         ]
     },
     "feature_0295": {
-        "id": "Ruin4",
         "name": "Ruin4",
         "position": [
             11072,
@@ -1484,7 +1378,6 @@
         ]
     },
     "feature_0296": {
-        "id": "Ruin4",
         "name": "Ruin4",
         "position": [
             11584,
@@ -1498,7 +1391,6 @@
         ]
     },
     "feature_0297": {
-        "id": "Ruin3",
         "name": "Ruin3",
         "position": [
             11712,
@@ -1512,7 +1404,6 @@
         ]
     },
     "feature_0298": {
-        "id": "Ruin1",
         "name": "Ruin1",
         "position": [
             11840,
@@ -1526,7 +1417,6 @@
         ]
     },
     "feature_0299": {
-        "id": "Ruin4",
         "name": "Ruin4",
         "position": [
             9536,
@@ -1540,7 +1430,6 @@
         ]
     },
     "feature_0300": {
-        "id": "Ruin4",
         "name": "Ruin4",
         "position": [
             9536,
@@ -1554,7 +1443,6 @@
         ]
     },
     "feature_0301": {
-        "id": "Ruin3",
         "name": "Ruin3",
         "position": [
             9792,
@@ -1568,7 +1456,6 @@
         ]
     },
     "feature_0303": {
-        "id": "Ruin1",
         "name": "Ruin1",
         "position": [
             9792,
@@ -1582,7 +1469,6 @@
         ]
     },
     "feature_0304": {
-        "id": "miruin2",
         "name": "miruin2",
         "position": [
             9408,
@@ -1596,7 +1482,6 @@
         ]
     },
     "feature_0305": {
-        "id": "BarbHUT",
         "name": "BarbHUT",
         "position": [
             9792,
@@ -1610,7 +1495,6 @@
         ]
     },
     "feature_0306": {
-        "id": "BarbHUT",
         "name": "BarbHUT",
         "position": [
             9280,
@@ -1624,7 +1508,6 @@
         ]
     },
     "feature_0308": {
-        "id": "Ruin1",
         "name": "Ruin1",
         "position": [
             9792,
@@ -1638,7 +1521,6 @@
         ]
     },
     "feature_0309": {
-        "id": "Ruin5",
         "name": "Ruin5",
         "position": [
             9280,
@@ -1652,7 +1534,6 @@
         ]
     },
     "feature_0310": {
-        "id": "Ruin5",
         "name": "Ruin5",
         "position": [
             9024,
@@ -1666,7 +1547,6 @@
         ]
     },
     "feature_0311": {
-        "id": "Ruin4",
         "name": "Ruin4",
         "position": [
             9536,
@@ -1680,7 +1560,6 @@
         ]
     },
     "feature_0312": {
-        "id": "Ruin4",
         "name": "Ruin4",
         "position": [
             9536,
@@ -1694,7 +1573,6 @@
         ]
     },
     "feature_0314": {
-        "id": "Ruin3",
         "name": "Ruin3",
         "position": [
             9536,
@@ -1708,7 +1586,6 @@
         ]
     },
     "feature_0315": {
-        "id": "Ruin3",
         "name": "Ruin3",
         "position": [
             9792,
@@ -1722,7 +1599,6 @@
         ]
     },
     "feature_0316": {
-        "id": "Ruin5",
         "name": "Ruin5",
         "position": [
             9792,
@@ -1736,7 +1612,6 @@
         ]
     },
     "feature_0317": {
-        "id": "Ruin5",
         "name": "Ruin5",
         "position": [
             8768,
@@ -1750,7 +1625,6 @@
         ]
     },
     "feature_0319": {
-        "id": "Ruin4",
         "name": "Ruin4",
         "position": [
             3136,
@@ -1764,7 +1638,6 @@
         ]
     },
     "feature_0320": {
-        "id": "Ruin3",
         "name": "Ruin3",
         "position": [
             3136,
@@ -1778,7 +1651,6 @@
         ]
     },
     "feature_0321": {
-        "id": "Ruin1",
         "name": "Ruin1",
         "position": [
             2880,
@@ -1792,7 +1664,6 @@
         ]
     },
     "feature_0322": {
-        "id": "miruin2",
         "name": "miruin2",
         "position": [
             2880,
@@ -1806,7 +1677,6 @@
         ]
     },
     "feature_0323": {
-        "id": "BarbHUT",
         "name": "BarbHUT",
         "position": [
             2752,
@@ -1820,7 +1690,6 @@
         ]
     },
     "feature_0324": {
-        "id": "Ruin4",
         "name": "Ruin4",
         "position": [
             2752,
@@ -1834,7 +1703,6 @@
         ]
     },
     "feature_0326": {
-        "id": "Ruin3",
         "name": "Ruin3",
         "position": [
             2624,
@@ -1848,7 +1716,6 @@
         ]
     },
     "feature_0327": {
-        "id": "Ruin3",
         "name": "Ruin3",
         "position": [
             3136,
@@ -1862,7 +1729,6 @@
         ]
     },
     "feature_0328": {
-        "id": "Ruin3",
         "name": "Ruin3",
         "position": [
             1856,
@@ -1876,7 +1742,6 @@
         ]
     },
     "feature_0329": {
-        "id": "Ruin3",
         "name": "Ruin3",
         "position": [
             1984,
@@ -1890,7 +1755,6 @@
         ]
     },
     "feature_0330": {
-        "id": "Ruin3",
         "name": "Ruin3",
         "position": [
             21568,
@@ -1904,7 +1768,6 @@
         ]
     },
     "feature_0331": {
-        "id": "Ruin3",
         "name": "Ruin3",
         "position": [
             21568,
@@ -1918,7 +1781,6 @@
         ]
     },
     "feature_0332": {
-        "id": "BarbHUT",
         "name": "BarbHUT",
         "position": [
             21824,
@@ -1932,7 +1794,6 @@
         ]
     },
     "feature_0333": {
-        "id": "miruin2",
         "name": "miruin2",
         "position": [
             21824,
@@ -1946,7 +1807,6 @@
         ]
     },
     "feature_0334": {
-        "id": "miruin2",
         "name": "miruin2",
         "position": [
             21952,
@@ -1960,7 +1820,6 @@
         ]
     },
     "feature_0335": {
-        "id": "miruin2",
         "name": "miruin2",
         "position": [
             22720,
@@ -1974,7 +1833,6 @@
         ]
     },
     "feature_0336": {
-        "id": "miruin2",
         "name": "miruin2",
         "position": [
             22720,
@@ -1988,7 +1846,6 @@
         ]
     },
     "feature_0337": {
-        "id": "Ruin1",
         "name": "Ruin1",
         "position": [
             22976,
@@ -2002,7 +1859,6 @@
         ]
     },
     "feature_0338": {
-        "id": "Ruin5",
         "name": "Ruin5",
         "position": [
             21952,
@@ -2016,7 +1872,6 @@
         ]
     },
     "feature_0340": {
-        "id": "Ruin3",
         "name": "Ruin3",
         "position": [
             21952,
@@ -2030,7 +1885,6 @@
         ]
     },
     "feature_0342": {
-        "id": "Ruin1",
         "name": "Ruin1",
         "position": [
             21696,
@@ -2044,7 +1898,6 @@
         ]
     },
     "feature_0343": {
-        "id": "BarbHUT",
         "name": "BarbHUT",
         "position": [
             21696,
@@ -2058,7 +1911,6 @@
         ]
     },
     "feature_0344": {
-        "id": "BarbHUT",
         "name": "BarbHUT",
         "position": [
             21952,
@@ -2072,7 +1924,6 @@
         ]
     },
     "feature_0345": {
-        "id": "Ruin5",
         "name": "Ruin5",
         "position": [
             21696,
@@ -2086,7 +1937,6 @@
         ]
     },
     "feature_0346": {
-        "id": "Ruin5",
         "name": "Ruin5",
         "position": [
             22208,
@@ -2100,7 +1950,6 @@
         ]
     },
     "feature_0348": {
-        "id": "Ruin4",
         "name": "Ruin4",
         "position": [
             22080,
@@ -2114,7 +1963,6 @@
         ]
     },
     "feature_0349": {
-        "id": "Ruin4",
         "name": "Ruin4",
         "position": [
             24384,
@@ -2128,7 +1976,6 @@
         ]
     },
     "feature_0350": {
-        "id": "Ruin1",
         "name": "Ruin1",
         "position": [
             24256,
@@ -2142,7 +1989,6 @@
         ]
     },
     "feature_0352": {
-        "id": "BarbHUT",
         "name": "BarbHUT",
         "position": [
             24384,
@@ -2156,7 +2002,6 @@
         ]
     },
     "feature_0354": {
-        "id": "Ruin5",
         "name": "Ruin5",
         "position": [
             2752,
@@ -2170,7 +2015,6 @@
         ]
     },
     "feature_0356": {
-        "id": "Ruin5",
         "name": "Ruin5",
         "position": [
             3008,
@@ -2184,7 +2028,6 @@
         ]
     },
     "feature_0357": {
-        "id": "Ruin4",
         "name": "Ruin4",
         "position": [
             3008,
@@ -2198,7 +2041,6 @@
         ]
     },
     "feature_0358": {
-        "id": "Ruin3",
         "name": "Ruin3",
         "position": [
             2752,
@@ -2212,7 +2054,6 @@
         ]
     },
     "feature_0359": {
-        "id": "Ruin1",
         "name": "Ruin1",
         "position": [
             3008,
@@ -2226,7 +2067,6 @@
         ]
     },
     "feature_0360": {
-        "id": "miruin2",
         "name": "miruin2",
         "position": [
             2752,
@@ -2240,7 +2080,6 @@
         ]
     },
     "feature_0361": {
-        "id": "BarbHUT",
         "name": "BarbHUT",
         "position": [
             3008,
@@ -2254,7 +2093,6 @@
         ]
     },
     "feature_0362": {
-        "id": "BarbHUT",
         "name": "BarbHUT",
         "position": [
             2624,
@@ -2268,7 +2106,6 @@
         ]
     },
     "feature_0363": {
-        "id": "BarbHUT",
         "name": "BarbHUT",
         "position": [
             2496,
@@ -2282,7 +2119,6 @@
         ]
     },
     "feature_0364": {
-        "id": "Ruin4",
         "name": "Ruin4",
         "position": [
             11072,
@@ -2296,7 +2132,6 @@
         ]
     },
     "feature_0365": {
-        "id": "miruin2",
         "name": "miruin2",
         "position": [
             11200,
@@ -2310,7 +2145,6 @@
         ]
     },
     "feature_0366": {
-        "id": "BarbHUT",
         "name": "BarbHUT",
         "position": [
             11328,
@@ -2324,7 +2158,6 @@
         ]
     },
     "feature_0367": {
-        "id": "Ruin1",
         "name": "Ruin1",
         "position": [
             11456,
@@ -2338,7 +2171,6 @@
         ]
     },
     "feature_0368": {
-        "id": "OilDrum",
         "name": "OilDrum",
         "position": [
             2624,
@@ -2352,7 +2184,6 @@
         ]
     },
     "feature_0369": {
-        "id": "OilDrum",
         "name": "OilDrum",
         "position": [
             2752,
@@ -2366,7 +2197,6 @@
         ]
     },
     "feature_0370": {
-        "id": "OilDrum",
         "name": "OilDrum",
         "position": [
             2752,
@@ -2380,7 +2210,6 @@
         ]
     },
     "feature_0371": {
-        "id": "OilDrum",
         "name": "OilDrum",
         "position": [
             2624,
@@ -2394,7 +2223,6 @@
         ]
     },
     "feature_0372": {
-        "id": "OilDrum",
         "name": "OilDrum",
         "position": [
             2624,
@@ -2408,7 +2236,6 @@
         ]
     },
     "feature_0373": {
-        "id": "OilDrum",
         "name": "OilDrum",
         "position": [
             2752,
@@ -2422,7 +2249,6 @@
         ]
     },
     "feature_0377": {
-        "id": "OilDrum",
         "name": "OilDrum",
         "position": [
             21952,
@@ -2436,7 +2262,6 @@
         ]
     },
     "feature_0378": {
-        "id": "OilDrum",
         "name": "OilDrum",
         "position": [
             21952,
@@ -2450,7 +2275,6 @@
         ]
     },
     "feature_0379": {
-        "id": "OilDrum",
         "name": "OilDrum",
         "position": [
             21952,
@@ -2464,7 +2288,6 @@
         ]
     },
     "feature_0380": {
-        "id": "OilDrum",
         "name": "OilDrum",
         "position": [
             22080,
@@ -2478,7 +2301,6 @@
         ]
     },
     "feature_0381": {
-        "id": "OilDrum",
         "name": "OilDrum",
         "position": [
             22080,
@@ -2492,7 +2314,6 @@
         ]
     },
     "feature_0382": {
-        "id": "OilDrum",
         "name": "OilDrum",
         "position": [
             22080,
@@ -2506,7 +2327,6 @@
         ]
     },
     "feature_0383": {
-        "id": "OilDrum",
         "name": "OilDrum",
         "position": [
             21568,
@@ -2520,7 +2340,6 @@
         ]
     },
     "feature_0384": {
-        "id": "OilDrum",
         "name": "OilDrum",
         "position": [
             21568,
@@ -2534,7 +2353,6 @@
         ]
     },
     "feature_0385": {
-        "id": "OilDrum",
         "name": "OilDrum",
         "position": [
             21440,
@@ -2548,7 +2366,6 @@
         ]
     },
     "feature_0386": {
-        "id": "OilDrum",
         "name": "OilDrum",
         "position": [
             21440,
@@ -2562,7 +2379,6 @@
         ]
     },
     "feature_0387": {
-        "id": "OilDrum",
         "name": "OilDrum",
         "position": [
             21440,
@@ -2576,7 +2392,6 @@
         ]
     },
     "feature_0388": {
-        "id": "OilDrum",
         "name": "OilDrum",
         "position": [
             21568,
@@ -2590,7 +2405,6 @@
         ]
     },
     "feature_0389": {
-        "id": "OilDrum",
         "name": "OilDrum",
         "position": [
             2624,
@@ -2604,7 +2418,6 @@
         ]
     },
     "feature_0390": {
-        "id": "OilDrum",
         "name": "OilDrum",
         "position": [
             2624,
@@ -2618,7 +2431,6 @@
         ]
     },
     "feature_0391": {
-        "id": "OilDrum",
         "name": "OilDrum",
         "position": [
             2496,
@@ -2632,7 +2444,6 @@
         ]
     },
     "feature_0392": {
-        "id": "OilDrum",
         "name": "OilDrum",
         "position": [
             2496,
@@ -2646,7 +2457,6 @@
         ]
     },
     "feature_0393": {
-        "id": "OilDrum",
         "name": "OilDrum",
         "position": [
             2368,
@@ -2660,7 +2470,6 @@
         ]
     },
     "feature_0394": {
-        "id": "OilDrum",
         "name": "OilDrum",
         "position": [
             2368,
@@ -2674,7 +2483,6 @@
         ]
     },
     "feature_0395": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             13120,
@@ -2688,7 +2496,6 @@
         ]
     },
     "feature_0396": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             11072,
@@ -2702,7 +2509,6 @@
         ]
     },
     "feature_0397": {
-        "id": "OilDrum",
         "name": "OilDrum",
         "position": [
             192,
@@ -2716,7 +2522,6 @@
         ]
     },
     "feature_0398": {
-        "id": "OilDrum",
         "name": "OilDrum",
         "position": [
             192,
@@ -2730,7 +2535,6 @@
         ]
     },
     "feature_0399": {
-        "id": "OilDrum",
         "name": "OilDrum",
         "position": [
             320,
@@ -2744,7 +2548,6 @@
         ]
     },
     "feature_0400": {
-        "id": "OilDrum",
         "name": "OilDrum",
         "position": [
             320,
@@ -2758,7 +2561,6 @@
         ]
     },
     "feature_0401": {
-        "id": "OilDrum",
         "name": "OilDrum",
         "position": [
             8512,
@@ -2772,7 +2574,6 @@
         ]
     },
     "feature_0402": {
-        "id": "OilDrum",
         "name": "OilDrum",
         "position": [
             8512,
@@ -2786,7 +2587,6 @@
         ]
     },
     "feature_0403": {
-        "id": "OilDrum",
         "name": "OilDrum",
         "position": [
             8640,
@@ -2800,7 +2600,6 @@
         ]
     },
     "feature_0404": {
-        "id": "OilDrum",
         "name": "OilDrum",
         "position": [
             8640,
@@ -2814,7 +2613,6 @@
         ]
     },
     "feature_0407": {
-        "id": "OilDrum",
         "name": "OilDrum",
         "position": [
             24000,
@@ -2828,7 +2626,6 @@
         ]
     },
     "feature_0409": {
-        "id": "OilDrum",
         "name": "OilDrum",
         "position": [
             23872,
@@ -2842,7 +2639,6 @@
         ]
     },
     "feature_0410": {
-        "id": "OilDrum",
         "name": "OilDrum",
         "position": [
             24128,
@@ -2856,7 +2652,6 @@
         ]
     },
     "feature_0411": {
-        "id": "OilDrum",
         "name": "OilDrum",
         "position": [
             24256,
@@ -2870,7 +2665,6 @@
         ]
     },
     "feature_0412": {
-        "id": "OilDrum",
         "name": "OilDrum",
         "position": [
             8384,
@@ -2884,7 +2678,6 @@
         ]
     },
     "feature_0413": {
-        "id": "OilDrum",
         "name": "OilDrum",
         "position": [
             8512,
@@ -2898,7 +2691,6 @@
         ]
     },
     "feature_0414": {
-        "id": "OilDrum",
         "name": "OilDrum",
         "position": [
             8512,
@@ -2912,7 +2704,6 @@
         ]
     },
     "feature_0415": {
-        "id": "OilDrum",
         "name": "OilDrum",
         "position": [
             8640,

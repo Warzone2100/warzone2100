@@ -1,6 +1,5 @@
 {
     "feature_1142": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             832,
@@ -14,7 +13,6 @@
         ]
     },
     "feature_1152": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             15424,
@@ -28,7 +26,6 @@
         ]
     },
     "feature_1155": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             15296,
@@ -42,7 +39,6 @@
         ]
     },
     "feature_1156": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             15552,
@@ -56,7 +52,6 @@
         ]
     },
     "feature_1159": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             10432,
@@ -70,7 +65,6 @@
         ]
     },
     "feature_1162": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             1600,
@@ -84,7 +78,6 @@
         ]
     },
     "feature_1165": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             1088,
@@ -98,7 +91,6 @@
         ]
     },
     "feature_1276": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             13120,
@@ -112,7 +104,6 @@
         ]
     },
     "feature_1559": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             5056,
@@ -126,7 +117,6 @@
         ]
     },
     "feature_1560": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             5824,
@@ -140,7 +130,6 @@
         ]
     },
     "feature_1561": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             6464,
@@ -154,7 +143,6 @@
         ]
     },
     "feature_1562": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             8512,
@@ -168,7 +156,6 @@
         ]
     },
     "feature_1563": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             10688,
@@ -182,7 +169,6 @@
         ]
     },
     "feature_1564": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             9536,
@@ -196,7 +182,6 @@
         ]
     },
     "feature_1565": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             9664,
@@ -210,7 +195,6 @@
         ]
     },
     "feature_1571": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             8384,
@@ -224,7 +208,6 @@
         ]
     },
     "feature_1610": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             8384,
@@ -238,7 +221,6 @@
         ]
     },
     "feature_1623": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             9792,
@@ -252,7 +234,6 @@
         ]
     },
     "feature_1652": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             6208,
@@ -266,7 +247,6 @@
         ]
     },
     "feature_20": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             2880,
@@ -280,7 +260,6 @@
         ]
     },
     "feature_22": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             13760,
@@ -294,7 +273,6 @@
         ]
     },
     "feature_33": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             1216,
@@ -308,7 +286,6 @@
         ]
     },
     "feature_4": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             2240,
@@ -322,7 +299,6 @@
         ]
     },
     "feature_40": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             14912,
@@ -336,7 +312,6 @@
         ]
     },
     "feature_52": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             7744,
@@ -350,7 +325,6 @@
         ]
     },
     "feature_7": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             14784,
@@ -364,7 +338,6 @@
         ]
     },
     "feature_704": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             2496,
@@ -378,7 +351,6 @@
         ]
     },
     "feature_706": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             13504,
@@ -392,7 +364,6 @@
         ]
     },
     "feature_707": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             14656,
@@ -406,7 +377,6 @@
         ]
     },
     "feature_708": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             14784,
@@ -420,7 +390,6 @@
         ]
     },
     "feature_709": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             7744,
@@ -434,7 +403,6 @@
         ]
     },
     "feature_711": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             1472,
@@ -448,7 +416,6 @@
         ]
     },
     "feature_713": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             5440,
@@ -462,7 +429,6 @@
         ]
     },
     "feature_716": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             9152,
@@ -476,7 +442,6 @@
         ]
     },
     "feature_718": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             11072,
@@ -490,7 +455,6 @@
         ]
     },
     "feature_719": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             11584,
@@ -504,7 +468,6 @@
         ]
     },
     "feature_720": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             12096,
@@ -518,7 +481,6 @@
         ]
     },
     "feature_721": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             9280,
@@ -532,7 +494,6 @@
         ]
     },
     "feature_722": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             5184,
@@ -546,7 +507,6 @@
         ]
     },
     "feature_723": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             3520,
@@ -560,7 +520,6 @@
         ]
     },
     "feature_726": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             7744,
@@ -574,7 +533,6 @@
         ]
     },
     "feature_734": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             2624,
@@ -588,7 +546,6 @@
         ]
     },
     "feature_738": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             1088,
@@ -602,7 +559,6 @@
         ]
     },
     "feature_739": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             6336,
@@ -616,7 +572,6 @@
         ]
     },
     "feature_740": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             15040,
@@ -630,7 +585,6 @@
         ]
     },
     "feature_741": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             15552,
@@ -644,7 +598,6 @@
         ]
     },
     "feature_743": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             6208,
@@ -658,7 +611,6 @@
         ]
     },
     "feature_744": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             3776,
@@ -672,7 +624,6 @@
         ]
     },
     "feature_745": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             960,

@@ -1,6 +1,5 @@
 {
     "feature_0001": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             13760,
@@ -14,7 +13,6 @@
         ]
     },
     "feature_0019": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             2368,
@@ -28,7 +26,6 @@
         ]
     },
     "feature_0020": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             2624,
@@ -42,7 +39,6 @@
         ]
     },
     "feature_0028": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             12736,
@@ -56,7 +52,6 @@
         ]
     },
     "feature_0029": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             12992,
@@ -70,7 +65,6 @@
         ]
     },
     "feature_0035": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             2624,
@@ -84,7 +78,6 @@
         ]
     },
     "feature_0036": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             2624,
@@ -98,7 +91,6 @@
         ]
     },
     "feature_0044": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             7744,
@@ -112,7 +104,6 @@
         ]
     },
     "feature_0045": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             7488,
@@ -126,7 +117,6 @@
         ]
     },
     "feature_0052": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             14016,
@@ -140,7 +130,6 @@
         ]
     },
     "feature_0053": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             11840,
@@ -154,7 +143,6 @@
         ]
     },
     "feature_0060": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             7104,
@@ -168,7 +156,6 @@
         ]
     },
     "feature_0061": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             7104,
@@ -182,7 +169,6 @@
         ]
     },
     "feature_0068": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             2624,
@@ -196,7 +182,6 @@
         ]
     },
     "feature_0069": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             2624,
@@ -210,7 +195,6 @@
         ]
     },
     "feature_0073": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             7360,
@@ -224,7 +208,6 @@
         ]
     },
     "feature_0074": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             4032,
@@ -238,7 +221,6 @@
         ]
     },
     "feature_0075": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             12736,
@@ -252,7 +234,6 @@
         ]
     },
     "feature_0076": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             11712,
@@ -266,7 +247,6 @@
         ]
     },
     "feature_0077": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             14016,
@@ -280,7 +260,6 @@
         ]
     },
     "feature_0078": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             8128,
@@ -294,7 +273,6 @@
         ]
     },
     "feature_0079": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             4928,
@@ -308,7 +286,6 @@
         ]
     },
     "feature_0080": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             4800,
@@ -322,7 +299,6 @@
         ]
     },
     "feature_0349": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             6976,
@@ -336,7 +312,6 @@
         ]
     },
     "feature_0359": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             5056,
@@ -350,7 +325,6 @@
         ]
     },
     "feature_0379": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             4672,
@@ -364,7 +338,6 @@
         ]
     },
     "feature_0389": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             5184,
@@ -378,7 +351,6 @@
         ]
     },
     "feature_0399": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             8384,
@@ -392,7 +364,6 @@
         ]
     },
     "feature_0409": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             11584,
@@ -406,7 +377,6 @@
         ]
     },
     "feature_0419": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             11584,
@@ -420,7 +390,6 @@
         ]
     },
     "feature_0429": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             11072,
@@ -434,7 +403,6 @@
         ]
     },
     "feature_0439": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             7744,
@@ -448,7 +416,6 @@
         ]
     },
     "feature_0440": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             7744,
@@ -462,7 +429,6 @@
         ]
     },
     "feature_0441": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             9536,
@@ -476,7 +442,6 @@
         ]
     },
     "feature_0442": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             6592,
@@ -490,7 +455,6 @@
         ]
     },
     "feature_0443": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             7616,
@@ -504,7 +468,6 @@
         ]
     },
     "feature_0444": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             10816,
@@ -518,7 +481,6 @@
         ]
     },
     "feature_0445": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             15040,
@@ -532,7 +494,6 @@
         ]
     },
     "feature_0446": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             11072,
@@ -546,7 +507,6 @@
         ]
     },
     "feature_0447": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             7616,
@@ -560,7 +520,6 @@
         ]
     },
     "feature_0448": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             3904,
@@ -574,7 +533,6 @@
         ]
     },
     "feature_0449": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             1344,
@@ -588,7 +546,6 @@
         ]
     },
     "feature_0450": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             4416,
@@ -602,7 +559,6 @@
         ]
     },
     "feature_0451": {
-        "id": "Ruin4",
         "name": "Ruin4",
         "position": [
             8896,
@@ -616,7 +572,6 @@
         ]
     },
     "feature_0452": {
-        "id": "Ruin3",
         "name": "Ruin3",
         "position": [
             9152,
@@ -630,7 +585,6 @@
         ]
     },
     "feature_0453": {
-        "id": "Ruin1",
         "name": "Ruin1",
         "position": [
             8896,
@@ -644,7 +598,6 @@
         ]
     },
     "feature_0454": {
-        "id": "Ruin5",
         "name": "Ruin5",
         "position": [
             8768,
@@ -658,7 +611,6 @@
         ]
     },
     "feature_0455": {
-        "id": "Boulder2",
         "name": "Boulder2",
         "position": [
             9536,
@@ -672,7 +624,6 @@
         ]
     },
     "feature_0456": {
-        "id": "WaterTower",
         "name": "WaterTower",
         "position": [
             9024,
@@ -686,7 +637,6 @@
         ]
     },
     "feature_0458": {
-        "id": "Ruin3",
         "name": "Ruin3",
         "position": [
             6720,
@@ -700,7 +650,6 @@
         ]
     },
     "feature_0459": {
-        "id": "Ruin1",
         "name": "Ruin1",
         "position": [
             6592,
@@ -714,7 +663,6 @@
         ]
     },
     "feature_0460": {
-        "id": "Ruin5",
         "name": "Ruin5",
         "position": [
             6848,
@@ -728,7 +676,6 @@
         ]
     },
     "feature_0461": {
-        "id": "WaterTower",
         "name": "WaterTower",
         "position": [
             6592,
@@ -742,7 +689,6 @@
         ]
     },
     "feature_0462": {
-        "id": "Boulder3",
         "name": "Boulder3",
         "position": [
             5696,
@@ -756,7 +702,6 @@
         ]
     },
     "feature_0463": {
-        "id": "Boulder3",
         "name": "Boulder3",
         "position": [
             6080,
@@ -770,7 +715,6 @@
         ]
     },
     "feature_0464": {
-        "id": "Boulder2",
         "name": "Boulder2",
         "position": [
             6336,
@@ -784,7 +728,6 @@
         ]
     },
     "feature_0465": {
-        "id": "Boulder2",
         "name": "Boulder2",
         "position": [
             6208,
@@ -798,7 +741,6 @@
         ]
     },
     "feature_0466": {
-        "id": "Boulder1",
         "name": "Boulder1",
         "position": [
             6080,
@@ -812,7 +754,6 @@
         ]
     },
     "feature_0467": {
-        "id": "Boulder1",
         "name": "Boulder1",
         "position": [
             5824,
@@ -826,7 +767,6 @@
         ]
     },
     "feature_0468": {
-        "id": "Boulder1",
         "name": "Boulder1",
         "position": [
             3648,
@@ -840,7 +780,6 @@
         ]
     },
     "feature_0469": {
-        "id": "Boulder3",
         "name": "Boulder3",
         "position": [
             4032,
@@ -854,7 +793,6 @@
         ]
     },
     "feature_0470": {
-        "id": "Boulder3",
         "name": "Boulder3",
         "position": [
             1472,
@@ -868,7 +806,6 @@
         ]
     },
     "feature_0471": {
-        "id": "Boulder3",
         "name": "Boulder3",
         "position": [
             5184,
@@ -882,7 +819,6 @@
         ]
     },
     "feature_0472": {
-        "id": "Boulder2",
         "name": "Boulder2",
         "position": [
             6592,
@@ -896,7 +832,6 @@
         ]
     },
     "feature_0473": {
-        "id": "Boulder2",
         "name": "Boulder2",
         "position": [
             11456,
@@ -910,7 +845,6 @@
         ]
     },
     "feature_0474": {
-        "id": "Boulder1",
         "name": "Boulder1",
         "position": [
             11072,
@@ -924,7 +858,6 @@
         ]
     },
     "feature_0475": {
-        "id": "Boulder1",
         "name": "Boulder1",
         "position": [
             14656,
@@ -938,7 +871,6 @@
         ]
     },
     "feature_0476": {
-        "id": "Boulder2",
         "name": "Boulder2",
         "position": [
             14400,
@@ -952,7 +884,6 @@
         ]
     },
     "feature_0477": {
-        "id": "Boulder2",
         "name": "Boulder2",
         "position": [
             14144,
@@ -966,7 +897,6 @@
         ]
     },
     "feature_0478": {
-        "id": "Boulder3",
         "name": "Boulder3",
         "position": [
             15424,
@@ -980,7 +910,6 @@
         ]
     },
     "feature_0479": {
-        "id": "Boulder3",
         "name": "Boulder3",
         "position": [
             14144,
@@ -994,7 +923,6 @@
         ]
     },
     "feature_0480": {
-        "id": "Boulder1",
         "name": "Boulder1",
         "position": [
             15424,
@@ -1008,7 +936,6 @@
         ]
     },
     "feature_0481": {
-        "id": "Boulder1",
         "name": "Boulder1",
         "position": [
             13248,
@@ -1022,7 +949,6 @@
         ]
     },
     "feature_0482": {
-        "id": "Boulder2",
         "name": "Boulder2",
         "position": [
             11712,
@@ -1036,7 +962,6 @@
         ]
     },
     "feature_0483": {
-        "id": "Boulder2",
         "name": "Boulder2",
         "position": [
             10176,
@@ -1050,7 +975,6 @@
         ]
     },
     "feature_0484": {
-        "id": "Boulder1",
         "name": "Boulder1",
         "position": [
             9792,
@@ -1064,7 +988,6 @@
         ]
     },
     "feature_0485": {
-        "id": "Boulder1",
         "name": "Boulder1",
         "position": [
             8640,
@@ -1078,7 +1001,6 @@
         ]
     },
     "feature_0486": {
-        "id": "Ruin1",
         "name": "Ruin1",
         "position": [
             11200,
@@ -1092,7 +1014,6 @@
         ]
     },
     "feature_0488": {
-        "id": "Ruin4",
         "name": "Ruin4",
         "position": [
             11328,
@@ -1106,7 +1027,6 @@
         ]
     },
     "feature_0489": {
-        "id": "Ruin5",
         "name": "Ruin5",
         "position": [
             11328,
@@ -1120,7 +1040,6 @@
         ]
     },
     "feature_0490": {
-        "id": "WreckedVertCampVan",
         "name": "WreckedVertCampVan",
         "position": [
             11072,
@@ -1134,7 +1053,6 @@
         ]
     },
     "feature_0491": {
-        "id": "Ruin1",
         "name": "Ruin1",
         "position": [
             10688,
@@ -1148,7 +1066,6 @@
         ]
     },
     "feature_0492": {
-        "id": "Ruin4",
         "name": "Ruin4",
         "position": [
             10816,
@@ -1162,7 +1079,6 @@
         ]
     },
     "feature_0493": {
-        "id": "Ruin5",
         "name": "Ruin5",
         "position": [
             10816,
@@ -1176,7 +1092,6 @@
         ]
     },
     "feature_0495": {
-        "id": "WreckedSuzukiJeep",
         "name": "WreckedSuzukiJeep",
         "position": [
             10688,
@@ -1190,7 +1105,6 @@
         ]
     },
     "feature_0496": {
-        "id": "Boulder1",
         "name": "Boulder1",
         "position": [
             7616,
@@ -1204,7 +1118,6 @@
         ]
     },
     "feature_4275817112": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             13760,

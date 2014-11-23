@@ -1,6 +1,5 @@
 {
     "feature_0010": {
-        "id": "building12",
         "name": "building12",
         "position": [
             4224,
@@ -14,7 +13,6 @@
         ]
     },
     "feature_0011": {
-        "id": "building3",
         "name": "building3",
         "position": [
             4672,
@@ -28,7 +26,6 @@
         ]
     },
     "feature_0012": {
-        "id": "building3",
         "name": "building3",
         "position": [
             3648,
@@ -42,7 +39,6 @@
         ]
     },
     "feature_0013": {
-        "id": "building12",
         "name": "building12",
         "position": [
             5120,
@@ -56,7 +52,6 @@
         ]
     },
     "feature_0020": {
-        "id": "building1",
         "name": "building1",
         "position": [
             5184,
@@ -70,7 +65,6 @@
         ]
     },
     "feature_0030": {
-        "id": "building10",
         "name": "building10",
         "position": [
             7424,
@@ -84,7 +78,6 @@
         ]
     },
     "feature_0031": {
-        "id": "building11",
         "name": "building11",
         "position": [
             7872,
@@ -98,7 +91,6 @@
         ]
     },
     "feature_0092": {
-        "id": "building1",
         "name": "building1",
         "position": [
             3520,
@@ -112,7 +104,6 @@
         ]
     },
     "feature_0102": {
-        "id": "building11",
         "name": "building11",
         "position": [
             5696,
@@ -126,7 +117,6 @@
         ]
     },
     "feature_0103": {
-        "id": "building12",
         "name": "building12",
         "position": [
             6016,
@@ -140,7 +130,6 @@
         ]
     },
     "feature_0105": {
-        "id": "building2",
         "name": "building2",
         "position": [
             5952,
@@ -154,7 +143,6 @@
         ]
     },
     "feature_0106": {
-        "id": "WreckedSuzukiJeep",
         "name": "WreckedSuzukiJeep",
         "position": [
             960,
@@ -168,7 +156,6 @@
         ]
     },
     "feature_0107": {
-        "id": "Pickup",
         "name": "Pickup",
         "position": [
             832,
@@ -182,7 +169,6 @@
         ]
     },
     "feature_0108": {
-        "id": "Chevy",
         "name": "Chevy",
         "position": [
             1088,
@@ -196,7 +182,6 @@
         ]
     },
     "feature_0109": {
-        "id": "Chevy",
         "name": "Chevy",
         "position": [
             1600,
@@ -210,7 +195,6 @@
         ]
     },
     "feature_0110": {
-        "id": "Chevy",
         "name": "Chevy",
         "position": [
             576,
@@ -224,7 +208,6 @@
         ]
     },
     "feature_0119": {
-        "id": "Pylon",
         "name": "Pylon",
         "position": [
             6976,
@@ -238,7 +221,6 @@
         ]
     },
     "feature_0120": {
-        "id": "Pylon",
         "name": "Pylon",
         "position": [
             7872,
@@ -252,7 +234,6 @@
         ]
     },
     "feature_0121": {
-        "id": "Pylon",
         "name": "Pylon",
         "position": [
             6976,
@@ -266,7 +247,6 @@
         ]
     },
     "feature_0122": {
-        "id": "Pylon",
         "name": "Pylon",
         "position": [
             6976,
@@ -280,7 +260,6 @@
         ]
     },
     "feature_0123": {
-        "id": "Pylon",
         "name": "Pylon",
         "position": [
             6976,
@@ -294,7 +273,6 @@
         ]
     },
     "feature_0124": {
-        "id": "Pylon",
         "name": "Pylon",
         "position": [
             6976,
@@ -308,7 +286,6 @@
         ]
     },
     "feature_0125": {
-        "id": "Pylon",
         "name": "Pylon",
         "position": [
             6976,
@@ -322,7 +299,6 @@
         ]
     },
     "feature_0126": {
-        "id": "Pylon",
         "name": "Pylon",
         "position": [
             5056,
@@ -336,7 +312,6 @@
         ]
     },
     "feature_0127": {
-        "id": "Pylon",
         "name": "Pylon",
         "position": [
             4032,
@@ -350,7 +325,6 @@
         ]
     },
     "feature_0128": {
-        "id": "Pylon",
         "name": "Pylon",
         "position": [
             1472,
@@ -364,7 +338,6 @@
         ]
     },
     "feature_0129": {
-        "id": "Pylon",
         "name": "Pylon",
         "position": [
             2112,
@@ -378,7 +351,6 @@
         ]
     },
     "feature_0130": {
-        "id": "WreckedBuilding16",
         "name": "WreckedBuilding16",
         "position": [
             3392,
@@ -392,7 +364,6 @@
         ]
     },
     "feature_0132": {
-        "id": "Chevy",
         "name": "Chevy",
         "position": [
             6848,
@@ -406,7 +377,6 @@
         ]
     },
     "feature_0133": {
-        "id": "WaterBuilding3",
         "name": "WaterBuilding3",
         "position": [
             7040,
@@ -420,7 +390,6 @@
         ]
     },
     "feature_0134": {
-        "id": "WaterBuilding2",
         "name": "WaterBuilding2",
         "position": [
             512,
@@ -434,7 +403,6 @@
         ]
     },
     "feature_0136": {
-        "id": "building1",
         "name": "building1",
         "position": [
             10048,
@@ -448,7 +416,6 @@
         ]
     },
     "feature_0141": {
-        "id": "building3",
         "name": "building3",
         "position": [
             8896,
@@ -462,7 +429,6 @@
         ]
     },
     "feature_0142": {
-        "id": "building7",
         "name": "building7",
         "position": [
             10176,
@@ -476,7 +442,6 @@
         ]
     },
     "feature_0144": {
-        "id": "building10",
         "name": "building10",
         "position": [
             10752,
@@ -490,7 +455,6 @@
         ]
     },
     "feature_0146": {
-        "id": "building12",
         "name": "building12",
         "position": [
             12288,
@@ -504,7 +468,6 @@
         ]
     },
     "feature_0147": {
-        "id": "building3",
         "name": "building3",
         "position": [
             13376,
@@ -518,7 +481,6 @@
         ]
     },
     "feature_0166": {
-        "id": "building10",
         "name": "building10",
         "position": [
             15488,
@@ -532,7 +494,6 @@
         ]
     },
     "feature_0167": {
-        "id": "building11",
         "name": "building11",
         "position": [
             15552,
@@ -546,7 +507,6 @@
         ]
     },
     "feature_0225": {
-        "id": "building2",
         "name": "building2",
         "position": [
             10048,
@@ -560,7 +520,6 @@
         ]
     },
     "feature_0226": {
-        "id": "building3",
         "name": "building3",
         "position": [
             10048,
@@ -574,7 +533,6 @@
         ]
     },
     "feature_0228": {
-        "id": "building1",
         "name": "building1",
         "position": [
             11712,
@@ -588,7 +546,6 @@
         ]
     },
     "feature_0242": {
-        "id": "WreckedSuzukiJeep",
         "name": "WreckedSuzukiJeep",
         "position": [
             9024,
@@ -602,7 +559,6 @@
         ]
     },
     "feature_0243": {
-        "id": "Pickup",
         "name": "Pickup",
         "position": [
             8896,
@@ -616,7 +572,6 @@
         ]
     },
     "feature_0244": {
-        "id": "Chevy",
         "name": "Chevy",
         "position": [
             9152,
@@ -630,7 +585,6 @@
         ]
     },
     "feature_0245": {
-        "id": "Chevy",
         "name": "Chevy",
         "position": [
             9536,
@@ -644,7 +598,6 @@
         ]
     },
     "feature_0246": {
-        "id": "Chevy",
         "name": "Chevy",
         "position": [
             8640,
@@ -658,7 +611,6 @@
         ]
     },
     "feature_0247": {
-        "id": "Pickup",
         "name": "Pickup",
         "position": [
             10560,
@@ -672,7 +624,6 @@
         ]
     },
     "feature_0248": {
-        "id": "Pylon",
         "name": "Pylon",
         "position": [
             8512,
@@ -686,7 +637,6 @@
         ]
     },
     "feature_0249": {
-        "id": "Pylon",
         "name": "Pylon",
         "position": [
             9024,
@@ -700,7 +650,6 @@
         ]
     },
     "feature_0250": {
-        "id": "Pylon",
         "name": "Pylon",
         "position": [
             9536,
@@ -714,7 +663,6 @@
         ]
     },
     "feature_0251": {
-        "id": "Pylon",
         "name": "Pylon",
         "position": [
             10688,
@@ -728,7 +676,6 @@
         ]
     },
     "feature_0252": {
-        "id": "Pylon",
         "name": "Pylon",
         "position": [
             11200,
@@ -742,7 +689,6 @@
         ]
     },
     "feature_0253": {
-        "id": "Pylon",
         "name": "Pylon",
         "position": [
             12864,
@@ -756,7 +702,6 @@
         ]
     },
     "feature_0254": {
-        "id": "Pylon",
         "name": "Pylon",
         "position": [
             14400,
@@ -770,7 +715,6 @@
         ]
     },
     "feature_0256": {
-        "id": "Pylon",
         "name": "Pylon",
         "position": [
             15936,
@@ -784,7 +728,6 @@
         ]
     },
     "feature_0261": {
-        "id": "Pylon",
         "name": "Pylon",
         "position": [
             15040,
@@ -798,7 +741,6 @@
         ]
     },
     "feature_0263": {
-        "id": "Pylon",
         "name": "Pylon",
         "position": [
             12096,
@@ -812,7 +754,6 @@
         ]
     },
     "feature_0264": {
-        "id": "Pylon",
         "name": "Pylon",
         "position": [
             9536,
@@ -826,7 +767,6 @@
         ]
     },
     "feature_0268": {
-        "id": "Chevy",
         "name": "Chevy",
         "position": [
             14912,
@@ -840,7 +780,6 @@
         ]
     },
     "feature_0269": {
-        "id": "WaterBuilding3",
         "name": "WaterBuilding3",
         "position": [
             15104,
@@ -854,7 +793,6 @@
         ]
     },
     "feature_0270": {
-        "id": "WaterBuilding2",
         "name": "WaterBuilding2",
         "position": [
             8576,
@@ -868,7 +806,6 @@
         ]
     },
     "feature_0272": {
-        "id": "building1",
         "name": "building1",
         "position": [
             1984,
@@ -882,7 +819,6 @@
         ]
     },
     "feature_0277": {
-        "id": "building3",
         "name": "building3",
         "position": [
             832,
@@ -896,7 +832,6 @@
         ]
     },
     "feature_0278": {
-        "id": "building7",
         "name": "building7",
         "position": [
             2112,
@@ -910,7 +845,6 @@
         ]
     },
     "feature_0279": {
-        "id": "building7",
         "name": "building7",
         "position": [
             3776,
@@ -924,7 +858,6 @@
         ]
     },
     "feature_0280": {
-        "id": "building10",
         "name": "building10",
         "position": [
             2688,
@@ -938,7 +871,6 @@
         ]
     },
     "feature_0282": {
-        "id": "building12",
         "name": "building12",
         "position": [
             4224,
@@ -952,7 +884,6 @@
         ]
     },
     "feature_0283": {
-        "id": "building3",
         "name": "building3",
         "position": [
             4672,
@@ -966,7 +897,6 @@
         ]
     },
     "feature_0284": {
-        "id": "building3",
         "name": "building3",
         "position": [
             3648,
@@ -980,7 +910,6 @@
         ]
     },
     "feature_0285": {
-        "id": "building12",
         "name": "building12",
         "position": [
             5120,
@@ -994,7 +923,6 @@
         ]
     },
     "feature_0292": {
-        "id": "building1",
         "name": "building1",
         "position": [
             5184,
@@ -1008,7 +936,6 @@
         ]
     },
     "feature_0302": {
-        "id": "building10",
         "name": "building10",
         "position": [
             7424,
@@ -1022,7 +949,6 @@
         ]
     },
     "feature_0303": {
-        "id": "building11",
         "name": "building11",
         "position": [
             8000,
@@ -1036,7 +962,6 @@
         ]
     },
     "feature_0346": {
-        "id": "building2",
         "name": "building2",
         "position": [
             960,
@@ -1050,7 +975,6 @@
         ]
     },
     "feature_0361": {
-        "id": "building2",
         "name": "building2",
         "position": [
             1984,
@@ -1064,7 +988,6 @@
         ]
     },
     "feature_0363": {
-        "id": "building11",
         "name": "building11",
         "position": [
             2880,
@@ -1078,7 +1001,6 @@
         ]
     },
     "feature_0375": {
-        "id": "building12",
         "name": "building12",
         "position": [
             5760,
@@ -1092,7 +1014,6 @@
         ]
     },
     "feature_0376": {
-        "id": "building10",
         "name": "building10",
         "position": [
             5760,
@@ -1106,7 +1027,6 @@
         ]
     },
     "feature_0377": {
-        "id": "building2",
         "name": "building2",
         "position": [
             5952,
@@ -1120,7 +1040,6 @@
         ]
     },
     "feature_0378": {
-        "id": "WreckedSuzukiJeep",
         "name": "WreckedSuzukiJeep",
         "position": [
             960,
@@ -1134,7 +1053,6 @@
         ]
     },
     "feature_0379": {
-        "id": "Pickup",
         "name": "Pickup",
         "position": [
             832,
@@ -1148,7 +1066,6 @@
         ]
     },
     "feature_0380": {
-        "id": "Chevy",
         "name": "Chevy",
         "position": [
             1088,
@@ -1162,7 +1079,6 @@
         ]
     },
     "feature_0381": {
-        "id": "Chevy",
         "name": "Chevy",
         "position": [
             1472,
@@ -1176,7 +1092,6 @@
         ]
     },
     "feature_0382": {
-        "id": "Chevy",
         "name": "Chevy",
         "position": [
             576,
@@ -1190,7 +1105,6 @@
         ]
     },
     "feature_0383": {
-        "id": "Pickup",
         "name": "Pickup",
         "position": [
             2496,
@@ -1204,7 +1118,6 @@
         ]
     },
     "feature_0384": {
-        "id": "Pylon",
         "name": "Pylon",
         "position": [
             448,
@@ -1218,7 +1131,6 @@
         ]
     },
     "feature_0385": {
-        "id": "Pylon",
         "name": "Pylon",
         "position": [
             960,
@@ -1232,7 +1144,6 @@
         ]
     },
     "feature_0386": {
-        "id": "Pylon",
         "name": "Pylon",
         "position": [
             1472,
@@ -1246,7 +1157,6 @@
         ]
     },
     "feature_0387": {
-        "id": "Pylon",
         "name": "Pylon",
         "position": [
             2624,
@@ -1260,7 +1170,6 @@
         ]
     },
     "feature_0388": {
-        "id": "Pylon",
         "name": "Pylon",
         "position": [
             3136,
@@ -1274,7 +1183,6 @@
         ]
     },
     "feature_0389": {
-        "id": "Pylon",
         "name": "Pylon",
         "position": [
             4800,
@@ -1288,7 +1196,6 @@
         ]
     },
     "feature_0392": {
-        "id": "Pylon",
         "name": "Pylon",
         "position": [
             7872,
@@ -1302,7 +1209,6 @@
         ]
     },
     "feature_0395": {
-        "id": "Pylon",
         "name": "Pylon",
         "position": [
             6976,
@@ -1316,7 +1222,6 @@
         ]
     },
     "feature_0396": {
-        "id": "Pylon",
         "name": "Pylon",
         "position": [
             6976,
@@ -1330,7 +1235,6 @@
         ]
     },
     "feature_0397": {
-        "id": "Pylon",
         "name": "Pylon",
         "position": [
             6976,
@@ -1344,7 +1248,6 @@
         ]
     },
     "feature_0398": {
-        "id": "Pylon",
         "name": "Pylon",
         "position": [
             5056,
@@ -1358,7 +1261,6 @@
         ]
     },
     "feature_0399": {
-        "id": "Pylon",
         "name": "Pylon",
         "position": [
             4032,
@@ -1372,7 +1274,6 @@
         ]
     },
     "feature_0400": {
-        "id": "Pylon",
         "name": "Pylon",
         "position": [
             1472,
@@ -1386,7 +1287,6 @@
         ]
     },
     "feature_0401": {
-        "id": "Pylon",
         "name": "Pylon",
         "position": [
             2112,
@@ -1400,7 +1300,6 @@
         ]
     },
     "feature_0404": {
-        "id": "Chevy",
         "name": "Chevy",
         "position": [
             6848,
@@ -1414,7 +1313,6 @@
         ]
     },
     "feature_0405": {
-        "id": "WaterBuilding3",
         "name": "WaterBuilding3",
         "position": [
             6912,
@@ -1428,7 +1326,6 @@
         ]
     },
     "feature_0406": {
-        "id": "WaterBuilding2",
         "name": "WaterBuilding2",
         "position": [
             512,
@@ -1442,7 +1339,6 @@
         ]
     },
     "feature_0413": {
-        "id": "building3",
         "name": "building3",
         "position": [
             8512,
@@ -1456,7 +1352,6 @@
         ]
     },
     "feature_0417": {
-        "id": "building11",
         "name": "building11",
         "position": [
             10944,
@@ -1470,7 +1365,6 @@
         ]
     },
     "feature_0418": {
-        "id": "building12",
         "name": "building12",
         "position": [
             12288,
@@ -1484,7 +1378,6 @@
         ]
     },
     "feature_0429": {
-        "id": "building2",
         "name": "building2",
         "position": [
             10816,
@@ -1498,7 +1391,6 @@
         ]
     },
     "feature_0437": {
-        "id": "building8",
         "name": "building8",
         "position": [
             14400,
@@ -1512,7 +1404,6 @@
         ]
     },
     "feature_0438": {
-        "id": "building10",
         "name": "building10",
         "position": [
             15616,
@@ -1526,7 +1417,6 @@
         ]
     },
     "feature_0439": {
-        "id": "building11",
         "name": "building11",
         "position": [
             15680,
@@ -1540,7 +1430,6 @@
         ]
     },
     "feature_0482": {
-        "id": "building2",
         "name": "building2",
         "position": [
             9152,
@@ -1554,7 +1443,6 @@
         ]
     },
     "feature_0490": {
-        "id": "building11",
         "name": "building11",
         "position": [
             12608,
@@ -1568,7 +1456,6 @@
         ]
     },
     "feature_0499": {
-        "id": "building11",
         "name": "building11",
         "position": [
             11072,
@@ -1582,7 +1469,6 @@
         ]
     },
     "feature_0510": {
-        "id": "building11",
         "name": "building11",
         "position": [
             13760,
@@ -1596,7 +1482,6 @@
         ]
     },
     "feature_0511": {
-        "id": "building12",
         "name": "building12",
         "position": [
             13952,
@@ -1610,7 +1495,6 @@
         ]
     },
     "feature_0512": {
-        "id": "building10",
         "name": "building10",
         "position": [
             14080,
@@ -1624,7 +1508,6 @@
         ]
     },
     "feature_0518": {
-        "id": "Chevy",
         "name": "Chevy",
         "position": [
             8768,
@@ -1638,7 +1521,6 @@
         ]
     },
     "feature_0520": {
-        "id": "Pylon",
         "name": "Pylon",
         "position": [
             8640,
@@ -1652,7 +1534,6 @@
         ]
     },
     "feature_0521": {
-        "id": "Pylon",
         "name": "Pylon",
         "position": [
             9152,
@@ -1666,7 +1547,6 @@
         ]
     },
     "feature_0527": {
-        "id": "Pylon",
         "name": "Pylon",
         "position": [
             15168,
@@ -1680,7 +1560,6 @@
         ]
     },
     "feature_0528": {
-        "id": "Pylon",
         "name": "Pylon",
         "position": [
             16064,
@@ -1694,7 +1573,6 @@
         ]
     },
     "feature_0529": {
-        "id": "Pylon",
         "name": "Pylon",
         "position": [
             15168,
@@ -1708,7 +1586,6 @@
         ]
     },
     "feature_0530": {
-        "id": "Pylon",
         "name": "Pylon",
         "position": [
             15168,
@@ -1722,7 +1599,6 @@
         ]
     },
     "feature_0532": {
-        "id": "Pylon",
         "name": "Pylon",
         "position": [
             15168,
@@ -1736,7 +1612,6 @@
         ]
     },
     "feature_0535": {
-        "id": "Pylon",
         "name": "Pylon",
         "position": [
             12224,
@@ -1750,7 +1625,6 @@
         ]
     },
     "feature_0536": {
-        "id": "Pylon",
         "name": "Pylon",
         "position": [
             9664,
@@ -1764,7 +1638,6 @@
         ]
     },
     "feature_0537": {
-        "id": "Pylon",
         "name": "Pylon",
         "position": [
             10304,
@@ -1778,7 +1651,6 @@
         ]
     },
     "feature_0539": {
-        "id": "Pickup",
         "name": "Pickup",
         "position": [
             13376,
@@ -1792,7 +1664,6 @@
         ]
     },
     "feature_0540": {
-        "id": "Chevy",
         "name": "Chevy",
         "position": [
             15040,
@@ -1806,7 +1677,6 @@
         ]
     },
     "feature_0541": {
-        "id": "WaterBuilding3",
         "name": "WaterBuilding3",
         "position": [
             15232,
@@ -1820,7 +1690,6 @@
         ]
     },
     "feature_0542": {
-        "id": "WaterBuilding2",
         "name": "WaterBuilding2",
         "position": [
             8704,
@@ -1834,7 +1703,6 @@
         ]
     },
     "feature_0545": {
-        "id": "building10",
         "name": "building10",
         "position": [
             7424,
@@ -1848,7 +1716,6 @@
         ]
     },
     "feature_0546": {
-        "id": "Ruin4",
         "name": "Ruin4",
         "position": [
             7488,
@@ -1862,7 +1729,6 @@
         ]
     },
     "feature_0547": {
-        "id": "building8",
         "name": "building8",
         "position": [
             7872,
@@ -1876,7 +1742,6 @@
         ]
     },
     "feature_0548": {
-        "id": "building12",
         "name": "building12",
         "position": [
             7424,
@@ -1890,7 +1755,6 @@
         ]
     },
     "feature_0555": {
-        "id": "building12",
         "name": "building12",
         "position": [
             7424,
@@ -1904,7 +1768,6 @@
         ]
     },
     "feature_0565": {
-        "id": "building12",
         "name": "building12",
         "position": [
             5376,
@@ -1918,7 +1781,6 @@
         ]
     },
     "feature_0570": {
-        "id": "building11",
         "name": "building11",
         "position": [
             15552,
@@ -1932,7 +1794,6 @@
         ]
     },
     "feature_0571": {
-        "id": "building12",
         "name": "building12",
         "position": [
             15488,
@@ -1946,7 +1807,6 @@
         ]
     },
     "feature_0572": {
-        "id": "building1",
         "name": "building1",
         "position": [
             15552,
@@ -1960,7 +1820,6 @@
         ]
     },
     "feature_0573": {
-        "id": "building2",
         "name": "building2",
         "position": [
             15552,
@@ -1974,7 +1833,6 @@
         ]
     },
     "feature_0590": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             5312,
@@ -1988,7 +1846,6 @@
         ]
     },
     "feature_0591": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             6336,
@@ -2002,7 +1859,6 @@
         ]
     },
     "feature_0653": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             2624,
@@ -2016,7 +1872,6 @@
         ]
     },
     "feature_0654": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             2624,
@@ -2030,7 +1885,6 @@
         ]
     },
     "feature_0736": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             9152,
@@ -2044,7 +1898,6 @@
         ]
     },
     "feature_0737": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             9408,
@@ -2058,7 +1911,6 @@
         ]
     },
     "feature_0806": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             14144,
@@ -2072,7 +1924,6 @@
         ]
     },
     "feature_0807": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             14144,
@@ -2086,7 +1937,6 @@
         ]
     },
     "feature_0965": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             7360,
@@ -2100,7 +1950,6 @@
         ]
     },
     "feature_0975": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             6080,
@@ -2114,7 +1963,6 @@
         ]
     },
     "feature_0985": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             3776,
@@ -2128,7 +1976,6 @@
         ]
     },
     "feature_0999": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             4416,
@@ -2142,7 +1989,6 @@
         ]
     },
     "feature_1009": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             8000,
@@ -2156,7 +2002,6 @@
         ]
     },
     "feature_1023": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             6464,
@@ -2170,7 +2015,6 @@
         ]
     },
     "feature_1033": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             11072,
@@ -2184,7 +2028,6 @@
         ]
     },
     "feature_1043": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             12864,
@@ -2198,7 +2041,6 @@
         ]
     },
     "feature_1053": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             2112,
@@ -2212,7 +2054,6 @@
         ]
     },
     "feature_1054": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             5312,
@@ -2226,7 +2067,6 @@
         ]
     },
     "feature_1055": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             10560,
@@ -2240,7 +2080,6 @@
         ]
     },
     "feature_1056": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             14144,
@@ -2254,7 +2093,6 @@
         ]
     },
     "feature_1057": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             7360,
@@ -2268,7 +2106,6 @@
         ]
     },
     "feature_1058": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             2752,
@@ -2282,7 +2119,6 @@
         ]
     },
     "feature_1059": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             11840,
@@ -2296,7 +2132,6 @@
         ]
     },
     "feature_1128": {
-        "id": "building11",
         "name": "building11",
         "position": [
             7872,
@@ -2310,7 +2145,6 @@
         ]
     },
     "feature_1129": {
-        "id": "building1",
         "name": "building1",
         "position": [
             7872,

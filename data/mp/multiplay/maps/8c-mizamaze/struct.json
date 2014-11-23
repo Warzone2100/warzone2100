@@ -1,6 +1,5 @@
 {
     "structure_1": {
-        "id": "A0PowerGenerator",
         "modules": 1,
         "name": "A0PowerGenerator",
         "position": [
@@ -16,7 +15,6 @@
         "startpos": 0
     },
     "structure_10": {
-        "id": "A0ResearchFacility",
         "modules": 1,
         "name": "A0ResearchFacility",
         "position": [
@@ -32,7 +30,6 @@
         "startpos": 1
     },
     "structure_1000": {
-        "id": "PillBox5",
         "modules": 0,
         "name": "PillBox5",
         "position": [
@@ -48,7 +45,6 @@
         "startpos": 3
     },
     "structure_1001": {
-        "id": "PillBox5",
         "modules": 0,
         "name": "PillBox5",
         "position": [
@@ -64,7 +60,6 @@
         "startpos": 3
     },
     "structure_103": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -81,7 +76,6 @@
         "wall/type": 0
     },
     "structure_1031": {
-        "id": "A0ComDroidControl",
         "modules": 0,
         "name": "A0ComDroidControl",
         "position": [
@@ -97,7 +91,6 @@
         "startpos": 3
     },
     "structure_1032": {
-        "id": "A0CyborgFactory",
         "modules": 0,
         "name": "A0CyborgFactory",
         "position": [
@@ -113,7 +106,6 @@
         "startpos": 3
     },
     "structure_1038": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -130,7 +122,6 @@
         "wall/type": 0
     },
     "structure_104": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -147,7 +138,6 @@
         "wall/type": 0
     },
     "structure_1052": {
-        "id": "A0ComDroidControl",
         "modules": 0,
         "name": "A0ComDroidControl",
         "position": [
@@ -163,7 +153,6 @@
         "startpos": 5
     },
     "structure_1053": {
-        "id": "A0CyborgFactory",
         "modules": 0,
         "name": "A0CyborgFactory",
         "position": [
@@ -179,7 +168,6 @@
         "startpos": 5
     },
     "structure_106": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -196,7 +184,6 @@
         "wall/type": 0
     },
     "structure_107": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -213,7 +200,6 @@
         "wall/type": 0
     },
     "structure_1086": {
-        "id": "A0ComDroidControl",
         "modules": 0,
         "name": "A0ComDroidControl",
         "position": [
@@ -229,7 +215,6 @@
         "startpos": 1
     },
     "structure_1087": {
-        "id": "A0CyborgFactory",
         "modules": 0,
         "name": "A0CyborgFactory",
         "position": [
@@ -245,7 +230,6 @@
         "startpos": 1
     },
     "structure_11": {
-        "id": "A0CommandCentre",
         "modules": 0,
         "name": "A0CommandCentre",
         "position": [
@@ -261,7 +245,6 @@
         "startpos": 1
     },
     "structure_112": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -278,7 +261,6 @@
         "wall/type": 0
     },
     "structure_1122": {
-        "id": "A0LightFactory",
         "modules": 1,
         "name": "A0LightFactory",
         "position": [
@@ -294,7 +276,6 @@
         "startpos": 0
     },
     "structure_1129": {
-        "id": "A0LightFactory",
         "modules": 1,
         "name": "A0LightFactory",
         "position": [
@@ -310,7 +291,6 @@
         "startpos": 3
     },
     "structure_113": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -327,7 +307,6 @@
         "wall/type": 0
     },
     "structure_1130": {
-        "id": "A0LightFactory",
         "modules": 1,
         "name": "A0LightFactory",
         "position": [
@@ -343,7 +322,6 @@
         "startpos": 5
     },
     "structure_1133": {
-        "id": "A0LightFactory",
         "modules": 1,
         "name": "A0LightFactory",
         "position": [
@@ -359,7 +337,6 @@
         "startpos": 1
     },
     "structure_1134": {
-        "id": "A0LightFactory",
         "modules": 1,
         "name": "A0LightFactory",
         "position": [
@@ -375,7 +352,6 @@
         "startpos": 7
     },
     "structure_1137": {
-        "id": "A0LightFactory",
         "modules": 0,
         "name": "A0LightFactory",
         "position": [
@@ -391,7 +367,6 @@
         "startpos": 2
     },
     "structure_1138": {
-        "id": "A0LightFactory",
         "modules": 1,
         "name": "A0LightFactory",
         "position": [
@@ -407,7 +382,6 @@
         "startpos": 4
     },
     "structure_1140": {
-        "id": "A0LightFactory",
         "modules": 1,
         "name": "A0LightFactory",
         "position": [
@@ -423,7 +397,6 @@
         "startpos": 2
     },
     "structure_115": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -440,7 +413,6 @@
         "wall/type": 0
     },
     "structure_116": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -457,7 +429,6 @@
         "wall/type": 0
     },
     "structure_1167": {
-        "id": "A0ResourceExtractor",
         "modules": 0,
         "name": "A0ResourceExtractor",
         "position": [
@@ -473,7 +444,6 @@
         "startpos": 0
     },
     "structure_1168": {
-        "id": "A0ResourceExtractor",
         "modules": 0,
         "name": "A0ResourceExtractor",
         "position": [
@@ -489,7 +459,6 @@
         "startpos": 0
     },
     "structure_1169": {
-        "id": "A0ResourceExtractor",
         "modules": 0,
         "name": "A0ResourceExtractor",
         "position": [
@@ -505,7 +474,6 @@
         "startpos": 6
     },
     "structure_1171": {
-        "id": "A0ResourceExtractor",
         "modules": 0,
         "name": "A0ResourceExtractor",
         "position": [
@@ -521,7 +489,6 @@
         "startpos": 3
     },
     "structure_1173": {
-        "id": "A0ResourceExtractor",
         "modules": 0,
         "name": "A0ResourceExtractor",
         "position": [
@@ -537,7 +504,6 @@
         "startpos": 5
     },
     "structure_1174": {
-        "id": "A0ResourceExtractor",
         "modules": 0,
         "name": "A0ResourceExtractor",
         "position": [
@@ -553,7 +519,6 @@
         "startpos": 5
     },
     "structure_1175": {
-        "id": "A0ResourceExtractor",
         "modules": 0,
         "name": "A0ResourceExtractor",
         "position": [
@@ -569,7 +534,6 @@
         "startpos": 1
     },
     "structure_1176": {
-        "id": "A0ResourceExtractor",
         "modules": 0,
         "name": "A0ResourceExtractor",
         "position": [
@@ -585,7 +549,6 @@
         "startpos": 1
     },
     "structure_1177": {
-        "id": "A0ResourceExtractor",
         "modules": 0,
         "name": "A0ResourceExtractor",
         "position": [
@@ -601,7 +564,6 @@
         "startpos": 7
     },
     "structure_1178": {
-        "id": "A0ResourceExtractor",
         "modules": 0,
         "name": "A0ResourceExtractor",
         "position": [
@@ -617,7 +579,6 @@
         "startpos": 7
     },
     "structure_1179": {
-        "id": "A0ResourceExtractor",
         "modules": 0,
         "name": "A0ResourceExtractor",
         "position": [
@@ -633,7 +594,6 @@
         "startpos": 2
     },
     "structure_118": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -650,7 +610,6 @@
         "wall/type": 0
     },
     "structure_1180": {
-        "id": "A0ResourceExtractor",
         "modules": 0,
         "name": "A0ResourceExtractor",
         "position": [
@@ -666,7 +625,6 @@
         "startpos": 2
     },
     "structure_1181": {
-        "id": "A0ResourceExtractor",
         "modules": 0,
         "name": "A0ResourceExtractor",
         "position": [
@@ -682,7 +640,6 @@
         "startpos": 4
     },
     "structure_1182": {
-        "id": "A0ResourceExtractor",
         "modules": 0,
         "name": "A0ResourceExtractor",
         "position": [
@@ -698,7 +655,6 @@
         "startpos": 4
     },
     "structure_1183": {
-        "id": "A0ResearchFacility",
         "modules": 1,
         "name": "A0ResearchFacility",
         "position": [
@@ -714,7 +670,6 @@
         "startpos": 0
     },
     "structure_1187": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -731,7 +686,6 @@
         "wall/type": 0
     },
     "structure_1188": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -748,7 +702,6 @@
         "wall/type": 0
     },
     "structure_1189": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -765,7 +718,6 @@
         "wall/type": 0
     },
     "structure_119": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -782,7 +734,6 @@
         "wall/type": 0
     },
     "structure_1190": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -799,7 +750,6 @@
         "wall/type": 0
     },
     "structure_1191": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -816,7 +766,6 @@
         "wall/type": 0
     },
     "structure_1192": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -833,7 +782,6 @@
         "wall/type": 0
     },
     "structure_1193": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -850,7 +798,6 @@
         "wall/type": 0
     },
     "structure_1204": {
-        "id": "PillBox1",
         "modules": 0,
         "name": "PillBox1",
         "position": [
@@ -866,7 +813,6 @@
         "startpos": 0
     },
     "structure_1205": {
-        "id": "PillBox1",
         "modules": 0,
         "name": "PillBox1",
         "position": [
@@ -882,7 +828,6 @@
         "startpos": 0
     },
     "structure_1210": {
-        "id": "GuardTower1",
         "modules": 0,
         "name": "GuardTower1",
         "position": [
@@ -898,7 +843,6 @@
         "startpos": 0
     },
     "structure_1211": {
-        "id": "GuardTower1",
         "modules": 0,
         "name": "GuardTower1",
         "position": [
@@ -914,7 +858,6 @@
         "startpos": 0
     },
     "structure_1213": {
-        "id": "WallTower01",
         "modules": 0,
         "name": "WallTower01",
         "position": [
@@ -930,7 +873,6 @@
         "startpos": 0
     },
     "structure_1214": {
-        "id": "WallTower01",
         "modules": 0,
         "name": "WallTower01",
         "position": [
@@ -946,7 +888,6 @@
         "startpos": 0
     },
     "structure_1215": {
-        "id": "WallTower01",
         "modules": 0,
         "name": "WallTower01",
         "position": [
@@ -962,7 +903,6 @@
         "startpos": 0
     },
     "structure_1216": {
-        "id": "WallTower01",
         "modules": 0,
         "name": "WallTower01",
         "position": [
@@ -978,7 +918,6 @@
         "startpos": 0
     },
     "structure_1217": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -995,7 +934,6 @@
         "wall/type": 0
     },
     "structure_1218": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -1012,7 +950,6 @@
         "wall/type": 0
     },
     "structure_1219": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -1029,7 +966,6 @@
         "wall/type": 0
     },
     "structure_1220": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -1046,7 +982,6 @@
         "wall/type": 0
     },
     "structure_1221": {
-        "id": "WallTower01",
         "modules": 0,
         "name": "WallTower01",
         "position": [
@@ -1062,7 +997,6 @@
         "startpos": 0
     },
     "structure_1222": {
-        "id": "WallTower01",
         "modules": 0,
         "name": "WallTower01",
         "position": [
@@ -1078,7 +1012,6 @@
         "startpos": 0
     },
     "structure_1223": {
-        "id": "WallTower01",
         "modules": 0,
         "name": "WallTower01",
         "position": [
@@ -1094,7 +1027,6 @@
         "startpos": 0
     },
     "structure_1224": {
-        "id": "WallTower01",
         "modules": 0,
         "name": "WallTower01",
         "position": [
@@ -1110,7 +1042,6 @@
         "startpos": 0
     },
     "structure_1225": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -1127,7 +1058,6 @@
         "wall/type": 0
     },
     "structure_1226": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -1144,7 +1074,6 @@
         "wall/type": 0
     },
     "structure_1227": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -1161,7 +1090,6 @@
         "wall/type": 0
     },
     "structure_1228": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -1178,7 +1106,6 @@
         "wall/type": 0
     },
     "structure_1231": {
-        "id": "PillBox1",
         "modules": 0,
         "name": "PillBox1",
         "position": [
@@ -1194,7 +1121,6 @@
         "startpos": 6
     },
     "structure_1232": {
-        "id": "PillBox1",
         "modules": 0,
         "name": "PillBox1",
         "position": [
@@ -1210,7 +1136,6 @@
         "startpos": 6
     },
     "structure_1251": {
-        "id": "WallTower01",
         "modules": 0,
         "name": "WallTower01",
         "position": [
@@ -1226,7 +1151,6 @@
         "startpos": 6
     },
     "structure_1252": {
-        "id": "WallTower01",
         "modules": 0,
         "name": "WallTower01",
         "position": [
@@ -1242,7 +1166,6 @@
         "startpos": 6
     },
     "structure_1253": {
-        "id": "WallTower01",
         "modules": 0,
         "name": "WallTower01",
         "position": [
@@ -1258,7 +1181,6 @@
         "startpos": 6
     },
     "structure_1254": {
-        "id": "WallTower01",
         "modules": 0,
         "name": "WallTower01",
         "position": [
@@ -1274,7 +1196,6 @@
         "startpos": 6
     },
     "structure_1255": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -1291,7 +1212,6 @@
         "wall/type": 0
     },
     "structure_1256": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -1308,7 +1228,6 @@
         "wall/type": 0
     },
     "structure_1257": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -1325,7 +1244,6 @@
         "wall/type": 0
     },
     "structure_1258": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -1342,7 +1260,6 @@
         "wall/type": 0
     },
     "structure_1268": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -1359,7 +1276,6 @@
         "wall/type": 0
     },
     "structure_1269": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -1376,7 +1292,6 @@
         "wall/type": 0
     },
     "structure_1270": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -1393,7 +1308,6 @@
         "wall/type": 0
     },
     "structure_1271": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -1410,7 +1324,6 @@
         "wall/type": 0
     },
     "structure_1272": {
-        "id": "WallTower01",
         "modules": 0,
         "name": "WallTower01",
         "position": [
@@ -1426,7 +1339,6 @@
         "startpos": 3
     },
     "structure_1273": {
-        "id": "WallTower01",
         "modules": 0,
         "name": "WallTower01",
         "position": [
@@ -1442,7 +1354,6 @@
         "startpos": 3
     },
     "structure_1274": {
-        "id": "WallTower01",
         "modules": 0,
         "name": "WallTower01",
         "position": [
@@ -1458,7 +1369,6 @@
         "startpos": 3
     },
     "structure_1275": {
-        "id": "WallTower01",
         "modules": 0,
         "name": "WallTower01",
         "position": [
@@ -1474,7 +1384,6 @@
         "startpos": 3
     },
     "structure_1277": {
-        "id": "A0ResourceExtractor",
         "modules": 0,
         "name": "A0ResourceExtractor",
         "position": [
@@ -1490,7 +1399,6 @@
         "startpos": 3
     },
     "structure_1278": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -1507,7 +1415,6 @@
         "wall/type": 0
     },
     "structure_1279": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -1524,7 +1431,6 @@
         "wall/type": 0
     },
     "structure_1280": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -1541,7 +1447,6 @@
         "wall/type": 0
     },
     "structure_1281": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -1558,7 +1463,6 @@
         "wall/type": 0
     },
     "structure_1282": {
-        "id": "WallTower01",
         "modules": 0,
         "name": "WallTower01",
         "position": [
@@ -1574,7 +1478,6 @@
         "startpos": 3
     },
     "structure_1283": {
-        "id": "WallTower01",
         "modules": 0,
         "name": "WallTower01",
         "position": [
@@ -1590,7 +1493,6 @@
         "startpos": 3
     },
     "structure_1284": {
-        "id": "WallTower01",
         "modules": 0,
         "name": "WallTower01",
         "position": [
@@ -1606,7 +1508,6 @@
         "startpos": 3
     },
     "structure_1285": {
-        "id": "WallTower01",
         "modules": 0,
         "name": "WallTower01",
         "position": [
@@ -1622,7 +1523,6 @@
         "startpos": 3
     },
     "structure_1289": {
-        "id": "GuardTower1",
         "modules": 0,
         "name": "GuardTower1",
         "position": [
@@ -1638,7 +1538,6 @@
         "startpos": 3
     },
     "structure_1290": {
-        "id": "GuardTower1",
         "modules": 0,
         "name": "GuardTower1",
         "position": [
@@ -1654,7 +1553,6 @@
         "startpos": 3
     },
     "structure_1303": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -1671,7 +1569,6 @@
         "wall/type": 0
     },
     "structure_1304": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -1688,7 +1585,6 @@
         "wall/type": 0
     },
     "structure_1307": {
-        "id": "A0ResearchFacility",
         "modules": 1,
         "name": "A0ResearchFacility",
         "position": [
@@ -1704,7 +1600,6 @@
         "startpos": 3
     },
     "structure_1322": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -1721,7 +1616,6 @@
         "wall/type": 0
     },
     "structure_1323": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -1738,7 +1632,6 @@
         "wall/type": 0
     },
     "structure_1331": {
-        "id": "PillBox1",
         "modules": 0,
         "name": "PillBox1",
         "position": [
@@ -1754,7 +1647,6 @@
         "startpos": 5
     },
     "structure_1332": {
-        "id": "PillBox1",
         "modules": 0,
         "name": "PillBox1",
         "position": [
@@ -1770,7 +1662,6 @@
         "startpos": 5
     },
     "structure_1333": {
-        "id": "GuardTower1",
         "modules": 0,
         "name": "GuardTower1",
         "position": [
@@ -1786,7 +1677,6 @@
         "startpos": 5
     },
     "structure_1334": {
-        "id": "GuardTower1",
         "modules": 0,
         "name": "GuardTower1",
         "position": [
@@ -1802,7 +1692,6 @@
         "startpos": 5
     },
     "structure_1335": {
-        "id": "A0ResearchFacility",
         "modules": 1,
         "name": "A0ResearchFacility",
         "position": [
@@ -1818,7 +1707,6 @@
         "startpos": 5
     },
     "structure_1339": {
-        "id": "WallTower01",
         "modules": 0,
         "name": "WallTower01",
         "position": [
@@ -1834,7 +1722,6 @@
         "startpos": 5
     },
     "structure_1340": {
-        "id": "WallTower01",
         "modules": 0,
         "name": "WallTower01",
         "position": [
@@ -1850,7 +1737,6 @@
         "startpos": 5
     },
     "structure_1341": {
-        "id": "WallTower01",
         "modules": 0,
         "name": "WallTower01",
         "position": [
@@ -1866,7 +1752,6 @@
         "startpos": 5
     },
     "structure_1342": {
-        "id": "WallTower01",
         "modules": 0,
         "name": "WallTower01",
         "position": [
@@ -1882,7 +1767,6 @@
         "startpos": 5
     },
     "structure_1343": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -1899,7 +1783,6 @@
         "wall/type": 0
     },
     "structure_1344": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -1916,7 +1799,6 @@
         "wall/type": 0
     },
     "structure_1345": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -1933,7 +1815,6 @@
         "wall/type": 0
     },
     "structure_1346": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -1950,7 +1831,6 @@
         "wall/type": 0
     },
     "structure_1347": {
-        "id": "WallTower01",
         "modules": 0,
         "name": "WallTower01",
         "position": [
@@ -1966,7 +1846,6 @@
         "startpos": 5
     },
     "structure_1348": {
-        "id": "WallTower01",
         "modules": 0,
         "name": "WallTower01",
         "position": [
@@ -1982,7 +1861,6 @@
         "startpos": 5
     },
     "structure_1349": {
-        "id": "WallTower01",
         "modules": 0,
         "name": "WallTower01",
         "position": [
@@ -1998,7 +1876,6 @@
         "startpos": 5
     },
     "structure_1350": {
-        "id": "WallTower01",
         "modules": 0,
         "name": "WallTower01",
         "position": [
@@ -2014,7 +1891,6 @@
         "startpos": 5
     },
     "structure_1351": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -2031,7 +1907,6 @@
         "wall/type": 0
     },
     "structure_1352": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -2048,7 +1923,6 @@
         "wall/type": 0
     },
     "structure_1353": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -2065,7 +1939,6 @@
         "wall/type": 0
     },
     "structure_1354": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -2082,7 +1955,6 @@
         "wall/type": 0
     },
     "structure_1359": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -2099,7 +1971,6 @@
         "wall/type": 0
     },
     "structure_1360": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -2116,7 +1987,6 @@
         "wall/type": 0
     },
     "structure_1361": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -2133,7 +2003,6 @@
         "wall/type": 0
     },
     "structure_1362": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -2150,7 +2019,6 @@
         "wall/type": 0
     },
     "structure_1363": {
-        "id": "WallTower01",
         "modules": 0,
         "name": "WallTower01",
         "position": [
@@ -2166,7 +2034,6 @@
         "startpos": 1
     },
     "structure_1364": {
-        "id": "WallTower01",
         "modules": 0,
         "name": "WallTower01",
         "position": [
@@ -2182,7 +2049,6 @@
         "startpos": 1
     },
     "structure_1365": {
-        "id": "WallTower01",
         "modules": 0,
         "name": "WallTower01",
         "position": [
@@ -2198,7 +2064,6 @@
         "startpos": 1
     },
     "structure_1366": {
-        "id": "WallTower01",
         "modules": 0,
         "name": "WallTower01",
         "position": [
@@ -2214,7 +2079,6 @@
         "startpos": 1
     },
     "structure_1380": {
-        "id": "GuardTower1",
         "modules": 0,
         "name": "GuardTower1",
         "position": [
@@ -2230,7 +2094,6 @@
         "startpos": 1
     },
     "structure_1381": {
-        "id": "GuardTower1",
         "modules": 0,
         "name": "GuardTower1",
         "position": [
@@ -2246,7 +2109,6 @@
         "startpos": 1
     },
     "structure_1382": {
-        "id": "WallTower01",
         "modules": 0,
         "name": "WallTower01",
         "position": [
@@ -2262,7 +2124,6 @@
         "startpos": 1
     },
     "structure_1383": {
-        "id": "WallTower01",
         "modules": 0,
         "name": "WallTower01",
         "position": [
@@ -2278,7 +2139,6 @@
         "startpos": 1
     },
     "structure_1384": {
-        "id": "WallTower01",
         "modules": 0,
         "name": "WallTower01",
         "position": [
@@ -2294,7 +2154,6 @@
         "startpos": 1
     },
     "structure_1385": {
-        "id": "WallTower01",
         "modules": 0,
         "name": "WallTower01",
         "position": [
@@ -2310,7 +2169,6 @@
         "startpos": 1
     },
     "structure_1386": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -2327,7 +2185,6 @@
         "wall/type": 0
     },
     "structure_1387": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -2344,7 +2201,6 @@
         "wall/type": 0
     },
     "structure_1388": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -2361,7 +2217,6 @@
         "wall/type": 0
     },
     "structure_1389": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -2378,7 +2233,6 @@
         "wall/type": 0
     },
     "structure_1393": {
-        "id": "A0ResearchFacility",
         "modules": 1,
         "name": "A0ResearchFacility",
         "position": [
@@ -2394,7 +2248,6 @@
         "startpos": 1
     },
     "structure_1398": {
-        "id": "WallTower01",
         "modules": 0,
         "name": "WallTower01",
         "position": [
@@ -2410,7 +2263,6 @@
         "startpos": 7
     },
     "structure_1399": {
-        "id": "WallTower01",
         "modules": 0,
         "name": "WallTower01",
         "position": [
@@ -2426,7 +2278,6 @@
         "startpos": 7
     },
     "structure_14": {
-        "id": "A0CommandCentre",
         "modules": 0,
         "name": "A0CommandCentre",
         "position": [
@@ -2442,7 +2293,6 @@
         "startpos": 2
     },
     "structure_1400": {
-        "id": "WallTower01",
         "modules": 0,
         "name": "WallTower01",
         "position": [
@@ -2458,7 +2308,6 @@
         "startpos": 7
     },
     "structure_1401": {
-        "id": "WallTower01",
         "modules": 0,
         "name": "WallTower01",
         "position": [
@@ -2474,7 +2323,6 @@
         "startpos": 7
     },
     "structure_1402": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -2491,7 +2339,6 @@
         "wall/type": 0
     },
     "structure_1403": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -2508,7 +2355,6 @@
         "wall/type": 0
     },
     "structure_1404": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -2525,7 +2371,6 @@
         "wall/type": 0
     },
     "structure_1405": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -2542,7 +2387,6 @@
         "wall/type": 0
     },
     "structure_1406": {
-        "id": "WallTower01",
         "modules": 0,
         "name": "WallTower01",
         "position": [
@@ -2558,7 +2402,6 @@
         "startpos": 7
     },
     "structure_1407": {
-        "id": "WallTower01",
         "modules": 0,
         "name": "WallTower01",
         "position": [
@@ -2574,7 +2417,6 @@
         "startpos": 7
     },
     "structure_1408": {
-        "id": "WallTower01",
         "modules": 0,
         "name": "WallTower01",
         "position": [
@@ -2590,7 +2432,6 @@
         "startpos": 7
     },
     "structure_1409": {
-        "id": "WallTower01",
         "modules": 0,
         "name": "WallTower01",
         "position": [
@@ -2606,7 +2447,6 @@
         "startpos": 7
     },
     "structure_1410": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -2623,7 +2463,6 @@
         "wall/type": 0
     },
     "structure_1411": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -2640,7 +2479,6 @@
         "wall/type": 0
     },
     "structure_1412": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -2657,7 +2495,6 @@
         "wall/type": 0
     },
     "structure_1413": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -2674,7 +2511,6 @@
         "wall/type": 0
     },
     "structure_1414": {
-        "id": "PillBox1",
         "modules": 0,
         "name": "PillBox1",
         "position": [
@@ -2690,7 +2526,6 @@
         "startpos": 7
     },
     "structure_1415": {
-        "id": "PillBox1",
         "modules": 0,
         "name": "PillBox1",
         "position": [
@@ -2706,7 +2541,6 @@
         "startpos": 7
     },
     "structure_1418": {
-        "id": "GuardTower1",
         "modules": 0,
         "name": "GuardTower1",
         "position": [
@@ -2722,7 +2556,6 @@
         "startpos": 7
     },
     "structure_1419": {
-        "id": "GuardTower1",
         "modules": 0,
         "name": "GuardTower1",
         "position": [
@@ -2738,7 +2571,6 @@
         "startpos": 7
     },
     "structure_1420": {
-        "id": "PillBox1",
         "modules": 0,
         "name": "PillBox1",
         "position": [
@@ -2754,7 +2586,6 @@
         "startpos": 1
     },
     "structure_1421": {
-        "id": "PillBox1",
         "modules": 0,
         "name": "PillBox1",
         "position": [
@@ -2770,7 +2601,6 @@
         "startpos": 1
     },
     "structure_1422": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -2787,7 +2617,6 @@
         "wall/type": 0
     },
     "structure_1427": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -2804,7 +2633,6 @@
         "wall/type": 0
     },
     "structure_1464": {
-        "id": "A0ResearchFacility",
         "modules": 1,
         "name": "A0ResearchFacility",
         "position": [
@@ -2820,7 +2648,6 @@
         "startpos": 7
     },
     "structure_1469": {
-        "id": "WallTower01",
         "modules": 0,
         "name": "WallTower01",
         "position": [
@@ -2836,7 +2663,6 @@
         "startpos": 2
     },
     "structure_1470": {
-        "id": "WallTower01",
         "modules": 0,
         "name": "WallTower01",
         "position": [
@@ -2852,7 +2678,6 @@
         "startpos": 2
     },
     "structure_1471": {
-        "id": "WallTower01",
         "modules": 0,
         "name": "WallTower01",
         "position": [
@@ -2868,7 +2693,6 @@
         "startpos": 2
     },
     "structure_1472": {
-        "id": "WallTower01",
         "modules": 0,
         "name": "WallTower01",
         "position": [
@@ -2884,7 +2708,6 @@
         "startpos": 2
     },
     "structure_1473": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -2901,7 +2724,6 @@
         "wall/type": 0
     },
     "structure_1474": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -2918,7 +2740,6 @@
         "wall/type": 0
     },
     "structure_1475": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -2935,7 +2756,6 @@
         "wall/type": 0
     },
     "structure_1476": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -2952,7 +2772,6 @@
         "wall/type": 0
     },
     "structure_1495": {
-        "id": "A0ResearchFacility",
         "modules": 1,
         "name": "A0ResearchFacility",
         "position": [
@@ -2968,7 +2787,6 @@
         "startpos": 2
     },
     "structure_1501": {
-        "id": "WallTower01",
         "modules": 0,
         "name": "WallTower01",
         "position": [
@@ -2984,7 +2802,6 @@
         "startpos": 2
     },
     "structure_1502": {
-        "id": "WallTower01",
         "modules": 0,
         "name": "WallTower01",
         "position": [
@@ -3000,7 +2817,6 @@
         "startpos": 2
     },
     "structure_1503": {
-        "id": "WallTower01",
         "modules": 0,
         "name": "WallTower01",
         "position": [
@@ -3016,7 +2832,6 @@
         "startpos": 2
     },
     "structure_1504": {
-        "id": "WallTower01",
         "modules": 0,
         "name": "WallTower01",
         "position": [
@@ -3032,7 +2847,6 @@
         "startpos": 2
     },
     "structure_1505": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -3049,7 +2863,6 @@
         "wall/type": 0
     },
     "structure_1506": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -3066,7 +2879,6 @@
         "wall/type": 0
     },
     "structure_1507": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -3083,7 +2895,6 @@
         "wall/type": 0
     },
     "structure_1508": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -3100,7 +2911,6 @@
         "wall/type": 0
     },
     "structure_1511": {
-        "id": "PillBox1",
         "modules": 0,
         "name": "PillBox1",
         "position": [
@@ -3116,7 +2926,6 @@
         "startpos": 2
     },
     "structure_1512": {
-        "id": "PillBox1",
         "modules": 0,
         "name": "PillBox1",
         "position": [
@@ -3132,7 +2941,6 @@
         "startpos": 2
     },
     "structure_1513": {
-        "id": "GuardTower1",
         "modules": 0,
         "name": "GuardTower1",
         "position": [
@@ -3148,7 +2956,6 @@
         "startpos": 2
     },
     "structure_1514": {
-        "id": "GuardTower1",
         "modules": 0,
         "name": "GuardTower1",
         "position": [
@@ -3164,7 +2971,6 @@
         "startpos": 2
     },
     "structure_1533": {
-        "id": "A0ResearchFacility",
         "modules": 1,
         "name": "A0ResearchFacility",
         "position": [
@@ -3180,7 +2986,6 @@
         "startpos": 4
     },
     "structure_1535": {
-        "id": "WallTower01",
         "modules": 0,
         "name": "WallTower01",
         "position": [
@@ -3196,7 +3001,6 @@
         "startpos": 4
     },
     "structure_1536": {
-        "id": "WallTower01",
         "modules": 0,
         "name": "WallTower01",
         "position": [
@@ -3212,7 +3016,6 @@
         "startpos": 4
     },
     "structure_1537": {
-        "id": "WallTower01",
         "modules": 0,
         "name": "WallTower01",
         "position": [
@@ -3228,7 +3031,6 @@
         "startpos": 4
     },
     "structure_1538": {
-        "id": "WallTower01",
         "modules": 0,
         "name": "WallTower01",
         "position": [
@@ -3244,7 +3046,6 @@
         "startpos": 4
     },
     "structure_1539": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -3261,7 +3062,6 @@
         "wall/type": 0
     },
     "structure_1540": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -3278,7 +3078,6 @@
         "wall/type": 0
     },
     "structure_1541": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -3295,7 +3094,6 @@
         "wall/type": 0
     },
     "structure_1542": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -3312,7 +3110,6 @@
         "wall/type": 0
     },
     "structure_1543": {
-        "id": "WallTower01",
         "modules": 0,
         "name": "WallTower01",
         "position": [
@@ -3328,7 +3125,6 @@
         "startpos": 4
     },
     "structure_1544": {
-        "id": "WallTower01",
         "modules": 0,
         "name": "WallTower01",
         "position": [
@@ -3344,7 +3140,6 @@
         "startpos": 4
     },
     "structure_1545": {
-        "id": "WallTower01",
         "modules": 0,
         "name": "WallTower01",
         "position": [
@@ -3360,7 +3155,6 @@
         "startpos": 4
     },
     "structure_1546": {
-        "id": "WallTower01",
         "modules": 0,
         "name": "WallTower01",
         "position": [
@@ -3376,7 +3170,6 @@
         "startpos": 4
     },
     "structure_1547": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -3393,7 +3186,6 @@
         "wall/type": 0
     },
     "structure_1548": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -3410,7 +3202,6 @@
         "wall/type": 0
     },
     "structure_1549": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -3427,7 +3218,6 @@
         "wall/type": 0
     },
     "structure_1550": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -3444,7 +3234,6 @@
         "wall/type": 0
     },
     "structure_1553": {
-        "id": "PillBox1",
         "modules": 0,
         "name": "PillBox1",
         "position": [
@@ -3460,7 +3249,6 @@
         "startpos": 4
     },
     "structure_1554": {
-        "id": "PillBox1",
         "modules": 0,
         "name": "PillBox1",
         "position": [
@@ -3476,7 +3264,6 @@
         "startpos": 4
     },
     "structure_1555": {
-        "id": "GuardTower1",
         "modules": 0,
         "name": "GuardTower1",
         "position": [
@@ -3492,7 +3279,6 @@
         "startpos": 4
     },
     "structure_1556": {
-        "id": "GuardTower1",
         "modules": 0,
         "name": "GuardTower1",
         "position": [
@@ -3508,7 +3294,6 @@
         "startpos": 4
     },
     "structure_1566": {
-        "id": "A0LightFactory",
         "modules": 0,
         "name": "A0LightFactory",
         "position": [
@@ -3524,7 +3309,6 @@
         "startpos": 6
     },
     "structure_1567": {
-        "id": "A0CommandCentre",
         "modules": 0,
         "name": "A0CommandCentre",
         "position": [
@@ -3540,7 +3324,6 @@
         "startpos": 6
     },
     "structure_1568": {
-        "id": "A0ResearchFacility",
         "modules": 1,
         "name": "A0ResearchFacility",
         "position": [
@@ -3556,7 +3339,6 @@
         "startpos": 6
     },
     "structure_1569": {
-        "id": "A0PowerGenerator",
         "modules": 1,
         "name": "A0PowerGenerator",
         "position": [
@@ -3572,7 +3354,6 @@
         "startpos": 6
     },
     "structure_1570": {
-        "id": "A0ResourceExtractor",
         "modules": 0,
         "name": "A0ResourceExtractor",
         "position": [
@@ -3588,7 +3369,6 @@
         "startpos": 6
     },
     "structure_1573": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -3605,7 +3385,6 @@
         "wall/type": 0
     },
     "structure_1574": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -3622,7 +3401,6 @@
         "wall/type": 0
     },
     "structure_1578": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -3639,7 +3417,6 @@
         "wall/type": 0
     },
     "structure_1579": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -3656,7 +3433,6 @@
         "wall/type": 0
     },
     "structure_1585": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -3673,7 +3449,6 @@
         "wall/type": 0
     },
     "structure_1598": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -3690,7 +3465,6 @@
         "wall/type": 0
     },
     "structure_1611": {
-        "id": "A0ResourceExtractor",
         "modules": 0,
         "name": "A0ResourceExtractor",
         "position": [
@@ -3706,7 +3480,6 @@
         "startpos": 6
     },
     "structure_1618": {
-        "id": "A0ComDroidControl",
         "modules": 0,
         "name": "A0ComDroidControl",
         "position": [
@@ -3722,7 +3495,6 @@
         "startpos": 6
     },
     "structure_1619": {
-        "id": "A0CyborgFactory",
         "modules": 0,
         "name": "A0CyborgFactory",
         "position": [
@@ -3738,7 +3510,6 @@
         "startpos": 6
     },
     "structure_1622": {
-        "id": "A0LightFactory",
         "modules": 1,
         "name": "A0LightFactory",
         "position": [
@@ -3754,7 +3525,6 @@
         "startpos": 6
     },
     "structure_1625": {
-        "id": "A0ResourceExtractor",
         "modules": 0,
         "name": "A0ResourceExtractor",
         "position": [
@@ -3770,7 +3540,6 @@
         "startpos": 6
     },
     "structure_1634": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -3787,7 +3556,6 @@
         "wall/type": 0
     },
     "structure_1636": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -3804,7 +3572,6 @@
         "wall/type": 0
     },
     "structure_1638": {
-        "id": "A0ResearchFacility",
         "modules": 1,
         "name": "A0ResearchFacility",
         "position": [
@@ -3820,7 +3587,6 @@
         "startpos": 6
     },
     "structure_1642": {
-        "id": "WallTower01",
         "modules": 0,
         "name": "WallTower01",
         "position": [
@@ -3836,7 +3602,6 @@
         "startpos": 6
     },
     "structure_1643": {
-        "id": "WallTower01",
         "modules": 0,
         "name": "WallTower01",
         "position": [
@@ -3852,7 +3617,6 @@
         "startpos": 6
     },
     "structure_1644": {
-        "id": "WallTower01",
         "modules": 0,
         "name": "WallTower01",
         "position": [
@@ -3868,7 +3632,6 @@
         "startpos": 6
     },
     "structure_1645": {
-        "id": "WallTower01",
         "modules": 0,
         "name": "WallTower01",
         "position": [
@@ -3884,7 +3647,6 @@
         "startpos": 6
     },
     "structure_1646": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -3901,7 +3663,6 @@
         "wall/type": 0
     },
     "structure_1647": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -3918,7 +3679,6 @@
         "wall/type": 0
     },
     "structure_1648": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -3935,7 +3695,6 @@
         "wall/type": 0
     },
     "structure_1649": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -3952,7 +3711,6 @@
         "wall/type": 0
     },
     "structure_1653": {
-        "id": "A0CommandCentre",
         "modules": 0,
         "name": "A0CommandCentre",
         "position": [
@@ -3968,7 +3726,6 @@
         "startpos": 0
     },
     "structure_1681": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -3985,7 +3742,6 @@
         "wall/type": 0
     },
     "structure_1682": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -4002,7 +3758,6 @@
         "wall/type": 0
     },
     "structure_17": {
-        "id": "A0PowerGenerator",
         "modules": 1,
         "name": "A0PowerGenerator",
         "position": [
@@ -4018,7 +3773,6 @@
         "startpos": 2
     },
     "structure_1706": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -4035,7 +3789,6 @@
         "wall/type": 0
     },
     "structure_1719": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -4052,7 +3805,6 @@
         "wall/type": 0
     },
     "structure_1734": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -4069,7 +3821,6 @@
         "wall/type": 0
     },
     "structure_1735": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -4086,7 +3837,6 @@
         "wall/type": 3
     },
     "structure_1736": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -4103,7 +3853,6 @@
         "wall/type": 0
     },
     "structure_1737": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -4120,7 +3869,6 @@
         "wall/type": 0
     },
     "structure_1740": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -4137,7 +3885,6 @@
         "wall/type": 0
     },
     "structure_1741": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -4154,7 +3901,6 @@
         "wall/type": 0
     },
     "structure_1742": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -4171,7 +3917,6 @@
         "wall/type": 0
     },
     "structure_1743": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -4188,7 +3933,6 @@
         "wall/type": 0
     },
     "structure_1746": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -4205,7 +3949,6 @@
         "wall/type": 0
     },
     "structure_1748": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -4222,7 +3965,6 @@
         "wall/type": 3
     },
     "structure_1750": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -4239,7 +3981,6 @@
         "wall/type": 0
     },
     "structure_1752": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -4256,7 +3997,6 @@
         "wall/type": 3
     },
     "structure_1754": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -4273,7 +4013,6 @@
         "wall/type": 0
     },
     "structure_1755": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -4290,7 +4029,6 @@
         "wall/type": 0
     },
     "structure_1756": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -4307,7 +4045,6 @@
         "wall/type": 0
     },
     "structure_1757": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -4324,7 +4061,6 @@
         "wall/type": 3
     },
     "structure_1759": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -4341,7 +4077,6 @@
         "wall/type": 0
     },
     "structure_1761": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -4358,7 +4093,6 @@
         "wall/type": 0
     },
     "structure_1762": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -4375,7 +4109,6 @@
         "wall/type": 0
     },
     "structure_1763": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -4392,7 +4125,6 @@
         "wall/type": 3
     },
     "structure_1764": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -4409,7 +4141,6 @@
         "wall/type": 0
     },
     "structure_1766": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -4426,7 +4157,6 @@
         "wall/type": 0
     },
     "structure_1768": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -4443,7 +4173,6 @@
         "wall/type": 0
     },
     "structure_1769": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -4460,7 +4189,6 @@
         "wall/type": 0
     },
     "structure_1770": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -4477,7 +4205,6 @@
         "wall/type": 0
     },
     "structure_1771": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -4494,7 +4221,6 @@
         "wall/type": 3
     },
     "structure_1773": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -4511,7 +4237,6 @@
         "wall/type": 0
     },
     "structure_1775": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -4528,7 +4253,6 @@
         "wall/type": 0
     },
     "structure_1776": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -4545,7 +4269,6 @@
         "wall/type": 0
     },
     "structure_1777": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -4562,7 +4285,6 @@
         "wall/type": 0
     },
     "structure_1780": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -4579,7 +4301,6 @@
         "wall/type": 0
     },
     "structure_1781": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -4596,7 +4317,6 @@
         "wall/type": 0
     },
     "structure_1782": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -4613,7 +4333,6 @@
         "wall/type": 0
     },
     "structure_1785": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -4630,7 +4349,6 @@
         "wall/type": 0
     },
     "structure_1786": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -4647,7 +4365,6 @@
         "wall/type": 0
     },
     "structure_1787": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -4664,7 +4381,6 @@
         "wall/type": 0
     },
     "structure_1789": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -4681,7 +4397,6 @@
         "wall/type": 0
     },
     "structure_1790": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -4698,7 +4413,6 @@
         "wall/type": 0
     },
     "structure_1793": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -4715,7 +4429,6 @@
         "wall/type": 0
     },
     "structure_1794": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -4732,7 +4445,6 @@
         "wall/type": 0
     },
     "structure_1795": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -4749,7 +4461,6 @@
         "wall/type": 0
     },
     "structure_1798": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -4766,7 +4477,6 @@
         "wall/type": 0
     },
     "structure_1799": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -4783,7 +4493,6 @@
         "wall/type": 3
     },
     "structure_18": {
-        "id": "A0ResourceExtractor",
         "modules": 0,
         "name": "A0ResourceExtractor",
         "position": [
@@ -4799,7 +4508,6 @@
         "startpos": 2
     },
     "structure_1802": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -4816,7 +4524,6 @@
         "wall/type": 3
     },
     "structure_1804": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -4833,7 +4540,6 @@
         "wall/type": 0
     },
     "structure_1807": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -4850,7 +4556,6 @@
         "wall/type": 0
     },
     "structure_1808": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -4867,7 +4572,6 @@
         "wall/type": 3
     },
     "structure_1809": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -4884,7 +4588,6 @@
         "wall/type": 0
     },
     "structure_1811": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -4901,7 +4604,6 @@
         "wall/type": 0
     },
     "structure_1812": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -4918,7 +4620,6 @@
         "wall/type": 0
     },
     "structure_1813": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -4935,7 +4636,6 @@
         "wall/type": 3
     },
     "structure_1815": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -4952,7 +4652,6 @@
         "wall/type": 0
     },
     "structure_1817": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -4969,7 +4668,6 @@
         "wall/type": 0
     },
     "structure_1819": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -4986,7 +4684,6 @@
         "wall/type": 3
     },
     "structure_1820": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -5003,7 +4700,6 @@
         "wall/type": 3
     },
     "structure_1822": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -5020,7 +4716,6 @@
         "wall/type": 0
     },
     "structure_1824": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -5037,7 +4732,6 @@
         "wall/type": 0
     },
     "structure_1826": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -5054,7 +4748,6 @@
         "wall/type": 0
     },
     "structure_1827": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -5071,7 +4764,6 @@
         "wall/type": 0
     },
     "structure_1828": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -5088,7 +4780,6 @@
         "wall/type": 0
     },
     "structure_1829": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -5105,7 +4796,6 @@
         "wall/type": 3
     },
     "structure_1831": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -5122,7 +4812,6 @@
         "wall/type": 0
     },
     "structure_1833": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -5139,7 +4828,6 @@
         "wall/type": 0
     },
     "structure_1835": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -5156,7 +4844,6 @@
         "wall/type": 3
     },
     "structure_1837": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -5173,7 +4860,6 @@
         "wall/type": 0
     },
     "structure_1838": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -5190,7 +4876,6 @@
         "wall/type": 3
     },
     "structure_1839": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -5207,7 +4892,6 @@
         "wall/type": 0
     },
     "structure_1840": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -5224,7 +4908,6 @@
         "wall/type": 3
     },
     "structure_1844": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -5241,7 +4924,6 @@
         "wall/type": 0
     },
     "structure_1845": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -5258,7 +4940,6 @@
         "wall/type": 0
     },
     "structure_1846": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -5275,7 +4956,6 @@
         "wall/type": 3
     },
     "structure_1848": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -5292,7 +4972,6 @@
         "wall/type": 0
     },
     "structure_1849": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -5309,7 +4988,6 @@
         "wall/type": 3
     },
     "structure_1851": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -5326,7 +5004,6 @@
         "wall/type": 0
     },
     "structure_1853": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -5343,7 +5020,6 @@
         "wall/type": 0
     },
     "structure_1854": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -5360,7 +5036,6 @@
         "wall/type": 0
     },
     "structure_1855": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -5377,7 +5052,6 @@
         "wall/type": 3
     },
     "structure_1856": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -5394,7 +5068,6 @@
         "wall/type": 3
     },
     "structure_1858": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -5411,7 +5084,6 @@
         "wall/type": 0
     },
     "structure_1860": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -5428,7 +5100,6 @@
         "wall/type": 0
     },
     "structure_1862": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -5445,7 +5116,6 @@
         "wall/type": 3
     },
     "structure_1863": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -5462,7 +5132,6 @@
         "wall/type": 3
     },
     "structure_1864": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -5479,7 +5148,6 @@
         "wall/type": 0
     },
     "structure_1867": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -5496,7 +5164,6 @@
         "wall/type": 0
     },
     "structure_1869": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -5513,7 +5180,6 @@
         "wall/type": 0
     },
     "structure_1870": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -5530,7 +5196,6 @@
         "wall/type": 0
     },
     "structure_1871": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -5547,7 +5212,6 @@
         "wall/type": 0
     },
     "structure_1872": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -5564,7 +5228,6 @@
         "wall/type": 3
     },
     "structure_1874": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -5581,7 +5244,6 @@
         "wall/type": 0
     },
     "structure_1875": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -5598,7 +5260,6 @@
         "wall/type": 0
     },
     "structure_1876": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -5615,7 +5276,6 @@
         "wall/type": 0
     },
     "structure_1877": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -5632,7 +5292,6 @@
         "wall/type": 0
     },
     "structure_1879": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -5649,7 +5308,6 @@
         "wall/type": 0
     },
     "structure_1880": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -5666,7 +5324,6 @@
         "wall/type": 0
     },
     "structure_1881": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -5683,7 +5340,6 @@
         "wall/type": 0
     },
     "structure_1882": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -5700,7 +5356,6 @@
         "wall/type": 0
     },
     "structure_1884": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -5717,7 +5372,6 @@
         "wall/type": 0
     },
     "structure_1886": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -5734,7 +5388,6 @@
         "wall/type": 0
     },
     "structure_1887": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -5751,7 +5404,6 @@
         "wall/type": 0
     },
     "structure_1888": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -5768,7 +5420,6 @@
         "wall/type": 3
     },
     "structure_1891": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -5785,7 +5436,6 @@
         "wall/type": 0
     },
     "structure_1893": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -5802,7 +5452,6 @@
         "wall/type": 0
     },
     "structure_1894": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -5819,7 +5468,6 @@
         "wall/type": 0
     },
     "structure_1896": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -5836,7 +5484,6 @@
         "wall/type": 3
     },
     "structure_1898": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -5853,7 +5500,6 @@
         "wall/type": 0
     },
     "structure_19": {
-        "id": "A0ResearchFacility",
         "modules": 1,
         "name": "A0ResearchFacility",
         "position": [
@@ -5869,7 +5515,6 @@
         "startpos": 2
     },
     "structure_1900": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -5886,7 +5531,6 @@
         "wall/type": 3
     },
     "structure_1901": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -5903,7 +5547,6 @@
         "wall/type": 0
     },
     "structure_1903": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -5920,7 +5563,6 @@
         "wall/type": 3
     },
     "structure_1905": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -5937,7 +5579,6 @@
         "wall/type": 0
     },
     "structure_1907": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -5954,7 +5595,6 @@
         "wall/type": 0
     },
     "structure_1909": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -5971,7 +5611,6 @@
         "wall/type": 0
     },
     "structure_1910": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -5988,7 +5627,6 @@
         "wall/type": 0
     },
     "structure_1913": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -6005,7 +5643,6 @@
         "wall/type": 0
     },
     "structure_1914": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -6022,7 +5659,6 @@
         "wall/type": 0
     },
     "structure_1915": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -6039,7 +5675,6 @@
         "wall/type": 0
     },
     "structure_1916": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -6056,7 +5691,6 @@
         "wall/type": 3
     },
     "structure_1919": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -6073,7 +5707,6 @@
         "wall/type": 3
     },
     "structure_1920": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -6090,7 +5723,6 @@
         "wall/type": 0
     },
     "structure_1921": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -6107,7 +5739,6 @@
         "wall/type": 0
     },
     "structure_1922": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -6124,7 +5755,6 @@
         "wall/type": 0
     },
     "structure_1924": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -6141,7 +5771,6 @@
         "wall/type": 0
     },
     "structure_1926": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -6158,7 +5787,6 @@
         "wall/type": 0
     },
     "structure_1928": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -6175,7 +5803,6 @@
         "wall/type": 3
     },
     "structure_1929": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -6192,7 +5819,6 @@
         "wall/type": 0
     },
     "structure_1930": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -6209,7 +5835,6 @@
         "wall/type": 0
     },
     "structure_1931": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -6226,7 +5851,6 @@
         "wall/type": 3
     },
     "structure_1932": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -6243,7 +5867,6 @@
         "wall/type": 0
     },
     "structure_1934": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -6260,7 +5883,6 @@
         "wall/type": 0
     },
     "structure_1936": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -6277,7 +5899,6 @@
         "wall/type": 3
     },
     "structure_1937": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -6294,7 +5915,6 @@
         "wall/type": 0
     },
     "structure_1939": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -6311,7 +5931,6 @@
         "wall/type": 3
     },
     "structure_1941": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -6328,7 +5947,6 @@
         "wall/type": 3
     },
     "structure_1943": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -6345,7 +5963,6 @@
         "wall/type": 3
     },
     "structure_1945": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -6362,7 +5979,6 @@
         "wall/type": 0
     },
     "structure_1947": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -6379,7 +5995,6 @@
         "wall/type": 3
     },
     "structure_1948": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -6396,7 +6011,6 @@
         "wall/type": 0
     },
     "structure_1949": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -6413,7 +6027,6 @@
         "wall/type": 0
     },
     "structure_1950": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -6430,7 +6043,6 @@
         "wall/type": 3
     },
     "structure_1952": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -6447,7 +6059,6 @@
         "wall/type": 0
     },
     "structure_1953": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -6464,7 +6075,6 @@
         "wall/type": 0
     },
     "structure_1954": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -6481,7 +6091,6 @@
         "wall/type": 3
     },
     "structure_1955": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -6498,7 +6107,6 @@
         "wall/type": 0
     },
     "structure_1957": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -6515,7 +6123,6 @@
         "wall/type": 0
     },
     "structure_1959": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -6532,7 +6139,6 @@
         "wall/type": 0
     },
     "structure_1962": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -6549,7 +6155,6 @@
         "wall/type": 0
     },
     "structure_1963": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -6566,7 +6171,6 @@
         "wall/type": 3
     },
     "structure_1964": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -6583,7 +6187,6 @@
         "wall/type": 3
     },
     "structure_1966": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -6600,7 +6203,6 @@
         "wall/type": 0
     },
     "structure_1968": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -6617,7 +6219,6 @@
         "wall/type": 0
     },
     "structure_1970": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -6634,7 +6235,6 @@
         "wall/type": 0
     },
     "structure_1971": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -6651,7 +6251,6 @@
         "wall/type": 0
     },
     "structure_1972": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -6668,7 +6267,6 @@
         "wall/type": 3
     },
     "structure_1973": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -6685,7 +6283,6 @@
         "wall/type": 3
     },
     "structure_1975": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -6702,7 +6299,6 @@
         "wall/type": 0
     },
     "structure_1977": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -6719,7 +6315,6 @@
         "wall/type": 0
     },
     "structure_1978": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -6736,7 +6331,6 @@
         "wall/type": 0
     },
     "structure_1980": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -6753,7 +6347,6 @@
         "wall/type": 3
     },
     "structure_1988": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -6770,7 +6363,6 @@
         "wall/type": 0
     },
     "structure_1989": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -6787,7 +6379,6 @@
         "wall/type": 0
     },
     "structure_1990": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -6804,7 +6395,6 @@
         "wall/type": 0
     },
     "structure_1991": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -6821,7 +6411,6 @@
         "wall/type": 3
     },
     "structure_1992": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -6838,7 +6427,6 @@
         "wall/type": 3
     },
     "structure_1993": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -6855,7 +6443,6 @@
         "wall/type": 0
     },
     "structure_1994": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -6872,7 +6459,6 @@
         "wall/type": 0
     },
     "structure_1996": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -6889,7 +6475,6 @@
         "wall/type": 0
     },
     "structure_1997": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -6906,7 +6491,6 @@
         "wall/type": 0
     },
     "structure_1998": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -6923,7 +6507,6 @@
         "wall/type": 0
     },
     "structure_1999": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -6940,7 +6523,6 @@
         "wall/type": 0
     },
     "structure_2": {
-        "id": "A0ResearchFacility",
         "modules": 1,
         "name": "A0ResearchFacility",
         "position": [
@@ -6956,7 +6538,6 @@
         "startpos": 0
     },
     "structure_2001": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -6973,7 +6554,6 @@
         "wall/type": 0
     },
     "structure_2002": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -6990,7 +6570,6 @@
         "wall/type": 0
     },
     "structure_2003": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -7007,7 +6586,6 @@
         "wall/type": 0
     },
     "structure_2004": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -7024,7 +6602,6 @@
         "wall/type": 0
     },
     "structure_2005": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -7041,7 +6618,6 @@
         "wall/type": 0
     },
     "structure_2008": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -7058,7 +6634,6 @@
         "wall/type": 0
     },
     "structure_2009": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -7075,7 +6650,6 @@
         "wall/type": 0
     },
     "structure_2010": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -7092,7 +6666,6 @@
         "wall/type": 0
     },
     "structure_2012": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -7109,7 +6682,6 @@
         "wall/type": 0
     },
     "structure_2013": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -7126,7 +6698,6 @@
         "wall/type": 0
     },
     "structure_2016": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -7143,7 +6714,6 @@
         "wall/type": 0
     },
     "structure_2017": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -7160,7 +6730,6 @@
         "wall/type": 0
     },
     "structure_2019": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -7177,7 +6746,6 @@
         "wall/type": 0
     },
     "structure_2020": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -7194,7 +6762,6 @@
         "wall/type": 3
     },
     "structure_2021": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -7211,7 +6778,6 @@
         "wall/type": 0
     },
     "structure_2023": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -7228,7 +6794,6 @@
         "wall/type": 0
     },
     "structure_2025": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -7245,7 +6810,6 @@
         "wall/type": 0
     },
     "structure_2026": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -7262,7 +6826,6 @@
         "wall/type": 0
     },
     "structure_2028": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -7279,7 +6842,6 @@
         "wall/type": 3
     },
     "structure_2030": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -7296,7 +6858,6 @@
         "wall/type": 0
     },
     "structure_2032": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -7313,7 +6874,6 @@
         "wall/type": 0
     },
     "structure_2034": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -7330,7 +6890,6 @@
         "wall/type": 3
     },
     "structure_2036": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -7347,7 +6906,6 @@
         "wall/type": 3
     },
     "structure_2038": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -7364,7 +6922,6 @@
         "wall/type": 0
     },
     "structure_2039": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -7381,7 +6938,6 @@
         "wall/type": 0
     },
     "structure_2042": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -7398,7 +6954,6 @@
         "wall/type": 3
     },
     "structure_2043": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -7415,7 +6970,6 @@
         "wall/type": 3
     },
     "structure_2044": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -7432,7 +6986,6 @@
         "wall/type": 0
     },
     "structure_2047": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -7449,7 +7002,6 @@
         "wall/type": 3
     },
     "structure_2049": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -7466,7 +7018,6 @@
         "wall/type": 0
     },
     "structure_2051": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -7483,7 +7034,6 @@
         "wall/type": 0
     },
     "structure_2052": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -7500,7 +7050,6 @@
         "wall/type": 0
     },
     "structure_2053": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -7517,7 +7066,6 @@
         "wall/type": 0
     },
     "structure_2054": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -7534,7 +7082,6 @@
         "wall/type": 3
     },
     "structure_2056": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -7551,7 +7098,6 @@
         "wall/type": 0
     },
     "structure_2058": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -7568,7 +7114,6 @@
         "wall/type": 3
     },
     "structure_2060": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -7585,7 +7130,6 @@
         "wall/type": 0
     },
     "structure_2062": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -7602,7 +7146,6 @@
         "wall/type": 0
     },
     "structure_2063": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -7619,7 +7162,6 @@
         "wall/type": 0
     },
     "structure_2064": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -7636,7 +7178,6 @@
         "wall/type": 0
     },
     "structure_2065": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -7653,7 +7194,6 @@
         "wall/type": 3
     },
     "structure_2067": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -7670,7 +7210,6 @@
         "wall/type": 0
     },
     "structure_2068": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -7687,7 +7226,6 @@
         "wall/type": 0
     },
     "structure_2069": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -7704,7 +7242,6 @@
         "wall/type": 0
     },
     "structure_2070": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -7721,7 +7258,6 @@
         "wall/type": 3
     },
     "structure_2072": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -7738,7 +7274,6 @@
         "wall/type": 0
     },
     "structure_2074": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -7755,7 +7290,6 @@
         "wall/type": 0
     },
     "structure_2075": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -7772,7 +7306,6 @@
         "wall/type": 0
     },
     "structure_2076": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -7789,7 +7322,6 @@
         "wall/type": 0
     },
     "structure_2077": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -7806,7 +7338,6 @@
         "wall/type": 3
     },
     "structure_2079": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -7823,7 +7354,6 @@
         "wall/type": 3
     },
     "structure_2081": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -7840,7 +7370,6 @@
         "wall/type": 0
     },
     "structure_2082": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -7857,7 +7386,6 @@
         "wall/type": 0
     },
     "structure_2083": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -7874,7 +7402,6 @@
         "wall/type": 3
     },
     "structure_2085": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -7891,7 +7418,6 @@
         "wall/type": 0
     },
     "structure_2086": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -7908,7 +7434,6 @@
         "wall/type": 0
     },
     "structure_2087": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -7925,7 +7450,6 @@
         "wall/type": 0
     },
     "structure_2088": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -7942,7 +7466,6 @@
         "wall/type": 0
     },
     "structure_2090": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -7959,7 +7482,6 @@
         "wall/type": 0
     },
     "structure_2091": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -7976,7 +7498,6 @@
         "wall/type": 0
     },
     "structure_2093": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -7993,7 +7514,6 @@
         "wall/type": 0
     },
     "structure_2095": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -8010,7 +7530,6 @@
         "wall/type": 0
     },
     "structure_2097": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -8027,7 +7546,6 @@
         "wall/type": 0
     },
     "structure_2099": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -8044,7 +7562,6 @@
         "wall/type": 0
     },
     "structure_21": {
-        "id": "A0CommandCentre",
         "modules": 0,
         "name": "A0CommandCentre",
         "position": [
@@ -8060,7 +7577,6 @@
         "startpos": 3
     },
     "structure_2101": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -8077,7 +7593,6 @@
         "wall/type": 3
     },
     "structure_2102": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -8094,7 +7609,6 @@
         "wall/type": 0
     },
     "structure_2103": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -8111,7 +7625,6 @@
         "wall/type": 0
     },
     "structure_2104": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -8128,7 +7641,6 @@
         "wall/type": 3
     },
     "structure_2105": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -8145,7 +7657,6 @@
         "wall/type": 3
     },
     "structure_2107": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -8162,7 +7673,6 @@
         "wall/type": 0
     },
     "structure_2109": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -8179,7 +7689,6 @@
         "wall/type": 0
     },
     "structure_2111": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -8196,7 +7705,6 @@
         "wall/type": 3
     },
     "structure_2113": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -8213,7 +7721,6 @@
         "wall/type": 0
     },
     "structure_2115": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -8230,7 +7737,6 @@
         "wall/type": 0
     },
     "structure_2116": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -8247,7 +7753,6 @@
         "wall/type": 0
     },
     "structure_2117": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -8264,7 +7769,6 @@
         "wall/type": 3
     },
     "structure_2120": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -8281,7 +7785,6 @@
         "wall/type": 3
     },
     "structure_2122": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -8298,7 +7801,6 @@
         "wall/type": 0
     },
     "structure_2123": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -8315,7 +7817,6 @@
         "wall/type": 3
     },
     "structure_2125": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -8332,7 +7833,6 @@
         "wall/type": 0
     },
     "structure_2126": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -8349,7 +7849,6 @@
         "wall/type": 0
     },
     "structure_2127": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -8366,7 +7865,6 @@
         "wall/type": 3
     },
     "structure_2129": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -8383,7 +7881,6 @@
         "wall/type": 0
     },
     "structure_2130": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -8400,7 +7897,6 @@
         "wall/type": 3
     },
     "structure_2132": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -8417,7 +7913,6 @@
         "wall/type": 0
     },
     "structure_2134": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -8434,7 +7929,6 @@
         "wall/type": 0
     },
     "structure_2135": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -8451,7 +7945,6 @@
         "wall/type": 0
     },
     "structure_2136": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -8468,7 +7961,6 @@
         "wall/type": 3
     },
     "structure_2137": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -8485,7 +7977,6 @@
         "wall/type": 0
     },
     "structure_2139": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -8502,7 +7993,6 @@
         "wall/type": 0
     },
     "structure_2141": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -8519,7 +8009,6 @@
         "wall/type": 0
     },
     "structure_2143": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -8536,7 +8025,6 @@
         "wall/type": 0
     },
     "structure_2152": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -8553,7 +8041,6 @@
         "wall/type": 0
     },
     "structure_2154": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -8570,7 +8057,6 @@
         "wall/type": 0
     },
     "structure_2156": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -8587,7 +8073,6 @@
         "wall/type": 0
     },
     "structure_2158": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -8604,7 +8089,6 @@
         "wall/type": 0
     },
     "structure_2159": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -8621,7 +8105,6 @@
         "wall/type": 3
     },
     "structure_2160": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -8638,7 +8121,6 @@
         "wall/type": 0
     },
     "structure_2161": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -8655,7 +8137,6 @@
         "wall/type": 3
     },
     "structure_2162": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -8672,7 +8153,6 @@
         "wall/type": 0
     },
     "structure_2163": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -8689,7 +8169,6 @@
         "wall/type": 0
     },
     "structure_2164": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -8706,7 +8185,6 @@
         "wall/type": 3
     },
     "structure_2166": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -8723,7 +8201,6 @@
         "wall/type": 0
     },
     "structure_2168": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -8740,7 +8217,6 @@
         "wall/type": 0
     },
     "structure_2169": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -8757,7 +8233,6 @@
         "wall/type": 3
     },
     "structure_2171": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -8774,7 +8249,6 @@
         "wall/type": 0
     },
     "structure_2172": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -8791,7 +8265,6 @@
         "wall/type": 0
     },
     "structure_2173": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -8808,7 +8281,6 @@
         "wall/type": 3
     },
     "structure_2174": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -8825,7 +8297,6 @@
         "wall/type": 0
     },
     "structure_2176": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -8842,7 +8313,6 @@
         "wall/type": 0
     },
     "structure_2178": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -8859,7 +8329,6 @@
         "wall/type": 0
     },
     "structure_2179": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -8876,7 +8345,6 @@
         "wall/type": 0
     },
     "structure_2180": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -8893,7 +8361,6 @@
         "wall/type": 0
     },
     "structure_2181": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -8910,7 +8377,6 @@
         "wall/type": 3
     },
     "structure_2183": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -8927,7 +8393,6 @@
         "wall/type": 0
     },
     "structure_2185": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -8944,7 +8409,6 @@
         "wall/type": 0
     },
     "structure_2186": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -8961,7 +8425,6 @@
         "wall/type": 0
     },
     "structure_2187": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -8978,7 +8441,6 @@
         "wall/type": 0
     },
     "structure_2188": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -8995,7 +8457,6 @@
         "wall/type": 3
     },
     "structure_2189": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -9012,7 +8473,6 @@
         "wall/type": 0
     },
     "structure_2190": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -9029,7 +8489,6 @@
         "wall/type": 0
     },
     "structure_2192": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -9046,7 +8505,6 @@
         "wall/type": 0
     },
     "structure_2193": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -9063,7 +8521,6 @@
         "wall/type": 0
     },
     "structure_2194": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -9080,7 +8537,6 @@
         "wall/type": 0
     },
     "structure_2197": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -9097,7 +8553,6 @@
         "wall/type": 0
     },
     "structure_2198": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -9114,7 +8569,6 @@
         "wall/type": 0
     },
     "structure_2199": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -9131,7 +8585,6 @@
         "wall/type": 0
     },
     "structure_2201": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -9148,7 +8601,6 @@
         "wall/type": 0
     },
     "structure_2203": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -9165,7 +8617,6 @@
         "wall/type": 0
     },
     "structure_2205": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -9182,7 +8633,6 @@
         "wall/type": 3
     },
     "structure_2206": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -9199,7 +8649,6 @@
         "wall/type": 0
     },
     "structure_2207": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -9216,7 +8665,6 @@
         "wall/type": 3
     },
     "structure_2208": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -9233,7 +8681,6 @@
         "wall/type": 0
     },
     "structure_2210": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -9250,7 +8697,6 @@
         "wall/type": 0
     },
     "structure_2211": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -9267,7 +8713,6 @@
         "wall/type": 0
     },
     "structure_2214": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -9284,7 +8729,6 @@
         "wall/type": 3
     },
     "structure_2216": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -9301,7 +8745,6 @@
         "wall/type": 0
     },
     "structure_2220": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -9318,7 +8761,6 @@
         "wall/type": 0
     },
     "structure_2221": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -9335,7 +8777,6 @@
         "wall/type": 0
     },
     "structure_2222": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -9352,7 +8793,6 @@
         "wall/type": 3
     },
     "structure_2224": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -9369,7 +8809,6 @@
         "wall/type": 0
     },
     "structure_2226": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -9386,7 +8825,6 @@
         "wall/type": 0
     },
     "structure_2227": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -9403,7 +8841,6 @@
         "wall/type": 3
     },
     "structure_2229": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -9420,7 +8857,6 @@
         "wall/type": 3
     },
     "structure_2231": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -9437,7 +8873,6 @@
         "wall/type": 0
     },
     "structure_2232": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -9454,7 +8889,6 @@
         "wall/type": 3
     },
     "structure_2233": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -9471,7 +8905,6 @@
         "wall/type": 0
     },
     "structure_2234": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -9488,7 +8921,6 @@
         "wall/type": 3
     },
     "structure_2235": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -9505,7 +8937,6 @@
         "wall/type": 3
     },
     "structure_2236": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -9522,7 +8953,6 @@
         "wall/type": 0
     },
     "structure_2237": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -9539,7 +8969,6 @@
         "wall/type": 0
     },
     "structure_2238": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -9556,7 +8985,6 @@
         "wall/type": 3
     },
     "structure_2239": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -9573,7 +9001,6 @@
         "wall/type": 0
     },
     "structure_2240": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -9590,7 +9017,6 @@
         "wall/type": 0
     },
     "structure_2241": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -9607,7 +9033,6 @@
         "wall/type": 0
     },
     "structure_2242": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -9624,7 +9049,6 @@
         "wall/type": 0
     },
     "structure_2243": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -9641,7 +9065,6 @@
         "wall/type": 0
     },
     "structure_2244": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -9658,7 +9081,6 @@
         "wall/type": 0
     },
     "structure_2245": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -9675,7 +9097,6 @@
         "wall/type": 0
     },
     "structure_2248": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -9692,7 +9113,6 @@
         "wall/type": 0
     },
     "structure_2249": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -9709,7 +9129,6 @@
         "wall/type": 0
     },
     "structure_2250": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -9726,7 +9145,6 @@
         "wall/type": 0
     },
     "structure_2251": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -9743,7 +9161,6 @@
         "wall/type": 3
     },
     "structure_2252": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -9760,7 +9177,6 @@
         "wall/type": 0
     },
     "structure_2253": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -9777,7 +9193,6 @@
         "wall/type": 0
     },
     "structure_2255": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -9794,7 +9209,6 @@
         "wall/type": 0
     },
     "structure_2257": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -9811,7 +9225,6 @@
         "wall/type": 0
     },
     "structure_2258": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -9828,7 +9241,6 @@
         "wall/type": 3
     },
     "structure_2260": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -9845,7 +9257,6 @@
         "wall/type": 0
     },
     "structure_2262": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -9862,7 +9273,6 @@
         "wall/type": 0
     },
     "structure_2264": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -9879,7 +9289,6 @@
         "wall/type": 3
     },
     "structure_2265": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -9896,7 +9305,6 @@
         "wall/type": 0
     },
     "structure_2266": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -9913,7 +9321,6 @@
         "wall/type": 0
     },
     "structure_2267": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -9930,7 +9337,6 @@
         "wall/type": 3
     },
     "structure_2268": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -9947,7 +9353,6 @@
         "wall/type": 0
     },
     "structure_2269": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -9964,7 +9369,6 @@
         "wall/type": 0
     },
     "structure_2270": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -9981,7 +9385,6 @@
         "wall/type": 0
     },
     "structure_2272": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -9998,7 +9401,6 @@
         "wall/type": 0
     },
     "structure_2274": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -10015,7 +9417,6 @@
         "wall/type": 3
     },
     "structure_2275": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -10032,7 +9433,6 @@
         "wall/type": 0
     },
     "structure_2276": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -10049,7 +9449,6 @@
         "wall/type": 3
     },
     "structure_2277": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -10066,7 +9465,6 @@
         "wall/type": 0
     },
     "structure_2279": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -10083,7 +9481,6 @@
         "wall/type": 0
     },
     "structure_2281": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -10100,7 +9497,6 @@
         "wall/type": 0
     },
     "structure_2283": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -10117,7 +9513,6 @@
         "wall/type": 3
     },
     "structure_2284": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -10134,7 +9529,6 @@
         "wall/type": 0
     },
     "structure_2285": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -10151,7 +9545,6 @@
         "wall/type": 3
     },
     "structure_2286": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -10168,7 +9561,6 @@
         "wall/type": 0
     },
     "structure_2288": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -10185,7 +9577,6 @@
         "wall/type": 0
     },
     "structure_2290": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -10202,7 +9593,6 @@
         "wall/type": 0
     },
     "structure_2292": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -10219,7 +9609,6 @@
         "wall/type": 3
     },
     "structure_2294": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -10236,7 +9625,6 @@
         "wall/type": 0
     },
     "structure_2295": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -10253,7 +9641,6 @@
         "wall/type": 3
     },
     "structure_2296": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -10270,7 +9657,6 @@
         "wall/type": 0
     },
     "structure_2297": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -10287,7 +9673,6 @@
         "wall/type": 3
     },
     "structure_2299": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -10304,7 +9689,6 @@
         "wall/type": 0
     },
     "structure_23": {
-        "id": "A0LightFactory",
         "modules": 0,
         "name": "A0LightFactory",
         "position": [
@@ -10320,7 +9704,6 @@
         "startpos": 3
     },
     "structure_2301": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -10337,7 +9720,6 @@
         "wall/type": 0
     },
     "structure_2303": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -10354,7 +9736,6 @@
         "wall/type": 3
     },
     "structure_2305": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -10371,7 +9752,6 @@
         "wall/type": 3
     },
     "structure_2307": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -10388,7 +9768,6 @@
         "wall/type": 0
     },
     "structure_2308": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -10405,7 +9784,6 @@
         "wall/type": 0
     },
     "structure_2310": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -10422,7 +9800,6 @@
         "wall/type": 0
     },
     "structure_2311": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -10439,7 +9816,6 @@
         "wall/type": 0
     },
     "structure_2312": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -10456,7 +9832,6 @@
         "wall/type": 3
     },
     "structure_2314": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -10473,7 +9848,6 @@
         "wall/type": 0
     },
     "structure_2316": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -10490,7 +9864,6 @@
         "wall/type": 0
     },
     "structure_2317": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -10507,7 +9880,6 @@
         "wall/type": 0
     },
     "structure_2318": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -10524,7 +9896,6 @@
         "wall/type": 0
     },
     "structure_2319": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -10541,7 +9912,6 @@
         "wall/type": 0
     },
     "structure_2320": {
-        "id": "GuardTower1",
         "modules": 0,
         "name": "GuardTower1",
         "position": [
@@ -10557,7 +9927,6 @@
         "startpos": 6
     },
     "structure_2321": {
-        "id": "GuardTower1",
         "modules": 0,
         "name": "GuardTower1",
         "position": [
@@ -10573,7 +9942,6 @@
         "startpos": 6
     },
     "structure_2322": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -10590,7 +9958,6 @@
         "wall/type": 0
     },
     "structure_2323": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -10607,7 +9974,6 @@
         "wall/type": 0
     },
     "structure_2325": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -10624,7 +9990,6 @@
         "wall/type": 0
     },
     "structure_2327": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -10641,7 +10006,6 @@
         "wall/type": 0
     },
     "structure_2328": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -10658,7 +10022,6 @@
         "wall/type": 0
     },
     "structure_2329": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -10675,7 +10038,6 @@
         "wall/type": 0
     },
     "structure_2330": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -10692,7 +10054,6 @@
         "wall/type": 3
     },
     "structure_2332": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -10709,7 +10070,6 @@
         "wall/type": 0
     },
     "structure_2334": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -10726,7 +10086,6 @@
         "wall/type": 0
     },
     "structure_2335": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -10743,7 +10102,6 @@
         "wall/type": 0
     },
     "structure_2336": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -10760,7 +10118,6 @@
         "wall/type": 3
     },
     "structure_2339": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -10777,7 +10134,6 @@
         "wall/type": 0
     },
     "structure_2340": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -10794,7 +10150,6 @@
         "wall/type": 3
     },
     "structure_2341": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -10811,7 +10166,6 @@
         "wall/type": 0
     },
     "structure_2342": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -10828,7 +10182,6 @@
         "wall/type": 0
     },
     "structure_2344": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -10845,7 +10198,6 @@
         "wall/type": 0
     },
     "structure_2346": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -10862,7 +10214,6 @@
         "wall/type": 0
     },
     "structure_2348": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -10879,7 +10230,6 @@
         "wall/type": 3
     },
     "structure_2350": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -10896,7 +10246,6 @@
         "wall/type": 0
     },
     "structure_2352": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -10913,7 +10262,6 @@
         "wall/type": 3
     },
     "structure_2354": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -10930,7 +10278,6 @@
         "wall/type": 0
     },
     "structure_2356": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -10947,7 +10294,6 @@
         "wall/type": 0
     },
     "structure_2358": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -10964,7 +10310,6 @@
         "wall/type": 3
     },
     "structure_2360": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -10981,7 +10326,6 @@
         "wall/type": 0
     },
     "structure_2362": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -10998,7 +10342,6 @@
         "wall/type": 3
     },
     "structure_2364": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -11015,7 +10358,6 @@
         "wall/type": 0
     },
     "structure_2366": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -11032,7 +10374,6 @@
         "wall/type": 0
     },
     "structure_2368": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -11049,7 +10390,6 @@
         "wall/type": 3
     },
     "structure_2370": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -11066,7 +10406,6 @@
         "wall/type": 3
     },
     "structure_2372": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -11083,7 +10422,6 @@
         "wall/type": 0
     },
     "structure_2374": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -11100,7 +10438,6 @@
         "wall/type": 0
     },
     "structure_2376": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -11117,7 +10454,6 @@
         "wall/type": 0
     },
     "structure_2377": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -11134,7 +10470,6 @@
         "wall/type": 3
     },
     "structure_2378": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -11151,7 +10486,6 @@
         "wall/type": 3
     },
     "structure_2379": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -11168,7 +10502,6 @@
         "wall/type": 0
     },
     "structure_2381": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -11185,7 +10518,6 @@
         "wall/type": 0
     },
     "structure_2383": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -11202,7 +10534,6 @@
         "wall/type": 0
     },
     "structure_2384": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -11219,7 +10550,6 @@
         "wall/type": 0
     },
     "structure_2385": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -11236,7 +10566,6 @@
         "wall/type": 3
     },
     "structure_2386": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -11253,7 +10582,6 @@
         "wall/type": 0
     },
     "structure_2388": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -11270,7 +10598,6 @@
         "wall/type": 0
     },
     "structure_2389": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -11287,7 +10614,6 @@
         "wall/type": 3
     },
     "structure_2390": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -11304,7 +10630,6 @@
         "wall/type": 0
     },
     "structure_2393": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -11321,7 +10646,6 @@
         "wall/type": 0
     },
     "structure_2394": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -11338,7 +10662,6 @@
         "wall/type": 3
     },
     "structure_2396": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -11355,7 +10678,6 @@
         "wall/type": 0
     },
     "structure_2397": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -11372,7 +10694,6 @@
         "wall/type": 0
     },
     "structure_2398": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -11389,7 +10710,6 @@
         "wall/type": 3
     },
     "structure_24": {
-        "id": "A0PowerGenerator",
         "modules": 1,
         "name": "A0PowerGenerator",
         "position": [
@@ -11405,7 +10725,6 @@
         "startpos": 3
     },
     "structure_2401": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -11422,7 +10741,6 @@
         "wall/type": 0
     },
     "structure_2403": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -11439,7 +10757,6 @@
         "wall/type": 0
     },
     "structure_2404": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -11456,7 +10773,6 @@
         "wall/type": 3
     },
     "structure_2406": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -11473,7 +10789,6 @@
         "wall/type": 0
     },
     "structure_2408": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -11490,7 +10805,6 @@
         "wall/type": 3
     },
     "structure_2410": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -11507,7 +10821,6 @@
         "wall/type": 3
     },
     "structure_2411": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -11524,7 +10837,6 @@
         "wall/type": 3
     },
     "structure_2412": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -11541,7 +10853,6 @@
         "wall/type": 0
     },
     "structure_2413": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -11558,7 +10869,6 @@
         "wall/type": 0
     },
     "structure_2415": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -11575,7 +10885,6 @@
         "wall/type": 0
     },
     "structure_2416": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -11592,7 +10901,6 @@
         "wall/type": 3
     },
     "structure_2418": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -11609,7 +10917,6 @@
         "wall/type": 0
     },
     "structure_2419": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -11626,7 +10933,6 @@
         "wall/type": 3
     },
     "structure_2420": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -11643,7 +10949,6 @@
         "wall/type": 0
     },
     "structure_2421": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -11660,7 +10965,6 @@
         "wall/type": 3
     },
     "structure_2424": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -11677,7 +10981,6 @@
         "wall/type": 0
     },
     "structure_2425": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -11694,7 +10997,6 @@
         "wall/type": 0
     },
     "structure_2426": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -11711,7 +11013,6 @@
         "wall/type": 0
     },
     "structure_2429": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -11728,7 +11029,6 @@
         "wall/type": 0
     },
     "structure_2430": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -11745,7 +11045,6 @@
         "wall/type": 0
     },
     "structure_2431": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -11762,7 +11061,6 @@
         "wall/type": 0
     },
     "structure_2433": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -11779,7 +11077,6 @@
         "wall/type": 0
     },
     "structure_2434": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -11796,7 +11093,6 @@
         "wall/type": 0
     },
     "structure_2436": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -11813,7 +11109,6 @@
         "wall/type": 3
     },
     "structure_2437": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -11830,7 +11125,6 @@
         "wall/type": 3
     },
     "structure_2438": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -11847,7 +11141,6 @@
         "wall/type": 3
     },
     "structure_2440": {
-        "id": "A0ResourceExtractor",
         "modules": 0,
         "name": "A0ResourceExtractor",
         "player": "scavenger",
@@ -11863,7 +11156,6 @@
         ]
     },
     "structure_2443": {
-        "id": "A0BaBaRocketPit",
         "modules": 0,
         "name": "A0BaBaRocketPit",
         "player": "scavenger",
@@ -11879,7 +11171,6 @@
         ]
     },
     "structure_2444": {
-        "id": "A0BaBaRocketPit",
         "modules": 0,
         "name": "A0BaBaRocketPit",
         "player": "scavenger",
@@ -11895,7 +11186,6 @@
         ]
     },
     "structure_2445": {
-        "id": "A0BaBaRocketPit",
         "modules": 0,
         "name": "A0BaBaRocketPit",
         "player": "scavenger",
@@ -11911,7 +11201,6 @@
         ]
     },
     "structure_2446": {
-        "id": "A0BaBaRocketPit",
         "modules": 0,
         "name": "A0BaBaRocketPit",
         "player": "scavenger",
@@ -11927,7 +11216,6 @@
         ]
     },
     "structure_2447": {
-        "id": "A0BaBaRocketPit",
         "modules": 0,
         "name": "A0BaBaRocketPit",
         "player": "scavenger",
@@ -11943,7 +11231,6 @@
         ]
     },
     "structure_2448": {
-        "id": "A0BaBaRocketPit",
         "modules": 0,
         "name": "A0BaBaRocketPit",
         "player": "scavenger",
@@ -11959,7 +11246,6 @@
         ]
     },
     "structure_2452": {
-        "id": "A0BabaCornerWall",
         "modules": 0,
         "name": "A0BabaCornerWall",
         "player": "scavenger",
@@ -11975,7 +11261,6 @@
         ]
     },
     "structure_2454": {
-        "id": "A0BabaCornerWall",
         "modules": 0,
         "name": "A0BabaCornerWall",
         "player": "scavenger",
@@ -11991,7 +11276,6 @@
         ]
     },
     "structure_2455": {
-        "id": "A0BabaCornerWall",
         "modules": 0,
         "name": "A0BabaCornerWall",
         "player": "scavenger",
@@ -12007,7 +11291,6 @@
         ]
     },
     "structure_2456": {
-        "id": "A0BabaCornerWall",
         "modules": 0,
         "name": "A0BabaCornerWall",
         "player": "scavenger",
@@ -12023,7 +11306,6 @@
         ]
     },
     "structure_2457": {
-        "id": "A0BabaCornerWall",
         "modules": 0,
         "name": "A0BabaCornerWall",
         "player": "scavenger",
@@ -12039,7 +11321,6 @@
         ]
     },
     "structure_2458": {
-        "id": "A0BabaCornerWall",
         "modules": 0,
         "name": "A0BabaCornerWall",
         "player": "scavenger",
@@ -12055,7 +11336,6 @@
         ]
     },
     "structure_2459": {
-        "id": "A0BaBaGunTowerEND",
         "modules": 0,
         "name": "A0BaBaGunTowerEND",
         "player": "scavenger",
@@ -12071,7 +11351,6 @@
         ]
     },
     "structure_2460": {
-        "id": "A0BaBaGunTowerEND",
         "modules": 0,
         "name": "A0BaBaGunTowerEND",
         "player": "scavenger",
@@ -12087,7 +11366,6 @@
         ]
     },
     "structure_2461": {
-        "id": "A0BaBaGunTowerEND",
         "modules": 0,
         "name": "A0BaBaGunTowerEND",
         "player": "scavenger",
@@ -12103,7 +11381,6 @@
         ]
     },
     "structure_2462": {
-        "id": "A0BaBaGunTowerEND",
         "modules": 0,
         "name": "A0BaBaGunTowerEND",
         "player": "scavenger",
@@ -12119,7 +11396,6 @@
         ]
     },
     "structure_2463": {
-        "id": "A0BaBaGunTowerEND",
         "modules": 0,
         "name": "A0BaBaGunTowerEND",
         "player": "scavenger",
@@ -12135,7 +11411,6 @@
         ]
     },
     "structure_2464": {
-        "id": "A0BaBaGunTowerEND",
         "modules": 0,
         "name": "A0BaBaGunTowerEND",
         "player": "scavenger",
@@ -12151,7 +11426,6 @@
         ]
     },
     "structure_2466": {
-        "id": "A0BaBaHorizontalWall",
         "modules": 0,
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
@@ -12167,7 +11441,6 @@
         ]
     },
     "structure_2468": {
-        "id": "A0BaBaHorizontalWall",
         "modules": 0,
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
@@ -12183,7 +11456,6 @@
         ]
     },
     "structure_2469": {
-        "id": "A0BaBaHorizontalWall",
         "modules": 0,
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
@@ -12199,7 +11471,6 @@
         ]
     },
     "structure_2470": {
-        "id": "A0BaBaHorizontalWall",
         "modules": 0,
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
@@ -12215,7 +11486,6 @@
         ]
     },
     "structure_2471": {
-        "id": "A0BaBaHorizontalWall",
         "modules": 0,
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
@@ -12231,7 +11501,6 @@
         ]
     },
     "structure_2472": {
-        "id": "A0BaBaHorizontalWall",
         "modules": 0,
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
@@ -12247,7 +11516,6 @@
         ]
     },
     "structure_2473": {
-        "id": "A0BaBaHorizontalWall",
         "modules": 0,
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
@@ -12263,7 +11531,6 @@
         ]
     },
     "structure_2474": {
-        "id": "A0BaBaHorizontalWall",
         "modules": 0,
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
@@ -12279,7 +11546,6 @@
         ]
     },
     "structure_2475": {
-        "id": "A0BaBaHorizontalWall",
         "modules": 0,
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
@@ -12295,7 +11561,6 @@
         ]
     },
     "structure_2476": {
-        "id": "A0BaBaHorizontalWall",
         "modules": 0,
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
@@ -12311,7 +11576,6 @@
         ]
     },
     "structure_2477": {
-        "id": "A0BaBaBunker",
         "modules": 0,
         "name": "A0BaBaBunker",
         "player": "scavenger",
@@ -12327,7 +11591,6 @@
         ]
     },
     "structure_2478": {
-        "id": "A0BaBaBunker",
         "modules": 0,
         "name": "A0BaBaBunker",
         "player": "scavenger",
@@ -12343,7 +11606,6 @@
         ]
     },
     "structure_2479": {
-        "id": "A0BaBaBunker",
         "modules": 0,
         "name": "A0BaBaBunker",
         "player": "scavenger",
@@ -12359,7 +11621,6 @@
         ]
     },
     "structure_2480": {
-        "id": "A0BaBaBunker",
         "modules": 0,
         "name": "A0BaBaBunker",
         "player": "scavenger",
@@ -12375,7 +11636,6 @@
         ]
     },
     "structure_2481": {
-        "id": "A0BaBaBunker",
         "modules": 0,
         "name": "A0BaBaBunker",
         "player": "scavenger",
@@ -12391,7 +11651,6 @@
         ]
     },
     "structure_2482": {
-        "id": "A0BaBaBunker",
         "modules": 0,
         "name": "A0BaBaBunker",
         "player": "scavenger",
@@ -12407,7 +11666,6 @@
         ]
     },
     "structure_2483": {
-        "id": "A0CannonTower",
         "modules": 0,
         "name": "A0CannonTower",
         "player": "scavenger",
@@ -12423,7 +11681,6 @@
         ]
     },
     "structure_2484": {
-        "id": "A0CannonTower",
         "modules": 0,
         "name": "A0CannonTower",
         "player": "scavenger",
@@ -12439,7 +11696,6 @@
         ]
     },
     "structure_2485": {
-        "id": "A0CannonTower",
         "modules": 0,
         "name": "A0CannonTower",
         "player": "scavenger",
@@ -12455,7 +11711,6 @@
         ]
     },
     "structure_2486": {
-        "id": "A0CannonTower",
         "modules": 0,
         "name": "A0CannonTower",
         "player": "scavenger",
@@ -12471,7 +11726,6 @@
         ]
     },
     "structure_2487": {
-        "id": "A0BaBaGunTowerEND",
         "modules": 0,
         "name": "A0BaBaGunTowerEND",
         "player": "scavenger",
@@ -12487,7 +11741,6 @@
         ]
     },
     "structure_2488": {
-        "id": "A0BaBaGunTowerEND",
         "modules": 0,
         "name": "A0BaBaGunTowerEND",
         "player": "scavenger",
@@ -12503,7 +11756,6 @@
         ]
     },
     "structure_2489": {
-        "id": "A0BaBaRocketPit",
         "modules": 0,
         "name": "A0BaBaRocketPit",
         "player": "scavenger",
@@ -12519,7 +11771,6 @@
         ]
     },
     "structure_2490": {
-        "id": "A0BaBaRocketPit",
         "modules": 0,
         "name": "A0BaBaRocketPit",
         "player": "scavenger",
@@ -12535,7 +11786,6 @@
         ]
     },
     "structure_2491": {
-        "id": "A0BaBaFactory",
         "modules": 0,
         "name": "A0BaBaFactory",
         "player": "scavenger",
@@ -12551,7 +11801,6 @@
         ]
     },
     "structure_2492": {
-        "id": "A0BaBaPowerGenerator",
         "modules": 0,
         "name": "A0BaBaPowerGenerator",
         "player": "scavenger",
@@ -12567,7 +11816,6 @@
         ]
     },
     "structure_2498": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -12584,7 +11832,6 @@
         "wall/type": 0
     },
     "structure_2499": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -12601,7 +11848,6 @@
         "wall/type": 3
     },
     "structure_25": {
-        "id": "A0ResourceExtractor",
         "modules": 0,
         "name": "A0ResourceExtractor",
         "position": [
@@ -12617,7 +11863,6 @@
         "startpos": 3
     },
     "structure_2501": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -12634,7 +11879,6 @@
         "wall/type": 0
     },
     "structure_2503": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -12651,7 +11895,6 @@
         "wall/type": 0
     },
     "structure_2505": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -12668,7 +11911,6 @@
         "wall/type": 3
     },
     "structure_2507": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -12685,7 +11927,6 @@
         "wall/type": 0
     },
     "structure_2509": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -12702,7 +11943,6 @@
         "wall/type": 3
     },
     "structure_2511": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -12719,7 +11959,6 @@
         "wall/type": 3
     },
     "structure_2512": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -12736,7 +11975,6 @@
         "wall/type": 0
     },
     "structure_2513": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -12753,7 +11991,6 @@
         "wall/type": 0
     },
     "structure_2514": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -12770,7 +12007,6 @@
         "wall/type": 3
     },
     "structure_258": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -12787,7 +12023,6 @@
         "wall/type": 0
     },
     "structure_259": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -12804,7 +12039,6 @@
         "wall/type": 0
     },
     "structure_26": {
-        "id": "A0ResearchFacility",
         "modules": 1,
         "name": "A0ResearchFacility",
         "position": [
@@ -12820,7 +12054,6 @@
         "startpos": 3
     },
     "structure_260": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -12837,7 +12070,6 @@
         "wall/type": 0
     },
     "structure_261": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -12854,7 +12086,6 @@
         "wall/type": 0
     },
     "structure_266": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -12871,7 +12102,6 @@
         "wall/type": 0
     },
     "structure_267": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -12888,7 +12118,6 @@
         "wall/type": 0
     },
     "structure_27": {
-        "id": "A0CommandCentre",
         "modules": 0,
         "name": "A0CommandCentre",
         "position": [
@@ -12904,7 +12133,6 @@
         "startpos": 4
     },
     "structure_273": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -12921,7 +12149,6 @@
         "wall/type": 0
     },
     "structure_275": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -12938,7 +12165,6 @@
         "wall/type": 0
     },
     "structure_281": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -12955,7 +12181,6 @@
         "wall/type": 0
     },
     "structure_286": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -12972,7 +12197,6 @@
         "wall/type": 0
     },
     "structure_287": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -12989,7 +12213,6 @@
         "wall/type": 0
     },
     "structure_289": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -13006,7 +12229,6 @@
         "wall/type": 0
     },
     "structure_3": {
-        "id": "A0LightFactory",
         "modules": 0,
         "name": "A0LightFactory",
         "position": [
@@ -13022,7 +12244,6 @@
         "startpos": 0
     },
     "structure_30": {
-        "id": "A0LightFactory",
         "modules": 0,
         "name": "A0LightFactory",
         "position": [
@@ -13038,7 +12259,6 @@
         "startpos": 4
     },
     "structure_31": {
-        "id": "A0ResearchFacility",
         "modules": 1,
         "name": "A0ResearchFacility",
         "position": [
@@ -13054,7 +12274,6 @@
         "startpos": 4
     },
     "structure_32": {
-        "id": "A0PowerGenerator",
         "modules": 1,
         "name": "A0PowerGenerator",
         "position": [
@@ -13070,7 +12289,6 @@
         "startpos": 4
     },
     "structure_324": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -13087,7 +12305,6 @@
         "wall/type": 0
     },
     "structure_333": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -13104,7 +12321,6 @@
         "wall/type": 0
     },
     "structure_334": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -13121,7 +12337,6 @@
         "wall/type": 0
     },
     "structure_34": {
-        "id": "A0ResourceExtractor",
         "modules": 0,
         "name": "A0ResourceExtractor",
         "position": [
@@ -13137,7 +12352,6 @@
         "startpos": 4
     },
     "structure_341": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -13154,7 +12368,6 @@
         "wall/type": 0
     },
     "structure_342": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -13171,7 +12384,6 @@
         "wall/type": 0
     },
     "structure_344": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -13188,7 +12400,6 @@
         "wall/type": 0
     },
     "structure_346": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -13205,7 +12416,6 @@
         "wall/type": 0
     },
     "structure_35": {
-        "id": "A0CommandCentre",
         "modules": 0,
         "name": "A0CommandCentre",
         "position": [
@@ -13221,7 +12431,6 @@
         "startpos": 5
     },
     "structure_358": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -13238,7 +12447,6 @@
         "wall/type": 0
     },
     "structure_359": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -13255,7 +12463,6 @@
         "wall/type": 0
     },
     "structure_36": {
-        "id": "A0ResearchFacility",
         "modules": 1,
         "name": "A0ResearchFacility",
         "position": [
@@ -13271,7 +12478,6 @@
         "startpos": 5
     },
     "structure_360": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -13288,7 +12494,6 @@
         "wall/type": 0
     },
     "structure_361": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -13305,7 +12510,6 @@
         "wall/type": 0
     },
     "structure_37": {
-        "id": "A0PowerGenerator",
         "modules": 1,
         "name": "A0PowerGenerator",
         "position": [
@@ -13321,7 +12525,6 @@
         "startpos": 5
     },
     "structure_39": {
-        "id": "A0LightFactory",
         "modules": 0,
         "name": "A0LightFactory",
         "position": [
@@ -13337,7 +12540,6 @@
         "startpos": 5
     },
     "structure_41": {
-        "id": "A0ResourceExtractor",
         "modules": 0,
         "name": "A0ResourceExtractor",
         "position": [
@@ -13353,7 +12555,6 @@
         "startpos": 5
     },
     "structure_412": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -13370,7 +12571,6 @@
         "wall/type": 0
     },
     "structure_413": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -13387,7 +12587,6 @@
         "wall/type": 0
     },
     "structure_414": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -13404,7 +12603,6 @@
         "wall/type": 0
     },
     "structure_439": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -13421,7 +12619,6 @@
         "wall/type": 0
     },
     "structure_440": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -13438,7 +12635,6 @@
         "wall/type": 0
     },
     "structure_441": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -13455,7 +12651,6 @@
         "wall/type": 0
     },
     "structure_442": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -13472,7 +12667,6 @@
         "wall/type": 0
     },
     "structure_475": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -13489,7 +12683,6 @@
         "wall/type": 0
     },
     "structure_477": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -13506,7 +12699,6 @@
         "wall/type": 0
     },
     "structure_49": {
-        "id": "A0CommandCentre",
         "modules": 0,
         "name": "A0CommandCentre",
         "position": [
@@ -13522,7 +12714,6 @@
         "startpos": 7
     },
     "structure_5": {
-        "id": "A0ResourceExtractor",
         "modules": 0,
         "name": "A0ResourceExtractor",
         "position": [
@@ -13538,7 +12729,6 @@
         "startpos": 0
     },
     "structure_51": {
-        "id": "A0LightFactory",
         "modules": 0,
         "name": "A0LightFactory",
         "position": [
@@ -13554,7 +12744,6 @@
         "startpos": 7
     },
     "structure_53": {
-        "id": "A0PowerGenerator",
         "modules": 1,
         "name": "A0PowerGenerator",
         "position": [
@@ -13570,7 +12759,6 @@
         "startpos": 7
     },
     "structure_54": {
-        "id": "A0ResearchFacility",
         "modules": 1,
         "name": "A0ResearchFacility",
         "position": [
@@ -13586,7 +12774,6 @@
         "startpos": 7
     },
     "structure_542": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -13603,7 +12790,6 @@
         "wall/type": 0
     },
     "structure_543": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -13620,7 +12806,6 @@
         "wall/type": 0
     },
     "structure_544": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -13637,7 +12822,6 @@
         "wall/type": 0
     },
     "structure_55": {
-        "id": "A0ResourceExtractor",
         "modules": 0,
         "name": "A0ResourceExtractor",
         "position": [
@@ -13653,7 +12837,6 @@
         "startpos": 7
     },
     "structure_552": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -13670,7 +12853,6 @@
         "wall/type": 0
     },
     "structure_57": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -13687,7 +12869,6 @@
         "wall/type": 0
     },
     "structure_592": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -13704,7 +12885,6 @@
         "wall/type": 0
     },
     "structure_6": {
-        "id": "A0ResourceExtractor",
         "modules": 0,
         "name": "A0ResourceExtractor",
         "position": [
@@ -13720,7 +12900,6 @@
         "startpos": 1
     },
     "structure_64": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -13737,7 +12916,6 @@
         "wall/type": 0
     },
     "structure_641": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -13754,7 +12932,6 @@
         "wall/type": 0
     },
     "structure_642": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -13771,7 +12948,6 @@
         "wall/type": 0
     },
     "structure_643": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -13788,7 +12964,6 @@
         "wall/type": 0
     },
     "structure_644": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -13805,7 +12980,6 @@
         "wall/type": 0
     },
     "structure_645": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -13822,7 +12996,6 @@
         "wall/type": 0
     },
     "structure_652": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -13839,7 +13012,6 @@
         "wall/type": 0
     },
     "structure_679": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -13856,7 +13028,6 @@
         "wall/type": 0
     },
     "structure_693": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -13873,7 +13044,6 @@
         "wall/type": 0
     },
     "structure_727": {
-        "id": "A0ResourceExtractor",
         "modules": 0,
         "name": "A0ResourceExtractor",
         "position": [
@@ -13889,7 +13059,6 @@
         "startpos": 0
     },
     "structure_729": {
-        "id": "A0ResourceExtractor",
         "modules": 0,
         "name": "A0ResourceExtractor",
         "position": [
@@ -13905,7 +13074,6 @@
         "startpos": 3
     },
     "structure_730": {
-        "id": "A0ResourceExtractor",
         "modules": 0,
         "name": "A0ResourceExtractor",
         "position": [
@@ -13921,7 +13089,6 @@
         "startpos": 5
     },
     "structure_731": {
-        "id": "A0ResourceExtractor",
         "modules": 0,
         "name": "A0ResourceExtractor",
         "position": [
@@ -13937,7 +13104,6 @@
         "startpos": 1
     },
     "structure_732": {
-        "id": "A0ResourceExtractor",
         "modules": 0,
         "name": "A0ResourceExtractor",
         "position": [
@@ -13953,7 +13119,6 @@
         "startpos": 7
     },
     "structure_735": {
-        "id": "A0ResourceExtractor",
         "modules": 0,
         "name": "A0ResourceExtractor",
         "position": [
@@ -13969,7 +13134,6 @@
         "startpos": 2
     },
     "structure_736": {
-        "id": "A0ResourceExtractor",
         "modules": 0,
         "name": "A0ResourceExtractor",
         "position": [
@@ -13985,7 +13149,6 @@
         "startpos": 4
     },
     "structure_762": {
-        "id": "A0CyborgFactory",
         "modules": 0,
         "name": "A0CyborgFactory",
         "position": [
@@ -14001,7 +13164,6 @@
         "startpos": 7
     },
     "structure_763": {
-        "id": "A0ComDroidControl",
         "modules": 0,
         "name": "A0ComDroidControl",
         "position": [
@@ -14017,7 +13179,6 @@
         "startpos": 7
     },
     "structure_8": {
-        "id": "A0LightFactory",
         "modules": 0,
         "name": "A0LightFactory",
         "position": [
@@ -14033,7 +13194,6 @@
         "startpos": 1
     },
     "structure_83": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -14050,7 +13210,6 @@
         "wall/type": 0
     },
     "structure_838": {
-        "id": "A0ComDroidControl",
         "modules": 0,
         "name": "A0ComDroidControl",
         "position": [
@@ -14066,7 +13225,6 @@
         "startpos": 2
     },
     "structure_839": {
-        "id": "A0CyborgFactory",
         "modules": 0,
         "name": "A0CyborgFactory",
         "position": [
@@ -14082,7 +13240,6 @@
         "startpos": 2
     },
     "structure_9": {
-        "id": "A0PowerGenerator",
         "modules": 1,
         "name": "A0PowerGenerator",
         "position": [
@@ -14098,7 +13255,6 @@
         "startpos": 1
     },
     "structure_91": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -14115,7 +13271,6 @@
         "wall/type": 0
     },
     "structure_917": {
-        "id": "A0CyborgFactory",
         "modules": 0,
         "name": "A0CyborgFactory",
         "position": [
@@ -14131,7 +13286,6 @@
         "startpos": 4
     },
     "structure_918": {
-        "id": "A0ComDroidControl",
         "modules": 0,
         "name": "A0ComDroidControl",
         "position": [
@@ -14147,7 +13301,6 @@
         "startpos": 4
     },
     "structure_92": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -14164,7 +13317,6 @@
         "wall/type": 0
     },
     "structure_93": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -14181,7 +13333,6 @@
         "wall/type": 0
     },
     "structure_94": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -14198,7 +13349,6 @@
         "wall/type": 0
     },
     "structure_95": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -14215,7 +13365,6 @@
         "wall/type": 0
     },
     "structure_951": {
-        "id": "A0ComDroidControl",
         "modules": 0,
         "name": "A0ComDroidControl",
         "position": [
@@ -14231,7 +13380,6 @@
         "startpos": 0
     },
     "structure_952": {
-        "id": "A0CyborgFactory",
         "modules": 0,
         "name": "A0CyborgFactory",
         "position": [

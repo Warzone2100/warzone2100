@@ -1,6 +1,5 @@
 {
     "feature_0046": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             3264,
@@ -14,7 +13,6 @@
         ]
     },
     "feature_0047": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             4800,
@@ -28,7 +26,6 @@
         ]
     },
     "feature_0048": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             576,
@@ -42,7 +39,6 @@
         ]
     },
     "feature_0049": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             576,
@@ -56,7 +52,6 @@
         ]
     },
     "feature_0050": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             3264,
@@ -70,7 +65,6 @@
         ]
     },
     "feature_0051": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             4800,
@@ -84,7 +78,6 @@
         ]
     },
     "feature_0052": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             7360,
@@ -98,7 +91,6 @@
         ]
     },
     "feature_0053": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             7360,
@@ -112,7 +104,6 @@
         ]
     },
     "feature_0207": {
-        "id": "building1",
         "name": "building1",
         "position": [
             3520,
@@ -126,7 +117,6 @@
         ]
     },
     "feature_0208": {
-        "id": "building2",
         "name": "building2",
         "position": [
             3520,
@@ -140,7 +130,6 @@
         ]
     },
     "feature_0209": {
-        "id": "building3",
         "name": "building3",
         "position": [
             4544,
@@ -154,7 +143,6 @@
         ]
     },
     "feature_0213": {
-        "id": "building10",
         "name": "building10",
         "position": [
             3456,
@@ -168,7 +156,6 @@
         ]
     },
     "feature_0215": {
-        "id": "building11",
         "name": "building11",
         "position": [
             4544,
@@ -182,7 +169,6 @@
         ]
     },
     "feature_0216": {
-        "id": "building12",
         "name": "building12",
         "position": [
             3968,
@@ -196,7 +182,6 @@
         ]
     },
     "feature_0218": {
-        "id": "building12",
         "name": "building12",
         "position": [
             4096,
@@ -210,7 +195,6 @@
         ]
     },
     "feature_0219": {
-        "id": "building10",
         "name": "building10",
         "position": [
             4480,
@@ -224,7 +208,6 @@
         ]
     },
     "feature_0231": {
-        "id": "Crane",
         "name": "Crane",
         "position": [
             4032,
@@ -238,7 +221,6 @@
         ]
     },
     "feature_0237": {
-        "id": "Pickup",
         "name": "Pickup",
         "position": [
             3264,
@@ -252,7 +234,6 @@
         ]
     },
     "feature_0238": {
-        "id": "Pickup",
         "name": "Pickup",
         "position": [
             4672,
@@ -266,7 +247,6 @@
         ]
     },
     "feature_0240": {
-        "id": "BlueCar",
         "name": "BlueCar",
         "position": [
             4288,
@@ -280,7 +260,6 @@
         ]
     },
     "feature_0241": {
-        "id": "OilTower",
         "name": "OilTower",
         "position": [
             4032,
@@ -294,7 +273,6 @@
         ]
     },
     "feature_0242": {
-        "id": "OilTower",
         "name": "OilTower",
         "position": [
             4160,
@@ -308,7 +286,6 @@
         ]
     },
     "feature_0243": {
-        "id": "OilTower",
         "name": "OilTower",
         "position": [
             4160,
@@ -322,7 +299,6 @@
         ]
     },
     "feature_0244": {
-        "id": "WaterTower",
         "name": "WaterTower",
         "position": [
             3904,
@@ -336,7 +312,6 @@
         ]
     },
     "feature_0248": {
-        "id": "BarbWarehouse1",
         "name": "BarbWarehouse1",
         "position": [
             4096,
@@ -350,7 +325,6 @@
         ]
     },
     "feature_0249": {
-        "id": "OldFactory",
         "name": "OldFactory",
         "position": [
             7552,
@@ -364,7 +338,6 @@
         ]
     },
     "feature_0253": {
-        "id": "BarbTechRuin",
         "name": "BarbTechRuin",
         "position": [
             4096,
@@ -378,7 +351,6 @@
         ]
     },
     "feature_0256": {
-        "id": "OilDrum",
         "name": "OilDrum",
         "position": [
             3904,
@@ -392,7 +364,6 @@
         ]
     },
     "feature_0257": {
-        "id": "OilDrum",
         "name": "OilDrum",
         "position": [
             3904,
@@ -406,7 +377,6 @@
         ]
     },
     "feature_0258": {
-        "id": "building12",
         "name": "building12",
         "position": [
             1024,
@@ -420,7 +390,6 @@
         ]
     },
     "feature_0259": {
-        "id": "building10",
         "name": "building10",
         "position": [
             1536,
@@ -434,7 +403,6 @@
         ]
     },
     "feature_0260": {
-        "id": "building2",
         "name": "building2",
         "position": [
             960,
@@ -448,7 +416,6 @@
         ]
     },
     "feature_0262": {
-        "id": "building1",
         "name": "building1",
         "position": [
             3008,
@@ -462,7 +429,6 @@
         ]
     },
     "feature_0265": {
-        "id": "building11",
         "name": "building11",
         "position": [
             3520,
@@ -476,7 +442,6 @@
         ]
     },
     "feature_0266": {
-        "id": "building10",
         "name": "building10",
         "position": [
             4480,
@@ -490,7 +455,6 @@
         ]
     },
     "feature_0270": {
-        "id": "WreckedBuilding16",
         "name": "WreckedBuilding16",
         "position": [
             4672,
@@ -504,7 +468,6 @@
         ]
     },
     "feature_0271": {
-        "id": "BarbWarehouse1",
         "name": "BarbWarehouse1",
         "position": [
             5120,
@@ -518,7 +481,6 @@
         ]
     },
     "feature_0272": {
-        "id": "WreckedBuilding9",
         "name": "WreckedBuilding9",
         "position": [
             6912,
@@ -532,7 +494,6 @@
         ]
     },
     "feature_0273": {
-        "id": "building10",
         "name": "building10",
         "position": [
             7552,
@@ -546,7 +507,6 @@
         ]
     },
     "feature_0274": {
-        "id": "building1",
         "name": "building1",
         "position": [
             7104,
@@ -560,7 +520,6 @@
         ]
     },
     "feature_0275": {
-        "id": "WreckedBuilding17",
         "name": "WreckedBuilding17",
         "position": [
             4864,
@@ -574,7 +533,6 @@
         ]
     },
     "feature_0276": {
-        "id": "BarbTechRuin",
         "name": "BarbTechRuin",
         "position": [
             4992,
@@ -588,7 +546,6 @@
         ]
     },
     "feature_0277": {
-        "id": "building11",
         "name": "building11",
         "position": [
             4544,
@@ -602,7 +559,6 @@
         ]
     },
     "feature_0278": {
-        "id": "WaterBuilding3",
         "name": "WaterBuilding3",
         "position": [
             3200,
@@ -616,7 +572,6 @@
         ]
     },
     "feature_0279": {
-        "id": "WaterBuilding2",
         "name": "WaterBuilding2",
         "position": [
             896,
@@ -630,7 +585,6 @@
         ]
     },
     "feature_0281": {
-        "id": "building10",
         "name": "building10",
         "position": [
             1280,
@@ -644,7 +598,6 @@
         ]
     },
     "feature_0282": {
-        "id": "building1",
         "name": "building1",
         "position": [
             1216,
@@ -658,7 +611,6 @@
         ]
     },
     "feature_0284": {
-        "id": "building3",
         "name": "building3",
         "position": [
             704,
@@ -672,7 +624,6 @@
         ]
     },
     "feature_0285": {
-        "id": "Pylon",
         "name": "Pylon",
         "position": [
             3520,
@@ -686,7 +637,6 @@
         ]
     },
     "feature_0286": {
-        "id": "Pylon",
         "name": "Pylon",
         "position": [
             3520,
@@ -700,7 +650,6 @@
         ]
     },
     "feature_0288": {
-        "id": "OldFactory",
         "name": "OldFactory",
         "position": [
             2944,
@@ -714,7 +663,6 @@
         ]
     },
     "feature_0289": {
-        "id": "building1",
         "name": "building1",
         "position": [
             3520,
@@ -728,7 +676,6 @@
         ]
     },
     "feature_0296": {
-        "id": "WaterBuilding3",
         "name": "WaterBuilding3",
         "position": [
             3456,
@@ -742,7 +689,6 @@
         ]
     },
     "feature_0297": {
-        "id": "WreckedBuilding17",
         "name": "WreckedBuilding17",
         "position": [
             7552,
@@ -756,7 +702,6 @@
         ]
     },
     "feature_0298": {
-        "id": "WreckedBuilding16",
         "name": "WreckedBuilding16",
         "position": [
             7232,
@@ -770,7 +715,6 @@
         ]
     },
     "feature_0299": {
-        "id": "building3",
         "name": "building3",
         "position": [
             7104,
@@ -784,7 +728,6 @@
         ]
     },
     "feature_0301": {
-        "id": "AirTrafficControl",
         "name": "AirTrafficControl",
         "position": [
             5056,
@@ -798,7 +741,6 @@
         ]
     },
     "feature_0303": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             3904,
@@ -812,7 +754,6 @@
         ]
     },
     "feature_0304": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             3648,
@@ -826,7 +767,6 @@
         ]
     },
     "feature_0305": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             3648,
@@ -840,7 +780,6 @@
         ]
     },
     "feature_0306": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             4416,
@@ -854,7 +793,6 @@
         ]
     },
     "feature_0307": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             5568,
@@ -868,7 +806,6 @@
         ]
     },
     "feature_0308": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             5568,
@@ -882,7 +819,6 @@
         ]
     },
     "feature_0309": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             2496,
@@ -896,7 +832,6 @@
         ]
     },
     "feature_0310": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             2496,
@@ -910,7 +845,6 @@
         ]
     },
     "feature_0311": {
-        "id": "BlueCar",
         "name": "BlueCar",
         "position": [
             7616,
@@ -924,7 +858,6 @@
         ]
     },
     "feature_0460": {
-        "id": "OldFactory",
         "name": "OldFactory",
         "position": [
             4096,
@@ -938,7 +871,6 @@
         ]
     },
     "feature_0461": {
-        "id": "Chevy",
         "name": "Chevy",
         "position": [
             3904,
@@ -952,7 +884,6 @@
         ]
     },
     "feature_0462": {
-        "id": "Pickup",
         "name": "Pickup",
         "position": [
             3904,

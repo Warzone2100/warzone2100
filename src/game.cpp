@@ -4084,7 +4084,7 @@ static bool loadSaveDroidPointers(const QString &pFileName, DROID **ppsCurrentDr
 	{
 		ini.beginGroup(list[i]);
 		DROID *psDroid;
-		int id = ini.value("id").toInt();
+		int id = ini.value("id", -1).toInt();
 		int player = getPlayer(ini);
 
 		if (id <= 0)
@@ -4208,7 +4208,7 @@ static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 		ini.beginGroup(sortedList[i].second);
 		DROID *psDroid;
 		int player = getPlayer(ini);
-		int id = ini.value("id").toInt();
+		int id = ini.value("id", -1).toInt();
 		Position pos = ini.vector3i("position");
 		Rotation rot = ini.vector3i("rotation");
 		Vector2i tmp;
@@ -4260,7 +4260,7 @@ static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 		/* Create the Droid */
 		turnOffMultiMsg(true);
 		psDroid = reallyBuildDroid(psTemplate, pos, player, onMission, rot);
-		ASSERT_OR_RETURN(NULL, psDroid != NULL, "Failed to build unit %d", id);
+		ASSERT_OR_RETURN(NULL, psDroid != NULL, "Failed to build unit %s", sortedList[i].second.toUtf8().constData());
 		turnOffMultiMsg(false);
 
 		// Copy the values across
@@ -4743,7 +4743,7 @@ static bool loadSaveStructure2(const char *pFileName, STRUCTURE **ppList)
 
 		ini.beginGroup(list[i]);
 		int player = getPlayer(ini);
-		int id = ini.value("id").toInt();
+		int id = ini.value("id", -1).toInt();
 		Position pos = ini.vector3i("position");
 		Rotation rot = ini.vector3i("rotation");
 		QString name = ini.value("name").toString();
@@ -4783,7 +4783,7 @@ static bool loadSaveStructure2(const char *pFileName, STRUCTURE **ppList)
 		if (map_coord(pos.x) < TOO_NEAR_EDGE || map_coord(pos.x) > mapWidth - TOO_NEAR_EDGE
 		    || map_coord(pos.y) < TOO_NEAR_EDGE || map_coord(pos.y) > mapHeight - TOO_NEAR_EDGE)
 		{
-			debug(LOG_ERROR, "Structure %s, coord too near the edge of the map. id - %d", name.toUtf8().constData(), id);
+			debug(LOG_ERROR, "Structure %s (%s), coord too near the edge of the map", name.toUtf8().constData(), list[i].toUtf8().constData());
 			ini.endGroup();
 			continue; // skip it
 		}
@@ -5180,7 +5180,7 @@ bool loadSaveStructurePointers(QString filename, STRUCTURE **ppList)
 		ini.beginGroup(list[i]);
 		STRUCTURE *psStruct;
 		int player = getPlayer(ini);
-		int id = ini.value("id").toInt();
+		int id = ini.value("id", -1).toInt();
 		for (psStruct = ppList[player]; psStruct && psStruct->id != id; psStruct = psStruct->psNext) { }
 		if (!psStruct)
 		{
@@ -5411,7 +5411,15 @@ bool loadSaveFeature2(const char *pFileName)
 			scriptSetDerrickPos(pFeature->pos.x, pFeature->pos.y);
 		}
 		//restore values
-		pFeature->id = ini.value("id").toInt();
+		int id = ini.value("id", -1).toInt();
+		if (id > 0)
+		{
+			pFeature->id = id;
+		}
+		else
+		{
+			pFeature->id = generateSynchronisedObjectId();
+		}
 		pFeature->rot = ini.vector3i("rotation");
 		pFeature->periodicalDamage = ini.value("periodicalDamage", 0).toInt();
 		pFeature->periodicalDamageStart = ini.value("periodicalDamageStart", 0).toInt();

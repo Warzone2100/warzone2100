@@ -1,6 +1,5 @@
 {
     "feature_0006": {
-        "id": "building10",
         "name": "building10",
         "position": [
             5312,
@@ -14,7 +13,6 @@
         ]
     },
     "feature_0016": {
-        "id": "building7",
         "name": "building7",
         "position": [
             10304,
@@ -28,7 +26,6 @@
         ]
     },
     "feature_0017": {
-        "id": "building2",
         "name": "building2",
         "position": [
             9920,
@@ -42,7 +39,6 @@
         ]
     },
     "feature_0045": {
-        "id": "building12",
         "name": "building12",
         "position": [
             896,
@@ -56,7 +52,6 @@
         ]
     },
     "feature_0057": {
-        "id": "building10",
         "name": "building10",
         "position": [
             3072,
@@ -70,7 +65,6 @@
         ]
     },
     "feature_0085": {
-        "id": "building10",
         "name": "building10",
         "position": [
             3648,
@@ -84,7 +78,6 @@
         ]
     },
     "feature_0100": {
-        "id": "building11",
         "name": "building11",
         "position": [
             5056,
@@ -98,7 +91,6 @@
         ]
     },
     "feature_0112": {
-        "id": "building1",
         "name": "building1",
         "position": [
             3136,
@@ -112,7 +104,6 @@
         ]
     },
     "feature_0133": {
-        "id": "building10",
         "name": "building10",
         "position": [
             1792,
@@ -126,7 +117,6 @@
         ]
     },
     "feature_0165": {
-        "id": "building10",
         "name": "building10",
         "position": [
             9344,
@@ -140,7 +130,6 @@
         ]
     },
     "feature_0235": {
-        "id": "building2",
         "name": "building2",
         "position": [
             4544,
@@ -154,7 +143,6 @@
         ]
     },
     "feature_0281": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             9408,
@@ -168,7 +156,6 @@
         ]
     },
     "feature_0282": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             9408,
@@ -182,7 +169,6 @@
         ]
     },
     "feature_0299": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             15552,
@@ -196,7 +182,6 @@
         ]
     },
     "feature_0300": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             15552,
@@ -210,7 +195,6 @@
         ]
     },
     "feature_0343": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             2368,
@@ -224,7 +208,6 @@
         ]
     },
     "feature_0344": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             1984,
@@ -238,7 +221,6 @@
         ]
     },
     "feature_0434": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             6976,
@@ -252,7 +234,6 @@
         ]
     },
     "feature_0435": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             7232,
@@ -266,7 +247,6 @@
         ]
     },
     "feature_0493": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             12352,
@@ -280,7 +260,6 @@
         ]
     },
     "feature_0494": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             12352,
@@ -294,7 +273,6 @@
         ]
     },
     "feature_0527": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             12864,
@@ -308,7 +286,6 @@
         ]
     },
     "feature_0528": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             12864,
@@ -322,7 +299,6 @@
         ]
     },
     "feature_0583": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             7104,
@@ -336,7 +312,6 @@
         ]
     },
     "feature_0584": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             7104,
@@ -350,7 +325,6 @@
         ]
     },
     "feature_0734": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             1088,
@@ -364,7 +338,6 @@
         ]
     },
     "feature_0735": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             1088,
@@ -378,7 +351,6 @@
         ]
     },
     "feature_0746": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             3136,
@@ -392,7 +364,6 @@
         ]
     },
     "feature_0761": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             3776,
@@ -406,7 +377,6 @@
         ]
     },
     "feature_0774": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             6848,
@@ -420,7 +390,6 @@
         ]
     },
     "feature_0784": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             5312,
@@ -434,7 +403,6 @@
         ]
     },
     "feature_0794": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             10176,
@@ -448,7 +416,6 @@
         ]
     },
     "feature_0804": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             14784,
@@ -462,7 +429,6 @@
         ]
     },
     "feature_0814": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             15424,
@@ -476,7 +442,6 @@
         ]
     },
     "feature_0824": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             13888,
@@ -490,7 +455,6 @@
         ]
     },
     "feature_0834": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             11840,
@@ -504,7 +468,6 @@
         ]
     },
     "feature_0844": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             11584,
@@ -518,7 +481,6 @@
         ]
     },
     "feature_0854": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             12864,
@@ -532,7 +494,6 @@
         ]
     },
     "feature_0864": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             8896,
@@ -546,7 +507,6 @@
         ]
     },
     "feature_0874": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             5952,
@@ -560,7 +520,6 @@
         ]
     },
     "feature_0884": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             8000,
@@ -574,7 +533,6 @@
         ]
     },
     "feature_0894": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             2368,
@@ -588,7 +546,6 @@
         ]
     },
     "feature_0904": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             3648,
@@ -602,7 +559,6 @@
         ]
     },
     "feature_0926": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             15808,
@@ -616,7 +572,6 @@
         ]
     },
     "feature_0928": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             15808,
@@ -630,7 +585,6 @@
         ]
     },
     "feature_0929": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             2240,
@@ -644,7 +598,6 @@
         ]
     },
     "feature_0931": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             1344,
@@ -658,7 +611,6 @@
         ]
     },
     "feature_0934": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             7104,
@@ -672,7 +624,6 @@
         ]
     },
     "feature_0936": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             6720,
@@ -686,7 +637,6 @@
         ]
     },
     "feature_0937": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             11712,
@@ -700,7 +650,6 @@
         ]
     },
     "feature_0939": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             11712,
@@ -714,7 +663,6 @@
         ]
     },
     "feature_0941": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             10688,
@@ -728,7 +676,6 @@
         ]
     },
     "feature_0943": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             10688,
@@ -742,7 +689,6 @@
         ]
     },
     "feature_0945": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             13632,
@@ -756,7 +702,6 @@
         ]
     },
     "feature_0947": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             13632,
@@ -770,7 +715,6 @@
         ]
     },
     "feature_0949": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             8896,
@@ -784,7 +728,6 @@
         ]
     },
     "feature_0951": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             7488,
@@ -798,7 +741,6 @@
         ]
     },
     "feature_0954": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             1344,
@@ -812,7 +754,6 @@
         ]
     },
     "feature_0956": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             1344,
@@ -826,7 +767,6 @@
         ]
     },
     "feature_0959": {
-        "id": "building1",
         "name": "building1",
         "position": [
             1856,
@@ -840,7 +780,6 @@
         ]
     },
     "feature_0960": {
-        "id": "building2",
         "name": "building2",
         "position": [
             1344,
@@ -854,7 +793,6 @@
         ]
     },
     "feature_0961": {
-        "id": "building3",
         "name": "building3",
         "position": [
             1344,
@@ -868,7 +806,6 @@
         ]
     },
     "feature_0962": {
-        "id": "building1",
         "name": "building1",
         "position": [
             576,
@@ -882,7 +819,6 @@
         ]
     },
     "feature_0963": {
-        "id": "building1",
         "name": "building1",
         "position": [
             3136,
@@ -896,7 +832,6 @@
         ]
     },
     "feature_0964": {
-        "id": "building2",
         "name": "building2",
         "position": [
             3904,
@@ -910,7 +845,6 @@
         ]
     },
     "feature_0965": {
-        "id": "building3",
         "name": "building3",
         "position": [
             3904,
@@ -924,7 +858,6 @@
         ]
     },
     "feature_0966": {
-        "id": "building11",
         "name": "building11",
         "position": [
             4032,
@@ -938,7 +871,6 @@
         ]
     },
     "feature_0967": {
-        "id": "building11",
         "name": "building11",
         "position": [
             2752,
@@ -952,7 +884,6 @@
         ]
     },
     "feature_0968": {
-        "id": "building1",
         "name": "building1",
         "position": [
             2752,
@@ -966,7 +897,6 @@
         ]
     },
     "feature_0969": {
-        "id": "building1",
         "name": "building1",
         "position": [
             4544,
@@ -980,7 +910,6 @@
         ]
     },
     "feature_0970": {
-        "id": "building1",
         "name": "building1",
         "position": [
             6720,
@@ -994,7 +923,6 @@
         ]
     },
     "feature_0972": {
-        "id": "building11",
         "name": "building11",
         "position": [
             6208,
@@ -1008,7 +936,6 @@
         ]
     },
     "feature_0973": {
-        "id": "building2",
         "name": "building2",
         "position": [
             5568,
@@ -1022,7 +949,6 @@
         ]
     },
     "feature_0974": {
-        "id": "building2",
         "name": "building2",
         "position": [
             6592,
@@ -1036,7 +962,6 @@
         ]
     },
     "feature_0975": {
-        "id": "building1",
         "name": "building1",
         "position": [
             7360,
@@ -1050,7 +975,6 @@
         ]
     },
     "feature_0976": {
-        "id": "building2",
         "name": "building2",
         "position": [
             8128,
@@ -1064,7 +988,6 @@
         ]
     },
     "feature_0977": {
-        "id": "building3",
         "name": "building3",
         "position": [
             8768,
@@ -1078,7 +1001,6 @@
         ]
     },
     "feature_0978": {
-        "id": "building11",
         "name": "building11",
         "position": [
             8000,
@@ -1092,7 +1014,6 @@
         ]
     },
     "feature_0979": {
-        "id": "building11",
         "name": "building11",
         "position": [
             7872,
@@ -1106,7 +1027,6 @@
         ]
     },
     "feature_0980": {
-        "id": "building11",
         "name": "building11",
         "position": [
             8128,
@@ -1120,7 +1040,6 @@
         ]
     },
     "feature_0981": {
-        "id": "building11",
         "name": "building11",
         "position": [
             9408,
@@ -1134,7 +1053,6 @@
         ]
     },
     "feature_0982": {
-        "id": "building11",
         "name": "building11",
         "position": [
             12096,
@@ -1148,7 +1066,6 @@
         ]
     },
     "feature_0983": {
-        "id": "building2",
         "name": "building2",
         "position": [
             12736,
@@ -1162,7 +1079,6 @@
         ]
     },
     "feature_0984": {
-        "id": "building3",
         "name": "building3",
         "position": [
             13760,
@@ -1176,7 +1092,6 @@
         ]
     },
     "feature_0985": {
-        "id": "building1",
         "name": "building1",
         "position": [
             13632,
@@ -1190,7 +1105,6 @@
         ]
     },
     "feature_0986": {
-        "id": "building2",
         "name": "building2",
         "position": [
             13504,
@@ -1204,7 +1118,6 @@
         ]
     },
     "feature_0987": {
-        "id": "building3",
         "name": "building3",
         "position": [
             14016,
@@ -1218,7 +1131,6 @@
         ]
     },
     "feature_0988": {
-        "id": "building11",
         "name": "building11",
         "position": [
             14656,
@@ -1232,7 +1144,6 @@
         ]
     },
     "feature_0989": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             5184,
@@ -1246,7 +1157,6 @@
         ]
     },
     "feature_0990": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             5440,
@@ -1260,7 +1170,6 @@
         ]
     },
     "feature_0991": {
-        "id": "building1",
         "name": "building1",
         "position": [
             4672,
@@ -1274,7 +1183,6 @@
         ]
     },
     "feature_0992": {
-        "id": "building1",
         "name": "building1",
         "position": [
             4416,
@@ -1288,7 +1196,6 @@
         ]
     },
     "feature_0993": {
-        "id": "building1",
         "name": "building1",
         "position": [
             9664,
@@ -1302,7 +1209,6 @@
         ]
     },
     "feature_0994": {
-        "id": "building2",
         "name": "building2",
         "position": [
             9664,
@@ -1316,7 +1222,6 @@
         ]
     },
     "feature_0995": {
-        "id": "building1",
         "name": "building1",
         "position": [
             3392,

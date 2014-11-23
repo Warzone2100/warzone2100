@@ -1,6 +1,5 @@
 {
     "structure_0045": {
-        "id": "A0CommandCentre",
         "name": "A0CommandCentre",
         "position": [
             1152,
@@ -15,7 +14,6 @@
         "startpos": 0
     },
     "structure_0050": {
-        "id": "A0CommandCentre",
         "name": "A0CommandCentre",
         "position": [
             14976,
@@ -30,7 +28,6 @@
         "startpos": 1
     },
     "structure_0059": {
-        "id": "A0CommandCentre",
         "name": "A0CommandCentre",
         "position": [
             15232,
@@ -45,7 +42,6 @@
         "startpos": 2
     },
     "structure_0064": {
-        "id": "A0CommandCentre",
         "name": "A0CommandCentre",
         "position": [
             1152,

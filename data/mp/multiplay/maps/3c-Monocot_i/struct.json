@@ -1,6 +1,5 @@
 {
     "structure_100": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -17,7 +16,6 @@
         "wall/type": 0
     },
     "structure_101": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -34,7 +32,6 @@
         "wall/type": 0
     },
     "structure_102": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -51,7 +48,6 @@
         "wall/type": 0
     },
     "structure_103": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -68,7 +64,6 @@
         "wall/type": 0
     },
     "structure_104": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -85,7 +80,6 @@
         "wall/type": 0
     },
     "structure_105": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -102,7 +96,6 @@
         "wall/type": 0
     },
     "structure_106": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -119,7 +112,6 @@
         "wall/type": 0
     },
     "structure_107": {
-        "id": "WallTower01",
         "modules": 0,
         "name": "WallTower01",
         "position": [
@@ -135,7 +127,6 @@
         "startpos": 2
     },
     "structure_108": {
-        "id": "WallTower01",
         "modules": 0,
         "name": "WallTower01",
         "position": [
@@ -151,7 +142,6 @@
         "startpos": 2
     },
     "structure_109": {
-        "id": "A0ResourceExtractor",
         "modules": 0,
         "name": "A0ResourceExtractor",
         "position": [
@@ -167,7 +157,6 @@
         "startpos": 2
     },
     "structure_110": {
-        "id": "A0ResourceExtractor",
         "modules": 0,
         "name": "A0ResourceExtractor",
         "position": [
@@ -183,7 +172,6 @@
         "startpos": 2
     },
     "structure_111": {
-        "id": "A0ResourceExtractor",
         "modules": 0,
         "name": "A0ResourceExtractor",
         "position": [
@@ -199,7 +187,6 @@
         "startpos": 2
     },
     "structure_112": {
-        "id": "A0ResourceExtractor",
         "modules": 0,
         "name": "A0ResourceExtractor",
         "position": [
@@ -215,7 +202,6 @@
         "startpos": 2
     },
     "structure_113": {
-        "id": "A0LightFactory",
         "modules": 2,
         "name": "A0LightFactory",
         "position": [
@@ -231,7 +217,6 @@
         "startpos": 2
     },
     "structure_116": {
-        "id": "A0LightFactory",
         "modules": 2,
         "name": "A0LightFactory",
         "position": [
@@ -247,7 +232,6 @@
         "startpos": 2
     },
     "structure_119": {
-        "id": "A0ResearchFacility",
         "modules": 1,
         "name": "A0ResearchFacility",
         "position": [
@@ -263,7 +247,6 @@
         "startpos": 2
     },
     "structure_121": {
-        "id": "A0ResearchFacility",
         "modules": 1,
         "name": "A0ResearchFacility",
         "position": [
@@ -279,7 +262,6 @@
         "startpos": 2
     },
     "structure_123": {
-        "id": "A0PowerGenerator",
         "modules": 1,
         "name": "A0PowerGenerator",
         "position": [
@@ -295,7 +277,6 @@
         "startpos": 2
     },
     "structure_125": {
-        "id": "A0CyborgFactory",
         "modules": 0,
         "name": "A0CyborgFactory",
         "position": [
@@ -311,7 +292,6 @@
         "startpos": 2
     },
     "structure_126": {
-        "id": "WallTower01",
         "modules": 0,
         "name": "WallTower01",
         "position": [
@@ -327,7 +307,6 @@
         "startpos": 2
     },
     "structure_127": {
-        "id": "WallTower01",
         "modules": 0,
         "name": "WallTower01",
         "position": [
@@ -343,7 +322,6 @@
         "startpos": 2
     },
     "structure_128": {
-        "id": "WallTower01",
         "modules": 0,
         "name": "WallTower01",
         "position": [
@@ -359,7 +337,6 @@
         "startpos": 2
     },
     "structure_129": {
-        "id": "WallTower01",
         "modules": 0,
         "name": "WallTower01",
         "position": [
@@ -375,7 +352,6 @@
         "startpos": 2
     },
     "structure_130": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -392,7 +368,6 @@
         "wall/type": 0
     },
     "structure_131": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -409,7 +384,6 @@
         "wall/type": 0
     },
     "structure_132": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -426,7 +400,6 @@
         "wall/type": 0
     },
     "structure_133": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -443,7 +416,6 @@
         "wall/type": 0
     },
     "structure_134": {
-        "id": "A0ResourceExtractor",
         "modules": 0,
         "name": "A0ResourceExtractor",
         "player": "scavenger",
@@ -459,7 +431,6 @@
         ]
     },
     "structure_135": {
-        "id": "A0ResourceExtractor",
         "modules": 0,
         "name": "A0ResourceExtractor",
         "player": "scavenger",
@@ -475,7 +446,6 @@
         ]
     },
     "structure_136": {
-        "id": "A0ResourceExtractor",
         "modules": 0,
         "name": "A0ResourceExtractor",
         "player": "scavenger",
@@ -491,7 +461,6 @@
         ]
     },
     "structure_137": {
-        "id": "A0ResourceExtractor",
         "modules": 0,
         "name": "A0ResourceExtractor",
         "player": "scavenger",
@@ -507,7 +476,6 @@
         ]
     },
     "structure_138": {
-        "id": "A0BaBaFactory",
         "modules": 0,
         "name": "A0BaBaFactory",
         "player": "scavenger",
@@ -523,7 +491,6 @@
         ]
     },
     "structure_139": {
-        "id": "A0BaBaPowerGenerator",
         "modules": 0,
         "name": "A0BaBaPowerGenerator",
         "player": "scavenger",
@@ -539,7 +506,6 @@
         ]
     },
     "structure_140": {
-        "id": "A0BaBaMortarPit",
         "modules": 0,
         "name": "A0BaBaMortarPit",
         "player": "scavenger",
@@ -555,7 +521,6 @@
         ]
     },
     "structure_141": {
-        "id": "A0BaBaGunTowerEND",
         "modules": 0,
         "name": "A0BaBaGunTowerEND",
         "player": "scavenger",
@@ -571,7 +536,6 @@
         ]
     },
     "structure_142": {
-        "id": "A0BaBaGunTowerEND",
         "modules": 0,
         "name": "A0BaBaGunTowerEND",
         "player": "scavenger",
@@ -587,7 +551,6 @@
         ]
     },
     "structure_143": {
-        "id": "A0BaBaGunTowerEND",
         "modules": 0,
         "name": "A0BaBaGunTowerEND",
         "player": "scavenger",
@@ -603,7 +566,6 @@
         ]
     },
     "structure_144": {
-        "id": "A0BaBaGunTowerEND",
         "modules": 0,
         "name": "A0BaBaGunTowerEND",
         "player": "scavenger",
@@ -619,7 +581,6 @@
         ]
     },
     "structure_145": {
-        "id": "A0BaBaGunTowerEND",
         "modules": 0,
         "name": "A0BaBaGunTowerEND",
         "player": "scavenger",
@@ -635,7 +596,6 @@
         ]
     },
     "structure_146": {
-        "id": "A0BaBaGunTowerEND",
         "modules": 0,
         "name": "A0BaBaGunTowerEND",
         "player": "scavenger",
@@ -651,7 +611,6 @@
         ]
     },
     "structure_147": {
-        "id": "A0BaBaGunTowerEND",
         "modules": 0,
         "name": "A0BaBaGunTowerEND",
         "player": "scavenger",
@@ -667,7 +626,6 @@
         ]
     },
     "structure_148": {
-        "id": "A0BaBaGunTowerEND",
         "modules": 0,
         "name": "A0BaBaGunTowerEND",
         "player": "scavenger",
@@ -683,7 +641,6 @@
         ]
     },
     "structure_149": {
-        "id": "A0BaBaGunTowerEND",
         "modules": 0,
         "name": "A0BaBaGunTowerEND",
         "player": "scavenger",
@@ -699,7 +656,6 @@
         ]
     },
     "structure_150": {
-        "id": "A0BaBaGunTowerEND",
         "modules": 0,
         "name": "A0BaBaGunTowerEND",
         "player": "scavenger",
@@ -715,7 +671,6 @@
         ]
     },
     "structure_151": {
-        "id": "A0BaBaGunTowerEND",
         "modules": 0,
         "name": "A0BaBaGunTowerEND",
         "player": "scavenger",
@@ -731,7 +686,6 @@
         ]
     },
     "structure_152": {
-        "id": "A0BaBaGunTowerEND",
         "modules": 0,
         "name": "A0BaBaGunTowerEND",
         "player": "scavenger",
@@ -747,7 +701,6 @@
         ]
     },
     "structure_153": {
-        "id": "A0CannonTower",
         "modules": 0,
         "name": "A0CannonTower",
         "player": "scavenger",
@@ -763,7 +716,6 @@
         ]
     },
     "structure_154": {
-        "id": "A0CannonTower",
         "modules": 0,
         "name": "A0CannonTower",
         "player": "scavenger",
@@ -779,7 +731,6 @@
         ]
     },
     "structure_155": {
-        "id": "A0CannonTower",
         "modules": 0,
         "name": "A0CannonTower",
         "player": "scavenger",
@@ -795,7 +746,6 @@
         ]
     },
     "structure_156": {
-        "id": "A0CannonTower",
         "modules": 0,
         "name": "A0CannonTower",
         "player": "scavenger",
@@ -811,7 +761,6 @@
         ]
     },
     "structure_157": {
-        "id": "A0CannonTower",
         "modules": 0,
         "name": "A0CannonTower",
         "player": "scavenger",
@@ -827,7 +776,6 @@
         ]
     },
     "structure_158": {
-        "id": "A0CannonTower",
         "modules": 0,
         "name": "A0CannonTower",
         "player": "scavenger",
@@ -843,7 +791,6 @@
         ]
     },
     "structure_159": {
-        "id": "A0CannonTower",
         "modules": 0,
         "name": "A0CannonTower",
         "player": "scavenger",
@@ -859,7 +806,6 @@
         ]
     },
     "structure_160": {
-        "id": "A0CannonTower",
         "modules": 0,
         "name": "A0CannonTower",
         "player": "scavenger",
@@ -875,7 +821,6 @@
         ]
     },
     "structure_161": {
-        "id": "A0CannonTower",
         "modules": 0,
         "name": "A0CannonTower",
         "player": "scavenger",
@@ -891,7 +836,6 @@
         ]
     },
     "structure_162": {
-        "id": "A0CannonTower",
         "modules": 0,
         "name": "A0CannonTower",
         "player": "scavenger",
@@ -907,7 +851,6 @@
         ]
     },
     "structure_163": {
-        "id": "A0CannonTower",
         "modules": 0,
         "name": "A0CannonTower",
         "player": "scavenger",
@@ -923,7 +866,6 @@
         ]
     },
     "structure_164": {
-        "id": "A0CannonTower",
         "modules": 0,
         "name": "A0CannonTower",
         "player": "scavenger",
@@ -939,7 +881,6 @@
         ]
     },
     "structure_165": {
-        "id": "A0BaBaBunker",
         "modules": 0,
         "name": "A0BaBaBunker",
         "player": "scavenger",
@@ -955,7 +896,6 @@
         ]
     },
     "structure_166": {
-        "id": "A0BaBaBunker",
         "modules": 0,
         "name": "A0BaBaBunker",
         "player": "scavenger",
@@ -971,7 +911,6 @@
         ]
     },
     "structure_167": {
-        "id": "A0BaBaBunker",
         "modules": 0,
         "name": "A0BaBaBunker",
         "player": "scavenger",
@@ -987,7 +926,6 @@
         ]
     },
     "structure_168": {
-        "id": "A0BaBaBunker",
         "modules": 0,
         "name": "A0BaBaBunker",
         "player": "scavenger",
@@ -1003,7 +941,6 @@
         ]
     },
     "structure_169": {
-        "id": "A0BaBaBunker",
         "modules": 0,
         "name": "A0BaBaBunker",
         "player": "scavenger",
@@ -1019,7 +956,6 @@
         ]
     },
     "structure_170": {
-        "id": "A0BaBaBunker",
         "modules": 0,
         "name": "A0BaBaBunker",
         "player": "scavenger",
@@ -1035,7 +971,6 @@
         ]
     },
     "structure_171": {
-        "id": "A0BaBaRocketPit",
         "modules": 0,
         "name": "A0BaBaRocketPit",
         "player": "scavenger",
@@ -1051,7 +986,6 @@
         ]
     },
     "structure_172": {
-        "id": "A0BaBaRocketPit",
         "modules": 0,
         "name": "A0BaBaRocketPit",
         "player": "scavenger",
@@ -1067,7 +1001,6 @@
         ]
     },
     "structure_173": {
-        "id": "A0BaBaRocketPit",
         "modules": 0,
         "name": "A0BaBaRocketPit",
         "player": "scavenger",
@@ -1083,7 +1016,6 @@
         ]
     },
     "structure_174": {
-        "id": "A0BaBaRocketPit",
         "modules": 0,
         "name": "A0BaBaRocketPit",
         "player": "scavenger",
@@ -1099,7 +1031,6 @@
         ]
     },
     "structure_175": {
-        "id": "A0BaBaRocketPit",
         "modules": 0,
         "name": "A0BaBaRocketPit",
         "player": "scavenger",
@@ -1115,7 +1046,6 @@
         ]
     },
     "structure_176": {
-        "id": "A0BaBaRocketPit",
         "modules": 0,
         "name": "A0BaBaRocketPit",
         "player": "scavenger",
@@ -1131,7 +1061,6 @@
         ]
     },
     "structure_40": {
-        "id": "A0CommandCentre",
         "modules": 0,
         "name": "A0CommandCentre",
         "position": [
@@ -1147,7 +1076,6 @@
         "startpos": 0
     },
     "structure_41": {
-        "id": "A0CommandCentre",
         "modules": 0,
         "name": "A0CommandCentre",
         "position": [
@@ -1163,7 +1091,6 @@
         "startpos": 1
     },
     "structure_42": {
-        "id": "A0CommandCentre",
         "modules": 0,
         "name": "A0CommandCentre",
         "position": [
@@ -1179,7 +1106,6 @@
         "startpos": 2
     },
     "structure_46": {
-        "id": "WallTower01",
         "modules": 0,
         "name": "WallTower01",
         "position": [
@@ -1195,7 +1121,6 @@
         "startpos": 0
     },
     "structure_47": {
-        "id": "WallTower01",
         "modules": 0,
         "name": "WallTower01",
         "position": [
@@ -1211,7 +1136,6 @@
         "startpos": 0
     },
     "structure_48": {
-        "id": "WallTower01",
         "modules": 0,
         "name": "WallTower01",
         "position": [
@@ -1227,7 +1151,6 @@
         "startpos": 0
     },
     "structure_49": {
-        "id": "WallTower01",
         "modules": 0,
         "name": "WallTower01",
         "position": [
@@ -1243,7 +1166,6 @@
         "startpos": 0
     },
     "structure_50": {
-        "id": "WallTower01",
         "modules": 0,
         "name": "WallTower01",
         "position": [
@@ -1259,7 +1181,6 @@
         "startpos": 0
     },
     "structure_51": {
-        "id": "WallTower01",
         "modules": 0,
         "name": "WallTower01",
         "position": [
@@ -1275,7 +1196,6 @@
         "startpos": 0
     },
     "structure_52": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -1292,7 +1212,6 @@
         "wall/type": 0
     },
     "structure_53": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -1309,7 +1228,6 @@
         "wall/type": 0
     },
     "structure_54": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -1326,7 +1244,6 @@
         "wall/type": 0
     },
     "structure_55": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -1343,7 +1260,6 @@
         "wall/type": 0
     },
     "structure_56": {
-        "id": "A0HardcreteMk1Wall",
         "modules": 0,
         "name": "A0HardcreteMk1Wall",
         "position": [
@@ -1360,7 +1276,6 @@
         "wall/type": 0
     },
     "structure_57": {
-        "id": "A0ResourceExtractor",
         "modules": 0,
         "name": "A0ResourceExtractor",
         "position": [
@@ -1376,7 +1291,6 @@
         "startpos": 0
     },
     "structure_58": {
-        "id": "A0ResourceExtractor",
         "modules": 0,
         "name": "A0ResourceExtractor",
         "position": [
@@ -1392,7 +1306,6 @@
         "startpos": 0
     },
     "structure_59": {
-        "id": "A0ResourceExtractor",
         "modules": 0,
         "name": "A0ResourceExtractor",
         "position": [
@@ -1408,7 +1321,6 @@
         "startpos": 0
     },
     "structure_60": {
-        "id": "A0ResourceExtractor",
         "modules": 0,
         "name": "A0ResourceExtractor",
         "position": [
@@ -1424,7 +1336,6 @@
         "startpos": 0
     },
     "structure_61": {
-        "id": "A0LightFactory",
         "modules": 2,
         "name": "A0LightFactory",
         "position": [
@@ -1440,7 +1351,6 @@
         "startpos": 0
     },
     "structure_64": {
-        "id": "A0LightFactory",
         "modules": 2,
         "name": "A0LightFactory",
         "position": [
@@ -1456,7 +1366,6 @@
         "startpos": 0
     },
     "structure_68": {
-        "id": "A0PowerGenerator",
         "modules": 1,
         "name": "A0PowerGenerator",
         "position": [
@@ -1472,7 +1381,6 @@
         "startpos": 0
     },
     "structure_72": {
-        "id": "A0ResearchFacility",
         "modules": 1,
         "name": "A0ResearchFacility",
         "position": [
@@ -1488,7 +1396,6 @@
         "startpos": 0
     },
     "structure_73": {
-        "id": "A0ResearchFacility",
         "modules": 1,
         "name": "A0ResearchFacility",
         "position": [
@@ -1504,7 +1411,6 @@
         "startpos": 0
     },
     "structure_76": {
-        "id": "A0CyborgFactory",
         "modules": 0,
         "name": "A0CyborgFactory",
         "position": [
@@ -1520,7 +1426,6 @@
         "startpos": 0
     },
     "structure_77": {
-        "id": "A0LightFactory",
         "modules": 2,
         "name": "A0LightFactory",
         "position": [
@@ -1536,7 +1441,6 @@
         "startpos": 1
     },
     "structure_78": {
-        "id": "A0LightFactory",
         "modules": 2,
         "name": "A0LightFactory",
         "position": [
@@ -1552,7 +1456,6 @@
         "startpos": 1
     },
     "structure_83": {
-        "id": "A0PowerGenerator",
         "modules": 1,
         "name": "A0PowerGenerator",
         "position": [
@@ -1568,7 +1471,6 @@
         "startpos": 1
     },
     "structure_85": {
-        "id": "A0ResearchFacility",
         "modules": 1,
         "name": "A0ResearchFacility",
         "position": [
@@ -1584,7 +1486,6 @@
         "startpos": 1
     },
     "structure_86": {
-        "id": "A0ResearchFacility",
         "modules": 1,
         "name": "A0ResearchFacility",
         "position": [
@@ -1600,7 +1501,6 @@
         "startpos": 1
     },
     "structure_89": {
-        "id": "A0ResourceExtractor",
         "modules": 0,
         "name": "A0ResourceExtractor",
         "position": [
@@ -1616,7 +1516,6 @@
         "startpos": 1
     },
     "structure_90": {
-        "id": "A0ResourceExtractor",
         "modules": 0,
         "name": "A0ResourceExtractor",
         "position": [
@@ -1632,7 +1531,6 @@
         "startpos": 1
     },
     "structure_91": {
-        "id": "A0ResourceExtractor",
         "modules": 0,
         "name": "A0ResourceExtractor",
         "position": [
@@ -1648,7 +1546,6 @@
         "startpos": 1
     },
     "structure_92": {
-        "id": "A0ResourceExtractor",
         "modules": 0,
         "name": "A0ResourceExtractor",
         "position": [
@@ -1664,7 +1561,6 @@
         "startpos": 1
     },
     "structure_93": {
-        "id": "A0CyborgFactory",
         "modules": 0,
         "name": "A0CyborgFactory",
         "position": [
@@ -1680,7 +1576,6 @@
         "startpos": 1
     },
     "structure_94": {
-        "id": "WallTower01",
         "modules": 0,
         "name": "WallTower01",
         "position": [
@@ -1696,7 +1591,6 @@
         "startpos": 1
     },
     "structure_95": {
-        "id": "WallTower01",
         "modules": 0,
         "name": "WallTower01",
         "position": [
@@ -1712,7 +1606,6 @@
         "startpos": 1
     },
     "structure_96": {
-        "id": "WallTower01",
         "modules": 0,
         "name": "WallTower01",
         "position": [
@@ -1728,7 +1621,6 @@
         "startpos": 1
     },
     "structure_97": {
-        "id": "WallTower01",
         "modules": 0,
         "name": "WallTower01",
         "position": [
@@ -1744,7 +1636,6 @@
         "startpos": 1
     },
     "structure_98": {
-        "id": "WallTower01",
         "modules": 0,
         "name": "WallTower01",
         "position": [
@@ -1760,7 +1651,6 @@
         "startpos": 1
     },
     "structure_99": {
-        "id": "WallTower01",
         "modules": 0,
         "name": "WallTower01",
         "position": [

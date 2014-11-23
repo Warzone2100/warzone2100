@@ -1,6 +1,5 @@
 {
     "structure_0001": {
-        "id": "A0LightFactory",
         "name": "A0LightFactory",
         "position": [
             2496,
@@ -15,7 +14,6 @@
         "startpos": 0
     },
     "structure_0002": {
-        "id": "A0LightFactory",
         "modules": 1,
         "name": "A0LightFactory",
         "position": [
@@ -31,7 +29,6 @@
         "startpos": 0
     },
     "structure_0004": {
-        "id": "A0CyborgFactory",
         "name": "A0CyborgFactory",
         "position": [
             1728,
@@ -46,7 +43,6 @@
         "startpos": 0
     },
     "structure_0005": {
-        "id": "A0ResearchFacility",
         "modules": 1,
         "name": "A0ResearchFacility",
         "position": [
@@ -62,7 +58,6 @@
         "startpos": 0
     },
     "structure_0006": {
-        "id": "A0ResearchFacility",
         "modules": 1,
         "name": "A0ResearchFacility",
         "position": [
@@ -78,7 +73,6 @@
         "startpos": 0
     },
     "structure_0008": {
-        "id": "A0PowerGenerator",
         "modules": 1,
         "name": "A0PowerGenerator",
         "position": [
@@ -94,7 +88,6 @@
         "startpos": 0
     },
     "structure_0010": {
-        "id": "A0ComDroidControl",
         "name": "A0ComDroidControl",
         "position": [
             768,
@@ -109,7 +102,6 @@
         "startpos": 0
     },
     "structure_0014": {
-        "id": "A0ResourceExtractor",
         "name": "A0ResourceExtractor",
         "position": [
             2112,
@@ -124,7 +116,6 @@
         "startpos": 0
     },
     "structure_0015": {
-        "id": "A0ResourceExtractor",
         "name": "A0ResourceExtractor",
         "position": [
             2368,
@@ -139,7 +130,6 @@
         "startpos": 0
     },
     "structure_0016": {
-        "id": "A0ResourceExtractor",
         "name": "A0ResourceExtractor",
         "position": [
             1728,
@@ -154,7 +144,6 @@
         "startpos": 0
     },
     "structure_0018": {
-        "id": "A0ResourceExtractor",
         "name": "A0ResourceExtractor",
         "position": [
             1344,
@@ -169,7 +158,6 @@
         "startpos": 0
     },
     "structure_0022": {
-        "id": "WallTower02",
         "name": "WallTower02",
         "position": [
             3776,
@@ -184,7 +172,6 @@
         "startpos": 0
     },
     "structure_0023": {
-        "id": "WallTower02",
         "name": "WallTower02",
         "position": [
             2496,
@@ -199,7 +186,6 @@
         "startpos": 0
     },
     "structure_0031": {
-        "id": "WallTower02",
         "name": "WallTower02",
         "position": [
             1984,
@@ -214,7 +200,6 @@
         "startpos": 0
     },
     "structure_0032": {
-        "id": "WallTower02",
         "name": "WallTower02",
         "position": [
             3776,
@@ -229,7 +214,6 @@
         "startpos": 0
     },
     "structure_0035": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             3392,
@@ -244,7 +228,6 @@
         "startpos": 0
     },
     "structure_0036": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             3392,
@@ -259,7 +242,6 @@
         "startpos": 0
     },
     "structure_0037": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             3392,
@@ -274,7 +256,6 @@
         "startpos": 0
     },
     "structure_0038": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             3392,
@@ -289,7 +270,6 @@
         "startpos": 0
     },
     "structure_0040": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             3392,
@@ -304,7 +284,6 @@
         "startpos": 0
     },
     "structure_0043": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             3392,
@@ -319,7 +298,6 @@
         "startpos": 0
     },
     "structure_0046": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             3392,
@@ -334,7 +312,6 @@
         "startpos": 0
     },
     "structure_0056": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             1728,
@@ -349,7 +326,6 @@
         "startpos": 0
     },
     "structure_0059": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             2624,
@@ -364,7 +340,6 @@
         "startpos": 0
     },
     "structure_0060": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             2752,
@@ -379,7 +354,6 @@
         "startpos": 0
     },
     "structure_0061": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             2880,
@@ -394,7 +368,6 @@
         "startpos": 0
     },
     "structure_0062": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             3136,
@@ -409,7 +382,6 @@
         "startpos": 0
     },
     "structure_0064": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             3008,
@@ -424,7 +396,6 @@
         "startpos": 0
     },
     "structure_0065": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             3264,
@@ -439,7 +410,6 @@
         "startpos": 0
     },
     "structure_0066": {
-        "id": "A0HardcreteMk1CWall",
         "name": "A0HardcreteMk1CWall",
         "position": [
             3392,
@@ -454,7 +424,6 @@
         "startpos": 0
     },
     "structure_0070": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             1856,
@@ -469,7 +438,6 @@
         "startpos": 0
     },
     "structure_0071": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             1600,
@@ -484,7 +452,6 @@
         "startpos": 0
     },
     "structure_0072": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             1472,
@@ -499,7 +466,6 @@
         "startpos": 0
     },
     "structure_0073": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             1344,
@@ -514,7 +480,6 @@
         "startpos": 0
     },
     "structure_0074": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             1216,
@@ -529,7 +494,6 @@
         "startpos": 0
     },
     "structure_0075": {
-        "id": "A0HardcreteMk1CWall",
         "name": "A0HardcreteMk1CWall",
         "position": [
             3392,
@@ -544,7 +508,6 @@
         "startpos": 0
     },
     "structure_0076": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             1728,
@@ -559,7 +522,6 @@
         "startpos": 0
     },
     "structure_0079": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             2496,
@@ -574,7 +536,6 @@
         "startpos": 0
     },
     "structure_0080": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             2624,
@@ -589,7 +550,6 @@
         "startpos": 0
     },
     "structure_0081": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             2752,
@@ -604,7 +564,6 @@
         "startpos": 0
     },
     "structure_0082": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             3136,
@@ -619,7 +578,6 @@
         "startpos": 0
     },
     "structure_0083": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             3008,
@@ -634,7 +592,6 @@
         "startpos": 0
     },
     "structure_0084": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             2880,
@@ -649,7 +606,6 @@
         "startpos": 0
     },
     "structure_0085": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             3264,
@@ -664,7 +620,6 @@
         "startpos": 0
     },
     "structure_0086": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             2240,
@@ -679,7 +634,6 @@
         "startpos": 0
     },
     "structure_0087": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             2112,
@@ -694,7 +648,6 @@
         "startpos": 0
     },
     "structure_0088": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             1984,
@@ -709,7 +662,6 @@
         "startpos": 0
     },
     "structure_0089": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             1856,
@@ -724,7 +676,6 @@
         "startpos": 0
     },
     "structure_0090": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             1600,
@@ -739,7 +690,6 @@
         "startpos": 0
     },
     "structure_0091": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             1472,
@@ -754,7 +704,6 @@
         "startpos": 0
     },
     "structure_0092": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             1344,
@@ -769,7 +718,6 @@
         "startpos": 0
     },
     "structure_0093": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             1216,
@@ -784,7 +732,6 @@
         "startpos": 0
     },
     "structure_0095": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             1088,
@@ -799,7 +746,6 @@
         "startpos": 0
     },
     "structure_0097": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             960,
@@ -814,7 +760,6 @@
         "startpos": 0
     },
     "structure_0098": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             832,
@@ -829,7 +774,6 @@
         "startpos": 0
     },
     "structure_0099": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             704,
@@ -844,7 +788,6 @@
         "startpos": 0
     },
     "structure_0100": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             1088,
@@ -859,7 +802,6 @@
         "startpos": 0
     },
     "structure_0101": {
-        "id": "A0HardcreteMk1CWall",
         "name": "A0HardcreteMk1CWall",
         "position": [
             960,
@@ -874,7 +816,6 @@
         "startpos": 0
     },
     "structure_0102": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             960,
@@ -889,7 +830,6 @@
         "startpos": 0
     },
     "structure_0103": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             960,
@@ -904,7 +844,6 @@
         "startpos": 0
     },
     "structure_0104": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             960,
@@ -919,7 +858,6 @@
         "startpos": 0
     },
     "structure_0106": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             448,
@@ -934,7 +872,6 @@
         "startpos": 0
     },
     "structure_0107": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             832,
@@ -949,7 +886,6 @@
         "startpos": 0
     },
     "structure_0108": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             704,
@@ -964,7 +900,6 @@
         "startpos": 0
     },
     "structure_0109": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             576,
@@ -979,7 +914,6 @@
         "startpos": 0
     },
     "structure_0110": {
-        "id": "A0HardcreteMk1CWall",
         "name": "A0HardcreteMk1CWall",
         "position": [
             960,
@@ -994,7 +928,6 @@
         "startpos": 0
     },
     "structure_0111": {
-        "id": "A0HardcreteMk1CWall",
         "name": "A0HardcreteMk1CWall",
         "position": [
             448,
@@ -1009,7 +942,6 @@
         "startpos": 0
     },
     "structure_0119": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             448,
@@ -1024,7 +956,6 @@
         "startpos": 0
     },
     "structure_0121": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             448,
@@ -1039,7 +970,6 @@
         "startpos": 0
     },
     "structure_0122": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             448,
@@ -1054,7 +984,6 @@
         "startpos": 0
     },
     "structure_0127": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             448,
@@ -1069,7 +998,6 @@
         "startpos": 0
     },
     "structure_0128": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             448,
@@ -1084,7 +1012,6 @@
         "startpos": 0
     },
     "structure_0129": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             448,
@@ -1099,7 +1026,6 @@
         "startpos": 0
     },
     "structure_0133": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             3520,
@@ -1114,7 +1040,6 @@
         "startpos": 0
     },
     "structure_0134": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             3520,
@@ -1129,7 +1054,6 @@
         "startpos": 0
     },
     "structure_0135": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             3648,
@@ -1144,7 +1068,6 @@
         "startpos": 0
     },
     "structure_0136": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             3648,
@@ -1159,7 +1082,6 @@
         "startpos": 0
     },
     "structure_0137": {
-        "id": "A0HardcreteMk1CWall",
         "name": "A0HardcreteMk1CWall",
         "position": [
             1984,
@@ -1174,7 +1096,6 @@
         "startpos": 0
     },
     "structure_0138": {
-        "id": "A0HardcreteMk1CWall",
         "name": "A0HardcreteMk1CWall",
         "position": [
             2496,
@@ -1189,7 +1110,6 @@
         "startpos": 0
     },
     "structure_0139": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             1984,
@@ -1204,7 +1124,6 @@
         "startpos": 0
     },
     "structure_0140": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             1984,
@@ -1219,7 +1138,6 @@
         "startpos": 0
     },
     "structure_0141": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             2496,
@@ -1234,7 +1152,6 @@
         "startpos": 0
     },
     "structure_0142": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             2496,
@@ -1249,7 +1166,6 @@
         "startpos": 0
     },
     "structure_0143": {
-        "id": "A0HardcreteMk1CWall",
         "name": "A0HardcreteMk1CWall",
         "position": [
             3392,
@@ -1264,7 +1180,6 @@
         "startpos": 0
     },
     "structure_0144": {
-        "id": "A0HardcreteMk1CWall",
         "name": "A0HardcreteMk1CWall",
         "position": [
             3392,
@@ -1279,7 +1194,6 @@
         "startpos": 0
     },
     "structure_0145": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             576,
@@ -1294,7 +1208,6 @@
         "startpos": 0
     },
     "structure_0146": {
-        "id": "A0HardcreteMk1CWall",
         "name": "A0HardcreteMk1CWall",
         "position": [
             448,
@@ -1309,7 +1222,6 @@
         "startpos": 0
     },
     "structure_0147": {
-        "id": "A0HardcreteMk1CWall",
         "name": "A0HardcreteMk1CWall",
         "position": [
             960,
@@ -1324,7 +1236,6 @@
         "startpos": 0
     },
     "structure_0148": {
-        "id": "A0HardcreteMk1CWall",
         "name": "A0HardcreteMk1CWall",
         "position": [
             960,
@@ -1339,7 +1250,6 @@
         "startpos": 0
     },
     "structure_0149": {
-        "id": "A0HardcreteMk1CWall",
         "name": "A0HardcreteMk1CWall",
         "position": [
             2368,
@@ -1354,7 +1264,6 @@
         "startpos": 0
     },
     "structure_0150": {
-        "id": "A0HardcreteMk1CWall",
         "name": "A0HardcreteMk1CWall",
         "position": [
             2368,
@@ -1369,7 +1278,6 @@
         "startpos": 0
     },
     "structure_0152": {
-        "id": "A0TankTrap",
         "name": "A0TankTrap",
         "position": [
             1984,
@@ -1384,7 +1292,6 @@
         "startpos": 0
     },
     "structure_0153": {
-        "id": "A0TankTrap",
         "name": "A0TankTrap",
         "position": [
             2112,
@@ -1399,7 +1306,6 @@
         "startpos": 0
     },
     "structure_0154": {
-        "id": "A0TankTrap",
         "name": "A0TankTrap",
         "position": [
             2240,
@@ -1414,7 +1320,6 @@
         "startpos": 0
     },
     "structure_0155": {
-        "id": "A0TankTrap",
         "name": "A0TankTrap",
         "position": [
             2368,
@@ -1429,7 +1334,6 @@
         "startpos": 0
     },
     "structure_0156": {
-        "id": "A0TankTrap",
         "name": "A0TankTrap",
         "position": [
             1856,
@@ -1444,7 +1348,6 @@
         "startpos": 0
     },
     "structure_0157": {
-        "id": "A0TankTrap",
         "name": "A0TankTrap",
         "position": [
             2496,
@@ -1459,7 +1362,6 @@
         "startpos": 0
     },
     "structure_0158": {
-        "id": "A0TankTrap",
         "name": "A0TankTrap",
         "position": [
             2752,
@@ -1474,7 +1376,6 @@
         "startpos": 0
     },
     "structure_0159": {
-        "id": "A0TankTrap",
         "name": "A0TankTrap",
         "position": [
             2624,
@@ -1489,7 +1390,6 @@
         "startpos": 0
     },
     "structure_0160": {
-        "id": "A0TankTrap",
         "name": "A0TankTrap",
         "position": [
             1728,
@@ -1504,7 +1404,6 @@
         "startpos": 0
     },
     "structure_0161": {
-        "id": "A0TankTrap",
         "name": "A0TankTrap",
         "position": [
             2880,
@@ -1519,7 +1418,6 @@
         "startpos": 0
     },
     "structure_0162": {
-        "id": "A0TankTrap",
         "name": "A0TankTrap",
         "position": [
             4288,
@@ -1534,7 +1432,6 @@
         "startpos": 0
     },
     "structure_0163": {
-        "id": "A0TankTrap",
         "name": "A0TankTrap",
         "position": [
             4288,
@@ -1549,7 +1446,6 @@
         "startpos": 0
     },
     "structure_0164": {
-        "id": "A0TankTrap",
         "name": "A0TankTrap",
         "position": [
             4288,
@@ -1564,7 +1460,6 @@
         "startpos": 0
     },
     "structure_0165": {
-        "id": "A0TankTrap",
         "name": "A0TankTrap",
         "position": [
             4288,
@@ -1579,7 +1474,6 @@
         "startpos": 0
     },
     "structure_0166": {
-        "id": "A0TankTrap",
         "name": "A0TankTrap",
         "position": [
             4288,
@@ -1594,7 +1488,6 @@
         "startpos": 0
     },
     "structure_0167": {
-        "id": "A0TankTrap",
         "name": "A0TankTrap",
         "position": [
             4288,
@@ -1609,7 +1502,6 @@
         "startpos": 0
     },
     "structure_0168": {
-        "id": "A0TankTrap",
         "name": "A0TankTrap",
         "position": [
             4288,
@@ -1624,7 +1516,6 @@
         "startpos": 0
     },
     "structure_0169": {
-        "id": "A0TankTrap",
         "name": "A0TankTrap",
         "position": [
             4288,
@@ -1639,7 +1530,6 @@
         "startpos": 0
     },
     "structure_0170": {
-        "id": "A0CommandCentre",
         "name": "A0CommandCentre",
         "position": [
             23296,
@@ -1654,7 +1544,6 @@
         "startpos": 1
     },
     "structure_0171": {
-        "id": "A0LightFactory",
         "name": "A0LightFactory",
         "position": [
             21568,
@@ -1669,7 +1558,6 @@
         "startpos": 1
     },
     "structure_0172": {
-        "id": "A0LightFactory",
         "modules": 1,
         "name": "A0LightFactory",
         "position": [
@@ -1685,7 +1573,6 @@
         "startpos": 1
     },
     "structure_0174": {
-        "id": "A0CyborgFactory",
         "name": "A0CyborgFactory",
         "position": [
             22336,
@@ -1700,7 +1587,6 @@
         "startpos": 1
     },
     "structure_0175": {
-        "id": "A0ResearchFacility",
         "modules": 1,
         "name": "A0ResearchFacility",
         "position": [
@@ -1716,7 +1602,6 @@
         "startpos": 1
     },
     "structure_0176": {
-        "id": "A0ResearchFacility",
         "modules": 1,
         "name": "A0ResearchFacility",
         "position": [
@@ -1732,7 +1617,6 @@
         "startpos": 1
     },
     "structure_0178": {
-        "id": "A0PowerGenerator",
         "modules": 1,
         "name": "A0PowerGenerator",
         "position": [
@@ -1748,7 +1632,6 @@
         "startpos": 1
     },
     "structure_0180": {
-        "id": "A0ComDroidControl",
         "name": "A0ComDroidControl",
         "position": [
             23296,
@@ -1763,7 +1646,6 @@
         "startpos": 1
     },
     "structure_0184": {
-        "id": "A0ResourceExtractor",
         "name": "A0ResourceExtractor",
         "position": [
             21952,
@@ -1778,7 +1660,6 @@
         "startpos": 1
     },
     "structure_0185": {
-        "id": "A0ResourceExtractor",
         "name": "A0ResourceExtractor",
         "position": [
             21696,
@@ -1793,7 +1674,6 @@
         "startpos": 1
     },
     "structure_0186": {
-        "id": "A0ResourceExtractor",
         "name": "A0ResourceExtractor",
         "position": [
             22336,
@@ -1808,7 +1688,6 @@
         "startpos": 1
     },
     "structure_0188": {
-        "id": "A0ResourceExtractor",
         "name": "A0ResourceExtractor",
         "position": [
             22720,
@@ -1823,7 +1702,6 @@
         "startpos": 1
     },
     "structure_0192": {
-        "id": "WallTower02",
         "name": "WallTower02",
         "position": [
             20288,
@@ -1838,7 +1716,6 @@
         "startpos": 1
     },
     "structure_0193": {
-        "id": "WallTower02",
         "name": "WallTower02",
         "position": [
             21568,
@@ -1853,7 +1730,6 @@
         "startpos": 1
     },
     "structure_0194": {
-        "id": "WallTower02",
         "name": "WallTower02",
         "position": [
             22080,
@@ -1868,7 +1744,6 @@
         "startpos": 1
     },
     "structure_0195": {
-        "id": "WallTower02",
         "name": "WallTower02",
         "position": [
             20288,
@@ -1883,7 +1758,6 @@
         "startpos": 1
     },
     "structure_0196": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             20672,
@@ -1898,7 +1772,6 @@
         "startpos": 1
     },
     "structure_0197": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             20672,
@@ -1913,7 +1786,6 @@
         "startpos": 1
     },
     "structure_0198": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             20672,
@@ -1928,7 +1800,6 @@
         "startpos": 1
     },
     "structure_0199": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             20672,
@@ -1943,7 +1814,6 @@
         "startpos": 1
     },
     "structure_0200": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             20672,
@@ -1958,7 +1828,6 @@
         "startpos": 1
     },
     "structure_0201": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             20672,
@@ -1973,7 +1842,6 @@
         "startpos": 1
     },
     "structure_0202": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             20672,
@@ -1988,7 +1856,6 @@
         "startpos": 1
     },
     "structure_0203": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             22336,
@@ -2003,7 +1870,6 @@
         "startpos": 1
     },
     "structure_0204": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             21440,
@@ -2018,7 +1884,6 @@
         "startpos": 1
     },
     "structure_0205": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             21312,
@@ -2033,7 +1898,6 @@
         "startpos": 1
     },
     "structure_0206": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             21184,
@@ -2048,7 +1912,6 @@
         "startpos": 1
     },
     "structure_0207": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             20928,
@@ -2063,7 +1926,6 @@
         "startpos": 1
     },
     "structure_0209": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             21056,
@@ -2078,7 +1940,6 @@
         "startpos": 1
     },
     "structure_0210": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             20800,
@@ -2093,7 +1954,6 @@
         "startpos": 1
     },
     "structure_0211": {
-        "id": "A0HardcreteMk1CWall",
         "name": "A0HardcreteMk1CWall",
         "position": [
             20672,
@@ -2108,7 +1968,6 @@
         "startpos": 1
     },
     "structure_0212": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             22208,
@@ -2123,7 +1982,6 @@
         "startpos": 1
     },
     "structure_0213": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             22464,
@@ -2138,7 +1996,6 @@
         "startpos": 1
     },
     "structure_0214": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             22592,
@@ -2153,7 +2010,6 @@
         "startpos": 1
     },
     "structure_0215": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             22720,
@@ -2168,7 +2024,6 @@
         "startpos": 1
     },
     "structure_0216": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             22848,
@@ -2183,7 +2038,6 @@
         "startpos": 1
     },
     "structure_0217": {
-        "id": "A0HardcreteMk1CWall",
         "name": "A0HardcreteMk1CWall",
         "position": [
             20672,
@@ -2198,7 +2052,6 @@
         "startpos": 1
     },
     "structure_0218": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             22336,
@@ -2213,7 +2066,6 @@
         "startpos": 1
     },
     "structure_0219": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             21568,
@@ -2228,7 +2080,6 @@
         "startpos": 1
     },
     "structure_0220": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             21440,
@@ -2243,7 +2094,6 @@
         "startpos": 1
     },
     "structure_0221": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             21312,
@@ -2258,7 +2108,6 @@
         "startpos": 1
     },
     "structure_0222": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             20928,
@@ -2273,7 +2122,6 @@
         "startpos": 1
     },
     "structure_0223": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             21056,
@@ -2288,7 +2136,6 @@
         "startpos": 1
     },
     "structure_0224": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             21184,
@@ -2303,7 +2150,6 @@
         "startpos": 1
     },
     "structure_0225": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             20800,
@@ -2318,7 +2164,6 @@
         "startpos": 1
     },
     "structure_0226": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             21824,
@@ -2333,7 +2178,6 @@
         "startpos": 1
     },
     "structure_0227": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             21952,
@@ -2348,7 +2192,6 @@
         "startpos": 1
     },
     "structure_0228": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             22080,
@@ -2363,7 +2206,6 @@
         "startpos": 1
     },
     "structure_0229": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             22208,
@@ -2378,7 +2220,6 @@
         "startpos": 1
     },
     "structure_0230": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             22464,
@@ -2393,7 +2234,6 @@
         "startpos": 1
     },
     "structure_0231": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             22592,
@@ -2408,7 +2248,6 @@
         "startpos": 1
     },
     "structure_0232": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             22720,
@@ -2423,7 +2262,6 @@
         "startpos": 1
     },
     "structure_0233": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             22848,
@@ -2438,7 +2276,6 @@
         "startpos": 1
     },
     "structure_0234": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             22976,
@@ -2453,7 +2290,6 @@
         "startpos": 1
     },
     "structure_0235": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             23104,
@@ -2468,7 +2304,6 @@
         "startpos": 1
     },
     "structure_0236": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             23232,
@@ -2483,7 +2318,6 @@
         "startpos": 1
     },
     "structure_0237": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             23360,
@@ -2498,7 +2332,6 @@
         "startpos": 1
     },
     "structure_0238": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             22976,
@@ -2513,7 +2346,6 @@
         "startpos": 1
     },
     "structure_0239": {
-        "id": "A0HardcreteMk1CWall",
         "name": "A0HardcreteMk1CWall",
         "position": [
             23104,
@@ -2528,7 +2360,6 @@
         "startpos": 1
     },
     "structure_0240": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             23104,
@@ -2543,7 +2374,6 @@
         "startpos": 1
     },
     "structure_0241": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             23104,
@@ -2558,7 +2388,6 @@
         "startpos": 1
     },
     "structure_0242": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             23104,
@@ -2573,7 +2402,6 @@
         "startpos": 1
     },
     "structure_0243": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             23616,
@@ -2588,7 +2416,6 @@
         "startpos": 1
     },
     "structure_0244": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             23232,
@@ -2603,7 +2430,6 @@
         "startpos": 1
     },
     "structure_0245": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             23360,
@@ -2618,7 +2444,6 @@
         "startpos": 1
     },
     "structure_0246": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             23488,
@@ -2633,7 +2458,6 @@
         "startpos": 1
     },
     "structure_0247": {
-        "id": "A0HardcreteMk1CWall",
         "name": "A0HardcreteMk1CWall",
         "position": [
             23104,
@@ -2648,7 +2472,6 @@
         "startpos": 1
     },
     "structure_0248": {
-        "id": "A0HardcreteMk1CWall",
         "name": "A0HardcreteMk1CWall",
         "position": [
             23616,
@@ -2663,7 +2486,6 @@
         "startpos": 1
     },
     "structure_0249": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             23616,
@@ -2678,7 +2500,6 @@
         "startpos": 1
     },
     "structure_0250": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             23616,
@@ -2693,7 +2514,6 @@
         "startpos": 1
     },
     "structure_0251": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             23616,
@@ -2708,7 +2528,6 @@
         "startpos": 1
     },
     "structure_0252": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             23616,
@@ -2723,7 +2542,6 @@
         "startpos": 1
     },
     "structure_0253": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             23616,
@@ -2738,7 +2556,6 @@
         "startpos": 1
     },
     "structure_0254": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             23616,
@@ -2753,7 +2570,6 @@
         "startpos": 1
     },
     "structure_0255": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             20544,
@@ -2768,7 +2584,6 @@
         "startpos": 1
     },
     "structure_0256": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             20544,
@@ -2783,7 +2598,6 @@
         "startpos": 1
     },
     "structure_0257": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             20416,
@@ -2798,7 +2612,6 @@
         "startpos": 1
     },
     "structure_0258": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             20416,
@@ -2813,7 +2626,6 @@
         "startpos": 1
     },
     "structure_0259": {
-        "id": "A0HardcreteMk1CWall",
         "name": "A0HardcreteMk1CWall",
         "position": [
             22080,
@@ -2828,7 +2640,6 @@
         "startpos": 1
     },
     "structure_0260": {
-        "id": "A0HardcreteMk1CWall",
         "name": "A0HardcreteMk1CWall",
         "position": [
             21568,
@@ -2843,7 +2654,6 @@
         "startpos": 1
     },
     "structure_0261": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             22080,
@@ -2858,7 +2668,6 @@
         "startpos": 1
     },
     "structure_0262": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             22080,
@@ -2873,7 +2682,6 @@
         "startpos": 1
     },
     "structure_0263": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             21568,
@@ -2888,7 +2696,6 @@
         "startpos": 1
     },
     "structure_0264": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             21568,
@@ -2903,7 +2710,6 @@
         "startpos": 1
     },
     "structure_0265": {
-        "id": "A0HardcreteMk1CWall",
         "name": "A0HardcreteMk1CWall",
         "position": [
             20672,
@@ -2918,7 +2724,6 @@
         "startpos": 1
     },
     "structure_0266": {
-        "id": "A0HardcreteMk1CWall",
         "name": "A0HardcreteMk1CWall",
         "position": [
             20672,
@@ -2933,7 +2738,6 @@
         "startpos": 1
     },
     "structure_0267": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             23488,
@@ -2948,7 +2752,6 @@
         "startpos": 1
     },
     "structure_0268": {
-        "id": "A0HardcreteMk1CWall",
         "name": "A0HardcreteMk1CWall",
         "position": [
             23616,
@@ -2963,7 +2766,6 @@
         "startpos": 1
     },
     "structure_0269": {
-        "id": "A0HardcreteMk1CWall",
         "name": "A0HardcreteMk1CWall",
         "position": [
             23104,
@@ -2978,7 +2780,6 @@
         "startpos": 1
     },
     "structure_0270": {
-        "id": "A0HardcreteMk1CWall",
         "name": "A0HardcreteMk1CWall",
         "position": [
             23104,
@@ -2993,7 +2794,6 @@
         "startpos": 1
     },
     "structure_0271": {
-        "id": "A0HardcreteMk1CWall",
         "name": "A0HardcreteMk1CWall",
         "position": [
             21696,
@@ -3008,7 +2808,6 @@
         "startpos": 1
     },
     "structure_0272": {
-        "id": "A0HardcreteMk1CWall",
         "name": "A0HardcreteMk1CWall",
         "position": [
             21696,
@@ -3023,7 +2822,6 @@
         "startpos": 1
     },
     "structure_0273": {
-        "id": "A0TankTrap",
         "name": "A0TankTrap",
         "position": [
             22080,
@@ -3038,7 +2836,6 @@
         "startpos": 1
     },
     "structure_0274": {
-        "id": "A0TankTrap",
         "name": "A0TankTrap",
         "position": [
             21952,
@@ -3053,7 +2850,6 @@
         "startpos": 1
     },
     "structure_0275": {
-        "id": "A0TankTrap",
         "name": "A0TankTrap",
         "position": [
             21824,
@@ -3068,7 +2864,6 @@
         "startpos": 1
     },
     "structure_0276": {
-        "id": "A0TankTrap",
         "name": "A0TankTrap",
         "position": [
             21696,
@@ -3083,7 +2878,6 @@
         "startpos": 1
     },
     "structure_0277": {
-        "id": "A0TankTrap",
         "name": "A0TankTrap",
         "position": [
             22208,
@@ -3098,7 +2892,6 @@
         "startpos": 1
     },
     "structure_0278": {
-        "id": "A0TankTrap",
         "name": "A0TankTrap",
         "position": [
             21568,
@@ -3113,7 +2906,6 @@
         "startpos": 1
     },
     "structure_0279": {
-        "id": "A0TankTrap",
         "name": "A0TankTrap",
         "position": [
             21312,
@@ -3128,7 +2920,6 @@
         "startpos": 1
     },
     "structure_0280": {
-        "id": "A0TankTrap",
         "name": "A0TankTrap",
         "position": [
             21440,
@@ -3143,7 +2934,6 @@
         "startpos": 1
     },
     "structure_0281": {
-        "id": "A0TankTrap",
         "name": "A0TankTrap",
         "position": [
             22336,
@@ -3158,7 +2948,6 @@
         "startpos": 1
     },
     "structure_0282": {
-        "id": "A0TankTrap",
         "name": "A0TankTrap",
         "position": [
             21184,
@@ -3173,7 +2962,6 @@
         "startpos": 1
     },
     "structure_0283": {
-        "id": "A0TankTrap",
         "name": "A0TankTrap",
         "position": [
             19776,
@@ -3188,7 +2976,6 @@
         "startpos": 1
     },
     "structure_0284": {
-        "id": "A0TankTrap",
         "name": "A0TankTrap",
         "position": [
             19776,
@@ -3203,7 +2990,6 @@
         "startpos": 1
     },
     "structure_0285": {
-        "id": "A0TankTrap",
         "name": "A0TankTrap",
         "position": [
             19776,
@@ -3218,7 +3004,6 @@
         "startpos": 1
     },
     "structure_0286": {
-        "id": "A0TankTrap",
         "name": "A0TankTrap",
         "position": [
             19776,
@@ -3233,7 +3018,6 @@
         "startpos": 1
     },
     "structure_0287": {
-        "id": "A0TankTrap",
         "name": "A0TankTrap",
         "position": [
             19776,
@@ -3248,7 +3032,6 @@
         "startpos": 1
     },
     "structure_0288": {
-        "id": "A0TankTrap",
         "name": "A0TankTrap",
         "position": [
             19776,
@@ -3263,7 +3046,6 @@
         "startpos": 1
     },
     "structure_0289": {
-        "id": "A0TankTrap",
         "name": "A0TankTrap",
         "position": [
             19776,
@@ -3278,7 +3060,6 @@
         "startpos": 1
     },
     "structure_0290": {
-        "id": "A0TankTrap",
         "name": "A0TankTrap",
         "position": [
             19776,
@@ -3293,7 +3074,6 @@
         "startpos": 1
     },
     "structure_0291": {
-        "id": "A0CommandCentre",
         "name": "A0CommandCentre",
         "position": [
             23296,
@@ -3308,7 +3088,6 @@
         "startpos": 2
     },
     "structure_0292": {
-        "id": "A0LightFactory",
         "name": "A0LightFactory",
         "position": [
             21568,
@@ -3323,7 +3102,6 @@
         "startpos": 2
     },
     "structure_0293": {
-        "id": "A0LightFactory",
         "modules": 1,
         "name": "A0LightFactory",
         "position": [
@@ -3339,7 +3117,6 @@
         "startpos": 2
     },
     "structure_0295": {
-        "id": "A0CyborgFactory",
         "name": "A0CyborgFactory",
         "position": [
             22336,
@@ -3354,7 +3131,6 @@
         "startpos": 2
     },
     "structure_0296": {
-        "id": "A0ResearchFacility",
         "modules": 1,
         "name": "A0ResearchFacility",
         "position": [
@@ -3370,7 +3146,6 @@
         "startpos": 2
     },
     "structure_0297": {
-        "id": "A0ResearchFacility",
         "modules": 1,
         "name": "A0ResearchFacility",
         "position": [
@@ -3386,7 +3161,6 @@
         "startpos": 2
     },
     "structure_0299": {
-        "id": "A0PowerGenerator",
         "modules": 1,
         "name": "A0PowerGenerator",
         "position": [
@@ -3402,7 +3176,6 @@
         "startpos": 2
     },
     "structure_0301": {
-        "id": "A0ComDroidControl",
         "name": "A0ComDroidControl",
         "position": [
             23296,
@@ -3417,7 +3190,6 @@
         "startpos": 2
     },
     "structure_0305": {
-        "id": "A0ResourceExtractor",
         "name": "A0ResourceExtractor",
         "position": [
             21952,
@@ -3432,7 +3204,6 @@
         "startpos": 2
     },
     "structure_0306": {
-        "id": "A0ResourceExtractor",
         "name": "A0ResourceExtractor",
         "position": [
             21696,
@@ -3447,7 +3218,6 @@
         "startpos": 2
     },
     "structure_0307": {
-        "id": "A0ResourceExtractor",
         "name": "A0ResourceExtractor",
         "position": [
             22336,
@@ -3462,7 +3232,6 @@
         "startpos": 2
     },
     "structure_0309": {
-        "id": "A0ResourceExtractor",
         "name": "A0ResourceExtractor",
         "position": [
             22720,
@@ -3477,7 +3246,6 @@
         "startpos": 2
     },
     "structure_0313": {
-        "id": "WallTower02",
         "name": "WallTower02",
         "position": [
             20288,
@@ -3492,7 +3260,6 @@
         "startpos": 2
     },
     "structure_0314": {
-        "id": "WallTower02",
         "name": "WallTower02",
         "position": [
             21568,
@@ -3507,7 +3274,6 @@
         "startpos": 2
     },
     "structure_0315": {
-        "id": "WallTower02",
         "name": "WallTower02",
         "position": [
             22080,
@@ -3522,7 +3288,6 @@
         "startpos": 2
     },
     "structure_0316": {
-        "id": "WallTower02",
         "name": "WallTower02",
         "position": [
             20288,
@@ -3537,7 +3302,6 @@
         "startpos": 2
     },
     "structure_0317": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             20672,
@@ -3552,7 +3316,6 @@
         "startpos": 2
     },
     "structure_0318": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             20672,
@@ -3567,7 +3330,6 @@
         "startpos": 2
     },
     "structure_0319": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             20672,
@@ -3582,7 +3344,6 @@
         "startpos": 2
     },
     "structure_0320": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             20672,
@@ -3597,7 +3358,6 @@
         "startpos": 2
     },
     "structure_0321": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             20672,
@@ -3612,7 +3372,6 @@
         "startpos": 2
     },
     "structure_0322": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             20672,
@@ -3627,7 +3386,6 @@
         "startpos": 2
     },
     "structure_0323": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             20672,
@@ -3642,7 +3400,6 @@
         "startpos": 2
     },
     "structure_0324": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             22336,
@@ -3657,7 +3414,6 @@
         "startpos": 2
     },
     "structure_0325": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             21440,
@@ -3672,7 +3428,6 @@
         "startpos": 2
     },
     "structure_0326": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             21312,
@@ -3687,7 +3442,6 @@
         "startpos": 2
     },
     "structure_0327": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             21184,
@@ -3702,7 +3456,6 @@
         "startpos": 2
     },
     "structure_0329": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             20928,
@@ -3717,7 +3470,6 @@
         "startpos": 2
     },
     "structure_0330": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             21056,
@@ -3732,7 +3484,6 @@
         "startpos": 2
     },
     "structure_0331": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             20800,
@@ -3747,7 +3498,6 @@
         "startpos": 2
     },
     "structure_0332": {
-        "id": "A0HardcreteMk1CWall",
         "name": "A0HardcreteMk1CWall",
         "position": [
             20672,
@@ -3762,7 +3512,6 @@
         "startpos": 2
     },
     "structure_0333": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             22208,
@@ -3777,7 +3526,6 @@
         "startpos": 2
     },
     "structure_0334": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             22464,
@@ -3792,7 +3540,6 @@
         "startpos": 2
     },
     "structure_0335": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             22592,
@@ -3807,7 +3554,6 @@
         "startpos": 2
     },
     "structure_0336": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             22720,
@@ -3822,7 +3568,6 @@
         "startpos": 2
     },
     "structure_0337": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             22848,
@@ -3837,7 +3582,6 @@
         "startpos": 2
     },
     "structure_0338": {
-        "id": "A0HardcreteMk1CWall",
         "name": "A0HardcreteMk1CWall",
         "position": [
             20672,
@@ -3852,7 +3596,6 @@
         "startpos": 2
     },
     "structure_0339": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             22336,
@@ -3867,7 +3610,6 @@
         "startpos": 2
     },
     "structure_0340": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             21568,
@@ -3882,7 +3624,6 @@
         "startpos": 2
     },
     "structure_0341": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             21440,
@@ -3897,7 +3638,6 @@
         "startpos": 2
     },
     "structure_0342": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             21312,
@@ -3912,7 +3652,6 @@
         "startpos": 2
     },
     "structure_0343": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             20928,
@@ -3927,7 +3666,6 @@
         "startpos": 2
     },
     "structure_0344": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             21056,
@@ -3942,7 +3680,6 @@
         "startpos": 2
     },
     "structure_0345": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             21184,
@@ -3957,7 +3694,6 @@
         "startpos": 2
     },
     "structure_0346": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             20800,
@@ -3972,7 +3708,6 @@
         "startpos": 2
     },
     "structure_0347": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             21824,
@@ -3987,7 +3722,6 @@
         "startpos": 2
     },
     "structure_0348": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             21952,
@@ -4002,7 +3736,6 @@
         "startpos": 2
     },
     "structure_0349": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             22080,
@@ -4017,7 +3750,6 @@
         "startpos": 2
     },
     "structure_0350": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             22208,
@@ -4032,7 +3764,6 @@
         "startpos": 2
     },
     "structure_0351": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             22464,
@@ -4047,7 +3778,6 @@
         "startpos": 2
     },
     "structure_0352": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             22592,
@@ -4062,7 +3792,6 @@
         "startpos": 2
     },
     "structure_0353": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             22720,
@@ -4077,7 +3806,6 @@
         "startpos": 2
     },
     "structure_0354": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             22848,
@@ -4092,7 +3820,6 @@
         "startpos": 2
     },
     "structure_0355": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             22976,
@@ -4107,7 +3834,6 @@
         "startpos": 2
     },
     "structure_0356": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             23104,
@@ -4122,7 +3848,6 @@
         "startpos": 2
     },
     "structure_0357": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             23232,
@@ -4137,7 +3862,6 @@
         "startpos": 2
     },
     "structure_0358": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             23360,
@@ -4152,7 +3876,6 @@
         "startpos": 2
     },
     "structure_0359": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             22976,
@@ -4167,7 +3890,6 @@
         "startpos": 2
     },
     "structure_0360": {
-        "id": "A0HardcreteMk1CWall",
         "name": "A0HardcreteMk1CWall",
         "position": [
             23104,
@@ -4182,7 +3904,6 @@
         "startpos": 2
     },
     "structure_0361": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             23104,
@@ -4197,7 +3918,6 @@
         "startpos": 2
     },
     "structure_0362": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             23104,
@@ -4212,7 +3932,6 @@
         "startpos": 2
     },
     "structure_0363": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             23104,
@@ -4227,7 +3946,6 @@
         "startpos": 2
     },
     "structure_0364": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             23616,
@@ -4242,7 +3960,6 @@
         "startpos": 2
     },
     "structure_0365": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             23232,
@@ -4257,7 +3974,6 @@
         "startpos": 2
     },
     "structure_0366": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             23360,
@@ -4272,7 +3988,6 @@
         "startpos": 2
     },
     "structure_0367": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             23488,
@@ -4287,7 +4002,6 @@
         "startpos": 2
     },
     "structure_0368": {
-        "id": "A0HardcreteMk1CWall",
         "name": "A0HardcreteMk1CWall",
         "position": [
             23104,
@@ -4302,7 +4016,6 @@
         "startpos": 2
     },
     "structure_0369": {
-        "id": "A0HardcreteMk1CWall",
         "name": "A0HardcreteMk1CWall",
         "position": [
             23616,
@@ -4317,7 +4030,6 @@
         "startpos": 2
     },
     "structure_0370": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             23616,
@@ -4332,7 +4044,6 @@
         "startpos": 2
     },
     "structure_0371": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             23616,
@@ -4347,7 +4058,6 @@
         "startpos": 2
     },
     "structure_0372": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             23616,
@@ -4362,7 +4072,6 @@
         "startpos": 2
     },
     "structure_0373": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             23616,
@@ -4377,7 +4086,6 @@
         "startpos": 2
     },
     "structure_0374": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             23616,
@@ -4392,7 +4100,6 @@
         "startpos": 2
     },
     "structure_0375": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             23616,
@@ -4407,7 +4114,6 @@
         "startpos": 2
     },
     "structure_0376": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             20544,
@@ -4422,7 +4128,6 @@
         "startpos": 2
     },
     "structure_0377": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             20544,
@@ -4437,7 +4142,6 @@
         "startpos": 2
     },
     "structure_0378": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             20416,
@@ -4452,7 +4156,6 @@
         "startpos": 2
     },
     "structure_0379": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             20416,
@@ -4467,7 +4170,6 @@
         "startpos": 2
     },
     "structure_0380": {
-        "id": "A0HardcreteMk1CWall",
         "name": "A0HardcreteMk1CWall",
         "position": [
             22080,
@@ -4482,7 +4184,6 @@
         "startpos": 2
     },
     "structure_0381": {
-        "id": "A0HardcreteMk1CWall",
         "name": "A0HardcreteMk1CWall",
         "position": [
             21568,
@@ -4497,7 +4198,6 @@
         "startpos": 2
     },
     "structure_0382": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             22080,
@@ -4512,7 +4212,6 @@
         "startpos": 2
     },
     "structure_0383": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             22080,
@@ -4527,7 +4226,6 @@
         "startpos": 2
     },
     "structure_0384": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             21568,
@@ -4542,7 +4240,6 @@
         "startpos": 2
     },
     "structure_0385": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             21568,
@@ -4557,7 +4254,6 @@
         "startpos": 2
     },
     "structure_0386": {
-        "id": "A0HardcreteMk1CWall",
         "name": "A0HardcreteMk1CWall",
         "position": [
             20672,
@@ -4572,7 +4268,6 @@
         "startpos": 2
     },
     "structure_0387": {
-        "id": "A0HardcreteMk1CWall",
         "name": "A0HardcreteMk1CWall",
         "position": [
             20672,
@@ -4587,7 +4282,6 @@
         "startpos": 2
     },
     "structure_0388": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             23488,
@@ -4602,7 +4296,6 @@
         "startpos": 2
     },
     "structure_0389": {
-        "id": "A0HardcreteMk1CWall",
         "name": "A0HardcreteMk1CWall",
         "position": [
             23616,
@@ -4617,7 +4310,6 @@
         "startpos": 2
     },
     "structure_0390": {
-        "id": "A0HardcreteMk1CWall",
         "name": "A0HardcreteMk1CWall",
         "position": [
             23104,
@@ -4632,7 +4324,6 @@
         "startpos": 2
     },
     "structure_0391": {
-        "id": "A0HardcreteMk1CWall",
         "name": "A0HardcreteMk1CWall",
         "position": [
             23104,
@@ -4647,7 +4338,6 @@
         "startpos": 2
     },
     "structure_0392": {
-        "id": "A0HardcreteMk1CWall",
         "name": "A0HardcreteMk1CWall",
         "position": [
             21696,
@@ -4662,7 +4352,6 @@
         "startpos": 2
     },
     "structure_0393": {
-        "id": "A0HardcreteMk1CWall",
         "name": "A0HardcreteMk1CWall",
         "position": [
             21696,
@@ -4677,7 +4366,6 @@
         "startpos": 2
     },
     "structure_0394": {
-        "id": "A0TankTrap",
         "name": "A0TankTrap",
         "position": [
             22080,
@@ -4692,7 +4380,6 @@
         "startpos": 2
     },
     "structure_0395": {
-        "id": "A0TankTrap",
         "name": "A0TankTrap",
         "position": [
             21952,
@@ -4707,7 +4394,6 @@
         "startpos": 2
     },
     "structure_0396": {
-        "id": "A0TankTrap",
         "name": "A0TankTrap",
         "position": [
             21824,
@@ -4722,7 +4408,6 @@
         "startpos": 2
     },
     "structure_0397": {
-        "id": "A0TankTrap",
         "name": "A0TankTrap",
         "position": [
             21696,
@@ -4737,7 +4422,6 @@
         "startpos": 2
     },
     "structure_0398": {
-        "id": "A0TankTrap",
         "name": "A0TankTrap",
         "position": [
             22208,
@@ -4752,7 +4436,6 @@
         "startpos": 2
     },
     "structure_0399": {
-        "id": "A0TankTrap",
         "name": "A0TankTrap",
         "position": [
             21568,
@@ -4767,7 +4450,6 @@
         "startpos": 2
     },
     "structure_0400": {
-        "id": "A0TankTrap",
         "name": "A0TankTrap",
         "position": [
             21312,
@@ -4782,7 +4464,6 @@
         "startpos": 2
     },
     "structure_0401": {
-        "id": "A0TankTrap",
         "name": "A0TankTrap",
         "position": [
             21440,
@@ -4797,7 +4478,6 @@
         "startpos": 2
     },
     "structure_0402": {
-        "id": "A0TankTrap",
         "name": "A0TankTrap",
         "position": [
             22336,
@@ -4812,7 +4492,6 @@
         "startpos": 2
     },
     "structure_0403": {
-        "id": "A0TankTrap",
         "name": "A0TankTrap",
         "position": [
             21184,
@@ -4827,7 +4506,6 @@
         "startpos": 2
     },
     "structure_0404": {
-        "id": "A0TankTrap",
         "name": "A0TankTrap",
         "position": [
             19776,
@@ -4842,7 +4520,6 @@
         "startpos": 2
     },
     "structure_0405": {
-        "id": "A0TankTrap",
         "name": "A0TankTrap",
         "position": [
             19776,
@@ -4857,7 +4534,6 @@
         "startpos": 2
     },
     "structure_0406": {
-        "id": "A0TankTrap",
         "name": "A0TankTrap",
         "position": [
             19776,
@@ -4872,7 +4548,6 @@
         "startpos": 2
     },
     "structure_0407": {
-        "id": "A0TankTrap",
         "name": "A0TankTrap",
         "position": [
             19776,
@@ -4887,7 +4562,6 @@
         "startpos": 2
     },
     "structure_0408": {
-        "id": "A0TankTrap",
         "name": "A0TankTrap",
         "position": [
             19776,
@@ -4902,7 +4576,6 @@
         "startpos": 2
     },
     "structure_0409": {
-        "id": "A0TankTrap",
         "name": "A0TankTrap",
         "position": [
             19776,
@@ -4917,7 +4590,6 @@
         "startpos": 2
     },
     "structure_0410": {
-        "id": "A0TankTrap",
         "name": "A0TankTrap",
         "position": [
             19776,
@@ -4932,7 +4604,6 @@
         "startpos": 2
     },
     "structure_0411": {
-        "id": "A0TankTrap",
         "name": "A0TankTrap",
         "position": [
             19776,
@@ -4947,7 +4618,6 @@
         "startpos": 2
     },
     "structure_0412": {
-        "id": "A0CommandCentre",
         "name": "A0CommandCentre",
         "position": [
             768,
@@ -4962,7 +4632,6 @@
         "startpos": 3
     },
     "structure_0413": {
-        "id": "A0LightFactory",
         "name": "A0LightFactory",
         "position": [
             2496,
@@ -4977,7 +4646,6 @@
         "startpos": 3
     },
     "structure_0414": {
-        "id": "A0LightFactory",
         "modules": 1,
         "name": "A0LightFactory",
         "position": [
@@ -4993,7 +4661,6 @@
         "startpos": 3
     },
     "structure_0416": {
-        "id": "A0CyborgFactory",
         "name": "A0CyborgFactory",
         "position": [
             1728,
@@ -5008,7 +4675,6 @@
         "startpos": 3
     },
     "structure_0417": {
-        "id": "A0ResearchFacility",
         "modules": 1,
         "name": "A0ResearchFacility",
         "position": [
@@ -5024,7 +4690,6 @@
         "startpos": 3
     },
     "structure_0418": {
-        "id": "A0ResearchFacility",
         "modules": 1,
         "name": "A0ResearchFacility",
         "position": [
@@ -5040,7 +4705,6 @@
         "startpos": 3
     },
     "structure_0420": {
-        "id": "A0PowerGenerator",
         "modules": 1,
         "name": "A0PowerGenerator",
         "position": [
@@ -5056,7 +4720,6 @@
         "startpos": 3
     },
     "structure_0422": {
-        "id": "A0ComDroidControl",
         "name": "A0ComDroidControl",
         "position": [
             768,
@@ -5071,7 +4734,6 @@
         "startpos": 3
     },
     "structure_0426": {
-        "id": "A0ResourceExtractor",
         "name": "A0ResourceExtractor",
         "position": [
             2112,
@@ -5086,7 +4748,6 @@
         "startpos": 3
     },
     "structure_0427": {
-        "id": "A0ResourceExtractor",
         "name": "A0ResourceExtractor",
         "position": [
             2368,
@@ -5101,7 +4762,6 @@
         "startpos": 3
     },
     "structure_0428": {
-        "id": "A0ResourceExtractor",
         "name": "A0ResourceExtractor",
         "position": [
             1728,
@@ -5116,7 +4776,6 @@
         "startpos": 3
     },
     "structure_0430": {
-        "id": "A0ResourceExtractor",
         "name": "A0ResourceExtractor",
         "position": [
             1344,
@@ -5131,7 +4790,6 @@
         "startpos": 3
     },
     "structure_0434": {
-        "id": "WallTower02",
         "name": "WallTower02",
         "position": [
             3776,
@@ -5146,7 +4804,6 @@
         "startpos": 3
     },
     "structure_0435": {
-        "id": "WallTower02",
         "name": "WallTower02",
         "position": [
             2496,
@@ -5161,7 +4818,6 @@
         "startpos": 3
     },
     "structure_0436": {
-        "id": "WallTower02",
         "name": "WallTower02",
         "position": [
             1984,
@@ -5176,7 +4832,6 @@
         "startpos": 3
     },
     "structure_0437": {
-        "id": "WallTower02",
         "name": "WallTower02",
         "position": [
             3776,
@@ -5191,7 +4846,6 @@
         "startpos": 3
     },
     "structure_0438": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             3392,
@@ -5206,7 +4860,6 @@
         "startpos": 3
     },
     "structure_0439": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             3392,
@@ -5221,7 +4874,6 @@
         "startpos": 3
     },
     "structure_0440": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             3392,
@@ -5236,7 +4888,6 @@
         "startpos": 3
     },
     "structure_0441": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             3392,
@@ -5251,7 +4902,6 @@
         "startpos": 3
     },
     "structure_0442": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             3392,
@@ -5266,7 +4916,6 @@
         "startpos": 3
     },
     "structure_0443": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             3392,
@@ -5281,7 +4930,6 @@
         "startpos": 3
     },
     "structure_0444": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             3392,
@@ -5296,7 +4944,6 @@
         "startpos": 3
     },
     "structure_0445": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             1728,
@@ -5311,7 +4958,6 @@
         "startpos": 3
     },
     "structure_0446": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             2624,
@@ -5326,7 +4972,6 @@
         "startpos": 3
     },
     "structure_0447": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             2752,
@@ -5341,7 +4986,6 @@
         "startpos": 3
     },
     "structure_0448": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             2880,
@@ -5356,7 +5000,6 @@
         "startpos": 3
     },
     "structure_0449": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             3136,
@@ -5371,7 +5014,6 @@
         "startpos": 3
     },
     "structure_0451": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             3008,
@@ -5386,7 +5028,6 @@
         "startpos": 3
     },
     "structure_0452": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             3264,
@@ -5401,7 +5042,6 @@
         "startpos": 3
     },
     "structure_0453": {
-        "id": "A0HardcreteMk1CWall",
         "name": "A0HardcreteMk1CWall",
         "position": [
             3392,
@@ -5416,7 +5056,6 @@
         "startpos": 3
     },
     "structure_0454": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             1856,
@@ -5431,7 +5070,6 @@
         "startpos": 3
     },
     "structure_0455": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             1600,
@@ -5446,7 +5084,6 @@
         "startpos": 3
     },
     "structure_0456": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             1472,
@@ -5461,7 +5098,6 @@
         "startpos": 3
     },
     "structure_0457": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             1344,
@@ -5476,7 +5112,6 @@
         "startpos": 3
     },
     "structure_0458": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             1216,
@@ -5491,7 +5126,6 @@
         "startpos": 3
     },
     "structure_0459": {
-        "id": "A0HardcreteMk1CWall",
         "name": "A0HardcreteMk1CWall",
         "position": [
             3392,
@@ -5506,7 +5140,6 @@
         "startpos": 3
     },
     "structure_0460": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             1728,
@@ -5521,7 +5154,6 @@
         "startpos": 3
     },
     "structure_0461": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             2496,
@@ -5536,7 +5168,6 @@
         "startpos": 3
     },
     "structure_0462": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             2624,
@@ -5551,7 +5182,6 @@
         "startpos": 3
     },
     "structure_0463": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             2752,
@@ -5566,7 +5196,6 @@
         "startpos": 3
     },
     "structure_0464": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             3136,
@@ -5581,7 +5210,6 @@
         "startpos": 3
     },
     "structure_0465": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             3008,
@@ -5596,7 +5224,6 @@
         "startpos": 3
     },
     "structure_0466": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             2880,
@@ -5611,7 +5238,6 @@
         "startpos": 3
     },
     "structure_0467": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             3264,
@@ -5626,7 +5252,6 @@
         "startpos": 3
     },
     "structure_0468": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             2240,
@@ -5641,7 +5266,6 @@
         "startpos": 3
     },
     "structure_0469": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             2112,
@@ -5656,7 +5280,6 @@
         "startpos": 3
     },
     "structure_0470": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             1984,
@@ -5671,7 +5294,6 @@
         "startpos": 3
     },
     "structure_0471": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             1856,
@@ -5686,7 +5308,6 @@
         "startpos": 3
     },
     "structure_0472": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             1600,
@@ -5701,7 +5322,6 @@
         "startpos": 3
     },
     "structure_0473": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             1472,
@@ -5716,7 +5336,6 @@
         "startpos": 3
     },
     "structure_0474": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             1344,
@@ -5731,7 +5350,6 @@
         "startpos": 3
     },
     "structure_0475": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             1216,
@@ -5746,7 +5364,6 @@
         "startpos": 3
     },
     "structure_0476": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             1088,
@@ -5761,7 +5378,6 @@
         "startpos": 3
     },
     "structure_0477": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             960,
@@ -5776,7 +5392,6 @@
         "startpos": 3
     },
     "structure_0478": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             832,
@@ -5791,7 +5406,6 @@
         "startpos": 3
     },
     "structure_0479": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             704,
@@ -5806,7 +5420,6 @@
         "startpos": 3
     },
     "structure_0480": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             1088,
@@ -5821,7 +5434,6 @@
         "startpos": 3
     },
     "structure_0481": {
-        "id": "A0HardcreteMk1CWall",
         "name": "A0HardcreteMk1CWall",
         "position": [
             960,
@@ -5836,7 +5448,6 @@
         "startpos": 3
     },
     "structure_0482": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             960,
@@ -5851,7 +5462,6 @@
         "startpos": 3
     },
     "structure_0483": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             960,
@@ -5866,7 +5476,6 @@
         "startpos": 3
     },
     "structure_0484": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             960,
@@ -5881,7 +5490,6 @@
         "startpos": 3
     },
     "structure_0485": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             448,
@@ -5896,7 +5504,6 @@
         "startpos": 3
     },
     "structure_0486": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             832,
@@ -5911,7 +5518,6 @@
         "startpos": 3
     },
     "structure_0487": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             704,
@@ -5926,7 +5532,6 @@
         "startpos": 3
     },
     "structure_0488": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             576,
@@ -5941,7 +5546,6 @@
         "startpos": 3
     },
     "structure_0489": {
-        "id": "A0HardcreteMk1CWall",
         "name": "A0HardcreteMk1CWall",
         "position": [
             960,
@@ -5956,7 +5560,6 @@
         "startpos": 3
     },
     "structure_0490": {
-        "id": "A0HardcreteMk1CWall",
         "name": "A0HardcreteMk1CWall",
         "position": [
             448,
@@ -5971,7 +5574,6 @@
         "startpos": 3
     },
     "structure_0491": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             448,
@@ -5986,7 +5588,6 @@
         "startpos": 3
     },
     "structure_0492": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             448,
@@ -6001,7 +5602,6 @@
         "startpos": 3
     },
     "structure_0493": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             448,
@@ -6016,7 +5616,6 @@
         "startpos": 3
     },
     "structure_0494": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             448,
@@ -6031,7 +5630,6 @@
         "startpos": 3
     },
     "structure_0495": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             448,
@@ -6046,7 +5644,6 @@
         "startpos": 3
     },
     "structure_0496": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             448,
@@ -6061,7 +5658,6 @@
         "startpos": 3
     },
     "structure_0497": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             3520,
@@ -6076,7 +5672,6 @@
         "startpos": 3
     },
     "structure_0498": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             3520,
@@ -6091,7 +5686,6 @@
         "startpos": 3
     },
     "structure_0499": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             3648,
@@ -6106,7 +5700,6 @@
         "startpos": 3
     },
     "structure_0500": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             3648,
@@ -6121,7 +5714,6 @@
         "startpos": 3
     },
     "structure_0501": {
-        "id": "A0HardcreteMk1CWall",
         "name": "A0HardcreteMk1CWall",
         "position": [
             1984,
@@ -6136,7 +5728,6 @@
         "startpos": 3
     },
     "structure_0502": {
-        "id": "A0HardcreteMk1CWall",
         "name": "A0HardcreteMk1CWall",
         "position": [
             2496,
@@ -6151,7 +5742,6 @@
         "startpos": 3
     },
     "structure_0503": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             1984,
@@ -6166,7 +5756,6 @@
         "startpos": 3
     },
     "structure_0504": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             1984,
@@ -6181,7 +5770,6 @@
         "startpos": 3
     },
     "structure_0505": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             2496,
@@ -6196,7 +5784,6 @@
         "startpos": 3
     },
     "structure_0506": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             2496,
@@ -6211,7 +5798,6 @@
         "startpos": 3
     },
     "structure_0507": {
-        "id": "A0HardcreteMk1CWall",
         "name": "A0HardcreteMk1CWall",
         "position": [
             3392,
@@ -6226,7 +5812,6 @@
         "startpos": 3
     },
     "structure_0508": {
-        "id": "A0HardcreteMk1CWall",
         "name": "A0HardcreteMk1CWall",
         "position": [
             3392,
@@ -6241,7 +5826,6 @@
         "startpos": 3
     },
     "structure_0509": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             576,
@@ -6256,7 +5840,6 @@
         "startpos": 3
     },
     "structure_0510": {
-        "id": "A0HardcreteMk1CWall",
         "name": "A0HardcreteMk1CWall",
         "position": [
             448,
@@ -6271,7 +5854,6 @@
         "startpos": 3
     },
     "structure_0511": {
-        "id": "A0HardcreteMk1CWall",
         "name": "A0HardcreteMk1CWall",
         "position": [
             960,
@@ -6286,7 +5868,6 @@
         "startpos": 3
     },
     "structure_0512": {
-        "id": "A0HardcreteMk1CWall",
         "name": "A0HardcreteMk1CWall",
         "position": [
             960,
@@ -6301,7 +5882,6 @@
         "startpos": 3
     },
     "structure_0513": {
-        "id": "A0HardcreteMk1CWall",
         "name": "A0HardcreteMk1CWall",
         "position": [
             2368,
@@ -6316,7 +5896,6 @@
         "startpos": 3
     },
     "structure_0514": {
-        "id": "A0HardcreteMk1CWall",
         "name": "A0HardcreteMk1CWall",
         "position": [
             2368,
@@ -6331,7 +5910,6 @@
         "startpos": 3
     },
     "structure_0515": {
-        "id": "A0TankTrap",
         "name": "A0TankTrap",
         "position": [
             1984,
@@ -6346,7 +5924,6 @@
         "startpos": 3
     },
     "structure_0516": {
-        "id": "A0TankTrap",
         "name": "A0TankTrap",
         "position": [
             2112,
@@ -6361,7 +5938,6 @@
         "startpos": 3
     },
     "structure_0517": {
-        "id": "A0TankTrap",
         "name": "A0TankTrap",
         "position": [
             2240,
@@ -6376,7 +5952,6 @@
         "startpos": 3
     },
     "structure_0518": {
-        "id": "A0TankTrap",
         "name": "A0TankTrap",
         "position": [
             2368,
@@ -6391,7 +5966,6 @@
         "startpos": 3
     },
     "structure_0519": {
-        "id": "A0TankTrap",
         "name": "A0TankTrap",
         "position": [
             1856,
@@ -6406,7 +5980,6 @@
         "startpos": 3
     },
     "structure_0520": {
-        "id": "A0TankTrap",
         "name": "A0TankTrap",
         "position": [
             2496,
@@ -6421,7 +5994,6 @@
         "startpos": 3
     },
     "structure_0521": {
-        "id": "A0TankTrap",
         "name": "A0TankTrap",
         "position": [
             2752,
@@ -6436,7 +6008,6 @@
         "startpos": 3
     },
     "structure_0522": {
-        "id": "A0TankTrap",
         "name": "A0TankTrap",
         "position": [
             2624,
@@ -6451,7 +6022,6 @@
         "startpos": 3
     },
     "structure_0523": {
-        "id": "A0TankTrap",
         "name": "A0TankTrap",
         "position": [
             1728,
@@ -6466,7 +6036,6 @@
         "startpos": 3
     },
     "structure_0524": {
-        "id": "A0TankTrap",
         "name": "A0TankTrap",
         "position": [
             2880,
@@ -6481,7 +6050,6 @@
         "startpos": 3
     },
     "structure_0525": {
-        "id": "A0TankTrap",
         "name": "A0TankTrap",
         "position": [
             4288,
@@ -6496,7 +6064,6 @@
         "startpos": 3
     },
     "structure_0526": {
-        "id": "A0TankTrap",
         "name": "A0TankTrap",
         "position": [
             4288,
@@ -6511,7 +6078,6 @@
         "startpos": 3
     },
     "structure_0527": {
-        "id": "A0TankTrap",
         "name": "A0TankTrap",
         "position": [
             4288,
@@ -6526,7 +6092,6 @@
         "startpos": 3
     },
     "structure_0528": {
-        "id": "A0TankTrap",
         "name": "A0TankTrap",
         "position": [
             4288,
@@ -6541,7 +6106,6 @@
         "startpos": 3
     },
     "structure_0529": {
-        "id": "A0TankTrap",
         "name": "A0TankTrap",
         "position": [
             4288,
@@ -6556,7 +6120,6 @@
         "startpos": 3
     },
     "structure_0530": {
-        "id": "A0TankTrap",
         "name": "A0TankTrap",
         "position": [
             4288,
@@ -6571,7 +6134,6 @@
         "startpos": 3
     },
     "structure_0531": {
-        "id": "A0TankTrap",
         "name": "A0TankTrap",
         "position": [
             4288,
@@ -6586,7 +6148,6 @@
         "startpos": 3
     },
     "structure_0532": {
-        "id": "A0TankTrap",
         "name": "A0TankTrap",
         "position": [
             4288,
@@ -6601,7 +6162,6 @@
         "startpos": 3
     },
     "structure_0552": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -6616,7 +6176,6 @@
         ]
     },
     "structure_0554": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -6631,7 +6190,6 @@
         ]
     },
     "structure_0555": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -6646,7 +6204,6 @@
         ]
     },
     "structure_0556": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -6661,7 +6218,6 @@
         ]
     },
     "structure_0557": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -6676,7 +6232,6 @@
         ]
     },
     "structure_0560": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -6691,7 +6246,6 @@
         ]
     },
     "structure_0563": {
-        "id": "A0BabaCornerWall",
         "name": "A0BabaCornerWall",
         "player": "scavenger",
         "position": [
@@ -6706,7 +6260,6 @@
         ]
     },
     "structure_0566": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -6721,7 +6274,6 @@
         ]
     },
     "structure_0568": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -6736,7 +6288,6 @@
         ]
     },
     "structure_0569": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -6751,7 +6302,6 @@
         ]
     },
     "structure_0573": {
-        "id": "A0BabaCornerWall",
         "name": "A0BabaCornerWall",
         "player": "scavenger",
         "position": [
@@ -6766,7 +6316,6 @@
         ]
     },
     "structure_0574": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -6781,7 +6330,6 @@
         ]
     },
     "structure_0575": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -6796,7 +6344,6 @@
         ]
     },
     "structure_0577": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -6811,7 +6358,6 @@
         ]
     },
     "structure_0578": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -6826,7 +6372,6 @@
         ]
     },
     "structure_0579": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -6841,7 +6386,6 @@
         ]
     },
     "structure_0580": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -6856,7 +6400,6 @@
         ]
     },
     "structure_0581": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -6871,7 +6414,6 @@
         ]
     },
     "structure_0583": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -6886,7 +6428,6 @@
         ]
     },
     "structure_0584": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -6901,7 +6442,6 @@
         ]
     },
     "structure_0587": {
-        "id": "A0BabaCornerWall",
         "name": "A0BabaCornerWall",
         "player": "scavenger",
         "position": [
@@ -6916,7 +6456,6 @@
         ]
     },
     "structure_0589": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -6931,7 +6470,6 @@
         ]
     },
     "structure_0590": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -6946,7 +6484,6 @@
         ]
     },
     "structure_0592": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -6961,7 +6498,6 @@
         ]
     },
     "structure_0593": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -6976,7 +6512,6 @@
         ]
     },
     "structure_0595": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -6991,7 +6526,6 @@
         ]
     },
     "structure_0596": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -7006,7 +6540,6 @@
         ]
     },
     "structure_0597": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -7021,7 +6554,6 @@
         ]
     },
     "structure_0598": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -7036,7 +6568,6 @@
         ]
     },
     "structure_0599": {
-        "id": "A0BabaCornerWall",
         "name": "A0BabaCornerWall",
         "player": "scavenger",
         "position": [
@@ -7051,7 +6582,6 @@
         ]
     },
     "structure_0602": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -7066,7 +6596,6 @@
         ]
     },
     "structure_0603": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -7081,7 +6610,6 @@
         ]
     },
     "structure_0605": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -7096,7 +6624,6 @@
         ]
     },
     "structure_0606": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -7111,7 +6638,6 @@
         ]
     },
     "structure_0608": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -7126,7 +6652,6 @@
         ]
     },
     "structure_0609": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -7141,7 +6666,6 @@
         ]
     },
     "structure_0612": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -7156,7 +6680,6 @@
         ]
     },
     "structure_0613": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -7171,7 +6694,6 @@
         ]
     },
     "structure_0616": {
-        "id": "A0BabaCornerWall",
         "name": "A0BabaCornerWall",
         "player": "scavenger",
         "position": [
@@ -7186,7 +6708,6 @@
         ]
     },
     "structure_0618": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -7201,7 +6722,6 @@
         ]
     },
     "structure_0620": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -7216,7 +6736,6 @@
         ]
     },
     "structure_0623": {
-        "id": "A0BabaCornerWall",
         "name": "A0BabaCornerWall",
         "player": "scavenger",
         "position": [
@@ -7231,7 +6750,6 @@
         ]
     },
     "structure_0624": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -7246,7 +6764,6 @@
         ]
     },
     "structure_0625": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -7261,7 +6778,6 @@
         ]
     },
     "structure_0628": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -7276,7 +6792,6 @@
         ]
     },
     "structure_0629": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -7291,7 +6806,6 @@
         ]
     },
     "structure_0631": {
-        "id": "A0BabaCornerWall",
         "name": "A0BabaCornerWall",
         "player": "scavenger",
         "position": [
@@ -7306,7 +6820,6 @@
         ]
     },
     "structure_0633": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -7321,7 +6834,6 @@
         ]
     },
     "structure_0634": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -7336,7 +6848,6 @@
         ]
     },
     "structure_0635": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -7351,7 +6862,6 @@
         ]
     },
     "structure_0637": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -7366,7 +6876,6 @@
         ]
     },
     "structure_0638": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -7381,7 +6890,6 @@
         ]
     },
     "structure_0639": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -7396,7 +6904,6 @@
         ]
     },
     "structure_0640": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -7411,7 +6918,6 @@
         ]
     },
     "structure_0642": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -7426,7 +6932,6 @@
         ]
     },
     "structure_0644": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -7441,7 +6946,6 @@
         ]
     },
     "structure_0645": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -7456,7 +6960,6 @@
         ]
     },
     "structure_0646": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -7471,7 +6974,6 @@
         ]
     },
     "structure_0648": {
-        "id": "A0BabaCornerWall",
         "name": "A0BabaCornerWall",
         "player": "scavenger",
         "position": [
@@ -7486,7 +6988,6 @@
         ]
     },
     "structure_0649": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -7501,7 +7002,6 @@
         ]
     },
     "structure_0652": {
-        "id": "A0BaBaGunTowerEND",
         "name": "A0BaBaGunTowerEND",
         "player": "scavenger",
         "position": [
@@ -7516,7 +7016,6 @@
         ]
     },
     "structure_0653": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -7531,7 +7030,6 @@
         ]
     },
     "structure_0654": {
-        "id": "A0BaBaGunTowerEND",
         "name": "A0BaBaGunTowerEND",
         "player": "scavenger",
         "position": [
@@ -7546,7 +7044,6 @@
         ]
     },
     "structure_0655": {
-        "id": "A0BaBaGunTowerEND",
         "name": "A0BaBaGunTowerEND",
         "player": "scavenger",
         "position": [
@@ -7561,7 +7058,6 @@
         ]
     },
     "structure_0657": {
-        "id": "A0BaBaGunTowerEND",
         "name": "A0BaBaGunTowerEND",
         "player": "scavenger",
         "position": [
@@ -7576,7 +7072,6 @@
         ]
     },
     "structure_0658": {
-        "id": "A0BaBaGunTowerEND",
         "name": "A0BaBaGunTowerEND",
         "player": "scavenger",
         "position": [
@@ -7591,7 +7086,6 @@
         ]
     },
     "structure_0660": {
-        "id": "A0BaBaGunTowerEND",
         "name": "A0BaBaGunTowerEND",
         "player": "scavenger",
         "position": [
@@ -7606,7 +7100,6 @@
         ]
     },
     "structure_0662": {
-        "id": "A0BaBaGunTowerEND",
         "name": "A0BaBaGunTowerEND",
         "player": "scavenger",
         "position": [
@@ -7621,7 +7114,6 @@
         ]
     },
     "structure_0663": {
-        "id": "A0BaBaGunTowerEND",
         "name": "A0BaBaGunTowerEND",
         "player": "scavenger",
         "position": [
@@ -7636,7 +7128,6 @@
         ]
     },
     "structure_0670": {
-        "id": "A0BaBaGunTower",
         "name": "A0BaBaGunTower",
         "player": "scavenger",
         "position": [
@@ -7651,7 +7142,6 @@
         ]
     },
     "structure_0671": {
-        "id": "A0BaBaGunTower",
         "name": "A0BaBaGunTower",
         "player": "scavenger",
         "position": [
@@ -7666,7 +7156,6 @@
         ]
     },
     "structure_0672": {
-        "id": "A0BaBaGunTower",
         "name": "A0BaBaGunTower",
         "player": "scavenger",
         "position": [
@@ -7681,7 +7170,6 @@
         ]
     },
     "structure_0673": {
-        "id": "A0BaBaGunTower",
         "name": "A0BaBaGunTower",
         "player": "scavenger",
         "position": [
@@ -7696,7 +7184,6 @@
         ]
     },
     "structure_0674": {
-        "id": "A0BaBaGunTower",
         "name": "A0BaBaGunTower",
         "player": "scavenger",
         "position": [
@@ -7711,7 +7198,6 @@
         ]
     },
     "structure_0675": {
-        "id": "A0BaBaGunTower",
         "name": "A0BaBaGunTower",
         "player": "scavenger",
         "position": [
@@ -7726,7 +7212,6 @@
         ]
     },
     "structure_0676": {
-        "id": "A0BaBaGunTower",
         "name": "A0BaBaGunTower",
         "player": "scavenger",
         "position": [
@@ -7741,7 +7226,6 @@
         ]
     },
     "structure_0677": {
-        "id": "A0BaBaGunTower",
         "name": "A0BaBaGunTower",
         "player": "scavenger",
         "position": [
@@ -7756,7 +7240,6 @@
         ]
     },
     "structure_0678": {
-        "id": "A0BaBaGunTower",
         "name": "A0BaBaGunTower",
         "player": "scavenger",
         "position": [
@@ -7771,7 +7254,6 @@
         ]
     },
     "structure_0679": {
-        "id": "A0BaBaGunTower",
         "name": "A0BaBaGunTower",
         "player": "scavenger",
         "position": [
@@ -7786,7 +7268,6 @@
         ]
     },
     "structure_0680": {
-        "id": "A0BaBaGunTower",
         "name": "A0BaBaGunTower",
         "player": "scavenger",
         "position": [
@@ -7801,7 +7282,6 @@
         ]
     },
     "structure_0681": {
-        "id": "A0BaBaGunTower",
         "name": "A0BaBaGunTower",
         "player": "scavenger",
         "position": [
@@ -7816,7 +7296,6 @@
         ]
     },
     "structure_0682": {
-        "id": "A0BaBaGunTower",
         "name": "A0BaBaGunTower",
         "player": "scavenger",
         "position": [
@@ -7831,7 +7310,6 @@
         ]
     },
     "structure_0683": {
-        "id": "A0BaBaGunTower",
         "name": "A0BaBaGunTower",
         "player": "scavenger",
         "position": [
@@ -7846,7 +7324,6 @@
         ]
     },
     "structure_0704": {
-        "id": "A0BaBaFactory",
         "name": "A0BaBaFactory",
         "player": "scavenger",
         "position": [
@@ -7861,7 +7338,6 @@
         ]
     },
     "structure_0705": {
-        "id": "A0BaBaPowerGenerator",
         "name": "A0BaBaPowerGenerator",
         "player": "scavenger",
         "position": [
@@ -7876,7 +7352,6 @@
         ]
     },
     "structure_0706": {
-        "id": "A0ResourceExtractor",
         "name": "A0ResourceExtractor",
         "player": "scavenger",
         "position": [
@@ -7891,7 +7366,6 @@
         ]
     },
     "structure_0707": {
-        "id": "A0ResourceExtractor",
         "name": "A0ResourceExtractor",
         "player": "scavenger",
         "position": [
@@ -7906,7 +7380,6 @@
         ]
     },
     "structure_0708": {
-        "id": "A0ResourceExtractor",
         "name": "A0ResourceExtractor",
         "player": "scavenger",
         "position": [
@@ -7921,7 +7394,6 @@
         ]
     },
     "structure_0709": {
-        "id": "A0ResourceExtractor",
         "name": "A0ResourceExtractor",
         "player": "scavenger",
         "position": [
@@ -7936,7 +7408,6 @@
         ]
     },
     "structure_0765": {
-        "id": "A0BaBaGunTower",
         "name": "A0BaBaGunTower",
         "player": "scavenger",
         "position": [
@@ -7951,7 +7422,6 @@
         ]
     },
     "structure_0766": {
-        "id": "A0BaBaGunTower",
         "name": "A0BaBaGunTower",
         "player": "scavenger",
         "position": [
@@ -7966,7 +7436,6 @@
         ]
     },
     "structure_0767": {
-        "id": "A0BaBaGunTower",
         "name": "A0BaBaGunTower",
         "player": "scavenger",
         "position": [
@@ -7981,7 +7450,6 @@
         ]
     },
     "structure_0768": {
-        "id": "A0BaBaGunTower",
         "name": "A0BaBaGunTower",
         "player": "scavenger",
         "position": [
@@ -7996,7 +7464,6 @@
         ]
     },
     "structure_0769": {
-        "id": "A0BaBaGunTower",
         "name": "A0BaBaGunTower",
         "player": "scavenger",
         "position": [
@@ -8011,7 +7478,6 @@
         ]
     },
     "structure_0770": {
-        "id": "A0BaBaGunTower",
         "name": "A0BaBaGunTower",
         "player": "scavenger",
         "position": [
@@ -8026,7 +7492,6 @@
         ]
     },
     "structure_0771": {
-        "id": "A0BaBaGunTower",
         "name": "A0BaBaGunTower",
         "player": "scavenger",
         "position": [
@@ -8041,7 +7506,6 @@
         ]
     },
     "structure_0772": {
-        "id": "A0BaBaGunTower",
         "name": "A0BaBaGunTower",
         "player": "scavenger",
         "position": [
@@ -8056,7 +7520,6 @@
         ]
     },
     "structure_0773": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -8071,7 +7534,6 @@
         ]
     },
     "structure_0774": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -8086,7 +7548,6 @@
         ]
     },
     "structure_0775": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -8101,7 +7562,6 @@
         ]
     },
     "structure_0779": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -8116,7 +7576,6 @@
         ]
     },
     "structure_0780": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -8131,7 +7590,6 @@
         ]
     },
     "structure_0781": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -8146,7 +7604,6 @@
         ]
     },
     "structure_0783": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -8161,7 +7618,6 @@
         ]
     },
     "structure_0784": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -8176,7 +7632,6 @@
         ]
     },
     "structure_0785": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -8191,7 +7646,6 @@
         ]
     },
     "structure_0786": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -8206,7 +7660,6 @@
         ]
     },
     "structure_0787": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -8221,7 +7674,6 @@
         ]
     },
     "structure_0788": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -8236,7 +7688,6 @@
         ]
     },
     "structure_0790": {
-        "id": "A0BabaCornerWall",
         "name": "A0BabaCornerWall",
         "player": "scavenger",
         "position": [
@@ -8251,7 +7702,6 @@
         ]
     },
     "structure_0791": {
-        "id": "A0BabaCornerWall",
         "name": "A0BabaCornerWall",
         "player": "scavenger",
         "position": [
@@ -8266,7 +7716,6 @@
         ]
     },
     "structure_0792": {
-        "id": "A0BabaCornerWall",
         "name": "A0BabaCornerWall",
         "player": "scavenger",
         "position": [
@@ -8281,7 +7730,6 @@
         ]
     },
     "structure_0793": {
-        "id": "A0BabaCornerWall",
         "name": "A0BabaCornerWall",
         "player": "scavenger",
         "position": [
@@ -8296,7 +7744,6 @@
         ]
     },
     "structure_0794": {
-        "id": "A0BaBaGunTowerEND",
         "name": "A0BaBaGunTowerEND",
         "player": "scavenger",
         "position": [
@@ -8311,7 +7758,6 @@
         ]
     },
     "structure_0795": {
-        "id": "A0BaBaGunTowerEND",
         "name": "A0BaBaGunTowerEND",
         "player": "scavenger",
         "position": [
@@ -8326,7 +7772,6 @@
         ]
     },
     "structure_0796": {
-        "id": "A0BabaCornerWall",
         "name": "A0BabaCornerWall",
         "player": "scavenger",
         "position": [
@@ -8341,7 +7786,6 @@
         ]
     },
     "structure_0797": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -8356,7 +7800,6 @@
         ]
     },
     "structure_0798": {
-        "id": "A0BabaCornerWall",
         "name": "A0BabaCornerWall",
         "player": "scavenger",
         "position": [
@@ -8371,7 +7814,6 @@
         ]
     },
     "structure_0799": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -8386,7 +7828,6 @@
         ]
     },
     "structure_0800": {
-        "id": "A0BabaCornerWall",
         "name": "A0BabaCornerWall",
         "player": "scavenger",
         "position": [
@@ -8401,7 +7842,6 @@
         ]
     },
     "structure_0804": {
-        "id": "A0BaBaGunTowerEND",
         "name": "A0BaBaGunTowerEND",
         "player": "scavenger",
         "position": [
@@ -8416,7 +7856,6 @@
         ]
     },
     "structure_0805": {
-        "id": "A0BabaCornerWall",
         "name": "A0BabaCornerWall",
         "player": "scavenger",
         "position": [
@@ -8431,7 +7870,6 @@
         ]
     },
     "structure_0806": {
-        "id": "A0BaBaGunTowerEND",
         "name": "A0BaBaGunTowerEND",
         "player": "scavenger",
         "position": [
@@ -8446,7 +7884,6 @@
         ]
     },
     "structure_0808": {
-        "id": "A0BaBaGunTowerEND",
         "name": "A0BaBaGunTowerEND",
         "player": "scavenger",
         "position": [
@@ -8461,7 +7898,6 @@
         ]
     },
     "structure_0809": {
-        "id": "A0BabaCornerWall",
         "name": "A0BabaCornerWall",
         "player": "scavenger",
         "position": [
@@ -8476,7 +7912,6 @@
         ]
     },
     "structure_0810": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -8491,7 +7926,6 @@
         ]
     },
     "structure_0811": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -8506,7 +7940,6 @@
         ]
     },
     "structure_0812": {
-        "id": "A0BaBaGunTowerEND",
         "name": "A0BaBaGunTowerEND",
         "player": "scavenger",
         "position": [
@@ -8521,7 +7954,6 @@
         ]
     },
     "structure_0813": {
-        "id": "A0BaBaGunTowerEND",
         "name": "A0BaBaGunTowerEND",
         "player": "scavenger",
         "position": [
@@ -8536,7 +7968,6 @@
         ]
     },
     "structure_0814": {
-        "id": "A0BaBaGunTowerEND",
         "name": "A0BaBaGunTowerEND",
         "player": "scavenger",
         "position": [
@@ -8551,7 +7982,6 @@
         ]
     },
     "structure_0815": {
-        "id": "A0BabaCornerWall",
         "name": "A0BabaCornerWall",
         "player": "scavenger",
         "position": [
@@ -8566,7 +7996,6 @@
         ]
     },
     "structure_0816": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -8581,7 +8010,6 @@
         ]
     },
     "structure_0822": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -8596,7 +8024,6 @@
         ]
     },
     "structure_0835": {
-        "id": "A0BabaCornerWall",
         "name": "A0BabaCornerWall",
         "player": "scavenger",
         "position": [
@@ -8611,7 +8038,6 @@
         ]
     },
     "structure_0836": {
-        "id": "A0BabaCornerWall",
         "name": "A0BabaCornerWall",
         "player": "scavenger",
         "position": [
@@ -8626,7 +8052,6 @@
         ]
     },
     "structure_0837": {
-        "id": "A0BaBaGunTower",
         "name": "A0BaBaGunTower",
         "player": "scavenger",
         "position": [
@@ -8641,7 +8066,6 @@
         ]
     },
     "structure_0838": {
-        "id": "A0BaBaGunTower",
         "name": "A0BaBaGunTower",
         "player": "scavenger",
         "position": [
@@ -8656,7 +8080,6 @@
         ]
     },
     "structure_0839": {
-        "id": "A0BabaCornerWall",
         "name": "A0BabaCornerWall",
         "player": "scavenger",
         "position": [
@@ -8671,7 +8094,6 @@
         ]
     },
     "structure_0840": {
-        "id": "A0BabaCornerWall",
         "name": "A0BabaCornerWall",
         "player": "scavenger",
         "position": [
@@ -8686,7 +8108,6 @@
         ]
     },
     "structure_0841": {
-        "id": "A0BaBaGunTower",
         "name": "A0BaBaGunTower",
         "player": "scavenger",
         "position": [
@@ -8701,7 +8122,6 @@
         ]
     },
     "structure_0842": {
-        "id": "A0BaBaGunTower",
         "name": "A0BaBaGunTower",
         "player": "scavenger",
         "position": [
@@ -8716,7 +8136,6 @@
         ]
     },
     "structure_0843": {
-        "id": "A0BaBaGunTower",
         "name": "A0BaBaGunTower",
         "player": "scavenger",
         "position": [
@@ -8731,7 +8150,6 @@
         ]
     },
     "structure_0844": {
-        "id": "A0BaBaGunTower",
         "name": "A0BaBaGunTower",
         "player": "scavenger",
         "position": [
@@ -8746,7 +8164,6 @@
         ]
     },
     "structure_0845": {
-        "id": "A0BabaCornerWall",
         "name": "A0BabaCornerWall",
         "player": "scavenger",
         "position": [
@@ -8761,7 +8178,6 @@
         ]
     },
     "structure_0846": {
-        "id": "A0BabaCornerWall",
         "name": "A0BabaCornerWall",
         "player": "scavenger",
         "position": [
@@ -8776,7 +8192,6 @@
         ]
     },
     "structure_0847": {
-        "id": "A0BabaCornerWall",
         "name": "A0BabaCornerWall",
         "player": "scavenger",
         "position": [
@@ -8791,7 +8206,6 @@
         ]
     },
     "structure_0848": {
-        "id": "A0BabaCornerWall",
         "name": "A0BabaCornerWall",
         "player": "scavenger",
         "position": [
@@ -8806,7 +8220,6 @@
         ]
     },
     "structure_0849": {
-        "id": "A0BaBaGunTower",
         "name": "A0BaBaGunTower",
         "player": "scavenger",
         "position": [
@@ -8821,7 +8234,6 @@
         ]
     },
     "structure_0850": {
-        "id": "A0BaBaGunTower",
         "name": "A0BaBaGunTower",
         "player": "scavenger",
         "position": [
@@ -8836,7 +8248,6 @@
         ]
     },
     "structure_0931": {
-        "id": "A0BaBaFactory",
         "name": "A0BaBaFactory",
         "player": "scavenger",
         "position": [
@@ -8851,7 +8262,6 @@
         ]
     },
     "structure_0932": {
-        "id": "A0BaBaPowerGenerator",
         "name": "A0BaBaPowerGenerator",
         "player": "scavenger",
         "position": [
@@ -8866,7 +8276,6 @@
         ]
     },
     "structure_0935": {
-        "id": "A0BaBaGunTower",
         "name": "A0BaBaGunTower",
         "player": "scavenger",
         "position": [
@@ -8881,7 +8290,6 @@
         ]
     },
     "structure_0936": {
-        "id": "A0BaBaGunTower",
         "name": "A0BaBaGunTower",
         "player": "scavenger",
         "position": [
@@ -8896,7 +8304,6 @@
         ]
     },
     "structure_0939": {
-        "id": "A0BaBaGunTower",
         "name": "A0BaBaGunTower",
         "player": "scavenger",
         "position": [
@@ -8911,7 +8318,6 @@
         ]
     },
     "structure_0940": {
-        "id": "A0BaBaGunTower",
         "name": "A0BaBaGunTower",
         "player": "scavenger",
         "position": [
@@ -8926,7 +8332,6 @@
         ]
     },
     "structure_0941": {
-        "id": "A0BaBaFlameTower",
         "name": "A0BaBaFlameTower",
         "player": "scavenger",
         "position": [
@@ -8941,7 +8346,6 @@
         ]
     },
     "structure_0942": {
-        "id": "A0BaBaFlameTower",
         "name": "A0BaBaFlameTower",
         "player": "scavenger",
         "position": [
@@ -8956,7 +8360,6 @@
         ]
     },
     "structure_0943": {
-        "id": "A0BaBaFlameTower",
         "name": "A0BaBaFlameTower",
         "player": "scavenger",
         "position": [
@@ -8971,7 +8374,6 @@
         ]
     },
     "structure_0944": {
-        "id": "A0BaBaFlameTower",
         "name": "A0BaBaFlameTower",
         "player": "scavenger",
         "position": [
@@ -8986,7 +8388,6 @@
         ]
     },
     "structure_0945": {
-        "id": "A0BaBaFlameTower",
         "name": "A0BaBaFlameTower",
         "player": "scavenger",
         "position": [
@@ -9001,7 +8402,6 @@
         ]
     },
     "structure_0947": {
-        "id": "A0BaBaFlameTower",
         "name": "A0BaBaFlameTower",
         "player": "scavenger",
         "position": [
@@ -9016,7 +8416,6 @@
         ]
     },
     "structure_0948": {
-        "id": "A0BaBaFlameTower",
         "name": "A0BaBaFlameTower",
         "player": "scavenger",
         "position": [
@@ -9031,7 +8430,6 @@
         ]
     },
     "structure_0949": {
-        "id": "A0BaBaFlameTower",
         "name": "A0BaBaFlameTower",
         "player": "scavenger",
         "position": [
@@ -9046,7 +8444,6 @@
         ]
     },
     "structure_0950": {
-        "id": "A0BaBaFlameTower",
         "name": "A0BaBaFlameTower",
         "player": "scavenger",
         "position": [
@@ -9061,7 +8458,6 @@
         ]
     },
     "structure_0956": {
-        "id": "A0BaBaGunTower",
         "name": "A0BaBaGunTower",
         "player": "scavenger",
         "position": [
@@ -9076,7 +8472,6 @@
         ]
     },
     "structure_0957": {
-        "id": "A0BaBaGunTower",
         "name": "A0BaBaGunTower",
         "player": "scavenger",
         "position": [
@@ -9091,7 +8486,6 @@
         ]
     },
     "structure_0958": {
-        "id": "A0BaBaGunTower",
         "name": "A0BaBaGunTower",
         "player": "scavenger",
         "position": [
@@ -9106,7 +8500,6 @@
         ]
     },
     "structure_0959": {
-        "id": "A0BaBaGunTower",
         "name": "A0BaBaGunTower",
         "player": "scavenger",
         "position": [
@@ -9121,7 +8514,6 @@
         ]
     },
     "structure_1088": {
-        "id": "A0BaBaGunTowerEND",
         "name": "A0BaBaGunTowerEND",
         "player": "scavenger",
         "position": [
@@ -9136,7 +8528,6 @@
         ]
     },
     "structure_1089": {
-        "id": "A0BaBaGunTowerEND",
         "name": "A0BaBaGunTowerEND",
         "player": "scavenger",
         "position": [
@@ -9151,7 +8542,6 @@
         ]
     },
     "structure_1090": {
-        "id": "A0BaBaGunTowerEND",
         "name": "A0BaBaGunTowerEND",
         "player": "scavenger",
         "position": [
@@ -9166,7 +8556,6 @@
         ]
     },
     "structure_1091": {
-        "id": "A0BaBaGunTowerEND",
         "name": "A0BaBaGunTowerEND",
         "player": "scavenger",
         "position": [
@@ -9181,7 +8570,6 @@
         ]
     },
     "structure_1092": {
-        "id": "A0BaBaGunTower",
         "name": "A0BaBaGunTower",
         "player": "scavenger",
         "position": [
@@ -9196,7 +8584,6 @@
         ]
     },
     "structure_1093": {
-        "id": "A0BaBaGunTower",
         "name": "A0BaBaGunTower",
         "player": "scavenger",
         "position": [
@@ -9211,7 +8598,6 @@
         ]
     },
     "structure_1095": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -9226,7 +8612,6 @@
         ]
     },
     "structure_1096": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -9241,7 +8626,6 @@
         ]
     },
     "structure_1097": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -9256,7 +8640,6 @@
         ]
     },
     "structure_1098": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -9271,7 +8654,6 @@
         ]
     },
     "structure_1099": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -9286,7 +8668,6 @@
         ]
     },
     "structure_1100": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -9301,7 +8682,6 @@
         ]
     },
     "structure_1101": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -9316,7 +8696,6 @@
         ]
     },
     "structure_1102": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -9331,7 +8710,6 @@
         ]
     },
     "structure_1103": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -9346,7 +8724,6 @@
         ]
     },
     "structure_1104": {
-        "id": "A0BaBaGunTowerEND",
         "name": "A0BaBaGunTowerEND",
         "player": "scavenger",
         "position": [
@@ -9361,7 +8738,6 @@
         ]
     },
     "structure_1105": {
-        "id": "A0BaBaGunTowerEND",
         "name": "A0BaBaGunTowerEND",
         "player": "scavenger",
         "position": [
@@ -9376,7 +8752,6 @@
         ]
     },
     "structure_1106": {
-        "id": "A0BaBaGunTower",
         "name": "A0BaBaGunTower",
         "player": "scavenger",
         "position": [
@@ -9391,7 +8766,6 @@
         ]
     },
     "structure_1107": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -9406,7 +8780,6 @@
         ]
     },
     "structure_1108": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -9421,7 +8794,6 @@
         ]
     },
     "structure_1109": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -9436,7 +8808,6 @@
         ]
     },
     "structure_1110": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -9451,7 +8822,6 @@
         ]
     },
     "structure_1111": {
-        "id": "A0BaBaGunTowerEND",
         "name": "A0BaBaGunTowerEND",
         "player": "scavenger",
         "position": [
@@ -9466,7 +8836,6 @@
         ]
     },
     "structure_1112": {
-        "id": "A0BaBaGunTowerEND",
         "name": "A0BaBaGunTowerEND",
         "player": "scavenger",
         "position": [
@@ -9481,7 +8850,6 @@
         ]
     },
     "structure_1113": {
-        "id": "A0BaBaGunTower",
         "name": "A0BaBaGunTower",
         "player": "scavenger",
         "position": [
@@ -9496,7 +8864,6 @@
         ]
     },
     "structure_1114": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -9511,7 +8878,6 @@
         ]
     },
     "structure_1115": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -9526,7 +8892,6 @@
         ]
     },
     "structure_1116": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -9541,7 +8906,6 @@
         ]
     },
     "structure_1117": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -9556,7 +8920,6 @@
         ]
     },
     "structure_4275817112": {
-        "id": "A0CommandCentre",
         "name": "A0CommandCentre",
         "position": [
             768,

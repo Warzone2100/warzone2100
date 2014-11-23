@@ -1,6 +1,5 @@
 {
     "structure_0042": {
-        "id": "A0BaBaGunTowerEND",
         "name": "A0BaBaGunTowerEND",
         "player": "scavenger",
         "position": [
@@ -15,7 +14,6 @@
         ]
     },
     "structure_0043": {
-        "id": "A0BaBaGunTowerEND",
         "name": "A0BaBaGunTowerEND",
         "player": "scavenger",
         "position": [
@@ -30,7 +28,6 @@
         ]
     },
     "structure_0044": {
-        "id": "A0BaBaFlameTower",
         "name": "A0BaBaFlameTower",
         "player": "scavenger",
         "position": [
@@ -45,7 +42,6 @@
         ]
     },
     "structure_0045": {
-        "id": "A0BaBaGunTowerEND",
         "name": "A0BaBaGunTowerEND",
         "player": "scavenger",
         "position": [
@@ -60,7 +56,6 @@
         ]
     },
     "structure_0046": {
-        "id": "A0BaBaGunTowerEND",
         "name": "A0BaBaGunTowerEND",
         "player": "scavenger",
         "position": [
@@ -75,7 +70,6 @@
         ]
     },
     "structure_0047": {
-        "id": "A0BaBaGunTower",
         "name": "A0BaBaGunTower",
         "player": "scavenger",
         "position": [
@@ -90,7 +84,6 @@
         ]
     },
     "structure_0048": {
-        "id": "A0BaBaGunTower",
         "name": "A0BaBaGunTower",
         "player": "scavenger",
         "position": [
@@ -105,7 +98,6 @@
         ]
     },
     "structure_0049": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -120,7 +112,6 @@
         ]
     },
     "structure_0050": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -135,7 +126,6 @@
         ]
     },
     "structure_0051": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -150,7 +140,6 @@
         ]
     },
     "structure_0052": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -165,7 +154,6 @@
         ]
     },
     "structure_0053": {
-        "id": "A0CannonTower",
         "name": "A0CannonTower",
         "player": "scavenger",
         "position": [
@@ -180,7 +168,6 @@
         ]
     },
     "structure_0054": {
-        "id": "A0BaBaPowerGenerator",
         "name": "A0BaBaPowerGenerator",
         "player": "scavenger",
         "position": [
@@ -195,7 +182,6 @@
         ]
     },
     "structure_0056": {
-        "id": "A0BaBaGunTower",
         "name": "A0BaBaGunTower",
         "player": "scavenger",
         "position": [
@@ -210,7 +196,6 @@
         ]
     },
     "structure_0057": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -225,7 +210,6 @@
         ]
     },
     "structure_0058": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -240,7 +224,6 @@
         ]
     },
     "structure_0059": {
-        "id": "A0BaBaGunTower",
         "name": "A0BaBaGunTower",
         "player": "scavenger",
         "position": [
@@ -255,7 +238,6 @@
         ]
     },
     "structure_0060": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -270,7 +252,6 @@
         ]
     },
     "structure_0061": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -285,7 +266,6 @@
         ]
     },
     "structure_0062": {
-        "id": "A0ResourceExtractor",
         "name": "A0ResourceExtractor",
         "player": "scavenger",
         "position": [
@@ -300,7 +280,6 @@
         ]
     },
     "structure_0753": {
-        "id": "A0BaBaRocketPit",
         "name": "A0BaBaRocketPit",
         "player": "scavenger",
         "position": [
@@ -315,7 +294,6 @@
         ]
     },
     "structure_0754": {
-        "id": "A0CannonTower",
         "name": "A0CannonTower",
         "player": "scavenger",
         "position": [
@@ -330,7 +308,6 @@
         ]
     },
     "structure_0755": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -345,7 +322,6 @@
         ]
     },
     "structure_0756": {
-        "id": "A0CannonTower",
         "name": "A0CannonTower",
         "player": "scavenger",
         "position": [
@@ -360,7 +336,6 @@
         ]
     },
     "structure_0757": {
-        "id": "A0BaBaGunTowerEND",
         "name": "A0BaBaGunTowerEND",
         "player": "scavenger",
         "position": [
@@ -375,7 +350,6 @@
         ]
     },
     "structure_0758": {
-        "id": "A0BaBaRocketPit",
         "name": "A0BaBaRocketPit",
         "player": "scavenger",
         "position": [
@@ -390,7 +364,6 @@
         ]
     },
     "structure_0759": {
-        "id": "A0BaBaRocketPit",
         "name": "A0BaBaRocketPit",
         "player": "scavenger",
         "position": [
@@ -405,7 +378,6 @@
         ]
     },
     "structure_0760": {
-        "id": "A0BaBaRocketPit",
         "name": "A0BaBaRocketPit",
         "player": "scavenger",
         "position": [
@@ -420,7 +392,6 @@
         ]
     },
     "structure_0761": {
-        "id": "A0BaBaBunker",
         "name": "A0BaBaBunker",
         "player": "scavenger",
         "position": [
@@ -435,7 +406,6 @@
         ]
     },
     "structure_0762": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -450,7 +420,6 @@
         ]
     },
     "structure_0763": {
-        "id": "A0BaBaRocketPit",
         "name": "A0BaBaRocketPit",
         "player": "scavenger",
         "position": [
@@ -465,7 +434,6 @@
         ]
     },
     "structure_0764": {
-        "id": "A0CannonTower",
         "name": "A0CannonTower",
         "player": "scavenger",
         "position": [
@@ -480,7 +448,6 @@
         ]
     },
     "structure_0765": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -495,7 +462,6 @@
         ]
     },
     "structure_0766": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -510,7 +476,6 @@
         ]
     },
     "structure_0767": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -525,7 +490,6 @@
         ]
     },
     "structure_0768": {
-        "id": "A0BaBaGunTowerEND",
         "name": "A0BaBaGunTowerEND",
         "player": "scavenger",
         "position": [
@@ -540,7 +504,6 @@
         ]
     },
     "structure_0769": {
-        "id": "A0CannonTower",
         "name": "A0CannonTower",
         "player": "scavenger",
         "position": [
@@ -555,7 +518,6 @@
         ]
     },
     "structure_0770": {
-        "id": "A0CannonTower",
         "name": "A0CannonTower",
         "player": "scavenger",
         "position": [
@@ -570,7 +532,6 @@
         ]
     },
     "structure_0771": {
-        "id": "A0CannonTower",
         "name": "A0CannonTower",
         "player": "scavenger",
         "position": [
@@ -585,7 +546,6 @@
         ]
     },
     "structure_0772": {
-        "id": "A0CannonTower",
         "name": "A0CannonTower",
         "player": "scavenger",
         "position": [
@@ -600,7 +560,6 @@
         ]
     },
     "structure_0773": {
-        "id": "A0CannonTower",
         "name": "A0CannonTower",
         "player": "scavenger",
         "position": [
@@ -615,7 +574,6 @@
         ]
     },
     "structure_0774": {
-        "id": "A0BaBaFlameTower",
         "name": "A0BaBaFlameTower",
         "player": "scavenger",
         "position": [
@@ -630,7 +588,6 @@
         ]
     },
     "structure_0775": {
-        "id": "A0BaBaFlameTower",
         "name": "A0BaBaFlameTower",
         "player": "scavenger",
         "position": [
@@ -645,7 +602,6 @@
         ]
     },
     "structure_0776": {
-        "id": "A0BaBaFlameTower",
         "name": "A0BaBaFlameTower",
         "player": "scavenger",
         "position": [
@@ -660,7 +616,6 @@
         ]
     },
     "structure_0777": {
-        "id": "A0BaBaFlameTower",
         "name": "A0BaBaFlameTower",
         "player": "scavenger",
         "position": [
@@ -675,7 +630,6 @@
         ]
     },
     "structure_0778": {
-        "id": "A0BaBaFlameTower",
         "name": "A0BaBaFlameTower",
         "player": "scavenger",
         "position": [
@@ -690,7 +644,6 @@
         ]
     },
     "structure_0779": {
-        "id": "A0BaBaFlameTower",
         "name": "A0BaBaFlameTower",
         "player": "scavenger",
         "position": [
@@ -705,7 +658,6 @@
         ]
     },
     "structure_0780": {
-        "id": "A0BaBaBunker",
         "name": "A0BaBaBunker",
         "player": "scavenger",
         "position": [
@@ -720,7 +672,6 @@
         ]
     },
     "structure_0781": {
-        "id": "A0BaBaBunker",
         "name": "A0BaBaBunker",
         "player": "scavenger",
         "position": [
@@ -735,7 +686,6 @@
         ]
     },
     "structure_0782": {
-        "id": "A0BaBaBunker",
         "name": "A0BaBaBunker",
         "player": "scavenger",
         "position": [
@@ -750,7 +700,6 @@
         ]
     },
     "structure_0783": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -765,7 +714,6 @@
         ]
     },
     "structure_0784": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -780,7 +728,6 @@
         ]
     },
     "structure_0785": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -795,7 +742,6 @@
         ]
     },
     "structure_0786": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -810,7 +756,6 @@
         ]
     },
     "structure_0787": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -825,7 +770,6 @@
         ]
     },
     "structure_0788": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -840,7 +784,6 @@
         ]
     },
     "structure_0789": {
-        "id": "A0BaBaBunker",
         "name": "A0BaBaBunker",
         "player": "scavenger",
         "position": [
@@ -855,7 +798,6 @@
         ]
     },
     "structure_0790": {
-        "id": "A0BaBaGunTowerEND",
         "name": "A0BaBaGunTowerEND",
         "player": "scavenger",
         "position": [
@@ -870,7 +812,6 @@
         ]
     },
     "structure_0791": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -885,7 +826,6 @@
         ]
     },
     "structure_0792": {
-        "id": "A0ResourceExtractor",
         "name": "A0ResourceExtractor",
         "player": "scavenger",
         "position": [
@@ -900,7 +840,6 @@
         ]
     },
     "structure_0793": {
-        "id": "A0BaBaFactory",
         "name": "A0BaBaFactory",
         "player": "scavenger",
         "position": [
@@ -915,7 +854,6 @@
         ]
     },
     "structure_0796": {
-        "id": "A0BaBaGunTowerEND",
         "name": "A0BaBaGunTowerEND",
         "player": "scavenger",
         "position": [
@@ -930,7 +868,6 @@
         ]
     },
     "structure_0799": {
-        "id": "A0BaBaGunTowerEND",
         "name": "A0BaBaGunTowerEND",
         "player": "scavenger",
         "position": [
@@ -945,7 +882,6 @@
         ]
     },
     "structure_0804": {
-        "id": "A0BaBaGunTowerEND",
         "name": "A0BaBaGunTowerEND",
         "player": "scavenger",
         "position": [
@@ -960,7 +896,6 @@
         ]
     },
     "structure_0805": {
-        "id": "A0BaBaGunTowerEND",
         "name": "A0BaBaGunTowerEND",
         "player": "scavenger",
         "position": [
@@ -975,7 +910,6 @@
         ]
     },
     "structure_0806": {
-        "id": "A0BaBaGunTowerEND",
         "name": "A0BaBaGunTowerEND",
         "player": "scavenger",
         "position": [
@@ -990,7 +924,6 @@
         ]
     },
     "structure_0807": {
-        "id": "A0BaBaGunTower",
         "name": "A0BaBaGunTower",
         "player": "scavenger",
         "position": [
@@ -1005,7 +938,6 @@
         ]
     },
     "structure_0808": {
-        "id": "A0BaBaGunTowerEND",
         "name": "A0BaBaGunTowerEND",
         "player": "scavenger",
         "position": [
@@ -1020,7 +952,6 @@
         ]
     },
     "structure_0809": {
-        "id": "A0BaBaGunTower",
         "name": "A0BaBaGunTower",
         "player": "scavenger",
         "position": [
@@ -1035,7 +966,6 @@
         ]
     },
     "structure_0810": {
-        "id": "A0BaBaGunTower",
         "name": "A0BaBaGunTower",
         "player": "scavenger",
         "position": [
@@ -1050,7 +980,6 @@
         ]
     },
     "structure_0811": {
-        "id": "A0BaBaGunTower",
         "name": "A0BaBaGunTower",
         "player": "scavenger",
         "position": [
@@ -1065,7 +994,6 @@
         ]
     },
     "structure_0812": {
-        "id": "A0BaBaGunTowerEND",
         "name": "A0BaBaGunTowerEND",
         "player": "scavenger",
         "position": [
@@ -1080,7 +1008,6 @@
         ]
     },
     "structure_0813": {
-        "id": "A0BaBaGunTowerEND",
         "name": "A0BaBaGunTowerEND",
         "player": "scavenger",
         "position": [
@@ -1095,7 +1022,6 @@
         ]
     },
     "structure_0814": {
-        "id": "A0BaBaGunTowerEND",
         "name": "A0BaBaGunTowerEND",
         "player": "scavenger",
         "position": [
@@ -1110,7 +1036,6 @@
         ]
     },
     "structure_1015": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -1125,7 +1050,6 @@
         ]
     },
     "structure_1016": {
-        "id": "A0BaBaGunTower",
         "name": "A0BaBaGunTower",
         "player": "scavenger",
         "position": [
@@ -1140,7 +1064,6 @@
         ]
     },
     "structure_1017": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -1155,7 +1078,6 @@
         ]
     },
     "structure_1018": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -1170,7 +1092,6 @@
         ]
     },
     "structure_1019": {
-        "id": "A0BaBaGunTowerEND",
         "name": "A0BaBaGunTowerEND",
         "player": "scavenger",
         "position": [
@@ -1185,7 +1106,6 @@
         ]
     },
     "structure_1020": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -1200,7 +1120,6 @@
         ]
     },
     "structure_1021": {
-        "id": "A0ResourceExtractor",
         "name": "A0ResourceExtractor",
         "player": "scavenger",
         "position": [
@@ -1215,7 +1134,6 @@
         ]
     },
     "structure_1023": {
-        "id": "A0BaBaGunTower",
         "name": "A0BaBaGunTower",
         "player": "scavenger",
         "position": [
@@ -1230,7 +1148,6 @@
         ]
     },
     "structure_1024": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -1245,7 +1162,6 @@
         ]
     },
     "structure_1026": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -1260,7 +1176,6 @@
         ]
     },
     "structure_1027": {
-        "id": "A0BaBaGunTower",
         "name": "A0BaBaGunTower",
         "player": "scavenger",
         "position": [
@@ -1275,7 +1190,6 @@
         ]
     },
     "structure_1028": {
-        "id": "A0BaBaGunTowerEND",
         "name": "A0BaBaGunTowerEND",
         "player": "scavenger",
         "position": [
@@ -1290,7 +1204,6 @@
         ]
     },
     "structure_1029": {
-        "id": "A0BaBaGunTower",
         "name": "A0BaBaGunTower",
         "player": "scavenger",
         "position": [
@@ -1305,7 +1218,6 @@
         ]
     },
     "structure_1030": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -1320,7 +1232,6 @@
         ]
     },
     "structure_1031": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -1335,7 +1246,6 @@
         ]
     },
     "structure_1033": {
-        "id": "A0BaBaPowerGenerator",
         "name": "A0BaBaPowerGenerator",
         "player": "scavenger",
         "position": [
@@ -1350,7 +1260,6 @@
         ]
     },
     "structure_1034": {
-        "id": "A0CannonTower",
         "name": "A0CannonTower",
         "player": "scavenger",
         "position": [
@@ -1365,7 +1274,6 @@
         ]
     },
     "structure_1035": {
-        "id": "A0BaBaGunTowerEND",
         "name": "A0BaBaGunTowerEND",
         "player": "scavenger",
         "position": [
@@ -1380,7 +1288,6 @@
         ]
     },
     "structure_1036": {
-        "id": "A0BaBaGunTowerEND",
         "name": "A0BaBaGunTowerEND",
         "player": "scavenger",
         "position": [
@@ -1395,7 +1302,6 @@
         ]
     },
     "structure_1037": {
-        "id": "A0BaBaFlameTower",
         "name": "A0BaBaFlameTower",
         "player": "scavenger",
         "position": [
@@ -1410,7 +1316,6 @@
         ]
     },
     "structure_1141": {
-        "id": "A0BaBaRocketPit",
         "name": "A0BaBaRocketPit",
         "player": "scavenger",
         "position": [
@@ -1425,7 +1330,6 @@
         ]
     },
     "structure_1142": {
-        "id": "A0CannonTower",
         "name": "A0CannonTower",
         "player": "scavenger",
         "position": [
@@ -1440,7 +1344,6 @@
         ]
     },
     "structure_1143": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -1455,7 +1358,6 @@
         ]
     },
     "structure_1144": {
-        "id": "A0CannonTower",
         "name": "A0CannonTower",
         "player": "scavenger",
         "position": [
@@ -1470,7 +1372,6 @@
         ]
     },
     "structure_1145": {
-        "id": "A0BaBaGunTowerEND",
         "name": "A0BaBaGunTowerEND",
         "player": "scavenger",
         "position": [
@@ -1485,7 +1386,6 @@
         ]
     },
     "structure_1146": {
-        "id": "A0BaBaRocketPit",
         "name": "A0BaBaRocketPit",
         "player": "scavenger",
         "position": [
@@ -1500,7 +1400,6 @@
         ]
     },
     "structure_1147": {
-        "id": "A0BaBaRocketPit",
         "name": "A0BaBaRocketPit",
         "player": "scavenger",
         "position": [
@@ -1515,7 +1414,6 @@
         ]
     },
     "structure_1148": {
-        "id": "A0BaBaRocketPit",
         "name": "A0BaBaRocketPit",
         "player": "scavenger",
         "position": [
@@ -1530,7 +1428,6 @@
         ]
     },
     "structure_1149": {
-        "id": "A0BaBaBunker",
         "name": "A0BaBaBunker",
         "player": "scavenger",
         "position": [
@@ -1545,7 +1442,6 @@
         ]
     },
     "structure_1150": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -1560,7 +1456,6 @@
         ]
     },
     "structure_1151": {
-        "id": "A0BaBaRocketPit",
         "name": "A0BaBaRocketPit",
         "player": "scavenger",
         "position": [
@@ -1575,7 +1470,6 @@
         ]
     },
     "structure_1152": {
-        "id": "A0CannonTower",
         "name": "A0CannonTower",
         "player": "scavenger",
         "position": [
@@ -1590,7 +1484,6 @@
         ]
     },
     "structure_1153": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -1605,7 +1498,6 @@
         ]
     },
     "structure_1154": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -1620,7 +1512,6 @@
         ]
     },
     "structure_1155": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -1635,7 +1526,6 @@
         ]
     },
     "structure_1156": {
-        "id": "A0BaBaGunTowerEND",
         "name": "A0BaBaGunTowerEND",
         "player": "scavenger",
         "position": [
@@ -1650,7 +1540,6 @@
         ]
     },
     "structure_1157": {
-        "id": "A0CannonTower",
         "name": "A0CannonTower",
         "player": "scavenger",
         "position": [
@@ -1665,7 +1554,6 @@
         ]
     },
     "structure_1158": {
-        "id": "A0CannonTower",
         "name": "A0CannonTower",
         "player": "scavenger",
         "position": [
@@ -1680,7 +1568,6 @@
         ]
     },
     "structure_1159": {
-        "id": "A0CannonTower",
         "name": "A0CannonTower",
         "player": "scavenger",
         "position": [
@@ -1695,7 +1582,6 @@
         ]
     },
     "structure_1160": {
-        "id": "A0CannonTower",
         "name": "A0CannonTower",
         "player": "scavenger",
         "position": [
@@ -1710,7 +1596,6 @@
         ]
     },
     "structure_1161": {
-        "id": "A0CannonTower",
         "name": "A0CannonTower",
         "player": "scavenger",
         "position": [
@@ -1725,7 +1610,6 @@
         ]
     },
     "structure_1162": {
-        "id": "A0BaBaFlameTower",
         "name": "A0BaBaFlameTower",
         "player": "scavenger",
         "position": [
@@ -1740,7 +1624,6 @@
         ]
     },
     "structure_1163": {
-        "id": "A0BaBaFlameTower",
         "name": "A0BaBaFlameTower",
         "player": "scavenger",
         "position": [
@@ -1755,7 +1638,6 @@
         ]
     },
     "structure_1164": {
-        "id": "A0BaBaFlameTower",
         "name": "A0BaBaFlameTower",
         "player": "scavenger",
         "position": [
@@ -1770,7 +1652,6 @@
         ]
     },
     "structure_1165": {
-        "id": "A0BaBaFlameTower",
         "name": "A0BaBaFlameTower",
         "player": "scavenger",
         "position": [
@@ -1785,7 +1666,6 @@
         ]
     },
     "structure_1166": {
-        "id": "A0BaBaFlameTower",
         "name": "A0BaBaFlameTower",
         "player": "scavenger",
         "position": [
@@ -1800,7 +1680,6 @@
         ]
     },
     "structure_1167": {
-        "id": "A0BaBaFlameTower",
         "name": "A0BaBaFlameTower",
         "player": "scavenger",
         "position": [
@@ -1815,7 +1694,6 @@
         ]
     },
     "structure_1168": {
-        "id": "A0BaBaBunker",
         "name": "A0BaBaBunker",
         "player": "scavenger",
         "position": [
@@ -1830,7 +1708,6 @@
         ]
     },
     "structure_1169": {
-        "id": "A0BaBaBunker",
         "name": "A0BaBaBunker",
         "player": "scavenger",
         "position": [
@@ -1845,7 +1722,6 @@
         ]
     },
     "structure_1170": {
-        "id": "A0BaBaBunker",
         "name": "A0BaBaBunker",
         "player": "scavenger",
         "position": [
@@ -1860,7 +1736,6 @@
         ]
     },
     "structure_1171": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -1875,7 +1750,6 @@
         ]
     },
     "structure_1172": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -1890,7 +1764,6 @@
         ]
     },
     "structure_1173": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -1905,7 +1778,6 @@
         ]
     },
     "structure_1174": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -1920,7 +1792,6 @@
         ]
     },
     "structure_1175": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -1935,7 +1806,6 @@
         ]
     },
     "structure_1176": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -1950,7 +1820,6 @@
         ]
     },
     "structure_1177": {
-        "id": "A0BaBaBunker",
         "name": "A0BaBaBunker",
         "player": "scavenger",
         "position": [
@@ -1965,7 +1834,6 @@
         ]
     },
     "structure_1178": {
-        "id": "A0BaBaGunTowerEND",
         "name": "A0BaBaGunTowerEND",
         "player": "scavenger",
         "position": [
@@ -1980,7 +1848,6 @@
         ]
     },
     "structure_1179": {
-        "id": "A0BaBaHorizontalWall",
         "name": "A0BaBaHorizontalWall",
         "player": "scavenger",
         "position": [
@@ -1995,7 +1862,6 @@
         ]
     },
     "structure_1180": {
-        "id": "A0ResourceExtractor",
         "name": "A0ResourceExtractor",
         "player": "scavenger",
         "position": [
@@ -2010,7 +1876,6 @@
         ]
     },
     "structure_1181": {
-        "id": "A0BaBaFactory",
         "name": "A0BaBaFactory",
         "player": "scavenger",
         "position": [
@@ -2025,7 +1890,6 @@
         ]
     },
     "structure_1184": {
-        "id": "A0BaBaGunTowerEND",
         "name": "A0BaBaGunTowerEND",
         "player": "scavenger",
         "position": [
@@ -2040,7 +1904,6 @@
         ]
     },
     "structure_1187": {
-        "id": "A0BaBaGunTowerEND",
         "name": "A0BaBaGunTowerEND",
         "player": "scavenger",
         "position": [
@@ -2055,7 +1918,6 @@
         ]
     },
     "structure_1192": {
-        "id": "A0BaBaGunTowerEND",
         "name": "A0BaBaGunTowerEND",
         "player": "scavenger",
         "position": [
@@ -2070,7 +1932,6 @@
         ]
     },
     "structure_1193": {
-        "id": "A0BaBaGunTowerEND",
         "name": "A0BaBaGunTowerEND",
         "player": "scavenger",
         "position": [
@@ -2085,7 +1946,6 @@
         ]
     },
     "structure_1194": {
-        "id": "A0BaBaGunTowerEND",
         "name": "A0BaBaGunTowerEND",
         "player": "scavenger",
         "position": [
@@ -2100,7 +1960,6 @@
         ]
     },
     "structure_1195": {
-        "id": "A0BaBaGunTower",
         "name": "A0BaBaGunTower",
         "player": "scavenger",
         "position": [
@@ -2115,7 +1974,6 @@
         ]
     },
     "structure_1196": {
-        "id": "A0BaBaGunTowerEND",
         "name": "A0BaBaGunTowerEND",
         "player": "scavenger",
         "position": [
@@ -2130,7 +1988,6 @@
         ]
     },
     "structure_1197": {
-        "id": "A0BaBaGunTower",
         "name": "A0BaBaGunTower",
         "player": "scavenger",
         "position": [
@@ -2145,7 +2002,6 @@
         ]
     },
     "structure_1198": {
-        "id": "A0BaBaGunTower",
         "name": "A0BaBaGunTower",
         "player": "scavenger",
         "position": [
@@ -2160,7 +2016,6 @@
         ]
     },
     "structure_1199": {
-        "id": "A0BaBaGunTower",
         "name": "A0BaBaGunTower",
         "player": "scavenger",
         "position": [
@@ -2175,7 +2030,6 @@
         ]
     },
     "structure_1200": {
-        "id": "A0BaBaGunTowerEND",
         "name": "A0BaBaGunTowerEND",
         "player": "scavenger",
         "position": [
@@ -2190,7 +2044,6 @@
         ]
     },
     "structure_1201": {
-        "id": "A0BaBaGunTowerEND",
         "name": "A0BaBaGunTowerEND",
         "player": "scavenger",
         "position": [
@@ -2205,7 +2058,6 @@
         ]
     },
     "structure_1202": {
-        "id": "A0BaBaGunTowerEND",
         "name": "A0BaBaGunTowerEND",
         "player": "scavenger",
         "position": [
@@ -2220,7 +2072,6 @@
         ]
     },
     "structure_1385": {
-        "id": "A0CommandCentre",
         "name": "A0CommandCentre",
         "position": [
             4096,
@@ -2235,7 +2086,6 @@
         "startpos": 0
     },
     "structure_1386": {
-        "id": "A0CommandCentre",
         "name": "A0CommandCentre",
         "position": [
             8064,
@@ -2250,7 +2100,6 @@
         "startpos": 1
     },
     "structure_1387": {
-        "id": "A0LightFactory",
         "modules": 2,
         "name": "A0LightFactory",
         "position": [
@@ -2266,7 +2115,6 @@
         "startpos": 1
     },
     "structure_1388": {
-        "id": "A0LightFactory",
         "modules": 2,
         "name": "A0LightFactory",
         "position": [
@@ -2282,7 +2130,6 @@
         "startpos": 0
     },
     "structure_1389": {
-        "id": "A0PowerGenerator",
         "modules": 1,
         "name": "A0PowerGenerator",
         "position": [
@@ -2298,7 +2145,6 @@
         "startpos": 0
     },
     "structure_1390": {
-        "id": "A0PowerGenerator",
         "modules": 1,
         "name": "A0PowerGenerator",
         "position": [
@@ -2314,7 +2160,6 @@
         "startpos": 1
     },
     "structure_1391": {
-        "id": "A0ResearchFacility",
         "modules": 1,
         "name": "A0ResearchFacility",
         "position": [
@@ -2330,7 +2175,6 @@
         "startpos": 1
     },
     "structure_1392": {
-        "id": "A0ResearchFacility",
         "modules": 1,
         "name": "A0ResearchFacility",
         "position": [
@@ -2346,7 +2190,6 @@
         "startpos": 0
     },
     "structure_1393": {
-        "id": "A0ResearchFacility",
         "modules": 1,
         "name": "A0ResearchFacility",
         "position": [
@@ -2362,7 +2205,6 @@
         "startpos": 0
     },
     "structure_1394": {
-        "id": "A0ResearchFacility",
         "modules": 1,
         "name": "A0ResearchFacility",
         "position": [
@@ -2378,7 +2220,6 @@
         "startpos": 1
     },
     "structure_1396": {
-        "id": "A0CyborgFactory",
         "name": "A0CyborgFactory",
         "position": [
             4416,
@@ -2393,7 +2234,6 @@
         "startpos": 0
     },
     "structure_1397": {
-        "id": "A0CyborgFactory",
         "name": "A0CyborgFactory",
         "position": [
             7744,
@@ -2408,7 +2248,6 @@
         "startpos": 1
     },
     "structure_1399": {
-        "id": "A0LightFactory",
         "modules": 2,
         "name": "A0LightFactory",
         "position": [
@@ -2424,7 +2263,6 @@
         "startpos": 0
     },
     "structure_1400": {
-        "id": "A0CyborgFactory",
         "name": "A0CyborgFactory",
         "position": [
             4032,
@@ -2439,7 +2277,6 @@
         "startpos": 0
     },
     "structure_1401": {
-        "id": "A0CyborgFactory",
         "name": "A0CyborgFactory",
         "position": [
             8128,
@@ -2454,7 +2291,6 @@
         "startpos": 1
     },
     "structure_1402": {
-        "id": "A0LightFactory",
         "modules": 2,
         "name": "A0LightFactory",
         "position": [
@@ -2470,7 +2306,6 @@
         "startpos": 1
     },
     "structure_1403": {
-        "id": "A0ResourceExtractor",
         "name": "A0ResourceExtractor",
         "position": [
             7872,
@@ -2485,7 +2320,6 @@
         "startpos": 1
     },
     "structure_1404": {
-        "id": "A0ResourceExtractor",
         "name": "A0ResourceExtractor",
         "position": [
             7488,
@@ -2500,7 +2334,6 @@
         "startpos": 1
     },
     "structure_1405": {
-        "id": "A0ResourceExtractor",
         "name": "A0ResourceExtractor",
         "position": [
             6976,
@@ -2515,7 +2348,6 @@
         "startpos": 1
     },
     "structure_1406": {
-        "id": "A0ResourceExtractor",
         "name": "A0ResourceExtractor",
         "position": [
             7744,
@@ -2530,7 +2362,6 @@
         "startpos": 1
     },
     "structure_1407": {
-        "id": "A0ResourceExtractor",
         "name": "A0ResourceExtractor",
         "position": [
             4288,
@@ -2545,7 +2376,6 @@
         "startpos": 0
     },
     "structure_1408": {
-        "id": "A0ResourceExtractor",
         "name": "A0ResourceExtractor",
         "position": [
             4672,
@@ -2560,7 +2390,6 @@
         "startpos": 0
     },
     "structure_1409": {
-        "id": "A0ResourceExtractor",
         "name": "A0ResourceExtractor",
         "position": [
             5184,
@@ -2575,7 +2404,6 @@
         "startpos": 0
     },
     "structure_1410": {
-        "id": "A0ResourceExtractor",
         "name": "A0ResourceExtractor",
         "position": [
             4416,
@@ -2590,7 +2418,6 @@
         "startpos": 0
     },
     "structure_1415": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             9024,
@@ -2605,7 +2432,6 @@
         "startpos": 1
     },
     "structure_1416": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             9024,
@@ -2620,7 +2446,6 @@
         "startpos": 1
     },
     "structure_1427": {
-        "id": "WallTower01",
         "name": "WallTower01",
         "position": [
             9024,
@@ -2635,7 +2460,6 @@
         "startpos": 1
     },
     "structure_1428": {
-        "id": "WallTower01",
         "name": "WallTower01",
         "position": [
             9024,
@@ -2650,7 +2474,6 @@
         "startpos": 1
     },
     "structure_1429": {
-        "id": "WallTower01",
         "name": "WallTower01",
         "position": [
             6720,
@@ -2665,7 +2488,6 @@
         "startpos": 1
     },
     "structure_1430": {
-        "id": "WallTower01",
         "name": "WallTower01",
         "position": [
             6976,
@@ -2680,7 +2502,6 @@
         "startpos": 1
     },
     "structure_1431": {
-        "id": "WallTower01",
         "name": "WallTower01",
         "position": [
             6720,
@@ -2695,7 +2516,6 @@
         "startpos": 1
     },
     "structure_1432": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             6848,
@@ -2710,7 +2530,6 @@
         "startpos": 1
     },
     "structure_1433": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             6720,
@@ -2725,7 +2544,6 @@
         "startpos": 1
     },
     "structure_1434": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             6720,
@@ -2740,7 +2558,6 @@
         "startpos": 1
     },
     "structure_1435": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             3136,
@@ -2755,7 +2572,6 @@
         "startpos": 0
     },
     "structure_1436": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             3136,
@@ -2770,7 +2586,6 @@
         "startpos": 0
     },
     "structure_1442": {
-        "id": "WallTower01",
         "name": "WallTower01",
         "position": [
             3136,
@@ -2785,7 +2600,6 @@
         "startpos": 0
     },
     "structure_1443": {
-        "id": "WallTower01",
         "name": "WallTower01",
         "position": [
             3136,
@@ -2800,7 +2614,6 @@
         "startpos": 0
     },
     "structure_1448": {
-        "id": "WallTower01",
         "name": "WallTower01",
         "position": [
             5440,
@@ -2815,7 +2628,6 @@
         "startpos": 0
     },
     "structure_1449": {
-        "id": "WallTower01",
         "name": "WallTower01",
         "position": [
             5440,
@@ -2830,7 +2642,6 @@
         "startpos": 0
     },
     "structure_1450": {
-        "id": "WallTower01",
         "name": "WallTower01",
         "position": [
             5184,
@@ -2845,7 +2656,6 @@
         "startpos": 0
     },
     "structure_1451": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             5312,
@@ -2860,7 +2670,6 @@
         "startpos": 0
     },
     "structure_1452": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             5440,
@@ -2875,7 +2684,6 @@
         "startpos": 0
     },
     "structure_1453": {
-        "id": "A0HardcreteMk1Wall",
         "name": "A0HardcreteMk1Wall",
         "position": [
             5440,
@@ -2890,7 +2698,6 @@
         "startpos": 0
     },
     "structure_1461": {
-        "id": "A0RepairCentre3",
         "name": "A0RepairCentre3",
         "position": [
             3264,
@@ -2905,7 +2712,6 @@
         "startpos": 0
     },
     "structure_1462": {
-        "id": "A0RepairCentre3",
         "name": "A0RepairCentre3",
         "position": [
             8896,

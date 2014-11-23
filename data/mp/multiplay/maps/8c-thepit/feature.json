@@ -1,6 +1,5 @@
 {
     "feature_0016": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             11584,
@@ -14,7 +13,6 @@
         ]
     },
     "feature_0017": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             11584,
@@ -28,7 +26,6 @@
         ]
     },
     "feature_0018": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             13504,
@@ -42,7 +39,6 @@
         ]
     },
     "feature_0019": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             13504,
@@ -56,7 +52,6 @@
         ]
     },
     "feature_0043": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             21952,
@@ -70,7 +65,6 @@
         ]
     },
     "feature_0044": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             22208,
@@ -84,7 +78,6 @@
         ]
     },
     "feature_0045": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             23360,
@@ -98,7 +91,6 @@
         ]
     },
     "feature_0046": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             23360,
@@ -112,7 +104,6 @@
         ]
     },
     "feature_0070": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             1728,
@@ -126,7 +117,6 @@
         ]
     },
     "feature_0071": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             1472,
@@ -140,7 +130,6 @@
         ]
     },
     "feature_0072": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             2112,
@@ -154,7 +143,6 @@
         ]
     },
     "feature_0073": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             2368,
@@ -168,7 +156,6 @@
         ]
     },
     "feature_0097": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             832,
@@ -182,7 +169,6 @@
         ]
     },
     "feature_0098": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             832,
@@ -196,7 +182,6 @@
         ]
     },
     "feature_0099": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             832,
@@ -210,7 +195,6 @@
         ]
     },
     "feature_0100": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             832,
@@ -224,7 +208,6 @@
         ]
     },
     "feature_0124": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             3136,
@@ -238,7 +221,6 @@
         ]
     },
     "feature_0125": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             1472,
@@ -252,7 +234,6 @@
         ]
     },
     "feature_0126": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             3136,
@@ -266,7 +247,6 @@
         ]
     },
     "feature_0127": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             1216,
@@ -280,7 +260,6 @@
         ]
     },
     "feature_0151": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             13120,
@@ -294,7 +273,6 @@
         ]
     },
     "feature_0152": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             13376,
@@ -308,7 +286,6 @@
         ]
     },
     "feature_0153": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             12096,
@@ -322,7 +299,6 @@
         ]
     },
     "feature_0154": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             12096,
@@ -336,7 +312,6 @@
         ]
     },
     "feature_0178": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             22720,
@@ -350,7 +325,6 @@
         ]
     },
     "feature_0179": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             22720,
@@ -364,7 +338,6 @@
         ]
     },
     "feature_0180": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             21824,
@@ -378,7 +351,6 @@
         ]
     },
     "feature_0181": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             22080,
@@ -392,7 +364,6 @@
         ]
     },
     "feature_0205": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             23744,
@@ -406,7 +377,6 @@
         ]
     },
     "feature_0206": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             23744,
@@ -420,7 +390,6 @@
         ]
     },
     "feature_0207": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             23744,
@@ -434,7 +403,6 @@
         ]
     },
     "feature_0208": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             23744,
@@ -448,7 +416,6 @@
         ]
     },
     "feature_0218": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             9024,
@@ -462,7 +429,6 @@
         ]
     },
     "feature_0219": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             15552,
@@ -476,7 +442,6 @@
         ]
     },
     "feature_0220": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             15552,
@@ -490,7 +455,6 @@
         ]
     },
     "feature_0221": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             9024,
@@ -504,7 +468,6 @@
         ]
     },
     "feature_0572": {
-        "id": "TreeSnow1",
         "name": "TreeSnow1",
         "position": [
             9984,
@@ -518,7 +481,6 @@
         ]
     },
     "feature_0574": {
-        "id": "Tree1",
         "name": "Tree1",
         "position": [
             15488,
@@ -532,7 +494,6 @@
         ]
     },
     "feature_0575": {
-        "id": "Tree1",
         "name": "Tree1",
         "position": [
             15872,
@@ -546,7 +507,6 @@
         ]
     },
     "feature_0576": {
-        "id": "Tree1",
         "name": "Tree1",
         "position": [
             15232,
@@ -560,7 +520,6 @@
         ]
     },
     "feature_0577": {
-        "id": "Tree2",
         "name": "Tree2",
         "position": [
             14976,
@@ -574,7 +533,6 @@
         ]
     },
     "feature_0578": {
-        "id": "Tree2",
         "name": "Tree2",
         "position": [
             14592,
@@ -588,7 +546,6 @@
         ]
     },
     "feature_0579": {
-        "id": "Tree2",
         "name": "Tree2",
         "position": [
             15104,
@@ -602,7 +559,6 @@
         ]
     },
     "feature_0580": {
-        "id": "Tree3",
         "name": "Tree3",
         "position": [
             15680,
@@ -616,7 +572,6 @@
         ]
     },
     "feature_0581": {
-        "id": "Tree3",
         "name": "Tree3",
         "position": [
             15296,
@@ -630,7 +585,6 @@
         ]
     },
     "feature_0582": {
-        "id": "Tree3",
         "name": "Tree3",
         "position": [
             15808,
@@ -644,7 +598,6 @@
         ]
     },
     "feature_0583": {
-        "id": "Tree3",
         "name": "Tree3",
         "position": [
             15808,
@@ -658,7 +611,6 @@
         ]
     },
     "feature_0584": {
-        "id": "Tree3",
         "name": "Tree3",
         "position": [
             15168,
@@ -672,7 +624,6 @@
         ]
     },
     "feature_0585": {
-        "id": "Tree3",
         "name": "Tree3",
         "position": [
             9152,
@@ -686,7 +637,6 @@
         ]
     },
     "feature_0586": {
-        "id": "Tree3",
         "name": "Tree3",
         "position": [
             9152,
@@ -700,7 +650,6 @@
         ]
     },
     "feature_0587": {
-        "id": "Tree3",
         "name": "Tree3",
         "position": [
             8384,
@@ -714,7 +663,6 @@
         ]
     },
     "feature_0588": {
-        "id": "Tree3",
         "name": "Tree3",
         "position": [
             8640,
@@ -728,7 +676,6 @@
         ]
     },
     "feature_0589": {
-        "id": "Tree3",
         "name": "Tree3",
         "position": [
             9536,
@@ -742,7 +689,6 @@
         ]
     },
     "feature_0590": {
-        "id": "Tree2",
         "name": "Tree2",
         "position": [
             8704,
@@ -756,7 +702,6 @@
         ]
     },
     "feature_0591": {
-        "id": "Tree2",
         "name": "Tree2",
         "position": [
             8704,
@@ -770,7 +715,6 @@
         ]
     },
     "feature_0592": {
-        "id": "Tree2",
         "name": "Tree2",
         "position": [
             9600,
@@ -784,7 +728,6 @@
         ]
     },
     "feature_0593": {
-        "id": "Tree2",
         "name": "Tree2",
         "position": [
             9344,
@@ -798,7 +741,6 @@
         ]
     },
     "feature_0594": {
-        "id": "Tree2",
         "name": "Tree2",
         "position": [
             9216,
@@ -812,7 +754,6 @@
         ]
     },
     "feature_0595": {
-        "id": "Tree1",
         "name": "Tree1",
         "position": [
             9216,
@@ -826,7 +767,6 @@
         ]
     },
     "feature_0596": {
-        "id": "Tree1",
         "name": "Tree1",
         "position": [
             9088,
@@ -840,7 +780,6 @@
         ]
     },
     "feature_0597": {
-        "id": "Tree1",
         "name": "Tree1",
         "position": [
             8576,
@@ -854,7 +793,6 @@
         ]
     },
     "feature_0598": {
-        "id": "Tree1",
         "name": "Tree1",
         "position": [
             8960,
@@ -868,7 +806,6 @@
         ]
     },
     "feature_0599": {
-        "id": "Tree1",
         "name": "Tree1",
         "position": [
             9472,
@@ -882,7 +819,6 @@
         ]
     },
     "feature_0600": {
-        "id": "Tree1",
         "name": "Tree1",
         "position": [
             15232,
@@ -896,7 +832,6 @@
         ]
     },
     "feature_0601": {
-        "id": "Tree1",
         "name": "Tree1",
         "position": [
             15360,
@@ -910,7 +845,6 @@
         ]
     },
     "feature_0602": {
-        "id": "Tree1",
         "name": "Tree1",
         "position": [
             16128,
@@ -924,7 +858,6 @@
         ]
     },
     "feature_0603": {
-        "id": "Tree1",
         "name": "Tree1",
         "position": [
             15744,
@@ -938,7 +871,6 @@
         ]
     },
     "feature_0604": {
-        "id": "Tree1",
         "name": "Tree1",
         "position": [
             14976,
@@ -952,7 +884,6 @@
         ]
     },
     "feature_0605": {
-        "id": "Tree2",
         "name": "Tree2",
         "position": [
             15488,
@@ -966,7 +897,6 @@
         ]
     },
     "feature_0606": {
-        "id": "Tree2",
         "name": "Tree2",
         "position": [
             15616,
@@ -980,7 +910,6 @@
         ]
     },
     "feature_0607": {
-        "id": "Tree2",
         "name": "Tree2",
         "position": [
             15104,
@@ -994,7 +923,6 @@
         ]
     },
     "feature_0608": {
-        "id": "Tree2",
         "name": "Tree2",
         "position": [
             15872,
@@ -1008,7 +936,6 @@
         ]
     },
     "feature_0609": {
-        "id": "Tree2",
         "name": "Tree2",
         "position": [
             14976,
@@ -1022,7 +949,6 @@
         ]
     },
     "feature_0610": {
-        "id": "Tree3",
         "name": "Tree3",
         "position": [
             15040,
@@ -1036,7 +962,6 @@
         ]
     },
     "feature_0611": {
-        "id": "Tree3",
         "name": "Tree3",
         "position": [
             15296,
@@ -1050,7 +975,6 @@
         ]
     },
     "feature_0612": {
-        "id": "Tree3",
         "name": "Tree3",
         "position": [
             15552,
@@ -1064,7 +988,6 @@
         ]
     },
     "feature_0613": {
-        "id": "Tree3",
         "name": "Tree3",
         "position": [
             15552,
@@ -1078,7 +1001,6 @@
         ]
     },
     "feature_0614": {
-        "id": "Tree3",
         "name": "Tree3",
         "position": [
             14784,
@@ -1092,7 +1014,6 @@
         ]
     },
     "feature_0615": {
-        "id": "Tree3",
         "name": "Tree3",
         "position": [
             15040,
@@ -1106,7 +1027,6 @@
         ]
     },
     "feature_0616": {
-        "id": "Tree3",
         "name": "Tree3",
         "position": [
             16320,
@@ -1120,7 +1040,6 @@
         ]
     },
     "feature_0617": {
-        "id": "Tree3",
         "name": "Tree3",
         "position": [
             8896,
@@ -1134,7 +1053,6 @@
         ]
     },
     "feature_0618": {
-        "id": "Tree3",
         "name": "Tree3",
         "position": [
             9536,
@@ -1148,7 +1066,6 @@
         ]
     },
     "feature_0619": {
-        "id": "Tree3",
         "name": "Tree3",
         "position": [
             8384,
@@ -1162,7 +1079,6 @@
         ]
     },
     "feature_0620": {
-        "id": "Tree3",
         "name": "Tree3",
         "position": [
             8256,
@@ -1176,7 +1092,6 @@
         ]
     },
     "feature_0621": {
-        "id": "Tree3",
         "name": "Tree3",
         "position": [
             8768,
@@ -1190,7 +1105,6 @@
         ]
     },
     "feature_0622": {
-        "id": "Tree3",
         "name": "Tree3",
         "position": [
             9152,
@@ -1204,7 +1118,6 @@
         ]
     },
     "feature_0623": {
-        "id": "Tree3",
         "name": "Tree3",
         "position": [
             9280,
@@ -1218,7 +1131,6 @@
         ]
     },
     "feature_0624": {
-        "id": "Tree2",
         "name": "Tree2",
         "position": [
             8832,
@@ -1232,7 +1144,6 @@
         ]
     },
     "feature_0625": {
-        "id": "Tree2",
         "name": "Tree2",
         "position": [
             9600,
@@ -1246,7 +1157,6 @@
         ]
     },
     "feature_0626": {
-        "id": "Tree2",
         "name": "Tree2",
         "position": [
             9088,
@@ -1260,7 +1170,6 @@
         ]
     },
     "feature_0627": {
-        "id": "Tree2",
         "name": "Tree2",
         "position": [
             8576,
@@ -1274,7 +1183,6 @@
         ]
     },
     "feature_0628": {
-        "id": "Tree2",
         "name": "Tree2",
         "position": [
             8448,
@@ -1288,7 +1196,6 @@
         ]
     },
     "feature_0629": {
-        "id": "Tree2",
         "name": "Tree2",
         "position": [
             8192,
@@ -1302,7 +1209,6 @@
         ]
     },
     "feature_0630": {
-        "id": "Tree2",
         "name": "Tree2",
         "position": [
             9472,
@@ -1316,7 +1222,6 @@
         ]
     },
     "feature_0631": {
-        "id": "Tree1",
         "name": "Tree1",
         "position": [
             8192,
@@ -1330,7 +1235,6 @@
         ]
     },
     "feature_0632": {
-        "id": "Tree1",
         "name": "Tree1",
         "position": [
             8448,
@@ -1344,7 +1248,6 @@
         ]
     },
     "feature_0633": {
-        "id": "Tree1",
         "name": "Tree1",
         "position": [
             9216,
@@ -1358,7 +1261,6 @@
         ]
     },
     "feature_0634": {
-        "id": "Tree1",
         "name": "Tree1",
         "position": [
             8960,
@@ -1372,7 +1274,6 @@
         ]
     },
     "feature_0635": {
-        "id": "Tree1",
         "name": "Tree1",
         "position": [
             9088,
@@ -1386,7 +1287,6 @@
         ]
     },
     "feature_0636": {
-        "id": "Tree1",
         "name": "Tree1",
         "position": [
             8704,
@@ -1400,7 +1300,6 @@
         ]
     },
     "feature_0637": {
-        "id": "Tree1",
         "name": "Tree1",
         "position": [
             9728,
@@ -1414,7 +1313,6 @@
         ]
     },
     "feature_0638": {
-        "id": "Tree1",
         "name": "Tree1",
         "position": [
             9344,
@@ -1428,7 +1326,6 @@
         ]
     },
     "feature_0658": {
-        "id": "Tree2",
         "name": "Tree2",
         "position": [
             11648,
@@ -1442,7 +1339,6 @@
         ]
     },
     "feature_0659": {
-        "id": "Tree2",
         "name": "Tree2",
         "position": [
             12032,
@@ -1456,7 +1352,6 @@
         ]
     },
     "feature_0660": {
-        "id": "Tree2",
         "name": "Tree2",
         "position": [
             11264,
@@ -1470,7 +1365,6 @@
         ]
     },
     "feature_0661": {
-        "id": "Tree2",
         "name": "Tree2",
         "position": [
             10624,
@@ -1484,7 +1378,6 @@
         ]
     },
     "feature_0662": {
-        "id": "Tree2",
         "name": "Tree2",
         "position": [
             12032,
@@ -1498,7 +1391,6 @@
         ]
     },
     "feature_0663": {
-        "id": "Tree2",
         "name": "Tree2",
         "position": [
             12032,
@@ -1512,7 +1404,6 @@
         ]
     },
     "feature_0664": {
-        "id": "Tree2",
         "name": "Tree2",
         "position": [
             9728,
@@ -1526,7 +1417,6 @@
         ]
     },
     "feature_0665": {
-        "id": "Tree2",
         "name": "Tree2",
         "position": [
             7168,
@@ -1540,7 +1430,6 @@
         ]
     },
     "feature_0666": {
-        "id": "TreeSnow3",
         "name": "TreeSnow3",
         "position": [
             8512,
@@ -1554,7 +1443,6 @@
         ]
     },
     "feature_0667": {
-        "id": "TreeSnow3",
         "name": "TreeSnow3",
         "position": [
             8768,
@@ -1568,7 +1456,6 @@
         ]
     },
     "feature_0668": {
-        "id": "TreeSnow3",
         "name": "TreeSnow3",
         "position": [
             8256,
@@ -1582,7 +1469,6 @@
         ]
     },
     "feature_0669": {
-        "id": "TreeSnow3",
         "name": "TreeSnow3",
         "position": [
             17984,
@@ -1596,7 +1482,6 @@
         ]
     },
     "feature_0670": {
-        "id": "TreeSnow3",
         "name": "TreeSnow3",
         "position": [
             17856,
@@ -1610,7 +1495,6 @@
         ]
     },
     "feature_0671": {
-        "id": "TreeSnow3",
         "name": "TreeSnow3",
         "position": [
             17472,
@@ -1624,7 +1508,6 @@
         ]
     },
     "feature_0672": {
-        "id": "TreeSnow2",
         "name": "TreeSnow2",
         "position": [
             17408,
@@ -1638,7 +1521,6 @@
         ]
     },
     "feature_0673": {
-        "id": "TreeSnow2",
         "name": "TreeSnow2",
         "position": [
             17664,
@@ -1652,7 +1534,6 @@
         ]
     },
     "feature_0674": {
-        "id": "TreeSnow2",
         "name": "TreeSnow2",
         "position": [
             8320,
@@ -1666,7 +1547,6 @@
         ]
     },
     "feature_0675": {
-        "id": "TreeSnow2",
         "name": "TreeSnow2",
         "position": [
             14720,
@@ -1680,7 +1560,6 @@
         ]
     },
     "feature_0676": {
-        "id": "TreeSnow2",
         "name": "TreeSnow2",
         "position": [
             14976,
@@ -1694,7 +1573,6 @@
         ]
     },
     "feature_0677": {
-        "id": "TreeSnow1",
         "name": "TreeSnow1",
         "position": [
             14720,
@@ -1708,7 +1586,6 @@
         ]
     },
     "feature_0678": {
-        "id": "TreeSnow3",
         "name": "TreeSnow3",
         "position": [
             15168,
@@ -1722,7 +1599,6 @@
         ]
     },
     "feature_0679": {
-        "id": "TreeSnow3",
         "name": "TreeSnow3",
         "position": [
             14400,
@@ -1736,7 +1612,6 @@
         ]
     },
     "feature_0680": {
-        "id": "TreeSnow3",
         "name": "TreeSnow3",
         "position": [
             20800,
@@ -1750,7 +1625,6 @@
         ]
     },
     "feature_0681": {
-        "id": "TreeSnow3",
         "name": "TreeSnow3",
         "position": [
             20416,
@@ -1764,7 +1638,6 @@
         ]
     },
     "feature_0682": {
-        "id": "TreeSnow3",
         "name": "TreeSnow3",
         "position": [
             6592,
@@ -1778,7 +1651,6 @@
         ]
     },
     "feature_0683": {
-        "id": "TreeSnow3",
         "name": "TreeSnow3",
         "position": [
             6464,
@@ -1792,7 +1664,6 @@
         ]
     },
     "feature_0684": {
-        "id": "TreeSnow2",
         "name": "TreeSnow2",
         "position": [
             6400,
@@ -1806,7 +1677,6 @@
         ]
     },
     "feature_0685": {
-        "id": "TreeSnow2",
         "name": "TreeSnow2",
         "position": [
             6784,
@@ -1820,7 +1690,6 @@
         ]
     },
     "feature_0686": {
-        "id": "Tree3",
         "name": "Tree3",
         "position": [
             6976,
@@ -1834,7 +1703,6 @@
         ]
     },
     "feature_0687": {
-        "id": "Tree3",
         "name": "Tree3",
         "position": [
             6336,
@@ -1848,7 +1716,6 @@
         ]
     },
     "feature_0688": {
-        "id": "Tree3",
         "name": "Tree3",
         "position": [
             6080,
@@ -1862,7 +1729,6 @@
         ]
     },
     "feature_0689": {
-        "id": "Tree3",
         "name": "Tree3",
         "position": [
             9152,
@@ -1876,7 +1742,6 @@
         ]
     },
     "feature_0690": {
-        "id": "Tree3",
         "name": "Tree3",
         "position": [
             7872,
@@ -1890,7 +1755,6 @@
         ]
     },
     "feature_0691": {
-        "id": "Tree3",
         "name": "Tree3",
         "position": [
             7488,
@@ -1904,7 +1768,6 @@
         ]
     },
     "feature_0692": {
-        "id": "Tree3",
         "name": "Tree3",
         "position": [
             6720,
@@ -1918,7 +1781,6 @@
         ]
     },
     "feature_0693": {
-        "id": "Tree2",
         "name": "Tree2",
         "position": [
             6144,
@@ -1932,7 +1794,6 @@
         ]
     },
     "feature_0694": {
-        "id": "Tree1",
         "name": "Tree1",
         "position": [
             5504,
@@ -1946,7 +1807,6 @@
         ]
     },
     "feature_0695": {
-        "id": "Tree2",
         "name": "Tree2",
         "position": [
             13952,
@@ -1960,7 +1820,6 @@
         ]
     },
     "feature_0696": {
-        "id": "Tree2",
         "name": "Tree2",
         "position": [
             9856,
@@ -1974,7 +1833,6 @@
         ]
     },
     "feature_0697": {
-        "id": "Tree2",
         "name": "Tree2",
         "position": [
             9600,
@@ -1988,7 +1846,6 @@
         ]
     },
     "feature_0698": {
-        "id": "Tree3",
         "name": "Tree3",
         "position": [
             9664,
@@ -2002,7 +1859,6 @@
         ]
     },
     "feature_0699": {
-        "id": "Tree3",
         "name": "Tree3",
         "position": [
             6976,
@@ -2016,7 +1872,6 @@
         ]
     },
     "feature_0700": {
-        "id": "Tree3",
         "name": "Tree3",
         "position": [
             8640,
@@ -2030,7 +1885,6 @@
         ]
     },
     "feature_0701": {
-        "id": "Tree3",
         "name": "Tree3",
         "position": [
             18112,
@@ -2044,7 +1898,6 @@
         ]
     },
     "feature_0702": {
-        "id": "Tree3",
         "name": "Tree3",
         "position": [
             19392,
@@ -2058,7 +1911,6 @@
         ]
     },
     "feature_0703": {
-        "id": "Tree3",
         "name": "Tree3",
         "position": [
             19264,
@@ -2072,7 +1924,6 @@
         ]
     },
     "feature_0704": {
-        "id": "Tree3",
         "name": "Tree3",
         "position": [
             15680,
@@ -2086,7 +1937,6 @@
         ]
     },
     "feature_0705": {
-        "id": "Tree3",
         "name": "Tree3",
         "position": [
             18752,
@@ -2100,7 +1950,6 @@
         ]
     },
     "feature_0706": {
-        "id": "Tree3",
         "name": "Tree3",
         "position": [
             7232,
@@ -2114,7 +1963,6 @@
         ]
     },
     "feature_0707": {
-        "id": "Tree3",
         "name": "Tree3",
         "position": [
             6208,
@@ -2128,7 +1976,6 @@
         ]
     },
     "feature_0708": {
-        "id": "Tree3",
         "name": "Tree3",
         "position": [
             20032,
@@ -2142,7 +1989,6 @@
         ]
     },
     "feature_0709": {
-        "id": "Tree3",
         "name": "Tree3",
         "position": [
             19392,
@@ -2156,7 +2002,6 @@
         ]
     },
     "feature_0710": {
-        "id": "Tree3",
         "name": "Tree3",
         "position": [
             13504,
@@ -2170,7 +2015,6 @@
         ]
     },
     "feature_0711": {
-        "id": "Tree3",
         "name": "Tree3",
         "position": [
             12352,
@@ -2184,7 +2028,6 @@
         ]
     },
     "feature_0712": {
-        "id": "Tree3",
         "name": "Tree3",
         "position": [
             13248,
@@ -2198,7 +2041,6 @@
         ]
     },
     "feature_0713": {
-        "id": "Tree2",
         "name": "Tree2",
         "position": [
             12032,
@@ -2212,7 +2054,6 @@
         ]
     },
     "feature_0714": {
-        "id": "Tree2",
         "name": "Tree2",
         "position": [
             11776,
@@ -2226,7 +2067,6 @@
         ]
     },
     "feature_0715": {
-        "id": "Tree3",
         "name": "Tree3",
         "position": [
             12096,
@@ -2240,7 +2080,6 @@
         ]
     },
     "feature_0716": {
-        "id": "Tree1",
         "name": "Tree1",
         "position": [
             11776,
@@ -2254,7 +2093,6 @@
         ]
     },
     "feature_0718": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             12352,
@@ -2268,7 +2106,6 @@
         ]
     },
     "feature_0719": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             10944,
@@ -2282,7 +2119,6 @@
         ]
     },
     "feature_0720": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             4544,
@@ -2296,7 +2132,6 @@
         ]
     },
     "feature_0721": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             5568,
@@ -2310,7 +2145,6 @@
         ]
     },
     "feature_0722": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             3904,
@@ -2324,7 +2158,6 @@
         ]
     },
     "feature_0723": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             4160,
@@ -2338,7 +2171,6 @@
         ]
     },
     "feature_0724": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             4800,
@@ -2352,7 +2184,6 @@
         ]
     },
     "feature_0725": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             3776,
@@ -2366,7 +2197,6 @@
         ]
     },
     "feature_0726": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             13632,
@@ -2380,7 +2210,6 @@
         ]
     },
     "feature_0727": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             11840,
@@ -2394,7 +2223,6 @@
         ]
     },
     "feature_0728": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             20416,
@@ -2408,7 +2236,6 @@
         ]
     },
     "feature_0729": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             19264,
@@ -2422,7 +2249,6 @@
         ]
     },
     "feature_0730": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             20544,
@@ -2436,7 +2262,6 @@
         ]
     },
     "feature_0731": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             20544,
@@ -2450,7 +2275,6 @@
         ]
     },
     "feature_0732": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             19264,
@@ -2464,7 +2288,6 @@
         ]
     },
     "feature_0733": {
-        "id": "OilResource",
         "name": "OilResource",
         "position": [
             20160,

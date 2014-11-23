@@ -1,6 +1,5 @@
 {
     "structure_0094": {
-        "id": "A0CommandCentre",
         "name": "A0CommandCentre",
         "position": [
             896,
@@ -15,7 +14,6 @@
         "startpos": 0
     },
     "structure_0099": {
-        "id": "A0CommandCentre",
         "name": "A0CommandCentre",
         "position": [
             7808,
@@ -30,7 +28,6 @@
         "startpos": 1
     },
     "structure_0100": {
-        "id": "A0CommandCentre",
         "name": "A0CommandCentre",
         "position": [
             15232,
@@ -45,7 +42,6 @@
         "startpos": 2
     },
     "structure_0105": {
-        "id": "A0CommandCentre",
         "name": "A0CommandCentre",
         "position": [
             14592,
@@ -60,7 +56,6 @@
         "startpos": 3
     },
     "structure_0106": {
-        "id": "A0CommandCentre",
         "name": "A0CommandCentre",
         "position": [
             15104,
@@ -75,7 +70,6 @@
         "startpos": 4
     },
     "structure_0113": {
-        "id": "A0CommandCentre",
         "name": "A0CommandCentre",
         "position": [
             8064,
@@ -90,7 +84,6 @@
         "startpos": 5
     },
     "structure_0114": {
-        "id": "A0CommandCentre",
         "name": "A0CommandCentre",
         "position": [
             896,
@@ -105,7 +98,6 @@
         "startpos": 6
     },
     "structure_0119": {
-        "id": "A0CommandCentre",
         "name": "A0CommandCentre",
         "position": [
             1408,
