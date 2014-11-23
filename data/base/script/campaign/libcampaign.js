@@ -78,6 +78,7 @@
 
 const CAM_HUMAN_PLAYER = 0;
 const CAM_MAX_PLAYERS = 8;
+const CAM_TICKS_PER_FRAME = 100;
 
 //;; \subsection{camDef(something)}
 //;; Returns false if something is JavaScript-undefined, true otherwise.
@@ -893,7 +894,7 @@ function camManageGroup(group, order, data)
 		camManageGroup(commanderGroup, data.order, data.data);
 	}
 	// apply orders instantly
-	queue("__camTacticsTick");
+	queue("__camTacticsTickForGroup", CAM_TICKS_PER_FRAME, group);
 }
 
 //;; \subsection{camStopManagingGroup(group)}
@@ -934,7 +935,7 @@ function camOrderToString(order)
 
 var __camGroupInfo;
 
-const __CAM_TARGET_TRACKING_RADIUS = 10;
+const __CAM_TARGET_TRACKING_RADIUS = 5;
 const __CAM_PLAYER_BASE_RADIUS = 20;
 const __CAM_DEFENSE_RADIUS = 4;
 const __CAM_CLOSE_RADIUS = 2;
@@ -1058,145 +1059,157 @@ function __camPickTarget(group)
 
 function __camTacticsTick()
 {
+	var dt = CAM_TICKS_PER_FRAME;
 	for (var group in __camGroupInfo)
 	{
-		var gi = __camGroupInfo[group];
-		var rawDroids = enumGroup(group);
-		var healthyDroids = [];
+		queue("__camTacticsTickForGroup", dt, group);
+		dt += CAM_TICKS_PER_FRAME;
+	}
+	queue("__camTacticsTick", dt);
+}
 
-		// Handle the case when we need to repair
-		if (rawDroids.length > 0 && camDef(gi.data.repair)
-		            && countStruct("A0RepairCentre3", rawDroids[0].player))
-		{
-			for (var i = 0; i < rawDroids.length; ++i)
-			{
-				var droid = rawDroids[i];
-				if (droid.order === DORDER_RTR)
-					continue;
-				if (droid.health < gi.data.repair)
-				{
-					orderDroid(droid, DORDER_RTR);
-					continue;
-				}
-				healthyDroids[healthyDroids.length] = droid;
-			}
-		}
-		else
-		{
-			healthyDroids = rawDroids
-		}
+function __camTacticsTickForGroup(group)
+{
+	var gi = __camGroupInfo[group];
+	if (!camDef(gi))
+		return;
+	var rawDroids = enumGroup(group);
+	if (rawDroids.length === 0)
+		return;
+	var healthyDroids = [];
 
-		// Handle regrouping
-		var droids = healthyDroids;
-		if (camDef(gi.data.regroup) && gi.data.regroup
-		              && healthyDroids.length > 0)
+	// Handle the case when we need to repair
+	if (rawDroids.length > 0 && camDef(gi.data.repair)
+	            && countStruct("A0RepairCentre3", rawDroids[0].player))
+	{
+		for (var i = 0; i < rawDroids.length; ++i)
 		{
-			var ret = __camFindClusters(healthyDroids, __CAM_CLUSTER_SIZE);
-			var groupX = ret.xav[ret.maxIdx];
-			var groupY = ret.yav[ret.maxIdx];
-			droids = ret.clusters[ret.maxIdx];
-			for (var i = 0; i < ret.clusters.length; ++i)
-				if (i != ret.maxIdx) // move other droids towards main cluster
-					for (var j = 0; j < ret.clusters[i].length; ++j)
-					{
-						var droid = ret.clusters[i][j];
-						orderDroidLoc(droid, DORDER_MOVE, groupX, groupY);
-					}
-			var back = (gameTime - gi.lastHit < __CAM_FALLBACK_TIME_ON_REGROUP);
-			// not enough droids grouped?
-			if (ret.maxCount < gi.count)
+			var droid = rawDroids[i];
+			if (droid.order === DORDER_RTR)
+				continue;
+			if (droid.health < gi.data.repair)
 			{
-				for (var i = 0; i < droids.length; ++i)
-				{
-					var droid = droids[i];
-					if (back)
-						orderDroid(droid, DORDER_RTB);
-					else
-						orderDroid(droid, DORDER_STOP);
-				}
+				orderDroid(droid, DORDER_RTR);
 				continue;
 			}
+			healthyDroids[healthyDroids.length] = droid;
 		}
+	}
+	else
+	{
+		healthyDroids = rawDroids
+	}
 
-		switch(gi.order)
+	// Handle regrouping
+	var droids = healthyDroids;
+	if (camDef(gi.data.regroup) && gi.data.regroup
+	              && healthyDroids.length > 0)
+	{
+		var ret = __camFindClusters(healthyDroids, __CAM_CLUSTER_SIZE);
+		var groupX = ret.xav[ret.maxIdx];
+		var groupY = ret.yav[ret.maxIdx];
+		droids = ret.clusters[ret.maxIdx];
+		for (var i = 0; i < ret.clusters.length; ++i)
+			if (i != ret.maxIdx) // move other droids towards main cluster
+				for (var j = 0; j < ret.clusters[i].length; ++j)
+				{
+					var droid = ret.clusters[i][j];
+					orderDroidLoc(droid, DORDER_MOVE, groupX, groupY);
+				}
+		var back = (gameTime - gi.lastHit < __CAM_FALLBACK_TIME_ON_REGROUP);
+		// not enough droids grouped?
+		if (ret.maxCount < gi.count)
 		{
-			case CAM_ORDER_ATTACK:
-			case CAM_ORDER_DEFEND:
-			case CAM_ORDER_COMPROMISE:
-				var target = __camPickTarget(group);
-				if (!camDef(target))
-					continue;
-				for (var i = 0; i < droids.length; ++i)
-				{
-					var droid = droids[i];
-					var done = false;
-					if (gi.order === CAM_ORDER_DEFEND)
-					{
-						// fall back to defense position
-						var dist = camDist(droid, gi.data.pos);
-						var radius = gi.data.radius;
-						if (!camDef(radius))
-							radius = __CAM_DEFENSE_RADIUS;
-						if (dist > radius)
-						{
-							orderDroidLoc(droid, DORDER_MOVE,
-							              gi.data.pos.x, gi.data.pos.y);
-							done = true;
-						}
-					}
-					if (!done && droid.order !== DORDER_SCOUT
-						&& camDist(droid, target) >= __CAM_CLOSE_RADIUS)
-					{
-						orderDroidLoc(droid, DORDER_SCOUT,
-						              target.x, target.y);
-					}
-				}
-				break;
-			case CAM_ORDER_PATROL:
-				if (!camDef(gi.lastmove) || !camDef(gi.lastspot))
-				{
-					gi.lastspot = 0;
-				}
+			for (var i = 0; i < droids.length; ++i)
+			{
+				var droid = droids[i];
+				if (back)
+					orderDroid(droid, DORDER_RTB);
 				else
-				{
-					if (gameTime - gi.lastmove < gi.data.interval)
-						continue;
-					// find random new position to visit
-					var list = [];
-					for (var i = 0; i < gi.data.pos.length; ++i)
-						if (i !== gi.lastpos)
-							list[list.length] = i;
-					gi.lastspot = list[camRand(list.length)];
-				}
-				gi.lastmove = gameTime;
-				var pos = camMakePos(gi.data.pos[gi.lastspot]);
-				for (var i = 0; i < droids.length; ++i)
-				{
-					var droid = droids[i];
-					orderDroidLoc(droid, DORDER_MOVE, pos.x, pos.y);
-				}
-				break;
-			case CAM_ORDER_FOLLOW:
-				var commander = getObject(gi.data.droid);
-				if (!camDef(commander) || !commander)
-				{
-					// the commander is dead? let the group execute
-					// his last will.
-					camManageGroup(group, gi.data.order, gi.data.data);
-					break;
-				}
-				for (var i = 0; i < droids.length; ++i)
-				{
-					var droid = droids[i];
-					if (droid.order !== DORDER_COMMANDERSUPPORT)
-						orderDroidObj(droid, DORDER_COMMANDERSUPPORT,
-						              commander);
-				}
-				break;
-			default:
-				camDebug("Unknown group order", gi.order);
-				break;
+					orderDroid(droid, DORDER_STOP);
+			}
+			return;
 		}
+	}
+
+	switch(gi.order)
+	{
+		case CAM_ORDER_ATTACK:
+		case CAM_ORDER_DEFEND:
+		case CAM_ORDER_COMPROMISE:
+			var target = profile("__camPickTarget", group);
+			if (!camDef(target))
+				return;
+			for (var i = 0; i < droids.length; ++i)
+			{
+				var droid = droids[i];
+				var done = false;
+				if (gi.order === CAM_ORDER_DEFEND)
+				{
+					// fall back to defense position
+					var dist = camDist(droid, gi.data.pos);
+					var radius = gi.data.radius;
+					if (!camDef(radius))
+						radius = __CAM_DEFENSE_RADIUS;
+					if (dist > radius)
+					{
+						orderDroidLoc(droid, DORDER_MOVE,
+						              gi.data.pos.x, gi.data.pos.y);
+						done = true;
+					}
+				}
+				if (!done && droid.order !== DORDER_SCOUT
+					&& camDist(droid, target) >= __CAM_CLOSE_RADIUS)
+				{
+					orderDroidLoc(droid, DORDER_SCOUT,
+					              target.x, target.y);
+				}
+			}
+			break;
+		case CAM_ORDER_PATROL:
+			if (!camDef(gi.lastmove) || !camDef(gi.lastspot))
+			{
+				gi.lastspot = 0;
+			}
+			else
+			{
+				if (gameTime - gi.lastmove < gi.data.interval)
+					return;
+				// find random new position to visit
+				var list = [];
+				for (var i = 0; i < gi.data.pos.length; ++i)
+					if (i !== gi.lastpos)
+						list[list.length] = i;
+				gi.lastspot = list[camRand(list.length)];
+			}
+			gi.lastmove = gameTime;
+			var pos = camMakePos(gi.data.pos[gi.lastspot]);
+			for (var i = 0; i < droids.length; ++i)
+			{
+				var droid = droids[i];
+				orderDroidLoc(droid, DORDER_MOVE, pos.x, pos.y);
+			}
+			break;
+		case CAM_ORDER_FOLLOW:
+			var commander = getObject(gi.data.droid);
+			if (!camDef(commander) || !commander)
+			{
+				// the commander is dead? let the group execute
+				// his last will.
+				camManageGroup(group, gi.data.order, gi.data.data);
+				break;
+			}
+			for (var i = 0; i < droids.length; ++i)
+			{
+				var droid = droids[i];
+				if (droid.order !== DORDER_COMMANDERSUPPORT)
+					orderDroidObj(droid, DORDER_COMMANDERSUPPORT,
+					              commander);
+			}
+			break;
+		default:
+			camDebug("Unknown group order", gi.order);
+			break;
 	}
 }
 
@@ -1220,7 +1233,7 @@ function __camCheckGroupMorale(group)
 			gi.data.pos = gi.data.fallback;
 			gi.data.fallback = temp;
 			// apply orders instantly
-			queue("__camTacticsTick");
+			queue("__camTacticsTickForGroup", CAM_TICKS_PER_FRAME, group);
 			break;
 		case CAM_ORDER_DEFEND:
 			if (gsize <= msize)
@@ -1232,7 +1245,7 @@ function __camCheckGroupMorale(group)
 			gi.data.pos = gi.data.fallback;
 			gi.data.fallback = temp;
 			// apply orders instantly
-			queue("__camTacticsTick");
+			queue("__camTacticsTickForGroup", CAM_TICKS_PER_FRAME, group);
 			break;
 		default:
 			camDebug("Group order doesn't support morale",
@@ -1763,7 +1776,6 @@ function __camPreHookEvent(eventname, hookcode)
 /* Called every second after eventStartLevel(). */
 function __camTick()
 {
-	queue("__camTacticsTick", 100);
 	if (camDef(__camWinLossCallback))
 		__camGlobalContext[__camWinLossCallback]();
 }
@@ -1785,7 +1797,7 @@ __camPreHookEvent("eventGroupLoss", function(obj, group, newsize)
 	if (newsize === 0)
 		__camCheckBaseEliminated(group);
 	if (camDef(__camGroupInfo[group]))
-		__camCheckGroupMorale(group);
+		profile("__camCheckGroupMorale", group);
 });
 
 __camPreHookEvent("eventCheatMode", function(entered)
@@ -1833,7 +1845,8 @@ __camPreHookEvent("eventStartLevel", function()
 	__camLZCompromisedTicker = 0;
 	__camLastAttackTriggered = false;
 	__camLevelEnded = false;
-	setTimer("__camTick", 1000);
+	setTimer("__camTick", 1000); // campaign pollers
+	queue("__camTacticsTick", 100); // would re-queue itself
 });
 
 __camPreHookEvent("eventDroidBuilt", function(droid, structure)
