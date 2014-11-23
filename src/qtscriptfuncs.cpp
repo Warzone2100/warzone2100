@@ -328,27 +328,34 @@ void showLabel(const QString &key)
 	}
 }
 
-// Returns zero for no action, SCRIPT_OBJECT_SEEN for object seen callback, positive for group callback
-int seenLabelCheck(QScriptEngine *engine, BASE_OBJECT *seen, BASE_OBJECT *viewer)
+// The bool return value is true when an object callback needs to be called.
+// The int return value holds group id when a group callback needs to be called, 0 otherwise.
+std::pair<bool, int> seenLabelCheck(QScriptEngine *engine, BASE_OBJECT *seen, BASE_OBJECT *viewer)
 {
 	GROUPMAP *psMap = groups.value(engine);
 	int groupId = psMap->value(seen);
+	bool foundObj = false, foundGroup = false;
 	for (LABELMAP::iterator i = labels.begin(); i != labels.end(); i++)
 	{
 		labeltype &l = (*i);
-		if (l.id == seen->id && l.triggered == 0)
+		if (l.id == seen->id && l.triggered == 0
+		    && (l.subscriber == ALL_PLAYERS || l.subscriber == viewer->player))
 		{
 			l.triggered = viewer->id; // record who made the discovery
-			return SCRIPT_OBJECT_SEEN;
+			foundObj = true;
 		}
 		else if (l.type == SCRIPT_GROUP && l.id == groupId && l.triggered == 0
 		         && (l.subscriber == ALL_PLAYERS || l.subscriber == viewer->player))
 		{
 			l.triggered = viewer->id; // record who made the discovery
-			return groupId;
+			foundGroup = true;
 		}
 	}
-	return 0;
+	if (foundObj || foundGroup)
+	{
+		updateLabelModel();
+	}
+	return std::make_pair(foundObj, foundGroup ? groupId : 0);
 }
 
 bool areaLabelCheck(DROID *psDroid)
@@ -361,7 +368,7 @@ bool areaLabelCheck(DROID *psDroid)
 		labeltype &l = i.value();
 		if (l.triggered == 0 && (l.subscriber == ALL_PLAYERS || l.subscriber == psDroid->player)
 		    && ((l.type == SCRIPT_AREA && l.p1.x < x && l.p1.y < y && l.p2.x > x && l.p2.y > y)
-			|| (l.type == SCRIPT_RADIUS && iHypot(l.p1 - removeZ(psDroid->pos)) < l.p2.x)))
+		        || (l.type == SCRIPT_RADIUS && iHypot(l.p1 - removeZ(psDroid->pos)) < l.p2.x)))
 		{
 			// We're inside an untriggered area
 			activated = true;

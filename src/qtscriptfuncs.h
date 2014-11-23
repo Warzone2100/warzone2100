@@ -37,8 +37,6 @@ enum SCRIPT_TYPE
 	SCRIPT_COUNT
 };
 
-#define SCRIPT_OBJECT_SEEN -1
-
 #include <QtScript/QScriptEngine>
 
 // ----------------------------------------------
@@ -79,7 +77,7 @@ QStandardItemModel *createLabelModel();
 void showLabel(const QString &key);
 
 /// Check if this object marked for a seen trigger once it comes into vision
-int seenLabelCheck(QScriptEngine *engine, BASE_OBJECT *seen, BASE_OBJECT *viewer);
+std::pair<bool, int> seenLabelCheck(QScriptEngine *engine, BASE_OBJECT *seen, BASE_OBJECT *viewer);
 
 /// Assert for scripts that give useful backtraces and other info.
 #define SCRIPT_ASSERT(context, expr, ...) \

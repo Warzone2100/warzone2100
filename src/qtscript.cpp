@@ -1234,21 +1234,21 @@ bool triggerEventSeen(BASE_OBJECT *psViewer, BASE_OBJECT *psSeen)
 	for (int i = 0; i < scripts.size() && psSeen && psViewer; ++i)
 	{
 		QScriptEngine *engine = scripts.at(i);
-		int seen = seenLabelCheck(engine, psSeen, psViewer);
-		if (seen == SCRIPT_OBJECT_SEEN)
+		std::pair<bool, int> callbacks = seenLabelCheck(engine, psSeen, psViewer);
+		if (callbacks.first)
 		{
 			QScriptValueList args;
 			args += convMax(psViewer, engine);
 			args += convMax(psSeen, engine);
 			callFunction(engine, "eventObjectSeen", args);
 		}
-		else if (seen > 0)
+		if (callbacks.second)
 		{
 			QScriptValueList args;
 			args += convMax(psViewer, engine);
-			args += QScriptValue(seen); // group id
+			args += QScriptValue(callbacks.second); // group id
 			callFunction(engine, "eventGroupSeen", args);
-		} // else do nothing
+		}
 	}
 	return true;
 }
