@@ -6,8 +6,7 @@ var NPScout; // Sensor scout (initialized when droid is created)
 
 camAreaEvent("AttackArea1", function(droid)
 {
-	// call this manually because eventObjectSeen is unreliable
-	eventObjectSeen(0, NPScout);
+	queue("camCallOnce", 2000, "doNPRetreat");
 	camManageGroup(camMakeGroup("enemy1Force1", 6), CAM_ORDER_ATTACK, {
 		pos: camMakePos("enemy1Force1Pos"),
 		fallback: camMakePos("enemy1Force1Fallback"),
@@ -33,17 +32,28 @@ camAreaEvent("AttackArea2", function(droid)
 	camEnableFactory("base4factory");
 });
 
-function doNPRetreat() {
+function doNPRetreat()
+{
 	var pos = camMakePos("NPSensorTurn");
-	camTrace("New Paradigm sensor droid is retreating");
-	orderDroidLoc(NPScout, DORDER_MOVE, pos.x, pos.y);
+	if (NPScout)
+	{
+		camTrace("New Paradigm sensor droid is retreating");
+		orderDroidLoc(NPScout, DORDER_MOVE, pos.x, pos.y);
+	}
+	else
+	{
+		camTrace("Sensor droid died before retreating.");
+	}
 }
 
-function eventObjectSeen(viewer, seen)
+function eventDestroyed(obj)
 {
-	if (viewer !== 0 || seen.id !== NPScout.id)
-		return;
-	queue("camCallOnce", 2000, "doNPRetreat");
+	if (NPScout && (obj.id === NPScout.id))
+	{
+		NPScout = null;
+		camUnmarkTiles("NPSensorTurn");
+		camUnmarkTiles("NPSensorRemove");
+	}
 }
 
 camAreaEvent("NPSensorTurn", function(droid)

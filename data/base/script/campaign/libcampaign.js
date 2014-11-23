@@ -115,6 +115,8 @@ function camCallOnce(callback)
 //;; Remove a game object (by value or label) if it exists, do nothing otherwise.
 function camSafeRemoveObject(obj, flashy)
 {
+	if (__camLevelEnded)
+		return;
 	if (camIsString(obj))
 		obj = getObject(obj);
 	if (camDef(obj) && obj)
@@ -939,18 +941,22 @@ const __CAM_CLOSE_RADIUS = 2;
 const __CAM_CLUSTER_SIZE = 4;
 const __CAM_FALLBACK_TIME_ON_REGROUP = 5000;
 
-function __camFindClusters(list, size) {
+function __camFindClusters(list, size)
+{
 	var ret = { clusters: [], xav: [], yav: [], maxIdx: 0, maxCount: 0 };
-	for (var i = list.length - 1; i >= 0; --i) {
+	for (var i = list.length - 1; i >= 0; --i)
+	{
 		var x = list[i].x, y = list[i].y;
 		var found = false;
 		for (var j = 0; j < ret.clusters.length; ++j) {
-			if (camDist(ret.xav[j], ret.yav[j], x, y) < size) {
+			if (camDist(ret.xav[j], ret.yav[j], x, y) < size)
+			{
 				var n = ret.clusters[j].length;
 				ret.clusters[j][n] = list[i];
 				ret.xav[j] = (n * ret.xav[j] + x) / (n + 1);
 				ret.yav[j] = (n * ret.yav[j] + y) / (n + 1);
-				if (ret.clusters[j].length > ret.maxCount) {
+				if (ret.clusters[j].length > ret.maxCount)
+				{
 					ret.maxIdx = j;
 					ret.maxCount = ret.clusters[j].length;
 				}
@@ -958,12 +964,14 @@ function __camFindClusters(list, size) {
 				break;
 			}
 		}
-		if (!found) {
+		if (!found)
+		{
 			var n = ret.clusters.length;
 			ret.clusters[n] = [list[i]];
 			ret.xav[n] = x;
 			ret.yav[n] = y;
-			if (1 > ret.maxCount) {
+			if (1 > ret.maxCount)
+			{
 				ret.maxIdx = n;
 				ret.maxCount = 1
 			}
@@ -1192,7 +1200,8 @@ function __camTacticsTick()
 	}
 }
 
-function __camCheckGroupMorale(group) {
+function __camCheckGroupMorale(group)
+{
 	var gi = __camGroupInfo[group];
 	if (!camDef(gi.data.morale))
 		return;
@@ -1293,17 +1302,19 @@ function camSetFactories(factories)
 //;; factory. You would need to call \texttt{camEnableFactory()} again.
 function camSetFactoryData(flabel, fdata)
 {
+	var structure = getObject(flabel);
+	if (!camDef(structure) || !structure)
+	{
+		// Not an error! It's ok if the factory is already destroyed
+		// when its data was updated.
+		camTrace("Factory", flabel, "not found");
+		return;
+	}
 	// remember the old factory group, if any
 	var droids = [];
 	if (camDef(__camFactoryInfo[flabel]))
 		droids = enumGroup(__camFactoryInfo[flabel].group);
 	__camFactoryInfo[flabel] = fdata;
-	var structure = getObject(flabel);
-	if (!camDef(structure) || !structure)
-	{
-		camDebug("Factory", flabel, "not found");
-		return;
-	}
 	var fi = __camFactoryInfo[flabel];
 	if (!camDef(fi.data))
 		fi.data = {};
@@ -1543,6 +1554,7 @@ var __camVictoryData;
 var __camRTLZTicker;
 var __camLZCompromisedTicker;
 var __camLastAttackTriggered;
+var __camLevelEnded;
 
 function __camSetOffworldLimits()
 {
@@ -1559,6 +1571,7 @@ function __camGameLost()
 
 function __camGameWon()
 {
+	__camLevelEnded = true;
 	camTrace(__camNextLevel);
 	if (camDef(__camNextLevel))
 		camNextLevel(__camNextLevel);
@@ -1734,7 +1747,14 @@ function __camPreHookEvent(eventname, hookcode)
 		__camOriginalEvents[eventname] = __camGlobalContext[eventname];
 	__camGlobalContext[eventname] = function()
 	{
-		hookcode.apply(__camGlobalContext, arguments);
+		// Don't trigger hooks after level end.
+		// No, this should't say "if (__camLevelEnded) return;".
+		// Because we are not hooking all possible events,
+		// and we are not documenting which exactly events are hooked.
+		// We should not intervene with level events in unobvious ways.
+		if (!__camLevelEnded)
+			hookcode.apply(__camGlobalContext, arguments);
+		// otherwise, call the original event if any
 		if (camDef(__camOriginalEvents[eventname]))
 			__camOriginalEvents[eventname].apply(__camGlobalContext, arguments);
 	};
@@ -1812,6 +1832,7 @@ __camPreHookEvent("eventStartLevel", function()
 	__camRTLZTicker = 0;
 	__camLZCompromisedTicker = 0;
 	__camLastAttackTriggered = false;
+	__camLevelEnded = false;
 	setTimer("__camTick", 1000);
 });
 
