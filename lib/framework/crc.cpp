@@ -188,13 +188,11 @@ EcKey::EcKey(EcKey const &b)
 	vKey = (void *)EC_KEY_dup((EC_KEY *)b.vKey);
 }
 
-#ifdef WZ_CXX11
 EcKey::EcKey(EcKey &&b)
 	: vKey(nullptr)
 {
 	std::swap(vKey, b.vKey);
 }
-#endif
 
 EcKey::~EcKey()
 {
@@ -208,13 +206,11 @@ EcKey &EcKey::operator =(EcKey const &b)
 	return *this;
 }
 
-#ifdef WZ_CXX11
 EcKey &EcKey::operator =(EcKey &&b)
 {
 	std::swap(vKey, b.vKey);
 	return *this;
 }
-#endif
 
 void EcKey::clear()
 {

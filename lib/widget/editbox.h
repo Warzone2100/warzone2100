@@ -37,7 +37,6 @@
 #define WEDBS_HILITE	0x0010		//
 #define WEDBS_DISABLE   0x0020		// disable button from selection
 
-
 class W_EDITBOX : public WIDGET
 {
 	Q_OBJECT

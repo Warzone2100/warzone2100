@@ -9,13 +9,11 @@ AC_SUBST([XZ_OPT], ["-6"])
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_SRCDIR([lib/framework/frame.cpp])
 
-
 # HACK
 # Workaround stupid autoconf CFLAGS default
 # (Bash considers set but empty variables different from null for the ${VAR:+alt} operator)
 CFLAGS="${CFLAGS} -fPIC"
-CXXFLAGS="${CXXFLAGS} -fPIC"
-
+CXXFLAGS="${CXXFLAGS} -fPIC -std=c++11"
 
 # Make cross compilation options available in --help
 AC_CANONICAL_HOST

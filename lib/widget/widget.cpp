@@ -816,8 +816,6 @@ void WIDGET::displayRecursive(int xOffset, int yOffset)
 	}
 }
 
-
-
 /* Display the screen's widgets in their current state
  * (Call after calling widgRunScreen, this allows the input
  *  processing to be seperated from the display of the widgets).
@@ -874,31 +872,27 @@ void WidgSetAudio(WIDGET_AUDIOCALLBACK Callback, SWORD HilightID, SWORD ClickedI
 	ClickedAudioID = ClickedID;
 }
 
-
 WIDGET_AUDIOCALLBACK WidgGetAudioCallback(void)
 {
 	return AudioCallback;
 }
-
 
 SWORD WidgGetHilightAudioID(void)
 {
 	return HilightAudioID;
 }
 
-
 SWORD WidgGetClickedAudioID(void)
 {
 	return ClickedAudioID;
 }
 
-
-void	setWidgetsStatus(bool var)
+void setWidgetsStatus(bool var)
 {
 	bWidgetsActive = var;
 }
 
-bool	getWidgetsStatus(void)
+bool getWidgetsStatus()
 {
-	return(bWidgetsActive);
+	return bWidgetsActive;
 }

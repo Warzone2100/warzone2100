@@ -586,11 +586,6 @@ void kf_ToggleOrders(void)	// Displays orders & action of currently selected uni
 		CONPRINTF(ConsoleString, (ConsoleString, "Unit Order/Action displayed is %s", showORDERS ? "Enabled" : "Disabled"));
 }
 
-void kf_ToggleLevelName(void) // toggles level name 
-{
-	showLevelName = !showLevelName;
-}
-
 /* Writes out the frame rate */
 void	kf_FrameRate( void )
 {
@@ -1199,14 +1194,14 @@ void	kf_ToggleDroidInfo( void )
 {
 	camToggleInfo();
 }
-// --------------------------------------------------------------------------
+
 void	kf_addInGameOptions( void )
 {
-		setWidgetsStatus(true);
-		if (!isInGamePopupUp)	// they can *only* quit when popup is up.
-		{
+	setWidgetsStatus(true);
+	if (!isInGamePopupUp)	// they can *only* quit when popup is up.
+	{
 		intAddInGameOptions();
-		}
+	}
 }
 
 // --------------------------------------------------------------------------

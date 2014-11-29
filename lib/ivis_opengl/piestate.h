@@ -87,7 +87,7 @@ void pie_FreeShaders();
 GLuint pie_LoadShader(const char *programName, const char *vertexPath, const char *fragmentPath);
 
 // Actual shaders (we do not want to export these calls)
-void pie_ActivateShader(int shaderMode, iIMDShape* shape, PIELIGHT teamcolour, PIELIGHT colour);
+void pie_ActivateShader(int shaderMode, const iIMDShape* shape, PIELIGHT teamcolour, PIELIGHT colour);
 void pie_DeactivateShader();
 void pie_SetShaderStretchDepth(float stretch);
 void pie_SetShaderTime(uint32_t shaderTime);

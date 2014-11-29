@@ -129,8 +129,6 @@
 #define WZCOL_TERC3_GROUND_LOW  pal_Colour(0x00, 0x1C, 0x0E)
 #define WZCOL_TERC3_GROUND_HIGH WZCOL_TERC3_CLIFF_HIGH
 
-static const unsigned gnImage[] = {IMAGE_GN_0, IMAGE_GN_1, IMAGE_GN_2, IMAGE_GN_3, IMAGE_GN_4, IMAGE_GN_5, IMAGE_GN_6, IMAGE_GN_7, IMAGE_GN_8, IMAGE_GN_9, IMAGE_GN_10, IMAGE_GN_11, IMAGE_GN_12, IMAGE_GN_13, IMAGE_GN_14, IMAGE_GN_15};
-
 // ////////////////////////////////////////////////////////////////////////////
 // vars
 extern char	MultiCustomMapsPath[PATH_MAX];
@@ -1005,7 +1003,7 @@ static void addGames(void)
 				}
 				else
 				{
-					std::string flags;
+					QString flags;
 					if (NetPlay.games[i].privateGame)
 					{
 						flags += " "; flags += _("[Password required]");
@@ -1022,13 +1020,13 @@ static void addGames(void)
 					{
 						flags += " "; flags += _("[No VTOLs]");
 					}
-					if (flags.empty())
+					if (flags.isEmpty())
 					{
 						ssprintf(tooltipbuffer[i], _("Hosted by %s"), NetPlay.games[i].hostname);
 					}
 					else
 					{
-						ssprintf(tooltipbuffer[i], _("Hosted by %s —%s"), NetPlay.games[i].hostname, flags.c_str());
+						ssprintf(tooltipbuffer[i], _("Hosted by %s —%s"), NetPlay.games[i].hostname, flags.toUtf8().constData());
 					}
 					sButInit.pTip = tooltipbuffer[i];
 				}
@@ -2599,9 +2597,9 @@ static void addChatBox(void)
 
 	if (*getModList())
 	{
-		std::string modListMessage = _("Mod: ");
+		QString modListMessage = _("Mod: ");
 		modListMessage += getModList();
-		addConsoleMessage(modListMessage.c_str(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+		addConsoleMessage(modListMessage.toUtf8().constData(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 		if (NetPlay.bComms)
 		{
 			addConsoleMessage(_("All players need to have the same mods to join your game."),DEFAULT_JUSTIFY, SYSTEM_MESSAGE);

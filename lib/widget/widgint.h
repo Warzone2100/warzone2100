@@ -25,6 +25,5 @@
 #define __INCLUDED_LIB_WIDGET_WIDGINT_H__
 
 #include "lib/framework/input.h"
-//#include "widgbase.h"
 
 #endif // __INCLUDED_LIB_WIDGET_WIDGINT_H__

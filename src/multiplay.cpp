@@ -1158,7 +1158,7 @@ bool sendTextMessage(const char *pStr, bool all, uint32_t from)
 	// This is for local display
 	if (from == selectedPlayer)
 	{
-		printchatmsg(normal ? curStr : display, from);
+		printchatmsg(curStr, from);
 	}
 
 	triggerEventChat(from, from, pStr); // send to self

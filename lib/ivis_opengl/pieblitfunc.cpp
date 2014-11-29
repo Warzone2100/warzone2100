@@ -21,13 +21,12 @@
 /*
  * pieBlitFunc.c
  *
- * patch for exisitng ivis rectangle draw functions.
- *
  */
 /***************************************************************************/
 
 #include "lib/framework/frame.h"
 #include "lib/framework/opengl.h"
+#include "lib/gamelib/gtime.h"
 #include <time.h>
 
 #include "lib/ivis_opengl/bitimage.h"

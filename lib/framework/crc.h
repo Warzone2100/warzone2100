@@ -25,7 +25,6 @@
 #include <vector>
 #include <string>
 
-
 uint32_t crcSum(uint32_t crc, const void *data, size_t dataLen);
 uint32_t crcSumU16(uint32_t crc, const uint16_t *data, size_t dataLen);
 uint32_t crcSumVector2i(uint32_t crc, const Vector2i *data, size_t dataLen);
@@ -53,14 +52,10 @@ public:
 
 	EcKey();
 	EcKey(EcKey const &b);
-#ifdef WZ_CXX11
 	EcKey(EcKey &&b);
-#endif
 	~EcKey();
 	EcKey &operator =(EcKey const &b);
-#ifdef WZ_CXX11
 	EcKey &operator =(EcKey &&b);
-#endif
 
 	void clear();
 

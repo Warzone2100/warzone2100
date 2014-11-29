@@ -74,7 +74,6 @@ static CHEAT_ENTRY cheatCodes[] =
 	{"showfps", kf_ToggleFPS},	//displays your average FPS
 	{"showsamples", kf_ToggleSamples}, //displays the # of Sound samples in Queue & List
 	{"showorders", kf_ToggleOrders}, //displays unit order/action state.
-	{"showlevelname", kf_ToggleLevelName}, // shows the current level name on screen
 	{"pause", kf_TogglePauseMode}, // Pause the game.
 	{"power info", kf_PowerInfo},
 	{"reload me", kf_Reload},	// reload selected weapons immediately
@@ -95,11 +94,6 @@ bool attemptCheatCode(const char* cheat_name)
 	{
 		kf_ToggleFPS(); 
 		return true; 
-	}
-	else if (!strcasecmp("showlevelname", cheat_name))
-	{
-		kf_ToggleLevelName();
-		return true;
 	}
 
 	if (strcmp(cheat_name, "cheat on") == 0 || strcmp(cheat_name, "debug") == 0)

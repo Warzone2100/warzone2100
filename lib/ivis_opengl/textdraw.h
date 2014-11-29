@@ -30,6 +30,7 @@ enum iV_fonts
 	font_large,
 	font_small,
 	font_scaled,
+	font_count
 };
 
 extern void iV_TextInit(void);

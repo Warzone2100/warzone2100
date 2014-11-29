@@ -277,7 +277,7 @@ static void startSinglePlayerMenu(void)
 	addTextButton(FRONTEND_LOADGAME_MISSION, FRONTEND_POS5X,FRONTEND_POS5Y, _("Load Campaign Game"), WBUT_TXTCENTRE);
 	addTextButton(FRONTEND_LOADGAME_SKIRMISH, FRONTEND_POS6X,FRONTEND_POS6Y, _("Load Skirmish Game"), WBUT_TXTCENTRE);
 
-	addSideText	 (FRONTEND_SIDETEXT ,FRONTEND_SIDEX,FRONTEND_SIDEY,_("SINGLE PLAYER"));
+	addSideText(FRONTEND_SIDETEXT, FRONTEND_SIDEX, FRONTEND_SIDEY,_("SINGLE PLAYER"));
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_QUIT, 10, 10, 30, 29, P_("menu", "Return"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
 	// show this only when the video sequences are not installed
 	if (!PHYSFS_exists("sequences/devastation.ogg"))

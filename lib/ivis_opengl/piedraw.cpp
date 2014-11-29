@@ -166,7 +166,7 @@ static void pie_Draw3DButton(iIMDShape *shape, PIELIGHT teamcolour)
 	pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
 }
 
-static void pie_Draw3DShape2(iIMDShape *shape, int frame, PIELIGHT colour, PIELIGHT teamcolour, int pieFlag, int pieFlagData, glm::mat4 &matrix)
+static void pie_Draw3DShape2(const iIMDShape *shape, int frame, PIELIGHT colour, PIELIGHT teamcolour, int pieFlag, int pieFlagData, glm::mat4 &matrix)
 {
 	bool light = true;
 

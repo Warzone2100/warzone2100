@@ -27,7 +27,6 @@
 #if defined(WZ_CC_MSVC)
 #include "slider_moc.h"		// this is generated on the pre-build event.
 #endif
-// FIXME Direct iVis implementation include!
 #include "lib/ivis_opengl/pieblitfunc.h"
 
 static bool DragEnabled = true;
@@ -70,13 +69,11 @@ UDWORD widgGetSliderPos(W_SCREEN *psScreen, UDWORD id)
 	WIDGET	*psWidget;
 
 	psWidget = widgGetFromID(psScreen, id);
-	ASSERT(psWidget != NULL,
-	       "widgGetSliderPos: couldn't find widget from id");
+	ASSERT(psWidget != NULL, "Could not find widget from id %u", id);
 	if (psWidget)
 	{
 		return ((W_SLIDER *)psWidget)->pos;
 	}
-
 	return 0;
 }
 

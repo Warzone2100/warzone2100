@@ -782,7 +782,6 @@ static void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	// Let's use the real score for MP games
 	if (NetPlay.bComms)
 	{
-		//c8:score,
 		if (Cheated)
 		{
 			sprintf(str, "(cheated)");
@@ -977,12 +976,6 @@ static void addMultiPlayer(UDWORD player,UDWORD pos)
 	sFormInit.pDisplay		  = displayMultiPlayer;
 	sFormInit.UserData		  = player;
 	widgAddForm(psWScreen, &sFormInit);
-
-	//name,
-	//score,
-	//kills,
-	//ping
-	//ALL DONE IN THE DISPLAY FUNC.
 
 	W_BUTINIT sButInit;
 

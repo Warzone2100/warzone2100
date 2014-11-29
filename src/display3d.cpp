@@ -133,6 +133,7 @@ static PIELIGHT getBlueprintColour(STRUCT_STATES state);
 static void NetworkDisplayPlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 static void NetworkDisplayImage(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 extern bool writeGameInfo(const char *pFileName); // Used to help debug issues when we have fatal errors & crash handler testing.
+
 /********************  Variables  ********************/
 // Should be cleaned up properly and be put in structures.
 
@@ -215,10 +216,7 @@ bool showSAMPLES = false;
  *  default OFF, turn ON via console command 'showorders'
  */
 bool showORDERS = false;
-/** Show the current level name on the screen, toggle via the 'showlevelname'
- *  console command
-*/
-bool showLevelName = true;
+
 /** When we have a connection issue, we will flash a message on screen
 */
 static const char *errorWaiting = NULL;
@@ -805,15 +803,11 @@ void draw3DScene( void )
 	if (getWidgetsStatus() && !gamePaused())
 	{
 		char buildInfo[255];
-		if (showLevelName)
-		{
-			iV_SetFont(font_small);
-			iV_SetTextColour(WZCOL_TEXT_MEDIUM);
-			iV_DrawText( getLevelName(), RET_X + 134, 410 + E_H );
-		}
+		iV_SetFont(font_small);
+		iV_SetTextColour(WZCOL_TEXT_MEDIUM);
+		iV_DrawText(getLevelName(), RET_X + 134, 410 + E_H);
 		getAsciiTime(buildInfo, graphicsTime);
-		iV_DrawText( buildInfo, RET_X + 134, 422 + E_H );
-
+		iV_DrawText(buildInfo, RET_X + 134, 422 + E_H);
 		if (getDebugMappingStatus())
 		{
 			iV_DrawText( "DEBUG ", RET_X + 134, 436 + E_H );

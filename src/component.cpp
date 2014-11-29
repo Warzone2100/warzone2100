@@ -69,8 +69,7 @@ UBYTE getPlayerColour(UDWORD pl)
 	return NetPlay.players[pl].colour;
 }
 
-
-static void setMatrix(Vector3i *Position, Vector3i *Rotation, int scale)
+static void setMatrix(const Vector3i *Position, const Vector3i *Rotation, int scale)
 {
 	pie_PerspectiveBegin();
 	pie_MatBegin();
@@ -81,7 +80,6 @@ static void setMatrix(Vector3i *Position, Vector3i *Rotation, int scale)
 	pie_MatRotZ(DEG(Rotation->z));
 	pie_MatScale(scale / 100.f);
 }
-
 
 static void unsetMatrix(void)
 {
@@ -167,28 +165,26 @@ UDWORD getStructureStatHeight(STRUCTURE_STATS *psStat)
 	return 0;
 }
 
-
-void displayIMDButton(iIMDShape *IMDShape, Vector3i *Rotation, Vector3i *Position, SDWORD scale)
+void displayIMDButton(iIMDShape *IMDShape, const Vector3i *Rotation, const Vector3i *Position, int scale)
 {
 	setMatrix(Position, Rotation, scale);
 	pie_Draw3DShape(IMDShape, 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, pie_BUTTON, 0);
 	unsetMatrix();
 }
 
-
-static void sharedStructureButton(STRUCTURE_STATS *Stats, iIMDShape *strImd, Vector3i *Rotation, Vector3i *Position, SDWORD scale)
+static void sharedStructureButton(STRUCTURE_STATS *Stats, iIMDShape *strImd, const Vector3i *Rotation, const Vector3i *Position, int scale)
 {
 	iIMDShape *baseImd, *mountImd[STRUCT_MAXWEAPS], *weaponImd[STRUCT_MAXWEAPS];
+	Vector3i pos = *Position;
 
-	/*HACK HACK HACK!
-	if its a 'tall thin (ie tower)' structure stat with something on the top - offset the
-	position to show the object on top*/
+	/* HACK HACK HACK!
+	if its a 'tall thin (ie tower)' structure stat with something on the top - offset the position to show the object on top */
 	if (strImd->nconnectors && scale == SMALL_STRUCT_SCALE && getStructureStatHeight(Stats) > TOWER_HEIGHT)
 	{
-		Position->y -= 20;
+		pos.y -= 20;
 	}
 
-	setMatrix(Position, Rotation, scale);
+	setMatrix(&pos, Rotation, scale);
 
 	/* Draw the building's base first */
 	baseImd = Stats->pBaseIMD;
@@ -267,19 +263,19 @@ static void sharedStructureButton(STRUCTURE_STATS *Stats, iIMDShape *strImd, Vec
 	unsetMatrix();
 }
 
-void displayStructureButton(STRUCTURE *psStructure, Vector3i *rotation, Vector3i *Position, SDWORD scale)
+void displayStructureButton(STRUCTURE *psStructure, const Vector3i *rotation, const Vector3i *Position, int scale)
 {
 	sharedStructureButton(psStructure->pStructureType, psStructure->sDisplay.imd, rotation, Position, scale);
 }
 
-void displayStructureStatButton(STRUCTURE_STATS *Stats, Vector3i *rotation, Vector3i *Position, SDWORD scale)
+void displayStructureStatButton(STRUCTURE_STATS *Stats, const Vector3i *rotation, const Vector3i *Position, int scale)
 {
 	sharedStructureButton(Stats, Stats->pIMD[0], rotation, Position, scale);
 }
 
 // Render a component given a BASE_STATS structure.
 //
-void displayComponentButton(BASE_STATS *Stat, Vector3i *Rotation, Vector3i *Position, SDWORD scale)
+void displayComponentButton(BASE_STATS *Stat, const Vector3i *Rotation, const Vector3i *Position, int scale)
 {
 	iIMDShape *ComponentIMD = NULL;
 	iIMDShape *MountIMD = NULL;
@@ -324,7 +320,7 @@ void displayComponentButton(BASE_STATS *Stat, Vector3i *Rotation, Vector3i *Posi
 
 // Render a research item given a BASE_STATS structure.
 //
-void displayResearchButton(BASE_STATS *Stat, Vector3i *Rotation, Vector3i *Position, SDWORD scale)
+void displayResearchButton(BASE_STATS *Stat, const Vector3i *Rotation, const Vector3i *Position, int scale)
 {
 	iIMDShape *ResearchIMD = ((RESEARCH *)Stat)->pIMD;
 	iIMDShape *MountIMD = ((RESEARCH *)Stat)->pIMD2;
@@ -792,7 +788,7 @@ static void displayCompObj(DROID *psDroid, bool bButton)
 
 // Render a composite droid given a DROID_TEMPLATE structure.
 //
-void displayComponentButtonTemplate(DROID_TEMPLATE *psTemplate, Vector3i *Rotation, Vector3i *Position, SDWORD scale)
+void displayComponentButtonTemplate(DROID_TEMPLATE *psTemplate, const Vector3i *Rotation, const Vector3i *Position, int scale)
 {
 	setMatrix(Position, Rotation, scale);
 
@@ -815,7 +811,7 @@ void displayComponentButtonTemplate(DROID_TEMPLATE *psTemplate, Vector3i *Rotati
 
 // Render a composite droid given a DROID structure.
 //
-void displayComponentButtonObject(DROID *psDroid, Vector3i *Rotation, Vector3i *Position, SDWORD scale)
+void displayComponentButtonObject(DROID *psDroid, const Vector3i *Rotation, const Vector3i *Position, int scale)
 {
 	SDWORD		difference;
 

@@ -30,8 +30,6 @@
 #endif
 #include "form.h"
 #include "tip.h"
-// FIXME Direct iVis implementation include!
-#include "lib/ivis_opengl/textdraw.h"
 
 W_LABINIT::W_LABINIT()
 	: FontID(font_regular)

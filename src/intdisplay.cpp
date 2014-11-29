@@ -2023,7 +2023,6 @@ void intDisplayDesignPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	intDisplayBar(psWidget, xOffset, yOffset, true);
 }
 
-
 // Widget callback function to play an audio track.
 //
 #define WIDGETBEEPGAP (200)	// 200 milliseconds between each beep please
