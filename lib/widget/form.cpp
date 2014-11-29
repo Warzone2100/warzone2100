@@ -81,6 +81,7 @@ void W_CLICKFORM::setState(unsigned newState)
 
 	unsigned mask = WBUT_DISABLE | WBUT_LOCK | WBUT_CLICKLOCK;
 	state = (state & ~mask) | (newState & mask);
+	dirty = true;
 }
 
 void W_CLICKFORM::setFlash(bool enable)
@@ -93,12 +94,14 @@ void W_CLICKFORM::setFlash(bool enable)
 	{
 		state &= ~WBUT_FLASH;
 	}
+	dirty = true;
 }
 
 void W_FORM::clicked(W_CONTEXT *, WIDGET_KEY)
 {
 	// Stop the tip if there is one.
 	tipStop(this);
+	dirty = true;
 }
 
 /* Respond to a mouse click */
@@ -115,6 +118,7 @@ void W_CLICKFORM::clicked(W_CONTEXT *psContext, WIDGET_KEY key)
 		{
 			state &= ~WBUT_FLASH;  // Stop it flashing
 			state |= WBUT_DOWN;
+			dirty = true;
 
 			if (AudioCallback != NULL)
 			{
@@ -134,6 +138,7 @@ void W_CLICKFORM::released(W_CONTEXT *, WIDGET_KEY key)
 		{
 			screenPointer->setReturn(this);
 			state &= ~WBUT_DOWN;
+			dirty = true;
 		}
 	}
 }
@@ -162,6 +167,7 @@ void W_FORM::highlightLost()
 {
 	// Clear the tool tip if there is one.
 	tipStop(this);
+	dirty = true;
 }
 
 void W_CLICKFORM::highlightLost()
@@ -169,16 +175,11 @@ void W_CLICKFORM::highlightLost()
 	W_FORM::highlightLost();
 
 	state &= ~(WBUT_DOWN | WBUT_HIGHLIGHT);
+	dirty = true;
 }
 
 void W_FORM::display(int xOffset, int yOffset)
 {
-	if (displayFunction != NULL)
-	{
-		displayFunction(this, xOffset, yOffset);
-		return;
-	}
-
 	if ((style & WFORM_INVISIBLE) == 0)
 	{
 		int x0 = x() + xOffset;
@@ -186,30 +187,6 @@ void W_FORM::display(int xOffset, int yOffset)
 		int x1 = x0 + width();
 		int y1 = y0 + height();
 
-		iV_ShadowBox(x0, y0, x1, y1, 1, WZCOL_FORM_LIGHT, WZCOL_FORM_DARK, WZCOL_FORM_BACKGROUND);
-	}
-}
-
-void W_CLICKFORM::display(int xOffset, int yOffset)
-{
-	if (displayFunction != NULL)
-	{
-		displayFunction(this, xOffset, yOffset);
-		return;
-	}
-
-	int x0 = x() + xOffset;
-	int y0 = y() + yOffset;
-	int x1 = x0 + width();
-	int y1 = y0 + height();
-
-	/* Display the border */
-	if ((state & (WBUT_DOWN | WBUT_LOCK | WBUT_CLICKLOCK)) != 0)
-	{
-		iV_ShadowBox(x0, y0, x1, y1, 1, WZCOL_FORM_DARK, WZCOL_FORM_LIGHT, WZCOL_FORM_BACKGROUND);
-	}
-	else
-	{
 		iV_ShadowBox(x0, y0, x1, y1, 1, WZCOL_FORM_LIGHT, WZCOL_FORM_DARK, WZCOL_FORM_BACKGROUND);
 	}
 }
@@ -227,4 +204,9 @@ bool W_CLICKFORM::isDown() const
 bool W_CLICKFORM::isHighlighted() const
 {
 	return (state & WBUT_HIGHLIGHT) != 0;
+}
+
+void W_CLICKFORM::display(int xOffset, int yOffset)
+{
+	ASSERT(false, "No default implementation exists for click forms");
 }

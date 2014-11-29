@@ -33,9 +33,7 @@
 #include "editbox_moc.h"		// this is generated on the pre-build event.
 #endif
 #include "form.h"
-// FIXME Direct iVis implementation include!
 #include "lib/ivis_opengl/pieblitfunc.h"
-#include "lib/ivis_opengl/textdraw.h"
 
 
 /* Pixel gap between edge of edit box and text */
@@ -136,6 +134,7 @@ void W_EDITBOX::overwriteChar(QChar ch)
 	}
 
 	ASSERT(insPos <= aText.length(), "overwriteChar: Invalid insertion point");
+	dirty = true;
 
 	if (insPos == aText.length())
 	{
@@ -274,6 +273,7 @@ void W_EDITBOX::run(W_CONTEXT *psContext)
 	{
 		return;
 	}
+	dirty = true;
 
 	/* If there is a mouse click outside of the edit box - stop editing */
 	int mx = psContext->mx;
@@ -463,6 +463,7 @@ void W_EDITBOX::setString(QString string)
 {
 	aText = string;
 	initialise();
+	dirty = true;
 }
 
 
@@ -500,6 +501,7 @@ void W_EDITBOX::clicked(W_CONTEXT *psContext, WIDGET_KEY)
 		/* Tell the form that the edit box has focus */
 		screenPointer->setFocus(this);
 	}
+	dirty = true;
 }
 
 
@@ -514,6 +516,7 @@ void W_EDITBOX::focusLost()
 	fitStringStart();
 
 	screenPointer->setReturn(this);
+	dirty = true;
 }
 
 
@@ -556,12 +559,6 @@ void W_EDITBOX::setBoxColours(PIELIGHT first, PIELIGHT second, PIELIGHT backgrou
 
 void W_EDITBOX::display(int xOffset, int yOffset)
 {
-	if (displayFunction != NULL)
-	{
-		displayFunction(this, xOffset, yOffset);
-		return;
-	}
-
 	int x0 = x() + xOffset;
 	int y0 = y() + yOffset;
 	int x1 = x0 + width();

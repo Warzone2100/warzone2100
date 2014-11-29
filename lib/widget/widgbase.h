@@ -154,14 +154,11 @@ private:
 
 	QRect                   dim;
 
-private:
-#ifdef WZ_CXX11
 	WIDGET(WIDGET const &) = delete;
 	WIDGET &operator =(WIDGET const &) = delete;
-#else
-	WIDGET(WIDGET const &);  // Non-copyable.
-	WIDGET &operator =(WIDGET const &);  // Non-copyable.
-#endif
+
+public:
+	bool dirty; ///< Whether widget is changed and needs to be redrawn
 };
 
 

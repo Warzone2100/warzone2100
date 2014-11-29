@@ -79,56 +79,33 @@ W_BARGRAPH::W_BARGRAPH(W_BARINIT const *init)
 /* Set the current size of a bar graph */
 void widgSetBarSize(W_SCREEN *psScreen, UDWORD id, UDWORD iValue)
 {
-	W_BARGRAPH		*psBGraph;
-	UDWORD			size;
-
-	ASSERT(psScreen != NULL, "Invalid screen pointer");
-
-	psBGraph = (W_BARGRAPH *)widgGetFromID(psScreen, id);
-	if (psBGraph == NULL || psBGraph->type != WIDG_BARGRAPH)
-	{
-		ASSERT(false, "widgSetBarSize: Couldn't find widget from id");
-		return;
-	}
+	W_BARGRAPH *psBGraph = (W_BARGRAPH *)widgGetFromID(psScreen, id);
+	ASSERT_OR_RETURN(, psBGraph != NULL, "Could not find widget from ID");
+	ASSERT_OR_RETURN(, psBGraph->type == WIDG_BARGRAPH, "Wrong widget type");
 
 	psBGraph->iOriginal = iValue;
 	if (iValue < psBGraph->iRange)
 	{
-		psBGraph->iValue = (UWORD) iValue;
+		psBGraph->iValue = iValue;
 	}
 	else
 	{
 		psBGraph->iValue = psBGraph->iRange;
 	}
 
-	size = WBAR_SCALE * psBGraph->iValue / MAX(psBGraph->iRange, 1);
-
-	psBGraph->majorSize = (UWORD)size;
+	psBGraph->majorSize = WBAR_SCALE * psBGraph->iValue / MAX(psBGraph->iRange, 1);
+	psBGraph->dirty = true;
 }
 
 
 /* Set the current size of a minor bar on a double graph */
 void widgSetMinorBarSize(W_SCREEN *psScreen, UDWORD id, UDWORD iValue)
 {
-	W_BARGRAPH		*psBGraph;
-	UDWORD			size;
-
-	ASSERT(psScreen != NULL, "Invalid screen pointer");
-
-	psBGraph = (W_BARGRAPH *)widgGetFromID(psScreen, id);
-	if (psBGraph == NULL || psBGraph->type != WIDG_BARGRAPH)
-	{
-		ASSERT(false, "Couldn't find widget from id");
-		return;
-	}
-
-	size = WBAR_SCALE * iValue / MAX(psBGraph->iRange, 1);
-	if (size > WBAR_SCALE)
-	{
-		size = WBAR_SCALE;
-	}
-
-	psBGraph->minorSize = (UWORD)size;
+	W_BARGRAPH *psBGraph = (W_BARGRAPH *)widgGetFromID(psScreen, id);
+	ASSERT_OR_RETURN(, psBGraph != NULL, "Could not find widget from ID");
+	ASSERT_OR_RETURN(, psBGraph->type == WIDG_BARGRAPH, "Wrong widget type");
+	psBGraph->minorSize = MIN(WBAR_SCALE * iValue / MAX(psBGraph->iRange, 1), WBAR_SCALE);
+	psBGraph->dirty = true;
 }
 
 
@@ -389,12 +366,6 @@ void barGraphDisplayTrough(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 
 void W_BARGRAPH::display(int xOffset, int yOffset)
 {
-	if (displayFunction != NULL)
-	{
-		displayFunction(this, xOffset, yOffset);
-		return;
-	}
-
 	if (style & WBAR_TROUGH)
 	{
 		barGraphDisplayTrough(this, xOffset, yOffset);

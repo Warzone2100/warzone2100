@@ -68,6 +68,7 @@ unsigned W_BUTTON::getState()
 
 void W_BUTTON::setFlash(bool enable)
 {
+	dirty = true;
 	if (enable)
 	{
 		state |= WBUT_FLASH;
@@ -84,6 +85,7 @@ void W_BUTTON::setState(unsigned newState)
 
 	unsigned mask = WBUT_DISABLE | WBUT_LOCK | WBUT_CLICKLOCK;
 	state = (state & ~mask) | (newState & mask);
+	dirty = true;
 }
 
 QString W_BUTTON::getString() const
@@ -94,6 +96,7 @@ QString W_BUTTON::getString() const
 void W_BUTTON::setString(QString string)
 {
 	pText = string;
+	dirty = true;
 }
 
 void W_BUTTON::setTip(QString string)
@@ -103,6 +106,8 @@ void W_BUTTON::setTip(QString string)
 
 void W_BUTTON::clicked(W_CONTEXT *, WIDGET_KEY key)
 {
+	dirty = true;
+
 	/* Can't click a button if it is disabled or locked down */
 	if ((state & (WBUT_DISABLE | WBUT_LOCK)) == 0)
 	{
@@ -138,6 +143,7 @@ void W_BUTTON::released(W_CONTEXT *, WIDGET_KEY key)
 			emit clicked();
 			screenPointer->setReturn(this);
 			state &= ~WBUT_DOWN;
+			dirty = true;
 		}
 	}
 }
@@ -146,13 +152,15 @@ void W_BUTTON::released(W_CONTEXT *, WIDGET_KEY key)
 /* Respond to a mouse moving over a button */
 void W_BUTTON::highlight(W_CONTEXT *psContext)
 {
-	state |= WBUT_HIGHLIGHT;
-
+	if ((state & WBUT_HIGHLIGHT) == 0)
+	{
+		state |= WBUT_HIGHLIGHT;
+		dirty = true;
+	}
 	if (AudioCallback)
 	{
 		AudioCallback(HilightAudioID);
 	}
-
 	/* If there is a tip string start the tool tip */
 	if (!pTip.isEmpty())
 	{
@@ -165,6 +173,7 @@ void W_BUTTON::highlight(W_CONTEXT *psContext)
 void W_BUTTON::highlightLost()
 {
 	state &= ~(WBUT_DOWN | WBUT_HIGHLIGHT);
+	dirty = true;
 	if (!pTip.isEmpty())
 	{
 		tipStop(this);
@@ -173,12 +182,6 @@ void W_BUTTON::highlightLost()
 
 void W_BUTTON::display(int xOffset, int yOffset)
 {
-	if (displayFunction != NULL)
-	{
-		displayFunction(this, xOffset, yOffset);
-		return;
-	}
-
 	int x0 = x() + xOffset;
 	int y0 = y() + yOffset;
 	int x1 = x0 + width();
@@ -247,6 +250,7 @@ void W_BUTTON::display(int xOffset, int yOffset)
 void W_BUTTON::setImages(Images const &images_)
 {
 	images = images_;
+	dirty = true;
 	if (!images.normal.isNull())
 	{
 		setGeometry(x(), y(), images.normal.width(), images.normal.height());
@@ -255,6 +259,7 @@ void W_BUTTON::setImages(Images const &images_)
 
 void W_BUTTON::setImages(Image image, Image imageDown, Image imageHighlight, Image imageDisabled)
 {
+	dirty = true;
 	setImages(Images(image, imageDown, imageHighlight, imageDisabled));
 }
 
@@ -264,7 +269,7 @@ void StateButton::setState(int state)
 	{
 		return;
 	}
-
+	dirty = true;
 	currentState = state;
 	std::map<int, Images>::const_iterator image = imageSets.find(state);
 	if (image != imageSets.end())
@@ -295,6 +300,7 @@ void StateButton::setTip(int state, char const *stringUtf8)
 void StateButton::setImages(int state, Images const &images)
 {
 	imageSets[state] = images;
+	dirty = true;
 	if (currentState == state)
 	{
 		W_BUTTON::setImages(images);

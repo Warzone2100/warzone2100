@@ -119,6 +119,7 @@ WIDGET::WIDGET(W_INIT const *init, WIDGET_TYPE type)
 	, screenPointer(nullptr)
 	, parentWidget(NULL)
 	, dim(init->x, init->y, init->width, init->height)
+	, dirty(true)
 {}
 
 WIDGET::WIDGET(WIDGET *parent, WIDGET_TYPE type)
@@ -132,6 +133,7 @@ WIDGET::WIDGET(WIDGET *parent, WIDGET_TYPE type)
 	, screenPointer(nullptr)
 	, parentWidget(NULL)
 	, dim(0, 0, 1, 1)
+	, dirty(true)
 {
 	parent->attach(this);
 }
@@ -164,6 +166,7 @@ void WIDGET::setGeometry(QRect const &r)
 	}
 	dim = r;
 	geometryChanged();
+	dirty = true;
 }
 
 void WIDGET::attach(WIDGET *widget)
@@ -774,6 +777,10 @@ void WIDGET::displayRecursive(int xOffset, int yOffset)
 		PIELIGHT col;
 		col.byte.r = 128 + iSinSR(realTime, 2000, 127); col.byte.g = 128 + iSinSR(realTime + 667, 2000, 127); col.byte.b = 128 + iSinSR(realTime + 1333, 2000, 127); col.byte.a = 128;
 		iV_Box(xOffset + x(), yOffset + y(), xOffset + x() + width() - 1, yOffset + y() + height() - 1, col);
+	}
+	else if (displayFunction)
+	{
+		displayFunction(this, xOffset, yOffset);
 	}
 	else
 	{

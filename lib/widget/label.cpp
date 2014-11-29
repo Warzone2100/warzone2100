@@ -53,12 +53,6 @@ W_LABEL::W_LABEL(WIDGET *parent)
 
 void W_LABEL::display(int xOffset, int yOffset)
 {
-	if (displayFunction != NULL)
-	{
-		displayFunction(this, xOffset, yOffset);
-		return;
-	}
-
 	iV_SetFont(FontID);
 	iV_SetTextColour(fontColour);
 
@@ -122,6 +116,7 @@ QString W_LABEL::getString() const
 void W_LABEL::setString(QString string)
 {
 	aText = string;
+	dirty = true;
 }
 
 void W_LABEL::setTip(QString string)
@@ -133,4 +128,5 @@ void W_LABEL::setTextAlignment(WzTextAlignment align)
 {
 	style &= ~(WLAB_ALIGNLEFT | WLAB_ALIGNCENTRE | WLAB_ALIGNRIGHT);
 	style |= align;
+	dirty = true;
 }
