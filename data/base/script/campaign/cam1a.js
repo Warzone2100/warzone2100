@@ -119,7 +119,6 @@ function eventStartLevel()
 	// give player briefing
 	hackAddMessage("CMB1_MSG", CAMP_MSG, 0, false);
 
-	setReinforcementTime(-1);
 	setMissionTime(-1);
 
 	// feed libcampaign.js with data to do the rest

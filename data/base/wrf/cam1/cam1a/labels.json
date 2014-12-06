@@ -1,7 +1,7 @@
 {
     "area_1": { "label": "raidGroup", "pos1": [ 3392, 576 ], "pos2": [ 3904, 1088 ]},
     "area_10": { "label": "RoadblockArea", "pos1": [ 4500, 3600 ], "pos2": [ 5500, 4700 ]},
-    "area_11": { "label": "raidTrigger", "pos1": [ 2900, 500 ], "pos2": [ 3800, 3000 ]},
+    "area_11": { "label": "raidTrigger", "subscriber": 0, "pos1": [ 2900, 500 ], "pos2": [ 3800, 3000 ]},
     "area_3": { "label": "landingZone", "pos1": [ 1280, 6528 ], "pos2": [ 1536, 6784 ]},
     "area_4": { "label": "LaunchScavAttack", "pos1": [ 2496, 6080 ], "pos2": [ 4928, 7232 ]},
     "area_5": { "label": "scavbase1area", "pos1": [ 3520, 4416 ], "pos2": [ 4416, 5056 ]},

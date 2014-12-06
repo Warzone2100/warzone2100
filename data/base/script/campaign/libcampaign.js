@@ -161,6 +161,9 @@ function camMakePos(xx, yy)
 			};
 		case GROUP:
 		default:
+			// already a pos-like object?
+			if (camDef(obj.x) && camDef(obj.y))
+				return { x: obj.x, y: obj.y };
 			camDebug("Not implemented:", obj.type);
 			return undefined;
 	}
@@ -382,6 +385,7 @@ function __camUpdateMarkedTiles()
 function __camLetMeWin()
 {
 	__camLetMeWinArtifacts();
+	hackMarkTiles(); // clear marked tiles, as they may actually remain
 	__camGameWon();
 }
 
@@ -876,6 +880,15 @@ function camManageGroup(group, order, data)
 	var saneData = data;
 	if (!camDef(saneData))
 		saneData = {};
+	if (camDef(saneData.pos)) // sanitize pos now to make ticks faster
+	{
+		if (camIsString(saneData.pos)) // single label?
+			saneData.pos = [ camMakePos(saneData.pos) ];
+		else if (!camDef(saneData.pos.length)) // single position object?
+			saneData.pos = [ saneData.pos ];
+		for (var i = 0; i < saneData.pos.length; ++i) // array of labels?
+			saneData.pos[i] = camMakePos(saneData.pos[i]);
+	}
 	if (camDef(__camGroupInfo[group])
 	    && order !== __camGroupInfo[group].order)
 	{
@@ -996,30 +1009,25 @@ function __camPickTarget(group)
 			}
 			// fall-through! we just don't track targets on COMPROMISE
 		case CAM_ORDER_COMPROMISE:
-			var list = [];
 			if (camDef(gi.data.pos))
 			{
-				if (camDef(gi.data.pos.length))
-					list = gi.data.pos;
-				else
-					list = [ gi.data.pos ];
-				for (var i = 0; i < list.length && !targets.length; ++i)
+				for (var i = 0; i < gi.data.pos.length && !targets.length; ++i)
 				{
 					var radius = gi.data.radius;
 					if (!camDef(radius))
 						radius = __CAM_PLAYER_BASE_RADIUS;
-					targets = enumRange(list[i].x,
-					                    list[i].y,
+					targets = enumRange(gi.data.pos[i].x,
+					                    gi.data.pos[i].y,
 					                    radius,
 					                    CAM_HUMAN_PLAYER, false);
 				}
 			}
 			if (gi.order === CAM_ORDER_COMPROMISE && !targets.length)
 			{
-				if (!list.length)
+				if (!camDef(gi.data.pos))
 					camDebug("`pos' is required for COMPROMISE order")
 				else
-					targets = [ list[list.length - 1] ];
+					targets = [ gi.data.pos[gi.data.pos.length - 1] ];
 			}
 			if (!targets.length)
 				targets = enumStruct(CAM_HUMAN_PLAYER);
@@ -1183,7 +1191,7 @@ function __camTacticsTickForGroup(group)
 				gi.lastspot = list[camRand(list.length)];
 			}
 			gi.lastmove = gameTime;
-			var pos = camMakePos(gi.data.pos[gi.lastspot]);
+			var pos = gi.data.pos[gi.lastspot];
 			for (var i = 0; i < droids.length; ++i)
 			{
 				var droid = droids[i];
@@ -1576,10 +1584,15 @@ function __camSetOffworldLimits()
 	setStructureLimits("A0CommandCentre", 0, 0);
 }
 
-function __camGameLost()
+function __camGameLostCB()
 {
 	camTrace();
 	gameOverMessage(false);
+}
+
+function __camGameLost()
+{
+	camCallOnce("__camGameLostCB");
 }
 
 function __camGameWon()
@@ -1824,6 +1837,11 @@ __camPreHookEvent("eventChat", function(from, to, message)
 		__camLetMeWin();
 	if (message === "win info")
 		__camWinInfo();
+	if (message === "make cc")
+	{
+		setMiniMap(true);
+		setDesign(true);
+	}
 	if (message.lastIndexOf("ascend ", 0) === 0)
 	{
 		__camNextLevel = message.substring(7).toUpperCase().replace(/-/g, "_");

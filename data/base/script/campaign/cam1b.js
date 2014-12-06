@@ -75,7 +75,6 @@ function eventStartLevel()
 	centreView(startpos.x, startpos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, 0);
 
-	setReinforcementTime(-1);
 	setMissionTime(3600);
 	setAlliance(1, 6, true);
 	setAlliance(1, 7, true);
