@@ -9424,7 +9424,7 @@ msgstr "2100 Július 4, reggel"
 
 #: data/base/sequenceaudio/cam1/c001.txa:9
 msgid "In-flight to Western Sector"
-msgstr "Repülés a Nyutati Szektorba"
+msgstr "Repülés a Nyugati Szektorba"
 
 #: data/base/sequenceaudio/cam1/c001.txa:10
 msgid "Team Alpha nears its destination"
@@ -11887,7 +11887,7 @@ msgstr "Helyi rendszer"
 
 #: lib/ivis_opengl/screen.cpp:187
 msgid "OpenGL GLSL shader version 1.20 is not supported by your system. Some things may look wrong. Please upgrade your graphics driver/hardware, if possible."
-msgstr "OpenGL GLSL 1.20árnyékolási verziót nem támogatja a te rendszered. Néhány dolgot rossznak látok. Kérlek frissítsd fel a drivert vagy hardware videokártyád, ha ez lehetséges."
+msgstr "OpenGL GLSL 1.20 árnyékolási verziót nem támogatja a te rendszered. Néhány dolgot rossznak látok. Kérlek frissítsd fel a drivert vagy hardware videokártyád, ha ez lehetséges."
 
 #: lib/ivis_opengl/screen.cpp:193
 #, fuzzy
@@ -12184,7 +12184,7 @@ msgstr "Szöveg tömörítés kikapcsolása"
 
 #: src/clparse.cpp:269
 msgid "Disable the use of OpenGL Vertex Buffer Objects"
-msgstr ""
+msgstr "OpenGL Vertex Puffer Objektum kikapcsolása"
 
 #: src/cmddroid.cpp:110
 msgid "Commander needs a higher level to command more units"
@@ -12473,7 +12473,7 @@ msgstr "%s %s-t akart neked adni, de neked már így is túl sok van!"
 #: src/droid.cpp:3356
 #, c-format
 msgid "You wanted to give %s a %s but they have too many!"
-msgstr "%s-t akartál adni %s de neki már így is túl sok van."
+msgstr "%s-t akartál adni %s, de neki már így is túl sok van."
 
 #: src/frontend.cpp:108
 msgid "Single Player"
@@ -14132,7 +14132,7 @@ msgstr "%s adott %u energiát"
 #: src/multigifts.cpp:408
 #, c-format
 msgid "%s Requests An Alliance With You"
-msgstr "% szeretne szövetség önnel"
+msgstr "% szeretne szövetséget önnel"
 
 #: src/multigifts.cpp:417
 #, c-format
@@ -14313,7 +14313,7 @@ msgstr "Térkép kiválasztása"
 
 #: src/multiint.cpp:1504
 msgid "Map-Mod!"
-msgstr ""
+msgstr "Térkép-Mód"
 
 #: src/multiint.cpp:1517
 msgid "Click to set Password"
@@ -14507,7 +14507,7 @@ msgstr " *** jelszó NEM kötelező! ***"
 
 #: src/multiint.cpp:3020
 msgid "This is a map-mod, it can change your playing experience!"
-msgstr ""
+msgstr "Ez egy térkép-mod, meg tudja változtatni a játékélményt!"
 
 #: src/multiint.cpp:3072
 msgid "Sorry! Failed to host the game."
@@ -14735,12 +14735,12 @@ msgstr "%s : %s ki lettek rúgva a játékból, és a tiltó listára kerültek.
 #: src/multiopt.cpp:227
 #: src/multiplay.cpp:1722
 msgid "Warning, this is a map-mod, it could alter normal gameplay."
-msgstr ""
+msgstr "Figyelem, ez egy térkép-mod, meg tudja változtatni a normális játékot."
 
 #: src/multiopt.cpp:231
 #: src/multiplay.cpp:1726
 msgid "Warning, HOST has altered the game code, and can't be trusted!"
-msgstr ""
+msgstr "Figyelem, GAZDAGÉP megváltoztatta a játék kódot, és nem lehet megbízni benne!"
 
 #: src/multiplay.cpp:263
 #, c-format
