@@ -40,6 +40,19 @@ ACLOCAL_AMFLAGS = -I m4
 distcleancheck_listfiles =  find . -type f -print | grep -v 'autorevision.cache'
 
 EXTRA_DIST= \
+	lib/framework/resource_lexer.lpp \
+	lib/framework/resource_parser.ypp \
+	lib/framework/strres_lexer.lpp \
+	lib/framework/strres_parser.ypp \
+	lib/gamelib/audp_lexer.lpp \
+	lib/gamelib/audp_parser.ypp \
+	lib/script/chat_lexer.lpp \
+	lib/script/chat_parser.ypp \
+	lib/script/script_lexer.lpp \
+	lib/script/script_parser.ypp \
+	src/level_lexer.lpp \
+	src/scriptvals_lexer.lpp \
+	src/scriptvals_parser.ypp \
 	build_tools/autorevision \
 	autogen.sh \
 	config.rpath \
