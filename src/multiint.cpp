@@ -1041,7 +1041,14 @@ static void addGames(void)
 		switch (getLobbyError())
 		{
 		case ERROR_NOERROR:
-			txt = _("No games are available");
+			if (NetPlay.HaveUpgrade)
+			{
+				txt = _("There appears to be a game update available!");
+			}
+			else
+			{
+				txt = _("No games are available for your version");
+			}
 			break;
 		case ERROR_FULL:
 			txt = _("Game is full");
@@ -1086,7 +1093,7 @@ static void addGames(void)
 		sButInit.UserData = 0; // store disable state
 		sButInit.height = FRONTEND_BUTHEIGHT;
 		sButInit.pDisplay = displayTextOption;
-		sButInit.FontID = font_large;
+		sButInit.FontID = font_medium;
 		sButInit.pText = txt;
 
 		widgAddButton(psWScreen, &sButInit);
