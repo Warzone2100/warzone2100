@@ -646,7 +646,6 @@
     <ClInclude Include="scriptobj.h" />
     <ClInclude Include="scripttabs.h" />
     <ClInclude Include="scriptvals.h" />
-    <ClInclude Include="scriptvals_parser.hpp" />
     <ClInclude Include="selection.h" />
     <ClInclude Include="seqdisp.h" />
     <ClInclude Include="stats.h" />

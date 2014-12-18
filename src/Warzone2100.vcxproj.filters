@@ -716,9 +716,6 @@
     <ClInclude Include="qtscriptfuncs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="scriptvals_parser.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\win32\warzone2100.rc">
