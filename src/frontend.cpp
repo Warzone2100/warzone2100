@@ -63,6 +63,7 @@
 #include "version.h"
 #include "warzoneconfig.h"
 #include "wrappers.h"
+#include "autorevision.h"
 
 // ////////////////////////////////////////////////////////////////////////////
 // Global variables
@@ -123,7 +124,49 @@ static bool startTitleMenu(void)
 
 	addSmallTextButton(FRONTEND_HYPERLINK, FRONTEND_POS8X, FRONTEND_POS8Y, _("Official site: http://wz2100.net/"), 0);
 
+	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_UPGRDLINK, 7, 7, MULTIOP_BUTW, MULTIOP_BUTH, _("Check for a newer version"), IMAGE_GAMEVERSION, IMAGE_GAMEVERSION_HI, true);
+
 	return true;
+}
+
+static void runUpgrdHyperlink(void)
+{
+	//FIXME: There is no decent way we can re-init the display to switch to window or fullscreen within game. refs: screenToggleMode().
+	char buf[250] = { '\0' };
+	const char *segment;
+	const char vcs_branch_cstr[] = VCS_BRANCH;
+	const char vcs_tag[] = VCS_TAG;
+
+	if (strlen(vcs_tag))
+	{
+		segment = vcs_tag;
+	}
+	else if (strlen(vcs_branch_cstr))
+	{
+		segment = vcs_branch_cstr;
+	}
+	else
+	{
+		segment = "unknown";
+	}
+
+	ssprintf(buf, "http://gamecheck.wz2100.net/%s", segment);
+
+#if defined(WZ_OS_WIN)
+	wchar_t  wszDest[250];
+	MultiByteToWideChar(CP_UTF8, 0, buf, -1, wszDest, 250);
+
+	ShellExecuteW(NULL, L"open", wszDest, NULL, NULL, SW_SHOWNORMAL);
+#elif defined (WZ_OS_MAC)
+	// For the macs (I have no way of checking, so default to this)
+	system("open http://gamecheck.wz2100.net/mac");
+#else
+	// for linux
+	char lbuf[250] = {'\0'};
+	ssprintf(lbuf, "xdg-open %s &", buf);
+	int stupidWarning = system(lbuf);
+	(void)stupidWarning;  // Why is system() a warn_unused_result function..?
+#endif
 }
 
 static void runHyperlink(void)
@@ -170,6 +213,9 @@ bool runTitleMenu(void)
 			break;
 		case FRONTEND_HYPERLINK:
 			runHyperlink();
+			break;
+		case FRONTEND_UPGRDLINK:
+			runUpgrdHyperlink();
 			break;
 		default:
 			break;
