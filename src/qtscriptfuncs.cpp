@@ -1753,7 +1753,8 @@ static DROID_TEMPLATE *makeTemplate(int player, const QString &templName, QScrip
 //-- Create and place a droid at the given x, y position as belonging to the given player, built with
 //-- the given components. Currently does not support placing droids in multiplayer, doing so will
 //-- cause a desync. Returns the created droid on success, otherwise returns null. Passing "" for
-//-- reserved parameters is recommended.
+//-- reserved parameters is recommended. In 3.2+ only, to create droids in off-world (campaign mission list),
+//-- pass -1 as both x and y.
 static QScriptValue js_addDroid(QScriptContext *context, QScriptEngine *engine)
 {
 	int player = context->argument(0).toInt32();
@@ -1761,26 +1762,69 @@ static QScriptValue js_addDroid(QScriptContext *context, QScriptEngine *engine)
 	int x = context->argument(1).toInt32();
 	int y = context->argument(2).toInt32();
 	QString templName = context->argument(3).toString();
+	bool onMission = (x == -1) && (y == -1);
+	SCRIPT_ASSERT(context, (onMission || (x >= 0 && y >= 0)), "Invalid coordinates (%d, %d) for droid", x, y);
 	DROID_TEMPLATE *psTemplate = makeTemplate(player, templName, context, 4, SIZE_NUM, false);
 	if (psTemplate)
 	{
+		DROID *psDroid = NULL;
 		bool oldMulti = bMultiMessages;
 		bMultiMessages = false; // ugh, fixme
-		DROID *psDroid = buildDroid(psTemplate, world_coord(x) + TILE_UNITS / 2, world_coord(y) + TILE_UNITS / 2, player, false, NULL);
-		if (psDroid)
+		if (onMission)
 		{
-			addDroid(psDroid, apsDroidLists);
-			debug(LOG_LIFE, "Created droid %s by script for player %d: %u", objInfo(psDroid), player, psDroid->id);
+			psDroid = buildMissionDroid(psTemplate, 128, 128, player);
+			if (psDroid)
+			{
+				debug(LOG_LIFE, "Created mission-list droid %s by script for player %d: %u", objInfo(psDroid), player, psDroid->id);
+			}
+			else
+			{
+				debug(LOG_ERROR, "Invalid droid %s", templName.toUtf8().constData());
+			}
 		}
 		else
 		{
-			debug(LOG_ERROR, "Invalid droid %s", templName.toUtf8().constData());
+			psDroid = buildDroid(psTemplate, world_coord(x) + TILE_UNITS / 2, world_coord(y) + TILE_UNITS / 2, player, onMission, NULL);
+			if (psDroid)
+			{
+				addDroid(psDroid, apsDroidLists);
+				debug(LOG_LIFE, "Created droid %s by script for player %d: %u", objInfo(psDroid), player, psDroid->id);
+			}
+			else
+			{
+				debug(LOG_ERROR, "Invalid droid %s", templName.toUtf8().constData());
+			}
 		}
 		bMultiMessages = oldMulti; // ugh
 		delete psTemplate;
 		return psDroid ? QScriptValue(convDroid(psDroid, engine)) : QScriptValue::NullValue;
 	}
 	return QScriptValue::NullValue;
+}
+
+//-- \subsection{addDroidToTransporter(transporter, droid)}
+//-- Load a droid, which is currently located on the campaign off-world mission list,
+//-- into a transporter, which is also currently on the campaign off-world mission list.
+//-- (3.2+ only)
+
+static QScriptValue js_addDroidToTransporter(QScriptContext *context, QScriptEngine *engine)
+{
+	QScriptValue transporterVal = context->argument(0);
+	int transporterId = transporterVal.property("id").toInt32();
+	int transporterPlayer = transporterVal.property("player").toInt32();
+	DROID *psTransporter = IdToMissionDroid(transporterId, transporterPlayer);
+	SCRIPT_ASSERT(context, psTransporter, "No such transporter id %d belonging to player %d", transporterId, transporterPlayer);
+	SCRIPT_ASSERT(context, isTransporter(psTransporter), "Droid id %d belonging to player %d is not a transporter", transporterId, transporterPlayer);
+	QScriptValue droidVal = context->argument(1);
+	int droidId = droidVal.property("id").toInt32();
+	int droidPlayer = droidVal.property("player").toInt32();
+	DROID *psDroid = IdToMissionDroid(droidId, droidPlayer);
+	SCRIPT_ASSERT(context, psDroid, "No such droid id %d belonging to player %d", droidId, droidPlayer);
+	SCRIPT_ASSERT(context, checkTransporterSpace(psTransporter, psDroid), "Not enough room in transporter %d for droid %d", transporterId, droidId);
+	bool removeSuccessful = droidRemove(psDroid, mission.apsDroidLists);
+	SCRIPT_ASSERT(context, removeSuccessful, "Could not remove droid id %d from mission list", droidId);
+	psTransporter->psGroup->add(psDroid);
+	return QScriptValue();
 }
 
 //-- \subsection{makeTemplate(player, name, body, propulsion, reserved, turrets...)}
@@ -4743,6 +4787,7 @@ bool registerFunctions(QScriptEngine *engine, QString scriptName)
 	engine->globalObject().setProperty("orderDroid", engine->newFunction(js_orderDroid));
 	engine->globalObject().setProperty("buildDroid", engine->newFunction(js_buildDroid));
 	engine->globalObject().setProperty("addDroid", engine->newFunction(js_addDroid));
+	engine->globalObject().setProperty("addDroidToTransporter", engine->newFunction(js_addDroidToTransporter));
 	engine->globalObject().setProperty("addFeature", engine->newFunction(js_addFeature));
 	engine->globalObject().setProperty("componentAvailable", engine->newFunction(js_componentAvailable));
 	engine->globalObject().setProperty("isVTOL", engine->newFunction(js_isVTOL));

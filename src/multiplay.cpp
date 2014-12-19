@@ -318,6 +318,35 @@ DROID *IdToDroid(UDWORD id, UDWORD player)
 	return NULL;
 }
 
+// find off-world droids
+DROID *IdToMissionDroid(UDWORD id, UDWORD player)
+{
+	if (player == ANYPLAYER)
+	{
+		for (int i = 0; i < MAX_PLAYERS; i++)
+		{
+			for (DROID *d = mission.apsDroidLists[i]; d; d = d->psNext)
+			{
+				if (d->id == id)
+				{
+					return d;
+				}
+			}
+		}
+	}
+	else if (player < MAX_PLAYERS)
+	{
+		for (DROID *d = mission.apsDroidLists[player]; d; d = d->psNext)
+		{
+			if (d->id == id)
+			{
+				return d;
+			}
+		}
+	}
+	return NULL;
+}
+
 // ////////////////////////////////////////////////////////////////////////////
 // find a structure
 STRUCTURE *IdToStruct(UDWORD id, UDWORD player)
