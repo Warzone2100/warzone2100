@@ -75,7 +75,6 @@
 // Misc useful stuff.
 ////////////////////////////////////////////////////////////////////////////////
 
-
 const CAM_HUMAN_PLAYER = 0;
 const CAM_MAX_PLAYERS = 8;
 const CAM_TICKS_PER_FRAME = 100;
@@ -100,6 +99,7 @@ function camRand(max)
 {
 	if (max > 0)
 		return Math.floor(Math.random() * max);
+	camDebug("Max should be positive");
 }
 
 //;; \subsection{camCallOnce(function name)}
@@ -170,7 +170,7 @@ function camMakePos(xx, yy)
 }
 
 //;; \subsection{camDist(x1, y1, x2, y2 | pos1, x2, y2 | x1, y1, pos2 | pos1, pos2)}
-//;; A wrapper for distBetweenTwoPoints.
+//;; A wrapper for \texttt{distBetweenTwoPoints()}.
 function camDist(x1, y1, x2, y2)
 {
 	if (camDef(y2)) // standard
@@ -206,11 +206,11 @@ function camPlayerMatchesFilter(player, filter)
 //;; Make a new group out of array of droids, single game object,
 //;; or label string, with fuzzy auto-detection of argument type.
 //;; Only droids would be added to the group. \textbf{filter} can be one of
-//;; a player index, ALL_PLAYERS, ALLIES or ENEMIES; defaults to ALL_PLAYERS.
+//;; a player index, ALL_PLAYERS, ALLIES or ENEMIES; defaults to ENEMIES.
 function camMakeGroup(what, filter)
 {
 	if (!camDef(filter))
-		filter = ALL_PLAYERS;
+		filter = ENEMIES;
 	var array;
 	var obj;
 	if (camIsString(what)) // label
@@ -273,7 +273,6 @@ var __camCalledOnce = {};
 ////////////////////////////////////////////////////////////////////////////////
 // Debugging helpers.
 ////////////////////////////////////////////////////////////////////////////////
-
 
 //;; \subsection{camMarkTiles(label | array of labels)}
 //;; Mark area on the map by label(s), but only if debug mode is enabled.
@@ -426,10 +425,10 @@ function __camBacktrace()
 	return list;
 }
 
+
 ////////////////////////////////////////////////////////////////////////////////
 // Artifacts management.
 ////////////////////////////////////////////////////////////////////////////////
-
 
 //;; \subsection{camSetArtifacts(artifacts)}
 //;; Tell \texttt{libcampaign.js} to manage a certain set of artifacts.
@@ -569,9 +568,14 @@ function __camLetMeWinArtifacts()
 	}
 }
 
+
 ////////////////////////////////////////////////////////////////////////////////
 // Enemy base management.
 ////////////////////////////////////////////////////////////////////////////////
+
+const CAM_REINFORCE_NONE = 0;
+const CAM_REINFORCE_GROUND = 1;
+const CAM_REINFORCE_TRANSPORT = 2;
 
 //;; \subsection{camSetEnemyBases(bases)}
 //;; Tell \texttt{libcampaign.js} to manage a certain set of enemy bases.
@@ -592,6 +596,9 @@ function __camLetMeWinArtifacts()
 //;; 	\item[eliminateSnd] A sound file to play when the base is eliminated.
 //;; 	The sound is played in the center of the cleanup area,
 //;; 	which needs to be defined.
+//;; 	\item{player} If base is detected by cleanup area, only objects
+//;; 	matching this player filter would be added to the base group or
+//;; 	cleaned up. Note that this most likely disables feature cleanup.
 //;; \end{description}
 //;; Additionally, this function would call special event callbacks if they are
 //;; defined in your script, which should be named as follows,
@@ -657,8 +664,12 @@ function camSetEnemyBases(bases)
 				var s = structs[i];
 				if (s.type !== STRUCTURE || __camIsValidLeftover(s))
 					continue;
-				camTrace("Auto-adding", s.id, "to base", blabel);
-				groupAdd(bi.group, s);
+				if (!camDef(bi.player) ||
+				    camPlayerMatchesFilter(s.player, bi.player))
+				{
+					camTrace("Auto-adding", s.id, "to base", blabel);
+					groupAdd(bi.group, s);
+				}
 			}
 		}
 		if (groupSize(bi.group) === 0)
@@ -709,10 +720,40 @@ function camAllEnemyBasesEliminated()
 	return __camNumEnemyBases === Object.keys(__camEnemyBases).length;
 }
 
+//;; \subsection{camSetEnemyReinforcements(base label, kind, interval, callback, data)}
+//;; Periodically brings reinforcements to an enemy base, until the base is
+//;; eliminated. Kind can be one of:
+//;; \begin{description}
+//;; 	\item[CAM_REINFORCE_NONE] Disable previously set reinforcements,
+//;; 	\item[CAM_REINFORCE_GROUND] Reinforcements magically appear on the ground,
+//;; 	\item[CAM_REINFORCE_TRANSPORT] Reinforcements are unloaded from transports.
+//;; 	\textbf{NOTE:} the game engine doesn't seem to support two simultaneous
+//;; 	incoming transporters for the same player. Avoid this at all costs!
+//;; 	The following data fields are required:
+//;; 	\begin{description}
+//;; 		\item[entry] Transporter entry position.
+//;; 		\item[exit] Transporter exit position.
+//;; 	\end{description}
+//;; \end{description}
+//;; Interval is pause, in milliseconds, between reinforcements. Callback is
+//;; name of a function that returns a list of droid templates to spawn.
+function camSetEnemyReinforcements(blabel, kind, interval, callback, data)
+{
+	if (!camIsString(callback))
+		camDebug("Callback name must be a string (received", callback, ")");
+	var bi = __camEnemyBases[blabel];
+	bi.reinforce_kind = kind;
+	bi.reinforce_interval = interval;
+	bi.reinforce_callback = callback;
+	bi.reinforce_data = data;
+}
+
 //////////// privates
 
 var __camEnemyBases;
 var __camNumEnemyBases;
+var __camPlayerTransports;
+var __camIncomingTransports;
 
 function __camCheckBaseSeen(seen)
 {
@@ -783,11 +824,106 @@ function __camCheckBaseEliminated(group)
 	}
 }
 
+function __camBasesTick()
+{
+	for (var blabel in __camEnemyBases)
+	{
+		var bi = __camEnemyBases[blabel];
+		if (bi.eliminated || !camDef(bi.reinforce_kind))
+			continue;
+		if (gameTime - bi.reinforce_last < bi.reinforce_interval)
+			continue;
+		if (!camDef(bi.player))
+		{
+			camDebug("Enemy base player needs to be set for", blabel);
+			return;
+		}
+		if (!camDef(bi.cleanup))
+		{
+			camDebug("Enemy base cleanup area needs to be set for", blabel);
+			return;
+		}
+		bi.reinforce_last = gameTime;
+		var list = profile(bi.reinforce_callback);
+		var pos = camMakePos(bi.cleanup);
+		switch(bi.reinforce_kind)
+		{
+			case CAM_REINFORCE_GROUND:
+				var droids = [];
+				for (var i = 0; i < list.length; ++i)
+				{
+					droids[droids.length] = addDroid(bi.player, pos.x, pos.y,
+					                        "Reinforcement", list[i].body,
+					                        list[i].prop, null, null, list[i].weap);
+				}
+				camManageGroup(camMakeGroup(droids), CAM_ORDER_ATTACK, {
+					regroup: true,
+					count: -1,
+				});
+				break;
+			case CAM_REINFORCE_TRANSPORT:
+				if (camDef(__camIncomingTransports[bi.player]))
+				{
+					camDebug("Transporter already on map for player", bi.player);
+					return;
+				}
+				if (!camDef(__camPlayerTransports[bi.player]))
+				{
+					camTrace("Creating a transporter for player", bi.player);
+					__camPlayerTransports[bi.player] = addDroid(bi.player,
+					                                   -1, -1, "Transporter",
+					                                   "TransporterBody",
+					                                   "V-Tol", null, null,
+					                                   "MG3-VTOL");
+				}
+				var trans = __camPlayerTransports[bi.player];
+				var droids = [];
+				for (var i = 0; i < list.length; ++i)
+				{
+					var droid = addDroid(bi.player, -1, -1,
+					                     "Reinforcement", list[i].body,
+					                     list[i].prop, null, null, list[i].weap);
+					droids[droids.length] = droid;
+					addDroidToTransporter(trans, droid);
+				}
+				__camIncomingTransports[bi.player] = droids;
+				camTrace("Incoming transport with", droids.length,
+				         "droids for player", bi.player);
+				playSound("pcv395.ogg", pos.x, pos.y, 0);
+				setNoGoArea(pos.x - 2, pos.y - 2,
+				            pos.x + 2, pos.y + 2, bi.player);
+				setTransporterExit(bi.reinforce_data.exit.x,
+				                   bi.reinforce_data.exit.y, bi.player);
+				// will guess which transporter to start, automagically
+				startTransporterEntry(bi.reinforce_data.entry.x,
+				                      bi.reinforce_data.entry.y, bi.player);
+				break;
+			default:
+				break;
+		}
+	}
+}
+
+function __camLandTransporter(player)
+{
+	if (!camDef(__camIncomingTransports[player]))
+	{
+		camDebug("Unhandled transporter for player", player);
+		return;
+	}
+	camTrace("Landing transport for player", player);
+	var droids = __camIncomingTransports[player];
+	camManageGroup(camMakeGroup(droids), CAM_ORDER_ATTACK, {
+		regroup: true,
+		count: -1,
+	});
+	delete __camIncomingTransports[player];
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////
 // AI droid movement automation.
 ////////////////////////////////////////////////////////////////////////////////
-
 
 const CAM_ORDER_ATTACK = 0;
 const CAM_ORDER_DEFEND = 1;
@@ -820,10 +956,12 @@ const CAM_ORDER_FOLLOW = 4;
 //;; 		if any.
 //;; 		\item[regroup] If set to true, the group will not move forward unless
 //;; 		it has at least \textbf{count} droids in its biggest cluster.
+//;; 		If \textbf{count} is set to -1, at least 2/3 of group's droids should be in
+//;; 		the biggest cluster.
 //;; 	\end{description}
 //;; 	\item[CAM_ORDER_DEFEND] Protect the given position. If too far, retreat
 //;; 	back there ignoring fire. The following data object fields are
-//;; 	required:
+//;; 	available:
 //;; 	\begin{description}
 //;; 		\item[pos] Position to defend.
 //;; 		\item[radius] Circle radius around \textbf{pos} to scan for targets.
@@ -834,9 +972,11 @@ const CAM_ORDER_FOLLOW = 4;
 //;; 		if any.
 //;; 		\item[regroup] If set to true, the group will not move forward unless
 //;; 		it has at least \textbf{count} droids in its biggest cluster.
+//;; 		If \textbf{count} is set to -1, at least 2/3 of group's droids should be in
+//;; 		the biggest cluster.
 //;; 	\end{description}
 //;; 	\item[CAM_ORDER_PATROL] Move droids randomly between a given list of
-//;; 	positions. The following data object fields are required:
+//;; 	positions. The following data object fields are available:
 //;; 	\begin{description}
 //;; 		\item[pos] An array of positions to patrol between.
 //;; 		\item[interval] Change positions every this many milliseconds.
@@ -847,11 +987,14 @@ const CAM_ORDER_FOLLOW = 4;
 //;; 		if any.
 //;; 		\item[regroup] If set to true, the group will not move forward unless
 //;; 		it has at least \textbf{count} droids in its biggest cluster.
+//;; 		If \textbf{count} is set to -1, at least 2/3 of group's droids should be in
+//;; 		the biggest cluster.
 //;; 	\end{description}
 //;; 	\item[CAM_ORDER_COMPROMISE] Same as CAM_ORDER_ATTACK, just stay near the
 //;; 	last (or only) attack position instead of looking for the player
 //;; 	around the whole map. Useful for offworld missions,
-//;; 	with player's LZ as the final position.
+//;; 	with player's LZ as the final position. The following data object fields
+//;; 	are available:
 //;; 	\begin{description}
 //;; 		\item[pos] Position or list of positions to compromise. If pos is a list,
 //;; 		first positions in the list will be compromised first.
@@ -863,10 +1006,13 @@ const CAM_ORDER_FOLLOW = 4;
 //;; 		if any.
 //;; 		\item[regroup] If set to true, the group will not move forward unless
 //;; 		it has at least \textbf{count} droids in its biggest cluster.
+//;; 		If \textbf{count} is set to -1, at least 2/3 of group's droids should be in
+//;; 		the biggest cluster.
 //;; 	\end{description}
 //;; 	\item[CAM_ORDER_FOLLOW] Assign the group to commander. The sub-order
 //;; 	is defined to be given to the commander. When commander dies,
-//;; 	the group continues to execute the sub-order.
+//;; 	the group continues to execute the sub-order. The following data object
+//;; 	fields are available:
 //;; 	\begin{description}
 //;; 		\item[droid] Commander droid label.
 //;; 		\item[order] The order to give to the commander.
@@ -883,7 +1029,7 @@ function camManageGroup(group, order, data)
 	if (camDef(saneData.pos)) // sanitize pos now to make ticks faster
 	{
 		if (camIsString(saneData.pos)) // single label?
-			saneData.pos = [ camMakePos(saneData.pos) ];
+			saneData.pos = [ saneData.pos ];
 		else if (!camDef(saneData.pos.length)) // single position object?
 			saneData.pos = [ saneData.pos ];
 		for (var i = 0; i < saneData.pos.length; ++i) // array of labels?
@@ -923,6 +1069,15 @@ function camStopManagingGroup(group)
 	delete __camGroupInfo[group];
 }
 
+//;; \subsection{camManageTrucks(player)}
+//;; Manage trucks for an AI player. This assumes recapturing oils and
+//;; rebuilding destroyed trucks in factories, the latter is implemented
+//;; via \texttt{camQueueDroidProduction()} mechanism.
+function camManageTrucks(player)
+{
+	__camTruckInfo[player] = 1;
+}
+
 //;; \subsection{camOrderToString(order)}
 //;; Print campaign order as string, useful for debugging.
 function camOrderToString(order)
@@ -947,6 +1102,7 @@ function camOrderToString(order)
 //////////// privates
 
 var __camGroupInfo;
+var __camTruckInfo;
 
 const __CAM_TARGET_TRACKING_RADIUS = 5;
 const __CAM_PLAYER_BASE_RADIUS = 20;
@@ -957,6 +1113,7 @@ const __CAM_FALLBACK_TIME_ON_REGROUP = 5000;
 
 function __camFindClusters(list, size)
 {
+	// The good old cluster analysis algorithm taken from NullBot AI.
 	var ret = { clusters: [], xav: [], yav: [], maxIdx: 0, maxCount: 0 };
 	for (var i = list.length - 1; i >= 0; --i)
 	{
@@ -1035,21 +1192,23 @@ function __camPickTarget(group)
 				targets = enumDroid(CAM_HUMAN_PLAYER);
 			break;
 		case CAM_ORDER_DEFEND:
+			if (!camDef(gi.data.pos))
+				camDebug("`pos' is required for DEFEND order")
 			var radius = gi.data.radius;
 			if (!camDef(radius))
 				radius = __CAM_DEFENSE_RADIUS;
 			if (camDef(gi.target)
-				&& camDist(gi.target, gi.data.pos) < radius)
+				&& camDist(gi.target, gi.data.pos[0]) < radius)
 			{
 				targets = enumRange(gi.target.x, gi.target.y,
 				                    __CAM_TARGET_TRACKING_RADIUS,
 				                    CAM_HUMAN_PLAYER, false);
 			}
 			if (!targets.length)
-				targets = enumRange(gi.data.pos.x, gi.data.pos.y,
+				targets = enumRange(gi.data.pos[0].x, gi.data.pos[0].y,
 				                    radius, CAM_HUMAN_PLAYER, false);
 			if (!targets.length)
-				targets = [ gi.data.pos ];
+				targets = [ gi.data.pos[0] ];
 			break;
 		default:
 			camDebug("Unsupported group order", gi.order,
@@ -1105,7 +1264,7 @@ function __camTacticsTickForGroup(group)
 	}
 	else
 	{
-		healthyDroids = rawDroids
+		healthyDroids = rawDroids;
 	}
 
 	// Handle regrouping
@@ -1126,19 +1285,24 @@ function __camTacticsTickForGroup(group)
 				}
 		var back = (gameTime - gi.lastHit < __CAM_FALLBACK_TIME_ON_REGROUP);
 		// not enough droids grouped?
-		if (ret.maxCount < gi.count)
+		if (gi.count < 0
+		    ? (ret.maxCount < groupSize(group) * 0.66)
+		    : (ret.maxCount < gi.count))
 		{
 			for (var i = 0; i < droids.length; ++i)
 			{
 				var droid = droids[i];
 				if (back)
 					orderDroid(droid, DORDER_RTB);
-				else
+				else if (droid.order !== DORDER_MOVE) // to assembly point?
 					orderDroid(droid, DORDER_STOP);
 			}
 			return;
 		}
 	}
+
+	if (droids.length === 0)
+		return;
 
 	switch(gi.order)
 	{
@@ -1151,6 +1315,10 @@ function __camTacticsTickForGroup(group)
 			for (var i = 0; i < droids.length; ++i)
 			{
 				var droid = droids[i];
+				if (droid.player === CAM_HUMAN_PLAYER)
+				{
+					camDebug("Controlling a human player's droid");
+				}
 				var done = false;
 				if (gi.order === CAM_ORDER_DEFEND)
 				{
@@ -1238,7 +1406,7 @@ function __camCheckGroupMorale(group)
 			gi.order = CAM_ORDER_DEFEND;
 			// swap pos and fallback
 			var temp = gi.data.pos;
-			gi.data.pos = gi.data.fallback;
+			gi.data.pos = [ camMakePos(gi.data.fallback) ];
 			gi.data.fallback = temp;
 			// apply orders instantly
 			queue("__camTacticsTickForGroup", CAM_TICKS_PER_FRAME, group);
@@ -1251,7 +1419,7 @@ function __camCheckGroupMorale(group)
 			// swap pos and fallback
 			var temp = gi.data.pos;
 			gi.data.pos = gi.data.fallback;
-			gi.data.fallback = temp;
+			gi.data.fallback = temp[0];
 			// apply orders instantly
 			queue("__camTacticsTickForGroup", CAM_TICKS_PER_FRAME, group);
 			break;
@@ -1262,6 +1430,61 @@ function __camCheckGroupMorale(group)
 	}
 }
 
+function __camTruckTick()
+{
+	for (player in __camTruckInfo)
+	{
+		var oils = enumFeature(-1, "OilResource");
+		if (oils.length === 0)
+				return;
+		var rawDroids = enumDroid(player, DROID_CONSTRUCT);
+		var droids = [];
+		for (var i = 0; i < rawDroids.length; ++i)
+		{
+			var droid = rawDroids[i];
+			if (droid.order !== DORDER_BUILD && droid.order !== DORDER_HELPBUILD
+			                                 && droid.order !== DORDER_LINEBUILD)
+			{
+				droids[droids.length] = droid;
+			}
+		}
+		if (droids.length === 0)
+			continue;
+		var oil = oils[0], minDroid = droids[0];
+		var minDist = camDist(minDroid, oil);
+		for (var i = 1; i < droids.length; ++i)
+		{
+			var droid = droids[i];
+			if (!droidCanReach(droid, oil.x, oil.y))
+				continue;
+			var dist = camDist(droid, oil);
+			if (dist < minDist)
+			{
+				minDist = dist;
+				minDroid = droid;
+			}
+		}
+		enableStructure("A0ResourceExtractor", minDroid.player);
+		orderDroidBuild(minDroid, DORDER_BUILD, "A0ResourceExtractor",
+		                oil.x, oil.y);
+	}
+}
+
+// called from eventDestroyed
+function __camCheckDeadTruck(obj)
+{
+	if (camDef(__camTruckInfo[obj.player]))
+	{
+		// multi-turret templates are not supported yet
+		// cyborg engineers are not supported yet
+		// cannot use obj.weapons[] because spade aint a weapon
+		camQueueDroidProduction(obj.player, {
+			body: obj.body,
+			prop: obj.propulsion,
+			weap: "Spade1Mk1"
+		});
+	}
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Factory production management.
@@ -1347,18 +1570,6 @@ function camSetFactoryData(flabel, fdata)
 		groupAdd(fi.group, droids[i]);
 	if (!camDef(fi.data.count))
 		fi.data.count = fi.groupSize;
-	if (camDef(fi.assembly))
-	{
-		var pos = camMakePos(fi.assembly);
-		setAssemblyPoint(structure, pos.x, pos.y);
-	}
-	// automatically make templates available.
-	for (var i = 0; i < fi.templates.length; ++i)
-	{
-		makeComponentAvailable(fi.templates[i].body, structure.player);
-		makeComponentAvailable(fi.templates[i].prop, structure.player);
-		makeComponentAvailable(fi.templates[i].weap, structure.player);
-	}
 }
 
 //;; \subsection{camEnableFactory(factory label)}
@@ -1390,9 +1601,21 @@ function camEnableFactory(flabel)
 	__camFactoryUpdateTactics(flabel);
 }
 
+//;; \subsection{camQueueDroidProduction(player, template)}
+//;; Queues up an extra droid template for production. It would be produced
+//;; in the first factory that is capable of producing it, at the end of
+//;; its production loop, first queued first served.
+function camQueueDroidProduction(player, template)
+{
+	if (!camDef(__camFactoryQueue[player]))
+		__camFactoryQueue[player] = [];
+	__camFactoryQueue[player][__camFactoryQueue[player].length] = template;
+}
+
 //////////// privates
 
 var __camFactoryInfo;
+var __camFactoryQueue;
 
 function __camFactoryUpdateTactics(flabel)
 {
@@ -1406,25 +1629,49 @@ function __camFactoryUpdateTactics(flabel)
 	if (droids.length >= fi.groupSize)
 	{
 		camManageGroup(fi.group, fi.order, fi.data);
+		fi.group = newGroup();
 	}
 	else
 	{
 		var pos = camMakePos(fi.assembly);
 		if (!camDef(pos))
-			pos = camMakePos(factory);
+			pos = camMakePos(flabel);
 		camManageGroup(fi.group, CAM_ORDER_DEFEND, { pos: pos });
 	}
 }
 
 function __camAddDroidToFactoryGroup(droid, structure)
 {
+	// don't manage trucks in this function
+	if (droid.droidType === DROID_CONSTRUCT)
+		return;
 	// FIXME: O(n) lookup here
 	var flabel = getLabel(structure);
 	if (!camDef(flabel) || !flabel)
 		return;
 	var fi = __camFactoryInfo[flabel];
 	groupAdd(fi.group, droid);
+	if (camDef(fi.assembly))
+	{
+		// this is necessary in case droid is regrouped manually
+		// in the scenario code, and thus DORDER_DEFEND for assembly
+		// will not be applied in __camFactoryUpdateTactics()
+		var pos = camMakePos(fi.assembly);
+		orderDroidLoc(droid, DORDER_MOVE, pos.x, pos.y);
+	}
 	__camFactoryUpdateTactics(flabel);
+}
+
+function __camBuildDroid(template, structure)
+{
+	makeComponentAvailable(template.body, structure.player);
+	makeComponentAvailable(template.prop, structure.player);
+	makeComponentAvailable(template.weap, structure.player);
+	var n = [ structure.name, structure.id,
+	          template.body, template.prop, template.weap ].join(" ");
+	// multi-turret templates are not supported yet
+	return buildDroid(structure, n, template.body, template.prop,
+	                          null, null, template.weap);
 }
 
 function __camContinueProduction(structure)
@@ -1471,14 +1718,25 @@ function __camContinueProduction(structure)
 			return;
 		}
 	}
-	var t = fi.templates[fi.state];
-	var n = [ struct.name, struct.id, fi.state ].join(" ");
-	// multi-turret templates are not supported yet
-	buildDroid(struct, n, t.body, t.prop, 0, 0, t.weap);
+	// check factory queue after every loop
+	if (fi.state === -1)
+	{
+		fi.state = 0;
+		var p = struct.player;
+		if (camDef(__camFactoryQueue[p]) && __camFactoryQueue[p].length > 0)
+		{
+			if (__camBuildDroid(__camFactoryQueue[p][0], struct))
+			{
+				__camFactoryQueue[p].shift();
+				return;
+			}
+		}
+	}
+	__camBuildDroid(fi.templates[fi.state], struct);
 	// loop through templates
 	++fi.state;
 	if (fi.state >= fi.templates.length)
-		fi.state = 0;
+		fi.state = -1;
 	fi.lastprod = gameTime;
 }
 
@@ -1486,7 +1744,6 @@ function __camContinueProduction(structure)
 ////////////////////////////////////////////////////////////////////////////////
 // Victory celebration helpers.
 ////////////////////////////////////////////////////////////////////////////////
-
 
 //;; \subsection{camNextLevel(next level)}
 //;; A wrapper around \texttt{loadLevel()}. Remembers to give bonus power
@@ -1722,6 +1979,7 @@ function __camVictoryOffworld()
 	}
 }
 
+
 ////////////////////////////////////////////////////////////////////////////////
 // Transporter management.
 ////////////////////////////////////////////////////////////////////////////////
@@ -1733,9 +1991,10 @@ function __camVictoryOffworld()
 function camSetupTransporter(x, y, x1, y1)
 {
 	addDroid(CAM_HUMAN_PLAYER, x, y, "Transport",
-	         "TransporterBody", "V-Tol", 0, 0, "MG3-VTOL");
+	         "TransporterBody", "V-Tol", null, null, "MG3-VTOL");
 	setTransporterExit(x1, y1, CAM_HUMAN_PLAYER);
 }
+
 
 ////////////////////////////////////////////////////////////////////////////////
 // Event hooks magic. This makes all the library catch all the necessary events
@@ -1743,7 +2002,6 @@ function camSetupTransporter(x, y, x1, y1)
 // It assumes that script authors do not implement another similar mechanism,
 // or something BAD would happen.
 ////////////////////////////////////////////////////////////////////////////////
-
 
 //;; \subsection{camAreaEvent(label, function(droid))}
 //;; Implement eventArea<label> in a debugging-friendly way. The function
@@ -1791,6 +2049,7 @@ function __camTick()
 {
 	if (camDef(__camWinLossCallback))
 		__camGlobalContext[__camWinLossCallback]();
+	__camBasesTick();
 }
 
 var __camLastHitTime = 0;
@@ -1856,6 +2115,8 @@ __camPreHookEvent("eventStartLevel", function()
 	// on the global scope (or wherever necessary).
 	__camGroupInfo = {};
 	__camFactoryInfo = {};
+	__camFactoryQueue = {};
+	__camTruckInfo = {};
 	isReceivingAllEvents = true;
 	__camNeedBonusTime = false;
 	__camDefeatOnTimeout = false;
@@ -1863,7 +2124,10 @@ __camPreHookEvent("eventStartLevel", function()
 	__camLZCompromisedTicker = 0;
 	__camLastAttackTriggered = false;
 	__camLevelEnded = false;
+	__camPlayerTransports = {};
+	__camIncomingTransports = {};
 	setTimer("__camTick", 1000); // campaign pollers
+	setTimer("__camTruckTick", 150100); // some slower campaign pollers
 	queue("__camTacticsTick", 100); // would re-queue itself
 });
 
@@ -1884,6 +2148,8 @@ __camPreHookEvent("eventDroidBuilt", function(droid, structure)
 __camPreHookEvent("eventDestroyed", function(obj)
 {
 	__camCheckPlaceArtifact(obj);
+	if (obj.type === DROID && obj.droidType === DROID_CONSTRUCT)
+		__camCheckDeadTruck(obj);
 });
 
 __camPreHookEvent("eventObjectSeen", function(viewer, seen)
@@ -1904,6 +2170,12 @@ __camPreHookEvent("eventTransporterExit", function(transport)
 		__camGameWon();
 		return;
 	}
+});
+
+__camPreHookEvent("eventTransporterLanded", function(transport)
+{
+	if (transport.player !== CAM_HUMAN_PLAYER)
+		__camLandTransporter(transport.player);
 });
 
 __camPreHookEvent("eventMissionTimeout", function()
