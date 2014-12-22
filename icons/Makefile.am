@@ -3,9 +3,15 @@ dist_noinst_DATA = \
 	warzone2100.ico \
 	warzone2100.obsolete.ico \
 	warzone2100.png \
+	warzone2100.large.png \
+	warzone2100logo.png \
 	warzone2100.splash.png \
 	warzone2100.uninstall.ico \
+	wz2100portable.ico \
+	wz2100portableU.ico \
 	wz2100header.bmp \
+	wz2100headerP.bmp \
+	wz2100welcomeP.bmp \
 	wz2100welcome.bmp
 
 install-data-local:

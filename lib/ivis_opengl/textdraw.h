@@ -28,6 +28,7 @@ enum iV_fonts
 {
 	font_regular,
 	font_large,
+	font_medium,
 	font_small,
 	font_scaled,
 	font_count

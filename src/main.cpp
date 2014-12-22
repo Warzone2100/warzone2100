@@ -499,16 +499,14 @@ static void initialize_ConfigDir(void)
 			      tmpstr, PHYSFS_getLastError());
 			exit(1);
 		}
+	}
 
-		// NOTE: This is currently only used for mingw builds for now.
-#if defined (WZ_CC_MINGW)
-		if (!OverrideRPTDirectory(tmpstr))
+	if (!OverrideRPTDirectory(tmpstr))
 		{
 			// since it failed, we just use our default path, and not the user supplied one.
 			debug(LOG_ERROR, "Error setting exception hanlder to use directory %s", tmpstr);
 		}
-#endif
-	}
+
 
 	// User's home dir first so we allways see what we write
 	PHYSFS_addToSearchPath( PHYSFS_getWriteDir(), PHYSFS_PREPEND );

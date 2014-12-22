@@ -166,7 +166,8 @@ static char
 	executionDate[MAX_DATE_STRING] = {'\0'},
 	programPID[MAX_PID_STRING] = {'\0'},
 	programPath[PATH_MAX] = {'\0'},
-	gdbPath[PATH_MAX] = {'\0'};
+	gdbPath[PATH_MAX] = {'\0'},
+	WritePath[PATH_MAX] = {'\0'};
 
 
 /**
@@ -616,8 +617,9 @@ static void posixExceptionHandler(int signum)
 {
 	static sig_atomic_t allreadyRunning = 0;
 	// XXXXXX will be converted into random characters by mkstemp(3)
-	static const char gdmpPath[] = "/tmp/warzone2100.gdmp-XXXXXX";
-	char dumpFilename[sizeof(gdmpPath)];
+	static const char gdmpFile[] = "warzone2100.gdmp-XXXXXX";
+	char gdmpPath[PATH_MAX] = {'\0'};
+	char dumpFilename[PATH_MAX];
 	int dumpFile;
 	const char *signal;
 # if defined(__GLIBC__)
@@ -628,7 +630,9 @@ static void posixExceptionHandler(int signum)
 	if (allreadyRunning)
 		raise(signum);
 	allreadyRunning = 1;
-
+	// we use our write directory (which is the only directory that wz should have access to)
+	// and stuff it into our logs directory (same as on windows)
+	ssprintf(gdmpPath, "%slogs/%s", WritePath, gdmpFile);
 	sstrcpy(dumpFilename, gdmpPath);
 
 	dumpFile = mkstemp(dumpFilename);
@@ -808,6 +812,8 @@ bool OverrideRPTDirectory(char *newPath)
 	wcscat(buf, L"\\logs\\"); // stuff it in the logs directory
 	wcscat(buf, L"Warzone2100.RPT");
 	ResetRPTDirectory(buf);
+#elif defined(WZ_OS_UNIX)
+	sstrcpy(WritePath, newPath);
 #endif
 	return true;
 }

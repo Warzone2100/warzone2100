@@ -265,6 +265,7 @@ struct NETPLAY
 	char gamePassword[password_string_size];		//
 	bool GamePassworded;				// if we have a password or not.
 	bool ShowedMOTD;					// only want to show this once
+	bool HaveUpgrade;					// game updates available
 	char MOTDbuffer[255];				// buffer for MOTD
 	char* MOTD;
 };
