@@ -601,12 +601,6 @@ void removeWildcards(char *pStr)
 			// We allow spaces as long as they aren't the first char, or two spaces in a row
 		    && pStr[i] != '-'
 		    && pStr[i] != '+'
-		    && pStr[i] != '!'
-		    && pStr[i] != ','
-		    && pStr[i] != '='
-		    && pStr[i] != '^'
-		    && pStr[i] != '@'
-		    && (pStr[i]<35 || pStr[i]>41) // # $ % & ' ( )
 		    && pStr[i] != '[' && pStr[i] != ']'
 		    && (pStr[i]&0x80) != 0x80  // á é í ó ú α β γ δ ε
 			)

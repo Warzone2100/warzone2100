@@ -1114,6 +1114,7 @@ int NETinit(bool bFirstCall)
 		NetPlay.GamePassworded = false;
 		NetPlay.ShowedMOTD = false;
 		NetPlay.isHostAlive = false;
+		NetPlay.HaveUpgrade = false;
 		NetPlay.gamePassword[0] = '\0';
 		NetPlay.MOTD = strdup("");
 		sstrcpy(NetPlay.gamePassword,_("Enter password here"));
@@ -2110,13 +2111,23 @@ static ssize_t readLobbyResponse(Socket* sock, unsigned int timeout)
 	// NUL terminate string
 	NetPlay.MOTD[MOTDLength] = '\0';
 
-	if (lobbyStatusCode / 100 != 2) // Check whether status code is 2xx (success)
+	switch (lobbyStatusCode)
 	{
+	case 200:
+		debug(LOG_NET, "Lobby success (%u): %s", (unsigned int)lobbyStatusCode, NetPlay.MOTD);
+		NetPlay.HaveUpgrade = false;
+		break;
+
+	case 400:
+		debug(LOG_NET, "**Upgrade available! Lobby success (%u): %s", (unsigned int)lobbyStatusCode, NetPlay.MOTD);
+		NetPlay.HaveUpgrade = true;
+		break;
+
+	default:
 		debug(LOG_ERROR, "Lobby error (%u): %s", (unsigned int)lobbyStatusCode, NetPlay.MOTD);
-		return received;
+		break;
 	}
 
-	debug(LOG_NET, "Lobby success (%u): %s", (unsigned int)lobbyStatusCode, NetPlay.MOTD);
 	return received;
 
 error:
@@ -2358,11 +2369,16 @@ static void NETallowJoining(void)
 		    && (recv_result = readNoInt(tmp_socket[i], p_buffer, 8))
 			&& recv_result != SOCKET_ERROR)
 		{
+			std::string rIP = "Incomming connection from:";
+			rIP.append(getSocketTextAddress(tmp_socket[i]));
+			NETlogEntry(rIP.c_str(), SYNC_FLAG, i);
 			// A 2.3.7 client sends a "list" command first, just drop the connection.
 			if (strcmp(buffer, "list") == 0)
 			{
 				debug(LOG_INFO, "An old client tried to connect, closing the socket.");
 				NETlogEntry("Dropping old client.", SYNC_FLAG, i);
+				NETlogEntry("Invalid (old)game version", SYNC_FLAG, i);
+				addToBanList(rIP.c_str(), "BAD_USER");
 				connectFailed = true;
 			}
 			else
@@ -2393,6 +2409,7 @@ static void NETallowJoining(void)
 					memcpy(&buffer, &result, sizeof(result));
 					writeAll(tmp_socket[i], &buffer, sizeof(result));
 					NETlogEntry("Invalid game version", SYNC_FLAG, i);
+					addToBanList(rIP.c_str(), "BAD_USER");
 					connectFailed = true;
 				}
 				if ((int)NetPlay.playercount == gamestruct.desc.dwMaxPlayers)
@@ -2702,14 +2719,21 @@ bool NEThostGame(const char* SessionName, const char* PlayerName,
 	gamestruct.Mods = 0;										// number of concatenated mods?
 	gamestruct.gameId  = 0;
 	gamestruct.limits = 0x0;									// used for limits
-	gamestruct.future3 = 0xBAD03;								// for future use
-	gamestruct.future4 = 0xBAD04;								// for future use
+#if defined(WZ_OS_WIN)
+	gamestruct.future3 = 0x77696e;								// for future use
+#elif defined (WZ_OS_MAC)
+	gamestruct.future3 = 0x6d6163;								// for future use
+#else
+	gamestruct.future3 = 0x6c696e;								// for future use
+#endif
+	gamestruct.future4 = NETCODE_VERSION_MAJOR << 16 | NETCODE_VERSION_MINOR;	// for future use
 
 	selectedPlayer = NET_CreatePlayer(PlayerName);
 	ASSERT_OR_RETURN(false, selectedPlayer < MAX_PLAYERS, "Failed to create player");
 	realSelectedPlayer = selectedPlayer;
 	NetPlay.isHost	= true;
 	NetPlay.isHostAlive = true;
+	NetPlay.HaveUpgrade = false;
 	NetPlay.hostPlayer	= NET_HOST_ONLY;
 	ASSERT(selectedPlayer == NET_HOST_ONLY, "For now, host must start at player index zero, was %d", (int)selectedPlayer);
 
@@ -2861,6 +2885,14 @@ bool NETfindGame(void)
 			strncpy(NetPlay.games[gamecount].desc.host, getSocketTextAddress(tcp_socket), sizeof(NetPlay.games[gamecount].desc.host) - 1);
 		}
 
+		int Vmgr = (NetPlay.games[gamecount].future4 & 0xFFFF0000) >> 16;
+		int Vmnr = (NetPlay.games[gamecount].future4 & 0x0000FFFF);
+
+		if (Vmgr > NETCODE_VERSION_MAJOR || Vmnr > NETCODE_VERSION_MINOR)
+		{
+			debug(LOG_NET, "Version update %d:%d", Vmgr, Vmnr);
+			NetPlay.HaveUpgrade = true;
+		}
 		++gamecount;
 	}
 

@@ -1041,7 +1041,14 @@ static void addGames(void)
 		switch (getLobbyError())
 		{
 		case ERROR_NOERROR:
-			txt = _("No games are available");
+			if (NetPlay.HaveUpgrade)
+			{
+				txt = _("There appears to be a game update available!");
+			}
+			else
+			{
+				txt = _("No games are available for your version");
+			}
 			break;
 		case ERROR_FULL:
 			txt = _("Game is full");
@@ -1086,7 +1093,7 @@ static void addGames(void)
 		sButInit.UserData = 0; // store disable state
 		sButInit.height = FRONTEND_BUTHEIGHT;
 		sButInit.pDisplay = displayTextOption;
-		sButInit.FontID = font_large;
+		sButInit.FontID = font_medium;
 		sButInit.pText = txt;
 
 		widgAddButton(psWScreen, &sButInit);
@@ -2803,6 +2810,8 @@ static void processMultiopWidgets(UDWORD id)
 		{
 		case MULTIOP_GNAME:										// we get this when nec.
 			sstrcpy(game.name,widgGetString(psWScreen, MULTIOP_GNAME));
+			removeWildcards(game.name);
+			widgSetString(psWScreen, MULTIOP_GNAME, game.name);
 			break;
 
 		case MULTIOP_MAP:
@@ -3033,13 +3042,9 @@ static void processMultiopWidgets(UDWORD id)
 		{
 			sPlayer[strlen(sPlayer)-1]='\0';
 		}
-
+		removeWildcards(sPlayer);
 		// update string.
 		widgSetString(psWScreen, MULTIOP_PNAME,sPlayer);
-
-
-		removeWildcards((char*)sPlayer);
-
 		printConsoleNameChange(NetPlay.players[selectedPlayer].name, sPlayer);
 
 		NETchangePlayerName(selectedPlayer, (char*)sPlayer);			// update if joined.

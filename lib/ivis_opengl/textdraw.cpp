@@ -249,6 +249,11 @@ void iV_SetFont(enum iV_fonts FontID)
 			glcFont(_glcFont_Bold);
 			break;
 
+		case font_medium:
+			iV_SetTextSize(16.f);
+			glcFont(_glcFont_Regular);
+			break;
+
 		case font_small:
 			iV_SetTextSize(9.f);
 			glcFont(_glcFont_Regular);
