@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2014-12-14 21:21-0500\n"
+"POT-Creation-Date: 2014-12-28 21:38+0100\n"
 "PO-Revision-Date: 2009-06-10 14:43+0100\n"
 "Last-Translator: Tomaž Povšin <tomaz.povsin@gmail.com>\n"
 "Language-Team: Slovenian <sl@li.org>\n"
@@ -12043,11 +12043,11 @@ msgid "OpenGL GLSL shader version 1.20 is not supported by your system. Some thi
 msgstr ""
 
 #: lib/ivis_opengl/screen.cpp:193
-msgid "OpenGL 1.2 + TEC is not supported by your system. The game requires this. Please upgrade your graphics drivers/hardware, if possible."
+msgid "OpenGL 1.2 + VBO + TEC is not supported by your system. The game requires this. Please upgrade your graphics drivers/hardware, if possible."
 msgstr ""
 
 #: lib/netplay/netplay.cpp:218
-#: lib/netplay/netplay.cpp:1119
+#: lib/netplay/netplay.cpp:1120
 #, fuzzy
 msgid "Enter password here"
 msgstr "Najprej vnesite geslo"
@@ -12082,12 +12082,12 @@ msgid ""
 "Your external IP is %s"
 msgstr ""
 
-#: lib/netplay/netplay.cpp:2176
+#: lib/netplay/netplay.cpp:2187
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr "Ni bilo mogoče razrešiti imena glavnega strežnika (%s)!"
 
-#: lib/netplay/netplay.cpp:2198
+#: lib/netplay/netplay.cpp:2209
 #, c-format
 msgid ""
 "Error connecting to the lobby server: %s.\n"
@@ -12096,7 +12096,7 @@ msgid ""
 " or to forward the port to your system."
 msgstr ""
 
-#: lib/netplay/netplay.cpp:2871
+#: lib/netplay/netplay.cpp:2903
 msgid "Failed to get a lobby response!"
 msgstr ""
 
@@ -12181,150 +12181,146 @@ msgstr ""
 msgid "Debug mode now disabled!"
 msgstr "Razhroščevalni meni je odprt"
 
-#: src/clparse.cpp:243
+#: src/clparse.cpp:242
 msgid "Set configuration directory"
 msgstr "Določi direktorij z nastavitvami"
 
-#: src/clparse.cpp:243
+#: src/clparse.cpp:242
 msgid "configuration directory"
 msgstr "Direktorij z nastavitvami"
 
-#: src/clparse.cpp:244
+#: src/clparse.cpp:243
 msgid "Set default data directory"
 msgstr "Določi privzeti podatkovni direktorij"
 
-#: src/clparse.cpp:244
+#: src/clparse.cpp:243
 msgid "data directory"
 msgstr "podatkovni direktorij"
 
-#: src/clparse.cpp:245
+#: src/clparse.cpp:244
 msgid "Show debug for given level"
 msgstr "Pokaži razhroščitev za dano stopnjo"
 
-#: src/clparse.cpp:245
+#: src/clparse.cpp:244
 msgid "debug level"
 msgstr "razhrošči stopnjo"
 
-#: src/clparse.cpp:246
+#: src/clparse.cpp:245
 msgid "Log debug output to file"
 msgstr "Zabeleži proizvod razhroščitve v datoteko"
 
-#: src/clparse.cpp:246
+#: src/clparse.cpp:245
 msgid "file"
 msgstr "datoteka"
 
-#: src/clparse.cpp:247
+#: src/clparse.cpp:246
 msgid "Flush all debug output written to stderr"
 msgstr "Splakni ves proizvod razhroščitve napisan v stderr"
 
-#: src/clparse.cpp:248
+#: src/clparse.cpp:247
 msgid "Play in fullscreen mode"
 msgstr "Igraj v celozaslonskem načinu"
 
-#: src/clparse.cpp:249
+#: src/clparse.cpp:248
 msgid "Load a specific game"
 msgstr "Naloži določeno igro"
 
-#: src/clparse.cpp:249
+#: src/clparse.cpp:248
 msgid "game-name"
 msgstr "Ime igre"
 
-#: src/clparse.cpp:250
+#: src/clparse.cpp:249
 msgid "Show this help message and exit"
 msgstr "Pokaži to sporočilo pomoči in pojdi ven"
 
-#: src/clparse.cpp:251
+#: src/clparse.cpp:250
 msgid "Enable a global mod"
 msgstr "Omogoči celoten mod"
 
+#: src/clparse.cpp:250
 #: src/clparse.cpp:251
 #: src/clparse.cpp:252
-#: src/clparse.cpp:253
 msgid "mod"
 msgstr "mod"
 
-#: src/clparse.cpp:252
+#: src/clparse.cpp:251
 msgid "Enable a campaign only mod"
 msgstr "Omogoči le bojno pohodni mod"
 
-#: src/clparse.cpp:253
+#: src/clparse.cpp:252
 msgid "Enable a multiplay only mod"
 msgstr "Omogoči le večigralski mod"
 
-#: src/clparse.cpp:254
+#: src/clparse.cpp:253
 msgid "Disable asserts"
 msgstr "Prepreči zahteve"
 
-#: src/clparse.cpp:255
+#: src/clparse.cpp:254
 msgid "Causes a crash to test the crash handler"
 msgstr ""
 
-#: src/clparse.cpp:256
+#: src/clparse.cpp:255
 msgid "Load a saved game"
 msgstr "Naloži shranjeno igro"
 
-#: src/clparse.cpp:256
+#: src/clparse.cpp:255
 msgid "savegame"
 msgstr "Shranjena igra"
 
-#: src/clparse.cpp:257
+#: src/clparse.cpp:256
 msgid "Play in windowed mode"
 msgstr "Igraj v okenskem načinu"
 
-#: src/clparse.cpp:258
+#: src/clparse.cpp:257
 msgid "Show version information and exit"
 msgstr "Pokaži informacijo o verziji in pojdi ven"
 
-#: src/clparse.cpp:259
+#: src/clparse.cpp:258
 msgid "Set the resolution to use"
 msgstr "Določi ločljivosti uporabo"
 
-#: src/clparse.cpp:259
+#: src/clparse.cpp:258
 msgid "WIDTHxHEIGHT"
 msgstr "ŠIRINAxVIŠINA"
 
-#: src/clparse.cpp:260
+#: src/clparse.cpp:259
 msgid "Enable shadows"
 msgstr "Omogoči sence"
 
-#: src/clparse.cpp:261
+#: src/clparse.cpp:260
 msgid "Disable shadows"
 msgstr "Prepreči sence"
 
-#: src/clparse.cpp:262
+#: src/clparse.cpp:261
 msgid "Enable sound"
 msgstr "Omogoči zvoke"
 
-#: src/clparse.cpp:263
+#: src/clparse.cpp:262
 msgid "Disable sound"
 msgstr "Prepreči zvoke"
 
-#: src/clparse.cpp:264
+#: src/clparse.cpp:263
 msgid "connect directly to IP/hostname"
 msgstr "poveži se direktno na IP/ime gostitelja"
 
-#: src/clparse.cpp:264
+#: src/clparse.cpp:263
 msgid "host"
 msgstr "gostitelj"
 
-#: src/clparse.cpp:265
+#: src/clparse.cpp:264
 msgid "go directly to host screen"
 msgstr "pojdi naravnost na gostiteljev zaslon"
 
-#: src/clparse.cpp:266
+#: src/clparse.cpp:265
 msgid "Enable texture compression"
 msgstr ""
 
-#: src/clparse.cpp:267
+#: src/clparse.cpp:266
 msgid "Disable texture compression"
 msgstr ""
 
-#: src/clparse.cpp:268
-msgid "Disable the use of OpenGL shaders"
-msgstr ""
-
-#: src/clparse.cpp:269
-msgid "Disable the use of OpenGL Vertex Buffer Objects"
+#: src/clparse.cpp:267
+msgid "Only use OpenGL 1.5"
 msgstr ""
 
 #: src/cmddroid.cpp:110
@@ -12502,20 +12498,20 @@ msgstr "Sistemi"
 msgid "Delete Template"
 msgstr ""
 
-#: src/display3d.cpp:676
+#: src/display3d.cpp:658
 msgid "Player left"
 msgstr "Igralec odšel"
 
-#: src/display3d.cpp:680
+#: src/display3d.cpp:662
 msgid "Player dropped"
 msgstr "Igralec izpadel"
 
-#: src/display3d.cpp:684
-#: src/multiint.cpp:2382
+#: src/display3d.cpp:666
+#: src/multiint.cpp:2389
 msgid "Waiting for other players"
 msgstr "Čakanje ostalih igralcev"
 
-#: src/display3d.cpp:689
+#: src/display3d.cpp:671
 msgid "Out of sync"
 msgstr ""
 
@@ -12625,428 +12621,444 @@ msgstr ""
 msgid "You wanted to give %s a %s but they have too many!"
 msgstr ""
 
-#: src/frontend.cpp:108
+#: src/frontend.cpp:109
 msgid "Single Player"
 msgstr "En igralec"
 
-#: src/frontend.cpp:109
+#: src/frontend.cpp:110
 msgid "Multi Player"
 msgstr "Več igralcev"
 
-#: src/frontend.cpp:110
-#: src/frontend.cpp:193
+#: src/frontend.cpp:111
+#: src/frontend.cpp:256
 msgid "Tutorial"
 msgstr "Učna vaja"
 
-#: src/frontend.cpp:111
+#: src/frontend.cpp:112
 #: src/hci.cpp:3484
 msgid "Options"
 msgstr "Možnosti"
 
-#: src/frontend.cpp:114
-#: src/frontend.cpp:118
+#: src/frontend.cpp:115
+#: src/frontend.cpp:119
 msgid "View Intro"
 msgstr "Oglej si začetni film"
 
-#: src/frontend.cpp:119
+#: src/frontend.cpp:120
 msgid "Videos are missing, download them from http://wz2100.net"
 msgstr ""
 
-#: src/frontend.cpp:121
+#: src/frontend.cpp:122
 msgid "Quit Game"
 msgstr "Končaj igro"
 
-#: src/frontend.cpp:122
+#: src/frontend.cpp:123
 msgid "MAIN MENU"
 msgstr "GLAVNI MENI"
 
-#: src/frontend.cpp:124
+#: src/frontend.cpp:125
 msgid "Official site: http://wz2100.net/"
 msgstr ""
 
-#: src/frontend.cpp:194
+#: src/frontend.cpp:126
+msgid "Come visit the forums and all Warzone 2100 news! Click this link."
+msgstr ""
+
+#: src/frontend.cpp:127
+msgid "Donate: http://donations.wz2100.net/"
+msgstr ""
+
+#: src/frontend.cpp:128
+msgid "Help support the project with our server costs, Click this link."
+msgstr ""
+
+#: src/frontend.cpp:129
+msgid "Check for a newer version"
+msgstr ""
+
+#: src/frontend.cpp:257
 msgid "Fast Play"
 msgstr "Hitra igra"
 
-#: src/frontend.cpp:195
+#: src/frontend.cpp:258
 msgid "TUTORIALS"
 msgstr "UČNE VAJE"
 
 #. TRANSLATORS: "Return", in this context, means "return to previous screen/menu"
-#: src/frontend.cpp:197
-#: src/frontend.cpp:259
-#: src/frontend.cpp:404
-#: src/frontend.cpp:478
-#: src/frontend.cpp:619
-#: src/frontend.cpp:765
-#: src/frontend.cpp:911
-#: src/frontend.cpp:1170
-#: src/frontend.cpp:1325
-#: src/frontend.cpp:1345
+#: src/frontend.cpp:260
+#: src/frontend.cpp:322
+#: src/frontend.cpp:467
+#: src/frontend.cpp:541
+#: src/frontend.cpp:682
+#: src/frontend.cpp:828
+#: src/frontend.cpp:974
+#: src/frontend.cpp:1233
+#: src/frontend.cpp:1388
+#: src/frontend.cpp:1408
 msgctxt "menu"
 msgid "Return"
 msgstr "Nazaj"
 
-#: src/frontend.cpp:252
+#: src/frontend.cpp:315
 msgid "New Campaign"
 msgstr "Nov bojni pohod"
 
-#: src/frontend.cpp:253
+#: src/frontend.cpp:316
 msgid "Start Skirmish Game"
 msgstr "Začni spopad"
 
-#: src/frontend.cpp:254
+#: src/frontend.cpp:317
 #, fuzzy
 msgid "Challenges"
 msgstr "Plenilec"
 
-#: src/frontend.cpp:255
+#: src/frontend.cpp:318
 #, fuzzy
 msgid "Load Campaign Game"
 msgstr "Naloži bojni pohod"
 
-#: src/frontend.cpp:256
+#: src/frontend.cpp:319
 #, fuzzy
 msgid "Load Skirmish Game"
 msgstr "Začni spopad"
 
-#: src/frontend.cpp:258
+#: src/frontend.cpp:321
 msgid "SINGLE PLAYER"
 msgstr "EN IGRALEC"
 
-#: src/frontend.cpp:263
+#: src/frontend.cpp:326
 msgid "Campaign videos are missing! Get them from http://wz2100.net"
 msgstr ""
 
-#: src/frontend.cpp:339
+#: src/frontend.cpp:402
 #: src/ingameop.cpp:504
 #, fuzzy
 msgid "Load Campaign Saved Game"
 msgstr "Naloži shranjeno igro"
 
-#: src/frontend.cpp:345
+#: src/frontend.cpp:408
 #: src/ingameop.cpp:508
 #, fuzzy
 msgid "Load Skirmish Saved Game"
 msgstr "Naloži shranjeno igro"
 
-#: src/frontend.cpp:399
+#: src/frontend.cpp:462
 msgid "MULTI PLAYER"
 msgstr "VEČ IGRALCEV"
 
-#: src/frontend.cpp:401
+#: src/frontend.cpp:464
 msgid "Host Game"
 msgstr "Gostite igro"
 
-#: src/frontend.cpp:402
+#: src/frontend.cpp:465
 msgid "Join Game"
 msgstr "Pridružite se igri"
 
-#: src/frontend.cpp:407
+#: src/frontend.cpp:470
 msgid "TCP port 2100 must be opened in your firewall or router to host games!"
 msgstr ""
 
-#: src/frontend.cpp:471
-#: src/multiint.cpp:1483
+#: src/frontend.cpp:534
+#: src/multiint.cpp:1490
 msgid "OPTIONS"
 msgstr "MOŽNOSTI"
 
-#: src/frontend.cpp:472
+#: src/frontend.cpp:535
 msgid "Game Options"
 msgstr "Možnosti igre"
 
-#: src/frontend.cpp:473
+#: src/frontend.cpp:536
 msgid "Graphics Options"
 msgstr "Grafične možnosti"
 
-#: src/frontend.cpp:474
+#: src/frontend.cpp:537
 msgid "Video Options"
 msgstr "Video možnosti"
 
-#: src/frontend.cpp:475
+#: src/frontend.cpp:538
 #: src/ingameop.cpp:268
 msgid "Audio Options"
 msgstr "Zvočne možnosti"
 
-#: src/frontend.cpp:476
+#: src/frontend.cpp:539
 msgid "Mouse Options"
 msgstr "Možnosti miške"
 
-#: src/frontend.cpp:477
+#: src/frontend.cpp:540
 msgid "Key Mappings"
 msgstr "Vnosi tipk"
 
-#: src/frontend.cpp:537
+#: src/frontend.cpp:600
 msgid "Video Playback"
 msgstr "Igranje posnetkov"
 
-#: src/frontend.cpp:541
-#: src/frontend.cpp:693
+#: src/frontend.cpp:604
+#: src/frontend.cpp:756
 msgid "1X"
 msgstr "1X"
 
-#: src/frontend.cpp:545
-#: src/frontend.cpp:683
+#: src/frontend.cpp:608
+#: src/frontend.cpp:746
 msgid "2X"
 msgstr "2X"
 
-#: src/frontend.cpp:549
-#: src/frontend.cpp:688
-#: src/frontend.cpp:839
-#: src/frontend.cpp:936
+#: src/frontend.cpp:612
+#: src/frontend.cpp:751
+#: src/frontend.cpp:902
+#: src/frontend.cpp:999
 msgid "Fullscreen"
 msgstr "Cel zaslon"
 
-#: src/frontend.cpp:558
+#: src/frontend.cpp:621
 msgid "Scanlines"
 msgstr ""
 
-#: src/frontend.cpp:562
-#: src/frontend.cpp:583
-#: src/frontend.cpp:591
-#: src/frontend.cpp:607
-#: src/frontend.cpp:637
-#: src/frontend.cpp:655
-#: src/frontend.cpp:673
+#: src/frontend.cpp:625
+#: src/frontend.cpp:646
+#: src/frontend.cpp:654
+#: src/frontend.cpp:670
+#: src/frontend.cpp:700
 #: src/frontend.cpp:718
-#: src/frontend.cpp:864
-#: src/frontend.cpp:874
-#: src/frontend.cpp:904
-#: src/frontend.cpp:960
-#: src/frontend.cpp:1021
-#: src/frontend.cpp:1064
-#: src/frontend.cpp:1077
+#: src/frontend.cpp:736
+#: src/frontend.cpp:781
+#: src/frontend.cpp:927
+#: src/frontend.cpp:937
+#: src/frontend.cpp:967
+#: src/frontend.cpp:1023
+#: src/frontend.cpp:1084
 #: src/frontend.cpp:1127
-#: src/frontend.cpp:1139
-#: src/frontend.cpp:1151
-#: src/frontend.cpp:1187
-#: src/frontend.cpp:1200
+#: src/frontend.cpp:1140
+#: src/frontend.cpp:1190
+#: src/frontend.cpp:1202
 #: src/frontend.cpp:1214
+#: src/frontend.cpp:1250
+#: src/frontend.cpp:1263
+#: src/frontend.cpp:1277
 msgid "Off"
 msgstr "Izklopljeno"
 
-#: src/frontend.cpp:566
-#: src/frontend.cpp:708
+#: src/frontend.cpp:629
+#: src/frontend.cpp:771
 msgid "50%"
 msgstr ""
 
-#: src/frontend.cpp:570
-#: src/frontend.cpp:713
+#: src/frontend.cpp:633
+#: src/frontend.cpp:776
 #: src/multiplay.cpp:2020
 msgid "Black"
 msgstr "Črna"
 
-#: src/frontend.cpp:576
+#: src/frontend.cpp:639
 msgid "Screen Shake"
 msgstr "Tresenje zaslona"
 
-#: src/frontend.cpp:579
-#: src/frontend.cpp:595
-#: src/frontend.cpp:603
 #: src/frontend.cpp:642
-#: src/frontend.cpp:660
-#: src/frontend.cpp:669
-#: src/frontend.cpp:860
-#: src/frontend.cpp:900
-#: src/frontend.cpp:1026
-#: src/frontend.cpp:1060
-#: src/frontend.cpp:1082
+#: src/frontend.cpp:658
+#: src/frontend.cpp:666
+#: src/frontend.cpp:705
+#: src/frontend.cpp:723
+#: src/frontend.cpp:732
+#: src/frontend.cpp:923
+#: src/frontend.cpp:963
+#: src/frontend.cpp:1089
 #: src/frontend.cpp:1123
-#: src/frontend.cpp:1135
-#: src/frontend.cpp:1147
-#: src/frontend.cpp:1192
-#: src/frontend.cpp:1205
-#: src/frontend.cpp:1219
+#: src/frontend.cpp:1145
+#: src/frontend.cpp:1186
+#: src/frontend.cpp:1198
+#: src/frontend.cpp:1210
+#: src/frontend.cpp:1255
+#: src/frontend.cpp:1268
+#: src/frontend.cpp:1282
 msgid "On"
 msgstr "Vklopljeno"
 
-#: src/frontend.cpp:588
+#: src/frontend.cpp:651
 msgid "Subtitles"
 msgstr "Podnapisi"
 
-#: src/frontend.cpp:600
+#: src/frontend.cpp:663
 msgid "Shadows"
 msgstr "Sence"
 
-#: src/frontend.cpp:611
-#: src/frontend.cpp:1352
+#: src/frontend.cpp:674
+#: src/frontend.cpp:1415
 msgid "Radar"
 msgstr ""
 
-#: src/frontend.cpp:612
-#: src/frontend.cpp:725
-#: src/frontend.cpp:1353
+#: src/frontend.cpp:675
+#: src/frontend.cpp:788
+#: src/frontend.cpp:1416
 #, fuzzy
 msgid "Rotating"
 msgstr "Zavrti desno"
 
-#: src/frontend.cpp:612
-#: src/frontend.cpp:725
-#: src/frontend.cpp:1353
+#: src/frontend.cpp:675
+#: src/frontend.cpp:788
+#: src/frontend.cpp:1416
 msgid "Fixed"
 msgstr ""
 
-#: src/frontend.cpp:615
+#: src/frontend.cpp:678
 #, fuzzy
 msgid "GRAPHICS OPTIONS"
 msgstr "MOŽNOSTI IGRE"
 
-#: src/frontend.cpp:753
+#: src/frontend.cpp:816
 #: src/ingameop.cpp:168
 msgid "Voice Volume"
 msgstr "Glasovi"
 
-#: src/frontend.cpp:757
+#: src/frontend.cpp:820
 #: src/ingameop.cpp:173
 msgid "FX Volume"
 msgstr "Učinki"
 
-#: src/frontend.cpp:761
+#: src/frontend.cpp:824
 #: src/ingameop.cpp:178
 msgid "Music Volume"
 msgstr "Glasba"
 
-#: src/frontend.cpp:768
+#: src/frontend.cpp:831
 #, fuzzy
 msgid "AUDIO OPTIONS"
 msgstr "MOŽNOSTI IGRE"
 
-#: src/frontend.cpp:832
+#: src/frontend.cpp:895
 msgid "* Takes effect on game restart"
 msgstr "* Začne delovati po ponovnem zagonu"
 
-#: src/frontend.cpp:835
+#: src/frontend.cpp:898
 msgid "Graphics Mode*"
 msgstr "Grafični način*"
 
-#: src/frontend.cpp:843
-#: src/frontend.cpp:931
+#: src/frontend.cpp:906
+#: src/frontend.cpp:994
 msgid "Windowed"
 msgstr "Okensko"
 
-#: src/frontend.cpp:847
+#: src/frontend.cpp:910
 msgid "Resolution*"
 msgstr "Ločljivost*"
 
-#: src/frontend.cpp:852
+#: src/frontend.cpp:915
 msgid "Texture size"
 msgstr "Velikost tekstur"
 
-#: src/frontend.cpp:856
+#: src/frontend.cpp:919
 #, fuzzy
 msgid "Vertical sync"
 msgstr "Vertkalna sinh*"
 
-#: src/frontend.cpp:891
-#: src/frontend.cpp:966
+#: src/frontend.cpp:954
+#: src/frontend.cpp:1029
 #, fuzzy
 msgid "Unsupported"
 msgstr "Prevoz"
 
-#: src/frontend.cpp:896
+#: src/frontend.cpp:959
 #, fuzzy
 msgid "Shaders"
 msgstr "Sence"
 
-#: src/frontend.cpp:908
+#: src/frontend.cpp:971
 #, fuzzy
 msgid "VIDEO OPTIONS"
 msgstr "MOŽNOSTI IGRE"
 
-#: src/frontend.cpp:1120
+#: src/frontend.cpp:1183
 #, fuzzy
 msgid "Reverse Rotation"
 msgstr "Obrnjena miška"
 
-#: src/frontend.cpp:1131
+#: src/frontend.cpp:1194
 msgid "Trap Cursor"
 msgstr "Ujemi kazalec"
 
-#: src/frontend.cpp:1144
+#: src/frontend.cpp:1207
 #, fuzzy
 msgid "Switch Mouse Buttons"
 msgstr "Možnosti miške"
 
-#: src/frontend.cpp:1156
+#: src/frontend.cpp:1219
 #, fuzzy
 msgid "Rotate Screen"
 msgstr "Zavrti levo"
 
-#: src/frontend.cpp:1159
-#: src/frontend.cpp:1233
+#: src/frontend.cpp:1222
+#: src/frontend.cpp:1296
 msgid "Middle Mouse"
 msgstr ""
 
-#: src/frontend.cpp:1163
-#: src/frontend.cpp:1228
+#: src/frontend.cpp:1226
+#: src/frontend.cpp:1291
 msgid "Right Mouse"
 msgstr ""
 
-#: src/frontend.cpp:1167
+#: src/frontend.cpp:1230
 #, fuzzy
 msgid "MOUSE OPTIONS"
 msgstr "MOŽNOSTI IGRE"
 
-#: src/frontend.cpp:1268
-#: src/frontend.cpp:1346
+#: src/frontend.cpp:1331
+#: src/frontend.cpp:1409
 msgid "Language"
 msgstr "Jezik"
 
-#: src/frontend.cpp:1272
-#: src/frontend.cpp:1350
+#: src/frontend.cpp:1335
+#: src/frontend.cpp:1413
 msgid "Difficulty"
 msgstr "Težavnost"
 
-#: src/frontend.cpp:1276
-#: src/frontend.cpp:1357
-#: src/frontend.cpp:1389
+#: src/frontend.cpp:1339
+#: src/frontend.cpp:1420
+#: src/frontend.cpp:1452
 #: src/multiint.cpp:215
 msgid "Easy"
 msgstr "Lahka"
 
-#: src/frontend.cpp:1279
-#: src/frontend.cpp:1360
-#: src/frontend.cpp:1381
+#: src/frontend.cpp:1342
+#: src/frontend.cpp:1423
+#: src/frontend.cpp:1444
 msgid "Normal"
 msgstr "Običajna"
 
-#: src/frontend.cpp:1283
-#: src/frontend.cpp:1363
-#: src/frontend.cpp:1385
+#: src/frontend.cpp:1346
+#: src/frontend.cpp:1426
+#: src/frontend.cpp:1448
 #: src/multiint.cpp:215
 msgid "Hard"
 msgstr "Težka"
 
-#: src/frontend.cpp:1288
 #: src/frontend.cpp:1351
+#: src/frontend.cpp:1414
 msgid "Scroll Speed"
 msgstr "Hitrost pomikanja"
 
-#: src/frontend.cpp:1292
-#: src/frontend.cpp:1347
+#: src/frontend.cpp:1355
+#: src/frontend.cpp:1410
 #, fuzzy
 msgid "Unit Colour:"
 msgstr "Barva enot"
 
-#: src/frontend.cpp:1312
-#: src/frontend.cpp:1348
+#: src/frontend.cpp:1375
+#: src/frontend.cpp:1411
 #, fuzzy
 msgid "Campaign"
 msgstr "Nov bojni pohod"
 
-#: src/frontend.cpp:1322
-#: src/frontend.cpp:1349
+#: src/frontend.cpp:1385
+#: src/frontend.cpp:1412
 #, fuzzy
 msgid "Skirmish/Multiplayer"
 msgstr "Več igralcev"
 
-#: src/frontend.cpp:1328
-#: src/frontend.cpp:1344
+#: src/frontend.cpp:1391
+#: src/frontend.cpp:1407
 msgid "GAME OPTIONS"
 msgstr "MOŽNOSTI IGRE"
 
-#: src/frontend.cpp:1489
-#: src/multiint.cpp:2651
+#: src/frontend.cpp:1552
+#: src/multiint.cpp:2658
 msgid "Mod: "
 msgstr ""
 
@@ -13106,7 +13118,7 @@ msgid "Build (F3)"
 msgstr "Gradnja (F3)"
 
 #: src/hci.cpp:3431
-#: src/multiint.cpp:1596
+#: src/multiint.cpp:1603
 #: src/multimenu.cpp:808
 msgid "Power"
 msgstr "Moč"
@@ -13713,8 +13725,8 @@ msgstr "VNAŠANJE TIPK"
 
 #: src/keyedit.cpp:377
 #: src/multiint.cpp:763
-#: src/multiint.cpp:1263
-#: src/multiint.cpp:1682
+#: src/multiint.cpp:1270
+#: src/multiint.cpp:1689
 msgid "Return To Previous Screen"
 msgstr "Vrni se na prejšnji zaslon"
 
@@ -14377,7 +14389,7 @@ msgid "Accept Settings"
 msgstr "Sprejmi nastavitve"
 
 #: src/multiint.cpp:703
-#: src/multiint.cpp:1318
+#: src/multiint.cpp:1325
 #, fuzzy
 msgid "Cancel"
 msgstr "Suličar"
@@ -14430,409 +14442,414 @@ msgstr ""
 msgid "Can't find any games for your version."
 msgstr ""
 
-#: src/multiint.cpp:1044
-msgid "No games are available"
+#: src/multiint.cpp:1046
+msgid "There appears to be a game update available!"
+msgstr ""
+
+#: src/multiint.cpp:1050
+#, fuzzy
+msgid "No games are available for your version"
 msgstr "Nobenih iger ni na voljo"
 
-#: src/multiint.cpp:1047
+#: src/multiint.cpp:1054
 msgid "Game is full"
 msgstr "Igra je polna"
 
-#: src/multiint.cpp:1051
+#: src/multiint.cpp:1058
 msgid "You were kicked!"
 msgstr "Bili ste brcnjeni!"
 
-#: src/multiint.cpp:1054
+#: src/multiint.cpp:1061
 msgid "Wrong Game Version!"
 msgstr "Napačna verzija igre!"
 
-#: src/multiint.cpp:1057
+#: src/multiint.cpp:1064
 msgid "You have an incompatible mod."
 msgstr ""
 
-#: src/multiint.cpp:1061
+#: src/multiint.cpp:1068
 msgid "Host couldn't send file?"
 msgstr ""
 
-#: src/multiint.cpp:1065
+#: src/multiint.cpp:1072
 msgid "Incorrect Password!"
 msgstr "Napačno geslo!"
 
-#: src/multiint.cpp:1068
+#: src/multiint.cpp:1075
 msgid "Host has dropped connection!"
 msgstr ""
 
-#: src/multiint.cpp:1072
+#: src/multiint.cpp:1079
 msgid "Connection Error"
 msgstr "Napaka v povezavi"
 
-#: src/multiint.cpp:1191
+#: src/multiint.cpp:1198
 msgid "Searching"
 msgstr "Iskanje"
 
-#: src/multiint.cpp:1260
+#: src/multiint.cpp:1267
 msgid "GAMES"
 msgstr "IGRE"
 
-#: src/multiint.cpp:1268
+#: src/multiint.cpp:1275
 msgid "Refresh Games List"
 msgstr "Osveži spisek iger"
 
-#: src/multiint.cpp:1271
+#: src/multiint.cpp:1278
 #, fuzzy
 msgid "Filter Games List"
 msgstr "Osveži spisek iger"
 
-#: src/multiint.cpp:1298
+#: src/multiint.cpp:1305
 #, fuzzy
 msgid "Enter Password:"
 msgstr "Najprej vnesite geslo"
 
-#: src/multiint.cpp:1316
+#: src/multiint.cpp:1323
 msgid "OK"
 msgstr ""
 
-#: src/multiint.cpp:1437
+#: src/multiint.cpp:1444
 msgid "Tanks disabled!!"
 msgstr ""
 
-#: src/multiint.cpp:1438
+#: src/multiint.cpp:1445
 #, fuzzy
 msgid "Cyborgs disabled."
 msgstr "Nov kiborg na voljo"
 
-#: src/multiint.cpp:1439
+#: src/multiint.cpp:1446
 msgid "VTOLs disabled."
 msgstr ""
 
-#: src/multiint.cpp:1440
+#: src/multiint.cpp:1447
 #, fuzzy
 msgid "Satellite Uplink disabled."
 msgstr "Satelitska povezava"
 
-#: src/multiint.cpp:1441
+#: src/multiint.cpp:1448
 #, fuzzy
 msgid "Laser Satellite disabled."
 msgstr "Poveljniška postaja laserskega satelita"
 
-#: src/multiint.cpp:1488
-#: src/multiint.cpp:1496
+#: src/multiint.cpp:1495
+#: src/multiint.cpp:1503
 msgid "Select Game Name"
 msgstr "Izberite ime igre"
 
-#: src/multiint.cpp:1489
+#: src/multiint.cpp:1496
 #, fuzzy
 msgid "One-Player Skirmish"
 msgstr "Enoigralski spopad"
 
-#: src/multiint.cpp:1503
+#: src/multiint.cpp:1510
 msgid "Select Map"
 msgstr "Izberite mapo"
 
-#: src/multiint.cpp:1504
+#: src/multiint.cpp:1511
 msgid "Map-Mod!"
 msgstr ""
 
-#: src/multiint.cpp:1517
+#: src/multiint.cpp:1524
 msgid "Click to set Password"
 msgstr "Kliknite za nastavitev gesla"
 
-#: src/multiint.cpp:1527
-#: src/multiint.cpp:1528
+#: src/multiint.cpp:1534
+#: src/multiint.cpp:1535
 #, fuzzy
 msgid "Scavengers"
 msgstr "Plenilec"
 
-#: src/multiint.cpp:1530
+#: src/multiint.cpp:1537
 #, fuzzy
 msgid "No Scavengers"
 msgstr "Plenilec"
 
-#: src/multiint.cpp:1560
+#: src/multiint.cpp:1567
 msgid "Select Player Name"
 msgstr "Izberite ime igralca"
 
-#: src/multiint.cpp:1563
+#: src/multiint.cpp:1570
 #: src/multimenu.cpp:801
 msgid "Alliances"
 msgstr "Zavezništva"
 
-#: src/multiint.cpp:1566
+#: src/multiint.cpp:1573
 msgid "No Alliances"
 msgstr "Nobenih zavezništev"
 
-#: src/multiint.cpp:1568
+#: src/multiint.cpp:1575
 msgid "Allow Alliances"
 msgstr "Dovoli zavezništva"
 
-#: src/multiint.cpp:1572
+#: src/multiint.cpp:1579
 msgid "Locked Teams"
 msgstr "Zaklenjene skupine"
 
-#: src/multiint.cpp:1598
+#: src/multiint.cpp:1605
 msgid "Low Power Levels"
 msgstr "Nizke stopnje moči"
 
-#: src/multiint.cpp:1600
+#: src/multiint.cpp:1607
 msgid "Medium Power Levels"
 msgstr "Srednje velike stopnje moči"
 
-#: src/multiint.cpp:1602
+#: src/multiint.cpp:1609
 msgid "High Power Levels"
 msgstr "Visoke stopnje moči"
 
-#: src/multiint.cpp:1634
+#: src/multiint.cpp:1641
 msgid "Base"
 msgstr "Baza"
 
-#: src/multiint.cpp:1636
+#: src/multiint.cpp:1643
 msgid "Start with No Bases"
 msgstr "Začnite brez baz"
 
-#: src/multiint.cpp:1638
+#: src/multiint.cpp:1645
 msgid "Start with Bases"
 msgstr "Začnite z bazami"
 
-#: src/multiint.cpp:1640
+#: src/multiint.cpp:1647
 msgid "Start with Advanced Bases"
 msgstr "Začnite z naprednimi bazami"
 
-#: src/multiint.cpp:1672
+#: src/multiint.cpp:1679
 msgid "Map Preview"
 msgstr "Predogled mape"
 
-#: src/multiint.cpp:1674
+#: src/multiint.cpp:1681
 msgid "Click to see Map"
 msgstr "Kliknite za ogled mape"
 
-#: src/multiint.cpp:1687
-#: src/multiint.cpp:1689
+#: src/multiint.cpp:1694
+#: src/multiint.cpp:1696
 msgid "Start Hosting Game"
 msgstr "Začnite gostiti igro"
 
-#: src/multiint.cpp:1696
-#: src/multiint.cpp:1700
+#: src/multiint.cpp:1703
+#: src/multiint.cpp:1707
 #, fuzzy
 msgid "Show Structure Limits"
 msgstr "Nastavite gradbene omejitve"
 
-#: src/multiint.cpp:1696
-#: src/multiint.cpp:1700
+#: src/multiint.cpp:1703
+#: src/multiint.cpp:1707
 msgid "Set Structure Limits"
 msgstr "Nastavite gradbene omejitve"
 
-#: src/multiint.cpp:1777
+#: src/multiint.cpp:1784
 msgid "DIFFICULTY"
 msgstr ""
 
-#: src/multiint.cpp:1791
+#: src/multiint.cpp:1798
 msgid "Less aggressive"
 msgstr ""
 
-#: src/multiint.cpp:1792
+#: src/multiint.cpp:1799
 #, fuzzy
 msgid "Plays nice"
 msgstr "Igralec"
 
-#: src/multiint.cpp:1793
+#: src/multiint.cpp:1800
 msgid "No holds barred"
 msgstr ""
 
-#: src/multiint.cpp:1794
+#: src/multiint.cpp:1801
 #, fuzzy
 msgid "Starts with advantages"
 msgstr "Začnite z naprednimi bazami"
 
-#: src/multiint.cpp:1822
+#: src/multiint.cpp:1829
 msgid "CHOOSE AI"
 msgstr ""
 
-#: src/multiint.cpp:1860
+#: src/multiint.cpp:1867
 msgid "Allow human players to join in this slot"
 msgstr ""
 
-#: src/multiint.cpp:1867
+#: src/multiint.cpp:1874
 msgid "Leave this slot unused"
 msgstr ""
 
-#: src/multiint.cpp:2324
+#: src/multiint.cpp:2331
 msgid "Team"
 msgstr "Skupina"
 
-#: src/multiint.cpp:2367
+#: src/multiint.cpp:2374
 msgid "You cannot change difficulty in a challenge"
 msgstr ""
 
-#: src/multiint.cpp:2367
+#: src/multiint.cpp:2374
 #, fuzzy
 msgid "Click to change difficulty"
 msgstr "Kliknite za nastavitev gesla"
 
-#: src/multiint.cpp:2382
+#: src/multiint.cpp:2389
 #, fuzzy
 msgid "Waiting for player"
 msgstr "Čakanje ostalih igralcev"
 
-#: src/multiint.cpp:2382
+#: src/multiint.cpp:2389
 #, fuzzy
 msgid "Player is ready"
 msgstr "Igralec izpadel"
 
-#: src/multiint.cpp:2382
+#: src/multiint.cpp:2389
 msgid "Click when ready"
 msgstr "Kliknite, ko boste pripravljeni"
 
-#: src/multiint.cpp:2389
+#: src/multiint.cpp:2396
 msgid "READY?"
 msgstr ""
 
-#: src/multiint.cpp:2433
+#: src/multiint.cpp:2440
 msgid "PLAYERS"
 msgstr "IGRALCI"
 
-#: src/multiint.cpp:2468
+#: src/multiint.cpp:2475
 #, fuzzy
 msgid "Click to change to this slot"
 msgstr "Kliknite za nastavitev gesla"
 
-#: src/multiint.cpp:2496
+#: src/multiint.cpp:2503
 #, fuzzy
 msgid "Choose Team"
 msgstr "Zaklenjene skupine"
 
-#: src/multiint.cpp:2526
+#: src/multiint.cpp:2533
 #, fuzzy
 msgid "Click to change player colour"
 msgstr "Radar kaže barve igralca"
 
-#: src/multiint.cpp:2554
+#: src/multiint.cpp:2561
 #, fuzzy
 msgid "Click to change player position"
 msgstr "Straži položaj"
 
-#: src/multiint.cpp:2558
+#: src/multiint.cpp:2565
 #, fuzzy
 msgid "Click to change AI"
 msgstr "Kliknite za nastavitev gesla"
 
-#: src/multiint.cpp:2624
+#: src/multiint.cpp:2631
 msgid "CHAT"
 msgstr "POGOVOR"
 
-#: src/multiint.cpp:2656
+#: src/multiint.cpp:2663
 msgid "All players need to have the same mods to join your game."
 msgstr ""
 
-#: src/multiint.cpp:2697
+#: src/multiint.cpp:2704
 msgid "Connecting to the lobby server..."
 msgstr ""
 
-#: src/multiint.cpp:3000
+#: src/multiint.cpp:3009
 #, fuzzy, c-format
 msgid "*** password [%s] is now required! ***"
 msgstr "*** geslo je sedaj potrebno! ***"
 
-#: src/multiint.cpp:3006
+#: src/multiint.cpp:3015
 msgid "*** password is NOT required! ***"
 msgstr "*** geslo NI potrebno! ***"
 
-#: src/multiint.cpp:3020
+#: src/multiint.cpp:3029
 msgid "This is a map-mod, it can change your playing experience!"
 msgstr ""
 
-#: src/multiint.cpp:3072
+#: src/multiint.cpp:3077
 msgid "Sorry! Failed to host the game."
 msgstr ""
 
-#: src/multiint.cpp:3195
+#: src/multiint.cpp:3200
 msgid "'Locked Teams' mode enabled"
 msgstr "Omogočen način 'zaklenjene skupine'"
 
-#: src/multiint.cpp:3223
-#: src/multiint.cpp:3292
+#: src/multiint.cpp:3228
+#: src/multiint.cpp:3297
 #: src/multimenu.cpp:1496
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "Gostitelj je brcnil %s iz igre!"
 
-#: src/multiint.cpp:3358
+#: src/multiint.cpp:3363
 msgid "Host is Starting Game"
 msgstr "Gostitelj začenja igro"
 
-#: src/multiint.cpp:3937
+#: src/multiint.cpp:3942
 msgid "UPnP has been enabled."
 msgstr ""
 
-#: src/multiint.cpp:3943
+#: src/multiint.cpp:3948
 msgid "UPnP detection faled. You must manually configure router yourself."
 msgstr ""
 
-#: src/multiint.cpp:3947
+#: src/multiint.cpp:3952
 #, fuzzy
 msgid "UPnP detection is in progress..."
 msgstr "Dešifriranje poteka....."
 
-#: src/multiint.cpp:3954
+#: src/multiint.cpp:3959
 msgid "UPnP detection disabled by user. Autoconfig of port 2100 will not happen."
 msgstr ""
 
-#: src/multiint.cpp:3960
+#: src/multiint.cpp:3965
 msgid "Hit the ready box to begin your challenge!"
 msgstr ""
 
-#: src/multiint.cpp:3964
+#: src/multiint.cpp:3969
 msgid "Press the start hosting button to begin hosting a game."
 msgstr ""
 
-#: src/multiint.cpp:4006
+#: src/multiint.cpp:4011
 msgid "Can't connect to lobby server!"
 msgstr ""
 
-#: src/multiint.cpp:4107
+#: src/multiint.cpp:4112
 #, c-format
 msgid "Mods: %s"
 msgstr ""
 
-#: src/multiint.cpp:4114
+#: src/multiint.cpp:4119
 msgid "Mods: None!"
 msgstr ""
 
-#: src/multiint.cpp:4124
+#: src/multiint.cpp:4129
 #, fuzzy, c-format
 msgid "Version: %s"
 msgstr "Verzija %s%s%s%s"
 
-#: src/multiint.cpp:4175
+#: src/multiint.cpp:4180
 #, fuzzy, c-format
 msgid "Click to take player slot %d"
 msgstr "Radar kaže barve igralca"
 
-#: src/multiint.cpp:4184
-#: src/multiint.cpp:4386
+#: src/multiint.cpp:4189
+#: src/multiint.cpp:4391
 msgid "Open"
 msgstr ""
 
-#: src/multiint.cpp:4184
-#: src/multiint.cpp:4387
+#: src/multiint.cpp:4189
+#: src/multiint.cpp:4392
 #, fuzzy
 msgid "Closed"
 msgstr "Zapri"
 
-#: src/multiint.cpp:4234
+#: src/multiint.cpp:4239
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr ""
 
-#: src/multiint.cpp:4242
+#: src/multiint.cpp:4247
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr ""
 
-#: src/multiint.cpp:4268
+#: src/multiint.cpp:4273
 msgid "HOST"
 msgstr ""
 
-#: src/multiint.cpp:4275
+#: src/multiint.cpp:4280
 #: src/multimenu.cpp:815
 msgid "Ping"
 msgstr "Ping"
@@ -14862,10 +14879,14 @@ msgstr ""
 msgid "%s is joining the game"
 msgstr "%s se pridružuje igri"
 
-#: src/multijoin.cpp:473
+#: src/multijoin.cpp:474
 #, fuzzy
 msgid "Server message:"
 msgstr "Sistemsko sporočilo:"
+
+#: src/multijoin.cpp:479
+msgid "There is an update to the game, please visit http://wz2100.net to download new version."
+msgstr ""
 
 #: src/multilimit.cpp:183
 #, fuzzy
@@ -15061,12 +15082,12 @@ msgstr ""
 msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
 msgstr ""
 
-#: src/qtscriptfuncs.cpp:1597
+#: src/qtscriptfuncs.cpp:1596
 #: src/scriptfuncs.cpp:3263
 msgid "YOU ARE VICTORIOUS!"
 msgstr "ZMAGALI STE!"
 
-#: src/qtscriptfuncs.cpp:1602
+#: src/qtscriptfuncs.cpp:1601
 #: src/scriptfuncs.cpp:3267
 msgid "YOU WERE DEFEATED!"
 msgstr "BILI STE PREMAGANI!"
