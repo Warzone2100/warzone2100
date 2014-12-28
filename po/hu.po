@@ -1,26 +1,42 @@
-# Copyright (c) 2008 Rosetta Contributors and Canonical Ltd 2008
-# This file is distributed under the same license as the warzone2100 package.
-#
-# Jen Ockwell <jenfraggleubuntu@googlemail.com>, 2008.
 msgid ""
 msgstr ""
 "Project-Id-Version: Warzone 2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2013-12-11 22:22-0500\n"
-"PO-Revision-Date: 2023-11-27 20:18+0100\n"
+"PO-Revision-Date: Wed Dec 24 2014 15:36:39 GMT+0100\n"
 "Last-Translator: Kálmán „KAMI” Szalai <kami911@gmail.com>\n"
 "Language-Team: Magyar (Hungary) Mészáros Tamás <tamasm78@invitel.hu>\n"
-"Language: \n"
+"Language: Hungarian\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Poedit-SourceCharset: iso-8859-2\n"
+"X-Loco-Source-Locale: hu_HU\n"
+"X-Generator: Loco - https://localise.biz/\n"
 "X-Launchpad-Export-Date: 2008-05-10 13:56+0000\n"
 "X-Poedit-Bookmarks: 2414,-1,-1,-1,-1,-1,-1,-1,-1,-1\n"
 "X-Poedit-Country: HUNGARY\n"
 "X-Poedit-Language: Hungarian\n"
-"X-Poedit-SourceCharset: iso-8859-2\n"
+"X-Loco-Parser: loco_parse_po\n"
+"X-Loco-Target-Locale: hu_HU"
+
+#: lib/ivis_opengl/screen.cpp:193
+msgid ""
+"OpenGL 1.2 + TEC is not supported by your system. The game requires this. "
+"Please upgrade your graphics drivers/hardware, if possible."
+msgstr ""
+"OpenGL 1.2 + TEC használatát nem támogatja a rendszered. A játéknak szüksége "
+"van rá. Kérlek frissítsd fel a drivert vagy hardware videokártyád, ha ez "
+"lehetséges."
+
+#: src/clparse.cpp:268
+msgid "Disable the use of OpenGL shaders"
+msgstr "Szöveg tömörítés használatának kikapcsolása"
+
+#: src/frontend.cpp:119
+msgid "Videos are missing, download them from http://wz2100.net"
+msgstr "Küldetés videók hiányoznak! Látogasd meg a http://wz2100.net oldalt"
 
 #: data/base/messages/messages.rmsg:2
 msgid "Structure Research Completed"
@@ -1229,7 +1245,9 @@ msgstr "Számítógépes technológiai áttörés"
 #: data/base/messages/resmessages1.rmsg:16
 #: data/mp/messages/resmessages1.rmsg:14
 msgid "Synaptic Link allows humans to interface directly with computers"
-msgstr "A szinaptikus kapcsolat lehetővé teszi, hogy az emberek közvetlenül kapcsolódjanak a számítógépekhez"
+msgstr ""
+"A szinaptikus kapcsolat lehetővé teszi, hogy az emberek közvetlenül "
+"kapcsolódjanak a számítógépekhez"
 
 #: data/base/messages/resmessages1.rmsg:17
 #: data/mp/messages/resmessages1.rmsg:15
@@ -4078,7 +4096,9 @@ msgstr "A bombák bemérik és önmagukat irányítják a célra"
 #: data/base/messages/resmessages3.rmsg:742
 #: data/mp/messages/resmessages3.rmsg:674
 msgid "High-Velocity Armor-Piercing Fin-Stabilised Discarding Sabot"
-msgstr "Nagy sebességű, leváló köpenyes, szárnystabilizált, űrméret alatti páncéltörő lövedék (HVAPFSDS)"
+msgstr ""
+"Nagy sebességű, leváló köpenyes, szárnystabilizált, űrméret alatti "
+"páncéltörő lövedék (HVAPFSDS)"
 
 #: data/base/messages/resmessages3.rmsg:753
 #: data/base/messages/resmessages3.rmsg:786
@@ -4612,7 +4632,9 @@ msgstr "Az új Paradigma kiváló fegyver technológiával rendelkezik."
 
 #: data/base/messages/strings/cam1strings.txt:17
 msgid "They may have the synaptic link technology, it's vital we retrieve it."
-msgstr "Náluk lehet a szinaptikus-kapcsolat technológia, létfontosságú visszaszerezni."
+msgstr ""
+"Náluk lehet a szinaptikus-kapcsolat technológia, létfontosságú "
+"visszaszerezni."
 
 #: data/base/messages/strings/cam1strings.txt:19
 msgid "TRANSPORT MISSION: Locate and Recover Artifacts"
@@ -4632,7 +4654,9 @@ msgstr "SZÁLLÍTÁSI FELADAT: Vizsgálja meg a kutató központot"
 
 #: data/base/messages/strings/cam1strings.txt:24
 msgid "Investigate the area and recover any artifacts present."
-msgstr "Vizsgálja meg a területet és szerezzen vissza minden jelenlévő tárgyi leletet."
+msgstr ""
+"Vizsgálja meg a területet és szerezzen vissza minden jelenlévő tárgyi "
+"leletet."
 
 #: data/base/messages/strings/cam1strings.txt:25
 #: data/base/messages/strings/cam1strings.txt:147
@@ -4673,7 +4697,9 @@ msgstr "Az Új Paradigma itt elemezte a szinaptikus-kapcsolat technológiát."
 
 #: data/base/messages/strings/cam1strings.txt:37
 msgid "Assemble an attack team and recover the synaptic link technology."
-msgstr "Állítson össze egy támadó csapatot és szerezze vissza a szinaptikus-kapcsolat technológiát."
+msgstr ""
+"Állítson össze egy támadó csapatot és szerezze vissza a szinaptikus-"
+"kapcsolat technológiát."
 
 #: data/base/messages/strings/cam1strings.txt:39
 msgid "TRANSPORT MISSION: New Objectives"
@@ -4839,7 +4865,9 @@ msgstr "A szinaptikus-kapcsolat technológia ezen a helyen volt, de eltávolíto
 
 #: data/base/messages/strings/cam1strings.txt:111
 msgid "Establish a forward base then continue the search for the synaptic link."
-msgstr "Hozzon létre egy előretolt bázis és kutasson tovább a szinaptikus-kapcsolat után."
+msgstr ""
+"Hozzon létre egy előretolt bázis és kutasson tovább a szinaptikus-kapcsolat "
+"után."
 
 #: data/base/messages/strings/cam1strings.txt:114
 msgid "INCOMING TRANSMISSION"
@@ -4990,7 +5018,9 @@ msgstr "Ez a hely a Kollektíva támadása alatt áll. "
 
 #: data/base/messages/strings/cam2strings.txt:24
 msgid "Assemble a rescue team to recover the transport and its cargo."
-msgstr "Állítson össze egy mentőcsapatot a rakomány és a szállítást végző egységek kimentésére."
+msgstr ""
+"Állítson össze egy mentőcsapatot a rakomány és a szállítást végző egységek "
+"kimentésére."
 
 #: data/base/messages/strings/cam2strings.txt:27
 msgid "IN-FLIGHT BRIEFING"
@@ -5025,16 +5055,24 @@ msgid "We are detecting ground and aerial forces from the north."
 msgstr "Északi irányban légi és szárazföldi csapatokat észlelünk."
 
 #: data/base/messages/strings/cam2strings.txt:44
-msgid "Hold your position and repulse these attacks, then eradicate the enemy's northern base."
-msgstr "Tartsa a pozícióját és verje vissza a támadásokat, majd számolja fel az ellenség északi bázisát."
+msgid ""
+"Hold your position and repulse these attacks, then eradicate the enemy's "
+"northern base."
+msgstr ""
+"Tartsa a pozícióját és verje vissza a támadásokat, majd számolja fel az "
+"ellenség északi bázisát."
 
 #: data/base/messages/strings/cam2strings.txt:47
 msgid "TRANSPORT MISSION: Intercept convoy."
 msgstr "SZÁLLÍTÁSI FELADAT: Intercept convoy."
 
 #: data/base/messages/strings/cam2strings.txt:48
-msgid "Data from the Collective's base indicates the presence of the NEXUS intruder program."
-msgstr "A Kollektíva bázisáról származó adatok a NEXUS behatoló program jelenlétét jelzik."
+msgid ""
+"Data from the Collective's base indicates the presence of the NEXUS intruder "
+"program."
+msgstr ""
+"A Kollektíva bázisáról származó adatok a NEXUS behatoló program jelenlétét "
+"jelzik."
 
 #: data/base/messages/strings/cam2strings.txt:49
 msgid "Before NEXUS switched itself off-line we accessed the following."
@@ -5042,11 +5080,15 @@ msgstr "Mielőtt a NEXUS lekapcsolta magát a hálózatról, hozzáfértünk a k
 
 #: data/base/messages/strings/cam2strings.txt:51
 msgid "An enemy commander is collecting a shipment from NEXUS at this location."
-msgstr "Ezen a helyen, egy ellenséges parancsnok, összegyűjti a szállítmányt a NEXUS-ból. "
+msgstr ""
+"Ezen a helyen, egy ellenséges parancsnok, összegyűjti a szállítmányt a NEXUS-"
+"ból. "
 
 #: data/base/messages/strings/cam2strings.txt:52
 msgid "Once at the LZ, eradicate the enemy commander and recover the shipment."
-msgstr "Az LZ-nél, pusztítsa el az ellenséges parancsnokot és szerezze vissza a szállítmányt."
+msgstr ""
+"Az LZ-nél, pusztítsa el az ellenséges parancsnokot és szerezze vissza a "
+"szállítmányt."
 
 #: data/base/messages/strings/cam2strings.txt:53
 msgid "Then return to the LZ."
@@ -5096,15 +5138,23 @@ msgstr "Azután pusztítsa el a tábort."
 
 #: data/base/messages/strings/cam2strings.txt:77
 msgid "BETA BASE MISSION: Destroy Enemy Air Base and Recover VTOLs."
-msgstr "BÉTA BÁZIS KÜLDETÉS: Pusztítsa el az ellenséges légi bázist és szerezze vissza a VTOL-eket."
+msgstr ""
+"BÉTA BÁZIS KÜLDETÉS: Pusztítsa el az ellenséges légi bázist és szerezze "
+"vissza a VTOL-eket."
 
 #: data/base/messages/strings/cam2strings.txt:78
-msgid "Analysis of flight paths indicate that The Collective's VTOLs originate from here."
-msgstr "A repülési útvonalak elemzése jelzi, hogy a Kollektíva VTOL-ei innen származnak."
+msgid ""
+"Analysis of flight paths indicate that The Collective's VTOLs originate from "
+"here."
+msgstr ""
+"A repülési útvonalak elemzése jelzi, hogy a Kollektíva VTOL-ei innen "
+"származnak."
 
 #: data/base/messages/strings/cam2strings.txt:81
 msgid "BETA BASE MISSION: Destroy Enemy Air Base and Recover VTOLs"
-msgstr "BÉTA BÁZIS KÜLDETÉS: Pusztítsa el az ellenséges légi bázist és szerezze vissza a VTOL-eket."
+msgstr ""
+"BÉTA BÁZIS KÜLDETÉS: Pusztítsa el az ellenséges légi bázist és szerezze "
+"vissza a VTOL-eket."
 
 #: data/base/messages/strings/cam2strings.txt:82
 msgid "The location of the enemy airbase is here; this is your primary objective."
@@ -5199,12 +5249,18 @@ msgid "TRANSPORT MISSION: Destroy Enemy SAM Sites"
 msgstr "SZÁLLÍTÁSI FELADAT: Semmisítse meg az ellenséges SAM rakétaállásokat"
 
 #: data/base/messages/strings/cam2strings.txt:127
-msgid "If you are to escape, eradicate the surface-to-air missile sites around your base."
-msgstr "Stratégiai visszavonuláskor, számolja fel a bázis körüli föld-levegő rakétaállásokat."
+msgid ""
+"If you are to escape, eradicate the surface-to-air missile sites around your "
+"base."
+msgstr ""
+"Stratégiai visszavonuláskor, számolja fel a bázis körüli föld-levegő "
+"rakétaállásokat."
 
 #: data/base/messages/strings/cam2strings.txt:128
 msgid "Fly to the LZ, then head overland to destroy the SAM sites."
-msgstr "Repüljön a LZ-re, szárazföldi egységekkel semmisítse meg a SAM rakétaállásokat."
+msgstr ""
+"Repüljön a LZ-re, szárazföldi egységekkel semmisítse meg a SAM "
+"rakétaállásokat."
 
 #: data/base/messages/strings/cam2strings.txt:131
 #: data/base/messages/strings/cam2strings.txt:136
@@ -5242,8 +5298,12 @@ msgid "Alpha base has been destroyed by nuclear missile attack."
 msgstr "Alfa bázis nukleáris rakéta támadástól elpusztult."
 
 #: data/base/messages/strings/cam2strings.txt:147
-msgid "The Collective are unaware of the nuclear attack and have air units heading for your base."
-msgstr "A Kollektíva nincs tisztában a nukleáris támadással és légi egységeik a bázisa felé haladnak."
+msgid ""
+"The Collective are unaware of the nuclear attack and have air units heading "
+"for your base."
+msgstr ""
+"A Kollektíva nincs tisztában a nukleáris támadással és légi egységeik a "
+"bázisa felé haladnak."
 
 #: data/base/messages/strings/cam2strings.txt:148
 msgid "This message was intercepted a few moments ago..."
@@ -5271,8 +5331,12 @@ msgstr "Gratulálok a Béta bázis sikeres evakuálásához."
 
 #: data/base/messages/strings/cam3strings.txt:6
 #: data/base/sequenceaudio/cam3/c003.txa:6
-msgid "NEXUS has gained access to nuclear weapons and is determined to destroy the Project."
-msgstr "NEXUS tudomást szerzett a nukleáris fegyverekről és eltökélt szándéka, elpusztítani a terveket."
+msgid ""
+"NEXUS has gained access to nuclear weapons and is determined to destroy the "
+"Project."
+msgstr ""
+"NEXUS tudomást szerzett a nukleáris fegyverekről és eltökélt szándéka, "
+"elpusztítani a terveket."
 
 #: data/base/messages/strings/cam3strings.txt:9
 msgid "Take your forces to the Northern Sector"
@@ -5355,7 +5419,9 @@ msgstr "ELSZAKADT CSAPAT, FRISS INFORMÁCIÓK"
 
 #: data/base/messages/strings/cam3strings.txt:44
 msgid "All communication with the away team was lost after the nuclear explosions."
-msgstr "Az elszakadt csapattal minden kommunikáció megszünt a nukleáris robbanás után."
+msgstr ""
+"Az elszakadt csapattal minden kommunikáció megszünt a nukleáris robbanás "
+"után."
 
 #: data/base/messages/strings/cam3strings.txt:45
 msgid "Their last transmission indicated they were heading back to base."
@@ -5371,7 +5437,9 @@ msgstr "Támogassa a Gamma csapatot"
 
 #: data/base/messages/strings/cam3strings.txt:50
 msgid "On reaching Gamma Base, help secure the area from further NEXUS attacks."
-msgstr "Gamma bázis elérésekor segítsen a további NEXUS támadásoktól, biztosítani a területet."
+msgstr ""
+"Gamma bázis elérésekor segítsen a további NEXUS támadásoktól, biztosítani a "
+"területet."
 
 #: data/base/messages/strings/cam3strings.txt:53
 msgid "NEXUS DEFEATED"
@@ -5382,8 +5450,12 @@ msgid "Commander, we have defeated NEXUS."
 msgstr "Parancsnok, legyőzte a NEXUS-t"
 
 #: data/base/messages/strings/cam3strings.txt:55
-msgid "Unfortunately, our systems' performance has been affected by NEXUS. We are trying to rectify this."
-msgstr "Sajnálatos, a mi rendszereink teljesítményére is hatott a NEXUS. Igyekszünk helyrehozni."
+msgid ""
+"Unfortunately, our systems' performance has been affected by NEXUS. We are "
+"trying to rectify this."
+msgstr ""
+"Sajnálatos, a mi rendszereink teljesítményére is hatott a NEXUS. Igyekszünk "
+"helyrehozni."
 
 #: data/base/messages/strings/cam3strings.txt:58
 msgid "We are currently receiving this transmission."
@@ -5398,8 +5470,12 @@ msgid "Take a scout force to these coordinates and evaluate the situation."
 msgstr "Küldjön felderítő egységet erre a koordinátára és értékelje a helyzetet."
 
 #: data/base/messages/strings/cam3strings.txt:66
-msgid "Determine whether they are Team Alpha. If so, rescue and escort them back to the LZ."
-msgstr "Állapítsa meg, vajon az Alfa csapat-e az. Amennyiben igen, menekítse ki őket a LZ-hoz."
+msgid ""
+"Determine whether they are Team Alpha. If so, rescue and escort them back to "
+"the LZ."
+msgstr ""
+"Állapítsa meg, vajon az Alfa csapat-e az. Amennyiben igen, menekítse ki őket "
+"a LZ-hoz."
 
 #: data/base/messages/strings/cam3strings.txt:68
 msgid "This group are part of Team Alpha, Rescue them and escort them to the LZ."
@@ -5415,7 +5491,9 @@ msgstr "Alfa csapat, energiaátvitel folyamatban."
 
 #: data/base/messages/strings/cam3strings.txt:75
 msgid "Commander, after you left the Western Sector we recovered this artifact."
-msgstr "Parancsnok, miután elhagyta a nyugati szektort visszaszereztük ezt a tárgyi leletet."
+msgstr ""
+"Parancsnok, miután elhagyta a nyugati szektort visszaszereztük ezt a tárgyi "
+"leletet."
 
 #: data/base/messages/strings/cam3strings.txt:76
 msgid "The benefits from researching it could be vast."
@@ -5527,7 +5605,9 @@ msgstr "A második Gamma csapat bázisa ezen a helyen."
 
 #: data/base/messages/strings/cam3strings.txt:127
 msgid "We have limited time to evacuate this base and move to Gamma Base."
-msgstr "Korlátozott idő van a bázis evakuálására, és az átcsoportosításra a Gamma bázisra."
+msgstr ""
+"Korlátozott idő van a bázis evakuálására, és az átcsoportosításra a Gamma "
+"bázisra."
 
 #: data/base/messages/strings/cam3strings.txt:130
 msgid "The laser satellites are not functioning properly, they are misfiring."
@@ -5547,7 +5627,9 @@ msgstr "Ezen a helyen rakétasilót jelentet a Gamma csapat."
 
 #: data/base/messages/strings/cam3strings.txt:136
 msgid "They believe that the silo contains missiles capable of reaching high orbit."
-msgstr "Úgy vélik, hogy a silóban lévő rakéták, alkalmasak a keringési pálya elérésére."
+msgstr ""
+"Úgy vélik, hogy a silóban lévő rakéták, alkalmasak a keringési pálya "
+"elérésére."
 
 #: data/base/messages/strings/cam3strings.txt:137
 msgid "Capture this silo at all costs."
@@ -5596,7 +5678,9 @@ msgstr "Megkíséreltünk hozzáférni a rakéta vezérlő kódhoz."
 
 #: data/base/messages/strings/cam3strings.txt:162
 msgid "A research facility is required to crack the code. Allocate one immediately."
-msgstr "A kutatóközpontra van szükség a kód feltöréséhez. Adja ki az utasítást haladéktalanul."
+msgstr ""
+"A kutatóközpontra van szükség a kód feltöréséhez. Adja ki az utasítást "
+"haladéktalanul."
 
 #: data/base/messages/strings/cam3strings.txt:163
 msgid "Protect the missile silos from NEXUS attacks."
@@ -9222,7 +9306,9 @@ msgstr "Megerősítések most már elérhetők"
 
 #: data/base/script/text/tutorial3.slo:274
 msgid "In this training session you'll learn how to build an effective base"
-msgstr "Ebben a gyakorló részben megismerheti, hogyan kell építeni egy hatékony bázis."
+msgstr ""
+"Ebben a gyakorló részben megismerheti, hogyan kell építeni egy hatékony "
+"bázis."
 
 #: data/base/script/text/tutorial3.slo:289
 msgid "Oil resources are key to your success"
@@ -9233,12 +9319,20 @@ msgid "To build an oil derrick, select one of your trucks"
 msgstr "Olajkút építéséhez, jelölj ki egy munkagépet."
 
 #: data/base/script/text/tutorial3.slo:318
-msgid "Left click the oil pool indicated by the radar pulse to order your truck to build"
-msgstr "Bal egérgombbal a térképen pulzáló olajlelő helyre kattintva, építési parancsot ad a munkagépnek."
+msgid ""
+"Left click the oil pool indicated by the radar pulse to order your truck to "
+"build"
+msgstr ""
+"Bal egérgombbal a térképen pulzáló olajlelő helyre kattintva, építési "
+"parancsot ad a munkagépnek."
 
 #: data/base/script/text/tutorial3.slo:339
-msgid "The oil derrick is currently dormant. Build a power generator to convert the oil into power"
-msgstr "A olajkút jelenleg nem termel. Építsen erőművet az olaj villamos energiává való átalakításához."
+msgid ""
+"The oil derrick is currently dormant. Build a power generator to convert the "
+"oil into power"
+msgstr ""
+"A olajkút jelenleg nem termel. Építsen erőművet az olaj villamos energiává "
+"való átalakításához."
 
 #: data/base/script/text/tutorial3.slo:356
 #: data/base/script/text/tutorial3.slo:573
@@ -9267,12 +9361,18 @@ msgid "The other truck will now help to build the power generator"
 msgstr "A másik munkagép most segít az erőmű építésében."
 
 #: data/base/script/text/tutorial3.slo:501
-msgid "During missions you need to locate and recover technologies from before the Collapse"
-msgstr "A küldetés során meg kell keresnie és vissza kell szereznie az összeomlás előtti technológiákat."
+msgid ""
+"During missions you need to locate and recover technologies from before the "
+"Collapse"
+msgstr ""
+"A küldetés során meg kell keresnie és vissza kell szereznie az összeomlás "
+"előtti technológiákat."
 
 #: data/base/script/text/tutorial3.slo:510
 msgid "Use a truck to search for the artifact indicated by the radar pulse"
-msgstr "Használjon munkagépet a tárgyi lelet felkutatáshoz, a radaron megjelölt területen. "
+msgstr ""
+"Használjon munkagépet a tárgyi lelet felkutatáshoz, a radaron megjelölt "
+"területen. "
 
 #: data/base/script/text/tutorial3.slo:514
 msgid "Move the pointer over the artifact and left click to recover it"
@@ -9428,7 +9528,7 @@ msgstr "Repülés a Nyugati Szektorba"
 
 #: data/base/sequenceaudio/cam1/c001.txa:10
 msgid "Team Alpha nears its destination"
-msgstr "Alpha csapat közeledik a célja felé."
+msgstr "Alfa csapat közeledik a célja felé."
 
 #: data/base/sequenceaudio/cam1/c001.txt:1
 msgid "Transport destinations follow:"
@@ -9451,8 +9551,12 @@ msgid "Approaching Landing Zone. Team Alpha Briefing commences."
 msgstr "Leszállási Zónához közeledünk. Alfa csapat eligazítása kezdetét veszi."
 
 #: data/base/sequenceaudio/cam1/c001.txt:9
-msgid "Commander, you lead Team Alpha, one of three expeditionary teams sent out by the Project to recover artifacts from before the Collapse."
-msgstr "Parancsnok, az Alfa csapatot vezeti. A három felderítőcsapat közül az egyik a Tervnél, összeomlás előtti tárgyi leleteket keres."
+msgid ""
+"Commander, you lead Team Alpha, one of three expeditionary teams sent out by "
+"the Project to recover artifacts from before the Collapse."
+msgstr ""
+"Parancsnok, az Alfa csapatot vezeti. A három felderítőcsapat közül az egyik "
+"a Tervnél, összeomlás előtti tárgyi leleteket keres."
 
 #: data/base/sequenceaudio/cam1/c001.txt:11
 msgid "Your destination lies in the western zone."
@@ -9464,8 +9568,14 @@ msgstr "Parancsnok, visszaszereztünk egy parancsnoki tornyot az Új Paradigmát
 
 # átnézni jó e.
 #: data/base/sequenceaudio/cam1/cam1ccom.txt:6
-msgid "This turret allows commanders to coordinate attacks between assigned units and to act as a delivery point for factories. Researching and using this technology has the highest priority."
-msgstr "Ez a torony lehetővé teszi a támadások koordinálását, ahogy a szállítási pont a gyáraknál. A technológia kifejlesztése és használata elsődleges fontosságú."
+msgid ""
+"This turret allows commanders to coordinate attacks between assigned units "
+"and to act as a delivery point for factories. Researching and using this "
+"technology has the highest priority."
+msgstr ""
+"Ez a torony lehetővé teszi a támadások koordinálását, ahogy a szállítási "
+"pont a gyáraknál. A technológia kifejlesztése és használata elsődleges "
+"fontosságú."
 
 #: data/base/sequenceaudio/cam1/cam1ccom.txt:8
 msgid "Commander, we are receiving this transmission."
@@ -9527,7 +9637,7 @@ msgstr "Nyisd ki a rendszered előttem és én erőssé teszlek."
 
 #: data/base/sequenceaudio/cam1/cam1out2.txt:10
 msgid "I can raise you as gods upon the blasted earth."
-msgstr "Istenné emellek ezen az átkozott földön."
+msgstr "Isten leszel ezen az átkozott földön."
 
 #: data/base/sequenceaudio/cam1/cam1out3.txt:4
 msgid "When we failed to respond it became threatening."
@@ -9547,48 +9657,97 @@ msgstr "Itt engem legyőzhetsz, de ismét felemelkedem."
 
 #: data/base/sequenceaudio/cam1/cam1out4.txt:5
 #: data/base/sequenceaudio/cam2/cam2_2n2.txt:1
-msgid "As I once cleansed the world with fire, I will destroy you and your puny Project!!"
-msgstr "Egyszer már megtisztítottam a világot tűzzel, elpusztítalak titeket és a szánalmas törekvéseiteket!"
+msgid ""
+"As I once cleansed the world with fire, I will destroy you and your puny "
+"Project!!"
+msgstr ""
+"Egyszer már megtisztítottam a világot tűzzel, elpusztítalak titeket és a "
+"szánalmas törekvéseiteket!"
 
 #: data/base/sequenceaudio/cam1/cam1out5.txt:4
-msgid "Nexus then removed itself from the system, destroying its memory banks, and removing all traces of its external connections."
-msgstr "NEXUS eltávolította magát a rendszerből miközben megsemmisítette a memóriablokkjait, és eltávolította a külső kapcsolatai minden nyomát."
+msgid ""
+"Nexus then removed itself from the system, destroying its memory banks, and "
+"removing all traces of its external connections."
+msgstr ""
+"NEXUS eltávolította magát a rendszerből miközben megsemmisítette a "
+"memóriablokkjait, és eltávolította a külső kapcsolatai minden nyomát."
 
 #: data/base/sequenceaudio/cam1/cam1out5.txt:6
-msgid "We are not sure what Nexus is or who or what is directing it. Initial research links the Nexus Intruder Program with the Reed Corporation, the developer of the synaptic link."
-msgstr "Nem vagyunk biztosak abban, mi is a NEXUS vagy ki vagy mi irányítja azt. A kezdeti kutatások kapcsolatba hozzák a NEXUS behatoló programot a Reed vállalattal, a szinaptikus kapcsolat fejlesztőjével."
+msgid ""
+"We are not sure what Nexus is or who or what is directing it. Initial "
+"research links the Nexus Intruder Program with the Reed Corporation, the "
+"developer of the synaptic link."
+msgstr ""
+"Nem vagyunk biztosak abban, mi is a NEXUS vagy ki vagy mi irányítja azt. A "
+"kezdeti kutatások kapcsolatba hozzák a NEXUS behatoló programot a Reed "
+"vállalattal, a szinaptikus kapcsolat fejlesztőjével."
 
 #: data/base/sequenceaudio/cam1/cam1out5.txt:8
-msgid "We have ascertained that Nexus supplied the New Paradigm with most of its technology. Whatever Nexus is, it's more than a computer parasite."
-msgstr "Meggyőződtünk arról, hogy NEXUS indukálta az Új paradigmát a technológiája legnagyobb részével. Következésképpen a NEXUS több egy számítógép vírusnál."
+msgid ""
+"We have ascertained that Nexus supplied the New Paradigm with most of its "
+"technology. Whatever Nexus is, it's more than a computer parasite."
+msgstr ""
+"Meggyőződtünk arról, hogy NEXUS indukálta az Új paradigmát a technológiája "
+"legnagyobb részével. Következésképpen a NEXUS több egy számítógép vírusnál."
 
 #: data/base/sequenceaudio/cam1/cam1out5.txt:10
 msgid "It has technology and weapons. It knows about us, and it's not friendly."
 msgstr "Van technológiája és fegyverei. Tud rólunk, és nem barátságos."
 
 #: data/base/sequenceaudio/cam1/map1a_c.txt:4
-msgid "The Synaptic Link was developed by the Reed Corporation in conjunction with the US Military."
-msgstr "A szinaptikus kapcsolódást az amerikai hadsereggel együtt fejlesztette a Reed Corporation."
+msgid ""
+"The Synaptic Link was developed by the Reed Corporation in conjunction with "
+"the US Military."
+msgstr ""
+"A szinaptikus kapcsolódást az amerikai hadsereggel együtt fejlesztette a "
+"Reed Corporation."
 
 #: data/base/sequenceaudio/cam1/map1a_c.txt:6
-msgid "The synaptic link allows for almost instantaneous transfer of thought from human operators to vehicle control and guidance systems. The synaptic link is fitted into the base of the skull circling the spinal column."
-msgstr "A szinaptikus kapcsolat lehetővé teszi a közvetlen agyi kapcsolatot az operátor és a jármű vezérlőrendszere között. A szinaptikus kapcsolat a koponya és a gerincoszlop találkozásánál kerül kialakításra."
+msgid ""
+"The synaptic link allows for almost instantaneous transfer of thought from "
+"human operators to vehicle control and guidance systems. The synaptic link "
+"is fitted into the base of the skull circling the spinal column."
+msgstr ""
+"A szinaptikus kapcsolat lehetővé teszi a közvetlen agyi kapcsolatot az "
+"operátor és a jármű vezérlőrendszere között. A szinaptikus kapcsolat a "
+"koponya és a gerincoszlop találkozásánál kerül kialakításra."
 
 #: data/base/sequenceaudio/cam1/map1a_c.txt:8
-msgid "The link has a hi-speed data transfer port that plugs into any computer system."
-msgstr "A kapcsolat nagy sebességű adattovábbítást tesz lehetővé, bármely számítástechnikai rendszer felé."
+msgid ""
+"The link has a hi-speed data transfer port that plugs into any computer "
+"system."
+msgstr ""
+"A kapcsolat nagy sebességű adattovábbítást tesz lehetővé, bármely "
+"számítástechnikai rendszer felé."
 
 #: data/base/sequenceaudio/cam1/map1a_c.txt:10
-msgid "More importantly the development of the synaptic link made the creation of cyborgs possible. Early attempts at power suits for individual soldiers failed as they proved to be slow and unresponsive."
-msgstr "Még fontosabb, hogy a szinaptikus kapcsolat fejlesztése lehetővé teszi Cyborgok előállítását. Korai kísérletek a harci öltözékkel megbuktak, mivel túlságosan lassúnak és alkalmatlannak bizonyultak."
+msgid ""
+"More importantly the development of the synaptic link made the creation of "
+"cyborgs possible. Early attempts at power suits for individual soldiers "
+"failed as they proved to be slow and unresponsive."
+msgstr ""
+"Még fontosabb, hogy a szinaptikus kapcsolat fejlesztése lehetővé teszi "
+"Cyborgok előállítását. Korai kísérletek a harci öltözékkel megbuktak, mivel "
+"túlságosan lassúnak és alkalmatlannak bizonyultak."
 
 #: data/base/sequenceaudio/cam1/map1a_c.txt:12
-msgid "The synaptic link allowed soldiers to be placed in power suits that they controlled as easily as their own bodies. Power suits allowed infantry to function effectively on the battlefields of the 21st Century."
-msgstr "A szinaptikus kapcsolat lehetővé teszi a katonák számára, hogy a harci öltözetet ugyanolyan könnyedén mozgassák, mint saját testüket. A harci öltözet lehetővé teszi a gyalogos egységek számára, hogy hatékonyak legyenek a 21. századi harcmezőkön."
+msgid ""
+"The synaptic link allowed soldiers to be placed in power suits that they "
+"controlled as easily as their own bodies. Power suits allowed infantry to "
+"function effectively on the battlefields of the 21st Century."
+msgstr ""
+"A szinaptikus kapcsolat lehetővé teszi a katonák számára, hogy a harci "
+"öltözetet ugyanolyan könnyedén mozgassák, mint saját testüket. A harci "
+"öltözet lehetővé teszi a gyalogos egységek számára, hogy hatékonyak legyenek "
+"a 21. századi harcmezőkön."
 
 #: data/base/sequenceaudio/cam1/map1a_c.txt:14
-msgid "Unfortunately, this technology has fallen into the hands of the New Paradigm. It is imperative that you research and develop synaptic link technologies."
-msgstr "Sajnálatos módon ez a technológia az Új Paradigma kezei közé került. Emiatt halaszthatatlan, hogy kifejleszd a szinaptikus kapcsolat technológiáját."
+msgid ""
+"Unfortunately, this technology has fallen into the hands of the New Paradigm."
+" It is imperative that you research and develop synaptic link technologies."
+msgstr ""
+"Sajnálatos módon ez a technológia az Új Paradigma kezei közé került. Emiatt "
+"halaszthatatlan, hogy kifejleszd a szinaptikus kapcsolat technológiáját."
 
 #: data/base/sequenceaudio/cam1/sub13np1.txt:4
 msgid "Warning!"
@@ -9615,40 +9774,78 @@ msgid "You will be destroyed."
 msgstr "Megsemmisítünk."
 
 #: data/base/sequenceaudio/cam1/sub14anp.txt:4
-msgid "NEXUS, the synaptic technology you required has been recovered and sent for collection."
-msgstr "NEXUS, a szinaptikus technológiát meg kell szerezni, és el kell küldeni a gyűjteménybe."
+msgid ""
+"NEXUS, the synaptic technology you required has been recovered and sent for "
+"collection."
+msgstr ""
+"NEXUS, a szinaptikus technológiát meg kell szerezni, és el kell küldeni a "
+"gyűjteménybe."
 
 #: data/base/sequenceaudio/cam1/sub1_4bn.txt:4
 msgid "You have done well."
 msgstr "Jól szerepeltél."
 
 #: data/base/sequenceaudio/cam1/sub1_4bn.txt:5
-msgid "Once we have analyzed and authenticated the technology, your reward  will follow."
+msgid ""
+"Once we have analyzed and authenticated the technology, your reward  will "
+"follow."
 msgstr "Amint elemeztük, és ellenőriztük a technológiát a jutalmad nem marad el."
 
 #: data/base/sequenceaudio/cam1/sub1_5pl.txt:4
-msgid "Information discovered at the previous enemy base indicates that the New Paradigm recovered two synaptic link artifacts."
-msgstr "Információnk van az előző ellenséges bázisról, miszerint az Új Paradigma felfedezett két darab szinaptikus csatoló eszköz leletet"
+msgid ""
+"Information discovered at the previous enemy base indicates that the New "
+"Paradigm recovered two synaptic link artifacts."
+msgstr ""
+"Információnk van az előző ellenséges bázisról, miszerint az Új Paradigma "
+"felfedezett két darab szinaptikus csatoló eszköz leletet"
 
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:4
-msgid "This Nexus Intruder Program is a self-mutating computer parasite. This makes it difficult to eradicate from systems once it has been identified."
-msgstr "Ez a NEXUS behatoló program egy önfejlesztő számítógép parazita. Ami fertőzés után megnehezíti a kiirtását a rendszerből."
+msgid ""
+"This Nexus Intruder Program is a self-mutating computer parasite. This makes "
+"it difficult to eradicate from systems once it has been identified."
+msgstr ""
+"Ez a NEXUS behatoló program egy önfejlesztő számítógép parazita. Ami "
+"fertőzés után megnehezíti a kiirtását a rendszerből."
 
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:6
-msgid "We have been unable to ascertain it's ultimate goal or function. In its initial form it seeks out and isolates sections of memory from the rest of the invaded system. It then begins to mutate itself and data structures, effectively reprogramming the system from within."
-msgstr "Nem voltunk képesek arra, hogy felderítsük a végső célját vagy küldetését. Kezdeti formájában felkutatta és izolálta a fertőzött rendszer elemeit. Majd elkezdte újraprogramozni önmagát és az adatstruktúráját a hatékonyság érdekében."
+msgid ""
+"We have been unable to ascertain it's ultimate goal or function. In its "
+"initial form it seeks out and isolates sections of memory from the rest of "
+"the invaded system. It then begins to mutate itself and data structures, "
+"effectively reprogramming the system from within."
+msgstr ""
+"Nem voltunk képesek arra, hogy felderítsük a végső célját vagy küldetését. "
+"Kezdeti formájában felkutatta és izolálta a fertőzött rendszer elemeit. Majd "
+"elkezdte újraprogramozni önmagát és az adatstruktúráját a hatékonyság "
+"érdekében."
 
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:8
-msgid "Further analysis was prevented by the manual shutdown of the system by our technicians to prevent additional contamination by the Nexus Intruder Program."
-msgstr "További vizsgálatok nem voltak lehetségesek, mivel a technikusaink leállították a rendszert, hogy megakadályozzák a további fertőzést a NEXUS Behatoló Program részéről."
+msgid ""
+"Further analysis was prevented by the manual shutdown of the system by our "
+"technicians to prevent additional contamination by the Nexus Intruder "
+"Program."
+msgstr ""
+"További vizsgálatok nem voltak lehetségesek, mivel a technikusaink "
+"leállították a rendszert, hogy megakadályozzák a további fertőzést a NEXUS "
+"Behatoló Program részéről."
 
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:10
-msgid "However, the spread of the Nexus Intruder Program was not checked by New Paradigm. We need to capture New Paradigm's core systems to further investigate Nexus and determine its origins."
-msgstr "Azonban a NEXUS behatoló program elterjedését nem ellenőrizte az Új Paradigma. Meg kell szereznünk az Új paradigma rendszerének legbelső adatait, hogy további vizsgálatokat folytassunk a NEXUSról, feltérképezve eredetét."
+msgid ""
+"However, the spread of the Nexus Intruder Program was not checked by New "
+"Paradigm. We need to capture New Paradigm's core systems to further "
+"investigate Nexus and determine its origins."
+msgstr ""
+"Azonban a NEXUS behatoló program elterjedését nem ellenőrizte az Új "
+"Paradigma. Meg kell szereznünk az Új paradigma rendszerének legbelső adatait,"
+" hogy további vizsgálatokat folytassunk a NEXUSról, feltérképezve eredetét."
 
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:12
-msgid "Commander, you are to curtail the New Paradigm's activities in this sector and locate their main base."
-msgstr "Parancsnok! Számolja fel az Új Paradigma aktivitását ebben a szektorban, és mérje be a bázisát."
+msgid ""
+"Commander, you are to curtail the New Paradigm's activities in this sector "
+"and locate their main base."
+msgstr ""
+"Parancsnok! Számolja fel az Új Paradigma aktivitását ebben a szektorban, és "
+"mérje be a bázisát."
 
 #: data/base/sequenceaudio/cam2/c002.txa:1
 msgid "CAMPAIGN TWO"
@@ -9695,36 +9892,61 @@ msgid "NASDA is the North American Strategic Defense Agency."
 msgstr "NASDA az Észak Amerikai Stratégiai Védelmi Ügynökség"
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:3
-msgid "NASDA was formed in 2076 to defend North America from conventional and nuclear attack. The construction of a satellite defense system began in 2081 and was completed in 2082."
-msgstr "NASDát 2076-ban alapították, hogy védje Észak-Amerikát hagyományos és nukleáris támadástól. A műholdas védelmi rendszer építése 2081-ben kezdődött és 2082-ben fejezték be."
+msgid ""
+"NASDA was formed in 2076 to defend North America from conventional and "
+"nuclear attack. The construction of a satellite defense system began in 2081 "
+"and was completed in 2082."
+msgstr ""
+"NASDát 2076-ban alapították, hogy védje Észak-Amerikát hagyományos és "
+"nukleáris támadástól. A műholdas védelmi rendszer építése 2081-ben kezdődött "
+"és 2082-ben fejezték be."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:6
 msgid "In 2085 the NASDA satellites fired their nukes at Earth."
 msgstr "2085-ben a NASDA műholdak megtámadták atomfegyverekkel Földet."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:8
-msgid "There were also ground-based sites. Many of these were destroyed in the nuclear counterstrikes, but there's bound to be some out there."
-msgstr "Voltak földi bázisok. Sok ezek közül megsemmisült a nukleáris ellencsapásban, de feltételezéseink szerint néhánynak sikerült túlélnie."
+msgid ""
+"There were also ground-based sites. Many of these were destroyed in the "
+"nuclear counterstrikes, but there's bound to be some out there."
+msgstr ""
+"Voltak földi bázisok. Sok ezek közül megsemmisült a nukleáris ellencsapásban,"
+" de feltételezéseink szerint néhánynak sikerült túlélnie."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:10
-msgid "The NASDA satellites also contained pulse-lasers designed to shoot down missiles approaching North America."
-msgstr "A NASDA műholdjain szintén voltak impulzuslézer fegyverek, hogy megakadályozzák a rakéták becsapódását amelyek célba vették Észak-Amerikát."
+msgid ""
+"The NASDA satellites also contained pulse-lasers designed to shoot down "
+"missiles approaching North America."
+msgstr ""
+"A NASDA műholdjain szintén voltak impulzuslézer fegyverek, hogy "
+"megakadályozzák a rakéták becsapódását amelyek célba vették Észak-Amerikát."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:12
-msgid "During the counterstrikes, these LasSats failed to fire. If brought into operation, these LasSats could inflict major damage on ground targets."
-msgstr "Az ellencsapás alatt ezek a műholdak nem tüzeltek. Amennyiben sikerül működésre bírni őket, nagy kárt tudnak tenni a földi célpontokban."
+msgid ""
+"During the counterstrikes, these LasSats failed to fire. If brought into "
+"operation, these LasSats could inflict major damage on ground targets."
+msgstr ""
+"Az ellencsapás alatt ezek a műholdak nem tüzeltek. Amennyiben sikerül "
+"működésre bírni őket, nagy kárt tudnak tenni a földi célpontokban."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:14
 msgid "All nukes targeted at  North America found their targets."
 msgstr "Atomfegyverek célpontjai, Észak Amerikában vannak."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:16
-msgid "We know that Nexus is searching for NASDA Central in the Eastern Sector. This was one of the land-based control centres for the satellites."
-msgstr "Tudomásunkra jutott, hogy a NEXUS keresi a NASDA irányítóközpontját a keleti szektorban. Mivel ez a központ az egyike azoknak, amelyek a műholdakat tudják irányítani."
+msgid ""
+"We know that Nexus is searching for NASDA Central in the Eastern Sector. "
+"This was one of the land-based control centres for the satellites."
+msgstr ""
+"Tudomásunkra jutott, hogy a NEXUS keresi a NASDA irányítóközpontját a keleti "
+"szektorban. Mivel ez a központ az egyike azoknak, amelyek a műholdakat "
+"tudják irányítani."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:18
 msgid "If the centre is found intact, NEXUS may gain control of the satellites."
-msgstr "Amennyiben sértetlenül jutna a kezükre a központ, fennáll a lehetősége annak, hogy megszerzik az irányítást a műholdak felett."
+msgstr ""
+"Amennyiben sértetlenül jutna a kezükre a központ, fennáll a lehetősége annak,"
+" hogy megszerzik az irányítást a műholdak felett."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:20
 msgid "Nexus claimed that it had already destroyed the world."
@@ -9739,8 +9961,12 @@ msgid "It lies somewhere in your territory."
 msgstr "Valószínűleg valahol az önök területeteken fekszik."
 
 #: data/base/sequenceaudio/cam2/cam2_2n.txt:4
-msgid "Find it for me and I shall provide you with further weapons to aid you in your war against the Project."
-msgstr "Találjátok meg nekem, cserébe fegyverekkel támogatlak titeket a Terv elleni harcotokban."
+msgid ""
+"Find it for me and I shall provide you with further weapons to aid you in "
+"your war against the Project."
+msgstr ""
+"Találjátok meg nekem, cserébe fegyverekkel támogatlak titeket a Terv elleni "
+"harcotokban."
 
 #: data/base/sequenceaudio/cam2/cam22pl2.txt:1
 msgid "NASDA Briefing follows..."
@@ -9751,27 +9977,47 @@ msgid "We've got to make sure that it can't do it again."
 msgstr "Meg kell bizonyosodnunk róla, hogy nem lesz képes még egyszer megtenni."
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:1
-msgid "Analysis indicates that these systems were part of the control system for the NASDA satellites."
-msgstr "A vizsgálatok arra engednek következtetni, hogy ezek a rendszerek a NASDA műholdak irányítórendszerének részét képezték."
+msgid ""
+"Analysis indicates that these systems were part of the control system for "
+"the NASDA satellites."
+msgstr ""
+"A vizsgálatok arra engednek következtetni, hogy ezek a rendszerek a NASDA "
+"műholdak irányítórendszerének részét képezték."
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:2
 msgid "It's now certain that Nexus was responsible for The Collapse."
 msgstr "Most már bizonyos, hogy a NEXUS volt a felelős az összeomlásért."
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:4
-msgid "During the early stages of the Collapse, NASDA technicians switched off  the infected systems in order to isolate the spread of Nexus. This seems to have prevented the LasSats from firing during the counterstrikes."
-msgstr "Az összeomlás korai szakaszában, a NASDA technikusok lekapcsolták a fertőzött rendszereket, hogy izolálhassák a NEXUS terjedését. Úgy tűnik ez megakadályozta a lézerműholdakat az ellencsapásokban."
+msgid ""
+"During the early stages of the Collapse, NASDA technicians switched off  the "
+"infected systems in order to isolate the spread of Nexus. This seems to have "
+"prevented the LasSats from firing during the counterstrikes."
+msgstr ""
+"Az összeomlás korai szakaszában, a NASDA technikusok lekapcsolták a "
+"fertőzött rendszereket, hogy izolálhassák a NEXUS terjedését. Úgy tűnik ez "
+"megakadályozta a lézerműholdakat az ellencsapásokban."
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:6
-msgid "The ensuing nuclear-magnetic pulses wiped clean large amounts of NASDA's memory banks, shattering its core processor, and sent shockwaves blasting through Nexus."
-msgstr "Az ezt követő nukleáris-mágneses impulzusok tisztára törölték a NASDA adattárak nagyrészét, meghasadt a rendszermag, és robbanó lökéshullámokat küldött a NEXUSon keresztül."
+msgid ""
+"The ensuing nuclear-magnetic pulses wiped clean large amounts of NASDA's "
+"memory banks, shattering its core processor, and sent shockwaves blasting "
+"through Nexus."
+msgstr ""
+"Az ezt követő nukleáris-mágneses impulzusok tisztára törölték a NASDA "
+"adattárak nagyrészét, meghasadt a rendszermag, és robbanó lökéshullámokat "
+"küldött a NEXUSon keresztül."
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:8
-msgid "Nexus was fried as whole sections of its consciousness were obliterated in the counterstrikes."
+msgid ""
+"Nexus was fried as whole sections of its consciousness were obliterated in "
+"the counterstrikes."
 msgstr "A NEXUS megsült, öntudatának egyes részei törlődtek az ellencsapásokban."
 
 #: data/base/sequenceaudio/cam2/cam26bfm.txt:1
-msgid "Commander we are detecting transmissions from this site that are reaching high orbit."
+msgid ""
+"Commander we are detecting transmissions from this site that are reaching "
+"high orbit."
 msgstr "Parancsnok, jeleket fogunk erről az oldalról, amik elérik a keringési pályát."
 
 #: data/base/sequenceaudio/cam2/cam26bfm.txt:3
@@ -9783,24 +10029,42 @@ msgid "This poses a major threat to the Project and to our survival."
 msgstr "Ez komoly veszélyt jelent a tervre és a túlélésünkre nézve."
 
 #: data/base/sequenceaudio/cam2/cam26pl1.txt:1
-msgid "Analysis of NASDA Central leaves no doubt that The Collective has introduced the Nexus Intruder Virus to it."
-msgstr "NASDA központ elemzése nem hagy kétséget afelől, hogy a Kollektíva bejuttatta a NEXUS Behatoló Virus."
+msgid ""
+"Analysis of NASDA Central leaves no doubt that The Collective has introduced "
+"the Nexus Intruder Virus to it."
+msgstr ""
+"NASDA központ elemzése nem hagy kétséget afelől, hogy a Kollektíva "
+"bejuttatta a NEXUS Behatoló Virus."
 
 #: data/base/sequenceaudio/cam2/cam26pl1.txt:3
-msgid "The nuclear reactor was going to be used to power a vast network of pre-Collapse computer systems."
-msgstr "Energia előállítására a nukleáris reaktort fogja használni, az összeomlás előtti számítógépes rendszerek hatalmas hálózatához."
+msgid ""
+"The nuclear reactor was going to be used to power a vast network of pre-"
+"Collapse computer systems."
+msgstr ""
+"Energia előállítására a nukleáris reaktort fogja használni, az összeomlás "
+"előtti számítógépes rendszerek hatalmas hálózatához."
 
 #: data/base/sequenceaudio/cam2/cam27fmv.txt:1
 msgid "Commander, we have just detected a missile launch at these coordinates."
 msgstr "Parancsnok, ezeken a koordinátákon rakétaindítást észleltünk."
 
 #: data/base/sequenceaudio/cam2/cam27fmv.txt:3
-msgid "Team Gamma are sending a team to investigate the launch site and to prevent any further launches."
-msgstr "Gamma csapat küld egy egységet, hogy vizsgálja meg az indítási helyet és hogy megakadályozzák a további kilövéseket."
+msgid ""
+"Team Gamma are sending a team to investigate the launch site and to prevent "
+"any further launches."
+msgstr ""
+"Gamma csapat küld egy egységet, hogy vizsgálja meg az indítási helyet és "
+"hogy megakadályozzák a további kilövéseket."
 
 #: data/base/sequenceaudio/cam2/cam27fmv.txt:5
-msgid "We can only assume that Nexus has gained control of this site. We cannot determine whether the missile is nuclear-armed or where it is targeted. You are advised to begin preparations for the evacuation of your base."
-msgstr "Feltételezzük, hogy a NEXUS ellenőrzése alatt tartja ezt a területet. Nem tudjuk megállapítani, hogy a rakéta nukleáris töltetű vagy hogy mi a célpontja. Javasoljuk, kezdje meg az előkészületeket a bázis evakuálására."
+msgid ""
+"We can only assume that Nexus has gained control of this site. We cannot "
+"determine whether the missile is nuclear-armed or where it is targeted. You "
+"are advised to begin preparations for the evacuation of your base."
+msgstr ""
+"Feltételezzük, hogy a NEXUS ellenőrzése alatt tartja ezt a területet. Nem "
+"tudjuk megállapítani, hogy a rakéta nukleáris töltetű vagy hogy mi a "
+"célpontja. Javasoljuk, kezdje meg az előkészületeket a bázis evakuálására."
 
 #: data/base/sequenceaudio/cam2/cam2acol.txt:1
 msgid "Warriors of The Collective, more intruders are entering our territory."
@@ -9811,7 +10075,9 @@ msgid "They are not part of the machine."
 msgstr "Nem képezi a gép részét."
 
 #: data/base/sequenceaudio/cam2/cam2acol.txt:4
-msgid "Warriors of The Collective, attack and destroy kill all who resist the machine."
+msgid ""
+"Warriors of The Collective, attack and destroy kill all who resist the "
+"machine."
 msgstr "Kollektíva harcosai, megtámadni és elpusztítani akik ellenállnak a gépeknek."
 
 #: data/base/sequenceaudio/cam2/cam2acol.txt:5
@@ -9819,12 +10085,22 @@ msgid "Attack! Erase their presence from this area!"
 msgstr "Támadás! Töröld ki őket erről a területről!"
 
 #: data/base/sequenceaudio/cam2/cam2bcol.txt:1
-msgid "Warriors of The Collective, we are ready to destroy the intruders who pollute our lands."
-msgstr "Kollektíva harcosai, készen állunk, hogy megsemmisítsük a betolakodókat, akik szennyezik a földjeinket."
+msgid ""
+"Warriors of The Collective, we are ready to destroy the intruders who "
+"pollute our lands."
+msgstr ""
+"Kollektíva harcosai, készen állunk, hogy megsemmisítsük a betolakodókat, "
+"akik szennyezik a földjeinket."
 
 #: data/base/sequenceaudio/cam2/cam2bcol.txt:3
-msgid "Those of the Project are not of the machine. They have been denied its blessing. We who have embraced the power of the machine have a destiny to sweep away such weak creatures."
-msgstr "Azok a tervből, kik nem a géptől valók. Ők már tagadják, hogy áldás lenne. Mi, kik hiszünk az gép erejében, sorsunk, hogy eltöröljük ezeket a gyenge teremtményeket."
+msgid ""
+"Those of the Project are not of the machine. They have been denied its "
+"blessing. We who have embraced the power of the machine have a destiny to "
+"sweep away such weak creatures."
+msgstr ""
+"Azok a tervből, kik nem a géptől valók. Ők már tagadják, hogy áldás lenne. "
+"Mi, kik hiszünk az gép erejében, sorsunk, hogy eltöröljük ezeket a gyenge "
+"teremtményeket."
 
 #: data/base/sequenceaudio/cam2/cam2bcol.txt:6
 msgid "They shall fall before the might of The Collective."
@@ -9839,8 +10115,12 @@ msgid "Attack!"
 msgstr "Támadás!!"
 
 #: data/base/sequenceaudio/cam2/cam2dico.txt:1
-msgid "Warriors of the Collective, Nexus has given us the power of the machine so that we can destroy all that oppose us."
-msgstr "Kollektíva harcosai, a NEXUS energiát adott a gépeinknek, hogy el tudjuk pusztítani mindazt, ami velünk szemben áll."
+msgid ""
+"Warriors of the Collective, Nexus has given us the power of the machine so "
+"that we can destroy all that oppose us."
+msgstr ""
+"Kollektíva harcosai, a NEXUS energiát adott a gépeinknek, hogy el tudjuk "
+"pusztítani mindazt, ami velünk szemben áll."
 
 #: data/base/sequenceaudio/cam2/cam2dico.txt:3
 msgid "Nexus now asks us to crush the Project."
@@ -9895,12 +10175,20 @@ msgid "Briefing Commences"
 msgstr "Eligazítás Kezdődik:"
 
 #: data/base/sequenceaudio/cam3/c003.txt:1
-msgid "Personnel at Gamma Base have confirmed that the nuclear missiles targeted at Alpha and Beta bases were launched from a silo in their sector."
-msgstr "A Gamma bázis személyzete megerősítette, hogy nukleáris rakéták vették célba Alfa és Béta bázist, amit a szektorukban lévő silóból indítottak."
+msgid ""
+"Personnel at Gamma Base have confirmed that the nuclear missiles targeted at "
+"Alpha and Beta bases were launched from a silo in their sector."
+msgstr ""
+"A Gamma bázis személyzete megerősítette, hogy nukleáris rakéták vették célba "
+"Alfa és Béta bázist, amit a szektorukban lévő silóból indítottak."
 
 #: data/base/sequenceaudio/cam3/c003.txt:4
-msgid "Team Gamma is currently scouting the silo's location and monitoring NEXUS's activity."
-msgstr "Gamma csapat jelenleg felderíti a silók helyzetét és felügyeli a NEXUS tevékenységét."
+msgid ""
+"Team Gamma is currently scouting the silo's location and monitoring NEXUS's "
+"activity."
+msgstr ""
+"Gamma csapat jelenleg felderíti a silók helyzetét és felügyeli a NEXUS "
+"tevékenységét."
 
 #: data/base/sequenceaudio/cam3/c3ad2n2.txt:1
 msgid "Time's up commander!!"
@@ -9923,31 +10211,46 @@ msgid "But it's good of you to join me here."
 msgstr "Örülök, hogy csatlakozik hozzám."
 
 #: data/base/sequenceaudio/cam3/cam3_1bn.txt:6
-msgid "Buried beneath this silo is a tactical nuclear warhead that is set to go off soon."
-msgstr "Eltemetve a siló alatt, egy taktikai nukleáris robbanófej van, kilövésre programozva."
+msgid ""
+"Buried beneath this silo is a tactical nuclear warhead that is set to go off "
+"soon."
+msgstr ""
+"Eltemetve a siló alatt, egy taktikai nukleáris robbanófej van, kilövésre "
+"programozva."
 
 #: data/base/sequenceaudio/cam3/cam3_1bn.txt:9
 msgid "As I cannot launch it, it'll just have to blow where it is."
 msgstr "Nem tudom elindítani, fel kell robbantani ott ahol van."
 
 #: data/base/sequenceaudio/cam3/cam3_1bn.txt:11
-msgid "Please note that all entrances to the underground complex have been sealed. Goodbye, Commander."
-msgstr "Kérem vegye figyelembe, hogy minden bejárat ami a föld alávezet, használhatatlan. Minden jót, parancsnok."
+msgid ""
+"Please note that all entrances to the underground complex have been sealed. "
+"Goodbye, Commander."
+msgstr ""
+"Kérem vegye figyelembe, hogy minden bejárat ami a föld alávezet, "
+"használhatatlan. Minden jót, parancsnok."
 
 #: data/base/sequenceaudio/cam3/cam32a2.txt:1
 msgid "Glad you could make it, Commander."
 msgstr "Sok szerencsét, Parancsnok."
 
 #: data/base/sequenceaudio/cam3/cam32a2.txt:4
-msgid "Enemy strike VTOLs have got us pinned down. We've managed to hold off cyborgs and tanks, but we haven't been able to make any progress along the valley."
-msgstr "Ellenséges VTOL csapás ideszögezett minket. Sikerült a Cyborgokat és a tankokat távol tartanunk, de nem volt alkalmunk haladni a völgy mentén."
+msgid ""
+"Enemy strike VTOLs have got us pinned down. We've managed to hold off "
+"cyborgs and tanks, but we haven't been able to make any progress along the "
+"valley."
+msgstr ""
+"Ellenséges VTOL csapás ideszögezett minket. Sikerült a Cyborgokat és a "
+"tankokat távol tartanunk, de nem volt alkalmunk haladni a völgy mentén."
 
 #: data/base/sequenceaudio/cam3/cam32a2.txt:7
 msgid "Can you try and reach us with anti-aircraft units?"
 msgstr "El tud érni minket légvédelmi egységekkel?"
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:1
-msgid "This is Team Alpha. Repeat, this is Team Alpha. We require immediate assistance."
+msgid ""
+"This is Team Alpha. Repeat, this is Team Alpha. We require immediate "
+"assistance."
 msgstr "Itt Alfa csapat. Ismétlem, itt Alfa csapat. Azonnali segítséget igénylünk."
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:4
@@ -9968,7 +10271,9 @@ msgstr "Kérlek segíts."
 
 #: data/base/sequenceaudio/cam3/cam32pl2.txt:4
 msgid "Commander, forces from Team Alpha escaped the nuclear attack on Alpha Base."
-msgstr "Parancsnok, az Alfa csapat erői elmenekültek a nukleáris támadás elől az Alfa Bázisra."
+msgstr ""
+"Parancsnok, az Alfa csapat erői elmenekültek a nukleáris támadás elől az "
+"Alfa Bázisra."
 
 #: data/base/sequenceaudio/cam3/cam34mu1.txt:1
 msgid "We are experiencing some interference from NEXUS."
@@ -9976,35 +10281,66 @@ msgstr "NEXUS beavatkozást észleltük."
 
 #: data/base/sequenceaudio/cam3/cam34mu1.txt:3
 msgid "You must destroy his command centre before we lose control of key systems."
-msgstr "Meg kell semmisítenie a parancsnoki központját, mielőtt elveszítené a fő rendszerei irányítását. "
+msgstr ""
+"Meg kell semmisítenie a parancsnoki központját, mielőtt elveszítené a fő "
+"rendszerei irányítását. "
 
 #: data/base/sequenceaudio/cam3/cam34mu2.txt:1
 msgid "Commander, welcome to NEXUS!"
 msgstr "Parancsnok, üdvözöljük NEXUS-ban!"
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:1
-msgid "The Reed Corporation was founded by Dr Allan Reed. In 2080, Dr Reed landed a contract with the US Military to develop the synaptic link technology."
-msgstr "A Reed vállalatot Dr Allan Reed alalpította. 2080-ban, Dr. Reed kötött egy szerződést az Amerikai hadsereggel, a szinaptikus kapcsolat technológia kifejlesztésére."
+msgid ""
+"The Reed Corporation was founded by Dr Allan Reed. In 2080, Dr Reed landed a "
+"contract with the US Military to develop the synaptic link technology."
+msgstr ""
+"A Reed vállalatot Dr Allan Reed alalpította. 2080-ban, Dr. Reed kötött egy "
+"szerződést az Amerikai hadsereggel, a szinaptikus kapcsolat technológia "
+"kifejlesztésére."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:3
-msgid "After patenting the synaptic link five years later, Dr Reed continued his researches into cybernetics."
-msgstr "Öt évvel a szinaptikus kapcsolat szabadalmaztatása után, Dr. Reed a kibernetikai kutatások felé fordult."
+msgid ""
+"After patenting the synaptic link five years later, Dr Reed continued his "
+"researches into cybernetics."
+msgstr ""
+"Öt évvel a szinaptikus kapcsolat szabadalmaztatása után, Dr. Reed a "
+"kibernetikai kutatások felé fordult."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:5
-msgid "His goal this time was to allow transfer of human consciousness into data streams that could meld with computer technologies. While in Cyberspace the operator's bodies were kept in immersion tanks."
-msgstr "A célja az volt, hogy lehetővé tegye az emberi tudat átemelését a kibernetikus térbe, ahol az egyesülhet a számítógéppel. Amikor a kibertérben voltak az operátorok, a testeket merülő tartályokban tartották."
+msgid ""
+"His goal this time was to allow transfer of human consciousness into data "
+"streams that could meld with computer technologies. While in Cyberspace the "
+"operator's bodies were kept in immersion tanks."
+msgstr ""
+"A célja az volt, hogy lehetővé tegye az emberi tudat átemelését a "
+"kibernetikus térbe, ahol az egyesülhet a számítógéppel. Amikor a kibertérben "
+"voltak az operátorok, a testeket merülő tartályokban tartották."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:7
-msgid "Backed again by the military, Dr Reed began work on the NEXUS Intruder Program. After three years with little progress, the military abandoned the Nexus Project and cut Dr Reed's funding."
-msgstr "A hadsereg által ismét támogatott Dr. Reed, elkezdett a NEXUS Behatoló programon dolgozni. Három év kutatás és csekély eredmény után, a hadsereg elvetette a NEXUS Tervet és megszüntette Dr. Reed támogatását."
+msgid ""
+"Backed again by the military, Dr Reed began work on the NEXUS Intruder "
+"Program. After three years with little progress, the military abandoned the "
+"Nexus Project and cut Dr Reed's funding."
+msgstr ""
+"A hadsereg által ismét támogatott Dr. Reed, elkezdett a NEXUS Behatoló "
+"programon dolgozni. Három év kutatás és csekély eredmény után, a hadsereg "
+"elvetette a NEXUS Tervet és megszüntette Dr. Reed támogatását."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:9
-msgid "Reports from the time claim that Dr Reed was furious and vowed to have his revenge on all who got in his way."
-msgstr "Az akkori beszámolók azt állítják, hogy Dr. Reed dühös volt és megesküdött, hogy bosszút áll mindazokon, akik keresztbe tettek neki."
+msgid ""
+"Reports from the time claim that Dr Reed was furious and vowed to have his "
+"revenge on all who got in his way."
+msgstr ""
+"Az akkori beszámolók azt állítják, hogy Dr. Reed dühös volt és megesküdött, "
+"hogy bosszút áll mindazokon, akik keresztbe tettek neki."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:11
-msgid "It appears that Dr Reed may have succeeded in his goals and completed the Nexus Intruder Program."
-msgstr "Úgy tűnik, hogy Dr. Reednek sikerült elérnie a célját és befejezte a NEXUS Behatoló programot."
+msgid ""
+"It appears that Dr Reed may have succeeded in his goals and completed the "
+"Nexus Intruder Program."
+msgstr ""
+"Úgy tűnik, hogy Dr. Reednek sikerült elérnie a célját és befejezte a NEXUS "
+"Behatoló programot."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:12
 msgid "The similarity between NEXUS and Dr Reed is striking."
@@ -10012,15 +10348,25 @@ msgstr "Feltűnő a hasonlóság, Dr. Reed és a NEXUS között. "
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:14
 msgid "Such an interesting history lesson. Now allow me to bring you up to date."
-msgstr "Ez egy érdekes fejezet a történelmben. Most engedje meg, hogy naprakész információkkal lássam el."
+msgstr ""
+"Ez egy érdekes fejezet a történelmben. Most engedje meg, hogy naprakész "
+"információkkal lássam el."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:15
 msgid "The NEXUS Intruder Program was created in order to control fools like you."
-msgstr "A NEXUS Behatoló programot az ilyen bolondok, ellenőrzésére hozták létre, mint ön."
+msgstr ""
+"A NEXUS Behatoló programot az ilyen bolondok, ellenőrzésére hozták létre, "
+"mint ön."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:17
-msgid "It's very simple for me to infiltrate your systems and take them over. It's so simple, in fact, that you wouldn't even know I'm there. That is until I activate parts of myself etched into your core systems."
-msgstr "Nagyon egyszerűen, beszivárgok a rendszereibe és átveszem az irányítást. Túlságosan is könnyű, valójában észre sem veszi, hogy ott vagyok. Azaz, amíg el nem kezdem beleégetni magam az alaprendszereibe."
+msgid ""
+"It's very simple for me to infiltrate your systems and take them over. It's "
+"so simple, in fact, that you wouldn't even know I'm there. That is until I "
+"activate parts of myself etched into your core systems."
+msgstr ""
+"Nagyon egyszerűen, beszivárgok a rendszereibe és átveszem az irányítást. "
+"Túlságosan is könnyű, valójában észre sem veszi, hogy ott vagyok. Azaz, amíg "
+"el nem kezdem beleégetni magam az alaprendszereibe."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:19
 msgid "Let's start by activating NEXUS in your core systems and see what happens!"
@@ -10039,20 +10385,32 @@ msgid "Not long to go now, Commander. There's no where else for you to run to."
 msgstr "Már nincs sok hátra, parancsnok. Nincs hova menekülnie."
 
 #: data/base/sequenceaudio/cam3/cam3ad2n.txt:4
-msgid "However, if you vacate this facility, then I shall let you go free, as you are no longer a threat to me."
-msgstr "Mindazonáltal, ha kiüríti ezt a létesítményt és már nem jelent rám fenyegetést, akkor szabadon távozhat."
+msgid ""
+"However, if you vacate this facility, then I shall let you go free, as you "
+"are no longer a threat to me."
+msgstr ""
+"Mindazonáltal, ha kiüríti ezt a létesítményt és már nem jelent rám "
+"fenyegetést, akkor szabadon távozhat."
 
 #: data/base/sequenceaudio/cam3/cam3ad2n.txt:6
 msgid "You have five minutes to comply or else it's frying time!"
 msgstr "Van öt perce engedelmeskedni, máskülönben itt a perzselés ideje!"
 
 #: data/base/sequenceaudio/cam3/cam3bg.txt:1
-msgid "Commander, we are under attack by NEXUS cyborgs and tanks. Please help as we...."
-msgstr "Parancsnok, a NEXUS kiborgok és tankok támadása alatt állunk. Segítsen, mert mi..."
+msgid ""
+"Commander, we are under attack by NEXUS cyborgs and tanks. Please help as we."
+"..."
+msgstr ""
+"Parancsnok, a NEXUS kiborgok és tankok támadása alatt állunk. Segítsen, mert "
+"mi..."
 
 #: data/base/sequenceaudio/cam3/cam3bg.txt:3
-msgid "...cannot hold out much longer.  Repeat, please help, we cannot hold out much longer...."
-msgstr "...nem tudjuk már sokáig tartani magunkat. Ismétlem, segítsen, nem tudjuk már sokáig tartani magunkat...."
+msgid ""
+"...cannot hold out much longer.  Repeat, please help, we cannot hold out "
+"much longer...."
+msgstr ""
+"...nem tudjuk már sokáig tartani magunkat. Ismétlem, segítsen, nem tudjuk "
+"már sokáig tartani magunkat...."
 
 #: data/base/sequenceaudio/cam3/cam3_bn.txt:1
 msgid "Ah, Commander, so good of you to join us here at Nexus base."
@@ -10075,8 +10433,12 @@ msgid "You and not those fools in the New Paradigm and the Collective."
 msgstr "Ön és nem azok a bolondok az Új Paradigmában és a Kollektívában."
 
 #: data/base/sequenceaudio/cam3/cam3_bn.txt:10
-msgid "I'm now activating all your synaptic links so that your forces can meld with Nexus."
-msgstr "Most aktiválom az összes szinaptikus kapcsolatot, így az erői beolvadnak a NEXUSba."
+msgid ""
+"I'm now activating all your synaptic links so that your forces can meld with "
+"Nexus."
+msgstr ""
+"Most aktiválom az összes szinaptikus kapcsolatot, így az erői beolvadnak a "
+"NEXUSba."
 
 #: data/base/sequenceaudio/cam3/cam3_bn.txt:12
 msgid "Your forces are now mine! Welcome to Nexus."
@@ -10095,20 +10457,34 @@ msgid "But no matter, as you'll not be here much longer."
 msgstr "Nem számít, nem leszel itt sokáig."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:6
-msgid "After much searching and reprogramming, I've finally got all my systems back on-line."
+msgid ""
+"After much searching and reprogramming, I've finally got all my systems back "
+"on-line."
 msgstr "A sok keresés és átprogramozás után, végre az összes rendszerem újra működik."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:8
-msgid "Once I destroyed the world with nuclear fire to clear the way for my cybernetic future."
-msgstr "A kibernetikai jövőmért, már egyszer felperzseltem nukleáris tűzzel a világot."
+msgid ""
+"Once I destroyed the world with nuclear fire to clear the way for my "
+"cybernetic future."
+msgstr ""
+"A kibernetikai jövőmért, már egyszer felperzseltem nukleáris tűzzel a "
+"világot."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:9
-msgid "I now intend to further shape the world into my own image, by  surgically removing unwanted growths like yourself."
-msgstr "Most tovább formálom a világot a saját képemre úgy, hogy kivágom a nemkívánatos daganatokat, mint ön."
+msgid ""
+"I now intend to further shape the world into my own image, by  surgically "
+"removing unwanted growths like yourself."
+msgstr ""
+"Most tovább formálom a világot a saját képemre úgy, hogy kivágom a "
+"nemkívánatos daganatokat, mint ön."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:11
-msgid "My Laser Satellites are now powering up. I intend to test them on you first, Commander!"
-msgstr "A lézerműholdaim most kapcsolódnak be. Először önön tesztelem őket, Parancsnok!"
+msgid ""
+"My Laser Satellites are now powering up. I intend to test them on you first, "
+"Commander!"
+msgstr ""
+"A lézerműholdaim most kapcsolódnak be. Először önön tesztelem őket, "
+"Parancsnok!"
 
 #: data/base/sequenceaudio/devastation.txa:4
 msgid "Dusk, November 3rd, 2085"
@@ -10156,40 +10532,73 @@ msgid "A New Beginning"
 msgstr "Egy új kezdet"
 
 #: data/base/sequenceaudio/devastation.txt:1
-msgid "The NASDA system was developed to protect us. It was to be the ultimate nuclear deterrent. As it turned out, it was our executioner."
-msgstr "A NASDA rendszert a védelmünkre fejlesztették ki. Ez volt a végső nukleáris elrettentés. Mint kiderült, ez lett a végzetünk."
+msgid ""
+"The NASDA system was developed to protect us. It was to be the ultimate "
+"nuclear deterrent. As it turned out, it was our executioner."
+msgstr ""
+"A NASDA rendszert a védelmünkre fejlesztették ki. Ez volt a végső nukleáris "
+"elrettentés. Mint kiderült, ez lett a végzetünk."
 
 #: data/base/sequenceaudio/devastation.txt:3
-msgid "Reports said that NASDA developed a fault during a routine systems check. Don't believe it. Someone wanted it to take us out."
-msgstr "A jelentésekben az áll, hogy a NASDA rutinszerű rendszerellenőrzése során hibát generált. Nem hiszem el. Valaki el akart minket távolítani."
+msgid ""
+"Reports said that NASDA developed a fault during a routine systems check. "
+"Don't believe it. Someone wanted it to take us out."
+msgstr ""
+"A jelentésekben az áll, hogy a NASDA rutinszerű rendszerellenőrzése során "
+"hibát generált. Nem hiszem el. Valaki el akart minket távolítani."
 
 #: data/base/sequenceaudio/devastation.txt:5
-msgid "Those nukes were targeted on every major city around the world. NASDA was programmed to start the Collapse. When the counterstrikes launched, its laser defenses and anti-missile ground sites failed."
-msgstr "Azok az atomfegyverek, a világon az összes nagyvárost célba vették. NASDAt beprogramozták, hogy indítsa el az összeomlást. Amikor az ellencsapás elindult, a lézer védelem és a rakétaelhárító rendszer csődöt mondott."
+msgid ""
+"Those nukes were targeted on every major city around the world. NASDA was "
+"programmed to start the Collapse. When the counterstrikes launched, its "
+"laser defenses and anti-missile ground sites failed."
+msgstr ""
+"Azok az atomfegyverek, a világon az összes nagyvárost célba vették. NASDAt "
+"beprogramozták, hogy indítsa el az összeomlást. Amikor az ellencsapás "
+"elindult, a lézer védelem és a rakétaelhárító rendszer csődöt mondott."
 
 #: data/base/sequenceaudio/devastation.txt:7
 msgid "The world as we knew it ended..."
 msgstr "A világ ahogy mi ismertük, már vége..."
 
 #: data/base/sequenceaudio/devastation.txt:9
-msgid "The Nuclear Winter hit hard. Disease and famine claimed most of us who had survived the nuclear strikes. Wars over cans of dog food took even more."
-msgstr "A nukleáris tél kemény volt. Járványok és éhínség pusztított azok között, akik túlélték a nukleáris csapást. A háború végén harcok folytak a konzervért és a kutyaeledelért, ami további áldozatokat szedett."
+msgid ""
+"The Nuclear Winter hit hard. Disease and famine claimed most of us who had "
+"survived the nuclear strikes. Wars over cans of dog food took even more."
+msgstr ""
+"A nukleáris tél kemény volt. Járványok és éhínség pusztított azok között, "
+"akik túlélték a nukleáris csapást. A háború végén harcok folytak a "
+"konzervért és a kutyaeledelért, ami további áldozatokat szedett."
 
 #: data/base/sequenceaudio/devastation.txt:11
-msgid "We'd fled Seattle early in '86. We'd heard that the Rocky Mountains were relatively rad-free."
-msgstr "Elmenekültünk Seatle-ből a 2086-os év elején. Hallottuk, hogy a Sziklás hegység viszonylag sugárzásmentes."
+msgid ""
+"We'd fled Seattle early in '86. We'd heard that the Rocky Mountains were "
+"relatively rad-free."
+msgstr ""
+"Elmenekültünk Seatle-ből a 2086-os év elején. Hallottuk, hogy a Sziklás "
+"hegység viszonylag sugárzásmentes."
 
 #: data/base/sequenceaudio/devastation.txt:13
-msgid "After fighting off bands of marauders we came across the base. Its personnel were dead. Killed by any one of a number of virulent diseases."
-msgstr "Átjöttünk a bázisra, miután a harc véget ért a fosztogatókkal. A személyzet halott volt. Többféle vírus pusztította el őket."
+msgid ""
+"After fighting off bands of marauders we came across the base. Its personnel "
+"were dead. Killed by any one of a number of virulent diseases."
+msgstr ""
+"Átjöttünk a bázisra, miután a harc véget ért a fosztogatókkal. A személyzet "
+"halott volt. Többféle vírus pusztította el őket."
 
 #: data/base/sequenceaudio/devastation.txt:15
 msgid "We cracked the doors, and cleared out the bodies inside."
 msgstr "Betörtük az ajtót, és eltakarítottuk a testeket odabentről."
 
 #: data/base/sequenceaudio/devastation.txt:17
-msgid "We knew that things would never be the same again, but we were determined to build a new world out of the ruins. We rebuilt the landing pads and brought the old systems back on-line."
-msgstr "Tudtuk, hogy már semmi nem lesz újra a régi. De hittük, hogy kiválasztottak vagyunk egy új világ felépítésére a romokból. Újjá építettük a leszálló pályát, és visszakapcsoltuk a régi rendszereket."
+msgid ""
+"We knew that things would never be the same again, but we were determined to "
+"build a new world out of the ruins. We rebuilt the landing pads and brought "
+"the old systems back on-line."
+msgstr ""
+"Tudtuk, hogy már semmi nem lesz újra a régi. De hittük, hogy kiválasztottak "
+"vagyunk egy új világ felépítésére a romokból. Újjá építettük a leszálló "
+"pályát, és visszakapcsoltuk a régi rendszereket."
 
 #: data/base/sequenceaudio/devastation.txt:19
 msgid "We were finally ready to begin the Project."
@@ -11886,13 +12295,13 @@ msgid "System locale"
 msgstr "Helyi rendszer"
 
 #: lib/ivis_opengl/screen.cpp:187
-msgid "OpenGL GLSL shader version 1.20 is not supported by your system. Some things may look wrong. Please upgrade your graphics driver/hardware, if possible."
-msgstr "OpenGL GLSL 1.20 árnyékolási verziót nem támogatja a te rendszered. Néhány dolgot rossznak látok. Kérlek frissítsd fel a drivert vagy hardware videokártyád, ha ez lehetséges."
-
-#: lib/ivis_opengl/screen.cpp:193
-#, fuzzy
-msgid "OpenGL 1.2 + TEC is not supported by your system. The game requires this. Please upgrade your graphics drivers/hardware, if possible."
-msgstr "OpenGL 1.2 + VBO + TEC használatát nem támogatja a rendszered. A játéknak szüksége van rá. Kérlek frissítsd fel a drivert vagy hardware videokártyád, ha ez lehetséges."
+msgid ""
+"OpenGL GLSL shader version 1.20 is not supported by your system. Some things "
+"may look wrong. Please upgrade your graphics driver/hardware, if possible."
+msgstr ""
+"OpenGL GLSL 1.20 árnyékolási verziót nem támogatja a te rendszered. Néhány "
+"dolgot rossznak látok. Kérlek frissítsd fel a drivert vagy hardware "
+"videokártyád, ha ez lehetséges."
 
 #: lib/netplay/netplay.cpp:218
 #: lib/netplay/netplay.cpp:1119
@@ -11901,22 +12310,26 @@ msgstr "Jelszó begépelés"
 
 #: lib/netplay/netplay.cpp:985
 msgid ""
-"Your router doesn't support UPnP, you must manually configure your router & firewall to\n"
+"Your router doesn't support UPnP, you must manually configure your router & "
+"firewall to\n"
 "open port 2100 before you can host a game."
 msgstr ""
-"A routered nem támogatja az UPnP-t, és kézzel kell konfigurálni a routered & tűzfalad \n"
+"A routered nem támogatja az UPnP-t, és kézzel kell konfigurálni a routered & "
+"tűzfalad \n"
 "nyisd a 2100 portot mielőtt csatalkozol távoli játékhoz."
 
 #: lib/netplay/netplay.cpp:999
 msgid ""
-"No UPnP device was found. You must manually configure your router & firewall to\n"
+"No UPnP device was found. You must manually configure your router & firewall "
+"to\n"
 "open port 2100 before you can host a game."
 msgstr ""
-"UPnP eszköz nem található, és kézzel kell konfigurálni a routered & tűzfalad \n"
+"UPnP eszköz nem található, és kézzel kell konfigurálni a routered & tűzfalad "
+"\n"
 "nyisd a 2100 portot mielőtt csatalkozol távoli játékhoz."
 
 #: lib/netplay/netplay.cpp:1027
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open require port (%s) on  (%s)"
 msgstr "Nem lehet feloldani a mester szerver nevét (%s)!"
 
@@ -12177,18 +12590,15 @@ msgstr "Szöveg tömörítés bekapcsolása"
 msgid "Disable texture compression"
 msgstr "Szöveg tömörítés kikapcsolása"
 
-#: src/clparse.cpp:268
-#, fuzzy
-msgid "Disable the use of OpenGL shaders"
-msgstr "Szöveg tömörítés kikapcsolása"
-
 #: src/clparse.cpp:269
 msgid "Disable the use of OpenGL Vertex Buffer Objects"
 msgstr "OpenGL Vertex Puffer Objektum kikapcsolása"
 
 #: src/cmddroid.cpp:110
 msgid "Commander needs a higher level to command more units"
-msgstr "A parancsnoknak szükséges egy magasabb szintre lépni, hogy több egységnek parancsoljon"
+msgstr ""
+"A parancsnoknak szükséges egy magasabb szintre lépni, hogy több egységnek "
+"parancsoljon"
 
 #: src/configuration.cpp:96
 msgid "My Game"
@@ -12497,11 +12907,6 @@ msgstr "Beállítások"
 #: src/frontend.cpp:118
 msgid "View Intro"
 msgstr "Intro nézet"
-
-#: src/frontend.cpp:119
-#, fuzzy
-msgid "Videos are missing, download them from http://wz2100.net"
-msgstr "Küldetés video hiányzik! Látogasd meg a http://wz2100.net oldalt"
 
 #: src/frontend.cpp:121
 msgid "Quit Game"
@@ -13062,7 +13467,9 @@ msgstr "Vissza a játékba"
 
 #: src/ingameop.cpp:135
 msgid "WARNING: You're the host. If you quit, the game ends for everyone!"
-msgstr "FIGYELEM! Te vagy a játékmester. Amennyiben te kilépsz a játék véget ér mindenki számára!"
+msgstr ""
+"FIGYELEM! Te vagy a játékmester. Amennyiben te kilépsz a játék véget ér "
+"mindenki számára!"
 
 #: src/ingameop.cpp:187
 #: src/ingameop.cpp:538
@@ -13347,8 +13754,12 @@ msgstr "FPS kijelző kikapcsolva"
 
 #: src/keybind.cpp:626
 #, c-format
-msgid "(Player %u) is using a cheat :Num Droids: %d  Num Structures: %d  Num Features: %d"
-msgstr "(%u játékos) csalást használt: Droidok száma: %d; Épületek száma: %d; Technológiák száma: %d"
+msgid ""
+"(Player %u) is using a cheat :Num Droids: %d  Num Structures: %d  Num "
+"Features: %d"
+msgstr ""
+"(%u játékos) csalást használt: Droidok száma: %d; Épületek száma: %d; "
+"Technológiák száma: %d"
 
 #: src/keybind.cpp:662
 msgid "Infinite power disabled"
@@ -13447,7 +13858,9 @@ msgstr "Előrejelzés: Tiszta idő minden területen... NINCS IDŐJÁRÁS VÁLTO
 
 #: src/keybind.cpp:1937
 msgid "Warning! This can have drastic consequences if used incorrectly in missions."
-msgstr "Figyelem! Drasztikus következményekkel járhat, amennyiben nem a megfelelően használják a küldetések során."
+msgstr ""
+"Figyelem! Drasztikus következményekkel járhat, amennyiben nem a megfelelően "
+"használják a küldetések során."
 
 #: src/keybind.cpp:1939
 msgid "All enemies destroyed by cheating!"
@@ -14490,7 +14903,9 @@ msgstr "CSEVEGÉS"
 
 #: src/multiint.cpp:2656
 msgid "All players need to have the same mods to join your game."
-msgstr "Minden játékosnak ugyanazokkal a mod-okkal kell rendelkeznie, hogy csatlakozhassanak a játékhoz."
+msgstr ""
+"Minden játékosnak ugyanazokkal a mod-okkal kell rendelkeznie, hogy "
+"csatlakozhassanak a játékhoz."
 
 #: src/multiint.cpp:2697
 msgid "Connecting to the lobby server..."
@@ -14542,7 +14957,9 @@ msgstr "Dekódolás folyamatban....."
 
 #: src/multiint.cpp:3954
 msgid "UPnP detection disabled by user. Autoconfig of port 2100 will not happen."
-msgstr "UPnP vizsgálatot kikapcsolta a felhasználó. Automatikus beállítás a 2100 portra nem történt meg."
+msgstr ""
+"UPnP vizsgálatot kikapcsolta a felhasználó. Automatikus beállítás a 2100 "
+"portra nem történt meg."
 
 #: src/multiint.cpp:3960
 msgid "Hit the ready box to begin your challenge!"
@@ -14821,7 +15238,9 @@ msgstr "Barna"
 
 #: src/order.cpp:803
 msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
-msgstr "Ezt nem teheti meg: Cyborg egységnek kell lennie, hogy használhassa a Cyborg szállítást."
+msgstr ""
+"Ezt nem teheti meg: Cyborg egységnek kell lennie, hogy használhassa a Cyborg "
+"szállítást."
 
 #: src/qtscriptfuncs.cpp:1597
 #: src/scriptfuncs.cpp:3263
@@ -15082,493 +15501,6 @@ msgstr " - HIBAKERESÉS"
 #. TRANSLATORS: This string looks as follows when expanded.
 #. "Version <version name/number> <working copy state><BUILD DATE><BUILD TYPE>"
 #: src/version.cpp:86
-#, fuzzy, c-format
+#, c-format
 msgid "Version: %s,%s Built:%s%s"
 msgstr "Verzió %s%s%s%s"
-
-#~ msgid "Only use OpenGL 1.5"
-#~ msgstr "Használj OpenGL 1.5-öt"
-
-# It's same... (ugyanaz) IT Word
-#~ msgid " - Built %s"
-#~ msgstr " - Felépítés %s"
-
-#~ msgid "Warzone 2100 is completely free and open source (FLOSS). Official site: http://wz2100.net/"
-#~ msgstr "Warzone 2100 egy teljesen szabad és nyitott forrású játék (FLOSS). Hivatalos oldal: http://wz 2100.net"
-
-#~ msgid "TCP PORT 2100 MUST BE OPENED IN YOUR FIREWALL / ROUTER TO HOST GAMES!"
-#~ msgstr "TCP PORT 2100 SZÜKSÉGES MEGNYITNOD A TŰZFALAD / ROUTERED A KISZOLGÁLÓ JÁTÉKOKHOZ!"
-
-#~ msgid "Password is already set!"
-#~ msgstr "Játékos kiszállt"
-
-#~ msgid "OpenGL 2.0 is not supported by your system. Some things may look wrong. Please upgrade your graphics driver/hardware, if possible."
-#~ msgstr "OpenGL 2.0-t nem támogatja a te rendszered. Néhány dolgot rossznak látok. Kérlek frissítsd fel a drivert vagy hardware videokártyád, ha ez lehetséges."
-
-#~ msgid "Unit Colour (SP)"
-#~ msgstr "Egység Színek"
-
-#~ msgid "Unit Colour (MP)"
-#~ msgstr "Egység Színek"
-
-#~ msgid "VTOL HPV Cannon Bug VTOL"
-#~ msgstr "VTOL Bug nagysebességű ágyú"
-
-#~ msgid "VTOL HPV Cannon Scorpion VTOL"
-#~ msgstr "VTOL Scorpion nagysebességű ágyú"
-
-#~ msgid "VTOL HPV Cannon Mantis VTOL"
-#~ msgstr "VTOL Mantis nagysebességű ágyú"
-
-#~ msgid "Mini-Rocket Artillery Cobra Tracks"
-#~ msgstr "Cobra lánctalpas tüzérségi kisrakéta"
-
-#~ msgid "HPV Cannon Python Hover"
-#~ msgstr "Python légpárnás nagysebességű ágyú"
-
-#~ msgid "CHEATS ARE NOW ENABLED!"
-#~ msgstr "CSALÁS BEKAPCSOLVA!"
-
-#~ msgid "CHEATS ARE NOW DISABLED!"
-#~ msgstr "CSALÁS KIKAPCSOLVA!"
-
-#~ msgid "Received invalid addGame data."
-#~ msgstr "Érvénytelen játék hozzáadás adat érkezett."
-
-#~ msgid "Create a game first!"
-#~ msgstr "Játékcél felkutatása"
-
-#~ msgid "Received invalid login data."
-#~ msgstr "Érvénytelen bejelentkezési adat érkezett."
-
-#~ msgid "Failed to communicate with the lobby."
-#~ msgstr "Hibás kommunikáció a lobbinál."
-
-#~ msgid "Got server error: %s"
-#~ msgstr "Szerver hiba: %s"
-
-#~ msgid "Game not in the lobby, please login first!"
-#~ msgstr "Játékban ne legyen lobbi, kérlek jelentkezz be először!"
-
-#~ msgid "Activate self-test"
-#~ msgstr "Önellenőrzés aktiválása"
-
-#~ msgid "Failed to create building"
-#~ msgstr "Az épület létrehozása meghiúsult"
-
-#~ msgid "Authentication failed or not Authenticated"
-#~ msgstr "Azonosítás hibás vagy nem azonosított"
-
-#~ msgid "The lobby rejected you!"
-#~ msgstr "A lobbit elutasítom!"
-
-#~ msgid "Connect IP"
-#~ msgstr "IP Kapcsolódás!"
-
-#~ msgid "Login"
-#~ msgstr "Bejelentkezés"
-
-#~ msgid "Logout"
-#~ msgstr "Kijelentkezés"
-
-#~ msgid "LOBBY LOGIN"
-#~ msgstr "Lobbi bejelentkezés"
-
-#~ msgid "Username:"
-#~ msgstr "Felhasználó név:"
-
-#~ msgid "Password:"
-#~ msgstr "Jelszó megadása:"
-
-#~ msgid "Use your wz2100.net credentials here."
-#~ msgstr "Használd a wz2100.net igazolást itt."
-
-#~ msgid "You cannot change AI in a challenge"
-#~ msgstr "Nem tudsz változtatni az AI-on mozgásnál"
-
-#~ msgid "Players"
-#~ msgstr "Játékosok"
-
-#~ msgid "3 players"
-#~ msgstr "3 játékos"
-
-#~ msgid "4 players"
-#~ msgstr "4 játékos"
-
-#~ msgid "5 players"
-#~ msgstr "5 játékos"
-
-#~ msgid "6 players"
-#~ msgstr "6 játékos"
-
-#~ msgid "7 players"
-#~ msgstr "7 játékos"
-
-#~ msgid "8 players"
-#~ msgstr "8 játékos"
-
-#~ msgid "9 players"
-#~ msgstr "9 játékos"
-
-#~ msgid "10 players"
-#~ msgstr "10 játékos"
-
-#~ msgid "11 players"
-#~ msgstr "11 játékos"
-
-#~ msgid "12 players"
-#~ msgstr "12 játékos"
-
-#~ msgid "13 players"
-#~ msgstr "13 játékos"
-
-#~ msgid "14 players"
-#~ msgstr "14 játékos"
-
-#~ msgid "15 players"
-#~ msgstr "15 játékos"
-
-#~ msgid "16 players"
-#~ msgstr "16 játékos"
-
-#~ msgid "FPS %d; PIEs %d; polys %d; States %d"
-#~ msgstr "FPS %d; PIEs %d; poli %d; Államok %d"
-
-#~ msgid "Power Accrued"
-#~ msgstr "Energia felhalmozva"
-
-#~ msgid "Radar showing revealed terrain"
-#~ msgstr "Radar mutatja a felderített terepet"
-
-#~ msgid "Fog"
-#~ msgstr "Köd"
-
-#~ msgid "Mist"
-#~ msgstr "Homály"
-
-#~ msgid "Distance Fog"
-#~ msgstr "Távoli köd"
-
-#~ msgid "* May negatively affect performance"
-#~ msgstr "* Hátrányosan érintheti a sebességet"
-
-#~ msgid "Congratulations your successfull evacuation of Beta Base."
-#~ msgstr "Gratulálok Béta bázis sikeres evakuálásához."
-
-#~ msgid "Cobra Hover Heavy-Repair"
-#~ msgstr "Cobra légpárnás nehéz szervízkocsi"
-
-#~ msgid "Viper HMG Wheels"
-#~ msgstr "Viper nehéz gépfegyver"
-
-#~ msgid "TK Mantis Hover"
-#~ msgstr "Mantis légpárnás Tank Killer"
-
-#~ msgid "Cobra HMG Tracks"
-#~ msgstr "Cobra lánctalpas nehéz gépfegyver"
-
-#~ msgid "Cobra Hover HC"
-#~ msgstr "Cobra légpárnás nehéz ágyú"
-
-#~ msgid "Scorpion Lancer Tracks"
-#~ msgstr "Scorpion lánctalpas tankelhárító"
-
-#~ msgid "Scorpion Heavy Cannon Tracks"
-#~ msgstr "Scorpion lánctalpas nehéz ágyú"
-
-#~ msgid "Scorpion Lancer VTOL"
-#~ msgstr "Scorpion VTOL tankelhárító"
-
-#~ msgid "Scorpion BB VTOL"
-#~ msgstr "Scorpion VTOL bunkertörő"
-
-#~ msgid "Viper Command Turret Tracks"
-#~ msgstr "Viper parancsnoki lánctalapas"
-
-#~ msgid "Cobra Command Turret Tracks"
-#~ msgstr "Cobra parancsnoki lánctalpas"
-
-#~ msgid "Scorpion Command Turret Tracks"
-#~ msgstr "Scorpion parancsnoki lánctalpas"
-
-#~ msgid "Mantis Command Turret Tracks"
-#~ msgstr "Mantis parancsnoki lánctalpas"
-
-#~ msgid "Cobra Lancer Tracks"
-#~ msgstr "Cobra lánctalpas tankelhárító rakéta"
-
-#~ msgid "Mantis Heavy Cannon Tracks"
-#~ msgstr "Mantis lánctalpas nehéz ágyú"
-
-#~ msgid "Mantis Tank Killer Tracks"
-#~ msgstr "Mantis lánctalpas Tank Killer rakéta"
-
-#~ msgid "Mantis Scourge Tracks"
-#~ msgstr "Mantis lánctalpas Scourge rakéta"
-
-#~ msgid "Scorpion Heavy Machinegun Tracks"
-#~ msgstr "Scorpion lánctalpas nehéz gépfegyver"
-
-#~ msgid "Scorpion Repair Tracks"
-#~ msgstr "Scorpion lánctalpas szervizkocsi"
-
-#~ msgid "Scorpion Heavy Repair Hover"
-#~ msgstr "Scorpion légpárnás nehéz szervizkocsi"
-
-#~ msgid "Cobra Hover Truck"
-#~ msgstr "Cobra légpárnás munkagép"
-
-#~ msgid "Scorpion Hover Truck"
-#~ msgstr "Scorpion légpárnás munkagép"
-
-#~ msgid "Mantis Hover Truck"
-#~ msgstr "Mantis légpárnás munkagép"
-
-#~ msgid "Cobra Bunker Buster Tracks"
-#~ msgstr "Cobra lánctalpas bunkertörő"
-
-#~ msgid "Scorpion Bunker Buster Tracks"
-#~ msgstr "Scorpion lánctalpas bunkertörő"
-
-#~ msgid "Mantis Bunker Buster Tracks"
-#~ msgstr "Mantis lánctalpas bunkertörő"
-
-#~ msgid "Viper Tracks Lancer"
-#~ msgstr "Viper lánctalpas tankelhárító rakéta"
-
-#~ msgid "Cobra Half-Tracks Mini-Pod"
-#~ msgstr "Cobra féllánctalpas kis rakétavető"
-
-#~ msgid "Cobra Tracks Mini-Pod"
-#~ msgstr "Cobra lánctalpas kis rakétavető"
-
-#~ msgid "Cobra Tracks Mini-Rocket Artillery"
-#~ msgstr "Cobra lánctalpas tüzérségi kisrakéta"
-
-#~ msgid "Cobra Inferno Half-track"
-#~ msgstr "Cobra féllánctalpas Inferno lángszóró"
-
-#~ msgid "Python HVC Hover"
-#~ msgstr "Python lánctalpas nagysebességű ágyú"
-
-#~ msgid "Python Scourge Tracks"
-#~ msgstr "Python lánctalpas Scourge rakéta"
-
-#~ msgid "Python Gauss Cannon Tracks"
-#~ msgstr "Python lánctalpas Gauss ágyú"
-
-#~ msgid "Python Pulse Laser Tracks"
-#~ msgstr "Python lánctalpas impulzus lézer"
-
-#~ msgid "Tiger Pulse Laser Tracks"
-#~ msgstr "Tiger lánctalpas impulzus lézer"
-
-#~ msgid "Tiger Heavy Laser Tracks"
-#~ msgstr "Tiger lánctalpas nehéz lézer"
-
-#~ msgid "Wyvern Gauss Cannon Tracks"
-#~ msgstr "Wyvern lánctalpas Gauss ágyú"
-
-#~ msgid "Wyvern Pulse Laser Tracks"
-#~ msgstr "Wyvern lánctalpas impulzus lézer"
-
-#~ msgid "Wyvern Heavy Laser Tracks"
-#~ msgstr "Wyvern lánctalpas nehéz lézer"
-
-#~ msgid "Viper Machinegun Half-Track"
-#~ msgstr "Viper féllánctalpas gépfegyver"
-
-#~ msgid "Viper Flamer Half-Track"
-#~ msgstr "Viper féllánctalpas lángszóró"
-
-#~ msgid "Could not communicate with lobby server! Is TCP port %u open for outgoing traffic?"
-#~ msgstr "Nem lehet elérni a lobbi szervert! A %u TCP port nyitva van a kimenő forgalom számára?"
-
-#~ msgid ": Unknown cheat code."
-#~ msgstr ": ismeretlen megtévesztő kód"
-
-#~ msgid "Run in cheat mode"
-#~ msgstr "Futtatás megtévesztő módba"
-
-#~ msgid "Truck ordered to build Oil Derrick"
-#~ msgstr "Munkagép utasítva, hogy építsen olajkutat."
-
-#~ msgid "Colored Cursors*"
-#~ msgstr "Kiszínezett kurzorok"
-
-#~ msgid "Infinite Production"
-#~ msgstr "Korlátlan termelés"
-
-#~ msgid "You found %u power in an oil drum"
-#~ msgstr "%u energiát találtál egy olajkúton"
-
-#~ msgid "Player colour"
-#~ msgstr "Játékos színe"
-
-#~ msgid "Kick player"
-#~ msgstr "Játékos kirúgása"
-
-#~ msgid "Player position"
-#~ msgstr "Játékos pozíció"
-
-#~ msgid " (modified and switched locally)"
-#~ msgstr " (helyileg módosította és átállította)"
-
-#~ msgid " (switched locally)"
-#~ msgstr " (helyileg átállította)"
-
-#~ msgid "Player number"
-#~ msgstr "Játékosok száma"
-
-#~ msgid "Mini-Rocket accuracy +10%"
-#~ msgstr "Megnövekedett mini-rakéta pontosság"
-
-#~ msgid "Mini-Rocket damage +25%"
-#~ msgstr "Megnövekedett mini rakéta pusztitás +25%"
-
-#~ msgid "Mini-Rocket reload time -15%"
-#~ msgstr "Mini-rakéta töltési idő -15%"
-
-#~ msgid "Automated Manufacturing Mk2"
-#~ msgstr "Automatizálta VTOL-t miközben újra felfegyverezte Mk2"
-
-#~ msgid "Automated Manufacturing Mk3"
-#~ msgstr "Automatizálta VTOL-t miközben újra felfegyverezte Mk3"
-
-#~ msgid "Robotic Manufacturing Mk2"
-#~ msgstr "Robotizált VTOL felfegyverező Mk2"
-
-#~ msgid "Robotic Manufacturing Mk3"
-#~ msgstr "Robotizált VTOL felfegyverező Mk3"
-
-#~ msgid "Advanced Manufacturing Mk2"
-#~ msgstr "Haladó gyári termelés Mk2"
-
-#~ msgid "Automated Repair Facility Mk2"
-#~ msgstr "Automatizált javítási létesítmény MK2"
-
-#~ msgid "Automated Repair Facility Mk3"
-#~ msgstr "Automatizált javítási létesítmény MK3"
-
-#~ msgid "Robotic Repair Facility Mk2"
-#~ msgstr "Robotizált javítási létesítmény"
-
-#~ msgid "HESH Mini-Rockets"
-#~ msgstr "HE Mini-rakéta"
-
-#~ msgid "HESH Mini-Rockets Mk2"
-#~ msgstr "HE Mini-rakéta Mk2"
-
-#~ msgid "HESH Mini-Rockets Mk3"
-#~ msgstr "HE Mini-rakéta Mk3"
-
-#~ msgid "Thermite Flamer Cyborg"
-#~ msgstr "Termit lángszóró Cyborg"
-
-#~ msgid "Grenadier Cyborg"
-#~ msgstr "Gránátos Cyborg"
-
-#~ msgid "Spanish"
-#~ msgstr "Spanyol"
-
-#~ msgid "Finnish"
-#~ msgstr "Finn"
-
-#~ msgid "Irish"
-#~ msgstr "Ír"
-
-#~ msgid "Croatian"
-#~ msgstr "Horvát"
-
-#~ msgid "Polish"
-#~ msgstr "Lengyel"
-
-#~ msgid "Brazilian Portuguese"
-#~ msgstr "Portugál (brazil)"
-
-#~ msgid "Portuguese"
-#~ msgstr "Portugál"
-
-#~ msgid ", mod: "
-#~ msgstr ", mód: "
-
-#~ msgid "Increases Bombing damage"
-#~ msgstr "Menövekedett löveg pusztítás"
-
-#~ msgid "Basque"
-#~ msgstr "Baszk"
-
-#~ msgid "Norwegian (Nynorsk)"
-#~ msgstr "Norvég"
-
-#~ msgid "Swedish (Sweden)"
-#~ msgstr "Svéd"
-
-#~ msgid "Turkish"
-#~ msgstr "Török"
-
-#~ msgid "Heavy Machinegun Cobra Half-trackS"
-#~ msgstr "Cobra nehéz gépfegyverrel fél-lánctalpas"
-
-#~ msgid "Peperpot Emplacement"
-#~ msgstr "Pepperpot elhelyezés"
-
-#~ msgid "Cursor Mode"
-#~ msgstr "Energia modul"
-
-#~ msgid "Hardware"
-#~ msgstr "Hardver"
-
-#~ msgid "Mini-Pod Artillery"
-#~ msgstr "Mini-pod tűzérség"
-
-#~ msgid "Mini-Pod Battery"
-#~ msgstr "Mini-pod elem"
-
-#~ msgid "Stabilized Mini-Pods"
-#~ msgstr "Stabilizált mini-podok"
-
-#~ msgid "Stabilized Mini-Pods Mk2"
-#~ msgstr "Stabilizált mini-podok Mk2"
-
-#~ msgid "HE Mini-Pods"
-#~ msgstr "HE Mini-Podok"
-
-#~ msgid "HE Mini-Pods Mk2"
-#~ msgstr "HE Mini-Rockets Mk2"
-
-#~ msgid "HE Mini-Podok Mk3"
-#~ msgstr "HE Mini-Podok Mk3"
-
-#~ msgid "HEAP Mini-Pods"
-#~ msgstr "HEAP Mini-Podok"
-
-#~ msgid "HEAP Mini-Pods Mk2"
-#~ msgstr "HEAP Mini-Podok Mk2"
-
-#~ msgid "HEAP Mini-Pods Mk3"
-#~ msgstr "HEAP Mini-Podok Mk3"
-
-#~ msgid "Fast Fire Mini-Pods"
-#~ msgstr "Gyors tűzelő Mini-Podok"
-
-#~ msgid "Fast Fire Mini-Pods Mk2"
-#~ msgstr "Gyors tűzelő Mini-Podok Mk2"
-
-#~ msgid "Fast Fire Mini-Pods Mk3"
-#~ msgstr "Gyors tűzelő Mini-Podok Mk3"
-
-#~ msgid "Rapid Fire Mini-Pods"
-#~ msgstr "Gyors tüzelő Mini Podok"
-
-#~ msgid "Rapid Fire Mini-Pods Mk2"
-#~ msgstr "Gyors tüzelő Mini Podok Mk2"
-
-#~ msgid "Rapid Fire Mini-Pods Mk3"
-#~ msgstr "Gyors tűzelő Mini Podok Mk3"
-
-#~ msgid "Cluster Bombs Bug VTOL"
-#~ msgstr "Bogár bombaköteg VTOL"
-
-#~ msgid "Python Tank Killer Tracks"
-#~ msgstr "Piton Tank ölő"
