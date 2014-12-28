@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100 2.3_branch\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2013-12-11 22:22-0500\n"
+"POT-Creation-Date: 2014-12-28 21:38+0100\n"
 "PO-Revision-Date: 2010-11-23 21:01+0900\n"
 "Last-Translator: Joshua Shin <urgood2@gmail.com>\n"
 "Language-Team: Korean Translation Team <urgood2@gmail.com>\n"
@@ -11940,11 +11940,11 @@ msgid "OpenGL GLSL shader version 1.20 is not supported by your system. Some thi
 msgstr ""
 
 #: lib/ivis_opengl/screen.cpp:193
-msgid "OpenGL 1.2 + TEC is not supported by your system. The game requires this. Please upgrade your graphics drivers/hardware, if possible."
+msgid "OpenGL 1.2 + VBO + TEC is not supported by your system. The game requires this. Please upgrade your graphics drivers/hardware, if possible."
 msgstr ""
 
 #: lib/netplay/netplay.cpp:218
-#: lib/netplay/netplay.cpp:1119
+#: lib/netplay/netplay.cpp:1120
 msgid "Enter password here"
 msgstr "여기에 비밀번호를 입력하십시오"
 
@@ -11978,12 +11978,12 @@ msgid ""
 "Your external IP is %s"
 msgstr ""
 
-#: lib/netplay/netplay.cpp:2176
+#: lib/netplay/netplay.cpp:2187
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr "마스터서버 이름을 확인할 수 없습니다 (%s)!"
 
-#: lib/netplay/netplay.cpp:2198
+#: lib/netplay/netplay.cpp:2209
 #, c-format
 msgid ""
 "Error connecting to the lobby server: %s.\n"
@@ -11992,7 +11992,7 @@ msgid ""
 " or to forward the port to your system."
 msgstr ""
 
-#: lib/netplay/netplay.cpp:2871
+#: lib/netplay/netplay.cpp:2903
 msgid "Failed to get a lobby response!"
 msgstr ""
 
@@ -12047,11 +12047,11 @@ msgid "Strategy Game"
 msgstr "게임 저장"
 
 #: src/challenge.cpp:222
-#: src/hci.cpp:915
-#: src/hci.cpp:3379
-#: src/hci.cpp:3502
-#: src/hci.cpp:3938
-#: src/hci.cpp:4972
+#: src/hci.cpp:911
+#: src/hci.cpp:3375
+#: src/hci.cpp:3498
+#: src/hci.cpp:3934
+#: src/hci.cpp:4968
 #: src/intelmap.cpp:530
 #: src/intorder.cpp:727
 #: src/loadsave.cpp:250
@@ -12082,150 +12082,146 @@ msgstr ""
 msgid "Debug mode now disabled!"
 msgstr "디버그 메뉴가 열였습니다"
 
-#: src/clparse.cpp:243
+#: src/clparse.cpp:242
 msgid "Set configuration directory"
 msgstr "환경 설정 디렉토리로 설정"
 
-#: src/clparse.cpp:243
+#: src/clparse.cpp:242
 msgid "configuration directory"
 msgstr "환경 설정 디렉토리"
 
-#: src/clparse.cpp:244
+#: src/clparse.cpp:243
 msgid "Set default data directory"
 msgstr "기본 자료 디렉토리로 설정"
 
-#: src/clparse.cpp:244
+#: src/clparse.cpp:243
 msgid "data directory"
 msgstr "자료 디렉토리"
 
-#: src/clparse.cpp:245
+#: src/clparse.cpp:244
 msgid "Show debug for given level"
 msgstr "특정 레벨의 디버깅 표시"
 
-#: src/clparse.cpp:245
+#: src/clparse.cpp:244
 msgid "debug level"
 msgstr "레벨 디버그하기"
 
-#: src/clparse.cpp:246
+#: src/clparse.cpp:245
 msgid "Log debug output to file"
 msgstr "파일로 디버깅 출력을 로그하기"
 
-#: src/clparse.cpp:246
+#: src/clparse.cpp:245
 msgid "file"
 msgstr "파일"
 
-#: src/clparse.cpp:247
+#: src/clparse.cpp:246
 msgid "Flush all debug output written to stderr"
 msgstr "모든 디버깅 출력을 stderr로 보내기(flush)"
 
-#: src/clparse.cpp:248
+#: src/clparse.cpp:247
 msgid "Play in fullscreen mode"
 msgstr "전체 화면 모드로 실행"
 
-#: src/clparse.cpp:249
+#: src/clparse.cpp:248
 msgid "Load a specific game"
 msgstr "특정 게임을 로드하기"
 
-#: src/clparse.cpp:249
+#: src/clparse.cpp:248
 msgid "game-name"
 msgstr "게임 네임(이름)"
 
-#: src/clparse.cpp:250
+#: src/clparse.cpp:249
 msgid "Show this help message and exit"
 msgstr "이 도움말 메시지를 보인 다음 종료하기"
 
-#: src/clparse.cpp:251
+#: src/clparse.cpp:250
 msgid "Enable a global mod"
 msgstr "글로벌 mod를 활성화하기"
 
+#: src/clparse.cpp:250
 #: src/clparse.cpp:251
 #: src/clparse.cpp:252
-#: src/clparse.cpp:253
 msgid "mod"
 msgstr "mod"
 
-#: src/clparse.cpp:252
+#: src/clparse.cpp:251
 msgid "Enable a campaign only mod"
 msgstr "캠페인용 mod를 활성화하기"
 
-#: src/clparse.cpp:253
+#: src/clparse.cpp:252
 msgid "Enable a multiplay only mod"
 msgstr "멀티플레이어용 mod를 활성화하기"
 
-#: src/clparse.cpp:254
+#: src/clparse.cpp:253
 msgid "Disable asserts"
 msgstr "assert 비활성화하기"
 
-#: src/clparse.cpp:255
+#: src/clparse.cpp:254
 msgid "Causes a crash to test the crash handler"
 msgstr "(컴퓨터) 크래시 핸들러를 시험하기 위해 크래시를 일으킵니다"
 
-#: src/clparse.cpp:256
+#: src/clparse.cpp:255
 msgid "Load a saved game"
 msgstr "저장된 게임 로드"
 
-#: src/clparse.cpp:256
+#: src/clparse.cpp:255
 msgid "savegame"
 msgstr "세이브게임"
 
-#: src/clparse.cpp:257
+#: src/clparse.cpp:256
 msgid "Play in windowed mode"
 msgstr "창(windowed) 모드로 실행"
 
-#: src/clparse.cpp:258
+#: src/clparse.cpp:257
 msgid "Show version information and exit"
 msgstr "버젼 정보를 보인 다음 종료하기"
 
-#: src/clparse.cpp:259
+#: src/clparse.cpp:258
 msgid "Set the resolution to use"
 msgstr "사용할 화면 해상도를 설정하십시오"
 
-#: src/clparse.cpp:259
+#: src/clparse.cpp:258
 msgid "WIDTHxHEIGHT"
 msgstr "너비x높이"
 
-#: src/clparse.cpp:260
+#: src/clparse.cpp:259
 msgid "Enable shadows"
 msgstr "그림자 사용"
 
-#: src/clparse.cpp:261
+#: src/clparse.cpp:260
 msgid "Disable shadows"
 msgstr "그림자 사용 안함"
 
-#: src/clparse.cpp:262
+#: src/clparse.cpp:261
 msgid "Enable sound"
 msgstr "소리 켜짐"
 
-#: src/clparse.cpp:263
+#: src/clparse.cpp:262
 msgid "Disable sound"
 msgstr "소리 꺼짐"
 
-#: src/clparse.cpp:264
+#: src/clparse.cpp:263
 msgid "connect directly to IP/hostname"
 msgstr "바로 IP 또는 호스트네임으로 연결"
 
-#: src/clparse.cpp:264
+#: src/clparse.cpp:263
 msgid "host"
 msgstr "호스트"
 
-#: src/clparse.cpp:265
+#: src/clparse.cpp:264
 msgid "go directly to host screen"
 msgstr "호스트 화면으로 바로 가기"
 
-#: src/clparse.cpp:266
+#: src/clparse.cpp:265
 msgid "Enable texture compression"
 msgstr ""
 
-#: src/clparse.cpp:267
+#: src/clparse.cpp:266
 msgid "Disable texture compression"
 msgstr ""
 
-#: src/clparse.cpp:268
-msgid "Disable the use of OpenGL shaders"
-msgstr ""
-
-#: src/clparse.cpp:269
-msgid "Disable the use of OpenGL Vertex Buffer Objects"
+#: src/clparse.cpp:267
+msgid "Only use OpenGL 1.5"
 msgstr ""
 
 #: src/cmddroid.cpp:110
@@ -12387,12 +12383,12 @@ msgid "Water Speed"
 msgstr "수상 속도"
 
 #: src/design.cpp:2003
-#: src/hci.cpp:4995
+#: src/hci.cpp:4991
 msgid "Tab Scroll left"
 msgstr "왼쪽으로 탭 스크롤"
 
 #: src/design.cpp:2018
-#: src/hci.cpp:5010
+#: src/hci.cpp:5006
 msgid "Tab Scroll right"
 msgstr "오른쪽으로 탭 스크롤"
 
@@ -12408,21 +12404,21 @@ msgstr "시스템"
 msgid "Delete Template"
 msgstr ""
 
-#: src/display3d.cpp:676
+#: src/display3d.cpp:658
 msgid "Player left"
 msgstr "플레이어가 떠났습니다"
 
 # same thing as player left??
-#: src/display3d.cpp:680
+#: src/display3d.cpp:662
 msgid "Player dropped"
 msgstr "플레이어가 인터넷 연결 문제 또는 게임 버그 때문에 퇴장하였습니다"
 
-#: src/display3d.cpp:684
-#: src/multiint.cpp:2382
+#: src/display3d.cpp:666
+#: src/multiint.cpp:2389
 msgid "Waiting for other players"
 msgstr "다른 플레이어를 더 기다리고 있습니다"
 
-#: src/display3d.cpp:689
+#: src/display3d.cpp:671
 msgid "Out of sync"
 msgstr ""
 
@@ -12450,671 +12446,687 @@ msgid "Structure Restored"
 msgstr "구조물이 복구되었습니다"
 
 # ask about form 0, 1, 2, etc
-#: src/droid.cpp:2198
+#: src/droid.cpp:2201
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] "부대 %u가(이) 선택되었습니다 - 유닛 %u개"
 
-#: src/droid.cpp:2211
+#: src/droid.cpp:2214
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] "유닛 %u개가 부대 %u에 할당되었습니다"
 
-#: src/droid.cpp:2224
+#: src/droid.cpp:2227
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "부대 %u를(을) 중심으로 - 유닛 %u개"
 
-#: src/droid.cpp:2228
+#: src/droid.cpp:2231
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] "부대 %u와(과) 정렬하였습니다 - 유닛 %u개"
 
-#: src/droid.cpp:2410
+#: src/droid.cpp:2413
 msgid "Rookie"
 msgstr "루키"
 
-#: src/droid.cpp:2411
+#: src/droid.cpp:2414
 msgctxt "rank"
 msgid "Green"
 msgstr "그린"
 
 # finished training,
 # is now intern
-#: src/droid.cpp:2412
+#: src/droid.cpp:2415
 msgid "Trained"
 msgstr "견습병"
 
 # 정규 사병 = regular soldier
-#: src/droid.cpp:2413
+#: src/droid.cpp:2416
 msgid "Regular"
 msgstr "정규병"
 
-#: src/droid.cpp:2414
+#: src/droid.cpp:2417
 msgid "Professional"
 msgstr "프로페셔널"
 
-#: src/droid.cpp:2415
+#: src/droid.cpp:2418
 msgid "Veteran"
 msgstr "베테랑"
 
-#: src/droid.cpp:2416
+#: src/droid.cpp:2419
 msgid "Elite"
 msgstr "엘리트"
 
-#: src/droid.cpp:2417
+#: src/droid.cpp:2420
 msgid "Special"
 msgstr "스페셜"
 
-#: src/droid.cpp:2418
+#: src/droid.cpp:2421
 msgid "Hero"
 msgstr "히어로"
 
-#: src/droid.cpp:3352
+#: src/droid.cpp:3361
 #, c-format
 msgid "%s wanted to give you a %s but you have too many!"
 msgstr "%s가 당신에게 %s를(을) 주고 싶어하지만 이미 수가 너무 많습니다!"
 
-#: src/droid.cpp:3356
+#: src/droid.cpp:3365
 #, fuzzy, c-format
 msgid "You wanted to give %s a %s but they have too many!"
 msgstr "%s가 당신에게 %s를(을) 주고 싶어하지만 이미 수가 너무 많습니다!"
 
-#: src/frontend.cpp:108
+#: src/frontend.cpp:109
 msgid "Single Player"
 msgstr "싱글 플레이어(Single Player)"
 
-#: src/frontend.cpp:109
+#: src/frontend.cpp:110
 msgid "Multi Player"
 msgstr "멀티 플레이어(Multi player)"
 
-#: src/frontend.cpp:110
-#: src/frontend.cpp:193
+#: src/frontend.cpp:111
+#: src/frontend.cpp:256
 msgid "Tutorial"
 msgstr "튜토리얼"
 
-#: src/frontend.cpp:111
-#: src/hci.cpp:3488
+#: src/frontend.cpp:112
+#: src/hci.cpp:3484
 msgid "Options"
 msgstr "옵션"
 
-#: src/frontend.cpp:114
-#: src/frontend.cpp:118
+#: src/frontend.cpp:115
+#: src/frontend.cpp:119
 msgid "View Intro"
 msgstr "인트로 영상 보기"
 
-#: src/frontend.cpp:119
+#: src/frontend.cpp:120
 msgid "Videos are missing, download them from http://wz2100.net"
 msgstr ""
 
-#: src/frontend.cpp:121
+#: src/frontend.cpp:122
 msgid "Quit Game"
 msgstr "게임 종료"
 
-#: src/frontend.cpp:122
+#: src/frontend.cpp:123
 msgid "MAIN MENU"
 msgstr "메인 메뉴"
 
-#: src/frontend.cpp:124
+#: src/frontend.cpp:125
 msgid "Official site: http://wz2100.net/"
 msgstr ""
 
-#: src/frontend.cpp:194
+#: src/frontend.cpp:126
+msgid "Come visit the forums and all Warzone 2100 news! Click this link."
+msgstr ""
+
+#: src/frontend.cpp:127
+msgid "Donate: http://donations.wz2100.net/"
+msgstr ""
+
+#: src/frontend.cpp:128
+msgid "Help support the project with our server costs, Click this link."
+msgstr ""
+
+#: src/frontend.cpp:129
+msgid "Check for a newer version"
+msgstr ""
+
+#: src/frontend.cpp:257
 msgid "Fast Play"
 msgstr "Fast Play (바로 하기)"
 
-#: src/frontend.cpp:195
+#: src/frontend.cpp:258
 msgid "TUTORIALS"
 msgstr "튜토리얼"
 
 #. TRANSLATORS: "Return", in this context, means "return to previous screen/menu"
-#: src/frontend.cpp:197
-#: src/frontend.cpp:259
-#: src/frontend.cpp:404
-#: src/frontend.cpp:478
-#: src/frontend.cpp:619
-#: src/frontend.cpp:765
-#: src/frontend.cpp:911
-#: src/frontend.cpp:1170
-#: src/frontend.cpp:1325
-#: src/frontend.cpp:1345
+#: src/frontend.cpp:260
+#: src/frontend.cpp:322
+#: src/frontend.cpp:467
+#: src/frontend.cpp:541
+#: src/frontend.cpp:682
+#: src/frontend.cpp:828
+#: src/frontend.cpp:974
+#: src/frontend.cpp:1233
+#: src/frontend.cpp:1388
+#: src/frontend.cpp:1408
 msgctxt "menu"
 msgid "Return"
 msgstr "뒤로"
 
-#: src/frontend.cpp:252
+#: src/frontend.cpp:315
 msgid "New Campaign"
 msgstr "새 캠페인"
 
-#: src/frontend.cpp:253
+#: src/frontend.cpp:316
 msgid "Start Skirmish Game"
 msgstr "스커미쉬(Skirmish) 게임 시작"
 
-#: src/frontend.cpp:254
+#: src/frontend.cpp:317
 msgid "Challenges"
 msgstr "챌런지(도전)"
 
-#: src/frontend.cpp:255
+#: src/frontend.cpp:318
 #, fuzzy
 msgid "Load Campaign Game"
 msgstr "게임 로드"
 
-#: src/frontend.cpp:256
+#: src/frontend.cpp:319
 #, fuzzy
 msgid "Load Skirmish Game"
 msgstr "스커미쉬(Skirmish) 게임 시작"
 
-#: src/frontend.cpp:258
+#: src/frontend.cpp:321
 msgid "SINGLE PLAYER"
 msgstr "싱글 플레이어"
 
-#: src/frontend.cpp:263
+#: src/frontend.cpp:326
 msgid "Campaign videos are missing! Get them from http://wz2100.net"
 msgstr ""
 
-#: src/frontend.cpp:339
+#: src/frontend.cpp:402
 #: src/ingameop.cpp:504
 #, fuzzy
 msgid "Load Campaign Saved Game"
 msgstr "저장된 게임 로드하기"
 
-#: src/frontend.cpp:345
+#: src/frontend.cpp:408
 #: src/ingameop.cpp:508
 #, fuzzy
 msgid "Load Skirmish Saved Game"
 msgstr "저장된 게임 로드하기"
 
-#: src/frontend.cpp:399
+#: src/frontend.cpp:462
 msgid "MULTI PLAYER"
 msgstr "멀티 플레이어"
 
-#: src/frontend.cpp:401
+#: src/frontend.cpp:464
 msgid "Host Game"
 msgstr "네트워크 게임 새로 시작 (호스팅 하기)"
 
-#: src/frontend.cpp:402
+#: src/frontend.cpp:465
 msgid "Join Game"
 msgstr "네트워크 게임 참여하기"
 
-#: src/frontend.cpp:407
+#: src/frontend.cpp:470
 msgid "TCP port 2100 must be opened in your firewall or router to host games!"
 msgstr ""
 
-#: src/frontend.cpp:471
-#: src/multiint.cpp:1483
+#: src/frontend.cpp:534
+#: src/multiint.cpp:1490
 msgid "OPTIONS"
 msgstr "옵션"
 
-#: src/frontend.cpp:472
+#: src/frontend.cpp:535
 msgid "Game Options"
 msgstr "게임 옵션"
 
-#: src/frontend.cpp:473
+#: src/frontend.cpp:536
 msgid "Graphics Options"
 msgstr "그래픽 옵션"
 
-#: src/frontend.cpp:474
+#: src/frontend.cpp:537
 msgid "Video Options"
 msgstr "비디오 옵션"
 
-#: src/frontend.cpp:475
+#: src/frontend.cpp:538
 #: src/ingameop.cpp:268
 msgid "Audio Options"
 msgstr "오디오 옵션"
 
-#: src/frontend.cpp:476
+#: src/frontend.cpp:539
 msgid "Mouse Options"
 msgstr "마우스 옵션"
 
-#: src/frontend.cpp:477
+#: src/frontend.cpp:540
 msgid "Key Mappings"
 msgstr "키보드 매핑(Mapping)"
 
-#: src/frontend.cpp:537
+#: src/frontend.cpp:600
 msgid "Video Playback"
 msgstr "비디오 재생"
 
-#: src/frontend.cpp:541
-#: src/frontend.cpp:693
+#: src/frontend.cpp:604
+#: src/frontend.cpp:756
 msgid "1X"
 msgstr "1X"
 
-#: src/frontend.cpp:545
-#: src/frontend.cpp:683
+#: src/frontend.cpp:608
+#: src/frontend.cpp:746
 msgid "2X"
 msgstr "2X"
 
-#: src/frontend.cpp:549
-#: src/frontend.cpp:688
-#: src/frontend.cpp:839
-#: src/frontend.cpp:936
+#: src/frontend.cpp:612
+#: src/frontend.cpp:751
+#: src/frontend.cpp:902
+#: src/frontend.cpp:999
 msgid "Fullscreen"
 msgstr "전체 화면"
 
-#: src/frontend.cpp:558
+#: src/frontend.cpp:621
 msgid "Scanlines"
 msgstr ""
 
-#: src/frontend.cpp:562
-#: src/frontend.cpp:583
-#: src/frontend.cpp:591
-#: src/frontend.cpp:607
-#: src/frontend.cpp:637
-#: src/frontend.cpp:655
-#: src/frontend.cpp:673
+#: src/frontend.cpp:625
+#: src/frontend.cpp:646
+#: src/frontend.cpp:654
+#: src/frontend.cpp:670
+#: src/frontend.cpp:700
 #: src/frontend.cpp:718
-#: src/frontend.cpp:864
-#: src/frontend.cpp:874
-#: src/frontend.cpp:904
-#: src/frontend.cpp:960
-#: src/frontend.cpp:1021
-#: src/frontend.cpp:1064
-#: src/frontend.cpp:1077
+#: src/frontend.cpp:736
+#: src/frontend.cpp:781
+#: src/frontend.cpp:927
+#: src/frontend.cpp:937
+#: src/frontend.cpp:967
+#: src/frontend.cpp:1023
+#: src/frontend.cpp:1084
 #: src/frontend.cpp:1127
-#: src/frontend.cpp:1139
-#: src/frontend.cpp:1151
-#: src/frontend.cpp:1187
-#: src/frontend.cpp:1200
+#: src/frontend.cpp:1140
+#: src/frontend.cpp:1190
+#: src/frontend.cpp:1202
 #: src/frontend.cpp:1214
+#: src/frontend.cpp:1250
+#: src/frontend.cpp:1263
+#: src/frontend.cpp:1277
 msgid "Off"
 msgstr "꺼짐"
 
-#: src/frontend.cpp:566
-#: src/frontend.cpp:708
+#: src/frontend.cpp:629
+#: src/frontend.cpp:771
 msgid "50%"
 msgstr ""
 
-#: src/frontend.cpp:570
-#: src/frontend.cpp:713
+#: src/frontend.cpp:633
+#: src/frontend.cpp:776
 #: src/multiplay.cpp:2020
 msgid "Black"
 msgstr "검정색"
 
-#: src/frontend.cpp:576
+#: src/frontend.cpp:639
 msgid "Screen Shake"
 msgstr "화면 떨림(Shake)"
 
-#: src/frontend.cpp:579
-#: src/frontend.cpp:595
-#: src/frontend.cpp:603
 #: src/frontend.cpp:642
-#: src/frontend.cpp:660
-#: src/frontend.cpp:669
-#: src/frontend.cpp:860
-#: src/frontend.cpp:900
-#: src/frontend.cpp:1026
-#: src/frontend.cpp:1060
-#: src/frontend.cpp:1082
+#: src/frontend.cpp:658
+#: src/frontend.cpp:666
+#: src/frontend.cpp:705
+#: src/frontend.cpp:723
+#: src/frontend.cpp:732
+#: src/frontend.cpp:923
+#: src/frontend.cpp:963
+#: src/frontend.cpp:1089
 #: src/frontend.cpp:1123
-#: src/frontend.cpp:1135
-#: src/frontend.cpp:1147
-#: src/frontend.cpp:1192
-#: src/frontend.cpp:1205
-#: src/frontend.cpp:1219
+#: src/frontend.cpp:1145
+#: src/frontend.cpp:1186
+#: src/frontend.cpp:1198
+#: src/frontend.cpp:1210
+#: src/frontend.cpp:1255
+#: src/frontend.cpp:1268
+#: src/frontend.cpp:1282
 msgid "On"
 msgstr "켜짐"
 
-#: src/frontend.cpp:588
+#: src/frontend.cpp:651
 msgid "Subtitles"
 msgstr "자막"
 
-#: src/frontend.cpp:600
+#: src/frontend.cpp:663
 msgid "Shadows"
 msgstr "그림자"
 
-#: src/frontend.cpp:611
-#: src/frontend.cpp:1352
+#: src/frontend.cpp:674
+#: src/frontend.cpp:1415
 msgid "Radar"
 msgstr "레이더"
 
-#: src/frontend.cpp:612
-#: src/frontend.cpp:725
-#: src/frontend.cpp:1353
+#: src/frontend.cpp:675
+#: src/frontend.cpp:788
+#: src/frontend.cpp:1416
 msgid "Rotating"
 msgstr "회전식"
 
-#: src/frontend.cpp:612
-#: src/frontend.cpp:725
-#: src/frontend.cpp:1353
+#: src/frontend.cpp:675
+#: src/frontend.cpp:788
+#: src/frontend.cpp:1416
 msgid "Fixed"
 msgstr "고정식"
 
-#: src/frontend.cpp:615
+#: src/frontend.cpp:678
 msgid "GRAPHICS OPTIONS"
 msgstr "그래픽 옵션"
 
-#: src/frontend.cpp:753
+#: src/frontend.cpp:816
 #: src/ingameop.cpp:168
 msgid "Voice Volume"
 msgstr "음성 볼륨"
 
-#: src/frontend.cpp:757
+#: src/frontend.cpp:820
 #: src/ingameop.cpp:173
 msgid "FX Volume"
 msgstr "특수 효과음 볼륨 "
 
-#: src/frontend.cpp:761
+#: src/frontend.cpp:824
 #: src/ingameop.cpp:178
 msgid "Music Volume"
 msgstr "음악 볼륨"
 
-#: src/frontend.cpp:768
+#: src/frontend.cpp:831
 msgid "AUDIO OPTIONS"
 msgstr "오디오 옵션"
 
-#: src/frontend.cpp:832
+#: src/frontend.cpp:895
 msgid "* Takes effect on game restart"
 msgstr "*게임 재시작시 적용됩니다"
 
-#: src/frontend.cpp:835
+#: src/frontend.cpp:898
 msgid "Graphics Mode*"
 msgstr "그래픽 모드*"
 
-#: src/frontend.cpp:843
-#: src/frontend.cpp:931
+#: src/frontend.cpp:906
+#: src/frontend.cpp:994
 msgid "Windowed"
 msgstr "윈도우(창) 모드"
 
-#: src/frontend.cpp:847
+#: src/frontend.cpp:910
 msgid "Resolution*"
 msgstr "해상도*"
 
-#: src/frontend.cpp:852
+#: src/frontend.cpp:915
 msgid "Texture size"
 msgstr "텍스쳐 크기"
 
-#: src/frontend.cpp:856
+#: src/frontend.cpp:919
 #, fuzzy
 msgid "Vertical sync"
 msgstr "수직동기화(V sync)*"
 
-#: src/frontend.cpp:891
-#: src/frontend.cpp:966
+#: src/frontend.cpp:954
+#: src/frontend.cpp:1029
 #, fuzzy
 msgid "Unsupported"
 msgstr "수송선"
 
-#: src/frontend.cpp:896
+#: src/frontend.cpp:959
 #, fuzzy
 msgid "Shaders"
 msgstr "그림자"
 
-#: src/frontend.cpp:908
+#: src/frontend.cpp:971
 msgid "VIDEO OPTIONS"
 msgstr "비디오 옵션"
 
 # 3D rotation direction w/ mouse
-#: src/frontend.cpp:1120
+#: src/frontend.cpp:1183
 msgid "Reverse Rotation"
 msgstr "3D 회전방향 반전"
 
-#: src/frontend.cpp:1131
+#: src/frontend.cpp:1194
 msgid "Trap Cursor"
 msgstr "마우스 커서 가두기"
 
-#: src/frontend.cpp:1144
+#: src/frontend.cpp:1207
 msgid "Switch Mouse Buttons"
 msgstr "마우스 버튼 좌우 전환"
 
-#: src/frontend.cpp:1156
+#: src/frontend.cpp:1219
 msgid "Rotate Screen"
 msgstr "화면 회전"
 
-#: src/frontend.cpp:1159
-#: src/frontend.cpp:1233
+#: src/frontend.cpp:1222
+#: src/frontend.cpp:1296
 #, fuzzy
 msgid "Middle Mouse"
 msgstr "마우스 중앙 버튼"
 
-#: src/frontend.cpp:1163
-#: src/frontend.cpp:1228
+#: src/frontend.cpp:1226
+#: src/frontend.cpp:1291
 #, fuzzy
 msgid "Right Mouse"
 msgstr "마우스 오른쪽 버튼"
 
-#: src/frontend.cpp:1167
+#: src/frontend.cpp:1230
 msgid "MOUSE OPTIONS"
 msgstr "마우스 옵션"
 
-#: src/frontend.cpp:1268
-#: src/frontend.cpp:1346
+#: src/frontend.cpp:1331
+#: src/frontend.cpp:1409
 msgid "Language"
 msgstr "언어"
 
-#: src/frontend.cpp:1272
-#: src/frontend.cpp:1350
+#: src/frontend.cpp:1335
+#: src/frontend.cpp:1413
 msgid "Difficulty"
 msgstr "난이도"
 
-#: src/frontend.cpp:1276
-#: src/frontend.cpp:1357
-#: src/frontend.cpp:1389
+#: src/frontend.cpp:1339
+#: src/frontend.cpp:1420
+#: src/frontend.cpp:1452
 #: src/multiint.cpp:215
 msgid "Easy"
 msgstr "낮음"
 
-#: src/frontend.cpp:1279
-#: src/frontend.cpp:1360
-#: src/frontend.cpp:1381
+#: src/frontend.cpp:1342
+#: src/frontend.cpp:1423
+#: src/frontend.cpp:1444
 msgid "Normal"
 msgstr "보통"
 
-#: src/frontend.cpp:1283
-#: src/frontend.cpp:1363
-#: src/frontend.cpp:1385
+#: src/frontend.cpp:1346
+#: src/frontend.cpp:1426
+#: src/frontend.cpp:1448
 #: src/multiint.cpp:215
 msgid "Hard"
 msgstr "높음"
 
-#: src/frontend.cpp:1288
 #: src/frontend.cpp:1351
+#: src/frontend.cpp:1414
 msgid "Scroll Speed"
 msgstr "스크롤 속도"
 
-#: src/frontend.cpp:1292
-#: src/frontend.cpp:1347
+#: src/frontend.cpp:1355
+#: src/frontend.cpp:1410
 #, fuzzy
 msgid "Unit Colour:"
 msgstr "유닛 색"
 
-#: src/frontend.cpp:1312
-#: src/frontend.cpp:1348
+#: src/frontend.cpp:1375
+#: src/frontend.cpp:1411
 #, fuzzy
 msgid "Campaign"
 msgstr "새 캠페인"
 
-#: src/frontend.cpp:1322
-#: src/frontend.cpp:1349
+#: src/frontend.cpp:1385
+#: src/frontend.cpp:1412
 #, fuzzy
 msgid "Skirmish/Multiplayer"
 msgstr "멀티 플레이어(Multi player)"
 
-#: src/frontend.cpp:1328
-#: src/frontend.cpp:1344
+#: src/frontend.cpp:1391
+#: src/frontend.cpp:1407
 msgid "GAME OPTIONS"
 msgstr "게임 옵션"
 
-#: src/frontend.cpp:1489
-#: src/multiint.cpp:2651
+#: src/frontend.cpp:1552
+#: src/multiint.cpp:2658
 msgid "Mod: "
 msgstr "Mod (Modification):"
 
-#: src/hci.cpp:1234
+#: src/hci.cpp:1230
 msgid "MAP SAVED!"
 msgstr "맵이 저장되었습니다!"
 
-#: src/hci.cpp:1561
+#: src/hci.cpp:1557
 #: src/loop.cpp:260
 #: src/loop.cpp:276
 #, fuzzy
 msgid "GAME SAVED: "
 msgstr "게임이 저장되었습니다 : "
 
-#: src/hci.cpp:1986
+#: src/hci.cpp:1982
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new structure: %s."
 msgstr "플레이어 %u 가 치트(디버그 메뉴)를 사용해 새로운 구조물을 지었습니다: %s."
 
-#: src/hci.cpp:2001
+#: src/hci.cpp:1997
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new feature: %s."
 msgstr "플레이어 %u 가 치트(디버그 메뉴)를 사용해 새로운 물체를 배치하였습니다: %s."
 
-#: src/hci.cpp:2024
+#: src/hci.cpp:2020
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
 msgstr "플레이어 %u 가 치트(디버그 메뉴)를 사용해 새로운 병사를 만들었습니다: %s."
 
-#: src/hci.cpp:2037
+#: src/hci.cpp:2033
 #, fuzzy, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid."
 msgstr "플레이어 %u 가 치트(디버그 메뉴)를 사용해 새로운 병사를 만들었습니다: %s."
 
-#: src/hci.cpp:3299
+#: src/hci.cpp:3295
 msgid "Commanders (F6)"
 msgstr "사령관 (F6)"
 
-#: src/hci.cpp:3312
+#: src/hci.cpp:3308
 msgid "Intelligence Display (F5)"
 msgstr "보도 디스플레이 (F5)"
 
-#: src/hci.cpp:3325
+#: src/hci.cpp:3321
 msgid "Manufacture (F1)"
 msgstr "생산 (F1)"
 
-#: src/hci.cpp:3338
+#: src/hci.cpp:3334
 msgid "Design (F4)"
 msgstr "디자인 (F4)"
 
-#: src/hci.cpp:3351
+#: src/hci.cpp:3347
 msgid "Research (F2)"
 msgstr "연구 (F2)"
 
-#: src/hci.cpp:3364
+#: src/hci.cpp:3360
 msgid "Build (F3)"
 msgstr "건축 (F3)"
 
-#: src/hci.cpp:3435
-#: src/multiint.cpp:1596
+#: src/hci.cpp:3431
+#: src/multiint.cpp:1603
 #: src/multimenu.cpp:808
 msgid "Power"
 msgstr "전력"
 
-#: src/hci.cpp:3526
+#: src/hci.cpp:3522
 msgid "Map:"
 msgstr "맵: "
 
-#: src/hci.cpp:3539
+#: src/hci.cpp:3535
 msgid "Load"
 msgstr "로드"
 
-#: src/hci.cpp:3540
+#: src/hci.cpp:3536
 msgid "Load Map File"
 msgstr "맵 파일 로드"
 
-#: src/hci.cpp:3551
+#: src/hci.cpp:3547
 msgid "Save"
 msgstr "저장"
 
-#: src/hci.cpp:3552
+#: src/hci.cpp:3548
 msgid "Save Map File"
 msgstr "맵 파일 저장"
 
-#: src/hci.cpp:3564
+#: src/hci.cpp:3560
 msgid "New"
 msgstr "새로 (New)"
 
-#: src/hci.cpp:3565
+#: src/hci.cpp:3561
 msgid "New Blank Map"
 msgstr "새로운 빈 맵"
 
-#: src/hci.cpp:3613
+#: src/hci.cpp:3609
 msgid "Tile"
 msgstr "타일"
 
-#: src/hci.cpp:3614
+#: src/hci.cpp:3610
 msgid "Place tiles on map"
 msgstr "게임 맵에서 타일을 놓기"
 
-#: src/hci.cpp:3627
+#: src/hci.cpp:3623
 msgid "Unit"
 msgstr "유닛"
 
-#: src/hci.cpp:3628
+#: src/hci.cpp:3624
 msgid "Place Unit on map"
 msgstr "게임 맵 안에 유닛 배치하기"
 
-#: src/hci.cpp:3636
+#: src/hci.cpp:3632
 msgid "Struct"
 msgstr "구조물"
 
-#: src/hci.cpp:3637
+#: src/hci.cpp:3633
 msgid "Place Structures on map"
 msgstr "게임 맵에서 구조물을 놓기"
 
-#: src/hci.cpp:3645
+#: src/hci.cpp:3641
 msgid "Feat"
 msgstr "물체"
 
-#: src/hci.cpp:3646
+#: src/hci.cpp:3642
 msgid "Place Features on map"
 msgstr "물체(Feature)를 맵위에 배치하기"
 
-#: src/hci.cpp:3660
+#: src/hci.cpp:3656
 msgid "Pause"
 msgstr "일시 정지"
 
-#: src/hci.cpp:3661
+#: src/hci.cpp:3657
 msgid "Pause or unpause the game"
 msgstr "게임을 일시 중지하거나 일시중지를 해제합니다"
 
-#: src/hci.cpp:3679
+#: src/hci.cpp:3675
 msgid "Align height of all map objects"
 msgstr "모든 맵 개체의 높이를 정렬하기 "
 
-#: src/hci.cpp:3692
+#: src/hci.cpp:3688
 msgid "Edit"
 msgstr "편집"
 
-#: src/hci.cpp:3693
+#: src/hci.cpp:3689
 msgid "Start Edit Mode"
 msgstr "편집 모드 시작하기"
 
-#: src/hci.cpp:3707
+#: src/hci.cpp:3703
 #: src/ingameop.cpp:113
 #: src/ingameop.cpp:257
 #: src/ingameop.cpp:261
 msgid "Quit"
 msgstr "종료"
 
-#: src/hci.cpp:3708
+#: src/hci.cpp:3704
 msgid "Exit Game"
 msgstr "게임 종료"
 
-#: src/hci.cpp:3734
+#: src/hci.cpp:3730
 msgid "Current Player:"
 msgstr "현재 플레이어: "
 
-#: src/hci.cpp:4015
+#: src/hci.cpp:4011
 msgid "Progress Bar"
 msgstr "진행률 표시줄"
 
-#: src/hci.cpp:4897
+#: src/hci.cpp:4893
 msgid "Factory Delivery Point"
 msgstr "공장 배달 지점"
 
-#: src/hci.cpp:4915
+#: src/hci.cpp:4911
 msgid "Loop Production"
 msgstr "반복 생산"
 
 # Build Points
 # Points used to determine how long something takes to build.
 # For building structures, for instance, the time is calculated as the build points of the structure divided by the build points of the truck.
-#: src/hci.cpp:5225
+#: src/hci.cpp:5221
 #, fuzzy
 msgid "Ally progress"
 msgstr "건설(빌드) 포인트"
@@ -13609,8 +13621,8 @@ msgstr "키보드 매핑"
 
 #: src/keyedit.cpp:377
 #: src/multiint.cpp:763
-#: src/multiint.cpp:1263
-#: src/multiint.cpp:1682
+#: src/multiint.cpp:1270
+#: src/multiint.cpp:1689
 msgid "Return To Previous Screen"
 msgstr "이전 화면으로 돌아가기"
 
@@ -14235,7 +14247,7 @@ msgstr "%s가 %s와(과)의 동맹을 깨었습니다"
 msgid "%s Forms An Alliance With %s"
 msgstr "%s가 %s와(과) 동맹을 맺었습니다"
 
-#: src/multigifts.cpp:721
+#: src/multigifts.cpp:720
 #, c-format
 msgid "You Discover Blueprints For %s"
 msgstr "당신이 %s의 청사진을 발견하였습니다"
@@ -14255,7 +14267,7 @@ msgid "Accept Settings"
 msgstr "설정 적용"
 
 #: src/multiint.cpp:703
-#: src/multiint.cpp:1318
+#: src/multiint.cpp:1325
 msgid "Cancel"
 msgstr "취소"
 
@@ -14307,403 +14319,408 @@ msgstr ""
 msgid "Can't find any games for your version."
 msgstr ""
 
-#: src/multiint.cpp:1044
-msgid "No games are available"
+#: src/multiint.cpp:1046
+msgid "There appears to be a game update available!"
+msgstr ""
+
+#: src/multiint.cpp:1050
+#, fuzzy
+msgid "No games are available for your version"
 msgstr "참여 가능한 게임이 없습니다"
 
-#: src/multiint.cpp:1047
+#: src/multiint.cpp:1054
 msgid "Game is full"
 msgstr "게임이 만원입니다"
 
-#: src/multiint.cpp:1051
+#: src/multiint.cpp:1058
 msgid "You were kicked!"
 msgstr "당신이 퇴장당하였습니다!"
 
-#: src/multiint.cpp:1054
+#: src/multiint.cpp:1061
 msgid "Wrong Game Version!"
 msgstr "잘못된 게임 버젼입니다!"
 
-#: src/multiint.cpp:1057
+#: src/multiint.cpp:1064
 msgid "You have an incompatible mod."
 msgstr "당신은 호환되지 않는 mod를 사용 중입니다."
 
-#: src/multiint.cpp:1061
+#: src/multiint.cpp:1068
 msgid "Host couldn't send file?"
 msgstr "호스트가 파일을 보내지 못했습니다."
 
-#: src/multiint.cpp:1065
+#: src/multiint.cpp:1072
 msgid "Incorrect Password!"
 msgstr "비밀번호가 틀립니다!"
 
-#: src/multiint.cpp:1068
+#: src/multiint.cpp:1075
 msgid "Host has dropped connection!"
 msgstr "호스트의 연결이 끊어졌습니다!"
 
-#: src/multiint.cpp:1072
+#: src/multiint.cpp:1079
 msgid "Connection Error"
 msgstr "연결 에러(Error)"
 
-#: src/multiint.cpp:1191
+#: src/multiint.cpp:1198
 msgid "Searching"
 msgstr "찾는 중"
 
-#: src/multiint.cpp:1260
+#: src/multiint.cpp:1267
 msgid "GAMES"
 msgstr "게임"
 
-#: src/multiint.cpp:1268
+#: src/multiint.cpp:1275
 msgid "Refresh Games List"
 msgstr "게임 목록 새로고침"
 
-#: src/multiint.cpp:1271
+#: src/multiint.cpp:1278
 #, fuzzy
 msgid "Filter Games List"
 msgstr "게임 목록 새로고침"
 
-#: src/multiint.cpp:1298
+#: src/multiint.cpp:1305
 msgid "Enter Password:"
 msgstr "비밀번호를 입력하십시오:"
 
-#: src/multiint.cpp:1316
+#: src/multiint.cpp:1323
 msgid "OK"
 msgstr "확인"
 
-#: src/multiint.cpp:1437
+#: src/multiint.cpp:1444
 msgid "Tanks disabled!!"
 msgstr "탱크가 비활성화되었습니다!!"
 
-#: src/multiint.cpp:1438
+#: src/multiint.cpp:1445
 msgid "Cyborgs disabled."
 msgstr "사이보그가 비활성화되었습니다."
 
-#: src/multiint.cpp:1439
+#: src/multiint.cpp:1446
 msgid "VTOLs disabled."
 msgstr "VTOL이 비활성화되었습니다."
 
-#: src/multiint.cpp:1440
+#: src/multiint.cpp:1447
 #, fuzzy
 msgid "Satellite Uplink disabled."
 msgstr "위성 업링크 센터"
 
-#: src/multiint.cpp:1441
+#: src/multiint.cpp:1448
 #, fuzzy
 msgid "Laser Satellite disabled."
 msgstr "레이저 위성 지휘 본부"
 
-#: src/multiint.cpp:1488
-#: src/multiint.cpp:1496
+#: src/multiint.cpp:1495
+#: src/multiint.cpp:1503
 msgid "Select Game Name"
 msgstr "게임 이름 선택"
 
-#: src/multiint.cpp:1489
+#: src/multiint.cpp:1496
 msgid "One-Player Skirmish"
 msgstr "싱글플레이어 스커미쉬"
 
-#: src/multiint.cpp:1503
+#: src/multiint.cpp:1510
 msgid "Select Map"
 msgstr "맵 선택"
 
-#: src/multiint.cpp:1504
+#: src/multiint.cpp:1511
 msgid "Map-Mod!"
 msgstr ""
 
-#: src/multiint.cpp:1517
+#: src/multiint.cpp:1524
 msgid "Click to set Password"
 msgstr "클릭하여 비밀번호를 설정하십시오"
 
-#: src/multiint.cpp:1527
-#: src/multiint.cpp:1528
+#: src/multiint.cpp:1534
+#: src/multiint.cpp:1535
 msgid "Scavengers"
 msgstr "스캐빈저"
 
-#: src/multiint.cpp:1530
+#: src/multiint.cpp:1537
 msgid "No Scavengers"
 msgstr "스캐빈저 없음"
 
-#: src/multiint.cpp:1560
+#: src/multiint.cpp:1567
 msgid "Select Player Name"
 msgstr "플레이어 이름 선택"
 
-#: src/multiint.cpp:1563
+#: src/multiint.cpp:1570
 #: src/multimenu.cpp:801
 msgid "Alliances"
 msgstr "동맹"
 
-#: src/multiint.cpp:1566
+#: src/multiint.cpp:1573
 msgid "No Alliances"
 msgstr "동맹 없음"
 
-#: src/multiint.cpp:1568
+#: src/multiint.cpp:1575
 msgid "Allow Alliances"
 msgstr "동맹 있음"
 
-#: src/multiint.cpp:1572
+#: src/multiint.cpp:1579
 msgid "Locked Teams"
 msgstr "팀 잠금"
 
-#: src/multiint.cpp:1598
+#: src/multiint.cpp:1605
 msgid "Low Power Levels"
 msgstr "낮은 전력 수준"
 
-#: src/multiint.cpp:1600
+#: src/multiint.cpp:1607
 msgid "Medium Power Levels"
 msgstr "중급 전력 수준"
 
-#: src/multiint.cpp:1602
+#: src/multiint.cpp:1609
 msgid "High Power Levels"
 msgstr "높은 전력 수준"
 
-#: src/multiint.cpp:1634
+#: src/multiint.cpp:1641
 msgid "Base"
 msgstr "기지"
 
-#: src/multiint.cpp:1636
+#: src/multiint.cpp:1643
 msgid "Start with No Bases"
 msgstr "기지 없이 시작하기"
 
-#: src/multiint.cpp:1638
+#: src/multiint.cpp:1645
 msgid "Start with Bases"
 msgstr "기지를 갖추고 시작하기"
 
-#: src/multiint.cpp:1640
+#: src/multiint.cpp:1647
 msgid "Start with Advanced Bases"
 msgstr "고급 기지를 갖추고 시작하기"
 
-#: src/multiint.cpp:1672
+#: src/multiint.cpp:1679
 msgid "Map Preview"
 msgstr "맵 미리보기"
 
-#: src/multiint.cpp:1674
+#: src/multiint.cpp:1681
 msgid "Click to see Map"
 msgstr "맵을 보려면 클릭하십시오"
 
-#: src/multiint.cpp:1687
-#: src/multiint.cpp:1689
+#: src/multiint.cpp:1694
+#: src/multiint.cpp:1696
 msgid "Start Hosting Game"
 msgstr "게임 호스팅을 시작하기"
 
-#: src/multiint.cpp:1696
-#: src/multiint.cpp:1700
+#: src/multiint.cpp:1703
+#: src/multiint.cpp:1707
 msgid "Show Structure Limits"
 msgstr "구조물 제한 보기"
 
-#: src/multiint.cpp:1696
-#: src/multiint.cpp:1700
+#: src/multiint.cpp:1703
+#: src/multiint.cpp:1707
 msgid "Set Structure Limits"
 msgstr "구조물 제한 설정하기"
 
-#: src/multiint.cpp:1777
+#: src/multiint.cpp:1784
 msgid "DIFFICULTY"
 msgstr ""
 
-#: src/multiint.cpp:1791
+#: src/multiint.cpp:1798
 msgid "Less aggressive"
 msgstr ""
 
-#: src/multiint.cpp:1792
+#: src/multiint.cpp:1799
 #, fuzzy
 msgid "Plays nice"
 msgstr "플레이어"
 
-#: src/multiint.cpp:1793
+#: src/multiint.cpp:1800
 msgid "No holds barred"
 msgstr ""
 
-#: src/multiint.cpp:1794
+#: src/multiint.cpp:1801
 #, fuzzy
 msgid "Starts with advantages"
 msgstr "고급 기지를 갖추고 시작하기"
 
-#: src/multiint.cpp:1822
+#: src/multiint.cpp:1829
 msgid "CHOOSE AI"
 msgstr ""
 
-#: src/multiint.cpp:1860
+#: src/multiint.cpp:1867
 msgid "Allow human players to join in this slot"
 msgstr ""
 
-#: src/multiint.cpp:1867
+#: src/multiint.cpp:1874
 msgid "Leave this slot unused"
 msgstr ""
 
-#: src/multiint.cpp:2324
+#: src/multiint.cpp:2331
 msgid "Team"
 msgstr "팀"
 
-#: src/multiint.cpp:2367
+#: src/multiint.cpp:2374
 msgid "You cannot change difficulty in a challenge"
 msgstr ""
 
-#: src/multiint.cpp:2367
+#: src/multiint.cpp:2374
 #, fuzzy
 msgid "Click to change difficulty"
 msgstr "인공 지능 난이도를 변경하려면 클릭하십시오"
 
-#: src/multiint.cpp:2382
+#: src/multiint.cpp:2389
 #, fuzzy
 msgid "Waiting for player"
 msgstr "다른 플레이어를 더 기다리고 있습니다"
 
 # same thing as player left??
-#: src/multiint.cpp:2382
+#: src/multiint.cpp:2389
 #, fuzzy
 msgid "Player is ready"
 msgstr "플레이어가 인터넷 연결 문제 또는 게임 버그 때문에 퇴장하였습니다"
 
-#: src/multiint.cpp:2382
+#: src/multiint.cpp:2389
 msgid "Click when ready"
 msgstr "준비되었을 때 클릭하십시오"
 
-#: src/multiint.cpp:2389
+#: src/multiint.cpp:2396
 msgid "READY?"
 msgstr "시작"
 
-#: src/multiint.cpp:2433
+#: src/multiint.cpp:2440
 msgid "PLAYERS"
 msgstr "플레이어"
 
-#: src/multiint.cpp:2468
+#: src/multiint.cpp:2475
 #, fuzzy
 msgid "Click to change to this slot"
 msgstr "사용자 설정을 변경하려면 클릭하십시오"
 
-#: src/multiint.cpp:2496
+#: src/multiint.cpp:2503
 msgid "Choose Team"
 msgstr "팀 선택"
 
-#: src/multiint.cpp:2526
+#: src/multiint.cpp:2533
 #, fuzzy
 msgid "Click to change player colour"
 msgstr "사용자 설정을 변경하려면 클릭하십시오"
 
-#: src/multiint.cpp:2554
+#: src/multiint.cpp:2561
 #, fuzzy
 msgid "Click to change player position"
 msgstr "사용자 설정을 변경하려면 클릭하십시오"
 
-#: src/multiint.cpp:2558
+#: src/multiint.cpp:2565
 #, fuzzy
 msgid "Click to change AI"
 msgstr "사용자 설정을 변경하려면 클릭하십시오"
 
-#: src/multiint.cpp:2624
+#: src/multiint.cpp:2631
 msgid "CHAT"
 msgstr "채팅"
 
-#: src/multiint.cpp:2656
+#: src/multiint.cpp:2663
 msgid "All players need to have the same mods to join your game."
 msgstr "모든 플레이어는 당신과 같은 mod를 사용해야만 게임에 참여할 수 있습니다"
 
-#: src/multiint.cpp:2697
+#: src/multiint.cpp:2704
 msgid "Connecting to the lobby server..."
 msgstr ""
 
-#: src/multiint.cpp:3000
+#: src/multiint.cpp:3009
 #, c-format
 msgid "*** password [%s] is now required! ***"
 msgstr "*** 이제 비밀번호 [%s] 가 요구됩니다! ***"
 
-#: src/multiint.cpp:3006
+#: src/multiint.cpp:3015
 msgid "*** password is NOT required! ***"
 msgstr "*** 비밀번호가 요구되지 않습니다! ***"
 
-#: src/multiint.cpp:3020
+#: src/multiint.cpp:3029
 msgid "This is a map-mod, it can change your playing experience!"
 msgstr ""
 
-#: src/multiint.cpp:3072
+#: src/multiint.cpp:3077
 msgid "Sorry! Failed to host the game."
 msgstr "죄송합니다! 게임 호스팅이 실패하였습니다"
 
-#: src/multiint.cpp:3195
+#: src/multiint.cpp:3200
 msgid "'Locked Teams' mode enabled"
 msgstr "'팀 잠금' 모드가 켜졌습니다"
 
-#: src/multiint.cpp:3223
-#: src/multiint.cpp:3292
+#: src/multiint.cpp:3228
+#: src/multiint.cpp:3297
 #: src/multimenu.cpp:1496
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "호스트가 %s를 게임에서 퇴장시켰습니다!"
 
-#: src/multiint.cpp:3358
+#: src/multiint.cpp:3363
 msgid "Host is Starting Game"
 msgstr "호스트가 게임을 시작하고 있습니다"
 
-#: src/multiint.cpp:3937
+#: src/multiint.cpp:3942
 msgid "UPnP has been enabled."
 msgstr ""
 
-#: src/multiint.cpp:3943
+#: src/multiint.cpp:3948
 msgid "UPnP detection faled. You must manually configure router yourself."
 msgstr ""
 
-#: src/multiint.cpp:3947
+#: src/multiint.cpp:3952
 #, fuzzy
 msgid "UPnP detection is in progress..."
 msgstr "해독 진행중..."
 
-#: src/multiint.cpp:3954
+#: src/multiint.cpp:3959
 msgid "UPnP detection disabled by user. Autoconfig of port 2100 will not happen."
 msgstr ""
 
-#: src/multiint.cpp:3960
+#: src/multiint.cpp:3965
 msgid "Hit the ready box to begin your challenge!"
 msgstr ""
 
-#: src/multiint.cpp:3964
+#: src/multiint.cpp:3969
 msgid "Press the start hosting button to begin hosting a game."
 msgstr ""
 
-#: src/multiint.cpp:4006
+#: src/multiint.cpp:4011
 msgid "Can't connect to lobby server!"
 msgstr ""
 
-#: src/multiint.cpp:4107
+#: src/multiint.cpp:4112
 #, c-format
 msgid "Mods: %s"
 msgstr ""
 
-#: src/multiint.cpp:4114
+#: src/multiint.cpp:4119
 msgid "Mods: None!"
 msgstr ""
 
-#: src/multiint.cpp:4124
+#: src/multiint.cpp:4129
 #, fuzzy, c-format
 msgid "Version: %s"
 msgstr "버젼 %s%s%s%s"
 
-#: src/multiint.cpp:4175
+#: src/multiint.cpp:4180
 #, fuzzy, c-format
 msgid "Click to take player slot %d"
 msgstr "사용자 설정을 변경하려면 클릭하십시오"
 
-#: src/multiint.cpp:4184
-#: src/multiint.cpp:4386
+#: src/multiint.cpp:4189
+#: src/multiint.cpp:4391
 msgid "Open"
 msgstr ""
 
-#: src/multiint.cpp:4184
-#: src/multiint.cpp:4387
+#: src/multiint.cpp:4189
+#: src/multiint.cpp:4392
 #, fuzzy
 msgid "Closed"
 msgstr "닫기"
 
-#: src/multiint.cpp:4234
+#: src/multiint.cpp:4239
 #, c-format
 msgid "Sending Map: %d%% "
 msgstr "맵을 보내는 중: %d%% "
 
-#: src/multiint.cpp:4242
+#: src/multiint.cpp:4247
 #, c-format
 msgid "Map: %d%% downloaded"
 msgstr "맵: %d%% 다운로드 완료"
 
-#: src/multiint.cpp:4268
+#: src/multiint.cpp:4273
 msgid "HOST"
 msgstr "호스트"
 
-#: src/multiint.cpp:4275
+#: src/multiint.cpp:4280
 #: src/multimenu.cpp:815
 msgid "Ping"
 msgstr "핑(Ping)"
@@ -14733,10 +14750,14 @@ msgstr "%s (%u)는 호환되지 않는 mod를 사용 중이며, 게임에서 퇴
 msgid "%s is joining the game"
 msgstr "%s가 게임에 참여하였습니다"
 
-#: src/multijoin.cpp:473
+#: src/multijoin.cpp:474
 #, fuzzy
 msgid "Server message:"
 msgstr "시스템 메시지:"
+
+#: src/multijoin.cpp:479
+msgid "There is an update to the game, please visit http://wz2100.net to download new version."
+msgstr ""
 
 #: src/multilimit.cpp:183
 msgid "Apply Defaults and Return To Previous Screen"
@@ -14928,12 +14949,12 @@ msgstr ""
 msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
 msgstr ""
 
-#: src/qtscriptfuncs.cpp:1597
+#: src/qtscriptfuncs.cpp:1596
 #: src/scriptfuncs.cpp:3263
 msgid "YOU ARE VICTORIOUS!"
 msgstr "당신이 승리했습니다!"
 
-#: src/qtscriptfuncs.cpp:1602
+#: src/qtscriptfuncs.cpp:1601
 #: src/scriptfuncs.cpp:3267
 msgid "YOU WERE DEFEATED!"
 msgstr "당신이 패배했습니다!"
@@ -15069,12 +15090,12 @@ msgstr "총 게임 시간소요 - %s"
 msgid "You cheated!"
 msgstr "당신이 치트했습니다!"
 
-#: src/scriptfuncs.cpp:9380
+#: src/scriptfuncs.cpp:9379
 #, c-format
 msgid "Beacon received from %s!"
 msgstr "%s이 표지를 보냈습니다!"
 
-#: src/scriptfuncs.cpp:9417
+#: src/scriptfuncs.cpp:9416
 #, c-format
 msgid "Beacon %d"
 msgstr "표지 %d"
@@ -15102,62 +15123,62 @@ msgid "%u unit selected"
 msgid_plural "%u units selected"
 msgstr[0] "유닛 %u개가 선택되었습니다"
 
-#: src/structure.cpp:2620
+#: src/structure.cpp:2629
 #, fuzzy
 msgid "Can't build anymore units, Command Control Limit Reached - Production Halted"
 msgstr "제어 한계에 도달하였습니다 - 생산이 중단되었습니다"
 
-#: src/structure.cpp:5613
-#: src/structure.cpp:5638
+#: src/structure.cpp:5621
+#: src/structure.cpp:5646
 #, fuzzy, c-format
 msgid "%s - %u Unit assigned - Damage %3.0f%%"
 msgid_plural "%s - %u Units assigned - Damage %3.0f%%"
 msgstr[0] "%s - 유닛 %u개 할당되었습니다"
 
-#: src/structure.cpp:5643
-#: src/structure.cpp:5711
-#: src/structure.cpp:5726
-#: src/structure.cpp:5740
+#: src/structure.cpp:5651
+#: src/structure.cpp:5719
+#: src/structure.cpp:5734
+#: src/structure.cpp:5748
 #, c-format
 msgid "%s - Damage %3.0f%%"
 msgstr "%s - 데미지 %3.0f%%"
 
-#: src/structure.cpp:5693
+#: src/structure.cpp:5701
 #, fuzzy, c-format
 msgid "%s - Connected %u of %u - Damage %3.0f%%"
 msgstr "%s - %u개 연결 되었습니다 (전체 %u개)"
 
-#: src/structure.cpp:5857
-#: src/structure.cpp:5902
+#: src/structure.cpp:5865
+#: src/structure.cpp:5910
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - 전자적으로 손상됨"
 
-#: src/structure.cpp:6153
+#: src/structure.cpp:6161
 msgid "Electronic Reward - Visibility Report"
 msgstr "전자적 보상 - 시계보고"
 
-#: src/structure.cpp:6193
+#: src/structure.cpp:6201
 msgid "Factory Reward - Propulsion"
 msgstr "공장 보상 - 추진력"
 
-#: src/structure.cpp:6217
+#: src/structure.cpp:6225
 msgid "Factory Reward - Body"
 msgstr "공장 보상 - 차체"
 
-#: src/structure.cpp:6241
+#: src/structure.cpp:6249
 msgid "Factory Reward - Weapon"
 msgstr "공장 보상 - 무기"
 
-#: src/structure.cpp:6250
+#: src/structure.cpp:6258
 msgid "Factory Reward - Nothing"
 msgstr "공장 보상 - 없음"
 
-#: src/structure.cpp:6278
+#: src/structure.cpp:6286
 msgid "Repair Facility Award - Repair"
 msgstr "수리 시설 상 - 수리"
 
-#: src/structure.cpp:6285
+#: src/structure.cpp:6293
 msgid "Repair Facility Award - Nothing"
 msgstr "수리 시설 상 - 없음"
 
@@ -15166,11 +15187,11 @@ msgstr "수리 시설 상 - 없음"
 msgid "Launch Transport"
 msgstr "수송선 출발"
 
-#: src/transporter.cpp:1378
+#: src/transporter.cpp:1377
 msgid "There is not enough room in the Transport!"
 msgstr ""
 
-#: src/transporter.cpp:1604
+#: src/transporter.cpp:1603
 msgid "Reinforcements landing"
 msgstr "지원군이 착륙하고 있습니다"
 
