@@ -160,8 +160,9 @@ static void runUpgrdHyperlink(void)
 
 	ShellExecuteW(NULL, L"open", wszDest, NULL, NULL, SW_SHOWNORMAL);
 #elif defined (WZ_OS_MAC)
-	// For the macs (I have no way of checking, so default to this)
-	system("open http://gamecheck.wz2100.net/mac");
+	char lbuf[250] = {'\0'};
+	ssprintf(lbuf, "open %s &", buf);
+	system(lbuf);
 #else
 	// for linux
 	char lbuf[250] = {'\0'};
