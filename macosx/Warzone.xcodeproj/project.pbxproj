@@ -132,7 +132,7 @@
 		02356E130BD3BD7E00E9A019 /* framing.c in Sources */ = {isa = PBXBuildFile; fileRef = 02356E110BD3BD7E00E9A019 /* framing.c */; };
 		02356E190BD3BD9700E9A019 /* ogg.h in Headers */ = {isa = PBXBuildFile; fileRef = 02356E170BD3BD9700E9A019 /* ogg.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		02356E1A0BD3BD9700E9A019 /* os_types.h in Headers */ = {isa = PBXBuildFile; fileRef = 02356E180BD3BD9700E9A019 /* os_types.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		023ECC500E9318D600D9E7C3 /* Theora.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 97AEAB330E8C1B5200A10721 /* Theora.framework */; };
+		023ECC500E9318D600D9E7C3 /* Theora.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 97AEAB330E8C1B5200A10721 /* Theora.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		024480240C5E4BEE00E1A641 /* utf.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 024480220C5E4BEE00E1A641 /* utf.cpp */; };
 		0246A05D0BD3C975004D1C70 /* Warzone.icns in Resources */ = {isa = PBXBuildFile; fileRef = 0246A05C0BD3C975004D1C70 /* Warzone.icns */; };
 		0246A0C20BD3CBD5004D1C70 /* debug.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A09F0BD3CBD5004D1C70 /* debug.cpp */; };
@@ -269,12 +269,12 @@
 		0246A2FB0BD3CCDC004D1C70 /* warcam.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A2850BD3CCDC004D1C70 /* warcam.cpp */; };
 		0246A2FC0BD3CCDC004D1C70 /* warzoneconfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A2870BD3CCDC004D1C70 /* warzoneconfig.cpp */; };
 		0246A2FD0BD3CCDC004D1C70 /* wrappers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A28B0BD3CCDC004D1C70 /* wrappers.cpp */; };
-		02581C810BD5AD1100957CBC /* Gettext.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 022B2F220BD55814002E64E3 /* Gettext.framework */; };
-		02581C820BD5AD1100957CBC /* Ogg.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 02356E090BD3BCFE00E9A019 /* Ogg.framework */; };
-		02581C830BD5AD1100957CBC /* PhysFS.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 02DDA8B10BD3C2F20049AB60 /* PhysFS.framework */; };
-		02581C840BD5AD1100957CBC /* Png.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 02356DC20BD3BBFC00E9A019 /* Png.framework */; };
-		02581C870BD5AD1100957CBC /* Vorbis.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 02DDA7EE0BD3C03F0049AB60 /* Vorbis.framework */; };
-		02581C880BD5AD1100957CBC /* Zlib.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 02356D830BD3BB4100E9A019 /* Zlib.framework */; };
+		02581C810BD5AD1100957CBC /* Gettext.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 022B2F220BD55814002E64E3 /* Gettext.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		02581C820BD5AD1100957CBC /* Ogg.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 02356E090BD3BCFE00E9A019 /* Ogg.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		02581C830BD5AD1100957CBC /* PhysFS.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 02DDA8B10BD3C2F20049AB60 /* PhysFS.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		02581C840BD5AD1100957CBC /* Png.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 02356DC20BD3BBFC00E9A019 /* Png.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		02581C870BD5AD1100957CBC /* Vorbis.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 02DDA7EE0BD3C03F0049AB60 /* Vorbis.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		02581C880BD5AD1100957CBC /* Zlib.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 02356D830BD3BB4100E9A019 /* Zlib.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		02AAD1440D9ED28C00248B0F /* i18n.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02AAD1400D9ED28C00248B0F /* i18n.cpp */; };
 		02BBB2090DA874F6002D438B /* exceptionhandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02BBB2070DA874F6002D438B /* exceptionhandler.cpp */; };
 		02C8AEF80BE68A5600E9D8A7 /* png_util.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02C8AEF60BE68A5600E9D8A7 /* png_util.cpp */; };
@@ -359,7 +359,7 @@
 		43119DC71353B005004C54BB /* pnglibconf.h in Headers */ = {isa = PBXBuildFile; fileRef = 43119DC31353AFD7004C54BB /* pnglibconf.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		43119DC81353B007004C54BB /* pngstruct.h in Headers */ = {isa = PBXBuildFile; fileRef = 43119DC41353AFD7004C54BB /* pngstruct.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4318439B1363955300BA2BC5 /* MiniUPnPc.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4318434B1363942200BA2BC5 /* MiniUPnPc.framework */; };
-		431843B71363958E00BA2BC5 /* MiniUPnPc.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 4318434B1363942200BA2BC5 /* MiniUPnPc.framework */; };
+		431843B71363958E00BA2BC5 /* MiniUPnPc.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 4318434B1363942200BA2BC5 /* MiniUPnPc.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		431843C8136395B000BA2BC5 /* bsdqueue.h in Headers */ = {isa = PBXBuildFile; fileRef = 43C18F7A114FF38B0028741B /* bsdqueue.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		431843C9136395B100BA2BC5 /* codelength.h in Headers */ = {isa = PBXBuildFile; fileRef = 43C18F7C114FF38B0028741B /* codelength.h */; };
 		431843CA136395B200BA2BC5 /* declspec.h in Headers */ = {isa = PBXBuildFile; fileRef = 43C18F7D114FF38B0028741B /* declspec.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -389,16 +389,16 @@
 		432BA00314980A370069E137 /* main_sdl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 436D248314963CF200BF74E3 /* main_sdl.cpp */; };
 		432BA00414980A380069E137 /* scrap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 436D248414963CF200BF74E3 /* scrap.cpp */; };
 		432BA01C14980A740069E137 /* SDL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 436D24B0149642AD00BF74E3 /* SDL.framework */; };
-		432BA02E14980A8A0069E137 /* SDL.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 436D24B0149642AD00BF74E3 /* SDL.framework */; };
+		432BA02E14980A8A0069E137 /* SDL.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 436D24B0149642AD00BF74E3 /* SDL.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		432BE3D810D9C90B00A486AB /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 432BE3C110D9C79400A486AB /* InfoPlist.strings */; };
 		432BE3F810D9CD4000A486AB /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 432BE3EE10D9CB4D00A486AB /* InfoPlist.strings */; };
 		432BE40210D9CF6F00A486AB /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 432BE3FE10D9CF1300A486AB /* InfoPlist.strings */; };
 		4333612211A07FB900380F5E /* QtCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4333611E11A07FB900380F5E /* QtCore.framework */; };
-		4333661B11A07FFF00380F5E /* QtCore.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 4333611E11A07FB900380F5E /* QtCore.framework */; };
+		4333661B11A07FFF00380F5E /* QtCore.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 4333611E11A07FB900380F5E /* QtCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		4336D8AA111DDF0F0012E8E4 /* random.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4336D8A8111DDF0F0012E8E4 /* random.cpp */; };
 		434117221495024C003F06FF /* wzconfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 434117201495024C003F06FF /* wzconfig.cpp */; };
 		43502D6D1347648300A02A1F /* GLExtensionWrangler.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43502D521347640700A02A1F /* GLExtensionWrangler.framework */; };
-		43502D77134764B000A02A1F /* GLExtensionWrangler.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 43502D521347640700A02A1F /* GLExtensionWrangler.framework */; };
+		43502D77134764B000A02A1F /* GLExtensionWrangler.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 43502D521347640700A02A1F /* GLExtensionWrangler.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		43502DC51347675300A02A1F /* glew.c in Sources */ = {isa = PBXBuildFile; fileRef = 43502DC21347675300A02A1F /* glew.c */; };
 		43502DC81347676600A02A1F /* glew.h in Headers */ = {isa = PBXBuildFile; fileRef = 43502DBD1347670800A02A1F /* glew.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		43502DCC1347681D00A02A1F /* AGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43502DCB1347681D00A02A1F /* AGL.framework */; };
@@ -415,7 +415,7 @@
 		435AE7B014B55C3400B01C85 /* WarzoneHelp in Resources */ = {isa = PBXBuildFile; fileRef = 435AE76A14B55C3400B01C85 /* WarzoneHelp */; };
 		435D3B6A149AC4A000E24F69 /* cursors_sdl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4301EC49149A3DE90054BABB /* cursors_sdl.cpp */; };
 		4366722A13D20B5700FE85BA /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43B8FD34127CB13F006F5A13 /* OpenGL.framework */; };
-		4366727413D211AE00FE85BA /* QuesoGLC.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 4366718213D1FD5600FE85BA /* QuesoGLC.framework */; };
+		4366727413D211AE00FE85BA /* QuesoGLC.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 4366718213D1FD5600FE85BA /* QuesoGLC.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		4366729613D2122700FE85BA /* QuesoGLC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4366718213D1FD5600FE85BA /* QuesoGLC.framework */; };
 		4371B60F11D93FD1005A67AB /* pngpriv.h in Headers */ = {isa = PBXBuildFile; fileRef = 4371B60D11D93FD0005A67AB /* pngpriv.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		437487CF14AE41C100ABC9C7 /* template.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4343651C149EA04800527137 /* template.cpp */; };
@@ -540,7 +540,7 @@
 		43CCDD8A14BA4DA400B21363 /* fribidi.h in Headers */ = {isa = PBXBuildFile; fileRef = 43CCDD6E14BA4DA400B21363 /* fribidi.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		43CCDD8B14BA4DA400B21363 /* wcwidth.c in Sources */ = {isa = PBXBuildFile; fileRef = 43CCDD6F14BA4DA400B21363 /* wcwidth.c */; };
 		43CCDDBE14BA53ED00B21363 /* fribidi.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43CCDD1B14BA474E00B21363 /* fribidi.framework */; };
-		43CCDEF414BA5E6200B21363 /* fribidi.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 43CCDD1B14BA474E00B21363 /* fribidi.framework */; };
+		43CCDEF414BA5E6200B21363 /* fribidi.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 43CCDD1B14BA474E00B21363 /* fribidi.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		43CCE06514BA636900B21363 /* netjoin_stub.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43CCE06414BA636900B21363 /* netjoin_stub.cpp */; };
 		43CEAE22141D71560001637B /* libfontconfig.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 43CEAE20141D71560001637B /* libfontconfig.a */; };
 		43CEAE23141D71570001637B /* libfreetype.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 43CEAE21141D71560001637B /* libfreetype.a */; };
@@ -601,7 +601,7 @@
 		43E189A811441135000870EB /* vasnprintf.c in Sources */ = {isa = PBXBuildFile; fileRef = 022B2F930BD55B50002E64E3 /* vasnprintf.c */; };
 		43E189A911441136000870EB /* version.c in Sources */ = {isa = PBXBuildFile; fileRef = 022B2F670BD55AE3002E64E3 /* version.c */; };
 		43F1D9801343F1C5001478EC /* QtScript.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43F1D96B1343F196001478EC /* QtScript.framework */; };
-		43F1D99A1343F1DE001478EC /* QtScript.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 43F1D96B1343F196001478EC /* QtScript.framework */; };
+		43F1D99A1343F1DE001478EC /* QtScript.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 43F1D96B1343F196001478EC /* QtScript.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		43F1D9D21343F542001478EC /* qtscript.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43F1D9CE1343F542001478EC /* qtscript.cpp */; };
 		43F1D9D31343F542001478EC /* qtscriptfuncs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43F1D9D01343F542001478EC /* qtscriptfuncs.cpp */; };
 		43F3001410D3410C00707B6E /* macosx.c in Sources */ = {isa = PBXBuildFile; fileRef = 43F3FFFE10D33F4D00707B6E /* macosx.c */; };
@@ -4055,6 +4055,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 0610;
 				ORGANIZATIONNAME = net.wz2100.;
 			};
 			buildConfigurationList = 02356D670BD3BB2600E9A019 /* Build configuration list for PBXProject "Warzone" */;
@@ -4520,7 +4521,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Config\nexport PATH=$PATH:/sw/bin:/opt/local/bin\npodir=\"../po\"\ndisfile=\"configs/LangDis\"\naresdir=\"${CONFIGURATION_BUILD_DIR}/Warzone.app/Contents/Resources/\"\nbresdir=\"locale/\"\nmessdir=\"LC_MESSAGES/\"\nmonme=\"warzone2100.mo\"\npolist=`ls -1 ${podir} | sed -n 's:\\.po$:&:p' | sed -e 's:\\.po::'`\ndislist=`cat ${disfile} | sed -n 's:^<::p'`\n\n# 1st san check\necho \"Checking for msgfmt...\"\nif [ -f build/notrans.dis ]; then\n    rm build/notrans.dis\n    echo \"warning: Gettext support has been disabled for this build because we could not find a binary.\" >&2\n    exit 0\nelif ! type -aP msgfmt; then\n    echo \"error: Fatal inability to properly translate messages.\" >&2\n    exit 1\nfi\n\n# Get the path\nmsgfmtpth=`type -P msgfmt`\n\n# 2nd san check\necho \"Checking for sanity...\"\nif ! $msgfmtpth --version; then\n    echo \"error: Fatal failure of san check.\" >&2\n    exit 1\nfi\n\n# Disable selected langs\nfor dislang in ${dislist}; do\n    echo \"Cleaning up for ${dislang} ...\"\n    rm -rfv \"${aresdir}${dislang}.lproj\"\ndone\n\n# Make .mo\nfor lang in ${polist}; do\n    if [ -d \"${aresdir}${lang}.lproj\" ]; then\n        echo \"Setting up for ${lang} ...\"\n        mkdir -p \"${aresdir}${bresdir}${lang}/${messdir}\"\n        $msgfmtpth -v -o \"${aresdir}${bresdir}${lang}/${messdir}${monme}\" \"${podir}/${lang}.po\"\n    fi\ndone\n\nexit 0";
+			shellScript = "# Config\nexport PATH=$PATH:/sw/bin:/usr/local/bin/:/opt/local/bin\npodir=\"../po\"\ndisfile=\"configs/LangDis\"\naresdir=\"${CONFIGURATION_BUILD_DIR}/Warzone.app/Contents/Resources/\"\nbresdir=\"locale/\"\nmessdir=\"LC_MESSAGES/\"\nmonme=\"warzone2100.mo\"\npolist=`ls -1 ${podir} | sed -n 's:\\.po$:&:p' | sed -e 's:\\.po::'`\ndislist=`cat ${disfile} | sed -n 's:^<::p'`\n\n# 1st san check\necho \"Checking for msgfmt...\"\nif [ -f build/notrans.dis ]; then\n    rm build/notrans.dis\n    echo \"warning: Gettext support has been disabled for this build because we could not find a binary.\" >&2\n    exit 0\nelif ! type -aP msgfmt; then\n    echo \"error: Fatal inability to properly translate messages.\" >&2\n    exit 1\nfi\n\n# Get the path\nmsgfmtpth=`type -P msgfmt`\n\n# 2nd san check\necho \"Checking for sanity...\"\nif ! $msgfmtpth --version; then\n    echo \"error: Fatal failure of san check.\" >&2\n    exit 1\nfi\n\n# Disable selected langs\nfor dislang in ${dislist}; do\n    echo \"Cleaning up for ${dislang} ...\"\n    rm -rfv \"${aresdir}${dislang}.lproj\"\ndone\n\n# Make .mo\nfor lang in ${polist}; do\n    if [ -d \"${aresdir}${lang}.lproj\" ]; then\n        echo \"Setting up for ${lang} ...\"\n        mkdir -p \"${aresdir}${bresdir}${lang}/${messdir}\"\n        $msgfmtpth -v -o \"${aresdir}${bresdir}${lang}/${messdir}${monme}\" \"${podir}/${lang}.po\"\n    fi\ndone\n\nexit 0";
 		};
 		4311544C14BA01F900332251 /* Docs */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -5603,6 +5604,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 43025ECA1120E0C0006C49B1 /* Gettext-Debug.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COMBINE_HIDPI_IMAGES = YES;
+				SDKROOT = macosx;
 			};
 			name = Debug;
 		};
@@ -5610,6 +5614,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 43025ECB1120E0C0006C49B1 /* Gettext-Release.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COMBINE_HIDPI_IMAGES = YES;
+				SDKROOT = macosx;
 			};
 			name = Release;
 		};
@@ -5617,6 +5624,24 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 43025DFE1120A4CA006C49B1 /* Project-All.xcconfig */;
 			buildSettings = {
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_INHIBIT_ALL_WARNINGS = NO;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
 			};
 			name = Debug;
 		};
@@ -5624,6 +5649,23 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 43025DFE1120A4CA006C49B1 /* Project-All.xcconfig */;
 			buildSettings = {
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_INHIBIT_ALL_WARNINGS = NO;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				SDKROOT = macosx;
 			};
 			name = Release;
 		};
@@ -5631,6 +5673,24 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 43025E001120A4CA006C49B1 /* Warzone-Debug.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_LABEL = YES;
+				GCC_WARN_UNUSED_VALUE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/external/glew/include",
+					"$(SRCROOT)/../3rdparty/SDL/mac/include",
+					/opt/X11/include,
+				);
+				HEADER_SEARCH_PATHS_QUOTED_1 = "";
+				HEADER_SEARCH_PATHS_QUOTED_2 = "";
+				SDKROOT = macosx;
 			};
 			name = Debug;
 		};
@@ -5638,6 +5698,24 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 43025E011120A4CA006C49B1 /* Warzone-Release.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_LABEL = YES;
+				GCC_WARN_UNUSED_VALUE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/external/glew/include",
+					"$(SRCROOT)/../3rdparty/SDL/mac/include",
+					/opt/X11/include,
+				);
+				HEADER_SEARCH_PATHS_QUOTED_1 = "";
+				HEADER_SEARCH_PATHS_QUOTED_2 = "";
+				SDKROOT = macosx;
 			};
 			name = Release;
 		};
@@ -5645,6 +5723,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 43025ED4112144C0006C49B1 /* Zlib-Debug.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COMBINE_HIDPI_IMAGES = YES;
+				SDKROOT = macosx;
 			};
 			name = Debug;
 		};
@@ -5652,6 +5733,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 43025ED5112144C0006C49B1 /* Zlib-Release.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COMBINE_HIDPI_IMAGES = YES;
+				SDKROOT = macosx;
 			};
 			name = Release;
 		};
@@ -5659,6 +5743,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 43025F231121DC68006C49B1 /* Png-Debug.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COMBINE_HIDPI_IMAGES = YES;
+				SDKROOT = macosx;
 			};
 			name = Debug;
 		};
@@ -5666,6 +5753,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 43025F241121DC68006C49B1 /* Png-Release.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COMBINE_HIDPI_IMAGES = YES;
+				SDKROOT = macosx;
 			};
 			name = Release;
 		};
@@ -5673,6 +5763,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 43025F061121D267006C49B1 /* Ogg-Debug.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COMBINE_HIDPI_IMAGES = YES;
+				SDKROOT = macosx;
 			};
 			name = Debug;
 		};
@@ -5680,6 +5773,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 43025F071121D267006C49B1 /* Ogg-Release.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COMBINE_HIDPI_IMAGES = YES;
+				SDKROOT = macosx;
 			};
 			name = Release;
 		};
@@ -5687,6 +5783,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 43025F2B1121F965006C49B1 /* Vorbis-Debug.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COMBINE_HIDPI_IMAGES = YES;
+				SDKROOT = macosx;
 			};
 			name = Debug;
 		};
@@ -5694,6 +5793,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 43025F2C1121F965006C49B1 /* Vorbis-Release.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COMBINE_HIDPI_IMAGES = YES;
+				SDKROOT = macosx;
 			};
 			name = Release;
 		};
@@ -5701,6 +5803,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 43025F301121FEC7006C49B1 /* PhysFS-Debug.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COMBINE_HIDPI_IMAGES = YES;
+				SDKROOT = macosx;
 			};
 			name = Debug;
 		};
@@ -5708,6 +5813,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 43025F311121FEC7006C49B1 /* PhysFS-Release.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COMBINE_HIDPI_IMAGES = YES;
+				SDKROOT = macosx;
 			};
 			name = Release;
 		};
@@ -5736,6 +5844,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 431843631363946800BA2BC5 /* MiniUPnPc-Debug.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COMBINE_HIDPI_IMAGES = YES;
+				SDKROOT = macosx;
 			};
 			name = Debug;
 		};
@@ -5743,6 +5854,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 431843631363946800BA2BC5 /* MiniUPnPc-Debug.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COMBINE_HIDPI_IMAGES = YES;
+				SDKROOT = macosx;
 			};
 			name = StaticAnalyzer;
 		};
@@ -5750,6 +5864,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 431843641363946800BA2BC5 /* MiniUPnPc-Release.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COMBINE_HIDPI_IMAGES = YES;
+				SDKROOT = macosx;
 			};
 			name = Release;
 		};
@@ -5757,6 +5874,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 43502D31134763D700A02A1F /* Glew-Debug.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COMBINE_HIDPI_IMAGES = YES;
+				SDKROOT = macosx;
 			};
 			name = Debug;
 		};
@@ -5764,6 +5884,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 43502D31134763D700A02A1F /* Glew-Debug.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COMBINE_HIDPI_IMAGES = YES;
+				SDKROOT = macosx;
 			};
 			name = StaticAnalyzer;
 		};
@@ -5771,6 +5894,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 43502D32134763D700A02A1F /* Glew-Release.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COMBINE_HIDPI_IMAGES = YES;
+				SDKROOT = macosx;
 			};
 			name = Release;
 		};
@@ -5778,6 +5904,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 4366712D13D1FCC300FE85BA /* QuesoGLC-Debug.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COMBINE_HIDPI_IMAGES = YES;
+				SDKROOT = macosx;
 			};
 			name = Debug;
 		};
@@ -5785,6 +5914,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 4366712D13D1FCC300FE85BA /* QuesoGLC-Debug.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COMBINE_HIDPI_IMAGES = YES;
+				SDKROOT = macosx;
 			};
 			name = StaticAnalyzer;
 		};
@@ -5792,6 +5924,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 4366712E13D1FCC300FE85BA /* QuesoGLC-Release.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COMBINE_HIDPI_IMAGES = YES;
+				SDKROOT = macosx;
 			};
 			name = Release;
 		};
@@ -5799,6 +5934,23 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 43025DFE1120A4CA006C49B1 /* Project-All.xcconfig */;
 			buildSettings = {
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_INHIBIT_ALL_WARNINGS = NO;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				SDKROOT = macosx;
 			};
 			name = StaticAnalyzer;
 		};
@@ -5806,6 +5958,24 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 43025E021120A4CA006C49B1 /* Warzone-StaticAnalyzer.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_LABEL = YES;
+				GCC_WARN_UNUSED_VALUE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/external/glew/include",
+					"$(SRCROOT)/../3rdparty/SDL/mac/include",
+					/opt/X11/include,
+				);
+				HEADER_SEARCH_PATHS_QUOTED_1 = "";
+				HEADER_SEARCH_PATHS_QUOTED_2 = "";
+				SDKROOT = macosx;
 			};
 			name = StaticAnalyzer;
 		};
@@ -5820,6 +5990,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 43025ECA1120E0C0006C49B1 /* Gettext-Debug.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COMBINE_HIDPI_IMAGES = YES;
+				SDKROOT = macosx;
 			};
 			name = StaticAnalyzer;
 		};
@@ -5827,6 +6000,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 43025ED4112144C0006C49B1 /* Zlib-Debug.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COMBINE_HIDPI_IMAGES = YES;
+				SDKROOT = macosx;
 			};
 			name = StaticAnalyzer;
 		};
@@ -5834,6 +6010,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 43025F061121D267006C49B1 /* Ogg-Debug.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COMBINE_HIDPI_IMAGES = YES;
+				SDKROOT = macosx;
 			};
 			name = StaticAnalyzer;
 		};
@@ -5841,6 +6020,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 43025F231121DC68006C49B1 /* Png-Debug.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COMBINE_HIDPI_IMAGES = YES;
+				SDKROOT = macosx;
 			};
 			name = StaticAnalyzer;
 		};
@@ -5848,6 +6030,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 43025F2B1121F965006C49B1 /* Vorbis-Debug.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COMBINE_HIDPI_IMAGES = YES;
+				SDKROOT = macosx;
 			};
 			name = StaticAnalyzer;
 		};
@@ -5855,6 +6040,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 43025F301121FEC7006C49B1 /* PhysFS-Debug.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COMBINE_HIDPI_IMAGES = YES;
+				SDKROOT = macosx;
 			};
 			name = StaticAnalyzer;
 		};
@@ -5862,6 +6050,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 43025F3D11221018006C49B1 /* Theora-Debug.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COMBINE_HIDPI_IMAGES = YES;
+				SDKROOT = macosx;
 			};
 			name = StaticAnalyzer;
 		};
@@ -5869,6 +6060,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 433A44F715C6CA4000D1856A /* CS-ID.xcconfig */;
 			buildSettings = {
+				GCC_WARN_UNUSED_VALUE = NO;
 				PRODUCT_NAME = "Make DMGs for Release";
 			};
 			name = StaticAnalyzer;
@@ -5898,6 +6090,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 43CCDD9514BA502600B21363 /* Fribidi-Debug.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COMBINE_HIDPI_IMAGES = YES;
+				OTHER_LDFLAGS = "-Wl,-undefined,error";
+				SDKROOT = macosx;
 			};
 			name = Debug;
 		};
@@ -5905,6 +6101,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 43CCDD9514BA502600B21363 /* Fribidi-Debug.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COMBINE_HIDPI_IMAGES = YES;
+				OTHER_LDFLAGS = "-Wl,-undefined,error";
+				SDKROOT = macosx;
 			};
 			name = StaticAnalyzer;
 		};
@@ -5912,6 +6112,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 43CCDD9614BA502600B21363 /* Fribidi-Release.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COMBINE_HIDPI_IMAGES = YES;
+				OTHER_LDFLAGS = "-Wl,-undefined,error";
+				SDKROOT = macosx;
 			};
 			name = Release;
 		};
@@ -5940,6 +6144,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 433A44F715C6CA4000D1856A /* CS-ID.xcconfig */;
 			buildSettings = {
+				GCC_WARN_UNUSED_VALUE = NO;
 				PRODUCT_NAME = "Make DMGs for Release";
 			};
 			name = Debug;
@@ -5948,6 +6153,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 433A44F715C6CA4000D1856A /* CS-ID.xcconfig */;
 			buildSettings = {
+				GCC_WARN_UNUSED_VALUE = NO;
 				PRODUCT_NAME = "Make DMGs for Release";
 			};
 			name = Release;
@@ -5970,6 +6176,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 43025F3D11221018006C49B1 /* Theora-Debug.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COMBINE_HIDPI_IMAGES = YES;
+				SDKROOT = macosx;
 			};
 			name = Debug;
 		};
@@ -5977,6 +6186,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 43025F3E11221018006C49B1 /* Theora-Release.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COMBINE_HIDPI_IMAGES = YES;
+				SDKROOT = macosx;
 			};
 			name = Release;
 		};

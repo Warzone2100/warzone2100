@@ -7,7 +7,7 @@ BuiltDLP="http://downloads.sourceforge.net/project/warzone2100/build-tools/mac/g
 MD5Sum="ba7984918fe0b36e2e7c786693e005f2"
 
 # Checks
-export PATH=$PATH:/sw/bin:/opt/local/bin
+export PATH=$PATH:/sw/bin:/usr/local/bin:/opt/local/bin
 if type -aP msgfmt; then
     echo "msgfmt exists, skipping"
     exit 0
