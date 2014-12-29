@@ -1,29 +1,61 @@
 Original game developed by Pumpkin Studios, and published by EIDOS Interactive.
 
-The Warzone 2100 Project team:
+The Warzone 2100 Project team (current GPL version):
 Christian Ohm (cybersphinx) 	programmer
 Per I. Mathisen (per / sendai)	programmer
+Stephen Swaney (stiv) programmer, web programmer
 - (Cyp) 	programmer
-- (dak180) 	MacOSX Packaging
-- (Safety0ff) 	programmer
-- (vexed) 	programmer
-Rene Jochum (fastdeath / pcdummy) 	Webmaster/Hosting, programmer
+- (vexed) 	programmer+++
 
 
 
-Current or former contributors to the GPL version:
+Current or former contributors to the GPL version (alphabetical order):
+- ([ARCH]T4l0n) Artist
+- (adimosh)
+- (Alpha93) Translator
+- (Amiral JCDG) Translator
+- (aubergine) Artist
+- (bornemix) Programming
+- (Bulldozer) MacOSX Packaging
+- (Delphinio) NTW
+- (duda) Artist & Maps
+- (DylanDog) AI script
+- (Emdek) Translator
+- (Flail13) flaME (Map Editor)
+- (Jorzi) Artist
+- (littlepig) Programming
+- (MaNGusT) Artist
+- (mecatxis) Translator
+- (mtomi78) Translator
+- (NanoTech) Mac programming
+- (NoQ) Maps / programming
+- (olexandr1986) Translator
+- (Olrox) Artist
+- (Rimbok) Translator
+- (Romano FC) Translator
+- (Saberuneko) Translator
+- (stwf) MacOSX Packaging
+- (themousemaster) Walkthrough / Docs
+- (Tucalipe) Translator
+- (urgood2 ) Translator
+- (Zerovirus) Artist
+- (Bulldozer) MacOSX Packaging
+- (dak180) 	former MacOSX Packaging
+- (Duha) Addons site
 - (Hatsjoe) 	2D Graphics
-- (Pseudonym404) 	Programming + original 64bit support
 - (i-NoD) 	Programming
+- (Pseudonym404) 	Programming + original 64bit support
+- (Safety0ff) 	programmer
 - (vs2k5) 	Programming
 Adam Holland (coppercore) 	Testing
 Angus Lees (gus) 	Debian Packaging
 Ari Johnson (iamtheari) 	Programming and MacOSX Packaging + original MacOSX port
 Ben Russon (grizzly) 	Support
-Mr.Marney (Berg) 	Models, textures
+Mr.Marney (Berg) 	Models, textures, Site theme designer, programmer
 Ben Latimore (BlueMaxima) 	guide/manual
 Bruce V. Edwards (cathuria) 	2D/3D Graphics
 Carl Hee (Watermelon) 	Programming + Multiturrets
+Christian Scholz (cnceo)	2D Graphics
 Denis Dupeyron (charun) 	Programming
 Dennis Luxen (pret) 	Programming
 Dennis Schridde (devurandom) 	Programming and general Linux and Windows Packaging
@@ -32,25 +64,30 @@ Dmitri Shuralyov (shurcool) 	Programming
 Don Edwards 	2D Graphics support
 Elio Gubser (elio, ohyeh) 	2D Graphics
 Freddie Witherden (EvilGuru) 	Programming and MacOSX Packaging
+Garrett Wiens-Kind (Neuralize) Artist
 Gerard Krol (gerard_) 	Programming, Textures
 Giel van Schijndel (Giel) 	Programming and Debian Linux and Windows Packaging
 Guangcong Luo (Zarel) 	Programming, Balancing, and Documentation
 Hylke van der Schaaf (TheNoid) 	Programming
+Ivan Vasilov (Wolftrak) MacOSX Packaging
 Kevin Malec (Kevin`) 	Websupport
 Kim Metcalfe (lav-coyote25) 	Documentation, Maps and Support
 Marcus Rast (charon) 	Programming
 Martin Koller (mkoller) 	Programming
 Mike Gilmore (Chojun) 	Programming
 Phil Procario (GrimMoroe, grimandmandy) 	3D Graphics
+Rene Jochum (fastdeath / pcdummy) 	former Webmaster, programmer
 Rodolphe Suescun (rodzilla) 	Programming
 Roman C. troman 	Programming
 Scott Balneaves (sbalneav) 	Programming
 Stefan Huehner (shuehner) 	Programming + original 64bit support
 Steven Koenig (kreuvf) 	Documentation, translation
 Thomas Barlow (Mysteryem) 	3D Graphics
-Tim Perrei (kamaze) 	Webmaster/Hosting, Programming
+Tim Perrei (kamaze) 	former Webmaster, Programming
+Vladimir Salnikov (crab_) Warzone Guide Database
 Victor Qamly (vqamly) 	Programming
-Christian Scholz (cnceo)	2D Graphics
+
+
 
 Non-project members whose content has been used in Warzone:
 Bart Everson 	Terrain textures
