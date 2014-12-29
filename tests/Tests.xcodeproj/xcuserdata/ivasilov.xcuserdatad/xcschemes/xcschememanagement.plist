@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>SchemeUserState</key>
+	<dict>
+		<key>All Tests.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>23</integer>
+		</dict>
+		<key>maptest.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>25</integer>
+		</dict>
+		<key>mkdir.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>24</integer>
+		</dict>
+		<key>modeltest.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>26</integer>
+		</dict>
+		<key>qslint.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>28</integer>
+		</dict>
+		<key>qtscripttest.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>27</integer>
+		</dict>
+	</dict>
+	<key>SuppressBuildableAutocreation</key>
+	<dict>
+		<key>430FEDB0150EA4580008DE82</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>43E7009A14F9829600D419C5</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>43E700A014F9830C00D419C5</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>43E700DF14F9862500D419C5</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>43E700FF14F9887F00D419C5</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>43E7011514F989BC00D419C5</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+	</dict>
+</dict>
+</plist>

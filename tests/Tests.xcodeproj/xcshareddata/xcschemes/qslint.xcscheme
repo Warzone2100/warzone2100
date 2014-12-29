@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
    LastUpgradeVersion = "0610"
-   version = "1.8">
+   version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
       buildImplicitDependencies = "YES">
@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "43F77C7710F0125E00E04615"
-               BuildableName = "Make DMGs for Release"
-               BlueprintName = "Make DMGs for Release"
-               ReferencedContainer = "container:Warzone.xcodeproj">
+               BlueprintIdentifier = "43E700FF14F9887F00D419C5"
+               BuildableName = "qslint"
+               BlueprintName = "qslint"
+               ReferencedContainer = "container:Tests.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -32,53 +32,49 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "02356D740BD3BB3400E9A019"
-            BuildableName = "Warzone.app"
-            BlueprintName = "Warzone"
-            ReferencedContainer = "container:Warzone.xcodeproj">
+            BlueprintIdentifier = "43E700FF14F9887F00D419C5"
+            BuildableName = "qslint"
+            BlueprintName = "qslint"
+            ReferencedContainer = "container:Tests.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
    <LaunchAction
-      selectedDebuggerIdentifier = ""
-      selectedLauncherIdentifier = "Xcode.IDEFoundation.Launcher.PosixSpawn"
-      displayScaleIsEnabled = "NO"
-      displayScale = "1.00"
+      selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
+      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       launchStyle = "0"
       useCustomWorkingDirectory = "NO"
-      buildConfiguration = "Release"
+      buildConfiguration = "Debug"
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
       allowLocationSimulation = "YES">
       <BuildableProductRunnable>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "02356D740BD3BB3400E9A019"
-            BuildableName = "Warzone.app"
-            BlueprintName = "Warzone"
-            ReferencedContainer = "container:Warzone.xcodeproj">
+            BlueprintIdentifier = "43E700FF14F9887F00D419C5"
+            BuildableName = "qslint"
+            BlueprintName = "qslint"
+            ReferencedContainer = "container:Tests.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>
    <ProfileAction
-      displayScaleIsEnabled = "NO"
-      displayScale = "1.00"
       shouldUseLaunchSchemeArgsEnv = "YES"
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       buildConfiguration = "Release"
       debugDocumentVersioning = "YES">
-      <MacroExpansion>
+      <BuildableProductRunnable>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "43F77C7710F0125E00E04615"
-            BuildableName = "Make DMGs for Release"
-            BlueprintName = "Make DMGs for Release"
-            ReferencedContainer = "container:Warzone.xcodeproj">
+            BlueprintIdentifier = "43E700FF14F9887F00D419C5"
+            BuildableName = "qslint"
+            BlueprintName = "qslint"
+            ReferencedContainer = "container:Tests.xcodeproj">
          </BuildableReference>
-      </MacroExpansion>
+      </BuildableProductRunnable>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>SchemeUserState</key>
+	<dict>
+		<key>All Tools.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>17</integer>
+		</dict>
+		<key>map2lnd.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>21</integer>
+		</dict>
+		<key>map2png.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>18</integer>
+		</dict>
+		<key>map2preview.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>22</integer>
+		</dict>
+		<key>mapconv.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>19</integer>
+		</dict>
+		<key>mapinfo.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>20</integer>
+		</dict>
+	</dict>
+	<key>SuppressBuildableAutocreation</key>
+	<dict>
+		<key>438C94E3149BD19D001BAF3A</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>438C952C149BD22C001BAF3A</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>438C953C149BD26C001BAF3A</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>438C9544149BD280001BAF3A</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>438C954C149BD290001BAF3A</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>438C9613149BDA19001BAF3A</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+	</dict>
+</dict>
+</plist>
