@@ -1,4 +1,4 @@
-2014-12-??: Version 3.1.2
+2014-12-29: Version 3.1.2
  * General:
    * Change: Some updated textures and models (commit:90f9ef01e8c684792507c49c86c99b1f72db473b)
    * Change: No longer enforce a 255 max limit on number of structure types (commit:8f7b9c8f07502c2e0cb86fd2c7d6085dfae1896d, ticket:4205)
@@ -6,8 +6,8 @@
    * Fix: Throttling of danger function was not working (commit:9827d7a2a99602016d55c9cc8cb18d375fb7b5a8, ticket:4212)
    * Fix: Stop auto-repair from repairing unfinished structures (commit:8f7b9c8f07502c2e0cb86fd2c7d6085dfae1896d, ticket:4205)
    * Fix: Fix wall rotation bug (commit:b562febeec102801e098a69c484fdc5c65fbdec3)
-   * Fix: Highground map for balance issues (commit: )
-   * Fix: Update the Roughness map to improve terrain texturing (commit: )
+   * Fix: Highground map for balance issues (commit:ec99d98a47fc25f5b1e2193bdf6c7a2d39faf712)
+   * Fix: Update the Roughness map to improve terrain texturing (commit:9eb558eba4d2ce66569ea69592836231bc87e1ae)
    * Fix: Add some Host & client version checks (commit:b92a1d9328223f50911833fe5a0aa285bc3fd02c commit:3e746930ebe6d5f8de759f899eb31fe62d32493a)
    * Fix: Add missing bitmaps to distribution packages (commit:992dcecac2a4aefab6d6283abe2d7b3465c9042a)
    * Fix: Add missing bison/flex files to distribution packages (commit:63b1860973138ad8d0b4642599bce874cf72ac28, ticket:4151)
