@@ -812,7 +812,7 @@ bool OverrideRPTDirectory(char *newPath)
 	wcscat(buf, L"\\logs\\"); // stuff it in the logs directory
 	wcscat(buf, L"Warzone2100.RPT");
 	ResetRPTDirectory(buf);
-#elif defined(WZ_OS_UNIX)
+#elif defined(WZ_OS_UNIX) && !defined(WZ_OS_MAC)
 	sstrcpy(WritePath, newPath);
 #endif
 	return true;
