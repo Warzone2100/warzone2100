@@ -6,7 +6,7 @@
 # Dennis Schridde <devurandom@gna.org>, 2007.
 # Martin Koller <koller@etm.at>, 2007.
 # Martin Koller <m.koller@surfeu.at>, 2007.
-# Steven \"Kreuvf\" Koenig <kreuvf@wz2100.net>, 2008-2012.
+# Steven \"Kreuvf\" Koenig <translations@kreuvf.de>, 2008-2014.
 # raymond, 2011.
 # Markus Enzenberger, 2013.
 msgid ""
@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2014-12-28 21:38+0100\n"
-"PO-Revision-Date: 2014-12-31 14:52+0100\n"
+"PO-Revision-Date: 2014-12-31 18:42+0100\n"
 "Last-Translator: Steven 'Kreuvf' Koenig <translations@kreuvf.de>\n"
 "Language-Team: Deutsch <warzone2100-project@lists.sourceforge.net>\n"
 "Language: \n"
@@ -552,21 +552,21 @@ msgstr "Neuer Systemturm verfügbar"
 #: data/base/messages/resmessages12.rmsg:60
 #: data/mp/messages/resmessages12.rmsg:54
 msgid "Counter-battery turret detects enemy indirect fire batteries"
-msgstr "Counter Battery-Turm ortet feindliche, indirekt-feuernde Stellungen"
+msgstr "Counter-Battery-Turm ortet feindliche indirektfeuernde Stellungen"
 
 #: data/base/messages/resmessages12.rmsg:61
 #: data/base/messages/resmessagesall.rmsg:83
 #: data/mp/messages/resmessages12.rmsg:55
 #: data/mp/messages/resmessagesall.rmsg:95
 msgid "Orders assigned indirect fire units to fire at the enemy batteries"
-msgstr "Weist die zugewiesenen, indirekt-feuernden Einheiten an auf Feindstellungen zu feuern"
+msgstr "Weist die zugewiesenen indirektfeuernden Einheiten an auf Feindstellungen zu feuern"
 
 #: data/base/messages/resmessages12.rmsg:62
 #: data/base/messages/resmessagesall.rmsg:84
 #: data/mp/messages/resmessages12.rmsg:56
 #: data/mp/messages/resmessagesall.rmsg:96
 msgid "Counter-battery fire continues until enemy battery is suppressed"
-msgstr "Counter-battery-Feuer hält an bis die feindliche Stellung vernichtet ist"
+msgstr "Counter-battery-Feuer hält an, bis die feindliche Stellung vernichtet ist"
 
 #: data/base/messages/resmessages12.rmsg:70
 #: data/base/messages/resmessages23.rmsg:48
@@ -726,7 +726,7 @@ msgstr "Neuer Waffenturm verfügbar"
 #: data/base/messages/resmessages12.rmsg:104
 #: data/mp/messages/resmessages12.rmsg:94
 msgid ".50-calibre heavy machinegun"
-msgstr "Schweres 12.7mm-Maschinengewehr"
+msgstr "Schweres 12,7-mm-Maschinengewehr"
 
 #: data/base/messages/resmessages12.rmsg:105
 #: data/base/messages/resmessages1.rmsg:523
@@ -868,7 +868,7 @@ msgstr "Maschinengewehrverbesserung"
 #: data/base/messages/resmessages12.rmsg:115
 #: data/mp/messages/resmessages12.rmsg:104
 msgid "Chaingun mechanism replaces belt-feed"
-msgstr "Ketten-Lademechanismus ersetzt Munitionsgurte"
+msgstr "Kettenlademechanismus ersetzt Munitionsgurte"
 
 #: data/base/messages/resmessages12.rmsg:116
 #: data/base/messages/resmessages23.rmsg:149
@@ -926,7 +926,7 @@ msgstr "Alle Maschinengewehre werden automatisch aufgerüstet"
 #: data/mp/messages/strings/resstrings.txt:828
 #: data/mp/messages/strings/resstrings.txt:934
 msgid "New Indirect Fire Weapon Available"
-msgstr "Neue indirekt-feuernde Waffe verfügbar"
+msgstr "Neue indirektfeuernde Waffe verfügbar"
 
 #: data/base/messages/resmessages12.rmsg:126
 #: data/base/messages/resmessages2.rmsg:764
@@ -1128,7 +1128,7 @@ msgstr "Erhöht Feuerrate von Geschützen"
 #: data/base/messages/resmessages12.rmsg:192
 #: data/mp/messages/resmessages12.rmsg:174
 msgid "Armor-Piercing Fin-Stabilized Discarding Sabot"
-msgstr "Panzerbrechende, seitenleitwerk-stabilisierte Treibspiegelgeschosse"
+msgstr "Panzerbrechende seitenleitwerkstabilisierte Treibspiegelgeschosse"
 
 #: data/base/messages/resmessages12.rmsg:193
 #: data/base/messages/resmessages1.rmsg:490
@@ -2059,7 +2059,7 @@ msgstr "Amphibischer Hoverantrieb"
 #: data/mp/messages/resmessages1.rmsg:385
 #: data/mp/messages/resmessages1.rmsg:405
 msgid "Speed: Fast"
-msgstr "Geschwindigkeit: Schnell"
+msgstr "Geschwindigkeit: schnell"
 
 #: data/base/messages/resmessages1.rmsg:425
 #: data/base/messages/resmessages1.rmsg:447
@@ -2127,17 +2127,17 @@ msgstr "Radantrieb"
 #: data/base/messages/resmessages1.rmsg:456
 #: data/mp/messages/resmessages1.rmsg:414
 msgid "Light Cannon firing 40mm rounds"
-msgstr "Leichtes Geschütz mit 40mm-Geschossen"
+msgstr "Leichtes Geschütz mit 40-mm-Geschossen"
 
 #: data/base/messages/resmessages1.rmsg:467
 #: data/mp/messages/resmessages1.rmsg:424
 msgid "Medium Cannon firing 76mm rounds"
-msgstr "Mittleres Geschütz mit 76mm-Geschossen"
+msgstr "Mittleres Geschütz mit 76-mm-Geschossen"
 
 #: data/base/messages/resmessages1.rmsg:478
 #: data/mp/messages/resmessages1.rmsg:434
 msgid "Heavy Cannon firing 120 mm rounds"
-msgstr "Schweres Geschütz mit 120mm-Geschossen"
+msgstr "Schweres Geschütz mit 120-mm-Geschossen"
 
 #: data/base/messages/resmessages1.rmsg:489
 #: data/mp/messages/resmessages1.rmsg:444
@@ -2147,7 +2147,7 @@ msgstr "Hochexplosive Antipanzergeschosse für Geschütze"
 #: data/base/messages/resmessages1.rmsg:500
 #: data/mp/messages/resmessages1.rmsg:454
 msgid "Flame-thrower firing Propylene Oxide gel"
-msgstr "Flammenwerfer verschießt Propylenoxid-Gel"
+msgstr "Flammenwerfer verschießt Propylenoxidgel"
 
 #: data/base/messages/resmessages1.rmsg:501
 #: data/base/messages/resmessages2.rmsg:655
@@ -2168,7 +2168,7 @@ msgstr "Rumpfpunkte: sehr niedrig"
 #: data/base/messages/resmessages1.rmsg:511
 #: data/mp/messages/resmessages1.rmsg:464
 msgid "Propylene Oxide gel treated to burn at higher temperatures"
-msgstr "Behandeltes Propylenoxid-Gel brennt heißer"
+msgstr "Behandeltes Propylenoxidgel brennt heißer"
 
 #: data/base/messages/resmessages1.rmsg:512
 #: data/base/messages/resmessages2.rmsg:666
@@ -2180,12 +2180,12 @@ msgstr "Erhöht Schaden von Flammenwerfern"
 #: data/base/messages/resmessages1.rmsg:522
 #: data/mp/messages/resmessages1.rmsg:474
 msgid "7.62mm machinegun"
-msgstr "7.62mm-Maschinengewehr"
+msgstr "7.62-mm-Maschinengewehr"
 
 #: data/base/messages/resmessages1.rmsg:533
 #: data/mp/messages/resmessages1.rmsg:484
 msgid "Twin 7.62mm machineguns"
-msgstr "7.62mm-Zwillings-Maschinengewehr"
+msgstr "7.62-mm-Zwillingsmaschinengewehr"
 
 #: data/base/messages/resmessages1.rmsg:544
 #: data/mp/messages/resmessages1.rmsg:494
@@ -2228,7 +2228,7 @@ msgstr "Erhöht Schaden von Mörsern"
 #: data/base/messages/resmessages1.rmsg:588
 #: data/mp/messages/resmessages1.rmsg:534
 msgid "Fast firing light anti-vehicle rockets"
-msgstr "Schnell feuernde, leichte Antifahrzeugraketen"
+msgstr "Schnell feuernde leichte Antifahrzeugraketen"
 
 #: data/base/messages/resmessages1.rmsg:589
 #: data/mp/messages/resmessages1.rmsg:535
@@ -2295,7 +2295,7 @@ msgstr "Verfolgt und leitet abgefeuerte Rakete in ihr Ziel"
 #: data/base/messages/resmessages1.rmsg:643
 #: data/mp/messages/resmessages1.rmsg:584
 msgid "High Explosive Anti-Tank warhead"
-msgstr "Hochexplosiver Antipanzer-Sprengkopf"
+msgstr "Hochexplosiver Antipanzersprengkopf"
 
 #: data/base/messages/resmessages1.rmsg:644
 #: data/base/messages/resmessages2.rmsg:798
@@ -2420,7 +2420,7 @@ msgstr "Neuer Systemturm verfügbar"
 #: data/base/messages/resmessages23.rmsg:60
 #: data/mp/messages/resmessages23.rmsg:54
 msgid "VTOL CB Tower detects enemy indirect fire batteries"
-msgstr "VTOL-CB-Turm ortet feindliche, indirekt-feuernde Stellungen"
+msgstr "VTOL-CB-Turm ortet feindliche indirektfeuernde Stellungen"
 
 #: data/base/messages/resmessages23.rmsg:61
 #: data/base/messages/resmessages2.rmsg:369
@@ -2438,7 +2438,7 @@ msgstr "Weist die zugewiesenen VTOLs an feindliche Stellungen anzugreifen"
 #: data/mp/messages/resmessages2.rmsg:336
 #: data/mp/messages/strings/resstrings.txt:512
 msgid "VTOLs attack until enemy battery is suppressed"
-msgstr "VTOL-Angriff hält an bis die feindliche Stellung vernichtet ist"
+msgstr "VTOL-Angriff hält an, bis die feindliche Stellung vernichtet ist"
 
 #: data/base/messages/resmessages23.rmsg:70
 #: data/base/messages/resmessages2.rmsg:378
@@ -2573,7 +2573,7 @@ msgstr "Alle VTOL-Schlagsensoren werden automatisch aufgerüstet"
 #: data/mp/messages/strings/resstrings.txt:694
 #: data/mp/messages/strings/resstrings.txt:712
 msgid "AA Upgrade"
-msgstr "Verbesserung der Luftabwehr"
+msgstr "Verbesserung der Flugabwehr"
 
 #: data/base/messages/resmessages23.rmsg:115
 #: data/base/messages/resmessages2.rmsg:709
@@ -2582,7 +2582,7 @@ msgstr "Verbesserung der Luftabwehr"
 #: data/mp/messages/resmessages2.rmsg:644
 #: data/mp/messages/strings/resstrings.txt:835
 msgid "Self-guided rocket powered shells"
-msgstr "Selbstgeleitete, raketengetriebene Geschosse"
+msgstr "Selbstgeleitete raketengetriebene Geschosse"
 
 #: data/base/messages/resmessages23.rmsg:116
 #: data/base/messages/resmessages2.rmsg:545
@@ -2590,7 +2590,7 @@ msgstr "Selbstgeleitete, raketengetriebene Geschosse"
 #: data/base/messages/strings/resstrings.txt:661
 #: data/mp/messages/strings/resstrings.txt:696
 msgid "Increases AA accuracy"
-msgstr "Erhöht Genauigkeit der Luftabwehr"
+msgstr "Erhöht Genauigkeit der Flugabwehr"
 
 #: data/base/messages/resmessages23.rmsg:117
 #: data/base/messages/resmessages2.rmsg:546
@@ -2607,7 +2607,7 @@ msgstr "Erhöht Genauigkeit der Luftabwehr"
 #: data/mp/messages/strings/resstrings.txt:697
 #: data/mp/messages/strings/resstrings.txt:715
 msgid "All AA weapons upgraded automatically"
-msgstr "Alle Luftabwehrwaffen werden automatisch aufgerüstet"
+msgstr "Alle Flugabwehrwaffen werden automatisch aufgerüstet"
 
 #: data/base/messages/resmessages23.rmsg:125
 #: data/base/messages/resmessages2.rmsg:598
@@ -2645,7 +2645,7 @@ msgstr "Verbesserung des Bombenvisiers"
 
 #: data/base/messages/resmessages23.rmsg:137
 msgid "Laser designator paints and guides bombs to the target"
-msgstr "Laser-Zielgeber markiert Ziele und leitet Bomben ins Ziel"
+msgstr "Laserzielgeber markiert Ziele und leitet Bomben ins Ziel"
 
 #: data/base/messages/resmessages23.rmsg:138
 #: data/base/messages/resmessages2.rmsg:622
@@ -2679,7 +2679,7 @@ msgstr "Geschoss ortet Hitzesignaturen und steuert auf diese zu"
 #: data/base/messages/resmessages23.rmsg:170
 #: data/mp/messages/resmessages23.rmsg:154
 msgid "105mm multi-barrel Howitzer may be assigned to a sensor"
-msgstr "Mehrläufige 105mm-Haubitze kann Sensoren zugewiesen werden"
+msgstr "Mehrläufige 105-mm-Haubitze kann Sensoren zugewiesen werden"
 
 #: data/base/messages/resmessages23.rmsg:171
 #: data/base/messages/resmessages2.rmsg:677
@@ -2723,7 +2723,7 @@ msgstr "Thermalpanzerung für Cyborgs verbessert"
 #: data/mp/messages/resmessages3.rmsg:4
 #: data/mp/messages/strings/resstrings.txt:46
 msgid "Heat resistant armored layers"
-msgstr "Hitzebeständige, gepanzerte Schichten"
+msgstr "Hitzebeständige gepanzerte Schichten"
 
 #: data/base/messages/resmessages2.rmsg:6
 #: data/base/messages/resmessages3.rmsg:6
@@ -2741,7 +2741,7 @@ msgstr "Thermalpanzerung erhöht"
 #: data/mp/messages/strings/resstrings.txt:36
 #: data/mp/messages/strings/resstrings.txt:607
 msgid "Layered dense composite alloys and energy-absorbing fibres"
-msgstr "Geschichtete, verdichtete Mischlegierungen und energieabsorbierende Fasern"
+msgstr "Geschichtete verdichtete Mischlegierungen und energieabsorbierende Fasern"
 
 #: data/base/messages/resmessages2.rmsg:27
 #: data/base/messages/strings/resstrings.txt:50
@@ -2750,28 +2750,28 @@ msgstr "Geschichtete, verdichtete Mischlegierungen und energieabsorbierende Fase
 #: data/mp/messages/strings/resstrings.txt:54
 #: data/mp/messages/strings/resstrings.txt:104
 msgid "Armed with Bunker Buster rocket"
-msgstr "Mit Bunker Buster-Rakete bewaffnet"
+msgstr "Mit Bunker-Buster-Rakete bewaffnet"
 
 #: data/base/messages/resmessages2.rmsg:38
 #: data/base/messages/strings/resstrings.txt:66
 #: data/mp/messages/resmessages2.rmsg:34
 #: data/mp/messages/strings/resstrings.txt:86
 msgid "Armed with Cyborg Assault Gun"
-msgstr "Bewaffnet mit Cyborg-Sturmgewehr"
+msgstr "Bewaffnet mit Cyborgsturmgewehr"
 
 #: data/base/messages/resmessages2.rmsg:49
 #: data/base/messages/strings/resstrings.txt:104
 #: data/mp/messages/resmessages2.rmsg:44
 #: data/mp/messages/strings/resstrings.txt:124
 msgid "High-tensile concrete reinforced with boron"
-msgstr "Hochbelastbarer, mit Bor verstärkter Hartbeton"
+msgstr "Hochbelastbarer mit Bor verstärkter Hartbeton"
 
 #: data/base/messages/resmessages2.rmsg:60
 #: data/base/messages/strings/resstrings.txt:120
 #: data/mp/messages/resmessages2.rmsg:54
 #: data/mp/messages/strings/resstrings.txt:140
 msgid "AA Site with Cyclone Flak Turret"
-msgstr "Luftabwehrstellung mit Cyclone FLAK"
+msgstr "Flugabwehrstellung mit Cyclone-FLAK"
 
 #: data/base/messages/resmessages2.rmsg:61
 #: data/base/messages/resmessages2.rmsg:83
@@ -2797,7 +2797,7 @@ msgstr "Greift automatisch VTOLs an"
 #: data/mp/messages/resmessages2.rmsg:64
 #: data/mp/messages/strings/resstrings.txt:146
 msgid "AA Site with Hurricane Gun Turret"
-msgstr "Luftabwehrstellung mit Hurricane FLAK"
+msgstr "Flugabwehrstellung mit Hurricane-FLAK"
 
 #: data/base/messages/resmessages2.rmsg:72
 #: data/base/messages/strings/resstrings.txt:127
@@ -2811,14 +2811,14 @@ msgstr "Greift automatisch VTOLs an"
 #: data/mp/messages/resmessages2.rmsg:74
 #: data/mp/messages/strings/resstrings.txt:152
 msgid "AA Site with Whirlwind Gun Turret"
-msgstr "Luftabwehrstellung mit Whirlwind"
+msgstr "Flugabwehrstellung mit Whirlwind"
 
 #: data/base/messages/resmessages2.rmsg:93
 #: data/base/messages/strings/resstrings.txt:114
 #: data/mp/messages/resmessages2.rmsg:84
 #: data/mp/messages/strings/resstrings.txt:134
 msgid "AA Site with Tornado Flak Turret"
-msgstr "Luftabwehrstellung mit Tornado FLAK"
+msgstr "Flugabwehrstellung mit Tornado-FLAK"
 
 #: data/base/messages/resmessages2.rmsg:104
 #: data/base/messages/strings/resstrings.txt:142
@@ -2864,14 +2864,14 @@ msgstr "Gepanzerte Mörsergrube für Pepperpot-Mörser"
 #: data/mp/messages/strings/resstrings.txt:204
 #: data/mp/messages/strings/resstrings.txt:210
 msgid "Armored Hellstorm howitzer emplacement"
-msgstr "Gepanzerte Stellung mit Hellstorm"
+msgstr "Gepanzerte Stellung mit Hellstorm-Haubitze"
 
 #: data/base/messages/resmessages2.rmsg:181
 #: data/base/messages/strings/resstrings.txt:192
 #: data/mp/messages/resmessages2.rmsg:164
 #: data/mp/messages/strings/resstrings.txt:216
 msgid "Armored strongpoint with Tank Killer rocket"
-msgstr "Gepanzerte Aufhängung mit Tank Killer"
+msgstr "Gepanzerte Aufhängung mit Tank-Killer-Rakete"
 
 #: data/base/messages/resmessages2.rmsg:182
 #: data/base/messages/resmessages2.rmsg:193
@@ -2960,7 +2960,7 @@ msgstr "Gepanzerte Aufhängung mit Inferno-Flammenwerfer"
 #: data/mp/messages/resmessages2.rmsg:244
 #: data/mp/messages/strings/resstrings.txt:336
 msgid "Armored hardpoint with Tank Killer AT missile"
-msgstr "Gepanzerte Aufhängung mit Tank Killer-Antipanzerrakete"
+msgstr "Gepanzerte Aufhängung mit Tank-Killer-Antipanzerrakete"
 
 #: data/base/messages/resmessages2.rmsg:280
 #: data/base/messages/strings/resstrings.txt:334
@@ -3032,7 +3032,7 @@ msgstr "Erhöht Produktionsrate von VTOL-Fabriken"
 #: data/mp/messages/resmessages3.rmsg:376
 #: data/mp/messages/strings/resstrings.txt:442
 msgid "All VTOL factories upgraded automatically"
-msgstr "Alle VTOL-Fabriken werden aufgerüstet"
+msgstr "Alle VTOL-Fabriken werden automatisch aufgerüstet"
 
 #: data/base/messages/resmessages2.rmsg:345
 #: data/base/messages/resmessages3.rmsg:422
@@ -3105,7 +3105,7 @@ msgstr "Kann als Zielgeber für indirektes Feuer verwendet werden"
 #: data/mp/messages/resmessages2.rmsg:334
 #: data/mp/messages/strings/resstrings.txt:510
 msgid "VTOL CB turret detects enemy indirect fire batteries"
-msgstr "VTOL-CB-Turm ortet feindliche, indirekt-feuernde Stellungen"
+msgstr "VTOL-CB-Turm ortet feindliche indirektfeuernde Stellungen"
 
 #: data/base/messages/resmessages2.rmsg:390
 #: data/base/messages/strings/resstrings.txt:500
@@ -3201,7 +3201,7 @@ msgstr "Thermalpanzerung für Fahrzeuge verbessert"
 #: data/mp/messages/resmessagesall.rmsg:654
 #: data/mp/messages/strings/resstrings.txt:617
 msgid "Heat-resistant armored layers"
-msgstr "Hitzebeständige, gepanzerte Schichten"
+msgstr "Hitzebeständige gepanzerte Schichten"
 
 #: data/base/messages/resmessages2.rmsg:446
 #: data/base/messages/resmessages3.rmsg:611
@@ -3301,7 +3301,7 @@ msgstr "Neuer FLAK-Turm verfügbar"
 #: data/mp/messages/resmessages2.rmsg:454
 #: data/mp/messages/strings/resstrings.txt:671
 msgid "Twin 80mm flak weapon"
-msgstr "80mm-Zwillings-Luftabwehrkanonen"
+msgstr "80-mm-Zwillingsflugabwehrkanonen"
 
 #: data/base/messages/resmessages2.rmsg:501
 #: data/base/messages/resmessages2.rmsg:512
@@ -3330,14 +3330,14 @@ msgstr "Nur Luftziele"
 #: data/mp/messages/resmessages2.rmsg:464
 #: data/mp/messages/strings/resstrings.txt:677
 msgid "Quad 80mm flak weapon"
-msgstr "Vierfache 80mm-Luftabwehrkanone"
+msgstr "Vierfache 80-mm-Flugabwehrkanone"
 
 #: data/base/messages/resmessages2.rmsg:522
 #: data/base/messages/strings/resstrings.txt:648
 #: data/mp/messages/resmessages2.rmsg:474
 #: data/mp/messages/strings/resstrings.txt:683
 msgid "30mm Anti-Aircraft machinegun"
-msgstr "30mm Luftabwehr-Maschinengewehr"
+msgstr "30-mm-Flugabwehrmaschinengewehr"
 
 #: data/base/messages/resmessages2.rmsg:533
 #: data/base/messages/strings/resstrings.txt:654
@@ -3345,7 +3345,7 @@ msgstr "30mm Luftabwehr-Maschinengewehr"
 #: data/mp/messages/resmessagesall.rmsg:594
 #: data/mp/messages/strings/resstrings.txt:689
 msgid "Quad 30mm Anti-Aircraft machinegun"
-msgstr "Vierfaches 30mm-Luftabwehr-Maschinengewehr"
+msgstr "Vierfaches 30-mm-Flugabwehrmaschinengewehr"
 
 #: data/base/messages/resmessages2.rmsg:544
 #: data/base/messages/strings/resstrings.txt:660
@@ -3375,7 +3375,7 @@ msgstr "Hochexplosive FLAK-Geschosse"
 #: data/base/messages/strings/resstrings.txt:671
 #: data/mp/messages/strings/resstrings.txt:706
 msgid "Increases AA Flak damage"
-msgstr "Erhöht Schaden von Luftabwehrgeschützen"
+msgstr "Erhöht Schaden von Flugabwehrgeschützen"
 
 #: data/base/messages/resmessages2.rmsg:557
 #: data/base/messages/resmessages3.rmsg:700
@@ -3384,21 +3384,21 @@ msgstr "Erhöht Schaden von Luftabwehrgeschützen"
 #: data/mp/messages/resmessages3.rmsg:636
 #: data/mp/messages/strings/resstrings.txt:707
 msgid "All AA flak weapons upgraded automatically"
-msgstr "Alle Luftabwehrgeschütze werden automatisch aufgerüstet"
+msgstr "Alle Flugabwehrgeschütze werden automatisch aufgerüstet"
 
 #: data/base/messages/resmessages2.rmsg:566
 #: data/base/messages/strings/resstrings.txt:678
 #: data/mp/messages/resmessages2.rmsg:514
 #: data/mp/messages/strings/resstrings.txt:713
 msgid "Recoil loaded AA ammunition hopper"
-msgstr "Rückstoßgeladener Munitionstrichter für Luftabwehrgeschütze"
+msgstr "Rückstoßgeladener Munitionstrichter für Flugabwehrgeschütze"
 
 #: data/base/messages/resmessages2.rmsg:567
 #: data/base/messages/resmessages3.rmsg:710
 #: data/base/messages/strings/resstrings.txt:679
 #: data/mp/messages/strings/resstrings.txt:714
 msgid "Increases AA ROF"
-msgstr "Erhöht Feuerrate von Luftabwehrgeschützen"
+msgstr "Erhöht Feuerrate von Flugabwehrgeschützen"
 
 # Gibt sicherlich einen deutschen Fachausdruck dafür, nur her damit -Kreuvf
 #: data/base/messages/resmessages2.rmsg:576
@@ -3410,7 +3410,7 @@ msgstr "Erhöht Feuerrate von Luftabwehrgeschützen"
 #: data/mp/messages/strings/resstrings.txt:720
 #: data/mp/messages/strings/resstrings.txt:726
 msgid "New Proximity Bomb Turret Available"
-msgstr "Neuer Näherungsbomben-Abwurfschacht verfügbar"
+msgstr "Neuer Näherungsbombenabwurfschacht verfügbar"
 
 #: data/base/messages/resmessages2.rmsg:577
 #: data/base/messages/strings/resstrings.txt:686
@@ -3456,7 +3456,7 @@ msgstr "Beste Ziele: Basisgebäude"
 #: data/mp/messages/resmessages2.rmsg:554
 #: data/mp/messages/strings/resstrings.txt:739
 msgid "Drops High Explosive Armor Piercing bombs"
-msgstr "Wirft hochexplosive, panzerbrechende Bomben ab"
+msgstr "Wirft hochexplosive panzerbrechende Bomben ab"
 
 #: data/base/messages/resmessages2.rmsg:611
 #: data/base/messages/strings/resstrings.txt:705
@@ -3476,7 +3476,7 @@ msgstr "Richtet sich nach Wärmeemissionen aus"
 #: data/mp/messages/resmessages2.rmsg:574
 #: data/mp/messages/strings/resstrings.txt:765
 msgid "Hyper-velocity automatic-cannon firing 88mm rounds"
-msgstr "Hochgeschwindigkeitsautomatikgeschütz mit 88mm-Geschossen"
+msgstr "Hochgeschwindigkeitsautomatikgeschütz mit 88-mm-Geschossen"
 
 #: data/base/messages/resmessages2.rmsg:634
 #: data/base/messages/strings/resstrings.txt:732
@@ -3490,14 +3490,14 @@ msgstr "Ersetzt mittleres Geschütz"
 #: data/mp/messages/resmessages2.rmsg:584
 #: data/mp/messages/strings/resstrings.txt:771
 msgid "76mm hyper-velocity quad-barrel automatic-cannon"
-msgstr "Vierläufiges 76mm-Hochgeschwindigkeitsautomatikgeschütz"
+msgstr "Vierläufiges 76-mm-Hochgeschwindigkeitsautomatikgeschütz"
 
 #: data/base/messages/resmessages2.rmsg:654
 #: data/base/messages/strings/resstrings.txt:758
 #: data/mp/messages/resmessages2.rmsg:594
 #: data/mp/messages/strings/resstrings.txt:797
 msgid "Heavy Flame-thrower firing Propylene Oxide gel"
-msgstr "Schwerer Flammenwerfer verschießt Propylenoxid-Gel"
+msgstr "Schwerer Flammenwerfer verschießt Propylenoxidgel"
 
 #: data/base/messages/resmessages2.rmsg:665
 #: data/base/messages/strings/resstrings.txt:766
@@ -3512,21 +3512,21 @@ msgstr "Behandeltes Propylenoxid brennt sehr viel heißer"
 #: data/mp/messages/resmessages2.rmsg:614
 #: data/mp/messages/strings/resstrings.txt:813
 msgid "105mm Howitzer may be assigned to a sensor"
-msgstr "105mm-Haubitze kann Sensoren zugewiesen werden"
+msgstr "105-mm-Haubitze kann Sensoren zugewiesen werden"
 
 #: data/base/messages/resmessages2.rmsg:687
 #: data/base/messages/strings/resstrings.txt:780
 #: data/mp/messages/resmessages2.rmsg:624
 #: data/mp/messages/strings/resstrings.txt:821
 msgid "155mm Howitzer may be assigned to a sensor"
-msgstr "155mm-Haubitze kann Sensoren zugewiesen werden"
+msgstr "155-mm-Haubitze kann Sensoren zugewiesen werden"
 
 #: data/base/messages/resmessages2.rmsg:698
 #: data/base/messages/strings/resstrings.txt:788
 #: data/mp/messages/resmessages2.rmsg:634
 #: data/mp/messages/strings/resstrings.txt:829
 msgid "105m Howitzer firing incendiaries, may be assigned to a sensor"
-msgstr "105mm-Haubitze mit Brandsätzen kann Sensoren zugewiesen werden"
+msgstr "105-mm-Haubitze mit Brandsätzen kann Sensoren zugewiesen werden"
 
 #: data/base/messages/resmessages2.rmsg:699
 #: data/base/messages/strings/resstrings.txt:789
@@ -3618,20 +3618,20 @@ msgstr "Panzerbrechende Projektile mit wolframummantelter Spitze"
 #: data/mp/messages/resmessages2.rmsg:684
 #: data/mp/messages/strings/resstrings.txt:901
 msgid "Improved chaingun mechanism"
-msgstr "Verbesserter Ketten-Lademechanismus"
+msgstr "Verbesserter Kettenlademechanismus"
 
 #: data/base/messages/resmessages2.rmsg:775
 #: data/base/messages/strings/resstrings.txt:906
 #: data/mp/messages/resmessages2.rmsg:704
 #: data/mp/messages/strings/resstrings.txt:951
 msgid "High Explosive Armor-Piercing Shells"
-msgstr "Hochexplosive, panzerbrechende Geschosse"
+msgstr "Hochexplosive panzerbrechende Geschosse"
 
 #: data/base/messages/resmessages2.rmsg:786
 #: data/base/messages/strings/resstrings.txt:944
 #: data/mp/messages/strings/resstrings.txt:989
 msgid "High Explosive Armor-Piercing warheads"
-msgstr "Hochexplosive, panzerbrechende Sprengköpfe"
+msgstr "Hochexplosive panzerbrechende Sprengköpfe"
 
 #: data/base/messages/resmessages2.rmsg:797
 #: data/base/messages/strings/resstrings.txt:966
@@ -3687,7 +3687,7 @@ msgstr "Gibt Cyborgs eingeschränkte Flugfähigkeit"
 #: data/base/messages/resmessages3.rmsg:40
 #: data/mp/messages/resmessages3.rmsg:36
 msgid "Jump Cyborgs can now be researched"
-msgstr "Sprung-Cyborgs können nun erforscht werden"
+msgstr "Sprungcyborgs können nun erforscht werden"
 
 #: data/base/messages/resmessages3.rmsg:60
 #: data/base/messages/resmessages3.rmsg:588
@@ -3744,7 +3744,7 @@ msgstr "Bewaffnet mit Flashlight-Laser"
 #: data/mp/messages/strings/resstrings.txt:97
 #: data/mp/messages/strings/resstrings.txt:103
 msgid "New Jump Cyborg Available"
-msgstr "Neuer Sprung-Cyborg verfügbar"
+msgstr "Neuer Sprungcyborg verfügbar"
 
 #: data/base/messages/resmessages3.rmsg:126
 #: data/mp/messages/resmessages3.rmsg:114
@@ -3754,7 +3754,7 @@ msgstr "Bewaffnet mit Lancer-Antipanzerrakete"
 #: data/base/messages/resmessages3.rmsg:137
 #: data/mp/messages/resmessages3.rmsg:124
 msgid "Armed with Cyborg assault gun"
-msgstr "Bewaffnet mit Cyborg-Sturmgewehr"
+msgstr "Bewaffnet mit Cyborgsturmgewehr"
 
 #: data/base/messages/resmessages3.rmsg:170
 #: data/mp/messages/resmessages3.rmsg:154
@@ -3774,7 +3774,7 @@ msgstr "Hochbelastbares Kunststoff-Hartbeton-Verbundmaterial"
 #: data/base/messages/resmessages3.rmsg:192
 #: data/mp/messages/resmessages3.rmsg:174
 msgid "Bonded metallic laminates formed into walls and defenses"
-msgstr "Ummantelte, metallische Verbundstoffe für Mauern und Verteidigungsanlagen"
+msgstr "Ummantelte metallische Verbundstoffe für Mauern und Verteidigungsanlagen"
 
 #: data/base/messages/resmessages3.rmsg:203
 #: data/mp/messages/resmessages3.rmsg:184
@@ -3784,7 +3784,7 @@ msgstr "Stellung mit Avenger-Boden-Luft-Lenkraketen"
 #: data/base/messages/resmessages3.rmsg:214
 #: data/mp/messages/resmessages3.rmsg:194
 msgid "SAM site with Vindicator missiles"
-msgstr "Stellung mit Vindicator-Boden-Luft-Raketen"
+msgstr "Stellung mit Vindicator-Boden-Luft-Lenkraketen"
 
 #: data/base/messages/resmessages3.rmsg:225
 #: data/mp/messages/resmessages3.rmsg:204
@@ -3911,7 +3911,6 @@ msgstr "Fortschrittliche Zielerkennungssysteme"
 msgid "Synaptic Link Scrambler technology"
 msgstr "Störtechnologie gegen synaptische Verbindungen"
 
-# eigentlich müsste es Greift [...] elektronisch an heißen, aber das klingt gestelzt -Kreuvf
 #: data/base/messages/resmessages3.rmsg:479
 #: data/mp/messages/resmessages3.rmsg:435
 #: data/mp/messages/resmessagesall.rmsg:305
@@ -4027,7 +4026,7 @@ msgstr "Sehr hohe Produktionskosten"
 #: data/mp/messages/resmessages3.rmsg:514
 #: data/mp/messages/strings/names.txt:960
 msgid "Gas Turbine Engine"
-msgstr "Gasturbinen-Motor"
+msgstr "Gasturbinenmotor"
 
 #: data/base/messages/resmessages3.rmsg:577
 #: data/mp/messages/resmessages3.rmsg:524
@@ -4063,7 +4062,7 @@ msgstr "Computer verfolgt Geschoss und führt es zur Zielposition"
 #: data/base/messages/resmessages3.rmsg:698
 #: data/mp/messages/resmessages3.rmsg:634
 msgid "High Explosive Armor Piercing Flak"
-msgstr "Hochexplosive, panzerbrechende FLAK"
+msgstr "Hochexplosive panzerbrechende FLAK"
 
 #: data/base/messages/resmessages3.rmsg:709
 #: data/mp/messages/resmessages3.rmsg:644
@@ -4092,7 +4091,7 @@ msgstr "Bomben richten sich aus und leiten sich selbst ins Ziel"
 #: data/base/messages/resmessages3.rmsg:742
 #: data/mp/messages/resmessages3.rmsg:674
 msgid "High-Velocity Armor-Piercing Fin-Stabilised Discarding Sabot"
-msgstr "Panzerbrechende, seitenleitwerk-stabilisierte Hochgeschwindigkeitstreibspiegelgeschosse"
+msgstr "Panzerbrechende seitenleitwerkstabilisierte Hochgeschwindigkeitstreibspiegelgeschosse"
 
 #: data/base/messages/resmessages3.rmsg:753
 #: data/base/messages/resmessages3.rmsg:786
@@ -4111,7 +4110,7 @@ msgstr "Computergelenkte Geschosse"
 #: data/base/messages/resmessages3.rmsg:775
 #: data/mp/messages/resmessages3.rmsg:704
 msgid "High Explosive Armor Piercing Shells"
-msgstr "Hochexplosive, panzerbrechende Geschosse"
+msgstr "Hochexplosive panzerbrechende Geschosse"
 
 #: data/base/messages/resmessages3.rmsg:796
 #: data/base/messages/resmessages3.rmsg:807
@@ -4177,7 +4176,7 @@ msgstr "Erhöht Schaden durch Laserwaffen"
 #: data/base/messages/resmessages3.rmsg:841
 #: data/mp/messages/resmessages3.rmsg:764
 msgid "Improved Energizer reduces laser recharge time"
-msgstr "Verbesserter Energiespeicher reduziert Laser-Ladezeiten"
+msgstr "Verbesserter Energiespeicher reduziert Laserladezeiten"
 
 #: data/base/messages/resmessages3.rmsg:842
 msgid "Increases Laser ROF"
@@ -4208,7 +4207,7 @@ msgstr "Antipanzerrakete"
 #: data/base/messages/resmessages3.rmsg:885
 #: data/mp/messages/resmessages3.rmsg:804
 msgid "Bunker buster missile"
-msgstr "Bunker Buster-Rakete"
+msgstr "Bunker-Buster-Rakete"
 
 #: data/base/messages/resmessages3.rmsg:895
 #: data/base/messages/resmessages3.rmsg:906
@@ -4255,7 +4254,7 @@ msgstr "Lenkrakete sucht aktiv Ziele und steuert auf diese zu"
 #: data/mp/messages/resmessages3.rmsg:664
 #: data/mp/messages/resmessages3.rmsg:834
 msgid "Low yield thermonuclear warhead"
-msgstr "Abgeschwächter, thermonuklearer Sprengkopf"
+msgstr "Abgeschwächter thermonuklearer Sprengkopf"
 
 #: data/base/messages/resmessages3.rmsg:919
 msgid "Increases Missile damage"
@@ -4331,7 +4330,7 @@ msgstr "Gestapelter Lenkraketenzuteiler ermöglicht schnelles Nachladen"
 #: data/base/messages/resmessages3.rmsg:995
 #: data/mp/messages/resmessages3.rmsg:904
 msgid "Self-guided rocket-powered shells"
-msgstr "Selbstgeleitete, raketengetriebene Geschosse"
+msgstr "Selbstgeleitete raketengetriebene Geschosse"
 
 #: data/base/messages/resmessages3.rmsg:1016
 #: data/base/messages/resmessages3.rmsg:1027
@@ -4396,7 +4395,7 @@ msgstr "Erhöht Schaden durch Magnetwaffen"
 #: data/base/messages/resmessages3.rmsg:1072
 #: data/mp/messages/resmessages3.rmsg:974
 msgid "Increased gauss output speeds up reload time"
-msgstr "Erhöhte Gauß-Abgabe verkürzt Nachladezeit"
+msgstr "Erhöhte Gaußabgabe verkürzt Nachladezeit"
 
 #: data/base/messages/resmessages3.rmsg:1073
 msgid "Increases Rail Gun ROF"
@@ -4450,7 +4449,7 @@ msgstr "Der VTOL kehrt zur angewählten Servicestation zur Bewaffnung zurück"
 #: data/base/messages/resmessagesall.rmsg:38
 #: data/mp/messages/resmessagesall.rmsg:34
 msgid "Battlefield repair unit"
-msgstr "Gefechtsfeld-Reparatureinheit"
+msgstr "Gefechtsfeldreparatureinheit"
 
 #: data/base/messages/resmessagesall.rmsg:39
 #: data/base/messages/strings/resstrings.txt:445
@@ -4524,7 +4523,7 @@ msgstr "Alle Sensoren werden automatisch aufgerüstet"
 #: data/base/messages/resmessagesall.rmsg:82
 #: data/mp/messages/resmessagesall.rmsg:94
 msgid "Counter-battery tower detects enemy indirect fire batteries"
-msgstr "Counter-battery-Türme orten feindliche, indirekt-feuernde Stellungen"
+msgstr "Counter-Battery-Türme orten feindliche indirektfeuernde Stellungen"
 
 #: data/base/messages/resmessagesall.rmsg:92
 #: data/mp/messages/resmessagesall.rmsg:113
@@ -4569,12 +4568,12 @@ msgstr "Antipanzerrakete"
 #: data/base/messages/resmessagesall.rmsg:137
 #: data/mp/messages/resmessagesall.rmsg:154
 msgid "High explosive shaped charge missile"
-msgstr "Hochexplosive Hohlladungs-Rakete"
+msgstr "Hochexplosive Hohlladungsrakete"
 
 #: data/base/messages/resmessagesall.rmsg:148
 #: data/mp/messages/resmessagesall.rmsg:164
 msgid "Laser designator paints and guides rounds to the target"
-msgstr "Laser-Zielgeber markiert Ziele und leitet Geschosse ins Ziel"
+msgstr "Laserzielgeber markiert Ziele und leitet Geschosse ins Ziel"
 
 #: data/base/messages/strings/cam1strings.txt:3
 #: data/base/sequenceaudio/cam1/c001.txa:12
@@ -4642,7 +4641,7 @@ msgstr "Erkunden Sie nach der Landung die Ruinen und bergen Sie jegliche Artefak
 
 #: data/base/messages/strings/cam1strings.txt:23
 msgid "TRANSPORT MISSION: Investigate Research Center"
-msgstr "TRANSPORTERMISSION: Untersuchen des Forschungszentrums"
+msgstr "TRANSPORTERMISSION: Forschungszentrums untersuchen"
 
 #: data/base/messages/strings/cam1strings.txt:24
 msgid "Investigate the area and recover any artifacts present."
@@ -4769,7 +4768,7 @@ msgstr "Wir haben nun eine weitere Aufgabe für Sie."
 
 #: data/base/messages/strings/cam1strings.txt:70
 msgid "ALPHA BASE MISSION: Locate and Recover Artifacts"
-msgstr "ALPHABASISMISSION: Finden und Bergen von Artefakten"
+msgstr "ALPHABASISMISSION: Artefakte aufspüren und bergen"
 
 #: data/base/messages/strings/cam1strings.txt:71
 msgid "The first two zones are now secure."
@@ -4893,7 +4892,7 @@ msgstr "Anfängliche Analysen bestätigen, dass sie für das Projekt von großem
 
 #: data/base/messages/strings/cam1strings.txt:132
 msgid "Base Beta is under heavy attack, they may need assistance."
-msgstr "Die Beta-Basis liegt unter schwerem Beschuss, sie könnten Unterstützung brauchen."
+msgstr "Die Betabasis liegt unter schwerem Beschuss, sie könnten Unterstützung brauchen."
 
 #: data/base/messages/strings/cam1strings.txt:133
 msgid "We will send further updates as they arrive."
@@ -4933,7 +4932,7 @@ msgstr "Herzlichen Glückwunsch zu Ihrem Sieg über das New Paradigm, dieser Sek
 
 #: data/base/messages/strings/cam1strings.txt:151
 msgid "The Nexus Intruder Program was in the New Paradigm system."
-msgstr "Das NEXUS-Eindringlingsprogramm war in den Systemen des New Paradigm."
+msgstr "Das NEXUS-Eindringlingsprogramm befand sich in den Systemen des New Paradigm."
 
 #: data/base/messages/strings/cam1strings.txt:152
 msgid "We recorded two conversations with it, extracts follow..."
@@ -4972,7 +4971,7 @@ msgstr "BETABASISMISSION: Verteidigen und befestigen"
 #: data/base/messages/strings/cam2strings.txt:33
 #: data/base/sequenceaudio/cam2/c002.txa:17
 msgid "Be sure to fortify the perimeter and establish anti-aircraft defenses."
-msgstr "Stellen Sie sicher, dass die Umgebung ausreichend befestigt ist und errichten Sie Luftabwehranlagen."
+msgstr "Stellen Sie sicher, dass die Umgebung ausreichend befestigt ist und errichten Sie Flugabwehranlagen."
 
 #: data/base/messages/strings/cam2strings.txt:11
 #: data/base/messages/strings/cam2strings.txt:34
@@ -4982,7 +4981,7 @@ msgstr "Neue Technologien sind verfügbar."
 
 #: data/base/messages/strings/cam2strings.txt:14
 msgid "We are currently detecting coded bitstream signals."
-msgstr "Wir empfangen soeben kodierte Bitstrom-Signale."
+msgstr "Wir empfangen soeben kodierte Bitstromsignale."
 
 #: data/base/messages/strings/cam2strings.txt:15
 #: data/base/messages/strings/cam2strings.txt:39
@@ -4996,7 +4995,7 @@ msgstr "TRANSPORTMISSION: Transporter abgestürzt"
 
 #: data/base/messages/strings/cam2strings.txt:19
 msgid "Our transport carrying units from team Alpha Base has been shot down."
-msgstr "Unser Transporter mit Einheiten aus der Alpha-Basis ist abgeschossen worden."
+msgstr "Unser Transporter mit Einheiten aus der Alphabasis ist abgeschossen worden."
 
 #: data/base/messages/strings/cam2strings.txt:23
 msgid "It is under attack from The Collective at this location."
@@ -5028,7 +5027,7 @@ msgstr "BETABASISMISSION: Um jeden Preis halten"
 
 #: data/base/messages/strings/cam2strings.txt:38
 msgid "We are detecting coded bitstream signals from the Collective."
-msgstr "Wir empfangen kodierte Bitstrom-Signale vom Kollektiv."
+msgstr "Wir empfangen kodierte Bitstromsignale vom Kollektiv."
 
 #: data/base/messages/strings/cam2strings.txt:42
 msgid "BETA BASE MISSION: Hold At All Costs"
@@ -5098,7 +5097,7 @@ msgstr "TRANSPORTERMISSION: Zivilisten aus Sammellager retten"
 
 #: data/base/messages/strings/cam2strings.txt:69
 msgid "The Collective are processing and exterminating civilians at this base."
-msgstr "Das Kollektiv verarbeitet und vertilgt Zivilisten in dieser Basis."
+msgstr "Das Kollektiv verarbeitet und tötet Zivilisten in dieser Basis."
 
 #: data/base/messages/strings/cam2strings.txt:73
 msgid "You are to rescue the civilians."
@@ -5227,11 +5226,11 @@ msgstr "TRANSPORTERMISSION: Sicherheitszone einrichten"
 
 #: data/base/messages/strings/cam2strings.txt:132
 msgid "We can confirm a missile is heading for Alpha Base."
-msgstr "Wir können bestätigen, dass sich eine Rakete auf dem Weg zur Alpha-Basis befindet."
+msgstr "Wir können bestätigen, dass sich eine Rakete im Anflug auf die Alphabasis befindet."
 
 #: data/base/messages/strings/cam2strings.txt:133
 msgid "You are to establish a safe haven for evacuation of Beta Base."
-msgstr "Sie müssen eine Sicherheitszone zur Evakuierung der Beta-Basis einrichten."
+msgstr "Sie müssen eine Sicherheitszone zur Evakuierung der Betabasis einrichten."
 
 #: data/base/messages/strings/cam2strings.txt:137
 msgid "Eradicate any enemy and secure the area."
@@ -5385,7 +5384,7 @@ msgstr "Sie sollen Team Gamma unterstützen."
 
 #: data/base/messages/strings/cam3strings.txt:50
 msgid "On reaching Gamma Base, help secure the area from further NEXUS attacks."
-msgstr "Wenn Sie die Gamma-Basis erreicht haben, sichern Sie das Gebiet vor weiteren Angiffen durch NEXUS."
+msgstr "Wenn Sie die Gammabasis erreicht haben, sichern Sie das Gebiet vor weiteren Angiffen durch NEXUS."
 
 #: data/base/messages/strings/cam3strings.txt:53
 msgid "NEXUS DEFEATED"
@@ -5449,15 +5448,15 @@ msgstr "Finden und zerstören ...."
 
 #: data/base/messages/strings/cam3strings.txt:84
 msgid "TRANSPORT MISSION: Ambush NEXUS Forces"
-msgstr "TRANSPORTERMISSION: Hinterhalt"
+msgstr "TRANSPORTERMISSION: NEXUS Truppen aus dem Hinterhalt angreifen"
 
 #: data/base/messages/strings/cam3strings.txt:85
 msgid "Commander, your decisive actions halted the spread of NEXUS."
-msgstr "Commander, Ihr entschiedenes Vorgehen hat die weitere Ausbreitung von NEXUS aufgehalten."
+msgstr "Commander, Ihr entscheidendes Vorgehen hat die weitere Ausbreitung von NEXUS aufgehalten."
 
 #: data/base/messages/strings/cam3strings.txt:86
 msgid "Before NEXUS was expelled, we intercepted this message - Decoding completed."
-msgstr "Bevor NEXUS vertrieben wurde, konnten wir diese Nachricht abhören - Entschlüsselung abgeschlossen."
+msgstr "Bevor NEXUS vertrieben wurde, konnten wir diese Nachricht abfangen - Dekodierung abgeschlossen."
 
 #: data/base/messages/strings/cam3strings.txt:89
 msgid "A NEXUS task force is heading for these coordinates."
@@ -5513,7 +5512,7 @@ msgstr "Eintreffende Übertragung..."
 
 #: data/base/messages/strings/cam3strings.txt:116
 msgid "Elements of Team Gamma have contacted us."
-msgstr "Teile des Gamme-Teams haben uns kontaktiert."
+msgstr "Teile des Gammeteams haben uns kontaktiert."
 
 #: data/base/messages/strings/cam3strings.txt:117
 msgid "They claim to be free of NEXUS, and offer their base as a site of operations."
@@ -5537,11 +5536,11 @@ msgstr "Die Lasersatelliten sind geladen und bewegen sich auf unsere Position zu
 
 #: data/base/messages/strings/cam3strings.txt:126
 msgid "The 2nd Team Gamma base is at this location."
-msgstr "Die zweite Gamma-Basis befindet sich an dieser Position."
+msgstr "Die zweite Gammabasis befindet sich an dieser Position."
 
 #: data/base/messages/strings/cam3strings.txt:127
 msgid "We have limited time to evacuate this base and move to Gamma Base."
-msgstr "Wir haben nur begrenzte Zeit diese Basis zu evakuieren und in die Gamma-Basis umzuziehen."
+msgstr "Wir haben nur begrenzte Zeit diese Basis zu evakuieren und in die Gammabasis umzuziehen."
 
 #: data/base/messages/strings/cam3strings.txt:130
 msgid "The laser satellites are not functioning properly, they are misfiring."
@@ -5565,7 +5564,7 @@ msgstr "Sie glauben, dass dieses Silo mit Raketen bestückt ist, die man in den 
 
 #: data/base/messages/strings/cam3strings.txt:137
 msgid "Capture this silo at all costs."
-msgstr "Erobern Sie dieses Silo um jeden Preis,"
+msgstr "Erobern Sie dieses Silo um jeden Preis."
 
 #: data/base/messages/strings/cam3strings.txt:140
 msgid "Missile silos captured."
@@ -5610,7 +5609,7 @@ msgstr "Wir versuchen auf die Raketenabschusscodes zuzugreifen."
 
 #: data/base/messages/strings/cam3strings.txt:162
 msgid "A research facility is required to crack the code. Allocate one immediately."
-msgstr "Eine Forschungseinrichtung ist notwendig, um den Code zu knacken. Weisen Sie dieses Thema unverzüglich einer Forschungseinrichtung zu."
+msgstr "Eine Forschungseinrichtung ist notwendig, um den Code zu knacken. Weisen Sie dieses Thema unverzüglich einer zu."
 
 #: data/base/messages/strings/cam3strings.txt:163
 msgid "Protect the missile silos from NEXUS attacks."
@@ -5634,11 +5633,11 @@ msgstr "PROJEKT-BERICHT: Zweite Stufe der Zielerfassungscodes geknackt."
 
 #: data/base/messages/strings/cam3strings.txt:172
 msgid "Missile target programming in progress."
-msgstr "Raketen-Zielprogrammierung läuft."
+msgstr "Raketenzielprogrammierung läuft."
 
 #: data/base/messages/strings/cam3strings.txt:173
 msgid "Once level 3 codes are cracked we initiate launch procedures."
-msgstr "Sobald die dritte Code-Stufe geknackt ist, initialisieren wir den Startvorgang."
+msgstr "Sobald die dritte Codestufe geknackt ist, initialisieren wir den Startvorgang."
 
 #: data/base/messages/strings/cam3strings.txt:176
 msgid "PROJECT UPDATE: 3rd Level Missile Code Cracked."
@@ -5826,12 +5825,12 @@ msgstr "Reparaturarm Viper Halbketten"
 #: data/mp/messages/strings/names.txt:177
 #: data/mp/messages/strings/names.txt:1840
 msgid "Twin Machinegun Viper Wheels"
-msgstr "Zwillings-Maschinengewehr Viper Räder"
+msgstr "Zwillingsmaschinengewehr Viper Räder"
 
 #: data/base/messages/strings/names.txt:175
 #: data/mp/messages/strings/names.txt:178
 msgid "Twin Machinegun Viper Half-tracks"
-msgstr "Zwillings-Maschinengewehr Viper Halbketten"
+msgstr "Zwillingsmaschinengewehr Viper Halbketten"
 
 #: data/base/messages/strings/names.txt:176
 #: data/mp/messages/strings/names.txt:179
@@ -5960,12 +5959,12 @@ msgstr "Buggy"
 #: data/base/messages/strings/names.txt:203
 #: data/mp/messages/strings/names.txt:206
 msgid "Rocket Buggy"
-msgstr "Buggy mit Raketenwerfer"
+msgstr "Raketenbuggy"
 
 #: data/base/messages/strings/names.txt:204
 #: data/mp/messages/strings/names.txt:207
 msgid "Rocket Jeep"
-msgstr "Jeep mit Raketenwerfer"
+msgstr "Raketenjeep"
 
 #: data/base/messages/strings/names.txt:205
 #: data/mp/messages/strings/names.txt:208
@@ -6046,7 +6045,7 @@ msgstr "Sturmschütze"
 #: data/base/messages/strings/names.txt:226
 #: data/mp/messages/strings/names.txt:229
 msgid "Cyborg Cannon"
-msgstr "Cyborg-Geschütz"
+msgstr "Cyborggeschütz"
 
 #: data/base/messages/strings/names.txt:234
 #: data/mp/messages/strings/names.txt:237
@@ -6411,33 +6410,33 @@ msgstr "Stellung mit Hellstorm-Haubitze"
 #: data/base/messages/strings/names.txt:715
 #: data/mp/messages/strings/names.txt:725
 msgid "Tornado AA Flak Site"
-msgstr "Luftabwehrstellung mit Tornado FLAK"
+msgstr "Flugabwehrstellung mit Tornado-FLAK"
 
 #: data/base/messages/strings/names.txt:410
 #: data/base/messages/strings/names.txt:712
 msgid "Cyclone AA Flak Site"
-msgstr "Luftabwehrstellung mit Cyclone FLAK"
+msgstr "Flugabwehrstellung mit Cyclone-FLAK"
 
 #: data/base/messages/strings/names.txt:411
 #: data/base/messages/strings/names.txt:713
 #: data/mp/messages/strings/names.txt:410
 #: data/mp/messages/strings/names.txt:723
 msgid "Hurricane AA Site"
-msgstr "Luftabwehrstellung mit Hurricane FLAK"
+msgstr "Flugabwehrstellung mit Hurricane-FLAK"
 
 #: data/base/messages/strings/names.txt:412
 #: data/base/messages/strings/names.txt:714
 #: data/mp/messages/strings/names.txt:411
 #: data/mp/messages/strings/names.txt:724
 msgid "Whirlwind AA Site"
-msgstr "Luftabwehrstellung mit Whirlwind"
+msgstr "Flugabwehrstellung mit Whirlwind"
 
 #: data/base/messages/strings/names.txt:414
 #: data/base/messages/strings/names.txt:726
 #: data/mp/messages/strings/names.txt:413
 #: data/mp/messages/strings/names.txt:736
 msgid "Ripple Rocket Battery"
-msgstr "Ripple-Raketen-Batterie"
+msgstr "Ripple-Raketenbatterie"
 
 #: data/base/messages/strings/names.txt:417
 #: data/mp/messages/strings/names.txt:416
@@ -6533,7 +6532,7 @@ msgstr "Wachturm mit Maschinengewehr"
 #: data/base/messages/strings/names.txt:439
 #: data/mp/messages/strings/names.txt:438
 msgid "Twin Machinegun Guard Tower"
-msgstr "Wachturm mit Zwillings-Maschinengewehr"
+msgstr "Wachturm mit Zwillingsmaschinengewehr"
 
 #: data/base/messages/strings/names.txt:440
 #: data/mp/messages/strings/names.txt:439
@@ -6574,7 +6573,7 @@ msgstr "Maschinengewehrbunker"
 #: data/mp/messages/strings/names.txt:446
 #: data/mp/messages/strings/names.txt:497
 msgid "Twin Machinegun Bunker"
-msgstr "Zwillings-Maschinengewehrbunker"
+msgstr "Zwillingsmaschinengewehrbunker"
 
 #: data/base/messages/strings/names.txt:448
 #: data/base/messages/strings/names.txt:500
@@ -6741,7 +6740,7 @@ msgstr "Ground Shaker"
 #: data/mp/messages/strings/names.txt:732
 #: data/mp/messages/strings/names.txt:1468
 msgid "Ground Shaker Emplacement"
-msgstr "Stellung für Ground Shaker-Haubitze"
+msgstr "Stellung für Ground-Shaker-Haubitze"
 
 #: data/base/messages/strings/names.txt:487
 #: data/mp/messages/strings/names.txt:486
@@ -6769,7 +6768,7 @@ msgstr "Maschinengewehr"
 #: data/mp/messages/strings/names.txt:496
 #: data/mp/messages/strings/names.txt:1111
 msgid "Twin Machinegun"
-msgstr "Zwillings-Maschinengewehr"
+msgstr "Zwillingsmaschinengewehr"
 
 #: data/base/messages/strings/names.txt:499
 #: data/base/messages/strings/names.txt:1100
@@ -6809,7 +6808,7 @@ msgstr "Vindicator-SAM"
 #: data/mp/messages/strings/names.txt:506
 #: data/mp/messages/strings/names.txt:1134
 msgid "Archangel Missile"
-msgstr "Archangel-Rakete"
+msgstr "Archangelrakete"
 
 #: data/base/messages/strings/names.txt:509
 #: data/base/messages/strings/names.txt:1118
@@ -6908,7 +6907,7 @@ msgstr "Tank Killer"
 #: data/base/messages/strings/names.txt:529
 #: data/mp/messages/strings/names.txt:528
 msgid "VTOL Bunker Buster"
-msgstr "VTOL-Bunker Buster"
+msgstr "VTOL-Bunker-Buster"
 
 #: data/base/messages/strings/names.txt:530
 #: data/mp/messages/strings/names.txt:529
@@ -6923,7 +6922,7 @@ msgstr "VTOL-Lancer"
 #: data/base/messages/strings/names.txt:532
 #: data/mp/messages/strings/names.txt:531
 msgid "VTOL Tank Killer"
-msgstr "VTOL-Tank Killer"
+msgstr "VTOL-Tank-Killer"
 
 #: data/base/messages/strings/names.txt:544
 #: data/base/messages/strings/names.txt:980
@@ -6979,7 +6978,7 @@ msgstr "VTOL-Maschinengewehr"
 #: data/base/messages/strings/names.txt:566
 #: data/mp/messages/strings/names.txt:566
 msgid "VTOL Twin Machinegun"
-msgstr "VTOL-Zwillings-Maschinengewehr"
+msgstr "VTOL-Zwillingsmaschinengewehr"
 
 #: data/base/messages/strings/names.txt:567
 #: data/mp/messages/strings/names.txt:567
@@ -7004,32 +7003,32 @@ msgstr "VTOL-Magnetgeschütz"
 #: data/base/messages/strings/names.txt:572
 #: data/mp/messages/strings/names.txt:572
 msgid "Proximity Bomb Turret"
-msgstr "Näherungsbomben-Abwurfschacht"
+msgstr "Näherungsbombenabwurfschacht"
 
 #: data/base/messages/strings/names.txt:573
 #: data/mp/messages/strings/names.txt:573
 msgid "Proximity Superbomb Turret"
-msgstr "Näherungssuperbomben-Abwurfschacht"
+msgstr "Näherungssuperbombenabwurfschacht"
 
 #: data/base/messages/strings/names.txt:575
 msgid "VTOL Cluster Bombs Bay"
-msgstr "VTOL-Streubomben-Abwurfschacht"
+msgstr "VTOL-Streubombenabwurfschacht"
 
 # HEAP = high explosive, armor piercing -Kreuvf
 #: data/base/messages/strings/names.txt:576
 #: data/mp/messages/strings/names.txt:576
 msgid "VTOL Heap Bomb Bay"
-msgstr "VTOL-Bombenabwurfschacht für hochexplosive, panzerbrechende Bomben"
+msgstr "VTOL-Bombenabwurfschacht für hochexplosive panzerbrechende Bomben"
 
 #: data/base/messages/strings/names.txt:577
 #: data/mp/messages/strings/names.txt:577
 msgid "VTOL Phosphor Bomb Bay"
-msgstr "VTOL-Phosphorbomben-Abwurfschacht"
+msgstr "VTOL-Phosphorbombenabwurfschacht"
 
 #: data/base/messages/strings/names.txt:578
 #: data/mp/messages/strings/names.txt:578
 msgid "VTOL Thermite Bomb Bay"
-msgstr "VTOL-Thermitbomben-Abwurfschacht"
+msgstr "VTOL-Thermitbombenabwurfschacht"
 
 #: data/base/messages/strings/names.txt:581
 #: data/mp/messages/strings/names.txt:581
@@ -7051,7 +7050,7 @@ msgstr "NEXUS-Mauer (Eckstück)"
 #: data/base/messages/strings/names.txt:623
 #: data/mp/messages/strings/names.txt:623
 msgid "CAM1 RESEARCH"
-msgstr "CAM1 FORSCHUNGEN"
+msgstr "CAM1-FORSCHUNGEN"
 
 #: data/base/messages/strings/names.txt:624
 #: data/mp/messages/strings/names.txt:624
@@ -7061,67 +7060,67 @@ msgstr "FORTGESCHRITTENE FORSCHUNGEN"
 #: data/base/messages/strings/names.txt:625
 #: data/mp/messages/strings/names.txt:625
 msgid "CAM1 VEHICLES"
-msgstr "CAM1 FAHRZEUGE"
+msgstr "CAM1-FAHRZEUGE"
 
 #: data/base/messages/strings/names.txt:626
 #: data/mp/messages/strings/names.txt:626
 msgid "CAM1 WEAPONS"
-msgstr "CAM1 WAFFEN"
+msgstr "CAM1-WAFFEN"
 
 #: data/base/messages/strings/names.txt:627
 #: data/mp/messages/strings/names.txt:627
 msgid "CAM1 SYSTEMS"
-msgstr "CAM1 SYSTEME"
+msgstr "CAM1-SYSTEME"
 
 #: data/base/messages/strings/names.txt:628
 #: data/mp/messages/strings/names.txt:628
 msgid "CAM1 DEFENSES"
-msgstr "CAM1 VERTEIDIGUNG"
+msgstr "CAM1-VERTEIDIGUNG"
 
 #: data/base/messages/strings/names.txt:629
 #: data/mp/messages/strings/names.txt:629
 msgid "CAM1 STRUCTURES"
-msgstr "CAM1 GEBÄUDE"
+msgstr "CAM1-GEBÄUDE"
 
 #: data/base/messages/strings/names.txt:630
 #: data/mp/messages/strings/names.txt:630
 msgid "CAM2 RESEARCH"
-msgstr "CAM2 FORSCHUNGEN"
+msgstr "CAM2-FORSCHUNGEN"
 
 #: data/base/messages/strings/names.txt:631
 #: data/mp/messages/strings/names.txt:631
 msgid "CAM2 VEHICLES"
-msgstr "CAM2 FAHRZEUGE"
+msgstr "CAM2-FAHRZEUGE"
 
 #: data/base/messages/strings/names.txt:632
 #: data/mp/messages/strings/names.txt:632
 msgid "CAM2 CYBORGS"
-msgstr "CAM2 CYBORGS"
+msgstr "CAM2-CYBORGS"
 
 #: data/base/messages/strings/names.txt:633
 #: data/mp/messages/strings/names.txt:633
 msgid "CAM2 WEAPONS"
-msgstr "CAM2 WAFFEN"
+msgstr "CAM2-WAFFEN"
 
 #: data/base/messages/strings/names.txt:634
 #: data/mp/messages/strings/names.txt:634
 msgid "CAM2 SYSTEMS"
-msgstr "CAM2 SYSTEME"
+msgstr "CAM2-SYSTEME"
 
 #: data/base/messages/strings/names.txt:635
 #: data/mp/messages/strings/names.txt:635
 msgid "CAM2 DEFENSES"
-msgstr "CAM2 VERTEIDIGUNG"
+msgstr "CAM2-VERTEIDIGUNG"
 
 #: data/base/messages/strings/names.txt:636
 #: data/mp/messages/strings/names.txt:636
 msgid "CAM2 STRUCTURES"
-msgstr "CAM2 GEBÄUDE"
+msgstr "CAM2-GEBÄUDE"
 
 #: data/base/messages/strings/names.txt:638
 #: data/mp/messages/strings/names.txt:638
 msgid "CAM3 RESEARCH"
-msgstr "CAM3 FORSCHUNGEN"
+msgstr "CAM3-FORSCHUNGEN"
 
 #: data/base/messages/strings/names.txt:649
 #: data/mp/messages/strings/names.txt:649
@@ -7161,17 +7160,17 @@ msgstr "Thermalpanzerung für Cyborgs Mk3"
 #: data/base/messages/strings/names.txt:658
 #: data/mp/messages/strings/names.txt:658
 msgid "Cyborg High Intensity Thermal Armor"
-msgstr "Hochtemperatur-Thermalpanzerung für Cyborgs"
+msgstr "Hochtemperaturthermalpanzerung für Cyborgs"
 
 #: data/base/messages/strings/names.txt:659
 #: data/mp/messages/strings/names.txt:659
 msgid "Cyborg High Intensity Thermal Armor Mk2"
-msgstr "Hochtemperatur-Thermalpanzerung für Cyborgs Mk2"
+msgstr "Hochtemperaturthermalpanzerung für Cyborgs Mk2"
 
 #: data/base/messages/strings/names.txt:660
 #: data/mp/messages/strings/names.txt:660
 msgid "Cyborg High Intensity Thermal Armor Mk3"
-msgstr "Hochtemperatur-Thermalpanzerung für Cyborgs Mk3"
+msgstr "Hochtemperaturthermalpanzerung für Cyborgs Mk3"
 
 #: data/base/messages/strings/names.txt:662
 #: data/mp/messages/strings/names.txt:662
@@ -7378,12 +7377,12 @@ msgstr "Bombardgrube"
 
 #: data/base/messages/strings/names.txt:728
 msgid "Angel Missile Battery"
-msgstr "Angel-Raketen-Batterie"
+msgstr "Angel-Raketenbatterie"
 
 #: data/base/messages/strings/names.txt:729
 #: data/mp/messages/strings/names.txt:739
 msgid "Archangel Missile Battery"
-msgstr "Archangel-Raketenbatterie"
+msgstr "Archangelraketenbatterie"
 
 #: data/base/messages/strings/names.txt:730
 #: data/base/messages/strings/names.txt:1216
@@ -7570,12 +7569,12 @@ msgstr "Fortschrittliche Gebäudematerialien MK3"
 #: data/base/messages/strings/names.txt:817
 #: data/mp/messages/strings/names.txt:827
 msgid "Gas Turbine Generator"
-msgstr "Gasturbinen-Generator"
+msgstr "Gasturbinengenerator"
 
 #: data/base/messages/strings/names.txt:818
 #: data/mp/messages/strings/names.txt:828
 msgid "Vapor Turbine Generator"
-msgstr "Dampfturbinen-Generator"
+msgstr "Dampfturbinengenerator"
 
 #: data/base/messages/strings/names.txt:820
 #: data/base/messages/strings/names.txt:1449
@@ -7811,17 +7810,17 @@ msgstr "CB-Turm"
 #: data/base/messages/strings/names.txt:893
 #: data/mp/messages/strings/names.txt:905
 msgid "CB Sensor Upgrade"
-msgstr "CB-Sensor-Verbesserung"
+msgstr "CB-Sensorverbesserung"
 
 #: data/base/messages/strings/names.txt:894
 #: data/mp/messages/strings/names.txt:906
 msgid "CB Sensor Upgrade 2"
-msgstr "CB-Sensor-Verbesserung Mk2"
+msgstr "CB-Sensorverbesserung Mk2"
 
 #: data/base/messages/strings/names.txt:895
 #: data/mp/messages/strings/names.txt:907
 msgid "CB Sensor Upgrade 3"
-msgstr "CB-Sensor-Verbesserung Mk3"
+msgstr "CB-Sensorverbesserung Mk3"
 
 #: data/base/messages/strings/names.txt:897
 #: data/mp/messages/strings/names.txt:909
@@ -7831,32 +7830,32 @@ msgstr "VTOL-CB-Turm"
 #: data/base/messages/strings/names.txt:900
 #: data/mp/messages/strings/names.txt:912
 msgid "VTOL CB Upgrade"
-msgstr "VTOL-CB-Sensor-Verbesserung"
+msgstr "VTOL-CB-Sensorverbesserung"
 
 #: data/base/messages/strings/names.txt:901
 #: data/mp/messages/strings/names.txt:913
 msgid "VTOL CB Upgrade 2"
-msgstr "VTOL-CB-Sensor-Verbesserung Mk2"
+msgstr "VTOL-CB-Sensorverbesserung Mk2"
 
 #: data/base/messages/strings/names.txt:902
 #: data/mp/messages/strings/names.txt:914
 msgid "VTOL CB Upgrade 3"
-msgstr "VTOL-CB-Sensor-Verbesserung Mk3"
+msgstr "VTOL-CB-Sensorverbesserung Mk3"
 
 #: data/base/messages/strings/names.txt:903
 #: data/mp/messages/strings/names.txt:915
 msgid "VTOL Strike Upgrade"
-msgstr "VTOL-Schlag-Sensor-Verbesserung"
+msgstr "VTOL-Schlag-Sensorverbesserung"
 
 #: data/base/messages/strings/names.txt:904
 #: data/mp/messages/strings/names.txt:916
 msgid "VTOL Strike Upgrade Mk2"
-msgstr "VTOL-Schlag-Sensor-Verbesserung Mk2"
+msgstr "VTOL-Schlag-Sensorverbesserung Mk2"
 
 #: data/base/messages/strings/names.txt:905
 #: data/mp/messages/strings/names.txt:917
 msgid "VTOL Strike Upgrade Mk3"
-msgstr "VTOL-Schlag-Sensor-Verbesserung Mk3"
+msgstr "VTOL-Schlag-Sensorverbesserung Mk3"
 
 #: data/base/messages/strings/names.txt:907
 #: data/mp/messages/strings/names.txt:427
@@ -7913,17 +7912,17 @@ msgstr "Thermalpanzerung für Fahrzeuge Mk3"
 #: data/base/messages/strings/names.txt:925
 #: data/mp/messages/strings/names.txt:937
 msgid "High Intensity Thermal Armor"
-msgstr "Hochtemperatur-Thermalpanzerung für Fahrzeuge"
+msgstr "Hochtemperaturthermalpanzerung für Fahrzeuge"
 
 #: data/base/messages/strings/names.txt:926
 #: data/mp/messages/strings/names.txt:938
 msgid "High Intensity Thermal Armor Mk2"
-msgstr "Hochtemperatur-Thermalpanzerung für Fahrzeuge Mk2"
+msgstr "Hochtemperaturthermalpanzerung für Fahrzeuge Mk2"
 
 #: data/base/messages/strings/names.txt:927
 #: data/mp/messages/strings/names.txt:939
 msgid "High Intensity Thermal Armor Mk3"
-msgstr "Hochtemperatur-Thermalpanzerung für Fahrzeuge Mk3"
+msgstr "Hochtemperaturthermalpanzerung für Fahrzeuge Mk3"
 
 #: data/base/messages/strings/names.txt:929
 #: data/mp/messages/strings/names.txt:941
@@ -8008,12 +8007,12 @@ msgstr "Turbomotor Mk3"
 #: data/base/messages/strings/names.txt:949
 #: data/mp/messages/strings/names.txt:961
 msgid "Gas Turbine Engine Mk2"
-msgstr "Gasturbinen-Motor Mk2"
+msgstr "Gasturbinenmotor Mk2"
 
 #: data/base/messages/strings/names.txt:950
 #: data/mp/messages/strings/names.txt:962
 msgid "Gas Turbine Engine Mk3"
-msgstr "Gasturbinen-Motor Mk3"
+msgstr "Gasturbinenmotor Mk3"
 
 #: data/base/messages/strings/names.txt:953
 #: data/mp/messages/strings/names.txt:965
@@ -8108,7 +8107,7 @@ msgstr "Radantrieb II"
 #: data/base/messages/strings/names.txt:984
 #: data/mp/messages/strings/names.txt:996
 msgid "AA Thermal Imaging Sensor"
-msgstr "Luftabwehr-Wärmebildsensor"
+msgstr "Wärmebildsensor für Flugabwehrwaffen"
 
 #: data/base/messages/strings/names.txt:985
 #: data/mp/messages/strings/names.txt:997
@@ -8118,86 +8117,86 @@ msgstr "Zielerfassende FLAK-Geschosse"
 #: data/base/messages/strings/names.txt:986
 #: data/mp/messages/strings/names.txt:998
 msgid "AA Target Prediction Computer"
-msgstr "Luftabwehr-Zielvorhersage-Computer"
+msgstr "Zielvorhersagecomputer für Flugabwehrwaffen"
 
 #: data/base/messages/strings/names.txt:987
 #: data/mp/messages/strings/names.txt:999
 msgid "AA HE Flak"
-msgstr "Hochexplosive Luftabwehrgeschosse"
+msgstr "Hochexplosive Flugabwehrgeschosse"
 
 #: data/base/messages/strings/names.txt:988
 #: data/mp/messages/strings/names.txt:1000
 msgid "AA HE Flak Mk2"
-msgstr "Hochexplosive Luftabwehrgeschosse Mk2"
+msgstr "Hochexplosive Flugabwehrgeschosse Mk2"
 
 #: data/base/messages/strings/names.txt:989
 #: data/mp/messages/strings/names.txt:1001
 msgid "AA HE Flak Mk3"
-msgstr "Hochexplosive Luftabwehrgeschosse Mk3"
+msgstr "Hochexplosive Flugabwehrgeschosse Mk3"
 
 #: data/base/messages/strings/names.txt:990
 #: data/mp/messages/strings/names.txt:1002
 msgid "AA HEAP Flak"
-msgstr "Hochexplosive, panzerbrechende Luftabwehrgeschosse"
+msgstr "Hochexplosive panzerbrechende Flugabwehrgeschosse"
 
 #: data/base/messages/strings/names.txt:991
 #: data/mp/messages/strings/names.txt:1003
 msgid "AA HEAP Flak Mk2"
-msgstr "Hochexplosive, panzerbrechende Luftabwehrgeschosse Mk2"
+msgstr "Hochexplosive panzerbrechende Flugabwehrgeschosse Mk2"
 
 #: data/base/messages/strings/names.txt:992
 #: data/mp/messages/strings/names.txt:1004
 msgid "AA HEAP Flak Mk3"
-msgstr "Hochexplosive, panzerbrechende Luftabwehrgeschosse Mk3"
+msgstr "Hochexplosive panzerbrechende Flugabwehrgeschosse Mk3"
 
 #: data/base/messages/strings/names.txt:993
 #: data/mp/messages/strings/names.txt:1005
 msgid "AA Ammunition Hopper"
-msgstr "Luftabwehr-Munitionstrichter"
+msgstr "Munitionstrichter für Flugabwehrwaffen"
 
 #: data/base/messages/strings/names.txt:994
 #: data/mp/messages/strings/names.txt:1006
 msgid "AA Ammunition Hopper Mk2"
-msgstr "Luftabwehr-Munitionstrichter Mk2"
+msgstr "Munitionstrichter für Flugabwehrwaffen Mk2"
 
 #: data/base/messages/strings/names.txt:995
 #: data/mp/messages/strings/names.txt:1007
 msgid "AA Ammunition Hopper Mk3"
-msgstr "Luftabwehr-Munitionstrichter Mk3"
+msgstr "Munitionstrichter für Flugabwehrwaffen Mk3"
 
 #: data/base/messages/strings/names.txt:996
 #: data/mp/messages/strings/names.txt:1008
 msgid "AA Chainfeed Loader"
-msgstr "Luftabwehr-Munitionsband-Lader"
+msgstr "Munitionsbandlader für Flugabwehrwaffen"
 
 #: data/base/messages/strings/names.txt:997
 #: data/mp/messages/strings/names.txt:1009
 msgid "AA Chainfeed Loader Mk2"
-msgstr "Luftabwehr-Munitionsband-Lader Mk2"
+msgstr "Munitionsbandlader für Flugabwehrwaffen Mk2"
 
 #: data/base/messages/strings/names.txt:998
 #: data/mp/messages/strings/names.txt:1010
 msgid "AA Chainfeed Loader Mk3"
-msgstr "Luftabwehr-Munitionsband-Lader Mk3"
+msgstr "Munitionsbandlader für Flugabwehrwaffen Mk3"
 
 #: data/base/messages/strings/names.txt:1003
 msgid "Cluster Bombs Bay"
-msgstr "Streubomben-Abwurfschacht"
+msgstr "Streubombenabwurfschacht"
 
 #: data/base/messages/strings/names.txt:1004
 #: data/mp/messages/strings/names.txt:1016
 msgid "HEAP Bomb Bay"
-msgstr "Abwurfschacht für hochexplosive, panzerbrechende Bomben"
+msgstr "Abwurfschacht für hochexplosive panzerbrechende Bomben"
 
 #: data/base/messages/strings/names.txt:1005
 #: data/mp/messages/strings/names.txt:1017
 msgid "Phosphor Bomb Bay"
-msgstr "Phosphorbomben-Abwurfschacht"
+msgstr "Phosphorbombenabwurfschacht"
 
 #: data/base/messages/strings/names.txt:1006
 #: data/mp/messages/strings/names.txt:1018
 msgid "Thermite Bomb Bay"
-msgstr "Thermitbomben-Abwurfschacht"
+msgstr "Thermitbombenabwurfschacht"
 
 #: data/base/messages/strings/names.txt:1008
 msgid "Thermal Imaging Bombsight"
@@ -8219,7 +8218,7 @@ msgstr "Laserentfernungsmesser für Geschütze"
 #: data/base/messages/strings/names.txt:1013
 #: data/mp/messages/strings/names.txt:1025
 msgid "Cannon Laser Designator"
-msgstr "Laser-Zielgeber für Geschütze"
+msgstr "Laserzielgeber für Geschütze"
 
 #: data/base/messages/strings/names.txt:1014
 #: data/mp/messages/strings/names.txt:1026
@@ -8239,32 +8238,32 @@ msgstr "Hochexplosive Antipanzergeschosse für Geschütze Mk3"
 #: data/base/messages/strings/names.txt:1017
 #: data/mp/messages/strings/names.txt:1029
 msgid "APFSDS Cannon Rounds"
-msgstr "Panzerbrechende, seitenleitwerk-stabilisierte Treibspiegelgeschosse für Geschütze"
+msgstr "Panzerbrechende seitenleitwerkstabilisierte Treibspiegelgeschosse für Geschütze"
 
 #: data/base/messages/strings/names.txt:1018
 #: data/mp/messages/strings/names.txt:1030
 msgid "APFSDS Cannon Rounds Mk2"
-msgstr "Panzerbrechende, seitenleitwerk-stabilisierte Treibspiegelgeschosse für Geschütze Mk2"
+msgstr "Panzerbrechende seitenleitwerkstabilisierte Treibspiegelgeschosse für Geschütze Mk2"
 
 #: data/base/messages/strings/names.txt:1019
 #: data/mp/messages/strings/names.txt:1031
 msgid "APFSDS Cannon Rounds Mk3"
-msgstr "Panzerbrechende, seitenleitwerk-stabilisierte Treibspiegelgeschosse für Geschütze Mk3"
+msgstr "Panzerbrechende seitenleitwerkstabilisierte Treibspiegelgeschosse für Geschütze Mk3"
 
 #: data/base/messages/strings/names.txt:1020
 #: data/mp/messages/strings/names.txt:1032
 msgid "HVAPFSDS Cannon Rounds"
-msgstr "Panzerbrechende, seitenleitwerk-stabilisierte Hochgeschwindigkeitstreibspiegelgeschosse für Geschütze"
+msgstr "Panzerbrechende seitenleitwerkstabilisierte Hochgeschwindigkeitstreibspiegelgeschosse für Geschütze"
 
 #: data/base/messages/strings/names.txt:1021
 #: data/mp/messages/strings/names.txt:1033
 msgid "HVAPFSDS Cannon Rounds Mk2"
-msgstr "Panzerbrechende, seitenleitwerk-stabilisierte Hochgeschwindigkeitstreibspiegelgeschosse für Geschütze Mk2"
+msgstr "Panzerbrechende seitenleitwerkstabilisierte Hochgeschwindigkeitstreibspiegelgeschosse für Geschütze Mk2"
 
 #: data/base/messages/strings/names.txt:1022
 #: data/mp/messages/strings/names.txt:1034
 msgid "HVAPFSDS Cannon Rounds Mk3"
-msgstr "Panzerbrechende, seitenleitwerk-stabilisierte Hochgeschwindigkeitstreibspiegelgeschosse für Geschütze Mk3"
+msgstr "Panzerbrechende seitenleitwerkstabilisierte Hochgeschwindigkeitstreibspiegelgeschosse für Geschütze Mk3"
 
 # auto -> selbst
 # Substantiv im Englischen absichtlich als Adjektiv im Deutschen -Kreuvf
@@ -8317,32 +8316,32 @@ msgstr "Verbesserte Laserfokussierung Mk3"
 #: data/base/messages/strings/names.txt:1042
 #: data/mp/messages/strings/names.txt:1054
 msgid "Hi-Energy Laser Emitter"
-msgstr "Hochenergie-Laseremitter"
+msgstr "Hochenergielaseremitter"
 
 #: data/base/messages/strings/names.txt:1043
 #: data/mp/messages/strings/names.txt:1055
 msgid "Hi-Energy Laser Emitter Mk2"
-msgstr "Hochenergie-Laseremitter Mk2"
+msgstr "Hochenergielaseremitter Mk2"
 
 #: data/base/messages/strings/names.txt:1044
 #: data/mp/messages/strings/names.txt:1056
 msgid "Hi-Energy Laser Emitter Mk3"
-msgstr "Hochenergie-Laseremitter Mk3"
+msgstr "Hochenergielaseremitter Mk3"
 
 #: data/base/messages/strings/names.txt:1045
 #: data/mp/messages/strings/names.txt:1057
 msgid "Thermopole Energizer"
-msgstr "Thermopol-Energiequelle"
+msgstr "Thermopolenergiequelle"
 
 #: data/base/messages/strings/names.txt:1046
 #: data/mp/messages/strings/names.txt:1058
 msgid "Thermopole Energizer Mk2"
-msgstr "Thermopol-Energiequelle Mk2"
+msgstr "Thermopolenergiequelle Mk2"
 
 #: data/base/messages/strings/names.txt:1047
 #: data/mp/messages/strings/names.txt:1059
 msgid "Thermopole Energizer Mk3"
-msgstr "Thermopol-Energiequelle Mk3"
+msgstr "Thermopolenergiequelle Mk3"
 
 #: data/base/messages/strings/names.txt:1049
 #: data/mp/messages/strings/names.txt:1061
@@ -8417,7 +8416,7 @@ msgstr "Zielerfassende Artilleriegeschosse Mk2"
 #: data/base/messages/strings/names.txt:1068
 #: data/mp/messages/strings/names.txt:1080
 msgid "Target Prediction Artillery Shells"
-msgstr "Zielvorhersage-Artilleriegeschosse"
+msgstr "Zielvorhersageartilleriegeschosse"
 
 #: data/base/messages/strings/names.txt:1070
 #: data/mp/messages/strings/names.txt:1082
@@ -8437,17 +8436,17 @@ msgstr "Hochexplosive Haubitzengeschosse Mk3"
 #: data/base/messages/strings/names.txt:1073
 #: data/mp/messages/strings/names.txt:1085
 msgid "HEAP Howitzer Shells"
-msgstr "Hochexplosive, panzerbrechende Haubitzengeschosse"
+msgstr "Hochexplosive panzerbrechende Haubitzengeschosse"
 
 #: data/base/messages/strings/names.txt:1074
 #: data/mp/messages/strings/names.txt:1086
 msgid "HEAP Howitzer Shells Mk2"
-msgstr "Hochexplosive, panzerbrechende Haubitzengeschosse Mk2"
+msgstr "Hochexplosive panzerbrechende Haubitzengeschosse Mk2"
 
 #: data/base/messages/strings/names.txt:1075
 #: data/mp/messages/strings/names.txt:1087
 msgid "HEAP Howitzer Shells Mk3"
-msgstr "Hochexplosive, panzerbrechende Haubitzengeschosse Mk3"
+msgstr "Hochexplosive panzerbrechende Haubitzengeschosse Mk3"
 
 #: data/base/messages/strings/names.txt:1077
 #: data/mp/messages/strings/names.txt:1089
@@ -8535,12 +8534,12 @@ msgstr "Hyperschnellfeuermechanismus für Maschinengewehre"
 #: data/base/messages/strings/names.txt:1103
 #: data/mp/messages/strings/names.txt:1115
 msgid "Target Prediction Missiles"
-msgstr "Zielvorhersage-Lenkraketen"
+msgstr "Zielvorhersagelenkraketen"
 
 #: data/base/messages/strings/names.txt:1104
 #: data/mp/messages/strings/names.txt:1116
 msgid "Search & Destroy Missiles"
-msgstr "Finden & Vernichten-Lenkraketen"
+msgstr "Finden-&-Vernichten-Lenkraketen"
 
 #: data/base/messages/strings/names.txt:1105
 #: data/mp/messages/strings/names.txt:1117
@@ -8575,17 +8574,17 @@ msgstr "Fortschrittliches Lenkraketenladesystem Mk3"
 #: data/base/messages/strings/names.txt:1111
 #: data/mp/messages/strings/names.txt:1123
 msgid "HEAP Missile Warhead"
-msgstr "Hochexplosiver, panzerbrechender Sprengkopf für Lenkraketen"
+msgstr "Hochexplosiver panzerbrechender Sprengkopf für Lenkraketen"
 
 #: data/base/messages/strings/names.txt:1112
 #: data/mp/messages/strings/names.txt:1124
 msgid "HEAP Missile Warhead Mk2"
-msgstr "Hochexplosiver, panzerbrechender Sprengkopf für Lenkraketen Mk2"
+msgstr "Hochexplosiver panzerbrechender Sprengkopf für Lenkraketen Mk2"
 
 #: data/base/messages/strings/names.txt:1113
 #: data/mp/messages/strings/names.txt:1125
 msgid "HEAP Missile Warhead Mk3"
-msgstr "Hochexplosiver, panzerbrechender Sprengkopf für Lenkraketen Mk3"
+msgstr "Hochexplosiver panzerbrechender Sprengkopf für Lenkraketen Mk3"
 
 #: data/base/messages/strings/names.txt:1114
 #: data/mp/messages/strings/names.txt:1126
@@ -8625,17 +8624,17 @@ msgstr "Hochexplosive Mörsergranaten Mk3"
 #: data/base/messages/strings/names.txt:1131
 #: data/mp/messages/strings/names.txt:1143
 msgid "HEAP Mortar Shells"
-msgstr "Hochexplosive, panzerbrechende Mörsergranaten"
+msgstr "Hochexplosive panzerbrechende Mörsergranaten"
 
 #: data/base/messages/strings/names.txt:1132
 #: data/mp/messages/strings/names.txt:1144
 msgid "HEAP Mortar Shells Mk2"
-msgstr "Hochexplosive, panzerbrechende Mörsergranaten Mk2"
+msgstr "Hochexplosive panzerbrechende Mörsergranaten Mk2"
 
 #: data/base/messages/strings/names.txt:1133
 #: data/mp/messages/strings/names.txt:1145
 msgid "HEAP Mortar Shells Mk3"
-msgstr "Hochexplosive, panzerbrechende Mörsergranaten Mk3"
+msgstr "Hochexplosive panzerbrechende Mörsergranaten Mk3"
 
 #: data/base/messages/strings/names.txt:1134
 #: data/mp/messages/strings/names.txt:1146
@@ -8723,15 +8722,15 @@ msgstr "Hochexplosive Miniraketen Mk3"
 
 #: data/base/messages/strings/names.txt:1158
 msgid "HEAP Mini-Rockets"
-msgstr "Hochexplosive, panzerbrechende Miniraketen"
+msgstr "Hochexplosive panzerbrechende Miniraketen"
 
 #: data/base/messages/strings/names.txt:1159
 msgid "HEAP Mini-Rockets Mk2"
-msgstr "Hochexplosive, panzerbrechende Miniraketen Mk2"
+msgstr "Hochexplosive panzerbrechende Miniraketen Mk2"
 
 #: data/base/messages/strings/names.txt:1160
 msgid "HEAP Mini-Rockets Mk3"
-msgstr "Hochexplosive, panzerbrechende Miniraketen Mk3"
+msgstr "Hochexplosive panzerbrechende Miniraketen Mk3"
 
 #: data/base/messages/strings/names.txt:1161
 msgid "Fast Fire Mini-Rockets"
@@ -8773,7 +8772,7 @@ msgstr "Laserzielgeber für Raketen"
 #: data/base/messages/strings/names.txt:1169
 #: data/mp/messages/strings/names.txt:1168
 msgid "Thermal Imaging Rockets"
-msgstr "Wärmebild-Raketen"
+msgstr "Wärmebildraketen"
 
 #: data/base/messages/strings/names.txt:1170
 #: data/mp/messages/strings/names.txt:1172
@@ -8829,17 +8828,17 @@ msgstr "Lancer-Antipanzerrakete"
 #: data/base/messages/strings/names.txt:1182
 #: data/mp/messages/strings/names.txt:1197
 msgid "Bunker Buster Rocket"
-msgstr "Bunker Buster-Rakete"
+msgstr "Bunker-Buster-Rakete"
 
 #: data/base/messages/strings/names.txt:1185
 #: data/mp/messages/strings/names.txt:1200
 msgid "Tank Killer Rocket"
-msgstr "Tank Killer-Rakete"
+msgstr "Tank-Killer-Rakete"
 
 #: data/base/messages/strings/names.txt:1187
 #: data/mp/messages/strings/names.txt:1202
 msgid "Machinegun Artifact"
-msgstr "Maschinengewehr-Artefakt"
+msgstr "Maschinengewehrartefakt"
 
 #: data/base/messages/strings/names.txt:1190
 #: data/mp/messages/strings/names.txt:1205
@@ -8879,7 +8878,7 @@ msgstr "Scavenger-Raketengrube"
 #: data/base/messages/strings/names.txt:1206
 #: data/mp/messages/strings/names.txt:1221
 msgid "Scavenger AT-Rocket Pit"
-msgstr "Scavenger-Antipanzer-Raketengrube"
+msgstr "Scavenger-Antipanzerraketengrube"
 
 #: data/base/messages/strings/names.txt:1207
 #: data/mp/messages/strings/names.txt:1222
@@ -9054,7 +9053,7 @@ msgstr "Stellung mit Angel-Raketen"
 #: data/base/messages/strings/names.txt:1378
 #: data/mp/messages/strings/names.txt:1393
 msgid "Archangel Missile Emplacement"
-msgstr "Stellung mit Archangel-Raketen"
+msgstr "Stellung mit Archangelraketen"
 
 #: data/base/messages/strings/names.txt:1423
 #: data/mp/messages/strings/names.txt:1888
@@ -9276,7 +9275,7 @@ msgstr "Linksklicken Sie auf das aufleuchtende KONSTRUKTION-Symbol"
 
 #: data/base/script/text/tutorial3.slo:384
 msgid "Now left click the power generator in the build menu on the left"
-msgstr "Linksklicken Sie auf das Kraftwerk im Konstruktions-Menü auf der linken Seite"
+msgstr "Linksklicken Sie auf das Kraftwerk im Konstruktionsmenü auf der linken Seite"
 
 #: data/base/script/text/tutorial3.slo:395
 msgid "Position the square at your base and left click to start the build process"
@@ -9324,7 +9323,7 @@ msgstr "Um das Artefakt zu untersuchen, linksklicken Sie auf das blinkende FORSC
 
 #: data/base/script/text/tutorial3.slo:676
 msgid "Now left click the machinegun artifact"
-msgstr "Linksklicken Sie jetzt auf das Maschinengewehr-Artefakt"
+msgstr "Linksklicken Sie jetzt auf das Maschinengewehrartefakt"
 
 #: data/base/script/text/tutorial3.slo:690
 msgid "The artifact is now being researched by the facility"
@@ -9340,11 +9339,11 @@ msgstr "Linksklicken Sie jetzt auf das blinkende ENTWURF-Symbol"
 
 #: data/base/script/text/tutorial3.slo:746
 msgid "To start your design, left click the NEW DESIGN icon"
-msgstr "Um den Entwurf zu beginnen, klicken Sie mit der linken Maustaste auf das NEUER ENTWURF-Symbol"
+msgstr "Um den Entwurf zu beginnen, klicken Sie mit der linken Maustaste auf das NEUER-ENTWURF-Symbol"
 
 #: data/base/script/text/tutorial3.slo:762
 msgid "Now left click the Vehicle Body icon"
-msgstr "Linksklicken Sie nun auf das Fahrzeugrumpf-Symbol"
+msgstr "Linksklicken Sie nun auf das Fahrzeugrumpfsymbol"
 
 #: data/base/script/text/tutorial3.slo:776
 msgid "Then left click the Viper body"
@@ -9352,7 +9351,7 @@ msgstr "Dann einen Linksklick auf den Rumpf Viper"
 
 #: data/base/script/text/tutorial3.slo:788
 msgid "Left click the Wheels icon"
-msgstr "Linksklicken Sie nun das Fahrzeugantrieb-Symbol"
+msgstr "Linksklicken Sie nun das Fahrzeugantriebsymbol"
 
 #: data/base/script/text/tutorial3.slo:799
 msgid "Then left click the machinegun to complete your design"
@@ -9376,7 +9375,7 @@ msgstr "Wählen Sie eine Position für Ihre Fabrik"
 
 #: data/base/script/text/tutorial3.slo:934
 msgid "The delivery point is indicated by the number 1"
-msgstr "Der Auslieferungspunkt wird durch die Nummer 1 angezeigt"
+msgstr "Der Auslieferungspunkt wird durch die Zahl 1 angezeigt"
 
 #: data/base/script/text/tutorial3.slo:937
 msgid "All new units will drive to this location once built"
@@ -9506,7 +9505,7 @@ msgstr "Die Angriffe gegen uns werden nicht ungestraft bleiben."
 #: data/base/sequenceaudio/cam1/cam1cnp.txt:5
 #: data/base/sequenceaudio/cam1/sub13np2.txt:5
 msgid "You are in contravention of the New Paradigm."
-msgstr "Sie verstoßen gegen die Rechte des New Paradigm."
+msgstr "Sie verstoßen gegen die Gesetze des New Paradigm."
 
 #: data/base/sequenceaudio/cam1/cam1dnp.txt:4
 msgid "All attack groups commence attack on enemy."
@@ -9514,7 +9513,7 @@ msgstr "Alle Gruppen beginnen mit den Angriff auf den Feind."
 
 #: data/base/sequenceaudio/cam1/cam1dnp.txt:5
 msgid "They are in contravention of the New Paradigm."
-msgstr "Sie verstoßen gegen die Rechte des New Paradigm."
+msgstr "Sie verstoßen gegen die Gesetze des New Paradigm."
 
 #: data/base/sequenceaudio/cam1/cam1dnp.txt:7
 msgid "They must be eradicated."
@@ -9583,7 +9582,7 @@ msgstr "Nexus entfernte sich dann selbst aus dem System, zerstörte die Speicher
 
 #: data/base/sequenceaudio/cam1/cam1out5.txt:6
 msgid "We are not sure what Nexus is or who or what is directing it. Initial research links the Nexus Intruder Program with the Reed Corporation, the developer of the synaptic link."
-msgstr "Wir wissen nicht, was Nexus ist, und wer oder was es steuert. Anfängliche Untersuchungen weisen auf eine Verbindung des Nexus-Eindringlingsprogramm zur Reed Corporation hin, dem Entwickler der synaptischen Verbindung."
+msgstr "Wir wissen nicht, was Nexus ist und wer oder was es steuert. Anfängliche Untersuchungen weisen auf eine Verbindung des Nexus-Eindringlingsprogramm zur Reed Corporation hin, dem Entwickler der synaptischen Verbindung."
 
 #: data/base/sequenceaudio/cam1/cam1out5.txt:8
 msgid "We have ascertained that Nexus supplied the New Paradigm with most of its technology. Whatever Nexus is, it's more than a computer parasite."
@@ -9591,7 +9590,7 @@ msgstr "Wir konnten feststellen, dass Nexus das New Paradigm mit einem Großteil
 
 #: data/base/sequenceaudio/cam1/cam1out5.txt:10
 msgid "It has technology and weapons. It knows about us, and it's not friendly."
-msgstr "Es verfügt über Technologie und Waffen. Es weiß von uns und es ist nicht unbedingt unser Freund."
+msgstr "Es verfügt über Technologie und Waffen. Es weiß von uns und es ist nicht freundlich gesinnt."
 
 #: data/base/sequenceaudio/cam1/map1a_c.txt:4
 msgid "The Synaptic Link was developed by the Reed Corporation in conjunction with the US Military."
@@ -9643,7 +9642,7 @@ msgstr "Sie werden zerstört werden."
 
 #: data/base/sequenceaudio/cam1/sub14anp.txt:4
 msgid "NEXUS, the synaptic technology you required has been recovered and sent for collection."
-msgstr "Nexus, die geforderte synaptische Technologie wurde geborgen und auf den Weg geschickt."
+msgstr "NEXUS, die geforderte synaptische Technologie wurde geborgen und auf den Weg geschickt."
 
 #: data/base/sequenceaudio/cam1/sub1_4bn.txt:4
 msgid "You have done well."
@@ -9667,7 +9666,7 @@ msgstr "Wir konnten seine genaue Funktion oder sein Ziel nicht feststellen. In s
 
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:8
 msgid "Further analysis was prevented by the manual shutdown of the system by our technicians to prevent additional contamination by the Nexus Intruder Program."
-msgstr "Weitere Untersuchungen wurden durch das manuelle Abschalten des Systems durch unsere Techniker verhindert. Sie wollten so eine weitere Verseuchung des Systems vermeiden."
+msgstr "Weitere Untersuchungen wurden durch das manuelle Abschalten des Systems durch unsere Techniker verhindert, um eine weitere Verseuchung durch das Nexuseindringlingsprogramm zu verhindern."
 
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:10
 msgid "However, the spread of the Nexus Intruder Program was not checked by New Paradigm. We need to capture New Paradigm's core systems to further investigate Nexus and determine its origins."
@@ -9695,7 +9694,7 @@ msgstr "Anflug auf Östlichen Sektor"
 
 #: data/base/sequenceaudio/cam2/c002.txa:6
 msgid "Team Alpha approaches Beta Base"
-msgstr "Team Alpha nähert sich der Beta-Basis"
+msgstr "Team Alpha nähert sich der Betabasis"
 
 #: data/base/sequenceaudio/cam2/c002.txa:10
 msgid "You must defend and hold it at all costs."
@@ -9723,7 +9722,7 @@ msgstr "NASDA ist die North American Strategic Defense Agency."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:3
 msgid "NASDA was formed in 2076 to defend North America from conventional and nuclear attack. The construction of a satellite defense system began in 2081 and was completed in 2082."
-msgstr "Die NASDA wurde im Jahre 2076 gegründet, um Nordamerika gegen konventionelle und nukleare Angriffe zu verteidigen. Der Bau eines Satellitenverteidigungssystem wurde im Jahre 2081 aufgenommen und 2082 beendet."
+msgstr "Die NASDA wurde im Jahre 2076 gegründet, um Nordamerika gegen konventionelle und nukleare Angriffe zu verteidigen. Der Bau eines Satellitenverteidigungssystems wurde im Jahre 2081 aufgenommen und 2082 beendet."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:6
 msgid "In 2085 the NASDA satellites fired their nukes at Earth."
@@ -9795,7 +9794,7 @@ msgstr "Die darauf folgenden elektromagnetischen Impulse löschten große Bereic
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:8
 msgid "Nexus was fried as whole sections of its consciousness were obliterated in the counterstrikes."
-msgstr "Somit wurden während der Gegenschläge ganze Bestandteile von Nexus Bewusstsein ausgelöscht."
+msgstr "Nexus wurde übel mitgenommen, als komplette Teile seines Bewusstseins in den Gegenschlägen verloren gingen."
 
 #: data/base/sequenceaudio/cam2/cam26bfm.txt:1
 msgid "Commander we are detecting transmissions from this site that are reaching high orbit."
@@ -9843,7 +9842,7 @@ msgstr "Krieger des Kollektivs, zerstört all jene, die sich der Maschine widers
 
 #: data/base/sequenceaudio/cam2/cam2acol.txt:5
 msgid "Attack! Erase their presence from this area!"
-msgstr "Kämpft! Kämpft!"
+msgstr "Kämpft! Entfernt ihr Antlitz aus diesem Gebiet!"
 
 #: data/base/sequenceaudio/cam2/cam2bcol.txt:1
 msgid "Warriors of The Collective, we are ready to destroy the intruders who pollute our lands."
@@ -9851,7 +9850,7 @@ msgstr "Krieger des Kollektivs, wir können nun die Eindringlinge bekämpfen, di
 
 #: data/base/sequenceaudio/cam2/cam2bcol.txt:3
 msgid "Those of the Project are not of the machine. They have been denied its blessing. We who have embraced the power of the machine have a destiny to sweep away such weak creatures."
-msgstr "Die Anhänger des Projekts sind kein Teil der Maschine. Ihnen wurde der Segen verweigert. Wir, die wir die Macht der Maschine gesehen haben, haben die Verpflichtung solche schwachen Kreaturen hinwegzufegen."
+msgstr "Die Anhänger des Projekts sind kein Teil der Maschine. Sie haben den Segen verweigert. Wir, die wir die Macht der Maschine angenommen haben, haben das Schicksal solch schwache Kreaturen hinwegzufegen."
 
 #: data/base/sequenceaudio/cam2/cam2bcol.txt:6
 msgid "They shall fall before the might of The Collective."
@@ -9859,7 +9858,7 @@ msgstr "Sie sollen von der Macht des Kollektivs zerschmettert werden."
 
 #: data/base/sequenceaudio/cam2/cam2bcol.txt:8
 msgid "Attack and destroy all who resist the machine."
-msgstr "Krieger des Kollektivs, bekämpft und zerstört all jene, die sich der Maschine widersetzen."
+msgstr "Bekämpft und zerstört all jene, die sich der Maschine widersetzen."
 
 #: data/base/sequenceaudio/cam2/cam2bcol.txt:9
 msgid "Attack!"
@@ -9875,7 +9874,7 @@ msgstr "Nexus will, dass wir das Projekt zerschmettern."
 
 #: data/base/sequenceaudio/cam2/cam2dico.txt:4
 msgid "Cleanse and destroy!!"
-msgstr "Kämpft, säubert und vereint tötet sie alle!!"
+msgstr "Säubert und zerstört!!"
 
 #: data/base/sequenceaudio/cam2/cam2diin.txt:1
 msgid "Warriors of the Collective. You have performed well."
@@ -9895,7 +9894,7 @@ msgstr "Ihr müsst sie aufhalten!"
 
 #: data/base/sequenceaudio/cam2/cam2dipl.txt:1
 msgid "Decoding Transmission..."
-msgstr "Übertragung wird enschlüsselt..."
+msgstr "Übertragung wird dekodiert..."
 
 #: data/base/sequenceaudio/cam3/c003.txa:1
 msgid "CAMPAIGN THREE"
@@ -9971,7 +9970,7 @@ msgstr "Feindliche VTOLs nageln uns am Boden fest. Wir konnten die Cyborgs und P
 
 #: data/base/sequenceaudio/cam3/cam32a2.txt:7
 msgid "Can you try and reach us with anti-aircraft units?"
-msgstr "Können Sie uns versuchen mit Einheiten der Luftabwehr zu unterstützen?"
+msgstr "Können Sie uns versuchen mit Flugabwehreinheiten zu unterstützen?"
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:1
 msgid "This is Team Alpha. Repeat, this is Team Alpha. We require immediate assistance."
@@ -9999,15 +9998,15 @@ msgstr "Commander, Einheiten von Team Alpha haben den Atomangriff auf die Alphab
 
 #: data/base/sequenceaudio/cam3/cam34mu1.txt:1
 msgid "We are experiencing some interference from NEXUS."
-msgstr "Wir werden von Nexus beeinflusst."
+msgstr "Wir haben Interferenzen durch NEXUS."
 
 #: data/base/sequenceaudio/cam3/cam34mu1.txt:3
 msgid "You must destroy his command centre before we lose control of key systems."
-msgstr "Commander, Sie müssen das Kommandozentrum von Nexus zerstören, bevor wir die Kontrolle über unsere Schlüsselsysteme verlieren."
+msgstr "Sie müssen das Kommandozentrum von Nexus zerstören, bevor wir die Kontrolle über unsere Schlüsselsysteme verlieren."
 
 #: data/base/sequenceaudio/cam3/cam34mu2.txt:1
 msgid "Commander, welcome to NEXUS!"
-msgstr "Commander, willkommen im Nexus!"
+msgstr "Commander, willkommen im NEXUS!"
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:1
 msgid "The Reed Corporation was founded by Dr Allan Reed. In 2080, Dr Reed landed a contract with the US Military to develop the synaptic link technology."
@@ -10035,23 +10034,23 @@ msgstr "Es scheint, dass Dr. Reed seine Ziele erfolgreich weiterverfolgt und das
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:12
 msgid "The similarity between NEXUS and Dr Reed is striking."
-msgstr "Die Ähnlichkeit zwischen Nexus und Dr. Reed ist jedenfalls bemerkenswert."
+msgstr "Die Ähnlichkeit zwischen NEXUS und Dr. Reed ist jedenfalls bemerkenswert."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:14
 msgid "Such an interesting history lesson. Now allow me to bring you up to date."
-msgstr "Welch eine interessante Geschichte. Doch nun zum neuesten Stand der Dinge."
+msgstr "Welch interessante Geschichtsstunde. Doch nun zum neuesten Stand der Dinge."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:15
 msgid "The NEXUS Intruder Program was created in order to control fools like you."
-msgstr "Das Nexusprogramm wurde entwickelt, um Narren wie Sie zu kontrollieren."
+msgstr "Das NEXUS-Eindringlingsprogramm wurde entwickelt, um Narren wie Sie zu kontrollieren."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:17
 msgid "It's very simple for me to infiltrate your systems and take them over. It's so simple, in fact, that you wouldn't even know I'm there. That is until I activate parts of myself etched into your core systems."
-msgstr "Es ist sehr einfach für mich Ihre Systeme zu infiltrieren und zu übernehmen. Es ist so einfach, dass Sie nicht einmal merken, dass ich da bin. Zumindest solange nicht bis ich die in Ihren Kernsystemen eingeschleusten Teile von mir aktiviere."
+msgstr "Es ist sehr einfach für mich Ihre Systeme zu infiltrieren und zu übernehmen. Es ist so einfach, dass Sie nicht einmal merken, dass ich da bin. Zumindest solange nicht, bis ich die in Ihren Kernsystemen eingeschleusten Teile von mir aktiviere."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:19
 msgid "Let's start by activating NEXUS in your core systems and see what happens!"
-msgstr "Beginnen wir damit den Nexus in Schlüsselbereichen zu aktivieren und schauen wir, was dabei herauskommt!"
+msgstr "Beginnen wir damit den NEXUS in Schlüsselbereichen zu aktivieren und schauen wir, was dabei herauskommt!"
 
 #: data/base/sequenceaudio/cam3/cam3abpl.txt:1
 msgid "Commander, we are experiencing interference with our equipment."
@@ -10075,11 +10074,11 @@ msgstr "Sie haben fünf Minuten Bedenkzeit, danach gibt's ein Grillfest!"
 
 #: data/base/sequenceaudio/cam3/cam3bg.txt:1
 msgid "Commander, we are under attack by NEXUS cyborgs and tanks. Please help as we...."
-msgstr "Commander, wir werden von Nexus-Cyborgs und -panzern angegriffen. Erbitten Unterstützung ..."
+msgstr "Commander, wir werden von NEXUS Cyborgs und Panzern angegriffen. Erbitten Unterstützung, da wir ..."
 
 #: data/base/sequenceaudio/cam3/cam3bg.txt:3
 msgid "...cannot hold out much longer.  Repeat, please help, we cannot hold out much longer...."
-msgstr "...werden nicht sehr viel länger aushalten können. Wiederhole, erbitten Unterstützung, da wir nicht mehr sehr viel länger..."
+msgstr "... nicht sehr viel länger werden aushalten können. Wiederhole, erbitten Unterstützung, da wir nicht mehr sehr viel länger..."
 
 #: data/base/sequenceaudio/cam3/cam3_bn.txt:1
 msgid "Ah, Commander, so good of you to join us here at Nexus base."
@@ -10127,15 +10126,15 @@ msgstr "Nach intensiver Suche und Neuprogrammierung, sind alle meine Systeme end
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:8
 msgid "Once I destroyed the world with nuclear fire to clear the way for my cybernetic future."
-msgstr "Einst habe ich die Welt mit Atomraketen zerstört, um den Weg für meine kybernetische Zukunft zu bahnen."
+msgstr "Einst habe ich die Welt mit atomarem Feuer zerstört, um den Weg für meine kybernetische Zukunft zu bahnen."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:9
 msgid "I now intend to further shape the world into my own image, by  surgically removing unwanted growths like yourself."
-msgstr "Nun beabsichtige ich die Welt weiter nach meinem Abbild zu formen, indem ich unerwünschte Auswüchse wie Sie chirurgisch entferne."
+msgstr "Nun beabsichtige ich die Welt weiter nach meinem Belieben zu formen, indem ich unerwünschte Auswüchse wie Sie chirurgisch entferne."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:11
 msgid "My Laser Satellites are now powering up. I intend to test them on you first, Commander!"
-msgstr "Meine Lasersatelliten laufen gerade warm. Ich werde sie als erstes an Ihnen testen, Commander!"
+msgstr "Meine Lasersatelliten laufen gerade warm. Ich werde sie als Erstes an Ihnen testen, Commander!"
 
 #: data/base/sequenceaudio/devastation.txa:4
 msgid "Dusk, November 3rd, 2085"
@@ -10184,11 +10183,11 @@ msgstr "Ein Neuer Anfang"
 
 #: data/base/sequenceaudio/devastation.txt:1
 msgid "The NASDA system was developed to protect us. It was to be the ultimate nuclear deterrent. As it turned out, it was our executioner."
-msgstr "Das NASDA-System wurde entwickelt, um uns zu schützen. Unser aller Erlöser. Es galt als ultimative nukleare Abschreckung, doch es wurde zu unserem Henker."
+msgstr "Das NASDA-System wurde entwickelt, um uns zu schützen. Es galt als ultimative nukleare Abschreckung, doch es wurde zu unserem Henker."
 
 #: data/base/sequenceaudio/devastation.txt:3
 msgid "Reports said that NASDA developed a fault during a routine systems check. Don't believe it. Someone wanted it to take us out."
-msgstr "Berichten zufolge soll das NASDA während einer Routineüberprüfung der Systeme einen Fehler entwickelt haben. Glauben Sie das nicht. Die Fehlfunktion folgte einem Plan mit dem Ziel uns auszulöschen."
+msgstr "Berichten zufolge soll das NASDA während einer Routineüberprüfung der Systeme einen Fehler entwickelt haben. Glauben Sie das nicht. Jemand wollte, dass es uns auslöscht."
 
 #: data/base/sequenceaudio/devastation.txt:5
 msgid "Those nukes were targeted on every major city around the world. NASDA was programmed to start the Collapse. When the counterstrikes launched, its laser defenses and anti-missile ground sites failed."
@@ -10277,8 +10276,6 @@ msgstr "Mörsernachladezeit -10%"
 msgid "Rocket reload time -15%"
 msgstr "Raketennachladezeit -15%"
 
-# auto -> selbst
-# Substantiv im Englischen absichtlich als Adjektiv im Deutschen -Kreuvf
 #: data/mp/messages/resmessages12.rmsg:165
 #: data/mp/messages/resmessages3.rmsg:685
 msgid "Cannon reload time -10%"
@@ -10564,7 +10561,7 @@ msgstr "Radardetektor ortet feindliche Sensoren"
 
 #: data/mp/messages/resmessagesall.rmsg:105
 msgid "Orders assigned indirect fire units to fire at the enemy sensors"
-msgstr "Weist zugewiesene indirekt-feuernde Einheiten an feindliche Sensoren zu beschießen"
+msgstr "Weist zugewiesene indirektfeuernde Einheiten an feindliche Sensoren zu beschießen"
 
 #: data/mp/messages/resmessagesall.rmsg:106
 msgid "Counter-battery fire continues until enemy sensor is suppressed"
@@ -10598,11 +10595,11 @@ msgstr "Gepanzerte Grube mit Brandmörser"
 
 #: data/mp/messages/resmessagesall.rmsg:214
 msgid "Armored strongpoint with Plasmite Flamer"
-msgstr "Gepanzerte Stellung mit Plasmit-Flammenwerfer"
+msgstr "Gepanzerte Stellung mit Plasmitflammenwerfer"
 
 #: data/mp/messages/resmessagesall.rmsg:224
 msgid "Armed with Cyborg Thermite Flamer"
-msgstr "Bewaffnet mit Thermit-Flammenwerfer für Cyborgs"
+msgstr "Bewaffnet mit Thermitflammenwerfer für Cyborgs"
 
 #: data/mp/messages/resmessagesall.rmsg:234
 msgid "Armed with grenades"
@@ -10622,7 +10619,7 @@ msgstr "Brandhaubitze kann Sensoren zugewiesen werden"
 
 #: data/mp/messages/resmessagesall.rmsg:294
 msgid "Plasmite Flame-thrower"
-msgstr "Plasmit-Flammenwerfer"
+msgstr "Plasmitflammenwerfer"
 
 #: data/mp/messages/resmessagesall.rmsg:306
 msgid "Steals technology from structures and takes control of weapons"
@@ -10655,11 +10652,11 @@ msgstr "Bewaffnet mit Hochgeschwindigkeitgeschütz"
 
 #: data/mp/messages/resmessagesall.rmsg:364
 msgid "Armed with tank killer rockets"
-msgstr "Bewaffnet mit Tank Killer-Raketen"
+msgstr "Bewaffnet mit Tank-Killer-Raketen"
 
 #: data/mp/messages/resmessagesall.rmsg:374
 msgid "Fires heavy pulses of laser light"
-msgstr "Verschießt starke Laser-Impulse"
+msgstr "Verschießt starke Laserimpulse"
 
 #: data/mp/messages/resmessagesall.rmsg:375
 msgid "Best Targets: Heavy cyborgs"
@@ -10667,7 +10664,7 @@ msgstr "Beste Ziele: Schwere Cyborgs"
 
 #: data/mp/messages/resmessagesall.rmsg:384
 msgid "76mm twin-barrel automatic-cannon"
-msgstr "Doppelläufiges 76mm-Schnellfeuergeschütz"
+msgstr "Doppelläufiges 76-mm-Schnellfeuergeschütz"
 
 #: data/mp/messages/resmessagesall.rmsg:393
 #: data/mp/messages/resmessagesall.rmsg:403
@@ -10743,7 +10740,7 @@ msgstr "Bewaffnet mit Scourge-Lenkraketenwerfer für Cyborgs"
 
 #: data/mp/messages/resmessagesall.rmsg:504
 msgid "Uses advanced mass driver railgun technology"
-msgstr "Verwendet fortschrittliche Magnetgeschützmassenbeschleunigertechnologie"
+msgstr "Verwendet fortschrittliche Massenbeschleunigertechnologie für Magnetgeschütze"
 
 #: data/mp/messages/resmessagesall.rmsg:506
 #: data/mp/messages/resmessagesall.rmsg:516
@@ -10810,11 +10807,11 @@ msgstr "Gepanzerte Grube mit EMP-Mörser"
 
 #: data/mp/messages/resmessagesall.rmsg:643
 msgid "Laser AA Gun Available"
-msgstr "Luftabwehrlaser verfügbar"
+msgstr "Flugabwehrlaser verfügbar"
 
 #: data/mp/messages/resmessagesall.rmsg:644
 msgid "Twin Medium Anti-Aircraft Laser"
-msgstr "Mittlerer Zwillings-Luftabwehrlaser"
+msgstr "Mittlerer Zwillingsflugabwehrlaser"
 
 #: data/mp/messages/resmessagesall.rmsg:663
 msgid "Hardpoint Avenger SAM Site Available"
@@ -10826,12 +10823,12 @@ msgstr "Aufhängung mit Cyclone FLAK verfügbar"
 
 #: data/mp/messages/resmessagesall.rmsg:674
 msgid "Quad 80mm Anti-Aircraft machinegun"
-msgstr "Vierfaches 80mm-Luftabwehrmaschinengewehr"
+msgstr "Vierfaches 80-mm-Flugabwehrmaschinengewehr"
 
 #: data/mp/messages/resmessagesall.rmsg:684
 #: data/mp/messages/resmessagesall.rmsg:694
 msgid "Twin Multi-barrel, rapid-fire machinegun"
-msgstr "Mehrläufiges Zwillings-Schnellfeuermaschinengewehr"
+msgstr "Mehrläufiges Zwillingsschnellfeuermaschinengewehr"
 
 #: data/mp/messages/resmessagesall.rmsg:693
 msgid "Hardpoint Twin Assault Gun Available"
@@ -10876,7 +10873,7 @@ msgstr "Reparaturarm Viper Halbketten"
 
 #: data/mp/messages/strings/names.txt:183
 msgid "Mini-Rocket Array Viper Wheels"
-msgstr "Miniraketen-Anordnung Viper Räder"
+msgstr "Miniraketenanordnung Viper Räder"
 
 #: data/mp/messages/strings/names.txt:184
 msgid "Bunker Buster Rockets Viper Wheels"
@@ -10888,13 +10885,12 @@ msgstr "Sensorturm Cobra Halbketten"
 
 #: data/mp/messages/strings/names.txt:194
 msgid "Mini-Rocket Array Cobra Half-tracks"
-msgstr "Miniraketen-Anordnung Cobra Halbketten"
+msgstr "Miniraketenanordnung Cobra Halbketten"
 
 #: data/mp/messages/strings/names.txt:351
 msgid "Jammer Tower"
 msgstr "Turm mit Störsender"
 
-# Fachbegriff ist wohl Verwürfler im Deutschen, aber damit kann kaum jemand etwas anfangen -Kreuvf
 #: data/mp/messages/strings/names.txt:352
 msgid "Jammer Turret"
 msgstr "Aufbau mit Störsender"
@@ -10933,14 +10929,13 @@ msgstr "Bunker mit Inferno"
 
 #: data/mp/messages/strings/names.txt:408
 msgid "Tornado AA Site"
-msgstr "Luftabwehrstellung mit Tornado"
+msgstr "Flugabwehrstellung mit Tornado"
 
-# Nonsense im Original nicht originalgetreu übersetzt, daher fuzzy - Kreuvf
+# Nonsense im Original nicht originalgetreu übersetzt -Kreuvf
 #: data/mp/messages/strings/names.txt:409
 #: data/mp/messages/strings/names.txt:722
-#, fuzzy
 msgid "AA Flak Cannon Emplacement"
-msgstr "Stellung mit Luftabwehrgeschütz"
+msgstr "Stellung mit Flugabwehrgeschütz"
 
 #: data/mp/messages/strings/names.txt:465
 #: data/mp/messages/strings/names.txt:786
@@ -10955,35 +10950,33 @@ msgstr "Turm mit Pulslaser"
 #: data/mp/messages/strings/names.txt:504
 #: data/mp/messages/strings/names.txt:1133
 msgid "Seraph Missile Array"
-msgstr "Seraph-Raketen-Anordnung"
+msgstr "Seraph-Raketenanordnung"
 
 #: data/mp/messages/strings/names.txt:522
 #: data/mp/messages/strings/names.txt:1196
 msgid "Mini-Rocket Array"
-msgstr "Miniraketen-Anordnung"
+msgstr "Miniraketenanordnung"
 
-# Nonsense im Original nicht originalgetreu übersetzt, daher fuzzy - Kreuvf
+# Nonsense im Original nicht originalgetreu übersetzt -Kreuvf
 #: data/mp/messages/strings/names.txt:544
 #: data/mp/messages/strings/names.txt:993
-#, fuzzy
 msgid "AA Flak Cannon"
-msgstr "Luftabwehrgeschütz"
+msgstr "Flugabwehrgeschütz"
 
-# Nonsense im Original nicht originalgetreu übersetzt, daher fuzzy - Kreuvf
+# Nonsense im Original nicht originalgetreu übersetzt -Kreuvf
 #: data/mp/messages/strings/names.txt:545
-#, fuzzy
 msgid "VTOL Flak Cannon"
-msgstr "VTOL-Luftabwehrgeschütz"
+msgstr "VTOL-Flugabwehrgeschütz"
 
 #: data/mp/messages/strings/names.txt:558
 #: data/mp/messages/strings/names.txt:1694
 #: data/mp/messages/strings/names.txt:1701
 msgid "Laser Satellite Command Post"
-msgstr "Lasersatelliten-Kommandozentrale"
+msgstr "Lasersatellitenkommandozentrale"
 
 #: data/mp/messages/strings/names.txt:575
 msgid "VTOL Cluster Bomb Bay"
-msgstr "VTOL-Streubomben-Abwurfschacht"
+msgstr "VTOL-Streubombenabwurfschacht"
 
 #: data/mp/messages/strings/names.txt:582
 msgid "Collective Corner Wall"
@@ -11005,19 +10998,19 @@ msgstr "Supertransporter"
 
 #: data/mp/messages/strings/names.txt:677
 msgid "Super Transport Body"
-msgstr "Supertransporter-Rumpf"
+msgstr "Supertransporterrumpf"
 
 #: data/mp/messages/strings/names.txt:716
 msgid "Plasteel"
-msgstr "Kunststoff-Stahl-Verbundstoff"
+msgstr "Kunststoffstahlverbundstoff"
 
 #: data/mp/messages/strings/names.txt:717
 msgid "Plasteel Mk2"
-msgstr "Kunststoff-Stahl-Verbundstoff Mk2"
+msgstr "Kunststoffstahlverbundstoff Mk2"
 
 #: data/mp/messages/strings/names.txt:718
 msgid "Plasteel Mk3"
-msgstr "Kunststoff-Stahl-Verbundstoff Mk3"
+msgstr "Kunststoffstahlverbundstoff Mk3"
 
 #: data/mp/messages/strings/names.txt:727
 #: data/mp/messages/strings/names.txt:1388
@@ -11027,7 +11020,7 @@ msgstr "Stellung mit Hochgeschwindigkeitsgeschütz"
 #: data/mp/messages/strings/names.txt:738
 #: data/mp/messages/strings/names.txt:1391
 msgid "Seraph Missile Battery"
-msgstr "Seraph-Raketen-Batterie"
+msgstr "Seraph-Raketenbatterie"
 
 #: data/mp/messages/strings/names.txt:767
 msgid "Flamer Tower"
@@ -11107,7 +11100,7 @@ msgstr "NEXUS-resistente Schaltkreise Mk3"
 
 #: data/mp/messages/strings/names.txt:1015
 msgid "Cluster Bomb Bay"
-msgstr "Streubomben-Abwurfschacht"
+msgstr "Streubombenabwurfschacht"
 
 #: data/mp/messages/strings/names.txt:1020
 msgid "HE Bomb Shells"
@@ -11161,11 +11154,10 @@ msgstr "Reparaturarm Cobra Ketten"
 msgid "Hyper Velocity Cannon Python Tracks"
 msgstr "Hochgeschwindigkeitsgeschütz Python Ketten"
 
-# Nonsense im Original nicht originalgetreu übersetzt, daher fuzzy - Kreuvf
+# Nonsense im Original nicht originalgetreu übersetzt -Kreuvf
 #: data/mp/messages/strings/names.txt:1475
-#, fuzzy
 msgid "AA Flak Cannon Python Half-tracks"
-msgstr "Luftabwehrgeschütz Python Ketten"
+msgstr "Flugabwehrgeschütz Python Ketten"
 
 #: data/mp/messages/strings/names.txt:1513
 msgid "Bunker Buster Cobra Hover"
@@ -11181,19 +11173,19 @@ msgstr "Sensorverbesserung Mk3"
 
 #: data/mp/messages/strings/names.txt:1517
 msgid "Vapor Turbine Generator Mk2"
-msgstr "Dampfturbinen-Generator Mk2"
+msgstr "Dampfturbinengenerator Mk2"
 
 #: data/mp/messages/strings/names.txt:1521
 msgid "Gas Turbine Generator Mk2"
-msgstr "Gasturbinen-Generator Mk2"
+msgstr "Gasturbinengenerator Mk2"
 
 #: data/mp/messages/strings/names.txt:1522
 msgid "Gas Turbine Generator Mk3"
-msgstr "Gasturbinen-Generator Mk3"
+msgstr "Gasturbinengenerator Mk3"
 
 #: data/mp/messages/strings/names.txt:1525
 msgid "Vapor Turbine Generator Mk3"
-msgstr "Dampfturbinen-Generator Mk3"
+msgstr "Dampfturbinengenerator Mk3"
 
 #: data/mp/messages/strings/names.txt:1613
 msgid "Thermite Flamer"
@@ -11205,7 +11197,7 @@ msgstr "Grenadier"
 
 #: data/mp/messages/strings/names.txt:1625
 msgid "Combat Engineer"
-msgstr "Schlachtfeld-Baumeister"
+msgstr "Schlachtfeldbaumeister"
 
 #: data/mp/messages/strings/names.txt:1630
 msgid "Cyborg Mechanic"
@@ -11224,12 +11216,12 @@ msgstr "Stellung mit Brandhaubitze"
 #: data/mp/messages/strings/names.txt:1638
 #: data/mp/messages/strings/names.txt:1639
 msgid "Plasmite Flamer"
-msgstr "Plasmit-Flammenwerfer"
+msgstr "Plasmitflammenwerfer"
 
 #: data/mp/messages/strings/names.txt:1640
 #: data/mp/messages/strings/names.txt:1641
 msgid "Plasmite Flamer Bunker"
-msgstr "Bunker mit Plasmit-Flammenwerfer"
+msgstr "Bunker mit Plasmitflammenwerfer"
 
 #: data/mp/messages/strings/names.txt:1642
 #: data/mp/messages/strings/names.txt:1643
@@ -11291,7 +11283,7 @@ msgstr "Hochgeschwindigkeitsgeschütz-Supercyborg"
 #: data/mp/messages/strings/names.txt:1676
 #: data/mp/messages/strings/names.txt:1677
 msgid "Super Tank-Killer Cyborg"
-msgstr "Tank Killer-Supercyborg"
+msgstr "Tank-Killer-Supercyborg"
 
 #: data/mp/messages/strings/names.txt:1679
 #: data/mp/messages/strings/names.txt:1680
@@ -11310,12 +11302,12 @@ msgstr "Stellung für schweren Laser"
 #: data/mp/messages/strings/names.txt:1689
 #: data/mp/messages/strings/names.txt:1690
 msgid "Twin Assault Cannon"
-msgstr "Zwillings-Sturmgeschütz"
+msgstr "Zwillingssturmgeschütz"
 
 #: data/mp/messages/strings/names.txt:1691
 #: data/mp/messages/strings/names.txt:1692
 msgid "Twin Assault Cannon Bunker"
-msgstr "Bunker mit Zwillings-Sturmgeschütz"
+msgstr "Bunker mit Zwillingssturmgeschütz"
 
 #: data/mp/messages/strings/names.txt:1695
 #: data/mp/messages/strings/names.txt:1700
@@ -11326,12 +11318,12 @@ msgstr "Satellitenkontrollzentrale"
 #: data/mp/messages/strings/names.txt:1696
 #: data/mp/messages/strings/names.txt:1698
 msgid "Wide Spectrum Sensor"
-msgstr "Weitspektrum-Sensor"
+msgstr "Weitspektrumsensor"
 
 #: data/mp/messages/strings/names.txt:1697
 #: data/mp/messages/strings/names.txt:1699
 msgid "Wide Spectrum Sensor Tower"
-msgstr "Weitspektrum-Sensorturm"
+msgstr "Weitspektrumsensorturm"
 
 #: data/mp/messages/strings/names.txt:1717
 #: data/mp/messages/strings/names.txt:1718
@@ -11345,20 +11337,20 @@ msgstr "Stellung mit Plasmakanone"
 
 #: data/mp/messages/strings/names.txt:1722
 msgid "Sunburst AA Rocket Array"
-msgstr "Anordnung mit Sunburst-Luftabwehrrakete"
+msgstr "Anordnung mit Sunburst-Flugabwehrrakete"
 
 #: data/mp/messages/strings/names.txt:1723
 msgid "Sunburst AA"
-msgstr "Sunburst-Luftabwehrrakete"
+msgstr "Sunburst-Flugabwehrrakete"
 
 #: data/mp/messages/strings/names.txt:1724
 msgid "VTOL Sunburst AA"
-msgstr "VTOL-Sunburst-Luftabwehrrakete"
+msgstr "VTOL-Sunburst-Flugabwehrrakete"
 
 #: data/mp/messages/strings/names.txt:1725
 #: data/mp/messages/strings/names.txt:1726
 msgid "Sunburst AA Site"
-msgstr "Luftabwehrstellung mit Sunburst"
+msgstr "Flugabwehrstellung mit Sunburst"
 
 #: data/mp/messages/strings/names.txt:1728
 #: data/mp/messages/strings/names.txt:1729
@@ -11464,7 +11456,7 @@ msgstr "EMP-Mörsergrube"
 #: data/mp/messages/strings/names.txt:1787
 #: data/mp/messages/strings/names.txt:1789
 msgid "Stormbringer AA Laser"
-msgstr "Stormbringer-Luftabwehrlaser"
+msgstr "Stormbringer-Flugabwehrlaser"
 
 #: data/mp/messages/strings/names.txt:1788
 #: data/mp/messages/strings/names.txt:1790
@@ -11481,12 +11473,11 @@ msgstr "Aufhängung mit Vindicator-SAM"
 msgid "Whirlwind Hardpoint"
 msgstr "Aufhängung mit Whirlwind"
 
-# Nonsense im Original nicht originalgetreu übersetzt, daher fuzzy - Kreuvf
+# Nonsense im Original nicht originalgetreu übersetzt -Kreuvf
 #: data/mp/messages/strings/names.txt:1795
 #: data/mp/messages/strings/names.txt:1796
-#, fuzzy
 msgid "AA Flak Cannon Hardpoint"
-msgstr "Aufhängung mit Luftabwehrgeschütz"
+msgstr "Aufhängung mit Flugabwehrgeschütz"
 
 #: data/mp/messages/strings/names.txt:1797
 #: data/mp/messages/strings/names.txt:1798
@@ -11501,11 +11492,11 @@ msgstr "Zwillingssturmgewehr"
 #: data/mp/messages/strings/names.txt:1804
 #: data/mp/messages/strings/names.txt:1805
 msgid "Twin Assault Gun Hardpoint"
-msgstr "Aufhängung mit Zwillings-Sturmgewehr"
+msgstr "Aufhängung mit Zwillingssturmgewehr"
 
 #: data/mp/messages/strings/names.txt:1807
 msgid "VTOL Plasmite Bomb Bay"
-msgstr "VTOL-Plasmitbomben-Abwurfschacht"
+msgstr "VTOL-Plasmitbombenabwurfschacht"
 
 #: data/mp/messages/strings/names.txt:1808
 msgid "Plasmite Bomb"
@@ -11574,7 +11565,7 @@ msgstr "Maschinengewehr Viper Ketten"
 
 #: data/mp/messages/strings/names.txt:1846
 msgid "Twin Machinegun Viper Tracks"
-msgstr "Zwillings-Maschinengewehr Viper Ketten"
+msgstr "Zwillingsmaschinengewehr Viper Ketten"
 
 #: data/mp/messages/strings/names.txt:1850
 msgid "Medium Cannon Cobra Hover"
@@ -11646,7 +11637,7 @@ msgstr "Vengeance Ketten Scourge"
 
 #: data/mp/messages/strings/names.txt:1874
 msgid "VTOL Cluster Bomb Bay Bug VTOL"
-msgstr "VTOL-Streubomben-Abwurfschacht Bug VTOL"
+msgstr "VTOL-Streubombenabwurfschacht Bug VTOL"
 
 #: data/mp/messages/strings/names.txt:1875
 msgid "VTOL Bunker Buster Bug VTOL"
@@ -11654,7 +11645,7 @@ msgstr "VTOL-Bunker Buster Bug VTOL"
 
 #: data/mp/messages/strings/names.txt:1876
 msgid "VTOL Cluster Bomb Bay Scorpion VTOL"
-msgstr "VTOL-Streubomben-Abwurfschacht Scorpion VTOL"
+msgstr "VTOL-Streubombenabwurfschacht Scorpion VTOL"
 
 #: data/mp/messages/strings/names.txt:1877
 msgid "VTOL Bunker Buster Scorpion VTOL"
@@ -11786,7 +11777,7 @@ msgstr "Miniraketen Cobra Ketten"
 
 #: data/mp/messages/strings/names.txt:1924
 msgid "Mini-Rocket Array Cobra Tracks"
-msgstr "Miniraketen-Anordnung Cobra Ketten"
+msgstr "Miniraketenanordnung Cobra Ketten"
 
 #: data/mp/messages/strings/names.txt:1926
 msgid "Inferno Cobra Half-Tracks"
@@ -11898,20 +11889,19 @@ msgstr "Miniraketen Viper Halbketten"
 
 #: data/mp/messages/strings/names.txt:1959
 msgid "Mini-Rocket Array Viper Half Track"
-msgstr "Miniraketen-Anordnung Viper Halbketten"
+msgstr "Miniraketenanordnung Viper Halbketten"
 
 #: data/mp/messages/strings/names.txt:1960
 msgid "Phosphor Bomb Bay Mantis VTOL"
-msgstr "Phosphorbomben-Abwurfschacht Mantis VTOL"
+msgstr "Phosphorbombenabwurfschacht Mantis VTOL"
 
-# HEAP = high explosive, armor piercing -Kreuvf
 #: data/mp/messages/strings/names.txt:1961
 msgid "Heap Bomb Bay Mantis VTOL"
-msgstr "VTOL-Bombenabwurfschacht für hochexplosive, panzerbrechende Bomben Mantis VTOL"
+msgstr "VTOL-Bombenabwurfschacht für hochexplosive panzerbrechende Bomben Mantis VTOL"
 
 #: data/mp/messages/strings/names.txt:1962
 msgid "Heap Bomb Bay Retribution VTOL"
-msgstr "VTOL-Bombenabwurfschacht für hochexplosive, panzerbrechende Bomben Retribution VTOL"
+msgstr "VTOL-Bombenabwurfschacht für hochexplosive panzerbrechende Bomben Retribution VTOL"
 
 #: data/mp/messages/strings/names.txt:1963
 msgid "Scourge Retaliation VTOL"
@@ -11919,7 +11909,7 @@ msgstr "Scourge-Lenkrakete Retaliation VTOL"
 
 #: data/mp/messages/strings/names.txt:1964
 msgid "Plasmite Retribution VTOL"
-msgstr "VTOL-Plasmitbomben-Abwurfschacht"
+msgstr "VTOL-Plasmitbombenabwurfschacht"
 
 #: lib/framework/i18n.cpp:99
 #: lib/framework/i18n.cpp:161
@@ -11928,12 +11918,11 @@ msgstr "Systemsprache"
 
 #: lib/ivis_opengl/screen.cpp:187
 msgid "OpenGL GLSL shader version 1.20 is not supported by your system. Some things may look wrong. Please upgrade your graphics driver/hardware, if possible."
-msgstr "OpenGL GLSL-Shader in der Version 1.20 werden von Ihrem System nicht unterstützt. Manches könnte falsch aussehen. Bitte aktualisieren Sie, falls möglich, Grafiktreiber oder -hardware."
+msgstr "OpenGL-GLSL-Shader in der Version 1.20 werden von Ihrem System nicht unterstützt. Manches könnte falsch aussehen. Bitte aktualisieren Sie, falls möglich, Grafiktreiber oder -hardware."
 
 #: lib/ivis_opengl/screen.cpp:193
-#, fuzzy
 msgid "OpenGL 1.2 + VBO + TEC is not supported by your system. The game requires this. Please upgrade your graphics drivers/hardware, if possible."
-msgstr "OpenGL 1.2 + VBO-Erweiterung + TEC-Erweiterung wird von Ihrem System nicht unterstützt. Das Spiel erfordert dies. Bitte aktualisieren Sie, falls möglich, Grafiktreiber oder -hardware."
+msgstr "OpenGL 1.2 + VBO-Erweiterung + TEC-Erweiterung werden von Ihrem System nicht unterstützt. Das Spiel erfordert dies. Bitte aktualisieren Sie, falls möglich, Grafiktreiber oder -hardware."
 
 #: lib/netplay/netplay.cpp:218
 #: lib/netplay/netplay.cpp:1120
@@ -11945,23 +11934,29 @@ msgid ""
 "Your router doesn't support UPnP, you must manually configure your router & firewall to\n"
 "open port 2100 before you can host a game."
 msgstr ""
+"Ihr Router unterstützt UPnP nicht, Sie müssen Ihren Router und Ihre Firewall händisch\n"
+"einstellen, um Port 2100 zu öffnen, bevor Sie ein Spiel leiten können."
 
 #: lib/netplay/netplay.cpp:999
 msgid ""
 "No UPnP device was found. You must manually configure your router & firewall to\n"
 "open port 2100 before you can host a game."
 msgstr ""
+"Kein UPnP-Gerät gefunden. Sie müssen Ihren Router und Ihre Firewall händisch\n"
+"einstellen, um Port 2100 zu öffnen, bevor Sie ein Spiel leiten können."
 
 #: lib/netplay/netplay.cpp:1027
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open require port (%s) on  (%s)"
-msgstr "Konnte Lobbyserver-Namen nicht auflösen (%s)!"
+msgstr "Konnte benötigten Port (%s) auf (%s) nicht öffnen"
 
 #: lib/netplay/netplay.cpp:1031
 msgid ""
 "You must manually configure your router & firewall to\n"
 " open port 2100 before you can host a game."
 msgstr ""
+"Sie müssen Ihren Router und Ihre Firewall händisch\n"
+"einstellen, um Port 2100 zu öffnen, bevor Sie ein Spiel leiten können."
 
 #: lib/netplay/netplay.cpp:1041
 #, c-format
@@ -11969,6 +11964,8 @@ msgid ""
 "Game configured port (%s) correctly on (%s)\n"
 "Your external IP is %s"
 msgstr ""
+"Das Spiel hat den Port (%s) korrekt konfiguriert auf (%s)\n"
+"Ihre externe IP-Adresse lautet %s"
 
 #: lib/netplay/netplay.cpp:2187
 #, c-format
@@ -11993,13 +11990,12 @@ msgid "Failed to get a lobby response!"
 msgstr "Keine Lobbyantwort erhalten!"
 
 #: po/custom/mac-infoplist.txt:1
-#, fuzzy
 msgid ""
 "Copyright © 1999-2004 Eidos Interactive.\n"
 "Copyright © 2005-2013 The Warzone 2100 Project"
 msgstr ""
 "Copyright © 1999-2004 Eidos Interactive.\n"
-"Copyright © 2005-2012 The Warzone 2100 Project"
+"Copyright © 2005-2013 The Warzone 2100 Project"
 
 #: po/custom/mac-infoplist.txt:2
 #: po/custom/warzone2100.desktop.txt:2
@@ -12008,20 +12004,20 @@ msgstr "Warzone 2100"
 
 #: po/custom/mac-infoplist.txt:3
 msgid "Warzone 2100 Map / Mod File"
-msgstr "Warzone-2100-Karten/Mod-Datei"
+msgstr "Warzone-2100-Karten/Moddatei"
 
 #: po/custom/mac-infoplist.txt:4
 msgid "Warzone 2100 Campaign Mod File"
-msgstr "Warzone-2100-Feldzug-Mod-Datei"
+msgstr "Warzone-2100-Feldzug-Moddatei"
 
 # Das hat(te) Warzone damals schon, kA, ob noch nutzbar -Kreuvf
 #: po/custom/mac-infoplist.txt:5
 msgid "Warzone 2100 Multiplayer Mod File"
-msgstr "Warzone-2100-Mehrspieler-Mod-Datei"
+msgstr "Warzone-2100-Mehrspieler-Moddatei"
 
 #: po/custom/mac-infoplist.txt:6
 msgid "Warzone 2100 Global Mod File"
-msgstr "Warzone-2100-Global-Mod-Datei"
+msgstr "Warzone-2100-Global-Moddatei"
 
 #: po/custom/mac-infoplist.txt:7
 msgid "Warzone"
@@ -12029,7 +12025,7 @@ msgstr "Warzone"
 
 #: po/custom/mac-infoplist.txt:8
 msgid "Warzone 2100 Music Mod File"
-msgstr "Warzone-2100-Musik-Mod-Datei"
+msgstr "Warzone-2100-Musik-Moddatei"
 
 #: po/custom/warzone2100.desktop.txt:1
 msgid "Postnuclear realtime strategy"
@@ -12090,14 +12086,14 @@ msgstr "Setze Standard-Datenverzeichnis"
 msgid "data directory"
 msgstr "Datenverzeichnis"
 
-# Aus dem Source ist ersichtlich, was mit "level" gemeint ist, kA, ob Sektion gut übersetzt ist -Kreuvf
+# Aus dem Source ist ersichtlich, was mit "level" gemeint ist, kA, ob das gut übersetzt ist -Kreuvf
 #: src/clparse.cpp:244
 msgid "Show debug for given level"
-msgstr "Zeige die Debugdaten für die angeforderte Sektion"
+msgstr "Zeige die Debugdaten für die angeforderten Bereich"
 
 #: src/clparse.cpp:244
 msgid "debug level"
-msgstr "Debug-Sektion"
+msgstr "Debugbereich"
 
 #: src/clparse.cpp:245
 msgid "Log debug output to file"
@@ -12530,9 +12526,8 @@ msgid "View Intro"
 msgstr "Intro zeigen"
 
 #: src/frontend.cpp:120
-#, fuzzy
 msgid "Videos are missing, download them from http://wz2100.net"
-msgstr "Feldzugvideos fehlen! Hole Sie dir unter http://wz2100.net/."
+msgstr "Videos fehlen, laden Sie sie von http://wz2100.net/ herunter."
 
 #: src/frontend.cpp:122
 msgid "Quit Game"
@@ -12543,26 +12538,24 @@ msgid "MAIN MENU"
 msgstr "HAUPTMENÜ"
 
 #: src/frontend.cpp:125
-#, fuzzy
 msgid "Official site: http://wz2100.net/"
-msgstr "Besuchen Sie unsere offizielle Webseite: http://wz2100.net"
+msgstr "Offizielle Webseite: http://wz2100.net/"
 
 #: src/frontend.cpp:126
 msgid "Come visit the forums and all Warzone 2100 news! Click this link."
-msgstr ""
+msgstr "Besuchen Sie die Foren und alle Warzone-2100-Neuigkeiten! Klicken Sie auf diesen Link."
 
 #: src/frontend.cpp:127
-#, fuzzy
 msgid "Donate: http://donations.wz2100.net/"
-msgstr "Besuchen Sie unsere offizielle Webseite: http://wz2100.net"
+msgstr "Spenden: http://donations.wz2100.net/"
 
 #: src/frontend.cpp:128
 msgid "Help support the project with our server costs, Click this link."
-msgstr ""
+msgstr "Helfen Sie dem Projekt bei der Deckung unserer Serverkosten, klicken Sie auf diesen Link."
 
 #: src/frontend.cpp:129
 msgid "Check for a newer version"
-msgstr ""
+msgstr "Nach neuer Version suchen."
 
 #: src/frontend.cpp:257
 msgid "Fast Play"
@@ -12613,7 +12606,7 @@ msgstr "Einzelspieler"
 
 #: src/frontend.cpp:326
 msgid "Campaign videos are missing! Get them from http://wz2100.net"
-msgstr "Feldzugvideos fehlen! Hole Sie dir unter http://wz2100.net/."
+msgstr "Feldzugvideos fehlen! Hole Sie dir von http://wz2100.net/."
 
 #: src/frontend.cpp:402
 #: src/ingameop.cpp:504
@@ -12639,7 +12632,7 @@ msgstr "Spiel beitreten"
 
 #: src/frontend.cpp:470
 msgid "TCP port 2100 must be opened in your firewall or router to host games!"
-msgstr ""
+msgstr "TCP-Port 2100 muss auf Ihrer Firewall oder Ihrem Router geöffnet sein, um Spiele leiten zu können!"
 
 #: src/frontend.cpp:534
 #: src/multiint.cpp:1490
@@ -12961,30 +12954,29 @@ msgstr "Spieler %u erschummelt (Debugmenü) sich eine neue Einheit: %s."
 msgid "Player %u is cheating (debug menu) him/herself a new droid."
 msgstr "Spieler %u erschummelt (Debugmenü) sich eine neue Einheit."
 
-# Commander kann als Eigenname im Deutschen allerdings mit deutschem Plural stehen bleiben -Kreuvf
 #: src/hci.cpp:3295
 msgid "Commanders (F6)"
-msgstr "Commandermenü"
+msgstr "Commander (F6)"
 
 #: src/hci.cpp:3308
 msgid "Intelligence Display (F5)"
-msgstr "Aufklärungsbildschirm"
+msgstr "Aufklärungsbildschirm (F5)"
 
 #: src/hci.cpp:3321
 msgid "Manufacture (F1)"
-msgstr "Produktionsmenü"
+msgstr "Produktion (F1)"
 
 #: src/hci.cpp:3334
 msgid "Design (F4)"
-msgstr "Entwurfmenü"
+msgstr "Entwurf (F4)"
 
 #: src/hci.cpp:3347
 msgid "Research (F2)"
-msgstr "Forschungsmenü"
+msgstr "Forschung (F2)"
 
 #: src/hci.cpp:3360
 msgid "Build (F3)"
-msgstr "Konstruktionsmenü"
+msgstr "Konstruktion (F3)"
 
 #: src/hci.cpp:3431
 #: src/multiint.cpp:1603
@@ -13094,7 +13086,7 @@ msgstr "Fortschrittsbalken"
 
 #: src/hci.cpp:4893
 msgid "Factory Delivery Point"
-msgstr "Fabrik-Auslieferungspunkt"
+msgstr "Fabrikauslieferungspunkt"
 
 #: src/hci.cpp:4911
 msgid "Loop Production"
@@ -13112,7 +13104,7 @@ msgstr "Spiel fortsetzen"
 
 #: src/ingameop.cpp:135
 msgid "WARNING: You're the host. If you quit, the game ends for everyone!"
-msgstr "Warnung: Sie sind Spielleiter. Wenn Sie das Spiel verlassen, endet es für alle!"
+msgstr "WARNUNG: Sie sind Spielleiter. Wenn Sie das Spiel verlassen, endet es für alle!"
 
 #: src/ingameop.cpp:187
 #: src/ingameop.cpp:538
@@ -13172,11 +13164,11 @@ msgstr "Warte auf Energie"
 
 #: src/intdisplay.cpp:249
 msgid "Build Progress"
-msgstr "Fortschrittsbalken"
+msgstr "Baufortschritt"
 
 #: src/intdisplay.cpp:271
 msgid "Construction Progress"
-msgstr "Fortschrittsbalken"
+msgstr "Baufortschritt"
 
 #: src/intdisplay.cpp:292
 msgid "Research Progress"
@@ -13292,7 +13284,7 @@ msgstr "Rückkehr zwecks Recycling"
 
 #: src/intorder.cpp:183
 msgid "Recycle"
-msgstr "Wirklich recyclen"
+msgstr "Recyclen"
 
 #: src/intorder.cpp:184
 msgid "Assign Factory Production"
@@ -13300,7 +13292,7 @@ msgstr "Fabrikproduktion zuweisen"
 
 #: src/intorder.cpp:185
 msgid "Assign Cyborg Factory Production"
-msgstr "Cyborg-Fabrikproduktion zuweisen"
+msgstr "Cyborgfabrikproduktion zuweisen"
 
 #: src/intorder.cpp:186
 msgid "Assign Fire Support"
@@ -13316,7 +13308,7 @@ msgstr "Kreis"
 
 #: src/keybind.cpp:138
 msgid "Sorry, that cheat is disabled in multiplayer games."
-msgstr "Entschuldige, dieser Cheat ist in Mehrspieler-Spielen deaktiviert."
+msgstr "Entschuldigen Sie, dieser Cheat ist in Mehrspielerspielen deaktiviert."
 
 #: src/keybind.cpp:171
 msgid "Warning! This cheat is buggy.  We recommend to NOT use it."
@@ -13324,15 +13316,15 @@ msgstr "Warnung! Dieser Cheat ist fehlerbehaftet. Wir empfehlen ihn NICHT zu nut
 
 #: src/keybind.cpp:228
 msgid "Ouch! Droid's health is down 20%!"
-msgstr "Autsch! Einheitengesundheit um 20% runter"
+msgstr "Autsch! Einheitengesundheit um 20% runter!"
 
 #: src/keybind.cpp:244
 msgid "Ouch! Structure's health is down 20%!"
-msgstr "Autsch! Gebäudegesundheit um 20% runter"
+msgstr "Autsch! Gebäudegesundheit um 20% runter!"
 
 #: src/keybind.cpp:299
 msgid "Lets us see what you see!"
-msgstr "Lass' uns sehen was du siehst!"
+msgstr "Lass' uns sehen, was du siehst!"
 
 #: src/keybind.cpp:301
 msgid "Fine, weapon & sensor display is off!"
@@ -13341,7 +13333,7 @@ msgstr "Gut, Waffen- und Sensoranzeige sind aus!"
 #: src/keybind.cpp:423
 #, c-format
 msgid "Player %u is cheating a new droid army of: %s."
-msgstr "Spieler %u erschummelt sich eine neue Einheiten-Armee aus %s."
+msgstr "Spieler %u erschummelt sich eine neue Einheitenarmee aus %s."
 
 #: src/keybind.cpp:461
 #: src/keybind.cpp:491
@@ -13369,7 +13361,7 @@ msgstr "Die Dinge leicht nehmen!"
 
 #: src/keybind.cpp:492
 msgid "1000 big ones!!!"
-msgstr "1000 Riesenviecher!!!"
+msgstr "1000 Riesenoschis!!!"
 
 # Ursprünglich kenne ich das nur als Cheat aus StarCraft und das sollte imho nicht übersetzt werden -Kreuvf
 #: src/keybind.cpp:509
@@ -13521,7 +13513,7 @@ msgstr "Kann Kommandozentrale nicht finden!"
 
 #: src/keybind.cpp:2568
 msgid "Formation speed limiting has been removed from the game due to bugs."
-msgstr "Geschwindigkeitbegrenzung für Formationen aufgrund von Fehlern aus dem Spiel entfernt."
+msgstr "Geschwindigkeitbegrenzung für Formationen wurde aufgrund von Fehlern aus dem Spiel entfernt."
 
 #: src/keybind.cpp:2617
 msgid "Vertical rotation direction: Normal"
@@ -13599,19 +13591,19 @@ msgstr "Voreinstellung auswählen"
 
 #: src/keymap.cpp:309
 msgid "Manufacture"
-msgstr "Produktionsmenü"
+msgstr "Produktion"
 
 #: src/keymap.cpp:310
 msgid "Research"
-msgstr "Forschungsmenü"
+msgstr "Forschung"
 
 #: src/keymap.cpp:311
 msgid "Build"
-msgstr "Konstruktionsmenü"
+msgstr "Konstruktion"
 
 #: src/keymap.cpp:312
 msgid "Design"
-msgstr "Entwurfmenü"
+msgstr "Entwurf"
 
 #: src/keymap.cpp:313
 msgid "Intelligence Display"
@@ -13619,7 +13611,7 @@ msgstr "Aufklärungsbildschirm"
 
 #: src/keymap.cpp:314
 msgid "Commanders"
-msgstr "Commandereinheiten"
+msgstr "Commander"
 
 #: src/keymap.cpp:315
 msgid "Toggle Radar"
@@ -14059,7 +14051,7 @@ msgstr "DEMO-Modus umschalten"
 
 #: src/keymap.cpp:470
 msgid "End Mission"
-msgstr "Beende Mission."
+msgstr "Beende Mission"
 
 #: src/keymap.cpp:471
 msgid "Toggles All fog"
@@ -14270,16 +14262,15 @@ msgstr "Geleitet von %s —%s"
 
 #: src/multiint.cpp:1029
 msgid "Can't find any games for your version."
-msgstr ""
+msgstr "Kann keine Spiele für Ihre Version finden."
 
 #: src/multiint.cpp:1046
 msgid "There appears to be a game update available!"
-msgstr ""
+msgstr "Es scheint eine Spielaktualisierung zu geben!"
 
 #: src/multiint.cpp:1050
-#, fuzzy
 msgid "No games are available for your version"
-msgstr "Es sind keine Spiele verfügbar"
+msgstr "Es sind keine Spiele für Ihre Version verfügbar"
 
 #: src/multiint.cpp:1054
 msgid "Game is full"
@@ -14326,9 +14317,8 @@ msgid "Refresh Games List"
 msgstr "Spieleliste aktualisieren"
 
 #: src/multiint.cpp:1278
-#, fuzzy
 msgid "Filter Games List"
-msgstr "Spieleliste aktualisieren"
+msgstr "Spieleliste filtern"
 
 #: src/multiint.cpp:1305
 msgid "Enter Password:"
@@ -14365,7 +14355,7 @@ msgstr "Spielname auswählen"
 
 #: src/multiint.cpp:1496
 msgid "One-Player Skirmish"
-msgstr "Einzelspieler-Geplänkel"
+msgstr "Einzelspielergeplänkel"
 
 #: src/multiint.cpp:1510
 msgid "Select Map"
@@ -14373,7 +14363,7 @@ msgstr "Karte auswählen"
 
 #: src/multiint.cpp:1511
 msgid "Map-Mod!"
-msgstr ""
+msgstr "Karten-Mod"
 
 #: src/multiint.cpp:1524
 msgid "Click to set Password"
@@ -14405,7 +14395,6 @@ msgstr "Keine Bündnisse"
 msgid "Allow Alliances"
 msgstr "Bündnisse erlauben"
 
-# festgelegt ungleich fest -Kreuvf
 #: src/multiint.cpp:1579
 msgid "Locked Teams"
 msgstr "Feste Teams"
@@ -14463,7 +14452,7 @@ msgstr "Gebäudebeschränkungen einstellen"
 
 #: src/multiint.cpp:1784
 msgid "DIFFICULTY"
-msgstr "Schwierigkeitsgrad"
+msgstr "SCHWIERIGKEITSGRAD"
 
 #: src/multiint.cpp:1798
 msgid "Less aggressive"
@@ -14568,7 +14557,7 @@ msgstr "*** Passwort wird nicht benötigt! ***"
 
 #: src/multiint.cpp:3029
 msgid "This is a map-mod, it can change your playing experience!"
-msgstr ""
+msgstr "Dies ist eine Karten-Mod, sie kann ihre Spielerfahrung verändern!"
 
 #: src/multiint.cpp:3077
 msgid "Sorry! Failed to host the game."
@@ -14577,7 +14566,7 @@ msgstr "Tut mir leid! Spieleröffnung fehlgeschlagen."
 # festgelegt ungleich fest -Kreuvf
 #: src/multiint.cpp:3200
 msgid "'Locked Teams' mode enabled"
-msgstr "\"Feste Teams\"-Modus aktiviert"
+msgstr "Feste-Teams-Modus aktiviert"
 
 #: src/multiint.cpp:3228
 #: src/multiint.cpp:3297
@@ -14592,28 +14581,27 @@ msgstr "Der Spielleiter startet das Spiel"
 
 #: src/multiint.cpp:3942
 msgid "UPnP has been enabled."
-msgstr ""
+msgstr "UPnP wurde aktiviert."
 
 #: src/multiint.cpp:3948
 msgid "UPnP detection faled. You must manually configure router yourself."
-msgstr ""
+msgstr "UPnP-Erkennung fehlgeschlagen. Sie müssen Ihren Router händisch konfigurieren."
 
 #: src/multiint.cpp:3952
-#, fuzzy
 msgid "UPnP detection is in progress..."
-msgstr "Entschlüsselung läuft....."
+msgstr "UPnP-Erkennung läuft....."
 
 #: src/multiint.cpp:3959
 msgid "UPnP detection disabled by user. Autoconfig of port 2100 will not happen."
-msgstr ""
+msgstr "UPnP-Erkennung durch den Nutzer deaktiviert. Autokonfiguration von Port 2100 wird nicht durchgeführt."
 
 #: src/multiint.cpp:3965
 msgid "Hit the ready box to begin your challenge!"
-msgstr ""
+msgstr "Klicke den Fertig-Kasten, um die Herausforderung zu starten!"
 
 #: src/multiint.cpp:3969
 msgid "Press the start hosting button to begin hosting a game."
-msgstr ""
+msgstr "Drücke den Spiel-leiten-Knopf, um die Leitung eines Spiels zu starten."
 
 #: src/multiint.cpp:4011
 msgid "Can't connect to lobby server!"
@@ -14698,7 +14686,7 @@ msgstr "Servernachricht:"
 
 #: src/multijoin.cpp:479
 msgid "There is an update to the game, please visit http://wz2100.net to download new version."
-msgstr ""
+msgstr "Es gibt eine Aktualisierung für das Spiel, bitte besuchen Sie http://wz2100.net/, um die neue Version herunterzuladen."
 
 #: src/multilimit.cpp:183
 msgid "Apply Defaults and Return To Previous Screen"
@@ -14802,12 +14790,12 @@ msgstr "%s : %s aus dem Spiel geworfen und zur Bannliste hinzugefügt!"
 #: src/multiopt.cpp:227
 #: src/multiplay.cpp:1722
 msgid "Warning, this is a map-mod, it could alter normal gameplay."
-msgstr ""
+msgstr "Warnung, dies ist eine Karten-Mod, sie könnte das normale Spiel verändern."
 
 #: src/multiopt.cpp:231
 #: src/multiplay.cpp:1726
 msgid "Warning, HOST has altered the game code, and can't be trusted!"
-msgstr ""
+msgstr "Warnung, der SPIELLEITER hat den Code des Spiels verändert und kann nicht vertraut werden!"
 
 #: src/multiplay.cpp:263
 #, c-format
@@ -15069,7 +15057,6 @@ msgstr[1] "%u Einheiten ausgewählt"
 msgid "Can't build anymore units, Command Control Limit Reached - Production Halted"
 msgstr "Kann keine weiteren Einheiten mehr bauen, Commandereinheit hat Kontrollgrenze erreicht - Produktion angehalten"
 
-# nix Gruppe! -Kreuvf
 #: src/structure.cpp:5621
 #: src/structure.cpp:5646
 #, c-format
@@ -15097,7 +15084,6 @@ msgstr "%s - %u von %u verbunden - Schaden %3.0f%%"
 msgid "%s - Electronically Damaged"
 msgstr "%s - Elektronisch beschädigt"
 
-# Reward ist zwar nicht Beute, aber im Krieg erbeutet man eben Dinge -Kreuvf
 #: src/structure.cpp:6161
 msgid "Electronic Reward - Visibility Report"
 msgstr "Elektronische Beute - Sichtbarkeitsbericht"
@@ -15150,9 +15136,9 @@ msgstr " - DEBUG"
 #. TRANSLATORS: This string looks as follows when expanded.
 #. "Version <version name/number> <working copy state><BUILD DATE><BUILD TYPE>"
 #: src/version.cpp:86
-#, fuzzy, c-format
+#, c-format
 msgid "Version: %s,%s Built:%s%s"
-msgstr "Version %s%s%s%s"
+msgstr "Version %s,%s Erstellt:%s%s"
 
 #, fuzzy
 #~ msgid "Disable the use of OpenGL shaders"
@@ -15384,7 +15370,7 @@ msgstr "Version %s%s%s%s"
 #~ msgstr "Miniraketennachladezeit -15%"
 
 #~ msgid "Cyclone AA Site"
-#~ msgstr "Luftabwehrstellung mit Cyclone"
+#~ msgstr "Flugabwehrstellung mit Cyclone"
 
 #~ msgid "Gate"
 #~ msgstr "Spiel"
@@ -15680,12 +15666,12 @@ msgstr "Version %s%s%s%s"
 
 #, fuzzy
 #~ msgid "Phosphor Bomb Bay Manits VTOL"
-#~ msgstr "Phosphorbomben-Abwurfschacht"
+#~ msgstr "Phosphorbombenabwurfschacht"
 
 # HEAP = high explosive, armor piercing -Kreuvf
 #, fuzzy
 #~ msgid "Heap Bomb Bay Manits VTOL"
-#~ msgstr "VTOL-Bombenabwurfschacht für hochexplosive, panzerbrechende Bomben"
+#~ msgstr "VTOL-Bombenabwurfschacht für hochexplosive panzerbrechende Bomben"
 
 #, fuzzy
 #~ msgid ", mod: "
@@ -15820,10 +15806,10 @@ msgstr "Version %s%s%s%s"
 #~ msgstr "Viper Maschinengewehr Räder"
 
 #~ msgid "Viper Twin Machinegun Wheels"
-#~ msgstr "Viper Zwillings-Maschinengewehr Räder"
+#~ msgstr "Viper Zwillingsmaschinengewehr Räder"
 
 #~ msgid "Viper Twin Machinegun Half-track"
-#~ msgstr "Viper Zwillings-Maschinengewehr Halbketten"
+#~ msgstr "Viper Zwillingsmaschinengewehr Halbketten"
 
 #~ msgid "Viper Heavy Machinegun Half-track"
 #~ msgstr "Viper Schweres Maschinengewehr Halbketten"
@@ -15921,15 +15907,15 @@ msgstr "Version %s%s%s%s"
 
 #, fuzzy
 #~ msgid "HEAP Mini-Pods"
-#~ msgstr "Hochexplosive, panzerbrechende Miniraketen"
+#~ msgstr "Hochexplosive panzerbrechende Miniraketen"
 
 #, fuzzy
 #~ msgid "HEAP Mini-Pods Mk2"
-#~ msgstr "Hochexplosive, panzerbrechende Miniraketen Mk2"
+#~ msgstr "Hochexplosive panzerbrechende Miniraketen Mk2"
 
 #, fuzzy
 #~ msgid "HEAP Mini-Pods Mk3"
-#~ msgstr "Hochexplosive, panzerbrechende Miniraketen Mk3"
+#~ msgstr "Hochexplosive panzerbrechende Miniraketen Mk3"
 
 #, fuzzy
 #~ msgid "Fast Fire Mini-Pods"
@@ -15959,7 +15945,7 @@ msgstr "Version %s%s%s%s"
 #~ msgstr "Turm mit NEXUS-Link"
 
 #~ msgid "Whirlwind AATurret"
-#~ msgstr "Whirlwind-Luftabwehrturm"
+#~ msgstr "Whirlwind-Flugabwehrturm"
 
 #~ msgid "Power Upgrade"
 #~ msgstr "Kraftwerkverbesserung"
@@ -15968,7 +15954,7 @@ msgstr "Version %s%s%s%s"
 #~ msgstr "Viper Räder Maschinenengewehr"
 
 #~ msgid "Viper Wheels Twin Machinegun"
-#~ msgstr "Viper Räder Zwillings-Maschinengewehr"
+#~ msgstr "Viper Räder Zwillingsmaschinengewehr"
 
 #~ msgid "Viper Wheels Heavy Machinegun"
 #~ msgstr "Viper Räder Schweres Maschinengewehr"
@@ -15983,7 +15969,7 @@ msgstr "Version %s%s%s%s"
 #~ msgstr "Viper Ketten Maschinengewehr"
 
 #~ msgid "Viper Tracks Twin Machinegun"
-#~ msgstr "Viper Ketten Zwillings-Maschinengewehr"
+#~ msgstr "Viper Ketten Zwillingsmaschinengewehr"
 
 #~ msgid "Viper Tracks Heavy Machinegun"
 #~ msgstr "Viper Ketten Schweres Maschinengewehr"
