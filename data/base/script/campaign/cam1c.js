@@ -121,24 +121,26 @@ camAreaEvent("NPLZ1Trigger", function()
 	// please don't ask me why they did it this way
 	hackAddMessage("MB1C4_MSG", MISS_MSG, 0, true);
 	camDetectEnemyBase("NPLZ1Group");
-	camSetEnemyReinforcements(
-		"NPLZ1Group", CAM_REINFORCE_TRANSPORT,
-		300000, "getDroidsForNPLZ", {
+
+	camSetBaseReinforcements("NPLZ1Group", 300000, "getDroidsForNPLZ",
+		CAM_REINFORCE_TRANSPORT, {
 			entry: { x: 126, y: 76 },
 			exit: { x: 126, y: 36 }
-		});
+		}
+	);
 });
 
 camAreaEvent("NPLZ2Trigger", function()
 {
 	hackAddMessage("MB1C3_MSG", MISS_MSG, 0, true);
 	camDetectEnemyBase("NPLZ2Group");
-	camSetEnemyReinforcements(
-		"NPLZ2Group", CAM_REINFORCE_TRANSPORT,
-		300000, "getDroidsForNPLZ", {
+
+	camSetBaseReinforcements("NPLZ2Group", 300000, "getDroidsForNPLZ",
+		CAM_REINFORCE_TRANSPORT, {
 			entry: { x: 126, y: 76 },
 			exit: { x: 126, y: 36 }
-		});
+		}
+	);
 });
 
 function eventDroidBuilt(droid, structure)
@@ -167,6 +169,15 @@ function eventStartLevel()
 	var lz = getObject("landingZone");
 	centreView(startpos.x, startpos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, 0);
+
+	// make sure player doesn't build on enemy LZs of the next level
+	for (var i = 1; i <= 5; ++i)
+	{
+		var ph = getObject("PhantomLZ" + i);
+		// HACK: set LZs of bad players, namely 2...6,
+		// note: player 1 is NP, player 7 is scavs
+		setNoGoArea(ph.x, ph.y, ph.x2, ph.y2, i + 1);
+	}
 
 	setReinforcementTime(-1);
 	setMissionTime(7200);
@@ -268,7 +279,6 @@ function eventStartLevel()
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			throttle: 90000,
-			regroup: true,
 			templates: [ buscan, rbjeep, trike, buggy ]
 		},
 		"ScavCentralFactory": {
@@ -276,7 +286,6 @@ function eventStartLevel()
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			throttle: 60000,
-			regroup: true,
 			templates: [ firecan, rbuggy, bjeep, bloke ]
 		},
 		"ScavNorthFactory": {
@@ -284,7 +293,6 @@ function eventStartLevel()
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			throttle: 30000,
-			regroup: true,
 			templates: [ firecan, rbuggy, buscan, trike ]
 		},
 		"NPCentralFactory": {
@@ -293,6 +301,7 @@ function eventStartLevel()
 			groupSize: 4,
 			throttle: 60000,
 			regroup: true,
+			repair: 40,
 			templates: [ npmor, npsens, npslc ]
 		},
 		"NPNorthFactory": {
@@ -301,6 +310,7 @@ function eventStartLevel()
 			groupSize: 4,
 			throttle: 30000,
 			regroup: true,
+			repair: 40,
 			templates: [ nppod, npsmct, npmor ]
 		},
 	});

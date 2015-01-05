@@ -12,6 +12,7 @@ data/base/script/campaign/cam1-3.js
 data/base/script/campaign/cam1-3s.js
 data/base/script/campaign/cam1a.js
 data/base/script/campaign/cam1b.js
+data/base/script/campaign/cam1ca.js
 data/base/script/campaign/cam1c.js
 data/base/script/campaign/libcampaign.js
 data/base/script/campaign/templates.js
@@ -30,7 +31,6 @@ data/base/script/text/cam1-5s.slo
 data/base/script/text/cam1-7.slo
 data/base/script/text/cam1-7s.slo
 data/base/script/text/cam1a-c.slo
-data/base/script/text/cam1ca.slo
 data/base/script/text/cam1daynight.slo
 data/base/script/text/cam1end.slo
 data/base/script/text/cam2-1x.slo

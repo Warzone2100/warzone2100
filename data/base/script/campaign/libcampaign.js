@@ -452,7 +452,6 @@ function __camBacktrace()
 function camSetArtifacts(artifacts)
 {
 	__camArtifacts = artifacts;
-	__camNumArtifacts = 0;
 	for (var alabel in __camArtifacts)
 	{
 		var ai = __camArtifacts[alabel];
@@ -720,24 +719,83 @@ function camAllEnemyBasesEliminated()
 	return __camNumEnemyBases === Object.keys(__camEnemyBases).length;
 }
 
-//;; \subsection{camSetEnemyReinforcements(base label, kind, interval, callback, data)}
-//;; Periodically brings reinforcements to an enemy base, until the base is
-//;; eliminated. Kind can be one of:
+//;; \subsection{camSendReinforcement(player, position, droids, kind, data)}
+//;; Give a single bunch of droids (template list) for a player at
+//;; a position label. Kind can be one of:
 //;; \begin{description}
-//;; 	\item[CAM_REINFORCE_NONE] Disable previously set reinforcements,
-//;; 	\item[CAM_REINFORCE_GROUND] Reinforcements magically appear on the ground,
-//;; 	\item[CAM_REINFORCE_TRANSPORT] Reinforcements are unloaded from transports.
+//;; 	\item[CAM_REINFORCE_GROUND] Reinforcements magically appear
+//;; 	on the ground,
+//;; 	No data fields are currently supported.
+//;; 	\item[CAM_REINFORCE_TRANSPORT] Reinforcements are unloaded from
+//;; 	a transporter.
 //;; 	\textbf{NOTE:} the game engine doesn't seem to support two simultaneous
 //;; 	incoming transporters for the same player. Avoid this at all costs!
 //;; 	The following data fields are required:
 //;; 	\begin{description}
 //;; 		\item[entry] Transporter entry position.
 //;; 		\item[exit] Transporter exit position.
+//;; 		\item[message] PROX_MSG to display when transport is landing.
+//;; 		\item[order] Order to give to newly landed droids
+//;; 		\item[data] Order data.
 //;; 	\end{description}
+//;; 	 \textbf{NOTE:} the game engine doesn't seem to support two simultaneous
+//;; 	incoming transporters for the same player. If a transporter is already
+//;; 	on map, it will be correctly queued up and sent later.
 //;; \end{description}
-//;; Interval is pause, in milliseconds, between reinforcements. Callback is
-//;; name of a function that returns a list of droid templates to spawn.
-function camSetEnemyReinforcements(blabel, kind, interval, callback, data)
+function camSendReinforcement(player, position, list, kind, data)
+{
+	var pos = camMakePos(position);
+	switch(kind)
+	{
+		case CAM_REINFORCE_GROUND:
+			var droids = [];
+			for (var i = 0; i < list.length; ++i)
+			{
+				droids[droids.length] = addDroid(player, pos.x, pos.y,
+				                        "Reinforcement", list[i].body,
+				                        list[i].prop, null, null, list[i].weap);
+			}
+			camManageGroup(camMakeGroup(droids), CAM_ORDER_ATTACK, {
+				regroup: true,
+				count: -1
+			});
+			break;
+		case CAM_REINFORCE_TRANSPORT:
+			var order = CAM_ORDER_ATTACK, order_data = {
+				regroup: true,
+				count: -1
+			};
+			if (camDef(data) && camDef(data.order))
+			{
+				order = data.order;
+				if (camDef(data) && camDef(data.data))
+				{
+					order_data = data.data;
+				}
+			}
+			__camTransporterQueue[__camTransporterQueue.length] = {
+				player: player,
+				position: position,
+				list: list,
+				data: data,
+				order: order,
+				order_data: order_data
+			};
+			__camDispatchTransporterSafe();
+			break;
+		default:
+			break;
+	}
+}
+
+//;; \subsection{camSetBaseReinforcements(base label, interval, callback, kind, data)}
+//;; Periodically brings reinforcements to an enemy base, until the base is
+//;; eliminated. Interval is the pause, in milliseconds, between reinforcements.
+//;; Callback is name of a function that returns a list of droid templates to spawn,
+//;; which may be different every time. Kind and data work similarly to
+//;; \texttt{camSendReinforcement()}.
+//;; Use CAM_REINFORCE_NONE as kind to disable previously set reinforcements.
+function camSetBaseReinforcements(blabel, interval, callback, kind, data)
 {
 	if (!camIsString(callback))
 		camDebug("Callback name must be a string (received", callback, ")");
@@ -754,6 +812,77 @@ var __camEnemyBases;
 var __camNumEnemyBases;
 var __camPlayerTransports;
 var __camIncomingTransports;
+var __camTransporterQueue;
+var __camTransporterMessage;
+
+// returns true if transporter was launched,
+// false if transporter is already on map,
+// throws error if queue is empty.
+function __camDispatchTransporterUnsafe()
+{
+	if (__camTransporterQueue.length === 0)
+	{
+		camDebug("Transporter queue empty!");
+		return false;
+	}
+	args = __camTransporterQueue[0];
+	var player = args.player;
+	var pos = args.position;
+	var list = args.list;
+	var data = args.data;
+	if (camDef(__camIncomingTransports[player]))
+	{
+		camTrace("Transporter already on map for player",
+		         player + ", delaying.");
+		return false;
+	}
+	__camTransporterQueue.shift(); // what could possibly go wrong?
+	if (!camDef(__camPlayerTransports[player]))
+	{
+		camTrace("Creating a transporter for player", player);
+		__camPlayerTransports[player] = addDroid(player, -1, -1,
+		                                         "Transporter",
+		                                         "TransporterBody",
+		                                         "V-Tol", null, null,
+		                                         "MG3-VTOL");
+	}
+	var trans = __camPlayerTransports[player];
+	var droids = [];
+	for (var i = 0; i < list.length; ++i)
+	{
+		var droid = addDroid(player, -1, -1,
+		                     "Reinforcement", list[i].body,
+		                     list[i].prop, null, null, list[i].weap);
+		droids[droids.length] = droid;
+		addDroidToTransporter(trans, droid);
+	}
+	__camIncomingTransports[player] = {
+		droids: droids,
+		message: args.data.message,
+		order: args.order,
+		data: args.order_data,
+	}
+	camTrace("Incoming transport with", droids.length,
+	         "droids for player", player + 
+	         ", queued transports", __camTransporterQueue.length);
+	setNoGoArea(pos.x - 2, pos.y - 2, pos.x + 2, pos.y + 2, player);
+	setTransporterExit(data.exit.x,
+	                   data.exit.y, player);
+	// will guess which transporter to start, automagically
+	startTransporterEntry(data.entry.x, data.entry.y, player);
+	if (camDef(__camTransporterMessage))
+	{
+		hackRemoveMessage(__camTransporterMessage, PROX_MSG, 0);
+		__camTransporterMessage = undefined;
+	}
+	return true;
+}
+
+function __camDispatchTransporterSafe(player, position, list, data)
+{
+	if (!profile("__camDispatchTransporterUnsafe"))
+		queue("__camDispatchTransporterSafe", 1000);
+}
 
 function __camCheckBaseSeen(seen)
 {
@@ -798,7 +927,7 @@ function __camCheckBaseEliminated(group)
 			var leftovers = enumArea(bi.cleanup);
 			for (var i = 0; i < leftovers.length; i++)
 			{
-				obj = leftovers[i];
+				var obj = leftovers[i];
 				if (__camIsValidLeftover(obj))
 				{
 					// remove with special effect
@@ -846,78 +975,31 @@ function __camBasesTick()
 		bi.reinforce_last = gameTime;
 		var list = profile(bi.reinforce_callback);
 		var pos = camMakePos(bi.cleanup);
-		switch(bi.reinforce_kind)
-		{
-			case CAM_REINFORCE_GROUND:
-				var droids = [];
-				for (var i = 0; i < list.length; ++i)
-				{
-					droids[droids.length] = addDroid(bi.player, pos.x, pos.y,
-					                        "Reinforcement", list[i].body,
-					                        list[i].prop, null, null, list[i].weap);
-				}
-				camManageGroup(camMakeGroup(droids), CAM_ORDER_ATTACK, {
-					regroup: true,
-					count: -1,
-				});
-				break;
-			case CAM_REINFORCE_TRANSPORT:
-				if (camDef(__camIncomingTransports[bi.player]))
-				{
-					camDebug("Transporter already on map for player", bi.player);
-					return;
-				}
-				if (!camDef(__camPlayerTransports[bi.player]))
-				{
-					camTrace("Creating a transporter for player", bi.player);
-					__camPlayerTransports[bi.player] = addDroid(bi.player,
-					                                   -1, -1, "Transporter",
-					                                   "TransporterBody",
-					                                   "V-Tol", null, null,
-					                                   "MG3-VTOL");
-				}
-				var trans = __camPlayerTransports[bi.player];
-				var droids = [];
-				for (var i = 0; i < list.length; ++i)
-				{
-					var droid = addDroid(bi.player, -1, -1,
-					                     "Reinforcement", list[i].body,
-					                     list[i].prop, null, null, list[i].weap);
-					droids[droids.length] = droid;
-					addDroidToTransporter(trans, droid);
-				}
-				__camIncomingTransports[bi.player] = droids;
-				camTrace("Incoming transport with", droids.length,
-				         "droids for player", bi.player);
-				playSound("pcv395.ogg", pos.x, pos.y, 0);
-				setNoGoArea(pos.x - 2, pos.y - 2,
-				            pos.x + 2, pos.y + 2, bi.player);
-				setTransporterExit(bi.reinforce_data.exit.x,
-				                   bi.reinforce_data.exit.y, bi.player);
-				// will guess which transporter to start, automagically
-				startTransporterEntry(bi.reinforce_data.entry.x,
-				                      bi.reinforce_data.entry.y, bi.player);
-				break;
-			default:
-				break;
-		}
+		camSendReinforcement(bi.player, pos, list,
+		                     bi.reinforce_kind, bi.reinforce_data);
 	}
 }
 
-function __camLandTransporter(player)
+function __camLandTransporter(player, pos)
 {
-	if (!camDef(__camIncomingTransports[player]))
+	var ti = __camIncomingTransports[player];
+	if (!camDef(ti))
 	{
 		camDebug("Unhandled transporter for player", player);
 		return;
 	}
+	if (camDef(ti.message))
+	{
+		__camTransporterMessage = ti.message;
+		hackAddMessage(ti.message, PROX_MSG, 0, false);
+	}
+	else
+	{
+		__camTransporterMessage = undefined;
+	}
 	camTrace("Landing transport for player", player);
-	var droids = __camIncomingTransports[player];
-	camManageGroup(camMakeGroup(droids), CAM_ORDER_ATTACK, {
-		regroup: true,
-		count: -1,
-	});
-	delete __camIncomingTransports[player];
+	playSound("pcv395.ogg", pos.x, pos.y, 0);
+	camManageGroup(camMakeGroup(ti.droids), ti.order, ti.data);
 }
 
 
@@ -1779,6 +1861,15 @@ const CAM_VICTORY_OFFWORLD = 2;
 //;; 	and construction droids are lost, or on mission timeout.
 //;; 	Victory when all enemies are destroyed and all artifacts
 //;; 	are recovered.
+//;; 	The following data parameter fields are available:
+//;; 	\begin{description}
+//;; 		\item[calllback] A function callback to check for extra win/loss
+//;; 		conditions. Return values are interpreted as follows:
+//;; 		\textbf{false} means instant defeat ("objective failed"),
+//;; 		\textbf{true} means victory as long as other standard victory
+//;; 		conditions are met, \textbf{undefined} means suppress
+//;; 		other victory checks ("clearly not won yet").
+//;; 	\end{description}
 //;; 	\item[CAM_VICTORY_PRE_OFFWORLD] Defeat on timeout. Victory on
 //;; 	transporter launch, then load the sub-level.
 //;; 	\item[CAM_VICTORY_OFFWORLD] Defeat on timeout or all units lost.
@@ -1801,6 +1892,7 @@ function camSetStandardWinLossConditions(kind, nextLevel, data)
 			__camWinLossCallback = "__camVictoryStandard";
 			__camNeedBonusTime = true;
 			__camDefeatOnTimeout = true;
+			__camVictoryData = data;
 			break;
 		case CAM_VICTORY_PRE_OFFWORLD:
 			__camWinLossCallback = "__camVictoryPreOffworld";
@@ -1880,6 +1972,23 @@ function __camTriggerLastAttack()
 
 function __camVictoryStandard()
 {
+	var extraObjMet = true;
+	if (camDef(__camVictoryData) && camDef(__camVictoryData.callback))
+	{
+		var result = __camGlobalContext[__camVictoryData.callback]();
+		if (camDef(result))
+		{
+			if (!result)
+			{
+				__camGameLost();
+				return;
+			}
+		}
+		else
+		{
+			extraObjMet = false;
+		}
+	}
 	// check if game is lost
 	if (__camPlayerDead())
 	{
@@ -1887,7 +1996,7 @@ function __camVictoryStandard()
 		return;
 	}
 	// check if game is won
-	if (camAllArtifactsPickedUp() && camAllEnemyBasesEliminated())
+	if (camAllArtifactsPickedUp() && camAllEnemyBasesEliminated() && extraObjMet)
 	{
 		if (enumArea(0, 0, mapWidth, mapHeight, ENEMIES, false).length === 0)
 		{
@@ -2110,6 +2219,7 @@ __camPreHookEvent("eventChat", function(from, to, message)
 
 __camPreHookEvent("eventStartLevel", function()
 {
+	isReceivingAllEvents = true;
 	// Variables initialized here are the ones that should not be
 	// re-initialized on save-load. Otherwise, they are initialized
 	// on the global scope (or wherever necessary).
@@ -2117,7 +2227,6 @@ __camPreHookEvent("eventStartLevel", function()
 	__camFactoryInfo = {};
 	__camFactoryQueue = {};
 	__camTruckInfo = {};
-	isReceivingAllEvents = true;
 	__camNeedBonusTime = false;
 	__camDefeatOnTimeout = false;
 	__camRTLZTicker = 0;
@@ -2126,6 +2235,11 @@ __camPreHookEvent("eventStartLevel", function()
 	__camLevelEnded = false;
 	__camPlayerTransports = {};
 	__camIncomingTransports = {};
+	__camTransporterQueue = [];
+	__camNumArtifacts = 0;
+	__camArtifacts = {};
+	__camNumEnemyBases = 0;
+	__camEnemyBases = {};
 	setTimer("__camTick", 1000); // campaign pollers
 	setTimer("__camTruckTick", 150100); // some slower campaign pollers
 	queue("__camTacticsTick", 100); // would re-queue itself
@@ -2164,7 +2278,13 @@ __camPreHookEvent("eventGroupSeen", function(viewer, group)
 
 __camPreHookEvent("eventTransporterExit", function(transport)
 {
-	if (__camWinLossCallback === "__camVictoryPreOffworld")
+	if (transport.player !== CAM_HUMAN_PLAYER)
+	{
+		// allow the next transport to enter
+		if (camDef(__camIncomingTransports[transport.player]))
+			delete __camIncomingTransports[transport.player];
+	}
+	else if (__camWinLossCallback === "__camVictoryPreOffworld")
 	{
 		camTrace("Transporter is away.");
 		__camGameWon();
@@ -2175,7 +2295,7 @@ __camPreHookEvent("eventTransporterExit", function(transport)
 __camPreHookEvent("eventTransporterLanded", function(transport)
 {
 	if (transport.player !== CAM_HUMAN_PLAYER)
-		__camLandTransporter(transport.player);
+		__camLandTransporter(transport.player, camMakePos(transport));
 });
 
 __camPreHookEvent("eventMissionTimeout", function()

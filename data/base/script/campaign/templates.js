@@ -25,5 +25,10 @@ npmor: { body: "Body8MBT", prop: "HalfTrack", weap: "Mortar1Mk1" },
 npsmct: { body: "Body8MBT", prop: "tracked01", weap: "Cannon2A-TMk1" },
 nptruck: { body: "Body8MBT", prop: "HalfTrack", weap: "Spade1Mk1" },
 
+// CAM_1CA
+npmrl: { body: "Body4ABT", prop: "HalfTrack", weap: "Rocket-MRL" },
+npmmct: { body: "Body12SUP", prop: "tracked01", weap: "Cannon2A-TMk1" },
+npsbb: { body: "Body8MBT", prop: "HalfTrack", weap: "Rocket-BB" },
+
 ////////////////////////////////////////////////////////////////////////////////
 };
