@@ -208,7 +208,7 @@ void iV_ShadowBox(int x0, int y0, int x1, int y1, int pad, PIELIGHT first, PIELI
 {
 	pie_SetRendMode(REND_OPAQUE);
 	pie_SetTexturePage(TEXPAGE_NONE);
-	pie_DrawRect(x0 + pad, y0 + pad, x1 - pad, y1 - pad, fill); // necessary side-effect: sets alpha test off
+	pie_DrawRect(x0 + pad, y0 + pad, x1 - pad, y1 - pad, fill);
 	iV_Box2(x0, y0, x1, y1, first, second);
 }
 

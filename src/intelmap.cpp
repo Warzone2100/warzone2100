@@ -930,12 +930,10 @@ void IntMessageButton::display(int xOffset, int yOffset)
 {
 	RESEARCH		*pResearch = NULL;
 	bool MovieButton = false;
-
-	doRotation();
-
 	ImdObject object;
-
 	Image image;
+
+	initDisplay();
 
 	//shouldn't have any proximity messages here...
 	if (psMsg->type == MSG_PROXIMITY)
@@ -1008,8 +1006,8 @@ void IntMessageButton::display(int xOffset, int yOffset)
 		// Draw the button with the relevant image, don't add isDown() to the image ID if it's a movie button.
 		displayImage(MovieButton? image : Image(image.images, image.id + isDown()), xOffset, yOffset);
 	}
-
 	displayIfHighlight(xOffset, yOffset);
+	doneDisplay();
 }
 
 

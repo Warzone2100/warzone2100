@@ -636,16 +636,26 @@ void intDisplayPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 
 IntFancyButton::IntFancyButton(WIDGET *parent)
 	: W_CLICKFORM(parent)
-	, imdRotation(DEFAULT_BUTTON_ROTATION)
-	, imdRotationRate(0)
 	, buttonType(TOPBUTTON)
-{}
-
-void IntFancyButton::doRotation()
 {
-	imdRotationRate += realTimeAdjustedAverage(isHighlighted()? 2*BUTTONOBJ_ROTSPEED : -4*BUTTONOBJ_ROTSPEED);
-	imdRotationRate = clip(imdRotationRate, 0, BUTTONOBJ_ROTSPEED);
-	imdRotation += realTimeAdjustedAverage(imdRotationRate);
+	model.position.x = 0;
+	model.position.y = 0;
+	model.position.z = BUTTON_DEPTH;
+	model.rotation.x =-30;
+	model.rotation.y = DEFAULT_BUTTON_ROTATION;
+	model.rotation.z = 0;
+	model.rate = 0;
+}
+
+void IntFancyButton::initDisplay()
+{
+	model.rate += realTimeAdjustedAverage(isHighlighted()? 2*BUTTONOBJ_ROTSPEED : -4*BUTTONOBJ_ROTSPEED);
+	model.rate = clip(model.rate, 0, BUTTONOBJ_ROTSPEED);
+	model.rotation.y += realTimeAdjustedAverage(model.rate);
+}
+
+void IntFancyButton::doneDisplay()
+{
 }
 
 void IntFancyButton::displayIfHighlight(int xOffset, int yOffset)
@@ -671,11 +681,10 @@ void IntStatusButton::display(int xOffset, int yOffset)
 	BASE_STATS          *Stats, *psResGraphic;
 	UDWORD              compID;
 	bool	            bOnHold = false;
-
-	doRotation();
-
 	ImdObject object;
 	Image image;
+
+	initDisplay();
 
 	if (psObj && isDead(psObj))
 	{
@@ -817,7 +826,7 @@ IntObjectButton::IntObjectButton(WIDGET *parent)
 // Widget callback to display a rendered object button.
 void IntObjectButton::display(int xOffset, int yOffset)
 {
-	doRotation();
+	initDisplay();
 
 	ImdObject object;
 
@@ -846,6 +855,8 @@ void IntObjectButton::display(int xOffset, int yOffset)
 
 	displayIMD(Image(), object, xOffset, yOffset);
 	displayIfHighlight(xOffset, yOffset);
+
+	doneDisplay();
 }
 
 IntStatsButton::IntStatsButton(WIDGET *parent)
@@ -860,7 +871,7 @@ void IntStatsButton::display(int xOffset, int yOffset)
 	BASE_STATS *    psResGraphic;
 	SDWORD          compID;
 
-	doRotation();
+	initDisplay();
 
 	ImdObject object;
 	Image image;
@@ -933,6 +944,8 @@ void IntStatsButton::display(int xOffset, int yOffset)
 
 	displayIMD(image, object, xOffset, yOffset);
 	displayIfHighlight(xOffset, yOffset);
+
+	doneDisplay();
 }
 
 IntFormAnimated::IntFormAnimated(WIDGET *parent, bool openAnimate)
@@ -1228,15 +1241,11 @@ void IntFancyButton::displayIMD(Image image, ImdObject imdObject, int xOffset, i
 		displayImage(image, xOffset, yOffset);
 		return;
 	}
-
 	int ButXPos = xOffset + x();
 	int ButYPos = yOffset + y();
-
-	Vector3i Rotation, Position;
 	UDWORD ox, oy;
 	UDWORD Radius;
 	UDWORD basePlateSize;
-	SDWORD scale;
 
 	if (isDown())
 	{
@@ -1294,68 +1303,48 @@ void IntFancyButton::displayIMD(Image image, ImdObject imdObject, int xOffset, i
 			Radius = getComponentDroidTemplateRadius((DROID_TEMPLATE *)Object);
 		}
 
-		scale = DROID_BUT_SCALE;
+		model.scale = DROID_BUT_SCALE;
 		ASSERT(Radius <= 128, "create PIE button big component found");
 
 		displayClear(xOffset, yOffset);
-
-		Rotation.x = -30;
-		Rotation.y = imdRotation;
-		Rotation.z = 0;
 
 		if (IMDType == IMDTYPE_DROID)
 		{
 			if (isTransporter((DROID *)Object))
 			{
-				Position.x = 0;
-				Position.y = 0;
-				Position.z = BUTTON_DEPTH;
 				if (((DROID *)Object)->droidType == DROID_TRANSPORTER)
 				{
-					scale = DROID_BUT_SCALE / 2;
+					model.scale = DROID_BUT_SCALE / 2;
 				}
 				else
 				{
-					scale = DROID_BUT_SCALE / 3;
+					model.scale = DROID_BUT_SCALE / 3;
 				}
-			}
-			else
-			{
-				Position.x = Position.y = 0;
-				Position.z = BUTTON_DEPTH;
 			}
 		}
 		else//(IMDType == IMDTYPE_DROIDTEMPLATE)
 		{
 			if (((DROID_TEMPLATE *)Object)->droidType == DROID_TRANSPORTER || ((DROID_TEMPLATE *)Object)->droidType == DROID_SUPERTRANSPORTER)
 			{
-				Position.x = 0;
-				Position.y = 0;
-				Position.z = BUTTON_DEPTH;
 				if (((DROID_TEMPLATE *)Object)->droidType == DROID_TRANSPORTER)
 				{
-					scale = DROID_BUT_SCALE / 2;
+					model.scale = DROID_BUT_SCALE / 2;
 				}
 				else
 				{
-					scale = DROID_BUT_SCALE / 3;
+					model.scale = DROID_BUT_SCALE / 3;
 				}
-			}
-			else
-			{
-				Position.x = Position.y = 0;
-				Position.z = BUTTON_DEPTH;
 			}
 		}
 
 		//lefthand display droid buttons
 		if (IMDType == IMDTYPE_DROID)
 		{
-			displayComponentButtonObject((DROID *)Object, &Rotation, &Position, scale);
+			displayComponentButtonObject((DROID *)Object, &model.rotation, &model.position, model.scale);
 		}
 		else
 		{
-			displayComponentButtonTemplate((DROID_TEMPLATE *)Object, &Rotation, &Position, scale);
+			displayComponentButtonTemplate((DROID_TEMPLATE *)Object, &model.rotation, &model.position, model.scale);
 		}
 	}
 	else
@@ -1397,16 +1386,16 @@ void IntFancyButton::displayIMD(Image image, ImdObject imdObject, int xOffset, i
 		if (IMDType == IMDTYPE_COMPONENT)
 		{
 			Radius = getComponentRadius((BASE_STATS *)Object);
-			scale = rescaleButtonObject(Radius, COMP_BUT_SCALE, COMPONENT_RADIUS);
+			model.scale = rescaleButtonObject(Radius, COMP_BUT_SCALE, COMPONENT_RADIUS);
 			// NOTE: The Super transport is huge, and is considered a component type, so refit it to inside the button.
 			BASE_STATS *psStats = (BASE_STATS *)Object;
 			if (psStats->id.compare("SuperTransportBody") == 0)
 			{
-				scale *= .4;
+				model.scale *= .4;
 			}
 			else if (psStats->id.compare("TransporterBody") == 0)
 			{
-				scale *= .6;
+				model.scale *= .6;
 			}
 		}
 		else if (IMDType == IMDTYPE_RESEARCH)
@@ -1414,19 +1403,19 @@ void IntFancyButton::displayIMD(Image image, ImdObject imdObject, int xOffset, i
 			Radius = getResearchRadius((BASE_STATS *)Object);
 			if (Radius <= 100)
 			{
-				scale = rescaleButtonObject(Radius, COMP_BUT_SCALE, COMPONENT_RADIUS);
+				model.scale = rescaleButtonObject(Radius, COMP_BUT_SCALE, COMPONENT_RADIUS);
 			}
 			else if (Radius <= 128)
 			{
-				scale = SMALL_STRUCT_SCALE;
+				model.scale = SMALL_STRUCT_SCALE;
 			}
 			else if (Radius <= 256)
 			{
-				scale = MED_STRUCT_SCALE;
+				model.scale = MED_STRUCT_SCALE;
 			}
 			else
 			{
-				scale = LARGE_STRUCT_SCALE;
+				model.scale = LARGE_STRUCT_SCALE;
 			}
 		}
 		else if (IMDType == IMDTYPE_STRUCTURE)
@@ -1434,15 +1423,15 @@ void IntFancyButton::displayIMD(Image image, ImdObject imdObject, int xOffset, i
 			basePlateSize = getStructureSizeMax((STRUCTURE *)Object);
 			if (basePlateSize == 1)
 			{
-				scale = SMALL_STRUCT_SCALE;
+				model.scale = SMALL_STRUCT_SCALE;
 			}
 			else if (basePlateSize == 2)
 			{
-				scale = MED_STRUCT_SCALE;
+				model.scale = MED_STRUCT_SCALE;
 			}
 			else
 			{
-				scale = LARGE_STRUCT_SCALE;
+				model.scale = LARGE_STRUCT_SCALE;
 			}
 		}
 		else if (IMDType == IMDTYPE_STRUCTURESTAT)
@@ -1450,15 +1439,15 @@ void IntFancyButton::displayIMD(Image image, ImdObject imdObject, int xOffset, i
 			basePlateSize = getStructureStatSizeMax((STRUCTURE_STATS *)Object);
 			if (basePlateSize == 1)
 			{
-				scale = SMALL_STRUCT_SCALE;
+				model.scale = SMALL_STRUCT_SCALE;
 			}
 			else if (basePlateSize == 2)
 			{
-				scale = MED_STRUCT_SCALE;
+				model.scale = MED_STRUCT_SCALE;
 			}
 			else
 			{
-				scale = LARGE_STRUCT_SCALE;
+				model.scale = LARGE_STRUCT_SCALE;
 			}
 		}
 		else if (IMDType == IMDTYPE_FEATURE)
@@ -1467,23 +1456,23 @@ void IntFancyButton::displayIMD(Image image, ImdObject imdObject, int xOffset, i
 
 			if (imdRadius <= 40)
 			{
-				scale = ULTRA_SMALL_FEATURE_SCALE;
+				model.scale = ULTRA_SMALL_FEATURE_SCALE;
 			}
 			else if (imdRadius <= 64)
 			{
-				scale = REALLY_SMALL_FEATURE_SCALE;
+				model.scale = REALLY_SMALL_FEATURE_SCALE;
 			}
 			else if (imdRadius <= 128)
 			{
-				scale = SMALL_FEATURE_SCALE;
+				model.scale = SMALL_FEATURE_SCALE;
 			}
 			else if (imdRadius <= 256)
 			{
-				scale = MED_FEATURE_SCALE;
+				model.scale = MED_FEATURE_SCALE;
 			}
 			else
 			{
-				scale = LARGE_FEATURE_SCALE;
+				model.scale = LARGE_FEATURE_SCALE;
 			}
 		}
 		else
@@ -1492,27 +1481,19 @@ void IntFancyButton::displayIMD(Image image, ImdObject imdObject, int xOffset, i
 
 			if (Radius <= 128)
 			{
-				scale = SMALL_STRUCT_SCALE;
+				model.scale = SMALL_STRUCT_SCALE;
 			}
 			else if (Radius <= 256)
 			{
-				scale = MED_STRUCT_SCALE;
+				model.scale = MED_STRUCT_SCALE;
 			}
 			else
 			{
-				scale = LARGE_STRUCT_SCALE;
+				model.scale = LARGE_STRUCT_SCALE;
 			}
 		}
 
 		displayClear(xOffset, yOffset);
-
-		Rotation.x = -30;
-		Rotation.y = imdRotation;
-		Rotation.z = 0;
-
-		Position.x = 0;
-		Position.y = 0;
-		Position.z = BUTTON_DEPTH; //was 		Position.z = Radius*30;
 
 		if (!image.isNull())
 		{
@@ -1524,27 +1505,27 @@ void IntFancyButton::displayIMD(Image image, ImdObject imdObject, int xOffset, i
 		/* all non droid buttons */
 		if (IMDType == IMDTYPE_COMPONENT)
 		{
-			displayComponentButton((BASE_STATS *)Object, &Rotation, &Position, scale);
+			displayComponentButton((BASE_STATS *)Object, &model.rotation, &model.position, model.scale);
 		}
 		else if (IMDType == IMDTYPE_RESEARCH)
 		{
-			displayResearchButton((BASE_STATS *)Object, &Rotation, &Position, scale);
+			displayResearchButton((BASE_STATS *)Object, &model.rotation, &model.position, model.scale);
 		}
 		else if (IMDType == IMDTYPE_STRUCTURE)
 		{
-			displayStructureButton((STRUCTURE *)Object, &Rotation, &Position, scale);
+			displayStructureButton((STRUCTURE *)Object, &model.rotation, &model.position, model.scale);
 		}
 		else if (IMDType == IMDTYPE_STRUCTURESTAT)
 		{
-			displayStructureStatButton((STRUCTURE_STATS *)Object, &Rotation, &Position, scale);
+			displayStructureStatButton((STRUCTURE_STATS *)Object, &model.rotation, &model.position, model.scale);
 		}
 		else if (IMDType == IMDTYPE_FEATURE)
 		{
-			displayIMDButton((iIMDShape *)Object, &Rotation, &Position, scale);
+			displayIMDButton((iIMDShape *)Object, &model.rotation, &model.position, model.scale);
 		}
 		else
 		{
-			displayIMDButton((iIMDShape *)Object, &Rotation, &Position, scale);
+			displayIMDButton((iIMDShape *)Object, &model.rotation, &model.position, model.scale);
 		}
 
 		pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
@@ -2055,7 +2036,7 @@ void IntTransportButton::display(int xOffset, int yOffset)
 	// There should always be a droid associated with the button
 	ASSERT(psDroid != NULL, "Invalid droid pointer");
 
-	doRotation();
+	initDisplay();
 	displayIMD(Image(), ImdObject::Droid(psDroid), xOffset, yOffset);
 	displayIfHighlight(xOffset, yOffset);
 
@@ -2069,6 +2050,7 @@ void IntTransportButton::display(int xOffset, int yOffset)
 			iV_DrawImage(IntImages, gfxId, xOffset + x() + 50, yOffset + y() + 30);
 		}
 	}
+	doneDisplay();
 }
 
 /* Draws blips on radar to represent Proximity Display and damaged structures */

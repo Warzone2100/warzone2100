@@ -21,6 +21,8 @@
 #ifndef __INCLUDED_SRC_SCORES_H__
 #define __INCLUDED_SRC_SCORES_H__
 
+class WIDGET;
+
 enum DATA_INDEX
 {
 WD_UNITS_BUILT,
@@ -87,14 +89,12 @@ STAT_SPECIAL,
 STAT_ACE
 };
 
-
-
-extern bool	scoreInitSystem			( void );
-extern void	scoreUpdateVar			( DATA_INDEX var );
-extern void	scoreDataToConsole		( void );
-extern void	scoreDataToScreen		( void );
+bool scoreInitSystem();
+void scoreUpdateVar(DATA_INDEX var);
+void scoreDataToConsole();
+void scoreDataToScreen(WIDGET *psWidget);
 void getAsciiTime(char *psText, unsigned time);
-extern bool readScoreData			( const char* fileName );
-extern bool writeScoreData			( const char* fileName );
+bool readScoreData(const char* fileName);
+bool writeScoreData(const char* fileName);
 
 #endif // __INCLUDED_SRC_SCORES_H__

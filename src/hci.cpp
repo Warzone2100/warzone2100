@@ -2829,7 +2829,6 @@ bool intAddPower()
 bool intAddOptions(void)
 {
 	W_FORMINIT	sFormInit;
-	W_EDBINIT	sEdInit;
 	W_BUTINIT	sButInit;
 	W_LABINIT	sLabInit;
 	UDWORD		player;

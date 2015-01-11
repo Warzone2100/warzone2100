@@ -173,9 +173,7 @@ STAT_BAR	infoBars[]=
 };
 
 // --------------------------------------------------------------------
-static void drawStatBars(void);
 static void fillUpStats( void );
-static void dispAdditionalInfo( void );
 // --------------------------------------------------------------------
 
 /* The present mission data */
@@ -254,13 +252,6 @@ void	scoreUpdateVar( DATA_INDEX var )
 	}
 }
 
-
-// --------------------------------------------------------------------
-void	scoreDataToScreen(void)
-{
-	drawStatBars();
-}
-
 // Builds an ascii string for the passed in components 4:02:23 for example.
 void getAsciiTime(char *psText, unsigned time)
 {
@@ -280,14 +271,10 @@ void getAsciiTime(char *psText, unsigned time)
 	}
 }
 
-
-// -----------------------------------------------------------------------------------
-static void drawStatBars(void)
+void scoreDataToScreen(WIDGET *psWidget)
 {
-UDWORD	index;
-bool	bMoreBars;
-UDWORD	x,y;
-UDWORD	width,height;
+	int index, x, y, width, height;
+	bool bMoreBars;
 
 	if(!bDispStarted)
 	{
@@ -372,15 +359,8 @@ UDWORD	width,height;
 			bMoreBars = false;
 		}
 	}
-	dispAdditionalInfo();
-}
 
-// -----------------------------------------------------------------------------------
-void	dispAdditionalInfo( void )
-{
-
-	/* We now need to display the mission time, game time,
-		average unit experience level an number of artefacts found */
+	/* We now need to display the mission time, game time, average unit experience level an number of artefacts found */
 
 	/* Firstly, top of the screen, number of artefacts found */
 	sprintf( text, _("ARTIFACTS RECOVERED: %d"), missionData.artefactsFound );

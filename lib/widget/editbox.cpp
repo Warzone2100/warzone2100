@@ -231,8 +231,6 @@ void W_EDITBOX::fitStringEnd()
 	printWidth = 0;
 }
 
-
-/* Calculate how much of the end of a string can fit into the edit box */
 void W_EDITBOX::setCursorPosPixels(int xPos)
 {
 	QString tmp = aText;
@@ -327,7 +325,7 @@ void W_EDITBOX::run(W_CONTEXT *psContext)
 				printStart = MIN(printStart + WEDB_CHARJUMP, len - 1);
 				fitStringStart();
 			}
-			debug(LOG_INPUT, "EditBox cursor right");
+			debug(LOG_INPUT, "EditBox cursor right (%d, %d, %d)", insPos, printStart, printChars);
 			break;
 		case INPBUF_UP :
 			debug(LOG_INPUT, "EditBox cursor up");

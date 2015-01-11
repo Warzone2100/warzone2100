@@ -2218,7 +2218,7 @@ void intRemoveTransporterTimer(void)
 
 static void intDisplayMissionBackDrop(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
-	scoreDataToScreen();
+	scoreDataToScreen(psWidget);
 }
 
 static void missionResetInGameState(void)

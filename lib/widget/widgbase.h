@@ -94,15 +94,18 @@ public:
 
 	virtual void widgetLost(WIDGET *);
 
+	virtual void focusLost() {}
 	virtual void clicked(W_CONTEXT *, WIDGET_KEY = WKEY_PRIMARY) {}
+
+protected:
 	virtual void released(W_CONTEXT *, WIDGET_KEY = WKEY_PRIMARY) {}
 	virtual void highlight(W_CONTEXT *) {}
 	virtual void highlightLost() {}
-	virtual void focusLost() {}
 	virtual void run(W_CONTEXT *) {}
 	virtual void display(int, int) {}
 	virtual void geometryChanged() {}
 
+public:
 	virtual unsigned getState();
 	virtual void setState(unsigned state);
 	virtual void setFlash(bool enable);

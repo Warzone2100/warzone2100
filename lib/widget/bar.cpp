@@ -29,7 +29,6 @@
 #if defined(WZ_CC_MSVC)
 #include "bar_moc.h"		// this is generated on the pre-build event.
 #endif
-// FIXME Direct iVis implementation include!
 #include "lib/ivis_opengl/pieblitfunc.h"
 #include "lib/ivis_opengl/piepalette.h"
 
