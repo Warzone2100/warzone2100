@@ -439,7 +439,8 @@ bool intAddTransButtonForm(void)
 	for (DROID *psDroid = transInterfaceDroidList(); psDroid; psDroid = psDroid->psNext)
 	{
 		//only interested in Transporter droids
-		if (isTransporter(psDroid))
+		if (isTransporter(psDroid) && (psDroid->action == DACTION_TRANSPORTOUT &&
+			psDroid->action == DACTION_TRANSPORTIN) || !isTransporter(psDroid))
 		{
 			continue;
 		}
