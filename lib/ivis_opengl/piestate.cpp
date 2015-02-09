@@ -32,6 +32,13 @@
 #include "lib/ivis_opengl/piepalette.h"
 #include "screen.h"
 
+#ifndef GLEW_VERSION_4_3
+#define GLEW_VERSION_4_3 false
+#endif
+#ifndef GLEW_KHR_debug
+#define GLEW_KHR_debug false
+#endif
+
 /*
  *	Global Variables
  */
