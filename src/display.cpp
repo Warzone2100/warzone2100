@@ -456,6 +456,7 @@ void processInput(void)
 	ignoreRMBC = false;
 
 	/* Process all of our key mappings */
+	mouseOverConsole = mouseOverConsoleBox();
 	if (mousePressed(MOUSE_WUP) && !isMouseOverRadar())
 	{
 		/* Ctrl+Alt+WheelUp makes game speed up */
@@ -467,7 +468,7 @@ void processInput(void)
 		{
 			kf_BuildPrevPage();
 		}
-		else
+		else if (!mouseOverConsole)
 		{
 			kf_ZoomInStep();
 		}
@@ -484,7 +485,7 @@ void processInput(void)
 		{
 			kf_BuildNextPage();
 		}
-		else
+		else if (!mouseOverConsole)
 		{
 			kf_ZoomOutStep();
 		}
@@ -500,11 +501,6 @@ void processInput(void)
 		/* Run all standard mappings */
 		keyProcessMappings(false);
 	}
-	else
-	{
-		kf_SendTextMessage();		// process multiplayer chat message.
-	}
-
 	/* Allow the user to clear the console if need be */
 	mouseOverConsole = mouseOverConsoleBox();
 	if (mouseOverConsole && mousePressed(MOUSE_LMB))

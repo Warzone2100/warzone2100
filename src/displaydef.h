@@ -27,8 +27,9 @@
 #include "lib/ivis_opengl/imd.h"
 #include "lib/ivis_opengl/pieclip.h"
 
-#define	BOUNDARY_X			(22)
-#define BOUNDARY_Y			(22)
+// for mouse scrolling. (how many pixels from the edge before pointer scrolls the screen in a direction)
+#define	BOUNDARY_X	(2)
+#define	BOUNDARY_Y	(2)
 
 struct SCREEN_DISP_DATA
 {

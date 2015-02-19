@@ -296,7 +296,6 @@ COMMONLIBS = \
 	$(top_builddir)/lib/netplay/libnetplay.a \
 	$(top_builddir)/lib/ivis_opengl/libivis_opengl.a \
 	$(top_builddir)/lib/gamelib/libgamelib.a \
-	$(top_builddir)/lib/framework/libframework.a \
 	$(top_builddir)/lib/exceptionhandler/libexceptionhandler.a \
 	$(top_builddir)/3rdparty/miniupnpc/libminiupnpc.a \
 	$(top_builddir)/3rdparty/quesoglc/libquesoglc.a
@@ -311,17 +310,21 @@ endif
 
 if BACKEND_QT
 if PORTABLE
-warzone2100_portable_LIBS += $(top_builddir)/lib/qtgame/libqtgame.a
+warzone2100_portable_LIBS += $(top_builddir)/lib/qtgame/libqtgame.a \
+							 $(top_builddir)/lib/framework/libframework.a
 else
-warzone2100_LIBS += $(top_builddir)/lib/qtgame/libqtgame.a
+warzone2100_LIBS += $(top_builddir)/lib/qtgame/libqtgame.a \
+					$(top_builddir)/lib/framework/libframework.a
 endif
 endif
 
 if BACKEND_SDL
 if PORTABLE
-warzone2100_portable_LIBS += $(top_builddir)/lib/sdl/libsdl.a
+warzone2100_portable_LIBS += $(top_builddir)/lib/sdl/libsdl.a \
+							 $(top_builddir)/lib/framework/libframework.a
 else
-warzone2100_LIBS += $(top_builddir)/lib/sdl/libsdl.a
+warzone2100_LIBS += $(top_builddir)/lib/sdl/libsdl.a \
+					$(top_builddir)/lib/framework/libframework.a
 endif
 endif
 

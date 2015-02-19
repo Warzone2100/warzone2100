@@ -39,11 +39,12 @@ enum CONSOLE_TEXT_JUSTIFICATION
 
 extern char ConsoleString[MAX_CONSOLE_TMP_STRING_LENGTH];
 
-bool addConsoleMessage(const char *Text, CONSOLE_TEXT_JUSTIFICATION jusType, SDWORD player);
+bool addConsoleMessage(const char *Text, CONSOLE_TEXT_JUSTIFICATION jusType, SDWORD player, bool team = false);
 void updateConsoleMessages(void);
 void initConsoleMessages(void);
 void removeTopConsoleMessage(void);
 void displayConsoleMessages(void);
+void displayOldMessages(void);
 void flushConsoleMessages(void);
 void setConsoleBackdropStatus(bool state);
 void enableConsoleDisplay(bool state);
@@ -51,11 +52,12 @@ bool getConsoleDisplayStatus(void);
 void setConsoleSizePos(UDWORD x, UDWORD y, UDWORD width);
 void setConsolePermanence(bool state, bool bClearOld);
 bool mouseOverConsoleBox(void);
-UDWORD getNumberConsoleMessages(void);
+int getNumberConsoleMessages(void);
 void setConsoleLineInfo(UDWORD vis);
 UDWORD getConsoleLineInfo(void);
 void permitNewConsoleMessages(bool allow);
 void toggleConsoleDrop(void);
+void setHistoryMode(bool mode);
 
 #if defined(DEBUG)
 # define debug_console(...) \

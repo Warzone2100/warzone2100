@@ -1165,23 +1165,65 @@ bool recvResearchStatus(NETQUEUE queue)
 	return true;
 }
 
-static void printchatmsg(const char *text, int from)
+static void printchatmsg(const char *text, int from, bool team = false)
 {
 	char msg[MAX_CONSOLE_STRING_LENGTH];
 
 	sstrcpy(msg, NetPlay.players[from].name);		// name
 	sstrcat(msg, ": ");					// seperator
 	sstrcat(msg, text);					// add message
-	addConsoleMessage(msg, DEFAULT_JUSTIFY, from);		// display
+	addConsoleMessage(msg, DEFAULT_JUSTIFY, from, team);		// display
 }
 
 // ////////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////////
+// Text Messaging between team.
+void sendTeamMessage(const char *pStr, uint32_t from)
+{
+	char	display[MAX_CONSOLE_STRING_LENGTH];
+	bool team = true;
+
+	sstrcpy(display, pStr);
+	// This is for local display
+	if (from == selectedPlayer)
+	{
+		printchatmsg(display, from, team);
+	}
+
+	for (int i = 0; i < game.maxPlayers; i++)
+	{
+		if (i != from && aiCheckAlliances(from, i))
+		{
+			if (i == selectedPlayer)
+			{
+				printchatmsg(display, from); // also display it
+			}
+			if (isHumanPlayer(i))
+			{
+				NETbeginEncode(NETnetQueue(i), NET_TEXTMSG);
+				NETuint32_t(&from);				// who this msg is from
+				NETbool(&team);
+				NETstring(display, MAX_CONSOLE_STRING_LENGTH);	// the message to send
+				NETend();
+			}
+			else if (myResponsibility(i))
+			{
+				msgStackPush(CALL_AI_MSG, from, i, display, -1, -1, NULL);
+				triggerEventChat(from, i, display);
+			}
+			else	//also send to AIs now (non-humans), needed for AI
+			{
+				sendAIMessage(display, from, i);
+			}
+		}
+	}
+}
+
 // Text Messaging between players. proceed string with players to send to.
 // eg "123hi there" sends "hi there" to players 1,2 and 3.
 bool sendTextMessage(const char *pStr, bool all, uint32_t from)
 {
-	bool				normal = true;
+	bool				normal = true, team = false;
 	bool				sendto[MAX_PLAYERS];
 	int					posTable[MAX_PLAYERS];
 	UDWORD				i;
@@ -1265,6 +1307,7 @@ bool sendTextMessage(const char *pStr, bool all, uint32_t from)
 	{
 		NETbeginEncode(NETbroadcastQueue(), NET_TEXTMSG);
 		NETuint32_t(&from);		// who this msg is from
+		NETbool(&team);			// team specific?
 		NETstring(msg, MAX_CONSOLE_STRING_LENGTH);	// the message to send
 		NETend();
 		for (i = 0; i < MAX_PLAYERS; i++)
@@ -1298,6 +1341,7 @@ bool sendTextMessage(const char *pStr, bool all, uint32_t from)
 				{
 					NETbeginEncode(NETnetQueue(i), NET_TEXTMSG);
 					NETuint32_t(&from);		// who this msg is from
+					NETbool(&team);			// team specific?
 					NETstring(msg, MAX_CONSOLE_STRING_LENGTH);	// the message to send
 					NETend();
 				}
@@ -1327,6 +1371,7 @@ bool sendTextMessage(const char *pStr, bool all, uint32_t from)
 				{
 					NETbeginEncode(NETnetQueue(i), NET_TEXTMSG);
 					NETuint32_t(&from);				// who this msg is from
+					NETbool(&team); // team specific?
 					NETstring(display, MAX_CONSOLE_STRING_LENGTH);	// the message to send
 					NETend();
 				}
@@ -1434,15 +1479,15 @@ bool recvTextMessage(NETQUEUE queue)
 	UDWORD	playerIndex;
 	char	msg[MAX_CONSOLE_STRING_LENGTH];
 	char newmsg[MAX_CONSOLE_STRING_LENGTH];
+	bool team;
 
 	memset(msg, 0x0, sizeof(msg));
 	memset(newmsg, 0x0, sizeof(newmsg));
 
 	NETbeginDecode(queue, NET_TEXTMSG);
-	// Who this msg is from
-	NETuint32_t(&playerIndex);
-	// The message to receive
-	NETstring(newmsg, MAX_CONSOLE_STRING_LENGTH);
+	NETuint32_t(&playerIndex);	// Who this msg is from
+	NETbool(&team);	// team specific?
+	NETstring(newmsg, MAX_CONSOLE_STRING_LENGTH);	// The message to receive
 	NETend();
 
 	if (whosResponsible(playerIndex) != queue.index)
@@ -1461,7 +1506,7 @@ bool recvTextMessage(NETQUEUE queue)
 	// Add message
 	sstrcat(msg, newmsg);
 
-	addConsoleMessage(msg, DEFAULT_JUSTIFY, playerIndex);
+	addConsoleMessage(msg, DEFAULT_JUSTIFY, playerIndex, team);
 
 	// Multiplayer message callback
 	// Received a console message from a player, save

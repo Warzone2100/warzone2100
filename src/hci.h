@@ -33,7 +33,7 @@
 
 
 #define BASE_COORDS_X	(640)
-#define BASE_COORDS_Y	(480)
+#define BASE_COORDS_Y	(460)
 #define E_W (pie_GetVideoBufferWidth() - BASE_COORDS_X)
 #define E_H (pie_GetVideoBufferHeight() - BASE_COORDS_Y)
 #define D_W	((pie_GetVideoBufferWidth() - BASE_COORDS_X)/2)
@@ -102,15 +102,25 @@
 #define IDSTAT_ALLYEND			5100
 
 // Reticule position.
-#define RET_X				24
+#define RET_X				6
 #define RET_Y				(324+E_H)
 #define RET_FORMWIDTH		132
 #define RET_FORMHEIGHT		132
 
+// chat stuff
+#define CHAT_CONSOLEBOX	0x4A001
+#define CHAT_EDITBOX	0x4A004
+#define CHAT_TEAM		0x1
+#define CHAT_GLOB		0x2
+#define CHAT_CONSOLEBOXX	RET_X + RET_FORMWIDTH + D_W
+#define CHAT_CONSOLEBOXY	(RET_Y)
+#define CHAT_CONSOLEBOXW	160
+#define CHAT_CONSOLEBOXH	54
+
 /* Option positions */
 #define OPT_GAP			5
 
-// Object screen position.
+// Object screen position. (aka where the factories, research builds show up) [right of command retile]
 #define BASE_GAP		6
 #define OBJ_BACKX		(RET_X + RET_FORMWIDTH + BASE_GAP + D_W)	// X coord of object screen back form.
 #define OBJ_BACKY		RET_Y	// Y coord of object screen back form.
@@ -144,11 +154,11 @@
 #define CLOSE_HEIGHT	15
 #define CLOSE_SIZE		15
 
-// Stat screen position.
-#define STAT_X				23
-#define STAT_Y				(45 + E_H)
+// Stat screen position. [aka, the 'dialog' of items you research/create]
+#define STAT_X			6
+#define STAT_Y			(E_H)
 #define STAT_WIDTH			RET_FORMWIDTH	// Width of the tab form.
-#define STAT_HEIGHT			273				// Height of the tab form.
+#define STAT_HEIGHT		322			// Height of the tab form.
 #define STAT_TABWIDTH		15
 #define STAT_TABFORMX		0	// Offset of the tab form within the main form.
 #define STAT_TABFORMY		18	// Offset of the tab form within the main form.
@@ -374,5 +384,8 @@ extern bool intIsRefreshing(void);
 extern void intDemolishCancel(void);
 
 StateButton *makeObsoleteButton(WIDGET *parent);  ///< Makes a button to toggle showing obsolete items.
+
+extern void chatDialog(int mode);
+extern bool GetSecondaryWindowUp(void);
 
 #endif // __INCLUDED_SRC_HCI_H__

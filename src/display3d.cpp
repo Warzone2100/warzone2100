@@ -456,28 +456,6 @@ static PIELIGHT structureBrightness(STRUCTURE *psStructure)
 	return buildingBrightness;
 }
 
-/// Display the multiplayer chat box
-static void displayMultiChat(void)
-{
-	iV_SetFont(font_regular);
-
-	UDWORD	pixelLength;
-	UDWORD	pixelHeight;
-
-	pixelLength = iV_GetTextWidth(sTextToSend);
-	pixelHeight = iV_GetTextLineSize();
-
-	if ((realTime % 500) < 250)
-	{
-		// implement blinking cursor in multiplayer chat
-		pie_BoxFill(RET_X + pixelLength + 3, 474 + E_H - (pixelHeight / 4), RET_X + pixelLength + 10, 473 + E_H, WZCOL_CURSOR);
-	}
-
-	/* FIXME: GET RID OF THE MAGIC NUMBERS BELOW */
-	iV_TransBoxFill(RET_X + 1, 474 + E_H - pixelHeight, RET_X + 1 + pixelLength + 2, 473 + E_H);
-
-	iV_DrawText(sTextToSend, RET_X + 3, 469 + E_H);
-}
 
 /// Show all droid movement parts by displaying an explosion at every step
 static void showDroidPaths(void)
@@ -766,10 +744,6 @@ void draw3DScene(void)
 	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
 
 	/* Dont remove this folks!!!! */
-	if (!bAllowOtherKeyPresses)
-	{
-		displayMultiChat();
-	}
 	if (errorWaiting)
 	{
 		// print the error message if none have been printed for one minute

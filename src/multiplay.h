@@ -149,6 +149,7 @@ extern bool SendDestroyTemplate(DROID_TEMPLATE *t, uint8_t player);
 extern bool SendResearch(uint8_t player, uint32_t index, bool trigger);
 extern bool SendDestroyFeature(FEATURE *pF);					// send a destruct feature message.
 extern bool sendTextMessage(const char *pStr, bool cast, uint32_t from = selectedPlayer);	// send a text message
+extern void sendTeamMessage(const char *pStr, uint32_t from = selectedPlayer);	// send a team chat message
 void printConsoleNameChange(const char *oldName, const char *newName);  ///< Print message to console saying a name changed.
 
 extern void turnOffMultiMsg(bool bDoit);

@@ -49,6 +49,8 @@
 #include "lib/widget/label.h"
 #include "lib/widget/bar.h"
 #include "lib/widget/button.h"
+#include "lib/widget/editbox.h"
+#include "cheat.h"
 #include "console.h"
 #include "design.h"
 #include "display.h"
@@ -82,6 +84,7 @@
 #include "wrappers.h"
 #include "keybind.h"
 #include "qtscript.h"
+#include "frend.h"
 
 // Is a button widget highlighted, either because the cursor is over it or it is flashing.
 //
@@ -89,6 +92,8 @@
 
 // Empty edit window
 static bool SecondaryWindowUp = false;
+// Chat dialog
+static bool ChatDialogUp = false;
 
 #define RETXOFFSET (0)// Reticule button offset
 #define RETYOFFSET (0)
@@ -1349,6 +1354,30 @@ INT_RETVAL intRunWidgets(void)
 			intResetScreen(false);
 			quitting = true;
 			break;
+
+		// process our chatbox
+		case CHAT_EDITBOX:
+			{
+				const char *msg2 = widgGetString(psWScreen, CHAT_EDITBOX);
+				int mode = (int) widgGetUserData2(psWScreen, CHAT_EDITBOX);
+				if (strlen(msg2))
+				{
+					attemptCheatCode(msg2);		// parse the message
+					if (mode == CHAT_TEAM)
+					{
+						sendTeamMessage(msg2);
+					}
+					else
+					{
+						sendTextMessage(msg2, false);
+					}
+				}
+				inputLoseFocus();
+				bAllowOtherKeyPresses = true;
+				widgDelete(psWScreen, CHAT_CONSOLEBOX);
+				ChatDialogUp = false;
+				break;
+			}
 
 		/* Default case passes remaining IDs to appropriate function */
 		default:
@@ -5174,4 +5203,64 @@ bool CoordInBuild(int x, int y)
 	}
 
 	return true;
+}
+
+// Our chat dialog for global & team communication
+// \mode sets if global or team communication is wanted
+void chatDialog(int mode)
+{
+	static WIDGET *parent = psWScreen->psForm;
+	static IntFormAnimated *consoleBox = NULL;
+	static W_EDITBOX *chatBox = NULL;
+	static W_CONTEXT sContext;
+
+	if (!ChatDialogUp)
+	{
+		consoleBox = new IntFormAnimated(parent);
+		consoleBox->id = CHAT_CONSOLEBOX;
+		consoleBox->setGeometry(CHAT_CONSOLEBOXX, CHAT_CONSOLEBOXY, 300, CHAT_CONSOLEBOXH);
+
+		chatBox = new W_EDITBOX(consoleBox);
+		chatBox->id = CHAT_EDITBOX;
+		chatBox->setGeometry(10, 28, 280, 20);
+		if (mode == CHAT_GLOB)
+		{
+			chatBox->setBoxColours(WZCOL_MENU_BORDER, WZCOL_MENU_BORDER, WZCOL_MENU_BACKGROUND);
+			widgSetUserData2(psWScreen, CHAT_EDITBOX, CHAT_GLOB);
+		}
+		else
+		{
+			chatBox->setBoxColours(WZCOL_YELLOW, WZCOL_YELLOW, WZCOL_MENU_BACKGROUND);
+			widgSetUserData2(psWScreen, CHAT_EDITBOX, CHAT_TEAM);
+		}
+		sContext.xOffset = sContext.yOffset = 0;
+		sContext.mx = sContext.my = 0;
+
+		W_LABEL *label = new W_LABEL(consoleBox);
+		label->setGeometry(12, 10, 100, 12);
+		if (mode == CHAT_GLOB)
+		{
+			label->setFontColour(WZCOL_TEXT_BRIGHT);
+			label->setString(_("Chat: Global"));
+		}
+		else
+		{
+			label->setFontColour(WZCOL_YELLOW);
+			label->setString(_("Chat: Team"));
+		}
+		label->setTextAlignment(WLAB_ALIGNTOPLEFT);
+		ChatDialogUp = true;
+	}
+	else
+	{
+		debug(LOG_ERROR, "Tried to throw up chat dialog when we already had one up!");
+	}
+	// Auto-click it
+	widgGetFromID(psWScreen, CHAT_EDITBOX)->clicked(&sContext);
+}
+
+// Helper call to see if we have builder/research/... window up or not.
+bool GetSecondaryWindowUp(void)
+{
+	return SecondaryWindowUp;
 }

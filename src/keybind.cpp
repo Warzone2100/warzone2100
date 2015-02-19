@@ -451,6 +451,16 @@ void	kf_ToggleConsoleDrop(void)
 {
 	if (!bInTutorial)
 	{
+		setHistoryMode(false);
+		toggleConsoleDrop();
+	}
+}
+
+void kf_ToggleTeamChat(void)
+{
+	if (!bInTutorial)
+	{
+		setHistoryMode(true);
 		toggleConsoleDrop();
 	}
 }
@@ -2001,87 +2011,38 @@ void kf_ShowGridInfo(void)
 	}
 }
 #endif
-
 // --------------------------------------------------------------------------
 // Chat message. NOTE THIS FUNCTION CAN DISABLE ALL OTHER KEYPRESSES
-void kf_SendTextMessage(void)
+void kf_SendTeamMessage(void)
 {
-	UDWORD	ch;
-	utf_32_char unicode;
-
-	if (bAllowOtherKeyPresses)									// just starting.
+	if (bAllowOtherKeyPresses)		// just starting.
 	{
 		bAllowOtherKeyPresses = false;
 		sstrcpy(sTextToSend, "");
-		sstrcpy(sCurrentConsoleText, "");							//for beacons
+		sstrcpy(sCurrentConsoleText, "");			//for beacons
 		inputClearBuffer();
-		StartTextInput();
+		chatDialog(CHAT_TEAM);						// throw up the dialog
 	}
-
-	ch = inputGetKey(&unicode);
-	while (ch != 0)												// in progress
+	else
 	{
-		// FIXME: Why are we using duplicate defines? INPBUF_CR == KEY_RETURN == SDLK_RETURN
+		bAllowOtherKeyPresses = true;
+	}
+}
 
-		// Kill if they hit return or keypad enter or it maxes out console or it's more than one line long
-		// NOTE: here is where we would start SDL_StartTextInput() if we were to use SDL's UTF input
-		// (also, perhaps make the chat key configurable?)
-		if ((ch == INPBUF_CR) || (ch == KEY_KPENTER) || (strlen(sTextToSend) >= MAX_CONSOLE_STRING_LENGTH - 16) // Prefixes with ERROR: and terminates with '?'
-		    || iV_GetTextWidth(sTextToSend) > (pie_GetVideoBufferWidth() - 64)) // sendit
-		{
-			bAllowOtherKeyPresses = true;
-			//	flushConsoleMessages();
-
-			sstrcpy(sCurrentConsoleText, "");		//reset beacon msg, since console is empty now
-
-			// don't send empty lines to other players
-			if (!strcmp(sTextToSend, ""))
-			{
-				return;
-			}
-
-			//console callback message
-			//--------------------------
-			ConsolePlayer = selectedPlayer;
-			sstrcpy(ConsoleMsg, sTextToSend);
-			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_CONSOLE);
-
-			sendTextMessage(sTextToSend, false);
-			attemptCheatCode(sTextToSend);
-			StopTextInput();
-			return;
-		}
-		else if (ch == INPBUF_BKSPACE)							// delete
-		{
-			if (sTextToSend[0] != '\0')							// cant delete nothing!
-			{
-				size_t newlen = strlen(sTextToSend) - 1;
-				while (newlen > 0 && (sTextToSend[newlen] & 0xC0) == 0x80)
-				{
-					--newlen;    // Don't delete half a unicode character.
-				}
-				sTextToSend[newlen] = '\0';
-				sstrcpy(sCurrentConsoleText, sTextToSend);		//beacons
-			}
-		}
-		else if (ch == INPBUF_ESC)								//abort.
-		{
-			bAllowOtherKeyPresses = true;
-			sstrcpy(sCurrentConsoleText, "");
-			StopTextInput();
-			//	flushConsoleMessages();
-			return;
-		}
-		else							 						// display
-		{
-			const utf_32_char input_char[2] = { unicode, '\0' };
-			char *utf = UTF32toUTF8(input_char, NULL);
-			sstrcat(sTextToSend, utf);
-			free(utf);
-			sstrcpy(sCurrentConsoleText, sTextToSend);
-		}
-
-		ch = inputGetKey(&unicode);
+// Chat message. NOTE THIS FUNCTION CAN DISABLE ALL OTHER KEYPRESSES
+void kf_SendGlobalMessage(void)
+{
+	if (bAllowOtherKeyPresses)		// just starting.
+	{
+		bAllowOtherKeyPresses = false;
+		sstrcpy(sTextToSend, "");
+		sstrcpy(sCurrentConsoleText, "");			//for beacons
+		inputClearBuffer();
+		chatDialog(CHAT_GLOB);						// throw up the dialog
+	}
+	else
+	{
+		bAllowOtherKeyPresses = true;
 	}
 
 	// macro store stuff
@@ -2094,8 +2055,6 @@ void kf_SendTextMessage(void)
 		else
 		{
 			sstrcpy(sTextToSend, ingame.phrases[0]);
-			bAllowOtherKeyPresses = true;
-			//	flushConsoleMessages();
 			sendTextMessage(sTextToSend, false);
 			return;
 		}
@@ -2109,8 +2068,6 @@ void kf_SendTextMessage(void)
 		else
 		{
 			sstrcpy(sTextToSend, ingame.phrases[1]);
-			bAllowOtherKeyPresses = true;
-			//	flushConsoleMessages();
 			sendTextMessage(sTextToSend, false);
 			return;
 		}
@@ -2124,8 +2081,6 @@ void kf_SendTextMessage(void)
 		else
 		{
 			sstrcpy(sTextToSend, ingame.phrases[2]);
-			bAllowOtherKeyPresses = true;
-			//	flushConsoleMessages();
 			sendTextMessage(sTextToSend, false);
 			return;
 		}
@@ -2139,8 +2094,6 @@ void kf_SendTextMessage(void)
 		else
 		{
 			sstrcpy(sTextToSend, ingame.phrases[3]);
-			bAllowOtherKeyPresses = true;
-			//	flushConsoleMessages();
 			sendTextMessage(sTextToSend, false);
 			return;
 		}
@@ -2154,17 +2107,12 @@ void kf_SendTextMessage(void)
 		else
 		{
 			sstrcpy(sTextToSend, ingame.phrases[4]);
-			bAllowOtherKeyPresses = true;
-			//	flushConsoleMessages();
 			sendTextMessage(sTextToSend, false);
 			return;
 		}
 	}
-
-//	flushConsoleMessages();								//clear
-//	addConsoleMessage(sTextToSend,DEFAULT_JUSTIFY, SYSTEM_MESSAGE);		//display
-//	iV_DrawText(sTextToSend,16+D_W,RADTLY+D_H-16);
 }
+
 // --------------------------------------------------------------------------
 void	kf_ToggleConsole(void)
 {
