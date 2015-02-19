@@ -45,6 +45,7 @@ static AUDIO_ID_MAP asAudioID[] =
 
 	{ID_SOUND_WINDOWCLOSE,                         "beep1.ogg"},
 	{ID_SOUND_WINDOWOPEN,                          "beep2.ogg"},
+	{ID_SOUND_BUTTON_CLICK_3,                      "beep3.ogg"},
 	{ID_SOUND_SELECT,                              "beep4.ogg"},
 	{ID_SOUND_BUTTON_CLICK_5,                      "beep5.ogg"},
 	{FE_AUDIO_MESSAGEEND,                          "beep6.ogg"},
