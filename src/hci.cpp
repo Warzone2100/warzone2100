@@ -529,7 +529,7 @@ bool intInitialise(void)
 
 	widgSetTipColour(WZCOL_TOOLTIP_TEXT);
 
-	WidgSetAudio(WidgetAudioCallback, -1, ID_SOUND_SELECT);
+	WidgSetAudio(WidgetAudioCallback, ID_SOUND_BUTTON_CLICK_5, ID_SOUND_SELECT, ID_SOUND_BUILD_FAIL);
 
 	/* Create storage for Structures that can be built */
 	apsStructStatsList = (STRUCTURE_STATS **)malloc(sizeof(STRUCTURE_STATS *) * MAXSTRUCTURES);

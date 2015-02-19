@@ -52,6 +52,7 @@ static WIDGET	*psMouseOverWidget = NULL;
 static WIDGET_AUDIOCALLBACK AudioCallback = NULL;
 static SWORD HilightAudioID = -1;
 static SWORD ClickedAudioID = -1;
+static SWORD ErrorAudioID = -1;
 
 static WIDGET_KEY lastReleasedKey_DEPRECATED = WKEY_NONE;
 
@@ -872,11 +873,12 @@ void W_SCREEN::setFocus(WIDGET *widget)
 	psFocus = widget;
 }
 
-void WidgSetAudio(WIDGET_AUDIOCALLBACK Callback, SWORD HilightID, SWORD ClickedID)
+void WidgSetAudio(WIDGET_AUDIOCALLBACK Callback, SWORD HilightID, SWORD ClickedID, SWORD ErrorID)
 {
 	AudioCallback = Callback;
 	HilightAudioID = HilightID;
 	ClickedAudioID = ClickedID;
+	ErrorAudioID = ErrorID;
 }
 
 WIDGET_AUDIOCALLBACK WidgGetAudioCallback(void)
@@ -892,6 +894,11 @@ SWORD WidgGetHilightAudioID(void)
 SWORD WidgGetClickedAudioID(void)
 {
 	return ClickedAudioID;
+}
+
+SWORD WidgGetErrorAudioID(void)
+{
+	return ErrorAudioID;
 }
 
 void setWidgetsStatus(bool var)

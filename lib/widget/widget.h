@@ -346,7 +346,7 @@ extern void widgDisplayScreen(W_SCREEN *psScreen);
 
 
 /** Set the current audio callback function and audio id's. */
-extern void WidgSetAudio(WIDGET_AUDIOCALLBACK Callback, SWORD HilightID, SWORD ClickedID);
+extern void WidgSetAudio(WIDGET_AUDIOCALLBACK Callback, SWORD HilightID, SWORD ClickedID, SWORD ErrorID);
 
 /** Get pointer to current audio callback function. */
 extern WIDGET_AUDIOCALLBACK WidgGetAudioCallback(void);
@@ -356,6 +356,9 @@ extern SWORD WidgGetHilightAudioID(void);
 
 /** Get current audio ID for clicked. */
 extern SWORD WidgGetClickedAudioID(void);
+
+// error ID
+extern SWORD WidgGetErrorAudioID(void);
 
 /** Enable or disable all sliders. */
 extern void sliderEnableDrag(bool Enable);

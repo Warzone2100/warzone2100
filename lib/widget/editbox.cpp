@@ -51,6 +51,8 @@
 /* Number of characters to jump the edit box text when moving the cursor */
 #define WEDB_CHARJUMP		6
 
+// Max size for a string in a editbox
+#define EB_MAX_STRINGSIZE 72
 
 W_EDBINIT::W_EDBINIT()
 	: pText(NULL)
@@ -63,10 +65,15 @@ W_EDITBOX::W_EDITBOX(W_EDBINIT const *init)
 	, state(WEDBS_FIXED)
 	, FontID(init->FontID)
 	, blinkOffset(wzGetTicks())
+	, maxStringSize(EB_MAX_STRINGSIZE)
+	, insPos(0)
 	, printStart(0)
+	, printChars(0)
+	, printWidth(0)
 	, pBoxDisplay(init->pBoxDisplay)
 	, HilightAudioID(WidgGetHilightAudioID())
 	, ClickedAudioID(WidgGetClickedAudioID())
+	, ErrorAudioID(WidgGetErrorAudioID())
 	, AudioCallback(WidgGetAudioCallback())
 	, boxColourFirst(WZCOL_FORM_DARK)
 	, boxColourSecond(WZCOL_FORM_LIGHT)
@@ -88,9 +95,15 @@ W_EDITBOX::W_EDITBOX(WIDGET *parent)
 	: WIDGET(parent)
 	, state(WEDBS_FIXED)
 	, FontID(font_regular)
+	, maxStringSize(EB_MAX_STRINGSIZE)
+	, insPos(0)
+	, printStart(0)
+	, printChars(0)
+	, printWidth(0)
 	, pBoxDisplay(nullptr)
 	, HilightAudioID(WidgGetHilightAudioID())
 	, ClickedAudioID(WidgGetClickedAudioID())
+	, ErrorAudioID(WidgGetErrorAudioID())
 	, AudioCallback(WidgGetAudioCallback())
 	, boxColourFirst(WZCOL_FORM_DARK)
 	, boxColourSecond(WZCOL_FORM_LIGHT)
@@ -101,6 +114,7 @@ void W_EDITBOX::initialise()
 {
 	state = WEDBS_FIXED;
 	printStart = 0;
+	maxStringSize = EB_MAX_STRINGSIZE;
 	iV_SetFont(FontID);
 	fitStringStart();
 }
@@ -115,7 +129,14 @@ void W_EDITBOX::insertChar(QChar ch)
 	}
 
 	ASSERT(insPos <= aText.length(), "Invalid insertion point");
-
+	if (aText.length() >= maxStringSize)
+	{
+		if (AudioCallback)
+		{
+			AudioCallback(ErrorAudioID);
+		}
+		return;		// string too big, just return
+	}
 	/* Move the end of the string up by one (including terminating \0) */
 	/* Insert the character */
 	aText.insert(insPos, ch);
@@ -390,7 +411,7 @@ void W_EDITBOX::run(W_CONTEXT *psContext)
 			debug(LOG_INPUT, "EditBox cursor tab");
 			break;
 		case INPBUF_CR :
-		case KEY_KPENTER:                  // either normal return key || keypad enter
+		case KEY_KPENTER:					// either normal return key || keypad enter
 			/* Finish editing */
 			StopTextInput();
 			screenPointer->setFocus(nullptr);
@@ -408,6 +429,10 @@ void W_EDITBOX::run(W_CONTEXT *psContext)
 				{
 				case KEY_V:
 					aText = wzGetSelection();
+					if (aText.length() >= maxStringSize)
+					{
+						aText.truncate(maxStringSize);
+					}
 					insPos = aText.length();
 					/* Update the printable text */
 					fitStringEnd();
@@ -631,6 +656,10 @@ void W_EDITBOX::display(int xOffset, int yOffset)
 	}
 }
 
+void W_EDITBOX::setMaxStringSize(int size)
+{
+	maxStringSize = size;
+}
 
 void W_EDITBOX::setState(unsigned newState)
 {

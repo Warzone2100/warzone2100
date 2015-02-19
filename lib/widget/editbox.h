@@ -53,20 +53,23 @@ public:
 	void setState(unsigned state);
 	QString getString() const;
 	void setString(QString string);
+	void setMaxStringSize(int size);
 
 	void setBoxColours(PIELIGHT first, PIELIGHT second, PIELIGHT background);
 
 	UDWORD		state;						// The current edit box state
-	QString         aText;                  // The text in the edit box
-	iV_fonts        FontID;
-	int 		blinkOffset;		// Cursor should be visible at time blinkOffset.
-	int             insPos;                 // The insertion point in the buffer
-	int             printStart;					// Where in the string appears at the far left of the box
-	int             printChars;					// The number of characters appearing in the box
-	int             printWidth;					// The pixel width of the characters in the box
+	QString		aText;						// The text in the edit box
+	iV_fonts	FontID;
+	int			blinkOffset;				// Cursor should be visible at time blinkOffset.
+	int			maxStringSize;				// max characters string will accept
+	int			insPos;						// The insertion point in the buffer
+	int			printStart;					// Where in the string appears at the far left of the box
+	int			printChars;					// The number of characters appearing in the box
+	int			printWidth;					// The pixel width of the characters in the box
 	WIDGET_DISPLAY	pBoxDisplay;			// Optional callback to display the edit box background.
 	SWORD HilightAudioID;					// Audio ID for form clicked sound
 	SWORD ClickedAudioID;					// Audio ID for form hilighted sound
+	SWORD ErrorAudioID;						// Audio ID for error sound
 	WIDGET_AUDIOCALLBACK AudioCallback;		// Pointer to audio callback function
 
 private:
