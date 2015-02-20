@@ -1362,6 +1362,9 @@ INT_RETVAL intRunWidgets(void)
 				int mode = (int) widgGetUserData2(psWScreen, CHAT_EDITBOX);
 				if (strlen(msg2))
 				{
+					sstrcpy(ConsoleMsg, msg2);
+					ConsolePlayer = selectedPlayer;
+					eventFireCallbackTrigger((TRIGGER_TYPE)CALL_CONSOLE);
 					attemptCheatCode(msg2);		// parse the message
 					if (mode == CHAT_TEAM)
 					{
