@@ -65,6 +65,8 @@ extern void war_setFSAA(unsigned int);
 extern unsigned int war_getFSAA(void);
 extern void war_SetTrapCursor(bool b);
 extern bool war_GetTrapCursor(void);
+extern bool war_GetColouredCursor(void);
+extern void war_SetColouredCursor(bool enabled);
 extern void war_SetVsync(bool b);
 extern bool war_GetVsync(void);
 extern void war_SetWidth(UDWORD width);

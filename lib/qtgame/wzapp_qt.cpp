@@ -86,7 +86,7 @@ static MOUSE_KEY_CODE dragKey;
 static SDWORD dragX, dragY;
 
 /** The current mouse button state */
-static INPUT_STATE aMouseState[MOUSE_BAD];
+static INPUT_STATE aMouseState[MOUSE_END];
 static MousePresses mousePresses;
 
 /** The input string buffer */
@@ -344,7 +344,7 @@ MOUSE_KEY_CODE WzMainWindow::buttonToIdx(Qt::MouseButton button)
 			break;
 		default:
 		case Qt::NoButton:
-			idx = MOUSE_BAD;
+			idx = MOUSE_END;
 			debug(LOG_INPUT, "NoButton (strange case ?");
 			break;	// strange case
 	}
@@ -361,7 +361,7 @@ void WzMainWindow::mousePressEvent(QMouseEvent *event)
 	Qt::MouseButtons presses = event->buttons();	// full state info for all buttons
 	MOUSE_KEY_CODE idx = buttonToIdx(event->button());			// index of button that caused event
 
-	if (idx == MOUSE_BAD)
+	if (idx == MOUSE_END)
 	{
 		debug(LOG_ERROR, "bad mouse idx");	// FIXME remove
 		return; // not recognized mouse button
@@ -432,7 +432,7 @@ void WzMainWindow::mouseReleaseEvent(QMouseEvent *event)
 
 	MOUSE_KEY_CODE idx = buttonToIdx(event->button());
 
-	if (idx == MOUSE_BAD)
+	if (idx == MOUSE_END)
 	{
 		return; // not recognized mouse button
 	}
@@ -863,7 +863,7 @@ void inputInitialise(void)
 		aKeyState[i].state = KEY_UP;
 	}
 
-	for (i = 0; i < MOUSE_BAD; i++)
+	for (i = 0; i < MOUSE_END; i++)
 	{
 		aMouseState[i].state = KEY_UP;
 	}
@@ -943,7 +943,7 @@ void inputNewFrame(void)
 	}
 
 	/* Do the mouse */
-	for (i = 0; i < MOUSE_BAD; i++)
+	for (i = 0; i < MOUSE_END; i++)
 	{
 		if (aMouseState[i].state == KEY_PRESSED)
 		{
@@ -973,7 +973,7 @@ void inputLoseFocus()
 	{
 		aKeyState[i].state = KEY_UP;
 	}
-	for (i = 0; i < MOUSE_BAD; i++)
+	for (i = 0; i < MOUSE_END; i++)
 	{
 		aMouseState[i].state = KEY_UP;
 	}

@@ -120,6 +120,7 @@ bool loadConfig()
 	// Leave this to false, some system will fail and they can't see the system popup dialog!
 	war_setFullscreen(ini.value("fullscreen", false).toBool());
 	war_SetTrapCursor(ini.value("trapCursor", false).toBool());
+	war_SetColouredCursor(ini.value("coloredCursor", false).toBool());
 	// this should be enabled on all systems by default
 	war_SetVsync(ini.value("vsync", true).toBool());
 	// 640x480 is minimum that we will support
@@ -171,6 +172,7 @@ bool saveConfig()
 	ini.setValue("shake",(SDWORD)(getShakeStatus()));		// screenshake
 	ini.setValue("mouseflip",(SDWORD)(getInvertMouseStatus()));	// flipmouse
 	ini.setValue("nomousewarp", (SDWORD)getMouseWarp()); 		// mouse warp
+	ini.setValue("coloredCursor", (SDWORD)war_GetColouredCursor());
 	ini.setValue("RightClickOrders",(SDWORD)(getRightClickOrders()));
 	ini.setValue("MiddleClickRotate",(SDWORD)(getMiddleClickRotate()));
 	ini.setValue("showFPS", (SDWORD)showFPS);

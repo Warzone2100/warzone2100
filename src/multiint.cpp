@@ -3547,9 +3547,6 @@ void runMultiOptions(void)
 	PLAYERSTATS		playerStats;
 	W_CONTEXT		context;
 
-	KEY_CODE		k;
-	char			str[3];
-
 	frontendMultiMessages();
 	if (NetPlay.isHost)
 	{
@@ -3583,19 +3580,15 @@ void runMultiOptions(void)
 		sendPing();
 	}
 
-	// if typing and not in an edit box then jump to chat box.
-	k = getQwertyKey();
-	if(	k && psWScreen->psFocus == NULL)
+	// if we don't have the focus, then autoclick in the chatbox.
+	if (!psWScreen->psFocus)
 	{
-		context.xOffset		= 0;
-		context.yOffset		= 0;
+		context.xOffset = 	context.yOffset = 0;
 		context.mx			= mouseX();
 		context.my			= mouseY();
 
-		keyScanToString(k,(char*)&str,3);
-		if(widgGetFromID(psWScreen,MULTIOP_CHATEDIT))
+		if(widgGetFromID(psWScreen, MULTIOP_CHATEDIT))
 		{
-			widgSetString(psWScreen, MULTIOP_CHATEDIT, (char*)&str);	// start it up!
 			widgGetFromID(psWScreen, MULTIOP_CHATEDIT)->clicked(&context);
 		}
 	}

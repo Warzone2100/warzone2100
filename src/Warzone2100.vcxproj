@@ -138,7 +138,7 @@ call $(ProjectDir)..\build_tools\autorevision.bat $(ProjectDir)</Command>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>libogg_static.lib;libvorbis_static.lib;libvorbisfile_static.lib;OpenAL32.lib;glc32.lib;OpenGL32.lib;GLU32.lib;shfolder.lib;winmm.lib;Iphlpapi.lib;ws2_32.lib;dbghelp.lib;physfs.lib;glew.lib;libtheora_static.lib;libpng16.lib;SDLmain.lib;SDL.lib;Qt5Cored.lib;Qt5Widgetsd.lib;Qt5Guid.lib;Qt5Scriptd.lib;Qt5ScriptToolsd.lib;zlibstat.lib;ssleay32.lib;libeay32.lib;crypt32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libogg_static.lib;libvorbis_static.lib;libvorbisfile_static.lib;OpenAL32.lib;glc32.lib;OpenGL32.lib;GLU32.lib;shfolder.lib;winmm.lib;Iphlpapi.lib;ws2_32.lib;dbghelp.lib;physfs.lib;glew.lib;libtheora_static.lib;libpng16.lib;SDL2main.lib;SDL2.lib;Qt5Cored.lib;Qt5Widgetsd.lib;Qt5Guid.lib;Qt5Scriptd.lib;Qt5ScriptToolsd.lib;zlibstat.lib;ssleay32.lib;libeay32.lib;crypt32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(ProjectName)-Dbg.exe</OutputFile>
       <AdditionalLibraryDirectories>$(SolutionDir)\..\devpkg\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>MSVCRT.lib;libcmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>

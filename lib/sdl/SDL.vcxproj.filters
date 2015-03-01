@@ -18,18 +18,12 @@
     <ClCompile Include="cursors_sdl.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="scrap.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="main_sdl.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cursors_sdl.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="scrap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="wz2100icon.h">

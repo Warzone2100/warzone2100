@@ -2008,6 +2008,7 @@ void kf_SendTextMessage(void)
 		sstrcpy(sTextToSend, "");
 		sstrcpy(sCurrentConsoleText, "");							//for beacons
 		inputClearBuffer();
+		StartTextInput();
 	}
 
 	ch = inputGetKey(&unicode);
@@ -2016,6 +2017,8 @@ void kf_SendTextMessage(void)
 		// FIXME: Why are we using duplicate defines? INPBUF_CR == KEY_RETURN == SDLK_RETURN
 
 		// Kill if they hit return or keypad enter or it maxes out console or it's more than one line long
+		// NOTE: here is where we would start SDL_StartTextInput() if we were to use SDL's UTF input
+		// (also, perhaps make the chat key configurable?)
 		if ((ch == INPBUF_CR) || (ch == KEY_KPENTER) || (strlen(sTextToSend)>=MAX_CONSOLE_STRING_LENGTH-16) // Prefixes with ERROR: and terminates with '?'
 		 || iV_GetTextWidth(sTextToSend) > (pie_GetVideoBufferWidth()-64))// sendit
 		{
@@ -2036,6 +2039,7 @@ void kf_SendTextMessage(void)
 
 			sendTextMessage(sTextToSend,false);
 			attemptCheatCode(sTextToSend);
+			StopTextInput();
 			return;
 		}
 		else if(ch == INPBUF_BKSPACE )							// delete
@@ -2053,6 +2057,7 @@ void kf_SendTextMessage(void)
 		{
 			bAllowOtherKeyPresses = true;
 			sstrcpy(sCurrentConsoleText, "");
+			StopTextInput();
 			//	flushConsoleMessages();
 			return;
 		}

@@ -1037,6 +1037,10 @@ extern const char *BACKEND;
 
 int realmain(int argc, char *argv[])
 {
+	int utfargc = argc;
+	const char** utfargv = (const char**)argv;
+	wzMain(argc, argv);		// init Qt integration first
+
 	// The libcrypto startup stuff... May or may not actually be needed for anything at all.
 	ERR_load_crypto_strings();  // This is needed for descriptive error messages.
 	OpenSSL_add_all_algorithms();  // Don't actually use the EVP functions, so probably not needed.
@@ -1044,10 +1048,6 @@ int realmain(int argc, char *argv[])
 #ifdef WZ_OS_WIN
 	RAND_screen();  // Uses a screenshot as a random seed, on systems lacking /dev/random.
 #endif
-
-	wzMain(argc, argv);
-	int utfargc = argc;
-	const char** utfargv = (const char**)argv;
 
 #ifdef WZ_OS_MAC
 	cocoaInit();
@@ -1223,10 +1223,17 @@ int realmain(int argc, char *argv[])
 		}
 	}
 
-	if (!wzMain2(war_getFSAA(), war_getFullscreen(), war_GetVsync()))
+	if (!wzMainScreenSetup(war_getFSAA(), war_getFullscreen(), war_GetVsync()))
 	{
 		return EXIT_FAILURE;
 	}
+
+	debug(LOG_WZ, "Warzone 2100 - %s", version_getFormattedVersionString());
+	debug(LOG_WZ, "Using language: %s", getLanguage());
+	debug(LOG_WZ, "Backend: %s", BACKEND);
+	debug(LOG_MEMORY, "sizeof: SIMPLE_OBJECT=%ld, BASE_OBJECT=%ld, DROID=%ld, STRUCTURE=%ld, FEATURE=%ld, PROJECTILE=%ld",
+	      (long)sizeof(SIMPLE_OBJECT), (long)sizeof(BASE_OBJECT), (long)sizeof(DROID), (long)sizeof(STRUCTURE), (long)sizeof(FEATURE), (long)sizeof(PROJECTILE));
+
 	int w = pie_GetVideoBufferWidth();
 	int h = pie_GetVideoBufferHeight();
 
@@ -1294,7 +1301,7 @@ int realmain(int argc, char *argv[])
 	debug_MEMSTATS();
 #endif
 	debug(LOG_MAIN, "Entering main loop");
-	wzMain3();
+	wzMainEventLoop();
 	saveConfig();
 	systemShutdown();
 #ifdef WZ_OS_WIN	// clean up the memory allocated for the command line conversion

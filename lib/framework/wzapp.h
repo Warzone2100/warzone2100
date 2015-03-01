@@ -22,17 +22,22 @@
 #define __INCLUDED_WZAPP_C_H__
 
 #include "frame.h"
-
-#include <QtCore/QSize>
+#include <vector>
 
 struct WZ_THREAD;
 struct WZ_MUTEX;
 struct WZ_SEMAPHORE;
 
+struct screeninfo {
+		int width;
+		int height;
+		int refresh_rate;
+		int screen;
+};
 
 void wzMain(int &argc, char **argv);
-bool wzMain2(int antialiasing = 0, bool fullscreen = false, bool vsync = true);
-void wzMain3();
+bool wzMainScreenSetup(int antialiasing = 0, bool fullscreen = false, bool vsync = true);
+void wzMainEventLoop(void);
 void wzQuit(void);              ///< Quit game
 void wzShutdown();
 void wzToggleFullscreen();
@@ -45,12 +50,17 @@ void wzReleaseMouse(void);	///< Undo the wzGrabMouse operation
 bool wzActiveWindow(void);	///< Whether application currently has the mouse pointer over it
 int wzGetTicks(void);		///< Milliseconds since start of game
 void wzFatalDialog(const char *text);	///< Throw up a modal warning dialog
-QList<QSize> wzAvailableResolutions();  ///< Get list of available resolutions.
-void wzSetSwapInterval(int swap);
-int wzGetSwapInterval();
-QString wzGetSelection();
-void wzDelay(unsigned int delay);	//delay in ms
 
+std::vector<screeninfo> wzAvailableResolutions();
+void wzSetSwapInterval(int swap);
+int wzGetSwapInterval(void);
+QString wzGetSelection(void);
+QString wzGetCurrentText(void);
+unsigned int wzGetCurrentKey(void);
+void wzDelay(unsigned int delay);	//delay in ms
+// unicode text support
+void StartTextInput(void);
+void StopTextInput(void);
 // Thread related
 WZ_THREAD *wzThreadCreate(int (*threadFunc)(void *), void *data);
 int wzThreadJoin(WZ_THREAD *thread);

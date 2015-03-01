@@ -1073,7 +1073,7 @@ static bool startVideoOptionsMenu(void)
 
 bool runVideoOptionsMenu(void)
 {
-	QList<QSize> modes = wzAvailableResolutions();
+	std::vector<screeninfo> modes = wzAvailableResolutions();
 	WidgetTriggers const &triggers = widgRunScreen(psWScreen);
 	unsigned id = triggers.empty()? 0 : triggers.front().widget->id;  // Just use first click here, since the next click could be on another menu.
 
@@ -1134,7 +1134,7 @@ bool runVideoOptionsMenu(void)
 			// Get the current mode offset
 			for (count = 0, current = 0; count < modes.size(); count++)
 			{
-				if (war_GetWidth() == modes[count].width() && war_GetHeight() == modes[count].height())
+				if (war_GetWidth() == modes[count].width && war_GetHeight() == modes[count].height)
 				{
 					current = count;
 				}
@@ -1153,19 +1153,19 @@ bool runVideoOptionsMenu(void)
 			}
 
 			// We can't pick resolutions if there are any.
-			if (modes.isEmpty())
+			if (modes.empty())
 			{
 				debug(LOG_ERROR,"No resolutions available to change.");
 				break;
 			}
 
 			// Set the new width and height (takes effect on restart)
-			war_SetWidth(modes[current].width());
-			war_SetHeight(modes[current].height());
+			war_SetWidth(modes[current].width);
+			war_SetHeight(modes[current].height);
 
 			// Generate the textual representation of the new width and height
 			char resolution[43];
-			ssprintf(resolution, "%d x %d", modes[current].width(), modes[current].height());
+			ssprintf(resolution, "[%d] %d x %d@%d", modes[current].screen, modes[current].width, modes[current].height, modes[current].refresh_rate);
 
 			// Update the widget
 			widgSetString(psWScreen, FRONTEND_RESOLUTION_R, resolution);
@@ -1301,6 +1301,19 @@ static bool startMouseOptionsMenu(void)
 		addTextButton(FRONTEND_MMROTATE_R, FRONTEND_POS2M-25,  FRONTEND_POS5Y, _("Right Mouse"), 0);
 	}
 
+	// Hardware / software cursor toggle
+	addTextButton(FRONTEND_CURSORMODE, FRONTEND_POS4X-35, FRONTEND_POS6Y, _("Colored Cursors"), 0);
+
+	if (war_GetColouredCursor())
+	{
+		addTextButton(FRONTEND_CURSORMODE_R, FRONTEND_POS4M-25, FRONTEND_POS6Y, _("On"), 0);
+	}
+	else
+	{
+		addTextButton(FRONTEND_CURSORMODE_R, FRONTEND_POS4M-25, FRONTEND_POS6Y, _("Off"), 0);
+	}
+
+
 	// Add some text down the side of the form
 	addSideText(FRONTEND_SIDETEXT, FRONTEND_SIDEX, FRONTEND_SIDEY, _("MOUSE OPTIONS"));
 
@@ -1369,6 +1382,22 @@ bool runMouseOptionsMenu(void)
 			{
 				setMiddleClickRotate(true);
 				widgSetString(psWScreen,FRONTEND_MMROTATE_R, _("Middle Mouse"));
+			}
+			break;
+
+		case FRONTEND_CURSORMODE:
+		case FRONTEND_CURSORMODE_R:
+			if (war_GetColouredCursor())
+			{
+				war_SetColouredCursor(false);
+				widgSetString(psWScreen, FRONTEND_CURSORMODE_R, _("Off"));
+				wzSetCursor(CURSOR_DEFAULT);
+			}
+			else
+			{
+				war_SetColouredCursor(true);
+				widgSetString(psWScreen, FRONTEND_CURSORMODE_R, _("On"));
+				wzSetCursor(CURSOR_DEFAULT);
 			}
 			break;
 

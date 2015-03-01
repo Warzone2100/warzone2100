@@ -39,12 +39,13 @@ int main(int argc, char *argv[])
 QApplication *appPtr;
 WzMainWindow *mainWindowPtr;
 
-void wzMain(int &argc, char **argv)
+bool wzMain(int &argc, char **argv)
 {
-	appPtr = new QApplication(argc, argv);
-}
+	debug(LOG_MAIN, "Qt initialization");
 
-bool wzMain2(int antialiasing, bool fullscreen, bool vsync)
+	appPtr = new QApplication(argc, argv);
+
+bool wzMainScreenSetup(int antialiasing, bool fullscreen, bool vsync)
 {
 	debug(LOG_MAIN, "Qt initialization");
 	QGL::setPreferredPaintEngine(QPaintEngine::OpenGL); // Workaround for incorrect text rendering on nany platforms.
@@ -98,7 +99,7 @@ bool wzMain2(int antialiasing, bool fullscreen, bool vsync)
 	return true;
 }
 
-void wzMain3()
+void wzMainScreenSetup()
 {
 	QApplication &app = *appPtr;
 	WzMainWindow &mainwindow = *mainWindowPtr;

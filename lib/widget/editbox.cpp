@@ -272,12 +272,13 @@ void W_EDITBOX::run(W_CONTEXT *psContext)
 		return;
 	}
 	dirty = true;
-
+	StartTextInput();
 	/* If there is a mouse click outside of the edit box - stop editing */
 	int mx = psContext->mx;
 	int my = psContext->my;
 	if (mousePressed(MOUSE_LMB) && !geometry().contains(mx, my))
 	{
+		StopTextInput();
 		screenPointer->setFocus(nullptr);
 		return;
 	}
@@ -391,6 +392,7 @@ void W_EDITBOX::run(W_CONTEXT *psContext)
 		case INPBUF_CR :
 		case KEY_KPENTER:                  // either normal return key || keypad enter
 			/* Finish editing */
+			StopTextInput();
 			screenPointer->setFocus(nullptr);
 			debug(LOG_INPUT, "EditBox cursor return");
 			return;

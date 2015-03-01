@@ -87,6 +87,7 @@ void war_SetDefaultStates(void)//Sets all states
 	war_SetVsync(true);
 	war_setSoundEnabled( true );
 	war_SetPauseOnFocusLoss(false);
+	war_SetColouredCursor(true);
 	war_SetMusicEnabled(true);
 	war_SetSPcolor(0);		//default color is green
 	war_setMPcolour(-1);            // Default color is random.
@@ -209,6 +210,16 @@ void war_SetPauseOnFocusLoss(bool enabled)
 bool war_GetPauseOnFocusLoss()
 {
 	return warGlobs.pauseOnFocusLoss;
+}
+
+void war_SetColouredCursor(bool enabled)
+{
+	warGlobs.ColouredCursor = enabled;
+}
+
+bool war_GetColouredCursor(void)
+{
+	return warGlobs.ColouredCursor;
 }
 
 void war_setSoundEnabled( bool soundEnabled )

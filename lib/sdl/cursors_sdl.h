@@ -24,10 +24,11 @@
 #ifndef __INCLUDED_LIB_SDL_CURSORS_SDL_H__
 #define __INCLUDED_LIB_SDL_CURSORS_SDL_H__
 
-#include <SDL_mouse.h>
 #include "lib/framework/cursors.h"
+#include <SDL2/SDL_mouse.h>
 
-void sdlInitCursors();
-void sdlFreeCursors();
+void sdlInitCursors(void);
+void sdlInitColoredCursors(void);
+void sdlFreeCursors(void);
 
 #endif // __INCLUDED_LIB_SDL_CURSORS_SDL_H__

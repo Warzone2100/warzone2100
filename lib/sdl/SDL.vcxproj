@@ -21,11 +21,9 @@
   <ItemGroup>
     <ClCompile Include="cursors_sdl.cpp" />
     <ClCompile Include="main_sdl.cpp" />
-    <ClCompile Include="scrap.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cursors_sdl.h" />
-    <ClInclude Include="scrap.h" />
     <ClInclude Include="wz2100icon.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -83,7 +81,7 @@
     <IncludePath>..\..;..\..\devpkg\include;..\..\devpkg\include\SDL;$(Qt5dir)\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>..\..;..\..\devpkg\include;..\..\devpkg\include\SDL;$(Qt5dir)\include;$(IncludePath)</IncludePath>
+    <IncludePath>..\..;..\..\devpkg\include;..\..\devpkg\include\SDL2;$(Qt5dir)\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_QT_backend|Win32'">
     <IncludePath>..\..;..\..\devpkg\include;..\..\devpkg\include\SDL;$(Qt5dir)\include;$(IncludePath)</IncludePath>
@@ -97,6 +95,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <MinimalRebuild>false</MinimalRebuild>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

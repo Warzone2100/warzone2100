@@ -152,17 +152,18 @@ enum MOUSE_KEY_CODE
 	MOUSE_LMB = 1,
 	MOUSE_MMB,
 	MOUSE_RMB,
+	MOUSE_X1,	// mouse button 4
+	MOUSE_X2,	// mouse button 5
 	MOUSE_WUP,
 	MOUSE_WDN,
-
-	MOUSE_BAD
+	MOUSE_END	// end of our enum
 };
 
 struct MousePress
 {
 	enum Action {None, Press, Release};
 
-	MousePress(Action action = None, MOUSE_KEY_CODE key = MOUSE_BAD) : action(action), key(key) {}
+	MousePress(Action action = None, MOUSE_KEY_CODE key = MOUSE_END) : action(action), key(key) {}
 	bool empty() const { return action == None; }
 
 	Action action;
@@ -173,7 +174,7 @@ typedef std::vector<MousePress> MousePresses;
 
 /** Tell the input system that we have lost the focus. */
 extern void inputLoseFocus(void);
-
+extern void StopTextInput(void);
 /** Converts the key code into an ascii string. */
 extern void keyScanToString(KEY_CODE code, char *ascii, UDWORD maxStringSize);
 
@@ -223,7 +224,7 @@ extern bool getMouseWarp();
 
 /* The input buffer can contain normal character codes and these control codes */
 #define INPBUF_LEFT		KEY_LEFTARROW
-#define INPBUF_RIGHT	KEY_RIGHTARROW
+#define INPBUF_RIGHT		KEY_RIGHTARROW
 #define INPBUF_UP		KEY_UPARROW
 #define INPBUF_DOWN		KEY_DOWNARROW
 #define INPBUF_HOME		KEY_HOME
