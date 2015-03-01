@@ -51,7 +51,7 @@ int realmain(int argc, char **argv)
 	debug_register_callback(debug_callback_stderr, NULL, NULL, NULL);
 	pie_SetVideoBufferWidth(800);
 	pie_SetVideoBufferHeight(600);
-	if (!wzMain2(0, false, true))
+	if (!wzMainScreenSetup(0, false, true))
 	{
 		fprintf(stderr, "Failed to initialize graphics\n");
 		return EXIT_FAILURE;
@@ -59,7 +59,7 @@ int realmain(int argc, char **argv)
 	frameInitialise();
 	screenInitialise();
 
-	wzMain3(); // enter main loop
+	wzMainEventLoop(); // enter main loop
 
 	frameShutDown();
 	screenShutDown();
