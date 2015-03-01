@@ -180,7 +180,6 @@ lib/script/script.cpp
 lib/script/stack.cpp
 lib/sdl/cursors_sdl.cpp
 lib/sdl/main_sdl.cpp
-lib/sdl/scrap.cpp
 lib/sequence/sequence.cpp
 lib/sequence/timer.cpp
 lib/sound/audio.cpp
