@@ -97,35 +97,75 @@ void NETbytes(std::vector<uint8_t> *vec, unsigned maxLen = 10000);
 PACKETDIR NETgetPacketDir(void);
 
 template <typename EnumT>
-static void NETenum(EnumT* enumPtr)
+static void NETenum(EnumT *enumPtr)
 {
 	uint32_t val;
-	
+
 	if (NETgetPacketDir() == PACKET_ENCODE)
+	{
 		val = *enumPtr;
+	}
 
 	NETuint32_t(&val);
 
 	if (NETgetPacketDir() == PACKET_DECODE)
+	{
 		*enumPtr = static_cast<EnumT>(val);
+	}
 }
 
 void NETPosition(Position *vp);
 void NETRotation(Rotation *vp);
 void NETVector2i(Vector2i *vp);
 
-static inline void NETauto(int8_t *ip)    { NETint8_t(ip); }
-static inline void NETauto(uint8_t *ip)   { NETuint8_t(ip); }
-static inline void NETauto(int16_t *ip)   { NETint16_t(ip); }
-static inline void NETauto(uint16_t *ip)  { NETuint16_t(ip); }
-static inline void NETauto(int32_t *ip)   { NETint32_t(ip); }
-static inline void NETauto(uint32_t *ip)  { NETuint32_t(ip); }
-static inline void NETauto(int64_t *ip)   { NETint64_t(ip); }
-static inline void NETauto(uint64_t *ip)  { NETuint64_t(ip); }
-static inline void NETauto(bool *bp)      { NETbool(bp); }
-static inline void NETauto(Position *vp)  { NETPosition(vp); }
-static inline void NETauto(Rotation *vp)  { NETRotation(vp); }
-static inline void NETauto(Vector2i *vp)  { NETVector2i(vp); }
+static inline void NETauto(int8_t *ip)
+{
+	NETint8_t(ip);
+}
+static inline void NETauto(uint8_t *ip)
+{
+	NETuint8_t(ip);
+}
+static inline void NETauto(int16_t *ip)
+{
+	NETint16_t(ip);
+}
+static inline void NETauto(uint16_t *ip)
+{
+	NETuint16_t(ip);
+}
+static inline void NETauto(int32_t *ip)
+{
+	NETint32_t(ip);
+}
+static inline void NETauto(uint32_t *ip)
+{
+	NETuint32_t(ip);
+}
+static inline void NETauto(int64_t *ip)
+{
+	NETint64_t(ip);
+}
+static inline void NETauto(uint64_t *ip)
+{
+	NETuint64_t(ip);
+}
+static inline void NETauto(bool *bp)
+{
+	NETbool(bp);
+}
+static inline void NETauto(Position *vp)
+{
+	NETPosition(vp);
+}
+static inline void NETauto(Rotation *vp)
+{
+	NETRotation(vp);
+}
+static inline void NETauto(Vector2i *vp)
+{
+	NETVector2i(vp);
+}
 
 
 void NETnetMessage(NetMessage const **message);  ///< If decoding, must delete the NETMESSAGE.

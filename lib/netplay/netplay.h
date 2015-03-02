@@ -163,10 +163,10 @@ struct GAMESTRUCT
 	char		extra[extra_string_size];		// extra string (future use)
 	char		mapname[map_string_size];		// map server is hosting
 	char		hostname[hostname_string_size];	// ...
-	char		versionstring[StringSize];		// 
+	char		versionstring[StringSize];		//
 	char		modlist[modlist_string_size];	// ???
-	uint32_t	game_version_major;				// 
-	uint32_t	game_version_minor;				// 
+	uint32_t	game_version_major;				//
+	uint32_t	game_version_minor;				//
 	uint32_t	privateGame;					// if true, it is a private game
 	uint32_t	pureMap;						// If this map has mods in it.
 	uint32_t	Mods;							// number of concatenated mods?
@@ -224,7 +224,7 @@ enum
 };
 
 // ////////////////////////////////////////////////////////////////////////
-// Player information. Filled when players join, never re-ordered. selectedPlayer global points to 
+// Player information. Filled when players join, never re-ordered. selectedPlayer global points to
 // currently controlled player.
 struct PLAYER
 {
@@ -260,14 +260,14 @@ struct NETPLAY
 	bool		isUPNP_CONFIGURED;	// if UPnP was successful
 	bool		isUPNP_ERROR;		//If we had a error during detection/config process
 	bool		isHostAlive;	/// if the host is still alive
-	PHYSFS_file *   pMapFileHandle;         ///< Only non-NULL during map download.
+	PHYSFS_file    *pMapFileHandle;         ///< Only non-NULL during map download.
 	char mapFileName[255];            ///< Only valid during map download.
 	char gamePassword[password_string_size];		//
 	bool GamePassworded;				// if we have a password or not.
 	bool ShowedMOTD;					// only want to show this once
 	bool HaveUpgrade;					// game updates available
 	char MOTDbuffer[255];				// buffer for MOTD
-	char* MOTD;
+	char *MOTD;
 };
 
 struct PLAYER_IP
@@ -316,16 +316,16 @@ extern int32_t	NETgetGameFlagsUnjoined(unsigned int gameid, unsigned int flag);	
 extern bool	NETsetGameFlags(UDWORD flag, SDWORD value);	// set game flag(1-4) to value.
 extern bool	NEThaltJoining(void);				// stop new players joining this game
 extern bool	NETfindGame(void);		// find games being played(uses GAME_GUID);
-extern bool	NETjoinGame(const char* host, uint32_t port, const char* playername); // join game given with playername
-extern bool	NEThostGame(const char* SessionName, const char* PlayerName,// host a game
-			    SDWORD one, SDWORD two, SDWORD three, SDWORD four, UDWORD plyrs);
+extern bool	NETjoinGame(const char *host, uint32_t port, const char *playername); // join game given with playername
+extern bool	NEThostGame(const char *SessionName, const char *PlayerName,// host a game
+                        SDWORD one, SDWORD two, SDWORD three, SDWORD four, UDWORD plyrs);
 extern bool	NETchangePlayerName(UDWORD player, char *newName);// change a players name.
 void            NETfixDuplicatePlayerNames(void);  // Change a player's name automatically, if there are duplicates.
 
 #include "netlog.h"
 
-extern void NETsetMasterserverName(const char* hostname);
-extern const char* NETgetMasterserverName(void);
+extern void NETsetMasterserverName(const char *hostname);
+extern const char *NETgetMasterserverName(void);
 extern void NETsetMasterserverPort(unsigned int port);
 extern unsigned int NETgetMasterserverPort(void);
 extern void NETsetGameserverPort(unsigned int port);
@@ -352,7 +352,7 @@ const char *messageTypeToString(unsigned messageType);
 /// Sync debugging. Only prints anything, if different players would print different things.
 #define syncDebug(...) do { _syncDebug(__FUNCTION__, __VA_ARGS__); } while(0)
 void _syncDebug(const char *function, const char *str, ...)
-	WZ_DECL_FORMAT(printf, 2, 3);
+WZ_DECL_FORMAT(printf, 2, 3);
 /// Faster than syncDebug. Make sure that str is a format string that takes ints only.
 void _syncDebugIntList(const char *function, const char *str, int *ints, size_t numInts);
 #define syncDebugBacktrace() do { _syncDebugBacktrace(__FUNCTION__); } while(0)

@@ -104,8 +104,8 @@ void socketArrayClose(Socket **sockets, size_t maxSockets);             ///< Clo
 char const *getSocketTextAddress(Socket const *sock);                   ///< Gets a string with the socket address.
 bool socketReadReady(Socket const *sock);                               ///< Returns if checkSockets found data to read from this Socket.
 ssize_t readNoInt(Socket *sock, void *buf, size_t max_size, size_t *rawByteCount = NULL);  ///< Reads up to max_size bytes from the Socket. Raw count of bytes (after compression) returned in rawByteCount.
-ssize_t readAll(Socket* sock, void *buf, size_t size, unsigned timeout);///< Reads exactly size bytes from the Socket, or blocks until the timeout expires.
-ssize_t writeAll(Socket *sock, const void* buf, size_t size, size_t *rawByteCount = NULL);  ///< Nonblocking write of size bytes to the Socket. All bytes will be written asynchronously, by a separate thread. Raw count of bytes (after compression) returned in rawByteCount, which will often be 0 until the socket is flushed.
+ssize_t readAll(Socket *sock, void *buf, size_t size, unsigned timeout);///< Reads exactly size bytes from the Socket, or blocks until the timeout expires.
+ssize_t writeAll(Socket *sock, const void *buf, size_t size, size_t *rawByteCount = NULL);  ///< Nonblocking write of size bytes to the Socket. All bytes will be written asynchronously, by a separate thread. Raw count of bytes (after compression) returned in rawByteCount, which will often be 0 until the socket is flushed.
 
 // Sockets, compressed.
 void socketBeginCompression(Socket *sock);                              ///< Makes future data sent compressed, and future data received expected to be compressed.

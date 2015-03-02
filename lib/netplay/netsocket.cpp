@@ -116,10 +116,10 @@ void setSockErr(int error)
 }
 
 #if defined(WZ_OS_WIN)
-typedef int (WINAPI * GETADDRINFO_DLL_FUNC)(const char *node, const char *service,
-                                           const struct addrinfo *hints,
-                                           struct addrinfo **res);
-typedef int (WINAPI * FREEADDRINFO_DLL_FUNC)(struct addrinfo *res);
+typedef int (WINAPI *GETADDRINFO_DLL_FUNC)(const char *node, const char *service,
+        const struct addrinfo *hints,
+        struct addrinfo **res);
+typedef int (WINAPI *FREEADDRINFO_DLL_FUNC)(struct addrinfo *res);
 
 static HMODULE winsock2_dll = NULL;
 static unsigned int major_windows_version = 0;
@@ -142,39 +142,39 @@ static int getaddrinfo(const char *node, const char *service,
 
 	switch (major_windows_version)
 	{
-		case 0:
-		case 1:
-		case 2:
-		case 3:
-		// Windows 95, 98 and ME
-		case 4:
-			debug(LOG_ERROR, "Name resolution isn't supported on this version (%u) of Windows", major_windows_version);
+	case 0:
+	case 1:
+	case 2:
+	case 3:
+	// Windows 95, 98 and ME
+	case 4:
+		debug(LOG_ERROR, "Name resolution isn't supported on this version (%u) of Windows", major_windows_version);
+		return EAI_FAIL;
+
+	// Windows 2000, XP and Server 2003
+	case 5:
+		if (hints)
+		{
+			// These flags are only supported from version 6 and onward
+			hint.ai_flags &= ~(AI_V4MAPPED | AI_ADDRCONFIG);
+		}
+	// Windows Vista and Server 2008
+	case 6:
+	// Onward (aka: in the future)
+	default:
+		if (!winsock2_dll)
+		{
+			debug(LOG_ERROR, "Failed to load winsock2 DLL. Required for name resolution.");
 			return EAI_FAIL;
+		}
 
-		// Windows 2000, XP and Server 2003
-		case 5:
-			if (hints)
-			{
-				// These flags are only supported from version 6 and onward
-				hint.ai_flags &= ~(AI_V4MAPPED | AI_ADDRCONFIG);
-			}
-		// Windows Vista and Server 2008
-		case 6:
-		// Onward (aka: in the future)
-		default:
-			if (!winsock2_dll)
-			{
-				debug(LOG_ERROR, "Failed to load winsock2 DLL. Required for name resolution.");
-				return EAI_FAIL;
-			}
+		if (!getaddrinfo_dll_func)
+		{
+			debug(LOG_ERROR, "Failed to retrieve \"getaddrinfo\" function from winsock2 DLL. Required for name resolution.");
+			return EAI_FAIL;
+		}
 
-			if (!getaddrinfo_dll_func)
-			{
-				debug(LOG_ERROR, "Failed to retrieve \"getaddrinfo\" function from winsock2 DLL. Required for name resolution.");
-				return EAI_FAIL;
-			}
-
-			return getaddrinfo_dll_func(node, service, hints ? &hint: NULL, res);
+		return getaddrinfo_dll_func(node, service, hints ? &hint : NULL, res);
 	}
 }
 
@@ -182,130 +182,130 @@ static void freeaddrinfo(struct addrinfo *res)
 {
 	switch (major_windows_version)
 	{
-		case 0:
-		case 1:
-		case 2:
-		case 3:
-		// Windows 95, 98 and ME
-		case 4:
-			debug(LOG_ERROR, "Name resolution isn't supported on this version (%u) of Windows", major_windows_version);
+	case 0:
+	case 1:
+	case 2:
+	case 3:
+	// Windows 95, 98 and ME
+	case 4:
+		debug(LOG_ERROR, "Name resolution isn't supported on this version (%u) of Windows", major_windows_version);
+		return;
+
+	// Windows 2000, XP and Server 2003
+	case 5:
+	// Windows Vista and Server 2008
+	case 6:
+	// Onward (aka: in the future)
+	default:
+		if (!winsock2_dll)
+		{
+			debug(LOG_ERROR, "Failed to load winsock2 DLL. Required for name resolution.");
 			return;
+		}
 
-		// Windows 2000, XP and Server 2003
-		case 5:
-		// Windows Vista and Server 2008
-		case 6:
-		// Onward (aka: in the future)
-		default:
-			if (!winsock2_dll)
-			{
-				debug(LOG_ERROR, "Failed to load winsock2 DLL. Required for name resolution.");
-				return;
-			}
+		if (!freeaddrinfo_dll_func)
+		{
+			debug(LOG_ERROR, "Failed to retrieve \"freeaddrinfo\" function from winsock2 DLL. Required for name resolution.");
+			return;
+		}
 
-			if (!freeaddrinfo_dll_func)
-			{
-				debug(LOG_ERROR, "Failed to retrieve \"freeaddrinfo\" function from winsock2 DLL. Required for name resolution.");
-				return;
-			}
-
-			freeaddrinfo_dll_func(res);
+		freeaddrinfo_dll_func(res);
 	}
 }
 #endif
 
-static int addressToText(const struct sockaddr* addr, char* buf, size_t size)
+static int addressToText(const struct sockaddr *addr, char *buf, size_t size)
 {
 	switch (addr->sa_family)
 	{
-		case AF_INET:
+	case AF_INET:
 		{
-			unsigned char* address = (unsigned char*)&((const struct sockaddr_in*)addr)->sin_addr.s_addr;
+			unsigned char *address = (unsigned char *) & ((const struct sockaddr_in *)addr)->sin_addr.s_addr;
 
 			return snprintf(buf, size,
-			"%hhu.%hhu.%hhu.%hhu",
-				address[0],
-				address[1],
-				address[2],
-				address[3]);
+			                "%hhu.%hhu.%hhu.%hhu",
+			                address[0],
+			                address[1],
+			                address[2],
+			                address[3]);
 		}
-		case AF_INET6:
+	case AF_INET6:
 		{
-			uint16_t* address = (uint16_t*)&((const struct sockaddr_in6*)addr)->sin6_addr.s6_addr;
+			uint16_t *address = (uint16_t *) & ((const struct sockaddr_in6 *)addr)->sin6_addr.s6_addr;
 
 			return snprintf(buf, size,
-			"%hx:%hx:%hx:%hx:%hx:%hx:%hx:%hx",
-				ntohs(address[0]),
-				ntohs(address[1]),
-				ntohs(address[2]),
-				ntohs(address[3]),
-				ntohs(address[4]),
-				ntohs(address[5]),
-				ntohs(address[6]),
-				ntohs(address[7]));
+			                "%hx:%hx:%hx:%hx:%hx:%hx:%hx:%hx",
+			                ntohs(address[0]),
+			                ntohs(address[1]),
+			                ntohs(address[2]),
+			                ntohs(address[3]),
+			                ntohs(address[4]),
+			                ntohs(address[5]),
+			                ntohs(address[6]),
+			                ntohs(address[7]));
 		}
-		default:
-			ASSERT(!"Unknown address family", "Got non IPv4 or IPv6 address!");
-			return -1;
+	default:
+		ASSERT(!"Unknown address family", "Got non IPv4 or IPv6 address!");
+		return -1;
 	}
 }
 
-const char* strSockError(int error)
+const char *strSockError(int error)
 {
 #if   defined(WZ_OS_WIN)
 	switch (error)
 	{
-		case 0:                     return "No error";
-		case WSAEINTR:              return "Interrupted system call";
-		case WSAEBADF:              return "Bad file number";
-		case WSAEACCES:             return "Permission denied";
-		case WSAEFAULT:             return "Bad address";
-		case WSAEINVAL:             return "Invalid argument";
-		case WSAEMFILE:             return "Too many open sockets";
-		case WSAEWOULDBLOCK:        return "Operation would block";
-		case WSAEINPROGRESS:        return "Operation now in progress";
-		case WSAEALREADY:           return "Operation already in progress";
-		case WSAENOTSOCK:           return "Socket operation on non-socket";
-		case WSAEDESTADDRREQ:       return "Destination address required";
-		case WSAEMSGSIZE:           return "Message too long";
-		case WSAEPROTOTYPE:         return "Protocol wrong type for socket";
-		case WSAENOPROTOOPT:        return "Bad protocol option";
-		case WSAEPROTONOSUPPORT:    return "Protocol not supported";
-		case WSAESOCKTNOSUPPORT:    return "Socket type not supported";
-		case WSAEOPNOTSUPP:         return "Operation not supported on socket";
-		case WSAEPFNOSUPPORT:       return "Protocol family not supported";
-		case WSAEAFNOSUPPORT:       return "Address family not supported";
-		case WSAEADDRINUSE:         return "Address already in use";
-		case WSAEADDRNOTAVAIL:      return "Can't assign requested address";
-		case WSAENETDOWN:           return "Network is down";
-		case WSAENETUNREACH:        return "Network is unreachable";
-		case WSAENETRESET:          return "Net connection reset";
-		case WSAECONNABORTED:       return "Software caused connection abort";
-		case WSAECONNRESET:         return "Connection reset by peer";
-		case WSAENOBUFS:            return "No buffer space available";
-		case WSAEISCONN:            return "Socket is already connected";
-		case WSAENOTCONN:           return "Socket is not connected";
-		case WSAESHUTDOWN:          return "Can't send after socket shutdown";
-		case WSAETOOMANYREFS:       return "Too many references, can't splice";
-		case WSAETIMEDOUT:          return "Connection timed out";
-		case WSAECONNREFUSED:       return "Connection refused";
-		case WSAELOOP:              return "Too many levels of symbolic links";
-		case WSAENAMETOOLONG:       return "File name too long";
-		case WSAEHOSTDOWN:          return "Host is down";
-		case WSAEHOSTUNREACH:       return "No route to host";
-		case WSAENOTEMPTY:          return "Directory not empty";
-		case WSAEPROCLIM:           return "Too many processes";
-		case WSAEUSERS:             return "Too many users";
-		case WSAEDQUOT:             return "Disc quota exceeded";
-		case WSAESTALE:             return "Stale NFS file handle";
-		case WSAEREMOTE:            return "Too many levels of remote in path";
-		case WSASYSNOTREADY:        return "Network system is unavailable";
-		case WSAVERNOTSUPPORTED:    return "Winsock version out of range";
-		case WSANOTINITIALISED:     return "WSAStartup not yet called";
-		case WSAEDISCON:            return "Graceful shutdown in progress";
-		case WSAHOST_NOT_FOUND:     return "Host not found";
-		case WSANO_DATA:            return "No host data of that type was found";
-		default:                    return "Unknown error";
+	case 0:                     return "No error";
+	case WSAEINTR:              return "Interrupted system call";
+	case WSAEBADF:              return "Bad file number";
+	case WSAEACCES:             return "Permission denied";
+	case WSAEFAULT:             return "Bad address";
+	case WSAEINVAL:             return "Invalid argument";
+	case WSAEMFILE:             return "Too many open sockets";
+	case WSAEWOULDBLOCK:        return "Operation would block";
+	case WSAEINPROGRESS:        return "Operation now in progress";
+	case WSAEALREADY:           return "Operation already in progress";
+	case WSAENOTSOCK:           return "Socket operation on non-socket";
+	case WSAEDESTADDRREQ:       return "Destination address required";
+	case WSAEMSGSIZE:           return "Message too long";
+	case WSAEPROTOTYPE:         return "Protocol wrong type for socket";
+	case WSAENOPROTOOPT:        return "Bad protocol option";
+	case WSAEPROTONOSUPPORT:    return "Protocol not supported";
+	case WSAESOCKTNOSUPPORT:    return "Socket type not supported";
+	case WSAEOPNOTSUPP:         return "Operation not supported on socket";
+	case WSAEPFNOSUPPORT:       return "Protocol family not supported";
+	case WSAEAFNOSUPPORT:       return "Address family not supported";
+	case WSAEADDRINUSE:         return "Address already in use";
+	case WSAEADDRNOTAVAIL:      return "Can't assign requested address";
+	case WSAENETDOWN:           return "Network is down";
+	case WSAENETUNREACH:        return "Network is unreachable";
+	case WSAENETRESET:          return "Net connection reset";
+	case WSAECONNABORTED:       return "Software caused connection abort";
+	case WSAECONNRESET:         return "Connection reset by peer";
+	case WSAENOBUFS:            return "No buffer space available";
+	case WSAEISCONN:            return "Socket is already connected";
+	case WSAENOTCONN:           return "Socket is not connected";
+	case WSAESHUTDOWN:          return "Can't send after socket shutdown";
+	case WSAETOOMANYREFS:       return "Too many references, can't splice";
+	case WSAETIMEDOUT:          return "Connection timed out";
+	case WSAECONNREFUSED:       return "Connection refused";
+	case WSAELOOP:              return "Too many levels of symbolic links";
+	case WSAENAMETOOLONG:       return "File name too long";
+	case WSAEHOSTDOWN:          return "Host is down";
+	case WSAEHOSTUNREACH:       return "No route to host";
+	case WSAENOTEMPTY:          return "Directory not empty";
+	case WSAEPROCLIM:           return "Too many processes";
+	case WSAEUSERS:             return "Too many users";
+	case WSAEDQUOT:             return "Disc quota exceeded";
+	case WSAESTALE:             return "Stale NFS file handle";
+	case WSAEREMOTE:            return "Too many levels of remote in path";
+	case WSASYSNOTREADY:        return "Network system is unavailable";
+	case WSAVERNOTSUPPORTED:    return "Winsock version out of range";
+	case WSANOTINITIALISED:     return "WSAStartup not yet called";
+	case WSAEDISCON:            return "Graceful shutdown in progress";
+	case WSAHOST_NOT_FOUND:     return "Host not found";
+	case WSANO_DATA:            return "No host data of that type was found";
+	default:                    return "Unknown error";
 	}
 #elif defined(WZ_OS_UNIX)
 	return strerror(error);
@@ -318,12 +318,12 @@ const char* strSockError(int error)
  * @return true when the connection is open, false when it's closed or in an
  *         error state, check getSockErr() to find out which.
  */
-static bool connectionIsOpen(Socket* sock)
+static bool connectionIsOpen(Socket *sock)
 {
 	const SocketSet set = {std::vector<Socket *>(1, sock)};
 
 	ASSERT_OR_RETURN((setSockErr(EBADF), false),
-		sock && sock->fd[SOCK_CONNECTION] != INVALID_SOCKET, "Invalid socket");
+	                 sock && sock->fd[SOCK_CONNECTION] != INVALID_SOCKET, "Invalid socket");
 
 	// Check whether the socket is still connected
 	int ret = checkSockets(&set, 0);
@@ -394,7 +394,7 @@ static int socketThreadFunction(void *)
 		// We can write to some sockets. (Ignore errors from select, we may have deleted the socket after unlocking the mutex, and before calling select.)
 		if (ret > 0)
 		{
-			for (SocketThreadWriteMap::iterator i = socketThreadWrites.begin(); i != socketThreadWrites.end(); )
+			for (SocketThreadWriteMap::iterator i = socketThreadWrites.begin(); i != socketThreadWrites.end();)
 			{
 				SocketThreadWriteMap::iterator w = i;
 				++i;
@@ -428,29 +428,13 @@ static int socketThreadFunction(void *)
 				{
 					switch (getSockErr())
 					{
-						case EAGAIN:
+					case EAGAIN:
 #if defined(EWOULDBLOCK) && EAGAIN != EWOULDBLOCK
-						case EWOULDBLOCK:
+					case EWOULDBLOCK:
 #endif
-							if (!connectionIsOpen(sock))
-							{
-								debug(LOG_NET, "Socket error");
-								sock->writeError = true;
-								socketThreadWrites.erase(w);  // Socket broken, don't try writing to it again.
-								if (sock->deleteLater)
-								{
-									socketCloseNow(sock);
-								}
-								break;
-							}
-						case EINTR:
-							break;
-#if defined(EPIPE)
-						case EPIPE:
-							debug(LOG_NET, "EPIPE generated");
-							// fall through
-#endif
-						default:
+						if (!connectionIsOpen(sock))
+						{
+							debug(LOG_NET, "Socket error");
 							sock->writeError = true;
 							socketThreadWrites.erase(w);  // Socket broken, don't try writing to it again.
 							if (sock->deleteLater)
@@ -458,6 +442,22 @@ static int socketThreadFunction(void *)
 								socketCloseNow(sock);
 							}
 							break;
+						}
+					case EINTR:
+						break;
+#if defined(EPIPE)
+					case EPIPE:
+						debug(LOG_NET, "EPIPE generated");
+						// fall through
+#endif
+					default:
+						sock->writeError = true;
+						socketThreadWrites.erase(w);  // Socket broken, don't try writing to it again.
+						if (sock->deleteLater)
+						{
+							socketCloseNow(sock);
+						}
+						break;
 					}
 				}
 			}
@@ -480,10 +480,10 @@ static int socketThreadFunction(void *)
  * Similar to read(2) with the exception that this function won't be
  * interrupted by signals (EINTR).
  */
-ssize_t readNoInt(Socket* sock, void* buf, size_t max_size, size_t *rawByteCount)
+ssize_t readNoInt(Socket *sock, void *buf, size_t max_size, size_t *rawByteCount)
 {
 	size_t ignored;
-	size_t &rawBytes = rawByteCount != NULL? *rawByteCount : ignored;
+	size_t &rawBytes = rawByteCount != NULL ? *rawByteCount : ignored;
 	rawBytes = 0;
 
 	if (sock->fd[SOCK_CONNECTION] == INVALID_SOCKET)
@@ -503,9 +503,11 @@ ssize_t readNoInt(Socket* sock, void* buf, size_t max_size, size_t *rawByteCount
 
 			ssize_t received;
 			do
-			{  //                                                  v----- This weird cast is because recv() takes a char * on windows instead of a void *...
+			{
+				//                                                  v----- This weird cast is because recv() takes a char * on windows instead of a void *...
 				received = recv(sock->fd[SOCK_CONNECTION], (char *)&sock->zInflateInBuf[0], sock->zInflateInBuf.size(), 0);
-			} while (received == SOCKET_ERROR && getSockErr() == EINTR);
+			}
+			while (received == SOCKET_ERROR && getSockErr() == EINTR);
 			if (received < 0)
 			{
 				return received;
@@ -532,9 +534,9 @@ ssize_t readNoInt(Socket* sock, void* buf, size_t max_size, size_t *rawByteCount
 		char const *err = NULL;
 		switch (ret)
 		{
-			case Z_NEED_DICT:  err = "Z_NEED_DICT";  break;
-			case Z_DATA_ERROR: err = "Z_DATA_ERROR"; break;
-			case Z_MEM_ERROR:  err = "Z_MEM_ERROR";  break;
+		case Z_NEED_DICT:  err = "Z_NEED_DICT";  break;
+		case Z_DATA_ERROR: err = "Z_DATA_ERROR"; break;
+		case Z_MEM_ERROR:  err = "Z_MEM_ERROR";  break;
 		}
 		if (err != NULL)
 		{
@@ -554,12 +556,13 @@ ssize_t readNoInt(Socket* sock, void* buf, size_t max_size, size_t *rawByteCount
 	ssize_t received;
 	do
 	{
-		received = recv(sock->fd[SOCK_CONNECTION], (char*)buf, max_size, 0);
+		received = recv(sock->fd[SOCK_CONNECTION], (char *)buf, max_size, 0);
 		if (received == 0)
 		{
 			sock->readDisconnected = true;
 		}
-	} while (received == SOCKET_ERROR && getSockErr() == EINTR);
+	}
+	while (received == SOCKET_ERROR && getSockErr() == EINTR);
 
 	sock->ready = false;
 
@@ -578,14 +581,14 @@ bool socketReadDisconnected(Socket *sock)
  *
  * @return @c size when succesful or @c SOCKET_ERROR if an error occurred.
  */
-ssize_t writeAll(Socket* sock, const void* buf, size_t size, size_t *rawByteCount)
+ssize_t writeAll(Socket *sock, const void *buf, size_t size, size_t *rawByteCount)
 {
 	size_t ignored;
-	size_t &rawBytes = rawByteCount != NULL? *rawByteCount : ignored;
+	size_t &rawBytes = rawByteCount != NULL ? *rawByteCount : ignored;
 	rawBytes = 0;
 
 	if (!sock
-	 || sock->fd[SOCK_CONNECTION] == INVALID_SOCKET)
+	    || sock->fd[SOCK_CONNECTION] == INVALID_SOCKET)
 	{
 		debug(LOG_ERROR, "Invalid socket (EBADF)");
 		setSockErr(EBADF);
@@ -628,7 +631,8 @@ ssize_t writeAll(Socket* sock, const void* buf, size_t size, size_t *rawByteCoun
 
 				// Remove unused part of buffer.
 				sock->zDeflateOutBuf.resize(sock->zDeflateOutBuf.size() - sock->zDeflate.avail_out);
-			} while(sock->zDeflate.avail_out == 0);
+			}
+			while (sock->zDeflate.avail_out == 0);
 
 			ASSERT(sock->zDeflate.avail_in == 0, "zlib didn't compress everything!");
 		}
@@ -640,7 +644,7 @@ ssize_t writeAll(Socket* sock, const void* buf, size_t size, size_t *rawByteCoun
 void socketFlush(Socket *sock, size_t *rawByteCount)
 {
 	size_t ignored;
-	size_t &rawBytes = rawByteCount != NULL? *rawByteCount : ignored;
+	size_t &rawBytes = rawByteCount != NULL ? *rawByteCount : ignored;
 	rawBytes = 0;
 
 	if (!sock->isCompressed)
@@ -663,7 +667,8 @@ void socketFlush(Socket *sock, size_t *rawByteCount)
 
 		// Remove unused part of buffer.
 		sock->zDeflateOutBuf.resize(sock->zDeflateOutBuf.size() - sock->zDeflate.avail_out);
-	} while(sock->zDeflate.avail_out == 0);
+	}
+	while (sock->zDeflate.avail_out == 0);
 
 	if (sock->zDeflateOutBuf.empty())
 	{
@@ -744,7 +749,7 @@ void deleteSocketSet(SocketSet *set)
  *
  * @return true if @c socket is succesfully added to @set.
  */
-void SocketSet_AddSocket(SocketSet* set, Socket* socket)
+void SocketSet_AddSocket(SocketSet *set, Socket *socket)
 {
 	ASSERT_OR_RETURN(, set != NULL, "NULL SocketSet provided");
 	ASSERT_OR_RETURN(, socket != NULL, "NULL Socket provided");
@@ -766,7 +771,7 @@ void SocketSet_AddSocket(SocketSet* set, Socket* socket)
 /**
  * Remove the given socket from the given socket set.
  */
-void SocketSet_DelSocket(SocketSet* set, Socket* socket)
+void SocketSet_DelSocket(SocketSet *set, Socket *socket)
 {
 	ASSERT_OR_RETURN(, set != NULL, "NULL SocketSet provided");
 	ASSERT_OR_RETURN(, socket != NULL, "NULL Socket provided");
@@ -791,9 +796,13 @@ static bool setSocketBlocking(const SOCKET fd, bool blocking)
 
 	// Set or clear O_NONBLOCK flag
 	if (blocking)
+	{
 		sockopts &= ~O_NONBLOCK;
+	}
 	else
+	{
 		sockopts |= O_NONBLOCK;
+	}
 
 	if (fcntl(fd, F_SETFL, sockopts) == SOCKET_ERROR)
 #elif defined(WZ_OS_WIN)
@@ -827,7 +836,7 @@ static void socketBlockSIGPIPE(const SOCKET fd, bool block_sigpipe)
 #endif
 }
 
-int checkSockets(const SocketSet* set, unsigned int timeout)
+int checkSockets(const SocketSet *set, unsigned int timeout)
 {
 	if (set->fds.empty())
 	{
@@ -882,7 +891,8 @@ int checkSockets(const SocketSet* set, unsigned int timeout)
 		}
 
 		ret = select(maxfd + 1, &fds, NULL, NULL, &tv);
-	} while (ret == SOCKET_ERROR && getSockErr() == EINTR);
+	}
+	while (ret == SOCKET_ERROR && getSockErr() == EINTR);
 
 	if (ret == SOCKET_ERROR)
 	{
@@ -912,9 +922,9 @@ int checkSockets(const SocketSet* set, unsigned int timeout)
  * when the other end disconnected or a timeout occurred. Or @c SOCKET_ERROR if
  * an error occurred.
  */
-ssize_t readAll(Socket* sock, void* buf, size_t size, unsigned int timeout)
+ssize_t readAll(Socket *sock, void *buf, size_t size, unsigned int timeout)
 {
-	ASSERT_OR_RETURN( SOCKET_ERROR, sock, "We don't have a valid socket!");
+	ASSERT_OR_RETURN(SOCKET_ERROR, sock, "We don't have a valid socket!");
 	ASSERT(!sock->isCompressed, "readAll on compressed sockets not implemented.");
 
 	const SocketSet set = {std::vector<Socket *>(1, sock)};
@@ -922,7 +932,7 @@ ssize_t readAll(Socket* sock, void* buf, size_t size, unsigned int timeout)
 	size_t received = 0;
 
 	if (!sock
-	 || sock->fd[SOCK_CONNECTION] == INVALID_SOCKET)
+	    || sock->fd[SOCK_CONNECTION] == INVALID_SOCKET)
 	{
 		debug(LOG_ERROR, "Invalid socket (%p), sock->fd[SOCK_CONNECTION]=%x  (error: EBADF)", sock, sock->fd[SOCK_CONNECTION]);
 		setSockErr(EBADF);
@@ -938,7 +948,7 @@ ssize_t readAll(Socket* sock, void* buf, size_t size, unsigned int timeout)
 		{
 			ret = checkSockets(&set, timeout);
 			if (ret < (ssize_t)set.fds.size()
-			 || !sock->ready)
+			    || !sock->ready)
 			{
 				if (ret == 0)
 				{
@@ -950,7 +960,7 @@ ssize_t readAll(Socket* sock, void* buf, size_t size, unsigned int timeout)
 			}
 		}
 
-		ret = recv(sock->fd[SOCK_CONNECTION], &((char*)buf)[received], size - received, 0);
+		ret = recv(sock->fd[SOCK_CONNECTION], &((char *)buf)[received], size - received, 0);
 		sock->ready = false;
 		if (ret == 0)
 		{
@@ -964,15 +974,15 @@ ssize_t readAll(Socket* sock, void* buf, size_t size, unsigned int timeout)
 		{
 			switch (getSockErr())
 			{
-				case EAGAIN:
+			case EAGAIN:
 #if defined(EWOULDBLOCK) && EAGAIN != EWOULDBLOCK
-				case EWOULDBLOCK:
+			case EWOULDBLOCK:
 #endif
-				case EINTR:
-					continue;
+			case EINTR:
+				continue;
 
-				default:
-					return SOCKET_ERROR;
+			default:
+				return SOCKET_ERROR;
 			}
 		}
 
@@ -1008,7 +1018,7 @@ static void socketCloseNow(Socket *sock)
 	delete sock;
 }
 
-void socketClose(Socket* sock)
+void socketClose(Socket *sock)
 {
 	if (sock == NULL)
 	{
@@ -1047,12 +1057,12 @@ Socket *socketAccept(Socket *sock)
 			Socket *conn;
 			unsigned int j;
 
-			const SOCKET newConn = accept(sock->fd[i], (struct sockaddr*)&addr, &addr_len);
+			const SOCKET newConn = accept(sock->fd[i], (struct sockaddr *)&addr, &addr_len);
 			if (newConn == INVALID_SOCKET)
 			{
 				// Ignore the case where no connection is pending
 				if (getSockErr() != EAGAIN
-				 && getSockErr() != EWOULDBLOCK)
+				    && getSockErr() != EWOULDBLOCK)
 				{
 					debug(LOG_ERROR, "accept failed for socket %p: %s", sock, strSockError(getSockErr()));
 				}
@@ -1088,7 +1098,7 @@ Socket *socketAccept(Socket *sock)
 
 			sock->ready = false;
 
-			addressToText((const struct sockaddr*)&addr, conn->textAddress, sizeof(conn->textAddress));
+			addressToText((const struct sockaddr *)&addr, conn->textAddress, sizeof(conn->textAddress));
 			debug(LOG_NET, "Incoming connection from [%s]:/*%%d*/ (FIXME: gives strict-aliasing error)", conn->textAddress/*, (unsigned int)ntohs(((const struct sockaddr_in*)&addr)->sin_port)*/);
 			debug(LOG_NET, "Using socket %p", conn);
 			return conn;
@@ -1114,7 +1124,7 @@ Socket *socketOpen(const SocketAddress *addr, unsigned timeout)
 	ASSERT(addr != NULL, "NULL Socket provided");
 
 	addressToText(addr->ai_addr, conn->textAddress, sizeof(conn->textAddress));
-	debug(LOG_NET, "Connecting to [%s]:%d", conn->textAddress, (int)ntohs(((const struct sockaddr_in*)addr->ai_addr)->sin_port));
+	debug(LOG_NET, "Connecting to [%s]:%d", conn->textAddress, (int)ntohs(((const struct sockaddr_in *)addr->ai_addr)->sin_port));
 
 	// Mark all unused socket handles as invalid
 	for (i = 0; i < ARRAY_SIZE(conn->fd); ++i)
@@ -1150,12 +1160,12 @@ Socket *socketOpen(const SocketAddress *addr, unsigned timeout)
 #endif
 
 		if ((getSockErr() != EINPROGRESS
-		  && getSockErr() != EAGAIN
-		  && getSockErr() != EWOULDBLOCK)
+		     && getSockErr() != EAGAIN
+		     && getSockErr() != EWOULDBLOCK)
 #if   defined(WZ_OS_UNIX)
-		 || conn->fd[SOCK_CONNECTION] >= FD_SETSIZE
+		    || conn->fd[SOCK_CONNECTION] >= FD_SETSIZE
 #endif
-		 || timeout == 0)
+		    || timeout == 0)
 		{
 			debug(LOG_NET, "Failed to start connecting: %s, using socket %p", strSockError(getSockErr()), conn);
 			socketClose(conn);
@@ -1178,7 +1188,8 @@ Socket *socketOpen(const SocketAddress *addr, unsigned timeout)
 #else
 			ret = select(conn->fd[SOCK_CONNECTION] + 1, NULL, &conReady, NULL, &tv);
 #endif
-		} while (ret == SOCKET_ERROR && getSockErr() == EINTR);
+		}
+		while (ret == SOCKET_ERROR && getSockErr() == EINTR);
 
 		if (ret == SOCKET_ERROR)
 		{
@@ -1205,7 +1216,7 @@ Socket *socketOpen(const SocketAddress *addr, unsigned timeout)
 		if (FD_ISSET(conn->fd[SOCK_CONNECTION], &conFailed))
 #elif defined(WZ_OS_UNIX)
 		if (connect(conn->fd[SOCK_CONNECTION], addr->ai_addr, addr->ai_addrlen) == SOCKET_ERROR
-		 && getSockErr() != EISCONN)
+		    && getSockErr() != EISCONN)
 #endif
 		{
 			debug(LOG_NET, "Failed to connect: %s, with socket %p.  Closing.", strSockError(getSockErr()), conn);
@@ -1262,7 +1273,7 @@ Socket *socketListen(unsigned int port)
 	conn->fd[SOCK_IPV6_LISTEN] = socket(addr6.sin6_family, SOCK_STREAM, 0);
 
 	if (conn->fd[SOCK_IPV4_LISTEN] == INVALID_SOCKET
-	 && conn->fd[SOCK_IPV6_LISTEN] == INVALID_SOCKET)
+	    && conn->fd[SOCK_IPV6_LISTEN] == INVALID_SOCKET)
 	{
 		debug(LOG_ERROR, "Failed to create an IPv4 and IPv6 (only supported address families) socket (%p): %s.  Closing.", conn, strSockError(getSockErr()));
 		socketClose(conn);
@@ -1282,7 +1293,7 @@ Socket *socketListen(unsigned int port)
 #if defined(IPV6_V6ONLY)
 	if (conn->fd[SOCK_IPV6_LISTEN] != INVALID_SOCKET)
 	{
-		if (setsockopt(conn->fd[SOCK_IPV6_LISTEN], IPPROTO_IPV6, IPV6_V6ONLY, (char*)&ipv6_v6only, sizeof(ipv6_v6only)) == SOCKET_ERROR)
+		if (setsockopt(conn->fd[SOCK_IPV6_LISTEN], IPPROTO_IPV6, IPV6_V6ONLY, (char *)&ipv6_v6only, sizeof(ipv6_v6only)) == SOCKET_ERROR)
 		{
 			debug(LOG_INFO, "Failed to set IPv6 socket to perform IPv4 to IPv6 mapping. Falling back to using two sockets. Error: %s", strSockError(getSockErr()));
 		}
@@ -1301,15 +1312,15 @@ Socket *socketListen(unsigned int port)
 
 	if (conn->fd[SOCK_IPV4_LISTEN] != INVALID_SOCKET)
 	{
-		if (setsockopt(conn->fd[SOCK_IPV4_LISTEN], SOL_SOCKET, SO_REUSEADDR, (char*)&so_reuseaddr, sizeof(so_reuseaddr)) == SOCKET_ERROR)
+		if (setsockopt(conn->fd[SOCK_IPV4_LISTEN], SOL_SOCKET, SO_REUSEADDR, (char *)&so_reuseaddr, sizeof(so_reuseaddr)) == SOCKET_ERROR)
 		{
 			debug(LOG_WARNING, "Failed to set SO_REUSEADDR on IPv4 socket. Error: %s", strSockError(getSockErr()));
 		}
 
 		debug(LOG_NET, "setting socket (%p) blocking status (false, IPv4).", conn);
-		if (bind(conn->fd[SOCK_IPV4_LISTEN], (const struct sockaddr*)&addr4, sizeof(addr4)) == SOCKET_ERROR
-		 || listen(conn->fd[SOCK_IPV4_LISTEN], 5) == SOCKET_ERROR
-		 || !setSocketBlocking(conn->fd[SOCK_IPV4_LISTEN], false))
+		if (bind(conn->fd[SOCK_IPV4_LISTEN], (const struct sockaddr *)&addr4, sizeof(addr4)) == SOCKET_ERROR
+		    || listen(conn->fd[SOCK_IPV4_LISTEN], 5) == SOCKET_ERROR
+		    || !setSocketBlocking(conn->fd[SOCK_IPV4_LISTEN], false))
 		{
 			debug(LOG_ERROR, "Failed to set up IPv4 socket for listening on port %u: %s", port, strSockError(getSockErr()));
 #if   defined(WZ_OS_WIN)
@@ -1323,15 +1334,15 @@ Socket *socketListen(unsigned int port)
 
 	if (conn->fd[SOCK_IPV6_LISTEN] != INVALID_SOCKET)
 	{
-		if (setsockopt(conn->fd[SOCK_IPV6_LISTEN], SOL_SOCKET, SO_REUSEADDR, (char*)&so_reuseaddr, sizeof(so_reuseaddr)) == SOCKET_ERROR)
+		if (setsockopt(conn->fd[SOCK_IPV6_LISTEN], SOL_SOCKET, SO_REUSEADDR, (char *)&so_reuseaddr, sizeof(so_reuseaddr)) == SOCKET_ERROR)
 		{
 			debug(LOG_INFO, "Failed to set SO_REUSEADDR on IPv6 socket. Error: %s", strSockError(getSockErr()));
 		}
 
 		debug(LOG_NET, "setting socket (%p) blocking status (false, IPv6).", conn);
-		if (bind(conn->fd[SOCK_IPV6_LISTEN], (const struct sockaddr*)&addr6, sizeof(addr6)) == SOCKET_ERROR
-		 || listen(conn->fd[SOCK_IPV6_LISTEN], 5) == SOCKET_ERROR
-		 || !setSocketBlocking(conn->fd[SOCK_IPV6_LISTEN], false))
+		if (bind(conn->fd[SOCK_IPV6_LISTEN], (const struct sockaddr *)&addr6, sizeof(addr6)) == SOCKET_ERROR
+		    || listen(conn->fd[SOCK_IPV6_LISTEN], 5) == SOCKET_ERROR
+		    || !setSocketBlocking(conn->fd[SOCK_IPV6_LISTEN], false))
 		{
 			debug(LOG_ERROR, "Failed to set up IPv6 socket for listening on port %u: %s", port, strSockError(getSockErr()));
 #if   defined(WZ_OS_WIN)
@@ -1345,7 +1356,7 @@ Socket *socketListen(unsigned int port)
 
 	// Check whether we still have at least a single (operating) socket.
 	if (conn->fd[SOCK_IPV4_LISTEN] == INVALID_SOCKET
-	 && conn->fd[SOCK_IPV6_LISTEN] == INVALID_SOCKET)
+	    && conn->fd[SOCK_IPV6_LISTEN] == INVALID_SOCKET)
 	{
 		debug(LOG_NET, "No IPv4 or IPv6 sockets created.");
 		socketClose(conn);
@@ -1388,7 +1399,7 @@ size_t socketArrayOpen(Socket **sockets, size_t maxSockets, const SocketAddress 
 void socketArrayClose(Socket **sockets, size_t maxSockets)
 {
 	std::for_each(sockets, sockets + maxSockets, socketClose);     // Close any open sockets.
-	std::fill    (sockets, sockets + maxSockets, (Socket *)NULL);  // Set the pointers to NULL.
+	std::fill(sockets, sockets + maxSockets, (Socket *)NULL);      // Set the pointers to NULL.
 }
 
 char const *getSocketTextAddress(Socket const *sock)
@@ -1398,8 +1409,8 @@ char const *getSocketTextAddress(Socket const *sock)
 
 SocketAddress *resolveHost(const char *host, unsigned int port)
 {
-	struct addrinfo* results;
-	char* service;
+	struct addrinfo *results;
+	char *service;
 	struct addrinfo hint;
 	int error, flags = 0;
 
