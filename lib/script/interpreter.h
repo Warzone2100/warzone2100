@@ -238,7 +238,7 @@ struct SCRIPT_CODE
 	TRIGGER_DATA	*psTriggerData;	// The extra info for each trigger
 	UWORD			*pEventTab;		// The table of event offsets
 	SWORD			*pEventLinks;	// The original trigger/event linkage
-									// -1 for no link
+	// -1 for no link
 
 	UWORD			numGlobals;		// The number of global variables
 	UWORD			numArrays;		// the number of arrays in the program

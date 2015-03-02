@@ -147,9 +147,9 @@ bool scriptGetVarIndex(SCRIPT_CODE *psCode, char *pID, UDWORD *pIndex)
 		return false;
 	}
 
-	for(index=0; index<psCode->numGlobals; index++)
+	for (index = 0; index < psCode->numGlobals; index++)
 	{
-		if (strcmp(psCode->psVarDebug[index].pIdent, pID)==0)
+		if (strcmp(psCode->psVarDebug[index].pIdent, pID) == 0)
 		{
 			*pIndex = index;
 			return true;
@@ -167,62 +167,67 @@ bool scriptTypeIsPointer(INTERP_TYPE type)
 {
 	ASSERT((SCR_USER_TYPES)type < ST_MAXTYPE || type >= VAL_REF, "Invalid type: %d", type);
 	// any value or'ed with VAL_REF is a pointer
-	if (type >= VAL_REF) return true;
+	if (type >= VAL_REF)
+	{
+		return true;
+	}
 	switch ((unsigned)type)  // Unsigned cast to suppress compiler warnings due to enum abuse.
 	{
-		case VAL_STRING:
-		case VAL_OBJ_GETSET:
-		case VAL_FUNC_EXTERN:
-		case ST_INTMESSAGE:
-		case ST_BASEOBJECT:
-		case ST_DROID:
-		case ST_STRUCTURE:
-		case ST_FEATURE:
-		case ST_TEMPLATE:
-		case ST_TEXTSTRING:
-		case ST_LEVEL:
-		case ST_RESEARCH:
-		case ST_GROUP:
-		case ST_POINTER_O:
-		case ST_POINTER_T:
-		case ST_POINTER_S:
-		case ST_POINTER_STRUCTSTAT:
-			return true;
-		case VAL_BOOL:
-		case VAL_INT:
-		case VAL_FLOAT:
-		case VAL_TRIGGER:
-		case VAL_EVENT:
-		case VAL_VOID:
-		case VAL_OPCODE:
-		case VAL_PKOPCODE:
-		case ST_BASESTATS:
-		case ST_COMPONENT:
-		case ST_BODY:
-		case ST_PROPULSION:
-		case ST_ECM:
-		case ST_SENSOR:
-		case ST_CONSTRUCT:
-		case ST_WEAPON:
-		case ST_REPAIR:
-		case ST_BRAIN:
-		case ST_STRUCTUREID:
-		case ST_STRUCTURESTAT:
-		case ST_FEATURESTAT:
-		case ST_DROIDID:
-		case ST_SOUND:
-			return false;
-		default:
-			ASSERT(false, "scriptTypeIsPointer: unhandled type: %d", type );
-			return false;
+	case VAL_STRING:
+	case VAL_OBJ_GETSET:
+	case VAL_FUNC_EXTERN:
+	case ST_INTMESSAGE:
+	case ST_BASEOBJECT:
+	case ST_DROID:
+	case ST_STRUCTURE:
+	case ST_FEATURE:
+	case ST_TEMPLATE:
+	case ST_TEXTSTRING:
+	case ST_LEVEL:
+	case ST_RESEARCH:
+	case ST_GROUP:
+	case ST_POINTER_O:
+	case ST_POINTER_T:
+	case ST_POINTER_S:
+	case ST_POINTER_STRUCTSTAT:
+		return true;
+	case VAL_BOOL:
+	case VAL_INT:
+	case VAL_FLOAT:
+	case VAL_TRIGGER:
+	case VAL_EVENT:
+	case VAL_VOID:
+	case VAL_OPCODE:
+	case VAL_PKOPCODE:
+	case ST_BASESTATS:
+	case ST_COMPONENT:
+	case ST_BODY:
+	case ST_PROPULSION:
+	case ST_ECM:
+	case ST_SENSOR:
+	case ST_CONSTRUCT:
+	case ST_WEAPON:
+	case ST_REPAIR:
+	case ST_BRAIN:
+	case ST_STRUCTUREID:
+	case ST_STRUCTURESTAT:
+	case ST_FEATURESTAT:
+	case ST_DROIDID:
+	case ST_SOUND:
+		return false;
+	default:
+		ASSERT(false, "scriptTypeIsPointer: unhandled type: %d", type);
+		return false;
 	}
 }
 
 
-static const struct {
+static const struct
+{
 	INTERP_TYPE type;
 	const char *name;
-} typeToStringMap[] = {
+} typeToStringMap[] =
+{
 	// Basic types
 	{ VAL_BOOL, "bool" },
 	{ VAL_INT, "int" },
@@ -251,19 +256,21 @@ const char *scriptTypeToString(INTERP_TYPE type)
 	int i; // Loop goes down -> signed
 
 	// Look whether it is a defaul type:
-	for (i = ARRAY_SIZE(typeToStringMap)-1;
-		i >= 0 && type <= typeToStringMap[i].type;
-		i--)
+	for (i = ARRAY_SIZE(typeToStringMap) - 1;
+	     i >= 0 && type <= typeToStringMap[i].type;
+	     i--)
 	{
 		if (type >= typeToStringMap[i].type)
+		{
 			return typeToStringMap[i].name;
+		}
 	}
 
 	// Look whether it is a user type:
 	if (asScrTypeTab)
 	{
 		unsigned int i;
-		for(i = 0; asScrTypeTab[i].typeID != 0; i++)
+		for (i = 0; asScrTypeTab[i].typeID != 0; i++)
 		{
 			if (asScrTypeTab[i].typeID == type)
 			{
@@ -276,10 +283,12 @@ const char *scriptTypeToString(INTERP_TYPE type)
 }
 
 
-static const struct {
+static const struct
+{
 	OPCODE opcode;
 	const char *name;
-} opcodeToStringMap[] = {
+} opcodeToStringMap[] =
+{
 	{ OP_PUSH, "push" },
 	{ OP_PUSHREF, "push(ref)" },
 	{ OP_POP, "pop" },
@@ -345,12 +354,14 @@ const char *scriptOpcodeToString(OPCODE opcode)
 	int i; // Loop goes down -> signed
 
 	// Look whether it is a defaul type:
-	for (i = ARRAY_SIZE(opcodeToStringMap)-1;
-		i >= 0 && opcode <= opcodeToStringMap[i].opcode;
-		i--)
+	for (i = ARRAY_SIZE(opcodeToStringMap) - 1;
+	     i >= 0 && opcode <= opcodeToStringMap[i].opcode;
+	     i--)
 	{
 		if (opcode >= opcodeToStringMap[i].opcode)
+		{
 			return opcodeToStringMap[i].name;
+		}
 	}
 
 	return "unknown";
@@ -363,7 +374,7 @@ const char *scriptFunctionToString(SCRIPT_FUNC function)
 	if (asScrInstinctTab)
 	{
 		unsigned int i;
-		for(i = 0; asScrInstinctTab[i].pFunc != NULL; i++)
+		for (i = 0; asScrInstinctTab[i].pFunc != NULL; i++)
 		{
 			if (asScrInstinctTab[i].pFunc == function)
 			{
@@ -376,7 +387,7 @@ const char *scriptFunctionToString(SCRIPT_FUNC function)
 	if (asScrCallbackTab)
 	{
 		unsigned int i;
-		for(i = 0; asScrCallbackTab[i].type != 0; i++)
+		for (i = 0; asScrCallbackTab[i].type != 0; i++)
 		{
 			if (asScrCallbackTab[i].pFunc == function)
 			{
