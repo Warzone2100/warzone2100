@@ -109,12 +109,12 @@ static int wz_oggVorbis_seek(void *datasource, ogg_int64_t offset, int whence)
 
 	switch (whence)
 	{
-		// Seek to absolute position
+	// Seek to absolute position
 	case SEEK_SET:
 		newPos = offset;
 		break;
 
-		// Seek `offset` ahead
+	// Seek `offset` ahead
 	case SEEK_CUR:
 		{
 			int curPos = PHYSFS_tell(fileHandle);
@@ -127,7 +127,7 @@ static int wz_oggVorbis_seek(void *datasource, ogg_int64_t offset, int whence)
 			break;
 		}
 
-		// Seek backwards from the end of the file
+	// Seek backwards from the end of the file
 	case SEEK_END:
 		{
 			int fileSize = PHYSFS_fileLength(fileHandle);
@@ -140,7 +140,7 @@ static int wz_oggVorbis_seek(void *datasource, ogg_int64_t offset, int whence)
 			break;
 		}
 
-		// unrecognized seek instruction
+	// unrecognized seek instruction
 	default:
 		// indicate failure
 		return -1;

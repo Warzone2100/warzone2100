@@ -65,7 +65,7 @@ ALenum __sound_GetError(const char *location_description)
 
 	default:
 		sasprintf((char **)&errorString, "unknown error code (%d); please report this number (along with the "
-		        "fact that it is an \"unknown OpenAL error code\"): 0x%x", (int)error, (unsigned int)error);
+		          "fact that it is an \"unknown OpenAL error code\"): 0x%x", (int)error, (unsigned int)error);
 		break;
 	}
 
@@ -108,7 +108,7 @@ ALenum __sound_GetContextError(ALCdevice *device, const char *location_descripti
 
 	default:
 		sasprintf((char **)&errorString, "unknown error code (%d); please report this number (along with the "
-		        "fact that it is an \"unknown OpenAL error code\"): 0x%x", (int)error, (unsigned int)error);
+		          "fact that it is an \"unknown OpenAL error code\"): 0x%x", (int)error, (unsigned int)error);
 		break;
 	}
 

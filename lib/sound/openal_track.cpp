@@ -361,8 +361,8 @@ void sound_Update()
 			node = node->next;
 			break;
 
-			// NOTE: if it isn't playing | paused, then it is most likely either done
-			// or a error.  In either case, we want to kill the sample in question.
+		// NOTE: if it isn't playing | paused, then it is most likely either done
+		// or a error.  In either case, we want to kill the sample in question.
 
 		default:
 			sound_DestroyIteratedSample(&previous, &node);

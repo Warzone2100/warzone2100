@@ -34,7 +34,7 @@ void	sound_ShutdownLibrary(void);
 void	sound_FreeTrack(TRACK *psTrack);
 
 bool	sound_Play2DSample(TRACK *psTrack, AUDIO_SAMPLE *psSample,
-        bool bQueued);
+                           bool bQueued);
 bool	sound_Play3DSample(TRACK *psTrack, AUDIO_SAMPLE *psSample);
 void	sound_StopSample(AUDIO_SAMPLE *psSample);
 void	sound_PauseSample(AUDIO_SAMPLE *psSample);
@@ -44,7 +44,7 @@ AUDIO_STREAM *sound_PlayStream(PHYSFS_file *PHYSFS_fileHandle, float volume, voi
 
 void	sound_SetSampleFreq(AUDIO_SAMPLE *psSample, SDWORD iFreq);
 void	sound_SetSampleVol(AUDIO_SAMPLE *psSample, SDWORD iVol,
-        bool bScale3D);
+                           bool bScale3D);
 
 int		sound_GetNumSamples(void);
 bool	sound_SampleIsFinished(AUDIO_SAMPLE *psSample);
