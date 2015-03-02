@@ -47,12 +47,13 @@ void QtGameWidget::trapMouse()
 	int result, count = 0;
 	do
 	{
-		result = XGrabPointer(QX11Info::display(), winId(), False, 
+		result = XGrabPointer(QX11Info::display(), winId(), False,
 		                      (uint)(ButtonPressMask | ButtonReleaseMask | PointerMotionMask | EnterWindowMask | LeaveWindowMask),
 		                      GrabModeAsync, GrabModeAsync, winId(), None, CurrentTime);
 		usleep(150);
 		count++;
-	} while (result != GrabSuccess && count < 15);
+	}
+	while (result != GrabSuccess && count < 15);
 #elif defined(WZ_WS_WIN32)
 	RECT lpRect;
 	QRect qRect = QtGameWidget::geometry();
@@ -317,7 +318,8 @@ bool QtGameWidget::setResolution(const QSize res, int rate, int depth)
 		return false;
 	}
 #elif defined(WZ_WS_MAC)
-	if (res != QSize(0,0)) {
+	if (res != QSize(0, 0))
+	{
 		macosxSetScreenResolution(res, pos());
 	}
 #endif

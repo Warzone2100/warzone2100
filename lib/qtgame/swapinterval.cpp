@@ -24,13 +24,13 @@
 #include <QtOpenGL/QGLWidget>
 
 
-void setSwapInterval(QGLWidget const &glWidget, int * interval)
+void setSwapInterval(QGLWidget const &glWidget, int *interval)
 {
-	typedef void (* PFNGLXQUERYDRAWABLEPROC) (Display *, GLXDrawable, int, unsigned int *);
-	typedef void ( * PFNGLXSWAPINTERVALEXTPROC) (Display*, GLXDrawable, int);
+	typedef void (* PFNGLXQUERYDRAWABLEPROC)(Display *, GLXDrawable, int, unsigned int *);
+	typedef void (* PFNGLXSWAPINTERVALEXTPROC)(Display *, GLXDrawable, int);
 	typedef int (* PFNGLXGETSWAPINTERVALMESAPROC)(void);
 	typedef int (* PFNGLXSWAPINTERVALMESAPROC)(unsigned);
-	typedef int ( * PFNGLXSWAPINTERVALSGIPROC) (int);
+	typedef int (* PFNGLXSWAPINTERVALSGIPROC)(int);
 	PFNGLXSWAPINTERVALEXTPROC glXSwapIntervalEXT;
 	PFNGLXQUERYDRAWABLEPROC glXQueryDrawable;
 	PFNGLXGETSWAPINTERVALMESAPROC glXGetSwapIntervalMESA;
@@ -45,7 +45,9 @@ void setSwapInterval(QGLWidget const &glWidget, int * interval)
 	{
 		unsigned clampedInterval;
 		if (*interval < 0)
+		{
 			*interval = 0;
+		}
 		glXSwapIntervalEXT(xinfo.display(), glWidget.winId(), *interval);
 		glXQueryDrawable(xinfo.display(), glWidget.winId(), GLX_SWAP_INTERVAL_EXT, &clampedInterval);
 		*interval = clampedInterval;
@@ -57,7 +59,9 @@ void setSwapInterval(QGLWidget const &glWidget, int * interval)
 	if (glXSwapIntervalMESA && glXGetSwapIntervalMESA)
 	{
 		if (*interval < 0)
+		{
 			*interval = 0;
+		}
 		glXSwapIntervalMESA(*interval);
 		*interval = glXGetSwapIntervalMESA();
 		return;
@@ -67,7 +71,9 @@ void setSwapInterval(QGLWidget const &glWidget, int * interval)
 	if (glXSwapIntervalSGI)
 	{
 		if (*interval < 1)
+		{
 			*interval = 1;
+		}
 		if (glXSwapIntervalSGI(*interval))
 		{
 			// Error, revert to default
@@ -83,10 +89,10 @@ void setSwapInterval(QGLWidget const &glWidget, int * interval)
 #elif defined(WZ_WS_WIN) // WZ_WS_X11
 #include <QtOpenGL/QGLWidget>
 
-void setSwapInterval(QGLWidget const &glWidget, int * interval)
+void setSwapInterval(QGLWidget const &glWidget, int *interval)
 {
-	typedef int (WINAPI * PFNWGLGETSWAPINTERVALEXTPROC) (void);
-	typedef BOOL (WINAPI * PFNWGLSWAPINTERVALEXTPROC) (int);
+	typedef int (WINAPI * PFNWGLGETSWAPINTERVALEXTPROC)(void);
+	typedef BOOL (WINAPI * PFNWGLSWAPINTERVALEXTPROC)(int);
 	PFNWGLGETSWAPINTERVALEXTPROC wglGetSwapIntervalEXT;
 	PFNWGLSWAPINTERVALEXTPROC wglSwapIntervalEXT;
 	QGLContext const &context = *glWidget.context();
@@ -97,7 +103,9 @@ void setSwapInterval(QGLWidget const &glWidget, int * interval)
 	if (wglGetSwapIntervalEXT && wglSwapIntervalEXT)
 	{
 		if (*interval < 0)
+		{
 			*interval = 0;
+		}
 		wglSwapIntervalEXT(*interval);
 		*interval = wglGetSwapIntervalEXT();
 	}
