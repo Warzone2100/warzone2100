@@ -14,6 +14,7 @@
 
 #define MAX_CONSOLE_TMP_STRING_LENGTH	(255)
 char ConsoleString[MAX_CONSOLE_TMP_STRING_LENGTH];
+int titleMode;
 
 bool addConsoleMessage(const char *Text, CONSOLE_TEXT_JUSTIFICATION jusType, SDWORD player)
 {
@@ -28,6 +29,32 @@ bool bMultiPlayer; // FIXME, really should not access this from ivis lib
 
 void addDumpInfo(const char *inbuffer)
 {
+}
+
+utf_32_char* UTF8toUTF32(char const*, unsigned long*)
+{
+	return NULL;
+}
+
+
+bool war_getFullscreen(void)
+{
+	return false;
+}
+
+bool war_GetColouredCursor(void)
+{
+	return false;
+}
+
+bool war_GetVsync(void)
+{
+	return false;
+}
+
+void war_SetColouredCursor(bool enabled)
+{
+
 }
 
 // --- end linking hacks ---
