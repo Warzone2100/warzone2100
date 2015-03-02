@@ -40,7 +40,10 @@ public:
 
 	void setTip(QString string);
 
-	void setBackgroundColour(PIELIGHT colour) { backgroundColour = colour; }
+	void setBackgroundColour(PIELIGHT colour)
+	{
+		backgroundColour = colour;
+	}
 
 	WBAR_ORIENTATION barPos;                        // Orientation of the bar on the widget
 	UWORD		majorSize;			// Percentage of the main bar that is filled
@@ -61,6 +64,6 @@ public:
 };
 
 /* The trough bar graph display function */
-void barGraphDisplayTrough(WIDGET* psWidget, UDWORD xOffset, UDWORD yOffset);
+void barGraphDisplayTrough(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 
 #endif // __INCLUDED_LIB_WIDGET_BAR_H__

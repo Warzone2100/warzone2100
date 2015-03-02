@@ -83,7 +83,7 @@ void W_LABEL::display(int xOffset, int yOffset)
 	}
 	else
 	{
-		fy = yOffset + y() - iV_GetTextAboveBase() + (height() - iV_GetTextLineSize())/2;
+		fy = yOffset + y() - iV_GetTextAboveBase() + (height() - iV_GetTextLineSize()) / 2;
 	}
 	iV_DrawText(text.constData(), fx, fy);
 }

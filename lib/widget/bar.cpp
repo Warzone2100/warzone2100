@@ -39,8 +39,8 @@ W_BARINIT::W_BARINIT()
 	, iRange(100)
 	, denominator(1)
 	, precision(0)
-	//sCol
-	//sMinorCol
+	  //sCol
+	  //sMinorCol
 {
 	sCol.rgba = 0;
 	sMinorCol.rgba = 0;

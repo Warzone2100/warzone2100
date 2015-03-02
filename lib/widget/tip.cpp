@@ -148,10 +148,10 @@ void tipDisplay()
 				fw = std::max<int>(fw, iV_GetTextWidth(pTip[n].toUtf8().constData()));
 			}
 			tw = fw + TIP_HGAP * 2;
-			th = topGap * 2 + lineHeight*pTip.size() + iV_GetTextBelowBase();
+			th = topGap * 2 + lineHeight * pTip.size() + iV_GetTextBelowBase();
 
 			/* Position the tip box */
-			tx = clip(wx + ww/2, 0, screenWidth - tw - 1);
+			tx = clip(wx + ww / 2, 0, screenWidth - tw - 1);
 			ty = std::max(wy + wh + TIP_VGAP, 0);
 			if (ty + th >= (int)screenHeight)
 			{
@@ -161,14 +161,14 @@ void tipDisplay()
 
 			/* Position the text */
 			fx = tx + TIP_HGAP;
-			fy = ty + (th - lineHeight*pTip.size()) / 2 - iV_GetTextAboveBase();
+			fy = ty + (th - lineHeight * pTip.size()) / 2 - iV_GetTextAboveBase();
 
 			/* Note the time */
 			startTime = wzGetTicks();
 		}
 		else if (newMX != mx ||
-		        newMY != my ||
-		        mousePressed(MOUSE_LMB))
+		         newMY != my ||
+		         mousePressed(MOUSE_LMB))
 		{
 			mx = newMX;
 			my = newMY;
@@ -188,7 +188,7 @@ void tipDisplay()
 		iV_SetTextColour(TipColour);
 		for (int n = 0; n < pTip.size(); ++n)
 		{
-			iV_DrawText(pTip[n].toUtf8().constData(), fx, fy + lineHeight*n);
+			iV_DrawText(pTip[n].toUtf8().constData(), fx, fy + lineHeight * n);
 		}
 
 		break;

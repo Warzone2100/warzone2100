@@ -113,22 +113,64 @@ public:
 	virtual void setString(QString string);
 	virtual void setTip(QString string);
 
-	void show(bool doShow = true) { style = (style & ~WIDG_HIDDEN) | (!doShow*WIDG_HIDDEN); }
-	void hide() { show(false); }
-	bool visible() { return (style & WIDG_HIDDEN) == 0; }
+	void show(bool doShow = true)
+	{
+		style = (style & ~WIDG_HIDDEN) | (!doShow * WIDG_HIDDEN);
+	}
+	void hide()
+	{
+		show(false);
+	}
+	bool visible()
+	{
+		return (style & WIDG_HIDDEN) == 0;
+	}
 
-	void setString(char const *stringUtf8) { setString(QString::fromUtf8(stringUtf8)); }
-	void setTip(char const *stringUtf8) { setTip(QString::fromUtf8(stringUtf8)); }
+	void setString(char const *stringUtf8)
+	{
+		setString(QString::fromUtf8(stringUtf8));
+	}
+	void setTip(char const *stringUtf8)
+	{
+		setTip(QString::fromUtf8(stringUtf8));
+	}
 
-	WIDGET *parent() { return parentWidget; }
-	Children const &children() { return childWidgets; }
-	QRect const &geometry() const { return dim; }
-	int x() const { return dim.x(); }
-	int y() const { return dim.y(); }
-	int width() const { return dim.width(); }
-	int height() const { return dim.height(); }
-	void move(int x, int y) { setGeometry(QRect(x, y, width(), height())); }
-	void setGeometry(int x, int y, int w, int h) { setGeometry(QRect(x, y, w, h)); }
+	WIDGET *parent()
+	{
+		return parentWidget;
+	}
+	Children const &children()
+	{
+		return childWidgets;
+	}
+	QRect const &geometry() const
+	{
+		return dim;
+	}
+	int x() const
+	{
+		return dim.x();
+	}
+	int y() const
+	{
+		return dim.y();
+	}
+	int width() const
+	{
+		return dim.width();
+	}
+	int height() const
+	{
+		return dim.height();
+	}
+	void move(int x, int y)
+	{
+		setGeometry(QRect(x, y, width(), height()));
+	}
+	void setGeometry(int x, int y, int w, int h)
+	{
+		setGeometry(QRect(x, y, w, h));
+	}
 	void setGeometry(QRect const &r);
 
 	void attach(WIDGET *widget);
@@ -141,7 +183,7 @@ public:
 	WIDGET_CALLBACK         callback;               ///< User callback (if any)
 	void                   *pUserData;              ///< Pointer to a user data block (if any)
 	UDWORD                  UserData;               ///< User data (if any)
-	W_SCREEN *              screenPointer;          ///< Pointer to screen the widget is on (if attached).
+	W_SCREEN               *screenPointer;          ///< Pointer to screen the widget is on (if attached).
 
 private:
 	void setScreenPointer(W_SCREEN *screen);        ///< Set screen pointer for us and all children.
@@ -152,7 +194,7 @@ public:
 	void displayRecursive(int xOffset, int yOffset);  ///< Display this widget, and all visible children.
 private:
 
-	WIDGET *                parentWidget;           ///< Parent widget.
+	WIDGET                 *parentWidget;           ///< Parent widget.
 	std::vector<WIDGET *>   childWidgets;           ///< Child widgets. Will be deleted if we are deleted.
 
 	QRect                   dim;
@@ -182,7 +224,7 @@ struct W_SCREEN
 
 	W_FORM          *psForm;        ///< The root form of the screen
 	WIDGET          *psFocus;       ///< The widget that has keyboard focus
-	WIDGET *        lastHighlight;  ///< The last widget to be highlighted. This is used to track when the mouse moves off something.
+	WIDGET         *lastHighlight;  ///< The last widget to be highlighted. This is used to track when the mouse moves off something.
 	iV_fonts         TipFontID;     ///< ID of the IVIS font to use for tool tips.
 	WidgetTriggers   retWidgets;    ///< The widgets to be returned by widgRunScreen.
 

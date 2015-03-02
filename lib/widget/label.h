@@ -45,13 +45,29 @@ public:
 	void setString(QString string);
 	void setTip(QString string);
 
-	void setFont(iV_fonts font) { FontID = font; }
-	void setFontColour(PIELIGHT colour) { fontColour = colour; }
-	void setFont(iV_fonts font, PIELIGHT colour) { setFont(font); setFontColour(colour); }
+	void setFont(iV_fonts font)
+	{
+		FontID = font;
+	}
+	void setFontColour(PIELIGHT colour)
+	{
+		fontColour = colour;
+	}
+	void setFont(iV_fonts font, PIELIGHT colour)
+	{
+		setFont(font);
+		setFontColour(colour);
+	}
 	void setTextAlignment(WzTextAlignment align);
 
-	void setString(char const *stringUtf8) { WIDGET::setString(stringUtf8); }  // Unhide the WIDGET::setString(char const *) function...
-	void setTip(char const *stringUtf8) { WIDGET::setTip(stringUtf8); }  // Unhide the WIDGET::setTip(char const *) function...
+	void setString(char const *stringUtf8)
+	{
+		WIDGET::setString(stringUtf8);    // Unhide the WIDGET::setString(char const *) function...
+	}
+	void setTip(char const *stringUtf8)
+	{
+		WIDGET::setTip(stringUtf8);    // Unhide the WIDGET::setTip(char const *) function...
+	}
 
 	QString  aText;         // Text on the label
 	iV_fonts FontID;

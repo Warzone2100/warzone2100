@@ -155,7 +155,7 @@ WIDGET::~WIDGET()
 
 void WIDGET::deleteLater()
 {
-	   widgetDeletionQueue.push_back(this);
+	widgetDeletionQueue.push_back(this);
 }
 
 void WIDGET::setGeometry(QRect const &r)
@@ -297,42 +297,42 @@ W_FORM *widgAddForm(W_SCREEN *psScreen, const W_FORMINIT *psInit)
 		psForm = new W_FORM(psInit);
 	}
 
-	return widgAddWidget(psScreen, psInit, psForm)? psForm : nullptr;
+	return widgAddWidget(psScreen, psInit, psForm) ? psForm : nullptr;
 }
 
 /* Add a label to the widget screen */
 W_LABEL *widgAddLabel(W_SCREEN *psScreen, const W_LABINIT *psInit)
 {
 	W_LABEL *psLabel = new W_LABEL(psInit);
-	return widgAddWidget(psScreen, psInit, psLabel)? psLabel : nullptr;
+	return widgAddWidget(psScreen, psInit, psLabel) ? psLabel : nullptr;
 }
 
 /* Add a button to the widget screen */
 W_BUTTON *widgAddButton(W_SCREEN *psScreen, const W_BUTINIT *psInit)
 {
 	W_BUTTON *psButton = new W_BUTTON(psInit);
-	return widgAddWidget(psScreen, psInit, psButton)? psButton : nullptr;
+	return widgAddWidget(psScreen, psInit, psButton) ? psButton : nullptr;
 }
 
 /* Add an edit box to the widget screen */
 W_EDITBOX *widgAddEditBox(W_SCREEN *psScreen, const W_EDBINIT *psInit)
 {
 	W_EDITBOX *psEdBox = new W_EDITBOX(psInit);
-	return widgAddWidget(psScreen, psInit, psEdBox)? psEdBox : nullptr;
+	return widgAddWidget(psScreen, psInit, psEdBox) ? psEdBox : nullptr;
 }
 
 /* Add a bar graph to the widget screen */
 W_BARGRAPH *widgAddBarGraph(W_SCREEN *psScreen, const W_BARINIT *psInit)
 {
 	W_BARGRAPH *psBarGraph = new W_BARGRAPH(psInit);
-	return widgAddWidget(psScreen, psInit, psBarGraph)? psBarGraph : nullptr;
+	return widgAddWidget(psScreen, psInit, psBarGraph) ? psBarGraph : nullptr;
 }
 
 /* Add a slider to a form */
 W_SLIDER *widgAddSlider(W_SCREEN *psScreen, const W_SLDINIT *psInit)
 {
 	W_SLIDER *psSlider = new W_SLIDER(psInit);
-	return widgAddWidget(psScreen, psInit, psSlider)? psSlider : nullptr;
+	return widgAddWidget(psScreen, psInit, psSlider) ? psSlider : nullptr;
 }
 
 /* Delete a widget from the screen */
@@ -729,16 +729,16 @@ WidgetTriggers const &widgRunScreen(W_SCREEN *psScreen)
 			WIDGET_KEY wkey;
 			switch (c->key)
 			{
-				case MOUSE_LMB: wkey = WKEY_PRIMARY; break;
-				case MOUSE_RMB: wkey = WKEY_SECONDARY; break;
-				default: continue;  // Who cares about other mouse buttons?
+			case MOUSE_LMB: wkey = WKEY_PRIMARY; break;
+			case MOUSE_RMB: wkey = WKEY_SECONDARY; break;
+			default: continue;  // Who cares about other mouse buttons?
 			}
 			bool pressed;
 			switch (c->action)
 			{
-				case MousePress::Press: pressed = true; break;
-				case MousePress::Release: pressed = false; break;
-				default: continue;
+			case MousePress::Press: pressed = true; break;
+			case MousePress::Release: pressed = false; break;
+			default: continue;
 			}
 			sContext.mx = c->pos.x;
 			sContext.my = c->pos.y;
@@ -831,11 +831,11 @@ void widgDisplayScreen(W_SCREEN *psScreen)
 {
 	// To toggle debug bounding boxes: Press: Left Shift   --  --  --------------
 	//                                        Left Ctrl  ------------  --  --  ----
-	static const int debugSequence[] = {-1, 0, 1, 3, 1, 3, 1, 3, 2, 3, 2, 3, 2, 3, 1, 0, -1};
+	static const int debugSequence[] = { -1, 0, 1, 3, 1, 3, 1, 3, 2, 3, 2, 3, 2, 3, 1, 0, -1};
 	static int const *debugLoc = debugSequence;
 	static bool debugBoundingBoxes = false;
-	int debugCode = keyDown(KEY_LCTRL) + 2*keyDown(KEY_LSHIFT);
-	debugLoc = debugLoc[1] == -1? debugSequence : debugLoc[0] == debugCode? debugLoc : debugLoc[1] == debugCode? debugLoc + 1 : debugSequence;
+	int debugCode = keyDown(KEY_LCTRL) + 2 * keyDown(KEY_LSHIFT);
+	debugLoc = debugLoc[1] == -1 ? debugSequence : debugLoc[0] == debugCode ? debugLoc : debugLoc[1] == debugCode ? debugLoc + 1 : debugSequence;
 	debugBoundingBoxes = debugBoundingBoxes ^ (debugLoc[1] == -1);
 
 	/* Process any user callback functions */

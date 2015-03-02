@@ -121,14 +121,14 @@ void TabSelectionWidget::doLayoutAll()
 	TabSelectionStyle style;
 	int scrollSpace = 0;
 	tabsAtOnce = tabs();
-	style.tabSize = QSize(width()/tabs(), height());
+	style.tabSize = QSize(width() / tabs(), height());
 	style.scrollTabSize = QSize(0, 0);
 	style.tabGap = 0;
 	for (unsigned n = 0; n < styles.size(); ++n)
 	{
 		bool haveScroll_ = !styles[n].scrollTabSize.isEmpty();
-		int scrollSpace_ = haveScroll_? styles[n].scrollTabSize.width() + styles[n].tabGap : 0;
-		int tabsAtOnce_ = (width() + styles[n].tabGap - scrollSpace_*2)/(styles[n].tabSize.width() + styles[n].tabGap);
+		int scrollSpace_ = haveScroll_ ? styles[n].scrollTabSize.width() + styles[n].tabGap : 0;
+		int tabsAtOnce_ = (width() + styles[n].tabGap - scrollSpace_ * 2) / (styles[n].tabSize.width() + styles[n].tabGap);
 		if (haveScroll_ || tabs() <= tabsAtOnce_)
 		{
 			scrollSpace = scrollSpace_;
@@ -142,13 +142,13 @@ void TabSelectionWidget::doLayoutAll()
 	prevTabPageButton->show(currentTab >= tabsAtOnce);
 	nextTabPageButton->setGeometry(width() - style.scrollTabSize.width(), 0, style.scrollTabSize.width(), style.scrollTabSize.height());
 	nextTabPageButton->setImages(style.nextScrollTabImage, style.nextScrollTabImageDown, style.nextScrollTabImageHighlight);
-	nextTabPageButton->show(currentTab/tabsAtOnce < (tabs() - 1)/tabsAtOnce);
+	nextTabPageButton->show(currentTab / tabsAtOnce < (tabs() - 1) / tabsAtOnce);
 	for (unsigned n = 0; n < tabButtons.size(); ++n)
 	{
-		tabButtons[n]->setGeometry(scrollSpace + n%tabsAtOnce*(style.tabSize.width() + style.tabGap), 0, style.tabSize.width(), style.tabSize.height());
+		tabButtons[n]->setGeometry(scrollSpace + n % tabsAtOnce * (style.tabSize.width() + style.tabGap), 0, style.tabSize.width(), style.tabSize.height());
 		tabButtons[n]->setImages(style.tabImage, style.tabImageDown, style.tabImageHighlight);
-		tabButtons[n]->show(currentTab/tabsAtOnce == n/tabsAtOnce);
-		tabButtons[n]->setState(n == currentTab? WBUT_LOCK : 0);
+		tabButtons[n]->show(currentTab / tabsAtOnce == n / tabsAtOnce);
+		tabButtons[n]->setState(n == currentTab ? WBUT_LOCK : 0);
 	}
 	if (tabButtons.size() == 1)
 	{
@@ -215,11 +215,11 @@ void ListWidget::setCurrentPage(int page)
 	{
 		return;  // Nothing to do.
 	}
-	for (unsigned n = pp*previousPage; n < pp*(previousPage + 1) && n < myChildren.size(); ++n)
+	for (unsigned n = pp * previousPage; n < pp * (previousPage + 1) && n < myChildren.size(); ++n)
 	{
 		myChildren[n]->hide();
 	}
-	for (unsigned n = pp*currentPage_; n < pp*(currentPage_ + 1) && n < myChildren.size(); ++n)
+	for (unsigned n = pp * currentPage_; n < pp * (currentPage_ + 1) && n < myChildren.size(); ++n)
 	{
 		myChildren[n]->show();
 	}
@@ -236,21 +236,21 @@ void ListWidget::doLayoutAll()
 
 void ListWidget::doLayout(int num)
 {
-	unsigned page = num/widgetsPerPage();
-	int withinPage = num%widgetsPerPage();
+	unsigned page = num / widgetsPerPage();
+	int withinPage = num % widgetsPerPage();
 	int column = 0, row = 0;
 	switch (order)
 	{
 	case RightThenDown:
-		column = withinPage%widgetsPerRow();
-		row = withinPage/widgetsPerRow();
+		column = withinPage % widgetsPerRow();
+		row = withinPage / widgetsPerRow();
 		break;
 	case DownThenRight:
-		column = withinPage/widgetsPerColumn();
-		row = withinPage%widgetsPerColumn();
+		column = withinPage / widgetsPerColumn();
+		row = withinPage % widgetsPerColumn();
 		break;
 	}
-	myChildren[num]->setGeometry(column*widgetSkipX(), row*widgetSkipY(), childSize.width(), childSize.height());
+	myChildren[num]->setGeometry(column * widgetSkipX(), row * widgetSkipY(), childSize.width(), childSize.height());
 	myChildren[num]->show(page == currentPage_);
 }
 

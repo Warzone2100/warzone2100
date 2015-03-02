@@ -51,7 +51,10 @@ public:
 	void setHeight(int height);
 	void addStyle(TabSelectionStyle const &style);
 
-	int tabs() const { return tabButtons.size(); }
+	int tabs() const
+	{
+		return tabButtons.size();
+	}
 
 signals:
 	void tabChanged(int);
@@ -92,8 +95,14 @@ public:
 	void setOrder(Order order);  ///< Sets whether subsequent child widgets are placed in horizontal or vertical lines (applied by calling addWidgetToLayout).
 	void addWidgetToLayout(WIDGET *widget);  ///< Manages the geometry of widget, and shows/hides it when changing tabs.
 
-	int currentPage() const { return currentPage_; }
-	int pages() const { return std::max(((int)myChildren.size() - 1)/widgetsPerPage(), 0) + 1; }
+	int currentPage() const
+	{
+		return currentPage_;
+	}
+	int pages() const
+	{
+		return std::max(((int)myChildren.size() - 1) / widgetsPerPage(), 0) + 1;
+	}
 
 signals:
 	void currentPageChanged(int);
@@ -106,11 +115,26 @@ private:
 	void doLayoutAll();
 	void doLayout(int num);
 
-	int widgetsPerPage() const { return widgetsPerRow()*widgetsPerColumn(); }
-	int widgetsPerRow() const { return std::max((width() + spacing.width())/widgetSkipX(), 1); }
-	int widgetsPerColumn() const { return std::max((height() + spacing.height())/widgetSkipY(), 1); }
-	int widgetSkipX() const { return childSize.width() + spacing.width(); }
-	int widgetSkipY() const { return childSize.height() + spacing.height(); }
+	int widgetsPerPage() const
+	{
+		return widgetsPerRow() * widgetsPerColumn();
+	}
+	int widgetsPerRow() const
+	{
+		return std::max((width() + spacing.width()) / widgetSkipX(), 1);
+	}
+	int widgetsPerColumn() const
+	{
+		return std::max((height() + spacing.height()) / widgetSkipY(), 1);
+	}
+	int widgetSkipX() const
+	{
+		return childSize.width() + spacing.width();
+	}
+	int widgetSkipY() const
+	{
+		return childSize.height() + spacing.height();
+	}
 
 	QSize childSize;
 	QSize spacing;
@@ -130,18 +154,43 @@ public:
 
 	virtual void geometryChanged();
 
-	void setChildSize(int width, int height) { widgets->setChildSize(width, height); }  ///< Sets the size of all child widgets (applied by calling addWidgetToLayout).
-	void setChildSpacing(int width, int height) { widgets->setChildSpacing(width, height); }  ///< Sets the distance between child widgets (applied by calling addWidgetToLayout).
-	void setOrder(ListWidget::Order order) { widgets->setOrder(order); }  ///< Sets whether subsequent child widgets are placed in horizontal or vertical lines (applied by calling addWidgetToLayout).
+	void setChildSize(int width, int height)
+	{
+		widgets->setChildSize(width, height);    ///< Sets the size of all child widgets (applied by calling addWidgetToLayout).
+	}
+	void setChildSpacing(int width, int height)
+	{
+		widgets->setChildSpacing(width, height);    ///< Sets the distance between child widgets (applied by calling addWidgetToLayout).
+	}
+	void setOrder(ListWidget::Order order)
+	{
+		widgets->setOrder(order);    ///< Sets whether subsequent child widgets are placed in horizontal or vertical lines (applied by calling addWidgetToLayout).
+	}
 	void addWidgetToLayout(WIDGET *widget);  ///< Manages the geometry of widget, and shows/hides it when changing tabs.
-	bool setCurrentPage(int page) { widgets->setCurrentPage(page); return widgets->currentPage() == page; }
-	int currentPage() const { return widgets->currentPage(); }
-	int pages() const { return widgets->pages(); }
+	bool setCurrentPage(int page)
+	{
+		widgets->setCurrentPage(page);
+		return widgets->currentPage() == page;
+	}
+	int currentPage() const
+	{
+		return widgets->currentPage();
+	}
+	int pages() const
+	{
+		return widgets->pages();
+	}
 
 	void setTabPosition(TabPosition pos);
 
-	TabSelectionWidget *tabWidget() { return tabs; }
-	ListWidget *listWidget() { return widgets; }
+	TabSelectionWidget *tabWidget()
+	{
+		return tabs;
+	}
+	ListWidget *listWidget()
+	{
+		return widgets;
+	}
 
 private:
 	TabSelectionWidget *tabs;

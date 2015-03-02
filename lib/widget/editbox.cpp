@@ -84,7 +84,7 @@ W_EDITBOX::W_EDITBOX(W_EDBINIT const *init)
 	ASSERT((init->style & ~(WEDB_PLAIN | WIDG_HIDDEN)) == 0, "Unknown edit box style");
 }
 
-W_EDITBOX::W_EDITBOX(WIDGET* parent)
+W_EDITBOX::W_EDITBOX(WIDGET *parent)
 	: WIDGET(parent)
 	, state(WEDBS_FIXED)
 	, FontID(font_regular)

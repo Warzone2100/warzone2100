@@ -114,7 +114,7 @@ void W_CLICKFORM::clicked(W_CONTEXT *psContext, WIDGET_KEY key)
 	{
 		// Check this is the correct key
 		if ((!(style & WFORM_NOPRIMARY) && key == WKEY_PRIMARY) ||
-			((style & WFORM_SECONDARY) && key == WKEY_SECONDARY))
+		    ((style & WFORM_SECONDARY) && key == WKEY_SECONDARY))
 		{
 			state &= ~WBUT_FLASH;  // Stop it flashing
 			state |= WBUT_DOWN;

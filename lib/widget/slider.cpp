@@ -133,8 +133,8 @@ void W_SLIDER::run(W_CONTEXT *psContext)
 				/* Mouse is in the middle of the slider, calculate which stop */
 				stopSize = (width() - barSize) / numStops;
 				pos = (mx + stopSize / 2 - barSize / 2)
-				        * numStops
-				        / (width() - barSize);
+				      * numStops
+				      / (width() - barSize);
 			}
 			break;
 		case WSLD_RIGHT:
@@ -151,9 +151,9 @@ void W_SLIDER::run(W_CONTEXT *psContext)
 				/* Mouse is in the middle of the slider, calculate which stop */
 				stopSize = (width() - barSize) / numStops;
 				pos = numStops
-				        - (mx + stopSize / 2 - barSize / 2)
-				        * numStops
-				        / (width() - barSize);
+				      - (mx + stopSize / 2 - barSize / 2)
+				      * numStops
+				      / (width() - barSize);
 			}
 			break;
 		case WSLD_TOP:
@@ -170,8 +170,8 @@ void W_SLIDER::run(W_CONTEXT *psContext)
 				/* Mouse is in the middle of the slider, calculate which stop */
 				stopSize = (height() - barSize) / numStops;
 				pos = (my + stopSize / 2 - barSize / 2)
-				        * numStops
-				        / (height() - barSize);
+				      * numStops
+				      / (height() - barSize);
 			}
 			break;
 		case WSLD_BOTTOM:
@@ -188,9 +188,9 @@ void W_SLIDER::run(W_CONTEXT *psContext)
 				/* Mouse is in the middle of the slider, calculate which stop */
 				stopSize = (height() - barSize) / numStops;
 				pos = numStops
-				        - (my + stopSize / 2 - barSize / 2)
-				        * numStops
-				        / (height() - barSize);
+				      - (my + stopSize / 2 - barSize / 2)
+				      * numStops
+				      / (height() - barSize);
 			}
 			break;
 		}
