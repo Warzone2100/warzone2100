@@ -22,13 +22,14 @@
 
 #include "lib/framework/types.h"
 
-typedef enum {
-    SCANLINES_OFF,
-    SCANLINES_50,
-    SCANLINES_BLACK
+typedef enum
+{
+	SCANLINES_OFF,
+	SCANLINES_50,
+	SCANLINES_BLACK
 } SCANLINE_MODE;
 
-extern bool seq_Play(const char* filename);
+extern bool seq_Play(const char *filename);
 extern bool seq_Playing(void);
 extern bool seq_Update(void);
 extern void seq_Shutdown(void);

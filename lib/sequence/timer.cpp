@@ -48,7 +48,7 @@ static struct timeval endCount;
  */
 static const uint64_t usecs_between_fat32_and_unix_epoch = (uint64_t)((1970 - 1601) * 1461 + 13) * (uint64_t)86400 / (uint64_t)4 * (uint64_t)1000000;
 
-int gettimeofday(struct timeval* tv, struct timezone* tz)
+int gettimeofday(struct timeval *tv, struct timezone *tz)
 {
 	ASSERT(tz == NULL, "This gettimeofday implementation doesn't provide timezone info.");
 

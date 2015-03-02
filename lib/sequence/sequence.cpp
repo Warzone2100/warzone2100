@@ -123,10 +123,10 @@ static bool videobuf_ready = false;		// single frame video buffer ready for proc
 static bool audiobuf_ready = false;		// single 'frame' audio buffer ready for processing
 
 // file handle
-static PHYSFS_file* fpInfile = NULL;
+static PHYSFS_file *fpInfile = NULL;
 
-static uint32_t* RGBAframe = NULL;					// texture buffer
-static ogg_int16_t* audiobuf = NULL;			// audio buffer
+static uint32_t *RGBAframe = NULL;					// texture buffer
+static ogg_int16_t *audiobuf = NULL;			// audio buffer
 
 // For timing
 static double audioTime = 0;
@@ -154,7 +154,7 @@ static GLfloat Scrnvidpos[3];
 static SCANLINE_MODE use_scanlines;
 
 // Helper; just grab some more compressed bitstream and sync it for page extraction
-static int buffer_data(PHYSFS_file* in, ogg_sync_state* oy)
+static int buffer_data(PHYSFS_file *in, ogg_sync_state *oy)
 {
 	// read in 256K chunks
 	const int size = 262144;
@@ -162,7 +162,7 @@ static int buffer_data(PHYSFS_file* in, ogg_sync_state* oy)
 	int bytes = PHYSFS_read(in, buffer, 1, size);
 
 	ogg_sync_wrote(oy, bytes);
-	return(bytes);
+	return (bytes);
 }
 
 /** helper: push a page into the appropriate stream
@@ -252,7 +252,7 @@ static double getRelativeTime(void)
 		timer_expire += (int)((videobuf_time - getTimeNow()) * 1000000.0);
 		timer_started = true;
 	}
-	return((getTimeNow() - basetime) * .001);
+	return ((getTimeNow() - basetime) * .001);
 }
 
 const GLfloat texture_width = 1024.0f;
@@ -264,7 +264,9 @@ static void Allocate_videoFrame(void)
 {
 	int size = videodata.ti.frame_width * videodata.ti.frame_height * 4;
 	if (use_scanlines)
+	{
 		size *= 2;
+	}
 
 	RGBAframe = (uint32_t *)malloc(size);
 	memset(RGBAframe, 0, size);
@@ -273,7 +275,9 @@ static void Allocate_videoFrame(void)
 static void deallocateVideoFrame(void)
 {
 	if (RGBAframe)
+	{
 		free(RGBAframe);
+	}
 }
 
 #ifndef __BIG_ENDIAN__
@@ -367,7 +371,9 @@ static void video_write(bool update)
 				rgb_offset++;
 			}
 			if (use_scanlines)
+			{
 				rgb_offset += video_width;
+			}
 		}
 
 		videoGfx->updateTexture(RGBAframe, video_width, video_height * height_factor);
@@ -422,7 +428,7 @@ static void audio_write(void)
 		}
 
 		alBufferData(oldbuffer, (videodata.vi.channels == 1 ? AL_FORMAT_MONO16 : AL_FORMAT_STEREO16),
-		        audiobuf, audiodata.audiobuf_fill, videodata.vi.rate);
+		             audiobuf, audiodata.audiobuf_fill, videodata.vi.rate);
 
 		alSourceQueueBuffers(audiodata.source, 1, &oldbuffer);
 		audiodata.totbufstarted++;
@@ -482,7 +488,7 @@ static void seq_InitOgg(void)
 	Timer_start();
 }
 
-bool seq_Play(const char* filename)
+bool seq_Play(const char *filename)
 {
 	int pp_level_max = 0;
 	int pp_level = 0;
@@ -674,7 +680,7 @@ bool seq_Play(const char* filename)
 		if (videodata.ti.frame_width > texture_width || videodata.ti.frame_height > texture_height)
 		{
 			debug(LOG_ERROR, "Video size too large, must be below %.gx%.g!",
-					texture_width, texture_height);
+			      texture_width, texture_height);
 			delete videoGfx;
 			videoGfx = NULL;
 			return false;
@@ -690,7 +696,9 @@ bool seq_Play(const char* filename)
 
 		// disable scanlines if the video is too large for the texture or shown too small
 		if (videodata.ti.frame_height * 2 > texture_height || vertices[3][1] < videodata.ti.frame_height * 2)
+		{
 			use_scanlines = SCANLINES_OFF;
+		}
 
 		Allocate_videoFrame();
 		videoGfx->makeTexture(texture_width, texture_height, GL_LINEAR, GL_RGBA, blackframe);
@@ -728,7 +736,7 @@ bool seq_Update()
 	ogg_packet op;
 	int ret;
 	int i, j;
-	float **  pcm;
+	float   **pcm;
 	int count, maxsamples;
 
 	/* we want a video and audio frame ready to go at all times.  If
@@ -791,12 +799,14 @@ bool seq_Update()
 			if (ogg_stream_packetout(&videodata.vo, &op) > 0)
 			{
 				if (vorbis_synthesis(&videodata.vb, &op) == 0)
-				{	/* test for success! */
+				{
+					/* test for success! */
 					vorbis_synthesis_blockin(&videodata.vd, &videodata.vb);
 				}
 			}
 			else
-			{	/* we need more data; break out to suck in another page */
+			{
+				/* we need more data; break out to suck in another page */
 				break;
 			}
 		}
@@ -837,10 +847,10 @@ bool seq_Update()
 	alGetSourcei(audiodata.source, AL_SOURCE_STATE, &sourcestate);
 
 	if (PHYSFS_eof(fpInfile)
-		&& !videobuf_ready
-		&& ((!audiobuf_ready && (audiodata.audiobuf_fill == 0)) || audio_Disabled())
-		&& sourcestate != AL_PLAYING
-	 )
+	    && !videobuf_ready
+	    && ((!audiobuf_ready && (audiodata.audiobuf_fill == 0)) || audio_Disabled())
+	    && sourcestate != AL_PLAYING
+	   )
 	{
 		video_write(false);
 		seq_Shutdown();
@@ -860,9 +870,9 @@ bool seq_Update()
 
 	/* If playback has begun, top audio buffer off immediately. */
 	if (vorbis_p
-	 && stateflag
-	// FIXME : it is possible to crash if people are playing with no sound.
-	 && !audio_Disabled())
+	    && stateflag
+	    // FIXME : it is possible to crash if people are playing with no sound.
+	    && !audio_Disabled())
 	{
 		// play the data in pcm
 		audio_write();
@@ -1002,10 +1012,10 @@ void seq_SetDisplaySize(int sizeX, int sizeY, int posX, int posY)
 
 void seq_setScanlineMode(SCANLINE_MODE mode)
 {
-    use_scanlines = mode;
+	use_scanlines = mode;
 }
 
 SCANLINE_MODE seq_getScanlineMode(void)
 {
-    return use_scanlines;
+	return use_scanlines;
 }
