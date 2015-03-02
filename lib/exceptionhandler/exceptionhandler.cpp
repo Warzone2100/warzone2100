@@ -64,24 +64,24 @@ static LONG WINAPI windowsExceptionHandler(PEXCEPTION_POINTERS pExceptionInfo)
 	sstrcat(miniDumpPath, ".mdmp");
 	*/
 
-	if ( MessageBoxA( NULL, "Warzone crashed unexpectedly, would you like to save a diagnostic file?", applicationName, MB_YESNO ) == IDYES )
+	if (MessageBoxA(NULL, "Warzone crashed unexpectedly, would you like to save a diagnostic file?", applicationName, MB_YESNO) == IDYES)
 	{
-		HANDLE miniDumpFile = CreateFileA( miniDumpPath, GENERIC_WRITE, FILE_SHARE_WRITE, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL );
+		HANDLE miniDumpFile = CreateFileA(miniDumpPath, GENERIC_WRITE, FILE_SHARE_WRITE, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 
 		if (miniDumpFile != INVALID_HANDLE_VALUE)
 		{
-			MINIDUMP_USER_STREAM uStream = { LastReservedStream+1, strlen(PACKAGE_VERSION), PACKAGE_VERSION };
+			MINIDUMP_USER_STREAM uStream = { LastReservedStream + 1, strlen(PACKAGE_VERSION), PACKAGE_VERSION };
 			MINIDUMP_USER_STREAM_INFORMATION uInfo = { 1, &uStream };
 			MINIDUMP_EXCEPTION_INFORMATION eInfo = { GetCurrentThreadId(), pExceptionInfo, false };
 
-			if ( MiniDumpWriteDump(
-				 	GetCurrentProcess(),
-					GetCurrentProcessId(),
-					miniDumpFile,
-					MiniDumpNormal,
-					pExceptionInfo ? &eInfo : NULL,
-					&uInfo,
-					NULL ) )
+			if (MiniDumpWriteDump(
+			        GetCurrentProcess(),
+			        GetCurrentProcessId(),
+			        miniDumpFile,
+			        MiniDumpNormal,
+			        pExceptionInfo ? &eInfo : NULL,
+			        &uInfo,
+			        NULL))
 			{
 				snprintf(resultMessage, sizeof(resultMessage), "Saved dump file to '%s'", miniDumpPath);
 			}
@@ -97,13 +97,17 @@ static LONG WINAPI windowsExceptionHandler(PEXCEPTION_POINTERS pExceptionInfo)
 			snprintf(resultMessage, sizeof(resultMessage), "Failed to create dump file '%s' (error %d)", miniDumpPath, (int)GetLastError());
 		}
 
-		MessageBoxA( NULL, resultMessage, applicationName, MB_OK );
+		MessageBoxA(NULL, resultMessage, applicationName, MB_OK);
 	}
 
 	if (prevExceptionHandler)
+	{
 		return prevExceptionHandler(pExceptionInfo);
+	}
 	else
+	{
 		return EXCEPTION_CONTINUE_SEARCH;
+	}
 }
 #endif
 
@@ -163,11 +167,11 @@ static struct sigaction oldAction[NSIG];
 static struct utsname sysInfo;
 static bool gdbIsAvailable = false, programIsAvailable = false, sysInfoValid = false;
 static char
-	executionDate[MAX_DATE_STRING] = {'\0'},
-	programPID[MAX_PID_STRING] = {'\0'},
-	programPath[PATH_MAX] = {'\0'},
-	gdbPath[PATH_MAX] = {'\0'},
-	WritePath[PATH_MAX] = {'\0'};
+executionDate[MAX_DATE_STRING] = {'\0'},
+                                 programPID[MAX_PID_STRING] = {'\0'},
+                                         programPath[PATH_MAX] = {'\0'},
+                                                 gdbPath[PATH_MAX] = {'\0'},
+                                                         WritePath[PATH_MAX] = {'\0'};
 
 
 /**
@@ -179,122 +183,122 @@ static char
  * \return String with the description of the signal. "Unknown signal" when no description is available.
  */
 #ifdef SA_SIGINFO
-static const char * wz_strsignal(int signum, int sigcode)
+static const char *wz_strsignal(int signum, int sigcode)
 {
 	switch (signum)
 	{
-		case SIGABRT:
-			return "SIGABRT: Process abort signal";
-		case SIGALRM:
-			return "SIGALRM: Alarm clock";
-		case SIGBUS:
-			switch (sigcode)
-			{
-				case BUS_ADRALN:
-					return "SIGBUS: Access to an undefined portion of a memory object: Invalid address alignment";
-				case BUS_ADRERR:
-					return "SIGBUS: Access to an undefined portion of a memory object: Nonexistent physical address";
-				case BUS_OBJERR:
-					return "SIGBUS: Access to an undefined portion of a memory object: Object-specific hardware error";
-				default:
-					return "SIGBUS: Access to an undefined portion of a memory object";
-			}
-		case SIGFPE:
-			switch (sigcode)
-			{
-				case FPE_INTDIV:
-					return "SIGFPE: Erroneous arithmetic operation: Integer divide by zero";
-				case FPE_INTOVF:
-					return "SIGFPE: Erroneous arithmetic operation: Integer overflow";
-				case FPE_FLTDIV:
-					return "SIGFPE: Erroneous arithmetic operation: Floating-point divide by zero";
-				case FPE_FLTOVF:
-					return "SIGFPE: Erroneous arithmetic operation: Floating-point overflow";
-				case FPE_FLTUND:
-					return "SIGFPE: Erroneous arithmetic operation: Floating-point underflow";
-				case FPE_FLTRES:
-					return "SIGFPE: Erroneous arithmetic operation: Floating-point inexact result";
-				case FPE_FLTINV:
-					return "SIGFPE: Erroneous arithmetic operation: Invalid floating-point operation";
-				case FPE_FLTSUB:
-					return "SIGFPE: Erroneous arithmetic operation: Subscript out of range";
-				default:
-					return "SIGFPE: Erroneous arithmetic operation";
-			};
-		case SIGHUP:
-			return "SIGHUP: Hangup";
-		case SIGILL:
-			switch (sigcode)
-			{
-				case ILL_ILLOPC:
-					return "SIGILL: Illegal instruction: Illegal opcode";
-				case ILL_ILLOPN:
-					return "SIGILL: Illegal instruction: Illegal operand";
-				case ILL_ILLADR:
-					return "SIGILL: Illegal instruction: Illegal addressing mode";
-				case ILL_ILLTRP:
-					return "SIGILL: Illegal instruction: Illegal trap";
-				case ILL_PRVOPC:
-					return "SIGILL: Illegal instruction: Privileged opcode";
-				case ILL_PRVREG:
-					return "SIGILL: Illegal instruction: Privileged register";
-				case ILL_COPROC:
-					return "SIGILL: Illegal instruction: Coprocessor error";
-				case ILL_BADSTK:
-					return "SIGILL: Illegal instruction: Internal stack error";
-				default:
-					return "SIGILL: Illegal instruction";
-			}
-		case SIGINT:
-			return "SIGINT: Terminal interrupt signal";
-		case SIGKILL:
-			return "SIGKILL: Kill";
-		case SIGPIPE:
-			return "SIGPIPE: Write on a pipe with no one to read it";
-		case SIGQUIT:
-			return "SIGQUIT: Terminal quit signal";
-		case SIGSEGV:
-			switch (sigcode)
-			{
-				case SEGV_MAPERR:
-					return "SIGSEGV: Invalid memory reference: Address not mapped to object";
-				case SEGV_ACCERR:
-					return "SIGSEGV: Invalid memory reference: Invalid permissions for mapped object";
-				default:
-					return "SIGSEGV: Invalid memory reference";
-			}
-		case SIGTERM:
-			return "SIGTERM: Termination signal";
-		case SIGUSR1:
-			return "SIGUSR1: User-defined signal 1";
-		case SIGUSR2:
-			return "SIGUSR2: User-defined signal 2";
-#if _XOPEN_UNIX
-		case SIGPROF:
-			return "SIGPROF: Profiling timer expired";
-		case SIGSYS:
-			return "SIGSYS: Bad system call";
-		case SIGTRAP:
-			switch (sigcode)
-			{
-				case TRAP_BRKPT:
-					return "SIGTRAP: Trace/breakpoint trap: Process breakpoint";
-				case TRAP_TRACE:
-					return "SIGTRAP: Trace/breakpoint trap: Process trace trap";
-				default:
-					return "SIGTRAP: Trace/breakpoint trap";
-			}
-#endif // _XOPEN_UNIX
-#if _XOPEN_UNIX
-		case SIGVTALRM:
-			return "SIGVTALRM: Virtual timer expired";
-		case SIGXCPU:
-			return "SIGXCPU: CPU time limit exceeded";
-		case SIGXFSZ:
-			return "SIGXFSZ: File size limit exceeded";
-#endif // _XOPEN_UNIX
+	case SIGABRT:
+		return "SIGABRT: Process abort signal";
+	case SIGALRM:
+		return "SIGALRM: Alarm clock";
+	case SIGBUS:
+		switch (sigcode)
+		{
+		case BUS_ADRALN:
+			return "SIGBUS: Access to an undefined portion of a memory object: Invalid address alignment";
+		case BUS_ADRERR:
+			return "SIGBUS: Access to an undefined portion of a memory object: Nonexistent physical address";
+		case BUS_OBJERR:
+			return "SIGBUS: Access to an undefined portion of a memory object: Object-specific hardware error";
 		default:
-			return "Unknown signal";
+			return "SIGBUS: Access to an undefined portion of a memory object";
+		}
+	case SIGFPE:
+		switch (sigcode)
+		{
+		case FPE_INTDIV:
+			return "SIGFPE: Erroneous arithmetic operation: Integer divide by zero";
+		case FPE_INTOVF:
+			return "SIGFPE: Erroneous arithmetic operation: Integer overflow";
+		case FPE_FLTDIV:
+			return "SIGFPE: Erroneous arithmetic operation: Floating-point divide by zero";
+		case FPE_FLTOVF:
+			return "SIGFPE: Erroneous arithmetic operation: Floating-point overflow";
+		case FPE_FLTUND:
+			return "SIGFPE: Erroneous arithmetic operation: Floating-point underflow";
+		case FPE_FLTRES:
+			return "SIGFPE: Erroneous arithmetic operation: Floating-point inexact result";
+		case FPE_FLTINV:
+			return "SIGFPE: Erroneous arithmetic operation: Invalid floating-point operation";
+		case FPE_FLTSUB:
+			return "SIGFPE: Erroneous arithmetic operation: Subscript out of range";
+		default:
+			return "SIGFPE: Erroneous arithmetic operation";
+		};
+	case SIGHUP:
+		return "SIGHUP: Hangup";
+	case SIGILL:
+		switch (sigcode)
+		{
+		case ILL_ILLOPC:
+			return "SIGILL: Illegal instruction: Illegal opcode";
+		case ILL_ILLOPN:
+			return "SIGILL: Illegal instruction: Illegal operand";
+		case ILL_ILLADR:
+			return "SIGILL: Illegal instruction: Illegal addressing mode";
+		case ILL_ILLTRP:
+			return "SIGILL: Illegal instruction: Illegal trap";
+		case ILL_PRVOPC:
+			return "SIGILL: Illegal instruction: Privileged opcode";
+		case ILL_PRVREG:
+			return "SIGILL: Illegal instruction: Privileged register";
+		case ILL_COPROC:
+			return "SIGILL: Illegal instruction: Coprocessor error";
+		case ILL_BADSTK:
+			return "SIGILL: Illegal instruction: Internal stack error";
+		default:
+			return "SIGILL: Illegal instruction";
+		}
+	case SIGINT:
+		return "SIGINT: Terminal interrupt signal";
+	case SIGKILL:
+		return "SIGKILL: Kill";
+	case SIGPIPE:
+		return "SIGPIPE: Write on a pipe with no one to read it";
+	case SIGQUIT:
+		return "SIGQUIT: Terminal quit signal";
+	case SIGSEGV:
+		switch (sigcode)
+		{
+		case SEGV_MAPERR:
+			return "SIGSEGV: Invalid memory reference: Address not mapped to object";
+		case SEGV_ACCERR:
+			return "SIGSEGV: Invalid memory reference: Invalid permissions for mapped object";
+		default:
+			return "SIGSEGV: Invalid memory reference";
+		}
+	case SIGTERM:
+		return "SIGTERM: Termination signal";
+	case SIGUSR1:
+		return "SIGUSR1: User-defined signal 1";
+	case SIGUSR2:
+		return "SIGUSR2: User-defined signal 2";
+#if _XOPEN_UNIX
+	case SIGPROF:
+		return "SIGPROF: Profiling timer expired";
+	case SIGSYS:
+		return "SIGSYS: Bad system call";
+	case SIGTRAP:
+		switch (sigcode)
+		{
+		case TRAP_BRKPT:
+			return "SIGTRAP: Trace/breakpoint trap: Process breakpoint";
+		case TRAP_TRACE:
+			return "SIGTRAP: Trace/breakpoint trap: Process trace trap";
+		default:
+			return "SIGTRAP: Trace/breakpoint trap";
+		}
+#endif // _XOPEN_UNIX
+#if _XOPEN_UNIX
+	case SIGVTALRM:
+		return "SIGVTALRM: Virtual timer expired";
+	case SIGXCPU:
+		return "SIGXCPU: CPU time limit exceeded";
+	case SIGXFSZ:
+		return "SIGXFSZ: File size limit exceeded";
+#endif // _XOPEN_UNIX
+	default:
+		return "Unknown signal";
 	}
 }
 #endif // SA_SIGINFO
@@ -319,40 +323,58 @@ static void setFatalSignalHandler(SigActionHandler signalHandler)
 
 	sigaction(SIGABRT, NULL, &oldAction[SIGABRT]);
 	if (oldAction[SIGABRT].sa_handler != SIG_IGN)
+	{
 		sigaction(SIGABRT, &new_handler, NULL);
+	}
 
 	sigaction(SIGBUS, NULL, &oldAction[SIGBUS]);
 	if (oldAction[SIGBUS].sa_handler != SIG_IGN)
+	{
 		sigaction(SIGBUS, &new_handler, NULL);
+	}
 
 	sigaction(SIGFPE, NULL, &oldAction[SIGFPE]);
 	if (oldAction[SIGFPE].sa_handler != SIG_IGN)
+	{
 		sigaction(SIGFPE, &new_handler, NULL);
+	}
 
 	sigaction(SIGILL, NULL, &oldAction[SIGILL]);
 	if (oldAction[SIGILL].sa_handler != SIG_IGN)
+	{
 		sigaction(SIGILL, &new_handler, NULL);
+	}
 
 	sigaction(SIGQUIT, NULL, &oldAction[SIGQUIT]);
 	if (oldAction[SIGQUIT].sa_handler != SIG_IGN)
+	{
 		sigaction(SIGQUIT, &new_handler, NULL);
+	}
 
 	sigaction(SIGSEGV, NULL, &oldAction[SIGSEGV]);
 	if (oldAction[SIGSEGV].sa_handler != SIG_IGN)
+	{
 		sigaction(SIGSEGV, &new_handler, NULL);
+	}
 
 #if _XOPEN_UNIX
 	sigaction(SIGSYS, NULL, &oldAction[SIGSYS]);
 	if (oldAction[SIGSYS].sa_handler != SIG_IGN)
+	{
 		sigaction(SIGSYS, &new_handler, NULL);
+	}
 
 	sigaction(SIGXCPU, NULL, &oldAction[SIGXCPU]);
 	if (oldAction[SIGXCPU].sa_handler != SIG_IGN)
+	{
 		sigaction(SIGXCPU, &new_handler, NULL);
+	}
 
 	sigaction(SIGXFSZ, NULL, &oldAction[SIGXFSZ]);
 	if (oldAction[SIGXFSZ].sa_handler != SIG_IGN)
+	{
 		sigaction(SIGXFSZ, &new_handler, NULL);
+	}
 
 	// ignore SIGTRAP
 	new_handler.sa_handler = SIG_IGN;
@@ -381,7 +403,7 @@ static void setFatalSignalHandler(SigActionHandler signalHandler)
  *       function was unsuccessful and returned zero *gdbWritePipe's value will
  *       be unchanged.
  */
-static pid_t execGdb(int const dumpFile, int* gdbWritePipe)
+static pid_t execGdb(int const dumpFile, int *gdbWritePipe)
 {
 	int gdbPipe[2];
 	pid_t pid;
@@ -391,20 +413,20 @@ static pid_t execGdb(int const dumpFile, int* gdbWritePipe)
 	 * to our program's binary.
 	 */
 	if (!programIsAvailable
-	 || !gdbIsAvailable)
+	    || !gdbIsAvailable)
 	{
 		write(dumpFile, "No extended backtrace dumped:\n",
-		         strlen("No extended backtrace dumped:\n"));
+		      strlen("No extended backtrace dumped:\n"));
 
 		if (!programIsAvailable)
 		{
 			write(dumpFile, "- Program path not available\n",
-			         strlen("- Program path not available\n"));
+			      strlen("- Program path not available\n"));
 		}
 		if (!gdbIsAvailable)
 		{
 			write(dumpFile, "- GDB not available\n",
-			         strlen("- GDB not available\n"));
+			      strlen("- GDB not available\n"));
 		}
 
 		return 0;
@@ -414,7 +436,7 @@ static pid_t execGdb(int const dumpFile, int* gdbWritePipe)
 	if (pipe(gdbPipe) == -1)
 	{
 		write(dumpFile, "Pipe failed\n",
-		         strlen("Pipe failed\n"));
+		      strlen("Pipe failed\n"));
 
 		printf("Pipe failed\n");
 
@@ -426,7 +448,7 @@ static pid_t execGdb(int const dumpFile, int* gdbWritePipe)
 	if (pid == -1)
 	{
 		write(dumpFile, "Fork failed\n",
-		         strlen("Fork failed\n"));
+		      strlen("Fork failed\n"));
 
 		printf("Fork failed\n");
 
@@ -457,7 +479,7 @@ static pid_t execGdb(int const dumpFile, int* gdbWritePipe)
 	dup2(dumpFile, STDOUT_FILENO); // STDOUT to dumpFile
 
 	write(dumpFile, "GDB extended backtrace:\n",
-			strlen("GDB extended backtrace:\n"));
+	      strlen("GDB extended backtrace:\n"));
 
 	/* If execve() is successful it effectively prevents further
 	 * execution of this function.
@@ -466,7 +488,7 @@ static pid_t execGdb(int const dumpFile, int* gdbWritePipe)
 
 	// If we get here it means that execve failed!
 	write(dumpFile, "execcv(\"gdb\") failed\n",
-	         strlen("execcv(\"gdb\") failed\n"));
+	      strlen("execcv(\"gdb\") failed\n"));
 
 	// Terminate the child, indicating failure
 	_exit(1);
@@ -481,7 +503,7 @@ static pid_t execGdb(int const dumpFile, int* gdbWritePipe)
  *               backtrace.
  */
 #ifdef SA_SIGINFO
-static bool gdbExtendedBacktrace(int const dumpFile, const ucontext_t* sigcontext)
+static bool gdbExtendedBacktrace(int const dumpFile, const ucontext_t *sigcontext)
 #else
 static bool gdbExtendedBacktrace(int const dumpFile)
 #endif
@@ -496,13 +518,13 @@ static bool gdbExtendedBacktrace(int const dumpFile)
 	 * previous frame pointer and the return address).  Hence the
 	 * additions to the frame-pointer register's content.
 	 */
-	void const * const frame =
+	void const *const frame =
 #if   defined(SA_SIGINFO) && defined(REG_RBP)
-		sigcontext ? (void*)(sigcontext->uc_mcontext.gregs[REG_RBP] + sizeof(greg_t) + sizeof(void (*)(void))) : NULL;
+	    sigcontext ? (void *)(sigcontext->uc_mcontext.gregs[REG_RBP] + sizeof(greg_t) + sizeof(void (*)(void))) : NULL;
 #elif defined(SA_SIGINFO) && defined(REG_EBP)
-		sigcontext ? (void*)(sigcontext->uc_mcontext.gregs[REG_EBP] + sizeof(greg_t) + sizeof(void (*)(void))) : NULL;
+	    sigcontext ? (void *)(sigcontext->uc_mcontext.gregs[REG_EBP] + sizeof(greg_t) + sizeof(void (*)(void))) : NULL;
 #else
-		NULL;
+	    NULL;
 #endif
 
 	/*
@@ -510,18 +532,18 @@ static bool gdbExtendedBacktrace(int const dumpFile)
 	 */
 	void (*instruction)(void) =
 #if   defined(SA_SIGINFO) && defined(REG_RIP)
-		sigcontext ? (void (*)(void))sigcontext->uc_mcontext.gregs[REG_RIP] : NULL;
+	    sigcontext ? (void (*)(void))sigcontext->uc_mcontext.gregs[REG_RIP] : NULL;
 #elif defined(SA_SIGINFO) && defined(REG_EIP)
-		sigcontext ? (void (*)(void))sigcontext->uc_mcontext.gregs[REG_EIP] : NULL;
+	    sigcontext ? (void (*)(void))sigcontext->uc_mcontext.gregs[REG_EIP] : NULL;
 #else
-		NULL;
+	    NULL;
 #endif
 
 	// Spawn a GDB instance and retrieve a pipe to its stdin
 	int gdbPipe;
 	int status;
 	pid_t wpid;
-	                                  // Retrieve a full stack backtrace
+	// Retrieve a full stack backtrace
 	static const char gdbCommands[] = "thread apply all backtrace full\n"
 
 	                                  // Move to the stack frame where we triggered the crash
@@ -542,14 +564,14 @@ static bool gdbExtendedBacktrace(int const dumpFile)
 	// Disassemble the faulting instruction (if we know it)
 	if (instruction)
 	{
-		dprintf(gdbPipe, "x/i %p\n", (void*)instruction);
+		dprintf(gdbPipe, "x/i %p\n", (void *)instruction);
 	}
 
 	// We have an intelligent guess for the *correct* frame, disassemble *that* one.
 	if (frame)
 	{
 		dprintf(gdbPipe, "frame %p\n"
-		                 "disassemble /m\n", frame);
+		        "disassemble /m\n", frame);
 	}
 
 	write(gdbPipe, gdbCommands, strlen(gdbCommands));
@@ -569,7 +591,7 @@ static bool gdbExtendedBacktrace(int const dumpFile)
 	if (wpid == -1)
 	{
 		write(dumpFile, "GDB failed\n",
-		         strlen("GDB failed\n"));
+		      strlen("GDB failed\n"));
 		printf("GDB failed\n");
 
 		return false;
@@ -588,10 +610,10 @@ static bool gdbExtendedBacktrace(int const dumpFile)
 	 * return code.
 	 */
 	if (!WIFEXITED(status)
-	 || WEXITSTATUS(status) != 0)
+	    || WEXITSTATUS(status) != 0)
 	{
 		write(dumpFile, "GDB failed\n",
-		         strlen("GDB failed\n"));
+		      strlen("GDB failed\n"));
 		printf("GDB failed\n");
 
 		return false;
@@ -610,7 +632,7 @@ static bool gdbExtendedBacktrace(int const dumpFile)
  * \param sigcontext Signal context
  */
 #ifdef SA_SIGINFO
-static void posixExceptionHandler(int signum, siginfo_t * siginfo, void * sigcontext)
+static void posixExceptionHandler(int signum, siginfo_t *siginfo, void *sigcontext)
 #else
 static void posixExceptionHandler(int signum)
 #endif
@@ -623,12 +645,14 @@ static void posixExceptionHandler(int signum)
 	int dumpFile;
 	const char *signal;
 # if defined(__GLIBC__)
-	void * btBuffer[MAX_BACKTRACE] = {NULL};
+	void *btBuffer[MAX_BACKTRACE] = {NULL};
 	uint32_t btSize = backtrace(btBuffer, MAX_BACKTRACE);
 # endif
 
 	if (allreadyRunning)
+	{
 		raise(signum);
+	}
 	allreadyRunning = 1;
 	// we use our write directory (which is the only directory that wz should have access to)
 	// and stuff it into our logs directory (same as on windows)
@@ -663,7 +687,7 @@ static void posixExceptionHandler(int signum)
 	write(dumpFile, "\n", 1);
 # else
 	write(dumpFile, "GLIBC not available, no raw backtrace dumped\n\n",
-		  strlen("GLIBC not available, no raw backtrace dumped\n\n"));
+	      strlen("GLIBC not available, no raw backtrace dumped\n\n"));
 # endif
 
 
@@ -672,7 +696,7 @@ static void posixExceptionHandler(int signum)
 
 	// Use 'gdb' to provide an "extended" backtrace
 #ifdef SA_SIGINFO
-	gdbExtendedBacktrace(dumpFile, (ucontext_t*)sigcontext);
+	gdbExtendedBacktrace(dumpFile, (ucontext_t *)sigcontext);
 #else
 	gdbExtendedBacktrace(dumpFile);
 #endif
@@ -690,7 +714,7 @@ static void posixExceptionHandler(int signum)
 #endif // WZ_OS_*
 
 #if defined(WZ_OS_UNIX) && !defined(WZ_OS_MAC)
-static bool fetchProgramPath(char * const programPath, size_t const bufSize, const char * const programCommand)
+static bool fetchProgramPath(char *const programPath, size_t const bufSize, const char *const programCommand)
 {
 	FILE *whichProgramStream;
 	size_t bytesRead;
@@ -742,7 +766,7 @@ static bool fetchProgramPath(char * const programPath, size_t const bufSize, con
  *
  * \param programCommand Command used to launch this program. Only used for POSIX handler.
  */
-void setupExceptionHandler(int argc, const char ** argv, const char *packageVersion)
+void setupExceptionHandler(int argc, const char **argv, const char *packageVersion)
 {
 #if defined(WZ_OS_UNIX) && !defined(WZ_OS_MAC)
 	const char *programCommand;
@@ -792,14 +816,14 @@ bool OverrideRPTDirectory(char *newPath)
 		TCHAR szBuffer[4196];
 
 		FormatMessage(
-			FORMAT_MESSAGE_ALLOCATE_BUFFER |
-			FORMAT_MESSAGE_FROM_SYSTEM |
-			FORMAT_MESSAGE_IGNORE_INSERTS,
-			NULL,
-			dw,
-			MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-			(LPTSTR) &lpMsgBuf,
-			0, NULL );
+		    FORMAT_MESSAGE_ALLOCATE_BUFFER |
+		    FORMAT_MESSAGE_FROM_SYSTEM |
+		    FORMAT_MESSAGE_IGNORE_INSERTS,
+		    NULL,
+		    dw,
+		    MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+		    (LPTSTR) &lpMsgBuf,
+		    0, NULL);
 
 		wsprintf(szBuffer, _T("Exception handler failed setting new directory with error %d: %s\n"), dw, lpMsgBuf);
 		MessageBox((HWND)MB_ICONEXCLAMATION, szBuffer, _T("Error"), MB_OK);

@@ -50,13 +50,13 @@ using std::string;
 
 static const std::size_t max_debug_messages = 20;
 
-static char* dbgHeader = NULL;
+static char *dbgHeader = NULL;
 static std::deque<std::vector<char> > dbgMessages;
 
 // used to add custom info to the crash log
 static std::vector<char> miscData;
 
-static void dumpstr(const DumpFileHandle file, const char * const str, std::size_t const size)
+static void dumpstr(const DumpFileHandle file, const char *const str, std::size_t const size)
 {
 #if defined(WZ_OS_WIN)
 	DWORD lNumberOfBytesWritten;
@@ -70,14 +70,14 @@ static void dumpstr(const DumpFileHandle file, const char * const str, std::size
 		{
 			switch (errno)
 			{
-				case EAGAIN:
-					// Sleep to prevent wasting of CPU in case of non-blocking I/O
-					usleep(1);
-				case EINTR:
-					continue;
-				default:
-					// TODO find a decent way to deal with the fatal errors
-					return;
+			case EAGAIN:
+				// Sleep to prevent wasting of CPU in case of non-blocking I/O
+				usleep(1);
+			case EINTR:
+				continue;
+			default:
+				// TODO find a decent way to deal with the fatal errors
+				return;
 			}
 		}
 
@@ -86,7 +86,7 @@ static void dumpstr(const DumpFileHandle file, const char * const str, std::size
 #endif
 }
 
-static void dumpstr(const DumpFileHandle file, const char * const str)
+static void dumpstr(const DumpFileHandle file, const char *const str)
 {
 	dumpstr(file, str, strlen(str));
 }
@@ -96,7 +96,7 @@ static void dumpEOL(const DumpFileHandle file)
 	dumpstr(file, endl);
 }
 
-static void debug_exceptionhandler_data(void **, const char * const str)
+static void debug_exceptionhandler_data(void **, const char *const str)
 {
 	/* Can't use ASSERT here as that will cause us to be invoked again.
 	 * Possibly resulting in infinite recursion.
@@ -105,14 +105,16 @@ static void debug_exceptionhandler_data(void **, const char * const str)
 
 	// For non-debug builds
 	if (str == NULL)
+	{
 		return;
+	}
 
 	// Push this message on the message list
-	const char * last = &str[strlen(str)];
+	const char *last = &str[strlen(str)];
 
 	// Strip finishing newlines
 	while (last != str
-	    && *(last - 1) == '\n')
+	       && *(last - 1) == '\n')
 	{
 		--last;
 	}
@@ -161,7 +163,7 @@ void dbgDumpLog(DumpFileHandle file)
 	dumpEOL(file);
 }
 
-static std::string getProgramPath(const char* programCommand)
+static std::string getProgramPath(const char *programCommand)
 {
 	std::vector<char> buf(PATH_MAX);
 
@@ -172,8 +174,8 @@ static std::string getProgramPath(const char* programCommand)
 	}
 #elif defined(WZ_OS_UNIX) && !defined(WZ_OS_MAC)
 	{
-		FILE * whichProgramStream;
-		char* whichProgramCommand;
+		FILE *whichProgramStream;
+		char *whichProgramCommand;
 
 		sasprintf(&whichProgramCommand, "which %s", programCommand);
 		whichProgramStream = popen(whichProgramCommand, "r");
@@ -187,7 +189,9 @@ static std::string getProgramPath(const char* programCommand)
 		while (!feof(whichProgramStream))
 		{
 			if (read == buf.size())
+			{
 				buf.resize(buf.size() * 2);
+			}
 
 			read += fread(&buf[read], 1, buf.size() - read, whichProgramStream);
 		}
@@ -202,11 +206,15 @@ static std::string getProgramPath(const char* programCommand)
 		// `which' adds a \n which confuses exec()
 		std::string::size_type eol = programPath.find('\n');
 		if (eol != std::string::npos)
+		{
 			programPath.erase(eol);
+		}
 		// Strip any NUL chars
 		std::string::size_type nul = programPath.find('\0');
 		if (nul != std::string::npos)
+		{
 			programPath.erase(nul);
+		}
 		debug(LOG_WZ, "Found us at %s", programPath.c_str());
 	}
 	else
@@ -253,7 +261,7 @@ static std::string getCurTime()
 	for (string::reverse_iterator
 	     newline  = time.rbegin();
 	     newline != time.rend()
-	  && *newline == '\n';
+	     && *newline == '\n';
 	     ++newline)
 	{
 		*newline = '\0';
@@ -262,20 +270,22 @@ static std::string getCurTime()
 	// Remove everything after, and including, the first NUL character
 	string::size_type newline = time.find_first_of('\0');
 	if (newline != string::npos)
+	{
 		time.erase(newline);
+	}
 
 	return time;
 }
 
 template <typename CharT, typename Traits>
-std::basic_ostream<CharT, Traits>& operator<<(std::basic_ostream<CharT, Traits>& os, PHYSFS_Version const& ver)
+std::basic_ostream<CharT, Traits> &operator<<(std::basic_ostream<CharT, Traits> &os, PHYSFS_Version const &ver)
 {
 	return os << static_cast<unsigned int>(ver.major)
-	   << "." << static_cast<unsigned int>(ver.minor)
-	   << "." << static_cast<unsigned int>(ver.patch);
+	       << "." << static_cast<unsigned int>(ver.minor)
+	       << "." << static_cast<unsigned int>(ver.patch);
 }
 
-static void createHeader(int const argc, const char** argv, const char *packageVersion)
+static void createHeader(int const argc, const char **argv, const char *packageVersion)
 {
 	std::ostringstream os;
 
@@ -286,7 +296,9 @@ static void createHeader(int const argc, const char** argv, const char *packageV
 	 * separated by spaces.
 	 */
 	for (int i = 0; i < argc; ++i)
+	{
 		os << "\"" << argv[i] << "\" ";
+	}
 
 	os << endl;
 
@@ -295,22 +307,22 @@ static void createHeader(int const argc, const char** argv, const char *packageV
 	   << "Compiled on: " __DATE__ " " __TIME__ << endl
 	   << "Compiled by: "
 #if defined(WZ_CC_GNU) && !defined(WZ_CC_INTEL)
-	       << "GCC " __VERSION__ << endl
+	   << "GCC " __VERSION__ << endl
 #elif defined(WZ_CC_INTEL)
-	// Intel includes the compiler name within the version string
-	       << __VERSION__ << endl
+	   // Intel includes the compiler name within the version string
+	   << __VERSION__ << endl
 #else
-	       << "UNKNOWN" << endl
+	   << "UNKNOWN" << endl
 #endif
 	   << "Compiled mode: "
 #ifdef DEBUG
-			<< "Debug build" << endl
+	   << "Debug build" << endl
 #else
-			<< "Release build" << endl
+	   << "Release build" << endl
 #endif
 	   << "Executed on: " << getCurTime() << endl
 	   << getSysinfo() << endl
-	   << "Pointers: " << (sizeof(void*) * CHAR_BIT) << "bit" << endl
+	   << "Pointers: " << (sizeof(void *) * CHAR_BIT) << "bit" << endl
 	   << endl;
 
 	PHYSFS_Version physfs_version;
@@ -338,7 +350,7 @@ void addDumpInfo(const char *inbuffer)
 	char ourtime[sizeof("HH:MM:SS")];
 
 	const time_t curtime = time(NULL);
-	struct tm* const timeinfo = localtime(&curtime);
+	struct tm *const timeinfo = localtime(&curtime);
 
 	strftime(ourtime, sizeof(ourtime), "%H:%M:%S", timeinfo);
 
@@ -351,8 +363,8 @@ void addDumpInfo(const char *inbuffer)
 	miscData.insert(miscData.end(), msg.begin(), msg.end());
 }
 
-void dbgDumpInit(int argc, const char** argv, const char *packageVersion)
+void dbgDumpInit(int argc, const char **argv, const char *packageVersion)
 {
-	debug_register_callback(&debug_exceptionhandler_data, NULL, NULL, NULL );
+	debug_register_callback(&debug_exceptionhandler_data, NULL, NULL, NULL);
 	createHeader(argc, argv, packageVersion);
 }
