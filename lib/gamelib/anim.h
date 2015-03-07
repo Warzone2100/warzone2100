@@ -26,7 +26,6 @@
 #ifndef _ANIM_H_
 #define _ANIM_H_
 
-
 #include <physfs.h>
 
 #include "lib/framework/types.h"
@@ -36,13 +35,11 @@
 #define	ANIM_DELAYED	0xFFFE
 #define	NO_ANIM			0xFFFD
 
-
 enum ANIM_MODE
 {
 	ANIM_3D_FRAMES = 1,
 	ANIM_3D_TRANS
 };
-
 
 struct ANIM_STATE
 {
@@ -54,41 +51,36 @@ struct ANIM_STATE
 
 struct BASEANIM
 {
-	char                    szFileName[ANIM_MAX_STR];
-	char                    animType;
-	UWORD                   uwID;
-	UWORD                   uwFrameRate;
-	UWORD                   uwStates;
-	UWORD                   uwObj;
-	UWORD                   uwAnimTime;
-	ANIM_MODE               ubType;
-	ANIM_STATE *            psStates;
-	BASEANIM *              psNext;
+	char szFileName[ANIM_MAX_STR];
+	char animType;
+	UWORD uwID;
+	UWORD uwFrameRate;
+	UWORD uwStates;
+	UWORD uwObj;
+	UWORD uwAnimTime;
+	ANIM_MODE ubType;
+	ANIM_STATE *psStates;
 };
 
 struct ANIM3D : public BASEANIM
 {
-	iIMDShape *             psFrames;
-	iIMDShape **            apFrame;
+	iIMDShape *psFrames;
+	iIMDShape **apFrame;
 };
 
-
-bool		anim_Init(void);
-bool		anim_Shutdown(void);
-BASEANIM *	anim_LoadFromBuffer(char *pBuffer, UDWORD size);
-BASEANIM *	anim_LoadFromFile(PHYSFS_file* fileHandle);
-void		anim_ReleaseAnim(BASEANIM *psAnim);
-bool		anim_Create3D(char szPieFileName[], UWORD uwFrames, UWORD uwFrameRate, UWORD uwObj,
-		              ANIM_MODE ubType, UWORD uwID);
-void		anim_BeginScript(void);
-bool		anim_EndScript(void);
-bool		anim_AddFrameToAnim(int iFrame, Vector3i vecPos, Vector3i vecRot, Vector3i vecScale);
-BASEANIM *	anim_GetAnim(UWORD uwAnimID);
-UWORD		anim_GetAnimID(char *szName);
-iIMDShape *	anim_GetShapeFromID(UWORD uwID);
-UWORD           anim_GetFrame3D(ANIM3D *psAnim, UWORD uwObj, UDWORD udwGraphicsTime, UDWORD udwStartTime,
-		                UDWORD udwStartDelay, Vector3i *psVecPos, Vector3i *psVecRot,
-		                Vector3i *psVecScale);
-void		anim_SetVals(char szFileName[], UWORD uwAnimID);
+bool anim_Init();
+bool anim_Shutdown();
+BASEANIM *anim_LoadFromBuffer(char *pBuffer, UDWORD size);
+BASEANIM *anim_LoadFromFile(PHYSFS_file* fileHandle);
+void anim_ReleaseAnim(BASEANIM *psAnim);
+bool anim_Create3D(char szPieFileName[], UWORD uwFrames, UWORD uwFrameRate, UWORD uwObj, ANIM_MODE ubType, UWORD uwID);
+void anim_BeginScript();
+bool anim_EndScript();
+bool anim_AddFrameToAnim(int iFrame, Vector3i vecPos, Vector3i vecRot, Vector3i vecScale);
+BASEANIM *anim_GetAnim(UWORD uwAnimID);
+UWORD anim_GetAnimID(char *szName);
+iIMDShape *anim_GetShapeFromID(UWORD uwID);
+UWORD anim_GetFrame3D(ANIM3D *psAnim, UWORD uwObj, UDWORD udwGraphicsTime, UDWORD udwStartTime, Vector3i *psVecPos, Vector3i *psVecRot, Vector3i *psVecScale);
+void anim_SetVals(char szFileName[], UWORD uwAnimID);
 
 #endif	/* _ANIM_H_ */

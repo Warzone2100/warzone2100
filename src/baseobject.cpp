@@ -104,6 +104,7 @@ BASE_OBJECT::BASE_OBJECT(OBJECT_TYPE type, uint32_t id, unsigned player)
 	, periodicalDamage(0)
 	, flags(0)
 	, watchedTiles(NULL)
+	, psCurAnim(NULL)
 {
 	memset(visible, 0, sizeof(visible));
 	sDisplay.imd = NULL;

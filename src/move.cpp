@@ -28,7 +28,6 @@
 #include "lib/framework/trig.h"
 #include "lib/framework/math_ext.h"
 #include "lib/gamelib/gtime.h"
-#include "lib/gamelib/animobj.h"
 #include "lib/netplay/netplay.h"
 #include "lib/sound/audio.h"
 #include "lib/sound/audio_id.h"
@@ -36,6 +35,7 @@
 
 #include "move.h"
 
+//#include "animobj.h"
 #include "objects.h"
 #include "visibility.h"
 #include "map.h"
@@ -1639,7 +1639,7 @@ static void moveUpdatePersonModel(DROID *psDroid, SDWORD speed, uint16_t directi
 			/* add firing anim */
 			if ( psDroid->psCurAnim == NULL )
 			{
-				psDroid->psCurAnim = animObj_Add( psDroid, ID_ANIM_DROIDFIRE, 0, 0 );
+				psDroid->psCurAnim = animObj_Add(psDroid, ID_ANIM_DROIDFIRE, 0);
 			}
 			else
 			{
@@ -1697,9 +1697,8 @@ static void moveUpdatePersonModel(DROID *psDroid, SDWORD speed, uint16_t directi
 		{
 			// Only add the animation if the droid is on screen, saves memory and time.
 			if(clipXY(psDroid->pos.x,psDroid->pos.y)) {
-				debug( LOG_NEVER, "Added person run anim\n" );
-				psDroid->psCurAnim = animObj_Add( (BASE_OBJECT *) psDroid,
-													ID_ANIM_DROIDRUN, 0, 0 );
+				debug(LOG_NEVER, "Added person run anim");
+				psDroid->psCurAnim = animObj_Add(psDroid, ID_ANIM_DROIDRUN, 0);
 			}
 		} else {
 			// If the droid went off screen then remove the animation, saves memory and time.
@@ -1707,7 +1706,7 @@ static void moveUpdatePersonModel(DROID *psDroid, SDWORD speed, uint16_t directi
 				const bool bRet = animObj_Remove(psDroid->psCurAnim, psDroid->psCurAnim->psAnim->uwID);
 				ASSERT(bRet, "animObj_Remove failed");
 				psDroid->psCurAnim = NULL;
-				debug( LOG_NEVER, "Removed person run anim\n" );
+				debug(LOG_NEVER, "Removed person run anim");
 			}
 		}
 	}
@@ -1853,11 +1852,11 @@ static void moveUpdateCyborgModel(DROID *psDroid, SDWORD moveSpeed, uint16_t mov
 		{
 			if (psDroid->droidType == DROID_CYBORG_SUPER)
 			{
-				psDroid->psCurAnim = animObj_Add(psDroid, ID_ANIM_SUPERCYBORG_RUN, 0, 0);
+				psDroid->psCurAnim = animObj_Add(psDroid, ID_ANIM_SUPERCYBORG_RUN, 0);
 			}
 			else if (cyborgDroid(psDroid))
 			{
-				psDroid->psCurAnim = animObj_Add(psDroid, ID_ANIM_CYBORG_RUN, 0, 0);
+				psDroid->psCurAnim = animObj_Add(psDroid, ID_ANIM_CYBORG_RUN, 0);
 			}
 		}
 	}
@@ -1930,8 +1929,7 @@ static void movePlayDroidMoveAudio( DROID *psDroid )
 	PROPULSION_TYPES	*psPropType;
 	UBYTE				iPropType = 0;
 
-	ASSERT( psDroid != NULL,
-		"movePlayUnitMoveAudio: unit pointer invalid\n" );
+	ASSERT(psDroid != NULL, "Unit pointer invalid");
 
 	if ( (psDroid != NULL) &&
 		 (psDroid->visible[selectedPlayer]) )

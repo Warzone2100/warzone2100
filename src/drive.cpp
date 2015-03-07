@@ -29,9 +29,9 @@
 #include "lib/framework/input.h"
 
 #include "lib/gamelib/gtime.h"
-#include "lib/gamelib/animobj.h"
 #include "lib/sound/audio.h"
 
+//#include "animobj.h"
 #include "drive.h"
 #include "objects.h"
 #include "move.h"

@@ -28,53 +28,48 @@
 #ifndef _ANIMOBJ_H_
 #define _ANIMOBJ_H_
 
-#include "anim.h"
+#include "lib/gamelib/anim.h"
 
+class BASE_OBJECT;
 
-#define	ANIM_MAX_COMPONENTS		10
+#define	ANIM_MAX_COMPONENTS 10
 
-
-typedef void (* ANIMOBJDONEFUNC) ( struct ANIM_OBJECT *psObj );
-typedef bool (* ANIMOBJDIEDTESTFUNC) ( void *psParent );
+typedef void (*ANIMOBJDONEFUNC)(struct ANIM_OBJECT *psObj);
 
 struct COMPONENT_OBJECT
 {
-	Vector3i                position;
-	Vector3i                orientation;
-	void *                  psParent;
-	iIMDShape *             psShape;
+	Vector3i position;
+	Vector3i orientation;
+	BASE_OBJECT *psParent;
+	iIMDShape *psShape;
 };
 
 struct ANIM_OBJECT
 {
-	ANIM_OBJECT *           psNext;
+	ANIM_OBJECT *psNext;
 
-	UWORD                   uwID;
-	ANIM3D *                psAnim;
-	void *                  psParent;
-	UDWORD                  udwStartTime;
-	UDWORD                  udwStartDelay;
-	UWORD                   uwCycles;
-	bool                    bVisible;
-	ANIMOBJDONEFUNC         pDoneFunc;
+	UWORD uwID;
+	ANIM3D *psAnim;
+	BASE_OBJECT *psParent;
+	UDWORD udwStartTime;
+	UWORD uwCycles;
+	bool bVisible;
+	ANIMOBJDONEFUNC pDoneFunc;
 	/* this must be the last entry in this structure */
-	COMPONENT_OBJECT        apComponents[ANIM_MAX_COMPONENTS];
+	COMPONENT_OBJECT apComponents[ANIM_MAX_COMPONENTS];
 };
 
-
-bool			animObj_Init( ANIMOBJDIEDTESTFUNC pDiedFunc );
-void			animObj_Update( void );
-bool			animObj_Shutdown( void );
-void			animObj_SetDoneFunc( ANIM_OBJECT *psObj,
-										ANIMOBJDONEFUNC pDoneFunc );
+bool animObj_Init();
+void animObj_Update();
+bool animObj_Shutdown();
+void animObj_SetDoneFunc(ANIM_OBJECT *psObj, ANIMOBJDONEFUNC pDoneFunc);
 
 /* uwCycles=0 for infinite looping */
-ANIM_OBJECT *	animObj_Add( void *pParentObj, int iAnimID,
-								UDWORD udwStartDelay, UWORD uwCycles );
+ANIM_OBJECT *animObj_Add(BASE_OBJECT *pParentObj, int iAnimID, UWORD uwCycles);
 bool animObj_Remove(ANIM_OBJECT* psObj, int iAnimID);
 
-ANIM_OBJECT *	animObj_GetFirst( void );
-ANIM_OBJECT *	animObj_GetNext( void );
-ANIM_OBJECT *	animObj_Find( void *pParentObj, int iAnimID );
+ANIM_OBJECT *animObj_GetFirst();
+ANIM_OBJECT *animObj_GetNext();
+ANIM_OBJECT *animObj_Find(BASE_OBJECT *pParentObj, int iAnimID);
 
 #endif	/* _ANIMOBJ_H_ */

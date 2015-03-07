@@ -25,6 +25,7 @@
 #define __INCLUDED_BASEDEF_H__
 
 #include "lib/framework/vector.h"
+#include "animobj.h"
 #include "displaydef.h"
 #include "statsdef.h"
 
@@ -108,6 +109,7 @@ struct BASE_OBJECT : public SIMPLE_OBJECT
 	UDWORD              periodicalDamage;                 ///< How much damage has been done since the object entered the fire
 	uint16_t            flags;                      ///< Various flags
 	TILEPOS             *watchedTiles;              ///< Variable size array of watched tiles, NULL for features
+	ANIM_OBJECT         *psCurAnim;                 ///< Animation frames
 
 	NEXTOBJ             psNext;                     ///< Pointer to the next object in the object list
 	NEXTOBJ             psNextFunc;                 ///< Pointer to the next object in the function list

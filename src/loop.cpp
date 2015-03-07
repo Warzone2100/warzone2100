@@ -36,13 +36,13 @@
 #include "lib/ivis_opengl/screen.h"
 
 #include "lib/gamelib/gtime.h"
-#include "lib/gamelib/animobj.h"
 #include "lib/script/script.h"
 #include "lib/sound/audio.h"
 #include "lib/sound/cdaudio.h"
 #include "lib/sound/mixer.h"
 #include "lib/netplay/netplay.h"
 
+#include "animobj.h"
 #include "loop.h"
 #include "objects.h"
 #include "display.h"

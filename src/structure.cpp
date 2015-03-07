@@ -3743,7 +3743,6 @@ STRUCTURE::STRUCTURE(uint32_t id, unsigned player)
 	, pFunctionality(NULL)
 	, buildRate(1)  // Initialise to 1 instead of 0, to make sure we don't get destroyed first tick due to inactivity.
 	, lastBuildRate(0)
-	, psCurAnim(NULL)
 	, prebuiltImd(NULL)
 {
 	pos = Vector3i(0, 0, 0);
@@ -5391,7 +5390,7 @@ void buildingComplete(STRUCTURE *psBuilding)
 			/* GJ HACK! - add anim to deriks */
 			if (psBuilding->psCurAnim == NULL)
 			{
-				psBuilding->psCurAnim = animObj_Add(psBuilding, ID_ANIM_DERIK, 0, 0);
+				psBuilding->psCurAnim = animObj_Add(psBuilding, ID_ANIM_DERIK, 0);
 			}
 
 			break;

@@ -24,7 +24,6 @@
 #ifndef __INCLUDED_STRUCTUREDEF_H__
 #define __INCLUDED_STRUCTUREDEF_H__
 
-#include "lib/gamelib/animobj.h"
 #include "positiondef.h"
 #include "basedef.h"
 #include "statsdef.h"
@@ -268,9 +267,6 @@ struct STRUCTURE : public BASE_OBJECT
 	                                                ///< but shouldn't make a difference unless 3 mutual enemies happen to be fighting each other at the same time.
 
 	uint32_t        prevTime;                       ///< Time of structure's previous tick.
-
-	/* anim data */
-	ANIM_OBJECT	*psCurAnim;
 
 	float		foundationDepth;		///< Depth of structure's foundation
 	uint8_t		capacity;			///< Number of module upgrades

@@ -41,12 +41,12 @@
 #include "lib/ivis_opengl/screen.h"
 
 #include "lib/gamelib/gtime.h"
-#include "lib/gamelib/animobj.h"
 #include "lib/script/script.h"
 #include "lib/sound/audio.h"
 #include "lib/sound/audio_id.h"
 #include "lib/netplay/netplay.h"
 
+#include "animobj.h"
 #include "loop.h"
 #include "atmos.h"
 #include "levels.h"
@@ -1469,52 +1469,43 @@ static void displayStaticObjects()
 		for (; list != NULL; list = list->psNext)
 		{
 			/* Worth rendering the structure? */
-			if (list->type != OBJ_STRUCTURE
-			    || (list->died != 0 && list->died < graphicsTime)
+			if (list->type != OBJ_STRUCTURE || (list->died != 0 && list->died < graphicsTime)
 			    || !clipXY(list->pos.x, list->pos.y))
 			{
 				continue;
 			}
-				STRUCTURE *psStructure = castStructure(list);
+			STRUCTURE *psStructure = castStructure(list);
 
-				if ( psStructure->pStructureType->type == REF_RESOURCE_EXTRACTOR &&
-					psStructure->psCurAnim == NULL &&
-					(psStructure->currentBuildPts > (SDWORD)psStructure->pStructureType->buildPoints) )
-				{
-					psStructure->psCurAnim = animObj_Add( psStructure, ID_ANIM_DERIK, 0, 0 );
-				}
+			if (psStructure->pStructureType->type == REF_RESOURCE_EXTRACTOR && psStructure->psCurAnim == NULL
+			    && (psStructure->currentBuildPts > (SDWORD)psStructure->pStructureType->buildPoints))
+			{
+				psStructure->psCurAnim = animObj_Add(psStructure, ID_ANIM_DERIK, 0);
+			}
 
-				if ( psStructure->psCurAnim == NULL ||
-						psStructure->psCurAnim->bVisible == false ||
-						(psAnimObj = animObj_Find( psStructure,
-						psStructure->psCurAnim->uwID )) == NULL )
-				{
-					renderStructure(psStructure);
-				}
-				else if (psStructure->visible[selectedPlayer])
-				{
-						//check not a resource extractors
-						if (psStructure->pStructureType->type != REF_RESOURCE_EXTRACTOR)
-						{
-							displayAnimation( psAnimObj, false );
-						}
-						/*check the building is active*/
-						else if (psStructure->pFunctionality->resourceExtractor.psPowerGen != nullptr)
-						{
-							displayAnimation( psAnimObj, false );
-							if(selectedPlayer == psStructure->player)
-							{
-								audio_PlayObjStaticTrack(psStructure, ID_SOUND_OIL_PUMP_2);
-							}
-						}
-						else
-						{
-							/* hold anim on first frame */
-							displayAnimation( psAnimObj, true );
-							audio_StopObjTrack(psStructure, ID_SOUND_OIL_PUMP_2);
-						}
+			if (psStructure->psCurAnim == NULL || psStructure->psCurAnim->bVisible == false
+			    || (psAnimObj = animObj_Find(psStructure, psStructure->psCurAnim->uwID)) == NULL)
+			{
+				renderStructure(psStructure);
+			}
+			else if (psStructure->visible[selectedPlayer])
+			{
+				bool stopFrame = false;
 
+				// oil derrick: stop animation if not connected to power generator, play its sound
+				if (psStructure->pStructureType->type == REF_RESOURCE_EXTRACTOR)
+				{
+					if (!psStructure->pFunctionality->resourceExtractor.psPowerGen)
+					{
+						stopFrame = true;
+						audio_StopObjTrack(psStructure, ID_SOUND_OIL_PUMP_2);
+					}
+					else if (selectedPlayer == psStructure->player)
+					{
+						audio_PlayObjStaticTrack(psStructure, ID_SOUND_OIL_PUMP_2);
+					}
 				}
+				displayAnimation(psAnimObj, stopFrame);
+			}
 		}
 	}
 	pie_SetDepthOffset(0.0f);
@@ -1769,7 +1760,7 @@ static void displayProximityMsgs()
 }
 
 /// Display an animation
-static void displayAnimation( ANIM_OBJECT * psAnimObj, bool bHoldOnFirstFrame )
+static void displayAnimation(ANIM_OBJECT *psAnimObj, bool bHoldOnFirstFrame)
 {
 	UWORD i, uwFrame;
 	Vector3i vecPos, vecRot, vecScale;
@@ -1786,7 +1777,7 @@ static void displayAnimation( ANIM_OBJECT * psAnimObj, bool bHoldOnFirstFrame )
 		}
 		else
 		{
-			uwFrame = anim_GetFrame3D( psAnimObj->psAnim, i, graphicsTime, psAnimObj->udwStartTime, psAnimObj->udwStartDelay, &vecPos, &vecRot, &vecScale );
+			uwFrame = anim_GetFrame3D(psAnimObj->psAnim, i, graphicsTime, psAnimObj->udwStartTime, &vecPos, &vecRot, &vecScale);
 		}
 
 		if ( uwFrame != ANIM_DELAYED )
@@ -1825,8 +1816,7 @@ static void displayDynamicObjects()
 
 		for (; list != NULL; list = list->psNext)
 		{
-			if (list->type != OBJ_DROID
-			    || (list->died != 0 && list->died < graphicsTime)
+			if (list->type != OBJ_DROID || (list->died != 0 && list->died < graphicsTime)
 			    || !clipXY(list->pos.x, list->pos.y))
 			{
 				continue;
@@ -1836,30 +1826,28 @@ static void displayDynamicObjects()
 			/* No point in adding it if you can't see it? */
 			if (psDroid->visible[selectedPlayer])
 			{
-						psDroid->sDisplay.frameNumber = currentGameFrame;
+				psDroid->sDisplay.frameNumber = currentGameFrame;
 
-						// NOTE! : anything that has multiple (anim) frames *must* use the bucket to render
-						// In this case, AFAICT only DROID_CYBORG_SUPER had the issue.  (Same issue as oil pump anim)
-						if (psDroid->droidType != DROID_CYBORG_SUPER)
-						{
-							displayComponentObject(psDroid);
-						}
-						else
-						{
-							bucketAddTypeToList(RENDER_DROID, psDroid);
-						}
-						/* draw anim if visible */
-						if ( psDroid->psCurAnim != NULL &&
-							psDroid->psCurAnim->bVisible == true &&
-							(psAnimObj = animObj_Find( psDroid,
-							psDroid->psCurAnim->uwID )) != NULL )
-						{
-							displayAnimation( psAnimObj, false );
-						}
+				// NOTE! : anything that has multiple (anim) frames *must* use the bucket to render
+				// In this case, AFAICT only DROID_CYBORG_SUPER had the issue.  (Same issue as oil pump anim)
+				if (psDroid->droidType != DROID_CYBORG_SUPER)
+				{
+					displayComponentObject(psDroid);
+				}
+				else
+				{
+					bucketAddTypeToList(RENDER_DROID, psDroid);
+				}
+				/* draw anim if visible */
+				if (psDroid->psCurAnim != NULL && psDroid->psCurAnim->bVisible == true
+				    && (psAnimObj = animObj_Find(psDroid, psDroid->psCurAnim->uwID)) != NULL)
+				{
+					displayAnimation(psAnimObj, false);
+				}
 			}
-		} // end for
-	} // end for clan
-} // end Fn
+		}
+	}
+}
 
 /// Sets the player's position and view angle - defaults player rotations as well
 void setViewPos( UDWORD x, UDWORD y, WZ_DECL_UNUSED bool Pan )

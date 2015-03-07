@@ -752,38 +752,6 @@ void systemShutdown(void)
 
 /***************************************************************************/
 
-static bool
-init_ObjectDead( void * psObj )
-{
-	BASE_OBJECT	*psBaseObj = (BASE_OBJECT *) psObj;
-	DROID		*psDroid;
-	STRUCTURE	*psStructure;
-
-	CHECK_OBJECT(psBaseObj);
-
-	if ( psBaseObj->died == true )
-	{
-		switch ( psBaseObj->type )
-		{
-			case OBJ_DROID:
-				psDroid = (DROID *) psBaseObj;
-				psDroid->psCurAnim = NULL;
-				break;
-
-			case OBJ_STRUCTURE:
-				psStructure = (STRUCTURE *) psBaseObj;
-				psStructure->psCurAnim = NULL;
-				break;
-
-			default:
-				debug( LOG_ERROR, "init_ObjectAnimRemoved: unrecognised object type" );
-				return false;
-		}
-	}
-
-	return psBaseObj->died;
-}
-
 // ////////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////////
 // Called At Frontend Startup.
@@ -819,7 +787,7 @@ bool frontendInitialise(const char *ResourceFile)
 		return false;
 	}
 
-	if ( !animObj_Init( init_ObjectDead ) )
+	if (!animObj_Init())
 	{
 		return false;
 	}
@@ -968,7 +936,7 @@ bool stageOneInitialise(void)
 		return false;
 	}
 
-	if ( !animObj_Init( init_ObjectDead ) )
+	if (!animObj_Init())
 	{
 		return false;
 	}

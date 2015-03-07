@@ -29,7 +29,6 @@
 #include "lib/framework/strres.h"
 
 #include "lib/gamelib/gtime.h"
-#include "lib/gamelib/animobj.h"
 #include "lib/ivis_opengl/piematrix.h"
 #include "lib/ivis_opengl/screen.h"
 #include "lib/framework/fixedpoint.h"
@@ -351,7 +350,6 @@ DROID::DROID(uint32_t id, unsigned player)
 	, secondaryOrderPendingCount(0)
 	, action(DACTION_NONE)
 	, actionPos(0, 0)
-	, psCurAnim(NULL)
 {
 	memset(aName, 0, sizeof(aName));
 	memset(asBits, 0, sizeof(asBits));
@@ -368,7 +366,6 @@ DROID::DROID(uint32_t id, unsigned player)
 	listSize = 0;
 	listPendingBegin = 0;
 	iAudioID = NO_SOUND;
-	psCurAnim = NULL;
 	group = UBYTE_MAX;
 	psBaseStruct = NULL;
 	sDisplay.frameNumber = 0;	// it was never drawn before
@@ -728,7 +725,7 @@ static void droidBurntCallback( ANIM_OBJECT * psObj )
 	ASSERT_OR_RETURN( , psDroid != NULL, "invalid Unit pointer");
 
 	/* add falling anim */
-	psDroid->psCurAnim = animObj_Add((BASE_OBJECT *)psDroid, ID_ANIM_DROIDFLAMEFALL, 0, 1);
+	psDroid->psCurAnim = animObj_Add(psDroid, ID_ANIM_DROIDFLAMEFALL, 1);
 	if (!psDroid->psCurAnim)
 	{
 		debug( LOG_ERROR, "couldn't add fall over anim");
@@ -771,8 +768,7 @@ void droidBurn(DROID *psDroid)
 	}
 
 	/* add burning anim */
-	psDroid->psCurAnim = animObj_Add( (BASE_OBJECT *) psDroid,
-											ID_ANIM_DROIDBURN, 0, 3 );
+	psDroid->psCurAnim = animObj_Add(psDroid, ID_ANIM_DROIDBURN, 3);
 	if ( psDroid->psCurAnim == NULL )
 	{
 		debug( LOG_ERROR, "couldn't add burn anim" );

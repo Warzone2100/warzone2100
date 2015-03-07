@@ -26,8 +26,6 @@
 
 #include <vector>
 
-#include "lib/gamelib/animobj.h"
-
 #include "stringdef.h"
 #include "actiondef.h"
 #include "basedef.h"
@@ -163,7 +161,6 @@ struct DROID : public BASE_OBJECT
 	uint8_t		blockedBits;			///< Bit set telling which tiles block this type of droid (TODO)
 
 	/* anim data */
-	ANIM_OBJECT     *psCurAnim;
 	SDWORD          iAudioID;
 };
 

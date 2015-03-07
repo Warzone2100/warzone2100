@@ -4946,7 +4946,7 @@ static bool loadSaveStructure2(const char *pFileName, STRUCTURE **ppList)
 				/* GJ HACK! - add anim to deriks */
 				if (psStructure->psCurAnim == NULL)
 				{
-					psStructure->psCurAnim = animObj_Add(psStructure, ID_ANIM_DERIK, 0, 0);
+					psStructure->psCurAnim = animObj_Add(psStructure, ID_ANIM_DERIK, 0);
 				}
 				break;
 			default:

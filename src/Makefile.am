@@ -48,6 +48,7 @@ noinst_HEADERS = \
 	advvis.h \
 	ai.h \
 	anim_id.h \
+	animobj.h \
 	astar.h \
 	atmos.h \
 	basedef.h \
@@ -178,6 +179,7 @@ COMMONSOURCES = \
 	action.cpp \
 	advvis.cpp \
 	ai.cpp \
+	animobj.cpp \
 	astar.cpp \
 	atmos.cpp \
 	aud.cpp \
