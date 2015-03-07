@@ -29,6 +29,7 @@
 #include "droiddef.h"
 #include "featuredef.h"
 #include "power.h"
+#include "gateway.h"
 
 //mission types
 
@@ -48,8 +49,6 @@ struct LANDING_ZONE
 	uint8_t y2;
 };
 
-struct GATEWAY;
-
 //storage structure for values that need to be kept between missions
 struct MISSION
 {
@@ -59,7 +58,7 @@ struct MISSION
 	int32_t                         mapHeight;                      //the original mapHeight
 	uint8_t                        *psBlockMap[AUX_MAX];
 	uint8_t                        *psAuxMap[MAX_PLAYERS + AUX_MAX];
-	GATEWAY                        *psGateways;                     //the gateway list
+	GATEWAY_LIST                    psGateways;                     //the gateway list
 	int32_t                         scrollMinX;                     //scroll coords for original map
 	int32_t                         scrollMinY;
 	int32_t                         scrollMaxX;

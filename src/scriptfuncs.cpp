@@ -4689,7 +4689,6 @@ bool scrGetNearestGateway(void)
 	SDWORD	x, y;
 	UDWORD	nearestSoFar;
 	UDWORD	dist;
-	GATEWAY	*psGateway;
 	SDWORD	retX, retY;
 	SDWORD	*rX, *rY;
 	bool	success;
@@ -4709,7 +4708,7 @@ bool scrGetNearestGateway(void)
 	nearestSoFar = UDWORD_MAX;
 	retX = retY = -1;
 	success = false;
-	for (psGateway = gwGetGateways(); psGateway; psGateway = psGateway->psNext)
+	for (auto psGateway : gwGetGateways())
 	{
 		/* Get gateway midpoint */
 		const int gX = (psGateway->x1 + psGateway->x2) / 2;
@@ -5085,7 +5084,6 @@ bool structDoubleCheck(BASE_STATS *psStat, UDWORD xx, UDWORD yy, SDWORD maxBlock
 	UDWORD		x, y, xTL, yTL, xBR, yBR;
 	UBYTE		count = 0;
 	STRUCTURE_STATS	*psBuilding = (STRUCTURE_STATS *)psStat;
-	GATEWAY		*psGate;
 
 	xTL = xx - 1;
 	yTL = yy - 1;
@@ -5093,7 +5091,7 @@ bool structDoubleCheck(BASE_STATS *psStat, UDWORD xx, UDWORD yy, SDWORD maxBlock
 	yBR = (yy + psBuilding->baseBreadth);
 
 	// check against building in a gateway, as this can seriously block AI passages
-	for (psGate = gwGetGateways(); psGate; psGate = psGate->psNext)
+	for (auto psGate : gwGetGateways())
 	{
 		for (x = xx; x <= xBR; x++)
 		{

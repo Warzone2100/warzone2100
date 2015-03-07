@@ -1732,7 +1732,7 @@ static bool defenseLocation(bool variantB)
 {
 	SDWORD		*pX, *pY, statIndex, statIndex2;
 	UDWORD		x, y, gX, gY, dist, player, nearestSoFar, count;
-	GATEWAY		*psGate, *psChosenGate;
+	GATEWAY		*psChosenGate;
 	DROID		*psDroid;
 	UDWORD		x1, x2, x3, x4, y1, y2, y3, y4;
 	bool		noWater;
@@ -1778,7 +1778,7 @@ static bool defenseLocation(bool variantB)
 	// go down the gateways, find the nearest gateway with >1 empty tiles
 	nearestSoFar = UDWORD_MAX;
 	psChosenGate = NULL;
-	for (psGate = gwGetGateways(); psGate; psGate = psGate->psNext)
+	for (auto psGate : gwGetGateways())
 	{
 		if (auxTile(psGate->x1, psGate->y1, player) & AUXBITS_THREAT)
 		{

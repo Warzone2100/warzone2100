@@ -26,14 +26,16 @@
 
 #include "lib/framework/frame.h"
 
-#include "lib/framework/listmacs.h"
 #include "map.h"
 #include "wrappers.h"
 
 #include "gateway.h"
 
 /// the list of gateways on the current map
-static GATEWAY	*psGateways;
+static GATEWAY_LIST psGateways;
+
+// Prototypes
+static void gwFreeGateway(GATEWAY *psDel);
 
 /******************************************************************************************************/
 /*                   Gateway data access functions                                                    */
@@ -68,27 +70,19 @@ static void gwClearGatewayFlag(SDWORD x, SDWORD y)
 // Initialise the gateway system
 bool gwInitialise(void)
 {
-	ASSERT( psGateways == NULL, "gwInitialise: gateway list has not been reset" );
-
-	psGateways = NULL;
-
+	psGateways.clear();
 	return true;
 }
-
 
 // Shutdown the gateway system
 void gwShutDown(void)
 {
-	GATEWAY *psNext;
-
-	while (psGateways != NULL)
+	for (auto psGateway : psGateways)
 	{
-		psNext = psGateways->psNext;
-		gwFreeGateway(psGateways);
-		psGateways = psNext;
+		gwFreeGateway(psGateway);
 	}
+	psGateways.clear();
 }
-
 
 // Add a gateway to the system
 bool gwNewGateway(SDWORD x1, SDWORD y1, SDWORD x2, SDWORD y2)
@@ -125,8 +119,7 @@ bool gwNewGateway(SDWORD x1, SDWORD y1, SDWORD x2, SDWORD y2)
 	psNew->y2 = MIN(y2, mapHeight - 4);
 
 	// add the gateway to the list
-	psNew->psNext = psGateways;
-	psGateways = psNew;
+	psGateways.push_back(psNew);
 
 	// set the map flags
 	if (psNew->x1 == psNew->x2)
@@ -149,34 +142,21 @@ bool gwNewGateway(SDWORD x1, SDWORD y1, SDWORD x2, SDWORD y2)
 	return true;
 }
 
-
 // Return the number of gateways.
-UDWORD gwNumGateways(void)
+int gwNumGateways()
 {
-	GATEWAY		*psCurr;
-	UDWORD NumGateways = 0;
-
-	for(psCurr = psGateways; psCurr; psCurr = psCurr->psNext)
-	{
-		NumGateways++;
-	}
-
-	return NumGateways;
+	return psGateways.size();
 }
 
-
-GATEWAY *gwGetGateways(void)
+GATEWAY_LIST &gwGetGateways()
 {
 	return psGateways;
 }
 
-
 // Release a gateway
-void gwFreeGateway(GATEWAY *psDel)
+static void gwFreeGateway(GATEWAY *psDel)
 {
-	SDWORD	pos;
-
-	LIST_REMOVE(psGateways, psDel, GATEWAY);
+	int pos;
 
 	if (psMapTiles) // this lines fixes the bug where we were closing the gateways after freeing the map
 	{
@@ -201,11 +181,4 @@ void gwFreeGateway(GATEWAY *psDel)
 	}
 
 	free(psDel);
-}
-
-void gwSetGateways(GATEWAY *ps)
-{
-	// Notice that we do not recreate the gateway flags on tiles here. This is because we usually use this
-	// function to swap main and mission maps, where it will not be necessary.
-	psGateways = ps;
 }

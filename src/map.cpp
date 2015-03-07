@@ -919,16 +919,9 @@ bool mapSave(char **ppFileData, UDWORD *pFileSize)
 	MAP_SAVEHEADER	*psHeader = NULL;
 	MAP_SAVETILE	*psTileData = NULL;
 	MAPTILE	*psTile = NULL;
-	GATEWAY *psCurrGate = NULL;
 	GATEWAY_SAVEHEADER *psGateHeader = NULL;
 	GATEWAY_SAVE *psGate = NULL;
-	SDWORD	numGateways = 0;
-
-	// find the number of non water gateways
-	for(psCurrGate = gwGetGateways(); psCurrGate; psCurrGate = psCurrGate->psNext)
-	{
-		numGateways += 1;
-	}
+	SDWORD	numGateways = gwNumGateways();
 
 	/* Allocate the data buffer */
 	*pFileSize = SAVE_HEADER_SIZE + mapWidth*mapHeight * SAVE_TILE_SIZE;
@@ -992,7 +985,7 @@ bool mapSave(char **ppFileData, UDWORD *pFileSize)
 	psGate = (GATEWAY_SAVE*)(psGateHeader+1);
 
 	// Put the gateway data.
-	for(psCurrGate = gwGetGateways(); psCurrGate; psCurrGate = psCurrGate->psNext)
+	for (auto psCurrGate : gwGetGateways())
 	{
 		psGate->x0 = psCurrGate->x1;
 		psGate->y0 = psCurrGate->y1;
@@ -1000,7 +993,6 @@ bool mapSave(char **ppFileData, UDWORD *pFileSize)
 		psGate->y1 = psCurrGate->y2;
 		ASSERT(psGate->x0 == psGate->x1 || psGate->y0 == psGate->y1, "Invalid gateway coordinates (%d, %d, %d, %d)",
 		       psGate->x0, psGate->y0, psGate->x1, psGate->y1);
-		psGate++;
 	}
 
 	return true;

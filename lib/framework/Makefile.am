@@ -33,7 +33,6 @@ noinst_HEADERS = \
 	i18n.h \
 	input.h \
 	lexer_input.h \
-	listmacs.h \
 	macros.h \
 	math_ext.h \
 	opengl.h \

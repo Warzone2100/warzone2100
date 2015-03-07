@@ -1261,7 +1261,6 @@
 		0246A0A70BD3CBD5004D1C70 /* frameresource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = frameresource.h; path = ../lib/framework/frameresource.h; sourceTree = SOURCE_ROOT; };
 		0246A0A80BD3CBD5004D1C70 /* gettext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gettext.h; path = ../lib/framework/gettext.h; sourceTree = SOURCE_ROOT; };
 		0246A0AC0BD3CBD5004D1C70 /* input.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = input.h; path = ../lib/framework/input.h; sourceTree = SOURCE_ROOT; };
-		0246A0AD0BD3CBD5004D1C70 /* listmacs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = listmacs.h; path = ../lib/framework/listmacs.h; sourceTree = SOURCE_ROOT; };
 		0246A0AE0BD3CBD5004D1C70 /* macros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = macros.h; path = ../lib/framework/macros.h; sourceTree = SOURCE_ROOT; };
 		0246A0B00BD3CBD5004D1C70 /* resly.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = resly.h; path = ../lib/framework/resly.h; sourceTree = SOURCE_ROOT; };
 		0246A0B70BD3CBD5004D1C70 /* strres.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = strres.cpp; path = ../lib/framework/strres.cpp; sourceTree = SOURCE_ROOT; };
@@ -2344,7 +2343,6 @@
 				0246A0A70BD3CBD5004D1C70 /* frameresource.h */,
 				0246A0A80BD3CBD5004D1C70 /* gettext.h */,
 				0246A0AC0BD3CBD5004D1C70 /* input.h */,
-				0246A0AD0BD3CBD5004D1C70 /* listmacs.h */,
 				0246A0AE0BD3CBD5004D1C70 /* macros.h */,
 				0246A0B00BD3CBD5004D1C70 /* resly.h */,
 				0246A0B70BD3CBD5004D1C70 /* strres.cpp */,

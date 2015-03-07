@@ -219,7 +219,6 @@
     <ClInclude Include="i18n.h" />
     <ClInclude Include="input.h" />
     <ClInclude Include="lexer_input.h" />
-    <ClInclude Include="listmacs.h" />
     <ClInclude Include="macros.h" />
     <ClInclude Include="math_ext.h" />
     <ClInclude Include="opengl.h" />

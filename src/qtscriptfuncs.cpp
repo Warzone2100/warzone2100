@@ -1307,7 +1307,7 @@ static QScriptValue js_enumGateways(QScriptContext *, QScriptEngine *engine)
 {
 	QScriptValue result = engine->newArray(gwNumGateways());
 	int i = 0;
-	for (GATEWAY *psGateway = gwGetGateways(); psGateway; psGateway = psGateway->psNext)
+	for (auto psGateway : gwGetGateways())
 	{
 		QScriptValue v = engine->newObject();
 		v.setProperty("x1", psGateway->x1, QScriptValue::ReadOnly);

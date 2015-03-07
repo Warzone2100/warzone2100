@@ -71,7 +71,6 @@
 #include "visibility.h"
 #include "mapgrid.h"
 #include "cluster.h"
-#include "gateway.h"
 #include "selection.h"
 #include "scores.h"
 #include "keymap.h"
@@ -252,7 +251,8 @@ void initMission(void)
 
 	mission.ETA = -1;
 	mission.startTime = 0;
-	mission.psGateways = NULL;
+	ASSERT(mission.psGateways.size() == 0, "Mission map has gateways");
+	mission.psGateways.clear(); // just in case
 	mission.mapHeight = 0;
 	mission.mapWidth = 0;
 	for (int i = 0; i < ARRAY_SIZE(mission.psBlockMap); ++i)
@@ -344,7 +344,7 @@ bool missionShutDown(void)
 			psAuxMap[i] = mission.psAuxMap[i];
 			mission.psAuxMap[i] = NULL;
 		}
-		gwSetGateways(mission.psGateways);
+		std::swap(mission.psGateways, gwGetGateways());
 	}
 
 	// sorry if this breaks something - but it looks like it's what should happen - John
@@ -725,8 +725,7 @@ static void saveMissionData(void)
 	mission.scrollMinY = scrollMinY;
 	mission.scrollMaxX = scrollMaxX;
 	mission.scrollMaxY = scrollMaxY;
-	mission.psGateways = gwGetGateways();
-	gwSetGateways(NULL);
+	std::swap(mission.psGateways, gwGetGateways());
 	// save the selectedPlayer's LZ
 	mission.homeLZ_X = getLandingX(selectedPlayer);
 	mission.homeLZ_Y = getLandingY(selectedPlayer);
@@ -884,7 +883,8 @@ void restoreMissionData(void)
 	scrollMinY = mission.scrollMinY;
 	scrollMaxX = mission.scrollMaxX;
 	scrollMaxY = mission.scrollMaxY;
-	gwSetGateways(mission.psGateways);
+	ASSERT(mission.psGateways.size() == 0, "Mission map has gateways");
+	std::swap(mission.psGateways, gwGetGateways());
 	//and clear the mission pointers
 	mission.psMapTiles	= NULL;
 	mission.mapWidth	= 0;
@@ -893,7 +893,7 @@ void restoreMissionData(void)
 	mission.scrollMinY	= 0;
 	mission.scrollMaxX	= 0;
 	mission.scrollMaxY	= 0;
-	mission.psGateways	= NULL;
+	mission.psGateways.clear();
 
 	//reset the current structure lists
 	setCurrentStructQuantity(false);
@@ -1385,9 +1385,7 @@ void swapMissionPointers(void)
 		std::swap(psAuxMap[i],   mission.psAuxMap[i]);
 	}
 	//swap gateway zones
-	GATEWAY *gateway = gwGetGateways();
-	gwSetGateways(mission.psGateways);
-	mission.psGateways = gateway;
+	std::swap(mission.psGateways, gwGetGateways());
 	std::swap(scrollMinX, mission.scrollMinX);
 	std::swap(scrollMinY, mission.scrollMinY);
 	std::swap(scrollMaxX, mission.scrollMaxX);
