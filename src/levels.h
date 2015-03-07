@@ -66,15 +66,13 @@ struct LEVEL_DATASET
 	LEVEL_DATASET *psBaseData;                      // LEVEL_DATASET that must be loaded for this level to load
 	LEVEL_DATASET *psChange;                        // LEVEL_DATASET used when changing to this level from another
 
-	LEVEL_DATASET *psNext;
-
 	char *          realFileName;                   ///< Filename of the file containing the level, or NULL if the level is built in.
 	Sha256          realFileHash;                   ///< Use levGetFileHash() to read this value. SHA-256 hash of the file containing the level, or 0x00×32 if the level is built in or not yet calculated.
 };
 
+typedef std::list<LEVEL_DATASET *> LEVEL_LIST;
 
-// the current level descriptions
-extern LEVEL_DATASET	*psLevels;
+LEVEL_LIST enumerateMultiMaps(int camToUse, int numPlayers);
 
 // parse a level description data file
 bool levParse(const char* buffer, size_t size, searchPathMode datadir, bool ignoreWrf, char const *realFileName);

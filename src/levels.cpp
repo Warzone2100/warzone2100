@@ -29,7 +29,6 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/frameresource.h"
-#include "lib/framework/listmacs.h"
 #include "lib/framework/file.h"
 #include "lib/framework/crc.h"
 #include "lib/framework/physfs_ext.h"
@@ -64,14 +63,14 @@ extern int lev_lex_destroy(void);
 static	char	currentLevelName[32] = { "main" };
 
 // the current level descriptions
-LEVEL_DATASET	*psLevels = NULL;
+LEVEL_LIST psLevels;
 
 // the currently loaded data set
 static LEVEL_DATASET	*psBaseData = NULL;
 static LEVEL_DATASET	*psCurrLevel = NULL;
 
 // dummy level data for single WRF loads
-static LEVEL_DATASET	sSingleWRF = {LDS_COMPLETE, 0, 0, 0, mod_clean, {0}, 0, 0, 0, NULL, {{0}}};
+static LEVEL_DATASET	sSingleWRF = {LDS_COMPLETE, 0, 0, 0, mod_clean, {0}, 0, 0, 0, {{0}}};
 
 // return values from the lexer
 char *pLevToken;
@@ -96,7 +95,7 @@ enum LEVELPARSER_STATE
 // initialise the level system
 bool levInitialise(void)
 {
-	psLevels = NULL;
+	psLevels.clear();
 	psBaseData = NULL;
 	psCurrLevel = NULL;
 
@@ -111,12 +110,8 @@ SDWORD getLevelLoadType(void)
 // shutdown the level system
 void levShutDown(void)
 {
-	while (psLevels != NULL)
+	for (auto toDelete : psLevels)
 	{
-		LEVEL_DATASET * const toDelete = psLevels;
-
-		psLevels = psLevels->psNext;
-
 		for (int i = 0; i < ARRAY_SIZE(toDelete->apDataFiles); ++i)
 		{
 			if (toDelete->apDataFiles[i] != NULL)
@@ -129,9 +124,8 @@ void levShutDown(void)
 		free(toDelete->realFileName);
 		free(toDelete);
 	}
-	psLevels = NULL;
+	psLevels.clear();
 }
-
 
 // error report function for the level parser
 void lev_error(const char* msg)
@@ -151,9 +145,9 @@ LEVEL_DATASET *levFindDataSet(char const *name, Sha256 const *hash)
 		hash = NULL;  // Don't check hash if it's just 0000000000000000000000000000000000000000000000000000000000000000. Assuming real map files probably won't have that particular SHA-256 hash.
 	}
 
-	for (LEVEL_DATASET *psNewLevel = psLevels; psNewLevel != NULL; psNewLevel = psNewLevel->psNext)
+	for (auto psNewLevel : psLevels)
 	{
-		if (psNewLevel->pName != NULL && strcmp(psNewLevel->pName, name) == 0)
+		if (psNewLevel->pName && strcmp(psNewLevel->pName, name) == 0)
 		{
 			if (hash == NULL || levGetFileHash(psNewLevel) == *hash)
 			{
@@ -235,7 +229,7 @@ bool levParse(const char* buffer, size_t size, searchPathMode datadir, bool igno
 				psDataSet->dataDir = datadir;
 				psDataSet->realFileName = realFileName != NULL? strdup(realFileName) : NULL;
 				psDataSet->realFileHash.setZero();  // The hash is only calculated on demand; for example, if the map name matches.
-				LIST_APPEND(psLevels, psDataSet, LEVEL_DATASET);
+				psLevels.push_back(psDataSet);
 				currData = 0;
 
 				// set the dataset type
@@ -1049,4 +1043,39 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 	triggerEvent(TRIGGER_GAME_LOADED);
 
 	return true;
+}
+
+/// returns maps of the right 'type'
+LEVEL_LIST enumerateMultiMaps(int camToUse, int numPlayers)
+{
+	LEVEL_LIST list;
+
+	for (auto lev : psLevels)
+	{
+		if (game.type == SKIRMISH)
+		{
+			int cam;
+
+			if (lev->type == MULTI_SKIRMISH2)
+			{
+				cam = 2;
+			}
+			else if (lev->type == MULTI_SKIRMISH3)
+			{
+				cam = 3;
+			}
+			else
+			{
+				cam = 1;
+			}
+			if ((lev->type == SKIRMISH || lev->type == MULTI_SKIRMISH2 || lev->type == MULTI_SKIRMISH3)
+			    && (numPlayers == 0 || numPlayers == lev->players)
+			    && cam == camToUse)
+			{
+				list.push_front(lev);
+			}
+		}
+	}
+
+	return list;
 }

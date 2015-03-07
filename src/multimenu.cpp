@@ -176,49 +176,6 @@ static void SetPlayerTextColor( int mode, UDWORD player )
 		iV_SetTextColour(WZCOL_RED);			// Enemy color
 	}
 }
-// ////////////////////////////////////////////////////////////////////////////
-// enumerates maps in the gamedesc file.
-// returns only maps that are valid the right 'type'
-static LEVEL_DATASET *enumerateMultiMaps(bool first, unsigned camToUse, unsigned numPlayers)
-{
-	static LEVEL_DATASET *lev;
-	unsigned int cam;
-
-	if(first)
-	{
-		lev = psLevels;
-	}
-	while(lev)
-	{
-		if (game.type == SKIRMISH)
-		{
-			if (lev->type == MULTI_SKIRMISH2)
-			{
-				cam = 2;
-			}
-			else if (lev->type == MULTI_SKIRMISH3)
-			{
-				cam = 3;
-			}
-			else
-			{
-				cam = 1;
-			}
-			if((lev->type == SKIRMISH || lev->type == MULTI_SKIRMISH2 || lev->type == MULTI_SKIRMISH3)
-				&& (numPlayers == 0 || numPlayers == lev->players)
-				&& cam == camToUse )
-			{
-				LEVEL_DATASET *found = lev;
-
-				lev = lev->psNext;
-				return found;
-			}
-		}
-		lev = lev->psNext;
-	}
-
-	return NULL;
-}
 
 // ////////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////////
@@ -468,13 +425,11 @@ void addMultiRequest(const char* searchDir, const char* fileExtension, UDWORD mo
 
 	if(mode == MULTIOP_MAP)
 	{
-		LEVEL_DATASET *mapData;
+		LEVEL_LIST levels = enumerateMultiMaps(mapCam, numPlayers);
 		std::vector<std::pair<int, W_BUTTON *> > buttons;
-		bool first = true;
-		while ((mapData = enumerateMultiMaps(first, mapCam, numPlayers)) != NULL)
-		{
-			first = false;
 
+		for (auto mapData : levels)
+		{
 			// add number of players to string.
 			W_BUTTON *button = new W_BUTTON(requestList);
 			button->id = nextButtonId;
