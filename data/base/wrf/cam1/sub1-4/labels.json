@@ -1,0 +1,41 @@
+{
+	"position_0": { "label": "StartPosition", "pos": [ 576, 6592 ] },
+	"position_1": { "label": "TransporterEntry", "pos": [ 768, 7936 ] },
+	"position_2": { "label": "TransporterExit", "pos": [ 128, 7040 ] },
+
+	"area_0": { "label": "RTLZ", "pos1": [ 6656, 3840 ], "pos2": [ 8192, 5376 ] },
+	"area_1": { "label": "LandingZone1", "pos1": [ 384, 6400 ], "pos2": [ 640, 6656 ] },
+	"area_2": { "label": "LandingZone2", "pos1": [ 7296, 4480 ], "pos2": [ 7552, 4736 ] },
+
+	"area_3": { "label": "SouthScavBase", "pos1" : [ 1600, 6464 ], "pos2": [ 3776, 7872 ] },
+	"object_0": { "label": "SouthScavFactory", "id": 112, "player": 7, "type": 1 },
+	"position_3": { "label": "SouthScavFactoryAssembly", "pos": [ 2624, 6848 ] },
+
+	"area_4": { "label": "NorthScavBase", "pos1" : [ 5696, 1472 ], "pos2": [ 7872, 3264 ] },
+	"object_1": { "label": "NorthScavFactory", "id": 374, "player": 7, "type": 1 },
+	"position_4": { "label": "NorthScavFactoryAssembly", "pos": [ 6720, 1728 ] },
+	"radius_0": { "label": "NorthScavFactoryTrigger", "subscriber": 0, "pos" : [ 7040, 2688 ], "radius": 1280 },
+
+	"area_5": { "label": "NPBase", "pos1" : [ 2368, 960 ], "pos2": [ 5952, 4416 ] },
+	"object_2": { "label": "HeavyNPFactory", "id": 461, "player": 1, "type": 1 },
+	"object_3": { "label": "MediumNPFactory", "id": 480, "player": 1, "type": 1 },
+	"object_4": { "label": "NPCommandCenter", "id": 216, "player": 1, "type": 1 },
+	"object_5": { "label": "NPResearchFacility", "id": 458, "player": 1, "type": 1 },
+	"position_5": { "label": "HeavyNPFactoryAssembly", "pos": [ 3648, 2368 ] },
+	"position_6": { "label": "MediumNPFactoryAssembly", "pos": [ 4032, 1984 ] },
+	"radius_1": { "label": "HeavyNPFactoryTrigger", "subscriber": 0, "pos" : [ 3328, 1536 ], "radius": 1280 },
+	"radius_2": { "label": "MediumNPFactoryTrigger", "subscriber": 0, "pos" : [ 3840, 2688 ], "radius": 1280 },
+
+	"position_7" : { "label": "BuildTower0", "pos": [ 2880, 3264 ] },
+	"position_8" : { "label": "BuildTower1", "pos": [ 3136, 3520 ] },
+	"position_9" : { "label": "BuildTower2", "pos": [ 3392, 3264 ] },
+	"position_10": { "label": "BuildTower3", "pos": [ 5824, 2880 ] },
+	"position_11": { "label": "BuildTower4", "pos": [ 6208, 2880 ] },
+	"position_12": { "label": "BuildTower5", "pos": [ 6336, 3264 ] },
+	"position_13": { "label": "BuildTower6", "pos": [ 4416, 4288 ] },
+	"position_14": { "label": "BuildTower7", "pos": [ 4672, 4288 ] },
+
+	"area_6": { "label": "LandingZoneTrigger", "subscriber": 0, "pos1": [ 7232, 4416 ], "pos2": [ 7744, 4928 ] },
+	"area_7": { "label": "AttackGroupMedium", "pos1": [ 3264, 3008 ], "pos2": [ 3648, 3264 ] },
+	"area_8": { "label": "AttackGroupLight", "pos1": [ 3392, 2112 ], "pos2": [ 3776, 2624 ] }
+}

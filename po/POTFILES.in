@@ -10,6 +10,7 @@ data/base/script/campaign/cam1-2.js
 data/base/script/campaign/cam1-2s.js
 data/base/script/campaign/cam1-3.js
 data/base/script/campaign/cam1-3s.js
+data/base/script/campaign/cam1-4a.js
 data/base/script/campaign/cam1-4as.js
 data/base/script/campaign/cam1a.js
 data/base/script/campaign/cam1b.js
@@ -25,7 +26,6 @@ data/base/script/text/brief.slo
 data/base/script/text/cam1-1-ai.slo
 data/base/script/text/cam1-1.slo
 data/base/script/text/cam1-1s.slo
-data/base/script/text/cam1-4a.slo
 data/base/script/text/cam1-5.slo
 data/base/script/text/cam1-5s.slo
 data/base/script/text/cam1-7.slo
@@ -200,10 +200,10 @@ lib/widget/tip.cpp
 lib/widget/widget.cpp
 po/custom/mac-infoplist.txt
 po/custom/warzone2100.desktop.txt
-src/animobj.cpp
 src/action.cpp
 src/advvis.cpp
 src/ai.cpp
+src/animobj.cpp
 src/astar.cpp
 src/atmos.cpp
 src/aud.cpp

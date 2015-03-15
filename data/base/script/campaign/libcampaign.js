@@ -1160,7 +1160,21 @@ function camStopManagingGroup(group)
 //;; via \texttt{camQueueDroidProduction()} mechanism.
 function camManageTrucks(player)
 {
-	__camTruckInfo[player] = 1;
+	__camTruckInfo[player] = { enabled: 1, queue: [] };
+}
+
+//;; \subsection{camQueueBuilding(player, stat[, pos])}
+//;; Assuming truck management is enabled for the player, issue an order
+//;; to build a specific building near a certain position. The order
+//;; would be issued once as soon as a free truck becomes available. It will
+//;; not be re-issued in case the truck is destroyed before the building
+//;; is finished. If position is unspecified, the building would be built
+//;; near the first available truck. Otherwise, position may be a label
+//;; or a POSITION-like object.
+function camQueueBuilding(player, stat, pos)
+{
+	var ti = __camTruckInfo[player];
+	ti.queue[ti.queue.length] = { stat: stat, pos: camMakePos(pos) };
 }
 
 //;; \subsection{camOrderToString(order)}
@@ -1515,43 +1529,103 @@ function __camCheckGroupMorale(group)
 	}
 }
 
+function __camEnumFreeTrucks(player)
+{
+	var rawDroids = enumDroid(player, DROID_CONSTRUCT);
+	var droids = [];
+	for (var i = 0; i < rawDroids.length; ++i)
+	{
+		var droid = rawDroids[i];
+		if (droid.order !== DORDER_BUILD && droid.order !== DORDER_HELPBUILD
+		                                 && droid.order !== DORDER_LINEBUILD)
+		{
+			droids[droids.length] = droid;
+		}
+	}
+	return droids;
+}
+
+function __camGetClosestTruck(player, pos)
+{
+	var droids = __camEnumFreeTrucks(player);
+	if (droids.length <= 0)
+		return undefined;
+
+	// Find out which one is the closest.
+	var minDroid = droids[0];
+	var minDist = camDist(minDroid, pos);
+	for (var i = 1; i < droids.length; ++i)
+	{
+		var droid = droids[i];
+		if (!droidCanReach(droid, pos.x, pos.y))
+			continue;
+		var dist = camDist(droid, pos);
+		if (dist < minDist)
+		{
+			minDist = dist;
+			minDroid = droid;
+		}
+	}
+	return minDroid;
+}
+
 function __camTruckTick()
 {
+	// Issue truck orders for each player.
+	// See comments inside the loop to understand priority.
 	for (player in __camTruckInfo)
 	{
+		var ti = __camTruckInfo[player];
+
+		// First, build things that were explicitly ordered.
+		if (ti.queue.length > 0)
+		{
+			var qi = ti.queue[0];
+			var pos = qi.pos;
+			var truck;
+			if (camDef(pos))
+			{
+				// Find the truck most suitable for the job.
+				truck = __camGetClosestTruck(player, pos);
+				if (!camDef(truck))
+					continue;
+			}
+			else
+			{
+				// Build near any truck if pos was not specified.
+				var droids = __camEnumFreeTrucks(player);
+				if (droids.length <= 0)
+					continue;
+				truck = droids[0];
+				pos = truck;
+			}
+
+			enableStructure(qi.stat, player);
+			var loc = pickStructLocation(truck, qi.stat, pos.x, pos.y);
+			if (camDef(loc))
+			{
+				if (orderDroidBuild(truck, DORDER_BUILD,
+				                    qi.stat, loc.x, loc.y))
+				{
+					ti.queue.shift(); // consider it handled
+					continue;
+				}
+			}
+		}
+
+		// Then, capture free oils.
 		var oils = enumFeature(-1, "OilResource");
 		if (oils.length === 0)
-				return;
-		var rawDroids = enumDroid(player, DROID_CONSTRUCT);
-		var droids = [];
-		for (var i = 0; i < rawDroids.length; ++i)
-		{
-			var droid = rawDroids[i];
-			if (droid.order !== DORDER_BUILD && droid.order !== DORDER_HELPBUILD
-			                                 && droid.order !== DORDER_LINEBUILD)
-			{
-				droids[droids.length] = droid;
-			}
-		}
-		if (droids.length === 0)
 			continue;
-		var oil = oils[0], minDroid = droids[0];
-		var minDist = camDist(minDroid, oil);
-		for (var i = 1; i < droids.length; ++i)
+		var oil = oils[0];
+		var truck = __camGetClosestTruck(player, oil);
+		if (camDef(truck))
 		{
-			var droid = droids[i];
-			if (!droidCanReach(droid, oil.x, oil.y))
-				continue;
-			var dist = camDist(droid, oil);
-			if (dist < minDist)
-			{
-				minDist = dist;
-				minDroid = droid;
-			}
+			enableStructure("A0ResourceExtractor", player);
+			orderDroidBuild(minDroid, DORDER_BUILD, "A0ResourceExtractor",
+			                oil.x, oil.y);
+			continue;
 		}
-		enableStructure("A0ResourceExtractor", minDroid.player);
-		orderDroidBuild(minDroid, DORDER_BUILD, "A0ResourceExtractor",
-		                oil.x, oil.y);
 	}
 }
 
