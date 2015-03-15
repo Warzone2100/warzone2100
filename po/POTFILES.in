@@ -143,7 +143,6 @@ lib/framework/trig.cpp
 lib/framework/utf.cpp
 lib/framework/wzconfig.cpp
 lib/gamelib/anim.cpp
-lib/gamelib/animobj.cpp
 lib/gamelib/gtime.cpp
 lib/gamelib/hashtable.cpp
 lib/ivis_opengl/bitimage.cpp
@@ -201,6 +200,7 @@ lib/widget/tip.cpp
 lib/widget/widget.cpp
 po/custom/mac-infoplist.txt
 po/custom/warzone2100.desktop.txt
+src/animobj.cpp
 src/action.cpp
 src/advvis.cpp
 src/ai.cpp
