@@ -43,7 +43,7 @@
 typedef QMap<QString, iIMDShape *> MODELMAP;
 static MODELMAP models;
 
-iIMDShape *iV_ProcessIMD(const char **ppFileData, const char *FileDataEnd);
+static iIMDShape *iV_ProcessIMD(const char **ppFileData, const char *FileDataEnd);
 
 iIMDShape::iIMDShape()
 {
@@ -728,9 +728,7 @@ static iIMDShape *_imd_load_level(const char **ppFileData, const char *FileDataE
 		}
 		pFileData += cnt;
 
-		// check for next level ... or might be a BSP - This should handle an imd if it has a BSP tree attached to it
-		// might be "BSP" or "LEVEL"
-		if (strcmp(buffer, "LEVEL") == 0)
+		if (strcmp(buffer, "LEVEL") == 0)	// check for next level
 		{
 			debug(LOG_3D, "imd[_load_level] = npoints %d, npolys %d", s->npoints, s->npolys);
 			s->next = _imd_load_level(&pFileData, FileDataEnd, nlevels - 1, pieVersion);
@@ -791,13 +789,13 @@ static iIMDShape *_imd_load_level(const char **ppFileData, const char *FileDataE
  * \return The shape, constructed from the data read
  */
 // ppFileData is incremented to the end of the file on exit!
-iIMDShape *iV_ProcessIMD(const char **ppFileData, const char *FileDataEnd)
+static iIMDShape *iV_ProcessIMD(const char **ppFileData, const char *FileDataEnd)
 {
 	const char *pFileName = GetLastResourceFilename(); // Last loaded filename
 	const char *pFileData = *ppFileData;
 	char buffer[PATH_MAX], texfile[PATH_MAX], normalfile[PATH_MAX], specfile[PATH_MAX];
 	int cnt, nlevels;
-	iIMDShape *shape, *psShape;
+	iIMDShape *shape;
 	UDWORD level;
 	int32_t imd_version;
 	uint32_t imd_flags;
@@ -1021,7 +1019,11 @@ iIMDShape *iV_ProcessIMD(const char **ppFileData, const char *FileDataEnd)
 		return NULL;
 	}
 
-	shape->shaderProgram = shader;
+	// assign shader to all levels
+	for (iIMDShape *psShape = shape; psShape != NULL; psShape = psShape->next)
+	{
+		shape->shaderProgram = shader;
+	}
 
 	// load texture page if specified
 	if (bTextured)
@@ -1047,7 +1049,7 @@ iIMDShape *iV_ProcessIMD(const char **ppFileData, const char *FileDataEnd)
 		}
 
 		// assign tex pages and flags to all levels
-		for (psShape = shape; psShape != NULL; psShape = psShape->next)
+		for (iIMDShape *psShape = shape; psShape != NULL; psShape = psShape->next)
 		{
 			psShape->texpage = texpage;
 			psShape->normalpage = normalpage;
@@ -1067,7 +1069,7 @@ iIMDShape *iV_ProcessIMD(const char **ppFileData, const char *FileDataEnd)
 			ASSERT_OR_RETURN(shape, texpage_mask >= 0, "%s could not load tcmask %s", pFileName, texfile);
 
 			// Propagate settings through levels
-			for (psShape = shape; psShape != NULL; psShape = psShape->next)
+			for (iIMDShape *psShape = shape; psShape != NULL; psShape = psShape->next)
 			{
 				psShape->tcmaskpage = texpage_mask;
 			}

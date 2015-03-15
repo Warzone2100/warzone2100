@@ -322,7 +322,7 @@ void renderParticle(ATPART *psPart)
 	dv.x = psPart->position.x - player.p.x;
 	dv.y = psPart->position.y;
 	dv.z = -(psPart->position.z - player.p.z);
-	pie_MatBegin();					/* Push the current matrix */
+	pie_MatBegin(true);					/* Push the current matrix */
 	pie_TRANSLATE(dv.x, dv.y, dv.z);
 	/* Make it face camera */
 	pie_MatRotY(-player.r.y);
