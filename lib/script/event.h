@@ -36,7 +36,7 @@ struct VAL_CHUNK
 {
 	INTERP_VAL		asVals[CONTEXT_VALS];
 
-	VAL_CHUNK *             psNext;
+	VAL_CHUNK              *psNext;
 };
 
 // Whether a context is released when there are no active triggers for it
@@ -55,7 +55,7 @@ struct SCRIPT_CONTEXT
 	CONTEXT_RELEASE		release;		// Whether to release the context when there are no triggers
 	SWORD			id;
 
-	SCRIPT_CONTEXT *        psNext;
+	SCRIPT_CONTEXT         *psNext;
 };
 
 /*
@@ -72,7 +72,7 @@ struct ACTIVE_TRIGGER
 	UWORD				event;
 	UWORD				offset;
 	int32_t				deactivated;	// Whether the trigger is marked for deletion
-	ACTIVE_TRIGGER *        psNext;
+	ACTIVE_TRIGGER         *psNext;
 };
 
 // ID numbers for each user type
@@ -131,11 +131,11 @@ extern void eventShutDown(void);
 
 // add a TR_PAUSE trigger to the event system.
 extern bool eventAddPauseTrigger(SCRIPT_CONTEXT *psContext, UDWORD event, UDWORD offset,
-						  UDWORD time);
+                                 UDWORD time);
 
 // Load a trigger into the system from a save game
 extern bool eventLoadTrigger(UDWORD time, SCRIPT_CONTEXT *psContext,
-					  SDWORD type, SDWORD trigger, UDWORD event, UDWORD offset);
+                             SDWORD type, SDWORD trigger, UDWORD event, UDWORD offset);
 
 //resets the event timer - updateTime
 extern void eventTimeReset(UDWORD initTime);

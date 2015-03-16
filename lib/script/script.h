@@ -102,7 +102,7 @@ extern UDWORD retStackCallDepth(void);
  *  \return a valid, non-null pointer on success,
  *          otherwise a null pointer on failure.
  */
-extern SCRIPT_CODE* scriptCompile(PHYSFS_file* fileHandle, SCR_DEBUGTYPE debugType);
+extern SCRIPT_CODE *scriptCompile(PHYSFS_file *fileHandle, SCR_DEBUGTYPE debugType);
 
 /* Free a SCRIPT_CODE structure */
 extern void scriptFreeCode(SCRIPT_CODE *psCode);
@@ -119,7 +119,7 @@ extern const char *scriptFunctionToString(SCRIPT_FUNC function) WZ_DECL_PURE;
 
 /* Run a compiled script */
 extern bool interpRunScript(SCRIPT_CONTEXT *psContext, INTERP_RUNTYPE runType,
-							UDWORD index, UDWORD offset);
+                            UDWORD index, UDWORD offset);
 
 
 /***********************************************************************************
