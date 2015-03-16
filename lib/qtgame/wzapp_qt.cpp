@@ -324,31 +324,31 @@ MOUSE_KEY_CODE WzMainWindow::buttonToIdx(Qt::MouseButton button)
 
 	switch (button)
 	{
-		case Qt::LeftButton:
-			idx = MOUSE_LMB;
-			debug(LOG_INPUT, "MOUSE_LMB clicked");
-			break;
-		case Qt::RightButton:
-			idx = MOUSE_RMB;
-			debug(LOG_INPUT, "MOUSE_RMB clicked");
-			break;
-		case Qt::MidButton:
-			idx = MOUSE_MMB;
-			debug(LOG_INPUT, "MOUSE_MMB clicked");
-			break;
-		case Qt::XButton1:
-			idx = MOUSE_MMB;
-			debug(LOG_INPUT, "MOUSE_MMB (Xbutton1) clicked");
-			break;
-		case Qt::XButton2:
-			idx = MOUSE_MMB;
-			debug(LOG_INPUT, "MOUSE_MMB (Xbutton2) clicked");
-			break;
-		default:
-		case Qt::NoButton:
-			idx = MOUSE_BAD;
-			debug(LOG_INPUT, "NoButton (strange case ?");
-			break;	// strange case
+	case Qt::LeftButton:
+		idx = MOUSE_LMB;
+		debug(LOG_INPUT, "MOUSE_LMB clicked");
+		break;
+	case Qt::RightButton:
+		idx = MOUSE_RMB;
+		debug(LOG_INPUT, "MOUSE_RMB clicked");
+		break;
+	case Qt::MidButton:
+		idx = MOUSE_MMB;
+		debug(LOG_INPUT, "MOUSE_MMB clicked");
+		break;
+	case Qt::XButton1:
+		idx = MOUSE_MMB;
+		debug(LOG_INPUT, "MOUSE_MMB (Xbutton1) clicked");
+		break;
+	case Qt::XButton2:
+		idx = MOUSE_MMB;
+		debug(LOG_INPUT, "MOUSE_MMB (Xbutton2) clicked");
+		break;
+	default:
+	case Qt::NoButton:
+		idx = MOUSE_BAD;
+		debug(LOG_INPUT, "NoButton (strange case ?");
+		break;	// strange case
 	}
 
 	return idx;
@@ -379,8 +379,8 @@ void WzMainWindow::mousePressEvent(QMouseEvent *event)
 	aMouseState[idx].pressPos.y = mouseYPos;
 
 	if (aMouseState[idx].state == KEY_UP
-		|| aMouseState[idx].state == KEY_RELEASED
-		|| aMouseState[idx].state == KEY_PRESSRELEASE)
+	    || aMouseState[idx].state == KEY_RELEASED
+	    || aMouseState[idx].state == KEY_PRESSRELEASE)
 	{
 		if (!presses.testFlag(Qt::MidButton)) //skip doubleclick check for wheel
 		{
@@ -453,8 +453,8 @@ void WzMainWindow::mouseReleaseEvent(QMouseEvent *event)
 		aMouseState[idx].state = KEY_PRESSRELEASE;
 	}
 	else if (aMouseState[idx].state == KEY_DOWN
-			|| aMouseState[idx].state == KEY_DRAG
-			|| aMouseState[idx].state == KEY_DOUBLECLICK)
+	         || aMouseState[idx].state == KEY_DRAG
+	         || aMouseState[idx].state == KEY_DOUBLECLICK)
 	{
 		aMouseState[idx].state = KEY_RELEASED;
 	}
@@ -465,8 +465,8 @@ static unsigned int setKey(int code, bool pressed)
 	if (pressed)
 	{
 		if (aKeyState[code].state == KEY_UP ||
-			aKeyState[code].state == KEY_RELEASED ||
-			aKeyState[code].state == KEY_PRESSRELEASE)
+		    aKeyState[code].state == KEY_RELEASED ||
+		    aKeyState[code].state == KEY_PRESSRELEASE)
 		{
 			// whether double key press or not
 			aKeyState[code].state = KEY_PRESSED;
@@ -494,169 +494,169 @@ void WzMainWindow::realHandleKeyEvent(QKeyEvent *event, bool pressed)
 
 	switch (event->text().size())
 	{
-		case 0:
-			debug(LOG_INPUT, "Key%s 0x%04X, isKeypad=%d", pressed ? "Down" : "Up  ", event->key(), isKeypad);
-		case 1:
-			debug(LOG_INPUT, "Key%s 0x%04X, isKeypad=%d, 0x%04X", pressed ? "Down" : "Up  ", event->key(), isKeypad, event->text().unicode()[0].unicode());
-			break;
-		case 2:
-			debug(LOG_INPUT, "Key%s 0x%04X, isKeypad=%d, 0x%04X, 0x%04X", pressed ? "Down" : "Up  ", event->key(), isKeypad, event->text().unicode()[0].unicode(), event->text().unicode()[1].unicode());
-			break;
-		case 3:
-			debug(LOG_INPUT, "Key%s 0x%04X, isKeypad=%d, 0x%04X, 0x%04X, ...", pressed ? "Down" : "Up  ", event->key(), isKeypad, event->text().unicode()[0].unicode(), event->text().unicode()[1].unicode());
-			break;
+	case 0:
+		debug(LOG_INPUT, "Key%s 0x%04X, isKeypad=%d", pressed ? "Down" : "Up  ", event->key(), isKeypad);
+	case 1:
+		debug(LOG_INPUT, "Key%s 0x%04X, isKeypad=%d, 0x%04X", pressed ? "Down" : "Up  ", event->key(), isKeypad, event->text().unicode()[0].unicode());
+		break;
+	case 2:
+		debug(LOG_INPUT, "Key%s 0x%04X, isKeypad=%d, 0x%04X, 0x%04X", pressed ? "Down" : "Up  ", event->key(), isKeypad, event->text().unicode()[0].unicode(), event->text().unicode()[1].unicode());
+		break;
+	case 3:
+		debug(LOG_INPUT, "Key%s 0x%04X, isKeypad=%d, 0x%04X, 0x%04X, ...", pressed ? "Down" : "Up  ", event->key(), isKeypad, event->text().unicode()[0].unicode(), event->text().unicode()[1].unicode());
+		break;
 	}
 
 	if (!isKeypad)
 	{
 		switch (event->key())
 		{
-			case Qt::Key_Shift              :	lastKey = setKey(KEY_LSHIFT, pressed); break;
+		case Qt::Key_Shift              :	lastKey = setKey(KEY_LSHIFT, pressed); break;
 
-			case Qt::Key_Control            :	lastKey = setKey(KEY_LCTRL, pressed); break;
+		case Qt::Key_Control            :	lastKey = setKey(KEY_LCTRL, pressed); break;
 
-			case Qt::Key_Alt                :	lastKey = setKey(KEY_LALT, pressed); break;
-			case Qt::Key_AltGr              :	lastKey = setKey(KEY_RALT, pressed); break;
+		case Qt::Key_Alt                :	lastKey = setKey(KEY_LALT, pressed); break;
+		case Qt::Key_AltGr              :	lastKey = setKey(KEY_RALT, pressed); break;
 
-			case Qt::Key_Meta               :	lastKey = setKey(KEY_LMETA, pressed); break;
+		case Qt::Key_Meta               :	lastKey = setKey(KEY_LMETA, pressed); break;
 
-			case Qt::Key_Escape             :	lastKey = setKey(KEY_ESC, pressed); break;
-			case Qt::Key_Backspace          :	lastKey = setKey(KEY_BACKSPACE, pressed); break;
-			case Qt::Key_QuoteLeft          :	lastKey = setKey(KEY_BACKQUOTE, pressed); break;
-			case Qt::Key_1                  :	lastKey = setKey(KEY_1, pressed); break;
-			case Qt::Key_2                  :	lastKey = setKey(KEY_2, pressed); break;
-			case Qt::Key_3                  :	lastKey = setKey(KEY_3, pressed); break;
-			case Qt::Key_4                  :	lastKey = setKey(KEY_4, pressed); break;
-			case Qt::Key_5                  :	lastKey = setKey(KEY_5, pressed); break;
-			case Qt::Key_6                  :	lastKey = setKey(KEY_6, pressed); break;
-			case Qt::Key_7                  :	lastKey = setKey(KEY_7, pressed); break;
-			case Qt::Key_8                  :	lastKey = setKey(KEY_8, pressed); break;
-			case Qt::Key_9                  :	lastKey = setKey(KEY_9, pressed); break;
-			case Qt::Key_0                  :	lastKey = setKey(KEY_0, pressed); break;
-			case Qt::Key_Minus              :	lastKey = setKey(KEY_MINUS, pressed); break;
-			case Qt::Key_Equal              :	lastKey = setKey(KEY_EQUALS, pressed); break;
-			case Qt::Key_Backtab:
-			case Qt::Key_Tab                :	lastKey = setKey(KEY_TAB, pressed); break;
-			case Qt::Key_Q                  :	lastKey = setKey(KEY_Q, pressed); break;
-			case Qt::Key_W                  :	lastKey = setKey(KEY_W, pressed); break;
-			case Qt::Key_E                  :	lastKey = setKey(KEY_E, pressed); break;
-			case Qt::Key_R                  :	lastKey = setKey(KEY_R, pressed); break;
-			case Qt::Key_T                  :	lastKey = setKey(KEY_T, pressed); break;
-			case Qt::Key_Y                  :	lastKey = setKey(KEY_Y, pressed); break;
-			case Qt::Key_U                  :	lastKey = setKey(KEY_U, pressed); break;
-			case Qt::Key_I                  :	lastKey = setKey(KEY_I, pressed); break;
-			case Qt::Key_O                  :	lastKey = setKey(KEY_O, pressed); break;
-			case Qt::Key_P                  :	lastKey = setKey(KEY_P, pressed); break;
-			case Qt::Key_BracketLeft        :	lastKey = setKey(KEY_LBRACE, pressed); break;
-			case Qt::Key_BracketRight       :	lastKey = setKey(KEY_RBRACE, pressed); break;
-			case Qt::Key_Enter              :	lastKey = setKey(KEY_RETURN, pressed); break;
-			case Qt::Key_Return             :	lastKey = setKey(KEY_RETURN, pressed); break;
-			case Qt::Key_A                  :	lastKey = setKey(KEY_A, pressed); break;
-			case Qt::Key_S                  :	lastKey = setKey(KEY_S, pressed); break;
-			case Qt::Key_D                  :	lastKey = setKey(KEY_D, pressed); break;
-			case Qt::Key_F                  :	lastKey = setKey(KEY_F, pressed); break;
-			case Qt::Key_G                  :	lastKey = setKey(KEY_G, pressed); break;
-			case Qt::Key_H                  :	lastKey = setKey(KEY_H, pressed); break;
-			case Qt::Key_J                  :	lastKey = setKey(KEY_J, pressed); break;
-			case Qt::Key_K                  :	lastKey = setKey(KEY_K, pressed); break;
-			case Qt::Key_L                  :	lastKey = setKey(KEY_L, pressed); break;
-			case Qt::Key_Semicolon          :	lastKey = setKey(KEY_SEMICOLON, pressed); break;
-			case Qt::Key_QuoteDbl           :	lastKey = setKey(KEY_QUOTE, pressed); break;		// ?
-			case Qt::Key_Apostrophe         :	lastKey = setKey(KEY_BACKQUOTE, pressed); break;	// ?
-			case Qt::Key_Backslash          :	lastKey = setKey(KEY_BACKSLASH, pressed); break;
-			case Qt::Key_Z                  :	lastKey = setKey(KEY_Z, pressed); break;
-			case Qt::Key_X                  :	lastKey = setKey(KEY_X, pressed); break;
-			case Qt::Key_C                  :	lastKey = setKey(KEY_C, pressed); break;
-			case Qt::Key_V                  :	lastKey = setKey(KEY_V, pressed); break;
-			case Qt::Key_B                  :	lastKey = setKey(KEY_B, pressed); break;
-			case Qt::Key_N                  :	lastKey = setKey(KEY_N, pressed); break;
-			case Qt::Key_M                  :	lastKey = setKey(KEY_M, pressed); break;
-			case Qt::Key_Comma              :	lastKey = setKey(KEY_COMMA, pressed); break;
-			case Qt::Key_Period             :	lastKey = setKey(KEY_FULLSTOP, pressed); break;
-			case Qt::Key_Slash              :	lastKey = setKey(KEY_FORWARDSLASH, pressed); break;
-			case Qt::Key_Space              :	lastKey = setKey(KEY_SPACE, pressed); break;
-			case Qt::Key_CapsLock           :	lastKey = setKey(KEY_CAPSLOCK, pressed); break;
-			case Qt::Key_F1                 :	lastKey = setKey(KEY_F1, pressed); break;
-			case Qt::Key_F2                 :	lastKey = setKey(KEY_F2, pressed); break;
-			case Qt::Key_F3                 :	lastKey = setKey(KEY_F3, pressed); break;
-			case Qt::Key_F4                 :	lastKey = setKey(KEY_F4, pressed); break;
-			case Qt::Key_F5                 :	lastKey = setKey(KEY_F5, pressed); break;
-			case Qt::Key_F6                 :	lastKey = setKey(KEY_F6, pressed); break;
-			case Qt::Key_F7                 :	lastKey = setKey(KEY_F7, pressed); break;
-			case Qt::Key_F8                 :	lastKey = setKey(KEY_F8, pressed); break;
-			case Qt::Key_F9                 :	lastKey = setKey(KEY_F9, pressed); break;
-			case Qt::Key_F10                :	lastKey = setKey(KEY_F10, pressed); break;
-			case Qt::Key_NumLock            :	lastKey = setKey(KEY_NUMLOCK, pressed); break;
-			case Qt::Key_ScrollLock         :	lastKey = setKey(KEY_SCROLLLOCK, pressed); break;
-			case Qt::Key_F11                :	lastKey = setKey(KEY_F11, pressed); break;
-			case Qt::Key_F12                :	lastKey = setKey(KEY_F12, pressed); break;
-			case Qt::Key_Home               :	lastKey = setKey(KEY_HOME, pressed); break;
-			case Qt::Key_Up                 :	lastKey = setKey(KEY_UPARROW, pressed); break;
-			case Qt::Key_PageUp             :	lastKey = setKey(KEY_PAGEUP, pressed); break;
-			case Qt::Key_Left               :	lastKey = setKey(KEY_LEFTARROW, pressed); break;
-			case Qt::Key_Right              :	lastKey = setKey(KEY_RIGHTARROW, pressed); break;
-			case Qt::Key_End                :	lastKey = setKey(KEY_END, pressed); break;
-			case Qt::Key_Down               :	lastKey = setKey(KEY_DOWNARROW, pressed); break;
-			case Qt::Key_PageDown           :	lastKey = setKey(KEY_PAGEDOWN, pressed); break;
-			case Qt::Key_Insert             :	lastKey = setKey(KEY_INSERT, pressed); break;
-			case Qt::Key_Delete             :	lastKey = setKey(KEY_DELETE, pressed); break;
-			default:
-				debug(LOG_WARNING, "Ignoring normal key %d.\n", event->key());
-				lastKey = 0;
-				event->ignore();
-				break;
+		case Qt::Key_Escape             :	lastKey = setKey(KEY_ESC, pressed); break;
+		case Qt::Key_Backspace          :	lastKey = setKey(KEY_BACKSPACE, pressed); break;
+		case Qt::Key_QuoteLeft          :	lastKey = setKey(KEY_BACKQUOTE, pressed); break;
+		case Qt::Key_1                  :	lastKey = setKey(KEY_1, pressed); break;
+		case Qt::Key_2                  :	lastKey = setKey(KEY_2, pressed); break;
+		case Qt::Key_3                  :	lastKey = setKey(KEY_3, pressed); break;
+		case Qt::Key_4                  :	lastKey = setKey(KEY_4, pressed); break;
+		case Qt::Key_5                  :	lastKey = setKey(KEY_5, pressed); break;
+		case Qt::Key_6                  :	lastKey = setKey(KEY_6, pressed); break;
+		case Qt::Key_7                  :	lastKey = setKey(KEY_7, pressed); break;
+		case Qt::Key_8                  :	lastKey = setKey(KEY_8, pressed); break;
+		case Qt::Key_9                  :	lastKey = setKey(KEY_9, pressed); break;
+		case Qt::Key_0                  :	lastKey = setKey(KEY_0, pressed); break;
+		case Qt::Key_Minus              :	lastKey = setKey(KEY_MINUS, pressed); break;
+		case Qt::Key_Equal              :	lastKey = setKey(KEY_EQUALS, pressed); break;
+		case Qt::Key_Backtab:
+		case Qt::Key_Tab                :	lastKey = setKey(KEY_TAB, pressed); break;
+		case Qt::Key_Q                  :	lastKey = setKey(KEY_Q, pressed); break;
+		case Qt::Key_W                  :	lastKey = setKey(KEY_W, pressed); break;
+		case Qt::Key_E                  :	lastKey = setKey(KEY_E, pressed); break;
+		case Qt::Key_R                  :	lastKey = setKey(KEY_R, pressed); break;
+		case Qt::Key_T                  :	lastKey = setKey(KEY_T, pressed); break;
+		case Qt::Key_Y                  :	lastKey = setKey(KEY_Y, pressed); break;
+		case Qt::Key_U                  :	lastKey = setKey(KEY_U, pressed); break;
+		case Qt::Key_I                  :	lastKey = setKey(KEY_I, pressed); break;
+		case Qt::Key_O                  :	lastKey = setKey(KEY_O, pressed); break;
+		case Qt::Key_P                  :	lastKey = setKey(KEY_P, pressed); break;
+		case Qt::Key_BracketLeft        :	lastKey = setKey(KEY_LBRACE, pressed); break;
+		case Qt::Key_BracketRight       :	lastKey = setKey(KEY_RBRACE, pressed); break;
+		case Qt::Key_Enter              :	lastKey = setKey(KEY_RETURN, pressed); break;
+		case Qt::Key_Return             :	lastKey = setKey(KEY_RETURN, pressed); break;
+		case Qt::Key_A                  :	lastKey = setKey(KEY_A, pressed); break;
+		case Qt::Key_S                  :	lastKey = setKey(KEY_S, pressed); break;
+		case Qt::Key_D                  :	lastKey = setKey(KEY_D, pressed); break;
+		case Qt::Key_F                  :	lastKey = setKey(KEY_F, pressed); break;
+		case Qt::Key_G                  :	lastKey = setKey(KEY_G, pressed); break;
+		case Qt::Key_H                  :	lastKey = setKey(KEY_H, pressed); break;
+		case Qt::Key_J                  :	lastKey = setKey(KEY_J, pressed); break;
+		case Qt::Key_K                  :	lastKey = setKey(KEY_K, pressed); break;
+		case Qt::Key_L                  :	lastKey = setKey(KEY_L, pressed); break;
+		case Qt::Key_Semicolon          :	lastKey = setKey(KEY_SEMICOLON, pressed); break;
+		case Qt::Key_QuoteDbl           :	lastKey = setKey(KEY_QUOTE, pressed); break;		// ?
+		case Qt::Key_Apostrophe         :	lastKey = setKey(KEY_BACKQUOTE, pressed); break;	// ?
+		case Qt::Key_Backslash          :	lastKey = setKey(KEY_BACKSLASH, pressed); break;
+		case Qt::Key_Z                  :	lastKey = setKey(KEY_Z, pressed); break;
+		case Qt::Key_X                  :	lastKey = setKey(KEY_X, pressed); break;
+		case Qt::Key_C                  :	lastKey = setKey(KEY_C, pressed); break;
+		case Qt::Key_V                  :	lastKey = setKey(KEY_V, pressed); break;
+		case Qt::Key_B                  :	lastKey = setKey(KEY_B, pressed); break;
+		case Qt::Key_N                  :	lastKey = setKey(KEY_N, pressed); break;
+		case Qt::Key_M                  :	lastKey = setKey(KEY_M, pressed); break;
+		case Qt::Key_Comma              :	lastKey = setKey(KEY_COMMA, pressed); break;
+		case Qt::Key_Period             :	lastKey = setKey(KEY_FULLSTOP, pressed); break;
+		case Qt::Key_Slash              :	lastKey = setKey(KEY_FORWARDSLASH, pressed); break;
+		case Qt::Key_Space              :	lastKey = setKey(KEY_SPACE, pressed); break;
+		case Qt::Key_CapsLock           :	lastKey = setKey(KEY_CAPSLOCK, pressed); break;
+		case Qt::Key_F1                 :	lastKey = setKey(KEY_F1, pressed); break;
+		case Qt::Key_F2                 :	lastKey = setKey(KEY_F2, pressed); break;
+		case Qt::Key_F3                 :	lastKey = setKey(KEY_F3, pressed); break;
+		case Qt::Key_F4                 :	lastKey = setKey(KEY_F4, pressed); break;
+		case Qt::Key_F5                 :	lastKey = setKey(KEY_F5, pressed); break;
+		case Qt::Key_F6                 :	lastKey = setKey(KEY_F6, pressed); break;
+		case Qt::Key_F7                 :	lastKey = setKey(KEY_F7, pressed); break;
+		case Qt::Key_F8                 :	lastKey = setKey(KEY_F8, pressed); break;
+		case Qt::Key_F9                 :	lastKey = setKey(KEY_F9, pressed); break;
+		case Qt::Key_F10                :	lastKey = setKey(KEY_F10, pressed); break;
+		case Qt::Key_NumLock            :	lastKey = setKey(KEY_NUMLOCK, pressed); break;
+		case Qt::Key_ScrollLock         :	lastKey = setKey(KEY_SCROLLLOCK, pressed); break;
+		case Qt::Key_F11                :	lastKey = setKey(KEY_F11, pressed); break;
+		case Qt::Key_F12                :	lastKey = setKey(KEY_F12, pressed); break;
+		case Qt::Key_Home               :	lastKey = setKey(KEY_HOME, pressed); break;
+		case Qt::Key_Up                 :	lastKey = setKey(KEY_UPARROW, pressed); break;
+		case Qt::Key_PageUp             :	lastKey = setKey(KEY_PAGEUP, pressed); break;
+		case Qt::Key_Left               :	lastKey = setKey(KEY_LEFTARROW, pressed); break;
+		case Qt::Key_Right              :	lastKey = setKey(KEY_RIGHTARROW, pressed); break;
+		case Qt::Key_End                :	lastKey = setKey(KEY_END, pressed); break;
+		case Qt::Key_Down               :	lastKey = setKey(KEY_DOWNARROW, pressed); break;
+		case Qt::Key_PageDown           :	lastKey = setKey(KEY_PAGEDOWN, pressed); break;
+		case Qt::Key_Insert             :	lastKey = setKey(KEY_INSERT, pressed); break;
+		case Qt::Key_Delete             :	lastKey = setKey(KEY_DELETE, pressed); break;
+		default:
+			debug(LOG_WARNING, "Ignoring normal key %d.\n", event->key());
+			lastKey = 0;
+			event->ignore();
+			break;
 		}
 	}
 	else  // Is keypad.
 	{
 		switch (event->key())
 		{
-			case Qt::Key_Asterisk           :	lastKey = setKey(KEY_KP_STAR, pressed); break;
-			case Qt::Key_0                  :	lastKey = setKey(KEY_KP_0, pressed); break;
-			case Qt::Key_1                  :	lastKey = setKey(KEY_KP_1, pressed); break;
-			case Qt::Key_2                  :	lastKey = setKey(KEY_KP_2, pressed); break;
-			case Qt::Key_3                  :	lastKey = setKey(KEY_KP_3, pressed); break;
-			case Qt::Key_4                  :	lastKey = setKey(KEY_KP_4, pressed); break;
-			case Qt::Key_5                  :	lastKey = setKey(KEY_KP_5, pressed); break;
-			case Qt::Key_6                  :	lastKey = setKey(KEY_KP_6, pressed); break;
-			case Qt::Key_7                  :	lastKey = setKey(KEY_KP_7, pressed); break;
-			case Qt::Key_8                  :	lastKey = setKey(KEY_KP_8, pressed); break;
-			case Qt::Key_9                  :	lastKey = setKey(KEY_KP_9, pressed); break;
+		case Qt::Key_Asterisk           :	lastKey = setKey(KEY_KP_STAR, pressed); break;
+		case Qt::Key_0                  :	lastKey = setKey(KEY_KP_0, pressed); break;
+		case Qt::Key_1                  :	lastKey = setKey(KEY_KP_1, pressed); break;
+		case Qt::Key_2                  :	lastKey = setKey(KEY_KP_2, pressed); break;
+		case Qt::Key_3                  :	lastKey = setKey(KEY_KP_3, pressed); break;
+		case Qt::Key_4                  :	lastKey = setKey(KEY_KP_4, pressed); break;
+		case Qt::Key_5                  :	lastKey = setKey(KEY_KP_5, pressed); break;
+		case Qt::Key_6                  :	lastKey = setKey(KEY_KP_6, pressed); break;
+		case Qt::Key_7                  :	lastKey = setKey(KEY_KP_7, pressed); break;
+		case Qt::Key_8                  :	lastKey = setKey(KEY_KP_8, pressed); break;
+		case Qt::Key_9                  :	lastKey = setKey(KEY_KP_9, pressed); break;
 #ifndef WZ_OS_MAC  // Anything except mac
-			case Qt::Key_Home               :	lastKey = setKey(KEY_KP_7, pressed); break;
-			case Qt::Key_Up                 :	lastKey = setKey(KEY_KP_8, pressed); break;
-			case Qt::Key_PageUp             :	lastKey = setKey(KEY_KP_9, pressed); break;
-			case Qt::Key_Left               :	lastKey = setKey(KEY_KP_4, pressed); break;
-			case Qt::Key_Clear              :	lastKey = setKey(KEY_KP_5, pressed); break;
-			case Qt::Key_Right              :	lastKey = setKey(KEY_KP_6, pressed); break;
-			case Qt::Key_End                :	lastKey = setKey(KEY_KP_1, pressed); break;
-			case Qt::Key_Down               :	lastKey = setKey(KEY_KP_2, pressed); break;
-			case Qt::Key_PageDown           :	lastKey = setKey(KEY_KP_3, pressed); break;
-			case Qt::Key_Insert             :	lastKey = setKey(KEY_KP_0, pressed); break;
+		case Qt::Key_Home               :	lastKey = setKey(KEY_KP_7, pressed); break;
+		case Qt::Key_Up                 :	lastKey = setKey(KEY_KP_8, pressed); break;
+		case Qt::Key_PageUp             :	lastKey = setKey(KEY_KP_9, pressed); break;
+		case Qt::Key_Left               :	lastKey = setKey(KEY_KP_4, pressed); break;
+		case Qt::Key_Clear              :	lastKey = setKey(KEY_KP_5, pressed); break;
+		case Qt::Key_Right              :	lastKey = setKey(KEY_KP_6, pressed); break;
+		case Qt::Key_End                :	lastKey = setKey(KEY_KP_1, pressed); break;
+		case Qt::Key_Down               :	lastKey = setKey(KEY_KP_2, pressed); break;
+		case Qt::Key_PageDown           :	lastKey = setKey(KEY_KP_3, pressed); break;
+		case Qt::Key_Insert             :	lastKey = setKey(KEY_KP_0, pressed); break;
 #else  // Mac-specific, arrow keys are numpad on the mac.
-			case Qt::Key_Home               :	lastKey = setKey(KEY_HOME, pressed); break;
-			case Qt::Key_Up                 :	lastKey = setKey(KEY_UPARROW, pressed); break;
-			case Qt::Key_PageUp             :	lastKey = setKey(KEY_PAGEUP, pressed); break;
-			case Qt::Key_Left               :	lastKey = setKey(KEY_LEFTARROW, pressed); break;
-			case Qt::Key_Clear              :	lastKey = setKey(KEY_DELETE, pressed); break;
-			case Qt::Key_Right              :	lastKey = setKey(KEY_RIGHTARROW, pressed); break;
-			case Qt::Key_End                :	lastKey = setKey(KEY_END, pressed); break;
-			case Qt::Key_Down               :	lastKey = setKey(KEY_DOWNARROW, pressed); break;
-			case Qt::Key_PageDown           :	lastKey = setKey(KEY_PAGEDOWN, pressed); break;
-			case Qt::Key_Insert             :	lastKey = setKey(KEY_INSERT, pressed); break;
+		case Qt::Key_Home               :	lastKey = setKey(KEY_HOME, pressed); break;
+		case Qt::Key_Up                 :	lastKey = setKey(KEY_UPARROW, pressed); break;
+		case Qt::Key_PageUp             :	lastKey = setKey(KEY_PAGEUP, pressed); break;
+		case Qt::Key_Left               :	lastKey = setKey(KEY_LEFTARROW, pressed); break;
+		case Qt::Key_Clear              :	lastKey = setKey(KEY_DELETE, pressed); break;
+		case Qt::Key_Right              :	lastKey = setKey(KEY_RIGHTARROW, pressed); break;
+		case Qt::Key_End                :	lastKey = setKey(KEY_END, pressed); break;
+		case Qt::Key_Down               :	lastKey = setKey(KEY_DOWNARROW, pressed); break;
+		case Qt::Key_PageDown           :	lastKey = setKey(KEY_PAGEDOWN, pressed); break;
+		case Qt::Key_Insert             :	lastKey = setKey(KEY_INSERT, pressed); break;
 #endif
-			case Qt::Key_Delete             :	lastKey = setKey(KEY_KP_FULLSTOP, pressed); break;
-			case Qt::Key_Plus               :	lastKey = setKey(KEY_KP_PLUS, pressed); break;
-			case Qt::Key_Minus              :	lastKey = setKey(KEY_KP_MINUS, pressed); break;
-			case Qt::Key_Period             :	lastKey = setKey(KEY_KP_FULLSTOP, pressed); break;
-			case Qt::Key_Slash              :	lastKey = setKey(KEY_KP_BACKSLASH, pressed); break;  // HACK Shouldn't there be a KEY_KP_SLASH? Most keypads only have a forwardslash key.
-			case Qt::Key_Enter              :	lastKey = setKey(KEY_KPENTER, pressed); break;
-			case Qt::Key_Return             :	lastKey = setKey(KEY_KPENTER, pressed); break;
-			default:
-				debug(LOG_WARNING, "Ignoring keypad key %d.\n", event->key());
-				lastKey = 0;
-				event->ignore();
-				break;
+		case Qt::Key_Delete             :	lastKey = setKey(KEY_KP_FULLSTOP, pressed); break;
+		case Qt::Key_Plus               :	lastKey = setKey(KEY_KP_PLUS, pressed); break;
+		case Qt::Key_Minus              :	lastKey = setKey(KEY_KP_MINUS, pressed); break;
+		case Qt::Key_Period             :	lastKey = setKey(KEY_KP_FULLSTOP, pressed); break;
+		case Qt::Key_Slash              :	lastKey = setKey(KEY_KP_BACKSLASH, pressed); break;  // HACK Shouldn't there be a KEY_KP_SLASH? Most keypads only have a forwardslash key.
+		case Qt::Key_Enter              :	lastKey = setKey(KEY_KPENTER, pressed); break;
+		case Qt::Key_Return             :	lastKey = setKey(KEY_KPENTER, pressed); break;
+		default:
+			debug(LOG_WARNING, "Ignoring keypad key %d.\n", event->key());
+			lastKey = 0;
+			event->ignore();
+			break;
 		}
 	}
 
@@ -817,16 +817,16 @@ bool mouseDClicked(MOUSE_KEY_CODE code)
 bool mousePressed(MOUSE_KEY_CODE code)
 {
 	return ((aMouseState[code].state == KEY_PRESSED) ||
-			(aMouseState[code].state == KEY_DOUBLECLICK) ||
-			(aMouseState[code].state == KEY_PRESSRELEASE));
+	        (aMouseState[code].state == KEY_DOUBLECLICK) ||
+	        (aMouseState[code].state == KEY_PRESSRELEASE));
 }
 
 /* This returns true if the mouse key went from being down to being up this frame */
 bool mouseReleased(MOUSE_KEY_CODE code)
 {
 	return ((aMouseState[code].state == KEY_RELEASED) ||
-			(aMouseState[code].state == KEY_DOUBLECLICK) ||
-			(aMouseState[code].state == KEY_PRESSRELEASE));
+	        (aMouseState[code].state == KEY_DOUBLECLICK) ||
+	        (aMouseState[code].state == KEY_PRESSRELEASE));
 }
 
 /* Check for a mouse drag, return the drag start coords if dragging */
@@ -853,12 +853,18 @@ void keyScanToString(KEY_CODE code, char *ascii, UDWORD maxStringSize)
 	snprintf(ascii, maxStringSize, "%s", ba.data());	// and use that data as the text for the key
 
 #if defined(WZ_OS_MAC)	// Yet another mac hack, since these are normally shown as symbols, NOT text.
-	if ( (code == KEY_LALT) || (code == KEY_RALT) )
+	if ((code == KEY_LALT) || (code == KEY_RALT))
+	{
 		snprintf(ascii, maxStringSize, "Alt +");
-	else if ( (code == KEY_LCTRL) || (code == KEY_RCTRL) )	// apparently, ctrl = cmd and cmd = ctrl on macs.
+	}
+	else if ((code == KEY_LCTRL) || (code == KEY_RCTRL))	// apparently, ctrl = cmd and cmd = ctrl on macs.
+	{
 		snprintf(ascii, maxStringSize, "Cmd +");
-	else if ( code == KEY_ESC )
+	}
+	else if (code == KEY_ESC)
+	{
 		snprintf(ascii, maxStringSize, "Esc");
+	}
 #endif
 
 }
@@ -946,7 +952,7 @@ void inputNewFrame(void)
 			aKeyState[i].state = KEY_DOWN;
 		}
 		else if (aKeyState[i].state == KEY_RELEASED ||
-				 aKeyState[i].state == KEY_PRESSRELEASE)
+		         aKeyState[i].state == KEY_PRESSRELEASE)
 		{
 			aKeyState[i].state = KEY_UP;
 		}
@@ -960,8 +966,8 @@ void inputNewFrame(void)
 			aMouseState[i].state = KEY_DOWN;
 		}
 		else if (aMouseState[i].state == KEY_RELEASED
-				 || aMouseState[i].state == KEY_DOUBLECLICK
-				 || aMouseState[i].state == KEY_PRESSRELEASE)
+		         || aMouseState[i].state == KEY_DOUBLECLICK
+		         || aMouseState[i].state == KEY_PRESSRELEASE)
 		{
 			aMouseState[i].state = KEY_UP;
 		}
@@ -979,7 +985,7 @@ void inputLoseFocus()
 	unsigned int i;
 
 	/* Lost the window focus, have to take this as a global key up */
-	for(i = 0; i < KEY_MAXSCAN; i++)
+	for (i = 0; i < KEY_MAXSCAN; i++)
 	{
 		aKeyState[i].state = KEY_UP;
 	}
@@ -1101,17 +1107,17 @@ void iV_font(const char *fontName, const char *fontFace, const char *fontFaceBol
 	// TODO
 }
 
-unsigned int iV_GetTextWidth(const char* string)
+unsigned int iV_GetTextWidth(const char *string)
 {
 	return WzMainWindow::instance()->fontMetrics().width(QString::fromUtf8(string), -1);
 }
 
-unsigned int iV_GetCountedTextWidth(const char* string, size_t string_length)
+unsigned int iV_GetCountedTextWidth(const char *string, size_t string_length)
 {
 	return WzMainWindow::instance()->fontMetrics().width(QString::fromUtf8(string), string_length);
 }
 
-unsigned int iV_GetTextHeight(const char* string)
+unsigned int iV_GetTextHeight(const char *string)
 {
 	return WzMainWindow::instance()->fontMetrics().boundingRect(QString::fromUtf8(string)).height();
 }
@@ -1141,7 +1147,7 @@ void iV_SetTextColour(PIELIGHT colour)
 	fontColor = QColor(colour.byte.r, colour.byte.g, colour.byte.b, colour.byte.a);
 }
 
-void iV_DrawTextRotated(const char* string, float XPos, float YPos, float rotation)
+void iV_DrawTextRotated(const char *string, float XPos, float YPos, float rotation)
 {
 	pie_SetTexturePage(TEXPAGE_EXTERN);
 	glDisable(GL_CULL_FACE);
@@ -1175,7 +1181,10 @@ QString wzGetSelection()
 	QString aText;
 	QClipboard *clipboard = QApplication::clipboard();
 	aText = clipboard->text(QClipboard::Selection);                           // try X11 specific buffer first
-	if (aText.isEmpty()) aText = clipboard->text(QClipboard::Clipboard);      // if not, try generic clipboard
+	if (aText.isEmpty())
+	{
+		aText = clipboard->text(QClipboard::Clipboard);    // if not, try generic clipboard
+	}
 	return aText;
 }
 
@@ -1188,32 +1197,50 @@ void wzFatalDialog(const char *text)
 static int WZkeyToQtKey(int code)
 {
 	if (code >= Qt::Key_0  && code  <= Qt::Key_AsciiTilde)
-		return code;	// maps 1:1
+	{
+		return code;    // maps 1:1
+	}
 	else if (code >= KEY_F1 && code <= KEY_F12)
 	{
-		return (Qt::Key_F1 + ( code - KEY_F1 ));
+		return (Qt::Key_F1 + (code - KEY_F1));
 	}
 	else if (code >= KEY_KP_0 && code <= KEY_KP_9)
 	{
-		return (Qt::Key_0 + ( code - KEY_KP_0 ));
+		return (Qt::Key_0 + (code - KEY_KP_0));
 	}
 	else if (code >= Qt::Key_Exclam && code <= Qt::Key_Slash)
-		return code;	// maps 1:1
+	{
+		return code;    // maps 1:1
+	}
 	else if (code == KEY_ESC)
+	{
 		return Qt::Key_Escape;
+	}
 	else if (code == KEY_TAB)
+	{
 		return Qt::Key_Tab;
+	}
 	//Qt::Key_Backtab
 	else if (code == KEY_BACKSPACE)
+	{
 		return Qt::Key_Backspace;
+	}
 	else if (code == KEY_RETURN)
+	{
 		return Qt::Key_Return;
+	}
 	else if (code == KEY_KPENTER)
+	{
 		return 	Qt::Key_Enter;
+	}
 	else if (code == KEY_INSERT)
+	{
 		return Qt::Key_Insert;
+	}
 	else if (code == KEY_DELETE)
+	{
 		return Qt::Key_Delete;
+	}
 	//else if (code ==
 	//	return Qt::Key_Pause
 	//else if (code ==
@@ -1223,44 +1250,78 @@ static int WZkeyToQtKey(int code)
 	//else if (code ==
 	//	return Qt::Key_Clear
 	else if (code == KEY_KP_STAR)
+	{
 		return Qt::Key_Asterisk;
+	}
 	else if (code == KEY_KP_PLUS)
+	{
 		return Qt::Key_Plus;
+	}
 	else if (code == KEY_KP_MINUS)
+	{
 		return Qt::Key_Minus;
+	}
 	else if (code == KEY_KP_BACKSLASH)
+	{
 		return Qt::Key_Backslash;
+	}
 	else if (code == KEY_HOME)
+	{
 		return Qt::Key_Home;
+	}
 	else if (code == KEY_END)
+	{
 		return Qt::Key_End;
+	}
 	else if (code == KEY_LEFTARROW)
+	{
 		return Qt::Key_Left;
+	}
 	else if (code == KEY_UPARROW)
+	{
 		return Qt::Key_Up;
+	}
 	else if (code == KEY_RIGHTARROW)
+	{
 		return Qt::Key_Right;
+	}
 	else if (code == KEY_DOWNARROW)
+	{
 		return Qt::Key_Down;
+	}
 	else if (code == KEY_PAGEUP)
+	{
 		return Qt::Key_PageUp;
+	}
 	else if (code == KEY_PAGEDOWN)
+	{
 		return Qt::Key_PageDown;
+	}
 	else if (code == KEY_RSHIFT || code == KEY_LSHIFT)
-		return Qt::SHIFT; //Qt::Key_Shift;
+	{
+		return Qt::SHIFT;    //Qt::Key_Shift;
+	}
 	else if (code == KEY_LCTRL || code == KEY_RCTRL)
-		return Qt::CTRL; //Qt::Key_Control;
+	{
+		return Qt::CTRL;    //Qt::Key_Control;
+	}
 	else if (code == KEY_LMETA || code == KEY_RMETA)
-		return Qt::META; //Qt::Key_Meta;
+	{
+		return Qt::META;    //Qt::Key_Meta;
+	}
 	else if (code == KEY_LALT || code == KEY_RALT)
-		return Qt::ALT; //Qt::Key_Alt;
+	{
+		return Qt::ALT;    //Qt::Key_Alt;
+	}
 	else if (code == KEY_MAXSCAN)
 	{
 		// this just means that there is no key defined, so we print a "?" instead
 		return Qt::Key_Question;
 	}
 	else if (code == KEY_SPACE)
+	{
 		return Qt::Key_Space;
+	}
 
 	ASSERT(false, "We missed mapping a key, code is %d, map it to input.h, then qnamespace.h", code);
 
