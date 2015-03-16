@@ -23,13 +23,12 @@
  * Droid template functions.
  *
  */
-#include "template.h"
-
 #include "lib/framework/frame.h"
 #include "lib/framework/wzconfig.h"
 #include "lib/framework/math_ext.h"
 #include "lib/framework/strres.h"
 #include "lib/netplay/netplay.h"
+#include "template.h"
 #include "cmddroiddef.h"
 #include "mission.h"
 #include "objects.h"

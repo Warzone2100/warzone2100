@@ -160,7 +160,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="anim.cpp" />
-    <ClCompile Include="animobj.cpp" />
     <ClCompile Include="audp_lexer.cpp" />
     <ClCompile Include="audp_parser.cpp" />
     <ClCompile Include="gtime.cpp" />
@@ -168,7 +167,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="anim.h" />
-    <ClInclude Include="animobj.h" />
     <ClInclude Include="audp_parser.h" />
     <ClInclude Include="gtime.h" />
     <ClInclude Include="hashtable.h" />

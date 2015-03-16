@@ -14,9 +14,6 @@
     <ClCompile Include="anim.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="animobj.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="gtime.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -32,9 +29,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="anim.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="animobj.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="gtime.h">
