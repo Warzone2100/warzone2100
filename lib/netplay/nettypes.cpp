@@ -87,12 +87,12 @@ static void queue(const Q &q, uint8_t &v)
 template<class Q>
 static void queue(const Q &q, uint16_t &v)
 {
-	uint8_t b[2] = {uint8_t(v>>8), uint8_t(v)};
+	uint8_t b[2] = {uint8_t(v >> 8), uint8_t(v)};
 	queue(q, b[0]);
 	queue(q, b[1]);
 	if (Q::Direction == Q::Read)
 	{
-		v = b[0]<<8 | b[1];
+		v = b[0] << 8 | b[1];
 	}
 }
 
@@ -128,12 +128,12 @@ static void queue(const Q &q, uint32_t &vOrig)
 template<class Q>
 static void queue(const Q &q, uint64_t &v)
 {
-	uint32_t b[2] = {uint32_t(v>>32), uint32_t(v)};
+	uint32_t b[2] = {uint32_t(v >> 32), uint32_t(v)};
 	queue(q, b[0]);
 	queue(q, b[1]);
 	if (Q::Direction == Q::Read)
 	{
-		v = uint64_t(b[0])<<32 | b[1];
+		v = uint64_t(b[0]) << 32 | b[1];
 	}
 }
 
@@ -184,11 +184,11 @@ static void queue(const Q &q, int32_t &v)
 	// Example: int32_t -5 -4 -3 -2 -1  0  1  2  3  4  5
 	// becomes uint32_t  9  7  5  3  1  0  2  4  6  8 10
 
-	uint32_t b = v<<1 ^ (-((uint32_t)v>>31));
+	uint32_t b = v << 1 ^ (-((uint32_t)v >> 31));
 	queue(q, b);
 	if (Q::Direction == Q::Read)
 	{
-		v = b>>1 ^ -(b&1);
+		v = b >> 1 ^ -(b & 1);
 	}
 
 	STATIC_ASSERT(sizeof(b) == sizeof(v));
@@ -237,21 +237,21 @@ static void queue(const Q &q, std::vector<T> &v)
 	queue(q, len);
 	switch (Q::Direction)
 	{
-		case Q::Write:
-			for (unsigned i = 0; i != len; ++i)
-			{
-				queue(q, v[i]);
-			}
-			break;
-		case Q::Read:
-			v.clear();
-			for (unsigned i = 0; i != len && q.valid(); ++i)
-			{
-				T tmp;
-				queue(q, tmp);
-				v.push_back(tmp);
-			}
-			break;
+	case Q::Write:
+		for (unsigned i = 0; i != len; ++i)
+		{
+			queue(q, v[i]);
+		}
+		break;
+	case Q::Read:
+		v.clear();
+		for (unsigned i = 0; i != len && q.valid(); ++i)
+		{
+			T tmp;
+			queue(q, tmp);
+			v.push_back(tmp);
+		}
+		break;
 	}
 }
 
@@ -420,7 +420,7 @@ void NETdeleteQueue(void)
 		delete gameQueues[i];
 	}
 
-		delete broadcastQueue;
+	delete broadcastQueue;
 
 }
 
@@ -504,19 +504,19 @@ bool NETend()
 			uint32_t num = 1;
 			NetMessage backupMessage = message;  // 'message' will be overwritten, so we need a copy (to avoid trying to insert a message into itself).
 			NETbeginEncode(NETbroadcastQueue(), NET_SHARE_GAME_QUEUE);
-				NETuint8_t(&player);
-				NETuint32_t(&num);
-				for (uint32_t n = 0; n < num; ++n)
-				{
-					queueAuto(backupMessage);
-				}
+			NETuint8_t(&player);
+			NETuint32_t(&num);
+			for (uint32_t n = 0; n < num; ++n)
+			{
+				queueAuto(backupMessage);
+			}
 			NETsetPacketDir(PACKET_INVALID);  // Instead of NETend();
 			backupMessage = message;  // 'message' will be overwritten again, so we need a copy of this NET_SHARE_GAME_QUEUE message.
 			uint8_t allPlayers = NET_ALL_PLAYERS;
 			NETbeginEncode(NETbroadcastQueue(), NET_SEND_TO_PLAYER);
-				NETuint8_t(&player);
-				NETuint8_t(&allPlayers);
-				queueAuto(backupMessage);
+			NETuint8_t(&player);
+			NETuint8_t(&allPlayers);
+			queueAuto(backupMessage);
 			NETend();  // This time we actually send it.
 		}
 
@@ -557,13 +557,13 @@ void NETflushGameQueues()
 
 		// Decoded in NETprocessSystemMessage in netplay.cpp.
 		NETbeginEncode(NETbroadcastQueue(), NET_SHARE_GAME_QUEUE);
-			NETuint8_t(&player);
-			NETuint32_t(&num);
-			for (uint32_t n = 0; n < num; ++n)
-			{
-				queueAuto(const_cast<NetMessage &>(queue->getMessageForNet()));  // const_cast is safe since we are encoding, not decoding.
-				queue->popMessageForNet();
-			}
+		NETuint8_t(&player);
+		NETuint32_t(&num);
+		for (uint32_t n = 0; n < num; ++n)
+		{
+			queueAuto(const_cast<NetMessage &>(queue->getMessageForNet()));  // const_cast is safe since we are encoding, not decoding.
+			queue->popMessageForNet();
+		}
 		NETend();
 	}
 }

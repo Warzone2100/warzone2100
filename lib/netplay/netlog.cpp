@@ -53,11 +53,11 @@ bool NETstartLogging(void)
 		packetsize[1][i] = 0;
 	}
 
-	time( &aclock );                 /* Get time in seconds */
-	newtime = localtime( &aclock );  /* Convert time to struct */
+	time(&aclock);                   /* Get time in seconds */
+	newtime = localtime(&aclock);    /* Convert time to struct */
 
 	snprintf(filename, sizeof(filename), "logs/netplay-%04d%02d%02d_%02d%02d%02d.log", newtime->tm_year + 1900, newtime->tm_mon + 1, newtime->tm_mday, newtime->tm_hour, newtime->tm_min, newtime->tm_sec);
-	pFileHandle = PHYSFS_openWrite( filename ); // open the file
+	pFileHandle = PHYSFS_openWrite(filename);   // open the file
 	if (!pFileHandle)
 	{
 		debug(LOG_ERROR, "Could not create net log %s: %s", filename,
@@ -65,7 +65,7 @@ bool NETstartLogging(void)
 		return false;
 	}
 	snprintf(buf, sizeof(buf), "NETPLAY log: %s\n", asctime(newtime));
-	PHYSFS_write( pFileHandle, buf, strlen( buf ), 1 );
+	PHYSFS_write(pFileHandle, buf, strlen(buf), 1);
 	return true;
 }
 
@@ -91,7 +91,7 @@ bool NETstopLogging(void)
 		else
 		{
 			snprintf(buf, sizeof(buf), "%-24s:\t received %u times, %u bytes; sent %u times, %u bytes\n", messageTypeToString(i),
-				packetcount[1][i], packetsize[1][i], packetcount[0][i], packetsize[0][i]);
+			         packetcount[1][i], packetsize[1][i], packetcount[0][i], packetsize[0][i]);
 		}
 		PHYSFS_write(pFileHandle, buf, strlen(buf), 1);
 		totalBytessent += packetsize[0][i];
@@ -106,9 +106,9 @@ bool NETstopLogging(void)
 	snprintf(buf, sizeof(buf), "\n-Sync statistics -\n");
 	PHYSFS_write(pFileHandle, buf, strlen(buf), 1);
 	PHYSFS_write(pFileHandle, dash_line, strlen(dash_line), 1);
-	snprintf(buf, sizeof(buf), "joins: %hhu, kicks: %hhu, drops: %hhu, left %hhu\n", sync_counter.joins, sync_counter.kicks, sync_counter.drops, sync_counter.left );
+	snprintf(buf, sizeof(buf), "joins: %hhu, kicks: %hhu, drops: %hhu, left %hhu\n", sync_counter.joins, sync_counter.kicks, sync_counter.drops, sync_counter.left);
 	PHYSFS_write(pFileHandle, buf, strlen(buf), 1);
-	snprintf(buf, sizeof(buf), "banned: %hhu, cantjoin: %hhu, rejected: %hhu\n", sync_counter.banned, sync_counter.cantjoin, sync_counter.rejected );
+	snprintf(buf, sizeof(buf), "banned: %hhu, cantjoin: %hhu, rejected: %hhu\n", sync_counter.banned, sync_counter.cantjoin, sync_counter.rejected);
 	PHYSFS_write(pFileHandle, buf, strlen(buf), 1);
 	if (sync_counter.banned && IPlist)
 	{
@@ -144,16 +144,16 @@ bool NETstopLogging(void)
 */
 void NETlogPacket(uint8_t type, uint32_t size, bool received)
 {
-	STATIC_ASSERT((1<<(8*sizeof(type))) == NUM_GAME_PACKETS);  // NUM_GAME_PACKETS must be larger than maximum possible type.
+	STATIC_ASSERT((1 << (8 * sizeof(type))) == NUM_GAME_PACKETS); // NUM_GAME_PACKETS must be larger than maximum possible type.
 	packetcount[received][type]++;
 	packetsize[received][type] += size;
 }
 
-bool NETlogEntry(const char *str,UDWORD a,UDWORD b)
+bool NETlogEntry(const char *str, UDWORD a, UDWORD b)
 {
 	static const char star_line[] = "************************************************************\n";
 	static UDWORD lastframe = 0;
-	UDWORD frame= frameGetFrameNumber();
+	UDWORD frame = frameGetFrameNumber();
 	time_t aclock;
 	struct tm *newtime;
 	char buf[256];
@@ -163,8 +163,8 @@ bool NETlogEntry(const char *str,UDWORD a,UDWORD b)
 		return false;
 	}
 
-	time( &aclock );					/* Get time in seconds */
-	newtime = localtime( &aclock );		/* Convert time to struct */
+	time(&aclock);					/* Get time in seconds */
+	newtime = localtime(&aclock);		/* Convert time to struct */
 
 	if (!newtime || !str || !pFileHandle)
 	{
@@ -173,7 +173,7 @@ bool NETlogEntry(const char *str,UDWORD a,UDWORD b)
 	}
 
 	// check to see if a new frame.
-	if(frame != lastframe)
+	if (frame != lastframe)
 	{
 		static const char dash_line[] = "-----------------------------------------------------------\n";
 
@@ -183,22 +183,28 @@ bool NETlogEntry(const char *str,UDWORD a,UDWORD b)
 
 	if (a < NUM_GAME_PACKETS)
 		// replace common msgs with txt descriptions
+	{
 		snprintf(buf, sizeof(buf), "%s \t: %s \t:%d\t\t%s", str, messageTypeToString(a), b, asctime(newtime));
+	}
 	else if (a == SYNC_FLAG)
+	{
 		snprintf(buf, sizeof(buf), "%s \t: %d \t(Sync) \t%s", str, b, asctime(newtime));
+	}
 	else
+	{
 		snprintf(buf, sizeof(buf), "%s \t:%d \t\t\t:%d\t\t%s", str, a, b, asctime(newtime));
+	}
 
-	if (a == NET_PLAYER_LEAVING || a == NET_PLAYER_DROPPED )
+	if (a == NET_PLAYER_LEAVING || a == NET_PLAYER_DROPPED)
 	{
 		// Write a starry line above NET_LEAVING messages
 		PHYSFS_write(pFileHandle, star_line, strlen(star_line), 1);
-		PHYSFS_write(pFileHandle, buf, strlen( buf ), 1);
+		PHYSFS_write(pFileHandle, buf, strlen(buf), 1);
 		PHYSFS_write(pFileHandle, star_line, strlen(star_line), 1);
 	}
 	else
 	{
-		PHYSFS_write(pFileHandle, buf, strlen( buf ), 1);
+		PHYSFS_write(pFileHandle, buf, strlen(buf), 1);
 	}
 
 	PHYSFS_flush(pFileHandle);
