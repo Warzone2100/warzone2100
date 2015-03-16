@@ -169,8 +169,8 @@ void statsInitVars(void)
 	// init the max values
 	maxComponentWeight = maxBodyArmour = maxBodyPower =
 	        maxBodyPoints = maxSensorRange = maxECMRange =
-	                maxConstPoints = maxRepairPoints = maxWeaponRange = maxWeaponDamage =
-	                        maxPropulsionSpeed = 0;
+	                            maxConstPoints = maxRepairPoints = maxWeaponRange = maxWeaponDamage =
+	                                        maxPropulsionSpeed = 0;
 }
 
 /*Deallocate all the stats assigned from input data*/
@@ -1271,7 +1271,7 @@ bool loadPropulsionSounds(const char *pFileName)
 		ini.endGroup();
 	}
 
-	return(true);
+	return (true);
 }
 
 //get the speed factor for a given terrain type and propulsion type
@@ -1725,10 +1725,10 @@ int weaponROF(const WEAPON_STATS *psStat, int player)
 	if (player >= 0
 	    && psStat->upgrade[player].numRounds
 	    && psStat->upgrade[player].reloadTime != 0)
-    {
-        // Rounds per salvo multiplied with the number of salvos per minute
-        rof = psStat->upgrade[player].numRounds * 60 * GAME_TICKS_PER_SEC / weaponReloadTime(psStat, player);
-    }
+	{
+		// Rounds per salvo multiplied with the number of salvos per minute
+		rof = psStat->upgrade[player].numRounds * 60 * GAME_TICKS_PER_SEC / weaponReloadTime(psStat, player);
+	}
 
 	if (rof == 0)
 	{

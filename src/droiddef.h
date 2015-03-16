@@ -74,7 +74,7 @@ struct DROID_TEMPLATE : public BASE_STATS
 
 	DROID_TYPE      droidType;                  ///< The type of droid
 	UDWORD          multiPlayerID;              ///< multiplayer unique descriptor(cant use id's for templates). Used for save games as well now - AB 29/10/98
-	DROID_TEMPLATE* psNext;                     ///< Pointer to next template
+	DROID_TEMPLATE *psNext;                     ///< Pointer to next template
 	bool		prefab;                     ///< Not player designed, not saved, never delete or change
 	bool		stored;                     ///< Stored template
 	bool		enabled;                    ///< Has been enabled
@@ -117,9 +117,9 @@ struct DROID : public BASE_OBJECT
 	WEAPON          asWeaps[DROID_MAXWEAPS];
 
 	// The group the droid belongs to
-	DROID_GROUP *   psGroup;
-	DROID *         psGrpNext;
-	STRUCTURE *     psBaseStruct;                   ///< a structure that this droid might be associated with. For VTOLs this is the rearming pad
+	DROID_GROUP    *psGroup;
+	DROID          *psGrpNext;
+	STRUCTURE      *psBaseStruct;                   ///< a structure that this droid might be associated with. For VTOLs this is the rearming pad
 	// queued orders
 	SDWORD          listSize;                       ///< Gives the number of synchronised orders. Orders from listSize to the real end of the list may not affect game state.
 	OrderList       asOrderList;                    ///< The range [0; listSize - 1] corresponds to synchronised orders, and the range [listPendingBegin; listPendingEnd - 1] corresponds to the orders that will remain, once all orders are synchronised.
@@ -146,12 +146,12 @@ struct DROID : public BASE_OBJECT
 	/* Action data */
 	DROID_ACTION    action;
 	Vector2i        actionPos;
-	BASE_OBJECT*    psActionTarget[DROID_MAXWEAPS]; ///< Action target object
+	BASE_OBJECT    *psActionTarget[DROID_MAXWEAPS]; ///< Action target object
 	UDWORD          actionStarted;                  ///< Game time action started
 	UDWORD          actionPoints;                   ///< number of points done by action since start
 
 	UDWORD          expectedDamage;                 ///< Expected damage to be caused by all currently incoming projectiles. This info is shared between all players,
-	                                                ///< but shouldn't make a difference unless 3 mutual enemies happen to be fighting each other at the same time.
+	///< but shouldn't make a difference unless 3 mutual enemies happen to be fighting each other at the same time.
 
 	UBYTE           illumination;
 

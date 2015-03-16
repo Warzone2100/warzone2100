@@ -100,16 +100,46 @@ static DROID_TEMPLATE loadTemplateCommon(WzConfig &ini)
 	DROID_TEMPLATE design;
 	QString droidType = ini.value("type").toString();
 
-	if (droidType == "PERSON") design.droidType = DROID_PERSON;
-	else if (droidType == "CYBORG") design.droidType = DROID_CYBORG;
-	else if (droidType == "CYBORG_SUPER") design.droidType = DROID_CYBORG_SUPER;
-	else if (droidType == "CYBORG_CONSTRUCT") design.droidType = DROID_CYBORG_CONSTRUCT;
-	else if (droidType == "CYBORG_REPAIR") design.droidType = DROID_CYBORG_REPAIR;
-	else if (droidType == "TRANSPORTER") design.droidType = DROID_TRANSPORTER;
-	else if (droidType == "SUPERTRANSPORTER") design.droidType = DROID_SUPERTRANSPORTER;
-	else if (droidType == "DROID") design.droidType = DROID_DEFAULT;
-	else if (droidType == "DROID_COMMAND") design.droidType = DROID_COMMAND;
-	else ASSERT(false, "No such droid type \"%s\" for %s", droidType.toUtf8().constData(), getID(&design));
+	if (droidType == "PERSON")
+	{
+		design.droidType = DROID_PERSON;
+	}
+	else if (droidType == "CYBORG")
+	{
+		design.droidType = DROID_CYBORG;
+	}
+	else if (droidType == "CYBORG_SUPER")
+	{
+		design.droidType = DROID_CYBORG_SUPER;
+	}
+	else if (droidType == "CYBORG_CONSTRUCT")
+	{
+		design.droidType = DROID_CYBORG_CONSTRUCT;
+	}
+	else if (droidType == "CYBORG_REPAIR")
+	{
+		design.droidType = DROID_CYBORG_REPAIR;
+	}
+	else if (droidType == "TRANSPORTER")
+	{
+		design.droidType = DROID_TRANSPORTER;
+	}
+	else if (droidType == "SUPERTRANSPORTER")
+	{
+		design.droidType = DROID_SUPERTRANSPORTER;
+	}
+	else if (droidType == "DROID")
+	{
+		design.droidType = DROID_DEFAULT;
+	}
+	else if (droidType == "DROID_COMMAND")
+	{
+		design.droidType = DROID_COMMAND;
+	}
+	else
+	{
+		ASSERT(false, "No such droid type \"%s\" for %s", droidType.toUtf8().constData(), getID(&design));
+	}
 
 	design.asParts[COMP_BODY] = getCompFromName(COMP_BODY, ini.value("body").toString());
 	design.asParts[COMP_BRAIN] = getCompFromName(COMP_BRAIN, ini.value("brain", QString("ZNULLBRAIN")).toString());
@@ -211,7 +241,10 @@ bool storeTemplates()
 	}
 	for (DROID_TEMPLATE *psCurr = apsDroidTemplates[selectedPlayer]; psCurr != NULL; psCurr = psCurr->psNext)
 	{
-		if (!psCurr->stored) continue; // not stored
+		if (!psCurr->stored)
+		{
+			continue;    // not stored
+		}
 		ini.beginGroup("template_" + QString::number(psCurr->multiPlayerID));
 		ini.setValue("name", psCurr->name);
 		switch (psCurr->droidType)
@@ -265,9 +298,9 @@ bool shutdownTemplates()
 
 DROID_TEMPLATE::DROID_TEMPLATE()  // This constructor replaces a memset in scrAssembleWeaponTemplate(), not needed elsewhere.
 	: BASE_STATS(REF_TEMPLATE_START)
-	//, asParts
+	  //, asParts
 	, numWeaps(0)
-	//, asWeaps
+	  //, asWeaps
 	, droidType(DROID_WEAPON)
 	, multiPlayerID(0)
 	, psNext(NULL)
@@ -295,7 +328,7 @@ bool loadDroidTemplates(const char *filename)
 		design.enabled = true;
 		bool available = ini.value("available", false).toBool();
 		char const *droidResourceName = getDroidResourceName(list[i].toUtf8().constData());
-		design.name = droidResourceName != NULL? droidResourceName : GetDefaultTemplateName(&design);
+		design.name = droidResourceName != NULL ? droidResourceName : GetDefaultTemplateName(&design);
 		ini.endGroup();
 
 		for (int i = 0; i < MAX_PLAYERS; ++i)
@@ -332,7 +365,7 @@ bool loadDroidTemplates(const char *filename)
 			}
 		}
 		debug(LOG_NEVER, "Droid template found, Name: %s, MP ID: %d, ref: %u, ID: %s, prefab: %s, type:%d (loading)",
-		      getName(&design), design.multiPlayerID, design.ref, getID(&design), design.prefab ? "yes":"no", design.droidType);
+		      getName(&design), design.multiPlayerID, design.ref, getID(&design), design.prefab ? "yes" : "no", design.droidType);
 	}
 
 	return true;
@@ -367,7 +400,7 @@ bool droidTemplateShutDown(void)
  */
 DROID_TEMPLATE *getTemplateFromTranslatedNameNoPlayer(char const *pName)
 {
-	for (int i=0; i < MAX_PLAYERS; i++)
+	for (int i = 0; i < MAX_PLAYERS; i++)
 	{
 		for (DROID_TEMPLATE *psCurr = apsDroidTemplates[i]; psCurr != NULL; psCurr = psCurr->psNext)
 		{
@@ -381,14 +414,14 @@ DROID_TEMPLATE *getTemplateFromTranslatedNameNoPlayer(char const *pName)
 }
 
 /*getTemplatefFromMultiPlayerID gets template for unique ID  searching all lists */
-DROID_TEMPLATE* getTemplateFromMultiPlayerID(UDWORD multiPlayerID)
+DROID_TEMPLATE *getTemplateFromMultiPlayerID(UDWORD multiPlayerID)
 {
 	UDWORD		player;
 	DROID_TEMPLATE	*pDroidDesign;
 
 	for (player = 0; player < MAX_PLAYERS; player++)
 	{
-		for(pDroidDesign = apsDroidTemplates[player]; pDroidDesign != NULL; pDroidDesign = pDroidDesign->psNext)
+		for (pDroidDesign = apsDroidTemplates[player]; pDroidDesign != NULL; pDroidDesign = pDroidDesign->psNext)
 		{
 			if (pDroidDesign->multiPlayerID == multiPlayerID)
 			{
@@ -469,7 +502,7 @@ bool templateIsIDF(DROID_TEMPLATE *psTemplate)
 {
 	//add Cyborgs
 	if (!(psTemplate->droidType == DROID_WEAPON || psTemplate->droidType == DROID_CYBORG ||
-		psTemplate->droidType == DROID_CYBORG_SUPER))
+	      psTemplate->droidType == DROID_CYBORG_SUPER))
 	{
 		return false;
 	}
@@ -526,7 +559,7 @@ void fillTemplateList(std::vector<DROID_TEMPLATE *> &pList, STRUCTURE *psFactory
 		else if (bMultiPlayer && (iCapacity == SIZE_HEAVY))
 		{
 			// Special case for Super heavy bodyies (Super Transporter)
-			if((asBodyStats + psCurr->asParts[COMP_BODY])->size == SIZE_SUPER_HEAVY)
+			if ((asBodyStats + psCurr->asParts[COMP_BODY])->size == SIZE_SUPER_HEAVY)
 			{
 				pList.push_back(psCurr);
 			}

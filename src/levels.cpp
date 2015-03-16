@@ -52,7 +52,7 @@
 #include "qtscript.h"
 
 extern int lev_get_lineno(void);
-extern char* lev_get_text(void);
+extern char *lev_get_text(void);
 extern int lev_lex(void);
 extern void lev_set_extra(YY_EXTRA_TYPE user_defined);
 extern int lev_lex_destroy(void);
@@ -128,7 +128,7 @@ void levShutDown(void)
 }
 
 // error report function for the level parser
-void lev_error(const char* msg)
+void lev_error(const char *msg)
 {
 	debug(LOG_ERROR, "Level File parse error: `%s` at line `%d` text `%s`", msg, lev_get_lineno(), lev_get_text());
 }
@@ -185,7 +185,7 @@ Sha256 levGetMapNameHash(char const *mapName)
 // parse a level description data file
 // the ignoreWrf hack is for compatibility with old maps that try to link in various
 // data files that we have removed
-bool levParse(const char* buffer, size_t size, searchPathMode datadir, bool ignoreWrf, char const *realFileName)
+bool levParse(const char *buffer, size_t size, searchPathMode datadir, bool ignoreWrf, char const *realFileName)
 {
 	lexerinput_t input;
 	LEVELPARSER_STATE state;
@@ -216,7 +216,7 @@ bool levParse(const char* buffer, size_t size, searchPathMode datadir, bool igno
 			if (state == LP_START || state == LP_WAITDATA)
 			{
 				// start a new level data set
-				psDataSet = (LEVEL_DATASET*)malloc(sizeof(LEVEL_DATASET));
+				psDataSet = (LEVEL_DATASET *)malloc(sizeof(LEVEL_DATASET));
 				if (!psDataSet)
 				{
 					debug(LOG_FATAL, "Out of memory");
@@ -227,7 +227,7 @@ bool levParse(const char* buffer, size_t size, searchPathMode datadir, bool igno
 				psDataSet->players = 1;
 				psDataSet->game = -1;
 				psDataSet->dataDir = datadir;
-				psDataSet->realFileName = realFileName != NULL? strdup(realFileName) : NULL;
+				psDataSet->realFileName = realFileName != NULL ? strdup(realFileName) : NULL;
 				psDataSet->realFileHash.setZero();  // The hash is only calculated on demand; for example, if the map name matches.
 				psLevels.push_back(psDataSet);
 				currData = 0;
@@ -266,7 +266,7 @@ bool levParse(const char* buffer, size_t size, searchPathMode datadir, bool igno
 					psDataSet->type = LDS_MKEEP_LIMBO;
 					break;
 				default:
-					ASSERT( false,"eh?" );
+					ASSERT(false, "eh?");
 					break;
 				}
 			}
@@ -279,7 +279,7 @@ bool levParse(const char* buffer, size_t size, searchPathMode datadir, bool igno
 			break;
 		case LTK_PLAYERS:
 			if (state == LP_LEVELDONE &&
-				(psDataSet->type == LDS_COMPLETE || psDataSet->type >= LDS_MULTI_TYPE_START))
+			    (psDataSet->type == LDS_COMPLETE || psDataSet->type >= LDS_MULTI_TYPE_START))
 			{
 				state = LP_PLAYERS;
 			}
@@ -341,13 +341,13 @@ bool levParse(const char* buffer, size_t size, searchPathMode datadir, bool igno
 			else if (state == LP_LEVELDONE)
 			{
 				if (psDataSet->type == LDS_CAMSTART ||
-					psDataSet->type == LDS_MKEEP
-					||psDataSet->type == LDS_CAMCHANGE ||
-					psDataSet->type == LDS_EXPAND ||
-					psDataSet->type == LDS_MCLEAR ||
-					psDataSet->type == LDS_EXPAND_LIMBO ||
-					psDataSet->type == LDS_MKEEP_LIMBO
-					)
+				    psDataSet->type == LDS_MKEEP
+				    || psDataSet->type == LDS_CAMCHANGE ||
+				    psDataSet->type == LDS_EXPAND ||
+				    psDataSet->type == LDS_MCLEAR ||
+				    psDataSet->type == LDS_EXPAND_LIMBO ||
+				    psDataSet->type == LDS_MKEEP_LIMBO
+				   )
 				{
 					lev_error("Missing dataset command");
 					return false;
@@ -362,7 +362,7 @@ bool levParse(const char* buffer, size_t size, searchPathMode datadir, bool igno
 			break;
 		case LTK_GAME:
 			if ((state == LP_WAITDATA || state == LP_LEVELDONE) &&
-				psDataSet->game == -1 && psDataSet->type != LDS_CAMPAIGN)
+			    psDataSet->game == -1 && psDataSet->type != LDS_CAMPAIGN)
 			{
 				state = LP_GAME;
 			}
@@ -378,7 +378,7 @@ bool levParse(const char* buffer, size_t size, searchPathMode datadir, bool igno
 				if (psDataSet->type == LDS_CAMCHANGE)
 				{
 					// This is a campaign change dataset, we need to find the full data set.
-					LEVEL_DATASET * const psFoundData = levFindDataSet(pLevToken);
+					LEVEL_DATASET *const psFoundData = levFindDataSet(pLevToken);
 
 					if (psFoundData == NULL)
 					{
@@ -466,8 +466,8 @@ bool levParse(const char* buffer, size_t size, searchPathMode datadir, bool igno
 
 	// Accept empty files when parsing (indicated by currData < 0)
 	if (currData >= 0
-	 && (state != LP_WAITDATA
-	  || currData == 0))
+	    && (state != LP_WAITDATA
+	        || currData == 0))
 	{
 		lev_error("Unexpected end of file");
 		return false;
@@ -555,13 +555,13 @@ bool levReleaseAll(void)
 		}
 	}
 
-	psCurrLevel=NULL;
+	psCurrLevel = NULL;
 
 	return true;
 }
 
 // load up a single wrf file
-static bool levLoadSingleWRF(const char* name)
+static bool levLoadSingleWRF(const char *name)
 {
 	// free the old data
 	if (!levReleaseAll())
@@ -602,9 +602,9 @@ static bool levLoadSingleWRF(const char* name)
 }
 
 
-char *getLevelName( void )
+char *getLevelName(void)
 {
-	return(currentLevelName);
+	return (currentLevelName);
 }
 
 
@@ -614,7 +614,7 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 	LEVEL_DATASET	*psNewLevel, *psBaseData, *psChangeLevel;
 	bool            bCamChangeSaveGame;
 
-	debug(LOG_WZ, "Loading level %s hash %s (%s, type %d)", name, hash == NULL? "builtin" : hash->toString().c_str(), pSaveName, (int)saveType);
+	debug(LOG_WZ, "Loading level %s hash %s (%s, type %d)", name, hash == NULL ? "builtin" : hash->toString().c_str(), pSaveName, (int)saveType);
 	if (saveType == GTYPE_SAVE_START || saveType == GTYPE_SAVE_MIDMISSION)
 	{
 		if (!levReleaseAll())
@@ -669,8 +669,8 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 		if (psCurrLevel != NULL)
 		{
 			if ((psCurrLevel->psBaseData != psNewLevel->psBaseData) ||
-				(psCurrLevel->type < LDS_NONE && psNewLevel->type  >= LDS_NONE) ||
-				(psCurrLevel->type >= LDS_NONE && psNewLevel->type  < LDS_NONE))
+			    (psCurrLevel->type < LDS_NONE && psNewLevel->type  >= LDS_NONE) ||
+			    (psCurrLevel->type >= LDS_NONE && psNewLevel->type  < LDS_NONE))
 			{
 				// there is a dataset loaded but it isn't the correct one
 				debug(LOG_WZ, "Incorrect base dataset loaded (%p != %p, %d - %d)",
@@ -797,7 +797,7 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 			}
 
 			debug(LOG_NEVER, "Loading savegame: %s", pSaveName);
-			if (!loadGame(pSaveName, false, true,true))
+			if (!loadGame(pSaveName, false, true, true))
 			{
 				debug(LOG_ERROR, "Failed loadGame(%s)!", pSaveName);
 				return false;
@@ -830,7 +830,7 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 			}
 
 			debug(LOG_NEVER, "loading savegame: %s", pSaveName);
-			if (!loadGame(pSaveName, false, true,true))
+			if (!loadGame(pSaveName, false, true, true))
 			{
 				debug(LOG_ERROR, "Failed loadGame(%s)!", pSaveName);
 				return false;
@@ -878,7 +878,7 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 				}
 
 				debug(LOG_NEVER, "Loading save game %s", pSaveName);
-				if (!loadGame(pSaveName, false, true,true))
+				if (!loadGame(pSaveName, false, true, true))
 				{
 					debug(LOG_ERROR, "Failed loadGame(%s)!", pSaveName);
 					return false;
@@ -960,7 +960,7 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 					}
 					break;
 				default:
-					ASSERT( psNewLevel->type >= LDS_MULTI_TYPE_START, "Unexpected mission type" );
+					ASSERT(psNewLevel->type >= LDS_MULTI_TYPE_START, "Unexpected mission type");
 					debug(LOG_WZ, "default (MULTIPLAYER)");
 					if (!startMission(LDS_CAMSTART, psNewLevel->apDataFiles[i]))
 					{

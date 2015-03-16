@@ -309,7 +309,7 @@ static BASE_OBJECT *camFindTarget(void)
 	{
 		setUpRadarTarget(radarX, radarY);
 		bRadarTrackingRequested = false;
-		return(&radarTarget);
+		return (&radarTarget);
 	}
 
 	return camFindDroidTarget();
@@ -325,7 +325,7 @@ bool	processWarCam(void)
 	/* Get out if the camera isn't active */
 	if (trackingCamera.status == CAM_INACTIVE)
 	{
-		return(true);
+		return (true);
 	}
 
 	/* Ensure that the camera only ever flips state within this routine! */
@@ -459,12 +459,12 @@ BASE_OBJECT	*camFindDroidTarget(void)
 
 		{
 			/* Return the first one found */
-			return((BASE_OBJECT *)psDroid);
+			return ((BASE_OBJECT *)psDroid);
 		}
 	}
 
 	/* We didn't find one */
-	return(NULL);
+	return (NULL);
 }
 
 
@@ -892,7 +892,7 @@ static bool camTrackCamera()
 	/* Most importantly - see if the target we're tracking is dead! */
 	if (trackingCamera.target->died)
 	{
-		return(false);
+		return (false);
 	}
 
 	/* Update the acceleration,velocity and position of the camera for movement */
@@ -979,30 +979,30 @@ static bool camTrackCamera()
 			setWarCamActive(false);
 		}
 	}
-	return(true);
+	return (true);
 }
 //-----------------------------------------------------------------------------------
 DROID *getTrackingDroid(void)
 {
 	if (!getWarCamStatus())
 	{
-		return(NULL);
+		return (NULL);
 	}
 	if (trackingCamera.status != CAM_TRACKING)
 	{
-		return(NULL);
+		return (NULL);
 	}
 	if (trackingCamera.target->type != OBJ_DROID)
 	{
-		return(NULL);
+		return (NULL);
 	}
-	return((DROID *)trackingCamera.target);
+	return ((DROID *)trackingCamera.target);
 }
 
 //-----------------------------------------------------------------------------------
 SDWORD	getPresAngle(void)
 {
-	return(presAvAngle);
+	return (presAvAngle);
 }
 //-----------------------------------------------------------------------------------
 
@@ -1010,7 +1010,7 @@ SDWORD	getPresAngle(void)
 //-----------------------------------------------------------------------------------
 UDWORD	getNumDroidsSelected(void)
 {
-	return(selNumSelected(selectedPlayer));
+	return (selNumSelected(selectedPlayer));
 }
 
 //-----------------------------------------------------------------------------------
@@ -1021,12 +1021,12 @@ bool	getWarCamStatus(void)
 	/* Is it switched off? */
 	if (trackingCamera.status == CAM_INACTIVE)
 	{
-		return(false);
+		return (false);
 	}
 	else
 	{
 		/* Tracking is ON */
-		return(true);
+		return (true);
 	}
 }
 
@@ -1090,7 +1090,7 @@ bool	getRadarTrackingStatus(void)
 			retVal = false;
 		}
 	}
-	return(retVal);
+	return (retVal);
 }
 
 void	toggleRadarAllignment(void)

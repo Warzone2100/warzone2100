@@ -136,7 +136,7 @@ bool	renderBridgeSection(STRUCTURE *psStructure)
 	pie_Draw3DShape(psStructure->sDisplay.imd, 0, 0, WZCOL_WHITE, 0, 0);
 
 	pie_MatEnd();
-	return(true);
+	return (true);
 }
 
 /*

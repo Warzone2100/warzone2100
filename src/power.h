@@ -53,7 +53,7 @@ extern void addPower(int player, int32_t quantity);
 
 void usePower(int player, uint32_t quantity);
 
-/** Update current power based on what was extracted during the last cycle and what Power Generators exist. 
+/** Update current power based on what was extracted during the last cycle and what Power Generators exist.
   * If ticks is set, this is the number of game ticks to process for at once. */
 extern void updatePlayerPower(int player, int ticks = 1);
 

@@ -34,7 +34,7 @@
  * \param data Payload (store intermediate results here)
  * \return true if ore points are required, false otherwise
  */
-typedef bool (*RAY_CALLBACK)(Vector2i pos, int32_t dist, void* data);
+typedef bool (*RAY_CALLBACK)(Vector2i pos, int32_t dist, void *data);
 
 
 /*!

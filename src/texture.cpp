@@ -118,9 +118,12 @@ bool texLoad(const char *fileName)
 	firstPage = pie_NumberOfPages();
 
 	ASSERT_OR_RETURN(false, MIPMAP_MAX == TILE_WIDTH && MIPMAP_MAX == TILE_HEIGHT, "Bad tile sizes");
-	
+
 	// store the filename so we can later determine which tileset we are using
-	if (tilesetDir) free(tilesetDir);
+	if (tilesetDir)
+	{
+		free(tilesetDir);
+	}
 	tilesetDir = strdup(fileName);
 
 	// reset defaults
@@ -159,7 +162,8 @@ bool texLoad(const char *fileName)
 	}
 	i = 0; // tile
 	j = 0; // place in buffer
-	do {
+	do
+	{
 		unsigned int r, g, b;
 		int cnt = 0;
 
@@ -170,7 +174,8 @@ bool texLoad(const char *fileName)
 			radarColour(i, r, g, b);
 		}
 		i++; // next tile
-	} while (k >= 3 && j + 6 < size);
+	}
+	while (k >= 3 && j + 6 < size);
 	free(buffer);
 
 	/* Now load the actual tiles */
@@ -220,7 +225,7 @@ bool texLoad(const char *fileName)
 				tileTexInfo[k].vOffset = (float)yOffset / (float)ySize;
 				tileTexInfo[k].texPage = texPage;
 				debug(LOG_TEXTURE, "  texLoad: Registering k=%d i=%d u=%f v=%f xoff=%d yoff=%d xsize=%d ysize=%d tex=%d (%s)",
-				     k, i, tileTexInfo[k].uOffset, tileTexInfo[k].vOffset, xOffset, yOffset, xSize, ySize, texPage, fullPath);
+				      k, i, tileTexInfo[k].uOffset, tileTexInfo[k].vOffset, xOffset, yOffset, xSize, ySize, texPage, fullPath);
 			}
 			xOffset += i; // i is width of tile
 			if (xOffset + i > xLimit)

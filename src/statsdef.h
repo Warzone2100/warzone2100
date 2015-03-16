@@ -51,14 +51,20 @@ enum DROID_TYPE
 	DROID_ANY,              ///< Any droid. Used as a parameter for various stuff.
 };
 
-static inline bool stringToEnumSortFunction(std::pair<char const *, unsigned> const &a, std::pair<char const *, unsigned> const &b) { return strcmp(a.first, b.first) < 0; }
+static inline bool stringToEnumSortFunction(std::pair<char const *, unsigned> const &a, std::pair<char const *, unsigned> const &b)
+{
+	return strcmp(a.first, b.first) < 0;
+}
 
 template <typename Enum>
 struct StringToEnum
 {
-	operator std::pair<char const *, unsigned>() const { return std::make_pair(string, value); }
+	operator std::pair<char const *, unsigned>() const
+	{
+		return std::make_pair(string, value);
+	}
 
-	char const *    string;
+	char const     *string;
 	Enum            value;
 };
 
@@ -68,9 +74,9 @@ struct StringToEnumMap : public std::vector<std::pair<char const *, unsigned> >
 	typedef std::vector<std::pair<char const *, unsigned> > V;
 
 	template <int N>
-	static StringToEnumMap<Enum> const &FromArray(StringToEnum<Enum> const (&map)[N])
+	static StringToEnumMap<Enum> const &FromArray(StringToEnum<Enum> const(&map)[N])
 	{
-		static StringToEnum<Enum> const (&myMap)[N] = map;
+		static StringToEnum<Enum> const(&myMap)[N] = map;
 		static const StringToEnumMap<Enum> sortedMap(map);
 		assert(map == myMap);
 		(void)myMap;  // Squelch warning in release mode.
@@ -78,7 +84,10 @@ struct StringToEnumMap : public std::vector<std::pair<char const *, unsigned> >
 	}
 
 	template <int N>
-	StringToEnumMap(StringToEnum<Enum> const (&entries)[N]) : V(entries, entries + N) { std::sort(V::begin(), V::end(), stringToEnumSortFunction); }
+	StringToEnumMap(StringToEnum<Enum> const(&entries)[N]) : V(entries, entries + N)
+	{
+		std::sort(V::begin(), V::end(), stringToEnumSortFunction);
+	}
 };
 
 enum COMPONENT_TYPE
@@ -251,7 +260,7 @@ struct BASE_STATS
 struct COMPONENT_STATS : public BASE_STATS
 {
 	COMPONENT_STATS() : buildPower(0), buildPoints(0), weight(0), body(0), designable(false), pIMD(NULL),
-	                    compType(COMP_NUMCOMPONENTS) {}
+		compType(COMP_NUMCOMPONENTS) {}
 
 	UDWORD		buildPower;			/**< Power required to build the component */
 	UDWORD		buildPoints;		/**< Time required to build the component */
@@ -264,8 +273,8 @@ struct COMPONENT_STATS : public BASE_STATS
 
 struct PROPULSION_STATS : public COMPONENT_STATS
 {
-	PROPULSION_STATS() : maxSpeed(0), propulsionType(PROPULSION_TYPE_NUM), turnSpeed(0), spinSpeed(0), 
-	                     spinAngle(0), skidDeceleration(0), deceleration(0), acceleration(0) {}
+	PROPULSION_STATS() : maxSpeed(0), propulsionType(PROPULSION_TYPE_NUM), turnSpeed(0), spinSpeed(0),
+		spinAngle(0), skidDeceleration(0), deceleration(0), acceleration(0) {}
 
 	UDWORD			maxSpeed;		///< Max speed for the droid
 	PROPULSION_TYPE propulsionType; ///< Type of propulsion used - index into PropulsionTable
@@ -334,8 +343,8 @@ struct REPAIR_STATS : public COMPONENT_STATS
 struct WEAPON_STATS : public COMPONENT_STATS
 {
 	WEAPON_STATS() : pMountGraphic(NULL), pMuzzleGraphic(NULL), pInFlightGraphic(NULL), pTargetHitGraphic(NULL),
-	                 pTargetMissGraphic(NULL), pWaterHitGraphic(NULL), pTrailGraphic(NULL), iAudioFireID(0),
-	                 iAudioImpactID(0)
+		pTargetMissGraphic(NULL), pWaterHitGraphic(NULL), pTrailGraphic(NULL), iAudioFireID(0),
+		iAudioImpactID(0)
 	{
 		memset(&upgrade, 0, sizeof(upgrade));
 		memset(&base, 0, sizeof(base));
@@ -420,9 +429,9 @@ struct BRAIN_STATS : public COMPONENT_STATS
 {
 	BRAIN_STATS() : psWeaponStat(NULL), maxDroids(0), maxDroidsMult(0) {}
 
-       WEAPON_STATS	*psWeaponStat;	///< weapon stats associated with this brain - for Command Droids
-       UDWORD          maxDroids;       ///< base maximum number of droids that the commander can control
-       UDWORD          maxDroidsMult;   ///< maximum number of controlled droids multiplied by level
+	WEAPON_STATS	*psWeaponStat;	///< weapon stats associated with this brain - for Command Droids
+	UDWORD          maxDroids;       ///< base maximum number of droids that the commander can control
+	UDWORD          maxDroidsMult;   ///< maximum number of controlled droids multiplied by level
 };
 
 /*

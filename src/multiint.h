@@ -50,9 +50,15 @@ public:
 	void setLabel(char const *text);
 	void addButton(int value, Image image, Image imageHighlight, char const *tip);
 	void enable(bool enabled = true);
-	void disable() { enable(false); }
+	void disable()
+	{
+		enable(false);
+	}
 	void setGap(int gap);
-	int currentValue() const { return currentValue_; }
+	int currentValue() const
+	{
+		return currentValue_;
+	}
 
 signals:
 	void chosen(int);
@@ -91,20 +97,20 @@ int getNextAIAssignment(const char *name);
 extern LOBBY_ERROR_TYPES getLobbyError(void);
 extern void setLobbyError(LOBBY_ERROR_TYPES error_type);
 
-extern	void	runConnectionScreen		(void);
-extern	bool	startConnectionScreen	(void);
-extern	void	intProcessConnection	(UDWORD id);
+extern	void	runConnectionScreen(void);
+extern	bool	startConnectionScreen(void);
+extern	void	intProcessConnection(UDWORD id);
 
-extern	void	runGameFind				(void);
-extern	void	startGameFind			(void);
+extern	void	runGameFind(void);
+extern	void	startGameFind(void);
 
 void updateLimitFlags(void);
 
-extern	void	runMultiOptions			(void);
-extern	bool	startMultiOptions		(bool bReenter);
-extern	void	frontendMultiMessages	(void);
+extern	void	runMultiOptions(void);
+extern	bool	startMultiOptions(bool bReenter);
+extern	void	frontendMultiMessages(void);
 
-bool addMultiBut(W_SCREEN *screen, UDWORD formid, UDWORD id, UDWORD x, UDWORD y, UDWORD width, UDWORD height, const char* tipres, UDWORD norm, UDWORD down, UDWORD hi, unsigned tc = MAX_PLAYERS);
+bool addMultiBut(W_SCREEN *screen, UDWORD formid, UDWORD id, UDWORD x, UDWORD y, UDWORD width, UDWORD height, const char *tipres, UDWORD norm, UDWORD down, UDWORD hi, unsigned tc = MAX_PLAYERS);
 bool changeColour(unsigned player, int col, bool isHost);
 extern	char	sPlayer[128];
 

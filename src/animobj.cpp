@@ -57,7 +57,7 @@ static	HASHTABLE *g_pAnimObjTable = NULL;
 /* local functions */
 
 static UDWORD		animObj_HashFunction(intptr_t iKey1, intptr_t iKey2);
-static void		animObj_HashFreeElementFunc( void * psElement );
+static void		animObj_HashFreeElementFunc(void *psElement);
 
 /***************************************************************************/
 /*
@@ -70,11 +70,11 @@ bool animObj_Init()
 	SDWORD	iSize = sizeof(ANIM_OBJECT);
 
 	/* allocate hashtable */
-	hashTable_Create( &g_pAnimObjTable, ANIM_HASH_TABLE_SIZE,
-				ANIM_OBJ_INIT, ANIM_OBJ_EXT, iSize );
+	hashTable_Create(&g_pAnimObjTable, ANIM_HASH_TABLE_SIZE,
+	                 ANIM_OBJ_INIT, ANIM_OBJ_EXT, iSize);
 
 	/* set local hash table functions */
-	hashTable_SetHashFunction( g_pAnimObjTable, animObj_HashFunction );
+	hashTable_SetHashFunction(g_pAnimObjTable, animObj_HashFunction);
 	hashTable_SetFreeElementFunction(g_pAnimObjTable, animObj_HashFreeElementFunc);
 
 	return true;
@@ -83,7 +83,7 @@ bool animObj_Init()
 bool animObj_Shutdown()
 {
 	/* destroy hash table */
-	hashTable_Destroy( g_pAnimObjTable );
+	hashTable_Destroy(g_pAnimObjTable);
 	g_pAnimObjTable = NULL;
 
 	return true;
@@ -97,7 +97,7 @@ void animObj_SetDoneFunc(ANIM_OBJECT *psObj, ANIMOBJDONEFUNC pDoneFunc)
 /// Takes object pointer and id and returns hashed index
 static UDWORD animObj_HashFunction(intptr_t iKey1, intptr_t iKey2)
 {
-	return (iKey1 + iKey2)%ANIM_HASH_TABLE_SIZE;
+	return (iKey1 + iKey2) % ANIM_HASH_TABLE_SIZE;
 }
 
 static void animObj_HashFreeElementFunc(void *psElement)
@@ -110,9 +110,9 @@ static void animObj_HashFreeElementFunc(void *psElement)
 
 void animObj_Update()
 {
-	ANIM_OBJECT *psObj = (ANIM_OBJECT*)hashTable_GetFirst( g_pAnimObjTable );
+	ANIM_OBJECT *psObj = (ANIM_OBJECT *)hashTable_GetFirst(g_pAnimObjTable);
 
-	while ( psObj != NULL )
+	while (psObj != NULL)
 	{
 		bool bRemove = false;
 
@@ -124,16 +124,16 @@ void animObj_Update()
 		}
 
 		/* remove any expired (non-looping) animations */
-		if ( (bRemove == false) && (psObj->uwCycles != 0) )
+		if ((bRemove == false) && (psObj->uwCycles != 0))
 		{
 			int dwTime = graphicsTime - psObj->udwStartTime;
 
-			if ( dwTime > (psObj->psAnim->uwAnimTime*psObj->uwCycles) )
+			if (dwTime > (psObj->psAnim->uwAnimTime * psObj->uwCycles))
 			{
 				/* fire callback if set */
-				if ( psObj->pDoneFunc != NULL )
+				if (psObj->pDoneFunc != NULL)
 				{
-					(psObj->pDoneFunc) (psObj);
+					(psObj->pDoneFunc)(psObj);
 				}
 
 				bRemove = true;
@@ -141,17 +141,17 @@ void animObj_Update()
 		}
 
 		/* remove object if flagged */
-		if ( bRemove == true )
+		if (bRemove == true)
 		{
-			if ( hashTable_RemoveElement( g_pAnimObjTable, psObj,
-				(intptr_t) psObj->psParent, psObj->psAnim->uwID ) == false )
+			if (hashTable_RemoveElement(g_pAnimObjTable, psObj,
+			                            (intptr_t) psObj->psParent, psObj->psAnim->uwID) == false)
 			{
-				debug( LOG_FATAL, "animObj_Update: couldn't remove anim obj\n" );
+				debug(LOG_FATAL, "animObj_Update: couldn't remove anim obj\n");
 				abort();
 			}
 		}
 
-		psObj = (ANIM_OBJECT*)hashTable_GetNext( g_pAnimObjTable );
+		psObj = (ANIM_OBJECT *)hashTable_GetNext(g_pAnimObjTable);
 	}
 }
 
@@ -165,12 +165,12 @@ ANIM_OBJECT *animObj_Add(BASE_OBJECT *pParentObj, int iAnimID, UWORD uwCycles)
 	ASSERT(psAnim != NULL, "anim id %i not found\n", iAnimID);
 
 	/* get object from table */
-	psObj = (ANIM_OBJECT*)hashTable_GetElement( g_pAnimObjTable );
+	psObj = (ANIM_OBJECT *)hashTable_GetElement(g_pAnimObjTable);
 
-	if (psObj==NULL)
+	if (psObj == NULL)
 	{
 		debug(LOG_ERROR, "No room in hash table");
-		return(NULL);
+		return (NULL);
 	}
 
 	/* init object */
@@ -223,7 +223,7 @@ ANIM_OBJECT *animObj_GetNext()
 
 ANIM_OBJECT *animObj_Find(BASE_OBJECT *pParentObj, int iAnimID)
 {
-	return (ANIM_OBJECT*)hashTable_FindElement(g_pAnimObjTable, (intptr_t) pParentObj, iAnimID);
+	return (ANIM_OBJECT *)hashTable_FindElement(g_pAnimObjTable, (intptr_t) pParentObj, iAnimID);
 }
 
 bool animObj_Remove(ANIM_OBJECT *psObj, int iAnimID)

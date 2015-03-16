@@ -27,7 +27,8 @@
 #include "lib/framework/types.h"
 
 // used for multiplayer data integrity check.
-enum {
+enum
+{
 	DATA_SWEAPON,
 	DATA_SBODY,
 	DATA_SCONSTR,

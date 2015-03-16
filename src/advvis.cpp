@@ -19,7 +19,7 @@
 */
 /**
  * @file advvis.c
- * 
+ *
  * Makes smooth transitions for terrain visibility.
  */
 
@@ -38,7 +38,7 @@
 static bool bRevealActive = true;
 
 // ------------------------------------------------------------------------------------
-void	avUpdateTiles( void )
+void	avUpdateTiles(void)
 {
 	const int len = mapHeight * mapWidth;
 	const int playermask = 1 << selectedPlayer;
@@ -72,7 +72,7 @@ void	avUpdateTiles( void )
 }
 
 // ------------------------------------------------------------------------------------
-UDWORD	avGetObjLightLevel(BASE_OBJECT *psObj,UDWORD origLevel)
+UDWORD	avGetObjLightLevel(BASE_OBJECT *psObj, UDWORD origLevel)
 {
 	float div = (float)psObj->visible[selectedPlayer] / 255.f;
 	unsigned int lowest = origLevel / START_DIVIDE;
@@ -87,26 +87,26 @@ UDWORD	avGetObjLightLevel(BASE_OBJECT *psObj,UDWORD origLevel)
 }
 
 // ------------------------------------------------------------------------------------
-bool	getRevealStatus( void )
+bool	getRevealStatus(void)
 {
 	return bRevealActive;
 }
 
 // ------------------------------------------------------------------------------------
-void	setRevealStatus( bool val )
+void	setRevealStatus(bool val)
 {
 	debug(LOG_FOG, "avSetRevealStatus: Setting reveal to %s", val ? "ON" : "OFF");
 	bRevealActive = val;
 }
 
 // ------------------------------------------------------------------------------------
-void	preProcessVisibility( void )
+void	preProcessVisibility(void)
 {
 	for (int i = 0; i < mapWidth; i++)
 	{
 		for (int j = 0; j < mapHeight; j++)
 		{
-			MAPTILE *psTile = mapTile(i,j);
+			MAPTILE *psTile = mapTile(i, j);
 			psTile->level = bRevealActive ? MIN(MIN_ILLUM, psTile->illumination / 4.0f) : 0;
 
 			if (TEST_TILE_VISIBLE(selectedPlayer, psTile))

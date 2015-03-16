@@ -51,18 +51,18 @@ struct wzSearchPath
 {
 	char path[PATH_MAX];
 	unsigned int priority;
-	wzSearchPath * higherPriority, * lowerPriority;
+	wzSearchPath *higherPriority, * lowerPriority;
 };
 
 enum searchPathMode { mod_clean, mod_campaign, mod_multiplay, mod_override };
 
-void registerSearchPath( const char path[], unsigned int priority );
+void registerSearchPath(const char path[], unsigned int priority);
 bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map = NULL);
 
 bool buildMapList(void);
 bool CheckForMod(char *theMap);
 
-bool loadLevFile(const char* filename, searchPathMode datadir, bool ignoreWrf, char const *realFileName);
+bool loadLevFile(const char *filename, searchPathMode datadir, bool ignoreWrf, char const *realFileName);
 
 extern IMAGEFILE	*FrontImages;
 

@@ -59,15 +59,15 @@
 bool SendBuildFinished(STRUCTURE *psStruct)
 {
 	uint8_t player = psStruct->player;
-	ASSERT( player < MAX_PLAYERS, "invalid player %u", player);
+	ASSERT(player < MAX_PLAYERS, "invalid player %u", player);
 
 	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_DEBUG_ADD_STRUCTURE);
-		NETuint32_t(&psStruct->id);		// ID of building
+	NETuint32_t(&psStruct->id);		// ID of building
 
-		// Along with enough info to build it (if needed)
-		NETuint32_t(&psStruct->pStructureType->ref);
-		NETPosition(&psStruct->pos);
-		NETuint8_t(&player);
+	// Along with enough info to build it (if needed)
+	NETuint32_t(&psStruct->pStructureType->ref);
+	NETPosition(&psStruct->pos);
+	NETuint8_t(&player);
 	return NETend();
 }
 
@@ -77,14 +77,14 @@ bool recvBuildFinished(NETQUEUE queue)
 	uint32_t	structId;
 	STRUCTURE	*psStruct;
 	Position        pos;
-	uint32_t	type,typeindex;
+	uint32_t	type, typeindex;
 	uint8_t		player;
 
 	NETbeginDecode(queue, GAME_DEBUG_ADD_STRUCTURE);
-		NETuint32_t(&structId);	// get the struct id.
-		NETuint32_t(&type); 	// Kind of building.
-		NETPosition(&pos);      // pos
-		NETuint8_t(&player);
+	NETuint32_t(&structId);	// get the struct id.
+	NETuint32_t(&type); 	// Kind of building.
+	NETPosition(&pos);      // pos
+	NETuint8_t(&player);
 	NETend();
 
 	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "invalid player %u", player);
@@ -95,12 +95,12 @@ bool recvBuildFinished(NETQUEUE queue)
 		return false;
 	}
 
-	psStruct = IdToStruct(structId,ANYPLAYER);
+	psStruct = IdToStruct(structId, ANYPLAYER);
 
 	if (psStruct)
 	{
 		// make it complete.
-		psStruct->currentBuildPts = psStruct->pStructureType->buildPoints+1;
+		psStruct->currentBuildPts = psStruct->pStructureType->buildPoints + 1;
 
 		if (psStruct->status != SS_BUILT)
 		{
@@ -179,7 +179,7 @@ bool recvDestroyStructure(NETQUEUE queue)
 	STRUCTURE *psStruct;
 
 	NETbeginDecode(queue, GAME_DEBUG_REMOVE_STRUCTURE);
-		NETuint32_t(&structID);
+	NETuint32_t(&structID);
 	NETend();
 
 	if (!getDebugMappingStatus() && bMultiPlayer)
@@ -189,7 +189,7 @@ bool recvDestroyStructure(NETQUEUE queue)
 	}
 
 	// Struct to destory
-	psStruct = IdToStruct(structID,ANYPLAYER);
+	psStruct = IdToStruct(structID, ANYPLAYER);
 
 	if (psStruct)
 	{
@@ -211,10 +211,10 @@ bool sendLasSat(UBYTE player, STRUCTURE *psStruct, BASE_OBJECT *psObj)
 {
 	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_LASSAT);
 
-		NETuint8_t(&player);
-		NETuint32_t(&psStruct->id);
-		NETuint32_t(&psObj->id);	// Target
-		NETuint8_t(&psObj->player);	// Target player
+	NETuint8_t(&player);
+	NETuint32_t(&psStruct->id);
+	NETuint32_t(&psObj->id);	// Target
+	NETuint8_t(&psObj->player);	// Target player
 
 	return NETend();
 }
@@ -223,18 +223,18 @@ bool sendLasSat(UBYTE player, STRUCTURE *psStruct, BASE_OBJECT *psObj)
 bool recvLasSat(NETQUEUE queue)
 {
 	BASE_OBJECT	*psObj;
-	UBYTE		player,targetplayer;
+	UBYTE		player, targetplayer;
 	STRUCTURE	*psStruct;
-	uint32_t	id,targetid;
+	uint32_t	id, targetid;
 
 	NETbeginDecode(queue, GAME_LASSAT);
-		NETuint8_t(&player);
-		NETuint32_t(&id);
-		NETuint32_t(&targetid);
-		NETuint8_t(&targetplayer);
+	NETuint8_t(&player);
+	NETuint32_t(&id);
+	NETuint32_t(&targetid);
+	NETuint8_t(&targetplayer);
 	NETend();
 
-	psStruct = IdToStruct (id, player);
+	psStruct = IdToStruct(id, player);
 	psObj	 = IdToPointer(targetid, targetplayer);
 	if (psStruct && !canGiveOrdersFor(queue.index, psStruct->player))
 	{
@@ -265,7 +265,7 @@ bool recvLasSat(NETQUEUE queue)
 		psStruct->asWeaps[0].ammo = 1; // abducting this field for keeping track of triggers
 
 		// Play 5 second countdown message
-		audio_QueueTrackPos( ID_SOUND_LAS_SAT_COUNTDOWN, psObj->pos.x, psObj->pos.y, psObj->pos.z);
+		audio_QueueTrackPos(ID_SOUND_LAS_SAT_COUNTDOWN, psObj->pos.x, psObj->pos.y, psObj->pos.z);
 	}
 
 	return true;
@@ -278,15 +278,15 @@ void sendStructureInfo(STRUCTURE *psStruct, STRUCTURE_INFO structureInfo_, DROID
 	uint8_t  structureInfo = structureInfo_;
 
 	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_STRUCTUREINFO);
-		NETuint8_t(&player);
-		NETuint32_t(&structId);
-		NETuint8_t(&structureInfo);
-		if (structureInfo_ == STRUCTUREINFO_MANUFACTURE)
-		{
-			uint32_t templateId = psTempl != NULL ? psTempl->multiPlayerID : 0;
+	NETuint8_t(&player);
+	NETuint32_t(&structId);
+	NETuint8_t(&structureInfo);
+	if (structureInfo_ == STRUCTUREINFO_MANUFACTURE)
+	{
+		uint32_t templateId = psTempl != NULL ? psTempl->multiPlayerID : 0;
 
-			NETuint32_t(&templateId);
-		}
+		NETuint32_t(&templateId);
+	}
 	NETend();
 }
 
@@ -296,38 +296,38 @@ void recvStructureInfo(NETQUEUE queue)
 	uint32_t        structId = 0;
 	uint32_t        templateId = 0;
 	uint8_t         structureInfo;
-	STRUCTURE *     psStruct;
+	STRUCTURE      *psStruct;
 	DROID_TEMPLATE *psTempl = NULL;
 
 	NETbeginDecode(queue, GAME_STRUCTUREINFO);
-		NETuint8_t(&player);
-		NETuint32_t(&structId);
-		NETuint8_t(&structureInfo);
-		if (structureInfo == STRUCTUREINFO_MANUFACTURE)
+	NETuint8_t(&player);
+	NETuint32_t(&structId);
+	NETuint8_t(&structureInfo);
+	if (structureInfo == STRUCTUREINFO_MANUFACTURE)
+	{
+		NETuint32_t(&templateId);
+		if (templateId != 0)
 		{
-			NETuint32_t(&templateId);
-			if (templateId != 0)
+			// For autogames, where we want the AI to take us over, our templates are not setup... so let's use any AI's templates.
+			if (!NetPlay.players[player].autoGame)
 			{
-				// For autogames, where we want the AI to take us over, our templates are not setup... so let's use any AI's templates.
-				if (!NetPlay.players[player].autoGame)
-				{
-					psTempl = IdToTemplate(templateId, player);
-				}
-				else
-				{
-					psTempl = IdToTemplate(templateId, ANYPLAYER);
-				}
-				if (psTempl == NULL)
-				{
-					debug(LOG_SYNC, "Synch error, don't have tempate id %u, so can't change production of factory %u!", templateId, structId);
-				}
+				psTempl = IdToTemplate(templateId, player);
+			}
+			else
+			{
+				psTempl = IdToTemplate(templateId, ANYPLAYER);
+			}
+			if (psTempl == NULL)
+			{
+				debug(LOG_SYNC, "Synch error, don't have tempate id %u, so can't change production of factory %u!", templateId, structId);
 			}
 		}
+	}
 	NETend();
 
 	psStruct = IdToStruct(structId, player);
 
-	syncDebug("player%d,structId%u%c,structureInfo%u,templateId%u%c", player, structId, psStruct == NULL? '^' : '*', structureInfo, templateId, psTempl == NULL? '^' : '*');
+	syncDebug("player%d,structId%u%c,structureInfo%u,templateId%u%c", player, structId, psStruct == NULL ? '^' : '*', structureInfo, templateId, psTempl == NULL ? '^' : '*');
 
 	if (psStruct == NULL)
 	{
@@ -355,14 +355,14 @@ void recvStructureInfo(NETQUEUE queue)
 
 	switch (structureInfo)
 	{
-		case STRUCTUREINFO_MANUFACTURE:       structSetManufacture(psStruct, psTempl, ModeImmediate); break;
-		case STRUCTUREINFO_CANCELPRODUCTION:  cancelProduction(psStruct, ModeImmediate, false);       break;
-		case STRUCTUREINFO_HOLDPRODUCTION:    holdProduction(psStruct, ModeImmediate);                break;
-		case STRUCTUREINFO_RELEASEPRODUCTION: releaseProduction(psStruct, ModeImmediate);             break;
-		case STRUCTUREINFO_HOLDRESEARCH:      holdResearch(psStruct, ModeImmediate);                  break;
-		case STRUCTUREINFO_RELEASERESEARCH:   releaseResearch(psStruct, ModeImmediate);               break;
-		default:
-			debug(LOG_ERROR, "Invalid structureInfo %d", structureInfo);
+	case STRUCTUREINFO_MANUFACTURE:       structSetManufacture(psStruct, psTempl, ModeImmediate); break;
+	case STRUCTUREINFO_CANCELPRODUCTION:  cancelProduction(psStruct, ModeImmediate, false);       break;
+	case STRUCTUREINFO_HOLDPRODUCTION:    holdProduction(psStruct, ModeImmediate);                break;
+	case STRUCTUREINFO_RELEASEPRODUCTION: releaseProduction(psStruct, ModeImmediate);             break;
+	case STRUCTUREINFO_HOLDRESEARCH:      holdResearch(psStruct, ModeImmediate);                  break;
+	case STRUCTUREINFO_RELEASERESEARCH:   releaseResearch(psStruct, ModeImmediate);               break;
+	default:
+		debug(LOG_ERROR, "Invalid structureInfo %d", structureInfo);
 	}
 
 	syncDebugStructure(psStruct, '>');

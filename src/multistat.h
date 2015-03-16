@@ -52,7 +52,7 @@ void updateMultiStatsDamage(UDWORD attacker, UDWORD defender, UDWORD inflicted);
 void updateMultiStatsGames(void);
 void updateMultiStatsWins(void);
 void updateMultiStatsLoses(void);
-void updateMultiStatsKills(BASE_OBJECT *psKilled,UDWORD player);
+void updateMultiStatsKills(BASE_OBJECT *psKilled, UDWORD player);
 void recvMultiStats(NETQUEUE queue);
 
 std::map<std::string, EcKey::Key> const &getKnownPlayers();

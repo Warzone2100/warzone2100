@@ -37,7 +37,7 @@ static const char vcs_tag[] = VCS_TAG;
 */
 const char *version_getVersionString()
 {
-	static const char* version_string = NULL;
+	static const char *version_string = NULL;
 
 	if (version_string == NULL)
 	{
@@ -50,7 +50,8 @@ const char *version_getVersionString()
 			version_string = (VCS_BRANCH " " VCS_SHORT_HASH);
 		}
 		else
-		{	// not a branch or a tag, so we are detached most likely.
+		{
+			// not a branch or a tag, so we are detached most likely.
 			version_string = VCS_EXTRA;
 		}
 	}
@@ -69,15 +70,15 @@ const char *version_getFormattedVersionString()
 	{
 		// Compose the working copy state string
 #if (VCS_WC_MODIFIED)
-		const char* wc_state = _(" (modified locally)");
+		const char *wc_state = _(" (modified locally)");
 #else
-		const char* wc_state = "";
+		const char *wc_state = "";
 #endif
 		// Compose the build type string
 #ifdef DEBUG
-		const char* build_type = _(" - DEBUG");
+		const char *build_type = _(" - DEBUG");
 #else
-		const char* build_type = "";
+		const char *build_type = "";
 #endif
 
 		// Construct the version string

@@ -39,7 +39,7 @@ struct HeightCallbackHelp_t
 static void initSteps(int32_t srcM, int32_t dstM, int32_t &tile, int32_t &step, int32_t &cur, int32_t &end)
 {
 	int increasing = srcM < dstM;
-	step = -1 + 2*increasing;
+	step = -1 + 2 * increasing;
 	tile = srcM - step;
 	cur = srcM + increasing;
 	end = dstM + increasing;
@@ -57,7 +57,7 @@ static bool tryStep(int32_t &tile, int32_t step, int32_t &cur, int32_t end, int3
 
 	// Find the point on the line with the x coordinate world_coord(cur).
 	px = world_coord(cur);
-	py = sy + int64_t(px - sx) * (dy - sy)/(dx - sx);
+	py = sy + int64_t(px - sx) * (dy - sy) / (dx - sx);
 
 	cur += step;
 	return true;
@@ -104,7 +104,7 @@ void rayCast(Vector2i src, Vector2i dst, RAY_CALLBACK callback, void *data)
 		if (!first)
 		{
 			// Find midpoint.
-			Vector2i avg = (prev + sel)/2;
+			Vector2i avg = (prev + sel) / 2;
 			// But make sure it's on the right tile, since it could be off-by-one if the line passes exactly through a grid intersection.
 			avg.x = std::min(std::max(avg.x, world_coord(selTile.x)), world_coord(selTile.x + 1) - 1);
 			avg.y = std::min(std::max(avg.y, world_coord(selTile.y)), world_coord(selTile.y + 1) - 1);
@@ -190,7 +190,7 @@ static bool getTileHeightCallback(Vector2i pos, int32_t dist, void *data)
 
 void getBestPitchToEdgeOfGrid(UDWORD x, UDWORD y, uint16_t direction, uint16_t *pitch)
 {
-	HeightCallbackHelp_t help = {map_Height(x,y), 0};
+	HeightCallbackHelp_t help = {map_Height(x, y), 0};
 
 	Vector3i src(x, y, 0);
 	Vector3i delta(iSinCosR(direction, 5430), 0);

@@ -34,7 +34,7 @@ power values in the buttons */
 #define POWERBAR_SCALE			(5 * WBAR_SCALE/STAT_PROGBARWIDTH)
 
 #define BUTTONOBJ_ROTSPEED		90	// Speed to rotate objects rendered in
-									// buttons ( degrees per second )
+// buttons ( degrees per second )
 
 enum ImdType
 {
@@ -51,15 +51,40 @@ enum ImdType
 struct ImdObject
 {
 	ImdObject() : ptr(nullptr), type(IMDTYPE_NONE) {}
-	static ImdObject Droid(BASE_OBJECT *p) { return ImdObject(p, IMDTYPE_DROID); }
-	static ImdObject DroidTemplate(BASE_STATS *p) { return ImdObject(p, IMDTYPE_DROIDTEMPLATE); }
-	static ImdObject Component(BASE_STATS *p) { return ImdObject(p, IMDTYPE_COMPONENT); }
-	static ImdObject Structure(BASE_OBJECT *p) { return ImdObject(p, IMDTYPE_STRUCTURE); }
-	static ImdObject Research(BASE_STATS *p) { return ImdObject(p, IMDTYPE_RESEARCH); }
-	static ImdObject StructureStat(BASE_STATS *p) { return ImdObject(p, IMDTYPE_STRUCTURESTAT); }
-	static ImdObject Feature(BASE_STATS *p) { FEATURE_STATS *fStat = (FEATURE_STATS *)p; return ImdObject(fStat->psImd, IMDTYPE_FEATURE); }
+	static ImdObject Droid(BASE_OBJECT *p)
+	{
+		return ImdObject(p, IMDTYPE_DROID);
+	}
+	static ImdObject DroidTemplate(BASE_STATS *p)
+	{
+		return ImdObject(p, IMDTYPE_DROIDTEMPLATE);
+	}
+	static ImdObject Component(BASE_STATS *p)
+	{
+		return ImdObject(p, IMDTYPE_COMPONENT);
+	}
+	static ImdObject Structure(BASE_OBJECT *p)
+	{
+		return ImdObject(p, IMDTYPE_STRUCTURE);
+	}
+	static ImdObject Research(BASE_STATS *p)
+	{
+		return ImdObject(p, IMDTYPE_RESEARCH);
+	}
+	static ImdObject StructureStat(BASE_STATS *p)
+	{
+		return ImdObject(p, IMDTYPE_STRUCTURESTAT);
+	}
+	static ImdObject Feature(BASE_STATS *p)
+	{
+		FEATURE_STATS *fStat = (FEATURE_STATS *)p;
+		return ImdObject(fStat->psImd, IMDTYPE_FEATURE);
+	}
 
-	bool empty() const { return ptr == nullptr; }
+	bool empty() const
+	{
+		return ptr == nullptr;
+	}
 
 	void *ptr;
 	ImdType type;
@@ -69,7 +94,7 @@ private:
 };
 
 // Set audio IDs for form opening/closing anims.
-void SetFormAudioIDs(int OpenID,int CloseID);
+void SetFormAudioIDs(int OpenID, int CloseID);
 
 // Initialise interface graphics.
 void intInitialiseGraphics(void);
@@ -127,8 +152,16 @@ public:
 
 	virtual void display(int xOffset, int yOffset);
 
-	void setObject(BASE_OBJECT *object) { psObj = object; }
-	bool clearData() { bool ret = psObj != nullptr; psObj = nullptr; return ret; }
+	void setObject(BASE_OBJECT *object)
+	{
+		psObj = object;
+	}
+	bool clearData()
+	{
+		bool ret = psObj != nullptr;
+		psObj = nullptr;
+		return ret;
+	}
 
 protected:
 	BASE_OBJECT *psObj;
@@ -139,8 +172,16 @@ class IntStatusButton : public IntObjectButton
 public:
 	IntStatusButton(WIDGET *parent);
 
-	void setObject(BASE_OBJECT *object) { psObj = object; theStats = nullptr; }
-	void setObjectAndStats(BASE_OBJECT *object, BASE_STATS *stats) { psObj = object; theStats = stats; }
+	void setObject(BASE_OBJECT *object)
+	{
+		psObj = object;
+		theStats = nullptr;
+	}
+	void setObjectAndStats(BASE_OBJECT *object, BASE_STATS *stats)
+	{
+		psObj = object;
+		theStats = stats;
+	}
 
 	virtual void display(int xOffset, int yOffset);
 
@@ -155,8 +196,15 @@ public:
 
 	virtual void display(int xOffset, int yOffset);
 
-	void setStats(BASE_STATS *stats) { Stat = stats; }
-	void setStatsAndTip(BASE_STATS *stats) { setStats(stats); setTip(stats->name); }
+	void setStats(BASE_STATS *stats)
+	{
+		Stat = stats;
+	}
+	void setStatsAndTip(BASE_STATS *stats)
+	{
+		setStats(stats);
+		setTip(stats->name);
+	}
 
 protected:
 	BASE_STATS *Stat;
@@ -204,12 +252,12 @@ RESEARCH_FACILITY *StructureGetResearch(STRUCTURE *Structure);
 FACTORY *StructureGetFactory(STRUCTURE *Structure);
 
 bool StatIsStructure(BASE_STATS const *Stat);
-iIMDShape *StatGetStructureIMD(BASE_STATS *Stat,UDWORD Player);
+iIMDShape *StatGetStructureIMD(BASE_STATS *Stat, UDWORD Player);
 bool StatIsTemplate(BASE_STATS *Stat);
 bool StatIsFeature(BASE_STATS const *Stat);
 
 SDWORD StatIsComponent(BASE_STATS *Stat);
-bool StatGetComponentIMD(BASE_STATS *Stat, SDWORD compID,iIMDShape **CompIMD,iIMDShape **MountIMD);
+bool StatGetComponentIMD(BASE_STATS *Stat, SDWORD compID, iIMDShape **CompIMD, iIMDShape **MountIMD);
 
 bool StatIsResearch(BASE_STATS *Stat);
 
@@ -229,7 +277,10 @@ public:
 
 	virtual void display(int xOffset, int yOffset);
 
-	void setObject(DROID *object) { psDroid = object; }
+	void setObject(DROID *object)
+	{
+		psDroid = object;
+	}
 
 protected:
 	DROID *psDroid;
@@ -239,7 +290,7 @@ protected:
 extern void drawRadarBlips(int radarX, int radarY, float pixSizeH, float pixSizeV);
 
 /*Displays the proximity messages blips over the world*/
- void intDisplayProximityBlips(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
+void intDisplayProximityBlips(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 
 extern void intUpdateQuantitySlider(WIDGET *psWidget, W_CONTEXT *psContext);
 

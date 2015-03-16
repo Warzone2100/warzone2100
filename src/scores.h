@@ -25,17 +25,17 @@ class WIDGET;
 
 enum DATA_INDEX
 {
-WD_UNITS_BUILT,
-WD_UNITS_KILLED,
-WD_UNITS_LOST,
-WD_STR_BUILT,
-WD_STR_KILLED,
-WD_STR_LOST,
-WD_ARTEFACTS_FOUND,
-WD_MISSION_STARTED,
-WD_SHOTS_ON_TARGET,
-WD_SHOTS_OFF_TARGET,
-WD_BARBARIANS_MOWED_DOWN
+	WD_UNITS_BUILT,
+	WD_UNITS_KILLED,
+	WD_UNITS_LOST,
+	WD_STR_BUILT,
+	WD_STR_KILLED,
+	WD_STR_LOST,
+	WD_ARTEFACTS_FOUND,
+	WD_MISSION_STARTED,
+	WD_SHOTS_ON_TARGET,
+	WD_SHOTS_OFF_TARGET,
+	WD_BARBARIANS_MOWED_DOWN
 };
 
 // --------------------------------------------------------------------
@@ -58,35 +58,35 @@ extern MISSION_DATA	missionData;
 // Could use widgets, but hey.....
 struct STAT_BAR
 {
-UDWORD	topX,topY;		// Obvious
-UDWORD	width,height;	// Height down screen and width _unfilled_
-UDWORD	percent;		// What percentage full is it?
-UDWORD	stringID;		// String resource name to stick next to it.
-UDWORD	queTime;		// How many game ticks before it's active?
-bool	bQueued;		// Already fired off?
-bool	bActive;		// Is this one active?
-UDWORD	number;			// %d string for the associated text string.
+	UDWORD	topX, topY;		// Obvious
+	UDWORD	width, height;	// Height down screen and width _unfilled_
+	UDWORD	percent;		// What percentage full is it?
+	UDWORD	stringID;		// String resource name to stick next to it.
+	UDWORD	queTime;		// How many game ticks before it's active?
+	bool	bQueued;		// Already fired off?
+	bool	bActive;		// Is this one active?
+	UDWORD	number;			// %d string for the associated text string.
 };
 
 enum
 {
-STAT_UNIT_LOST,
-STAT_UNIT_KILLED,
-STAT_STR_LOST,
-STAT_STR_BLOWN_UP,
-STAT_UNITS_BUILT,
-STAT_UNITS_NOW,
-STAT_STR_BUILT,
-STAT_STR_NOW,
-STAT_ROOKIE,
-STAT_GREEN,
-STAT_TRAINED,
-STAT_REGULAR,
-STAT_VETERAN,
-STAT_CRACK,
-STAT_ELITE,
-STAT_SPECIAL,
-STAT_ACE
+	STAT_UNIT_LOST,
+	STAT_UNIT_KILLED,
+	STAT_STR_LOST,
+	STAT_STR_BLOWN_UP,
+	STAT_UNITS_BUILT,
+	STAT_UNITS_NOW,
+	STAT_STR_BUILT,
+	STAT_STR_NOW,
+	STAT_ROOKIE,
+	STAT_GREEN,
+	STAT_TRAINED,
+	STAT_REGULAR,
+	STAT_VETERAN,
+	STAT_CRACK,
+	STAT_ELITE,
+	STAT_SPECIAL,
+	STAT_ACE
 };
 
 bool scoreInitSystem();
@@ -94,7 +94,7 @@ void scoreUpdateVar(DATA_INDEX var);
 void scoreDataToConsole();
 void scoreDataToScreen(WIDGET *psWidget);
 void getAsciiTime(char *psText, unsigned time);
-bool readScoreData(const char* fileName);
-bool writeScoreData(const char* fileName);
+bool readScoreData(const char *fileName);
+bool writeScoreData(const char *fileName);
 
 #endif // __INCLUDED_SRC_SCORES_H__

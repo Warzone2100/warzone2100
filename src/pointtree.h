@@ -34,8 +34,14 @@ public:
 	public:
 		Filter() : data(1) {}  ///< Must be reset before use.
 		Filter(PointTree const &pointTree) : data(pointTree.points.size() + 1) {}
-		void reset(PointTree const &pointTree) { data.assign(pointTree.points.size() + 1, 0); }
-		void erase(unsigned index) { data[index] = std::max(data[index], 1u); }  ///< Erases the point from query results using the filter.
+		void reset(PointTree const &pointTree)
+		{
+			data.assign(pointTree.points.size() + 1, 0);
+		}
+		void erase(unsigned index)
+		{
+			data[index] = std::max(data[index], 1u);    ///< Erases the point from query results using the filter.
+		}
 
 	private:
 		friend class PointTree;

@@ -801,8 +801,8 @@ static bool intAddTemplateForm(DROID_TEMPLATE *psSelected)
 	IntListTabWidget *templList = new IntListTabWidget(templbaseForm);
 	templList->setChildSize(DES_TABBUTWIDTH, DES_TABBUTHEIGHT);
 	templList->setChildSpacing(DES_TABBUTGAP, DES_TABBUTGAP);
-	int templListWidth = OBJ_BUTWIDTH*2 + DES_TABBUTGAP;
-	templList->setGeometry((RET_FORMWIDTH - templListWidth)/2, 18, templListWidth, templbaseForm->height() - 18);
+	int templListWidth = OBJ_BUTWIDTH * 2 + DES_TABBUTGAP;
+	templList->setGeometry((RET_FORMWIDTH - templListWidth) / 2, 18, templListWidth, templbaseForm->height() - 18);
 
 	/* Put the buttons on it */
 	return intAddTemplateButtons(templList, psSelected);
@@ -1718,8 +1718,8 @@ static ListTabWidget *intAddComponentForm()
 	IntListTabWidget *compList = new IntListTabWidget(rightBase);
 	compList->setChildSize(DES_TABBUTWIDTH, DES_TABBUTHEIGHT);
 	compList->setChildSpacing(DES_TABBUTGAP, DES_TABBUTGAP);
-	int objListWidth = DES_TABBUTWIDTH*2 + DES_TABBUTGAP;
-	compList->setGeometry((rightBase->width() - objListWidth)/2, 40, objListWidth, rightBase->height() - 40);
+	int objListWidth = DES_TABBUTWIDTH * 2 + DES_TABBUTGAP;
+	compList->setGeometry((rightBase->width() - objListWidth) / 2, 40, objListWidth, rightBase->height() - 40);
 	return compList;
 }
 
@@ -2970,7 +2970,7 @@ static void intSetButtonFlash(UDWORD id, bool bFlash)
 
 	ASSERT_OR_RETURN(, psWidget->type == WIDG_BUTTON, "Not a button");
 
-	psWidget->displayFunction = bFlash? intDisplayButtonFlash : intDisplayButtonHilight;
+	psWidget->displayFunction = bFlash ? intDisplayButtonFlash : intDisplayButtonHilight;
 }
 
 /*
@@ -3176,7 +3176,7 @@ void intProcessDesign(UDWORD id)
 				eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DESIGN_WEAPON);
 			}
 			break;
-			//Added cases for 2nd/3rd turret
+		//Added cases for 2nd/3rd turret
 		case IDES_TURRET_A:
 			/* Calculate the index of the component */
 			sCurrDesign.asWeaps[1] =
@@ -3505,8 +3505,8 @@ void intProcessDesign(UDWORD id)
 	{
 		switch (id)
 		{
-			/* The four component clickable forms */
-			/* the six component clickable forms... */
+		/* The four component clickable forms */
+		/* the six component clickable forms... */
 		case IDDES_WEAPONS:
 			desCompID = 0;
 			intSetDesignMode(IDES_TURRET);
@@ -3526,7 +3526,7 @@ void intProcessDesign(UDWORD id)
 			desCompID = 0;
 			intSetDesignMode(IDES_SYSTEM);
 			break;
-			/* The name edit box */
+		/* The name edit box */
 		case IDDES_NAMEBOX:
 			sCurrDesign.name = widgGetString(psWScreen, IDDES_NAMEBOX);
 			sstrcpy(aCurrName, getName(&sCurrDesign));
@@ -3623,7 +3623,7 @@ void intProcessDesign(UDWORD id)
 			widgHide(psWScreen, IDDES_PROPFORM);
 
 			break;
-			// WPABUTTON
+		// WPABUTTON
 		case IDDES_WPABUTTON:
 			// Add the correct component form
 			switch (droidTemplateType(&sCurrDesign))
@@ -3646,7 +3646,7 @@ void intProcessDesign(UDWORD id)
 			widgHide(psWScreen, IDDES_PROPFORM);
 
 			break;
-			// WPBBUTTON
+		// WPBBUTTON
 		case IDDES_WPBBUTTON:
 			// Add the correct component form
 			switch (droidTemplateType(&sCurrDesign))
@@ -3744,7 +3744,7 @@ void intProcessDesign(UDWORD id)
 
 		case IDES_SYSTEM:
 		case IDES_TURRET:
-			// reveals SYSTEMFORM
+		// reveals SYSTEMFORM
 		case IDES_TURRET_A:
 		case IDES_TURRET_B:
 			widgHide(psWScreen, IDDES_BODYFORM);

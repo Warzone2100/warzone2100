@@ -159,8 +159,8 @@ void	effectResetUpdates(void);
 
 void	initPerimeterSmoke(iIMDShape *pImd, Vector3i base);
 
-bool	readFXData(const char* fileName);
-bool	writeFXData(const char* fileName);
+bool	readFXData(const char *fileName);
+bool	writeFXData(const char *fileName);
 void	effectSetSize(UDWORD size);
 void	effectSetLandLightSpec(LAND_LIGHT_SPEC spec);
 void	SetEffectForPlayer(uint8_t player);

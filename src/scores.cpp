@@ -94,24 +94,24 @@ static const char *getDescription(MR_STRING id)
 {
 	switch (id)
 	{
-		case STR_MR_UNITS_LOST   : return _("Own Units: %u");
-		case STR_MR_UNITS_KILLED : return _("Enemy Units: %u");
-		case STR_MR_STR_LOST     : return _("Own Structures: %u");
-		case STR_MR_STR_BLOWN_UP : return _("Enemy Structures: %u");
-		case STR_MR_UNITS_BUILT  : return _("Units Manufactured: %u");
-		case STR_MR_UNITS_NOW    : return _("Total Units: %u");
-		case STR_MR_STR_BUILT    : return _("Structures Built: %u");
-		case STR_MR_STR_NOW      : return _("Total Structures: %u");
+	case STR_MR_UNITS_LOST   : return _("Own Units: %u");
+	case STR_MR_UNITS_KILLED : return _("Enemy Units: %u");
+	case STR_MR_STR_LOST     : return _("Own Structures: %u");
+	case STR_MR_STR_BLOWN_UP : return _("Enemy Structures: %u");
+	case STR_MR_UNITS_BUILT  : return _("Units Manufactured: %u");
+	case STR_MR_UNITS_NOW    : return _("Total Units: %u");
+	case STR_MR_STR_BUILT    : return _("Structures Built: %u");
+	case STR_MR_STR_NOW      : return _("Total Structures: %u");
 
-		case STR_MR_LEVEL_ROOKIE : return _("Rookie: %u");
-		case STR_MR_LEVEL_GREEN  : return P_("rank", "Green: %u");
-		case STR_MR_LEVEL_TRAINED: return _("Trained: %u");
-		case STR_MR_LEVEL_REGULAR: return _("Regular: %u");
-		case STR_MR_LEVEL_VETERAN: return _("Professional: %u");
-		case STR_MR_LEVEL_CRACK  : return _("Veteran: %u");
-		case STR_MR_LEVEL_ELITE  : return _("Elite: %u");
-		case STR_MR_LEVEL_SPECIAL: return _("Special: %u");
-		case STR_MR_LEVEL_ACE    : return _("Hero: %u");
+	case STR_MR_LEVEL_ROOKIE : return _("Rookie: %u");
+	case STR_MR_LEVEL_GREEN  : return P_("rank", "Green: %u");
+	case STR_MR_LEVEL_TRAINED: return _("Trained: %u");
+	case STR_MR_LEVEL_REGULAR: return _("Regular: %u");
+	case STR_MR_LEVEL_VETERAN: return _("Professional: %u");
+	case STR_MR_LEVEL_CRACK  : return _("Veteran: %u");
+	case STR_MR_LEVEL_ELITE  : return _("Elite: %u");
+	case STR_MR_LEVEL_SPECIAL: return _("Special: %u");
+	case STR_MR_LEVEL_ACE    : return _("Hero: %u");
 	}
 
 	// make compiler shut up
@@ -122,58 +122,58 @@ static PIELIGHT getColour(int id)
 {
 	switch (id)
 	{
-		case STR_MR_STR_LOST	 :
-		case STR_MR_UNITS_LOST   :
-			return WZCOL_MENU_SCORE_LOSS;
-		case STR_MR_STR_BLOWN_UP :
-		case STR_MR_UNITS_KILLED :
-			return WZCOL_MENU_SCORE_DESTROYED;
-		case STR_MR_UNITS_BUILT  :
-		case STR_MR_UNITS_NOW    :
-		case STR_MR_STR_BUILT    :
-		case STR_MR_STR_NOW      :
-			return WZCOL_MENU_SCORE_BUILT;
-		case STR_MR_LEVEL_ROOKIE :
-		case STR_MR_LEVEL_GREEN  :
-		case STR_MR_LEVEL_TRAINED:
-		case STR_MR_LEVEL_REGULAR:
-		case STR_MR_LEVEL_VETERAN:
-		case STR_MR_LEVEL_CRACK  :
-		case STR_MR_LEVEL_ELITE  :
-		case STR_MR_LEVEL_SPECIAL:
-		case STR_MR_LEVEL_ACE    :
-			return WZCOL_MENU_SCORE_RANK;
-		default			 :
-			return WZCOL_BLACK;
+	case STR_MR_STR_LOST	 :
+	case STR_MR_UNITS_LOST   :
+		return WZCOL_MENU_SCORE_LOSS;
+	case STR_MR_STR_BLOWN_UP :
+	case STR_MR_UNITS_KILLED :
+		return WZCOL_MENU_SCORE_DESTROYED;
+	case STR_MR_UNITS_BUILT  :
+	case STR_MR_UNITS_NOW    :
+	case STR_MR_STR_BUILT    :
+	case STR_MR_STR_NOW      :
+		return WZCOL_MENU_SCORE_BUILT;
+	case STR_MR_LEVEL_ROOKIE :
+	case STR_MR_LEVEL_GREEN  :
+	case STR_MR_LEVEL_TRAINED:
+	case STR_MR_LEVEL_REGULAR:
+	case STR_MR_LEVEL_VETERAN:
+	case STR_MR_LEVEL_CRACK  :
+	case STR_MR_LEVEL_ELITE  :
+	case STR_MR_LEVEL_SPECIAL:
+	case STR_MR_LEVEL_ACE    :
+		return WZCOL_MENU_SCORE_RANK;
+	default			 :
+		return WZCOL_BLACK;
 	}
 }
 
-STAT_BAR	infoBars[]=
+STAT_BAR	infoBars[] =
 {
-	{LC_X,100,STAT_BAR_WIDTH,16,10,STR_MR_UNITS_LOST,0,false,true,0},	// left column		STAT_UNIT_LOST
-	{LC_X,120,STAT_BAR_WIDTH,16,20,STR_MR_UNITS_KILLED,0,false,true,0},			 //	STAT_UNIT_KILLED
-	{LC_X,160,STAT_BAR_WIDTH,16,30,STR_MR_STR_LOST,0,false,true,0},				 //	STAT_STR_LOST
-	{LC_X,180,STAT_BAR_WIDTH,16,40,STR_MR_STR_BLOWN_UP,0,false,true,0}, 			 //	STAT_STR_BLOWN_UP
-	{LC_X,220,STAT_BAR_WIDTH,16,50,STR_MR_UNITS_BUILT,0,false,true,0}, 			 //	STAT_UNITS_BUILT
-	{LC_X,240,STAT_BAR_WIDTH,16,60,STR_MR_UNITS_NOW,0,false,true,0}, 				 //	STAT_UNITS_NOW
-	{LC_X,260,STAT_BAR_WIDTH,16,70,STR_MR_STR_BUILT,0,false,true,0}, 				 //	STAT_STR_BUILT
-	{LC_X,280,STAT_BAR_WIDTH,16,80,STR_MR_STR_NOW,0,false,false,0}, 				 //	STAT_STR_NOW
+	{LC_X, 100, STAT_BAR_WIDTH, 16, 10, STR_MR_UNITS_LOST, 0, false, true, 0},	// left column		STAT_UNIT_LOST
+	{LC_X, 120, STAT_BAR_WIDTH, 16, 20, STR_MR_UNITS_KILLED, 0, false, true, 0},			 //	STAT_UNIT_KILLED
+	{LC_X, 160, STAT_BAR_WIDTH, 16, 30, STR_MR_STR_LOST, 0, false, true, 0},				 //	STAT_STR_LOST
+	{LC_X, 180, STAT_BAR_WIDTH, 16, 40, STR_MR_STR_BLOWN_UP, 0, false, true, 0}, 			 //	STAT_STR_BLOWN_UP
+	{LC_X, 220, STAT_BAR_WIDTH, 16, 50, STR_MR_UNITS_BUILT, 0, false, true, 0}, 			 //	STAT_UNITS_BUILT
+	{LC_X, 240, STAT_BAR_WIDTH, 16, 60, STR_MR_UNITS_NOW, 0, false, true, 0}, 				 //	STAT_UNITS_NOW
+	{LC_X, 260, STAT_BAR_WIDTH, 16, 70, STR_MR_STR_BUILT, 0, false, true, 0}, 				 //	STAT_STR_BUILT
+	{LC_X, 280, STAT_BAR_WIDTH, 16, 80, STR_MR_STR_NOW, 0, false, false, 0}, 				 //	STAT_STR_NOW
 
-	{RC_X,100,RANK_BAR_WIDTH,16,10,STR_MR_LEVEL_ROOKIE,0,false,true,0},	// right column	//	STAT_ROOKIE
-	{RC_X,120,RANK_BAR_WIDTH,16,20,STR_MR_LEVEL_GREEN,0,false,true,0}, 			 		//	STAT_GREEN
-	{RC_X,140,RANK_BAR_WIDTH,16,30,STR_MR_LEVEL_TRAINED,0,false,true,0}, 		 			//	STAT_TRAINED
-	{RC_X,160,RANK_BAR_WIDTH,16,40,STR_MR_LEVEL_REGULAR,0,false,true,0}, 		 			//	STAT_REGULAR
-	{RC_X,180,RANK_BAR_WIDTH,16,50,STR_MR_LEVEL_VETERAN,0,false,true,0}, 		 			//	STAT_VETERAN
-	{RC_X,200,RANK_BAR_WIDTH,16,60,STR_MR_LEVEL_CRACK,0,false,true,0}, 			 		//	STAT_CRACK
-	{RC_X,220,RANK_BAR_WIDTH,16,70,STR_MR_LEVEL_ELITE,0,false,true,0}, 			 		//	STAT_ELITE
-	{RC_X,240,RANK_BAR_WIDTH,16,80,STR_MR_LEVEL_SPECIAL,0,false,true,0}, 		 			//	STAT_SPECIAL
-	{RC_X,260,RANK_BAR_WIDTH,16,90,STR_MR_LEVEL_ACE,0,false,true,0}, 			 			//	STAT_ACE
+	{RC_X, 100, RANK_BAR_WIDTH, 16, 10, STR_MR_LEVEL_ROOKIE, 0, false, true, 0},	// right column	//	STAT_ROOKIE
+	{RC_X, 120, RANK_BAR_WIDTH, 16, 20, STR_MR_LEVEL_GREEN, 0, false, true, 0}, 			 		//	STAT_GREEN
+	{RC_X, 140, RANK_BAR_WIDTH, 16, 30, STR_MR_LEVEL_TRAINED, 0, false, true, 0}, 		 			//	STAT_TRAINED
+	{RC_X, 160, RANK_BAR_WIDTH, 16, 40, STR_MR_LEVEL_REGULAR, 0, false, true, 0}, 		 			//	STAT_REGULAR
+	{RC_X, 180, RANK_BAR_WIDTH, 16, 50, STR_MR_LEVEL_VETERAN, 0, false, true, 0}, 		 			//	STAT_VETERAN
+	{RC_X, 200, RANK_BAR_WIDTH, 16, 60, STR_MR_LEVEL_CRACK, 0, false, true, 0}, 			 		//	STAT_CRACK
+	{RC_X, 220, RANK_BAR_WIDTH, 16, 70, STR_MR_LEVEL_ELITE, 0, false, true, 0}, 			 		//	STAT_ELITE
+	{RC_X, 240, RANK_BAR_WIDTH, 16, 80, STR_MR_LEVEL_SPECIAL, 0, false, true, 0}, 		 			//	STAT_SPECIAL
+	{RC_X, 260, RANK_BAR_WIDTH, 16, 90, STR_MR_LEVEL_ACE, 0, false, true, 0}, 			 			//	STAT_ACE
 
 	{0, 0, 0, 0, 0, 0, 0, false, false, 0}
 };
 
 // --------------------------------------------------------------------
-static void fillUpStats( void );
+static void fillUpStats(void);
 // --------------------------------------------------------------------
 
 /* The present mission data */
@@ -186,7 +186,7 @@ extern bool Cheated;
 
 // --------------------------------------------------------------------
 /* Initialise the mission data info - done before each mission */
-bool	scoreInitSystem( void )
+bool	scoreInitSystem(void)
 {
 	missionData.unitsBuilt		= 0;
 	missionData.unitsKilled		= 0;
@@ -203,14 +203,14 @@ bool	scoreInitSystem( void )
 	missionData.babasMowedDown	= 0;
 	Cheated = false;
 	bDispStarted = false;
-	return(true);
+	return (true);
 }
 
 // --------------------------------------------------------------------
 // Updates a game statistic - more can be added if we need 'em
-void	scoreUpdateVar( DATA_INDEX var )
+void	scoreUpdateVar(DATA_INDEX var)
 {
-	switch(var)
+	switch (var)
 	{
 	case	WD_UNITS_BUILT:
 		missionData.unitsBuilt++;	// We've built another unit
@@ -246,7 +246,7 @@ void	scoreUpdateVar( DATA_INDEX var )
 		missionData.babasMowedDown++;	// Ran over a barbarian
 		break;
 	default:
-		debug( LOG_FATAL, "Weirdy variable request from scoreUpdateVar" );
+		debug(LOG_FATAL, "Weirdy variable request from scoreUpdateVar");
 		abort();
 		break;
 	}
@@ -258,7 +258,7 @@ void getAsciiTime(char *psText, unsigned time)
 	int hours, minutes, seconds, milliseconds;
 	getTimeComponents(time, &hours, &minutes, &seconds, &milliseconds);
 
-	char const *hourColon = hours != 0? ":" : "";
+	char const *hourColon = hours != 0 ? ":" : "";
 
 	bool showMs = gameTimeGetMod() < Rational(1, 4);
 	if (showMs)
@@ -276,7 +276,7 @@ void scoreDataToScreen(WIDGET *psWidget)
 	int index, x, y, width, height;
 	bool bMoreBars;
 
-	if(!bDispStarted)
+	if (!bDispStarted)
 	{
 		bDispStarted = true;
 		dispST = realTime;
@@ -285,22 +285,22 @@ void scoreDataToScreen(WIDGET *psWidget)
 
 	fillUpStats();
 
-	pie_UniTransBoxFill(16 + D_W, MT_Y_POS - 16, pie_GetVideoBufferWidth() - D_W - 16, MT_Y_POS + 256+16, WZCOL_SCORE_BOX);
-	iV_Box(16 + D_W, MT_Y_POS - 16, pie_GetVideoBufferWidth() - D_W - 16, MT_Y_POS + 256+16, WZCOL_SCORE_BOX_BORDER);
+	pie_UniTransBoxFill(16 + D_W, MT_Y_POS - 16, pie_GetVideoBufferWidth() - D_W - 16, MT_Y_POS + 256 + 16, WZCOL_SCORE_BOX);
+	iV_Box(16 + D_W, MT_Y_POS - 16, pie_GetVideoBufferWidth() - D_W - 16, MT_Y_POS + 256 + 16, WZCOL_SCORE_BOX_BORDER);
 
-	iV_DrawText( _("Unit Losses"), LC_X + D_W, 80 + 16 + D_H );
-	iV_DrawText( _("Structure Losses"), LC_X + D_W, 140 + 16 + D_H );
-	iV_DrawText( _("Force Information"), LC_X + D_W, 200 + 16 + D_H );
+	iV_DrawText(_("Unit Losses"), LC_X + D_W, 80 + 16 + D_H);
+	iV_DrawText(_("Structure Losses"), LC_X + D_W, 140 + 16 + D_H);
+	iV_DrawText(_("Force Information"), LC_X + D_W, 200 + 16 + D_H);
 
 	index = 0;
 	bMoreBars = true;
-	while(bMoreBars)
+	while (bMoreBars)
 	{
 		/* Is it time to display this bar? */
-		if( infoBars[index].bActive)
+		if (infoBars[index].bActive)
 		{
 			/* Has it been queued before? */
-			if(infoBars[index].bQueued == false)
+			if (infoBars[index].bQueued == false)
 			{
 				/* Don't do this next time...! */
 				infoBars[index].bQueued = true;
@@ -308,8 +308,8 @@ void scoreDataToScreen(WIDGET *psWidget)
 				/* Play a sound */
 //				audio_PlayTrack(ID_SOUND_BUTTON_CLICK_5);
 			}
-			x = infoBars[index].topX+D_W;
-			y = infoBars[index].topY+D_H;
+			x = infoBars[index].topX + D_W;
+			y = infoBars[index].topY + D_H;
 			width = infoBars[index].width;
 			height = infoBars[index].height;
 
@@ -321,16 +321,16 @@ void scoreDataToScreen(WIDGET *psWidget)
 			/* Draw the interior grey */
 			pie_BoxFill(x, y, x + width, y + height, WZCOL_MENU_SCORES_INTERIOR);
 
-			if( ((realTime - dispST) > infoBars[index].queTime) )
+			if (((realTime - dispST) > infoBars[index].queTime))
 			{
 				/* Now draw amount filled */
 				const float mul = (realTime - dispST < BAR_CRAWL_TIME) ?
-				                   (float)(realTime - dispST) / (float)BAR_CRAWL_TIME
+				                  (float)(realTime - dispST) / (float)BAR_CRAWL_TIME
 				                  : 1.f;
 
 				const float length = (float)infoBars[index].percent / 100.f * (float)infoBars[index].width * mul;
 
-				if((int)length > 4)
+				if ((int)length > 4)
 				{
 
 					/* Black shadow */
@@ -345,16 +345,16 @@ void scoreDataToScreen(WIDGET *psWidget)
 			iV_DrawText(text, x + width + 16, y + 12);
 
 			/* If we're beyond STAT_ROOKIE, then we're on rankings */
-			if(index>=STAT_GREEN && index <= STAT_ACE)
+			if (index >= STAT_GREEN && index <= STAT_ACE)
 			{
-				iV_DrawImage(IntImages,(UWORD)(IMAGE_LEV_0 + (index - STAT_GREEN)),x-8,y+2);
+				iV_DrawImage(IntImages, (UWORD)(IMAGE_LEV_0 + (index - STAT_GREEN)), x - 8, y + 2);
 			}
 
 
 		}
 		/* Move onto the next bar */
 		index++;
-		if(infoBars[index].topX == 0 && infoBars[index].topY == 0)
+		if (infoBars[index].topX == 0 && infoBars[index].topY == 0)
 		{
 			bMoreBars = false;
 		}
@@ -363,50 +363,50 @@ void scoreDataToScreen(WIDGET *psWidget)
 	/* We now need to display the mission time, game time, average unit experience level an number of artefacts found */
 
 	/* Firstly, top of the screen, number of artefacts found */
-	sprintf( text, _("ARTIFACTS RECOVERED: %d"), missionData.artefactsFound );
-	iV_DrawText( text, (pie_GetVideoBufferWidth() - iV_GetTextWidth(text))/2, 300 + D_H );
+	sprintf(text, _("ARTIFACTS RECOVERED: %d"), missionData.artefactsFound);
+	iV_DrawText(text, (pie_GetVideoBufferWidth() - iV_GetTextWidth(text)) / 2, 300 + D_H);
 
 	/* Get the mission result time in a string - and write it out */
-	getAsciiTime( (char*)&text2, gameTime - missionData.missionStarted );
-	sprintf( text, _("Mission Time - %s"), text2 );
-	iV_DrawText( text, (pie_GetVideoBufferWidth() - iV_GetTextWidth(text))/2, 320 + D_H);
+	getAsciiTime((char *)&text2, gameTime - missionData.missionStarted);
+	sprintf(text, _("Mission Time - %s"), text2);
+	iV_DrawText(text, (pie_GetVideoBufferWidth() - iV_GetTextWidth(text)) / 2, 320 + D_H);
 
 	/* Write out total game time so far */
-	getAsciiTime( (char*)&text2, gameTime );
-	sprintf( text, _("Total Game Time - %s"), text2 );
-	iV_DrawText( text, (pie_GetVideoBufferWidth() - iV_GetTextWidth(text))/2, 340 + D_H );
+	getAsciiTime((char *)&text2, gameTime);
+	sprintf(text, _("Total Game Time - %s"), text2);
+	iV_DrawText(text, (pie_GetVideoBufferWidth() - iV_GetTextWidth(text)) / 2, 340 + D_H);
 	if (Cheated)
 	{
 		// A quick way to flash the text
 		((realTime / 250) % 2) ? iV_SetTextColour(WZCOL_RED) : iV_SetTextColour(WZCOL_YELLOW);
-		sprintf( text, _("You cheated!"));
-		iV_DrawText( text, (pie_GetVideoBufferWidth() - iV_GetTextWidth(text))/2, 360 + D_H );
+		sprintf(text, _("You cheated!"));
+		iV_DrawText(text, (pie_GetVideoBufferWidth() - iV_GetTextWidth(text)) / 2, 360 + D_H);
 		iV_SetTextColour(WZCOL_TEXT_BRIGHT);
 	}
 }
 
 // -----------------------------------------------------------------------------------
-void	fillUpStats( void )
+void	fillUpStats(void)
 {
 	UDWORD	i;
-	UDWORD	maxi,num;
+	UDWORD	maxi, num;
 	float	scaleFactor;
 	UDWORD	length;
 	UDWORD	numUnits;
 	DROID	*psDroid;
 
 	/* Do rankings first cos they're easier */
-	for(i=0,maxi=0; i<DROID_LEVELS; i++)
+	for (i = 0, maxi = 0; i < DROID_LEVELS; i++)
 	{
 		num = getNumDroidsForLevel(i);
-		if(num>maxi)
+		if (num > maxi)
 		{
 			maxi = num;
 		}
 	}
 
 	/* Make sure we got something */
-	if(maxi == 0)
+	if (maxi == 0)
 	{
 		scaleFactor = 0.f;
 	}
@@ -416,11 +416,11 @@ void	fillUpStats( void )
 	}
 
 	/* Scale for percent */
-	for(i=0; i<DROID_LEVELS; i++)
+	for (i = 0; i < DROID_LEVELS; i++)
 	{
 		length = scaleFactor * getNumDroidsForLevel(i);
-		infoBars[STAT_ROOKIE+i].percent = PERCENT(length,RANK_BAR_WIDTH);
-		infoBars[STAT_ROOKIE+i].number = getNumDroidsForLevel(i);
+		infoBars[STAT_ROOKIE + i].percent = PERCENT(length, RANK_BAR_WIDTH);
+		infoBars[STAT_ROOKIE + i].number = getNumDroidsForLevel(i);
 	}
 
 	/* Now do the other stuff... */
@@ -436,9 +436,9 @@ void	fillUpStats( void )
 	}
 
 	length = scaleFactor * missionData.unitsLost;
-	infoBars[STAT_UNIT_LOST].percent = PERCENT(length,STAT_BAR_WIDTH);
+	infoBars[STAT_UNIT_LOST].percent = PERCENT(length, STAT_BAR_WIDTH);
 	length = scaleFactor * missionData.unitsKilled;
-	infoBars[STAT_UNIT_KILLED].percent = PERCENT(length,STAT_BAR_WIDTH);
+	infoBars[STAT_UNIT_KILLED].percent = PERCENT(length, STAT_BAR_WIDTH);
 
 	/* Now do the structure losses */
 	maxi = MAX(missionData.strLost, missionData.strKilled);
@@ -452,14 +452,14 @@ void	fillUpStats( void )
 	}
 
 	length = scaleFactor * missionData.strLost;
-	infoBars[STAT_STR_LOST].percent = PERCENT(length,STAT_BAR_WIDTH);
+	infoBars[STAT_STR_LOST].percent = PERCENT(length, STAT_BAR_WIDTH);
 	length = scaleFactor * missionData.strKilled;
-	infoBars[STAT_STR_BLOWN_UP].percent = PERCENT(length,STAT_BAR_WIDTH);
+	infoBars[STAT_STR_BLOWN_UP].percent = PERCENT(length, STAT_BAR_WIDTH);
 
 	/* Finally the force information - need amount of droids as well*/
-	for(psDroid = apsDroidLists[selectedPlayer], numUnits = 0; psDroid; psDroid = psDroid->psNext, numUnits++) {}
+	for (psDroid = apsDroidLists[selectedPlayer], numUnits = 0; psDroid; psDroid = psDroid->psNext, numUnits++) {}
 
-	for(psDroid = mission.apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext, numUnits++) {}
+	for (psDroid = mission.apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext, numUnits++) {}
 
 	maxi = MAX(missionData.unitsBuilt, missionData.strBuilt);
 	maxi = MAX(maxi, numUnits);
@@ -474,11 +474,11 @@ void	fillUpStats( void )
 	}
 
 	length = scaleFactor * missionData.unitsBuilt;
-	infoBars[STAT_UNITS_BUILT].percent = PERCENT(length,STAT_BAR_WIDTH);
+	infoBars[STAT_UNITS_BUILT].percent = PERCENT(length, STAT_BAR_WIDTH);
 	length = scaleFactor * numUnits;
-	infoBars[STAT_UNITS_NOW].percent = PERCENT(length,STAT_BAR_WIDTH);
+	infoBars[STAT_UNITS_NOW].percent = PERCENT(length, STAT_BAR_WIDTH);
 	length = scaleFactor * missionData.strBuilt;
-	infoBars[STAT_STR_BUILT].percent = PERCENT(length,STAT_BAR_WIDTH);
+	infoBars[STAT_STR_BUILT].percent = PERCENT(length, STAT_BAR_WIDTH);
 
 	/* Finally the numbers themselves */
 	infoBars[STAT_UNIT_LOST].number = missionData.unitsLost;
@@ -492,7 +492,7 @@ void	fillUpStats( void )
 
 // -----------------------------------------------------------------------------------
 /* This will save out the score data */
-bool writeScoreData(const char* fileName)
+bool writeScoreData(const char *fileName)
 {
 	WzConfig ini(fileName);
 
@@ -515,7 +515,7 @@ bool writeScoreData(const char* fileName)
 
 // -----------------------------------------------------------------------------------
 /* This will read in the score data */
-bool readScoreData(const char* fileName)
+bool readScoreData(const char *fileName)
 {
 	WzConfig ini(fileName, WzConfig::ReadOnly);
 

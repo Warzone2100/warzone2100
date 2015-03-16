@@ -63,7 +63,7 @@ struct CONSOLE_MESSAGE
 	UDWORD				JustifyType;
 	UDWORD				id;
 	SDWORD				player;						// Player who sent this message or SYSTEM_MESSAGE
-	CONSOLE_MESSAGE *               psNext;
+	CONSOLE_MESSAGE                *psNext;
 };
 
 /** Is the console history on or off? */
@@ -134,7 +134,7 @@ static void	setConsoleMessageDuration(UDWORD time)
 }
 
 /** Sets the system up */
-void	initConsoleMessages( void )
+void	initConsoleMessages(void)
 {
 	int TextLineSize = iV_GetTextLineSize();
 	messageIndex = 0;
@@ -142,7 +142,7 @@ void	initConsoleMessages( void )
 	/* Console can extend to half screen height */
 	if (TextLineSize)
 	{
-		maxDrop = ((pie_GetVideoBufferHeight() / TextLineSize)/2);
+		maxDrop = ((pie_GetVideoBufferHeight() / TextLineSize) / 2);
 	}
 	else
 	{
@@ -150,7 +150,10 @@ void	initConsoleMessages( void )
 		abort();
 	}
 
-	if(maxDrop>32) maxDrop = 32;
+	if (maxDrop > 32)
+	{
+		maxDrop = 32;
+	}
 
 	consoleDrop = maxDrop;//MAX_DROP;
 
@@ -177,22 +180,22 @@ void	initConsoleMessages( void )
 
 	/*	Set up the console size and postion
 		x,y,width */
-	setConsoleSizePos(16, 16, pie_GetVideoBufferWidth()-32);
+	setConsoleSizePos(16, 16, pie_GetVideoBufferWidth() - 32);
 
-	setConsoleLineInfo(MAX_CONSOLE_MESSAGES/4 + 4);
+	setConsoleLineInfo(MAX_CONSOLE_MESSAGES / 4 + 4);
 
 	/* We're not initially having permanent messages */
-	setConsolePermanence(false,true);
+	setConsolePermanence(false, true);
 
 	/* Allow new messages */
 	permitNewConsoleMessages(true);
 }
 
 /** Open the console when it's closed and close it when it's open. */
-void	toggleConsoleDrop( void )
+void	toggleConsoleDrop(void)
 {
 	/* If it's closed ... */
-	if(bConsoleDropped == false)
+	if (bConsoleDropped == false)
 	{
 		dropState = DROP_DROPPING;
 		consoleDrop = 0;
@@ -215,13 +218,13 @@ bool addConsoleMessage(const char *Text, CONSOLE_TEXT_JUSTIFICATION jusType, SDW
 	CONSOLE_MESSAGE	*psMessage;
 
 	/* Just don't add it if there's too many already */
-	if(numActiveMessages>=MAX_CONSOLE_MESSAGES-1)
+	if (numActiveMessages >= MAX_CONSOLE_MESSAGES - 1)
 	{
 		return false;
 	}
 
 	/* Don't allow it to be added if we've disabled adding of new messages */
-	if(!allowNewMessages)
+	if (!allowNewMessages)
 	{
 		return false ;
 	}
@@ -230,39 +233,39 @@ bool addConsoleMessage(const char *Text, CONSOLE_TEXT_JUSTIFICATION jusType, SDW
 	std::string lines;
 	char messageText[MAX_CONSOLE_STRING_LENGTH];
 
-	while(std::getline(stream, lines))
+	while (std::getline(stream, lines))
 	{
 		sstrcpy(messageText, lines.c_str());
 
 		/* Is the string too long? */
 		textLength = strlen(messageText);
 
-		ASSERT( textLength < MAX_CONSOLE_STRING_LENGTH, "Attempt to add a message to the console that exceeds MAX_CONSOLE_STRING_LENGTH" );
+		ASSERT(textLength < MAX_CONSOLE_STRING_LENGTH, "Attempt to add a message to the console that exceeds MAX_CONSOLE_STRING_LENGTH");
 
 		debug(LOG_CONSOLE, "(to player %d): %s", (int)player, messageText);
 
 		consoleStorage[messageIndex].player = player;
 
 		/* Precalculate and store (quicker!) the indent for justified text */
-		switch(jusType)
+		switch (jusType)
 		{
-			/* Allign to left edge of screen */
+		/* Allign to left edge of screen */
 		case LEFT_JUSTIFY:
 			consoleStorage[messageIndex].JustifyType = FTEXT_LEFTJUSTIFY;
 			break;
 
-			/* Allign to right edge of screen */
+		/* Allign to right edge of screen */
 		case RIGHT_JUSTIFY:
 			consoleStorage[messageIndex].JustifyType = FTEXT_RIGHTJUSTIFY;
 			break;
 
-			/* Allign to centre of the screen,NOT TO CENTRE OF CONSOLE!!!!!! */
+		/* Allign to centre of the screen,NOT TO CENTRE OF CONSOLE!!!!!! */
 		case CENTRE_JUSTIFY:
 			consoleStorage[messageIndex].JustifyType = FTEXT_CENTRE;
 			break;
-			/* Gone tits up by the looks of it */
+		/* Gone tits up by the looks of it */
 		default:
-			debug( LOG_FATAL, "Weirdy type of text justification for console print" );
+			debug(LOG_FATAL, "Weirdy type of text justification for console print");
 			abort();
 			break;
 		}
@@ -279,14 +282,14 @@ bool addConsoleMessage(const char *Text, CONSOLE_TEXT_JUSTIFICATION jusType, SDW
 		consoleStorage[messageIndex].id = 0;
 
 		/* Are there no messages? */
-		if(consoleMessages == NULL)
+		if (consoleMessages == NULL)
 		{
 			consoleMessages = &consoleStorage[messageIndex];
 		}
 		else
 		{
 			/* Get to the last element in our message list */
-			for(psMessage = consoleMessages; psMessage->psNext; psMessage = psMessage->psNext)
+			for (psMessage = consoleMessages; psMessage->psNext; psMessage = psMessage->psNext)
 			{
 				/* NOP */
 				;
@@ -296,7 +299,7 @@ bool addConsoleMessage(const char *Text, CONSOLE_TEXT_JUSTIFICATION jusType, SDW
 		}
 
 		/* Move on in our array */
-		if(messageIndex++ >= MAX_CONSOLE_MESSAGES-1)
+		if (messageIndex++ >= MAX_CONSOLE_MESSAGES - 1)
 		{
 			/* Reset */
 			messageIndex = 0;
@@ -310,22 +313,22 @@ bool addConsoleMessage(const char *Text, CONSOLE_TEXT_JUSTIFICATION jusType, SDW
 
 
 /// \return The number of console messages currently active
-UDWORD	getNumberConsoleMessages( void )
+UDWORD	getNumberConsoleMessages(void)
 {
-	return(numActiveMessages);
+	return (numActiveMessages);
 }
 
 /** Update the console messages.
 	This function will remove messages that are overdue.
 */
-void	updateConsoleMessages( void )
+void	updateConsoleMessages(void)
 {
-	if(dropState == DROP_DROPPING)
+	if (dropState == DROP_DROPPING)
 	{
-	 	if(gameTime - lastDropChange > DROP_STEP_INTERVAL)
+		if (gameTime - lastDropChange > DROP_STEP_INTERVAL)
 		{
 			lastDropChange = gameTime;
-			if(++consoleDrop > maxDrop)
+			if (++consoleDrop > maxDrop)
 			{
 				consoleDrop = maxDrop;
 				dropState = DROP_STATIC;
@@ -334,10 +337,10 @@ void	updateConsoleMessages( void )
 	}
 	else if (dropState == DROP_CLOSING)
 	{
-		if(gameTime - lastDropChange > DROP_STEP_INTERVAL)
+		if (gameTime - lastDropChange > DROP_STEP_INTERVAL)
 		{
 			lastDropChange = gameTime;
-			if(consoleDrop)
+			if (consoleDrop)
 			{
 				consoleDrop--;
 			}
@@ -352,19 +355,19 @@ void	updateConsoleMessages( void )
 	/* Don't do anything for DROP_STATIC */
 
 	/* If there are no messages or we're on permanent then exit */
- 	if(consoleMessages == NULL || mainConsole.permanent)
+	if (consoleMessages == NULL || mainConsole.permanent)
 	{
 		return;
 	}
 
 	/* Time to kill the top one ?*/
-	if(realTime - consoleMessages->timeAdded > messageDuration)
+	if (realTime - consoleMessages->timeAdded > messageDuration)
 	{
 		consoleMessages->id = messageId++;
 		/* Is this the only message? */
-		if(consoleMessages->psNext == NULL)
+		if (consoleMessages->psNext == NULL)
 		{
- 			/* Then list is now empty */
+			/* Then list is now empty */
 			consoleMessages = NULL;
 		}
 		else
@@ -373,7 +376,7 @@ void	updateConsoleMessages( void )
 			consoleMessages = consoleMessages->psNext;
 		}
 		/* There's one less active console message */
- 		numActiveMessages--;
+		numActiveMessages--;
 	}
 }
 
@@ -383,15 +386,15 @@ void	updateConsoleMessages( void )
 	us to put up messages that stay there until we remove them
 	ourselves - be sure and reset message duration afterwards
 */
-void	removeTopConsoleMessage( void )
+void	removeTopConsoleMessage(void)
 {
 	/* No point unless there is at least one */
-	if(consoleMessages!=NULL)
+	if (consoleMessages != NULL)
 	{
 		/* Is this the only message? */
-		if(consoleMessages->psNext == NULL)
+		if (consoleMessages->psNext == NULL)
 		{
- 			/* Then list is now empty */
+			/* Then list is now empty */
 			consoleMessages = NULL;
 		}
 		else
@@ -400,12 +403,12 @@ void	removeTopConsoleMessage( void )
 			consoleMessages = consoleMessages->psNext;
 		}
 		/* There's one less active console message */
- 		numActiveMessages--;
+		numActiveMessages--;
 	}
 }
 
 /** Clears all console messages */
-void	flushConsoleMessages( void )
+void	flushConsoleMessages(void)
 {
 	consoleMessages = NULL;
 	numActiveMessages = 0;
@@ -416,7 +419,7 @@ void	flushConsoleMessages( void )
 static void setConsoleTextColor(SDWORD player)
 {
 	// System messages
-	if(player == SYSTEM_MESSAGE)
+	if (player == SYSTEM_MESSAGE)
 	{
 		iV_SetTextColour(WZCOL_CONS_TEXT_SYSTEM);
 	}
@@ -427,9 +430,9 @@ static void setConsoleTextColor(SDWORD player)
 	else
 	{
 		// Don't use friend-foe colors in the lobby
-		if(bEnemyAllyRadarColor && (GetGameMode() == GS_NORMAL))
+		if (bEnemyAllyRadarColor && (GetGameMode() == GS_NORMAL))
 		{
-			if(aiCheckAlliances(player,selectedPlayer))
+			if (aiCheckAlliances(player, selectedPlayer))
 			{
 				iV_SetTextColour(WZCOL_CONS_TEXT_USER_ALLY);
 			}
@@ -462,21 +465,21 @@ static int displayOldMessages(void)
 	/* Check there actually are any messages */
 	int thisIndex = messageId;
 
-	if(thisIndex)
+	if (thisIndex)
 	{
 		bQuit = false;
-		while(!bQuit)
+		while (!bQuit)
 		{
-			for(i=0,bGotIt = false; i<MAX_CONSOLE_MESSAGES && !bGotIt; i++)
+			for (i = 0, bGotIt = false; i < MAX_CONSOLE_MESSAGES && !bGotIt; i++)
 			{
-				if (consoleStorage[i].id == thisIndex-1)
+				if (consoleStorage[i].id == thisIndex - 1)
 				{
 					bGotIt = true;
 					marker = i;
 				}
 			}
 			/* We found an older one */
-			if(bGotIt)
+			if (bGotIt)
 			{
 				history[count++] = marker;
 			}
@@ -484,9 +487,9 @@ static int displayOldMessages(void)
 			{
 				bQuit = true;	// count holds how many we got
 			}
-			if(thisIndex)
+			if (thisIndex)
 			{
-			 	/* Look for an older one */
+				/* Look for an older one */
 				thisIndex--;
 			}
 			else
@@ -494,17 +497,17 @@ static int displayOldMessages(void)
 				bQuit = true;	// We've reached the big bang - there is nothing older...
 			}
 			/* History can only hold so many */
-			if(count>=consoleDrop)
+			if (count >= consoleDrop)
 			{
 				bQuit = true;
 			}
 		}
 	}
 
-	if(!count)
+	if (!count)
 	{
 		/* there are messages - just no old ones yet */
-		return(0);
+		return (0);
 	}
 	else
 	{
@@ -513,22 +516,22 @@ static int displayOldMessages(void)
 
 		/* How big a box is necessary? */
 		/* GET RID OF THE MAGIC NUMBERS BELOW */
-		iV_TransBoxFill(mainConsole.topX - CON_BORDER_WIDTH,mainConsole.topY-mainConsole.textDepth-CON_BORDER_HEIGHT,
-			mainConsole.topX+mainConsole.width ,mainConsole.topY+((count)*linePitch)+CON_BORDER_HEIGHT-linePitch);
+		iV_TransBoxFill(mainConsole.topX - CON_BORDER_WIDTH, mainConsole.topY - mainConsole.textDepth - CON_BORDER_HEIGHT,
+		                mainConsole.topX + mainConsole.width , mainConsole.topY + ((count)*linePitch) + CON_BORDER_HEIGHT - linePitch);
 	}
 	MesY = mainConsole.topY;
 	/* Render what we found */
-	for(i=count-1; i>0; i--)
+	for (i = count - 1; i > 0; i--)
 	{
 		/* Set text color depending on message type */
 		setConsoleTextColor(consoleStorage[history[i]].player);
 
 		/* Draw the text string */
 		MesY = iV_DrawFormattedText(consoleStorage[history[i]].text,
-                                    mainConsole.topX,
-                                    MesY,
-                                    mainConsole.width,
-                                    consoleStorage[history[i]].JustifyType);
+		                            mainConsole.topX,
+		                            MesY,
+		                            mainConsole.width,
+		                            consoleStorage[history[i]].JustifyType);
 	}
 
 	/* Set text color depending on message type */
@@ -547,7 +550,7 @@ static int displayOldMessages(void)
 
 
 /** Displays all the console messages */
-void	displayConsoleMessages( void )
+void	displayConsoleMessages(void)
 {
 	CONSOLE_MESSAGE *psMessage;
 	int linePitch;
@@ -558,14 +561,14 @@ void	displayConsoleMessages( void )
 	unsigned int exceed, numProcessed;
 
 	/* Are there any to display? */
-	if(consoleMessages == NULL && !bConsoleDropped)
+	if (consoleMessages == NULL && !bConsoleDropped)
 	{
 		/* No point - so get out */
- 		return;
+		return;
 	}
 
 	/* Return if it's disabled */
-	if(!bConsoleDisplayEnabled)
+	if (!bConsoleDisplayEnabled)
 	{
 		return;
 	}
@@ -579,17 +582,17 @@ void	displayConsoleMessages( void )
 	pie_SetFogStatus(false);
 
 	drop = 0;
-	if(bConsoleDropped)
+	if (bConsoleDropped)
 	{
 		drop = displayOldMessages();
 	}
-	if(consoleMessages==NULL)
+	if (consoleMessages == NULL)
 	{
 		return;
 	}
 
 	/* Do we want a box under it? */
-	if(bTextBoxActive)
+	if (bTextBoxActive)
 	{
 		for (psMessage = consoleMessages, exceed = 0;
 		     psMessage && consoleVisibleLines > 0 && exceed < 4; // ho ho ho!!!
@@ -602,20 +605,20 @@ void	displayConsoleMessages( void )
 		}
 
 		/* How big a box is necessary? */
-		boxDepth = (numActiveMessages> consoleVisibleLines ? consoleVisibleLines-1 : numActiveMessages-1);
+		boxDepth = (numActiveMessages > consoleVisibleLines ? consoleVisibleLines - 1 : numActiveMessages - 1);
 
 		/* Add on the extra - hope it doesn't exceed two lines! */
 		boxDepth += exceed;
 
 		/* GET RID OF THE MAGIC NUMBERS BELOW */
-		clipDepth = (mainConsole.topY+(boxDepth*linePitch)+CON_BORDER_HEIGHT+drop);
-		if(clipDepth > pie_GetVideoBufferHeight() - linePitch)
+		clipDepth = (mainConsole.topY + (boxDepth * linePitch) + CON_BORDER_HEIGHT + drop);
+		if (clipDepth > pie_GetVideoBufferHeight() - linePitch)
 		{
 			clipDepth = (pie_GetVideoBufferHeight() - linePitch);
 		}
 
-		iV_TransBoxFill(mainConsole.topX - CON_BORDER_WIDTH,mainConsole.topY-mainConsole.textDepth-CON_BORDER_HEIGHT+drop+1,
-			mainConsole.topX+mainConsole.width ,clipDepth);
+		iV_TransBoxFill(mainConsole.topX - CON_BORDER_WIDTH, mainConsole.topY - mainConsole.textDepth - CON_BORDER_HEIGHT + drop + 1,
+		                mainConsole.topX + mainConsole.width , clipDepth);
 	}
 
 	/* Stop when we've drawn enough or we're at the end */
@@ -629,9 +632,9 @@ void	displayConsoleMessages( void )
 		/* Set text color depending on message type */
 		setConsoleTextColor(psMessage->player);
 
- 		/* Draw the text string */
+		/* Draw the text string */
 		MesY = iV_DrawFormattedText(psMessage->text, mainConsole.topX, MesY,
-									mainConsole.width, psMessage->JustifyType);
+		                            mainConsole.width, psMessage->JustifyType);
 
 		/* Move on */
 		++numProcessed;
@@ -670,9 +673,9 @@ void	setConsoleSizePos(UDWORD x, UDWORD y, UDWORD width)
 /**	Establishes whether the console messages stay there */
 void	setConsolePermanence(bool state, bool bClearOld)
 {
- 	if(mainConsole.permanent == true && state == false)
+	if (mainConsole.permanent == true && state == false)
 	{
-		if(bClearOld)
+		if (bClearOld)
 		{
 			flushConsoleMessages();
 		}
@@ -680,7 +683,7 @@ void	setConsolePermanence(bool state, bool bClearOld)
 	}
 	else
 	{
-		if(bClearOld)
+		if (bClearOld)
 		{
 			flushConsoleMessages();
 		}
@@ -689,27 +692,27 @@ void	setConsolePermanence(bool state, bool bClearOld)
 }
 
 /** true or false as to whether the mouse is presently over the console window */
-bool	mouseOverConsoleBox( void )
+bool	mouseOverConsoleBox(void)
 {
 	if	(
-		((UDWORD)mouseX() > mainConsole.topX)	// condition 1
-		&& ((UDWORD)mouseY() > mainConsole.topY)	// condition 2
-		&& ((UDWORD)mouseX() < mainConsole.topX + mainConsole.width)	//condition 3
-		&& ((UDWORD)mouseY() < (mainConsole.topY + iV_GetTextLineSize()*numActiveMessages))	//condition 4
+	    ((UDWORD)mouseX() > mainConsole.topX)	// condition 1
+	    && ((UDWORD)mouseY() > mainConsole.topY)	// condition 2
+	    && ((UDWORD)mouseX() < mainConsole.topX + mainConsole.width)	//condition 3
+	    && ((UDWORD)mouseY() < (mainConsole.topY + iV_GetTextLineSize()*numActiveMessages))	//condition 4
 	)
 	{
-		return(true);
+		return (true);
 	}
 	else
 	{
-		return(false);
+		return (false);
 	}
 }
 
 /** Sets up how many lines are allowed and how many are visible */
 void	setConsoleLineInfo(UDWORD vis)
 {
-	ASSERT( vis<=MAX_CONSOLE_MESSAGES,"Request for more visible lines in the console than exist" );
+	ASSERT(vis <= MAX_CONSOLE_MESSAGES, "Request for more visible lines in the console than exist");
 	consoleVisibleLines = vis;
 }
 
@@ -726,9 +729,9 @@ void	permitNewConsoleMessages(bool allow)
 }
 
 /// \return the visibility of the console
-bool	getConsoleDisplayStatus( void )
+bool	getConsoleDisplayStatus(void)
 {
-	return(bConsoleDisplayEnabled);
+	return (bConsoleDisplayEnabled);
 }
 
 /** like debug_console, but for release */
@@ -743,5 +746,5 @@ void console(const char *pFormat, ...)
 	va_end(pArgs);
 
 	/* Output it */
-	addConsoleMessage(aBuffer,DEFAULT_JUSTIFY,SYSTEM_MESSAGE);
+	addConsoleMessage(aBuffer, DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 }

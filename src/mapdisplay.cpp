@@ -44,14 +44,14 @@ void renderResearchToBuffer(RESEARCH *psResearch, UDWORD OriginX, UDWORD OriginY
 
 	BASE_STATS      *psResGraphic;
 	UDWORD          compID, IMDType;
-	Vector3i Rotation,Position;
+	Vector3i Rotation, Position;
 	UDWORD          basePlateSize, Radius;
 	SDWORD          scale = 0;
 
 	// Set identity (present) context
 	pie_MatBegin();
 
-	pie_SetGeometricOffset(OriginX+10, OriginY+10);
+	pie_SetGeometricOffset(OriginX + 10, OriginY + 10);
 
 	// Rotate round
 	// full rotation once every 2 seconds..
@@ -70,26 +70,26 @@ void renderResearchToBuffer(RESEARCH *psResearch, UDWORD OriginX, UDWORD OriginY
 	if (psResearch->psStat)
 	{
 		//we have a Stat associated with this research topic
-		if  (StatIsStructure(psResearch->psStat))
+		if (StatIsStructure(psResearch->psStat))
 		{
 			//this defines how the button is drawn
 			IMDType = IMDTYPE_STRUCTURESTAT;
 			psResGraphic = psResearch->psStat;
 			//set up the scale
-			basePlateSize= getStructureStatSizeMax((STRUCTURE_STATS*)psResearch->psStat);
-			if(basePlateSize == 1)
+			basePlateSize = getStructureStatSizeMax((STRUCTURE_STATS *)psResearch->psStat);
+			if (basePlateSize == 1)
 			{
 				scale = RESEARCH_COMPONENT_SCALE / 2;
 				/*HACK HACK HACK!
 				if its a 'tall thin (ie tower)' structure stat with something on
 				the top - offset the position to show the object on top*/
-				if (((STRUCTURE_STATS*)psResearch->psStat)->pIMD[0]->nconnectors &&
-					getStructureStatHeight((STRUCTURE_STATS*)psResearch->psStat) > TOWER_HEIGHT)
+				if (((STRUCTURE_STATS *)psResearch->psStat)->pIMD[0]->nconnectors &&
+				    getStructureStatHeight((STRUCTURE_STATS *)psResearch->psStat) > TOWER_HEIGHT)
 				{
 					Position.y -= 30;
 				}
 			}
-			else if(basePlateSize == 2)
+			else if (basePlateSize == 2)
 			{
 				scale = RESEARCH_COMPONENT_SCALE / 4;
 			}
@@ -122,7 +122,7 @@ void renderResearchToBuffer(RESEARCH *psResearch, UDWORD OriginX, UDWORD OriginY
 			}
 			else
 			{
-				ASSERT( false, "intDisplayMessageButton: invalid stat" );
+				ASSERT(false, "intDisplayMessageButton: invalid stat");
 				IMDType = IMDTYPE_RESEARCH;
 				psResGraphic = (BASE_STATS *)psResearch;
 			}
@@ -138,16 +138,16 @@ void renderResearchToBuffer(RESEARCH *psResearch, UDWORD OriginX, UDWORD OriginY
 	//scale the research according to size of IMD
 	if (IMDType == IMDTYPE_RESEARCH)
 	{
-		Radius = getResearchRadius((BASE_STATS*)psResGraphic);
-		if(Radius <= 100)
+		Radius = getResearchRadius((BASE_STATS *)psResGraphic);
+		if (Radius <= 100)
 		{
 			scale = RESEARCH_COMPONENT_SCALE / 2;
 		}
-		else if(Radius <= 128)
+		else if (Radius <= 128)
 		{
 			scale = RESEARCH_COMPONENT_SCALE / 3;
 		}
-		else if(Radius <= 256)
+		else if (Radius <= 256)
 		{
 			scale = RESEARCH_COMPONENT_SCALE / 4;
 		}
@@ -158,21 +158,21 @@ void renderResearchToBuffer(RESEARCH *psResearch, UDWORD OriginX, UDWORD OriginY
 	}
 
 	/* display the IMDs */
-	if(IMDType == IMDTYPE_COMPONENT)
+	if (IMDType == IMDTYPE_COMPONENT)
 	{
 		displayComponentButton(psResGraphic, &Rotation, &Position, scale);
 	}
-	else if(IMDType == IMDTYPE_RESEARCH)
+	else if (IMDType == IMDTYPE_RESEARCH)
 	{
 		displayResearchButton(psResGraphic, &Rotation, &Position, scale);
 	}
-	else if(IMDType == IMDTYPE_STRUCTURESTAT)
+	else if (IMDType == IMDTYPE_STRUCTURESTAT)
 	{
 		displayStructureStatButton((STRUCTURE_STATS *)psResGraphic, &Rotation, &Position, scale);
 	}
 	else
 	{
-		ASSERT( false, "Unknown PIEType" );
+		ASSERT(false, "Unknown PIEType");
 	}
 
 	// close matrix context

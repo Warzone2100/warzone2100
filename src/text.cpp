@@ -28,7 +28,7 @@
 #include "text.h"
 
 /* The string resource object */
-struct STR_RES* psStringRes = NULL;
+struct STR_RES *psStringRes = NULL;
 
 /* Initialise the string system */
 bool stringsInitialise(void)

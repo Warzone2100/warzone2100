@@ -49,31 +49,31 @@ uint16_t calcDirection(int32_t x0, int32_t y0, int32_t x1, int32_t y1)
 
 DROID	*getNearestDroid(UDWORD x, UDWORD y, bool bSelected)
 {
-DROID	*psDroid,*psBestUnit;
-UDWORD	bestSoFar;
+	DROID	*psDroid, *psBestUnit;
+	UDWORD	bestSoFar;
 
 	/* Go thru' all the droids  - how often have we seen this - a MACRO maybe? */
-	for(psDroid = apsDroidLists[selectedPlayer],psBestUnit = NULL, bestSoFar = UDWORD_MAX;
-		psDroid; psDroid = psDroid->psNext)
+	for (psDroid = apsDroidLists[selectedPlayer], psBestUnit = NULL, bestSoFar = UDWORD_MAX;
+	     psDroid; psDroid = psDroid->psNext)
 	{
-        if (!isVtolDroid(psDroid))
-        {
-		    /* Clever (?) bit that reads whether we're interested in droids being selected or not */
+		if (!isVtolDroid(psDroid))
+		{
+			/* Clever (?) bit that reads whether we're interested in droids being selected or not */
 			if (!bSelected || psDroid->selected)
-		    {
+			{
 				uint32_t dist = iHypot(psDroid->pos.x - x, psDroid->pos.y - y);
-			    /* Is this the nearest one we got so far? */
-			    if(dist<bestSoFar)
-			    {
-				    /* Yes, then keep a record of the distance for comparison... */
-				    bestSoFar = dist;
-				    /* ..and store away the droid responsible */
-				    psBestUnit = psDroid;
-			    }
-            }
+				/* Is this the nearest one we got so far? */
+				if (dist < bestSoFar)
+				{
+					/* Yes, then keep a record of the distance for comparison... */
+					bestSoFar = dist;
+					/* ..and store away the droid responsible */
+					psBestUnit = psDroid;
+				}
+			}
 		}
 	}
-	return(psBestUnit);
+	return (psBestUnit);
 }
 // -------------------------------------------------------------------------------------------
 
@@ -82,10 +82,22 @@ UDWORD	bestSoFar;
 bool inQuad(const Vector2i *pt, const QUAD *quad)
 {
 	// Early out.
-	int minX = std::min(std::min(quad->coords[0].x, quad->coords[1].x), std::min(quad->coords[2].x, quad->coords[3].x)); if (pt->x < minX) return false;
-	int maxX = std::max(std::max(quad->coords[0].x, quad->coords[1].x), std::max(quad->coords[2].x, quad->coords[3].x)); if (pt->x > maxX) return false;
-	int minY = std::min(std::min(quad->coords[0].y, quad->coords[1].y), std::min(quad->coords[2].y, quad->coords[3].y)); if (pt->y < minY) return false;
-	int maxY = std::max(std::max(quad->coords[0].y, quad->coords[1].y), std::max(quad->coords[2].y, quad->coords[3].y)); if (pt->y > maxY) return false;
+	int minX = std::min(std::min(quad->coords[0].x, quad->coords[1].x), std::min(quad->coords[2].x, quad->coords[3].x)); if (pt->x < minX)
+	{
+		return false;
+	}
+	int maxX = std::max(std::max(quad->coords[0].x, quad->coords[1].x), std::max(quad->coords[2].x, quad->coords[3].x)); if (pt->x > maxX)
+	{
+		return false;
+	}
+	int minY = std::min(std::min(quad->coords[0].y, quad->coords[1].y), std::min(quad->coords[2].y, quad->coords[3].y)); if (pt->y < minY)
+	{
+		return false;
+	}
+	int maxY = std::max(std::max(quad->coords[0].y, quad->coords[1].y), std::max(quad->coords[2].y, quad->coords[3].y)); if (pt->y > maxY)
+	{
+		return false;
+	}
 
 	bool c = false;
 
@@ -93,7 +105,7 @@ bool inQuad(const Vector2i *pt, const QUAD *quad)
 	{
 		Vector2i edge = quad->coords[j] - quad->coords[i];
 		Vector2i pos = *pt - quad->coords[i];
-		if ((     0 <= pos.y && pos.y < edge.y && pos.x * edge.y < pos.y * edge.x) ||
+		if ((0 <= pos.y && pos.y < edge.y && pos.x * edge.y < pos.y * edge.x) ||
 		    (edge.y <= pos.y && pos.y < 0      && pos.x * edge.y > pos.y * edge.x))
 		{
 			c = !c;
@@ -112,35 +124,35 @@ Vector2i positionInQuad(Vector2i const &pt, QUAD const &quad)
 		Vector2i edge = quad.coords[j] - quad.coords[i];
 		Vector2i pos  = quad.coords[j] - pt;
 		Vector2i posRot(pos.y, -pos.x);
-		lenSq[i] = edge*edge;
-		ptDot[i] = posRot*edge;
+		lenSq[i] = edge * edge;
+		ptDot[i] = posRot * edge;
 	}
 	int ret[2];
 	for (int i = 0; i < 2; ++i)
 	{
-		long d1 = ptDot[i]*lenSq[i + 2];
-		long d2 = ptDot[i + 2]*lenSq[i];
-		ret[i] = d1 + d2 != 0? (int64_t)TILE_UNITS*d1 / (d1 + d2) : TILE_UNITS/2;
+		long d1 = ptDot[i] * lenSq[i + 2];
+		long d2 = ptDot[i + 2] * lenSq[i];
+		ret[i] = d1 + d2 != 0 ? (int64_t)TILE_UNITS * d1 / (d1 + d2) : TILE_UNITS / 2;
 	}
 	return Vector2i(ret[0], ret[1]);
 }
 
 //-----------------------------------------------------------------------------------
-bool	droidOnScreen( DROID *psDroid, SDWORD tolerance )
+bool	droidOnScreen(DROID *psDroid, SDWORD tolerance)
 {
-SDWORD	dX,dY;
+	SDWORD	dX, dY;
 
-	if (DrawnInLastFrame(psDroid->sDisplay.frameNumber)==true)
+	if (DrawnInLastFrame(psDroid->sDisplay.frameNumber) == true)
+	{
+		dX = psDroid->sDisplay.screenX;
+		dY = psDroid->sDisplay.screenY;
+		/* Is it on screen */
+		if (dX > (0 - tolerance) && dY > (0 - tolerance)
+		    && dX < (SDWORD)(pie_GetVideoBufferWidth() + tolerance)
+		    && dY < (SDWORD)(pie_GetVideoBufferHeight() + tolerance))
 		{
-			dX = psDroid->sDisplay.screenX;
-			dY = psDroid->sDisplay.screenY;
-			/* Is it on screen */
-			if(dX > (0-tolerance) && dY > (0-tolerance)
-				&& dX < (SDWORD)(pie_GetVideoBufferWidth()+tolerance)
-				&& dY < (SDWORD)(pie_GetVideoBufferHeight()+tolerance))
-			{
-				return(true);
-			}
+			return (true);
 		}
-	return(false);
+	}
+	return (false);
 }

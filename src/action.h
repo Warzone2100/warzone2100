@@ -34,7 +34,7 @@
  *	@{
  */
 
-const char* getDroidActionName(DROID_ACTION action);
+const char *getDroidActionName(DROID_ACTION action);
 
 /** After failing a route ... this is the amount of time that the droid goes all defensive until it can start going aggressive. */
 #define MIN_SULK_TIME (1500)		// 1.5 sec
@@ -72,7 +72,7 @@ void actionDroid(DROID *psDroid, DROID_ACTION action, BASE_OBJECT *psObj);
 
 /** Give a droid an action with an object target and a location. */
 void actionDroid(DROID *psDroid, DROID_ACTION action,
-					   BASE_OBJECT *psObj, UDWORD x, UDWORD y);
+                 BASE_OBJECT *psObj, UDWORD x, UDWORD y);
 
 /** Rotate turret toward  target return True if locked on (Droid and Structure). */
 bool actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, WEAPON *psWeapon);

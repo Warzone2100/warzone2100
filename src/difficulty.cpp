@@ -45,7 +45,7 @@ static int              fDifEnemyModifier;
 void	setDifficultyLevel(DIFFICULTY_LEVEL lev)
 {
 
-	switch(lev)
+	switch (lev)
 	{
 	case	DL_EASY:
 		fDifPlayerModifier = 120;
@@ -74,9 +74,9 @@ void	setDifficultyLevel(DIFFICULTY_LEVEL lev)
 
 // ------------------------------------------------------------------------------------
 /* Returns the difficulty level */
-DIFFICULTY_LEVEL	getDifficultyLevel( void )
+DIFFICULTY_LEVEL	getDifficultyLevel(void)
 {
-	return(presDifLevel);
+	return (presDifLevel);
 }
 
 // ------------------------------------------------------------------------------------
@@ -87,8 +87,12 @@ int modifyForDifficultyLevel(int basicVal, bool IsPlayer)
 		return basicVal;
 	}
 	if (IsPlayer)
+	{
 		return basicVal * fDifPlayerModifier / 100;
+	}
 	else
+	{
 		return basicVal * fDifEnemyModifier / 100;
+	}
 }
 // ------------------------------------------------------------------------------------

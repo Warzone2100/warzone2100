@@ -85,7 +85,7 @@ void war_SetDefaultStates(void)//Sets all states
 	//set those here and reset in clParse or loadConfig
 	war_setFSAA(0);
 	war_SetVsync(true);
-	war_setSoundEnabled( true );
+	war_setSoundEnabled(true);
 	war_SetPauseOnFocusLoss(false);
 	war_SetColouredCursor(true);
 	war_SetMusicEnabled(true);
@@ -193,7 +193,7 @@ FMV_MODE war_GetFMVmode(void)
 void war_setScanlineMode(SCANLINE_MODE mode)
 {
 	debug(LOG_VIDEO, "%d", mode);
-    seq_setScanlineMode(mode);
+	seq_setScanlineMode(mode);
 }
 
 SCANLINE_MODE war_getScanlineMode(void)
@@ -222,12 +222,12 @@ bool war_GetColouredCursor(void)
 	return warGlobs.ColouredCursor;
 }
 
-void war_setSoundEnabled( bool soundEnabled )
+void war_setSoundEnabled(bool soundEnabled)
 {
 	warGlobs.soundEnabled = soundEnabled;
 }
 
-bool war_getSoundEnabled( void )
+bool war_getSoundEnabled(void)
 {
 	return warGlobs.soundEnabled;
 }

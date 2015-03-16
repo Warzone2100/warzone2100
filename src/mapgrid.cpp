@@ -56,7 +56,7 @@ void gridReset(void)
 	for (unsigned player = 0; player < MAX_PLAYERS; player++)
 	{
 		BASE_OBJECT *start[3] = {(BASE_OBJECT *)apsDroidLists[player], (BASE_OBJECT *)apsStructLists[player], (BASE_OBJECT *)apsFeatureLists[player]};
-		for (unsigned type = 0; type != sizeof(start)/sizeof(*start); ++type)
+		for (unsigned type = 0; type != sizeof(start) / sizeof(*start); ++type)
 		{
 			for (BASE_OBJECT *psObj = start[type]; psObj != NULL; psObj = psObj->psNext)
 			{
@@ -94,7 +94,7 @@ void gridShutDown(void)
 
 static bool isInRadius(int32_t x, int32_t y, uint32_t radius)
 {
-	return (uint32_t)(x*x + y*y) <= radius*radius;
+	return (uint32_t)(x * x + y * y) <= radius * radius;
 }
 
 // initialise the grid system to start iterating through units that
@@ -202,7 +202,7 @@ GridList const &gridStartIterateUnseen(int32_t x, int32_t y, uint32_t radius, in
 
 BASE_OBJECT **gridIterateDup(void)
 {
-	size_t bytes = gridPointTree->lastQueryResults.size()*sizeof(void *);
+	size_t bytes = gridPointTree->lastQueryResults.size() * sizeof(void *);
 	BASE_OBJECT **ret = (BASE_OBJECT **)malloc(bytes);
 	memcpy(ret, &gridPointTree->lastQueryResults[0], bytes);
 	return ret;

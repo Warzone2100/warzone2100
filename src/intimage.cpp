@@ -35,7 +35,8 @@
 
 #define INCEND	(0)
 
-enum {
+enum
+{
 	FR_SOLID,	//< Bitmap drawn solid.
 	FR_KEYED,	//< Bitmap drawn with colour 0 transparent.
 };
@@ -61,16 +62,16 @@ struct FRAMERECT
 // Frame definition structure.
 struct IMAGEFRAME
 {
-	SWORD OffsetX0,OffsetY0;	//< Offset top left of frame.
-	SWORD OffsetX1,OffsetY1;	//< Offset bottom right of frame.
+	SWORD OffsetX0, OffsetY0;	//< Offset top left of frame.
+	SWORD OffsetX1, OffsetY1;	//< Offset bottom right of frame.
 	SWORD TopLeft;			//< Image indecies for the corners ( -1 = don't draw).
 	SWORD TopRight;
 	SWORD BottomLeft;
 	SWORD BottomRight;
-	SWORD TopEdge,TopType;		//< Image indecies for the edges ( -1 = don't draw). Type ie FR_SOLID or FR_KEYED.
-	SWORD RightEdge,RightType;
-	SWORD BottomEdge,BottomType;
-	SWORD LeftEdge,LeftType;
+	SWORD TopEdge, TopType;		//< Image indecies for the edges ( -1 = don't draw). Type ie FR_SOLID or FR_KEYED.
+	SWORD RightEdge, RightType;
+	SWORD BottomEdge, BottomType;
+	SWORD LeftEdge, LeftType;
 	FRAMERECT FRect[5];		//< Fill rectangles.
 };
 
@@ -109,8 +110,9 @@ static const uint16_t MousePointerImageIDs[CURSOR_MAX] =
 };
 
 /** Form frame definition for normal frames. */
-IMAGEFRAME FrameNormal = {
-	0,0, 0,0,
+IMAGEFRAME FrameNormal =
+{
+	0, 0, 0, 0,
 	IMAGE_FRAME_C0,
 	IMAGE_FRAME_C1,
 	IMAGE_FRAME_C3,
@@ -119,16 +121,18 @@ IMAGEFRAME FrameNormal = {
 	IMAGE_FRAME_VR, FR_SOLID,
 	IMAGE_FRAME_HB, FR_SOLID,
 	IMAGE_FRAME_VL, FR_SOLID,
-	{{FR_FRAME, 0,1, 0,-1, 33},
-	{FR_IGNORE, 0,0, 0,0 ,0},
-	{FR_IGNORE, 0,0, 0,0 ,0},
-	{FR_IGNORE, 0,0, 0,0 ,0},
-	{FR_IGNORE, 0,0, 0,0 ,0}},
+	{	{FR_FRAME, 0, 1, 0, -1, 33},
+		{FR_IGNORE, 0, 0, 0, 0 , 0},
+		{FR_IGNORE, 0, 0, 0, 0 , 0},
+		{FR_IGNORE, 0, 0, 0, 0 , 0},
+		{FR_IGNORE, 0, 0, 0, 0 , 0}
+	},
 };
 
 /** Form frame definition for radar frames. */
-IMAGEFRAME FrameRadar = {
-	0,0, 0,0,
+IMAGEFRAME FrameRadar =
+{
+	0, 0, 0, 0,
 	IMAGE_FRAME_C0,
 	IMAGE_FRAME_C1,
 	IMAGE_FRAME_C3,
@@ -137,18 +141,19 @@ IMAGEFRAME FrameRadar = {
 	IMAGE_FRAME_VR, FR_SOLID,
 	IMAGE_FRAME_HB, FR_SOLID,
 	IMAGE_FRAME_VL, FR_SOLID,
-	{{FR_IGNORE, 0,0, 0,0 ,0},
-	{FR_IGNORE, 0,0, 0,0 ,0},
-	{FR_IGNORE, 0,0, 0,0 ,0},
-	{FR_IGNORE, 0,0, 0,0 ,0},
-	{FR_IGNORE, 0,0, 0,0 ,0}},
+	{	{FR_IGNORE, 0, 0, 0, 0 , 0},
+		{FR_IGNORE, 0, 0, 0, 0 , 0},
+		{FR_IGNORE, 0, 0, 0, 0 , 0},
+		{FR_IGNORE, 0, 0, 0, 0 , 0},
+		{FR_IGNORE, 0, 0, 0, 0 , 0}
+	},
 };
 
 // Read bitmaps used by the interface.
 //
 bool imageInitBitmaps(void)
 {
-	IntImages = (IMAGEFILE*)resGetData("IMG", "intfac.img");
+	IntImages = (IMAGEFILE *)resGetData("IMG", "intfac.img");
 
 	return true;
 }
@@ -171,26 +176,26 @@ void RenderWindowFrame(FRAMETYPE frame, UDWORD x, UDWORD y, UDWORD Width, UDWORD
 
 	x += Frame->OffsetX0;
 	y += Frame->OffsetY0;
-	Width -= Frame->OffsetX1+Frame->OffsetX0;
-	Height -= Frame->OffsetY1+Frame->OffsetY0;
+	Width -= Frame->OffsetX1 + Frame->OffsetX0;
+	Height -= Frame->OffsetY1 + Frame->OffsetY0;
 
 	for (RectI = 0; RectI < 5; RectI++)
 	{
 		Rect = &Frame->FRect[RectI];
 
-		switch(Rect->Type)
+		switch (Rect->Type)
 		{
 		case FR_FRAME:
-			iV_TransBoxFill(x + Rect->TLXOffset, y + Rect->TLYOffset, 
-			                x + Width-INCEND+Rect->BRXOffset, y + Height - INCEND + Rect->BRYOffset);
+			iV_TransBoxFill(x + Rect->TLXOffset, y + Rect->TLYOffset,
+			                x + Width - INCEND + Rect->BRXOffset, y + Height - INCEND + Rect->BRYOffset);
 			break;
 		case FR_LEFT:
 			iV_TransBoxFill(x + Rect->TLXOffset, y + Rect->TLYOffset,
-			                x + Rect->BRXOffset, y + Height - INCEND+Rect->BRYOffset);
+			                x + Rect->BRXOffset, y + Height - INCEND + Rect->BRYOffset);
 			break;
 		case FR_RIGHT:
-			iV_TransBoxFill(x + Width-INCEND + Rect->TLXOffset, y + Rect->TLYOffset,
-			                x + Width-INCEND + Rect->BRXOffset, y + Height - INCEND + Rect->BRYOffset);
+			iV_TransBoxFill(x + Width - INCEND + Rect->TLXOffset, y + Rect->TLYOffset,
+			                x + Width - INCEND + Rect->BRXOffset, y + Height - INCEND + Rect->BRYOffset);
 			break;
 		case FR_TOP:
 			iV_TransBoxFill(x + Rect->TLXOffset, y + Rect->TLYOffset,
@@ -205,28 +210,32 @@ void RenderWindowFrame(FRAMETYPE frame, UDWORD x, UDWORD y, UDWORD Width, UDWORD
 		}
 	}
 
-	if(Frame->TopLeft >= 0) {
-		WTopLeft = (SWORD)iV_GetImageWidth(IntImages,Frame->TopLeft);
-		HTopLeft = (SWORD)iV_GetImageHeight(IntImages,Frame->TopLeft);
-		iV_DrawImage(IntImages,Frame->TopLeft,x,y);
+	if (Frame->TopLeft >= 0)
+	{
+		WTopLeft = (SWORD)iV_GetImageWidth(IntImages, Frame->TopLeft);
+		HTopLeft = (SWORD)iV_GetImageHeight(IntImages, Frame->TopLeft);
+		iV_DrawImage(IntImages, Frame->TopLeft, x, y);
 	}
 
-	if(Frame->TopRight >= 0) {
-		WTopRight = (SWORD)iV_GetImageWidth(IntImages,Frame->TopRight);
-		HTopRight = (SWORD)iV_GetImageHeight(IntImages,Frame->TopRight);
-		iV_DrawImage(IntImages,Frame->TopRight,x+Width-WTopRight, y);
+	if (Frame->TopRight >= 0)
+	{
+		WTopRight = (SWORD)iV_GetImageWidth(IntImages, Frame->TopRight);
+		HTopRight = (SWORD)iV_GetImageHeight(IntImages, Frame->TopRight);
+		iV_DrawImage(IntImages, Frame->TopRight, x + Width - WTopRight, y);
 	}
 
-	if(Frame->BottomRight >= 0) {
-		WBottomRight = (SWORD)iV_GetImageWidth(IntImages,Frame->BottomRight);
-		HBottomRight = (SWORD)iV_GetImageHeight(IntImages,Frame->BottomRight);
-		iV_DrawImage(IntImages,Frame->BottomRight,x+Width-WBottomRight,y+Height-HBottomRight);
+	if (Frame->BottomRight >= 0)
+	{
+		WBottomRight = (SWORD)iV_GetImageWidth(IntImages, Frame->BottomRight);
+		HBottomRight = (SWORD)iV_GetImageHeight(IntImages, Frame->BottomRight);
+		iV_DrawImage(IntImages, Frame->BottomRight, x + Width - WBottomRight, y + Height - HBottomRight);
 	}
 
-	if(Frame->BottomLeft >= 0) {
-		WBottomLeft = (SWORD)iV_GetImageWidth(IntImages,Frame->BottomLeft);
-		HBottomLeft = (SWORD)iV_GetImageHeight(IntImages,Frame->BottomLeft);
-		iV_DrawImage(IntImages,Frame->BottomLeft,x,y+Height-HBottomLeft);
+	if (Frame->BottomLeft >= 0)
+	{
+		WBottomLeft = (SWORD)iV_GetImageWidth(IntImages, Frame->BottomLeft);
+		HBottomLeft = (SWORD)iV_GetImageHeight(IntImages, Frame->BottomLeft);
+		iV_DrawImage(IntImages, Frame->BottomLeft, x, y + Height - HBottomLeft);
 	}
 
 	if (Frame->TopEdge >= 0)
@@ -237,7 +246,7 @@ void RenderWindowFrame(FRAMETYPE frame, UDWORD x, UDWORD y, UDWORD Width, UDWORD
 
 	if (Frame->BottomEdge >= 0)
 	{
-		iV_DrawImageRepeatX(IntImages, Frame->BottomEdge, x + WBottomLeft, y + Height - iV_GetImageHeight(IntImages, Frame->BottomEdge), 
+		iV_DrawImageRepeatX(IntImages, Frame->BottomEdge, x + WBottomLeft, y + Height - iV_GetImageHeight(IntImages, Frame->BottomEdge),
 		                    Width - WBottomLeft - WBottomRight);
 	}
 

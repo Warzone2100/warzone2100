@@ -81,7 +81,10 @@ struct timerNode
 	timerNode() : engine(NULL), baseobjtype(OBJ_NUM_TYPES) {}
 	timerNode(QScriptEngine *caller, QString val, int plr, int frame)
 		: function(val), engine(caller), baseobj(-1), baseobjtype(OBJ_NUM_TYPES), frameTime(frame + gameTime), ms(frame), player(plr), calls(0), type(TIMER_REPEAT) {}
-	bool operator== (const timerNode &t) { return function == t.function && player == t.player; }
+	bool operator== (const timerNode &t)
+	{
+		return function == t.function && player == t.player;
+	}
 	// implement operator less TODO
 };
 
@@ -164,7 +167,7 @@ static QScriptValue callFunction(QScriptEngine *engine, const QString &function,
 	}
 	else if (ticks > HALF_MAX_US)
 	{
-		 m.overHalfMaxTimeCalls++;
+		m.overHalfMaxTimeCalls++;
 	}
 	m.calls++;
 	if (ticks > m.worst)
@@ -191,7 +194,7 @@ static QScriptValue callFunction(QScriptEngine *engine, const QString &function,
 }
 
 //-- \subsection{setTimer(function, milliseconds[, object])}
-//-- Set a function to run repeated at some given time interval. The function to run 
+//-- Set a function to run repeated at some given time interval. The function to run
 //-- is the first parameter, and it \underline{must be quoted}, otherwise the function will
 //-- be inlined. The second parameter is the interval, in milliseconds. A third, optional
 //-- parameter can be a \emph{game object} to pass to the timer function. If the \emph{game object}
@@ -263,13 +266,13 @@ static QScriptValue js_removeTimer(QScriptContext *context, QScriptEngine *engin
 //-- \subsection{queue(function[, milliseconds[, object]])}
 //-- Queues up a function to run at a later game frame. This is useful to prevent
 //-- stuttering during the game, which can happen if too much script processing is
-//-- done at once.  The function to run is the first parameter, and it 
+//-- done at once.  The function to run is the first parameter, and it
 //-- \underline{must be quoted}, otherwise the function will be inlined.
 //-- The second parameter is the delay in milliseconds, if it is omitted or 0,
 //-- the function will be run at a later frame.  A third optional
 //-- parameter can be a \emph{game object} to pass to the queued function. If the \emph{game object}
 //-- dies before the queued call runs, nothing happens.
-// TODO, check if an identical call is already queued up - and in this case, 
+// TODO, check if an identical call is already queued up - and in this case,
 // do not add anything.
 static QScriptValue js_queue(QScriptContext *context, QScriptEngine *engine)
 {
@@ -323,7 +326,7 @@ static QScriptValue js_profile(QScriptContext *context, QScriptEngine *engine)
 void scriptRemoveObject(BASE_OBJECT *psObj)
 {
 	// Weed out timers with dead objects
-	for (int i = 0; i < timers.count(); )
+	for (int i = 0; i < timers.count();)
 	{
 		const timerNode node = timers.at(i);
 		if (node.baseobj == psObj->id)
@@ -368,7 +371,7 @@ static QScriptValue js_include(QScriptContext *context, QScriptEngine *engine)
 	QScriptSyntaxCheckResult syntax = QScriptEngine::checkSyntax(source);
 	if (syntax.state() != QScriptSyntaxCheckResult::Valid)
 	{
-		debug(LOG_ERROR, "Syntax error in include %s line %d: %s", 
+		debug(LOG_ERROR, "Syntax error in include %s line %d: %s",
 		      path.toUtf8().constData(), syntax.errorLineNumber(), syntax.errorMessage().toUtf8().constData());
 		return QScriptValue(false);
 	}
@@ -429,9 +432,9 @@ bool shutdownScripts()
 			QString function = iter.key();
 			MONITOR_BIN m = iter.value();
 			QString info = QString("%1 | %2 | %3 | %4 | %5 | %6 | %7\n")
-				.arg(m.calls, 9).arg(m.time / m.calls, 10).arg(m.worst, 12)
-				.arg(m.worstGameTime, 13).arg(m.overMaxTimeCalls, 7)
-				.arg(m.overHalfMaxTimeCalls, 9).arg(function);
+			               .arg(m.calls, 9).arg(m.time / m.calls, 10).arg(m.worst, 12)
+			               .arg(m.worstGameTime, 13).arg(m.overMaxTimeCalls, 7)
+			               .arg(m.overHalfMaxTimeCalls, 9).arg(function);
 			dumpScriptLog(scriptName, me, info);
 		}
 		monitor->clear();
@@ -471,7 +474,7 @@ bool updateScripts()
 		engine->globalObject().setProperty("gameTime", gameTime, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	}
 	// Weed out dead timers
-	for (int i = 0; i < timers.count(); )
+	for (int i = 0; i < timers.count();)
 	{
 		const timerNode node = timers.at(i);
 		if (node.type == TIMER_ONESHOT_DONE)
@@ -518,7 +521,7 @@ bool updateScripts()
 	{
 		updateGlobalModels();
 		doUpdateModels = false;
-	}	
+	}
 
 	return true;
 }
@@ -626,7 +629,7 @@ QScriptEngine *loadPlayerScript(QString path, int player, int difficulty)
 	engine->globalObject().setProperty("scriptPath", basename.path(), QScriptValue::ReadOnly | QScriptValue::Undeletable);
 
 	QScriptValue result = engine->evaluate(source, path);
-	ASSERT_OR_RETURN(NULL, !engine->hasUncaughtException(), "Uncaught exception at line %d, file %s: %s", 
+	ASSERT_OR_RETURN(NULL, !engine->hasUncaughtException(), "Uncaught exception at line %d, file %s: %s",
 	                 engine->uncaughtExceptionLineNumber(), path.toUtf8().constData(), result.toString().toUtf8().constData());
 
 	// Register script
@@ -701,7 +704,7 @@ static QScriptEngine *findEngineForPlayer(int match, QString scriptName)
 			return engine;
 		}
 	}
-	ASSERT(false, "Script context for player %d and script name %s not found", 
+	ASSERT(false, "Script context for player %d and script name %s not found",
 	       match, scriptName.toUtf8().constData());
 	return NULL;
 }
@@ -724,7 +727,7 @@ bool loadScriptStates(const char *filename)
 			node.ms = ini.value("ms").toInt();
 			node.frameTime = ini.value("frame").toInt();
 			node.engine = engine;
-			debug(LOG_SAVE, "Registering trigger %d for player %d, script %s", 
+			debug(LOG_SAVE, "Registering trigger %d for player %d, script %s",
 			      i, node.player, scriptName.toUtf8().constData());
 			node.function = ini.value("function").toString();
 			node.baseobj = ini.value("baseobj", -1).toInt();
@@ -734,7 +737,7 @@ bool loadScriptStates(const char *filename)
 		else if (engine && list[i].startsWith("globals_"))
 		{
 			QStringList keys = ini.childKeys();
-			debug(LOG_SAVE, "Loading script globals for player %d, script %s -- found %d values", 
+			debug(LOG_SAVE, "Loading script globals for player %d, script %s -- found %d values",
 			      player, scriptName.toUtf8().constData(), keys.size());
 			for (int j = 0; j < keys.size(); ++j)
 			{
@@ -917,7 +920,7 @@ void jsShowDebug()
 
 /// For generic, parameter-less triggers
 //__ \subsection{eventGameInit()}
-//__ An event that is run once as the game is initialized. Not all game may have been 
+//__ An event that is run once as the game is initialized. Not all game may have been
 //__ properly initialized by this time, so use this only to initialize script state.
 //__ \subsection{eventStartLevel()}
 //__ An event that is run once the game has started and all game data has been loaded.
@@ -1204,7 +1207,7 @@ bool triggerEventResearched(RESEARCH *psResearch, STRUCTURE *psStruct, int playe
 }
 
 //__ \subsection{eventDestroyed(object)}
-//__ An event that is run whenever an object is destroyed. Careful passing 
+//__ An event that is run whenever an object is destroyed. Careful passing
 //__ the parameter object around, since it is about to vanish!
 bool triggerEventDestroyed(BASE_OBJECT *psVictim)
 {
@@ -1371,12 +1374,12 @@ bool triggerEventBeaconRemoved(int from, int to)
 }
 
 //__ \subsection{eventSelectionChanged(objects)}
-//__ An event that is triggered whenever the host player selects one or more game objects. 
+//__ An event that is triggered whenever the host player selects one or more game objects.
 //__ The \emph{objects} parameter contains an array of the currently selected game objects.
 //__ Keep in mind that the player may drag and drop select many units at once, select one
 //__ unit specifically, or even add more selections to a current selection one at a time.
 //__ This event will trigger once for each user action, not once for each selected or
-//__ deselected object. If all selected game objects are deselected, \emph{objects} will 
+//__ deselected object. If all selected game objects are deselected, \emph{objects} will
 //__ be empty.
 bool triggerEventSelected()
 {
@@ -1408,7 +1411,7 @@ bool triggerEventDroidMoved(DROID *psDroid, int oldx, int oldy)
 
 //__ \subsection{eventArea<label>(droid)}
 //__ An event that is run whenever a droid enters an area label. The area is then
-//__ deactived. Call resetArea() to reactivate it. The name of the event is 
+//__ deactived. Call resetArea() to reactivate it. The name of the event is
 //__ eventArea + the name of the label.
 bool triggerEventArea(QString label, DROID *psDroid)
 {

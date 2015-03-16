@@ -29,14 +29,14 @@
 
 enum LOADSAVE_MODE
 {
-LOAD_FRONTEND_MISSION,
-LOAD_MISSIONEND,
-LOAD_INGAME_MISSION,
-LOAD_FRONTEND_SKIRMISH,
-LOAD_INGAME_SKIRMISH,
-SAVE_MISSIONEND,
-SAVE_INGAME_MISSION,
-SAVE_INGAME_SKIRMISH
+	LOAD_FRONTEND_MISSION,
+	LOAD_MISSIONEND,
+	LOAD_INGAME_MISSION,
+	LOAD_FRONTEND_SKIRMISH,
+	LOAD_INGAME_SKIRMISH,
+	SAVE_MISSIONEND,
+	SAVE_INGAME_MISSION,
+	SAVE_INGAME_SKIRMISH
 };
 
 /***************************************************************************/
@@ -57,14 +57,14 @@ extern bool		bRequestLoad;
  */
 /***************************************************************************/
 
-extern void		drawBlueBox		(UDWORD x,UDWORD y, UDWORD w, UDWORD h);
+extern void		drawBlueBox(UDWORD x, UDWORD y, UDWORD w, UDWORD h);
 
 extern bool		addLoadSave(LOADSAVE_MODE mode, const char *title);
-extern bool		closeLoadSave	(void);
-extern bool		runLoadSave		(bool bResetMissionWidgets);
-extern bool		displayLoadSave	(void);
+extern bool		closeLoadSave(void);
+extern bool		runLoadSave(bool bResetMissionWidgets);
+extern bool		displayLoadSave(void);
 
-extern void		removeWildcards	(char *pStr);
+extern void		removeWildcards(char *pStr);
 
 // return whether the save screen was displayed in the mission results screen
 bool saveInMissionRes(void);
@@ -73,6 +73,6 @@ bool saveInMissionRes(void);
 bool saveMidMission(void);
 
 
-extern void deleteSaveGame(char* saveGameName);
+extern void deleteSaveGame(char *saveGameName);
 
 #endif // __INCLUDED_SRC_LOADSAVE_H__

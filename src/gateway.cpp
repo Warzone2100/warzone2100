@@ -54,13 +54,13 @@ static SDWORD gwMapHeight(void)
 // set the gateway flag on a tile
 static void gwSetGatewayFlag(SDWORD x, SDWORD y)
 {
-	mapTile((UDWORD)x,(UDWORD)y)->tileInfoBits |= BITS_GATEWAY;
+	mapTile((UDWORD)x, (UDWORD)y)->tileInfoBits |= BITS_GATEWAY;
 }
 
 // clear the gateway flag on a tile
 static void gwClearGatewayFlag(SDWORD x, SDWORD y)
 {
-	mapTile((UDWORD)x,(UDWORD)y)->tileInfoBits &= ~BITS_GATEWAY;
+	mapTile((UDWORD)x, (UDWORD)y)->tileInfoBits &= ~BITS_GATEWAY;
 }
 
 
@@ -94,7 +94,7 @@ bool gwNewGateway(SDWORD x1, SDWORD y1, SDWORD x2, SDWORD y2)
 	                 && x2 >= 0 && x2 < gwMapWidth() && y2 >= 0 && y2 < gwMapHeight()
 	                 && (x1 == x2 || y1 == y2), "Invalid gateway coordinates (%d, %d, %d, %d)",
 	                 x1, y1, x2, y2);
-	psNew = (GATEWAY*)malloc(sizeof(GATEWAY));
+	psNew = (GATEWAY *)malloc(sizeof(GATEWAY));
 
 	// make sure the first coordinate is always the smallest
 	if (x2 < x1)
@@ -125,7 +125,7 @@ bool gwNewGateway(SDWORD x1, SDWORD y1, SDWORD x2, SDWORD y2)
 	if (psNew->x1 == psNew->x2)
 	{
 		// vertical gateway
-		for(pos = psNew->y1; pos <= psNew->y2; pos++)
+		for (pos = psNew->y1; pos <= psNew->y2; pos++)
 		{
 			gwSetGatewayFlag(psNew->x1, pos);
 		}
@@ -133,7 +133,7 @@ bool gwNewGateway(SDWORD x1, SDWORD y1, SDWORD x2, SDWORD y2)
 	else
 	{
 		// horizontal gateway
-		for(pos = psNew->x1; pos <= psNew->x2; pos++)
+		for (pos = psNew->x1; pos <= psNew->x2; pos++)
 		{
 			gwSetGatewayFlag(pos, psNew->y1);
 		}
@@ -164,7 +164,7 @@ static void gwFreeGateway(GATEWAY *psDel)
 		if (psDel->x1 == psDel->x2)
 		{
 			// vertical gateway
-			for(pos = psDel->y1; pos <= psDel->y2; pos++)
+			for (pos = psDel->y1; pos <= psDel->y2; pos++)
 			{
 				gwClearGatewayFlag(psDel->x1, pos);
 			}
@@ -172,7 +172,7 @@ static void gwFreeGateway(GATEWAY *psDel)
 		else
 		{
 			// horizontal gateway
-			for(pos = psDel->x1; pos <= psDel->x2; pos++)
+			for (pos = psDel->x1; pos <= psDel->x2; pos++)
 			{
 				gwClearGatewayFlag(pos, psDel->y1);
 			}

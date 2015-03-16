@@ -59,8 +59,14 @@ struct PathCoord
 {
 	PathCoord() {}
 	PathCoord(int16_t x_, int16_t y_) : x(x_), y(y_) {}
-	bool operator ==(PathCoord const &z) const { return x == z.x && y == z.y; }
-	bool operator !=(PathCoord const &z) const { return !(*this == z); }
+	bool operator ==(PathCoord const &z) const
+	{
+		return x == z.x && y == z.y;
+	}
+	bool operator !=(PathCoord const &z) const
+	{
+		return !(*this == z);
+	}
 
 	int16_t x, y;
 };
@@ -74,10 +80,19 @@ struct PathNode
 	bool operator <(PathNode const &z) const
 	{
 		// Sort decending est, fallback to ascending dist, fallback to sorting by position.
-		if (est  != z.est)  return est  > z.est;
-		if (dist != z.dist) return dist < z.dist;
-		if (p.x  != z.p.x)  return p.x  < z.p.x;
-		                    return p.y  < z.p.y;
+		if (est  != z.est)
+		{
+			return est  > z.est;
+		}
+		if (dist != z.dist)
+		{
+			return dist < z.dist;
+		}
+		if (p.x  != z.p.x)
+		{
+			return p.x  < z.p.x;
+		}
+		return p.y  < z.p.y;
 	}
 
 	PathCoord p;                    // Map coords.
@@ -108,7 +123,7 @@ struct PathBlockingMap
 	{
 		return type.gameTime == z.gameTime &&
 		       fpathIsEquivalentBlocking(type.propulsion, type.owner, type.moveType,
-		                                    z.propulsion,    z.owner,    z.moveType);
+		                                 z.propulsion,    z.owner,    z.moveType);
 	}
 
 	PathBlockingType type;
@@ -120,8 +135,14 @@ struct PathNonblockingArea
 {
 	PathNonblockingArea() {}
 	PathNonblockingArea(StructureBounds const &st) : x1(st.map.x), x2(st.map.x + st.size.x), y1(st.map.y), y2(st.map.y + st.size.y) {}
-	bool operator ==(PathNonblockingArea const &z) const { return x1 == z.x1 && x2 == z.x2 && y1 == z.y1 && y2 == z.y2; }
-	bool operator !=(PathNonblockingArea const &z) const { return !(*this == z); }
+	bool operator ==(PathNonblockingArea const &z) const
+	{
+		return x1 == z.x1 && x2 == z.x2 && y1 == z.y1 && y2 == z.y2;
+	}
+	bool operator !=(PathNonblockingArea const &z) const
+	{
+		return !(*this == z);
+	}
 	bool isNonblocking(int x, int y) const
 	{
 		return x >= x1 && x < x2 && y >= y1 && y < y2;
@@ -141,11 +162,11 @@ struct PathfindContext
 			return false;  // The path is actually blocked here by a structure, but ignore it since it's where we want to go (or where we came from).
 		}
 		// Not sure whether the out-of-bounds check is needed, can only happen if pathfinding is started on a blocking tile (or off the map).
-		return x < 0 || y < 0 || x >= mapWidth || y >= mapHeight || blockingMap->map[x + y*mapWidth];
+		return x < 0 || y < 0 || x >= mapWidth || y >= mapHeight || blockingMap->map[x + y * mapWidth];
 	}
 	bool isDangerous(int x, int y) const
 	{
-		return !blockingMap->dangerMap.empty() && blockingMap->dangerMap[x + y*mapWidth];
+		return !blockingMap->dangerMap.empty() && blockingMap->dangerMap[x + y * mapWidth];
 	}
 	bool matches(PathBlockingMap const *blockingMap_, PathCoord tileS_, PathNonblockingArea dstIgnore_) const
 	{
@@ -200,14 +221,14 @@ static uint32_t fpathCurrentGameTime;
 // dir 0 => x = 0, y = -1
 static const Vector2i aDirOffset[] =
 {
-	Vector2i( 0, 1),
+	Vector2i(0, 1),
 	Vector2i(-1, 1),
 	Vector2i(-1, 0),
-	Vector2i(-1,-1),
-	Vector2i( 0,-1),
-	Vector2i( 1,-1),
-	Vector2i( 1, 0),
-	Vector2i( 1, 1),
+	Vector2i(-1, -1),
+	Vector2i(0, -1),
+	Vector2i(1, -1),
+	Vector2i(1, 0),
+	Vector2i(1, 1),
 };
 
 void fpathHardTableReset()
@@ -239,12 +260,12 @@ static inline unsigned WZ_DECL_CONST fpathEstimate(PathCoord s, PathCoord f)
 {
 	// Cost of moving horizontal/vertical = 70*2, cost of moving diagonal = 99*2, 99/70 = 1.41428571... ≈ √2 = 1.41421356...
 	unsigned xDelta = abs(s.x - f.x), yDelta = abs(s.y - f.y);
-	return std::min(xDelta, yDelta)*(198 - 140) + std::max(xDelta, yDelta)*140;
+	return std::min(xDelta, yDelta) * (198 - 140) + std::max(xDelta, yDelta) * 140;
 }
 static inline unsigned WZ_DECL_CONST fpathGoodEstimate(PathCoord s, PathCoord f)
 {
 	// Cost of moving horizontal/vertical = 70*2, cost of moving diagonal = 99*2, 99/70 = 1.41428571... ≈ √2 = 1.41421356...
-	return iHypot((s.x - f.x)*140, (s.y - f.y)*140);
+	return iHypot((s.x - f.x) * 140, (s.y - f.y) * 140);
 }
 
 /** Generate a new node
@@ -257,13 +278,13 @@ static inline void fpathNewNode(PathfindContext &context, PathCoord dest, PathCo
 	PathNode node;
 	unsigned costFactor = context.isDangerous(pos.x, pos.y) ? 5 : 1;
 	node.p = pos;
-	node.dist = prevDist + fpathEstimate(prevPos, pos)*costFactor;
+	node.dist = prevDist + fpathEstimate(prevPos, pos) * costFactor;
 	node.est = node.dist + fpathGoodEstimate(pos, dest);
 
-	Vector2i delta = Vector2i(pos.x - prevPos.x, pos.y - prevPos.y)*64;
+	Vector2i delta = Vector2i(pos.x - prevPos.x, pos.y - prevPos.y) * 64;
 	bool isDiagonal = delta.x && delta.y;
 
-	PathExploredTile &expl = context.map[pos.x + pos.y*mapWidth];
+	PathExploredTile &expl = context.map[pos.x + pos.y * mapWidth];
 	if (expl.iteration == context.iteration)
 	{
 		if (expl.visited)
@@ -282,23 +303,23 @@ static inline void fpathNewNode(PathfindContext &context, PathCoord dest, PathCo
 			// +---+---+
 			// | A | B |
 			// +---+---+
-			unsigned distA = node.dist - (isDiagonal? 198 : 140)*costFactor;  // If isDiagonal, node is A and expl is B.
-			unsigned distB = expl.dist - (isDiagonal? 140 : 198)*costFactor;
+			unsigned distA = node.dist - (isDiagonal ? 198 : 140) * costFactor; // If isDiagonal, node is A and expl is B.
+			unsigned distB = expl.dist - (isDiagonal ? 140 : 198) * costFactor;
 			if (!isDiagonal)
 			{
 				std::swap(distA, distB);
 				std::swap(deltaA, deltaB);
 			}
-			int gradientX = int(distB - distA)/costFactor;
+			int gradientX = int(distB - distA) / costFactor;
 			if (gradientX > 0 && gradientX <= 98)  // 98 = floor(140/√2), so gradientX <= 98 is needed so that gradientX < gradientY.
 			{
 				// The distance gradient is now known to be somewhere between the direction from A to P and the direction from B to P.
 				static const uint8_t gradYLookup[99] = {140, 140, 140, 140, 140, 140, 140, 140, 140, 140, 140, 140, 139, 139, 139, 139, 139, 139, 139, 139, 139, 138, 138, 138, 138, 138, 138, 137, 137, 137, 137, 137, 136, 136, 136, 136, 135, 135, 135, 134, 134, 134, 134, 133, 133, 133, 132, 132, 132, 131, 131, 130, 130, 130, 129, 129, 128, 128, 127, 127, 126, 126, 126, 125, 125, 124, 123, 123, 122, 122, 121, 121, 120, 119, 119, 118, 118, 117, 116, 116, 115, 114, 113, 113, 112, 111, 110, 110, 109, 108, 107, 106, 106, 105, 104, 103, 102, 101, 100};
 				int gradientY = gradYLookup[gradientX];  // = sqrt(140² -  gradientX²), rounded to nearest integer
-				unsigned distP = gradientY*costFactor + distB;
+				unsigned distP = gradientY * costFactor + distB;
 				node.est -= node.dist - distP;
 				node.dist = distP;
-				delta = (deltaA*gradientX + deltaB*(gradientY - gradientX))/gradientY;
+				delta = (deltaA * gradientX + deltaB * (gradientY - gradientX)) / gradientY;
 			}
 		}
 		if (expl.dist <= node.dist)
@@ -342,11 +363,11 @@ static PathCoord fpathAStarExplore(PathfindContext &context, PathCoord tileF)
 	while (!context.nodes.empty() && !foundIt)
 	{
 		PathNode node = fpathTakeNode(context.nodes);
-		if (context.map[node.p.x + node.p.y*mapWidth].visited)
+		if (context.map[node.p.x + node.p.y * mapWidth].visited)
 		{
 			continue;  // Already been here.
 		}
-		context.map[node.p.x + node.p.y*mapWidth].visited = true;
+		context.map[node.p.x + node.p.y * mapWidth].visited = true;
 
 		// note the nearest node to the target so far
 		if (node.est - node.dist < nearestDist)
@@ -443,8 +464,8 @@ ASR_RETVAL fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob)
 
 		// We have tried going to tileDest before.
 
-		if (contextIterator->map[tileOrig.x + tileOrig.y*mapWidth].iteration == contextIterator->iteration
-		 && contextIterator->map[tileOrig.x + tileOrig.y*mapWidth].visited)
+		if (contextIterator->map[tileOrig.x + tileOrig.y * mapWidth].iteration == contextIterator->iteration
+		    && contextIterator->map[tileOrig.x + tileOrig.y * mapWidth].visited)
 		{
 			// Already know the path from orig to dest.
 			endCoord = tileOrig;
@@ -496,25 +517,25 @@ ASR_RETVAL fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob)
 	path.clear();
 
 	Vector2i newP;
-	for (Vector2i p(world_coord(endCoord.x) + TILE_UNITS/2, world_coord(endCoord.y) + TILE_UNITS/2); true; p = newP)
+	for (Vector2i p(world_coord(endCoord.x) + TILE_UNITS / 2, world_coord(endCoord.y) + TILE_UNITS / 2); true; p = newP)
 	{
 		ASSERT_OR_RETURN(ASR_FAILED, worldOnMap(p.x, p.y), "Assigned XY coordinates (%d, %d) not on map!", (int)p.x, (int)p.y);
-		ASSERT_OR_RETURN(ASR_FAILED, path.size() < (unsigned)mapWidth*mapHeight, "Pathfinding got in a loop.");
+		ASSERT_OR_RETURN(ASR_FAILED, path.size() < (unsigned)mapWidth * mapHeight, "Pathfinding got in a loop.");
 
 		path.push_back(p);
 
-		PathExploredTile &tile = context.map[map_coord(p.x) + map_coord(p.y)*mapWidth];
-		newP = p - Vector2i(tile.dx, tile.dy)*(TILE_UNITS/64);
+		PathExploredTile &tile = context.map[map_coord(p.x) + map_coord(p.y) * mapWidth];
+		newP = p - Vector2i(tile.dx, tile.dy) * (TILE_UNITS / 64);
 		Vector2i mapP = map_coord(newP);
-		int xSide = newP.x - world_coord(mapP.x) > TILE_UNITS/2? 1 : -1;  // 1 if newP is on right-hand side of the tile, or -1 if newP is on the left-hand side of the tile.
-		int ySide = newP.y - world_coord(mapP.y) > TILE_UNITS/2? 1 : -1;  // 1 if newP is on bottom side of the tile, or -1 if newP is on the top side of the tile.
+		int xSide = newP.x - world_coord(mapP.x) > TILE_UNITS / 2 ? 1 : -1; // 1 if newP is on right-hand side of the tile, or -1 if newP is on the left-hand side of the tile.
+		int ySide = newP.y - world_coord(mapP.y) > TILE_UNITS / 2 ? 1 : -1; // 1 if newP is on bottom side of the tile, or -1 if newP is on the top side of the tile.
 		if (context.isBlocked(mapP.x + xSide, mapP.y))
 		{
-			newP.x = world_coord(mapP.x) + TILE_UNITS/2;  // Point too close to a blocking tile on left or right side, so move the point to the middle.
+			newP.x = world_coord(mapP.x) + TILE_UNITS / 2; // Point too close to a blocking tile on left or right side, so move the point to the middle.
 		}
 		if (context.isBlocked(mapP.x, mapP.y + ySide))
 		{
-			newP.y = world_coord(mapP.y) + TILE_UNITS/2;  // Point too close to a blocking tile on rop or bottom side, so move the point to the middle.
+			newP.y = world_coord(mapP.y) + TILE_UNITS / 2; // Point too close to a blocking tile on rop or bottom side, so move the point to the middle.
 		}
 		if (map_coord(p) == Vector2i(context.tileS.x, context.tileS.y) || p == newP)
 		{
@@ -614,24 +635,24 @@ void fpathSetBlockingMap(PATHJOB *psJob)
 		// i now points to an empty map with no data. Fill the map.
 		i->type = type;
 		std::vector<bool> &map = i->map;
-		map.resize(mapWidth*mapHeight);
+		map.resize(mapWidth * mapHeight);
 		uint32_t checksumMap = 0, checksumDangerMap = 0, factor = 0;
 		for (int y = 0; y < mapHeight; ++y)
 			for (int x = 0; x < mapWidth; ++x)
-		{
-			map[x + y*mapWidth] = fpathBaseBlockingTile(x, y, type.propulsion, type.owner, type.moveType);
-			checksumMap ^= map[x + y*mapWidth]*(factor = 3*factor + 1);
-		}
+			{
+				map[x + y * mapWidth] = fpathBaseBlockingTile(x, y, type.propulsion, type.owner, type.moveType);
+				checksumMap ^= map[x + y * mapWidth] * (factor = 3 * factor + 1);
+			}
 		if (!isHumanPlayer(type.owner) && type.moveType == FMT_MOVE)
 		{
 			std::vector<bool> &dangerMap = i->dangerMap;
-			dangerMap.resize(mapWidth*mapHeight);
+			dangerMap.resize(mapWidth * mapHeight);
 			for (int y = 0; y < mapHeight; ++y)
 				for (int x = 0; x < mapWidth; ++x)
-			{
-				dangerMap[x + y*mapWidth] = auxTile(x, y, type.owner) & AUXBITS_THREAT;
-				checksumDangerMap ^= dangerMap[x + y*mapWidth]*(factor = 3*factor + 1);
-			}
+				{
+					dangerMap[x + y * mapWidth] = auxTile(x, y, type.owner) & AUXBITS_THREAT;
+					checksumDangerMap ^= dangerMap[x + y * mapWidth] * (factor = 3 * factor + 1);
+				}
 		}
 		syncDebug("blockingMap(%d,%d,%d,%d) = %08X %08X", gameTime, psJob->propulsion, psJob->owner, psJob->moveType, checksumMap, checksumDangerMap);
 	}

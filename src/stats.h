@@ -188,7 +188,7 @@ int getCompFromID(COMPONENT_TYPE compType, const QString &name);
 COMPONENT_STATS *getCompStatsFromName(const QString &name);
 
 /*returns the weapon sub class based on the string name passed in */
-extern bool getWeaponSubClass(const char* subClass, WEAPON_SUBCLASS* wclass);
+extern bool getWeaponSubClass(const char *subClass, WEAPON_SUBCLASS *wclass);
 const char *getWeaponSubClass(WEAPON_SUBCLASS wclass);
 /*sets the store to the body size based on the name passed in - returns false
 if doesn't compare with any*/
@@ -208,7 +208,7 @@ extern bool getBodySize(const char *pSize, BODY_SIZE *pStore);
  *         contain a valid propulsion type enumerator, otherwise its value will
  *         be left unchanged.
  */
-extern bool getPropulsionType(const char* typeName, PROPULSION_TYPE* type);
+extern bool getPropulsionType(const char *typeName, PROPULSION_TYPE *type);
 
 /**
  * Determines the weapon effect indicated by the @c weaponEffect string passed
@@ -227,11 +227,11 @@ extern bool getPropulsionType(const char* typeName, PROPULSION_TYPE* type);
 extern const StringToEnumMap<WEAPON_EFFECT> map_WEAPON_EFFECT;
 
 WZ_DECL_PURE int weaponROF(const WEAPON_STATS *psStat, int player);
-WZ_DECL_PURE int weaponFirePause(const WEAPON_STATS* psStats, int player);
+WZ_DECL_PURE int weaponFirePause(const WEAPON_STATS *psStats, int player);
 WZ_DECL_PURE int weaponReloadTime(const WEAPON_STATS *psStats, int player);
-WZ_DECL_PURE int weaponShortHit(const WEAPON_STATS* psStats, int player);
-WZ_DECL_PURE int weaponLongHit(const WEAPON_STATS* psStats, int player);
-WZ_DECL_PURE int weaponDamage(const WEAPON_STATS* psStats, int player);
+WZ_DECL_PURE int weaponShortHit(const WEAPON_STATS *psStats, int player);
+WZ_DECL_PURE int weaponLongHit(const WEAPON_STATS *psStats, int player);
+WZ_DECL_PURE int weaponDamage(const WEAPON_STATS *psStats, int player);
 WZ_DECL_PURE int weaponRadDamage(const WEAPON_STATS *psStats, int player);
 WZ_DECL_PURE int weaponPeriodicalDamage(const WEAPON_STATS *psStats, int player);
 WZ_DECL_PURE int sensorRange(const SENSOR_STATS *psStats, int player);
@@ -261,7 +261,7 @@ WZ_DECL_PURE bool objHasWeapon(const BASE_OBJECT *psObj);
 
 extern void statsInitVars(void);
 
-bool getWeaponEffect(const char* weaponEffect, WEAPON_EFFECT* effect);
+bool getWeaponEffect(const char *weaponEffect, WEAPON_EFFECT *effect);
 bool getWeaponClass(QString weaponClassStr, WEAPON_CLASS *weaponClass);
 
 /* Wrappers */

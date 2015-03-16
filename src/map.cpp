@@ -56,7 +56,11 @@
 static WZ_THREAD *dangerThread = NULL;
 static WZ_SEMAPHORE *dangerSemaphore = NULL;
 static WZ_SEMAPHORE *dangerDoneSemaphore = NULL;
-struct floodtile { uint8_t x; uint8_t y; };
+struct floodtile
+{
+	uint8_t x;
+	uint8_t y;
+};
 static struct floodtile *floodbucket = NULL;
 static int bucketcounter;
 static UDWORD lastDangerUpdate = 0;
@@ -88,7 +92,7 @@ struct GATEWAY_SAVEHEADER
 
 struct GATEWAY_SAVE
 {
-	UBYTE	x0,y0,x1,y1;
+	UBYTE	x0, y0, x1, y1;
 };
 
 /* Sanity check definitions for the save struct file sizes */
@@ -141,7 +145,7 @@ static void init_tileNames(int type)
 
 	switch (type)
 	{
-		case ARIZONA:
+	case ARIZONA:
 		{
 			if (!loadFileToBuffer("tileset/arizona_enum.txt", pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 			{
@@ -159,7 +163,7 @@ static void init_tileNames(int type)
 			}
 			break;
 		}
-		case URBAN:
+	case URBAN:
 		{
 			if (!loadFileToBuffer("tileset/urban_enum.txt", pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 			{
@@ -177,7 +181,7 @@ static void init_tileNames(int type)
 			}
 			break;
 		}
-		case ROCKIE:
+	case ROCKIE:
 		{
 			if (!loadFileToBuffer("tileset/rockie_enum.txt", pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 			{
@@ -195,7 +199,7 @@ static void init_tileNames(int type)
 			}
 			break;
 		}
-		default:
+	default:
 		debug(LOG_FATAL, "Unknown type (%d) given.  Aborting.", type);
 		abort();
 	}
@@ -209,17 +213,17 @@ static void init_tileNames(int type)
 
 	numTile_names = numlines;
 	//increment the pointer to the start of the next record
-	pFileData = strchr(pFileData,'\n') + 1;
+	pFileData = strchr(pFileData, '\n') + 1;
 
-	Tile_names = (char *)malloc(numlines * sizeof(char[MAX_STR_LENGTH]) );
+	Tile_names = (char *)malloc(numlines * sizeof(char[MAX_STR_LENGTH]));
 	memset(Tile_names, 0x0, (numlines * sizeof(char[MAX_STR_LENGTH])));
 
-	for (i=0; i < numlines; i++)
+	for (i = 0; i < numlines; i++)
 	{
-		sscanf(pFileData, "%255[^,'\r\n]%n", &Tile_names[i*MAX_STR_LENGTH], &cnt);
+		sscanf(pFileData, "%255[^,'\r\n]%n", &Tile_names[i * MAX_STR_LENGTH], &cnt);
 		pFileData += cnt;
 		//increment the pointer to the start of the next record
-		pFileData = strchr(pFileData,'\n') + 1;
+		pFileData = strchr(pFileData, '\n') + 1;
 	}
 }
 
@@ -262,16 +266,16 @@ fallback:
 
 		debug(LOG_TERRAIN, "tilename: %s, with %d entries", tilename, numlines);
 		//increment the pointer to the start of the next record
-		pFileData = strchr(pFileData,'\n') + 1;
+		pFileData = strchr(pFileData, '\n') + 1;
 		numGroundTypes = numlines;
-		psGroundTypes = (GROUND_TYPE *)malloc(sizeof(GROUND_TYPE)*numlines);
+		psGroundTypes = (GROUND_TYPE *)malloc(sizeof(GROUND_TYPE) * numlines);
 
-		for (i=0; i < numlines; i++)
+		for (i = 0; i < numlines; i++)
 		{
 			sscanf(pFileData, "%255[^,'\r\n],%255[^,'\r\n],%lf%n", textureType, textureName, &textureSize, &cnt);
 			pFileData += cnt;
 			//increment the pointer to the start of the next record
-			pFileData = strchr(pFileData,'\n') + 1;
+			pFileData = strchr(pFileData, '\n') + 1;
 
 			psGroundTypes[getTextureType(textureType)].textureName = strdup(textureName);
 			psGroundTypes[getTextureType(textureType)].textureSize = textureSize ;
@@ -301,16 +305,16 @@ fallback:
 
 		debug(LOG_TERRAIN, "tilename: %s, with %d entries", tilename, numlines);
 		//increment the pointer to the start of the next record
-		pFileData = strchr(pFileData,'\n') + 1;
+		pFileData = strchr(pFileData, '\n') + 1;
 		numGroundTypes = numlines;
-		psGroundTypes = (GROUND_TYPE *)malloc(sizeof(GROUND_TYPE)*numlines);
+		psGroundTypes = (GROUND_TYPE *)malloc(sizeof(GROUND_TYPE) * numlines);
 
-		for (i=0; i < numlines; i++)
+		for (i = 0; i < numlines; i++)
 		{
 			sscanf(pFileData, "%255[^,'\r\n],%255[^,'\r\n],%lf%n", textureType, textureName, &textureSize, &cnt);
 			pFileData += cnt;
 			//increment the pointer to the start of the next record
-			pFileData = strchr(pFileData,'\n') + 1;
+			pFileData = strchr(pFileData, '\n') + 1;
 
 			psGroundTypes[getTextureType(textureType)].textureName = strdup(textureName);
 			psGroundTypes[getTextureType(textureType)].textureSize = textureSize;
@@ -340,16 +344,16 @@ fallback:
 
 		debug(LOG_TERRAIN, "tilename: %s, with %d entries", tilename, numlines);
 		//increment the pointer to the start of the next record
-		pFileData = strchr(pFileData,'\n') + 1;
+		pFileData = strchr(pFileData, '\n') + 1;
 		numGroundTypes = numlines;
-		psGroundTypes = (GROUND_TYPE *)malloc(sizeof(GROUND_TYPE)*numlines);
+		psGroundTypes = (GROUND_TYPE *)malloc(sizeof(GROUND_TYPE) * numlines);
 
-		for (i=0; i < numlines; i++)
+		for (i = 0; i < numlines; i++)
 		{
 			sscanf(pFileData, "%255[^,'\r\n],%255[^,'\r\n],%lf%n", textureType, textureName, &textureSize, &cnt);
 			pFileData += cnt;
 			//increment the pointer to the start of the next record
-			pFileData = strchr(pFileData,'\n') + 1;
+			pFileData = strchr(pFileData, '\n') + 1;
 
 			psGroundTypes[getTextureType(textureType)].textureName = strdup(textureName);
 			psGroundTypes[getTextureType(textureType)].textureSize = textureSize;
@@ -397,25 +401,25 @@ static void SetGroundForTile(const char *filename, const char *nametype)
 
 	debug(LOG_TERRAIN, "tilename: %s, with %d entries", tilename, numlines);
 	//increment the pointer to the start of the next record
-	pFileData = strchr(pFileData,'\n') + 1;
+	pFileData = strchr(pFileData, '\n') + 1;
 
-	map = (int *)malloc(sizeof(int) * numlines * 2 * 2 );	// this is a 3D array map[numlines][2][2]
+	map = (int *)malloc(sizeof(int) * numlines * 2 * 2);	// this is a 3D array map[numlines][2][2]
 
-	for (i=0; i < numlines; i++)
+	for (i = 0; i < numlines; i++)
 	{
 		sscanf(pFileData, "%255[^,'\r\n],%255[^,'\r\n],%255[^,'\r\n],%255[^,'\r\n]%n", val1, val2, val3, val4, &cnt);
 		pFileData += cnt;
 		//increment the pointer to the start of the next record
-		pFileData = strchr(pFileData,'\n') + 1;
+		pFileData = strchr(pFileData, '\n') + 1;
 
 		// inline int iA(int i, int j, int k){ return i*N2*N3 + j*N3 + k; }
 		// in case it isn't obvious, this is a 3D array, and using pointer math to access each element.
 		// so map[10][0][1] would be map[10*2*2 + 0 + 1] == map[41]
 		// map[10][1][0] == map[10*2*2 + 2 + 0] == map[42]
-		map[i*2*2+0*2+0] = getTextureType(val1);
-		map[i*2*2+0*2+1] = getTextureType(val2);
-		map[i*2*2+1*2+0] = getTextureType(val3);
-		map[i*2*2+1*2+1] = getTextureType(val4);
+		map[i * 2 * 2 + 0 * 2 + 0] = getTextureType(val1);
+		map[i * 2 * 2 + 0 * 2 + 1] = getTextureType(val2);
+		map[i * 2 * 2 + 1 * 2 + 0] = getTextureType(val3);
+		map[i * 2 * 2 + 1 * 2 + 1] = getTextureType(val4);
 	}
 }
 
@@ -423,9 +427,9 @@ static void SetGroundForTile(const char *filename, const char *nametype)
 static int getTextureType(const char *textureType)
 {
 	int i = 0;
-	for (i=0; i < numTile_names; i++)
+	for (i = 0; i < numTile_names; i++)
 	{
-		if (!strcmp(textureType, &Tile_names[i*MAX_STR_LENGTH]))
+		if (!strcmp(textureType, &Tile_names[i * MAX_STR_LENGTH]))
 		{
 			return i;
 		}
@@ -439,7 +443,7 @@ static int getTextureType(const char *textureType)
 //	so map[10][0][1] would be map[10*2*2 + 0*2 + 1] == map[41]
 static int groundFromMapTile(int tile, int j, int k)
 {
-	return map[TileNumber_tile(tile)* 2 * 2 + j * 2 + k];
+	return map[TileNumber_tile(tile) * 2 * 2 + j * 2 + k];
 }
 
 static void rotFlip(int tile, int *i, int *j)
@@ -463,7 +467,10 @@ static void rotFlip(int tile, int *i, int *j)
 	map[0][1] = 3; invmap[3][0] = 0; invmap[3][1] = 1;
 	rot = map[*i][*j];
 	rot -= (texture & TILE_ROTMASK) >> TILE_ROTSHIFT;
-	while(rot < 0) rot += 4;
+	while (rot < 0)
+	{
+		rot += 4;
+	}
 	*i = invmap[rot][0];
 	*j = invmap[rot][1];
 }
@@ -474,8 +481,8 @@ static int determineGroundType(int x, int y, const char *tileset)
 	int ground[2][2];
 	int votes[2][2];
 	int weight[2][2];
-	int i,j, tile;
-	int a,b, best;
+	int i, j, tile;
+	int a, b, best;
 	MAPTILE *psTile;
 
 	if (x < 0 || y < 0 || x >= mapWidth || y >= mapHeight)
@@ -484,18 +491,18 @@ static int determineGroundType(int x, int y, const char *tileset)
 	}
 
 	// check what tiles surround this grid point
-	for(i=0;i<2;i++)
+	for (i = 0; i < 2; i++)
 	{
-		for(j=0;j<2;j++)
+		for (j = 0; j < 2; j++)
 		{
-			if (x+i-1 < 0 || y+j-1 < 0 || x+i-1 >= mapWidth || y+j-1 >= mapHeight)
+			if (x + i - 1 < 0 || y + j - 1 < 0 || x + i - 1 >= mapWidth || y + j - 1 >= mapHeight)
 			{
 				psTile = NULL;
 				tile = 0;
 			}
 			else
 			{
-				psTile = mapTile(x+i-1, y+j-1);
+				psTile = mapTile(x + i - 1, y + j - 1);
 				tile = psTile->texture;
 			}
 			a = i;
@@ -510,23 +517,27 @@ static int determineGroundType(int x, int y, const char *tileset)
 			if (psTile)
 			{
 				// cliff tiles have higher priority, to be clearly visible
-				if (terrainType(psTile) == TER_CLIFFFACE) 
+				if (terrainType(psTile) == TER_CLIFFFACE)
+				{
 					weight[i][j] = 100;
+				}
 				// water bottom has lower priority, to stay inside water
-				if (terrainType(psTile) == TER_WATER) 
+				if (terrainType(psTile) == TER_WATER)
+				{
 					weight[i][j] = 1;
+				}
 			}
 		}
 	}
 
 	// now vote, because some maps have seams
-	for(i=0;i<2;i++)
+	for (i = 0; i < 2; i++)
 	{
-		for(j=0;j<2;j++)
+		for (j = 0; j < 2; j++)
 		{
-			for(a=0;a<2;a++)
+			for (a = 0; a < 2; a++)
 			{
-				for(b=0;b<2;b++)
+				for (b = 0; b < 2; b++)
 				{
 					if (ground[i][j] == ground[a][b])
 					{
@@ -537,14 +548,14 @@ static int determineGroundType(int x, int y, const char *tileset)
 		}
 	}
 	// and determine the winner
-	best = -1; 
+	best = -1;
 	a = 0;
 	b = 0;
-	for(i=0;i<2;i++)
+	for (i = 0; i < 2; i++)
 	{
-		for(j=0;j<2;j++)
+		for (j = 0; j < 2; j++)
 		{
-			if (votes[i][j] > best || (votes[i][j] == best && ground[i][j]<ground[a][b]))
+			if (votes[i][j] > best || (votes[i][j] == best && ground[i][j] < ground[a][b]))
 			{
 				best = votes[i][j];
 				a = i;
@@ -583,17 +594,17 @@ static void SetDecals(const char *filename, const char *decal_type)
 
 	debug(LOG_TERRAIN, "reading: %s, with %d entries", filename, numlines);
 	//increment the pointer to the start of the next record
-	pFileData = strchr(pFileData,'\n') + 1;
+	pFileData = strchr(pFileData, '\n') + 1;
 	mapDecals = new bool[MAX_TERRAIN_TILES];
 	std::fill_n(mapDecals, MAX_TERRAIN_TILES, false);  // set everything to false.
 
-	for (i=0; i < numlines; i++)
+	for (i = 0; i < numlines; i++)
 	{
 		tiledecal = -1;
 		sscanf(pFileData, "%d%n", &tiledecal, &cnt);
 		pFileData += cnt;
 		//increment the pointer to the start of the next record
-		pFileData = strchr(pFileData,'\n') + 1;
+		pFileData = strchr(pFileData, '\n') + 1;
 		if ((unsigned)tiledecal > MAX_TERRAIN_TILES)
 		{
 			debug(LOG_ERROR, "Tile index is out of range!  Was %d, our max is %d", tiledecal, MAX_TERRAIN_TILES);
@@ -619,17 +630,17 @@ static bool hasDecals(int i, int j)
 // Sets the ground type to be a decal or not
 static bool mapSetGroundTypes(void)
 {
-	int i,j;
+	int i, j;
 
-	for (i=0;i<mapWidth;i++)
+	for (i = 0; i < mapWidth; i++)
 	{
-		for (j=0;j<mapHeight;j++)
+		for (j = 0; j < mapHeight; j++)
 		{
 			MAPTILE *psTile = mapTile(i, j);
 
 			psTile->ground = determineGroundType(i, j, tilesetDir);
 
-			if (hasDecals(i,j))
+			if (hasDecals(i, j))
 			{
 				SET_TILE_DECAL(psTile);
 			}
@@ -648,17 +659,17 @@ static bool isWaterVertex(int x, int y)
 	{
 		return false;
 	}
-	return terrainType(mapTile(x, y)) == TER_WATER && terrainType(mapTile(x-1, y)) == TER_WATER 
-		&& terrainType(mapTile(x, y-1)) == TER_WATER && terrainType(mapTile(x-1, y-1)) == TER_WATER;
+	return terrainType(mapTile(x, y)) == TER_WATER && terrainType(mapTile(x - 1, y)) == TER_WATER
+	       && terrainType(mapTile(x, y - 1)) == TER_WATER && terrainType(mapTile(x - 1, y - 1)) == TER_WATER;
 }
 
-static void generateRiverbed(void) 
+static void generateRiverbed(void)
 {
 	MersenneTwister mt(12345);  // 12345 = random seed.
 	int maxIdx = 1, idx[MAP_MAXWIDTH][MAP_MAXHEIGHT];
 	int i, j, l = 0;
 
-	for (i = 0; i < mapWidth; i++) 
+	for (i = 0; i < mapWidth; i++)
 	{
 		for (j = 0; j < mapHeight; j++)
 		{
@@ -679,24 +690,25 @@ static void generateRiverbed(void)
 	do
 	{
 		maxIdx = 1;
-		for (i = 1; i < mapWidth - 2; i++) 
+		for (i = 1; i < mapWidth - 2; i++)
 		{
 			for (j = 1; j < mapHeight - 2; j++)
 			{
-				
+
 				if (idx[i][j] > 0)
 				{
-					idx[i][j] = (idx[i-1][j] + idx[i][j-1] + idx[i][j+1] + idx[i+1][j]) / 4;
-					if (idx[i][j] > maxIdx) 
+					idx[i][j] = (idx[i - 1][j] + idx[i][j - 1] + idx[i][j + 1] + idx[i + 1][j]) / 4;
+					if (idx[i][j] > maxIdx)
 					{
-						maxIdx=idx[i][j];
+						maxIdx = idx[i][j];
 					}
 				}
 			}
 		}
 		++l;
 		debug(LOG_TERRAIN, "%d%% completed after %d iterations", 10 * (100 - maxIdx), l);
-	} while (maxIdx > 90 && l < 20);
+	}
+	while (maxIdx > 90 && l < 20);
 
 	for (i = 0; i < mapWidth; i++)
 	{
@@ -736,12 +748,12 @@ bool mapLoad(char *filename, bool preview)
 		return false;
 	}
 	else if (PHYSFS_read(fp, aFileType, 4, 1) != 1
-	    || !PHYSFS_readULE32(fp, &version)
-	    || !PHYSFS_readULE32(fp, &width)
-	    || !PHYSFS_readULE32(fp, &height)
-	    || aFileType[0] != 'm'
-	    || aFileType[1] != 'a'
-	    || aFileType[2] != 'p')
+	         || !PHYSFS_readULE32(fp, &version)
+	         || !PHYSFS_readULE32(fp, &width)
+	         || !PHYSFS_readULE32(fp, &height)
+	         || aFileType[0] != 'm'
+	         || aFileType[1] != 'a'
+	         || aFileType[2] != 'p')
 	{
 		debug(LOG_ERROR, "Bad header in %s", filename);
 		goto failure;
@@ -762,7 +774,7 @@ bool mapLoad(char *filename, bool preview)
 		goto failure;
 	}
 
-	if (width <=1 || height <=1)
+	if (width <= 1 || height <= 1)
 	{
 		debug(LOG_ERROR, "Map is too small : %u, %u", width, height);
 		goto failure;
@@ -773,25 +785,25 @@ bool mapLoad(char *filename, bool preview)
 
 	/* Allocate the memory for the map */
 	psMapTiles = (MAPTILE *)calloc(width * height, sizeof(MAPTILE));
-	ASSERT(psMapTiles != NULL, "Out of memory" );
+	ASSERT(psMapTiles != NULL, "Out of memory");
 
 	mapWidth = width;
 	mapHeight = height;
-	
+
 	// FIXME: the map preview code loads the map without setting the tileset
 	if (!tilesetDir)
 	{
 		tilesetDir = strdup("texpages/tertilesc1hw");
 	}
-	
+
 	// load the ground types
 	if (!mapLoadGroundTypes())
 	{
 		goto failure;
 	}
-	
+
 	//load in the map data itself
-	
+
 	/* Load in the map data */
 	for (i = 0; i < mapWidth * mapHeight; i++)
 	{
@@ -805,7 +817,7 @@ bool mapLoad(char *filename, bool preview)
 		}
 
 		psMapTiles[i].texture = texture;
-		psMapTiles[i].height = height*ELEVATION_SCALE;
+		psMapTiles[i].height = height * ELEVATION_SCALE;
 
 		// Visibility stuff
 		memset(psMapTiles[i].watchers, 0, sizeof(psMapTiles[i].watchers));
@@ -842,7 +854,7 @@ bool mapLoad(char *filename, bool preview)
 			debug(LOG_ERROR, "%s: Unable to add gateway %d - dropping it", filename, i);
 		}
 	}
-	
+
 	if (!mapSetGroundTypes())
 	{
 		goto failure;
@@ -907,7 +919,7 @@ bool mapLoad(char *filename, bool preview)
 ok:
 	PHYSFS_close(fp);
 	return true;
-	
+
 failure:
 	PHYSFS_close(fp);
 	return false;
@@ -924,14 +936,14 @@ bool mapSave(char **ppFileData, UDWORD *pFileSize)
 	SDWORD	numGateways = gwNumGateways();
 
 	/* Allocate the data buffer */
-	*pFileSize = SAVE_HEADER_SIZE + mapWidth*mapHeight * SAVE_TILE_SIZE;
+	*pFileSize = SAVE_HEADER_SIZE + mapWidth * mapHeight * SAVE_TILE_SIZE;
 	// Add on the size of the gateway data.
-	*pFileSize += sizeof(GATEWAY_SAVEHEADER) + sizeof(GATEWAY_SAVE)*numGateways;
+	*pFileSize += sizeof(GATEWAY_SAVEHEADER) + sizeof(GATEWAY_SAVE) * numGateways;
 
-	*ppFileData = (char*)malloc(*pFileSize);
+	*ppFileData = (char *)malloc(*pFileSize);
 	if (*ppFileData == NULL)
 	{
-		debug( LOG_FATAL, "Out of memory" );
+		debug(LOG_FATAL, "Out of memory");
 		abort();
 		return false;
 	}
@@ -954,7 +966,7 @@ bool mapSave(char **ppFileData, UDWORD *pFileSize)
 	/* Put the map data into the buffer */
 	psTileData = (MAP_SAVETILE *)(*ppFileData + SAVE_HEADER_SIZE);
 	psTile = psMapTiles;
-	for (int i = 0; i < mapWidth*mapHeight; i++)
+	for (int i = 0; i < mapWidth * mapHeight; i++)
 	{
 		psTileData->texture = psTile->texture;
 		if (terrainType(psTile) == TER_WATER)
@@ -974,7 +986,7 @@ bool mapSave(char **ppFileData, UDWORD *pFileSize)
 	}
 
 	// Put the gateway header.
-	psGateHeader = (GATEWAY_SAVEHEADER*)psTileData;
+	psGateHeader = (GATEWAY_SAVEHEADER *)psTileData;
 	psGateHeader->version = 1;
 	psGateHeader->numGateways = numGateways;
 
@@ -982,7 +994,7 @@ bool mapSave(char **ppFileData, UDWORD *pFileSize)
 	endian_udword(&psGateHeader->version);
 	endian_udword(&psGateHeader->numGateways);
 
-	psGate = (GATEWAY_SAVE*)(psGateHeader+1);
+	psGate = (GATEWAY_SAVE *)(psGateHeader + 1);
 
 	// Put the gateway data.
 	for (auto psCurrGate : gwGetGateways())
@@ -1045,17 +1057,17 @@ bool mapShutdown(void)
 	return true;
 }
 
-/** 
+/**
  * Intersect a tile with a line and report the points of intersection
  * line is gives as point plus 2d directional vector
  * returned are two coordinates at the edge
  * true if the intersection also crosses the tile split line
  * (which has to be taken into account)
  **/
-bool map_Intersect(int* Cx, int* Cy, int* Vx, int* Vy, int* Sx, int* Sy)
+bool map_Intersect(int *Cx, int *Cy, int *Vx, int *Vy, int *Sx, int *Sy)
 {
 	int	 x, y, ox, oy, Dx, Dy, tileX, tileY;
-	int	 ily,iry,itx,ibx;
+	int	 ily, iry, itx, ibx;
 
 	// dereference pointers
 	x = *Cx;
@@ -1072,114 +1084,157 @@ bool map_Intersect(int* Cx, int* Cy, int* Vx, int* Vy, int* Sx, int* Sy)
 	oy = map_round(y);
 
 	/* allow backwards tracing */
-	if (ox==0 && Dx<0) {
+	if (ox == 0 && Dx < 0)
+	{
 		tileX--;
-		ox=TILE_UNITS;
+		ox = TILE_UNITS;
 	}
-	if (oy==0 && Dy<0) {
+	if (oy == 0 && Dy < 0)
+	{
 		tileY--;
-		oy=TILE_UNITS;
+		oy = TILE_UNITS;
 	}
 
-	*Cx=-4*TILE_UNITS; // to trigger assertion
-	*Cy=-4*TILE_UNITS;
-	*Vx=-4*TILE_UNITS;
-	*Vy=-4*TILE_UNITS;
+	*Cx = -4 * TILE_UNITS; // to trigger assertion
+	*Cy = -4 * TILE_UNITS;
+	*Vx = -4 * TILE_UNITS;
+	*Vy = -4 * TILE_UNITS;
 
 	// calculate intersection point on the left and right (if any)
 	ily = y - 4 * TILE_UNITS; // make sure initial value is way outside of tile
 	iry = y - 4 * TILE_UNITS;
-	if ( Dx!=0) {
-		ily = y - ox*Dy/Dx;
-		iry = y + (TILE_UNITS-ox)*Dy/Dx;
+	if (Dx != 0)
+	{
+		ily = y - ox * Dy / Dx;
+		iry = y + (TILE_UNITS - ox) * Dy / Dx;
 	}
 	// calculate intersection point on top and bottom (if any)
 	itx = x - 4 * TILE_UNITS; // make sure initial value is way outside of tile
 	ibx = x - 4 * TILE_UNITS;
-	if (Dy!=0) {
-		itx = x - oy*Dx/Dy;
-		ibx = x + (TILE_UNITS-oy)*Dx/Dy;
+	if (Dy != 0)
+	{
+		itx = x - oy * Dx / Dy;
+		ibx = x + (TILE_UNITS - oy) * Dx / Dy;
 	}
 
 	// line comes from the left?
-	if (Dx>=0) {
-		if (map_coord(ily)==tileY || map_coord(ily-1)==tileY) {
+	if (Dx >= 0)
+	{
+		if (map_coord(ily) == tileY || map_coord(ily - 1) == tileY)
+		{
 			*Cx = world_coord(tileX);
 			*Cy = ily;
 		}
-		if (map_coord(iry)==tileY || map_coord(iry-1)==tileY) {
-			*Vx = world_coord(tileX+1);
+		if (map_coord(iry) == tileY || map_coord(iry - 1) == tileY)
+		{
+			*Vx = world_coord(tileX + 1);
 			*Vy = iry;
 		}
-	} else {
-		if (map_coord(ily)==tileY || map_coord(ily-1)==tileY) {
+	}
+	else
+	{
+		if (map_coord(ily) == tileY || map_coord(ily - 1) == tileY)
+		{
 			*Vx = world_coord(tileX);
 			*Vy = ily;
 		}
-		if (map_coord(iry)==tileY || map_coord(iry-1)==tileY) {
-			*Cx = world_coord(tileX+1);
+		if (map_coord(iry) == tileY || map_coord(iry - 1) == tileY)
+		{
+			*Cx = world_coord(tileX + 1);
 			*Cy = iry;
 		}
 	}
 	// line comes from the top?
-	if (Dy>=0) {
-		if (map_coord(itx)==tileX || map_coord(itx-1)==tileX) {
+	if (Dy >= 0)
+	{
+		if (map_coord(itx) == tileX || map_coord(itx - 1) == tileX)
+		{
 			*Cx = itx;
 			*Cy = world_coord(tileY);
 		}
-		if (map_coord(ibx)==tileX || map_coord(ibx-1)==tileX) {
+		if (map_coord(ibx) == tileX || map_coord(ibx - 1) == tileX)
+		{
 			*Vx = ibx;
-			*Vy = world_coord(tileY+1);
+			*Vy = world_coord(tileY + 1);
 		}
-	} else {
-		if (map_coord(itx)==tileX || map_coord(itx-1)==tileX) {
+	}
+	else
+	{
+		if (map_coord(itx) == tileX || map_coord(itx - 1) == tileX)
+		{
 			*Vx = itx;
 			*Vy = world_coord(tileY);
 		}
-		if (map_coord(ibx)==tileX || map_coord(ibx-1)==tileX) {
+		if (map_coord(ibx) == tileX || map_coord(ibx - 1) == tileX)
+		{
 			*Cx = ibx;
-			*Cy = world_coord(tileY+1);
+			*Cy = world_coord(tileY + 1);
 		}
 	}
 	// assertions, no intersections outside of tile
-	ASSERT(*Cx>=world_coord(tileX) && *Cx<=world_coord(tileX+1),"map_Intersect(): tile Bounds %i %i, %i %i -> %i,%i,%i,%i",x,y,Dx,Dy,*Cx,*Cy,*Vx,*Vy);
-	ASSERT(*Cy>=world_coord(tileY) && *Cy<=world_coord(tileY+1),"map_Intersect(): tile Bounds %i %i, %i %i -> %i,%i,%i,%i",x,y,Dx,Dy,*Cx,*Cy,*Vx,*Vy);
-	ASSERT(*Vx>=world_coord(tileX) && *Vx<=world_coord(tileX+1),"map_Intersect(): tile Bounds %i %i, %i %i -> %i,%i,%i,%i",x,y,Dx,Dy,*Cx,*Cy,*Vx,*Vy);
-	ASSERT(*Vy>=world_coord(tileY) && *Vy<=world_coord(tileY+1),"map_Intersect(): tile Bounds %i %i, %i %i -> %i,%i,%i,%i",x,y,Dx,Dy,*Cx,*Cy,*Vx,*Vy);
-	ASSERT(tileX>=0 && tileY>=0 && tileX<mapWidth && tileY<mapHeight,"map_Intersect(): map Bounds %i %i, %i %i -> %i,%i,%i,%i",x,y,Dx,Dy,*Cx,*Cy,*Vx,*Vy);
+	ASSERT(*Cx >= world_coord(tileX) && *Cx <= world_coord(tileX + 1), "map_Intersect(): tile Bounds %i %i, %i %i -> %i,%i,%i,%i", x, y, Dx, Dy, *Cx, *Cy, *Vx, *Vy);
+	ASSERT(*Cy >= world_coord(tileY) && *Cy <= world_coord(tileY + 1), "map_Intersect(): tile Bounds %i %i, %i %i -> %i,%i,%i,%i", x, y, Dx, Dy, *Cx, *Cy, *Vx, *Vy);
+	ASSERT(*Vx >= world_coord(tileX) && *Vx <= world_coord(tileX + 1), "map_Intersect(): tile Bounds %i %i, %i %i -> %i,%i,%i,%i", x, y, Dx, Dy, *Cx, *Cy, *Vx, *Vy);
+	ASSERT(*Vy >= world_coord(tileY) && *Vy <= world_coord(tileY + 1), "map_Intersect(): tile Bounds %i %i, %i %i -> %i,%i,%i,%i", x, y, Dx, Dy, *Cx, *Cy, *Vx, *Vy);
+	ASSERT(tileX >= 0 && tileY >= 0 && tileX < mapWidth && tileY < mapHeight, "map_Intersect(): map Bounds %i %i, %i %i -> %i,%i,%i,%i", x, y, Dx, Dy, *Cx, *Cy, *Vx, *Vy);
 
 	//calculate midway line intersection points
-	if (((map_coord(itx)==tileX ) == (map_coord(ily)==tileY)) && ((map_coord(ibx)==tileX ) == (map_coord(iry)==tileY))) {
+	if (((map_coord(itx) == tileX) == (map_coord(ily) == tileY)) && ((map_coord(ibx) == tileX) == (map_coord(iry) == tileY)))
+	{
 		// line crosses diagnonal only
-		if (Dx-Dy==0) return false;
-		*Sx = world_coord(tileX) + (Dx*oy - Dy*ox)/(Dx - Dy);
-		*Sy = world_coord(tileY) + (Dx*oy - Dy*ox)/(Dx - Dy);
-		if (map_coord(*Sx)!=tileX || map_coord(*Sy)!=tileY) return false;
+		if (Dx - Dy == 0)
+		{
+			return false;
+		}
+		*Sx = world_coord(tileX) + (Dx * oy - Dy * ox) / (Dx - Dy);
+		*Sy = world_coord(tileY) + (Dx * oy - Dy * ox) / (Dx - Dy);
+		if (map_coord(*Sx) != tileX || map_coord(*Sy) != tileY)
+		{
+			return false;
+		}
 		return true;
-	} else if (((map_coord(ibx)==tileX) == (map_coord(ily)==tileY)) && ((map_coord(itx)==tileX) == (map_coord(iry)==tileY))) {
+	}
+	else if (((map_coord(ibx) == tileX) == (map_coord(ily) == tileY)) && ((map_coord(itx) == tileX) == (map_coord(iry) == tileY)))
+	{
 		//line crosses anti-diagonal only
-		if (Dx+Dy==0) return false;
-		*Sx = world_coord(tileX) + (Dx*(TILE_UNITS - oy) + Dy*ox)/(Dx + Dy);
-		*Sy = world_coord(tileY) + (Dy*(TILE_UNITS - ox) + Dx*oy)/(Dx + Dy);
-		if (map_coord(*Sx)!=tileX || map_coord(*Sy)!=tileY) return false;
+		if (Dx + Dy == 0)
+		{
+			return false;
+		}
+		*Sx = world_coord(tileX) + (Dx * (TILE_UNITS - oy) + Dy * ox) / (Dx + Dy);
+		*Sy = world_coord(tileY) + (Dy * (TILE_UNITS - ox) + Dx * oy) / (Dx + Dy);
+		if (map_coord(*Sx) != tileX || map_coord(*Sy) != tileY)
+		{
+			return false;
+		}
 		return true;
-	} else {
+	}
+	else
+	{
 		//line crosses both tile diagonals
 		//TODO: trunk divides tiles into 4 parts instead of 2 in 2.3.
 		//We would need to check and return both intersections here now,
 		//but that would require an additional return parameter!
 		//Instead we check only one of them and know it might be wrong!
-		if (Dx+Dy!=0) {
+		if (Dx + Dy != 0)
+		{
 			// check anti-diagonal
-			*Sx = world_coord(tileX) + (Dx*(TILE_UNITS - oy) + Dy*ox)/(Dx + Dy);
-			*Sy = world_coord(tileY) + (Dy*(TILE_UNITS - ox) + Dx*oy)/(Dx + Dy);
-			if (map_coord(*Sx)==tileX && map_coord(*Sy)==tileY) return true;
+			*Sx = world_coord(tileX) + (Dx * (TILE_UNITS - oy) + Dy * ox) / (Dx + Dy);
+			*Sy = world_coord(tileY) + (Dy * (TILE_UNITS - ox) + Dx * oy) / (Dx + Dy);
+			if (map_coord(*Sx) == tileX && map_coord(*Sy) == tileY)
+			{
+				return true;
+			}
 		}
-		if (Dx-Dy!=0) {
+		if (Dx - Dy != 0)
+		{
 			// check diagonal
-			*Sx = world_coord(tileX) + (Dx*oy - Dy*ox)/(Dx - Dy);
-			*Sy = world_coord(tileY) + (Dx*oy - Dy*ox)/(Dx - Dy);
-			if (map_coord(*Sx)==tileX && map_coord(*Sy)==tileY) return true;
+			*Sx = world_coord(tileX) + (Dx * oy - Dy * ox) / (Dx - Dy);
+			*Sy = world_coord(tileY) + (Dx * oy - Dy * ox) / (Dx - Dy);
+			if (map_coord(*Sx) == tileX && map_coord(*Sy) == tileY)
+			{
+				return true;
+			}
 		}
 	}
 
@@ -1191,11 +1246,11 @@ static Vector3i rotateWorldQuadrant(Vector3i v, int quadrant)
 {
 	switch (quadrant & 3)
 	{
-		default:  // Can't get here.
-		case 0: return v;                                                 break;  // 0°.
-		case 1: return Vector3i(TILE_UNITS - v.y,              v.x, v.z); break;  // 90° clockwise.
-		case 2: return Vector3i(TILE_UNITS - v.x, TILE_UNITS - v.y, v.z); break;  // 180°.
-		case 3: return Vector3i(             v.y, TILE_UNITS - v.x, v.z); break;  // 90° anticlockwise.
+	default:  // Can't get here.
+	case 0: return v;                                                 break;  // 0°.
+	case 1: return Vector3i(TILE_UNITS - v.y,              v.x, v.z); break;  // 90° clockwise.
+	case 2: return Vector3i(TILE_UNITS - v.x, TILE_UNITS - v.y, v.z); break;  // 180°.
+	case 3: return Vector3i(v.y, TILE_UNITS - v.x, v.z); break;               // 90° anticlockwise.
 	}
 }
 
@@ -1211,14 +1266,14 @@ static Vector2i quadrantCorner(int quadrant)
 static Vector2i quadrantDelta(int quadrant)
 {
 	int dx[4] = {0,  1, 0, -1};
-	int dy[4] = {-1, 0, 1,  0};
+	int dy[4] = { -1, 0, 1,  0};
 	return Vector2i(dx[quadrant & 3], dy[quadrant & 3]);
 }
 
 
 static inline bool fracTest(int numerA, int denomA, int numerB, int denomB)
 {
-	return denomA > 0 && numerA >= 0 && (denomB <= 0 || numerB < 0 || (int64_t)numerA*denomB < (int64_t)numerB*denomA);
+	return denomA > 0 && numerA >= 0 && (denomB <= 0 || numerB < 0 || (int64_t)numerA * denomB < (int64_t)numerB * denomA);
 }
 
 unsigned map_LineIntersect(Vector3i src, Vector3i dst, unsigned tMax)
@@ -1231,7 +1286,7 @@ unsigned map_LineIntersect(Vector3i src, Vector3i dst, unsigned tMax)
 	//            +0+
 	// quadrant = 3×1
 	//            +2+
-	int quadrant = ((src.x < src.y)*3) ^ (TILE_UNITS - src.x < src.y);
+	int quadrant = ((src.x < src.y) * 3) ^ (TILE_UNITS - src.x < src.y);
 	src = rotateWorldQuadrant(src, -quadrant);
 	dst = rotateWorldQuadrant(dst, -quadrant);
 	while (true)
@@ -1265,9 +1320,9 @@ unsigned map_LineIntersect(Vector3i src, Vector3i dst, unsigned tMax)
 		denom[1] =               dif.x + dif.y;
 		numer[2] = -(-src.x + src.y);
 		denom[2] =   -dif.x + dif.y;
-		Vector3i normal(2*(height[1] - height[0]), height[2] + height[3] - height[0] - height[1], -2*TILE_UNITS);  // Normal pointing down, and not normalised.
-		numer[3] = height[0]*normal.z - src*normal;
-		denom[3] =                      dif*normal;
+		Vector3i normal(2 * (height[1] - height[0]), height[2] + height[3] - height[0] - height[1], -2 * TILE_UNITS); // Normal pointing down, and not normalised.
+		numer[3] = height[0] * normal.z - src * normal;
+		denom[3] =                      dif * normal;
 		numer[4] = 1;
 		denom[4] = 1;
 		int firstIntersection = 0;
@@ -1280,34 +1335,34 @@ unsigned map_LineIntersect(Vector3i src, Vector3i dst, unsigned tMax)
 		}
 		switch (firstIntersection)
 		{
-			case 0:  // Cross top line first (the tile boundary).
-				tile += quadrantDelta(quadrant);
-				quadrant += 2;
-				src = rotateWorldQuadrant(src, -2) + Vector3i(0, -TILE_UNITS, 0);
-				dst = rotateWorldQuadrant(dst, -2) + Vector3i(0, -TILE_UNITS, 0);
+		case 0:  // Cross top line first (the tile boundary).
+			tile += quadrantDelta(quadrant);
+			quadrant += 2;
+			src = rotateWorldQuadrant(src, -2) + Vector3i(0, -TILE_UNITS, 0);
+			dst = rotateWorldQuadrant(dst, -2) + Vector3i(0, -TILE_UNITS, 0);
 
-				if (tile.x < 0 || tile.x >= mapWidth || tile.y < 0 || tile.y >= mapHeight)
-				{
-					// Intersect edge of map.
-					return (int64_t)tMax * numer[firstIntersection]/denom[firstIntersection];
-				}
-				break;
-			case 1:  // Cross bottom-right line first.
-				// Change to the new quadrant, and transform appropriately.
-				++quadrant;
-				src = rotateWorldQuadrant(src, -1);
-				dst = rotateWorldQuadrant(dst, -1);
-				break;
-			case 2:  // Cross bottom-left line first.
-				// Change to the new quadrant, and transform appropriately.
-				--quadrant;
-				src = rotateWorldQuadrant(src, 1);
-				dst = rotateWorldQuadrant(dst, 1);
-				break;
-			case 3:  // Intersect terrain!
-				return (int64_t)tMax * numer[firstIntersection]/denom[firstIntersection];
-			case 4:  // Line segment ends.
-				return UINT32_MAX;
+			if (tile.x < 0 || tile.x >= mapWidth || tile.y < 0 || tile.y >= mapHeight)
+			{
+				// Intersect edge of map.
+				return (int64_t)tMax * numer[firstIntersection] / denom[firstIntersection];
+			}
+			break;
+		case 1:  // Cross bottom-right line first.
+			// Change to the new quadrant, and transform appropriately.
+			++quadrant;
+			src = rotateWorldQuadrant(src, -1);
+			dst = rotateWorldQuadrant(dst, -1);
+			break;
+		case 2:  // Cross bottom-left line first.
+			// Change to the new quadrant, and transform appropriately.
+			--quadrant;
+			src = rotateWorldQuadrant(src, 1);
+			dst = rotateWorldQuadrant(dst, 1);
+			break;
+		case 3:  // Intersect terrain!
+			return (int64_t)tMax * numer[firstIntersection] / denom[firstIntersection];
+		case 4:  // Line segment ends.
+			return UINT32_MAX;
 		}
 	}
 }
@@ -1325,12 +1380,12 @@ extern int32_t map_Height(int x, int y)
 
 	// Clamp x and y values to actual ones
 	// Give one tile worth of leeway before asserting, for units/transporters coming in from off-map.
-	ASSERT(x >= -TILE_UNITS, "map_Height: x value is too small (%d,%d) in %dx%d",map_coord(x),map_coord(y),mapWidth,mapHeight);
-	ASSERT(y >= -TILE_UNITS, "map_Height: y value is too small (%d,%d) in %dx%d",map_coord(x),map_coord(y),mapWidth,mapHeight);
+	ASSERT(x >= -TILE_UNITS, "map_Height: x value is too small (%d,%d) in %dx%d", map_coord(x), map_coord(y), mapWidth, mapHeight);
+	ASSERT(y >= -TILE_UNITS, "map_Height: y value is too small (%d,%d) in %dx%d", map_coord(x), map_coord(y), mapWidth, mapHeight);
 	x = MAX(x, 0);
 	y = MAX(y, 0);
-	ASSERT(x < world_coord(mapWidth)+TILE_UNITS, "map_Height: x value is too big (%d,%d) in %dx%d",map_coord(x),map_coord(y),mapWidth,mapHeight);
-	ASSERT(y < world_coord(mapHeight)+TILE_UNITS, "map_Height: y value is too big (%d,%d) in %dx%d",map_coord(x),map_coord(y),mapWidth,mapHeight);
+	ASSERT(x < world_coord(mapWidth) + TILE_UNITS, "map_Height: x value is too big (%d,%d) in %dx%d", map_coord(x), map_coord(y), mapWidth, mapHeight);
+	ASSERT(y < world_coord(mapHeight) + TILE_UNITS, "map_Height: y value is too big (%d,%d) in %dx%d", map_coord(x), map_coord(y), mapWidth, mapHeight);
 	x = MIN(x, world_coord(mapWidth) - 1);
 	y = MIN(y, world_coord(mapHeight) - 1);
 
@@ -1348,7 +1403,7 @@ extern int32_t map_Height(int x, int y)
 	{
 		for (j = 0; j < 2; j++)
 		{
-			height[i][j] = map_TileHeightSurface(tileX+i, tileY+j);
+			height[i][j] = map_TileHeightSurface(tileX + i, tileY + j);
 			center += height[i][j];
 		}
 	}
@@ -1401,17 +1456,17 @@ extern int32_t map_Height(int x, int y)
 			towardsRight  = onTileX;
 		}
 	}
-	ASSERT(towardsCenter <= TILE_UNITS/2, "towardsCenter is too high");
+	ASSERT(towardsCenter <= TILE_UNITS / 2, "towardsCenter is too high");
 
 	// now we have:
 	//    left   m    right
 	//         center
 
-	middle = (left + right)/2;
+	middle = (left + right) / 2;
 	onBottom = left * (TILE_UNITS - towardsRight) + right * towardsRight;
 	result = onBottom + (center - middle) * towardsCenter * 2;
 
-	return (result + TILE_UNITS/2) / TILE_UNITS;
+	return (result + TILE_UNITS / 2) / TILE_UNITS;
 }
 
 /* returns true if object is above ground */
@@ -1423,7 +1478,7 @@ bool mapObjIsAboveGround(const SIMPLE_OBJECT *psObj)
 	const int tileX = map_coord(psObj->pos.x);
 	const int tileY = map_coord(psObj->pos.y);
 	const int tileYOffset1 = (tileY * mapWidth);
-	const int tileYOffset2 = ((tileY+1) * mapWidth);
+	const int tileYOffset2 = ((tileY + 1) * mapWidth);
 	const int h1 = psMapTiles[MIN(mapsize, tileYOffset1 + tileX)    ].height;
 	const int h2 = psMapTiles[MIN(mapsize, tileYOffset1 + tileX + 1)].height;
 	const int h3 = psMapTiles[MIN(mapsize, tileYOffset2 + tileX)    ].height;
@@ -1454,22 +1509,22 @@ void getTileMaxMin(int x, int y, int *pMax, int *pMin)
 
 	for (int j = 0; j < 2; ++j)
 		for (int i = 0; i < 2; ++i)
-	{
-		int height = map_TileHeight(x+i, y+j);
-		*pMin = std::min(*pMin, height);
-		*pMax = std::max(*pMax, height);
-	}
+		{
+			int height = map_TileHeight(x + i, y + j);
+			*pMin = std::min(*pMin, height);
+			*pMax = std::max(*pMax, height);
+		}
 }
 
 
 // -----------------------------------------------------------------------------------
 /* This will save out the visibility data */
-bool writeVisibilityData(const char* fileName)
+bool writeVisibilityData(const char *fileName)
 {
 	unsigned int i;
 	VIS_SAVEHEADER fileHeader;
 
-	PHYSFS_file* fileHandle = openSaveFile(fileName);
+	PHYSFS_file *fileHandle = openSaveFile(fileName);
 	if (!fileHandle)
 	{
 		return false;
@@ -1484,20 +1539,20 @@ bool writeVisibilityData(const char* fileName)
 
 	// Write out the current file header
 	if (PHYSFS_write(fileHandle, fileHeader.aFileType, sizeof(fileHeader.aFileType), 1) != 1
-	 || !PHYSFS_writeUBE32(fileHandle, fileHeader.version))
+	    || !PHYSFS_writeUBE32(fileHandle, fileHeader.version))
 	{
 		debug(LOG_ERROR, "writeVisibilityData: could not write header to %s; PHYSFS error: %s", fileName, PHYSFS_getLastError());
 		PHYSFS_close(fileHandle);
 		return false;
 	}
 
-	int planes = (game.maxPlayers + 7)/8;
+	int planes = (game.maxPlayers + 7) / 8;
 
 	for (unsigned plane = 0; plane < planes; ++plane)
 	{
 		for (i = 0; i < mapWidth * mapHeight; ++i)
 		{
-			if (!PHYSFS_writeUBE8(fileHandle, psMapTiles[i].tileExploredBits >> (plane*8)))
+			if (!PHYSFS_writeUBE8(fileHandle, psMapTiles[i].tileExploredBits >> (plane * 8)))
 			{
 				debug(LOG_ERROR, "writeVisibilityData: could not write to %s; PHYSFS error: %s", fileName, PHYSFS_getLastError());
 				PHYSFS_close(fileHandle);
@@ -1513,13 +1568,13 @@ bool writeVisibilityData(const char* fileName)
 
 // -----------------------------------------------------------------------------------
 /* This will read in the visibility data */
-bool readVisibilityData(const char* fileName)
+bool readVisibilityData(const char *fileName)
 {
 	VIS_SAVEHEADER fileHeader;
 	unsigned int expectedFileSize, fileSize;
 	unsigned int i;
 
-	PHYSFS_file* fileHandle = openLoadFile(fileName, false);
+	PHYSFS_file *fileHandle = openLoadFile(fileName, false);
 	if (!fileHandle)
 	{
 		// Failure to open the file is no failure to read it
@@ -1528,7 +1583,7 @@ bool readVisibilityData(const char* fileName)
 
 	// Read the header from the file
 	if (PHYSFS_read(fileHandle, fileHeader.aFileType, sizeof(fileHeader.aFileType), 1) != 1
-	 || !PHYSFS_readUBE32(fileHandle, &fileHeader.version))
+	    || !PHYSFS_readUBE32(fileHandle, &fileHeader.version))
 	{
 		debug(LOG_ERROR, "readVisibilityData: error while reading header from file: %s", PHYSFS_getLastError());
 		PHYSFS_close(fileHandle);
@@ -1537,9 +1592,9 @@ bool readVisibilityData(const char* fileName)
 
 	// Check the header to see if we've been given a file of the right type
 	if (fileHeader.aFileType[0] != 'v'
-	 || fileHeader.aFileType[1] != 'i'
-	 || fileHeader.aFileType[2] != 's'
-	 || fileHeader.aFileType[3] != 'd')
+	    || fileHeader.aFileType[1] != 'i'
+	    || fileHeader.aFileType[2] != 's'
+	    || fileHeader.aFileType[3] != 'd')
 	{
 		debug(LOG_ERROR, "readVisibilityData: Weird file type found? Has header letters - '%c' '%c' '%c' '%c' (should be 'v' 'i' 's' 'd')",
 		      fileHeader.aFileType[0],
@@ -1551,7 +1606,7 @@ bool readVisibilityData(const char* fileName)
 		return false;
 	}
 
-	int planes = (game.maxPlayers + 7)/8;
+	int planes = (game.maxPlayers + 7) / 8;
 
 	// Validate the filesize
 	expectedFileSize = sizeof(fileHeader.aFileType) + sizeof(fileHeader.version) + mapWidth * mapHeight * planes;
@@ -1565,13 +1620,13 @@ bool readVisibilityData(const char* fileName)
 	}
 
 	// For every tile...
-	for(i=0; i<mapWidth*mapHeight; i++)
+	for (i = 0; i < mapWidth * mapHeight; i++)
 	{
 		psMapTiles[i].tileExploredBits = 0;
 	}
 	for (unsigned plane = 0; plane < planes; ++plane)
 	{
-		for(i=0; i<mapWidth*mapHeight; i++)
+		for (i = 0; i < mapWidth * mapHeight; i++)
 		{
 			/* Get the visibility data */
 			uint8_t val = 0;
@@ -1581,7 +1636,7 @@ bool readVisibilityData(const char* fileName)
 				PHYSFS_close(fileHandle);
 				return false;
 			}
-			psMapTiles[i].tileExploredBits |= val << (plane*8);
+			psMapTiles[i].tileExploredBits |= val << (plane * 8);
 		}
 	}
 
@@ -1597,14 +1652,14 @@ bool readVisibilityData(const char* fileName)
 #define NUM_DIR		8
 static const Vector2i aDirOffset[] =
 {
-	Vector2i( 0, 1),
+	Vector2i(0, 1),
 	Vector2i(-1, 1),
 	Vector2i(-1, 0),
-	Vector2i(-1,-1),
-	Vector2i( 0,-1),
-	Vector2i( 1,-1),
-	Vector2i( 1, 0),
-	Vector2i( 1, 1),
+	Vector2i(-1, -1),
+	Vector2i(0, -1),
+	Vector2i(1, -1),
+	Vector2i(1, 0),
+	Vector2i(1, 1),
 };
 
 // Flood fill a "continent".
@@ -1786,7 +1841,8 @@ static int dangerFloodFill(int player)
 			pos.x = floodbucket[bucketcounter].x;
 			pos.y = floodbucket[bucketcounter].y;
 		}
-	} while (bucketcounter);
+	}
+	while (bucketcounter);
 	return 0;
 }
 
@@ -1931,17 +1987,17 @@ void mapUpdate()
 
 	for (posY = 0; posY < mapHeight; ++posY)
 		for (posX = 0; posX < mapWidth; ++posX)
-	{
-		MAPTILE *const tile = mapTile(posX, posY);
-
-		if ((tile->tileInfoBits & BITS_ON_FIRE) != 0 && tile->fireEndTime == currentTime)
 		{
-			// Extinguish, tile, extinguish!
-			tile->tileInfoBits &= ~BITS_ON_FIRE;
+			MAPTILE *const tile = mapTile(posX, posY);
 
-			syncDebug("Extinguished tile{%d, %d}", posX, posY);
+			if ((tile->tileInfoBits & BITS_ON_FIRE) != 0 && tile->fireEndTime == currentTime)
+			{
+				// Extinguish, tile, extinguish!
+				tile->tileInfoBits &= ~BITS_ON_FIRE;
+
+				syncDebug("Extinguished tile{%d, %d}", posX, posY);
+			}
 		}
-	}
 
 	if (gameTime > lastDangerUpdate + GAME_TICKS_FOR_DANGER && game.type == SKIRMISH)
 	{
@@ -1949,7 +2005,7 @@ void mapUpdate()
 		wzSemaphoreWait(dangerDoneSemaphore);
 
 		auxMapRestore(lastDangerPlayer, AUX_DANGERMAP, AUXBITS_THREAT | AUXBITS_AATHREAT | AUXBITS_DANGER);
-		lastDangerPlayer = (lastDangerPlayer + 1 ) % game.maxPlayers;
+		lastDangerPlayer = (lastDangerPlayer + 1) % game.maxPlayers;
 		auxMapStore(lastDangerPlayer, AUX_DANGERMAP);
 		threatUpdate(lastDangerPlayer);
 		wzSemaphorePost(dangerSemaphore);

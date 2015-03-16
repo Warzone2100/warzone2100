@@ -56,7 +56,7 @@ struct ARRAY_INDEXES
 
 /* A simple error reporting routine */
 
-extern void scrv_error(const char* fmt, ...);
+extern void scrv_error(const char *fmt, ...);
 
 // Lookup a type
 extern bool scrvLookUpType(const char *pIdent, INTERP_TYPE *pType);
@@ -105,7 +105,7 @@ extern void scrvShutDown(void);
 extern void scrvReset(void);
 
 // Load a script value file
-extern bool scrvLoad(PHYSFS_file* fileHandle);
+extern bool scrvLoad(PHYSFS_file *fileHandle);
 
 // Link any object types to the actual pointer values
 //extern bool scrvLinkValues(void);

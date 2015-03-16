@@ -73,7 +73,7 @@ struct RESEARCH : public BASE_STATS
 struct PLAYER_RESEARCH
 {
 	UDWORD		currentPoints;			// If the research has been suspended then this value contains the number of points generated at the suspension/cancel point
-										// normally it is null
+	// normally it is null
 
 	UBYTE		ResearchStatus;			// Bit flags   ...  see below
 
@@ -89,36 +89,77 @@ struct PLAYER_RESEARCH
 #define RESBITS_PENDING_ONLY (STARTED_RESEARCH_PENDING|CANCELLED_RESEARCH_PENDING)
 #define RESBITS_PENDING (RESBITS|RESBITS_PENDING_ONLY)
 
-static inline bool IsResearchPossible(const PLAYER_RESEARCH* research)
+static inline bool IsResearchPossible(const PLAYER_RESEARCH *research)
 {
 	return research->possible;
 }
 
-static inline void MakeResearchPossible(PLAYER_RESEARCH* research)
+static inline void MakeResearchPossible(PLAYER_RESEARCH *research)
 {
 	research->possible = true;
 }
 
-static inline bool IsResearchCompleted(PLAYER_RESEARCH const *x)        { return (x->ResearchStatus & RESEARCHED)                                                != 0; }
-static inline bool IsResearchCancelled(PLAYER_RESEARCH const *x)        { return (x->ResearchStatus & CANCELLED_RESEARCH)                                        != 0; }
-static inline bool IsResearchStarted(PLAYER_RESEARCH const *x)          { return (x->ResearchStatus & STARTED_RESEARCH)                                          != 0; }
+static inline bool IsResearchCompleted(PLAYER_RESEARCH const *x)
+{
+	return (x->ResearchStatus & RESEARCHED)                                                != 0;
+}
+static inline bool IsResearchCancelled(PLAYER_RESEARCH const *x)
+{
+	return (x->ResearchStatus & CANCELLED_RESEARCH)                                        != 0;
+}
+static inline bool IsResearchStarted(PLAYER_RESEARCH const *x)
+{
+	return (x->ResearchStatus & STARTED_RESEARCH)                                          != 0;
+}
 /// Pending means not yet synchronised, so only permitted to affect the UI, not the game state.
-static inline bool IsResearchCancelledPending(PLAYER_RESEARCH const *x) { return (x->ResearchStatus & RESBITS_PENDING_ONLY)                                      != 0?
-                                                                                 (x->ResearchStatus & CANCELLED_RESEARCH_PENDING)                                != 0:
-                                                                                 (x->ResearchStatus & CANCELLED_RESEARCH)                                        != 0; }
-static inline bool IsResearchStartedPending(PLAYER_RESEARCH const *x)   { return (x->ResearchStatus & RESBITS_PENDING_ONLY)                                      != 0?
-                                                                                 (x->ResearchStatus & STARTED_RESEARCH_PENDING)                                  != 0:
-                                                                                 (x->ResearchStatus & STARTED_RESEARCH)                                          != 0; }
+static inline bool IsResearchCancelledPending(PLAYER_RESEARCH const *x)
+{
+	return (x->ResearchStatus & RESBITS_PENDING_ONLY)                                      != 0 ?
+	       (x->ResearchStatus & CANCELLED_RESEARCH_PENDING)                                != 0 :
+	       (x->ResearchStatus & CANCELLED_RESEARCH)                                        != 0;
+}
+static inline bool IsResearchStartedPending(PLAYER_RESEARCH const *x)
+{
+	return (x->ResearchStatus & RESBITS_PENDING_ONLY)                                      != 0 ?
+	       (x->ResearchStatus & STARTED_RESEARCH_PENDING)                                  != 0 :
+	       (x->ResearchStatus & STARTED_RESEARCH)                                          != 0;
+}
 
-static inline void MakeResearchCompleted(PLAYER_RESEARCH *x)            { x->ResearchStatus &= ~RESBITS_PENDING;      x->ResearchStatus |= RESEARCHED;                 }
-static inline void MakeResearchCancelled(PLAYER_RESEARCH *x)            { x->ResearchStatus &= ~RESBITS_PENDING;      x->ResearchStatus |= CANCELLED_RESEARCH;         }
-static inline void MakeResearchStarted(PLAYER_RESEARCH *x)              { x->ResearchStatus &= ~RESBITS_PENDING;      x->ResearchStatus |= STARTED_RESEARCH;           }
+static inline void MakeResearchCompleted(PLAYER_RESEARCH *x)
+{
+	x->ResearchStatus &= ~RESBITS_PENDING;
+	x->ResearchStatus |= RESEARCHED;
+}
+static inline void MakeResearchCancelled(PLAYER_RESEARCH *x)
+{
+	x->ResearchStatus &= ~RESBITS_PENDING;
+	x->ResearchStatus |= CANCELLED_RESEARCH;
+}
+static inline void MakeResearchStarted(PLAYER_RESEARCH *x)
+{
+	x->ResearchStatus &= ~RESBITS_PENDING;
+	x->ResearchStatus |= STARTED_RESEARCH;
+}
 /// Pending means not yet synchronised, so only permitted to affect the UI, not the game state.
-static inline void MakeResearchCancelledPending(PLAYER_RESEARCH *x)     { x->ResearchStatus &= ~RESBITS_PENDING_ONLY; x->ResearchStatus |= CANCELLED_RESEARCH_PENDING; }
-static inline void MakeResearchStartedPending(PLAYER_RESEARCH *x)       { x->ResearchStatus &= ~RESBITS_PENDING_ONLY; x->ResearchStatus |= STARTED_RESEARCH_PENDING;   }
-static inline void ResetPendingResearchStatus(PLAYER_RESEARCH *x)       { x->ResearchStatus &= ~RESBITS_PENDING_ONLY;                                                  }
+static inline void MakeResearchCancelledPending(PLAYER_RESEARCH *x)
+{
+	x->ResearchStatus &= ~RESBITS_PENDING_ONLY;
+	x->ResearchStatus |= CANCELLED_RESEARCH_PENDING;
+}
+static inline void MakeResearchStartedPending(PLAYER_RESEARCH *x)
+{
+	x->ResearchStatus &= ~RESBITS_PENDING_ONLY;
+	x->ResearchStatus |= STARTED_RESEARCH_PENDING;
+}
+static inline void ResetPendingResearchStatus(PLAYER_RESEARCH *x)
+{
+	x->ResearchStatus &= ~RESBITS_PENDING_ONLY;
+}
 
 /// clear all bits in the status except for the possible bit
-static inline void ResetResearchStatus(PLAYER_RESEARCH *x)              { x->ResearchStatus &= ~RESBITS_PENDING;                                                       }
+static inline void ResetResearchStatus(PLAYER_RESEARCH *x)
+{
+	x->ResearchStatus &= ~RESBITS_PENDING;
+}
 
 #endif // __INCLUDED_RESEARCHDEF_H__

@@ -95,10 +95,10 @@ bool startLimitScreen(void)
 	addBackdrop();//background
 
 	// load stats...
-	if(!bLimiterLoaded)
+	if (!bLimiterLoaded)
 	{
 		initLoadingScreen(true);
-		
+
 		if (!resLoad("wrf/limiter_data.wrf", 503))
 		{
 			return false;
@@ -106,18 +106,18 @@ bool startLimitScreen(void)
 
 		bLimiterLoaded = true;
 
-		closeLoadingScreen();		
+		closeLoadingScreen();
 	}
 
 	if (challengeActive)
 	{
 		// reset the sliders..
-		// it's a HACK since the actual limiter structure was cleared in the startMultiOptions function 
+		// it's a HACK since the actual limiter structure was cleared in the startMultiOptions function
 		for (unsigned i = 0; i < numStructureStats; ++i)
 		{
 			asStructLimits[0][i].limit = asStructLimits[0][i].globalLimit;
 		}
-		
+
 		// turn off the sliders
 		sliderEnableDrag(false);
 	}
@@ -127,7 +127,7 @@ bool startLimitScreen(void)
 		sliderEnableDrag(true);
 	}
 
-	addSideText(FRONTEND_SIDETEXT1,LIMITSX-2,LIMITSY,"LIMITS");	// draw sidetext...
+	addSideText(FRONTEND_SIDETEXT1, LIMITSX - 2, LIMITSY, "LIMITS");	// draw sidetext...
 
 	WIDGET *parent = widgGetFromID(psWScreen, FRONTEND_BACKDROP);
 
@@ -136,18 +136,18 @@ bool startLimitScreen(void)
 	limitsForm->setGeometry(LIMITSX, LIMITSY, LIMITSW, LIMITSH);
 
 	// return button.
-	addMultiBut(psWScreen,IDLIMITS,IDLIMITS_RETURN,
-					LIMITS_OKX-40,LIMITS_OKY,
+	addMultiBut(psWScreen, IDLIMITS, IDLIMITS_RETURN,
+	            LIMITS_OKX - 40, LIMITS_OKY,
 	            iV_GetImageWidth(FrontImages, IMAGE_NO),
 	            iV_GetImageHeight(FrontImages, IMAGE_NO),
-					_("Apply Defaults and Return To Previous Screen"),IMAGE_NO,IMAGE_NO,true);
+	            _("Apply Defaults and Return To Previous Screen"), IMAGE_NO, IMAGE_NO, true);
 
 	// ok button
-	addMultiBut(psWScreen,IDLIMITS,IDLIMITS_OK,
-					LIMITS_OKX,LIMITS_OKY,
-					iV_GetImageWidth(FrontImages,IMAGE_OK),
-					iV_GetImageHeight(FrontImages,IMAGE_OK),
-					_("Accept Settings"),IMAGE_OK,IMAGE_OK,true);
+	addMultiBut(psWScreen, IDLIMITS, IDLIMITS_OK,
+	            LIMITS_OKX, LIMITS_OKY,
+	            iV_GetImageWidth(FrontImages, IMAGE_OK),
+	            iV_GetImageHeight(FrontImages, IMAGE_OK),
+	            _("Accept Settings"), IMAGE_OK, IMAGE_OK, true);
 
 	// add tab form..
 	IntListTabWidget *limitsList = new IntListTabWidget(limitsForm);
@@ -170,8 +170,8 @@ bool startLimitScreen(void)
 			++limitsButtonId;
 
 			addFESlider(limitsButtonId, limitsButtonId - 1, 290, 11,
-						asStructLimits[0][i].globalLimit,
-						asStructLimits[0][i].limit);
+			            asStructLimits[0][i].globalLimit,
+			            asStructLimits[0][i].limit);
 			++limitsButtonId;
 		}
 	}
@@ -186,21 +186,21 @@ void runLimitScreen(void)
 	frontendMultiMessages();							// network stuff.
 
 	WidgetTriggers const &triggers = widgRunScreen(psWScreen);
-	unsigned id = triggers.empty()? 0 : triggers.front().widget->id;  // Just use first click here, since the next click could be on another menu.
+	unsigned id = triggers.empty() ? 0 : triggers.front().widget->id; // Just use first click here, since the next click could be on another menu.
 
 	// sliders
-	if((id > IDLIMITS_ENTRIES_START)  && (id< IDLIMITS_ENTRIES_END))
+	if ((id > IDLIMITS_ENTRIES_START)  && (id < IDLIMITS_ENTRIES_END))
 	{
-		unsigned statid = widgGetFromID(psWScreen,id-1)->UserData;
-		if(statid)
+		unsigned statid = widgGetFromID(psWScreen, id - 1)->UserData;
+		if (statid)
 		{
-			asStructLimits[0][statid].limit = (UBYTE) ((W_SLIDER*)(widgGetFromID(psWScreen,id)))->pos;
+			asStructLimits[0][statid].limit = (UBYTE)((W_SLIDER *)(widgGetFromID(psWScreen, id)))->pos;
 		}
 	}
 	else
 	{
 		// icons that are always about.
-		switch(id)
+		switch (id)
 		{
 		case IDLIMITS_RETURN:
 			// reset the sliders..
@@ -220,13 +220,13 @@ void runLimitScreen(void)
 			changeTitleMode(MULTIOPTION);
 
 			// make some noize.
-			if(!ingame.localOptionsReceived)
+			if (!ingame.localOptionsReceived)
 			{
-				addConsoleMessage(_("Limits reset to default values"),DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+				addConsoleMessage(_("Limits reset to default values"), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 			}
 			else
 			{
-				sendTextMessage("Limits Reset To Default Values",true);
+				sendTextMessage("Limits Reset To Default Values", true);
 			}
 
 			break;
@@ -258,7 +258,7 @@ void createLimitSet(void)
 	{
 		return;
 	}
-	
+
 	// Count the number of changes
 	for (i = 0; i < numStructureStats; i++)
 	{
@@ -307,9 +307,9 @@ void applyLimitSet(void)
 
 	// Get the limits and decode
 	for (int i = 0; i < ingame.numStructureLimits; ++i)
- 	{
+	{
 		int id = pEntry[i].id;
-		
+
 		// So long as the ID is valid
 		if (id < numStructureStats)
 		{
@@ -336,25 +336,30 @@ static void displayStructureBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset
 	Vector3i rotation;
 	char str[20];
 
-	UDWORD scale,Radius;
+	UDWORD scale, Radius;
 
-	drawBlueBox(x,y,w,h);
+	drawBlueBox(x, y, w, h);
 
 	// draw image
-	pie_SetGeometricOffset(x + 35, y + psWidget->height()/2 + 9);
+	pie_SetGeometricOffset(x + 35, y + psWidget->height() / 2 + 9);
 	rotation.x = -15;
-	rotation.y = ((realTime/45)%360) ; //45
+	rotation.y = ((realTime / 45) % 360) ; //45
 	rotation.z = 0;
 	position.x = 0;
 	position.y = 0;
-	position.z = BUTTON_DEPTH*2;//getStructureStatSize(stat)  * 38 * OBJECT_RADIUS;
+	position.z = BUTTON_DEPTH * 2; //getStructureStatSize(stat)  * 38 * OBJECT_RADIUS;
 
 	Radius = getStructureStatSizeMax(stat);
-	if(Radius <= 128) {
+	if (Radius <= 128)
+	{
 		scale = SMALL_STRUCT_SCALE;
-	} else if(Radius <= 256) {
+	}
+	else if (Radius <= 256)
+	{
 		scale = MED_STRUCT_SCALE;
-	} else {
+	}
+	else
+	{
 		scale = LARGE_STRUCT_SCALE;
 	}
 
@@ -365,11 +370,11 @@ static void displayStructureBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset
 	// draw name
 	iV_SetFont(font_regular);											// font
 	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
-	iV_DrawText(_(getName(stat)), x + 80, y + psWidget->height()/2 + 3);
+	iV_DrawText(_(getName(stat)), x + 80, y + psWidget->height() / 2 + 3);
 
 	// draw limit
 	ssprintf(str, "%d", ((W_SLIDER *)widgGetFromID(psWScreen, psWidget->id + 1))->pos);
-	iV_DrawText(str, x + 270, y + psWidget->height()/2 + 3);
+	iV_DrawText(str, x + 270, y + psWidget->height() / 2 + 3);
 
 	return;
 }

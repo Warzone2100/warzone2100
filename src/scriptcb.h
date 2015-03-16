@@ -121,7 +121,7 @@ extern bool scrCBTransporterLanded(void);
 
 // tell the scripts when a cluster is no longer valid
 extern SDWORD	scrCBEmptyClusterID;
-extern bool scrCBClusterEmpty( void );
+extern bool scrCBClusterEmpty(void);
 
 // note when a vtol has finished returning to base - used to vanish
 // vtols when they are attacking from off map
@@ -139,7 +139,7 @@ extern bool scrCBVTOLRetarget(void);
 
 // alliance offered.
 extern bool scrCBAllianceOffer(void);
-extern UDWORD	CBallFrom,CBallTo;
+extern UDWORD	CBallFrom, CBallTo;
 
 // player number that left the game
 extern UDWORD	CBPlayerLeft;

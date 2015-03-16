@@ -641,7 +641,7 @@ IntFancyButton::IntFancyButton(WIDGET *parent)
 	model.position.x = 0;
 	model.position.y = 0;
 	model.position.z = BUTTON_DEPTH;
-	model.rotation.x =-30;
+	model.rotation.x = -30;
 	model.rotation.y = DEFAULT_BUTTON_ROTATION;
 	model.rotation.z = 0;
 	model.rate = 0;
@@ -649,7 +649,7 @@ IntFancyButton::IntFancyButton(WIDGET *parent)
 
 void IntFancyButton::initDisplay()
 {
-	model.rate += realTimeAdjustedAverage(isHighlighted()? 2*BUTTONOBJ_ROTSPEED : -4*BUTTONOBJ_ROTSPEED);
+	model.rate += realTimeAdjustedAverage(isHighlighted() ? 2 * BUTTONOBJ_ROTSPEED : -4 * BUTTONOBJ_ROTSPEED);
 	model.rate = clip(model.rate, 0, BUTTONOBJ_ROTSPEED);
 	model.rotation.y += realTimeAdjustedAverage(model.rate);
 }
@@ -662,7 +662,7 @@ void IntFancyButton::displayIfHighlight(int xOffset, int yOffset)
 {
 	if (isHighlighted())
 	{
-		iV_DrawImage(IntImages, buttonType == TOPBUTTON? IMAGE_BUT_HILITE : IMAGE_BUTB_HILITE, xOffset + x(), yOffset + y());
+		iV_DrawImage(IntImages, buttonType == TOPBUTTON ? IMAGE_BUT_HILITE : IMAGE_BUTB_HILITE, xOffset + x(), yOffset + y());
 	}
 }
 
@@ -808,7 +808,7 @@ void IntStatusButton::display(int xOffset, int yOffset)
 	//need to flash the button if a factory is on hold production
 	if (bOnHold)
 	{
-		iV_DrawImage(IntImages, ((realTime / 250) % 2) == 0? IMAGE_BUT0_DOWN : IMAGE_BUT_HILITE, xOffset + x(), yOffset + y());
+		iV_DrawImage(IntImages, ((realTime / 250) % 2) == 0 ? IMAGE_BUT0_DOWN : IMAGE_BUT_HILITE, xOffset + x(), yOffset + y());
 	}
 	else
 	{
@@ -868,7 +868,7 @@ IntStatsButton::IntStatsButton(WIDGET *parent)
 //
 void IntStatsButton::display(int xOffset, int yOffset)
 {
-	BASE_STATS *    psResGraphic;
+	BASE_STATS     *psResGraphic;
 	SDWORD          compID;
 
 	initDisplay();
@@ -951,7 +951,7 @@ void IntStatsButton::display(int xOffset, int yOffset)
 IntFormAnimated::IntFormAnimated(WIDGET *parent, bool openAnimate)
 	: W_FORM(parent)
 	, startTime(0)
-	, currentAction(openAnimate? 0 : 2)
+	, currentAction(openAnimate ? 0 : 2)
 {
 	disableChildren = openAnimate;
 }
@@ -965,47 +965,47 @@ void IntFormAnimated::closeAnimateDelete()
 void IntFormAnimated::display(int xOffset, int yOffset)
 {
 	QRect aOpen(xOffset + x(), yOffset + y(), width(), height());
-	QRect aClosed(aOpen.x() + aOpen.width()/4, aOpen.y() + aOpen.height()/2 - 4, aOpen.width()/2, 8);
+	QRect aClosed(aOpen.x() + aOpen.width() / 4, aOpen.y() + aOpen.height() / 2 - 4, aOpen.width() / 2, 8);
 	QRect aBegin;
 	QRect aEnd;
 	switch (currentAction)
 	{
-		case 1: FormOpenCount = 0;  break;
-		case 4: FormCloseCount = 0; break;
+	case 1: FormOpenCount = 0;  break;
+	case 4: FormCloseCount = 0; break;
 	}
 	switch (currentAction)
 	{
-		case 0:  // Start opening.
-			if (FormOpenAudioID >= 0 && FormOpenCount == 0)
-			{
-				audio_PlayTrack(FormOpenAudioID);
-				++FormOpenCount;
-			}
-			startTime = realTime;
-			++currentAction;
-			// No break.
-		case 1:  // Continue opening.
-			aBegin = aClosed;
-			aEnd = aOpen;
-			break;
-		case 2:  // Open.
-			aBegin = aOpen;
-			aEnd = aOpen;
-			startTime = realTime;
-			break;
-		case 3:  // Start closing.
-			if (FormCloseAudioID >= 0 && FormCloseCount == 0)
-			{
-				audio_PlayTrack(FormCloseAudioID);
-				FormCloseCount++;
-			}
-			startTime = realTime;
-			++currentAction;
-			// No break.
-		case 4:  // Continue closing.
-			aBegin = aOpen;
-			aEnd = aClosed;
-			break;
+	case 0:  // Start opening.
+		if (FormOpenAudioID >= 0 && FormOpenCount == 0)
+		{
+			audio_PlayTrack(FormOpenAudioID);
+			++FormOpenCount;
+		}
+		startTime = realTime;
+		++currentAction;
+	// No break.
+	case 1:  // Continue opening.
+		aBegin = aClosed;
+		aEnd = aOpen;
+		break;
+	case 2:  // Open.
+		aBegin = aOpen;
+		aEnd = aOpen;
+		startTime = realTime;
+		break;
+	case 3:  // Start closing.
+		if (FormCloseAudioID >= 0 && FormCloseCount == 0)
+		{
+			audio_PlayTrack(FormCloseAudioID);
+			FormCloseCount++;
+		}
+		startTime = realTime;
+		++currentAction;
+	// No break.
+	case 4:  // Continue closing.
+		aBegin = aOpen;
+		aEnd = aClosed;
+		break;
 	}
 	int den = FORM_OPEN_ANIM_DURATION;
 	int num = std::min<unsigned>(realTime - startTime, den);
@@ -1014,15 +1014,15 @@ void IntFormAnimated::display(int xOffset, int yOffset)
 		++currentAction;
 		switch (currentAction)
 		{
-			case 2: disableChildren = false; break;
-			case 5: deleteLater();           break;
+		case 2: disableChildren = false; break;
+		case 5: deleteLater();           break;
 		}
 	}
 
-	QRect aCur = QRect(aBegin.x()      + (aEnd.x()      - aBegin.x())     *num/den,
-	                   aBegin.y()      + (aEnd.y()      - aBegin.y())     *num/den,
-	                   aBegin.width()  + (aEnd.width()  - aBegin.width()) *num/den,
-	                   aBegin.height() + (aEnd.height() - aBegin.height())*num/den);
+	QRect aCur = QRect(aBegin.x()      + (aEnd.x()      - aBegin.x())     * num / den,
+	                   aBegin.y()      + (aEnd.y()      - aBegin.y())     * num / den,
+	                   aBegin.width()  + (aEnd.width()  - aBegin.width()) * num / den,
+	                   aBegin.height() + (aEnd.height() - aBegin.height()) * num / den);
 
 	RenderWindowFrame(FRAME_NORMAL, aCur.x(), aCur.y(), aCur.width(), aCur.height());
 }
@@ -1225,11 +1225,11 @@ void IntFancyButton::displayClear(int xOffset, int yOffset)
 {
 	if (isDown())
 	{
-		iV_DrawImage(IntImages, IMAGE_BUT0_DOWN + buttonType*2, xOffset + x(), yOffset + y());
+		iV_DrawImage(IntImages, IMAGE_BUT0_DOWN + buttonType * 2, xOffset + x(), yOffset + y());
 	}
 	else
 	{
-		iV_DrawImage(IntImages, IMAGE_BUT0_UP + buttonType*2, xOffset + x(), yOffset + y());
+		iV_DrawImage(IntImages, IMAGE_BUT0_UP + buttonType * 2, xOffset + x(), yOffset + y());
 	}
 }
 
@@ -1284,7 +1284,7 @@ void IntFancyButton::displayIMD(Image image, ImdObject imdObject, int xOffset, i
 			{
 				pie_SetGeometricOffset(
 				    (ButXPos + iV_GetImageWidth(IntImages, IMAGE_BUT0_UP) / 2),
-				    (ButYPos + iV_GetImageHeight(IntImages, IMAGE_BUT0_UP) / 2) + 8 );
+				    (ButYPos + iV_GetImageHeight(IntImages, IMAGE_BUT0_UP) / 2) + 8);
 			}
 			else
 			{
@@ -1372,7 +1372,7 @@ void IntFancyButton::displayIMD(Image image, ImdObject imdObject, int xOffset, i
 			{
 				pie_SetGeometricOffset(
 				    (ButXPos + iV_GetImageWidth(IntImages, IMAGE_BUT0_UP) / 2),
-				    (ButYPos + iV_GetImageHeight(IntImages, IMAGE_BUT0_UP) / 2) + 8 );
+				    (ButYPos + iV_GetImageHeight(IntImages, IMAGE_BUT0_UP) / 2) + 8);
 			}
 			else
 			{
@@ -1584,7 +1584,7 @@ bool DroidIsBuilding(DROID *Droid)
 		return false;
 	}
 	else if (orderStateObj(Droid, DORDER_BUILD)
-	        || orderStateObj(Droid, DORDER_HELPBUILD)) // Is building or helping?
+	         || orderStateObj(Droid, DORDER_HELPBUILD)) // Is building or helping?
 	{
 		return true;
 	}

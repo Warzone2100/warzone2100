@@ -60,7 +60,7 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 
 	/* Get the stats for the weapon */
 	compIndex = psWeap->nStat;
-	ASSERT_OR_RETURN( false , compIndex < numWeaponStats, "Invalid range referenced for numWeaponStats, %d > %d", compIndex, numWeaponStats);
+	ASSERT_OR_RETURN(false , compIndex < numWeaponStats, "Invalid range referenced for numWeaponStats, %d > %d", compIndex, numWeaponStats);
 	psStats = asWeaponStats + compIndex;
 
 	// check valid weapon/prop combination
@@ -111,7 +111,7 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 
 	/* Check we can hit the target */
 	bool tall = (psAttacker->type == OBJ_DROID && isVtolDroid((DROID *)psAttacker))
-		    || (psAttacker->type == OBJ_STRUCTURE && ((STRUCTURE *)psAttacker)->pStructureType->height > 1);
+	            || (psAttacker->type == OBJ_STRUCTURE && ((STRUCTURE *)psAttacker)->pStructureType->height > 1);
 	if (proj_Direct(psStats) && !lineOfFire(psAttacker, psTarget, weapon_slot, tall))
 	{
 		// Can't see the target - can't hit it with direct fire
@@ -141,7 +141,7 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	// Calculate angle for indirect shots
 	if (!proj_Direct(psStats) && dist > 0)
 	{
-		min_angle = arcOfFire(psAttacker,psTarget,weapon_slot,true);
+		min_angle = arcOfFire(psAttacker, psTarget, weapon_slot, true);
 
 		// prevent extremely steep shots
 		min_angle = std::min(min_angle, DEG(PROJ_ULTIMATE_PITCH));
@@ -150,9 +150,9 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 		if (min_angle > DEG(PROJ_MAX_PITCH))
 		{
 			//do not allow increase of max range though
-			if (iSin(2*min_angle) < iSin(2*DEG(PROJ_MAX_PITCH)))  // If PROJ_MAX_PITCH == 45, then always iSin(2*min_angle) <= iSin(2*DEG(PROJ_MAX_PITCH)), and the test is redundant.
+			if (iSin(2 * min_angle) < iSin(2 * DEG(PROJ_MAX_PITCH))) // If PROJ_MAX_PITCH == 45, then always iSin(2*min_angle) <= iSin(2*DEG(PROJ_MAX_PITCH)), and the test is redundant.
 			{
-				longRange = longRange * iSin(2*min_angle) / iSin(2*DEG(PROJ_MAX_PITCH));
+				longRange = longRange * iSin(2 * min_angle) / iSin(2 * DEG(PROJ_MAX_PITCH));
 			}
 		}
 	}
@@ -161,7 +161,7 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	if (dist <= longRange && dist >= psStats->upgrade[psAttacker->player].minRange)
 	{
 		// get weapon chance to hit in the long range
-		baseHitChance = weaponLongHit(psStats,psAttacker->player);
+		baseHitChance = weaponLongHit(psStats, psAttacker->player);
 
 		// adapt for height adjusted artillery shots
 		if (min_angle > DEG(PROJ_MAX_PITCH))
@@ -241,7 +241,7 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 		{
 			int empTime = EMP_DISABLE_TIME - (gameTime - psTarget->timeLastHit);
 			CLIP(empTime, 0, EMP_DISABLE_TIME);
-			if (empTime >= EMP_DISABLE_TIME * 9/10)
+			if (empTime >= EMP_DISABLE_TIME * 9 / 10)
 			{
 				flightTime = 0;  /* Just hit.  Assume they'll get hit again */
 			}
@@ -251,7 +251,7 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 			}
 		}
 
-		predict += Vector3i(iSinCosR(psDroid->sMove.moveDir, psDroid->sMove.speed*flightTime / GAME_TICKS_PER_SEC), 0);
+		predict += Vector3i(iSinCosR(psDroid->sMove.moveDir, psDroid->sMove.speed * flightTime / GAME_TICKS_PER_SEC), 0);
 		if (!isFlying(psDroid))
 		{
 			predict.z = map_Height(removeZ(predict));  // Predict that the object will be on the ground.
@@ -470,7 +470,9 @@ unsigned int objGuessFutureDamage(WEAPON_STATS *psStats, unsigned int player, BA
 	int actualDamage, armour, level = 1;
 
 	if (psTarget == NULL)
-		return 0;  // Hard to destroy the ground. The armour on the mud is very strong and blocks all damage.
+	{
+		return 0;    // Hard to destroy the ground. The armour on the mud is very strong and blocks all damage.
+	}
 
 	damage = calcDamage(weaponDamage(psStats, player), psStats->weaponEffect, psTarget);
 

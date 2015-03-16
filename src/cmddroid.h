@@ -56,16 +56,16 @@ extern void cmdDroidClearDesignator(UDWORD player);
 extern SDWORD cmdDroidGetIndex(DROID *psCommander);
 
 /** \brief Gets the maximum group size for a command droid.*/
-extern unsigned int cmdDroidMaxGroup(const DROID* psCommander);
+extern unsigned int cmdDroidMaxGroup(const DROID *psCommander);
 
 /** \brief Updates the experinence of a command droid if psKiller is in a command group.*/
 extern void cmdDroidUpdateKills(DROID *psKiller, uint32_t experienceInc);
 
 /** \brief Gets the level of the droid group's commander, if any.*/
-extern unsigned int cmdGetCommanderLevel(const DROID* psDroid);
+extern unsigned int cmdGetCommanderLevel(const DROID *psDroid);
 
 /** \brief Returns if the droid has commander.*/
-extern bool hasCommander(const DROID* psDroid);
+extern bool hasCommander(const DROID *psDroid);
 
 /** \brief Sets whether commander experience should be increased in multiplayer games.*/
 extern void cmdDroidMultiExpBoost(bool bDoit);

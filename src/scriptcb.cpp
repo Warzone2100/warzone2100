@@ -151,8 +151,8 @@ bool scrCBStructAttacked(void)
 	bool			triggered = false;
 
 	if (!stackPopParams(3, VAL_INT, &player,
-	        VAL_REF | ST_STRUCTURE, &ppsTarget,
-	        VAL_REF | ST_BASEOBJECT, &ppsAttacker))
+	                    VAL_REF | ST_STRUCTURE, &ppsTarget,
+	                    VAL_REF | ST_BASEOBJECT, &ppsAttacker))
 	{
 		return false;
 	}
@@ -224,8 +224,8 @@ bool scrCBDroidAttacked(void)
 	bool			triggered = false;
 
 	if (!stackPopParams(3, VAL_INT, &player,
-	        VAL_REF | ST_DROID, &ppsTarget,
-	        VAL_REF | ST_BASEOBJECT, &ppsAttacker))
+	                    VAL_REF | ST_DROID, &ppsTarget,
+	                    VAL_REF | ST_BASEOBJECT, &ppsAttacker))
 	{
 		return false;
 	}
@@ -268,8 +268,8 @@ bool scrCBAttacked(void)
 	bool			triggered = false;
 
 	if (!stackPopParams(3, VAL_INT, &player,
-	        VAL_REF | ST_BASEOBJECT, &ppsTarget,
-	        VAL_REF | ST_BASEOBJECT, &ppsAttacker))
+	                    VAL_REF | ST_BASEOBJECT, &ppsTarget,
+	                    VAL_REF | ST_BASEOBJECT, &ppsAttacker))
 	{
 		return false;
 	}
@@ -528,17 +528,17 @@ static bool scrCBObjectSeen(SDWORD callback)
 		retval = false;
 	}
 	else if ((callback == CALL_DROID_SEEN) &&
-	        (psScrCBObjSeen->type != OBJ_DROID))
+	         (psScrCBObjSeen->type != OBJ_DROID))
 	{
 		retval = false;
 	}
 	else if ((callback == CALL_STRUCT_SEEN) &&
-	        (psScrCBObjSeen->type != OBJ_STRUCTURE))
+	         (psScrCBObjSeen->type != OBJ_STRUCTURE))
 	{
 		retval = false;
 	}
 	else if ((callback == CALL_FEATURE_SEEN) &&
-	        (psScrCBObjSeen->type != OBJ_FEATURE))
+	         (psScrCBObjSeen->type != OBJ_FEATURE))
 	{
 		retval = false;
 	}
@@ -670,7 +670,7 @@ bool scrCBTransporterLandedB(void)
 	DROID			**ppsTransp;
 
 	if (!stackPopParams(3, ST_GROUP, &psGroup, VAL_INT, &player,
-	        VAL_REF | ST_DROID, &ppsTransp))
+	                    VAL_REF | ST_DROID, &ppsTransp))
 	{
 		debug(LOG_ERROR, "scrCBTransporterLandedB(): stack failed");
 		return false;
@@ -778,7 +778,7 @@ bool scrCBResCompleted(void)
 	SDWORD		resFacOwner;
 
 	if (!stackPopParams(3, VAL_REF | ST_RESEARCH, &ppsResearch,
-	        VAL_REF | ST_STRUCTURE, &ppsResFac , VAL_INT, &resFacOwner))
+	                    VAL_REF | ST_STRUCTURE, &ppsResFac , VAL_INT, &resFacOwner))
 	{
 		return false;
 	}
@@ -900,8 +900,8 @@ bool scrCallBeacon(void)
 	SDWORD	*locX, *locY;
 
 	if (!stackPopParams(5, VAL_INT, &playerTo, VAL_REF | VAL_INT, &playerFrom,
-	        VAL_REF | VAL_INT, &locX, VAL_REF | VAL_INT, &locY,
-	        VAL_REF | VAL_STRING, &BeaconText))
+	                    VAL_REF | VAL_INT, &locX, VAL_REF | VAL_INT, &locY,
+	                    VAL_REF | VAL_STRING, &BeaconText))
 	{
 		debug(LOG_ERROR, "scrCallBeacon() - failed to pop parameters.");
 		return false;

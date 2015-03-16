@@ -32,19 +32,19 @@ extern UDWORD fogStatus;
 
 enum LIGHT_COLOUR
 {
-LIGHT_RED,
-LIGHT_GREEN,
-LIGHT_BLUE,
-LIGHT_YELLOW,
-LIGHT_WHITE
+	LIGHT_RED,
+	LIGHT_GREEN,
+	LIGHT_BLUE,
+	LIGHT_YELLOW,
+	LIGHT_WHITE
 };
 
 struct LIGHT
 {
-Vector3i	position;
-UBYTE	type;
-UDWORD	range;
-LIGHT_COLOUR	colour;
+	Vector3i	position;
+	UBYTE	type;
+	UDWORD	range;
+	LIGHT_COLOUR	colour;
 };
 
 extern void setTheSun(Vector3f newSun);
@@ -53,7 +53,7 @@ extern Vector3f getTheSun(void);
 extern void	processLight(LIGHT *psLight);
 extern void initLighting(UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2);
 extern void	lightValueForTile(UDWORD tileX, UDWORD tileY);
-extern void	doBuildingLights( void );
+extern void	doBuildingLights(void);
 extern void UpdateFogDistance(float distance);
 extern void	calcDroidIllumination(DROID *psDroid);
 

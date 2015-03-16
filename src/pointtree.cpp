@@ -42,28 +42,28 @@ outside the rectangles). The orange points are the search results.
 static uint64_t expand(uint32_t x)
 {
 	uint64_t r = x;
-	r = (r | r<<16) & 0x0000FFFF0000FFFFULL;
-	r = (r | r<<8)  & 0x00FF00FF00FF00FFULL;
-	r = (r | r<<4)  & 0x0F0F0F0F0F0F0F0FULL;
-	r = (r | r<<2)  & 0x3333333333333333ULL;
-	r = (r | r<<1)  & 0x5555555555555555ULL;
+	r = (r | r << 16) & 0x0000FFFF0000FFFFULL;
+	r = (r | r << 8)  & 0x00FF00FF00FF00FFULL;
+	r = (r | r << 4)  & 0x0F0F0F0F0F0F0F0FULL;
+	r = (r | r << 2)  & 0x3333333333333333ULL;
+	r = (r | r << 1)  & 0x5555555555555555ULL;
 	return r;
 }
 
 // Returns v with highest set bit and all higher bits set, and all following bits 0. Example: 0000 0110 1001 1100 -> 1111 1100 0000 0000.
 static uint32_t findSplit(uint32_t v)
 {
-	v |= v>>1;
-	v |= v>>2;
-	v |= v>>4;
-	v |= v>>8;
-	v |= v>>16;
-	return ~(v>>1);
+	v |= v >> 1;
+	v |= v >> 2;
+	v |= v >> 4;
+	v |= v >> 8;
+	v |= v >> 16;
+	return ~(v >> 1);
 }
 
 static uint64_t expandX(int32_t x)
 {
-	return expand(x + 0x80000000u)<<1;
+	return expand(x + 0x80000000u) << 1;
 }
 
 static uint64_t expandY(int32_t y)
@@ -145,10 +145,10 @@ PointTree::ResultVector &PointTree::queryMaybeFilter(Filter &filter, int32_t min
 	uint64_t splitY2 = expandY(splitYo);
 
 	PointTreeRange ranges[4] = {{minX    | minY,    splitX1 | splitY1},
-	                            {splitX2 | minY,    maxX    | splitY1},
-	                            {minX    | splitY2, splitX1 | maxY},
-	                            {splitX2 | splitY2, maxX    | maxY}
-	                           };
+		{splitX2 | minY,    maxX    | splitY1},
+		{minX    | splitY2, splitX1 | maxY},
+		{splitX2 | splitY2, maxX    | maxY}
+	};
 	int numRanges = 4;
 
 #ifdef DUMP_IMAGE
@@ -158,45 +158,45 @@ PointTree::ResultVector &PointTree::queryMaybeFilter(Filter &filter, int32_t min
 		f = fopen("pointtree.ppm", "wb");
 		fprintf(f, "P6\n1000 1000\n255\n");
 		for (int py = 0; py != 1000; ++py) for (int px = 0; px != 1000; ++px)
-		{
-			int ax = px - 500, ay = py-500;
-			double dx = ax - x, dy = ay - y;
-			double dist = sqrt(dx*dx + dy*dy);
-			ppm[py][px][0] = 255;
-			ppm[py][px][1] = 255;
-			ppm[py][px][2] = 255;
-			if (dist <= radius)
 			{
-				ppm[py][px][0] = 128;
-				ppm[py][px][1] = 128;
-				ppm[py][px][2] = 128;
+				int ax = px - 500, ay = py - 500;
+				double dx = ax - x, dy = ay - y;
+				double dist = sqrt(dx * dx + dy * dy);
+				ppm[py][px][0] = 255;
+				ppm[py][px][1] = 255;
+				ppm[py][px][2] = 255;
+				if (dist <= radius)
+				{
+					ppm[py][px][0] = 128;
+					ppm[py][px][1] = 128;
+					ppm[py][px][2] = 128;
+				}
+				if (ax == minXo || ax == splitXo || ax == maxXo || ay == minYo || ay == splitYo || ay == maxYo)
+				{
+					ppm[py][px][0] /= 2;
+					ppm[py][px][1] /= 2;
+					ppm[py][px][2] /= 2;
+				}
+				uint64_t nn = expandX(ax) | expandY(ay);
+				if (ranges[0].a <= nn && nn <= ranges[0].z)
+				{
+					ppm[py][px][0] /= 2;
+				}
+				if (ranges[1].a <= nn && nn <= ranges[1].z)
+				{
+					ppm[py][px][1] /= 2;
+				}
+				if (ranges[2].a <= nn && nn <= ranges[2].z)
+				{
+					ppm[py][px][2] /= 2;
+				}
+				if (ranges[3].a <= nn && nn <= ranges[3].z && ((ax ^ ay) & 2))
+				{
+					ppm[py][px][0] /= 2;
+					ppm[py][px][1] /= 2;
+					ppm[py][px][2] /= 2;
+				}
 			}
-			if (ax == minXo || ax == splitXo || ax == maxXo || ay == minYo || ay == splitYo || ay == maxYo)
-			{
-				ppm[py][px][0] /= 2;
-				ppm[py][px][1] /= 2;
-				ppm[py][px][2] /= 2;
-			}
-			uint64_t nn = expandX(ax) | expandY(ay);
-			if (ranges[0].a <= nn && nn <= ranges[0].z)
-			{
-				ppm[py][px][0] /= 2;
-			}
-			if (ranges[1].a <= nn && nn <= ranges[1].z)
-			{
-				ppm[py][px][1] /= 2;
-			}
-			if (ranges[2].a <= nn && nn <= ranges[2].z)
-			{
-				ppm[py][px][2] /= 2;
-			}
-			if (ranges[3].a <= nn && nn <= ranges[3].z && ((ax ^ ay) & 2))
-			{
-				ppm[py][px][0] /= 2;
-				ppm[py][px][1] /= 2;
-				ppm[py][px][2] /= 2;
-			}
-		}
 	}
 #endif //DUMP_IMAGE
 

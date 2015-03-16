@@ -33,7 +33,7 @@
 /** This defines the maximum number of command droids allowed per player.*/
 #define MAX_CMDDROIDS	5
 
-/** This struct defines a command droid. 
+/** This struct defines a command droid.
  * Notice that this struct is not a droid: it is just responsible for the command's logic.
  * This struct uses the psDroid member to point to the actual droid where it lives in.
  * @todo died and psDroid are the only members that are being used somewhere in the code. Consider removing all the others.
@@ -45,7 +45,7 @@ struct COMMAND_DROID : public COMPONENT_STATS
 	SWORD   survival;
 	SWORD   nWeapStat;
 	UWORD   kills;
-	DROID*  psDroid;	/**< The droid where the command droid is living in.*/
+	DROID  *psDroid;	/**< The droid where the command droid is living in.*/
 };
 
 #endif // __INCLUDED_CMDDROIDDEF_H__

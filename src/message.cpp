@@ -59,7 +59,7 @@ iIMDShape	*pProximityMsgIMD;
  * new is a pointer to a pointer to the new message
  * type is the type of the message
  */
-static inline MESSAGE* createMessage(MESSAGE_TYPE msgType, UDWORD player)
+static inline MESSAGE *createMessage(MESSAGE_TYPE msgType, UDWORD player)
 {
 	MESSAGE *newMsg;
 
@@ -87,8 +87,8 @@ static inline void addMessageToList(MESSAGE *list[MAX_PLAYERS], MESSAGE *msg, UD
 {
 	MESSAGE *psCurr = NULL, *psPrev = NULL;
 
-	ASSERT_OR_RETURN( , msg != NULL, "Invalid message pointer");
-	ASSERT_OR_RETURN( , player < MAX_PLAYERS, "Bad player");
+	ASSERT_OR_RETURN(, msg != NULL, "Invalid message pointer");
+	ASSERT_OR_RETURN(, player < MAX_PLAYERS, "Bad player");
 
 	// If there is no message list, create one
 	if (list[player] == NULL)
@@ -100,73 +100,77 @@ static inline void addMessageToList(MESSAGE *list[MAX_PLAYERS], MESSAGE *msg, UD
 	}
 
 	switch (msg->type)
+	{
+	case MSG_CAMPAIGN:
+		/*add it before the first mission/research/prox message */
+		for (psCurr = list[player]; psCurr != NULL; psCurr = psCurr->psNext)
 		{
-		case MSG_CAMPAIGN:
-			/*add it before the first mission/research/prox message */
-			for(psCurr = list[player]; psCurr != NULL; psCurr = psCurr->psNext)
+			if (psCurr->type == MSG_MISSION ||
+			    psCurr->type == MSG_RESEARCH ||
+			    psCurr->type == MSG_PROXIMITY)
 			{
-				if (psCurr->type == MSG_MISSION ||
-					psCurr->type == MSG_RESEARCH ||
-					psCurr->type == MSG_PROXIMITY)
-					break;
-
-				psPrev = psCurr;
+				break;
 			}
 
-			if (psPrev)
-			{
-				psPrev->psNext = msg;
-				msg->psNext = psCurr;
-			}
-			else
-			{
-				//must be top of list
-				psPrev = list[player];
-				list[player] = msg;
-				msg->psNext = psPrev;
-			}
+			psPrev = psCurr;
+		}
 
-			break;
-		case MSG_MISSION:
-			/*add it before the first research/prox message */
-			for(psCurr = list[player]; psCurr != NULL; psCurr = psCurr->psNext)
-			{
-				if (psCurr->type == MSG_RESEARCH ||
-				    psCurr->type == MSG_PROXIMITY)
-					break;
+		if (psPrev)
+		{
+			psPrev->psNext = msg;
+			msg->psNext = psCurr;
+		}
+		else
+		{
+			//must be top of list
+			psPrev = list[player];
+			list[player] = msg;
+			msg->psNext = psPrev;
+		}
 
-				psPrev = psCurr;
-			}
-
-			if (psPrev)
+		break;
+	case MSG_MISSION:
+		/*add it before the first research/prox message */
+		for (psCurr = list[player]; psCurr != NULL; psCurr = psCurr->psNext)
+		{
+			if (psCurr->type == MSG_RESEARCH ||
+			    psCurr->type == MSG_PROXIMITY)
 			{
-				psPrev->psNext = msg;
-				msg->psNext = psCurr;
-			}
-			else
-			{
-				//must be top of list
-				psPrev = list[player];
-				list[player] = msg;
-				msg->psNext = psPrev;
+				break;
 			}
 
-			break;
-		case MSG_RESEARCH:
-		case MSG_PROXIMITY:
-			/*add it to the bottom of the list */
+			psPrev = psCurr;
+		}
 
-			// Iterate to the last item in the list
-			for (psCurr = list[player]; psCurr->psNext != NULL; psCurr = psCurr->psNext) {}
+		if (psPrev)
+		{
+			psPrev->psNext = msg;
+			msg->psNext = psCurr;
+		}
+		else
+		{
+			//must be top of list
+			psPrev = list[player];
+			list[player] = msg;
+			msg->psNext = psPrev;
+		}
 
-			// Append the new message to the end of the list
-			psCurr->psNext = msg;
-			msg->psNext = NULL;
+		break;
+	case MSG_RESEARCH:
+	case MSG_PROXIMITY:
+		/*add it to the bottom of the list */
 
-			break;
-		default:
-			debug(LOG_ERROR, "unknown message type");
-			break;
+		// Iterate to the last item in the list
+		for (psCurr = list[player]; psCurr->psNext != NULL; psCurr = psCurr->psNext) {}
+
+		// Append the new message to the end of the list
+		psCurr->psNext = msg;
+		msg->psNext = NULL;
+
+		break;
+	default:
+		debug(LOG_ERROR, "unknown message type");
+		break;
 	}
 }
 
@@ -180,8 +184,8 @@ static inline void removeMessageFromList(MESSAGE *list[], MESSAGE *del, UDWORD p
 {
 	MESSAGE *psPrev = NULL, *psCurr;
 
-	ASSERT_OR_RETURN( , del != NULL, "Invalid message pointer");
-	ASSERT_OR_RETURN( , player < MAX_PLAYERS, "Bad player");
+	ASSERT_OR_RETURN(, del != NULL, "Invalid message pointer");
+	ASSERT_OR_RETURN(, player < MAX_PLAYERS, "Bad player");
 
 	// If the message to remove is the first one in the list then mark the next one as the first
 	if (list[player] == del)
@@ -192,7 +196,7 @@ static inline void removeMessageFromList(MESSAGE *list[], MESSAGE *del, UDWORD p
 	}
 
 	// Iterate through the list and find the item before the message to delete
-	for(psCurr = list[player]; (psCurr != del) && (psCurr != NULL);	psCurr = psCurr->psNext)
+	for (psCurr = list[player]; (psCurr != del) && (psCurr != NULL);	psCurr = psCurr->psNext)
 	{
 		psPrev = psCurr;
 	}
@@ -214,10 +218,10 @@ static inline void releaseAllMessages(MESSAGE *list[])
 	MESSAGE	*psCurr, *psNext;
 
 	// Iterate through all players' message lists
-	for(i=0; i < MAX_PLAYERS; i++)
+	for (i = 0; i < MAX_PLAYERS; i++)
 	{
 		// Iterate through all messages in list
-		for(psCurr = list[i]; psCurr != NULL; psCurr = psNext)
+		for (psCurr = list[i]; psCurr != NULL; psCurr = psNext)
 		{
 			psNext = psCurr->psNext;
 			free(psCurr);
@@ -233,7 +237,8 @@ bool messageInitVars(void)
 	msgID = 0;
 	currentNumProxDisplays = 0;
 
-	for(i=0; i<MAX_PLAYERS; i++) {
+	for (i = 0; i < MAX_PLAYERS; i++)
+	{
 		apsMessages[i] = NULL;
 		apsProxDisp[i] = NULL;
 	}
@@ -250,9 +255,9 @@ bool initViewData(void)
 }
 
 /* Adds a beacon message. A wrapper for addMessage() */
-MESSAGE * addBeaconMessage(MESSAGE_TYPE msgType, bool proxPos, UDWORD player)
+MESSAGE *addBeaconMessage(MESSAGE_TYPE msgType, bool proxPos, UDWORD player)
 {
-	MESSAGE* psBeaconMsgToAdd = addMessage(msgType, proxPos, player);
+	MESSAGE *psBeaconMsgToAdd = addMessage(msgType, proxPos, player);
 
 	ASSERT_OR_RETURN(NULL, psBeaconMsgToAdd, "createMessage failed");
 
@@ -268,11 +273,11 @@ static void addProximityDisplay(MESSAGE *psMessage, bool proxPos, UDWORD player)
 {
 	PROXIMITY_DISPLAY *psToAdd;
 
-	ASSERT_OR_RETURN( , player < MAX_PLAYERS, "Bad player");
+	ASSERT_OR_RETURN(, player < MAX_PLAYERS, "Bad player");
 	debug(LOG_MSG, "Added prox display for player %u (proxPos=%d)", player, (int)proxPos);
 
 	//create the proximity display
-	psToAdd = (PROXIMITY_DISPLAY*)malloc(sizeof(PROXIMITY_DISPLAY));
+	psToAdd = (PROXIMITY_DISPLAY *)malloc(sizeof(PROXIMITY_DISPLAY));
 
 	if (proxPos)
 	{
@@ -309,10 +314,10 @@ static void addProximityDisplay(MESSAGE *psMessage, bool proxPos, UDWORD player)
 }
 
 /*Add a message to the list */
-MESSAGE * addMessage(MESSAGE_TYPE msgType, bool proxPos, UDWORD player)
+MESSAGE *addMessage(MESSAGE_TYPE msgType, bool proxPos, UDWORD player)
 {
 	//first create a message of the required type
-	MESSAGE* psMsgToAdd = createMessage(msgType, player);
+	MESSAGE *psMsgToAdd = createMessage(msgType, player);
 
 	debug(LOG_MSG, "adding message for player %d, type is %d, proximity is %d", player, msgType, proxPos);
 
@@ -338,8 +343,8 @@ static void removeProxDisp(MESSAGE *psMessage, UDWORD player)
 {
 	PROXIMITY_DISPLAY		*psCurr, *psPrev;
 
-	ASSERT_OR_RETURN( , player < MAX_PLAYERS, "Bad player");
-	ASSERT_OR_RETURN( , psMessage != NULL, "Bad message");
+	ASSERT_OR_RETURN(, player < MAX_PLAYERS, "Bad player");
+	ASSERT_OR_RETURN(, psMessage != NULL, "Bad message");
 
 	if (!apsProxDisp[player])
 	{
@@ -358,8 +363,8 @@ static void removeProxDisp(MESSAGE *psMessage, UDWORD player)
 	else
 	{
 		psPrev = apsProxDisp[player];
-		for(psCurr = apsProxDisp[player]; psCurr != NULL; psCurr =
-			psCurr->psNext)
+		for (psCurr = apsProxDisp[player]; psCurr != NULL; psCurr =
+		         psCurr->psNext)
 		{
 			//compare the pointers
 			if (psCurr->psMessage == psMessage)
@@ -377,8 +382,8 @@ static void removeProxDisp(MESSAGE *psMessage, UDWORD player)
 /*remove a message */
 void removeMessage(MESSAGE *psDel, UDWORD player)
 {
-	ASSERT_OR_RETURN( , player < MAX_PLAYERS, "Bad player");
-	ASSERT_OR_RETURN( , psDel != NULL, "Bad message");
+	ASSERT_OR_RETURN(, player < MAX_PLAYERS, "Bad player");
+	ASSERT_OR_RETURN(, psDel != NULL, "Bad message");
 	debug(LOG_MSG, "removing message for player %d", player);
 
 	if (psDel->type == MSG_PROXIMITY)
@@ -401,9 +406,9 @@ void releaseAllProxDisp(void)
 	UDWORD				player;
 	PROXIMITY_DISPLAY	*psCurr, *psNext;
 
-	for(player=0; player<MAX_PLAYERS; player++)
+	for (player = 0; player < MAX_PLAYERS; player++)
 	{
-		for(psCurr = apsProxDisp[player]; psCurr != NULL; psCurr = psNext)
+		for (psCurr = apsProxDisp[player]; psCurr != NULL; psCurr = psNext)
 		{
 			psNext = psCurr->psNext;
 			//remove message associated with this display
@@ -436,16 +441,16 @@ const char *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 	VIEW_RESEARCH		*psViewRes;
 	VIEW_REPLAY			*psViewReplay;
 	char				name[MAX_STR_LENGTH], imdName[MAX_STR_LENGTH],
-						string[MAX_STR_LENGTH],
-						imdName2[MAX_STR_LENGTH];
+	                    string[MAX_STR_LENGTH],
+	                    imdName2[MAX_STR_LENGTH];
 	char				audioName[MAX_STR_LENGTH];
-	SDWORD				LocX,LocY,LocZ, audioID;
+	SDWORD				LocX, LocY, LocZ, audioID;
 	PROX_TYPE	proxType;
 	int cnt;
 	const char *filename = strdup(GetLastResourceFilename());
 
 	numData = numCR(pViewMsgData, bufferSize);
-	for (i=0; i < numData; i++)
+	for (i = 0; i < numData; i++)
 	{
 		VIEWDATA *psViewData = new VIEWDATA;
 		UDWORD numText;
@@ -458,7 +463,7 @@ const char *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 		name[0] = '\0';
 
 		//read the data into the storage - the data is delimeted using comma's
-		sscanf(pViewMsgData,"%255[^,'\r\n],%d%n",name, &numText,&cnt);
+		sscanf(pViewMsgData, "%255[^,'\r\n],%d%n", name, &numText, &cnt);
 		pViewMsgData += cnt;
 
 		//check not loading up too many text strings
@@ -472,7 +477,7 @@ const char *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 		for (dataInc = 0; dataInc < numText; dataInc++)
 		{
 			name[0] = '\0';
-			sscanf(pViewMsgData,",%255[^,'\r\n]%n",name,&cnt);
+			sscanf(pViewMsgData, ",%255[^,'\r\n]%n", name, &cnt);
 			pViewMsgData += cnt;
 
 			// Get the string from the ID string
@@ -495,8 +500,8 @@ const char *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 			imdName2[0] = '\0';
 			string[0] = '\0';
 			audioName[0] = '\0';
-			sscanf(pViewMsgData,",%255[^,'\r\n],%255[^,'\r\n],%255[^,'\r\n],%255[^,'\r\n],%d%n",
-				imdName, imdName2, string, audioName, &dummy, &cnt);
+			sscanf(pViewMsgData, ",%255[^,'\r\n],%255[^,'\r\n],%255[^,'\r\n],%255[^,'\r\n],%d%n",
+			       imdName, imdName2, string, audioName, &dummy, &cnt);
 			pViewMsgData += cnt;
 			psViewRes = (VIEW_RESEARCH *)psViewData->pData;
 			psViewRes->pIMD = modelGet(imdName);
@@ -540,7 +545,7 @@ const char *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 			psViewReplay = (VIEW_REPLAY *)psViewData->pData;
 
 			//read in number of sequences for this message
-			sscanf(pViewMsgData, ",%d%n", &count,&cnt);
+			sscanf(pViewMsgData, ",%d%n", &count, &cnt);
 			pViewMsgData += cnt;
 
 			ASSERT(count <= MAX_DATA, "Too many text strings for %s", psViewData->pName);
@@ -559,7 +564,7 @@ const char *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 				//load extradat for extended type only
 				if (psViewData->type == VIEW_RPL)
 				{
-					sscanf(pViewMsgData, ",%255[^,'\r\n],%d%n", name, &count,&cnt);
+					sscanf(pViewMsgData, ",%255[^,'\r\n],%d%n", name, &count, &cnt);
 					pViewMsgData += cnt;
 					ASSERT(count <= MAX_DATA, "Too many text strings for %s", psViewData->pName);
 					//set the flag to default
@@ -568,7 +573,7 @@ const char *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 				}
 				else //extended type
 				{
-					sscanf(pViewMsgData, ",%255[^,'\r\n],%d,%d%n", name, &count,	&count2,&cnt);
+					sscanf(pViewMsgData, ",%255[^,'\r\n],%d,%d%n", name, &count,	&count2, &cnt);
 					pViewMsgData += cnt;
 					ASSERT(count <= MAX_DATA, "Invalid flag for %s", psViewData->pName);
 					psViewReplay->pSeqList[dataInc].flag = (UBYTE)count;
@@ -576,13 +581,13 @@ const char *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 					ASSERT(count2 <= MAX_DATA, "Too many text strings for %s", psViewData->pName);
 					numText = count2;
 				}
-				strcpy(psViewReplay->pSeqList[dataInc].sequenceName,name);
+				strcpy(psViewReplay->pSeqList[dataInc].sequenceName, name);
 
 				//get the text strings for this sequence - if any
 				for (seqInc = 0; seqInc < numText; seqInc++)
 				{
 					name[0] = '\0';
-					sscanf(pViewMsgData,",%255[^,'\r\n]%n", name,&cnt);
+					sscanf(pViewMsgData, ",%255[^,'\r\n]%n", name, &cnt);
 					pViewMsgData += cnt;
 
 					// Get the string from the ID string
@@ -592,7 +597,7 @@ const char *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 					psViewReplay->pSeqList[dataInc].textMsg.push_back(qstr);
 				}
 				//get the audio text string
-				sscanf(pViewMsgData,",%255[^,'\r\n],%d%n", audioName, &dummy, &cnt);
+				sscanf(pViewMsgData, ",%255[^,'\r\n],%d%n", audioName, &dummy, &cnt);
 				pViewMsgData += cnt;
 
 				if (strcmp(audioName, "0"))
@@ -614,28 +619,28 @@ const char *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 				int tmp;
 
 				audioName[0] = '\0';
-				sscanf( pViewMsgData, ", %d,%d,%d,%255[^,'\r\n],%d%n", &LocX, &LocY, &LocZ,
-						audioName, &tmp, &cnt);
+				sscanf(pViewMsgData, ", %d,%d,%d,%255[^,'\r\n],%d%n", &LocX, &LocY, &LocZ,
+				       audioName, &tmp, &cnt);
 				proxType = (PROX_TYPE)tmp;
 			}
 			pViewMsgData += cnt;
 
 			//allocate audioID
-			if ( strcmp( audioName, "0" ) == 0 )
+			if (strcmp(audioName, "0") == 0)
 			{
 				audioID = NO_SOUND;
 			}
 			else
 			{
-				if ( (audioID = audio_GetIDFromStr( audioName )) == NO_SOUND )
+				if ((audioID = audio_GetIDFromStr(audioName)) == NO_SOUND)
 				{
 					ASSERT(false, "couldn't get ID %d for weapon sound %s", audioID, audioName);
 					return NULL;
 				}
 
 				if ((audioID < 0
-				  || audioID > ID_MAX_SOUND)
-				 && audioID != NO_SOUND)
+				     || audioID > ID_MAX_SOUND)
+				    && audioID != NO_SOUND)
 				{
 					ASSERT(false, "Invalid Weapon Sound ID - %d for weapon %s", audioID, audioName);
 					return NULL;
@@ -647,19 +652,19 @@ const char *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 
 			if (LocX < 0)
 			{
-				ASSERT(false, "Negative X coord for prox message - %s",name);
+				ASSERT(false, "Negative X coord for prox message - %s", name);
 				return NULL;
 			}
 			((VIEW_PROXIMITY *)psViewData->pData)->x = (UDWORD)LocX;
 			if (LocY < 0)
 			{
-				ASSERT(false, "Negative Y coord for prox message - %s",name);
+				ASSERT(false, "Negative Y coord for prox message - %s", name);
 				return NULL;
 			}
 			((VIEW_PROXIMITY *)psViewData->pData)->y = (UDWORD)LocY;
 			if (LocZ < 0)
 			{
-				ASSERT(false, "Negative Z coord for prox message - %s",name);
+				ASSERT(false, "Negative Z coord for prox message - %s", name);
 				return NULL;
 			}
 			((VIEW_PROXIMITY *)psViewData->pData)->z = (UDWORD)LocZ;
@@ -676,7 +681,7 @@ const char *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 			return NULL;
 		}
 		//increment the pointer to the start of the next record
-		pViewMsgData = strchr(pViewMsgData,'\n') + 1;
+		pViewMsgData = strchr(pViewMsgData, '\n') + 1;
 
 		apsViewData.insert(psViewData->pName, psViewData);
 	}
@@ -684,7 +689,7 @@ const char *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 	return filename; // so that cleanup function will be called for correct data
 }
 
-const char *loadResearchViewData(const char* fileName)
+const char *loadResearchViewData(const char *fileName)
 {
 	ASSERT_OR_RETURN(NULL, PHYSFS_exists(fileName), "%s not found", fileName);
 	WzConfig ini(fileName, WzConfig::ReadOnlyAndRequired);
@@ -765,7 +770,7 @@ static void checkMessages(MSG_VIEWDATA *psViewData)
 	MESSAGE			*psCurr, *psNext;
 	UDWORD			i;
 
-	for (i=0; i < MAX_PLAYERS; i++)
+	for (i = 0; i < MAX_PLAYERS; i++)
 	{
 		for (psCurr = apsMessages[i]; psCurr != NULL; psCurr = psNext)
 		{
@@ -804,7 +809,7 @@ void viewDataShutDown(const char *fileName)
 		// free the space allocated for multiple sequences
 		if (psViewData->type == VIEW_RPL)
 		{
-			VIEW_REPLAY* const psViewReplay = (VIEW_REPLAY *)psViewData->pData;
+			VIEW_REPLAY *const psViewReplay = (VIEW_REPLAY *)psViewData->pData;
 			if (psViewReplay->numSeq)
 			{
 				unsigned int seqInc;
@@ -820,7 +825,7 @@ void viewDataShutDown(const char *fileName)
 		}
 		else if (psViewData->type == VIEW_RES)
 		{
-			VIEW_RESEARCH* const psViewRes = (VIEW_RESEARCH *)psViewData->pData;
+			VIEW_RESEARCH *const psViewRes = (VIEW_RESEARCH *)psViewData->pData;
 			if (psViewRes->pAudio)
 			{
 				free(psViewRes->pAudio);
@@ -835,7 +840,7 @@ void viewDataShutDown(const char *fileName)
 
 /* Looks through the players list of messages to find one with the same viewData
 pointer and which is the same type of message - used in scriptFuncs */
-MESSAGE * findMessage(MSG_VIEWDATA *pViewData, MESSAGE_TYPE type, UDWORD player)
+MESSAGE *findMessage(MSG_VIEWDATA *pViewData, MESSAGE_TYPE type, UDWORD player)
 {
 	MESSAGE					*psCurr;
 
@@ -869,7 +874,7 @@ void displayProximityMessage(PROXIMITY_DISPLAY *psProxDisp)
 		}
 
 		//play message - if any
-		if ( psViewProx->audioID != NO_AUDIO_MSG )
+		if (psViewProx->audioID != NO_AUDIO_MSG)
 		{
 			audio_QueueTrackPos(psViewProx->audioID, psViewProx->x, psViewProx->y, psViewProx->z);
 		}
@@ -878,20 +883,20 @@ void displayProximityMessage(PROXIMITY_DISPLAY *psProxDisp)
 	{
 		FEATURE	*psFeature = (FEATURE *)psProxDisp->psMessage->pViewData;
 
-		ASSERT_OR_RETURN( , ((BASE_OBJECT *)psProxDisp->psMessage->pViewData)->type ==
-			OBJ_FEATURE, "invalid feature" );
+		ASSERT_OR_RETURN(, ((BASE_OBJECT *)psProxDisp->psMessage->pViewData)->type ==
+		                 OBJ_FEATURE, "invalid feature");
 
 		if (psFeature->psStats->subType == FEAT_OIL_RESOURCE)
 		{
 			//play default audio message for oil resource
-			audio_QueueTrackPos( ID_SOUND_RESOURCE_HERE, psFeature->pos.x,
-								 psFeature->pos.y, psFeature->pos.z );
+			audio_QueueTrackPos(ID_SOUND_RESOURCE_HERE, psFeature->pos.x,
+			                    psFeature->pos.y, psFeature->pos.z);
 		}
 		else if (psFeature->psStats->subType == FEAT_GEN_ARTE)
 		{
 			//play default audio message for artefact
-			audio_QueueTrackPos( ID_SOUND_ARTIFACT, psFeature->pos.x,
-								 psFeature->pos.y, psFeature->pos.z );
+			audio_QueueTrackPos(ID_SOUND_ARTIFACT, psFeature->pos.x,
+			                    psFeature->pos.y, psFeature->pos.z);
 		}
 	}
 

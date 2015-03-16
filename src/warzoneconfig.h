@@ -90,13 +90,13 @@ SCANLINE_MODE war_getScanlineMode(void);
  *
  * \param	soundEnabled	enable sound (or not)
  */
-void war_setSoundEnabled( bool soundEnabled );
+void war_setSoundEnabled(bool soundEnabled);
 
 /**
  * Whether we should initialize sound or not
  *
  * \return	Enable sound (or not)
  */
-bool war_getSoundEnabled( void );
+bool war_getSoundEnabled(void);
 
 #endif // __INCLUDED_SRC_WARZONECONFIG_H__

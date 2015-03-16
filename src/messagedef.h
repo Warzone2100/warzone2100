@@ -105,12 +105,12 @@ struct VIEWDATA
 	char		*pName;		//name ID of the message - used for loading in and identifying
 	VIEW_TYPE	type;		//the type of view
 	QStringList     textMsg;        //Text messages, if any
-	void*		pData;		/*the data required to view - either a
+	void		*pData;		/*the data required to view - either a
 							  VIEW_RESEARCH, VIEW_PROXIMITY or VIEW_REPLAY*/
 	const char      *fileName;      //file it came from, for piecemeal destruction (pretty lame reason)
 };
 
-typedef void* MSG_VIEWDATA;
+typedef void *MSG_VIEWDATA;
 
 enum MSG_DATA_TYPE
 {
@@ -127,9 +127,9 @@ struct MESSAGE
 	bool			read;					//flag to indicate whether message has been read
 	UDWORD			player;					//which player this message belongs to
 	MSG_DATA_TYPE	dataType;				//stores actual type of data pViewData points to
-											//only relevant for messages of type MSG_PROXIMITY
+	//only relevant for messages of type MSG_PROXIMITY
 
-	MESSAGE *       psNext;                                 //pointer to the next in the list
+	MESSAGE        *psNext;                                 //pointer to the next in the list
 };
 
 //used to display the proximity messages
@@ -139,7 +139,7 @@ struct PROXIMITY_DISPLAY : public OBJECT_POSITION
 	UDWORD			timeLastDrawn;			//stores the time the 'button' was last drawn for animation
 	UDWORD			strobe;					//id of image last used
 	UDWORD			buttonID;				//id of the button for the interface
-	PROXIMITY_DISPLAY *     psNext;                         //pointer to the next in the list
+	PROXIMITY_DISPLAY      *psNext;                         //pointer to the next in the list
 };
 
 #endif // __INCLUDED_MESSAGEDEF_H__

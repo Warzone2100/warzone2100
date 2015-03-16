@@ -165,22 +165,27 @@ struct EffectChunk
 
 
 /*! List containing all allocated effect chunks */
-struct chunkList_t {
+struct chunkList_t
+{
 	EffectChunk *first; //!< First element of list, used for iteration
 	EffectChunk *last; //!< Last element of list, used for appending
-} chunkList = {
+} chunkList =
+{
 	NULL, NULL
 };
 
 
 /*! Our lists of all game world effects */
-struct activeList_t {
+struct activeList_t
+{
 	size_t num; //!< Number of effects in this list, used when saving
 	EFFECT *first; //!< First element of list, used for iteration / finding free effects
 	EFFECT *last; //!< Last element of list, used for appending
-} activeList = { //!< List of all active effects
+} activeList =   //!< List of all active effects
+{
 	0, NULL, NULL
-}, inactiveList = { //!< List of unused effects
+}, inactiveList =   //!< List of unused effects
+{
 	0, NULL, NULL
 };
 
@@ -204,7 +209,7 @@ static void updateExplosion(EFFECT *psEffect);
 static void updatePolySmoke(EFFECT *psEffect);
 static void updateGraviton(EFFECT *psEffect);
 static void updateConstruction(EFFECT *psEffect);
-static void updateBlood	(EFFECT *psEffect);
+static void updateBlood(EFFECT *psEffect);
 static void updateDestruction(EFFECT *psEffect);
 static void updateFire(EFFECT *psEffect);
 static void updateSatLaser(EFFECT *psEffect);
@@ -213,30 +218,30 @@ static void updateEffect(EFFECT *psEffect);	// MASTER function
 
 // ----------------------------------------------------------------------------------------
 // ---- The render functions - every group type of effect has a distinct one
-static void	renderExplosionEffect	( const EFFECT *psEffect );
-static void	renderSmokeEffect		( const EFFECT *psEffect );
-static void	renderGravitonEffect	( const EFFECT *psEffect );
-static void	renderConstructionEffect( const EFFECT *psEffect );
-static void	renderWaypointEffect	( const EFFECT *psEffect );
-static void	renderBloodEffect		( const EFFECT *psEffect );
-static void	renderDestructionEffect	( const EFFECT *psEffect );
-static void renderFirework			( const EFFECT *psEffect );
+static void	renderExplosionEffect(const EFFECT *psEffect);
+static void	renderSmokeEffect(const EFFECT *psEffect);
+static void	renderGravitonEffect(const EFFECT *psEffect);
+static void	renderConstructionEffect(const EFFECT *psEffect);
+static void	renderWaypointEffect(const EFFECT *psEffect);
+static void	renderBloodEffect(const EFFECT *psEffect);
+static void	renderDestructionEffect(const EFFECT *psEffect);
+static void renderFirework(const EFFECT *psEffect);
 
 static void positionEffect(const EFFECT *psEffect);
 /* There is no render destruction effect! */
 
 // ----------------------------------------------------------------------------------------
 // ---- The set up functions - every type has one
-static void	effectSetupSmoke		( EFFECT *psEffect );
-static void	effectSetupGraviton		( EFFECT *psEffect );
-static void	effectSetupExplosion	( EFFECT *psEffect );
-static void	effectSetupConstruction ( EFFECT *psEffect );
-static void	effectSetupWayPoint		( EFFECT *psEffect );
-static void	effectSetupBlood		( EFFECT *psEffect );
-static void effectSetupDestruction  ( EFFECT *psEffect );
-static void	effectSetupFire			( EFFECT *psEffect );
-static void	effectSetupSatLaser		( EFFECT *psEffect );
-static void effectSetupFirework		( EFFECT *psEffect );
+static void	effectSetupSmoke(EFFECT *psEffect);
+static void	effectSetupGraviton(EFFECT *psEffect);
+static void	effectSetupExplosion(EFFECT *psEffect);
+static void	effectSetupConstruction(EFFECT *psEffect);
+static void	effectSetupWayPoint(EFFECT *psEffect);
+static void	effectSetupBlood(EFFECT *psEffect);
+static void effectSetupDestruction(EFFECT *psEffect);
+static void	effectSetupFire(EFFECT *psEffect);
+static void	effectSetupSatLaser(EFFECT *psEffect);
+static void effectSetupFirework(EFFECT *psEffect);
 
 static void effectStructureUpdates();
 static void effectDroidUpdates(void);
@@ -256,7 +261,7 @@ static void initEffectPool(EFFECT *first, EFFECT *last)
 	{
 		// We do not need a double-linked-list for inactiveeffects, since we always pick from the front:
 		it->prev = NULL;
-		it->next = it+1;
+		it->next = it + 1;
 	}
 
 	last->prev = NULL;
@@ -281,10 +286,12 @@ static EFFECT *Effect_malloc(void)
 	/* Append to activeList */
 	instance->prev = activeList.last;
 
-	if (instance->prev == NULL) {
+	if (instance->prev == NULL)
+	{
 		activeList.first = instance; // activeList was empty, so fill it
 	}
-	else {
+	else
+	{
 		activeList.last->next = instance;
 	}
 
@@ -303,7 +310,8 @@ static EFFECT *Effect_malloc(void)
 		debug(LOG_MEMORY, "%lu effects in use, allocating %d extra", (unsigned long)activeList.num, EFFECT_CHUNK_SIZE);
 
 		/* Deal with out-of-memory conditions */
-		if (chunk == NULL) {
+		if (chunk == NULL)
+		{
 			debug(LOG_ERROR, "Out of memory");
 			return NULL; // The next call relies on inactiveList being non-empty, and would thus segfault, so bail out early instead
 		}
@@ -315,7 +323,7 @@ static EFFECT *Effect_malloc(void)
 		/* Update inactiveList */
 		inactiveList.num = EFFECT_CHUNK_SIZE;
 		inactiveList.first = &chunk->effects[0];
-		inactiveList.last = &chunk->effects[EFFECT_CHUNK_SIZE-1];
+		inactiveList.last = &chunk->effects[EFFECT_CHUNK_SIZE - 1];
 
 		/* Initialise list links between inactive effects */
 		initEffectPool(inactiveList.first, inactiveList.last);
@@ -334,16 +342,20 @@ static void Effect_free(EFFECT *instance)
 	instance->group = EFFECT_FREED;
 
 	/* Remove from activeList and fixup endings necessary */
-	if (instance->prev != NULL) {
+	if (instance->prev != NULL)
+	{
 		instance->prev->next = instance->next;
 	}
-	else {
+	else
+	{
 		activeList.first = instance->next; // We were the first in activeList
 	}
-	if (instance->next != NULL) {
+	if (instance->next != NULL)
+	{
 		instance->next->prev = instance->prev;
 	}
-	else {
+	else
+	{
 		activeList.last = instance->prev; // We were the last in activeList
 	}
 
@@ -351,7 +363,7 @@ static void Effect_free(EFFECT *instance)
 	instance->prev = NULL; // Singly linked
 	instance->next = NULL; // Last element
 
-	 // inactiveList is never empty (guaranteed in Effect_malloc), thus we can rely on last!=NULL
+	// inactiveList is never empty (guaranteed in Effect_malloc), thus we can rely on last!=NULL
 	inactiveList.last->next = instance;
 	inactiveList.last = instance;
 
@@ -394,7 +406,9 @@ void initEffectsSystem(void)
 
 	/* Deal with out-of-memory conditions */
 	if (chunk == NULL)
-		return; // FIXME We have no way to report an error here...
+	{
+		return;    // FIXME We have no way to report an error here...
+	}
 
 	/* Create chunkList */
 	chunkList.first = chunk;
@@ -409,7 +423,7 @@ void initEffectsSystem(void)
 	/* inactiveList contains all elements */
 	inactiveList.num = EFFECT_CHUNK_SIZE;
 	inactiveList.first = &chunk->effects[0];
-	inactiveList.last = &chunk->effects[EFFECT_CHUNK_SIZE-1];
+	inactiveList.last = &chunk->effects[EFFECT_CHUNK_SIZE - 1];
 
 	/* Initialise free-effects pool */
 	initEffectPool(inactiveList.first, inactiveList.last);
@@ -420,9 +434,9 @@ static void positionEffect(const EFFECT *psEffect)
 {
 	/* Establish world position */
 	Vector3i dv(
-		psEffect->position.x - player.p.x,
-		psEffect->position.y,
-		-(psEffect->position.z - player.p.z)
+	    psEffect->position.x - player.p.x,
+	    psEffect->position.y,
+	    -(psEffect->position.z - player.p.z)
 	);
 
 	/* Push the indentity matrix */
@@ -472,12 +486,12 @@ void addMultiEffect(const Vector3i *basePos, Vector3i *scatter, EFFECT_GROUP gro
 		*scatter = *scatter / 10;
 
 		/* There are multiple effects - so scatter them around according to parameter */
-		for(i=0; i<number; i++)
+		for (i = 0; i < number; i++)
 		{
 			// This scatters in a cube - is there a good reason for that, or just legacy?
-			Vector3i scatPos = *basePos + *scatter - Vector3i(rand()%(scatter->x*2 + 1),
-			                                                  rand()%(scatter->y*2 + 1),
-			                                                  rand()%(scatter->z*2 + 1)
+			Vector3i scatPos = *basePos + *scatter - Vector3i(rand() % (scatter->x * 2 + 1),
+			                   rand() % (scatter->y * 2 + 1),
+			                   rand() % (scatter->z * 2 + 1)
 			                                                 );
 			addEffect(&scatPos, group, type, specified, imd, lit, effectTime);
 		}
@@ -501,7 +515,7 @@ void addEffect(const Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type, bool s
 {
 	EFFECT *psEffect = NULL;
 
-	if(gamePaused())
+	if (gamePaused())
 	{
 		return;
 	}
@@ -510,7 +524,8 @@ void addEffect(const Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type, bool s
 	psEffect = Effect_malloc();
 
 	/* Deal with out-of-memory conditions */
-	if (psEffect == NULL) {
+	if (psEffect == NULL)
+	{
 		debug(LOG_ERROR, "Out of memory");
 		return; // FIXME We have no way to report an error here...
 	}
@@ -534,7 +549,7 @@ void addEffect(const Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type, bool s
 	/* Set when it entered the world */
 	psEffect->birthTime = psEffect->lastFrame = effectTime;
 
-	if(group == EFFECT_GRAVITON && (type == GRAVITON_TYPE_GIBLET || type == GRAVITON_TYPE_EMITTING_DR))
+	if (group == EFFECT_GRAVITON && (type == GRAVITON_TYPE_GIBLET || type == GRAVITON_TYPE_EMITTING_DR))
 	{
 		psEffect->frameNumber = lit;
 	}
@@ -549,12 +564,12 @@ void addEffect(const Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type, bool s
 		although some things are shared
 	*/
 	psEffect->imd = NULL;
-	if(lit)
+	if (lit)
 	{
 		SET_LIT(psEffect);
 	}
 
-	if(specified)
+	if (specified)
 	{
 		/* We're specifying what the imd is - override */
 		psEffect->imd = imd;
@@ -562,45 +577,45 @@ void addEffect(const Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type, bool s
 	}
 
 	/* Do all the effect type specific stuff */
-	switch(group)
+	switch (group)
 	{
-		case EFFECT_SMOKE:
-			effectSetupSmoke(psEffect);
-			break;
-		case EFFECT_GRAVITON:
-			effectSetupGraviton(psEffect);
-			break;
-		case EFFECT_EXPLOSION:
-			effectSetupExplosion(psEffect);
-			break;
-		case EFFECT_CONSTRUCTION:
-			effectSetupConstruction(psEffect);
-			break;
-		case EFFECT_WAYPOINT:
-			effectSetupWayPoint(psEffect);
-			break;
-		case EFFECT_BLOOD:
-			effectSetupBlood(psEffect);
-			break;
-		case EFFECT_DESTRUCTION:
-			effectSetupDestruction(psEffect);
-			break;
-		case EFFECT_FIRE:
-			effectSetupFire(psEffect);
-			break;
-		case EFFECT_SAT_LASER:
-			effectSetupSatLaser(psEffect);
-			break;
-		case EFFECT_FIREWORK:
-			effectSetupFirework(psEffect);
-			break;
-		case EFFECT_FREED:
-			ASSERT( false,"Weirdy group type for an effect" );
-			break;
+	case EFFECT_SMOKE:
+		effectSetupSmoke(psEffect);
+		break;
+	case EFFECT_GRAVITON:
+		effectSetupGraviton(psEffect);
+		break;
+	case EFFECT_EXPLOSION:
+		effectSetupExplosion(psEffect);
+		break;
+	case EFFECT_CONSTRUCTION:
+		effectSetupConstruction(psEffect);
+		break;
+	case EFFECT_WAYPOINT:
+		effectSetupWayPoint(psEffect);
+		break;
+	case EFFECT_BLOOD:
+		effectSetupBlood(psEffect);
+		break;
+	case EFFECT_DESTRUCTION:
+		effectSetupDestruction(psEffect);
+		break;
+	case EFFECT_FIRE:
+		effectSetupFire(psEffect);
+		break;
+	case EFFECT_SAT_LASER:
+		effectSetupSatLaser(psEffect);
+		break;
+	case EFFECT_FIREWORK:
+		effectSetupFirework(psEffect);
+		break;
+	case EFFECT_FREED:
+		ASSERT(false, "Weirdy group type for an effect");
+		break;
 	}
 
 	/* As of yet, it hasn't bounced (or whatever)... */
-	if(type!=EXPLOSION_TYPE_LAND_LIGHT)
+	if (type != EXPLOSION_TYPE_LAND_LIGHT)
 	{
 		psEffect->specific = 0;
 	}
@@ -646,53 +661,80 @@ void processEffects(void)
 static void updateEffect(EFFECT *psEffect)
 {
 	/* What type of effect are we dealing with? */
-	switch(psEffect->group)
+	switch (psEffect->group)
 	{
 	case EFFECT_EXPLOSION:
 		updateExplosion(psEffect);
 		return;
 
 	case EFFECT_WAYPOINT:
-		if(!gamePaused()) updateWaypoint(psEffect);
+		if (!gamePaused())
+		{
+			updateWaypoint(psEffect);
+		}
 		return;
 
 	case EFFECT_CONSTRUCTION:
-		if(!gamePaused()) updateConstruction(psEffect);
+		if (!gamePaused())
+		{
+			updateConstruction(psEffect);
+		}
 		return;
 
 	case EFFECT_SMOKE:
-		if(!gamePaused()) updatePolySmoke(psEffect);
+		if (!gamePaused())
+		{
+			updatePolySmoke(psEffect);
+		}
 		return;
 
 	case EFFECT_GRAVITON:
-		if(!gamePaused()) updateGraviton(psEffect);
+		if (!gamePaused())
+		{
+			updateGraviton(psEffect);
+		}
 		return;
 
 	case EFFECT_BLOOD:
-		if(!gamePaused()) updateBlood(psEffect);
+		if (!gamePaused())
+		{
+			updateBlood(psEffect);
+		}
 		return;
 
 	case EFFECT_DESTRUCTION:
-		if(!gamePaused()) updateDestruction(psEffect);
+		if (!gamePaused())
+		{
+			updateDestruction(psEffect);
+		}
 		return;
 
 	case EFFECT_FIRE:
-		if(!gamePaused()) updateFire(psEffect);
+		if (!gamePaused())
+		{
+			updateFire(psEffect);
+		}
 		return;
 
 	case EFFECT_SAT_LASER:
-		if(!gamePaused()) updateSatLaser(psEffect);
+		if (!gamePaused())
+		{
+			updateSatLaser(psEffect);
+		}
 		return;
 
 	case EFFECT_FIREWORK:
-		if(!gamePaused()) updateFirework(psEffect);
+		if (!gamePaused())
+		{
+			updateFirework(psEffect);
+		}
 		return;
 
 	case EFFECT_FREED:
 		break;
 	}
 
-	debug( LOG_ERROR, "Weirdy class of effect passed to updateEffect" );
+	debug(LOG_ERROR, "Weirdy class of effect passed to updateEffect");
 	abort();
 }
 
@@ -702,8 +744,8 @@ static void updateEffect(EFFECT *psEffect)
 /** Update the waypoint effects.*/
 static void updateWaypoint(EFFECT *psEffect)
 {
-	if(!(keyDown(KEY_LCTRL) || keyDown(KEY_RCTRL) ||
-	     keyDown(KEY_LSHIFT) || keyDown(KEY_RSHIFT)))
+	if (!(keyDown(KEY_LCTRL) || keyDown(KEY_RCTRL) ||
+	      keyDown(KEY_LSHIFT) || keyDown(KEY_RSHIFT)))
 	{
 		killEffect(psEffect);
 	}
@@ -712,7 +754,7 @@ static void updateWaypoint(EFFECT *psEffect)
 static void updateFirework(EFFECT *psEffect)
 {
 	UDWORD	height;
-	UDWORD	xDif,yDif,radius,val;
+	UDWORD	xDif, yDif, radius, val;
 	Vector3i dv;
 	SDWORD	dif;
 	UDWORD	drop;
@@ -722,22 +764,22 @@ static void updateFirework(EFFECT *psEffect)
 	psEffect->position.y += graphicsTimeAdjustedIncrement(psEffect->velocity.y);
 	psEffect->position.z += graphicsTimeAdjustedIncrement(psEffect->velocity.z);
 
-	if(psEffect->type == FIREWORK_TYPE_LAUNCHER)
+	if (psEffect->type == FIREWORK_TYPE_LAUNCHER)
 	{
 		height = psEffect->position.y;
-		if(height > psEffect->size)
+		if (height > psEffect->size)
 		{
 			dv.x = psEffect->position.x;
-   			dv.z = psEffect->position.z;
-   			dv.y = psEffect->position.y + (psEffect->radius / 2);
-			addEffect(&dv,EFFECT_EXPLOSION,EXPLOSION_TYPE_MEDIUM,false,NULL,0);
+			dv.z = psEffect->position.z;
+			dv.y = psEffect->position.y + (psEffect->radius / 2);
+			addEffect(&dv, EFFECT_EXPLOSION, EXPLOSION_TYPE_MEDIUM, false, NULL, 0);
 			audio_PlayStaticTrack(psEffect->position.x, psEffect->position.z, ID_SOUND_EXPLOSION);
 
-			for(dif =0; dif < (psEffect->radius*2); dif+=20)
+			for (dif = 0; dif < (psEffect->radius * 2); dif += 20)
 			{
-				if(dif<psEffect->radius)
+				if (dif < psEffect->radius)
 				{
-  					drop = psEffect->radius-dif;
+					drop = psEffect->radius - dif;
 				}
 				else
 				{
@@ -745,30 +787,30 @@ static void updateFirework(EFFECT *psEffect)
 				}
 				radius = (UDWORD)sqrtf(psEffect->radius * psEffect->radius - drop * drop);
 				//val = getStaticTimeValueRange(720,360);	// grab an angle - 4 seconds cyclic
-  				for(val = 0; val<=180; val+=20)
+				for (val = 0; val <= 180; val += 20)
 				{
 					xDif = iSinR(DEG(val), radius);
 					yDif = iCosR(DEG(val), radius);
-   					dv.x = psEffect->position.x + xDif;
-   					dv.z = psEffect->position.z + yDif;
-   					dv.y = psEffect->position.y + dif;
-					effectGiveAuxVar(100);
-   					addEffect(&dv,EFFECT_FIREWORK, FIREWORK_TYPE_STARBURST,false,NULL,0);
-					dv.x = psEffect->position.x - xDif;
-   					dv.z = psEffect->position.z - yDif;
-   					dv.y = psEffect->position.y + dif;
-					effectGiveAuxVar(100);
-   					addEffect(&dv,EFFECT_FIREWORK, FIREWORK_TYPE_STARBURST,false,NULL,0);
 					dv.x = psEffect->position.x + xDif;
-   					dv.z = psEffect->position.z - yDif;
-   					dv.y = psEffect->position.y + dif;
+					dv.z = psEffect->position.z + yDif;
+					dv.y = psEffect->position.y + dif;
 					effectGiveAuxVar(100);
-   					addEffect(&dv,EFFECT_FIREWORK, FIREWORK_TYPE_STARBURST,false,NULL,0);
+					addEffect(&dv, EFFECT_FIREWORK, FIREWORK_TYPE_STARBURST, false, NULL, 0);
 					dv.x = psEffect->position.x - xDif;
-   					dv.z = psEffect->position.z + yDif;
-   					dv.y = psEffect->position.y + dif;
+					dv.z = psEffect->position.z - yDif;
+					dv.y = psEffect->position.y + dif;
 					effectGiveAuxVar(100);
-   					addEffect(&dv,EFFECT_FIREWORK, FIREWORK_TYPE_STARBURST,false,NULL,0);
+					addEffect(&dv, EFFECT_FIREWORK, FIREWORK_TYPE_STARBURST, false, NULL, 0);
+					dv.x = psEffect->position.x + xDif;
+					dv.z = psEffect->position.z - yDif;
+					dv.y = psEffect->position.y + dif;
+					effectGiveAuxVar(100);
+					addEffect(&dv, EFFECT_FIREWORK, FIREWORK_TYPE_STARBURST, false, NULL, 0);
+					dv.x = psEffect->position.x - xDif;
+					dv.z = psEffect->position.z + yDif;
+					dv.y = psEffect->position.y + dif;
+					effectGiveAuxVar(100);
+					addEffect(&dv, EFFECT_FIREWORK, FIREWORK_TYPE_STARBURST, false, NULL, 0);
 				}
 			}
 			killEffect(psEffect);
@@ -781,39 +823,39 @@ static void updateFirework(EFFECT *psEffect)
 			dv.z = psEffect->position.z;
 
 			/* Add a trail graphic */
-			addEffect(&dv,EFFECT_SMOKE,SMOKE_TYPE_TRAIL,false,NULL,0);
+			addEffect(&dv, EFFECT_SMOKE, SMOKE_TYPE_TRAIL, false, NULL, 0);
 		}
 	}
 	else	// must be a startburst
 	{
 		/* Time to update the frame number on the smoke sprite */
-		if(graphicsTime - psEffect->lastFrame > psEffect->frameDelay)
+		if (graphicsTime - psEffect->lastFrame > psEffect->frameDelay)
 		{
 			/* Store away last frame change time */
 			psEffect->lastFrame = graphicsTime;
 
 			/* Are we on the last frame? */
-			if(++psEffect->frameNumber >= effectGetNumFrames(psEffect))
+			if (++psEffect->frameNumber >= effectGetNumFrames(psEffect))
 			{
 				/* Does the anim wrap around? */
-				if(TEST_CYCLIC(psEffect))
+				if (TEST_CYCLIC(psEffect))
 				{
 					psEffect->frameNumber = 0;
 				}
 				else
 				{
 					/* Kill it off */
- 					killEffect(psEffect);
+					killEffect(psEffect);
 					return;
 				}
 			}
 		}
 
 		/* If it doesn't get killed by frame number, then by age */
-		if(TEST_CYCLIC(psEffect))
+		if (TEST_CYCLIC(psEffect))
 		{
 			/* Has it overstayed it's welcome? */
-			if(graphicsTime - psEffect->birthTime > psEffect->lifeSpan)
+			if (graphicsTime - psEffect->birthTime > psEffect->lifeSpan)
 			{
 				/* Kill it */
 				killEffect(psEffect);
@@ -827,77 +869,77 @@ static void updateSatLaser(EFFECT *psEffect)
 	Vector3i dv;
 	UDWORD	val;
 	UDWORD	radius;
-	UDWORD	xDif,yDif;
+	UDWORD	xDif, yDif;
 	UDWORD	i;
-	UDWORD	startHeight,endHeight;
-	UDWORD	xPos,yPos;
+	UDWORD	startHeight, endHeight;
+	UDWORD	xPos, yPos;
 	LIGHT	light;
 
 	// Do these here cause there used by the lighting code below this if.
 	xPos = psEffect->position.x;
 	startHeight = psEffect->position.y;
-	endHeight = startHeight+1064;
+	endHeight = startHeight + 1064;
 	yPos = psEffect->position.z;
 
-	if(psEffect->baseScale)
+	if (psEffect->baseScale)
 	{
 		psEffect->baseScale = 0;
 
 		/* Add some big explosions....! */
 
-		for(i=0; i<16; i++)
+		for (i = 0; i < 16; i++)
 		{
-			dv.x = xPos+(200-rand()%400);
-			dv.z = yPos+(200-rand()%400);
-			dv.y = startHeight + rand()%100;
-			addEffect(&dv,EFFECT_EXPLOSION,EXPLOSION_TYPE_MEDIUM,false,NULL,0);
+			dv.x = xPos + (200 - rand() % 400);
+			dv.z = yPos + (200 - rand() % 400);
+			dv.y = startHeight + rand() % 100;
+			addEffect(&dv, EFFECT_EXPLOSION, EXPLOSION_TYPE_MEDIUM, false, NULL, 0);
 		}
 		/* Add a sound effect */
-  		audio_PlayStaticTrack(psEffect->position.x, psEffect->position.z, ID_SOUND_EXPLOSION);
+		audio_PlayStaticTrack(psEffect->position.x, psEffect->position.z, ID_SOUND_EXPLOSION);
 
 		/* Add a shockwave */
 		dv.x = xPos;
 		dv.z = yPos;
-		dv.y = startHeight+SHOCK_WAVE_HEIGHT;
-		addEffect(&dv,EFFECT_EXPLOSION,EXPLOSION_TYPE_SHOCKWAVE,false,NULL,0);
+		dv.y = startHeight + SHOCK_WAVE_HEIGHT;
+		addEffect(&dv, EFFECT_EXPLOSION, EXPLOSION_TYPE_SHOCKWAVE, false, NULL, 0);
 
 
 		/* Now, add the column of light */
-		for(i=startHeight; i<endHeight; i+=56)
+		for (i = startHeight; i < endHeight; i += 56)
 		{
 			radius = 80;
 			/* Add 36 around in a circle..! */
-			for(val = 0; val<=180; val+=30)
+			for (val = 0; val <= 180; val += 30)
 			{
 				xDif = iSinR(DEG(val), radius);
 				yDif = iCosR(DEG(val), radius);
-   				dv.x = xPos+xDif+i/64;
-   				dv.z = yPos+yDif;
-   				dv.y = startHeight+i;
+				dv.x = xPos + xDif + i / 64;
+				dv.z = yPos + yDif;
+				dv.y = startHeight + i;
 				effectGiveAuxVar(100);
-   				addEffect(&dv,EFFECT_EXPLOSION, EXPLOSION_TYPE_MEDIUM,false,NULL,0);
-				dv.x = xPos-xDif+i/64;
-   				dv.z = yPos-yDif;
-   				dv.y = startHeight+i;
+				addEffect(&dv, EFFECT_EXPLOSION, EXPLOSION_TYPE_MEDIUM, false, NULL, 0);
+				dv.x = xPos - xDif + i / 64;
+				dv.z = yPos - yDif;
+				dv.y = startHeight + i;
 				effectGiveAuxVar(100);
-   				addEffect(&dv,EFFECT_EXPLOSION, EXPLOSION_TYPE_MEDIUM,false,NULL,0);
-				dv.x = xPos+xDif+i/64;
-   				dv.z = yPos-yDif;
-   				dv.y = startHeight+i;
+				addEffect(&dv, EFFECT_EXPLOSION, EXPLOSION_TYPE_MEDIUM, false, NULL, 0);
+				dv.x = xPos + xDif + i / 64;
+				dv.z = yPos - yDif;
+				dv.y = startHeight + i;
 				effectGiveAuxVar(100);
-   				addEffect(&dv,EFFECT_EXPLOSION, EXPLOSION_TYPE_MEDIUM,false,NULL,0);
-				dv.x = xPos-xDif+i/64;
-   				dv.z = yPos+yDif;
-   				dv.y = startHeight+i;
+				addEffect(&dv, EFFECT_EXPLOSION, EXPLOSION_TYPE_MEDIUM, false, NULL, 0);
+				dv.x = xPos - xDif + i / 64;
+				dv.z = yPos + yDif;
+				dv.y = startHeight + i;
 				effectGiveAuxVar(100);
-   				addEffect(&dv,EFFECT_EXPLOSION, EXPLOSION_TYPE_MEDIUM,false,NULL,0);
+				addEffect(&dv, EFFECT_EXPLOSION, EXPLOSION_TYPE_MEDIUM, false, NULL, 0);
 			}
 		}
 	}
 
-	if(graphicsTime - psEffect->birthTime < 1000)
+	if (graphicsTime - psEffect->birthTime < 1000)
 	{
-  		light.position.x = xPos;
+		light.position.x = xPos;
 		light.position.y = startHeight;
 		light.position.z = yPos;
 		light.range = 800;
@@ -942,7 +984,7 @@ static void updateExplosion(EFFECT *psEffect)
 		light.position.x = psEffect->position.x;
 		light.position.y = psEffect->position.y;
 		light.position.z = psEffect->position.z;
-		light.range = (3*range)/2;
+		light.range = (3 * range) / 2;
 		light.colour = LIGHT_RED;
 		processLight(&light);
 	}
@@ -956,42 +998,42 @@ static void updateExplosion(EFFECT *psEffect)
 		light.position.x = psEffect->position.x;
 		light.position.y = psEffect->position.y;
 		light.position.z = psEffect->position.z;
-		light.range = psEffect->size+200;
+		light.range = psEffect->size + 200;
 		light.colour = LIGHT_YELLOW;
 		processLight(&light);
 
 		if (psEffect->size > MAX_SHOCKWAVE_SIZE || light.range > 600)
 		{
- 			/* Kill it off */
+			/* Kill it off */
 			killEffect(psEffect);
 			return;
 		}
 	}
 	/* Time to update the frame number on the explosion */
 	else while (graphicsTime - psEffect->lastFrame > psEffect->frameDelay)
-	{
-		psEffect->lastFrame += psEffect->frameDelay;
-		/* Are we on the last frame? */
-
-		if (++psEffect->frameNumber >= effectGetNumFrames(psEffect))
 		{
-			if (psEffect->type != EXPLOSION_TYPE_LAND_LIGHT)
+			psEffect->lastFrame += psEffect->frameDelay;
+			/* Are we on the last frame? */
+
+			if (++psEffect->frameNumber >= effectGetNumFrames(psEffect))
 			{
-				/* Kill it off */
-				killEffect(psEffect);
-				return;
-			}
-			else
-			{
-				psEffect->frameNumber = 0;
+				if (psEffect->type != EXPLOSION_TYPE_LAND_LIGHT)
+				{
+					/* Kill it off */
+					killEffect(psEffect);
+					return;
+				}
+				else
+				{
+					psEffect->frameNumber = 0;
+				}
 			}
 		}
-	}
 
-	if(!gamePaused())
+	if (!gamePaused())
 	{
 		/* Tesla explosions are the only ones that rise, or indeed move */
-		if(psEffect->type == EXPLOSION_TYPE_TESLA)
+		if (psEffect->type == EXPLOSION_TYPE_TESLA)
 		{
 			psEffect->position.y += graphicsTimeAdjustedIncrement(psEffect->velocity.y);
 		}
@@ -1003,11 +1045,11 @@ static void updateExplosion(EFFECT *psEffect)
 static void updateBlood(EFFECT *psEffect)
 {
 	/* Time to update the frame number on the blood */
-	if(graphicsTime - psEffect->lastFrame > psEffect->frameDelay)
+	if (graphicsTime - psEffect->lastFrame > psEffect->frameDelay)
 	{
 		psEffect->lastFrame = graphicsTime;
 		/* Are we on the last frame? */
-		if(++psEffect->frameNumber >= effectGetNumFrames(psEffect))
+		if (++psEffect->frameNumber >= effectGetNumFrames(psEffect))
 		{
 			/* Kill it off */
 			killEffect(psEffect);
@@ -1032,13 +1074,13 @@ static void updatePolySmoke(EFFECT *psEffect)
 		psEffect->lastFrame += psEffect->frameDelay;
 
 		/* Are we on the last frame? */
-		if(++psEffect->frameNumber >= effectGetNumFrames(psEffect))
+		if (++psEffect->frameNumber >= effectGetNumFrames(psEffect))
 		{
 			/* Does the anim wrap around? */
-			if(TEST_CYCLIC(psEffect))
+			if (TEST_CYCLIC(psEffect))
 			{
 				/* Does it change drift direction? */
-				if(psEffect->type == SMOKE_TYPE_DRIFTING)
+				if (psEffect->type == SMOKE_TYPE_DRIFTING)
 				{
 					/* Make it change direction */
 					psEffect->velocity.x = (float)(rand() % 20);
@@ -1051,7 +1093,7 @@ static void updatePolySmoke(EFFECT *psEffect)
 			else
 			{
 				/* Kill it off */
- 				killEffect(psEffect);
+				killEffect(psEffect);
 				return;
 			}
 		}
@@ -1063,10 +1105,10 @@ static void updatePolySmoke(EFFECT *psEffect)
 	psEffect->position.z += graphicsTimeAdjustedIncrement(psEffect->velocity.z);
 
 	/* If it doesn't get killed by frame number, then by age */
-	if(TEST_CYCLIC(psEffect))
+	if (TEST_CYCLIC(psEffect))
 	{
 		/* Has it overstayed it's welcome? */
-		if(graphicsTime - psEffect->birthTime > psEffect->lifeSpan)
+		if (graphicsTime - psEffect->birthTime > psEffect->lifeSpan)
 		{
 			/* Kill it */
 			killEffect(psEffect);
@@ -1085,7 +1127,7 @@ static void updateGraviton(EFFECT *psEffect)
 	MAPTILE	*psTile;
 	LIGHT	light;
 
-	if(psEffect->type!=GRAVITON_TYPE_GIBLET)
+	if (psEffect->type != GRAVITON_TYPE_GIBLET)
 	{
 		light.position.x = psEffect->position.x;
 		light.position.y = psEffect->position.y;
@@ -1095,7 +1137,7 @@ static void updateGraviton(EFFECT *psEffect)
 		processLight(&light);
 	}
 
-	if(gamePaused())
+	if (gamePaused())
 	{
 		/* Only update the lights if it's paused */
 		return;
@@ -1108,7 +1150,7 @@ static void updateGraviton(EFFECT *psEffect)
 
 	/* If it's bounced/drifted off the map then kill it */
 	if (map_coord(psEffect->position.x) >= mapWidth
-	 || map_coord(psEffect->position.z) >= mapHeight)
+	    || map_coord(psEffect->position.z) >= mapHeight)
 	{
 		killEffect(psEffect);
 		return;
@@ -1117,8 +1159,8 @@ static void updateGraviton(EFFECT *psEffect)
 	int groundHeight = map_Height(psEffect->position.x, psEffect->position.z);
 
 	/* If it's going up and it's still under the landscape, then remove it... */
-	if (psEffect->position.y<groundHeight
-	 && psEffect->velocity.y > 0)
+	if (psEffect->position.y < groundHeight
+	    && psEffect->velocity.y > 0)
 	{
 		killEffect(psEffect);
 		return;
@@ -1127,10 +1169,10 @@ static void updateGraviton(EFFECT *psEffect)
 	/* Does it emit a trail? And is it high enough? */
 	if ((psEffect->type == GRAVITON_TYPE_EMITTING_DR)
 	    || ((psEffect->type == GRAVITON_TYPE_EMITTING_ST)
-		&& (psEffect->position.y>(groundHeight+10))))
+	        && (psEffect->position.y > (groundHeight + 10))))
 	{
 		/* Time to add another trail 'thing'? */
-		if(graphicsTime > psEffect->lastFrame + psEffect->frameDelay)
+		if (graphicsTime > psEffect->lastFrame + psEffect->frameDelay)
 		{
 			/* Store away last update */
 			psEffect->lastFrame = graphicsTime;
@@ -1141,14 +1183,14 @@ static void updateGraviton(EFFECT *psEffect)
 			dv.z = psEffect->position.z;
 
 			/* Add a trail graphic */
-			addEffect(&dv,EFFECT_SMOKE,SMOKE_TYPE_TRAIL,false,NULL,0);
+			addEffect(&dv, EFFECT_SMOKE, SMOKE_TYPE_TRAIL, false, NULL, 0);
 		}
 	}
 
-	else if(psEffect->type == GRAVITON_TYPE_GIBLET && (psEffect->position.y>(groundHeight+5)))
+	else if (psEffect->type == GRAVITON_TYPE_GIBLET && (psEffect->position.y > (groundHeight + 5)))
 	{
 		/* Time to add another trail 'thing'? */
-		if(graphicsTime > psEffect->lastFrame + psEffect->frameDelay)
+		if (graphicsTime > psEffect->lastFrame + psEffect->frameDelay)
 		{
 			/* Store away last update */
 			psEffect->lastFrame = graphicsTime;
@@ -1157,7 +1199,7 @@ static void updateGraviton(EFFECT *psEffect)
 			dv.x = psEffect->position.x;
 			dv.y = psEffect->position.y;
 			dv.z = psEffect->position.z;
-			addEffect(&dv,EFFECT_BLOOD,BLOOD_TYPE_NORMAL,false,NULL,0);
+			addEffect(&dv, EFFECT_BLOOD, BLOOD_TYPE_NORMAL, false, NULL, 0);
 		}
 	}
 
@@ -1172,7 +1214,7 @@ static void updateGraviton(EFFECT *psEffect)
 
 	/* If it's bounced/drifted off the map then kill it */
 	if ((int)psEffect->position.x <= TILE_UNITS
-	 || (int)psEffect->position.z <= TILE_UNITS)
+	    || (int)psEffect->position.z <= TILE_UNITS)
 	{
 		killEffect(psEffect);
 		return;
@@ -1182,42 +1224,42 @@ static void updateGraviton(EFFECT *psEffect)
 	if ((int)psEffect->position.y < (int)groundHeight)
 	{
 		psTile = mapTile(map_coord(psEffect->position.x), map_coord(psEffect->position.z));
-	   	if (terrainType(psTile) == TER_WATER)
+		if (terrainType(psTile) == TER_WATER)
 		{
 			killEffect(psEffect);
 			return;
 		}
 		else
-		/* Are we falling - rather than rising? */
-   		if((int)psEffect->velocity.y < 0)
-		{
-			/* Has it sufficient energy to keep bouncing? */
-			if (abs(psEffect->velocity.y) > 16
-			 && psEffect->specific <= 2)
+			/* Are we falling - rather than rising? */
+			if ((int)psEffect->velocity.y < 0)
 			{
-				psEffect->specific++;
-				/* Half it's velocity */
-
-				psEffect->velocity.y/=(float)(-2); // only y gets flipped
-
-				/* Set it at ground level - may have gone through */
-				psEffect->position.y = (float)groundHeight;
-			}
-			else
-			{
-  				/* Giblets don't blow up when they hit the ground! */
-				if(psEffect->type!=GRAVITON_TYPE_GIBLET)
+				/* Has it sufficient energy to keep bouncing? */
+				if (abs(psEffect->velocity.y) > 16
+				    && psEffect->specific <= 2)
 				{
-					/* Remove the graviton and add an explosion */
-					dv.x = psEffect->position.x;
-					dv.y = psEffect->position.y + 10;
-					dv.z = psEffect->position.z;
-					addEffect(&dv,EFFECT_EXPLOSION,EXPLOSION_TYPE_VERY_SMALL,false,NULL,0);
+					psEffect->specific++;
+					/* Half it's velocity */
+
+					psEffect->velocity.y /= (float)(-2); // only y gets flipped
+
+					/* Set it at ground level - may have gone through */
+					psEffect->position.y = (float)groundHeight;
 				}
-				killEffect(psEffect);
-				return;
+				else
+				{
+					/* Giblets don't blow up when they hit the ground! */
+					if (psEffect->type != GRAVITON_TYPE_GIBLET)
+					{
+						/* Remove the graviton and add an explosion */
+						dv.x = psEffect->position.x;
+						dv.y = psEffect->position.y + 10;
+						dv.z = psEffect->position.z;
+						addEffect(&dv, EFFECT_EXPLOSION, EXPLOSION_TYPE_VERY_SMALL, false, NULL, 0);
+					}
+					killEffect(psEffect);
+					return;
+				}
 			}
-		}
 	}
 }
 
@@ -1236,26 +1278,26 @@ static void updateDestruction(EFFECT *psEffect)
 	UDWORD	height;
 
 	percent = PERCENT(graphicsTime - psEffect->birthTime, psEffect->lifeSpan);
-	if(percent > 100)
+	if (percent > 100)
 	{
 		percent = 100;
 	}
-	range = 50 - abs(50-percent);
+	range = 50 - abs(50 - percent);
 
 	light.position.x = psEffect->position.x;
 	light.position.y = psEffect->position.y;
 	light.position.z = psEffect->position.z;
-	if(psEffect->type == DESTRUCTION_TYPE_STRUCTURE)
+	if (psEffect->type == DESTRUCTION_TYPE_STRUCTURE)
 	{
-		light.range = range*10;
+		light.range = range * 10;
 	}
 	else
 	{
-		light.range = range*4;
+		light.range = range * 4;
 	}
-	if(psEffect->type == DESTRUCTION_TYPE_POWER_STATION)
+	if (psEffect->type == DESTRUCTION_TYPE_POWER_STATION)
 	{
-		light.range *=3;
+		light.range *= 3;
 		light.colour = LIGHT_WHITE;
 	}
 	else
@@ -1264,29 +1306,31 @@ static void updateDestruction(EFFECT *psEffect)
 	}
 	processLight(&light);
 
-	if(graphicsTime > psEffect->birthTime + psEffect->lifeSpan)
+	if (graphicsTime > psEffect->birthTime + psEffect->lifeSpan)
 	{
 		/* Kill it - it's too old */
 		killEffect(psEffect);
 		return;
 	}
 
-	if(psEffect->type == DESTRUCTION_TYPE_SKYSCRAPER)
+	if (psEffect->type == DESTRUCTION_TYPE_SKYSCRAPER)
 	{
 
-		if(graphicsTime - psEffect->birthTime > psEffect->lifeSpan * 9/10)
+		if (graphicsTime - psEffect->birthTime > psEffect->lifeSpan * 9 / 10)
 		{
 			pos.x = psEffect->position.x;
 			pos.z = psEffect->position.z;
 			pos.y = psEffect->position.y;
-			addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_LARGE,false,NULL,0);
+			addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_LARGE, false, NULL, 0);
 			killEffect(psEffect);
 			return;
 		}
 
 		div = 1.f - (float)(graphicsTime - psEffect->birthTime) / psEffect->lifeSpan;
-		if(div < 0.f)
+		if (div < 0.f)
+		{
 			div = 0.f;
+		}
 		height = div * psEffect->imd->max.y;
 	}
 	else
@@ -1296,10 +1340,10 @@ static void updateDestruction(EFFECT *psEffect)
 
 
 	/* Time to add another effect? */
-	if((graphicsTime - psEffect->lastFrame) > psEffect->frameDelay)
+	if ((graphicsTime - psEffect->lastFrame) > psEffect->frameDelay)
 	{
 		psEffect->lastFrame = graphicsTime;
-		switch(psEffect->type)
+		switch (psEffect->type)
 		{
 		case DESTRUCTION_TYPE_SKYSCRAPER:
 			widthScatter = TILE_UNITS;
@@ -1309,20 +1353,20 @@ static void updateDestruction(EFFECT *psEffect)
 
 		case DESTRUCTION_TYPE_POWER_STATION:
 		case DESTRUCTION_TYPE_STRUCTURE:
-			widthScatter = TILE_UNITS/2;
-			breadthScatter = TILE_UNITS/2;
-			heightScatter = TILE_UNITS/4;
+			widthScatter = TILE_UNITS / 2;
+			breadthScatter = TILE_UNITS / 2;
+			heightScatter = TILE_UNITS / 4;
 			break;
 
 		case DESTRUCTION_TYPE_DROID:
 		case DESTRUCTION_TYPE_WALL_SECTION:
 		case DESTRUCTION_TYPE_FEATURE:
-			widthScatter = TILE_UNITS/6;
-			breadthScatter = TILE_UNITS/6;
-			heightScatter = TILE_UNITS/6;
+			widthScatter = TILE_UNITS / 6;
+			breadthScatter = TILE_UNITS / 6;
+			heightScatter = TILE_UNITS / 6;
 			break;
 		default:
-			ASSERT( false,"Weirdy destruction type effect" );
+			ASSERT(false, "Weirdy destruction type effect");
 			break;
 		}
 
@@ -1332,36 +1376,36 @@ static void updateDestruction(EFFECT *psEffect)
 		pos.z = psEffect->position.z + breadthScatter - rand() % (2 * breadthScatter);
 		pos.y = psEffect->position.y + height + rand() % heightScatter;
 
-		if(psEffect->type == DESTRUCTION_TYPE_SKYSCRAPER)
+		if (psEffect->type == DESTRUCTION_TYPE_SKYSCRAPER)
 		{
-	  		pos.y = psEffect->position.y + height;
-  		}
+			pos.y = psEffect->position.y + height;
+		}
 
 
 		/* Choose an effect */
-		effectType = rand()%15;
-		switch(effectType)
+		effectType = rand() % 15;
+		switch (effectType)
 		{
 		case 0:
-			addEffect(&pos,EFFECT_SMOKE,SMOKE_TYPE_DRIFTING,false,NULL,0);
+			addEffect(&pos, EFFECT_SMOKE, SMOKE_TYPE_DRIFTING, false, NULL, 0);
 			break;
 		case 1:
 		case 2:
 		case 3:
 		case 4:
 		case 5:
-			if(psEffect->type == DESTRUCTION_TYPE_SKYSCRAPER)
+			if (psEffect->type == DESTRUCTION_TYPE_SKYSCRAPER)
 			{
-				addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_LARGE,false,NULL,0);
+				addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_LARGE, false, NULL, 0);
 			}
 			/* Only structures get the big explosions */
-			else if(psEffect->type==DESTRUCTION_TYPE_STRUCTURE)
+			else if (psEffect->type == DESTRUCTION_TYPE_STRUCTURE)
 			{
-				addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_MEDIUM,false,NULL,0);
+				addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_MEDIUM, false, NULL, 0);
 			}
 			else
 			{
-				addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_SMALL,false,NULL,0);
+				addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_SMALL, false, NULL, 0);
 			}
 			break;
 		case 6:
@@ -1369,29 +1413,29 @@ static void updateDestruction(EFFECT *psEffect)
 		case 8:
 		case 9:
 		case 10:
-			if(psEffect->type == DESTRUCTION_TYPE_STRUCTURE)
+			if (psEffect->type == DESTRUCTION_TYPE_STRUCTURE)
 			{
-				addEffect(&pos,EFFECT_GRAVITON,GRAVITON_TYPE_EMITTING_ST,true,getRandomDebrisImd(),0);
+				addEffect(&pos, EFFECT_GRAVITON, GRAVITON_TYPE_EMITTING_ST, true, getRandomDebrisImd(), 0);
 			}
 			else
 			{
-				addEffect(&pos,EFFECT_GRAVITON,GRAVITON_TYPE_EMITTING_DR,true,getRandomDebrisImd(),0);
+				addEffect(&pos, EFFECT_GRAVITON, GRAVITON_TYPE_EMITTING_DR, true, getRandomDebrisImd(), 0);
 			}
 			break;
 		case 11:
-			addEffect(&pos,EFFECT_SMOKE,SMOKE_TYPE_DRIFTING,false,NULL,0);
+			addEffect(&pos, EFFECT_SMOKE, SMOKE_TYPE_DRIFTING, false, NULL, 0);
 			break;
 		case 12:
 		case 13:
-			addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_SMALL,false,NULL,0);
+			addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_SMALL, false, NULL, 0);
 			break;
 		case 14:
 			/* Add sound effect, but only if we're less than 3/4 of the way thru' destruction */
-			if (graphicsTime < (psEffect->birthTime + psEffect->lifeSpan) * 3/4)
+			if (graphicsTime < (psEffect->birthTime + psEffect->lifeSpan) * 3 / 4)
 			{
 				iX = psEffect->position.x;
 				iY = psEffect->position.z;
-				audio_PlayStaticTrack( iX, iY, ID_SOUND_EXPLOSION );
+				audio_PlayStaticTrack(iX, iY, ID_SOUND_EXPLOSION);
 			}
 			break;
 
@@ -1404,14 +1448,14 @@ static void updateConstruction(EFFECT *psEffect)
 {
 
 	/* Time to update the frame number on the construction sprite */
-	if(graphicsTime - psEffect->lastFrame > psEffect->frameDelay)
+	if (graphicsTime - psEffect->lastFrame > psEffect->frameDelay)
 	{
 		psEffect->lastFrame = graphicsTime;
 		/* Are we on the last frame? */
-		if(++psEffect->frameNumber >= effectGetNumFrames(psEffect))
+		if (++psEffect->frameNumber >= effectGetNumFrames(psEffect))
 		{
 			/* Is it a cyclic sprite? */
-			if(TEST_CYCLIC(psEffect))
+			if (TEST_CYCLIC(psEffect))
 			{
 				psEffect->frameNumber = 0;
 			}
@@ -1431,11 +1475,11 @@ static void updateConstruction(EFFECT *psEffect)
 
 
 	/* If it doesn't get killed by frame number, then by height */
-	if(TEST_CYCLIC(psEffect))
+	if (TEST_CYCLIC(psEffect))
 	{
 		/* Has it hit the ground */
 		if ((int)psEffect->position.y <=
-			map_Height(psEffect->position.x, psEffect->position.z))
+		    map_Height(psEffect->position.x, psEffect->position.z))
 		{
 			killEffect(psEffect);
 			return;
@@ -1457,7 +1501,7 @@ static void updateFire(EFFECT *psEffect)
 	UDWORD	percent;
 
 	percent = PERCENT(graphicsTime - psEffect->birthTime, std::max<unsigned>(psEffect->lifeSpan, 1));
-	if(percent > 100)
+	if (percent > 100)
 	{
 		percent = 100;
 	}
@@ -1465,7 +1509,7 @@ static void updateFire(EFFECT *psEffect)
 	light.position.x = psEffect->position.x;
 	light.position.y = psEffect->position.y;
 	light.position.z = psEffect->position.z;
-	light.range = (percent*psEffect->radius*3)/100;
+	light.range = (percent * psEffect->radius * 3) / 100;
 	light.colour = LIGHT_RED;
 	processLight(&light);
 
@@ -1477,29 +1521,29 @@ static void updateFire(EFFECT *psEffect)
 		pos.z = (psEffect->position.z + ((rand() % psEffect->radius) - (rand() % (2 * psEffect->radius))));
 
 		// Effect is off map, no need to update it anymore
-		if(!worldOnMap(pos.x, pos.z))
+		if (!worldOnMap(pos.x, pos.z))
 		{
 			killEffect(psEffect);
 			return;
 		}
 
-		pos.y = map_Height(pos.x,pos.z);
+		pos.y = map_Height(pos.x, pos.z);
 
-		if(psEffect->type == FIRE_TYPE_SMOKY_BLUE)
+		if (psEffect->type == FIRE_TYPE_SMOKY_BLUE)
 		{
-			addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_FLAMETHROWER,false,NULL,0);
+			addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_FLAMETHROWER, false, NULL, 0);
 		}
 		else
 		{
-			addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_SMALL,false,NULL,0);
+			addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_SMALL, false, NULL, 0);
 		}
 
-		if(psEffect->type == FIRE_TYPE_SMOKY || psEffect->type == FIRE_TYPE_SMOKY_BLUE)
+		if (psEffect->type == FIRE_TYPE_SMOKY || psEffect->type == FIRE_TYPE_SMOKY_BLUE)
 		{
 			pos.x = (psEffect->position.x + ((rand() % psEffect->radius / 2) - (rand() % (2 * psEffect->radius / 2))));
 			pos.z = (psEffect->position.z + ((rand() % psEffect->radius / 2) - (rand() % (2 * psEffect->radius / 2))));
-			pos.y = map_Height(pos.x,pos.z);
-			addEffect(&pos,EFFECT_SMOKE,SMOKE_TYPE_DRIFTING_HIGH,false,NULL,0);
+			pos.y = map_Height(pos.x, pos.z);
+			addEffect(&pos, EFFECT_SMOKE, SMOKE_TYPE_DRIFTING_HIGH, false, NULL, 0);
 		}
 		else
 		{
@@ -1507,14 +1551,14 @@ static void updateFire(EFFECT *psEffect)
 			pos.z = (psEffect->position.z + ((rand() % psEffect->radius) - (rand() % (2 * psEffect->radius))));
 
 			// Effect is off map, no need to update it anymore
-			if(!worldOnMap(pos.x, pos.z))
+			if (!worldOnMap(pos.x, pos.z))
 			{
 				killEffect(psEffect);
 				return;
 			}
 
-			pos.y = map_Height(pos.x,pos.z);
-			addEffect(&pos,EFFECT_EXPLOSION,EXPLOSION_TYPE_SMALL,false,NULL,0);
+			pos.y = map_Height(pos.x, pos.z);
+			addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_SMALL, false, NULL, 0);
 		}
 
 		/*
@@ -1541,8 +1585,8 @@ static void updateFire(EFFECT *psEffect)
 /** Calls the appropriate render routine for each type of effect */
 void renderEffect(const EFFECT *psEffect)
 {
-		/* What type of effect are we dealing with? */
-	switch(psEffect->group)
+	/* What type of effect are we dealing with? */
+	switch (psEffect->group)
 	{
 	case EFFECT_WAYPOINT:
 		renderWaypointEffect(psEffect);
@@ -1590,7 +1634,7 @@ void renderEffect(const EFFECT *psEffect)
 		break;
 	}
 
-	debug( LOG_ERROR, "Weirdy class of effect passed to renderEffect" );
+	debug(LOG_ERROR, "Weirdy class of effect passed to renderEffect");
 	abort();
 }
 
@@ -1606,7 +1650,7 @@ static void renderWaypointEffect(const EFFECT *psEffect)
 static void renderFirework(const EFFECT *psEffect)
 {
 	/* these don't get rendered */
-	if(psEffect->type == FIREWORK_TYPE_LAUNCHER)
+	if (psEffect->type == FIREWORK_TYPE_LAUNCHER)
 	{
 		return;
 	}
@@ -1617,7 +1661,7 @@ static void renderFirework(const EFFECT *psEffect)
 	pie_MatRotX(-player.r.x);
 
 	pie_MatScale(psEffect->size / 100.f);
- 	pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, WZCOL_WHITE, pie_ADDITIVE, EFFECT_EXPLOSION_ADDITIVE);
+	pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, WZCOL_WHITE, pie_ADDITIVE, EFFECT_EXPLOSION_ADDITIVE);
 	pie_MatEnd();
 }
 
@@ -1639,7 +1683,7 @@ static void renderDestructionEffect(const EFFECT *psEffect)
 	float	div;
 	SDWORD	percent;
 
-	if(psEffect->type!=DESTRUCTION_TYPE_SKYSCRAPER)
+	if (psEffect->type != DESTRUCTION_TYPE_SKYSCRAPER)
 	{
 		return;
 	}
@@ -1647,26 +1691,29 @@ static void renderDestructionEffect(const EFFECT *psEffect)
 	positionEffect(psEffect);
 
 	div = (float)(graphicsTime - psEffect->birthTime) / psEffect->lifeSpan;
-	if(div>1.0)	div = 1.0;	//temporary!
+	if (div > 1.0)
+	{
+		div = 1.0;    //temporary!
+	}
 	{
 		div = 1.0 - div;
-		percent = (SDWORD)(div*pie_RAISE_SCALE);
+		percent = (SDWORD)(div * pie_RAISE_SCALE);
 	}
 
-	if(!gamePaused())
+	if (!gamePaused())
 	{
 		pie_MatRotX(SKY_SHIMMY);
 		pie_MatRotY(SKY_SHIMMY);
 		pie_MatRotZ(SKY_SHIMMY);
 	}
- 	pie_Draw3DShape(psEffect->imd, 0, 0, WZCOL_WHITE, pie_RAISE, percent);
+	pie_Draw3DShape(psEffect->imd, 0, 0, WZCOL_WHITE, pie_RAISE, percent);
 
 	pie_MatEnd();
 }
 
 static bool rejectLandLight(LAND_LIGHT_SPEC type)
 {
-	unsigned int timeSlice = graphicsTime%2000;
+	unsigned int timeSlice = graphicsTime % 2000;
 
 	if (timeSlice < 400)
 	{
@@ -1678,7 +1725,7 @@ static bool rejectLandLight(LAND_LIGHT_SPEC type)
 	}
 	else if (timeSlice < 1200)
 	{
-		return(false); //reject none
+		return (false); //reject none
 	}
 	else if (timeSlice < 1600)
 	{
@@ -1695,9 +1742,9 @@ static void renderExplosionEffect(const EFFECT *psEffect)
 {
 	const PIELIGHT brightness = WZCOL_WHITE;
 
-	if(psEffect->type == EXPLOSION_TYPE_LAND_LIGHT)
+	if (psEffect->type == EXPLOSION_TYPE_LAND_LIGHT)
 	{
-		if(rejectLandLight((LAND_LIGHT_SPEC)psEffect->specific))
+		if (rejectLandLight((LAND_LIGHT_SPEC)psEffect->specific))
 		{
 			return;
 		}
@@ -1706,7 +1753,7 @@ static void renderExplosionEffect(const EFFECT *psEffect)
 	positionEffect(psEffect);
 
 	/* Bit in comments - doesn't quite work yet? */
-	if(TEST_FACING(psEffect))
+	if (TEST_FACING(psEffect))
 	{
 		/* Always face the viewer! */
 		// TODO This only faces towards the viewer, if the effect is in the middle of the screen... It draws the effect parallel with the screens near/far planes.
@@ -1715,16 +1762,20 @@ static void renderExplosionEffect(const EFFECT *psEffect)
 	}
 
 	/* Tesla explosions diminish in size */
-	if(psEffect->type == EXPLOSION_TYPE_TESLA)
+	if (psEffect->type == EXPLOSION_TYPE_TESLA)
 	{
 		float scale = (graphicsTime - psEffect->birthTime) / (float)psEffect->lifeSpan;
-		if      (scale < 0.f)
+		if (scale < 0.f)
+		{
 			scale = 0.f;
+		}
 		else if (scale > .45f)
+		{
 			scale = .45f;
+		}
 		pie_MatScale(psEffect->size / 100.f - scale);
 	}
-	else if(psEffect->type == EXPLOSION_TYPE_PLASMA)
+	else if (psEffect->type == EXPLOSION_TYPE_PLASMA)
 	{
 		float scale = (graphicsTime - psEffect->birthTime) / (float)psEffect->lifeSpan / 3.f;
 		pie_MatScale(BASE_PLASMA_SIZE / 100.f + scale);
@@ -1748,7 +1799,7 @@ static void renderExplosionEffect(const EFFECT *psEffect)
 	{
 		pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, pie_ADDITIVE, EFFECT_PLASMA_ADDITIVE);
 	}
-	else if(psEffect->type == EXPLOSION_TYPE_KICKUP)
+	else if (psEffect->type == EXPLOSION_TYPE_KICKUP)
 	{
 		pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, pie_TRANSLUCENT, 128);
 	}
@@ -1770,7 +1821,7 @@ static void renderGravitonEffect(const EFFECT *psEffect)
 	pie_MatRotZ(psEffect->rotation.z);
 
 	/* Buildings emitted by gravitons are chunkier */
-	if(psEffect->type == GRAVITON_TYPE_EMITTING_ST)
+	if (psEffect->type == GRAVITON_TYPE_EMITTING_ST)
 	{
 		/* Twice as big - 150 percent */
 		pie_MatScale(psEffect->size / 100.f);
@@ -1795,7 +1846,7 @@ static void renderConstructionEffect(const EFFECT *psEffect)
 	positionEffect(psEffect);
 
 	/* Bit in comments doesn't quite work yet? */
-	if(TEST_FACING(psEffect))
+	if (TEST_FACING(psEffect))
 	{
 		pie_MatRotY(-player.r.y);
 		pie_MatRotX(-player.r.x);
@@ -1803,11 +1854,17 @@ static void renderConstructionEffect(const EFFECT *psEffect)
 
 	/* Scale size according to age */
 	percent = PERCENT(graphicsTime - psEffect->birthTime, psEffect->lifeSpan);
-	if(percent<0) percent = 0;
-	if(percent>100) percent = 100;
+	if (percent < 0)
+	{
+		percent = 0;
+	}
+	if (percent > 100)
+	{
+		percent = 100;
+	}
 
 	/* Make imds be transparent on 3dfx */
-	if(percent<50)
+	if (percent < 50)
 	{
 		translucency = percent * 2;
 	}
@@ -1815,7 +1872,7 @@ static void renderConstructionEffect(const EFFECT *psEffect)
 	{
 		translucency = (100 - percent) * 2;
 	}
-	translucency+=10;
+	translucency += 10;
 	size = MIN(2.f * translucency / 100.f, .90f);
 	pie_MatScale(size);
 
@@ -1834,14 +1891,14 @@ static void renderSmokeEffect(const EFFECT *psEffect)
 	positionEffect(psEffect);
 
 	/* Bit in comments doesn't quite work yet? */
-	if(TEST_FACING(psEffect))
+	if (TEST_FACING(psEffect))
 	{
- 		/* Always face the viewer! */
+		/* Always face the viewer! */
 		pie_MatRotY(-player.r.y);
 		pie_MatRotX(-player.r.x);
 	}
 
-	if(TEST_SCALED(psEffect))
+	if (TEST_SCALED(psEffect))
 	{
 		const unsigned int lifetime = graphicsTime - psEffect->birthTime;
 		unsigned int percent;
@@ -1857,25 +1914,29 @@ static void renderSmokeEffect(const EFFECT *psEffect)
 
 		// HACK: Work around a bug that bit me causing a "integer divide by zero" at this location -- Giel
 		if (psEffect->lifeSpan != 0)
+		{
 			percent = (lifetime * 100) / psEffect->lifeSpan;
+		}
 		else
+		{
 			percent = 100;
+		}
 
 
 		pie_MatScale((percent + psEffect->baseScale) / 100.f);
-		transparency = (EFFECT_SMOKE_TRANSPARENCY * (100 - percent))/100;
+		transparency = (EFFECT_SMOKE_TRANSPARENCY * (100 - percent)) / 100;
 	}
 
 	transparency = (transparency * 3) / 2;  //JPS smoke strength increased for d3d 12 may 99
 
 	/* Make imds be transparent on 3dfx */
-	if(psEffect->type==SMOKE_TYPE_STEAM)
+	if (psEffect->type == SMOKE_TYPE_STEAM)
 	{
 		pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, pie_TRANSLUCENT, EFFECT_STEAM_TRANSPARENCY / 2);
 	}
 	else
 	{
-		if(psEffect->type == SMOKE_TYPE_TRAIL)
+		if (psEffect->type == SMOKE_TYPE_TRAIL)
 		{
 			pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, pie_TRANSLUCENT, (2 * transparency) / 3);
 		}
@@ -1895,25 +1956,25 @@ static void renderSmokeEffect(const EFFECT *psEffect)
 // ----------------------------------------------------------------------------------------
 void	effectSetupFirework(EFFECT *psEffect)
 {
-	if(psEffect->type == FIREWORK_TYPE_LAUNCHER)
+	if (psEffect->type == FIREWORK_TYPE_LAUNCHER)
 	{
-	 	psEffect->velocity.x = 200 - rand()%400;
-		psEffect->velocity.z = 200 - rand()%400;
-		psEffect->velocity.y = 400 + rand()%200;	//height
+		psEffect->velocity.x = 200 - rand() % 400;
+		psEffect->velocity.z = 200 - rand() % 400;
+		psEffect->velocity.y = 400 + rand() % 200;	//height
 		psEffect->lifeSpan = GAME_TICKS_PER_SEC * 3;
-		psEffect->radius = 80 + rand()%150;
-		psEffect->size = 300+rand()%300;	//height it goes off
+		psEffect->radius = 80 + rand() % 150;
+		psEffect->size = 300 + rand() % 300;	//height it goes off
 		psEffect->imd = getImdFromIndex(MI_FIREWORK); // not actually drawn
 	}
 	else
 	{
-		psEffect->velocity.x = 20 - rand()%40;
-		psEffect->velocity.z = 20 - rand()%40;
-		psEffect->velocity.y = 0-(20+rand()%40);	//height
+		psEffect->velocity.x = 20 - rand() % 40;
+		psEffect->velocity.z = 20 - rand() % 40;
+		psEffect->velocity.y = 0 - (20 + rand() % 40);	//height
 		psEffect->lifeSpan = GAME_TICKS_PER_SEC * 4;
 
 		/* setup the imds */
-		switch(rand()%3)
+		switch (rand() % 3)
 		{
 		case 0:
 			psEffect->imd = getImdFromIndex(MI_FIREWORK);
@@ -1933,75 +1994,75 @@ void	effectSetupFirework(EFFECT *psEffect)
 			break;
 		}
 	}
-	psEffect->frameDelay = (EXPLOSION_FRAME_DELAY*2);
+	psEffect->frameDelay = (EXPLOSION_FRAME_DELAY * 2);
 }
 
 void	effectSetupSmoke(EFFECT *psEffect)
 {
 	/* everything except steam drifts about */
-	if(psEffect->type==SMOKE_TYPE_STEAM)
+	if (psEffect->type == SMOKE_TYPE_STEAM)
 	{
-   		/* Only upwards */
+		/* Only upwards */
 		psEffect->velocity.x = 0.f;
-   		psEffect->velocity.z = 0.f;
+		psEffect->velocity.z = 0.f;
 	}
 	else if (psEffect->type == SMOKE_TYPE_BILLOW)
 	{
 
 		psEffect->velocity.x = (float)(10 - rand() % 20);
-   		psEffect->velocity.z = (float)(10 - rand() % 20);
+		psEffect->velocity.z = (float)(10 - rand() % 20);
 	}
 	else
 	{
-   	  	psEffect->velocity.x = (float)(rand() % 20);
-   		psEffect->velocity.z = (float)(10 - rand() % 20);
+		psEffect->velocity.x = (float)(rand() % 20);
+		psEffect->velocity.z = (float)(10 - rand() % 20);
 	}
 
 	/* Steam isn't cyclic  - it doesn't grow with time either */
-	if(psEffect->type!=SMOKE_TYPE_STEAM)
+	if (psEffect->type != SMOKE_TYPE_STEAM)
 	{
 		SET_CYCLIC(psEffect);
 		SET_SCALED(psEffect);
 	}
 
-	switch(psEffect->type)
-  	{
-  	case SMOKE_TYPE_DRIFTING:
-  		psEffect->imd = getImdFromIndex(MI_SMALL_SMOKE);
+	switch (psEffect->type)
+	{
+	case SMOKE_TYPE_DRIFTING:
+		psEffect->imd = getImdFromIndex(MI_SMALL_SMOKE);
 		psEffect->lifeSpan = (UWORD)NORMAL_SMOKE_LIFESPAN;
-   		psEffect->velocity.y = (float)(35 + rand() % 30);
+		psEffect->velocity.y = (float)(35 + rand() % 30);
 		psEffect->baseScale = 40;
-  		break;
-  	case SMOKE_TYPE_DRIFTING_HIGH:
-  		psEffect->imd = getImdFromIndex(MI_SMALL_SMOKE);
+		break;
+	case SMOKE_TYPE_DRIFTING_HIGH:
+		psEffect->imd = getImdFromIndex(MI_SMALL_SMOKE);
 		psEffect->lifeSpan = (UWORD)NORMAL_SMOKE_LIFESPAN;
-   		psEffect->velocity.y = (float)(40 + rand() % 45);
+		psEffect->velocity.y = (float)(40 + rand() % 45);
 		psEffect->baseScale = 25;
-  		break;
-  	case SMOKE_TYPE_DRIFTING_SMALL:
-  		psEffect->imd = getImdFromIndex(MI_SMALL_SMOKE);
+		break;
+	case SMOKE_TYPE_DRIFTING_SMALL:
+		psEffect->imd = getImdFromIndex(MI_SMALL_SMOKE);
 		psEffect->lifeSpan = (UWORD)SMALL_SMOKE_LIFESPAN;
-   		psEffect->velocity.y = (float)(25 + rand() % 35);
+		psEffect->velocity.y = (float)(25 + rand() % 35);
 		psEffect->baseScale = 17;
-  		break;
-  	case SMOKE_TYPE_BILLOW:
-  		psEffect->imd = getImdFromIndex(MI_SMALL_SMOKE);
+		break;
+	case SMOKE_TYPE_BILLOW:
+		psEffect->imd = getImdFromIndex(MI_SMALL_SMOKE);
 		psEffect->lifeSpan = (UWORD)SMALL_SMOKE_LIFESPAN;
-   		psEffect->velocity.y = (float)(10 + rand() % 20);
+		psEffect->velocity.y = (float)(10 + rand() % 20);
 		psEffect->baseScale = 80;
-  		break;
-  	case SMOKE_TYPE_STEAM:
-  		psEffect->imd = getImdFromIndex(MI_SMALL_STEAM);
-   		psEffect->velocity.y = (float)(rand() % 5);
-  		break;
+		break;
+	case SMOKE_TYPE_STEAM:
+		psEffect->imd = getImdFromIndex(MI_SMALL_STEAM);
+		psEffect->velocity.y = (float)(rand() % 5);
+		break;
 	case SMOKE_TYPE_TRAIL:
 		psEffect->imd = getImdFromIndex(MI_TRAIL);
 		psEffect->lifeSpan = TRAIL_SMOKE_LIFESPAN;
-   		psEffect->velocity.y = (float)(5 + rand() % 10);
+		psEffect->velocity.y = (float)(5 + rand() % 10);
 		psEffect->baseScale = 25;
 		break;
 	default:
-		ASSERT( false,"Weird smoke type" );
+		ASSERT(false, "Weird smoke type");
 		break;
 	}
 
@@ -2010,11 +2071,11 @@ void	effectSetupSmoke(EFFECT *psEffect)
 
 	psEffect->frameDelay = (UWORD)SMOKE_FRAME_DELAY;
 	/* Randomly flip gfx for variation */
-	if(ONEINTWO)
+	if (ONEINTWO)
 	{
 		SET_FLIPPED_X(psEffect);
 	}
-	if(ONEINTWO)
+	if (ONEINTWO)
 	{
 		SET_FLIPPED_Y(psEffect);
 	}
@@ -2029,42 +2090,42 @@ void effectSetupSatLaser(EFFECT *psEffect)
 
 void	effectSetupGraviton(EFFECT *psEffect)
 {
-	switch(psEffect->type)
+	switch (psEffect->type)
 	{
 	case GRAVITON_TYPE_GIBLET:
-	   	psEffect->velocity.x = GIBLET_INIT_VEL_X;
+		psEffect->velocity.x = GIBLET_INIT_VEL_X;
 		psEffect->velocity.z = GIBLET_INIT_VEL_Z;
 		psEffect->velocity.y = GIBLET_INIT_VEL_Y;
 		break;
 	case GRAVITON_TYPE_EMITTING_ST:
 		psEffect->velocity.x = GRAVITON_INIT_VEL_X;
 		psEffect->velocity.z = GRAVITON_INIT_VEL_Z;
-		psEffect->velocity.y = (5*GRAVITON_INIT_VEL_Y)/4;
-		psEffect->size =(UWORD)( 120 + rand()%30);
+		psEffect->velocity.y = (5 * GRAVITON_INIT_VEL_Y) / 4;
+		psEffect->size = (UWORD)(120 + rand() % 30);
 		break;
 	case GRAVITON_TYPE_EMITTING_DR:
-		psEffect->velocity.x = GRAVITON_INIT_VEL_X/2;
-		psEffect->velocity.z = GRAVITON_INIT_VEL_Z/2;
+		psEffect->velocity.x = GRAVITON_INIT_VEL_X / 2;
+		psEffect->velocity.z = GRAVITON_INIT_VEL_Z / 2;
 		psEffect->velocity.y = GRAVITON_INIT_VEL_Y;
 		break;
 	default:
-		ASSERT( false,"Weirdy type of graviton" );
+		ASSERT(false, "Weirdy type of graviton");
 		break;
 
 	}
 
-	psEffect->rotation.x = rand()%DEG(360);
-	psEffect->rotation.z = rand()%DEG(360);
-	psEffect->rotation.y = rand()%DEG(360);
+	psEffect->rotation.x = rand() % DEG(360);
+	psEffect->rotation.z = rand() % DEG(360);
+	psEffect->rotation.y = rand() % DEG(360);
 
-	psEffect->spin.x = rand()%DEG(100) + DEG(20);
-	psEffect->spin.z = rand()%DEG(100) + DEG(20);
-	psEffect->spin.y = rand()%DEG(100) + DEG(20);
+	psEffect->spin.x = rand() % DEG(100) + DEG(20);
+	psEffect->spin.z = rand() % DEG(100) + DEG(20);
+	psEffect->spin.y = rand() % DEG(100) + DEG(20);
 
 	/* Gravitons are essential */
 	SET_ESSENTIAL(psEffect);
 
-	if(psEffect->type == GRAVITON_TYPE_GIBLET)
+	if (psEffect->type == GRAVITON_TYPE_GIBLET)
 	{
 		psEffect->frameDelay = (UWORD)GRAVITON_BLOOD_DELAY;
 	}
@@ -2077,26 +2138,26 @@ void	effectSetupGraviton(EFFECT *psEffect)
 void effectSetupExplosion(EFFECT *psEffect)
 {
 	/* Get an imd if it's not established */
-	if(psEffect->imd == NULL)
+	if (psEffect->imd == NULL)
 	{
-		switch(psEffect->type)
+		switch (psEffect->type)
 		{
 		case EXPLOSION_TYPE_SMALL:
-  			psEffect->imd = getImdFromIndex(MI_EXPLOSION_SMALL);
-  			psEffect->size = (UBYTE)((6*EXPLOSION_SIZE)/5);
-  			break;
+			psEffect->imd = getImdFromIndex(MI_EXPLOSION_SMALL);
+			psEffect->size = (UBYTE)((6 * EXPLOSION_SIZE) / 5);
+			break;
 		case EXPLOSION_TYPE_VERY_SMALL:
-  			psEffect->imd = getImdFromIndex(MI_EXPLOSION_SMALL);
-  			psEffect->size = (UBYTE)(BASE_FLAME_SIZE + auxVar);
-  			break;
+			psEffect->imd = getImdFromIndex(MI_EXPLOSION_SMALL);
+			psEffect->size = (UBYTE)(BASE_FLAME_SIZE + auxVar);
+			break;
 		case EXPLOSION_TYPE_MEDIUM:
-  			psEffect->imd = getImdFromIndex(MI_EXPLOSION_MEDIUM);
-  			psEffect->size = (UBYTE)EXPLOSION_SIZE;
-  			break;
+			psEffect->imd = getImdFromIndex(MI_EXPLOSION_MEDIUM);
+			psEffect->size = (UBYTE)EXPLOSION_SIZE;
+			break;
 		case EXPLOSION_TYPE_LARGE:
-  			psEffect->imd = getImdFromIndex(MI_EXPLOSION_MEDIUM);
-  			psEffect->size = (UBYTE)EXPLOSION_SIZE*2;
-  			break;
+			psEffect->imd = getImdFromIndex(MI_EXPLOSION_MEDIUM);
+			psEffect->size = (UBYTE)EXPLOSION_SIZE * 2;
+			break;
 		case EXPLOSION_TYPE_FLAMETHROWER:
 			psEffect->imd = getImdFromIndex(MI_FLAME);
 			psEffect->size = (UBYTE)(BASE_FLAME_SIZE + auxVar);
@@ -2141,42 +2202,40 @@ void effectSetupExplosion(EFFECT *psEffect)
 			psEffect->velocity.y = 0.0f;
 			break;
 		default:
-  			break;
+			break;
 		}
 	}
 
-	if(psEffect->type == EXPLOSION_TYPE_FLAMETHROWER)
+	if (psEffect->type == EXPLOSION_TYPE_FLAMETHROWER)
 	{
 		psEffect->frameDelay = 45;
 	}
 	/* Set how long it lasts */
-	else if(psEffect->type == EXPLOSION_TYPE_LASER)
+	else if (psEffect->type == EXPLOSION_TYPE_LASER)
 	{
-		psEffect->frameDelay = EXPLOSION_FRAME_DELAY/2;
+		psEffect->frameDelay = EXPLOSION_FRAME_DELAY / 2;
 	}
-	else
-	if(psEffect->type==EXPLOSION_TYPE_TESLA)
+	else if (psEffect->type == EXPLOSION_TYPE_TESLA)
 	{
 		psEffect->frameDelay = EXPLOSION_TESLA_FRAME_DELAY;
 	}
 	else
 
-	if(psEffect->type==EXPLOSION_TYPE_PLASMA)
-	{
-		psEffect->frameDelay = EXPLOSION_PLASMA_FRAME_DELAY;
-	}
-	else
-		if(psEffect->type == EXPLOSION_TYPE_LAND_LIGHT)
+		if (psEffect->type == EXPLOSION_TYPE_PLASMA)
+		{
+			psEffect->frameDelay = EXPLOSION_PLASMA_FRAME_DELAY;
+		}
+		else if (psEffect->type == EXPLOSION_TYPE_LAND_LIGHT)
 		{
 			psEffect->frameDelay = 120;
 		}
-	else
-	{
-		psEffect->frameDelay = (UWORD)EXPLOSION_FRAME_DELAY;
-	}
+		else
+		{
+			psEffect->frameDelay = (UWORD)EXPLOSION_FRAME_DELAY;
+		}
 
 
-	if(psEffect->type == EXPLOSION_TYPE_SHOCKWAVE)
+	if (psEffect->type == EXPLOSION_TYPE_SHOCKWAVE)
 	{
 		psEffect->lifeSpan = GAME_TICKS_PER_SEC;
 	}
@@ -2186,16 +2245,16 @@ void effectSetupExplosion(EFFECT *psEffect)
 	}
 
 
-	if ( (psEffect->type!=EXPLOSION_TYPE_NOT_FACING) && (psEffect->type!=EXPLOSION_TYPE_SHOCKWAVE))
+	if ((psEffect->type != EXPLOSION_TYPE_NOT_FACING) && (psEffect->type != EXPLOSION_TYPE_SHOCKWAVE))
 	{
 		SET_FACING(psEffect);
 	}
 	/* Randomly flip x and y for variation */
-	if(ONEINTWO)
+	if (ONEINTWO)
 	{
 		SET_FLIPPED_X(psEffect);
 	}
-	if(ONEINTWO)
+	if (ONEINTWO)
 	{
 		SET_FLIPPED_Y(psEffect);
 	}
@@ -2217,11 +2276,11 @@ void	effectSetupConstruction(EFFECT *psEffect)
 	SET_CYCLIC(psEffect);
 
 	/* Randomly flip the construction graphics in x and y for variation */
-	if(ONEINTWO)
+	if (ONEINTWO)
 	{
 		SET_FLIPPED_X(psEffect);
 	}
-	if(ONEINTWO)
+	if (ONEINTWO)
 	{
 		SET_FLIPPED_Y(psEffect);
 	}
@@ -2256,33 +2315,33 @@ static void effectSetupBlood(EFFECT *psEffect)
 
 static void effectSetupDestruction(EFFECT *psEffect)
 {
-	if(psEffect->type == DESTRUCTION_TYPE_SKYSCRAPER)
+	if (psEffect->type == DESTRUCTION_TYPE_SKYSCRAPER)
 	{
-		psEffect->lifeSpan = (3*GAME_TICKS_PER_SEC)/2 + (rand()%GAME_TICKS_PER_SEC);
-		psEffect->frameDelay = DESTRUCTION_FRAME_DELAY/2;
+		psEffect->lifeSpan = (3 * GAME_TICKS_PER_SEC) / 2 + (rand() % GAME_TICKS_PER_SEC);
+		psEffect->frameDelay = DESTRUCTION_FRAME_DELAY / 2;
 	}
-	else if(psEffect->type == DESTRUCTION_TYPE_DROID)
+	else if (psEffect->type == DESTRUCTION_TYPE_DROID)
 	{
 		/* It's all over quickly for droids */
 		psEffect->lifeSpan = DROID_DESTRUCTION_DURATION;
 		psEffect->frameDelay = DESTRUCTION_FRAME_DELAY;
 	}
-	else if(psEffect->type == DESTRUCTION_TYPE_WALL_SECTION ||
-			psEffect->type == DESTRUCTION_TYPE_FEATURE)
+	else if (psEffect->type == DESTRUCTION_TYPE_WALL_SECTION ||
+	         psEffect->type == DESTRUCTION_TYPE_FEATURE)
 	{
-		psEffect->lifeSpan = STRUCTURE_DESTRUCTION_DURATION/4;
-		psEffect->frameDelay = DESTRUCTION_FRAME_DELAY/2;
+		psEffect->lifeSpan = STRUCTURE_DESTRUCTION_DURATION / 4;
+		psEffect->frameDelay = DESTRUCTION_FRAME_DELAY / 2;
 	}
-	else if(psEffect->type == DESTRUCTION_TYPE_POWER_STATION)
+	else if (psEffect->type == DESTRUCTION_TYPE_POWER_STATION)
 	{
-		psEffect->lifeSpan = STRUCTURE_DESTRUCTION_DURATION/2;
-		psEffect->frameDelay = DESTRUCTION_FRAME_DELAY/4;
+		psEffect->lifeSpan = STRUCTURE_DESTRUCTION_DURATION / 2;
+		psEffect->frameDelay = DESTRUCTION_FRAME_DELAY / 4;
 	}
 	else
 	{
 		/* building's destruction is longer */
 		psEffect->lifeSpan = STRUCTURE_DESTRUCTION_DURATION;
-		psEffect->frameDelay = DESTRUCTION_FRAME_DELAY/2;
+		psEffect->frameDelay = DESTRUCTION_FRAME_DELAY / 2;
 	}
 }
 
@@ -2299,7 +2358,7 @@ void initPerimeterSmoke(iIMDShape *pImd, Vector3i base)
 	{
 		Vector3i pos = base + Vector3i(i + shift, 0, inStart + shift);
 
-		if (rand()%6 == 1)
+		if (rand() % 6 == 1)
 		{
 			addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_SMALL, false, NULL, 0);
 		}
@@ -2310,7 +2369,7 @@ void initPerimeterSmoke(iIMDShape *pImd, Vector3i base)
 
 		pos = base + Vector3i(i + shift, 0, inEnd + shift);
 
-		if (rand()%6 == 1)
+		if (rand() % 6 == 1)
 		{
 			addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_SMALL, false, NULL, 0);
 		}
@@ -2331,7 +2390,7 @@ void initPerimeterSmoke(iIMDShape *pImd, Vector3i base)
 	{
 		Vector3i pos = base + Vector3i(inStart + shift, 0, i + shift);
 
-		if (rand()%6 == 1)
+		if (rand() % 6 == 1)
 		{
 			addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_SMALL, false, NULL, 0);
 		}
@@ -2342,7 +2401,7 @@ void initPerimeterSmoke(iIMDShape *pImd, Vector3i base)
 
 		pos = base + Vector3i(inEnd + shift, 0, i + shift);
 
-		if (rand()%6 == 1)
+		if (rand() % 6 == 1)
 		{
 			addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_SMALL, false, NULL, 0);
 		}
@@ -2367,13 +2426,13 @@ static UDWORD effectGetNumFrames(EFFECT *psEffect)
 }
 
 
-void	effectGiveAuxVar( UDWORD var)
+void	effectGiveAuxVar(UDWORD var)
 {
 	auxVar = var;
 }
 
 
-void	effectGiveAuxVarSec( UDWORD var)
+void	effectGiveAuxVarSec(UDWORD var)
 {
 	auxVarSec = var;
 }
@@ -2412,9 +2471,9 @@ static void effectDroidUpdates(void)
 						/* Present direction is important */
 						Vector2i behind = iSinCosR(psDroid->rot.direction, 50);
 						Vector3i pos(
-							clip(psDroid->pos.x - behind.x, 0, mapWidth),
-							clip(psDroid->pos.y - behind.y, 0, mapHeight),
-							0
+						    clip(psDroid->pos.x - behind.x, 0, mapWidth),
+						    clip(psDroid->pos.y - behind.y, 0, mapHeight),
+						    0
 						);
 
 						pos.z = map_Height(pos.x, pos.y);
@@ -2472,10 +2531,10 @@ static void effectStructureUpdates()
 				if (psStructure->sDisplay.imd->nconnectors == 1)
 				{
 					Vector3i eventPos = swapYZ(psStructure->pos) + Vector3i(
-						psStructure->sDisplay.imd->connectors->x,
-						psStructure->sDisplay.imd->connectors->z,
-						-psStructure->sDisplay.imd->connectors->y
-					);
+					                        psStructure->sDisplay.imd->connectors->x,
+					                        psStructure->sDisplay.imd->connectors->z,
+					                        -psStructure->sDisplay.imd->connectors->y
+					                    );
 
 					addEffect(&eventPos, EFFECT_SMOKE, SMOKE_TYPE_STEAM, false, NULL, 0);
 
@@ -2483,18 +2542,18 @@ static void effectStructureUpdates()
 				}
 				break;
 			case REF_POWER_GEN:
-			 {
-				Vector3i eventPos = swapYZ(psStructure->pos);
+				{
+					Vector3i eventPos = swapYZ(psStructure->pos);
 
-				// Add an effect over the central spire.
+					// Add an effect over the central spire.
 
-				eventPos.y = psStructure->pos.z + 48;
+					eventPos.y = psStructure->pos.z + 48;
 
-				addEffect(&eventPos, EFFECT_EXPLOSION, EXPLOSION_TYPE_TESLA, false, NULL, 0);
+					addEffect(&eventPos, EFFECT_EXPLOSION, EXPLOSION_TYPE_TESLA, false, NULL, 0);
 
-				audio_PlayObjStaticTrack(psStructure, ID_SOUND_POWER_SPARK);
-				break;
-			 }
+					audio_PlayObjStaticTrack(psStructure, ID_SOUND_POWER_SPARK);
+					break;
+				}
 			default:
 				break;
 			}

@@ -141,8 +141,8 @@ static		UBYTE	satUplinkExists[MAX_PLAYERS];
 //flag for when the player has one built - either completely or partially
 static		UBYTE	lasSatExists[MAX_PLAYERS];
 
-static bool setFunctionality(STRUCTURE* psBuilding, STRUCTURE_TYPE functionType);
-static void setFlagPositionInc(FUNCTIONALITY* pFunctionality, UDWORD player, UBYTE factoryType);
+static bool setFunctionality(STRUCTURE *psBuilding, STRUCTURE_TYPE functionType);
+static void setFlagPositionInc(FUNCTIONALITY *pFunctionality, UDWORD player, UBYTE factoryType);
 static void informPowerGen(STRUCTURE *psStruct);
 static bool electronicReward(STRUCTURE *psStructure, UBYTE attackPlayer);
 static void factoryReward(UBYTE losingPlayer, UBYTE rewardPlayer);
@@ -298,10 +298,10 @@ void initFactoryNumFlag(void)
 {
 	UDWORD i, j;
 
-	for(i=0; i< MAX_PLAYERS; i++)
+	for (i = 0; i < MAX_PLAYERS; i++)
 	{
 		//initialise the flag
-		for (j=0; j < NUM_FLAG_TYPES; j++)
+		for (j = 0; j < NUM_FLAG_TYPES; j++)
 		{
 			factoryNumFlag[i][j].clear();
 		}
@@ -311,7 +311,7 @@ void initFactoryNumFlag(void)
 //called at start of missions
 void resetFactoryNumFlag(void)
 {
-	for(unsigned int i = 0; i < MAX_PLAYERS; i++)
+	for (unsigned int i = 0; i < MAX_PLAYERS; i++)
 	{
 		for (int type = 0; type < NUM_FLAG_TYPES; type++)
 		{
@@ -324,11 +324,11 @@ void resetFactoryNumFlag(void)
 			FLAG_TYPE type;
 			switch (psStruct->pStructureType->type)
 			{
-				case REF_FACTORY:        type = FACTORY_FLAG; break;
-				case REF_CYBORG_FACTORY: type = CYBORG_FLAG;  break;
-				case REF_VTOL_FACTORY:   type = VTOL_FLAG;    break;
-				case REF_REPAIR_FACILITY: type = REPAIR_FLAG; break;
-				default: continue;
+			case REF_FACTORY:        type = FACTORY_FLAG; break;
+			case REF_CYBORG_FACTORY: type = CYBORG_FLAG;  break;
+			case REF_VTOL_FACTORY:   type = VTOL_FLAG;    break;
+			case REF_REPAIR_FACILITY: type = REPAIR_FLAG; break;
+			default: continue;
 			}
 
 			int inc = -1;
@@ -396,30 +396,30 @@ static void initModuleStats(unsigned i, STRUCTURE_TYPE type)
 	//need to work out the stats for the modules - HACK! - But less hacky than what was here before.
 	switch (type)
 	{
-		case REF_FACTORY_MODULE:
-			//store the stat for easy access later on
-			factoryModuleStat = i;
-			break;
+	case REF_FACTORY_MODULE:
+		//store the stat for easy access later on
+		factoryModuleStat = i;
+		break;
 
-		case REF_RESEARCH_MODULE:
-			//store the stat for easy access later on
-			researchModuleStat = i;
-			break;
+	case REF_RESEARCH_MODULE:
+		//store the stat for easy access later on
+		researchModuleStat = i;
+		break;
 
-		case REF_POWER_MODULE:
-			//store the stat for easy access later on
-			powerModuleStat = i;
-			break;
-		default:
-			break;
+	case REF_POWER_MODULE:
+		//store the stat for easy access later on
+		powerModuleStat = i;
+		break;
+	default:
+		break;
 	}
 }
 
 template <typename T, size_t N>
 inline
-size_t sizeOfArray( const T(&)[ N ] )
+size_t sizeOfArray(const T(&)[ N ])
 {
-  return N;
+	return N;
 }
 
 /* load the structure stats from the ini file */
@@ -493,15 +493,15 @@ bool loadStructureStats(QString filename)
 		QString strength = ini.value("strength", "").toString();
 		ASSERT_OR_RETURN(false, structStrength.contains(strength), "Invalid strength '%s' of structure '%s'", strength.toUtf8().constData(), getID(psStats));
 		psStats->strength = structStrength[strength];
-	
+
 		// set baseWidth
 		psStats->baseWidth = ini.value("width", 0).toUInt();
 		ASSERT_OR_RETURN(false, psStats->baseWidth <= 100, "Invalid width '%d' for structure '%s'", psStats->baseWidth, getID(psStats));
-		
+
 		// set baseBreadth
 		psStats->baseBreadth = ini.value("breadth", 0).toUInt();
 		ASSERT_OR_RETURN(false, psStats->baseBreadth < 100, "Invalid breadth '%d' for structure '%s'", psStats->baseBreadth, getID(psStats));
-		
+
 		psStats->height = ini.value("height").toUInt();
 		psStats->powerToBuild = ini.value("buildPower").toUInt();
 		psStats->buildPoints = ini.value("buildPoints").toUInt();
@@ -516,14 +516,14 @@ bool loadStructureStats(QString filename)
 		}
 
 		// set base model
-		QString baseModel = ini.value("baseModel","").toString();
+		QString baseModel = ini.value("baseModel", "").toString();
 		if (baseModel.compare("") != 0)
 		{
 			iIMDShape *imd = modelGet(baseModel);
 			ASSERT(imd != NULL, "Cannot find the PIE baseModel '%s' for structure '%s'", baseModel.toUtf8().constData(), getID(psStats));
 			psStats->pBaseIMD = imd;
 		}
-		
+
 		int ecm = getCompFromName(COMP_ECM, ini.value("ecmID", "ZNULLECM").toString());
 		ASSERT(ecm >= 0, "Invalid ECM found for '%s'", getID(psStats));
 		psStats->pECM = asECMStats + ecm;
@@ -620,7 +620,7 @@ void setCurrentStructQuantity(bool displayError)
 		}
 
 		for (psCurr = apsStructLists[player]; psCurr != NULL; psCurr =
-			psCurr->psNext)
+		         psCurr->psNext)
 		{
 			inc = psCurr->pStructureType - asStructureStats;
 			psStructLimits[inc].currentQuantity++;
@@ -731,7 +731,7 @@ int32_t structureDamage(STRUCTURE *psStructure, unsigned damage, WEAPON_CLASS we
 	CHECK_STRUCTURE(psStructure);
 
 	debug(LOG_ATTACK, "structure id %d, body %d, armour %d, damage: %d",
-		  psStructure->id, psStructure->body, objArmour(psStructure, weaponClass), damage);
+	      psStructure->id, psStructure->body, objArmour(psStructure, weaponClass), damage);
 
 	relativeDamage = objDamage(psStructure, damage, structureBody(psStructure), weaponClass, weaponSubClass, isDamagePerSecond, minDamage);
 
@@ -773,7 +773,7 @@ void structureBuild(STRUCTURE *psStruct, DROID *psDroid, int buildPoints, int bu
 		prevResearchState = intGetResearchState();
 	}
 
-	if (psDroid && !aiCheckAlliances(psStruct->player,psDroid->player))
+	if (psDroid && !aiCheckAlliances(psStruct->player, psDroid->player))
 	{
 		// Enemy structure
 		return;
@@ -786,7 +786,7 @@ void structureBuild(STRUCTURE *psStruct, DROID *psDroid, int buildPoints, int bu
 			{
 				// An enemy droid is blocking it
 				if ((STRUCTURE *) orderStateObj(psCurr, DORDER_BUILD) == psStruct
-				 && !aiCheckAlliances(psStruct->player,psCurr->player))
+				    && !aiCheckAlliances(psStruct->player, psCurr->player))
 				{
 					return;
 				}
@@ -834,11 +834,11 @@ void structureBuild(STRUCTURE *psStruct, DROID *psDroid, int buildPoints, int bu
 		//only play the sound if selected player
 		if (psDroid &&
 		    psStruct->player == selectedPlayer
-		 && (psDroid->order.type != DORDER_LINEBUILD
-		  || map_coord(psDroid->order.pos) == map_coord(psDroid->order.pos2)))
+		    && (psDroid->order.type != DORDER_LINEBUILD
+		        || map_coord(psDroid->order.pos) == map_coord(psDroid->order.pos2)))
 		{
-			audio_QueueTrackPos( ID_SOUND_STRUCTURE_COMPLETED,
-					psStruct->pos.x, psStruct->pos.y, psStruct->pos.z );
+			audio_QueueTrackPos(ID_SOUND_STRUCTURE_COMPLETED,
+			                    psStruct->pos.x, psStruct->pos.y, psStruct->pos.z);
 			intRefreshScreen();		// update any open interface bars.
 		}
 
@@ -868,7 +868,7 @@ void structureBuild(STRUCTURE *psStruct, DROID *psDroid, int buildPoints, int bu
 			psScrCBNewStructTruck	= psDroid;
 			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_STRUCTBUILT);
 
-			audio_StopObjTrack( psDroid, ID_SOUND_CONSTRUCTION_LOOP );
+			audio_StopObjTrack(psDroid, ID_SOUND_CONSTRUCTION_LOOP);
 		}
 		triggerEventStructBuilt(psStruct, psDroid);
 
@@ -926,10 +926,10 @@ void structureDemolish(STRUCTURE *psStruct, DROID *psDroid, int buildPoints)
 
 void structureRepair(STRUCTURE *psStruct, DROID *psDroid, int buildRate)
 {
-	int repairAmount = gameTimeAdjustedAverage(buildRate*structureBody(psStruct), psStruct->pStructureType->buildPoints);
+	int repairAmount = gameTimeAdjustedAverage(buildRate * structureBody(psStruct), psStruct->pStructureType->buildPoints);
 	/*	(droid construction power * current max hitpoints [incl. upgrades])
 			/ construction power that was necessary to build structure in the first place
-	
+
 	=> to repair a building from 1HP to full health takes as much time as building it.
 	=> if buildPoints = 1 and structureBody < buildPoints, repairAmount might get truncated to zero.
 		This happens with expensive, but weak buildings like mortar pits. In this case, do nothing
@@ -951,8 +951,8 @@ bool structSetManufacture(STRUCTURE *psStruct, DROID_TEMPLATE *psTempl, QUEUE_MO
 	                 (int)psStruct->pStructureType->type);
 	/* psTempl might be NULL if the build is being cancelled in the middle */
 	ASSERT_OR_RETURN(false, !psTempl
-	                 || (validTemplateForFactory(psTempl, psStruct, true) && researchedTemplate(psTempl, psStruct->player, true, true)) 
-	                 || psStruct->player == scavengerPlayer() || !bMultiPlayer, 
+	                 || (validTemplateForFactory(psTempl, psStruct, true) && researchedTemplate(psTempl, psStruct->player, true, true))
+	                 || psStruct->player == scavengerPlayer() || !bMultiPlayer,
 	                 "Wrong template for player %d factory, type %d.", psStruct->player, psStruct->pStructureType->type);
 
 	psFact = &psStruct->pFunctionality->factory;
@@ -1043,10 +1043,10 @@ static uint16_t wallType(WallOrientation orient)
 // look at where other walls are to decide what type of wall to build
 static WallOrientation structWallScan(bool aWallPresent[5][5], int x, int y)
 {
-	WallOrientation left  = aWallPresent[x - 1][y]? WallConnectLeft  : WallConnectNone;
-	WallOrientation right = aWallPresent[x + 1][y]? WallConnectRight : WallConnectNone;
-	WallOrientation up    = aWallPresent[x][y - 1]? WallConnectUp    : WallConnectNone;
-	WallOrientation down  = aWallPresent[x][y + 1]? WallConnectDown  : WallConnectNone;
+	WallOrientation left  = aWallPresent[x - 1][y] ? WallConnectLeft  : WallConnectNone;
+	WallOrientation right = aWallPresent[x + 1][y] ? WallConnectRight : WallConnectNone;
+	WallOrientation up    = aWallPresent[x][y - 1] ? WallConnectUp    : WallConnectNone;
+	WallOrientation down  = aWallPresent[x][y + 1] ? WallConnectDown  : WallConnectNone;
 	return WallOrientation(left | right | up | down);
 }
 
@@ -1075,14 +1075,14 @@ static void structFindWalls(unsigned player, Vector2i map, bool aWallPresent[5][
 {
 	for (int y = -2; y <= 2; ++y)
 		for (int x = -2; x <= 2; ++x)
-	{
-		STRUCTURE *psStruct = castStructure(mapTile(map.x + x, map.y + y)->psObject);
-		if (psStruct != NULL && isWallCombiningStructureType(psStruct->pStructureType) && aiCheckAlliances(player, psStruct->player))
 		{
-			aWallPresent[x + 2][y + 2] = true;
-			apsStructs[x + 2][y + 2] = psStruct;
+			STRUCTURE *psStruct = castStructure(mapTile(map.x + x, map.y + y)->psObject);
+			if (psStruct != NULL && isWallCombiningStructureType(psStruct->pStructureType) && aiCheckAlliances(player, psStruct->player))
+			{
+				aWallPresent[x + 2][y + 2] = true;
+				apsStructs[x + 2][y + 2] = psStruct;
+			}
 		}
-	}
 	// add in the wall about to be built
 	aWallPresent[2][2] = true;
 }
@@ -1091,13 +1091,13 @@ static void structFindWallBlueprints(Vector2i map, bool aWallPresent[5][5])
 {
 	for (int y = -2; y <= 2; ++y)
 		for (int x = -2; x <= 2; ++x)
-	{
-		STRUCTURE_STATS const *stats = getTileBlueprintStats(map.x + x, map.y + y);
-		if (stats != NULL && isWallCombiningStructureType(stats))
 		{
-			aWallPresent[x + 2][y + 2] = true;
+			STRUCTURE_STATS const *stats = getTileBlueprintStats(map.x + x, map.y + y);
+			if (stats != NULL && isWallCombiningStructureType(stats))
+			{
+				aWallPresent[x + 2][y + 2] = true;
+			}
 		}
-	}
 }
 
 static bool wallBlockingTerrainJoin(Vector2i map)
@@ -1113,10 +1113,10 @@ static WallOrientation structWallScanTerrain(bool aWallPresent[5][5], Vector2i m
 	if (orientation == WallConnectNone)
 	{
 		// If neutral, try choosing horizontal or vertical based on terrain, but don't change to corner type.
-		aWallPresent[2][1] = wallBlockingTerrainJoin(map + Vector2i( 0, -1));
-		aWallPresent[2][3] = wallBlockingTerrainJoin(map + Vector2i( 0,  1));
+		aWallPresent[2][1] = wallBlockingTerrainJoin(map + Vector2i(0, -1));
+		aWallPresent[2][3] = wallBlockingTerrainJoin(map + Vector2i(0,  1));
 		aWallPresent[1][2] = wallBlockingTerrainJoin(map + Vector2i(-1,  0));
-		aWallPresent[3][2] = wallBlockingTerrainJoin(map + Vector2i( 1,  0));
+		aWallPresent[3][2] = wallBlockingTerrainJoin(map + Vector2i(1,  0));
 		orientation = structWallScan(aWallPresent, 2, 2);
 		if ((orientation & (WallConnectLeft | WallConnectRight)) != 0 && (orientation & (WallConnectUp | WallConnectDown)) != 0)
 		{
@@ -1130,7 +1130,7 @@ static WallOrientation structWallScanTerrain(bool aWallPresent[5][5], Vector2i m
 static WallOrientation structChooseWallTypeBlueprint(Vector2i map)
 {
 	bool            aWallPresent[5][5];
-	STRUCTURE *     apsStructs[5][5];
+	STRUCTURE      *apsStructs[5][5];
 
 	// scan around the location looking for walls
 	memset(aWallPresent, 0, sizeof(aWallPresent));
@@ -1159,8 +1159,8 @@ static WallOrientation structChooseWallType(unsigned player, Vector2i map)
 		{
 			// do not look at walls diagonally from this wall
 			if (((x == 2 && y != 2) ||
-				(x != 2 && y == 2)) &&
-				aWallPresent[x][y])
+			     (x != 2 && y == 2)) &&
+			    aWallPresent[x][y])
 			{
 				// figure out what type the wall currently is
 				psStruct = apsStructs[x][y];
@@ -1171,7 +1171,7 @@ static WallOrientation structChooseWallType(unsigned player, Vector2i map)
 				}
 
 				// see what type the wall should be
-				WallOrientation scanType = structWallScan(aWallPresent, x,y);
+				WallOrientation scanType = structWallScan(aWallPresent, x, y);
 
 				// Got to change the wall
 				if (scanType != WallConnectNone)
@@ -1298,14 +1298,14 @@ STRUCTURE *buildStructure(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y, U
 	return buildStructureDir(pStructureType, x, y, 0, player, FromSave);
 }
 
-STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y, uint16_t direction, UDWORD player, bool FromSave)
+STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y, uint16_t direction, UDWORD player, bool FromSave)
 {
 	STRUCTURE	*psBuilding = NULL;
 	Vector2i size = getStructureStatsSize(pStructureType, direction);
 
 	ASSERT_OR_RETURN(NULL, pStructureType && pStructureType->type != REF_DEMOLISH, "You cannot build demolition!");
 
-	if (IsStatExpansionModule(pStructureType)==false)
+	if (IsStatExpansionModule(pStructureType) == false)
 	{
 		SDWORD preScrollMinX = 0, preScrollMinY = 0, preScrollMaxX = 0, preScrollMaxY = 0;
 		UDWORD	max = pStructureType - asStructureStats;
@@ -1325,26 +1325,26 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 		if (asStructLimits[player][max].currentQuantity + 1 > asStructLimits[player][max].limit)
 		{
 			debug(LOG_ERROR, "Player %u: Building %s could not be built due to building limits (has %d, max %d)!",
-				  player, getName(pStructureType), asStructLimits[player][max].currentQuantity,
-				  asStructLimits[player][max].limit);
+			      player, getName(pStructureType), asStructLimits[player][max].currentQuantity,
+			      asStructLimits[player][max].limit);
 			return NULL;
 		}
 
 		// snap the coords to a tile
-		x = (x & ~TILE_MASK) + size.x%2 * TILE_UNITS/2;
-		y = (y & ~TILE_MASK) + size.y%2 * TILE_UNITS/2;
+		x = (x & ~TILE_MASK) + size.x % 2 * TILE_UNITS / 2;
+		y = (y & ~TILE_MASK) + size.y % 2 * TILE_UNITS / 2;
 
 		//check not trying to build too near the edge
 		if (map_coord(x) < TOO_NEAR_EDGE || map_coord(x) > (mapWidth - TOO_NEAR_EDGE))
 		{
 			debug(LOG_WARNING, "attempting to build too closely to map-edge, "
-				  "x coord (%u) too near edge (req. distance is %u)", x, TOO_NEAR_EDGE);
+			      "x coord (%u) too near edge (req. distance is %u)", x, TOO_NEAR_EDGE);
 			return NULL;
 		}
 		if (map_coord(y) < TOO_NEAR_EDGE || map_coord(y) > (mapHeight - TOO_NEAR_EDGE))
 		{
 			debug(LOG_WARNING, "attempting to build too closely to map-edge, "
-				  "y coord (%u) too near edge (req. distance is %u)", y, TOO_NEAR_EDGE);
+			      "y coord (%u) too near edge (req. distance is %u)", y, TOO_NEAR_EDGE);
 			return NULL;
 		}
 
@@ -1353,10 +1353,10 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 		{
 			for (int dy = 0; dy < size.y; ++dy)
 				for (int dx = 0; dx < size.x; ++dx)
-			{
-				Vector2i pos = map_coord(Vector2i(x, y) - size*TILE_UNITS/2) + Vector2i(dx, dy);
-				wallOrientation = structChooseWallType(player, pos);  // This makes neighbouring walls match us, even if we're a hardpoint, not a wall.
-			}
+				{
+					Vector2i pos = map_coord(Vector2i(x, y) - size * TILE_UNITS / 2) + Vector2i(dx, dy);
+					wallOrientation = structChooseWallType(player, pos);  // This makes neighbouring walls match us, even if we're a hardpoint, not a wall.
+				}
 		}
 
 		// allocate memory for and initialize a structure object
@@ -1371,13 +1371,13 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 
 		psBuilding->pos.x = x;
 		psBuilding->pos.y = y;
-		psBuilding->rot.direction = (direction + 0x2000)&0xC000;
+		psBuilding->rot.direction = (direction + 0x2000) & 0xC000;
 		psBuilding->rot.pitch = 0;
 		psBuilding->rot.roll = 0;
 
 		//This needs to be done before the functionality bit...
 		//load into the map data and structure list if not an upgrade
-		Vector2i map = map_coord(Vector2i(x, y)) - size/2;
+		Vector2i map = map_coord(Vector2i(x, y)) - size / 2;
 
 		//set up the imd to use for the display
 		psBuilding->sDisplay.imd = pStructureType->pIMD[0];
@@ -1394,7 +1394,7 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 
 			if (psFeature && psFeature->psStats->subType == FEAT_OIL_RESOURCE)
 			{
-				if (fireOnLocation(psFeature->pos.x,psFeature->pos.y))
+				if (fireOnLocation(psFeature->pos.x, psFeature->pos.y))
 				{
 					// Can't build on burning oil resource
 					delete psBuilding;
@@ -1425,7 +1425,7 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 				{
 					if (TileHasStructure(mapTile(map.x + width, map.y + breadth)))
 					{
-						if (getTileStructure (map.x + width, map.y + breadth)->pStructureType->type == REF_WALLCORNER)
+						if (getTileStructure(map.x + width, map.y + breadth)->pStructureType->type == REF_WALLCORNER)
 						{
 							delete psBuilding;
 							return NULL; // dont build.
@@ -1436,9 +1436,9 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 				else if (TileHasStructure(psTile))
 				{
 					debug(LOG_ERROR, "Player %u (%s): is building %s at (%d, %d) but found %s already at (%d, %d)",
-						   player, isHumanPlayer(player) ? "Human" : "AI", getName(pStructureType), map.x, map.y,
-						   getName(getTileStructure(map.x + width, map.y + breadth)->pStructureType),
-						   map.x + width, map.y + breadth);
+					      player, isHumanPlayer(player) ? "Human" : "AI", getName(pStructureType), map.x, map.y,
+					      getName(getTileStructure(map.x + width, map.y + breadth)->pStructureType),
+					      map.x + width, map.y + breadth);
 					delete psBuilding;
 					return NULL;
 				}
@@ -1455,15 +1455,15 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 
 		switch (pStructureType->type)
 		{
-			case REF_REARM_PAD:
-				break;  // Not blocking.
-			default:
-				auxStructureBlocking(psBuilding);
-				break;
+		case REF_REARM_PAD:
+			break;  // Not blocking.
+		default:
+			auxStructureBlocking(psBuilding);
+			break;
 		}
 
 		//set up the rest of the data
-		for (i = 0;i < STRUCT_MAXWEAPS;i++)
+		for (i = 0; i < STRUCT_MAXWEAPS; i++)
 		{
 			psBuilding->asWeaps[i].rot.direction = 0;
 			psBuilding->asWeaps[i].rot.pitch = 0;
@@ -1488,7 +1488,7 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 		{
 			UDWORD weapon;
 
-			for(weapon=0; weapon < pStructureType->numWeaps; weapon++)
+			for (weapon = 0; weapon < pStructureType->numWeaps; weapon++)
 			{
 				if (pStructureType->psWeapStat[weapon])
 				{
@@ -1530,7 +1530,7 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 		// Structure is visible to anyone with shared vision.
 		for (unsigned vPlayer = 0; vPlayer < MAX_PLAYERS; ++vPlayer)
 		{
-			psBuilding->visible[vPlayer] = hasSharedVision(vPlayer, player)? UINT8_MAX : 0;
+			psBuilding->visible[vPlayer] = hasSharedVision(vPlayer, player) ? UINT8_MAX : 0;
 		}
 
 		// Reveal any tiles that can be seen by the structure
@@ -1556,7 +1556,7 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 			// NOTE: resizeRadar() may be required here, since we change scroll limits?
 		}
 		//set the functionality dependant on the type of structure
-		if(!setFunctionality(psBuilding, pStructureType->type))
+		if (!setFunctionality(psBuilding, pStructureType->type))
 		{
 			removeStructFromMap(psBuilding);
 			delete psBuilding;
@@ -1654,7 +1654,7 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 		if (pStructureType->type == REF_FACTORY_MODULE)
 		{
 			if (psBuilding->pStructureType->type != REF_FACTORY &&
-				psBuilding->pStructureType->type != REF_VTOL_FACTORY)
+			    psBuilding->pStructureType->type != REF_VTOL_FACTORY)
 			{
 				return NULL;
 			}
@@ -1736,16 +1736,16 @@ STRUCTURE* buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 		}
 		intNotifyResearchButton(prevResearchState);
 	}
-	if(pStructureType->type!=REF_WALL && pStructureType->type!=REF_WALLCORNER)
+	if (pStructureType->type != REF_WALL && pStructureType->type != REF_WALLCORNER)
 	{
-		if(player == selectedPlayer)
+		if (player == selectedPlayer)
 		{
 			scoreUpdateVar(WD_STR_BUILT);
 		}
 	}
 
 	/* why is this necessary - it makes tiles under the structure visible */
-	setUnderTilesVis(psBuilding,player);
+	setUnderTilesVis(psBuilding, player);
 
 	psBuilding->prevTime = gameTime - deltaGameTime;  // Structure hasn't been updated this tick, yet.
 	psBuilding->time = psBuilding->prevTime - 1;      // -1, so the times are different, even before updating.
@@ -1761,14 +1761,14 @@ STRUCTURE *buildBlueprint(STRUCTURE_STATS const *psStats, Vector2i xy, uint16_t 
 	ASSERT_OR_RETURN(NULL, psStats->pIMD[0] != NULL, "No blueprint model for %s", getName(psStats));
 
 	Vector3i pos(xy, INT32_MIN);
-	Rotation rot((direction + 0x2000)&0xC000, 0, 0);  // Round direction to nearest 90°.
+	Rotation rot((direction + 0x2000) & 0xC000, 0, 0); // Round direction to nearest 90°.
 
 	StructureBounds b = getStructureBounds(psStats, xy, direction);
 	for (int j = 0; j <= b.size.y; ++j)
 		for (int i = 0; i <= b.size.x; ++i)
-	{
-		pos.z = std::max(pos.z, map_TileHeight(b.map.x + i, b.map.y + j));
-	}
+		{
+			pos.z = std::max(pos.z, map_TileHeight(b.map.x + i, b.map.y + j));
+		}
 
 	int moduleNumber = 0;
 	std::vector<iIMDShape *> const *pIMD = &psStats->pIMD;
@@ -1781,7 +1781,7 @@ STRUCTURE *buildBlueprint(STRUCTURE_STATS const *psStats, Vector2i xy, uint16_t 
 			{
 				moduleIndex = nextModuleToBuild(baseStruct, 0);
 			}
-			int baseModuleNumber = moduleIndex*2 - 1;  // *2-1 because even-numbered IMDs are structures, odd-numbered IMDs are just the modules.
+			int baseModuleNumber = moduleIndex * 2 - 1; // *2-1 because even-numbered IMDs are structures, odd-numbered IMDs are just the modules.
 			std::vector<iIMDShape *> const *basepIMD = &baseStruct->pStructureType->pIMD;
 			if ((unsigned)baseModuleNumber < basepIMD->size())
 			{
@@ -1848,33 +1848,33 @@ static bool setFunctionality(STRUCTURE	*psBuilding, STRUCTURE_TYPE functionType)
 
 	switch (functionType)
 	{
-		case REF_FACTORY:
-		case REF_CYBORG_FACTORY:
-		case REF_VTOL_FACTORY:
-		case REF_RESEARCH:
-		case REF_POWER_GEN:
-		case REF_RESOURCE_EXTRACTOR:
-		case REF_REPAIR_FACILITY:
-		case REF_REARM_PAD:
-		case REF_WALL:
-		case REF_GATE:
-			// Allocate space for the buildings functionality
-			psBuilding->pFunctionality = (FUNCTIONALITY *)calloc(1, sizeof(*psBuilding->pFunctionality));
-			ASSERT_OR_RETURN(false, psBuilding != NULL, "Out of memory");
-			break;
+	case REF_FACTORY:
+	case REF_CYBORG_FACTORY:
+	case REF_VTOL_FACTORY:
+	case REF_RESEARCH:
+	case REF_POWER_GEN:
+	case REF_RESOURCE_EXTRACTOR:
+	case REF_REPAIR_FACILITY:
+	case REF_REARM_PAD:
+	case REF_WALL:
+	case REF_GATE:
+		// Allocate space for the buildings functionality
+		psBuilding->pFunctionality = (FUNCTIONALITY *)calloc(1, sizeof(*psBuilding->pFunctionality));
+		ASSERT_OR_RETURN(false, psBuilding != NULL, "Out of memory");
+		break;
 
-		default:
-			psBuilding->pFunctionality = NULL;
-			break;
+	default:
+		psBuilding->pFunctionality = NULL;
+		break;
 	}
 
 	switch (functionType)
 	{
-		case REF_FACTORY:
-		case REF_CYBORG_FACTORY:
-		case REF_VTOL_FACTORY:
+	case REF_FACTORY:
+	case REF_CYBORG_FACTORY:
+	case REF_VTOL_FACTORY:
 		{
-			FACTORY* psFactory = &psBuilding->pFunctionality->factory;
+			FACTORY *psFactory = &psBuilding->pFunctionality->factory;
 			unsigned int x, y;
 
 			psFactory->psSubject = NULL;
@@ -1889,8 +1889,8 @@ static bool setFunctionality(STRUCTURE	*psBuilding, STRUCTURE_TYPE functionType)
 			}
 
 			// initialise the assembly point position
-			x = map_coord(psBuilding->pos.x + (getStructureWidth(psBuilding)   + 1) * TILE_UNITS/2);
-			y = map_coord(psBuilding->pos.y + (getStructureBreadth(psBuilding) + 1) * TILE_UNITS/2);
+			x = map_coord(psBuilding->pos.x + (getStructureWidth(psBuilding)   + 1) * TILE_UNITS / 2);
+			y = map_coord(psBuilding->pos.y + (getStructureBreadth(psBuilding) + 1) * TILE_UNITS / 2);
 
 			// Set the assembly point
 			setAssemblyPoint(psFactory->psAssemblyPoint, world_coord(x), world_coord(y), psBuilding->player, true);
@@ -1899,37 +1899,37 @@ static bool setFunctionality(STRUCTURE	*psBuilding, STRUCTURE_TYPE functionType)
 			addFlagPosition(psFactory->psAssemblyPoint);
 			switch (functionType)
 			{
-				case REF_FACTORY:
-					setFlagPositionInc(psBuilding->pFunctionality, psBuilding->player, FACTORY_FLAG);
-					break;
-				case REF_CYBORG_FACTORY:
-					setFlagPositionInc(psBuilding->pFunctionality, psBuilding->player, CYBORG_FLAG);
-					break;
-				case REF_VTOL_FACTORY:
-					setFlagPositionInc(psBuilding->pFunctionality, psBuilding->player, VTOL_FLAG);
-					break;
-				default:
-					ASSERT_OR_RETURN(false, false, "Invalid factory type");
+			case REF_FACTORY:
+				setFlagPositionInc(psBuilding->pFunctionality, psBuilding->player, FACTORY_FLAG);
+				break;
+			case REF_CYBORG_FACTORY:
+				setFlagPositionInc(psBuilding->pFunctionality, psBuilding->player, CYBORG_FLAG);
+				break;
+			case REF_VTOL_FACTORY:
+				setFlagPositionInc(psBuilding->pFunctionality, psBuilding->player, VTOL_FLAG);
+				break;
+			default:
+				ASSERT_OR_RETURN(false, false, "Invalid factory type");
 			}
 			break;
 		}
-		case REF_POWER_GEN:
-		case REF_HQ:
-		case REF_REARM_PAD:
+	case REF_POWER_GEN:
+	case REF_HQ:
+	case REF_REARM_PAD:
 		{
 			break;
 		}
-		case REF_RESOURCE_EXTRACTOR:
+	case REF_RESOURCE_EXTRACTOR:
 		{
-			RES_EXTRACTOR* psResExtracter = &psBuilding->pFunctionality->resourceExtractor;
+			RES_EXTRACTOR *psResExtracter = &psBuilding->pFunctionality->resourceExtractor;
 
 			// Make the structure inactive
 			psResExtracter->psPowerGen = NULL;
 			break;
 		}
-		case REF_REPAIR_FACILITY:
+	case REF_REPAIR_FACILITY:
 		{
-			REPAIR_FACILITY* psRepairFac = &psBuilding->pFunctionality->repairFacility;
+			REPAIR_FACILITY *psRepairFac = &psBuilding->pFunctionality->repairFacility;
 			unsigned int x, y;
 
 			psRepairFac->psObj = NULL;
@@ -1946,21 +1946,21 @@ static bool setFunctionality(STRUCTURE	*psBuilding, STRUCTURE_TYPE functionType)
 			}
 
 			// Initialise the assembly point
-			x = map_coord(psBuilding->pos.x + (getStructureWidth(psBuilding)   + 1) * TILE_UNITS/2);
-			y = map_coord(psBuilding->pos.y + (getStructureBreadth(psBuilding) + 1) * TILE_UNITS/2);
+			x = map_coord(psBuilding->pos.x + (getStructureWidth(psBuilding)   + 1) * TILE_UNITS / 2);
+			y = map_coord(psBuilding->pos.y + (getStructureBreadth(psBuilding) + 1) * TILE_UNITS / 2);
 
 			// Set the assembly point
 			setAssemblyPoint(psRepairFac->psDeliveryPoint, world_coord(x),
-							 world_coord(y), psBuilding->player, true);
+			                 world_coord(y), psBuilding->player, true);
 
 			// Add the flag (triangular marker on the ground) at the delivery point
 			addFlagPosition(psRepairFac->psDeliveryPoint);
 			setFlagPositionInc(psBuilding->pFunctionality, psBuilding->player, REPAIR_FLAG);
 			break;
 		}
-		// Structure types without a FUNCTIONALITY
-		default:
-			break;
+	// Structure types without a FUNCTIONALITY
+	default:
+		break;
 	}
 
 	return true;
@@ -1972,47 +1972,47 @@ void assignFactoryCommandDroid(STRUCTURE *psStruct, DROID *psCommander)
 {
 	FACTORY			*psFact;
 	FLAG_POSITION	*psFlag, *psNext, *psPrev;
-	SDWORD			factoryInc,typeFlag;
+	SDWORD			factoryInc, typeFlag;
 
 	CHECK_STRUCTURE(psStruct);
-	ASSERT_OR_RETURN( , StructIsFactory(psStruct),"structure not a factory");
+	ASSERT_OR_RETURN(, StructIsFactory(psStruct), "structure not a factory");
 
 	psFact = &psStruct->pFunctionality->factory;
 
-	switch(psStruct->pStructureType->type)
+	switch (psStruct->pStructureType->type)
 	{
-		case REF_FACTORY:
-			typeFlag = FACTORY_FLAG;
-			break;
-		case REF_VTOL_FACTORY:
-			typeFlag = VTOL_FLAG;
-			break;
-		case REF_CYBORG_FACTORY:
-			typeFlag = CYBORG_FLAG;
-			break;
-		default:
-			ASSERT(!"unknown factory type", "unknown factory type");
-			typeFlag = FACTORY_FLAG;
-			break;
+	case REF_FACTORY:
+		typeFlag = FACTORY_FLAG;
+		break;
+	case REF_VTOL_FACTORY:
+		typeFlag = VTOL_FLAG;
+		break;
+	case REF_CYBORG_FACTORY:
+		typeFlag = CYBORG_FLAG;
+		break;
+	default:
+		ASSERT(!"unknown factory type", "unknown factory type");
+		typeFlag = FACTORY_FLAG;
+		break;
 	}
 
 	// removing a commander from a factory
-	if ( psFact->psCommander != NULL )
+	if (psFact->psCommander != NULL)
 	{
 		if (typeFlag == FACTORY_FLAG)
 		{
 			secondarySetState(psFact->psCommander, DSO_CLEAR_PRODUCTION,
-					(SECONDARY_STATE)(1 << ( psFact->psAssemblyPoint->factoryInc + DSS_ASSPROD_SHIFT)) );
+			                  (SECONDARY_STATE)(1 << (psFact->psAssemblyPoint->factoryInc + DSS_ASSPROD_SHIFT)));
 		}
 		else if (typeFlag == CYBORG_FLAG)
 		{
 			secondarySetState(psFact->psCommander, DSO_CLEAR_PRODUCTION,
-					(SECONDARY_STATE)(1 << ( psFact->psAssemblyPoint->factoryInc + DSS_ASSPROD_CYBORG_SHIFT)) );
+			                  (SECONDARY_STATE)(1 << (psFact->psAssemblyPoint->factoryInc + DSS_ASSPROD_CYBORG_SHIFT)));
 		}
 		else
 		{
 			secondarySetState(psFact->psCommander, DSO_CLEAR_PRODUCTION,
-					(SECONDARY_STATE)(1 << ( psFact->psAssemblyPoint->factoryInc + DSS_ASSPROD_VTOL_SHIFT)) );
+			                  (SECONDARY_STATE)(1 << (psFact->psAssemblyPoint->factoryInc + DSS_ASSPROD_VTOL_SHIFT)));
 		}
 
 		psFact->psCommander = NULL;
@@ -2029,9 +2029,9 @@ void assignFactoryCommandDroid(STRUCTURE *psStruct, DROID *psCommander)
 		}
 	}
 
-	if ( psCommander != NULL )
+	if (psCommander != NULL)
 	{
-		ASSERT_OR_RETURN( , !missionIsOffworld(), "cannot assign a commander to a factory when off world" );
+		ASSERT_OR_RETURN(, !missionIsOffworld(), "cannot assign a commander to a factory when off world");
 
 		factoryInc = psFact->psAssemblyPoint->factoryInc;
 		psPrev = NULL;
@@ -2040,9 +2040,9 @@ void assignFactoryCommandDroid(STRUCTURE *psStruct, DROID *psCommander)
 		{
 			psNext = psFlag->psNext;
 
-			if ( (psFlag->factoryInc == factoryInc) && (psFlag->factoryType == typeFlag)   )
+			if ((psFlag->factoryInc == factoryInc) && (psFlag->factoryType == typeFlag))
 			{
-				if ( psFlag != psFact->psAssemblyPoint )
+				if (psFlag != psFact->psAssemblyPoint)
 				{
 					removeFlagPosition(psFlag);
 				}
@@ -2051,7 +2051,7 @@ void assignFactoryCommandDroid(STRUCTURE *psStruct, DROID *psCommander)
 					// need to keep the assembly point(s) for the factory
 					// but remove it(the primary) from the list so it doesn't get
 					// displayed
-					if ( psPrev == NULL )
+					if (psPrev == NULL)
 					{
 						apsFlagPosLists[psStruct->player] = psFlag->psNext;
 					}
@@ -2078,11 +2078,11 @@ void clearCommandDroidFactory(DROID *psDroid)
 {
 	STRUCTURE	*psCurr;
 
-	for(psCurr = apsStructLists[selectedPlayer]; psCurr; psCurr=psCurr->psNext)
+	for (psCurr = apsStructLists[selectedPlayer]; psCurr; psCurr = psCurr->psNext)
 	{
-		if ( (psCurr->pStructureType->type == REF_FACTORY) ||
-			(psCurr->pStructureType->type == REF_CYBORG_FACTORY) ||
-			(psCurr->pStructureType->type == REF_VTOL_FACTORY) )
+		if ((psCurr->pStructureType->type == REF_FACTORY) ||
+		    (psCurr->pStructureType->type == REF_CYBORG_FACTORY) ||
+		    (psCurr->pStructureType->type == REF_VTOL_FACTORY))
 		{
 			if (psCurr->pFunctionality->factory.psCommander == psDroid)
 			{
@@ -2090,11 +2090,11 @@ void clearCommandDroidFactory(DROID *psDroid)
 			}
 		}
 	}
-	for(psCurr = mission.apsStructLists[selectedPlayer]; psCurr; psCurr=psCurr->psNext)
+	for (psCurr = mission.apsStructLists[selectedPlayer]; psCurr; psCurr = psCurr->psNext)
 	{
-		if ( (psCurr->pStructureType->type == REF_FACTORY) ||
-			(psCurr->pStructureType->type == REF_CYBORG_FACTORY) ||
-			(psCurr->pStructureType->type == REF_VTOL_FACTORY) )
+		if ((psCurr->pStructureType->type == REF_FACTORY) ||
+		    (psCurr->pStructureType->type == REF_CYBORG_FACTORY) ||
+		    (psCurr->pStructureType->type == REF_VTOL_FACTORY))
 		{
 			if (psCurr->pFunctionality->factory.psCommander == psDroid)
 			{
@@ -2118,12 +2118,12 @@ static bool structClearTile(UWORD x, UWORD y)
 	}
 
 	/* Check for a droid */
-	for(player=0; player< MAX_PLAYERS; player++)
+	for (player = 0; player < MAX_PLAYERS; player++)
 	{
-		for(psCurr = apsDroidLists[player]; psCurr; psCurr=psCurr->psNext)
+		for (psCurr = apsDroidLists[player]; psCurr; psCurr = psCurr->psNext)
 		{
 			if (map_coord(psCurr->pos.x) == x
-			 && map_coord(psCurr->pos.y) == y)
+			    && map_coord(psCurr->pos.y) == y)
 			{
 				debug(LOG_NEVER, "failed - not vacant");
 				return false;
@@ -2171,7 +2171,7 @@ bool placeDroid(STRUCTURE *psStructure, UDWORD *droidX, UDWORD *droidY)
 	}
 
 	/* Round direction to nearest 90°. */
-	uint16_t direction = (psStructure->rot.direction + 0x2000)&0xC000;
+	uint16_t direction = (psStructure->rot.direction + 0x2000) & 0xC000;
 
 	/* We sort all adjacent tiles by their Manhattan distance to the
 	target droid exit tile, misplaced by (1/3, 1/4) tiles.
@@ -2256,7 +2256,7 @@ bool placeDroid(STRUCTURE *psStructure, UDWORD *droidX, UDWORD *droidY)
 to the assembly point, returns true if droid was placed successfully */
 static bool structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl, DROID **ppsDroid)
 {
-	UDWORD			x,y;
+	UDWORD			x, y;
 	bool			placed;//bTemp = false;
 	DROID			*psNewDroid;
 	FACTORY			*psFact;
@@ -2301,11 +2301,11 @@ static bool structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl, DR
 			}
 		}
 
-		if(psStructure->visible[selectedPlayer])
+		if (psStructure->visible[selectedPlayer])
 		{
 			/* add smoke effect to cover the droid's emergence from the factory */
 			iVecEffect.x = psNewDroid->pos.x;
-			iVecEffect.y = map_Height( psNewDroid->pos.x, psNewDroid->pos.y ) + DROID_CONSTRUCTION_SMOKE_HEIGHT;
+			iVecEffect.y = map_Height(psNewDroid->pos.x, psNewDroid->pos.y) + DROID_CONSTRUCTION_SMOKE_HEIGHT;
 			iVecEffect.z = psNewDroid->pos.y;
 			addEffect(&iVecEffect, EFFECT_CONSTRUCTION, CONSTRUCTION_TYPE_DRIFTING, false, NULL, 0, gameTime - deltaGameTime + 1);
 			iVecEffect.x = psNewDroid->pos.x - DROID_CONSTRUCTION_SMOKE_OFFSET;
@@ -2321,9 +2321,9 @@ static bool structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl, DR
 		/* add the droid to the list */
 		addDroid(psNewDroid, apsDroidLists);
 		*ppsDroid = psNewDroid;
-		if ( psNewDroid->player == selectedPlayer )
+		if (psNewDroid->player == selectedPlayer)
 		{
-			audio_QueueTrack( ID_SOUND_DROID_COMPLETED );
+			audio_QueueTrack(ID_SOUND_DROID_COMPLETED);
 			intRefreshScreen();	// update any interface implications.
 		}
 
@@ -2347,7 +2347,7 @@ static bool structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl, DR
 		// if we've built a command droid - make sure that it isn't assigned to another commander
 		assignCommander = false;
 		if ((psNewDroid->droidType == DROID_COMMAND) &&
-			(psFact->psCommander != NULL))
+		    (psFact->psCommander != NULL))
 		{
 			assignFactoryCommandDroid(psStructure, NULL);
 			assignCommander = true;
@@ -2367,7 +2367,7 @@ static bool structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl, DR
 				orderDroidLoc(psNewDroid, DORDER_MOVE, psFact->psCommander->pos.x, psFact->psCommander->pos.y, ModeQueue);
 			}
 			else if (idfDroid(psNewDroid) ||
-				isVtolDroid(psNewDroid))
+			         isVtolDroid(psNewDroid))
 			{
 				orderDroidObj(psNewDroid, DORDER_FIRESUPPORT, psFact->psCommander, ModeQueue);
 				//moveToRearm(psNewDroid);
@@ -2413,7 +2413,7 @@ static bool structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl, DR
 		{
 			assignFactoryCommandDroid(psStructure, psNewDroid);
 		}
-		if ( psNewDroid->player == selectedPlayer )
+		if (psNewDroid->player == selectedPlayer)
 		{
 			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DROIDBUILT);
 		}
@@ -2427,7 +2427,7 @@ static bool structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl, DR
 }
 
 
-static bool IsFactoryCommanderGroupFull(const FACTORY* psFactory)
+static bool IsFactoryCommanderGroupFull(const FACTORY *psFactory)
 {
 	if (bMultiPlayer)
 	{
@@ -2438,7 +2438,10 @@ static bool IsFactoryCommanderGroupFull(const FACTORY* psFactory)
 	unsigned int DroidsInGroup;
 
 	// If we don't have a commander return false (group not full)
-	if (psFactory->psCommander==NULL) return false;
+	if (psFactory->psCommander == NULL)
+	{
+		return false;
+	}
 
 	// allow any number of IDF droids
 	if (templateIsIDF(psFactory->psSubject) || asPropulsionStats[psFactory->psSubject->asParts[COMP_PROPULSION]].propulsionType == PROPULSION_TYPE_LIFT)
@@ -2451,7 +2454,9 @@ static bool IsFactoryCommanderGroupFull(const FACTORY* psFactory)
 
 	// if the number in group is less than the maximum allowed then return false (group not full)
 	if (DroidsInGroup < cmdDroidMaxGroup(psFactory->psCommander))
+	{
 		return false;
+	}
 
 	// the number in group has reached the maximum
 	return true;
@@ -2517,7 +2522,7 @@ bool CheckHaltOnMaxUnitsReached(STRUCTURE *psStructure)
 		sstrcpy(limitMsg, _("Can't build anymore units, Unit Limit Reached — Production Halted"));
 	}
 	else switch (droidTemplateType(templ))
-	{
+		{
 		case DROID_COMMAND:
 			if (getNumCommandDroids(psStructure->player) >= getMaxCommanders(psStructure->player))
 			{
@@ -2535,7 +2540,7 @@ bool CheckHaltOnMaxUnitsReached(STRUCTURE *psStructure)
 			break;
 		default:
 			break;
-	}
+		}
 
 	if (psStructure->player == selectedPlayer && lastMaxUnitMessage + MAX_UNIT_MESSAGE_PAUSE < gameTime)
 	{
@@ -2562,7 +2567,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 	Vector3i iVecEffect;
 	bool				bDroidPlaced = false;
 	WEAPON_STATS		*psWStats;
-	SDWORD				xdiff,ydiff, mindist, currdist;
+	SDWORD				xdiff, ydiff, mindist, currdist;
 	UDWORD				i;
 	UWORD 				tmpOrigin = ORIGIN_UNKNOWN;
 
@@ -2573,8 +2578,14 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 		// This isn't supposed to happen, and really shouldn't be possible - if this happens, maybe a structure is being updated twice?
 		int count1 = 0, count2 = 0;
 		STRUCTURE *s;
-		for (s =         apsStructLists[psStructure->player]; s != NULL; s = s->psNext) count1 += s == psStructure;
-		for (s = mission.apsStructLists[psStructure->player]; s != NULL; s = s->psNext) count2 += s == psStructure;
+		for (s =         apsStructLists[psStructure->player]; s != NULL; s = s->psNext)
+		{
+			count1 += s == psStructure;
+		}
+		for (s = mission.apsStructLists[psStructure->player]; s != NULL; s = s->psNext)
+		{
+			count2 += s == psStructure;
+		}
 		debug(LOG_ERROR, "psStructure->prevTime = %u, psStructure->time = %u, gameTime = %u, count1 = %d, count2 = %d", psStructure->prevTime, psStructure->time, gameTime, count1, count2);
 		--psStructure->time;
 	}
@@ -2589,13 +2600,13 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 	{
 		switch (psStructure->pStructureType->type)
 		{
-			case REF_RESEARCH:
-			case REF_FACTORY:
-			case REF_CYBORG_FACTORY:
-			case REF_VTOL_FACTORY:
-				break;
-			default:
-				return; // nothing to do
+		case REF_RESEARCH:
+		case REF_FACTORY:
+		case REF_CYBORG_FACTORY:
+		case REF_VTOL_FACTORY:
+			break;
+		default:
+			return; // nothing to do
 		}
 	}
 
@@ -2604,12 +2615,12 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 	if (psStructure->numWeaps == 0)
 	{
 		if ((psStructure->asWeaps[0].nStat == 0) &&
-			(psStructure->pStructureType->type != REF_REPAIR_FACILITY))
+		    (psStructure->pStructureType->type != REF_REPAIR_FACILITY))
 		{
 
-	//////
-	// - radar should rotate every three seconds ... 'cause we timed it at Heathrow !
-	// gameTime is in milliseconds - one rotation every 3 seconds = 1 rotation event 3000 millisecs
+			//////
+			// - radar should rotate every three seconds ... 'cause we timed it at Heathrow !
+			// gameTime is in milliseconds - one rotation every 3 seconds = 1 rotation event 3000 millisecs
 			psStructure->asWeaps[0].rot.direction = (uint16_t)((uint64_t)gameTime * 65536 / 3000);  // Cast wrapping intended.
 			psStructure->asWeaps[0].rot.pitch = 0;
 		}
@@ -2628,25 +2639,25 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 	if (psStructure->numWeaps > 0)
 	{
 		//structures always update their targets
-		for (i = 0;i < psStructure->numWeaps;i++)
+		for (i = 0; i < psStructure->numWeaps; i++)
 		{
 			if (psStructure->asWeaps[i].nStat > 0 &&
-				asWeaponStats[psStructure->asWeaps[i].nStat].weaponSubClass != WSC_LAS_SAT)
+			    asWeaponStats[psStructure->asWeaps[i].nStat].weaponSubClass != WSC_LAS_SAT)
 			{
-				if (aiChooseTarget(psStructure, &psChosenObjs[i], i, true, &tmpOrigin) )
+				if (aiChooseTarget(psStructure, &psChosenObjs[i], i, true, &tmpOrigin))
 				{
 					objTrace(psStructure->id, "Weapon %d is targeting %d at (%d, %d)", i, psChosenObjs[i]->id,
-						psChosenObjs[i]->pos.x, psChosenObjs[i]->pos.y);
+					         psChosenObjs[i]->pos.x, psChosenObjs[i]->pos.y);
 					setStructureTarget(psStructure, psChosenObjs[i], i, tmpOrigin);
 				}
 				else
 				{
-					if ( aiChooseTarget(psStructure, &psChosenObjs[0], 0, true, &tmpOrigin) )
+					if (aiChooseTarget(psStructure, &psChosenObjs[0], 0, true, &tmpOrigin))
 					{
 						if (psChosenObjs[0])
 						{
 							objTrace(psStructure->id, "Weapon %d is supporting main weapon: %d at (%d, %d)", i,
-								psChosenObjs[0]->id, psChosenObjs[0]->pos.x, psChosenObjs[0]->pos.y);
+							         psChosenObjs[0]->id, psChosenObjs[0]->pos.x, psChosenObjs[0]->pos.y);
 							setStructureTarget(psStructure, psChosenObjs[0], i, tmpOrigin);
 							psChosenObjs[i] = psChosenObjs[0];
 						}
@@ -2731,28 +2742,28 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 	*/
 	switch (psStructure->pStructureType->type)
 	{
-		case REF_RESEARCH:
+	case REF_RESEARCH:
 		{
 			pSubject = psStructure->pFunctionality->researchFacility.psSubject;
 			structureMode = REF_RESEARCH;
 			break;
 		}
-		case REF_FACTORY:
-		case REF_CYBORG_FACTORY:
-		case REF_VTOL_FACTORY:
+	case REF_FACTORY:
+	case REF_CYBORG_FACTORY:
+	case REF_VTOL_FACTORY:
 		{
 			pSubject = psStructure->pFunctionality->factory.psSubject;
 			structureMode = REF_FACTORY;
 			//check here to see if the factory's commander has died
 			if (psStructure->pFunctionality->factory.psCommander &&
-				psStructure->pFunctionality->factory.psCommander->died)
+			    psStructure->pFunctionality->factory.psCommander->died)
 			{
 				//remove the commander from the factory
 				assignFactoryCommandDroid(psStructure, NULL);
 			}
 			break;
 		}
-		case REF_REPAIR_FACILITY: // FIXME FIXME FIXME: Magic numbers in this section
+	case REF_REPAIR_FACILITY: // FIXME FIXME FIXME: Magic numbers in this section
 		{
 			psRepairFac = &psStructure->pFunctionality->repairFacility;
 			psChosenObj = psRepairFac->psObj;
@@ -2769,14 +2780,14 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 
 			// skip droids that are trying to get to other repair factories
 			if (psDroid != NULL
-				&& (!orderState(psDroid, DORDER_RTR)
-				|| psDroid->order.psObj != psStructure))
+			    && (!orderState(psDroid, DORDER_RTR)
+			        || psDroid->order.psObj != psStructure))
 			{
 				psDroid = (DROID *)psChosenObj;
 				xdiff = (SDWORD)psDroid->pos.x - (SDWORD)psStructure->pos.x;
 				ydiff = (SDWORD)psDroid->pos.y - (SDWORD)psStructure->pos.y;
 				// unless it has orders to repair here, forget about it when it gets out of range
-				if (xdiff * xdiff + ydiff * ydiff > (TILE_UNITS*5/2)*(TILE_UNITS*5/2))
+				if (xdiff * xdiff + ydiff * ydiff > (TILE_UNITS * 5 / 2) * (TILE_UNITS * 5 / 2))
 				{
 					psChosenObj = NULL;
 					psDroid = NULL;
@@ -2787,7 +2798,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 			// select next droid if none being repaired,
 			// or look for a better droid if not repairing one with repair orders
 			if (psChosenObj == NULL ||
-				(((DROID *)psChosenObj)->order.type != DORDER_RTR && ((DROID *)psChosenObj)->order.type != DORDER_RTR_SPECIFIED))
+			    (((DROID *)psChosenObj)->order.type != DORDER_RTR && ((DROID *)psChosenObj)->order.type != DORDER_RTR_SPECIFIED))
 			{
 				//FIX ME: (doesn't look like we need this?)
 				ASSERT(psRepairFac->psGroup != NULL, "invalid repair facility group pointer");
@@ -2795,27 +2806,27 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 				// Tries to find most important droid to repair
 				// Lower dist = more important
 				// mindist contains lowest dist found so far
-				mindist = (TILE_UNITS*8)*(TILE_UNITS*8)*3;
+				mindist = (TILE_UNITS * 8) * (TILE_UNITS * 8) * 3;
 				if (psChosenObj)
 				{
 					// We already have a valid droid to repair, no need to look at
 					// droids without a repair order.
-					mindist = (TILE_UNITS*8)*(TILE_UNITS*8)*2;
+					mindist = (TILE_UNITS * 8) * (TILE_UNITS * 8) * 2;
 				}
 				psRepairFac->droidQueue = 0;
 				for (psDroid = apsDroidLists[psStructure->player]; psDroid; psDroid = psDroid->psNext)
 				{
-					BASE_OBJECT * const psTarget = orderStateObj(psDroid, DORDER_RTR);
+					BASE_OBJECT *const psTarget = orderStateObj(psDroid, DORDER_RTR);
 
 					// Highest priority:
 					// Take any droid with orders to Return to Repair (DORDER_RTR),
 					// or that have been ordered to this repair facility (DORDER_RTR_SPECIFIED),
 					// or any "lost" unit with one of those two orders.
 					if (((psDroid->order.type == DORDER_RTR || (psDroid->order.type == DORDER_RTR_SPECIFIED
-					      && (!psTarget || psTarget == psStructure)))
-					  && psDroid->action != DACTION_WAITFORREPAIR && psDroid->action != DACTION_MOVETOREPAIRPOINT
-					  && psDroid->action != DACTION_WAITDURINGREPAIR)
-					  || (psTarget && psTarget == psStructure))
+					        && (!psTarget || psTarget == psStructure)))
+					     && psDroid->action != DACTION_WAITFORREPAIR && psDroid->action != DACTION_MOVETOREPAIRPOINT
+					     && psDroid->action != DACTION_WAITDURINGREPAIR)
+					    || (psTarget && psTarget == psStructure))
 					{
 						if (psDroid->body >= psDroid->originalBody)
 						{
@@ -2839,15 +2850,15 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 								// move the droid out the way
 								objTrace(psDroid->id, "Repair not needed - move to delivery point");
 								orderDroidLoc(psDroid, DORDER_MOVE,
-									psRepairFac->psDeliveryPoint->coords.x,
-									psRepairFac->psDeliveryPoint->coords.y, ModeQueue);  // ModeQueue because delivery points are not yet synchronised!
+								              psRepairFac->psDeliveryPoint->coords.x,
+								              psRepairFac->psDeliveryPoint->coords.y, ModeQueue);  // ModeQueue because delivery points are not yet synchronised!
 							}
 							continue;
 						}
 						xdiff = (SDWORD)psDroid->pos.x - (SDWORD)psStructure->pos.x;
 						ydiff = (SDWORD)psDroid->pos.y - (SDWORD)psStructure->pos.y;
-						currdist = xdiff*xdiff + ydiff*ydiff;
-						if (currdist < mindist && currdist < (TILE_UNITS*8)*(TILE_UNITS*8))
+						currdist = xdiff * xdiff + ydiff * ydiff;
+						if (currdist < mindist && currdist < (TILE_UNITS * 8) * (TILE_UNITS * 8))
 						{
 							mindist = currdist;
 							psChosenObj = psDroid;
@@ -2859,8 +2870,8 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 					}
 					// Second highest priority:
 					// Help out another nearby repair facility
-					else if (psTarget && mindist > (TILE_UNITS*8)*(TILE_UNITS*8)
-						   && psTarget != psStructure && psDroid->action == DACTION_WAITFORREPAIR)
+					else if (psTarget && mindist > (TILE_UNITS * 8) * (TILE_UNITS * 8)
+					         && psTarget != psStructure && psDroid->action == DACTION_WAITFORREPAIR)
 					{
 						int distLimit = mindist;
 						if (psTarget->type == OBJ_STRUCTURE && ((STRUCTURE *)psTarget)->pStructureType->type == REF_REPAIR_FACILITY)  // Is a repair facility (not the HQ).
@@ -2872,8 +2883,8 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 
 						xdiff = (SDWORD)psDroid->pos.x - (SDWORD)psStructure->pos.x;
 						ydiff = (SDWORD)psDroid->pos.y - (SDWORD)psStructure->pos.y;
-						currdist = xdiff * xdiff + ydiff * ydiff + (TILE_UNITS*8)*(TILE_UNITS*8); // lower priority
-						if (currdist < mindist && currdist - (TILE_UNITS*8)*(TILE_UNITS*8) < distLimit)
+						currdist = xdiff * xdiff + ydiff * ydiff + (TILE_UNITS * 8) * (TILE_UNITS * 8); // lower priority
+						if (currdist < mindist && currdist - (TILE_UNITS * 8) * (TILE_UNITS * 8) < distLimit)
 						{
 							mindist = currdist;
 							psChosenObj = psDroid;
@@ -2883,12 +2894,12 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 					}
 					// Lowest priority:
 					// Just repair whatever's nearby and needs repairing.
-					else if (mindist > (TILE_UNITS*8)*(TILE_UNITS*8)*2 && psDroid->body < psDroid->originalBody)
+					else if (mindist > (TILE_UNITS * 8) * (TILE_UNITS * 8) * 2 && psDroid->body < psDroid->originalBody)
 					{
 						xdiff = (SDWORD)psDroid->pos.x - (SDWORD)psStructure->pos.x;
 						ydiff = (SDWORD)psDroid->pos.y - (SDWORD)psStructure->pos.y;
-						currdist = xdiff*xdiff + ydiff*ydiff + (TILE_UNITS*8)*(TILE_UNITS*8)*2; // even lower priority
-						if (currdist < mindist && currdist < (TILE_UNITS*5/2)*(TILE_UNITS*5/2) + (TILE_UNITS*8)*(TILE_UNITS*8)*2)
+						currdist = xdiff * xdiff + ydiff * ydiff + (TILE_UNITS * 8) * (TILE_UNITS * 8) * 2; // even lower priority
+						if (currdist < mindist && currdist < (TILE_UNITS * 5 / 2) * (TILE_UNITS * 5 / 2) + (TILE_UNITS * 8) * (TILE_UNITS * 8) * 2)
 						{
 							mindist = currdist;
 							psChosenObj = psDroid;
@@ -2897,9 +2908,9 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 				}
 				if (!psChosenObj) // Nothing to repair? Repair allied units!
 				{
-					mindist = (TILE_UNITS*5/2)*(TILE_UNITS*5/2);
+					mindist = (TILE_UNITS * 5 / 2) * (TILE_UNITS * 5 / 2);
 
-					for (i=0; i<MAX_PLAYERS; i++)
+					for (i = 0; i < MAX_PLAYERS; i++)
 					{
 						if (aiCheckAlliances(i, psStructure->player) && i != psStructure->player)
 						{
@@ -2909,7 +2920,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 								{
 									xdiff = (SDWORD)psDroid->pos.x - (SDWORD)psStructure->pos.x;
 									ydiff = (SDWORD)psDroid->pos.y - (SDWORD)psStructure->pos.y;
-									currdist = xdiff*xdiff + ydiff*ydiff;
+									currdist = xdiff * xdiff + ydiff * ydiff;
 									if (currdist < mindist)
 									{
 										mindist = currdist;
@@ -2944,12 +2955,12 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 				xdiff = (SDWORD)psDroid->pos.x - (SDWORD)psStructure->pos.x;
 				ydiff = (SDWORD)psDroid->pos.y - (SDWORD)psStructure->pos.y;
 				if (psDroid->action == DACTION_WAITFORREPAIR ||
-					(psDroid->action == DACTION_WAITDURINGREPAIR
-					&& xdiff*xdiff + ydiff*ydiff > (TILE_UNITS*5/2)*(TILE_UNITS*5/2)))
+				    (psDroid->action == DACTION_WAITDURINGREPAIR
+				     && xdiff * xdiff + ydiff * ydiff > (TILE_UNITS * 5 / 2) * (TILE_UNITS * 5 / 2)))
 				{
 					objTrace(psStructure->id, "Requesting droid %d to come to us", (int)psDroid->id);
 					actionDroid(psDroid, DACTION_MOVETOREPAIRPOINT,
-									   psStructure, psStructure->pos.x, psStructure->pos.y);
+					            psStructure, psStructure->pos.x, psStructure->pos.y);
 				}
 				/* reset repair started if we were previously repairing something else */
 				if (psRepairFac->psObj != psDroid)
@@ -2971,7 +2982,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 
 			break;
 		}
-		case REF_REARM_PAD:
+	case REF_REARM_PAD:
 		{
 			REARM_PAD	*psReArmPad = &psStructure->pFunctionality->rearmPad;
 
@@ -2982,19 +2993,19 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 			/* select next droid if none being rearmed*/
 			if (psChosenObj == NULL)
 			{
-				for(psDroid = apsDroidLists[psStructure->player]; psDroid;
-					psDroid = psDroid->psNext)
+				for (psDroid = apsDroidLists[psStructure->player]; psDroid;
+				     psDroid = psDroid->psNext)
 				{
 					// move next droid waiting on ground to rearm pad
 					if (vtolReadyToRearm(psDroid, psStructure) &&
-						(psChosenObj == NULL || (((DROID *)psChosenObj)->actionStarted > psDroid->actionStarted)) )
+					    (psChosenObj == NULL || (((DROID *)psChosenObj)->actionStarted > psDroid->actionStarted)))
 					{
 						psChosenObj = psDroid;
 					}
 				}
 				if (!psChosenObj) // None available? Try allies.
 				{
-					for (i=0; i<MAX_PLAYERS; i++)
+					for (i = 0; i < MAX_PLAYERS; i++)
 					{
 						if (aiCheckAlliances(i, psStructure->player) && i != psStructure->player)
 						{
@@ -3013,17 +3024,17 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 				psDroid = (DROID *)psChosenObj;
 				if (psDroid != NULL)
 				{
-					actionDroid( psDroid, DACTION_MOVETOREARMPOINT, psStructure);
+					actionDroid(psDroid, DACTION_MOVETOREARMPOINT, psStructure);
 				}
 			}
 			else
 			{
 				psDroid = (DROID *) psChosenObj;
-				if ( (psDroid->sMove.Status == MOVEINACTIVE ||
-					psDroid->sMove.Status == MOVEHOVER       ) &&
-					psDroid->action == DACTION_WAITFORREARM        )
+				if ((psDroid->sMove.Status == MOVEINACTIVE ||
+				     psDroid->sMove.Status == MOVEHOVER) &&
+				    psDroid->action == DACTION_WAITFORREARM)
 				{
-					actionDroid( psDroid, DACTION_MOVETOREARMPOINT, psStructure);
+					actionDroid(psDroid, DACTION_MOVETOREARMPOINT, psStructure);
 				}
 			}
 
@@ -3033,7 +3044,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 				/* set chosen object */
 				psChosenObj = psDroid;
 				psReArmPad->psObj = psChosenObj;
-				if ( psDroid->action == DACTION_MOVETOREARMPOINT )
+				if (psDroid->action == DACTION_MOVETOREARMPOINT)
 				{
 					/* reset rearm started */
 					psReArmPad->timeStarted = ACTION_START_TIME;
@@ -3047,8 +3058,8 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 			}
 			break;
 		}
-		default:
-			break;
+	default:
+		break;
 	}
 
 	/* check subject stats (for research or manufacture) */
@@ -3179,7 +3190,8 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 					return;
 				}
 
-				if(CheckHaltOnMaxUnitsReached(psStructure) == true) {
+				if (CheckHaltOnMaxUnitsReached(psStructure) == true)
+				{
 					return;
 				}
 			}
@@ -3243,17 +3255,17 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 	}
 
 	/* check base object (for repair / rearm) */
-	if ( psChosenObj != NULL )
+	if (psChosenObj != NULL)
 	{
-		if ( structureMode == REF_REPAIR_FACILITY )
+		if (structureMode == REF_REPAIR_FACILITY)
 		{
 			psDroid = (DROID *) psChosenObj;
-			ASSERT_OR_RETURN( , psDroid != NULL, "invalid droid pointer");
+			ASSERT_OR_RETURN(, psDroid != NULL, "invalid droid pointer");
 			psRepairFac = &psStructure->pFunctionality->repairFacility;
 
 			xdiff = (SDWORD)psDroid->pos.x - (SDWORD)psStructure->pos.x;
 			ydiff = (SDWORD)psDroid->pos.y - (SDWORD)psStructure->pos.y;
-			if (xdiff * xdiff + ydiff * ydiff <= (TILE_UNITS*5/2)*(TILE_UNITS*5/2))
+			if (xdiff * xdiff + ydiff * ydiff <= (TILE_UNITS * 5 / 2) * (TILE_UNITS * 5 / 2))
 			{
 				//check droid is not healthy
 				if (psDroid->body < psDroid->originalBody)
@@ -3262,7 +3274,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 					if (bMultiPlayer && isTransporter(psDroid))
 					{
 						if (!(psDroid->sMove.Status == MOVEINACTIVE &&
-							psDroid->sMove.iVertSpeed == 0))
+						      psDroid->sMove.iVertSpeed == 0))
 						{
 							objTrace(psStructure->id, "Waiting for transporter to land");
 							return;
@@ -3292,7 +3304,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 					psDroid->body = psDroid->originalBody;
 
 					if ((psDroid->order.type == DORDER_RTR || psDroid->order.type == DORDER_RTR_SPECIFIED)
-					  && psDroid->order.psObj == psStructure)
+					    && psDroid->order.psObj == psStructure)
 					{
 						// if completely repaired reset order
 						secondarySetState(psDroid, DSO_RETURN_TO_LOC, DSS_NONE);
@@ -3309,9 +3321,9 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 						{
 							// move the droid out the way
 							objTrace(psDroid->id, "Repair complete - move to delivery point");
-							orderDroidLoc( psDroid, DORDER_MOVE,
-								psRepairFac->psDeliveryPoint->coords.x,
-								psRepairFac->psDeliveryPoint->coords.y, ModeQueue);  // ModeQueue because delivery points are not yet synchronised!
+							orderDroidLoc(psDroid, DORDER_MOVE,
+							              psRepairFac->psDeliveryPoint->coords.x,
+							              psRepairFac->psDeliveryPoint->coords.y, ModeQueue);  // ModeQueue because delivery points are not yet synchronised!
 						}
 					}
 				}
@@ -3319,9 +3331,9 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 				if (psStructure->visible[selectedPlayer] && psDroid->visible[selectedPlayer])
 				{
 					/* add plasma repair effect whilst being repaired */
-					iVecEffect.x = psDroid->pos.x + (10-rand()%20);
-					iVecEffect.y = psDroid->pos.z + (10-rand()%20);
-					iVecEffect.z = psDroid->pos.y + (10-rand()%20);
+					iVecEffect.x = psDroid->pos.x + (10 - rand() % 20);
+					iVecEffect.y = psDroid->pos.z + (10 - rand() % 20);
+					iVecEffect.z = psDroid->pos.y + (10 - rand() % 20);
 					effectSetSize(100);
 					addEffect(&iVecEffect, EFFECT_EXPLOSION, EXPLOSION_TYPE_SPECIFIED, true, getImdFromIndex(MI_FLAME), 0, gameTime - deltaGameTime + 1);
 				}
@@ -3334,8 +3346,8 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 			UDWORD pointsAlreadyAdded;
 
 			psDroid = (DROID *)psChosenObj;
-			ASSERT_OR_RETURN( , psDroid != NULL, "invalid droid pointer");
-			ASSERT_OR_RETURN( , isVtolDroid(psDroid), "invalid droid type");
+			ASSERT_OR_RETURN(, psDroid != NULL, "invalid droid pointer");
+			ASSERT_OR_RETURN(, isVtolDroid(psDroid), "invalid droid type");
 
 			//check hasn't died whilst waiting to be rearmed
 			// also clear out any previously repaired droid
@@ -3375,8 +3387,8 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 							// Do not "simplify" this formula.
 							// It is written this way to prevent rounding errors.
 							int ammoToAddThisTime =
-								pointsToAdd * getNumAttackRuns(psDroid, i) / psDroid->weight -
-								pointsAlreadyAdded * getNumAttackRuns(psDroid, i) / psDroid->weight;
+							    pointsToAdd * getNumAttackRuns(psDroid, i) / psDroid->weight -
+							    pointsAlreadyAdded * getNumAttackRuns(psDroid, i) / psDroid->weight;
 							psDroid->asWeaps[i].usedAmmo -= std::min<unsigned>(ammoToAddThisTime, psDroid->asWeaps[i].usedAmmo);
 							if (ammoToAddThisTime)
 							{
@@ -3419,11 +3431,11 @@ static bool canSmoke(STRUCTURE *psStruct)
 	if (psStruct->pStructureType->type == REF_WALL || psStruct->pStructureType->type == REF_WALLCORNER
 	    || psStruct->status == SS_BEING_BUILT || psStruct->pStructureType->type == REF_GATE)
 	{
-		return(false);
+		return (false);
 	}
 	else
 	{
-		return(true);
+		return (true);
 	}
 }
 
@@ -3440,24 +3452,24 @@ void _syncDebugStructure(const char *function, STRUCTURE const *psStruct, char c
 	// Print what the structure is producing, too.
 	switch (psStruct->pStructureType->type)
 	{
-		case REF_RESEARCH:
-			if (psStruct->pFunctionality->researchFacility.psSubject != NULL)
-			{
-				ref = psStruct->pFunctionality->researchFacility.psSubject->ref;
-				refChr = 'r';
-			}
-			break;
-		case REF_FACTORY:
-		case REF_CYBORG_FACTORY:
-		case REF_VTOL_FACTORY:
-			if (psStruct->pFunctionality->factory.psSubject != NULL)
-			{
-				ref = psStruct->pFunctionality->factory.psSubject->multiPlayerID;
-				refChr = 'p';
-			}
-			break;
-		default:
-			break;
+	case REF_RESEARCH:
+		if (psStruct->pFunctionality->researchFacility.psSubject != NULL)
+		{
+			ref = psStruct->pFunctionality->researchFacility.psSubject->ref;
+			refChr = 'r';
+		}
+		break;
+	case REF_FACTORY:
+	case REF_CYBORG_FACTORY:
+	case REF_VTOL_FACTORY:
+		if (psStruct->pFunctionality->factory.psSubject != NULL)
+		{
+			ref = psStruct->pFunctionality->factory.psSubject->multiPlayerID;
+			refChr = 'p';
+		}
+		break;
+	default:
+		break;
 	}
 
 	int list[] =
@@ -3485,20 +3497,20 @@ int requestOpenGate(STRUCTURE *psStructure)
 
 	switch (psStructure->state)
 	{
-		case SAS_NORMAL:
-			psStructure->lastStateTime = gameTime;
-			psStructure->state = SAS_OPENING;
-			break;
-		case SAS_OPEN:
-			psStructure->lastStateTime = gameTime;
-			return 0;  // Already open.
-		case SAS_OPENING:
-			break;
-		case SAS_CLOSING:
-			psStructure->lastStateTime = 2*gameTime - psStructure->lastStateTime - SAS_OPEN_SPEED;
-			psStructure->state = SAS_OPENING;
-		default:
-			return 0;  // Unknown state...
+	case SAS_NORMAL:
+		psStructure->lastStateTime = gameTime;
+		psStructure->state = SAS_OPENING;
+		break;
+	case SAS_OPEN:
+		psStructure->lastStateTime = gameTime;
+		return 0;  // Already open.
+	case SAS_OPENING:
+		break;
+	case SAS_CLOSING:
+		psStructure->lastStateTime = 2 * gameTime - psStructure->lastStateTime - SAS_OPEN_SPEED;
+		psStructure->state = SAS_OPENING;
+	default:
+		return 0;  // Unknown state...
 	}
 
 	return psStructure->lastStateTime + SAS_OPEN_SPEED - gameTime;
@@ -3513,17 +3525,17 @@ int gateCurrentOpenHeight(STRUCTURE const *psStructure, uint32_t time, int minim
 		int openHeight;
 		switch (psStructure->state)
 		{
-			case SAS_OPEN:
-				openHeight = height;
-				break;
-			case SAS_OPENING:
-				openHeight = (height * std::max<int>(time + GAME_TICKS_PER_UPDATE - psStructure->lastStateTime, 0)) / SAS_OPEN_SPEED;
-				break;
-			case SAS_CLOSING:
-				openHeight = height - (height * std::max<int>(time - psStructure->lastStateTime, 0)) / SAS_OPEN_SPEED;
-				break;
-			default:
-				return 0;
+		case SAS_OPEN:
+			openHeight = height;
+			break;
+		case SAS_OPENING:
+			openHeight = (height * std::max<int>(time + GAME_TICKS_PER_UPDATE - psStructure->lastStateTime, 0)) / SAS_OPEN_SPEED;
+			break;
+		case SAS_CLOSING:
+			openHeight = height - (height * std::max<int>(time - psStructure->lastStateTime, 0)) / SAS_OPEN_SPEED;
+			break;
+		default:
+			return 0;
 		}
 		return std::max(std::min(openHeight, height - minimumStub), 0);
 	}
@@ -3533,7 +3545,7 @@ int gateCurrentOpenHeight(STRUCTURE const *psStructure, uint32_t time, int minim
 /* The main update routine for all Structures */
 void structureUpdate(STRUCTURE *psBuilding, bool mission)
 {
-	UDWORD widthScatter,breadthScatter;
+	UDWORD widthScatter, breadthScatter;
 	UDWORD emissionInterval, iPointsToAdd, iPointsRequired;
 	Vector3i dv;
 	int i;
@@ -3594,9 +3606,9 @@ void structureUpdate(STRUCTURE *psBuilding, bool mission)
 		aiUpdateStructure(psBuilding, mission);
 	}
 
-	if(psBuilding->status!=SS_BUILT)
+	if (psBuilding->status != SS_BUILT)
 	{
-		if(psBuilding->selected)
+		if (psBuilding->selected)
 		{
 			psBuilding->selected = false;
 		}
@@ -3629,14 +3641,14 @@ void structureUpdate(STRUCTURE *psBuilding, bool mission)
 		// Is there any damage?
 		if (damage > 0.)
 		{
-			emissionInterval = CalcStructureSmokeInterval(damage/65536.f);
+			emissionInterval = CalcStructureSmokeInterval(damage / 65536.f);
 			unsigned effectTime = std::max(gameTime - deltaGameTime + 1, psBuilding->lastEmission + emissionInterval);
 			if (gameTime >= effectTime)
 			{
-				widthScatter   = getStructureWidth(psBuilding)   * TILE_UNITS/2/3;
-				breadthScatter = getStructureBreadth(psBuilding) * TILE_UNITS/2/3;
-				dv.x = psBuilding->pos.x + widthScatter - rand()%(2*widthScatter);
-				dv.z = psBuilding->pos.y + breadthScatter - rand()%(2*breadthScatter);
+				widthScatter   = getStructureWidth(psBuilding)   * TILE_UNITS / 2 / 3;
+				breadthScatter = getStructureBreadth(psBuilding) * TILE_UNITS / 2 / 3;
+				dv.x = psBuilding->pos.x + widthScatter - rand() % (2 * widthScatter);
+				dv.z = psBuilding->pos.y + breadthScatter - rand() % (2 * breadthScatter);
 				dv.y = psBuilding->pos.z;
 				dv.y += (psBuilding->sDisplay.imd->max.y * 3) / 4;
 				addEffect(&dv, EFFECT_SMOKE, SMOKE_TYPE_DRIFTING_HIGH, false, NULL, 0, effectTime);
@@ -3697,19 +3709,19 @@ void structureUpdate(STRUCTURE *psBuilding, bool mission)
 
 			/*since self repair, then add half repair points depending on the time delay for the stat*/
 			iPointsToAdd = (repairPoints(asRepairStats + aDefaultRepair[
-				psBuilding->player], psBuilding->player) / 4) * ((gameTime -
-				psBuilding->lastResistance) / (asRepairStats +
-				aDefaultRepair[psBuilding->player])->time);
+			                                 psBuilding->player], psBuilding->player) / 4) * ((gameTime -
+			                                         psBuilding->lastResistance) / (asRepairStats +
+			                                                 aDefaultRepair[psBuilding->player])->time);
 
 			//add the blue flashing effect for multiPlayer
-			if(bMultiPlayer && ONEINTEN && !mission)
+			if (bMultiPlayer && ONEINTEN && !mission)
 			{
 				Vector3i position;
 				Vector3f *point;
 				SDWORD	realY;
 				UDWORD	pointIndex;
 
-				pointIndex = rand()%(psBuilding->sDisplay.imd->npoints-1);
+				pointIndex = rand() % (psBuilding->sDisplay.imd->npoints - 1);
 				point = &(psBuilding->sDisplay.imd->points[pointIndex]);
 				position.x = psBuilding->pos.x + point->x;
 				realY = structHeightScale(psBuilding) * point->y;
@@ -3717,14 +3729,14 @@ void structureUpdate(STRUCTURE *psBuilding, bool mission)
 				position.z = psBuilding->pos.y - point->z;
 
 				effectSetSize(30);
-				addEffect(&position, EFFECT_EXPLOSION, EXPLOSION_TYPE_SPECIFIED, true, getImdFromIndex(MI_PLASMA), 0, gameTime - deltaGameTime + rand()%deltaGameTime);
+				addEffect(&position, EFFECT_EXPLOSION, EXPLOSION_TYPE_SPECIFIED, true, getImdFromIndex(MI_PLASMA), 0, gameTime - deltaGameTime + rand() % deltaGameTime);
 			}
 
 			if (iPointsToAdd)
 			{
 				psBuilding->body = (UWORD)(psBuilding->body + iPointsToAdd);
 				psBuilding->lastResistance = gameTime;
-				if ( psBuilding->body > iPointsRequired)
+				if (psBuilding->body > iPointsRequired)
 				{
 					psBuilding->body = (UWORD)iPointsRequired;
 					psBuilding->lastResistance = ACTION_START_TIME;
@@ -3787,15 +3799,15 @@ UDWORD fillStructureList(STRUCTURE_STATS **ppList, UDWORD selectedPlayer, UDWORD
 	if (!missionIsOffworld())
 	{
 		for (psCurr = apsStructLists[selectedPlayer]; psCurr != NULL; psCurr =
-			psCurr->psNext)
+		         psCurr->psNext)
 		{
 			if (psCurr->pStructureType->type == REF_RESEARCH && psCurr->status ==
-				SS_BUILT)
+			    SS_BUILT)
 			{
 				researchModule = true;
 			}
 			else if (psCurr->pStructureType->type == REF_FACTORY && psCurr->status ==
-				SS_BUILT)
+			         SS_BUILT)
 			{
 				factoryModule = true;
 			}
@@ -3808,7 +3820,7 @@ UDWORD fillStructureList(STRUCTURE_STATS **ppList, UDWORD selectedPlayer, UDWORD
 
 	count = 0;
 	//set the list of Structures to build
-	for (inc=0; inc < numStructureStats; inc++)
+	for (inc = 0; inc < numStructureStats; inc++)
 	{
 		//if the structure is flagged as available, add it to the list
 		if (apStructTypeLists[selectedPlayer][inc] == AVAILABLE || (includeRedundantDesigns && apStructTypeLists[selectedPlayer][inc] == REDUNDANT))
@@ -3828,18 +3840,21 @@ UDWORD fillStructureList(STRUCTURE_STATS **ppList, UDWORD selectedPlayer, UDWORD
 				// tjc 4-dec-98  ...
 				if (bInTutorial)
 				{
-					if (psBuilding->type == REF_DEMOLISH) continue;
+					if (psBuilding->type == REF_DEMOLISH)
+					{
+						continue;
+					}
 				}
 
 				//can't build list when offworld
 				if (missionIsOffworld())
 				{
 					if (psBuilding->type == REF_FACTORY ||
-						psBuilding->type == REF_POWER_GEN ||
-						psBuilding->type == REF_RESOURCE_EXTRACTOR ||
-						psBuilding->type == REF_RESEARCH ||
-						psBuilding->type == REF_CYBORG_FACTORY ||
-						psBuilding->type == REF_VTOL_FACTORY)
+					    psBuilding->type == REF_POWER_GEN ||
+					    psBuilding->type == REF_RESOURCE_EXTRACTOR ||
+					    psBuilding->type == REF_RESEARCH ||
+					    psBuilding->type == REF_CYBORG_FACTORY ||
+					    psBuilding->type == REF_VTOL_FACTORY)
 					{
 						continue;
 					}
@@ -3871,8 +3886,8 @@ UDWORD fillStructureList(STRUCTURE_STATS **ppList, UDWORD selectedPlayer, UDWORD
 				}
 				//paranoid check!!
 				if (psBuilding->type == REF_FACTORY ||
-					psBuilding->type == REF_CYBORG_FACTORY ||
-					psBuilding->type == REF_VTOL_FACTORY)
+				    psBuilding->type == REF_CYBORG_FACTORY ||
+				    psBuilding->type == REF_VTOL_FACTORY)
 				{
 					//NEVER EVER EVER WANT MORE THAN 5 FACTORIES
 					if (asStructLimits[selectedPlayer][inc].currentQuantity >= MAX_FACTORY)
@@ -3921,17 +3936,17 @@ static STRUCTURE_PACKABILITY baseStructureTypePackability(STRUCTURE_TYPE type)
 {
 	switch (type)
 	{
-		case REF_DEFENSE:
-		case REF_WALL:
-		case REF_WALLCORNER:
-		case REF_GATE:
-		case REF_REARM_PAD:
-		case REF_MISSILE_SILO:
-			return PACKABILITY_DEFENSE;
-		default:
-			return PACKABILITY_NORMAL;
-		case REF_REPAIR_FACILITY:
-			return PACKABILITY_REPAIR;
+	case REF_DEFENSE:
+	case REF_WALL:
+	case REF_WALLCORNER:
+	case REF_GATE:
+	case REF_REARM_PAD:
+	case REF_MISSILE_SILO:
+		return PACKABILITY_DEFENSE;
+	default:
+		return PACKABILITY_NORMAL;
+	case REF_REPAIR_FACILITY:
+		return PACKABILITY_REPAIR;
 	}
 }
 
@@ -3943,9 +3958,9 @@ static STRUCTURE_PACKABILITY baseObjectPackability(BASE_OBJECT *psObject)
 	}
 	switch (psObject->type)
 	{
-		case OBJ_STRUCTURE: return baseStructureTypePackability(((STRUCTURE *)psObject)->pStructureType->type);
-		case OBJ_FEATURE:   return ((FEATURE *)psObject)->psStats->subType == FEAT_OIL_RESOURCE? PACKABILITY_NORMAL : PACKABILITY_EMPTY;
-		default:            return PACKABILITY_EMPTY;
+	case OBJ_STRUCTURE: return baseStructureTypePackability(((STRUCTURE *)psObject)->pStructureType->type);
+	case OBJ_FEATURE:   return ((FEATURE *)psObject)->psStats->subType == FEAT_OIL_RESOURCE ? PACKABILITY_NORMAL : PACKABILITY_EMPTY;
+	default:            return PACKABILITY_EMPTY;
 	}
 }
 
@@ -3957,7 +3972,7 @@ bool isBlueprintTooClose(STRUCTURE_STATS const *stats1, Vector2i pos1, uint16_t 
 	}
 
 	bool packable = canPack(baseStructureTypePackability(stats1->type), baseStructureTypePackability(stats2->type));
-	int minDist = packable? 0 : 1;
+	int minDist = packable ? 0 : 1;
 	StructureBounds b1 = getStructureBounds(stats1, pos1, dir1);
 	StructureBounds b2 = getStructureBounds(stats2, pos2, dir2);
 	Vector2i delta12 = b2.map - (b1.map + b1.size);
@@ -3968,8 +3983,8 @@ bool isBlueprintTooClose(STRUCTURE_STATS const *stats1, Vector2i pos1, uint16_t 
 
 bool validLocation(BASE_STATS *psStats, Vector2i pos, uint16_t direction, unsigned player, bool bCheckBuildQueue)
 {
-	STRUCTURE_STATS *       psBuilding = NULL;
-	DROID_TEMPLATE *        psTemplate = NULL;
+	STRUCTURE_STATS        *psBuilding = NULL;
+	DROID_TEMPLATE         *psTemplate = NULL;
 
 	StructureBounds b = getStructureBounds(psStats, pos, direction);
 
@@ -3986,8 +4001,8 @@ bool validLocation(BASE_STATS *psStats, Vector2i pos, uint16_t direction, unsign
 	{
 		//if we're dragging the wall/defense we need to check along the current dragged size
 		if (wallDrag.status != DRAG_INACTIVE && bCheckBuildQueue
-			&& (psBuilding->type == REF_WALL || psBuilding->type == REF_DEFENSE || psBuilding->type == REF_REARM_PAD ||  psBuilding->type == REF_GATE)
-			&& !isLasSat(psBuilding))
+		    && (psBuilding->type == REF_WALL || psBuilding->type == REF_DEFENSE || psBuilding->type == REF_REARM_PAD ||  psBuilding->type == REF_GATE)
+		    && !isLasSat(psBuilding))
 		{
 			wallDrag.x2 = mouseTileX;  // Why must this be done here? If not doing it here, dragging works almost normally, except it suddenly stops working if the drag becomes invalid.
 			wallDrag.y2 = mouseTileY;
@@ -4036,60 +4051,60 @@ bool validLocation(BASE_STATS *psStats, Vector2i pos, uint16_t direction, unsign
 	{
 		for (int j = 0; j < b.size.y; ++j)
 			for (int i = 0; i < b.size.x; ++i)
-		{
-			// Don't allow building structures (allow delivery points, though) outside visible area in single-player with debug mode off. (Why..?)
-			if (!bMultiPlayer && !getDebugMappingStatus() && !TEST_TILE_VISIBLE(player, mapTile(b.map.x + i, b.map.y + j)))
 			{
-				return false;
+				// Don't allow building structures (allow delivery points, though) outside visible area in single-player with debug mode off. (Why..?)
+				if (!bMultiPlayer && !getDebugMappingStatus() && !TEST_TILE_VISIBLE(player, mapTile(b.map.x + i, b.map.y + j)))
+				{
+					return false;
+				}
 			}
-		}
 
-		switch(psBuilding->type)
+		switch (psBuilding->type)
 		{
-			case REF_DEMOLISH:
-				break;
-			case NUM_DIFF_BUILDINGS:
-			case REF_BRIDGE:
-				ASSERT(!"invalid structure type", "Bad structure type %u", psBuilding->type);
-				break;
-			case REF_HQ:
-			case REF_FACTORY:
-			case REF_LAB:
-			case REF_RESEARCH:
-			case REF_POWER_GEN:
-			case REF_WALL:
-			case REF_WALLCORNER:
-			case REF_GATE:
-			case REF_DEFENSE:
-			case REF_REPAIR_FACILITY:
-			case REF_COMMAND_CONTROL:
-			case REF_CYBORG_FACTORY:
-			case REF_VTOL_FACTORY:
-			case REF_GENERIC:
-			case REF_REARM_PAD:
-			case REF_MISSILE_SILO:
-			case REF_SAT_UPLINK:
+		case REF_DEMOLISH:
+			break;
+		case NUM_DIFF_BUILDINGS:
+		case REF_BRIDGE:
+			ASSERT(!"invalid structure type", "Bad structure type %u", psBuilding->type);
+			break;
+		case REF_HQ:
+		case REF_FACTORY:
+		case REF_LAB:
+		case REF_RESEARCH:
+		case REF_POWER_GEN:
+		case REF_WALL:
+		case REF_WALLCORNER:
+		case REF_GATE:
+		case REF_DEFENSE:
+		case REF_REPAIR_FACILITY:
+		case REF_COMMAND_CONTROL:
+		case REF_CYBORG_FACTORY:
+		case REF_VTOL_FACTORY:
+		case REF_GENERIC:
+		case REF_REARM_PAD:
+		case REF_MISSILE_SILO:
+		case REF_SAT_UPLINK:
 			{
 				/*need to check each tile the structure will sit on is not water*/
 				for (int j = 0; j < b.size.y; ++j)
 					for (int i = 0; i < b.size.x; ++i)
-				{
-					MAPTILE const *psTile = mapTile(b.map.x + i, b.map.y + j);
-					if ((terrainType(psTile) == TER_WATER) ||
-						(terrainType(psTile) == TER_CLIFFFACE) )
 					{
-						return false;
+						MAPTILE const *psTile = mapTile(b.map.x + i, b.map.y + j);
+						if ((terrainType(psTile) == TER_WATER) ||
+						    (terrainType(psTile) == TER_CLIFFFACE))
+						{
+							return false;
+						}
 					}
-				}
 				//check not within landing zone
 				for (int j = 0; j < b.size.y; ++j)
 					for (int i = 0; i < b.size.x; ++i)
-				{
-					if (withinLandingZone(b.map.x + i, b.map.y + j))
 					{
-						return false;
+						if (withinLandingZone(b.map.x + i, b.map.y + j))
+						{
+							return false;
+						}
 					}
-				}
 
 				//walls/defensive structures can be built along any ground
 				if (!(psBuilding->type == REF_REPAIR_FACILITY ||
@@ -4100,14 +4115,14 @@ bool validLocation(BASE_STATS *psStats, Vector2i pos, uint16_t direction, unsign
 					/*cannot build on ground that is too steep*/
 					for (int j = 0; j < b.size.y; ++j)
 						for (int i = 0; i < b.size.x; ++i)
-					{
-						int max, min;
-						getTileMaxMin(b.map.x + i, b.map.y + j, &max, &min);
-						if (max - min > MAX_INCLINE)
 						{
-							return false;
+							int max, min;
+							getTileMaxMin(b.map.x + i, b.map.y + j, &max, &min);
+							if (max - min > MAX_INCLINE)
+							{
+								return false;
+							}
 						}
-					}
 				}
 				//don't bother checking if already found a problem
 				STRUCTURE_PACKABILITY packThis = baseStructureTypePackability(psBuilding->type);
@@ -4121,18 +4136,18 @@ bool validLocation(BASE_STATS *psStats, Vector2i pos, uint16_t direction, unsign
 				/* need to check there is one tile between buildings */
 				for (int j = -1; j < b.size.y + 1; ++j)
 					for (int i = -1; i < b.size.x + 1; ++i)
-				{
-					//skip the actual area the structure will cover
-					if (i < 0 || i >= b.size.x || j < 0 || j >= b.size.y)
 					{
-						STRUCTURE_PACKABILITY packObj = baseObjectPackability(mapTile(b.map.x + i, b.map.y + j)->psObject);
-
-						if (!canPack(packThis, packObj))
+						//skip the actual area the structure will cover
+						if (i < 0 || i >= b.size.x || j < 0 || j >= b.size.y)
 						{
-							return false;
+							STRUCTURE_PACKABILITY packObj = baseObjectPackability(mapTile(b.map.x + i, b.map.y + j)->psObject);
+
+							if (!canPack(packThis, packObj))
+							{
+								return false;
+							}
 						}
 					}
-				}
 				if (psBuilding->flags & STRUCTURE_CONNECTED)
 				{
 					bool connection = false;
@@ -4161,70 +4176,70 @@ bool validLocation(BASE_STATS *psStats, Vector2i pos, uint16_t direction, unsign
 				/*need to check each tile the structure will sit on*/
 				for (int j = 0; j < b.size.y; ++j)
 					for (int i = 0; i < b.size.x; ++i)
-				{
-					MAPTILE const *psTile = mapTile(b.map.x + i, b.map.y + j);
-					if (TileIsOccupied(psTile))
 					{
-						if (TileHasWall(psTile) && (psBuilding->type == REF_DEFENSE || psBuilding->type == REF_GATE || psBuilding->type == REF_WALL))
+						MAPTILE const *psTile = mapTile(b.map.x + i, b.map.y + j);
+						if (TileIsOccupied(psTile))
 						{
-							STRUCTURE const *psStruct = getTileStructure(b.map.x + i, b.map.y + j);
-							if (psStruct != NULL && psStruct->player != player)
+							if (TileHasWall(psTile) && (psBuilding->type == REF_DEFENSE || psBuilding->type == REF_GATE || psBuilding->type == REF_WALL))
+							{
+								STRUCTURE const *psStruct = getTileStructure(b.map.x + i, b.map.y + j);
+								if (psStruct != NULL && psStruct->player != player)
+								{
+									return false;
+								}
+							}
+							else
 							{
 								return false;
 							}
 						}
-						else
-						{
-							return false;
-						}
 					}
-				}
 				break;
 			}
-			case REF_FACTORY_MODULE:
-				if (TileHasStructure(worldTile(pos)))
+		case REF_FACTORY_MODULE:
+			if (TileHasStructure(worldTile(pos)))
+			{
+				STRUCTURE const *psStruct = getTileStructure(map_coord(pos.x), map_coord(pos.y));
+				if (psStruct && (psStruct->pStructureType->type == REF_FACTORY ||
+				                 psStruct->pStructureType->type == REF_VTOL_FACTORY) &&
+				    psStruct->status == SS_BUILT)
 				{
-					STRUCTURE const *psStruct = getTileStructure(map_coord(pos.x), map_coord(pos.y));
-					if (psStruct && (psStruct->pStructureType->type == REF_FACTORY ||
-					                 psStruct->pStructureType->type == REF_VTOL_FACTORY) &&
-					    psStruct->status == SS_BUILT)
-					{
-						break;
-					}
+					break;
 				}
-				return false;
-			case REF_RESEARCH_MODULE:
-				if (TileHasStructure(worldTile(pos)))
+			}
+			return false;
+		case REF_RESEARCH_MODULE:
+			if (TileHasStructure(worldTile(pos)))
+			{
+				STRUCTURE const *psStruct = getTileStructure(map_coord(pos.x), map_coord(pos.y));
+				if (psStruct && psStruct->pStructureType->type == REF_RESEARCH &&
+				    psStruct->status == SS_BUILT)
 				{
-					STRUCTURE const *psStruct = getTileStructure(map_coord(pos.x), map_coord(pos.y));
-					if (psStruct && psStruct->pStructureType->type == REF_RESEARCH &&
-					    psStruct->status == SS_BUILT)
-					{
-						break;
-					}
+					break;
 				}
-				return false;
-			case REF_POWER_MODULE:
-				if (TileHasStructure(worldTile(pos)))
+			}
+			return false;
+		case REF_POWER_MODULE:
+			if (TileHasStructure(worldTile(pos)))
+			{
+				STRUCTURE const *psStruct = getTileStructure(map_coord(pos.x), map_coord(pos.y));
+				if (psStruct && psStruct->pStructureType->type == REF_POWER_GEN &&
+				    psStruct->status == SS_BUILT)
 				{
-					STRUCTURE const *psStruct = getTileStructure(map_coord(pos.x), map_coord(pos.y));
-					if (psStruct && psStruct->pStructureType->type == REF_POWER_GEN &&
-					    psStruct->status == SS_BUILT)
-					{
-						break;
-					}
+					break;
 				}
-				return false;
-			case REF_RESOURCE_EXTRACTOR:
-				if (TileHasFeature(worldTile(pos)))
+			}
+			return false;
+		case REF_RESOURCE_EXTRACTOR:
+			if (TileHasFeature(worldTile(pos)))
+			{
+				FEATURE const *psFeat = getTileFeature(map_coord(pos.x), map_coord(pos.y));
+				if (psFeat && psFeat->psStats->subType == FEAT_OIL_RESOURCE)
 				{
-					FEATURE const *psFeat = getTileFeature(map_coord(pos.x), map_coord(pos.y));
-					if (psFeat && psFeat->psStats->subType == FEAT_OIL_RESOURCE)
-					{
-						break;
-					}
+					break;
 				}
-				return false;
+			}
+			return false;
 		}
 		//if setting up a build queue need to check against future sites as well - AB 4/5/99
 		if (ctrlShiftDown() && player == selectedPlayer && bCheckBuildQueue &&
@@ -4259,7 +4274,7 @@ for a new structure, find a location along an edge which the droid can get
 to and return this as the destination for the droid.
 */
 bool getDroidDestination(BASE_STATS *psStats, UDWORD structX,
-	UDWORD structY, UDWORD *pDroidX, UDWORD *pDroidY)
+                         UDWORD structY, UDWORD *pDroidX, UDWORD *pDroidY)
 {
 	int32_t                         start;
 	UDWORD				structTileX, structTileY, width = 0, breadth = 0;
@@ -4293,7 +4308,7 @@ bool getDroidDestination(BASE_STATS *psStats, UDWORD structX,
 		structTileX += width;
 		structTileY += 1;
 
-		if (checkLength(breadth, structTileX, structTileY,pDroidX, pDroidY))
+		if (checkLength(breadth, structTileX, structTileY, pDroidX, pDroidY))
 		{
 			return true;
 		}
@@ -4318,7 +4333,7 @@ bool getDroidDestination(BASE_STATS *psStats, UDWORD structX,
 		structTileX = (map_coord(structX)) + width;
 		structTileY = map_coord(structY);
 
-		if (checkLength(breadth, structTileX, structTileY,pDroidX, pDroidY))
+		if (checkLength(breadth, structTileX, structTileY, pDroidX, pDroidY))
 		{
 			return true;
 		}
@@ -4371,7 +4386,7 @@ bool getDroidDestination(BASE_STATS *psStats, UDWORD structX,
 		structTileX += width;
 		structTileY += 1;
 
-		if (checkLength(breadth, structTileX, structTileY,pDroidX, pDroidY))
+		if (checkLength(breadth, structTileX, structTileY, pDroidX, pDroidY))
 		{
 			return true;
 		}
@@ -4396,7 +4411,7 @@ bool getDroidDestination(BASE_STATS *psStats, UDWORD structX,
 		structTileX += width;
 		structTileY += 1;
 
-		if (checkLength(breadth, structTileX, structTileY,pDroidX, pDroidY))
+		if (checkLength(breadth, structTileX, structTileY, pDroidX, pDroidY))
 		{
 			return true;
 		}
@@ -4420,12 +4435,12 @@ bool checkWidth(UDWORD maxRange, UDWORD x, UDWORD y, UDWORD *pDroidX, UDWORD *pD
 
 	for (side = 0; side < maxRange; side++)
 	{
-		if( x+side < mapWidth && y < mapHeight && !TileIsOccupied(mapTile(x+side,y)) )
+		if (x + side < mapWidth && y < mapHeight && !TileIsOccupied(mapTile(x + side, y)))
 		{
 			*pDroidX = world_coord(x + side);
 			*pDroidY = world_coord(y);
 
-			ASSERT_OR_RETURN(false, worldOnMap(*pDroidX,*pDroidY), "Insane droid position generated at width (%u, %u)", *pDroidX, *pDroidY);
+			ASSERT_OR_RETURN(false, worldOnMap(*pDroidX, *pDroidY), "Insane droid position generated at width (%u, %u)", *pDroidX, *pDroidY);
 
 			return true;
 		}
@@ -4441,12 +4456,12 @@ bool checkLength(UDWORD maxRange, UDWORD x, UDWORD y, UDWORD *pDroidX, UDWORD *p
 
 	for (side = 0; side < maxRange; side++)
 	{
-		if(y+side < mapHeight && x < mapWidth && !TileIsOccupied(mapTile(x,y+side)) )
+		if (y + side < mapHeight && x < mapWidth && !TileIsOccupied(mapTile(x, y + side)))
 		{
 			*pDroidX = world_coord(x);
 			*pDroidY = world_coord(y + side);
 
-			ASSERT_OR_RETURN(false, worldOnMap(*pDroidX,*pDroidY), "Insane droid position generated at length (%u, %u)", *pDroidX, *pDroidY);
+			ASSERT_OR_RETURN(false, worldOnMap(*pDroidX, *pDroidY), "Insane droid position generated at length (%u, %u)", *pDroidX, *pDroidY);
 
 			return true;
 		}
@@ -4481,7 +4496,7 @@ bool removeStruct(STRUCTURE *psDel, bool bDestroy)
 {
 	bool		resourceFound = false;
 	SDWORD		cluster;
-	FLAG_POSITION	*psAssemblyPoint=NULL;
+	FLAG_POSITION	*psAssemblyPoint = NULL;
 
 	ASSERT_OR_RETURN(false, psDel != NULL, "Invalid structure pointer");
 
@@ -4581,7 +4596,7 @@ bool removeStruct(STRUCTURE *psDel, bool bDestroy)
 
 	clustUpdateCluster(apsStructLists[psDel->player], cluster);
 
-	if(psDel->player==selectedPlayer)
+	if (psDel->player == selectedPlayer)
 	{
 		intRefreshScreen();
 	}
@@ -4596,7 +4611,7 @@ bool removeStruct(STRUCTURE *psDel, bool bDestroy)
 /* Remove a structure */
 bool destroyStruct(STRUCTURE *psDel, unsigned impactTime)
 {
-	UDWORD			widthScatter,breadthScatter,heightScatter;
+	UDWORD			widthScatter, breadthScatter, heightScatter;
 
 	const unsigned          burnDurationWall    =  1000;
 	const unsigned          burnDurationOilWell = 60000;
@@ -4614,14 +4629,14 @@ bool destroyStruct(STRUCTURE *psDel, unsigned impactTime)
 	const bool bMinor = type == REF_WALL || type == REF_WALLCORNER;
 	const bool bDerrick = type == REF_RESOURCE_EXTRACTOR;
 	const bool bPowerGen = type == REF_POWER_GEN;
-	unsigned burnDuration = bMinor? burnDurationWall : bDerrick? burnDurationOilWell : burnDurationOther;
+	unsigned burnDuration = bMinor ? burnDurationWall : bDerrick ? burnDurationOilWell : burnDurationOther;
 	if (psDel->status == SS_BEING_BUILT)
 	{
 		burnDuration = burnDuration * psDel->currentBuildPts / psDel->pStructureType->buildPoints;
 	}
 
 	/* Only add if visible */
-	if(psDel->visible[selectedPlayer])
+	if (psDel->visible[selectedPlayer])
 	{
 		Vector3i pos;
 		int      i;
@@ -4633,9 +4648,9 @@ bool destroyStruct(STRUCTURE *psDel, unsigned impactTime)
 		heightScatter = TILE_UNITS;
 		for (i = 0; i < (bMinor ? 2 : 4); ++i)  // only add two for walls - gets crazy otherwise
 		{
-			pos.x = psDel->pos.x + widthScatter - rand()%(2*widthScatter);
-			pos.z = psDel->pos.y + breadthScatter - rand()%(2*breadthScatter);
-			pos.y = psDel->pos.z + 32 + rand()%heightScatter;
+			pos.x = psDel->pos.x + widthScatter - rand() % (2 * widthScatter);
+			pos.z = psDel->pos.y + breadthScatter - rand() % (2 * breadthScatter);
+			pos.y = psDel->pos.z + 32 + rand() % heightScatter;
 			addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_MEDIUM, false, NULL, 0, impactTime);
 		}
 
@@ -4673,7 +4688,7 @@ bool destroyStruct(STRUCTURE *psDel, unsigned impactTime)
 			addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_SHOCKWAVE, false, NULL, 0, impactTime);
 		}
 		/* As do wall sections */
-		else if(bMinor)
+		else if (bMinor)
 		{
 			addEffect(&pos, EFFECT_DESTRUCTION, DESTRUCTION_TYPE_WALL_SECTION, false, NULL, 0, impactTime);
 		}
@@ -4683,31 +4698,31 @@ bool destroyStruct(STRUCTURE *psDel, unsigned impactTime)
 		}
 
 		// shake the screen if we're near enough and it is explosive in nature
-		if (clipXY(pos.x,pos.z))
+		if (clipXY(pos.x, pos.z))
 		{
-			switch(type)
+			switch (type)
 			{
-				// These are the types that would cause a explosive outcome if destoryed
-				case REF_HQ:
-				case REF_POWER_GEN:
-				case REF_MISSILE_SILO:		// for campaign
-					shakeStart(1500);
-					break;
-				case REF_COMMAND_CONTROL:
-				case REF_VTOL_FACTORY:
-				case REF_CYBORG_FACTORY:
-				case REF_FACTORY:
-					shakeStart(750);
-					break;
-				case REF_RESOURCE_EXTRACTOR:
-					shakeStart(400);
-					break;
-				default:
-					break;
+			// These are the types that would cause a explosive outcome if destoryed
+			case REF_HQ:
+			case REF_POWER_GEN:
+			case REF_MISSILE_SILO:		// for campaign
+				shakeStart(1500);
+				break;
+			case REF_COMMAND_CONTROL:
+			case REF_VTOL_FACTORY:
+			case REF_CYBORG_FACTORY:
+			case REF_FACTORY:
+				shakeStart(750);
+				break;
+			case REF_RESOURCE_EXTRACTOR:
+				shakeStart(400);
+				break;
+			default:
+				break;
 			}
 		}
 		// and add a sound effect
-		audio_PlayStaticTrack( psDel->pos.x, psDel->pos.y, ID_SOUND_EXPLOSION );
+		audio_PlayStaticTrack(psDel->pos.x, psDel->pos.y, ID_SOUND_EXPLOSION);
 	}
 
 	// Actually set the tiles on fire - even if the effect is not visible.
@@ -4743,7 +4758,7 @@ bool destroyStruct(STRUCTURE *psDel, unsigned impactTime)
 	// updates score stats only if not wall
 	if (!bMinor)
 	{
-		if(psDel->player == selectedPlayer)
+		if (psDel->player == selectedPlayer)
 		{
 			scoreUpdateVar(WD_STR_LOST);
 		}
@@ -4778,25 +4793,27 @@ bool  structureIdle(STRUCTURE *psBuilding)
 	CHECK_STRUCTURE(psBuilding);
 
 	if (psBuilding->pFunctionality == NULL)
+	{
 		return true;
+	}
 
 	//determine the Subject
 	switch (psBuilding->pStructureType->type)
 	{
-		case REF_RESEARCH:
+	case REF_RESEARCH:
 		{
 			pSubject = psBuilding->pFunctionality->researchFacility.psSubject;
 			break;
 		}
-		case REF_FACTORY:
-		case REF_CYBORG_FACTORY:
-		case REF_VTOL_FACTORY:
+	case REF_FACTORY:
+	case REF_CYBORG_FACTORY:
+	case REF_VTOL_FACTORY:
 		{
 			pSubject = psBuilding->pFunctionality->factory.psSubject;
 			break;
 		}
-		default:
-			break;
+	default:
+		break;
 	}
 
 	if (pSubject != NULL)
@@ -4809,13 +4826,13 @@ bool  structureIdle(STRUCTURE *psBuilding)
 
 
 /*checks to see if any structure exists of a specified type with a specified status */
-bool checkStructureStatus( STRUCTURE_STATS *psStats, UDWORD player, UDWORD status)
+bool checkStructureStatus(STRUCTURE_STATS *psStats, UDWORD player, UDWORD status)
 {
 	STRUCTURE	*psStructure;
 	bool		found = false;
 
 	for (psStructure = apsStructLists[player]; psStructure != NULL;
-		psStructure = psStructure->psNext)
+	     psStructure = psStructure->psNext)
 	{
 		if (psStructure->pStructureType->type == psStats->type)
 		{
@@ -4841,12 +4858,12 @@ bool checkSpecificStructExists(UDWORD structInc, UDWORD player)
 	ASSERT_OR_RETURN(false, structInc < numStructureStats, "Invalid structure inc");
 
 	for (psStructure = apsStructLists[player]; psStructure != NULL;
-		psStructure = psStructure->psNext)
+	     psStructure = psStructure->psNext)
 	{
 		if (psStructure->status == SS_BUILT)
 		{
 			if ((psStructure->pStructureType->ref - REF_STRUCTURE_START) ==
-				structInc)
+			    structInc)
 			{
 				found = true;
 				break;
@@ -4863,7 +4880,7 @@ void findAssemblyPointPosition(UDWORD *pX, UDWORD *pY, UDWORD player)
 	//set up a dummy stat pointer
 	STRUCTURE_STATS     sStats;
 	UDWORD              passes = 0;
-	SDWORD	            i,j,startX,endX,startY,endY;
+	SDWORD	            i, j, startX, endX, startY, endY;
 
 	sStats.ref = 0;
 	sStats.baseWidth = 1;
@@ -4877,18 +4894,18 @@ void findAssemblyPointPosition(UDWORD *pX, UDWORD *pY, UDWORD player)
 	if (!validLocation(&sStats, world_coord(Vector2i(*pX, *pY)), 0, player, false))
 	{
 		/* Keep going until we get a tile or we exceed distance */
-		while(passes < LOOK_FOR_EMPTY_TILE)
+		while (passes < LOOK_FOR_EMPTY_TILE)
 		{
 			/* Process whole box */
-			for(i = startX; i <= endX; i++)
+			for (i = startX; i <= endX; i++)
 			{
-				for(j = startY; j<= endY; j++)
+				for (j = startY; j <= endY; j++)
 				{
 					/* Test only perimeter as internal tested previous iteration */
-					if(i==startX || i==endX || j==startY || j==endY)
+					if (i == startX || i == endX || j == startY || j == endY)
 					{
 						/* Good enough? */
-						if(validLocation(&sStats, world_coord(Vector2i(i, j)), 0, player, false))
+						if (validLocation(&sStats, world_coord(Vector2i(i, j)), 0, player, false))
 						{
 							/* Set exit conditions and get out NOW */
 							*pX = i;
@@ -4916,9 +4933,9 @@ void findAssemblyPointPosition(UDWORD *pX, UDWORD *pY, UDWORD player)
 /*sets the point new droids go to - x/y in world coords for a Factory
 bCheck is set to true for initial placement of the Assembly Point*/
 void setAssemblyPoint(FLAG_POSITION *psAssemblyPoint, UDWORD x, UDWORD y,
-					UDWORD player, bool bCheck)
+                      UDWORD player, bool bCheck)
 {
-	ASSERT_OR_RETURN( , psAssemblyPoint != NULL, "invalid AssemblyPoint pointer");
+	ASSERT_OR_RETURN(, psAssemblyPoint != NULL, "invalid AssemblyPoint pointer");
 
 	//check its valid
 	x = map_coord(x);
@@ -4928,8 +4945,8 @@ void setAssemblyPoint(FLAG_POSITION *psAssemblyPoint, UDWORD x, UDWORD y,
 		findAssemblyPointPosition(&x, &y, player);
 	}
 	//add half a tile so the centre is in the middle of the tile
-	x = world_coord(x) + TILE_UNITS/2;
-	y = world_coord(y) + TILE_UNITS/2;
+	x = world_coord(x) + TILE_UNITS / 2;
+	y = world_coord(y) + TILE_UNITS / 2;
 
 	psAssemblyPoint->coords.x = x;
 	psAssemblyPoint->coords.y = y;
@@ -4940,9 +4957,9 @@ void setAssemblyPoint(FLAG_POSITION *psAssemblyPoint, UDWORD x, UDWORD y,
 
 
 /*sets the factory Inc for the Assembly Point*/
-void setFlagPositionInc(FUNCTIONALITY* pFunctionality, UDWORD player, UBYTE factoryType)
+void setFlagPositionInc(FUNCTIONALITY *pFunctionality, UDWORD player, UBYTE factoryType)
 {
-	ASSERT_OR_RETURN( , player < MAX_PLAYERS, "invalid player number");
+	ASSERT_OR_RETURN(, player < MAX_PLAYERS, "invalid player number");
 
 	//find the first vacant slot
 	unsigned inc = std::find(factoryNumFlag[player][factoryType].begin(), factoryNumFlag[player][factoryType].end(), false) - factoryNumFlag[player][factoryType].begin();
@@ -4987,15 +5004,15 @@ void structureCompletedCallback(STRUCTURE_STATS *psStructType)
 		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_RESEARCH_BUILT);
 	}
 	if (psStructType->type == REF_FACTORY ||
-		psStructType->type == REF_CYBORG_FACTORY ||
-		psStructType->type == REF_VTOL_FACTORY)
+	    psStructType->type == REF_CYBORG_FACTORY ||
+	    psStructType->type == REF_VTOL_FACTORY)
 	{
 		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_FACTORY_BUILT);
 	}
 }
 
 
-STRUCTURE_STATS * structGetDemolishStat( void )
+STRUCTURE_STATS *structGetDemolishStat(void)
 {
 	ASSERT_OR_RETURN(NULL, g_psStatDestroyStruct != NULL , "Demolish stat not initialised");
 	return g_psStatDestroyStruct;
@@ -5045,7 +5062,7 @@ bool calcStructureMuzzleBaseLocation(STRUCTURE *psStructure, Vector3i *muzzle, i
 
 	CHECK_STRUCTURE(psStructure);
 
-	if(psShape && psShape->nconnectors)
+	if (psShape && psShape->nconnectors)
 	{
 		Vector3i barrel(0, 0, 0);
 
@@ -5057,11 +5074,11 @@ bool calcStructureMuzzleBaseLocation(STRUCTURE *psStructure, Vector3i *muzzle, i
 		af.RotY(psStructure->rot.direction);
 		af.RotX(psStructure->rot.pitch);
 		af.RotZ(-psStructure->rot.roll);
-		af.Trans( psShape->connectors[weapon_slot].x, -psShape->connectors[weapon_slot].z,
-					-psShape->connectors[weapon_slot].y);//note y and z flipped
+		af.Trans(psShape->connectors[weapon_slot].x, -psShape->connectors[weapon_slot].z,
+		         -psShape->connectors[weapon_slot].y);//note y and z flipped
 
-		
-		*muzzle = swapYZ(af*barrel);
+
+		*muzzle = swapYZ(af * barrel);
 		muzzle->z = -muzzle->z;
 	}
 	else
@@ -5079,7 +5096,7 @@ bool calcStructureMuzzleLocation(STRUCTURE *psStructure, Vector3i *muzzle, int w
 
 	CHECK_STRUCTURE(psStructure);
 
-	if(psShape && psShape->nconnectors)
+	if (psShape && psShape->nconnectors)
 	{
 		Vector3i barrel(0, 0, 0);
 		unsigned int nWeaponStat = psStructure->asWeaps[weapon_slot].nStat;
@@ -5099,8 +5116,8 @@ bool calcStructureMuzzleLocation(STRUCTURE *psStructure, Vector3i *muzzle, int w
 		af.RotY(psStructure->rot.direction);
 		af.RotX(psStructure->rot.pitch);
 		af.RotZ(-psStructure->rot.roll);
-		af.Trans( psShape->connectors[weapon_slot].x, -psShape->connectors[weapon_slot].z,
-					-psShape->connectors[weapon_slot].y);//note y and z flipped
+		af.Trans(psShape->connectors[weapon_slot].x, -psShape->connectors[weapon_slot].z,
+		         -psShape->connectors[weapon_slot].y);//note y and z flipped
 
 		//matrix = the weapon[slot] mount on the body
 		af.RotY(psStructure->asWeaps[weapon_slot].rot.direction);  // +ve anticlockwise
@@ -5125,11 +5142,11 @@ bool calcStructureMuzzleLocation(STRUCTURE *psStructure, Vector3i *muzzle, int w
 				// shoot first, draw later - substract one shot to get correct results
 				connector_num = (psStructure->asWeaps[weapon_slot].shotsFired - 1) % (psWeaponImd->nconnectors);
 			}
-			
+
 			barrel = Vector3i(psWeaponImd->connectors[connector_num].x, -psWeaponImd->connectors[connector_num].z, -psWeaponImd->connectors[connector_num].y);
 		}
 
-		*muzzle = swapYZ(af*barrel);
+		*muzzle = swapYZ(af * barrel);
 		muzzle->z = -muzzle->z;
 	}
 	else
@@ -5160,7 +5177,7 @@ void checkForResExtractors(STRUCTURE *psBuilding)
 		{
 			continue;  // Derrick not complete.
 		}
-		int priority = resExtractor->psPowerGen != nullptr? resExtractor->psPowerGen->capacity : -1;
+		int priority = resExtractor->psPowerGen != nullptr ? resExtractor->psPowerGen->capacity : -1;
 		//auto d = std::find_if(derricks.begin(), derricks.end(), [priority](Derrick const &v) { return v.first <= priority; });
 		Derricks::iterator d = derricks.begin();
 		while (d != derricks.end() && d->first <= priority)
@@ -5265,7 +5282,7 @@ void informPowerGen(STRUCTURE *psStruct)
 	psPowerGen = &psStruct->pFunctionality->resourceExtractor.psPowerGen->pFunctionality->powerGenerator;
 	if (psPowerGen)
 	{
-		for (i=0; i < NUM_POWER_MODULES; i++)
+		for (i = 0; i < NUM_POWER_MODULES; i++)
 		{
 			if (psPowerGen->apResExtractors[i] == psStruct)
 			{
@@ -5328,7 +5345,7 @@ void releasePowerGen(STRUCTURE *psRelease)
 
 	psPowerGen = &psRelease->pFunctionality->powerGenerator;
 	//go through list of res extractors, setting them to inactive
-	for (i=0; i < NUM_POWER_MODULES; i++)
+	for (i = 0; i < NUM_POWER_MODULES; i++)
 	{
 		if (psPowerGen->apResExtractors[i])
 		{
@@ -5338,10 +5355,10 @@ void releasePowerGen(STRUCTURE *psRelease)
 	}
 	//may have a power gen with spare capacity
 	for (psCurr = apsStructLists[psRelease->player]; psCurr != NULL; psCurr =
-		psCurr->psNext)
+	         psCurr->psNext)
 	{
 		if (psCurr->pStructureType->type == REF_POWER_GEN &&
-			psCurr != psRelease && psCurr->status == SS_BUILT)
+		    psCurr != psRelease && psCurr->status == SS_BUILT)
 		{
 			checkForResExtractors(psCurr);
 		}
@@ -5369,102 +5386,104 @@ void buildingComplete(STRUCTURE *psBuilding)
 	{
 		// We finished building a module, now use the combined IMD.
 		std::vector<iIMDShape *> &IMDs = psBuilding->pStructureType->pIMD;
-		int imdIndex = std::min<int>(numStructureModules(psBuilding)*2, IMDs.size() - 1);  // *2 because even-numbered IMDs are structures, odd-numbered IMDs are just the modules.
+		int imdIndex = std::min<int>(numStructureModules(psBuilding) * 2, IMDs.size() - 1); // *2 because even-numbered IMDs are structures, odd-numbered IMDs are just the modules.
 		psBuilding->prebuiltImd = NULL;
 		psBuilding->sDisplay.imd = IMDs[imdIndex];
 	}
 
 	switch (psBuilding->pStructureType->type)
 	{
-		case REF_POWER_GEN:
-			checkForResExtractors(psBuilding);
+	case REF_POWER_GEN:
+		checkForResExtractors(psBuilding);
 
-			if(selectedPlayer == psBuilding->player)
-			{
-				audio_PlayObjStaticTrack(psBuilding, ID_SOUND_POWER_HUM);
-			}
+		if (selectedPlayer == psBuilding->player)
+		{
+			audio_PlayObjStaticTrack(psBuilding, ID_SOUND_POWER_HUM);
+		}
 
-			break;
-		case REF_RESOURCE_EXTRACTOR:
-			checkForPowerGen(psBuilding);
-			/* GJ HACK! - add anim to deriks */
-			if (psBuilding->psCurAnim == NULL)
-			{
-				psBuilding->psCurAnim = animObj_Add(psBuilding, ID_ANIM_DERIK, 0);
-			}
+		break;
+	case REF_RESOURCE_EXTRACTOR:
+		checkForPowerGen(psBuilding);
+		/* GJ HACK! - add anim to deriks */
+		if (psBuilding->psCurAnim == NULL)
+		{
+			psBuilding->psCurAnim = animObj_Add(psBuilding, ID_ANIM_DERIK, 0);
+		}
 
-			break;
-		case REF_RESEARCH:
-			//this deals with research facilities that are upgraded whilst mid-research
-			releaseResearch(psBuilding, ModeImmediate);
-			intNotifyResearchButton(prevState);
-			break;
-		case REF_FACTORY:
-		case REF_CYBORG_FACTORY:
-		case REF_VTOL_FACTORY:
-			//this deals with factories that are upgraded whilst mid-production
-			releaseProduction(psBuilding, ModeImmediate);
-			break;
-		case REF_SAT_UPLINK:
-			revealAll(psBuilding->player);
-			break;
-		case REF_GATE:
-			auxStructureNonblocking(psBuilding);  // Clear outdated flags.
-			auxStructureClosedGate(psBuilding);  // Don't block for the sake of allied pathfinding.
-			break;
-		default:
-			//do nothing
-			break;
+		break;
+	case REF_RESEARCH:
+		//this deals with research facilities that are upgraded whilst mid-research
+		releaseResearch(psBuilding, ModeImmediate);
+		intNotifyResearchButton(prevState);
+		break;
+	case REF_FACTORY:
+	case REF_CYBORG_FACTORY:
+	case REF_VTOL_FACTORY:
+		//this deals with factories that are upgraded whilst mid-production
+		releaseProduction(psBuilding, ModeImmediate);
+		break;
+	case REF_SAT_UPLINK:
+		revealAll(psBuilding->player);
+		break;
+	case REF_GATE:
+		auxStructureNonblocking(psBuilding);  // Clear outdated flags.
+		auxStructureClosedGate(psBuilding);  // Don't block for the sake of allied pathfinding.
+		break;
+	default:
+		//do nothing
+		break;
 	}
 }
 
 
 /*for a given structure, return a pointer to its module stat */
-STRUCTURE_STATS* getModuleStat(const STRUCTURE* psStruct)
+STRUCTURE_STATS *getModuleStat(const STRUCTURE *psStruct)
 {
 	ASSERT_OR_RETURN(NULL, psStruct != NULL, "Invalid structure pointer");
 
 	switch (psStruct->pStructureType->type)
 	{
-		case REF_POWER_GEN:
-			return &asStructureStats[powerModuleStat];
-		case REF_FACTORY:
-		case REF_VTOL_FACTORY:
-			return &asStructureStats[factoryModuleStat];
-		case REF_RESEARCH:
-			return &asStructureStats[researchModuleStat];
-		default:
-			//no other structures can have modules attached
-			return NULL;
+	case REF_POWER_GEN:
+		return &asStructureStats[powerModuleStat];
+	case REF_FACTORY:
+	case REF_VTOL_FACTORY:
+		return &asStructureStats[factoryModuleStat];
+	case REF_RESEARCH:
+		return &asStructureStats[researchModuleStat];
+	default:
+		//no other structures can have modules attached
+		return NULL;
 	}
 }
 
 /**
  * Count the artillery and VTOL droids assigned to a structure.
  */
-static unsigned int countAssignedDroids(const STRUCTURE* psStructure)
+static unsigned int countAssignedDroids(const STRUCTURE *psStructure)
 {
-	const DROID* psCurr;
+	const DROID *psCurr;
 	unsigned int num;
 
 	CHECK_STRUCTURE(psStructure);
 
 	// For non-debug builds
 	if (psStructure == NULL)
+	{
 		return 0;
+	}
 
 	num = 0;
 	for (psCurr = apsDroidLists[selectedPlayer]; psCurr; psCurr = psCurr->psNext)
 	{
 		if (psCurr->order.psObj
-		 && psCurr->order.psObj->id == psStructure->id
-		 && psCurr->player == psStructure->player)
+		    && psCurr->order.psObj->id == psStructure->id
+		    && psCurr->player == psStructure->player)
 		{
 			const MOVEMENT_MODEL weapontype = asWeaponStats[psCurr->asWeaps[0].nStat].movementModel;
 
 			if (weapontype == MM_INDIRECT
-			 || weapontype == MM_HOMINGINDIRECT
-			 || isVtolDroid(psCurr))
+			    || weapontype == MM_HOMINGINDIRECT
+			    || isVtolDroid(psCurr))
 			{
 				num++;
 			}
@@ -5480,7 +5499,7 @@ void printStructureInfo(STRUCTURE *psStructure)
 	unsigned int numConnected;
 	POWER_GEN	*psPowerGen;
 
-	ASSERT_OR_RETURN( , psStructure != NULL, "Invalid Structure pointer");
+	ASSERT_OR_RETURN(, psStructure != NULL, "Invalid Structure pointer");
 
 	if (isBlueprint(psStructure))
 	{
@@ -5502,17 +5521,17 @@ void printStructureInfo(STRUCTURE *psStructure)
 		}
 	case REF_DEFENSE:
 		if (psStructure->pStructureType->pSensor != NULL
-			   && (psStructure->pStructureType->pSensor->type == STANDARD_SENSOR
-			   || psStructure->pStructureType->pSensor->type == INDIRECT_CB_SENSOR
-			   || psStructure->pStructureType->pSensor->type == VTOL_INTERCEPT_SENSOR
-			   || psStructure->pStructureType->pSensor->type == VTOL_CB_SENSOR
-			   || psStructure->pStructureType->pSensor->type == SUPER_SENSOR
-			   || psStructure->pStructureType->pSensor->type == RADAR_DETECTOR_SENSOR)
-			   && psStructure->pStructureType->pSensor->location == LOC_TURRET)
+		    && (psStructure->pStructureType->pSensor->type == STANDARD_SENSOR
+		        || psStructure->pStructureType->pSensor->type == INDIRECT_CB_SENSOR
+		        || psStructure->pStructureType->pSensor->type == VTOL_INTERCEPT_SENSOR
+		        || psStructure->pStructureType->pSensor->type == VTOL_CB_SENSOR
+		        || psStructure->pStructureType->pSensor->type == SUPER_SENSOR
+		        || psStructure->pStructureType->pSensor->type == RADAR_DETECTOR_SENSOR)
+		    && psStructure->pStructureType->pSensor->location == LOC_TURRET)
 		{
 			unsigned int assigned_droids = countAssignedDroids(psStructure);
 			console(ngettext("%s - %u Unit assigned - Damage %3.0f%%", "%s - %u Units assigned - Hitpoints %d/%d", assigned_droids),
-				getName(psStructure->pStructureType), assigned_droids, psStructure->body, structureBody(psStructure));
+			        getName(psStructure->pStructureType), assigned_droids, psStructure->body, structureBody(psStructure));
 		}
 		else
 		{
@@ -5549,7 +5568,7 @@ void printStructureInfo(STRUCTURE *psStructure)
 				numConnected++;
 			}
 		}
-		console(_("%s - Connected %u of %u - Hitpoints %d/%d"), getName(psStructure->pStructureType), numConnected, 
+		console(_("%s - Connected %u of %u - Hitpoints %d/%d"), getName(psStructure->pStructureType), numConnected,
 		        NUM_POWER_MODULES, psStructure->body, structureBody(psStructure));
 		if (getDebugMappingStatus())
 		{
@@ -5563,7 +5582,7 @@ void printStructureInfo(STRUCTURE *psStructure)
 		if (getDebugMappingStatus())
 		{
 			console("ID %u - Production Output: %u - BuildPointsRemaining: %u - Resistance: %d / %d", psStructure->id,
-			        getBuildingProductionPoints(psStructure), psStructure->pFunctionality->factory.buildPointsRemaining, 
+			        getBuildingProductionPoints(psStructure), psStructure->pFunctionality->factory.buildPointsRemaining,
 			        psStructure->resistance, structureResistance(psStructure->pStructureType, psStructure->player));
 		}
 		break;
@@ -5578,7 +5597,7 @@ void printStructureInfo(STRUCTURE *psStructure)
 		console(_("%s - Hitpoints %d/%d"), getName(psStructure->pStructureType), psStructure->body, structureBody(psStructure));
 		if (getDebugMappingStatus())
 		{
-			 console("ID %u - sensor range %d - ECM %d", psStructure->id, structSensorRange(psStructure), structJammerPower(psStructure));
+			console("ID %u - sensor range %d - ECM %d", psStructure->id, structSensorRange(psStructure), structJammerPower(psStructure));
 		}
 		break;
 	}
@@ -5605,9 +5624,9 @@ bool validTemplateForFactory(DROID_TEMPLATE *psTemplate, STRUCTURE *psFactory, b
 
 	//check if droid is a cyborg
 	if (psTemplate->droidType == DROID_CYBORG ||
-		psTemplate->droidType == DROID_CYBORG_SUPER ||
-		psTemplate->droidType == DROID_CYBORG_CONSTRUCT ||
-		psTemplate->droidType == DROID_CYBORG_REPAIR)
+	    psTemplate->droidType == DROID_CYBORG_SUPER ||
+	    psTemplate->droidType == DROID_CYBORG_CONSTRUCT ||
+	    psTemplate->droidType == DROID_CYBORG_REPAIR)
 	{
 		if (psFactory->pStructureType->type != REF_CYBORG_FACTORY)
 		{
@@ -5630,9 +5649,9 @@ bool validTemplateForFactory(DROID_TEMPLATE *psTemplate, STRUCTURE *psFactory, b
 	if (psFactory->pStructureType->type == REF_CYBORG_FACTORY)
 	{
 		if (!(psTemplate->droidType == DROID_CYBORG ||
-			psTemplate->droidType == DROID_CYBORG_SUPER ||
-			psTemplate->droidType == DROID_CYBORG_CONSTRUCT ||
-			psTemplate->droidType == DROID_CYBORG_REPAIR))
+		      psTemplate->droidType == DROID_CYBORG_SUPER ||
+		      psTemplate->droidType == DROID_CYBORG_CONSTRUCT ||
+		      psTemplate->droidType == DROID_CYBORG_REPAIR))
 		{
 			debug(level, "Can only build cyborg in cyborg factory, not droidType %d in %s.",
 			      psTemplate->droidType, objInfo(psFactory));
@@ -5703,7 +5722,7 @@ bool electronicDamage(BASE_OBJECT *psTarget, UDWORD damage, UBYTE attackPlayer)
 				if (psStructure->player == selectedPlayer)
 				{
 					console(_("%s - Electronically Damaged"),
-						getName(psStructure->pStructureType));
+					        getName(psStructure->pStructureType));
 					//tell the scripts if selectedPlayer has lost a structure
 					eventFireCallbackTrigger((TRIGGER_TYPE)CALL_ELECTRONIC_TAKEOVER);
 				}
@@ -5757,13 +5776,13 @@ bool electronicDamage(BASE_OBJECT *psTarget, UDWORD damage, UBYTE attackPlayer)
 
 				//give the droid to the attacking player
 
-				if(psDroid->visible[selectedPlayer])
+				if (psDroid->visible[selectedPlayer])
 				{
-					for(i=0; i<5; i++)
+					for (i = 0; i < 5; i++)
 					{
-						pos.x = psDroid->pos.x + (30-rand()%60);
-						pos.z = psDroid->pos.y + (30-rand()%60);
-						pos.y = psDroid->pos.z + (rand()%8);
+						pos.x = psDroid->pos.x + (30 - rand() % 60);
+						pos.z = psDroid->pos.y + (30 - rand() % 60);
+						pos.y = psDroid->pos.z + (rand() % 8);
 						effectGiveAuxVar(80);
 						addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_FLAMETHROWER, false, NULL, 0, gameTime - deltaGameTime);
 					}
@@ -5796,7 +5815,7 @@ bool validStructResistance(STRUCTURE *psStruct)
 		half the base value*/
 		if (bMultiPlayer)
 		{
-			switch(psStruct->pStructureType->type)
+			switch (psStruct->pStructureType->type)
 			{
 			case REF_RESEARCH:
 			case REF_FACTORY:
@@ -5860,7 +5879,7 @@ bool electronicReward(STRUCTURE *psStructure, UBYTE attackPlayer)
 {
 	bool    bRewarded = false;
 
-	switch(psStructure->pStructureType->type)
+	switch (psStructure->pStructureType->type)
 	{
 	case REF_RESEARCH:
 		researchReward(psStructure->player, attackPlayer);
@@ -5873,15 +5892,15 @@ bool electronicReward(STRUCTURE *psStructure, UBYTE attackPlayer)
 		bRewarded = true;
 		break;
 	case REF_HQ:
-		hqReward(psStructure->player,attackPlayer);
+		hqReward(psStructure->player, attackPlayer);
 		if (attackPlayer == selectedPlayer)
 		{
-			addConsoleMessage(_("Electronic Reward - Visibility Report"),	DEFAULT_JUSTIFY,SYSTEM_MESSAGE);
+			addConsoleMessage(_("Electronic Reward - Visibility Report"),	DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 		}
 		bRewarded = true;
 		break;
 	case REF_REPAIR_FACILITY:
-		repairFacilityReward(psStructure->player,attackPlayer);
+		repairFacilityReward(psStructure->player, attackPlayer);
 		bRewarded = true;
 		break;
 	default:
@@ -5899,10 +5918,10 @@ void factoryReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 	UDWORD		inc, comp = 0;
 
 	//search through the propulsions first
-	for (inc=0; inc < numPropulsionStats; inc++)
+	for (inc = 0; inc < numPropulsionStats; inc++)
 	{
 		if (apCompLists[losingPlayer][COMP_PROPULSION][inc] == AVAILABLE &&
-			apCompLists[rewardPlayer][COMP_PROPULSION][inc] != AVAILABLE)
+		    apCompLists[rewardPlayer][COMP_PROPULSION][inc] != AVAILABLE)
 		{
 			if (asPropulsionStats[inc].buildPower > asPropulsionStats[comp].buildPower)
 			{
@@ -5921,10 +5940,10 @@ void factoryReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 	}
 
 	//haven't found a propulsion - look for a body
-	for (inc=0; inc < numBodyStats; inc++)
+	for (inc = 0; inc < numBodyStats; inc++)
 	{
 		if (apCompLists[losingPlayer][COMP_BODY][inc] == AVAILABLE &&
-			apCompLists[rewardPlayer][COMP_BODY][inc] != AVAILABLE)
+		    apCompLists[rewardPlayer][COMP_BODY][inc] != AVAILABLE)
 		{
 			if (asBodyStats[inc].buildPower > asBodyStats[comp].buildPower)
 			{
@@ -5943,10 +5962,10 @@ void factoryReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 	}
 
 	//haven't found a body - look for a weapon
-	for (inc=0; inc < numWeaponStats; inc++)
+	for (inc = 0; inc < numWeaponStats; inc++)
 	{
 		if (apCompLists[losingPlayer][COMP_WEAPON][inc] == AVAILABLE &&
-			apCompLists[rewardPlayer][COMP_WEAPON][inc] != AVAILABLE)
+		    apCompLists[rewardPlayer][COMP_WEAPON][inc] != AVAILABLE)
 		{
 			if (asWeaponStats[inc].buildPower > asWeaponStats[comp].buildPower)
 			{
@@ -5967,7 +5986,7 @@ void factoryReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 	//losing Player hasn't got anything better so don't gain anything!
 	if (rewardPlayer == selectedPlayer)
 	{
-		addConsoleMessage(_("Factory Reward - Nothing"), DEFAULT_JUSTIFY,SYSTEM_MESSAGE);
+		addConsoleMessage(_("Factory Reward - Nothing"), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 	}
 }
 
@@ -5978,10 +5997,10 @@ void repairFacilityReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 	UDWORD		inc, comp = 0;
 
 	//search through the repair stats
-	for (inc=0; inc < numRepairStats; inc++)
+	for (inc = 0; inc < numRepairStats; inc++)
 	{
 		if (apCompLists[losingPlayer][COMP_REPAIRUNIT][inc] == AVAILABLE &&
-			apCompLists[rewardPlayer][COMP_REPAIRUNIT][inc] != AVAILABLE)
+		    apCompLists[rewardPlayer][COMP_REPAIRUNIT][inc] != AVAILABLE)
 		{
 			if (asRepairStats[inc].buildPower > asRepairStats[comp].buildPower)
 			{
@@ -6000,7 +6019,7 @@ void repairFacilityReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 	}
 	if (rewardPlayer == selectedPlayer)
 	{
-		addConsoleMessage(_("Repair Facility Award - Nothing"), DEFAULT_JUSTIFY,SYSTEM_MESSAGE);
+		addConsoleMessage(_("Repair Facility Award - Nothing"), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 	}
 }
 
@@ -6011,12 +6030,12 @@ void hqReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 	STRUCTURE *psStruct;
 	FEATURE	  *psFeat;
 	DROID	  *psDroid;
-	UDWORD	x,y,i;
+	UDWORD	x, y, i;
 
 	// share exploration info - pretty useless but perhaps a nice touch?
-	for(x = 0; x < mapWidth; x++)
+	for (x = 0; x < mapWidth; x++)
 	{
-		for(y = 0; y < mapHeight; y++)
+		for (y = 0; y < mapHeight; y++)
 		{
 			MAPTILE *psTile = mapTile(x, y);
 			if (TEST_TILE_VISIBLE(losingPlayer, psTile))
@@ -6027,31 +6046,31 @@ void hqReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 	}
 
 	//struct
-	for(i=0;i<MAX_PLAYERS;i++)
+	for (i = 0; i < MAX_PLAYERS; i++)
 	{
-		for(psStruct = apsStructLists[i]; psStruct != NULL; psStruct = psStruct->psNext)
+		for (psStruct = apsStructLists[i]; psStruct != NULL; psStruct = psStruct->psNext)
 		{
-			if( psStruct->visible[losingPlayer] && !psStruct->died)
+			if (psStruct->visible[losingPlayer] && !psStruct->died)
 			{
 				psStruct->visible[rewardPlayer] = psStruct->visible[losingPlayer];
 			}
 		}
 
 		//feature
-		for(psFeat = apsFeatureLists[i]; psFeat != NULL; psFeat = psFeat->psNext)
+		for (psFeat = apsFeatureLists[i]; psFeat != NULL; psFeat = psFeat->psNext)
 		{
-			if(psFeat->visible[losingPlayer] )
+			if (psFeat->visible[losingPlayer])
 			{
 				psFeat->visible[rewardPlayer] = psFeat->visible[losingPlayer];
 			}
 		}
 
 		//droids.
-		for(psDroid = apsDroidLists[i]; psDroid != NULL; psDroid = psDroid->psNext)
+		for (psDroid = apsDroidLists[i]; psDroid != NULL; psDroid = psDroid->psNext)
 		{
-			if(psDroid->visible[losingPlayer] || psDroid->player == losingPlayer)
+			if (psDroid->visible[losingPlayer] || psDroid->player == losingPlayer)
 			{
-				psDroid->visible[rewardPlayer] =UBYTE_MAX;
+				psDroid->visible[rewardPlayer] = UBYTE_MAX;
 			}
 		}
 	}
@@ -6065,9 +6084,9 @@ bool StructIsFactory(STRUCTURE *Struct)
 	ASSERT_OR_RETURN(false, Struct != NULL, "Invalid structure!");
 	ASSERT_OR_RETURN(false, Struct->pStructureType != NULL, "Invalid structureType!");
 
-	if( (Struct->pStructureType->type == REF_FACTORY) ||
-		(Struct->pStructureType->type == REF_CYBORG_FACTORY) ||
-		(Struct->pStructureType->type == REF_VTOL_FACTORY) )
+	if ((Struct->pStructureType->type == REF_FACTORY) ||
+	    (Struct->pStructureType->type == REF_CYBORG_FACTORY) ||
+	    (Struct->pStructureType->type == REF_VTOL_FACTORY))
 	{
 		return true;
 	}
@@ -6080,8 +6099,8 @@ bool StructIsFactory(STRUCTURE *Struct)
 //
 bool FlagIsFactory(FLAG_POSITION *psCurrFlag)
 {
-	if( (psCurrFlag->factoryType == FACTORY_FLAG) || (psCurrFlag->factoryType == CYBORG_FLAG) ||
-		(psCurrFlag->factoryType == VTOL_FLAG) )
+	if ((psCurrFlag->factoryType == FACTORY_FLAG) || (psCurrFlag->factoryType == CYBORG_FLAG) ||
+	    (psCurrFlag->factoryType == VTOL_FLAG))
 	{
 		return true;
 	}
@@ -6097,15 +6116,15 @@ FLAG_POSITION *FindFactoryDelivery(STRUCTURE *Struct)
 {
 	FLAG_POSITION	*psCurrFlag;
 
-	if(StructIsFactory(Struct))
+	if (StructIsFactory(Struct))
 	{
 		// Find the factories delivery point.
 		for (psCurrFlag = apsFlagPosLists[Struct->player]; psCurrFlag;
-			psCurrFlag = psCurrFlag->psNext)
+		     psCurrFlag = psCurrFlag->psNext)
 		{
-			if(FlagIsFactory(psCurrFlag)
-			 && Struct->pFunctionality->factory.psAssemblyPoint->factoryInc == psCurrFlag->factoryInc
-			 && Struct->pFunctionality->factory.psAssemblyPoint->factoryType == psCurrFlag->factoryType)
+			if (FlagIsFactory(psCurrFlag)
+			    && Struct->pFunctionality->factory.psAssemblyPoint->factoryInc == psCurrFlag->factoryInc
+			    && Struct->pFunctionality->factory.psAssemblyPoint->factoryType == psCurrFlag->factoryType)
 			{
 				return psCurrFlag;
 			}
@@ -6124,13 +6143,13 @@ STRUCTURE	*findDeliveryFactory(FLAG_POSITION *psDelPoint)
 	REPAIR_FACILITY *psRepair;
 
 	for (psCurr = apsStructLists[psDelPoint->player]; psCurr != NULL; psCurr =
-		psCurr->psNext)
+	         psCurr->psNext)
 	{
-		if(StructIsFactory(psCurr))
+		if (StructIsFactory(psCurr))
 		{
 			psFactory = &psCurr->pFunctionality->factory;
 			if (psFactory->psAssemblyPoint->factoryInc == psDelPoint->factoryInc &&
-				psFactory->psAssemblyPoint->factoryType == psDelPoint->factoryType)
+			    psFactory->psAssemblyPoint->factoryType == psDelPoint->factoryType)
 			{
 				return psCurr;
 			}
@@ -6152,7 +6171,7 @@ STRUCTURE	*findDeliveryFactory(FLAG_POSITION *psDelPoint)
 accrued but not used*/
 void cancelProduction(STRUCTURE *psBuilding, QUEUE_MODE mode, bool mayClearProductionRun)
 {
-	ASSERT_OR_RETURN( , StructIsFactory(psBuilding), "structure not a factory");
+	ASSERT_OR_RETURN(, StructIsFactory(psBuilding), "structure not a factory");
 
 	FACTORY *psFactory = &psBuilding->pFunctionality->factory;
 
@@ -6199,7 +6218,7 @@ void holdProduction(STRUCTURE *psBuilding, QUEUE_MODE mode)
 {
 	FACTORY *psFactory;
 
-	ASSERT_OR_RETURN( , StructIsFactory(psBuilding), "structure not a factory");
+	ASSERT_OR_RETURN(, StructIsFactory(psBuilding), "structure not a factory");
 
 	psFactory = &psBuilding->pFunctionality->factory;
 
@@ -6228,7 +6247,7 @@ void holdProduction(STRUCTURE *psBuilding, QUEUE_MODE mode)
 /*release a factory's production run from hold*/
 void releaseProduction(STRUCTURE *psBuilding, QUEUE_MODE mode)
 {
-	ASSERT_OR_RETURN( , StructIsFactory(psBuilding), "structure not a factory");
+	ASSERT_OR_RETURN(, StructIsFactory(psBuilding), "structure not a factory");
 
 	FACTORY *psFactory = &psBuilding->pFunctionality->factory;
 
@@ -6272,7 +6291,7 @@ bool ProductionRunEntry::operator ==(DROID_TEMPLATE *t) const
 
 /*this is called when a factory produces a droid. The Template returned is the next
 one to build - if any*/
-DROID_TEMPLATE * factoryProdUpdate(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate)
+DROID_TEMPLATE *factoryProdUpdate(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate)
 {
 	CHECK_STRUCTURE(psStructure);
 	if (psStructure->player != productionPlayer)
@@ -6344,8 +6363,8 @@ DROID_TEMPLATE * factoryProdUpdate(STRUCTURE *psStructure, DROID_TEMPLATE *psTem
 void factoryProdAdjust(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate, bool add)
 {
 	CHECK_STRUCTURE(psStructure);
-	ASSERT_OR_RETURN( , psStructure->player == productionPlayer, "called for incorrect player");
-	ASSERT_OR_RETURN( , psTemplate != NULL, "NULL template");
+	ASSERT_OR_RETURN(, psStructure->player == productionPlayer, "called for incorrect player");
+	ASSERT_OR_RETURN(, psTemplate != NULL, "NULL template");
 
 	FACTORY *psFactory = &psStructure->pFunctionality->factory;
 	if (psFactory->psAssemblyPoint->factoryInc >= asProductionRun[psFactory->psAssemblyPoint->factoryType].size())
@@ -6365,7 +6384,7 @@ void factoryProdAdjust(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate, bool 
 		}
 
 		//adjust the prod run
-		entry->quantity += add? 1 : -1;
+		entry->quantity += add ? 1 : -1;
 		entry->built = std::min(entry->built, entry->quantity);
 
 		// Allows us to queue up more units up to MAX_IN_RUN instead of ignoring how many we have built from that queue
@@ -6380,7 +6399,7 @@ void factoryProdAdjust(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate, bool 
 		//start off a new template
 		ProductionRunEntry entry;
 		entry.psTemplate = psTemplate;
-		entry.quantity = add? 1 : MAX_IN_RUN;  //wrap around to max value
+		entry.quantity = add ? 1 : MAX_IN_RUN; //wrap around to max value
 		entry.built = 0;
 		productionRun.push_back(entry);
 	}
@@ -6456,7 +6475,7 @@ UBYTE checkProductionForCommand(UBYTE player)
 
 // Count number of factories assignable to a command droid.
 //
-UWORD countAssignableFactories(UBYTE player,UWORD factoryType)
+UWORD countAssignableFactories(UBYTE player, UWORD factoryType)
 {
 	UBYTE           quantity = 0;
 
@@ -6503,20 +6522,20 @@ void checkDeliveryPoints(UDWORD version)
 		if (inc != selectedPlayer)
 		{
 			for (psStruct = apsStructLists[inc]; psStruct != NULL; psStruct =
-				psStruct->psNext)
+			         psStruct->psNext)
 			{
-				if(StructIsFactory(psStruct))
+				if (StructIsFactory(psStruct))
 				{
 					//check the DP
 					psFactory = &psStruct->pFunctionality->factory;
 					if (psFactory->psAssemblyPoint == NULL)//need to add one
 					{
-						ASSERT_OR_RETURN( , psFactory->psAssemblyPoint != NULL, "no delivery point for factory");
+						ASSERT_OR_RETURN(, psFactory->psAssemblyPoint != NULL, "no delivery point for factory");
 					}
 					else
 					{
 						setAssemblyPoint(psFactory->psAssemblyPoint, psFactory->psAssemblyPoint->
-							coords.x, psFactory->psAssemblyPoint->coords.y, inc, true);
+						                 coords.x, psFactory->psAssemblyPoint->coords.y, inc, true);
 					}
 				}
 				else if (psStruct->pStructureType->type == REF_REPAIR_FACILITY)
@@ -6527,7 +6546,7 @@ void checkDeliveryPoints(UDWORD version)
 					{
 						if (version >= VERSION_19)
 						{
-							ASSERT_OR_RETURN( , psRepair->psDeliveryPoint != NULL, "no delivery point for repair facility");
+							ASSERT_OR_RETURN(, psRepair->psDeliveryPoint != NULL, "no delivery point for repair facility");
 						}
 						else
 						{
@@ -6543,14 +6562,14 @@ void checkDeliveryPoints(UDWORD version)
 							x = map_coord(psStruct->pos.x + 256);
 							y = map_coord(psStruct->pos.y + 256);
 							// Belt and braces - shouldn't be able to build too near edge
-							setAssemblyPoint( psRepair->psDeliveryPoint, world_coord(x),
-								world_coord(y), inc, true);
+							setAssemblyPoint(psRepair->psDeliveryPoint, world_coord(x),
+							                 world_coord(y), inc, true);
 						}
 					}
 					else//check existing one
 					{
 						setAssemblyPoint(psRepair->psDeliveryPoint, psRepair->psDeliveryPoint->
-							coords.x, psRepair->psDeliveryPoint->coords.y, inc, true);
+						                 coords.x, psRepair->psDeliveryPoint->coords.y, inc, true);
 					}
 				}
 			}
@@ -6564,8 +6583,8 @@ void factoryLoopAdjust(STRUCTURE *psStruct, bool add)
 {
 	FACTORY		*psFactory;
 
-	ASSERT_OR_RETURN( , StructIsFactory(psStruct), "structure is not a factory");
-	ASSERT_OR_RETURN( , psStruct->player == selectedPlayer, "should only be called for selectedPlayer");
+	ASSERT_OR_RETURN(, StructIsFactory(psStruct), "structure is not a factory");
+	ASSERT_OR_RETURN(, psStruct->player == selectedPlayer, "should only be called for selectedPlayer");
 
 	psFactory = &psStruct->pFunctionality->factory;
 
@@ -6622,30 +6641,30 @@ bool structSensorDroidWeapon(STRUCTURE *psStruct, DROID *psDroid)
 		//Standard Sensor Tower + indirect weapon droid (non VTOL)
 		//else if (structStandardSensor(psStruct) && (psDroid->numWeaps &&
 		if (structStandardSensor(psStruct) && (psDroid->asWeaps[0].nStat > 0 &&
-			!proj_Direct(asWeaponStats + psDroid->asWeaps[0].nStat)) &&
-			!isVtolDroid(psDroid))
+		                                       !proj_Direct(asWeaponStats + psDroid->asWeaps[0].nStat)) &&
+		    !isVtolDroid(psDroid))
 		{
 			return true;
 		}
 		//CB Sensor Tower + indirect weapon droid (non VTOL)
 		//if (structCBSensor(psStruct) && (psDroid->numWeaps &&
 		else if (structCBSensor(psStruct) && (psDroid->asWeaps[0].nStat > 0 &&
-			!proj_Direct(asWeaponStats + psDroid->asWeaps[0].nStat)) &&
-			!isVtolDroid(psDroid))
+		                                      !proj_Direct(asWeaponStats + psDroid->asWeaps[0].nStat)) &&
+		         !isVtolDroid(psDroid))
 		{
 			return true;
 		}
 		//VTOL Intercept Sensor Tower + any weapon VTOL droid
 		//else if (structVTOLSensor(psStruct) && psDroid->numWeaps &&
 		else if (structVTOLSensor(psStruct) && psDroid->asWeaps[0].nStat > 0 &&
-			isVtolDroid(psDroid))
+		         isVtolDroid(psDroid))
 		{
 			return true;
 		}
 		//VTOL CB Sensor Tower + any weapon VTOL droid
 		//else if (structVTOLCBSensor(psStruct) && psDroid->numWeaps &&
 		else if (structVTOLCBSensor(psStruct) && psDroid->asWeaps[0].nStat > 0 &&
-			isVtolDroid(psDroid))
+		         isVtolDroid(psDroid))
 		{
 			return true;
 		}
@@ -6658,13 +6677,13 @@ bool structSensorDroidWeapon(STRUCTURE *psStruct, DROID *psDroid)
 
 /*checks if the structure has a Counter Battery sensor attached - returns
 true if it has*/
-bool structCBSensor(const STRUCTURE* psStruct)
+bool structCBSensor(const STRUCTURE *psStruct)
 {
 	// Super Sensor works as any type
 	if (psStruct->pStructureType->pSensor
-	 && (psStruct->pStructureType->pSensor->type == INDIRECT_CB_SENSOR
-	  || psStruct->pStructureType->pSensor->type == SUPER_SENSOR)
-	 && psStruct->pStructureType->pSensor->location == LOC_TURRET)
+	    && (psStruct->pStructureType->pSensor->type == INDIRECT_CB_SENSOR
+	        || psStruct->pStructureType->pSensor->type == SUPER_SENSOR)
+	    && psStruct->pStructureType->pSensor->location == LOC_TURRET)
 	{
 		return true;
 	}
@@ -6675,13 +6694,13 @@ bool structCBSensor(const STRUCTURE* psStruct)
 
 /*checks if the structure has a Standard Turret sensor attached - returns
 true if it has*/
-bool structStandardSensor(const STRUCTURE* psStruct)
+bool structStandardSensor(const STRUCTURE *psStruct)
 {
 	// Super Sensor works as any type
 	if (psStruct->pStructureType->pSensor
-	 && (psStruct->pStructureType->pSensor->type == STANDARD_SENSOR
-	  || psStruct->pStructureType->pSensor->type == SUPER_SENSOR)
-	 && psStruct->pStructureType->pSensor->location == LOC_TURRET)
+	    && (psStruct->pStructureType->pSensor->type == STANDARD_SENSOR
+	        || psStruct->pStructureType->pSensor->type == SUPER_SENSOR)
+	    && psStruct->pStructureType->pSensor->location == LOC_TURRET)
 	{
 		return true;
 	}
@@ -6692,13 +6711,13 @@ bool structStandardSensor(const STRUCTURE* psStruct)
 
 /*checks if the structure has a VTOL Intercept sensor attached - returns
 true if it has*/
-bool structVTOLSensor(const STRUCTURE* psStruct)
+bool structVTOLSensor(const STRUCTURE *psStruct)
 {
 	// Super Sensor works as any type
 	if (psStruct->pStructureType->pSensor
-	 && (psStruct->pStructureType->pSensor->type == VTOL_INTERCEPT_SENSOR
-	  || psStruct->pStructureType->pSensor->type == SUPER_SENSOR)
-	 && psStruct->pStructureType->pSensor->location == LOC_TURRET)
+	    && (psStruct->pStructureType->pSensor->type == VTOL_INTERCEPT_SENSOR
+	        || psStruct->pStructureType->pSensor->type == SUPER_SENSOR)
+	    && psStruct->pStructureType->pSensor->location == LOC_TURRET)
 	{
 		return true;
 	}
@@ -6709,14 +6728,14 @@ bool structVTOLSensor(const STRUCTURE* psStruct)
 
 /*checks if the structure has a VTOL Counter Battery sensor attached - returns
 true if it has*/
-bool structVTOLCBSensor(const STRUCTURE* psStruct)
+bool structVTOLCBSensor(const STRUCTURE *psStruct)
 {
 	// Super Sensor works as any type
 	if (psStruct->pStructureType->pSensor
-	 && (psStruct->pStructureType->pSensor->type == VTOL_CB_SENSOR
-	  || psStruct->pStructureType->pSensor->type == RADAR_DETECTOR_SENSOR
-	  || psStruct->pStructureType->pSensor->type == SUPER_SENSOR)
-	 && psStruct->pStructureType->pSensor->location == LOC_TURRET)
+	    && (psStruct->pStructureType->pSensor->type == VTOL_CB_SENSOR
+	        || psStruct->pStructureType->pSensor->type == RADAR_DETECTOR_SENSOR
+	        || psStruct->pStructureType->pSensor->type == SUPER_SENSOR)
+	    && psStruct->pStructureType->pSensor->location == LOC_TURRET)
 	{
 		return true;
 	}
@@ -6730,7 +6749,7 @@ bool clearRearmPad(STRUCTURE *psStruct)
 {
 	return psStruct->pStructureType->type == REF_REARM_PAD
 	       && (psStruct->pFunctionality->rearmPad.psObj == NULL
-	       || vtolHappy((DROID*)psStruct->pFunctionality->rearmPad.psObj));
+	           || vtolHappy((DROID *)psStruct->pFunctionality->rearmPad.psObj));
 }
 
 
@@ -6741,8 +6760,8 @@ bool clearRearmPad(STRUCTURE *psStruct)
 STRUCTURE *findNearestReArmPad(DROID *psDroid, STRUCTURE *psTarget, bool bClear)
 {
 	STRUCTURE		*psStruct, *psNearest, *psTotallyClear;
-	SDWORD			xdiff,ydiff, mindist, currdist, totallyDist;
-	SDWORD			cx,cy;
+	SDWORD			xdiff, ydiff, mindist, currdist, totallyDist;
+	SDWORD			cx, cy;
 
 	ASSERT_OR_RETURN(NULL, psDroid != NULL, "No droid was passed.");
 
@@ -6764,15 +6783,15 @@ STRUCTURE *findNearestReArmPad(DROID *psDroid, STRUCTURE *psTarget, bool bClear)
 	totallyDist = SDWORD_MAX;
 	psNearest = NULL;
 	psTotallyClear = NULL;
-	for(psStruct = apsStructLists[psDroid->player]; psStruct; psStruct=psStruct->psNext)
+	for (psStruct = apsStructLists[psDroid->player]; psStruct; psStruct = psStruct->psNext)
 	{
 		if ((psStruct->pStructureType->type == REF_REARM_PAD) &&
-			(psTarget == NULL || psTarget->cluster == psStruct->cluster) &&
-			(!bClear || clearRearmPad(psStruct)))
+		    (psTarget == NULL || psTarget->cluster == psStruct->cluster) &&
+		    (!bClear || clearRearmPad(psStruct)))
 		{
 			xdiff = (SDWORD)psStruct->pos.x - cx;
 			ydiff = (SDWORD)psStruct->pos.y - cy;
-			currdist = xdiff*xdiff + ydiff*ydiff;
+			currdist = xdiff * xdiff + ydiff * ydiff;
 			if (bClear && !vtolOnRearmPad(psStruct, psDroid))
 			{
 				if (currdist < totallyDist)
@@ -6803,21 +6822,21 @@ STRUCTURE *findNearestReArmPad(DROID *psDroid, STRUCTURE *psTarget, bool bClear)
 void ensureRearmPadClear(STRUCTURE *psStruct, DROID *psDroid)
 {
 	DROID	*psCurr;
-	SDWORD	tx,ty, i;
+	SDWORD	tx, ty, i;
 
 	tx = map_coord(psStruct->pos.x);
 	ty = map_coord(psStruct->pos.y);
 
-	for (i=0; i<MAX_PLAYERS; i++)
+	for (i = 0; i < MAX_PLAYERS; i++)
 	{
 		if (aiCheckAlliances(psStruct->player, i))
 		{
-			for (psCurr = apsDroidLists[i]; psCurr; psCurr=psCurr->psNext)
+			for (psCurr = apsDroidLists[i]; psCurr; psCurr = psCurr->psNext)
 			{
 				if (psCurr != psDroid
-				 && map_coord(psCurr->pos.x) == tx
-				 && map_coord(psCurr->pos.y) == ty
-				 && isVtolDroid(psCurr))
+				    && map_coord(psCurr->pos.x) == tx
+				    && map_coord(psCurr->pos.y) == ty
+				    && isVtolDroid(psCurr))
 				{
 					actionDroid(psCurr, DACTION_CLEARREARMPAD, psStruct);
 				}
@@ -6831,16 +6850,16 @@ void ensureRearmPadClear(STRUCTURE *psStruct, DROID *psDroid)
 bool vtolOnRearmPad(STRUCTURE *psStruct, DROID *psDroid)
 {
 	DROID	*psCurr;
-	SDWORD	tx,ty;
+	SDWORD	tx, ty;
 
 	tx = map_coord(psStruct->pos.x);
 	ty = map_coord(psStruct->pos.y);
 
-	for (psCurr = apsDroidLists[psStruct->player]; psCurr; psCurr=psCurr->psNext)
+	for (psCurr = apsDroidLists[psStruct->player]; psCurr; psCurr = psCurr->psNext)
 	{
 		if (psCurr != psDroid
-		 && map_coord(psCurr->pos.x) == tx
-		 && map_coord(psCurr->pos.y) == ty)
+		    && map_coord(psCurr->pos.x) == tx
+		    && map_coord(psCurr->pos.y) == ty)
 		{
 			return true;
 		}
@@ -6858,7 +6877,7 @@ bool	structIsDamaged(STRUCTURE *psStruct)
 
 // give a structure from one player to another - used in Electronic Warfare
 //returns pointer to the new structure
-STRUCTURE * giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, bool bFromScript)
+STRUCTURE *giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, bool bFromScript)
 {
 	STRUCTURE           *psNewStruct, *psStruct;
 	DROID               *psCurr;
@@ -6915,7 +6934,7 @@ STRUCTURE * giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, bool
 					orderDroid(psCurr, DORDER_STOP, ModeImmediate);
 					break;
 				}
-				for (i = 0;i < psCurr->numWeaps;i++)
+				for (i = 0; i < psCurr->numWeaps; i++)
 				{
 					if (psCurr->psActionTarget[i] == psStructure)
 					{
@@ -6929,7 +6948,7 @@ STRUCTURE * giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, bool
 
 			//check through the 'attackPlayer' players list of structures to see if any are targetting it
 			for (psStruct = apsStructLists[attackPlayer]; psStruct != NULL; psStruct =
-				psStruct->psNext)
+			         psStruct->psNext)
 			{
 				if (psStruct->psTarget[0] == psStructure)
 				{
@@ -6981,13 +7000,13 @@ STRUCTURE * giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, bool
 		psNewStruct->rot.direction = direction;
 		if (capacity)
 		{
-			switch(psType->type)
+			switch (psType->type)
 			{
 			case REF_POWER_GEN:
 			case REF_RESEARCH:
 				//build the module for powerGen and research
 				buildStructure(psModule, psNewStruct->pos.x, psNewStruct->pos.y,
-					attackPlayer, false);
+				               attackPlayer, false);
 				break;
 			case REF_FACTORY:
 			case REF_VTOL_FACTORY:
@@ -6995,7 +7014,7 @@ STRUCTURE * giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, bool
 				while (capacity)
 				{
 					buildStructure(psModule, psNewStruct->pos.x, psNewStruct->pos.y,
-						attackPlayer, false);
+					               attackPlayer, false);
 					capacity--;
 				}
 				break;
@@ -7024,15 +7043,15 @@ STRUCTURE * giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, bool
 				if (wallDefenceStruct(psNewStruct->pStructureType))
 				{
 
-					audio_QueueTrackPos( ID_SOUND_NEXUS_DEFENCES_ABSORBED,
-						psNewStruct->pos.x, psNewStruct->pos.y, psNewStruct->pos.z );
+					audio_QueueTrackPos(ID_SOUND_NEXUS_DEFENCES_ABSORBED,
+					                    psNewStruct->pos.x, psNewStruct->pos.y, psNewStruct->pos.z);
 
 				}
 				else
 				{
 
-					audio_QueueTrackPos( ID_SOUND_NEXUS_STRUCTURE_ABSORBED,
-						psNewStruct->pos.x, psNewStruct->pos.y, psNewStruct->pos.z );
+					audio_QueueTrackPos(ID_SOUND_NEXUS_STRUCTURE_ABSORBED,
+					                    psNewStruct->pos.x, psNewStruct->pos.y, psNewStruct->pos.z);
 
 				}
 				//make sure this structure is visible to selectedPlayer if the structure used to be selectedPlayers'
@@ -7046,7 +7065,7 @@ STRUCTURE * giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, bool
 }
 
 /*returns the power cost to build this structure*/
-UDWORD structPowerToBuild(const STRUCTURE* psStruct)
+UDWORD structPowerToBuild(const STRUCTURE *psStruct)
 {
 	if (psStruct->capacity)
 	{
@@ -7066,11 +7085,11 @@ void resetResistanceLag(STRUCTURE *psBuilding)
 	{
 		switch (psBuilding->pStructureType->type)
 		{
-			case REF_RESEARCH:
-				break;
-			case REF_FACTORY:
-			case REF_VTOL_FACTORY:
-			case REF_CYBORG_FACTORY:
+		case REF_RESEARCH:
+			break;
+		case REF_FACTORY:
+		case REF_VTOL_FACTORY:
+		case REF_CYBORG_FACTORY:
 			{
 				FACTORY    *psFactory = &psBuilding->pFunctionality->factory;
 
@@ -7084,8 +7103,8 @@ void resetResistanceLag(STRUCTURE *psBuilding)
 					}
 				}
 			}
-			default: //do nothing
-				break;
+		default: //do nothing
+			break;
 		}
 	}
 }
@@ -7095,9 +7114,9 @@ void resetResistanceLag(STRUCTURE *psBuilding)
 selected - returns true if valid*/
 bool lasSatStructSelected(STRUCTURE *psStruct)
 {
-	if ( (psStruct->selected || (bMultiPlayer && !isHumanPlayer(psStruct->player)))
-		&& psStruct->asWeaps[0].nStat
-		&& (asWeaponStats[psStruct->asWeaps[0].nStat].weaponSubClass == WSC_LAS_SAT))
+	if ((psStruct->selected || (bMultiPlayer && !isHumanPlayer(psStruct->player)))
+	    && psStruct->asWeaps[0].nStat
+	    && (asWeaponStats[psStruct->asWeaps[0].nStat].weaponSubClass == WSC_LAS_SAT))
 	{
 		return true;
 	}
@@ -7109,7 +7128,7 @@ bool lasSatStructSelected(STRUCTURE *psStruct)
 /* Call CALL_NEWDROID script callback */
 void cbNewDroid(STRUCTURE *psFactory, DROID *psDroid)
 {
-	ASSERT_OR_RETURN( , psDroid != NULL, "no droid assigned for CALL_NEWDROID callback");
+	ASSERT_OR_RETURN(, psDroid != NULL, "no droid assigned for CALL_NEWDROID callback");
 
 	psScrCBNewDroid = psDroid;
 	psScrCBNewDroidFact = psFactory;
@@ -7141,7 +7160,7 @@ Vector2i getStructureStatsSize(STRUCTURE_STATS const *pStructureType, uint16_t d
 StructureBounds getStructureBounds(STRUCTURE const *object)
 {
 	Vector2i size = getStructureSize(object);
-	Vector2i map = map_coord(removeZ(object->pos)) - size/2;
+	Vector2i map = map_coord(removeZ(object->pos)) - size / 2;
 
 	return StructureBounds(map, size);
 }
@@ -7149,7 +7168,7 @@ StructureBounds getStructureBounds(STRUCTURE const *object)
 StructureBounds getStructureBounds(STRUCTURE_STATS const *stats, Vector2i pos, uint16_t direction)
 {
 	Vector2i size = getStructureStatsSize(stats, direction);
-	Vector2i map = map_coord(pos) - size/2;
+	Vector2i map = map_coord(pos) - size / 2;
 
 	return StructureBounds(map, size);
 }
@@ -7172,7 +7191,7 @@ bool structureCheckReferences(STRUCTURE *psVictimStruct)
 				{
 #ifdef DEBUG
 					ASSERT(!"Illegal reference to structure", "Illegal reference to structure from %s line %d",
-						   psStruct->targetFunc[i], psStruct->targetLine[i]);
+					       psStruct->targetFunc[i], psStruct->targetLine[i]);
 #endif
 					return false;
 				}
@@ -7184,7 +7203,7 @@ bool structureCheckReferences(STRUCTURE *psVictimStruct)
 			{
 #ifdef DEBUG
 				ASSERT(!"Illegal reference to structure", "Illegal reference to structure from %s line %d",
-					   psDroid->targetFunc, psDroid->targetLine);
+				       psDroid->targetFunc, psDroid->targetLine);
 #endif
 				return false;
 			}
@@ -7194,7 +7213,7 @@ bool structureCheckReferences(STRUCTURE *psVictimStruct)
 				{
 #ifdef DEBUG
 					ASSERT(!"Illegal reference to structure", "Illegal action reference to structure from %s line %d",
-						   psDroid->actionTargetFunc[i], psDroid->actionTargetLine[i]);
+					       psDroid->actionTargetFunc[i], psDroid->actionTargetLine[i]);
 #endif
 					return false;
 				}
@@ -7203,7 +7222,7 @@ bool structureCheckReferences(STRUCTURE *psVictimStruct)
 			{
 #ifdef DEBUG
 				ASSERT(!"Illegal reference to structure", "Illegal action reference to structure from %s line %d",
-					   psDroid->baseFunc, psDroid->baseLine);
+				       psDroid->baseFunc, psDroid->baseLine);
 #endif
 				return false;
 			}
@@ -7212,10 +7231,12 @@ bool structureCheckReferences(STRUCTURE *psVictimStruct)
 	return true;
 }
 
-void checkStructure(const STRUCTURE* psStructure, const char * const location_description, const char * function, const int recurse)
+void checkStructure(const STRUCTURE *psStructure, const char *const location_description, const char *function, const int recurse)
 {
 	if (recurse < 0)
+	{
 		return;
+	}
 
 	ASSERT_HELPER(psStructure != NULL, location_description, function, "CHECK_STRUCTURE: NULL pointer");
 	ASSERT_HELPER(psStructure->id != 0, location_description, function, "CHECK_STRUCTURE: Structure with ID 0");

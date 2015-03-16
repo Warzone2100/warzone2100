@@ -69,7 +69,7 @@ extern bool orderStateLoc(DROID *psDroid, DROID_ORDER order, UDWORD *pX, UDWORD 
 void orderDroidObj(DROID *psDroid, DROID_ORDER order, BASE_OBJECT *psObj, QUEUE_MODE mode);
 
 /** \brief Gets the state of a droid's order with an object. */
-extern BASE_OBJECT* orderStateObj(DROID *psDroid, DROID_ORDER order);
+extern BASE_OBJECT *orderStateObj(DROID *psDroid, DROID_ORDER order);
 
 /** \brief Sends an order with a location and a stat to a droid. */
 void orderDroidStatsLocDir(DROID *psDroid, DROID_ORDER order, STRUCTURE_STATS *psStats, UDWORD x, UDWORD y, uint16_t direction, QUEUE_MODE mode);
@@ -130,13 +130,13 @@ extern void orderMoralCheck(UDWORD player);
 extern void orderGroupMoralCheck(DROID_GROUP *psGroup);
 
 /** \brief Gets the name of an order. */
-extern const char* getDroidOrderName(DROID_ORDER order);
+extern const char *getDroidOrderName(DROID_ORDER order);
 
 /** \brief Gets a player's transporter. */
 DROID *FindATransporter(DROID const *embarkee);
 
 /** \brief Checks if there are any damaged buildings to repair. */
-extern BASE_OBJECT * checkForDamagedStruct(DROID *psDroid, STRUCTURE *psTarget);
+extern BASE_OBJECT *checkForDamagedStruct(DROID *psDroid, STRUCTURE *psTarget);
 
 /** \brief Does a health check on a droid. */
 extern void orderHealthCheck(DROID *psDroid);
@@ -157,7 +157,7 @@ void orderDroidListEraseRange(DROID *psDroid, unsigned indexBegin, unsigned inde
 void orderClearTargetFromDroidList(DROID *psDroid, BASE_OBJECT *psTarget);
 
 /** \brief Chooses an order from a location. */
-extern DROID_ORDER chooseOrderLoc(DROID *psDroid, UDWORD x,UDWORD y, bool altOrder);
+extern DROID_ORDER chooseOrderLoc(DROID *psDroid, UDWORD x, UDWORD y, bool altOrder);
 
 /** \brief Chooses an order from an object. */
 DroidOrder chooseOrderObj(DROID *psDroid, BASE_OBJECT *psObj, bool altOrder);

@@ -54,7 +54,7 @@
 // whether a save game is currently being loaded
 static bool saveFlag = false;
 
-uint32_t	DataHash[DATA_MAXDATA]= {0};
+uint32_t	DataHash[DATA_MAXDATA] = {0};
 
 /**
 *	hashBuffer()
@@ -138,7 +138,7 @@ void dataClearSaveFlag(void)
 }
 
 /* Load the body stats */
-static bool bufferSBODYLoad(const char* fileName, void** ppData)
+static bool bufferSBODYLoad(const char *fileName, void **ppData)
 {
 	if (!loadBodyStats(fileName) || !allocComponentList(COMP_BODY, numBodyStats))
 	{
@@ -160,7 +160,7 @@ static void dataReleaseStats(WZ_DECL_UNUSED void *pData)
 static bool bufferSWEAPONLoad(const char *fileName, void **ppData)
 {
 	if (!loadWeaponStats(fileName)
-	 || !allocComponentList(COMP_WEAPON, numWeaponStats))
+	    || !allocComponentList(COMP_WEAPON, numWeaponStats))
 	{
 		return false;
 	}
@@ -174,7 +174,7 @@ static bool bufferSWEAPONLoad(const char *fileName, void **ppData)
 static bool bufferSCONSTRLoad(const char *fileName, void **ppData)
 {
 	if (!loadConstructStats(fileName)
-	 || !allocComponentList(COMP_CONSTRUCT, numConstructStats))
+	    || !allocComponentList(COMP_CONSTRUCT, numConstructStats))
 	{
 		return false;
 	}
@@ -188,7 +188,7 @@ static bool bufferSCONSTRLoad(const char *fileName, void **ppData)
 static bool bufferSECMLoad(const char *fileName, void **ppData)
 {
 	if (!loadECMStats(fileName)
-	 || !allocComponentList(COMP_ECM, numECMStats))
+	    || !allocComponentList(COMP_ECM, numECMStats))
 	{
 		return false;
 	}
@@ -199,7 +199,7 @@ static bool bufferSECMLoad(const char *fileName, void **ppData)
 }
 
 /* Load the Propulsion stats */
-static bool bufferSPROPLoad(const char* fileName, void** ppData)
+static bool bufferSPROPLoad(const char *fileName, void **ppData)
 {
 	if (!loadPropulsionStats(fileName) || !allocComponentList(COMP_PROPULSION, numPropulsionStats))
 	{
@@ -214,9 +214,9 @@ static bool bufferSPROPLoad(const char* fileName, void** ppData)
 static bool bufferSSENSORLoad(const char *fileName, void **ppData)
 {
 	if (!loadSensorStats(fileName)
-	 || !allocComponentList(COMP_SENSOR, numSensorStats))
+	    || !allocComponentList(COMP_SENSOR, numSensorStats))
 	{
-	        return false;
+		return false;
 	}
 
 	//not interested in this value
@@ -397,7 +397,7 @@ static void dataRESCHRelease(WZ_DECL_UNUSED void *pData)
 /* Load the Research stats */
 static bool bufferRESCHLoad(const char *fileName, void **ppData)
 {
-	//calcDataHash((uint8_t *)pBuffer, size, DATA_RESCH); 
+	//calcDataHash((uint8_t *)pBuffer, size, DATA_RESCH);
 
 	//check to see if already loaded
 	if (!asResearch.empty())
@@ -406,7 +406,7 @@ static bool bufferRESCHLoad(const char *fileName, void **ppData)
 		dataRESCHRelease(NULL);
 	}
 
-	if(!loadResearch(QString(fileName)))
+	if (!loadResearch(QString(fileName)))
 	{
 		return false;
 	}
@@ -431,7 +431,7 @@ static bool bufferSMSGLoad(const char *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load research message viewdata */
-static bool dataResearchMsgLoad(const char* fileName, void** ppData)
+static bool dataResearchMsgLoad(const char *fileName, void **ppData)
 {
 	const char *ptr = loadResearchViewData(fileName);
 	if (!ptr)
@@ -463,7 +463,7 @@ static bool dataImageLoad(const char *fileName, void **ppData)
 
 	if (!iV_loadImage_PNG(fileName, psSprite))
 	{
-		debug( LOG_ERROR, "IMGPAGE load failed" );
+		debug(LOG_ERROR, "IMGPAGE load failed");
 		free(psSprite);
 		return false;
 	}
@@ -491,7 +491,7 @@ static bool dataTERTILESLoad(const char *fileName, void **ppData)
 static bool dataIMGLoad(const char *fileName, void **ppData)
 {
 	*ppData = iV_LoadImageFile(fileName);
-	if(*ppData == NULL)
+	if (*ppData == NULL)
 	{
 		return false;
 	}
@@ -502,7 +502,7 @@ static bool dataIMGLoad(const char *fileName, void **ppData)
 
 static void dataIMGRelease(void *pData)
 {
-	iV_FreeImageFile((IMAGEFILE*)pData);
+	iV_FreeImageFile((IMAGEFILE *)pData);
 }
 
 /*!
@@ -510,9 +510,9 @@ static void dataIMGRelease(void *pData)
  */
 static void dataImageRelease(void *pData)
 {
-	iV_Image *psSprite = (iV_Image*) pData;
+	iV_Image *psSprite = (iV_Image *) pData;
 
-	if( psSprite )
+	if (psSprite)
 	{
 		free(psSprite);
 	}
@@ -520,9 +520,9 @@ static void dataImageRelease(void *pData)
 
 
 /* Load an audio file */
-static bool dataAudioLoad(const char* fileName, void **ppData)
+static bool dataAudioLoad(const char *fileName, void **ppData)
 {
-	if ( audio_Disabled() == true )
+	if (audio_Disabled() == true)
 	{
 		*ppData = NULL;
 		// No error occurred (sound is just disabled), so we return true
@@ -530,16 +530,16 @@ static bool dataAudioLoad(const char* fileName, void **ppData)
 	}
 
 	// Load the track from a file
-	*ppData = sound_LoadTrackFromFile( fileName );
+	*ppData = sound_LoadTrackFromFile(fileName);
 
 	return *ppData != NULL;
 }
 
 /* Load an audio file */
-static bool dataAudioCfgLoad(const char* fileName, void **ppData)
+static bool dataAudioCfgLoad(const char *fileName, void **ppData)
 {
 	bool success;
-	PHYSFS_file* fileHandle;
+	PHYSFS_file *fileHandle;
 
 	*ppData = NULL;
 
@@ -565,7 +565,7 @@ static bool dataAudioCfgLoad(const char* fileName, void **ppData)
 /* Load an anim file */
 static bool dataAnimLoad(const char *fileName, void **ppData)
 {
-	PHYSFS_file* fileHandle = PHYSFS_openRead(fileName);
+	PHYSFS_file *fileHandle = PHYSFS_openRead(fileName);
 	debug(LOG_WZ, "Reading...[directory: %s] %s", PHYSFS_getRealDir(fileName), fileName);
 	if (fileHandle == NULL)
 	{
@@ -584,7 +584,7 @@ static bool dataAnimLoad(const char *fileName, void **ppData)
 static bool dataAnimCfgLoad(const char *fileName, void **ppData)
 {
 	bool success;
-	PHYSFS_file* fileHandle = PHYSFS_openRead(fileName);
+	PHYSFS_file *fileHandle = PHYSFS_openRead(fileName);
 	*ppData = NULL;
 
 	debug(LOG_WZ, "Reading...[directory: %s] %s", PHYSFS_getRealDir(fileName), fileName);
@@ -601,13 +601,13 @@ static bool dataAnimCfgLoad(const char *fileName, void **ppData)
 }
 
 
-static void dataAnimRelease( void *pData )
+static void dataAnimRelease(void *pData)
 {
-	anim_ReleaseAnim((BASEANIM*)pData);
+	anim_ReleaseAnim((BASEANIM *)pData);
 }
 
 /* Load a string resource file */
-static bool dataStrResLoad(const char* fileName, void** ppData)
+static bool dataStrResLoad(const char *fileName, void **ppData)
 {
 	// recreate the string resource if it was freed by a WRF release
 	if (psStringRes == NULL)
@@ -639,11 +639,11 @@ static void dataStrResRelease(WZ_DECL_UNUSED void *pData)
 
 /* Load a script file */
 // All scripts, binary or otherwise are now passed through this routine
-static bool dataScriptLoad(const char* fileName, void **ppData)
+static bool dataScriptLoad(const char *fileName, void **ppData)
 {
 	static const bool printHack = false;
-	SCRIPT_CODE** psProg = (SCRIPT_CODE**)ppData;
-	PHYSFS_file* fileHandle;
+	SCRIPT_CODE **psProg = (SCRIPT_CODE **)ppData;
+	PHYSFS_file *fileHandle;
 	uint8_t *pBuffer;
 	PHYSFS_sint64 fileSize = 0;
 
@@ -703,10 +703,10 @@ static bool jsLoad(const char *fileName, void **ppData)
 }
 
 // Load a script variable values file
-static bool dataScriptLoadVals(const char* fileName, void **ppData)
+static bool dataScriptLoadVals(const char *fileName, void **ppData)
 {
 	bool success;
-	PHYSFS_file* fileHandle;
+	PHYSFS_file *fileHandle;
 	uint8_t *pBuffer;
 	PHYSFS_sint64 fileSize = 0;
 
@@ -743,7 +743,9 @@ static bool dataScriptLoadVals(const char* fileName, void **ppData)
 	success = scrvLoad(fileHandle);
 
 	if (!success)
+	{
 		debug(LOG_FATAL, "Script %s did not compile", GetLastResourceFilename());
+	}
 
 	PHYSFS_close(fileHandle);
 
@@ -822,11 +824,11 @@ bool dataInitLoadFuncs(void)
 	{
 		const RES_TYPE_MIN_BUF *CurrentType;
 		// Points just past the last item in the list
-		const RES_TYPE_MIN_BUF * const EndType = &BufferResourceTypes[sizeof(BufferResourceTypes) / sizeof(RES_TYPE_MIN_BUF)];
+		const RES_TYPE_MIN_BUF *const EndType = &BufferResourceTypes[sizeof(BufferResourceTypes) / sizeof(RES_TYPE_MIN_BUF)];
 
 		for (CurrentType = BufferResourceTypes; CurrentType != EndType; ++CurrentType)
 		{
-			if(!resAddBufferLoad(CurrentType->aType, CurrentType->buffLoad, CurrentType->release))
+			if (!resAddBufferLoad(CurrentType->aType, CurrentType->buffLoad, CurrentType->release))
 			{
 				return false; // error whilst adding a buffer load
 			}
@@ -837,11 +839,11 @@ bool dataInitLoadFuncs(void)
 	{
 		const RES_TYPE_MIN_FILE *CurrentType;
 		// Points just past the last item in the list
-		const RES_TYPE_MIN_FILE * const EndType = &FileResourceTypes[sizeof(FileResourceTypes) / sizeof(RES_TYPE_MIN_BUF)];
+		const RES_TYPE_MIN_FILE *const EndType = &FileResourceTypes[sizeof(FileResourceTypes) / sizeof(RES_TYPE_MIN_BUF)];
 
 		for (CurrentType = FileResourceTypes; CurrentType != EndType; ++CurrentType)
 		{
-			if(!resAddFileLoad(CurrentType->aType, CurrentType->fileLoad, CurrentType->release))
+			if (!resAddFileLoad(CurrentType->aType, CurrentType->fileLoad, CurrentType->release))
 			{
 				return false; // error whilst adding a file load
 			}

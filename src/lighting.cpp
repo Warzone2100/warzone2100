@@ -369,10 +369,10 @@ void	calcDroidIllumination(DROID *psDroid)
 	else
 	{
 		lightVal = mapTile(tileX, tileY)->illumination +		 //
-		        mapTile(tileX - 1, tileY)->illumination +	 //		 *
-		        mapTile(tileX, tileY - 1)->illumination +	 //		***		pattern
-		        mapTile(tileX + 1, tileY)->illumination +	 //		 *
-		        mapTile(tileX + 1, tileY + 1)->illumination;	 //
+		           mapTile(tileX - 1, tileY)->illumination +	 //		 *
+		           mapTile(tileX, tileY - 1)->illumination +	 //		***		pattern
+		           mapTile(tileX + 1, tileY)->illumination +	 //		 *
+		           mapTile(tileX + 1, tileY + 1)->illumination;	 //
 		lightVal /= 5;
 		lightVal += MIN_DROID_LIGHT_LEVEL;
 	}

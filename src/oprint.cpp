@@ -31,7 +31,7 @@
 /** print out information about a base object
  *  \param psObj the object to print the info for
  */
-static void printBaseObjInfo(const BASE_OBJECT* psObj)
+static void printBaseObjInfo(const BASE_OBJECT *psObj)
 {
 	const char *pType;
 	switch (psObj->type)
@@ -50,25 +50,25 @@ static void printBaseObjInfo(const BASE_OBJECT* psObj)
 		break;
 	}
 
-	CONPRINTF( ConsoleString, (ConsoleString, "%s id %d at (%d,%d,%d) dpr (%hu,%hu,%hu)\n", pType, psObj->id, psObj->pos.x, psObj->pos.y, psObj->pos.z, psObj->rot.direction, psObj->rot.pitch, psObj->rot.roll));
+	CONPRINTF(ConsoleString, (ConsoleString, "%s id %d at (%d,%d,%d) dpr (%hu,%hu,%hu)\n", pType, psObj->id, psObj->pos.x, psObj->pos.y, psObj->pos.z, psObj->rot.direction, psObj->rot.pitch, psObj->rot.roll));
 }
 
 /** print out information about a general component
  *  \param psStats the component to print the info for
  */
-static void printComponentInfo(const COMPONENT_STATS* psStats)
+static void printComponentInfo(const COMPONENT_STATS *psStats)
 {
-	CONPRINTF(ConsoleString,(ConsoleString,"%s ref %d\n"
-			  "   bPwr %d bPnts %d wt %d bdy %d imd %p\n",
-			  getName(psStats), psStats->ref, psStats->buildPower,
-			  psStats->buildPoints, psStats->weight, psStats->body,
-			  psStats->pIMD));
+	CONPRINTF(ConsoleString, (ConsoleString, "%s ref %d\n"
+	                          "   bPwr %d bPnts %d wt %d bdy %d imd %p\n",
+	                          getName(psStats), psStats->ref, psStats->buildPower,
+	                          psStats->buildPoints, psStats->weight, psStats->body,
+	                          psStats->pIMD));
 }
 
 /** print out weapon information
  *  \param psStats the weapon to print the info for
  */
-static void printWeaponInfo(const WEAPON_STATS* psStats)
+static void printWeaponInfo(const WEAPON_STATS *psStats)
 {
 	const char *pWC, *pWSC, *pMM;
 
@@ -160,31 +160,31 @@ static void printWeaponInfo(const WEAPON_STATS* psStats)
 		break;
 	}
 
-	CONPRINTF(ConsoleString,(ConsoleString,"Weapon: "));
+	CONPRINTF(ConsoleString, (ConsoleString, "Weapon: "));
 	printComponentInfo((COMPONENT_STATS *)psStats);
-	CONPRINTF(ConsoleString,(ConsoleString,"   lRng %d mRng %d %s\n"
-			  "   lHt %d pause %d dam %d\n",
-				proj_GetLongRange(psStats, selectedPlayer), psStats->upgrade[selectedPlayer].minRange,
-				proj_Direct(psStats) ? "direct" : "indirect",
-				weaponLongHit(psStats, selectedPlayer), weaponFirePause(psStats, selectedPlayer),
-				weaponDamage(psStats, selectedPlayer)));
-	CONPRINTF(ConsoleString,(ConsoleString,"   rad %d radDam %d\n"
-			  "   inTime %d inDam %d inRad %d\n",
-				psStats->upgrade[selectedPlayer].radius, psStats->upgrade[selectedPlayer].radiusDamage,
-				psStats->upgrade[selectedPlayer].periodicalDamageTime, psStats->upgrade[selectedPlayer].periodicalDamage, psStats->upgrade[selectedPlayer].periodicalDamageRadius));
-	CONPRINTF(ConsoleString,(ConsoleString,"   flSpd %d %s\n",
-				psStats->flightSpeed, psStats->fireOnMove ? "fireOnMove" : "not fireOnMove"));
-	CONPRINTF(ConsoleString,(ConsoleString,"   %s %s %s\n", pWC, pWSC, pMM));
-	CONPRINTF(ConsoleString,(ConsoleString,"   %srotate recoil %d\n"
-			  "   radLife %d\n",
-			  psStats->rotate ? "" : "not ",
-			  psStats->recoilValue, psStats->radiusLife));
+	CONPRINTF(ConsoleString, (ConsoleString, "   lRng %d mRng %d %s\n"
+	                          "   lHt %d pause %d dam %d\n",
+	                          proj_GetLongRange(psStats, selectedPlayer), psStats->upgrade[selectedPlayer].minRange,
+	                          proj_Direct(psStats) ? "direct" : "indirect",
+	                          weaponLongHit(psStats, selectedPlayer), weaponFirePause(psStats, selectedPlayer),
+	                          weaponDamage(psStats, selectedPlayer)));
+	CONPRINTF(ConsoleString, (ConsoleString, "   rad %d radDam %d\n"
+	                          "   inTime %d inDam %d inRad %d\n",
+	                          psStats->upgrade[selectedPlayer].radius, psStats->upgrade[selectedPlayer].radiusDamage,
+	                          psStats->upgrade[selectedPlayer].periodicalDamageTime, psStats->upgrade[selectedPlayer].periodicalDamage, psStats->upgrade[selectedPlayer].periodicalDamageRadius));
+	CONPRINTF(ConsoleString, (ConsoleString, "   flSpd %d %s\n",
+	                          psStats->flightSpeed, psStats->fireOnMove ? "fireOnMove" : "not fireOnMove"));
+	CONPRINTF(ConsoleString, (ConsoleString, "   %s %s %s\n", pWC, pWSC, pMM));
+	CONPRINTF(ConsoleString, (ConsoleString, "   %srotate recoil %d\n"
+	                          "   radLife %d\n",
+	                          psStats->rotate ? "" : "not ",
+	                          psStats->recoilValue, psStats->radiusLife));
 }
 
 /** print out information about a droid and it's components
  *  \param psDroid the droid to print the info for
  */
-void printDroidInfo(const DROID* psDroid)
+void printDroidInfo(const DROID *psDroid)
 {
 	BODY_STATS			*psBdyStats;
 	PROPULSION_STATS	*psPropStats;
@@ -195,8 +195,8 @@ void printDroidInfo(const DROID* psDroid)
 
 	printBaseObjInfo((BASE_OBJECT *)psDroid);
 
-	CONPRINTF(ConsoleString,(ConsoleString,"   wt %d bSpeed %d sRng %d ECM %d bdy %d\n",
-		psDroid->weight, psDroid->baseSpeed, droidSensorRange(psDroid), droidJammerPower(psDroid), psDroid->body));
+	CONPRINTF(ConsoleString, (ConsoleString, "   wt %d bSpeed %d sRng %d ECM %d bdy %d\n",
+	                          psDroid->weight, psDroid->baseSpeed, droidSensorRange(psDroid), droidJammerPower(psDroid), psDroid->body));
 
 	if (psDroid->asWeaps[0].nStat > 0)
 	{
@@ -210,13 +210,13 @@ void printDroidInfo(const DROID* psDroid)
 		case COMP_BODY:
 			if (psDroid->asBits[i] > 0)
 			{
-				CONPRINTF(ConsoleString,(ConsoleString,"Body: "));
+				CONPRINTF(ConsoleString, (ConsoleString, "Body: "));
 				psBdyStats = asBodyStats + psDroid->asBits[i];
 				printComponentInfo((COMPONENT_STATS *)psBdyStats);
 			}
 			else
 			{
-				CONPRINTF(ConsoleString,(ConsoleString,"ZNULL BODY\n"));
+				CONPRINTF(ConsoleString, (ConsoleString, "ZNULL BODY\n"));
 			}
 			break;
 		case COMP_BRAIN:
@@ -224,66 +224,66 @@ void printDroidInfo(const DROID* psDroid)
 		case COMP_PROPULSION:
 			if (psDroid->asBits[i] > 0)
 			{
-				CONPRINTF(ConsoleString,(ConsoleString,"Prop: "));
+				CONPRINTF(ConsoleString, (ConsoleString, "Prop: "));
 				psPropStats = asPropulsionStats + psDroid->asBits[i];
 				printComponentInfo((COMPONENT_STATS *)psPropStats);
 			}
 			else
 			{
-				CONPRINTF(ConsoleString,(ConsoleString,"ZNULL PROPULSION\n"));
+				CONPRINTF(ConsoleString, (ConsoleString, "ZNULL PROPULSION\n"));
 			}
 			break;
 		case COMP_ECM:
 			if (psDroid->asBits[i] > 0)
 			{
-				CONPRINTF(ConsoleString,(ConsoleString,"ECM: "));
+				CONPRINTF(ConsoleString, (ConsoleString, "ECM: "));
 				psECMStats = asECMStats + psDroid->asBits[i];
 				printComponentInfo((COMPONENT_STATS *)psECMStats);
-				CONPRINTF(ConsoleString,(ConsoleString,"   range %d loc %d imd %p\n",
-					ecmRange(psECMStats, psDroid->player), psECMStats->location,
-					psECMStats->pMountGraphic));
+				CONPRINTF(ConsoleString, (ConsoleString, "   range %d loc %d imd %p\n",
+				                          ecmRange(psECMStats, psDroid->player), psECMStats->location,
+				                          psECMStats->pMountGraphic));
 			}
 			else
 			{
-				CONPRINTF(ConsoleString,(ConsoleString,"ZNULL ECM\n"));
+				CONPRINTF(ConsoleString, (ConsoleString, "ZNULL ECM\n"));
 			}
 			break;
 		case COMP_SENSOR:
 			if (psDroid->asBits[i] > 0)
 			{
-				CONPRINTF(ConsoleString,(ConsoleString,"Sensor: "));
+				CONPRINTF(ConsoleString, (ConsoleString, "Sensor: "));
 				psSensStats = asSensorStats + psDroid->asBits[i];
 				printComponentInfo((COMPONENT_STATS *)psSensStats);
-				CONPRINTF(ConsoleString,(ConsoleString,"   rng %d loc %d imd %p\n",
-					sensorRange(psSensStats,psDroid->player),
-					psSensStats->location, psSensStats->pMountGraphic));
+				CONPRINTF(ConsoleString, (ConsoleString, "   rng %d loc %d imd %p\n",
+				                          sensorRange(psSensStats, psDroid->player),
+				                          psSensStats->location, psSensStats->pMountGraphic));
 			}
 			else
 			{
-				CONPRINTF(ConsoleString,(ConsoleString,"ZNULL SENSOR\n"));
+				CONPRINTF(ConsoleString, (ConsoleString, "ZNULL SENSOR\n"));
 			}
 			break;
 		case COMP_CONSTRUCT:
 			if (psDroid->asBits[i] > 0)
 			{
-				CONPRINTF(ConsoleString,(ConsoleString,"Construct: "));
+				CONPRINTF(ConsoleString, (ConsoleString, "Construct: "));
 				psConstStats = asConstructStats + psDroid->asBits[i];
 				printComponentInfo((COMPONENT_STATS *)psConstStats);
-				CONPRINTF(ConsoleString,(ConsoleString,"   cPnts %d imd %p\n",
-					constructorPoints(psConstStats, psDroid->player),
-					psConstStats->pMountGraphic));
+				CONPRINTF(ConsoleString, (ConsoleString, "   cPnts %d imd %p\n",
+				                          constructorPoints(psConstStats, psDroid->player),
+				                          psConstStats->pMountGraphic));
 			}
 			break;
 		case COMP_REPAIRUNIT:
 			if (psDroid->asBits[i] > 0)
 			{
-				CONPRINTF(ConsoleString,(ConsoleString,"Repair: "));
+				CONPRINTF(ConsoleString, (ConsoleString, "Repair: "));
 				psRepairStats = asRepairStats + psDroid->asBits[i];
 				printComponentInfo((COMPONENT_STATS *)psRepairStats);
-				CONPRINTF(ConsoleString,(ConsoleString,"   repPnts %d loc %d imd %p\n",
-					repairPoints(psRepairStats, psDroid->player),
-					psRepairStats->location,
-					psRepairStats->pMountGraphic));
+				CONPRINTF(ConsoleString, (ConsoleString, "   repPnts %d loc %d imd %p\n",
+				                          repairPoints(psRepairStats, psDroid->player),
+				                          psRepairStats->location,
+				                          psRepairStats->pMountGraphic));
 			}
 			break;
 		case COMP_WEAPON:

@@ -75,14 +75,14 @@ extern void fpathUpdate(void);
 
 /** Find a route for a droid to a location.
  */
-extern FPATH_RETVAL fpathDroidRoute(DROID* psDroid, SDWORD targetX, SDWORD targetY, FPATH_MOVETYPE moveType);
+extern FPATH_RETVAL fpathDroidRoute(DROID *psDroid, SDWORD targetX, SDWORD targetY, FPATH_MOVETYPE moveType);
 
 /// Returns true iff the parameters have equivalent behaviour in fpathBaseBlockingTile.
 bool fpathIsEquivalentBlocking(PROPULSION_TYPE propulsion1, int player1, FPATH_MOVETYPE moveType1,
                                PROPULSION_TYPE propulsion2, int player2, FPATH_MOVETYPE moveType2);
 
 /** Function pointer to the currently in-use blocking tile check function.
- *  
+ *
  *  This function will check if the map tile at the given location should be considered to block droids
  *  with the currently selected propulsion type. This is not identical to whether it will actually block,
  *  which can depend on hostilities and open/closed attributes.
@@ -97,7 +97,10 @@ bool fpathBlockingTile(SDWORD x, SDWORD y, PROPULSION_TYPE propulsion);
 bool fpathDroidBlockingTile(DROID *psDroid, int x, int y, FPATH_MOVETYPE moveType);
 bool fpathBaseBlockingTile(SDWORD x, SDWORD y, PROPULSION_TYPE propulsion, int player, FPATH_MOVETYPE moveType);
 
-static inline bool fpathBlockingTile(Vector2i tile, PROPULSION_TYPE propulsion) { return fpathBlockingTile(tile.x, tile.y, propulsion); }
+static inline bool fpathBlockingTile(Vector2i tile, PROPULSION_TYPE propulsion)
+{
+	return fpathBlockingTile(tile.x, tile.y, propulsion);
+}
 
 /** Set a direct path to position.
  *
@@ -106,7 +109,7 @@ static inline bool fpathBlockingTile(Vector2i tile, PROPULSION_TYPE propulsion) 
  *
  *  Used for instance by VTOLs. Function is thread-safe.
  */
-extern void fpathSetDirectRoute(DROID* psDroid, SDWORD targetX, SDWORD targetY);
+extern void fpathSetDirectRoute(DROID *psDroid, SDWORD targetX, SDWORD targetY);
 
 /** Clean up path jobs and results for a droid. Function is thread-safe. */
 extern void fpathRemoveDroidData(int id);

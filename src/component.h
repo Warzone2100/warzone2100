@@ -70,7 +70,7 @@ void displayComponentObject(DROID *psDroid);
 
 void compPersonToBits(DROID *psDroid);
 
-SDWORD rescaleButtonObject(SDWORD radius, SDWORD baseScale,SDWORD baseRadius);
+SDWORD rescaleButtonObject(SDWORD radius, SDWORD baseScale, SDWORD baseRadius);
 void destroyFXDroid(DROID *psDroid, unsigned impactTime);
 
 void drawMuzzleFlash(WEAPON sWeap, iIMDShape *weaponImd, iIMDShape *flashImd, PIELIGHT buildingBrightness, int pieFlag, int pieFlagData, UBYTE colour = 0);

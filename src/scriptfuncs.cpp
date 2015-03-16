@@ -249,8 +249,8 @@ bool scrSetSunIntensity(void)
 	// One day we should add support for vectors to our scripting language to cut
 	// down on such noise.
 	if (!stackPopParams(9, VAL_FLOAT, &ambient[0], VAL_FLOAT, &ambient[1], VAL_FLOAT, &ambient[2],
-	        VAL_FLOAT, &diffuse[0], VAL_FLOAT, &diffuse[1], VAL_FLOAT, &diffuse[2],
-	        VAL_FLOAT, &specular[0], VAL_FLOAT, &specular[1], VAL_FLOAT, &specular[2]))
+	                    VAL_FLOAT, &diffuse[0], VAL_FLOAT, &diffuse[1], VAL_FLOAT, &diffuse[2],
+	                    VAL_FLOAT, &specular[0], VAL_FLOAT, &specular[1], VAL_FLOAT, &specular[2]))
 	{
 		return false;
 	}
@@ -825,7 +825,7 @@ bool scrNumStructsByTypeInArea(void)
 	STRUCTURE	*psStruct;
 
 	if (!stackPopParams(6, VAL_INT, &player, VAL_INT, &type,
-	        VAL_INT, &x1, VAL_INT, &y1, VAL_INT, &x2, VAL_INT, &y2))
+	                    VAL_INT, &x1, VAL_INT, &y1, VAL_INT, &x2, VAL_INT, &y2))
 	{
 		return false;
 	}
@@ -1016,7 +1016,7 @@ bool scrAddDroidToMissionList(void)
 	// Don't build a new droid if player limit reached, unless it's a transporter.
 	if (IsPlayerDroidLimitReached(player) && (psTemplate->droidType != DROID_TRANSPORTER && psTemplate->droidType != DROID_SUPERTRANSPORTER))
 	{
-		debug(LOG_SCRIPT, "Max units reached for player %d adding %s to mission list (type %d)", 
+		debug(LOG_SCRIPT, "Max units reached for player %d adding %s to mission list (type %d)",
 		      player, getName(psTemplate), psTemplate->droidType);
 		psDroid = NULL;
 	}
@@ -1397,7 +1397,7 @@ bool scrAddMessage(void)
 
 
 	if (!stackPopParams(4, ST_INTMESSAGE, &psViewData , VAL_INT, &msgType,
-	        VAL_INT, &player, VAL_BOOL, &playImmediate))
+	                    VAL_INT, &player, VAL_BOOL, &playImmediate))
 	{
 		return false;
 	}
@@ -1415,7 +1415,7 @@ bool scrAddMessage(void)
 		{
 			//check the z value is at least the height of the terrain
 			height = map_Height(((VIEW_PROXIMITY *)psViewData->pData)->x,
-			        ((VIEW_PROXIMITY *)psViewData->pData)->y);
+			                    ((VIEW_PROXIMITY *)psViewData->pData)->y);
 			if (((VIEW_PROXIMITY *)psViewData->pData)->z < height)
 			{
 				((VIEW_PROXIMITY *)psViewData->pData)->z = height;
@@ -1484,11 +1484,11 @@ bool scrBuildDroid(void)
 	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "Invalid player number");
 	ASSERT_OR_RETURN(false, productionRun <= UBYTE_MAX, "Production run too high");
 	ASSERT_OR_RETURN(false, (psFactory->pStructureType->type == REF_FACTORY ||
-	        psFactory->pStructureType->type == REF_CYBORG_FACTORY ||
-	        psFactory->pStructureType->type == REF_VTOL_FACTORY),
-	        "Structure is not a factory");
+	                         psFactory->pStructureType->type == REF_CYBORG_FACTORY ||
+	                         psFactory->pStructureType->type == REF_VTOL_FACTORY),
+	                 "Structure is not a factory");
 	ASSERT_OR_RETURN(false, validTemplateForFactory(psTemplate, psFactory, true), "Invalid template - %s for factory - %s",
-	        getName(psTemplate), getID(psFactory->pStructureType));
+	                 getName(psTemplate), getID(psFactory->pStructureType));
 	if (productionRun != 1)
 	{
 		debug(LOG_WARNING, "A wzscript is trying to build a different number (%d) than 1 droid.", productionRun);
@@ -1531,7 +1531,7 @@ bool	scrSetAssemblyPoint(void)
 	}
 
 	setAssemblyPoint(((FACTORY *)psBuilding->pFunctionality)->psAssemblyPoint, x, y,
-	        psBuilding->player, true);
+	                 psBuilding->player, true);
 
 	return true;
 }
@@ -1779,7 +1779,7 @@ bool scrAddFeature(void)
 	SDWORD			iX, iY, iMapX, iMapY, iTestX, iTestY, iFeat;
 
 	if (!stackPopParams(3, ST_FEATURESTAT, &iFeat,
-	        VAL_INT, &iX, VAL_INT, &iY))
+	                    VAL_INT, &iX, VAL_INT, &iY))
 	{
 		return false;
 	}
@@ -1824,7 +1824,7 @@ bool scrAddStructure(void)
 	SDWORD				iStruct, iPlayer;//, iW, iB;
 
 	if (!stackPopParams(4, ST_STRUCTURESTAT, &iStruct, VAL_INT, &iPlayer,
-	        VAL_INT, &iX, VAL_INT, &iY))
+	                    VAL_INT, &iX, VAL_INT, &iY))
 	{
 		return false;
 	}
@@ -2005,7 +2005,7 @@ bool scrInitEnumStructB(void)
 	int32_t		any; // was BOOL (int) ** see warning about conversion
 
 	if (!stackPopParams(5, VAL_BOOL, &any, ST_STRUCTURESTAT, &iStat,
-	        VAL_INT, &targetPlayer, VAL_INT, &lookingPlayer, VAL_INT, &bucket))
+	                    VAL_INT, &targetPlayer, VAL_INT, &lookingPlayer, VAL_INT, &bucket))
 	{
 		return false;
 	}
@@ -2279,14 +2279,14 @@ bool scrGetStructure(void)
 		return false;
 	}
 
-	ASSERT_OR_RETURN(false, player >= 0 && player < MAX_PLAYERS, "Invalid player number");	
+	ASSERT_OR_RETURN(false, player >= 0 && player < MAX_PLAYERS, "Invalid player number");
 
 	structType = asStructureStats[index].ref;
 
 	//search the players' list of built structures to see if one exists
 	found = false;
 	for (psStruct = apsStructLists[player]; psStruct != NULL; psStruct =
-	        psStruct->psNext)
+	         psStruct->psNext)
 	{
 		if (psStruct->pStructureType->ref == structType)
 		{
@@ -2335,7 +2335,7 @@ bool scrGetTemplate(void)
 	//search the players' list of templates to see if one exists
 	found = false;
 	for (psTemplate = apsDroidTemplates[player]; psTemplate != NULL; psTemplate =
-	        psTemplate->psNext)
+	         psTemplate->psNext)
 	{
 		switch ((unsigned)sVal.type)  // Unsigned cast to suppress compiler warnings due to enum abuse.
 		{
@@ -2436,7 +2436,7 @@ bool scrGetDroid(void)
 	//search the players' list of droid to see if one exists
 	found = false;
 	for (psDroid = apsDroidLists[player]; psDroid != NULL; psDroid =
-	        psDroid->psNext)
+	         psDroid->psNext)
 	{
 		switch ((unsigned)sVal.type)  // Unsigned cast to suppress compiler warnings due to enum abuse.
 		{
@@ -2541,9 +2541,9 @@ bool scrSetScrollParams(void)
 
 	// When the scroll limits change midgame - need to redo the lighting
 	initLighting(prevMinX < scrollMinX ? prevMinX : scrollMinX,
-	        prevMinY < scrollMinY ? prevMinY : scrollMinY,
-	        prevMaxX < scrollMaxX ? prevMaxX : scrollMaxX,
-	        prevMaxY < scrollMaxY ? prevMaxY : scrollMaxY);
+	             prevMinY < scrollMinY ? prevMinY : scrollMinY,
+	             prevMaxX < scrollMaxX ? prevMaxX : scrollMaxX,
+	             prevMaxY < scrollMaxY ? prevMaxY : scrollMaxY);
 
 	// need to reset radar to take into account of new size
 	resizeRadar();
@@ -2575,7 +2575,7 @@ bool scrSetScrollMinX(void)
 
 	//when the scroll limits change midgame - need to redo the lighting
 	initLighting(prevMinX < scrollMinX ? prevMinX : scrollMinX,
-	        scrollMinY, scrollMaxX, scrollMaxY);
+	             scrollMinY, scrollMaxX, scrollMaxY);
 
 	// need to reset radar to take into account of new size
 	resizeRadar();
@@ -2607,8 +2607,8 @@ bool scrSetScrollMinY(void)
 
 	//when the scroll limits change midgame - need to redo the lighting
 	initLighting(scrollMinX,
-	        prevMinY < scrollMinY ? prevMinY : scrollMinY,
-	        scrollMaxX, scrollMaxY);
+	             prevMinY < scrollMinY ? prevMinY : scrollMinY,
+	             scrollMaxX, scrollMaxY);
 
 	// need to reset radar to take into account of new size
 	resizeRadar();
@@ -2640,8 +2640,8 @@ bool scrSetScrollMaxX(void)
 
 	//when the scroll limits change midgame - need to redo the lighting
 	initLighting(scrollMinX,  scrollMinY,
-	        prevMaxX < scrollMaxX ? prevMaxX : scrollMaxX,
-	        scrollMaxY);
+	             prevMaxX < scrollMaxX ? prevMaxX : scrollMaxX,
+	             scrollMaxY);
 
 	// need to reset radar to take into account of new size
 	resizeRadar();
@@ -2673,7 +2673,7 @@ bool scrSetScrollMaxY(void)
 
 	//when the scroll limits change midgame - need to redo the lighting
 	initLighting(scrollMinX, scrollMinY, scrollMaxX,
-	        prevMaxY < scrollMaxY ? prevMaxY : scrollMaxY);
+	             prevMaxY < scrollMaxY ? prevMaxY : scrollMaxY);
 
 	// need to reset radar to take into account of new size
 	resizeRadar();
@@ -2871,7 +2871,7 @@ bool scrPlaySoundPos(void)
 	SDWORD	player, soundID, iX, iY, iZ;
 
 	if (!stackPopParams(5, ST_SOUND, &soundID, VAL_INT, &player,
-	        VAL_INT, &iX, VAL_INT, &iY, VAL_INT, &iZ))
+	                    VAL_INT, &iX, VAL_INT, &iY, VAL_INT, &iZ))
 	{
 		return false;
 	}
@@ -2967,7 +2967,7 @@ bool scrTagConsoleText(void)
 bool	scrClearConsole(void)
 {
 	flushConsoleMessages();
-	return(true);
+	return (true);
 }
 
 // -----------------------------------------------------------------------------------------
@@ -3059,7 +3059,7 @@ bool scrGameOverMessage(void)
 	VIEWDATA		*psViewData;
 
 	if (!stackPopParams(4, ST_INTMESSAGE, &psViewData , VAL_INT, &msgType,
-	        VAL_INT, &player, VAL_BOOL, &gameWon))
+	                    VAL_INT, &player, VAL_BOOL, &gameWon))
 	{
 		return false;
 	}
@@ -4243,7 +4243,7 @@ bool scrSetNoGoArea(void)
 	SDWORD		x1, x2, y1, y2, area;
 
 	if (!stackPopParams(5, VAL_INT, &x1, VAL_INT, &y1, VAL_INT, &x2, VAL_INT, &y2,
-	        VAL_INT, &area))
+	                    VAL_INT, &area))
 	{
 		return false;
 	}
@@ -4380,9 +4380,9 @@ bool scrMissionTimeRemaining(void)
 	scrFunctionResult.v.ival = timeRemaining;
 	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
-		return(false);
+		return (false);
 	}
-	return(true);
+	return (true);
 }
 
 // -----------------------------------------------------------------------------------------
@@ -4499,7 +4499,7 @@ bool scrDistanceTwoPts(void)
 	if (!stackPopParams(4, VAL_INT, &x1, VAL_INT, &y1, VAL_INT, &x2, VAL_INT, &y2))
 	{
 		ASSERT(false, "Distance between two points - cannot get parameters");
-		return(false);
+		return (false);
 	}
 
 	/* Approximate the distance */
@@ -4507,9 +4507,9 @@ bool scrDistanceTwoPts(void)
 	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
 		ASSERT(false, "Distance between two points - cannot return scrFunctionResult");
-		return(false);
+		return (false);
 	}
-	return(true);
+	return (true);
 }
 
 // -----------------------------------------------------------------------------------------
@@ -4523,7 +4523,7 @@ bool	scrLOSTwoBaseObjects(void)
 	if (!stackPopParams(3, ST_BASEOBJECT, &psSource, ST_BASEOBJECT, &psDest, VAL_BOOL, &bWallsBlock))
 	{
 		ASSERT(false, "Cannot get parameters");
-		return(false);
+		return (false);
 	}
 
 	retVal = visibleObject(psSource, psDest, bWallsBlock);
@@ -4532,9 +4532,9 @@ bool	scrLOSTwoBaseObjects(void)
 	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 	{
 		ASSERT(false, "Cannot return scrFunctionResult");
-		return(false);
+		return (false);
 	}
-	return(true);
+	return (true);
 }
 
 // -----------------------------------------------------------------------------------------
@@ -4550,10 +4550,10 @@ bool	scrDestroyStructuresInArea(void)
 	SDWORD		sX, sY;
 
 	if (!stackPopParams(8, VAL_INT, &player, VAL_INT, &typeRef, VAL_INT, &x1, VAL_INT, &y1, VAL_INT, &x2,
-	        VAL_INT, &y2, VAL_BOOL, &bVisible, VAL_BOOL, &bTakeFeatures))
+	                    VAL_INT, &y2, VAL_BOOL, &bVisible, VAL_BOOL, &bTakeFeatures))
 	{
 		ASSERT(false, "Cannot get parameters");
-		return(false);
+		return (false);
 	}
 
 	ASSERT_OR_RETURN(false, player >= 0 && player < MAX_PLAYERS, "Invalid player number");
@@ -4611,7 +4611,7 @@ bool	scrDestroyStructuresInArea(void)
 			}
 		}
 	}
-	return(true);
+	return (true);
 }
 // -----------------------------------------------------------------------------------------
 // Returns a value representing the threat from droids in a given area
@@ -4626,16 +4626,16 @@ bool	scrThreatInArea(void)
 	int32_t	bVisible;		// was BOOL (int) ** see warning about conversion
 
 	if (!stackPopParams(10, VAL_INT, &playerLooking, VAL_INT, &playerTarget, VAL_INT, &x1, VAL_INT, &y1, VAL_INT, &x2, VAL_INT, &y2,
-	        VAL_INT, &ldThreat, VAL_INT, &mdThreat, VAL_INT, &hdThreat, VAL_BOOL, &bVisible))
+	                    VAL_INT, &ldThreat, VAL_INT, &mdThreat, VAL_INT, &hdThreat, VAL_BOOL, &bVisible))
 	{
 		ASSERT(false, "Cannot get parameters");
-		return(false);
+		return (false);
 	}
 
 	if (playerLooking >= MAX_PLAYERS || playerTarget >= MAX_PLAYERS)
 	{
 		ASSERT(false, "Player number too high");
-		return(false);
+		return (false);
 	}
 
 	totalThreat = 0;
@@ -4678,9 +4678,9 @@ bool	scrThreatInArea(void)
 	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
 		ASSERT(false, "Cannot push scrFunctionResult");
-		return(false);
+		return (false);
 	}
-	return(true);
+	return (true);
 }
 // -----------------------------------------------------------------------------------------
 // returns the nearest gateway bottleneck to a specified point
@@ -4696,13 +4696,13 @@ bool scrGetNearestGateway(void)
 	if (!stackPopParams(4, VAL_INT, &x, VAL_INT, &y, VAL_REF | VAL_INT, &rX, VAL_REF | VAL_INT, &rY))
 	{
 		ASSERT(false, "Cannot get parameters");
-		return(false);
+		return (false);
 	}
 
 	if (x < 0 || x > (SDWORD)mapWidth || y < 0 || y > (SDWORD)mapHeight)
 	{
 		ASSERT(false, "Invalid coordinates");
-		return(false);
+		return (false);
 	}
 
 	nearestSoFar = UDWORD_MAX;
@@ -4735,11 +4735,11 @@ bool scrGetNearestGateway(void)
 	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 	{
 		ASSERT(false, "Cannot return scrFunctionResult");
-		return(false);
+		return (false);
 	}
 
 
-	return(true);
+	return (true);
 }
 // -----------------------------------------------------------------------------------------
 bool	scrSetWaterTile(void)
@@ -4749,19 +4749,19 @@ bool	scrSetWaterTile(void)
 	if (!stackPopParams(1, VAL_INT, &tileNum))
 	{
 		ASSERT(false, "Cannot get parameter");
-		return(false);
+		return (false);
 	}
 
 
 	if (tileNum > 96)
 	{
 		ASSERT(false, "Water tile number too high");
-		return(false);
+		return (false);
 	}
 
 	setUnderwaterTile(tileNum);
 
-	return(true);
+	return (true);
 }
 // -----------------------------------------------------------------------------------------
 bool	scrSetRubbleTile(void)
@@ -4771,19 +4771,19 @@ bool	scrSetRubbleTile(void)
 	if (!stackPopParams(1, VAL_INT, &tileNum))
 	{
 		ASSERT(false, "Cannot get parameter");
-		return(false);
+		return (false);
 	}
 
 
 	if (tileNum > 96)
 	{
 		ASSERT(false, "Rubble tile number too high in scrSetWaterTile");
-		return(false);
+		return (false);
 	}
 
 	setRubbleTile(tileNum);
 
-	return(true);
+	return (true);
 }
 // -----------------------------------------------------------------------------------------
 bool	scrSetCampaignNumber(void)
@@ -4793,12 +4793,12 @@ bool	scrSetCampaignNumber(void)
 	if (!stackPopParams(1, VAL_INT, &campaignNumber))
 	{
 		ASSERT(false, "Cannot get parameter for scrSetCampaignNumber");
-		return(false);
+		return (false);
 	}
 
 	setCampaignNumber(campaignNumber);
 
-	return(true);
+	return (true);
 }
 
 // -----------------------------------------------------------------------------------------
@@ -4813,13 +4813,13 @@ bool	scrTestStructureModule(void)
 	if (!stackPopParams(3, VAL_INT, &player, ST_STRUCTURE, &psStructure, VAL_INT, &refId))
 	{
 		ASSERT(false, "SCRIPT : Cannot get parameters in scrTestStructureModule");
-		return(false);
+		return (false);
 	}
 
 	if (player >= MAX_PLAYERS)
 	{
 		ASSERT(false, "SCRIPT : Player number too high in scrTestStructureModule");
-		return(false);
+		return (false);
 
 	}
 
@@ -4853,10 +4853,10 @@ bool	scrTestStructureModule(void)
 	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 	{
 		ASSERT(false, "SCRIPT : Cannot push scrFunctionResult for scrTestStructureModule");
-		return(false);
+		return (false);
 	}
 
-	return(true);
+	return (true);
 }
 
 
@@ -4875,7 +4875,7 @@ bool	scrForceDamage(void)
 	if (!stackPopParams(2, ST_BASEOBJECT, &psObj, VAL_INT, &damagePercent))
 	{
 		ASSERT(false, "Cannot pop params for scrForceDamage");
-		return(false);
+		return (false);
 	}
 
 	/* Got to be a percent, so must be less than or equal to 100 */
@@ -4883,7 +4883,7 @@ bool	scrForceDamage(void)
 	{
 		ASSERT(false, "scrForceDamage : You're supposed to be passing in a PERCENTAGE VALUE, \
 			instead I got given %d, which is clearly no good, now is it!?", damagePercent);
-		return(false);
+		return (false);
 	}
 
 	/* Get percentage in range [0.1] */
@@ -4913,11 +4913,11 @@ bool	scrForceDamage(void)
 		break;
 	default:
 		ASSERT(false, "Unsupported base object type in scrForceDamage");
-		return(false);
+		return (false);
 		break;
 	}
 
-	return(true);
+	return (true);
 
 }
 // Kills of a droid without spawning any explosion effects.
@@ -4932,7 +4932,7 @@ bool	scrDestroyUnitsInArea(void)
 	if (!stackPopParams(5, VAL_INT, &x1, VAL_INT, &y1, VAL_INT, &x2, VAL_INT, &y2, VAL_INT, &player))
 	{
 		ASSERT(false, "Cannot get params for scrDestroyUnitsInArea");
-		return(false);
+		return (false);
 	}
 
 	if (player >= MAX_PLAYERS)
@@ -4955,10 +4955,10 @@ bool	scrDestroyUnitsInArea(void)
 	scrFunctionResult.v.ival = count;
 	if (!stackPushResult(VAL_INT, &scrFunctionResult))
 	{
-		return(false);
+		return (false);
 	}
 
-	return(true);
+	return (true);
 }
 // -----------------------------------------------------------------------------------------
 bool	scrRemoveDroid(void)
@@ -4968,7 +4968,7 @@ bool	scrRemoveDroid(void)
 	if (!stackPopParams(1, ST_DROID, &psDroid))
 	{
 		ASSERT(false, "Cannot get vars for scrRemoveDroid!");
-		return(false);
+		return (false);
 	}
 
 	if (psDroid)
@@ -4976,7 +4976,7 @@ bool	scrRemoveDroid(void)
 		vanishDroid(psDroid);
 	}
 
-	return(true);
+	return (true);
 }
 
 // -----------------------------------------------------------------------------------------
@@ -4990,7 +4990,7 @@ static bool	structHasModule(STRUCTURE *psStruct)
 	/* Fail if the structure isn't built yet */
 	if (psStruct->status != SS_BUILT)
 	{
-		return(false);
+		return (false);
 	}
 
 	/* Grab a stats pointer */
@@ -5031,7 +5031,7 @@ static bool	structHasModule(STRUCTURE *psStruct)
 		bFound = false;
 	}
 
-	return(bFound);
+	return (bFound);
 }
 
 // -----------------------------------------------------------------------------------------
@@ -5179,8 +5179,8 @@ static bool pickStructLocation(DROID *psDroid, int index, int *pX, int *pY, int 
 
 	// save a lot of typing... checks whether a position is valid
 #define LOC_OK(_x, _y) (tileOnMap(_x, _y) && \
-        (!psDroid || fpathCheck(psDroid->pos, Vector3i(world_coord(_x), world_coord(_y), 0), PROPULSION_TYPE_WHEELED)) \
-        && validLocation(psStat, world_coord(Vector2i(_x, _y)) + offset, 0, player, false) && structDoubleCheck(psStat, _x, _y, maxBlockingTiles))
+                        (!psDroid || fpathCheck(psDroid->pos, Vector3i(world_coord(_x), world_coord(_y), 0), PROPULSION_TYPE_WHEELED)) \
+                        && validLocation(psStat, world_coord(Vector2i(_x, _y)) + offset, 0, player, false) && structDoubleCheck(psStat, _x, _y, maxBlockingTiles))
 
 	// first try the original location
 	if (LOC_OK(startX, startY))
@@ -5285,7 +5285,7 @@ bool scrPickStructLocationB(void)
 	SDWORD			maxBlockingTiles;
 
 	if (!stackPopParams(5, ST_STRUCTURESTAT, &index, VAL_REF | VAL_INT, &pX ,
-	        VAL_REF | VAL_INT, &pY, VAL_INT, &player, VAL_INT, &maxBlockingTiles))
+	                    VAL_REF | VAL_INT, &pY, VAL_INT, &player, VAL_INT, &maxBlockingTiles))
 	{
 		return false;
 	}
@@ -5316,7 +5316,7 @@ bool scrFlyTransporterIn(void)
 	int32_t	bTrackTransporter;		// was BOOL (int) ** see warning about conversion
 
 	if (!stackPopParams(4, VAL_INT, &iPlayer, VAL_INT, &iEntryTileX, VAL_INT, &iEntryTileY,
-	        VAL_BOOL, &bTrackTransporter))
+	                    VAL_BOOL, &bTrackTransporter))
 	{
 		return false;
 	}
@@ -5490,7 +5490,7 @@ bool scrTakeOverDroidsInArea(void)
 	}
 	ASSERT_OR_RETURN(false, fromPlayer < MAX_PLAYERS && toPlayer < MAX_PLAYERS, "player number is too high");
 	ASSERT_OR_RETURN(false, x1 < world_coord(MAP_MAXWIDTH) && x2 < world_coord(MAP_MAXWIDTH) && y1 < world_coord(MAP_MAXHEIGHT)
-	        && y2 < world_coord(MAP_MAXHEIGHT), "coordinate outside map");
+	                 && y2 < world_coord(MAP_MAXHEIGHT), "coordinate outside map");
 	numChanged = 0;
 	for (psDroid = apsDroidLists[fromPlayer]; psDroid != NULL; psDroid = psNext)
 	{
@@ -5557,7 +5557,7 @@ bool scrTakeOverDroidsInAreaExp(void)
 	DROID       *psDroid, *psNext;
 
 	if (!stackPopParams(8, VAL_INT, &fromPlayer, VAL_INT, &toPlayer,
-	        VAL_INT, &x1, VAL_INT, &y1, VAL_INT, &x2, VAL_INT, &y2, VAL_INT, &level, VAL_INT, &maxUnits))
+	                    VAL_INT, &x1, VAL_INT, &y1, VAL_INT, &x2, VAL_INT, &y2, VAL_INT, &level, VAL_INT, &maxUnits))
 	{
 		return false;
 	}
@@ -5671,7 +5671,7 @@ bool scrTakeOverSingleStructure(void)
 			    asStructLimits[playerToGain][structureInc].limit)
 			{
 				asStructLimits[playerToGain][structureInc].limit = asStructLimits[
-				        playerToGain][structureInc].currentQuantity;
+				            playerToGain][structureInc].currentQuantity;
 			}
 			//for each structure taken - add graphical effect if the selectedPlayer
 			if (playerToGain == (SDWORD)selectedPlayer)
@@ -5698,7 +5698,7 @@ bool scrTakeOverStructsInArea(void)
 	UDWORD      structureInc;
 
 	if (!stackPopParams(6, VAL_INT, &fromPlayer, VAL_INT, &toPlayer,
-	        VAL_INT, &x1, VAL_INT, &y1, VAL_INT, &x2, VAL_INT, &y2))
+	                    VAL_INT, &x1, VAL_INT, &y1, VAL_INT, &x2, VAL_INT, &y2))
 	{
 		return false;
 	}
@@ -5762,7 +5762,7 @@ bool scrTakeOverStructsInArea(void)
 					    asStructLimits[toPlayer][structureInc].limit)
 					{
 						asStructLimits[toPlayer][structureInc].limit = asStructLimits[
-						        toPlayer][structureInc].currentQuantity;
+						            toPlayer][structureInc].currentQuantity;
 					}
 					//for each structure taken - add graphical effect if the selectedPlayer
 					if (toPlayer == (SDWORD)selectedPlayer)
@@ -6794,8 +6794,8 @@ bool scrFogTileInRange(void)
 	SDWORD		*wTileX, *wTileY;
 
 	if (!stackPopParams(9, VAL_REF | VAL_INT, &wTileX, VAL_REF | VAL_INT, &wTileY,
-	        VAL_INT, &pwLookerX, VAL_INT, &pwLookerY, VAL_INT, &wRangeX, VAL_INT, &wRangeY,
-	        VAL_INT, &wRange, VAL_INT, &player, VAL_INT, &threadRange))
+	                    VAL_INT, &pwLookerX, VAL_INT, &pwLookerY, VAL_INT, &wRangeX, VAL_INT, &wRangeY,
+	                    VAL_INT, &wRange, VAL_INT, &player, VAL_INT, &threadRange))
 	{
 		debug(LOG_ERROR, "scrFogTileInRange: failed to pop");
 		return false;
@@ -6884,7 +6884,7 @@ bool scrMapRevealedInRange(void)
 	int             i, j;
 
 	if (!stackPopParams(4, VAL_INT, &wRangeX, VAL_INT, &wRangeY,
-	        VAL_INT, &wRange, VAL_INT, &player))
+	                    VAL_INT, &wRange, VAL_INT, &player))
 	{
 		debug(LOG_ERROR,  "scrMapRevealedInRange: failed to pop");
 		return false;
@@ -7210,7 +7210,7 @@ bool scrThreatInRange(void)
 	int32_t		bVTOLs;		// was BOOL (int) ** see warning about conversion
 
 	if (!stackPopParams(5, VAL_INT, &player, VAL_INT, &rangeX,
-	        VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bVTOLs))
+	                    VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bVTOLs))
 	{
 		debug(LOG_ERROR,  "scrThreatInRange(): stack failed");
 		return false;
@@ -7233,7 +7233,7 @@ bool scrNumEnemyWeapObjInRange(void)
 	int32_t		bVTOLs, bFinished;		// was BOOL (int) ** see warning about conversion
 
 	if (!stackPopParams(6, VAL_INT, &lookingPlayer, VAL_INT, &rangeX,
-	        VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bVTOLs, VAL_BOOL, &bFinished))
+	                    VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bVTOLs, VAL_BOOL, &bFinished))
 	{
 		debug(LOG_ERROR,  "scrNumEnemyWeapObjInRange(): stack failed");
 		return false;
@@ -7269,7 +7269,7 @@ bool scrEnemyWeapObjCostInRange(void)
 	int32_t		bVTOLs, bFinished; // was BOOL (int) ** see warning about conversion
 
 	if (!stackPopParams(6, VAL_INT, &lookingPlayer, VAL_INT, &rangeX,
-	        VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bVTOLs, VAL_BOOL, &bFinished))
+	                    VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bVTOLs, VAL_BOOL, &bFinished))
 	{
 		debug(LOG_ERROR,  "scrEnemyWeapObjCostInRange(): stack failed");
 		return false;
@@ -7306,7 +7306,7 @@ bool scrFriendlyWeapObjCostInRange(void)
 	int32_t		bVTOLs, bFinished;		// was BOOL (int) ** see warning about conversion
 
 	if (!stackPopParams(6, VAL_INT, &player, VAL_INT, &rangeX,
-	        VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bVTOLs, VAL_BOOL, &bFinished))
+	                    VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bVTOLs, VAL_BOOL, &bFinished))
 	{
 		debug(LOG_ERROR,  "scrFriendlyWeapObjCostInRange(): stack failed");
 		return false;
@@ -7335,7 +7335,7 @@ bool scrFriendlyWeapObjCostInRange(void)
  * Will either count the number of droids or calculate the total costs.
  */
 static UDWORD costOrAmountInRange(SDWORD player, SDWORD lookingPlayer, SDWORD range,
-        SDWORD rangeX, SDWORD rangeY, bool bVTOLs, bool justCount)
+                                  SDWORD rangeX, SDWORD rangeY, bool bVTOLs, bool justCount)
 {
 	UDWORD	droidCost = 0;
 
@@ -7379,7 +7379,7 @@ UDWORD numPlayerWeapDroidsInRange(SDWORD player, SDWORD lookingPlayer, SDWORD ra
 }
 
 UDWORD playerWeapDroidsCostInRange(SDWORD player, SDWORD lookingPlayer, SDWORD range,
-        SDWORD rangeX, SDWORD rangeY, bool bVTOLs)
+                                   SDWORD rangeX, SDWORD rangeY, bool bVTOLs)
 {
 	return costOrAmountInRange(player, lookingPlayer, range, rangeX, rangeY, bVTOLs, false /*total cost*/);
 }
@@ -7387,7 +7387,7 @@ UDWORD playerWeapDroidsCostInRange(SDWORD player, SDWORD lookingPlayer, SDWORD r
 
 
 UDWORD numPlayerWeapStructsInRange(SDWORD player, SDWORD lookingPlayer, SDWORD range,
-        SDWORD rangeX, SDWORD rangeY, bool bFinished)
+                                   SDWORD rangeX, SDWORD rangeY, bool bFinished)
 {
 	const STRUCTURE *psStruct;
 
@@ -7417,7 +7417,7 @@ UDWORD numPlayerWeapStructsInRange(SDWORD player, SDWORD lookingPlayer, SDWORD r
 }
 
 UDWORD playerWeapStructsCostInRange(SDWORD player, SDWORD lookingPlayer, SDWORD range,
-        SDWORD rangeX, SDWORD rangeY, bool bFinished)
+                                    SDWORD rangeX, SDWORD rangeY, bool bFinished)
 {
 	const STRUCTURE *psStruct;
 
@@ -7451,7 +7451,7 @@ bool scrNumEnemyWeapDroidsInRange(void)
 	int32_t				bVTOLs;		// was BOOL (int) ** see warning about conversion
 
 	if (!stackPopParams(5, VAL_INT, &lookingPlayer, VAL_INT, &rangeX,
-	        VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bVTOLs))
+	                    VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bVTOLs))
 	{
 		debug(LOG_ERROR,  "scrNumEnemyWeapDroidsInRange(): stack failed");
 		return false;
@@ -7486,7 +7486,7 @@ bool scrNumEnemyWeapStructsInRange(void)
 	int32_t			bFinished;	// was BOOL (int) ** see warning about conversion
 
 	if (!stackPopParams(5, VAL_INT, &lookingPlayer, VAL_INT, &rangeX,
-	        VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bFinished))
+	                    VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bFinished))
 	{
 		debug(LOG_ERROR,  "scrNumEnemyWeapStructsInRange(): stack failed");
 		return false;
@@ -7519,7 +7519,7 @@ bool scrNumFriendlyWeapObjInRange(void)
 	int32_t				bVTOLs, bFinished;	// was BOOL (int) ** see warning about conversion
 
 	if (!stackPopParams(6, VAL_INT, &player, VAL_INT, &rangeX,
-	        VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bVTOLs, VAL_BOOL, &bFinished))
+	                    VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bVTOLs, VAL_BOOL, &bFinished))
 	{
 		debug(LOG_ERROR,  "scrNumFriendlyWeapObjInRange(): stack failed");
 		return false;
@@ -7550,7 +7550,7 @@ bool scrNumFriendlyWeapDroidsInRange(void)
 	int32_t		bVTOLs;		// was BOOL (int) ** see warning about conversion
 
 	if (!stackPopParams(5, VAL_INT, &lookingPlayer, VAL_INT, &rangeX,
-	        VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bVTOLs))
+	                    VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bVTOLs))
 	{
 		debug(LOG_ERROR,  "scrNumFriendlyWeapDroidsInRange(): stack failed");
 		return false;
@@ -7584,7 +7584,7 @@ bool scrNumFriendlyWeapStructsInRange(void)
 	int32_t				bFinished;		// was BOOL (int) ** see warning about conversion
 
 	if (!stackPopParams(5, VAL_INT, &lookingPlayer, VAL_INT, &rangeX,
-	        VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bFinished))
+	                    VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bFinished))
 	{
 		debug(LOG_ERROR, "scrNumFriendlyWeapStructsInRange(): stack failed");
 		return false;
@@ -7614,7 +7614,7 @@ bool scrNumPlayerWeapDroidsInRange(void)
 	int32_t		bVTOLs;		// was BOOL (int) ** see warning about conversion
 
 	if (!stackPopParams(6, VAL_INT, &targetPlayer, VAL_INT, &lookingPlayer,
-	        VAL_INT, &rangeX, VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bVTOLs))
+	                    VAL_INT, &rangeX, VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bVTOLs))
 	{
 		debug(LOG_ERROR, "scrNumPlayerWeapDroidsInRange(): stack failed");
 		return false;
@@ -7637,7 +7637,7 @@ bool scrNumPlayerWeapStructsInRange(void)
 	int32_t		bFinished;		// was BOOL (int) ** see warning about conversion
 
 	if (!stackPopParams(6, VAL_INT, &targetPlayer, VAL_INT, &lookingPlayer,
-	        VAL_INT, &rangeX, VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bFinished))
+	                    VAL_INT, &rangeX, VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bFinished))
 	{
 		debug(LOG_ERROR, "scrNumPlayerWeapStructsInRange(): stack failed");
 		return false;
@@ -7661,8 +7661,8 @@ bool scrNumPlayerWeapObjInRange(void)
 	int32_t				bVTOLs, bFinished;		// was BOOL (int) ** see warning about conversion
 
 	if (!stackPopParams(7, VAL_INT, &targetPlayer, VAL_INT, &lookingPlayer,
-	        VAL_INT, &rangeX, VAL_INT, &rangeY, VAL_INT, &range,
-	        VAL_BOOL, &bVTOLs, VAL_BOOL, &bFinished))
+	                    VAL_INT, &rangeX, VAL_INT, &rangeY, VAL_INT, &range,
+	                    VAL_BOOL, &bVTOLs, VAL_BOOL, &bFinished))
 	{
 		debug(LOG_ERROR, "scrNumPlayerWeapObjInRange(): stack failed");
 		return false;
@@ -7687,7 +7687,7 @@ bool scrNumEnemyObjInRange(void)
 	int32_t				bVTOLs, bFinished;		// was BOOL (int) ** see warning about conversion
 
 	if (!stackPopParams(6, VAL_INT, &lookingPlayer, VAL_INT, &rangeX,
-	        VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bVTOLs, VAL_BOOL, &bFinished))
+	                    VAL_INT, &rangeY, VAL_INT, &range, VAL_BOOL, &bVTOLs, VAL_BOOL, &bFinished))
 	{
 		debug(LOG_ERROR, "scrNumEnemyObjInRange(): stack failed");
 		return false;
@@ -7704,7 +7704,7 @@ bool scrNumEnemyObjInRange(void)
 }
 
 UDWORD numEnemyObjInRange(SDWORD player, SDWORD range, SDWORD rangeX, SDWORD rangeY,
-        bool bVTOLs, bool bFinished)
+                          bool bVTOLs, bool bFinished)
 {
 	unsigned int i;
 	const STRUCTURE *psStruct;
@@ -7748,7 +7748,7 @@ UDWORD numEnemyObjInRange(SDWORD player, SDWORD range, SDWORD rangeX, SDWORD ran
 				//if VTOLs are excluded, skip them
 				if (!bVTOLs
 				    && (asPropulsionStats[psDroid->asBits[COMP_PROPULSION]].propulsionType == PROPULSION_TYPE_LIFT
-					|| isTransporter(psDroid)))
+				        || isTransporter(psDroid)))
 				{
 					continue;
 				}
@@ -7775,7 +7775,7 @@ bool scrNumStructsByStatInRange(void)
 	STRUCTURE_STATS *psTarget;
 
 	if (!stackPopParams(6, ST_STRUCTURESTAT, &index, VAL_INT, &x, VAL_INT, &y,
-	        VAL_INT, &range, VAL_INT, &lookingPlayer, VAL_INT, &player))
+	                    VAL_INT, &range, VAL_INT, &lookingPlayer, VAL_INT, &player))
 	{
 		debug(LOG_ERROR, "scrNumStructsByStatInRange(): stack failed");
 		return false;
@@ -7820,7 +7820,7 @@ bool scrNumStructsByStatInRange(void)
 	{
 		xdiff = (SDWORD)psCurr->pos.x - x;
 		ydiff = (SDWORD)psCurr->pos.y - y;
-		if (xdiff *xdiff + ydiff *ydiff <= rangeSquared)
+		if (xdiff * xdiff + ydiff * ydiff <= rangeSquared)
 		{
 			if (psCurr->pStructureType->id.compare(psTarget->id) == 0)
 			{
@@ -7850,7 +7850,7 @@ bool scrNumStructsByStatInArea(void)
 	STRUCTURE_STATS		*psStats;
 
 	if (!stackPopParams(7, ST_STRUCTURESTAT, &index, VAL_INT, &x1, VAL_INT, &y1,
-	        VAL_INT, &x2, VAL_INT, &y2, VAL_INT, &lookingPlayer, VAL_INT, &player))
+	                    VAL_INT, &x2, VAL_INT, &y2, VAL_INT, &lookingPlayer, VAL_INT, &player))
 	{
 		debug(LOG_ERROR, "scrNumStructsByStatInArea: failed to pop");
 		return false;
@@ -7923,7 +7923,7 @@ bool scrNumStructsByTypeInRange(void)
 	SDWORD		xdiff, ydiff;
 
 	if (!stackPopParams(6, VAL_INT, &lookingPlayer, VAL_INT, &targetPlayer,
-	        VAL_INT, &type, VAL_INT, &x, VAL_INT, &y, VAL_INT, &range))
+	                    VAL_INT, &type, VAL_INT, &x, VAL_INT, &y, VAL_INT, &range))
 	{
 		debug(LOG_ERROR, "scrNumStructsByTypeInRange: failed to pop");
 		return false;
@@ -7964,7 +7964,7 @@ bool scrNumStructsByTypeInRange(void)
 	{
 		xdiff = (SDWORD)psCurr->pos.x - x;
 		ydiff = (SDWORD)psCurr->pos.y - y;
-		if (xdiff *xdiff + ydiff *ydiff <= rangeSquared)
+		if (xdiff * xdiff + ydiff * ydiff <= rangeSquared)
 		{
 			if ((type < 0) || (psCurr->pStructureType->type == type))
 			{
@@ -7993,7 +7993,7 @@ bool scrNumFeatByTypeInRange(void)
 	SDWORD		xdiff, ydiff;
 
 	if (!stackPopParams(5, VAL_INT, &lookingPlayer,
-	        VAL_INT, &type, VAL_INT, &x, VAL_INT, &y, VAL_INT, &range))
+	                    VAL_INT, &type, VAL_INT, &x, VAL_INT, &y, VAL_INT, &range))
 	{
 		debug(LOG_ERROR, "scrNumFeatByTypeInRange(): failed to pop");
 		return false;
@@ -8034,7 +8034,7 @@ bool scrNumFeatByTypeInRange(void)
 	{
 		xdiff = (SDWORD)psCurr->pos.x - x;
 		ydiff = (SDWORD)psCurr->pos.y - y;
-		if (xdiff *xdiff + ydiff *ydiff <= rangeSquared)
+		if (xdiff * xdiff + ydiff * ydiff <= rangeSquared)
 		{
 			if ((type < 0) || (psCurr->psStats->subType == type))	//like FEAT_OIL_RESOURCE
 			{
@@ -8064,7 +8064,7 @@ bool scrNumStructsButNotWallsInRangeVis(void)
 	SDWORD		xdiff, ydiff;
 
 	if (!stackPopParams(5, VAL_INT, &x, VAL_INT, &y,
-	        VAL_INT, &range, VAL_INT, &lookingPlayer, VAL_INT, &player))
+	                    VAL_INT, &range, VAL_INT, &lookingPlayer, VAL_INT, &player))
 	{
 		debug(LOG_ERROR, "scrNumStructsButNotWallsInRangeVis: failed to pop");
 		return false;
@@ -8107,7 +8107,7 @@ bool scrNumStructsButNotWallsInRangeVis(void)
 			{
 				xdiff = (SDWORD)psCurr->pos.x - x;
 				ydiff = (SDWORD)psCurr->pos.y - y;
-				if (xdiff *xdiff + ydiff *ydiff <= rangeSquared)
+				if (xdiff * xdiff + ydiff * ydiff <= rangeSquared)
 				{
 					NumStruct++;
 				}
@@ -8149,7 +8149,7 @@ bool scrGetStructureVis(void)
 	//search the players' list of built structures to see if one exists
 	found = false;
 	for (psStruct = apsStructLists[player]; psStruct != NULL; psStruct =
-	        psStruct->psNext)
+	         psStruct->psNext)
 	{
 		if (psStruct->pStructureType->ref == structType)
 		{
@@ -8183,7 +8183,7 @@ bool scrChooseValidLoc(void)
 	UDWORD tx, ty;
 
 	if (!stackPopParams(6, VAL_REF | VAL_INT, &x, VAL_REF | VAL_INT, &y,
-	        VAL_INT, &sendX, VAL_INT, &sendY, VAL_INT, &player, VAL_INT, &threatRange))
+	                    VAL_INT, &sendX, VAL_INT, &sendY, VAL_INT, &player, VAL_INT, &threatRange))
 	{
 		debug(LOG_ERROR, "scrChooseValidLoc: failed to pop");
 		return false;
@@ -8236,7 +8236,7 @@ bool scrGetClosestEnemy(void)
 	DROID				*psDroid = NULL;
 
 	if (!stackPopParams(6, VAL_INT, &x, VAL_INT, &y,
-	        VAL_INT, &range,  VAL_BOOL, &weaponOnly, VAL_BOOL, &bVTOLs, VAL_INT, &player))
+	                    VAL_INT, &range,  VAL_BOOL, &weaponOnly, VAL_BOOL, &bVTOLs, VAL_INT, &player))
 	{
 		debug(LOG_ERROR, "scrGetClosestEnemy: stack failed");
 		return false;
@@ -8618,7 +8618,7 @@ bool scrGetClosestEnemyDroidByType(void)
 	DROID				*psDroid = NULL, *foundDroid = NULL;
 
 	if (!stackPopParams(6, VAL_INT, &x, VAL_INT, &y,
-	        VAL_INT, &range,  VAL_INT, &type, VAL_BOOL, &bVTOLs, VAL_INT, &player))
+	                    VAL_INT, &range,  VAL_INT, &type, VAL_BOOL, &bVTOLs, VAL_INT, &player))
 	{
 		debug(LOG_ERROR, "scrGetClosestEnemyDroidByType: stack failed");
 		return false;
@@ -8706,7 +8706,7 @@ bool scrGetClosestEnemyStructByType(void)
 	STRUCTURE			*psStruct = NULL, *foundStruct = NULL;
 
 	if (!stackPopParams(5, VAL_INT, &x, VAL_INT, &y,
-	        VAL_INT, &range,  VAL_INT, &type, VAL_INT, &player))
+	                    VAL_INT, &range,  VAL_INT, &type, VAL_INT, &player))
 	{
 		debug(LOG_ERROR, "scrGetClosestEnemyStructByType: stack failed");
 		return false;
@@ -8788,7 +8788,7 @@ bool scrCirclePerimPoint(void)
 	float factor, deltaX, deltaY;
 
 	if (!stackPopParams(5, VAL_INT, &basex, VAL_INT, &basey, VAL_REF | VAL_INT, &grx,
-	        VAL_REF | VAL_INT, &gry, VAL_INT, &radius))
+	                    VAL_REF | VAL_INT, &gry, VAL_INT, &radius))
 	{
 		debug(LOG_ERROR, "scrCirclePerimPoint(): stack failed");
 		return false;
@@ -8891,7 +8891,7 @@ bool scrNumAAinRange(void)
 	STRUCTURE	*psStruct;
 
 	if (!stackPopParams(5, VAL_INT, &targetPlayer, VAL_INT, &lookingPlayer,
-	        VAL_INT, &rangeX, VAL_INT, &rangeY, VAL_INT, &range))
+	                    VAL_INT, &rangeX, VAL_INT, &rangeY, VAL_INT, &range))
 	{
 		debug(LOG_ERROR, "scrNumAAinRange(): stack failed");
 		return false;
@@ -9085,7 +9085,7 @@ bool addBeaconBlip(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, co
 		{
 			// show console message
 			CONPRINTF(ConsoleString, (ConsoleString, _("Beacon received from %s!"),
-			        getPlayerName(sender)));
+			                          getPlayerName(sender)));
 
 			// play audio
 			audio_QueueTrackPos(ID_SOUND_BEACON, locX, locY, 0);
@@ -9199,7 +9199,7 @@ bool scrDropBeacon(void)
 	UDWORD			locX, locY, locZ;
 
 	if (!stackPopParams(6, VAL_STRING, &strParam1 , VAL_INT, &forPlayer,
-	        VAL_INT, &sender, VAL_INT, &locX, VAL_INT, &locY, VAL_INT, &locZ))
+	                    VAL_INT, &sender, VAL_INT, &locX, VAL_INT, &locY, VAL_INT, &locZ))
 	{
 		debug(LOG_ERROR, "scrDropBeacon failed to pop parameters");
 		return false;
@@ -9244,7 +9244,7 @@ bool scrClosestDamagedGroupDroid(void)
 	SDWORD		x, y, healthLeft, wBestDist, wDist, maxRepairedBy, player;
 
 	if (!stackPopParams(6, VAL_INT, &player, ST_GROUP, &psGroup, VAL_INT, &healthLeft,
-	        VAL_INT, &x, VAL_INT, &y, VAL_INT, &maxRepairedBy))
+	                    VAL_INT, &x, VAL_INT, &y, VAL_INT, &maxRepairedBy))
 	{
 		debug(LOG_ERROR, "scrClosestDamagedGroupDroid: failed to pop");
 		return false;
@@ -9510,7 +9510,7 @@ bool scrPursueResearch(void)
 					break;
 				}
 				else if (!IsResearchCompleted(&asPlayerResList[player][tempIndex])
-				        && !IsResearchStartedPending(&asPlayerResList[player][tempIndex]))  //not avail and not busy with it, can check this PR's PR
+				         && !IsResearchStartedPending(&asPlayerResList[player][tempIndex]))  //not avail and not busy with it, can check this PR's PR
 				{
 					if (!asResearch[tempIndex].pPRList.empty())	//node has any nodes itself
 					{
@@ -9698,7 +9698,7 @@ bool scrSetBit(void)
 	int32_t				bSet;	// was BOOL (int) ** see warning about conversion
 
 	if (!stackPopParams(3, VAL_INT, &base,
-	        VAL_INT, &position, VAL_BOOL, &bSet))
+	                    VAL_INT, &position, VAL_BOOL, &bSet))
 	{
 		debug(LOG_ERROR, "scrSetBit(): failed to pop");
 		return false;
@@ -10208,7 +10208,7 @@ bool scrAssembleWeaponTemplate(void)
 	DROID_TEMPLATE			*pNewTemplate = NULL;
 
 	if (!stackPopParams(4, VAL_INT, &player, ST_BODY, &bodyIndex,
-	        ST_PROPULSION, &propIndex, ST_WEAPON, &weapIndex))
+	                    ST_PROPULSION, &propIndex, ST_WEAPON, &weapIndex))
 	{
 		return false;
 	}

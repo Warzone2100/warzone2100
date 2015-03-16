@@ -63,8 +63,8 @@ extern void loop_SetVideoPlaybackMode(void);
 extern void loop_ClearVideoPlaybackMode(void);
 extern bool loop_GetVideoStatus(void);
 extern SDWORD loop_GetVideoMode(void);
-extern bool	gamePaused( void );
-extern void	setGamePauseStatus( bool val );
+extern bool	gamePaused(void);
+extern void	setGamePauseStatus(bool val);
 extern void loopFastExit(void);
 
 extern bool gameUpdatePaused(void);

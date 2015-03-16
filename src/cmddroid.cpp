@@ -104,7 +104,7 @@ void cmdDroidAddDroid(DROID *psCommander, DROID *psDroid)
 	}
 	else
 	{
-		audio_PlayTrack( ID_SOUND_BUILD_FAIL );
+		audio_PlayTrack(ID_SOUND_BUILD_FAIL);
 		addConsoleMessage(_("Commander needs a higher level to command more units"), DEFAULT_JUSTIFY,  SYSTEM_MESSAGE);
 	}
 }
@@ -129,7 +129,7 @@ void cmdDroidClearDesignator(UDWORD player)
 	apsCmdDesignator[player] = NULL;
 }
 
-/** This function returns the index of the command droid. 
+/** This function returns the index of the command droid.
  * It does this by searching throughout all the player's droids.
  * @todo try to find something more efficient, has this function is of O(TotalNumberOfDroidsOfPlayer).
  */
@@ -143,10 +143,10 @@ SDWORD cmdDroidGetIndex(DROID *psCommander)
 		return 0;
 	}
 
-	for(psCurr=apsDroidLists[psCommander->player]; psCurr; psCurr=psCurr->psNext)
+	for (psCurr = apsDroidLists[psCommander->player]; psCurr; psCurr = psCurr->psNext)
 	{
 		if (psCurr->droidType == DROID_COMMAND &&
-			psCurr->id < psCommander->id)
+		    psCurr->id < psCommander->id)
 		{
 			index += 1;
 		}
@@ -166,16 +166,16 @@ bool cmdGetDroidMultiExpBoost()
 }
 
 /** This function returns the maximum group size of the command droid.*/
-unsigned int cmdDroidMaxGroup(const DROID* psCommander)
+unsigned int cmdDroidMaxGroup(const DROID *psCommander)
 {
-	return getDroidLevel(psCommander) * getBrainStats(const_cast<DROID*>(psCommander))->maxDroidsMult
-	       + getBrainStats(const_cast<DROID*>(psCommander))->maxDroids;
+	return getDroidLevel(psCommander) * getBrainStats(const_cast<DROID *>(psCommander))->maxDroidsMult
+	       + getBrainStats(const_cast<DROID *>(psCommander))->maxDroids;
 }
 
 /** This function adds experience to the command droid of the psKiller's command group.*/
 void cmdDroidUpdateKills(DROID *psKiller, uint32_t experienceInc)
 {
-	ASSERT_OR_RETURN( , psKiller != NULL, "invalid Unit pointer" );
+	ASSERT_OR_RETURN(, psKiller != NULL, "invalid Unit pointer");
 
 	if (hasCommander(psKiller))
 	{
@@ -185,12 +185,12 @@ void cmdDroidUpdateKills(DROID *psKiller, uint32_t experienceInc)
 }
 
 /** This function returns true if the droid is assigned to a commander group and it is not the commander.*/
-bool hasCommander(const DROID* psDroid)
+bool hasCommander(const DROID *psDroid)
 {
 	ASSERT_OR_RETURN(false, psDroid != NULL, "invalid droid pointer");
 
 	if (psDroid->droidType != DROID_COMMAND &&
-		psDroid->psGroup != NULL &&
+	    psDroid->psGroup != NULL &&
 	    psDroid->psGroup->type == GT_COMMAND)
 	{
 		return true;
@@ -200,9 +200,9 @@ bool hasCommander(const DROID* psDroid)
 }
 
 /** This function returns the level of a droids commander. If the droid doesn't have commander, it returns 0.*/
-unsigned int cmdGetCommanderLevel(const DROID* psDroid)
+unsigned int cmdGetCommanderLevel(const DROID *psDroid)
 {
-	const DROID* psCommander;
+	const DROID *psCommander;
 
 	ASSERT(psDroid != NULL, "invalid droid pointer");
 

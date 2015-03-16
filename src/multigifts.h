@@ -24,23 +24,23 @@
 #ifndef __INCLUDED_SRC_MULTIGIFTS_H__
 #define __INCLUDED_SRC_MULTIGIFTS_H__
 
-extern void requestAlliance		(uint8_t from, uint8_t to, bool prop, bool allowAudio);
-extern void breakAlliance		(uint8_t p1, uint8_t p2, bool prop, bool allowAudio);
-extern void formAlliance		(uint8_t p1, uint8_t p2, bool prop, bool allowAudio, bool allowNotification);
-extern void sendAlliance		(uint8_t from, uint8_t to, uint8_t state, int32_t value);
-extern bool recvAlliance                (NETQUEUE queue, bool allowAudio);  // Was declared in multirecv.h, too.
-extern void	createTeamAlliances	(void);
+extern void requestAlliance(uint8_t from, uint8_t to, bool prop, bool allowAudio);
+extern void breakAlliance(uint8_t p1, uint8_t p2, bool prop, bool allowAudio);
+extern void formAlliance(uint8_t p1, uint8_t p2, bool prop, bool allowAudio, bool allowNotification);
+extern void sendAlliance(uint8_t from, uint8_t to, uint8_t state, int32_t value);
+extern bool recvAlliance(NETQUEUE queue, bool allowAudio);                  // Was declared in multirecv.h, too.
+extern void	createTeamAlliances(void);
 
-extern bool sendGift			(uint8_t type, uint8_t to);
-extern bool recvGift                            (NETQUEUE queue);
+extern bool sendGift(uint8_t type, uint8_t to);
+extern bool recvGift(NETQUEUE queue);
 
-extern void technologyGiveAway				(const STRUCTURE* pS);
-extern void recvMultiPlayerFeature              (NETQUEUE queue);
+extern void technologyGiveAway(const STRUCTURE *pS);
+extern void recvMultiPlayerFeature(NETQUEUE queue);
 extern void sendMultiPlayerFeature(uint32_t ref, uint32_t x, uint32_t y, uint32_t id);
 
 bool pickupArtefact(int toPlayer, int fromPlayer);
-void giftPower                          (uint8_t from, uint8_t to, uint32_t amount, bool send);
-extern void giftRadar						(uint8_t from, uint8_t to, bool send);
+void giftPower(uint8_t from, uint8_t to, uint32_t amount, bool send);
+extern void giftRadar(uint8_t from, uint8_t to, bool send);
 
 #define RADAR_GIFT		1
 #define DROID_GIFT		2

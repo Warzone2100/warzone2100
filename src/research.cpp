@@ -70,19 +70,19 @@ UDWORD					aDefaultRepair[MAX_PLAYERS];
 //set the iconID based on the name read in in the stats
 static UWORD setIconID(char *pIconName, const char *pName);
 static void replaceComponent(COMPONENT_STATS *pNewComponent, COMPONENT_STATS *pOldComponent,
-					  UBYTE player);
+                             UBYTE player);
 static bool checkResearchName(RESEARCH *psRes, UDWORD numStats);
 
 //flag that indicates whether the player can self repair
 static UBYTE bSelfRepair[MAX_PLAYERS];
 static void replaceDroidComponent(DROID *pList, UDWORD oldType, UDWORD oldCompInc,
-                      UDWORD newCompInc);
+                                  UDWORD newCompInc);
 static void replaceStructureComponent(STRUCTURE *pList, UDWORD oldType, UDWORD oldCompInc,
-                      UDWORD newCompInc, UBYTE player);
-static void switchComponent(DROID *psDroid,UDWORD oldType, UDWORD oldCompInc,
-                     UDWORD newCompInc);
+                                      UDWORD newCompInc, UBYTE player);
+static void switchComponent(DROID *psDroid, UDWORD oldType, UDWORD oldCompInc,
+                            UDWORD newCompInc);
 static void replaceTransDroidComponents(DROID *psTransporter, UDWORD oldType,
-                                 UDWORD oldCompInc, UDWORD newCompInc);
+                                        UDWORD oldCompInc, UDWORD newCompInc);
 
 
 bool researchInitVars(void)
@@ -119,7 +119,7 @@ bool loadResearch(QString filename)
 		{
 			asPlayerResList[j].push_back(dummy);
 		}
-		
+
 		ini.beginGroup(list[inc]);
 		RESEARCH research;
 		research.index = inc;
@@ -132,7 +132,7 @@ bool loadResearch(QString filename)
 		research.ref = REF_RESEARCH_START + inc;
 
 		research.results = ini.json("results", QJsonArray());
-		
+
 		//set subGroup icon
 		QString subGroup = ini.value("subgroupIconID", "").toString();
 		if (subGroup.compare("") != 0)
@@ -147,10 +147,14 @@ bool loadResearch(QString filename)
 		//set key topic
 		unsigned int keyTopic = ini.value("keyTopic", 0).toUInt();
 		ASSERT(keyTopic <= 1, "Invalid keyTopic for research topic - '%s' ", getName(&research));
-		if(keyTopic <= 1)
+		if (keyTopic <= 1)
+		{
 			research.keyTopic = ini.value("keyTopic", 0).toUInt();
-		else 
+		}
+		else
+		{
 			research.keyTopic = 0;
+		}
 
 		//set tech code
 		UBYTE techCode = ini.value("techCode", 0).toUInt();
@@ -189,14 +193,14 @@ bool loadResearch(QString filename)
 		if (imdName.compare("") != 0)
 		{
 			research.pIMD = modelGet(imdName);
-			ASSERT(research.pIMD != NULL, "Cannot find the research PIE '%s' for record '%s'",imdName.toUtf8().data(), getName(&research));
+			ASSERT(research.pIMD != NULL, "Cannot find the research PIE '%s' for record '%s'", imdName.toUtf8().data(), getName(&research));
 		}
 
 		QString imdName2 = ini.value("imdName2", "").toString();
 		if (imdName2.compare("") != 0)
 		{
 			research.pIMD2 = modelGet(imdName2);
-			ASSERT(research.pIMD2 != NULL, "Cannot find the 2nd research '%s' PIE for record '%s'",imdName2.toUtf8().data(), getName(&research));
+			ASSERT(research.pIMD2 != NULL, "Cannot find the 2nd research '%s' PIE for record '%s'", imdName2.toUtf8().data(), getName(&research));
 		}
 
 		QString msgName = ini.value("msgName", "").toString();
@@ -232,7 +236,8 @@ bool loadResearch(QString filename)
 			if (pComp != NULL)
 			{
 				research.componentResults.push_back(pComp);
-			}else
+			}
+			else
 			{
 				ASSERT(false, "Invalid item '%s' in list of result components of research '%s' ", compID.toUtf8().constData(), getName(&research));
 			}
@@ -258,7 +263,7 @@ bool loadResearch(QString filename)
 				continue;
 			}
 			COMPONENT_STATS *newComp = getCompStatsFromName(newCompID);
-			if(newComp == NULL)
+			if (newComp == NULL)
 			{
 				ASSERT(false, "Invalid item '%s' in list of replaced components of research '%s'. Wrong component code.", newCompID.toUtf8().constData(), getName(&research));
 				continue;
@@ -278,7 +283,8 @@ bool loadResearch(QString filename)
 			if (pComp == NULL)
 			{
 				ASSERT(false, "Invalid item '%s' in list of redundant components of research '%s' ", compID.toUtf8().constData(), getName(&research));
-			}else
+			}
+			else
 			{
 				research.pRedArtefacts.push_back(pComp);
 			}
@@ -304,7 +310,7 @@ bool loadResearch(QString filename)
 			QString strucID = reqStruct[j].trimmed();
 			int structIndex = getStructStatFromName(strucID.toUtf8().data());
 			ASSERT(structIndex >= 0, "Invalid item '%s' in list of required structures of research '%s' ", strucID.toUtf8().constData(), getName(&research));
-			if(structIndex >= 0)
+			if (structIndex >= 0)
 			{
 				research.pStructList.push_back(structIndex);
 			}
@@ -337,7 +343,9 @@ bool loadResearch(QString filename)
 			RESEARCH *preResItem = getResearch(resID.toUtf8().constData());
 			ASSERT(preResItem != NULL, "Invalid item '%s' in list of pre-requisites of research '%s' ", resID.toUtf8().constData(), getName(&asResearch[inc]));
 			if (preResItem != NULL)
+			{
 				asResearch[inc].pPRList.push_back(preResItem->index);
+			}
 		}
 	}
 
@@ -404,7 +412,7 @@ bool researchAvailable(int inc, int playerID, QUEUE_MODE mode)
 		bPRFound = true;
 		for (incPR = 0; incPR < asResearch[inc].pPRList.size(); incPR++)
 		{
-			if (IsResearchCompleted(&(asPlayerResList[playerID][asResearch[inc].pPRList[incPR]]))==0)
+			if (IsResearchCompleted(&(asPlayerResList[playerID][asResearch[inc].pPRList[incPR]])) == 0)
 			{
 				// if haven't pre-requisite - quit checking rest
 				bPRFound = false;
@@ -456,9 +464,9 @@ There can only be 'limit' number of entries
 // NOTE by AJL may 99 - skirmish now has it's own version of this, skTopicAvail.
 UWORD fillResearchList(UWORD *plist, UDWORD playerID, UWORD topic, UWORD limit)
 {
-	UWORD				inc, count=0;
+	UWORD				inc, count = 0;
 
-	for (inc=0; inc < asResearch.size(); inc++)
+	for (inc = 0; inc < asResearch.size(); inc++)
 	{
 		// if the inc matches the 'topic' - automatically add to the list
 		if (inc == topic || researchAvailable(inc, playerID, ModeQueue))
@@ -477,12 +485,12 @@ UWORD fillResearchList(UWORD *plist, UDWORD playerID, UWORD topic, UWORD limit)
 /* process the results of a completed research topic */
 void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE *psResearchFacility, bool bTrigger)
 {
-	RESEARCH *                                      pResearch = &asResearch[researchIndex];
+	RESEARCH                                       *pResearch = &asResearch[researchIndex];
 	MESSAGE						*pMessage;
 	//the message gets sent to console
 	char						consoleMsg[MAX_RESEARCH_MSG_SIZE];
 
-	ASSERT_OR_RETURN( , researchIndex < asResearch.size(), "Invalid research index %u", researchIndex);
+	ASSERT_OR_RETURN(, researchIndex < asResearch.size(), "Invalid research index %u", researchIndex);
 
 	MakeResearchCompleted(&asPlayerResList[player][researchIndex]);
 
@@ -623,8 +631,8 @@ void ResearchRelease(void)
 /*puts research facility on hold*/
 void holdResearch(STRUCTURE *psBuilding, QUEUE_MODE mode)
 {
-	ASSERT( psBuilding->pStructureType->type == REF_RESEARCH,
-		"holdResearch: structure not a research facility" );
+	ASSERT(psBuilding->pStructureType->type == REF_RESEARCH,
+	       "holdResearch: structure not a research facility");
 
 	RESEARCH_FACILITY *psResFac = &psBuilding->pFunctionality->researchFacility;
 
@@ -652,8 +660,8 @@ void holdResearch(STRUCTURE *psBuilding, QUEUE_MODE mode)
 /*release a research facility from hold*/
 void releaseResearch(STRUCTURE *psBuilding, QUEUE_MODE mode)
 {
-	ASSERT( psBuilding->pStructureType->type == REF_RESEARCH,
-		"releaseResearch: structure not a research facility" );
+	ASSERT(psBuilding->pStructureType->type == REF_RESEARCH,
+	       "releaseResearch: structure not a research facility");
 
 	RESEARCH_FACILITY *psResFac = &psBuilding->pFunctionality->researchFacility;
 
@@ -681,16 +689,16 @@ void CancelAllResearch(UDWORD pl)
 {
 	STRUCTURE	*psCurr;
 
-	for (psCurr=apsStructLists[pl]; psCurr != NULL; psCurr = psCurr->psNext)
+	for (psCurr = apsStructLists[pl]; psCurr != NULL; psCurr = psCurr->psNext)
 	{
 		if (psCurr->pStructureType->type == REF_RESEARCH)
 		{
 			if (
-				 ( ((RESEARCH_FACILITY *)psCurr->pFunctionality)!=NULL )
-			 &&  ( ((RESEARCH_FACILITY *)psCurr->pFunctionality)->psSubject !=NULL )
-			   )
+			    (((RESEARCH_FACILITY *)psCurr->pFunctionality) != NULL)
+			    && (((RESEARCH_FACILITY *)psCurr->pFunctionality)->psSubject != NULL)
+			)
 			{
-				debug( LOG_NEVER, "canceling research for %p\n", psCurr );
+				debug(LOG_NEVER, "canceling research for %p\n", psCurr);
 				cancelResearch(psCurr, ModeQueue);
 			}
 		}
@@ -707,7 +715,7 @@ void cancelResearch(STRUCTURE *psBuilding, QUEUE_MODE mode)
 	ASSERT(psBuilding->pStructureType->type == REF_RESEARCH, "Structure not a research facility");
 
 	RESEARCH_FACILITY *psResFac = &psBuilding->pFunctionality->researchFacility;
-	if( !(RESEARCH *)psResFac->psSubject)
+	if (!(RESEARCH *)psResFac->psSubject)
 	{
 		debug(LOG_SYNC, "Invalid research topic");
 		return;
@@ -793,216 +801,216 @@ static UWORD setIconID(char *pIconName, const char *pName)
 		return IMAGE_RES_DROIDTECH;
 	}
 
-	if (!strcmp(pIconName,"IMAGE_RES_WEAPONTECH"))
+	if (!strcmp(pIconName, "IMAGE_RES_WEAPONTECH"))
 	{
 		return IMAGE_RES_WEAPONTECH;
 	}
 
-	if (!strcmp(pIconName,"IMAGE_RES_COMPUTERTECH"))
+	if (!strcmp(pIconName, "IMAGE_RES_COMPUTERTECH"))
 	{
 		return IMAGE_RES_COMPUTERTECH;
 	}
 
-	if (!strcmp(pIconName,"IMAGE_RES_POWERTECH"))
+	if (!strcmp(pIconName, "IMAGE_RES_POWERTECH"))
 	{
 		return IMAGE_RES_POWERTECH;
 	}
 
-	if (!strcmp(pIconName,"IMAGE_RES_SYSTEMTECH"))
+	if (!strcmp(pIconName, "IMAGE_RES_SYSTEMTECH"))
 	{
 		return IMAGE_RES_SYSTEMTECH;
 	}
 
-	if (!strcmp(pIconName,"IMAGE_RES_STRUCTURETECH"))
+	if (!strcmp(pIconName, "IMAGE_RES_STRUCTURETECH"))
 	{
 		return IMAGE_RES_STRUCTURETECH;
 	}
 
-	if (!strcmp(pIconName,"IMAGE_RES_CYBORGTECH"))
+	if (!strcmp(pIconName, "IMAGE_RES_CYBORGTECH"))
 	{
 		return IMAGE_RES_CYBORGTECH;
 	}
 
-	if (!strcmp(pIconName,"IMAGE_RES_DEFENCE"))
+	if (!strcmp(pIconName, "IMAGE_RES_DEFENCE"))
 	{
 		return IMAGE_RES_DEFENCE;
 	}
 
-	if (!strcmp(pIconName,"IMAGE_RES_QUESTIONMARK"))
+	if (!strcmp(pIconName, "IMAGE_RES_QUESTIONMARK"))
 	{
 		return IMAGE_RES_QUESTIONMARK;
 	}
 
-	if (!strcmp(pIconName,"IMAGE_RES_GRPACC"))
+	if (!strcmp(pIconName, "IMAGE_RES_GRPACC"))
 	{
 		return IMAGE_RES_GRPACC;
 	}
 
-	if (!strcmp(pIconName,"IMAGE_RES_GRPUPG"))
+	if (!strcmp(pIconName, "IMAGE_RES_GRPUPG"))
 	{
 		return IMAGE_RES_GRPUPG;
 	}
 
-	if (!strcmp(pIconName,"IMAGE_RES_GRPREP"))
+	if (!strcmp(pIconName, "IMAGE_RES_GRPREP"))
 	{
 		return IMAGE_RES_GRPREP;
 	}
 
-	if (!strcmp(pIconName,"IMAGE_RES_GRPROF"))
+	if (!strcmp(pIconName, "IMAGE_RES_GRPROF"))
 	{
 		return IMAGE_RES_GRPROF;
 	}
 
-	if (!strcmp(pIconName,"IMAGE_RES_GRPDAM"))
+	if (!strcmp(pIconName, "IMAGE_RES_GRPDAM"))
 	{
 		return IMAGE_RES_GRPDAM;
 	}
 
 	// Add more names as images are created
-	ASSERT( false, "Invalid icon graphic %s for topic %s", pIconName, pName );
+	ASSERT(false, "Invalid icon graphic %s for topic %s", pIconName, pName);
 
 	return NO_RESEARCH_ICON;	// Should never get here.
 }
 
 
-SDWORD	mapRIDToIcon( UDWORD rid )
+SDWORD	mapRIDToIcon(UDWORD rid)
 {
-	switch(rid)
+	switch (rid)
 	{
 	case RID_ROCKET:
-		return(IMAGE_ROCKET);
+		return (IMAGE_ROCKET);
 		break;
 	case RID_CANNON:
-		return(IMAGE_CANNON);
+		return (IMAGE_CANNON);
 		break;
 	case RID_HOVERCRAFT:
-		return(IMAGE_HOVERCRAFT);
+		return (IMAGE_HOVERCRAFT);
 		break;
 	case RID_ECM:
-		return(IMAGE_ECM);
+		return (IMAGE_ECM);
 		break;
 	case RID_PLASCRETE:
-		return(IMAGE_PLASCRETE);
+		return (IMAGE_PLASCRETE);
 		break;
 	case RID_TRACKS:
-		return(IMAGE_TRACKS);
+		return (IMAGE_TRACKS);
 		break;
 	case RID_DROIDTECH:
-		return(IMAGE_RES_DROIDTECH);
+		return (IMAGE_RES_DROIDTECH);
 		break;
 	case RID_WEAPONTECH:
-		return(IMAGE_RES_WEAPONTECH);
+		return (IMAGE_RES_WEAPONTECH);
 		break;
 	case RID_COMPUTERTECH:
-		return(IMAGE_RES_COMPUTERTECH);
+		return (IMAGE_RES_COMPUTERTECH);
 		break;
 	case RID_POWERTECH:
-		return(IMAGE_RES_POWERTECH);
+		return (IMAGE_RES_POWERTECH);
 		break;
 	case RID_SYSTEMTECH:
-		return(IMAGE_RES_SYSTEMTECH);
+		return (IMAGE_RES_SYSTEMTECH);
 		break;
 	case RID_STRUCTURETECH:
-		return(IMAGE_RES_STRUCTURETECH);
+		return (IMAGE_RES_STRUCTURETECH);
 		break;
 	case RID_CYBORGTECH:
-		return(IMAGE_RES_CYBORGTECH);
+		return (IMAGE_RES_CYBORGTECH);
 		break;
 	case RID_DEFENCE:
-		return(IMAGE_RES_DEFENCE);
+		return (IMAGE_RES_DEFENCE);
 		break;
 	case RID_QUESTIONMARK:
-		return(IMAGE_RES_QUESTIONMARK);
+		return (IMAGE_RES_QUESTIONMARK);
 		break;
 	case RID_GRPACC:
-		return(IMAGE_RES_GRPACC);
+		return (IMAGE_RES_GRPACC);
 		break;
 	case RID_GRPUPG:
-		return(IMAGE_RES_GRPUPG);
+		return (IMAGE_RES_GRPUPG);
 		break;
 	case RID_GRPREP:
-		return(IMAGE_RES_GRPREP);
+		return (IMAGE_RES_GRPREP);
 		break;
 	case RID_GRPROF:
-		return(IMAGE_RES_GRPROF);
+		return (IMAGE_RES_GRPROF);
 		break;
 	case RID_GRPDAM:
-		return(IMAGE_RES_GRPDAM);
+		return (IMAGE_RES_GRPDAM);
 		break;
 
 	default:
-		ASSERT( false,"Weirdy mapping request for RID to icon" );
-		return(-1); //pass back a value that can never have been set up
+		ASSERT(false, "Weirdy mapping request for RID to icon");
+		return (-1); //pass back a value that can never have been set up
 		break;
 	}
 }
 
 SDWORD	mapIconToRID(UDWORD iconID)
 {
-	switch(iconID)
+	switch (iconID)
 	{
 	case IMAGE_ROCKET:
-		return(RID_ROCKET);
+		return (RID_ROCKET);
 		break;
 	case IMAGE_CANNON:
-		return(RID_CANNON);
+		return (RID_CANNON);
 		break;
 	case IMAGE_HOVERCRAFT:
-		return(RID_HOVERCRAFT);
+		return (RID_HOVERCRAFT);
 		break;
 	case IMAGE_ECM:
-		return(RID_ECM);
+		return (RID_ECM);
 		break;
 	case IMAGE_PLASCRETE:
-		return(RID_PLASCRETE);
+		return (RID_PLASCRETE);
 		break;
 	case IMAGE_TRACKS:
-		return(RID_TRACKS);
+		return (RID_TRACKS);
 		break;
 	case IMAGE_RES_DROIDTECH:
-		return(RID_DROIDTECH);
+		return (RID_DROIDTECH);
 		break;
 	case IMAGE_RES_WEAPONTECH:
-		return(RID_WEAPONTECH);
+		return (RID_WEAPONTECH);
 		break;
 	case IMAGE_RES_COMPUTERTECH:
-		return(RID_COMPUTERTECH);
+		return (RID_COMPUTERTECH);
 		break;
 	case IMAGE_RES_POWERTECH:
-		return(RID_POWERTECH);
+		return (RID_POWERTECH);
 		break;
 	case IMAGE_RES_SYSTEMTECH:
-		return(RID_SYSTEMTECH);
+		return (RID_SYSTEMTECH);
 		break;
 	case IMAGE_RES_STRUCTURETECH:
-		return(RID_STRUCTURETECH);
+		return (RID_STRUCTURETECH);
 		break;
 	case IMAGE_RES_CYBORGTECH:
-		return(RID_CYBORGTECH);
+		return (RID_CYBORGTECH);
 		break;
 	case IMAGE_RES_DEFENCE:
-		return(RID_DEFENCE);
+		return (RID_DEFENCE);
 		break;
 	case IMAGE_RES_QUESTIONMARK:
-		return(RID_QUESTIONMARK);
+		return (RID_QUESTIONMARK);
 		break;
 	case IMAGE_RES_GRPACC:
-		return(RID_GRPACC);
+		return (RID_GRPACC);
 		break;
 	case IMAGE_RES_GRPUPG:
-		return(RID_GRPUPG);
+		return (RID_GRPUPG);
 		break;
 	case IMAGE_RES_GRPREP:
-		return(RID_GRPREP);
+		return (RID_GRPREP);
 		break;
 	case IMAGE_RES_GRPROF:
-		return(RID_GRPROF);
+		return (RID_GRPROF);
 		break;
 	case IMAGE_RES_GRPDAM:
-		return(RID_GRPDAM);
+		return (RID_GRPDAM);
 		break;
 	default:
-		return(-1); //pass back a value that can never have been set up
+		return (-1); //pass back a value that can never have been set up
 		break;
 	}
 }
@@ -1024,7 +1032,7 @@ RESEARCH *getResearch(const char *pName)
 /* looks through the players lists of structures and droids to see if any are using
  the old component - if any then replaces them with the new component */
 static void replaceComponent(COMPONENT_STATS *pNewComponent, COMPONENT_STATS *pOldComponent,
-					  UBYTE player)
+                             UBYTE player)
 {
 	DROID_TEMPLATE	*psTemplates;
 	COMPONENT_TYPE oldType = pOldComponent->compType;
@@ -1045,33 +1053,33 @@ static void replaceComponent(COMPONENT_STATS *pNewComponent, COMPONENT_STATS *pO
 	//check thru the templates
 	for (psTemplates = apsDroidTemplates[player]; psTemplates != NULL; psTemplates = psTemplates->psNext)
 	{
-		switch(oldType)
+		switch (oldType)
 		{
-			case COMP_BODY:
-			case COMP_BRAIN:
-			case COMP_PROPULSION:
-			case COMP_REPAIRUNIT:
-			case COMP_ECM:
-			case COMP_SENSOR:
-			case COMP_CONSTRUCT:
-				if (psTemplates->asParts[oldType] == (SDWORD)oldCompInc)
+		case COMP_BODY:
+		case COMP_BRAIN:
+		case COMP_PROPULSION:
+		case COMP_REPAIRUNIT:
+		case COMP_ECM:
+		case COMP_SENSOR:
+		case COMP_CONSTRUCT:
+			if (psTemplates->asParts[oldType] == (SDWORD)oldCompInc)
+			{
+				psTemplates->asParts[oldType] = newCompInc;
+			}
+			break;
+		case COMP_WEAPON:
+			for (int inc = 0; inc < psTemplates->numWeaps; inc++)
+			{
+				if (psTemplates->asWeaps[inc] == oldCompInc)
 				{
-					psTemplates->asParts[oldType] = newCompInc;
+					psTemplates->asWeaps[inc] = newCompInc;
 				}
-				break;
-			case COMP_WEAPON:
-				for (int inc = 0; inc < psTemplates->numWeaps; inc++)
-				{
-					if (psTemplates->asWeaps[inc] == oldCompInc)
-					{
-						psTemplates->asWeaps[inc] = newCompInc;
-					}
-				}
-				break;
-			default:
-				//unknown comp type
-				debug( LOG_ERROR, "Unknown component type - invalid Template" );
-				return;
+			}
+			break;
+		default:
+			//unknown comp type
+			debug(LOG_ERROR, "Unknown component type - invalid Template");
+			return;
 		}
 	}
 
@@ -1103,7 +1111,7 @@ bool enableResearch(RESEARCH *psResearch, UDWORD player)
 	inc = psResearch->index;
 	if (inc > asResearch.size())
 	{
-		ASSERT( false, "enableResearch: Invalid research topic - %s", getName(psResearch) );
+		ASSERT(false, "enableResearch: Invalid research topic - %s", getName(psResearch));
 		return false;
 	}
 
@@ -1131,7 +1139,7 @@ void researchReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 
 	//look through the losing players structures to find a research facility
 	for (psStruct = apsStructLists[losingPlayer]; psStruct != NULL; psStruct =
-		psStruct->psNext)
+	         psStruct->psNext)
 	{
 		if (psStruct->pStructureType->type == REF_RESEARCH)
 		{
@@ -1139,7 +1147,7 @@ void researchReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 			if (psFacility->psBestTopic)
 			{
 				topicIndex = ((RESEARCH *)psFacility->psBestTopic)->ref -
-					REF_RESEARCH_START;
+				             REF_RESEARCH_START;
 				if (topicIndex)
 				{
 					//if it cost more - it is better (or should be)
@@ -1161,9 +1169,9 @@ void researchReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 		if (rewardPlayer == selectedPlayer)
 		{
 			//name the actual reward
-			CONPRINTF(ConsoleString,(ConsoleString,"%s :- %s",
-				_("Research Award"),
-				getName(&asResearch[rewardID])));
+			CONPRINTF(ConsoleString, (ConsoleString, "%s :- %s",
+			                          _("Research Award"),
+			                          getName(&asResearch[rewardID])));
 		}
 	}
 }
@@ -1203,7 +1211,7 @@ bool wallDefenceStruct(STRUCTURE_STATS *psStats)
 
 /*for a given list of droids, replace the old component if exists*/
 void replaceDroidComponent(DROID *pList, UDWORD oldType, UDWORD oldCompInc,
-                      UDWORD newCompInc)
+                           UDWORD newCompInc)
 {
 	DROID   *psDroid;
 
@@ -1223,22 +1231,22 @@ void replaceDroidComponent(DROID *pList, UDWORD oldType, UDWORD oldCompInc,
 void replaceTransDroidComponents(DROID *psTransporter, UDWORD oldType,
                                  UDWORD oldCompInc, UDWORD newCompInc)
 {
-    DROID       *psCurr;
+	DROID       *psCurr;
 
 	ASSERT(isTransporter(psTransporter), "invalid unit type");
 
-    for (psCurr = psTransporter->psGroup->psList; psCurr != NULL; psCurr =
-        psCurr->psGrpNext)
-    {
-        if (psCurr != psTransporter)
-        {
-            switchComponent(psCurr, oldType, oldCompInc, newCompInc);
-        }
-    }
+	for (psCurr = psTransporter->psGroup->psList; psCurr != NULL; psCurr =
+	         psCurr->psGrpNext)
+	{
+		if (psCurr != psTransporter)
+		{
+			switchComponent(psCurr, oldType, oldCompInc, newCompInc);
+		}
+	}
 }
 
 void replaceStructureComponent(STRUCTURE *pList, UDWORD oldType, UDWORD oldCompInc,
-                      UDWORD newCompInc, UBYTE player)
+                               UDWORD newCompInc, UBYTE player)
 {
 	STRUCTURE   *psStructure;
 	int			inc;
@@ -1254,21 +1262,21 @@ void replaceStructureComponent(STRUCTURE *pList, UDWORD oldType, UDWORD oldCompI
 	{
 		switch (oldType)
 		{
-			case COMP_WEAPON:
-				for (inc=0; inc < psStructure->numWeaps; inc++)
+		case COMP_WEAPON:
+			for (inc = 0; inc < psStructure->numWeaps; inc++)
+			{
+				if (psStructure->asWeaps[inc].nStat > 0)
 				{
-					if (psStructure->asWeaps[inc].nStat > 0)
+					if (psStructure->asWeaps[inc].nStat == oldCompInc)
 					{
-						if (psStructure->asWeaps[inc].nStat == oldCompInc)
-						{
-							psStructure->asWeaps[inc].nStat = newCompInc;
-						}
+						psStructure->asWeaps[inc].nStat = newCompInc;
 					}
 				}
-				break;
-			default:
-				//ignore all other component types
-				break;
+			}
+			break;
+		default:
+			//ignore all other component types
+			break;
 		}
 	}
 }
@@ -1279,45 +1287,57 @@ static void switchComponent(DROID *psDroid, UDWORD oldType, UDWORD oldCompInc,
 {
 	ASSERT(psDroid != NULL, "switchComponent:invalid droid pointer");
 
-	switch(oldType)
+	switch (oldType)
 	{
-		case COMP_BODY:
-		case COMP_BRAIN:
-		case COMP_PROPULSION:
-		case COMP_REPAIRUNIT:
-		case COMP_ECM:
-		case COMP_SENSOR:
-		case COMP_CONSTRUCT:
-			if (psDroid->asBits[oldType] == oldCompInc)
+	case COMP_BODY:
+	case COMP_BRAIN:
+	case COMP_PROPULSION:
+	case COMP_REPAIRUNIT:
+	case COMP_ECM:
+	case COMP_SENSOR:
+	case COMP_CONSTRUCT:
+		if (psDroid->asBits[oldType] == oldCompInc)
+		{
+			psDroid->asBits[oldType] = (UBYTE)newCompInc;
+		}
+		break;
+	case COMP_WEAPON:
+		// Can only be one weapon now
+		if (psDroid->asWeaps[0].nStat > 0)
+		{
+			if (psDroid->asWeaps[0].nStat == oldCompInc)
 			{
-				psDroid->asBits[oldType] = (UBYTE)newCompInc;
+				psDroid->asWeaps[0].nStat = newCompInc;
 			}
-			break;
-		case COMP_WEAPON:
-			// Can only be one weapon now
-			if (psDroid->asWeaps[0].nStat > 0)
-			{
-				if (psDroid->asWeaps[0].nStat == oldCompInc)
-				{
-					psDroid->asWeaps[0].nStat = newCompInc;
-				}
-			}
-			break;
-		default:
-			//unknown comp type
-			debug( LOG_ERROR, "Unknown component type - invalid droid" );
-			abort();
-			return;
+		}
+		break;
+	default:
+		//unknown comp type
+		debug(LOG_ERROR, "Unknown component type - invalid droid");
+		abort();
+		return;
 	}
 }
 
 static inline bool allyResearchSortFunction(AllyResearch const &a, AllyResearch const &b)
 {
-	if (a.active         != b.active)         { return a.active; }
-	if (a.timeToResearch != b.timeToResearch) { return (unsigned)a.timeToResearch < (unsigned)b.timeToResearch; }  // Unsigned cast = sort -1 as infinite.
-	if (a.powerNeeded    != b.powerNeeded)    { return (unsigned)a.powerNeeded    < (unsigned)b.powerNeeded;    }
-	if (a.completion     != b.completion)     { return           a.completion     >           b.completion;     }
-	                                            return           a.player         <           b.player;
+	if (a.active         != b.active)
+	{
+		return a.active;
+	}
+	if (a.timeToResearch != b.timeToResearch)
+	{
+		return (unsigned)a.timeToResearch < (unsigned)b.timeToResearch;    // Unsigned cast = sort -1 as infinite.
+	}
+	if (a.powerNeeded    != b.powerNeeded)
+	{
+		return (unsigned)a.powerNeeded    < (unsigned)b.powerNeeded;
+	}
+	if (a.completion     != b.completion)
+	{
+		return           a.completion     >           b.completion;
+	}
+	return           a.player         <           b.player;
 }
 
 std::vector<AllyResearch> const &listAllyResearch(unsigned ref)

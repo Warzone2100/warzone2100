@@ -179,17 +179,17 @@ bool fpathIsEquivalentBlocking(PROPULSION_TYPE propulsion1, int player1, FPATH_M
 	int domain1, domain2;
 	switch (propulsion1)
 	{
-		default:                        domain1 = 0; break;  // Land
-		case PROPULSION_TYPE_LIFT:      domain1 = 1; break;  // Air
-		case PROPULSION_TYPE_PROPELLOR: domain1 = 2; break;  // Water
-		case PROPULSION_TYPE_HOVER:     domain1 = 3; break;  // Land and water
+	default:                        domain1 = 0; break;  // Land
+	case PROPULSION_TYPE_LIFT:      domain1 = 1; break;  // Air
+	case PROPULSION_TYPE_PROPELLOR: domain1 = 2; break;  // Water
+	case PROPULSION_TYPE_HOVER:     domain1 = 3; break;  // Land and water
 	}
 	switch (propulsion2)
 	{
-		default:                        domain2 = 0; break;  // Land
-		case PROPULSION_TYPE_LIFT:      domain2 = 1; break;  // Air
-		case PROPULSION_TYPE_PROPELLOR: domain2 = 2; break;  // Water
-		case PROPULSION_TYPE_HOVER:     domain2 = 3; break;  // Land and water
+	default:                        domain2 = 0; break;  // Land
+	case PROPULSION_TYPE_LIFT:      domain2 = 1; break;  // Air
+	case PROPULSION_TYPE_PROPELLOR: domain2 = 2; break;  // Water
+	case PROPULSION_TYPE_HOVER:     domain2 = 3; break;  // Land and water
 	}
 
 	if (domain1 != domain2)
@@ -252,9 +252,9 @@ bool fpathBaseBlockingTile(SDWORD x, SDWORD y, PROPULSION_TYPE propulsion, int m
 	int auxMask = 0;
 	switch (moveType)
 	{
-		case FMT_MOVE:   auxMask = AUXBITS_NONPASSABLE; break;   // do not wish to shoot our way through enemy buildings, but want to go through friendly gates (without shooting them)
-		case FMT_ATTACK: auxMask = AUXBITS_OUR_BUILDING; break;  // move blocked by friendly building, assuming we do not want to shoot it up en route
-		case FMT_BLOCK:  auxMask = AUXBITS_BLOCKING; break;      // Do not wish to tunnel through closed gates or buildings.
+	case FMT_MOVE:   auxMask = AUXBITS_NONPASSABLE; break;   // do not wish to shoot our way through enemy buildings, but want to go through friendly gates (without shooting them)
+	case FMT_ATTACK: auxMask = AUXBITS_OUR_BUILDING; break;  // move blocked by friendly building, assuming we do not want to shoot it up en route
+	case FMT_BLOCK:  auxMask = AUXBITS_BLOCKING; break;      // Do not wish to tunnel through closed gates or buildings.
 	}
 
 	unsigned unitbits = prop2bits(propulsion);  // TODO - cache prop2bits to psDroid, and pass in instead of propulsion type
@@ -292,16 +292,16 @@ static Position findNonblockingPosition(Position pos, PROPULSION_TYPE propulsion
 	int bestDistSq = INT32_MAX;
 	for (int y = -2; y <= 2; ++y)
 		for (int x = -2; x <= 2; ++x)
-	{
-		Vector2i tile = centreTile + Vector2i(x, y);
-		Vector2i diff = world_coord(tile) + Vector2i(TILE_UNITS/2, TILE_UNITS/2) - removeZ(pos);
-		int distSq = diff*diff;
-		if (distSq < bestDistSq && !fpathBaseBlockingTile(tile.x, tile.y, propulsion, player, moveType))
 		{
-			bestTile = tile;
-			bestDistSq = distSq;
+			Vector2i tile = centreTile + Vector2i(x, y);
+			Vector2i diff = world_coord(tile) + Vector2i(TILE_UNITS / 2, TILE_UNITS / 2) - removeZ(pos);
+			int distSq = diff * diff;
+			if (distSq < bestDistSq && !fpathBaseBlockingTile(tile.x, tile.y, propulsion, player, moveType))
+			{
+				bestTile = tile;
+				bestDistSq = distSq;
+			}
 		}
-	}
 
 	// Return point on tile closest to the original pos.
 	Vector2i minCoord = world_coord(bestTile);
@@ -338,7 +338,7 @@ void fpathRemoveDroidData(int id)
 			psJob->deleted = true;  // Don't delete the job, since job execution order matters, so tell it to throw away the result after executing, instead.
 		}
 	}
-	for (std::list<PATHRESULT>::iterator psResult = pathResults.begin(); psResult != pathResults.end(); )
+	for (std::list<PATHRESULT>::iterator psResult = pathResults.begin(); psResult != pathResults.end();)
 	{
 		if (psResult->droidID == id)
 		{
@@ -353,7 +353,7 @@ void fpathRemoveDroidData(int id)
 	wzMutexUnlock(fpathMutex);
 }
 
-static FPATH_RETVAL fpathRoute(MOVE_CONTROL *psMove, int id, int startX, int startY, int tX, int tY, PROPULSION_TYPE propulsionType, 
+static FPATH_RETVAL fpathRoute(MOVE_CONTROL *psMove, int id, int startX, int startY, int tX, int tY, PROPULSION_TYPE propulsionType,
                                DROID_TYPE droidType, FPATH_MOVETYPE moveType, int owner, bool acceptNearest, StructureBounds const &dstStructure)
 {
 	objTrace(id, "called(*,id=%d,sx=%d,sy=%d,ex=%d,ey=%d,prop=%d,type=%d,move=%d,owner=%d)", id, startX, startY, tX, tY, (int)propulsionType, (int)droidType, (int)moveType, owner);
@@ -466,7 +466,7 @@ queuePathfinding:
 
 
 // Find a route for an DROID to a location in world coordinates
-FPATH_RETVAL fpathDroidRoute(DROID* psDroid, SDWORD tX, SDWORD tY, FPATH_MOVETYPE moveType)
+FPATH_RETVAL fpathDroidRoute(DROID *psDroid, SDWORD tX, SDWORD tY, FPATH_MOVETYPE moveType)
 {
 	bool acceptNearest;
 	PROPULSION_STATS *psPropStats = getPropulsionStats(psDroid);
@@ -495,7 +495,7 @@ FPATH_RETVAL fpathDroidRoute(DROID* psDroid, SDWORD tX, SDWORD tY, FPATH_MOVETYP
 	case DORDER_BUILD:
 	case DORDER_LINEBUILD:                       // build a number of structures in a row (walls + bridges)
 		dstStructure = getStructureBounds(psDroid->order.psStats, psDroid->order.pos, psDroid->order.direction);  // Just need to get close enough to build (can be diagonally), do not need to reach the destination tile.
-		// Continue, do not break.
+	// Continue, do not break.
 	case DORDER_HELPBUILD:                       // help to build a structure
 	case DORDER_DEMOLISH:                        // demolish a structure
 	case DORDER_REPAIR:
@@ -505,7 +505,7 @@ FPATH_RETVAL fpathDroidRoute(DROID* psDroid, SDWORD tX, SDWORD tY, FPATH_MOVETYP
 		acceptNearest = true;
 		break;
 	}
-	return fpathRoute(&psDroid->sMove, psDroid->id, startPos.x, startPos.y, endPos.x, endPos.y, psPropStats->propulsionType, 
+	return fpathRoute(&psDroid->sMove, psDroid->id, startPos.x, startPos.y, endPos.x, endPos.y, psPropStats->propulsionType,
 	                  psDroid->droidType, moveType, psDroid->player, acceptNearest, dstStructure);
 }
 
@@ -600,7 +600,10 @@ void fpathTest(int x, int y, int x2, int y2)
 
 	/* This should not leak memory */
 	sMove.asPath = NULL;
-	for (i = 0; i < 100; i++) fpathSetMove(&sMove, 1, 1);
+	for (i = 0; i < 100; i++)
+	{
+		fpathSetMove(&sMove, 1, 1);
+	}
 	free(sMove.asPath);
 	sMove.asPath = NULL;
 
@@ -612,7 +615,10 @@ void fpathTest(int x, int y, int x2, int y2)
 	assert(fpathJobQueueLength() == 1 || fpathResultQueueLength() == 1);
 	fpathRemoveDroidData(2);	// should not crash, nor remove our path
 	assert(fpathJobQueueLength() == 1 || fpathResultQueueLength() == 1);
-	while (fpathResultQueueLength() == 0) wzYieldCurrentThread();
+	while (fpathResultQueueLength() == 0)
+	{
+		wzYieldCurrentThread();
+	}
 	assert(fpathJobQueueLength() == 0);
 	assert(fpathResultQueueLength() == 1);
 	r = fpathSimpleRoute(&sMove, 1, x, y, x2, y2);
@@ -629,7 +635,10 @@ void fpathTest(int x, int y, int x2, int y2)
 		r = fpathSimpleRoute(&sMove, i, x, y, x2, y2);
 		assert(r == FPR_WAIT);
 	}
-	while (fpathResultQueueLength() != 100) wzYieldCurrentThread();
+	while (fpathResultQueueLength() != 100)
+	{
+		wzYieldCurrentThread();
+	}
 	assert(fpathJobQueueLength() == 0);
 	for (i = 1; i <= 100; i++)
 	{

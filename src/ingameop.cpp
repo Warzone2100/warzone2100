@@ -84,12 +84,12 @@ static bool addIGTextButton(UDWORD id, UWORD x, UWORD y, UWORD width, const char
 
 static bool addQuitOptions(void)
 {
-	if (widgGetFromID(psWScreen,INTINGAMEOP))
+	if (widgGetFromID(psWScreen, INTINGAMEOP))
 	{
 		widgDelete(psWScreen, INTINGAMEOP);		// get rid of the old stuff.
 	}
 
-	if (widgGetFromID(psWScreen,INTINGAMEPOPUP))
+	if (widgGetFromID(psWScreen, INTINGAMEPOPUP))
 	{
 		widgDelete(psWScreen, INTINGAMEPOPUP);		// get rid of the old stuff.
 	}
@@ -131,7 +131,7 @@ static bool addQuitOptions(void)
 
 static bool addSlideOptions(void)
 {
-	if (widgGetFromID(psWScreen,INTINGAMEOP))
+	if (widgGetFromID(psWScreen, INTINGAMEOP))
 	{
 		widgDelete(psWScreen, INTINGAMEOP);		// get rid of the old stuff.
 	}
@@ -145,30 +145,30 @@ static bool addSlideOptions(void)
 
 	// fx vol
 	addIGTextButton(INTINGAMEOP_FXVOL, INTINGAMEOP_2_X, INTINGAMEOP_1_Y, INTINGAMEOP_OP_W, _("Voice Volume"), WBUT_PLAIN);
-	addFESlider(INTINGAMEOP_FXVOL_S, INTINGAMEOP, INTINGAMEOP_MID, INTINGAMEOP_1_Y-5,
-				AUDIO_VOL_MAX, (int)(sound_GetUIVolume() * 100.0));
+	addFESlider(INTINGAMEOP_FXVOL_S, INTINGAMEOP, INTINGAMEOP_MID, INTINGAMEOP_1_Y - 5,
+	            AUDIO_VOL_MAX, (int)(sound_GetUIVolume() * 100.0));
 
 	// fx vol
 	addIGTextButton(INTINGAMEOP_3DFXVOL, INTINGAMEOP_2_X, INTINGAMEOP_2_Y, INTINGAMEOP_OP_W, _("FX Volume"), WBUT_PLAIN);
-	addFESlider(INTINGAMEOP_3DFXVOL_S, INTINGAMEOP, INTINGAMEOP_MID, INTINGAMEOP_2_Y-5,
-				AUDIO_VOL_MAX, (int)(sound_GetEffectsVolume() * 100.0));
+	addFESlider(INTINGAMEOP_3DFXVOL_S, INTINGAMEOP, INTINGAMEOP_MID, INTINGAMEOP_2_Y - 5,
+	            AUDIO_VOL_MAX, (int)(sound_GetEffectsVolume() * 100.0));
 
 	// cd vol
 	addIGTextButton(INTINGAMEOP_CDVOL, INTINGAMEOP_2_X, INTINGAMEOP_3_Y, INTINGAMEOP_OP_W, _("Music Volume"), WBUT_PLAIN);
-	addFESlider(INTINGAMEOP_CDVOL_S, INTINGAMEOP, INTINGAMEOP_MID, INTINGAMEOP_3_Y-5,
-				AUDIO_VOL_MAX, (int)(sound_GetMusicVolume() * 100));
+	addFESlider(INTINGAMEOP_CDVOL_S, INTINGAMEOP, INTINGAMEOP_MID, INTINGAMEOP_3_Y - 5,
+	            AUDIO_VOL_MAX, (int)(sound_GetMusicVolume() * 100));
 
 #ifdef DEBUG
 	// Tactical UI: Target Origin
-	if(tuiTargetOrigin)
+	if (tuiTargetOrigin)
 	{
 		addIGTextButton(INTINGAMEOP_TUI_TARGET_ORIGIN_SW, INTINGAMEOP_2_X, INTINGAMEOP_4_Y, INTINGAMEOP_SW_W,
-			_("Tactical UI (Target Origin Icon): Show"), WBUT_PLAIN);
+		                _("Tactical UI (Target Origin Icon): Show"), WBUT_PLAIN);
 	}
 	else
 	{
 		addIGTextButton(INTINGAMEOP_TUI_TARGET_ORIGIN_SW, INTINGAMEOP_2_X, INTINGAMEOP_4_Y, INTINGAMEOP_SW_W,
-			_("Tactical UI (Target Origin Icon): Hide"), WBUT_PLAIN);
+		                _("Tactical UI (Target Origin Icon): Hide"), WBUT_PLAIN);
 	}
 #endif
 
@@ -184,14 +184,14 @@ static bool _intAddInGameOptions(void)
 {
 	audio_StopAll();
 
-    //clear out any mission widgets - timers etc that may be on the screen
-    clearMissionWidgets();
+	//clear out any mission widgets - timers etc that may be on the screen
+	clearMissionWidgets();
 
 
 	setWidgetsStatus(true);
 
 	//if already open, then close!
-	if (widgGetFromID(psWScreen,INTINGAMEOP))
+	if (widgGetFromID(psWScreen, INTINGAMEOP))
 	{
 		intCloseInGameOptions(false, true);
 		return true;
@@ -201,7 +201,7 @@ static bool _intAddInGameOptions(void)
 
 
 	// Pause the game.
-	if(!gamePaused())
+	if (!gamePaused())
 	{
 		kf_TogglePauseMode();
 	}
@@ -213,10 +213,10 @@ static bool _intAddInGameOptions(void)
 	// add form
 	IntFormAnimated *ingameOp = new IntFormAnimated(parent);
 	ingameOp->id = INTINGAMEOP;
-	ingameOp->setGeometry(INTINGAMEOP_X, INTINGAMEOP_Y, INTINGAMEOP_W, s? INTINGAMEOP_HS : INTINGAMEOP_H);
+	ingameOp->setGeometry(INTINGAMEOP_X, INTINGAMEOP_Y, INTINGAMEOP_W, s ? INTINGAMEOP_HS : INTINGAMEOP_H);
 
 	// add 'quit' text
-	addIGTextButton(INTINGAMEOP_QUIT, INTINGAMEOP_1_X, s? INTINGAMEOP_3_Y : INTINGAMEOP_5_Y, INTINGAMEOP_OP_W, _("Quit"), OPALIGN);
+	addIGTextButton(INTINGAMEOP_QUIT, INTINGAMEOP_1_X, s ? INTINGAMEOP_3_Y : INTINGAMEOP_5_Y, INTINGAMEOP_OP_W, _("Quit"), OPALIGN);
 
 	// add 'resume'
 	addIGTextButton(INTINGAMEOP_RESUME, INTINGAMEOP_1_X, INTINGAMEOP_1_Y, INTINGAMEOP_OP_W, _("Resume Game"), OPALIGN);
@@ -267,11 +267,14 @@ void intAddInGamePopup(void)
 	setWidgetsStatus(true);
 	intResetScreen(false);
 
-	if (isInGamePopupUp) return;
+	if (isInGamePopupUp)
+	{
+		return;
+	}
 
 	audio_StopAll();
 
-	if(!gamePaused())
+	if (!gamePaused())
 	{
 		kf_TogglePauseMode();	// Pause the game.
 	}
@@ -280,7 +283,7 @@ void intAddInGamePopup(void)
 
 	IntFormAnimated *ingamePopup = new IntFormAnimated(parent);
 	ingamePopup->id = INTINGAMEPOPUP;
-	ingamePopup->setGeometry(600, 160, 20 + D_W, (240 - 160/2) + D_H);
+	ingamePopup->setGeometry(600, 160, 20 + D_W, (240 - 160 / 2) + D_H);
 
 	// add the text "buttons" now
 	W_BUTINIT sButInit;
@@ -324,7 +327,7 @@ static void ProcessOptionFinished(void)
 
 
 	//unpause.
-	if(gamePaused())
+	if (gamePaused())
 	{
 		kf_TogglePauseMode();
 	}
@@ -343,12 +346,12 @@ void intCloseInGameOptionsNoAnim(bool bResetMissionWidgets)
 
 	ProcessOptionFinished();
 
-    //don't add the widgets if the load/save screen is put up or exiting to front end
-    if (bResetMissionWidgets)
-    {
-        //put any widgets back on for the missions
-        resetMissionWidgets();
-    }
+	//don't add the widgets if the load/save screen is put up or exiting to front end
+	if (bResetMissionWidgets)
+	{
+		//put any widgets back on for the missions
+		resetMissionWidgets();
+	}
 }
 
 
@@ -361,12 +364,12 @@ bool intCloseInGameOptions(bool bPutUpLoadSave, bool bResetMissionWidgets)
 		widgDelete(psWScreen, INTINGAMEPOPUP);
 	}
 
-	if(bPutUpLoadSave)
+	if (bPutUpLoadSave)
 	{
 		WIDGET *widg = widgGetFromID(psWScreen, INTINGAMEOP);
-		if(widg)
+		if (widg)
 		{
-			widgDelete(psWScreen,INTINGAMEOP);
+			widgDelete(psWScreen, INTINGAMEOP);
 		}
 
 		InGameOpUp = false;
@@ -395,14 +398,14 @@ bool intCloseInGameOptions(bool bPutUpLoadSave, bool bResetMissionWidgets)
 
 	ProcessOptionFinished();
 
-    //don't add the widgets if the load/save screen is put up or exiting to front end
-    if (bResetMissionWidgets)
-    {
-        //put any widgets back on for the missions
-        resetMissionWidgets();
-    }
+	//don't add the widgets if the load/save screen is put up or exiting to front end
+	if (bResetMissionWidgets)
+	{
+		//put any widgets back on for the missions
+		resetMissionWidgets();
+	}
 
-    return true;
+	return true;
 }
 
 
@@ -412,7 +415,7 @@ void intProcessInGameOptions(UDWORD id)
 {
 
 
-	switch(id)
+	switch (id)
 	{
 	// NORMAL KEYS
 	case INTINGAMEOP_QUIT:				//quit was pressed
@@ -476,7 +479,7 @@ void intProcessInGameOptions(UDWORD id)
 
 	case INTINGAMEOP_TUI_TARGET_ORIGIN_SW:
 		tuiTargetOrigin = !tuiTargetOrigin;
-		if(tuiTargetOrigin)
+		if (tuiTargetOrigin)
 		{
 			widgSetString(psWScreen, INTINGAMEOP_TUI_TARGET_ORIGIN_SW, _("Tactical UI (Target Origin Icon): Show"));
 		}

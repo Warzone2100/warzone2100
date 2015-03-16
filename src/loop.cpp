@@ -109,8 +109,8 @@ unsigned int loopStateChanges;
 /*
  * local variables
  */
-static bool paused=false;
-static bool video=false;
+static bool paused = false;
+static bool video = false;
 
 //holds which pause is valid at any one time
 struct PAUSE_STATE
@@ -203,7 +203,7 @@ static GAMECODE renderLoop()
 			/* Process all the console messages */
 			updateConsoleMessages();
 		}
-		if (!scrollPaused() && dragBox3D.status != DRAG_DRAGGING && intMode != INT_INGAMEOP )
+		if (!scrollPaused() && dragBox3D.status != DRAG_DRAGGING && intMode != INT_INGAMEOP)
 		{
 			scroll();
 			zoom();
@@ -214,21 +214,21 @@ static GAMECODE renderLoop()
 		// Using software cursors (when on) for these menus due to a bug in SDL's SDL_ShowCursor()
 		wzSetCursor(CURSOR_DEFAULT);
 
-		if(dragBox3D.status != DRAG_DRAGGING)
+		if (dragBox3D.status != DRAG_DRAGGING)
 		{
 			scroll();
 			zoom();
 		}
 
-		if(InGameOpUp || isInGamePopupUp)		// ingame options menu up, run it!
+		if (InGameOpUp || isInGamePopupUp)		// ingame options menu up, run it!
 		{
 			WidgetTriggers const &triggers = widgRunScreen(psWScreen);
-			unsigned widgval = triggers.empty()? 0 : triggers.front().widget->id;  // Just use first click here, since the next click could be on another menu.
+			unsigned widgval = triggers.empty() ? 0 : triggers.front().widget->id; // Just use first click here, since the next click could be on another menu.
 
 			intProcessInGameOptions(widgval);
-			if(widgval == INTINGAMEOP_QUIT_CONFIRM || widgval == INTINGAMEOP_POPUP_QUIT)
+			if (widgval == INTINGAMEOP_QUIT_CONFIRM || widgval == INTINGAMEOP_POPUP_QUIT)
 			{
-				if(gamePaused())
+				if (gamePaused())
 				{
 					kf_TogglePauseMode();
 				}
@@ -236,10 +236,10 @@ static GAMECODE renderLoop()
 			}
 		}
 
-		if(bLoadSaveUp && runLoadSave(true) && strlen(sRequestResult))
+		if (bLoadSaveUp && runLoadSave(true) && strlen(sRequestResult))
 		{
-			debug( LOG_NEVER, "Returned %s", sRequestResult );
-			if(bRequestLoad)
+			debug(LOG_NEVER, "Returned %s", sRequestResult);
+			if (bRequestLoad)
 			{
 				loopMissionState = LMS_LOADGAME;
 				NET_InitPlayers();			// otherwise alliances were not cleared
@@ -247,7 +247,7 @@ static GAMECODE renderLoop()
 			}
 			else
 			{
-				char msgbuffer[256]= {'\0'};
+				char msgbuffer[256] = {'\0'};
 
 				if (saveInMissionRes())
 				{
@@ -255,13 +255,13 @@ static GAMECODE renderLoop()
 					{
 						sstrcpy(msgbuffer, _("GAME SAVED: "));
 						sstrcat(msgbuffer, sRequestResult);
-						addConsoleMessage( msgbuffer, LEFT_JUSTIFY, NOTIFY_MESSAGE);
+						addConsoleMessage(msgbuffer, LEFT_JUSTIFY, NOTIFY_MESSAGE);
 					}
 					else
 					{
-						ASSERT( false,"Mission Results: saveGame Failed" );
+						ASSERT(false, "Mission Results: saveGame Failed");
 						sstrcpy(msgbuffer, _("Could not save game!"));
-						addConsoleMessage( msgbuffer, LEFT_JUSTIFY, NOTIFY_MESSAGE);
+						addConsoleMessage(msgbuffer, LEFT_JUSTIFY, NOTIFY_MESSAGE);
 						deleteSaveGame(sRequestResult);
 					}
 				}
@@ -271,19 +271,19 @@ static GAMECODE renderLoop()
 					{
 						sstrcpy(msgbuffer, _("GAME SAVED: "));
 						sstrcat(msgbuffer, sRequestResult);
-						addConsoleMessage( msgbuffer, LEFT_JUSTIFY, NOTIFY_MESSAGE);
+						addConsoleMessage(msgbuffer, LEFT_JUSTIFY, NOTIFY_MESSAGE);
 					}
 					else
 					{
-						ASSERT(!"saveGame(sRequestResult, GTYPE_SAVE_MIDMISSION) failed", "Mid Mission: saveGame Failed" );
+						ASSERT(!"saveGame(sRequestResult, GTYPE_SAVE_MIDMISSION) failed", "Mid Mission: saveGame Failed");
 						sstrcpy(msgbuffer, _("Could not save game!"));
-						addConsoleMessage( msgbuffer, LEFT_JUSTIFY, NOTIFY_MESSAGE);
+						addConsoleMessage(msgbuffer, LEFT_JUSTIFY, NOTIFY_MESSAGE);
 						deleteSaveGame(sRequestResult);
 					}
 				}
 				else
 				{
-					ASSERT( false, "Attempt to save game with incorrect load/save mode" );
+					ASSERT(false, "Attempt to save game with incorrect load/save mode");
 				}
 			}
 		}
@@ -326,13 +326,13 @@ static GAMECODE renderLoop()
 		pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
 		pie_SetFogStatus(false);
 
-		if(bMultiPlayer && bDisplayMultiJoiningStatus)
+		if (bMultiPlayer && bDisplayMultiJoiningStatus)
 		{
 			intDisplayMultiJoiningStatus(bDisplayMultiJoiningStatus);
 			setWidgetsStatus(false);
 		}
 
-		if(getWidgetsStatus())
+		if (getWidgetsStatus())
 		{
 			intDisplayWidgets();
 		}
@@ -361,40 +361,40 @@ static GAMECODE renderLoop()
 	// deal with the mission state
 	switch (loopMissionState)
 	{
-		case LMS_CLEAROBJECTS:
-			missionDestroyObjects();
-			setScriptPause(true);
-			loopMissionState = LMS_SETUPMISSION;
-			break;
+	case LMS_CLEAROBJECTS:
+		missionDestroyObjects();
+		setScriptPause(true);
+		loopMissionState = LMS_SETUPMISSION;
+		break;
 
-		case LMS_NORMAL:
-			// default
-			break;
-		case LMS_SETUPMISSION:
-			setScriptPause(false);
-			if (!setUpMission(nextMissionType))
-			{
-				return GAMECODE_QUITGAME;
-			}
-			break;
-		case LMS_SAVECONTINUE:
-			// just wait for this to be changed when the new mission starts
-			break;
-		case LMS_NEWLEVEL:
-			//nextMissionType = MISSION_NONE;
-			nextMissionType = LDS_NONE;
-			return GAMECODE_NEWLEVEL;
-			break;
-		case LMS_LOADGAME:
-			return GAMECODE_LOADGAME;
-			break;
-		default:
-			ASSERT( false, "unknown loopMissionState" );
-			break;
+	case LMS_NORMAL:
+		// default
+		break;
+	case LMS_SETUPMISSION:
+		setScriptPause(false);
+		if (!setUpMission(nextMissionType))
+		{
+			return GAMECODE_QUITGAME;
+		}
+		break;
+	case LMS_SAVECONTINUE:
+		// just wait for this to be changed when the new mission starts
+		break;
+	case LMS_NEWLEVEL:
+		//nextMissionType = MISSION_NONE;
+		nextMissionType = LDS_NONE;
+		return GAMECODE_NEWLEVEL;
+		break;
+	case LMS_LOADGAME:
+		return GAMECODE_LOADGAME;
+		break;
+	default:
+		ASSERT(false, "unknown loopMissionState");
+		break;
 	}
 
 	int clearMode = 0;
-	if(getDrawShadows())
+	if (getDrawShadows())
 	{
 		clearMode |= CLEAR_SHADOW;
 	}
@@ -426,7 +426,7 @@ static GAMECODE renderLoop()
 
 // Carry out the various counting operations we perform each loop
 void countUpdate()
-{	
+{
 	for (unsigned i = 0; i < MAX_PLAYERS; i++)
 	{
 		//set the flag for each player
@@ -443,36 +443,36 @@ void countUpdate()
 			numDroids[i]++;
 			switch (psCurr->droidType)
 			{
-				case DROID_COMMAND:
-					numCommandDroids[i] += 1;
-					break;
-				case DROID_CONSTRUCT:
-				case DROID_CYBORG_CONSTRUCT:
-					numConstructorDroids[i] += 1;
-					break;
-				case DROID_TRANSPORTER:
-				case DROID_SUPERTRANSPORTER:
-					if( (psCurr->psGroup != NULL) )
-					{
-						DROID *psDroid = NULL;
+			case DROID_COMMAND:
+				numCommandDroids[i] += 1;
+				break;
+			case DROID_CONSTRUCT:
+			case DROID_CYBORG_CONSTRUCT:
+				numConstructorDroids[i] += 1;
+				break;
+			case DROID_TRANSPORTER:
+			case DROID_SUPERTRANSPORTER:
+				if ((psCurr->psGroup != NULL))
+				{
+					DROID *psDroid = NULL;
 
-						numTransporterDroids[i] += psCurr->psGroup->refCount-1;
-						// and count the units inside it...
-							for (psDroid = psCurr->psGroup->psList; psDroid != NULL && psDroid != psCurr; psDroid = psDroid->psGrpNext)
-							{
-							if (psDroid->droidType == DROID_CYBORG_CONSTRUCT || psDroid->droidType == DROID_CONSTRUCT)
-								{
-									numConstructorDroids[i] += 1;
-								}
-							if (psDroid->droidType == DROID_COMMAND)
-							{
-								numCommandDroids[i] += 1;
-							}
+					numTransporterDroids[i] += psCurr->psGroup->refCount - 1;
+					// and count the units inside it...
+					for (psDroid = psCurr->psGroup->psList; psDroid != NULL && psDroid != psCurr; psDroid = psDroid->psGrpNext)
+					{
+						if (psDroid->droidType == DROID_CYBORG_CONSTRUCT || psDroid->droidType == DROID_CONSTRUCT)
+						{
+							numConstructorDroids[i] += 1;
+						}
+						if (psDroid->droidType == DROID_COMMAND)
+						{
+							numCommandDroids[i] += 1;
 						}
 					}
-					break;
-				default:
-					break;
+				}
+				break;
+			default:
+				break;
 			}
 		}
 		for (DROID *psCurr = mission.apsDroidLists[i]; psCurr != NULL; psCurr = psCurr->psNext)
@@ -480,22 +480,22 @@ void countUpdate()
 			numMissionDroids[i]++;
 			switch (psCurr->droidType)
 			{
-				case DROID_COMMAND:
-					numCommandDroids[i] += 1;
-					break;
-				case DROID_CONSTRUCT:
-				case DROID_CYBORG_CONSTRUCT:
-					numConstructorDroids[i] += 1;
-					break;
-				case DROID_TRANSPORTER:
-				case DROID_SUPERTRANSPORTER:
-					if( (psCurr->psGroup != NULL) )
-					{
-						numTransporterDroids[i] += psCurr->psGroup->refCount-1;
-					}
-					break;
-				default:
-					break;
+			case DROID_COMMAND:
+				numCommandDroids[i] += 1;
+				break;
+			case DROID_CONSTRUCT:
+			case DROID_CYBORG_CONSTRUCT:
+				numConstructorDroids[i] += 1;
+				break;
+			case DROID_TRANSPORTER:
+			case DROID_SUPERTRANSPORTER:
+				if ((psCurr->psGroup != NULL))
+				{
+					numTransporterDroids[i] += psCurr->psGroup->refCount - 1;
+				}
+				break;
+			default:
+				break;
 			}
 		}
 		for (DROID *psCurr = apsLimboDroids[i]; psCurr != NULL; psCurr = psCurr->psNext)
@@ -503,15 +503,15 @@ void countUpdate()
 			// count the type of units
 			switch (psCurr->droidType)
 			{
-				case DROID_COMMAND:
-					numCommandDroids[i] += 1;
-					break;
-				case DROID_CONSTRUCT:
-				case DROID_CYBORG_CONSTRUCT:
-					numConstructorDroids[i] += 1;
-					break;
-				default:
-					break;
+			case DROID_COMMAND:
+				numCommandDroids[i] += 1;
+				break;
+			case DROID_CONSTRUCT:
+			case DROID_CYBORG_CONSTRUCT:
+				numConstructorDroids[i] += 1;
+				break;
+			default:
+				break;
 			}
 		}
 		// FIXME: These for-loops are code duplicationo
@@ -565,11 +565,11 @@ static void gameStateUpdate()
 		/* Update the event system */
 		if (!bInTutorial)
 		{
-			eventProcessTriggers(gameTime/SCR_TICKRATE);
+			eventProcessTriggers(gameTime / SCR_TICKRATE);
 		}
 		else
 		{
-			eventProcessTriggers(realTime/SCR_TICKRATE);
+			eventProcessTriggers(realTime / SCR_TICKRATE);
 		}
 		updateScripts();
 	}
@@ -597,7 +597,7 @@ static void gameStateUpdate()
 
 	// update the command droids
 	cmdDroidUpdate();
-	if(getDrivingStatus())
+	if (getDrivingStatus())
 	{
 		driveUpdate();
 	}
@@ -694,7 +694,7 @@ GAMECODE gameLoop(void)
 		unsigned after = wzGetTicks();
 
 		renderBudget -= (after - before) * renderFraction.n;
-		renderBudget = std::max(renderBudget, (-updateFraction*500).floor());
+		renderBudget = std::max(renderBudget, (-updateFraction * 500).floor());
 		previousUpdateWasRender = false;
 
 		ASSERT(deltaGraphicsTime == 0, "Shouldn't update graphics and game state at once.");
@@ -711,7 +711,7 @@ GAMECODE gameLoop(void)
 	unsigned after = wzGetTicks();
 
 	renderBudget += (after - before) * updateFraction.n;
-	renderBudget = std::min(renderBudget, (renderFraction*500).floor());
+	renderBudget = std::min(renderBudget, (renderFraction * 500).floor());
 	previousUpdateWasRender = true;
 
 	return renderReturn;
@@ -722,7 +722,7 @@ void videoLoop(void)
 {
 	bool videoFinished;
 
-	ASSERT( videoMode == 1, "videoMode out of sync" );
+	ASSERT(videoMode == 1, "videoMode out of sync");
 
 	// display a frame of the FMV
 	videoFinished = !seq_UpdateFullScreenVideo(NULL);
@@ -777,14 +777,14 @@ void loop_SetVideoPlaybackMode(void)
 
 void loop_ClearVideoPlaybackMode(void)
 {
-	videoMode -=1;
+	videoMode -= 1;
 	paused = false;
 	video = false;
 	gameTimeStart();
 	pie_SetFogStatus(true);
 	cdAudio_Resume();
 	wzShowMouse(true);
-	ASSERT( videoMode == 0, "loop_ClearVideoPlaybackMode: out of sync." );
+	ASSERT(videoMode == 0, "loop_ClearVideoPlaybackMode: out of sync.");
 }
 
 
@@ -798,12 +798,12 @@ bool loop_GetVideoStatus(void)
 	return video;
 }
 
-bool gamePaused( void )
+bool gamePaused(void)
 {
 	return paused;
 }
 
-void setGamePauseStatus( bool val )
+void setGamePauseStatus(bool val)
 {
 	paused = val;
 }
@@ -862,17 +862,17 @@ void setAllPauseStates(bool state)
 
 UDWORD	getNumDroids(UDWORD player)
 {
-	return(numDroids[player]);
+	return (numDroids[player]);
 }
 
 UDWORD	getNumTransporterDroids(UDWORD player)
 {
-	return(numTransporterDroids[player]);
+	return (numTransporterDroids[player]);
 }
 
 UDWORD	getNumMissionDroids(UDWORD player)
 {
-	return(numMissionDroids[player]);
+	return (numMissionDroids[player]);
 }
 
 UDWORD	getNumCommandDroids(UDWORD player)
@@ -905,10 +905,11 @@ static void fireWaitingCallbacks(void)
 {
 	bool bOK = true;
 
-	while(!isMsgStackEmpty() && bOK)
+	while (!isMsgStackEmpty() && bOK)
 	{
 		bOK = msgStackFireTop();
-		if(!bOK){
+		if (!bOK)
+		{
 			ASSERT(false, "fireWaitingCallbacks: msgStackFireTop() failed (stack count: %d)", msgStackGetCount());
 		}
 	}

@@ -66,7 +66,7 @@
 #define MINPITCH (768)
 #define PITCHCHANGE (512)
 
-static	SWORD DrivingAudioTrack=-1;		// Which hardware channel are we using for the car driving noise
+static	SWORD DrivingAudioTrack = -1;		// Which hardware channel are we using for the car driving noise
 
 extern UDWORD selectedPlayer;
 static bool DirectControl = false;
@@ -132,10 +132,10 @@ DROID *driveGetDriven(void)
 //
 void driveInitVars(bool Restart)
 {
-	if(WasDriving && !Restart)
+	if (WasDriving && !Restart)
 	{
-		debug( LOG_NEVER, "driveInitVars: WasDriving\n" );
-		DrivingAudioTrack=-1;
+		debug(LOG_NEVER, "driveInitVars: WasDriving\n");
+		DrivingAudioTrack = -1;
 		psDrivenDroid = NULL;
 		DoFollowRangeCheck = true;
 		ClearFollowRangeCheck = false;
@@ -149,8 +149,8 @@ void driveInitVars(bool Restart)
 	}
 	else
 	{
-		debug( LOG_NEVER, "driveInitVars: Driving\n" );
-		DrivingAudioTrack=-1;
+		debug(LOG_NEVER, "driveInitVars: Driving\n");
+		DrivingAudioTrack = -1;
 		psDrivenDroid = NULL;
 		DoFollowRangeCheck = true;
 		ClearFollowRangeCheck = false;
@@ -166,14 +166,14 @@ void driveInitVars(bool Restart)
 }
 
 
-void	setDrivingStatus( bool val )
+void	setDrivingStatus(bool val)
 {
 	bDriveMode = val;
 }
 
-bool	getDrivingStatus( void )
+bool	getDrivingStatus(void)
 {
-	return(bDriveMode);
+	return (bDriveMode);
 }
 
 
@@ -189,9 +189,9 @@ bool StartDriverMode(DROID *psOldDroid)
 	psDrivenDroid = NULL;
 
 	// Find a selected droid and make that the driven one.
-	for(DROID *psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
+	for (DROID *psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
 	{
-		if(psDroid->selected)
+		if (psDroid->selected)
 		{
 			if ((psDrivenDroid == NULL) && (psDroid != psOldDroid))
 			{
@@ -201,7 +201,7 @@ bool StartDriverMode(DROID *psOldDroid)
 					//					psDroid->sMove.Status = MOVEDRIVE;
 				}
 				psDrivenDroid = psDroid;
-				debug( LOG_NEVER, "New driven droid" );
+				debug(LOG_NEVER, "New driven droid");
 			}
 		}
 	}
@@ -210,21 +210,21 @@ bool StartDriverMode(DROID *psOldDroid)
 	if (psDrivenDroid == NULL)
 	{
 		psLastDriven = NULL;
-		psDrivenDroid = intGotoNextDroidType(NULL,DROID_ANY,true);
+		psDrivenDroid = intGotoNextDroidType(NULL, DROID_ANY, true);
 
 		// If it's the same droid then try again
-		if(psDrivenDroid == psOldDroid)
+		if (psDrivenDroid == psOldDroid)
 		{
-			psDrivenDroid = intGotoNextDroidType(NULL,DROID_ANY,true);
+			psDrivenDroid = intGotoNextDroidType(NULL, DROID_ANY, true);
 		}
 
-		if(psDrivenDroid == psOldDroid)
+		if (psDrivenDroid == psOldDroid)
 		{
 			psDrivenDroid = NULL;
 		}
 
 		// If it failed then try for a transporter.
-		if(psDrivenDroid == NULL)
+		if (psDrivenDroid == NULL)
 		{
 			// FIXME: for DROID_SUPER_TRANSPORTER
 			psDrivenDroid = intGotoNextDroidType(NULL, DROID_TRANSPORTER, true);
@@ -233,7 +233,7 @@ bool StartDriverMode(DROID *psOldDroid)
 		//		DBPRINTF(("Selected a new driven droid : %p\n",psDrivenDroid));
 	}
 
-	if(psDrivenDroid)
+	if (psDrivenDroid)
 	{
 		driveDir = UNDEG(psDrivenDroid->rot.direction);
 		driveSpeed = 0;
@@ -241,9 +241,9 @@ bool StartDriverMode(DROID *psOldDroid)
 
 		setDrivingStatus(true);
 
-		if(DriveInterfaceEnabled)
+		if (DriveInterfaceEnabled)
 		{
-			debug( LOG_NEVER, "Interface enabled1 ! Disabling drive control" );
+			debug(LOG_NEVER, "Interface enabled1 ! Disabling drive control");
 			DriveControlEnabled = false;
 			DirectControl = false;
 		}
@@ -253,10 +253,10 @@ bool StartDriverMode(DROID *psOldDroid)
 			DirectControl = true; // we are taking over the unit.
 		}
 
-		if(psLastDriven != psDrivenDroid)
+		if (psLastDriven != psDrivenDroid)
 		{
-			debug( LOG_NEVER, "camAllignWithTarget" );
-			camAllignWithTarget((BASE_OBJECT*)psDrivenDroid);
+			debug(LOG_NEVER, "camAllignWithTarget");
+			camAllignWithTarget((BASE_OBJECT *)psDrivenDroid);
 		}
 
 		return true;
@@ -267,9 +267,9 @@ bool StartDriverMode(DROID *psOldDroid)
 
 static void ChangeDriver(void)
 {
-	if(psDrivenDroid != NULL)
+	if (psDrivenDroid != NULL)
 	{
-		debug( LOG_NEVER, "Driver Changed\n" );
+		debug(LOG_NEVER, "Driver Changed\n");
 
 		for (DROID *psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
 		{
@@ -286,10 +286,10 @@ static void ChangeDriver(void)
 //
 void StopDriverMode(void)
 {
-	if(psDrivenDroid != NULL)
+	if (psDrivenDroid != NULL)
 	{
-		debug( LOG_NEVER, "Drive mode canceled" );
-		addConsoleMessage("Driver mode canceled.", LEFT_JUSTIFY,SYSTEM_MESSAGE);
+		debug(LOG_NEVER, "Drive mode canceled");
+		addConsoleMessage("Driver mode canceled.", LEFT_JUSTIFY, SYSTEM_MESSAGE);
 
 		psDrivenDroid = NULL;
 
@@ -316,14 +316,16 @@ void StopDriverMode(void)
 //
 bool driveDroidKilled(DROID *psDroid)
 {
-	if(driveModeActive()) {
-		if(psDroid == psDrivenDroid) {
+	if (driveModeActive())
+	{
+		if (psDroid == psDrivenDroid)
+		{
 			ChangeDriver();
 
 			psDrivenDroid = NULL;
 			DeSelectDroid(psDroid);
 
-			if(!StartDriverMode(psDroid))
+			if (!StartDriverMode(psDroid))
 			{
 				return false;
 			}
@@ -338,8 +340,10 @@ bool driveDroidKilled(DROID *psDroid)
 //
 void driveSelectionChanged(void)
 {
-	if(driveModeActive()) {
-		if(psDrivenDroid) {
+	if (driveModeActive())
+	{
+		if (psDrivenDroid)
+		{
 			ChangeDriver();
 			StartDriverMode(NULL);
 		}
@@ -354,26 +358,30 @@ static void driveNextDriver(void)
 	DROID *psDroid;
 
 	// Start from the current driven droid.
-	for(psDroid = psDrivenDroid; psDroid; psDroid = psDroid->psNext) {
-		if( (psDroid->selected) && (psDroid != psDrivenDroid) ) {
+	for (psDroid = psDrivenDroid; psDroid; psDroid = psDroid->psNext)
+	{
+		if ((psDroid->selected) && (psDroid != psDrivenDroid))
+		{
 			// Found one so make it the driven droid.
 			psDrivenDroid = psDroid;
-			camAllignWithTarget((BASE_OBJECT*)psDroid);
+			camAllignWithTarget((BASE_OBJECT *)psDroid);
 			return;
 		}
 	}
 
-		for(psDroid = apsDroidLists[selectedPlayer];
-			psDroid && (psDroid != psDrivenDroid);
-			psDroid = psDroid->psNext) {
+	for (psDroid = apsDroidLists[selectedPlayer];
+	     psDroid && (psDroid != psDrivenDroid);
+	     psDroid = psDroid->psNext)
+	{
 
-			if(psDroid->selected) {
-				// Found one so make it the driven droid.
-				psDrivenDroid = psDroid;
-				camAllignWithTarget((BASE_OBJECT*)psDroid);
-				return;
-			}
+		if (psDroid->selected)
+		{
+			// Found one so make it the driven droid.
+			psDrivenDroid = psDroid;
+			camAllignWithTarget((BASE_OBJECT *)psDroid);
+			return;
 		}
+	}
 	// No other selected droids found. Oh well...
 }
 
@@ -383,20 +391,26 @@ static bool driveControl(DROID *psDroid)
 	bool Input = false;
 	SDWORD MaxSpeed = moveCalcDroidSpeed(psDroid);
 
-	if(!DriveControlEnabled) {
+	if (!DriveControlEnabled)
+	{
 		return false;
 	}
 
-	if(keyPressed(KEY_N)) {
+	if (keyPressed(KEY_N))
+	{
 		driveNextDriver();
 	}
 
-	if(keyDown(KEY_LEFTARROW)) {
+	if (keyDown(KEY_LEFTARROW))
+	{
 		driveDir += DRIVE_TURNSPEED;
 		Input = true;
-	} else if(keyDown(KEY_RIGHTARROW)) {
+	}
+	else if (keyDown(KEY_RIGHTARROW))
+	{
 		driveDir -= DRIVE_TURNSPEED;
-		if(driveDir < 0) {
+		if (driveDir < 0)
+		{
 			driveDir += 360;
 		}
 		Input = true;
@@ -404,41 +418,61 @@ static bool driveControl(DROID *psDroid)
 
 	driveDir = driveDir % 360;
 
-	if(keyDown(KEY_UPARROW)) {
-		if(driveSpeed >= 0) {
+	if (keyDown(KEY_UPARROW))
+	{
+		if (driveSpeed >= 0)
+		{
 			driveSpeed += DRIVE_ACCELERATE;
-			if(driveSpeed > MaxSpeed) {
+			if (driveSpeed > MaxSpeed)
+			{
 				driveSpeed = MaxSpeed;
 			}
-		} else {
+		}
+		else
+		{
 			driveSpeed += DRIVE_BRAKE;
-			if(driveSpeed > 0) {
+			if (driveSpeed > 0)
+			{
 				driveSpeed = 0;
 			}
 		}
 		Input = true;
-	} else if(keyDown(KEY_DOWNARROW)) {
-		if(driveSpeed <= 0) {
+	}
+	else if (keyDown(KEY_DOWNARROW))
+	{
+		if (driveSpeed <= 0)
+		{
 			driveSpeed -= DRIVE_ACCELERATE;
-			if(driveSpeed < -MaxSpeed) {
+			if (driveSpeed < -MaxSpeed)
+			{
 				driveSpeed = -MaxSpeed;
 			}
-		} else {
+		}
+		else
+		{
 			driveSpeed -= DRIVE_BRAKE;
-			if(driveSpeed < 0) {
+			if (driveSpeed < 0)
+			{
 				driveSpeed = 0;
 			}
 		}
 		Input = true;
-	} else {
-		if(driveSpeed > 0) {
+	}
+	else
+	{
+		if (driveSpeed > 0)
+		{
 			driveSpeed -= DRIVE_DECELERATE;
-			if(driveSpeed < 0) {
+			if (driveSpeed < 0)
+			{
 				driveSpeed = 0;
 			}
-		} else {
+		}
+		else
+		{
 			driveSpeed += DRIVE_DECELERATE;
-			if(driveSpeed > 0) {
+			if (driveSpeed > 0)
+			{
 				driveSpeed = 0;
 			}
 		}
@@ -450,8 +484,9 @@ static bool driveControl(DROID *psDroid)
 
 static bool driveInDriverRange(DROID *psDroid)
 {
-	if( (abs(psDroid->pos.x-psDrivenDroid->pos.x) < FOLLOW_STOP_RANGE) &&
-		(abs(psDroid->pos.y-psDrivenDroid->pos.y) < FOLLOW_STOP_RANGE) ) {
+	if ((abs(psDroid->pos.x - psDrivenDroid->pos.x) < FOLLOW_STOP_RANGE) &&
+	    (abs(psDroid->pos.y - psDrivenDroid->pos.y) < FOLLOW_STOP_RANGE))
+	{
 		return true;
 	}
 
@@ -461,9 +496,11 @@ static bool driveInDriverRange(DROID *psDroid)
 
 static void driveMoveFollower(DROID *psDroid)
 {
-	if(driveBumpTime < gameTime) {
+	if (driveBumpTime < gameTime)
+	{
 		// Update the driven droid's followers.
-		if(!driveInDriverRange(psDroid)) {
+		if (!driveInDriverRange(psDroid))
+		{
 
 			//psDroid->secondaryOrder&=~DSS_MOVEHOLD_SET;		// Remove secondary order ... this stops the droid from jumping back to GUARD mode ... see order.c #111 - tjc
 			// if the droid is currently guarding we need to change the order to a move
@@ -474,17 +511,21 @@ static void driveMoveFollower(DROID *psDroid)
 			else
 			{
 				// otherwise we just adjust its move-to location
-				moveDroidTo(psDroid,psDrivenDroid->pos.x,psDrivenDroid->pos.y);
+				moveDroidTo(psDroid, psDrivenDroid->pos.x, psDrivenDroid->pos.y);
 			}
 
 		}
 	}
 
 	// Stop it when it gets within range of the driver.
-	if(DoFollowRangeCheck) {
-		if(driveInDriverRange(psDroid)) {
+	if (DoFollowRangeCheck)
+	{
+		if (driveInDriverRange(psDroid))
+		{
 			psDroid->sMove.Status = MOVEINACTIVE;
-		} else {
+		}
+		else
+		{
 			AllInRange = false;
 		}
 	}
@@ -495,7 +536,7 @@ static void driveMoveCommandFollowers(DROID *psDroid)
 {
 	DROID_GROUP *psGroup = psDroid->psGroup;
 
-	for (DROID *psCurr = psGroup->psList; psCurr!=NULL; psCurr=psCurr->psGrpNext)
+	for (DROID *psCurr = psGroup->psList; psCurr != NULL; psCurr = psCurr->psGrpNext)
 	{
 		driveMoveFollower(psCurr);
 	}
@@ -516,76 +557,76 @@ void driveUpdate(void)
 		return;
 	}
 
-		if (psDrivenDroid != NULL)
+	if (psDrivenDroid != NULL)
+	{
+		if (bMultiMessages && (driveBumpTime < gameTime))	// send latest info about driven droid.
 		{
-			if (bMultiMessages && (driveBumpTime < gameTime))	// send latest info about driven droid.
+			sendDroidInfo(psDrivenDroid, DroidOrder(DORDER_MOVE, removeZ(psDrivenDroid->pos)), false);
+		}
+
+		// Check the driven droid is still selected
+		if (psDrivenDroid->selected == false)
+		{
+			// if it's not then reset the driving system.
+			driveSelectionChanged();
+			return;
+		}
+
+		// Update the driven droid.
+		if (driveControl(psDrivenDroid))
+		{
+			// If control did something then force the droid's move status.
+			if (psDrivenDroid->sMove.Status != MOVEDRIVE)
 			{
-				sendDroidInfo(psDrivenDroid, DroidOrder(DORDER_MOVE, removeZ(psDrivenDroid->pos)), false);
+				psDrivenDroid->sMove.Status = MOVEDRIVE;
+				ASSERT(!isTransporter(psDrivenDroid), "Tried to control a transporter");
+				driveDir = UNDEG(psDrivenDroid->rot.direction);
+			}
+			DoFollowRangeCheck = true;
+		}
+
+		// Is the driven droid under user control?
+		if (psDrivenDroid->sMove.Status == MOVEDRIVE)
+		{
+			// Is it a command droid
+			if ((psDrivenDroid->droidType == DROID_COMMAND) &&
+			    (psDrivenDroid->psGroup != NULL))
+			{
+				driveMoveCommandFollowers(psDrivenDroid);
 			}
 
-			// Check the driven droid is still selected
-			if (psDrivenDroid->selected == false)
+			for (psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
 			{
-				// if it's not then reset the driving system.
-				driveSelectionChanged();
-				return;
-			}
+				psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION];
 
-			// Update the driven droid.
-			if (driveControl(psDrivenDroid))
-			{
-				// If control did something then force the droid's move status.
-				if (psDrivenDroid->sMove.Status != MOVEDRIVE)
+				if ((psDroid->selected) &&
+				    (psDroid != psDrivenDroid) &&
+				    !isTransporter(psDroid) &&
+				    ((psPropStats->propulsionType != PROPULSION_TYPE_LIFT) || cyborgDroid(psDroid)))
 				{
-					psDrivenDroid->sMove.Status = MOVEDRIVE;
-					ASSERT(!isTransporter(psDrivenDroid), "Tried to control a transporter");
-					driveDir = UNDEG(psDrivenDroid->rot.direction);
+					// Send new orders to it's followers.
+					driveMoveFollower(psDroid);
 				}
-				DoFollowRangeCheck = true;
-			}
-
-			// Is the driven droid under user control?
-			if (psDrivenDroid->sMove.Status == MOVEDRIVE)
-			{
-				// Is it a command droid
-				if ((psDrivenDroid->droidType == DROID_COMMAND) &&
-					(psDrivenDroid->psGroup != NULL))
-				{
-					driveMoveCommandFollowers(psDrivenDroid);
-				}
-
-				for (psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
-				{
-					psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION];
-
-					if ((psDroid->selected) &&
-						(psDroid != psDrivenDroid) &&
-						!isTransporter(psDroid) &&
-                        ((psPropStats->propulsionType != PROPULSION_TYPE_LIFT) || cyborgDroid(psDroid)) )
-                    {
-						// Send new orders to it's followers.
-						driveMoveFollower(psDroid);
-					}
-				}
-			}
-
-			if (AllInRange)
-			{
-				DoFollowRangeCheck = false;
-			}
-			if(driveBumpTime < gameTime)
-			{
-				// Send next order in 1 second.
-				driveBumpTime = gameTime+GAME_TICKS_PER_SEC;
 			}
 		}
-		else
+
+		if (AllInRange)
 		{
-			if (StartDriverMode(NULL) == false)
-			{
-				// nothing
-			}
+			DoFollowRangeCheck = false;
 		}
+		if (driveBumpTime < gameTime)
+		{
+			// Send next order in 1 second.
+			driveBumpTime = gameTime + GAME_TICKS_PER_SEC;
+		}
+	}
+	else
+	{
+		if (StartDriverMode(NULL) == false)
+		{
+			// nothing
+		}
+	}
 }
 
 
@@ -639,7 +680,8 @@ bool driveControlEnabled(void)
 //
 void driveEnableInterface(bool AddReticule)
 {
-	if(AddReticule) {
+	if (AddReticule)
+	{
 		intAddReticule();
 	}
 
@@ -670,7 +712,7 @@ bool driveInterfaceEnabled(void)
 //
 void driveProcessAquireButton(void)
 {
-	if(mouseReleased(MOUSE_RMB) || keyPressed(KEY_S))
+	if (mouseReleased(MOUSE_RMB) || keyPressed(KEY_S))
 	{
 //		BASE_OBJECT	*psObj;
 //		psObj = targetAquireNearestObjView((BASE_OBJECT*)psDrivenDroid);
@@ -706,7 +748,7 @@ bool driveAllowControl(void)
 //
 void driveDisableTactical(void)
 {
-	if(driveModeActive() && TacticalActive)
+	if (driveModeActive() && TacticalActive)
 	{
 		TacticalActive = false;
 	}
@@ -723,12 +765,12 @@ bool driveTacticalActive(void)
 
 // Player clicked in the radar window.
 //
-void driveProcessRadarInput(int x,int y)
+void driveProcessRadarInput(int x, int y)
 {
 	int PosX, PosY;
 
 	// when drive mode is active, clicking on the radar orders all selected droids
 	// to move to this position.
 	CalcRadarPosition(x, y, &PosX, &PosY);
-	orderSelectedLoc(selectedPlayer, PosX*TILE_UNITS, PosY*TILE_UNITS, ctrlShiftDown());  // ctrlShiftDown() = ctrl clicked a destination, add an order
+	orderSelectedLoc(selectedPlayer, PosX * TILE_UNITS, PosY * TILE_UNITS, ctrlShiftDown()); // ctrlShiftDown() = ctrl clicked a destination, add an order
 }

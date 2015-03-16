@@ -47,14 +47,14 @@
 
 enum AP_TYPE
 {
-    AP_RAIN,
-    AP_SNOW
+	AP_RAIN,
+	AP_SNOW
 };
 
 enum AP_STATUS
 {
-    APS_INACTIVE,
-    APS_ACTIVE
+	APS_INACTIVE,
+	APS_ACTIVE
 };
 
 static ATPART	*asAtmosParts = NULL;

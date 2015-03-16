@@ -84,8 +84,18 @@ struct SEQLIST
 	int             currentText;			// current number of text messages for this seq
 	SEQTEXT		aText[MAX_TEXT_OVERLAYS];	//text data to display for this sequence
 
-	SEQLIST() : bSeqLoop(false), currentText(0) { memset(aText, 0, sizeof(aText)); }
-	void reset() { bSeqLoop = false; currentText = 0; memset(aText, 0, sizeof(aText)); pSeq.clear(); pAudio.clear(); }
+	SEQLIST() : bSeqLoop(false), currentText(0)
+	{
+		memset(aText, 0, sizeof(aText));
+	}
+	void reset()
+	{
+		bSeqLoop = false;
+		currentText = 0;
+		memset(aText, 0, sizeof(aText));
+		pSeq.clear();
+		pAudio.clear();
+	}
 };
 /***************************************************************************/
 /*
@@ -122,8 +132,8 @@ static bool seq_StartFullScreenVideo(QString videoName, QString audioName, VIDEO
  */
 /***************************************************************************/
 
- /* Renders a video sequence specified by filename to a buffer*/
-bool seq_RenderVideoToBuffer(const char* sequenceName, int seqCommand)
+/* Renders a video sequence specified by filename to a buffer*/
+bool seq_RenderVideoToBuffer(const char *sequenceName, int seqCommand)
 {
 	static enum
 	{
@@ -183,7 +193,7 @@ static void seq_SetUserResolution(void)
 {
 	switch (war_GetFMVmode())
 	{
-		case FMV_1X:
+	case FMV_1X:
 		{
 			// Native (1x)
 			const int x = (screenWidth - 320) / 2;
@@ -191,7 +201,7 @@ static void seq_SetUserResolution(void)
 			seq_SetDisplaySize(320, 240, x, y);
 			break;
 		}
-		case FMV_2X:
+	case FMV_2X:
 		{
 			// Double (2x)
 			const int x = (screenWidth - 640) / 2;
@@ -199,13 +209,13 @@ static void seq_SetUserResolution(void)
 			seq_SetDisplaySize(640, 480, x, y);
 			break;
 		}
-		case FMV_FULLSCREEN:
-			seq_SetDisplaySize(screenWidth, screenHeight, 0, 0);
-			break;
+	case FMV_FULLSCREEN:
+		seq_SetDisplaySize(screenWidth, screenHeight, 0, 0);
+		break;
 
-		default:
-			ASSERT(!"invalid FMV mode", "Invalid FMV mode: %u", (unsigned int)war_GetFMVmode());
-			break;
+	default:
+		ASSERT(!"invalid FMV mode", "Invalid FMV mode: %u", (unsigned int)war_GetFMVmode());
+		break;
 	}
 }
 
@@ -390,10 +400,10 @@ bool seq_StopFullScreenVideo(void)
 }
 
 // add a string at x,y or add string below last line if x and y are 0
-bool seq_AddTextForVideo(const char* pText, SDWORD xOffset, SDWORD yOffset, double startTime, double endTime, SEQ_TEXT_POSITIONING textJustification)
+bool seq_AddTextForVideo(const char *pText, SDWORD xOffset, SDWORD yOffset, double startTime, double endTime, SEQ_TEXT_POSITIONING textJustification)
 {
 	SDWORD sourceLength, currentLength;
-	char* currentText;
+	char *currentText;
 	static SDWORD lastX;
 	// make sure we take xOffset into account, we don't always start at 0
 	const unsigned int buffer_width = pie_GetVideoBufferWidth() - xOffset;
@@ -411,14 +421,14 @@ bool seq_AddTextForVideo(const char* pText, SDWORD xOffset, SDWORD yOffset, doub
 	{
 		currentLength = MAX_STR_LENGTH - 1;
 		//get end of the last word
-		while((pText[currentLength] != ' ') && (currentLength > 0))
+		while ((pText[currentLength] != ' ') && (currentLength > 0))
 		{
 			currentLength--;
 		}
 		currentLength--;
 	}
 
-	memcpy(currentText,pText,currentLength);
+	memcpy(currentText, pText, currentLength);
 	currentText[currentLength] = 0;//terminate the string what ever
 
 	//check the string is shortenough to print
@@ -426,7 +436,7 @@ bool seq_AddTextForVideo(const char* pText, SDWORD xOffset, SDWORD yOffset, doub
 	while (iV_GetTextWidth(currentText) > buffer_width)
 	{
 		currentLength--;
-		while((pText[currentLength] != ' ') && (currentLength > 0))
+		while ((pText[currentLength] != ' ') && (currentLength > 0))
 		{
 			currentLength--;
 		}
@@ -439,7 +449,7 @@ bool seq_AddTextForVideo(const char* pText, SDWORD xOffset, SDWORD yOffset, doub
 	{
 		aSeqList[currentSeq].aText[aSeqList[currentSeq].currentText].x = lastX;
 		aSeqList[currentSeq].aText[aSeqList[currentSeq].currentText].y =
-			aSeqList[currentSeq].aText[aSeqList[currentSeq].currentText-1].y + iV_GetTextLineSize();
+		    aSeqList[currentSeq].aText[aSeqList[currentSeq].currentText - 1].y + iV_GetTextLineSize();
 	}
 	else
 	{
@@ -513,12 +523,12 @@ static bool seq_AddTextFromFile(const char *pTextName, SEQ_TEXT_POSITIONING text
 	}
 
 	pTextBuffer = fileLoadBuffer;
-	pCurrentLine = strtok(pTextBuffer,seps);
+	pCurrentLine = strtok(pTextBuffer, seps);
 	while (pCurrentLine != NULL)
 	{
 		if (*pCurrentLine != '/')
 		{
-			if (sscanf(pCurrentLine,"%d %d %lf %lf", &xOffset, &yOffset, &startTime, &endTime) == 4)
+			if (sscanf(pCurrentLine, "%d %d %lf %lf", &xOffset, &yOffset, &startTime, &endTime) == 4)
 			{
 				// Since all the positioning was hardcoded to specific values, we now calculate the
 				// ratio of our screen, compared to what the game expects and multiply that to x, y.
@@ -526,13 +536,13 @@ static bool seq_AddTextFromFile(const char *pTextName, SEQ_TEXT_POSITIONING text
 				xOffset = (double)pie_GetVideoBufferWidth() / 640. * (double)xOffset;
 				yOffset = (double)pie_GetVideoBufferHeight() / 480. * (double)yOffset;
 				//get the text
-				pText = strrchr(pCurrentLine,'"');
+				pText = strrchr(pCurrentLine, '"');
 				ASSERT(pText != NULL, "error parsing text file");
 				if (pText != NULL)
 				{
 					*pText = (UBYTE)0;
 				}
-				pText = strchr(pCurrentLine,'"');
+				pText = strchr(pCurrentLine, '"');
 				ASSERT(pText != NULL, "error parsing text file");
 				if (pText != NULL)
 				{
@@ -541,7 +551,7 @@ static bool seq_AddTextFromFile(const char *pTextName, SEQ_TEXT_POSITIONING text
 			}
 		}
 		//get next line
-		pCurrentLine = strtok(NULL,seps);
+		pCurrentLine = strtok(NULL, seps);
 	}
 	return true;
 }
@@ -580,7 +590,7 @@ void seq_AddSeqToList(const char *pSeqName, const char *pAudioName, const char *
 		sstrcpy(aSubtitleName, pSeqName);
 
 		// check for a subtitle file
-		char* extension = strrchr(aSubtitleName, '.');
+		char *extension = strrchr(aSubtitleName, '.');
 		if (extension)
 		{
 			*extension = '\0';
@@ -628,7 +638,9 @@ void seq_StartNextFullScreenVideo(void)
 			// Not sure this is correct... CHECK, since the callback should ONLY
 			// be called when a video is playing (always?)
 			if (seq_Playing())
+			{
 				eventFireCallbackTrigger((TRIGGER_TYPE)CALL_VIDEO_QUIT);
+			}
 		}
 		else
 		{

@@ -84,16 +84,16 @@ static CHEAT_ENTRY cheatCodes[] =
 
 };
 
-bool attemptCheatCode(const char* cheat_name)
+bool attemptCheatCode(const char *cheat_name)
 {
-	const CHEAT_ENTRY * curCheat;
-	static const CHEAT_ENTRY * const EndCheat = &cheatCodes[ARRAY_SIZE(cheatCodes)];
+	const CHEAT_ENTRY *curCheat;
+	static const CHEAT_ENTRY *const EndCheat = &cheatCodes[ARRAY_SIZE(cheatCodes)];
 
 	// there is no reason to make people enter "cheat mode" to enter following commands
-	if (!strcasecmp("showfps", cheat_name)) 
+	if (!strcasecmp("showfps", cheat_name))
 	{
-		kf_ToggleFPS(); 
-		return true; 
+		kf_ToggleFPS();
+		return true;
 	}
 
 	if (strcmp(cheat_name, "cheat on") == 0 || strcmp(cheat_name, "debug") == 0)
@@ -139,7 +139,7 @@ bool attemptCheatCode(const char* cheat_name)
 void sendProcessDebugMappings(bool val)
 {
 	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_DEBUG_MODE);
-		NETbool(&val);
+	NETbool(&val);
 	NETend();
 }
 
@@ -147,7 +147,7 @@ void recvProcessDebugMappings(NETQUEUE queue)
 {
 	bool val = false;
 	NETbeginDecode(queue, GAME_DEBUG_MODE);
-		NETbool(&val);
+	NETbool(&val);
 	NETend();
 
 	bool oldDebugMode = getDebugMappingStatus();
@@ -157,11 +157,11 @@ void recvProcessDebugMappings(NETQUEUE queue)
 	char const *cmsg;
 	if (val)
 	{
-		sasprintf((char**)&cmsg, _("%s wants to enable debug mode. Enabled: %s, Disabled: %s."), getPlayerName(queue.index), getWantedDebugMappingStatuses(true).c_str(), getWantedDebugMappingStatuses(false).c_str());
+		sasprintf((char **)&cmsg, _("%s wants to enable debug mode. Enabled: %s, Disabled: %s."), getPlayerName(queue.index), getWantedDebugMappingStatuses(true).c_str(), getWantedDebugMappingStatuses(false).c_str());
 	}
 	else
 	{
-		sasprintf((char**)&cmsg, _("%s wants to disable debug mode. Enabled: %s, Disabled: %s."), getPlayerName(queue.index), getWantedDebugMappingStatuses(true).c_str(), getWantedDebugMappingStatuses(false).c_str());
+		sasprintf((char **)&cmsg, _("%s wants to disable debug mode. Enabled: %s, Disabled: %s."), getPlayerName(queue.index), getWantedDebugMappingStatuses(true).c_str(), getWantedDebugMappingStatuses(false).c_str());
 	}
 	addConsoleMessage(cmsg, DEFAULT_JUSTIFY,  SYSTEM_MESSAGE);
 

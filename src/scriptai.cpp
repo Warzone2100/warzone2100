@@ -94,7 +94,7 @@ bool scrGroupAddArea(void)
 	SDWORD			x1, y1, x2, y2, player;
 
 	if (!stackPopParams(6, ST_GROUP, &psGroup, VAL_INT, &player,
-	        VAL_INT, &x1, VAL_INT, &y1, VAL_INT, &x2, VAL_INT, &y2))
+	                    VAL_INT, &x1, VAL_INT, &y1, VAL_INT, &x2, VAL_INT, &y2))
 	{
 		return false;
 	}
@@ -132,7 +132,7 @@ bool scrGroupAddAreaNoGroup(void)
 	SDWORD			x1, y1, x2, y2, player;
 
 	if (!stackPopParams(6, ST_GROUP, &psGroup, VAL_INT, &player,
-	        VAL_INT, &x1, VAL_INT, &y1, VAL_INT, &x2, VAL_INT, &y2))
+	                    VAL_INT, &x1, VAL_INT, &y1, VAL_INT, &x2, VAL_INT, &y2))
 	{
 		return false;
 	}
@@ -575,7 +575,7 @@ bool scrOrderDroidStatsLoc(void)
 	SDWORD			x, y, statIndex;
 
 	if (!stackPopParams(5, ST_DROID, &psDroid, VAL_INT, &order, ST_STRUCTURESTAT, &statIndex,
-	        VAL_INT, &x, VAL_INT, &y))
+	                    VAL_INT, &x, VAL_INT, &y))
 	{
 		return false;
 	}
@@ -1118,7 +1118,7 @@ typedef void (*TARGET_PREF)(BASE_OBJECT **, BASE_OBJECT *);
 
 // generic find a target in an area given preference data
 static BASE_OBJECT *scrTargetInArea(SDWORD tarPlayer, SDWORD visPlayer, SDWORD tarType, SDWORD cluster,
-        SDWORD x1, SDWORD y1, SDWORD x2, SDWORD y2)
+                                    SDWORD x1, SDWORD y1, SDWORD x2, SDWORD y2)
 {
 	BASE_OBJECT		*psTarget, *psCurr;
 	SDWORD			temp;
@@ -1209,7 +1209,7 @@ bool scrStructTargetInArea(void)
 	SDWORD		tarPlayer, visPlayer;
 
 	if (!stackPopParams(6, VAL_INT, &tarPlayer, VAL_INT, &visPlayer,
-	        VAL_INT, &x1, VAL_INT, &y1, VAL_INT, &x2, VAL_INT, &y2))
+	                    VAL_INT, &x1, VAL_INT, &y1, VAL_INT, &x2, VAL_INT, &y2))
 	{
 		return false;
 	}
@@ -1236,8 +1236,8 @@ bool scrStructTargetOnMap(void)
 	}
 
 	psTarget = (STRUCTURE *)scrTargetInArea(tarPlayer, visPlayer, SCR_TAR_STRUCT, 0,
-	        scrollMinX * TILE_UNITS, scrollMinY * TILE_UNITS,
-	        scrollMaxX * TILE_UNITS, scrollMaxY * TILE_UNITS);
+	                                        scrollMinX * TILE_UNITS, scrollMinY * TILE_UNITS,
+	                                        scrollMaxX * TILE_UNITS, scrollMaxY * TILE_UNITS);
 
 	scrFunctionResult.v.oval = psTarget;
 	if (!stackPushResult((INTERP_TYPE)ST_STRUCTURE, &scrFunctionResult))
@@ -1256,7 +1256,7 @@ bool scrDroidTargetInArea(void)
 	DROID		*psTarget;
 
 	if (!stackPopParams(6, VAL_INT, &tarPlayer, VAL_INT, &visPlayer,
-	        VAL_INT, &x1, VAL_INT, &y1, VAL_INT, &x2, VAL_INT, &y2))
+	                    VAL_INT, &x1, VAL_INT, &y1, VAL_INT, &x2, VAL_INT, &y2))
 	{
 		return false;
 	}
@@ -1284,8 +1284,8 @@ bool scrDroidTargetOnMap(void)
 	}
 
 	psTarget = (DROID *)scrTargetInArea(tarPlayer, visPlayer, SCR_TAR_DROID, 0,
-	        scrollMinX * TILE_UNITS, scrollMinY * TILE_UNITS,
-	        scrollMaxX * TILE_UNITS, scrollMaxY * TILE_UNITS);
+	                                    scrollMinX * TILE_UNITS, scrollMinY * TILE_UNITS,
+	                                    scrollMaxX * TILE_UNITS, scrollMaxY * TILE_UNITS);
 
 	scrFunctionResult.v.oval = psTarget;
 	if (!stackPushResult((INTERP_TYPE)ST_DROID, &scrFunctionResult))
@@ -1318,8 +1318,8 @@ bool scrTargetInCluster(void)
 	tarType = (aClusterInfo[cluster] & CLUSTER_DROID) ? SCR_TAR_DROID : SCR_TAR_STRUCT;
 
 	psTarget = scrTargetInArea(tarPlayer, visPlayer, tarType, cluster,
-	        scrollMinX * TILE_UNITS, scrollMinY * TILE_UNITS,
-	        scrollMaxX * TILE_UNITS, scrollMaxY * TILE_UNITS);
+	                           scrollMinX * TILE_UNITS, scrollMinY * TILE_UNITS,
+	                           scrollMaxX * TILE_UNITS, scrollMaxY * TILE_UNITS);
 
 	scrFunctionResult.v.oval = psTarget;
 	if (!stackPushResult((INTERP_TYPE)ST_BASEOBJECT, &scrFunctionResult))
@@ -1552,7 +1552,7 @@ bool skTopicAvail(UWORD inc, UDWORD player)
 			//if (!checkStructureStatus(asStructureStats + asResearch[inc].
 			//	pStructList[incS], playerID, SS_BUILT))
 			if (!checkSpecificStructExists(asResearch[inc].pStructList[incS],
-			        player))
+			                               player))
 			{
 				//if not built, quit checking
 				bStructFound = false;
@@ -1740,12 +1740,12 @@ static bool defenseLocation(bool variantB)
 	UDWORD      offset;
 
 	if (!stackPopParams(6,
-	        VAL_REF | VAL_INT, &pX,
-	        VAL_REF | VAL_INT, &pY,
-	        ST_STRUCTURESTAT, &statIndex,
-	        ST_STRUCTURESTAT, &statIndex2,
-	        ST_DROID, &psDroid,
-	        VAL_INT, &player))
+	                    VAL_REF | VAL_INT, &pX,
+	                    VAL_REF | VAL_INT, &pY,
+	                    ST_STRUCTURESTAT, &statIndex,
+	                    ST_STRUCTURESTAT, &statIndex2,
+	                    ST_DROID, &psDroid,
+	                    VAL_INT, &player))
 	{
 		debug(LOG_ERROR, "defenseLocation: failed to pop");
 		return false;

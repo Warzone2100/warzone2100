@@ -27,7 +27,7 @@
 bool loadConfig(void);
 bool saveConfig(void);
 bool reloadMPConfig(void);
-void closeConfig( void );
+void closeConfig(void);
 
 /// Default map for Skirmish
 static const char DEFAULTSKIRMISHMAP[] = "Sk-Rush";

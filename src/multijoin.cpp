@@ -80,7 +80,7 @@ static void resetMultiVisibility(UDWORD player);
 
 bool intDisplayMultiJoiningStatus(UBYTE joinCount)
 {
-	UDWORD			x,y,w,h;
+	UDWORD			x, y, w, h;
 	char			sTmp[6];
 
 	w = RET_FORMWIDTH;
@@ -89,13 +89,13 @@ bool intDisplayMultiJoiningStatus(UBYTE joinCount)
 	y = RET_Y;
 
 //	cameraToHome(selectedPlayer);				// home the camera to the player.
-	RenderWindowFrame(FRAME_NORMAL, x, y ,w, h);		// draw a wee blu box.
+	RenderWindowFrame(FRAME_NORMAL, x, y , w, h);		// draw a wee blu box.
 
 	// display how far done..
 	iV_SetFont(font_regular);
 	iV_DrawText(_("Players Still Joining"),
-					x+(w/2)-(iV_GetTextWidth(_("Players Still Joining"))/2),
-					y+(h/2)-8 );
+	            x + (w / 2) - (iV_GetTextWidth(_("Players Still Joining")) / 2),
+	            y + (h / 2) - 8);
 	unsigned playerCount = 0;  // Calculate what NetPlay.playercount should be, which is apparently only non-zero for the host.
 	for (unsigned player = 0; player < game.maxPlayers; ++player)
 	{
@@ -110,11 +110,11 @@ bool intDisplayMultiJoiningStatus(UBYTE joinCount)
 	}
 	iV_SetFont(font_large);
 	sprintf(sTmp, "%d%%", PERCENT(playerCount - joinCount, playerCount));
-	iV_DrawText(sTmp ,x + (w / 2) - 10, y + (h / 2) + 10);
+	iV_DrawText(sTmp , x + (w / 2) - 10, y + (h / 2) + 10);
 
 	iV_SetFont(font_small);
 	int yStep = iV_GetTextLineSize();
-	int yPos = RET_Y - yStep*game.maxPlayers;
+	int yPos = RET_Y - yStep * game.maxPlayers;
 
 	static const std::string statusStrings[3] = {"☐ ", "☑ ", "☒ "};
 
@@ -123,7 +123,7 @@ bool intDisplayMultiJoiningStatus(UBYTE joinCount)
 		int status = -1;
 		if (isHumanPlayer(player))
 		{
-			status = ingame.JoiningInProgress[player]? 0 : 1;  // Human player, still joining or joined.
+			status = ingame.JoiningInProgress[player] ? 0 : 1; // Human player, still joining or joined.
 		}
 		else if (NetPlay.players[player].ai >= 0)
 		{
@@ -131,7 +131,7 @@ bool intDisplayMultiJoiningStatus(UBYTE joinCount)
 		}
 		if (status >= 0)
 		{
-			iV_DrawText((statusStrings[status] + getPlayerName(player)).c_str(), x + 5, yPos + yStep*NetPlay.players[player].position);
+			iV_DrawText((statusStrings[status] + getPlayerName(player)).c_str(), x + 5, yPos + yStep * NetPlay.players[player].position);
 		}
 	}
 
@@ -145,28 +145,28 @@ bool intDisplayMultiJoiningStatus(UBYTE joinCount)
 ** @param player -- the one we need to clear
 ** @param quietly -- true means without any visible effects
 */
-void clearPlayer(UDWORD player,bool quietly)
+void clearPlayer(UDWORD player, bool quietly)
 {
 	UDWORD			i;
-	STRUCTURE		*psStruct,*psNext;
+	STRUCTURE		*psStruct, *psNext;
 
-	debug(LOG_NET, "R.I.P. %s (%u). quietly is %s", getPlayerName(player), player, quietly ? "true":"false");
+	debug(LOG_NET, "R.I.P. %s (%u). quietly is %s", getPlayerName(player), player, quietly ? "true" : "false");
 
 	ingame.JoiningInProgress[player] = false;	// if they never joined, reset the flag
 	ingame.DataIntegrity[player] = false;
 
-	(void)setPlayerName(player,"");				//clear custom player name (will use default instead)
+	(void)setPlayerName(player, "");				//clear custom player name (will use default instead)
 
-	for(i = 0;i<MAX_PLAYERS;i++)				// remove alliances
+	for (i = 0; i < MAX_PLAYERS; i++)				// remove alliances
 	{
 		alliances[player][i]	= ALLIANCE_BROKEN;
 		alliances[i][player]	= ALLIANCE_BROKEN;
 	}
 
 	debug(LOG_DEATH, "killing off all droids for player %d", player);
-	while(apsDroidLists[player])				// delete all droids
+	while (apsDroidLists[player])				// delete all droids
 	{
-		if(quietly)			// don't show effects
+		if (quietly)			// don't show effects
 		{
 			killDroid(apsDroidLists[player]);
 		}
@@ -178,12 +178,12 @@ void clearPlayer(UDWORD player,bool quietly)
 
 	debug(LOG_DEATH, "killing off all structures for player %d", player);
 	psStruct = apsStructLists[player];
-	while(psStruct)				// delete all structs
+	while (psStruct)				// delete all structs
 	{
 		psNext = psStruct->psNext;
 
 		// FIXME: look why destroyStruct() doesn't put back the feature like removeStruct() does
-		if(quietly || psStruct->pStructureType->type == REF_RESOURCE_EXTRACTOR)		// don't show effects
+		if (quietly || psStruct->pStructureType->type == REF_RESOURCE_EXTRACTOR)		// don't show effects
 		{
 			removeStruct(psStruct, true);
 		}
@@ -205,18 +205,18 @@ static void resetMultiVisibility(UDWORD player)
 	DROID		*pDroid;
 	STRUCTURE	*pStruct;
 
-	for(owned = 0 ; owned <MAX_PLAYERS ;owned++)		// for each player
+	for (owned = 0 ; owned < MAX_PLAYERS ; owned++)		// for each player
 	{
-		if(owned != player)								// done reset own stuff..
+		if (owned != player)								// done reset own stuff..
 		{
 			//droids
-			for(pDroid = apsDroidLists[owned];pDroid;pDroid=pDroid->psNext)
+			for (pDroid = apsDroidLists[owned]; pDroid; pDroid = pDroid->psNext)
 			{
 				pDroid->visible[player] = false;
 			}
 
 			//structures
-			for(pStruct= apsStructLists[owned];pStruct;pStruct=pStruct->psNext)
+			for (pStruct = apsStructLists[owned]; pStruct; pStruct = pStruct->psNext)
 			{
 				pStruct->visible[player] = false;
 			}
@@ -231,9 +231,9 @@ static void sendPlayerLeft(uint32_t playerIndex)
 	ASSERT(NetPlay.isHost, "Only host should call this.");
 
 	uint32_t forcedPlayerIndex = whosResponsible(playerIndex);
-	NETQUEUE (*netQueueType)(unsigned) = forcedPlayerIndex != selectedPlayer? NETgameQueueForced : NETgameQueue;
+	NETQUEUE(*netQueueType)(unsigned) = forcedPlayerIndex != selectedPlayer ? NETgameQueueForced : NETgameQueue;
 	NETbeginEncode(netQueueType(forcedPlayerIndex), GAME_PLAYER_LEFT);
-		NETuint32_t(&playerIndex);
+	NETuint32_t(&playerIndex);
 	NETend();
 }
 
@@ -241,7 +241,7 @@ void recvPlayerLeft(NETQUEUE queue)
 {
 	uint32_t playerIndex = 0;
 	NETbeginDecode(queue, GAME_PLAYER_LEFT);
-		NETuint32_t(&playerIndex);
+	NETuint32_t(&playerIndex);
 	NETend();
 	if (whosResponsible(playerIndex) != queue.index)
 	{
@@ -272,7 +272,7 @@ bool MultiPlayerLeave(UDWORD playerIndex)
 	}
 
 	NETlogEntry("Player leaving game", SYNC_FLAG, playerIndex);
-	debug(LOG_NET,"** Player %u [%s], has left the game at game time %u.", playerIndex, getPlayerName(playerIndex), gameTime);
+	debug(LOG_NET, "** Player %u [%s], has left the game at game time %u.", playerIndex, getPlayerName(playerIndex), gameTime);
 
 	if (ingame.localJoiningInProgress)
 	{
@@ -313,12 +313,12 @@ bool MultiPlayerLeave(UDWORD playerIndex)
 // A Remote Player has joined the game.
 bool MultiPlayerJoin(UDWORD playerIndex)
 {
-	if(widgGetFromID(psWScreen,IDRET_FORM))	// if ingame.
+	if (widgGetFromID(psWScreen, IDRET_FORM))	// if ingame.
 	{
-		audio_QueueTrack( ID_CLAN_ENTER );
+		audio_QueueTrack(ID_CLAN_ENTER);
 	}
 
-	if(widgGetFromID(psWScreen,MULTIOP_PLAYERS))	// if in multimenu.
+	if (widgGetFromID(psWScreen, MULTIOP_PLAYERS))	// if in multimenu.
 	{
 		if (!multiRequestUp && (bHosted || ingame.localJoiningInProgress))
 		{
@@ -326,7 +326,7 @@ bool MultiPlayerJoin(UDWORD playerIndex)
 		}
 	}
 
-	if(NetPlay.isHost)		// host responsible for welcoming this player.
+	if (NetPlay.isHost)		// host responsible for welcoming this player.
 	{
 		// if we've already received a request from this player don't reallocate.
 		if (ingame.JoiningInProgress[playerIndex])
@@ -367,7 +367,7 @@ bool sendDataCheck(void)
 	int i = 0;
 
 	NETbeginEncode(NETnetQueue(NET_HOST_ONLY), NET_DATA_CHECK);		// only need to send to HOST
-	for(i = 0; i < DATA_MAXDATA; i++)
+	for (i = 0; i < DATA_MAXDATA; i++)
 	{
 		NETuint32_t(&DataHash[i]);
 	}
@@ -382,14 +382,14 @@ bool recvDataCheck(NETQUEUE queue)
 	uint32_t player = queue.index;
 	uint32_t tempBuffer[DATA_MAXDATA] = {0};
 
-	if(!NetPlay.isHost)				// only host should act
+	if (!NetPlay.isHost)				// only host should act
 	{
 		ASSERT(false, "Host only routine detected for client!");
 		return false;
 	}
 
 	NETbeginDecode(queue, NET_DATA_CHECK);
-	for(i = 0; i < DATA_MAXDATA; i++)
+	for (i = 0; i < DATA_MAXDATA; i++)
 	{
 		NETuint32_t(&tempBuffer[i]);
 	}
@@ -415,9 +415,12 @@ bool recvDataCheck(NETQUEUE queue)
 		{
 			char msg[256] = {'\0'};
 
-			for (i=0; i<DATA_MAXDATA; i++)
+			for (i = 0; i < DATA_MAXDATA; i++)
 			{
-				if (DataHash[i] != tempBuffer[i]) break;
+				if (DataHash[i] != tempBuffer[i])
+				{
+					break;
+				}
 			}
 
 			sprintf(msg, _("%s (%u) has an incompatible mod, and has been kicked."), getPlayerName(player), player);

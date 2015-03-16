@@ -373,8 +373,8 @@ void drawMuzzleFlash(WEAPON sWeap, iIMDShape *weaponImd, iIMDShape *flashImd, PI
 
 	/* Now we need to move to the end of the firing barrel */
 	pie_TRANSLATE(weaponImd->connectors[connector_num].x,
-		      weaponImd->connectors[connector_num].z,
-		      weaponImd->connectors[connector_num].y);
+	              weaponImd->connectors[connector_num].z,
+	              weaponImd->connectors[connector_num].y);
 
 	// assume no clan colours for muzzle effects
 	if (flashImd->numFrames == 0 || flashImd->animInterval <= 0)

@@ -170,7 +170,7 @@ static bool _intRefreshTransporter(void)
 
 bool intAddTransporter(DROID *psSelected, bool offWorld)
 {
-	return(_intAddTransporter(psSelected, offWorld));
+	return (_intAddTransporter(psSelected, offWorld));
 }
 
 /*Add the Transporter Interface*/
@@ -426,10 +426,10 @@ bool intAddTransButtonForm(void)
 
 	/* Add the button form */
 	IntListTabWidget *transList = new IntListTabWidget(transForm);
-	transList->setChildSize(OBJ_BUTWIDTH, OBJ_BUTHEIGHT*2);
+	transList->setChildSize(OBJ_BUTWIDTH, OBJ_BUTHEIGHT * 2);
 	transList->setChildSpacing(OBJ_GAP, OBJ_GAP);
-	int objListWidth = OBJ_BUTWIDTH*5 + OBJ_GAP*4;
-	transList->setGeometry((OBJ_BACKWIDTH - objListWidth)/2, TRANS_TABY, objListWidth, transForm->height() - TRANS_TABY);
+	int objListWidth = OBJ_BUTWIDTH * 5 + OBJ_GAP * 4;
+	transList->setGeometry((OBJ_BACKWIDTH - objListWidth) / 2, TRANS_TABY, objListWidth, transForm->height() - TRANS_TABY);
 
 	/* Add the transporter and status buttons */
 	int nextObjButtonId = IDTRANS_START;
@@ -440,7 +440,7 @@ bool intAddTransButtonForm(void)
 	{
 		//only interested in Transporter droids
 		if ((isTransporter(psDroid) && (psDroid->action == DACTION_TRANSPORTOUT  ||
-			psDroid->action == DACTION_TRANSPORTIN)) || !isTransporter(psDroid))
+		                                psDroid->action == DACTION_TRANSPORTIN)) || !isTransporter(psDroid))
 		{
 			continue;
 		}
@@ -495,8 +495,8 @@ bool intAddTransContentsForm(void)
 	IntListTabWidget *contList = new IntListTabWidget(contForm);
 	contList->setChildSize(OBJ_BUTWIDTH, OBJ_BUTHEIGHT);
 	contList->setChildSpacing(OBJ_GAP, OBJ_GAP);
-	int contListWidth = OBJ_BUTWIDTH*2 + OBJ_GAP;
-	contList->setGeometry((contForm->width() - contListWidth)/2, TRANSCONT_TABY, contListWidth, contForm->height() - TRANSCONT_TABY);
+	int contListWidth = OBJ_BUTWIDTH * 2 + OBJ_GAP;
+	contList->setGeometry((contForm->width() - contListWidth) / 2, TRANSCONT_TABY, contListWidth, contForm->height() - TRANSCONT_TABY);
 
 	/* Add the transporter contents buttons */
 	int nextButtonId = IDTRANS_CONTSTART;
@@ -572,8 +572,8 @@ bool intAddDroidsAvailForm(void)
 	droidList->id = IDTRANS_DROIDTAB;
 	droidList->setChildSize(OBJ_BUTWIDTH, OBJ_BUTHEIGHT);
 	droidList->setChildSpacing(OBJ_GAP, OBJ_GAP);
-	int droidListWidth = OBJ_BUTWIDTH*2 + OBJ_GAP;
-	droidList->setGeometry((TRANSDROID_WIDTH - droidListWidth)/2, AVAIL_STARTY + 15, droidListWidth, TRANSDROID_HEIGHT - (AVAIL_STARTY + 15));
+	int droidListWidth = OBJ_BUTWIDTH * 2 + OBJ_GAP;
+	droidList->setGeometry((TRANSDROID_WIDTH - droidListWidth) / 2, AVAIL_STARTY + 15, droidListWidth, TRANSDROID_HEIGHT - (AVAIL_STARTY + 15));
 
 	/* Add the droids available buttons */
 	int nextButtonId = IDTRANS_DROIDSTART;
@@ -670,7 +670,7 @@ bool transporterIsEmpty(const DROID *psTransporter)
 
 	// Assume dead droids and non-transporter droids to be empty
 	return (isDead((const BASE_OBJECT *)psTransporter)
-			|| !isTransporter(psTransporter)
+	        || !isTransporter(psTransporter)
 	        || psTransporter->psGroup->psList == NULL
 	        || psTransporter->psGroup->psList == psTransporter);
 }
@@ -856,7 +856,7 @@ void setCurrentTransporter(UDWORD id)
 
 	//loop thru all the droids to find the selected one
 	for (psDroid = transInterfaceDroidList(); psDroid != NULL; psDroid =
-	        psDroid->psNext)
+	         psDroid->psNext)
 	{
 		if (isTransporter(psDroid) &&
 		    (psDroid->action != DACTION_TRANSPORTOUT &&
@@ -1203,7 +1203,7 @@ bool updateTransporter(DROID *psTransporter)
 		{
 			//play reinforcements have arrived message
 			audio_QueueTrackPos(ID_SOUND_TRANSPORT_LANDING,
-			        psTransporter->pos.x, psTransporter->pos.y, psTransporter->pos.z);
+			                    psTransporter->pos.x, psTransporter->pos.y, psTransporter->pos.z);
 			addConsoleMessage(_("Reinforcements landing"), LEFT_JUSTIFY, SYSTEM_MESSAGE);
 			//reset the data for the transporter timer
 			widgSetUserData(psWScreen, IDTRANTIMER_DISPLAY, (void *)NULL);

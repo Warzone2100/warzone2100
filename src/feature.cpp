@@ -61,7 +61,7 @@ FEATURE_STATS	*asFeatureStats;
 UDWORD			numFeatureStats;
 
 //Value is stored for easy access to this feature in destroyDroid()/destroyStruct()
-FEATURE_STATS* oilResFeature = NULL;
+FEATURE_STATS *oilResFeature = NULL;
 
 void featureInitVars(void)
 {
@@ -85,16 +85,46 @@ bool loadFeatureStats(const char *pFileName)
 		p->name = ini.value("name").toString();
 		p->id = list[i];
 		QString subType = ini.value("type").toString();
-		if (subType == "TANK WRECK") p->subType = FEAT_TANK;
-		else if (subType == "GENERIC ARTEFACT") p->subType = FEAT_GEN_ARTE;
-		else if (subType == "OIL RESOURCE") p->subType = FEAT_OIL_RESOURCE;
-		else if (subType == "BOULDER") p->subType = FEAT_BOULDER;
-		else if (subType == "VEHICLE") p->subType = FEAT_VEHICLE;
-		else if (subType == "BUILDING") p->subType = FEAT_BUILDING;
-		else if (subType == "OIL DRUM") p->subType = FEAT_OIL_DRUM;
-		else if (subType == "TREE") p->subType = FEAT_TREE;
-		else if (subType == "SKYSCRAPER") p->subType = FEAT_SKYSCRAPER;
-		else ASSERT(false, "Unknown feature type: %s", subType.toUtf8().constData());
+		if (subType == "TANK WRECK")
+		{
+			p->subType = FEAT_TANK;
+		}
+		else if (subType == "GENERIC ARTEFACT")
+		{
+			p->subType = FEAT_GEN_ARTE;
+		}
+		else if (subType == "OIL RESOURCE")
+		{
+			p->subType = FEAT_OIL_RESOURCE;
+		}
+		else if (subType == "BOULDER")
+		{
+			p->subType = FEAT_BOULDER;
+		}
+		else if (subType == "VEHICLE")
+		{
+			p->subType = FEAT_VEHICLE;
+		}
+		else if (subType == "BUILDING")
+		{
+			p->subType = FEAT_BUILDING;
+		}
+		else if (subType == "OIL DRUM")
+		{
+			p->subType = FEAT_OIL_DRUM;
+		}
+		else if (subType == "TREE")
+		{
+			p->subType = FEAT_TREE;
+		}
+		else if (subType == "SKYSCRAPER")
+		{
+			p->subType = FEAT_SKYSCRAPER;
+		}
+		else
+		{
+			ASSERT(false, "Unknown feature type: %s", subType.toUtf8().constData());
+		}
 		p->psImd = modelGet(ini.value("model").toString());
 		p->baseWidth = ini.value("width", 1).toInt();
 		p->baseBreadth = ini.value("breadth", 1).toInt();
@@ -156,7 +186,7 @@ int32_t featureDamage(FEATURE *psFeature, unsigned damage, WEAPON_CLASS weaponCl
 
 
 /* Create a feature on the map */
-FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,bool FromSave)
+FEATURE *buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y, bool FromSave)
 {
 	//try and create the Feature
 	FEATURE *psFeature = new FEATURE(generateSynchronisedObjectId(), psStats);
@@ -175,13 +205,13 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,bool FromSave)
 	// snap the coords to a tile
 	if (!FromSave)
 	{
-		x = (x & ~TILE_MASK) + psStats->baseWidth  %2 * TILE_UNITS/2;
-		y = (y & ~TILE_MASK) + psStats->baseBreadth%2 * TILE_UNITS/2;
+		x = (x & ~TILE_MASK) + psStats->baseWidth  % 2 * TILE_UNITS / 2;
+		y = (y & ~TILE_MASK) + psStats->baseBreadth % 2 * TILE_UNITS / 2;
 	}
 	else
 	{
-		if ((x & TILE_MASK) != psStats->baseWidth  %2 * TILE_UNITS/2 ||
-		    (y & TILE_MASK) != psStats->baseBreadth%2 * TILE_UNITS/2)
+		if ((x & TILE_MASK) != psStats->baseWidth  % 2 * TILE_UNITS / 2 ||
+		    (y & TILE_MASK) != psStats->baseBreadth % 2 * TILE_UNITS / 2)
 		{
 			debug(LOG_WARNING, "Feature not aligned. position (%d,%d), size (%d,%d)", x, y, psStats->baseWidth, psStats->baseBreadth);
 		}
@@ -253,7 +283,7 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,bool FromSave)
 					removeFeature(psBlock);
 				}
 
-				psTile->psObject = (BASE_OBJECT*)psFeature;
+				psTile->psObject = (BASE_OBJECT *)psFeature;
 
 				// if it's a tall feature then flag it in the map.
 				if (psFeature->sDisplay.imd->max.y > TALLOBJECT_YMAX)
@@ -267,7 +297,7 @@ FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,bool FromSave)
 				}
 			}
 
-			if( (!psStats->tileDraw) && (FromSave == false) )
+			if ((!psStats->tileDraw) && (FromSave == false))
 			{
 				psTile->height = height;
 			}
@@ -342,7 +372,7 @@ bool removeFeature(FEATURE *psDel)
 			if (tileOnMap(b.map.x + width, b.map.y + breadth))
 			{
 				MAPTILE *psTile = mapTile(b.map.x + width, b.map.y + breadth);
-	 
+
 				if (psTile->psObject == psDel)
 				{
 					psTile->psObject = NULL;
@@ -387,20 +417,20 @@ bool removeFeature(FEATURE *psDel)
 /* Remove a Feature and free it's memory */
 bool destroyFeature(FEATURE *psDel, unsigned impactTime)
 {
-	UDWORD			widthScatter,breadthScatter,heightScatter, i;
+	UDWORD			widthScatter, breadthScatter, heightScatter, i;
 	EFFECT_TYPE		explosionSize;
 	Vector3i pos;
 
 	ASSERT_OR_RETURN(false, psDel != NULL, "Invalid feature pointer");
 
- 	/* Only add if visible and damageable*/
-	if(psDel->visible[selectedPlayer] && psDel->psStats->damageable)
+	/* Only add if visible and damageable*/
+	if (psDel->visible[selectedPlayer] && psDel->psStats->damageable)
 	{
 		/* Set off a destruction effect */
 		/* First Explosions */
-		widthScatter = TILE_UNITS/2;
-		breadthScatter = TILE_UNITS/2;
-		heightScatter = TILE_UNITS/4;
+		widthScatter = TILE_UNITS / 2;
+		breadthScatter = TILE_UNITS / 2;
+		heightScatter = TILE_UNITS / 4;
 		//set which explosion to use based on size of feature
 		if (psDel->psStats->baseWidth < 2 && psDel->psStats->baseBreadth < 2)
 		{
@@ -414,15 +444,15 @@ bool destroyFeature(FEATURE *psDel, unsigned impactTime)
 		{
 			explosionSize = EXPLOSION_TYPE_LARGE;
 		}
-		for(i=0; i<4; i++)
+		for (i = 0; i < 4; i++)
 		{
-			pos.x = psDel->pos.x + widthScatter - rand()%(2*widthScatter);
-			pos.z = psDel->pos.y + breadthScatter - rand()%(2*breadthScatter);
-			pos.y = psDel->pos.z + 32 + rand()%heightScatter;
+			pos.x = psDel->pos.x + widthScatter - rand() % (2 * widthScatter);
+			pos.z = psDel->pos.y + breadthScatter - rand() % (2 * breadthScatter);
+			pos.y = psDel->pos.z + 32 + rand() % heightScatter;
 			addEffect(&pos, EFFECT_EXPLOSION, explosionSize, false, NULL, 0, impactTime);
 		}
 
-		if(psDel->psStats->subType == FEAT_SKYSCRAPER)
+		if (psDel->psStats->subType == FEAT_SKYSCRAPER)
 		{
 			pos.x = psDel->pos.x;
 			pos.z = psDel->pos.y;
@@ -436,18 +466,18 @@ bool destroyFeature(FEATURE *psDel, unsigned impactTime)
 		/* Then a sequence of effects */
 		pos.x = psDel->pos.x;
 		pos.z = psDel->pos.y;
-		pos.y = map_Height(pos.x,pos.z);
+		pos.y = map_Height(pos.x, pos.z);
 		addEffect(&pos, EFFECT_DESTRUCTION, DESTRUCTION_TYPE_FEATURE, false, NULL, 0, impactTime);
 
 		//play sound
 		// ffs gj
-		if(psDel->psStats->subType == FEAT_SKYSCRAPER)
+		if (psDel->psStats->subType == FEAT_SKYSCRAPER)
 		{
-			audio_PlayStaticTrack( psDel->pos.x, psDel->pos.y, ID_SOUND_BUILDING_FALL );
+			audio_PlayStaticTrack(psDel->pos.x, psDel->pos.y, ID_SOUND_BUILDING_FALL);
 		}
 		else
 		{
-			audio_PlayStaticTrack( psDel->pos.x, psDel->pos.y, ID_SOUND_EXPLOSION );
+			audio_PlayStaticTrack(psDel->pos.x, psDel->pos.y, ID_SOUND_EXPLOSION);
 		}
 	}
 
@@ -514,7 +544,7 @@ Vector2i getFeatureStatsSize(FEATURE_STATS const *pFeatureType)
 StructureBounds getStructureBounds(FEATURE const *object)
 {
 	Vector2i size = getFeatureStatsSize(object->psStats);
-	Vector2i map = map_coord(removeZ(object->pos)) - size/2;
+	Vector2i map = map_coord(removeZ(object->pos)) - size / 2;
 
 	return StructureBounds(map, size);
 }
@@ -522,7 +552,7 @@ StructureBounds getStructureBounds(FEATURE const *object)
 StructureBounds getStructureBounds(FEATURE_STATS const *stats, Vector2i pos)
 {
 	Vector2i size = getFeatureStatsSize(stats);
-	Vector2i map = map_coord(pos) - size/2;
+	Vector2i map = map_coord(pos) - size / 2;
 
 	return StructureBounds(map, size);
 }

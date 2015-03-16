@@ -45,24 +45,24 @@
 #include "scripttabs.h"
 
 
-static UDWORD asciiKeyCodeToTable( KEY_CODE code );
+static UDWORD asciiKeyCodeToTable(KEY_CODE code);
 
 // ----------------------------------------------------------------------------------
 KEY_MAPPING	*keyGetMappingFromFunction(void	*function)
 {
-KEY_MAPPING	*psMapping,*psReturn;
+	KEY_MAPPING	*psMapping, *psReturn;
 
-	for(psMapping = keyMappings,psReturn = NULL;
-		psMapping && !psReturn;
-		psMapping = psMapping->psNext)
+	for (psMapping = keyMappings, psReturn = NULL;
+	     psMapping && !psReturn;
+	     psMapping = psMapping->psNext)
+	{
+		if ((void *)psMapping->function == function)
 		{
-			if ((void *)psMapping->function == function)
-			{
-				psReturn = psMapping;
-			}
+			psReturn = psMapping;
 		}
+	}
 
-	return(psReturn);
+	return (psReturn);
 }
 // ----------------------------------------------------------------------------------
 /* Some stuff allowing the user to add key mappings themselves */
@@ -70,9 +70,9 @@ KEY_MAPPING	*psMapping,*psReturn;
 #define	NUM_QWERTY_KEYS	26
 struct KEYMAP_MARKER
 {
-KEY_MAPPING	*psMapping;
-UDWORD	xPos,yPos;
-SDWORD	spin;
+	KEY_MAPPING	*psMapping;
+	UDWORD	xPos, yPos;
+	SDWORD	spin;
 };
 static	KEYMAP_MARKER	qwertyKeyMappings[NUM_QWERTY_KEYS];
 
@@ -89,7 +89,7 @@ KEY_MAPPING	*keyMappings;
 UDWORD	numActiveMappings;
 
 /* Last meta and sub key that were recorded */
-static KEY_CODE	lastMetaKey,lastSubKey;
+static KEY_CODE	lastMetaKey, lastSubKey;
 static bool	bKeyProcessing = true;
 
 static void kf_NOOP(void) {}
@@ -277,7 +277,7 @@ _keymapsave keyMapSaveTable[] =
 	these will be read in from a .cfg file customisable by the player from
 	an in-game menu
 */
-void	keyInitMappings( bool bForceDefaults )
+void	keyInitMappings(bool bForceDefaults)
 {
 	UDWORD	i;
 	keyMappings = NULL;
@@ -289,13 +289,13 @@ void	keyInitMappings( bool bForceDefaults )
 	}
 
 
-	for(i=0; i<NUM_QWERTY_KEYS; i++)
+	for (i = 0; i < NUM_QWERTY_KEYS; i++)
 	{
 		qwertyKeyMappings[i].psMapping = NULL;
 	}
 
 	// load the mappings.
-	if(!bForceDefaults && loadKeyMap() == true)
+	if (!bForceDefaults && loadKeyMap() == true)
 	{
 		return;
 	}
@@ -383,7 +383,7 @@ void	keyInitMappings( bool bForceDefaults )
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL,  KEY_EQUALS,            KEYMAP_PRESSED, kf_SpeedUp,                 N_("Increase Game Speed"));
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL,  KEY_BACKSPACE,         KEYMAP_PRESSED, kf_NormalSpeed,             N_("Reset Game Speed"));
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL,  KEY_UPARROW,           KEYMAP_PRESSED, kf_FaceNorth,               N_("View North"));
-	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL,  KEY_DOWNARROW,         KEYMAP_PRESSED, kf_FaceSouth,               N_("View South") );
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL,  KEY_DOWNARROW,         KEYMAP_PRESSED, kf_FaceSouth,               N_("View South"));
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL,  KEY_LEFTARROW,         KEYMAP_PRESSED, kf_FaceEast,                N_("View East"));
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL,  KEY_RIGHTARROW,        KEYMAP_PRESSED, kf_FaceWest,                N_("View West"));
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_KP_STAR,           KEYMAP_PRESSED, kf_JumpToResourceExtractor, N_("View next Oil Derrick"));
@@ -450,10 +450,10 @@ void	keyInitMappings( bool bForceDefaults )
 	//                                **********************************
 	//                                **********************************
 	//									SELECT PLAYERS - DEBUG ONLY
-	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE,(KEY_CODE)KEY_MAXSCAN, KEYMAP_PRESSED, kf_SelectNextFactory,       N_("Select next Factory"));
-	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE,(KEY_CODE)KEY_MAXSCAN, KEYMAP_PRESSED, kf_SelectNextResearch,      N_("Select next Research Facility"));
-	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE,(KEY_CODE)KEY_MAXSCAN, KEYMAP_PRESSED, kf_SelectNextPowerStation,  N_("Select next Power Generator"));
-	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE,(KEY_CODE)KEY_MAXSCAN, KEYMAP_PRESSED, kf_SelectNextCyborgFactory, N_("Select next Cyborg Factory"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, (KEY_CODE)KEY_MAXSCAN, KEYMAP_PRESSED, kf_SelectNextFactory,       N_("Select next Factory"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, (KEY_CODE)KEY_MAXSCAN, KEYMAP_PRESSED, kf_SelectNextResearch,      N_("Select next Research Facility"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, (KEY_CODE)KEY_MAXSCAN, KEYMAP_PRESSED, kf_SelectNextPowerStation,  N_("Select next Power Generator"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, (KEY_CODE)KEY_MAXSCAN, KEYMAP_PRESSED, kf_SelectNextCyborgFactory, N_("Select next Cyborg Factory"));
 
 	// Debug options
 	keyAddMapping(KEYMAP___HIDE, KEY_LSHIFT, KEY_BACKSPACE, KEYMAP_PRESSED, kf_ToggleDebugMappings, N_("Toggle Debug Mappings"));
@@ -484,13 +484,13 @@ void	keyInitMappings( bool bForceDefaults )
 // ----------------------------------------------------------------------------------
 /* Adds a new mapping to the list */
 //bool	keyAddMapping(KEY_CODE metaCode, KEY_CODE subCode, KEY_ACTION action,void *function, char *name)
-KEY_MAPPING *keyAddMapping(KEY_STATUS status,KEY_CODE metaCode, KEY_CODE subCode, KEY_ACTION action,
-					  void (*pKeyMapFunc)(void), const char *name)
+KEY_MAPPING *keyAddMapping(KEY_STATUS status, KEY_CODE metaCode, KEY_CODE subCode, KEY_ACTION action,
+                           void (*pKeyMapFunc)(void), const char *name)
 {
-KEY_MAPPING	*newMapping;
+	KEY_MAPPING	*newMapping;
 
 	/* Get some memory for our binding */
-	newMapping = (KEY_MAPPING*)malloc(sizeof(KEY_MAPPING));
+	newMapping = (KEY_MAPPING *)malloc(sizeof(KEY_MAPPING));
 	if (newMapping == NULL)
 	{
 		debug(LOG_FATAL, "keyAddMapping: Out of memory!");
@@ -524,10 +524,22 @@ KEY_MAPPING	*newMapping;
 	newMapping->altMetaKeyCode = KEY_IGNORE;
 
 	/* We always request only the left hand one */
-	if(metaCode == KEY_LCTRL) {newMapping->altMetaKeyCode = KEY_RCTRL;}
-	else if(metaCode == KEY_LALT) {newMapping->altMetaKeyCode = KEY_RALT;}
-	else if(metaCode == KEY_LSHIFT) {newMapping->altMetaKeyCode = KEY_RSHIFT;}
-	else if(metaCode == KEY_LMETA) {newMapping->altMetaKeyCode = KEY_RMETA;}
+	if (metaCode == KEY_LCTRL)
+	{
+		newMapping->altMetaKeyCode = KEY_RCTRL;
+	}
+	else if (metaCode == KEY_LALT)
+	{
+		newMapping->altMetaKeyCode = KEY_RALT;
+	}
+	else if (metaCode == KEY_LSHIFT)
+	{
+		newMapping->altMetaKeyCode = KEY_RSHIFT;
+	}
+	else if (metaCode == KEY_LMETA)
+	{
+		newMapping->altMetaKeyCode = KEY_RMETA;
+	}
 
 	/* Set it to be active */
 	newMapping->active = true;
@@ -536,41 +548,41 @@ KEY_MAPPING	*newMapping;
 	keyMappings = newMapping;
 	numActiveMappings++;
 
-	return(newMapping);
+	return (newMapping);
 }
 
 // ----------------------------------------------------------------------------------
 /* Removes a mapping from the list specified by the key codes */
-bool	keyRemoveMapping( KEY_CODE metaCode, KEY_CODE subCode )
+bool	keyRemoveMapping(KEY_CODE metaCode, KEY_CODE subCode)
 {
-KEY_MAPPING	*mapping;
+	KEY_MAPPING	*mapping;
 
 	mapping = keyFindMapping(metaCode, subCode);
-	return(keyRemoveMappingPt(mapping));
+	return (keyRemoveMappingPt(mapping));
 }
 
 // ----------------------------------------------------------------------------------
 /* Returns a pointer to a mapping if it exists - NULL otherwise */
-KEY_MAPPING *keyFindMapping( KEY_CODE metaCode, KEY_CODE subCode )
+KEY_MAPPING *keyFindMapping(KEY_CODE metaCode, KEY_CODE subCode)
 {
-KEY_MAPPING	*psCurr;
+	KEY_MAPPING	*psCurr;
 
 	/* See if we can find it */
-	for(psCurr = keyMappings; psCurr != NULL; psCurr = psCurr->psNext)
+	for (psCurr = keyMappings; psCurr != NULL; psCurr = psCurr->psNext)
+	{
+		if (psCurr->metaKeyCode == metaCode && psCurr->subKeyCode == subCode)
 		{
-			if(psCurr->metaKeyCode == metaCode && psCurr->subKeyCode == subCode)
-			{
-				return(psCurr);
-			}
+			return (psCurr);
 		}
-	return(NULL);
+	}
+	return (NULL);
 }
 
 // ----------------------------------------------------------------------------------
 /* clears the mappings list and frees the memory */
-void	keyClearMappings( void )
+void	keyClearMappings(void)
 {
-	while(keyMappings)
+	while (keyMappings)
 	{
 		keyRemoveMappingPt(keyMappings);
 	}
@@ -581,35 +593,38 @@ void	keyClearMappings( void )
 /* Removes a mapping specified by a pointer */
 bool	keyRemoveMappingPt(KEY_MAPPING *psToRemove)
 {
-KEY_MAPPING	*psPrev,*psCurr;
+	KEY_MAPPING	*psPrev, *psCurr;
 
-	if(psToRemove == NULL)
+	if (psToRemove == NULL)
 	{
-		return(false);
+		return (false);
 	}
 
-	if(psToRemove == keyMappings && keyMappings->psNext == NULL)
+	if (psToRemove == keyMappings && keyMappings->psNext == NULL)
 	{
-		if (keyMappings->pName)	free(keyMappings->pName);		// ffs
+		if (keyMappings->pName)
+		{
+			free(keyMappings->pName);    // ffs
+		}
 		free(keyMappings);
 		keyMappings = NULL;
 		numActiveMappings = 0;
-		return(true);
+		return (true);
 	}
 
 	/* See if we can find it */
-	for(psPrev = NULL, psCurr = keyMappings;
-		psCurr != NULL && psCurr!=psToRemove;
-		psPrev = psCurr, psCurr = psCurr->psNext)
-		{
-		  /*NOP*/
-		}
+	for (psPrev = NULL, psCurr = keyMappings;
+	     psCurr != NULL && psCurr != psToRemove;
+	     psPrev = psCurr, psCurr = psCurr->psNext)
+	{
+		/*NOP*/
+	}
 
-		/* If it was found... */
-	if(psCurr==psToRemove)
+	/* If it was found... */
+	if (psCurr == psToRemove)
 	{
 		/* See if it was the first element */
-		if(psPrev)
+		if (psPrev)
 		{
 			/* It wasn't */
 			psPrev->psNext = psCurr->psNext;
@@ -620,26 +635,29 @@ KEY_MAPPING	*psPrev,*psCurr;
 			keyMappings = psCurr->psNext;
 		}
 		/* Free up the memory, first for the string  */
-		if (psCurr->pName)	free(psCurr->pName);		// only free it if it was allocated in the first place (ffs)
+		if (psCurr->pName)
+		{
+			free(psCurr->pName);    // only free it if it was allocated in the first place (ffs)
+		}
 		/* and then for the mapping itself */
 		free(psCurr);
 		numActiveMappings--;
-		return(true);
+		return (true);
 	}
-	return(false);
+	return (false);
 }
 
 // ----------------------------------------------------------------------------------
 /* Just returns how many are active */
-UDWORD	getNumMappings( void )
+UDWORD	getNumMappings(void)
 {
-	return(numActiveMappings);
+	return (numActiveMappings);
 }
 
 
 // ----------------------------------------------------------------------------------
 /* Allows _new_ mappings to be made at runtime */
-static bool checkQwertyKeys( void )
+static bool checkQwertyKeys(void)
 {
 	KEY_CODE qKey;
 	UDWORD tableEntry;
@@ -662,7 +680,7 @@ static bool checkQwertyKeys( void )
 			}
 			/* Now add the new one for this location */
 			qwertyKeyMappings[tableEntry].psMapping =
-				keyAddMapping(KEYMAP_ALWAYS, KEY_LSHIFT, qKey, KEYMAP_PRESSED, kf_JumpToMapMarker, "Jump to new map marker");
+			    keyAddMapping(KEYMAP_ALWAYS, KEY_LSHIFT, qKey, KEYMAP_PRESSED, kf_JumpToMapMarker, "Jump to new map marker");
 			aquired = true;
 
 			/* Store away the position and view angle */
@@ -677,25 +695,25 @@ static bool checkQwertyKeys( void )
 
 // ----------------------------------------------------------------------------------
 /* Manages update of all the active function mappings */
-void	keyProcessMappings( bool bExclude )
+void	keyProcessMappings(bool bExclude)
 {
-KEY_MAPPING	*keyToProcess;
-bool		bMetaKeyDown;
-SDWORD		i;
+	KEY_MAPPING	*keyToProcess;
+	bool		bMetaKeyDown;
+	SDWORD		i;
 
 	/* Bomb out if there are none */
-	if(!keyMappings || !numActiveMappings || !bKeyProcessing)
+	if (!keyMappings || !numActiveMappings || !bKeyProcessing)
 	{
 		return;
 	}
 
 	/* Jump out if we've got a new mapping */
-  	(void) checkQwertyKeys();
+	(void) checkQwertyKeys();
 
 	/* Check for the meta keys */
 	if (keyDown(KEY_LCTRL) || keyDown(KEY_RCTRL) || keyDown(KEY_LALT)
-	 || keyDown(KEY_RALT) || keyDown(KEY_LSHIFT) || keyDown(KEY_RSHIFT)
-	 || keyDown(KEY_LMETA) || keyDown(KEY_RMETA))
+	    || keyDown(KEY_RALT) || keyDown(KEY_LSHIFT) || keyDown(KEY_RSHIFT)
+	    || keyDown(KEY_LMETA) || keyDown(KEY_RMETA))
 	{
 		bMetaKeyDown = true;
 	}
@@ -704,17 +722,17 @@ SDWORD		i;
 		bMetaKeyDown = false;
 	}
 
- 	/* Run through all our mappings */
- 	for(keyToProcess = keyMappings; keyToProcess!=NULL; keyToProcess = keyToProcess->psNext)
+	/* Run through all our mappings */
+	for (keyToProcess = keyMappings; keyToProcess != NULL; keyToProcess = keyToProcess->psNext)
 	{
 		/* We haven't acted upon it */
-		if(!keyToProcess->active)
+		if (!keyToProcess->active)
 		{
 			/* Get out if it's inactive */
 			break;
 		}
 		/* Skip innappropriate ones when necessary */
-		if(bExclude && keyToProcess->status!=KEYMAP_ALWAYS_PROCESS)
+		if (bExclude && keyToProcess->status != KEYMAP_ALWAYS_PROCESS)
 		{
 			break;
 		}
@@ -729,113 +747,129 @@ SDWORD		i;
 			continue;
 		}
 
-		if(keyToProcess->metaKeyCode==KEY_IGNORE && !bMetaKeyDown &&
-			!(keyToProcess->status==KEYMAP__DEBUG && !getDebugMappingStatus()) )
- 		{
-			switch(keyToProcess->action)
- 			{
- 			case KEYMAP_PRESSED:
- 				/* Were the right keys pressed? */
- 				if(keyPressed(keyToProcess->subKeyCode))
- 				{
- 					lastSubKey = keyToProcess->subKeyCode;
- 					/* Jump to the associated function call */
- 					 keyToProcess->function();
- 				}
- 				break;
- 			case KEYMAP_DOWN:
- 				/* Is the key Down? */
- 				if(keyDown(keyToProcess->subKeyCode))
- 				{
- 					lastSubKey = keyToProcess->subKeyCode;
- 					/* Jump to the associated function call */
- 					 keyToProcess->function();
- 				}
+		if (keyToProcess->metaKeyCode == KEY_IGNORE && !bMetaKeyDown &&
+		    !(keyToProcess->status == KEYMAP__DEBUG && !getDebugMappingStatus()))
+		{
+			switch (keyToProcess->action)
+			{
+			case KEYMAP_PRESSED:
+				/* Were the right keys pressed? */
+				if (keyPressed(keyToProcess->subKeyCode))
+				{
+					lastSubKey = keyToProcess->subKeyCode;
+					/* Jump to the associated function call */
+					keyToProcess->function();
+				}
+				break;
+			case KEYMAP_DOWN:
+				/* Is the key Down? */
+				if (keyDown(keyToProcess->subKeyCode))
+				{
+					lastSubKey = keyToProcess->subKeyCode;
+					/* Jump to the associated function call */
+					keyToProcess->function();
+				}
 
- 				break;
+				break;
 			case KEYMAP_RELEASED:
- 				/* Has the key been released? */
- 				if(keyReleased(keyToProcess->subKeyCode))
- 				{
- 					lastSubKey = keyToProcess->subKeyCode;
- 					/* Jump to the associated function call */
- 					 keyToProcess->function();
- 				}
+				/* Has the key been released? */
+				if (keyReleased(keyToProcess->subKeyCode))
+				{
+					lastSubKey = keyToProcess->subKeyCode;
+					/* Jump to the associated function call */
+					keyToProcess->function();
+				}
 				break;
 
- 			default:
+			default:
 				debug(LOG_FATAL, "Unknown key action (action code %u) while processing keymap.", (unsigned int)keyToProcess->action);
 				abort();
- 				break;
+				break;
 			}
- 		}
+		}
 		/* Process the combi ones */
- 		if( (keyToProcess->metaKeyCode!=KEY_IGNORE && bMetaKeyDown) &&
-			!(keyToProcess->status==KEYMAP__DEBUG && !getDebugMappingStatus()))
- 		{
- 			/* It's a combo keypress - one held down and the other pressed */
- 			if (keyDown(keyToProcess->metaKeyCode) && keyPressed(keyToProcess->subKeyCode))
- 			{
- 				lastMetaKey = keyToProcess->metaKeyCode;
- 				lastSubKey = keyToProcess->subKeyCode;
- 				keyToProcess->function();
- 			}
+		if ((keyToProcess->metaKeyCode != KEY_IGNORE && bMetaKeyDown) &&
+		    !(keyToProcess->status == KEYMAP__DEBUG && !getDebugMappingStatus()))
+		{
+			/* It's a combo keypress - one held down and the other pressed */
+			if (keyDown(keyToProcess->metaKeyCode) && keyPressed(keyToProcess->subKeyCode))
+			{
+				lastMetaKey = keyToProcess->metaKeyCode;
+				lastSubKey = keyToProcess->subKeyCode;
+				keyToProcess->function();
+			}
 			else if (keyToProcess->altMetaKeyCode != KEY_IGNORE)
 			{
-				if(keyDown(keyToProcess->altMetaKeyCode) && keyPressed(keyToProcess->subKeyCode))
+				if (keyDown(keyToProcess->altMetaKeyCode) && keyPressed(keyToProcess->subKeyCode))
 				{
- 					lastMetaKey = keyToProcess->metaKeyCode;
- 					lastSubKey = keyToProcess->subKeyCode;
- 					keyToProcess->function();
+					lastMetaKey = keyToProcess->metaKeyCode;
+					lastSubKey = keyToProcess->subKeyCode;
+					keyToProcess->function();
 				}
 			}
- 		}
+		}
 	}
 
 	/* Script callback - find out what meta key was pressed */
 	cbPressedMetaKey = KEY_IGNORE;
 
 	/* getLastMetaKey() can't be used here, have to do manually */
-	if(keyDown(KEY_LCTRL))
+	if (keyDown(KEY_LCTRL))
+	{
 		cbPressedMetaKey = KEY_LCTRL;
-	else if(keyDown(KEY_RCTRL))
+	}
+	else if (keyDown(KEY_RCTRL))
+	{
 		cbPressedMetaKey = KEY_RCTRL;
-	else if(keyDown(KEY_LALT))
+	}
+	else if (keyDown(KEY_LALT))
+	{
 		cbPressedMetaKey = KEY_LALT;
-	else if(keyDown(KEY_RALT))
+	}
+	else if (keyDown(KEY_RALT))
+	{
 		cbPressedMetaKey = KEY_RALT;
-	else if(keyDown(KEY_LSHIFT))
+	}
+	else if (keyDown(KEY_LSHIFT))
+	{
 		cbPressedMetaKey = KEY_LSHIFT;
-	else if(keyDown(KEY_RSHIFT))
+	}
+	else if (keyDown(KEY_RSHIFT))
+	{
 		cbPressedMetaKey = KEY_RSHIFT;
-	else if(keyDown(KEY_LMETA))
+	}
+	else if (keyDown(KEY_LMETA))
+	{
 		cbPressedMetaKey = KEY_LMETA;
-	else if(keyDown(KEY_RMETA))
+	}
+	else if (keyDown(KEY_RMETA))
+	{
 		cbPressedMetaKey = KEY_RMETA;
+	}
 
 	/* Find out what keys were pressed */
-	for(i=0; i<KEY_MAXSCAN;i++)
+	for (i = 0; i < KEY_MAXSCAN; i++)
 	{
 		/* Skip meta keys */
-		switch(i)
+		switch (i)
 		{
-			case KEY_LCTRL:
-			case KEY_RCTRL:
-			case KEY_LALT:
-			case KEY_RALT:
-			case KEY_LSHIFT:
-			case KEY_RSHIFT:
-			case KEY_LMETA:
-			case KEY_RMETA:
-				continue;
+		case KEY_LCTRL:
+		case KEY_RCTRL:
+		case KEY_LALT:
+		case KEY_RALT:
+		case KEY_LSHIFT:
+		case KEY_RSHIFT:
+		case KEY_LMETA:
+		case KEY_RMETA:
+			continue;
 			break;
 		}
 
 		/* Let scripts process this key if it's pressed */
-		if(keyPressed((KEY_CODE)i))
+		if (keyPressed((KEY_CODE)i))
 		{
-				cbPressedKey =  i;
-				eventFireCallbackTrigger((TRIGGER_TYPE)CALL_KEY_PRESSED);
+			cbPressedKey =  i;
+			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_KEY_PRESSED);
 		}
 	}
 
@@ -846,18 +880,18 @@ SDWORD		i;
 /* Sends a particular key mapping to the console */
 static void keyShowMapping(KEY_MAPPING *psMapping)
 {
-char	asciiSub[20],asciiMeta[20];
-bool	onlySub;
+	char	asciiSub[20], asciiMeta[20];
+	bool	onlySub;
 
 	onlySub = true;
-	if(psMapping->metaKeyCode!=KEY_IGNORE)
+	if (psMapping->metaKeyCode != KEY_IGNORE)
 	{
-		keyScanToString(psMapping->metaKeyCode,(char *)&asciiMeta,20);
+		keyScanToString(psMapping->metaKeyCode, (char *)&asciiMeta, 20);
 		onlySub = false;
 	}
 
-	keyScanToString(psMapping->subKeyCode,(char *)&asciiSub,20);
-	if(onlySub)
+	keyScanToString(psMapping->subKeyCode, (char *)&asciiSub, 20);
+	if (onlySub)
 	{
 		CONPRINTF(ConsoleString, (ConsoleString, "%s - %s", asciiSub, _(psMapping->pName)));
 	}
@@ -870,7 +904,7 @@ bool	onlySub;
 
 // ----------------------------------------------------------------------------------
 // this function isn't really module static - should be removed - debug only
-void keyShowMappings( void )
+void keyShowMappings(void)
 {
 	KEY_MAPPING *psMapping;
 
@@ -882,43 +916,43 @@ void keyShowMappings( void )
 
 // ----------------------------------------------------------------------------------
 /* Returns the key code of the last sub key pressed - allows called functions to have a simple stack */
-KEY_CODE	getLastSubKey( void )
+KEY_CODE	getLastSubKey(void)
 {
-	return(lastSubKey);
+	return (lastSubKey);
 }
 
 // ----------------------------------------------------------------------------------
 /* Returns the key code of the last meta key pressed - allows called functions to have a simple stack */
-KEY_CODE	getLastMetaKey( void )
+KEY_CODE	getLastMetaKey(void)
 {
-	return(lastMetaKey);
+	return (lastMetaKey);
 }
 
 // ----------------------------------------------------------------------------------
 /* Allows us to enable/disable the whole mapping system */
-void	keyEnableProcessing( bool val )
+void	keyEnableProcessing(bool val)
 {
 	bKeyProcessing = val;
 }
 
 // ----------------------------------------------------------------------------------
 /* Sets all mappings to be inactive */
-void	keyAllMappingsInactive( void )
+void	keyAllMappingsInactive(void)
 {
-KEY_MAPPING	*psMapping;
+	KEY_MAPPING	*psMapping;
 
-	for(psMapping = keyMappings; psMapping; psMapping = psMapping->psNext)
+	for (psMapping = keyMappings; psMapping; psMapping = psMapping->psNext)
 	{
 		psMapping->active = false;
 	}
 }
 
 // ----------------------------------------------------------------------------------
-void	keyAllMappingsActive( void )
+void	keyAllMappingsActive(void)
 {
-KEY_MAPPING	*psMapping;
+	KEY_MAPPING	*psMapping;
 
-	for(psMapping = keyMappings; psMapping; psMapping = psMapping->psNext)
+	for (psMapping = keyMappings; psMapping; psMapping = psMapping->psNext)
 	{
 		psMapping->active = true;
 	}
@@ -935,13 +969,13 @@ void	keySetMappingStatus(KEY_MAPPING *psMapping, bool state)
 static const KEY_CODE qwertyCodes[26] =
 {
 	//  +---+   +---+   +---+   +---+   +---+   +---+   +---+   +---+   +---+   +---+
-	    KEY_Q,  KEY_W,  KEY_E,  KEY_R,  KEY_T,  KEY_Y,  KEY_U,  KEY_I,  KEY_O,  KEY_P,
+	KEY_Q,  KEY_W,  KEY_E,  KEY_R,  KEY_T,  KEY_Y,  KEY_U,  KEY_I,  KEY_O,  KEY_P,
 	//  +---+   +---+   +---+   +---+   +---+   +---+   +---+   +---+   +---+   +---+
 	//    +---+   +---+   +---+   +---+   +---+   +---+   +---+   +---+   +---+
-	      KEY_A,  KEY_S,  KEY_D,  KEY_F,  KEY_G,  KEY_H,  KEY_J,  KEY_K,  KEY_L,
+	KEY_A,  KEY_S,  KEY_D,  KEY_F,  KEY_G,  KEY_H,  KEY_J,  KEY_K,  KEY_L,
 	//    +---+   +---+   +---+   +---+   +---+   +---+   +---+   +---+   +---+
 	//        +---+   +---+   +---+   +---+   +---+   +---+   +---+
-	          KEY_Z,  KEY_X,  KEY_C,  KEY_V,  KEY_B,  KEY_N,  KEY_M
+	KEY_Z,  KEY_X,  KEY_C,  KEY_V,  KEY_B,  KEY_N,  KEY_M
 	//        +---+   +---+   +---+   +---+   +---+   +---+   +---+
 };
 
@@ -982,29 +1016,29 @@ UDWORD asciiKeyCodeToTable(KEY_CODE code)
 
 // ----------------------------------------------------------------------------------
 /* Returns the map X position associated with the passed in keycode */
-UDWORD	getMarkerX( KEY_CODE code )
+UDWORD	getMarkerX(KEY_CODE code)
 {
-UDWORD	entry;
+	UDWORD	entry;
 	entry = asciiKeyCodeToTable(code);
-	return(qwertyKeyMappings[entry].xPos);
+	return (qwertyKeyMappings[entry].xPos);
 }
 
 // ----------------------------------------------------------------------------------
 /* Returns the map Y position associated with the passed in keycode */
-UDWORD	getMarkerY( KEY_CODE code )
+UDWORD	getMarkerY(KEY_CODE code)
 {
-UDWORD	entry;
+	UDWORD	entry;
 	entry = asciiKeyCodeToTable(code);
-	return(qwertyKeyMappings[entry].yPos);
+	return (qwertyKeyMappings[entry].yPos);
 }
 
 // ----------------------------------------------------------------------------------
 /* Returns the map Y rotation associated with the passed in keycode */
-SDWORD	getMarkerSpin( KEY_CODE code )
+SDWORD	getMarkerSpin(KEY_CODE code)
 {
-UDWORD	entry;
+	UDWORD	entry;
 	entry = asciiKeyCodeToTable(code);
-	return(qwertyKeyMappings[entry].spin);
+	return (qwertyKeyMappings[entry].spin);
 }
 
 
@@ -1046,20 +1080,20 @@ std::string getWantedDebugMappingStatuses(bool val)
 	return ret;
 }
 // ----------------------------------------------------------------------------------
-bool	keyReAssignMapping( KEY_CODE origMetaCode, KEY_CODE origSubCode,
-							KEY_CODE newMetaCode, KEY_CODE newSubCode )
+bool	keyReAssignMapping(KEY_CODE origMetaCode, KEY_CODE origSubCode,
+                           KEY_CODE newMetaCode, KEY_CODE newSubCode)
 {
-KEY_MAPPING	*psMapping;
-bool		bFound;
+	KEY_MAPPING	*psMapping;
+	bool		bFound;
 
-	for(psMapping = keyMappings,bFound = false; psMapping && !bFound;
-		psMapping = psMapping->psNext)
+	for (psMapping = keyMappings, bFound = false; psMapping && !bFound;
+	     psMapping = psMapping->psNext)
 	{
 		/* Find the original */
-		if(psMapping->metaKeyCode == origMetaCode && psMapping->subKeyCode == origSubCode)
+		if (psMapping->metaKeyCode == origMetaCode && psMapping->subKeyCode == origSubCode)
 		{
 			/* Not all can be remapped */
-			if(psMapping->status != KEYMAP_ALWAYS || psMapping->status == KEYMAP_ALWAYS_PROCESS)
+			if (psMapping->status != KEYMAP_ALWAYS || psMapping->status == KEYMAP_ALWAYS_PROCESS)
 			{
 				psMapping->metaKeyCode = newMetaCode;
 				psMapping->subKeyCode = newSubCode;
@@ -1068,40 +1102,40 @@ bool		bFound;
 		}
 	}
 
-	return(bFound);
+	return (bFound);
 }
 
 // ----------------------------------------------------------------------------------
 KEY_MAPPING	*getKeyMapFromName(char *pName)
 {
-KEY_MAPPING	*psMapping;
-		for(psMapping = keyMappings; psMapping;	psMapping = psMapping->psNext)
+	KEY_MAPPING	*psMapping;
+	for (psMapping = keyMappings; psMapping;	psMapping = psMapping->psNext)
+	{
+		if (strcmp(pName, psMapping->pName) == false)
 		{
-			if(strcmp(pName,psMapping->pName) == false)
-			{
-				return(psMapping);
-			}
+			return (psMapping);
 		}
-	return(NULL);
+	}
+	return (NULL);
 }
 
 // ----------------------------------------------------------------------------------
-bool	keyReAssignMappingName(char *pName,KEY_CODE newMetaCode, KEY_CODE newSubCode)
+bool	keyReAssignMappingName(char *pName, KEY_CODE newMetaCode, KEY_CODE newSubCode)
 {
-KEY_MAPPING	*psMapping;
+	KEY_MAPPING	*psMapping;
 
 
 	psMapping = getKeyMapFromName(pName);
-	if(psMapping)
+	if (psMapping)
 	{
-		if(psMapping->status == KEYMAP_ASSIGNABLE)
+		if (psMapping->status == KEYMAP_ASSIGNABLE)
 		{
-			(void)keyAddMapping(psMapping->status,newMetaCode,
-			newSubCode, psMapping->action,psMapping->function,psMapping->pName);
+			(void)keyAddMapping(psMapping->status, newMetaCode,
+			                    newSubCode, psMapping->action, psMapping->function, psMapping->pName);
 			keyRemoveMappingPt(psMapping);
-			return(true);
+			return (true);
 		}
 	}
-	return(false);
+	return (false);
 }
 // ----------------------------------------------------------------------------------

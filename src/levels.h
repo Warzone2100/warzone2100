@@ -45,7 +45,7 @@ enum LEVEL_TYPE
 	LDS_EXPAND_LIMBO,   // expand campaign map using droids held in apsLimboDroids
 	LDS_MKEEP_LIMBO,    // off map saving any droids (selectedPlayer) at end into apsLimboDroids
 	LDS_NONE,			//flags when not got a mission to go back to or when
-						//already on one - ****LEAVE AS LAST ONE****
+	//already on one - ****LEAVE AS LAST ONE****
 	LDS_MULTI_TYPE_START,           ///< Start number for custom type numbers (as used by a `type` instruction)
 
 	CAMPAIGN = 12,
@@ -62,11 +62,11 @@ struct LEVEL_DATASET
 	char	*pName;					// title for the level
 	searchPathMode	dataDir;					// title for the level
 	char	*apDataFiles[LEVEL_MAXFILES];		// the WRF/GAM files for the level
-							// in load order
+	// in load order
 	LEVEL_DATASET *psBaseData;                      // LEVEL_DATASET that must be loaded for this level to load
 	LEVEL_DATASET *psChange;                        // LEVEL_DATASET used when changing to this level from another
 
-	char *          realFileName;                   ///< Filename of the file containing the level, or NULL if the level is built in.
+	char           *realFileName;                   ///< Filename of the file containing the level, or NULL if the level is built in.
 	Sha256          realFileHash;                   ///< Use levGetFileHash() to read this value. SHA-256 hash of the file containing the level, or 0x00×32 if the level is built in or not yet calculated.
 };
 
@@ -75,7 +75,7 @@ typedef std::list<LEVEL_DATASET *> LEVEL_LIST;
 LEVEL_LIST enumerateMultiMaps(int camToUse, int numPlayers);
 
 // parse a level description data file
-bool levParse(const char* buffer, size_t size, searchPathMode datadir, bool ignoreWrf, char const *realFileName);
+bool levParse(const char *buffer, size_t size, searchPathMode datadir, bool ignoreWrf, char const *realFileName);
 
 // shutdown the level system
 extern void levShutDown(void);
@@ -100,7 +100,7 @@ extern bool levReleaseMissionData(void);
 //get the type of level currently being loaded of GTYPE type
 extern SDWORD getLevelLoadType(void);
 
-extern char *getLevelName( void );
+extern char *getLevelName(void);
 
 extern void levTest(void);
 

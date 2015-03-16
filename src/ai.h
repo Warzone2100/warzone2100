@@ -75,7 +75,7 @@ void aiObjectAddExpectedDamage(BASE_OBJECT *psObject, SDWORD damage);
 
 /* See if there is a target in range added int weapon_slot*/
 bool aiChooseTarget(BASE_OBJECT *psObj,
-						   BASE_OBJECT **ppsTarget, int weapon_slot, bool bUpdateTarget, UWORD *targetOrigin);
+                    BASE_OBJECT **ppsTarget, int weapon_slot, bool bUpdateTarget, UWORD *targetOrigin);
 
 /** See if there is a target in range for Sensor objects. */
 bool aiChooseSensorTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget);
@@ -86,11 +86,29 @@ bool validTarget(BASE_OBJECT *psObject, BASE_OBJECT *psTarget, int weapon_slot);
 // Check if any of the weapons can target the target
 bool checkAnyWeaponsTarget(BASE_OBJECT *psObject, BASE_OBJECT *psTarget);
 // Check properties of the AllianceType enum.
-static inline bool alliancesFixed(int t) { return t != ALLIANCES; }
-static inline bool alliancesSharedVision(int t) { return t == ALLIANCES_TEAMS || t == ALLIANCES_UNSHARED; }
-static inline bool alliancesSharedResearch(int t) { return t == ALLIANCES || t == ALLIANCES_TEAMS; }
-static inline bool alliancesSetTeamsBeforeGame(int t) { return t == ALLIANCES_TEAMS || t == ALLIANCES_UNSHARED; }
-static inline bool alliancesCanGiveResearchAndRadar(int t) { return t == ALLIANCES; }
-static inline bool alliancesCanGiveAnything(int t) { return t != NO_ALLIANCES; }
+static inline bool alliancesFixed(int t)
+{
+	return t != ALLIANCES;
+}
+static inline bool alliancesSharedVision(int t)
+{
+	return t == ALLIANCES_TEAMS || t == ALLIANCES_UNSHARED;
+}
+static inline bool alliancesSharedResearch(int t)
+{
+	return t == ALLIANCES || t == ALLIANCES_TEAMS;
+}
+static inline bool alliancesSetTeamsBeforeGame(int t)
+{
+	return t == ALLIANCES_TEAMS || t == ALLIANCES_UNSHARED;
+}
+static inline bool alliancesCanGiveResearchAndRadar(int t)
+{
+	return t == ALLIANCES;
+}
+static inline bool alliancesCanGiveAnything(int t)
+{
+	return t != NO_ALLIANCES;
+}
 
 #endif // __INCLUDED_SRC_AI_H__
