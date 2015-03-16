@@ -120,11 +120,11 @@
 #  define WZ_OS_FREEBSD
 #  define WZ_OS_BSD4
 #elif defined(__FreeBSD_kernel__) && !defined(__FreeBSD__)
-   /* We're running a non-FreeBSD system with a FreeBSD kernel. Find out what C
-    * library we're using to detect the system we're running on. */
+/* We're running a non-FreeBSD system with a FreeBSD kernel. Find out what C
+ * library we're using to detect the system we're running on. */
 #  include <stdlib.h>
 #  if defined(__GLIBC__)
-     /* We're running GNU/kFreeBSD */
+/* We're running GNU/kFreeBSD */
 #    define WZ_OS_GNU_kFREEBSD
 #  endif
 #elif defined(__NetBSD__)
@@ -320,7 +320,7 @@
 */
 #if defined(WZ_CC_GNU) && defined __GNUC__ && defined __GNUC_MINOR__
 #  define WZ_CC_GNU_PREREQ(maj, min) \
-          ((__GNUC__ << 16) + __GNUC_MINOR__ >= ((maj) << 16) + (min))
+	((__GNUC__ << 16) + __GNUC_MINOR__ >= ((maj) << 16) + (min))
 #else
 #  define WZ_CC_GNU_PREREQ(maj, min) 0
 #endif
@@ -331,7 +331,7 @@
 */
 #if defined(WZ_CC_INTEL) && defined __ICC
 #  define WZ_CC_INTEL_PREREQ(maj, min) \
-          ((__ICC) >= ((maj) * 100) + (min))
+	((__ICC) >= ((maj) * 100) + (min))
 #else
 #  define WZ_CC_INTEL_PREREQ(maj, min) 0
 #endif
@@ -395,7 +395,7 @@
  */
 #if WZ_CC_GNU_PREREQ(2,5) && !defined(WZ_CC_INTEL)
 #  define WZ_DECL_FORMAT(archetype, string_index, first_to_check) \
-          __attribute__((__format__(archetype, string_index, first_to_check)))
+	__attribute__((__format__(archetype, string_index, first_to_check)))
 #else
 #  define WZ_DECL_FORMAT(archetype, string_index, first_to_check)
 #endif
@@ -432,7 +432,7 @@
 /*!
  * \def WZ_DECL_ALWAYS_INLINE
  * GCC: "Generally, functions are not inlined unless optimization is specified. For functions
- *       declared inline, this attribute inlines the function even if no optimization level 
+ *       declared inline, this attribute inlines the function even if no optimization level
  *       was specified."
  */
 #if WZ_CC_GNU_PREREQ(2,5)
@@ -633,10 +633,19 @@
  * Asserts that the given string is statically allocated.
  */
 #if defined(__cplusplus)
-   template <int N>
-   static inline char _WZ_ASSERT_STATIC_STRING_FUNCTION(char const (&)[N]) { return '\0'; }  // Regular array.
-   static inline char *_WZ_ASSERT_STATIC_STRING_FUNCTION(char const *&) { return NULL; }     // Eeek, it's a pointer!
-   static inline char *_WZ_ASSERT_STATIC_STRING_FUNCTION(char *&) { return NULL; }           // Eeek, it's a pointer!
+template <int N>
+static inline char _WZ_ASSERT_STATIC_STRING_FUNCTION(char const(&)[N])
+{
+	return '\0';    // Regular array.
+}
+static inline char *_WZ_ASSERT_STATIC_STRING_FUNCTION(char const *&)
+{
+	return NULL;    // Eeek, it's a pointer!
+}
+static inline char *_WZ_ASSERT_STATIC_STRING_FUNCTION(char *&)
+{
+	return NULL;    // Eeek, it's a pointer!
+}
 #  define WZ_ASSERT_STATIC_STRING(_var) STATIC_ASSERT(sizeof(_WZ_ASSERT_STATIC_STRING_FUNCTION(_var)) == sizeof(char))
 #elif defined(WZ_CC_GNU) || defined(WZ_CC_INTEL)
 #  define WZ_ASSERT_STATIC_STRING(_var) STATIC_ASSERT(__builtin_types_compatible_p(typeof(_var), char[]))
@@ -648,11 +657,20 @@
  * Asserts that the given variable is a (statically sized) array, not just a pointer.
  */
 #if defined(__cplusplus)
-   template <typename T, int N>
-   static inline char _WZ_ASSERT_ARRAY_EXPR_FUNCTION(T (&)[N]) { return '\0'; }      // Regular array.
-   static inline char _WZ_ASSERT_ARRAY_EXPR_FUNCTION(void const *) { return '\0'; }  // Catch static arrays of unnamed structs.
-   template <typename T>
-   static inline char *_WZ_ASSERT_ARRAY_EXPR_FUNCTION(T *&) { return NULL; }         // Eeek, it's a pointer!
+template <typename T, int N>
+static inline char _WZ_ASSERT_ARRAY_EXPR_FUNCTION(T(&)[N])
+{
+	return '\0';    // Regular array.
+}
+static inline char _WZ_ASSERT_ARRAY_EXPR_FUNCTION(void const *)
+{
+	return '\0';    // Catch static arrays of unnamed structs.
+}
+template <typename T>
+static inline char *_WZ_ASSERT_ARRAY_EXPR_FUNCTION(T *&)
+{
+	return NULL;    // Eeek, it's a pointer!
+}
 #  define WZ_ASSERT_ARRAY_EXPR(_var) STATIC_ASSERT_EXPR(sizeof(_WZ_ASSERT_ARRAY_EXPR_FUNCTION(_var)) == sizeof(char))
 #elif defined(WZ_CC_GNU) || defined(WZ_CC_INTEL)
 /* &a[0] degrades to a pointer: a different type from an array */

@@ -93,7 +93,7 @@ enum KEY_CODE
 	KEY_M           = 'm',
 	KEY_COMMA       = ',',
 	KEY_FULLSTOP    = '.',
-	KEY_FORWARDSLASH= '/',
+	KEY_FORWARDSLASH = '/',
 	KEY_RSHIFT      = 303,
 	KEY_RMETA       = 309,  // TODO Added after Qt branched.
 	KEY_RSUPER      = 312,  // TODO Added after Qt branched.
@@ -129,7 +129,7 @@ enum KEY_CODE
 	KEY_F11         = 292,
 	KEY_F12         = 293,
 	KEY_RCTRL       = 305,
-	KEY_KP_BACKSLASH= 267,  ///< Most keypads just have a forward slash.
+	KEY_KP_BACKSLASH = 267, ///< Most keypads just have a forward slash.
 	KEY_RALT        = 307,
 	KEY_HOME        = 278,
 	KEY_UPARROW     = 273,
@@ -163,7 +163,10 @@ struct MousePress
 	enum Action {None, Press, Release};
 
 	MousePress(Action action = None, MOUSE_KEY_CODE key = MOUSE_BAD) : action(action), key(key) {}
-	bool empty() const { return action == None; }
+	bool empty() const
+	{
+		return action == None;
+	}
 
 	Action action;
 	MOUSE_KEY_CODE key;

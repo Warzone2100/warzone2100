@@ -32,7 +32,7 @@
 #include "resly.h"
 
 // Local prototypes
-static RES_TYPE *psResTypes=NULL;
+static RES_TYPE *psResTypes = NULL;
 
 /* The initial resource directory and the current resource directory */
 char aResDir[PATH_MAX];
@@ -45,7 +45,7 @@ static SDWORD resBlockID;
 static void ResetResourceFile(void);
 
 // callback to resload screen.
-static RESLOAD_CALLBACK resLoadCallback=NULL;
+static RESLOAD_CALLBACK resLoadCallback = NULL;
 
 
 /* set the callback function for the res loader*/
@@ -57,7 +57,7 @@ void resSetLoadCallback(RESLOAD_CALLBACK funcToCall)
 /* do the callback for the resload display function */
 static inline void resDoResLoadCallback(void)
 {
-	if(resLoadCallback)
+	if (resLoadCallback)
 	{
 		resLoadCallback();
 	}
@@ -67,8 +67,8 @@ static inline void resDoResLoadCallback(void)
 /* Initialise the resource module */
 bool resInitialise(void)
 {
-	ASSERT( psResTypes == NULL,
-		"resInitialise: resource module hasn't been shut down??" );
+	ASSERT(psResTypes == NULL,
+	       "resInitialise: resource module hasn't been shut down??");
 	psResTypes = NULL;
 	resBlockID = 0;
 	resLoadCallback = NULL;
@@ -82,21 +82,22 @@ bool resInitialise(void)
 /* Shutdown the resource module */
 void resShutDown(void)
 {
-	if (psResTypes != NULL) {
+	if (psResTypes != NULL)
+	{
 		debug(LOG_WZ, "resShutDown: warning resources still allocated");
 		resReleaseAll();
 	}
 }
 
 // force set the base resource directory
-void resForceBaseDir(const char* pResDir)
+void resForceBaseDir(const char *pResDir)
 {
 	sstrcpy(aResDir, pResDir);
 	sstrcpy(aCurrResDir, pResDir);
 }
 
 // set the base resource directory
-void resSetBaseDir(const char* pResDir)
+void resSetBaseDir(const char *pResDir)
 {
 	sstrcpy(aResDir, pResDir);
 }
@@ -139,16 +140,16 @@ bool resLoad(const char *pResFile, SDWORD blockID)
 
 
 /* Allocate a RES_TYPE structure */
-static RES_TYPE* resAlloc(const char *pType)
+static RES_TYPE *resAlloc(const char *pType)
 {
 	RES_TYPE	*psT;
 
 #ifdef DEBUG
 	// Check for a duplicate type
-	for(psT = psResTypes; psT; psT = psT->psNext)
+	for (psT = psResTypes; psT; psT = psT->psNext)
 	{
-		ASSERT( strcmp(psT->aType, pType) != 0,
-			"resAlloc: Duplicate function for type: %s", pType );
+		ASSERT(strcmp(psT->aType, pType) != 0,
+		       "resAlloc: Duplicate function for type: %s", pType);
 	}
 #endif
 
@@ -156,7 +157,7 @@ static RES_TYPE* resAlloc(const char *pType)
 	psT = (RES_TYPE *)malloc(sizeof(RES_TYPE));
 	if (!psT)
 	{
-		debug( LOG_FATAL, "resAlloc: Out of memory" );
+		debug(LOG_FATAL, "resAlloc: Out of memory");
 		abort();
 		return NULL;
 	}
@@ -175,7 +176,7 @@ static RES_TYPE* resAlloc(const char *pType)
 
 /* Add a buffer load function for a file type */
 bool resAddBufferLoad(const char *pType, RES_BUFFERLOAD buffLoad,
-					  RES_FREE release)
+                      RES_FREE release)
 {
 	RES_TYPE	*psT = resAlloc(pType);
 
@@ -197,7 +198,7 @@ bool resAddBufferLoad(const char *pType, RES_BUFFERLOAD buffLoad,
 
 /* Add a file name load function for a file type */
 bool resAddFileLoad(const char *pType, RES_FILELOAD fileLoad,
-					RES_FREE release)
+                    RES_FREE release)
 {
 	RES_TYPE	*psT = resAlloc(pType);
 
@@ -253,7 +254,7 @@ void SetLastResourceFilename(const char *pName)
 // Structure for each file currently in use in the resource  ... probably only going to be one ... but we will handle upto MAXLOADEDRESOURCE
 struct RESOURCEFILE
 {
-  	char *pBuffer;	// a pointer to the data
+	char *pBuffer;	// a pointer to the data
 	UDWORD size;	// number of bytes
 	UBYTE	type;	// what type of resource is it
 };
@@ -272,9 +273,9 @@ static void ResetResourceFile(void)
 {
 	UWORD i;
 
-	for (i=0;i<MAXLOADEDRESOURCES;i++)
+	for (i = 0; i < MAXLOADEDRESOURCES; i++)
 	{
-		LoadedResourceFiles[i].type=RESFILETYPE_EMPTY;
+		LoadedResourceFiles[i].type = RESFILETYPE_EMPTY;
 	}
 }
 
@@ -282,13 +283,15 @@ static void ResetResourceFile(void)
 static SDWORD FindEmptyResourceFile(void)
 {
 	UWORD i;
-	for (i=0;i<MAXLOADEDRESOURCES ;i++ )
-	  {
-		if (LoadedResourceFiles[i].type==RESFILETYPE_EMPTY)
-			return(i);
+	for (i = 0; i < MAXLOADEDRESOURCES ; i++)
+	{
+		if (LoadedResourceFiles[i].type == RESFILETYPE_EMPTY)
+		{
+			return (i);
+		}
 
-	  }
-	return(-1);			// ERROR
+	}
+	return (-1);			// ERROR
 }
 
 
@@ -300,11 +303,14 @@ static bool RetreiveResourceFile(char *ResourceName, RESOURCEFILE **NewResource)
 	UDWORD size;
 	char *pBuffer;
 
-	ResID=FindEmptyResourceFile();
-	if (ResID==-1) return(false);		// all resource files are full
+	ResID = FindEmptyResourceFile();
+	if (ResID == -1)
+	{
+		return (false);    // all resource files are full
+	}
 
-	ResData= &LoadedResourceFiles[ResID];
-	*NewResource=ResData;
+	ResData = &LoadedResourceFiles[ResID];
+	*NewResource = ResData;
 
 	// This is needed for files that do not fit in the WDG cache ... (VAB file for example)
 	if (!loadFile(ResourceName, &pBuffer, &size))
@@ -312,10 +318,10 @@ static bool RetreiveResourceFile(char *ResourceName, RESOURCEFILE **NewResource)
 		return false;
 	}
 
-	ResData->type=RESFILETYPE_LOADED;
-	ResData->size=size;
-	ResData->pBuffer=pBuffer;
-	return(true);
+	ResData->type = RESFILETYPE_LOADED;
+	ResData->size = size;
+	ResData->pBuffer = pBuffer;
+	return (true);
 }
 
 
@@ -324,24 +330,24 @@ static void FreeResourceFile(RESOURCEFILE *OldResource)
 {
 	switch (OldResource->type)
 	{
-		case RESFILETYPE_LOADED:
-			free(OldResource->pBuffer);
-			OldResource->pBuffer = NULL;
-			break;
+	case RESFILETYPE_LOADED:
+		free(OldResource->pBuffer);
+		OldResource->pBuffer = NULL;
+		break;
 
-		default:
-			debug(LOG_WARNING, "resource not freed");
+	default:
+		debug(LOG_WARNING, "resource not freed");
 	}
 
 
 	// Remove from the list
-	OldResource->type=RESFILETYPE_EMPTY;
+	OldResource->type = RESFILETYPE_EMPTY;
 }
 
 
-static inline RES_DATA* resDataInit(const char *DebugName, UDWORD DataIDHash, void *pData, UDWORD BlockID)
+static inline RES_DATA *resDataInit(const char *DebugName, UDWORD DataIDHash, void *pData, UDWORD BlockID)
 {
-	char* resID;
+	char *resID;
 
 	// Allocate memory to hold the RES_DATA structure plus the identifying string
 	RES_DATA *psRes = (RES_DATA *)malloc(sizeof(RES_DATA) + strlen(DebugName) + 1);
@@ -352,7 +358,7 @@ static inline RES_DATA* resDataInit(const char *DebugName, UDWORD DataIDHash, vo
 	}
 
 	// Initialize the pointer for our ID string
-	resID = (char*)(psRes + 1);
+	resID = (char *)(psRes + 1);
 
 	// Copy over the identifying string
 	strcpy(resID, DebugName);
@@ -375,21 +381,21 @@ static inline RES_DATA* resDataInit(const char *DebugName, UDWORD DataIDHash, vo
  * \param[in,out] fileName must be at least PATH_MAX bytes large
  * \param maxlen indicates the maximum buffer size of \c fileName
  */
-static void makeLocaleFile(char* fileName, size_t maxlen)  // given string must have PATH_MAX size
+static void makeLocaleFile(char *fileName, size_t maxlen)  // given string must have PATH_MAX size
 {
 #ifdef ENABLE_NLS
-	const char * language = getLanguage();
+	const char *language = getLanguage();
 	char localeFile[PATH_MAX];
 
-	if ( language[0] == '\0' || // could not get language
-		 strlen(fileName) + strlen(language) + 1 >= PATH_MAX )
+	if (language[0] == '\0' ||  // could not get language
+	    strlen(fileName) + strlen(language) + 1 >= PATH_MAX)
 	{
 		return;
 	}
 
 	snprintf(localeFile, sizeof(localeFile), "locale/%s/%s", language, fileName);
 
-	if ( PHYSFS_exists(localeFile) )
+	if (PHYSFS_exists(localeFile))
 	{
 		strlcpy(fileName, localeFile, maxlen);
 		debug(LOG_WZ, "Found translated file: %s", fileName);
@@ -413,7 +419,7 @@ bool resLoadFile(const char *pType, const char *pFile)
 	UDWORD HashedName, HashedType = HashString(pType);
 
 	// Find the resource-type
-	for(psT = psResTypes; psT != NULL; psT = psT->psNext )
+	for (psT = psResTypes; psT != NULL; psT = psT->psNext)
 	{
 		if (psT->HashedType == HashedType)
 		{
@@ -432,7 +438,7 @@ bool resLoadFile(const char *pType, const char *pFile)
 	HashedName = HashStringIgnoreCase(pFile);
 	for (psRes = psT->psRes; psRes; psRes = psRes->psNext)
 	{
-		if(psRes->HashedID == HashedName)
+		if (psRes->HashedID == HashedName)
 		{
 			ASSERT(strcasecmp(psRes->aID, pFile) == 0, "Hash collision \"%s\" vs \"%s\"", psRes->aID, pFile);
 			debug(LOG_WZ, "Duplicate file name: %s (hash %x) for type %s",
@@ -482,7 +488,7 @@ bool resLoadFile(const char *pType, const char *pFile)
 
 		FreeResourceFile(Resource);
 	}
-	else if(psT->fileLoad)
+	else if (psT->fileLoad)
 	{
 		// Process data directly from file
 		if (!psT->fileLoad(aFileName, &pData))
@@ -507,7 +513,7 @@ bool resLoadFile(const char *pType, const char *pFile)
 	if (pData != NULL)
 	{
 		// LastResourceFilename may have been changed (e.g. by TEXPAGE loading)
-		psRes = resDataInit( GetLastResourceFilename(), HashStringIgnoreCase(GetLastResourceFilename()), pData, resBlockID );
+		psRes = resDataInit(GetLastResourceFilename(), HashStringIgnoreCase(GetLastResourceFilename()), pData, resBlockID);
 		if (!psRes)
 		{
 			if (psT->release != NULL)
@@ -532,22 +538,22 @@ void *resGetDataFromHash(const char *pType, UDWORD HashedID)
 	// Find the correct type
 	UDWORD HashedType = HashString(pType);
 
-	for(psT = psResTypes; psT != NULL; psT = psT->psNext )
+	for (psT = psResTypes; psT != NULL; psT = psT->psNext)
 	{
-		if (psT->HashedType==HashedType)
+		if (psT->HashedType == HashedType)
 		{
 			/* We found it */
 			break;
 		}
 	}
 
-	ASSERT( psT != NULL, "resGetDataFromHash: Unknown type: %s", pType );
+	ASSERT(psT != NULL, "resGetDataFromHash: Unknown type: %s", pType);
 	if (psT == NULL)
 	{
 		return NULL;
 	}
 
-	for(psRes = psT->psRes; psRes != NULL; psRes = psRes->psNext)
+	for (psRes = psT->psRes; psRes != NULL; psRes = psRes->psNext)
 	{
 		if (psRes->HashedID == HashedID)
 		{
@@ -556,7 +562,7 @@ void *resGetDataFromHash(const char *pType, UDWORD HashedID)
 		}
 	}
 
-	ASSERT( psRes != NULL, "resGetDataFromHash: Unknown ID: %0x Type: %s", HashedID, pType );
+	ASSERT(psRes != NULL, "resGetDataFromHash: Unknown ID: %0x Type: %s", HashedID, pType);
 	if (psRes == NULL)
 	{
 		return NULL;
@@ -571,7 +577,7 @@ void *resGetDataFromHash(const char *pType, UDWORD HashedID)
 /* Return the resource for a type and ID */
 void *resGetData(const char *pType, const char *pID)
 {
-	void * data = resGetDataFromHash(pType, HashStringIgnoreCase(pID));
+	void *data = resGetDataFromHash(pType, HashStringIgnoreCase(pID));
 	ASSERT(data != NULL, "resGetData: Unable to find data for %s type %s", pID, pType);
 	return data;
 }
@@ -583,11 +589,11 @@ bool resGetHashfromData(const char *pType, const void *pData, UDWORD *pHash)
 	RES_DATA	*psRes;
 
 	// Find the correct type
-	UDWORD	HashedType=HashString(pType);
+	UDWORD	HashedType = HashString(pType);
 
-	for(psT = psResTypes; psT != NULL; psT = psT->psNext )
+	for (psT = psResTypes; psT != NULL; psT = psT->psNext)
 	{
-		if (psT->HashedType==HashedType)
+		if (psT->HashedType == HashedType)
 		{
 			break;
 		}
@@ -595,12 +601,12 @@ bool resGetHashfromData(const char *pType, const void *pData, UDWORD *pHash)
 
 	if (psT == NULL)
 	{
-		ASSERT( false, "resGetHashfromData: Unknown type: %x", HashedType );
+		ASSERT(false, "resGetHashfromData: Unknown type: %x", HashedType);
 		return false;
 	}
 
 	// Find the resource
-	for(psRes = psT->psRes; psRes; psRes = psRes->psNext)
+	for (psRes = psT->psRes; psRes; psRes = psRes->psNext)
 	{
 
 		if (psRes->pData == pData)
@@ -611,7 +617,7 @@ bool resGetHashfromData(const char *pType, const void *pData, UDWORD *pHash)
 
 	if (psRes == NULL)
 	{
-		ASSERT( false, "resGetHashfromData:: couldn't find data for type %x\n", HashedType );
+		ASSERT(false, "resGetHashfromData:: couldn't find data for type %x\n", HashedType);
 		return false;
 	}
 
@@ -620,7 +626,7 @@ bool resGetHashfromData(const char *pType, const void *pData, UDWORD *pHash)
 	return true;
 }
 
-const char* resGetNamefromData(const char* type, const void *data)
+const char *resGetNamefromData(const char *type, const void *data)
 {
 	RES_TYPE	*psT;
 	RES_DATA	*psRes;
@@ -645,12 +651,12 @@ const char* resGetNamefromData(const char* type, const void *data)
 
 	if (psT == NULL)
 	{
-		ASSERT( false, "resGetHashfromData: Unknown type: %x", HashedType );
+		ASSERT(false, "resGetHashfromData: Unknown type: %x", HashedType);
 		return "";
 	}
 
 	// Find the resource in the resource table
-	for(psRes = psT->psRes; psRes; psRes = psRes->psNext)
+	for (psRes = psT->psRes; psRes; psRes = psRes->psNext)
 	{
 		if (psRes->pData == data)
 		{
@@ -660,7 +666,7 @@ const char* resGetNamefromData(const char* type, const void *data)
 
 	if (psRes == NULL)
 	{
-		ASSERT( false, "resGetHashfromData:: couldn't find data for type %x\n", HashedType );
+		ASSERT(false, "resGetHashfromData:: couldn't find data for type %x\n", HashedType);
 		return "";
 	}
 
@@ -674,11 +680,11 @@ bool resPresent(const char *pType, const char *pID)
 	RES_DATA	*psRes;
 
 	// Find the correct type
-	UDWORD HashedType=HashString(pType);
+	UDWORD HashedType = HashString(pType);
 
-	for(psT = psResTypes; psT != NULL; psT = psT->psNext )
+	for (psT = psResTypes; psT != NULL; psT = psT->psNext)
 	{
-		if (psT->HashedType==HashedType)
+		if (psT->HashedType == HashedType)
 		{
 			break;
 		}
@@ -692,11 +698,11 @@ bool resPresent(const char *pType, const char *pID)
 	}
 
 	{
-		UDWORD HashedID=HashStringIgnoreCase(pID);
+		UDWORD HashedID = HashStringIgnoreCase(pID);
 
-		for(psRes = psT->psRes; psRes; psRes = psRes->psNext)
+		for (psRes = psT->psRes; psRes; psRes = psRes->psNext)
 		{
-			if (psRes->HashedID==HashedID)
+			if (psRes->HashedID == HashedID)
 			{
 				/* We found it */
 				break;
@@ -721,7 +727,7 @@ void resReleaseAll(void)
 
 	resReleaseAllData();
 
-	for(psT = psResTypes; psT != NULL; psT = psNT)
+	for (psT = psResTypes; psT != NULL; psT = psNT)
 	{
 		psNT = psT->psNext;
 		free(psT);
@@ -739,7 +745,7 @@ void resReleaseAllData(void)
 
 	for (psT = psResTypes; psT != NULL; psT = psT->psNext)
 	{
-		for(psRes = psT->psRes; psRes != NULL; psRes = psNRes)
+		for (psRes = psT->psRes; psRes != NULL; psRes = psNRes)
 		{
 			if (psRes->usage == 0)
 			{
@@ -766,10 +772,10 @@ void resReleaseBlockData(SDWORD blockID)
 	RES_TYPE	*psT, *psNT;
 	RES_DATA	*psPRes, *psRes, *psNRes;
 
-	for(psT = psResTypes; psT != NULL; psT = psNT)
+	for (psT = psResTypes; psT != NULL; psT = psNT)
 	{
 		psPRes = NULL;
-		for(psRes = psT->psRes; psRes; psRes = psNRes)
+		for (psRes = psT->psRes; psRes; psRes = psNRes)
 		{
 			ASSERT(psRes != NULL, "resReleaseBlockData: null pointer passed into loop");
 
@@ -780,9 +786,9 @@ void resReleaseBlockData(SDWORD blockID)
 					debug(LOG_NEVER, "resReleaseBlockData: %s resource: %s(%04x) not used", psT->aType, psRes->aID,
 					      psRes->HashedID);
 				}
-				if(psT->release != NULL)
+				if (psT->release != NULL)
 				{
-					psT->release( psRes->pData );
+					psT->release(psRes->pData);
 				}
 
 				psNRes = psRes->psNext;

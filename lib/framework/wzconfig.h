@@ -36,9 +36,15 @@ class WzConfigHack
 public:
 	WzConfigHack(const QString &fileName)
 	{
-		if (PHYSFS_exists(fileName.toUtf8().constData())) return;
+		if (PHYSFS_exists(fileName.toUtf8().constData()))
+		{
+			return;
+		}
 		PHYSFS_file *fileHandle = PHYSFS_openWrite(fileName.toUtf8().constData());
-		if (!fileHandle) debug(LOG_ERROR, "%s could not be created: %s", fileName.toUtf8().constData(), PHYSFS_getLastError());
+		if (!fileHandle)
+		{
+			debug(LOG_ERROR, "%s could not be created: %s", fileName.toUtf8().constData(), PHYSFS_getLastError());
+		}
 		PHYSFS_close(fileHandle);
 	}
 };

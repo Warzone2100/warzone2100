@@ -48,11 +48,11 @@ struct RES_DATA
 	SDWORD		blockID;			// which of the blocks is it in (so we can clear some of them...)
 
 	UDWORD	HashedID;				// hashed version of the name of the id
-	RES_DATA *      psNext;                         // next entry - most likely to be following on!
+	RES_DATA       *psNext;                         // next entry - most likely to be following on!
 	UDWORD		usage; // Reference count
 
 	// ID of the resource - filename from the .wrf - e.g. "TRON.PIE"
-	const char* aID;
+	const char *aID;
 };
 
 
@@ -71,7 +71,7 @@ struct RES_TYPE
 	UDWORD	HashedType;				// hashed version of the name of the id - // a null hashedtype indicates end of list
 
 	RES_FILELOAD	fileLoad;		// This isn't really used any more ?
-	RES_TYPE *      psNext;
+	RES_TYPE       *psNext;
 };
 
 
@@ -85,8 +85,8 @@ extern bool resInitialise(void);
 extern void resShutDown(void);
 
 /** Set the base resource directory. */
-extern void resSetBaseDir(const char* pResDir);
-extern void resForceBaseDir(const char* pResDir);
+extern void resSetBaseDir(const char *pResDir);
+extern void resForceBaseDir(const char *pResDir);
 
 /** Parse the res file. */
 bool resLoad(const char *pResFile, SDWORD blockID);
@@ -102,11 +102,11 @@ extern void resReleaseAllData(void);
 
 /** Add a buffer load and release function for a file type. */
 extern bool	resAddBufferLoad(const char *pType, RES_BUFFERLOAD buffLoad,
-							 RES_FREE release);
+                             RES_FREE release);
 
 /** Add a file name load and release function for a file type. */
 extern bool	resAddFileLoad(const char *pType, RES_FILELOAD fileLoad,
-						   RES_FREE release);
+                           RES_FREE release);
 
 /** Call the load function for a file. */
 extern bool resLoadFile(const char *pType, const char *pFile);
@@ -126,7 +126,7 @@ extern bool resGetHashfromData(const char *pType, const void *pData, UDWORD *pHa
  *  \return the from the ID string (usually its filename without directory)
  *  \note passing a NULL pointer for either \c type or \c data is valid (the result will be an empty string though)
  */
-extern const char* resGetNamefromData(const char* type, const void *data);
+extern const char *resGetNamefromData(const char *type, const void *data);
 
 /** Return last imd resource */
 const char *GetLastResourceFilename(void) WZ_DECL_PURE;

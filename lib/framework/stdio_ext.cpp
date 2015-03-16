@@ -25,16 +25,16 @@
 #include <assert.h>
 
 #if defined(WZ_CC_MSVC)
-int vslcatprintf(char* str, size_t size, const char* format, va_list ap)
+int vslcatprintf(char *str, size_t size, const char *format, va_list ap)
 {
 	size_t str_len;
 
 	if (str == NULL
-	 || size == 0)
+	    || size == 0)
 	{
 		return vsnprintf(NULL, 0, format, ap);
 	}
-	
+
 	str_len = strlen(str);
 
 	assert(str_len < size);
@@ -43,20 +43,20 @@ int vslcatprintf(char* str, size_t size, const char* format, va_list ap)
 }
 
 
-int slcatprintf(char* str, size_t size, const char* format, ...)
+int slcatprintf(char *str, size_t size, const char *format, ...)
 {
 	va_list ap;
 	int count;
 
 	va_start(ap, format);
-		count = vslcatprintf(str, size, format, ap);
+	count = vslcatprintf(str, size, format, ap);
 	va_end(ap);
 
 	return count;
 }
 
 
-int vasprintf(char** strp, const char* format, va_list ap)
+int vasprintf(char **strp, const char *format, va_list ap)
 {
 	int count;
 	va_list aq;
@@ -94,13 +94,13 @@ int vasprintf(char** strp, const char* format, va_list ap)
 }
 
 
-int asprintf(char** strp, const char* format, ...)
+int asprintf(char **strp, const char *format, ...)
 {
 	va_list ap;
 	int count;
 
 	va_start(ap, format);
-		count = vasprintf(strp, format, ap);
+	count = vasprintf(strp, format, ap);
 	va_end(ap);
 
 	return count;
@@ -109,7 +109,7 @@ int asprintf(char** strp, const char* format, ...)
 
 
 #if defined(WZ_CC_MSVC)
-int wz_vsnprintf(char* str, size_t size, const char* format, va_list ap)
+int wz_vsnprintf(char *str, size_t size, const char *format, va_list ap)
 {
 	int count;
 	va_list aq;
@@ -121,7 +121,7 @@ int wz_vsnprintf(char* str, size_t size, const char* format, va_list ap)
 	va_end(aq);
 
 	if (count >= 0
-	 && str != NULL)
+	    && str != NULL)
 	{
 		// Perfrom the actual string formatting
 		_vsnprintf_s(str, size, _TRUNCATE, format, ap);
@@ -132,36 +132,38 @@ int wz_vsnprintf(char* str, size_t size, const char* format, va_list ap)
 }
 
 
-int wz_snprintf(char* str, size_t size, const char* format, ...)
+int wz_snprintf(char *str, size_t size, const char *format, ...)
 {
 	va_list ap;
 	int count;
 
 	va_start(ap, format);
-		count = vsnprintf(str, size, format, ap);
+	count = vsnprintf(str, size, format, ap);
 	va_end(ap);
 
 	return count;
 }
 #endif
 
-int vasprintfNull(char** strp, const char* format, va_list ap)
+int vasprintfNull(char **strp, const char *format, va_list ap)
 {
 	int count = vasprintf(strp, format, ap);
 
 	if (count == -1)  // If count == -1, strp is currently undefined.
+	{
 		strp = NULL;
+	}
 
 	return count;
 }
 
-int asprintfNull(char** strp, const char* format, ...)
+int asprintfNull(char **strp, const char *format, ...)
 {
 	va_list ap;
 	int count;
 
 	va_start(ap, format);
-		count = vasprintfNull(strp, format, ap);
+	count = vasprintfNull(strp, format, ap);
 	va_end(ap);
 
 	return count;

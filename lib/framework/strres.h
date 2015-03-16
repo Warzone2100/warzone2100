@@ -27,7 +27,7 @@
 struct STR_RES;
 
 /* Create a string resource object */
-extern struct STR_RES* strresCreate(void);
+extern struct STR_RES *strresCreate(void);
 
 /* Release a string resource object */
 extern void strresDestroy(struct STR_RES *psRes);
@@ -40,12 +40,12 @@ extern void strresDestroy(struct STR_RES *psRes);
  * @return the string associated with the given @c ID string, or NULL if none
  *         could be found.
  */
-extern const char* strresGetString(const struct STR_RES* psRes, const char* ID);
+extern const char *strresGetString(const struct STR_RES *psRes, const char *ID);
 
 /* Load a string resource file */
-extern bool strresLoad(struct STR_RES* psRes, const char* fileName);
+extern bool strresLoad(struct STR_RES *psRes, const char *fileName);
 
 /* Get the ID string for a string */
-extern const char* strresGetIDfromString(struct STR_RES *psRes, const char *pString);
+extern const char *strresGetIDfromString(struct STR_RES *psRes, const char *pString);
 
 #endif

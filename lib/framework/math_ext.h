@@ -48,9 +48,13 @@ static inline int roundf(float x)
 {
 	// Ensure that float truncation results in a proper rounding
 	if (x < 0.0f)
+	{
 		return x - 0.5f;
+	}
 	else
+	{
 		return x + 0.5f;
+	}
 }
 
 
@@ -102,8 +106,14 @@ static inline WZ_DECL_CONST float hypotf(float x, float y)
  */
 static inline WZ_DECL_CONST float wrapf(float x, float max)
 {
-	while(x < 0.0f) x += max;
-	while(x >= max) x -= max;
+	while (x < 0.0f)
+	{
+		x += max;
+	}
+	while (x >= max)
+	{
+		x -= max;
+	}
 	return x;
 }
 
@@ -116,8 +126,14 @@ static inline WZ_DECL_CONST float wrapf(float x, float max)
  */
 static inline WZ_DECL_CONST int clip(int x, int min, int max)
 {
-	if (x < min) return min;
-	if (x > max) return max;
+	if (x < min)
+	{
+		return min;
+	}
+	if (x > max)
+	{
+		return max;
+	}
 	return x;
 }
 
@@ -130,8 +146,14 @@ static inline WZ_DECL_CONST int clip(int x, int min, int max)
  */
 static inline WZ_DECL_CONST float clipf(float x, float min, float max)
 {
-	if (x < min) return min;
-	if (x > max) return max;
+	if (x < min)
+	{
+		return min;
+	}
+	if (x > max)
+	{
+		return max;
+	}
 	return x;
 }
 
@@ -142,17 +164,17 @@ static inline void solveDifferential2ndOrder(float *y_, float *dydt_, double acc
 	// Solution is y = g_1 exp(h_1 t) + g_2 exp(h_2 t), where h_i are the solutions to h^2 + f h + a = 0, which are -f/2 +- sqrt(f^2/4 - a).
 	// At t = 0, g_1 = (y' - h_2 y) / (h_1 - h_2) and g_2 = (y' - h_1 y) / (h_2 - h_1).
 
-	std::complex<double> d = friction*friction/4 - acceleration;
+	std::complex<double> d = friction * friction / 4 - acceleration;
 
 	std::complex<double> sqd    = std::sqrt(d);
-	std::complex<double> h1     = -friction/2 + sqd;
-	std::complex<double> h2     = -friction/2 - sqd;
-	std::complex<double> e1     = std::exp(h1*dt);
-	std::complex<double> e2     = std::exp(h2*dt);
+	std::complex<double> h1     = -friction / 2 + sqd;
+	std::complex<double> h2     = -friction / 2 - sqd;
+	std::complex<double> e1     = std::exp(h1 * dt);
+	std::complex<double> e2     = std::exp(h2 * dt);
 	std::complex<double> g1     = (dydt - h2 * y) / (h1 - h2);
 	std::complex<double> g2     = (dydt - h1 * y) / (h2 - h1);
-	                     *y_    = (g1*e1    + g2*e2).real();     // .imag() should be 0.
-	                     *dydt_ = (g1*h1*e1 + g2*h2*e2).real();  // .imag() should be 0.
+	*y_    = (g1 * e1    + g2 * e2).real(); // .imag() should be 0.
+	*dydt_ = (g1 * h1 * e1 + g2 * h2 * e2).real(); // .imag() should be 0.
 }
 
 // Windows unfortunately appears to do this, so do this too for compatibility...

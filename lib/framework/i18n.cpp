@@ -91,11 +91,12 @@
  */
 static const struct
 {
-	const char * language;
-	const char * name;
+	const char *language;
+	const char *name;
 	USHORT usPrimaryLanguage;
 	USHORT usSubLanguage;
-} map[] = {
+} map[] =
+{
 	{ "", N_("System locale"), LANG_NEUTRAL, SUBLANG_DEFAULT },
 #  if defined(ENABLE_NLS)
 	{ "ca", LANG_NAME_CATALAN, LANG_CATALAN, SUBLANG_DEFAULT },
@@ -157,7 +158,8 @@ static const struct
 	const char *name;
 	const char *locale;
 	const char *localeFallback;
-} map[] = {
+} map[] =
+{
 	{ "",   N_("System locale"), "", "" },
 #  if defined(ENABLE_NLS)
 	{ "ca_ES", LANG_NAME_CATALAN, "ca_ES.UTF-8", "ca" },
@@ -213,7 +215,7 @@ static unsigned int selectedLanguage = 0;
  * Return the language part of the selected locale
  */
 #if !defined(ENABLE_NLS)
-const char* getLanguage(void)
+const char *getLanguage(void)
 {
 	return "";
 }
@@ -274,7 +276,7 @@ const char *getLanguage(void)
 #endif
 
 
-const char* getLanguageName(void)
+const char *getLanguageName(void)
 {
 	const char *language = getLanguage();
 	unsigned int i;
@@ -295,7 +297,7 @@ const char* getLanguageName(void)
 #  if defined(WZ_OS_WIN)
 static bool setLocaleWindows(USHORT usPrimaryLanguage, USHORT usSubLanguage)
 {
-	bool success = SUCCEEDED( SetThreadLocale( MAKELCID( MAKELANGID(usPrimaryLanguage, usSubLanguage), SORT_DEFAULT ) ) );
+	bool success = SUCCEEDED(SetThreadLocale(MAKELCID(MAKELANGID(usPrimaryLanguage, usSubLanguage), SORT_DEFAULT)));
 
 	if (!success)
 	{
@@ -316,7 +318,7 @@ static bool setLocaleWindows(USHORT usPrimaryLanguage, USHORT usSubLanguage)
  * \param locale The locale, NOT just the language part
  * \note Use this instead of setlocale(), because we need the default radix character
  */
-static bool setLocaleUnix(const char* locale)
+static bool setLocaleUnix(const char *locale)
 {
 	const char *actualLocale = setlocale(LC_ALL, locale);
 
@@ -404,18 +406,18 @@ void initI18n(void)
 		textdomainDirectory = bindtextdomain(PACKAGE, localeDir);
 	}
 #else
-	#ifdef WZ_OS_MAC
+#ifdef WZ_OS_MAC
 	{
 		char resourcePath[PATH_MAX];
 		CFURLRef resourceURL = CFBundleCopyResourcesDirectoryURL(CFBundleGetMainBundle());
-		if( CFURLGetFileSystemRepresentation( resourceURL, true, (UInt8 *) resourcePath, PATH_MAX) )
+		if (CFURLGetFileSystemRepresentation(resourceURL, true, (UInt8 *) resourcePath, PATH_MAX))
 		{
 			sstrcat(resourcePath, "/locale");
 			textdomainDirectory = bindtextdomain(PACKAGE, resourcePath);
 		}
 		else
 		{
-			debug( LOG_ERROR, "Could not change to resources directory." );
+			debug(LOG_ERROR, "Could not change to resources directory.");
 		}
 
 		if (resourceURL != NULL)
@@ -425,9 +427,9 @@ void initI18n(void)
 
 		debug(LOG_INFO, "resourcePath is %s", resourcePath);
 	}
-	#else
+#else
 	textdomainDirectory = bindtextdomain(PACKAGE, LOCALEDIR);
-	#endif
+#endif
 #endif
 	if (!textdomainDirectory)
 	{

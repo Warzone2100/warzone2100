@@ -39,13 +39,13 @@
 /* A String Resource */
 struct STR_RES
 {
-	struct TREAP_NODE**     psIDTreap;              ///< The treap to store string identifiers
+	struct TREAP_NODE     **psIDTreap;              ///< The treap to store string identifiers
 };
 
 /* Initialise the string system */
-STR_RES* strresCreate()
+STR_RES *strresCreate()
 {
-	STR_RES* const psRes = (STR_RES*)malloc(sizeof(*psRes));
+	STR_RES *const psRes = (STR_RES *)malloc(sizeof(*psRes));
 	if (!psRes)
 	{
 		debug(LOG_FATAL, "Out of memory");
@@ -75,7 +75,7 @@ void strresDestroy(STR_RES *psRes)
 
 
 /* Store a string */
-bool strresStoreString(STR_RES *psRes, const char* pID, const char* pString)
+bool strresStoreString(STR_RES *psRes, const char *pID, const char *pString)
 {
 	ASSERT(psRes != NULL, "Invalid string res pointer");
 
@@ -90,14 +90,14 @@ bool strresStoreString(STR_RES *psRes, const char* pID, const char* pString)
 	return treapAdd(psRes->psIDTreap, pID, pString);
 }
 
-const char* strresGetString(const STR_RES* psRes, const char* ID)
+const char *strresGetString(const STR_RES *psRes, const char *ID)
 {
 	ASSERT(psRes != NULL, "Invalid string resource pointer");
 	return treapFind(psRes->psIDTreap, ID);
 }
 
 /* Load a string resource file */
-bool strresLoad(STR_RES* psRes, const char* fileName)
+bool strresLoad(STR_RES *psRes, const char *fileName)
 {
 	bool retval;
 	lexerinput_t input;
@@ -121,7 +121,7 @@ bool strresLoad(STR_RES* psRes, const char* fileName)
 }
 
 /* Get the ID number for a string*/
-const char* strresGetIDfromString(STR_RES *psRes, const char *pString)
+const char *strresGetIDfromString(STR_RES *psRes, const char *pString)
 {
 	ASSERT(psRes != NULL, "Invalid string res pointer");
 

@@ -59,7 +59,7 @@ static uint32_t curTicks = 0; // Number of ticks since execution started
 static uint32_t lastTicks = 0;
 
 /* InitFrameStuff - needs to be called once before frame loop commences */
-static void InitFrameStuff( void )
+static void InitFrameStuff(void)
 {
 	frameCount = 0.0;
 	curFrames = 0;
@@ -153,9 +153,9 @@ bool getMouseWarp()
 	return mousewarp;
 }
 
-PHYSFS_file* openLoadFile(const char* fileName, bool hard_fail)
+PHYSFS_file *openLoadFile(const char *fileName, bool hard_fail)
 {
-	PHYSFS_file* fileHandle = PHYSFS_openRead(fileName);
+	PHYSFS_file *fileHandle = PHYSFS_openRead(fileName);
 	debug(LOG_NEVER, "Reading...[directory: %s] %s", PHYSFS_getRealDir(fileName), fileName);
 	if (!fileHandle)
 	{
@@ -205,7 +205,7 @@ static bool loadFile2(const char *pFileName, char **ppFileData, UDWORD *pFileSiz
 	if (AllocateMem)
 	{
 		// Allocate a buffer to store the data and a terminating zero
-		*ppFileData = (char*)malloc(filesize + 1);
+		*ppFileData = (char *)malloc(filesize + 1);
 		if (*ppFileData == NULL)
 		{
 			debug(LOG_ERROR, "loadFile2: Out of memory loading %s", pFileName);
@@ -261,9 +261,9 @@ static bool loadFile2(const char *pFileName, char **ppFileData, UDWORD *pFileSiz
 	return true;
 }
 
-PHYSFS_file* openSaveFile(const char* fileName)
+PHYSFS_file *openSaveFile(const char *fileName)
 {
-	PHYSFS_file* fileHandle = PHYSFS_openWrite(fileName);
+	PHYSFS_file *fileHandle = PHYSFS_openWrite(fileName);
 	if (!fileHandle)
 	{
 		const char *found = PHYSFS_getRealDir(fileName);
@@ -369,7 +369,7 @@ Sha256 findHashOfFile(char const *realFileName)
  * Accepts string and returns hashed integer.
  */
 /***************************************************************************/
-UDWORD HashString( const char *c )
+UDWORD HashString(const char *c)
 {
 	UDWORD	iHashValue;
 
@@ -379,13 +379,13 @@ UDWORD HashString( const char *c )
 	for (iHashValue = 0; *c; ++c)
 	{
 		unsigned int i;
-		iHashValue = ( iHashValue << ONE_EIGHTH ) + *c;
+		iHashValue = (iHashValue << ONE_EIGHTH) + *c;
 
 		i = iHashValue & HIGH_BITS;
-		if ( i != 0 )
+		if (i != 0)
 		{
-			iHashValue = ( iHashValue ^ ( i >> THREE_QUARTERS ) ) &
-							~HIGH_BITS;
+			iHashValue = (iHashValue ^ (i >> THREE_QUARTERS)) &
+			             ~HIGH_BITS;
 		}
 	}
 	return iHashValue;
@@ -399,29 +399,33 @@ static inline char upcaseASCII(char c)
 {
 	// If this is _not_ a lower case character simply return
 	if (c < 'a' || c > 'z')
+	{
 		return c;
+	}
 	// Otherwise substract 32 to make the lower case character an upper case one
 	else
+	{
 		return c - 32;
+	}
 }
 
-UDWORD HashStringIgnoreCase( const char *c )
+UDWORD HashStringIgnoreCase(const char *c)
 {
 	UDWORD	iHashValue;
 
 	assert(c != NULL);
 	assert(*c != 0x0);
 
-	for (iHashValue=0; *c; ++c)
+	for (iHashValue = 0; *c; ++c)
 	{
 		unsigned int i;
-		iHashValue = ( iHashValue << ONE_EIGHTH ) + upcaseASCII(*c);
+		iHashValue = (iHashValue << ONE_EIGHTH) + upcaseASCII(*c);
 
 		i = iHashValue & HIGH_BITS;
-		if ( i != 0 )
+		if (i != 0)
 		{
-			iHashValue = ( iHashValue ^ ( i >> THREE_QUARTERS ) ) &
-							~HIGH_BITS;
+			iHashValue = (iHashValue ^ (i >> THREE_QUARTERS)) &
+			             ~HIGH_BITS;
 		}
 	}
 	return iHashValue;

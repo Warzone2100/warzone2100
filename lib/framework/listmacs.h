@@ -34,55 +34,55 @@
  * Append an entry to the end of a linked list
  */
 #define LIST_APPEND(psHead, psEntry, TYPE) \
-{ \
-	TYPE	*psPrev, *psCurr; \
-\
-	/* Find the end of the list */ \
-	psPrev = NULL; \
-	for(psCurr = (psHead); psCurr; psCurr = psCurr->psNext) \
 	{ \
-		psPrev = psCurr; \
-	} \
-\
-	(psEntry)->psNext = NULL; \
-\
-	if (psPrev) \
-	{ \
-		/* Append to the end */ \
-		psPrev->psNext = (psEntry); \
-	} \
-	else \
-	{ \
-		/* If a NULL list got passed, make this item the list */ \
-		(psHead) = (psEntry); \
-	} \
-}
+		TYPE	*psPrev, *psCurr; \
+		\
+		/* Find the end of the list */ \
+		psPrev = NULL; \
+		for(psCurr = (psHead); psCurr; psCurr = psCurr->psNext) \
+		{ \
+			psPrev = psCurr; \
+		} \
+		\
+		(psEntry)->psNext = NULL; \
+		\
+		if (psPrev) \
+		{ \
+			/* Append to the end */ \
+			psPrev->psNext = (psEntry); \
+		} \
+		else \
+		{ \
+			/* If a NULL list got passed, make this item the list */ \
+			(psHead) = (psEntry); \
+		} \
+	}
 
 /**
  * Remove an entry from a linked list
  */
 #define LIST_REMOVE(psHead, psEntry, TYPE) \
-{ \
-	TYPE	*psPrev, *psCurr; \
-\
-	psPrev = NULL; \
-	for(psCurr = (psHead); psCurr; psCurr = psCurr->psNext) \
 	{ \
-		if (psCurr == (psEntry)) \
+		TYPE	*psPrev, *psCurr; \
+		\
+		psPrev = NULL; \
+		for(psCurr = (psHead); psCurr; psCurr = psCurr->psNext) \
 		{ \
-			break; \
+			if (psCurr == (psEntry)) \
+			{ \
+				break; \
+			} \
+			psPrev = psCurr; \
 		} \
-		psPrev = psCurr; \
-	} \
-	ASSERT(psCurr != NULL, "LIST_REMOVE: entry not found"); \
-	if (psPrev == NULL) \
-	{ \
-		(psHead) = (psHead)->psNext; \
-	} \
-	else if (psCurr != NULL) \
-	{ \
-		psPrev->psNext = psCurr->psNext; \
-	} \
-}
+		ASSERT(psCurr != NULL, "LIST_REMOVE: entry not found"); \
+		if (psPrev == NULL) \
+		{ \
+			(psHead) = (psHead)->psNext; \
+		} \
+		else if (psCurr != NULL) \
+		{ \
+			psPrev->psNext = psCurr->psNext; \
+		} \
+	}
 
 #endif // __INCLUDED_LIB_FRAMEWORK_LISTMACS_H__
