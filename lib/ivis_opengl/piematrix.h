@@ -40,7 +40,7 @@
  * \return Normal vector
  */
 static inline WZ_DECL_CONST WZ_DECL_WARN_UNUSED_RESULT
-		Vector3f pie_SurfaceNormal3fv(const Vector3f p1, const Vector3f p2, const Vector3f p3)
+Vector3f pie_SurfaceNormal3fv(const Vector3f p1, const Vector3f p2, const Vector3f p3)
 {
 	return normalise(crossProduct(p3 - p1, p2 - p1));
 }
@@ -58,8 +58,14 @@ extern void pie_MatEnd(void);
 
 struct ScopedPieMatrix
 {
-	ScopedPieMatrix() { pie_MatBegin(); }
-	~ScopedPieMatrix() { pie_MatEnd(); } // Automatic end of scope matrix popping
+	ScopedPieMatrix()
+	{
+		pie_MatBegin();
+	}
+	~ScopedPieMatrix()
+	{
+		pie_MatEnd();    // Automatic end of scope matrix popping
+	}
 };
 
 //*************************************************************************

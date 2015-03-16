@@ -43,14 +43,15 @@ power values in the buttons */
 #define POWERBAR_SCALE			(5 * WBAR_SCALE/STAT_PROGBARWIDTH)
 
 #define BUTTONOBJ_ROTSPEED		90	// Speed to rotate objects rendered in
-									// buttons ( degrees per second )
+// buttons ( degrees per second )
 
 //the two types of button used in the object display (bottom bar)
 #define		TOPBUTTON			0
 #define		BTMBUTTON			1
 
 
-enum {
+enum
+{
 	IMDTYPE_NONE,
 	IMDTYPE_DROID,
 	IMDTYPE_DROIDTEMPLATE,
@@ -98,7 +99,7 @@ extern UDWORD ManuPower;		// Power required to manufacture the current item.
 extern BASE_STATS *CurrentStatsTemplate;
 
 // Set audio IDs for form opening/closing anims.
-void SetFormAudioIDs(int OpenID,int CloseID);
+void SetFormAudioIDs(int OpenID, int CloseID);
 
 // Initialise interface graphics.
 void intInitialiseGraphics(void);
@@ -171,7 +172,7 @@ void intDisplayObjectButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PI
 
 void intDisplayStatsButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 
-void AdjustTabFormSize(W_TABFORM *Form,UDWORD *x0,UDWORD *y0,UDWORD *x1,UDWORD *y1);
+void AdjustTabFormSize(W_TABFORM *Form, UDWORD *x0, UDWORD *y0, UDWORD *x1, UDWORD *y1);
 
 void intDisplayStatsForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 
@@ -193,8 +194,8 @@ void intDisplayButtonPressed(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, P
 
 void intDisplayReticuleButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 
-void intDisplayTab(WIDGET *psWidget,UDWORD TabType, UDWORD Position,
-					UDWORD Number,bool Selected,bool Hilight,UDWORD x,UDWORD y,UDWORD Width,UDWORD Height);
+void intDisplayTab(WIDGET *psWidget, UDWORD TabType, UDWORD Position,
+                   UDWORD Number, bool Selected, bool Hilight, UDWORD x, UDWORD y, UDWORD Width, UDWORD Height);
 void intDisplaySlider(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 
 void intDisplayNumber(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
@@ -202,23 +203,23 @@ void intAddLoopQuantity(WIDGET *psWidget, W_CONTEXT *psContext);
 
 void intDisplayEditBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 
-void OpenButtonRender(UWORD XPos,UWORD YPos,UWORD Width,UWORD Height);
+void OpenButtonRender(UWORD XPos, UWORD YPos, UWORD Width, UWORD Height);
 void CloseButtonRender(void);
 
-void ClearButton(bool Down,UDWORD Size, UDWORD buttonType);
+void ClearButton(bool Down, UDWORD Size, UDWORD buttonType);
 
-void RenderToButton(IMAGEFILE *ImageFile,UWORD ImageID,void *Object,UDWORD Player,RENDERED_BUTTON *Buffer,
-					bool Down,UDWORD IMDType, UDWORD buttonType);
+void RenderToButton(IMAGEFILE *ImageFile, UWORD ImageID, void *Object, UDWORD Player, RENDERED_BUTTON *Buffer,
+                    bool Down, UDWORD IMDType, UDWORD buttonType);
 
-void CreateIMDButton(IMAGEFILE *ImageFile,UWORD ImageID,void *Object,UDWORD Player,RENDERED_BUTTON *Buffer,
-					bool Down,UDWORD IMDType,UDWORD buttonType);
+void CreateIMDButton(IMAGEFILE *ImageFile, UWORD ImageID, void *Object, UDWORD Player, RENDERED_BUTTON *Buffer,
+                     bool Down, UDWORD IMDType, UDWORD buttonType);
 
-void CreateImageButton(IMAGEFILE *ImageFile,UWORD ImageID,RENDERED_BUTTON *Buffer,bool Down, UDWORD buttonType);
+void CreateImageButton(IMAGEFILE *ImageFile, UWORD ImageID, RENDERED_BUTTON *Buffer, bool Down, UDWORD buttonType);
 
-void CreateBlankButton(RENDERED_BUTTON *Buffer,bool Down, UDWORD buttonType);
+void CreateBlankButton(RENDERED_BUTTON *Buffer, bool Down, UDWORD buttonType);
 
-void RenderImageToButton(IMAGEFILE *ImageFile,UWORD ImageID,RENDERED_BUTTON *Buffer,bool Down, UDWORD buttonType);
-void RenderBlankToButton(RENDERED_BUTTON *Buffer,bool Down, UDWORD buttonType);
+void RenderImageToButton(IMAGEFILE *ImageFile, UWORD ImageID, RENDERED_BUTTON *Buffer, bool Down, UDWORD buttonType);
+void RenderBlankToButton(RENDERED_BUTTON *Buffer, bool Down, UDWORD buttonType);
 
 
 extern bool DroidIsRepairing(DROID *Droid);
@@ -245,12 +246,12 @@ FACTORY *StructureGetFactory(STRUCTURE *Structure);
 //SDWORD ResearchGetImage(RESEARCH_FACILITY *Research);
 
 bool StatIsStructure(BASE_STATS const *Stat);
-iIMDShape *StatGetStructureIMD(BASE_STATS *Stat,UDWORD Player);
+iIMDShape *StatGetStructureIMD(BASE_STATS *Stat, UDWORD Player);
 bool StatIsTemplate(BASE_STATS *Stat);
 bool StatIsFeature(BASE_STATS const *Stat);
 
 SDWORD StatIsComponent(BASE_STATS *Stat);
-bool StatGetComponentIMD(BASE_STATS *Stat, SDWORD compID,iIMDShape **CompIMD,iIMDShape **MountIMD);
+bool StatGetComponentIMD(BASE_STATS *Stat, SDWORD compID, iIMDShape **CompIMD, iIMDShape **MountIMD);
 
 bool StatIsResearch(BASE_STATS *Stat);
 //void StatGetResearchImage(BASE_STATS *Stat,SDWORD *Image,iIMDShape **Shape, bool drawTechIcon);
@@ -259,23 +260,23 @@ void StatGetResearchImage(BASE_STATS *psStat, SDWORD *Image, iIMDShape **Shape,
 
 /* Draws a stats bar for the design screen */
 extern void intDisplayStatsBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
-							   PIELIGHT *pColours);
+                               PIELIGHT *pColours);
 /* Draws a Template Power Bar for the Design Screen */
 void intDisplayDesignPowerBar(WIDGET *psWidget, UDWORD xOffset,
-							  UDWORD yOffset, PIELIGHT *pColours);
+                              UDWORD yOffset, PIELIGHT *pColours);
 
 // Widget callback function to play an audio track.
 extern void WidgetAudioCallback(int AudioID);
 
 // Widget callback to display a contents button for the Transporter
 extern void intDisplayTransportButton(WIDGET *psWidget, UDWORD xOffset,
-						  UDWORD yOffset, PIELIGHT *pColours);
+                                      UDWORD yOffset, PIELIGHT *pColours);
 /*draws blips on radar to represent Proximity Display*/
 extern void drawRadarBlips(int radarX, int radarY, float pixSizeH, float pixSizeV);
 
 /*Displays the proximity messages blips over the world*/
 extern void intDisplayProximityBlips(WIDGET *psWidget, UDWORD xOffset,
-					UDWORD yOffset, PIELIGHT *pColours);
+                                     UDWORD yOffset, PIELIGHT *pColours);
 
 extern void intUpdateQuantitySlider(WIDGET *psWidget, W_CONTEXT *psContext);
 

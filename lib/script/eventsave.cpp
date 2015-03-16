@@ -105,7 +105,7 @@ static bool eventSaveContext(WzConfig &ini)
 					}
 				}
 
-				numVars -=1;
+				numVars -= 1;
 				countVar++;
 				ini.endGroup();
 				if (numVars <= 0)
@@ -156,7 +156,7 @@ static bool eventLoadContext(WzConfig &ini)
 		numVars = ini.value("numVars").toInt();
 		release = (CONTEXT_RELEASE)ini.value("release").toInt();
 
-		psCode = (SCRIPT_CODE*)resGetDataFromHash("SCRIPT", hashedName);
+		psCode = (SCRIPT_CODE *)resGetDataFromHash("SCRIPT", hashedName);
 
 		// create the context
 		if (!eventNewContext(psCode, release, &psCCont))
@@ -204,7 +204,7 @@ static bool eventLoadContext(WzConfig &ini)
 					data.v.ival = ini.value("data").toInt();
 					break;
 				case VAL_STRING:
-					data.v.sval = (char*)malloc(MAXSTRLEN);
+					data.v.sval = (char *)malloc(MAXSTRLEN);
 					strcpy(data.v.sval, ini.value("var/" + QString::number(i) + "/data").toString().toAscii().constData());
 					break;
 				case VAL_OBJ_GETSET:
@@ -255,7 +255,7 @@ static bool eventGetContextIndex(SCRIPT_CONTEXT *psContext, SDWORD *pIndex)
 {
 	int index = 0;
 
-	for (SCRIPT_CONTEXT *psCurr = psContList; psCurr!= NULL; psCurr = psCurr->psNext)
+	for (SCRIPT_CONTEXT *psCurr = psContList; psCurr != NULL; psCurr = psCurr->psNext)
 	{
 		if (psCurr == psContext)
 		{
@@ -270,7 +270,7 @@ static bool eventGetContextIndex(SCRIPT_CONTEXT *psContext, SDWORD *pIndex)
 // find a context from it's id number
 static bool eventFindContext(SDWORD id, SCRIPT_CONTEXT **ppsContext)
 {
-	for (SCRIPT_CONTEXT *psCurr = psContList; psCurr!= NULL; psCurr=psCurr->psNext)
+	for (SCRIPT_CONTEXT *psCurr = psContList; psCurr != NULL; psCurr = psCurr->psNext)
 	{
 		if (psCurr->id == id)
 		{

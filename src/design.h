@@ -124,7 +124,7 @@
 #define IDDES_WPABUTTON			5903		// WeaponA button
 #define IDDES_WPBBUTTON			5904		// WeaponB button
 
-extern bool intAddDesign( bool bShowCentreScreen );
+extern bool intAddDesign(bool bShowCentreScreen);
 extern void intRemoveDesign(void);
 extern void intProcessDesign(UDWORD id);
 extern void intRunDesign(void);

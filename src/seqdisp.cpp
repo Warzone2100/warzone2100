@@ -113,7 +113,7 @@ enum VIDEO_RESOLUTION
 	VIDEO_USER_CHOSEN_RESOLUTION,
 };
 
-static bool seq_StartFullScreenVideo(const char* videoName, const char* audioName, VIDEO_RESOLUTION resolution);
+static bool seq_StartFullScreenVideo(const char *videoName, const char *audioName, VIDEO_RESOLUTION resolution);
 
 /***************************************************************************/
 /*
@@ -121,8 +121,8 @@ static bool seq_StartFullScreenVideo(const char* videoName, const char* audioNam
  */
 /***************************************************************************/
 
- /* Renders a video sequence specified by filename to a buffer*/
-bool seq_RenderVideoToBuffer(const char* sequenceName, int seqCommand)
+/* Renders a video sequence specified by filename to a buffer*/
+bool seq_RenderVideoToBuffer(const char *sequenceName, int seqCommand)
 {
 	static enum
 	{
@@ -147,7 +147,7 @@ bool seq_RenderVideoToBuffer(const char* sequenceName, int seqCommand)
 	}
 
 	if (!bSeqPlaying
-	 && frameHold == VIDEO_LOOP)
+	    && frameHold == VIDEO_LOOP)
 	{
 		//start the ball rolling
 
@@ -183,7 +183,7 @@ static void seq_SetUserResolution(void)
 {
 	switch (war_GetFMVmode())
 	{
-		case FMV_1X:
+	case FMV_1X:
 		{
 			// Native (1x)
 			const int x = (screenWidth - 320) / 2;
@@ -191,7 +191,7 @@ static void seq_SetUserResolution(void)
 			seq_SetDisplaySize(320, 240, x, y);
 			break;
 		}
-		case FMV_2X:
+	case FMV_2X:
 		{
 			// Double (2x)
 			const int x = (screenWidth - 640) / 2;
@@ -199,20 +199,20 @@ static void seq_SetUserResolution(void)
 			seq_SetDisplaySize(640, 480, x, y);
 			break;
 		}
-		case FMV_FULLSCREEN:
-			seq_SetDisplaySize(screenWidth, screenHeight, 0, 0);
-			break;
+	case FMV_FULLSCREEN:
+		seq_SetDisplaySize(screenWidth, screenHeight, 0, 0);
+		break;
 
-		default:
-			ASSERT(!"invalid FMV mode", "Invalid FMV mode: %u", (unsigned int)war_GetFMVmode());
-			break;
+	default:
+		ASSERT(!"invalid FMV mode", "Invalid FMV mode: %u", (unsigned int)war_GetFMVmode());
+		break;
 	}
 }
 
 //full screenvideo functions
-static bool seq_StartFullScreenVideo(const char* videoName, const char* audioName, VIDEO_RESOLUTION resolution)
+static bool seq_StartFullScreenVideo(const char *videoName, const char *audioName, VIDEO_RESOLUTION resolution)
 {
-	const char* aAudioName = NULL;
+	const char *aAudioName = NULL;
 	int chars_printed;
 
 	bHoldSeqForAudio = false;
@@ -223,7 +223,7 @@ static bool seq_StartFullScreenVideo(const char* videoName, const char* audioNam
 	//set audio path
 	if (audioName != NULL)
 	{
-		sasprintf((char**)&aAudioName, "sequenceaudio/%s", audioName);
+		sasprintf((char **)&aAudioName, "sequenceaudio/%s", audioName);
 	}
 
 	cdAudio_Pause();
@@ -399,10 +399,10 @@ bool seq_StopFullScreenVideo(void)
 }
 
 // add a string at x,y or add string below last line if x and y are 0
-bool seq_AddTextForVideo(const char* pText, SDWORD xOffset, SDWORD yOffset, double startTime, double endTime, SEQ_TEXT_POSITIONING textJustification)
+bool seq_AddTextForVideo(const char *pText, SDWORD xOffset, SDWORD yOffset, double startTime, double endTime, SEQ_TEXT_POSITIONING textJustification)
 {
 	SDWORD sourceLength, currentLength;
-	char* currentText;
+	char *currentText;
 	static SDWORD lastX;
 	// make sure we take xOffset into account, we don't always start at 0
 	const unsigned int buffer_width = pie_GetVideoBufferWidth() - xOffset;
@@ -420,14 +420,14 @@ bool seq_AddTextForVideo(const char* pText, SDWORD xOffset, SDWORD yOffset, doub
 	{
 		currentLength = MAX_STR_LENGTH - 1;
 		//get end of the last word
-		while((pText[currentLength] != ' ') && (currentLength > 0))
+		while ((pText[currentLength] != ' ') && (currentLength > 0))
 		{
 			currentLength--;
 		}
 		currentLength--;
 	}
 
-	memcpy(currentText,pText,currentLength);
+	memcpy(currentText, pText, currentLength);
 	currentText[currentLength] = 0;//terminate the string what ever
 
 	//check the string is shortenough to print
@@ -435,7 +435,7 @@ bool seq_AddTextForVideo(const char* pText, SDWORD xOffset, SDWORD yOffset, doub
 	while (iV_GetTextWidth(currentText) > buffer_width)
 	{
 		currentLength--;
-		while((pText[currentLength] != ' ') && (currentLength > 0))
+		while ((pText[currentLength] != ' ') && (currentLength > 0))
 		{
 			currentLength--;
 		}
@@ -449,7 +449,7 @@ bool seq_AddTextForVideo(const char* pText, SDWORD xOffset, SDWORD yOffset, doub
 		aSeqList[currentSeq].aText[aSeqList[currentSeq].currentText].x = lastX;
 		//	aSeqList[currentSeq].aText[aSeqList[currentSeq].currentText-1].x;
 		aSeqList[currentSeq].aText[aSeqList[currentSeq].currentText].y =
-			aSeqList[currentSeq].aText[aSeqList[currentSeq].currentText-1].y + iV_GetTextLineSize();
+		    aSeqList[currentSeq].aText[aSeqList[currentSeq].currentText - 1].y + iV_GetTextLineSize();
 	}
 	else
 	{
@@ -523,12 +523,12 @@ static bool seq_AddTextFromFile(const char *pTextName, SEQ_TEXT_POSITIONING text
 	}
 
 	pTextBuffer = fileLoadBuffer;
-	pCurrentLine = strtok(pTextBuffer,seps);
+	pCurrentLine = strtok(pTextBuffer, seps);
 	while (pCurrentLine != NULL)
 	{
 		if (*pCurrentLine != '/')
 		{
-			if (sscanf(pCurrentLine,"%d %d %lf %lf", &xOffset, &yOffset, &startTime, &endTime) == 4)
+			if (sscanf(pCurrentLine, "%d %d %lf %lf", &xOffset, &yOffset, &startTime, &endTime) == 4)
 			{
 				// Since all the positioning was hardcoded to specific values, we now calculate the
 				// ratio of our screen, compared to what the game expects and multiply that to x, y.
@@ -536,13 +536,13 @@ static bool seq_AddTextFromFile(const char *pTextName, SEQ_TEXT_POSITIONING text
 				xOffset = (double)pie_GetVideoBufferWidth() / 640. * (double)xOffset;
 				yOffset = (double)pie_GetVideoBufferHeight() / 480. * (double)yOffset;
 				//get the text
-				pText = strrchr(pCurrentLine,'"');
+				pText = strrchr(pCurrentLine, '"');
 				ASSERT(pText != NULL, "error parsing text file");
 				if (pText != NULL)
 				{
 					*pText = (UBYTE)0;
 				}
-				pText = strchr(pCurrentLine,'"');
+				pText = strchr(pCurrentLine, '"');
 				ASSERT(pText != NULL, "error parsing text file");
 				if (pText != NULL)
 				{
@@ -551,7 +551,7 @@ static bool seq_AddTextFromFile(const char *pTextName, SEQ_TEXT_POSITIONING text
 			}
 		}
 		//get next line
-		pCurrentLine = strtok(NULL,seps);
+		pCurrentLine = strtok(NULL, seps);
 	}
 	return true;
 }
@@ -585,14 +585,16 @@ void seq_AddSeqToList(const char *pSeqName, const char *pAudioName, const char *
 	{
 		char aSubtitleName[MAX_STR_LENGTH];
 		size_t check_len = sstrcpy(aSubtitleName, pSeqName);
-		char* extension;
+		char *extension;
 
 		ASSERT(check_len < sizeof(aSubtitleName), "given sequence name (%s) longer (%lu) than buffer (%lu)", pSeqName, (unsigned long) check_len, (unsigned long) sizeof(aSubtitleName));
 
 		// check for a subtitle file
 		extension = strrchr(aSubtitleName, '.');
 		if (extension)
+		{
 			*extension = '\0';
+		}
 		check_len = sstrcat(aSubtitleName, ".txt");
 		ASSERT(check_len < sizeof(aSubtitleName), "sequence name to long to attach an extension too");
 
@@ -637,7 +639,9 @@ void seq_StartNextFullScreenVideo(void)
 			// Not sure this is correct... CHECK, since the callback should ONLY
 			// be called when a video is playing (always?)
 			if (seq_Playing())
+			{
 				eventFireCallbackTrigger((TRIGGER_TYPE)CALL_VIDEO_QUIT);
+			}
 		}
 		else
 		{

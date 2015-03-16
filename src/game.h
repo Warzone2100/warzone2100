@@ -110,7 +110,7 @@ extern bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bo
 
 /*This just loads up the .gam file to determine which level data to set up - split up
 so can be called in levLoadData when starting a game from a load save game*/
-extern bool loadGameInit(const char* fileName);
+extern bool loadGameInit(const char *fileName);
 
 extern bool loadMissionExtras(const char *pGameToLoad, SWORD levelType);
 
@@ -123,7 +123,7 @@ extern bool loadTerrainTypeMap(const char *pFileData, UDWORD filesize);
 extern bool saveGame(char *aFileName, GAME_TYPE saveType);
 
 // Get the campaign number for loadGameInit game
-extern UDWORD getCampaign(const char* fileName);
+extern UDWORD getCampaign(const char *fileName);
 
 /*calls windows find file tree*/
 extern bool getSaveGameName(char *pName);

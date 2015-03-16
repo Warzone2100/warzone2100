@@ -43,11 +43,11 @@ struct SCRV_STORE
 	char			*pIDString;
 	SCRIPT_CONTEXT	*psContext;
 
-	SCRV_STORE *     psNext;
+	SCRV_STORE      *psNext;
 };
 
 // The list of script contexts
-static SCRV_STORE	*psContextStore=NULL;
+static SCRV_STORE	*psContextStore = NULL;
 
 // Copy of all references to game objects, so that we can NULL them on death...
 static std::list<INTERP_VAL *>basePointers;
@@ -95,17 +95,17 @@ bool scrvAddContext(char *pID, SCRIPT_CONTEXT *psContext, SCRV_TYPE type)
 {
 	SCRV_STORE		*psNew;
 
-	psNew = (SCRV_STORE*)malloc(sizeof(SCRV_STORE));
+	psNew = (SCRV_STORE *)malloc(sizeof(SCRV_STORE));
 	if (!psNew)
 	{
-		debug( LOG_FATAL, "scrvAddContext: Out of memory" );
+		debug(LOG_FATAL, "scrvAddContext: Out of memory");
 		abort();
 		return false;
 	}
-	psNew->pIDString = (char*)malloc(strlen(pID) + 1);
+	psNew->pIDString = (char *)malloc(strlen(pID) + 1);
 	if (!psNew->pIDString)
 	{
-		debug( LOG_FATAL, "scrvAddContext: Out of memory" );
+		debug(LOG_FATAL, "scrvAddContext: Out of memory");
 		abort();
 		return false;
 	}
@@ -170,11 +170,11 @@ void scrvReleaseGroup(INTERP_VAL *psVal)
 {
 	DROID_GROUP		*psGroup;
 
-	psGroup = (DROID_GROUP*)psVal->v.oval;
+	psGroup = (DROID_GROUP *)psVal->v.oval;
 	psGroup->removeAll();
 
-	ASSERT( psGroup->refCount == 1,
-		"scrvReleaseGroup: ref count is wrong" );
+	ASSERT(psGroup->refCount == 1,
+	       "scrvReleaseGroup: ref count is wrong");
 
 	// do a final Remove to free the group
 	psGroup->remove(NULL);
@@ -185,7 +185,7 @@ bool scrvGetContext(char *pID, SCRIPT_CONTEXT **ppsContext)
 {
 	SCRV_STORE	*psCurr;
 
-	for(psCurr=psContextStore; psCurr; psCurr=psCurr->psNext)
+	for (psCurr = psContextStore; psCurr; psCurr = psCurr->psNext)
 	{
 		if (strcmp(psCurr->pIDString, pID) == 0)
 		{
@@ -194,7 +194,7 @@ bool scrvGetContext(char *pID, SCRIPT_CONTEXT **ppsContext)
 		}
 	}
 
-	debug( LOG_FATAL, "scrvGetContext: couldn't find context for id: %s", pID );
+	debug(LOG_FATAL, "scrvGetContext: couldn't find context for id: %s", pID);
 	abort();
 	return false;
 }

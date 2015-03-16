@@ -51,10 +51,10 @@ static enum _tip_state
 
 
 static SDWORD		startTime;			// When the tip was created
-static SDWORD		mx,my;				// Last mouse coords
-static SDWORD		wx,wy,ww,wh;		// Position and size of button to place tip by
-static SDWORD		tx,ty,tw,th;		// Position and size of the tip box
-static SDWORD		fx,fy;				// Position of the text
+static SDWORD		mx, my;				// Last mouse coords
+static SDWORD		wx, wy, ww, wh;		// Position and size of button to place tip by
+static SDWORD		tx, ty, tw, th;		// Position and size of the tip box
+static SDWORD		fx, fy;				// Position of the text
 static const char *pTip;				// Tip text
 static PIELIGHT		*pColours;			// The colours for the tool tip
 static WIDGET		*psWidget;			// The button the tip is for
@@ -86,14 +86,14 @@ void widgSetTipColour(PIELIGHT colour)
  * tip by.
  */
 void tipStart(WIDGET *psSource, const char *pNewTip, enum iV_fonts NewFontID,
-					 PIELIGHT *pNewColours, SDWORD x, SDWORD y, UDWORD width, UDWORD height)
+              PIELIGHT *pNewColours, SDWORD x, SDWORD y, UDWORD width, UDWORD height)
 {
-	ASSERT( psSource != NULL,
-		"tipStart: Invalid widget pointer" );
+	ASSERT(psSource != NULL,
+	       "tipStart: Invalid widget pointer");
 //	ASSERT( pNewTip != NULL,
 //		"tipStart: Invalid tip pointer" );
-	ASSERT( pNewColours != NULL,
-		"tipStart: Invalid colours pointer" );
+	ASSERT(pNewColours != NULL,
+	       "tipStart: Invalid colours pointer");
 
 	tipState = TIP_WAIT;
 	startTime = wzGetTicks();
@@ -113,8 +113,8 @@ void tipStart(WIDGET *psSource, const char *pNewTip, enum iV_fonts NewFontID,
  */
 void tipStop(WIDGET *psSource)
 {
-	ASSERT( psSource != NULL,
-		"tipStop: Invalid widget pointer" );
+	ASSERT(psSource != NULL,
+	       "tipStop: Invalid widget pointer");
 
 	if (tipState != TIP_NONE && psSource == psWidget)
 	{
@@ -130,7 +130,7 @@ void tipStop(WIDGET *psSource)
 /* Update and possibly display the tip */
 void tipDisplay(void)
 {
-	SDWORD		newMX,newMY;
+	SDWORD		newMX, newMY;
 	SDWORD		currTime;
 	SDWORD		fw, topGap;
 //	UDWORD		time;
@@ -143,8 +143,8 @@ void tipDisplay(void)
 		newMY = mouseY();
 		currTime = wzGetTicks();
 		if (newMX == mx &&
-			newMY == my &&
-			(currTime - startTime > TIP_PAUSE))
+		    newMY == my &&
+		    (currTime - startTime > TIP_PAUSE))
 		{
 			/* Activate the tip */
 			tipState = TIP_ACTIVE;
@@ -154,8 +154,8 @@ void tipDisplay(void)
 			iV_SetFont(FontID);
 
 			fw = iV_GetTextWidth(pTip);
-			tw = fw + TIP_HGAP*2;
-			th = topGap*2 + iV_GetTextLineSize()+iV_GetTextBelowBase();
+			tw = fw + TIP_HGAP * 2;
+			th = topGap * 2 + iV_GetTextLineSize() + iV_GetTextBelowBase();
 
 			/* Position the tip box */
 			tx = wx + (ww >> 1);
@@ -166,15 +166,15 @@ void tipDisplay(void)
 			{
 				tx = 0;
 			}
-			if (tx + tw >= (SDWORD)screenWidth-RIGHTBORDER)
+			if (tx + tw >= (SDWORD)screenWidth - RIGHTBORDER)
 			{
-				tx = screenWidth-RIGHTBORDER - tw - 1;
+				tx = screenWidth - RIGHTBORDER - tw - 1;
 			}
 			if (ty < 0)
 			{
 				ty = 0;
 			}
-			if (ty + th >= (SDWORD)screenHeight-BOTTOMBORDER)
+			if (ty + th >= (SDWORD)screenHeight - BOTTOMBORDER)
 			{
 				/* Position the tip above the button */
 				ty = wy - th - TIP_VGAP;
@@ -184,15 +184,15 @@ void tipDisplay(void)
 			/* Position the text */
 			fx = tx + TIP_HGAP;
 
-			fy = ty + (th - iV_GetTextLineSize())/2 - iV_GetTextAboveBase();
+			fy = ty + (th - iV_GetTextLineSize()) / 2 - iV_GetTextAboveBase();
 
 
 			/* Note the time */
 			startTime = wzGetTicks();
 		}
 		else if (newMX != mx ||
-				 newMY != my ||
-				 mousePressed(MOUSE_LMB))
+		         newMY != my ||
+		         mousePressed(MOUSE_LMB))
 		{
 			mx = newMX;
 			my = newMY;
@@ -211,16 +211,16 @@ void tipDisplay(void)
 
 
 		/* Draw the tool tip */
-		pie_BoxFill(tx,ty, tx+tw, ty+th, pColours[WCOL_TIPBKGRND]);
-		iV_Line(tx+1, ty+th-2, tx+1,    ty+1, pColours[WCOL_DARK]);
-		iV_Line(tx+2, ty+1,    tx+tw-2, ty+1, pColours[WCOL_DARK]);
-		iV_Line(tx,	  ty+th,   tx+tw,   ty+th, pColours[WCOL_DARK]);
-		iV_Line(tx+tw,ty+th-1, tx+tw,   ty, pColours[WCOL_DARK]);
-		iV_Box(tx,ty, tx+tw-1, ty+th-1, pColours[WCOL_LIGHT]);
+		pie_BoxFill(tx, ty, tx + tw, ty + th, pColours[WCOL_TIPBKGRND]);
+		iV_Line(tx + 1, ty + th - 2, tx + 1,    ty + 1, pColours[WCOL_DARK]);
+		iV_Line(tx + 2, ty + 1,    tx + tw - 2, ty + 1, pColours[WCOL_DARK]);
+		iV_Line(tx,	  ty + th,   tx + tw,   ty + th, pColours[WCOL_DARK]);
+		iV_Line(tx + tw, ty + th - 1, tx + tw,   ty, pColours[WCOL_DARK]);
+		iV_Box(tx, ty, tx + tw - 1, ty + th - 1, pColours[WCOL_LIGHT]);
 
 		iV_SetFont(FontID);
 		iV_SetTextColour(TipColour);
-		iV_DrawText(pTip,fx,fy);
+		iV_DrawText(pTip, fx, fy);
 
 		break;
 	default:

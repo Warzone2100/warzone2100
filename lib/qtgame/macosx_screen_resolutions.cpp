@@ -157,11 +157,11 @@ bool macosxSetScreenResolution(QSize resolution, QPoint screenPoint)
 		CGDisplayModeRef currentMainDisplayMode = CGDisplayCopyDisplayMode(display);
 		CFStringRef currentPixelEncoding = CGDisplayModeCopyPixelEncoding(currentMainDisplayMode);
 		CFArrayRef displayModes = CGDisplayCopyAllDisplayModes(display, NULL);
-        for (CFIndex i = 0, c = CFArrayGetCount(displayModes); i < c; i++)
+		for (CFIndex i = 0, c = CFArrayGetCount(displayModes); i < c; i++)
 		{
 			bool isEqual = false;
 			CGDisplayModeRef mode = (CGDisplayModeRef)CFArrayGetValueAtIndex(displayModes, i);
-            CFStringRef pixelEncoding = CGDisplayModeCopyPixelEncoding(mode);
+			CFStringRef pixelEncoding = CGDisplayModeCopyPixelEncoding(mode);
 			if (CFStringCompare(pixelEncoding, currentPixelEncoding, 0) == kCFCompareEqualTo
 			    && CGDisplayModeGetWidth(mode) == (size_t)resolution.width()
 			    && CGDisplayModeGetHeight(mode) == (size_t)resolution.height())

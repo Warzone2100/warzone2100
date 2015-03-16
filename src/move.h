@@ -61,10 +61,10 @@ extern void moveUpdateTracked(DROID *psDroid);
 extern void updateDroidOrientation(DROID *psDroid);
 
 /* audio callback used to kill movement sounds */
-extern bool moveCheckDroidMovingAndVisible( void *psObj );
+extern bool moveCheckDroidMovingAndVisible(void *psObj);
 
 // set a vtol to be hovering in the air
-void moveMakeVtolHover( DROID *psDroid );
+void moveMakeVtolHover(DROID *psDroid);
 
 const char *moveDescription(MOVE_STATUS status);
 

@@ -42,12 +42,12 @@
 
 struct RENDER_STATE
 {
-					bool				fogEnabled;
-					bool				fog;
-					PIELIGHT			fogColour;
-					SDWORD				texPage;
-					REND_MODE			rendMode;
-					bool				keyingOn;
+	bool				fogEnabled;
+	bool				fog;
+	PIELIGHT			fogColour;
+	SDWORD				texPage;
+	REND_MODE			rendMode;
+	bool				keyingOn;
 };
 
 void rendStatesRendModeHack();  // Sets rendStates.rendMode = REND_ALPHA; (Added during merge, since the renderStates is now static.)
@@ -94,8 +94,8 @@ bool pie_LoadShaders(void);
 // Actual shaders (we do not want to export these calls)
 void pie_DeactivateShader(void);
 void pie_DeactivateFallback(void);
-void pie_ActivateShader(SHADER_MODE shaderMode, iIMDShape* shape, PIELIGHT teamcolour, PIELIGHT colour);
-void pie_ActivateFallback(SHADER_MODE shaderMode, iIMDShape* shape, PIELIGHT teamcolour, PIELIGHT colour);
+void pie_ActivateShader(SHADER_MODE shaderMode, iIMDShape *shape, PIELIGHT teamcolour, PIELIGHT colour);
+void pie_ActivateFallback(SHADER_MODE shaderMode, iIMDShape *shape, PIELIGHT teamcolour, PIELIGHT colour);
 void pie_SetShaderStretchDepth(float stretch);
 void pie_SetShaderTime(uint32_t shaderTime);
 void pie_SetShaderEcmEffect(bool value);

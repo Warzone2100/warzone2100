@@ -73,8 +73,14 @@ public:
 	void setCursor(QCursor cursor);
 	void setFontType(enum iV_fonts FontID);
 	void setFontSize(float size);
-	int ticks() { return tickCount.elapsed(); }
-	void setReadyToPaint() { notReadyToPaint = false; }
+	int ticks()
+	{
+		return tickCount.elapsed();
+	}
+	void setReadyToPaint()
+	{
+		notReadyToPaint = false;
+	}
 #if 0
 	// Re-enable when Qt's font rendering is improved.
 	void drawPixmap(int XPos, int YPos, QPixmap *pix);

@@ -52,7 +52,7 @@ QScriptValue convResearch(RESEARCH *psResearch, QScriptEngine *engine, int playe
 /// Assert for scripts that give useful backtraces and other info.
 #define SCRIPT_ASSERT(context, expr, ...) \
 	do { bool _wzeval = (expr); \
-	     if (!_wzeval) { debug(LOG_ERROR, __VA_ARGS__); \
-	       context->throwError(QScriptContext::ReferenceError, QString(#expr) +  " failed in " + QString(__FUNCTION__) + " at line " + QString::number(__LINE__)); \
-	     return QScriptValue(); } } while (0)
+		if (!_wzeval) { debug(LOG_ERROR, __VA_ARGS__); \
+			context->throwError(QScriptContext::ReferenceError, QString(#expr) +  " failed in " + QString(__FUNCTION__) + " at line " + QString::number(__LINE__)); \
+			return QScriptValue(); } } while (0)
 #endif

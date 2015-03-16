@@ -91,8 +91,8 @@ struct COND_BLOCK
 {
 	UDWORD		numOffsets;
 	UDWORD		*aOffsets;	// Positions in the code that have to be
-							// replaced with the offset to the end of the
-							// conditional statement (for the jumps). - //TODO: change to INTERP_VAL - probbaly not necessary
+	// replaced with the offset to the end of the
+	// conditional statement (for the jumps). - //TODO: change to INTERP_VAL - probbaly not necessary
 	UDWORD		size;
 	INTERP_VAL		*pCode;
 	UDWORD			debugEntries;	// Number of debugging entries in psDebug.
@@ -144,7 +144,7 @@ struct VAR_SYMBOL
 	UDWORD			dimensions;						// number of dimensions of an array - 0 for normal var
 	SDWORD			elements[VAR_MAX_DIMENSIONS];	// number of elements in an array
 
-	VAR_SYMBOL *    psNext;
+	VAR_SYMBOL     *psNext;
 };
 
 
@@ -197,16 +197,16 @@ struct FUNC_SYMBOL
 	INTERP_TYPE	type;		// function type
 	UDWORD		numParams;	// Number of parameters to the function
 	uint32_t/*INTERP_TYPE*/ aParams[INST_MAXPARAMS];
-							// List of parameter types
+	// List of parameter types
 	int32_t		script;		// Whether the function is defined in the script
-							// or a C instinct function
+	// or a C instinct function
 	UDWORD		size;		// The size of script code
 	INTERP_VAL	*pCode;		// The code for a function if it is defined in the script
 	UDWORD		location;	// The position of the function in the final code block
 	UDWORD			debugEntries;	// Number of debugging entries in psDebug.
 	SCRIPT_DEBUG	*psDebug;		// Debugging info for the script.
 
-	FUNC_SYMBOL *   psNext;
+	FUNC_SYMBOL    *psNext;
 };
 
 /* The type for a variable declaration */
@@ -249,7 +249,7 @@ struct CALLBACK_SYMBOL
 	SCRIPT_FUNC		pFunc;		// Pointer to the instinct function
 	UDWORD			numParams;	// Number of parameters to the function
 	uint32_t/*INTERP_TYPE*/ aParams[INST_MAXPARAMS];
-								// List of parameter types
+	// List of parameter types
 };
 
 
@@ -274,7 +274,7 @@ struct EVENT_SYMBOL
 
 	INTERP_TYPE	aParams[INST_MAXPARAMS];
 
-	EVENT_SYMBOL *  psNext;
+	EVENT_SYMBOL   *psNext;
 };
 
 /* The table of user types */
@@ -296,7 +296,7 @@ extern CONST_SYMBOL		*asScrConstantTab;
 extern CALLBACK_SYMBOL	*asScrCallbackTab;
 
 /* Set the current input file for the lexer */
-extern void scriptSetInputFile(PHYSFS_file* fileHandle);
+extern void scriptSetInputFile(PHYSFS_file *fileHandle);
 
 /* Initialise the parser ready for a new script */
 extern bool scriptInitParser(void);
@@ -341,11 +341,11 @@ extern bool scriptLookUpEvent(const char *pIdent, EVENT_SYMBOL **ppsEvent);
 
 /* Add a new function symbol */
 extern bool scriptStartFunctionDef(const char *pIdent,	// Functions name
-						  INTERP_TYPE		type);		// return type
+                                   INTERP_TYPE		type);		// return type
 
 /* Store the parameter types for the current script function definition  */
 extern bool scriptSetParameters(UDWORD		numParams,	// number of parameters
-							  INTERP_TYPE		*pParams);	// parameter types
+                                INTERP_TYPE		*pParams);	// parameter types
 
 /* Store the code for a script function definition.
  * Clean up the local variable list for this function definition.

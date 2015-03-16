@@ -423,19 +423,19 @@ extern bool scrPickStructLocationB(void);
 extern bool scrPickStructLocationC(void);
 
 // establish the distance between two points in world coordinates - approximate bounded to 11% out
-extern bool scrDistanceTwoPts( void );
+extern bool scrDistanceTwoPts(void);
 
 // decides if a base object can see another - you can select whether walls matter to line of sight
-extern bool	scrLOSTwoBaseObjects( void );
+extern bool	scrLOSTwoBaseObjects(void);
 
 // destroys all structures of a certain type within a certain area and gives a gfx effect if you want it
-extern bool	scrDestroyStructuresInArea( void );
+extern bool	scrDestroyStructuresInArea(void);
 
 // Estimates a threat from droids within a certain area
-extern bool	scrThreatInArea( void );
+extern bool	scrThreatInArea(void);
 
 // gets the nearest gateway to a list of points
-extern bool scrGetNearestGateway( void );
+extern bool scrGetNearestGateway(void);
 
 // Lets the user specify which tile goes under water.
 extern bool	scrSetWaterTile(void);
@@ -462,13 +462,13 @@ extern bool scrFlyTransporterIn(void);
 extern bool scrAddDroidToTransporter(void);
 
 
-extern	bool	scrDestroyUnitsInArea( void );
+extern	bool	scrDestroyUnitsInArea(void);
 
 // Removes a droid from thr world without all the graphical hoo ha.
-extern bool	scrRemoveDroid( void );
+extern bool	scrRemoveDroid(void);
 
 // Sets an object to be a certain percent damaged
-extern bool	scrForceDamage( void );
+extern bool	scrForceDamage(void);
 
 extern bool scrGetGameStatus(void);
 
@@ -672,9 +672,9 @@ extern UDWORD numPlayerWeapStructsInRange(SDWORD player, SDWORD lookingPlayer, S
 extern UDWORD playerWeapDroidsCostInRange(SDWORD player, SDWORD lookingPlayer, SDWORD range, SDWORD rangeX, SDWORD rangeY, bool bVTOLs);
 extern UDWORD playerWeapStructsCostInRange(SDWORD player, SDWORD lookingPlayer, SDWORD range, SDWORD rangeX, SDWORD rangeY, bool bFinished);
 extern UDWORD numEnemyObjInRange(SDWORD player, SDWORD range, SDWORD rangeX, SDWORD rangeY, bool bVTOLs, bool bFinished);
-extern bool addBeaconBlip(SDWORD x, SDWORD y, SDWORD forPlayer, SDWORD sender, char * textMsg);
-extern bool sendBeaconToPlayer(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, char * beaconMsg);
-extern MESSAGE * findBeaconMsg(UDWORD player, SDWORD sender);
+extern bool addBeaconBlip(SDWORD x, SDWORD y, SDWORD forPlayer, SDWORD sender, char *textMsg);
+extern bool sendBeaconToPlayer(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, char *beaconMsg);
+extern MESSAGE *findBeaconMsg(UDWORD player, SDWORD sender);
 extern SDWORD getNumRepairedBy(struct DROID *psDroidToCheck, SDWORD player);
 extern bool objectInRangeVis(struct BASE_OBJECT *psList, SDWORD x, SDWORD y, SDWORD range, SDWORD lookingPlayer);
 extern SDWORD getPlayerFromString(char *playerName);
@@ -682,7 +682,7 @@ extern bool scrExp(void);
 extern bool scrSqrt(void);
 extern bool scrLog(void);
 
-extern bool addBeaconBlip(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, char * textMsg);
+extern bool addBeaconBlip(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, char *textMsg);
 extern VIEWDATA *CreateBeaconViewData(SDWORD sender, UDWORD LocX, UDWORD LocY);
 
 extern bool scrEnumUnbuilt(void);

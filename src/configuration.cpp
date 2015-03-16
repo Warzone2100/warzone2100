@@ -64,13 +64,34 @@ bool loadConfig()
 		return false;
 	}
 	debug(LOG_WZ, "Reading configuration from %s", ini.fileName().toUtf8().constData());
-	if (ini.contains("voicevol")) sound_SetUIVolume(ini.value("voicevol").toDouble() / 100.0);
-	if (ini.contains("fxvol")) sound_SetEffectsVolume(ini.value("fxvol").toDouble() / 100.0);
-	if (ini.contains("cdvol")) sound_SetMusicVolume(ini.value("cdvol").toDouble() / 100.0);
-	if (ini.contains("music_enabled")) war_SetMusicEnabled(ini.value("music_enabled").toBool());
-	if (ini.contains("language")) setLanguage(ini.value("language").toString().toUtf8().constData());
-	if (ini.contains("nomousewarp")) setMouseWarp(ini.value("nomousewarp").toBool());
-	if (ini.contains("notexturecompression")) wz_texture_compression = GL_RGBA;
+	if (ini.contains("voicevol"))
+	{
+		sound_SetUIVolume(ini.value("voicevol").toDouble() / 100.0);
+	}
+	if (ini.contains("fxvol"))
+	{
+		sound_SetEffectsVolume(ini.value("fxvol").toDouble() / 100.0);
+	}
+	if (ini.contains("cdvol"))
+	{
+		sound_SetMusicVolume(ini.value("cdvol").toDouble() / 100.0);
+	}
+	if (ini.contains("music_enabled"))
+	{
+		war_SetMusicEnabled(ini.value("music_enabled").toBool());
+	}
+	if (ini.contains("language"))
+	{
+		setLanguage(ini.value("language").toString().toUtf8().constData());
+	}
+	if (ini.contains("nomousewarp"))
+	{
+		setMouseWarp(ini.value("nomousewarp").toBool());
+	}
+	if (ini.contains("notexturecompression"))
+	{
+		wz_texture_compression = GL_RGBA;
+	}
 	showFPS = ini.value("showFPS", false).toBool();
 	scroll_speed_accel = ini.value("scroll", DEFAULTSCROLL).toInt();
 	setShakeStatus(ini.value("shake", false).toBool());
@@ -83,8 +104,8 @@ bool loadConfig()
 	war_SetPauseOnFocusLoss(ini.value("PauseOnFocusLoss", false).toBool());
 	NETsetMasterserverName(ini.value("masterserver_name", "lobby.wz2100.net").toString().toUtf8().constData());
 	iV_font(ini.value("fontname", "DejaVu Sans").toString().toUtf8().constData(),
-		ini.value("fontface", "Book").toString().toUtf8().constData(),
-		ini.value("fontfacebold", "Bold").toString().toUtf8().constData());
+	        ini.value("fontface", "Book").toString().toUtf8().constData(),
+	        ini.value("fontfacebold", "Bold").toString().toUtf8().constData());
 	NETsetMasterserverPort(ini.value("masterserver_port", MASTERSERVERPORT).toInt());
 	NETsetGameserverPort(ini.value("gameserver_port", GAMESERVERPORT).toInt());
 	war_SetFMVmode((FMV_MODE)ini.value("FMVmode", FMV_FULLSCREEN).toInt());
@@ -108,15 +129,27 @@ bool loadConfig()
 	for (int i = 1; i < 5; i++)
 	{
 		QString key("phrase" + QString::number(i));
-		if (ini.contains(key)) sstrcpy(ingame.phrases[i], ini.value(key).toString().toUtf8().constData());
+		if (ini.contains(key))
+		{
+			sstrcpy(ingame.phrases[i], ini.value(key).toString().toUtf8().constData());
+		}
 	}
 	bEnemyAllyRadarColor = ini.value("radarObjectMode").toBool();
 	radarDrawMode = (RADAR_DRAW_MODE)ini.value("radarTerrainMode", RADAR_MODE_DEFAULT).toInt();
 	radarDrawMode = (RADAR_DRAW_MODE)MIN(NUM_RADAR_MODES - 1, radarDrawMode); // restrict to allowed values
-	if (ini.contains("textureSize")) setTextureSize(ini.value("textureSize").toInt());
+	if (ini.contains("textureSize"))
+	{
+		setTextureSize(ini.value("textureSize").toInt());
+	}
 	NetPlay.isUPNP = ini.value("UPnP", true).toBool();
-	if (ini.contains("FSAA")) war_setFSAA(ini.value("FSAA").toInt());
-	if (ini.contains("shaders")) war_SetShaders(ini.value("shaders").toInt());
+	if (ini.contains("FSAA"))
+	{
+		war_setFSAA(ini.value("FSAA").toInt());
+	}
+	if (ini.contains("shaders"))
+	{
+		war_SetShaders(ini.value("shaders").toInt());
+	}
 	// Leave this to false, some system will fail and they can't see the system popup dialog!
 	war_setFullscreen(ini.value("fullscreen", false).toBool());
 	war_SetTrapCursor(ini.value("trapCursor", false).toBool());
@@ -135,7 +168,10 @@ bool loadConfig()
 	war_SetWidth(width);
 	war_SetHeight(height);
 
-	if (ini.contains("bpp")) pie_SetVideoBufferDepth(ini.value("bpp").toInt());
+	if (ini.contains("bpp"))
+	{
+		pie_SetVideoBufferDepth(ini.value("bpp").toInt());
+	}
 	return true;
 }
 
@@ -167,20 +203,20 @@ bool saveConfig()
 		ini.setValue("difficulty", getDifficultyLevel());		// level
 	}
 	ini.setValue("showFPS", (SDWORD)showFPS);
-	ini.setValue("scroll",(SDWORD)scroll_speed_accel);		// scroll
-	ini.setValue("shake",(SDWORD)(getShakeStatus()));		// screenshake
-	ini.setValue("mouseflip",(SDWORD)(getInvertMouseStatus()));	// flipmouse
+	ini.setValue("scroll", (SDWORD)scroll_speed_accel);		// scroll
+	ini.setValue("shake", (SDWORD)(getShakeStatus()));		// screenshake
+	ini.setValue("mouseflip", (SDWORD)(getInvertMouseStatus()));	// flipmouse
 	ini.setValue("nomousewarp", (SDWORD)getMouseWarp()); 		// mouse warp
-	ini.setValue("RightClickOrders",(SDWORD)(getRightClickOrders()));
-	ini.setValue("MiddleClickRotate",(SDWORD)(getMiddleClickRotate()));
+	ini.setValue("RightClickOrders", (SDWORD)(getRightClickOrders()));
+	ini.setValue("MiddleClickRotate", (SDWORD)(getMiddleClickRotate()));
 	ini.setValue("showFPS", (SDWORD)showFPS);
-	ini.setValue("shadows",(SDWORD)(getDrawShadows()));	// shadows
+	ini.setValue("shadows", (SDWORD)(getDrawShadows()));	// shadows
 	ini.setValue("sound", (SDWORD)war_getSoundEnabled());
-	ini.setValue("FMVmode",(SDWORD)(war_GetFMVmode()));		// sequences
+	ini.setValue("FMVmode", (SDWORD)(war_GetFMVmode()));		// sequences
 	ini.setValue("scanlines", (SDWORD)war_getScanlineMode());
-	ini.setValue("subtitles",(SDWORD)(seq_GetSubtitles()));		// subtitles
-	ini.setValue("radarObjectMode",(SDWORD)bEnemyAllyRadarColor);    // enemy/allies radar view
-	ini.setValue("radarTerrainMode",(SDWORD)radarDrawMode);
+	ini.setValue("subtitles", (SDWORD)(seq_GetSubtitles()));		// subtitles
+	ini.setValue("radarObjectMode", (SDWORD)bEnemyAllyRadarColor);   // enemy/allies radar view
+	ini.setValue("radarTerrainMode", (SDWORD)radarDrawMode);
 	ini.setValue("trapCursor", war_GetTrapCursor());
 	ini.setValue("vsync", war_GetVsync());
 	ini.setValue("shaders", war_GetShaders());
@@ -211,7 +247,7 @@ bool saveConfig()
 			ini.setValue("base", game.base);				// size of base
 			ini.setValue("alliance", game.alliance);		// allow alliances
 		}
-		ini.setValue("playerName", (char*)sPlayer);		// player name
+		ini.setValue("playerName", (char *)sPlayer);		// player name
 	}
 	ini.setValue("colourMP", war_getMPcolour());
 	ini.sync();

@@ -62,17 +62,17 @@ bool setMultiStats(uint32_t playerIndex, PLAYERSTATS plStats, bool bLocal)
 	{
 		// Now send it to all other players
 		NETbeginEncode(NETbroadcastQueue(), NET_PLAYER_STATS);
-			// Send the ID of the player's stats we're updating
-			NETuint32_t(&playerIndex);
+		// Send the ID of the player's stats we're updating
+		NETuint32_t(&playerIndex);
 
-			// Send over the actual stats
-			NETuint32_t(&playerStats[playerIndex].played);
-			NETuint32_t(&playerStats[playerIndex].wins);
-			NETuint32_t(&playerStats[playerIndex].losses);
-			NETuint32_t(&playerStats[playerIndex].totalKills);
-			NETuint32_t(&playerStats[playerIndex].totalScore);
-			NETuint32_t(&playerStats[playerIndex].recentKills);
-			NETuint32_t(&playerStats[playerIndex].recentScore);
+		// Send over the actual stats
+		NETuint32_t(&playerStats[playerIndex].played);
+		NETuint32_t(&playerStats[playerIndex].wins);
+		NETuint32_t(&playerStats[playerIndex].losses);
+		NETuint32_t(&playerStats[playerIndex].totalKills);
+		NETuint32_t(&playerStats[playerIndex].totalScore);
+		NETuint32_t(&playerStats[playerIndex].recentKills);
+		NETuint32_t(&playerStats[playerIndex].recentScore);
 		NETend();
 	}
 
@@ -84,36 +84,36 @@ void recvMultiStats(NETQUEUE queue)
 	uint32_t playerIndex;
 
 	NETbeginDecode(queue, NET_PLAYER_STATS);
-		// Retrieve the ID number of the player for which we need to
-		// update the stats
-		NETuint32_t(&playerIndex);
+	// Retrieve the ID number of the player for which we need to
+	// update the stats
+	NETuint32_t(&playerIndex);
 
-		if (playerIndex >= MAX_PLAYERS)
-		{
-			NETend();
-			return;
-		}
+	if (playerIndex >= MAX_PLAYERS)
+	{
+		NETend();
+		return;
+	}
 
 
-		if (playerIndex != queue.index && queue.index != NET_HOST_ONLY)
-		{
-			HandleBadParam("NET_PLAYER_STATS given incorrect params.", playerIndex, queue.index);
-			NETend();
-			return;
-		}
+	if (playerIndex != queue.index && queue.index != NET_HOST_ONLY)
+	{
+		HandleBadParam("NET_PLAYER_STATS given incorrect params.", playerIndex, queue.index);
+		NETend();
+		return;
+	}
 
-		// we don't what to update ourselves, we already know our score (FIXME: rewrite setMultiStats())
-		if (!myResponsibility(playerIndex))
-		{
-			// Retrieve the actual stats
-			NETuint32_t(&playerStats[playerIndex].played);
-			NETuint32_t(&playerStats[playerIndex].wins);
-			NETuint32_t(&playerStats[playerIndex].losses);
-			NETuint32_t(&playerStats[playerIndex].totalKills);
-			NETuint32_t(&playerStats[playerIndex].totalScore);
-			NETuint32_t(&playerStats[playerIndex].recentKills);
-			NETuint32_t(&playerStats[playerIndex].recentScore);
-		}
+	// we don't what to update ourselves, we already know our score (FIXME: rewrite setMultiStats())
+	if (!myResponsibility(playerIndex))
+	{
+		// Retrieve the actual stats
+		NETuint32_t(&playerStats[playerIndex].played);
+		NETuint32_t(&playerStats[playerIndex].wins);
+		NETuint32_t(&playerStats[playerIndex].losses);
+		NETuint32_t(&playerStats[playerIndex].totalKills);
+		NETuint32_t(&playerStats[playerIndex].totalScore);
+		NETuint32_t(&playerStats[playerIndex].recentKills);
+		NETuint32_t(&playerStats[playerIndex].recentScore);
+	}
 	NETend();
 }
 
@@ -138,18 +138,18 @@ bool loadMultiStats(char *sPlayerName, PLAYERSTATS *st)
 	debug(LOG_WZ, "loadMultiStats: %s", fileName);
 
 	// check player already exists
-	if ( !PHYSFS_exists( fileName ) )
+	if (!PHYSFS_exists(fileName))
 	{
 		PLAYERSTATS			blankstats;
 
 		memset(&blankstats, 0, sizeof(PLAYERSTATS));
-		saveMultiStats(sPlayerName,sPlayerName,&blankstats);		// didnt exist so create.
+		saveMultiStats(sPlayerName, sPlayerName, &blankstats);		// didnt exist so create.
 	}
 	else
 	{
 		int num = 0;
 
-		loadFile(fileName,&pFileData,&size);
+		loadFile(fileName, &pFileData, &size);
 
 		if (strncmp(pFileData, "WZ.STA.v3", 9) != 0)
 		{
@@ -170,10 +170,10 @@ bool loadMultiStats(char *sPlayerName, PLAYERSTATS *st)
 	st->recentScore = 0;
 
 	// clear any skirmish stats.
-	for(size = 0;size<MAX_PLAYERS;size++)
+	for (size = 0; size < MAX_PLAYERS; size++)
 	{
-		ingame.skScores[size][0] =0;
-		ingame.skScores[size][1] =0;
+		ingame.skScores[size][0] = 0;
+		ingame.skScores[size][1] = 0;
 	}
 
 	return true;
@@ -267,7 +267,7 @@ void updateMultiStatsLoses(void)
 }
 
 // update kills
-void updateMultiStatsKills(BASE_OBJECT *psKilled,UDWORD player)
+void updateMultiStatsKills(BASE_OBJECT *psKilled, UDWORD player)
 {
 	if (Cheated || player >= MAX_PLAYERS)
 	{

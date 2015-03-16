@@ -71,26 +71,26 @@ UDWORD					aDefaultRepair[MAX_PLAYERS];
 
 //set the iconID based on the name read in in the stats
 static UWORD setIconID(char *pIconName, char *pName);
-static COMPONENT_STATS * getComponentDetails(char *pName, char *pCompName);
+static COMPONENT_STATS *getComponentDetails(char *pName, char *pCompName);
 static void replaceComponent(COMPONENT_STATS *pNewComponent, COMPONENT_STATS *pOldComponent,
-					  UBYTE player);
+                             UBYTE player);
 static bool checkResearchName(RESEARCH *psRes, UDWORD numStats);
 
 static const char *getResearchName(RESEARCH *pResearch)
 {
-	return(getName(pResearch->pName));
+	return (getName(pResearch->pName));
 }
 
 //flag that indicates whether the player can self repair
 static UBYTE bSelfRepair[MAX_PLAYERS];
 static void replaceDroidComponent(DROID *pList, UDWORD oldType, UDWORD oldCompInc,
-                      UDWORD newCompInc);
+                                  UDWORD newCompInc);
 static void replaceStructureComponent(STRUCTURE *pList, UDWORD oldType, UDWORD oldCompInc,
-                      UDWORD newCompInc, UBYTE player);
-static void switchComponent(DROID *psDroid,UDWORD oldType, UDWORD oldCompInc,
-                     UDWORD newCompInc);
+                                      UDWORD newCompInc, UBYTE player);
+static void switchComponent(DROID *psDroid, UDWORD oldType, UDWORD oldCompInc,
+                            UDWORD newCompInc);
 static void replaceTransDroidComponents(DROID *psTransporter, UDWORD oldType,
-                                 UDWORD oldCompInc, UDWORD newCompInc);
+                                        UDWORD oldCompInc, UDWORD newCompInc);
 
 
 bool researchInitVars(void)
@@ -122,15 +122,15 @@ bool loadResearch(const char *pResearchData, UDWORD bufferSize)
 	char msgName[MAX_STR_LENGTH], iconID[MAX_STR_LENGTH];
 	char imdName[MAX_STR_LENGTH], imdName2[MAX_STR_LENGTH];
 	char structName[MAX_STR_LENGTH], compName[MAX_STR_LENGTH],
-		compType[MAX_STR_LENGTH];
+	     compType[MAX_STR_LENGTH];
 	PLAYER_RESEARCH dummy;
 
 	memset(&dummy, 0, sizeof(dummy));
 
 	// Skip descriptive header
-	if (strncmp(pResearchData,"Research ",9)==0)
+	if (strncmp(pResearchData, "Research ", 9) == 0)
 	{
-		pResearchData = strchr(pResearchData,'\n') + 1;
+		pResearchData = strchr(pResearchData, '\n') + 1;
 		researchCount--;
 	}
 
@@ -147,7 +147,7 @@ bool loadResearch(const char *pResearchData, UDWORD bufferSize)
 		research.index = i;
 		//read the data into the storage - the data is delimeted using comma's
 		ResearchName[0] = '\0';
-		sscanf(pResearchData,"%255[^,'\r\n],", ResearchName);
+		sscanf(pResearchData, "%255[^,'\r\n],", ResearchName);
 
 		//allocate storage for the name
 		research.pName = allocateName(ResearchName);
@@ -156,16 +156,16 @@ bool loadResearch(const char *pResearchData, UDWORD bufferSize)
 		//check the name hasn't been used already
 		ASSERT_OR_RETURN(false, checkResearchName(&research, i), "Research name %s used already", research.pName);
 
-		pResearchData += (strlen(ResearchName)+1);
+		pResearchData += (strlen(ResearchName) + 1);
 		research.ref = REF_RESEARCH_START + i;
 
 		//determine the tech level (unused, so we don't use the resulting string)
 		ResearchName[0] = '\0';
-		sscanf(pResearchData,"%255[^,'\r\n],", ResearchName);
-		pResearchData += (strlen(ResearchName)+1);
+		sscanf(pResearchData, "%255[^,'\r\n],", ResearchName);
+		pResearchData += (strlen(ResearchName) + 1);
 
 		ResearchName[0] = '\0';
-		sscanf(pResearchData,"%255[^,'\r\n],", ResearchName);
+		sscanf(pResearchData, "%255[^,'\r\n],", ResearchName);
 
 		if (strcmp(ResearchName, "0"))
 		{
@@ -176,7 +176,7 @@ bool loadResearch(const char *pResearchData, UDWORD bufferSize)
 			research.subGroup = NO_RESEARCH_ICON;
 		}
 
-		pResearchData += (strlen(ResearchName)+1);
+		pResearchData += (strlen(ResearchName) + 1);
 
 		iconID[0] = '\0';
 		imdName[0] = '\0';
@@ -195,14 +195,14 @@ bool loadResearch(const char *pResearchData, UDWORD bufferSize)
 			UDWORD numRedArtefacts;
 			UDWORD numArteResults;
 
-			sscanf(pResearchData,"%d,%255[^,'\r\n],%255[^,'\r\n],%255[^,'\r\n],%255[^,'\r\n],%255[^,'\r\n], \
+			sscanf(pResearchData, "%d,%255[^,'\r\n],%255[^,'\r\n],%255[^,'\r\n],%255[^,'\r\n],%255[^,'\r\n], \
 			       %255[^,'\r\n],%255[^,'\r\n],%d,%d,%d,%d,%d,%d,%d,%d,%d",
-				&techCode, iconID, imdName, imdName2, msgName,
+			       &techCode, iconID, imdName, imdName2, msgName,
 			       structName, compName, compType,
-				&resPoints, &keyTopic, &numPRRequired,
-				&numFunctions, &numStructures,
-				&numRedStructs, &numStructResults,
-				&numRedArtefacts, &numArteResults);
+			       &resPoints, &keyTopic, &numPRRequired,
+			       &numFunctions, &numStructures,
+			       &numRedStructs, &numStructResults,
+			       &numRedArtefacts, &numArteResults);
 		}
 
 		//set keytopic flag
@@ -298,7 +298,7 @@ bool loadResearch(const char *pResearchData, UDWORD bufferSize)
 		}
 
 		//increment the pointer to the start of the next record
-		pResearchData = strchr(pResearchData,'\n') + 1;
+		pResearchData = strchr(pResearchData, '\n') + 1;
 		asResearch.push_back(research);
 	}
 
@@ -319,7 +319,7 @@ bool loadResearchPR(const char *pPRData, UDWORD bufferSize)
 		//read the data into the storage - the data is delimited using commas
 		ResearchName[0] = '\0';
 		PRName[0] = '\0';
-		sscanf(pPRData,"%255[^,'\r\n],%255[^,'\r\n],%*d", ResearchName, PRName);
+		sscanf(pPRData, "%255[^,'\r\n],%255[^,'\r\n],%*d", ResearchName, PRName);
 
 		//loop through each Research to compare the name
 		for (int incR = 0; incR < asResearch.size(); incR++)
@@ -343,7 +343,7 @@ bool loadResearchPR(const char *pPRData, UDWORD bufferSize)
 		}
 		ASSERT_OR_RETURN(false, recFound, "Unable to find Research %s", ResearchName);
 		// increment the pointer to the start of the next record
-		pPRData = strchr(pPRData,'\n') + 1;
+		pPRData = strchr(pPRData, '\n') + 1;
 	}
 	return true;
 }
@@ -369,10 +369,10 @@ bool loadResearchArtefacts(const char *pArteData, UDWORD bufferSize, UDWORD list
 		ResearchName[0] = '\0';
 		ArteName[0] = '\0';
 		TypeName[0] = '\0';
-		sscanf(pArteData,"%255[^,'\r\n],%255[^,'\r\n],%255[^,'\r\n]", ResearchName, ArteName, TypeName);
+		sscanf(pArteData, "%255[^,'\r\n],%255[^,'\r\n],%255[^,'\r\n]", ResearchName, ArteName, TypeName);
 
 		//increment the data pointer
-		pArteData += (strlen(ResearchName)+1+strlen(ArteName)+1+strlen(TypeName)+1);
+		pArteData += (strlen(ResearchName) + 1 + strlen(ArteName) + 1 + strlen(TypeName) + 1);
 
 		pArtefact = getComponentDetails(TypeName, ArteName);
 		if (pArtefact == NULL)
@@ -391,64 +391,64 @@ bool loadResearchArtefacts(const char *pArteData, UDWORD bufferSize, UDWORD list
 		//ArtefactResearch found - alloc the artefact to the current Research topic
 		switch (listNumber)
 		{
-			case RED_LIST:
-				pResearch->pRedArtefacts.push_back(pArtefact);
-				break;
-			case RES_LIST:
-				pResearch->pArtefactResults.push_back(pArtefact);
-				break;
-			default:
-				debug( LOG_ERROR, "Unknown research list" );
-				abort();
-				return false;
+		case RED_LIST:
+			pResearch->pRedArtefacts.push_back(pArtefact);
+			break;
+		case RES_LIST:
+			pResearch->pArtefactResults.push_back(pArtefact);
+			break;
+		default:
+			debug(LOG_ERROR, "Unknown research list");
+			abort();
+			return false;
 		}
 		//deal with extra data
 		switch (listNumber)
 		{
-			case RED_LIST:
-				//ignore the last character
-				sscanf(pArteData,",%*d");
-				break;
-			case RES_LIST:
-				ArteName[0] = '\0';
-				TypeName[0] = '\0';
-				sscanf(pArteData, "%255[^,'\r\n],%255[^,'\r\n],%*d", ArteName, TypeName);
-				if (!strcmp(ArteName, "0"))
+		case RED_LIST:
+			//ignore the last character
+			sscanf(pArteData, ",%*d");
+			break;
+		case RES_LIST:
+			ArteName[0] = '\0';
+			TypeName[0] = '\0';
+			sscanf(pArteData, "%255[^,'\r\n],%255[^,'\r\n],%*d", ArteName, TypeName);
+			if (!strcmp(ArteName, "0"))
+			{
+				pResearch->pReplacedArtefacts.push_back(NULL);
+			}
+			else
+			{
+				pArtefact = getComponentDetails(TypeName, ArteName);
+				if (pArtefact == NULL)
 				{
-					pResearch->pReplacedArtefacts.push_back(NULL);
+					return false;
 				}
-				else
+				//check the old and new types are the same
+				if (statType(pArtefact->ref) != newType)
 				{
-					pArtefact = getComponentDetails(TypeName, ArteName);
-					if (pArtefact == NULL)
-					{
-						return false;
-					}
-					//check the old and new types are the same
-					if (statType(pArtefact->ref) != newType)
-					{
-						debug( LOG_ERROR, "You are trying to replace one type of component with a different type for research %s in ResultComponents.txt", ResearchName );
-						abort();
-						return false;
-					}
-					// ArtefactResearch found - alloc the artefact to the current Research topic
-					pResearch->pReplacedArtefacts.push_back(pArtefact);
+					debug(LOG_ERROR, "You are trying to replace one type of component with a different type for research %s in ResultComponents.txt", ResearchName);
+					abort();
+					return false;
 				}
-				break;
-			default:
-				debug( LOG_ERROR, "Unknown research list" );
-				abort();
-				return false;
+				// ArtefactResearch found - alloc the artefact to the current Research topic
+				pResearch->pReplacedArtefacts.push_back(pArtefact);
+			}
+			break;
+		default:
+			debug(LOG_ERROR, "Unknown research list");
+			abort();
+			return false;
 		}
 		//increment the pointer to the start of the next record
-		pArteData = strchr(pArteData,'\n') + 1;
+		pArteData = strchr(pArteData, '\n') + 1;
 	}
 
 	return true;
 }
 
 //Load the Structures for a research list
-bool loadResearchStructures(const char *pStructData, UDWORD bufferSize,UDWORD listNumber)
+bool loadResearchStructures(const char *pStructData, UDWORD bufferSize, UDWORD listNumber)
 {
 	unsigned NumToAlloc = numCR(pStructData, bufferSize);
 	unsigned int i = 0;
@@ -471,7 +471,7 @@ bool loadResearchStructures(const char *pStructData, UDWORD bufferSize,UDWORD li
 		//read the data into the storage - the data is delimited using comma's
 		ResearchName[0] = '\0';
 		StructureName[0] = '\0';
-		sscanf(pStructData,"%255[^,'\r\n],%255[^,'\r\n],%*d,%*d", ResearchName, StructureName);
+		sscanf(pStructData, "%255[^,'\r\n],%255[^,'\r\n],%*d,%*d", ResearchName, StructureName);
 
 		//loop through each Research to compare the name
 		for (incR = 0; incR < asResearch.size(); incR++)
@@ -486,20 +486,20 @@ bool loadResearchStructures(const char *pStructData, UDWORD bufferSize,UDWORD li
 						//Structure found - alloc this to the current Research
 						switch (listNumber)
 						{
-							case REQ_LIST:
-								asResearch[incR].pStructList.push_back(incS);
-								break;
-							case RED_LIST:
-								asResearch[incR].pRedStructs.push_back(incS);
-								break;
-							case RES_LIST:
-								asResearch[incR].pStructureResults.push_back(incS);
-								break;
-							default:
-								/* NO DEFAULT CASE? Alex.... Here ya go - just for you...*/
-								debug( LOG_FATAL, "Unknown research list" );
-								abort();
-								return false;
+						case REQ_LIST:
+							asResearch[incR].pStructList.push_back(incS);
+							break;
+						case RED_LIST:
+							asResearch[incR].pRedStructs.push_back(incS);
+							break;
+						case RES_LIST:
+							asResearch[incR].pStructureResults.push_back(incS);
+							break;
+						default:
+							/* NO DEFAULT CASE? Alex.... Here ya go - just for you...*/
+							debug(LOG_FATAL, "Unknown research list");
+							abort();
+							return false;
 						}
 						recFound = true;
 						break;
@@ -524,7 +524,7 @@ bool loadResearchStructures(const char *pStructData, UDWORD bufferSize,UDWORD li
 			return false;
 		}
 		//increment the pointer to the start of the next record
-		pStructData = strchr(pStructData,'\n') + 1;
+		pStructData = strchr(pStructData, '\n') + 1;
 	}
 
 	return true;
@@ -547,21 +547,21 @@ bool loadResearchFunctions(const char *pFunctionData, UDWORD bufferSize)
 		NumToAlloc--;
 	}
 
-	for (i=0; i < NumToAlloc; i++)
+	for (i = 0; i < NumToAlloc; i++)
 	{
 		recFound = false;
 		//read the data into the storage - the data is delimited using comma's
 		ResearchName[0] = '\0';
 		FunctionName[0] = '\0';
-		sscanf(pFunctionData,"%255[^,'\r\n],%255[^,'\r\n],%*d", ResearchName, FunctionName);
+		sscanf(pFunctionData, "%255[^,'\r\n],%255[^,'\r\n],%*d", ResearchName, FunctionName);
 
 		//loop through each Research to compare the name
-		for (incR=0; incR < asResearch.size(); incR++)
+		for (incR = 0; incR < asResearch.size(); incR++)
 		{
 			if (!(strcmp(ResearchName, asResearch[incR].pName)))
 			{
 				//Research found
-				for (incF=0; incF < numFunctions; incF++)
+				for (incF = 0; incF < numFunctions; incF++)
 				{
 					if (!(strcmp(FunctionName, (*pFunction[incF]).pName)))
 					{
@@ -574,7 +574,7 @@ bool loadResearchFunctions(const char *pFunctionData, UDWORD bufferSize)
 				//if Function not found - error
 				if (!recFound)
 				{
-					debug( LOG_ERROR, "Unable to find Function %s for research %s", FunctionName, ResearchName );
+					debug(LOG_ERROR, "Unable to find Function %s for research %s", FunctionName, ResearchName);
 					abort();
 					return false;
 				}
@@ -587,13 +587,13 @@ bool loadResearchFunctions(const char *pFunctionData, UDWORD bufferSize)
 		//if Research not found - error
 		if (!recFound)
 		{
-			debug( LOG_ERROR, "Unable to allocate all research Functions for %s", ResearchName );
+			debug(LOG_ERROR, "Unable to allocate all research Functions for %s", ResearchName);
 			abort();
 			return false;
 		}
 
 		//increment the pointer to the start of the next record
-		pFunctionData = strchr(pFunctionData,'\n') + 1;
+		pFunctionData = strchr(pFunctionData, '\n') + 1;
 	}
 
 	return true;
@@ -659,7 +659,7 @@ bool researchAvailable(int inc, int playerID, QUEUE_MODE mode)
 		bPRFound = true;
 		for (incPR = 0; incPR < asResearch[inc].pPRList.size(); incPR++)
 		{
-			if (IsResearchCompleted(&(asPlayerResList[playerID][asResearch[inc].pPRList[incPR]]))==0)
+			if (IsResearchCompleted(&(asPlayerResList[playerID][asResearch[inc].pPRList[incPR]])) == 0)
 			{
 				// if haven't pre-requisite - quit checking rest
 				bPRFound = false;
@@ -711,9 +711,9 @@ There can only be 'limit' number of entries
 // NOTE by AJL may 99 - skirmish now has it's own version of this, skTopicAvail.
 UWORD fillResearchList(UWORD *plist, UDWORD playerID, UWORD topic, UWORD limit)
 {
-	UWORD				inc, count=0;
+	UWORD				inc, count = 0;
 
-	for (inc=0; inc < asResearch.size(); inc++)
+	for (inc = 0; inc < asResearch.size(); inc++)
 	{
 		// if the inc matches the 'topic' - automatically add to the list
 		if (inc == topic || researchAvailable(inc, playerID, ModeQueue))
@@ -732,7 +732,7 @@ UWORD fillResearchList(UWORD *plist, UDWORD playerID, UWORD topic, UWORD limit)
 /* process the results of a completed research topic */
 void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE *psResearchFacility, bool bTrigger)
 {
-	RESEARCH *                                      pResearch = &asResearch[researchIndex];
+	RESEARCH                                       *pResearch = &asResearch[researchIndex];
 	UDWORD						type, inc;
 	STRUCTURE					*psCurr;
 	DROID						*psDroid;
@@ -742,7 +742,7 @@ void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE
 	//the message gets sent to console
 	char						consoleMsg[MAX_RESEARCH_MSG_SIZE];
 
-	ASSERT_OR_RETURN( , researchIndex < asResearch.size(), "Invalid research index %u", researchIndex);
+	ASSERT_OR_RETURN(, researchIndex < asResearch.size(), "Invalid research index %u", researchIndex);
 
 	MakeResearchCompleted(&asPlayerResList[player][researchIndex]);
 
@@ -832,310 +832,310 @@ void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE
 
 		switch (pFunction->type)
 		{
-			case(PRODUCTION_UPGRADE_TYPE):
-				productionUpgrade(pFunction, player);
-				// search the list of players structures for a Factory
-				for (psCurr = apsStructLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
+		case (PRODUCTION_UPGRADE_TYPE):
+			productionUpgrade(pFunction, player);
+			// search the list of players structures for a Factory
+			for (psCurr = apsStructLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
+			{
+				if ((psCurr->pStructureType->type == REF_FACTORY &&
+				     ((PRODUCTION_UPGRADE_FUNCTION *)pFunction)->factory) ||
+				    (psCurr->pStructureType->type == REF_CYBORG_FACTORY &&
+				     ((PRODUCTION_UPGRADE_FUNCTION *)pFunction)->cyborgFactory) ||
+				    (psCurr->pStructureType->type == REF_VTOL_FACTORY &&
+				     ((PRODUCTION_UPGRADE_FUNCTION *)pFunction)->vtolFactory))
 				{
-					if ((psCurr->pStructureType->type == REF_FACTORY &&
-						((PRODUCTION_UPGRADE_FUNCTION *)pFunction)->factory) ||
-						(psCurr->pStructureType->type == REF_CYBORG_FACTORY &&
-						((PRODUCTION_UPGRADE_FUNCTION *)pFunction)->cyborgFactory) ||
-						(psCurr->pStructureType->type == REF_VTOL_FACTORY &&
-						((PRODUCTION_UPGRADE_FUNCTION *)pFunction)->vtolFactory))
-					{
-						// upgrade the Output for the structure
-						structureProductionUpgrade(psCurr);
-					}
+					// upgrade the Output for the structure
+					structureProductionUpgrade(psCurr);
 				}
-				// and the mission structures
-				for (psCurr = mission.apsStructLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
+			}
+			// and the mission structures
+			for (psCurr = mission.apsStructLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
+			{
+				if ((psCurr->pStructureType->type == REF_FACTORY &&
+				     ((PRODUCTION_UPGRADE_FUNCTION *)pFunction)->factory) ||
+				    (psCurr->pStructureType->type == REF_CYBORG_FACTORY &&
+				     ((PRODUCTION_UPGRADE_FUNCTION *)pFunction)->cyborgFactory) ||
+				    (psCurr->pStructureType->type == REF_VTOL_FACTORY &&
+				     ((PRODUCTION_UPGRADE_FUNCTION *)pFunction)->vtolFactory))
 				{
-					if ((psCurr->pStructureType->type == REF_FACTORY &&
-						((PRODUCTION_UPGRADE_FUNCTION *)pFunction)->factory) ||
-						(psCurr->pStructureType->type == REF_CYBORG_FACTORY &&
-						((PRODUCTION_UPGRADE_FUNCTION *)pFunction)->cyborgFactory) ||
-						(psCurr->pStructureType->type == REF_VTOL_FACTORY &&
-						((PRODUCTION_UPGRADE_FUNCTION *)pFunction)->vtolFactory))
-					{
-						// upgrade the Output for the structure
-						structureProductionUpgrade(psCurr);
-					}
+					// upgrade the Output for the structure
+					structureProductionUpgrade(psCurr);
 				}
-			   	// message/sound in here for production boost
-				break;
-			case(RESEARCH_UPGRADE_TYPE):
-				researchUpgrade(pFunction, player);
-				//search the list of players structures for a Research Facility
-				for (psCurr = apsStructLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
+			}
+			// message/sound in here for production boost
+			break;
+		case (RESEARCH_UPGRADE_TYPE):
+			researchUpgrade(pFunction, player);
+			//search the list of players structures for a Research Facility
+			for (psCurr = apsStructLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
+			{
+				if (psCurr->pStructureType->type == REF_RESEARCH)
 				{
-					if (psCurr->pStructureType->type == REF_RESEARCH)
-					{
-						// upgrade the research points
-						structureResearchUpgrade(psCurr);
-					}
+					// upgrade the research points
+					structureResearchUpgrade(psCurr);
 				}
-				// and the mission structures
-				for (psCurr = mission.apsStructLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
+			}
+			// and the mission structures
+			for (psCurr = mission.apsStructLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
+			{
+				if (psCurr->pStructureType->type == REF_RESEARCH)
 				{
-					if (psCurr->pStructureType->type == REF_RESEARCH)
-					{
-						// upgrade the research points
-						structureResearchUpgrade(psCurr);
-					}
+					// upgrade the research points
+					structureResearchUpgrade(psCurr);
 				}
-				// Stuff a message in here/sound whatever for research boost.
-				break;
-			case(POWER_UPGRADE_TYPE):
-				powerUpgrade(pFunction, player);
-				// search the list of players structures for a Power Gens
-				for (psCurr = apsStructLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
+			}
+			// Stuff a message in here/sound whatever for research boost.
+			break;
+		case (POWER_UPGRADE_TYPE):
+			powerUpgrade(pFunction, player);
+			// search the list of players structures for a Power Gens
+			for (psCurr = apsStructLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
+			{
+				if (psCurr->pStructureType->type == REF_POWER_GEN)
 				{
-					if (psCurr->pStructureType->type == REF_POWER_GEN)
-					{
-						// upgrade the power points
-						structurePowerUpgrade(psCurr);
-					}
+					// upgrade the power points
+					structurePowerUpgrade(psCurr);
 				}
-				// and the mission structure
-				for (psCurr = mission.apsStructLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
+			}
+			// and the mission structure
+			for (psCurr = mission.apsStructLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
+			{
+				if (psCurr->pStructureType->type == REF_POWER_GEN)
 				{
-					if (psCurr->pStructureType->type == REF_POWER_GEN)
-					{
-						// upgrade the power points
-						structurePowerUpgrade(psCurr);
-					}
+					// upgrade the power points
+					structurePowerUpgrade(psCurr);
 				}
-				break;
-			case(REARM_UPGRADE_TYPE):
-				reArmUpgrade(pFunction, player);
-				// search the list of players structures for a ReArm pad
-				for (psCurr = apsStructLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
+			}
+			break;
+		case (REARM_UPGRADE_TYPE):
+			reArmUpgrade(pFunction, player);
+			// search the list of players structures for a ReArm pad
+			for (psCurr = apsStructLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
+			{
+				if (psCurr->pStructureType->type == REF_REARM_PAD)
 				{
-					if (psCurr->pStructureType->type == REF_REARM_PAD)
-					{
-						// upgrade the rearm points
-						structureReArmUpgrade(psCurr);
-					}
+					// upgrade the rearm points
+					structureReArmUpgrade(psCurr);
 				}
-				// and the mission structure
-				for (psCurr = mission.apsStructLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
+			}
+			// and the mission structure
+			for (psCurr = mission.apsStructLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
+			{
+				if (psCurr->pStructureType->type == REF_REARM_PAD)
 				{
-					if (psCurr->pStructureType->type == REF_REARM_PAD)
-					{
-						// upgrade the rearm points
-						structureReArmUpgrade(psCurr);
-					}
+					// upgrade the rearm points
+					structureReArmUpgrade(psCurr);
 				}
-				break;
-			case(REPAIR_UPGRADE_TYPE):
-				repairFacUpgrade(pFunction, player);
-				// search the list of players structures for a Power Gens
-				for (psCurr = apsStructLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
+			}
+			break;
+		case (REPAIR_UPGRADE_TYPE):
+			repairFacUpgrade(pFunction, player);
+			// search the list of players structures for a Power Gens
+			for (psCurr = apsStructLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
+			{
+				if (psCurr->pStructureType->type == REF_REPAIR_FACILITY)
 				{
-					if (psCurr->pStructureType->type == REF_REPAIR_FACILITY)
-					{
-						// upgrade the repair points
-						structureRepairUpgrade(psCurr);
-					}
+					// upgrade the repair points
+					structureRepairUpgrade(psCurr);
 				}
-				// and the mission structure
-				for (psCurr = mission.apsStructLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
+			}
+			// and the mission structure
+			for (psCurr = mission.apsStructLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
+			{
+				if (psCurr->pStructureType->type == REF_REPAIR_FACILITY)
 				{
-					if (psCurr->pStructureType->type == REF_REPAIR_FACILITY)
-					{
-						// upgrade the repair points
-						structureRepairUpgrade(psCurr);
-					}
+					// upgrade the repair points
+					structureRepairUpgrade(psCurr);
 				}
-				break;
-			case(WEAPON_UPGRADE_TYPE):
-				// for the current player, upgrade the weapon stats
-				weaponUpgrade(pFunction, player);
-				// message/sound for weapon upgrade
-				break;
-			case(DROIDSENSOR_UPGRADE_TYPE):
-				// for the current player, upgrade the sensor stats
-				sensorUpgrade(pFunction, player);
-				// for each structure in the player's list, upgrade the sensor stat
-				for (psCurr = apsStructLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
+			}
+			break;
+		case (WEAPON_UPGRADE_TYPE):
+			// for the current player, upgrade the weapon stats
+			weaponUpgrade(pFunction, player);
+			// message/sound for weapon upgrade
+			break;
+		case (DROIDSENSOR_UPGRADE_TYPE):
+			// for the current player, upgrade the sensor stats
+			sensorUpgrade(pFunction, player);
+			// for each structure in the player's list, upgrade the sensor stat
+			for (psCurr = apsStructLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
+			{
+				structureSensorUpgrade(psCurr);
+				visTilesUpdate(psCurr);
+			}
+			for (psCurr = mission.apsStructLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
+			{
+				structureSensorUpgrade(psCurr);
+			}
+			// for each droid in the player's list, upgrade the sensor stat
+			for (psDroid = apsDroidLists[player]; psDroid != NULL; psDroid = psDroid->psNext)
+			{
+				droidSensorUpgrade(psDroid);
+				visTilesUpdate(psDroid);
+				if (isTransporter(psDroid))
 				{
-					structureSensorUpgrade(psCurr);
-					visTilesUpdate(psCurr);
+					upgradeTransporterDroids(psDroid, droidSensorUpgrade);
 				}
-				for (psCurr = mission.apsStructLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
+			}
+			for (psDroid = mission.apsDroidLists[player]; psDroid != NULL; psDroid = psDroid->psNext)
+			{
+				droidSensorUpgrade(psDroid);
+				if (isTransporter(psDroid))
 				{
-					structureSensorUpgrade(psCurr);
+					upgradeTransporterDroids(psDroid, droidSensorUpgrade);
 				}
-				// for each droid in the player's list, upgrade the sensor stat
-				for (psDroid = apsDroidLists[player]; psDroid != NULL; psDroid = psDroid->psNext)
+			}
+			for (psDroid = apsLimboDroids[player]; psDroid != NULL; psDroid = psDroid->psNext)
+			{
+				droidSensorUpgrade(psDroid);
+				if (isTransporter(psDroid))
 				{
-					droidSensorUpgrade(psDroid);
-					visTilesUpdate(psDroid);
-					if (isTransporter(psDroid))
-					{
-						upgradeTransporterDroids(psDroid, droidSensorUpgrade);
-					}
+					upgradeTransporterDroids(psDroid, droidSensorUpgrade);
 				}
-				for (psDroid = mission.apsDroidLists[player]; psDroid != NULL; psDroid = psDroid->psNext)
+			}
+			// message/sound for sensor upgrade
+			break;
+		case (DROIDECM_UPGRADE_TYPE):
+			// for the current player, upgrade the ecm stats
+			ecmUpgrade(pFunction, player);
+			// for each structure in the player's list, upgrade the ecm stat
+			for (psCurr = apsStructLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
+			{
+				structureECMUpgrade(psCurr);
+			}
+			for (psCurr = mission.apsStructLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
+			{
+				structureECMUpgrade(psCurr);
+			}
+			// for each droid in the player's list, upgrade the ecm stat
+			for (psDroid = apsDroidLists[player]; psDroid != NULL; psDroid = psDroid->psNext)
+			{
+				droidECMUpgrade(psDroid);
+				if (isTransporter(psDroid))
 				{
-					droidSensorUpgrade(psDroid);
-					if (isTransporter(psDroid))
-					{
-						upgradeTransporterDroids(psDroid, droidSensorUpgrade);
-					}
+					upgradeTransporterDroids(psDroid, droidECMUpgrade);
 				}
-				for (psDroid = apsLimboDroids[player]; psDroid != NULL; psDroid = psDroid->psNext)
+			}
+			for (psDroid = mission.apsDroidLists[player]; psDroid != NULL; psDroid = psDroid->psNext)
+			{
+				droidECMUpgrade(psDroid);
+				if (isTransporter(psDroid))
 				{
-					droidSensorUpgrade(psDroid);
-					if (isTransporter(psDroid))
-					{
-						upgradeTransporterDroids(psDroid, droidSensorUpgrade);
-					}
+					upgradeTransporterDroids(psDroid, droidECMUpgrade);
 				}
-				// message/sound for sensor upgrade
-				break;
-			case(DROIDECM_UPGRADE_TYPE):
-				// for the current player, upgrade the ecm stats
-				ecmUpgrade(pFunction, player);
-				// for each structure in the player's list, upgrade the ecm stat
-				for (psCurr = apsStructLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
+			}
+			for (psDroid = apsLimboDroids[player]; psDroid != NULL; psDroid = psDroid->psNext)
+			{
+				droidECMUpgrade(psDroid);
+				if (isTransporter(psDroid))
 				{
-					structureECMUpgrade(psCurr);
+					upgradeTransporterDroids(psDroid, droidECMUpgrade);
 				}
-				for (psCurr = mission.apsStructLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
+			}
+			// message/sound for ecm upgrade
+			break;
+		case (DROIDREPAIR_UPGRADE_TYPE):
+			// for the current player, upgrade the repair stats
+			repairUpgrade(pFunction, player);
+			// message/sound for repair upgrade
+			break;
+		case (DROIDCONST_UPGRADE_TYPE):
+			// for the current player, upgrade the constructor stats
+			constructorUpgrade(pFunction, player);
+			// message/sound for constructor upgrade
+			break;
+		case (DROIDBODY_UPGRADE_TYPE):
+			// for each droid in the player's list, upgrade the body points
+			for (psDroid = apsDroidLists[player]; psDroid != NULL; psDroid = psDroid->psNext)
+			{
+				droidBodyUpgrade(pFunction, psDroid);
+			}
+			for (psDroid = mission.apsDroidLists[player]; psDroid != NULL; psDroid = psDroid->psNext)
+			{
+				droidBodyUpgrade(pFunction, psDroid);
+				if (isTransporter(psDroid))
 				{
-					structureECMUpgrade(psCurr);
+					upgradeTransporterDroids(psDroid, droidSensorUpgrade);
 				}
-				// for each droid in the player's list, upgrade the ecm stat
-				for (psDroid = apsDroidLists[player]; psDroid != NULL; psDroid = psDroid->psNext)
+			}
+			for (psDroid = apsLimboDroids[player]; psDroid != NULL; psDroid = psDroid->psNext)
+			{
+				droidBodyUpgrade(pFunction, psDroid);
+				if (isTransporter(psDroid))
 				{
-					droidECMUpgrade(psDroid);
-					if (isTransporter(psDroid))
-					{
-						upgradeTransporterDroids(psDroid, droidECMUpgrade);
-					}
+					upgradeTransporterDroids(psDroid, droidSensorUpgrade);
 				}
-				for (psDroid = mission.apsDroidLists[player]; psDroid != NULL; psDroid = psDroid->psNext)
+			}
+			// DO THIS AFTER so above calculations can use the previous upgrade values for
+			// the current player, upgrade the body stats
+			bodyUpgrade(pFunction, player);
+			// message/sound for body upgrade
+			break;
+		case (STRUCTURE_UPGRADE_TYPE):
+			// for each structure in the player's list, upgrade the stats
+			for (psCurr = apsStructLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
+			{
+				//do this for none wallDefense structs
+				if (!wallDefenceStruct(psCurr->pStructureType))
 				{
-					droidECMUpgrade(psDroid);
-					if (isTransporter(psDroid))
-					{
-						upgradeTransporterDroids(psDroid, droidECMUpgrade);
-					}
+					structureBodyUpgrade(pFunction, psCurr);
+					structureArmourUpgrade(pFunction, psCurr);
+					structureResistanceUpgrade(pFunction, psCurr);
 				}
-				for (psDroid = apsLimboDroids[player]; psDroid != NULL; psDroid = psDroid->psNext)
+				// Defense type can have resistance upgrade now - AB 19/02/99
+				if (psCurr->pStructureType->type == REF_DEFENSE)
 				{
-					droidECMUpgrade(psDroid);
-					if (isTransporter(psDroid))
-					{
-						upgradeTransporterDroids(psDroid, droidECMUpgrade);
-					}
+					structureResistanceUpgrade(pFunction, psCurr);
 				}
-				// message/sound for ecm upgrade
-				break;
-			case(DROIDREPAIR_UPGRADE_TYPE):
-				// for the current player, upgrade the repair stats
-				repairUpgrade(pFunction, player);
-				// message/sound for repair upgrade
-				break;
-			case(DROIDCONST_UPGRADE_TYPE):
-				// for the current player, upgrade the constructor stats
-				constructorUpgrade(pFunction, player);
-				// message/sound for constructor upgrade
-				break;
-			case(DROIDBODY_UPGRADE_TYPE):
-				// for each droid in the player's list, upgrade the body points
-				for (psDroid = apsDroidLists[player]; psDroid != NULL; psDroid = psDroid->psNext)
+			}
+			for (psCurr = mission.apsStructLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
+			{
+				//do this for none wallDefense structs
+				if (!wallDefenceStruct(psCurr->pStructureType))
 				{
-					droidBodyUpgrade(pFunction, psDroid);
+					structureBodyUpgrade(pFunction, psCurr);
+					structureArmourUpgrade(pFunction, psCurr);
+					structureResistanceUpgrade(pFunction, psCurr);
 				}
-				for (psDroid = mission.apsDroidLists[player]; psDroid != NULL; psDroid = psDroid->psNext)
+				// Defense type can have resistance upgrade now - AB 19/02/99
+				if (psCurr->pStructureType->type == REF_DEFENSE)
 				{
-					droidBodyUpgrade(pFunction, psDroid);
-					if (isTransporter(psDroid))
-					{
-						upgradeTransporterDroids(psDroid, droidSensorUpgrade);
-					}
+					structureResistanceUpgrade(pFunction, psCurr);
 				}
-				for (psDroid = apsLimboDroids[player]; psDroid != NULL; psDroid = psDroid->psNext)
+			}
+			// DO THIS AFTER so above calculations can use the previous upgrade values
+			// for the current player, upgrade the structure stats
+			structureUpgrade(pFunction, player);
+			// message/sound for structure upgrade
+			break;
+		case (WALLDEFENCE_UPGRADE_TYPE):
+			//for each structure in the player's list, upgrade the stats
+			for (psCurr = apsStructLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
+			{
+				// do this for wallDefense structs
+				if (wallDefenceStruct(psCurr->pStructureType))
 				{
-					droidBodyUpgrade(pFunction, psDroid);
-					if (isTransporter(psDroid))
-					{
-						upgradeTransporterDroids(psDroid, droidSensorUpgrade);
-					}
+					structureBodyUpgrade(pFunction, psCurr);
+					structureArmourUpgrade(pFunction, psCurr);
 				}
-				// DO THIS AFTER so above calculations can use the previous upgrade values for
-				// the current player, upgrade the body stats
-				bodyUpgrade(pFunction, player);
-				// message/sound for body upgrade
-				break;
-			case(STRUCTURE_UPGRADE_TYPE):
-				// for each structure in the player's list, upgrade the stats
-				for (psCurr = apsStructLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
+			}
+			for (psCurr = mission.apsStructLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
+			{
+				// do this for wallDefense structs
+				if (wallDefenceStruct(psCurr->pStructureType))
 				{
-					//do this for none wallDefense structs
-					if (!wallDefenceStruct(psCurr->pStructureType))
-					{
-						structureBodyUpgrade(pFunction, psCurr);
-						structureArmourUpgrade(pFunction, psCurr);
-						structureResistanceUpgrade(pFunction, psCurr);
-					}
-					// Defense type can have resistance upgrade now - AB 19/02/99
-					if (psCurr->pStructureType->type == REF_DEFENSE)
-					{
-						structureResistanceUpgrade(pFunction, psCurr);
-					}
+					structureBodyUpgrade(pFunction, psCurr);
+					structureArmourUpgrade(pFunction, psCurr);
 				}
-				for (psCurr = mission.apsStructLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
-				{
-					//do this for none wallDefense structs
-					if (!wallDefenceStruct(psCurr->pStructureType))
-					{
-						structureBodyUpgrade(pFunction, psCurr);
-						structureArmourUpgrade(pFunction, psCurr);
-						structureResistanceUpgrade(pFunction, psCurr);
-					}
-					// Defense type can have resistance upgrade now - AB 19/02/99
-					if (psCurr->pStructureType->type == REF_DEFENSE)
-					{
-						structureResistanceUpgrade(pFunction, psCurr);
-					}
-				}
-				// DO THIS AFTER so above calculations can use the previous upgrade values
-				// for the current player, upgrade the structure stats
-				structureUpgrade(pFunction, player);
-				// message/sound for structure upgrade
-				break;
-			case(WALLDEFENCE_UPGRADE_TYPE):
-				//for each structure in the player's list, upgrade the stats
-				for (psCurr = apsStructLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
-				{
-					// do this for wallDefense structs
-					if (wallDefenceStruct(psCurr->pStructureType))
-					{
-						structureBodyUpgrade(pFunction, psCurr);
-						structureArmourUpgrade(pFunction, psCurr);
-					}
-				}
-				for (psCurr = mission.apsStructLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
-				{
-					// do this for wallDefense structs
-					if (wallDefenceStruct(psCurr->pStructureType))
-					{
-						structureBodyUpgrade(pFunction, psCurr);
-						structureArmourUpgrade(pFunction, psCurr);
-					}
-				}
-				// DO THIS AFTER so above calculations can use the previous upgrade values
-				// for the current player, upgrade the wall/defence structure stats
-				wallDefenceUpgrade(pFunction, player);
-				// message/sound for wall/defence structure upgrade
-				break;
-		//	default:
-		//		ASSERT(false,"Invalid function type");
-		//		break;
+			}
+			// DO THIS AFTER so above calculations can use the previous upgrade values
+			// for the current player, upgrade the wall/defence structure stats
+			wallDefenceUpgrade(pFunction, player);
+			// message/sound for wall/defence structure upgrade
+			break;
+			//	default:
+			//		ASSERT(false,"Invalid function type");
+			//		break;
 		}//end of switch
 	}//end of function loop
 
@@ -1198,44 +1198,44 @@ void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE
 	}
 
 #ifdef DEBUG
-    /*this just checks that there are not more than 32 weapons now available for
-    the design screen - it'll give us grief in the design screen (which we may HAVE TO fix)!*/
-    //only check if selectedPlayer has done the research
-    if (player == selectedPlayer)
-    {
-        UDWORD    vtolCompInc;
+	/*this just checks that there are not more than 32 weapons now available for
+	the design screen - it'll give us grief in the design screen (which we may HAVE TO fix)!*/
+	//only check if selectedPlayer has done the research
+	if (player == selectedPlayer)
+	{
+		UDWORD    vtolCompInc;
 
-        compInc = vtolCompInc =0;
-	    for (inc = 0; inc < numWeaponStats; inc++)
-	    {
-		    if (apCompLists[selectedPlayer][COMP_WEAPON][inc] == AVAILABLE &&
-                asWeaponStats[inc].designable)
-            {
-                if (asWeaponStats[inc].vtolAttackRuns)
-                {
-                    vtolCompInc++;
-                }
-                else
-                {
-                    compInc++;
-                }
-                if (compInc >= 128)
-                {
+		compInc = vtolCompInc = 0;
+		for (inc = 0; inc < numWeaponStats; inc++)
+		{
+			if (apCompLists[selectedPlayer][COMP_WEAPON][inc] == AVAILABLE &&
+			    asWeaponStats[inc].designable)
+			{
+				if (asWeaponStats[inc].vtolAttackRuns)
+				{
+					vtolCompInc++;
+				}
+				else
+				{
+					compInc++;
+				}
+				if (compInc >= 128)
+				{
 					debug(LOG_ERROR, "researchResult - more than 128 weapons now available");
-                   
+
 					//don't bother checking any more
-                    break;
-                }
-                if (vtolCompInc >= 128)
-                {
+					break;
+				}
+				if (vtolCompInc >= 128)
+				{
 					debug(LOG_ERROR, "researchResult - more than 128 vtol weapons now available");
-                    
+
 					//don't bother checking any more
-                    break;
-                }
-            }
-	    }
-    }
+					break;
+				}
+			}
+		}
+	}
 #endif
 }
 
@@ -1259,8 +1259,8 @@ void ResearchRelease(void)
 /*puts research facility on hold*/
 void holdResearch(STRUCTURE *psBuilding, QUEUE_MODE mode)
 {
-	ASSERT( psBuilding->pStructureType->type == REF_RESEARCH,
-		"holdResearch: structure not a research facility" );
+	ASSERT(psBuilding->pStructureType->type == REF_RESEARCH,
+	       "holdResearch: structure not a research facility");
 
 	RESEARCH_FACILITY *psResFac = &psBuilding->pFunctionality->researchFacility;
 
@@ -1288,8 +1288,8 @@ void holdResearch(STRUCTURE *psBuilding, QUEUE_MODE mode)
 /*release a research facility from hold*/
 void releaseResearch(STRUCTURE *psBuilding, QUEUE_MODE mode)
 {
-	ASSERT( psBuilding->pStructureType->type == REF_RESEARCH,
-		"releaseResearch: structure not a research facility" );
+	ASSERT(psBuilding->pStructureType->type == REF_RESEARCH,
+	       "releaseResearch: structure not a research facility");
 
 	RESEARCH_FACILITY *psResFac = &psBuilding->pFunctionality->researchFacility;
 
@@ -1317,16 +1317,16 @@ void CancelAllResearch(UDWORD pl)
 {
 	STRUCTURE	*psCurr;
 
-	for (psCurr=apsStructLists[pl]; psCurr != NULL; psCurr = psCurr->psNext)
+	for (psCurr = apsStructLists[pl]; psCurr != NULL; psCurr = psCurr->psNext)
 	{
 		if (psCurr->pStructureType->type == REF_RESEARCH)
 		{
 			if (
-				 ( ((RESEARCH_FACILITY *)psCurr->pFunctionality)!=NULL )
-			 &&  ( ((RESEARCH_FACILITY *)psCurr->pFunctionality)->psSubject !=NULL )
-			   )
+			    (((RESEARCH_FACILITY *)psCurr->pFunctionality) != NULL)
+			    && (((RESEARCH_FACILITY *)psCurr->pFunctionality)->psSubject != NULL)
+			)
 			{
-				debug( LOG_NEVER, "canceling research for %p\n", psCurr );
+				debug(LOG_NEVER, "canceling research for %p\n", psCurr);
 				cancelResearch(psCurr, ModeQueue);
 			}
 		}
@@ -1343,7 +1343,7 @@ void cancelResearch(STRUCTURE *psBuilding, QUEUE_MODE mode)
 	ASSERT(psBuilding->pStructureType->type == REF_RESEARCH, "Structure not a research facility");
 
 	RESEARCH_FACILITY *psResFac = &psBuilding->pFunctionality->researchFacility;
-	if( !(RESEARCH *)psResFac->psSubject)
+	if (!(RESEARCH *)psResFac->psSubject)
 	{
 		debug(LOG_SYNC, "Invalid research topic");
 		return;
@@ -1429,222 +1429,222 @@ static UWORD setIconID(char *pIconName, char *pName)
 		return IMAGE_RES_DROIDTECH;
 	}
 
-	if (!strcmp(pIconName,"IMAGE_RES_WEAPONTECH"))
+	if (!strcmp(pIconName, "IMAGE_RES_WEAPONTECH"))
 	{
 		return IMAGE_RES_WEAPONTECH;
 	}
 
-	if (!strcmp(pIconName,"IMAGE_RES_COMPUTERTECH"))
+	if (!strcmp(pIconName, "IMAGE_RES_COMPUTERTECH"))
 	{
 		return IMAGE_RES_COMPUTERTECH;
 	}
 
-	if (!strcmp(pIconName,"IMAGE_RES_POWERTECH"))
+	if (!strcmp(pIconName, "IMAGE_RES_POWERTECH"))
 	{
 		return IMAGE_RES_POWERTECH;
 	}
 
-	if (!strcmp(pIconName,"IMAGE_RES_SYSTEMTECH"))
+	if (!strcmp(pIconName, "IMAGE_RES_SYSTEMTECH"))
 	{
 		return IMAGE_RES_SYSTEMTECH;
 	}
 
-	if (!strcmp(pIconName,"IMAGE_RES_STRUCTURETECH"))
+	if (!strcmp(pIconName, "IMAGE_RES_STRUCTURETECH"))
 	{
 		return IMAGE_RES_STRUCTURETECH;
 	}
 
-	if (!strcmp(pIconName,"IMAGE_RES_CYBORGTECH"))
+	if (!strcmp(pIconName, "IMAGE_RES_CYBORGTECH"))
 	{
 		return IMAGE_RES_CYBORGTECH;
 	}
 
-	if (!strcmp(pIconName,"IMAGE_RES_DEFENCE"))
+	if (!strcmp(pIconName, "IMAGE_RES_DEFENCE"))
 	{
 		return IMAGE_RES_DEFENCE;
 	}
 
-	if (!strcmp(pIconName,"IMAGE_RES_QUESTIONMARK"))
+	if (!strcmp(pIconName, "IMAGE_RES_QUESTIONMARK"))
 	{
 		return IMAGE_RES_QUESTIONMARK;
 	}
 
-	if (!strcmp(pIconName,"IMAGE_RES_GRPACC"))
+	if (!strcmp(pIconName, "IMAGE_RES_GRPACC"))
 	{
 		return IMAGE_RES_GRPACC;
 	}
 
-	if (!strcmp(pIconName,"IMAGE_RES_GRPUPG"))
+	if (!strcmp(pIconName, "IMAGE_RES_GRPUPG"))
 	{
 		return IMAGE_RES_GRPUPG;
 	}
 
-	if (!strcmp(pIconName,"IMAGE_RES_GRPREP"))
+	if (!strcmp(pIconName, "IMAGE_RES_GRPREP"))
 	{
 		return IMAGE_RES_GRPREP;
 	}
 
-	if (!strcmp(pIconName,"IMAGE_RES_GRPROF"))
+	if (!strcmp(pIconName, "IMAGE_RES_GRPROF"))
 	{
 		return IMAGE_RES_GRPROF;
 	}
 
-	if (!strcmp(pIconName,"IMAGE_RES_GRPDAM"))
+	if (!strcmp(pIconName, "IMAGE_RES_GRPDAM"))
 	{
 		return IMAGE_RES_GRPDAM;
 	}
 
 	// Add more names as images are created
-	ASSERT( false, "Invalid icon graphic %s for topic %s", pIconName, pName );
+	ASSERT(false, "Invalid icon graphic %s for topic %s", pIconName, pName);
 
 	return 0;	// Should never get here.
 }
 
 
-SDWORD	mapRIDToIcon( UDWORD rid )
+SDWORD	mapRIDToIcon(UDWORD rid)
 {
-	switch(rid)
+	switch (rid)
 	{
 	case RID_ROCKET:
-		return(IMAGE_ROCKET);
+		return (IMAGE_ROCKET);
 		break;
 	case RID_CANNON:
-		return(IMAGE_CANNON);
+		return (IMAGE_CANNON);
 		break;
 	case RID_HOVERCRAFT:
-		return(IMAGE_HOVERCRAFT);
+		return (IMAGE_HOVERCRAFT);
 		break;
 	case RID_ECM:
-		return(IMAGE_ECM);
+		return (IMAGE_ECM);
 		break;
 	case RID_PLASCRETE:
-		return(IMAGE_PLASCRETE);
+		return (IMAGE_PLASCRETE);
 		break;
 	case RID_TRACKS:
-		return(IMAGE_TRACKS);
+		return (IMAGE_TRACKS);
 		break;
 	case RID_DROIDTECH:
-		return(IMAGE_RES_DROIDTECH);
+		return (IMAGE_RES_DROIDTECH);
 		break;
 	case RID_WEAPONTECH:
-		return(IMAGE_RES_WEAPONTECH);
+		return (IMAGE_RES_WEAPONTECH);
 		break;
 	case RID_COMPUTERTECH:
-		return(IMAGE_RES_COMPUTERTECH);
+		return (IMAGE_RES_COMPUTERTECH);
 		break;
 	case RID_POWERTECH:
-		return(IMAGE_RES_POWERTECH);
+		return (IMAGE_RES_POWERTECH);
 		break;
 	case RID_SYSTEMTECH:
-		return(IMAGE_RES_SYSTEMTECH);
+		return (IMAGE_RES_SYSTEMTECH);
 		break;
 	case RID_STRUCTURETECH:
-		return(IMAGE_RES_STRUCTURETECH);
+		return (IMAGE_RES_STRUCTURETECH);
 		break;
 	case RID_CYBORGTECH:
-		return(IMAGE_RES_CYBORGTECH);
+		return (IMAGE_RES_CYBORGTECH);
 		break;
 	case RID_DEFENCE:
-		return(IMAGE_RES_DEFENCE);
+		return (IMAGE_RES_DEFENCE);
 		break;
 	case RID_QUESTIONMARK:
-		return(IMAGE_RES_QUESTIONMARK);
+		return (IMAGE_RES_QUESTIONMARK);
 		break;
 	case RID_GRPACC:
-		return(IMAGE_RES_GRPACC);
+		return (IMAGE_RES_GRPACC);
 		break;
 	case RID_GRPUPG:
-		return(IMAGE_RES_GRPUPG);
+		return (IMAGE_RES_GRPUPG);
 		break;
 	case RID_GRPREP:
-		return(IMAGE_RES_GRPREP);
+		return (IMAGE_RES_GRPREP);
 		break;
 	case RID_GRPROF:
-		return(IMAGE_RES_GRPROF);
+		return (IMAGE_RES_GRPROF);
 		break;
 	case RID_GRPDAM:
-		return(IMAGE_RES_GRPDAM);
+		return (IMAGE_RES_GRPDAM);
 		break;
 
 	default:
-		ASSERT( false,"Weirdy mapping request for RID to icon" );
-		return(-1); //pass back a value that can never have been set up
+		ASSERT(false, "Weirdy mapping request for RID to icon");
+		return (-1); //pass back a value that can never have been set up
 		break;
 	}
 }
 
 SDWORD	mapIconToRID(UDWORD iconID)
 {
-	switch(iconID)
+	switch (iconID)
 	{
 	case IMAGE_ROCKET:
-		return(RID_ROCKET);
+		return (RID_ROCKET);
 		break;
 	case IMAGE_CANNON:
-		return(RID_CANNON);
+		return (RID_CANNON);
 		break;
 	case IMAGE_HOVERCRAFT:
-		return(RID_HOVERCRAFT);
+		return (RID_HOVERCRAFT);
 		break;
 	case IMAGE_ECM:
-		return(RID_ECM);
+		return (RID_ECM);
 		break;
 	case IMAGE_PLASCRETE:
-		return(RID_PLASCRETE);
+		return (RID_PLASCRETE);
 		break;
 	case IMAGE_TRACKS:
-		return(RID_TRACKS);
+		return (RID_TRACKS);
 		break;
 	case IMAGE_RES_DROIDTECH:
-		return(RID_DROIDTECH);
+		return (RID_DROIDTECH);
 		break;
 	case IMAGE_RES_WEAPONTECH:
-		return(RID_WEAPONTECH);
+		return (RID_WEAPONTECH);
 		break;
 	case IMAGE_RES_COMPUTERTECH:
-		return(RID_COMPUTERTECH);
+		return (RID_COMPUTERTECH);
 		break;
 	case IMAGE_RES_POWERTECH:
-		return(RID_POWERTECH);
+		return (RID_POWERTECH);
 		break;
 	case IMAGE_RES_SYSTEMTECH:
-		return(RID_SYSTEMTECH);
+		return (RID_SYSTEMTECH);
 		break;
 	case IMAGE_RES_STRUCTURETECH:
-		return(RID_STRUCTURETECH);
+		return (RID_STRUCTURETECH);
 		break;
 	case IMAGE_RES_CYBORGTECH:
-		return(RID_CYBORGTECH);
+		return (RID_CYBORGTECH);
 		break;
 	case IMAGE_RES_DEFENCE:
-		return(RID_DEFENCE);
+		return (RID_DEFENCE);
 		break;
 	case IMAGE_RES_QUESTIONMARK:
-		return(RID_QUESTIONMARK);
+		return (RID_QUESTIONMARK);
 		break;
 	case IMAGE_RES_GRPACC:
-		return(RID_GRPACC);
+		return (RID_GRPACC);
 		break;
 	case IMAGE_RES_GRPUPG:
-		return(RID_GRPUPG);
+		return (RID_GRPUPG);
 		break;
 	case IMAGE_RES_GRPREP:
-		return(RID_GRPREP);
+		return (RID_GRPREP);
 		break;
 	case IMAGE_RES_GRPROF:
-		return(RID_GRPROF);
+		return (RID_GRPROF);
 		break;
 	case IMAGE_RES_GRPDAM:
-		return(RID_GRPDAM);
+		return (RID_GRPDAM);
 		break;
 	default:
-		return(-1); //pass back a value that can never have been set up
+		return (-1); //pass back a value that can never have been set up
 		break;
 	}
 }
 
 /* returns a pointer to a component based on the name - used to load in the research */
-COMPONENT_STATS * getComponentDetails(char *pName, char *pCompName)
+COMPONENT_STATS *getComponentDetails(char *pName, char *pCompName)
 {
 	UDWORD stat, size, quantity, inc;
 	COMPONENT_STATS		*pArtefact;
@@ -1653,66 +1653,66 @@ COMPONENT_STATS * getComponentDetails(char *pName, char *pCompName)
 	//get the stat list
 	switch (stat)
 	{
-		case COMP_BODY:
+	case COMP_BODY:
 		{
-			pArtefact = (COMPONENT_STATS*)asBodyStats;
+			pArtefact = (COMPONENT_STATS *)asBodyStats;
 			size = sizeof(BODY_STATS);
 			quantity = numBodyStats;
 			break;
 		}
-		case COMP_BRAIN:
+	case COMP_BRAIN:
 		{
-			pArtefact = (COMPONENT_STATS*)asBrainStats;
+			pArtefact = (COMPONENT_STATS *)asBrainStats;
 			size = sizeof(BRAIN_STATS);
 			quantity = numBrainStats;
 			break;
 		}
-		case COMP_PROPULSION:
+	case COMP_PROPULSION:
 		{
-			pArtefact = (COMPONENT_STATS*)asPropulsionStats;
+			pArtefact = (COMPONENT_STATS *)asPropulsionStats;
 			size = sizeof(PROPULSION_STATS);
 			quantity = numPropulsionStats;
 			break;
 		}
-		case COMP_REPAIRUNIT:
+	case COMP_REPAIRUNIT:
 		{
-			pArtefact = (COMPONENT_STATS*)asRepairStats;
+			pArtefact = (COMPONENT_STATS *)asRepairStats;
 			size = sizeof(REPAIR_STATS);
 			quantity = numRepairStats;
 			break;
 		}
-		case COMP_ECM:
+	case COMP_ECM:
 		{
-			pArtefact = (COMPONENT_STATS*)asECMStats;
+			pArtefact = (COMPONENT_STATS *)asECMStats;
 			size = sizeof(ECM_STATS);
 			quantity = numECMStats;
 			break;
 		}
-		case COMP_SENSOR:
+	case COMP_SENSOR:
 		{
-			pArtefact = (COMPONENT_STATS*)asSensorStats;
+			pArtefact = (COMPONENT_STATS *)asSensorStats;
 			size = sizeof(SENSOR_STATS);
 			quantity = numSensorStats;
 			break;
 		}
-		case COMP_WEAPON:
+	case COMP_WEAPON:
 		{
-			pArtefact = (COMPONENT_STATS*)asWeaponStats;
+			pArtefact = (COMPONENT_STATS *)asWeaponStats;
 			size = sizeof(WEAPON_STATS);
 			quantity = numWeaponStats;
 			break;
 		}
-		case COMP_CONSTRUCT:
+	case COMP_CONSTRUCT:
 		{
-			pArtefact = (COMPONENT_STATS*)asConstructStats;
+			pArtefact = (COMPONENT_STATS *)asConstructStats;
 			size = sizeof(CONSTRUCT_STATS);
 			quantity = numConstructStats;
 			break;
 		}
-		default:
+	default:
 		{
 			//COMP_UNKNOWN should be an error
-			debug( LOG_ERROR, "Unknown artefact type  - %s", pName );
+			debug(LOG_ERROR, "Unknown artefact type  - %s", pName);
 			abort();
 			return NULL;
 		}
@@ -1724,10 +1724,10 @@ COMPONENT_STATS * getComponentDetails(char *pName, char *pCompName)
 		{
 			return pArtefact;
 		}
-		pArtefact = (COMPONENT_STATS*)((char*)pArtefact + size);
+		pArtefact = (COMPONENT_STATS *)((char *)pArtefact + size);
 	}
 
-	debug( LOG_ERROR, "Cannot find component %s", pCompName );
+	debug(LOG_ERROR, "Cannot find component %s", pCompName);
 	abort();
 	return NULL;
 }
@@ -1751,7 +1751,7 @@ RESEARCH *getResearch(const char *pName)
 /* looks through the players lists of structures and droids to see if any are using
  the old component - if any then replaces them with the new component */
 static void replaceComponent(COMPONENT_STATS *pNewComponent, COMPONENT_STATS *pOldComponent,
-					  UBYTE player)
+                             UBYTE player)
 {
 	DROID_TEMPLATE	*psTemplates;
 	UDWORD			inc, oldType, newType, oldCompInc, newCompInc;
@@ -1775,36 +1775,36 @@ static void replaceComponent(COMPONENT_STATS *pNewComponent, COMPONENT_STATS *pO
 
 	//check thru the templates
 	for (psTemplates = apsDroidTemplates[player]; psTemplates != NULL;
-		psTemplates = psTemplates->psNext)
+	     psTemplates = psTemplates->psNext)
 	{
-		switch(oldType)
+		switch (oldType)
 		{
-			case COMP_BODY:
-			case COMP_BRAIN:
-			case COMP_PROPULSION:
-			case COMP_REPAIRUNIT:
-			case COMP_ECM:
-			case COMP_SENSOR:
-			case COMP_CONSTRUCT:
-				if (psTemplates->asParts[oldType] == (SDWORD)oldCompInc)
+		case COMP_BODY:
+		case COMP_BRAIN:
+		case COMP_PROPULSION:
+		case COMP_REPAIRUNIT:
+		case COMP_ECM:
+		case COMP_SENSOR:
+		case COMP_CONSTRUCT:
+			if (psTemplates->asParts[oldType] == (SDWORD)oldCompInc)
+			{
+				psTemplates->asParts[oldType] = newCompInc;
+			}
+			break;
+		case COMP_WEAPON:
+			for (inc = 0; inc < psTemplates->numWeaps; inc++)
+			{
+				if (psTemplates->asWeaps[inc] == oldCompInc)
 				{
-					psTemplates->asParts[oldType] = newCompInc;
+					psTemplates->asWeaps[inc] = newCompInc;
 				}
-				break;
-			case COMP_WEAPON:
-				for (inc=0; inc < psTemplates->numWeaps; inc++)
-				{
-					if (psTemplates->asWeaps[inc] == oldCompInc)
-					{
-						psTemplates->asWeaps[inc] = newCompInc;
-					}
-				}
-				break;
-			default:
-				//unknown comp type
-				debug( LOG_ERROR, "Unknown component type - invalid Template" );
-				abort();
-				return;
+			}
+			break;
+		default:
+			//unknown comp type
+			debug(LOG_ERROR, "Unknown component type - invalid Template");
+			abort();
+			return;
 		}
 	}
 
@@ -1817,7 +1817,7 @@ a duplicate*/
 static bool checkResearchName(RESEARCH *psResearch, UDWORD numStats)
 {
 	UDWORD inc;
-	char *pName=psResearch->pName;
+	char *pName = psResearch->pName;
 
 	for (inc = 0; inc < numStats; inc++)
 	{
@@ -1825,7 +1825,7 @@ static bool checkResearchName(RESEARCH *psResearch, UDWORD numStats)
 		if (!strcmp(asResearch[inc].pName, pName))
 		{
 			//oops! found the name
-			ASSERT( false, "Research name has already been used - %s", pName );
+			ASSERT(false, "Research name has already been used - %s", pName);
 			return false;
 		}
 	}
@@ -1841,7 +1841,7 @@ bool enableResearch(RESEARCH *psResearch, UDWORD player)
 	inc = psResearch->index;
 	if (inc > asResearch.size())
 	{
-		ASSERT( false, "enableResearch: Invalid research topic - %s", getResearchName(psResearch) );
+		ASSERT(false, "enableResearch: Invalid research topic - %s", getResearchName(psResearch));
 		return false;
 	}
 
@@ -1869,7 +1869,7 @@ void researchReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 
 	//look through the losing players structures to find a research facility
 	for (psStruct = apsStructLists[losingPlayer]; psStruct != NULL; psStruct =
-		psStruct->psNext)
+	         psStruct->psNext)
 	{
 		if (psStruct->pStructureType->type == REF_RESEARCH)
 		{
@@ -1877,7 +1877,7 @@ void researchReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 			if (psFacility->psBestTopic)
 			{
 				topicIndex = ((RESEARCH *)psFacility->psBestTopic)->ref -
-					REF_RESEARCH_START;
+				             REF_RESEARCH_START;
 				if (topicIndex)
 				{
 					//if it cost more - it is better (or should be)
@@ -1899,9 +1899,9 @@ void researchReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 		if (rewardPlayer == selectedPlayer)
 		{
 			//name the actual reward
-			CONPRINTF(ConsoleString,(ConsoleString,"%s :- %s",
-				_("Research Award"),
-				getName(asResearch[rewardID].pName)));
+			CONPRINTF(ConsoleString, (ConsoleString, "%s :- %s",
+			                          _("Research Award"),
+			                          getName(asResearch[rewardID].pName)));
 		}
 	}
 }
@@ -1987,7 +1987,7 @@ bool wallDefenceStruct(STRUCTURE_STATS *psStats)
 
 /*for a given list of droids, replace the old component if exists*/
 void replaceDroidComponent(DROID *pList, UDWORD oldType, UDWORD oldCompInc,
-                      UDWORD newCompInc)
+                           UDWORD newCompInc)
 {
 	DROID   *psDroid;
 
@@ -2007,22 +2007,22 @@ void replaceDroidComponent(DROID *pList, UDWORD oldType, UDWORD oldCompInc,
 void replaceTransDroidComponents(DROID *psTransporter, UDWORD oldType,
                                  UDWORD oldCompInc, UDWORD newCompInc)
 {
-    DROID       *psCurr;
+	DROID       *psCurr;
 
 	ASSERT(isTransporter(psTransporter), "invalid unit type");
 
-    for (psCurr = psTransporter->psGroup->psList; psCurr != NULL; psCurr =
-        psCurr->psGrpNext)
-    {
-        if (psCurr != psTransporter)
-        {
-            switchComponent(psCurr, oldType, oldCompInc, newCompInc);
-        }
-    }
+	for (psCurr = psTransporter->psGroup->psList; psCurr != NULL; psCurr =
+	         psCurr->psGrpNext)
+	{
+		if (psCurr != psTransporter)
+		{
+			switchComponent(psCurr, oldType, oldCompInc, newCompInc);
+		}
+	}
 }
 
 void replaceStructureComponent(STRUCTURE *pList, UDWORD oldType, UDWORD oldCompInc,
-                      UDWORD newCompInc, UBYTE player)
+                               UDWORD newCompInc, UBYTE player)
 {
 	STRUCTURE   *psStructure;
 	int			inc;
@@ -2038,27 +2038,27 @@ void replaceStructureComponent(STRUCTURE *pList, UDWORD oldType, UDWORD oldCompI
 	{
 		switch (oldType)
 		{
-			case COMP_ECM:
-				objEcmCache((BASE_OBJECT *)psStructure, asECMStats + newCompInc);
-				break;
-			case COMP_SENSOR:
-				objSensorCache((BASE_OBJECT *)psStructure, asSensorStats + newCompInc);
-				break;
-			case COMP_WEAPON:
-				for (inc=0; inc < psStructure->numWeaps; inc++)
+		case COMP_ECM:
+			objEcmCache((BASE_OBJECT *)psStructure, asECMStats + newCompInc);
+			break;
+		case COMP_SENSOR:
+			objSensorCache((BASE_OBJECT *)psStructure, asSensorStats + newCompInc);
+			break;
+		case COMP_WEAPON:
+			for (inc = 0; inc < psStructure->numWeaps; inc++)
+			{
+				if (psStructure->asWeaps[inc].nStat > 0)
 				{
-					if (psStructure->asWeaps[inc].nStat > 0)
+					if (psStructure->asWeaps[inc].nStat == oldCompInc)
 					{
-						if (psStructure->asWeaps[inc].nStat == oldCompInc)
-						{
-							psStructure->asWeaps[inc].nStat = newCompInc;
-						}
+						psStructure->asWeaps[inc].nStat = newCompInc;
 					}
 				}
-				break;
-			default:
-				//ignore all other component types
-				break;
+			}
+			break;
+		default:
+			//ignore all other component types
+			break;
 		}
 	}
 }
@@ -2069,45 +2069,57 @@ static void switchComponent(DROID *psDroid, UDWORD oldType, UDWORD oldCompInc,
 {
 	ASSERT(psDroid != NULL, "switchComponent:invalid droid pointer");
 
-	switch(oldType)
+	switch (oldType)
 	{
-		case COMP_BODY:
-		case COMP_BRAIN:
-		case COMP_PROPULSION:
-		case COMP_REPAIRUNIT:
-		case COMP_ECM:
-		case COMP_SENSOR:
-		case COMP_CONSTRUCT:
-			if (psDroid->asBits[oldType].nStat == oldCompInc)
+	case COMP_BODY:
+	case COMP_BRAIN:
+	case COMP_PROPULSION:
+	case COMP_REPAIRUNIT:
+	case COMP_ECM:
+	case COMP_SENSOR:
+	case COMP_CONSTRUCT:
+		if (psDroid->asBits[oldType].nStat == oldCompInc)
+		{
+			psDroid->asBits[oldType].nStat = (UBYTE)newCompInc;
+		}
+		break;
+	case COMP_WEAPON:
+		// Can only be one weapon now
+		if (psDroid->asWeaps[0].nStat > 0)
+		{
+			if (psDroid->asWeaps[0].nStat == oldCompInc)
 			{
-				psDroid->asBits[oldType].nStat = (UBYTE)newCompInc;
+				psDroid->asWeaps[0].nStat = newCompInc;
 			}
-			break;
-		case COMP_WEAPON:
-			// Can only be one weapon now
-			if (psDroid->asWeaps[0].nStat > 0)
-			{
-				if (psDroid->asWeaps[0].nStat == oldCompInc)
-				{
-					psDroid->asWeaps[0].nStat = newCompInc;
-				}
-			}
-			break;
-		default:
-			//unknown comp type
-			debug( LOG_ERROR, "Unknown component type - invalid droid" );
-			abort();
-			return;
+		}
+		break;
+	default:
+		//unknown comp type
+		debug(LOG_ERROR, "Unknown component type - invalid droid");
+		abort();
+		return;
 	}
 }
 
 static inline bool allyResearchSortFunction(AllyResearch const &a, AllyResearch const &b)
 {
-	if (a.active         != b.active)         { return a.active; }
-	if (a.timeToResearch != b.timeToResearch) { return (unsigned)a.timeToResearch < (unsigned)b.timeToResearch; }  // Unsigned cast = sort -1 as infinite.
-	if (a.powerNeeded    != b.powerNeeded)    { return (unsigned)a.powerNeeded    < (unsigned)b.powerNeeded;    }
-	if (a.completion     != b.completion)     { return           a.completion     >           b.completion;     }
-	                                            return           a.player         <           b.player;
+	if (a.active         != b.active)
+	{
+		return a.active;
+	}
+	if (a.timeToResearch != b.timeToResearch)
+	{
+		return (unsigned)a.timeToResearch < (unsigned)b.timeToResearch;    // Unsigned cast = sort -1 as infinite.
+	}
+	if (a.powerNeeded    != b.powerNeeded)
+	{
+		return (unsigned)a.powerNeeded    < (unsigned)b.powerNeeded;
+	}
+	if (a.completion     != b.completion)
+	{
+		return           a.completion     >           b.completion;
+	}
+	return           a.player         <           b.player;
 }
 
 std::vector<AllyResearch> const &listAllyResearch(unsigned ref)

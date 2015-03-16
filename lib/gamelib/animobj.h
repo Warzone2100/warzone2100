@@ -34,24 +34,24 @@
 #define	ANIM_MAX_COMPONENTS		10
 
 
-typedef void (* ANIMOBJDONEFUNC) ( struct ANIM_OBJECT *psObj );
-typedef bool (* ANIMOBJDIEDTESTFUNC) ( void *psParent );
+typedef void (* ANIMOBJDONEFUNC)(struct ANIM_OBJECT *psObj);
+typedef bool (* ANIMOBJDIEDTESTFUNC)(void *psParent);
 
 struct COMPONENT_OBJECT
 {
 	Vector3i                position;
 	Vector3i                orientation;
-	void *                  psParent;
-	iIMDShape *             psShape;
+	void                   *psParent;
+	iIMDShape              *psShape;
 };
 
 struct ANIM_OBJECT
 {
-	ANIM_OBJECT *           psNext;
+	ANIM_OBJECT            *psNext;
 
 	UWORD                   uwID;
-	ANIM3D *                psAnim;
-	void *                  psParent;
+	ANIM3D                 *psAnim;
+	void                   *psParent;
 	UDWORD                  udwStartTime;
 	UDWORD                  udwStartDelay;
 	UWORD                   uwCycles;
@@ -62,19 +62,19 @@ struct ANIM_OBJECT
 };
 
 
-bool			animObj_Init( ANIMOBJDIEDTESTFUNC pDiedFunc );
-void			animObj_Update( void );
-bool			animObj_Shutdown( void );
-void			animObj_SetDoneFunc( ANIM_OBJECT *psObj,
-										ANIMOBJDONEFUNC pDoneFunc );
+bool			animObj_Init(ANIMOBJDIEDTESTFUNC pDiedFunc);
+void			animObj_Update(void);
+bool			animObj_Shutdown(void);
+void			animObj_SetDoneFunc(ANIM_OBJECT *psObj,
+                                    ANIMOBJDONEFUNC pDoneFunc);
 
 /* uwCycles=0 for infinite looping */
-ANIM_OBJECT *	animObj_Add( void *pParentObj, int iAnimID,
-								UDWORD udwStartDelay, UWORD uwCycles );
-bool animObj_Remove(ANIM_OBJECT* psObj, int iAnimID);
+ANIM_OBJECT 	*animObj_Add(void *pParentObj, int iAnimID,
+                             UDWORD udwStartDelay, UWORD uwCycles);
+bool animObj_Remove(ANIM_OBJECT *psObj, int iAnimID);
 
-ANIM_OBJECT *	animObj_GetFirst( void );
-ANIM_OBJECT *	animObj_GetNext( void );
-ANIM_OBJECT *	animObj_Find( void *pParentObj, int iAnimID );
+ANIM_OBJECT 	*animObj_GetFirst(void);
+ANIM_OBJECT 	*animObj_GetNext(void);
+ANIM_OBJECT 	*animObj_Find(void *pParentObj, int iAnimID);
 
 #endif	/* _ANIMOBJ_H_ */

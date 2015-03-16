@@ -699,10 +699,10 @@ void missionFlyTransportersIn(SDWORD iPlayer, bool bTrackTransporter)
 
 				/* set fly-in order */
 				orderDroidLoc(psTransporter, DORDER_TRANSPORTIN,
-				        iLandX, iLandY, ModeImmediate);
+				              iLandX, iLandY, ModeImmediate);
 
 				audio_PlayObjDynamicTrack(psTransporter, ID_SOUND_BLIMP_FLIGHT,
-				        moveCheckDroidMovingAndVisible);
+				                          moveCheckDroidMovingAndVisible);
 
 				//only want to fly one transporter in at a time now - AB 14/01/99
 				break;
@@ -749,7 +749,7 @@ static void saveMissionData(void)
 	bRepairExists = false;
 	//set any structures currently being built to completed for the selected player
 	for (psStruct = apsStructLists[selectedPlayer]; psStruct != NULL; psStruct =
-	        psStruct->psNext)
+	         psStruct->psNext)
 	{
 		if (psStruct->status == SS_BEING_BUILT)
 		{
@@ -1469,7 +1469,7 @@ void endMission(void)
 		emptyTransporters(false);
 		endMissionCamChange();
 		break;
-		/* left in so can skip the mission for testing...*/
+	/* left in so can skip the mission for testing...*/
 	case LDS_EXPAND_LIMBO:
 		//shouldn't be any transporters on this mission but...who knows?
 		endMissionExpandLimbo();
@@ -1589,8 +1589,8 @@ void missionDroidUpdate(DROID *psDroid)
 	//ignore all droids except Transporters
 	if (!isTransporter(psDroid)
 	    || !(orderState(psDroid, DORDER_TRANSPORTOUT)  ||
-	            orderState(psDroid, DORDER_TRANSPORTIN)     ||
-	            orderState(psDroid, DORDER_TRANSPORTRETURN)))
+	         orderState(psDroid, DORDER_TRANSPORTIN)     ||
+	         orderState(psDroid, DORDER_TRANSPORTRETURN)))
 	{
 		return;
 	}
@@ -2585,7 +2585,7 @@ void intProcessMissionResult(UDWORD id)
 /*builds a droid back at the home base whilst on a mission - stored in a list made
 available to the transporter interface*/
 DROID *buildMissionDroid(DROID_TEMPLATE *psTempl, UDWORD x, UDWORD y,
-        UDWORD player)
+                         UDWORD player)
 {
 	DROID		*psNewDroid;
 
@@ -2657,8 +2657,8 @@ bool setUpMission(UDWORD type)
 		loopMissionState = LMS_SAVECONTINUE;
 	}
 	else if (type == LDS_MKEEP
-	        || type == LDS_MCLEAR
-	        || type == LDS_MKEEP_LIMBO)
+	         || type == LDS_MCLEAR
+	         || type == LDS_MKEEP_LIMBO)
 	{
 		launchMission();
 	}
@@ -2748,7 +2748,7 @@ void initNoGoAreas(void)
 		if (i != LIMBO_LANDING)
 		{
 			sLandingZone[i].x1 = sLandingZone[i].y1 = sLandingZone[i].x2 =
-			        sLandingZone[i].y2 = 0;
+			                         sLandingZone[i].y2 = 0;
 		}
 	}
 }
@@ -2838,7 +2838,7 @@ UWORD getLandingX(SDWORD iPlayer)
 {
 	ASSERT_OR_RETURN(0, iPlayer < MAX_NOGO_AREAS, "getLandingX: player %d out of range", iPlayer);
 	return (UWORD)world_coord((sLandingZone[iPlayer].x1 + (sLandingZone[iPlayer].x2 -
-	        sLandingZone[iPlayer].x1) / 2));
+	                           sLandingZone[iPlayer].x1) / 2));
 }
 
 //returns the y coord for where the Transporter can land
@@ -2846,7 +2846,7 @@ UWORD getLandingY(SDWORD iPlayer)
 {
 	ASSERT_OR_RETURN(0, iPlayer < MAX_NOGO_AREAS, "getLandingY: player %d out of range", iPlayer);
 	return (UWORD)world_coord((sLandingZone[iPlayer].y1 + (sLandingZone[iPlayer].y2 -
-	        sLandingZone[iPlayer].y1) / 2));
+	                           sLandingZone[iPlayer].y1) / 2));
 }
 
 //returns the x coord for where the Transporter can land back at home base
@@ -3215,7 +3215,7 @@ void	setCampaignNumber(UDWORD number)
 
 UDWORD	getCampaignNumber(void)
 {
-	return(camNumber);
+	return (camNumber);
 }
 
 /*deals with any selectedPlayer's transporters that are flying in when the

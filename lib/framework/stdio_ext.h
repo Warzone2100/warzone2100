@@ -35,14 +35,14 @@
  *            string
  *  \return the amount of characters appended to the string
  */
-extern int vslcatprintf(char* str, size_t size, const char* format, va_list ap);
+extern int vslcatprintf(char *str, size_t size, const char *format, va_list ap);
 
 
 /** A variant on snprintf which appends its output string to the given string
  *  The function's interface is similar to vslcatprintf(), so look at that
  *  function's description.
  */
-extern int slcatprintf(char* str, size_t size, const char* format, ...) WZ_DECL_FORMAT(printf, 3, 4);
+extern int slcatprintf(char *str, size_t size, const char *format, ...) WZ_DECL_FORMAT(printf, 3, 4);
 
 
 // These functions are GNU extensions; so make sure they are available on Windows also
@@ -66,7 +66,7 @@ extern int slcatprintf(char* str, size_t size, const char* format, ...) WZ_DECL_
  *         vsprintf. If memory allocation wasn't possible or some other error
  *         occurred, -1 is returned.
  */
-extern int vasprintf(char** strp, const char* format, va_list ap);
+extern int vasprintf(char **strp, const char *format, va_list ap);
 
 
 /**
@@ -75,14 +75,14 @@ extern int vasprintf(char** strp, const char* format, va_list ap);
  *
  * @see vasprintf()
  */
-extern int asprintf(char** strp, const char* format, ...) WZ_DECL_FORMAT(printf, 2, 3);
+extern int asprintf(char **strp, const char *format, ...) WZ_DECL_FORMAT(printf, 2, 3);
 #endif
 
 #if defined(WZ_CC_MSVC)
 // Make sure that these functions are available, and work according to the C99 spec on MSVC also
 
-extern int wz_vsnprintf(char* str, size_t size, const char* format, va_list ap);
-extern int wz_snprintf(char* str, size_t size, const char* format, ...);
+extern int wz_vsnprintf(char *str, size_t size, const char *format, va_list ap);
+extern int wz_snprintf(char *str, size_t size, const char *format, ...);
 
 // Necessary to prevent conflicting symbols with MSVC's own (incorrect!) implementations of these functions
 # define vsnprintf wz_vsnprintf
@@ -96,24 +96,24 @@ extern int wz_snprintf(char* str, size_t size, const char* format, ...);
 
 // A stack-allocating variant of sprintf
 #define sasprintf(strp, format, ...) \
-do { \
-	/* Make sure to evaluate "format" just once */ \
-	const char* fmt = format; \
-	/* Determine the size of the string we're going to produce */ \
-	size_t size = snprintf(NULL, 0, fmt, __VA_ARGS__); \
-	\
-	/* Let the compiler perform some static type-checking */ \
-	char** var = strp; \
-	\
-	/* Allocate a buffer large enough to hold our string on the stack*/ \
-	*var = (char*)alloca(size + 1); \
-	/* Print into our newly created string-buffer */ \
-	sprintf(*var, fmt,  __VA_ARGS__); \
-} while(0)
+	do { \
+		/* Make sure to evaluate "format" just once */ \
+		const char* fmt = format; \
+		/* Determine the size of the string we're going to produce */ \
+		size_t size = snprintf(NULL, 0, fmt, __VA_ARGS__); \
+		\
+		/* Let the compiler perform some static type-checking */ \
+		char** var = strp; \
+		\
+		/* Allocate a buffer large enough to hold our string on the stack*/ \
+		*var = (char*)alloca(size + 1); \
+		/* Print into our newly created string-buffer */ \
+		sprintf(*var, fmt,  __VA_ARGS__); \
+	} while(0)
 
 /// Equivalent to vasprintf, except that strp is NULL instead of undefined, if the function returns -1. Does not give compiler warnings/-Werrors if not checking the return value.
-int vasprintfNull(char** strp, const char* format, va_list ap);
+int vasprintfNull(char **strp, const char *format, va_list ap);
 /// Equivalent to asprintf, except that strp is NULL instead of undefined, if the function returns -1. Does not give compiler warnings/-Werrors if not checking the return value.
-int asprintfNull(char** strp, const char* format, ...);
+int asprintfNull(char **strp, const char *format, ...);
 
 #endif // STDIO_EXT_H

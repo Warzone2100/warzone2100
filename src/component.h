@@ -70,7 +70,7 @@ void displayComponentObject(DROID *psDroid);
 
 void compPersonToBits(DROID *psDroid);
 
-SDWORD rescaleButtonObject(SDWORD radius, SDWORD baseScale,SDWORD baseRadius);
+SDWORD rescaleButtonObject(SDWORD radius, SDWORD baseScale, SDWORD baseRadius);
 void destroyFXDroid(DROID *psDroid, unsigned impactTime);
 
 /* Pass in the stats you're interested in and the COMPONENT - double reference, but works. NOTE: Unused!*/

@@ -26,37 +26,37 @@
 extern bool		audio_Init(AUDIO_CALLBACK pStopTrackCallback, bool really_init);
 extern void		audio_Update(void);
 extern bool		audio_Shutdown(void);
-extern bool		audio_Disabled( void );
+extern bool		audio_Disabled(void);
 
-extern bool		audio_LoadTrackFromFile( char szFileName[] );
-extern unsigned int audio_SetTrackVals(const char* fileName, bool loop, unsigned int volume, unsigned int audibleRadius);
+extern bool		audio_LoadTrackFromFile(char szFileName[]);
+extern unsigned int audio_SetTrackVals(const char *fileName, bool loop, unsigned int volume, unsigned int audibleRadius);
 
-extern bool		audio_PlayStaticTrack( SDWORD iX, SDWORD iY, int iTrack );
+extern bool		audio_PlayStaticTrack(SDWORD iX, SDWORD iY, int iTrack);
 bool                    audio_PlayObjStaticTrack(SIMPLE_OBJECT *psObj, int iTrack);
 bool                    audio_PlayObjStaticTrackCallback(SIMPLE_OBJECT *psObj, int iTrack, AUDIO_CALLBACK pUserCallback);
-bool                    audio_PlayObjDynamicTrack(SIMPLE_OBJECT *psObj, int iTrack, AUDIO_CALLBACK pUserCallback );
+bool                    audio_PlayObjDynamicTrack(SIMPLE_OBJECT *psObj, int iTrack, AUDIO_CALLBACK pUserCallback);
 void                    audio_StopObjTrack(SIMPLE_OBJECT *psObj, int iTrack);
-extern void		audio_PlayTrack( int iTrack );
-extern void		audio_PlayCallbackTrack( int iTrack,
-											AUDIO_CALLBACK pUserCallback );
-extern AUDIO_STREAM* audio_PlayStream(const char* fileName, float volume, void (*onFinished)(void*), void* user_data);
-extern void		audio_QueueTrack( SDWORD iTrack );
-extern void		audio_QueueTrackMinDelay( SDWORD iTrack, UDWORD iMinDelay );
-extern void		audio_QueueTrackMinDelayPos( SDWORD iTrack, UDWORD iMinDelay,
-											SDWORD iX, SDWORD iY, SDWORD iZ);
-extern void		audio_QueueTrackGroup( SDWORD iTrack, SDWORD iGroup );
-extern void		audio_QueueTrackPos( SDWORD iTrack, SDWORD iX, SDWORD iY,
-										SDWORD iZ );
-extern void		audio_QueueTrackGroupPos( SDWORD iTrack, SDWORD iGroup,
-										SDWORD iX, SDWORD iY, SDWORD iZ );
-extern bool		audio_GetPreviousQueueTrackPos( SDWORD *iX, SDWORD *iY,
-											SDWORD *iZ );
-extern bool		audio_GetPreviousQueueTrackRadarBlipPos( SDWORD *iX, SDWORD *iY);
-extern void		audio_PauseAll( void );
-extern void		audio_ResumeAll( void );
-extern void		audio_StopAll( void );
+extern void		audio_PlayTrack(int iTrack);
+extern void		audio_PlayCallbackTrack(int iTrack,
+                                        AUDIO_CALLBACK pUserCallback);
+extern AUDIO_STREAM *audio_PlayStream(const char *fileName, float volume, void (*onFinished)(void *), void *user_data);
+extern void		audio_QueueTrack(SDWORD iTrack);
+extern void		audio_QueueTrackMinDelay(SDWORD iTrack, UDWORD iMinDelay);
+extern void		audio_QueueTrackMinDelayPos(SDWORD iTrack, UDWORD iMinDelay,
+        SDWORD iX, SDWORD iY, SDWORD iZ);
+extern void		audio_QueueTrackGroup(SDWORD iTrack, SDWORD iGroup);
+extern void		audio_QueueTrackPos(SDWORD iTrack, SDWORD iX, SDWORD iY,
+                                    SDWORD iZ);
+extern void		audio_QueueTrackGroupPos(SDWORD iTrack, SDWORD iGroup,
+        SDWORD iX, SDWORD iY, SDWORD iZ);
+extern bool		audio_GetPreviousQueueTrackPos(SDWORD *iX, SDWORD *iY,
+        SDWORD *iZ);
+extern bool		audio_GetPreviousQueueTrackRadarBlipPos(SDWORD *iX, SDWORD *iY);
+extern void		audio_PauseAll(void);
+extern void		audio_ResumeAll(void);
+extern void		audio_StopAll(void);
 
-extern SDWORD	audio_GetTrackID( const char *fileName );
+extern SDWORD	audio_GetTrackID(const char *fileName);
 void                    audio_RemoveObj(SIMPLE_OBJECT const *psObj);
 extern unsigned int audio_GetSampleQueueCount(void);
 extern unsigned int audio_GetSampleListCount(void);

@@ -62,33 +62,33 @@ struct BASEANIM
 	UWORD                   uwObj;
 	UWORD                   uwAnimTime;
 	ANIM_MODE               ubType;
-	ANIM_STATE *            psStates;
-	BASEANIM *              psNext;
+	ANIM_STATE             *psStates;
+	BASEANIM               *psNext;
 };
 
 struct ANIM3D : public BASEANIM
 {
-	iIMDShape *             psFrames;
-	iIMDShape **            apFrame;
+	iIMDShape              *psFrames;
+	iIMDShape             **apFrame;
 };
 
 
 bool		anim_Init(void);
 bool		anim_Shutdown(void);
-BASEANIM *	anim_LoadFromBuffer(char *pBuffer, UDWORD size);
-BASEANIM *	anim_LoadFromFile(PHYSFS_file* fileHandle);
+BASEANIM 	*anim_LoadFromBuffer(char *pBuffer, UDWORD size);
+BASEANIM 	*anim_LoadFromFile(PHYSFS_file *fileHandle);
 void		anim_ReleaseAnim(BASEANIM *psAnim);
 bool		anim_Create3D(char szPieFileName[], UWORD uwFrames, UWORD uwFrameRate, UWORD uwObj,
-		              ANIM_MODE ubType, UWORD uwID);
+                          ANIM_MODE ubType, UWORD uwID);
 void		anim_BeginScript(void);
 bool		anim_EndScript(void);
 bool		anim_AddFrameToAnim(int iFrame, Vector3i vecPos, Vector3i vecRot, Vector3i vecScale);
-BASEANIM *	anim_GetAnim(UWORD uwAnimID);
+BASEANIM 	*anim_GetAnim(UWORD uwAnimID);
 UWORD		anim_GetAnimID(char *szName);
-iIMDShape *	anim_GetShapeFromID(UWORD uwID);
+iIMDShape 	*anim_GetShapeFromID(UWORD uwID);
 UWORD           anim_GetFrame3D(ANIM3D *psAnim, UWORD uwObj, UDWORD udwGraphicsTime, UDWORD udwStartTime,
-		                UDWORD udwStartDelay, Vector3i *psVecPos, Vector3i *psVecRot,
-		                Vector3i *psVecScale);
+                                UDWORD udwStartDelay, Vector3i *psVecPos, Vector3i *psVecRot,
+                                Vector3i *psVecScale);
 void		anim_SetVals(char szFileName[], UWORD uwAnimID);
 
 #endif	/* _ANIM_H_ */

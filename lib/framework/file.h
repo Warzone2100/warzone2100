@@ -25,15 +25,15 @@
 
 
 /*! Open a file for reading */
-extern PHYSFS_file* openLoadFile(const char* fileName, bool hard_fail);
+extern PHYSFS_file *openLoadFile(const char *fileName, bool hard_fail);
 
 /*! Open a file for writing */
-extern PHYSFS_file* openSaveFile(const char* fileName);
+extern PHYSFS_file *openSaveFile(const char *fileName);
 
 /** Load the file with name pointed to by pFileName into a memory buffer. */
 extern bool loadFile(const char *pFileName,		// The filename
-              char **ppFileData,	// A buffer containing the file contents
-              UDWORD *pFileSize);	// The size of this buffer
+                     char **ppFileData,	// A buffer containing the file contents
+                     UDWORD *pFileSize);	// The size of this buffer
 
 /** Save the data in the buffer into the given file */
 extern bool saveFile(const char *pFileName, const char *pFileData, UDWORD fileSize);
@@ -43,7 +43,7 @@ extern bool loadFileToBuffer(const char *pFileName, char *pFileBuffer, UDWORD bu
 
 /** Load a file from disk, but returns quietly if no file found. */
 extern bool loadFileToBufferNoError(const char *pFileName, char *pFileBuffer, UDWORD bufferSize,
-                             UDWORD *pSize);
+                                    UDWORD *pSize);
 
 Sha256 findHashOfFile(char const *realFileName);
 

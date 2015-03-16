@@ -239,7 +239,9 @@ bool scrBaseObjGet(UDWORD index)
 			if (((DROID *)psObj)->asWeaps[0].nStat == 0)
 			{
 				scrFunctionResult.v.ival = 0;
-			}else{
+			}
+			else
+			{
 				scrFunctionResult.v.ival = (SDWORD)((DROID *)psObj)->asWeaps[0].nStat;
 			}
 			break;
@@ -247,12 +249,14 @@ bool scrBaseObjGet(UDWORD index)
 			if (((STRUCTURE *)psObj)->numWeaps == 0 || ((STRUCTURE *)psObj)->asWeaps[0].nStat == 0)
 			{
 				scrFunctionResult.v.ival = 0;
-			}else{
+			}
+			else
+			{
 				scrFunctionResult.v.ival = (SDWORD)((STRUCTURE *)psObj)->asWeaps[0].nStat;
 			}
 			break;
 		default:		//only droids and structures can have a weapon
-			debug(LOG_ERROR, "scrBaseObjGet: weapon only valid for droids and structures" );
+			debug(LOG_ERROR, "scrBaseObjGet: weapon only valid for droids and structures");
 			return false;
 			break;
 		}
@@ -441,7 +445,7 @@ bool scrObjToFeature(void)
 
 // cache all the possible values for the last group to try
 // to speed up access
-static SDWORD		lgX,lgY, lgMembers, lgHealth;
+static SDWORD		lgX, lgY, lgMembers, lgHealth;
 
 // Get values from a weapon
 bool scrWeaponObjGet(UDWORD index)
@@ -512,7 +516,7 @@ bool scrWeaponObjGet(UDWORD index)
 
 		break;
 	default:
-		ASSERT( false, "unknown variable index" );
+		ASSERT(false, "unknown variable index");
 		return false;
 		break;
 	}
@@ -543,7 +547,7 @@ bool scrGroupObjGet(UDWORD index)
 	case GROUPID_POSX:
 		lgX = 0;
 		lgMembers = 0;
-		for(psCurr = psGroup->psList; psCurr; psCurr = psCurr->psGrpNext)
+		for (psCurr = psGroup->psList; psCurr; psCurr = psCurr->psGrpNext)
 		{
 			lgMembers += 1;
 			lgX += (SDWORD)psCurr->pos.x;
@@ -559,7 +563,7 @@ bool scrGroupObjGet(UDWORD index)
 	case GROUPID_POSY:
 		lgY = 0;
 		lgMembers = 0;
-		for(psCurr = psGroup->psList; psCurr; psCurr = psCurr->psGrpNext)
+		for (psCurr = psGroup->psList; psCurr; psCurr = psCurr->psGrpNext)
 		{
 			lgMembers += 1;
 			lgY += (SDWORD)psCurr->pos.y;
@@ -575,7 +579,7 @@ bool scrGroupObjGet(UDWORD index)
 		break;
 	case GROUPID_MEMBERS:
 		lgMembers = 0;
-		for(psCurr = psGroup->psList; psCurr; psCurr = psCurr->psGrpNext)
+		for (psCurr = psGroup->psList; psCurr; psCurr = psCurr->psGrpNext)
 		{
 			lgMembers += 1;
 		}
@@ -586,10 +590,10 @@ bool scrGroupObjGet(UDWORD index)
 	case GROUPID_HEALTH:
 		lgHealth = 0;
 		lgMembers = 0;
-		for(psCurr = psGroup->psList; psCurr; psCurr = psCurr->psGrpNext)
+		for (psCurr = psGroup->psList; psCurr; psCurr = psCurr->psGrpNext)
 		{
 			lgMembers += 1;
-			lgHealth += (SDWORD)((100 * psCurr->body)/psCurr->originalBody);
+			lgHealth += (SDWORD)((100 * psCurr->body) / psCurr->originalBody);
 		}
 
 		if (lgMembers > 0)
@@ -608,7 +612,7 @@ bool scrGroupObjGet(UDWORD index)
 		scrFunctionResult.v.oval = psGroup->psCommander;
 		break;
 	default:
-		ASSERT( false, "scrGroupObjGet: unknown variable index" );
+		ASSERT(false, "scrGroupObjGet: unknown variable index");
 		return false;
 		break;
 	}
@@ -700,7 +704,7 @@ static char *scrGetStatName(INTERP_TYPE type, UDWORD data)
 
 	if (pName == NULL)
 	{
-		debug( LOG_FATAL, "scrGetStatName: cannot get name for a base stat" );
+		debug(LOG_FATAL, "scrGetStatName: cannot get name for a base stat");
 		abort();
 	}
 
@@ -761,14 +765,14 @@ bool scrValDefSave(INTERP_VAL *psVal, WzConfig &ini)
 		}
 		break;
 	case ST_TEXTSTRING:
-	{
-		const char *const idStr = psVal->v.sval ? strresGetIDfromString(psStringRes, psVal->v.sval) : NULL;
-		if (idStr)
 		{
-			ini.setValue("data", QString(idStr));
+			const char *const idStr = psVal->v.sval ? strresGetIDfromString(psStringRes, psVal->v.sval) : NULL;
+			if (idStr)
+			{
+				ini.setValue("data", QString(idStr));
+			}
+			break;
 		}
-		break;
-	}
 	case ST_LEVEL:
 		if (psVal->v.sval)
 		{
@@ -784,31 +788,31 @@ bool scrValDefSave(INTERP_VAL *psVal, WzConfig &ini)
 		}
 		break;
 	case ST_GROUP:
-	{
-		DROID_GROUP *const psGroup = (DROID_GROUP *)psVal->v.oval;
-		if (psGroup)
 		{
-			const int members = psGroup->getNumMembers();
-			QStringList droids;
-			for (psCDroid = psGroup->psList; psCDroid; psCDroid = psCDroid->psGrpNext)
+			DROID_GROUP *const psGroup = (DROID_GROUP *)psVal->v.oval;
+			if (psGroup)
 			{
-				checkValidId(psCDroid->id);
-				droids.push_back(QString::number(psCDroid->id));
+				const int members = psGroup->getNumMembers();
+				QStringList droids;
+				for (psCDroid = psGroup->psList; psCDroid; psCDroid = psCDroid->psGrpNext)
+				{
+					checkValidId(psCDroid->id);
+					droids.push_back(QString::number(psCDroid->id));
+				}
+				ini.setValue("members", QVariant(members));
+				if (droids.size() > 0)
+				{
+					ini.setValue("data", droids);
+				}
+				ini.setVector2i("runpos", psGroup->sRunData.sPos);
+				ini.setValue("forceLevel", QVariant(psGroup->sRunData.forceLevel));
+				ini.setValue("leadership", QVariant(psGroup->sRunData.leadership));
+				ini.setValue("healthLevel", QVariant(psGroup->sRunData.healthLevel));
 			}
-			ini.setValue("members", QVariant(members));
-			if (droids.size() > 0)
-			{
-				ini.setValue("data", droids);
-			}
-			ini.setVector2i("runpos", psGroup->sRunData.sPos);
-			ini.setValue("forceLevel", QVariant(psGroup->sRunData.forceLevel));
-			ini.setValue("leadership", QVariant(psGroup->sRunData.leadership));
-			ini.setValue("healthLevel", QVariant(psGroup->sRunData.healthLevel));
+			break;
 		}
-		break;
-	}
 	case ST_SOUND:
-		if(psVal->v.ival)
+		if (psVal->v.ival)
 		{
 			// can also return NULL
 			pName = sound_GetTrackName((UDWORD)psVal->v.ival);
@@ -851,7 +855,7 @@ bool scrValDefLoad(INTERP_VAL *psVal, WzConfig &ini)
 	case ST_INTMESSAGE:
 		if (ini.contains("data"))
 		{
-			psVal->v.oval = (void*)getViewData(ini.value("data").toString().toAscii().constData());
+			psVal->v.oval = (void *)getViewData(ini.value("data").toString().toAscii().constData());
 		}
 		else
 		{
@@ -864,7 +868,7 @@ bool scrValDefLoad(INTERP_VAL *psVal, WzConfig &ini)
 	case ST_FEATURE:
 		if (ini.contains("data"))
 		{
-			psVal->v.oval = (void*)getBaseObjFromId(ini.value("data").toInt());
+			psVal->v.oval = (void *)getBaseObjFromId(ini.value("data").toInt());
 		}
 		else
 		{
@@ -881,7 +885,7 @@ bool scrValDefLoad(INTERP_VAL *psVal, WzConfig &ini)
 			index = getStructStatFromName(ini.value("data").toString().toAscii().constData());
 			if (index == -1)
 			{
-				debug( LOG_FATAL, "Could not find stat");
+				debug(LOG_FATAL, "Could not find stat");
 				index = 0;
 			}
 		}
@@ -894,7 +898,7 @@ bool scrValDefLoad(INTERP_VAL *psVal, WzConfig &ini)
 			index = getFeatureStatFromName(ini.value("data").toString().toAscii().constData());
 			if (index == -1)
 			{
-				debug( LOG_FATAL, "Could not find stat");
+				debug(LOG_FATAL, "Could not find stat");
 				index = 0;
 			}
 		}
@@ -977,8 +981,8 @@ bool scrValDefLoad(INTERP_VAL *psVal, WzConfig &ini)
 		if (ini.contains("data"))
 		{
 			// FIXME: Ugh. Find a better way to show full template info
-			psVal->v.oval = (void*)IdToTemplate(ini.value("data").toInt(), ANYPLAYER);
-			if ((DROID_TEMPLATE*)(psVal->v.oval) == NULL)
+			psVal->v.oval = (void *)IdToTemplate(ini.value("data").toInt(), ANYPLAYER);
+			if ((DROID_TEMPLATE *)(psVal->v.oval) == NULL)
 			{
 				debug(LOG_FATAL, "Could not find template %d", ini.value("data").toInt());
 			}
@@ -1010,7 +1014,7 @@ bool scrValDefLoad(INTERP_VAL *psVal, WzConfig &ini)
 			QString research = ini.value("data").toString();
 			if (!research.isEmpty())
 			{
-				psVal->v.oval = (void*)getResearch(research.toUtf8().constData());
+				psVal->v.oval = (void *)getResearch(research.toUtf8().constData());
 				ASSERT_OR_RETURN(false, psVal->v.oval, "Could not find research %s", research.toUtf8().constData());
 			}
 		}
@@ -1045,7 +1049,7 @@ bool scrValDefLoad(INTERP_VAL *psVal, WzConfig &ini)
 				}
 				else
 				{
-					((DROID_GROUP*)(psVal->v.oval))->add(psCDroid);
+					((DROID_GROUP *)(psVal->v.oval))->add(psCDroid);
 				}
 				members--;
 			}

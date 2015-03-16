@@ -90,12 +90,12 @@ struct INITIAL_DROID_ORDERS
 };
 /*Builds an instance of a Structure - the x/y passed in are in world coords.*/
 /// Sends a GAME_DROID message if bMultiMessages is true, or actually creates it if false. Only uses initialOrders if sending a GAME_DROID message.
-extern DROID* buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player, bool onMission, const INITIAL_DROID_ORDERS *initialOrders);
+extern DROID *buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player, bool onMission, const INITIAL_DROID_ORDERS *initialOrders);
 /// Creates a droid locally, instead of sending a message, even if the bMultiMessages HACK is set to true.
 DROID *reallyBuildDroid(DROID_TEMPLATE *pTemplate, Position pos, UDWORD player, bool onMission, Rotation rot = Rotation());
 
 /* Set the asBits in a DROID structure given it's template. */
-extern void droidSetBits(DROID_TEMPLATE *pTemplate,DROID *psDroid);
+extern void droidSetBits(DROID_TEMPLATE *pTemplate, DROID *psDroid);
 
 /* Calculate the weight of a droid from it's template */
 extern UDWORD calcDroidWeight(DROID_TEMPLATE *psTemplate);
@@ -138,21 +138,21 @@ enum DroidStartBuild {DroidStartBuildFailed, DroidStartBuildSuccess, DroidStartB
 DroidStartBuild droidStartBuild(DROID *psDroid);
 
 /* Sets a droid to start demolishing - returns true if successful */
-extern bool	droidStartDemolishing( DROID *psDroid );
+extern bool	droidStartDemolishing(DROID *psDroid);
 
 /* Update a construction droid while it is demolishing
    returns true while demolishing */
-extern bool	droidUpdateDemolishing( DROID *psDroid );
+extern bool	droidUpdateDemolishing(DROID *psDroid);
 
 /* Sets a droid to start repairing - returns true if successful */
-extern bool	droidStartRepair( DROID *psDroid );
+extern bool	droidStartRepair(DROID *psDroid);
 
 /* Update a construction droid while it is repairing
    returns true while repairing */
-extern bool	droidUpdateRepair( DROID *psDroid );
+extern bool	droidUpdateRepair(DROID *psDroid);
 
 /*Start a Repair Droid working on a damaged droid - returns true if successful*/
-extern bool droidStartDroidRepair( DROID *psDroid );
+extern bool droidStartDroidRepair(DROID *psDroid);
 
 /*Updates a Repair Droid working on a damaged droid - returns true whilst repairing*/
 extern bool droidUpdateDroidRepair(DROID *psRepairDroid);
@@ -162,10 +162,10 @@ extern bool droidUpdateDroidRepair(DROID *psRepairDroid);
 extern bool droidUpdateBuild(DROID *psDroid);
 
 /*Start a EW weapon droid working on a low resistance structure*/
-extern bool droidStartRestore( DROID *psDroid );
+extern bool droidStartRestore(DROID *psDroid);
 
 /*continue restoring a structure*/
-extern bool droidUpdateRestore( DROID *psDroid );
+extern bool droidUpdateRestore(DROID *psDroid);
 
 // recycle a droid (retain it's experience and some of it's cost)
 extern void recycleDroid(DROID *psDel);
@@ -177,7 +177,7 @@ void destroyDroid(DROID *psDel, unsigned impactTime);
 extern void	vanishDroid(DROID *psDel);
 
 /* Burn a barbarian then destroy it */
-extern void droidBurn( DROID * psDroid );
+extern void droidBurn(DROID *psDroid);
 
 /* Remove a droid from the apsDroidLists so doesn't update or get drawn etc*/
 //returns true if successfully removed from the list
@@ -208,7 +208,7 @@ bool calcDroidMuzzleBaseLocation(DROID *psDroid, Vector3i *muzzle, int weapon_sl
 extern bool selectDroidByID(UDWORD id, UDWORD player);
 
 /* Droid experience stuff */
-extern unsigned int getDroidLevel(const DROID* psDroid);
+extern unsigned int getDroidLevel(const DROID *psDroid);
 extern UDWORD	getDroidEffectiveLevel(DROID *psDroid);
 extern const char *getDroidLevelName(DROID *psDroid);
 
@@ -219,15 +219,15 @@ extern const char *droidGetName(const DROID *psDroid);
 extern void droidSetName(DROID *psDroid, const char *pName);
 
 // returns true when no droid on x,y square.
-extern bool	noDroid					(UDWORD x, UDWORD y);				// true if no droid at x,y
+extern bool	noDroid(UDWORD x, UDWORD y);				// true if no droid at x,y
 // returns an x/y coord to place a droid
-extern PICKTILE pickHalfATile		(UDWORD *x, UDWORD *y, UBYTE numIterations);
+extern PICKTILE pickHalfATile(UDWORD *x, UDWORD *y, UBYTE numIterations);
 extern	bool	zonedPAT(UDWORD x, UDWORD y);
 extern	bool	pickATileGen(UDWORD *x, UDWORD *y, UBYTE numIterations,
-					 bool (*function)(UDWORD x, UDWORD y));
+                             bool (*function)(UDWORD x, UDWORD y));
 bool pickATileGen(Vector2i *pos, unsigned numIterations, bool (*function)(UDWORD x, UDWORD y));
 extern	bool	pickATileGenThreat(UDWORD *x, UDWORD *y, UBYTE numIterations, SDWORD threatRange,
-					 SDWORD player, bool (*function)(UDWORD x, UDWORD y));
+                                   SDWORD player, bool (*function)(UDWORD x, UDWORD y));
 
 
 //initialises the droid movement model
@@ -252,9 +252,9 @@ extern void setUpBuildModule(DROID *psDroid);
 extern bool	droidIsDamaged(DROID *psDroid);
 
 /* Returns currently active (selected) group */
-extern UDWORD	getSelectedGroup( void );
+extern UDWORD	getSelectedGroup(void);
 extern void	setSelectedGroup(UDWORD groupNumber);
-extern UDWORD	getSelectedCommander( void );
+extern UDWORD	getSelectedCommander(void);
 extern void	setSelectedCommander(UDWORD commander);
 
 extern char const *getDroidResourceName(char const *pName);
@@ -270,20 +270,20 @@ extern UBYTE checkCommandExist(UBYTE player);
 
 /*For a given repair droid, check if there are any damaged droids within
 a defined range*/
-extern BASE_OBJECT * checkForRepairRange(DROID *psDroid,DROID *psTarget);
+extern BASE_OBJECT *checkForRepairRange(DROID *psDroid, DROID *psTarget);
 // Returns true if the droid is a transporter.
-extern bool isTransporter(const DROID* psDroid);
+extern bool isTransporter(const DROID *psDroid);
 /// Returns true if the droid has VTOL propulsion, and is not a transport.
-extern bool isVtolDroid(const DROID* psDroid);
+extern bool isVtolDroid(const DROID *psDroid);
 /// Returns true if the droid has VTOL propulsion and is moving.
-extern bool isFlying(const DROID* psDroid);
+extern bool isFlying(const DROID *psDroid);
 /*returns true if a VTOL weapon droid which has completed all runs*/
 extern bool vtolEmpty(DROID *psDroid);
 /*returns true if a VTOL weapon droid which still has full ammo*/
 extern bool vtolFull(DROID *psDroid);
 /*Checks a vtol for being fully armed and fully repaired to see if ready to
 leave reArm pad */
-extern bool  vtolHappy(const DROID* psDroid);
+extern bool  vtolHappy(const DROID *psDroid);
 /*checks if the droid is a VTOL droid and updates the attack runs as required*/
 extern void updateVtolAttackRun(DROID *psDroid, int weapon_slot);
 /*returns a count of the base number of attack runs for the weapon attached to the droid*/
@@ -310,7 +310,7 @@ extern bool cbSensorDroid(DROID *psDroid);
 extern bool standardSensorDroid(DROID *psDroid);
 
 // give a droid from one player to another - used in Electronic Warfare and multiplayer
-extern DROID * giftSingleDroid(DROID *psD, UDWORD to);
+extern DROID *giftSingleDroid(DROID *psD, UDWORD to);
 /*calculates the electronic resistance of a droid based on its experience level*/
 extern SWORD   droidResistance(DROID *psDroid);
 
@@ -331,10 +331,10 @@ extern void SelectDroid(DROID *psDroid);
 extern void DeSelectDroid(DROID *psDroid);
 
 /* audio finished callback */
-extern bool droidAudioTrackStopped( void *psObj );
+extern bool droidAudioTrackStopped(void *psObj);
 
 /*returns true if droid type is one of the Cyborg types*/
-extern bool cyborgDroid(const DROID* psDroid);
+extern bool cyborgDroid(const DROID *psDroid);
 
 bool isConstructionDroid(DROID const *psDroid);
 bool isConstructionDroid(BASE_OBJECT const *psObject);
@@ -347,19 +347,19 @@ bool droidOnMap(const DROID *psDroid);
 
 void droidSetPosition(DROID *psDroid, int x, int y);
 
-static inline int droidSensorRange(const DROID* psDroid)
+static inline int droidSensorRange(const DROID *psDroid)
 {
-	return objSensorRange((const BASE_OBJECT*)psDroid);
+	return objSensorRange((const BASE_OBJECT *)psDroid);
 }
 
-static inline int droidJammerPower(const DROID* psDroid)
+static inline int droidJammerPower(const DROID *psDroid)
 {
-	return objJammerPower((const BASE_OBJECT*)psDroid);
+	return objJammerPower((const BASE_OBJECT *)psDroid);
 }
 
-static inline int droidConcealment(const DROID* psDroid)
+static inline int droidConcealment(const DROID *psDroid)
 {
-	return objConcealment((const BASE_OBJECT*)psDroid);
+	return objConcealment((const BASE_OBJECT *)psDroid);
 }
 
 /*
@@ -487,7 +487,7 @@ static inline void setSaveDroidBase(DROID *psSaveDroid, STRUCTURE *psNewBase)
 #endif
 }
 
-void checkDroid(const DROID *droid, const char * const location_description, const char * function, const int recurse);
+void checkDroid(const DROID *droid, const char *const location_description, const char *function, const int recurse);
 
 /** assert if droid is bad */
 #define CHECK_DROID(droid) checkDroid(droid, AT_MACRO, __FUNCTION__, max_check_object_recursion)
@@ -507,11 +507,20 @@ void _syncDebugDroid(const char *function, DROID const *psDroid, char ch);
 
 
 // True iff object is a droid.
-static inline bool isDroid(SIMPLE_OBJECT const *psObject)           { return psObject != NULL && psObject->type == OBJ_DROID; }
+static inline bool isDroid(SIMPLE_OBJECT const *psObject)
+{
+	return psObject != NULL && psObject->type == OBJ_DROID;
+}
 // Returns DROID * if droid or NULL if not.
-static inline DROID *castDroid(SIMPLE_OBJECT *psObject)             { return isDroid(psObject)? (DROID *)psObject : (DROID *)NULL; }
+static inline DROID *castDroid(SIMPLE_OBJECT *psObject)
+{
+	return isDroid(psObject) ? (DROID *)psObject : (DROID *)NULL;
+}
 // Returns DROID const * if droid or NULL if not.
-static inline DROID const *castDroid(SIMPLE_OBJECT const *psObject) { return isDroid(psObject)? (DROID const *)psObject : (DROID const *)NULL; }
+static inline DROID const *castDroid(SIMPLE_OBJECT const *psObject)
+{
+	return isDroid(psObject) ? (DROID const *)psObject : (DROID const *)NULL;
+}
 
 
 #endif // __INCLUDED_SRC_DROID_H__

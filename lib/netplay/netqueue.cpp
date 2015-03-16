@@ -56,7 +56,7 @@ unsigned encodedlength_uint32_t(uint32_t v)
 	{
 		const unsigned a = table_uint32_t_a[n];
 		const unsigned m = table_uint32_t_m[n];
-		const unsigned possibleValues = (256 - a)*m;  // Number of values which encode to n + 1 bytes.
+		const unsigned possibleValues = (256 - a) * m; // Number of values which encode to n + 1 bytes.
 		if (v < possibleValues)
 		{
 			return n + 1;
@@ -77,7 +77,7 @@ bool encode_uint32_t(uint8_t &b, uint32_t &v, unsigned n)
 	else
 	{
 		v -= 256 - a;
-		b = 255 - v%a;
+		b = 255 - v % a;
 		v /= a;
 	}
 	return !isLastByte;
@@ -91,11 +91,11 @@ bool decode_uint32_t(uint8_t b, uint32_t &v, unsigned n)
 	bool isLastByte = b < 256 - a;
 	if (isLastByte)
 	{
-		v += b*m;
+		v += b * m;
 	}
 	else
 	{
-		v += (256 - a + 255 - b)*m;
+		v += (256 - a + 255 - b) * m;
 	}
 	return !isLastByte;
 }

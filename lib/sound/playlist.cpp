@@ -30,7 +30,7 @@
 struct WZ_TRACK
 {
 	char		path[PATH_MAX];
-	WZ_TRACK *      next;
+	WZ_TRACK       *next;
 };
 
 static WZ_TRACK *currentSong = NULL;
@@ -59,10 +59,10 @@ void PlayList_Quit()
 	PlayList_Init();
 }
 
-bool PlayList_Read(const char* path)
+bool PlayList_Read(const char *path)
 {
-	WZ_TRACK** last = &songList;
-	PHYSFS_file* fileHandle;
+	WZ_TRACK **last = &songList;
+	PHYSFS_file *fileHandle;
 	char listName[PATH_MAX];
 
 	// Construct file name
@@ -82,15 +82,15 @@ bool PlayList_Read(const char* path)
 
 	while (!PHYSFS_eof(fileHandle))
 	{
-		WZ_TRACK* song;
+		WZ_TRACK *song;
 		char filename[BUFFER_SIZE];
 		size_t buf_pos = 0;
 
 		// Read a single line
 		while (buf_pos < sizeof(filename) - 1
-		    && PHYSFS_read(fileHandle, &filename[buf_pos], 1, 1)
-		    && filename[buf_pos] != '\n'
-		    && filename[buf_pos] != '\r')
+		       && PHYSFS_read(fileHandle, &filename[buf_pos], 1, 1)
+		       && filename[buf_pos] != '\n'
+		       && filename[buf_pos] != '\r')
 		{
 			++buf_pos;
 		}
@@ -131,7 +131,7 @@ bool PlayList_Read(const char* path)
 	return true;
 }
 
-const char* PlayList_CurrentSong()
+const char *PlayList_CurrentSong()
 {
 	if (currentSong)
 	{
@@ -143,11 +143,11 @@ const char* PlayList_CurrentSong()
 	}
 }
 
-const char* PlayList_NextSong()
+const char *PlayList_NextSong()
 {
 	// If there's a next song in the playlist select it
 	if (currentSong
-	 && currentSong->next)
+	    && currentSong->next)
 	{
 		currentSong = currentSong->next;
 	}

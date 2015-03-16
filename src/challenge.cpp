@@ -144,7 +144,7 @@ static void displayLoadSlot(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ
 
 		while (iV_GetTextWidth(butString) > psWidget->width)
 		{
-			butString[strlen(butString)-1] = '\0';
+			butString[strlen(butString) - 1] = '\0';
 		}
 
 		//draw text
@@ -238,19 +238,19 @@ bool addChallenges()
 		{
 			sButInit.x	= 22 + CHALLENGE_HGAP;
 			sButInit.y	= (SWORD)((CHALLENGE_BANNER_DEPTH + (2 * CHALLENGE_VGAP)) + (
-			                         slotCount * (CHALLENGE_VGAP + CHALLENGE_ENTRY_H)));
+			                          slotCount * (CHALLENGE_VGAP + CHALLENGE_ENTRY_H)));
 		}
-		else if (slotCount >= slotsInColumn && (slotCount < (slotsInColumn *2)))
+		else if (slotCount >= slotsInColumn && (slotCount < (slotsInColumn * 2)))
 		{
 			sButInit.x	= 22 + (2 * CHALLENGE_HGAP + CHALLENGE_ENTRY_W);
 			sButInit.y	= (SWORD)((CHALLENGE_BANNER_DEPTH + (2 * CHALLENGE_VGAP)) + (
-			                         (slotCount % slotsInColumn) * (CHALLENGE_VGAP + CHALLENGE_ENTRY_H)));
+			                          (slotCount % slotsInColumn) * (CHALLENGE_VGAP + CHALLENGE_ENTRY_H)));
 		}
 		else
 		{
 			sButInit.x	= 22 + (3 * CHALLENGE_HGAP + (2 * CHALLENGE_ENTRY_W));
 			sButInit.y	= (SWORD)((CHALLENGE_BANNER_DEPTH + (2 * CHALLENGE_VGAP)) + (
-			                         (slotCount % slotsInColumn) * (CHALLENGE_VGAP + CHALLENGE_ENTRY_H)));
+			                          (slotCount % slotsInColumn) * (CHALLENGE_VGAP + CHALLENGE_ENTRY_H)));
 		}
 		widgAddButton(psRequestScreen, &sButInit);
 	}
@@ -305,7 +305,7 @@ bool addChallenges()
 		difficulty = challenge.value("Difficulty", "BAD DIFFICULTY").toString();
 		description = map + ", " + difficulty + ", " + highscore + ". " + challenge.value("Description", "").toString();
 
-		button = (W_BUTTON*)widgGetFromID(psRequestScreen, CHALLENGE_ENTRY_START + slotCount);
+		button = (W_BUTTON *)widgGetFromID(psRequestScreen, CHALLENGE_ENTRY_START + slotCount);
 
 		debug(LOG_SAVE, "We found [%s]", *i);
 

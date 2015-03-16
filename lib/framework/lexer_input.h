@@ -34,12 +34,12 @@ struct lexerinput_t
 {
 	union
 	{
-		FILE* stdiofile;
-		PHYSFS_file* physfsfile;
+		FILE *stdiofile;
+		PHYSFS_file *physfsfile;
 		struct
 		{
-			const char* begin;
-			const char* end;
+			const char *begin;
+			const char *end;
 		} buffer;
 	} input;
 	lexinput_type type;
@@ -51,12 +51,12 @@ struct lexerinput_t
 
 #define YY_EXTRA_TYPE lexerinput_t *
 
-extern int lexer_input(lexerinput_t* input, char* buf, size_t max_size, int nullvalue);
+extern int lexer_input(lexerinput_t *input, char *buf, size_t max_size, int nullvalue);
 
 #define YY_INPUT(buf, result, max_size) \
-do \
-{ \
-	result = lexer_input(yyextra, buf, max_size, YY_NULL); \
-} while(0)
+	do \
+	{ \
+		result = lexer_input(yyextra, buf, max_size, YY_NULL); \
+	} while(0)
 
 #endif // __INCLUDED_LIB_FRAMEWORK_LEXER_INPUT_H__

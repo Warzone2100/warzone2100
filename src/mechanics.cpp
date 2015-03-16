@@ -39,7 +39,7 @@ bool mechanicsShutdown(void)
 {
 	BASE_OBJECT *psObj, *psNext;
 
-	for(psObj = psDestroyedObj; psObj != NULL; psObj = psNext)
+	for (psObj = psDestroyedObj; psObj != NULL; psObj = psNext)
 	{
 		psNext = psObj->psNext;
 		delete psObj;
@@ -56,7 +56,7 @@ bool allocComponentList(COMPONENT_TYPE	type, SDWORD number)
 	SDWORD	inc, comp;
 
 	//allocate the space for the Players' component lists
-	for (inc=0; inc < MAX_PLAYERS; inc++)
+	for (inc = 0; inc < MAX_PLAYERS; inc++)
 	{
 		if (apCompLists[inc][type])
 		{
@@ -66,13 +66,13 @@ bool allocComponentList(COMPONENT_TYPE	type, SDWORD number)
 		apCompLists[inc][type] = (UBYTE *) malloc(sizeof(UBYTE) * number);
 		if (apCompLists[inc][type] == NULL)
 		{
-			debug( LOG_FATAL, "Out of memory assigning Player Component Lists" );
+			debug(LOG_FATAL, "Out of memory assigning Player Component Lists");
 			abort();
 			return false;
 		}
 
 		//initialise the players' lists
-		for (comp=0; comp < number; comp++)
+		for (comp = 0; comp < number; comp++)
 		{
 			apCompLists[inc][type][comp] = UNAVAILABLE;
 		}
@@ -86,7 +86,7 @@ void freeComponentLists(void)
 {
 	UDWORD	inc;
 
-	for (inc=0; inc < MAX_PLAYERS; inc++)
+	for (inc = 0; inc < MAX_PLAYERS; inc++)
 	{
 		//free the component lists
 		if (apCompLists[inc][COMP_BODY])
@@ -137,15 +137,15 @@ bool allocStructLists(void)
 {
 	SDWORD	inc, stat;
 
-	for (inc=0; inc < MAX_PLAYERS; inc++)
+	for (inc = 0; inc < MAX_PLAYERS; inc++)
 	{
-		if(numStructureStats)
+		if (numStructureStats)
 		{
 			apStructTypeLists[inc] = (UBYTE *) malloc(sizeof(UBYTE) *
-								numStructureStats);
+			                         numStructureStats);
 			if (apStructTypeLists[inc] == NULL)
 			{
-				debug( LOG_FATAL, "Out of memory assigning Player Structure Lists" );
+				debug(LOG_FATAL, "Out of memory assigning Player Structure Lists");
 				abort();
 				return false;
 			}
@@ -169,10 +169,11 @@ void freeStructureLists(void)
 {
 	UDWORD	inc;
 
-	for (inc=0; inc < MAX_PLAYERS; inc++)
+	for (inc = 0; inc < MAX_PLAYERS; inc++)
 	{
 		//free the structure lists
-		if(apStructTypeLists[inc]) {
+		if (apStructTypeLists[inc])
+		{
 			free(apStructTypeLists[inc]);
 			apStructTypeLists[inc] = NULL;
 		}
@@ -183,45 +184,45 @@ void freeStructureLists(void)
 //TEST FUNCTION - MAKE EVERYTHING AVAILABLE
 void makeAllAvailable(void)
 {
-	UDWORD	comp,i;
+	UDWORD	comp, i;
 
-	for(i=0;i<MAX_PLAYERS;i++)
+	for (i = 0; i < MAX_PLAYERS; i++)
 	{
-		for (comp=0; comp <numWeaponStats; comp++)
+		for (comp = 0; comp < numWeaponStats; comp++)
 		{
 			apCompLists[i][COMP_WEAPON][comp] = AVAILABLE;
 		}
-		for (comp=0; comp <numBodyStats; comp++)
+		for (comp = 0; comp < numBodyStats; comp++)
 		{
 			apCompLists[i][COMP_BODY][comp] = AVAILABLE;
 		}
-		for (comp=0; comp <numPropulsionStats; comp++)
+		for (comp = 0; comp < numPropulsionStats; comp++)
 		{
 			apCompLists[i][COMP_PROPULSION][comp] = AVAILABLE;
 		}
-		for (comp=0; comp <numSensorStats; comp++)
+		for (comp = 0; comp < numSensorStats; comp++)
 		{
 			apCompLists[i][COMP_SENSOR][comp] = AVAILABLE;
 		}
-		for (comp=0; comp <numECMStats; comp++)
+		for (comp = 0; comp < numECMStats; comp++)
 		{
 			apCompLists[i][COMP_ECM][comp] = AVAILABLE;
 		}
-		for (comp=0; comp <numConstructStats; comp++)
+		for (comp = 0; comp < numConstructStats; comp++)
 		{
 			apCompLists[i][COMP_CONSTRUCT][comp] = AVAILABLE;
 		}
-		for (comp=0; comp <numBrainStats; comp++)
+		for (comp = 0; comp < numBrainStats; comp++)
 		{
 			apCompLists[i][COMP_BRAIN][comp] = AVAILABLE;
 		}
-		for (comp=0; comp <numRepairStats; comp++)
+		for (comp = 0; comp < numRepairStats; comp++)
 		{
 			apCompLists[i][COMP_REPAIRUNIT][comp] = AVAILABLE;
 		}
 
 		//make all the structures available
-		for (comp=0; comp < numStructureStats; comp++)
+		for (comp = 0; comp < numStructureStats; comp++)
 		{
 			apStructTypeLists[i][comp] = AVAILABLE;
 		}

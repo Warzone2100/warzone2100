@@ -31,7 +31,7 @@ extern FEATURE_STATS	*asFeatureStats;
 extern UDWORD			numFeatureStats;
 
 //Value is stored for easy access to this feature in destroyDroid()/destroyStruct()
-extern FEATURE_STATS* oilResFeature;
+extern FEATURE_STATS *oilResFeature;
 
 /* Load the feature stats */
 extern bool loadFeatureStats(const char *pFeatureData, UDWORD bufferSize);
@@ -40,7 +40,7 @@ extern bool loadFeatureStats(const char *pFeatureData, UDWORD bufferSize);
 extern void featureStatsShutDown(void);
 
 /* Create a feature on the map */
-extern FEATURE * buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y,bool FromSave);
+extern FEATURE *buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y, bool FromSave);
 
 /* Update routine for features */
 extern void featureUpdate(FEATURE *psFeat);
@@ -67,10 +67,19 @@ void _syncDebugFeature(const char *function, FEATURE const *psFeature, char ch);
 
 
 // True iff object is a feature.
-static inline bool isFeature(SIMPLE_OBJECT const *psObject)             { return psObject != NULL && psObject->type == OBJ_FEATURE; }
+static inline bool isFeature(SIMPLE_OBJECT const *psObject)
+{
+	return psObject != NULL && psObject->type == OBJ_FEATURE;
+}
 // Returns FEATURE * if feature or NULL if not.
-static inline FEATURE *castFeature(SIMPLE_OBJECT *psObject)             { return isFeature(psObject)? (FEATURE *)psObject : (FEATURE *)NULL; }
+static inline FEATURE *castFeature(SIMPLE_OBJECT *psObject)
+{
+	return isFeature(psObject) ? (FEATURE *)psObject : (FEATURE *)NULL;
+}
 // Returns FEATURE const * if feature or NULL if not.
-static inline FEATURE const *castFeature(SIMPLE_OBJECT const *psObject) { return isFeature(psObject)? (FEATURE const *)psObject : (FEATURE const *)NULL; }
+static inline FEATURE const *castFeature(SIMPLE_OBJECT const *psObject)
+{
+	return isFeature(psObject) ? (FEATURE const *)psObject : (FEATURE const *)NULL;
+}
 
 #endif // __INCLUDED_SRC_FEATURE_H__

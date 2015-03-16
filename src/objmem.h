@@ -84,7 +84,7 @@ extern void removeStructureFromList(STRUCTURE *psStructToRemove,
                                     STRUCTURE *pList[MAX_PLAYERS]);
 
 /* add the feature to the Feature Lists */
- extern void addFeature(FEATURE *psFeatureToAdd);
+extern void addFeature(FEATURE *psFeatureToAdd);
 
 /* Destroy a feature */
 void killFeature(FEATURE *psDel);

@@ -51,14 +51,14 @@ struct wzSearchPath
 {
 	char path[PATH_MAX];
 	unsigned int priority;
-	wzSearchPath * higherPriority, * lowerPriority;
+	wzSearchPath *higherPriority, * lowerPriority;
 };
 
 enum searchPathMode { mod_clean, mod_campaign, mod_multiplay, mod_override };
 
-void cleanSearchPath( void );
-void registerSearchPath( const char path[], unsigned int priority );
-bool rebuildSearchPath( searchPathMode mode, bool force );
+void cleanSearchPath(void);
+void registerSearchPath(const char path[], unsigned int priority);
+bool rebuildSearchPath(searchPathMode mode, bool force);
 
 bool buildMapList(void);
 bool CheckForMod(char *theMap);

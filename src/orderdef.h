@@ -177,7 +177,7 @@ struct DroidOrder
 	Vector2i         pos2;       /**< the order's second position, in case those exist. */
 	uint16_t         direction;  /**< the order's direction, in case it exist. */
 	uint32_t         index;      ///< Module index, with DORDER_BUILDMODULE.
-	BASE_OBJECT *    psObj;      /**< the order's target, in case it exist. */
+	BASE_OBJECT     *psObj;      /**< the order's target, in case it exist. */
 	STRUCTURE_STATS *psStats;    /**< order structure stats. */
 };
 

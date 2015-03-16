@@ -37,7 +37,7 @@ void cocoaInit(void);
  * \returns The index of the selected button. (0-indexed from leftmost argument, rightmost displayed button.)
  */
 int cocoaShowAlert(const char *message, const char *information, unsigned style,
-                   const char *buttonTitles, ...) __attribute__ ((sentinel));
+                   const char *buttonTitles, ...) __attribute__((sentinel));
 
 void cocoaSelectFileInFinder(const char *filename);
 void cocoaOpenURL(const char *url);

@@ -30,7 +30,7 @@
 #include "wzapp_qt.h"
 
 // used in crash reports & version info
-const char *BACKEND="Qt";
+const char *BACKEND = "Qt";
 
 int realmain(int argc, char *argv[]);
 int main(int argc, char *argv[])
@@ -76,12 +76,14 @@ bool wzMain2()
 	screenHeight = h;
 	if (war_getFullscreen())
 	{
-		mainwindow.resize(w,h);
+		mainwindow.resize(w, h);
 		mainwindow.showFullScreen();
-		if(w>mainwindow.width()) {
+		if (w > mainwindow.width())
+		{
 			w = mainwindow.width();
 		}
-		if(h>mainwindow.height()) {
+		if (h > mainwindow.height())
+		{
 			h = mainwindow.height();
 		}
 		pie_SetVideoBufferWidth(w);

@@ -26,8 +26,8 @@
 
 struct GATEWAY
 {
-	UBYTE			x1,y1, x2,y2;
-	GATEWAY *       psNext;
+	UBYTE			x1, y1, x2, y2;
+	GATEWAY        *psNext;
 };
 
 /// Initialise the gateway system

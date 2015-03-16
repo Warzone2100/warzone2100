@@ -48,10 +48,10 @@ bool initMessage(void);
 bool messageShutdown(void);
 
 /** Add a message to the list. */
-MESSAGE * addMessage(MESSAGE_TYPE msgType, bool proxPos, UDWORD player);
+MESSAGE *addMessage(MESSAGE_TYPE msgType, bool proxPos, UDWORD player);
 
 /** Add a beacon message to the list. */
-MESSAGE * addBeaconMessage(MESSAGE_TYPE msgType, bool proxPos, UDWORD player);
+MESSAGE *addBeaconMessage(MESSAGE_TYPE msgType, bool proxPos, UDWORD player);
 
 /** Remove a message. */
 void removeMessage(MESSAGE *psDel, UDWORD player);
@@ -64,7 +64,7 @@ void releaseAllProxDisp(void);
 
 /** Load the view data for the messages from the file exported from the world editor. */
 const char *loadViewData(const char *pViewMsgData, UDWORD bufferSize);
-const char *loadResearchViewData(const char* fileName);
+const char *loadResearchViewData(const char *fileName);
 
 /** Get the view data that contains the text message pointer passed in. */
 VIEWDATA *getViewData(const char *pTextMsg);
@@ -74,7 +74,7 @@ void viewDataShutDown(const char *fileName);
 
 /** Looks through the players list of messages to find one with the same viewData
   * pointer and which is the same type of message - used in scriptFuncs. */
-MESSAGE* findMessage(MSG_VIEWDATA *pViewdata, MESSAGE_TYPE type, UDWORD player);
+MESSAGE *findMessage(MSG_VIEWDATA *pViewdata, MESSAGE_TYPE type, UDWORD player);
 
 /** 'Displays' a proximity display. */
 void displayProximityMessage(PROXIMITY_DISPLAY *psProxDisp);

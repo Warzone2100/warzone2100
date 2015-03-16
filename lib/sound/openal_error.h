@@ -32,8 +32,8 @@
 # include <AL/alc.h>
 #endif
 
-extern ALenum __sound_GetError(const char* location_description);
-extern ALenum __sound_GetContextError(ALCdevice* device, const char* location_description);
+extern ALenum __sound_GetError(const char *location_description);
+extern ALenum __sound_GetContextError(ALCdevice *device, const char *location_description);
 
 /** Check whether an error occurred in OpenAL's current sound context. If one
  *  did occur, print an error message and return the error code.

@@ -96,11 +96,11 @@ static bool pushedKeyMap(UDWORD key)
 //			count++;
 //		}
 //	}
-	selectedKeyMap = (KEY_MAPPING *)widgGetFromID(psWScreen,key)->pUserData;
-	if(selectedKeyMap && selectedKeyMap->status != KEYMAP_ASSIGNABLE)
+	selectedKeyMap = (KEY_MAPPING *)widgGetFromID(psWScreen, key)->pUserData;
+	if (selectedKeyMap && selectedKeyMap->status != KEYMAP_ASSIGNABLE)
 	{
 		selectedKeyMap = NULL;
-	    audio_PlayTrack( ID_SOUND_BUILD_FAIL );
+		audio_PlayTrack(ID_SOUND_BUILD_FAIL);
 
 	}
 
@@ -111,68 +111,68 @@ static bool pushedKeyMap(UDWORD key)
 // ////////////////////////////////////////////////////////////////////////////
 static bool pushedKeyCombo(KEY_CODE subkey)
 {
-	KEY_CODE	metakey=KEY_IGNORE;
+	KEY_CODE	metakey = KEY_IGNORE;
 	KEY_MAPPING	*pExist;
-   	KEY_MAPPING	*psMapping;
+	KEY_MAPPING	*psMapping;
 	KEY_CODE	alt;
-   //	void (*function)(void);
-   //	KEY_ACTION	action;
-   //	KEY_STATUS	status;
-   //	char	name[255];
+	//	void (*function)(void);
+	//	KEY_ACTION	action;
+	//	KEY_STATUS	status;
+	//	char	name[255];
 
 	// check for
 	// alt
 	alt = (KEY_CODE)0;
-	if( keyDown(KEY_RALT) || keyDown(KEY_LALT) )
+	if (keyDown(KEY_RALT) || keyDown(KEY_LALT))
 	{
-		metakey= KEY_LALT;
+		metakey = KEY_LALT;
 		alt = KEY_RALT;
 	}
 
 	// ctrl
-	else if( keyDown(KEY_RCTRL) || keyDown(KEY_LCTRL) )
+	else if (keyDown(KEY_RCTRL) || keyDown(KEY_LCTRL))
 	{
 		metakey = KEY_LCTRL;
 		alt = KEY_RCTRL;
 	}
 
 	// shift
-	else if( keyDown(KEY_RSHIFT) || keyDown(KEY_LSHIFT) )
+	else if (keyDown(KEY_RSHIFT) || keyDown(KEY_LSHIFT))
 	{
 		metakey = KEY_LSHIFT;
 		alt = KEY_RSHIFT;
 	}
 
 	// meta (cmd)
-	else if( keyDown(KEY_RMETA) || keyDown(KEY_LMETA) )
+	else if (keyDown(KEY_RMETA) || keyDown(KEY_LMETA))
 	{
 		metakey = KEY_LMETA;
 		alt = KEY_RMETA;
 	}
 
 	// check if bound to a fixed combo.
-	pExist = keyFindMapping(  metakey,  subkey );
-	if(pExist && (pExist->status == KEYMAP_ALWAYS || pExist->status == KEYMAP_ALWAYS_PROCESS))
+	pExist = keyFindMapping(metakey,  subkey);
+	if (pExist && (pExist->status == KEYMAP_ALWAYS || pExist->status == KEYMAP_ALWAYS_PROCESS))
 	{
 		selectedKeyMap = NULL;	// unhighlght selected.
 		return false;
 	}
 
 	/* Clear down mappings using these keys... But only if it isn't unassigned */
-	keyReAssignMapping( metakey, subkey, KEY_IGNORE, (KEY_CODE)KEY_MAXSCAN );
+	keyReAssignMapping(metakey, subkey, KEY_IGNORE, (KEY_CODE)KEY_MAXSCAN);
 
 	/* Try and see if its there already - damn well should be! */
-	psMapping = keyGetMappingFromFunction((void*)selectedKeyMap->function);
+	psMapping = keyGetMappingFromFunction((void *)selectedKeyMap->function);
 
 	/* Cough if it's not there */
-	ASSERT( psMapping!=NULL,"Trying to patch a non-existant function mapping - whoop whoop!!!" );
+	ASSERT(psMapping != NULL, "Trying to patch a non-existant function mapping - whoop whoop!!!");
 
 	/* Now alter it to the new values */
 	psMapping->metaKeyCode = metakey;
 	psMapping->subKeyCode = subkey;
 	// was "=="
 	psMapping->status = KEYMAP_ASSIGNABLE; //must be
-	if(alt)
+	if (alt)
 	{
 		psMapping->altMetaKeyCode = alt;
 	}
@@ -184,24 +184,24 @@ static bool pushedKeyCombo(KEY_CODE subkey)
 
 
 	// unbind old mapping with this combo.
-//	function = selectedKeyMap->function;
-//	action = selectedKeyMap->action;
-//	status = selectedKeyMap->status;
-//	sstrcpy(name, selectedKeyMap->pName);
-//	keyRemoveMappingPt(selectedKeyMap);
+	//	function = selectedKeyMap->function;
+	//	action = selectedKeyMap->action;
+	//	status = selectedKeyMap->status;
+	//	sstrcpy(name, selectedKeyMap->pName);
+	//	keyRemoveMappingPt(selectedKeyMap);
 
 	keyAddMapping(status,metakey,subkey,action,function,name);
 
 	// add new binding.
-//	keyReAssignMapping( selectedKeyMap->metaKeyCode, selectedKeyMap->subKeyCode, metakey, subkey);
-  //	keyAddMapping(
+	//	keyReAssignMapping( selectedKeyMap->metaKeyCode, selectedKeyMap->subKeyCode, metakey, subkey);
+	//	keyAddMapping(
 
 	selectedKeyMap->metaKeyCode = metakey;
 	selectedKeyMap->subKeyCode = subkey;
 
-// readd the widgets.
-//	widgDelete(psWScreen,FRONTEND_BACKDROP);
-//	startKeyMapEditor(false);
+	// readd the widgets.
+	//	widgDelete(psWScreen,FRONTEND_BACKDROP);
+	//	startKeyMapEditor(false);
 
 	*/
 	selectedKeyMap = NULL;	// unhighlght selected .
@@ -212,19 +212,19 @@ static bool pushedKeyCombo(KEY_CODE subkey)
 static KEY_CODE scanKeyBoardForBinding(void)
 {
 	UDWORD i;
-	for(i = 0; i < KEY_MAXSCAN; i++)
+	for (i = 0; i < KEY_MAXSCAN; i++)
 	{
-		if(keyPressed((KEY_CODE)i))
+		if (keyPressed((KEY_CODE)i))
 		{
-			if(i !=	KEY_RALT			// exceptions
-			&& i !=	KEY_LALT
-			&& i != KEY_RCTRL
-			&& i != KEY_LCTRL
-			&& i != KEY_RSHIFT
-			&& i != KEY_LSHIFT
-			&& i != KEY_LMETA
-			&& i != KEY_RMETA
-			)
+			if (i !=	KEY_RALT			// exceptions
+			    && i !=	KEY_LALT
+			    && i != KEY_RCTRL
+			    && i != KEY_LCTRL
+			    && i != KEY_RSHIFT
+			    && i != KEY_LSHIFT
+			    && i != KEY_LMETA
+			    && i != KEY_RMETA
+			   )
 			{
 				return (KEY_CODE)i;             // top row key pressed
 			}
@@ -237,26 +237,26 @@ static KEY_CODE scanKeyBoardForBinding(void)
 bool runKeyMapEditor(void)
 {
 	WidgetTriggers const &triggers = widgRunScreen(psWScreen);
-	unsigned id = triggers.empty()? 0 : triggers.front().widget->id;  // Just use first click here, since the next click could be on another menu.
+	unsigned id = triggers.empty() ? 0 : triggers.front().widget->id; // Just use first click here, since the next click could be on another menu.
 
-	if(id == KM_RETURN)			// return
+	if (id == KM_RETURN)			// return
 	{
 		saveKeyMap();
 		changeTitleMode(OPTIONS);
 	}
-	if(id == KM_DEFAULT)
+	if (id == KM_DEFAULT)
 	{
 		keyClearMappings();
 		keyInitMappings(true);
-		widgDelete(psWScreen,FRONTEND_BACKDROP);// readd the widgets
+		widgDelete(psWScreen, FRONTEND_BACKDROP); // readd the widgets
 		startKeyMapEditor(false);
 	}
-	else if( id>=KM_START && id<=KM_END)
+	else if (id >= KM_START && id <= KM_END)
 	{
-		 pushedKeyMap(id);
+		pushedKeyMap(id);
 	}
 
-	if(selectedKeyMap)
+	if (selectedKeyMap)
 	{
 		KEY_CODE kc = scanKeyBoardForBinding();
 		if (kc)
@@ -280,22 +280,22 @@ bool runKeyMapEditor(void)
 static bool keyMapToString(char *pStr, KEY_MAPPING *psMapping)
 {
 	bool	onlySub = true;
-	char	asciiSub[20],asciiMeta[20];
+	char	asciiSub[20], asciiMeta[20];
 
-	if(psMapping->metaKeyCode!=KEY_IGNORE)
+	if (psMapping->metaKeyCode != KEY_IGNORE)
 	{
-		keyScanToString(psMapping->metaKeyCode,(char *)&asciiMeta,20);
+		keyScanToString(psMapping->metaKeyCode, (char *)&asciiMeta, 20);
 		onlySub = false;
 	}
-	keyScanToString(psMapping->subKeyCode,(char *)&asciiSub,20);
+	keyScanToString(psMapping->subKeyCode, (char *)&asciiSub, 20);
 
-	if(onlySub)
+	if (onlySub)
 	{
-		sprintf(pStr,"%s",asciiSub);
+		sprintf(pStr, "%s", asciiSub);
 	}
 	else
 	{
-		sprintf(pStr,"%s %s", asciiMeta, asciiSub);
+		sprintf(pStr, "%s %s", asciiMeta, asciiSub);
 	}
 	return true;
 }
@@ -304,25 +304,25 @@ static bool keyMapToString(char *pStr, KEY_MAPPING *psMapping)
 // display a keymap on the interface.
 static void displayKeyMap(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
-	UDWORD		x = xOffset+psWidget->x;
-	UDWORD		y = yOffset+psWidget->y;
+	UDWORD		x = xOffset + psWidget->x;
+	UDWORD		y = yOffset + psWidget->y;
 	UDWORD		w = psWidget->width;
 	UDWORD		h = psWidget->height;
-	KEY_MAPPING *psMapping = (KEY_MAPPING*)psWidget->pUserData;
+	KEY_MAPPING *psMapping = (KEY_MAPPING *)psWidget->pUserData;
 	char		sKey[MAX_STR_LENGTH];
 
-	if(psMapping == selectedKeyMap)
+	if (psMapping == selectedKeyMap)
 	{
 		pie_BoxFill(x, y, x + w, y + h, WZCOL_KEYMAP_ACTIVE);
 	}
-	else if(psMapping->status == KEYMAP_ALWAYS || psMapping->status == KEYMAP_ALWAYS_PROCESS)
+	else if (psMapping->status == KEYMAP_ALWAYS || psMapping->status == KEYMAP_ALWAYS_PROCESS)
 	{
 		// when user can't edit something...
 		pie_BoxFill(x, y , x + w, y + h, WZCOL_KEYMAP_FIXED);
 	}
 	else
 	{
-		drawBlueBox(x,y,w,h);
+		drawBlueBox(x, y, w, h);
 	}
 
 	// draw name
@@ -346,13 +346,13 @@ static void displayKeyMap(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_D
 bool startKeyMapEditor(bool first)
 {
 	KEY_MAPPING	*psMapping;
-	UDWORD		i,mapcount =0;
+	UDWORD		i, mapcount = 0;
 	UDWORD		bubbleCount;
-	bool		bAtEnd,bGotOne;
+	bool		bAtEnd, bGotOne;
 	KEY_MAPPING	*psPresent = NULL, *psNext;
 	char		test[255];
 	addBackdrop();
-	addSideText	(FRONTEND_SIDETEXT ,KM_SX,KM_Y,_("KEY MAPPING"));
+	addSideText(FRONTEND_SIDETEXT , KM_SX, KM_Y, _("KEY MAPPING"));
 
 	if (first)
 	{
@@ -370,17 +370,17 @@ bool startKeyMapEditor(bool first)
 	widgAddForm(psWScreen, &sFormInit);
 
 
-	addMultiBut(psWScreen,KM_FORM,KM_RETURN,			// return button.
-					8,5,
-					iV_GetImageWidth(FrontImages,IMAGE_RETURN),
-					iV_GetImageHeight(FrontImages,IMAGE_RETURN),
-					_("Return To Previous Screen"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
+	addMultiBut(psWScreen, KM_FORM, KM_RETURN,			// return button.
+	            8, 5,
+	            iV_GetImageWidth(FrontImages, IMAGE_RETURN),
+	            iV_GetImageHeight(FrontImages, IMAGE_RETURN),
+	            _("Return To Previous Screen"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
 
-	addMultiBut(psWScreen,KM_FORM,KM_DEFAULT,
-				11,45,
-				56,38,
-				_("Select Default"),
-				IMAGE_KEYMAP_DEFAULT, IMAGE_KEYMAP_DEFAULT_HI, IMAGE_KEYMAP_DEFAULT_HI);	// default.
+	addMultiBut(psWScreen, KM_FORM, KM_DEFAULT,
+	            11, 45,
+	            56, 38,
+	            _("Select Default"),
+	            IMAGE_KEYMAP_DEFAULT, IMAGE_KEYMAP_DEFAULT_HI, IMAGE_KEYMAP_DEFAULT_HI);	// default.
 
 
 	/* Better be none that come after this...! */
@@ -388,12 +388,12 @@ bool startKeyMapEditor(bool first)
 	psMapping = NULL;
 
 	//count mappings required.
-	for(psMapping = keyMappings; psMapping; psMapping = psMapping->psNext)
+	for (psMapping = keyMappings; psMapping; psMapping = psMapping->psNext)
 	{
-		if( (psMapping->status!=KEYMAP__DEBUG)&&(psMapping->status!=KEYMAP___HIDE))		// if it's not a debug mapping..
+		if ((psMapping->status != KEYMAP__DEBUG) && (psMapping->status != KEYMAP___HIDE))		// if it's not a debug mapping..
 		{
 			mapcount++;
-			if(strcmp(psMapping->pName,test) < 0)
+			if (strcmp(psMapping->pName, test) < 0)
 			{
 				/* Best one found so far */
 				sstrcpy(test, psMapping->pName);
@@ -409,20 +409,20 @@ bool startKeyMapEditor(bool first)
 	sFormInit.style			= WFORM_TABBED;
 	sFormInit.x			= 50;
 	sFormInit.y			= 10;
-	sFormInit.width			= KM_W- 100;
-	sFormInit.height		= KM_H- 4;
+	sFormInit.width			= KM_W - 100;
+	sFormInit.height		= KM_H - 4;
 	sFormInit.numMajor		= numForms(mapcount, BUTTONSPERKEYMAPPAGE);
 	sFormInit.majorPos		= WFORM_TABTOP;
 	sFormInit.minorPos		= WFORM_TABNONE;
-	sFormInit.majorSize		= OBJ_TABWIDTH+3;
+	sFormInit.majorSize		= OBJ_TABWIDTH + 3;
 	sFormInit.majorOffset		= OBJ_TABOFFSET;
-	sFormInit.tabVertOffset		= (OBJ_TABHEIGHT/2);
+	sFormInit.tabVertOffset		= (OBJ_TABHEIGHT / 2);
 	sFormInit.tabMajorThickness 	= OBJ_TABHEIGHT;
 	sFormInit.pUserData		= &StandardTab;
 	sFormInit.pTabDisplay		= intDisplayTab;
 
 	// TABFIXME: Special case for tabs, since this one has whole screen to itself. No need to modify(?)
-	for (i=0; i< sFormInit.numMajor; i++)
+	for (i = 0; i < sFormInit.numMajor; i++)
 	{
 		sFormInit.aNumMinors[i] = 1;
 	}
@@ -440,52 +440,52 @@ bool startKeyMapEditor(bool first)
 
 
 	/* Add our first mapping to the form */
-	sButInit.pUserData= psPresent;
+	sButInit.pUserData = psPresent;
 	widgAddButton(psWScreen, &sButInit);
 	sButInit.id++;
-	sButInit.y +=  KM_ENTRYH +3;
+	sButInit.y +=  KM_ENTRYH + 3;
 
 	/* Now add the others... */
 	bubbleCount = 0;
 	bAtEnd = false;
 	/* Stop when the right number or when aphabetically last - not sure...! */
-	while(bubbleCount<mapcount-1 && !bAtEnd)
+	while (bubbleCount < mapcount - 1 && !bAtEnd)
 	{
 		/* Same test as before for upper limit */
-	 	sstrcpy(test, "zzzzzzzzzzzzzzzzzzzzz");
-		for(psMapping = keyMappings,psNext = NULL,bGotOne = false; psMapping; psMapping = psMapping->psNext)
+		sstrcpy(test, "zzzzzzzzzzzzzzzzzzzzz");
+		for (psMapping = keyMappings, psNext = NULL, bGotOne = false; psMapping; psMapping = psMapping->psNext)
 		{
 			/* Only certain mappings get displayed */
-			if( (psMapping->status!=KEYMAP__DEBUG)&&(psMapping->status!=KEYMAP___HIDE))		// if it's not a debug mapping..
+			if ((psMapping->status != KEYMAP__DEBUG) && (psMapping->status != KEYMAP___HIDE))		// if it's not a debug mapping..
 			{
 				/* If it's alphabetically good but better then next one */
-				if(strcmp(psMapping->pName,test) < 0 && strcmp(psMapping->pName,psPresent->pName) > 0)
+				if (strcmp(psMapping->pName, test) < 0 && strcmp(psMapping->pName, psPresent->pName) > 0)
 				{
 					/* Keep a record of it */
 					sstrcpy(test, psMapping->pName);
-				   	psNext = psMapping;
+					psNext = psMapping;
 					bGotOne = true;
 				}
 			}
 		}
 		/* We found one matching criteria */
-		if(bGotOne)
+		if (bGotOne)
 		{
 			psPresent = psNext;
 			bubbleCount++;
-			sButInit.pUserData= psNext;
-	 		widgAddButton(psWScreen, &sButInit);
-			 					// move on..
-	 		sButInit.id++;
-		  	/* Might be no more room on the page */
-			if (  (sButInit.y + KM_ENTRYH+5 ) > (3+ (BUTTONSPERKEYMAPPAGE*(KM_ENTRYH+3))))
+			sButInit.pUserData = psNext;
+			widgAddButton(psWScreen, &sButInit);
+			// move on..
+			sButInit.id++;
+			/* Might be no more room on the page */
+			if ((sButInit.y + KM_ENTRYH + 5) > (3 + (BUTTONSPERKEYMAPPAGE * (KM_ENTRYH + 3))))
 			{
 				sButInit.y = 16;
 				sButInit.majorID += 1;
 			}
 			else
 			{
-				sButInit.y +=  KM_ENTRYH +3;
+				sButInit.y +=  KM_ENTRYH + 3;
 			}
 		}
 		else
@@ -511,11 +511,12 @@ bool saveKeyMap(void)
 	char		name[128];
 	PHYSFS_file *pfile;
 
-  // KeyMapPath
+	// KeyMapPath
 	debug(LOG_WZ, "We are to write %s for keymap info", KeyMapPath);
 	pfile = PHYSFS_openWrite(KeyMapPath);
 	if (!pfile)
-	{	// NOTE: Changed to LOG_FATAL, since we want to inform user via pop-up (windows only)
+	{
+		// NOTE: Changed to LOG_FATAL, since we want to inform user via pop-up (windows only)
 		debug(LOG_FATAL, "saveKeyMap: %s could not be created: %s", KeyMapPath, PHYSFS_getLastError());
 		assert(false);
 		return false;
@@ -538,7 +539,7 @@ bool saveKeyMap(void)
 	WRITE(&count, sizeof(count));
 	WRITE(&keymapVersion, 8);
 
-	for(psMapping = keyMappings; psMapping; psMapping = psMapping->psNext)
+	for (psMapping = keyMappings; psMapping; psMapping = psMapping->psNext)
 	{
 		// save this map.
 		// name
@@ -552,9 +553,9 @@ bool saveKeyMap(void)
 
 		// function to map to!
 		for (count = 0;  keyMapSaveTable[count] != NULL && keyMapSaveTable[count] != psMapping->function; count++) {}
-		if(keyMapSaveTable[count] == NULL)
+		if (keyMapSaveTable[count] == NULL)
 		{
-			debug( LOG_FATAL, "can't find keymapped function %s in the keymap save table at %d!", name, count );
+			debug(LOG_FATAL, "can't find keymapped function %s in the keymap save table at %d!", name, count);
 			abort();
 		}
 		WRITE(&count, sizeof(count));
@@ -600,7 +601,7 @@ bool loadKeyMap(void)
 	{
 		// NOTE: Changed to LOG_FATAL, since we want to inform user via pop-up (windows only)
 		debug(LOG_FATAL, "loadKeyMap: [directory: %s] %s could not be opened: %s", PHYSFS_getRealDir(KeyMapPath),
-			KeyMapPath, PHYSFS_getLastError());
+		      KeyMapPath, PHYSFS_getLastError());
 		assert(false);
 		return false;
 	}
@@ -627,7 +628,8 @@ bool loadKeyMap(void)
 		return false;
 	}
 
-	for(; count > 0; count--) {
+	for (; count > 0; count--)
+	{
 		READ(&name, 128);	// name
 		READ(&status, sizeof(KEY_STATUS));	// status
 		READ(&metaCode, sizeof(KEY_CODE));	// metakey
@@ -636,7 +638,7 @@ bool loadKeyMap(void)
 		READ(&funcmap, sizeof(funcmap));	// function
 
 		// add mapping
-		keyAddMapping( status, metaCode, subCode, action, keyMapSaveTable[funcmap],(char*)&name);
+		keyAddMapping(status, metaCode, subCode, action, keyMapSaveTable[funcmap], (char *)&name);
 	}
 
 	if (!PHYSFS_close(pfile))

@@ -42,27 +42,27 @@ enum
 
 enum
 {
-RID_ROCKET,
-RID_CANNON,
-RID_HOVERCRAFT,
-RID_ECM,
-RID_PLASCRETE,
-RID_TRACKS,
-RID_DROIDTECH,
-RID_WEAPONTECH,
-RID_COMPUTERTECH,
-RID_POWERTECH,
-RID_SYSTEMTECH,
-RID_STRUCTURETECH,
-RID_CYBORGTECH,
-RID_DEFENCE,
-RID_QUESTIONMARK,
-RID_GRPACC,
-RID_GRPUPG,
-RID_GRPREP,
-RID_GRPROF,
-RID_GRPDAM,
-RID_MAXRID
+	RID_ROCKET,
+	RID_CANNON,
+	RID_HOVERCRAFT,
+	RID_ECM,
+	RID_PLASCRETE,
+	RID_TRACKS,
+	RID_DROIDTECH,
+	RID_WEAPONTECH,
+	RID_COMPUTERTECH,
+	RID_POWERTECH,
+	RID_SYSTEMTECH,
+	RID_STRUCTURETECH,
+	RID_CYBORGTECH,
+	RID_DEFENCE,
+	RID_QUESTIONMARK,
+	RID_GRPACC,
+	RID_GRPUPG,
+	RID_GRPREP,
+	RID_GRPROF,
+	RID_GRPDAM,
+	RID_MAXRID
 };
 
 
@@ -110,7 +110,7 @@ extern bool ResearchShutDown(void);
 extern void ResearchRelease(void);
 
 /* For a given view data get the research this is related to */
-extern RESEARCH * getResearch(const char *pName);
+extern RESEARCH *getResearch(const char *pName);
 
 /* sets the status of the topic to cancelled and stores the current research
    points accquired */
@@ -131,7 +131,7 @@ extern void researchReward(UBYTE losingPlayer, UBYTE rewardPlayer);
 /*check to see if any research has been completed that enables self repair*/
 extern bool selfRepairEnabled(UBYTE player);
 
-extern SDWORD	mapRIDToIcon( UDWORD rid );
+extern SDWORD	mapRIDToIcon(UDWORD rid);
 extern SDWORD	mapIconToRID(UDWORD iconID);
 extern bool checkResearchStats(void);
 

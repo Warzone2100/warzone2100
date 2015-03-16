@@ -235,7 +235,7 @@ typedef enum
 	CLI_FALLBACKMODE,
 } CLI_OPTIONS;
 
-static const struct poptOption* getOptionsTable(void)
+static const struct poptOption *getOptionsTable(void)
 {
 	static const struct poptOption optionsTable[] =
 	{
@@ -260,7 +260,7 @@ static const struct poptOption* getOptionsTable(void)
 		{ "noshadows",  '\0', POPT_ARG_NONE,   NULL, CLI_NOSHADOWS,  N_("Disable shadows"),                   NULL },
 		{ "sound",      '\0', POPT_ARG_NONE,   NULL, CLI_SOUND,      N_("Enable sound"),                      NULL },
 		{ "nosound",    '\0', POPT_ARG_NONE,   NULL, CLI_NOSOUND,    N_("Disable sound"),                     NULL },
-		{ "join",       '\0', POPT_ARG_STRING, NULL, CLI_CONNECTTOIP,N_("connect directly to IP/hostname"),   N_("host") },
+		{ "join",       '\0', POPT_ARG_STRING, NULL, CLI_CONNECTTOIP, N_("connect directly to IP/hostname"),   N_("host") },
 		{ "host",       '\0', POPT_ARG_NONE,   NULL, CLI_HOSTLAUNCH, N_("go directly to host screen"),        NULL },
 		{ "texturecompression", '\0', POPT_ARG_NONE, NULL, CLI_TEXTURECOMPRESSION, N_("Enable texture compression"), NULL },
 		{ "notexturecompression", '\0', POPT_ARG_NONE, NULL, CLI_NOTEXTURECOMPRESSION, N_("Disable texture compression"), NULL },
@@ -283,10 +283,14 @@ static const struct poptOption* getOptionsTable(void)
 
 			// If there is a description, make sure to translate it with gettext
 			if (TranslatedOptionsTable[i].descrip != NULL)
+			{
 				TranslatedOptionsTable[i].descrip = gettext(TranslatedOptionsTable[i].descrip);
+			}
 
 			if (TranslatedOptionsTable[i].argDescrip != NULL)
+			{
 				TranslatedOptionsTable[i].argDescrip = gettext(TranslatedOptionsTable[i].argDescrip);
+			}
 		}
 
 		translated = true;
@@ -304,20 +308,20 @@ static const struct poptOption* getOptionsTable(void)
  * \param argc number of arguments given
  * \param argv string array of the arguments
  * \return Returns true on success, false on error */
-bool ParseCommandLineEarly(int argc, const char** argv)
+bool ParseCommandLineEarly(int argc, const char **argv)
 {
 	poptContext poptCon = poptGetContext(NULL, argc, argv, getOptionsTable(), 0);
 	int iOption;
 
 #if defined(WZ_OS_MAC) && defined(DEBUG)
-	debug_enable_switch( "all" );
+	debug_enable_switch("all");
 #endif /* WZ_OS_MAC && DEBUG */
 
 	/* loop through command line */
 	while ((iOption = poptGetNextOpt(poptCon)) > 0 || iOption == POPT_ERROR_BADOPT)
 	{
 		CLI_OPTIONS option = (CLI_OPTIONS)iOption;
-		const char* token;
+		const char *token;
 
 		if (iOption == POPT_ERROR_BADOPT)
 		{
@@ -326,57 +330,57 @@ bool ParseCommandLineEarly(int argc, const char** argv)
 
 		switch (option)
 		{
-			case CLI_DEBUG:
-				// retrieve the debug section name
-				token = poptGetOptArg(poptCon);
-				if (token == NULL)
-				{
-					qFatal("Usage: --debug=<flag>");
-				}
+		case CLI_DEBUG:
+			// retrieve the debug section name
+			token = poptGetOptArg(poptCon);
+			if (token == NULL)
+			{
+				qFatal("Usage: --debug=<flag>");
+			}
 
-				// Attempt to enable the given debug section
-				if (!debug_enable_switch(token))
-				{
-					qFatal("Debug flag \"%s\" not found!", token);
-				}
-				break;
+			// Attempt to enable the given debug section
+			if (!debug_enable_switch(token))
+			{
+				qFatal("Debug flag \"%s\" not found!", token);
+			}
+			break;
 
-			case CLI_DEBUGFILE:
-				// find the file name
-				token = poptGetOptArg(poptCon);
-				if (token == NULL)
-				{
-					qFatal("Missing debugfile filename?");
-				}
-				debug_register_callback( debug_callback_file, debug_callback_file_init, debug_callback_file_exit, (void*)token );
-				customDebugfile = true;
-				break;
+		case CLI_DEBUGFILE:
+			// find the file name
+			token = poptGetOptArg(poptCon);
+			if (token == NULL)
+			{
+				qFatal("Missing debugfile filename?");
+			}
+			debug_register_callback(debug_callback_file, debug_callback_file_init, debug_callback_file_exit, (void *)token);
+			customDebugfile = true;
+			break;
 
-			case CLI_FLUSHDEBUGSTDERR:
-				// Tell the debug stderr output callback to always flush its output
-				debugFlushStderr();
-				break;
+		case CLI_FLUSHDEBUGSTDERR:
+			// Tell the debug stderr output callback to always flush its output
+			debugFlushStderr();
+			break;
 
-			case CLI_CONFIGDIR:
-				// retrieve the configuration directory
-				token = poptGetOptArg(poptCon);
-				if (token == NULL)
-				{
-					qFatal("Unrecognised configuration directory");
-				}
-				sstrcpy(configdir, token);
-				break;
+		case CLI_CONFIGDIR:
+			// retrieve the configuration directory
+			token = poptGetOptArg(poptCon);
+			if (token == NULL)
+			{
+				qFatal("Unrecognised configuration directory");
+			}
+			sstrcpy(configdir, token);
+			break;
 
-			case CLI_HELP:
-				poptPrintHelp(poptCon, stdout, 0);
-				return false;
+		case CLI_HELP:
+			poptPrintHelp(poptCon, stdout, 0);
+			return false;
 
-			case CLI_VERSION:
-				printf("Warzone 2100 - %s\n", version_getFormattedVersionString());
-				return false;
+		case CLI_VERSION:
+			printf("Warzone 2100 - %s\n", version_getFormattedVersionString());
+			return false;
 
-			default:
-				break;
+		default:
+			break;
 		};
 	}
 
@@ -390,7 +394,7 @@ bool ParseCommandLineEarly(int argc, const char** argv)
  * \param argc number of arguments given
  * \param argv string array of the arguments
  * \return Returns true on success, false on error */
-bool ParseCommandLine(int argc, const char** argv)
+bool ParseCommandLine(int argc, const char **argv)
 {
 	poptContext poptCon = poptGetContext(NULL, argc, argv, getOptionsTable(), 0);
 	int iOption;
@@ -398,84 +402,84 @@ bool ParseCommandLine(int argc, const char** argv)
 	/* loop through command line */
 	while ((iOption = poptGetNextOpt(poptCon)) > 0)
 	{
-		const char* token;
+		const char *token;
 		CLI_OPTIONS option = (CLI_OPTIONS)iOption;
 
 		switch (option)
 		{
-			case CLI_DEBUG:
-			case CLI_DEBUGFILE:
-			case CLI_FLUSHDEBUGSTDERR:
-			case CLI_CONFIGDIR:
-			case CLI_HELP:
-			case CLI_VERSION:
-				// These options are parsed in ParseCommandLineEarly() already, so ignore them
-				break;
+		case CLI_DEBUG:
+		case CLI_DEBUGFILE:
+		case CLI_FLUSHDEBUGSTDERR:
+		case CLI_CONFIGDIR:
+		case CLI_HELP:
+		case CLI_VERSION:
+			// These options are parsed in ParseCommandLineEarly() already, so ignore them
+			break;
 
-			case CLI_NOASSERT:
-				kf_NoAssert();
-				break;
+		case CLI_NOASSERT:
+			kf_NoAssert();
+			break;
 
-			// NOTE: The sole purpose of this is to test the crash handler.
-			case CLI_CRASH:
-				CauseCrash = true;
-				NetPlay.bComms = false;
-				sstrcpy(aLevelName, "CAM_3A");
-				SetGameMode(GS_NORMAL);
-				break;
+		// NOTE: The sole purpose of this is to test the crash handler.
+		case CLI_CRASH:
+			CauseCrash = true;
+			NetPlay.bComms = false;
+			sstrcpy(aLevelName, "CAM_3A");
+			SetGameMode(GS_NORMAL);
+			break;
 
-			case CLI_DATADIR:
-				// retrieve the quoted path name
-				token = poptGetOptArg(poptCon);
-				if (token == NULL)
-				{
-					qFatal("Unrecognised datadir");
-				}
-				sstrcpy(datadir, token);
-				break;
+		case CLI_DATADIR:
+			// retrieve the quoted path name
+			token = poptGetOptArg(poptCon);
+			if (token == NULL)
+			{
+				qFatal("Unrecognised datadir");
+			}
+			sstrcpy(datadir, token);
+			break;
 
-			case CLI_FULLSCREEN:
-				war_setFullscreen(true);
-				break;
-			case CLI_CONNECTTOIP:
-				//get the ip we want to connect with, and go directly to join screen.
-				token = poptGetOptArg(poptCon);
-				if (token == NULL)
-				{
-					qFatal("No IP/hostname given");
-				}
-				sstrcpy(iptoconnect, token);
-				break;
-			case CLI_HOSTLAUNCH:
-				// go directly to host screen, bypass all others.
-				hostlaunch = true;
-				break;
-			case CLI_GAME:
-				// retrieve the game name
-				token = poptGetOptArg(poptCon);
-				if (token == NULL
-				    || (strcmp(token, "CAM_1A") && strcmp(token, "CAM_2A") && strcmp(token, "CAM_3A")
-				        && strcmp(token, "TUTORIAL3") && strcmp(token, "FASTPLAY")))
-				{
-					qFatal("The game parameter requires one of the following keywords:"
-					       "CAM_1A, CAM_2A, CAM_3A, TUTORIAL3, or FASTPLAY.");
-				}
-				NetPlay.bComms = false;
-				bMultiPlayer = false;
-				bMultiMessages = false;
-				NetPlay.players[0].allocated = true;
-				if (!strcmp(token, "CAM_1A") || !strcmp(token, "CAM_2A") || !strcmp(token, "CAM_3A"))
-				{
-					game.type = CAMPAIGN;
-				}
-				else
-				{
-					game.type = SKIRMISH; // tutorial is skirmish for some reason
-				}
-				sstrcpy(aLevelName, token);
-				SetGameMode(GS_NORMAL);
-				break;
-			case CLI_MOD_GLOB:
+		case CLI_FULLSCREEN:
+			war_setFullscreen(true);
+			break;
+		case CLI_CONNECTTOIP:
+			//get the ip we want to connect with, and go directly to join screen.
+			token = poptGetOptArg(poptCon);
+			if (token == NULL)
+			{
+				qFatal("No IP/hostname given");
+			}
+			sstrcpy(iptoconnect, token);
+			break;
+		case CLI_HOSTLAUNCH:
+			// go directly to host screen, bypass all others.
+			hostlaunch = true;
+			break;
+		case CLI_GAME:
+			// retrieve the game name
+			token = poptGetOptArg(poptCon);
+			if (token == NULL
+			    || (strcmp(token, "CAM_1A") && strcmp(token, "CAM_2A") && strcmp(token, "CAM_3A")
+			        && strcmp(token, "TUTORIAL3") && strcmp(token, "FASTPLAY")))
+			{
+				qFatal("The game parameter requires one of the following keywords:"
+				       "CAM_1A, CAM_2A, CAM_3A, TUTORIAL3, or FASTPLAY.");
+			}
+			NetPlay.bComms = false;
+			bMultiPlayer = false;
+			bMultiMessages = false;
+			NetPlay.players[0].allocated = true;
+			if (!strcmp(token, "CAM_1A") || !strcmp(token, "CAM_2A") || !strcmp(token, "CAM_3A"))
+			{
+				game.type = CAMPAIGN;
+			}
+			else
+			{
+				game.type = SKIRMISH; // tutorial is skirmish for some reason
+			}
+			sstrcpy(aLevelName, token);
+			SetGameMode(GS_NORMAL);
+			break;
+		case CLI_MOD_GLOB:
 			{
 				unsigned int i;
 
@@ -495,7 +499,7 @@ bool ParseCommandLine(int argc, const char** argv)
 				global_mods[i] = strdup(token);
 				break;
 			}
-			case CLI_MOD_CA:
+		case CLI_MOD_CA:
 			{
 				unsigned int i;
 
@@ -515,7 +519,7 @@ bool ParseCommandLine(int argc, const char** argv)
 				campaign_mods[i] = strdup(token);
 				break;
 			}
-			case CLI_MOD_MP:
+		case CLI_MOD_MP:
 			{
 				unsigned int i;
 
@@ -534,20 +538,22 @@ bool ParseCommandLine(int argc, const char** argv)
 				multiplay_mods[i] = strdup(token);
 				break;
 			}
-			case CLI_RESOLUTION:
+		case CLI_RESOLUTION:
 			{
 				unsigned int width, height;
 
 				token = poptGetOptArg(poptCon);
-				if (sscanf(token, "%ix%i", &width, &height ) != 2 )
+				if (sscanf(token, "%ix%i", &width, &height) != 2)
 				{
 					qFatal("Invalid parameter specified (format is WIDTHxHEIGHT, e.g. 800x600)");
 				}
-				if (width < 640) {
+				if (width < 640)
+				{
 					debug(LOG_ERROR, "Screen width < 640 unsupported, using 640");
 					width = 640;
 				}
-				if (height < 480) {
+				if (height < 480)
+				{
 					debug(LOG_ERROR, "Screen height < 480 unsupported, using 480");
 					height = 480;
 				}
@@ -559,48 +565,48 @@ bool ParseCommandLine(int argc, const char** argv)
 				war_SetHeight(height);
 				break;
 			}
-			case CLI_SAVEGAME:
-				// retrieve the game name
-				token = poptGetOptArg(poptCon);
-				if (token == NULL)
-				{
-					qFatal("Unrecognised savegame name");
-				}
-				snprintf(saveGameName, sizeof(saveGameName), "%s/%s", SaveGamePath, token);
-				SetGameMode(GS_SAVEGAMELOAD);
-				break;
+		case CLI_SAVEGAME:
+			// retrieve the game name
+			token = poptGetOptArg(poptCon);
+			if (token == NULL)
+			{
+				qFatal("Unrecognised savegame name");
+			}
+			snprintf(saveGameName, sizeof(saveGameName), "%s/%s", SaveGamePath, token);
+			SetGameMode(GS_SAVEGAMELOAD);
+			break;
 
-			case CLI_WINDOW:
-				war_setFullscreen(false);
-				break;
+		case CLI_WINDOW:
+			war_setFullscreen(false);
+			break;
 
-			case CLI_SHADOWS:
-				setDrawShadows(true);
-				break;
+		case CLI_SHADOWS:
+			setDrawShadows(true);
+			break;
 
-			case CLI_NOSHADOWS:
-				setDrawShadows(false);
-				break;
+		case CLI_NOSHADOWS:
+			setDrawShadows(false);
+			break;
 
-			case CLI_SOUND:
-				war_setSoundEnabled(true);
-				break;
+		case CLI_SOUND:
+			war_setSoundEnabled(true);
+			break;
 
-			case CLI_NOSOUND:
-				war_setSoundEnabled(false);
-				break;
+		case CLI_NOSOUND:
+			war_setSoundEnabled(false);
+			break;
 
-			case CLI_TEXTURECOMPRESSION:
-				wz_texture_compression = GL_COMPRESSED_RGBA_ARB;
-				break;
+		case CLI_TEXTURECOMPRESSION:
+			wz_texture_compression = GL_COMPRESSED_RGBA_ARB;
+			break;
 
-			case CLI_NOTEXTURECOMPRESSION:
-				wz_texture_compression = GL_RGBA;
-				break;
+		case CLI_NOTEXTURECOMPRESSION:
+			wz_texture_compression = GL_RGBA;
+			break;
 
-			case CLI_FALLBACKMODE:
-				war_SetShaders(SHADERS_OFF);
-				break;
+		case CLI_FALLBACKMODE:
+			war_SetShaders(SHADERS_OFF);
+			break;
 		};
 	}
 

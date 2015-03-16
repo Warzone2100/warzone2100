@@ -79,7 +79,7 @@ struct iIMDPoly
 
 struct iIMDShape
 {
-	unsigned int flags;	
+	unsigned int flags;
 	int texpage;
 	int tcmaskpage;
 	int normalpage;

@@ -268,7 +268,7 @@ UINT16 bitindex = 0;
 void (*read_format)(JPEG_ENCODER_STRUCTURE *jpeg_encoder_structure, UINT8 *input_ptr);
 
 
-static void quantization(INT16* data, UINT8* zigzag_table, INT16* Temp, UINT16* quant_table_ptr)
+static void quantization(INT16 *data, UINT8 *zigzag_table, INT16 *Temp, UINT16 *quant_table_ptr)
 {
 	INT16 i;
 	INT32 value;
@@ -295,7 +295,9 @@ static void read_400_format(JPEG_ENCODER_STRUCTURE *jpeg_encoder_structure, UINT
 	for (i = rows; i > 0; i--)
 	{
 		for (j = cols; j > 0; j--)
+		{
 			*Y1_Ptr++ = (*input_ptr++) - 128;
+		}
 
 		for (j = 8 - cols; j > 0; j--)
 		{
@@ -339,7 +341,7 @@ static void read_422_format(JPEG_ENCODER_STRUCTURE *jpeg_encoder_structure, UINT
 	else
 	{
 		Y1_cols = 8;
-		Y2_cols = (UINT16) (cols - 8);
+		Y2_cols = (UINT16)(cols - 8);
 	}
 
 	for (i = rows; i > 0; i--)
@@ -430,7 +432,7 @@ static void read_rgb24_format(JPEG_ENCODER_STRUCTURE *jpeg_encoder_structure, UI
 	else
 	{
 		Y1_cols = 8;
-		Y2_cols = (UINT16) (cols - 8);
+		Y2_cols = (UINT16)(cols - 8);
 	}
 
 	for (i = rows; i > 0; i--)
@@ -507,8 +509,8 @@ static void initialization(JPEG_ENCODER_STRUCTURE *jpeg, UINT32 image_format, UI
 		jpeg->mcu_width = mcu_width = 8;
 		jpeg->mcu_height = mcu_height = 8;
 
-		jpeg->horizontal_mcus = (UINT16) ((image_width + mcu_width - 1) >> 3);
-		jpeg->vertical_mcus = (UINT16) ((image_height + mcu_height - 1) >> 3);
+		jpeg->horizontal_mcus = (UINT16)((image_width + mcu_width - 1) >> 3);
+		jpeg->vertical_mcus = (UINT16)((image_height + mcu_height - 1) >> 3);
 
 		bytes_per_pixel = 1;
 		read_format = read_400_format;
@@ -516,33 +518,33 @@ static void initialization(JPEG_ENCODER_STRUCTURE *jpeg, UINT32 image_format, UI
 	else if (image_format == JPEG_FORMAT_RGB)
 	{
 		jpeg->mcu_width = mcu_width = 16;
-		jpeg->horizontal_mcus = (UINT16) ((image_width + mcu_width - 1) >> 4);
+		jpeg->horizontal_mcus = (UINT16)((image_width + mcu_width - 1) >> 4);
 
 		jpeg->mcu_height = mcu_height = 8;
-		jpeg->vertical_mcus = (UINT16) ((image_height + mcu_height - 1) >> 3);
+		jpeg->vertical_mcus = (UINT16)((image_height + mcu_height - 1) >> 3);
 		bytes_per_pixel = 3;
 		read_format = read_rgb24_format;
 	}
 	else                    // it's 422
 	{
 		jpeg->mcu_width = mcu_width = 16;
-		jpeg->horizontal_mcus = (UINT16) ((image_width + mcu_width - 1) >> 4);
+		jpeg->horizontal_mcus = (UINT16)((image_width + mcu_width - 1) >> 4);
 
 		jpeg->mcu_height = mcu_height = 8;
-		jpeg->vertical_mcus = (UINT16) ((image_height + mcu_height - 1) >> 3);
+		jpeg->vertical_mcus = (UINT16)((image_height + mcu_height - 1) >> 3);
 		bytes_per_pixel = 2;
 		read_format = read_422_format;
 	}
 
-	jpeg->rows_in_bottom_mcus = (UINT16) (image_height - (jpeg->vertical_mcus - 1) * mcu_height);
-	jpeg->cols_in_right_mcus = (UINT16) (image_width - (jpeg->horizontal_mcus - 1) * mcu_width);
+	jpeg->rows_in_bottom_mcus = (UINT16)(image_height - (jpeg->vertical_mcus - 1) * mcu_height);
+	jpeg->cols_in_right_mcus = (UINT16)(image_width - (jpeg->horizontal_mcus - 1) * mcu_width);
 
-	jpeg->length_minus_mcu_width = (UINT16) ((image_width - mcu_width) * bytes_per_pixel);
-	jpeg->length_minus_width = (UINT16) ((image_width - jpeg->cols_in_right_mcus) * bytes_per_pixel);
+	jpeg->length_minus_mcu_width = (UINT16)((image_width - mcu_width) * bytes_per_pixel);
+	jpeg->length_minus_width = (UINT16)((image_width - jpeg->cols_in_right_mcus) * bytes_per_pixel);
 
-	jpeg->mcu_width_size = (UINT16) (mcu_width * bytes_per_pixel);
+	jpeg->mcu_width_size = (UINT16)(mcu_width * bytes_per_pixel);
 
-	jpeg->offset = (UINT16) ((image_width * (mcu_height - 1) - (mcu_width - jpeg->cols_in_right_mcus)) * bytes_per_pixel);
+	jpeg->offset = (UINT16)((image_width * (mcu_height - 1) - (mcu_width - jpeg->cols_in_right_mcus)) * bytes_per_pixel);
 
 	jpeg->ldc1 = 0;
 	jpeg->ldc2 = 0;
@@ -589,16 +591,16 @@ static void DCT(INT16 *data)
 		x5 = x7 + x6;
 		x7 = x7 - x6;
 
-		data[0] = (INT16) (x4 + x5);
-		data[4] = (INT16) (x4 - x5);
+		data[0] = (INT16)(x4 + x5);
+		data[4] = (INT16)(x4 - x5);
 
-		data[2] = (INT16) ((x8 * c2 + x7 * c6) >> s2);
-		data[6] = (INT16) ((x8 * c6 - x7 * c2) >> s2);
+		data[2] = (INT16)((x8 * c2 + x7 * c6) >> s2);
+		data[6] = (INT16)((x8 * c6 - x7 * c2) >> s2);
 
-		data[7] = (INT16) ((x0 * c7 - x1 * c5 + x2 * c3 - x3 * c1) >> s2);
-		data[5] = (INT16) ((x0 * c5 - x1 * c1 + x2 * c7 + x3 * c3) >> s2);
-		data[3] = (INT16) ((x0 * c3 - x1 * c7 - x2 * c1 - x3 * c5) >> s2);
-		data[1] = (INT16) ((x0 * c1 + x1 * c3 + x2 * c5 + x3 * c7) >> s2);
+		data[7] = (INT16)((x0 * c7 - x1 * c5 + x2 * c3 - x3 * c1) >> s2);
+		data[5] = (INT16)((x0 * c5 - x1 * c1 + x2 * c7 + x3 * c3) >> s2);
+		data[3] = (INT16)((x0 * c3 - x1 * c7 - x2 * c1 - x3 * c5) >> s2);
+		data[1] = (INT16)((x0 * c1 + x1 * c3 + x2 * c5 + x3 * c7) >> s2);
 
 		data += 8;
 	}
@@ -625,16 +627,16 @@ static void DCT(INT16 *data)
 		x5 = x7 + x6;
 		x7 = x7 - x6;
 
-		data[0] = (INT16) ((x4 + x5) >> s1);
-		data[32] = (INT16) ((x4 - x5) >> s1);
+		data[0] = (INT16)((x4 + x5) >> s1);
+		data[32] = (INT16)((x4 - x5) >> s1);
 
-		data[16] = (INT16) ((x8 * c2 + x7 * c6) >> s3);
-		data[48] = (INT16) ((x8 * c6 - x7 * c2) >> s3);
+		data[16] = (INT16)((x8 * c2 + x7 * c6) >> s3);
+		data[48] = (INT16)((x8 * c6 - x7 * c2) >> s3);
 
-		data[56] = (INT16) ((x0 * c7 - x1 * c5 + x2 * c3 - x3 * c1) >> s3);
-		data[40] = (INT16) ((x0 * c5 - x1 * c1 + x2 * c7 + x3 * c3) >> s3);
-		data[24] = (INT16) ((x0 * c3 - x1 * c7 - x2 * c1 - x3 * c5) >> s3);
-		data[8] = (INT16) ((x0 * c1 + x1 * c3 + x2 * c5 + x3 * c7) >> s3);
+		data[56] = (INT16)((x0 * c7 - x1 * c5 + x2 * c3 - x3 * c1) >> s3);
+		data[40] = (INT16)((x0 * c5 - x1 * c1 + x2 * c7 + x3 * c3) >> s3);
+		data[24] = (INT16)((x0 * c3 - x1 * c7 - x2 * c1 - x3 * c5) >> s3);
+		data[8] = (INT16)((x0 * c1 + x1 * c3 + x2 * c5 + x3 * c7) >> s3);
 
 		data++;
 	}
@@ -642,30 +644,30 @@ static void DCT(INT16 *data)
 
 
 #define PUTBITS \
-{ \
-	bits_in_next_word = (INT16) (bitindex + numbits - 32); \
-	if (bits_in_next_word < 0) \
 	{ \
-		lcode = (lcode << numbits) | data; \
-		bitindex += numbits; \
-	} \
-	else \
-	{ \
-		lcode = (lcode << (32 - bitindex)) | (data >> bits_in_next_word); \
-		if ((*output_ptr ++ = (UINT8)(lcode >> 24)) == 0xff) \
-		*output_ptr ++ = 0; \
-		if ((*output_ptr ++ = (UINT8)(lcode >> 16)) == 0xff) \
-		*output_ptr ++ = 0; \
-		if ((*output_ptr ++ = (UINT8)(lcode >> 8)) == 0xff) \
-		*output_ptr ++ = 0; \
-		if ((*output_ptr ++ = (UINT8) lcode) == 0xff) \
-		*output_ptr ++ = 0; \
-		lcode = data; \
-		bitindex = bits_in_next_word; \
-	} \
-}
+		bits_in_next_word = (INT16) (bitindex + numbits - 32); \
+		if (bits_in_next_word < 0) \
+		{ \
+			lcode = (lcode << numbits) | data; \
+			bitindex += numbits; \
+		} \
+		else \
+		{ \
+			lcode = (lcode << (32 - bitindex)) | (data >> bits_in_next_word); \
+			if ((*output_ptr ++ = (UINT8)(lcode >> 24)) == 0xff) \
+				*output_ptr ++ = 0; \
+			if ((*output_ptr ++ = (UINT8)(lcode >> 16)) == 0xff) \
+				*output_ptr ++ = 0; \
+			if ((*output_ptr ++ = (UINT8)(lcode >> 8)) == 0xff) \
+				*output_ptr ++ = 0; \
+			if ((*output_ptr ++ = (UINT8) lcode) == 0xff) \
+				*output_ptr ++ = 0; \
+			lcode = data; \
+			bitindex = bits_in_next_word; \
+		} \
+	}
 
-static UINT8* huffman(JPEG_ENCODER_STRUCTURE *jpeg_encoder_structure, UINT16 component, UINT8 *output_ptr)
+static UINT8 *huffman(JPEG_ENCODER_STRUCTURE *jpeg_encoder_structure, UINT16 component, UINT8 *output_ptr)
 {
 	UINT16 i;
 	UINT16 *DcCodeTable, *DcSizeTable, *AcCodeTable, *AcSizeTable;
@@ -744,9 +746,13 @@ static UINT8* huffman(JPEG_ENCODER_STRUCTURE *jpeg_encoder_structure, UINT16 com
 			AbsCoeff = (Coeff < 0) ? -Coeff-- : Coeff;
 
 			if (AbsCoeff >> 8 == 0)
+			{
 				DataSize = bitsize[AbsCoeff];
+			}
 			else
+			{
 				DataSize = bitsize[AbsCoeff >> 8] + 8;
+			}
 
 			index = RunLength * 10 + DataSize;
 			HuffCode = AcCodeTable[index];
@@ -760,7 +766,9 @@ static UINT8* huffman(JPEG_ENCODER_STRUCTURE *jpeg_encoder_structure, UINT16 com
 			RunLength = 0;
 		}
 		else
+		{
 			RunLength++;
+		}
 	}
 
 	if (RunLength != 0)
@@ -773,7 +781,7 @@ static UINT8* huffman(JPEG_ENCODER_STRUCTURE *jpeg_encoder_structure, UINT16 com
 }
 
 
-static UINT8* encodeMCU(JPEG_ENCODER_STRUCTURE *jpeg_encoder_structure, UINT32 image_format, UINT8 *output_ptr)
+static UINT8 *encodeMCU(JPEG_ENCODER_STRUCTURE *jpeg_encoder_structure, UINT32 image_format, UINT8 *output_ptr)
 {
 	DCT(Y1);
 	quantization(Y1, zigzag_table, Temp, ILqt);
@@ -799,7 +807,7 @@ static UINT8* encodeMCU(JPEG_ENCODER_STRUCTURE *jpeg_encoder_structure, UINT32 i
 
 
 /* For bit Stuffing and EOI marker */
-static UINT8* close_bitstream(UINT8 *output_ptr)
+static UINT8 *close_bitstream(UINT8 *output_ptr)
 {
 	UINT16 i, count;
 	UINT8 *ptr;
@@ -814,7 +822,9 @@ static UINT8* close_bitstream(UINT8 *output_ptr)
 
 		for (i = 0; i < count; i++)
 			if ((*output_ptr++ = *ptr--) == 0xff)
+			{
 				*output_ptr++ = 0;
+			}
 	}
 
 	// End of image marker
@@ -846,7 +856,9 @@ static UINT8 *write_markers(UINT8 *output_ptr, UINT32 image_format, UINT32 image
 
 	// Lqt table
 	for (i = 0; i < 64; i++)
+	{
 		*output_ptr++ = Lqt[i];
+	}
 
 	// Quantization table marker
 	*output_ptr++ = 0xFF;
@@ -861,12 +873,18 @@ static UINT8 *write_markers(UINT8 *output_ptr, UINT32 image_format, UINT32 image
 
 	// Cqt table
 	for (i = 0; i < 64; i++)
+	{
 		*output_ptr++ = Cqt[i];
+	}
 
 	if (image_format == JPEG_FORMAT_FOUR_ZERO_ZERO)
+	{
 		number_of_components = 1;
+	}
 	else
+	{
 		number_of_components = 3;
+	}
 
 	// Frame header(SOF)
 
@@ -874,21 +892,21 @@ static UINT8 *write_markers(UINT8 *output_ptr, UINT32 image_format, UINT32 image
 	*output_ptr++ = 0xFF;
 	*output_ptr++ = 0xC0;
 
-	header_length = (UINT16) (8 + 3 * number_of_components);
+	header_length = (UINT16)(8 + 3 * number_of_components);
 
 	// Frame header length
-	*output_ptr++ = (UINT8) (header_length >> 8);
+	*output_ptr++ = (UINT8)(header_length >> 8);
 	*output_ptr++ = (UINT8) header_length;
 
 	// Precision (P)
 	*output_ptr++ = 0x08;
 
 	// image height
-	*output_ptr++ = (UINT8) (image_height >> 8);
+	*output_ptr++ = (UINT8)(image_height >> 8);
 	*output_ptr++ = (UINT8) image_height;
 
 	// image width
-	*output_ptr++ = (UINT8) (image_width >> 8);
+	*output_ptr++ = (UINT8)(image_width >> 8);
 	*output_ptr++ = (UINT8) image_width;
 
 	// Nf
@@ -905,9 +923,13 @@ static UINT8 *write_markers(UINT8 *output_ptr, UINT32 image_format, UINT32 image
 		*output_ptr++ = 0x01;
 
 		if ((image_format == JPEG_FORMAT_FOUR_TWO_TWO) || (image_format == JPEG_FORMAT_RGB))
+		{
 			*output_ptr++ = 0x21;
+		}
 		else
+		{
 			*output_ptr++ = 0x11;
+		}
 
 		*output_ptr++ = 0x00;
 
@@ -923,7 +945,9 @@ static UINT8 *write_markers(UINT8 *output_ptr, UINT32 image_format, UINT32 image
 	// huffman table(DHT)
 
 	for (i = 0; i < sizeof(markerdata); i++)
+	{
 		*output_ptr++ = markerdata[i];
+	}
 
 	// Scan header(SOF)
 
@@ -931,10 +955,10 @@ static UINT8 *write_markers(UINT8 *output_ptr, UINT32 image_format, UINT32 image
 	*output_ptr++ = 0xFF;
 	*output_ptr++ = 0xDA;
 
-	header_length = (UINT16) (6 + (number_of_components << 1));
+	header_length = (UINT16)(6 + (number_of_components << 1));
 
 	// Scan header length
-	*output_ptr++ = (UINT8) (header_length >> 8);
+	*output_ptr++ = (UINT8)(header_length >> 8);
 	*output_ptr++ = (UINT8) header_length;
 
 	// Ns
@@ -972,9 +996,13 @@ static void initialize_quantization_tables(UINT32 quality_factor)
 	UINT32 value;
 
 	if (quality_factor < 1)
+	{
 		quality_factor = 1;
+	}
 	if (quality_factor > 8)
+	{
 		quality_factor = 8;
+	}
 	quality_factor = ((quality_factor * 3) - 2) * 128; //converts range[1:8] to [1:22]
 
 	for (i = 0; i < 64; i++)
@@ -986,9 +1014,13 @@ static void initialize_quantization_tables(UINT32 quality_factor)
 		value = (value + 0x200) >> 10;
 
 		if (value < 2)
+		{
 			value = 2;
+		}
 		else if (value > 255)
+		{
 			value = 255;
+		}
 
 		Lqt[index] = (UINT8) value;
 		ILqt[i] = 0x8000 / value;
@@ -998,9 +1030,13 @@ static void initialize_quantization_tables(UINT32 quality_factor)
 		value = (value + 0x200) >> 10;
 
 		if (value < 2)
+		{
 			value = 2;
+		}
 		else if (value > 255)
+		{
 			value = 255;
+		}
 
 		Cqt[index] = (UINT8) value;
 		ICqt[i] = 0x8000 / value;
@@ -1008,7 +1044,7 @@ static void initialize_quantization_tables(UINT32 quality_factor)
 }
 
 
-UINT8* jpeg_encode_image(UINT8 *input_ptr, UINT8 *output_ptr, UINT32 quality_factor, UINT32 image_format, UINT32 image_width, UINT32 image_height)
+UINT8 *jpeg_encode_image(UINT8 *input_ptr, UINT8 *output_ptr, UINT32 quality_factor, UINT32 image_format, UINT32 image_width, UINT32 image_height)
 {
 	UINT16 i, j;
 
@@ -1027,9 +1063,13 @@ UINT8* jpeg_encode_image(UINT8 *input_ptr, UINT8 *output_ptr, UINT32 quality_fac
 	for (i = 1; i <= jpeg_encoder_structure->vertical_mcus; i++)
 	{
 		if (i < jpeg_encoder_structure->vertical_mcus)
+		{
 			jpeg_encoder_structure->rows = jpeg_encoder_structure->mcu_height;
+		}
 		else
+		{
 			jpeg_encoder_structure->rows = jpeg_encoder_structure->rows_in_bottom_mcus;
+		}
 
 		for (j = 1; j <= jpeg_encoder_structure->horizontal_mcus; j++)
 		{

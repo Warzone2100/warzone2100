@@ -161,7 +161,9 @@ void pie_SetShaderUsage(bool usage)
 	bool valid = !usage && pie_GetFallbackAvailability();
 	valid = valid || (usage && pie_GetShaderAvailability());
 	if (valid)
+	{
 		shaderUsage = usage;
+	}
 }
 
 // Read shader into text buffer
@@ -222,7 +224,7 @@ static void printProgramInfoLog(code_part part, GLuint program)
 
 // Read/compile/link shaders
 static bool loadShaders(GLuint *program, const char *definitions,
-						const char *vertexPath, const char *fragmentPath)
+                        const char *vertexPath, const char *fragmentPath)
 {
 	GLint status;
 	bool success = true; // Assume overall success
@@ -365,7 +367,7 @@ void pie_SetShaderStretchDepth(float stretch)
 	shaderStretch = stretch;
 }
 
-void pie_ActivateFallback(SHADER_MODE, iIMDShape* shape, PIELIGHT teamcolour, PIELIGHT colour)
+void pie_ActivateFallback(SHADER_MODE, iIMDShape *shape, PIELIGHT teamcolour, PIELIGHT colour)
 {
 	if (shape->tcmaskpage == iV_TEX_INVALID)
 	{
@@ -437,7 +439,7 @@ void pie_DeactivateFallback()
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 }
 
-void pie_ActivateShader(SHADER_MODE shaderMode, iIMDShape* shape, PIELIGHT teamcolour, PIELIGHT colour)
+void pie_ActivateShader(SHADER_MODE shaderMode, iIMDShape *shape, PIELIGHT teamcolour, PIELIGHT colour)
 {
 	int maskpage = shape->tcmaskpage;
 	int normalpage = shape->normalpage;
@@ -498,29 +500,29 @@ void pie_ActivateShader(SHADER_MODE shaderMode, iIMDShape* shape, PIELIGHT teamc
 
 void pie_SetDepthBufferStatus(DEPTH_MODE depthMode)
 {
-	switch(depthMode)
+	switch (depthMode)
 	{
-		case DEPTH_CMP_LEQ_WRT_ON:
-			glEnable(GL_DEPTH_TEST);
-			glDepthFunc(GL_LEQUAL);
-			glDepthMask(GL_TRUE);
-			break;
+	case DEPTH_CMP_LEQ_WRT_ON:
+		glEnable(GL_DEPTH_TEST);
+		glDepthFunc(GL_LEQUAL);
+		glDepthMask(GL_TRUE);
+		break;
 
-		case DEPTH_CMP_ALWAYS_WRT_ON:
-			glDisable(GL_DEPTH_TEST);
-			glDepthMask(GL_TRUE);
-			break;
+	case DEPTH_CMP_ALWAYS_WRT_ON:
+		glDisable(GL_DEPTH_TEST);
+		glDepthMask(GL_TRUE);
+		break;
 
-		case DEPTH_CMP_LEQ_WRT_OFF:
-			glEnable(GL_DEPTH_TEST);
-			glDepthFunc(GL_LEQUAL);
-			glDepthMask(GL_FALSE);
-			break;
+	case DEPTH_CMP_LEQ_WRT_OFF:
+		glEnable(GL_DEPTH_TEST);
+		glDepthFunc(GL_LEQUAL);
+		glDepthMask(GL_FALSE);
+		break;
 
-		case DEPTH_CMP_ALWAYS_WRT_OFF:
-			glDisable(GL_DEPTH_TEST);
-			glDepthMask(GL_FALSE);
-			break;
+	case DEPTH_CMP_ALWAYS_WRT_OFF:
+		glDisable(GL_DEPTH_TEST);
+		glDepthMask(GL_FALSE);
+		break;
 	}
 }
 
@@ -528,14 +530,14 @@ void pie_SetDepthBufferStatus(DEPTH_MODE depthMode)
 /// Negative values are closer to the screen
 void pie_SetDepthOffset(float offset)
 {
-	if(offset == 0.0f)
+	if (offset == 0.0f)
 	{
-		glDisable (GL_POLYGON_OFFSET_FILL);
+		glDisable(GL_POLYGON_OFFSET_FILL);
 	}
 	else
 	{
 		glPolygonOffset(offset, offset);
-		glEnable (GL_POLYGON_OFFSET_FILL);
+		glEnable(GL_POLYGON_OFFSET_FILL);
 	}
 }
 
@@ -561,13 +563,14 @@ void pie_SetFogStatus(bool val)
 		if (rendStates.fog != val)
 		{
 			rendStates.fog = val;
-			if (rendStates.fog) {
+			if (rendStates.fog)
+			{
 				PIELIGHT fog = pie_GetFogColour();
 
-				fog_colour[0] = fog.byte.r/255.0f;
-				fog_colour[1] = fog.byte.g/255.0f;
-				fog_colour[2] = fog.byte.b/255.0f;
-				fog_colour[3] = fog.byte.a/255.0f;
+				fog_colour[0] = fog.byte.r / 255.0f;
+				fog_colour[1] = fog.byte.g / 255.0f;
+				fog_colour[2] = fog.byte.b / 255.0f;
+				fog_colour[3] = fog.byte.a / 255.0f;
 
 				glFogi(GL_FOG_MODE, GL_LINEAR);
 				glFogfv(GL_FOG_COLOR, fog_colour);
@@ -575,7 +578,9 @@ void pie_SetFogStatus(bool val)
 				glHint(GL_FOG_HINT, GL_DONT_CARE);
 				glEnable(GL_FOG);
 				glClearColor(fog_colour[0], fog_colour[1], fog_colour[2], fog_colour[3]);
-			} else {
+			}
+			else
+			{
 				glDisable(GL_FOG);
 				glClearColor(0, 0, 0, 0);
 			}
@@ -602,20 +607,20 @@ void pie_SetTexturePage(SDWORD num)
 	{
 		switch (num)
 		{
-			case TEXPAGE_NONE:
-				glDisable(GL_TEXTURE_2D);
-				break;
-			case TEXPAGE_EXTERN:
-				// GLC will set the texture, we just need to enable texturing
+		case TEXPAGE_NONE:
+			glDisable(GL_TEXTURE_2D);
+			break;
+		case TEXPAGE_EXTERN:
+			// GLC will set the texture, we just need to enable texturing
+			glEnable(GL_TEXTURE_2D);
+			break;
+		default:
+			if (rendStates.texPage == TEXPAGE_NONE)
+			{
 				glEnable(GL_TEXTURE_2D);
-				break;
-			default:
-				if (rendStates.texPage == TEXPAGE_NONE)
-				{
-					glEnable(GL_TEXTURE_2D);
-				}
-				ASSERT_OR_RETURN(, num < iV_TEX_MAX, "Index out of bounds: %d", num);
-				glBindTexture(GL_TEXTURE_2D, _TEX_PAGE[num].id);
+			}
+			ASSERT_OR_RETURN(, num < iV_TEX_MAX, "Index out of bounds: %d", num);
+			glBindTexture(GL_TEXTURE_2D, _TEX_PAGE[num].id);
 		}
 		rendStates.texPage = num;
 	}
@@ -628,10 +633,13 @@ void pie_SetAlphaTest(bool keyingOn)
 		rendStates.keyingOn = keyingOn;
 		pieStateCount++;
 
-		if (keyingOn == true) {
+		if (keyingOn == true)
+		{
 			glEnable(GL_ALPHA_TEST);
 			glAlphaFunc(GL_GREATER, 0.1f);
-		} else {
+		}
+		else
+		{
 			glDisable(GL_ALPHA_TEST);
 		}
 	}
@@ -644,33 +652,33 @@ void pie_SetRendMode(REND_MODE rendMode)
 		rendStates.rendMode = rendMode;
 		switch (rendMode)
 		{
-			case REND_OPAQUE:
-				glDisable(GL_BLEND);
-				break;
+		case REND_OPAQUE:
+			glDisable(GL_BLEND);
+			break;
 
-			case REND_ALPHA:
-				glEnable(GL_BLEND);
-				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-				break;
+		case REND_ALPHA:
+			glEnable(GL_BLEND);
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			break;
 
-			case REND_ADDITIVE:
-				glEnable(GL_BLEND);
-				glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-				break;
+		case REND_ADDITIVE:
+			glEnable(GL_BLEND);
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+			break;
 
-			case REND_MULTIPLICATIVE:
-				glEnable(GL_BLEND);
-				glBlendFunc(GL_ZERO, GL_SRC_COLOR);
-				break;
+		case REND_MULTIPLICATIVE:
+			glEnable(GL_BLEND);
+			glBlendFunc(GL_ZERO, GL_SRC_COLOR);
+			break;
 
-			case REND_PREMULTIPLIED:
-				glEnable(GL_BLEND);
-				glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-				break;
+		case REND_PREMULTIPLIED:
+			glEnable(GL_BLEND);
+			glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+			break;
 
-			default:
-				ASSERT(false, "Bad render state");
-				break;
+		default:
+			ASSERT(false, "Bad render state");
+			break;
 		}
 	}
 	return;

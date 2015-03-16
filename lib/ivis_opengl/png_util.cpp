@@ -30,44 +30,56 @@
 // PNG callbacks
 static void wzpng_read_data(png_structp ctx, png_bytep area, png_size_t size)
 {
-	PHYSFS_file* fileHandle = (PHYSFS_file*)png_get_io_ptr(ctx);
+	PHYSFS_file *fileHandle = (PHYSFS_file *)png_get_io_ptr(ctx);
 
 	PHYSFS_read(fileHandle, area, 1, size);
 }
 
 static void wzpng_write_data(png_structp png_ptr, png_bytep data, png_size_t length)
 {
-	PHYSFS_file* fileHandle = (PHYSFS_file*)png_get_io_ptr(png_ptr);
+	PHYSFS_file *fileHandle = (PHYSFS_file *)png_get_io_ptr(png_ptr);
 
 	PHYSFS_write(fileHandle, data, length, 1);
 }
 
 static void wzpng_flush_data(png_structp png_ptr)
 {
-	PHYSFS_file* fileHandle = (PHYSFS_file*)png_get_io_ptr(png_ptr);
+	PHYSFS_file *fileHandle = (PHYSFS_file *)png_get_io_ptr(png_ptr);
 
 	PHYSFS_flush(fileHandle);
 }
 // End of PNG callbacks
 
-static inline void PNGReadCleanup(png_infop *info_ptr, png_structp *png_ptr, PHYSFS_file* fileHandle)
+static inline void PNGReadCleanup(png_infop *info_ptr, png_structp *png_ptr, PHYSFS_file *fileHandle)
 {
 	if (*info_ptr != NULL)
+	{
 		png_destroy_info_struct(*png_ptr, info_ptr);
+	}
 	if (*png_ptr != NULL)
+	{
 		png_destroy_read_struct(png_ptr, NULL, NULL);
+	}
 	if (fileHandle != NULL)
+	{
 		PHYSFS_close(fileHandle);
+	}
 }
 
-static inline void PNGWriteCleanup(png_infop *info_ptr, png_structp *png_ptr, PHYSFS_file* fileHandle)
+static inline void PNGWriteCleanup(png_infop *info_ptr, png_structp *png_ptr, PHYSFS_file *fileHandle)
 {
 	if (*info_ptr != NULL)
+	{
 		png_destroy_info_struct(*png_ptr, info_ptr);
+	}
 	if (*png_ptr != NULL)
+	{
 		png_destroy_write_struct(png_ptr, NULL);
+	}
 	if (fileHandle != NULL)
+	{
 		PHYSFS_close(fileHandle);
+	}
 }
 
 bool iV_loadImage_PNG(const char *fileName, iV_Image *image)
@@ -79,7 +91,7 @@ bool iV_loadImage_PNG(const char *fileName, iV_Image *image)
 	png_infop info_ptr = NULL;
 
 	// Open file
-	PHYSFS_file* fileHandle = PHYSFS_openRead(fileName);
+	PHYSFS_file *fileHandle = PHYSFS_openRead(fileName);
 	if (fileHandle == NULL)
 	{
 		debug(LOG_ERROR, "pie_PNGLoadFile: PHYSFS_openRead(%s) failed with error: %s\n", fileName, PHYSFS_getLastError());
@@ -105,14 +117,16 @@ bool iV_loadImage_PNG(const char *fileName, iV_Image *image)
 	}
 
 	png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
-	if (png_ptr == NULL) {
+	if (png_ptr == NULL)
+	{
 		debug(LOG_3D, "pie_PNGLoadMem: Unable to create png struct");
 		PNGReadCleanup(&info_ptr, &png_ptr, fileHandle);
 		return false;
 	}
 
 	info_ptr = png_create_info_struct(png_ptr);
-	if (info_ptr == NULL) {
+	if (info_ptr == NULL)
+	{
 		debug(LOG_3D, "pie_PNGLoadMem: Unable to create png info struct");
 		PNGReadCleanup(&info_ptr, &png_ptr, fileHandle);
 		return false;
@@ -120,7 +134,8 @@ bool iV_loadImage_PNG(const char *fileName, iV_Image *image)
 
 	// Set libpng's failure jump position to the if branch,
 	// setjmp evaluates to false so the else branch will be executed at first
-	if (setjmp(png_jmpbuf(png_ptr))) {
+	if (setjmp(png_jmpbuf(png_ptr)))
+	{
 		debug(LOG_3D, "pie_PNGLoadMem: Error decoding PNG data in %s", fileName);
 		PNGReadCleanup(&info_ptr, &png_ptr, fileHandle);
 		return false;
@@ -136,7 +151,7 @@ bool iV_loadImage_PNG(const char *fileName, iV_Image *image)
 	// Filler is, however, for an unknown reason required for tertilesc[23]
 
 	/* tell libpng to strip 16 bit/color files down to 8 bits/color */
- 	png_set_strip_16(png_ptr);
+	png_set_strip_16(png_ptr);
 
 	/* Extract multiple pixels with bit depths of 1, 2, and 4 from a single
 	 * byte into separate bytes (useful for paletted and grayscale images).
@@ -160,8 +175,10 @@ bool iV_loadImage_PNG(const char *fileName, iV_Image *image)
 	{
 		unsigned int i = 0;
 		png_bytepp row_pointers = png_get_rows(png_ptr, info_ptr);
-		for ( i = 0; i < png_get_image_height(png_ptr, info_ptr); i++ )
-			memcpy( image->bmp + (png_get_rowbytes(png_ptr, info_ptr) * i), row_pointers[i], png_get_rowbytes(png_ptr, info_ptr) );
+		for (i = 0; i < png_get_image_height(png_ptr, info_ptr); i++)
+		{
+			memcpy(image->bmp + (png_get_rowbytes(png_ptr, info_ptr) * i), row_pointers[i], png_get_rowbytes(png_ptr, info_ptr));
+		}
 	}
 
 	PNGReadCleanup(&info_ptr, &png_ptr, fileHandle);
@@ -173,10 +190,10 @@ bool iV_loadImage_PNG(const char *fileName, iV_Image *image)
 
 static void internal_saveImage_PNG(const char *fileName, const iV_Image *image, int color_type)
 {
-	unsigned char** scanlines = NULL;
+	unsigned char **scanlines = NULL;
 	png_infop info_ptr = NULL;
 	png_structp png_ptr = NULL;
-	PHYSFS_file* fileHandle;
+	PHYSFS_file *fileHandle;
 
 	ASSERT(image->depth != 0, "Bad depth");
 
@@ -292,7 +309,7 @@ void iV_saveImage_JPEG(const char *fileName, const iV_Image *image)
 	char newfilename[PATH_MAX];
 	unsigned int currentRow;
 	const unsigned int row_stride = image->width * 3; // 3 bytes per pixel
-	PHYSFS_file* fileHandle;
+	PHYSFS_file *fileHandle;
 	unsigned char *jpeg_end;
 
 	sstrcpy(newfilename, fileName);
@@ -304,7 +321,7 @@ void iV_saveImage_JPEG(const char *fileName, const iV_Image *image)
 		return;
 	}
 
-	buffer = (unsigned char *)malloc(sizeof(const char*) * image->height * image->width);  // Suspect it should be sizeof(unsigned char)*3 == 3 here, not sizeof(const char *) == 8.
+	buffer = (unsigned char *)malloc(sizeof(const char *) * image->height * image->width); // Suspect it should be sizeof(unsigned char)*3 == 3 here, not sizeof(const char *) == 8.
 	if (buffer == NULL)
 	{
 		debug(LOG_ERROR, "pie_JPEGSaveFile: Couldn't allocate memory\n");
@@ -319,7 +336,7 @@ void iV_saveImage_JPEG(const char *fileName, const iV_Image *image)
 		memcpy(buffer + row_stride * currentRow, &image->bmp[row_stride * (image->height - currentRow - 1)], row_stride);
 	}
 
-	jpeg = (unsigned char *)malloc(sizeof(const char*) * image->height * image->width);  // Suspect it should be something else here, but sizeof(const char *) == 8 is hopefully big enough...
+	jpeg = (unsigned char *)malloc(sizeof(const char *) * image->height * image->width); // Suspect it should be something else here, but sizeof(const char *) == 8 is hopefully big enough...
 	if (jpeg == NULL)
 	{
 		debug(LOG_ERROR, "pie_JPEGSaveFile: Couldn't allocate memory\n");

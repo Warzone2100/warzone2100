@@ -33,7 +33,7 @@ uint32_t crcSum(uint32_t crc, const void *data_, size_t dataLen)
 
 	while (dataLen-- > 0)
 	{
-		crc = crc<<8 ^ crcTable[crc>>24 ^ (uint8_t)*data++];
+		crc = crc << 8 ^ crcTable[crc>>24 ^ (uint8_t) * data++];
 	}
 
 	return crc;
@@ -43,8 +43,8 @@ uint32_t crcSumU16(uint32_t crc, const uint16_t *data, size_t dataLen)
 {
 	while (dataLen-- > 0)
 	{
-		crc = crc<<8 ^ crcTable[crc>>24 ^ (uint8_t)(*data>>8)];
-		crc = crc<<8 ^ crcTable[crc>>24 ^ (uint8_t)*data++];
+		crc = crc << 8 ^ crcTable[crc>>24 ^ (uint8_t)(*data >> 8)];
+		crc = crc << 8 ^ crcTable[crc>>24 ^ (uint8_t) * data++];
 	}
 
 	return crc;
@@ -54,14 +54,14 @@ uint32_t crcSumVector2i(uint32_t crc, const Vector2i *data, size_t dataLen)
 {
 	while (dataLen-- > 0)
 	{
-		crc = crc<<8 ^ crcTable[crc>>24 ^ (uint8_t)(data->x>>24)];
-		crc = crc<<8 ^ crcTable[crc>>24 ^ (uint8_t)(data->x>>16)];
-		crc = crc<<8 ^ crcTable[crc>>24 ^ (uint8_t)(data->x>>8)];
-		crc = crc<<8 ^ crcTable[crc>>24 ^ (uint8_t)data->x];
-		crc = crc<<8 ^ crcTable[crc>>24 ^ (uint8_t)(data->y>>24)];
-		crc = crc<<8 ^ crcTable[crc>>24 ^ (uint8_t)(data->y>>16)];
-		crc = crc<<8 ^ crcTable[crc>>24 ^ (uint8_t)(data->y>>8)];
-		crc = crc<<8 ^ crcTable[crc>>24 ^ (uint8_t)data++->y];
+		crc = crc << 8 ^ crcTable[crc>>24 ^ (uint8_t)(data->x >> 24)];
+		crc = crc << 8 ^ crcTable[crc>>24 ^ (uint8_t)(data->x >> 16)];
+		crc = crc << 8 ^ crcTable[crc>>24 ^ (uint8_t)(data->x >> 8)];
+		crc = crc << 8 ^ crcTable[crc>>24 ^ (uint8_t)data->x];
+		crc = crc << 8 ^ crcTable[crc>>24 ^ (uint8_t)(data->y >> 24)];
+		crc = crc << 8 ^ crcTable[crc>>24 ^ (uint8_t)(data->y >> 16)];
+		crc = crc << 8 ^ crcTable[crc>>24 ^ (uint8_t)(data->y >> 8)];
+		crc = crc << 8 ^ crcTable[crc>>24 ^ (uint8_t)data++->y];
 	}
 
 	return crc;
@@ -181,12 +181,12 @@ void Sha256::setZero()
 std::string Sha256::toString() const
 {
 	std::string str;
-	str.resize(Bytes*2);
+	str.resize(Bytes * 2);
 	char const *hexDigits = "0123456789abcdef";
 	for (unsigned n = 0; n < Bytes; ++n)
 	{
-		str[n*2    ] = hexDigits[bytes[n] >> 4];
-		str[n*2 + 1] = hexDigits[bytes[n] & 15];
+		str[n * 2    ] = hexDigits[bytes[n] >> 4];
+		str[n * 2 + 1] = hexDigits[bytes[n] & 15];
 	}
 	return str;
 }
@@ -194,7 +194,7 @@ std::string Sha256::toString() const
 void Sha256::fromString(std::string const &s)
 {
 	setZero();
-	unsigned nChars = std::min<unsigned>(Bytes*2, s.size());
+	unsigned nChars = std::min<unsigned>(Bytes * 2, s.size());
 	for (unsigned n = 0; n < nChars; ++n)
 	{
 		unsigned h;
@@ -215,6 +215,6 @@ void Sha256::fromString(std::string const &s)
 		{
 			break;
 		}
-		bytes[n/2] |= h << (n%2? 0 : 4);
+		bytes[n / 2] |= h << (n % 2 ? 0 : 4);
 	}
 }

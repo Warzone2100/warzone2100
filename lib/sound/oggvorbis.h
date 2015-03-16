@@ -36,15 +36,15 @@ struct soundDataBuffer
 	unsigned int frequency;
 
 	// the raw PCM data
-	char* data;
+	char *data;
 };
 
 // Forward declaration so we can take pointers to this type
 struct OggVorbisDecoderState;
 
-struct OggVorbisDecoderState* sound_CreateOggVorbisDecoder(PHYSFS_file* PHYSFS_fileHandle, bool allowSeeking);
-void sound_DestroyOggVorbisDecoder(struct OggVorbisDecoderState* decoder);
+struct OggVorbisDecoderState *sound_CreateOggVorbisDecoder(PHYSFS_file *PHYSFS_fileHandle, bool allowSeeking);
+void sound_DestroyOggVorbisDecoder(struct OggVorbisDecoderState *decoder);
 
-soundDataBuffer* sound_DecodeOggVorbis(struct OggVorbisDecoderState* decoder, size_t bufferSize);
+soundDataBuffer *sound_DecodeOggVorbis(struct OggVorbisDecoderState *decoder, size_t bufferSize);
 
 #endif // _LIBSOUND_OGGVORBIS_H_

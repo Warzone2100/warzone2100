@@ -36,7 +36,7 @@
 struct OggVorbisDecoderState
 {
 	// Internal identifier towards PhysicsFS
-	PHYSFS_file* fileHandle;
+	PHYSFS_file *fileHandle;
 
 	// Wether to allow seeking or not
 	bool         allowSeeking;
@@ -46,110 +46,120 @@ struct OggVorbisDecoderState
 	OggVorbis_File oggVorbis_stream;
 
 	// Internal meta data
-	vorbis_info* VorbisInfo;
+	vorbis_info *VorbisInfo;
 #endif
 };
 
 #ifndef WZ_NOSOUND
-static const char* wz_oggVorbis_getErrorStr(int error)
+static const char *wz_oggVorbis_getErrorStr(int error)
 {
-    switch(error)
-    {
-		case OV_FALSE:
-			return "OV_FALSE";
-		case OV_HOLE:
-			return "OV_HOLE";
-		case OV_EREAD:
-			return "OV_EREAD";
-		case OV_EFAULT:
-			return "OV_EFAULT";
-		case OV_EIMPL:
-			return "OV_EIMPL";
-		case OV_EINVAL:
-			return "OV_EINVAL";
-		case OV_ENOTVORBIS:
-			return "OV_ENOTVORBIS";
-		case OV_EBADHEADER:
-			return "OV_EBADHEADER";
-		case OV_EVERSION:
-			return "OV_EVERSION";
-		case OV_EBADLINK:
-			return "OV_EBADLINK";
-		case OV_ENOSEEK:
-			return "OV_ENOSEEK";
-		default:
-			return "Unknown Ogg error.";
-    }
+	switch (error)
+	{
+	case OV_FALSE:
+		return "OV_FALSE";
+	case OV_HOLE:
+		return "OV_HOLE";
+	case OV_EREAD:
+		return "OV_EREAD";
+	case OV_EFAULT:
+		return "OV_EFAULT";
+	case OV_EIMPL:
+		return "OV_EIMPL";
+	case OV_EINVAL:
+		return "OV_EINVAL";
+	case OV_ENOTVORBIS:
+		return "OV_ENOTVORBIS";
+	case OV_EBADHEADER:
+		return "OV_EBADHEADER";
+	case OV_EVERSION:
+		return "OV_EVERSION";
+	case OV_EBADLINK:
+		return "OV_EBADLINK";
+	case OV_ENOSEEK:
+		return "OV_ENOSEEK";
+	default:
+		return "Unknown Ogg error.";
+	}
 }
 
 static size_t wz_oggVorbis_read(void *ptr, size_t size, size_t nmemb, void *datasource)
 {
-	PHYSFS_file* fileHandle;
+	PHYSFS_file *fileHandle;
 
 	ASSERT(datasource != NULL, "NULL decoder passed!");
 
-	fileHandle = ((struct OggVorbisDecoderState*)datasource)->fileHandle;
+	fileHandle = ((struct OggVorbisDecoderState *)datasource)->fileHandle;
 	ASSERT(fileHandle != NULL, "Bad PhysicsFS file handle passed in");
 
-	return PHYSFS_read(fileHandle, ptr, 1, size*nmemb);
+	return PHYSFS_read(fileHandle, ptr, 1, size * nmemb);
 }
 
 static int wz_oggVorbis_seek(void *datasource, ogg_int64_t offset, int whence)
 {
-	PHYSFS_file* fileHandle;
+	PHYSFS_file *fileHandle;
 	bool allowSeeking;
 	int newPos;
 
 	ASSERT(datasource != NULL, "NULL decoder passed!");
 
-	fileHandle = ((struct OggVorbisDecoderState*)datasource)->fileHandle;
+	fileHandle = ((struct OggVorbisDecoderState *)datasource)->fileHandle;
 	ASSERT(fileHandle != NULL, "Bad PhysicsFS file handle passed in");
 
-	allowSeeking = ((struct OggVorbisDecoderState*)datasource)->allowSeeking;
+	allowSeeking = ((struct OggVorbisDecoderState *)datasource)->allowSeeking;
 
 	if (!allowSeeking)
+	{
 		return -1;
+	}
 
 	switch (whence)
 	{
-		// Seek to absolute position
-		case SEEK_SET:
-			newPos = offset;
-			break;
+	// Seek to absolute position
+	case SEEK_SET:
+		newPos = offset;
+		break;
 
-		// Seek `offset` ahead
-		case SEEK_CUR:
+	// Seek `offset` ahead
+	case SEEK_CUR:
 		{
 			int curPos = PHYSFS_tell(fileHandle);
 			if (curPos == -1)
+			{
 				return -1;
+			}
 
 			newPos = curPos + offset;
 			break;
 		}
 
-		// Seek backwards from the end of the file
-		case SEEK_END:
+	// Seek backwards from the end of the file
+	case SEEK_END:
 		{
 			int fileSize = PHYSFS_fileLength(fileHandle);
 			if (fileSize == -1)
+			{
 				return -1;
+			}
 
 			newPos = fileSize - 1 - offset;
 			break;
 		}
 
-		// unrecognized seek instruction
-		default:
-			// indicate failure
-			return -1;
+	// unrecognized seek instruction
+	default:
+		// indicate failure
+		return -1;
 	}
 
 	// PHYSFS_seek return value of non-zero means success
 	if (PHYSFS_seek(fileHandle, newPos) != 0)
-		return newPos;   // success
+	{
+		return newPos;    // success
+	}
 	else
-		return -1;  // failure
+	{
+		return -1;    // failure
+	}
 }
 
 static int wz_oggVorbis_close(WZ_DECL_UNUSED void *datasource)
@@ -159,11 +169,11 @@ static int wz_oggVorbis_close(WZ_DECL_UNUSED void *datasource)
 
 static long wz_oggVorbis_tell(void *datasource)
 {
-	PHYSFS_file* fileHandle;
+	PHYSFS_file *fileHandle;
 
 	ASSERT(datasource != NULL, "NULL decoder passed!");
 
-	fileHandle = ((struct OggVorbisDecoderState*)datasource)->fileHandle;
+	fileHandle = ((struct OggVorbisDecoderState *)datasource)->fileHandle;
 	ASSERT(fileHandle != NULL, "Bad PhysicsFS file handle passed in");
 
 	return PHYSFS_tell(fileHandle);
@@ -178,13 +188,13 @@ static const ov_callbacks wz_oggVorbis_callbacks =
 };
 #endif
 
-struct OggVorbisDecoderState* sound_CreateOggVorbisDecoder(PHYSFS_file* PHYSFS_fileHandle, bool allowSeeking)
+struct OggVorbisDecoderState *sound_CreateOggVorbisDecoder(PHYSFS_file *PHYSFS_fileHandle, bool allowSeeking)
 {
 #ifndef WZ_NOSOUND
 	int error;
 #endif
 
-	struct OggVorbisDecoderState* decoder = (struct OggVorbisDecoderState *)malloc(sizeof(struct OggVorbisDecoderState));
+	struct OggVorbisDecoderState *decoder = (struct OggVorbisDecoderState *)malloc(sizeof(struct OggVorbisDecoderState));
 	if (decoder == NULL)
 	{
 		debug(LOG_FATAL, "Out of memory");
@@ -213,7 +223,7 @@ struct OggVorbisDecoderState* sound_CreateOggVorbisDecoder(PHYSFS_file* PHYSFS_f
 	return decoder;
 }
 
-void sound_DestroyOggVorbisDecoder(struct OggVorbisDecoderState* decoder)
+void sound_DestroyOggVorbisDecoder(struct OggVorbisDecoderState *decoder)
 {
 	ASSERT(decoder != NULL, "NULL decoder passed!");
 
@@ -225,7 +235,7 @@ void sound_DestroyOggVorbisDecoder(struct OggVorbisDecoderState* decoder)
 	free(decoder);
 }
 
-static inline unsigned int getSampleCount(struct OggVorbisDecoderState* decoder)
+static inline unsigned int getSampleCount(struct OggVorbisDecoderState *decoder)
 {
 #ifndef WZ_NOSOUND
 	int numSamples;
@@ -235,7 +245,9 @@ static inline unsigned int getSampleCount(struct OggVorbisDecoderState* decoder)
 	numSamples = ov_pcm_total(&decoder->oggVorbis_stream, -1);
 
 	if (numSamples == OV_EINVAL)
+	{
 		return 0;
+	}
 
 	return numSamples;
 #else
@@ -243,7 +255,7 @@ static inline unsigned int getSampleCount(struct OggVorbisDecoderState* decoder)
 #endif
 }
 
-static inline unsigned int getCurrentSample(struct OggVorbisDecoderState* decoder)
+static inline unsigned int getCurrentSample(struct OggVorbisDecoderState *decoder)
 {
 #ifndef WZ_NOSOUND
 	int samplePos;
@@ -253,7 +265,9 @@ static inline unsigned int getCurrentSample(struct OggVorbisDecoderState* decode
 	samplePos = ov_pcm_tell(&decoder->oggVorbis_stream);
 
 	if (samplePos == OV_EINVAL)
+	{
 		return 0;
+	}
 
 	return samplePos;
 #else
@@ -261,14 +275,14 @@ static inline unsigned int getCurrentSample(struct OggVorbisDecoderState* decode
 #endif
 }
 
-soundDataBuffer* sound_DecodeOggVorbis(struct OggVorbisDecoderState* decoder, size_t bufferSize)
+soundDataBuffer *sound_DecodeOggVorbis(struct OggVorbisDecoderState *decoder, size_t bufferSize)
 {
 	size_t		size = 0;
 #ifndef WZ_NOSOUND
 	int		result;
 #endif
 
-	soundDataBuffer* buffer;
+	soundDataBuffer *buffer;
 
 	ASSERT(decoder != NULL, "NULL decoder passed!");
 
@@ -302,7 +316,7 @@ soundDataBuffer* sound_DecodeOggVorbis(struct OggVorbisDecoderState* decoder, si
 		return NULL;
 	}
 
-	buffer->data = (char*)(buffer + 1);
+	buffer->data = (char *)(buffer + 1);
 	buffer->bufferSize = bufferSize;
 	buffer->bitsPerSample = 16;
 
@@ -328,7 +342,8 @@ soundDataBuffer* sound_DecodeOggVorbis(struct OggVorbisDecoderState* decoder, si
 			size += result;
 		}
 
-	} while ((result != 0 && size < bufferSize));
+	}
+	while ((result != 0 && size < bufferSize));
 #endif
 
 	buffer->size = size;

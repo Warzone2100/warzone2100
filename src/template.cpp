@@ -100,13 +100,13 @@ bool researchedTemplate(DROID_TEMPLATE *psCurr, int player, bool allowRedundant)
 	// Note the ugly special case for commanders - their weapon is unavailable
 	// NOTE: This was one ugly & hard to debug if statement.
 	bool researchedEverything = researchedPart(psCurr, player, COMP_BODY,       false, allowRedundant)
-	                         && researchedPart(psCurr, player, COMP_BRAIN,      true,  allowRedundant)
-	                         && researchedPart(psCurr, player, COMP_PROPULSION, false, allowRedundant)
-	                         && researchedPart(psCurr, player, COMP_SENSOR,     true,  allowRedundant)
-	                         && researchedPart(psCurr, player, COMP_ECM,        true,  allowRedundant)
-	                         && researchedPart(psCurr, player, COMP_REPAIRUNIT, true,  allowRedundant)
-	                         && researchedPart(psCurr, player, COMP_CONSTRUCT,  true,  allowRedundant);
-	unsigned ignoreFirstWeapon = psCurr->asParts[COMP_BRAIN] != 0? 1 : 0;
+	                            && researchedPart(psCurr, player, COMP_BRAIN,      true,  allowRedundant)
+	                            && researchedPart(psCurr, player, COMP_PROPULSION, false, allowRedundant)
+	                            && researchedPart(psCurr, player, COMP_SENSOR,     true,  allowRedundant)
+	                            && researchedPart(psCurr, player, COMP_ECM,        true,  allowRedundant)
+	                            && researchedPart(psCurr, player, COMP_REPAIRUNIT, true,  allowRedundant)
+	                            && researchedPart(psCurr, player, COMP_CONSTRUCT,  true,  allowRedundant);
+	unsigned ignoreFirstWeapon = psCurr->asParts[COMP_BRAIN] != 0 ? 1 : 0;
 	for (unsigned weapIndex = ignoreFirstWeapon; weapIndex < psCurr->numWeaps && researchedEverything; ++weapIndex)
 	{
 		researchedEverything = researchedWeap(psCurr, player, weapIndex, allowRedundant);
@@ -116,7 +116,7 @@ bool researchedTemplate(DROID_TEMPLATE *psCurr, int player, bool allowRedundant)
 
 static char const *templatesFilename()
 {
-	return bMultiPlayer? "templates.ini" : "templatesCampaign.ini";
+	return bMultiPlayer ? "templates.ini" : "templatesCampaign.ini";
 }
 
 bool initTemplates()
@@ -216,7 +216,10 @@ bool storeTemplates()
 	}
 	for (DROID_TEMPLATE *psCurr = apsDroidTemplates[selectedPlayer]; psCurr != NULL; psCurr = psCurr->psNext)
 	{
-		if (!psCurr->stored) continue; // not stored
+		if (!psCurr->stored)
+		{
+			continue;    // not stored
+		}
 		ini.beginGroup("template_" + QString::number(psCurr->multiPlayerID));
 		ini.setValue("name", psCurr->aName);
 		ini.setValue("droidType", psCurr->droidType);
@@ -284,13 +287,13 @@ void initTemplatePoints(void)
 
 DROID_TEMPLATE::DROID_TEMPLATE()  // This constructor replaces a memset in scrAssembleWeaponTemplate(), not needed elsewhere.
 	: BASE_STATS()
-	//, aName
-	//, asParts
+	  //, aName
+	  //, asParts
 	, buildPoints(0)
 	, powerPoints(0)
 	, storeCount(0)
 	, numWeaps(0)
-	//, asWeaps
+	  //, asWeaps
 	, droidType(DROID_WEAPON)
 	, multiPlayerID(0)
 	, psNext(NULL)
@@ -304,31 +307,31 @@ DROID_TEMPLATE::DROID_TEMPLATE()  // This constructor replaces a memset in scrAs
 
 DROID_TEMPLATE::DROID_TEMPLATE(LineView line)
 	: BASE_STATS(REF_TEMPLATE_START + line.line())
-	//, aName
-	//, asParts
+	  //, aName
+	  //, asParts
 	, buildPoints(0)
 	, powerPoints(0)
 	, storeCount(0)
 	, numWeaps(line.i(11, 0, DROID_MAXWEAPS))
-	//, asWeaps
+	  //, asWeaps
 	, droidType(line.e(9, map_DROID_TYPE))
 	, multiPlayerID(line.u32(1))
 	, psNext(NULL)
 	, prefab(false)
 	, stored(false)
 	, enabled(true)
-	// Ignored columns: 6 - but used later to decide whether the template is for human players.
+	  // Ignored columns: 6 - but used later to decide whether the template is for human players.
 {
 	std::string name = line.s(0);
 	sstrcpy(aName, name.c_str());
 
 	asParts[COMP_UNKNOWN]    = 0;  // Is this one useful for anything at all?
-	asParts[COMP_BODY]       = line.stats( 2, asBodyStats,       numBodyStats)       - asBodyStats;
-	asParts[COMP_BRAIN]      = line.stats( 3, asBrainStats,      numBrainStats)      - asBrainStats;
-	asParts[COMP_CONSTRUCT]  = line.stats( 4, asConstructStats,  numConstructStats)  - asConstructStats;
-	asParts[COMP_ECM]        = line.stats( 5, asECMStats,        numECMStats)        - asECMStats;
-	asParts[COMP_PROPULSION] = line.stats( 7, asPropulsionStats, numPropulsionStats) - asPropulsionStats;
-	asParts[COMP_REPAIRUNIT] = line.stats( 8, asRepairStats,     numRepairStats)     - asRepairStats;
+	asParts[COMP_BODY]       = line.stats(2, asBodyStats,       numBodyStats)       - asBodyStats;
+	asParts[COMP_BRAIN]      = line.stats(3, asBrainStats,      numBrainStats)      - asBrainStats;
+	asParts[COMP_CONSTRUCT]  = line.stats(4, asConstructStats,  numConstructStats)  - asConstructStats;
+	asParts[COMP_ECM]        = line.stats(5, asECMStats,        numECMStats)        - asECMStats;
+	asParts[COMP_PROPULSION] = line.stats(7, asPropulsionStats, numPropulsionStats) - asPropulsionStats;
+	asParts[COMP_REPAIRUNIT] = line.stats(8, asRepairStats,     numRepairStats)     - asRepairStats;
 	asParts[COMP_SENSOR]     = line.stats(10, asSensorStats,     numSensorStats)     - asSensorStats;
 
 	std::fill_n(asWeaps, DROID_MAXWEAPS, 0);
@@ -363,7 +366,7 @@ bool loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 
 		// Store translated name in aName
 		char const *droidResourceName = getDroidResourceName(design.aName);
-		sstrcpy(design.aName, droidResourceName != NULL? droidResourceName : GetDefaultTemplateName(&design));
+		sstrcpy(design.aName, droidResourceName != NULL ? droidResourceName : GetDefaultTemplateName(&design));
 
 		// Store global default design if found else store in the appropriate array
 		if (design.droidType == DROID_ANY)
@@ -387,7 +390,7 @@ bool loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 				// Also support the old template format, in which those meant
 				// for humans were player 0 (in campaign) or 5 (in multiplayer), ("YES" is used in MP stats)
 				if (NetPlay.players[i].allocated &&
-					((!bMultiPlayer && playerType == "0") || (bMultiPlayer && playerType == "5") || playerType == "YES"))
+				    ((!bMultiPlayer && playerType == "0") || (bMultiPlayer && playerType == "5") || playerType == "YES"))
 				{
 					debug(LOG_NEVER, "HUMAN (%d): %s id:%d enabled:%d", i, design.aName, design.multiPlayerID, design.enabled);
 					design.prefab = false;
@@ -426,7 +429,7 @@ bool loadDroidTemplates(const char *pDroidData, UDWORD bufferSize)
 			}
 		}
 		debug(LOG_NEVER, "(default) Droid template found, aName: %s, MP ID: %d, ref: %u, pname: %s, prefab: %s, type:%d (loading)",
-			design.aName, design.multiPlayerID, design.ref, design.pName, design.prefab ? "yes":"no", design.droidType);
+		      design.aName, design.multiPlayerID, design.ref, design.pName, design.prefab ? "yes" : "no", design.droidType);
 	}
 
 	ASSERT_OR_RETURN(false, bDefaultTemplateFound, "Default template not found");
@@ -474,7 +477,7 @@ bool droidTemplateShutDown(void)
  * \pre pName has to be the unique, untranslated name!
  * \pre player \< MAX_PLAYERS
  */
-DROID_TEMPLATE * getTemplateFromUniqueName(const char *pName, unsigned int player)
+DROID_TEMPLATE *getTemplateFromUniqueName(const char *pName, unsigned int player)
 {
 	DROID_TEMPLATE *list = apsDroidTemplates[player];
 
@@ -497,7 +500,7 @@ DROID_TEMPLATE * getTemplateFromUniqueName(const char *pName, unsigned int playe
  */
 DROID_TEMPLATE *getTemplateFromTranslatedNameNoPlayer(char const *pName)
 {
-	for (int i=0; i < MAX_PLAYERS; i++)
+	for (int i = 0; i < MAX_PLAYERS; i++)
 	{
 		for (DROID_TEMPLATE *psCurr = apsDroidTemplates[i]; psCurr != NULL; psCurr = psCurr->psNext)
 		{
@@ -512,14 +515,14 @@ DROID_TEMPLATE *getTemplateFromTranslatedNameNoPlayer(char const *pName)
 }
 
 /*getTemplatefFromMultiPlayerID gets template for unique ID  searching all lists */
-DROID_TEMPLATE* getTemplateFromMultiPlayerID(UDWORD multiPlayerID)
+DROID_TEMPLATE *getTemplateFromMultiPlayerID(UDWORD multiPlayerID)
 {
 	UDWORD		player;
 	DROID_TEMPLATE	*pDroidDesign;
 
 	for (player = 0; player < MAX_PLAYERS; player++)
 	{
-		for(pDroidDesign = apsDroidTemplates[player]; pDroidDesign != NULL; pDroidDesign = pDroidDesign->psNext)
+		for (pDroidDesign = apsDroidTemplates[player]; pDroidDesign != NULL; pDroidDesign = pDroidDesign->psNext)
 		{
 			if (pDroidDesign->multiPlayerID == multiPlayerID)
 			{
@@ -530,7 +533,7 @@ DROID_TEMPLATE* getTemplateFromMultiPlayerID(UDWORD multiPlayerID)
 	return NULL;
 }
 
-const char* getTemplateName(const DROID_TEMPLATE *psTemplate)
+const char *getTemplateName(const DROID_TEMPLATE *psTemplate)
 {
 	return psTemplate->aName;
 }
@@ -605,7 +608,7 @@ bool templateIsIDF(DROID_TEMPLATE *psTemplate)
 {
 	//add Cyborgs
 	if (!(psTemplate->droidType == DROID_WEAPON || psTemplate->droidType == DROID_CYBORG ||
-		psTemplate->droidType == DROID_CYBORG_SUPER))
+	      psTemplate->droidType == DROID_CYBORG_SUPER))
 	{
 		return false;
 	}
@@ -661,7 +664,7 @@ void fillTemplateList(std::vector<DROID_TEMPLATE *> &pList, STRUCTURE *psFactory
 		else if (bMultiPlayer && (iCapacity == SIZE_HEAVY))
 		{
 			// Special case for Super heavy bodyies (Super Transporter)
-			if((asBodyStats + psCurr->asParts[COMP_BODY])->size == SIZE_SUPER_HEAVY)
+			if ((asBodyStats + psCurr->asParts[COMP_BODY])->size == SIZE_SUPER_HEAVY)
 			{
 				pList.push_back(psCurr);
 			}

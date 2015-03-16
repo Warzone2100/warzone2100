@@ -34,21 +34,21 @@
 static inline uint16_t interpolateAngle(uint16_t v1, uint16_t v2, uint32_t t1, uint32_t t2, uint32_t t)
 {
 	const int numer = t - t1, denom = t2 - t1;
-	return v1 + angleDelta(v2 - v1) * numer/denom;
+	return v1 + angleDelta(v2 - v1) * numer / denom;
 }
 
 static Position interpolatePos(Position p1, Position p2, uint32_t t1, uint32_t t2, uint32_t t)
 {
 	const int numer = t - t1, denom = t2 - t1;
-	return p1 + (p2 - p1) * numer/denom;
+	return p1 + (p2 - p1) * numer / denom;
 }
 
 Rotation interpolateRot(Rotation v1, Rotation v2, uint32_t t1, uint32_t t2, uint32_t t)
 {
 	//return v1 + (v2 - v1) * (t - t1) / (t2 - t1);
-	return Rotation( interpolateAngle(v1.direction, v2.direction, t1, t2, t),
-	                 interpolateAngle(v1.pitch,     v2.pitch,     t1, t2, t),
-	                 interpolateAngle(v1.roll,      v2.roll,      t1, t2, t)
+	return Rotation(interpolateAngle(v1.direction, v2.direction, t1, t2, t),
+	                interpolateAngle(v1.pitch,     v2.pitch,     t1, t2, t),
+	                interpolateAngle(v1.roll,      v2.roll,      t1, t2, t)
 	               );
 }
 
@@ -63,12 +63,12 @@ Spacetime interpolateObjectSpacetime(const SIMPLE_OBJECT *obj, uint32_t t)
 {
 	switch (obj->type)
 	{
-		default:
-			return getSpacetime(obj);
-		case OBJ_DROID:
-			return interpolateSpacetime(castDroid(obj)->prevSpacetime, getSpacetime(obj), t);
-		case OBJ_PROJECTILE:
-			return interpolateSpacetime(castProjectile(obj)->prevSpacetime, getSpacetime(obj), t);
+	default:
+		return getSpacetime(obj);
+	case OBJ_DROID:
+		return interpolateSpacetime(castDroid(obj)->prevSpacetime, getSpacetime(obj), t);
+	case OBJ_PROJECTILE:
+		return interpolateSpacetime(castProjectile(obj)->prevSpacetime, getSpacetime(obj), t);
 	}
 }
 
@@ -117,31 +117,33 @@ BASE_OBJECT::~BASE_OBJECT()
 void checkObject(const SIMPLE_OBJECT *psObject, const char *const location_description, const char *function, const int recurse)
 {
 	if (recurse < 0)
+	{
 		return;
+	}
 
 	ASSERT(psObject != NULL, "NULL pointer");
 
 	switch (psObject->type)
 	{
-		case OBJ_DROID:
-			checkDroid((const DROID *)psObject, location_description, function, recurse - 1);
-			break;
+	case OBJ_DROID:
+		checkDroid((const DROID *)psObject, location_description, function, recurse - 1);
+		break;
 
-		case OBJ_STRUCTURE:
-			checkStructure((const STRUCTURE *)psObject, location_description, function, recurse - 1);
-			break;
+	case OBJ_STRUCTURE:
+		checkStructure((const STRUCTURE *)psObject, location_description, function, recurse - 1);
+		break;
 
-		case OBJ_PROJECTILE:
-			checkProjectile((const PROJECTILE *)psObject, location_description, function, recurse - 1);
-			break;
+	case OBJ_PROJECTILE:
+		checkProjectile((const PROJECTILE *)psObject, location_description, function, recurse - 1);
+		break;
 
-		case OBJ_FEATURE:
-		case OBJ_TARGET:
-			break;
+	case OBJ_FEATURE:
+	case OBJ_TARGET:
+		break;
 
-		default:
-			ASSERT_HELPER(!"invalid object type", location_description, function, "CHECK_OBJECT: Invalid object type (type num %u)", (unsigned int)psObject->type);
-			break;
+	default:
+		ASSERT_HELPER(!"invalid object type", location_description, function, "CHECK_OBJECT: Invalid object type (type num %u)", (unsigned int)psObject->type);
+		break;
 	}
 }
 
@@ -149,13 +151,13 @@ void _syncDebugObject(const char *function, SIMPLE_OBJECT const *psObject, char 
 {
 	switch (psObject->type)
 	{
-		case OBJ_DROID:      _syncDebugDroid     (function, (const DROID *)     psObject, ch); break;
-		case OBJ_STRUCTURE:  _syncDebugStructure (function, (const STRUCTURE *) psObject, ch); break;
-		case OBJ_FEATURE:    _syncDebugFeature   (function, (const FEATURE *)   psObject, ch); break;
-		case OBJ_PROJECTILE: _syncDebugProjectile(function, (const PROJECTILE *)psObject, ch); break;
-		default:             _syncDebug          (function, "%c unidentified_object%d = p%d;objectType%d", ch, psObject->id, psObject->player, psObject->type);
-			ASSERT_HELPER(!"invalid object type", "_syncDebugObject", function, "syncDebug: Invalid object type (type num %u)", (unsigned int)psObject->type);
-			break;
+	case OBJ_DROID:      _syncDebugDroid(function, (const DROID *)     psObject, ch); break;
+	case OBJ_STRUCTURE:  _syncDebugStructure(function, (const STRUCTURE *) psObject, ch); break;
+	case OBJ_FEATURE:    _syncDebugFeature(function, (const FEATURE *)   psObject, ch); break;
+	case OBJ_PROJECTILE: _syncDebugProjectile(function, (const PROJECTILE *)psObject, ch); break;
+	default:             _syncDebug(function, "%c unidentified_object%d = p%d;objectType%d", ch, psObject->id, psObject->player, psObject->type);
+		ASSERT_HELPER(!"invalid object type", "_syncDebugObject", function, "syncDebug: Invalid object type (type num %u)", (unsigned int)psObject->type);
+		break;
 	}
 }
 
@@ -165,7 +167,7 @@ Vector2i getStatsSize(BASE_STATS const *pType, uint16_t direction)
 	{
 		return getStructureStatsSize(static_cast<STRUCTURE_STATS const *>(pType), direction);
 	}
-	else if(StatIsFeature(pType))
+	else if (StatIsFeature(pType))
 	{
 		return getFeatureStatsSize(static_cast<FEATURE_STATS const *>(pType));
 	}

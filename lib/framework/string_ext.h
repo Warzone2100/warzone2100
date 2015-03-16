@@ -38,19 +38,21 @@
 #	endif
 #	if defined(DEBUG)
 #		define strdup(s) \
-			strdup2(s,__FILE__,__LINE__)
+	strdup2(s,__FILE__,__LINE__)
 static inline char *strdup2(const char *s, char *fileName, int line)
 {
 	char *result;
 
 	(void)debug_MEMCHKOFF();
-	result = (char*)malloc(strlen(s) + 1);
+	result = (char *)malloc(strlen(s) + 1);
 	(void)debug_MEMCHKON();
 
-	if (result == (char*)0)
-		return (char*)0;
-	strcpy(result, s); 
-	return result; 
+	if (result == (char *)0)
+	{
+		return (char *)0;
+	}
+	strcpy(result, s);
+	return result;
 }
 #	else	// for release builds
 #		define strdup _strdup
@@ -68,21 +70,25 @@ static inline char *strdup2(const char *s, char *fileName, int line)
  * \note This is the same as strnlen(string, maxlen - 1) + 1 when using the
  *       GNU C library.
  */
-static inline size_t strnlen1(const char* string, size_t maxlen)
+static inline size_t strnlen1(const char *string, size_t maxlen)
 {
 	// Find the first NUL char
-	const char* end = (const char*)memchr(string, '\0', maxlen); // Cast required for C++
+	const char *end = (const char *)memchr(string, '\0', maxlen); // Cast required for C++
 
 	if (end != NULL)
+	{
 		return end - string + 1;
+	}
 	else
+	{
 		return maxlen;
+	}
 }
 
 
 #ifndef HAVE_VALID_STRLCPY
 # ifdef HAVE_SYSTEM_STRLCPY
-   // If the system provides a non-conformant strlcpy we use our own
+// If the system provides a non-conformant strlcpy we use our own
 #  ifdef strlcpy
 #   undef strlcpy
 #  endif
@@ -116,7 +122,7 @@ static inline size_t strlcpy(char *dest, const char *src, size_t size)
 
 #ifndef HAVE_VALID_STRLCAT
 # ifdef HAVE_SYSTEM_STRLCAT
-   // If the system provides a non-conformant strlcat we use our own
+// If the system provides a non-conformant strlcat we use our own
 #  ifdef strlcat
 #   undef strlcat
 #  endif
@@ -151,7 +157,7 @@ static inline size_t strlcat(char *dest, const char *src, size_t size)
 
 		assert(dlen > 0);
 
-		strlcpy(&dest[dlen-1], src, size - dlen);
+		strlcpy(&dest[dlen - 1], src, size - dlen);
 	}
 
 	return len;

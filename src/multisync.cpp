@@ -83,9 +83,9 @@ static UDWORD averagePing(void)
 {
 	UDWORD i, count = 0, total = 0;
 
-	for(i=0;i<MAX_PLAYERS;i++)
+	for (i = 0; i < MAX_PLAYERS; i++)
 	{
-		if(isHumanPlayer(i))
+		if (isHumanPlayer(i))
 		{
 			total += ingame.PingTimes[i];
 			count ++;
@@ -138,24 +138,24 @@ bool sendPing(void)
 	for (i = 0; i < MAX_PLAYERS; i++)
 	{
 		if (isHumanPlayer(i)
-		 && PingSend[i]
-		 && ingame.PingTimes[i]
-		 && i != selectedPlayer)
+		    && PingSend[i]
+		    && ingame.PingTimes[i]
+		    && i != selectedPlayer)
 		{
 			ingame.PingTimes[i] = PING_LIMIT;
 		}
 		else if (!isHumanPlayer(i)
-		      && PingSend[i]
-		      && ingame.PingTimes[i]
-		      && i != selectedPlayer)
+		         && PingSend[i]
+		         && ingame.PingTimes[i]
+		         && i != selectedPlayer)
 		{
 			ingame.PingTimes[i] = 0;
 		}
 	}
 
 	NETbeginEncode(NETbroadcastQueue(), NET_PING);
-		NETuint8_t(&player);
-		NETbool(&isNew);
+	NETuint8_t(&player);
+	NETbool(&isNew);
 	NETend();
 
 	// Note when we sent the ping
@@ -174,8 +174,8 @@ bool recvPing(NETQUEUE queue)
 	uint8_t	sender, us = selectedPlayer;
 
 	NETbeginDecode(queue, NET_PING);
-		NETuint8_t(&sender);
-		NETbool(&isNew);
+	NETuint8_t(&sender);
+	NETbool(&isNew);
 	NETend();
 
 	if (sender >= MAX_PLAYERS)
@@ -188,11 +188,11 @@ bool recvPing(NETQUEUE queue)
 	if (isNew)
 	{
 		NETbeginEncode(NETnetQueue(sender), NET_PING);
-			// We are responding to a new ping
-			isNew = false;
+		// We are responding to a new ping
+		isNew = false;
 
-			NETuint8_t(&us);
-			NETbool(&isNew);
+		NETuint8_t(&us);
+		NETbool(&isNew);
 		NETend();
 	}
 	// They are responding to one of our pings

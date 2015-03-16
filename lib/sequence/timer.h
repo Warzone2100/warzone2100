@@ -30,7 +30,7 @@ double Timer_getElapsedMicroSecs(void);		// get elapsed time in microseconds
 # include <winsock2.h> /* for struct timeval */
 
 struct timezone;
-extern int gettimeofday(struct timeval* tv, struct timezone* tz);
+extern int gettimeofday(struct timeval *tv, struct timezone *tz);
 #endif
 
 #endif // __INCLUDED_LIB_SEQUENCE_TIMER_H__

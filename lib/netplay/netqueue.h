@@ -59,8 +59,14 @@ public:
 
 	MessageWriter(NetMessage *m = NULL) : message(m) {}
 	MessageWriter(NetMessage &m) : message(&m) {}
-	void byte(uint8_t v) const { message->data.push_back(v); }
-	bool valid() const { return true; }
+	void byte(uint8_t v) const
+	{
+		message->data.push_back(v);
+	}
+	bool valid() const
+	{
+		return true;
+	}
 	NetMessage *message;
 };
 /// MessageReader is used for deserialising, using the same interface as MessageWriter.
@@ -71,8 +77,15 @@ public:
 
 	MessageReader(const NetMessage *m = NULL) : message(m), index(0) {}
 	MessageReader(const NetMessage &m) : message(&m), index(0) {}
-	void byte(uint8_t &v) const { v = index >= message->data.size() ? 0x00 : message->data[index]; ++index; }
-	bool valid() const { return index <= message->data.size(); }
+	void byte(uint8_t &v) const
+	{
+		v = index >= message->data.size() ? 0x00 : message->data[index];
+		++index;
+	}
+	bool valid() const
+	{
+		return index <= message->data.size();
+	}
 	const NetMessage *message;
 	mutable size_t index;
 };
@@ -122,7 +135,11 @@ private:
 class NetQueuePair
 {
 public:
-	NetQueuePair() { send.setWillNeverGetMessages(); receive.setWillNeverGetMessagesForNet(); }
+	NetQueuePair()
+	{
+		send.setWillNeverGetMessages();
+		receive.setWillNeverGetMessagesForNet();
+	}
 
 	NetQueue send;
 	NetQueue receive;

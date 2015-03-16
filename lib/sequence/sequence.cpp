@@ -133,12 +133,12 @@ static bool audiobuf_ready = false;		// single 'frame' audio buffer ready for pr
 #endif
 
 // file handle
-static PHYSFS_file* fpInfile = NULL;
+static PHYSFS_file *fpInfile = NULL;
 
-static uint32_t* RGBAframe = NULL;					// texture buffer
+static uint32_t *RGBAframe = NULL;					// texture buffer
 
 #if !defined(WZ_NOSOUND)
-static ogg_int16_t* audiobuf = NULL;			// audio buffer
+static ogg_int16_t *audiobuf = NULL;			// audio buffer
 #endif
 
 
@@ -176,7 +176,7 @@ static int ScrnvidYpos = 0;
 static SCANLINE_MODE use_scanlines;
 
 // Helper; just grab some more compressed bitstream and sync it for page extraction
-static int buffer_data(PHYSFS_file* in, ogg_sync_state* oy)
+static int buffer_data(PHYSFS_file *in, ogg_sync_state *oy)
 {
 	// read in 256K chunks
 	const int size = 262144;
@@ -184,7 +184,7 @@ static int buffer_data(PHYSFS_file* in, ogg_sync_state* oy)
 	int bytes = PHYSFS_read(in, buffer, 1, size);
 
 	ogg_sync_wrote(oy, bytes);
-	return(bytes);
+	return (bytes);
 }
 
 /** helper: push a page into the appropriate steam
@@ -278,7 +278,7 @@ static double getRelativeTime(void)
 		timer_expire += (int)((videobuf_time - getTimeNow()) * 1000000.0);
 		timer_started = true;
 	}
-	return((getTimeNow() - basetime) * .001);
+	return ((getTimeNow() - basetime) * .001);
 }
 
 static int texture_width = 1024;
@@ -291,7 +291,9 @@ static void Allocate_videoFrame(void)
 {
 	int size = videodata.ti.frame_width * videodata.ti.frame_height * 4;
 	if (use_scanlines)
+	{
 		size *= 2;
+	}
 
 	RGBAframe = (uint32_t *)malloc(size);
 	memset(RGBAframe, 0, size);
@@ -301,7 +303,9 @@ static void Allocate_videoFrame(void)
 static void deallocateVideoFrame(void)
 {
 	if (RGBAframe)
+	{
 		free(RGBAframe);
+	}
 	glDeleteTextures(1, &video_texture);
 }
 
@@ -402,11 +406,13 @@ static void video_write(bool update)
 				rgb_offset++;
 			}
 			if (use_scanlines)
+			{
 				rgb_offset += video_width;
+			}
 		}
 
 		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, video_width,
-				video_height * height_factor, GL_RGBA, GL_UNSIGNED_BYTE, RGBAframe);
+		                video_height * height_factor, GL_RGBA, GL_UNSIGNED_BYTE, RGBAframe);
 		glErrors();
 	}
 
@@ -472,7 +478,7 @@ static void audio_write(void)
 		}
 
 		alBufferData(oldbuffer, (videodata.vi.channels == 1 ? AL_FORMAT_MONO16 : AL_FORMAT_STEREO16),
-		        audiobuf, audiodata.audiobuf_fill, videodata.vi.rate);
+		             audiobuf, audiodata.audiobuf_fill, videodata.vi.rate);
 
 		alSourceQueueBuffers(audiodata.source, 1, &oldbuffer);
 		audiodata.totbufstarted++;
@@ -543,7 +549,7 @@ static void seq_InitOgg(void)
 	Timer_start();
 }
 
-bool seq_Play(const char* filename)
+bool seq_Play(const char *filename)
 {
 	int pp_level_max = 0;
 	int pp_level = 0;
@@ -632,9 +638,9 @@ bool seq_Play(const char* filename)
 	/* we're expecting more header packets. */
 	while ((theora_p && theora_p < 3)
 #if !defined(WZ_NOSOUND)
-	    || (vorbis_p && vorbis_p < 3)
+	       || (vorbis_p && vorbis_p < 3)
 #endif
-	    )
+	      )
 	{
 		int ret;
 
@@ -747,7 +753,7 @@ bool seq_Play(const char* filename)
 		if (videodata.ti.frame_width > texture_width || videodata.ti.frame_height > texture_height)
 		{
 			debug(LOG_ERROR, "Video size too large, must be below %dx%d!",
-					texture_width, texture_height);
+			      texture_width, texture_height);
 			return false;
 		}
 		if (videodata.ti.pixelformat != OC_PF_420)
@@ -759,13 +765,15 @@ bool seq_Play(const char* filename)
 
 		// disable scanlines if the video is too large for the texture or shown too small
 		if (videodata.ti.frame_height * 2 > texture_height || videoY2 < videodata.ti.frame_height * 2)
+		{
 			use_scanlines = SCANLINES_OFF;
+		}
 
 		Allocate_videoFrame();
 
 		glBindTexture(GL_TEXTURE_2D, video_texture);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texture_width, texture_height,
-				0, GL_RGBA, GL_UNSIGNED_BYTE, blackframe);
+		             0, GL_RGBA, GL_UNSIGNED_BYTE, blackframe);
 		free(blackframe);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -798,7 +806,7 @@ bool seq_Update()
 	int ret;
 #if !defined(WZ_NOSOUND)
 	int i, j;
-	float **  pcm;
+	float   **pcm;
 	int count, maxsamples;
 #endif
 
@@ -863,12 +871,14 @@ bool seq_Update()
 			if (ogg_stream_packetout(&videodata.vo, &op) > 0)
 			{
 				if (vorbis_synthesis(&videodata.vb, &op) == 0)
-				{	/* test for success! */
+				{
+					/* test for success! */
 					vorbis_synthesis_blockin(&videodata.vd, &videodata.vb);
 				}
 			}
 			else
-			{	/* we need more data; break out to suck in another page */
+			{
+				/* we need more data; break out to suck in another page */
 				break;
 			}
 		}
@@ -912,12 +922,12 @@ bool seq_Update()
 #endif
 
 	if (PHYSFS_eof(fpInfile)
-		&& !videobuf_ready
+	    && !videobuf_ready
 #if !defined(WZ_NOSOUND)
-		&& ((!audiobuf_ready && (audiodata.audiobuf_fill == 0)) || audio_Disabled())
-		&& sourcestate != AL_PLAYING
+	    && ((!audiobuf_ready && (audiodata.audiobuf_fill == 0)) || audio_Disabled())
+	    && sourcestate != AL_PLAYING
 #endif
-	 )
+	   )
 	{
 		video_write(false);
 		seq_Shutdown();
@@ -927,9 +937,9 @@ bool seq_Update()
 
 	if (!videobuf_ready
 #if !defined(WZ_NOSOUND)
-	 || !audiobuf_ready
+	    || !audiobuf_ready
 #endif
-	 )
+	   )
 	{
 		/* no data yet for somebody.  Grab another page */
 		ret = buffer_data(fpInfile, &videodata.oy);
@@ -942,9 +952,9 @@ bool seq_Update()
 #if !defined(WZ_NOSOUND)
 	/* If playback has begun, top audio buffer off immediately. */
 	if (vorbis_p
-	 && stateflag
-	// FIXME : it is possible to crash if people are playing with no sound.
-	 && !audio_Disabled())
+	    && stateflag
+	    // FIXME : it is possible to crash if people are playing with no sound.
+	    && !audio_Disabled())
 	{
 		// play the data in pcm
 		audio_write();
@@ -967,9 +977,9 @@ bool seq_Update()
 		   we can begin playback */
 	if ((!theora_p || videobuf_ready)
 #if !defined(WZ_NOSOUND)
-	 && (!vorbis_p || audiobuf_ready)
+	    && (!vorbis_p || audiobuf_ready)
 #endif
-	 && !stateflag)
+	    && !stateflag)
 	{
 		debug(LOG_VIDEO, "all buffers ready");
 		stateflag = true;
@@ -1082,10 +1092,10 @@ void seq_SetDisplaySize(int sizeX, int sizeY, int posX, int posY)
 
 void seq_setScanlineMode(SCANLINE_MODE mode)
 {
-    use_scanlines = mode;
+	use_scanlines = mode;
 }
 
 SCANLINE_MODE seq_getScanlineMode(void)
 {
-    return use_scanlines;
+	return use_scanlines;
 }

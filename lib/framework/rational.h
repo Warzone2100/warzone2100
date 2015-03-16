@@ -45,27 +45,78 @@ struct Rational
 	Rational(int numerator, int denominator = 1)
 	{
 		int g = gcd(numerator, denominator);
-		g *= denominator > 0? 1 : -1;
-		n = numerator/g;
-		d = denominator/g;
+		g *= denominator > 0 ? 1 : -1;
+		n = numerator / g;
+		d = denominator / g;
 	}
-	bool operator ==(Rational const &b) const { return n*b.d == b.n*d; }
-	bool operator !=(Rational const &b) const { return n*b.d != b.n*d; }
-	bool operator < (Rational const &b) const { return n*b.d <  b.n*d; }
-	bool operator <=(Rational const &b) const { return n*b.d <= b.n*d; }
-	bool operator > (Rational const &b) const { return n*b.d >  b.n*d; }
-	bool operator >=(Rational const &b) const { return n*b.d >= b.n*d; }
-	Rational operator +(Rational const &b) const { return Rational(n*b.d + b.n*d, d*b.d); }
-	Rational operator -(Rational const &b) const { return Rational(n*b.d - b.n*d, d*b.d); }
-	Rational operator *(Rational const &b) const { return Rational(n*b.n, d*b.d); }
-	Rational operator /(Rational const &b) const { return Rational(n*b.d, d*b.n); }
-	Rational operator -() const { return Rational(-n, d); }
-	Rational &operator +=(Rational const &b) { return *this = *this + b; }
-	Rational &operator -=(Rational const &b) { return *this = *this - b; }
-	Rational &operator *=(Rational const &b) { return *this = *this * b; }
-	Rational &operator /=(Rational const &b) { return *this = *this / b; }
-	int floor() const { return n >= 0? n/d : (n - (d - 1))/d; }
-	int ceil() const { return n >= 0? (n + (d - 1))/d : n/d; }
+	bool operator ==(Rational const &b) const
+	{
+		return n * b.d == b.n * d;
+	}
+	bool operator !=(Rational const &b) const
+	{
+		return n * b.d != b.n * d;
+	}
+	bool operator < (Rational const &b) const
+	{
+		return n * b.d <  b.n * d;
+	}
+	bool operator <=(Rational const &b) const
+	{
+		return n * b.d <= b.n * d;
+	}
+	bool operator > (Rational const &b) const
+	{
+		return n * b.d >  b.n * d;
+	}
+	bool operator >=(Rational const &b) const
+	{
+		return n * b.d >= b.n * d;
+	}
+	Rational operator +(Rational const &b) const
+	{
+		return Rational(n * b.d + b.n * d, d * b.d);
+	}
+	Rational operator -(Rational const &b) const
+	{
+		return Rational(n * b.d - b.n * d, d * b.d);
+	}
+	Rational operator *(Rational const &b) const
+	{
+		return Rational(n * b.n, d * b.d);
+	}
+	Rational operator /(Rational const &b) const
+	{
+		return Rational(n * b.d, d * b.n);
+	}
+	Rational operator -() const
+	{
+		return Rational(-n, d);
+	}
+	Rational &operator +=(Rational const &b)
+	{
+		return *this = *this + b;
+	}
+	Rational &operator -=(Rational const &b)
+	{
+		return *this = *this - b;
+	}
+	Rational &operator *=(Rational const &b)
+	{
+		return *this = *this * b;
+	}
+	Rational &operator /=(Rational const &b)
+	{
+		return *this = *this / b;
+	}
+	int floor() const
+	{
+		return n >= 0 ? n / d : (n - (d - 1)) / d;
+	}
+	int ceil() const
+	{
+		return n >= 0 ? (n + (d - 1)) / d : n / d;
+	}
 
 	// If int16_t isn't big enough, the comparison operations might overflow.
 	int16_t n;

@@ -81,17 +81,17 @@ static void displayStructureBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset
 
 // ////////////////////////////////////////////////////////////////////////////
 
-static bool useStruct(UDWORD count,UDWORD i)
+static bool useStruct(UDWORD count, UDWORD i)
 {
 	ASSERT(i < numStructureStats, "Bad structure for structure limit: %d", (int)i);
 
-	if(count >= (4*BUTPERFORM))
+	if (count >= (4 * BUTPERFORM))
 	{
 		return false;
 	}
 
 	// now see if we loaded that stat..
-	if(asStructLimits[0][i].globalLimit ==LOTS_OF)
+	if (asStructLimits[0][i].globalLimit == LOTS_OF)
 	{
 		return false;
 	}
@@ -120,10 +120,10 @@ bool startLimitScreen(void)
 	addBackdrop();//background
 
 	// load stats...
-	if(!bLimiterLoaded)
+	if (!bLimiterLoaded)
 	{
 		initLoadingScreen(true);
-		
+
 		if (!resLoad("wrf/limiter_tex.wrf", 501))
 		{
 			return false;
@@ -141,18 +141,18 @@ bool startLimitScreen(void)
 
 		bLimiterLoaded = true;
 
-		closeLoadingScreen();		
+		closeLoadingScreen();
 	}
 
 	if (challengeActive)
 	{
 		// reset the sliders..
-		// it's a HACK since the actual limiter structure was cleared in the startMultiOptions function 
+		// it's a HACK since the actual limiter structure was cleared in the startMultiOptions function
 		for (i = 0; i < numStructureStats ; ++i)
 		{
 			asStructLimits[0][i].limit = asStructLimits[0][i].globalLimit;
 		}
-		
+
 		// turn off the sliders
 		sliderEnableDrag(false);
 	}
@@ -162,7 +162,7 @@ bool startLimitScreen(void)
 		sliderEnableDrag(true);
 	}
 
-	addSideText(FRONTEND_SIDETEXT1,LIMITSX-2,LIMITSY,"LIMITS");	// draw sidetext...
+	addSideText(FRONTEND_SIDETEXT1, LIMITSX - 2, LIMITSY, "LIMITS");	// draw sidetext...
 
 	W_FORMINIT sFormInit;
 	sFormInit.formID	= FRONTEND_BACKDROP;
@@ -176,31 +176,34 @@ bool startLimitScreen(void)
 	widgAddForm(psWScreen, &sFormInit);
 
 	// return button.
-	addMultiBut(psWScreen,IDLIMITS,IDLIMITS_RETURN,
-					LIMITS_OKX-40,LIMITS_OKY,
-					iV_GetImageWidth(FrontImages,IMAGE_RETURN),
-					iV_GetImageHeight(FrontImages,IMAGE_RETURN),
-					_("Apply Defaults and Return To Previous Screen"),IMAGE_NO,IMAGE_NO,true);
+	addMultiBut(psWScreen, IDLIMITS, IDLIMITS_RETURN,
+	            LIMITS_OKX - 40, LIMITS_OKY,
+	            iV_GetImageWidth(FrontImages, IMAGE_RETURN),
+	            iV_GetImageHeight(FrontImages, IMAGE_RETURN),
+	            _("Apply Defaults and Return To Previous Screen"), IMAGE_NO, IMAGE_NO, true);
 
 	// ok button
-	addMultiBut(psWScreen,IDLIMITS,IDLIMITS_OK,
-					LIMITS_OKX,LIMITS_OKY,
-					iV_GetImageWidth(FrontImages,IMAGE_OK),
-					iV_GetImageHeight(FrontImages,IMAGE_OK),
-					_("Accept Settings"),IMAGE_OK,IMAGE_OK,true);
+	addMultiBut(psWScreen, IDLIMITS, IDLIMITS_OK,
+	            LIMITS_OKX, LIMITS_OKY,
+	            iV_GetImageWidth(FrontImages, IMAGE_OK),
+	            iV_GetImageHeight(FrontImages, IMAGE_OK),
+	            _("Accept Settings"), IMAGE_OK, IMAGE_OK, true);
 
 	// Count the number of minor tabs needed
 	numButtons = 0;
 
-	for(i=0;i<numStructureStats;i++ )
+	for (i = 0; i < numStructureStats; i++)
 	{
-		if(useStruct(numButtons,i))
+		if (useStruct(numButtons, i))
 		{
 			numButtons++;
 		}
 	}
 
-	if(numButtons >(4*BUTPERFORM)) numButtons =(4*BUTPERFORM);
+	if (numButtons > (4 * BUTPERFORM))
+	{
+		numButtons = (4 * BUTPERFORM);
+	}
 
 	// add tab form..
 	sFormInit = W_FORMINIT();
@@ -210,19 +213,19 @@ bool startLimitScreen(void)
 	sFormInit.x = 50;
 	sFormInit.y = 10;
 	sFormInit.width = LIMITSW - 100;
-	sFormInit.height =LIMITSH - 4;
+	sFormInit.height = LIMITSH - 4;
 	sFormInit.numMajor = numForms(numButtons, BUTPERFORM);
 	sFormInit.majorPos = WFORM_TABTOP;
 	sFormInit.minorPos = WFORM_TABNONE;
-	sFormInit.majorSize = OBJ_TABWIDTH+3; //!!
+	sFormInit.majorSize = OBJ_TABWIDTH + 3; //!!
 	sFormInit.majorOffset = OBJ_TABOFFSET;
-	sFormInit.tabVertOffset = (OBJ_TABHEIGHT/2);			//(DES_TAB_HEIGHT/2)+2;
+	sFormInit.tabVertOffset = (OBJ_TABHEIGHT / 2);			//(DES_TAB_HEIGHT/2)+2;
 	sFormInit.tabMajorThickness = OBJ_TABHEIGHT;
 	sFormInit.pUserData = &StandardTab;
 	sFormInit.pTabDisplay = intDisplayTab;
 
 	// TABFIXME --unsure if needs fixing yet.
-	for (i=0; i< sFormInit.numMajor; i++)
+	for (i = 0; i < sFormInit.numMajor; i++)
 	{
 		sFormInit.aNumMinors[i] = 1;
 	}
@@ -239,30 +242,30 @@ bool startLimitScreen(void)
 	sButInit.y		  = 5;
 	sButInit.id	 	  = IDLIMITS_ENTRIES_START;
 
-	numButtons =0;
-	for(i=0; i<numStructureStats ;i++)
+	numButtons = 0;
+	for (i = 0; i < numStructureStats ; i++)
 	{
-		if(useStruct(numButtons,i))
+		if (useStruct(numButtons, i))
 		{
 			numButtons++;
-			sButInit.UserData= i;
+			sButInit.UserData = i;
 
 			widgAddForm(psWScreen, &sButInit);
 			sButInit.id	++;
 
-			addFESlider(sButInit.id,sButInit.id-1, 290,11,
-						asStructLimits[0][i].globalLimit,
-						asStructLimits[0][i].limit);
+			addFESlider(sButInit.id, sButInit.id - 1, 290, 11,
+			            asStructLimits[0][i].globalLimit,
+			            asStructLimits[0][i].limit);
 			sButInit.id	++;
 
-			if (sButInit.y + BARHEIGHT + 2 > (BUTPERFORM*(BARHEIGHT+2) - 4) )
+			if (sButInit.y + BARHEIGHT + 2 > (BUTPERFORM * (BARHEIGHT + 2) - 4))
 			{
 				sButInit.y = 5;
 				sButInit.majorID += 1;
 			}
 			else
 			{
-				sButInit.y +=  BARHEIGHT +5;
+				sButInit.y +=  BARHEIGHT + 5;
 			}
 		}
 	}
@@ -277,21 +280,21 @@ void runLimitScreen(void)
 	frontendMultiMessages();							// network stuff.
 
 	WidgetTriggers const &triggers = widgRunScreen(psWScreen);
-	unsigned id = triggers.empty()? 0 : triggers.front().widget->id;  // Just use first click here, since the next click could be on another menu.
+	unsigned id = triggers.empty() ? 0 : triggers.front().widget->id; // Just use first click here, since the next click could be on another menu.
 
 	// sliders
-	if((id > IDLIMITS_ENTRIES_START)  && (id< IDLIMITS_ENTRIES_END))
+	if ((id > IDLIMITS_ENTRIES_START)  && (id < IDLIMITS_ENTRIES_END))
 	{
-		unsigned statid = widgGetFromID(psWScreen,id-1)->UserData;
-		if(statid)
+		unsigned statid = widgGetFromID(psWScreen, id - 1)->UserData;
+		if (statid)
 		{
-			asStructLimits[0][statid].limit = (UBYTE) ((W_SLIDER*)(widgGetFromID(psWScreen,id)))->pos;
+			asStructLimits[0][statid].limit = (UBYTE)((W_SLIDER *)(widgGetFromID(psWScreen, id)))->pos;
 		}
 	}
 	else
 	{
 		// icons that are always about.
-		switch(id)
+		switch (id)
 		{
 		case IDLIMITS_RETURN:
 			// reset the sliders..
@@ -311,13 +314,13 @@ void runLimitScreen(void)
 			changeTitleMode(MULTIOPTION);
 
 			// make some noize.
-			if(!ingame.localOptionsReceived)
+			if (!ingame.localOptionsReceived)
 			{
-				addConsoleMessage(_("Limits reset to default values"),DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+				addConsoleMessage(_("Limits reset to default values"), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 			}
 			else
 			{
-				sendTextMessage("Limits Reset To Default Values",true);
+				sendTextMessage("Limits Reset To Default Values", true);
 			}
 
 			break;
@@ -350,7 +353,7 @@ void createLimitSet(void)
 	{
 		return;
 	}
-	
+
 	// Count the number of changes
 	for (i = 0; i < numStructureStats; i++)
 	{
@@ -399,9 +402,9 @@ void applyLimitSet(void)
 
 	// Get the limits and decode
 	for (int i = 0; i < ingame.numStructureLimits; ++i)
- 	{
+	{
 		int id = pEntry[i].id;
-		
+
 		// So long as the ID is valid
 		if (id < numStructureStats)
 		{
@@ -419,8 +422,8 @@ void applyLimitSet(void)
 
 static void displayStructureBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
 {
-	UDWORD	x = xOffset+psWidget->x;
-	UDWORD	y = yOffset+psWidget->y;
+	UDWORD	x = xOffset + psWidget->x;
+	UDWORD	y = yOffset + psWidget->y;
 	UDWORD	w = psWidget->width;
 	UDWORD	h = psWidget->height;
 	STRUCTURE_STATS	*stat = asStructureStats + psWidget->UserData;
@@ -428,25 +431,30 @@ static void displayStructureBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset
 	Vector3i rotation;
 	char str[20];
 
-	UDWORD scale,Radius;
+	UDWORD scale, Radius;
 
-	drawBlueBox(x,y,w,h);
+	drawBlueBox(x, y, w, h);
 
 	// draw image
-	pie_SetGeometricOffset( x+35 ,y+(psWidget->height/2)+9);
+	pie_SetGeometricOffset(x + 35 , y + (psWidget->height / 2) + 9);
 	rotation.x = -15;
-	rotation.y = ((realTime/45)%360) ; //45
+	rotation.y = ((realTime / 45) % 360) ; //45
 	rotation.z = 0;
 	position.x = 0;
 	position.y = 0;
-	position.z = BUTTON_DEPTH*2;//getStructureStatSize(stat)  * 38 * OBJECT_RADIUS;
+	position.z = BUTTON_DEPTH * 2; //getStructureStatSize(stat)  * 38 * OBJECT_RADIUS;
 
 	Radius = getStructureStatSizeMax(stat);
-	if(Radius <= 128) {
+	if (Radius <= 128)
+	{
 		scale = SMALL_STRUCT_SCALE;
-	} else if(Radius <= 256) {
+	}
+	else if (Radius <= 256)
+	{
 		scale = MED_STRUCT_SCALE;
-	} else {
+	}
+	else
+	{
 		scale = LARGE_STRUCT_SCALE;
 	}
 
@@ -461,7 +469,7 @@ static void displayStructureBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset
 
 	// draw limit
 	ssprintf(str, "%d", ((W_SLIDER *)widgGetFromID(psWScreen, psWidget->id + 1))->pos);
-	iV_DrawText(str, x+270, y+(psWidget->height/2)+3);
+	iV_DrawText(str, x + 270, y + (psWidget->height / 2) + 3);
 
 	return;
 }

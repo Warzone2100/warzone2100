@@ -47,7 +47,7 @@ void updateMultiStatsDamage(UDWORD attacker, UDWORD defender, UDWORD inflicted);
 void updateMultiStatsGames(void);
 void updateMultiStatsWins(void);
 void updateMultiStatsLoses(void);
-void updateMultiStatsKills(BASE_OBJECT *psKilled,UDWORD player);
+void updateMultiStatsKills(BASE_OBJECT *psKilled, UDWORD player);
 void recvMultiStats(NETQUEUE queue);
 
 #endif // __INCLUDED_SRC_MULTISTATS_H__

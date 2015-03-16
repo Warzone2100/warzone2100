@@ -54,7 +54,7 @@ void clustNewDroid(DROID *psDroid);
 void clustNewStruct(STRUCTURE *psStruct);
 
 // update the cluster information for an object
-void clustUpdateObject(BASE_OBJECT * psObj);
+void clustUpdateObject(BASE_OBJECT *psObj);
 
 // update all objects from a list belonging to a specific cluster
 void clustUpdateCluster(BASE_OBJECT *psList, SDWORD cluster);

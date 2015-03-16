@@ -45,7 +45,7 @@ extern iTexPage _TEX_PAGE[iV_TEX_MAX];
 
 //*************************************************************************
 
-static inline char * iV_TexName(SDWORD pageNum)
+static inline char *iV_TexName(SDWORD pageNum)
 {
 	return _TEX_PAGE[pageNum].name;
 }
@@ -67,8 +67,8 @@ extern void pie_TexInit(void);
 
 extern void pie_InitSkybox(SDWORD pageNum);
 
-extern void pie_MakeTexPageName(char * filename);
-extern void pie_MakeTexPageTCMaskName(char * filename);
+extern void pie_MakeTexPageName(char *filename);
+extern void pie_MakeTexPageTCMaskName(char *filename);
 
 //*************************************************************************
 

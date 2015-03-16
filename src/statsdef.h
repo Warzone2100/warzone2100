@@ -29,7 +29,10 @@
 #include <vector>
 #include <algorithm>
 
-static inline bool stringToEnumSortFunction(std::pair<char const *, unsigned> const &a, std::pair<char const *, unsigned> const &b) { return strcmp(a.first, b.first) < 0; }
+static inline bool stringToEnumSortFunction(std::pair<char const *, unsigned> const &a, std::pair<char const *, unsigned> const &b)
+{
+	return strcmp(a.first, b.first) < 0;
+}
 template <typename STATS>
 static inline STATS *findStatsByName(std::string const &name, STATS *asStats, unsigned numStats)
 {
@@ -60,9 +63,12 @@ static inline STATS *findStatsByName(std::string const &name, STATS **asStats, u
 template <typename Enum>
 struct StringToEnum
 {
-	operator std::pair<char const *, unsigned>() const { return std::make_pair(string, value); }
+	operator std::pair<char const *, unsigned>() const
+	{
+		return std::make_pair(string, value);
+	}
 
-	char const *    string;
+	char const     *string;
 	Enum            value;
 };
 
@@ -72,9 +78,9 @@ struct StringToEnumMap : public std::vector<std::pair<char const *, unsigned> >
 	typedef std::vector<std::pair<char const *, unsigned> > V;
 
 	template <int N>
-	static StringToEnumMap<Enum> const &FromArray(StringToEnum<Enum> const (&map)[N])
+	static StringToEnumMap<Enum> const &FromArray(StringToEnum<Enum> const(&map)[N])
 	{
-		static StringToEnum<Enum> const (&myMap)[N] = map;
+		static StringToEnum<Enum> const(&myMap)[N] = map;
 		static const StringToEnumMap<Enum> sortedMap(map);
 		assert(map == myMap);
 		(void)myMap;  // Squelch warning in release mode.
@@ -82,7 +88,10 @@ struct StringToEnumMap : public std::vector<std::pair<char const *, unsigned> >
 	}
 
 	template <int N>
-	StringToEnumMap(StringToEnum<Enum> const (&entries)[N]) : V(entries, entries + N) { std::sort(V::begin(), V::end(), stringToEnumSortFunction); }
+	StringToEnumMap(StringToEnum<Enum> const(&entries)[N]) : V(entries, entries + N)
+	{
+		std::sort(V::begin(), V::end(), stringToEnumSortFunction);
+	}
 };
 
 /// Read-only view of file data in "A,1,2\nB,3,4" format as a 2D array-like object. Note — does not copy the file data.
@@ -91,14 +100,23 @@ class TableView
 public:
 	TableView(char const *buffer, unsigned size);
 
-	bool isError() const { return !parseError.isEmpty(); }  ///< If returning true, there was an error parsing the table.
-	QString getError() const { return parseError; }         ///< Returns an error message about what went wrong.
+	bool isError() const
+	{
+		return !parseError.isEmpty();    ///< If returning true, there was an error parsing the table.
+	}
+	QString getError() const
+	{
+		return parseError;    ///< Returns an error message about what went wrong.
+	}
 
-	unsigned size() const { return lines.size(); }
+	unsigned size() const
+	{
+		return lines.size();
+	}
 
 private:
 	friend class LineView;
-	char const *                                buffer;
+	char const                                 *buffer;
 	std::vector<uint32_t>                       cells;
 	std::vector<std::pair<uint32_t, uint32_t> > lines;  // List of pairs of offsets into the cells array and the number of cells in the line.
 	QString                                     parseError;
@@ -111,23 +129,53 @@ class LineView
 public:
 	LineView(class TableView &table, unsigned lineNumber) : table(table), cells(&table.cells[table.lines.at(lineNumber).first]), numCells(table.lines.at(lineNumber).second), lineNumber(lineNumber) {}  ///< This LineView is only valid for the lifetime of the TableView.
 
-	bool isError() const { return !table.parseError.isEmpty(); }  ///< If returning true, there was an error parsing the table.
+	bool isError() const
+	{
+		return !table.parseError.isEmpty();    ///< If returning true, there was an error parsing the table.
+	}
 	void setError(unsigned index, char const *error);  ///< Only the first error is saved.
 
-	unsigned size() const { return numCells; }
-	unsigned line() const { return lineNumber; }
+	unsigned size() const
+	{
+		return numCells;
+	}
+	unsigned line() const
+	{
+		return lineNumber;
+	}
 
 	/// Function for reading a bool (in the form of "0" or "1") in the line.
-	bool b(unsigned index) { return i(index, 0, 1); }
+	bool b(unsigned index)
+	{
+		return i(index, 0, 1);
+	}
 
 	/// Functions for reading integers in the line.
 	int64_t i(unsigned index, int64_t min, int64_t max);
-	uint32_t i8(unsigned index)  { return i(index, INT8_MIN,  INT8_MAX);   }
-	uint32_t u8(unsigned index)  { return i(index, 0,         UINT8_MAX);  }
-	uint32_t i16(unsigned index) { return i(index, INT16_MIN, INT16_MAX);  }
-	uint32_t u16(unsigned index) { return i(index, 0,         UINT16_MAX); }
-	uint32_t i32(unsigned index) { return i(index, INT32_MIN, INT32_MAX);  }
-	uint32_t u32(unsigned index) { return i(index, 0,         UINT32_MAX); }
+	uint32_t i8(unsigned index)
+	{
+		return i(index, INT8_MIN,  INT8_MAX);
+	}
+	uint32_t u8(unsigned index)
+	{
+		return i(index, 0,         UINT8_MAX);
+	}
+	uint32_t i16(unsigned index)
+	{
+		return i(index, INT16_MIN, INT16_MAX);
+	}
+	uint32_t u16(unsigned index)
+	{
+		return i(index, 0,         UINT16_MAX);
+	}
+	uint32_t i32(unsigned index)
+	{
+		return i(index, INT32_MIN, INT32_MAX);
+	}
+	uint32_t u32(unsigned index)
+	{
+		return i(index, 0,         UINT32_MAX);
+	}
 
 	/// Function for reading a float in the line. (Should not use the result to affect game state.)
 	float f(unsigned index, float min = -1.e30f, float max = 1.e30f);
@@ -137,9 +185,15 @@ public:
 
 	// Function for reading enum values. The StringToEnum map should give a list of strings and corresponding enum values.
 	template <typename Enum>
-	Enum e(unsigned index, StringToEnumMap<Enum> const &map) { return (Enum)eu(index, map); }
+	Enum e(unsigned index, StringToEnumMap<Enum> const &map)
+	{
+		return (Enum)eu(index, map);
+	}
 	template <typename Enum, int N>
-	Enum e(unsigned index, StringToEnum<Enum> const (&map)[N]) { return e(index, StringToEnumMap<Enum>::FromArray(map)); }
+	Enum e(unsigned index, StringToEnum<Enum> const(&map)[N])
+	{
+		return e(index, StringToEnumMap<Enum>::FromArray(map));
+	}
 
 	/// Returns the .pie file data referenced by the cell. May return NULL without error if the cell is "0" and accept0AsNULL is true.
 	iIMDShape *imdShape(unsigned index, bool accept0AsNULL = false);
@@ -183,8 +237,8 @@ public:
 private:
 	unsigned eu(unsigned index, std::vector<std::pair<char const *, unsigned> > const &map);
 	bool checkRange(unsigned index);
-	class TableView &       table;
-	unsigned const *        cells;
+	class TableView        &table;
+	unsigned const         *cells;
 	unsigned                numCells;
 	unsigned                lineNumber;
 };
