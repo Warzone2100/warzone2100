@@ -40,7 +40,7 @@
 
 extern void mainLoop();
 // used in crash reports & version info
-const char *BACKEND="SDL";
+const char *BACKEND = "SDL";
 
 int realmain(int argc, char *argv[]);
 int main(int argc, char *argv[])
@@ -51,7 +51,7 @@ int main(int argc, char *argv[])
 unsigned                screenWidth = 0;   // Declared in frameint.h.
 unsigned                screenHeight = 0;  // Declared in frameint.h.
 static unsigned         screenDepth = 0;
-static SDL_Surface *    screen = NULL;
+static SDL_Surface     *screen = NULL;
 
 QCoreApplication *appPtr;
 
@@ -122,11 +122,11 @@ static InputKey	*pStartBuffer, *pEndBuffer;
 QString wzGetSelection()
 {
 	QString retval;
-	static char* scrap = NULL;
+	static char *scrap = NULL;
 	int scraplen;
 
-	get_scrap(T('T','E','X','T'), &scraplen, &scrap);
-	if (scraplen > 0 && scraplen < WIDG_MAXSTR-2)
+	get_scrap(T('T', 'E', 'X', 'T'), &scraplen, &scrap);
+	if (scraplen > 0 && scraplen < WIDG_MAXSTR - 2)
 	{
 		retval = QString::fromUtf8(scrap);
 	}
@@ -157,11 +157,11 @@ static int swapInterval = -1;
 
 void wzSetSwapInterval(int interval)
 {
-	typedef void (* PFNGLXQUERYDRAWABLEPROC) (Display *, GLXDrawable, int, unsigned int *);
-	typedef void ( * PFNGLXSWAPINTERVALEXTPROC) (Display*, GLXDrawable, int);
+	typedef void (* PFNGLXQUERYDRAWABLEPROC)(Display *, GLXDrawable, int, unsigned int *);
+	typedef void (* PFNGLXSWAPINTERVALEXTPROC)(Display *, GLXDrawable, int);
 	typedef int (* PFNGLXGETSWAPINTERVALMESAPROC)(void);
 	typedef int (* PFNGLXSWAPINTERVALMESAPROC)(unsigned);
-	typedef int (* PFNGLXSWAPINTERVALSGIPROC) (int);
+	typedef int (* PFNGLXSWAPINTERVALSGIPROC)(int);
 	PFNGLXSWAPINTERVALEXTPROC glXSwapIntervalEXT;
 	PFNGLXQUERYDRAWABLEPROC glXQueryDrawable;
 	PFNGLXGETSWAPINTERVALMESAPROC glXGetSwapIntervalMESA;
@@ -169,12 +169,14 @@ void wzSetSwapInterval(int interval)
 	PFNGLXSWAPINTERVALSGIPROC glXSwapIntervalSGI;
 
 	if (interval < 0)
-			interval = 0;
+	{
+		interval = 0;
+	}
 
 #if GLX_VERSION_1_2
 	// Hack-ish, but better than not supporting GLX_SWAP_INTERVAL_EXT?
 	GLXDrawable drawable = glXGetCurrentDrawable();
-	Display * display =  glXGetCurrentDisplay();
+	Display *display =  glXGetCurrentDisplay();
 	glXSwapIntervalEXT = (PFNGLXSWAPINTERVALEXTPROC) SDL_GL_GetProcAddress("glXSwapIntervalEXT");
 	glXQueryDrawable = (PFNGLXQUERYDRAWABLEPROC) SDL_GL_GetProcAddress("glXQueryDrawable");
 
@@ -201,7 +203,9 @@ void wzSetSwapInterval(int interval)
 	if (glXSwapIntervalSGI)
 	{
 		if (interval < 1)
+		{
 			interval = 1;
+		}
 		if (glXSwapIntervalSGI(interval))
 		{
 			// Error, revert to default
@@ -220,11 +224,13 @@ void wzSetSwapInterval(int interval)
 int wzGetSwapInterval()
 {
 	if (swapInterval >= 0)
+	{
 		return swapInterval;
+	}
 
-	typedef void (* PFNGLXQUERYDRAWABLEPROC) (Display *, GLXDrawable, int, unsigned int *);
+	typedef void (* PFNGLXQUERYDRAWABLEPROC)(Display *, GLXDrawable, int, unsigned int *);
 	typedef int (* PFNGLXGETSWAPINTERVALMESAPROC)(void);
-	typedef int (* PFNGLXSWAPINTERVALSGIPROC) (int);
+	typedef int (* PFNGLXSWAPINTERVALSGIPROC)(int);
 	PFNGLXQUERYDRAWABLEPROC glXQueryDrawable;
 	PFNGLXGETSWAPINTERVALMESAPROC glXGetSwapIntervalMESA;
 	PFNGLXSWAPINTERVALSGIPROC glXSwapIntervalSGI;
@@ -232,7 +238,7 @@ int wzGetSwapInterval()
 #if GLX_VERSION_1_2
 	// Hack-ish, but better than not supporting GLX_SWAP_INTERVAL_EXT?
 	GLXDrawable drawable = glXGetCurrentDrawable();
-	Display * display =  glXGetCurrentDisplay();
+	Display *display =  glXGetCurrentDisplay();
 	glXQueryDrawable = (PFNGLXQUERYDRAWABLEPROC) SDL_GL_GetProcAddress("glXQueryDrawable");
 
 	if (glXQueryDrawable && drawable)
@@ -267,26 +273,32 @@ int wzGetSwapInterval()
 
 void wzSetSwapInterval(int interval)
 {
-	typedef BOOL (WINAPI * PFNWGLSWAPINTERVALEXTPROC) (int);
+	typedef BOOL (WINAPI * PFNWGLSWAPINTERVALEXTPROC)(int);
 	PFNWGLSWAPINTERVALEXTPROC wglSwapIntervalEXT;
 
 	if (interval < 0)
+	{
 		interval = 0;
+	}
 
 	wglSwapIntervalEXT = (PFNWGLSWAPINTERVALEXTPROC) SDL_GL_GetProcAddress("wglSwapIntervalEXT");
 
 	if (wglSwapIntervalEXT)
+	{
 		wglSwapIntervalEXT(interval);
+	}
 }
 
 int wzGetSwapInterval()
 {
-	typedef int (WINAPI * PFNWGLGETSWAPINTERVALEXTPROC) (void);
+	typedef int (WINAPI * PFNWGLGETSWAPINTERVALEXTPROC)(void);
 	PFNWGLGETSWAPINTERVALEXTPROC wglGetSwapIntervalEXT;
 
 	wglGetSwapIntervalEXT = (PFNWGLGETSWAPINTERVALEXTPROC) SDL_GL_GetProcAddress("wglGetSwapIntervalEXT");
 	if (wglGetSwapIntervalEXT)
+	{
 		return wglGetSwapIntervalEXT();
+	}
 	return 0;
 }
 
@@ -327,7 +339,7 @@ int wzGetTicks()
 	return SDL_GetTicks();
 }
 
-void wzFatalDialog(char const*)
+void wzFatalDialog(char const *)
 {
 	// no-op
 }
@@ -586,7 +598,7 @@ static inline SDLKey keyCodeToSDLKey(KEY_CODE code)
 // Cyclic increment.
 static InputKey *inputPointerNext(InputKey *p)
 {
-    return p + 1 == pInputBuffer + INPUT_MAXSTR ? pInputBuffer : p + 1;
+	return p + 1 == pInputBuffer + INPUT_MAXSTR ? pInputBuffer : p + 1;
 }
 
 /* add count copies of the characater code to the input buffer */
@@ -609,9 +621,9 @@ static void inputAddBuffer(UDWORD key, utf_32_char unicode)
 
 void keyScanToString(KEY_CODE code, char *ascii, UDWORD maxStringSize)
 {
-	if(keyCodeToSDLKey(code) == SDLK_LAST)
+	if (keyCodeToSDLKey(code) == SDLK_LAST)
 	{
-		strcpy(ascii,"???");
+		strcpy(ascii, "???");
 		return;
 	}
 	else if (code == KEY_LCTRL)
@@ -647,7 +659,7 @@ void keyScanToString(KEY_CODE code, char *ascii, UDWORD maxStringSize)
 	if (ascii[0] >= 'a' && ascii[0] <= 'z' && ascii[1] != 0)
 	{
 		// capitalize
-		ascii[0] += 'A'-'a';
+		ascii[0] += 'A' - 'a';
 	}
 }
 
@@ -670,8 +682,8 @@ void inputInitialise(void)
 	pStartBuffer = pInputBuffer;
 	pEndBuffer = pInputBuffer;
 
-	dragX = mouseXPos = screenWidth/2;
-	dragY = mouseYPos = screenHeight/2;
+	dragX = mouseXPos = screenWidth / 2;
+	dragY = mouseYPos = screenHeight / 2;
 	dragKey = MOUSE_LMB;
 
 	SDL_EnableUNICODE(1);
@@ -696,17 +708,17 @@ UDWORD inputGetKey(utf_32_char *unicode)
 
 	if (pStartBuffer == pEndBuffer)
 	{
-	    return 0;  // Buffer empty.
+		return 0;  // Buffer empty.
 	}
 
 	retVal = pStartBuffer->key;
 	if (unicode)
 	{
-	    *unicode = pStartBuffer->unicode;
+		*unicode = pStartBuffer->unicode;
 	}
 	if (!retVal)
 	{
-	    retVal = ' ';  // Don't return 0 if we got a virtual key, since that's interpreted as no input.
+		retVal = ' ';  // Don't return 0 if we got a virtual key, since that's interpreted as no input.
 	}
 	pStartBuffer = inputPointerNext(pStartBuffer);
 
@@ -734,8 +746,8 @@ void inputNewFrame(void)
 		{
 			aKeyState[i].state = KEY_DOWN;
 		}
-		else if ( aKeyState[i].state == KEY_RELEASED  ||
-			  aKeyState[i].state == KEY_PRESSRELEASE )
+		else if (aKeyState[i].state == KEY_RELEASED  ||
+		         aKeyState[i].state == KEY_PRESSRELEASE)
 		{
 			aKeyState[i].state = KEY_UP;
 		}
@@ -748,9 +760,9 @@ void inputNewFrame(void)
 		{
 			aMouseState[i].state = KEY_DOWN;
 		}
-		else if ( aMouseState[i].state == KEY_RELEASED
-		       || aMouseState[i].state == KEY_DOUBLECLICK
-		       || aMouseState[i].state == KEY_PRESSRELEASE )
+		else if (aMouseState[i].state == KEY_RELEASED
+		         || aMouseState[i].state == KEY_DOUBLECLICK
+		         || aMouseState[i].state == KEY_PRESSRELEASE)
 		{
 			aMouseState[i].state = KEY_UP;
 		}
@@ -768,7 +780,7 @@ void inputLoseFocus(void)
 	unsigned int i;
 
 	/* Lost the window focus, have to take this as a global key up */
-	for(i = 0; i < KEY_MAXSCAN; i++)
+	for (i = 0; i < KEY_MAXSCAN; i++)
 	{
 		aKeyState[i].state = KEY_UP;
 	}
@@ -845,16 +857,16 @@ bool mouseDClicked(MOUSE_KEY_CODE code)
 bool mousePressed(MOUSE_KEY_CODE code)
 {
 	return ((aMouseState[code].state == KEY_PRESSED) ||
-			(aMouseState[code].state == KEY_DOUBLECLICK) ||
-			(aMouseState[code].state == KEY_PRESSRELEASE));
+	        (aMouseState[code].state == KEY_DOUBLECLICK) ||
+	        (aMouseState[code].state == KEY_PRESSRELEASE));
 }
 
 /* This returns true if the mouse key went from being down to being up this frame */
 bool mouseReleased(MOUSE_KEY_CODE code)
 {
 	return ((aMouseState[code].state == KEY_RELEASED) ||
-			(aMouseState[code].state == KEY_DOUBLECLICK) ||
-			(aMouseState[code].state == KEY_PRESSRELEASE));
+	        (aMouseState[code].state == KEY_DOUBLECLICK) ||
+	        (aMouseState[code].state == KEY_PRESSRELEASE));
 }
 
 /* Check for a mouse drag, return the drag start coords if dragging */
@@ -864,7 +876,7 @@ bool mouseDrag(MOUSE_KEY_CODE code, UDWORD *px, UDWORD *py)
 
 	    // dragging LMB and RMB counts as dragging MMB
 	    (code == MOUSE_MMB && ((aMouseState[MOUSE_LMB].state == KEY_DRAG && aMouseState[MOUSE_RMB].state != KEY_UP) ||
-	     (aMouseState[MOUSE_LMB].state != KEY_UP && aMouseState[MOUSE_RMB].state == KEY_DRAG))))
+	                           (aMouseState[MOUSE_LMB].state != KEY_UP && aMouseState[MOUSE_RMB].state == KEY_DRAG))))
 	{
 		*px = dragX;
 		*py = dragY;
@@ -890,94 +902,96 @@ void setMousePos(uint16_t x, uint16_t y)
 		}
 	}
 	if (mousewarp)
+	{
 		SDL_WarpMouse(x, y);
+	}
 }
 
 /*!
  * Handle keyboard events
  */
-static void inputHandleKeyEvent(SDL_KeyboardEvent * keyEvent)
+static void inputHandleKeyEvent(SDL_KeyboardEvent *keyEvent)
 {
 	UDWORD code, vk;
 	utf_32_char unicode = keyEvent->keysym.unicode;
 
 	switch (keyEvent->type)
 	{
-		case SDL_KEYDOWN:
-			switch (keyEvent->keysym.sym)
-			{
-				case SDLK_LEFT:
-					vk = INPBUF_LEFT;
-					break;
-				case SDLK_RIGHT:
-					vk = INPBUF_RIGHT;
-					break;
-				case SDLK_UP:
-					vk = INPBUF_UP;
-					break;
-				case SDLK_DOWN:
-					vk = INPBUF_DOWN;
-					break;
-				case SDLK_HOME:
-					vk = INPBUF_HOME;
-					break;
-				case SDLK_END:
-					vk = INPBUF_END;
-					break;
-				case SDLK_INSERT:
-					vk = INPBUF_INS;
-					break;
-				case SDLK_DELETE:
-					vk = INPBUF_DEL;
-					break;
-				case SDLK_PAGEUP:
-					vk = INPBUF_PGUP;
-					break;
-				case SDLK_PAGEDOWN:
-					vk = INPBUF_PGDN;
-					break;
-				default:
-					vk = keyEvent->keysym.sym;
-					break;
-			}
-
-			debug( LOG_INPUT, "Key Code (pressed): 0x%x, %d, [%c] SDLkey=[%s]", vk, vk, (vk < 128) && (vk > 31) ? (char) vk : '?' , SDL_GetKeyName(keyCodeToSDLKey((KEY_CODE)keyEvent->keysym.sym)));
-			if (unicode < 32)
-			{
-				unicode = 0;
-			}
-			inputAddBuffer(vk, unicode);
-
-			code = sdlKeyToKeyCode(keyEvent->keysym.sym);
-			if ( aKeyState[code].state == KEY_UP ||
-				 aKeyState[code].state == KEY_RELEASED ||
-				 aKeyState[code].state == KEY_PRESSRELEASE )
-			{
-				//whether double key press or not
-					aKeyState[code].state = KEY_PRESSED;
-					aKeyState[code].lastdown = 0;
-			}
+	case SDL_KEYDOWN:
+		switch (keyEvent->keysym.sym)
+		{
+		case SDLK_LEFT:
+			vk = INPBUF_LEFT;
 			break;
-		case SDL_KEYUP:
-			code = sdlKeyToKeyCode(keyEvent->keysym.sym);
-			if (aKeyState[code].state == KEY_PRESSED)
-			{
-				aKeyState[code].state = KEY_PRESSRELEASE;
-			}
-			else if (aKeyState[code].state == KEY_DOWN )
-			{
-				aKeyState[code].state = KEY_RELEASED;
-			}
+		case SDLK_RIGHT:
+			vk = INPBUF_RIGHT;
+			break;
+		case SDLK_UP:
+			vk = INPBUF_UP;
+			break;
+		case SDLK_DOWN:
+			vk = INPBUF_DOWN;
+			break;
+		case SDLK_HOME:
+			vk = INPBUF_HOME;
+			break;
+		case SDLK_END:
+			vk = INPBUF_END;
+			break;
+		case SDLK_INSERT:
+			vk = INPBUF_INS;
+			break;
+		case SDLK_DELETE:
+			vk = INPBUF_DEL;
+			break;
+		case SDLK_PAGEUP:
+			vk = INPBUF_PGUP;
+			break;
+		case SDLK_PAGEDOWN:
+			vk = INPBUF_PGDN;
 			break;
 		default:
+			vk = keyEvent->keysym.sym;
 			break;
+		}
+
+		debug(LOG_INPUT, "Key Code (pressed): 0x%x, %d, [%c] SDLkey=[%s]", vk, vk, (vk < 128) && (vk > 31) ? (char) vk : '?' , SDL_GetKeyName(keyCodeToSDLKey((KEY_CODE)keyEvent->keysym.sym)));
+		if (unicode < 32)
+		{
+			unicode = 0;
+		}
+		inputAddBuffer(vk, unicode);
+
+		code = sdlKeyToKeyCode(keyEvent->keysym.sym);
+		if (aKeyState[code].state == KEY_UP ||
+		    aKeyState[code].state == KEY_RELEASED ||
+		    aKeyState[code].state == KEY_PRESSRELEASE)
+		{
+			//whether double key press or not
+			aKeyState[code].state = KEY_PRESSED;
+			aKeyState[code].lastdown = 0;
+		}
+		break;
+	case SDL_KEYUP:
+		code = sdlKeyToKeyCode(keyEvent->keysym.sym);
+		if (aKeyState[code].state == KEY_PRESSED)
+		{
+			aKeyState[code].state = KEY_PRESSRELEASE;
+		}
+		else if (aKeyState[code].state == KEY_DOWN)
+		{
+			aKeyState[code].state = KEY_RELEASED;
+		}
+		break;
+	default:
+		break;
 	}
 }
 
 /*!
  * Handle mousebutton events
  */
-static void inputHandleMouseButtonEvent(SDL_MouseButtonEvent * buttonEvent)
+static void inputHandleMouseButtonEvent(SDL_MouseButtonEvent *buttonEvent)
 {
 	mouseXPos = buttonEvent->x;
 	mouseYPos = buttonEvent->y;
@@ -985,12 +999,12 @@ static void inputHandleMouseButtonEvent(SDL_MouseButtonEvent * buttonEvent)
 	MOUSE_KEY_CODE mouseKeyCode;
 	switch (buttonEvent->button)
 	{
-		default: return;  // Unknown button.
-		case SDL_BUTTON_LEFT: mouseKeyCode = MOUSE_LMB; break;
-		case SDL_BUTTON_MIDDLE: mouseKeyCode = MOUSE_MMB; break;
-		case SDL_BUTTON_RIGHT: mouseKeyCode = MOUSE_RMB; break;
-		case SDL_BUTTON_WHEELUP: mouseKeyCode = MOUSE_WUP; break;
-		case SDL_BUTTON_WHEELDOWN: mouseKeyCode = MOUSE_WDN; break;
+	default: return;  // Unknown button.
+	case SDL_BUTTON_LEFT: mouseKeyCode = MOUSE_LMB; break;
+	case SDL_BUTTON_MIDDLE: mouseKeyCode = MOUSE_MMB; break;
+	case SDL_BUTTON_RIGHT: mouseKeyCode = MOUSE_RMB; break;
+	case SDL_BUTTON_WHEELUP: mouseKeyCode = MOUSE_WUP; break;
+	case SDL_BUTTON_WHEELDOWN: mouseKeyCode = MOUSE_WDN; break;
 	}
 
 	MousePress mousePress;
@@ -999,65 +1013,65 @@ static void inputHandleMouseButtonEvent(SDL_MouseButtonEvent * buttonEvent)
 
 	switch (buttonEvent->type)
 	{
-		case SDL_MOUSEBUTTONDOWN:
-			mousePress.action = MousePress::Press;
-			mousePresses.push_back(mousePress);
+	case SDL_MOUSEBUTTONDOWN:
+		mousePress.action = MousePress::Press;
+		mousePresses.push_back(mousePress);
 
-			aMouseState[mouseKeyCode].pressPos.x = mouseXPos;
-			aMouseState[mouseKeyCode].pressPos.y = mouseYPos;
-			if ( aMouseState[mouseKeyCode].state == KEY_UP
-				|| aMouseState[mouseKeyCode].state == KEY_RELEASED
-				|| aMouseState[mouseKeyCode].state == KEY_PRESSRELEASE )
+		aMouseState[mouseKeyCode].pressPos.x = mouseXPos;
+		aMouseState[mouseKeyCode].pressPos.y = mouseYPos;
+		if (aMouseState[mouseKeyCode].state == KEY_UP
+		    || aMouseState[mouseKeyCode].state == KEY_RELEASED
+		    || aMouseState[mouseKeyCode].state == KEY_PRESSRELEASE)
+		{
+			if ((buttonEvent->button != SDL_BUTTON_WHEELUP		//skip doubleclick check for wheel
+			     && buttonEvent->button != SDL_BUTTON_WHEELDOWN))
 			{
-				if ( (buttonEvent->button != SDL_BUTTON_WHEELUP		//skip doubleclick check for wheel
-					&& buttonEvent->button != SDL_BUTTON_WHEELDOWN))
+				// whether double click or not
+				if (realTime - aMouseState[mouseKeyCode].lastdown < DOUBLE_CLICK_INTERVAL)
 				{
-					// whether double click or not
-					if ( realTime - aMouseState[mouseKeyCode].lastdown < DOUBLE_CLICK_INTERVAL )
-					{
-						aMouseState[mouseKeyCode].state = KEY_DOUBLECLICK;
-						aMouseState[mouseKeyCode].lastdown = 0;
-					}
-					else
-					{
-						aMouseState[mouseKeyCode].state = KEY_PRESSED;
-						aMouseState[mouseKeyCode].lastdown = realTime;
-					}
-
-				}
-				else	//mouse wheel up/down was used, so notify.
-				{
-					aMouseState[mouseKeyCode].state = KEY_PRESSED;
+					aMouseState[mouseKeyCode].state = KEY_DOUBLECLICK;
 					aMouseState[mouseKeyCode].lastdown = 0;
 				}
-
-				if (mouseKeyCode < 4) // Not the mousewheel
+				else
 				{
-					dragKey = mouseKeyCode;
-					dragX = mouseXPos;
-					dragY = mouseYPos;
+					aMouseState[mouseKeyCode].state = KEY_PRESSED;
+					aMouseState[mouseKeyCode].lastdown = realTime;
 				}
-			}
-			break;
-		case SDL_MOUSEBUTTONUP:
-			mousePress.action = MousePress::Release;
-			mousePresses.push_back(mousePress);
 
-			aMouseState[mouseKeyCode].releasePos.x = mouseXPos;
-			aMouseState[mouseKeyCode].releasePos.y = mouseYPos;
-			if (aMouseState[mouseKeyCode].state == KEY_PRESSED)
-			{
-				aMouseState[mouseKeyCode].state = KEY_PRESSRELEASE;
 			}
-			else if ( aMouseState[mouseKeyCode].state == KEY_DOWN
-					|| aMouseState[mouseKeyCode].state == KEY_DRAG
-					|| aMouseState[mouseKeyCode].state == KEY_DOUBLECLICK)
+			else	//mouse wheel up/down was used, so notify.
 			{
-				aMouseState[mouseKeyCode].state = KEY_RELEASED;
+				aMouseState[mouseKeyCode].state = KEY_PRESSED;
+				aMouseState[mouseKeyCode].lastdown = 0;
 			}
-			break;
-		default:
-			break;
+
+			if (mouseKeyCode < 4) // Not the mousewheel
+			{
+				dragKey = mouseKeyCode;
+				dragX = mouseXPos;
+				dragY = mouseYPos;
+			}
+		}
+		break;
+	case SDL_MOUSEBUTTONUP:
+		mousePress.action = MousePress::Release;
+		mousePresses.push_back(mousePress);
+
+		aMouseState[mouseKeyCode].releasePos.x = mouseXPos;
+		aMouseState[mouseKeyCode].releasePos.y = mouseYPos;
+		if (aMouseState[mouseKeyCode].state == KEY_PRESSED)
+		{
+			aMouseState[mouseKeyCode].state = KEY_PRESSRELEASE;
+		}
+		else if (aMouseState[mouseKeyCode].state == KEY_DOWN
+		         || aMouseState[mouseKeyCode].state == KEY_DRAG
+		         || aMouseState[mouseKeyCode].state == KEY_DOUBLECLICK)
+		{
+			aMouseState[mouseKeyCode].state = KEY_RELEASED;
+		}
+		break;
+	default:
+		break;
 	}
 }
 
@@ -1065,26 +1079,26 @@ static void inputHandleMouseButtonEvent(SDL_MouseButtonEvent * buttonEvent)
 /*!
  * Handle mousemotion events
  */
-static void inputHandleMouseMotionEvent(SDL_MouseMotionEvent * motionEvent)
+static void inputHandleMouseMotionEvent(SDL_MouseMotionEvent *motionEvent)
 {
 	switch (motionEvent->type)
 	{
-		case SDL_MOUSEMOTION:
-			/* store the current mouse position */
-			mouseXPos = motionEvent->x;
-			mouseYPos = motionEvent->y;
+	case SDL_MOUSEMOTION:
+		/* store the current mouse position */
+		mouseXPos = motionEvent->x;
+		mouseYPos = motionEvent->y;
 
-			/* now see if a drag has started */
-			if ((aMouseState[dragKey].state == KEY_PRESSED ||
-			     aMouseState[dragKey].state == KEY_DOWN) &&
-			    (ABSDIF(dragX, mouseXPos) > DRAG_THRESHOLD ||
-			     ABSDIF(dragY, mouseYPos) > DRAG_THRESHOLD))
-			{
-				aMouseState[dragKey].state = KEY_DRAG;
-			}
-			break;
-		default:
-			break;
+		/* now see if a drag has started */
+		if ((aMouseState[dragKey].state == KEY_PRESSED ||
+		     aMouseState[dragKey].state == KEY_DOWN) &&
+		    (ABSDIF(dragX, mouseXPos) > DRAG_THRESHOLD ||
+		     ABSDIF(dragY, mouseYPos) > DRAG_THRESHOLD))
+		{
+			aMouseState[dragKey].state = KEY_DRAG;
+		}
+		break;
+	default:
+		break;
 	}
 }
 
@@ -1101,7 +1115,7 @@ bool wzMain2()
 
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) != 0)
 	{
-		debug( LOG_ERROR, "Error: Could not initialise SDL (%s).\n", SDL_GetError() );
+		debug(LOG_ERROR, "Error: Could not initialise SDL (%s).\n", SDL_GetError());
 		return false;
 	}
 
@@ -1118,7 +1132,7 @@ bool wzMain2()
 	uint32_t amask = 0xff000000;
 #endif
 
-	SDL_WM_SetIcon(SDL_CreateRGBSurfaceFrom((void*)wz2100icon.pixel_data, wz2100icon.width, wz2100icon.height, wz2100icon.bytes_per_pixel * 8,
+	SDL_WM_SetIcon(SDL_CreateRGBSurfaceFrom((void *)wz2100icon.pixel_data, wz2100icon.width, wz2100icon.height, wz2100icon.bytes_per_pixel * 8,
 	                                        wz2100icon.width * wz2100icon.bytes_per_pixel, rmask, gmask, bmask, amask), NULL);
 #endif
 	SDL_WM_SetCaption(PACKAGE_NAME, NULL);
@@ -1137,7 +1151,7 @@ bool wzMain2()
 	bool            vsync = war_GetVsync();
 
 	// Fetch the video info.
-	const SDL_VideoInfo* video_info = SDL_GetVideoInfo();
+	const SDL_VideoInfo *video_info = SDL_GetVideoInfo();
 
 	if (video_info == NULL)
 	{
@@ -1190,32 +1204,32 @@ bool wzMain2()
 	}
 	switch (bpp)
 	{
-		case 32:
-		case 24:
-			SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
-			SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
-			SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
-			SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
-			SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
-			SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
-			break;
-		case 16:
-			info("Using colour depth of %i instead of %i.", bpp, screenDepth);
-			info("You will experience graphics glitches!");
-			SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 5);
-			SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 6);
-			SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 5);
-			SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
-			SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
-			break;
-		case 8:
-			debug(LOG_FATAL, "You don't want to play Warzone with a bit depth of %i, do you?", bpp);
-			exit(1);
-			break;
-		default:
-			debug(LOG_FATAL, "Unsupported bit depth: %i", bpp);
-			exit(1);
-			break;
+	case 32:
+	case 24:
+		SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
+		SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
+		SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
+		SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
+		SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
+		SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
+		break;
+	case 16:
+		info("Using colour depth of %i instead of %i.", bpp, screenDepth);
+		info("You will experience graphics glitches!");
+		SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 5);
+		SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 6);
+		SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 5);
+		SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
+		SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
+		break;
+	case 8:
+		debug(LOG_FATAL, "You don't want to play Warzone with a bit depth of %i, do you?", bpp);
+		exit(1);
+		break;
+	default:
+		debug(LOG_FATAL, "Unsupported bit depth: %i", bpp);
+		exit(1);
+		break;
 	}
 
 	screen = SDL_SetVideoMode(width, height, bpp, video_flags);
@@ -1227,8 +1241,8 @@ bool wzMain2()
 	int value = 0;
 	if (SDL_GL_GetAttribute(SDL_GL_DOUBLEBUFFER, &value) == -1 || value == 0)
 	{
-		debug( LOG_FATAL, "OpenGL initialization did not give double buffering!" );
-		debug( LOG_FATAL, "Double buffering is required for this game!");
+		debug(LOG_FATAL, "OpenGL initialization did not give double buffering!");
+		debug(LOG_FATAL, "Double buffering is required for this game!");
 		exit(1);
 	}
 
@@ -1256,15 +1270,15 @@ bool wzMain2()
 /*!
  * Activation (focus change) eventhandler
  */
-static void handleActiveEvent(SDL_ActiveEvent * activeEvent)
+static void handleActiveEvent(SDL_ActiveEvent *activeEvent)
 {
 	switch (activeEvent->state)
 	{
-		case SDL_APPMOUSEFOCUS:
-			mouseInWindow = activeEvent->gain;
-			break;
-		default:
-			break;
+	case SDL_APPMOUSEFOCUS:
+		mouseInWindow = activeEvent->gain;
+		break;
+	default:
+		break;
 	}
 }
 
