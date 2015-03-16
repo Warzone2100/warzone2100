@@ -20,7 +20,7 @@
 #ifndef __INCLUDED_LIB_EXCEPTIONHANDLER_EXCEPTIONHANDLER_H__
 #define __INCLUDED_LIB_EXCEPTIONHANDLER_EXCEPTIONHANDLER_H__
 
-extern void setupExceptionHandler(int argc, const char ** argv, const char* packageVersion);
+extern void setupExceptionHandler(int argc, const char **argv, const char *packageVersion);
 
 extern bool OverrideRPTDirectory(char *newPath);
 
