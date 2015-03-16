@@ -28,24 +28,24 @@
 #define MAX_TILE_HEIGHT 255
 #define MIN_TILE_HEIGHT	0
 
-typedef void (*BUILDCALLBACK)(UDWORD xPos, UDWORD yPos,void *UserData);
+typedef void (*BUILDCALLBACK)(UDWORD xPos, UDWORD yPos, void *UserData);
 
 extern void Edit3DInitVars(void);
-extern	bool	found3DBuilding		( UDWORD *x, UDWORD *y );
-extern  bool    found3DBuildLocTwo  ( UDWORD *px1, UDWORD *py1, UDWORD *px2, UDWORD *py2);
-extern void init3DBuilding(BASE_STATS *psStats,BUILDCALLBACK CallBack,void *UserData);
-extern	void	kill3DBuilding		( void );
+extern	bool	found3DBuilding(UDWORD *x, UDWORD *y);
+extern  bool    found3DBuildLocTwo(UDWORD *px1, UDWORD *py1, UDWORD *px2, UDWORD *py2);
+extern void init3DBuilding(BASE_STATS *psStats, BUILDCALLBACK CallBack, void *UserData);
+extern	void	kill3DBuilding(void);
 extern bool process3DBuilding(void);
 
-extern void	adjustTileHeight	( MAPTILE *psTile, SDWORD adjust );
+extern void	adjustTileHeight(MAPTILE *psTile, SDWORD adjust);
 extern void	raiseTile(int tile3dX, int tile3dY);
 extern void	lowerTile(int tile3dX, int tile3dY);
-bool	inHighlight				( UDWORD realX, UDWORD realY );
+bool	inHighlight(UDWORD realX, UDWORD realY);
 
 struct HIGHLIGHT
 {
-UWORD	xTL,yTL;		// Top left of box to highlight
-UWORD	xBR,yBR;		// Bottom right of box to highlight
+	UWORD	xTL, yTL;		// Top left of box to highlight
+	UWORD	xBR, yBR;		// Bottom right of box to highlight
 };
 
 extern HIGHLIGHT	buildSite;
@@ -61,8 +61,8 @@ struct BUILDDETAILS
 {
 	BUILDCALLBACK	CallBack;
 	void 			*UserData;  //this holds the OBJECT_POSITION pointer for a Deliv Point
-	UDWORD			x,y;
-	UDWORD			width,height;
+	UDWORD			x, y;
+	UDWORD			width, height;
 	BASE_STATS		*psStats;
 };
 

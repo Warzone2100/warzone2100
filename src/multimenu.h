@@ -28,21 +28,21 @@
 #include "stringdef.h"
 
 // requester
-extern void		addMultiRequest(const char* searchDir, const char* fileExtension, UDWORD id,UBYTE mapCam, UBYTE numPlayers);
+extern void		addMultiRequest(const char *searchDir, const char *fileExtension, UDWORD id, UBYTE mapCam, UBYTE numPlayers);
 extern bool		multiRequestUp;
 extern W_SCREEN *psRScreen;			// requester stuff.
 bool runMultiRequester(UDWORD id, UDWORD *mode, char *chosen, LEVEL_DATASET **chosenValue, bool *isHoverPreview);
 extern void		displayRequestOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 
 // multimenu
-extern void		intProcessMultiMenu		(UDWORD id);
-extern bool		intRunMultiMenu			(void);
-extern bool		intCloseMultiMenu		(void);
-extern void		intCloseMultiMenuNoAnim	(void);
-extern bool		intAddMultiMenu			(void);
+extern void		intProcessMultiMenu(UDWORD id);
+extern bool		intRunMultiMenu(void);
+extern bool		intCloseMultiMenu(void);
+extern void		intCloseMultiMenuNoAnim(void);
+extern bool		intAddMultiMenu(void);
 
-extern bool		addDebugMenu			(bool bAdd);
-extern void		intCloseDebugMenuNoAnim	(void);
+extern bool		addDebugMenu(bool bAdd);
+extern void		intCloseDebugMenuNoAnim(void);
 extern void		setDebugMenuEntry(char *entry, SDWORD index);
 
 extern bool		MultiMenuUp;

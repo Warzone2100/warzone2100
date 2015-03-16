@@ -52,6 +52,6 @@ extern char *pLevToken;
 extern SDWORD levVal;
 
 // error report function for the level parser
-extern void lev_error(const char* msg);
+extern void lev_error(const char *msg);
 
 #endif // __INCLUDED_SRC_LEVELINT_H__

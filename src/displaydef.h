@@ -36,7 +36,7 @@ struct SCREEN_DISP_DATA
 {
 	iIMDShape	*imd;
 	UDWORD		frameNumber;		// last frame it was drawn
-	UDWORD		screenX,screenY;
+	UDWORD		screenX, screenY;
 	UDWORD		screenR;
 };
 

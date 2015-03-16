@@ -87,8 +87,8 @@ struct POWER_GEN_FUNCTION : public FUNCTION
 struct WALL_FUNCTION : public FUNCTION
 {
 	char						*pStructName;		//storage space for the name so can work out
-													//which stat when structs are loaded in
-	struct STRUCTURE_STATS *                        pCornerStat;            ///< pointer to which stat to use as a corner wall
+	//which stat when structs are loaded in
+	struct STRUCTURE_STATS                         *pCornerStat;            ///< pointer to which stat to use as a corner wall
 };
 
 /*function used by Resource Extractor to indicate how much resource is available*/

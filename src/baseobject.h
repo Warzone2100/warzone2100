@@ -30,7 +30,10 @@ struct StructureBounds
 {
 	StructureBounds() {}
 	StructureBounds(Vector2i const &map, Vector2i const &size) : map(map), size(size) {}
-	bool valid() { return size.x >= 0; }
+	bool valid()
+	{
+		return size.x >= 0;
+	}
 
 	Vector2i map;           ///< Map coordinates of upper left corner of structure.
 	Vector2i size;          ///< Size (in map coordinates) of the structure.

@@ -44,15 +44,15 @@ extern char MultiPlayersPath[PATH_MAX];
 
 #define MAX_MODS 100
 
-extern char * global_mods[MAX_MODS];
-extern char * campaign_mods[MAX_MODS];
-extern char * multiplay_mods[MAX_MODS];
+extern char *global_mods[MAX_MODS];
+extern char *campaign_mods[MAX_MODS];
+extern char *multiplay_mods[MAX_MODS];
 
-extern char * override_mods[MAX_MODS];
-extern char * override_mod_list;
+extern char *override_mods[MAX_MODS];
+extern char *override_mod_list;
 extern bool use_override_mods;
 
-void setCurrentMap(char* map, int maxPlayers);
+void setCurrentMap(char *map, int maxPlayers);
 extern char *current_map;
 
 #endif // __INCLUDED_SRC_MAIN_H__

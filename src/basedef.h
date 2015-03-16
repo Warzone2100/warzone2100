@@ -63,9 +63,16 @@ struct BASE_OBJECT;
 struct NEXTOBJ
 {
 	NEXTOBJ(BASE_OBJECT *ptr_ = NULL) : ptr(ptr_) {}
-	NEXTOBJ &operator =(BASE_OBJECT *ptr_) { ptr = ptr_; return *this; }
+	NEXTOBJ &operator =(BASE_OBJECT *ptr_)
+	{
+		ptr = ptr_;
+		return *this;
+	}
 	template<class T>
-	operator T * () const { return static_cast<T *>(ptr); }
+	operator T *() const
+	{
+		return static_cast<T *>(ptr);
+	}
 
 	BASE_OBJECT *ptr;
 };
@@ -125,10 +132,18 @@ struct Spacetime
 	Rotation  rot;         ///< Rotation of the object
 };
 
-static inline Spacetime getSpacetime(SIMPLE_OBJECT const *psObj) { return Spacetime(psObj->pos, psObj->rot, psObj->time); }
-static inline void setSpacetime(SIMPLE_OBJECT *psObj, Spacetime const &st) { psObj->pos = st.pos; psObj->rot = st.rot; psObj->time = st.time; }
+static inline Spacetime getSpacetime(SIMPLE_OBJECT const *psObj)
+{
+	return Spacetime(psObj->pos, psObj->rot, psObj->time);
+}
+static inline void setSpacetime(SIMPLE_OBJECT *psObj, Spacetime const &st)
+{
+	psObj->pos = st.pos;
+	psObj->rot = st.rot;
+	psObj->time = st.time;
+}
 
-static inline bool isDead(const BASE_OBJECT* psObj)
+static inline bool isDead(const BASE_OBJECT *psObj)
 {
 	// See objmem.c for comments on the NOT_CURRENT_LIST hack
 	return (psObj->died > NOT_CURRENT_LIST);
@@ -137,7 +152,7 @@ static inline bool isDead(const BASE_OBJECT* psObj)
 static inline int objPosDiffSq(Position pos1, Position pos2)
 {
 	const Vector2i diff = removeZ(pos1 - pos2);
-	return diff*diff;
+	return diff * diff;
 }
 
 static inline int objPosDiffSq(SIMPLE_OBJECT const *pos1, SIMPLE_OBJECT const *pos2)
@@ -146,11 +161,20 @@ static inline int objPosDiffSq(SIMPLE_OBJECT const *pos1, SIMPLE_OBJECT const *p
 }
 
 // True iff object is a droid, structure or feature (not a projectile). Will incorrectly return true if passed a nonsense object of type OBJ_TARGET or OBJ_NUM_TYPES.
-static inline bool isBaseObject(SIMPLE_OBJECT const *psObject)                 { return psObject != NULL && psObject->type != OBJ_PROJECTILE; }
+static inline bool isBaseObject(SIMPLE_OBJECT const *psObject)
+{
+	return psObject != NULL && psObject->type != OBJ_PROJECTILE;
+}
 // Returns BASE_OBJECT * if base_object or NULL if not.
-static inline BASE_OBJECT *castBaseObject(SIMPLE_OBJECT *psObject)             { return isBaseObject(psObject)? (BASE_OBJECT *)psObject : (BASE_OBJECT *)NULL; }
+static inline BASE_OBJECT *castBaseObject(SIMPLE_OBJECT *psObject)
+{
+	return isBaseObject(psObject) ? (BASE_OBJECT *)psObject : (BASE_OBJECT *)NULL;
+}
 // Returns BASE_OBJECT const * if base_object or NULL if not.
-static inline BASE_OBJECT const *castBaseObject(SIMPLE_OBJECT const *psObject) { return isBaseObject(psObject)? (BASE_OBJECT const *)psObject : (BASE_OBJECT const *)NULL; }
+static inline BASE_OBJECT const *castBaseObject(SIMPLE_OBJECT const *psObject)
+{
+	return isBaseObject(psObject) ? (BASE_OBJECT const *)psObject : (BASE_OBJECT const *)NULL;
+}
 
 // Must be #included __AFTER__ the definition of BASE_OBJECT
 #include "baseobject.h"

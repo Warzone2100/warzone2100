@@ -103,7 +103,7 @@ bool scrGenExternGet(UDWORD index)
 		break;
 	case EXTID_GAMETIME:
 		type = VAL_INT;
-		scrFunctionResult.v.ival = (SDWORD)(gameTime/SCR_TICKRATE);
+		scrFunctionResult.v.ival = (SDWORD)(gameTime / SCR_TICKRATE);
 		break;
 	case EXTID_TUTORIAL:
 		type = VAL_BOOL;
@@ -114,21 +114,21 @@ bool scrGenExternGet(UDWORD index)
 		scrFunctionResult.v.ival = 0; // FIXME Set to 0 since function returned undef value
 		break;
 	case EXTID_INTMODE:
-		type=VAL_INT;
-		scrFunctionResult.v.ival=intMode;
+		type = VAL_INT;
+		scrFunctionResult.v.ival = intMode;
 		break;
 
 	case EXTID_TARGETTYPE:
-		type=VAL_INT;
-		scrFunctionResult.v.ival=getTargetType();
+		type = VAL_INT;
+		scrFunctionResult.v.ival = getTargetType();
 		break;
 	case EXTID_EXTRAVICTORYFLAG:
-		type=VAL_BOOL;
-		scrFunctionResult.v.bval=bExtraVictoryFlag;
+		type = VAL_BOOL;
+		scrFunctionResult.v.bval = bExtraVictoryFlag;
 		break;
 	case EXTID_EXTRAFAILFLAG:
-		type=VAL_BOOL;
-		scrFunctionResult.v.bval=bExtraFailFlag;
+		type = VAL_BOOL;
+		scrFunctionResult.v.bval = bExtraFailFlag;
 		break;
 	case EXTID_MULTIGAMETYPE:		// multiplayer variable..
 		type = VAL_INT;
@@ -147,8 +147,8 @@ bool scrGenExternGet(UDWORD index)
 		scrFunctionResult.v.ival	= game.alliance;
 		break;
 
-		default:
-		ASSERT( false, "scrGenExternGet: unknown variable index" );
+	default:
+		ASSERT(false, "scrGenExternGet: unknown variable index");
 		return false;
 		break;
 	}
@@ -182,7 +182,7 @@ bool scrGenExternSet(UDWORD index)
 	case EXTID_GAMELEVEL:
 		if (type != VAL_INT)
 		{
-			ASSERT( false,"invalid type for gameLevel" );
+			ASSERT(false, "invalid type for gameLevel");
 			return false;
 		}
 		scrGameLevel = val;
@@ -190,7 +190,7 @@ bool scrGenExternSet(UDWORD index)
 	case EXTID_TUTORIAL:
 		if (type != VAL_BOOL)
 		{
-			ASSERT( false,"invalid type for inTutorial" );
+			ASSERT(false, "invalid type for inTutorial");
 			return false;
 		}
 		bInTutorial = val;
@@ -203,7 +203,7 @@ bool scrGenExternSet(UDWORD index)
 	case EXTID_EXTRAVICTORYFLAG:
 		if (type != VAL_BOOL)
 		{
-			ASSERT( false,"invalid type for extraVictoryFlag" );
+			ASSERT(false, "invalid type for extraVictoryFlag");
 			return false;
 		}
 		bExtraVictoryFlag = val;
@@ -211,13 +211,13 @@ bool scrGenExternSet(UDWORD index)
 	case EXTID_EXTRAFAILFLAG:
 		if (type != VAL_BOOL)
 		{
-			ASSERT( false,"invalid type for extraFailFlag" );
+			ASSERT(false, "invalid type for extraFailFlag");
 			return false;
 		}
 		bExtraFailFlag = val;
 		break;
 	default:
-		ASSERT( false, "scrGenExternSet: unknown variable index" );
+		ASSERT(false, "scrGenExternSet: unknown variable index");
 		return false;
 		break;
 	}

@@ -45,7 +45,7 @@ static int              fDifEnemyModifier;
 void	setDifficultyLevel(DIFFICULTY_LEVEL lev)
 {
 
-	switch(lev)
+	switch (lev)
 	{
 	case	DL_EASY:
 		fDifPlayerModifier = 120;
@@ -68,7 +68,7 @@ void	setDifficultyLevel(DIFFICULTY_LEVEL lev)
 		fDifEnemyModifier = 50;    // they do less damage!
 		break;
 	default:
-		debug( LOG_ERROR, "Invalid difficulty level selected - forcing NORMAL" );
+		debug(LOG_ERROR, "Invalid difficulty level selected - forcing NORMAL");
 		fDifPlayerModifier = 100;
 		fDifEnemyModifier = 100;
 		lev = DL_NORMAL;
@@ -80,9 +80,9 @@ void	setDifficultyLevel(DIFFICULTY_LEVEL lev)
 
 // ------------------------------------------------------------------------------------
 /* Returns the difficulty level */
-DIFFICULTY_LEVEL	getDifficultyLevel( void )
+DIFFICULTY_LEVEL	getDifficultyLevel(void)
 {
-	return(presDifLevel);
+	return (presDifLevel);
 }
 
 // ------------------------------------------------------------------------------------
@@ -93,8 +93,12 @@ int modifyForDifficultyLevel(int basicVal, bool IsPlayer)
 		return basicVal;
 	}
 	if (IsPlayer)
+	{
 		return basicVal * fDifPlayerModifier / 100;
+	}
 	else
+	{
 		return basicVal * fDifEnemyModifier / 100;
+	}
 }
 // ------------------------------------------------------------------------------------

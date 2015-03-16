@@ -32,12 +32,12 @@ struct QUAD
 extern uint16_t calcDirection(int32_t x0, int32_t y0, int32_t x1, int32_t y1);
 bool inQuad(const Vector2i *pt, const QUAD *quad);
 Vector2i positionInQuad(Vector2i const &pt, QUAD const &quad);
-extern DROID *getNearestDroid( UDWORD x, UDWORD y, bool bSelected );
-extern bool droidOnScreen( DROID *psDroid, SDWORD tolerance );
+extern DROID *getNearestDroid(UDWORD x, UDWORD y, bool bSelected);
+extern bool droidOnScreen(DROID *psDroid, SDWORD tolerance);
 
 static inline STRUCTURE *getTileStructure(UDWORD x, UDWORD y)
 {
-	BASE_OBJECT * psObj = mapTile(x,y)->psObject;
+	BASE_OBJECT *psObj = mapTile(x, y)->psObject;
 	if (psObj && psObj->type == OBJ_STRUCTURE)
 	{
 		return (STRUCTURE *)psObj;
@@ -47,7 +47,7 @@ static inline STRUCTURE *getTileStructure(UDWORD x, UDWORD y)
 
 static inline FEATURE *getTileFeature(UDWORD x, UDWORD y)
 {
-	BASE_OBJECT * psObj = mapTile(x,y)->psObject;
+	BASE_OBJECT *psObj = mapTile(x, y)->psObject;
 	if (psObj && psObj->type == OBJ_FEATURE)
 	{
 		return (FEATURE *)psObj;
@@ -58,12 +58,14 @@ static inline FEATURE *getTileFeature(UDWORD x, UDWORD y)
 /// WARNING: Returns NULL if tile not visible to selectedPlayer.
 static inline BASE_OBJECT *getTileOccupier(UDWORD x, UDWORD y)
 {
-	MAPTILE *psTile = mapTile(x,y);
+	MAPTILE *psTile = mapTile(x, y);
 
 	if (TEST_TILE_VISIBLE(selectedPlayer, psTile))
 	{
-		return mapTile(x,y)->psObject;
-	} else {
+		return mapTile(x, y)->psObject;
+	}
+	else
+	{
 		return NULL;
 	}
 }

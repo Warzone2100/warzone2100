@@ -190,7 +190,7 @@ void recvOptions(NETQUEUE queue)
 
 	// Do the skirmish slider settings if they are up
 	for (i = 0; i < MAX_PLAYERS; i++)
- 	{
+	{
 		if (widgGetFromID(psWScreen, MULTIOP_SKSLIDE + i))
 		{
 			widgSetSliderPos(psWScreen, MULTIOP_SKSLIDE + i, game.skDiff[i]);
@@ -278,13 +278,13 @@ bool hostCampaign(char *sGame, char *sPlayer)
 	bMultiPlayer = true;
 	bMultiMessages = true; // enable messages
 
-	loadMultiStats(sPlayer,&playerStats);				// stats stuff
+	loadMultiStats(sPlayer, &playerStats);				// stats stuff
 	setMultiStats(selectedPlayer, playerStats, false);
 	setMultiStats(selectedPlayer, playerStats, true);
 
-	if(!NetPlay.bComms)
+	if (!NetPlay.bComms)
 	{
-		strcpy(NetPlay.players[0].name,sPlayer);
+		strcpy(NetPlay.players[0].name, sPlayer);
 	}
 
 	return true;
@@ -315,10 +315,10 @@ bool multiShutdown(void)
 {
 	// shut down netplay lib.
 	debug(LOG_MAIN, "shutting down networking");
-  	NETshutdown();
+	NETshutdown();
 
 	debug(LOG_MAIN, "free game data (structure limits)");
-	if(ingame.numStructureLimits)
+	if (ingame.numStructureLimits)
 	{
 		ingame.numStructureLimits = 0;
 		free(ingame.pStructureLimits);
@@ -441,7 +441,7 @@ bool multiGameInit(void)
 
 	for (player = 0; player < MAX_PLAYERS; player++)
 	{
-		openchannels[player] =true;								//open comms to this player.
+		openchannels[player] = true;								//open comms to this player.
 	}
 
 	gameInit();
@@ -457,7 +457,7 @@ bool multiGameShutdown(void)
 	PLAYERSTATS	st;
 	uint32_t        time;
 
-	debug(LOG_NET,"%s is shutting down.",getPlayerName(selectedPlayer));
+	debug(LOG_NET, "%s is shutting down.", getPlayerName(selectedPlayer));
 
 	sendLeavingMsg();							// say goodbye
 	updateMultiStatsGames();					// update games played.

@@ -65,17 +65,17 @@ bool proj_SendProjectile(WEAPON *psWeap, SIMPLE_OBJECT *psAttacker, int player, 
 bool proj_SendProjectileAngled(WEAPON *psWeap, SIMPLE_OBJECT *psAttacker, int player, Vector3i target, BASE_OBJECT *psTarget, bool bVisible, int weapon_slot, int min_angle, unsigned fireTime);
 
 /** Return whether a weapon is direct or indirect. */
-bool proj_Direct(const WEAPON_STATS* psStats);
+bool proj_Direct(const WEAPON_STATS *psStats);
 
 /** Return the maximum range for a weapon. */
-SDWORD	proj_GetLongRange(const WEAPON_STATS* psStats);
+SDWORD	proj_GetLongRange(const WEAPON_STATS *psStats);
 
 extern UDWORD calcDamage(UDWORD baseDamage, WEAPON_EFFECT weaponEffect, BASE_OBJECT *psTarget);
 extern bool gfxVisible(PROJECTILE *psObj);
 
 /***************************************************************************/
 
-extern void	objectShimmy	( BASE_OBJECT *psObj );
+extern void	objectShimmy(BASE_OBJECT *psObj);
 
 static inline void setProjectileSource(PROJECTILE *psProj, SIMPLE_OBJECT *psObj)
 {
@@ -103,7 +103,7 @@ int establishTargetHeight(BASE_OBJECT const *psTarget);
 
 /* @} */
 
-void checkProjectile(const PROJECTILE* psProjectile, const char * const location_description, const char * function, const int recurse);
+void checkProjectile(const PROJECTILE *psProjectile, const char *const location_description, const char *function, const int recurse);
 
 /* assert if projectile is bad */
 #define CHECK_PROJECTILE(object) checkProjectile((object), AT_MACRO, __FUNCTION__, max_check_object_recursion)

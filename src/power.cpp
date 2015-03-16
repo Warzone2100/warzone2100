@@ -154,7 +154,7 @@ static int64_t checkPrecisePowerRequest(STRUCTURE *psStruct)
 int32_t checkPowerRequest(STRUCTURE *psStruct)
 {
 	int64_t power = checkPrecisePowerRequest(psStruct);
-	return power != -1? power / FP_ONE : -1;
+	return power != -1 ? power / FP_ONE : -1;
 }
 
 static int64_t getQueuedPower(unsigned player)
@@ -187,22 +187,22 @@ bool checkPower(int player, uint32_t quantity)
 		return true;
 	}
 
-	return asPower[player].currentPower >= quantity*FP_ONE;
+	return asPower[player].currentPower >= quantity * FP_ONE;
 }
 
 void usePower(int player, uint32_t quantity)
 {
 	ASSERT_OR_RETURN(, player < MAX_PLAYERS, "Bad player (%d)", player);
 	syncDebug("usePower%d %" PRId64"-=%u", player, asPower[player].currentPower, quantity);
-	asPower[player].currentPower = MAX(0, asPower[player].currentPower - quantity*FP_ONE);
+	asPower[player].currentPower = MAX(0, asPower[player].currentPower - quantity * FP_ONE);
 }
 
 void addPower(int player, int32_t quantity)
 {
 	ASSERT_OR_RETURN(, player < MAX_PLAYERS, "Bad player (%d)", player);
 	syncDebug("addPower%d %" PRId64"+=%d", player, asPower[player].currentPower, quantity);
-	asPower[player].currentPower += quantity*FP_ONE;
-	CLIP(asPower[player].currentPower, 0, MAX_POWER*FP_ONE);
+	asPower[player].currentPower += quantity * FP_ONE;
+	CLIP(asPower[player].currentPower, 0, MAX_POWER * FP_ONE);
 }
 
 /*resets the power calc flag for all players*/
@@ -230,9 +230,9 @@ static int64_t updateExtractedPower(STRUCTURE *psBuilding)
 		{
 			switch (getDifficultyLevel())
 			{
-				case DL_EASY: modifier = EASY_POWER_MOD; break;
-				case DL_HARD: modifier = HARD_POWER_MOD; break;
-				default: break;
+			case DL_EASY: modifier = EASY_POWER_MOD; break;
+			case DL_HARD: modifier = HARD_POWER_MOD; break;
+			default: break;
 			}
 		}
 		// include modifier as a %
@@ -244,7 +244,7 @@ static int64_t updateExtractedPower(STRUCTURE *psBuilding)
 }
 
 //returns the relevant list based on OffWorld or OnWorld
-STRUCTURE* powerStructList(int player)
+STRUCTURE *powerStructList(int player)
 {
 	ASSERT(player < MAX_PLAYERS, "powerStructList: Bad player");
 	if (offWorldKeepLists)
@@ -289,7 +289,7 @@ static void updateCurrentPower(POWER_GEN *psPowerGen, UDWORD player)
 
 	//each power gen can cope with its associated resource extractors
 	extractedPower = 0;
-	for (i=0; i < NUM_POWER_MODULES; i++)
+	for (i = 0; i < NUM_POWER_MODULES; i++)
 	{
 		if (psPowerGen->apResExtractors[i])
 		{
@@ -309,9 +309,9 @@ static void updateCurrentPower(POWER_GEN *psPowerGen, UDWORD player)
 
 	asPower[player].currentPower += (extractedPower * psPowerGen->multiplier) / 100;
 	ASSERT(asPower[player].currentPower >= 0, "negative power");
-	if (asPower[player].currentPower > MAX_POWER*FP_ONE)
+	if (asPower[player].currentPower > MAX_POWER * FP_ONE)
 	{
-		asPower[player].currentPower = MAX_POWER*FP_ONE;
+		asPower[player].currentPower = MAX_POWER * FP_ONE;
 	}
 }
 
@@ -320,7 +320,7 @@ void setPower(unsigned player, int32_t power)
 	ASSERT(player < MAX_PLAYERS, "Bad player (%u)", player);
 
 	syncDebug("setPower%d %" PRId64"->%d", player, asPower[player].currentPower, power);
-	asPower[player].currentPower = power*FP_ONE;
+	asPower[player].currentPower = power * FP_ONE;
 	ASSERT(asPower[player].currentPower >= 0, "negative power");
 }
 
@@ -356,7 +356,7 @@ int32_t getPowerMinusQueued(unsigned player)
 
 bool requestPowerFor(STRUCTURE *psStruct, int32_t amount)
 {
-	return requestPrecisePowerFor(psStruct, amount*FP_ONE);
+	return requestPrecisePowerFor(psStruct, amount * FP_ONE);
 }
 
 bool requestPrecisePowerFor(STRUCTURE *psStruct, int64_t amount)

@@ -41,30 +41,30 @@
 /* Defines for indexing an appropriate IMD object given a buildings purpose. */
 enum STRUCTURE_TYPE
 {
-REF_HQ,
-REF_FACTORY,
-REF_FACTORY_MODULE,//draw as factory 2
-REF_POWER_GEN,
-REF_POWER_MODULE,
-REF_RESOURCE_EXTRACTOR,
-REF_DEFENSE,
-REF_WALL,
-REF_WALLCORNER,				//corner wall - no gun
-REF_BLASTDOOR,
-REF_RESEARCH,
-REF_RESEARCH_MODULE,
-REF_REPAIR_FACILITY,
-REF_COMMAND_CONTROL,		//control centre for command droids
-REF_BRIDGE,			//NOT USED, but removing it would change savegames
-REF_DEMOLISH,			//the demolish structure type - should only be one stat with this type
-REF_CYBORG_FACTORY,
-REF_VTOL_FACTORY,
-REF_LAB,
-REF_REARM_PAD,
-REF_MISSILE_SILO,
-REF_SAT_UPLINK,         //added for updates - AB 8/6/99
-REF_GATE,
-NUM_DIFF_BUILDINGS,		//need to keep a count of how many types for IMD loading
+	REF_HQ,
+	REF_FACTORY,
+	REF_FACTORY_MODULE,//draw as factory 2
+	REF_POWER_GEN,
+	REF_POWER_MODULE,
+	REF_RESOURCE_EXTRACTOR,
+	REF_DEFENSE,
+	REF_WALL,
+	REF_WALLCORNER,				//corner wall - no gun
+	REF_BLASTDOOR,
+	REF_RESEARCH,
+	REF_RESEARCH_MODULE,
+	REF_REPAIR_FACILITY,
+	REF_COMMAND_CONTROL,		//control centre for command droids
+	REF_BRIDGE,			//NOT USED, but removing it would change savegames
+	REF_DEMOLISH,			//the demolish structure type - should only be one stat with this type
+	REF_CYBORG_FACTORY,
+	REF_VTOL_FACTORY,
+	REF_LAB,
+	REF_REARM_PAD,
+	REF_MISSILE_SILO,
+	REF_SAT_UPLINK,         //added for updates - AB 8/6/99
+	REF_GATE,
+	NUM_DIFF_BUILDINGS,		//need to keep a count of how many types for IMD loading
 };
 
 struct FLAG_POSITION : public OBJECT_POSITION
@@ -72,7 +72,7 @@ struct FLAG_POSITION : public OBJECT_POSITION
 	Vector3i		coords;							//the world coords of the Position
 	UBYTE		factoryInc;						//indicates whether the first, second etc factory
 	UBYTE		factoryType;					//indicates whether standard, cyborg or vtol factory
-	FLAG_POSITION * psNext;
+	FLAG_POSITION *psNext;
 };
 
 
@@ -161,13 +161,13 @@ struct RESEARCH;
 
 struct RESEARCH_FACILITY
 {
-	RESEARCH *      psSubject;                      // The subject the structure is working on.
-	RESEARCH *      psSubjectPending;               // The subject the structure is going to work on when the GAME_RESEARCHSTATUS message is received.
+	RESEARCH       *psSubject;                      // The subject the structure is working on.
+	RESEARCH       *psSubjectPending;               // The subject the structure is going to work on when the GAME_RESEARCHSTATUS message is received.
 	StatusPending   statusPending;                  ///< Pending = not yet synchronised.
 	unsigned        pendingCount;                   ///< Number of messages sent but not yet processed.
 	UDWORD		capacity;				/* Number of upgrade modules added*/
 	UDWORD		researchPoints;			/* Research Points produced per research cycle*/
-	RESEARCH *      psBestTopic;                    // The topic with the most research points that was last performed
+	RESEARCH       *psBestTopic;                    // The topic with the most research points that was last performed
 	UDWORD		timeStartHold;		    /* The time the research facility was put on hold*/
 };
 
@@ -181,8 +181,8 @@ struct FACTORY
 	UBYTE				loopsPerformed;		/* how many times the loop has been performed*/
 	UBYTE				productionOutput;	/* Droid Build Points Produced Per
 											   Build Cycle*/
-	DROID_TEMPLATE *                psSubject;              ///< The subject the structure is working on.
-	DROID_TEMPLATE *                psSubjectPending;       ///< The subject the structure is going to working on. (Pending = not yet synchronised.)
+	DROID_TEMPLATE                 *psSubject;              ///< The subject the structure is working on.
+	DROID_TEMPLATE                 *psSubjectPending;       ///< The subject the structure is going to working on. (Pending = not yet synchronised.)
 	StatusPending                   statusPending;          ///< Pending = not yet synchronised.
 	unsigned                        pendingCount;           ///< Number of messages sent but not yet processed.
 
@@ -197,14 +197,14 @@ struct FACTORY
 struct RES_EXTRACTOR
 {
 	bool				active;				/*indicates when the extractor is on ie digging up oil*/
-	struct STRUCTURE *      psPowerGen;                             ///< owning power generator
+	struct STRUCTURE       *psPowerGen;                             ///< owning power generator
 };
 
 struct POWER_GEN
 {
 	UDWORD			multiplier;				///< Factor to multiply output by - percentage
 	UDWORD			capacity;				///< Number of upgrade modules added
-	struct STRUCTURE *      apResExtractors[NUM_POWER_MODULES];     ///< Pointers to associated oil derricks
+	struct STRUCTURE       *apResExtractors[NUM_POWER_MODULES];     ///< Pointers to associated oil derricks
 };
 
 class DROID_GROUP;
@@ -216,7 +216,7 @@ struct REPAIR_FACILITY
 	FLAG_POSITION                   *psDeliveryPoint;       /* Place for the repaired droids to assemble at */
 
 	// The group the droids to be repaired by this facility belong to
-	DROID_GROUP *                   psGroup;
+	DROID_GROUP                    *psGroup;
 	int                             droidQueue;              ///< Last count of droid queue for this facility
 };
 
@@ -272,7 +272,7 @@ struct STRUCTURE : public BASE_OBJECT
 #endif
 
 	UDWORD          expectedDamage;                 ///< Expected damage to be caused by all currently incoming projectiles. This info is shared between all players,
-	                                                ///< but shouldn't make a difference unless 3 mutual enemies happen to be fighting each other at the same time.
+	///< but shouldn't make a difference unless 3 mutual enemies happen to be fighting each other at the same time.
 
 	uint32_t        prevTime;                       ///< Time of structure's previous tick.
 
@@ -284,7 +284,7 @@ struct STRUCTURE : public BASE_OBJECT
 	STRUCT_ANIM_STATES	state;
 	UDWORD			lastStateTime;
 
-	iIMDShape *         prebuiltImd;
+	iIMDShape          *prebuiltImd;
 };
 
 #define LOTS_OF 0xFFFFFFFF  // highest number the limit can be set to
@@ -316,16 +316,32 @@ static const int NUM_FACMOD_TYPES = 2;
 struct ProductionRunEntry
 {
 	ProductionRunEntry() : quantity(0), built(0), psTemplate(NULL) {}
-	void restart() { built = 0; }
-	void removeComplete() { quantity -= built; built = 0; }
-	int numRemaining() const { return quantity - built; }
-	bool isComplete() const { return numRemaining() <= 0; }
-	bool isValid() const { return psTemplate != NULL && quantity > 0 && built <= quantity; }
+	void restart()
+	{
+		built = 0;
+	}
+	void removeComplete()
+	{
+		quantity -= built;
+		built = 0;
+	}
+	int numRemaining() const
+	{
+		return quantity - built;
+	}
+	bool isComplete() const
+	{
+		return numRemaining() <= 0;
+	}
+	bool isValid() const
+	{
+		return psTemplate != NULL && quantity > 0 && built <= quantity;
+	}
 	bool operator ==(DROID_TEMPLATE *t) const;
 
 	int                             quantity;             //number to build
 	int                             built;                //number built on current run
-	DROID_TEMPLATE *                psTemplate;           //template to build
+	DROID_TEMPLATE                 *psTemplate;           //template to build
 };
 typedef std::vector<ProductionRunEntry> ProductionRun;
 

@@ -76,7 +76,7 @@
 // globals.
 bool						bMultiPlayer				= false;	// true when more than 1 player.
 bool						bMultiMessages				= false;	// == bMultiPlayer unless multimessages are disabled
-bool						openchannels[MAX_PLAYERS]={true};
+bool						openchannels[MAX_PLAYERS] = {true};
 UBYTE						bDisplayMultiJoiningStatus;
 
 MULTIPLAYERGAME				game;									//info to describe game.
@@ -106,8 +106,8 @@ static bool recvBeacon(NETQUEUE queue);
 static bool recvDestroyTemplate(NETQUEUE queue);
 static bool recvResearch(NETQUEUE queue);
 
-bool		multiplayPlayersReady		(bool bNotifyStatus);
-void		startMultiplayerGame		(void);
+bool		multiplayPlayersReady(bool bNotifyStatus);
+void		startMultiplayerGame(void);
 
 // ////////////////////////////////////////////////////////////////////////////
 // temporarily disable multiplayer mode.
@@ -129,20 +129,20 @@ bool multiplayerWinSequence(bool firstCall)
 {
 	static Position pos;
 	Position pos2;
-	static UDWORD last=0;
+	static UDWORD last = 0;
 	float		rotAmount;
 	STRUCTURE	*psStruct;
 
-	if(firstCall)
+	if (firstCall)
 	{
-		pos  = cameraToHome(selectedPlayer,true);			// pan the camera to home if not already doing so
-		last =0;
+		pos  = cameraToHome(selectedPlayer, true);			// pan the camera to home if not already doing so
+		last = 0;
 
 		// stop all research
 		CancelAllResearch(selectedPlayer);
 
 		// stop all manufacture.
-		for(psStruct=apsStructLists[selectedPlayer];psStruct;psStruct = psStruct->psNext)
+		for (psStruct = apsStructLists[selectedPlayer]; psStruct; psStruct = psStruct->psNext)
 		{
 			if (StructIsFactory(psStruct))
 			{
@@ -161,32 +161,43 @@ bool multiplayerWinSequence(bool firstCall)
 		player.r.y += rotAmount;
 	}
 
-	if(last > gameTime)last= 0;
-	if((gameTime-last) < 500 )							// only  if not done recently.
+	if (last > gameTime)
+	{
+		last = 0;
+	}
+	if ((gameTime - last) < 500)							// only  if not done recently.
 	{
 		return true;
 	}
 	last = gameTime;
 
-	if(rand()%3 == 0)
+	if (rand() % 3 == 0)
 	{
-		pos2=pos;
-		pos2.x +=  (rand() % world_coord(8)) - world_coord(4);
-		pos2.z +=  (rand() % world_coord(8)) - world_coord(4);
+		pos2 = pos;
+		pos2.x += (rand() % world_coord(8)) - world_coord(4);
+		pos2.z += (rand() % world_coord(8)) - world_coord(4);
 
 		if (pos2.x < 0)
+		{
 			pos2.x = 128;
+		}
 
 		if ((unsigned)pos2.x > world_coord(mapWidth))
+		{
 			pos2.x = world_coord(mapWidth);
+		}
 
 		if (pos2.z < 0)
+		{
 			pos2.z = 128;
+		}
 
 		if ((unsigned)pos2.z > world_coord(mapHeight))
+		{
 			pos2.z = world_coord(mapHeight);
+		}
 
-		addEffect(&pos2,EFFECT_FIREWORK,FIREWORK_TYPE_LAUNCHER,false,NULL,0);	// throw up some fire works.
+		addEffect(&pos2, EFFECT_FIREWORK, FIREWORK_TYPE_LAUNCHER, false, NULL, 0);	// throw up some fire works.
 	}
 
 	// show the score..
@@ -203,81 +214,81 @@ bool multiPlayerLoop(void)
 	UDWORD		i;
 	UBYTE		joinCount;
 
-		joinCount =0;
-		for(i=0;i<MAX_PLAYERS;i++)
+	joinCount = 0;
+	for (i = 0; i < MAX_PLAYERS; i++)
+	{
+		if (isHumanPlayer(i) && ingame.JoiningInProgress[i])
 		{
-			if(isHumanPlayer(i) && ingame.JoiningInProgress[i] )
+			joinCount++;
+		}
+	}
+	if (joinCount)
+	{
+		setWidgetsStatus(false);
+		bDisplayMultiJoiningStatus = joinCount;	// someone is still joining! say So
+
+		// deselect anything selected.
+		selDroidDeselect(selectedPlayer);
+
+		if (keyPressed(KEY_ESC))// check for cancel
+		{
+			bDisplayMultiJoiningStatus = 0;
+			setWidgetsStatus(true);
+			setPlayerHasLost(true);
+		}
+	}
+	else		//everyone is in the game now!
+	{
+		if (bDisplayMultiJoiningStatus)
+		{
+			bDisplayMultiJoiningStatus = 0;
+			setWidgetsStatus(true);
+		}
+		if (!ingame.TimeEveryoneIsInGame)
+		{
+			ingame.TimeEveryoneIsInGame = gameTime;
+			debug(LOG_NET, "I have entered the game @ %d", ingame.TimeEveryoneIsInGame);
+			if (!NetPlay.isHost)
 			{
-				joinCount++;
+				debug(LOG_NET, "=== Sending hash to host ===");
+				sendDataCheck();
 			}
 		}
-		if(joinCount)
+		if (NetPlay.bComms)
 		{
-			setWidgetsStatus(false);
-			bDisplayMultiJoiningStatus = joinCount;	// someone is still joining! say So
-
-			// deselect anything selected.
-			selDroidDeselect(selectedPlayer);
-
-			if(keyPressed(KEY_ESC) )// check for cancel
-			{
-				bDisplayMultiJoiningStatus = 0;
-				setWidgetsStatus(true);
-				setPlayerHasLost(true);
-			}
+			sendPing();
 		}
-		else		//everyone is in the game now!
+		// Only have to do this on a true MP game
+		if (NetPlay.isHost && !ingame.isAllPlayersDataOK && NetPlay.bComms)
 		{
-			if(bDisplayMultiJoiningStatus)
+			if (gameTime - ingame.TimeEveryoneIsInGame > GAME_TICKS_PER_SEC * 60)
 			{
-				bDisplayMultiJoiningStatus = 0;
-				setWidgetsStatus(true);
-			}
-			if (!ingame.TimeEveryoneIsInGame)
-			{
-				ingame.TimeEveryoneIsInGame = gameTime;
-				debug(LOG_NET, "I have entered the game @ %d", ingame.TimeEveryoneIsInGame );
-				if (!NetPlay.isHost)
+				// we waited 60 secs to make sure people didn't bypass the data integrity checks
+				int index;
+				for (index = 0; index < MAX_PLAYERS; index++)
 				{
-					debug(LOG_NET, "=== Sending hash to host ===");
-					sendDataCheck();
-				}
-			}
-			if (NetPlay.bComms)
-			{
-				sendPing();
-			}
-			// Only have to do this on a true MP game
-			if (NetPlay.isHost && !ingame.isAllPlayersDataOK && NetPlay.bComms)
-			{
-				if (gameTime - ingame.TimeEveryoneIsInGame > GAME_TICKS_PER_SEC * 60)
-				{
-					// we waited 60 secs to make sure people didn't bypass the data integrity checks
-					int index;
-					for (index=0; index < MAX_PLAYERS; index++)
+					if (ingame.DataIntegrity[index] == false && isHumanPlayer(index) && index != NET_HOST_ONLY)
 					{
-						if (ingame.DataIntegrity[index] == false && isHumanPlayer(index) && index != NET_HOST_ONLY)
-						{
-							char msg[256] = {'\0'};
+						char msg[256] = {'\0'};
 
-							sprintf(msg, _("Kicking player %s, because they tried to bypass data integrity check!"), getPlayerName(index));
-							sendTextMessage(msg, true);
-							addConsoleMessage(msg, LEFT_JUSTIFY, NOTIFY_MESSAGE);
-							NETlogEntry(msg, SYNC_FLAG, index);
+						sprintf(msg, _("Kicking player %s, because they tried to bypass data integrity check!"), getPlayerName(index));
+						sendTextMessage(msg, true);
+						addConsoleMessage(msg, LEFT_JUSTIFY, NOTIFY_MESSAGE);
+						NETlogEntry(msg, SYNC_FLAG, index);
 
 #ifndef DEBUG
-							kickPlayer(index, "invalid data!", ERROR_INVALID);
+						kickPlayer(index, "invalid data!", ERROR_INVALID);
 #endif
-							debug(LOG_WARNING, "Kicking Player %s (%u), they tried to bypass data integrity check!", getPlayerName(index), index);
-						}
+						debug(LOG_WARNING, "Kicking Player %s (%u), they tried to bypass data integrity check!", getPlayerName(index), index);
 					}
-					ingame.isAllPlayersDataOK = true;
 				}
+				ingame.isAllPlayersDataOK = true;
 			}
 		}
+	}
 
 	// if player has won then process the win effects...
-	if(testPlayerHasWon())
+	if (testPlayerHasWon())
 	{
 		multiplayerWinSequence(false);
 	}
@@ -368,7 +379,7 @@ DROID_TEMPLATE *IdToTemplate(UDWORD tempId, UDWORD player)
 
 	// Check if we know which player this is from, in that case, assume it is a player template
 	// FIXME: nuke the ANYPLAYER hack
-	if (player != ANYPLAYER && player < MAX_PLAYERS )
+	if (player != ANYPLAYER && player < MAX_PLAYERS)
 	{
 		for (psTempl = apsDroidTemplates[player]; psTempl && (psTempl->multiPlayerID != tempId); psTempl = psTempl->psNext)
 		{}		// follow templates
@@ -391,7 +402,7 @@ DROID_TEMPLATE *IdToTemplate(UDWORD tempId, UDWORD player)
 
 		if (psTempl)
 		{
-			debug(LOG_NEVER, "Found template ID %d, for player %d, but found it in player's %d list?",tempId, player, i);
+			debug(LOG_NEVER, "Found template ID %d, for player %d, but found it in player's %d list?", tempId, player, i);
 			return psTempl;
 		}
 	}
@@ -401,7 +412,7 @@ DROID_TEMPLATE *IdToTemplate(UDWORD tempId, UDWORD player)
 
 /////////////////////////////////////////////////////////////////////////////////
 //  Returns a pointer to base object, given an id and optionally a player.
-BASE_OBJECT *IdToPointer(UDWORD id,UDWORD player)
+BASE_OBJECT *IdToPointer(UDWORD id, UDWORD player)
 {
 	DROID		*pD;
 	STRUCTURE	*pS;
@@ -411,21 +422,21 @@ BASE_OBJECT *IdToPointer(UDWORD id,UDWORD player)
 	pD = IdToDroid(id, player);
 	if (pD)
 	{
-		return (BASE_OBJECT*)pD;
+		return (BASE_OBJECT *)pD;
 	}
 
 	// structures
-	pS = IdToStruct(id,player);
-	if(pS)
+	pS = IdToStruct(id, player);
+	if (pS)
 	{
-		return (BASE_OBJECT*)pS;
+		return (BASE_OBJECT *)pS;
 	}
 
 	// features
-	pF = IdToFeature(id,player);
-	if(pF)
+	pF = IdToFeature(id, player);
+	if (pF)
 	{
-		return (BASE_OBJECT*)pF;
+		return (BASE_OBJECT *)pF;
 	}
 
 	return NULL;
@@ -434,7 +445,7 @@ BASE_OBJECT *IdToPointer(UDWORD id,UDWORD player)
 
 // ////////////////////////////////////////////////////////////////////////////
 // return a players name.
-const char* getPlayerName(int player)
+const char *getPlayerName(int player)
 {
 	ASSERT_OR_RETURN(NULL, player < MAX_PLAYERS , "Wrong player index: %u", player);
 
@@ -442,7 +453,7 @@ const char* getPlayerName(int player)
 	{
 		if (strcmp(playerName[player], "") != 0)
 		{
-			return (char*)&playerName[player];
+			return (char *)&playerName[player];
 		}
 	}
 
@@ -526,52 +537,52 @@ int scavengerSlot()
 
 int scavengerPlayer()
 {
-	return game.scavengers? scavengerSlot() : -1;
+	return game.scavengers ? scavengerSlot() : -1;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
 // probably temporary. Places the camera on the players 1st droid or struct.
-Vector3i cameraToHome(UDWORD player,bool scroll)
+Vector3i cameraToHome(UDWORD player, bool scroll)
 {
 	Vector3i res;
-	UDWORD x,y;
+	UDWORD x, y;
 	STRUCTURE	*psBuilding;
 
-	for (psBuilding = apsStructLists[player]; psBuilding && (psBuilding->pStructureType->type != REF_HQ); psBuilding= psBuilding->psNext) {}
+	for (psBuilding = apsStructLists[player]; psBuilding && (psBuilding->pStructureType->type != REF_HQ); psBuilding = psBuilding->psNext) {}
 
-	if(psBuilding)
+	if (psBuilding)
 	{
-		x= map_coord(psBuilding->pos.x);
-		y= map_coord(psBuilding->pos.y);
+		x = map_coord(psBuilding->pos.x);
+		y = map_coord(psBuilding->pos.y);
 	}
 	else if (apsDroidLists[player])				// or first droid
 	{
-		 x= map_coord(apsDroidLists[player]->pos.x);
-		 y=	map_coord(apsDroidLists[player]->pos.y);
+		x = map_coord(apsDroidLists[player]->pos.x);
+		y =	map_coord(apsDroidLists[player]->pos.y);
 	}
 	else if (apsStructLists[player])							// center on first struct
 	{
-		x= map_coord(apsStructLists[player]->pos.x);
-		y= map_coord(apsStructLists[player]->pos.y);
+		x = map_coord(apsStructLists[player]->pos.x);
+		y = map_coord(apsStructLists[player]->pos.y);
 	}
 	else														//or map center.
 	{
-		x= mapWidth/2;
-		y= mapHeight/2;
+		x = mapWidth / 2;
+		y = mapHeight / 2;
 	}
 
 
-	if(scroll)
+	if (scroll)
 	{
 		requestRadarTrack(world_coord(x), world_coord(y));
 	}
 	else
 	{
-		setViewPos(x,y,true);
+		setViewPos(x, y, true);
 	}
 
 	res.x = world_coord(x);
-	res.y = map_TileHeight(x,y);
+	res.y = map_TileHeight(x, y);
 	res.z = world_coord(y);
 	return res;
 }
@@ -596,10 +607,10 @@ bool recvMessage(void)
 		}
 
 		// messages only in game.
-		if(!ingame.localJoiningInProgress)
+		if (!ingame.localJoiningInProgress)
 		{
 			processedMessage1 = true;
-			switch(type)
+			switch (type)
 			{
 			case GAME_DROIDINFO:					//droid update info
 				recvDroidInfo(queue);
@@ -657,7 +668,7 @@ bool recvMessage(void)
 
 		// messages usable all the time
 		processedMessage2 = true;
-		switch(type)
+		switch (type)
 		{
 		case GAME_TEMPLATE:					// new template
 			recvTemplate(queue);
@@ -672,50 +683,50 @@ bool recvMessage(void)
 			recvOptions(queue);
 			break;
 		case NET_PLAYER_DROPPED:				// remote player got disconnected
-		{
-			uint32_t player_id;
-
-			NETbeginDecode(queue, NET_PLAYER_DROPPED);
 			{
-				NETuint32_t(&player_id);
-			}
-			NETend();
+				uint32_t player_id;
 
-			if (whosResponsible(player_id) != queue.index && queue.index != NET_HOST_ONLY)
-			{
-				HandleBadParam("NET_PLAYER_DROPPED given incorrect params.", player_id, queue.index);
+				NETbeginDecode(queue, NET_PLAYER_DROPPED);
+				{
+					NETuint32_t(&player_id);
+				}
+				NETend();
+
+				if (whosResponsible(player_id) != queue.index && queue.index != NET_HOST_ONLY)
+				{
+					HandleBadParam("NET_PLAYER_DROPPED given incorrect params.", player_id, queue.index);
+					break;
+				}
+
+				debug(LOG_INFO, "** player %u has dropped!", player_id);
+
+				if (NetPlay.players[player_id].allocated)
+				{
+					MultiPlayerLeave(player_id);		// get rid of their stuff
+					NET_InitPlayer(player_id, false);
+				}
+				NETsetPlayerConnectionStatus(CONNECTIONSTATUS_PLAYER_DROPPED, player_id);
 				break;
 			}
-
-			debug(LOG_INFO,"** player %u has dropped!", player_id);
-
-			if (NetPlay.players[player_id].allocated)
-			{
-				MultiPlayerLeave(player_id);		// get rid of their stuff
-				NET_InitPlayer(player_id, false);
-			}
-			NETsetPlayerConnectionStatus(CONNECTIONSTATUS_PLAYER_DROPPED, player_id);
-			break;
-		}
 		case NET_PLAYERRESPONDING:			// remote player is now playing
-		{
-			uint32_t player_id;
+			{
+				uint32_t player_id;
 
-			resetReadyStatus(false);
+				resetReadyStatus(false);
 
-			NETbeginDecode(queue, NET_PLAYERRESPONDING);
+				NETbeginDecode(queue, NET_PLAYERRESPONDING);
 				// the player that has just responded
 				NETuint32_t(&player_id);
-			NETend();
-			if (player_id >= MAX_PLAYERS)
-			{
-				debug(LOG_ERROR, "Bad NET_PLAYERRESPONDING received, ID is %d", (int)player_id);
+				NETend();
+				if (player_id >= MAX_PLAYERS)
+				{
+					debug(LOG_ERROR, "Bad NET_PLAYERRESPONDING received, ID is %d", (int)player_id);
+					break;
+				}
+				// This player is now with us!
+				ingame.JoiningInProgress[player_id] = false;
 				break;
 			}
-			// This player is now with us!
-			ingame.JoiningInProgress[player_id] = false;
-			break;
-		}
 		// FIXME: the next 4 cases might not belong here --check (we got two loops for this)
 		case NET_COLOURREQUEST:
 			recvColourRequest(queue);
@@ -730,7 +741,7 @@ bool recvMessage(void)
 			recvReadyRequest(queue);
 
 			// if hosting try to start the game if everyone is ready
-			if(NetPlay.isHost && multiplayPlayersReady(false))
+			if (NetPlay.isHost && multiplayPlayersReady(false))
 			{
 				startMultiplayerGame();
 			}
@@ -739,42 +750,42 @@ bool recvMessage(void)
 			recvAlliance(queue, true);
 			break;
 		case NET_KICK:	// in-game kick message
-		{
-			uint32_t player_id;
-			char reason[MAX_KICK_REASON];
-			LOBBY_ERROR_TYPES KICK_TYPE = ERROR_NOERROR;
+			{
+				uint32_t player_id;
+				char reason[MAX_KICK_REASON];
+				LOBBY_ERROR_TYPES KICK_TYPE = ERROR_NOERROR;
 
-			NETbeginDecode(queue, NET_KICK);
+				NETbeginDecode(queue, NET_KICK);
 				NETuint32_t(&player_id);
 				NETstring(reason, MAX_KICK_REASON);
 				NETenum(&KICK_TYPE);
-			NETend();
+				NETend();
 
-			if (player_id == NET_HOST_ONLY)
-			{
-				char buf[250]= {'\0'};
-
-				ssprintf(buf, "Player %d (%s : %s) tried to kick %u", (int) queue.index, NetPlay.players[queue.index].name, NetPlay.players[queue.index].IPtextAddress, player_id);
-				NETlogEntry(buf, SYNC_FLAG, 0);
-				debug(LOG_ERROR, "%s", buf);
-				if (NetPlay.isHost)
+				if (player_id == NET_HOST_ONLY)
 				{
-					NETplayerKicked((unsigned int) queue.index);
+					char buf[250] = {'\0'};
+
+					ssprintf(buf, "Player %d (%s : %s) tried to kick %u", (int) queue.index, NetPlay.players[queue.index].name, NetPlay.players[queue.index].IPtextAddress, player_id);
+					NETlogEntry(buf, SYNC_FLAG, 0);
+					debug(LOG_ERROR, "%s", buf);
+					if (NetPlay.isHost)
+					{
+						NETplayerKicked((unsigned int) queue.index);
+					}
+					break;
+				}
+				else if (selectedPlayer == player_id)  // we've been told to leave.
+				{
+					debug(LOG_ERROR, "You were kicked because %s", reason);
+					setPlayerHasLost(true);
+				}
+				else
+				{
+					debug(LOG_NET, "Player %d was kicked: %s", player_id, reason);
+					NETplayerKicked(player_id);
 				}
 				break;
 			}
-			else if (selectedPlayer == player_id)  // we've been told to leave.
-			{
-				debug(LOG_ERROR, "You were kicked because %s", reason);
-				setPlayerHasLost(true);
-			}
-			else
-			{
-				debug(LOG_NET, "Player %d was kicked: %s", player_id, reason);
-				NETplayerKicked(player_id);
-			}
-			break;
-		}
 		case GAME_RESEARCHSTATUS:
 			recvResearchStatus(queue);
 			break;
@@ -827,8 +838,8 @@ bool SendResearch(uint8_t player, uint32_t index, bool trigger)
 {
 	// Send the player that is researching the topic and the topic itself
 	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_DEBUG_FINISH_RESEARCH);
-		NETuint8_t(&player);
-		NETuint32_t(&index);
+	NETuint8_t(&player);
+	NETuint32_t(&index);
 	NETend();
 
 	return true;
@@ -843,8 +854,8 @@ static bool recvResearch(NETQUEUE queue)
 	PLAYER_RESEARCH	*pPlayerRes;
 
 	NETbeginDecode(queue, GAME_DEBUG_FINISH_RESEARCH);
-		NETuint8_t(&player);
-		NETuint32_t(&index);
+	NETuint8_t(&player);
+	NETuint32_t(&index);
 	NETend();
 
 	if (!getDebugMappingStatus() && bMultiPlayer)
@@ -904,22 +915,22 @@ bool sendResearchStatus(STRUCTURE *psBuilding, uint32_t index, uint8_t player, b
 	}
 
 	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_RESEARCHSTATUS);
-		NETuint8_t(&player);
-		NETbool(&bStart);
+	NETuint8_t(&player);
+	NETbool(&bStart);
 
-		// If we know the building researching it then send its ID
-		if (psBuilding)
-		{
-			NETuint32_t(&psBuilding->id);
-		}
-		else
-		{
-			uint32_t zero = 0;
-			NETuint32_t(&zero);
-		}
+	// If we know the building researching it then send its ID
+	if (psBuilding)
+	{
+		NETuint32_t(&psBuilding->id);
+	}
+	else
+	{
+		uint32_t zero = 0;
+		NETuint32_t(&zero);
+	}
 
-		// Finally the topic in question
-		NETuint32_t(&index);
+	// Finally the topic in question
+	NETuint32_t(&index);
 	NETend();
 
 	// Tell UI to remove from the list of available research.
@@ -934,8 +945,8 @@ STRUCTURE *findResearchingFacilityByResearchIndex(unsigned player, unsigned inde
 	for (STRUCTURE *psBuilding = apsStructLists[player]; psBuilding; psBuilding = psBuilding->psNext)
 	{
 		if (psBuilding->pStructureType->type == REF_RESEARCH
-		 && ((RESEARCH_FACILITY *)psBuilding->pFunctionality)->psSubject
-		 && ((RESEARCH_FACILITY *)psBuilding->pFunctionality)->psSubject->ref - REF_RESEARCH_START == index)
+		    && ((RESEARCH_FACILITY *)psBuilding->pFunctionality)->psSubject
+		    && ((RESEARCH_FACILITY *)psBuilding->pFunctionality)->psSubject->ref - REF_RESEARCH_START == index)
 		{
 			return psBuilding;
 		}
@@ -954,10 +965,10 @@ bool recvResearchStatus(NETQUEUE queue)
 	uint32_t			index, structRef;
 
 	NETbeginDecode(queue, GAME_RESEARCHSTATUS);
-		NETuint8_t(&player);
-		NETbool(&bStart);
-		NETuint32_t(&structRef);
-		NETuint32_t(&index);
+	NETuint8_t(&player);
+	NETbool(&bStart);
+	NETuint32_t(&structRef);
+	NETuint32_t(&index);
 	NETend();
 
 	syncDebug("player%d, bStart%d, structRef%u, index%u", player, bStart, structRef, index);
@@ -1074,22 +1085,22 @@ bool sendTextMessage(const char *pStr, bool all)
 	UDWORD				i;
 	char				display[MAX_CONSOLE_STRING_LENGTH];
 	char				msg[MAX_CONSOLE_STRING_LENGTH];
-	char*				curStr = (char*)pStr;
+	char				*curStr = (char *)pStr;
 
 	if (!ingame.localOptionsReceived)
 	{
-		if(!bMultiPlayer)
+		if (!bMultiPlayer)
 		{
 			// apparently we are not in a mp game, so dump the message to the console.
-			addConsoleMessage(curStr,LEFT_JUSTIFY, SYSTEM_MESSAGE);
+			addConsoleMessage(curStr, LEFT_JUSTIFY, SYSTEM_MESSAGE);
 		}
 		return true;
 	}
 
-	memset(display,0x0, sizeof(display));	//clear buffer
-	memset(msg,0x0, sizeof(display));		//clear buffer
-	memset(sendto,0x0, sizeof(sendto));		//clear private flag
-	memset(posTable,0x0, sizeof(posTable));		//clear buffer
+	memset(display, 0x0, sizeof(display));	//clear buffer
+	memset(msg, 0x0, sizeof(display));		//clear buffer
+	memset(sendto, 0x0, sizeof(sendto));		//clear private flag
+	memset(posTable, 0x0, sizeof(posTable));		//clear buffer
 	sstrcpy(msg, curStr);
 
 	if (!all)
@@ -1118,7 +1129,7 @@ bool sendTextMessage(const char *pStr, bool all)
 		}
 		for (; curStr[0] >= '0' && curStr[0] <= '9'; ++curStr)  // for each 0..9 numeric char encountered
 		{
-			i = posTable[curStr[0]-'0'];
+			i = posTable[curStr[0] - '0'];
 			if (normal)
 			{
 				sstrcpy(display, _("(private to "));
@@ -1127,9 +1138,9 @@ bool sendTextMessage(const char *pStr, bool all)
 			{
 				sstrcat(display, ", ");
 			}
-			if ((isHumanPlayer(i) || (game.type == SKIRMISH && i<game.maxPlayers && game.skDiff[i] ) ))
+			if ((isHumanPlayer(i) || (game.type == SKIRMISH && i < game.maxPlayers && game.skDiff[i])))
 			{
-				sstrcat(display, getPlayerName(posTable[curStr[0]-'0']));
+				sstrcat(display, getPlayerName(posTable[curStr[0] - '0']));
 				sendto[i] = true;
 			}
 			else
@@ -1154,7 +1165,7 @@ bool sendTextMessage(const char *pStr, bool all)
 	{
 		NETbeginEncode(NETbroadcastQueue(), NET_TEXTMSG);
 		NETuint32_t(&selectedPlayer);		// who this msg is from
-		NETstring(msg,MAX_CONSOLE_STRING_LENGTH);	// the message to send
+		NETstring(msg, MAX_CONSOLE_STRING_LENGTH);	// the message to send
 		NETend();
 	}
 	else if (normal)
@@ -1167,7 +1178,7 @@ bool sendTextMessage(const char *pStr, bool all)
 				{
 					NETbeginEncode(NETnetQueue(i), NET_TEXTMSG);
 					NETuint32_t(&selectedPlayer);		// who this msg is from
-					NETstring(msg,MAX_CONSOLE_STRING_LENGTH);	// the message to send
+					NETstring(msg, MAX_CONSOLE_STRING_LENGTH);	// the message to send
 					NETend();
 				}
 				else	//also send to AIs now (non-humans), needed for AI
@@ -1201,7 +1212,7 @@ bool sendTextMessage(const char *pStr, bool all)
 	//This is for local display
 	sstrcpy(msg, NetPlay.players[selectedPlayer].name);		// name
 	sstrcat(msg, ": ");						// seperator
-	sstrcat(msg, (normal?curStr:display));						// add message
+	sstrcat(msg, (normal ? curStr : display));						// add message
 
 	addConsoleMessage(msg, DEFAULT_JUSTIFY, selectedPlayer);	// display
 
@@ -1235,7 +1246,7 @@ bool sendAIMessage(char *pStr, UDWORD player, UDWORD to)
 		//Received a console message from a player callback
 		//store and call later
 		//-------------------------------------------------
-		if (!msgStackPush(CALL_AI_MSG,player,to,pStr,-1,-1,NULL))
+		if (!msgStackPush(CALL_AI_MSG, player, to, pStr, -1, -1, NULL))
 		{
 			debug(LOG_ERROR, "sendAIMessage() - msgStackPush - stack failed");
 			return false;
@@ -1265,10 +1276,10 @@ bool sendAIMessage(char *pStr, UDWORD player, UDWORD to)
 
 		//send to the player who is hosting 'to' player (might be himself if human and not AI)
 		NETbeginEncode(NETnetQueue(sendPlayer), NET_AITEXTMSG);
-			NETuint32_t(&player);			//save the actual sender
-			//save the actual player that is to get this msg on the source machine (source can host many AIs)
-			NETuint32_t(&to);				//save the actual receiver (might not be the same as the one we are actually sending to, in case of AIs)
-			NETstring(pStr, MAX_CONSOLE_STRING_LENGTH);		// copy message in.
+		NETuint32_t(&player);			//save the actual sender
+		//save the actual player that is to get this msg on the source machine (source can host many AIs)
+		NETuint32_t(&to);				//save the actual receiver (might not be the same as the one we are actually sending to, in case of AIs)
+		NETstring(pStr, MAX_CONSOLE_STRING_LENGTH);		// copy message in.
 		NETend();
 	}
 
@@ -1278,7 +1289,7 @@ bool sendAIMessage(char *pStr, UDWORD player, UDWORD to)
 //
 // At this time, we do NOT support messages for beacons
 //
-bool sendBeacon(int32_t locX, int32_t locY, int32_t forPlayer, int32_t sender, const char* pStr)
+bool sendBeacon(int32_t locX, int32_t locY, int32_t forPlayer, int32_t sender, const char *pStr)
 {
 	int sendPlayer;
 	//debug(LOG_WZ, "sendBeacon: '%s'",pStr);
@@ -1286,7 +1297,7 @@ bool sendBeacon(int32_t locX, int32_t locY, int32_t forPlayer, int32_t sender, c
 	//find machine that is hosting this human or AI
 	sendPlayer = whosResponsible(forPlayer);
 
-	if(sendPlayer >= MAX_PLAYERS)
+	if (sendPlayer >= MAX_PLAYERS)
 	{
 		debug(LOG_ERROR, "sendAIMessage() - whosResponsible() failed.");
 		return false;
@@ -1295,15 +1306,15 @@ bool sendBeacon(int32_t locX, int32_t locY, int32_t forPlayer, int32_t sender, c
 	// I assume this is correct, looks like it sends it to ONLY that person, and the routine
 	// kf_AddHelpBlip() iterates for each player it needs.
 	NETbeginEncode(NETnetQueue(sendPlayer), NET_BEACONMSG);    // send to the player who is hosting 'to' player (might be himself if human and not AI)
-		NETint32_t(&sender);                                // save the actual sender
+	NETint32_t(&sender);                                // save the actual sender
 
-		// save the actual player that is to get this msg on the source machine (source can host many AIs)
-		NETint32_t(&forPlayer);                             // save the actual receiver (might not be the same as the one we are actually sending to, in case of AIs)
-		NETint32_t(&locX);                                  // save location
-		NETint32_t(&locY);
+	// save the actual player that is to get this msg on the source machine (source can host many AIs)
+	NETint32_t(&forPlayer);                             // save the actual receiver (might not be the same as the one we are actually sending to, in case of AIs)
+	NETint32_t(&locX);                                  // save location
+	NETint32_t(&locY);
 
-		// const_cast: need to cast away constness because of the const-incorrectness of NETstring (const-incorrect when sending/encoding a packet)
-		NETstring((char*)pStr, MAX_CONSOLE_STRING_LENGTH);  // copy message in.
+	// const_cast: need to cast away constness because of the const-incorrectness of NETstring (const-incorrect when sending/encoding a packet)
+	NETstring((char *)pStr, MAX_CONSOLE_STRING_LENGTH); // copy message in.
 	NETend();
 
 	return true;
@@ -1334,10 +1345,10 @@ bool recvTextMessage(NETQUEUE queue)
 	memset(newmsg, 0x0, sizeof(newmsg));
 
 	NETbeginDecode(queue, NET_TEXTMSG);
-		// Who this msg is from
-		NETuint32_t(&playerIndex);
-		// The message to send
-		NETstring(newmsg, MAX_CONSOLE_STRING_LENGTH);
+	// Who this msg is from
+	NETuint32_t(&playerIndex);
+	// The message to send
+	NETstring(newmsg, MAX_CONSOLE_STRING_LENGTH);
 	NETend();
 
 	if (whosResponsible(playerIndex) != queue.index)
@@ -1387,9 +1398,9 @@ bool recvTextMessageAI(NETQUEUE queue)
 	char	newmsg[MAX_CONSOLE_STRING_LENGTH];
 
 	NETbeginDecode(queue, NET_AITEXTMSG);
-		NETuint32_t(&sender);			//in-game player index ('normal' one)
-		NETuint32_t(&receiver);			//in-game player index
-		NETstring(newmsg,MAX_CONSOLE_STRING_LENGTH);
+	NETuint32_t(&sender);			//in-game player index ('normal' one)
+	NETuint32_t(&receiver);			//in-game player index
+	NETstring(newmsg, MAX_CONSOLE_STRING_LENGTH);
 	NETend();
 
 	if (whosResponsible(sender) != queue.index)
@@ -1407,7 +1418,7 @@ bool recvTextMessageAI(NETQUEUE queue)
 	//Received a console message from a player callback
 	//store and call later
 	//-------------------------------------------------
-	if(!msgStackPush(CALL_AI_MSG,sender,receiver,msg,-1,-1,NULL))
+	if (!msgStackPush(CALL_AI_MSG, sender, receiver, msg, -1, -1, NULL))
 	{
 		debug(LOG_ERROR, "recvTextMessageAI() - msgStackPush - stack failed");
 		return false;
@@ -1448,8 +1459,8 @@ static void NETtemplate(DROID_TEMPLATE *pTempl)
 bool sendTemplate(uint32_t player, DROID_TEMPLATE *pTempl)
 {
 	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_TEMPLATE);
-		NETuint32_t(&player);
-		NETtemplate(pTempl);
+	NETuint32_t(&player);
+	NETtemplate(pTempl);
 	return NETend();
 }
 
@@ -1461,10 +1472,10 @@ bool recvTemplate(NETQUEUE queue)
 	DROID_TEMPLATE  t;
 
 	NETbeginDecode(queue, GAME_TEMPLATE);
-		NETuint32_t(&player);
-		ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "invalid player size: %d", player);
+	NETuint32_t(&player);
+	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "invalid player size: %d", player);
 
-		NETtemplate(&t);
+	NETtemplate(&t);
 	NETend();
 	if (!canGiveOrdersFor(queue.index, player))
 	{
@@ -1476,7 +1487,7 @@ bool recvTemplate(NETQUEUE queue)
 	t.pName = NULL;
 	t.ref = REF_TEMPLATE_START;
 
-	psTempl = IdToTemplate(t.multiPlayerID,player);
+	psTempl = IdToTemplate(t.multiPlayerID, player);
 
 	// Already exists
 	if (psTempl)
@@ -1505,8 +1516,8 @@ bool recvTemplate(NETQUEUE queue)
 bool SendDestroyTemplate(DROID_TEMPLATE *t, uint8_t player)
 {
 	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_TEMPLATEDEST);
-		NETuint8_t(&player);
-		NETuint32_t(&t->multiPlayerID);
+	NETuint8_t(&player);
+	NETuint32_t(&t->multiPlayerID);
 	NETend();
 
 	return true;
@@ -1520,8 +1531,8 @@ static bool recvDestroyTemplate(NETQUEUE queue)
 	DROID_TEMPLATE	*psTempl, *psTempPrev = NULL;
 
 	NETbeginDecode(queue, GAME_TEMPLATEDEST);
-		NETuint8_t(&player);
-		NETuint32_t(&templateID);
+	NETuint8_t(&player);
+	NETuint32_t(&templateID);
 	NETend();
 	if (!canGiveOrdersFor(queue.index, player))
 	{
@@ -1576,7 +1587,7 @@ static bool recvDestroyTemplate(NETQUEUE queue)
 bool SendDestroyFeature(FEATURE *pF)
 {
 	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_DEBUG_REMOVE_FEATURE);
-		NETuint32_t(&pF->id);
+	NETuint32_t(&pF->id);
 	return NETend();
 }
 
@@ -1587,7 +1598,7 @@ bool recvDestroyFeature(NETQUEUE queue)
 	uint32_t	id;
 
 	NETbeginDecode(queue, GAME_DEBUG_REMOVE_FEATURE);
-		NETuint32_t(&id);
+	NETuint32_t(&id);
 	NETend();
 
 	if (!getDebugMappingStatus() && bMultiPlayer)
@@ -1596,7 +1607,7 @@ bool recvDestroyFeature(NETQUEUE queue)
 		return false;
 	}
 
-	pF = IdToFeature(id,ANYPLAYER);
+	pF = IdToFeature(id, ANYPLAYER);
 	if (pF == NULL)
 	{
 		debug(LOG_FEATURE, "feature id %d not found (probably already destroyed)", id);
@@ -1622,7 +1633,7 @@ bool recvMapFileRequested(NETQUEUE queue)
 	PHYSFS_sint64 fileSize_64;
 	PHYSFS_file	*pFileHandle;
 
-	if(!NetPlay.isHost)				// only host should act
+	if (!NetPlay.isHost)				// only host should act
 	{
 		ASSERT(false, "Host only routine detected for client!");
 		return false;
@@ -1641,7 +1652,7 @@ bool recvMapFileRequested(NETQUEUE queue)
 
 		LEVEL_DATASET *mapData = levFindDataSet(game.map, &game.hash);
 
-		addConsoleMessage("Map was requested: SENDING MAP!",DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+		addConsoleMessage("Map was requested: SENDING MAP!", DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 
 		char *mapStr = mapData->realFileName;
 		debug(LOG_INFO, "Map was requested. Looking for %s", mapStr);
@@ -1685,7 +1696,7 @@ void sendMap(void)
 			int done = NETsendFile(game.map, game.hash, i);
 			if (done == 100)
 			{
-				addConsoleMessage("MAP SENT!",DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+				addConsoleMessage("MAP SENT!", DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 				debug(LOG_INFO, "=== File has been sent to player %d ===", i);
 				NetPlay.players[i].wzFile.isSending = false;
 				NetPlay.players[i].needFile = false;
@@ -1700,8 +1711,8 @@ bool recvMapFileData(NETQUEUE queue)
 	mapDownloadProgress = NETrecvFile(queue);
 	if (mapDownloadProgress == 100)
 	{
-		addConsoleMessage("MAP DOWNLOADED!",DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
-		sendTextMessage("MAP DOWNLOADED",true);					//send
+		addConsoleMessage("MAP DOWNLOADED!", DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+		sendTextMessage("MAP DOWNLOADED", true);					//send
 		debug(LOG_INFO, "=== File has been received. ===");
 
 		// clear out the old level list.
@@ -1714,7 +1725,7 @@ bool recvMapFileData(NETQUEUE queue)
 		}
 
 		LEVEL_DATASET *mapData = levFindDataSet(game.map, &game.hash);
-		if ( mapData && CheckForMod(mapData->realFileName))
+		if (mapData && CheckForMod(mapData->realFileName))
 		{
 			char buf[256];
 			if (game.isMapMod)
@@ -1776,13 +1787,16 @@ UDWORD msgStackPush(SDWORD CBtype, SDWORD plFrom, SDWORD plTo, const char *tStr,
 
 bool isMsgStackEmpty(void)
 {
-	if(msgStackPos <= (-1)) return true;
+	if (msgStackPos <= (-1))
+	{
+		return true;
+	}
 	return false;
 }
 
 bool msgStackGetFrom(SDWORD  *psVal)
 {
-	if(msgStackPos < 0)
+	if (msgStackPos < 0)
 	{
 		debug(LOG_ERROR, "msgStackGetFrom: msgStackPos < 0");
 		return false;
@@ -1795,7 +1809,7 @@ bool msgStackGetFrom(SDWORD  *psVal)
 
 bool msgStackGetTo(SDWORD  *psVal)
 {
-	if(msgStackPos < 0)
+	if (msgStackPos < 0)
 	{
 		debug(LOG_ERROR, "msgStackGetTo: msgStackPos < 0");
 		return false;
@@ -1808,7 +1822,7 @@ bool msgStackGetTo(SDWORD  *psVal)
 
 static bool msgStackGetCallbackType(SDWORD  *psVal)
 {
-	if(msgStackPos < 0)
+	if (msgStackPos < 0)
 	{
 		debug(LOG_ERROR, "msgStackGetCallbackType: msgStackPos < 0");
 		return false;
@@ -1821,7 +1835,7 @@ static bool msgStackGetCallbackType(SDWORD  *psVal)
 
 static bool msgStackGetXY(SDWORD  *psValx, SDWORD  *psValy)
 {
-	if(msgStackPos < 0)
+	if (msgStackPos < 0)
 	{
 		debug(LOG_ERROR, "msgStackGetXY: msgStackPos < 0");
 		return false;
@@ -1836,7 +1850,7 @@ static bool msgStackGetXY(SDWORD  *psValx, SDWORD  *psValy)
 
 bool msgStackGetMsg(char  *psVal)
 {
-	if(msgStackPos < 0)
+	if (msgStackPos < 0)
 	{
 		debug(LOG_ERROR, "msgStackGetMsg: msgStackPos < 0");
 		return false;
@@ -1853,16 +1867,16 @@ static bool msgStackSort(void)
 	SDWORD i;
 
 	//go through all-1 elements (bottom-top)
-	for(i=0;i<msgStackPos;i++)
+	for (i = 0; i < msgStackPos; i++)
 	{
-		msgPlFrom[i] = msgPlFrom[i+1];
-		msgPlTo[i] = msgPlTo[i+1];
+		msgPlFrom[i] = msgPlFrom[i + 1];
+		msgPlTo[i] = msgPlTo[i + 1];
 
-		callbackType[i] = callbackType[i+1];
-		locx[i] = locx[i+1];
-		locy[i] = locy[i+1];
+		callbackType[i] = callbackType[i + 1];
+		locx[i] = locx[i + 1];
+		locy[i] = locy[i + 1];
 
-		strcpy(msgStr[i], msgStr[i+1]);
+		strcpy(msgStr[i], msgStr[i + 1]);
 	}
 
 	//erase top element
@@ -1884,7 +1898,7 @@ bool msgStackPop(void)
 {
 	debug(LOG_WZ, "msgStackPop: stack size %d", msgStackPos);
 
-	if(msgStackPos < 0 || msgStackPos > MAX_MSG_STACK)
+	if (msgStackPos < 0 || msgStackPos > MAX_MSG_STACK)
 	{
 		debug(LOG_ERROR, "msgStackPop: wrong msgStackPos index: %d", msgStackPos);
 		return false;
@@ -1895,7 +1909,7 @@ bool msgStackPop(void)
 
 bool msgStackGetDroid(DROID **ppsDroid)
 {
-	if(msgStackPos < 0)
+	if (msgStackPos < 0)
 	{
 		debug(LOG_ERROR, "msgStackGetDroid: msgStackPos < 0");
 		return false;
@@ -1916,93 +1930,113 @@ bool msgStackFireTop(void)
 	SDWORD		_callbackType;
 	char		msg[255];
 
-	if(msgStackPos < 0)
+	if (msgStackPos < 0)
 	{
 		debug(LOG_ERROR, "msgStackFireTop: msgStackPos < 0");
 		return false;
 	}
 
-	if(!msgStackGetCallbackType(&_callbackType))
-		return false;
-
-	switch(_callbackType)
+	if (!msgStackGetCallbackType(&_callbackType))
 	{
-		case CALL_VIDEO_QUIT:
-			debug(LOG_SCRIPT, "msgStackFireTop: popped CALL_VIDEO_QUIT");
-			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_VIDEO_QUIT);
-			break;
-
-		case CALL_DORDER_STOP:
-			ASSERT(false,"CALL_DORDER_STOP is currently disabled");
-
-			debug(LOG_SCRIPT, "msgStackFireTop: popped CALL_DORDER_STOP");
-
-			if(!msgStackGetDroid(&psScrCBOrderDroid))
-				return false;
-
-			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DORDER_STOP);
-			break;
-
-		case CALL_BEACON:
-
-			if(!msgStackGetXY(&beaconX, &beaconY))
-				return false;
-
-			if(!msgStackGetFrom(&MultiMsgPlayerFrom))
-				return false;
-
-			if(!msgStackGetTo(&MultiMsgPlayerTo))
-				return false;
-
-			if(!msgStackGetMsg(msg))
-				return false;
-
-			strcpy(MultiplayMsg, msg);
-
-			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_BEACON);
-			break;
-
-		case CALL_AI_MSG:
-			if(!msgStackGetFrom(&MultiMsgPlayerFrom))
-				return false;
-
-			if(!msgStackGetTo(&MultiMsgPlayerTo))
-				return false;
-
-			if(!msgStackGetMsg(msg))
-				return false;
-
-			strcpy(MultiplayMsg, msg);
-
-			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_AI_MSG);
-			break;
-
-		default:
-			debug(LOG_ERROR, "msgStackFireTop: unknown callback type");
-			return false;
-			break;
+		return false;
 	}
 
-	if(!msgStackPop())
+	switch (_callbackType)
+	{
+	case CALL_VIDEO_QUIT:
+		debug(LOG_SCRIPT, "msgStackFireTop: popped CALL_VIDEO_QUIT");
+		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_VIDEO_QUIT);
+		break;
+
+	case CALL_DORDER_STOP:
+		ASSERT(false, "CALL_DORDER_STOP is currently disabled");
+
+		debug(LOG_SCRIPT, "msgStackFireTop: popped CALL_DORDER_STOP");
+
+		if (!msgStackGetDroid(&psScrCBOrderDroid))
+		{
+			return false;
+		}
+
+		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_DORDER_STOP);
+		break;
+
+	case CALL_BEACON:
+
+		if (!msgStackGetXY(&beaconX, &beaconY))
+		{
+			return false;
+		}
+
+		if (!msgStackGetFrom(&MultiMsgPlayerFrom))
+		{
+			return false;
+		}
+
+		if (!msgStackGetTo(&MultiMsgPlayerTo))
+		{
+			return false;
+		}
+
+		if (!msgStackGetMsg(msg))
+		{
+			return false;
+		}
+
+		strcpy(MultiplayMsg, msg);
+
+		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_BEACON);
+		break;
+
+	case CALL_AI_MSG:
+		if (!msgStackGetFrom(&MultiMsgPlayerFrom))
+		{
+			return false;
+		}
+
+		if (!msgStackGetTo(&MultiMsgPlayerTo))
+		{
+			return false;
+		}
+
+		if (!msgStackGetMsg(msg))
+		{
+			return false;
+		}
+
+		strcpy(MultiplayMsg, msg);
+
+		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_AI_MSG);
+		break;
+
+	default:
+		debug(LOG_ERROR, "msgStackFireTop: unknown callback type");
 		return false;
+		break;
+	}
+
+	if (!msgStackPop())
+	{
+		return false;
+	}
 
 	return true;
 }
 
 static bool recvBeacon(NETQUEUE queue)
 {
-	int32_t sender, receiver,locX, locY;
+	int32_t sender, receiver, locX, locY;
 	char    msg[MAX_CONSOLE_STRING_LENGTH];
 
 	NETbeginDecode(queue, NET_BEACONMSG);
-	    NETint32_t(&sender);            // the actual sender
-	    NETint32_t(&receiver);          // the actual receiver (might not be the same as the one we are actually sending to, in case of AIs)
-	    NETint32_t(&locX);
-	    NETint32_t(&locY);
-	    NETstring(msg, sizeof(msg));    // Receive the actual message
+	NETint32_t(&sender);            // the actual sender
+	NETint32_t(&receiver);          // the actual receiver (might not be the same as the one we are actually sending to, in case of AIs)
+	NETint32_t(&locX);
+	NETint32_t(&locY);
+	NETstring(msg, sizeof(msg));    // Receive the actual message
 	NETend();
 
-	debug(LOG_WZ, "Received beacon for player: %d, from: %d",receiver, sender);
+	debug(LOG_WZ, "Received beacon for player: %d, from: %d", receiver, sender);
 
 	sstrcat(msg, NetPlay.players[sender].name);    // name
 	sstrcpy(beaconReceiveMsg[sender], msg);
@@ -2010,9 +2044,9 @@ static bool recvBeacon(NETQUEUE queue)
 	return addBeaconBlip(locX, locY, receiver, sender, beaconReceiveMsg[sender]);
 }
 
-const char* getPlayerColourName(int player)
+const char *getPlayerColourName(int player)
 {
-	static const char* playerColors[] =
+	static const char *playerColors[] =
 	{
 		N_("Green"),
 		N_("Orange"),
@@ -2047,7 +2081,7 @@ const char* getPlayerColourName(int player)
 void resetReadyStatus(bool bSendOptions)
 {
 	// notify all clients if needed
-	if(bSendOptions)
+	if (bSendOptions)
 	{
 		sendOptions();
 	}

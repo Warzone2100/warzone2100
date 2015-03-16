@@ -29,7 +29,7 @@ MersenneTwister::MersenneTwister(uint32_t seed)
 	state[0] = seed;
 	for (unsigned i = 1; i != 624; ++i)
 	{
-		state[i] = 0x6C078965*(state[i - 1] ^ state[i - 1]>>30) + i;
+		state[i] = 0x6C078965 * (state[i - 1] ^ state[i - 1] >> 30) + i;
 	}
 }
 
@@ -45,10 +45,10 @@ uint32_t MersenneTwister::u32()
 	// Give better than 624 dimensional equidistribution for lower bits.
 	// Don't change the constants unless you know what you're doing.
 	// Can skip this step if it noticably affects performance (which it probably doesn't), since we aren't doing Monte-Carlo simulations.
-	ret ^= ret>>11;
-	ret ^= ret<<7 & 0x9D2C5680;
-	ret ^= ret<<15 & 0xEFC60000;
-	ret ^= ret>>18;
+	ret ^= ret >> 11;
+	ret ^= ret << 7 & 0x9D2C5680;
+	ret ^= ret << 15 & 0xEFC60000;
+	ret ^= ret >> 18;
 
 	return ret;
 }
@@ -62,18 +62,18 @@ void MersenneTwister::generate()
 	// Loop tripled, to avoid using %624 everywhere.
 	for (unsigned i = 0; i != 227; ++i)
 	{
-		int v = (state[i]&0x80000000) | (state[i + 1      ]&0x7FFFFFFF);
-		state[i] = state[i + 397     ] ^ v>>1 ^ ((v&0x00000001)*0x9908B0DF);
+		int v = (state[i] & 0x80000000) | (state[i + 1      ] & 0x7FFFFFFF);
+		state[i] = state[i + 397     ] ^ v >> 1 ^ ((v & 0x00000001) * 0x9908B0DF);
 	}
 	for (unsigned i = 227; i != 623; ++i)
 	{
-		int v = (state[i]&0x80000000) | (state[i + 1      ]&0x7FFFFFFF);
-		state[i] = state[i + 397 - 624] ^ v>>1 ^ ((v&0x00000001)*0x9908B0DF);
+		int v = (state[i] & 0x80000000) | (state[i + 1      ] & 0x7FFFFFFF);
+		state[i] = state[i + 397 - 624] ^ v >> 1 ^ ((v & 0x00000001) * 0x9908B0DF);
 	}
 	for (unsigned i = 623; i != 624; ++i)  // Very short loop.
 	{
-		int v = (state[i]&0x80000000) | (state[i + 1 - 624]&0x7FFFFFFF);
-		state[i] = state[i + 397 - 624] ^ v>>1 ^ ((v&0x00000001)*0x9908B0DF);
+		int v = (state[i] & 0x80000000) | (state[i + 1 - 624] & 0x7FFFFFFF);
+		state[i] = state[i + 397 - 624] ^ v >> 1 ^ ((v & 0x00000001) * 0x9908B0DF);
 	}
 }
 
@@ -90,5 +90,5 @@ uint32_t gameRandU32()
 int32_t gameRand(uint32_t limit)
 {
 	syncDebug("Used a random number.");
-	return gamePseudorandomNumberGenerator.u32()%limit;
+	return gamePseudorandomNumberGenerator.u32() % limit;
 }

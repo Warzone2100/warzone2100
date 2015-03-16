@@ -59,7 +59,7 @@ extern void droidSensorUpgrade(DROID *psDroid);
 extern void droidECMUpgrade(DROID *psDroid);
 extern void droidBodyUpgrade(FUNCTION *pFunction, DROID *psDroid);
 extern void upgradeTransporterDroids(DROID *psTransporter,
-                              void(*pUpgradeFunction)(DROID *psDroid));
+                                     void(*pUpgradeFunction)(DROID *psDroid));
 
 extern bool FunctionShutDown(void);
 

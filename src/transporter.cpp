@@ -192,7 +192,7 @@ static bool _intRefreshTransporter(void)
 
 bool intAddTransporter(DROID *psSelected, bool offWorld)
 {
-	return(_intAddTransporter(psSelected, offWorld));
+	return (_intAddTransporter(psSelected, offWorld));
 }
 
 /*Add the Transporter Interface*/
@@ -529,7 +529,7 @@ bool intAddTransButtonForm(void)
 
 	//set the number of tabs required
 	sFormInit.numMajor = numForms((OBJ_BUTWIDTH + OBJ_GAP) * numButtons,
-	        OBJ_WIDTH - OBJ_GAP);
+	                              OBJ_WIDTH - OBJ_GAP);
 
 	sFormInit.pUserData = &StandardTab;
 	sFormInit.pTabDisplay = intDisplayTab;
@@ -849,9 +849,9 @@ bool intAddDroidsAvailForm(void)
 	}
 
 	butPerForm = ((TRANSDROID_TABWIDTH - OBJ_GAP) /
-	        (OBJ_BUTWIDTH + OBJ_GAP)) *
-	        ((TRANSDROID_TABHEIGHT - OBJ_GAP) /
-	                (OBJ_BUTHEIGHT + OBJ_GAP));
+	              (OBJ_BUTWIDTH + OBJ_GAP)) *
+	             ((TRANSDROID_TABHEIGHT - OBJ_GAP) /
+	              (OBJ_BUTHEIGHT + OBJ_GAP));
 
 	sFormInit.numMajor = numForms(numButtons, butPerForm);
 	if (sFormInit.numMajor > MAX_TAB_SMALL_SHOWN)
@@ -1009,7 +1009,7 @@ bool transporterIsEmpty(const DROID *psTransporter)
 
 	// Assume dead droids and non-transporter droids to be empty
 	return (isDead((const BASE_OBJECT *)psTransporter)
-			|| !isTransporter(psTransporter)
+	        || !isTransporter(psTransporter)
 	        || psTransporter->psGroup->psList == NULL
 	        || psTransporter->psGroup->psList == psTransporter);
 }
@@ -1227,7 +1227,7 @@ void setCurrentTransporter(UDWORD id)
 
 	//loop thru all the droids to find the selected one
 	for (psDroid = transInterfaceDroidList(); psDroid != NULL; psDroid =
-	        psDroid->psNext)
+	         psDroid->psNext)
 	{
 		if (isTransporter(psDroid) &&
 		    (psDroid->action != DACTION_TRANSPORTOUT &&
@@ -1599,7 +1599,7 @@ bool updateTransporter(DROID *psTransporter)
 		{
 			//play reinforcements have arrived message
 			audio_QueueTrackPos(ID_SOUND_TRANSPORT_LANDING,
-			        psTransporter->pos.x, psTransporter->pos.y, psTransporter->pos.z);
+			                    psTransporter->pos.x, psTransporter->pos.y, psTransporter->pos.z);
 			addConsoleMessage(_("Reinforcements landing"), LEFT_JUSTIFY, SYSTEM_MESSAGE);
 			//reset the data for the transporter timer
 			widgSetUserData(psWScreen, IDTRANTIMER_DISPLAY, (void *)NULL);
@@ -1651,7 +1651,7 @@ void processLaunchTransporter(void)
 			launchTransporter(psCurrTransporter);
 			//set the data for the transporter timer
 			widgSetUserData(psWScreen, IDTRANTIMER_DISPLAY,
-			        (void *)psCurrTransporter);
+			                (void *)psCurrTransporter);
 
 			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_LAUNCH_TRANSPORTER);
 			triggerEvent(TRIGGER_LAUNCH_TRANSPORTER);

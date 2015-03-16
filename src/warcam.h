@@ -40,49 +40,49 @@
 /* The different tracking states */
 enum
 {
-CAM_INACTIVE,
-CAM_REQUEST,
-CAM_TRACKING,
-CAM_RESET,
-CAM_TRACK_OBJECT,
-CAM_TRACK_LOCATION
+	CAM_INACTIVE,
+	CAM_REQUEST,
+	CAM_TRACKING,
+	CAM_RESET,
+	CAM_TRACK_OBJECT,
+	CAM_TRACK_LOCATION
 };
 
 /* Storage for old viewnagles etc */
 struct WARCAM
 {
-UDWORD	status;
-UDWORD	trackClass;
-UDWORD	lastUpdate;
-iView	oldView;
+	UDWORD	status;
+	UDWORD	trackClass;
+	UDWORD	lastUpdate;
+	iView	oldView;
 
-Vector3f	acceleration;
-Vector3f	velocity;
-Vector3f	position;
+	Vector3f	acceleration;
+	Vector3f	velocity;
+	Vector3f	position;
 
-Vector3f	rotation;
-Vector3f	rotVel;
-Vector3f	rotAccel;
+	Vector3f	rotation;
+	Vector3f	rotVel;
+	Vector3f	rotAccel;
 
-UDWORD	oldDistance;
-BASE_OBJECT *target;
+	UDWORD	oldDistance;
+	BASE_OBJECT *target;
 };
 
 /* Externally referenced functions */
-extern void	initWarCam			( void );
-extern void	setWarCamActive		( bool status );
-extern bool	getWarCamStatus		( void );
-extern void camToggleStatus		( void );
-extern bool processWarCam		( void );
-extern void	camToggleInfo		( void );
-extern void	requestRadarTrack	( SDWORD x, SDWORD y );
-extern bool	getRadarTrackingStatus( void );
-extern void	toggleRadarAllignment( void );
-extern void	camInformOfRotation ( Vector3i *rotation );
+extern void	initWarCam(void);
+extern void	setWarCamActive(bool status);
+extern bool	getWarCamStatus(void);
+extern void camToggleStatus(void);
+extern bool processWarCam(void);
+extern void	camToggleInfo(void);
+extern void	requestRadarTrack(SDWORD x, SDWORD y);
+extern bool	getRadarTrackingStatus(void);
+extern void	toggleRadarAllignment(void);
+extern void	camInformOfRotation(Vector3i *rotation);
 extern BASE_OBJECT *camFindDroidTarget(void);
-extern DROID *getTrackingDroid( void );
-extern SDWORD	getPresAngle( void );
-extern UDWORD	getNumDroidsSelected( void );
+extern DROID *getTrackingDroid(void);
+extern SDWORD	getPresAngle(void);
+extern UDWORD	getNumDroidsSelected(void);
 extern void	camAllignWithTarget(BASE_OBJECT *psTarget);
 
 #endif // __INCLUDED_SRC_WARCAM_H__

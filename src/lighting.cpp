@@ -85,18 +85,18 @@ void initLighting(UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2)
 	// quick check not trying to go off the map - don't need to check for < 0 since UWORD's!!
 	if (x1 > mapWidth || x2 > mapWidth || y1 > mapHeight || y2 > mapHeight)
 	{
-		ASSERT( false, "initLighting: coords off edge of map" );
+		ASSERT(false, "initLighting: coords off edge of map");
 		return;
 	}
 
 	for (i = x1; i < x2; i++)
 	{
-		for(j = y1; j < y2; j++)
+		for (j = y1; j < y2; j++)
 		{
 			MAPTILE	*psTile = mapTile(i, j);
 
 			// always make the edge tiles dark
-			if (i==0 || j==0 || i >= mapWidth-1 || j >= mapHeight-1)
+			if (i == 0 || j == 0 || i >= mapWidth - 1 || j >= mapHeight - 1)
 			{
 				psTile->illumination = 16;
 
@@ -108,14 +108,14 @@ void initLighting(UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2)
 			}
 			else
 			{
-				calcTileIllum(i,j);
+				calcTileIllum(i, j);
 			}
 			// Basically darkens down the tiles that are outside the scroll
 			// limits - thereby emphasising the cannot-go-there-ness of them
 			if ((SDWORD)i < scrollMinX + 4 || (SDWORD)i > scrollMaxX - 4
 			    || (SDWORD)j < scrollMinY + 4 || (SDWORD)j > scrollMaxY - 4)
 			{
-				psTile->illumination/=3;
+				psTile->illumination /= 3;
 			}
 		}
 	}
@@ -130,15 +130,15 @@ static void normalsOnTile(unsigned int tileX, unsigned int tileY, unsigned int q
 
 	for (unsigned j = 0; j < 2; ++j)
 		for (unsigned i = 0; i < 2; ++i)
-	{
-		tiles[i][j] = Vector2i(tileX + i, tileY + j);
-		/* Get a pointer to our tile */
-		/* And to the ones to the east, south and southeast of it */
-		psTiles[i][j] = mapTile(tiles[i][j]);
-		corners[i][j] = Vector3f(world_coord(tiles[i][j]), psTiles[i][j]->height);
-	}
+		{
+			tiles[i][j] = Vector2i(tileX + i, tileY + j);
+			/* Get a pointer to our tile */
+			/* And to the ones to the east, south and southeast of it */
+			psTiles[i][j] = mapTile(tiles[i][j]);
+			corners[i][j] = Vector3f(world_coord(tiles[i][j]), psTiles[i][j]->height);
+		}
 
-	int flipped = TRI_FLIPPED(psTiles[0][0])? 10 : 0;
+	int flipped = TRI_FLIPPED(psTiles[0][0]) ? 10 : 0;
 
 	switch (quadrant + flipped)
 	{
@@ -170,7 +170,7 @@ static void normalsOnTile(unsigned int tileX, unsigned int tileY, unsigned int q
 		normals[(*numNormals)++] = pie_SurfaceNormal3fv(corners[1][0], corners[1][1], corners[0][1]);
 		break;
 	default:
-		ASSERT( false,"Invalid quadrant in lighting code" );
+		ASSERT(false, "Invalid quadrant in lighting code");
 	} // end switch
 }
 
@@ -201,18 +201,18 @@ static void calcTileIllum(UDWORD tileX, UDWORD tileY)
 	*/
 
 	/* Do quadrant 0 - tile that's above and left*/
-	normalsOnTile(tileX-1, tileY-1, 0, &numNormals, normals);
+	normalsOnTile(tileX - 1, tileY - 1, 0, &numNormals, normals);
 
 	/* Do quadrant 1 - tile that's above and right*/
-	normalsOnTile(tileX, tileY-1, 1, &numNormals, normals);
+	normalsOnTile(tileX, tileY - 1, 1, &numNormals, normals);
 
 	/* Do quadrant 2 - tile that's down and right*/
 	normalsOnTile(tileX, tileY, 2, &numNormals, normals);
 
 	/* Do quadrant 3 - tile that's down and left*/
-	normalsOnTile(tileX-1, tileY, 3, &numNormals, normals);
+	normalsOnTile(tileX - 1, tileY, 3, &numNormals, normals);
 
-	for(i = 0; i < numNormals; i++)
+	for (i = 0; i < numNormals; i++)
 	{
 		finalVector = finalVector + normals[i];
 	}
@@ -220,30 +220,36 @@ static void calcTileIllum(UDWORD tileX, UDWORD tileY)
 	dotProduct = normalise(finalVector) * theSun;
 
 	val = abs(dotProduct) / 16;
-	if (val == 0) val = 1;
-	if (val > 254) val = 254;
+	if (val == 0)
+	{
+		val = 1;
+	}
+	if (val > 254)
+	{
+		val = 254;
+	}
 	mapTile(tileX, tileY)->illumination = val;
 }
 
 
 void	processLight(LIGHT *psLight)
 {
-SDWORD	tileX,tileY;
-SDWORD	startX,endX;
-SDWORD	startY,endY;
-SDWORD	rangeSkip;
-SDWORD	i,j;
-SDWORD	distToCorner;
-UDWORD	percent;
+	SDWORD	tileX, tileY;
+	SDWORD	startX, endX;
+	SDWORD	startY, endY;
+	SDWORD	rangeSkip;
+	SDWORD	i, j;
+	SDWORD	distToCorner;
+	UDWORD	percent;
 
- 	/* Firstly - there's no point processing lights that are off the grid */
-	if(clipXY(psLight->position.x,psLight->position.z) == false)
+	/* Firstly - there's no point processing lights that are off the grid */
+	if (clipXY(psLight->position.x, psLight->position.z) == false)
 	{
 		return;
 	}
 
-	tileX = psLight->position.x/TILE_UNITS;
-	tileY = psLight->position.z/TILE_UNITS;
+	tileX = psLight->position.x / TILE_UNITS;
+	tileY = psLight->position.z / TILE_UNITS;
 
 	rangeSkip = sqrtf(psLight->range * psLight->range * 2) / TILE_UNITS + 1;
 
@@ -263,17 +269,17 @@ UDWORD	percent;
 	endY = MIN(endY, mapHeight - 1);
 	startY = MIN(startY, endY);
 
-	for(i=startX;i<=endX; i++)
+	for (i = startX; i <= endX; i++)
 	{
-		for(j=startY; j<=endY; j++)
+		for (j = startY; j <= endY; j++)
 		{
-			distToCorner = calcDistToTile(i,j,&psLight->position);
+			distToCorner = calcDistToTile(i, j, &psLight->position);
 
 			/* If we're inside the range of the light */
-			if (distToCorner<(SDWORD)psLight->range)
+			if (distToCorner < (SDWORD)psLight->range)
 			{
 				/* Find how close we are to it */
-				percent = 100 - PERCENT(distToCorner,psLight->range);
+				percent = 100 - PERCENT(distToCorner, psLight->range);
 				colourTile(i, j, psLight->colour, 2 * percent);
 			}
 		}
@@ -287,7 +293,7 @@ static UDWORD calcDistToTile(UDWORD tileX, UDWORD tileY, Vector3i *pos)
 
 	/* The coordinates of the tile corner */
 	x1 = tileX * TILE_UNITS;
-	y1 = map_TileHeight(tileX,tileY);
+	y1 = map_TileHeight(tileX, tileY);
 	z1 = tileY * TILE_UNITS;
 
 	return iHypot3(x1 - pos->x, y1 - pos->y, z1 - pos->z);
@@ -299,33 +305,33 @@ static void colourTile(SDWORD xIndex, SDWORD yIndex, LIGHT_COLOUR colouridx, UBY
 {
 	PIELIGHT colour = getTileColour(xIndex, yIndex);
 
-	switch(colouridx)
+	switch (colouridx)
 	{
- 		case LIGHT_RED:
-			/* And add that to the lighting value */
-			colour.byte.r = MIN(255, colour.byte.r + percent);
+	case LIGHT_RED:
+		/* And add that to the lighting value */
+		colour.byte.r = MIN(255, colour.byte.r + percent);
 		break;
- 		case LIGHT_GREEN:
-			/* And add that to the lighting value */
-			colour.byte.g = MIN(255, colour.byte.g + percent);
+	case LIGHT_GREEN:
+		/* And add that to the lighting value */
+		colour.byte.g = MIN(255, colour.byte.g + percent);
 		break;
- 		case LIGHT_BLUE:
-			/* And add that to the lighting value */
-			colour.byte.b = MIN(255, colour.byte.b + percent);
+	case LIGHT_BLUE:
+		/* And add that to the lighting value */
+		colour.byte.b = MIN(255, colour.byte.b + percent);
 		break;
-		case LIGHT_YELLOW:
-			/* And add that to the lighting value */
-			colour.byte.r = MIN(255, colour.byte.r + percent);
-			colour.byte.g = MIN(255, colour.byte.g + percent);
+	case LIGHT_YELLOW:
+		/* And add that to the lighting value */
+		colour.byte.r = MIN(255, colour.byte.r + percent);
+		colour.byte.g = MIN(255, colour.byte.g + percent);
 		break;
-		case LIGHT_WHITE:
-			colour.byte.r = MIN(255, colour.byte.r + percent);
-			colour.byte.g = MIN(255, colour.byte.g + percent);
-			colour.byte.b = MIN(255, colour.byte.b + percent);
+	case LIGHT_WHITE:
+		colour.byte.r = MIN(255, colour.byte.r + percent);
+		colour.byte.g = MIN(255, colour.byte.g + percent);
+		colour.byte.b = MIN(255, colour.byte.b + percent);
 		break;
-		default:
-			ASSERT( false,"Weirdy colour of light attempted" );
-			break;
+	default:
+		ASSERT(false, "Weirdy colour of light attempted");
+		break;
 	}
 	setTileColour(xIndex, yIndex, colour);
 }
@@ -335,7 +341,7 @@ static void colourTile(SDWORD xIndex, SDWORD yIndex, LIGHT_COLOUR colouridx, UBY
 /// "popping" tiles
 void UpdateFogDistance(float distance)
 {
-	pie_UpdateFogDistance(FOG_END-FOG_DEPTH + distance*FOG_BEGIN_SCALE, FOG_END + distance*FOG_END_SCALE);
+	pie_UpdateFogDistance(FOG_END - FOG_DEPTH + distance * FOG_BEGIN_SCALE, FOG_END + distance * FOG_END_SCALE);
 }
 
 
@@ -357,44 +363,50 @@ void	calcDroidIllumination(DROID *psDroid)
 	}
 	else if (tileX <= 1 || tileX >= mapWidth - 2 || tileY <= 1 || tileY >= mapHeight - 2)
 	{
-		lightVal = mapTile(tileX,tileY)->illumination;
+		lightVal = mapTile(tileX, tileY)->illumination;
 		lightVal += MIN_DROID_LIGHT_LEVEL;
 	}
 	else
 	{
-		lightVal = mapTile(tileX,tileY)->illumination +		 //
-				   mapTile(tileX-1,tileY)->illumination +	 //		 *
-				   mapTile(tileX,tileY-1)->illumination +	 //		***		pattern
-				   mapTile(tileX+1,tileY)->illumination +	 //		 *
-				   mapTile(tileX+1,tileY+1)->illumination;	 //
+		lightVal = mapTile(tileX, tileY)->illumination +		 //
+		           mapTile(tileX - 1, tileY)->illumination +	 //		 *
+		           mapTile(tileX, tileY - 1)->illumination +	 //		***		pattern
+		           mapTile(tileX + 1, tileY)->illumination +	 //		 *
+		           mapTile(tileX + 1, tileY + 1)->illumination;	 //
 		lightVal /= 5;
 		lightVal += MIN_DROID_LIGHT_LEVEL;
 	}
 
 	/* Saturation */
-	if (lightVal > 255) lightVal = 255;
+	if (lightVal > 255)
+	{
+		lightVal = 255;
+	}
 	presVal = psDroid->illumination;
 	adjust = (float)lightVal - (float)presVal;
 	adjust *= graphicsTimeAdjustedIncrement(DROID_SEEK_LIGHT_SPEED);
 	retVal = presVal + adjust;
-	if (retVal > 255) retVal = 255;
+	if (retVal > 255)
+	{
+		retVal = 255;
+	}
 	psDroid->illumination = retVal;
 }
 
-void	doBuildingLights( void )
+void	doBuildingLights(void)
 {
 	STRUCTURE	*psStructure;
 	UDWORD	i;
 	LIGHT	light;
 
-	for(i=0; i<MAX_PLAYERS; i++)
+	for (i = 0; i < MAX_PLAYERS; i++)
 	{
-		for(psStructure = apsStructLists[i]; psStructure; psStructure = psStructure->psNext)
+		for (psStructure = apsStructLists[i]; psStructure; psStructure = psStructure->psNext)
 		{
 			light.range = psStructure->pStructureType->baseWidth * TILE_UNITS;
 			light.position.x = psStructure->pos.x;
 			light.position.z = psStructure->pos.y;
-			light.position.y = map_Height(light.position.x,light.position.z);
+			light.position.y = map_Height(light.position.x, light.position.z);
 			light.range = psStructure->pStructureType->baseWidth * TILE_UNITS;
 			light.colour = LIGHT_WHITE;
 			processLight(&light);
@@ -404,12 +416,12 @@ void	doBuildingLights( void )
 
 #if 0
 /* Experimental moving shadows code */
-void	findSunVector( void )
+void	findSunVector(void)
 {
 	Vector3f val(
-		4096 - getModularScaledGraphicsTime(16384,8192),
-		0 - getModularScaledGraphicsTime(16384,4096),
-		4096 - getModularScaledGraphicsTime(49152,8192)
+	    4096 - getModularScaledGraphicsTime(16384, 8192),
+	    0 - getModularScaledGraphicsTime(16384, 4096),
+	    4096 - getModularScaledGraphicsTime(49152, 8192)
 	);
 
 	setTheSun(val);

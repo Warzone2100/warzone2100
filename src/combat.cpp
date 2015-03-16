@@ -61,7 +61,7 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 
 	/* Get the stats for the weapon */
 	compIndex = psWeap->nStat;
-	ASSERT_OR_RETURN( false , compIndex < numWeaponStats, "Invalid range referenced for numWeaponStats, %d > %d", compIndex, numWeaponStats);
+	ASSERT_OR_RETURN(false , compIndex < numWeaponStats, "Invalid range referenced for numWeaponStats, %d > %d", compIndex, numWeaponStats);
 	psStats = asWeaponStats + compIndex;
 
 	// check valid weapon/prop combination
@@ -114,35 +114,35 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	if (psAttacker->type == OBJ_DROID && !isVtolDroid((DROID *)psAttacker)
 	    && (proj_Direct(psStats) || actionInsideMinRange((DROID *)psAttacker, psTarget, psStats)))
 	{
-		if(!lineOfFire(psAttacker, psTarget, weapon_slot, true))
+		if (!lineOfFire(psAttacker, psTarget, weapon_slot, true))
 		{
 			// Can't see the target - can't hit it with direct fire
 			objTrace(psAttacker->id, "combFire(%u[%s]->%u): Droid has no direct line of sight to target",
-			      psAttacker->id, ((DROID *)psAttacker)->aName, psTarget->id);
+			         psAttacker->id, ((DROID *)psAttacker)->aName, psTarget->id);
 			return false;
 		}
 	}
 	else if ((psAttacker->type == OBJ_STRUCTURE) &&
-			 (((STRUCTURE *)psAttacker)->pStructureType->height == 1) &&
-			 proj_Direct(psStats))
+	         (((STRUCTURE *)psAttacker)->pStructureType->height == 1) &&
+	         proj_Direct(psStats))
 	{
 		// a bunker can't shoot through walls
 		if (!lineOfFire(psAttacker, psTarget, weapon_slot, true))
 		{
 			// Can't see the target - can't hit it with direct fire
 			objTrace(psAttacker->id, "combFire(%u[%s]->%u): Structure has no direct line of sight to target",
-			      psAttacker->id, ((STRUCTURE *)psAttacker)->pStructureType->pName, psTarget->id);
+			         psAttacker->id, ((STRUCTURE *)psAttacker)->pStructureType->pName, psTarget->id);
 			return false;
 		}
 	}
-	else if ( proj_Direct(psStats) )
+	else if (proj_Direct(psStats))
 	{
 		// VTOL or tall building
 		if (!lineOfFire(psAttacker, psTarget, weapon_slot, false))
 		{
 			// Can't see the target - can't hit it with direct fire
 			objTrace(psAttacker->id, "combFire(%u[%s]->%u): Tall object has no direct line of sight to target",
-			      psAttacker->id, psStats->pName, psTarget->id);
+			         psAttacker->id, psStats->pName, psTarget->id);
 			return false;
 		}
 	}
@@ -169,7 +169,7 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	// only calculate for indirect shots
 	if (!proj_Direct(psStats) && dist > 0)
 	{
-		min_angle = arcOfFire(psAttacker,psTarget,weapon_slot,true);
+		min_angle = arcOfFire(psAttacker, psTarget, weapon_slot, true);
 
 		// prevent extremely steep shots
 		min_angle = std::min(min_angle, DEG(PROJ_ULTIMATE_PITCH));
@@ -178,9 +178,9 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 		if (min_angle > DEG(PROJ_MAX_PITCH))
 		{
 			//do not allow increase of max range though
-			if (iSin(2*min_angle) < iSin(2*DEG(PROJ_MAX_PITCH)))  // If PROJ_MAX_PITCH == 45, then always iSin(2*min_angle) <= iSin(2*DEG(PROJ_MAX_PITCH)), and the test is redundant.
+			if (iSin(2 * min_angle) < iSin(2 * DEG(PROJ_MAX_PITCH))) // If PROJ_MAX_PITCH == 45, then always iSin(2*min_angle) <= iSin(2*DEG(PROJ_MAX_PITCH)), and the test is redundant.
 			{
-				longRange = longRange * iSin(2*min_angle) / iSin(2*DEG(PROJ_MAX_PITCH));
+				longRange = longRange * iSin(2 * min_angle) / iSin(2 * DEG(PROJ_MAX_PITCH));
 			}
 		}
 	}
@@ -189,7 +189,7 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	if ((dist <= psStats->shortRange)  && (dist >= psStats->minRange))
 	{
 		// get weapon chance to hit in the short range
-		baseHitChance = weaponShortHit(psStats,psAttacker->player);
+		baseHitChance = weaponShortHit(psStats, psAttacker->player);
 	}
 	else if ((dist <= longRange && dist >= psStats->minRange)
 	         || (psAttacker->type == OBJ_DROID
@@ -197,7 +197,7 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	             && actionInsideMinRange((DROID *)psAttacker, psTarget, psStats)))
 	{
 		// get weapon chance to hit in the long range
-		baseHitChance = weaponLongHit(psStats,psAttacker->player);
+		baseHitChance = weaponLongHit(psStats, psAttacker->player);
 
 		// adapt for height adjusted artillery shots
 		if (min_angle > DEG(PROJ_MAX_PITCH))
@@ -237,7 +237,7 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 
 	// fire while moving modifiers
 	if (psAttacker->type == OBJ_DROID &&
-		((DROID *)psAttacker)->sMove.Status != MOVEINACTIVE)
+	    ((DROID *)psAttacker)->sMove.Status != MOVEINACTIVE)
 	{
 		switch (psStats->fireOnMove)
 		{
@@ -296,7 +296,7 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 		{
 			int empTime = EMP_DISABLE_TIME - (gameTime - psTarget->timeLastHit);
 			CLIP(empTime, 0, EMP_DISABLE_TIME);
-			if (empTime >= EMP_DISABLE_TIME * 9/10)
+			if (empTime >= EMP_DISABLE_TIME * 9 / 10)
 			{
 				flightTime = 0;  /* Just hit.  Assume they'll get hit again */
 			}
@@ -306,7 +306,7 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 			}
 		}
 
-		predict += Vector3i(iSinCosR(psDroid->sMove.moveDir, psDroid->sMove.speed*flightTime / GAME_TICKS_PER_SEC), 0);
+		predict += Vector3i(iSinCosR(psDroid->sMove.moveDir, psDroid->sMove.speed * flightTime / GAME_TICKS_PER_SEC), 0);
 		if (!isFlying(psDroid))
 		{
 			predict.z = map_Height(removeZ(predict));  // Predict that the object will be on the ground.
@@ -356,8 +356,8 @@ void counterBatteryFire(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget)
 	// also ignore cases where you attack your own player
 	// Also ignore cases where there are already 1000 missiles heading towards the attacker.
 	if ((psTarget == NULL) ||
-		((psAttacker != NULL) && (psAttacker->player == psTarget->player)) ||
-		aiObjectIsProbablyDoomed(psAttacker))
+	    ((psAttacker != NULL) && (psAttacker->player == psTarget->player)) ||
+	    aiObjectIsProbablyDoomed(psAttacker))
 	{
 		return;
 	}
@@ -395,7 +395,7 @@ void counterBatteryFire(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget)
 			if (cbSensorDroid(psDroid))
 			{
 				sensorRange = asSensorStats[psDroid->asBits[COMP_SENSOR].
-					nStat].range;
+				                            nStat].range;
 			}
 		}
 		//check sensor distance from target
@@ -404,7 +404,7 @@ void counterBatteryFire(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget)
 			SDWORD	xDiff = (SDWORD)psViewer->pos.x - (SDWORD)psTarget->pos.x;
 			SDWORD	yDiff = (SDWORD)psViewer->pos.y - (SDWORD)psTarget->pos.y;
 
-			if (xDiff*xDiff + yDiff*yDiff < sensorRange * sensorRange)
+			if (xDiff * xDiff + yDiff * yDiff < sensorRange * sensorRange)
 			{
 				//inform viewer of target
 				if (psViewer->type == OBJ_DROID)
@@ -531,7 +531,9 @@ unsigned int objGuessFutureDamage(WEAPON_STATS *psStats, unsigned int player, BA
 	int	actualDamage, armour = 0, level = 1;
 
 	if (psTarget == NULL)
-		return 0;  // Hard to destroy the ground. The armour on the mud is very strong and blocks all damage.
+	{
+		return 0;    // Hard to destroy the ground. The armour on the mud is very strong and blocks all damage.
+	}
 
 	damage = calcDamage(weaponDamage(psStats, player), psStats->weaponEffect, psTarget);
 

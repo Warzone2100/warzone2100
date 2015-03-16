@@ -246,8 +246,8 @@ extern CONSTRUCT_STATS *statsGetConstruct(UDWORD ref);
 extern bool statsShutDown(void);
 
 /*Deallocate the stats passed in as parameter */
-extern void statsDealloc(COMPONENT_STATS* pStats, UDWORD listSize,
-						 UDWORD structureSize);
+extern void statsDealloc(COMPONENT_STATS *pStats, UDWORD listSize,
+                         UDWORD structureSize);
 
 extern void deallocPropulsionTypes(void);
 extern void deallocTerrainTypes(void);
@@ -260,23 +260,23 @@ extern UDWORD statType(UDWORD ref);
 //return the REF_START value of this type of stat
 extern UDWORD statRefStart(UDWORD stat);
 /*Returns the component type based on the string - used for reading in data */
-extern UDWORD componentType(const char* pType);
+extern UDWORD componentType(const char *pType);
 //get the component Inc for a stat based on the name
 extern SDWORD getCompFromName(UDWORD compType, const char *pName);
 //get the component Inc for a stat based on the Resource name held in Names.txt
 extern SDWORD getCompFromResName(UDWORD compType, const char *pName);
 /*returns the weapon sub class based on the string name passed in */
-extern bool getWeaponSubClass(const char* subClass, WEAPON_SUBCLASS* wclass);
+extern bool getWeaponSubClass(const char *subClass, WEAPON_SUBCLASS *wclass);
 /*either gets the name associated with the resource (if one) or allocates space and copies pName*/
-extern char* allocateName(const char* name);
+extern char *allocateName(const char *name);
 /*return the name to display for the interface - valid for OBJECTS and STATS*/
-extern const char* getName(const char *pNameID);
+extern const char *getName(const char *pNameID);
 /*sets the store to the body size based on the name passed in - returns false
 if doesn't compare with any*/
 extern bool getBodySize(const char *pSize, BODY_SIZE *pStore);
 
 // Pass in a stat and get its name
-extern const char* getStatName(const void * pStat);
+extern const char *getStatName(const void *pStat);
 
 /**
  * Determines the propulsion type indicated by the @c typeName string passed
@@ -292,7 +292,7 @@ extern const char* getStatName(const void * pStat);
  *         contain a valid propulsion type enumerator, otherwise its value will
  *         be left unchanged.
  */
-extern bool getPropulsionType(const char* typeName, PROPULSION_TYPE* type);
+extern bool getPropulsionType(const char *typeName, PROPULSION_TYPE *type);
 
 /**
  * Determines the weapon effect indicated by the @c weaponEffect string passed
@@ -312,11 +312,11 @@ extern const StringToEnumMap<WEAPON_EFFECT> map_WEAPON_EFFECT;
 
 extern UWORD weaponROF(WEAPON_STATS *psStat, SBYTE player);
 /*Access functions for the upgradeable stats of a weapon*/
-extern UDWORD	weaponFirePause(const WEAPON_STATS* psStats, UBYTE player);
+extern UDWORD	weaponFirePause(const WEAPON_STATS *psStats, UBYTE player);
 extern UDWORD	weaponReloadTime(WEAPON_STATS *psStats, UBYTE player);
-extern UDWORD	weaponShortHit(const WEAPON_STATS* psStats, UBYTE player);
-extern UDWORD	weaponLongHit(const WEAPON_STATS* psStats, UBYTE player);
-extern UDWORD	weaponDamage(const WEAPON_STATS* psStats, UBYTE player);
+extern UDWORD	weaponShortHit(const WEAPON_STATS *psStats, UBYTE player);
+extern UDWORD	weaponLongHit(const WEAPON_STATS *psStats, UBYTE player);
+extern UDWORD	weaponDamage(const WEAPON_STATS *psStats, UBYTE player);
 extern UDWORD	weaponRadDamage(WEAPON_STATS *psStats, UBYTE player);
 extern UDWORD	weaponIncenDamage(WEAPON_STATS *psStats, UBYTE player);
 extern UDWORD	weaponRadiusHit(WEAPON_STATS *psStats, UBYTE player);
@@ -331,7 +331,7 @@ extern UDWORD	constructorPoints(CONSTRUCT_STATS *psStats, UBYTE player);
 /*Access functions for the upgradeable stats of a body*/
 extern UDWORD	bodyPower(BODY_STATS *psStats, UBYTE player, UBYTE bodyType);
 extern UDWORD	bodyArmour(BODY_STATS *psStats, UBYTE player, UBYTE bodyType,
-				   WEAPON_CLASS weaponClass);
+                           WEAPON_CLASS weaponClass);
 
 /*dummy function for John*/
 extern void brainAvailable(BRAIN_STATS *psStat);

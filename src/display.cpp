@@ -76,7 +76,7 @@
 #include "multiplay.h"
 #include "warzoneconfig.h"
 
-struct	_dragBox dragBox3D,wallDrag;
+struct	_dragBox dragBox3D, wallDrag;
 
 #define POSSIBLE_SELECTIONS		14
 #define POSSIBLE_TARGETS		23
@@ -102,9 +102,9 @@ static bool bRightClickOrders = false;
 static bool bMiddleClickRotate = false;
 static bool bDrawShadows = true;
 static SELECTION_TYPE	establishSelection(UDWORD selectedPlayer);
-static void	dealWithLMB( void );
-static void	dealWithLMBDClick( void );
-static void	dealWithRMB( void );
+static void	dealWithLMB(void);
+static void	dealWithLMBDClick(void);
+static void	dealWithRMB(void);
 static bool	mouseInBox(SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1);
 static OBJECT_POSITION *checkMouseLoc(void);
 
@@ -141,16 +141,16 @@ bool	gameStats = false;
 /* Hackety hack hack hack */
 SDWORD	screenShakeTable[100] =
 {
--2,-2,-3,-4,-3,-3,-5,-4,-4,-4,
--4,-5,-5,-5,-5,-7,-5,-6,-8,-6,
--7,-8,-6,-4,-8,-7,-7,-7,-6,-5,
--6,-5,-2,-5,-6,-3,-5,-3,-2,-4,
--5,-3,-2,-0,1,2,2,1,0,0,
-0,1,1,3,2,1,0,2,3,4,
-4,2,6,4,5,3,7,7,3,6,
-4,7,9,10,9,8,6,4,7,5,
-5,4,6,2,4,5,3,3,2,1,
-1,0,-1,-1,-2,-1,1,0,1,0
+	-2, -2, -3, -4, -3, -3, -5, -4, -4, -4,
+	-4, -5, -5, -5, -5, -7, -5, -6, -8, -6,
+	-7, -8, -6, -4, -8, -7, -7, -7, -6, -5,
+	-6, -5, -2, -5, -6, -3, -5, -3, -2, -4,
+	-5, -3, -2, -0, 1, 2, 2, 1, 0, 0,
+	0, 1, 1, 3, 2, 1, 0, 2, 3, 4,
+	4, 2, 6, 4, 5, 3, 7, 7, 3, 6,
+	4, 7, 9, 10, 9, 8, 6, 4, 7, 5,
+	5, 4, 6, 2, 4, 5, 3, 3, 2, 1,
+	1, 0, -1, -1, -2, -1, 1, 0, 1, 0
 };
 
 static bool	bScreenShakeActive = false;
@@ -179,22 +179,22 @@ void	setRadarJump(bool	val)
 	bInstantRadarJump = val;
 }
 
-bool	getRadarJumpStatus( void )
+bool	getRadarJumpStatus(void)
 {
-	return(bInstantRadarJump);
+	return (bInstantRadarJump);
 }
 
-bool	getShakeStatus( void )
+bool	getShakeStatus(void)
 {
-	return(bShakingPermitted);
+	return (bShakingPermitted);
 }
 
-bool	getInvertMouseStatus( void )
+bool	getInvertMouseStatus(void)
 {
-	return(bInvertMouse);
+	return (bInvertMouse);
 }
 
-void	setInvertMouseStatus( bool val )
+void	setInvertMouseStatus(bool val)
 {
 	bInvertMouse = val;
 }
@@ -204,46 +204,46 @@ void	setInvertMouseStatus( bool val )
 #define MOUSE_SELECT (bRightClickOrders?MOUSE_LMB:MOUSE_RMB)
 #define MOUSE_ROTATE (bMiddleClickRotate?MOUSE_MMB:MOUSE_RMB)
 
-bool	getRightClickOrders( void )
+bool	getRightClickOrders(void)
 {
 	return bRightClickOrders;
 }
 
-void	setRightClickOrders( bool val )
+void	setRightClickOrders(bool val)
 {
 	bRightClickOrders = val;
 }
 
-bool	getMiddleClickRotate( void )
+bool	getMiddleClickRotate(void)
 {
 	return bMiddleClickRotate;
 }
 
-void	setMiddleClickRotate( bool val )
+void	setMiddleClickRotate(bool val)
 {
 	bMiddleClickRotate = val;
 }
 
-bool	getDrawShadows( void )
+bool	getDrawShadows(void)
 {
-	return(bDrawShadows);
+	return (bDrawShadows);
 }
 
-void	setDrawShadows( bool val )
+void	setDrawShadows(bool val)
 {
 	bDrawShadows = val;
 }
 
-void	setShakeStatus( bool val )
+void	setShakeStatus(bool val)
 {
 	bShakingPermitted = val;
 }
 
 void shakeStart(unsigned int length)
 {
-	if(bShakingPermitted)
+	if (bShakingPermitted)
 	{
-		if(!bScreenShakeActive)
+		if (!bScreenShakeActive)
 		{
 			bScreenShakeActive = true;
 			screenShakeStarted = gameTime;
@@ -265,7 +265,7 @@ static void shakeUpdate(void)
 	/* Check if we're shaking the screen or not */
 	if (bScreenShakeActive)
 	{
-		screenShakePercentage = PERCENT(gameTime-screenShakeStarted, screenShakeLength);
+		screenShakePercentage = PERCENT(gameTime - screenShakeStarted, screenShakeLength);
 		if (screenShakePercentage < 100)
 		{
 			player.r.z = 0 + DEG(screenShakeTable[screenShakePercentage]);
@@ -290,13 +290,13 @@ void ProcessRadarInput()
 	int PosX, PosY;
 	int x = mouseX();
 	int y = mouseY();
-	UDWORD	temp1,temp2;
+	UDWORD	temp1, temp2;
 
 	/* Only allow jump-to-area-of-map if radar is on-screen */
 	mouseOverRadar = false;
 	if (radarOnScreen && radarPermitted)
 	{
-		if(CoordInRadar(x,y))
+		if (CoordInRadar(x, y))
 		{
 			mouseOverRadar = true;
 
@@ -312,31 +312,34 @@ void ProcessRadarInput()
 					x = mousePressPos_DEPRECATED(MOUSE_MMB).x;
 					y = mousePressPos_DEPRECATED(MOUSE_MMB).y;
 				}
-				if(driveModeActive()) {
-					driveProcessRadarInput(x,y);
-				} else {
+				if (driveModeActive())
+				{
+					driveProcessRadarInput(x, y);
+				}
+				else
+				{
 
 					/* If we're tracking a droid, then cancel that */
 					CalcRadarPosition(x, y, &PosX, &PosY);
-					if(mouseOverRadar)
+					if (mouseOverRadar)
 					{
 						// MARKER
 						// Send all droids to that location
-						orderSelectedLoc(selectedPlayer, (PosX*TILE_UNITS)+TILE_UNITS/2,
-						                                 (PosY*TILE_UNITS)+TILE_UNITS/2, ctrlShiftDown());  // ctrlShiftDown() = ctrl clicked a destination, add an order
+						orderSelectedLoc(selectedPlayer, (PosX * TILE_UNITS) + TILE_UNITS / 2,
+						                 (PosY * TILE_UNITS) + TILE_UNITS / 2, ctrlShiftDown()); // ctrlShiftDown() = ctrl clicked a destination, add an order
 
 
 					}
 					CheckScrollLimits();
-					audio_PlayTrack( ID_SOUND_MESSAGEEND );
+					audio_PlayTrack(ID_SOUND_MESSAGEEND);
 				}
 			}
 
 
-			if(mouseDrag(MOUSE_SELECT,&temp1,&temp2) && !rotActive)
+			if (mouseDrag(MOUSE_SELECT, &temp1, &temp2) && !rotActive)
 			{
 				CalcRadarPosition(x, y, &PosX, &PosY);
-				setViewPos(PosX,PosY,true);
+				setViewPos(PosX, PosY, true);
 				bRadarDragging = true;
 				if (ctrlShiftDown())
 				{
@@ -350,15 +353,15 @@ void ProcessRadarInput()
 
 				CalcRadarPosition(x, y, &PosX, &PosY);
 
-				if(bInstantRadarJump)
+				if (bInstantRadarJump)
 				{
 					/* Go instantly */
-					setViewPos(PosX,PosY,true);
+					setViewPos(PosX, PosY, true);
 				}
 				else
 				{
 					/* Pan to it */
-					requestRadarTrack(PosX*TILE_UNITS,PosY*TILE_UNITS);
+					requestRadarTrack(PosX * TILE_UNITS, PosY * TILE_UNITS);
 				}
 			}
 			// ctrl-alt-scroll changes game speed
@@ -395,7 +398,7 @@ void processInput(void)
 		dragBox3D.status = DRAG_RELEASED;	// disengage the dragging since it stops menu input
 	}
 
-	if(CoordInBuild(mouseX(), mouseY()))
+	if (CoordInBuild(mouseX(), mouseY()))
 	{
 		mOverConstruction = true;
 	}
@@ -461,7 +464,7 @@ void processInput(void)
 
 	/* Allow the user to clear the console if need be */
 	mouseOverConsole = mouseOverConsoleBox();
-	if(mouseOverConsole && mousePressed(MOUSE_LMB))
+	if (mouseOverConsole && mousePressed(MOUSE_LMB))
 	{
 		setConsolePermanence(false, true);
 	}
@@ -474,16 +477,17 @@ static bool OverRadarAndNotDragging(void)
 
 static void CheckFinishedDrag(void)
 {
-	if(driveModeActive()) {
+	if (driveModeActive())
+	{
 		return;
 	}
 
 	if (mouseReleased(MOUSE_LMB) || mouseDown(MOUSE_RMB))
 	{
 		selectAttempt = false;
-		if(dragBox3D.status == DRAG_DRAGGING)
+		if (dragBox3D.status == DRAG_DRAGGING)
 		{
-			if(wallDrag.status == DRAG_DRAGGING)
+			if (wallDrag.status == DRAG_DRAGGING)
 			{
 				//if invalid location keep looking for a valid one
 				if ((buildState == BUILD3D_VALID || buildState == BUILD3D_FINISHED)
@@ -504,7 +508,7 @@ static void CheckFinishedDrag(void)
 			}
 
 			/* Only clear if shift isn't down - this is for the drag selection box for units*/
-			if(!ctrlShiftDown() && wallDrag.status==DRAG_INACTIVE)
+			if (!ctrlShiftDown() && wallDrag.status == DRAG_INACTIVE)
 			{
 				clearSelection();
 			}
@@ -522,11 +526,12 @@ static void CheckFinishedDrag(void)
 
 static void CheckStartWallDrag(void)
 {
-	if(driveModeActive()) {
+	if (driveModeActive())
+	{
 		return;
 	}
 
-	if(mousePressed(MOUSE_LMB))
+	if (mousePressed(MOUSE_LMB))
 	{
 		/* Store away the details if we're building */
 		// You can start dragging walls from invalid locations so check for
@@ -544,7 +549,7 @@ static void CheckStartWallDrag(void)
 				wallDrag.x1 = wallDrag.x2 = mouseTileX;
 				wallDrag.y1 = wallDrag.y2 = mouseTileY;
 				wallDrag.status = DRAG_PLACING;
-				debug( LOG_NEVER, "Start Wall Drag\n" );
+				debug(LOG_NEVER, "Start Wall Drag\n");
 			}
 		}
 		else if (intBuildSelectMode())//if we were in build select mode
@@ -561,7 +566,7 @@ static bool CheckFinishedFindPosition(void)
 	bool OverRadar = OverRadarAndNotDragging();
 
 	/* Do not let the player position buildings 'under' the radar */
-	if(mouseReleased(MOUSE_LMB) && !OverRadar)
+	if (mouseReleased(MOUSE_LMB) && !OverRadar)
 	{
 
 		if (deliveryReposValid())
@@ -587,15 +592,18 @@ static bool CheckFinishedFindPosition(void)
 				dx = abs(mouseTileX - wallDrag.x1);
 				dy = abs(mouseTileY - wallDrag.y1);
 
-				if(dx >= dy) {
+				if (dx >= dy)
+				{
 					wallDrag.y2 = wallDrag.y1;
-				} else if(dx < dy) {
+				}
+				else if (dx < dy)
+				{
 					wallDrag.x2 = wallDrag.x1;
 				}
 
 				wallDrag.status = DRAG_RELEASED;
 			}
-			debug( LOG_NEVER, "BUILD3D_FINISHED\n" );
+			debug(LOG_NEVER, "BUILD3D_FINISHED\n");
 			buildState = BUILD3D_FINISHED;
 			return true;
 		}
@@ -608,10 +616,11 @@ static void HandleDrag(void)
 {
 	UDWORD dragX, dragY;
 
-	if ( (driveModeActive() && mouseDown(MOUSE_LMB))
-		|| (mouseDrag(MOUSE_LMB, &dragX, &dragY) && !mouseOverRadar && !mouseDown(MOUSE_RMB)) )
+	if ((driveModeActive() && mouseDown(MOUSE_LMB))
+	    || (mouseDrag(MOUSE_LMB, &dragX, &dragY) && !mouseOverRadar && !mouseDown(MOUSE_RMB)))
 	{
-		if(!driveModeActive()) {
+		if (!driveModeActive())
+		{
 			dragBox3D.x1 = dragX;
 			dragBox3D.x2 = mouseX();
 			dragBox3D.y1 = dragY;
@@ -620,7 +629,7 @@ static void HandleDrag(void)
 			dragBox3D.status = DRAG_DRAGGING;
 		}
 
-		if(buildState == BUILD3D_VALID)
+		if (buildState == BUILD3D_VALID)
 		{
 			if ((((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_WALL
 			     || ((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_GATE
@@ -636,9 +645,12 @@ static void HandleDrag(void)
 				dx = abs(mouseTileX - wallDrag.x1);
 				dy = abs(mouseTileY - wallDrag.y1);
 
-				if(dx >= dy) {
+				if (dx >= dy)
+				{
 					wallDrag.y2 = wallDrag.y1;
-				} else if(dx < dy) {
+				}
+				else if (dx < dy)
+				{
 					wallDrag.x2 = wallDrag.x1;
 				}
 
@@ -660,7 +672,7 @@ void processMouseClickInput(void)
 {
 	UDWORD	i;
 	SELECTION_TYPE	selection;
-	MOUSE_TARGET	item=MT_NOTARGET;
+	MOUSE_TARGET	item = MT_NOTARGET;
 	bool OverRadar = OverRadarAndNotDragging();
 
 	ignoreOrder = CheckFinishedFindPosition();
@@ -672,7 +684,7 @@ void processMouseClickInput(void)
 	CheckFinishedDrag();
 
 	if ((mouseReleased(MOUSE_LMB) || (mouseReleased(MOUSE_MMB) && (keyDown(KEY_LALT) || keyDown(KEY_RALT)))) && !OverRadar &&
-		dragBox3D.status!=DRAG_RELEASED && !ignoreOrder && !mouseOverConsole && !bDisplayMultiJoiningStatus)
+	    dragBox3D.status != DRAG_RELEASED && !ignoreOrder && !mouseOverConsole && !bDisplayMultiJoiningStatus)
 	{
 		if (bRightClickOrders)
 		{
@@ -721,20 +733,20 @@ void processMouseClickInput(void)
 					dealWithRMB();
 				}
 				// Why?
-				if(getWarCamStatus())
+				if (getWarCamStatus())
 				{
 					camToggleStatus();
 				}
 			}
 
-			if (!mouseDrag(MOUSE_SELECT,(UDWORD*)&rotX,(UDWORD*)&rotY) && bRadarDragging)
+			if (!mouseDrag(MOUSE_SELECT, (UDWORD *)&rotX, (UDWORD *)&rotY) && bRadarDragging)
 			{
 				bRadarDragging = false;
 			}
 
 			/* Right mouse click kills a building placement */
 			if (mouseReleased(MOUSE_RMB) &&
-				(buildState == BUILD3D_POS || buildState == BUILD3D_VALID))
+			    (buildState == BUILD3D_POS || buildState == BUILD3D_VALID))
 			{
 				/* Stop the placement */
 				kill3DBuilding();
@@ -744,7 +756,7 @@ void processMouseClickInput(void)
 			{
 				cancelDeliveryRepos();
 			}
-			if (mouseDrag(MOUSE_ROTATE,(UDWORD *)&rotX,(UDWORD *)&rotY) && !rotActive && !bRadarDragging)
+			if (mouseDrag(MOUSE_ROTATE, (UDWORD *)&rotX, (UDWORD *)&rotY) && !rotActive && !bRadarDragging)
 			{
 				rotInitial = player.r.y;
 				rotInitialUp = player.r.x;
@@ -756,7 +768,7 @@ void processMouseClickInput(void)
 	}
 
 	selection = establishSelection(selectedPlayer);
-	ASSERT( selection<=POSSIBLE_SELECTIONS,"Weirdy selection!" );
+	ASSERT(selection <= POSSIBLE_SELECTIONS, "Weirdy selection!");
 
 	if (gamePaused())
 	{
@@ -778,23 +790,23 @@ void processMouseClickInput(void)
 		bool ObjAllied;
 
 		item = itemUnderMouse(&ObjUnderMouse);
-		ASSERT( item<POSSIBLE_TARGETS,"Weirdy target!" );
+		ASSERT(item < POSSIBLE_TARGETS, "Weirdy target!");
 
-		ObjAllied = (ObjUnderMouse && selectedPlayer != ObjUnderMouse->player && aiCheckAlliances(selectedPlayer,ObjUnderMouse->player));
+		ObjAllied = (ObjUnderMouse && selectedPlayer != ObjUnderMouse->player && aiCheckAlliances(selectedPlayer, ObjUnderMouse->player));
 
-		if(item != MT_NOTARGET)
+		if (item != MT_NOTARGET)
 		{
 			// exceptions to the lookup table.
 			if (ctrlShiftDown() &&
-				(ObjUnderMouse != NULL) &&
-				(ObjUnderMouse->player == selectedPlayer) &&
-				(ObjUnderMouse->type == OBJ_DROID))
+			    (ObjUnderMouse != NULL) &&
+			    (ObjUnderMouse->player == selectedPlayer) &&
+			    (ObjUnderMouse->type == OBJ_DROID))
 			{
 				item = MT_OWNDROID;
 			}
 			else if (specialOrderKeyDown() &&
-				(ObjUnderMouse != NULL) &&
-			    ObjUnderMouse->player == selectedPlayer)
+			         (ObjUnderMouse != NULL) &&
+			         ObjUnderMouse->player == selectedPlayer)
 			{
 				if (selection == SC_DROID_REPAIR)
 				{
@@ -832,12 +844,12 @@ void processMouseClickInput(void)
 			// in multiPlayer check for what kind of unit can use it (TODO)
 			else if (bMultiPlayer && item == MT_TRANDROID)
 			{
-				if ( ObjUnderMouse->player != selectedPlayer)
+				if (ObjUnderMouse->player != selectedPlayer)
 				{
 					item = MT_OWNDROID;
 				}
 			}
-			else if (selection==SC_DROID_CONSTRUCT)
+			else if (selection == SC_DROID_CONSTRUCT)
 			{
 				// We don't allow the build cursor under certain circumstances ....
 				// can't build if res extractors arent available.
@@ -853,28 +865,30 @@ void processMouseClickInput(void)
 				// repair instead of sensor/guard with cons. droids.
 				else if (item == MT_SENSOR)
 				{
-					if(ObjUnderMouse							// something valid
-						&& (ObjUnderMouse->type == OBJ_STRUCTURE))// check if struct
+					if (ObjUnderMouse							// something valid
+					    && (ObjUnderMouse->type == OBJ_STRUCTURE))// check if struct
 					{
-						if(buildingDamaged((STRUCTURE *)ObjUnderMouse))
+						if (buildingDamaged((STRUCTURE *)ObjUnderMouse))
 						{
 							item = MT_OWNSTRDAM;				// replace guard/sense with usual icons.
-						}else{
+						}
+						else
+						{
 							item = MT_OWNSTROK;
 						}
 					}
 				}
 			}
 			else if (item == MT_SENSOR
-					&& selection == SC_DROID_INDIRECT
-					&& (keyDown(KEY_LSHIFT) || keyDown(KEY_RSHIFT)))
+			         && selection == SC_DROID_INDIRECT
+			         && (keyDown(KEY_LSHIFT) || keyDown(KEY_RSHIFT)))
 			{
 				selection = SC_DROID_SENSOR;
 			}
 
 			// check the type of sensor for indirect weapons
 			else if ((item == MT_SENSOR || item == MT_SENSORSTRUCT || item == MT_SENSORSTRUCTDAM)
-					&& selection == SC_DROID_INDIRECT )
+			         && selection == SC_DROID_INDIRECT)
 			{
 				if (!droidSensorDroidWeapon(ObjUnderMouse, psDominantSelected))
 				{
@@ -883,9 +897,9 @@ void processMouseClickInput(void)
 			}
 
 			//check for VTOL droids being assigned to a sensor droid/structure
-			else if ( (item == MT_SENSOR || item == MT_SENSORSTRUCT || item == MT_SENSORSTRUCTDAM)
-					&& selection == SC_DROID_DIRECT
-					&& vtolDroidSelected((UBYTE)selectedPlayer))
+			else if ((item == MT_SENSOR || item == MT_SENSORSTRUCT || item == MT_SENSORSTRUCTDAM)
+			         && selection == SC_DROID_DIRECT
+			         && vtolDroidSelected((UBYTE)selectedPlayer))
 			{
 				// NB. psSelectedVtol was set by vtolDroidSelected - yes I know its horrible, but it
 				// only smells as much as the rest of display.c so I don't feel so bad
@@ -901,14 +915,14 @@ void processMouseClickInput(void)
 
 			//vtols cannot pick up artifacts
 			else if (item == MT_ARTIFACT
-					&& selection == SC_DROID_DIRECT
-					&& vtolDroidSelected((UBYTE)selectedPlayer))
+			         && selection == SC_DROID_DIRECT
+			         && vtolDroidSelected((UBYTE)selectedPlayer))
 			{
 				item = MT_BLOCKING;
 			}
 
 			if (item == MT_TERRAIN
-					&& terrainType(mapTile(mouseTileX,mouseTileY)) == TER_CLIFFFACE)
+			    && terrainType(mapTile(mouseTileX, mouseTileY)) == TER_CLIFFFACE)
 			{
 				item = MT_BLOCKING;
 			}
@@ -929,13 +943,13 @@ void processMouseClickInput(void)
 			}
 
 			if (specialOrderKeyDown() && (selection == SC_DROID_TRANSPORTER || selection == SC_DROID_SUPERTRANSPORTER) &&
-				arnMPointers[item][selection] == CURSOR_MOVE && bMultiPlayer)
+			    arnMPointers[item][selection] == CURSOR_MOVE && bMultiPlayer)
 			{
 				// Alt+move = disembark transporter
 				wzSetCursor(CURSOR_DISEMBARK);
 			}
 			else if (specialOrderKeyDown() && selection == SC_DROID_DIRECT &&
-				arnMPointers[item][selection] == CURSOR_MOVE)
+			         arnMPointers[item][selection] == CURSOR_MOVE)
 			{
 				// Alt+move = scout
 				wzSetCursor(CURSOR_SCOUT);
@@ -965,7 +979,7 @@ void processMouseClickInput(void)
 		//exceptions, exceptions...AB 10/06/99
 		if (bMultiPlayer && bLasSatStruct)
 		{
-			ASSERT( item<POSSIBLE_TARGETS,"Weirdy target!" );
+			ASSERT(item < POSSIBLE_TARGETS, "Weirdy target!");
 			if (item == MT_ENEMYDROID || item == MT_ENEMYSTR || item == MT_DAMFEATURE)
 			{
 				//display attack cursor
@@ -988,9 +1002,9 @@ void processMouseClickInput(void)
 			}
 		}
 		else if (ObjUnderMouse && (ObjUnderMouse->player == selectedPlayer) &&
-			((ObjUnderMouse->type == OBJ_STRUCTURE && ((STRUCTURE *)ObjUnderMouse)->asWeaps[0].nStat
-			&& (asWeaponStats[((STRUCTURE *)ObjUnderMouse)->asWeaps[0].nStat].weaponSubClass == WSC_LAS_SAT))
-		    || ObjUnderMouse->type == OBJ_DROID))
+		         ((ObjUnderMouse->type == OBJ_STRUCTURE && ((STRUCTURE *)ObjUnderMouse)->asWeaps[0].nStat
+		           && (asWeaponStats[((STRUCTURE *)ObjUnderMouse)->asWeaps[0].nStat].weaponSubClass == WSC_LAS_SAT))
+		          || ObjUnderMouse->type == OBJ_DROID))
 		{
 			wzSetCursor(CURSOR_SELECT); // Special casing for LasSat or own unit
 		}
@@ -1022,14 +1036,14 @@ static void calcScroll(float *y, float *dydt, float accel, float decel, float ta
 	// Decelerate if needed.
 	tMid = (0 - *dydt) / decel;
 	CLIP(tMid, 0, dt);
-	*y += *dydt * tMid + decel/2 * tMid*tMid;
+	*y += *dydt * tMid + decel / 2 * tMid * tMid;
 	*dydt += decel * tMid;
 	dt -= tMid;
 
 	// Accelerate if needed.
 	tMid = (targetVelocity - *dydt) / accel;
 	CLIP(tMid, 0, dt);
-	*y += *dydt * tMid + accel/2 * tMid*tMid;
+	*y += *dydt * tMid + accel / 2 * tMid * tMid;
 	*dydt += accel * tMid;
 	dt -= tMid;
 
@@ -1039,16 +1053,16 @@ static void calcScroll(float *y, float *dydt, float accel, float decel, float ta
 
 void scroll(void)
 {
-	SDWORD	xDif,yDif;
+	SDWORD	xDif, yDif;
 	uint32_t timeDiff;
 	int scrollDirLeftRight = 0, scrollDirUpDown = 0;
-	float scroll_zoom_factor = 1+2*((getViewDistance()-MINDISTANCE)/((float)(MAXDISTANCE-MINDISTANCE)));
+	float scroll_zoom_factor = 1 + 2 * ((getViewDistance() - MINDISTANCE) / ((float)(MAXDISTANCE - MINDISTANCE)));
 	float scaled_max_scroll_speed = scroll_zoom_factor * MAX_SCROLL_SPEED;
 	float scaled_accel;
 
 	static float xDiffFrac = 0, yDiffFrac = 0;
 
-	if(InGameOpUp || bDisplayMultiJoiningStatus || isInGamePopupUp)		// cant scroll when menu up. or when over radar
+	if (InGameOpUp || bDisplayMultiJoiningStatus || isInGamePopupUp)		// cant scroll when menu up. or when over radar
 	{
 		return;
 	}
@@ -1057,11 +1071,11 @@ void scroll(void)
 	{
 		// Scroll left or right
 		scrollDirLeftRight += (mouseX() > (pie_GetVideoBufferWidth() - BOUNDARY_X)) -
-		                       (mouseX() < BOUNDARY_X);
+		                      (mouseX() < BOUNDARY_X);
 
 		// Scroll down or up
 		scrollDirUpDown += (mouseY() < BOUNDARY_Y) -
-		                    (mouseY() > (pie_GetVideoBufferHeight() - BOUNDARY_Y));
+		                   (mouseY() > (pie_GetVideoBufferHeight() - BOUNDARY_Y));
 	}
 	if (!keyDown(KEY_LCTRL) && !keyDown(KEY_RCTRL))
 	{
@@ -1088,13 +1102,13 @@ void scroll(void)
 
 	scrollStepLeftRight = 0;
 	scrollStepUpDown = 0;
-	calcScroll(&scrollStepLeftRight, &scrollSpeedLeftRight, scaled_accel, 2*scaled_accel, scrollDirLeftRight * scaled_max_scroll_speed, (float)timeDiff / GAME_TICKS_PER_SEC);
-	calcScroll(&scrollStepUpDown,    &scrollSpeedUpDown,    scaled_accel, 2*scaled_accel, scrollDirUpDown    * scaled_max_scroll_speed, (float)timeDiff / GAME_TICKS_PER_SEC);
+	calcScroll(&scrollStepLeftRight, &scrollSpeedLeftRight, scaled_accel, 2 * scaled_accel, scrollDirLeftRight * scaled_max_scroll_speed, (float)timeDiff / GAME_TICKS_PER_SEC);
+	calcScroll(&scrollStepUpDown,    &scrollSpeedUpDown,    scaled_accel, 2 * scaled_accel, scrollDirUpDown    * scaled_max_scroll_speed, (float)timeDiff / GAME_TICKS_PER_SEC);
 
 	/* Get x component of movement */
-	xDiffFrac += cos(-player.r.y*(M_PI/32768))*scrollStepLeftRight + sin(-player.r.y*(M_PI/32768))*scrollStepUpDown;
+	xDiffFrac += cos(-player.r.y * (M_PI / 32768)) * scrollStepLeftRight + sin(-player.r.y * (M_PI / 32768)) * scrollStepUpDown;
 	/* Get y component of movement */
-	yDiffFrac += sin(-player.r.y*(M_PI/32768))*scrollStepLeftRight - cos(-player.r.y*(M_PI/32768))*scrollStepUpDown;
+	yDiffFrac += sin(-player.r.y * (M_PI / 32768)) * scrollStepLeftRight - cos(-player.r.y * (M_PI / 32768)) * scrollStepUpDown;
 
 	xDif = (int)xDiffFrac;
 	yDif = (int)yDiffFrac;
@@ -1122,10 +1136,10 @@ void resetScroll(void)
 // Check a coordinate is within the scroll limits, SDWORD version.
 // Returns true if edge hit.
 //
-bool CheckInScrollLimits(SDWORD *xPos,SDWORD *zPos)
+bool CheckInScrollLimits(SDWORD *xPos, SDWORD *zPos)
 {
 	bool EdgeHit = false;
-	SDWORD	minX,minY,maxX,maxY;
+	SDWORD	minX, minY, maxX, maxY;
 
 	minX = world_coord(scrollMinX);
 	maxX = world_coord(scrollMaxX - 1);
@@ -1138,8 +1152,7 @@ bool CheckInScrollLimits(SDWORD *xPos,SDWORD *zPos)
 		*xPos = minX;
 		EdgeHit = true;
 	}
-	else
-	if (*xPos >= maxX)
+	else if (*xPos >= maxX)
 	{
 		*xPos = maxX;
 		EdgeHit = true;
@@ -1150,8 +1163,7 @@ bool CheckInScrollLimits(SDWORD *xPos,SDWORD *zPos)
 		*zPos = minY;
 		EdgeHit = true;
 	}
-	else
-	if (*zPos >= maxY)
+	else if (*zPos >= maxY)
 	{
 		*zPos = maxY;
 		EdgeHit = true;
@@ -1168,7 +1180,7 @@ bool CheckScrollLimits(void)
 {
 	SDWORD xp = player.p.x;
 	SDWORD zp = player.p.z;
-	bool ret = CheckInScrollLimits(&xp,&zp);
+	bool ret = CheckInScrollLimits(&xp, &zp);
 
 	player.p.x = xp;
 	player.p.z = zp;
@@ -1196,39 +1208,39 @@ void displayWorld(void)
 			{
 				player.r.y = rotInitial - (mouseX() - rotX) * DEG(1) / 2;
 			}
-				yMoved += abs(mouseY() - rotY);
-				if (bInvertMouse)
+			yMoved += abs(mouseY() - rotY);
+			if (bInvertMouse)
+			{
+				if (mouseY() < rotY)
 				{
-					if (mouseY() < rotY)
-					{
-						player.r.x = rotInitialUp + (rotY - mouseY()) * DEG(1) / 3;
-					}
-					else
-					{
-						player.r.x = rotInitialUp - (mouseY() - rotY) * DEG(1) / 3;
-					}
+					player.r.x = rotInitialUp + (rotY - mouseY()) * DEG(1) / 3;
 				}
 				else
 				{
-					if(mouseY() < rotY)
-					{
-						player.r.x = rotInitialUp - (rotY - mouseY()) * DEG(1) / 3;
-					}
-					else
-					{
-						player.r.x = rotInitialUp + (mouseY() - rotY) * DEG(1) / 3;
-					}
+					player.r.x = rotInitialUp - (mouseY() - rotY) * DEG(1) / 3;
 				}
-				if(player.r.x > DEG(360 + MAX_PLAYER_X_ANGLE))
+			}
+			else
+			{
+				if (mouseY() < rotY)
 				{
-					player.r.x = DEG(360 + MAX_PLAYER_X_ANGLE);
+					player.r.x = rotInitialUp - (rotY - mouseY()) * DEG(1) / 3;
 				}
-				if(player.r.x < DEG(360 + MIN_PLAYER_X_ANGLE))
+				else
 				{
-					player.r.x = DEG(360 + MIN_PLAYER_X_ANGLE);
+					player.r.x = rotInitialUp + (mouseY() - rotY) * DEG(1) / 3;
 				}
+			}
+			if (player.r.x > DEG(360 + MAX_PLAYER_X_ANGLE))
+			{
+				player.r.x = DEG(360 + MAX_PLAYER_X_ANGLE);
+			}
+			if (player.r.x < DEG(360 + MIN_PLAYER_X_ANGLE))
+			{
+				player.r.x = DEG(360 + MIN_PLAYER_X_ANGLE);
+			}
 
-			setDesiredPitch(player.r.x/DEG_1);
+			setDesiredPitch(player.r.x / DEG_1);
 		}
 	}
 
@@ -1263,30 +1275,30 @@ bool DrawnInLastFrame(int32_t frame)
 	on MOUSE_LMB. We aren't concerned here with setting selection flags - just what it
 	actually was
 */
-BASE_OBJECT	*mouseTarget( void )
+BASE_OBJECT	*mouseTarget(void)
 {
-UDWORD		i;
-BASE_OBJECT	*psReturn;
-DROID		*psDroid;
-UDWORD		dispX,dispY,dispR;
+	UDWORD		i;
+	BASE_OBJECT	*psReturn;
+	DROID		*psDroid;
+	UDWORD		dispX, dispY, dispR;
 
-	if( (mouseTileX < 0) ||
-		(mouseTileY < 0) ||
-		(mouseTileX > (SDWORD)(mapWidth-1)) ||
-		(mouseTileY > (SDWORD)(mapHeight-1)) )
+	if ((mouseTileX < 0) ||
+	    (mouseTileY < 0) ||
+	    (mouseTileX > (SDWORD)(mapWidth - 1)) ||
+	    (mouseTileY > (SDWORD)(mapHeight - 1)))
 	{
-		return(NULL);
+		return (NULL);
 	}
 
 	/* We haven't found anything yet */
 	psReturn = NULL;
 
 	/* First have a look through the droid lists */
-	for (i=0; i<MAX_PLAYERS; i++)
+	for (i = 0; i < MAX_PLAYERS; i++)
 	{
 		/* Note the !psObject check isn't really necessary as the goto will jump out */
 		for (psDroid = apsDroidLists[i]; psDroid && !psReturn;
-			psDroid = psDroid->psNext)
+		     psDroid = psDroid->psNext)
 		{
 
 			dispX = psDroid->sDisplay.screenX;
@@ -1295,14 +1307,14 @@ UDWORD		dispX,dispY,dispR;
 			/* Only check droids that're on screen */
 
 			// Has the droid been drawn since the start of the last frame
-			if (psDroid->visible[selectedPlayer] && DrawnInLastFrame(psDroid->sDisplay.frameNumber)==true)
+			if (psDroid->visible[selectedPlayer] && DrawnInLastFrame(psDroid->sDisplay.frameNumber) == true)
 			{
-				if (mouseInBox(dispX-dispR, dispY-dispR, dispX+dispR, dispY+dispR))
+				if (mouseInBox(dispX - dispR, dispY - dispR, dispX + dispR, dispY + dispR))
 				{
 					/* We HAVE clicked on droid! */
 					psReturn = (BASE_OBJECT *) psDroid;
 					/* There's no point in checking other object types */
-					return(psReturn);
+					return (psReturn);
 				}
 			}
 		}
@@ -1318,10 +1330,10 @@ UDWORD		dispX,dispY,dispR;
 	}
 
 	/* Send the result back - if it's null then we clicked on an area of terrain */
-	return(psReturn);
+	return (psReturn);
 }
 
-void StartTacticalScrollObj(WZ_DECL_UNUSED bool driveActive, WZ_DECL_UNUSED BASE_OBJECT* psObj)
+void StartTacticalScrollObj(WZ_DECL_UNUSED bool driveActive, WZ_DECL_UNUSED BASE_OBJECT *psObj)
 {
 }
 
@@ -1347,7 +1359,7 @@ void startDeliveryPosition(FLAG_POSITION *psFlag)
 
 	//clear the selected delivery point
 	for (psFlagPos = apsFlagPosLists[selectedPlayer]; psFlagPos;
-		psFlagPos = psFlagPos->psNext)
+	     psFlagPos = psFlagPos->psNext)
 	{
 		psFlagPos->selected = false;
 	}
@@ -1356,7 +1368,7 @@ void startDeliveryPosition(FLAG_POSITION *psFlag)
 	psFlag->selected = true;
 	flagPos = *psFlag;
 
-	STRUCTURE* psStruct = findDeliveryFactory(psFlag);
+	STRUCTURE *psStruct = findDeliveryFactory(psFlag);
 	if (!psStruct)
 	{
 		flagStructId = 0; // not a struct, just a flag.
@@ -1378,25 +1390,25 @@ void startDeliveryPosition(FLAG_POSITION *psFlag)
 //
 void finishDeliveryPosition()
 {
-	FLAG_POSITION* psFlagPos;
+	FLAG_POSITION *psFlagPos;
 	if (flagStructId)
 	{
 		flagReposVarsValid = false;
-		STRUCTURE* psStruct = IdToStruct(flagStructId, selectedPlayer);
+		STRUCTURE *psStruct = IdToStruct(flagStructId, selectedPlayer);
 		if (StructIsFactory(psStruct) && psStruct->pFunctionality
-			&& psStruct->pFunctionality->factory.psAssemblyPoint)
+		    && psStruct->pFunctionality->factory.psAssemblyPoint)
 		{
 			setAssemblyPoint(psStruct->pFunctionality->factory.psAssemblyPoint,
-							 flagPos.coords.x, flagPos.coords.y, selectedPlayer, true);
+			                 flagPos.coords.x, flagPos.coords.y, selectedPlayer, true);
 		}
 		else if (psStruct->pStructureType->type == REF_REPAIR_FACILITY)
 		{
 			setAssemblyPoint(psStruct->pFunctionality->repairFacility.psDeliveryPoint,
-							 flagPos.coords.x, flagPos.coords.y, selectedPlayer, true);
+			                 flagPos.coords.x, flagPos.coords.y, selectedPlayer, true);
 		}
 		//deselect once moved
 		for (psFlagPos = apsFlagPosLists[selectedPlayer]; psFlagPos;
-			psFlagPos = psFlagPos->psNext)
+		     psFlagPos = psFlagPos->psNext)
 		{
 			psFlagPos->selected = false;
 		}
@@ -1408,7 +1420,9 @@ void finishDeliveryPosition()
 bool deliveryReposValid(void)
 {
 	if (!flagReposVarsValid)
+	{
 		return false;
+	}
 
 	Vector2i map = map_coord(removeZ(flagPos.coords));
 
@@ -1424,7 +1438,9 @@ bool deliveryReposValid(void)
 	{
 		Vector2i flagTile = map_coord(removeZ(psCurrFlag->coords));
 		if (flagTile == map)
+		{
 			return false;
+		}
 	}
 
 	if (fpathBlockingTile(map.x, map.y, PROPULSION_TYPE_WHEELED))
@@ -1438,22 +1454,28 @@ bool deliveryReposValid(void)
 bool deliveryReposFinished(FLAG_POSITION *psFlag)
 {
 	if (!flagReposVarsValid)
+	{
 		return false;
+	}
 
 	if (psFlag)
+	{
 		*psFlag = flagPos;
+	}
 	return flagReposFinished;
 }
 
 void processDeliveryRepos(void)
 {
 	if (!flagReposVarsValid)
+	{
 		return;
+	}
 
 	int bX = clip(mouseTileX, 2, mapWidth - 3);
 	int bY = clip(mouseTileY, 2, mapHeight - 3);
 
-	flagPos.coords = Vector3i(world_coord(Vector2i(bX, bY))+Vector2i(TILE_UNITS/2,TILE_UNITS/2), map_TileHeight(bX, bY) + 2*ASSEMBLY_POINT_Z_PADDING);
+	flagPos.coords = Vector3i(world_coord(Vector2i(bX, bY)) + Vector2i(TILE_UNITS / 2, TILE_UNITS / 2), map_TileHeight(bX, bY) + 2 * ASSEMBLY_POINT_Z_PADDING);
 }
 
 // Cancel repositioning of the delivery point without moving it.
@@ -1466,7 +1488,9 @@ void cancelDeliveryRepos(void)
 void renderDeliveryRepos(void)
 {
 	if (flagReposVarsValid)
+	{
 		renderDeliveryPoint(&flagPos, true);
+	}
 }
 
 // check whether a clicked on droid is in a command group or assigned to a sensor
@@ -1475,7 +1499,7 @@ static bool droidHasLeader(DROID *psDroid)
 	BASE_OBJECT		*psLeader;
 
 	if (psDroid->droidType == DROID_COMMAND ||
-		psDroid->droidType == DROID_SENSOR)
+	    psDroid->droidType == DROID_SENSOR)
 	{
 		return false;
 	}
@@ -1518,9 +1542,9 @@ void dealWithDroidSelect(DROID *psDroid, bool bDragBox)
 	}
 	else if (ctrlShiftDown() || !droidHasLeader(psDroid))
 	{
-		for(psD = apsDroidLists[selectedPlayer],bGotGroup = false; psD && !bGotGroup; psD = psD->psNext)
+		for (psD = apsDroidLists[selectedPlayer], bGotGroup = false; psD && !bGotGroup; psD = psD->psNext)
 		{
-			if(psD->selected && (psD->group!=UBYTE_MAX))
+			if (psD->selected && (psD->group != UBYTE_MAX))
 			{
 				bGotGroup = true;
 			}
@@ -1549,7 +1573,8 @@ static void FeedbackOrderGiven(void)
 	UDWORD ThisFrame = frameGetFrameNumber();
 
 	// Ensure only played once per game cycle.
-	if(ThisFrame != LastFrame) {
+	if (ThisFrame != LastFrame)
+	{
 		audio_PlayTrack(ID_SOUND_SELECT);
 		LastFrame = ThisFrame;
 	}
@@ -1563,11 +1588,11 @@ bool ctrlShiftDown(void)
 
 void AddDerrickBurningMessage(void)
 {
-	addConsoleMessage(_("Cannot Build. Oil Resource Burning."),DEFAULT_JUSTIFY,SYSTEM_MESSAGE);
-	audio_PlayTrack( ID_SOUND_BUILD_FAIL );
+	addConsoleMessage(_("Cannot Build. Oil Resource Burning."), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+	audio_PlayTrack(ID_SOUND_BUILD_FAIL);
 }
 
-static void dealWithLMBDroid(DROID* psDroid, SELECTION_TYPE selection)
+static void dealWithLMBDroid(DROID *psDroid, SELECTION_TYPE selection)
 {
 	bool ownDroid; // Not an allied droid
 
@@ -1579,18 +1604,18 @@ static void dealWithLMBDroid(DROID* psDroid, SELECTION_TYPE selection)
 		if (getDebugMappingStatus())
 		{
 			CONPRINTF(ConsoleString, (ConsoleString, "(Enemy!) %s - Damage %d%% - ID %d - experience %f, %s - order %s - action %s - sensor range %hu - ECM %u - pitch %.0f",
-						droidGetName(psDroid), 	100 - clip(PERCENT(psDroid->body, psDroid->originalBody), 0, 100), psDroid->id,
-						psDroid->experience/65536.f, getDroidLevelName(psDroid), getDroidOrderName(psDroid->order.type), getDroidActionName(psDroid->action),
-						droidSensorRange(psDroid), droidConcealment(psDroid), UNDEG(psDroid->rot.pitch)));
+			                          droidGetName(psDroid), 	100 - clip(PERCENT(psDroid->body, psDroid->originalBody), 0, 100), psDroid->id,
+			                          psDroid->experience / 65536.f, getDroidLevelName(psDroid), getDroidOrderName(psDroid->order.type), getDroidActionName(psDroid->action),
+			                          droidSensorRange(psDroid), droidConcealment(psDroid), UNDEG(psDroid->rot.pitch)));
 			FeedbackOrderGiven();
 		}
 #endif
-		orderSelectedObjAdd(selectedPlayer, (BASE_OBJECT*)psDroid, ctrlShiftDown());
+		orderSelectedObjAdd(selectedPlayer, (BASE_OBJECT *)psDroid, ctrlShiftDown());
 
 		//lasSat structure can select a target - in multiPlayer only
 		if (bMultiPlayer && bLasSatStruct)
 		{
-			orderStructureObj(selectedPlayer, (BASE_OBJECT*)psDroid);
+			orderStructureObj(selectedPlayer, (BASE_OBJECT *)psDroid);
 		}
 
 		FeedbackOrderGiven();
@@ -1609,7 +1634,7 @@ static void dealWithLMBDroid(DROID* psDroid, SELECTION_TYPE selection)
 	else if (specialOrderKeyDown() && ownDroid)
 	{
 		// try to attack your own unit
-		orderSelectedObjAdd(selectedPlayer, (BASE_OBJECT*)psDroid, ctrlShiftDown());
+		orderSelectedObjAdd(selectedPlayer, (BASE_OBJECT *)psDroid, ctrlShiftDown());
 		FeedbackOrderGiven();
 		driveDisableTactical();
 	}
@@ -1633,23 +1658,24 @@ static void dealWithLMBDroid(DROID* psDroid, SELECTION_TYPE selection)
 			}
 		}
 		else
-		{	// We can order all units to use the transport now
+		{
+			// We can order all units to use the transport now
 			if (cyborgDroidSelected(selectedPlayer))
 			{
 				// TODO add special processing for cyborgDroids
 			}
-			orderSelectedObj(selectedPlayer, (BASE_OBJECT*)psDroid);
+			orderSelectedObj(selectedPlayer, (BASE_OBJECT *)psDroid);
 			FeedbackOrderGiven();
 		}
 	}
 	// Clicked on a commander? Will link to it.
 	else if (psDroid->droidType == DROID_COMMAND && selection != SC_INVALID &&
-	          selection != SC_DROID_COMMAND &&
-	          selection != SC_DROID_CONSTRUCT &&
-	          !ctrlShiftDown() && ownDroid)
+	         selection != SC_DROID_COMMAND &&
+	         selection != SC_DROID_CONSTRUCT &&
+	         !ctrlShiftDown() && ownDroid)
 	{
 		turnOffMultiMsg(true);
-		orderSelectedObj(selectedPlayer, (BASE_OBJECT*)psDroid);
+		orderSelectedObj(selectedPlayer, (BASE_OBJECT *)psDroid);
 		FeedbackOrderGiven();
 		clearSelection();
 		assignSensorTarget((BASE_OBJECT *)psDroid);
@@ -1659,17 +1685,17 @@ static void dealWithLMBDroid(DROID* psDroid, SELECTION_TYPE selection)
 	// Clicked on a sensor? Will assign to it.
 	else if (psDroid->droidType == DROID_SENSOR)
 	{
-		DROID* psCurr;
+		DROID *psCurr;
 
 		bSensorAssigned = false;
 		for (psCurr = apsDroidLists[selectedPlayer]; psCurr; psCurr = psCurr->psNext)
 		{
 			//must be indirect weapon droid or VTOL weapon droid
 			if ((psCurr->droidType == DROID_WEAPON) &&
-			    (psCurr->selected)&&
+			    (psCurr->selected) &&
 			    (psCurr->asWeaps[0].nStat > 0) &&
 			    ((!proj_Direct(asWeaponStats + psCurr->asWeaps[0].nStat)) ||
-			    isVtolDroid(psCurr)) &&
+			     isVtolDroid(psCurr)) &&
 			    droidSensorDroidWeapon((BASE_OBJECT *)psDroid, psCurr))
 			{
 				bSensorAssigned = true;
@@ -1697,14 +1723,14 @@ static void dealWithLMBDroid(DROID* psDroid, SELECTION_TYPE selection)
 	          psDroid->droidType == DROID_COMMAND)
 	         && selection == SC_DROID_DIRECT)
 	{
-		orderSelectedObj(selectedPlayer, (BASE_OBJECT*)psDroid);
+		orderSelectedObj(selectedPlayer, (BASE_OBJECT *)psDroid);
 		FeedbackOrderGiven();
 	}
 	// Clicked on a damaged unit? Will repair it.
 	else if (droidIsDamaged(psDroid) && repairDroidSelected(selectedPlayer))
 	{
 		assignDestTarget();
-		orderSelectedObjAdd(selectedPlayer, (BASE_OBJECT*)psDroid, ctrlShiftDown());
+		orderSelectedObjAdd(selectedPlayer, (BASE_OBJECT *)psDroid, ctrlShiftDown());
 		FeedbackOrderGiven();
 	}
 	else if (bRightClickOrders && ownDroid)
@@ -1725,39 +1751,39 @@ static void dealWithLMBDroid(DROID* psDroid, SELECTION_TYPE selection)
 		if (getDebugMappingStatus()) // cheating on, so output debug info
 		{
 			CONPRINTF(ConsoleString, (ConsoleString,
-						"%s - Damage %d%% - ID %d - experience %f, %s - order %s - action %s - sensor range %hu - ECM %u - pitch %.0f - frust %u",
-						droidGetName(psDroid),
-						100 - clip(PERCENT(psDroid->body, psDroid->originalBody), 0, 100), psDroid->id,
-						psDroid->experience/65536.f, getDroidLevelName(psDroid), getDroidOrderName(psDroid->order.type), getDroidActionName(psDroid->action),
-						droidSensorRange(psDroid), droidConcealment(psDroid), UNDEG(psDroid->rot.pitch), psDroid->lastFrustratedTime));
+			                          "%s - Damage %d%% - ID %d - experience %f, %s - order %s - action %s - sensor range %hu - ECM %u - pitch %.0f - frust %u",
+			                          droidGetName(psDroid),
+			                          100 - clip(PERCENT(psDroid->body, psDroid->originalBody), 0, 100), psDroid->id,
+			                          psDroid->experience / 65536.f, getDroidLevelName(psDroid), getDroidOrderName(psDroid->order.type), getDroidActionName(psDroid->action),
+			                          droidSensorRange(psDroid), droidConcealment(psDroid), UNDEG(psDroid->rot.pitch), psDroid->lastFrustratedTime));
 			FeedbackOrderGiven();
 		}
 		else
 #endif
-		if (godMode)
-		{
-			CONPRINTF(ConsoleString, (ConsoleString,
-					"%s - Damage %d%% - Serial ID %d - Experience %f order %d action %d, %s",
-					droidGetName(psDroid),
-					100 - clip(PERCENT(psDroid->body, psDroid->originalBody), 0, 100),
-					psDroid->id, psDroid->experience/65536.f, psDroid->order.type,
-					psDroid->action, getDroidLevelName(psDroid)));
-
-			FeedbackOrderGiven();
-		}
-		else
-		{
-			if(!psDroid->selected)
+			if (godMode)
 			{
 				CONPRINTF(ConsoleString, (ConsoleString,
-					_("%s - Damage %d%% - Experience %.1f, %s"),
-					droidGetName(psDroid),
-					100 - clip(PERCENT(psDroid->body,psDroid->originalBody), 0, 100),
-					psDroid->experience/65536.f, _(getDroidLevelName(psDroid))));
+				                          "%s - Damage %d%% - Serial ID %d - Experience %f order %d action %d, %s",
+				                          droidGetName(psDroid),
+				                          100 - clip(PERCENT(psDroid->body, psDroid->originalBody), 0, 100),
+				                          psDroid->id, psDroid->experience / 65536.f, psDroid->order.type,
+				                          psDroid->action, getDroidLevelName(psDroid)));
 
 				FeedbackOrderGiven();
 			}
-		}
+			else
+			{
+				if (!psDroid->selected)
+				{
+					CONPRINTF(ConsoleString, (ConsoleString,
+					                          _("%s - Damage %d%% - Experience %.1f, %s"),
+					                          droidGetName(psDroid),
+					                          100 - clip(PERCENT(psDroid->body, psDroid->originalBody), 0, 100),
+					                          psDroid->experience / 65536.f, _(getDroidLevelName(psDroid))));
+
+					FeedbackOrderGiven();
+				}
+			}
 
 		// select/deselect etc. the droid
 		clearSelection();
@@ -1766,16 +1792,16 @@ static void dealWithLMBDroid(DROID* psDroid, SELECTION_TYPE selection)
 	else // Clicked on allied unit with no other possible actions
 	{
 		CONPRINTF(ConsoleString, (ConsoleString,
-								  _("%s - Allied - Damage %d%% - Experience %d, %s"),
-								  droidGetName(psDroid),
-								  100 - clip(PERCENT(psDroid->body,psDroid->originalBody), 0, 100),
-								  psDroid->experience/65536, getDroidLevelName(psDroid)));
+		                          _("%s - Allied - Damage %d%% - Experience %d, %s"),
+		                          droidGetName(psDroid),
+		                          100 - clip(PERCENT(psDroid->body, psDroid->originalBody), 0, 100),
+		                          psDroid->experience / 65536, getDroidLevelName(psDroid)));
 
 		FeedbackOrderGiven();
 	}
 }
 
-static void dealWithLMBStructure(STRUCTURE* psStructure, SELECTION_TYPE selection)
+static void dealWithLMBStructure(STRUCTURE *psStructure, SELECTION_TYPE selection)
 {
 	bool ownStruct = (psStructure->player == selectedPlayer);
 
@@ -1786,14 +1812,14 @@ static void dealWithLMBStructure(STRUCTURE* psStructure, SELECTION_TYPE selectio
 		if (getDebugMappingStatus())
 		{
 			CONPRINTF(ConsoleString, (ConsoleString, "(Enemy!) %s, ref: %d, ID: %d Damage %d%%", psStructure->pStructureType->pName, psStructure->pStructureType->ref,
-				psStructure->id, 100 - clip(PERCENT(psStructure->body, psStructure->pStructureType->bodyPoints), 0, 100)));
+			                          psStructure->id, 100 - clip(PERCENT(psStructure->body, psStructure->pStructureType->bodyPoints), 0, 100)));
 		}
 #endif
-		orderSelectedObjAdd(selectedPlayer, (BASE_OBJECT*)psStructure, ctrlShiftDown());
+		orderSelectedObjAdd(selectedPlayer, (BASE_OBJECT *)psStructure, ctrlShiftDown());
 		//lasSat structure can select a target - in multiPlayer only
 		if (bMultiPlayer && bLasSatStruct)
 		{
-			orderStructureObj(selectedPlayer, (BASE_OBJECT*)psStructure);
+			orderStructureObj(selectedPlayer, (BASE_OBJECT *)psStructure);
 		}
 		FeedbackOrderGiven();
 		driveDisableTactical();
@@ -1804,11 +1830,14 @@ static void dealWithLMBStructure(STRUCTURE* psStructure, SELECTION_TYPE selectio
 	/* We've clicked on our own building */
 
 	//print some info at the top of the screen for the specific structure
-	if (!bRightClickOrders) printStructureInfo(psStructure);
+	if (!bRightClickOrders)
+	{
+		printStructureInfo(psStructure);
+	}
 
 	/* Got to be built. Also, you can't 'select' derricks */
 	if (!specialOrderKeyDown() && (psStructure->status == SS_BUILT) &&
-		(psStructure->pStructureType->type != REF_RESOURCE_EXTRACTOR) && ownStruct)
+	    (psStructure->pStructureType->type != REF_RESOURCE_EXTRACTOR) && ownStruct)
 	{
 		if (bRightClickOrders)
 		{
@@ -1830,10 +1859,10 @@ static void dealWithLMBStructure(STRUCTURE* psStructure, SELECTION_TYPE selectio
 // buttons in the object window.
 			if (selection == SC_INVALID)
 			{
-				STRUCTURE* psCurr;
+				STRUCTURE *psCurr;
 
 				/* Clear old building selection(s) - should only be one */
-				for(psCurr = apsStructLists[selectedPlayer]; psCurr; psCurr = psCurr->psNext)
+				for (psCurr = apsStructLists[selectedPlayer]; psCurr; psCurr = psCurr->psNext)
 				{
 					psCurr->selected = false;
 				}
@@ -1845,11 +1874,11 @@ static void dealWithLMBStructure(STRUCTURE* psStructure, SELECTION_TYPE selectio
 		}
 
 	}
-	else if ((psStructure->status==SS_BUILT) &&
-			(psStructure->pStructureType->type == REF_RESOURCE_EXTRACTOR) &&
-			selection == SC_INVALID && ownStruct)
+	else if ((psStructure->status == SS_BUILT) &&
+	         (psStructure->pStructureType->type == REF_RESOURCE_EXTRACTOR) &&
+	         selection == SC_INVALID && ownStruct)
 	{
-		STRUCTURE* psCurr;
+		STRUCTURE *psCurr;
 
 		/* Clear old building selection(s) - should only be one */
 		for (psCurr = apsStructLists[selectedPlayer]; psCurr; psCurr = psCurr->psNext)
@@ -1860,7 +1889,7 @@ static void dealWithLMBStructure(STRUCTURE* psStructure, SELECTION_TYPE selectio
 		psStructure->selected = true;
 	}
 	bSensorAssigned = false;
-	orderSelectedObjAdd(selectedPlayer, (BASE_OBJECT*)psStructure, ctrlShiftDown());
+	orderSelectedObjAdd(selectedPlayer, (BASE_OBJECT *)psStructure, ctrlShiftDown());
 	FeedbackOrderGiven();
 	if (bSensorAssigned)
 	{
@@ -1883,22 +1912,22 @@ static void dealWithLMBStructure(STRUCTURE* psStructure, SELECTION_TYPE selectio
 	driveDisableTactical();
 }
 
-static void dealWithLMBFeature(FEATURE* psFeature)
+static void dealWithLMBFeature(FEATURE *psFeature)
 {
 	//go on to check for
 	if (psFeature->psStats->damageable)
 	{
-		orderSelectedObjAdd(selectedPlayer, (BASE_OBJECT*)psFeature, ctrlShiftDown());
+		orderSelectedObjAdd(selectedPlayer, (BASE_OBJECT *)psFeature, ctrlShiftDown());
 		//lasSat structure can select a target - in multiPlayer only
 		if (bMultiPlayer && bLasSatStruct)
 		{
-			orderStructureObj(selectedPlayer, (BASE_OBJECT*)psFeature);
+			orderStructureObj(selectedPlayer, (BASE_OBJECT *)psFeature);
 		}
 		FeedbackOrderGiven();
 	}
 
 	//clicking an oil field should start a build..
-	if(psFeature->psStats->subType == FEAT_OIL_RESOURCE)
+	if (psFeature->psStats->subType == FEAT_OIL_RESOURCE)
 	{
 		unsigned int i;
 		// find any construction droids. and order them to build an oil resource.
@@ -1906,18 +1935,18 @@ static void dealWithLMBFeature(FEATURE* psFeature)
 		// first find the derrick.
 		for (i = 0; (i < numStructureStats) && (asStructureStats[i].type != REF_RESOURCE_EXTRACTOR); ++i) {}
 
-		if( (i < numStructureStats) &&
-			(apStructTypeLists[selectedPlayer][i] == AVAILABLE) )	// dont go any further if no derrick stat found.
+		if ((i < numStructureStats) &&
+		    (apStructTypeLists[selectedPlayer][i] == AVAILABLE))	// dont go any further if no derrick stat found.
 		{
-			DROID* psCurr;
+			DROID *psCurr;
 
 			// for each droid
-			for(psCurr = apsDroidLists[selectedPlayer]; psCurr; psCurr = psCurr->psNext)
+			for (psCurr = apsDroidLists[selectedPlayer]; psCurr; psCurr = psCurr->psNext)
 			{
 				if ((droidType(psCurr) == DROID_CONSTRUCT ||
-					droidType(psCurr) == DROID_CYBORG_CONSTRUCT) && (psCurr->selected))
+				     droidType(psCurr) == DROID_CYBORG_CONSTRUCT) && (psCurr->selected))
 				{
-					if(fireOnLocation(psFeature->pos.x,psFeature->pos.y))
+					if (fireOnLocation(psFeature->pos.x, psFeature->pos.y))
 					{
 						// Can't build because it's burning
 						AddDerrickBurningMessage();
@@ -1931,13 +1960,13 @@ static void dealWithLMBFeature(FEATURE* psFeature)
 	}
 	else
 	{
-		switch(psFeature->psStats->subType)
+		switch (psFeature->psStats->subType)
 		{
-			case FEAT_GEN_ARTE:
-			case FEAT_OIL_DRUM:
+		case FEAT_GEN_ARTE:
+		case FEAT_OIL_DRUM:
 			{
-				DROID* psNearestUnit = getNearestDroid(mouseTileX*TILE_UNITS+TILE_UNITS/2,
-											mouseTileY*TILE_UNITS+TILE_UNITS/2,true);
+				DROID *psNearestUnit = getNearestDroid(mouseTileX * TILE_UNITS + TILE_UNITS / 2,
+				                                       mouseTileY * TILE_UNITS + TILE_UNITS / 2, true);
 				/* If so then find the nearest unit! */
 				if (psNearestUnit)	// bloody well should be!!!
 				{
@@ -1946,50 +1975,50 @@ static void dealWithLMBFeature(FEATURE* psFeature)
 				}
 				break;
 			}
-			case FEAT_BOULDER:
-			case FEAT_HOVER:
-			case FEAT_OIL_RESOURCE:
-			case FEAT_VEHICLE:
-			default:
-				break;
+		case FEAT_BOULDER:
+		case FEAT_HOVER:
+		case FEAT_OIL_RESOURCE:
+		case FEAT_VEHICLE:
+		default:
+			break;
 		}
 	}
 #ifdef DEBUG
-		if (getDebugMappingStatus())
-		{
-			CONPRINTF(ConsoleString, (ConsoleString, "(Feature) %s, ID: %d, ref: %d, body: (%d):%d", psFeature->psStats->pName, psFeature->id, psFeature->psStats->ref, psFeature->psStats->body, psFeature->body ));
-		}
+	if (getDebugMappingStatus())
+	{
+		CONPRINTF(ConsoleString, (ConsoleString, "(Feature) %s, ID: %d, ref: %d, body: (%d):%d", psFeature->psStats->pName, psFeature->id, psFeature->psStats->ref, psFeature->psStats->body, psFeature->body));
+	}
 #endif
 	driveDisableTactical();
 }
 
-static void dealWithLMBObject(BASE_OBJECT* psClickedOn)
+static void dealWithLMBObject(BASE_OBJECT *psClickedOn)
 {
 	SELECTION_TYPE selection = establishSelection(selectedPlayer);
 	OBJECT_TYPE type = psClickedOn->type;
 
 	switch (type)
 	{
-		case OBJ_DROID:
-			dealWithLMBDroid((DROID*)psClickedOn, selection);
-			break;
+	case OBJ_DROID:
+		dealWithLMBDroid((DROID *)psClickedOn, selection);
+		break;
 
-		case OBJ_STRUCTURE:
-			dealWithLMBStructure((STRUCTURE*)psClickedOn, selection);
-			break;
+	case OBJ_STRUCTURE:
+		dealWithLMBStructure((STRUCTURE *)psClickedOn, selection);
+		break;
 
-		case OBJ_FEATURE:
-			dealWithLMBFeature((FEATURE*)psClickedOn);
-			break;
+	case OBJ_FEATURE:
+		dealWithLMBFeature((FEATURE *)psClickedOn);
+		break;
 
-		default:
-			// assert only when the value is outside of the valid range
-			ASSERT(type < OBJ_NUM_TYPES, "Weird selection from LMB - type of clicked object is %d", (int)type);
-			break;
+	default:
+		// assert only when the value is outside of the valid range
+		ASSERT(type < OBJ_NUM_TYPES, "Weird selection from LMB - type of clicked object is %d", (int)type);
+		break;
 	}
 }
 
-void	dealWithLMB( void )
+void	dealWithLMB(void)
 {
 	BASE_OBJECT         *psClickedOn;
 	OBJECT_POSITION     *psLocation;
@@ -1997,13 +2026,13 @@ void	dealWithLMB( void )
 
 	/* Don't process if in game options are on screen */
 	if (mouseOverRadar ||
-	    InGameOpUp == true || widgGetFromID(psWScreen,INTINGAMEOP))
+	    InGameOpUp == true || widgGetFromID(psWScreen, INTINGAMEOP))
 	{
 		return;
 	}
 
 	/* What have we clicked on? */
-	if(driveModeActive() && !driveTacticalActive())
+	if (driveModeActive() && !driveTacticalActive())
 	{
 		psClickedOn = NULL;
 		if (psClickedOn)
@@ -2032,7 +2061,7 @@ void	dealWithLMB( void )
 		// clicked on a destination.
 		orderSelectedLoc(selectedPlayer, mousePos.x, mousePos.y, ctrlShiftDown());  // ctrlShiftDown() = ctrl clicked a destination, add an order
 		/* Otherwise send them all */
-		if(getNumDroidsSelected())
+		if (getNumDroidsSelected())
 		{
 			assignDestTarget();
 			audio_PlayTrack(ID_SOUND_SELECT);
@@ -2044,11 +2073,11 @@ void	dealWithLMB( void )
 			uint8_t aux = auxTile(mouseTileX, mouseTileY, selectedPlayer);
 
 			CONPRINTF(ConsoleString, (ConsoleString, "%s tile %d, %d [%d, %d] continent(l%d, h%d) level %g illum %d %s %s w=%d s=%d j=%d",
-			          tileIsExplored(psTile) ? "Explored" : "Unexplored",
-			          mouseTileX, mouseTileY, world_coord(mouseTileX), world_coord(mouseTileY),
-			          (int)psTile->limitedContinent, (int)psTile->hoverContinent, psTile->level, (int)psTile->illumination,
-				  aux & AUXBITS_DANGER ? "danger" : "", aux & AUXBITS_THREAT ? "threat" : "",
-				  (int)psTile->watchers[selectedPlayer], (int)psTile->sensors[selectedPlayer], (int)psTile->jammers[selectedPlayer]));
+			                          tileIsExplored(psTile) ? "Explored" : "Unexplored",
+			                          mouseTileX, mouseTileY, world_coord(mouseTileX), world_coord(mouseTileY),
+			                          (int)psTile->limitedContinent, (int)psTile->hoverContinent, psTile->level, (int)psTile->illumination,
+			                          aux & AUXBITS_DANGER ? "danger" : "", aux & AUXBITS_THREAT ? "threat" : "",
+			                          (int)psTile->watchers[selectedPlayer], (int)psTile->sensors[selectedPlayer], (int)psTile->jammers[selectedPlayer]));
 		}
 
 		driveDisableTactical();
@@ -2058,39 +2087,39 @@ void	dealWithLMB( void )
 
 	switch (psLocation->type)
 	{
-		case POS_DELIVERY:
-			if(psLocation->player == selectedPlayer)
+	case POS_DELIVERY:
+		if (psLocation->player == selectedPlayer)
+		{
+			if (bRightClickOrders)
 			{
-				if (bRightClickOrders)
+				//centre the view on the owning Factory
+				psStructure = findDeliveryFactory((FLAG_POSITION *)psLocation);
+				if (psStructure)
 				{
-					//centre the view on the owning Factory
-					psStructure = findDeliveryFactory((FLAG_POSITION *)psLocation);
-					if (psStructure)
-					{
-						setViewPos(map_coord(psStructure->pos.x),
-								   map_coord(psStructure->pos.y),
-								   true);
-					}
-				}
-				else
-				{
-					startDeliveryPosition((FLAG_POSITION *)psLocation);
+					setViewPos(map_coord(psStructure->pos.x),
+					           map_coord(psStructure->pos.y),
+					           true);
 				}
 			}
-			break;
-		default:
-			ASSERT(!"unknown object position type", "Unknown type from checkMouseLoc" );
+			else
+			{
+				startDeliveryPosition((FLAG_POSITION *)psLocation);
+			}
+		}
+		break;
+	default:
+		ASSERT(!"unknown object position type", "Unknown type from checkMouseLoc");
 	}
 }
 
-bool	getRotActive( void )
+bool	getRotActive(void)
 {
-	return(rotActive);
+	return (rotActive);
 }
 
-SDWORD	getDesiredPitch( void )
+SDWORD	getDesiredPitch(void)
 {
-	return(desiredPitch);
+	return (desiredPitch);
 }
 
 void	setDesiredPitch(SDWORD pitch)
@@ -2108,14 +2137,14 @@ static void dealWithLMBDClick(void)
 	/* What have we clicked on? */
 	psClickedOn = mouseTarget();
 	/* If not NULL, then it's a droid or a structure */
-	if(psClickedOn != NULL)
+	if (psClickedOn != NULL)
 	{
 		/* We've got a droid or a structure */
-		if(psClickedOn->type == OBJ_DROID)
+		if (psClickedOn->type == OBJ_DROID)
 		{
 			/* We clicked on droid */
 			psDroid = (DROID *) psClickedOn;
-			if(psDroid->player == selectedPlayer)
+			if (psDroid->player == selectedPlayer)
 			{
 				/* If we've double clicked on a constructor droid, activate build menu */
 				if (psDroid->droidType == DROID_COMMAND)
@@ -2126,7 +2155,7 @@ static void dealWithLMBDClick(void)
 				else
 				{
 					// Now selects all of same type on screen
-					selDroidSelection(selectedPlayer,DS_BY_TYPE,DST_ALL_SAME,true);
+					selDroidSelection(selectedPlayer, DS_BY_TYPE, DST_ALL_SAME, true);
 				}
 			}
 		}
@@ -2139,14 +2168,14 @@ static void dealWithLMBDClick(void)
 				if (StructIsFactory(psStructure))
 				{
 					setViewPos(map_coord(psStructure->pFunctionality->factory.psAssemblyPoint->coords.x),
-							   map_coord(psStructure->pFunctionality->factory.psAssemblyPoint->coords.y),
-							   true);
+					           map_coord(psStructure->pFunctionality->factory.psAssemblyPoint->coords.y),
+					           true);
 				}
 				else if (psStructure->pStructureType->type == REF_REPAIR_FACILITY)
 				{
 					setViewPos(map_coord(psStructure->pFunctionality->repairFacility.psDeliveryPoint->coords.x),
-							   map_coord(psStructure->pFunctionality->repairFacility.psDeliveryPoint->coords.y),
-							   true);
+					           map_coord(psStructure->pFunctionality->repairFacility.psDeliveryPoint->coords.y),
+					           true);
 				}
 			}
 		}
@@ -2155,24 +2184,24 @@ static void dealWithLMBDClick(void)
 
 /*This checks to see if the mouse was over a delivery point or a proximity message
 when the mouse button was pressed */
-static OBJECT_POSITION *	checkMouseLoc(void)
+static OBJECT_POSITION 	*checkMouseLoc(void)
 {
 	FLAG_POSITION		*psPoint;
 	UDWORD				i;
-	UDWORD				dispX,dispY,dispR;
+	UDWORD				dispX, dispY, dispR;
 
 	// First have a look through the DeliveryPoint lists
-	for (i=0; i<MAX_PLAYERS; i++)
+	for (i = 0; i < MAX_PLAYERS; i++)
 	{
 		//new way, handles multiple points.
-		for(psPoint = apsFlagPosLists[i];psPoint;psPoint=psPoint->psNext)
+		for (psPoint = apsFlagPosLists[i]; psPoint; psPoint = psPoint->psNext)
 		{
 			dispX = psPoint->screenX;
 			dispY = psPoint->screenY;
 			dispR = psPoint->screenR;
-			if (DrawnInLastFrame(psPoint->frameNumber)==true)	// Only check DP's that are on screen
+			if (DrawnInLastFrame(psPoint->frameNumber) == true)	// Only check DP's that are on screen
 			{
-				if (mouseInBox(dispX-dispR, dispY-dispR, dispX+dispR, dispY+dispR))
+				if (mouseInBox(dispX - dispR, dispY - dispR, dispX + dispR, dispY + dispR))
 				{
 					// We HAVE clicked on DP!
 					return psPoint;
@@ -2183,14 +2212,14 @@ static OBJECT_POSITION *	checkMouseLoc(void)
 	return NULL;
 }
 
-static void dealWithRMB( void )
+static void dealWithRMB(void)
 {
 	BASE_OBJECT			*psClickedOn;
 	DROID				*psDroid;
 	STRUCTURE			*psStructure;
 
 	if (driveModeActive() || mouseOverRadar ||
-	    InGameOpUp == true || widgGetFromID(psWScreen,INTINGAMEOP))
+	    InGameOpUp == true || widgGetFromID(psWScreen, INTINGAMEOP))
 	{
 		return;
 	}
@@ -2201,7 +2230,7 @@ static void dealWithRMB( void )
 	if (psClickedOn != NULL)
 	{
 		/* We've got a droid or a structure */
-		if (psClickedOn->type == OBJ_DROID )
+		if (psClickedOn->type == OBJ_DROID)
 		{
 			/* We clicked on droid */
 			psDroid = (DROID *) psClickedOn;
@@ -2222,45 +2251,45 @@ static void dealWithRMB( void )
 						if (getDebugMappingStatus()) // cheating on, so output debug info
 						{
 							CONPRINTF(ConsoleString, (ConsoleString,
-										"%s - Damage %d%% - ID %d - experience %f, %s - order %s - action %s - sensor range %hu - ECM %u",
-										droidGetName(psDroid),
-										100 - clip(PERCENT(psDroid->body, psDroid->originalBody), 0, 100), psDroid->id,
-										psDroid->experience/65536.f, getDroidLevelName(psDroid), getDroidOrderName(psDroid->order.type), getDroidActionName(psDroid->action),
-										droidSensorRange(psDroid), droidConcealment(psDroid)));
+							                          "%s - Damage %d%% - ID %d - experience %f, %s - order %s - action %s - sensor range %hu - ECM %u",
+							                          droidGetName(psDroid),
+							                          100 - clip(PERCENT(psDroid->body, psDroid->originalBody), 0, 100), psDroid->id,
+							                          psDroid->experience / 65536.f, getDroidLevelName(psDroid), getDroidOrderName(psDroid->order.type), getDroidActionName(psDroid->action),
+							                          droidSensorRange(psDroid), droidConcealment(psDroid)));
 							FeedbackOrderGiven();
 						}
 						else
 #endif
-						if (godMode)
-						{
-							CONPRINTF(ConsoleString, (ConsoleString,
-									"%s - Damage %d%% - Serial ID %d - Experience %f order %d action %d, %s",
-									droidGetName(psDroid),
-									100 - clip(PERCENT(psDroid->body, psDroid->originalBody), 0, 100),
-									psDroid->id, psDroid->experience/65536.f, psDroid->order.type,
-									psDroid->action, getDroidLevelName(psDroid)));
-
-							FeedbackOrderGiven();
-						}
-						else
-						{
-							if(!psDroid->selected)
+							if (godMode)
 							{
 								CONPRINTF(ConsoleString, (ConsoleString,
-									_("%s - Damage %d%% - Experience %.1f, %s"),
-									droidGetName(psDroid),
-									100 - clip(PERCENT(psDroid->body,psDroid->originalBody), 0, 100),
-									psDroid->experience/65536.f, _(getDroidLevelName(psDroid))));
+								                          "%s - Damage %d%% - Serial ID %d - Experience %f order %d action %d, %s",
+								                          droidGetName(psDroid),
+								                          100 - clip(PERCENT(psDroid->body, psDroid->originalBody), 0, 100),
+								                          psDroid->id, psDroid->experience / 65536.f, psDroid->order.type,
+								                          psDroid->action, getDroidLevelName(psDroid)));
 
 								FeedbackOrderGiven();
 							}
-						}
+							else
+							{
+								if (!psDroid->selected)
+								{
+									CONPRINTF(ConsoleString, (ConsoleString,
+									                          _("%s - Damage %d%% - Experience %.1f, %s"),
+									                          droidGetName(psDroid),
+									                          100 - clip(PERCENT(psDroid->body, psDroid->originalBody), 0, 100),
+									                          psDroid->experience / 65536.f, _(getDroidLevelName(psDroid))));
+
+									FeedbackOrderGiven();
+								}
+							}
 						clearSelection();
 						dealWithDroidSelect(psDroid, false);
 					}
 					else
 					{
-						if (psDroid->selected!=true)
+						if (psDroid->selected != true)
 						{
 							clearSelection();
 							SelectDroid(psDroid);
@@ -2273,7 +2302,7 @@ static void dealWithRMB( void )
 				{
 					if (bMultiPlayer)
 					{
-						if (bRightClickOrders && psDroid->selected!=true)
+						if (bRightClickOrders && psDroid->selected != true)
 						{
 							clearSelection();
 							SelectDroid(psDroid);
@@ -2296,7 +2325,7 @@ static void dealWithRMB( void )
 				{
 					if (isHumanPlayer(psDroid->player))
 					{
-						CONPRINTF(ConsoleString, (ConsoleString,"%s",droidGetName(psDroid)));
+						CONPRINTF(ConsoleString, (ConsoleString, "%s", droidGetName(psDroid)));
 						FeedbackOrderGiven();
 					}
 				}
@@ -2324,7 +2353,7 @@ static void dealWithRMB( void )
 						intDemolishCancel();
 					}
 				}
-				else if (psStructure->selected==true)
+				else if (psStructure->selected == true)
 				{
 					psStructure->selected = false;
 					intObjectSelected(NULL);
@@ -2339,7 +2368,7 @@ static void dealWithRMB( void )
 					if (bRightClickOrders)
 					{
 						if ((psStructure->status == SS_BUILT) &&
-							(psStructure->pStructureType->type != REF_RESOURCE_EXTRACTOR))
+						    (psStructure->pStructureType->type != REF_RESOURCE_EXTRACTOR))
 						{
 							printStructureInfo(psStructure);
 
@@ -2373,35 +2402,35 @@ static void dealWithRMB( void )
 	else
 	{
 		/*Check for a Delivery Point*/
-		OBJECT_POSITION* psLocation = checkMouseLoc();
+		OBJECT_POSITION *psLocation = checkMouseLoc();
 
 		if (psLocation)
 		{
 			switch (psLocation->type)
 			{
-				case POS_DELIVERY:
-					if(psLocation->player == selectedPlayer)
+			case POS_DELIVERY:
+				if (psLocation->player == selectedPlayer)
+				{
+					if (bRightClickOrders)
 					{
-						if (bRightClickOrders)
+						startDeliveryPosition((FLAG_POSITION *)psLocation);
+					}
+					else
+					{
+						//centre the view on the owning Factory
+						psStructure = findDeliveryFactory((FLAG_POSITION *)psLocation);
+						if (psStructure)
 						{
-							startDeliveryPosition((FLAG_POSITION *)psLocation);
-						}
-						else
-						{
-							//centre the view on the owning Factory
-							psStructure = findDeliveryFactory((FLAG_POSITION *)psLocation);
-							if (psStructure)
-							{
-								setViewPos(map_coord(psStructure->pos.x),
-										   map_coord(psStructure->pos.y),
-										   true);
-							}
+							setViewPos(map_coord(psStructure->pos.x),
+							           map_coord(psStructure->pos.y),
+							           true);
 						}
 					}
-					break;
+				}
+				break;
 
-				default:
-					ASSERT(!"unknown object position type", "Unknown type from checkMouseLoc");
+			default:
+				ASSERT(!"unknown object position type", "Unknown type from checkMouseLoc");
 			}
 		}
 		else
@@ -2417,25 +2446,26 @@ static void dealWithRMB( void )
 return code, but also a pointer to the BASE_OBJECT) ... well if your going to be "object orientated" you might as well do it right
 - it sets it to null if we don't find anything
 */
-static MOUSE_TARGET	itemUnderMouse( BASE_OBJECT **ppObjectUnderMouse )
+static MOUSE_TARGET	itemUnderMouse(BASE_OBJECT **ppObjectUnderMouse)
 {
-UDWORD		i;
-MOUSE_TARGET retVal;
-BASE_OBJECT	 *psNotDroid;
-DROID		*psDroid;
-UDWORD		dispX,dispY,dispR;
-STRUCTURE	*psStructure;
+	UDWORD		i;
+	MOUSE_TARGET retVal;
+	BASE_OBJECT	 *psNotDroid;
+	DROID		*psDroid;
+	UDWORD		dispX, dispY, dispR;
+	STRUCTURE	*psStructure;
 
-	*ppObjectUnderMouse=NULL;
+	*ppObjectUnderMouse = NULL;
 
-	if(!driveModeActive() || driveTacticalActive()) {
-		if( (mouseTileX < 0) ||
-			(mouseTileY < 0) ||
-			(mouseTileX > (SDWORD)(mapWidth-1)) ||
-			(mouseTileY > (SDWORD)(mapHeight-1)) )
+	if (!driveModeActive() || driveTacticalActive())
+	{
+		if ((mouseTileX < 0) ||
+		    (mouseTileY < 0) ||
+		    (mouseTileX > (SDWORD)(mapWidth - 1)) ||
+		    (mouseTileY > (SDWORD)(mapHeight - 1)))
 		{
 			retVal = MT_BLOCKING;
-			return(retVal);
+			return (retVal);
 		}
 	}
 
@@ -2443,24 +2473,24 @@ STRUCTURE	*psStructure;
 	retVal = MT_NOTARGET;
 
 	/* First have a look through the droid lists */
-	for (i=0; i<MAX_PLAYERS; i++)
+	for (i = 0; i < MAX_PLAYERS; i++)
 	{
 		/* Note the !psObject check isn't really necessary as the goto will jump out */
-		for (psDroid = apsDroidLists[i]; psDroid && retVal==MT_NOTARGET;
-			psDroid = psDroid->psNext)
+		for (psDroid = apsDroidLists[i]; psDroid && retVal == MT_NOTARGET;
+		     psDroid = psDroid->psNext)
 		{
 			dispX = psDroid->sDisplay.screenX;
 			dispY = psDroid->sDisplay.screenY;
 			dispR = psDroid->sDisplay.screenR;
 			/* Only check droids that're on screen */
-			if(psDroid->sDisplay.frameNumber+1 == currentFrame && psDroid->visible[selectedPlayer] )
+			if (psDroid->sDisplay.frameNumber + 1 == currentFrame && psDroid->visible[selectedPlayer])
 			{
-				if (mouseInBox(dispX-dispR, dispY-dispR, dispX+dispR, dispY+dispR))
+				if (mouseInBox(dispX - dispR, dispY - dispR, dispX + dispR, dispY + dispR))
 				{
 					/* We HAVE clicked on droid! */
-					if(aiCheckAlliances(psDroid->player, selectedPlayer))
+					if (aiCheckAlliances(psDroid->player, selectedPlayer))
 					{
-						*ppObjectUnderMouse=(BASE_OBJECT *)psDroid;
+						*ppObjectUnderMouse = (BASE_OBJECT *)psDroid;
 						// need to check for command droids here as well
 						if (psDroid->droidType == DROID_SENSOR)
 						{
@@ -2474,7 +2504,7 @@ STRUCTURE	*psStructure;
 							}
 						}
 						else if (isTransporter(psDroid) &&
-								 selectedPlayer == psDroid->player)
+						         selectedPlayer == psDroid->player)
 						{
 							//check the transporter is not full
 							if (calcRemainingCapacity(psDroid))
@@ -2487,7 +2517,7 @@ STRUCTURE	*psStructure;
 							}
 						}
 						else if (psDroid->droidType == DROID_CONSTRUCT ||
-							psDroid->droidType == DROID_CYBORG_CONSTRUCT)
+						         psDroid->droidType == DROID_CYBORG_CONSTRUCT)
 						{
 							return MT_CONSTRUCT;
 						}
@@ -2516,11 +2546,11 @@ STRUCTURE	*psStructure;
 					}
 					else
 					{
-						*ppObjectUnderMouse=(BASE_OBJECT *)psDroid;
+						*ppObjectUnderMouse = (BASE_OBJECT *)psDroid;
 						retVal = MT_ENEMYDROID;
 					}
 					/* There's no point in checking other object types */
-					return(retVal);
+					return (retVal);
 				}
 			}
 		}
@@ -2528,7 +2558,8 @@ STRUCTURE	*psStructure;
 
 	/*	Not a droid, so maybe a structure or feature?
 		If still NULL after this then nothing */
-	if(driveModeActive() && !driveTacticalActive()) {
+	if (driveModeActive() && !driveTacticalActive())
+	{
 		psNotDroid = NULL;
 	}
 	else
@@ -2540,22 +2571,22 @@ STRUCTURE	*psStructure;
 		}
 	}
 
-	if(psNotDroid!=NULL)
+	if (psNotDroid != NULL)
 	{
-		*ppObjectUnderMouse=(BASE_OBJECT *)psNotDroid;
+		*ppObjectUnderMouse = (BASE_OBJECT *)psNotDroid;
 
-		if(psNotDroid->type == OBJ_FEATURE)
+		if (psNotDroid->type == OBJ_FEATURE)
 		{
-			if(   (((FEATURE *)psNotDroid)->psStats->subType == FEAT_GEN_ARTE)
-				|| (((FEATURE *)psNotDroid)->psStats->subType == FEAT_OIL_DRUM) )
+			if ((((FEATURE *)psNotDroid)->psStats->subType == FEAT_GEN_ARTE)
+			    || (((FEATURE *)psNotDroid)->psStats->subType == FEAT_OIL_DRUM))
 			{
 				retVal = MT_ARTIFACT;
 			}
-			else if(((FEATURE *)psNotDroid)->psStats->damageable)	//make damageable features return 'target' mouse pointer
+			else if (((FEATURE *)psNotDroid)->psStats->damageable)	//make damageable features return 'target' mouse pointer
 			{
 				retVal = MT_DAMFEATURE;
 			}
-			else if(((FEATURE *)psNotDroid)->psStats->subType == FEAT_OIL_RESOURCE)
+			else if (((FEATURE *)psNotDroid)->psStats->subType == FEAT_OIL_RESOURCE)
 			{
 				retVal = MT_RESOURCE;
 			}
@@ -2564,7 +2595,7 @@ STRUCTURE	*psStructure;
 				retVal = MT_BLOCKING;
 			}
 		}
-		else if(psNotDroid->type == OBJ_STRUCTURE)
+		else if (psNotDroid->type == OBJ_STRUCTURE)
 		{
 			psStructure = (STRUCTURE *)psNotDroid;
 
@@ -2575,9 +2606,9 @@ STRUCTURE	*psStructure;
 					retVal = MT_OWNSTRINCOMP;
 				}
 				// repair center.
-				else if(psStructure->pStructureType->type == REF_REPAIR_FACILITY)
+				else if (psStructure->pStructureType->type == REF_REPAIR_FACILITY)
 				{
-					if(buildingDamaged(psStructure))
+					if (buildingDamaged(psStructure))
 					{
 						retVal = MT_REPAIRDAM;
 					}
@@ -2588,9 +2619,9 @@ STRUCTURE	*psStructure;
 				}
 				//sensor tower
 				else if ((psStructure->pStructureType->pSensor) &&
-					(psStructure->pStructureType->pSensor->location == LOC_TURRET))
+				         (psStructure->pStructureType->pSensor->location == LOC_TURRET))
 				{
-					if(buildingDamaged(psStructure))
+					if (buildingDamaged(psStructure))
 					{
 						retVal = MT_SENSORSTRUCTDAM;
 					}
@@ -2601,7 +2632,7 @@ STRUCTURE	*psStructure;
 				}
 
 				// standard buildings. - check for buildingDamaged BEFORE upgrades
-				else if(buildingDamaged(psStructure))
+				else if (buildingDamaged(psStructure))
 				{
 					retVal = MT_OWNSTRDAM;
 				}
@@ -2626,11 +2657,11 @@ STRUCTURE	*psStructure;
 
 	/* Send the result back - if it's null then we clicked on an area of terrain */
 	/* make unseen objects just look like terrain. */
-	if(retVal == MT_NOTARGET || !(psNotDroid->visible[selectedPlayer])  )
+	if (retVal == MT_NOTARGET || !(psNotDroid->visible[selectedPlayer]))
 	{
 		retVal = MT_TERRAIN;
 	}
-	return(retVal);
+	return (retVal);
 }
 
 // Indicates the priority given to any given droid
@@ -2640,7 +2671,8 @@ STRUCTURE	*psStructure;
 // enum in DroidDef.h
 //
 #define NUM_DROID_WEIGHTS (14)
-UBYTE DroidSelectionWeights[NUM_DROID_WEIGHTS] = {
+UBYTE DroidSelectionWeights[NUM_DROID_WEIGHTS] =
+{
 	3,	//DROID_WEAPON,
 	1,	//DROID_SENSOR,
 	2,	//DROID_ECM,
@@ -2662,39 +2694,41 @@ UBYTE DroidSelectionWeights[NUM_DROID_WEIGHTS] = {
 	of multiple selections */
 static SELECTION_TYPE	establishSelection(UDWORD selectedPlayer)
 {
-DROID			*psDroid,*psDominant=NULL;
+	DROID			*psDroid, *psDominant = NULL;
 	UBYTE	CurrWeight;
-bool			atLeastOne;
-SELECTION_TYPE	selectionClass;
+	bool			atLeastOne;
+	SELECTION_TYPE	selectionClass;
 
 	atLeastOne = false;
 	selectionClass = SC_INVALID;
 	CurrWeight = UBYTE_MAX;
 
-	for(psDroid = apsDroidLists[selectedPlayer];
-			psDroid /*&& !atLeastOne*/; psDroid = psDroid->psNext)
+	for (psDroid = apsDroidLists[selectedPlayer];
+	     psDroid /*&& !atLeastOne*/; psDroid = psDroid->psNext)
 	{
 		// This works, uses the DroidSelectionWeights[] table to priorities the different
 		// droid types and find the dominant selection.
-		if(psDroid->selected) {
-			ASSERT( psDroid->droidType < NUM_DROID_WEIGHTS,
-				"establishSelection : droidType exceeds NUM_DROID_WEIGHTS" );
+		if (psDroid->selected)
+		{
+			ASSERT(psDroid->droidType < NUM_DROID_WEIGHTS,
+			       "establishSelection : droidType exceeds NUM_DROID_WEIGHTS");
 
 			atLeastOne = true;
-			if(DroidSelectionWeights[psDroid->droidType] < CurrWeight) {
+			if (DroidSelectionWeights[psDroid->droidType] < CurrWeight)
+			{
 				CurrWeight = DroidSelectionWeights[psDroid->droidType];
 				psDominant = psDroid;
 			}
 		}
 	}
 
-	if(atLeastOne)
+	if (atLeastOne)
 	{
 		psDominantSelected = psDominant;
-		switch(psDominant->droidType)
+		switch (psDominant->droidType)
 		{
 		case DROID_WEAPON:
-			if (proj_Direct( asWeaponStats + psDominant->asWeaps[0].nStat ))
+			if (proj_Direct(asWeaponStats + psDominant->asWeaps[0].nStat))
 			{
 				selectionClass = SC_DROID_DIRECT;
 			}
@@ -2749,7 +2783,7 @@ SELECTION_TYPE	selectionClass;
 
 		}
 	}
-	return(selectionClass);
+	return (selectionClass);
 }
 
 /* Just returns true if the building's present body points aren't 100 percent */
@@ -2767,8 +2801,8 @@ bool	repairDroidSelected(UDWORD player)
 	{
 		//if (psCurr->selected && psCurr->droidType == DROID_REPAIR)
 		if (psCurr->selected && (
-			psCurr->droidType == DROID_REPAIR ||
-			psCurr->droidType == DROID_CYBORG_REPAIR))
+		        psCurr->droidType == DROID_REPAIR ||
+		        psCurr->droidType == DROID_CYBORG_REPAIR))
 		{
 			return true;
 		}
@@ -2839,20 +2873,20 @@ void clearSel(void)
 	//FEATURE			*psFeat;
 	FLAG_POSITION	*psFlagPos;
 
-	for(psCurrDroid = apsDroidLists[selectedPlayer]; psCurrDroid;
-		psCurrDroid = psCurrDroid->psNext)
+	for (psCurrDroid = apsDroidLists[selectedPlayer]; psCurrDroid;
+	     psCurrDroid = psCurrDroid->psNext)
 	{
 		psCurrDroid->selected = false;
 	}
-	for(psStruct = apsStructLists[selectedPlayer]; psStruct;
-		psStruct = psStruct->psNext)
+	for (psStruct = apsStructLists[selectedPlayer]; psStruct;
+	     psStruct = psStruct->psNext)
 	{
 		psStruct->selected = false;
 	}
 	bLasSatStruct = false;
 	//clear the Deliv Point if one
 	for (psFlagPos = apsFlagPosLists[selectedPlayer]; psFlagPos;
-		psFlagPos = psFlagPos->psNext)
+	     psFlagPos = psFlagPos->psNext)
 	{
 		psFlagPos->selected = false;
 	}

@@ -198,7 +198,7 @@ static bool loadProductionUpgradeFunction(const char *pData)
 
 	//allocate storage
 	psFunction = (PRODUCTION_UPGRADE_FUNCTION *)malloc(sizeof
-	        (PRODUCTION_UPGRADE_FUNCTION));
+	             (PRODUCTION_UPGRADE_FUNCTION));
 	memset(psFunction, 0, sizeof(PRODUCTION_UPGRADE_FUNCTION));
 
 	//store the pointer in the Function Array
@@ -553,7 +553,7 @@ static bool loadStructureUpgradeFunction(const char *pData)
 
 	//allocate storage
 	psFunction = (STRUCTURE_UPGRADE_FUNCTION *)malloc(sizeof
-	        (STRUCTURE_UPGRADE_FUNCTION));
+	             (STRUCTURE_UPGRADE_FUNCTION));
 	memset(psFunction, 0, sizeof(STRUCTURE_UPGRADE_FUNCTION));
 
 	//store the pointer in the Function Array
@@ -598,7 +598,7 @@ static bool loadWallDefenceUpgradeFunction(const char *pData)
 
 	//allocate storage
 	psFunction = (WALLDEFENCE_UPGRADE_FUNCTION *)malloc(sizeof
-	        (WALLDEFENCE_UPGRADE_FUNCTION));
+	             (WALLDEFENCE_UPGRADE_FUNCTION));
 	memset(psFunction, 0, sizeof(WALLDEFENCE_UPGRADE_FUNCTION));
 
 	//store the pointer in the Function Array
@@ -664,15 +664,15 @@ static bool loadPowerGenFunction(const char *pData)
 	{
 		switch (game.power)
 		{
-			// Multiply by 3/4
+		// Multiply by 3/4
 		case LEV_LOW:
 			psFunction->powerMultiplier *= 3;
 			psFunction->powerMultiplier /= 4;
 			break;
-			// No change
+		// No change
 		case LEV_MED:
 			break;
-			// Multiply by 5/4
+		// Multiply by 5/4
 		case LEV_HI:
 			psFunction->powerMultiplier *= 5;
 			psFunction->powerMultiplier /= 4;
@@ -898,7 +898,7 @@ void structureBodyUpgrade(FUNCTION *pFunction, STRUCTURE *psBuilding)
 
 	prevBaseBody = (UWORD)structureBody(psBuilding);
 	newBaseBody = (UWORD)(structureBaseBody(psBuilding) +
-	        (structureBaseBody(psBuilding) * increase) / 100);
+	                      (structureBaseBody(psBuilding) * increase) / 100);
 
 	if (newBaseBody > prevBaseBody)
 	{
@@ -927,7 +927,7 @@ void structureArmourUpgrade(FUNCTION *pFunction, STRUCTURE *psBuilding)
 
 	prevBaseArmour = (UWORD)structureArmour(psBuilding->pStructureType, psBuilding->player);
 	newBaseArmour = (UWORD)(psBuilding->pStructureType->armourValue + (psBuilding->
-	        pStructureType->armourValue * increase) / 100);
+	                        pStructureType->armourValue * increase) / 100);
 
 	if (newBaseArmour > prevBaseArmour)
 	{
@@ -945,14 +945,14 @@ void structureResistanceUpgrade(FUNCTION *pFunction, STRUCTURE *psBuilding)
 	increase = ((STRUCTURE_UPGRADE_FUNCTION *)pFunction)->resistance;
 
 	prevBaseResistance = (UWORD)structureResistance(psBuilding->pStructureType,
-	        psBuilding->player);
+	                     psBuilding->player);
 	newBaseResistance = (UWORD)(psBuilding->pStructureType->resistance + (psBuilding
-	        ->pStructureType->resistance * increase) / 100);
+	                            ->pStructureType->resistance * increase) / 100);
 
 	if (newBaseResistance > prevBaseResistance)
 	{
 		psBuilding->resistance = (UWORD)((psBuilding->resistance * newBaseResistance) /
-		        prevBaseResistance);
+		                                 prevBaseResistance);
 	}
 }
 
@@ -1000,7 +1000,7 @@ void structureProductionUpgrade(STRUCTURE *psBuilding)
 	}
 
 	pFact->productionOutput = (UBYTE)(baseOutput + (pFactFunc->productionOutput *
-	        asProductionUpgrade[psBuilding->player][type].modifier) / 100);
+	                                  asProductionUpgrade[psBuilding->player][type].modifier) / 100);
 }
 
 void structureResearchUpgrade(STRUCTURE *psBuilding)
@@ -1028,7 +1028,7 @@ void structureResearchUpgrade(STRUCTURE *psBuilding)
 		}
 	}
 	pRes->researchPoints = baseOutput + (pResFunc->researchPoints *
-	        asResearchUpgrade[psBuilding->player].modifier) / 100;
+	                                     asResearchUpgrade[psBuilding->player].modifier) / 100;
 }
 
 void structureReArmUpgrade(STRUCTURE *psBuilding)
@@ -1044,7 +1044,7 @@ void structureReArmUpgrade(STRUCTURE *psBuilding)
 	       "structureReArmUpgrade: invalid Function pointer");
 
 	pPad->reArmPoints = pPadFunc->reArmPoints + (pPadFunc->reArmPoints *
-	        asReArmUpgrade[psBuilding->player].modifier) / 100;
+	                    asReArmUpgrade[psBuilding->player].modifier) / 100;
 }
 
 void structurePowerUpgrade(STRUCTURE *psBuilding)
@@ -1083,7 +1083,7 @@ void structureRepairUpgrade(STRUCTURE *psBuilding)
 	       "structureRepairUpgrade: invalid Function pointer");
 
 	pRepair->power = pRepairFunc->repairPoints + (pRepairFunc->repairPoints *
-	        asRepairFacUpgrade[psBuilding->player].modifier) / 100;
+	                 asRepairFacUpgrade[psBuilding->player].modifier) / 100;
 }
 
 void structureSensorUpgrade(STRUCTURE *psBuilding)
@@ -1126,7 +1126,7 @@ void droidBodyUpgrade(FUNCTION *pFunction, DROID *psDroid)
 	if (isTransporter(psDroid))
 	{
 		for (psCurr = psDroid->psGroup->psList; psCurr != NULL; psCurr =
-		        psCurr->psGrpNext)
+		         psCurr->psGrpNext)
 		{
 			if (psCurr != psDroid)
 			{

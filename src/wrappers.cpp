@@ -56,7 +56,7 @@ static bool		bPlayerHasLost = false;
 static bool		bPlayerHasWon = false;
 static UBYTE    scriptWinLoseVideo = PLAY_NONE;
 
-void	runCreditsScreen	( void );
+void	runCreditsScreen(void);
 
 static	UDWORD	lastChange = 0;
 bool hostlaunch = false;				// used to detect if we are hosting a game via command line option.
@@ -133,7 +133,7 @@ TITLECODE titleLoop(void)
 		firstcall = false;
 		// First check to see if --host was given as a command line option, if not,
 		// then check --join and if neither, run the normal game menu.
-		if( hostlaunch )
+		if (hostlaunch)
 		{
 			NetPlay.bComms = true; // use network = true
 			NetPlay.isUPNP_CONFIGURED = false;
@@ -147,7 +147,7 @@ TITLECODE titleLoop(void)
 			changeTitleMode(MULTIOPTION);
 			hostlaunch = false;			// reset the bool to default state.
 		}
-		else if(strlen(iptoconnect) )
+		else if (strlen(iptoconnect))
 		{
 			NetPlay.bComms = true; // use network = true
 			NETinit(true);
@@ -162,49 +162,51 @@ TITLECODE titleLoop(void)
 	}
 
 	if (titleMode != MULTIOPTION && titleMode != MULTILIMIT && titleMode != STARTGAME)
-		screen_disableMapPreview();
-
-	switch(titleMode) // run relevant title screen code.
 	{
-		// MULTIPLAYER screens
-		case PROTOCOL:
-			runConnectionScreen(); // multiplayer connection screen.
-			break;
-		case MULTIOPTION:
-			runMultiOptions();
-			break;
-		case GAMEFIND:
-			runGameFind();
-			break;
-		case MULTI:
-			runMultiPlayerMenu();
-			break;
-		case MULTILIMIT:
-			runLimitScreen();
-			break;
-		case KEYMAP:
-			runKeyMapEditor();
-			break;
+		screen_disableMapPreview();
+	}
 
-		case TITLE:
-			runTitleMenu();
-			break;
+	switch (titleMode) // run relevant title screen code.
+	{
+	// MULTIPLAYER screens
+	case PROTOCOL:
+		runConnectionScreen(); // multiplayer connection screen.
+		break;
+	case MULTIOPTION:
+		runMultiOptions();
+		break;
+	case GAMEFIND:
+		runGameFind();
+		break;
+	case MULTI:
+		runMultiPlayerMenu();
+		break;
+	case MULTILIMIT:
+		runLimitScreen();
+		break;
+	case KEYMAP:
+		runKeyMapEditor();
+		break;
 
-		case SINGLE:
-			runSinglePlayerMenu();
-			break;
+	case TITLE:
+		runTitleMenu();
+		break;
 
-		case TUTORIAL:
-			runTutorialMenu();
-			break;
+	case SINGLE:
+		runSinglePlayerMenu();
+		break;
+
+	case TUTORIAL:
+		runTutorialMenu();
+		break;
 
 //		case GRAPHICS:
 //			runGraphicsOptionsMenu();
 //			break;
 
-		case CREDITS:
-			runCreditsScreen();
-			break;
+	case CREDITS:
+		runCreditsScreen();
+		break;
 
 //		case DEMOMODE:
 //			runDemoMenu();
@@ -212,57 +214,57 @@ TITLECODE titleLoop(void)
 //	case VIDEO:
 //			runVideoOptionsMenu();
 //			break;
-		case OPTIONS:
-			runOptionsMenu();
-			break;
+	case OPTIONS:
+		runOptionsMenu();
+		break;
 
-		case GAME:
-			runGameOptionsMenu();
-			break;
+	case GAME:
+		runGameOptionsMenu();
+		break;
 
 
-		case GRAPHICS_OPTIONS:
-			runGraphicsOptionsMenu();
-			break;
+	case GRAPHICS_OPTIONS:
+		runGraphicsOptionsMenu();
+		break;
 
-		case AUDIO_OPTIONS:
-			runAudioOptionsMenu();
-			break;
+	case AUDIO_OPTIONS:
+		runAudioOptionsMenu();
+		break;
 
-		case VIDEO_OPTIONS:
-			runVideoOptionsMenu();
-			break;
+	case VIDEO_OPTIONS:
+		runVideoOptionsMenu();
+		break;
 
-		case MOUSE_OPTIONS:
-			runMouseOptionsMenu();
-			break;
+	case MOUSE_OPTIONS:
+		runMouseOptionsMenu();
+		break;
 
-		case QUIT:
-			RetCode = TITLECODE_QUITGAME;
-			break;
+	case QUIT:
+		RetCode = TITLECODE_QUITGAME;
+		break;
 
-		case STARTGAME:
-		case LOADSAVEGAME:
-  			if (titleMode == LOADSAVEGAME)
-			{
-				RetCode = TITLECODE_SAVEGAMELOAD;
-			}
-			else
-			{
-				RetCode = TITLECODE_STARTGAME;
-			}
-			return RetCode;			// don't flip!
+	case STARTGAME:
+	case LOADSAVEGAME:
+		if (titleMode == LOADSAVEGAME)
+		{
+			RetCode = TITLECODE_SAVEGAMELOAD;
+		}
+		else
+		{
+			RetCode = TITLECODE_STARTGAME;
+		}
+		return RetCode;			// don't flip!
 
-		case SHOWINTRO:
-			pie_SetFogStatus(false);
-	  		pie_ScreenFlip(CLEAR_BLACK);
-			changeTitleMode(TITLE);
-			RetCode = TITLECODE_SHOWINTRO;
-			break;
+	case SHOWINTRO:
+		pie_SetFogStatus(false);
+		pie_ScreenFlip(CLEAR_BLACK);
+		changeTitleMode(TITLE);
+		RetCode = TITLECODE_SHOWINTRO;
+		break;
 
-		default:
-			debug( LOG_FATAL, "unknown title screen mode" );
-			abort();
+	default:
+		debug(LOG_FATAL, "unknown title screen mode");
+		abort();
 	}
 	NETflush();  // Send any pending network data.
 
@@ -273,7 +275,8 @@ TITLECODE titleLoop(void)
 
 	if ((keyDown(KEY_LALT) || keyDown(KEY_RALT))
 	    /* Check for toggling display mode */
-	    && keyPressed(KEY_RETURN)) {
+	    && keyPressed(KEY_RETURN))
+	{
 		wzToggleFullscreen();
 	}
 	return RetCode;
@@ -308,12 +311,12 @@ void loadingScreenCallback(void)
 			stars[i].xPos = 1;
 		}
 		{
-		const int topX = barLeftX + stars[i].xPos;
-		const int topY = barLeftY + i * (boxHeight - starHeight) / starsNum;
-		const int botX = MIN(topX + stars[i].speed, barRightX);
-		const int botY = topY + starHeight;
+			const int topX = barLeftX + stars[i].xPos;
+			const int topY = barLeftY + i * (boxHeight - starHeight) / starsNum;
+			const int botX = MIN(topX + stars[i].speed, barRightX);
+			const int botY = topY + starHeight;
 
-		pie_UniTransBoxFill(topX, topY, botX, botY, stars[i].colour);
+			pie_UniTransBoxFill(topX, topY, botX, botY, stars[i].colour);
 		}
 	}
 
@@ -322,7 +325,7 @@ void loadingScreenCallback(void)
 }
 
 // fill buffers with the static screen
-void initLoadingScreen( bool drawbdrop )
+void initLoadingScreen(bool drawbdrop)
 {
 	setupLoadingScreen();
 	wzShowMouse(false);
@@ -365,13 +368,13 @@ void startCreditsScreen(void)
 }
 
 /* This function does nothing - since it's already been drawn */
-void runCreditsScreen( void )
+void runCreditsScreen(void)
 {
 	// Check for key presses now.
-	if( keyReleased(KEY_ESC)
-	   || keyReleased(KEY_SPACE)
-	   || mouseReleased(MOUSE_LMB)
-	   || gameTime - lastChange > 4000 )
+	if (keyReleased(KEY_ESC)
+	    || keyReleased(KEY_SPACE)
+	    || mouseReleased(MOUSE_LMB)
+	    || gameTime - lastChange > 4000)
 	{
 		lastChange = gameTime;
 		changeTitleMode(QUIT);
@@ -398,11 +401,11 @@ void closeLoadingScreen(void)
 
 bool displayGameOver(bool bDidit)
 {
-	if(bDidit)
+	if (bDidit)
 	{
 		setPlayerHasWon(true);
 		multiplayerWinSequence(true);
-		if(bMultiPlayer)
+		if (bMultiPlayer)
 		{
 			updateMultiStatsWins();
 		}
@@ -410,7 +413,7 @@ bool displayGameOver(bool bDidit)
 	else
 	{
 		setPlayerHasLost(true);
-		if(bMultiPlayer)
+		if (bMultiPlayer)
 		{
 			updateMultiStatsLoses();
 		}
@@ -430,24 +433,24 @@ bool displayGameOver(bool bDidit)
 
 
 ////////////////////////////////////////////////////////////////////////////////
-bool testPlayerHasLost( void )
+bool testPlayerHasLost(void)
 {
-	return(bPlayerHasLost);
+	return (bPlayerHasLost);
 }
 
-void setPlayerHasLost( bool val )
+void setPlayerHasLost(bool val)
 {
 	bPlayerHasLost = val;
 }
 
 
 ////////////////////////////////////////////////////////////////////////////////
-bool testPlayerHasWon( void )
+bool testPlayerHasWon(void)
 {
-	return(bPlayerHasWon);
+	return (bPlayerHasWon);
 }
 
-void setPlayerHasWon( bool val )
+void setPlayerHasWon(bool val)
 {
 	bPlayerHasWon = val;
 }
@@ -455,10 +458,10 @@ void setPlayerHasWon( bool val )
 /*access functions for scriptWinLoseVideo - used to indicate when the script is playing the win/lose video*/
 void setScriptWinLoseVideo(UBYTE val)
 {
-    scriptWinLoseVideo = val;
+	scriptWinLoseVideo = val;
 }
 
 UBYTE getScriptWinLoseVideo(void)
 {
-    return scriptWinLoseVideo;
+	return scriptWinLoseVideo;
 }

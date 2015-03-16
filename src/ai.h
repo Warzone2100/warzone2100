@@ -72,7 +72,7 @@ void aiObjectAddExpectedDamage(BASE_OBJECT *psObject, SDWORD damage);
 
 /* See if there is a target in range added int weapon_slot*/
 bool aiChooseTarget(BASE_OBJECT *psObj,
-						   BASE_OBJECT **ppsTarget, int weapon_slot, bool bUpdateTarget, UWORD *targetOrigin);
+                    BASE_OBJECT **ppsTarget, int weapon_slot, bool bUpdateTarget, UWORD *targetOrigin);
 
 /** See if there is a target in range for Sensor objects. */
 bool aiChooseSensorTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget);

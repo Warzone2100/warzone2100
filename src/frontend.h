@@ -54,7 +54,7 @@ extern tMode lastTitleMode;
 
 #define MAX_LEVEL_NAME_SIZE	(256)
 
-extern char	aLevelName[MAX_LEVEL_NAME_SIZE+1];	//256];			// vital! the wrf file to use.
+extern char	aLevelName[MAX_LEVEL_NAME_SIZE + 1];	//256];			// vital! the wrf file to use.
 
 extern bool	bLimiterLoaded;
 

@@ -409,21 +409,21 @@ void selNextSpecifiedUnit(DROID_TYPE unitType)
 	}
 	else
 	{
-		switch(unitType)
+		switch (unitType)
 		{
-			case	DROID_REPAIR:
-				addConsoleMessage(_("Unable to locate any repair units!"), LEFT_JUSTIFY, SYSTEM_MESSAGE);
-				break;
-			case	DROID_CONSTRUCT:
-				addConsoleMessage(_("Unable to locate any Trucks!"), LEFT_JUSTIFY, SYSTEM_MESSAGE);
-				break;
-			case	DROID_SENSOR:
-				addConsoleMessage(_("Unable to locate any Sensor Units!"), LEFT_JUSTIFY, SYSTEM_MESSAGE);
-				break;
-			case	DROID_COMMAND:
-				addConsoleMessage(_("Unable to locate any Commanders!"), LEFT_JUSTIFY, SYSTEM_MESSAGE);
-			default:
-				break;
+		case	DROID_REPAIR:
+			addConsoleMessage(_("Unable to locate any repair units!"), LEFT_JUSTIFY, SYSTEM_MESSAGE);
+			break;
+		case	DROID_CONSTRUCT:
+			addConsoleMessage(_("Unable to locate any Trucks!"), LEFT_JUSTIFY, SYSTEM_MESSAGE);
+			break;
+		case	DROID_SENSOR:
+			addConsoleMessage(_("Unable to locate any Sensor Units!"), LEFT_JUSTIFY, SYSTEM_MESSAGE);
+			break;
+		case	DROID_COMMAND:
+			addConsoleMessage(_("Unable to locate any Commanders!"), LEFT_JUSTIFY, SYSTEM_MESSAGE);
+		default:
+			break;
 		}
 	}
 }
@@ -526,7 +526,7 @@ void selNextSpecifiedBuilding(STRUCTURE_TYPE structType)
 		}
 	}
 
-	if(!psResult && psFirst)
+	if (!psResult && psFirst)
 	{
 		psResult = psFirst;
 	}
@@ -623,75 +623,75 @@ unsigned int selDroidSelection(unsigned int player, SELECTION_CLASS droidClass, 
 	/* Establish the class of selection */
 	switch (droidClass)
 	{
-		case DS_ALL_UNITS:
-			retVal = selSelectAllUnits(player, bOnScreen);
+	case DS_ALL_UNITS:
+		retVal = selSelectAllUnits(player, bOnScreen);
+		break;
+	case DS_BY_TYPE:
+		switch (droidType)
+		{
+		case DST_VTOL:
+			retVal = selSelectAllSameProp(player, PROPULSION_TYPE_LIFT, bOnScreen);
 			break;
-		case DS_BY_TYPE:
-			switch (droidType)
-			{
-				case DST_VTOL:
-					retVal = selSelectAllSameProp(player, PROPULSION_TYPE_LIFT, bOnScreen);
-					break;
-				case DST_HOVER:
-					retVal = selSelectAllSameProp(player, PROPULSION_TYPE_HOVER, bOnScreen);
-					break;
-				case DST_WHEELED:
-					retVal = selSelectAllSameProp(player, PROPULSION_TYPE_WHEELED, bOnScreen);
-					break;
-				case DST_TRACKED:
-					retVal = selSelectAllSameProp(player, PROPULSION_TYPE_TRACKED, bOnScreen);
-					break;
-				case DST_HALF_TRACKED:
-					retVal = selSelectAllSameProp(player, PROPULSION_TYPE_HALF_TRACKED, bOnScreen);
-					break;
-				case DST_CYBORG:
-					retVal = selSelectAllSameProp(player, PROPULSION_TYPE_LEGGED, bOnScreen);
-					break;
-				case DST_ENGINEER:
-					retVal = selSelectAllSameDroid(player, DROID_CYBORG_CONSTRUCT, bOnScreen);
-					break;
-				case DST_MECHANIC:
-					retVal = selSelectAllSameDroid(player, DROID_CYBORG_REPAIR, bOnScreen);
-					break;
-				case DST_TRANSPORTER:
-					retVal = selSelectAllSameDroid(player, DROID_TRANSPORTER, bOnScreen);
-					break;
-				case DST_REPAIR_TANK:
-					retVal = selSelectAllSameDroid(player, DROID_REPAIR, bOnScreen);
-					break;
-				case DST_SENSOR:
-					retVal = selSelectAllSameDroid(player, DROID_SENSOR, bOnScreen);
-					break;
-				case DST_TRUCK:
-					retVal = selSelectAllSameDroid(player, DROID_CONSTRUCT, bOnScreen);
-					break;
-				case DST_ALL_COMBAT:
-					retVal = selSelectAllCombat(player, bOnScreen);
-					break;
-				case DST_ALL_COMBAT_LAND:
-					retVal = selSelectAllCombatLand(player, bOnScreen);
-					break;
-				case DST_ALL_COMBAT_CYBORG:
-					retVal = selSelectAllCombatCyborg(player, bOnScreen);
-					break;
-				case DST_ALL_DAMAGED:
-					retVal = selSelectAllDamaged(player, bOnScreen);
-					break;
-				case DST_ALL_SAME:
-					retVal = selSelectAllSame(player, bOnScreen);
-					break;
-				default:
-					ASSERT(false, "Invalid selection type");
-			}
+		case DST_HOVER:
+			retVal = selSelectAllSameProp(player, PROPULSION_TYPE_HOVER, bOnScreen);
+			break;
+		case DST_WHEELED:
+			retVal = selSelectAllSameProp(player, PROPULSION_TYPE_WHEELED, bOnScreen);
+			break;
+		case DST_TRACKED:
+			retVal = selSelectAllSameProp(player, PROPULSION_TYPE_TRACKED, bOnScreen);
+			break;
+		case DST_HALF_TRACKED:
+			retVal = selSelectAllSameProp(player, PROPULSION_TYPE_HALF_TRACKED, bOnScreen);
+			break;
+		case DST_CYBORG:
+			retVal = selSelectAllSameProp(player, PROPULSION_TYPE_LEGGED, bOnScreen);
+			break;
+		case DST_ENGINEER:
+			retVal = selSelectAllSameDroid(player, DROID_CYBORG_CONSTRUCT, bOnScreen);
+			break;
+		case DST_MECHANIC:
+			retVal = selSelectAllSameDroid(player, DROID_CYBORG_REPAIR, bOnScreen);
+			break;
+		case DST_TRANSPORTER:
+			retVal = selSelectAllSameDroid(player, DROID_TRANSPORTER, bOnScreen);
+			break;
+		case DST_REPAIR_TANK:
+			retVal = selSelectAllSameDroid(player, DROID_REPAIR, bOnScreen);
+			break;
+		case DST_SENSOR:
+			retVal = selSelectAllSameDroid(player, DROID_SENSOR, bOnScreen);
+			break;
+		case DST_TRUCK:
+			retVal = selSelectAllSameDroid(player, DROID_CONSTRUCT, bOnScreen);
+			break;
+		case DST_ALL_COMBAT:
+			retVal = selSelectAllCombat(player, bOnScreen);
+			break;
+		case DST_ALL_COMBAT_LAND:
+			retVal = selSelectAllCombatLand(player, bOnScreen);
+			break;
+		case DST_ALL_COMBAT_CYBORG:
+			retVal = selSelectAllCombatCyborg(player, bOnScreen);
+			break;
+		case DST_ALL_DAMAGED:
+			retVal = selSelectAllDamaged(player, bOnScreen);
+			break;
+		case DST_ALL_SAME:
+			retVal = selSelectAllSame(player, bOnScreen);
 			break;
 		default:
-			ASSERT(false,"Invalid selection attempt");
-			break;
+			ASSERT(false, "Invalid selection type");
+		}
+		break;
+	default:
+		ASSERT(false, "Invalid selection attempt");
+		break;
 	}
 
 	/* Send back the return value */
 	char selInfo[255];
 	snprintf(selInfo, sizeof(selInfo), ngettext("%u unit selected", "%u units selected", retVal), retVal);
-	addConsoleMessage(selInfo, RIGHT_JUSTIFY,SYSTEM_MESSAGE);
+	addConsoleMessage(selInfo, RIGHT_JUSTIFY, SYSTEM_MESSAGE);
 	return retVal;
 }

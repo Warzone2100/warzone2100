@@ -25,7 +25,7 @@
 #define __INCLUDED_SRC_CLPARSE_H__
 
 // parse the commandline
-bool ParseCommandLine(int argc, const char** argv);
-bool ParseCommandLineEarly(int argc, const char** argv);
+bool ParseCommandLine(int argc, const char **argv);
+bool ParseCommandLineEarly(int argc, const char **argv);
 
 #endif // __INCLUDED_SRC_CLPARSE_H__

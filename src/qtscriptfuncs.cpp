@@ -59,7 +59,7 @@
 
 // hack, this is used from scriptfuncs.cpp -- and we don't want to include any stinkin' wzscript headers here!
 // TODO, move this stuff into a script common subsystem
-extern bool structDoubleCheck(BASE_STATS *psStat,UDWORD xx,UDWORD yy, SDWORD maxBlockingTiles);
+extern bool structDoubleCheck(BASE_STATS *psStat, UDWORD xx, UDWORD yy, SDWORD maxBlockingTiles);
 extern Vector2i positions[MAX_PLAYERS];
 extern std::vector<Vector2i> derricks;
 
@@ -101,7 +101,7 @@ QScriptValue convResearch(RESEARCH *psResearch, QScriptEngine *engine, int playe
 //;; \begin{description}
 //;; \item[status] The completeness status of the structure. It will be one of BEING_BUILT and BUILT.
 //;; \item[type] The type will always be STRUCTURE.
-//;; \item[stattype] The stattype defines the type of structure. It will be one of HQ, FACTORY, POWER_GEN, RESOURCE_EXTRACTOR, 
+//;; \item[stattype] The stattype defines the type of structure. It will be one of HQ, FACTORY, POWER_GEN, RESOURCE_EXTRACTOR,
 //;; LASSAT, DEFENSE, WALL, RESEARCH_LAB, REPAIR_FACILITY, CYBORG_FACTORY, VTOL_FACTORY, REARM_PAD, SAT_UPLINK, GATE
 //;; and COMMAND_CONTROL.
 //;; \item[modules] If the stattype is set to one of the factories, POWER_GEN or RESEARCH_LAB, then this property is set to the
@@ -286,7 +286,13 @@ QScriptValue convMax(BASE_OBJECT *psObj, QScriptEngine *engine)
 // Label system (function defined in qtscript.h header)
 //
 
-struct labeltype { Vector2i p1, p2; int id; int type; int player; };
+struct labeltype
+{
+	Vector2i p1, p2;
+	int id;
+	int type;
+	int player;
+};
 
 static QHash<QString, labeltype> labels;
 
@@ -397,7 +403,7 @@ bool writeLabels(const char *filename)
 // All script functions should be prefixed with "js_" then followed by same name as in script.
 
 //-- \subsection{label(key)}
-//-- Fetch something denoted by a label. A label refers to an area, a position or a \emph{game object} on 
+//-- Fetch something denoted by a label. A label refers to an area, a position or a \emph{game object} on
 //-- the map defined using the map editor and stored together with the map. The only argument
 //-- is a text label. The function returns an object that has a type variable defining what it
 //-- is (in case this is unclear). This type will be one of DROID, STRUCTURE, FEATURE, AREA
@@ -424,25 +430,37 @@ static QScriptValue js_label(QScriptContext *context, QScriptEngine *engine)
 		else if (p.type == OBJ_DROID)
 		{
 			DROID *psDroid = IdToDroid(p.id, p.player);
-			if (psDroid) ret = convDroid(psDroid, engine);
+			if (psDroid)
+			{
+				ret = convDroid(psDroid, engine);
+			}
 		}
 		else if (p.type == OBJ_STRUCTURE)
 		{
 			STRUCTURE *psStruct = IdToStruct(p.id, p.player);
-			if (psStruct) ret = convStructure(psStruct, engine);
+			if (psStruct)
+			{
+				ret = convStructure(psStruct, engine);
+			}
 		}
 		else if (p.type == OBJ_FEATURE)
 		{
 			FEATURE *psFeature = IdToFeature(p.id, p.player);
-			if (psFeature) ret = convFeature(psFeature, engine);
+			if (psFeature)
+			{
+				ret = convFeature(psFeature, engine);
+			}
 		}
 	}
-	else debug(LOG_ERROR, "label %s not found!", label.toUtf8().constData());
+	else
+	{
+		debug(LOG_ERROR, "label %s not found!", label.toUtf8().constData());
+	}
 	return ret;
 }
 
 //-- \subsection{enumBlips(player)}
-//-- Return an array containing all the non-transient radar blips that the given player 
+//-- Return an array containing all the non-transient radar blips that the given player
 //-- can see. This includes sensors revealed by radar detectors, as well as ECM jammers.
 //-- It does not include units going out of view.
 static QScriptValue js_enumBlips(QScriptContext *context, QScriptEngine *engine)
@@ -587,7 +605,7 @@ static QScriptValue js_pursueResearch(QScriptContext *context, QScriptEngine *en
 				{
 					int bits = asPlayerResList[i][cur->index].ResearchStatus;
 					started = started || (bits & STARTED_RESEARCH) || (bits & STARTED_RESEARCH_PENDING)
-							|| (bits & RESBITS_PENDING_ONLY) || (bits & RESEARCHED);
+					          || (bits & RESBITS_PENDING_ONLY) || (bits & RESEARCHED);
 				}
 			}
 			if (!started) // found relevant item on the path?
@@ -598,7 +616,7 @@ static QScriptValue js_pursueResearch(QScriptContext *context, QScriptEngine *en
 				sprintf(sTemp, "player:%d starts topic from script: %s", player, cur->pName);
 				NETlogEntry(sTemp, SYNC_FLAG, 0);
 #endif
-				debug(LOG_SCRIPT, "Started research in %d's %s(%d) of %s", player, 
+				debug(LOG_SCRIPT, "Started research in %d's %s(%d) of %s", player,
 				      objInfo(psStruct), psStruct->id, cur->pName);
 				return QScriptValue(true);
 			}
@@ -618,7 +636,7 @@ static QScriptValue js_pursueResearch(QScriptContext *context, QScriptEngine *en
 		{
 			cur = reslist.takeFirst(); // retrieve options from the stack
 		}
-		ASSERT_OR_RETURN(QScriptValue(false), ++iterations < asResearch.size()*100 || !cur, "Possible cyclic dependencies in prerequisites, possibly of research \"%s\".", cur->pName);
+		ASSERT_OR_RETURN(QScriptValue(false), ++iterations < asResearch.size() * 100 || !cur, "Possible cyclic dependencies in prerequisites, possibly of research \"%s\".", cur->pName);
 	}
 	debug(LOG_SCRIPT, "No research topic found for %s(%d)", objInfo(psStruct), psStruct->id);
 	return QScriptValue(false); // none found
@@ -688,7 +706,7 @@ static QScriptValue js_addDroid(QScriptContext *context, QScriptEngine *engine)
 	DROID_TYPE droidType = (DROID_TYPE)context->argument(7).toInt32();
 	int numTurrets = context->argumentCount() - 8; // anything beyond first eight parameters, are turrets
 	COMPONENT_TYPE compType = COMP_NUMCOMPONENTS;
-	
+
 	memset(psTemplate->asParts, 0, sizeof(psTemplate->asParts)); // reset to defaults
 	memset(psTemplate->asWeaps, 0, sizeof(psTemplate->asWeaps));
 	int body = getCompFromName(COMP_BODY, context->argument(4).toString().toUtf8().constData());
@@ -722,7 +740,7 @@ static QScriptValue js_addDroid(QScriptContext *context, QScriptEngine *engine)
 			j = getCompFromName(COMP_WEAPON, context->argument(8 + i).toString().toUtf8().constData());
 			if (j < 0)
 			{
-				debug(LOG_SCRIPT, "Wanted to build %s at (%d, %d), but no weapon unavailable", 
+				debug(LOG_SCRIPT, "Wanted to build %s at (%d, %d), but no weapon unavailable",
 				      templName.toUtf8().constData(), x, y);
 				return QScriptValue(false);
 			}
@@ -838,7 +856,7 @@ static QScriptValue js_buildDroid(QScriptContext *context, QScriptEngine *engine
 	STRUCTURE *psStruct = IdToStruct(id, player);
 	SCRIPT_ASSERT(context, psStruct, "No such structure id %d belonging to player %d", id, player);
 	SCRIPT_ASSERT(context, (psStruct->pStructureType->type == REF_FACTORY || psStruct->pStructureType->type == REF_CYBORG_FACTORY
-		       || psStruct->pStructureType->type == REF_VTOL_FACTORY), "Structure %s is not a factory", objInfo(psStruct));
+	                        || psStruct->pStructureType->type == REF_VTOL_FACTORY), "Structure %s is not a factory", objInfo(psStruct));
 	QString templName = context->argument(1).toString();
 	DROID_TEMPLATE *psTemplate = new DROID_TEMPLATE;
 	DROID_TYPE droidType = (DROID_TYPE)context->argument(5).toInt32();
@@ -882,7 +900,7 @@ static QScriptValue js_buildDroid(QScriptContext *context, QScriptEngine *engine
 			j = get_first_available_component(psStruct, context->argument(6 + i), COMP_WEAPON);
 			if (j < 0)
 			{
-				debug(LOG_SCRIPT, "Wanted to build %s at %s, but no weapon unavailable", 
+				debug(LOG_SCRIPT, "Wanted to build %s at %s, but no weapon unavailable",
 				      templName.toUtf8().constData(), objInfo(psStruct));
 				return QScriptValue(false);
 			}
@@ -913,7 +931,7 @@ static QScriptValue js_buildDroid(QScriptContext *context, QScriptEngine *engine
 		j = get_first_available_component(psStruct, context->argument(6 + i), compType);
 		if (j < 0)
 		{
-			debug(LOG_SCRIPT, "Wanted to build %s at %s, but turret unavailable", 
+			debug(LOG_SCRIPT, "Wanted to build %s at %s, but turret unavailable",
 			      templName.toUtf8().constData(), objInfo(psStruct));
 			return QScriptValue(false);
 		}
@@ -1183,9 +1201,9 @@ static QScriptValue js_pickStructLocation(QScriptContext *context, QScriptEngine
 	Vector2i offset(psStat->baseWidth * (TILE_UNITS / 2), psStat->baseBreadth * (TILE_UNITS / 2));
 
 	// save a lot of typing... checks whether a position is valid
-	#define LOC_OK(_x, _y) (tileOnMap(_x, _y) && \
-				(!psDroid || fpathCheck(psDroid->pos, Vector3i(world_coord(_x), world_coord(_y), 0), PROPULSION_TYPE_WHEELED)) \
-				&& validLocation(psStat, world_coord(Vector2i(_x, _y)) + offset, 0, player, false) && structDoubleCheck(psStat, _x, _y, maxBlockingTiles))
+#define LOC_OK(_x, _y) (tileOnMap(_x, _y) && \
+                        (!psDroid || fpathCheck(psDroid->pos, Vector3i(world_coord(_x), world_coord(_y), 0), PROPULSION_TYPE_WHEELED)) \
+                        && validLocation(psStat, world_coord(Vector2i(_x, _y)) + offset, 0, player, false) && structDoubleCheck(psStat, _x, _y, maxBlockingTiles))
 
 	// first try the original location
 	if (LOC_OK(startX, startY))
@@ -1318,8 +1336,8 @@ static QScriptValue js_groupAddArea(QScriptContext *context, QScriptEngine *engi
 	DROID_GROUP *psGroup = grpFind(groupId);
 
 	SCRIPT_ASSERT(context, psGroup, "Invalid group index %d", groupId);
-	SCRIPT_ASSERT(context, !psGroup->psList || psGroup->psList->player == player, 
-	              "Group %d belongs to player %d, not player %d", 
+	SCRIPT_ASSERT(context, !psGroup->psList || psGroup->psList->player == player,
+	              "Group %d belongs to player %d, not player %d",
 	              groupId, psGroup->psList->player, player);
 	for (DROID *psDroid = apsDroidLists[player]; psGroup && psDroid; psDroid = psDroid->psNext)
 	{
@@ -1344,8 +1362,8 @@ static QScriptValue js_groupAddDroid(QScriptContext *context, QScriptEngine *eng
 	DROID *psDroid = IdToDroid(droidId, droidPlayer);
 	SCRIPT_ASSERT(context, psGroup, "Invalid group index %d", groupId);
 	SCRIPT_ASSERT(context, psDroid, "Invalid droid index %d", droidId);
-	SCRIPT_ASSERT(context, !psGroup->psList || psGroup->psList->player == psDroid->player, 
-	              "Group %d belongs to player %d, not player %d, cannot add %s", 
+	SCRIPT_ASSERT(context, !psGroup->psList || psGroup->psList->player == psDroid->player,
+	              "Group %d belongs to player %d, not player %d, cannot add %s",
 	              groupId, psGroup->psList->player, psDroid->player, objInfo(psDroid));
 	psGroup->add(psDroid);
 	return QScriptValue();
@@ -1484,7 +1502,7 @@ static QScriptValue js_setReinforcementTime(QScriptContext *context, QScriptEngi
 {
 	int value = context->argument(0).toInt32() * 100;
 	SCRIPT_ASSERT(context, value == LZ_COMPROMISED_TIME || value < 60 * 60 * GAME_TICKS_PER_SEC,
-	                 "The transport timer cannot be set to more than 1 hour!");
+	              "The transport timer cannot be set to more than 1 hour!");
 	mission.ETA = value;
 	if (missionCanReEnforce())
 	{
@@ -1495,7 +1513,7 @@ static QScriptValue js_setReinforcementTime(QScriptContext *context, QScriptEngi
 		DROID *psDroid;
 
 		intRemoveTransporterTimer();
-		/* Only remove the launch if haven't got a transporter droid since the scripts set the 
+		/* Only remove the launch if haven't got a transporter droid since the scripts set the
 		 * time to -1 at the between stage if there are not going to be reinforcements on the submap  */
 		for (psDroid = apsDroidLists[selectedPlayer]; psDroid != NULL; psDroid = psDroid->psNext)
 		{
@@ -1562,7 +1580,9 @@ static QScriptValue js_playSound(QScriptContext *context, QScriptEngine *engine)
 	QString sound = context->argument(0).toString();
 	int soundID = audio_GetTrackID(sound.toUtf8().constData());
 	if (soundID == SAMPLE_NOT_FOUND)
+	{
 		soundID = audio_SetTrackVals(sound.toUtf8().constData(), false, 100, 1800);
+	}
 	if (context->argumentCount() > 1)
 	{
 		int x = world_coord(context->argument(1).toInt32());
@@ -1593,7 +1613,7 @@ static QScriptValue js_gameOverMessage(QScriptContext *context, QScriptEngine *e
 	VIEWDATA *psViewData;
 	if (gameWon)
 	{
-		 psViewData = getViewData("WIN");
+		psViewData = getViewData("WIN");
 		addConsoleMessage(_("YOU ARE VICTORIOUS!"), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 	}
 	else
@@ -1883,7 +1903,7 @@ static QScriptValue js_isStructureAvailable(QScriptContext *context, QScriptEngi
 	SCRIPT_ASSERT(context, index >= 0, "%s not found", building.toUtf8().constData());
 	int player = context->argument(1).toInt32();
 	return QScriptValue(apStructTypeLists[player][index] == AVAILABLE
-			    && asStructLimits[player][index].currentQuantity < asStructLimits[player][index].limit);
+	                    && asStructLimits[player][index].currentQuantity < asStructLimits[player][index].limit);
 }
 
 //-- \subsection{isVTOL(droid)}
@@ -2056,7 +2076,7 @@ static QScriptValue js_setNoGoArea(QScriptContext *context, QScriptEngine *)
 	SCRIPT_ASSERT(context, x2 <= mapWidth, "Maximum scroll x value %d is greater than mapWidth %d", x2, (int)mapWidth);
 	SCRIPT_ASSERT(context, y2 <= mapHeight, "Maximum scroll y value %d is greater than mapHeight %d", y2, (int)mapHeight);
 	SCRIPT_ASSERT(context, player < game.maxPlayers && player >= -1, "Bad player value %d", player);
-	
+
 	if (player == -1)
 	{
 		setNoGoArea(x1, y1, x2, y2, LIMBO_LANDING);
@@ -2095,9 +2115,9 @@ static QScriptValue js_setScrollParams(QScriptContext *context, QScriptEngine *)
 
 	// When the scroll limits change midgame - need to redo the lighting
 	initLighting(prevMinX < scrollMinX ? prevMinX : scrollMinX,
-				 prevMinY < scrollMinY ? prevMinY : scrollMinY,
-				 prevMaxX < scrollMaxX ? prevMaxX : scrollMaxX,
-				 prevMaxY < scrollMaxY ? prevMaxY : scrollMaxY);
+	             prevMinY < scrollMinY ? prevMinY : scrollMinY,
+	             prevMaxX < scrollMaxX ? prevMaxX : scrollMaxX,
+	             prevMaxY < scrollMaxY ? prevMaxY : scrollMaxY);
 
 	// need to reset radar to take into account of new size
 	resizeRadar();
@@ -2143,7 +2163,7 @@ static QScriptValue js_hackNetOn(QScriptContext *, QScriptEngine *)
 //-- \subsection{getDroidLimit([player[, unit type]])}
 //-- Return maximum number of droids that this player can produce. This limit is usually
 //-- fixed throughout a game and the same for all players. If no arguments are passed,
-//-- returns general unit limit for the current player. If a second, unit type argument 
+//-- returns general unit limit for the current player. If a second, unit type argument
 //-- is passed, the limit for this unit type is returned, which may be different from
 //-- the general unit limit (eg for commanders and construction droids).
 static QScriptValue js_getDroidLimit(QScriptContext *context, QScriptEngine *engine)
@@ -2335,9 +2355,9 @@ bool registerFunctions(QScriptEngine *engine)
 	engine->globalObject().setProperty("playerData", playerData, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 
 	// Static map knowledge about start positions
-	//== \item[derrickPositions] An array of derrick starting positions on the current map. Each item in the array is an 
+	//== \item[derrickPositions] An array of derrick starting positions on the current map. Each item in the array is an
 	//== object containing the x and y variables for a derrick.
-	//== \item[startPositions] An array of player start positions on the current map. Each item in the array is an 
+	//== \item[startPositions] An array of player start positions on the current map. Each item in the array is an
 	//== object containing the x and y variables for a player start position.
 	QScriptValue startPositions = engine->newArray(game.maxPlayers);
 	for (int i = 0; i < game.maxPlayers; i++)

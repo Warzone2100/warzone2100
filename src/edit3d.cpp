@@ -17,11 +17,11 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-	/*
-	Edit3D.c - to ultimately contain the map editing functions -
-	they are presently scattered in various files .
-	Alex McLean, Pumpkin Studios, EIDOS Interactive, 1997
-	*/
+/*
+Edit3D.c - to ultimately contain the map editing functions -
+they are presently scattered in various files .
+Alex McLean, Pumpkin Studios, EIDOS Interactive, 1997
+*/
 
 #include "lib/framework/frame.h"
 #include "map.h"
@@ -67,7 +67,7 @@ void raiseTile(int tile3dX, int tile3dY)
 		for (j = tile3dY; j <= MIN(mapHeight - 1, tile3dY + brushSize); j++)
 		{
 			adjustTileHeight(mapTile(i, j), TILE_RAISE);
-			markTileDirty(i,j);
+			markTileDirty(i, j);
 		}
 	}
 }
@@ -86,7 +86,7 @@ void lowerTile(int tile3dX, int tile3dY)
 		for (j = tile3dY; j <= MIN(mapHeight - 1, tile3dY + brushSize); j++)
 		{
 			adjustTileHeight(mapTile(i, j), TILE_LOWER);
-			markTileDirty(i,j);
+			markTileDirty(i, j);
 		}
 	}
 }
@@ -94,9 +94,9 @@ void lowerTile(int tile3dX, int tile3dY)
 /* Ensures any adjustment to tile elevation is within allowed ranges */
 void	adjustTileHeight(MAPTILE *psTile, SDWORD adjust)
 {
-	int32_t newHeight = psTile->height + adjust*ELEVATION_SCALE;
+	int32_t newHeight = psTile->height + adjust * ELEVATION_SCALE;
 
-	if (newHeight >= MIN_TILE_HEIGHT*ELEVATION_SCALE && newHeight <= MAX_TILE_HEIGHT*ELEVATION_SCALE)
+	if (newHeight >= MIN_TILE_HEIGHT * ELEVATION_SCALE && newHeight <= MAX_TILE_HEIGHT * ELEVATION_SCALE)
 	{
 		psTile->height = newHeight;
 	}
@@ -106,18 +106,18 @@ bool	inHighlight(UDWORD realX, UDWORD realY)
 {
 	bool	retVal = false;
 
-	if (realX>=buildSite.xTL && realX<=buildSite.xBR)
+	if (realX >= buildSite.xTL && realX <= buildSite.xBR)
 	{
-		if (realY>=buildSite.yTL && realY<=buildSite.yBR)
+		if (realY >= buildSite.yTL && realY <= buildSite.yBR)
 		{
 			retVal = true;
 		}
 	}
 
-	return(retVal);
+	return (retVal);
 }
 
-void init3DBuilding(BASE_STATS *psStats,BUILDCALLBACK CallBack,void *UserData)
+void init3DBuilding(BASE_STATS *psStats, BUILDCALLBACK CallBack, void *UserData)
 {
 	ASSERT(psStats, "Bad parameter");
 	if (!psStats)
@@ -133,14 +133,14 @@ void init3DBuilding(BASE_STATS *psStats,BUILDCALLBACK CallBack,void *UserData)
 	sBuildDetails.y = mouseTileY;
 
 	if (psStats->ref >= REF_STRUCTURE_START &&
-		psStats->ref < (REF_STRUCTURE_START + REF_RANGE))
+	    psStats->ref < (REF_STRUCTURE_START + REF_RANGE))
 	{
 		sBuildDetails.width = ((STRUCTURE_STATS *)psStats)->baseWidth;
 		sBuildDetails.height = ((STRUCTURE_STATS *)psStats)->baseBreadth;
 		sBuildDetails.psStats = psStats;
 	}
 	else if (psStats->ref >= REF_FEATURE_START &&
-			 psStats->ref < (REF_FEATURE_START + REF_RANGE))
+	         psStats->ref < (REF_FEATURE_START + REF_RANGE))
 	{
 		sBuildDetails.width = ((FEATURE_STATS *)psStats)->baseWidth;
 		sBuildDetails.height = ((FEATURE_STATS *)psStats)->baseBreadth;
@@ -155,11 +155,11 @@ void init3DBuilding(BASE_STATS *psStats,BUILDCALLBACK CallBack,void *UserData)
 	}
 }
 
-void	kill3DBuilding		( void )
+void	kill3DBuilding(void)
 {
-    //cancel the drag boxes
-    dragBox3D.status = DRAG_INACTIVE;
-    wallDrag.status = DRAG_INACTIVE;
+	//cancel the drag boxes
+	dragBox3D.status = DRAG_INACTIVE;
+	wallDrag.status = DRAG_INACTIVE;
 	buildState = BUILD3D_NONE;
 }
 
@@ -170,7 +170,7 @@ bool process3DBuilding(void)
 {
 	//if not trying to build ignore
 	if (buildState == BUILD3D_NONE)
-  	{
+	{
 		if (quickQueueMode && !ctrlShiftDown())
 		{
 			quickQueueMode = false;
@@ -202,19 +202,19 @@ bool process3DBuilding(void)
 	sBuildDetails.y = buildSite.yTL = bY;
 	if (((player.r.y + 0x2000) & 0x4000) == 0)
 	{
-		buildSite.xBR = buildSite.xTL+sBuildDetails.width-1;
-		buildSite.yBR = buildSite.yTL+sBuildDetails.height-1;
+		buildSite.xBR = buildSite.xTL + sBuildDetails.width - 1;
+		buildSite.yBR = buildSite.yTL + sBuildDetails.height - 1;
 	}
 	else
 	{
 		// Rotated 90°, swap width and height
-		buildSite.xBR = buildSite.xTL+sBuildDetails.height-1;
-		buildSite.yBR = buildSite.yTL+sBuildDetails.width-1;
+		buildSite.xBR = buildSite.xTL + sBuildDetails.height - 1;
+		buildSite.yBR = buildSite.yTL + sBuildDetails.width - 1;
 	}
 
-	if( (buildState == BUILD3D_FINISHED) && (sBuildDetails.CallBack != NULL) )
+	if ((buildState == BUILD3D_FINISHED) && (sBuildDetails.CallBack != NULL))
 	{
-		sBuildDetails.CallBack(sBuildDetails.x,sBuildDetails.y,sBuildDetails.UserData);
+		sBuildDetails.CallBack(sBuildDetails.x, sBuildDetails.y, sBuildDetails.UserData);
 		buildState = BUILD3D_NONE;
 		return true;
 	}
@@ -255,20 +255,20 @@ bool found3DBuilding(UDWORD *x, UDWORD *y)
 /* See if a second position for a build has been found */
 bool found3DBuildLocTwo(UDWORD *px1, UDWORD *py1, UDWORD *px2, UDWORD *py2)
 {
-	if ( (((STRUCTURE_STATS *)sBuildDetails.psStats)->type != REF_WALL &&
-		  ((STRUCTURE_STATS *)sBuildDetails.psStats)->type != REF_GATE &&
-		  ((STRUCTURE_STATS *)sBuildDetails.psStats)->type != REF_DEFENSE &&
-		  ((STRUCTURE_STATS *)sBuildDetails.psStats)->type != REF_REARM_PAD) ||
-		wallDrag.status != DRAG_RELEASED)
+	if ((((STRUCTURE_STATS *)sBuildDetails.psStats)->type != REF_WALL &&
+	     ((STRUCTURE_STATS *)sBuildDetails.psStats)->type != REF_GATE &&
+	     ((STRUCTURE_STATS *)sBuildDetails.psStats)->type != REF_DEFENSE &&
+	     ((STRUCTURE_STATS *)sBuildDetails.psStats)->type != REF_REARM_PAD) ||
+	    wallDrag.status != DRAG_RELEASED)
 	{
 		return false;
 	}
 
-    //whilst we're still looking for a valid location - return false
-    if (buildState == BUILD3D_POS)
-    {
-        return false;
-    }
+	//whilst we're still looking for a valid location - return false
+	if (buildState == BUILD3D_POS)
+	{
+		return false;
+	}
 
 	wallDrag.status = DRAG_INACTIVE;
 	*px1 = wallDrag.x1;
@@ -288,12 +288,12 @@ bool found3DBuildLocTwo(UDWORD *px1, UDWORD *py1, UDWORD *px2, UDWORD *py2)
 /*returns true if the build state is not equal to BUILD3D_NONE*/
 bool tryingToGetLocation(void)
 {
-    if (buildState == BUILD3D_NONE)
-    {
-        return false;
-    }
-    else
-    {
-        return true;
-    }
+	if (buildState == BUILD3D_NONE)
+	{
+		return false;
+	}
+	else
+	{
+		return true;
+	}
 }

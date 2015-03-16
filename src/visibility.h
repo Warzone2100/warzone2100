@@ -39,19 +39,19 @@ extern void revealAll(UBYTE player);
  * currently droids and structures.
  * psTarget can be any type of BASE_OBJECT (e.g. a tree).
  */
-extern int visibleObject(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget, bool wallsBlock);
+extern int visibleObject(const BASE_OBJECT *psViewer, const BASE_OBJECT *psTarget, bool wallsBlock);
 
 /** Can shooter hit target with direct fire weapon? */
-bool lineOfFire(const SIMPLE_OBJECT* psViewer, const BASE_OBJECT* psTarget, int weapon_slot, bool wallsBlock);
+bool lineOfFire(const SIMPLE_OBJECT *psViewer, const BASE_OBJECT *psTarget, int weapon_slot, bool wallsBlock);
 
 /** How much of target can the player hit with direct fire weapon? */
-int areaOfFire(const SIMPLE_OBJECT* psViewer, const BASE_OBJECT* psTarget, int weapon_slot, bool wallsBlock);
+int areaOfFire(const SIMPLE_OBJECT *psViewer, const BASE_OBJECT *psTarget, int weapon_slot, bool wallsBlock);
 
 /** How much of target can the player hit with direct fire weapon? */
-int arcOfFire(const SIMPLE_OBJECT* psViewer, const BASE_OBJECT* psTarget, int weapon_slot, bool wallsBlock);
+int arcOfFire(const SIMPLE_OBJECT *psViewer, const BASE_OBJECT *psTarget, int weapon_slot, bool wallsBlock);
 
 // Find the wall that is blocking LOS to a target (if any)
-extern STRUCTURE* visGetBlockingWall(const BASE_OBJECT* psViewer, const BASE_OBJECT* psTarget);
+extern STRUCTURE *visGetBlockingWall(const BASE_OBJECT *psViewer, const BASE_OBJECT *psTarget);
 
 bool hasSharedVision(unsigned viewer, unsigned ally);
 
@@ -71,20 +71,20 @@ static inline bool visObjInRange(BASE_OBJECT *psObj1, BASE_OBJECT *psObj2, SDWOR
 {
 	int32_t xdiff = psObj1->pos.x - psObj2->pos.x, ydiff = psObj1->pos.y - psObj2->pos.y;
 
-	return abs(xdiff) <= range && abs(ydiff) <= range && xdiff*xdiff + ydiff*ydiff <= range;
+	return abs(xdiff) <= range && abs(ydiff) <= range && xdiff * xdiff + ydiff * ydiff <= range;
 }
 
-static inline int objSensorRange(const BASE_OBJECT* psObj)
+static inline int objSensorRange(const BASE_OBJECT *psObj)
 {
 	return psObj->sensorRange;
 }
 
-static inline int objJammerPower(const BASE_OBJECT* psObj)
+static inline int objJammerPower(const BASE_OBJECT *psObj)
 {
 	return psObj->ECMMod;
 }
 
-static inline int objConcealment(const BASE_OBJECT* psObj)
+static inline int objConcealment(const BASE_OBJECT *psObj)
 {
 	return psObj->ECMMod;
 }
