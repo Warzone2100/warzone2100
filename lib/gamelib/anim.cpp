@@ -51,8 +51,8 @@
 
 static struct
 {
-        BASEANIM                *psAnimList;
-        UWORD                   uwCurObj;
+	BASEANIM                *psAnimList;
+	UWORD                   uwCurObj;
 	UWORD			uwCurState;
 }
 g_animGlobals;
@@ -89,14 +89,14 @@ void anim_ReleaseAnim(BASEANIM *psAnim)
 		LIST_REMOVE(g_animGlobals.psAnimList, psAnim, BASEANIM);
 	}
 	/* free anim scripts */
-	free( psAnim->psStates );
+	free(psAnim->psStates);
 
 	/* free anim shape */
 	if (psAnim->animType == ANIM_3D_FRAMES || psAnim->animType == ANIM_3D_TRANS)
 	{
 		ANIM3D	*psAnim3D = (ANIM3D *)psAnim;
 
-		free( psAnim3D->apFrame );
+		free(psAnim3D->apFrame);
 	}
 
 	free(psAnim);
@@ -116,17 +116,17 @@ bool anim_Shutdown()
 
 	/* empty anim list */
 	psAnim = g_animGlobals.psAnimList;
-	while ( psAnim != NULL )
+	while (psAnim != NULL)
 	{
 		psAnimTmp = psAnim->psNext;
-		anim_ReleaseAnim( psAnim );
+		anim_ReleaseAnim(psAnim);
 		psAnim = psAnimTmp;
 	}
 
 	return true;
 }
 
-static void anim_InitBaseMembers(BASEANIM * psAnim, UWORD uwStates, UWORD uwFrameRate,
+static void anim_InitBaseMembers(BASEANIM *psAnim, UWORD uwStates, UWORD uwFrameRate,
                                  UWORD uwObj, ANIM_MODE ubType, UWORD uwID)
 {
 	psAnim->uwStates    = uwStates;
@@ -134,16 +134,16 @@ static void anim_InitBaseMembers(BASEANIM * psAnim, UWORD uwStates, UWORD uwFram
 	psAnim->uwObj       = uwObj;
 	psAnim->ubType      = ubType;
 	psAnim->uwID        = uwID;
-	psAnim->uwAnimTime  = (UWORD) (uwStates*1000 / psAnim->uwFrameRate);
+	psAnim->uwAnimTime  = (UWORD)(uwStates * 1000 / psAnim->uwFrameRate);
 
 	/* allocate frames */
-	psAnim->psStates = (ANIM_STATE*)malloc( uwObj*psAnim->uwStates*sizeof(ANIM_STATE) );
+	psAnim->psStates = (ANIM_STATE *)malloc(uwObj * psAnim->uwStates * sizeof(ANIM_STATE));
 }
 
 /**
  *	Create animation for a model. Called from animation script.
  */
-bool anim_Create3D(char szPieFileName[], UWORD uwStates, UWORD uwFrameRate, UWORD uwObj, 
+bool anim_Create3D(char szPieFileName[], UWORD uwStates, UWORD uwFrameRate, UWORD uwObj,
                    ANIM_MODE ubType, UWORD uwID)
 {
 	ANIM3D		*psAnim3D;
@@ -151,25 +151,25 @@ bool anim_Create3D(char szPieFileName[], UWORD uwStates, UWORD uwFrameRate, UWOR
 	UWORD		uwFrames, i;
 
 	/* allocate anim */
-	if ( (psAnim3D = (ANIM3D*)malloc(sizeof(ANIM3D))) == NULL )
+	if ((psAnim3D = (ANIM3D *)malloc(sizeof(ANIM3D))) == NULL)
 	{
 		return false;
 	}
 
 	/* get local pointer to shape */
-	psAnim3D->psFrames = (iIMDShape*)resGetData("IMD", szPieFileName);
+	psAnim3D->psFrames = (iIMDShape *)resGetData("IMD", szPieFileName);
 
 	/* count frames in imd */
 	psFrames = psAnim3D->psFrames;
 	uwFrames = 0;
-	while ( psFrames != NULL )
+	while (psFrames != NULL)
 	{
 		uwFrames++;
 		psFrames = psFrames->next;
 	}
 
 	/* check frame count matches script */
-	if ( ubType == ANIM_3D_TRANS && uwObj != uwFrames )
+	if (ubType == ANIM_3D_TRANS && uwObj != uwFrames)
 	{
 		ASSERT(false, "Frames in pie %s != script objects %i", szPieFileName, uwObj);
 		free(psAnim3D);
@@ -177,9 +177,9 @@ bool anim_Create3D(char szPieFileName[], UWORD uwStates, UWORD uwFrameRate, UWOR
 	}
 
 	/* get pointers to individual frames */
-	psAnim3D->apFrame = (iIMDShape**)malloc( uwFrames*sizeof(iIMDShape *) );
+	psAnim3D->apFrame = (iIMDShape **)malloc(uwFrames * sizeof(iIMDShape *));
 	psFrames = psAnim3D->psFrames;
-	for ( i=0; i<uwFrames; i++ )
+	for (i = 0; i < uwFrames; i++)
 	{
 		psAnim3D->apFrame[i] = psFrames;
 		psFrames = psFrames->next;
@@ -187,12 +187,12 @@ bool anim_Create3D(char szPieFileName[], UWORD uwStates, UWORD uwFrameRate, UWOR
 
 	/* init members */
 	psAnim3D->animType = ubType;
-	anim_InitBaseMembers( (BASEANIM * ) psAnim3D, uwStates,
-							uwFrameRate, uwObj, ubType, uwID );
+	anim_InitBaseMembers((BASEANIM *) psAnim3D, uwStates,
+	                     uwFrameRate, uwObj, ubType, uwID);
 
 	/* add to head of list */
 	psAnim3D->psNext = g_animGlobals.psAnimList;
-	g_animGlobals.psAnimList = (BASEANIM * ) psAnim3D;
+	g_animGlobals.psAnimList = (BASEANIM *) psAnim3D;
 
 	/* update globals */
 	g_animGlobals.uwCurObj = 0;
@@ -217,7 +217,7 @@ bool anim_EndScript()
 	/* get pointer to current anim */
 	psAnim = g_animGlobals.psAnimList;
 
-	if ( g_animGlobals.uwCurState != psAnim->uwStates )
+	if (g_animGlobals.uwCurState != psAnim->uwStates)
 	{
 		ASSERT(false, "States in current anim not consistent with header");
 		return false;
@@ -241,16 +241,16 @@ bool anim_AddFrameToAnim(int iFrame, Vector3i vecPos, Vector3i vecRot, Vector3i 
 	psAnim = g_animGlobals.psAnimList;
 
 	/* check current anim valid */
-	ASSERT( psAnim != NULL, "anim_AddFrameToAnim: NULL current anim\n" );
+	ASSERT(psAnim != NULL, "anim_AddFrameToAnim: NULL current anim\n");
 
 	/* check frame number in range */
-	ASSERT( iFrame<psAnim->uwStates,
-			"anim_AddFrameToAnim: frame number %i > %i frames in imd\n",
-			iFrame, psAnim->uwObj );
+	ASSERT(iFrame < psAnim->uwStates,
+	       "anim_AddFrameToAnim: frame number %i > %i frames in imd\n",
+	       iFrame, psAnim->uwObj);
 
 	/* get state */
 	uwState = (g_animGlobals.uwCurObj * psAnim->uwStates) +
-				g_animGlobals.uwCurState;
+	          g_animGlobals.uwCurState;
 	psState = &psAnim->psStates[uwState];
 
 	/* set state pointer */
@@ -283,7 +283,7 @@ BASEANIM *anim_GetAnim(UWORD uwAnimID)
 
 	/* find matching anim id in list */
 	psAnim = g_animGlobals.psAnimList;
-	while( psAnim != NULL && psAnim->uwID != uwAnimID )
+	while (psAnim != NULL && psAnim->uwID != uwAnimID)
 	{
 		psAnim = psAnim->psNext;
 	}
@@ -296,9 +296,9 @@ BASEANIM *anim_GetAnim(UWORD uwAnimID)
 void anim_SetVals(char szFileName[], UWORD uwAnimID)
 {
 	/* get track pointer from resource */
-	BASEANIM	*psAnim = (BASEANIM*)resGetData( "ANI", szFileName );
+	BASEANIM	*psAnim = (BASEANIM *)resGetData("ANI", szFileName);
 
-	if ( psAnim == NULL )
+	if (psAnim == NULL)
 	{
 		ASSERT(false, "Can't find anim %s", szFileName);
 		return ;
@@ -311,9 +311,9 @@ void anim_SetVals(char szFileName[], UWORD uwAnimID)
 
 /***************************************************************************/
 
-BASEANIM *anim_LoadFromFile(PHYSFS_file* fileHandle)
+BASEANIM *anim_LoadFromFile(PHYSFS_file *fileHandle)
 {
-	if ( ParseResourceFile( fileHandle ) == false )
+	if (ParseResourceFile(fileHandle) == false)
 	{
 		ASSERT(false, "Couldn't parse file");
 		return NULL;
@@ -328,9 +328,9 @@ BASEANIM *anim_LoadFromFile(PHYSFS_file* fileHandle)
 UWORD anim_GetAnimID(char *szName)
 {
 	BASEANIM	*psAnim;
-	char		*cPos = strstr( szName, ".ani" );
+	char		*cPos = strstr(szName, ".ani");
 
-	if ( cPos == NULL )
+	if (cPos == NULL)
 	{
 		ASSERT(false, "%s isn't .ani file", szName);
 		return NO_ANIM;
@@ -338,12 +338,12 @@ UWORD anim_GetAnimID(char *szName)
 
 	/* find matching anim string in list */
 	psAnim = g_animGlobals.psAnimList;
-	while( psAnim != NULL && strcasecmp( psAnim->szFileName, szName ) != 0 )
+	while (psAnim != NULL && strcasecmp(psAnim->szFileName, szName) != 0)
 	{
 		psAnim = psAnim->psNext;
 	}
 
-	if ( psAnim != NULL )
+	if (psAnim != NULL)
 	{
 		return psAnim->uwID;
 	}
@@ -360,12 +360,12 @@ iIMDShape *anim_GetShapeFromID(UWORD uwID)
 	BASEANIM	*psAnim = g_animGlobals.psAnimList;
 
 	/* find matching anim id in list */
-	while( psAnim != NULL && psAnim->uwID != uwID )
+	while (psAnim != NULL && psAnim->uwID != uwID)
 	{
 		psAnim = psAnim->psNext;
 	}
 
-	if ( psAnim == NULL )
+	if (psAnim == NULL)
 	{
 		return NULL;
 	}
@@ -392,7 +392,7 @@ UWORD anim_GetFrame3D(ANIM3D *psAnim, UWORD uwObj, UDWORD udwGraphicsTime, UDWOR
 	dwTime = udwGraphicsTime - udwStartTime - udwStartDelay;
 
 	/* return NULL if animation still delayed */
-	if ( dwTime < 0 )
+	if (dwTime < 0)
 	{
 		return ANIM_DELAYED;
 	}
@@ -400,7 +400,7 @@ UWORD anim_GetFrame3D(ANIM3D *psAnim, UWORD uwObj, UDWORD udwGraphicsTime, UDWOR
 	uwFrame = (dwTime % psAnim->uwAnimTime) * psAnim->uwFrameRate / 1000;
 
 	/* check in range */
-	ASSERT(uwFrame<psAnim->uwStates, "anim_GetObjectFrame3D: error in animation calculation");
+	ASSERT(uwFrame < psAnim->uwStates, "anim_GetObjectFrame3D: error in animation calculation");
 
 	/* find current state */
 	uwState = (uwObj * psAnim->uwStates) + uwFrame;
@@ -418,7 +418,7 @@ UWORD anim_GetFrame3D(ANIM3D *psAnim, UWORD uwObj, UDWORD udwGraphicsTime, UDWOR
 	psVecScale->y = psState->vecScale.y;
 	psVecScale->z = psState->vecScale.z;
 
-	if ( psAnim->ubType == ANIM_3D_TRANS )
+	if (psAnim->ubType == ANIM_3D_TRANS)
 	{
 		return uwFrame;
 	}

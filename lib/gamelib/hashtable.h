@@ -46,7 +46,7 @@
  * \return calculated hash-value for the keys
  * \see hashTable_SetHashFunction
  */
-typedef UDWORD	(* HASHFUNC)		(intptr_t iKey1, intptr_t iKey2);
+typedef UDWORD(* HASHFUNC)(intptr_t iKey1, intptr_t iKey2);
 
 /**
  * Free Element function
@@ -54,7 +54,7 @@ typedef UDWORD	(* HASHFUNC)		(intptr_t iKey1, intptr_t iKey2);
  * \param	psElement	the element to be freed
  * \see hashTable_SetFreeElementFunction
  */
-typedef void	(* HASHFREEFUNC)	( void *psElement );
+typedef void	(* HASHFREEFUNC)(void *psElement);
 
 /***************************************************************************/
 /* structs
@@ -65,7 +65,7 @@ struct HASHNODE
 	intptr_t			iKey1;
 	intptr_t			iKey2;
 	void			*psElement;
-	HASHNODE *              psNext;
+	HASHNODE               *psNext;
 };
 
 struct HASHTABLE
@@ -94,31 +94,31 @@ struct HASHTABLE
  * \param	udwExtElements	number of elements when extending the heap
  * \param	udwElementSize	size of elements to be stored in the hashtable
  */
-bool	hashTable_Create( HASHTABLE **ppsTable, UDWORD udwTableSize,
-							UDWORD udwInitElements, UDWORD udwExtElements,
-							UDWORD udwElementSize );
+bool	hashTable_Create(HASHTABLE **ppsTable, UDWORD udwTableSize,
+                         UDWORD udwInitElements, UDWORD udwExtElements,
+                         UDWORD udwElementSize);
 
 /**
  * Function to destroy a hashtable
  *
  * \param	psTable		the hashtable to be destroyed
  */
-void    hashTable_Destroy( HASHTABLE *psTable );
+void    hashTable_Destroy(HASHTABLE *psTable);
 
 /**
  * Returns all nodes from hash table to free node list
  *
  * \param	psTable		the hashtable to be cleared
  */
-void	hashTable_Clear( HASHTABLE *psTable );
+void	hashTable_Clear(HASHTABLE *psTable);
 
 /**
  * Gets free node from heap and returns element pointer
- * 
+ *
  * \param	psTable		the hashtable
  * \return	pointer to the element
  */
-void *	hashTable_GetElement( HASHTABLE *psTable );
+void 	*hashTable_GetElement(HASHTABLE *psTable);
 
 /**
  * Function to insert an element into the hashtable
@@ -158,7 +158,7 @@ void *hashTable_FindElement(HASHTABLE *psTable, intptr_t iKey1, intptr_t iKey2);
  * \see		hashTable_GetNext
  * \return	the first element
  */
-void *	hashTable_GetFirst( HASHTABLE *psTable );
+void 	*hashTable_GetFirst(HASHTABLE *psTable);
 
 /**
  * Gets the next allocated element from the hashtable
@@ -167,7 +167,7 @@ void *	hashTable_GetFirst( HASHTABLE *psTable );
  * \see		hashTable_GetFirst
  * \return	next element
  */
-void *	hashTable_GetNext(  HASHTABLE *psTable );
+void 	*hashTable_GetNext(HASHTABLE *psTable);
 
 /**
  * Function to the the hashing function to be used
@@ -176,7 +176,7 @@ void *	hashTable_GetNext(  HASHTABLE *psTable );
  * \param	pHashFunc	the hashing function
  * \see HASHFUNC
  */
-void	hashTable_SetHashFunction( HASHTABLE *psTable, HASHFUNC pHashFunc );
+void	hashTable_SetHashFunction(HASHTABLE *psTable, HASHFUNC pHashFunc);
 
 /**
  * Sets the function to be called when freeing an element.
@@ -185,8 +185,8 @@ void	hashTable_SetHashFunction( HASHTABLE *psTable, HASHFUNC pHashFunc );
  * \param	pFreeFunc	the free function
  * \see HASHFREEFUNC
  */
-void	hashTable_SetFreeElementFunction( HASHTABLE *psTable,
-											HASHFREEFUNC pFreeFunc );
+void	hashTable_SetFreeElementFunction(HASHTABLE *psTable,
+        HASHFREEFUNC pFreeFunc);
 
 /***************************************************************************/
 
