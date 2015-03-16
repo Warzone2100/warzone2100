@@ -27,7 +27,7 @@ enum SONG_CONTEXT
 	SONG_INGAME,
 };
 
-bool cdAudio_Open(const char* user_musicdir);
+bool cdAudio_Open(const char *user_musicdir);
 void cdAudio_Close(void);
 bool cdAudio_PlayTrack(SONG_CONTEXT context);
 void cdAudio_Stop(void);
