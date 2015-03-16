@@ -62,7 +62,7 @@ struct W_BUTTON : public WIDGET
 extern bool buttonStartUp(void);
 
 /* Create a button widget data structure */
-extern W_BUTTON* buttonCreate(const W_BUTINIT* psInit);
+extern W_BUTTON *buttonCreate(const W_BUTINIT *psInit);
 
 /* Free the memory used by a button */
 extern void buttonFree(W_BUTTON *psWidget);

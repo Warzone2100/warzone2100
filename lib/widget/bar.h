@@ -50,7 +50,7 @@ struct W_BARGRAPH : public WIDGET
 };
 
 /* Create a barGraph widget data structure */
-extern W_BARGRAPH* barGraphCreate(const W_BARINIT* psInit);
+extern W_BARGRAPH *barGraphCreate(const W_BARINIT *psInit);
 
 /* Free the memory used by a barGraph */
 extern void barGraphFree(W_BARGRAPH *psWidget);
