@@ -23,6 +23,6 @@
 
 #include <physfs.h>
 
-extern bool ParseResourceFile(PHYSFS_file* fileHandle);
+extern bool ParseResourceFile(PHYSFS_file *fileHandle);
 
 #endif	/* _PARSER_H_ */

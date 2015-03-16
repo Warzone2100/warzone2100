@@ -37,17 +37,17 @@ static UDWORD HashTest(intptr_t iKey1, intptr_t iKey2)
 /***************************************************************************/
 
 bool
-hashTable_Create( HASHTABLE **ppsTable, UDWORD udwTableSize,
-	UDWORD udwInitElements, UDWORD udwExtElements, UDWORD udwElementSize )
+hashTable_Create(HASHTABLE **ppsTable, UDWORD udwTableSize,
+                 UDWORD udwInitElements, UDWORD udwExtElements, UDWORD udwElementSize)
 {
 	UDWORD			udwSize;
 
 	/* allocate and init table */
 
-	(*ppsTable) = (HASHTABLE*)malloc( sizeof(HASHTABLE) );
+	(*ppsTable) = (HASHTABLE *)malloc(sizeof(HASHTABLE));
 	udwSize = udwTableSize * sizeof(HASHNODE *);
-	(*ppsTable)->ppsNode = (HASHNODE**)malloc( udwSize );
-	memset( (*ppsTable)->ppsNode, 0, udwSize );
+	(*ppsTable)->ppsNode = (HASHNODE **)malloc(udwSize);
+	memset((*ppsTable)->ppsNode, 0, udwSize);
 
 	/* init members */
 	(*ppsTable)->udwTableSize   = udwTableSize;
@@ -59,7 +59,7 @@ hashTable_Create( HASHTABLE **ppsTable, UDWORD udwTableSize,
 	(*ppsTable)->pFreeFunc      = NULL;
 
 	/* set hash function to internal */
-	hashTable_SetHashFunction( (*ppsTable), HashTest );
+	hashTable_SetHashFunction((*ppsTable), HashTest);
 
 	return true;
 }
@@ -67,16 +67,16 @@ hashTable_Create( HASHTABLE **ppsTable, UDWORD udwTableSize,
 /***************************************************************************/
 
 void
-hashTable_Destroy( HASHTABLE *psTable )
+hashTable_Destroy(HASHTABLE *psTable)
 {
-	ASSERT( psTable != NULL,
-			"hashTable_Destroy: table pointer invalid\n" );
+	ASSERT(psTable != NULL,
+	       "hashTable_Destroy: table pointer invalid\n");
 
-	hashTable_Clear( psTable );
+	hashTable_Clear(psTable);
 
 	/* free table */
-	free( psTable->ppsNode );
-	free( psTable );
+	free(psTable->ppsNode);
+	free(psTable);
 }
 
 /***************************************************************************/
@@ -88,37 +88,37 @@ hashTable_Destroy( HASHTABLE *psTable )
 /***************************************************************************/
 
 void
-hashTable_Clear( HASHTABLE *psTable )
+hashTable_Clear(HASHTABLE *psTable)
 {
 	HASHNODE	*psNode, *psNodeTmp;
 	UDWORD		i;
 
-	ASSERT( psTable != NULL,
-			"hashTable_Destroy: table pointer invalid\n" );
+	ASSERT(psTable != NULL,
+	       "hashTable_Destroy: table pointer invalid\n");
 
 	/* free nodes */
-	for ( i=0; i<psTable->udwTableSize; i++ )
+	for (i = 0; i < psTable->udwTableSize; i++)
 	{
 		/* free table entry nodelist */
 		psNode = psTable->ppsNode[i];
-		while ( psNode != NULL )
+		while (psNode != NULL)
 		{
 			/* return node element to heap */
-			ASSERT( psNode->psElement != NULL,
-				"hashTable_Destroy: element pointer invalid\n" );
+			ASSERT(psNode->psElement != NULL,
+			       "hashTable_Destroy: element pointer invalid\n");
 
 			/* do free-element callback if set */
-			if ( psTable->pFreeFunc != NULL )
+			if (psTable->pFreeFunc != NULL)
 			{
-				(psTable->pFreeFunc) (psNode->psElement);
+				(psTable->pFreeFunc)(psNode->psElement);
 			}
 
 			/* free element */
 			free(psNode->psElement);
 
 			/* return node to heap */
-			ASSERT( psNode != NULL,
-				"hashTable_Destroy: node pointer invalid\n" );
+			ASSERT(psNode != NULL,
+			       "hashTable_Destroy: node pointer invalid\n");
 			psNodeTmp = psNode->psNext;
 			free(psNode);
 			psNode = psNodeTmp;
@@ -132,10 +132,10 @@ hashTable_Clear( HASHTABLE *psTable )
 /***************************************************************************/
 
 void
-hashTable_SetHashFunction( HASHTABLE *psTable, HASHFUNC pHashFunc )
+hashTable_SetHashFunction(HASHTABLE *psTable, HASHFUNC pHashFunc)
 {
-	ASSERT( psTable != NULL,
-			"hashTable_SetHashFunction: table pointer invalid\n" );
+	ASSERT(psTable != NULL,
+	       "hashTable_SetHashFunction: table pointer invalid\n");
 
 	psTable->pHashFunc = pHashFunc;
 }
@@ -143,11 +143,11 @@ hashTable_SetHashFunction( HASHTABLE *psTable, HASHFUNC pHashFunc )
 /***************************************************************************/
 
 void
-hashTable_SetFreeElementFunction( HASHTABLE *psTable,
-									HASHFREEFUNC pFreeFunc )
+hashTable_SetFreeElementFunction(HASHTABLE *psTable,
+                                 HASHFREEFUNC pFreeFunc)
 {
-	ASSERT( psTable != NULL,
-			"hashTable_SetFreeElementFunction: table pointer invalid\n" );
+	ASSERT(psTable != NULL,
+	       "hashTable_SetFreeElementFunction: table pointer invalid\n");
 
 	psTable->pFreeFunc = pFreeFunc;
 }
@@ -161,12 +161,12 @@ hashTable_SetFreeElementFunction( HASHTABLE *psTable,
 /***************************************************************************/
 
 void *
-hashTable_GetElement( HASHTABLE *psTable )
+hashTable_GetElement(HASHTABLE *psTable)
 {
 	void	*psElement;
 
-	ASSERT( psTable != NULL,
-			"hashTable_GetElement: table pointer invalid\n" );
+	ASSERT(psTable != NULL,
+	       "hashTable_GetElement: table pointer invalid\n");
 
 	psElement = malloc(psTable->udwElementSize);
 	if (psElement == NULL)  // if the alloc fails then return NULL
@@ -182,11 +182,11 @@ hashTable_GetElement( HASHTABLE *psTable )
 
 static UDWORD hashTable_GetHashKey(HASHTABLE *psTable, intptr_t iKey1, intptr_t iKey2)
 {
-	ASSERT( psTable != NULL,
-		"hashTable_GetFirst: hash table pointer invalid\n" );
+	ASSERT(psTable != NULL,
+	       "hashTable_GetFirst: hash table pointer invalid\n");
 
 	/* get hashed index */
-	return (psTable->pHashFunc) ( iKey1, iKey2 ) % psTable->udwTableSize;
+	return (psTable->pHashFunc)(iKey1, iKey2) % psTable->udwTableSize;
 }
 
 /***************************************************************************/
@@ -196,13 +196,13 @@ void hashTable_InsertElement(HASHTABLE *psTable, void *psElement, intptr_t iKey1
 	UDWORD		udwHashIndex;
 	HASHNODE	*psNode;
 
-	ASSERT( psTable != NULL,
-			"hashTable_InsertElement: table pointer invalid\n" );
-	ASSERT( psElement != NULL,
-			"hashTable_InsertElement: element pointer invalid\n" );
+	ASSERT(psTable != NULL,
+	       "hashTable_InsertElement: table pointer invalid\n");
+	ASSERT(psElement != NULL,
+	       "hashTable_InsertElement: element pointer invalid\n");
 
 	/* get hashed index */
-	udwHashIndex = hashTable_GetHashKey( psTable, iKey1, iKey2 );
+	udwHashIndex = hashTable_GetHashKey(psTable, iKey1, iKey2);
 
 	/* get node from heap */
 	psNode = (HASHNODE *)malloc(sizeof(HASHNODE));
@@ -230,23 +230,23 @@ void *hashTable_FindElement(HASHTABLE *psTable, intptr_t iKey1, intptr_t iKey2)
 	UDWORD		udwHashIndex;
 	HASHNODE	*psNode;
 
-	ASSERT( psTable != NULL,
-			"hashTable_FindElement: table pointer invalid\n" );
+	ASSERT(psTable != NULL,
+	       "hashTable_FindElement: table pointer invalid\n");
 
 	/* get hashed index */
-	udwHashIndex = hashTable_GetHashKey( psTable, iKey1, iKey2 );
+	udwHashIndex = hashTable_GetHashKey(psTable, iKey1, iKey2);
 
 	psNode = psTable->ppsNode[udwHashIndex];
 
 	/* loop through node list to find element match */
-	while (    psNode != NULL &&
-			!( psNode->iKey1 == iKey1 && psNode->iKey2 == iKey2) )
+	while (psNode != NULL &&
+	       !(psNode->iKey1 == iKey1 && psNode->iKey2 == iKey2))
 	{
 		psNode = psNode->psNext;
 	}
 
 	/* remove node from hash table and return to heap */
-	if ( psNode == NULL )
+	if (psNode == NULL)
 	{
 		return NULL;
 	}
@@ -259,33 +259,33 @@ void *hashTable_FindElement(HASHTABLE *psTable, intptr_t iKey1, intptr_t iKey2)
 /***************************************************************************/
 
 static void
-hashTable_SetNextNode( HASHTABLE *psTable, bool bMoveToNextNode )
+hashTable_SetNextNode(HASHTABLE *psTable, bool bMoveToNextNode)
 {
-	if ( (bMoveToNextNode == true) && (psTable->psNextNode != NULL) )
+	if ((bMoveToNextNode == true) && (psTable->psNextNode != NULL))
 	{
 		/* get next node */
 		psTable->psNextNode = psTable->psNextNode->psNext;
 
 		/* if next node NULL increment index */
-		if ( psTable->psNextNode == NULL )
+		if (psTable->psNextNode == NULL)
 		{
 			psTable->sdwCurIndex++;
 		}
 	}
 
 	/* search through table for next allocated node */
-	while ( psTable->sdwCurIndex < psTable->udwTableSize &&
-			psTable->psNextNode == NULL )
+	while (psTable->sdwCurIndex < psTable->udwTableSize &&
+	       psTable->psNextNode == NULL)
 	{
 		psTable->psNextNode = psTable->ppsNode[psTable->sdwCurIndex];
-		if ( psTable->psNextNode == NULL )
+		if (psTable->psNextNode == NULL)
 		{
 			psTable->sdwCurIndex++;
 		}
 	}
 
 	/* reset pointer if table overrun */
-	if ( psTable->sdwCurIndex >= psTable->udwTableSize )
+	if (psTable->sdwCurIndex >= psTable->udwTableSize)
 	{
 		psTable->psNextNode = NULL;
 	}
@@ -299,11 +299,11 @@ hashTable_RemoveElement(HASHTABLE *psTable, void *psElement, intptr_t iKey1, int
 	UDWORD		udwHashIndex;
 	HASHNODE	*psNode, *psPrev;
 
-	ASSERT( psTable != NULL,
-			"hashTable_RemoveElement: table pointer invalid\n" );
+	ASSERT(psTable != NULL,
+	       "hashTable_RemoveElement: table pointer invalid\n");
 
 	/* get hashed index */
-	udwHashIndex = hashTable_GetHashKey( psTable, iKey1, iKey2 );
+	udwHashIndex = hashTable_GetHashKey(psTable, iKey1, iKey2);
 
 	/* init previous node pointer */
 	psPrev = NULL;
@@ -312,22 +312,22 @@ hashTable_RemoveElement(HASHTABLE *psTable, void *psElement, intptr_t iKey1, int
 	psNode = psTable->ppsNode[udwHashIndex];
 
 	/* loop through node list to find element match */
-	while ( psNode != NULL && !( psElement == psNode->psElement &&
-			psNode->iKey1 == iKey1 && psNode->iKey2 == iKey2) )
+	while (psNode != NULL && !(psElement == psNode->psElement &&
+	                           psNode->iKey1 == iKey1 && psNode->iKey2 == iKey2))
 	{
 		psPrev = psNode;
 		psNode = psNode->psNext;
 	}
 
 	/* remove node from hash table and return to heap */
-	if ( psNode == NULL )
+	if (psNode == NULL)
 	{
 		return false;
 	}
 	else
 	{
 		/* remove from hash table */
-		if ( psPrev == NULL )
+		if (psPrev == NULL)
 		{
 			psTable->ppsNode[udwHashIndex] = psNode->psNext;
 		}
@@ -337,22 +337,22 @@ hashTable_RemoveElement(HASHTABLE *psTable, void *psElement, intptr_t iKey1, int
 		}
 
 		/* set next node pointer to this one if necessary */
-		if ( psTable->psNextNode == psNode )
+		if (psTable->psNextNode == psNode)
 		{
 			psTable->psNextNode = psPrev;
 		}
 
 		/* setup next node pointer */
-		hashTable_SetNextNode( psTable, true );
+		hashTable_SetNextNode(psTable, true);
 
 		/* return element to heap */
-		ASSERT( psNode->psElement != NULL,
-				"hashTable_RemoveElement: element pointer invalid\n" );
+		ASSERT(psNode->psElement != NULL,
+		       "hashTable_RemoveElement: element pointer invalid\n");
 		free(psNode->psElement);
 
 		/* return node to heap */
-		ASSERT( psNode != NULL,
-				"hashTable_RemoveElement: node pointer invalid\n" );
+		ASSERT(psNode != NULL,
+		       "hashTable_RemoveElement: node pointer invalid\n");
 		free(psNode);
 
 		return true;
@@ -362,14 +362,14 @@ hashTable_RemoveElement(HASHTABLE *psTable, void *psElement, intptr_t iKey1, int
 /***************************************************************************/
 
 void *
-hashTable_GetNext( HASHTABLE *psTable )
+hashTable_GetNext(HASHTABLE *psTable)
 {
 	void	*psElement;
 
-	ASSERT( psTable != NULL,
-		"hashTable_GetNext: hash table pointer invalid\n" );
+	ASSERT(psTable != NULL,
+	       "hashTable_GetNext: hash table pointer invalid\n");
 
-	if ( psTable->psNextNode == NULL )
+	if (psTable->psNextNode == NULL)
 	{
 		return NULL;
 	}
@@ -378,7 +378,7 @@ hashTable_GetNext( HASHTABLE *psTable )
 		psElement = psTable->psNextNode->psElement;
 
 		/* setup next node pointer */
-		hashTable_SetNextNode( psTable, true );
+		hashTable_SetNextNode(psTable, true);
 
 		return psElement;
 	}
@@ -387,20 +387,20 @@ hashTable_GetNext( HASHTABLE *psTable )
 /***************************************************************************/
 
 void *
-hashTable_GetFirst( HASHTABLE *psTable )
+hashTable_GetFirst(HASHTABLE *psTable)
 {
-	ASSERT( psTable != NULL,
-		"hashTable_GetFirst: hash table pointer invalid\n" );
+	ASSERT(psTable != NULL,
+	       "hashTable_GetFirst: hash table pointer invalid\n");
 
 	/* init current index and node to start of table */
 	psTable->sdwCurIndex = 0;
 	psTable->psNextNode  = psTable->ppsNode[0];
 
 	/* search through table for first allocated node */
-	hashTable_SetNextNode( psTable, false );
+	hashTable_SetNextNode(psTable, false);
 
 	/* return it */
-	return hashTable_GetNext( psTable );
+	return hashTable_GetNext(psTable);
 }
 
 /***************************************************************************/

@@ -71,7 +71,7 @@ struct ANIM3D : public BASEANIM
 bool anim_Init();
 bool anim_Shutdown();
 BASEANIM *anim_LoadFromBuffer(char *pBuffer, UDWORD size);
-BASEANIM *anim_LoadFromFile(PHYSFS_file* fileHandle);
+BASEANIM *anim_LoadFromFile(PHYSFS_file *fileHandle);
 void anim_ReleaseAnim(BASEANIM *psAnim);
 bool anim_Create3D(char szPieFileName[], UWORD uwFrames, UWORD uwFrameRate, UWORD uwObj, ANIM_MODE ubType, UWORD uwID);
 void anim_BeginScript();

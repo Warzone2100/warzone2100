@@ -45,9 +45,9 @@ static Rational modifier;
 /// The real time, the last time graphicsTime updated.
 static uint32_t prevRealTime;
 
-/** 
-  * Count how many times gameTimeStop has been called without a game time start. 
-  * We use this to ensure that we can properly nest stop commands. 
+/**
+  * Count how many times gameTimeStop has been called without a game time start.
+  * We use this to ensure that we can properly nest stop commands.
   **/
 static UDWORD	stopCount;
 
@@ -103,9 +103,9 @@ void gameTimeInit(void)
 
 	stopCount = 0;
 
-	chosenLatency = GAME_TICKS_PER_UPDATE*2;
-	discreteChosenLatency = GAME_TICKS_PER_UPDATE*2;
-	wantedLatency = GAME_TICKS_PER_UPDATE*2;
+	chosenLatency = GAME_TICKS_PER_UPDATE * 2;
+	discreteChosenLatency = GAME_TICKS_PER_UPDATE * 2;
+	wantedLatency = GAME_TICKS_PER_UPDATE * 2;
 	for (player = 0; player != MAX_PLAYERS; ++player)
 	{
 		wantedLatencies[player] = 0;
@@ -132,7 +132,7 @@ void setGameTime(uint32_t newGameTime)
 
 UDWORD getModularScaledGameTime(UDWORD timePeriod, UDWORD requiredRange)
 {
-	return gameTime%timePeriod * requiredRange / MAX(1, timePeriod);
+	return gameTime % timePeriod * requiredRange / MAX(1, timePeriod);
 }
 
 UDWORD getModularScaledGraphicsTime(UDWORD timePeriod, UDWORD requiredRange)
@@ -339,7 +339,7 @@ static void updateLatency()
 	// Adjust the agreed latency. (Can maximum decrease by 5ms or increase by 30ms per update.
 	chosenLatency = chosenLatency + clip(maxWantedLatency - chosenLatency, -5, 60);
 	// Round the chosen latency to an integer number of updates, up to 10.
-	discreteChosenLatency = clip((chosenLatency + GAME_TICKS_PER_UPDATE/2)/GAME_TICKS_PER_UPDATE*GAME_TICKS_PER_UPDATE, GAME_TICKS_PER_UPDATE, GAME_TICKS_PER_UPDATE*GAME_UPDATES_PER_SEC);
+	discreteChosenLatency = clip((chosenLatency + GAME_TICKS_PER_UPDATE / 2) / GAME_TICKS_PER_UPDATE * GAME_TICKS_PER_UPDATE, GAME_TICKS_PER_UPDATE, GAME_TICKS_PER_UPDATE * GAME_UPDATES_PER_SEC);
 	if (prevDiscreteChosenLatency != discreteChosenLatency)
 	{
 		debug(LOG_SYNC, "Adjusting latency %d -> %d", prevDiscreteChosenLatency, discreteChosenLatency);
@@ -369,10 +369,10 @@ void sendPlayerGameTime()
 		}
 
 		NETbeginEncode(NETgameQueue(player), GAME_GAME_TIME);
-			NETuint32_t(&latencyTicks);
-			NETuint32_t(&checkTime);
-			NETuint16_t(&checkCrc);
-			NETuint16_t(&wantedLatency);
+		NETuint32_t(&latencyTicks);
+		NETuint32_t(&checkTime);
+		NETuint16_t(&checkCrc);
+		NETuint16_t(&wantedLatency);
 		NETend();
 	}
 }
@@ -384,10 +384,10 @@ void recvPlayerGameTime(NETQUEUE queue)
 	GameCrcType checkCrc = 0;
 
 	NETbeginDecode(queue, GAME_GAME_TIME);
-		NETuint32_t(&latencyTicks);
-		NETuint32_t(&checkTime);
-		NETuint16_t(&checkCrc);
-		NETuint16_t(&wantedLatencies[queue.index]);
+	NETuint32_t(&latencyTicks);
+	NETuint32_t(&checkTime);
+	NETuint16_t(&checkCrc);
+	NETuint16_t(&wantedLatencies[queue.index]);
 	NETend();
 
 	syncDebug("GAME_GAME_TIME p%d;lat%u,ct%u,crc%04X,wlat%u", queue.index, latencyTicks, checkTime, checkCrc, wantedLatencies[queue.index]);

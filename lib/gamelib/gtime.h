@@ -88,7 +88,7 @@ extern void gameTimeReset(UDWORD time);
 
 /**
  *	Reset the game time modifiers.
- *	@see gameTimeSetMod 
+ *	@see gameTimeSetMod
  */
 void gameTimeResetMod(void);
 
@@ -139,8 +139,8 @@ extern float realTimeFraction;  ///< Private performance calculation. Do not use
 /// Returns numerator/denominator * (newTime - oldTime). Rounds up or down such that the average return value is right, if oldTime is always the previous newTime.
 static inline WZ_DECL_CONST int quantiseFraction(int numerator, int denominator, int newTime, int oldTime)
 {
-	int64_t newValue = (int64_t)newTime * numerator/denominator;
-	int64_t oldValue = (int64_t)oldTime * numerator/denominator;
+	int64_t newValue = (int64_t)newTime * numerator / denominator;
+	int64_t oldValue = (int64_t)oldTime * numerator / denominator;
 	return newValue - oldValue;
 }
 /// Returns numerator/denominator * (newTime - oldTime). Rounds up or down such that the average return value is right, if oldTime is always the previous newTime.
@@ -181,12 +181,12 @@ static inline int32_t gameTimeAdjustedAverage(int value)
 /// Returns the numerator/denominator times deltaGameTime, converted to seconds. The return value is rounded up or down, such that it is exactly right on average.
 static inline int32_t gameTimeAdjustedAverage(int numerator, int denominator)
 {
-	return quantiseFraction(numerator, GAME_TICKS_PER_SEC*denominator, gameTime + deltaGameTime, gameTime);
+	return quantiseFraction(numerator, GAME_TICKS_PER_SEC * denominator, gameTime + deltaGameTime, gameTime);
 }
 /// Returns the numerator/denominator times deltaGameTime, converted to seconds. The return value is rounded up or down, such that it is exactly right on average.
 static inline Vector3i gameTimeAdjustedAverage(Vector3i numerator, int denominator)
 {
-	return quantiseFraction(numerator, GAME_TICKS_PER_SEC*denominator, gameTime + deltaGameTime, gameTime);
+	return quantiseFraction(numerator, GAME_TICKS_PER_SEC * denominator, gameTime + deltaGameTime, gameTime);
 }
 
 void sendPlayerGameTime(void);                            ///< Sends a GAME_GAME_TIME message with gameTime plus latency to our game queues.
