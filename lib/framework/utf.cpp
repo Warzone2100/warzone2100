@@ -61,7 +61,7 @@ utf_32_char UTF8DecodeChar(const char *utf8_char, const char **next_char)
 	ASSERT_START_OCTECT(*utf8_char);
 
 	// first octect: 0xxxxxxx: 7 bit (ASCII)
-	if      ((*utf8_char & 0x80) == 0x00)
+	if ((*utf8_char & 0x80) == 0x00)
 	{
 		// 1 byte long encoding
 		decoded = *((*next_char)++);
@@ -141,17 +141,25 @@ size_t UTF16CharacterCount(const uint16_t *utf16)
 static size_t unicode_utf8_char_length(const utf_32_char unicode_char)
 {
 	// an ASCII character, which uses 7 bit at most, which is one byte in UTF-8
-	if      (unicode_char < 0x00000080)
-		return 1; // stores 7 bits
+	if (unicode_char < 0x00000080)
+	{
+		return 1;    // stores 7 bits
+	}
 	else if (unicode_char < 0x00000800)
-		return 2; // stores 11 bits
+	{
+		return 2;    // stores 11 bits
+	}
 	else if (unicode_char < 0x00010000)
-		return 3; // stores 16 bits
+	{
+		return 3;    // stores 16 bits
+	}
 	/* This encoder can deal with < 0x00200000, but Unicode only ranges
 	 * from 0x0 to 0x10FFFF. Thus we don't accept anything else.
 	 */
 	else if (unicode_char < 0x00110000)
-		return 4; // stores 21 bits
+	{
+		return 4;    // stores 21 bits
+	}
 
 	/* Apparently this character lies outside the 0x0 - 0x10FFFF
 	 * Unicode range, so don't accept it.
@@ -165,7 +173,7 @@ static size_t unicode_utf8_char_length(const utf_32_char unicode_char)
 char *UTF8CharacterAtOffset(const char *utf8_string, size_t index)
 {
 	while (*utf8_string != '\0'
-	    && index != 0)
+	       && index != 0)
 	{
 		// Move to the next character
 		UTF8DecodeChar(utf8_string, &utf8_string);
@@ -174,9 +182,11 @@ char *UTF8CharacterAtOffset(const char *utf8_string, size_t index)
 	}
 
 	if (*utf8_string == '\0')
+	{
 		return NULL;
+	}
 
-	return (char*)utf8_string;
+	return (char *)utf8_string;
 }
 
 /** Encodes a single Unicode character to a UTF-8 encoded string.
@@ -196,7 +206,7 @@ static char *encode_utf8_char(const utf_32_char unicode_char, char *out_char)
 	char *next_char = out_char;
 
 	// 7 bits
-	if      (unicode_char < 0x00000080)
+	if (unicode_char < 0x00000080)
 	{
 		*(next_char++) = unicode_char;
 	}
@@ -251,7 +261,7 @@ utf_32_char UTF16DecodeChar(const utf_16_char *utf16_char, const utf_16_char **n
 
 	// Are we dealing with a surrogate pair
 	if (*utf16_char >= 0xD800
-	 && *utf16_char <= 0xDFFF)
+	    && *utf16_char <= 0xDFFF)
 	{
 		ASSERT_START_HEXADECT(utf16_char[0]);
 		ASSERT_FINAL_HEXADECT(utf16_char[1]);
@@ -287,7 +297,7 @@ static utf_16_char *encode_utf16_char(const utf_32_char unicode_char, utf_16_cha
 	utf_16_char *next_char = out_char;
 
 	// 16 bits
-	if      (unicode_char < 0x10000)
+	if (unicode_char < 0x10000)
 	{
 		*(next_char++) = unicode_char;
 	}
@@ -313,9 +323,9 @@ static utf_16_char *encode_utf16_char(const utf_32_char unicode_char, utf_16_cha
 	return next_char;
 }
 
-static size_t utf16_utf8_buffer_length(const utf_16_char* unicode_string)
+static size_t utf16_utf8_buffer_length(const utf_16_char *unicode_string)
 {
-	const utf_16_char* curChar = unicode_string;
+	const utf_16_char *curChar = unicode_string;
 
 	// Determine length of string (in octets) when encoded in UTF-8
 	size_t length = 0;
@@ -330,13 +340,13 @@ static size_t utf16_utf8_buffer_length(const utf_16_char* unicode_string)
 
 char *UTF16toUTF8(const utf_16_char *unicode_string, size_t *nbytes)
 {
-	const utf_16_char* curChar;
+	const utf_16_char *curChar;
 
 	const size_t utf8_length = utf16_utf8_buffer_length(unicode_string);
 
 	// Allocate memory to hold the UTF-8 encoded string (plus a terminating nul char)
-	char* utf8_string = (char *)malloc(utf8_length + 1);
-	char* curOutPos = utf8_string;
+	char *utf8_string = (char *)malloc(utf8_length + 1);
+	char *curOutPos = utf8_string;
 
 	if (utf8_string == NULL)
 	{
@@ -362,16 +372,16 @@ char *UTF16toUTF8(const utf_16_char *unicode_string, size_t *nbytes)
 	return utf8_string;
 }
 
-static size_t utf8_as_utf16_buf_size(const char* utf8_string)
+static size_t utf8_as_utf16_buf_size(const char *utf8_string)
 {
-	const char* curChar = utf8_string;
+	const char *curChar = utf8_string;
 
 	size_t length = 0;
 	while (*curChar != '\0')
 	{
 		const utf_32_char unicode_char = UTF8DecodeChar(curChar, &curChar);
 
-		if      (unicode_char < 0x10000)
+		if (unicode_char < 0x10000)
 		{
 			length += 1;
 		}
@@ -392,14 +402,14 @@ static size_t utf8_as_utf16_buf_size(const char* utf8_string)
 	return length;
 }
 
-utf_16_char *UTF8toUTF16(const char* utf8_string, size_t *nbytes)
+utf_16_char *UTF8toUTF16(const char *utf8_string, size_t *nbytes)
 {
-	const char* curChar = utf8_string;
+	const char *curChar = utf8_string;
 	const size_t unicode_length = utf8_as_utf16_buf_size(utf8_string);
 
 	// Allocate memory to hold the UTF-16 encoded string (plus a terminating nul)
-	utf_16_char* unicode_string = (utf_16_char *)malloc(sizeof(utf_16_char) * (unicode_length + 1));
-	utf_16_char* curOutPos = unicode_string;
+	utf_16_char *unicode_string = (utf_16_char *)malloc(sizeof(utf_16_char) * (unicode_length + 1));
+	utf_16_char *curOutPos = unicode_string;
 
 	if (unicode_string == NULL)
 	{
@@ -427,7 +437,7 @@ utf_16_char *UTF8toUTF16(const char* utf8_string, size_t *nbytes)
 utf_16_char *UTF16CharacterAtOffset(const utf_16_char *utf16_string, size_t index)
 {
 	while (*utf16_string != '\0'
-	    && index != 0)
+	       && index != 0)
 	{
 		// Move to the next character
 		UTF16DecodeChar(utf16_string, &utf16_string);
@@ -436,15 +446,17 @@ utf_16_char *UTF16CharacterAtOffset(const utf_16_char *utf16_string, size_t inde
 	}
 
 	if (*utf16_string == '\0')
+	{
 		return NULL;
+	}
 
-	return (utf_16_char*)utf16_string;
+	return (utf_16_char *)utf16_string;
 }
 
 
-static size_t utf32_utf8_buffer_length(const utf_32_char* unicode_string)
+static size_t utf32_utf8_buffer_length(const utf_32_char *unicode_string)
 {
-	const utf_32_char* curChar;
+	const utf_32_char *curChar;
 
 	// Determine length of string (in octets) when encoded in UTF-8
 	size_t length = 0;
@@ -458,13 +470,13 @@ static size_t utf32_utf8_buffer_length(const utf_32_char* unicode_string)
 
 char *UTF32toUTF8(const utf_32_char *unicode_string, size_t *nbytes)
 {
-	const utf_32_char* curChar;
+	const utf_32_char *curChar;
 
 	const size_t utf8_length = utf32_utf8_buffer_length(unicode_string);
 
 	// Allocate memory to hold the UTF-8 encoded string (plus a terminating nul char)
-	char* utf8_string = (char *)malloc(utf8_length + 1);
-	char* curOutPos = utf8_string;
+	char *utf8_string = (char *)malloc(utf8_length + 1);
+	char *curOutPos = utf8_string;
 
 	if (utf8_string == NULL)
 	{
@@ -491,12 +503,12 @@ char *UTF32toUTF8(const utf_32_char *unicode_string, size_t *nbytes)
 
 utf_32_char *UTF8toUTF32(const char *utf8_string, size_t *nbytes)
 {
-	const char* curChar = utf8_string;
+	const char *curChar = utf8_string;
 	const size_t unicode_length = UTF8CharacterCount(utf8_string);
 
 	// Allocate memory to hold the UTF-32 encoded string (plus a terminating nul)
-	utf_32_char* unicode_string = (utf_32_char *)malloc(sizeof(utf_32_char) * (unicode_length + 1));
-	utf_32_char* curOutPos = unicode_string;
+	utf_32_char *unicode_string = (utf_32_char *)malloc(sizeof(utf_32_char) * (unicode_length + 1));
+	utf_32_char *curOutPos = unicode_string;
 
 	if (unicode_string == NULL)
 	{

@@ -31,10 +31,10 @@
 #define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]) + WZ_ASSERT_ARRAY_EXPR(x))
 
 #define CLIP(val, min, max) do                                                \
-{                                                                             \
-    if ((val) < (min)) (val) = (min);                                         \
-    else if ((val) > (max)) (val) = (max);                                    \
-} while(0)
+	{                                                                             \
+		if ((val) < (min)) (val) = (min);                                         \
+		else if ((val) > (max)) (val) = (max);                                    \
+	} while(0)
 
 /*
    defines for ONEINX

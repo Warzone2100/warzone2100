@@ -33,32 +33,90 @@
 # include <openssl/obj_mac.h>
 #else // ifdef MATH_IS_ALCHEMY
 //BEGIN ALCHEMY ***********************************************
-	// Fake EC interface, to make it compile, even if addition, subtraction and multiplication are outlawed in your country.
-	#define NID_secp224r1 0xBADBAD
+// Fake EC interface, to make it compile, even if addition, subtraction and multiplication are outlawed in your country.
+#define NID_secp224r1 0xBADBAD
 
-	struct EC_KEY
+struct EC_KEY
+{
+	std::vector<uint8_t> privateVoodoo;
+	std::vector<uint8_t> publicVoodoo;
+};
+struct ECDSA_SIG {};
+
+EC_KEY *EC_KEY_new_by_curve_name(int)
+{
+	return new EC_KEY;
+}
+void EC_KEY_free(EC_KEY *key)
+{
+	delete key;
+}
+EC_KEY *EC_KEY_dup(EC_KEY const *key)
+{
+	return key != nullptr ? new EC_KEY(*key) : nullptr;
+}
+int EC_KEY_generate_key(EC_KEY *)
+{
+	return 1;
+}
+uint8_t *EC_KEY_get0_private_key(EC_KEY *key)
+{
+	return key->privateVoodoo.empty() ? nullptr : &key->privateVoodoo[0];
+}
+int i2d_ECPrivateKey(EC_KEY *key, unsigned char **out)
+{
+	if (out != nullptr && *out != nullptr)
 	{
-		std::vector<uint8_t> privateVoodoo;
-		std::vector<uint8_t> publicVoodoo;
-	};
-	struct ECDSA_SIG {};
+		memcpy(*out, &key->privateVoodoo[0], key->privateVoodoo.size());
+		*out += key->privateVoodoo.size();
+	} return key->privateVoodoo.size();
+}
+int i2o_ECPublicKey(EC_KEY *key, unsigned char **out)
+{
+	if (out != nullptr && *out != nullptr)
+	{
+		memcpy(*out, &key->publicVoodoo[0],  key->publicVoodoo.size());
+		*out += key->publicVoodoo.size();
+	} return key->publicVoodoo.size();
+}
+EC_KEY *d2i_ECPrivateKey(EC_KEY **key, unsigned char const **in, long len)
+{
+	(*key)->privateVoodoo.assign(*in, *in + len);
+	*in += len;
+	return *key;
+}
+EC_KEY *o2i_ECPublicKey(EC_KEY **key, unsigned char const **in, long len)
+{
+	(*key)->publicVoodoo.assign(*in, *in + len);
+	*in += len;
+	return *key;
+}
 
-	EC_KEY *EC_KEY_new_by_curve_name(int) { return new EC_KEY; }
-	void EC_KEY_free(EC_KEY *key) { delete key; }
-	EC_KEY *EC_KEY_dup(EC_KEY const *key) { return key != nullptr? new EC_KEY(*key) : nullptr; }
-	int EC_KEY_generate_key(EC_KEY *) { return 1; }
-	uint8_t *EC_KEY_get0_private_key(EC_KEY *key) { return key->privateVoodoo.empty()? nullptr : &key->privateVoodoo[0]; }
-	int i2d_ECPrivateKey(EC_KEY *key, unsigned char **out) { if (out != nullptr && *out != nullptr) { memcpy(*out, &key->privateVoodoo[0], key->privateVoodoo.size()); *out += key->privateVoodoo.size(); } return key->privateVoodoo.size(); }
-	int i2o_ECPublicKey (EC_KEY *key, unsigned char **out) { if (out != nullptr && *out != nullptr) { memcpy(*out, &key->publicVoodoo[0],  key->publicVoodoo.size());  *out += key->publicVoodoo.size();  } return key->publicVoodoo.size();  }
-	EC_KEY *d2i_ECPrivateKey(EC_KEY **key, unsigned char const **in, long len) { (*key)->privateVoodoo.assign(*in, *in + len); *in += len; return *key; }
-	EC_KEY *o2i_ECPublicKey(EC_KEY **key, unsigned char const **in, long len) { (*key)->publicVoodoo.assign(*in, *in + len); *in += len; return *key; }
-
-	ECDSA_SIG *ECDSA_do_sign(uint8_t const *, size_t, EC_KEY const *) { return nullptr; }
-	int ECDSA_size(EC_KEY const *) { return 0; }
-	int i2d_ECDSA_SIG(ECDSA_SIG *, uint8_t **) { return 0; }
-	ECDSA_SIG *d2i_ECDSA_SIG(ECDSA_SIG **, unsigned char const **pp, size_t len) { *pp += len; return new ECDSA_SIG; }
-	void ECDSA_SIG_free(ECDSA_SIG *sig) { delete sig; }
-	int ECDSA_do_verify(uint8_t const *, int, ECDSA_SIG const *, EC_KEY const *) { return 1; }  // We have just checked this signature very very carefully, and it was valid.
+ECDSA_SIG *ECDSA_do_sign(uint8_t const *, size_t, EC_KEY const *)
+{
+	return nullptr;
+}
+int ECDSA_size(EC_KEY const *)
+{
+	return 0;
+}
+int i2d_ECDSA_SIG(ECDSA_SIG *, uint8_t **)
+{
+	return 0;
+}
+ECDSA_SIG *d2i_ECDSA_SIG(ECDSA_SIG **, unsigned char const **pp, size_t len)
+{
+	*pp += len;
+	return new ECDSA_SIG;
+}
+void ECDSA_SIG_free(ECDSA_SIG *sig)
+{
+	delete sig;
+}
+int ECDSA_do_verify(uint8_t const *, int, ECDSA_SIG const *, EC_KEY const *)
+{
+	return 1;    // We have just checked this signature very very carefully, and it was valid.
+}
 //END ALCHEMY ***********************************************
 #endif  //MATH_IS_ALCHEMY
 
@@ -75,7 +133,7 @@ uint32_t crcSum(uint32_t crc, const void *data_, size_t dataLen)
 
 	while (dataLen-- > 0)
 	{
-		crc = crc<<8 ^ crcTable[crc>>24 ^ (uint8_t)*data++];
+		crc = crc << 8 ^ crcTable[crc>>24 ^ (uint8_t) * data++];
 	}
 
 	return crc;
@@ -85,8 +143,8 @@ uint32_t crcSumU16(uint32_t crc, const uint16_t *data, size_t dataLen)
 {
 	while (dataLen-- > 0)
 	{
-		crc = crc<<8 ^ crcTable[crc>>24 ^ (uint8_t)(*data>>8)];
-		crc = crc<<8 ^ crcTable[crc>>24 ^ (uint8_t)*data++];
+		crc = crc << 8 ^ crcTable[crc>>24 ^ (uint8_t)(*data >> 8)];
+		crc = crc << 8 ^ crcTable[crc>>24 ^ (uint8_t) * data++];
 	}
 
 	return crc;
@@ -96,14 +154,14 @@ uint32_t crcSumVector2i(uint32_t crc, const Vector2i *data, size_t dataLen)
 {
 	while (dataLen-- > 0)
 	{
-		crc = crc<<8 ^ crcTable[crc>>24 ^ (uint8_t)(data->x>>24)];
-		crc = crc<<8 ^ crcTable[crc>>24 ^ (uint8_t)(data->x>>16)];
-		crc = crc<<8 ^ crcTable[crc>>24 ^ (uint8_t)(data->x>>8)];
-		crc = crc<<8 ^ crcTable[crc>>24 ^ (uint8_t)data->x];
-		crc = crc<<8 ^ crcTable[crc>>24 ^ (uint8_t)(data->y>>24)];
-		crc = crc<<8 ^ crcTable[crc>>24 ^ (uint8_t)(data->y>>16)];
-		crc = crc<<8 ^ crcTable[crc>>24 ^ (uint8_t)(data->y>>8)];
-		crc = crc<<8 ^ crcTable[crc>>24 ^ (uint8_t)data++->y];
+		crc = crc << 8 ^ crcTable[crc>>24 ^ (uint8_t)(data->x >> 24)];
+		crc = crc << 8 ^ crcTable[crc>>24 ^ (uint8_t)(data->x >> 16)];
+		crc = crc << 8 ^ crcTable[crc>>24 ^ (uint8_t)(data->x >> 8)];
+		crc = crc << 8 ^ crcTable[crc>>24 ^ (uint8_t)data->x];
+		crc = crc << 8 ^ crcTable[crc>>24 ^ (uint8_t)(data->y >> 24)];
+		crc = crc << 8 ^ crcTable[crc>>24 ^ (uint8_t)(data->y >> 16)];
+		crc = crc << 8 ^ crcTable[crc>>24 ^ (uint8_t)(data->y >> 8)];
+		crc = crc << 8 ^ crcTable[crc>>24 ^ (uint8_t)data++->y];
 	}
 
 	return crc;
@@ -139,12 +197,12 @@ void Sha256::setZero()
 std::string Sha256::toString() const
 {
 	std::string str;
-	str.resize(Bytes*2);
+	str.resize(Bytes * 2);
 	char const *hexDigits = "0123456789abcdef";
 	for (int n = 0; n < Bytes; ++n)
 	{
-		str[n*2    ] = hexDigits[bytes[n] >> 4];
-		str[n*2 + 1] = hexDigits[bytes[n] & 15];
+		str[n * 2    ] = hexDigits[bytes[n] >> 4];
+		str[n * 2 + 1] = hexDigits[bytes[n] & 15];
 	}
 	return str;
 }
@@ -152,7 +210,7 @@ std::string Sha256::toString() const
 void Sha256::fromString(std::string const &s)
 {
 	setZero();
-	unsigned nChars = std::min<unsigned>(Bytes*2, s.size());
+	unsigned nChars = std::min<unsigned>(Bytes * 2, s.size());
 	for (unsigned n = 0; n < nChars; ++n)
 	{
 		unsigned h;
@@ -173,7 +231,7 @@ void Sha256::fromString(std::string const &s)
 		{
 			break;
 		}
-		bytes[n/2] |= h << (n%2? 0 : 4);
+		bytes[n / 2] |= h << (n % 2 ? 0 : 4);
 	}
 }
 
@@ -273,11 +331,11 @@ bool EcKey::verify(Sig const &sig, void const *data, size_t dataLen) const
 
 EcKey::Key EcKey::toBytes(Privacy privacy) const
 {
-	int (*toBytesFunc)(EC_KEY *key, unsigned char **out) = nullptr;
+	int (*toBytesFunc)(EC_KEY * key, unsigned char **out) = nullptr;
 	switch (privacy)
 	{
-		case Private: toBytesFunc = i2d_ECPrivateKey; break;  // Note that the format for private keys is somewhat bloated, and even contains the public key which could be (efficiently) computed from the private key.
-		case Public:  toBytesFunc = i2o_ECPublicKey;  break;
+	case Private: toBytesFunc = i2d_ECPrivateKey; break;  // Note that the format for private keys is somewhat bloated, and even contains the public key which could be (efficiently) computed from the private key.
+	case Public:  toBytesFunc = i2o_ECPublicKey;  break;
 	}
 	if (empty())
 	{
@@ -285,7 +343,7 @@ EcKey::Key EcKey::toBytes(Privacy privacy) const
 		return Key();
 	}
 	Key bytes(toBytesFunc((EC_KEY *)vKey, nullptr));
-	unsigned char *keyPtr = bytes.empty()? nullptr : &bytes[0];
+	unsigned char *keyPtr = bytes.empty() ? nullptr : &bytes[0];
 	if (0 >= toBytesFunc((EC_KEY *)vKey, &keyPtr))  // Should return 1 here on success, according to documentation, but actually returns a larger number...
 	{
 #ifndef MATH_IS_ALCHEMY
@@ -303,8 +361,8 @@ void EcKey::fromBytes(EcKey::Key const &key, EcKey::Privacy privacy)
 	EC_KEY *(*fromBytesFunc)(EC_KEY **key, unsigned char const **in, long len) = nullptr;
 	switch (privacy)
 	{
-		case Private: fromBytesFunc = d2i_ECPrivateKey; break;
-		case Public:  fromBytesFunc = o2i_ECPublicKey;  break;
+	case Private: fromBytesFunc = d2i_ECPrivateKey; break;
+	case Public:  fromBytesFunc = o2i_ECPublicKey;  break;
 	}
 
 	clear();
@@ -339,21 +397,21 @@ EcKey EcKey::generate()
 
 std::string base64Encode(std::vector<uint8_t> const &bytes)
 {
-	std::string str((bytes.size() + 2)/3 * 4, '\0');
-	for (unsigned n = 0; n*3 < bytes.size(); ++n)
+	std::string str((bytes.size() + 2) / 3 * 4, '\0');
+	for (unsigned n = 0; n * 3 < bytes.size(); ++n)
 	{
-		unsigned rem = bytes.size() - n*3;
-		unsigned block = bytes[0 + n*3]<<16 | (rem > 1? bytes[1 + n*3] : 0)<<8 | (rem > 2? bytes[2 + n*3] : 0);
+		unsigned rem = bytes.size() - n * 3;
+		unsigned block = bytes[0 + n * 3] << 16 | (rem > 1 ? bytes[1 + n * 3] : 0) << 8 | (rem > 2 ? bytes[2 + n * 3] : 0);
 		for (unsigned i = 0; i < 4; ++i)
 		{
-			str[i + n*4] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"[(block >> (6*(3 - i))) & 0x3F];
+			str[i + n * 4] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"[(block >> (6 * (3 - i))) & 0x3F];
 		}
 		if (rem <= 2)
 		{
-			str[3 + n*4] = '=';
+			str[3 + n * 4] = '=';
 			if (rem <= 1)
 			{
-				str[2 + n*4] = '=';
+				str[2 + n * 4] = '=';
 			}
 		}
 	}
@@ -362,32 +420,32 @@ std::string base64Encode(std::vector<uint8_t> const &bytes)
 
 std::vector<uint8_t> base64Decode(std::string const &str)
 {
-	std::vector<uint8_t> bytes(str.size()/4 * 3);
-	for (unsigned n = 0; n < str.size()/4; ++n)
+	std::vector<uint8_t> bytes(str.size() / 4 * 3);
+	for (unsigned n = 0; n < str.size() / 4; ++n)
 	{
 		unsigned block = 0;
 		for (unsigned i = 0; i < 4; ++i)
 		{
-			uint8_t ch = str[i + n*4];
-			unsigned val = ch >= 'A' && ch <= 'Z'? ch - 'A' + 0 :
-			               ch >= 'a' && ch <= 'z'? ch - 'a' + 26 :
-			               ch >= '0' && ch <= '9'? ch - '0' + 52 :
-			               ch == '+'? 62 :
-			               ch == '/'? 63 :
+			uint8_t ch = str[i + n * 4];
+			unsigned val = ch >= 'A' && ch <= 'Z' ? ch - 'A' + 0 :
+			               ch >= 'a' && ch <= 'z' ? ch - 'a' + 26 :
+			               ch >= '0' && ch <= '9' ? ch - '0' + 52 :
+			               ch == '+' ? 62 :
+			               ch == '/' ? 63 :
 			               0;
-			block |= val << (6*(3 - i));
+			block |= val << (6 * (3 - i));
 		}
-		bytes[0 + n*3] = block>>16;
-		bytes[1 + n*3] = block>>8;
-		bytes[2 + n*3] = block;
+		bytes[0 + n * 3] = block >> 16;
+		bytes[1 + n * 3] = block >> 8;
+		bytes[2 + n * 3] = block;
 	}
 	if (str.size() >= 4)
 	{
-		if (str[str.size()/4*4 - 2] == '=')
+		if (str[str.size() / 4 * 4 - 2] == '=')
 		{
 			bytes.resize(bytes.size() - 2);
 		}
-		else if (str[str.size()/4*4 - 1] == '=')
+		else if (str[str.size() / 4 * 4 - 1] == '=')
 		{
 			bytes.resize(bytes.size() - 1);
 		}

@@ -41,19 +41,19 @@ struct TREAP_NODE;
  * \return On success a non-NULL pointer, which holds the created treap. On
  *         failure NULL is returned.
  */
-extern struct TREAP_NODE** treapCreate(void);
+extern struct TREAP_NODE **treapCreate(void);
 
 /* Add an object to a treap
  */
-extern bool treapAdd(struct TREAP_NODE** psTreap, const char *key, const char* string);
+extern bool treapAdd(struct TREAP_NODE **psTreap, const char *key, const char *string);
 
 /* Find an object in a treap */
-extern const char* treapFind(struct TREAP_NODE** psTreap, const char *key);
+extern const char *treapFind(struct TREAP_NODE **psTreap, const char *key);
 
 /** Find the key associated with the given string number */
-extern const char* treapFindKey(struct TREAP_NODE** psTreap, const char* string);
+extern const char *treapFindKey(struct TREAP_NODE **psTreap, const char *string);
 
 /* Destroy a treap and release all the memory associated with it */
-extern void treapDestroy(struct TREAP_NODE** psTreap);
+extern void treapDestroy(struct TREAP_NODE **psTreap);
 
 #endif

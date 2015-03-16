@@ -66,11 +66,23 @@ public:
 
 	void beginGroup(const QString &prefix);
 	void endGroup();
-	QString fileName() const { return mFilename; }
-	bool isWritable() const { return mWarning == ReadAndWrite && mStatus; }
+	QString fileName() const
+	{
+		return mFilename;
+	}
+	bool isWritable() const
+	{
+		return mWarning == ReadAndWrite && mStatus;
+	}
 	void setValue(const QString &key, const QVariant &value);
-	QString group() { return mName; }
-	bool status() { return mStatus; }
+	QString group()
+	{
+		return mName;
+	}
+	bool status()
+	{
+		return mStatus;
+	}
 };
 
 #endif

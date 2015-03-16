@@ -36,9 +36,9 @@
 
 struct TREAP_NODE
 {
-	const char*                     key;                    //< The key to sort the node on
+	const char                     *key;                    //< The key to sort the node on
 	unsigned int                    priority;               //< Treap priority
-	const char*                     string;                 //< The string stored in the treap
+	const char                     *string;                 //< The string stored in the treap
 	TREAP_NODE                      *psLeft, *psRight;      //< The sub trees
 };
 
@@ -48,18 +48,24 @@ static int treapStringCmp(const char *key1, const char *key2)
 	int result;
 
 	result = strcmp(key1, key2);
-	if      (result < 0)
+	if (result < 0)
+	{
 		return -1;
+	}
 	else if (result > 0)
+	{
 		return 1;
+	}
 	else
+	{
 		return 0;
+	}
 }
 
 
-TREAP_NODE** treapCreate()
+TREAP_NODE **treapCreate()
 {
-	TREAP_NODE** const psTreap = (TREAP_NODE**)malloc(sizeof(*psTreap));
+	TREAP_NODE **const psTreap = (TREAP_NODE **)malloc(sizeof(*psTreap));
 	if (!psTreap)
 	{
 		debug(LOG_FATAL, "Out of memory");
@@ -136,7 +142,7 @@ static void treapAddNode(TREAP_NODE **ppsRoot, TREAP_NODE *psNew)
 
 /* Add an object to a treap
  */
-bool treapAdd(TREAP_NODE** psTreap, const char* key, const char* string)
+bool treapAdd(TREAP_NODE **psTreap, const char *key, const char *string)
 {
 	/* Over-allocate so that we can put the key and the string in the same
 	 * chunck of memory as the TREAP_NODE struct. Which means a single
@@ -144,7 +150,7 @@ bool treapAdd(TREAP_NODE** psTreap, const char* key, const char* string)
 	 */
 	const size_t key_size    = strlen(key)    + 1;
 	const size_t string_size = strlen(string) + 1;
-	TREAP_NODE * const psNew = (TREAP_NODE *)malloc(sizeof(*psNew) + key_size + string_size);
+	TREAP_NODE *const psNew = (TREAP_NODE *)malloc(sizeof(*psNew) + key_size + string_size);
 
 	if (psNew == NULL)
 	{
@@ -153,8 +159,8 @@ bool treapAdd(TREAP_NODE** psTreap, const char* key, const char* string)
 		return false;
 	}
 
-	psNew->key    = strcpy((char*)(psNew + 1),            key);
-	psNew->string = strcpy((char*)(psNew + 1) + key_size, string);
+	psNew->key    = strcpy((char *)(psNew + 1),            key);
+	psNew->string = strcpy((char *)(psNew + 1) + key_size, string);
 
 	psNew->priority = rand();
 	psNew->psLeft = NULL;
@@ -167,7 +173,7 @@ bool treapAdd(TREAP_NODE** psTreap, const char* key, const char* string)
 
 
 /* Recursively find an object in a treap */
-static const char* treapFindRec(TREAP_NODE *psRoot, const char *key)
+static const char *treapFindRec(TREAP_NODE *psRoot, const char *key)
 {
 	if (psRoot == NULL)
 	{
@@ -187,7 +193,7 @@ static const char* treapFindRec(TREAP_NODE *psRoot, const char *key)
 		return treapFindRec(psRoot->psRight, key);
 		break;
 	default:
-		ASSERT( false, "treapFindRec: invalid return from comparison" );
+		ASSERT(false, "treapFindRec: invalid return from comparison");
 		break;
 	}
 	return NULL;
@@ -195,16 +201,16 @@ static const char* treapFindRec(TREAP_NODE *psRoot, const char *key)
 
 
 /* Find an object in a treap */
-const char* treapFind(TREAP_NODE** psTreap, const char *key)
+const char *treapFind(TREAP_NODE **psTreap, const char *key)
 {
 	ASSERT(psTreap != NULL, "Invalid treap pointer!");
 
 	return treapFindRec(*psTreap, key);
 }
 
-static const char* treapFindKeyRec(TREAP_NODE const * const psNode, const char * const string)
+static const char *treapFindKeyRec(TREAP_NODE const *const psNode, const char *const string)
 {
-	const char* key;
+	const char *key;
 
 	if (psNode == NULL)
 	{
@@ -225,7 +231,7 @@ static const char* treapFindKeyRec(TREAP_NODE const * const psNode, const char *
 	return treapFindKeyRec(psNode->psRight, string);
 }
 
-const char* treapFindKey(TREAP_NODE** psTreap, const char* string)
+const char *treapFindKey(TREAP_NODE **psTreap, const char *string)
 {
 	ASSERT(psTreap != NULL, "Invalid treap pointer!");
 
@@ -250,7 +256,7 @@ static void treapDestroyRec(TREAP_NODE *psRoot)
 
 
 /* Destroy a treap and release all the memory associated with it */
-void treapDestroy(TREAP_NODE** psTreap)
+void treapDestroy(TREAP_NODE **psTreap)
 {
 	ASSERT(psTreap != NULL, "Invalid treap pointer!");
 

@@ -29,14 +29,14 @@
 extern void strres_set_extra(YY_EXTRA_TYPE user_defined);
 
 /* Call the yacc parser */
-extern int strres_parse(void* psStrRes);
+extern int strres_parse(void *psStrRes);
 
 /* Destroy the lexer */
 extern int strres_lex_destroy(void);
 
-void strres_error(const char* msg);
+void strres_error(const char *msg);
 
 /* Store a string */
-extern bool strresStoreString(struct STR_RES *psRes, const char* pID, const char* pString);
+extern bool strresStoreString(struct STR_RES *psRes, const char *pID, const char *pString);
 
 #endif

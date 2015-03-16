@@ -79,11 +79,13 @@ WzConfig::WzConfig(const QString &name, WzConfig::warning warning, QObject *pare
 	char **diffList = PHYSFS_enumerateFiles("diffs");
 	char **i;
 	int j;
-	for (i = diffList; *i != NULL; i++) 
+	for (i = diffList; *i != NULL; i++)
 	{
 		std::string str(std::string("diffs/") + *i + std::string("/") + name.toUtf8().constData());
-		if (!PHYSFS_exists(str.c_str())) 
+		if (!PHYSFS_exists(str.c_str()))
+		{
 			continue;
+		}
 		QSettings tmp(QString("wz::") + str.c_str(), QSettings::IniFormat);
 		if (tmp.status() != QSettings::NoError)
 		{
@@ -92,7 +94,7 @@ WzConfig::WzConfig(const QString &name, WzConfig::warning warning, QObject *pare
 		QStringList keys(tmp.allKeys());
 		for (j = 0; j < keys.length(); j++)
 		{
-			m_overrides.insert(keys[j],tmp.value(keys[j]));
+			m_overrides.insert(keys[j], tmp.value(keys[j]));
 		}
 	}
 	PHYSFS_freeList(diffList);
@@ -116,14 +118,26 @@ bool WzConfig::contains(const QString &key) const
 
 QVariant WzConfig::value(const QString &key, const QVariant &defaultValue) const
 {
-	if (!contains(key)) return defaultValue;
-	else return mObj.value(key).toVariant();
+	if (!contains(key))
+	{
+		return defaultValue;
+	}
+	else
+	{
+		return mObj.value(key).toVariant();
+	}
 }
 
 QJsonValue WzConfig::json(const QString &key, const QJsonValue &defaultValue) const
 {
-	if (!contains(key)) return defaultValue;
-	else return mObj.value(key);
+	if (!contains(key))
+	{
+		return defaultValue;
+	}
+	else
+	{
+		return mObj.value(key);
+	}
 }
 
 void WzConfig::setVector3f(const QString &name, const Vector3f &v)
@@ -138,7 +152,10 @@ void WzConfig::setVector3f(const QString &name, const Vector3f &v)
 Vector3f WzConfig::vector3f(const QString &name)
 {
 	Vector3f r(0.0, 0.0, 0.0);
-	if (!contains(name)) return r;
+	if (!contains(name))
+	{
+		return r;
+	}
 	QStringList v = value(name).toStringList();
 	ASSERT(v.size() == 3, "Bad list of %s", name.toUtf8().constData());
 	r.x = v[0].toDouble();
@@ -159,7 +176,10 @@ void WzConfig::setVector3i(const QString &name, const Vector3i &v)
 Vector3i WzConfig::vector3i(const QString &name)
 {
 	Vector3i r(0, 0, 0);
-	if (!contains(name)) return r;
+	if (!contains(name))
+	{
+		return r;
+	}
 	QStringList v = value(name).toStringList();
 	ASSERT(v.size() == 3, "Bad list of %s", name.toUtf8().constData());
 	r.x = v[0].toInt();
@@ -179,7 +199,10 @@ void WzConfig::setVector2i(const QString &name, const Vector2i &v)
 Vector2i WzConfig::vector2i(const QString &name)
 {
 	Vector2i r(0, 0);
-	if (!contains(name)) return r;
+	if (!contains(name))
+	{
+		return r;
+	}
 	QStringList v = value(name).toStringList();
 	ASSERT(v.size() == 2, "Bad list of %s", name.toUtf8().constData());
 	r.x = v[0].toInt();

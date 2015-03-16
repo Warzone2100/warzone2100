@@ -45,7 +45,7 @@
 char last_called_script_event[MAX_EVENT_NAME_LEN];
 UDWORD traceID = -1;
 
-static debug_callback * callbackRegistry = NULL;
+static debug_callback *callbackRegistry = NULL;
 bool enabled_debug[LOG_LAST]; // global
 #ifdef DEBUG
 bool assertEnabled = true;
@@ -59,7 +59,8 @@ bool assertEnabled = false;
  * This list _must_ match the enum in debug.h!
  * Names must be 8 chars long at max!
  */
-static const char *code_part_names[] = {
+static const char *code_part_names[] =
+{
 	"all",
 	"main",
 	"sound",
@@ -110,8 +111,10 @@ static code_part code_part_from_str(const char *str)
 {
 	unsigned int i;
 
-	for (i = 0; i < LOG_LAST; i++) {
-		if (strcasecmp(code_part_names[i], str) == 0) {
+	for (i = 0; i < LOG_LAST; i++)
+	{
+		if (strcasecmp(code_part_names[i], str) == 0)
+		{
 			return (code_part)i;
 		}
 	}
@@ -125,12 +128,15 @@ static code_part code_part_from_str(const char *str)
  * \param	data			Ignored. Use NULL.
  * \param	outputBuffer	Buffer containing the preprocessed text to output.
  */
-void debug_callback_stderr( WZ_DECL_UNUSED void ** data, const char * outputBuffer )
+void debug_callback_stderr(WZ_DECL_UNUSED void **data, const char *outputBuffer)
 {
-	if ( outputBuffer[strlen(outputBuffer) - 1] != '\n' ) {
-		fprintf( stderr, "%s\n", outputBuffer );
-	} else {
-		fprintf( stderr, "%s", outputBuffer );
+	if (outputBuffer[strlen(outputBuffer) - 1] != '\n')
+	{
+		fprintf(stderr, "%s\n", outputBuffer);
+	}
+	else
+	{
+		fprintf(stderr, "%s", outputBuffer);
 	}
 
 	// Make sure that all output is flushed to stderr when requested by the user
@@ -148,7 +154,7 @@ void debug_callback_stderr( WZ_DECL_UNUSED void ** data, const char * outputBuff
  * \param	outputBuffer	Buffer containing the preprocessed text to output.
  */
 #if defined WIN32 && defined DEBUG
-void debug_callback_win32debug(WZ_DECL_UNUSED void ** data, const char * outputBuffer)
+void debug_callback_win32debug(WZ_DECL_UNUSED void **data, const char *outputBuffer)
 {
 	char tmpStr[MAX_LEN_LOG_LINE];
 
@@ -158,7 +164,7 @@ void debug_callback_win32debug(WZ_DECL_UNUSED void ** data, const char * outputB
 		sstrcat(tmpStr, "\n");
 	}
 
-	OutputDebugStringA( tmpStr );
+	OutputDebugStringA(tmpStr);
 }
 #endif // WIN32
 
@@ -169,14 +175,17 @@ void debug_callback_win32debug(WZ_DECL_UNUSED void ** data, const char * outputB
  * \param	data			Filehandle to output to.
  * \param	outputBuffer	Buffer containing the preprocessed text to output.
  */
-void debug_callback_file( void ** data, const char * outputBuffer )
+void debug_callback_file(void **data, const char *outputBuffer)
 {
-	FILE * logfile = (FILE*)*data;
+	FILE *logfile = (FILE *)*data;
 
-	if ( !strchr( outputBuffer, '\n' ) ) {
-		fprintf( logfile, "%s\n", outputBuffer );
-	} else {
-		fprintf( logfile, "%s", outputBuffer );
+	if (!strchr(outputBuffer, '\n'))
+	{
+		fprintf(logfile, "%s\n", outputBuffer);
+	}
+	else
+	{
+		fprintf(logfile, "%s", outputBuffer);
 	}
 }
 
@@ -194,7 +203,7 @@ bool debug_callback_file_init(void **data)
 {
 	WZDebugfilename = (const char *)*data;
 
-	FILE* const logfile = fopen(WZDebugfilename, "w");
+	FILE *const logfile = fopen(WZDebugfilename, "w");
 	if (!logfile)
 	{
 		fprintf(stderr, "Could not open %s for appending!\n", WZDebugfilename);
@@ -216,10 +225,10 @@ bool debug_callback_file_init(void **data)
  *
  * \param	data	The filehandle to close.
  */
-void debug_callback_file_exit( void ** data )
+void debug_callback_file_exit(void **data)
 {
-	FILE * logfile = (FILE*)*data;
-	fclose( logfile );
+	FILE *logfile = (FILE *)*data;
+	fclose(logfile);
 	*data = NULL;
 }
 
@@ -256,20 +265,20 @@ void debug_init(void)
 	/*** Initialize the debug subsystem ***/
 #if defined(WZ_CC_MSVC) && defined(DEBUG)
 	int tmpDbgFlag;
-	_CrtSetReportMode( _CRT_WARN, _CRTDBG_MODE_DEBUG ); // Output CRT info to debugger
+	_CrtSetReportMode(_CRT_WARN, _CRTDBG_MODE_DEBUG);   // Output CRT info to debugger
 
-	tmpDbgFlag = _CrtSetDbgFlag( _CRTDBG_REPORT_FLAG ); // Grab current flags
+	tmpDbgFlag = _CrtSetDbgFlag(_CRTDBG_REPORT_FLAG);   // Grab current flags
 # if defined(DEBUG_MEMORY)
 	tmpDbgFlag |= _CRTDBG_CHECK_ALWAYS_DF; // Check every (de)allocation
 # endif // DEBUG_MEMORY
 	tmpDbgFlag |= _CRTDBG_ALLOC_MEM_DF; // Check allocations
 	tmpDbgFlag |= _CRTDBG_LEAK_CHECK_DF; // Check for memleaks
-	_CrtSetDbgFlag( tmpDbgFlag );
+	_CrtSetDbgFlag(tmpDbgFlag);
 #endif // WZ_CC_MSVC && DEBUG
 
 	STATIC_ASSERT(ARRAY_SIZE(code_part_names) - 1 == LOG_LAST); // enums start at 0
 
-	memset( enabled_debug, false, sizeof(enabled_debug) );
+	memset(enabled_debug, false, sizeof(enabled_debug));
 	enabled_debug[LOG_ERROR] = true;
 	enabled_debug[LOG_INFO] = true;
 	enabled_debug[LOG_FATAL] = true;
@@ -284,14 +293,16 @@ void debug_init(void)
 
 void debug_exit(void)
 {
-	debug_callback * curCallback = callbackRegistry, * tmpCallback = NULL;
+	debug_callback *curCallback = callbackRegistry, * tmpCallback = NULL;
 
-	while ( curCallback )
+	while (curCallback)
 	{
-		if ( curCallback->exit )
-			curCallback->exit( &curCallback->data );
+		if (curCallback->exit)
+		{
+			curCallback->exit(&curCallback->data);
+		}
 		tmpCallback = curCallback->next;
-		free( curCallback );
+		free(curCallback);
 		curCallback = tmpCallback;
 	}
 	warning_list.clear();
@@ -299,11 +310,11 @@ void debug_exit(void)
 }
 
 
-void debug_register_callback( debug_callback_fn callback, debug_callback_init init, debug_callback_exit exit, void * data )
+void debug_register_callback(debug_callback_fn callback, debug_callback_init init, debug_callback_exit exit, void *data)
 {
-	debug_callback * curCallback = callbackRegistry, * tmpCallback = NULL;
+	debug_callback *curCallback = callbackRegistry, * tmpCallback = NULL;
 
-	tmpCallback = (debug_callback*)malloc(sizeof(*tmpCallback));
+	tmpCallback = (debug_callback *)malloc(sizeof(*tmpCallback));
 
 	tmpCallback->next = NULL;
 	tmpCallback->callback = callback;
@@ -312,21 +323,23 @@ void debug_register_callback( debug_callback_fn callback, debug_callback_init in
 	tmpCallback->data = data;
 
 	if (tmpCallback->init
-	 && !tmpCallback->init(&tmpCallback->data))
+	    && !tmpCallback->init(&tmpCallback->data))
 	{
 		fprintf(stderr, "Failed to initialise debug callback, debugfile set to [%s]!\n", WZDebugfilename);
 		free(tmpCallback);
 		return;
 	}
 
-	if ( !curCallback )
+	if (!curCallback)
 	{
 		callbackRegistry = tmpCallback;
 		return;
 	}
 
-	while ( curCallback->next )
+	while (curCallback->next)
+	{
 		curCallback = curCallback->next;
+	}
 
 	curCallback->next = tmpCallback;
 }
@@ -336,10 +349,12 @@ bool debug_enable_switch(const char *str)
 {
 	code_part part = code_part_from_str(str);
 
-	if (part != LOG_LAST) {
+	if (part != LOG_LAST)
+	{
 		enabled_debug[part] = !enabled_debug[part];
 	}
-	if (part == LOG_ALL) {
+	if (part == LOG_ALL)
+	{
 		memset(enabled_debug, true, sizeof(enabled_debug));
 	}
 	return (part != LOG_LAST);
@@ -349,9 +364,9 @@ bool debug_enable_switch(const char *str)
  *
  *  @param str The string to send to debug callbacks.
  */
-static void printToDebugCallbacks(const char * const str)
+static void printToDebugCallbacks(const char *const str)
 {
-	debug_callback * curCallback;
+	debug_callback *curCallback;
 
 	// Loop over all callbacks, invoking them with the given data string
 	for (curCallback = callbackRegistry; curCallback != NULL; curCallback = curCallback->next)
@@ -375,7 +390,7 @@ void _realObjTrace(int id, const char *function, const char *str, ...)
 }
 
 // Thread local to prevent a race condition on read and write to this buffer if multiple
-// threads log errors. This means we will not be reporting any errors to console from threads 
+// threads log errors. This means we will not be reporting any errors to console from threads
 // other than main. If we want to fix this, make sure accesses are protected by a mutex.
 static WZ_DECL_THREAD char errorStore[512];
 static WZ_DECL_THREAD bool errorWaiting = false;
@@ -392,7 +407,7 @@ const char *debugLastError()
 	}
 }
 
-void _debug( int line, code_part part, const char *function, const char *str, ... )
+void _debug(int line, code_part part, const char *function, const char *str, ...)
 {
 	va_list ap;
 	static char outputBuffer[MAX_LEN_LOG_LINE];
@@ -426,23 +441,33 @@ void _debug( int line, code_part part, const char *function, const char *str, ..
 	{
 		// Received again the same line
 		repeated++;
-		if (repeated == next) {
-			if (repeated > 2) {
+		if (repeated == next)
+		{
+			if (repeated > 2)
+			{
 				ssprintf(outputBuffer, "last message repeated %u times (total %u repeats)", repeated - prev, repeated);
-			} else {
+			}
+			else
+			{
 				ssprintf(outputBuffer, "last message repeated %u times", repeated - prev);
 			}
 			printToDebugCallbacks(outputBuffer);
 			prev = repeated;
 			next *= 2;
 		}
-	} else {
+	}
+	else
+	{
 		// Received another line, cleanup the old
-		if (repeated > 0 && repeated != prev && repeated != 1) {
+		if (repeated > 0 && repeated != prev && repeated != 1)
+		{
 			/* just repeat the previous message when only one repeat occurred */
-			if (repeated > 2) {
+			if (repeated > 2)
+			{
 				ssprintf(outputBuffer, "last message repeated %u times (total %u repeats)", repeated - prev, repeated);
-			} else {
+			}
+			else
+			{
 				ssprintf(outputBuffer, "last message repeated %u times", repeated - prev);
 			}
 			printToDebugCallbacks(outputBuffer);
@@ -455,12 +480,12 @@ void _debug( int line, code_part part, const char *function, const char *str, ..
 	if (!repeated)
 	{
 		time_t rawtime;
-		struct tm * timeinfo;
+		struct tm *timeinfo;
 		char ourtime[15];		//HH:MM:SS
 
-		time ( &rawtime );
-		timeinfo = localtime ( &rawtime );
-		strftime (ourtime,15,"%I:%M:%S",timeinfo);
+		time(&rawtime);
+		timeinfo = localtime(&rawtime);
+		strftime(ourtime, 15, "%I:%M:%S", timeinfo);
 
 		// Assemble the outputBuffer:
 		ssprintf(outputBuffer, "%-8s|%s: %s", code_part_names[part], ourtime, useInputBuffer1 ? inputBuffer[1] : inputBuffer[0]);
@@ -485,26 +510,29 @@ void _debug( int line, code_part part, const char *function, const char *str, ..
 			char wbuf[512];
 			ssprintf(wbuf, "%s\n\nPlease check the file (%s) in your configuration directory for more details. \
 				\nDo not forget to upload the %s file, WZdebuginfo.txt and the warzone2100.rpt files in your bug reports at http://developer.wz2100.net/newticket!", useInputBuffer1 ? inputBuffer[1] : inputBuffer[0], WZ_DBGFile, WZ_DBGFile);
-			MessageBoxA( NULL, wbuf, "Warzone has terminated unexpectedly", MB_OK|MB_ICONERROR);
+			MessageBoxA(NULL, wbuf, "Warzone has terminated unexpectedly", MB_OK | MB_ICONERROR);
 #elif defined(WZ_OS_MAC)
 			int clickedIndex = \
-			cocoaShowAlert("Warzone has quit unexpectedly.",
-			               "Please check your logs and attach them along with a bug report. Thanks!",
-			               2, "Show Log Files & Open Bug Reporter", "Ignore", NULL);
+			                   cocoaShowAlert("Warzone has quit unexpectedly.",
+			                                  "Please check your logs and attach them along with a bug report. Thanks!",
+			                                  2, "Show Log Files & Open Bug Reporter", "Ignore", NULL);
 			if (clickedIndex == 0)
 			{
 				cocoaOpenURL("http://developer.wz2100.net/newticket");
-				if (WZDebugfilename == NULL) {
+				if (WZDebugfilename == NULL)
+				{
 					cocoaShowAlert("Unable to open debug log.",
 					               "The debug log subsystem has not yet been initialised.",
 					               2, "Continue", NULL);
-				} else {
+				}
+				else
+				{
 					cocoaSelectFileInFinder(WZDebugfilename);
 				}
 				cocoaOpenUserCrashReportFolder();
 			}
 #else
-			const char* popupBuf = useInputBuffer1 ? inputBuffer[1] : inputBuffer[0];
+			const char *popupBuf = useInputBuffer1 ? inputBuffer[1] : inputBuffer[0];
 			wzFatalDialog(popupBuf);
 #endif
 		}
@@ -516,9 +544,9 @@ void _debug( int line, code_part part, const char *function, const char *str, ..
 #if defined(WZ_OS_WIN)
 			char wbuf[512];
 			ssprintf(wbuf, "A non fatal error has occurred.\n\n%s\n\n", useInputBuffer1 ? inputBuffer[1] : inputBuffer[0]);
-			MessageBoxA( NULL,
-				wbuf,
-				"Warzone has detected a problem.", MB_OK|MB_ICONINFORMATION);
+			MessageBoxA(NULL,
+			            wbuf,
+			            "Warzone has detected a problem.", MB_OK | MB_ICONINFORMATION);
 #elif defined(WZ_OS_MAC)
 			cocoaShowAlert("Warzone has detected a problem.", inputBuffer[useInputBuffer1 ? 1 : 0], 0, "OK", NULL);
 #endif
@@ -532,7 +560,7 @@ void _debugBacktrace(code_part part)
 {
 #ifdef WZ_OS_LINUX
 	void *btv[20];
-	unsigned num = backtrace(btv, sizeof(btv)/sizeof(*btv));
+	unsigned num = backtrace(btv, sizeof(btv) / sizeof(*btv));
 	char **btc = backtrace_symbols(btv, num);
 	unsigned i;
 	for (i = 1; i + 2 < num; ++i)  // =1: Don't print "src/warzone2100(syncDebugBacktrace+0x16) [0x6312d1]". +2: Don't print last two lines of backtrace such as "/lib/libc.so.6(__libc_start_main+0xe6) [0x7f91e040ea26]", since the address varies (even with the same binary).

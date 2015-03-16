@@ -28,11 +28,12 @@ struct WZ_THREAD;
 struct WZ_MUTEX;
 struct WZ_SEMAPHORE;
 
-struct screeninfo {
-		int width;
-		int height;
-		int refresh_rate;
-		int screen;
+struct screeninfo
+{
+	int width;
+	int height;
+	int refresh_rate;
+	int screen;
 };
 
 void wzMain(int &argc, char **argv);

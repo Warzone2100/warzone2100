@@ -125,10 +125,10 @@ extern UDWORD frameGetFrameNumber(void);
 /** Return framerate of the last second. */
 int frameRate();
 
-extern UDWORD HashString( const char *String );
-extern UDWORD HashStringIgnoreCase( const char *String );
+extern UDWORD HashString(const char *String);
+extern UDWORD HashStringIgnoreCase(const char *String);
 
-static inline WZ_DECL_CONST const char * bool2string(bool var)
+static inline WZ_DECL_CONST const char *bool2string(bool var)
 {
 	return (var ? "true" : "false");
 }
