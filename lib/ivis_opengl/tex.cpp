@@ -63,7 +63,7 @@ int pie_ReserveTexture(const char *name)
 	return _TEX_PAGE.size() - 1;
 }
 
-int pie_AddTexPage(iV_Image *s, const char* filename, bool gameTexture, int page)
+int pie_AddTexPage(iV_Image *s, const char *filename, bool gameTexture, int page)
 {
 	ASSERT(s && filename, "Bad input parameter");
 
@@ -122,7 +122,7 @@ int pie_AddTexPage(iV_Image *s, const char* filename, bool gameTexture, int page
  * Turns filename into a pagename if possible
  * \param[in,out] filename Filename to pagify
  */
-void pie_MakeTexPageName(char * filename)
+void pie_MakeTexPageName(char *filename)
 {
 	char *c = strstr(filename, iV_TEXNAME_TCSUFFIX);
 	if (c)
@@ -141,12 +141,12 @@ void pie_MakeTexPageName(char * filename)
  * Turns page filename into a pagename + tc mask if possible
  * \param[in,out] filename Filename to pagify
  */
-void pie_MakeTexPageTCMaskName(char * filename)
+void pie_MakeTexPageTCMaskName(char *filename)
 {
 	if (strncmp(filename, "page-", 5) == 0)
 	{
 		int i;
-		for ( i = 5; i < iV_TEXNAME_MAX-1 && isdigit(filename[i]); i++) {}
+		for (i = 5; i < iV_TEXNAME_MAX - 1 && isdigit(filename[i]); i++) {}
 		filename[i] = '\0';
 		strcat(filename, iV_TEXNAME_TCSUFFIX);
 	}
@@ -262,12 +262,12 @@ unsigned int iV_getPixelFormat(const iV_Image *image)
 {
 	switch (image->depth)
 	{
-		case 3:
-			return GL_RGB;
-		case 4:
-			return GL_RGBA;
-		default:
-			debug(LOG_ERROR, "iV_getPixelFormat: Unsupported image depth: %u", image->depth);
-			return GL_INVALID_ENUM;
+	case 3:
+		return GL_RGB;
+	case 4:
+		return GL_RGBA;
+	default:
+		debug(LOG_ERROR, "iV_getPixelFormat: Unsupported image depth: %u", image->depth);
+		return GL_INVALID_ENUM;
 	}
 }

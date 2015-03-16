@@ -65,43 +65,43 @@ PIELIGHT pal_GetTeamColour(int team)
 	// set correct team colour based on team
 	switch (team)
 	{
-		case 0: 
-			tcolour = WZCOL_TEAM1; //green
-			break;
-		case 1:
-			tcolour = WZCOL_TEAM2; //orange
-			break;
-		case 2:
-			tcolour = WZCOL_TEAM3; //gray
-			break;
-		case 3:
-			tcolour = WZCOL_TEAM4; //black
-			break;
-		case 4:
-			tcolour = WZCOL_TEAM5; //red
-			break;
-		case 5:
-			tcolour = WZCOL_TEAM6; //blue
-			break;
-		case 6:
-			tcolour = WZCOL_TEAM7; //purple
-			break;
-		case 7:
-			tcolour = WZCOL_TEAM8; //teal
-			break;
-		case  8: return WZCOL_TEAM9;
-		case  9: return WZCOL_TEAM10;
-		case 10: return WZCOL_TEAM11;
-		case 11: return WZCOL_TEAM12;
-		case 12: return WZCOL_TEAM13;
-		case 13: return WZCOL_TEAM14;
-		case 14: return WZCOL_TEAM15;
-		case 15: return WZCOL_TEAM16;
-		default:
-			STATIC_ASSERT(MAX_PLAYERS <= 16);
-			ASSERT(false, "Attempting to get colour for non-existing team %u", (unsigned int)team);
-			tcolour = WZCOL_WHITE; //default is white
-			break;
+	case 0:
+		tcolour = WZCOL_TEAM1; //green
+		break;
+	case 1:
+		tcolour = WZCOL_TEAM2; //orange
+		break;
+	case 2:
+		tcolour = WZCOL_TEAM3; //gray
+		break;
+	case 3:
+		tcolour = WZCOL_TEAM4; //black
+		break;
+	case 4:
+		tcolour = WZCOL_TEAM5; //red
+		break;
+	case 5:
+		tcolour = WZCOL_TEAM6; //blue
+		break;
+	case 6:
+		tcolour = WZCOL_TEAM7; //purple
+		break;
+	case 7:
+		tcolour = WZCOL_TEAM8; //teal
+		break;
+	case  8: return WZCOL_TEAM9;
+	case  9: return WZCOL_TEAM10;
+	case 10: return WZCOL_TEAM11;
+	case 11: return WZCOL_TEAM12;
+	case 12: return WZCOL_TEAM13;
+	case 13: return WZCOL_TEAM14;
+	case 14: return WZCOL_TEAM15;
+	case 15: return WZCOL_TEAM16;
+	default:
+		STATIC_ASSERT(MAX_PLAYERS <= 16);
+		ASSERT(false, "Attempting to get colour for non-existing team %u", (unsigned int)team);
+		tcolour = WZCOL_WHITE; //default is white
+		break;
 	}
 
 	return tcolour;

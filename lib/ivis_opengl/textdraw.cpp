@@ -106,7 +106,7 @@ static inline void iV_printFontList(void)
 		 * same buffer (according to GLC specs).
 		 */
 		char prBuffer[1024];
-		snprintf(prBuffer, sizeof(prBuffer), "Font #%d : %s ", (int)font, (const char*)glcGetFontc(font, GLC_FAMILY));
+		snprintf(prBuffer, sizeof(prBuffer), "Font #%d : %s ", (int)font, (const char *)glcGetFontc(font, GLC_FAMILY));
 		prBuffer[sizeof(prBuffer) - 1] = 0;
 		sstrcat(prBuffer, (char const *)glcGetFontFace(font));
 		debug(LOG_NEVER, "%s", prBuffer);
@@ -136,7 +136,7 @@ static void iV_initializeGLC(void)
 	glcRenderStyle(GLC_TEXTURE);
 	glcStringType(GLC_UTF8_QSO); // Set GLC's string type to UTF-8 FIXME should be UCS4 to avoid conversions
 
-	#ifdef WZ_OS_MAC
+#ifdef WZ_OS_MAC
 	{
 		char resourcePath[PATH_MAX];
 		CFURLRef resourceURL = CFBundleCopyResourcesDirectoryURL(CFBundleGetMainBundle());
@@ -155,7 +155,7 @@ static void iV_initializeGLC(void)
 			CFRelease(resourceURL);
 		}
 	}
-	#endif
+#endif
 
 	_glcFont_Regular = glcGenFontID();
 	_glcFont_Bold = glcGenFontID();
@@ -233,31 +233,31 @@ void iV_SetFont(enum iV_fonts FontID)
 {
 	switch (FontID)
 	{
-		case font_scaled:
-			iV_SetTextSize(12.f * pie_GetVideoBufferHeight() / 480);
-			glcFont(_glcFont_Regular);
-			break;
+	case font_scaled:
+		iV_SetTextSize(12.f * pie_GetVideoBufferHeight() / 480);
+		glcFont(_glcFont_Regular);
+		break;
 
-		default:
-		case font_regular:
-			iV_SetTextSize(12.f);
-			glcFont(_glcFont_Regular);
-			break;
+	default:
+	case font_regular:
+		iV_SetTextSize(12.f);
+		glcFont(_glcFont_Regular);
+		break;
 
-		case font_large:
-			iV_SetTextSize(21.f);
-			glcFont(_glcFont_Bold);
-			break;
+	case font_large:
+		iV_SetTextSize(21.f);
+		glcFont(_glcFont_Bold);
+		break;
 
-		case font_medium:
-			iV_SetTextSize(16.f);
-			glcFont(_glcFont_Regular);
-			break;
+	case font_medium:
+		iV_SetTextSize(16.f);
+		glcFont(_glcFont_Regular);
+		break;
 
-		case font_small:
-			iV_SetTextSize(9.f);
-			glcFont(_glcFont_Regular);
-			break;
+	case font_small:
+		iV_SetTextSize(9.f);
+		glcFont(_glcFont_Regular);
+		break;
 	}
 }
 
@@ -280,7 +280,7 @@ static inline float getGLCPixelSize(void)
 	return pixel_size;
 }
 
-static inline float getGLCPointWidth(const float* boundingbox)
+static inline float getGLCPointWidth(const float *boundingbox)
 {
 	// boundingbox contains: [ xlb ylb xrb yrb xrt yrt xlt ylt ]
 	// l = left; r = right; b = bottom; t = top;
@@ -292,7 +292,7 @@ static inline float getGLCPointWidth(const float* boundingbox)
 	return point_width;
 }
 
-static inline float getGLCPointHeight(const float* boundingbox)
+static inline float getGLCPointHeight(const float *boundingbox)
 {
 	// boundingbox contains: [ xlb ylb xrb yrb xrt yrt xlt ylt ]
 	// l = left; r = right; b = bottom; t = top;
@@ -311,7 +311,7 @@ static inline float getGLCPointToPixel(float point_width)
 	return pixel_width;
 }
 
-unsigned int iV_GetTextWidth(const char* string)
+unsigned int iV_GetTextWidth(const char *string)
 {
 	float boundingbox[8];
 	float pixel_width, point_width;
@@ -328,7 +328,7 @@ unsigned int iV_GetTextWidth(const char* string)
 	return (unsigned int)pixel_width;
 }
 
-unsigned int iV_GetCountedTextWidth(const char* string, size_t string_length)
+unsigned int iV_GetCountedTextWidth(const char *string, size_t string_length)
 {
 	float boundingbox[8];
 	float pixel_width, point_width;
@@ -345,7 +345,7 @@ unsigned int iV_GetCountedTextWidth(const char* string, size_t string_length)
 	return (unsigned int)pixel_width;
 }
 
-unsigned int iV_GetTextHeight(const char* string)
+unsigned int iV_GetTextHeight(const char *string)
 {
 	float boundingbox[8];
 	float pixel_height, point_height;
@@ -465,7 +465,7 @@ void iV_SetTextColour(PIELIGHT colour)
  *                  FTEXT_LEFTJUSTIFY, FTEXT_CENTRE or FTEXT_RIGHTJUSTIFY.
  *  @return the Y coordinate for the next text line.
  */
-int iV_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWORD Width, UDWORD Justify)
+int iV_DrawFormattedText(const char *String, UDWORD x, UDWORD y, UDWORD Width, UDWORD Justify)
 {
 	std::string FString;
 	std::string FWord;
@@ -474,7 +474,7 @@ int iV_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWORD Width, U
 	int jy = y;
 	UDWORD WWidth;
 	int TWidth;
-	const char* curChar = String;
+	const char *curChar = String;
 
 	while (*curChar != 0)
 	{
@@ -489,16 +489,16 @@ int iV_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWORD Width, U
 		// Parse through the string, adding words until width is achieved.
 		while (*curChar != 0 && WWidth < Width && !NewLine)
 		{
-			const char* startOfWord = curChar;
+			const char *startOfWord = curChar;
 			const unsigned int FStringWidth = iV_GetTextWidth(FString.c_str());
 
 			// Get the next word.
 			i = 0;
 			FWord.clear();
 			for (; *curChar != 0
-			    && *curChar != ASCII_SPACE
-			    && *curChar != ASCII_NEWLINE
-			    && *curChar != '\n';
+			     && *curChar != ASCII_SPACE
+			     && *curChar != ASCII_NEWLINE
+			     && *curChar != '\n';
 			     ++i, ++curChar)
 			{
 				if (*curChar == ASCII_COLOURMODE) // If it's a colour mode toggle char then just add it to the word.
@@ -539,7 +539,7 @@ int iV_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWORD Width, U
 			}
 			// Check for new line character.
 			else if (*curChar == ASCII_NEWLINE
-			      || *curChar == '\n')
+			         || *curChar == '\n')
 			{
 				if (!bMultiPlayer)
 				{
@@ -552,9 +552,9 @@ int iV_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWORD Width, U
 			// maximum width and this isn't caused by the appended space then
 			// rewind to the start of this word and finish this line.
 			if (GotSpace
-			 && i != 0
-			 && WWidth > Width
-			 && FWord[i - 1] != ' ')
+			    && i != 0
+			    && WWidth > Width
+			    && FWord[i - 1] != ' ')
 			{
 				// Skip back to the beginning of this
 				// word and draw it on the next line
@@ -578,17 +578,17 @@ int iV_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWORD Width, U
 		// Do justify.
 		switch (Justify)
 		{
-			case FTEXT_CENTRE:
-				jx = x + (Width - TWidth) / 2;
-				break;
+		case FTEXT_CENTRE:
+			jx = x + (Width - TWidth) / 2;
+			break;
 
-			case FTEXT_RIGHTJUSTIFY:
-				jx = x + Width - TWidth;
-				break;
+		case FTEXT_RIGHTJUSTIFY:
+			jx = x + Width - TWidth;
+			break;
 
-			case FTEXT_LEFTJUSTIFY:
-				jx = x;
-				break;
+		case FTEXT_LEFTJUSTIFY:
+			jx = x;
+			break;
 		}
 
 		// draw the text.
@@ -601,10 +601,10 @@ int iV_DrawFormattedText(const char* String, UDWORD x, UDWORD y, UDWORD Width, U
 	return jy;
 }
 
-void iV_DrawTextRotated(const char* string, float XPos, float YPos, float rotation)
+void iV_DrawTextRotated(const char *string, float XPos, float YPos, float rotation)
 {
 	GLint matrix_mode = 0;
-	ASSERT_OR_RETURN( , string, "Couldn't render string!");
+	ASSERT_OR_RETURN(, string, "Couldn't render string!");
 	pie_SetTexturePage(TEXPAGE_EXTERN);
 
 	glGetIntegerv(GL_MATRIX_MODE, &matrix_mode);
@@ -639,11 +639,11 @@ void iV_DrawTextRotated(const char* string, float XPos, float YPos, float rotati
 	glLoadIdentity();
 }
 
-static void iV_DrawTextRotatedFv(float x, float y, float rotation, const char* format, va_list ap)
+static void iV_DrawTextRotatedFv(float x, float y, float rotation, const char *format, va_list ap)
 {
 	va_list aq;
 	size_t size;
-	char* str;
+	char *str;
 
 	/* Required because we're using the va_list ap twice otherwise, which
 	 * results in undefined behaviour. See stdarg(3) for details.
@@ -663,12 +663,12 @@ static void iV_DrawTextRotatedFv(float x, float y, float rotation, const char* f
 	iV_DrawTextRotated(str, x, y, rotation);
 }
 
-void iV_DrawTextF(float x, float y, const char* format, ...)
+void iV_DrawTextF(float x, float y, const char *format, ...)
 {
 	va_list ap;
 
 	va_start(ap, format);
-		iV_DrawTextRotatedFv(x, y, 0.f, format, ap);
+	iV_DrawTextRotatedFv(x, y, 0.f, format, ap);
 	va_end(ap);
 }
 

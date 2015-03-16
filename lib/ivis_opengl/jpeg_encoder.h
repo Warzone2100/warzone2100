@@ -10,7 +10,7 @@
  * output_end - output_start gives the size of the JPEG data.
  *
  */
-unsigned char *jpeg_encode_image (unsigned char *, unsigned char *, unsigned int, unsigned int, unsigned int, unsigned int);
+unsigned char *jpeg_encode_image(unsigned char *, unsigned char *, unsigned int, unsigned int, unsigned int, unsigned int);
 
 #define        JPEG_FORMAT_FOUR_ZERO_ZERO          0
 #define        JPEG_FORMAT_FOUR_TWO_TWO            2

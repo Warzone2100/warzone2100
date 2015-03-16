@@ -120,7 +120,7 @@ void pie_EndLighting(void)
 struct ShadowcastingShape
 {
 	glm::mat4	matrix;
-	iIMDShape*	shape;
+	iIMDShape	*shape;
 	int		flag;
 	int		flag_data;
 	glm::vec4	light;
@@ -129,7 +129,7 @@ struct ShadowcastingShape
 typedef struct
 {
 	glm::mat4	matrix;
-	iIMDShape*	shape;
+	iIMDShape	*shape;
 	int		frame;
 	PIELIGHT	colour;
 	PIELIGHT	teamcolour;
@@ -253,7 +253,10 @@ static void pie_Draw3DShape2(const iIMDShape *shape, int frame, PIELIGHT colour,
 
 static inline bool edgeLessThan(EDGE const &e1, EDGE const &e2)
 {
-	if (e1.from != e2.from) return e1.from < e2.from;
+	if (e1.from != e2.from)
+	{
+		return e1.from < e2.from;
+	}
 	return e1.to < e2.to;
 }
 
@@ -279,12 +282,19 @@ static inline void addToEdgeList(int a, int b, std::vector<EDGE> &edgelist)
 static inline float scale_y(float y, int flag, int flag_data)
 {
 	float tempY = y;
-	if (flag & pie_RAISE) {
+	if (flag & pie_RAISE)
+	{
 		tempY = y - flag_data;
-		if (y - flag_data < 0) tempY = 0;
-	} else if (flag & pie_HEIGHT_SCALED) {
-		if(y>0) {
-			tempY = (y * flag_data)/pie_RAISE_SCALE;
+		if (y - flag_data < 0)
+		{
+			tempY = 0;
+		}
+	}
+	else if (flag & pie_HEIGHT_SCALED)
+	{
+		if (y > 0)
+		{
+			tempY = (y * flag_data) / pie_RAISE_SCALE;
 		}
 	}
 	return tempY;
@@ -303,7 +313,7 @@ static void pie_DrawShadow(iIMDShape *shape, int flag, int flag_data, const glm:
 
 	unsigned edge_count;
 	pVertices = shape->points;
-	if( flag & pie_STATIC_SHADOW && shape->shadowEdgeList )
+	if (flag & pie_STATIC_SHADOW && shape->shadowEdgeList)
 	{
 		drawlist = shape->shadowEdgeList;
 		edge_count = shape->nShadowEdges;
@@ -314,7 +324,7 @@ static void pie_DrawShadow(iIMDShape *shape, int flag, int flag_data, const glm:
 		for (i = 0, pPolys = shape->polys; i < shape->npolys; ++i, ++pPolys)
 		{
 			glm::vec3 p[3];
-			for(j = 0; j < 3; j++)
+			for (j = 0; j < 3; j++)
 			{
 				int current = pPolys->pindex[j];
 				p[j] = glm::vec3(pVertices[current].x, scale_y(pVertices[current].y, flag, flag_data), pVertices[current].z);
@@ -324,7 +334,7 @@ static void pie_DrawShadow(iIMDShape *shape, int flag, int flag_data, const glm:
 				for (n = 1; n < 3; n++)
 				{
 					// link to the previous vertex
-					addToEdgeList(pPolys->pindex[n-1], pPolys->pindex[n], edgelist);
+					addToEdgeList(pPolys->pindex[n - 1], pPolys->pindex[n], edgelist);
 				}
 				// back to the first (FIXME - should be 0, not 2?)
 				addToEdgeList(pPolys->pindex[2], pPolys->pindex[0], edgelist);
@@ -343,7 +353,7 @@ static void pie_DrawShadow(iIMDShape *shape, int flag, int flag_data, const glm:
 		edge_count = edgelistFiltered.size();
 		//debug(LOG_WARNING, "we have %i edges", edge_count);
 
-		if(flag & pie_STATIC_SHADOW)
+		if (flag & pie_STATIC_SHADOW)
 		{
 			// then store it in the imd
 			shape->nShadowEdges = edge_count;
@@ -355,7 +365,7 @@ static void pie_DrawShadow(iIMDShape *shape, int flag, int flag_data, const glm:
 	// draw the shadow volume
 	glBegin(GL_QUADS);
 	glNormal3f(0.0, 1.0, 0.0);
-	for(i=0;i<edge_count;i++)
+	for (i = 0; i < edge_count; i++)
 	{
 		int a = drawlist[i].from, b = drawlist[i].to;
 
@@ -395,7 +405,7 @@ void pie_SetUp(void)
 	}
 }
 
-void pie_CleanUp( void )
+void pie_CleanUp(void)
 {
 	tshapes.clear();
 	shapes.clear();
@@ -509,10 +519,10 @@ static void pie_DrawShadows(void)
 	glLoadIdentity();
 	glDisable(GL_DEPTH_TEST);
 	glBegin(GL_TRIANGLE_STRIP);
-		glVertex2f(0, 0);
-		glVertex2f(width, 0);
-		glVertex2f(0, height);
-		glVertex2f(width, height);
+	glVertex2f(0, 0);
+	glVertex2f(width, 0);
+	glVertex2f(0, height);
+	glVertex2f(width, height);
 	glEnd();
 	pie_PerspectiveBegin();
 
@@ -564,7 +574,7 @@ void pie_RemainingPasses(void)
 	GL_DEBUG("Remaining passes - done");
 }
 
-void pie_GetResetCounts(unsigned int* pPieCount, unsigned int* pPolyCount, unsigned int* pStateCount)
+void pie_GetResetCounts(unsigned int *pPieCount, unsigned int *pPolyCount, unsigned int *pStateCount)
 {
 	*pPieCount  = pieCount;
 	*pPolyCount = polyCount;

@@ -73,10 +73,10 @@ static SDWORD _MATRIX_INDEX;
 void pie_MatBegin(bool cached)
 {
 	_MATRIX_INDEX++;
-	ASSERT( _MATRIX_INDEX < MATRIX_MAX, "pie_MatBegin past top of the stack" );
+	ASSERT(_MATRIX_INDEX < MATRIX_MAX, "pie_MatBegin past top of the stack");
 
 	psMatrix++;
-	aMatrixStack[_MATRIX_INDEX] = aMatrixStack[_MATRIX_INDEX-1];
+	aMatrixStack[_MATRIX_INDEX] = aMatrixStack[_MATRIX_INDEX - 1];
 
 	psMatrix->cached = cached;
 
@@ -84,7 +84,7 @@ void pie_MatBegin(bool cached)
 	{
 		glPushMatrix();
 	}
-	else if (!aMatrixStack[_MATRIX_INDEX-1].cached)
+	else if (!aMatrixStack[_MATRIX_INDEX - 1].cached)
 	{
 		glGetFloatv(GL_MODELVIEW_MATRIX, &psMatrix->matrix[0][0]);
 	}
@@ -98,7 +98,7 @@ void pie_MatBegin(bool cached)
 void pie_MatEnd()
 {
 	_MATRIX_INDEX--;
-	ASSERT( _MATRIX_INDEX >= 0, "pie_MatEnd of the bottom of the stack" );
+	ASSERT(_MATRIX_INDEX >= 0, "pie_MatEnd of the bottom of the stack");
 
 	if (!psMatrix->cached)
 	{
@@ -198,16 +198,16 @@ void pie_MatRotY(uint16_t y)
 		int t;
 		int64_t cra = iCos(y), sra = iSin(y);
 
-		t = (cra*psMatrix->a - sra*psMatrix->g)>>16;
-		psMatrix->g = (sra*psMatrix->a + cra*psMatrix->g)>>16;
+		t = (cra * psMatrix->a - sra * psMatrix->g) >> 16;
+		psMatrix->g = (sra * psMatrix->a + cra * psMatrix->g) >> 16;
 		psMatrix->a = t;
 
-		t = (cra*psMatrix->b - sra*psMatrix->h)>>16;
-		psMatrix->h = (sra*psMatrix->b + cra*psMatrix->h)>>16;
+		t = (cra * psMatrix->b - sra * psMatrix->h) >> 16;
+		psMatrix->h = (sra * psMatrix->b + cra * psMatrix->h) >> 16;
 		psMatrix->b = t;
 
-		t = (cra*psMatrix->c - sra*psMatrix->i)>>16;
-		psMatrix->i = (sra*psMatrix->c + cra*psMatrix->i)>>16;
+		t = (cra * psMatrix->c - sra * psMatrix->i) >> 16;
+		psMatrix->i = (sra * psMatrix->c + cra * psMatrix->i) >> 16;
 		psMatrix->c = t;
 
 		if (!psMatrix->cached)
@@ -246,16 +246,16 @@ void pie_MatRotZ(uint16_t z)
 		int t;
 		int64_t cra = iCos(z), sra = iSin(z);
 
-		t = (cra*psMatrix->a + sra*psMatrix->d)>>16;
-		psMatrix->d = (cra*psMatrix->d - sra*psMatrix->a)>>16;
+		t = (cra * psMatrix->a + sra * psMatrix->d) >> 16;
+		psMatrix->d = (cra * psMatrix->d - sra * psMatrix->a) >> 16;
 		psMatrix->a = t;
 
-		t = (cra*psMatrix->b + sra*psMatrix->e)>>16;
-		psMatrix->e = (cra*psMatrix->e - sra*psMatrix->b)>>16;
+		t = (cra * psMatrix->b + sra * psMatrix->e) >> 16;
+		psMatrix->e = (cra * psMatrix->e - sra * psMatrix->b) >> 16;
 		psMatrix->b = t;
 
-		t = (cra*psMatrix->c + sra*psMatrix->f)>>16;
-		psMatrix->f = (cra*psMatrix->f - sra*psMatrix->c)>>16;
+		t = (cra * psMatrix->c + sra * psMatrix->f) >> 16;
+		psMatrix->f = (cra * psMatrix->f - sra * psMatrix->c) >> 16;
 		psMatrix->c = t;
 
 		if (!psMatrix->cached)
@@ -294,16 +294,16 @@ void pie_MatRotX(uint16_t x)
 		int t;
 		int64_t cra = iCos(x), sra = iSin(x);
 
-		t = (cra*psMatrix->d + sra*psMatrix->g)>>16;
-		psMatrix->g = (cra*psMatrix->g - sra*psMatrix->d)>>16;
+		t = (cra * psMatrix->d + sra * psMatrix->g) >> 16;
+		psMatrix->g = (cra * psMatrix->g - sra * psMatrix->d) >> 16;
 		psMatrix->d = t;
 
-		t = (cra*psMatrix->e + sra*psMatrix->h)>>16;
-		psMatrix->h = (cra*psMatrix->h - sra*psMatrix->e)>>16;
+		t = (cra * psMatrix->e + sra * psMatrix->h) >> 16;
+		psMatrix->h = (cra * psMatrix->h - sra * psMatrix->e) >> 16;
 		psMatrix->e = t;
 
-		t = (cra*psMatrix->f + sra*psMatrix->i)>>16;
-		psMatrix->i = (cra*psMatrix->i - sra*psMatrix->f)>>16;
+		t = (cra * psMatrix->f + sra * psMatrix->i) >> 16;
+		psMatrix->i = (cra * psMatrix->i - sra * psMatrix->f) >> 16;
 		psMatrix->f = t;
 
 		if (!psMatrix->cached)
@@ -348,9 +348,9 @@ int32_t pie_RotateProject(const Vector3i *v3d, Vector2i *v2d)
 	 * v = curMatrix . v3d
 	 */
 	Vector3i v(
-		v3d->x * psMatrix->a + v3d->y * psMatrix->d + v3d->z * psMatrix->g + psMatrix->j,
-		v3d->x * psMatrix->b + v3d->y * psMatrix->e + v3d->z * psMatrix->h + psMatrix->k,
-		v3d->x * psMatrix->c + v3d->y * psMatrix->f + v3d->z * psMatrix->i + psMatrix->l
+	    v3d->x * psMatrix->a + v3d->y * psMatrix->d + v3d->z * psMatrix->g + psMatrix->j,
+	    v3d->x * psMatrix->b + v3d->y * psMatrix->e + v3d->z * psMatrix->h + psMatrix->k,
+	    v3d->x * psMatrix->c + v3d->y * psMatrix->f + v3d->z * psMatrix->i + psMatrix->l
 	);
 
 	const int zz = v.z >> STRETCHED_Z_SHIFT;
@@ -373,15 +373,15 @@ void pie_PerspectiveBegin(void)
 {
 	const float width = pie_GetVideoBufferWidth();
 	const float height = pie_GetVideoBufferHeight();
-	const float xangle = width/6.0f;
-	const float yangle = height/6.0f;
+	const float xangle = width / 6.0f;
+	const float yangle = height / 6.0f;
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	glTranslatef(
-		(2 * rendSurface.xcentre-width) / width,
-		(height - 2 * rendSurface.ycentre) / height,
-		0);
+	    (2 * rendSurface.xcentre - width) / width,
+	    (height - 2 * rendSurface.ycentre) / height,
+	    0);
 	glFrustum(-xangle, xangle, -yangle, yangle, 330, 100000);
 	glScalef(1, 1, -1);
 	glMatrixMode(GL_MODELVIEW);

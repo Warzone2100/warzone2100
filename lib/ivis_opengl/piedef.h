@@ -63,12 +63,12 @@ union PIELIGHT
 /***************************************************************************/
 
 #define GL_DEBUG(_str) \
-do { \
-	if (GLEW_GREMEDY_string_marker) \
-	{ \
-		glStringMarkerGREMEDY(0, _str); \
-	} \
-} while(0)
+	do { \
+		if (GLEW_GREMEDY_string_marker) \
+		{ \
+			glStringMarkerGREMEDY(0, _str); \
+		} \
+	} while(0)
 
 /***************************************************************************/
 /*
@@ -77,7 +77,7 @@ do { \
 /***************************************************************************/
 void pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, int pieFlag, int pieFlagData);
 
-extern void pie_GetResetCounts(unsigned int* pPieCount, unsigned int* pPolyCount, unsigned int* pStateCount);
+extern void pie_GetResetCounts(unsigned int *pPieCount, unsigned int *pPolyCount, unsigned int *pStateCount);
 
 /** Setup stencil shadows and OpenGL lighting. */
 void pie_BeginLighting(const Vector3f *light);

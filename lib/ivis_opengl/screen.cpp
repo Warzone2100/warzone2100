@@ -80,7 +80,10 @@ static GFX *backdropGfx = NULL;
 
 static bool perfStarted = false;
 static GLuint perfpos[PERF_COUNT];
-struct PERF_STORE { GLuint64 counters[PERF_COUNT]; };
+struct PERF_STORE
+{
+	GLuint64 counters[PERF_COUNT];
+};
 static QList<PERF_STORE> perfList;
 static PERF_POINT queryActive = PERF_COUNT;
 
@@ -99,7 +102,7 @@ static const char *cbsource(GLenum source)
 	case GL_DEBUG_SOURCE_SHADER_COMPILER: return "SC";
 	case GL_DEBUG_SOURCE_THIRD_PARTY: return "3P";
 	case GL_DEBUG_SOURCE_APPLICATION: return "WZ";
-	default: case GL_DEBUG_SOURCE_OTHER: return "OTHER";
+default: case GL_DEBUG_SOURCE_OTHER: return "OTHER";
 	}
 }
 
@@ -113,7 +116,7 @@ static const char *cbtype(GLenum type)
 	case GL_DEBUG_TYPE_PORTABILITY: return "Portability";
 	case GL_DEBUG_TYPE_PERFORMANCE: return "Performance";
 	case GL_DEBUG_TYPE_MARKER: return "Marker";
-	default: case GL_DEBUG_TYPE_OTHER: return "Other";
+default: case GL_DEBUG_TYPE_OTHER: return "Other";
 	}
 }
 
@@ -178,7 +181,7 @@ bool screenInitialise()
 	GLubyte const *extensionsBegin = glGetString(GL_EXTENSIONS);
 	GLubyte const *extensionsEnd = extensionsBegin + strlen((char const *)extensionsBegin);
 	std::vector<std::string> glExtensions;
-	for (GLubyte const *i = extensionsBegin; i < extensionsEnd; )
+	for (GLubyte const *i = extensionsBegin; i < extensionsEnd;)
 	{
 		GLubyte const *j = std::find(i, extensionsEnd, ' ');
 		glExtensions.push_back(std::string(i, j));
@@ -250,7 +253,7 @@ bool screenInitialise()
 	debug(LOG_3D, "  * Total number of Texture Image Units (TIUs) supported is %d.", (int) glMaxTIUs);
 	glGetIntegerv(GL_MAX_TEXTURE_COORDS, &glMaxTCs);
 	debug(LOG_3D, "  * Total number of Texture Coords (TCs) supported is %d.", (int) glMaxTCs);
-	glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS_ARB,&glMaxTIUAs);
+	glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS_ARB, &glMaxTIUAs);
 	debug(LOG_3D, "  * Total number of Texture Image Units ARB(TIUAs) supported is %d.", (int) glMaxTIUAs);
 	glGetIntegerv(GL_SAMPLE_BUFFERS, &glmaxSamplesbuf);
 	debug(LOG_3D, "  * (current) Max Sample buffer is %d.", (int) glmaxSamplesbuf);
@@ -351,7 +354,7 @@ void wzPerfFrame()
 	time(&aclock);           /* Get time in seconds */
 	t = localtime(&aclock);  /* Convert time to struct */
 
-	ssprintf(screendump_filename, "screenshots/wz2100-perf-sample-%02d-%04d%02d%02d_%02d%02d%02d.png", perfList.size() - 1, 
+	ssprintf(screendump_filename, "screenshots/wz2100-perf-sample-%02d-%04d%02d%02d_%02d%02d%02d.png", perfList.size() - 1,
 	         t->tm_year + 1900, t->tm_mon + 1, t->tm_mday, t->tm_hour, t->tm_min, t->tm_sec);
 	screendump_required = true;
 	GL_DEBUG("Performance sample complete");
@@ -449,7 +452,7 @@ void screen_SetRandomBackdrop(const char *dirname, const char *basename)
 	screen_SetBackDropFromFile(full_path.c_str());
 }
 
-void screen_SetBackDropFromFile(const char* filename)
+void screen_SetBackDropFromFile(const char *filename)
 {
 	backdropGfx->loadTexture(filename);
 	screen_Upload(NULL);
@@ -594,10 +597,13 @@ static const unsigned int channelsPerPixel = 3;
  */
 void screenDoDumpToDiskIfRequired(void)
 {
-	const char* fileName = screendump_filename;
+	const char *fileName = screendump_filename;
 	iV_Image image = { 0, 0, 8, NULL };
 
-	if (!screendump_required) return;
+	if (!screendump_required)
+	{
+		return;
+	}
 	debug(LOG_3D, "Saving screenshot %s", fileName);
 
 	image.width = screenWidth;
@@ -611,8 +617,8 @@ void screenDoDumpToDiskIfRequired(void)
 	iV_saveImage_JPEG(fileName, &image);
 
 	// display message to user about screenshot
-	snprintf(ConsoleString,sizeof(ConsoleString),"Screenshot %s saved!",fileName);
-	addConsoleMessage(ConsoleString, LEFT_JUSTIFY,SYSTEM_MESSAGE);
+	snprintf(ConsoleString, sizeof(ConsoleString), "Screenshot %s saved!", fileName);
+	addConsoleMessage(ConsoleString, LEFT_JUSTIFY, SYSTEM_MESSAGE);
 	if (image.bmp)
 	{
 		free(image.bmp);
@@ -627,7 +633,7 @@ void screenDoDumpToDiskIfRequired(void)
  *
  *  \param path The directory path to save the screenshot in.
  */
-void screenDumpToDisk(const char* path, const char *level)
+void screenDumpToDisk(const char *path, const char *level)
 {
 	unsigned int screendump_num = 0;
 	time_t aclock;
@@ -638,7 +644,7 @@ void screenDumpToDisk(const char* path, const char *level)
 
 	ssprintf(screendump_filename, "%s/wz2100-%04d%02d%02d_%02d%02d%02d-%s.png", path, t->tm_year + 1900, t->tm_mon + 1, t->tm_mday, t->tm_hour, t->tm_min, t->tm_sec, level);
 
-        while (PHYSFS_exists(screendump_filename))
+	while (PHYSFS_exists(screendump_filename))
 	{
 		ssprintf(screendump_filename, "%s/wz2100-%04d%02d%02d_%02d%02d%02d-%s-%d.png", path, t->tm_year + 1900, t->tm_mon + 1, t->tm_mday, t->tm_hour, t->tm_min, t->tm_sec, level, ++screendump_num);
 	}

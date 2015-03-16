@@ -25,32 +25,32 @@ static UDWORD videoBufferDepth = 32, videoBufferWidth = 0, videoBufferHeight = 0
 bool pie_SetVideoBufferDepth(UDWORD depth)
 {
 	videoBufferDepth = depth;
-	return(true);
+	return (true);
 }
 
 bool pie_SetVideoBufferWidth(UDWORD width)
 {
 	videoBufferWidth = width;
-	return(true);
+	return (true);
 }
 
 bool pie_SetVideoBufferHeight(UDWORD height)
 {
 	videoBufferHeight = height;
-	return(true);
+	return (true);
 }
 
 int pie_GetVideoBufferDepth(void)
 {
-	return(videoBufferDepth);
+	return (videoBufferDepth);
 }
 
 int pie_GetVideoBufferWidth(void)
 {
-	return(videoBufferWidth);
+	return (videoBufferWidth);
 }
 
 int pie_GetVideoBufferHeight(void)
 {
-	return(videoBufferHeight);
+	return (videoBufferHeight);
 }

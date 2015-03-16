@@ -114,8 +114,14 @@ void GFX::makeTexture(int width, int height, GLenum filter, GLenum format, const
 void GFX::updateTexture(const void *image, int width, int height)
 {
 	ASSERT(mType == GFX_TEXTURE, "Wrong GFX type");
-	if (width == -1) width = mWidth;
-	if (height == -1) height = mHeight;
+	if (width == -1)
+	{
+		width = mWidth;
+	}
+	if (height == -1)
+	{
+		height = mHeight;
+	}
 	pie_SetTexturePage(TEXPAGE_EXTERN);
 	glBindTexture(GL_TEXTURE_2D, mTexture);
 	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, mFormat, GL_UNSIGNED_BYTE, image);
@@ -197,10 +203,10 @@ static void pie_DrawRect(float x0, float y0, float x1, float y1, PIELIGHT colour
 {
 	glColor4ubv(colour.vector);
 	glBegin(GL_TRIANGLE_STRIP);
-		glVertex2f(x0, y0);
-		glVertex2f(x1, y0);
-		glVertex2f(x0, y1);
-		glVertex2f(x1, y1);
+	glVertex2f(x0, y0);
+	glVertex2f(x1, y0);
+	glVertex2f(x0, y1);
+	glVertex2f(x1, y1);
 	glEnd();
 }
 
@@ -214,7 +220,7 @@ void iV_ShadowBox(int x0, int y0, int x1, int y1, int pad, PIELIGHT first, PIELI
 
 /***************************************************************************/
 
-void iV_Box2(int x0,int y0, int x1, int y1, PIELIGHT first, PIELIGHT second)
+void iV_Box2(int x0, int y0, int x1, int y1, PIELIGHT first, PIELIGHT second)
 {
 	pie_SetTexturePage(TEXPAGE_NONE);
 
@@ -236,7 +242,7 @@ void iV_Box2(int x0,int y0, int x1, int y1, PIELIGHT first, PIELIGHT second)
 
 /***************************************************************************/
 
-void pie_BoxFill(int x0,int y0, int x1, int y1, PIELIGHT colour)
+void pie_BoxFill(int x0, int y0, int x1, int y1, PIELIGHT colour)
 {
 	pie_SetRendMode(REND_OPAQUE);
 	pie_SetTexturePage(TEXPAGE_NONE);
@@ -279,17 +285,17 @@ static void pie_DrawImage(IMAGEFILE *imageFile, int id, Vector2i size, const PIE
 	pie_SetTexturePage(texPage);
 	glColor4ubv(colour.vector);
 	glBegin(GL_TRIANGLE_STRIP);
-		glTexCoord2f(tu * invTextureSize, tv * invTextureSize);
-		glVertex2f(dest->x, dest->y);
+	glTexCoord2f(tu * invTextureSize, tv * invTextureSize);
+	glVertex2f(dest->x, dest->y);
 
-		glTexCoord2f((tu + size.x) * invTextureSize, tv * invTextureSize);
-		glVertex2f(dest->x + dest->w, dest->y);
+	glTexCoord2f((tu + size.x) * invTextureSize, tv * invTextureSize);
+	glVertex2f(dest->x + dest->w, dest->y);
 
-		glTexCoord2f(tu * invTextureSize, (tv + size.y) * invTextureSize);
-		glVertex2f(dest->x, dest->y + dest->h);
+	glTexCoord2f(tu * invTextureSize, (tv + size.y) * invTextureSize);
+	glVertex2f(dest->x, dest->y + dest->h);
 
-		glTexCoord2f((tu + size.x) * invTextureSize, (tv + size.y) * invTextureSize);
-		glVertex2f(dest->x + dest->w, dest->y + dest->h);
+	glTexCoord2f((tu + size.x) * invTextureSize, (tv + size.y) * invTextureSize);
+	glVertex2f(dest->x + dest->w, dest->y + dest->h);
 	glEnd();
 }
 
@@ -323,17 +329,17 @@ void iV_DrawImage2(const QString &filename, float x, float y, float width, float
 	glColor4ubv(WZCOL_WHITE.vector);
 	pie_SetRendMode(REND_ALPHA);
 	glBegin(GL_TRIANGLE_STRIP);
-		glTexCoord2f(tu * image->invTextureSize, tv * invTextureSize);
-		glVertex2f(x, y);
+	glTexCoord2f(tu * image->invTextureSize, tv * invTextureSize);
+	glVertex2f(x, y);
 
-		glTexCoord2f((tu + image->Width) * invTextureSize, tv * invTextureSize);
-		glVertex2f(x + w, y);
+	glTexCoord2f((tu + image->Width) * invTextureSize, tv * invTextureSize);
+	glVertex2f(x + w, y);
 
-		glTexCoord2f(tu * invTextureSize, (tv + image->Height) * invTextureSize);
-		glVertex2f(x, y + h);
+	glTexCoord2f(tu * invTextureSize, (tv + image->Height) * invTextureSize);
+	glVertex2f(x, y + h);
 
-		glTexCoord2f((tu + image->Width) * invTextureSize, (tv + image->Height) * invTextureSize);
-		glVertex2f(x + w, y + h);
+	glTexCoord2f((tu + image->Width) * invTextureSize, (tv + image->Height) * invTextureSize);
+	glVertex2f(x + w, y + h);
 	glEnd();
 }
 

@@ -93,10 +93,10 @@ void pie_TransColouredTriangle(Vector3f *vrt, PIELIGHT c)
 	glColor4ub(c.byte.r, c.byte.g, c.byte.b, 128);
 
 	glBegin(GL_TRIANGLE_FAN);
-		for (i = 0; i < 3; ++i)
-		{
-			glVertex3f(vrt[i].x, vrt[i].y, vrt[i].z);
-		}
+	for (i = 0; i < 3; ++i)
+	{
+		glVertex3f(vrt[i].x, vrt[i].y, vrt[i].z);
+	}
 	glEnd();
 }
 
@@ -108,13 +108,15 @@ void pie_Skybox_Init()
 	const int h = 1;
 	const float r = 1.0f; // just because it is shorter than 1.0f
 	GLfloat vert[] = { -r, 0, r, -r, r, r, r, 0, r, r, r, r, // front
-	                    r, 0,-r, r, r,-r, // right
+	                   r, 0, -r, r, r, -r, // right
 	                   -r, 0, -r, -r, r, -r, // back
-	                   -r, 0, r, -r, r, r };
+	                   -r, 0, r, -r, r, r
+	                 };
 	GLfloat texc[] = { u + w * 0, v + h, u + w * 0, v, u + w * 2, v + h, u + w * 2, v,
 	                   u + w * 4, v + h, u + w * 4, v,
 	                   u + w * 6, v + h, u + w * 6, v,
-	                   u + w * 8, v + h, u + w * 8, v };
+	                   u + w * 8, v + h, u + w * 8, v
+	                 };
 
 	GL_DEBUG("Initializing skybox");
 	skyboxGfx = new GFX(GFX_TEXTURE, GL_QUAD_STRIP, 3);
@@ -142,13 +144,13 @@ void pie_DrawSkybox(float scale)
 	glDisable(GL_FOG);
 
 	// So we have realistic colors
-	glColor4ub(0xFF,0xFF,0xFF,0xFF);
+	glColor4ub(0xFF, 0xFF, 0xFF, 0xFF);
 
 	// enable alpha
 	pie_SetRendMode(REND_ALPHA);
 
 	// Apply scale matrix
-	glScalef(scale, scale/2.0f, scale);
+	glScalef(scale, scale / 2.0f, scale);
 
 	skyboxGfx->draw();
 

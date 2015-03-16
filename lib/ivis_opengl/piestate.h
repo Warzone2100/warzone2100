@@ -44,11 +44,11 @@ struct SHADER_PROGRAM;
 
 struct RENDER_STATE
 {
-					bool				fogEnabled;
-					bool				fog;
-					PIELIGHT			fogColour;
-					SDWORD				texPage;
-					REND_MODE			rendMode;
+	bool				fogEnabled;
+	bool				fog;
+	PIELIGHT			fogColour;
+	SDWORD				texPage;
+	REND_MODE			rendMode;
 };
 
 void rendStatesRendModeHack();  // Sets rendStates.rendMode = REND_ALPHA; (Added during merge, since the renderStates is now static.)
@@ -87,7 +87,7 @@ void pie_FreeShaders();
 GLuint pie_LoadShader(const char *programName, const char *vertexPath, const char *fragmentPath);
 
 // Actual shaders (we do not want to export these calls)
-void pie_ActivateShader(int shaderMode, const iIMDShape* shape, PIELIGHT teamcolour, PIELIGHT colour);
+void pie_ActivateShader(int shaderMode, const iIMDShape *shape, PIELIGHT teamcolour, PIELIGHT colour);
 void pie_DeactivateShader();
 void pie_SetShaderStretchDepth(float stretch);
 void pie_SetShaderTime(uint32_t shaderTime);
