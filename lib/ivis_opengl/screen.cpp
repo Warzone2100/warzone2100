@@ -93,7 +93,7 @@ bool screenInitialise()
 	GLubyte const *extensionsBegin = glGetString(GL_EXTENSIONS);
 	GLubyte const *extensionsEnd = extensionsBegin + strlen((char const *)extensionsBegin);
 	std::vector<std::string> glExtensions;
-	for (GLubyte const *i = extensionsBegin; i < extensionsEnd; )
+	for (GLubyte const *i = extensionsBegin; i < extensionsEnd;)
 	{
 		GLubyte const *j = std::find(i, extensionsEnd, ' ');
 		glExtensions.push_back(std::string(i, j));
@@ -158,7 +158,7 @@ bool screenInitialise()
 		debug(LOG_3D, "  * Total number of Texture Image Units (TIUs) supported is %d.", (int) glMaxTIUs);
 		glGetIntegerv(GL_MAX_TEXTURE_COORDS, &glMaxTCs);
 		debug(LOG_3D, "  * Total number of Texture Coords (TCs) supported is %d.", (int) glMaxTCs);
-		glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS_ARB,&glMaxTIUAs);
+		glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS_ARB, &glMaxTIUAs);
 		debug(LOG_3D, "  * Total number of Texture Image Units ARB(TIUAs) supported is %d.", (int) glMaxTIUAs);
 		glGetIntegerv(GL_SAMPLE_BUFFERS, &glmaxSamplesbuf);
 		debug(LOG_3D, "  * (current) Max Sample buffer is %d.", (int) glmaxSamplesbuf);
@@ -278,13 +278,13 @@ void screen_EnableMissingFunctions()
 	}
 }
 
-void screen_SetBackDropFromFile(const char* filename)
+void screen_SetBackDropFromFile(const char *filename)
 {
 	// HACK : We should use a resource handler here!
 	const char *extension = strrchr(filename, '.');// determine the filetype
 	iV_Image image;
 
-	if(!extension)
+	if (!extension)
 	{
 		debug(LOG_ERROR, "Image without extension: \"%s\"!", filename);
 		return; // filename without extension... don't bother
@@ -294,17 +294,19 @@ void screen_SetBackDropFromFile(const char* filename)
 	// Otherwise WZ will think it is still loaded and not load it again
 	pie_SetTexturePage(TEXPAGE_EXTERN);
 
-	if( strcmp(extension,".png") == 0 )
+	if (strcmp(extension, ".png") == 0)
 	{
-		if (iV_loadImage_PNG( filename, &image ) )
+		if (iV_loadImage_PNG(filename, &image))
 		{
 			if (backDropTexture == 0)
+			{
 				glGenTextures(1, &backDropTexture);
+			}
 
 			glBindTexture(GL_TEXTURE_2D, backDropTexture);
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
-					image.width, image.height,
-					0, iV_getPixelFormat(&image), GL_UNSIGNED_BYTE, image.bmp);
+			             image.width, image.height,
+			             0, iV_getPixelFormat(&image), GL_UNSIGNED_BYTE, image.bmp);
 			glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -316,7 +318,9 @@ void screen_SetBackDropFromFile(const char* filename)
 		return;
 	}
 	else
+	{
 		debug(LOG_ERROR, "Unknown extension \"%s\" for image \"%s\"!", extension, filename);
+	}
 }
 //===================================================================
 
@@ -358,19 +362,19 @@ void screen_Upload(const char *newBackDropBmp, bool preview)
 		y2 -= offset;
 	}
 
-	if(newBackDropBmp != NULL)
+	if (newBackDropBmp != NULL)
 	{
 		if (processed)	// lets free a texture when we use a new one.
 		{
-			glDeleteTextures( 1, &backDropTexture );
+			glDeleteTextures(1, &backDropTexture);
 		}
 
 		glGenTextures(1, &backDropTexture);
 		pie_SetTexturePage(TEXPAGE_NONE);
 		glBindTexture(GL_TEXTURE_2D, backDropTexture);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,
-			BACKDROP_HACK_WIDTH, BACKDROP_HACK_HEIGHT,
-			0, GL_RGB, GL_UNSIGNED_BYTE, newBackDropBmp);
+		             BACKDROP_HACK_WIDTH, BACKDROP_HACK_HEIGHT,
+		             0, GL_RGB, GL_UNSIGNED_BYTE, newBackDropBmp);
 
 		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
@@ -414,14 +418,14 @@ void screen_Upload(const char *newBackDropBmp, bool preview)
 	}
 
 	glBegin(GL_TRIANGLE_STRIP);
-		glTexCoord2f(0, 0);
-		glVertex2f(x1, y1);
-		glTexCoord2f(tx, 0);
-		glVertex2f(x2, y1);
-		glTexCoord2f(0, ty);
-		glVertex2f(x1, y2);
-		glTexCoord2f(tx, ty);
-		glVertex2f(x2, y2);
+	glTexCoord2f(0, 0);
+	glVertex2f(x1, y1);
+	glTexCoord2f(tx, 0);
+	glVertex2f(x2, y1);
+	glTexCoord2f(0, ty);
+	glVertex2f(x1, y2);
+	glTexCoord2f(tx, ty);
+	glVertex2f(x2, y2);
 	glEnd();
 
 	if (preview)
@@ -433,7 +437,9 @@ void screen_Upload(const char *newBackDropBmp, bool preview)
 			char text[5];
 
 			if (x == 0x77777777)
+			{
 				continue;
+			}
 
 			x = screenWidth / 2 - w / 2 + x * scale;
 			y = screenHeight / 2 - h / 2 + y * scale;
@@ -491,11 +497,14 @@ static const unsigned int channelsPerPixel = 3;
  */
 void screenDoDumpToDiskIfRequired(void)
 {
-	const char* fileName = screendump_filename;
+	const char *fileName = screendump_filename;
 	iV_Image image = { 0, 0, 8, NULL };
 
-	if (!screendump_required) return;
-	debug( LOG_3D, "Saving screenshot %s\n", fileName );
+	if (!screendump_required)
+	{
+		return;
+	}
+	debug(LOG_3D, "Saving screenshot %s\n", fileName);
 
 	if (image.width != screenWidth || image.height != screenHeight)
 	{
@@ -521,8 +530,8 @@ void screenDoDumpToDiskIfRequired(void)
 	iV_saveImage_JPEG(fileName, &image);
 
 	// display message to user about screenshot
-	snprintf(ConsoleString,sizeof(ConsoleString),"Screenshot %s saved!",fileName);
-	addConsoleMessage(ConsoleString, LEFT_JUSTIFY,SYSTEM_MESSAGE);
+	snprintf(ConsoleString, sizeof(ConsoleString), "Screenshot %s saved!", fileName);
+	addConsoleMessage(ConsoleString, LEFT_JUSTIFY, SYSTEM_MESSAGE);
 	if (image.bmp)
 	{
 		free(image.bmp);
@@ -537,7 +546,7 @@ void screenDoDumpToDiskIfRequired(void)
  *
  *  \param path The directory path to save the screenshot in.
  */
-void screenDumpToDisk(const char* path)
+void screenDumpToDisk(const char *path)
 {
 	unsigned int screendump_num = 0;
 	time_t aclock;
@@ -548,7 +557,7 @@ void screenDumpToDisk(const char* path)
 
 	ssprintf(screendump_filename, "%s/wz2100-%04d%02d%02d_%02d%02d%02d-%s.png", path, t->tm_year + 1900, t->tm_mon + 1, t->tm_mday, t->tm_hour, t->tm_min, t->tm_sec, getLevelName());
 
-        while (PHYSFS_exists(screendump_filename))
+	while (PHYSFS_exists(screendump_filename))
 	{
 		ssprintf(screendump_filename, "%s/wz2100-%04d%02d%02d_%02d%02d%02d-%s-%d.png", path, t->tm_year + 1900, t->tm_mon + 1, t->tm_mday, t->tm_hour, t->tm_min, t->tm_sec, getLevelName(), ++screendump_num);
 	}

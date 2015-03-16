@@ -50,8 +50,8 @@ struct CLIP_VERTEX
 extern bool pie_SetVideoBufferDepth(UDWORD depth);
 extern bool pie_SetVideoBufferWidth(UDWORD width);
 extern bool pie_SetVideoBufferHeight(UDWORD height);
-extern int pie_GetVideoBufferDepth( void ) WZ_DECL_PURE;
-extern int pie_GetVideoBufferWidth( void ) WZ_DECL_PURE;
-extern int pie_GetVideoBufferHeight( void ) WZ_DECL_PURE;
+extern int pie_GetVideoBufferDepth(void) WZ_DECL_PURE;
+extern int pie_GetVideoBufferWidth(void) WZ_DECL_PURE;
+extern int pie_GetVideoBufferHeight(void) WZ_DECL_PURE;
 
 #endif // _pieclip_h

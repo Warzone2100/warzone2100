@@ -83,35 +83,43 @@ static void pie_DrawRect(float x0, float y0, float x1, float y1, PIELIGHT colour
 
 	glColor4ubv(colour.vector);
 	glBegin(GL_TRIANGLE_STRIP);
-		glVertex2f(x0, y0);
-		glVertex2f(x1, y0);
-		glVertex2f(x0, y1);
-		glVertex2f(x1, y1);
+	glVertex2f(x0, y0);
+	glVertex2f(x1, y0);
+	glVertex2f(x0, y1);
+	glVertex2f(x1, y1);
 	glEnd();
 }
 
 
 /***************************************************************************/
 
-void iV_Box(int x0,int y0, int x1, int y1, PIELIGHT colour)
+void iV_Box(int x0, int y0, int x1, int y1, PIELIGHT colour)
 {
 	pie_SetTexturePage(TEXPAGE_NONE);
 	pie_SetAlphaTest(false);
 
-	if (x0>rendSurface.clip.right || x1<rendSurface.clip.left ||
-		y0>rendSurface.clip.bottom || y1<rendSurface.clip.top)
+	if (x0 > rendSurface.clip.right || x1 < rendSurface.clip.left ||
+	    y0 > rendSurface.clip.bottom || y1 < rendSurface.clip.top)
 	{
 		return;
 	}
 
-	if (x0<rendSurface.clip.left)
+	if (x0 < rendSurface.clip.left)
+	{
 		x0 = rendSurface.clip.left;
-	if (x1>rendSurface.clip.right)
+	}
+	if (x1 > rendSurface.clip.right)
+	{
 		x1 = rendSurface.clip.right;
-	if (y0<rendSurface.clip.top)
+	}
+	if (y0 < rendSurface.clip.top)
+	{
 		y0 = rendSurface.clip.top;
-	if (y1>rendSurface.clip.bottom)
+	}
+	if (y1 > rendSurface.clip.bottom)
+	{
 		y1 = rendSurface.clip.bottom;
+	}
 
 	glColor4ubv(colour.vector);
 	glBegin(GL_LINE_STRIP);
@@ -125,7 +133,7 @@ void iV_Box(int x0,int y0, int x1, int y1, PIELIGHT colour)
 
 /***************************************************************************/
 
-void pie_BoxFill(int x0,int y0, int x1, int y1, PIELIGHT colour)
+void pie_BoxFill(int x0, int y0, int x1, int y1, PIELIGHT colour)
 {
 	pie_SetRendMode(REND_OPAQUE);
 	pie_SetTexturePage(TEXPAGE_NONE);
@@ -233,13 +241,13 @@ void iV_DrawImageRect(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Width, i
 	vRemainder = Height % Image->Height;
 	hRemainder = Width % Image->Width;
 
-	for (vRep = 0; vRep < Height/Image->Height; vRep++)
+	for (vRep = 0; vRep < Height / Image->Height; vRep++)
 	{
 		pieImage.tw = Image->Width;
 		dest.x = x + Image->XOffset;
 		dest.w = Image->Width;
 
-		for (hRep = 0; hRep < Width/Image->Width; hRep++)
+		for (hRep = 0; hRep < Width / Image->Width; hRep++)
 		{
 			pie_DrawImage(&pieImage, &dest);
 			dest.x += Image->Width;
@@ -267,7 +275,7 @@ void iV_DrawImageRect(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Width, i
 		pieImage.th = vRemainder;
 		dest.h = vRemainder;
 
-		for (hRep = 0; hRep < Width/Image->Width; hRep++)
+		for (hRep = 0; hRep < Width / Image->Width; hRep++)
 		{
 			pie_DrawImage(&pieImage, &dest);
 			dest.x += Image->Width;
@@ -364,10 +372,10 @@ void pie_RenderRadar(int x, int y, int width, int height)
 
 	glColor4ubv(WZCOL_WHITE.vector);
 	glBegin(GL_TRIANGLE_STRIP);
-		glTexCoord2f(0, 0);			glVertex2f(x, y);
-		glTexCoord2f(radarTexX, 0);		glVertex2f(x + width, y);
-		glTexCoord2f(0, radarTexY);		glVertex2f(x, y + height);
-		glTexCoord2f(radarTexX, radarTexY);	glVertex2f(x + width, y + height);
+	glTexCoord2f(0, 0);			glVertex2f(x, y);
+	glTexCoord2f(radarTexX, 0);		glVertex2f(x + width, y);
+	glTexCoord2f(0, radarTexY);		glVertex2f(x, y + height);
+	glTexCoord2f(radarTexX, radarTexY);	glVertex2f(x + width, y + height);
 	glEnd();
 }
 
@@ -376,21 +384,21 @@ void pie_LoadBackDrop(SCREENTYPE screenType)
 	char backd[128];
 
 	//randomly load in a backdrop piccy.
-	srand( (unsigned)time(NULL) + 17 ); // Use offset since time alone doesn't work very well
+	srand((unsigned)time(NULL) + 17);   // Use offset since time alone doesn't work very well
 
 	switch (screenType)
 	{
-		case SCREEN_RANDOMBDROP:
-			snprintf(backd, sizeof(backd), "texpages/bdrops/backdrop%i.png", rand() % NUM_BACKDROPS); // Range: 0 to (NUM_BACKDROPS-1)
-			break;
-		case SCREEN_MISSIONEND:
-			sstrcpy(backd, "texpages/bdrops/missionend.png");
-			break;
+	case SCREEN_RANDOMBDROP:
+		snprintf(backd, sizeof(backd), "texpages/bdrops/backdrop%i.png", rand() % NUM_BACKDROPS); // Range: 0 to (NUM_BACKDROPS-1)
+		break;
+	case SCREEN_MISSIONEND:
+		sstrcpy(backd, "texpages/bdrops/missionend.png");
+		break;
 
-		case SCREEN_CREDITS:
-		default:
-			sstrcpy(backd, "texpages/bdrops/credits.png");
-			break;
+	case SCREEN_CREDITS:
+	default:
+		sstrcpy(backd, "texpages/bdrops/credits.png");
+		break;
 	}
 
 	screen_SetBackDropFromFile(backd);

@@ -45,14 +45,14 @@
 extern void screenSetTextColour(UBYTE red, UBYTE green, UBYTE blue);
 
 /* backDrop */
-extern void screen_SetBackDropFromFile(const char* filename);
+extern void screen_SetBackDropFromFile(const char *filename);
 extern void screen_StopBackDrop(void);
 extern void screen_RestartBackDrop(void);
 extern bool screen_GetBackDrop(void);
 extern void screen_Upload(const char *newBackDropBmp, bool preview);
 
 /* screendump */
-extern void screenDumpToDisk(const char* path);
+extern void screenDumpToDisk(const char *path);
 
 extern int wz_texture_compression;
 

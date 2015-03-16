@@ -33,9 +33,15 @@ struct ImageMergeRectangle
 {
 	bool operator <(ImageMergeRectangle const &b) const
 	{
-		if (std::max(siz.x, siz.y) != std::max(b.siz.x, b.siz.y)) return std::max(siz.x, siz.y) < std::max(b.siz.x, b.siz.y);
-		if (std::min(siz.x, siz.y) != std::min(b.siz.x, b.siz.y)) return std::min(siz.x, siz.y) < std::min(b.siz.x, b.siz.y);
-		                                                          return siz.x                  < b.siz.x;
+		if (std::max(siz.x, siz.y) != std::max(b.siz.x, b.siz.y))
+		{
+			return std::max(siz.x, siz.y) < std::max(b.siz.x, b.siz.y);
+		}
+		if (std::min(siz.x, siz.y) != std::min(b.siz.x, b.siz.y))
+		{
+			return std::min(siz.x, siz.y) < std::min(b.siz.x, b.siz.y);
+		}
+		return siz.x                  < b.siz.x;
 	}
 
 	int index;  // Index in ImageDefs array.
@@ -193,8 +199,8 @@ IMAGEFILE *iV_LoadImageFile(const char *fileName)
 		ivImages[p].depth = 4;
 		ivImages[p].width = size;
 		ivImages[p].height = size;
-		ivImages[p].bmp = (unsigned char *)malloc(size*size*4);  // MUST be malloc, since this is free()d later by pie_AddTexPage().
-		memset(ivImages[p].bmp, 0x00, size*size*4);
+		ivImages[p].bmp = (unsigned char *)malloc(size * size * 4); // MUST be malloc, since this is free()d later by pie_AddTexPage().
+		memset(ivImages[p].bmp, 0x00, size * size * 4);
 		imageFile->pages[p].size = size;
 		// Must set imageFile->pages[p].id later, after filling out ivImages[p].bmp.
 	}
@@ -210,20 +216,20 @@ IMAGEFILE *iV_LoadImageFile(const char *fileName)
 		// Copy image data onto texture page.
 		iV_Image *srcImage = r->data;
 		int srcDepth = srcImage->depth;
-		int srcStride = srcImage->width*srcDepth;  // Not sure whether to pad in the case that srcDepth ≠ 4, however this apparently cannot happen.
-		unsigned char *srcBytes = srcImage->bmp + 0*srcDepth + 0*srcStride;
+		int srcStride = srcImage->width * srcDepth; // Not sure whether to pad in the case that srcDepth ≠ 4, however this apparently cannot happen.
+		unsigned char *srcBytes = srcImage->bmp + 0 * srcDepth + 0 * srcStride;
 		iV_Image *dstImage = &ivImages[r->page];
 		int dstDepth = dstImage->depth;
-		int dstStride = dstImage->width*dstDepth;
-		unsigned char *dstBytes = dstImage->bmp + r->loc.x*dstDepth + r->loc.y*dstStride;
+		int dstStride = dstImage->width * dstDepth;
+		unsigned char *dstBytes = dstImage->bmp + r->loc.x * dstDepth + r->loc.y * dstStride;
 		Vector2i size = r->siz;
 		unsigned char rgba[4] = {0x00, 0x00, 0x00, 0xFF};
 		for (int y = 0; y < size.y; ++y)
 			for (int x = 0; x < size.x; ++x)
-		{
-			memcpy(rgba, srcBytes + x*srcDepth + y*srcStride, srcDepth);
-			memcpy(dstBytes + x*dstDepth + y*dstStride, rgba, dstDepth);
-		}
+			{
+				memcpy(rgba, srcBytes + x * srcDepth + y * srcStride, srcDepth);
+				memcpy(dstBytes + x * dstDepth + y * dstStride, rgba, dstDepth);
+			}
 
 		// Finished reading the image data and copying it to the texture page, delete it.
 		free(r->data->bmp);

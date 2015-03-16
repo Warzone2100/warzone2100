@@ -50,7 +50,7 @@ static void pie_PrintLoadedTextures(void);
 
 	Returns the texture number of the image.
 **************************************************************************/
-int pie_AddTexPage(iV_Image *s, const char* filename, int slot, int maxTextureSize, bool useMipmaping)
+int pie_AddTexPage(iV_Image *s, const char *filename, int slot, int maxTextureSize, bool useMipmaping)
 {
 	unsigned int i = 0;
 	int width, height;
@@ -93,7 +93,7 @@ int pie_AddTexPage(iV_Image *s, const char* filename, int slot, int maxTextureSi
 	width = s->width;
 	height = s->height;
 	bmp = s->bmp;
-	if ((width & (width-1)) == 0 && (height & (height-1)) == 0)
+	if ((width & (width - 1)) == 0 && (height & (height - 1)) == 0)
 	{
 		if (maxTextureSize > 0 && width > maxTextureSize)
 		{
@@ -110,7 +110,7 @@ int pie_AddTexPage(iV_Image *s, const char* filename, int slot, int maxTextureSi
 			debug(LOG_TEXTURE, "scaling down texture %s from %ix%i to %ix%i", filename, s->width, s->height, width, height);
 			bmp = malloc(4 * width * height); // FIXME: don't know for sure it is 4 bytes per pixel
 			gluScaleImage(iV_getPixelFormat(s), s->width, s->height, GL_UNSIGNED_BYTE, s->bmp,
-			                                    width,    height,    GL_UNSIGNED_BYTE, bmp);
+			              width,    height,    GL_UNSIGNED_BYTE, bmp);
 			free(s->bmp);
 		}
 
@@ -129,9 +129,9 @@ int pie_AddTexPage(iV_Image *s, const char* filename, int slot, int maxTextureSi
 	{
 		debug(LOG_ERROR, "pie_AddTexPage: non POT texture %s", filename);
 	}
-	
+
 	// it is uploaded, we do not need it anymore
-	free(bmp); 
+	free(bmp);
 	s->bmp = NULL;
 
 	if (useMipmaping)
@@ -179,7 +179,7 @@ void pie_InitSkybox(SDWORD pageNum)
  * Turns filename into a pagename if possible
  * \param[in,out] filename Filename to pagify
  */
-void pie_MakeTexPageName(char * filename)
+void pie_MakeTexPageName(char *filename)
 {
 	char *c = strstr(filename, iV_TEXNAME_TCSUFFIX);
 	if (c)
@@ -198,12 +198,12 @@ void pie_MakeTexPageName(char * filename)
  * Turns page filename into a pagename + tc mask if possible
  * \param[in,out] filename Filename to pagify
  */
-void pie_MakeTexPageTCMaskName(char * filename)
+void pie_MakeTexPageTCMaskName(char *filename)
 {
 	if (strncmp(filename, "page-", 5) == 0)
 	{
 		int i;
-		for ( i = 5; i < iV_TEXNAME_MAX-1 && isdigit(filename[i]); i++) {}
+		for (i = 5; i < iV_TEXNAME_MAX - 1 && isdigit(filename[i]); i++) {}
 		filename[i] = '\0';
 		strcat(filename, iV_TEXNAME_TCSUFFIX);
 	}
@@ -218,7 +218,7 @@ static void pie_PrintLoadedTextures(void)
 
 	debug(LOG_ERROR, "Available texture pages in memory (%d out of %d max):", _TEX_INDEX, iV_TEX_MAX);
 
-	for ( i = 0; i < iV_TEX_MAX && _TEX_PAGE[i].name[0] != '\0'; i++ )
+	for (i = 0; i < iV_TEX_MAX && _TEX_PAGE[i].name[0] != '\0'; i++)
 	{
 		debug(LOG_ERROR, "%02d : %s", i, _TEX_PAGE[i].name);
 	}
@@ -313,7 +313,8 @@ void pie_TexInit(void)
 {
 	int i = 0;
 
-	while (i < iV_TEX_MAX) {
+	while (i < iV_TEX_MAX)
+	{
 		_TEX_PAGE[i].name[0] = '\0';
 		i++;
 	}
@@ -342,12 +343,12 @@ unsigned int iV_getPixelFormat(const iV_Image *image)
 {
 	switch (image->depth)
 	{
-		case 3:
-			return GL_RGB;
-		case 4:
-			return GL_RGBA;
-		default:
-			debug(LOG_ERROR, "iV_getPixelFormat: Unsupported image depth: %u", image->depth);
-			return GL_INVALID_ENUM;
+	case 3:
+		return GL_RGB;
+	case 4:
+		return GL_RGBA;
+	default:
+		debug(LOG_ERROR, "iV_getPixelFormat: Unsupported image depth: %u", image->depth);
+		return GL_INVALID_ENUM;
 	}
 }

@@ -75,10 +75,10 @@ extern void pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colo
 extern void pie_DrawImage(const PIEIMAGE *image, const PIERECT *dest);
 void pie_DrawImage(const PIEIMAGE *image, const PIERECT *dest, PIELIGHT colour);
 
-extern void pie_GetResetCounts(unsigned int* pPieCount, unsigned int* pPolyCount, unsigned int* pStateCount);
+extern void pie_GetResetCounts(unsigned int *pPieCount, unsigned int *pPolyCount, unsigned int *pStateCount);
 
 /** Setup stencil shadows and OpenGL lighting. */
-void pie_BeginLighting(const Vector3f * light, bool drawshadows);
+void pie_BeginLighting(const Vector3f *light, bool drawshadows);
 
 /* Stop using stencil shadows and OpenGL lighting (if enabled). */
 void pie_EndLighting(void);

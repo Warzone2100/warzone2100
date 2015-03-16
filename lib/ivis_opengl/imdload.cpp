@@ -36,7 +36,7 @@
 
 static bool AtEndOfFile(const char *CurPos, const char *EndOfFile)
 {
-	while ( *CurPos == 0x00 || *CurPos == 0x09 || *CurPos == 0x0a || *CurPos == 0x0d || *CurPos == 0x20 )
+	while (*CurPos == 0x00 || *CurPos == 0x09 || *CurPos == 0x0a || *CurPos == 0x0d || *CurPos == 0x20)
 	{
 		CurPos++;
 		if (CurPos >= EndOfFile)
@@ -64,7 +64,7 @@ static bool AtEndOfFile(const char *CurPos, const char *EndOfFile)
  * \post s->polys allocated (iFSDPoly * s->npolys)
  * \post s->pindex allocated for each poly
  */
-static bool _imd_load_polys( const char **ppFileData, iIMDShape *s, int pieVersion)
+static bool _imd_load_polys(const char **ppFileData, iIMDShape *s, int pieVersion)
 {
 	const char *pFileData = *ppFileData;
 	unsigned int i, j;
@@ -73,7 +73,7 @@ static bool _imd_load_polys( const char **ppFileData, iIMDShape *s, int pieVersi
 	s->numFrames = 0;
 	s->animInterval = 0;
 
-	s->polys = (iIMDPoly*)malloc(sizeof(iIMDPoly) * s->npolys);
+	s->polys = (iIMDPoly *)malloc(sizeof(iIMDPoly) * s->npolys);
 	if (s->polys == NULL)
 	{
 		debug(LOG_ERROR, "(_load_polys) Out of memory (polys)");
@@ -114,9 +114,9 @@ static bool _imd_load_polys( const char **ppFileData, iIMDShape *s, int pieVersi
 			p1.y = s->points[poly->pindex[1]].y;
 			p1.z = s->points[poly->pindex[1]].z;
 
-			p2.x = s->points[poly->pindex[poly->npnts-1]].x;
-			p2.y = s->points[poly->pindex[poly->npnts-1]].y;
-			p2.z = s->points[poly->pindex[poly->npnts-1]].z;
+			p2.x = s->points[poly->pindex[poly->npnts - 1]].x;
+			p2.y = s->points[poly->pindex[poly->npnts - 1]].y;
+			p2.z = s->points[poly->pindex[poly->npnts - 1]].z;
 
 			poly->normal = pie_SurfaceNormal3fv(p0, p1, p2);
 		}
@@ -150,11 +150,11 @@ static bool _imd_load_polys( const char **ppFileData, iIMDShape *s, int pieVersi
 				else
 				{
 					ASSERT(s->numFrames == nFrames,
-						"%s: varying number of frames within one PIE level: %d != %d",
-							GetLastResourceFilename(), nFrames, s->numFrames);
+					       "%s: varying number of frames within one PIE level: %d != %d",
+					       GetLastResourceFilename(), nFrames, s->numFrames);
 					ASSERT(s->animInterval == pbRate,
-						"%s: varying animation intervals within one PIE level: %d != %d",
-							GetLastResourceFilename(), pbRate, s->animInterval);
+					       "%s: varying animation intervals within one PIE level: %d != %d",
+					       GetLastResourceFilename(), pbRate, s->animInterval);
 				}
 
 				poly->texAnim.x = tWidth;
@@ -165,7 +165,7 @@ static bool _imd_load_polys( const char **ppFileData, iIMDShape *s, int pieVersi
 					poly->texAnim.x /= OLD_TEXTURE_SIZE_FIX;
 					poly->texAnim.y /= OLD_TEXTURE_SIZE_FIX;
 				}
-				framesPerLine = 1/poly->texAnim.x;
+				framesPerLine = 1 / poly->texAnim.x;
 			}
 			else
 			{
@@ -221,7 +221,7 @@ static bool _imd_load_polys( const char **ppFileData, iIMDShape *s, int pieVersi
 }
 
 
-static bool ReadPoints( const char **ppFileData, iIMDShape *s )
+static bool ReadPoints(const char **ppFileData, iIMDShape *s)
 {
 	const char *pFileData = *ppFileData;
 	unsigned int i;
@@ -243,7 +243,7 @@ static bool ReadPoints( const char **ppFileData, iIMDShape *s )
 }
 
 
-static bool _imd_load_points( const char **ppFileData, iIMDShape *s )
+static bool _imd_load_points(const char **ppFileData, iIMDShape *s)
 {
 	Vector3f *p = NULL;
 	int32_t xmax, ymax, zmax;
@@ -254,14 +254,14 @@ static bool _imd_load_points( const char **ppFileData, iIMDShape *s )
 	         vxmax(0, 0, 0), vymax(0, 0, 0), vzmax(0, 0, 0);
 
 	//load the points then pass through a second time to setup bounding datavalues
-	s->points = (Vector3f*)malloc(sizeof(Vector3f) * s->npoints);
+	s->points = (Vector3f *)malloc(sizeof(Vector3f) * s->npoints);
 	if (s->points == NULL)
 	{
 		return false;
 	}
 
 	// Read in points and remove duplicates (!)
-	if ( ReadPoints( ppFileData, s ) == false )
+	if (ReadPoints(ppFileData, s) == false)
 	{
 		free(s->points);
 		s->points = NULL;
@@ -354,7 +354,7 @@ static bool _imd_load_points( const char **ppFileData, iIMDShape *s )
 	zmax = MAX(s->max.z, -s->min.z);
 
 	s->radius = MAX(xmax, MAX(ymax, zmax));
-	s->sradius = sqrtf(xmax*xmax + ymax*ymax + zmax*zmax);
+	s->sradius = sqrtf(xmax * xmax + ymax * ymax + zmax * zmax);
 
 // START: tight bounding sphere
 
@@ -362,19 +362,19 @@ static bool _imd_load_points( const char **ppFileData, iIMDShape *s )
 	dx = vxmax.x - vxmin.x;
 	dy = vxmax.y - vxmin.y;
 	dz = vxmax.z - vxmin.z;
-	xspan = dx*dx + dy*dy + dz*dz;
+	xspan = dx * dx + dy * dy + dz * dz;
 
 	// same for yspan
 	dx = vymax.x - vymin.x;
 	dy = vymax.y - vymin.y;
 	dz = vymax.z - vymin.z;
-	yspan = dx*dx + dy*dy + dz*dz;
+	yspan = dx * dx + dy * dy + dz * dz;
 
 	// and ofcourse zspan
 	dx = vzmax.x - vzmin.x;
 	dy = vzmax.y - vzmin.y;
 	dz = vzmax.z - vzmin.z;
-	zspan = dx*dx + dy*dy + dz*dz;
+	zspan = dx * dx + dy * dy + dz * dz;
 
 	// set points dia1 & dia2 to maximally seperated pair
 	// assume xspan biggest
@@ -405,7 +405,7 @@ static bool _imd_load_points( const char **ppFileData, iIMDShape *s )
 	dy = dia2.y - cen.y;
 	dz = dia2.z - cen.z;
 
-	rad_sq = dx*dx + dy*dy + dz*dz;
+	rad_sq = dx * dx + dy * dy + dz * dz;
 	rad = sqrt((double)rad_sq);
 
 	// second pass (find tight sphere)
@@ -414,22 +414,22 @@ static bool _imd_load_points( const char **ppFileData, iIMDShape *s )
 		dx = p->x - cen.x;
 		dy = p->y - cen.y;
 		dz = p->z - cen.z;
-		old_to_p_sq = dx*dx + dy*dy + dz*dz;
+		old_to_p_sq = dx * dx + dy * dy + dz * dz;
 
 		// do r**2 first
-		if (old_to_p_sq>rad_sq)
+		if (old_to_p_sq > rad_sq)
 		{
 			// this point outside current sphere
 			old_to_p = sqrt((double)old_to_p_sq);
 			// radius of new sphere
 			rad = (rad + old_to_p) / 2.;
 			// rad**2 for next compare
-			rad_sq = rad*rad;
+			rad_sq = rad * rad;
 			old_to_new = old_to_p - rad;
 			// centre of new sphere
-			cen.x = (rad*cen.x + old_to_new*p->x) / old_to_p;
-			cen.y = (rad*cen.y + old_to_new*p->y) / old_to_p;
-			cen.z = (rad*cen.z + old_to_new*p->z) / old_to_p;
+			cen.x = (rad * cen.x + old_to_new * p->x) / old_to_p;
+			cen.y = (rad * cen.y + old_to_new * p->y) / old_to_p;
+			cen.z = (rad * cen.z + old_to_new * p->z) / old_to_p;
 		}
 	}
 
@@ -508,7 +508,7 @@ static iIMDShape *_imd_load_level(const char **ppFileData, const char *FileDataE
 	i = sscanf(pFileData, "%255s %n", buffer, &cnt);
 	ASSERT_OR_RETURN(NULL, i == 1, "Bad directive following LEVEL");
 
-	s = (iIMDShape*)malloc(sizeof(iIMDShape));
+	s = (iIMDShape *)malloc(sizeof(iIMDShape));
 	if (s == NULL)
 	{
 		/* Failed to allocate memory for s */
@@ -537,7 +537,7 @@ static iIMDShape *_imd_load_level(const char **ppFileData, const char *FileDataE
 		i = sscanf(pFileData, "%255s %f %f %f %f %f %f %f %f %f %f%n", buffer,
 		           &s->material[LIGHT_AMBIENT][0], &s->material[LIGHT_AMBIENT][1], &s->material[LIGHT_AMBIENT][2],
 		           &s->material[LIGHT_DIFFUSE][0], &s->material[LIGHT_DIFFUSE][1], &s->material[LIGHT_DIFFUSE][2],
-	                   &s->material[LIGHT_SPECULAR][0], &s->material[LIGHT_SPECULAR][1], &s->material[LIGHT_SPECULAR][2],
+		           &s->material[LIGHT_SPECULAR][0], &s->material[LIGHT_SPECULAR][1], &s->material[LIGHT_SPECULAR][2],
 		           &s->shininess, &cnt);
 		ASSERT_OR_RETURN(NULL, i == 11, "Bad MATERIALS directive");
 		pFileData += cnt;
@@ -569,7 +569,7 @@ static iIMDShape *_imd_load_level(const char **ppFileData, const char *FileDataE
 
 	ASSERT_OR_RETURN(NULL, strcmp(buffer, "POINTS") == 0, "Expecting 'POINTS' directive, got: %s", buffer);
 
-	_imd_load_points( &pFileData, s );
+	_imd_load_points(&pFileData, s);
 
 	if (sscanf(pFileData, "%255s %d%n", buffer, &s->npolys, &cnt) != 2)
 	{
@@ -580,7 +580,7 @@ static iIMDShape *_imd_load_level(const char **ppFileData, const char *FileDataE
 
 	ASSERT_OR_RETURN(NULL, strcmp(buffer, "POLYGONS") == 0, "Expecting 'POLYGONS' directive, got: %s", buffer);
 
-	_imd_load_polys( &pFileData, s, pieVersion);
+	_imd_load_polys(&pFileData, s, pieVersion);
 
 
 	// NOW load optional stuff
@@ -604,7 +604,7 @@ static iIMDShape *_imd_load_level(const char **ppFileData, const char *FileDataE
 		{
 			//load connector stuff
 			s->nconnectors = n;
-			_imd_load_connectors( &pFileData, s );
+			_imd_load_connectors(&pFileData, s);
 		}
 		else
 		{
@@ -626,7 +626,7 @@ static iIMDShape *_imd_load_level(const char **ppFileData, const char *FileDataE
  * \return The shape, constructed from the data read
  */
 // ppFileData is incremented to the end of the file on exit!
-iIMDShape *iV_ProcessIMD( const char **ppFileData, const char *FileDataEnd )
+iIMDShape *iV_ProcessIMD(const char **ppFileData, const char *FileDataEnd)
 {
 	const char *pFileName = GetLastResourceFilename(); // Last loaded texture page filename
 	const char *pFileData = *ppFileData;
@@ -688,9 +688,9 @@ iIMDShape *iV_ProcessIMD( const char **ppFileData, const char *FileDataEnd )
 		ch = *pFileData++;
 
 		// Run up to the dot or till the buffer is filled. Leave room for the extension.
-		for (i = 0; i < PATH_MAX-5 && (ch = *pFileData++) != '\0' && ch != '.'; ++i)
+		for (i = 0; i < PATH_MAX - 5 && (ch = *pFileData++) != '\0' && ch != '.'; ++i)
 		{
- 			texfile[i] = ch;
+			texfile[i] = ch;
 		}
 		texfile[i] = '\0';
 
@@ -736,9 +736,9 @@ iIMDShape *iV_ProcessIMD( const char **ppFileData, const char *FileDataEnd )
 		ch = *pFileData++;
 
 		// Run up to the dot or till the buffer is filled. Leave room for the extension.
-		for (i = 0; i < PATH_MAX-5 && (ch = *pFileData++) != '\0' && ch != '.'; ++i)
+		for (i = 0; i < PATH_MAX - 5 && (ch = *pFileData++) != '\0' && ch != '.'; ++i)
 		{
- 			normalfile[i] = ch;
+			normalfile[i] = ch;
 		}
 		normalfile[i] = '\0';
 

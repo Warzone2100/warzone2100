@@ -82,18 +82,18 @@ void pie_DrawViewingWindow(Vector3i *v, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD 
 
 	glColor4ub(colour.byte.r, colour.byte.g, colour.byte.b, colour.byte.a >> 1);
 	glBegin(GL_TRIANGLE_FAN);
-		for (i = 0; i < VW_VERTICES; i++)
-		{
-			glVertex2f(pieVrts[i].pos.x, pieVrts[i].pos.y);
-		}
+	for (i = 0; i < VW_VERTICES; i++)
+	{
+		glVertex2f(pieVrts[i].pos.x, pieVrts[i].pos.y);
+	}
 	glEnd();
 
 	glColor4ub(colour.byte.r, colour.byte.g, colour.byte.b, colour.byte.a);
 	glBegin(GL_LINE_STRIP);
-		for (i = 0; i < VW_VERTICES; i++)
-		{
-			glVertex2f(pieVrts[i].pos.x, pieVrts[i].pos.y);
-		}
+	for (i = 0; i < VW_VERTICES; i++)
+	{
+		glVertex2f(pieVrts[i].pos.x, pieVrts[i].pos.y);
+	}
 	glVertex2f(pieVrts[0].pos.x, pieVrts[0].pos.y);
 	glEnd();
 }
@@ -108,10 +108,10 @@ void pie_TransColouredTriangle(Vector3f *vrt, PIELIGHT c)
 	glColor4ub(c.byte.r, c.byte.g, c.byte.b, 128);
 
 	glBegin(GL_TRIANGLE_FAN);
-		for (i = 0; i < 3; ++i)
-		{
-			glVertex3f(vrt[i].x, vrt[i].y, vrt[i].z);
-		}
+	for (i = 0; i < 3; ++i)
+	{
+		glVertex3f(vrt[i].x, vrt[i].y, vrt[i].z);
+	}
 	glEnd();
 }
 
@@ -127,7 +127,7 @@ void pie_DrawSkybox(float scale, int u, int v, int w, int h)
 	glDisable(GL_FOG);
 
 	// So we have realistic colors
-	glColor4ub(0xFF,0xFF,0xFF,0xFF);
+	glColor4ub(0xFF, 0xFF, 0xFF, 0xFF);
 
 	// enable alpha
 	pie_SetRendMode(REND_ALPHA);
@@ -136,26 +136,26 @@ void pie_DrawSkybox(float scale, int u, int v, int w, int h)
 	glDisable(GL_ALPHA_TEST);
 
 	// Apply scale matrix
-	glScalef(scale, scale/2.0f, scale);
+	glScalef(scale, scale / 2.0f, scale);
 
 	glBegin(GL_QUAD_STRIP);
-		// Front
-		glTexCoord2f(u + w * 0, v + h);	glVertex3f(-r, 0, r); // bottom left
-		glTexCoord2f(u + w * 0, v);		glVertex3f(-r, r, r); // top left
-		glTexCoord2f(u + w * 2, v + h);	glVertex3f( r, 0, r); // bottom right
-		glTexCoord2f(u + w * 2, v); 	glVertex3f( r, r, r); // top right
+	// Front
+	glTexCoord2f(u + w * 0, v + h);	glVertex3f(-r, 0, r); // bottom left
+	glTexCoord2f(u + w * 0, v);		glVertex3f(-r, r, r); // top left
+	glTexCoord2f(u + w * 2, v + h);	glVertex3f(r, 0, r);  // bottom right
+	glTexCoord2f(u + w * 2, v); 	glVertex3f(r, r, r);  // top right
 
-		// Right
-		glTexCoord2f(u + w * 4, v + h);	glVertex3f( r, 0,-r); // bottom r
-		glTexCoord2f(u + w * 4, v); 	glVertex3f( r, r,-r); // top r
+	// Right
+	glTexCoord2f(u + w * 4, v + h);	glVertex3f(r, 0, -r); // bottom r
+	glTexCoord2f(u + w * 4, v); 	glVertex3f(r, r, -r); // top r
 
-		// Back
-		glTexCoord2f(u + w * 6, v + h);	glVertex3f(-r, 0, -r); // bottom right
-		glTexCoord2f(u + w * 6, v); 	glVertex3f(-r, r, -r); // top right
+	// Back
+	glTexCoord2f(u + w * 6, v + h);	glVertex3f(-r, 0, -r); // bottom right
+	glTexCoord2f(u + w * 6, v); 	glVertex3f(-r, r, -r); // top right
 
-		// Left
-		glTexCoord2f(u + w * 8, v + h);	glVertex3f(-r, 0, r); // bottom r
-		glTexCoord2f(u + w * 8, v); 	glVertex3f(-r, r, r); // top r
+	// Left
+	glTexCoord2f(u + w * 8, v + h);	glVertex3f(-r, 0, r); // bottom r
+	glTexCoord2f(u + w * 8, v); 	glVertex3f(-r, r, r); // top r
 	glEnd();
 
 	glPopAttrib();
@@ -168,7 +168,7 @@ void pie_DrawFogBox(float left, float right, float front, float back, float heig
 
 	pie_SetTexturePage(TEXPAGE_NONE);
 
-	glColor4ub(fog_colour.byte.r,fog_colour.byte.g,fog_colour.byte.b,0xFF);
+	glColor4ub(fog_colour.byte.r, fog_colour.byte.g, fog_colour.byte.b, 0xFF);
 
 	pie_SetRendMode(REND_OPAQUE);
 
@@ -177,23 +177,23 @@ void pie_DrawFogBox(float left, float right, float front, float back, float heig
 	glDepthMask(GL_FALSE);
 	glDisable(GL_FOG);
 	glBegin(GL_QUAD_STRIP);
-		// Front
-		glVertex3f(-left, 0, front); // bottom left
-		glVertex3f(-left-wider, height, front+wider); // top left
-		glVertex3f( right, 0, front); // bottom right
-		glVertex3f( right+wider, height, front+wider); // top right
+	// Front
+	glVertex3f(-left, 0, front); // bottom left
+	glVertex3f(-left - wider, height, front + wider); // top left
+	glVertex3f(right, 0, front);  // bottom right
+	glVertex3f(right + wider, height, front + wider); // top right
 
-		// Right
-		glVertex3f( right, 0,-back); // bottom r
-		glVertex3f( right+wider, height,-back-wider); // top r
+	// Right
+	glVertex3f(right, 0, -back); // bottom r
+	glVertex3f(right + wider, height, -back - wider); // top r
 
-		// Back
-		glVertex3f(-left, 0, -back); // bottom right
-		glVertex3f(-left-wider, height, -back-wider); // top right
+	// Back
+	glVertex3f(-left, 0, -back); // bottom right
+	glVertex3f(-left - wider, height, -back - wider); // top right
 
-		// Left
-		glVertex3f(-left, 0, front); // bottom r
-		glVertex3f(-left-wider, height, front+wider); // top r
+	// Left
+	glVertex3f(-left, 0, front); // bottom r
+	glVertex3f(-left - wider, height, front + wider); // top r
 	glEnd();
 	glPopAttrib();
 }

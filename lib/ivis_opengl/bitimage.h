@@ -53,14 +53,14 @@ static inline WZ_DECL_PURE short iV_GetImageYOffset(const IMAGEFILE *ImageFile, 
 static inline WZ_DECL_PURE unsigned short iV_GetImageCenterX(const IMAGEFILE *ImageFile, const unsigned short ID)
 {
 	assert(ID < ImageFile->imageDefs.size());
-	return ImageFile->imageDefs[ID].XOffset + ImageFile->imageDefs[ID].Width/2;
+	return ImageFile->imageDefs[ID].XOffset + ImageFile->imageDefs[ID].Width / 2;
 }
 
 
 static inline WZ_DECL_PURE unsigned short iV_GetImageCenterY(const IMAGEFILE *ImageFile, const unsigned short ID)
 {
 	assert(ID < ImageFile->imageDefs.size());
-	return ImageFile->imageDefs[ID].YOffset + ImageFile->imageDefs[ID].Height/2;
+	return ImageFile->imageDefs[ID].YOffset + ImageFile->imageDefs[ID].Height / 2;
 }
 
 

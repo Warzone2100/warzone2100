@@ -38,7 +38,7 @@ iSurface *iV_SurfaceCreate(int width, int height)
 	s->clip.left = 0;
 	s->clip.right = width - 1;
 	s->clip.top = 0;
-	s->clip.bottom = height-1;
+	s->clip.bottom = height - 1;
 
 	return s;
 }
