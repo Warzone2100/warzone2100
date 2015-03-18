@@ -35,6 +35,7 @@ WzConfig::~WzConfig()
 {
 	if (mWarning == ReadAndWrite)
 	{
+		ASSERT(mObjStack.size() == 0, "Some json groups have not been closed, stack size %d.", mObjStack.size());
 		QJsonDocument doc(mObj);
 		QByteArray json = doc.toJson();
 		saveFile(mFilename.toUtf8().constData(), json.constData(), json.size());
@@ -56,14 +57,12 @@ WzConfig::WzConfig(const QString &name, WzConfig::warning warning, QObject *pare
 		if (warning == ReadOnly)
 		{
 			mStatus = false;
-			debug(LOG_ERROR, "IGNORED %s", name.toUtf8().constData());
 			return;
 		}
 		else if (warning == ReadAndWrite)
 		{
 			mJson = QJsonDocument();
 			mObj = mJson.object();
-			debug(LOG_ERROR, "PREPARED %s", name.toUtf8().constData());
 			return;
 		}
 	}
@@ -212,18 +211,20 @@ Vector2i WzConfig::vector2i(const QString &name)
 
 void WzConfig::beginGroup(const QString &prefix)
 {
-	mObjNameStack.append(prefix);
+	mObjNameStack.append(mName);
 	mObjStack.append(mObj);
 	mName = prefix;
 	if (mWarning == ReadAndWrite)
 	{
 		mObj = QJsonObject();
-		return;
 	}
-	ASSERT(mWarning == ReadAndWrite || contains(prefix), "beginGroup() on non-existing key %s", prefix.toUtf8().constData());
-	QJsonValue value = mObj.value(prefix);
-	ASSERT(value.isObject(), "beginGroup() on non-object key %s", prefix.toUtf8().constData());
-	mObj = value.toObject();
+	else
+	{
+		ASSERT(contains(prefix), "beginGroup() on non-existing key \"%s\"", prefix.toUtf8().constData());
+		QJsonValue value = mObj.value(prefix);
+		ASSERT(value.isObject(), "beginGroup() on non-object key \"%s\"", prefix.toUtf8().constData());
+		mObj = value.toObject();
+	}
 }
 
 void WzConfig::endGroup()

@@ -1005,6 +1005,9 @@ bool mapSave(char **ppFileData, UDWORD *pFileSize)
 		psGate->y1 = psCurrGate->y2;
 		ASSERT(psGate->x0 == psGate->x1 || psGate->y0 == psGate->y1, "Invalid gateway coordinates (%d, %d, %d, %d)",
 		       psGate->x0, psGate->y0, psGate->x1, psGate->y1);
+		ASSERT(psGate->x0 < mapWidth && psGate->y0 < mapHeight && psGate->x1 < mapWidth && psGate->y1 < mapHeight,
+		       "Bad gateway dimensions for savegame");
+		psGate++;
 	}
 
 	return true;

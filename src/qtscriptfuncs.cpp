@@ -964,12 +964,12 @@ bool writeLabels(const char *filename)
 	{
 		QString key = i.key();
 		labeltype l = i.value();
-		ini.setValue("triggered", l.triggered);
 		if (l.type == SCRIPT_POSITION)
 		{
 			ini.beginGroup("position_" + QString::number(c[0]++));
 			ini.setVector2i("pos", l.p1);
 			ini.setValue("label", key);
+			ini.setValue("triggered", l.triggered);
 			ini.endGroup();
 		}
 		else if (l.type == SCRIPT_AREA)
@@ -1016,6 +1016,7 @@ bool writeLabels(const char *filename)
 			ini.setValue("player", l.player);
 			ini.setValue("type", l.type);
 			ini.setValue("label", key);
+			ini.setValue("triggered", l.triggered);
 			ini.endGroup();
 		}
 	}
