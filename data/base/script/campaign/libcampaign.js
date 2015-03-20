@@ -109,7 +109,7 @@ function camCallOnce(callback)
 	if (camDef(__camCalledOnce[callback]) && __camCalledOnce[callback])
 		return;
 	__camCalledOnce[callback] = true;
-	__camGlobalContext[callback]();
+	__camGlobalContext()[callback]();
 }
 
 //;; \subsection{camSafeRemoveObject(obj[, special effects?])}
@@ -266,9 +266,12 @@ function camMakeGroup(what, filter)
 
 //////////// privates
 
-var __camGlobalContext = this;
 var __camCalledOnce = {};
 
+function __camGlobalContext()
+{
+	return Function('return this')();
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Debugging helpers.
@@ -542,7 +545,7 @@ function __camPickupArtifact(artifact)
 	// bump counter before the callback, so that it was
 	// actual during the callback
 	++__camNumArtifacts;
-	var callback = __camGlobalContext["camArtifactPickup_" + alabel];
+	var callback = __camGlobalContext()["camArtifactPickup_" + alabel];
 	if (camDef(callback))
 		callback();
 }
@@ -705,7 +708,7 @@ function camDetectEnemyBase(blabel)
 	}
 	if (camDef(bi.detectMsg))
 		hackAddMessage(bi.detectMsg, PROX_MSG, 0, false);
-	var callback = __camGlobalContext["camEnemyBaseDetected_" + blabel];
+	var callback = __camGlobalContext()["camEnemyBaseDetected_" + blabel];
 	if (camDef(callback))
 		callback();
 }
@@ -946,7 +949,7 @@ function __camCheckBaseEliminated(group)
 		// bump counter before the callback, so that it was
 		// actual during the callback
 		++__camNumEnemyBases;
-		var callback = __camGlobalContext["camEnemyBaseEliminated_" + blabel];
+		var callback = __camGlobalContext()["camEnemyBaseEliminated_" + blabel];
 		if (camDef(callback))
 			callback();
 		break;
@@ -1975,7 +1978,7 @@ function __camVictoryStandard()
 	var extraObjMet = true;
 	if (camDef(__camVictoryData) && camDef(__camVictoryData.callback))
 	{
-		var result = __camGlobalContext[__camVictoryData.callback]();
+		var result = __camGlobalContext()[__camVictoryData.callback]();
 		if (camDef(result))
 		{
 			if (!result)
@@ -2136,9 +2139,9 @@ var __camOriginalEvents = {};
 function __camPreHookEvent(eventname, hookcode)
 {
 	// store the original event handler
-	if (camDef(__camGlobalContext[eventname]))
-		__camOriginalEvents[eventname] = __camGlobalContext[eventname];
-	__camGlobalContext[eventname] = function()
+	if (camDef(__camGlobalContext()[eventname]))
+		__camOriginalEvents[eventname] = __camGlobalContext()[eventname];
+	__camGlobalContext()[eventname] = function()
 	{
 		// Don't trigger hooks after level end.
 		// No, this should't say "if (__camLevelEnded) return;".
@@ -2146,10 +2149,10 @@ function __camPreHookEvent(eventname, hookcode)
 		// and we are not documenting which exactly events are hooked.
 		// We should not intervene with level events in unobvious ways.
 		if (!__camLevelEnded)
-			hookcode.apply(__camGlobalContext, arguments);
+			hookcode.apply(__camGlobalContext(), arguments);
 		// otherwise, call the original event if any
 		if (camDef(__camOriginalEvents[eventname]))
-			__camOriginalEvents[eventname].apply(__camGlobalContext, arguments);
+			__camOriginalEvents[eventname].apply(__camGlobalContext(), arguments);
 	};
 }
 
@@ -2157,7 +2160,7 @@ function __camPreHookEvent(eventname, hookcode)
 function __camTick()
 {
 	if (camDef(__camWinLossCallback))
-		__camGlobalContext[__camWinLossCallback]();
+		__camGlobalContext()[__camWinLossCallback]();
 	__camBasesTick();
 }
 

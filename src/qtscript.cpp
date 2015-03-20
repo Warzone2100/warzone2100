@@ -659,7 +659,8 @@ bool saveScriptStates(const char *filename)
 		while (it.hasNext())
 		{
 			it.next();
-			if (!internalNamespace.contains(it.name()) && !it.value().isFunction())
+			if (!internalNamespace.contains(it.name()) && !it.value().isFunction()
+			    && !it.value().equals(engine->globalObject()))
 			{
 				ini.setValue(it.name(), it.value().toVariant());
 			}
