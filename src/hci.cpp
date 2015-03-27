@@ -5209,13 +5209,13 @@ bool CoordInBuild(int x, int y)
 // \mode sets if global or team communication is wanted
 void chatDialog(int mode)
 {
-	static WIDGET *parent = psWScreen->psForm;
-	static IntFormAnimated *consoleBox = NULL;
-	static W_EDITBOX *chatBox = NULL;
-	static W_CONTEXT sContext;
-
 	if (!ChatDialogUp)
 	{
+		WIDGET *parent = psWScreen->psForm;
+		static IntFormAnimated *consoleBox = NULL;
+		W_EDITBOX *chatBox = NULL;
+		W_CONTEXT sContext;
+
 		consoleBox = new IntFormAnimated(parent);
 		consoleBox->id = CHAT_CONSOLEBOX;
 		consoleBox->setGeometry(CHAT_CONSOLEBOXX, CHAT_CONSOLEBOXY, 300, CHAT_CONSOLEBOXH);
@@ -5250,13 +5250,13 @@ void chatDialog(int mode)
 		}
 		label->setTextAlignment(WLAB_ALIGNTOPLEFT);
 		ChatDialogUp = true;
+		// Auto-click it
+		widgGetFromID(psWScreen, CHAT_EDITBOX)->clicked(&sContext);
 	}
 	else
 	{
 		debug(LOG_ERROR, "Tried to throw up chat dialog when we already had one up!");
 	}
-	// Auto-click it
-	widgGetFromID(psWScreen, CHAT_EDITBOX)->clicked(&sContext);
 }
 
 // Helper call to see if we have builder/research/... window up or not.
