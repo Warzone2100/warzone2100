@@ -456,7 +456,7 @@ void processInput(void)
 	ignoreRMBC = false;
 
 	/* Process all of our key mappings */
-	mouseOverConsole = mouseOverConsoleBox();
+	mouseOverConsole = mouseOverHistoryConsoleBox();
 	if (mousePressed(MOUSE_WUP) && !isMouseOverRadar())
 	{
 		/* Ctrl+Alt+WheelUp makes game speed up */
@@ -501,11 +501,10 @@ void processInput(void)
 		/* Run all standard mappings */
 		keyProcessMappings(false);
 	}
-	/* Allow the user to clear the console if need be */
-	mouseOverConsole = mouseOverConsoleBox();
-	if (mouseOverConsole && mousePressed(MOUSE_LMB))
+	/* Allow the user to clear the (Active) console if need be */
+	if (mouseOverConsoleBox() && mousePressed(MOUSE_LMB))
 	{
-		setConsolePermanence(false, true);
+		clearActiveConsole();
 	}
 }
 

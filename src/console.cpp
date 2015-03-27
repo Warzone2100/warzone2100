@@ -132,6 +132,7 @@ void	toggleConsoleDrop(void)
 	{
 		// play closing sound
 		audio_PlayTrack(ID_SOUND_WINDOWCLOSE);
+		bConsoleDropped = false;
 	}
 }
 
@@ -244,6 +245,12 @@ void	removeTopConsoleMessage(void)
 	{
 		ActiveMessages.pop_front();
 	}
+}
+
+/** Clears just Active console messages */
+void clearActiveConsole(void)
+{
+	ActiveMessages.clear();
 }
 
 /** Clears all console messages */
@@ -451,8 +458,23 @@ void	setConsolePermanence(bool state, bool bClearOld)
 	}
 }
 
-/** true or false as to whether the mouse is presently over the console window */
-bool	mouseOverConsoleBox(void)
+/** Check if mouse is over the Active console 'window' area */
+bool mouseOverConsoleBox(void)
+{
+	int gotMessages = getNumberConsoleMessages();
+	if (gotMessages &&
+		((UDWORD)mouseX() > mainConsole.topX)
+		&& ((UDWORD)mouseY() > mainConsole.topY)
+		&& ((UDWORD)mouseX() < mainConsole.topX + mainConsole.width)
+		&& ((UDWORD)mouseY() < (mainConsole.topY + 4 + linePitch * gotMessages)))
+	{
+		return true;
+	}
+	return false;
+}
+
+/** Check if mouse is over the History console 'window' area */
+bool	mouseOverHistoryConsoleBox(void)
 {
 	int nudgeright = 0;
 	if (GetSecondaryWindowUp())
