@@ -5259,8 +5259,14 @@ void chatDialog(int mode)
 	}
 }
 
+// If chat dialog is up
+bool isChatUp(void)
+{
+	return ChatDialogUp;
+}
+
 // Helper call to see if we have builder/research/... window up or not.
-bool GetSecondaryWindowUp(void)
+bool isSecondaryWindowUp(void)
 {
 	return SecondaryWindowUp;
 }

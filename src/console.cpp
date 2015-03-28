@@ -338,7 +338,7 @@ void displayOldMessages(bool mode)
 		int nudgeright = 0;
 		int TextYpos = historyConsole.topY + linePitch - 2;
 
-		if (GetSecondaryWindowUp())	// see if (build/research/...)window is up
+		if (isSecondaryWindowUp())	// see if (build/research/...)window is up
 		{
 			nudgeright = RET_FORMWIDTH + 2; // move text over
 		}
@@ -477,13 +477,13 @@ bool mouseOverConsoleBox(void)
 bool	mouseOverHistoryConsoleBox(void)
 {
 	int nudgeright = 0;
-	if (GetSecondaryWindowUp())
+	if (isSecondaryWindowUp())
 	{	// if a build/research/... is up, we need to move text over by this much
 		nudgeright = RET_FORMWIDTH;
 	}
 	// enable below to see the hitbox of the history console window
 #if 0
-	if (GetSecondaryWindowUp())
+	if (isSecondaryWindowUp())
 	{
 		iV_Box2(historyConsole.topX + nudgeright, historyConsole.topY, historyConsole.topX + historyConsole.width, (historyConsole.topY + 4 + linePitch * NumDisplayLines), WZCOL_RED, WZCOL_GREEN);
 

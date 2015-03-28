@@ -1655,7 +1655,7 @@ void	kf_JumpToUnassignedUnits(void)
 
 void	kf_ToggleOverlays(void)
 {
-	if (getWidgetsStatus())
+	if (getWidgetsStatus() && !isChatUp() && !gamePaused())
 	{
 		setWidgetsStatus(false);
 	}

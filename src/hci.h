@@ -386,6 +386,7 @@ extern void intDemolishCancel(void);
 StateButton *makeObsoleteButton(WIDGET *parent);  ///< Makes a button to toggle showing obsolete items.
 
 extern void chatDialog(int mode);
-extern bool GetSecondaryWindowUp(void);
+extern bool isChatUp(void);
+extern bool isSecondaryWindowUp(void);
 
 #endif // __INCLUDED_SRC_HCI_H__
