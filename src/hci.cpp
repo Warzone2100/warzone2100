@@ -5218,11 +5218,11 @@ void chatDialog(int mode)
 
 		consoleBox = new IntFormAnimated(parent);
 		consoleBox->id = CHAT_CONSOLEBOX;
-		consoleBox->setGeometry(CHAT_CONSOLEBOXX, CHAT_CONSOLEBOXY, 300, CHAT_CONSOLEBOXH);
+		consoleBox->setGeometry(CHAT_CONSOLEBOXX, CHAT_CONSOLEBOXY, CHAT_CONSOLEBOXW, CHAT_CONSOLEBOXH);
 
 		chatBox = new W_EDITBOX(consoleBox);
 		chatBox->id = CHAT_EDITBOX;
-		chatBox->setGeometry(10, 28, 280, 20);
+		chatBox->setGeometry(80, 2, 320, 16);
 		if (mode == CHAT_GLOB)
 		{
 			chatBox->setBoxColours(WZCOL_MENU_BORDER, WZCOL_MENU_BORDER, WZCOL_MENU_BACKGROUND);
@@ -5237,7 +5237,7 @@ void chatDialog(int mode)
 		sContext.mx = sContext.my = 0;
 
 		W_LABEL *label = new W_LABEL(consoleBox);
-		label->setGeometry(12, 10, 100, 12);
+		label->setGeometry(2, 2,60, 16);
 		if (mode == CHAT_GLOB)
 		{
 			label->setFontColour(WZCOL_TEXT_BRIGHT);

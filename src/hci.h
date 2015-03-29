@@ -113,9 +113,9 @@
 #define CHAT_TEAM		0x1
 #define CHAT_GLOB		0x2
 #define CHAT_CONSOLEBOXX	RET_X + RET_FORMWIDTH + D_W
-#define CHAT_CONSOLEBOXY	(RET_Y)
-#define CHAT_CONSOLEBOXW	160
-#define CHAT_CONSOLEBOXH	54
+#define CHAT_CONSOLEBOXY	(1)
+#define CHAT_CONSOLEBOXW	240
+#define CHAT_CONSOLEBOXH	16
 
 /* Option positions */
 #define OPT_GAP			5

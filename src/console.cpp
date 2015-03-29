@@ -105,7 +105,7 @@ void	initConsoleMessages(void)
 	enableConsoleDisplay(true);								// Turn on the console display
 
 	//	Set up the main console size and position x,y,width
-	setConsoleSizePos(16, 16, pie_GetVideoBufferWidth() - 32);
+	setConsoleSizePos(16, 32, pie_GetVideoBufferWidth() - 32);
 	historyConsole.topX = HISTORYBOX_X;
 	historyConsole.topY = HISTORYBOX_Y;
 	historyConsole.width = pie_GetVideoBufferWidth() - 32;
