@@ -559,9 +559,7 @@ unsigned int selDroidSelection(unsigned int player, SELECTION_CLASS droidClass, 
 		break;
 	}
 
-	/* Send back the return value */
-	char selInfo[255];
-	snprintf(selInfo, sizeof(selInfo), ngettext("%u unit selected", "%u units selected", retVal), retVal);
-	addConsoleMessage(selInfo, RIGHT_JUSTIFY, SYSTEM_MESSAGE);
+	CONPRINTF(ConsoleString, (ConsoleString, ngettext("%u unit selected", "%u units selected", retVal), retVal));
+
 	return retVal;
 }

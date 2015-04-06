@@ -35,7 +35,8 @@ enum CONSOLE_TEXT_JUSTIFICATION
 
 /* ID to use for addConsoleMessage() in case of a system message */
 #define	SYSTEM_MESSAGE				(-1)
-#define NOTIFY_MESSAGE				(-2)		// mainly used for lobby messages
+#define NOTIFY_MESSAGE				(-2)	// mainly used for lobby & error messages
+#define INFO_MESSAGE				(-3)	// This type is not stored, it is used for simple messages
 
 extern char ConsoleString[MAX_CONSOLE_TMP_STRING_LENGTH];
 
@@ -72,22 +73,16 @@ extern void console(const char *pFormat, ...); /// Print always to the ingame co
 
 /**
  Usage:
-
-  CONPRINTF(StringPointer,(StringPointer,"format",data));
-
-  StringPointer should always be ConsoleString.
+	CONPRINTF(StringPointer,(StringPointer,"format",data));
+	StringPointer should always be ConsoleString.
+	NOTE: This class of messages are NOT saved in the history
+	logs.  These are "one shot" type of messages.
 
  eg.
-
 	CONPRINTF(ConsoleString,(ConsoleString,"Hello %d",123));
-
-	Doing it this way will work on both PC and Playstation.
-
-	Be very carefull that the resulting string is no longer
-	than MAX_CONSOLE_TMP_STRING_LENGTH.
 */
 #define CONPRINTF(s,x) \
 	sprintf x; \
-	addConsoleMessage(s,DEFAULT_JUSTIFY,SYSTEM_MESSAGE)
+	addConsoleMessage(s, DEFAULT_JUSTIFY, INFO_MESSAGE)
 
 #endif // __INCLUDED_SRC_CONSOLE_H__

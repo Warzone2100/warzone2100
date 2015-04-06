@@ -5241,7 +5241,7 @@ void chatDialog(int mode)
 		if (mode == CHAT_GLOB)
 		{
 			label->setFontColour(WZCOL_TEXT_BRIGHT);
-			label->setString(_("Chat: Global"));
+			label->setString(_("Chat: All"));
 		}
 		else
 		{

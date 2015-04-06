@@ -2150,46 +2150,35 @@ bool activateGroup(UDWORD playerNumber, UDWORD groupNumber)
 
 void	groupConsoleInformOfSelection(UDWORD groupNumber)
 {
-	// ffs am
-	char groupInfo[255];
 	unsigned int num_selected = selNumSelected(selectedPlayer);
 
-	ssprintf(groupInfo, ngettext("Group %u selected - %u Unit", "Group %u selected - %u Units", num_selected), groupNumber, num_selected);
-	addConsoleMessage(groupInfo, RIGHT_JUSTIFY, SYSTEM_MESSAGE);
-
+	CONPRINTF(ConsoleString, (ConsoleString, ngettext("Group %u selected - %u Unit", "Group %u selected - %u Units", num_selected), groupNumber, num_selected));
 }
 
 void	groupConsoleInformOfCreation(UDWORD groupNumber)
 {
-	char groupInfo[255];
-
 	if (!getWarCamStatus())
 	{
 		unsigned int num_selected = selNumSelected(selectedPlayer);
 
-		ssprintf(groupInfo, ngettext("%u unit assigned to Group %u", "%u units assigned to Group %u", num_selected), num_selected, groupNumber);
-		addConsoleMessage(groupInfo, RIGHT_JUSTIFY, SYSTEM_MESSAGE);
+		CONPRINTF(ConsoleString, (ConsoleString, ngettext("%u unit assigned to Group %u", "%u units assigned to Group %u", num_selected), num_selected, groupNumber));
 	}
 
 }
 
 void	groupConsoleInformOfCentering(UDWORD groupNumber)
 {
-	char	groupInfo[255];
 	unsigned int num_selected = selNumSelected(selectedPlayer);
 
 	if (!getWarCamStatus())
 	{
-		ssprintf(groupInfo, ngettext("Centered on Group %u - %u Unit", "Centered on Group %u - %u Units", num_selected), groupNumber, num_selected);
+		CONPRINTF(ConsoleString, (ConsoleString, ngettext("Centered on Group %u - %u Unit", "Centered on Group %u - %u Units", num_selected), groupNumber, num_selected));
 	}
 	else
 	{
-		ssprintf(groupInfo, ngettext("Aligning with Group %u - %u Unit", "Aligning with Group %u - %u Units", num_selected), groupNumber, num_selected);
+		CONPRINTF(ConsoleString, (ConsoleString, ngettext("Aligning with Group %u - %u Unit", "Aligning with Group %u - %u Units", num_selected), groupNumber, num_selected));
 	}
-
-	addConsoleMessage(groupInfo, RIGHT_JUSTIFY, SYSTEM_MESSAGE);
 }
-
 
 
 UDWORD	getSelectedGroup(void)

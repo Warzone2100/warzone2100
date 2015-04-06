@@ -1498,7 +1498,7 @@ void kf_Reload(void)
 			unsigned int firePause = weaponFirePause(&asWeaponStats[psCurr->asWeaps[0].nStat], psCurr->player);
 
 			psCurr->asWeaps[0].lastFired -= firePause;
-			console("Selected buildings instantly recharged!");
+			CONPRINTF(ConsoleString, (ConsoleString, _("Selected buildings instantly recharged!")));
 		}
 	}
 }
@@ -2344,12 +2344,12 @@ void	kf_ToggleVisibility(void)
 {
 	if (getRevealStatus())
 	{
-		console("Reveal OFF");
+		CONPRINTF(ConsoleString, (ConsoleString, _("Reveal OFF")));
 		setRevealStatus(false);
 	}
 	else
 	{
-		console("Reveal ON");
+		CONPRINTF(ConsoleString, (ConsoleString, _("Reveal ON")));
 		setRevealStatus(true);
 	}
 }

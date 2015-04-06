@@ -31,6 +31,7 @@
 #include "lib/sound/audio.h"
 #include "lib/sound/audio_id.h"
 #include "lib/netplay/netplay.h"
+#include "loadsave.h"
 #include "ai.h"
 #include "console.h"
 #include "main.h"
@@ -71,6 +72,7 @@ struct CONSOLE_MESSAGE
 std::deque<CONSOLE_MESSAGE> ActiveMessages;		// we add all messages to this container
 std::deque<CONSOLE_MESSAGE> TeamMessages;		// history of team/private communications
 std::deque<CONSOLE_MESSAGE> HistoryMessages;	// history of all other communications
+std::deque<CONSOLE_MESSAGE> InfoMessages;
 static bool	bConsoleDropped = false;			// Is the console history on or off?
 static bool HistoryMode = false;				// toggle between team & global history
 static int updatepos = 0;						// if user wants to scroll back the history log
@@ -192,12 +194,19 @@ bool addConsoleMessage(const char *Text, CONSOLE_TEXT_JUSTIFICATION jusType, SDW
 
 		consoleStorage.text = messageText;
 		consoleStorage.timeAdded = realTime;		// Store the time when it was added
-		ActiveMessages.push_back(consoleStorage);	// everything gets logged here for a specific period of time
-		if (team)
+		if (player == INFO_MESSAGE)
 		{
-			TeamMessages.push_back(consoleStorage);	// persistent team specific logs
+			InfoMessages.push_back(consoleStorage);
 		}
-		HistoryMessages.push_back(consoleStorage);	// persistent messages (all types)
+		else
+		{
+			ActiveMessages.push_back(consoleStorage);	// everything gets logged here for a specific period of time
+			if (team)
+			{
+				TeamMessages.push_back(consoleStorage);	// persistent team specific logs
+			}
+			HistoryMessages.push_back(consoleStorage);	// persistent messages (all types)
+		}
 	}
 	return true;
 }
@@ -214,11 +223,21 @@ int	getNumberConsoleMessages(void)
 void	updateConsoleMessages(void)
 {
 	// If there are no messages or we're on permanent (usually for scripts) then exit
-	if (!getNumberConsoleMessages() || mainConsole.permanent)
+	if ((!getNumberConsoleMessages() && !InfoMessages.size()) || mainConsole.permanent)
 	{
 		return;
 	}
-
+	for (auto i = InfoMessages.begin(); i != InfoMessages.end();)
+	{
+		if (realTime - i->timeAdded > messageDuration)
+		{
+			i = InfoMessages.erase(i);
+		}
+		else
+		{
+			++i;
+		}
+	}
 	// Time to kill all expired ones
 	for (auto i = ActiveMessages.begin(); i != ActiveMessages.end();)
 	{
@@ -272,6 +291,10 @@ static void setConsoleTextColor(SDWORD player)
 	else if (player == NOTIFY_MESSAGE)
 	{
 		iV_SetTextColour(WZCOL_YELLOW);
+	}
+	else if (player == INFO_MESSAGE)
+	{
+		iV_SetTextColour(WZCOL_CONS_TEXT_INFO);
 	}
 	else
 	{
@@ -372,13 +395,13 @@ void displayOldMessages(bool mode)
 void	displayConsoleMessages(void)
 {
 	// Check if we have any messages we want to show
-	if (!getNumberConsoleMessages() && !bConsoleDropped)
+	if (!getNumberConsoleMessages() && !bConsoleDropped && !InfoMessages.size())
 	{
 		return;
 	}
 
 	// scripts can disable the console
-	if (!bConsoleDisplayEnabled)
+	if (!bConsoleDisplayEnabled && !InfoMessages.size())
 	{
 		return;
 	}
@@ -392,7 +415,16 @@ void	displayConsoleMessages(void)
 	{
 		displayOldMessages(HistoryMode);
 	}
+	if (InfoMessages.size())
+	{
+		auto i = InfoMessages.end() - 1;		// we can only show the last one...
+		setConsoleTextColor(i->player);
 
+		int tmp = pie_GetVideoBufferWidth();
+		drawBlueBox(0, 0,tmp, 18);
+		tmp -= iV_GetTextWidth(i->text.c_str());
+		iV_DrawFormattedText(i->text.c_str(), tmp - 6, linePitch - 2, iV_GetTextWidth(i->text.c_str()), i->JustifyType);
+	}
 	int TextYpos = mainConsole.topY;
 	// Draw the blue background for the text (only in game, not lobby)
 	if (bTextBoxActive && GetGameMode() == GS_NORMAL)
@@ -549,11 +581,15 @@ bool	getConsoleDisplayStatus(void)
 	return (bConsoleDisplayEnabled);
 }
 
-/** like debug_console, but for release */
+/** Use console() for when you want to display a console message,
+    and keep it in the history logs.
+
+	Use the macro CONPRINTF if you don't want it to be in the history logs.
+**/
 void console(const char *pFormat, ...)
 {
-	char		aBuffer[500];   // Output string buffer
-	va_list		pArgs;					  // Format arguments
+	char		aBuffer[500];	// Output string buffer
+	va_list		pArgs;			// Format arguments
 
 	/* Print out the string */
 	va_start(pArgs, pFormat);
