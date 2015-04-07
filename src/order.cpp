@@ -1250,8 +1250,7 @@ static void orderCmdGroupBase(DROID_GROUP *psGroup, DROID_ORDER_DATA *psData)
 	DROID	*psCurr, *psChosen;
 	SDWORD	currdist, mindist;
 
-	ASSERT(psGroup != NULL,
-	       "cmdUnitOrderGroupBase: invalid unit group");
+	ASSERT_OR_RETURN(, psGroup != NULL, "Invalid unit group");
 
 	syncDebug("Commander group order");
 
@@ -1298,19 +1297,16 @@ static void orderCmdGroupBase(DROID_GROUP *psGroup, DROID_ORDER_DATA *psData)
  */
 static void orderPlayFireSupportAudio(BASE_OBJECT *psObj)
 {
-	DROID		*psDroid = NULL;
-	STRUCTURE	*psStruct = NULL;
-	SDWORD		iAudioID = NO_SOUND;
+	SDWORD	iAudioID = NO_SOUND;
+	DROID *psDroid;
+	STRUCTURE *psStruct;
 
-
-
+	ASSERT_OR_RETURN(, psObj != NULL, "Invalid pointer");
 	/* play appropriate speech */
 	switch (psObj->type)
 	{
 	case OBJ_DROID:
-		psDroid = (DROID *) psObj;
-		ASSERT(psObj != NULL,
-		       "orderPlayFireSupportAudio: invalid droid pointer");
+		psDroid = (DROID *)psObj;
 		if (psDroid->droidType == DROID_COMMAND)
 		{
 			iAudioID = ID_SOUND_ASSIGNED_TO_COMMANDER;
@@ -1322,9 +1318,7 @@ static void orderPlayFireSupportAudio(BASE_OBJECT *psObj)
 		break;
 
 	case OBJ_STRUCTURE:
-		ASSERT(psObj != NULL,
-		       "orderPlayFireSupportAudio: invalid structure pointer");
-		psStruct = (STRUCTURE *) psObj;
+		psStruct = (STRUCTURE *)psObj;
 		//check for non-CB first
 		if (structStandardSensor(psStruct) || structVTOLSensor(psStruct))
 		{
@@ -1512,7 +1506,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		ASSERT_OR_RETURN(, isConstructionDroid(psDroid), "%s cannot construct things!", objInfo(psDroid));
 		ASSERT_OR_RETURN(, psOrder->psStats != NULL, "invalid structure stats pointer");
 		psDroid->order = *psOrder;
-		ASSERT(!psDroid->order.psStats || psDroid->order.psStats->type != REF_DEMOLISH, "Cannot build demolition");
+		ASSERT_OR_RETURN(, !psDroid->order.psStats || psDroid->order.psStats->type != REF_DEMOLISH, "Cannot build demolition");
 		actionDroid(psDroid, DACTION_BUILD, psOrder->pos.x, psOrder->pos.y);
 		objTrace(psDroid->id, "Starting new construction effort of %s", psOrder->psStats ? psOrder->psStats->pName : "NULL POINTER");
 		break;
@@ -1523,8 +1517,8 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 			break;
 		}
 		psDroid->order = DroidOrder(DORDER_BUILD, getModuleStat((STRUCTURE *)psOrder->psObj), removeZ(psOrder->psObj->pos), 0);
-		ASSERT(psDroid->order.psStats != NULL, "should have found a module stats");
-		ASSERT(!psDroid->order.psStats || psDroid->order.psStats->type != REF_DEMOLISH, "Cannot build demolition");
+		ASSERT_OR_RETURN(, psDroid->order.psStats != NULL, "should have found a module stats");
+		ASSERT_OR_RETURN(, !psDroid->order.psStats || psDroid->order.psStats->type != REF_DEMOLISH, "Cannot build demolition");
 		actionDroid(psDroid, DACTION_BUILD, psOrder->psObj->pos.x, psOrder->psObj->pos.y);
 		objTrace(psDroid->id, "Starting new upgrade of %s", psOrder->psStats ? psOrder->psStats->pName : "NULL POINTER");
 		break;
@@ -1535,7 +1529,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		psDroid->order = *psOrder;
 		psDroid->order.pos = removeZ(psOrder->psObj->pos);
 		psDroid->order.psStats = ((STRUCTURE *)psOrder->psObj)->pStructureType;
-		ASSERT(!psDroid->order.psStats || psDroid->order.psStats->type != REF_DEMOLISH, "Cannot build demolition");
+		ASSERT_OR_RETURN(,!psDroid->order.psStats || psDroid->order.psStats->type != REF_DEMOLISH, "Cannot build demolition");
 		actionDroid(psDroid, DACTION_BUILD, psDroid->order.pos.x, psDroid->order.pos.y);
 		objTrace(psDroid->id, "Helping construction of %s", psDroid->order.psStats ? psDroid->order.psStats->pName : "NULL POINTER");
 		break;
@@ -2220,7 +2214,7 @@ bool orderStateStatsLoc(DROID *psDroid, DROID_ORDER order, BASE_STATS **ppsStats
 /** @todo needs documentation.*/
 void orderDroidAddPending(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 {
-	ASSERT(psDroid != NULL, "Invalid unit pointer");
+	ASSERT_OR_RETURN(, psDroid != NULL, "Invalid unit pointer");
 
 	psDroid->asOrderList.push_back(*psOrder);
 
@@ -2253,7 +2247,7 @@ void orderDroidAddPending(DROID *psDroid, DROID_ORDER_DATA *psOrder)
  */
 void orderDroidAdd(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 {
-	ASSERT(psDroid != NULL, "Invalid unit pointer");
+	ASSERT_OR_RETURN(, psDroid != NULL, "Invalid unit pointer");
 
 	if (psDroid->listSize >= psDroid->asOrderList.size())
 	{
