@@ -1003,10 +1003,11 @@ static void proj_ImpactFunc(PROJECTILE *psObj)
 	iIMDShape       *imd;
 	BASE_OBJECT     *temp;
 
+	ASSERT_OR_RETURN(, psObj != NULL, "Invalid pointer");
 	CHECK_PROJECTILE(psObj);
 
 	psStats = psObj->psWStats;
-	ASSERT(psStats != NULL, "proj_ImpactFunc: Invalid weapon stats pointer");
+	ASSERT_OR_RETURN(, psStats != NULL, "Invalid weapon stats pointer");
 
 	// note the attacker if any
 	g_pProjLastAttacker = psObj->psSource;
@@ -1284,11 +1285,11 @@ static void proj_ImpactFunc(PROJECTILE *psObj)
 
 static void proj_PostImpactFunc(PROJECTILE *psObj)
 {
+	ASSERT_OR_RETURN(, psObj != NULL, "Invalid pointer");
 	CHECK_PROJECTILE(psObj);
 
 	WEAPON_STATS *psStats = psObj->psWStats;
-	ASSERT(psStats != NULL,
-	       "proj_PostImpactFunc: Invalid weapon stats pointer");
+	ASSERT_OR_RETURN(, psStats != NULL, "Invalid weapon stats pointer");
 
 	int age = gameTime - psObj->born;
 
