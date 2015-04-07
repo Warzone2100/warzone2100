@@ -4228,7 +4228,7 @@ void displayTeamChooser(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIG
 	UDWORD		y = yOffset + psWidget->y;
 	UDWORD		i = psWidget->UserData;
 
-	ASSERT(i < MAX_PLAYERS && NetPlay.players[i].team >= 0 && NetPlay.players[i].team < MAX_PLAYERS, "Team index out of bounds");
+	ASSERT_OR_RETURN(, i < MAX_PLAYERS && NetPlay.players[i].team >= 0 && NetPlay.players[i].team < MAX_PLAYERS, "Team index out of bounds");
 
 	drawBlueBox(x, y, psWidget->width, psWidget->height);							// right
 
