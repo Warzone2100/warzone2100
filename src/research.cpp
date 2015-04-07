@@ -2067,7 +2067,7 @@ void replaceStructureComponent(STRUCTURE *pList, UDWORD oldType, UDWORD oldCompI
 static void switchComponent(DROID *psDroid, UDWORD oldType, UDWORD oldCompInc,
                             UDWORD newCompInc)
 {
-	ASSERT(psDroid != NULL, "switchComponent:invalid droid pointer");
+	ASSERT_OR_RETURN(, psDroid != NULL, "Invalid droid pointer");
 
 	switch (oldType)
 	{
