@@ -310,19 +310,15 @@ void intUpdateProgressBar(WIDGET *psWidget, W_CONTEXT *psContext)
 
 void intUpdateQuantity(WIDGET *psWidget, W_CONTEXT *psContext)
 {
-	BASE_OBJECT		*psObj;
-	STRUCTURE		*Structure;
-	DROID_TEMPLATE         *psTemplate;
-	W_LABEL			*Label = (W_LABEL *)psWidget;
+	W_LABEL *Label = (W_LABEL *)psWidget;
+	BASE_OBJECT *psObj = (BASE_OBJECT *)Label->pUserData; // Get the object associated with this widget.
+	STRUCTURE *Structure = (STRUCTURE *)psObj;
 
-	psObj = (BASE_OBJECT *)Label->pUserData; // Get the object associated with this widget.
-	Structure = (STRUCTURE *)psObj;
-
-	if (psObj != NULL && psObj->type == OBJ_STRUCTURE && StructureIsManufacturingPending(Structure))
+	if (psObj != NULL && StructIsFactory(Structure) && StructureIsManufacturingPending(Structure))
 	{
 		ASSERT(!isDead(psObj), "intUpdateQuantity: object is dead");
 
-		psTemplate = FactoryGetTemplate(StructureGetFactory(Structure));
+		DROID_TEMPLATE *psTemplate = FactoryGetTemplate(StructureGetFactory(Structure));
 		int remaining = getProduction(Structure, psTemplate).numRemaining();
 		snprintf(Label->aText, sizeof(Label->aText), "%d", remaining);
 		Label->style &= ~WIDG_HIDDEN;
