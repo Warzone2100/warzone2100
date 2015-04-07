@@ -259,7 +259,7 @@ void intUpdateProgressBar(WIDGET *psWidget, W_CONTEXT *psContext)
 	case OBJ_STRUCTURE:					// If it's a structure and...
 		Structure = (STRUCTURE *)psObj;
 
-		if (StructureIsManufacturingPending(Structure))  // Is it manufacturing.
+		if (StructIsFactory(Structure) && StructureIsManufacturingPending(Structure))  // Is it manufacturing.
 		{
 			Manufacture = StructureGetFactory(Structure);
 
