@@ -2106,8 +2106,7 @@ bool scrInitIterateGroupB(void)
 	ASSERT(psGroup != NULL,
 	       "scrInitIterateGroupB: invalid group pointer");
 
-	ASSERT(bucket < MAX_PLAYERS,
-	       "scrInitIterateGroupB: invalid bucket");
+	ASSERT_OR_RETURN(false, bucket < MAX_PLAYERS, "Invalid bucket");
 
 	psScrIterateGroupB[bucket] = psGroup;
 	psScrIterateGroupDroidB[bucket] = psGroup->psList;
@@ -2129,8 +2128,7 @@ bool scrIterateGroupB(void)
 		return false;
 	}
 
-	ASSERT(bucket < MAX_PLAYERS,
-	       "scrIterateGroupB: invalid bucket");
+	ASSERT_OR_RETURN(false, bucket < MAX_PLAYERS, "Invalid bucket");
 
 	if (psGroup != psScrIterateGroupB[bucket])
 	{
