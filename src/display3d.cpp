@@ -1959,8 +1959,12 @@ void	renderFeature(FEATURE *psFeature)
 		/* these cast a shadow */
 		pieFlags = pie_STATIC_SHADOW;
 	}
-
-	pie_Draw3DShape(psFeature->sDisplay.imd, 0, 0, brightness, pieFlags, 0);
+	iIMDShape *imd = psFeature->sDisplay.imd;
+	while (imd)
+	{
+		pie_Draw3DShape(imd, 0, 0, brightness, pieFlags, 0);
+		imd = imd->next;
+	}
 
 	setScreenDisp(&psFeature->sDisplay);
 
@@ -2090,190 +2094,33 @@ static PIELIGHT getBlueprintColour(STRUCT_STATES state)
 	}
 }
 
-
-/// Draw the structures
-void	renderStructure(STRUCTURE *psStructure)
+static void renderStructureTurrets(STRUCTURE *psStructure, iIMDShape *strImd, PIELIGHT buildingBrightness, int pieFlag, int pieFlagData, int ecmFlag)
 {
-	int			i, structX, structY, colour, rotation, frame, animFrame, pieFlag, pieFlagData, ecmFlag = 0;
-	PIELIGHT		buildingBrightness;
-	Vector3i		dv;
-	bool			bHitByElectronic = false;
-	bool			defensive = false;
-	iIMDShape		*strImd = psStructure->sDisplay.imd;
-	MAPTILE			*psTile = worldTile(psStructure->pos.x, psStructure->pos.y);
+	iIMDShape *mountImd[STRUCT_MAXWEAPS] = { NULL };
+	iIMDShape *weaponImd[STRUCT_MAXWEAPS] = { NULL };
+	iIMDShape *flashImd[STRUCT_MAXWEAPS] = { NULL };
 
-	if (psStructure->pStructureType->type == REF_WALL || psStructure->pStructureType->type == REF_WALLCORNER
-	    || psStructure->pStructureType->type == REF_GATE)
-	{
-		renderWallSection(psStructure);
-		return;
-	}
-	// If the structure is not truly visible, but we know there is something there, we will instead draw a blip
-	if (psStructure->visible[selectedPlayer] < UBYTE_MAX && psStructure->visible[selectedPlayer] > 0)
-	{
-		dv.x = psStructure->pos.x - player.p.x;
-		dv.z = -(psStructure->pos.y - player.p.z);
-		dv.y = psStructure->pos.z;
-		pie_MatBegin(true);
-		pie_TRANSLATE(dv.x, dv.y, dv.z);
-		int frame = graphicsTime / BLIP_ANIM_DURATION + psStructure->id % 8192;  // de-sync the blip effect, but don't overflow the int
-		pie_Draw3DShape(getImdFromIndex(MI_BLIP), frame, 0, WZCOL_WHITE, pie_ADDITIVE, psStructure->visible[selectedPlayer] / 2);
-		pie_MatEnd();
-		return;
-	}
-	else if (!psStructure->visible[selectedPlayer])
-	{
-		return;
-	}
-	else if (psStructure->pStructureType->type == REF_DEFENSE)
-	{
-		defensive = true;
-	}
+	int colour = getPlayerColour(psStructure->player);
 
-	if (psTile->jammerBits & alliancebits[psStructure->player])
-	{
-		ecmFlag = pie_ECM;
-	}
-
-	colour = getPlayerColour(psStructure->player);
-	animFrame = 0;
-
-	if (strImd->numFrames > 0)
-	{
-		// Calculate an animation frame
-		animFrame = getModularScaledGraphicsTime(strImd->animInterval, strImd->numFrames);
-	}
-
-	// -------------------------------------------------------------------------------
-
-	/* Mark it as having been drawn */
-	psStructure->sDisplay.frameNumber = currentGameFrame;
-
-	/* Get it's x and y coordinates so we don't have to deref. struct later */
-	structX = psStructure->pos.x;
-	structY = psStructure->pos.y;
-
-	dv.x = structX - player.p.x;
-	dv.z = -(structY - player.p.z);
-	dv.y = psStructure->pos.z;
-	/* Push the indentity matrix */
-	pie_MatBegin(true);
-
-	/* Translate the building  - N.B. We can also do rotations here should we require
-	buildings to face different ways - Don't know if this is necessary - should be IMO */
-	pie_TRANSLATE(dv.x, dv.y, dv.z);
-
-	/* OK - here is where we establish which IMD to draw for the building - luckily static objects,
-	* buildings in other words are NOT made up of components - much quicker! */
-
-	rotation = psStructure->rot.direction;
-	pie_MatRotY(-rotation);
-	if (!defensive
-	    && graphicsTime - psStructure->timeLastHit < ELEC_DAMAGE_DURATION
-	    && psStructure->lastHitWeapon == WSC_ELECTRONIC)
-	{
-		bHitByElectronic = true;
-	}
-
-	buildingBrightness = structureBrightness(psStructure);
-
-	if (!defensive)
-	{
-		/* Draw the building's base first */
-		if (psStructure->pStructureType->pBaseIMD != NULL)
-		{
-			if (structureIsBlueprint(psStructure))
-			{
-				pieFlag = pie_TRANSLUCENT;
-				pieFlagData = BLUEPRINT_OPACITY;
-			}
-			else
-			{
-				pieFlag = pie_TRANSLUCENT | pie_FORCE_FOG | ecmFlag;
-				pieFlagData = 255;
-			}
-			pie_Draw3DShape(psStructure->pStructureType->pBaseIMD, 0, colour, buildingBrightness, pieFlag, pieFlagData);
-		}
-
-		// override
-		if (bHitByElectronic)
-		{
-			buildingBrightness = pal_SetBrightness(150);
-		}
-	}
-
-	if (bHitByElectronic)
-	{
-		objectShimmy((BASE_OBJECT *)psStructure);
-	}
-
-	//first check if partially built - ANOTHER HACK!
-	if (psStructure->status == SS_BEING_BUILT)
-	{
-		if (psStructure->prebuiltImd != NULL)
-		{
-			// strImd is a module, so render the already-built part at full height.
-			pie_Draw3DShape(psStructure->prebuiltImd, 0, colour, buildingBrightness, pie_SHADOW, 0);
-		}
-		pie_Draw3DShape(strImd, 0, colour, buildingBrightness, pie_HEIGHT_SCALED | pie_SHADOW, structHeightScale(psStructure) * pie_RAISE_SCALE);
-		setScreenDisp(&psStructure->sDisplay);
-		pie_MatEnd();
-		return;
-	}
-
-	if (structureIsBlueprint(psStructure))
-	{
-		pieFlag = pie_TRANSLUCENT;
-		pieFlagData = BLUEPRINT_OPACITY;
-	}
-	else
-	{
-		pieFlag = pie_STATIC_SHADOW | ecmFlag;
-		pieFlagData = 0;
-	}
-	if (defensive && !structureIsBlueprint(psStructure) && !(strImd->flags & iV_IMD_NOSTRETCH))
-	{
-		pie_SetShaderStretchDepth(psStructure->pos.z - psStructure->foundationDepth);
-	}
-	pie_Draw3DShape(strImd, animFrame, colour, buildingBrightness, pieFlag, pieFlagData);
-	pie_SetShaderStretchDepth(0);
-
-	// If no weapons, we are done
-	if (psStructure->sDisplay.imd->nconnectors == 0)
-	{
-		setScreenDisp(&psStructure->sDisplay);
-		pie_MatEnd();
-		return;
-	}
-	iIMDShape	*mountImd[STRUCT_MAXWEAPS];
-	iIMDShape	*weaponImd[STRUCT_MAXWEAPS];
-	iIMDShape	*flashImd[STRUCT_MAXWEAPS];
-
-	for (i = 0; i < STRUCT_MAXWEAPS; i++)
-	{
-		weaponImd[i] = NULL;//weapon is gun ecm or sensor
-		mountImd[i] = NULL;
-		flashImd[i] = NULL;
-	}
 	//get an imd to draw on the connector priority is weapon, ECM, sensor
 	//check for weapon
-	for (i = 0; i < MAX(1, psStructure->numWeaps); i++)
+	for (int i = 0; i < MAX(1, psStructure->numWeaps); i++)
 	{
 		if (psStructure->asWeaps[i].nStat > 0)
 		{
 			const int nWeaponStat = psStructure->asWeaps[i].nStat;
 
-			weaponImd[i] =  asWeaponStats[nWeaponStat].pIMD;
-			mountImd[i] =  asWeaponStats[nWeaponStat].pMountGraphic;
-			flashImd[i] =  asWeaponStats[nWeaponStat].pMuzzleGraphic;
+			weaponImd[i] = asWeaponStats[nWeaponStat].pIMD;
+			mountImd[i] = asWeaponStats[nWeaponStat].pMountGraphic;
+			flashImd[i] = asWeaponStats[nWeaponStat].pMuzzleGraphic;
 		}
 	}
 
 	// check for ECM
 	if (weaponImd[0] == NULL && psStructure->pStructureType->pECM != NULL)
 	{
-		weaponImd[0] =  psStructure->pStructureType->pECM->pIMD;
-		mountImd[0] =  psStructure->pStructureType->pECM->pMountGraphic;
+		weaponImd[0] = psStructure->pStructureType->pECM->pIMD;
+		mountImd[0] = psStructure->pStructureType->pECM->pMountGraphic;
 		flashImd[0] = NULL;
 	}
 	// check for sensor (or repair center)
@@ -2300,7 +2147,7 @@ void	renderStructure(STRUCTURE *psStructure)
 	}
 
 	// draw Weapon / ECM / Sensor for structure
-	for (i = 0; i < psStructure->numWeaps || i == 0; i++)
+	for (int i = 0; i < psStructure->numWeaps || i == 0; i++)
 	{
 		Rotation rot = structureGetInterpolatedWeaponRotation(psStructure, i, graphicsTime);
 
@@ -2313,7 +2160,11 @@ void	renderStructure(STRUCTURE *psStructure)
 			if (mountImd[i] != NULL)
 			{
 				pie_TRANSLATE(0, 0, recoilValue / 3);
-
+				int animFrame = 0;
+				if (mountImd[i]->numFrames > 0)	// Calculate an animation frame
+				{
+					animFrame = getModularScaledGraphicsTime(mountImd[i]->animInterval, mountImd[i]->numFrames);
+				}
 				pie_Draw3DShape(mountImd[i], animFrame, colour, buildingBrightness, pieFlag, pieFlagData);
 				if (mountImd[i]->nconnectors)
 				{
@@ -2406,7 +2257,7 @@ void	renderStructure(STRUCTURE *psStructure)
 						}
 						else
 						{
-							frame = (graphicsTime - psStructure->asWeaps[i].lastFired) / flashImd[i]->animInterval;
+							const int frame = (graphicsTime - psStructure->asWeaps[i].lastFired) / flashImd[i]->animInterval;
 							if (frame < flashImd[i]->numFrames && frame >= 0)
 							{
 								pie_Draw3DShape(flashImd[i], 0, colour, buildingBrightness, 0, 0); //muzzle flash
@@ -2433,7 +2284,160 @@ void	renderStructure(STRUCTURE *psStructure)
 			}
 		}
 	}
+}
 
+/// Draw the structures
+void renderStructure(STRUCTURE *psStructure)
+{
+	int structX, structY, colour, rotation, pieFlag, pieFlagData, ecmFlag = 0;
+	PIELIGHT		buildingBrightness;
+	Vector3i		dv;
+	bool			bHitByElectronic = false;
+	bool			defensive = false;
+	iIMDShape		*strImd = psStructure->sDisplay.imd;
+	MAPTILE			*psTile = worldTile(psStructure->pos.x, psStructure->pos.y);
+
+	if (psStructure->pStructureType->type == REF_WALL || psStructure->pStructureType->type == REF_WALLCORNER
+	    || psStructure->pStructureType->type == REF_GATE)
+	{
+		renderWallSection(psStructure);
+		return;
+	}
+	// If the structure is not truly visible, but we know there is something there, we will instead draw a blip
+	if (psStructure->visible[selectedPlayer] < UBYTE_MAX && psStructure->visible[selectedPlayer] > 0)
+	{
+		dv.x = psStructure->pos.x - player.p.x;
+		dv.z = -(psStructure->pos.y - player.p.z);
+		dv.y = psStructure->pos.z;
+		pie_MatBegin(true);
+		pie_TRANSLATE(dv.x, dv.y, dv.z);
+		int frame = graphicsTime / BLIP_ANIM_DURATION + psStructure->id % 8192;  // de-sync the blip effect, but don't overflow the int
+		pie_Draw3DShape(getImdFromIndex(MI_BLIP), frame, 0, WZCOL_WHITE, pie_ADDITIVE, psStructure->visible[selectedPlayer] / 2);
+		pie_MatEnd();
+		return;
+	}
+	else if (!psStructure->visible[selectedPlayer])
+	{
+		return;
+	}
+	else if (psStructure->pStructureType->type == REF_DEFENSE)
+	{
+		defensive = true;
+	}
+
+	if (psTile->jammerBits & alliancebits[psStructure->player])
+	{
+		ecmFlag = pie_ECM;
+	}
+
+	colour = getPlayerColour(psStructure->player);
+
+	// -------------------------------------------------------------------------------
+
+	/* Mark it as having been drawn */
+	psStructure->sDisplay.frameNumber = currentGameFrame;
+
+	/* Get it's x and y coordinates so we don't have to deref. struct later */
+	structX = psStructure->pos.x;
+	structY = psStructure->pos.y;
+
+	dv.x = structX - player.p.x;
+	dv.z = -(structY - player.p.z);
+	dv.y = psStructure->pos.z;
+	/* Push the indentity matrix */
+	pie_MatBegin(true);
+
+	/* Translate the building  - N.B. We can also do rotations here should we require
+	buildings to face different ways - Don't know if this is necessary - should be IMO */
+	pie_TRANSLATE(dv.x, dv.y, dv.z);
+
+	/* OK - here is where we establish which IMD to draw for the building - luckily static objects,
+	* buildings in other words are NOT made up of components - much quicker! */
+
+	rotation = psStructure->rot.direction;
+	pie_MatRotY(-rotation);
+	if (!defensive
+	    && graphicsTime - psStructure->timeLastHit < ELEC_DAMAGE_DURATION
+	    && psStructure->lastHitWeapon == WSC_ELECTRONIC)
+	{
+		bHitByElectronic = true;
+	}
+
+	buildingBrightness = structureBrightness(psStructure);
+
+	if (!defensive)
+	{
+		/* Draw the building's base first */
+		if (psStructure->pStructureType->pBaseIMD != NULL)
+		{
+			if (structureIsBlueprint(psStructure))
+			{
+				pieFlag = pie_TRANSLUCENT;
+				pieFlagData = BLUEPRINT_OPACITY;
+			}
+			else
+			{
+				pieFlag = pie_TRANSLUCENT | pie_FORCE_FOG | ecmFlag;
+				pieFlagData = 255;
+			}
+			pie_Draw3DShape(psStructure->pStructureType->pBaseIMD, 0, colour, buildingBrightness, pieFlag, pieFlagData);
+		}
+
+		// override
+		if (bHitByElectronic)
+		{
+			buildingBrightness = pal_SetBrightness(150);
+		}
+	}
+
+	if (bHitByElectronic)
+	{
+		objectShimmy((BASE_OBJECT *)psStructure);
+	}
+
+	//first check if partially built - ANOTHER HACK!
+	if (psStructure->status == SS_BEING_BUILT)
+	{
+		if (psStructure->prebuiltImd != NULL)
+		{
+			// strImd is a module, so render the already-built part at full height.
+			pie_Draw3DShape(psStructure->prebuiltImd, 0, colour, buildingBrightness, pie_SHADOW, 0);
+		}
+		pie_Draw3DShape(strImd, 0, colour, buildingBrightness, pie_HEIGHT_SCALED | pie_SHADOW, structHeightScale(psStructure) * pie_RAISE_SCALE);
+		setScreenDisp(&psStructure->sDisplay);
+		pie_MatEnd();
+		return;
+	}
+
+	if (structureIsBlueprint(psStructure))
+	{
+		pieFlag = pie_TRANSLUCENT;
+		pieFlagData = BLUEPRINT_OPACITY;
+	}
+	else
+	{
+		pieFlag = pie_STATIC_SHADOW | ecmFlag;
+		pieFlagData = 0;
+	}
+	if (defensive && !structureIsBlueprint(psStructure) && !(strImd->flags & iV_IMD_NOSTRETCH))
+	{
+		pie_SetShaderStretchDepth(psStructure->pos.z - psStructure->foundationDepth);
+	}
+	while (strImd)
+	{
+		int animFrame = 0;
+		if (strImd->numFrames > 0)	// Calculate an animation frame
+		{
+			animFrame = getModularScaledGraphicsTime(strImd->animInterval, strImd->numFrames);
+		}
+		pie_Draw3DShape(strImd, animFrame, colour, buildingBrightness, pieFlag, pieFlagData);
+		if (psStructure->sDisplay.imd->nconnectors > 0)
+		{
+			renderStructureTurrets(psStructure, strImd, buildingBrightness, pieFlag, pieFlagData, ecmFlag);
+		}
+		strImd = strImd->next;
+	}
+	pie_SetShaderStretchDepth(0);
 	setScreenDisp(&psStructure->sDisplay);
 	pie_MatEnd();
 }
@@ -2486,8 +2490,7 @@ void	renderDeliveryPoint(FLAG_POSITION *psPosition, bool blueprint)
 	pie_MatEnd();
 }
 
-/// Draw a piece of wall
-static bool	renderWallSection(STRUCTURE *psStructure)
+static bool renderWallSection(STRUCTURE *psStructure)
 {
 	int			structX, structY, ecmFlag = 0;
 	PIELIGHT		brightness;
@@ -2556,7 +2559,12 @@ static bool	renderWallSection(STRUCTURE *psStructure)
 			}
 			pieFlagData = 0;
 		}
-		pie_Draw3DShape(psStructure->sDisplay.imd, 0, getPlayerColour(psStructure->player), brightness, pieFlag | ecmFlag, pieFlagData);
+		iIMDShape *imd = psStructure->sDisplay.imd;
+		while (imd)
+		{
+			pie_Draw3DShape(imd, 0, getPlayerColour(psStructure->player), brightness, pieFlag | ecmFlag, pieFlagData);
+			imd = imd->next;
+		}
 	}
 
 	setScreenDisp(&psStructure->sDisplay);
