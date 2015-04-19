@@ -3550,8 +3550,7 @@ static void	processSensorTarget(void)
 				}
 				iV_DrawImage(IntImages, index, x, y);
 
-				offset = (SWORD)(12 + ((TARGET_TO_SENSOR_TIME) - (realTime -
-				                       lastTargetAssignation)) / 2);
+				offset = (SWORD)(12 + ((TARGET_TO_SENSOR_TIME) - (realTime - lastTargetAssignation)) / 2);
 
 				x0 = (SWORD)(x - offset);
 				y0 = (SWORD)(y - offset);

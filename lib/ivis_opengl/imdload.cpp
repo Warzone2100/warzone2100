@@ -663,7 +663,8 @@ static inline int addVertex(iIMDShape *s, int i, const iIMDPoly *p, int frameidx
  */
 static iIMDShape *_imd_load_level(const char **ppFileData, const char *FileDataEnd, int nlevels, int pieVersion)
 {
-	const char *pTmp, *pFileData = *ppFileData;
+	const char *pFileName = GetLastResourceFilename(); // Last loaded filename
+	const char *pFileData = *ppFileData;
 	char buffer[PATH_MAX] = {'\0'};
 	int cnt = 0, n = 0, i;
 	iIMDShape *s = NULL;
@@ -674,7 +675,6 @@ static iIMDShape *_imd_load_level(const char **ppFileData, const char *FileDataE
 		return NULL;
 	}
 
-	pTmp = pFileData;	// remember position
 	i = sscanf(pFileData, "%255s %n", buffer, &cnt);
 	ASSERT_OR_RETURN(NULL, i == 1, "Bad directive following LEVEL");
 
@@ -689,9 +689,17 @@ static iIMDShape *_imd_load_level(const char **ppFileData, const char *FileDataE
 		debug(LOG_WARNING, "MATERIALS directive no longer supported!");
 		pFileData += cnt;
 	}
-	else // use defaults
+	else if (strcmp(buffer, "SHADERS") == 0)
 	{
-		pFileData = pTmp;
+		char vertex[PATH_MAX], fragment[PATH_MAX];
+
+		if (sscanf(pFileData, "%255s %255s %255s%n", buffer, vertex, fragment, &cnt) != 3)
+		{
+			debug(LOG_ERROR, "%s shader corrupt: %s", pFileName, buffer);
+			return NULL;
+		}
+		s->shaderProgram = pie_LoadShader(pFileName, vertex, fragment);
+		pFileData += cnt;
 	}
 
 	if (sscanf(pFileData, "%255s %d%n", buffer, &s->npoints, &cnt) != 2)
@@ -968,6 +976,7 @@ static iIMDShape *iV_ProcessIMD(const char **ppFileData, const char *FileDataEnd
 		pFileData += cnt;
 	}
 
+	// DEPRECATED SHADERS DIRECTIVE! Has been moved into levels block now. Remove me later.
 	if (strncmp(buffer, "SHADERS", 7) == 0)
 	{
 		char vertex[PATH_MAX], fragment[PATH_MAX];
@@ -1019,8 +1028,8 @@ static iIMDShape *iV_ProcessIMD(const char **ppFileData, const char *FileDataEnd
 		return NULL;
 	}
 
-	// assign shader to all levels
-	for (iIMDShape *psShape = shape; psShape != NULL; psShape = psShape->next)
+	// assign shader to all levels, if old deprecated SHADERS directive used. FIXME remove this later.
+	for (iIMDShape *psShape = shape; shader && psShape != NULL; psShape = psShape->next)
 	{
 		shape->shaderProgram = shader;
 	}
