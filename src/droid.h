@@ -149,9 +149,6 @@ bool destroyDroid(DROID *psDel, unsigned impactTime);
 /* Same as destroy droid except no graphical effects */
 extern void	vanishDroid(DROID *psDel);
 
-/* Burn a barbarian then destroy it */
-extern void droidBurn(DROID *psDroid);
-
 /* Remove a droid from the apsDroidLists so doesn't update or get drawn etc*/
 //returns true if successfully removed from the list
 extern bool droidRemove(DROID *psDroid, DROID *pList[MAX_PLAYERS]);

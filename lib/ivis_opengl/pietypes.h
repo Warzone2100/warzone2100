@@ -46,7 +46,7 @@
 #define pie_ECM                 0x1
 #define pie_TRANSLUCENT         0x2
 #define pie_ADDITIVE            0x4
-#define pie_FORCE_FOG			0x8
+#define pie_FORCE_FOG           0x8
 #define pie_HEIGHT_SCALED       0x10
 #define pie_RAISE               0x20
 #define pie_BUTTON              0x40

@@ -67,7 +67,6 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void *pObject)
 	DROID				*psDroid;
 	BODY_STATS			*psBStats;
 	SIMPLE_OBJECT		*psSimpObj;
-	COMPONENT_OBJECT	*psCompObj;
 	const iIMDShape		*pImd;
 	Spacetime               spacetime;
 
@@ -186,33 +185,6 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void *pObject)
 				z = -1;
 			}
 		}
-		break;
-	case RENDER_ANIMATION://not depth sorted
-		psCompObj = (COMPONENT_OBJECT *) pObject;
-		spacetime = interpolateObjectSpacetime((SIMPLE_OBJECT *)psCompObj->psParent, graphicsTime);
-		position.x = spacetime.pos.x - player.p.x;
-		position.z = -(spacetime.pos.y - player.p.z);
-		position.y = spacetime.pos.z;
-
-		/* object offset translation */
-		position.x += psCompObj->psShape->ocen.x;
-		position.y += psCompObj->psShape->ocen.z;
-		position.z -= psCompObj->psShape->ocen.y;
-
-		pie_MatBegin(true);
-
-		/* object (animation) translations - ivis z and y flipped */
-		pie_TRANSLATE(psCompObj->position.x, psCompObj->position.z, psCompObj->position.y);
-
-		/* object (animation) rotations */
-		pie_MatRotY(-psCompObj->orientation.z);
-		pie_MatRotZ(-psCompObj->orientation.y);
-		pie_MatRotX(-psCompObj->orientation.x);
-
-		z = pie_RotateProject(&position, &pixel);
-
-		pie_MatEnd();
-
 		break;
 	case RENDER_DROID:
 	case RENDER_SHADOW:
@@ -391,10 +363,6 @@ void bucketAddTypeToList(RENDER_TYPE objectType, void *pObject)
 		pie = ((FEATURE *)pObject)->sDisplay.imd;
 		z = INT32_MAX - pie->texpage;
 		break;
-	case RENDER_ANIMATION:
-		pie = ((COMPONENT_OBJECT *)pObject)->psShape;
-		z = INT32_MAX - pie->texpage;
-		break;
 	case RENDER_DELIVPOINT:
 		pie = pAssemblyPointIMDs[((FLAG_POSITION *)pObject)->
 		                         factoryType][((FLAG_POSITION *)pObject)->factoryInc];
@@ -450,9 +418,6 @@ void bucketRenderCurrentList(void)
 			break;
 		case RENDER_PROJECTILE:
 			renderProjectile((PROJECTILE *)thisTag->pObject);
-			break;
-		case RENDER_ANIMATION:
-			renderAnimComponent((COMPONENT_OBJECT *)thisTag->pObject);
 			break;
 		case RENDER_DELIVPOINT:
 			renderDeliveryPoint((FLAG_POSITION *)thisTag->pObject, false);

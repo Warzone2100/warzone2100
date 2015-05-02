@@ -846,6 +846,7 @@ BASE_OBJECT *IdToObject(OBJECT_TYPE type, int id, int player)
 bool loadGroup(QScriptEngine *engine, int groupId, int objId)
 {
 	BASE_OBJECT *psObj = IdToPointer(objId, ANYPLAYER);
+	ASSERT_OR_RETURN(false, psObj, "Non-existent object %d in group %d in savegame", objId, groupId);
 	return groupAddObject(psObj, groupId, engine);
 }
 
@@ -857,6 +858,7 @@ bool saveGroups(WzConfig &ini, QScriptEngine *engine)
 	{
 		QStringList value;
 		BASE_OBJECT *psObj = i.key();
+		ASSERT(!isDead(psObj), "Wanted to save dead %s to savegame!", objInfo(psObj));
 		if (ini.contains(QString::number(psObj->id)))
 		{
 			value.push_back(ini.value(QString::number(psObj->id)).toString());

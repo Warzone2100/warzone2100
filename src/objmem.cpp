@@ -280,7 +280,7 @@ template <typename OBJECT>
 static inline void destroyObject(OBJECT *list[], OBJECT *object)
 {
 	ASSERT_OR_RETURN(, object != NULL, "Invalid pointer");
-	ASSERT(gameTime - deltaGameTime < gameTime || gameTime == 2, "Expected %u < %u, bad time", gameTime - deltaGameTime, gameTime);
+	ASSERT(gameTime - deltaGameTime <= gameTime || gameTime == 2, "Expected %u <= %u, bad time", gameTime - deltaGameTime, gameTime);
 
 	// If the message to remove is the first one in the list then mark the next one as the first
 	if (list[object->player] == object)

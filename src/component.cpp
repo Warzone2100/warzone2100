@@ -401,7 +401,7 @@ void drawMuzzleFlash(WEAPON sWeap, iIMDShape *weaponImd, iIMDShape *flashImd, PI
 // removed mountRotation,they get such stuff from psObj directly now
 static void displayCompObj(DROID *psDroid, bool bButton)
 {
-	iIMDShape               *psShape, *psMoveAnim, *psStillAnim, *psShapeTemp = NULL, *psMountShape;
+	iIMDShape *psMoveAnim, *psStillAnim;
 	SDWORD				iConnector;
 	PROPULSION_STATS	*psPropStats;
 	SDWORD				pieFlag, iPieData;
@@ -460,11 +460,10 @@ static void displayCompObj(DROID *psDroid, bool bButton)
 		pie_TRANSLATE(0, -world_coord(1) / 2.3f, 0);
 	}
 
-	//uses psShapeTemp too separate it from turret's psShape
-	psShapeTemp = (leftFirst ? getLeftPropulsionIMD(psDroid) : getRightPropulsionIMD(psDroid));
-	if (psShapeTemp != NULL)
+	iIMDShape *psShapeProp = (leftFirst ? getLeftPropulsionIMD(psDroid) : getRightPropulsionIMD(psDroid));
+	if (psShapeProp)
 	{
-		pie_Draw3DShape(psShapeTemp, 0, colour, brightness, pieFlag, iPieData);
+		pie_Draw3DShape(psShapeProp, 0, colour, brightness, pieFlag, iPieData);
 	}
 
 	/* set default components transparent */
@@ -480,32 +479,22 @@ static void displayCompObj(DROID *psDroid, bool bButton)
 	}
 
 	/* Get the body graphic now*/
-	//uses psShapeTemp too separate it from turret's psShape
-	psShapeTemp = BODY_IMD(psDroid, psDroid->player);
-	if (psShapeTemp != NULL)
+	iIMDShape *psShapeBody = BODY_IMD(psDroid, psDroid->player);
+	if (psShapeBody)
 	{
-		// FIXME
+		iIMDShape *strImd = psShapeBody;
 		if (psDroid->droidType == DROID_PERSON)
 		{
-			/* draw body if not animating */
-			if (psDroid->psCurAnim == NULL  || psDroid->psCurAnim->bVisible == false)
-			{
-				// FIXME - hideous....!!!!
-				pie_MatScale(.75f);
-				pie_Draw3DShape(psShapeTemp, 0, psDroid->player, brightness, pieFlag, iPieData);
-			}
+			pie_MatScale(.75f); // FIXME - hideous....!!!!
 		}
-		else if (cyborgDroid(psDroid))
+		if (psDroid->timeAnimationStarted && strImd->objanimpie[psDroid->animationEvent])
 		{
-			/* draw body if cyborg not animating */
-			if (psDroid->psCurAnim == NULL || psDroid->psCurAnim->bVisible == false)
-			{
-				pie_Draw3DShape(psShapeTemp, 0, colour, brightness, pieFlag, iPieData);
-			}
+			strImd = psShapeBody->objanimpie[psDroid->animationEvent];
 		}
-		else
+		while (strImd)
 		{
-			pie_Draw3DShape(psShapeTemp, 0, colour, brightness, pieFlag, iPieData);
+			drawShape(psDroid, strImd, colour, brightness, pieFlag, iPieData);
+			strImd = strImd->next;
 		}
 	}
 
@@ -545,8 +534,7 @@ static void displayCompObj(DROID *psDroid, bool bButton)
 		iPieData = 0;
 	}
 
-	psShapeTemp = BODY_IMD(psDroid, psDroid->player);
-	if (psShapeTemp && psShapeTemp->nconnectors)
+	if (psShapeBody && psShapeBody->nconnectors)
 	{
 		/* vtol weapons attach to connector 2 (underneath);
 		 * all others to connector 1 */
@@ -577,7 +565,7 @@ static void displayCompObj(DROID *psDroid, bool bButton)
 			for (i = 0; i < psDroid->numWeaps; i++)
 			{
 				if ((psDroid->asWeaps[i].nStat > 0 || psDroid->droidType == DROID_DEFAULT)
-				    && psShapeTemp->connectors)
+				    && psShapeBody->connectors)
 				{
 					Rotation rot = getInterpolatedWeaponRotation(psDroid, i, graphicsTime);
 
@@ -586,15 +574,15 @@ static void displayCompObj(DROID *psDroid, bool bButton)
 					//to skip number of VTOL_CONNECTOR_START ground unit connectors
 					if (iConnector < VTOL_CONNECTOR_START)
 					{
-						pie_TRANSLATE(psShapeTemp->connectors[i].x,
-						              psShapeTemp->connectors[i].z,
-						              psShapeTemp->connectors[i].y);
+						pie_TRANSLATE(psShapeBody->connectors[i].x,
+						              psShapeBody->connectors[i].z,
+						              psShapeBody->connectors[i].y);
 					}
 					else
 					{
-						pie_TRANSLATE(psShapeTemp->connectors[iConnector + i].x,
-						              psShapeTemp->connectors[iConnector + i].z,
-						              psShapeTemp->connectors[iConnector + i].y);
+						pie_TRANSLATE(psShapeBody->connectors[iConnector + i].x,
+						              psShapeBody->connectors[iConnector + i].z,
+						              psShapeBody->connectors[iConnector + i].y);
 					}
 
 					pie_MatRotY(-rot.direction);
@@ -606,7 +594,7 @@ static void displayCompObj(DROID *psDroid, bool bButton)
 					}
 
 					/* Get the mount graphic */
-					psShape = WEAPON_MOUNT_IMD(psDroid, i);
+					iIMDShape *psShape = WEAPON_MOUNT_IMD(psDroid, i);
 
 					int recoilValue = getRecoil(psDroid->asWeaps[i]);
 					pie_TRANSLATE(0, 0, recoilValue / 3);
@@ -660,6 +648,7 @@ static void displayCompObj(DROID *psDroid, bool bButton)
 		case DROID_CYBORG_REPAIR:
 			{
 				Rotation rot = getInterpolatedWeaponRotation(psDroid, 0, graphicsTime);
+				iIMDShape *psShape, *psMountShape;
 
 				switch (psDroid->droidType)
 				{
@@ -698,9 +687,9 @@ static void displayCompObj(DROID *psDroid, bool bButton)
 					pie_MatRotZ(65536 / 2); //this might affect gun rotation
 				}
 
-				pie_TRANSLATE(psShapeTemp->connectors[0].x,
-				              psShapeTemp->connectors[0].z,
-				              psShapeTemp->connectors[0].y);
+				pie_TRANSLATE(psShapeBody->connectors[0].x,
+				              psShapeBody->connectors[0].z,
+				              psShapeBody->connectors[0].y);
 
 				pie_MatRotY(-rot.direction);
 				/* Draw it */
@@ -763,8 +752,6 @@ static void displayCompObj(DROID *psDroid, bool bButton)
 			break;
 		}
 	}
-	/*	We've also got a handle on the psShape here for the weapon which has a connector to point to
-		muzzle flash attachment points - just grab it from psShape->connectors->[x|y|z] */
 
 	/* set default components transparent */
 	if (psDroid->asBits[COMP_PROPULSION] == 0)
@@ -778,10 +765,11 @@ static void displayCompObj(DROID *psDroid, bool bButton)
 		iPieData = 0;
 	}
 
-	psShape = (leftFirst ? getRightPropulsionIMD(psDroid) : getLeftPropulsionIMD(psDroid));
-	if (psShape != NULL)
+	// now render the other propulsion side
+	psShapeProp = (leftFirst ? getRightPropulsionIMD(psDroid) : getLeftPropulsionIMD(psDroid));
+	if (psShapeProp)
 	{
-		pie_Draw3DShape(psShape, 0, colour, brightness, pieFlag, iPieData);
+		pie_Draw3DShape(psShapeProp, 0, colour, brightness, pieFlag, iPieData);
 	}
 }
 

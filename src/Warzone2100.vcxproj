@@ -301,7 +301,6 @@ call $(ProjectDir)..\build_tools\autorevision.bat $(ProjectDir)</Command>
     <ClCompile Include="action.cpp" />
     <ClCompile Include="advvis.cpp" />
     <ClCompile Include="ai.cpp" />
-    <ClCompile Include="animobj.cpp" />
     <ClCompile Include="astar.cpp" />
     <ClCompile Include="atmos.cpp" />
     <ClCompile Include="aud.cpp" />
@@ -412,8 +411,6 @@ call $(ProjectDir)..\build_tools\autorevision.bat $(ProjectDir)</Command>
     <ClInclude Include="actiondef.h" />
     <ClInclude Include="advvis.h" />
     <ClInclude Include="ai.h" />
-    <ClInclude Include="animobj.h" />
-    <ClInclude Include="anim_id.h" />
     <ClInclude Include="astar.h" />
     <ClInclude Include="atmos.h" />
     <ClInclude Include="autorevision.h" />

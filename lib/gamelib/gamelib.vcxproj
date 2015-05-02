@@ -159,17 +159,13 @@
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="anim.cpp" />
     <ClCompile Include="audp_lexer.cpp" />
     <ClCompile Include="audp_parser.cpp" />
     <ClCompile Include="gtime.cpp" />
-    <ClCompile Include="hashtable.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="anim.h" />
     <ClInclude Include="audp_parser.h" />
     <ClInclude Include="gtime.h" />
-    <ClInclude Include="hashtable.h" />
     <ClInclude Include="parser.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -141,8 +141,6 @@
 		0246A0CD0BD3CBD5004D1C70 /* strres.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A0B70BD3CBD5004D1C70 /* strres.cpp */; };
 		0246A0CE0BD3CBD5004D1C70 /* treap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A0BA0BD3CBD5004D1C70 /* treap.cpp */; };
 		0246A0CF0BD3CBD5004D1C70 /* trig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A0BD0BD3CBD5004D1C70 /* trig.cpp */; };
-		0246A0E30BD3CC0B004D1C70 /* anim.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A0D70BD3CC0B004D1C70 /* anim.cpp */; };
-		0246A0E40BD3CC0B004D1C70 /* animobj.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A0D90BD3CC0B004D1C70 /* animobj.cpp */; };
 		0246A0E70BD3CC0B004D1C70 /* gtime.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A0DD0BD3CC0B004D1C70 /* gtime.cpp */; };
 		0246A1030BD3CC29004D1C70 /* bitimage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A0EA0BD3CC29004D1C70 /* bitimage.cpp */; };
 		0246A1050BD3CC29004D1C70 /* imdload.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A0F00BD3CC29004D1C70 /* imdload.cpp */; };
@@ -679,7 +677,6 @@
 		43F4DA3716FD0B3D00C566E3 /* scriptvals_parser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43F4DA3316FD0B3D00C566E3 /* scriptvals_parser.cpp */; };
 		647D9C571039289A006D37CF /* challenge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 647D9C551039289A006D37CF /* challenge.cpp */; };
 		9742E5730DF9975E000A5D41 /* lexer_input.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9742E5710DF9975E000A5D41 /* lexer_input.cpp */; };
-		974964240F5ABBBB00A38899 /* hashtable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 974964220F5ABBBB00A38899 /* hashtable.cpp */; };
 		9749642C0F5ABBE100A38899 /* stdio_ext.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 974964280F5ABBE100A38899 /* stdio_ext.cpp */; };
 		974964330F5ABC3F00A38899 /* eventsave.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9749642F0F5ABC3F00A38899 /* eventsave.cpp */; };
 		974964340F5ABC3F00A38899 /* interpreter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 974964310F5ABC3F00A38899 /* interpreter.cpp */; };
@@ -1271,10 +1268,6 @@
 		0246A0BE0BD3CBD5004D1C70 /* trig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = trig.h; path = ../lib/framework/trig.h; sourceTree = SOURCE_ROOT; };
 		0246A0BF0BD3CBD5004D1C70 /* types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = types.h; path = ../lib/framework/types.h; sourceTree = SOURCE_ROOT; };
 		0246A0C00BD3CBD5004D1C70 /* wzglobal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = wzglobal.h; path = ../lib/framework/wzglobal.h; sourceTree = SOURCE_ROOT; };
-		0246A0D70BD3CC0B004D1C70 /* anim.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = anim.cpp; path = ../lib/gamelib/anim.cpp; sourceTree = SOURCE_ROOT; };
-		0246A0D80BD3CC0B004D1C70 /* anim.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = anim.h; path = ../lib/gamelib/anim.h; sourceTree = SOURCE_ROOT; };
-		0246A0D90BD3CC0B004D1C70 /* animobj.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = animobj.cpp; path = ../lib/gamelib/animobj.cpp; sourceTree = SOURCE_ROOT; };
-		0246A0DA0BD3CC0B004D1C70 /* animobj.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = animobj.h; path = ../lib/gamelib/animobj.h; sourceTree = SOURCE_ROOT; };
 		0246A0DD0BD3CC0B004D1C70 /* gtime.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gtime.cpp; path = ../lib/gamelib/gtime.cpp; sourceTree = SOURCE_ROOT; };
 		0246A0DE0BD3CC0B004D1C70 /* gtime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gtime.h; path = ../lib/gamelib/gtime.h; sourceTree = SOURCE_ROOT; };
 		0246A0E20BD3CC0B004D1C70 /* parser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = parser.h; path = ../lib/gamelib/parser.h; sourceTree = SOURCE_ROOT; };
@@ -2021,8 +2014,6 @@
 		9742E5710DF9975E000A5D41 /* lexer_input.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = lexer_input.cpp; path = ../lib/framework/lexer_input.cpp; sourceTree = SOURCE_ROOT; };
 		9742E5720DF9975E000A5D41 /* lexer_input.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = lexer_input.h; path = ../lib/framework/lexer_input.h; sourceTree = SOURCE_ROOT; };
 		9749641E0F5ABB9E00A38899 /* stringdef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = stringdef.h; path = ../src/stringdef.h; sourceTree = SOURCE_ROOT; };
-		974964220F5ABBBB00A38899 /* hashtable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = hashtable.cpp; path = ../lib/gamelib/hashtable.cpp; sourceTree = SOURCE_ROOT; };
-		974964230F5ABBBB00A38899 /* hashtable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = hashtable.h; path = ../lib/gamelib/hashtable.h; sourceTree = SOURCE_ROOT; };
 		974964250F5ABBE100A38899 /* endian_hack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = endian_hack.h; path = ../lib/framework/endian_hack.h; sourceTree = SOURCE_ROOT; };
 		974964260F5ABBE100A38899 /* fixedpoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = fixedpoint.h; path = ../lib/framework/fixedpoint.h; sourceTree = SOURCE_ROOT; };
 		974964270F5ABBE100A38899 /* math_ext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = math_ext.h; path = ../lib/framework/math_ext.h; sourceTree = SOURCE_ROOT; };
@@ -2361,12 +2352,6 @@
 				43F4DA2216FD0A8900C566E3 /* audp_lexer.cpp */,
 				43F4DA2316FD0A8900C566E3 /* audp_parser.cpp */,
 				43F4DA2416FD0A8900C566E3 /* audp_parser.h */,
-				974964220F5ABBBB00A38899 /* hashtable.cpp */,
-				974964230F5ABBBB00A38899 /* hashtable.h */,
-				0246A0D70BD3CC0B004D1C70 /* anim.cpp */,
-				0246A0D80BD3CC0B004D1C70 /* anim.h */,
-				0246A0D90BD3CC0B004D1C70 /* animobj.cpp */,
-				0246A0DA0BD3CC0B004D1C70 /* animobj.h */,
 				0246A0DD0BD3CC0B004D1C70 /* gtime.cpp */,
 				0246A0DE0BD3CC0B004D1C70 /* gtime.h */,
 				0246A0E20BD3CC0B004D1C70 /* parser.h */,
@@ -4873,8 +4858,6 @@
 				0246A0CD0BD3CBD5004D1C70 /* strres.cpp in Sources */,
 				0246A0CE0BD3CBD5004D1C70 /* treap.cpp in Sources */,
 				0246A0CF0BD3CBD5004D1C70 /* trig.cpp in Sources */,
-				0246A0E30BD3CC0B004D1C70 /* anim.cpp in Sources */,
-				0246A0E40BD3CC0B004D1C70 /* animobj.cpp in Sources */,
 				0246A0E70BD3CC0B004D1C70 /* gtime.cpp in Sources */,
 				0246A1030BD3CC29004D1C70 /* bitimage.cpp in Sources */,
 				0246A1050BD3CC29004D1C70 /* imdload.cpp in Sources */,
@@ -5012,7 +4995,6 @@
 				024480240C5E4BEE00E1A641 /* utf.cpp in Sources */,
 				976AE8280EA0B59A00F2473F /* timer.cpp in Sources */,
 				974EDB380EDC818D00A25352 /* terrain.cpp in Sources */,
-				974964240F5ABBBB00A38899 /* hashtable.cpp in Sources */,
 				9749642C0F5ABBE100A38899 /* stdio_ext.cpp in Sources */,
 				974964330F5ABC3F00A38899 /* eventsave.cpp in Sources */,
 				974964340F5ABC3F00A38899 /* interpreter.cpp in Sources */,

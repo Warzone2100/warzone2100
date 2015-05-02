@@ -10,7 +10,6 @@ stamp:
 
 BASELIST = \
 	palette.txt \
-	anims \
 	audio \
 	campaigns \
 	components \

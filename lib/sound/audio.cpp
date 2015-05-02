@@ -591,13 +591,10 @@ void audio_Update()
 					sound_StopTrack(psSample);
 					psSample->psObj = NULL;
 				}
-				else
+				else	// update sample position
 				{
-					// update sample position
-					{
-						audio_GetObjectPos(psSample->psObj, &psSample->x, &psSample->y, &psSample->z);
-						sound_SetObjectPosition(psSample);
-					}
+					audio_GetObjectPos(psSample->psObj, &psSample->x, &psSample->y, &psSample->z);
+					sound_SetObjectPosition(psSample);
 				}
 			}
 			// next sample

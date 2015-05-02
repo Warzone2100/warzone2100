@@ -42,7 +42,6 @@
 #include "lib/sound/mixer.h"
 #include "lib/netplay/netplay.h"
 
-#include "animobj.h"
 #include "loop.h"
 #include "objects.h"
 #include "display.h"
@@ -194,9 +193,6 @@ static GAMECODE renderLoop()
 					calcDroidIllumination(psCurr);
 				}
 			}
-
-			/* update animations */
-			animObj_Update();
 		}
 
 		if (!consolePaused())

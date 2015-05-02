@@ -37,7 +37,6 @@
 #include "map.h"
 #include "lib/sound/audio_id.h"
 #include "lib/sound/audio.h"
-#include "anim_id.h"
 #include "projectile.h"
 #include "visibility.h"
 #include "lib/script/script.h"

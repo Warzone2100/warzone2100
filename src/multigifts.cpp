@@ -32,7 +32,6 @@
 #include "research.h"
 #include "power.h"
 #include "group.h"
-#include "anim_id.h"
 #include "hci.h"
 #include "scriptfuncs.h"		// for objectinrange.
 #include "lib/gamelib/gtime.h"

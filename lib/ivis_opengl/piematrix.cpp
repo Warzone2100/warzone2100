@@ -173,6 +173,31 @@ void pie_MatScale(float scale)
 	}
 }
 
+void pie_MatScale(Vector3f scale)
+{
+	psMatrix->a = psMatrix->a * scale.x;
+	psMatrix->b = psMatrix->b * scale.y;
+	psMatrix->c = psMatrix->c * scale.z;
+
+	psMatrix->d = psMatrix->d * scale.x;
+	psMatrix->e = psMatrix->e * scale.y;
+	psMatrix->f = psMatrix->f * scale.z;
+
+	psMatrix->g = psMatrix->g * scale.x;
+	psMatrix->h = psMatrix->h * scale.y;
+	psMatrix->i = psMatrix->i * scale.z;
+
+	if (!psMatrix->cached)
+	{
+		glScalef(scale.x, scale.y, scale.z);
+	}
+	else
+	{
+		glm::vec3 v(scale.x, scale.y, scale.z);
+		psMatrix->matrix = glm::scale(psMatrix->matrix, v);
+	}
+}
+
 
 //*************************************************************************
 //*** matrix rotate y (yaw) current transformation matrix

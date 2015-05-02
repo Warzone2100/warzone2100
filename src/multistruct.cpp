@@ -35,7 +35,6 @@
 #include "basedef.h"
 #include "power.h"
 #include "geometry.h"								// for gettilestructure
-#include "anim_id.h"
 #include "stats.h"
 #include "map.h"
 #include "console.h"

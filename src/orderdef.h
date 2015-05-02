@@ -66,7 +66,7 @@ enum DroidOrderType
 	DORDER_DROIDREPAIR,     /**< 26 - repair a droid. */
 	DORDER_RESTORE,         /**< restore resistance points for a structure. */
 	DORDER_SCOUT,           /**< 28 - same as move, but stop if an enemy is seen. */
-	DORDER_RUNBURN,         /**< run away on fire. */
+	DORDER_UNUSED_3,
 	DORDER_UNUSED,
 	DORDER_PATROL,          /**< move between two way points. */
 	DORDER_REARM,           /**< 32 - order a vtol to rearming pad. */

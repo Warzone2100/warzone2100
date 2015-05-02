@@ -28,7 +28,6 @@
 #include "objectdef.h"
 #include "message.h"
 
-
 /*!
  * Special tile types
  */
@@ -70,7 +69,6 @@ extern void renderStructure(STRUCTURE *psStructure);
 extern void renderFeature(FEATURE *psFeature);
 extern void renderProximityMsg(PROXIMITY_DISPLAY	*psProxDisp);
 extern void renderProjectile(PROJECTILE *psCurr);
-extern void renderAnimComponent(const COMPONENT_OBJECT *psObj);
 extern void renderDeliveryPoint(FLAG_POSITION *psPosition, bool blueprint);
 extern void debugToggleSensorDisplay(void);
 
@@ -124,5 +122,8 @@ extern UWORD barMode;
 extern bool CauseCrash;
 
 extern bool tuiTargetOrigin;
+
+/// Draws using the animation systems. Usually want to use in a while loop to get all model levels.
+void drawShape(BASE_OBJECT *psObj, iIMDShape *strImd, int colour, PIELIGHT buildingBrightness, int pieFlag, int pieFlagData);
 
 #endif // __INCLUDED_SRC_DISPLAY3D_H__

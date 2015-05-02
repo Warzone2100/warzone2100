@@ -604,7 +604,7 @@ static bool CheckInMap(const char *archive, const char *mountpoint, const char *
 		if (PHYSFS_isDirectory((checkpath + checkfile).c_str()))
 		{
 			if (checkfile.compare("wrf") == 0 || checkfile.compare("stats") == 0 || checkfile.compare("components") == 0
-			    || checkfile.compare("anims") == 0 || checkfile.compare("effects") == 0 || checkfile.compare("messages") == 0
+			    || checkfile.compare("effects") == 0 || checkfile.compare("messages") == 0
 			    || checkfile.compare("audio") == 0 || checkfile.compare("sequenceaudio") == 0 || checkfile.compare("misc") == 0
 			    || checkfile.compare("features") == 0 || checkfile.compare("script") == 0 || checkfile.compare("structs") == 0
 			    || checkfile.compare("tileset") == 0 || checkfile.compare("images") == 0 || checkfile.compare("texpages") == 0
@@ -811,16 +811,6 @@ bool frontendInitialise(const char *ResourceFile)
 		return false;
 	}
 
-	if (!anim_Init())
-	{
-		return false;
-	}
-
-	if (!animObj_Init())
-	{
-		return false;
-	}
-
 	if (!allocPlayerPower())	 //set up the PlayerPower for each player - this should only be done ONCE now
 	{
 		return false;
@@ -892,16 +882,6 @@ bool frontendShutdown(void)
 
 	ResearchRelease();
 
-	if (!anim_Shutdown())
-	{
-		return false;
-	}
-
-	if (!animObj_Shutdown())
-	{
-		return false;
-	}
-
 	debug(LOG_TEXTURE, "=== frontendShutdown ===");
 	modelShutdown();
 	pie_TexShutDown();
@@ -956,16 +936,6 @@ bool stageOneInitialise(void)
 	}
 
 	if (!aiInitialise())		/* Initialise the AI system */ // pregame
-	{
-		return false;
-	}
-
-	if (!anim_Init())
-	{
-		return false;
-	}
-
-	if (!animObj_Init())
 	{
 		return false;
 	}
@@ -1057,16 +1027,6 @@ bool stageOneShutDown(void)
 
 	scrShutDown();
 	gridShutDown();
-
-	if (!anim_Shutdown())
-	{
-		return false;
-	}
-
-	if (!animObj_Shutdown())
-	{
-		return false;
-	}
 
 	debug(LOG_TEXTURE, "=== stageOneShutDown ===");
 	modelShutdown();

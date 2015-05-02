@@ -100,12 +100,7 @@ extern void audp_set_extra(YY_EXTRA_TYPE user_defined);
 oneshot							{	return ONESHOT;			}
 loop							{	return LOOP;			}
 audio							{	return AUDIO;			}
-anim3dfile						{	return ANIM3DFILE;		}
 audio_module					{	return AUDIO_MODULE;	}
-anim_module						{	return ANIM_MODULE;		}
-ANIM3DFRAMES					{	return ANIM3DFRAMES;	}
-ANIM3DTRANS						{	return ANIM3DTRANS;		}
-ANIMOBJECT						{	return ANIMOBJECT;		}
 
 	/* Match floating point numbers */
 	/* This is a problem with the PSX so is disabled

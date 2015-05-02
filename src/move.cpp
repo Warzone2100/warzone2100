@@ -35,14 +35,12 @@
 
 #include "move.h"
 
-//#include "animobj.h"
 #include "objects.h"
 #include "visibility.h"
 #include "map.h"
 #include "fpath.h"
 #include "loop.h"
 #include "geometry.h"
-#include "anim_id.h"
 #include "action.h"
 #include "display3d.h"
 #include "order.h"
@@ -1612,40 +1610,21 @@ static void moveUpdatePersonModel(DROID *psDroid, SDWORD speed, uint16_t directi
 
 	CHECK_DROID(psDroid);
 
-	// nothing to do if the droid is stopped
-	if (moveDroidStopped(psDroid, speed) == true)
+	// if the droid is stopped, only make sure animations are set correctly
+	if (moveDroidStopped(psDroid, speed))
 	{
 		if (psDroid->droidType == DROID_PERSON &&
-		    psDroid->order.type != DORDER_RUNBURN &&
 		    (psDroid->action == DACTION_ATTACK ||
-		     psDroid->action == DACTION_ROTATETOATTACK))
+		     psDroid->action == DACTION_ROTATETOATTACK)
+		    && psDroid->timeAnimationStarted == 0)
 		{
-			/* remove previous anim */
-			if (psDroid->psCurAnim != NULL &&
-			    psDroid->psCurAnim->psAnim->uwID != ID_ANIM_DROIDFIRE)
-			{
-				const bool bRet = animObj_Remove(psDroid->psCurAnim, psDroid->psCurAnim->psAnim->uwID);
-				ASSERT(bRet, "animObj_Remove failed");
-				psDroid->psCurAnim = NULL;
-			}
-
-			/* add firing anim */
-			if (psDroid->psCurAnim == NULL)
-			{
-				psDroid->psCurAnim = animObj_Add(psDroid, ID_ANIM_DROIDFIRE, 0);
-			}
-			else
-			{
-				psDroid->psCurAnim->bVisible = true;
-			}
-
-			return;
+			psDroid->timeAnimationStarted = gameTime;
+			psDroid->animationEvent = ANIM_EVENT_FIRING;
 		}
-
-		/* don't show move animations if inactive */
-		if (psDroid->psCurAnim != NULL)
+		else if (psDroid->timeAnimationStarted && psDroid->animationEvent == ANIM_EVENT_ACTIVE)
 		{
-			psDroid->psCurAnim->bVisible = false;
+			psDroid->timeAnimationStarted = 0; // turn off movement animation, since we stopped
+			psDroid->animationEvent = ANIM_EVENT_NONE;
 		}
 		return;
 	}
@@ -1672,47 +1651,12 @@ static void moveUpdatePersonModel(DROID *psDroid, SDWORD speed, uint16_t directi
 	psDroid->pos.z = map_Height(psDroid->pos.x, psDroid->pos.y);//jps 21july96
 
 	/* update anim if moving and not on fire */
-	if (psDroid->droidType == DROID_PERSON && speed != 0 &&
-	    psDroid->order.type != DORDER_RUNBURN)
+	if (psDroid->droidType == DROID_PERSON && speed != 0 && psDroid->timeAnimationStarted == 0)
 	{
-		/* remove previous anim */
-		if (psDroid->psCurAnim != NULL &&
-		    (psDroid->psCurAnim->psAnim->uwID != ID_ANIM_DROIDRUN ||
-		     psDroid->psCurAnim->psAnim->uwID != ID_ANIM_DROIDRUN))
-		{
-			const bool bRet = animObj_Remove(psDroid->psCurAnim, psDroid->psCurAnim->psAnim->uwID);
-			ASSERT(bRet, "animObj_Remove failed");
-			psDroid->psCurAnim = NULL;
-		}
-
-		/* if no anim currently attached, get one */
-		if (psDroid->psCurAnim == NULL)
-		{
-			// Only add the animation if the droid is on screen, saves memory and time.
-			if (clipXY(psDroid->pos.x, psDroid->pos.y))
-			{
-				debug(LOG_NEVER, "Added person run anim");
-				psDroid->psCurAnim = animObj_Add(psDroid, ID_ANIM_DROIDRUN, 0);
-			}
-		}
-		else
-		{
-			// If the droid went off screen then remove the animation, saves memory and time.
-			if (!clipXY(psDroid->pos.x, psDroid->pos.y))
-			{
-				const bool bRet = animObj_Remove(psDroid->psCurAnim, psDroid->psCurAnim->psAnim->uwID);
-				ASSERT(bRet, "animObj_Remove failed");
-				psDroid->psCurAnim = NULL;
-				debug(LOG_NEVER, "Removed person run anim");
-			}
-		}
+		psDroid->timeAnimationStarted = gameTime;
+		psDroid->animationEvent = ANIM_EVENT_ACTIVE;
 	}
 
-	/* show anim */
-	if (psDroid->psCurAnim != NULL)
-	{
-		psDroid->psCurAnim->bVisible = true;
-	}
 	CHECK_DROID(psDroid);
 }
 
@@ -1829,40 +1773,19 @@ static void moveUpdateCyborgModel(DROID *psDroid, SDWORD moveSpeed, uint16_t mov
 	CHECK_DROID(psDroid);
 
 	// nothing to do if the droid is stopped
-	if (moveDroidStopped(psDroid, moveSpeed) == true)
+	if (moveDroidStopped(psDroid, moveSpeed))
 	{
-		if (psDroid->psCurAnim != NULL)
+		if (psDroid->animationEvent == ANIM_EVENT_ACTIVE)
 		{
-			if (!animObj_Remove(psDroid->psCurAnim, psDroid->psCurAnim->uwID))
-			{
-				debug(LOG_NEVER, "couldn't remove walk anim");
-			}
-			psDroid->psCurAnim = NULL;
+			psDroid->timeAnimationStarted = 0;
 		}
 		return;
 	}
 
-	if (psDroid->psCurAnim == NULL)
+	if (psDroid->timeAnimationStarted == 0)
 	{
-		// Only add the animation if the droid is on screen, saves memory and time.
-		if (clipXY(psDroid->pos.x, psDroid->pos.y))
-		{
-			if (psDroid->droidType == DROID_CYBORG_SUPER)
-			{
-				psDroid->psCurAnim = animObj_Add(psDroid, ID_ANIM_SUPERCYBORG_RUN, 0);
-			}
-			else if (cyborgDroid(psDroid))
-			{
-				psDroid->psCurAnim = animObj_Add(psDroid, ID_ANIM_CYBORG_RUN, 0);
-			}
-		}
-	}
-	// If the droid went off screen then remove the animation, saves memory and time
-	else if (!clipXY(psDroid->pos.x, psDroid->pos.y))
-	{
-		const bool bRet = animObj_Remove(psDroid->psCurAnim, psDroid->psCurAnim->psAnim->uwID);
-		ASSERT(bRet, "animObj_Remove failed");
-		psDroid->psCurAnim = NULL;
+		psDroid->timeAnimationStarted = gameTime;
+		psDroid->animationEvent = ANIM_EVENT_ACTIVE;
 	}
 
 	/* use baba person movement */
@@ -2147,11 +2070,9 @@ void moveUpdateDroid(DROID *psDroid)
 	switch (psDroid->sMove.Status)
 	{
 	case MOVEINACTIVE:
-		if ((psDroid->droidType == DROID_PERSON) &&
-		    (psDroid->psCurAnim != NULL) &&
-		    (psDroid->psCurAnim->psAnim->uwID == ID_ANIM_DROIDRUN))
+		if (psDroid->animationEvent == ANIM_EVENT_ACTIVE && psDroid->timeAnimationStarted)
 		{
-			psDroid->psCurAnim->bVisible = false;
+			psDroid->timeAnimationStarted = 0;
 		}
 		break;
 	case MOVESHUFFLE:

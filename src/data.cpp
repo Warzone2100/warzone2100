@@ -562,50 +562,6 @@ static bool dataAudioCfgLoad(const char *fileName, void **ppData)
 	return success;
 }
 
-/* Load an anim file */
-static bool dataAnimLoad(const char *fileName, void **ppData)
-{
-	PHYSFS_file *fileHandle = PHYSFS_openRead(fileName);
-	debug(LOG_WZ, "Reading...[directory: %s] %s", PHYSFS_getRealDir(fileName), fileName);
-	if (fileHandle == NULL)
-	{
-		*ppData = NULL;
-		return false;
-	}
-
-	*ppData = anim_LoadFromFile(fileHandle);
-
-	PHYSFS_close(fileHandle);
-
-	return *ppData != NULL;
-}
-
-/* Load an audio config file */
-static bool dataAnimCfgLoad(const char *fileName, void **ppData)
-{
-	bool success;
-	PHYSFS_file *fileHandle = PHYSFS_openRead(fileName);
-	*ppData = NULL;
-
-	debug(LOG_WZ, "Reading...[directory: %s] %s", PHYSFS_getRealDir(fileName), fileName);
-	if (fileHandle == NULL)
-	{
-		return false;
-	}
-
-	success = ParseResourceFile(fileHandle);
-
-	PHYSFS_close(fileHandle);
-
-	return success;
-}
-
-
-static void dataAnimRelease(void *pData)
-{
-	anim_ReleaseAnim((BASEANIM *)pData);
-}
-
 /* Load a string resource file */
 static bool dataStrResLoad(const char *fileName, void **ppData)
 {
@@ -795,8 +751,6 @@ static const RES_TYPE_MIN_FILE FileResourceTypes[] =
 	{"SWEAPMOD", bufferSWEAPMODLoad, dataReleaseStats},
 	{"SPROPSND", bufferSPROPSNDLoad, dataReleaseStats},
 	{"AUDIOCFG", dataAudioCfgLoad, NULL},
-	{"ANI", dataAnimLoad, dataAnimRelease},
-	{"ANIMCFG", dataAnimCfgLoad, NULL},
 	{"IMGPAGE", dataImageLoad, dataImageRelease},
 	{"TERTILES", dataTERTILESLoad, NULL},
 	{"IMG", dataIMGLoad, dataIMGRelease},

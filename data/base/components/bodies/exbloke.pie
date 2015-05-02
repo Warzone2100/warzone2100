@@ -1,6 +1,9 @@
 PIE 2
 TYPE 200
 TEXTURE 0 page-7-barbarians-arizona.png 256 256
+EVENT 1 runanim.pie
+EVENT 2 fireknee.pie
+EVENT 3 flamfall.pie
 LEVELS 1
 LEVEL 1
 POINTS 16 

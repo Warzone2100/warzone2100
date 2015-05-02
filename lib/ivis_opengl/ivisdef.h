@@ -70,6 +70,13 @@ struct EDGE
 	int from, to;
 };
 
+struct ANIMFRAME
+{
+	Position pos;
+	Rotation rot;
+	Vector3f scale;
+};
+
 struct iIMDPoly
 {
 	uint32_t flags;
@@ -88,6 +95,15 @@ enum VBO_TYPE
 	VBO_NORMAL = VBO_MINIMAL,
 	VBO_INDEX,
 	VBO_COUNT
+};
+
+enum ANIMATION_EVENTS
+{
+	ANIM_EVENT_NONE,
+	ANIM_EVENT_ACTIVE,
+	ANIM_EVENT_FIRING, // should not be combined with fire-on-move, as this will look weird
+	ANIM_EVENT_DYING,
+	ANIM_EVENT_COUNT
 };
 
 struct iIMDShape
@@ -121,6 +137,15 @@ struct iIMDShape
 	// The new rendering data
 	GLuint buffers[VBO_COUNT];
 	SHADER_MODE shaderProgram; // if using specialized shader for this model
+
+	// object animation (animating a level, rather than its texture)
+	std::vector<ANIMFRAME> objanimdata;
+	int objanimframes;
+
+	// more object animation, but these are only set for the first level
+	int objanimtime; ///< total time to render all animation frames
+	int objanimcycles; ///< Number of cycles to render, zero means infinitely many
+	iIMDShape *objanimpie[ANIM_EVENT_COUNT];
 
 	iIMDShape *next;  // next pie in multilevel pies (NULL for non multilevel !)
 };

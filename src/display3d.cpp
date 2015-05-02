@@ -46,7 +46,6 @@
 #include "lib/sound/audio_id.h"
 #include "lib/netplay/netplay.h"
 
-#include "animobj.h"
 #include "loop.h"
 #include "atmos.h"
 #include "levels.h"
@@ -88,7 +87,6 @@
 #include "multiplay.h"
 #include "advvis.h"
 #include "texture.h"
-#include "anim_id.h"
 #include "cmddroid.h"
 #include "terrain.h"
 
@@ -111,7 +109,6 @@ static void	drawTiles(iView *player);
 static void	display3DProjectiles(void);
 static void	drawDroidSelections(void);
 static void	drawStructureSelections(void);
-static void	displayAnimation(ANIM_OBJECT *psAnimObj, bool bHoldOnFirstFrame);
 static void displayBlueprints(void);
 static void	processSensorTarget(void);
 static void	processDestinationTarget(void);
@@ -328,6 +325,34 @@ static std::vector<Blueprint> blueprints;
 static const int BLUEPRINT_OPACITY = 120;
 
 /********************  Functions  ********************/
+
+void drawShape(BASE_OBJECT *psObj, iIMDShape *strImd, int colour, PIELIGHT buildingBrightness, int pieFlag, int pieFlagData)
+{
+	int animFrame = 0; // for texture animation
+	if (strImd->numFrames > 0)	// Calculate an animation frame
+	{
+		animFrame = getModularScaledGraphicsTime(strImd->animInterval, strImd->numFrames);
+	}
+	if (psObj->timeAnimationStarted && strImd->objanimframes)
+	{
+		const int elapsed = graphicsTime - psObj->timeAnimationStarted;
+		const int frame = (elapsed / strImd->objanimtime) % strImd->objanimframes;
+		const ANIMFRAME &state = strImd->objanimdata[frame];
+		if (state.scale.x == -1.0f) // disabled frame, for implementing key frame animation
+		{
+			return;
+		}
+		pie_MatBegin(true);
+		pie_TRANSLATE(state.pos);
+		pie_MatRot(state.rot);
+		pie_MatScale(state.scale);
+	}
+	pie_Draw3DShape(strImd, animFrame, colour, buildingBrightness, pieFlag, pieFlagData);
+	if (psObj->timeAnimationStarted && strImd->objanimframes)
+	{
+		pie_MatEnd();
+	}
+}
 
 static void setScreenDisp(SCREEN_DISP_DATA *sDisplay)
 {
@@ -1354,110 +1379,9 @@ void	renderProjectile(PROJECTILE *psCurr)
 	}
 }
 
-/// Draw an animated component
-void	renderAnimComponent(const COMPONENT_OBJECT *psObj)
-{
-	BASE_OBJECT *psParentObj = (BASE_OBJECT *)psObj->psParent;
-	Spacetime spacetime = interpolateObjectSpacetime(psParentObj, graphicsTime);
-	const SDWORD posX = spacetime.pos.x + psObj->position.x,
-	             posY = spacetime.pos.y + psObj->position.y;
-
-	ASSERT_OR_RETURN(, psParentObj, "Invalid parent object pointer");
-
-	/* only draw visible bits */
-	if (psParentObj->type == OBJ_DROID && ((DROID *)psParentObj)->visible[selectedPlayer] != UBYTE_MAX)
-	{
-		return;
-	}
-	if (!clipXY(posX, posY))
-	{
-		return;
-	}
-	/* get parent object translation */
-	const Vector3i dv(
-	    spacetime.pos.x - player.p.x,
-	    spacetime.pos.z,
-	    -(spacetime.pos.y - player.p.z)
-	);
-	int iPlayer, pieFlag = pie_STATIC_SHADOW;
-	PIELIGHT brightness;
-	MAPTILE *psTile = worldTile(psParentObj->pos.x, psParentObj->pos.y);
-
-	if (psTile->jammerBits & alliancebits[psParentObj->player])
-	{
-		pieFlag |= pie_ECM;
-	}
-
-	psParentObj->sDisplay.frameNumber = currentGameFrame;
-
-	/* Push the indentity matrix */
-	pie_MatBegin(true);
-
-	/* parent object translation */
-	pie_TRANSLATE(dv.x, dv.y, dv.z);
-
-	/* parent object rotations */
-	pie_MatRotY(-spacetime.rot.direction);
-	pie_MatRotX(spacetime.rot.pitch);
-
-	/* Set frame numbers - look into this later?? FIXME!!!!!!!! */
-	if (psParentObj->type == OBJ_DROID)
-	{
-		DROID *psDroid = (DROID *)psParentObj;
-		if (psDroid->droidType == DROID_PERSON)
-		{
-			iPlayer = psParentObj->player - 6;
-			pie_MatScale(.75f);
-		}
-		else
-		{
-			iPlayer = getPlayerColour(psParentObj->player);
-		}
-
-		/* Get the onscreen coordinates so we can draw a bounding box */
-		calcScreenCoords(psDroid);
-	}
-	else
-	{
-		iPlayer = getPlayerColour(psParentObj->player);
-	}
-
-	//brightness and fog calculation
-	if (psParentObj->type == OBJ_STRUCTURE)
-	{
-		STRUCTURE *psStructure = (STRUCTURE *)psParentObj;
-
-		brightness = structureBrightness(psStructure);
-		setScreenDisp(&psStructure->sDisplay);
-	}
-	else
-	{
-		brightness = pal_SetBrightness(UBYTE_MAX);
-		if (!getRevealStatus())
-		{
-			brightness = pal_SetBrightness(avGetObjLightLevel((BASE_OBJECT *)psParentObj, brightness.byte.r));
-		}
-	}
-
-	// Do translation and rotation after setting sDisplay.screen[XY], so that the health bars for animated objects (such as oil derricks and cyborgs) will show on the stationary part.
-	// object (animation) translations - ivis z and y flipped
-	pie_TRANSLATE(psObj->position.x, psObj->position.z, psObj->position.y);
-	// object (animation) rotations
-	pie_MatRotY(-psObj->orientation.z);
-	pie_MatRotZ(-psObj->orientation.y);
-	pie_MatRotX(-psObj->orientation.x);
-
-	pie_Draw3DShape(psObj->psShape, 0, iPlayer, brightness, pieFlag, 0);
-
-	/* clear stack */
-	pie_MatEnd();
-}
-
 /// Draw the buildings
 static void displayStaticObjects()
 {
-	ANIM_OBJECT	*psAnimObj;
-
 	// to solve the flickering edges of baseplates
 	pie_SetDepthOffset(-1.0f);
 
@@ -1476,37 +1400,7 @@ static void displayStaticObjects()
 				continue;
 			}
 			STRUCTURE *psStructure = castStructure(list);
-
-			if (psStructure->pStructureType->type == REF_RESOURCE_EXTRACTOR && psStructure->psCurAnim == NULL
-			    && (psStructure->currentBuildPts > (SDWORD)psStructure->pStructureType->buildPoints))
-			{
-				psStructure->psCurAnim = animObj_Add(psStructure, ID_ANIM_DERIK, 0);
-			}
-
-			if (psStructure->psCurAnim == NULL || psStructure->psCurAnim->bVisible == false
-			    || (psAnimObj = animObj_Find(psStructure, psStructure->psCurAnim->uwID)) == NULL)
-			{
-				renderStructure(psStructure);
-			}
-			else if (psStructure->visible[selectedPlayer])
-			{
-				bool stopFrame = false;
-
-				// oil derrick: stop animation if not connected to power generator, play its sound
-				if (psStructure->pStructureType->type == REF_RESOURCE_EXTRACTOR)
-				{
-					if (!psStructure->pFunctionality->resourceExtractor.psPowerGen)
-					{
-						stopFrame = true;
-						audio_StopObjTrack(psStructure, ID_SOUND_OIL_PUMP_2);
-					}
-					else if (selectedPlayer == psStructure->player)
-					{
-						audio_PlayObjStaticTrack(psStructure, ID_SOUND_OIL_PUMP_2);
-					}
-				}
-				displayAnimation(psAnimObj, stopFrame);
-			}
+			renderStructure(psStructure);
 		}
 	}
 	pie_SetDepthOffset(0.0f);
@@ -1763,56 +1657,9 @@ static void displayProximityMsgs()
 	}
 }
 
-/// Display an animation
-static void displayAnimation(ANIM_OBJECT *psAnimObj, bool bHoldOnFirstFrame)
-{
-	UWORD i, uwFrame;
-	Vector3i vecPos, vecRot, vecScale;
-	COMPONENT_OBJECT *psComp;
-
-	for (i = 0; i < psAnimObj->psAnim->uwObj; i++)
-	{
-		if (bHoldOnFirstFrame == true)
-		{
-			uwFrame = 0;
-			vecPos.x = vecPos.y = vecPos.z = 0;
-			vecRot.x = vecRot.y = vecRot.z = 0;
-			vecScale.x = vecScale.y = vecScale.z = 0;
-		}
-		else
-		{
-			uwFrame = anim_GetFrame3D(psAnimObj->psAnim, i, graphicsTime, psAnimObj->udwStartTime, &vecPos, &vecRot, &vecScale);
-		}
-
-		if (uwFrame != ANIM_DELAYED)
-		{
-			if (psAnimObj->psAnim->animType == ANIM_3D_TRANS)
-			{
-				psComp = &psAnimObj->apComponents[i];
-			}
-			else
-			{
-				psComp = &psAnimObj->apComponents[uwFrame];
-			}
-
-			psComp->position.x = vecPos.x;
-			psComp->position.y = vecPos.y;
-			psComp->position.z = vecPos.z;
-
-			psComp->orientation.x = vecRot.x;
-			psComp->orientation.y = vecRot.y;
-			psComp->orientation.z = vecRot.z;
-
-			bucketAddTypeToList(RENDER_ANIMATION, psComp);
-		}
-	}
-}
-
 /// Draw the droids
 static void displayDynamicObjects()
 {
-	ANIM_OBJECT	*psAnimObj;
-
 	/* Need to go through all the droid lists */
 	for (unsigned player = 0; player <= MAX_PLAYERS; ++player)
 	{
@@ -1831,23 +1678,7 @@ static void displayDynamicObjects()
 			if (psDroid->visible[selectedPlayer])
 			{
 				psDroid->sDisplay.frameNumber = currentGameFrame;
-
-				// NOTE! : anything that has multiple (anim) frames *must* use the bucket to render
-				// In this case, AFAICT only DROID_CYBORG_SUPER had the issue.  (Same issue as oil pump anim)
-				if (psDroid->droidType != DROID_CYBORG_SUPER)
-				{
-					displayComponentObject(psDroid);
-				}
-				else
-				{
-					bucketAddTypeToList(RENDER_DROID, psDroid);
-				}
-				/* draw anim if visible */
-				if (psDroid->psCurAnim != NULL && psDroid->psCurAnim->bVisible == true
-				    && (psAnimObj = animObj_Find(psDroid, psDroid->psCurAnim->uwID)) != NULL)
-				{
-					displayAnimation(psAnimObj, false);
-				}
+				displayComponentObject(psDroid);
 			}
 		}
 	}
@@ -2290,13 +2121,13 @@ static void renderStructureTurrets(STRUCTURE *psStructure, iIMDShape *strImd, PI
 /// Draw the structures
 void renderStructure(STRUCTURE *psStructure)
 {
-	int structX, structY, colour, rotation, pieFlag, pieFlagData, ecmFlag = 0;
-	PIELIGHT		buildingBrightness;
-	Vector3i		dv;
-	bool			bHitByElectronic = false;
-	bool			defensive = false;
-	iIMDShape		*strImd = psStructure->sDisplay.imd;
-	MAPTILE			*psTile = worldTile(psStructure->pos.x, psStructure->pos.y);
+	int colour, pieFlag, pieFlagData, ecmFlag = 0;
+	PIELIGHT buildingBrightness;
+	const Vector3i dv = Vector3i{ psStructure->pos.x - player.p.x, psStructure->pos.z, -(psStructure->pos.y - player.p.z)};
+	bool bHitByElectronic = false;
+	bool defensive = false;
+	iIMDShape *strImd = psStructure->sDisplay.imd;
+	MAPTILE	*psTile = worldTile(psStructure->pos.x, psStructure->pos.y);
 
 	if (psStructure->pStructureType->type == REF_WALL || psStructure->pStructureType->type == REF_WALLCORNER
 	    || psStructure->pStructureType->type == REF_GATE)
@@ -2307,11 +2138,8 @@ void renderStructure(STRUCTURE *psStructure)
 	// If the structure is not truly visible, but we know there is something there, we will instead draw a blip
 	if (psStructure->visible[selectedPlayer] < UBYTE_MAX && psStructure->visible[selectedPlayer] > 0)
 	{
-		dv.x = psStructure->pos.x - player.p.x;
-		dv.z = -(psStructure->pos.y - player.p.z);
-		dv.y = psStructure->pos.z;
 		pie_MatBegin(true);
-		pie_TRANSLATE(dv.x, dv.y, dv.z);
+		pie_TRANSLATE(dv);
 		int frame = graphicsTime / BLIP_ANIM_DURATION + psStructure->id % 8192;  // de-sync the blip effect, but don't overflow the int
 		pie_Draw3DShape(getImdFromIndex(MI_BLIP), frame, 0, WZCOL_WHITE, pie_ADDITIVE, psStructure->visible[selectedPlayer] / 2);
 		pie_MatEnd();
@@ -2338,25 +2166,10 @@ void renderStructure(STRUCTURE *psStructure)
 	/* Mark it as having been drawn */
 	psStructure->sDisplay.frameNumber = currentGameFrame;
 
-	/* Get it's x and y coordinates so we don't have to deref. struct later */
-	structX = psStructure->pos.x;
-	structY = psStructure->pos.y;
-
-	dv.x = structX - player.p.x;
-	dv.z = -(structY - player.p.z);
-	dv.y = psStructure->pos.z;
-	/* Push the indentity matrix */
 	pie_MatBegin(true);
+	pie_TRANSLATE(dv);
+	pie_MatRotY(-psStructure->rot.direction);
 
-	/* Translate the building  - N.B. We can also do rotations here should we require
-	buildings to face different ways - Don't know if this is necessary - should be IMO */
-	pie_TRANSLATE(dv.x, dv.y, dv.z);
-
-	/* OK - here is where we establish which IMD to draw for the building - luckily static objects,
-	* buildings in other words are NOT made up of components - much quicker! */
-
-	rotation = psStructure->rot.direction;
-	pie_MatRotY(-rotation);
 	if (!defensive
 	    && graphicsTime - psStructure->timeLastHit < ELEC_DAMAGE_DURATION
 	    && psStructure->lastHitWeapon == WSC_ELECTRONIC)
@@ -2420,19 +2233,21 @@ void renderStructure(STRUCTURE *psStructure)
 		pieFlag = pie_STATIC_SHADOW | ecmFlag;
 		pieFlagData = 0;
 	}
+
+	if (defensive && !structureIsBlueprint(psStructure) && !(strImd->flags & iV_IMD_NOSTRETCH))
+	{
+		pie_SetShaderStretchDepth(psStructure->pos.z - psStructure->foundationDepth);
+	}
+
+	// check for animation model replacement - if none found, use animation in existing IMD
+	if (psStructure->timeAnimationStarted && strImd->objanimpie[psStructure->animationEvent])
+	{
+		strImd = strImd->objanimpie[psStructure->animationEvent];
+	}
+
 	while (strImd)
 	{
-		int animFrame = 0;
-		if (strImd->numFrames > 0)	// Calculate an animation frame
-		{
-			animFrame = getModularScaledGraphicsTime(strImd->animInterval, strImd->numFrames);
-		}
-		if (defensive && !structureIsBlueprint(psStructure) && !(strImd->flags & iV_IMD_NOSTRETCH))
-		{
-			pie_SetShaderStretchDepth(psStructure->pos.z - psStructure->foundationDepth);
-		}
-		pie_Draw3DShape(strImd, animFrame, colour, buildingBrightness, pieFlag, pieFlagData);
-		pie_SetShaderStretchDepth(0);
+		drawShape(psStructure, strImd, colour, buildingBrightness, pieFlag, pieFlagData);
 		if (psStructure->sDisplay.imd->nconnectors > 0)
 		{
 			renderStructureTurrets(psStructure, strImd, buildingBrightness, pieFlag, pieFlagData, ecmFlag);
@@ -2493,9 +2308,8 @@ void	renderDeliveryPoint(FLAG_POSITION *psPosition, bool blueprint)
 
 static bool renderWallSection(STRUCTURE *psStructure)
 {
-	int			structX, structY, ecmFlag = 0;
+	int ecmFlag = 0;
 	PIELIGHT		brightness;
-	SDWORD			rotation;
 	Vector3i			dv;
 	int				pieFlag, pieFlagData;
 	MAPTILE			*psTile = worldTile(psStructure->pos.x, psStructure->pos.y);
@@ -2511,28 +2325,20 @@ static bool renderWallSection(STRUCTURE *psStructure)
 	}
 
 	psStructure->sDisplay.frameNumber = currentGameFrame;
-	/* Get it's x and y coordinates so we don't have to deref. struct later */
-	structX = psStructure->pos.x;
-	structY = psStructure->pos.y;
 
 	brightness = structureBrightness(psStructure);
 	pie_SetShaderStretchDepth(psStructure->pos.z - psStructure->foundationDepth);
 
 	/* Establish where it is in the world */
-	dv.x = structX - player.p.x;
-	dv.z = -(structY - player.p.z);
+	dv.x = psStructure->pos.x - player.p.x;
+	dv.z = -(psStructure->pos.y - player.p.z);
 	dv.y = psStructure->pos.z;
 
 	dv.y -= gateCurrentOpenHeight(psStructure, graphicsTime, 1);  // Make gate stick out by 1 unit, so that the tops of ┼ gates can safely have heights differing by 1 unit.
 
-	/* Push the indentity matrix */
 	pie_MatBegin(true);
-
-	/* Translate */
 	pie_TRANSLATE(dv.x, dv.y, dv.z);
-
-	rotation = psStructure->rot.direction;
-	pie_MatRotY(-rotation);
+	pie_MatRotY(-psStructure->rot.direction);
 
 	/* Actually render it */
 	if (psStructure->status == SS_BEING_BUILT)

@@ -23,11 +23,7 @@
 #include "lib/framework/frame.h"
 #include "lib/gamelib/parser.h"
 #include "lib/sound/audio.h"
-#include "lib/gamelib/anim.h"
 #include "lib/framework/lexer_input.h"
-
-static int		g_iCurAnimID = 0;
-static Vector3i vecPos, vecRot, vecScale;
 
 extern int audp_lex(void);
 extern int audp_lex_destroy(void);
@@ -67,26 +63,21 @@ void yyerror(const char* fmt);
 %token ONESHOT
 %token LOOP
 %token AUDIO
-%token ANIM3DFRAMES
-%token ANIM3DTRANS
-%token ANIM3DFILE
 %token AUDIO_MODULE
-%token ANIM_MODULE
-%token ANIMOBJECT
 
 	/* rule types */
 %type <bval> looping
 
 %%
 
-data_file:				module_file | anim_file
+data_file:				module_file
 						;
 
 module_file:			module_file data_list |
 						data_list
 						;
 
-data_list:				audio_module | anim_module
+data_list:				audio_module
 						;
 
 audio_header:			AUDIO_MODULE '{'
@@ -115,103 +106,6 @@ looping:			LOOP
 				| ONESHOT
 				{ $$ = false; }
 				;
-
-anim_module_header:		ANIM_MODULE '{'
-						{
-						}
-						;
-
-anim_module:			anim_module_header anim_file_list   '}' |
-						anim_module_header anim_config_list '}'
-						/* NULL */
-						;
-
-anim_config_list:		anim_config_list anim_config |
-						anim_config
-						/* NULL */
-						;
-
-anim_file_list:			anim_file_list anim_file |
-						anim_file
-						/* NULL */
-						;
-
-anim_file:				anim_trans | anim_frames
-						;
-
-anim_config:			QTEXT INTEGER
-						{
-							g_iCurAnimID = $2;
-							anim_SetVals( $1, $2 );
-							free($1);
-						}
-						;
-
-	/*
-	 * anim_Create3D( char szAniFileName[], char szPieFileName[], UWORD uwFrames,
-	 *					UWORD uwFrameRate, UWORD uwNumObj, char cType, UWORD uwID )
-	 */
-
-anim_trans:				ANIM3DTRANS QTEXT INTEGER INTEGER INTEGER
-						{
-							anim_Create3D( $2, $3, $4, $5, ANIM_3D_TRANS, g_iCurAnimID );
-							free($2);
-						}
-						'{' anim_obj_list '}'
-						{
-							g_iCurAnimID++;
-						}
-						;
-
-anim_frames:			ANIM3DFRAMES QTEXT INTEGER INTEGER
-						{
-							anim_Create3D( $2, $3, $4, 1, ANIM_3D_FRAMES, g_iCurAnimID );
-							free($2);
-						}
-						'{'
-						{
-							anim_BeginScript();
-						}
-						anim_script '}'
-						{
-							anim_EndScript();
-							g_iCurAnimID++;
-						}
-						;
-
-anim_obj_list:			anim_obj anim_obj_list |
-						anim_obj
-						;
-
-anim_obj:				ANIMOBJECT INTEGER QTEXT '{'
-						{
-							anim_BeginScript();
-							free($3);
-						}
-						anim_script '}'
-						{
-							anim_EndScript();
-						}
-						;
-
-anim_script:			anim_script anim_state |
-						anim_state
-						;
-
-anim_state:				INTEGER INTEGER INTEGER INTEGER INTEGER INTEGER INTEGER INTEGER INTEGER INTEGER
-						{
-							vecPos.x   = $2;
-							vecPos.y   = $3;
-							vecPos.z   = $4;
-							vecRot.x   = $5;
-							vecRot.y   = $6;
-							vecRot.z   = $7;
-							vecScale.x = $8;
-							vecScale.y = $9;
-							vecScale.z = $10;
-							anim_AddFrameToAnim( $1, vecPos, vecRot, vecScale );
-						}
-						;
 
 %%
 

@@ -52,12 +52,15 @@ void pie_MatEnd();
 
 //*************************************************************************
 
-extern void pie_TRANSLATE(int32_t x, int32_t y, int32_t z);
-extern void pie_MatScale(float scale);
-extern void pie_MatRotX(uint16_t x);
-extern void pie_MatRotY(uint16_t y);
-extern void pie_MatRotZ(uint16_t z);
-extern int32_t pie_RotateProject(const Vector3i *src, Vector2i *dest);
+void pie_TRANSLATE(int32_t x, int32_t y, int32_t z);
+static inline void pie_TRANSLATE(Position p) { pie_TRANSLATE(p.x, p.y, p.z); }
+void pie_MatScale(float scale);
+void pie_MatScale(Vector3f scale);
+void pie_MatRotX(uint16_t pitch);
+void pie_MatRotY(uint16_t direction);
+void pie_MatRotZ(uint16_t roll);
+static inline void pie_MatRot(Rotation rot) { pie_MatRotX(rot.pitch); pie_MatRotY(rot.direction); pie_MatRotZ(rot.roll); }
+int32_t pie_RotateProject(const Vector3i *src, Vector2i *dest);
 void pie_GetMatrix(float *matrix);
 
 //*************************************************************************

@@ -42,7 +42,6 @@
 #include "order.h"
 #include "structure.h"
 #include "miscimd.h"
-#include "anim_id.h"
 #include "visibility.h"
 #include "text.h"
 #include "effects.h"

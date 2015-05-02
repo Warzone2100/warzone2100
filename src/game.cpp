@@ -64,7 +64,6 @@
 #include "init.h"
 #include "mission.h"
 #include "scores.h"
-#include "anim_id.h"
 #include "design.h"
 #include "component.h"
 #include "radar.h"
@@ -4317,6 +4316,74 @@ static int healthValue(WzConfig &ini, int defaultValue)
 	}
 }
 
+static void loadSaveObject(WzConfig &ini, BASE_OBJECT *psObj)
+{
+	psObj->died = ini.value("died", 0).toInt();
+	memset(psObj->visible, 0, sizeof(psObj->visible));
+	for (int j = 0; j < game.maxPlayers; j++)
+	{
+		psObj->visible[j] = ini.value("visible/" + QString::number(j), 0).toInt();
+	}
+	psObj->periodicalDamage = ini.value("periodicalDamage", 0).toInt();
+	psObj->periodicalDamageStart = ini.value("periodicalDamageStart", 0).toInt();
+	psObj->timeAnimationStarted = ini.value("timeAnimationStarted", 0).toInt();
+	psObj->animationEvent = ini.value("animationEvent", 0).toInt();
+	psObj->timeLastHit = ini.value("timeLastHit", UDWORD_MAX).toInt();
+	psObj->lastEmission = ini.value("lastEmission", 0).toInt();
+	psObj->selected = ini.value("selected", false).toBool();
+	psObj->born = ini.value("born", 2).toInt();
+}
+
+static void writeSaveObject(WzConfig &ini, BASE_OBJECT *psObj)
+{
+	ini.setValue("id", psObj->id);
+	setPlayer(ini, psObj->player);
+	ini.setValue("health", psObj->body);
+	ini.setVector3i("position", psObj->pos);
+	ini.setVector3i("rotation", toVector(psObj->rot));
+	if (psObj->timeAnimationStarted)
+	{
+		ini.setValue("timeAnimationStarted", psObj->timeAnimationStarted);
+	}
+	if (psObj->animationEvent)
+	{
+		ini.setValue("animationEvent", psObj->animationEvent);
+	}
+	ini.setValue("selected", psObj->selected);	// third kind of group
+	if (psObj->lastEmission)
+	{
+		ini.setValue("lastEmission", psObj->lastEmission);
+	}
+	if (psObj->periodicalDamageStart > 0)
+	{
+		ini.setValue("periodicalDamageStart", psObj->periodicalDamageStart);
+	}
+	if (psObj->periodicalDamage > 0)
+	{
+		ini.setValue("periodicalDamage", psObj->periodicalDamage);
+	}
+	ini.setValue("born", psObj->born);
+	if (psObj->died > 0)
+	{
+		ini.setValue("died", psObj->died);
+	}
+	if (psObj->timeLastHit != UDWORD_MAX)
+	{
+		ini.setValue("timeLastHit", psObj->timeLastHit);
+	}
+	if (psObj->selected)
+	{
+		ini.setValue("selected", psObj->selected);
+	}
+	for (int i = 0; i < game.maxPlayers; i++)
+	{
+		if (psObj->visible[i])
+		{
+			ini.setValue("visible/" + QString::number(i), psObj->visible[i]);
+		}
+	}
+}
+
 static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 {
 	if (!PHYSFS_exists(pFileName))
@@ -4413,10 +4480,7 @@ static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 		ASSERT(id != 0, "Droid ID should never be zero here");
 		psDroid->body = healthValue(ini, psDroid->originalBody);
 		ASSERT(psDroid->body != 0, "%s : %d has zero hp!", pFileName, i);
-		psDroid->periodicalDamage = ini.value("periodicalDamage", 0).toInt();
-		psDroid->periodicalDamageStart = ini.value("periodicalDamageStart", 0).toInt();
 		psDroid->experience = ini.value("experience", 0).toInt();
-		psDroid->timeLastHit = ini.value("timeLastHit", UDWORD_MAX).toInt();
 		psDroid->secondaryOrder = ini.value("secondaryOrder", psDroid->secondaryOrder).toInt();
 		psDroid->secondaryOrderPending = psDroid->secondaryOrder;
 		psDroid->action = (DROID_ACTION)ini.value("action", DACTION_NONE).toInt();
@@ -4425,6 +4489,9 @@ static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 		psDroid->actionPoints = ini.value("actionPoints", 0).toInt();
 		psDroid->resistance = ini.value("resistance", 0).toInt(); // zero resistance == no electronic damage
 		psDroid->lastFrustratedTime = ini.value("lastFrustratedTime", 0).toInt();
+
+		// common BASE_OBJECT info
+		loadSaveObject(ini, psDroid);
 
 		// copy the droid's weapon stats
 		for (int j = 0; j < psDroid->numWeaps; j++)
@@ -4439,7 +4506,6 @@ static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 		}
 
 		psDroid->group = ini.value("group", UBYTE_MAX).toInt();
-		psDroid->selected = ini.value("selected", false).toBool();
 		int aigroup = ini.value("aigroup", -1).toInt();
 		if (aigroup >= 0)
 		{
@@ -4462,13 +4528,6 @@ static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 			{
 				psDroid->psGroup = NULL;
 			}
-		}
-		psDroid->died = ini.value("died", 0).toInt();
-		psDroid->lastEmission = ini.value("lastEmission", 0).toInt();
-		memset(psDroid->visible, 0, sizeof(psDroid->visible));
-		for (int j = 0; j < game.maxPlayers; j++)
-		{
-			psDroid->visible[j] = ini.value("visible/" + QString::number(j), 0).toInt();
 		}
 
 		psDroid->sMove.Status = (MOVE_STATUS)ini.value("moveStatus", 0).toInt();
@@ -4497,7 +4556,6 @@ static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 		tmp = ini.vector2i("bumpPosition");
 		psDroid->sMove.bumpX = tmp.x;
 		psDroid->sMove.bumpY = tmp.y;
-		psDroid->born = ini.value("born", 2).toInt();
 
 		// Recreate path-finding jobs
 		if (psDroid->sMove.Status == MOVEWAITROUTE)
@@ -4545,12 +4603,11 @@ Writes the linked list of droids for each player to a file
 static bool writeDroid(WzConfig &ini, DROID *psCurr, bool onMission, int &counter)
 {
 	ini.beginGroup("droid_" + QString("%1").arg(counter++, 10, 10, QLatin1Char('0')));  // Zero padded so that alphabetical sort works.
-	ini.setValue("id", psCurr->id);
-	setPlayer(ini, psCurr->player);
 	ini.setValue("name", psCurr->aName);
-	ini.setVector3i("position", psCurr->pos);
-	ini.setVector3i("rotation", toVector(psCurr->rot));
-	ini.setValue("health", psCurr->body);
+
+	// write common BASE_OBJECT info
+	writeSaveObject(ini, psCurr);
+
 	for (int i = 0; i < psCurr->numWeaps; i++)
 	{
 		if (psCurr->asWeaps[i].nStat > 0)
@@ -4565,7 +4622,6 @@ static bool writeDroid(WzConfig &ini, DROID *psCurr, bool onMission, int &counte
 	{
 		setIniBaseObject(ini, "actionTarget/" + QString::number(i), psCurr->psActionTarget[i]);
 	}
-	ini.setValue("born", psCurr->born);
 	if (psCurr->lastFrustratedTime > 0)
 	{
 		ini.setValue("lastFrustratedTime", psCurr->lastFrustratedTime);
@@ -4574,6 +4630,7 @@ static bool writeDroid(WzConfig &ini, DROID *psCurr, bool onMission, int &counte
 	{
 		ini.setValue("experience", psCurr->experience);
 	}
+
 	setIniDroidOrder(ini, "order", psCurr->order);
 	ini.setValue("orderList/size", psCurr->listSize);
 	for (int i = 0; i < psCurr->listSize; ++i)
@@ -4602,34 +4659,13 @@ static bool writeDroid(WzConfig &ini, DROID *psCurr, bool onMission, int &counte
 		ini.setValue("aigroup/type", psCurr->psGroup->type);
 	}
 	ini.setValue("group", psCurr->group);	// different kind of group. of course.
-	ini.setValue("selected", psCurr->selected);	// third kind of group
-	if (psCurr->lastEmission)
-	{
-		ini.setValue("lastEmission", psCurr->lastEmission);
-	}
-	for (int i = 0; i < game.maxPlayers; i++)
-	{
-		ini.setValue("visible/" + QString::number(i), psCurr->visible[i]);
-	}
 	if (hasCommander(psCurr) && psCurr->psGroup->psCommander->died <= 1)
 	{
 		ini.setValue("commander", psCurr->psGroup->psCommander->id);
 	}
-	if (psCurr->died > 0)
-	{
-		ini.setValue("died", psCurr->died);
-	}
 	if (psCurr->resistance > 0)
 	{
 		ini.setValue("resistance", psCurr->resistance);
-	}
-	if (psCurr->periodicalDamageStart > 0)
-	{
-		ini.setValue("periodicalDamageStart", psCurr->periodicalDamageStart);
-	}
-	if (psCurr->periodicalDamage > 0)
-	{
-		ini.setValue("periodicalDamage", psCurr->periodicalDamage);
 	}
 	ini.setValue("droidType", psCurr->droidType);
 	ini.setValue("weapons", psCurr->numWeaps);
@@ -4966,13 +5002,10 @@ static bool loadSaveStructure2(const char *pFileName, STRUCTURE **ppList)
 		{
 			psStructure->id = id;	// force correct ID
 		}
-		psStructure->periodicalDamage = ini.value("periodicalDamage", 0).toInt();
-		psStructure->periodicalDamageStart = ini.value("periodicalDamageStart", 0).toInt();
-		memset(psStructure->visible, 0, sizeof(psStructure->visible));
-		for (int i = 0; i < game.maxPlayers; i++)
-		{
-			psStructure->visible[i] = ini.value("visible/" + QString::number(i), 0).toInt();
-		}
+
+		// common BASE_OBJECT info
+		loadSaveObject(ini, psStructure);
+
 		if (psStructure->pStructureType->type == REF_HQ)
 		{
 			scriptSetStartPos(player, psStructure->pos.x, psStructure->pos.y);
@@ -5111,11 +5144,6 @@ static bool loadSaveStructure2(const char *pFileName, STRUCTURE **ppList)
 				break;
 			case REF_RESOURCE_EXTRACTOR:
 				checkForPowerGen(psStructure);
-				/* GJ HACK! - add anim to deriks */
-				if (psStructure->psCurAnim == NULL)
-				{
-					psStructure->psCurAnim = animObj_Add(psStructure, ID_ANIM_DERIK, 0);
-				}
 				break;
 			default:
 				//do nothing for factories etc
@@ -5133,10 +5161,6 @@ static bool loadSaveStructure2(const char *pFileName, STRUCTURE **ppList)
 				psStructure->asWeaps[j].rot = ini.vector3i("rotation/" + QString::number(j));
 			}
 		}
-		psStructure->selected = ini.value("selected", false).toBool();
-		psStructure->died = ini.value("died", 0).toInt();
-		psStructure->lastEmission = ini.value("lastEmission", 0).toInt();
-		psStructure->timeLastHit = ini.value("timeLastHit", UDWORD_MAX).toInt();
 		psStructure->status = (STRUCT_STATES)ini.value("status", SS_BUILT).toInt();
 		if (psStructure->status == SS_BUILT)
 		{
@@ -5199,43 +5223,13 @@ bool writeStructFile(const char *pFileName)
 		for (STRUCTURE *psCurr = apsStructLists[player]; psCurr != NULL; psCurr = psCurr->psNext)
 		{
 			ini.beginGroup("structure_" + QString("%1").arg(counter++, 10, 10, QLatin1Char('0')));  // Zero padded so that alphabetical sort works.
-			ini.setValue("id", psCurr->id);
-			setPlayer(ini, psCurr->player);
 			ini.setValue("name", psCurr->pStructureType->id);
-			ini.setVector3i("position", psCurr->pos);
-			ini.setVector3i("rotation", toVector(psCurr->rot));
-			ini.setValue("health", psCurr->body);
-			ini.setValue("born", psCurr->born);
-			if (psCurr->timeLastHit != UDWORD_MAX)
-			{
-				ini.setValue("timeLastHit", psCurr->timeLastHit);
-			}
-			if (psCurr->selected)
-			{
-				ini.setValue("selected", psCurr->selected);
-			}
-			for (int i = 0; i < MAX_PLAYERS; i++)
-			{
-				if (psCurr->visible[i])
-				{
-					ini.setValue("visible/" + QString::number(i), psCurr->visible[i]);
-				}
-			}
-			if (psCurr->died > 0)
-			{
-				ini.setValue("died", psCurr->died);
-			}
+
+			writeSaveObject(ini, psCurr);
+
 			if (psCurr->resistance > 0)
 			{
 				ini.setValue("resistance", psCurr->resistance);
-			}
-			if (psCurr->periodicalDamageStart > 0)
-			{
-				ini.setValue("periodicalDamageStart", psCurr->periodicalDamageStart);
-			}
-			if (psCurr->periodicalDamage > 0)
-			{
-				ini.setValue("periodicalDamage", psCurr->periodicalDamage);
 			}
 			if (psCurr->status != SS_BUILT)
 			{
@@ -5622,16 +5616,12 @@ bool loadSaveFeature2(const char *pFileName)
 			pFeature->id = generateSynchronisedObjectId();
 		}
 		pFeature->rot = ini.vector3i("rotation");
-		pFeature->periodicalDamage = ini.value("periodicalDamage", 0).toInt();
-		pFeature->periodicalDamageStart = ini.value("periodicalDamageStart", 0).toInt();
-		pFeature->born = ini.value("born", 2).toInt();
-		pFeature->timeLastHit = ini.value("timeLastHit", UDWORD_MAX).toInt();
-		pFeature->selected = ini.value("selected", false).toBool();
+
+		// common BASE_OBJECT info
+		loadSaveObject(ini, pFeature);
+
 		pFeature->body = healthValue(ini, pFeature->psStats->body);
-		for (int i = 0; i < MAX_PLAYERS; i++)
-		{
-			pFeature->visible[i] = ini.value("visible/" + QString::number(i), 0).toInt();
-		}
+
 		ini.endGroup();
 	}
 	return true;
@@ -5649,29 +5639,8 @@ bool writeFeatureFile(const char *pFileName)
 	for (FEATURE *psCurr = apsFeatureLists[0]; psCurr != NULL; psCurr = psCurr->psNext)
 	{
 		ini.beginGroup("feature_" + QString("%1").arg(counter++, 10, 10, QLatin1Char('0')));  // Zero padded so that alphabetical sort works.
-		ini.setValue("id", psCurr->id);
 		ini.setValue("name", psCurr->psStats->id);
-		ini.setVector3i("position", psCurr->pos);
-		ini.setVector3i("rotation", toVector(psCurr->rot));
-		ini.setValue("periodicalDamage", psCurr->periodicalDamage);
-		ini.setValue("periodicalDamageStart", psCurr->periodicalDamageStart);
-		ini.setValue("health", psCurr->body);
-		ini.setValue("born", psCurr->born);
-		if (psCurr->selected)
-		{
-			ini.setValue("selected", psCurr->selected);
-		}
-		if (psCurr->timeLastHit != UDWORD_MAX)
-		{
-			ini.setValue("timeLastHit", psCurr->timeLastHit);
-		}
-		for (int i = 0; i < MAX_PLAYERS; i++)
-		{
-			if (psCurr->visible[i])
-			{
-				ini.setValue("visible/" + QString::number(i), psCurr->visible[i]);
-			}
-		}
+		writeSaveObject(ini, psCurr);
 		ini.endGroup();
 	}
 	return true;

@@ -1,25 +1,5 @@
-/*
-	This file is part of Warzone 2100.
-	Copyright (C) 2005-2015  Warzone 2100 Project
 
-	Warzone 2100 is free software; you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation; either version 2 of the License, or
-	(at your option) any later version.
-
-	Warzone 2100 is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-	GNU General Public License for more details.
-
-	You should have received a copy of the GNU General Public License
-	along with Warzone 2100; if not, write to the Free Software
-	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
-*/
-
-#line 2 "audp_lexer.cpp"
-
-#line 4 "audp_lexer.cpp"
+#line 3 "lex.audp_.c"
 
 #define  YY_INT_ALIGNED short int
 
@@ -47,13 +27,13 @@
 #define FLEX_SCANNER
 #define YY_FLEX_MAJOR_VERSION 2
 #define YY_FLEX_MINOR_VERSION 5
-#define YY_FLEX_SUBMINOR_VERSION 35
+#define YY_FLEX_SUBMINOR_VERSION 37
 #if YY_FLEX_SUBMINOR_VERSION > 0
 #define FLEX_BETA
 #endif
 
 /* First, we deal with  platform-specific or compiler-specific issues. */
-#include "lib/framework/frame.h"
+
 /* begin standard C headers. */
 #include <stdio.h>
 #include <string.h>
@@ -72,7 +52,7 @@
 #if defined (__STDC_VERSION__) && __STDC_VERSION__ >= 199901L
 
 /* C99 says to define __STDC_LIMIT_MACROS before including stdint.h,
- * if you want the limit (max/min) macros for int types.
+ * if you want the limit (max/min) macros for int types. 
  */
 #ifndef __STDC_LIMIT_MACROS
 #define __STDC_LIMIT_MACROS 1
@@ -89,7 +69,7 @@ typedef uint32_t flex_uint32_t;
 typedef signed char flex_int8_t;
 typedef short int flex_int16_t;
 typedef int flex_int32_t;
-typedef unsigned char flex_uint8_t;
+typedef unsigned char flex_uint8_t; 
 typedef unsigned short int flex_uint16_t;
 typedef unsigned int flex_uint32_t;
 
@@ -180,15 +160,7 @@ typedef unsigned int flex_uint32_t;
 
 /* Size of default input buffer. */
 #ifndef YY_BUF_SIZE
-#ifdef __ia64__
-/* On IA-64, the buffer size is 16k, not 8k.
- * Moreover, YY_BUF_SIZE is 2*YY_READ_BUF_SIZE in the general case.
- * Ditto for the __ia64__ case accordingly.
- */
-#define YY_BUF_SIZE 32768
-#else
 #define YY_BUF_SIZE 16384
-#endif /* __ia64__ */
 #endif
 
 /* The state buf must be large enough to hold one state per character in the main buffer.
@@ -200,7 +172,12 @@ typedef unsigned int flex_uint32_t;
 typedef struct yy_buffer_state *YY_BUFFER_STATE;
 #endif
 
-extern int audp_leng;
+#ifndef YY_TYPEDEF_YY_SIZE_T
+#define YY_TYPEDEF_YY_SIZE_T
+typedef size_t yy_size_t;
+#endif
+
+extern yy_size_t audp_leng;
 
 extern FILE *audp_in, *audp_out;
 
@@ -210,7 +187,7 @@ extern FILE *audp_in, *audp_out;
 
     /* Note: We specifically omit the test for yy_rule_can_match_eol because it requires
      *       access to the local variable yy_act. Since yyless() is a macro, it would break
-     *       existing scanners that call yyless() from OUTSIDE audp_lex.
+     *       existing scanners that call yyless() from OUTSIDE audp_lex. 
      *       One obvious solution it to make yy_act a global. I tried that, and saw
      *       a 5% performance hit in a non-audp_lineno scanner, because yy_act is
      *       normally declared as a register variable-- so it is not worth it.
@@ -222,7 +199,7 @@ extern FILE *audp_in, *audp_out;
                     if ( audp_text[yyl] == '\n' )\
                         --audp_lineno;\
             }while(0)
-
+    
 /* Return all but the first "n" matched characters back to the input stream. */
 #define yyless(n) \
 	do \
@@ -238,11 +215,6 @@ extern FILE *audp_in, *audp_out;
 	while ( 0 )
 
 #define unput(c) yyunput( c, (yytext_ptr)  )
-
-#ifndef YY_TYPEDEF_YY_SIZE_T
-#define YY_TYPEDEF_YY_SIZE_T
-typedef size_t yy_size_t;
-#endif
 
 #ifndef YY_STRUCT_YY_BUFFER_STATE
 #define YY_STRUCT_YY_BUFFER_STATE
@@ -261,7 +233,7 @@ struct yy_buffer_state
 	/* Number of characters read into yy_ch_buf, not including EOB
 	 * characters.
 	 */
-	int yy_n_chars;
+	yy_size_t yy_n_chars;
 
 	/* Whether we "own" the buffer - i.e., we know we created it,
 	 * and can realloc() it to grow it, and should free() it to
@@ -284,7 +256,7 @@ struct yy_buffer_state
 
     int yy_bs_lineno; /**< The line count. */
     int yy_bs_column; /**< The column count. */
-
+    
 	/* Whether to try to fill the input buffer when we reach the
 	 * end of it.
 	 */
@@ -331,8 +303,8 @@ static YY_BUFFER_STATE * yy_buffer_stack = 0; /**< Stack as an array. */
 
 /* yy_hold_char holds the character lost when audp_text is formed. */
 static char yy_hold_char;
-static int yy_n_chars;		/* number of characters read into yy_ch_buf */
-int audp_leng;
+static yy_size_t yy_n_chars;		/* number of characters read into yy_ch_buf */
+yy_size_t audp_leng;
 
 /* Points to current character in buffer. */
 static char *yy_c_buf_p = (char *) 0;
@@ -360,7 +332,7 @@ static void audp__init_buffer (YY_BUFFER_STATE b,FILE *file  );
 
 YY_BUFFER_STATE audp__scan_buffer (char *base,yy_size_t size  );
 YY_BUFFER_STATE audp__scan_string (yyconst char *yy_str  );
-YY_BUFFER_STATE audp__scan_bytes (yyconst char *bytes,int len  );
+YY_BUFFER_STATE audp__scan_bytes (yyconst char *bytes,yy_size_t len  );
 
 void *audp_alloc (yy_size_t  );
 void *audp_realloc (void *,yy_size_t  );
@@ -392,7 +364,7 @@ void audp_free (void *  );
 
 /* Begin user sect3 */
 
-#define audp_wrap(n) 1
+#define audp_wrap() 1
 #define YY_SKIP_YYWRAP
 
 typedef unsigned char YY_CHAR;
@@ -423,8 +395,8 @@ static void yy_fatal_error (yyconst char msg[]  );
 	*yy_cp = '\0'; \
 	(yy_c_buf_p) = yy_cp;
 
-#define YY_NUM_RULES 26
-#define YY_END_OF_BUFFER 27
+#define YY_NUM_RULES 21
+#define YY_END_OF_BUFFER 22
 /* This struct is not used in this scanner,
    but its presence is necessary. */
 struct yy_trans_info
@@ -432,19 +404,14 @@ struct yy_trans_info
 	flex_int32_t yy_verify;
 	flex_int32_t yy_nxt;
 	};
-static yyconst flex_int16_t yy_accept[96] =
+static yyconst flex_int16_t yy_accept[57] =
     {   0,
-        0,    0,    0,    0,   15,   15,   24,   24,   27,   25,
-       16,   16,   12,   25,   25,   10,   25,   25,   25,   25,
-       20,   21,   20,   15,   14,   13,   24,   23,   11,   10,
-       17,   22,    0,    0,    0,    0,    0,   18,   15,   24,
-        0,    0,    0,    0,    0,   19,    0,    0,    0,    2,
-        0,    0,    0,    0,    0,    3,    0,    0,    0,    0,
-        0,    0,    0,    0,    0,    0,    0,    0,    0,    1,
-        0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-        0,    0,    0,    0,    9,    4,    0,    0,    0,    8,
-        6,    0,    7,    5,    0
-
+        0,    0,    0,    0,   10,   10,   19,   19,   22,   20,
+       11,   11,    7,   20,   20,    5,   20,   20,   20,   15,
+       16,   15,   10,    9,    8,   19,   18,    6,    5,   12,
+       17,    0,    0,    0,   13,   10,   19,    0,    0,    0,
+       14,    0,    2,    0,    3,    0,    0,    0,    0,    1,
+        0,    0,    0,    0,    4,    0
     } ;
 
 static yyconst flex_int32_t yy_ec[256] =
@@ -454,14 +421,14 @@ static yyconst flex_int32_t yy_ec[256] =
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    2,    1,    4,    1,    1,    1,    1,    1,    1,
         1,    5,    1,    1,    6,    1,    7,    8,    8,    8,
-        9,    8,    8,    8,    8,    8,    8,    1,    1,    1,
-        1,    1,    1,    1,   10,   11,   12,   13,   14,   15,
-        1,    1,   16,   17,    1,    1,   18,   19,   20,    1,
-        1,   21,   22,   23,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,   24,    1,   25,    1,    1,   26,
+        8,    8,    8,    8,    8,    8,    8,    1,    1,    1,
+        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
+        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
+        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
+        1,    1,    1,    1,    9,    1,   10,    1,    1,   11,
 
-       27,   28,    1,   29,   30,    1,    1,   31,   32,   33,
-       34,   35,    1,    1,   36,   37,   38,    1,    1,    1,
+       12,    1,    1,   13,   14,    1,    1,   15,   16,   17,
+       18,   19,    1,    1,   20,   21,   22,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
@@ -479,93 +446,70 @@ static yyconst flex_int32_t yy_ec[256] =
         1,    1,    1,    1,    1
     } ;
 
-static yyconst flex_int32_t yy_meta[39] =
+static yyconst flex_int32_t yy_meta[23] =
     {   0,
         1,    1,    2,    3,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
+        1,    1
+    } ;
+
+static yyconst flex_int16_t yy_base[62] =
+    {   0,
+        0,    0,   20,   21,   24,   26,   70,   69,   71,   74,
+       74,   74,   66,   61,   26,   60,   45,   48,   48,   74,
+       74,   57,    0,   74,   74,    0,   74,   74,   55,   74,
+       74,   51,   43,   48,   56,    0,    0,   44,   38,   36,
+       74,   37,   74,   41,   44,   34,   35,   29,   31,   74,
+       37,   25,   31,   32,   74,   74,   33,   36,   39,   31,
+       42
+    } ;
+
+static yyconst flex_int16_t yy_def[62] =
+    {   0,
+       56,    1,   57,   57,   58,   58,   59,   59,   56,   56,
+       56,   56,   56,   56,   56,   56,   56,   56,   56,   56,
+       56,   56,   60,   56,   56,   61,   56,   56,   56,   56,
+       56,   56,   56,   56,   56,   60,   61,   56,   56,   56,
+       56,   56,   56,   56,   56,   56,   56,   56,   56,   56,
+       56,   56,   56,   56,   56,    0,   56,   56,   56,   56,
+       56
+    } ;
+
+static yyconst flex_int16_t yy_nxt[97] =
+    {   0,
+       10,   11,   12,   13,   10,   14,   15,   16,   10,   17,
+       10,   10,   10,   10,   18,   10,   10,   19,   10,   10,
+       10,   10,   21,   21,   22,   22,   24,   25,   24,   25,
+       30,   36,   31,   20,   20,   20,   23,   23,   23,   26,
+       26,   26,   37,   55,   37,   54,   53,   52,   51,   50,
+       49,   48,   47,   46,   45,   44,   43,   42,   41,   40,
+       39,   38,   29,   35,   34,   33,   32,   29,   29,   28,
+       56,   27,   27,    9,   56,   56,   56,   56,   56,   56,
+       56,   56,   56,   56,   56,   56,   56,   56,   56,   56,
+       56,   56,   56,   56,   56,   56
+
+    } ;
+
+static yyconst flex_int16_t yy_chk[97] =
+    {   0,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,    1,    1,    1,    1
-    } ;
+        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
+        1,    1,    3,    4,    3,    4,    5,    5,    6,    6,
+       15,   60,   15,   57,   57,   57,   58,   58,   58,   59,
+       59,   59,   61,   54,   61,   53,   52,   51,   49,   48,
+       47,   46,   45,   44,   42,   40,   39,   38,   35,   34,
+       33,   32,   29,   22,   19,   18,   17,   16,   14,   13,
+        9,    8,    7,   56,   56,   56,   56,   56,   56,   56,
+       56,   56,   56,   56,   56,   56,   56,   56,   56,   56,
+       56,   56,   56,   56,   56,   56
 
-static yyconst flex_int16_t yy_base[102] =
-    {   0,
-        0,   33,    8,    9,   12,   14,  116,  115,  117,  120,
-      120,  120,  112,   11,   16,   18,   96,    0,   80,   80,
-      120,  120,  105,    0,  120,  120,    0,  120,  120,   20,
-      120,  120,   95,   80,   83,   74,   80,  103,    0,    0,
-       87,   72,   73,   67,   65,  120,   35,   21,   66,  120,
-       70,   85,   86,   70,   63,   70,   59,    9,   75,   63,
-       56,   57,   51,   66,   65,   71,   54,   57,   47,  120,
-       56,   55,   51,   31,   23,   34,   41,   38,   33,   27,
-       22,   14,   37,   28,  120,  120,   22,   17,   25,  120,
-      120,   19,  120,  120,  120,   67,   70,   73,   76,    0,
-
-       79
-    } ;
-
-static yyconst flex_int16_t yy_def[102] =
-    {   0,
-       96,   96,   97,   97,   98,   98,   99,   99,   95,   95,
-       95,   95,   95,   95,   95,   95,   95,   95,   95,   95,
-       95,   95,   95,  100,   95,   95,  101,   95,   95,   95,
-       95,   95,   95,   95,   95,   95,   95,   95,  100,  101,
-       95,   95,   95,   95,   95,   95,   95,   95,   95,   95,
-       95,   95,   95,   95,   95,   95,   95,   95,   95,   95,
-       95,   95,   95,   95,   95,   95,   95,   95,   95,   95,
-       95,   95,   95,   95,   95,   95,   95,   95,   95,   95,
-       95,   95,   95,   95,   95,   95,   95,   95,   95,   95,
-       95,   95,   95,   95,    0,   95,   95,   95,   95,   95,
-
-       95
-    } ;
-
-static yyconst flex_int16_t yy_nxt[159] =
-    {   0,
-       39,   11,   12,   13,   95,   14,   15,   16,   16,   17,
-       22,   22,   23,   23,   25,   26,   25,   26,   30,   30,
-       31,   95,   32,   64,   18,   30,   30,   30,   30,   54,
-       19,   65,   34,   20,   11,   12,   13,   35,   14,   15,
-       16,   16,   17,   52,   55,   94,   93,   92,   91,   90,
-       89,   88,   87,   86,   53,   85,   84,   18,   83,   82,
-       81,   80,   79,   19,   78,   77,   20,   10,   10,   10,
-       21,   21,   21,   24,   24,   24,   27,   27,   27,   40,
-       76,   40,   75,   74,   73,   72,   71,   70,   69,   68,
-       67,   66,   63,   62,   61,   60,   59,   58,   57,   56,
-
-       51,   50,   49,   48,   47,   46,   45,   44,   43,   42,
-       41,   38,   37,   36,   33,   29,   95,   28,   28,    9,
-       95,   95,   95,   95,   95,   95,   95,   95,   95,   95,
-       95,   95,   95,   95,   95,   95,   95,   95,   95,   95,
-       95,   95,   95,   95,   95,   95,   95,   95,   95,   95,
-       95,   95,   95,   95,   95,   95,   95,   95
-    } ;
-
-static yyconst flex_int16_t yy_chk[159] =
-    {   0,
-      100,    1,    1,    1,    0,    1,    1,    1,    1,    1,
-        3,    4,    3,    4,    5,    5,    6,    6,   14,   14,
-       15,    0,   15,   58,    1,   16,   16,   30,   30,   48,
-        1,   58,   18,    1,    2,    2,    2,   18,    2,    2,
-        2,    2,    2,   47,   48,   92,   89,   88,   87,   84,
-       83,   82,   81,   80,   47,   79,   78,    2,   77,   76,
-       75,   74,   73,    2,   72,   71,    2,   96,   96,   96,
-       97,   97,   97,   98,   98,   98,   99,   99,   99,  101,
-       69,  101,   68,   67,   66,   65,   64,   63,   62,   61,
-       60,   59,   57,   56,   55,   54,   53,   52,   51,   49,
-
-       45,   44,   43,   42,   41,   38,   37,   36,   35,   34,
-       33,   23,   20,   19,   17,   13,    9,    8,    7,   95,
-       95,   95,   95,   95,   95,   95,   95,   95,   95,   95,
-       95,   95,   95,   95,   95,   95,   95,   95,   95,   95,
-       95,   95,   95,   95,   95,   95,   95,   95,   95,   95,
-       95,   95,   95,   95,   95,   95,   95,   95
     } ;
 
 /* Table of booleans, true if rule could match eol. */
-static yyconst flex_int32_t yy_rule_can_match_eol[27] =
+static yyconst flex_int32_t yy_rule_can_match_eol[22] =
     {   0,
-0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1,
-    0, 1, 0, 1, 0, 0, 0,     };
+0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 
+    0, 0,     };
 
 static yy_state_type yy_last_accepting_state;
 static char *yy_last_accepting_cpos;
@@ -581,7 +525,7 @@ int audp__flex_debug = 0;
 #define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
 char *audp_text;
-#line 1 "audp_lexer.lpp"
+#line 1 "../lib/gamelib/audp_lexer.lpp"
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
@@ -601,7 +545,7 @@ char *audp_text;
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-#line 21 "audp_lexer.lpp"
+#line 21 "../lib/gamelib/audp_lexer.lpp"
 
 /* include framework */
 #include "lib/framework/frame.h"
@@ -610,9 +554,12 @@ char *audp_text;
 
 #include "lib/gamelib/parser.h"
 
+#if defined (WZ_CC_MSVC)
+#include "audp_parser.hpp"
+#else
 /* Get the Yacc definitions */
 #include "audp_parser.h"
-
+#endif
 
 // fwrite declared with warn_unused_result, resulting in mysterious errors in "%%" on some distros.
 static inline bool no_warn_unused_result(int ignore) { if (ignore) {} return true; }
@@ -670,7 +617,7 @@ extern void audp_set_extra(YY_EXTRA_TYPE user_defined);
 
 
 
-#line 658 "audp_lexer.cpp"
+#line 621 "lex.audp_.c"
 
 #define INITIAL 0
 #define COMMENT 1
@@ -712,7 +659,7 @@ FILE *audp_get_out (void );
 
 void audp_set_out  (FILE * out_str  );
 
-int audp_get_leng (void );
+yy_size_t audp_get_leng (void );
 
 char *audp_get_text (void );
 
@@ -752,12 +699,7 @@ static int input (void );
 
 /* Amount of stuff to slurp up with each read. */
 #ifndef YY_READ_BUF_SIZE
-#ifdef __ia64__
-/* On IA-64, the buffer size is 16k, not 8k */
-#define YY_READ_BUF_SIZE 16384
-#else
 #define YY_READ_BUF_SIZE 8192
-#endif /* __ia64__ */
 #endif
 
 /* Copy whatever the last rule matched to the standard output. */
@@ -857,11 +799,11 @@ YY_DECL
 	register yy_state_type yy_current_state;
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
-
-#line 98 "audp_lexer.lpp"
+    
+#line 98 "../lib/gamelib/audp_lexer.lpp"
 
 	/* Match to key words */
-#line 849 "audp_lexer.cpp"
+#line 807 "lex.audp_.c"
 
 	if ( !(yy_init) )
 		{
@@ -914,13 +856,13 @@ yy_match:
 			while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 				{
 				yy_current_state = (int) yy_def[yy_current_state];
-				if ( yy_current_state >= 96 )
+				if ( yy_current_state >= 57 )
 					yy_c = yy_meta[(unsigned int) yy_c];
 				}
 			yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
 			++yy_cp;
 			}
-		while ( yy_current_state != 95 );
+		while ( yy_current_state != 56 );
 		yy_cp = (yy_last_accepting_cpos);
 		yy_current_state = (yy_last_accepting_state);
 
@@ -931,10 +873,10 @@ yy_find_action:
 
 		if ( yy_act != YY_END_OF_BUFFER && yy_rule_can_match_eol[yy_act] )
 			{
-			int yyl;
+			yy_size_t yyl;
 			for ( yyl = 0; yyl < audp_leng; ++yyl )
 				if ( audp_text[yyl] == '\n' )
-
+					   
     audp_lineno++;
 ;
 			}
@@ -952,48 +894,23 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 100 "audp_lexer.lpp"
+#line 100 "../lib/gamelib/audp_lexer.lpp"
 {	return ONESHOT;			}
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 101 "audp_lexer.lpp"
+#line 101 "../lib/gamelib/audp_lexer.lpp"
 {	return LOOP;			}
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 102 "audp_lexer.lpp"
+#line 102 "../lib/gamelib/audp_lexer.lpp"
 {	return AUDIO;			}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 103 "audp_lexer.lpp"
-{	return ANIM3DFILE;		}
-	YY_BREAK
-case 5:
-YY_RULE_SETUP
-#line 104 "audp_lexer.lpp"
+#line 103 "../lib/gamelib/audp_lexer.lpp"
 {	return AUDIO_MODULE;	}
-	YY_BREAK
-case 6:
-YY_RULE_SETUP
-#line 105 "audp_lexer.lpp"
-{	return ANIM_MODULE;		}
-	YY_BREAK
-case 7:
-YY_RULE_SETUP
-#line 106 "audp_lexer.lpp"
-{	return ANIM3DFRAMES;	}
-	YY_BREAK
-case 8:
-YY_RULE_SETUP
-#line 107 "audp_lexer.lpp"
-{	return ANIM3DTRANS;		}
-	YY_BREAK
-case 9:
-YY_RULE_SETUP
-#line 108 "audp_lexer.lpp"
-{	return ANIMOBJECT;		}
 	YY_BREAK
 /* Match floating point numbers */
 /* This is a problem with the PSX so is disabled
@@ -1002,104 +919,104 @@ YY_RULE_SETUP
 								}
 	*/
 /* Match integer numbers */
-case 10:
+case 5:
 YY_RULE_SETUP
-#line 118 "audp_lexer.lpp"
+#line 113 "../lib/gamelib/audp_lexer.lpp"
 {	audp_lval.ival = atoi(audp_text);
 									return INTEGER;
 								}
 	YY_BREAK
 /* Match quoted text */
-case 11:
+case 6:
 YY_RULE_SETUP
-#line 123 "audp_lexer.lpp"
+#line 118 "../lib/gamelib/audp_lexer.lpp"
 {
 					audp_lval.sval = strdup("");
 					return QTEXT;
 				}
 	YY_BREAK
-case 12:
+case 7:
 YY_RULE_SETUP
-#line 128 "audp_lexer.lpp"
+#line 123 "../lib/gamelib/audp_lexer.lpp"
 { BEGIN QUOTE;   }
 	YY_BREAK
-case 13:
+case 8:
 YY_RULE_SETUP
-#line 129 "audp_lexer.lpp"
+#line 124 "../lib/gamelib/audp_lexer.lpp"
 { BEGIN INITIAL; }
 	YY_BREAK
-case 14:
-/* rule 14 can match eol */
+case 9:
+/* rule 9 can match eol */
 YY_RULE_SETUP
-#line 130 "audp_lexer.lpp"
+#line 125 "../lib/gamelib/audp_lexer.lpp"
 { audp_error("Unexpected end of line in string"); }
 	YY_BREAK
-case 15:
+case 10:
 YY_RULE_SETUP
-#line 131 "audp_lexer.lpp"
+#line 126 "../lib/gamelib/audp_lexer.lpp"
 {
 					audp_lval.sval = strdup(audp_text);
 					return QTEXT;
 				}
 	YY_BREAK
 /* Skip white space */
-case 16:
-/* rule 16 can match eol */
+case 11:
+/* rule 11 can match eol */
 YY_RULE_SETUP
-#line 137 "audp_lexer.lpp"
+#line 132 "../lib/gamelib/audp_lexer.lpp"
 ;
 	YY_BREAK
 /* Strip comments */
-case 17:
+case 12:
 YY_RULE_SETUP
-#line 140 "audp_lexer.lpp"
+#line 135 "../lib/gamelib/audp_lexer.lpp"
 { BEGIN COMMENT; }
 	YY_BREAK
-case 18:
-#line 142 "audp_lexer.lpp"
-case 19:
-/* rule 19 can match eol */
+case 13:
+#line 137 "../lib/gamelib/audp_lexer.lpp"
+case 14:
+/* rule 14 can match eol */
 YY_RULE_SETUP
-#line 142 "audp_lexer.lpp"
+#line 137 "../lib/gamelib/audp_lexer.lpp"
 { BEGIN INITIAL; }
 	YY_BREAK
-case 20:
-#line 144 "audp_lexer.lpp"
-case 21:
-/* rule 21 can match eol */
+case 15:
+#line 139 "../lib/gamelib/audp_lexer.lpp"
+case 16:
+/* rule 16 can match eol */
 YY_RULE_SETUP
-#line 144 "audp_lexer.lpp"
+#line 139 "../lib/gamelib/audp_lexer.lpp"
 ;
 	YY_BREAK
 /* Strip single line comments */
-case 22:
+case 17:
 YY_RULE_SETUP
-#line 147 "audp_lexer.lpp"
+#line 142 "../lib/gamelib/audp_lexer.lpp"
 { BEGIN SLCOMMENT; }
 	YY_BREAK
-case 23:
-/* rule 23 can match eol */
+case 18:
+/* rule 18 can match eol */
 YY_RULE_SETUP
-#line 148 "audp_lexer.lpp"
+#line 143 "../lib/gamelib/audp_lexer.lpp"
 { BEGIN INITIAL;   }
 	YY_BREAK
-case 24:
+case 19:
 YY_RULE_SETUP
-#line 149 "audp_lexer.lpp"
+#line 144 "../lib/gamelib/audp_lexer.lpp"
 ;
 	YY_BREAK
 /* Match anything that's been missed and pass it as a char */
-case 25:
+case 20:
 YY_RULE_SETUP
-#line 152 "audp_lexer.lpp"
+#line 147 "../lib/gamelib/audp_lexer.lpp"
 return audp_text[0];
 	YY_BREAK
-case 26:
+case 21:
 YY_RULE_SETUP
-#line 155 "audp_lexer.lpp"
+#line 150 "../lib/gamelib/audp_lexer.lpp"
 ECHO;
 	YY_BREAK
-#line 1087 "audp_lexer.cpp"
+#line 1020 "lex.audp_.c"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(COMMENT):
 case YY_STATE_EOF(QUOTE):
@@ -1289,21 +1206,21 @@ static int yy_get_next_buffer (void)
 
 	else
 		{
-			int num_to_read =
+			yy_size_t num_to_read =
 			YY_CURRENT_BUFFER_LVALUE->yy_buf_size - number_to_move - 1;
 
 		while ( num_to_read <= 0 )
 			{ /* Not enough room in the buffer - grow it. */
 
 			/* just a shorter name for the current buffer */
-			YY_BUFFER_STATE b = YY_CURRENT_BUFFER;
+			YY_BUFFER_STATE b = YY_CURRENT_BUFFER_LVALUE;
 
 			int yy_c_buf_p_offset =
 				(int) ((yy_c_buf_p) - b->yy_ch_buf);
 
 			if ( b->yy_is_our_buffer )
 				{
-				int new_size = b->yy_buf_size * 2;
+				yy_size_t new_size = b->yy_buf_size * 2;
 
 				if ( new_size <= 0 )
 					b->yy_buf_size += b->yy_buf_size / 8;
@@ -1334,7 +1251,7 @@ static int yy_get_next_buffer (void)
 
 		/* Read in more data. */
 		YY_INPUT( (&YY_CURRENT_BUFFER_LVALUE->yy_ch_buf[number_to_move]),
-			(yy_n_chars), (size_t) num_to_read );
+			(yy_n_chars), num_to_read );
 
 		YY_CURRENT_BUFFER_LVALUE->yy_n_chars = (yy_n_chars);
 		}
@@ -1381,7 +1298,7 @@ static int yy_get_next_buffer (void)
 {
 	register yy_state_type yy_current_state;
 	register char *yy_cp;
-
+    
 	yy_current_state = (yy_start);
 
 	for ( yy_cp = (yytext_ptr) + YY_MORE_ADJ; yy_cp < (yy_c_buf_p); ++yy_cp )
@@ -1395,7 +1312,7 @@ static int yy_get_next_buffer (void)
 		while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 			{
 			yy_current_state = (int) yy_def[yy_current_state];
-			if ( yy_current_state >= 96 )
+			if ( yy_current_state >= 57 )
 				yy_c = yy_meta[(unsigned int) yy_c];
 			}
 		yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
@@ -1423,13 +1340,13 @@ static int yy_get_next_buffer (void)
 	while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 		{
 		yy_current_state = (int) yy_def[yy_current_state];
-		if ( yy_current_state >= 96 )
+		if ( yy_current_state >= 57 )
 			yy_c = yy_meta[(unsigned int) yy_c];
 		}
 	yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
-	yy_is_jam = (yy_current_state == 95);
+	yy_is_jam = (yy_current_state == 56);
 
-	return yy_is_jam ? 0 : yy_current_state;
+		return yy_is_jam ? 0 : yy_current_state;
 }
 
 #ifndef YY_NO_INPUT
@@ -1441,7 +1358,7 @@ static int yy_get_next_buffer (void)
 
 {
 	int c;
-
+    
 	*(yy_c_buf_p) = (yy_hold_char);
 
 	if ( *(yy_c_buf_p) == YY_END_OF_BUFFER_CHAR )
@@ -1456,7 +1373,7 @@ static int yy_get_next_buffer (void)
 
 		else
 			{ /* need more input */
-			int offset = (yy_c_buf_p) - (yytext_ptr);
+			yy_size_t offset = (yy_c_buf_p) - (yytext_ptr);
 			++(yy_c_buf_p);
 
 			switch ( yy_get_next_buffer(  ) )
@@ -1503,7 +1420,7 @@ static int yy_get_next_buffer (void)
 	(yy_hold_char) = *++(yy_c_buf_p);
 
 	if ( c == '\n' )
-
+		   
     audp_lineno++;
 ;
 
@@ -1513,12 +1430,12 @@ static int yy_get_next_buffer (void)
 
 /** Immediately switch to a different input stream.
  * @param input_file A readable stream.
- *
+ * 
  * @note This function does not reset the start condition to @c INITIAL .
  */
     void audp_restart  (FILE * input_file )
 {
-
+    
 	if ( ! YY_CURRENT_BUFFER ){
         audp_ensure_buffer_stack ();
 		YY_CURRENT_BUFFER_LVALUE =
@@ -1531,11 +1448,11 @@ static int yy_get_next_buffer (void)
 
 /** Switch to a different input buffer.
  * @param new_buffer The new input buffer.
- *
+ * 
  */
     void audp__switch_to_buffer  (YY_BUFFER_STATE  new_buffer )
 {
-
+    
 	/* TODO. We should be able to replace this entire function body
 	 * with
 	 *		audp_pop_buffer_state();
@@ -1575,13 +1492,13 @@ static void audp__load_buffer_state  (void)
 /** Allocate and initialize an input buffer state.
  * @param file A readable stream.
  * @param size The character buffer size in bytes. When in doubt, use @c YY_BUF_SIZE.
- *
+ * 
  * @return the allocated buffer state.
  */
     YY_BUFFER_STATE audp__create_buffer  (FILE * file, int  size )
 {
 	YY_BUFFER_STATE b;
-
+    
 	b = (YY_BUFFER_STATE) audp_alloc(sizeof( struct yy_buffer_state )  );
 	if ( ! b )
 		YY_FATAL_ERROR( "out of dynamic memory in audp__create_buffer()" );
@@ -1604,11 +1521,11 @@ static void audp__load_buffer_state  (void)
 
 /** Destroy the buffer.
  * @param b a buffer created with audp__create_buffer()
- *
+ * 
  */
     void audp__delete_buffer (YY_BUFFER_STATE  b )
 {
-
+    
 	if ( ! b )
 		return;
 
@@ -1629,7 +1546,7 @@ static void audp__load_buffer_state  (void)
 
 {
 	int oerrno = errno;
-
+    
 	audp__flush_buffer(b );
 
 	b->yy_input_file = file;
@@ -1645,13 +1562,13 @@ static void audp__load_buffer_state  (void)
     }
 
         b->yy_is_interactive = 0;
-
+    
 	errno = oerrno;
 }
 
 /** Discard all buffered characters. On the next scan, YY_INPUT will be called.
  * @param b the buffer state to be flushed, usually @c YY_CURRENT_BUFFER.
- *
+ * 
  */
     void audp__flush_buffer (YY_BUFFER_STATE  b )
 {
@@ -1680,7 +1597,7 @@ static void audp__load_buffer_state  (void)
  *  the current state. This function will allocate the stack
  *  if necessary.
  *  @param new_buffer The new state.
- *
+ *  
  */
 void audp_push_buffer_state (YY_BUFFER_STATE new_buffer )
 {
@@ -1710,7 +1627,7 @@ void audp_push_buffer_state (YY_BUFFER_STATE new_buffer )
 
 /** Removes and deletes the top of the stack, if present.
  *  The next element becomes the new top.
- *
+ *  
  */
 void audp_pop_buffer_state (void)
 {
@@ -1733,8 +1650,8 @@ void audp_pop_buffer_state (void)
  */
 static void audp_ensure_buffer_stack (void)
 {
-	int num_to_alloc;
-
+	yy_size_t num_to_alloc;
+    
 	if (!(yy_buffer_stack)) {
 
 		/* First allocation is just for 2 elements, since we don't know if this
@@ -1747,9 +1664,9 @@ static void audp_ensure_buffer_stack (void)
 								);
 		if ( ! (yy_buffer_stack) )
 			YY_FATAL_ERROR( "out of dynamic memory in audp_ensure_buffer_stack()" );
-
+								  
 		memset((yy_buffer_stack), 0, num_to_alloc * sizeof(struct yy_buffer_state*));
-
+				
 		(yy_buffer_stack_max) = num_to_alloc;
 		(yy_buffer_stack_top) = 0;
 		return;
@@ -1777,13 +1694,13 @@ static void audp_ensure_buffer_stack (void)
 /** Setup the input buffer state to scan directly from a user-specified character buffer.
  * @param base the character buffer
  * @param size the size in bytes of the character buffer
- *
- * @return the newly allocated buffer state object.
+ * 
+ * @return the newly allocated buffer state object. 
  */
 YY_BUFFER_STATE audp__scan_buffer  (char * base, yy_size_t  size )
 {
 	YY_BUFFER_STATE b;
-
+    
 	if ( size < 2 ||
 	     base[size-2] != YY_END_OF_BUFFER_CHAR ||
 	     base[size-1] != YY_END_OF_BUFFER_CHAR )
@@ -1812,14 +1729,14 @@ YY_BUFFER_STATE audp__scan_buffer  (char * base, yy_size_t  size )
 /** Setup the input buffer state to scan a string. The next call to audp_lex() will
  * scan from a @e copy of @a str.
  * @param yystr a NUL-terminated string to scan
- *
+ * 
  * @return the newly allocated buffer state object.
  * @note If you want to scan bytes that may contain NUL values, then use
  *       audp__scan_bytes() instead.
  */
 YY_BUFFER_STATE audp__scan_string (yyconst char * yystr )
 {
-
+    
 	return audp__scan_bytes(yystr,strlen(yystr) );
 }
 
@@ -1827,16 +1744,16 @@ YY_BUFFER_STATE audp__scan_string (yyconst char * yystr )
  * scan from a @e copy of @a bytes.
  * @param yybytes the byte buffer to scan
  * @param _yybytes_len the number of bytes in the buffer pointed to by @a bytes.
- *
+ * 
  * @return the newly allocated buffer state object.
  */
-YY_BUFFER_STATE audp__scan_bytes  (yyconst char * yybytes, int  _yybytes_len )
+YY_BUFFER_STATE audp__scan_bytes  (yyconst char * yybytes, yy_size_t  _yybytes_len )
 {
 	YY_BUFFER_STATE b;
 	char *buf;
 	yy_size_t n;
-	int i;
-
+	yy_size_t i;
+    
 	/* Get memory for full buffer, including space for trailing EOB's. */
 	n = _yybytes_len + 2;
 	buf = (char *) audp_alloc(n  );
@@ -1890,16 +1807,16 @@ static void yy_fatal_error (yyconst char* msg )
 /* Accessor  methods (get/set functions) to struct members. */
 
 /** Get the current line number.
- *
+ * 
  */
 int audp_get_lineno  (void)
 {
-
+        
     return audp_lineno;
 }
 
 /** Get the input stream.
- *
+ * 
  */
 FILE *audp_get_in  (void)
 {
@@ -1907,7 +1824,7 @@ FILE *audp_get_in  (void)
 }
 
 /** Get the output stream.
- *
+ * 
  */
 FILE *audp_get_out  (void)
 {
@@ -1915,15 +1832,15 @@ FILE *audp_get_out  (void)
 }
 
 /** Get the length of the current token.
- *
+ * 
  */
-int audp_get_leng  (void)
+yy_size_t audp_get_leng  (void)
 {
         return audp_leng;
 }
 
 /** Get the current token.
- *
+ * 
  */
 
 char *audp_get_text  (void)
@@ -1933,18 +1850,18 @@ char *audp_get_text  (void)
 
 /** Set the current line number.
  * @param line_number
- *
+ * 
  */
 void audp_set_lineno (int  line_number )
 {
-
+    
     audp_lineno = line_number;
 }
 
 /** Set the input stream. This does not discard the current
  * input buffer.
  * @param in_str A readable stream.
- *
+ * 
  * @see audp__switch_to_buffer
  */
 void audp_set_in (FILE *  in_str )
@@ -1975,7 +1892,7 @@ static int yy_init_globals (void)
 
     /* We do not touch audp_lineno unless the option is enabled. */
     audp_lineno =  1;
-
+    
     (yy_buffer_stack) = 0;
     (yy_buffer_stack_top) = 0;
     (yy_buffer_stack_max) = 0;
@@ -2001,7 +1918,7 @@ static int yy_init_globals (void)
 /* audp_lex_destroy is for both reentrant and non-reentrant scanners. */
 int audp_lex_destroy  (void)
 {
-
+    
     /* Pop the buffer stack, destroying each element. */
 	while(YY_CURRENT_BUFFER){
 		audp__delete_buffer(YY_CURRENT_BUFFER  );
@@ -2068,7 +1985,7 @@ void audp_free (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 155 "audp_lexer.lpp"
+#line 150 "../lib/gamelib/audp_lexer.lpp"
 
 
 

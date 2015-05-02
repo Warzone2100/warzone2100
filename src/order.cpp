@@ -920,13 +920,6 @@ void orderUpdateDroid(DROID *psDroid)
 			orderDroid(psDroid, DORDER_RTR, ModeImmediate);
 		}
 		break;
-	case DORDER_RUNBURN:
-		if (psDroid->actionStarted + RUN_BURN_TIME <= gameTime)
-		{
-			debug(LOG_DEATH, "orderUpdateDroid: Droid %d burned to death", psDroid->id); // why is this an order?
-			destroyDroid(psDroid, psDroid->actionStarted + RUN_BURN_TIME);
-		}
-		break;
 	case DORDER_RUN:
 		if (psDroid->action == DACTION_NONE)
 		{
@@ -1569,7 +1562,6 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		cmdDroidAddDroid((DROID *)psOrder->psObj, psDroid);
 		break;
 	case DORDER_RETREAT:
-	case DORDER_RUNBURN:
 	case DORDER_RUN:
 		psDroid->order = *psOrder;
 		if (psOrder->type != DORDER_RUN || psOrder->pos == Vector2i(0, 0))
@@ -1839,7 +1831,6 @@ void orderDroid(DROID *psDroid, DROID_ORDER order, QUEUE_MODE mode)
 	       order == DORDER_RTB ||
 	       order == DORDER_RECYCLE ||
 	       order == DORDER_RUN ||
-	       order == DORDER_RUNBURN ||
 	       order == DORDER_TRANSPORTIN ||
 	       order == DORDER_STOP ||		// Added this PD.
 	       order == DORDER_HOLD,
@@ -3721,7 +3712,6 @@ void orderMoralCheck(UDWORD player)
 	for (psCurr = apsDroidLists[player]; psCurr; psCurr = psCurr->psNext)
 	{
 		if (orderState(psCurr, DORDER_RUN) ||
-		    orderState(psCurr, DORDER_RUNBURN) ||
 		    orderState(psCurr, DORDER_RETREAT) ||
 		    orderState(psCurr, DORDER_RTB) ||
 		    orderState(psCurr, DORDER_RTR))
@@ -3788,7 +3778,6 @@ void orderGroupMoralCheck(DROID_GROUP *psGroup)
 	for (psCurr = psGroup->psList; psCurr; psCurr = psCurr->psGrpNext)
 	{
 		if (orderState(psCurr, DORDER_RUN) ||
-		    orderState(psCurr, DORDER_RUNBURN) ||
 		    orderState(psCurr, DORDER_RETREAT) ||
 		    orderState(psCurr, DORDER_RTB) ||
 		    orderState(psCurr, DORDER_RTR))
@@ -3864,7 +3853,6 @@ void orderHealthCheck(DROID *psDroid)
 	{
 		// order this droid to turn and run - // if already running - ignore
 		if (!(orderState(psDroid, DORDER_RUN) ||
-		      orderState(psDroid, DORDER_RUNBURN) ||
 		      orderState(psDroid, DORDER_RETREAT) ||
 		      orderState(psDroid, DORDER_RTB) ||
 		      orderState(psDroid, DORDER_RTR)))
@@ -3878,7 +3866,7 @@ void orderHealthCheck(DROID *psDroid)
 		{
 			for (psCurr = psDroid->psGroup->psList; psCurr; psCurr = psCurr->psGrpNext)
 			{
-				if (orderState(psCurr, DORDER_RUN) || orderState(psCurr, DORDER_RUNBURN) || orderState(psCurr, DORDER_RETREAT)
+				if (orderState(psCurr, DORDER_RUN) || orderState(psCurr, DORDER_RETREAT)
 				    || orderState(psCurr, DORDER_RTB) || orderState(psCurr, DORDER_RTR))
 				{
 					// already running - ignore
@@ -4035,7 +4023,7 @@ const char *getDroidOrderName(DROID_ORDER order)
 	case DORDER_DROIDREPAIR:              return "DORDER_DROIDREPAIR";
 	case DORDER_RESTORE:                  return "DORDER_RESTORE";
 	case DORDER_SCOUT:                    return "DORDER_SCOUT";
-	case DORDER_RUNBURN:                  return "DORDER_RUNBURN";
+	case DORDER_UNUSED_3:                 return "DORDER_UNUSED_3";
 	case DORDER_UNUSED:                   return "DORDER_UNUSED";
 	case DORDER_PATROL:                   return "DORDER_PATROL";
 	case DORDER_REARM:                    return "DORDER_REARM";
