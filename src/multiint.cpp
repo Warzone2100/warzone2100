@@ -2268,7 +2268,6 @@ int allPlayersOnSameTeam(int except)
 static void addTeamChooser(UDWORD player)
 {
 	UDWORD i;
-	int disallow = allPlayersOnSameTeam(player);
 
 	debug(LOG_NET, "Opened team chooser for %d, current team: %d", player, NetPlay.players[player].team);
 
@@ -2283,15 +2282,9 @@ static void addTeamChooser(UDWORD player)
 	int spaceDiv = game.maxPlayers;
 	space = std::min(space, 3 * spaceDiv);
 
-	// add the teams, skipping the one we CAN'T be on (if applicable)
+	// add the teams. Used to block "all on 1 team" configurations, but they're useful for learning.
 	for (i = 0; i < game.maxPlayers; i++)
-	{
-		if (i != disallow)
-		{
-			addMultiBut(psWScreen, MULTIOP_TEAMCHOOSER_FORM, MULTIOP_TEAMCHOOSER + i, i * (teamW * spaceDiv + space) / spaceDiv + 3, 6, teamW, teamH, _("Team"), IMAGE_TEAM0 + i , IMAGE_TEAM0_HI + i, IMAGE_TEAM0_HI + i);
-		}
-		// may want to add some kind of 'can't do' icon instead of being blank?
-	}
+		addMultiBut(psWScreen, MULTIOP_TEAMCHOOSER_FORM, MULTIOP_TEAMCHOOSER + i, i * (teamW * spaceDiv + space) / spaceDiv + 3, 6, teamW, teamH, _("Team"), IMAGE_TEAM0 + i , IMAGE_TEAM0_HI + i, IMAGE_TEAM0_HI + i);
 
 	// add a kick button
 	if (player != selectedPlayer && NetPlay.bComms && NetPlay.isHost && NetPlay.players[player].allocated)
@@ -2316,8 +2309,6 @@ static void closeTeamChooser(void)
 
 static void drawReadyButton(UDWORD player)
 {
-	int disallow = allPlayersOnSameTeam(-1);
-
 	// delete 'ready' botton form
 	widgDelete(psWScreen, MULTIOP_READY_FORM_ID + player);
 
@@ -2340,11 +2331,6 @@ static void drawReadyButton(UDWORD player)
 	else if (!NetPlay.players[player].allocated)
 	{
 		return;	// closed or open
-	}
-
-	if (disallow != -1)
-	{
-		return;
 	}
 
 	bool isMe = player == selectedPlayer;
@@ -2406,7 +2392,6 @@ void addPlayerBox(bool players)
 	if (players)
 	{
 		int  team = -1;
-		bool allOnSameTeam = true;
 
 		for (int i = 0; i < game.maxPlayers; i++)
 		{
@@ -2419,7 +2404,6 @@ void addPlayerBox(bool players)
 				}
 				else if (myTeam != team)
 				{
-					allOnSameTeam = false;
 					break;  // We just need to know if we have enough to start a game
 				}
 			}
@@ -2502,10 +2486,7 @@ void addPlayerBox(bool players)
 
 			if (ingame.localOptionsReceived)
 			{
-				if (!allOnSameTeam)
-				{
-					drawReadyButton(i);
-				}
+				drawReadyButton(i);
 
 				// draw player info box
 				W_BUTINIT sButInit;
