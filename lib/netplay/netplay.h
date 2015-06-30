@@ -264,6 +264,7 @@ struct NETPLAY
 	char mapFileName[255];            ///< Only valid during map download.
 	char gamePassword[password_string_size];		//
 	bool GamePassworded;				// if we have a password or not.
+	bool GamePublic;					// if we want to broadcast to Lobby.
 	bool ShowedMOTD;					// only want to show this once
 	bool HaveUpgrade;					// game updates available
 	char MOTDbuffer[255];				// buffer for MOTD

@@ -196,7 +196,7 @@ void NETGameLocked(bool flag)
 	NetPlay.GamePassworded = flag;
 	bool flagChanged = gamestruct.privateGame != flag;
 	gamestruct.privateGame = flag;
-	if (allow_joining && NetPlay.isHost && flagChanged)
+	if (allow_joining && NetPlay.isHost && flagChanged && NetPlay.GamePublic)
 	{
 		debug(LOG_NET, "Updating game locked status.");
 		NETregisterServer(WZ_SERVER_UPDATE);
@@ -444,7 +444,7 @@ static void NET_DestroyPlayer(unsigned int index)
 		NetPlay.players[index].allocated = false;
 		NetPlay.playercount--;
 		gamestruct.desc.dwCurrentPlayers = NetPlay.playercount;
-		if (allow_joining && NetPlay.isHost)
+		if (allow_joining && NetPlay.isHost && NetPlay.GamePublic)
 		{
 			// Update player count in the lobby by disconnecting
 			// and reconnecting
@@ -1114,6 +1114,7 @@ int NETinit(bool bFirstCall)
 		memset(&NetPlay.games, 0, sizeof(NetPlay.games));
 		// NOTE NetPlay.isUPNP is already set in configuration.c!
 		NetPlay.bComms = true;
+		NetPlay.GamePublic = true;
 		NetPlay.GamePassworded = false;
 		NetPlay.ShowedMOTD = false;
 		NetPlay.isHostAlive = false;
@@ -2321,7 +2322,9 @@ void NETfixPlayerCount(void)
 		debug(LOG_NET, "Updating player count from %d/%d to %d/%d", (int)NetPlay.playercount, gamestruct.desc.dwMaxPlayers, playercount, maxPlayers);
 		gamestruct.desc.dwCurrentPlayers = NetPlay.playercount = playercount;
 		gamestruct.desc.dwMaxPlayers = maxPlayers;
-		NETregisterServer(WZ_SERVER_UPDATE);
+		if (NetPlay.GamePublic) {
+			NETregisterServer(WZ_SERVER_UPDATE);
+		}
 	}
 
 }
@@ -2343,7 +2346,9 @@ static void NETallowJoining(void)
 	}
 	ASSERT(NetPlay.isHost, "Cannot receive joins if not host!");
 
-	NETregisterServer(WZ_SERVER_CONNECT);
+	if (NetPlay.GamePublic) {
+		NETregisterServer(WZ_SERVER_CONNECT);
+	}
 
 	// This is here since we need to get the status, before we can show the info.
 	// FIXME: find better location to stick this?
@@ -2643,8 +2648,9 @@ static void NETallowJoining(void)
 					NETfixDuplicatePlayerNames();
 
 					// Send the updated GAMESTRUCT to the masterserver
-					NETregisterServer(WZ_SERVER_UPDATE);
-
+					if (NetPlay.GamePublic) {
+						NETregisterServer(WZ_SERVER_UPDATE);
+					}
 
 					// reset flags for new players
 					NetPlay.players[index].wzFile.isCancelled = false;
@@ -2778,7 +2784,9 @@ bool NEThostGame(const char *SessionName, const char *PlayerName,
 
 	allow_joining = true;
 
-	NETregisterServer(WZ_SERVER_DISCONNECT);
+	if (NetPlay.GamePublic) {
+		NETregisterServer(WZ_SERVER_DISCONNECT);
+	}
 
 	debug(LOG_NET, "Hosting a server. We are player %d.", selectedPlayer);
 
@@ -2793,7 +2801,10 @@ bool NEThaltJoining(void)
 
 	allow_joining = false;
 	// disconnect from the master server
-	NETregisterServer(WZ_SERVER_DISCONNECT);
+	if (NetPlay.GamePublic) {
+		NETregisterServer(WZ_SERVER_DISCONNECT);
+	}
+
 	return true;
 }
 
