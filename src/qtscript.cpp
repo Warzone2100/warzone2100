@@ -471,7 +471,7 @@ bool saveScriptStates(const char *filename)
 		ini.beginGroup(QString("triggers_") + QString::number(i));
 		ini.setValue("player", node.player);
 		ini.setValue("function", node.function.toUtf8().constData());
-		if (!node.baseobj >= 0)
+		if (node.baseobj >= 0)
 		{
 			ini.setValue("object", QVariant(node.baseobj));
 		}
