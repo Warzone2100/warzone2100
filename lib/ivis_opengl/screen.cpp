@@ -175,7 +175,6 @@ bool screenInitialise()
 
 	if (canRunShaders)
 	{
-		screen_EnableMissingFunctions();  // We need to do this before pie_LoadShaders(), but the effect of this call will be undone later by iV_TextInit(), so we will need to call it again.
 		if (pie_LoadShaders())
 		{
 			pie_SetShaderAvailability(true);
@@ -216,66 +215,6 @@ bool screen_IsVBOAvailable()
 	}
 
 	return GLEW_VERSION_1_5 || GLEW_ARB_vertex_buffer_object;
-}
-
-// Make OpenGL's VBO functions available under the core names for drivers that support OpenGL 1.4 only but have the VBO extension
-void screen_EnableMissingFunctions()
-{
-	if (!GLEW_VERSION_1_3 && GLEW_ARB_multitexture)
-	{
-		debug(LOG_WARNING, "Pre-OpenGL 1.3: Fixing ARB_multitexture extension function names.");
-
-		__glewActiveTexture = __glewActiveTextureARB;
-		__glewMultiTexCoord2fv = __glewMultiTexCoord2fvARB;
-	}
-
-	if (!GLEW_VERSION_1_5 && GLEW_ARB_vertex_buffer_object)
-	{
-		debug(LOG_WARNING, "Pre-OpenGL 1.5: Fixing ARB_vertex_buffer_object extension function names.");
-
-		__glewBindBuffer = __glewBindBufferARB;
-		__glewBufferData = __glewBufferDataARB;
-		__glewBufferSubData = __glewBufferSubDataARB;
-		__glewDeleteBuffers = __glewDeleteBuffersARB;
-		__glewGenBuffers = __glewGenBuffersARB;
-		__glewGetBufferParameteriv = __glewGetBufferParameterivARB;
-		__glewGetBufferPointerv = __glewGetBufferPointervARB;
-		__glewGetBufferSubData = __glewGetBufferSubDataARB;
-		__glewIsBuffer = __glewIsBufferARB;
-		__glewMapBuffer = __glewMapBufferARB;
-		__glewUnmapBuffer = __glewUnmapBufferARB;
-	}
-
-	if (!GLEW_VERSION_2_0 && GLEW_ARB_shader_objects)
-	{
-		debug(LOG_WARNING, "Pre-OpenGL 2.0: Fixing ARB_shader_objects extension function names.");
-
-		__glewGetUniformLocation = __glewGetUniformLocationARB;
-		__glewAttachShader = __glewAttachObjectARB;
-		__glewCompileShader = __glewCompileShaderARB;
-		__glewCreateProgram = __glewCreateProgramObjectARB;
-		__glewCreateShader = __glewCreateShaderObjectARB;
-		__glewGetProgramInfoLog = __glewGetInfoLogARB;
-		__glewGetShaderInfoLog = __glewGetInfoLogARB;  // Same as previous.
-		__glewGetProgramiv = __glewGetObjectParameterivARB;
-		__glewUseProgram = __glewUseProgramObjectARB;
-		__glewGetShaderiv = __glewGetObjectParameterivARB;
-		__glewLinkProgram = __glewLinkProgramARB;
-		__glewShaderSource = __glewShaderSourceARB;
-		__glewUniform1f = __glewUniform1fARB;
-		__glewUniform1i = __glewUniform1iARB;
-		__glewUniform4fv = __glewUniform4fvARB;
-	}
-
-	if ((GLEW_ARB_imaging || GLEW_EXT_blend_color) && __glewBlendColor == NULL)
-	{
-		__glewBlendColor = __glewBlendColorEXT;  // Shouldn't be needed if GLEW_ARB_imaging is true, but apparently is needed even in that case, with some drivers..?
-		if (__glewBlendColor == NULL)
-		{
-			debug(LOG_ERROR, "Your graphics driver is broken, and claims to support ARB_imaging or EXT_blend_color without exporting glBlendColor[EXT].");
-			__GLEW_ARB_imaging = __GLEW_EXT_blend_color = 0;
-		}
-	}
 }
 
 void screen_SetBackDropFromFile(const char *filename)
