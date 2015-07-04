@@ -1960,7 +1960,7 @@ static void intProcessObject(UDWORD id)
 				}
 			}
 		}
-		else
+		else if (psObj)
 		{
 			if (psObjSelected)
 			{

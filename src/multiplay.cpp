@@ -1617,6 +1617,12 @@ bool recvTemplate(NETQUEUE queue)
 	t.psNext = NULL;
 	t.ref = REF_TEMPLATE_START;
 
+	if (!researchedTemplate(&t, player, true))
+	{
+		debug(LOG_ERROR, "Illegal template received from player %d", (int)player);
+		return false;
+	}
+
 	psTempl = IdToTemplate(t.multiPlayerID, player);
 
 	// Already exists

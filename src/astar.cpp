@@ -100,7 +100,7 @@ struct PathNode
 };
 struct PathExploredTile
 {
-	PathExploredTile() : iteration(0xFFFF) {}
+	PathExploredTile() : iteration(0xFFFF), dx(0), dy(0), dist(0), visited(false) {}
 
 	uint16_t iteration;
 	int8_t   dx, dy;                // Offset from previous point in the route.
