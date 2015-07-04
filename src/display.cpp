@@ -2694,26 +2694,18 @@ UBYTE DroidSelectionWeights[NUM_DROID_WEIGHTS] =
 	of multiple selections */
 static SELECTION_TYPE	establishSelection(UDWORD selectedPlayer)
 {
-	DROID			*psDroid, *psDominant = NULL;
-	UBYTE	CurrWeight;
-	bool			atLeastOne;
-	SELECTION_TYPE	selectionClass;
+	DROID *psDroid = NULL;
+	DROID *psDominant = NULL;
+	UBYTE CurrWeight = UBYTE_MAX;
+	SELECTION_TYPE	selectionClass = SC_INVALID;
 
-	atLeastOne = false;
-	selectionClass = SC_INVALID;
-	CurrWeight = UBYTE_MAX;
-
-	for (psDroid = apsDroidLists[selectedPlayer];
-	     psDroid /*&& !atLeastOne*/; psDroid = psDroid->psNext)
+	for (psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
 	{
 		// This works, uses the DroidSelectionWeights[] table to priorities the different
 		// droid types and find the dominant selection.
 		if (psDroid->selected)
 		{
-			ASSERT(psDroid->droidType < NUM_DROID_WEIGHTS,
-			       "establishSelection : droidType exceeds NUM_DROID_WEIGHTS");
-
-			atLeastOne = true;
+			ASSERT(psDroid->droidType < NUM_DROID_WEIGHTS, "droidType exceeds NUM_DROID_WEIGHTS");
 			if (DroidSelectionWeights[psDroid->droidType] < CurrWeight)
 			{
 				CurrWeight = DroidSelectionWeights[psDroid->droidType];
@@ -2722,7 +2714,7 @@ static SELECTION_TYPE	establishSelection(UDWORD selectedPlayer)
 		}
 	}
 
-	if (atLeastOne)
+	if (psDominant)
 	{
 		psDominantSelected = psDominant;
 		switch (psDominant->droidType)
