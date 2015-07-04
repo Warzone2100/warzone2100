@@ -2924,7 +2924,10 @@ bool intValidTemplate(DROID_TEMPLATE *psTempl, const char *newName, bool complai
 	psTempl->enabled = true;
 
 	/* copy name into template */
-	psTempl->name = newName;
+	if (newName)
+	{
+		psTempl->name = newName;
+	}
 
 	return true;
 }

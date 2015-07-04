@@ -56,6 +56,8 @@
 #include "lib/gamelib/gtime.h"
 #include "keybind.h"
 #include "qtscript.h"
+#include "design.h"
+
 #include "lib/script/script.h"				//Because of "ScriptTabs.h"
 #include "scripttabs.h"			//because of CALL_AI_MSG
 #include "scriptcb.h"			//for console callback
@@ -1617,7 +1619,7 @@ bool recvTemplate(NETQUEUE queue)
 	t.psNext = NULL;
 	t.ref = REF_TEMPLATE_START;
 
-	if (!researchedTemplate(&t, player, true))
+	if (!researchedTemplate(&t, player, true) || !intValidTemplate(&t, NULL, true, player))
 	{
 		debug(LOG_ERROR, "Illegal template received from player %d", (int)player);
 		return false;
