@@ -1432,6 +1432,8 @@ bool recvTextMessageAI(NETQUEUE queue)
 
 static void NETtemplate(DROID_TEMPLATE *pTempl)
 {
+	uint32_t storeCount = 0; // loading hack, should not be sent on network
+
 	NETstring(pTempl->aName, sizeof(pTempl->aName));
 
 	for (unsigned i = 0; i < ARRAY_SIZE(pTempl->asParts); ++i)
@@ -1442,7 +1444,7 @@ static void NETtemplate(DROID_TEMPLATE *pTempl)
 
 	NETuint32_t(&pTempl->buildPoints);
 	NETuint32_t(&pTempl->powerPoints);
-	NETuint32_t(&pTempl->storeCount);
+	NETuint32_t(&storeCount); // remains here for network compatibility only
 	NETuint32_t(&pTempl->numWeaps);
 	NETbool(&pTempl->stored);	// other players don't need to know, but we need to keep the knowledge in the loop somehow...
 
@@ -1486,6 +1488,20 @@ bool recvTemplate(NETQUEUE queue)
 	t.psNext = NULL;
 	t.pName = NULL;
 	t.ref = REF_TEMPLATE_START;
+
+	if (!researchedTemplate(&t, player, true))
+	{
+		debug(LOG_ERROR, "Illegal template received from player %d", (int)player);
+		return false;
+	}
+	int buildPoints = calcTemplateBuild(&t);
+	int powerPoints = calcTemplatePower(&t);
+	if (buildPoints != t.buildPoints || powerPoints != t.powerPoints)
+	{
+		debug(LOG_ERROR, "Illegal template point values received from player %d [%d vs %d,%d vs %d]",
+		      (int)player, buildPoints, calcTemplateBuild(&t), powerPoints, calcTemplatePower(&t));
+		return false;
+	}
 
 	psTempl = IdToTemplate(t.multiPlayerID, player);
 
