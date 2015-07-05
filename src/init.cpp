@@ -720,6 +720,7 @@ bool systemInitialise(void)
 	screen_EnableMissingFunctions();
 
 	iV_Reset();								// Reset the IV library.
+	readAIs();
 
 	return true;
 }
@@ -822,8 +823,6 @@ bool frontendInitialise(const char *ResourceFile)
 	{
 		return false;
 	}
-
-	readAIs();
 
 	iV_Reset();								// Reset the IV library.
 

@@ -218,7 +218,8 @@ typedef enum
 	CLI_MOD_GLOB,
 	CLI_MOD_CA,
 	CLI_MOD_MP,
-	CLI_SAVEGAME,
+	CLI_LOADSKIRMISH,
+	CLI_LOADCAMPAIGN,
 	CLI_WINDOW,
 	CLI_VERSION,
 	CLI_RESOLUTION,
@@ -252,7 +253,8 @@ static const struct poptOption *getOptionsTable(void)
 		{ "mod_mp",     '\0', POPT_ARG_STRING, NULL, CLI_MOD_MP,     N_("Enable a multiplay only mod"),       N_("mod") },
 		{ "noassert",	'\0', POPT_ARG_NONE,   NULL, CLI_NOASSERT,   N_("Disable asserts"),                   NULL },
 		{ "crash",		'\0', POPT_ARG_NONE,   NULL, CLI_CRASH,      N_("Causes a crash to test the crash handler"), NULL },
-		{ "savegame",   '\0', POPT_ARG_STRING, NULL, CLI_SAVEGAME,   N_("Load a saved game"),                 N_("savegame") },
+		{ "loadskirmish",'\0', POPT_ARG_STRING, NULL, CLI_LOADSKIRMISH, N_("Load a saved skirmish game"),     N_("savegame") },
+		{ "loadcampaign",'\0', POPT_ARG_STRING, NULL, CLI_LOADCAMPAIGN, N_("Load a saved campaign game"),     N_("savegame") },
 		{ "window",     '\0', POPT_ARG_NONE,   NULL, CLI_WINDOW,     N_("Play in windowed mode"),             NULL },
 		{ "version",    '\0', POPT_ARG_NONE,   NULL, CLI_VERSION,    N_("Show version information and exit"), NULL },
 		{ "resolution", '\0', POPT_ARG_STRING, NULL, CLI_RESOLUTION, N_("Set the resolution to use"),         N_("WIDTHxHEIGHT") },
@@ -565,14 +567,28 @@ bool ParseCommandLine(int argc, const char **argv)
 				war_SetHeight(height);
 				break;
 			}
-		case CLI_SAVEGAME:
+		case CLI_LOADSKIRMISH:
 			// retrieve the game name
 			token = poptGetOptArg(poptCon);
 			if (token == NULL)
 			{
 				qFatal("Unrecognised savegame name");
 			}
-			snprintf(saveGameName, sizeof(saveGameName), "%s/%s", SaveGamePath, token);
+			snprintf(saveGameName, sizeof(saveGameName), "%s/skirmish/%s.gam", SaveGamePath, token);
+			SPinit();
+			bMultiPlayer = true;
+			game.type = SKIRMISH; // tutorial is skirmish for some reason
+			SetGameMode(GS_SAVEGAMELOAD);
+			break;
+		case CLI_LOADCAMPAIGN:
+			// retrieve the game name
+			token = poptGetOptArg(poptCon);
+			if (token == NULL)
+			{
+				qFatal("Unrecognised savegame name");
+			}
+			snprintf(saveGameName, sizeof(saveGameName), "%s/campaign/%s.gam", SaveGamePath, token);
+			SPinit();
 			SetGameMode(GS_SAVEGAMELOAD);
 			break;
 
