@@ -431,7 +431,7 @@ static void loadOK(void)
 	}
 }
 
-static void SPinit(void)
+void SPinit()
 {
 	uint8_t playercolor;
 

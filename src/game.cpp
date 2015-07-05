@@ -427,10 +427,8 @@ static bool deserializePlayer(PHYSFS_file *fileHandle, PLAYER *serializePlayer, 
 	if (player < game.maxPlayers)
 	{
 		serializePlayer->ai = matchAIbyName(aiName);
-		if (serializePlayer->ai == AI_NOT_FOUND)
-		{
-			debug(LOG_ERROR, "AI \"%s\" not found -- script loading will fail (player %d / %d)", aiName, player, game.maxPlayers);
-		}
+		ASSERT(serializePlayer->ai != AI_NOT_FOUND, "AI \"%s\" not found -- script loading will fail (player %d / %d)",
+		       aiName, player, game.maxPlayers);
 	}
 	serializePlayer->position = position;
 	serializePlayer->colour = colour;

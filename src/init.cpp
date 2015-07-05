@@ -716,6 +716,8 @@ bool systemInitialise(void)
 
 	pie_InitRadar();
 
+	readAIs();
+
 	return true;
 }
 
@@ -787,8 +789,6 @@ bool frontendInitialise(const char *ResourceFile)
 	{
 		return false;
 	}
-
-	readAIs();
 
 	if (!scrTabInitialise())				// Initialise the script system
 	{

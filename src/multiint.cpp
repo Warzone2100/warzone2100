@@ -298,8 +298,7 @@ void loadMultiScripts()
 	sstrcat(aPathName, "/");
 
 	// Reset assigned counter
-	std::vector<AIDATA>::iterator it;
-	for (it = aidata.begin(); it < aidata.end(); it++)
+	for (auto it = aidata.begin(); it < aidata.end(); ++it)
 	{
 		(*it).assigned = 0;
 	}
@@ -626,14 +625,13 @@ void loadMapPreview(bool hideInterface)
 
 int matchAIbyName(const char *name)
 {
-	std::vector<AIDATA>::iterator it;
 	int i = 0;
 
 	if (name[0] == '\0')
 	{
 		return AI_CLOSED;
 	}
-	for (it = aidata.begin(); it < aidata.end(); it++, i++)
+	for (auto it = aidata.cbegin(); it < aidata.cend(); ++it, i++)
 	{
 		if (strncasecmp(name, (*it).name, MAX_LEN_AI_NAME) == 0)
 		{
