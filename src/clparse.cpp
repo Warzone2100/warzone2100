@@ -72,6 +72,9 @@ typedef struct _poptContext
 #undef qFatal
 #define qFatal(...) { fprintf(stderr, __VA_ARGS__); fprintf(stderr, "\n"); exit(1); }
 
+/// Enable automatic test games
+static bool wz_autogame = false;
+
 static void poptPrintHelp(poptContext ctx, FILE *output, WZ_DECL_UNUSED int unused)
 {
 	int i;
@@ -234,6 +237,7 @@ typedef enum
 	CLI_CRASH,
 	CLI_TEXTURECOMPRESSION,
 	CLI_NOTEXTURECOMPRESSION,
+	CLI_AUTOGAME,
 } CLI_OPTIONS;
 
 static const struct poptOption *getOptionsTable(void)
@@ -262,10 +266,11 @@ static const struct poptOption *getOptionsTable(void)
 		{ "noshadows",  '\0', POPT_ARG_NONE,   NULL, CLI_NOSHADOWS,  N_("Disable shadows"),                   NULL },
 		{ "sound",      '\0', POPT_ARG_NONE,   NULL, CLI_SOUND,      N_("Enable sound"),                      NULL },
 		{ "nosound",    '\0', POPT_ARG_NONE,   NULL, CLI_NOSOUND,    N_("Disable sound"),                     NULL },
-		{ "join",       '\0', POPT_ARG_STRING, NULL, CLI_CONNECTTOIP, N_("connect directly to IP/hostname"),   N_("host") },
-		{ "host",       '\0', POPT_ARG_NONE,   NULL, CLI_HOSTLAUNCH, N_("go directly to host screen"),        NULL },
+		{ "join",       '\0', POPT_ARG_STRING, NULL, CLI_CONNECTTOIP, N_("Connect directly to IP/hostname"),   N_("host") },
+		{ "host",       '\0', POPT_ARG_NONE,   NULL, CLI_HOSTLAUNCH, N_("Go directly to host screen"),        NULL },
 		{ "texturecompression", '\0', POPT_ARG_NONE, NULL, CLI_TEXTURECOMPRESSION, N_("Enable texture compression"), NULL },
 		{ "notexturecompression", '\0', POPT_ARG_NONE, NULL, CLI_NOTEXTURECOMPRESSION, N_("Disable texture compression"), NULL },
+		{ "autogame",   '\0', POPT_ARG_NONE,   NULL, CLI_AUTOGAME,   N_("Run games automatically for testing"), NULL },
 		// Terminating entry
 		{ NULL,         '\0', 0,               NULL, 0,              NULL,                                    NULL },
 	};
@@ -618,8 +623,17 @@ bool ParseCommandLine(int argc, const char **argv)
 		case CLI_NOTEXTURECOMPRESSION:
 			wz_texture_compression = GL_RGBA;
 			break;
+
+		case CLI_AUTOGAME:
+			wz_autogame = true;
+			break;
 		};
 	}
 
 	return true;
+}
+
+bool autogame_enabled()
+{
+	return wz_autogame;
 }

@@ -36,6 +36,7 @@
 #include "hci.h"
 
 #include <time.h>									// for recording ping times.
+#include "clparse.h"
 #include "research.h"
 #include "display3d.h"								// for changing the viewpoint
 #include "console.h"								// for screen messages
@@ -293,6 +294,11 @@ bool multiPlayerLoop(void)
 	// if player has won then process the win effects...
 	if (testPlayerHasWon())
 	{
+		if (autogame_enabled())
+		{
+			debug(LOG_WARNING, "Autogame completed successfully!");
+			exit(0);
+		}
 		multiplayerWinSequence(false);
 	}
 	return true;

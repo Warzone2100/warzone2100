@@ -32,7 +32,10 @@
 #include "lib/framework/file.h"
 #include "lib/framework/crc.h"
 #include "lib/framework/physfs_ext.h"
+#include "lib/framework/rational.h"
+#include "lib/gamelib/gtime.h"
 #include "lib/exceptionhandler/dumpinfo.h"
+#include "clparse.h"
 #include "init.h"
 #include "objects.h"
 #include "hci.h"
@@ -1041,6 +1044,11 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 	addDumpInfo(buf);
 
 	triggerEvent(TRIGGER_GAME_LOADED);
+
+	if (autogame_enabled())
+	{
+		gameTimeSetMod(Rational(500));
+	}
 
 	return true;
 }
