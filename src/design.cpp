@@ -3412,7 +3412,10 @@ bool intValidTemplate(DROID_TEMPLATE *psTempl, const char *newName, bool complai
 	psTempl->droidType = droidTemplateType(psTempl);
 
 	/* copy name into template */
-	sstrcpy(psTempl->aName, newName);
+	if (newName)
+	{
+		sstrcpy(psTempl->aName, newName);
+	}
 
 	return true;
 }
