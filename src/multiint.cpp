@@ -2799,21 +2799,13 @@ static void loadMapSettings2()
 		return;
 	}
 	WzConfig ini(ininame, WzConfig::ReadOnly);
-	int offbyone = 0; // for compatibility with 3.1 and earlier challenges
-
-	ini.beginGroup("challenge"); // backwards compatibility mode
-	if (challengeActive && ini.value("version", 1).toInt() <= 1)
-	{
-		offbyone = 1; // old version, counts from 1
-	}
-	ini.endGroup();
 
 	for (int i = 0; i < MAX_PLAYERS; i++)
 	{
-		ini.beginGroup("player_" + QString::number(i + offbyone));
+		ini.beginGroup("player_" + QString::number(i));
 		if (ini.contains("team"))
 		{
-			NetPlay.players[i].team = ini.value("team").toInt() - offbyone;
+			NetPlay.players[i].team = ini.value("team").toInt();
 		}
 		else if (challengeActive) // team is a required key for challenges
 		{
@@ -3805,17 +3797,17 @@ bool startMultiOptions(bool bReenter)
 
 		WzConfig ini(sRequestResult, WzConfig::ReadOnly);
 		ini.beginGroup("challenge");
-		sstrcpy(game.map, ini.value("Map", game.map).toString().toUtf8().constData());
+		sstrcpy(game.map, ini.value("map", game.map).toString().toUtf8().constData());
 		game.hash = levGetMapNameHash(game.map);
-		game.maxPlayers = ini.value("MaxPlayers", game.maxPlayers).toInt();	// TODO, read from map itself, not here!!
-		game.scavengers = ini.value("Scavengers", game.scavengers).toBool();
+		game.maxPlayers = ini.value("maxPlayers", game.maxPlayers).toInt();	// TODO, read from map itself, not here!!
+		game.scavengers = ini.value("scavengers", game.scavengers).toBool();
 		game.alliance = ALLIANCES_TEAMS;
 		netPlayersUpdated = true;
 		mapDownloadProgress = 100;
 		game.power = ini.value("powerLevel", game.power).toInt();
-		game.base = ini.value("Bases", game.base + 1).toInt() - 1;		// count from 1 like the humans do
+		game.base = ini.value("bases", game.base + 1).toInt() - 1;		// count from 1 like the humans do
 		sstrcpy(game.name, ini.value("name").toString().toUtf8().constData());
-		locked.position = ini.value("AllowPositionChange", locked.position).toBool();
+		locked.position = ini.value("allowPositionChange", locked.position).toBool();
 		ini.endGroup();
 
 		ingame.localOptionsReceived = true;

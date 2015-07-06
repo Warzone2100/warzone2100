@@ -233,7 +233,7 @@ bool initTemplates()
 bool storeTemplates()
 {
 	// Write stored templates (back) to file
-	WzConfig ini("userdata/" + QString(rulesettag) + "/templates.json");
+	WzConfig ini("userdata/" + QString(rulesettag) + "/templates.json", WzConfig::ReadAndWrite);
 	if (!ini.status() || !ini.isWritable())
 	{
 		debug(LOG_ERROR, "Could not open %s", ini.fileName().toUtf8().constData());

@@ -96,7 +96,7 @@ void updateChallenge(bool gameWon)
 	char sPath[64], *fStr;
 	int seconds = 0, newtime = (gameTime - mission.startTime) / GAME_TICKS_PER_SEC;
 	bool victory = false;
-	WzConfig scores(CHALLENGE_SCORES);
+	WzConfig scores(CHALLENGE_SCORES, WzConfig::ReadAndWrite);
 
 	fStr = strrchr(sRequestResult, '/');
 	fStr++;	// skip slash
@@ -285,10 +285,14 @@ bool addChallenges()
 			QTime format = QTime(0, 0, 0).addSecs(seconds);
 			highscore = format.toString(Qt::TextDate) + " by " + name + " (" + QString(victory ? "Victory" : "Survived") + ")";
 		}
+		scores.endGroup();
 		ssprintf(sPath, "%s/%s", sSearchPath, *i);
-		WzConfig challenge(sPath);
+		WzConfig challenge(sPath, WzConfig::ReadOnlyAndRequired);
+		ASSERT(challenge.contains("challenge"), "Invalid challenge file %s - no challenge section!", sPath);
 		challenge.beginGroup("challenge");
+		ASSERT(challenge.contains("name"), "Invalid challenge file %s - no name", sPath);
 		name = challenge.value("name", "BAD NAME").toString();
+		ASSERT(challenge.contains("map"), "Invalid challenge file %s - no map", sPath);
 		map = challenge.value("map", "BAD MAP").toString();
 		difficulty = challenge.value("difficulty", "BAD DIFFICULTY").toString();
 		description = map + ", " + difficulty + ", " + highscore + ". " + challenge.value("Description", "").toString();
@@ -311,6 +315,7 @@ bool addChallenges()
 		{
 			break;
 		}
+		challenge.endGroup();
 	}
 	PHYSFS_freeList(files);
 

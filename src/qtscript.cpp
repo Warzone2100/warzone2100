@@ -649,7 +649,7 @@ bool loadGlobalScript(QString path)
 
 bool saveScriptStates(const char *filename)
 {
-	WzConfig ini(filename);
+	WzConfig ini(filename, WzConfig::ReadAndWrite);
 	for (int i = 0; i < scripts.size(); ++i)
 	{
 		QScriptEngine *engine = scripts.at(i);

@@ -343,7 +343,7 @@ static bool eventLoadTriggerList(WzConfig &ini, QString tname)
 // Save the state of the event system
 bool eventSaveState(const char *pFilename)
 {
-	WzConfig ini(pFilename);
+	WzConfig ini(pFilename, WzConfig::ReadAndWrite);
 	if (!eventSaveContext(ini) || !eventSaveTriggerList(psTrigList, "trig", ini) || !eventSaveTriggerList(psCallbackList, "callback", ini))
 	{
 		return false;

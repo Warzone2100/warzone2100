@@ -2254,7 +2254,7 @@ void effectResetUpdates()
 bool writeFXData(const char *fileName)
 {
 	int i = 0;
-	WzConfig ini(fileName);
+	WzConfig ini(fileName, WzConfig::ReadAndWrite);
 	for (auto iter = activeList.cbegin(); iter != activeList.end(); ++iter, i++)
 	{
 		EFFECT *it = *iter;

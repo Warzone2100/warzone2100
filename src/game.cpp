@@ -4699,7 +4699,7 @@ static bool writeDroid(WzConfig &ini, DROID *psCurr, bool onMission, int &counte
 
 static bool writeDroidFile(const char *pFileName, DROID **ppsCurrentDroidLists)
 {
-	WzConfig ini(pFileName);
+	WzConfig ini(pFileName, WzConfig::ReadAndWrite);
 	int counter = 0;
 	bool onMission = (ppsCurrentDroidLists[0] == mission.apsDroidLists[0]);
 
@@ -5178,7 +5178,7 @@ Writes some version info
 */
 bool writeGameInfo(const char *pFileName)
 {
-	WzConfig ini(pFileName);
+	WzConfig ini(pFileName, WzConfig::ReadAndWrite);
 	char ourtime[100] = {'\0'};
 	const time_t currentTime = time(NULL);
 	std::string time(ctime(&currentTime));
@@ -5214,7 +5214,7 @@ Writes the linked list of structure for each player to a file
 */
 bool writeStructFile(const char *pFileName)
 {
-	WzConfig ini(pFileName);
+	WzConfig ini(pFileName, WzConfig::ReadAndWrite);
 	int counter = 0;
 
 	for (int player = 0; player < MAX_PLAYERS; player++)
@@ -5666,7 +5666,7 @@ Writes the linked list of features to a file
 */
 bool writeFeatureFile(const char *pFileName)
 {
-	WzConfig ini(pFileName);
+	WzConfig ini(pFileName, WzConfig::ReadAndWrite);
 	int counter = 0;
 
 	for (FEATURE *psCurr = apsFeatureLists[0]; psCurr != NULL; psCurr = psCurr->psNext)
@@ -5767,7 +5767,7 @@ bool loadSaveTemplate(const char *pFileName)
 
 bool writeTemplateFile(const char *pFileName)
 {
-	WzConfig ini(pFileName);
+	WzConfig ini(pFileName, WzConfig::ReadAndWrite);
 
 	for (int player = 0; player < MAX_PLAYERS; player++)
 	{
@@ -5935,7 +5935,7 @@ bool loadSaveCompList(const char *pFileName)
 // Write out the current state of the Comp lists per player
 static bool writeCompListFile(const char *pFileName)
 {
-	WzConfig ini(pFileName);
+	WzConfig ini(pFileName, WzConfig::ReadAndWrite);
 
 	// Save each type of struct type
 	for (int player = 0; player < MAX_PLAYERS; player++)
@@ -6057,7 +6057,7 @@ static bool loadSaveStructTypeList(const char *pFileName)
 // Write out the current state of the Struct Type List per player
 static bool writeStructTypeListFile(const char *pFileName)
 {
-	WzConfig ini(pFileName);
+	WzConfig ini(pFileName, WzConfig::ReadAndWrite);
 
 	// Save each type of struct type
 	for (int player = 0; player < MAX_PLAYERS; player++)
@@ -6142,7 +6142,7 @@ bool loadSaveResearch(const char *pFileName)
 // Write out the current state of the Research per player
 static bool writeResearchFile(char *pFileName)
 {
-	WzConfig ini(pFileName);
+	WzConfig ini(pFileName, WzConfig::ReadAndWrite);
 
 	for (int i = 0; i < asResearch.size(); ++i)
 	{
@@ -6304,7 +6304,7 @@ bool loadSaveMessage(const char *pFileName, SWORD levelType)
 // Write out the current messages per player
 static bool writeMessageFile(const char *pFileName)
 {
-	WzConfig ini(pFileName);
+	WzConfig ini(pFileName, WzConfig::ReadAndWrite);
 	int numMessages = 0;
 
 	// save each type of research
@@ -6410,7 +6410,7 @@ Writes the list of structure limits to a file
 */
 bool writeStructLimitsFile(const char *pFileName)
 {
-	WzConfig ini(pFileName);
+	WzConfig ini(pFileName, WzConfig::ReadAndWrite);
 
 	// Save each type of struct type
 	for (int player = 0; player < game.maxPlayers; player++)
@@ -6455,7 +6455,7 @@ bool readFiresupportDesignators(const char *pFileName)
 bool writeFiresupportDesignators(const char *pFileName)
 {
 	int player;
-	WzConfig ini(pFileName);
+	WzConfig ini(pFileName, WzConfig::ReadAndWrite);
 
 	for (player = 0; player < MAX_PLAYERS; player++)
 	{

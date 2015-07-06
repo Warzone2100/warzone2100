@@ -59,6 +59,11 @@ WzConfig::WzConfig(const QString &name, WzConfig::warning warning, QObject *pare
 			mStatus = false;
 			return;
 		}
+		else if (warning == ReadOnlyAndRequired)
+		{
+			debug(LOG_FATAL, "Missing required file %s", name.toUtf8().constData());
+			abort();
+		}
 		else if (warning == ReadAndWrite)
 		{
 			mJson = QJsonDocument();

@@ -494,7 +494,7 @@ void	fillUpStats(void)
 /* This will save out the score data */
 bool writeScoreData(const char *fileName)
 {
-	WzConfig ini(fileName);
+	WzConfig ini(fileName, WzConfig::ReadAndWrite);
 
 	// Dump the scores for the current player
 	ini.setValue("unitsBuilt", missionData.unitsBuilt);

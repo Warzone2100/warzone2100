@@ -1,13 +1,13 @@
 {
     "challenge": {
-        "Bases": 2,
-        "Description": "You've got seven AI players on your tail. There's nowhere to run, nowhere to hide.",
-        "Difficulty": "Ultimate",
-        "Map": "Sk-MizaMaze",
-        "MaxPlayers": 8,
-        "Name": "No Place To Hide",
-        "PowerLevel": 1,
-        "Scavengers": "false",
+        "bases": 2,
+        "description": "You've got seven AI players on your tail. There's nowhere to run, nowhere to hide.",
+        "difficulty": "Ultimate",
+        "map": "Sk-MizaMaze",
+        "maxPlayers": 8,
+        "name": "No Place To Hide",
+        "powerLevel": 1,
+        "scavengers": "false",
         "version": 2
     },
     "locked": {

@@ -960,7 +960,7 @@ bool writeLabels(const char *filename)
 {
 	int c[5]; // make unique, incremental section names
 	memset(c, 0, sizeof(c));
-	WzConfig ini(filename);
+	WzConfig ini(filename, WzConfig::ReadAndWrite);
 	for (LABELMAP::const_iterator i = labels.constBegin(); i != labels.constEnd(); i++)
 	{
 		QString key = i.key();

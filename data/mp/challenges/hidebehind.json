@@ -1,13 +1,13 @@
 {
     "challenge": {
-        "Bases": 2,
-        "Description": "Stay behind your AI allies and beat the enemy in close quarters, man-to-man combat.",
-        "Difficulty": "Medium",
-        "Map": "Sk-MizaMaze",
-        "MaxPlayers": 8,
-        "Name": "Hide Behind Me",
-        "PowerLevel": 1,
-        "Scavengers": "false",
+        "bases": 2,
+        "description": "Stay behind your AI allies and beat the enemy in close quarters, man-to-man combat.",
+        "difficulty": "Medium",
+        "map": "Sk-MizaMaze",
+        "maxPlayers": 8,
+        "name": "Hide Behind Me",
+        "powerLevel": 1,
+        "scavengers": "false",
         "version": 2
     },
     "locked": {
