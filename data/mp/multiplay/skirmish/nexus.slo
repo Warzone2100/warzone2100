@@ -845,6 +845,11 @@ event buildOilDefenseOrRetreat(buildOilDefenseOrRetreatTr)
 //mortar etc.. rules. build sensor towers and emplacements.
 event incendry(incendryTr)
 {
+	if (not isStructureAvailable(sensorTower, me))
+	{
+		exit;
+	}
+
 	initEnumStruct(FALSE,sensorTower,me,me);
 
 	count = 0;
@@ -855,12 +860,7 @@ event incendry(incendryTr)
 		structure = enumStruct();
 	}
 
-	if (not isStructureAvailable(sensorTower, me))
-	{
-		exit;
-	}
-
-	if (count < (gameTime/4200) and isStructureAvailable(sensorTower, me))		// every 7 mins
+	if (count < (gameTime/4200))		// every 7 mins
 	{
 		// if not found build a sensor tower.
 		// find a place to build.

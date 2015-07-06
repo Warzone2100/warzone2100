@@ -1362,6 +1362,11 @@ event incendry(inactive)
 	local bool boolResult;
 	local STRUCTURE structure2;
 
+	if (not isStructureAvailable(sensorTower, me))
+	{
+		exit;
+	}
+
 	initEnumStruct(FALSE,sensorTower,me,me);
 
 	count = 0;

@@ -35,6 +35,7 @@
 #include <QtGui/QStandardItemModel>
 
 #include "action.h"
+#include "clparse.h"
 #include "combat.h"
 #include "console.h"
 #include "design.h"
@@ -2781,6 +2782,11 @@ static QScriptValue js_gameOverMessage(QScriptContext *context, QScriptEngine *e
 	if (challengeActive)
 	{
 		updateChallenge(gameWon);
+	}
+	if (autogame_enabled())
+	{
+		debug(LOG_WARNING, "Autogame completed successfully!");
+		exit(0);
 	}
 	return QScriptValue();
 }
