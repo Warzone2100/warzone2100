@@ -308,15 +308,17 @@ void loadMultiScripts()
 	{
 		WzConfig ini(ininame, WzConfig::ReadOnly);
 		debug(LOG_SAVE, "Loading map scripts");
-		ini.beginGroup("scripts");
-		if (ini.contains("extra"))
+		if (ini.beginGroup("scripts"))
 		{
-			loadGlobalScript(path + ini.value("extra").toString());
-		}
-		if (ini.contains("rules"))
-		{
-			loadGlobalScript(path + ini.value("rules").toString());
-			defaultRules = false;
+			if (ini.contains("extra"))
+			{
+				loadGlobalScript(path + ini.value("extra").toString());
+			}
+			if (ini.contains("rules"))
+			{
+				loadGlobalScript(path + ini.value("rules").toString());
+				defaultRules = false;
+			}
 		}
 		ini.endGroup();
 	}

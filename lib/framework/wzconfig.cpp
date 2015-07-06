@@ -209,7 +209,7 @@ Vector2i WzConfig::vector2i(const QString &name)
 	return r;
 }
 
-void WzConfig::beginGroup(const QString &prefix)
+bool WzConfig::beginGroup(const QString &prefix)
 {
 	mObjNameStack.append(mName);
 	mObjStack.append(mObj);
@@ -220,11 +220,16 @@ void WzConfig::beginGroup(const QString &prefix)
 	}
 	else
 	{
-		ASSERT(contains(prefix), "beginGroup() on non-existing key \"%s\"", prefix.toUtf8().constData());
+		if (!contains(prefix)) // handled in this way for backwards compatibility
+		{
+			mObj = QJsonObject();
+			return false;
+		}
 		QJsonValue value = mObj.value(prefix);
 		ASSERT(value.isObject(), "beginGroup() on non-object key \"%s\"", prefix.toUtf8().constData());
 		mObj = value.toObject();
 	}
+	return true;
 }
 
 void WzConfig::endGroup()

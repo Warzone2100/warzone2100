@@ -64,7 +64,7 @@ public:
 	QVariant value(const QString &key, const QVariant &defaultValue = QVariant()) const;
 	QJsonValue json(const QString &key, const QJsonValue &defaultValue = QJsonValue()) const;
 
-	void beginGroup(const QString &prefix);
+	bool beginGroup(const QString &prefix);
 	void endGroup();
 	QString fileName() const
 	{
