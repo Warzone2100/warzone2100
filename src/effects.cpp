@@ -425,8 +425,8 @@ void processEffects()
 			{
 				bucketAddTypeToList(RENDER_EFFECT, psEffect);
 			}
-			++it;
 		}
+		++it;
 	}
 
 	/* Add any structure effects */
@@ -2276,9 +2276,9 @@ bool writeFXData(const char *fileName)
 		ini.setValue("lifeSpan", it->lifeSpan);
 		ini.setValue("radius", it->radius);
 
-		const QString &imd_name = modelName(it->imd);
-		if (!imd_name.isEmpty())
+		if (it->imd)
 		{
+			const QString &imd_name = modelName(it->imd);
 			ini.setValue("imd_name", imd_name);
 		}
 
