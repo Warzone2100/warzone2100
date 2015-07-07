@@ -614,7 +614,7 @@ static bool CheckFinishedFindPosition(void)
 
 static void HandleDrag(void)
 {
-	UDWORD dragX, dragY;
+	UDWORD dragX = 0, dragY = 0;
 
 	if ((driveModeActive() && mouseDown(MOUSE_LMB))
 	    || (mouseDrag(MOUSE_LMB, &dragX, &dragY) && !mouseOverRadar && !mouseDown(MOUSE_RMB)))
