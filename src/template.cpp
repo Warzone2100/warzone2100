@@ -355,7 +355,7 @@ bool loadDroidTemplates(const char *filename)
 				if (it == localTemplates.end())
 				{
 					debug(LOG_NEVER, "Design id:%d (%s) added to UI list, player =%d", design.multiPlayerID, getName(&design), i);
-					localTemplates.push_front(design);
+					localTemplates.push_back(design);
 				}
 			}
 			else if (!NetPlay.players[i].allocated)	// AI template
