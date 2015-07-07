@@ -2705,7 +2705,7 @@ static SELECTION_TYPE	establishSelection(UDWORD selectedPlayer)
 		// droid types and find the dominant selection.
 		if (psDroid->selected)
 		{
-			ASSERT(psDroid->droidType < NUM_DROID_WEIGHTS, "droidType exceeds NUM_DROID_WEIGHTS");
+			ASSERT_OR_RETURN(SC_INVALID, psDroid->droidType < NUM_DROID_WEIGHTS, "droidType exceeds NUM_DROID_WEIGHTS");
 			if (DroidSelectionWeights[psDroid->droidType] < CurrWeight)
 			{
 				CurrWeight = DroidSelectionWeights[psDroid->droidType];
