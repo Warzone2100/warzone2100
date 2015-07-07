@@ -311,7 +311,10 @@ bool droidCheckReferences(DROID *psVictimDroid)
 		{
 			for (int i = 0; i < psStruct->numWeaps; i++)
 			{
-				ASSERT_OR_RETURN(false, (DROID *)psStruct->psTarget[i] != psVictimDroid, DROIDREF(psStruct->targetFunc[i], psStruct->targetLine[i]));
+				if (psStruct->psTarget[i] && psStruct->psTarget[i]->type == OBJ_DROID)
+				{
+					ASSERT_OR_RETURN(false, (DROID *)psStruct->psTarget[i] != psVictimDroid, DROIDREF(psStruct->targetFunc[i], psStruct->targetLine[i]));
+				}
 			}
 		}
 		for (DROID *psDroid = apsDroidLists[plr]; psDroid != NULL; psDroid = psDroid->psNext)

@@ -1055,7 +1055,7 @@ bool recvResearchStatus(NETQUEUE queue)
 	RESEARCH_FACILITY	*psResFacilty;
 	RESEARCH			*pResearch;
 	uint8_t				player;
-	bool				bStart;
+	bool bStart = false;
 	uint32_t			index, structRef;
 
 	NETbeginDecode(queue, GAME_RESEARCHSTATUS);
@@ -1481,7 +1481,7 @@ bool recvTextMessage(NETQUEUE queue)
 	UDWORD	playerIndex;
 	char	msg[MAX_CONSOLE_STRING_LENGTH];
 	char newmsg[MAX_CONSOLE_STRING_LENGTH];
-	bool team;
+	bool team = false;
 
 	memset(msg, 0x0, sizeof(msg));
 	memset(newmsg, 0x0, sizeof(newmsg));

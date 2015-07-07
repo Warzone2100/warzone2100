@@ -67,6 +67,7 @@ struct CONSOLE_MESSAGE
 	int		JustifyType;	// text justification
 	int		player;			// Player who sent this message or SYSTEM_MESSAGE
 	bool	team;			// team message or not
+	CONSOLE_MESSAGE() : timeAdded(0), JustifyType(0), player(0), team(false) {}
 };
 
 std::deque<CONSOLE_MESSAGE> ActiveMessages;		// we add all messages to this container

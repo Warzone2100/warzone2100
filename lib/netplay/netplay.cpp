@@ -1447,7 +1447,7 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 			NETuint8_t(&sender);
 			NETuint8_t(&receiver);
 			NETnetMessage(&message);  // Must delete message later.
-			std::auto_ptr<NetMessage const> deleteLater(message);
+			std::unique_ptr<NetMessage const> deleteLater(message);
 			if (!NETend())
 			{
 				debug(LOG_ERROR, "Incomplete NET_SEND_TO_PLAYER.");

@@ -185,11 +185,12 @@ bool iV_loadImage_PNG(const char *fileName, iV_Image *image)
 
 static void internal_saveImage_PNG(const char *fileName, const iV_Image *image, int color_type)
 {
-	unsigned char **scanlines = NULL;
+	static unsigned char **scanlines;
 	png_infop info_ptr = NULL;
 	png_structp png_ptr = NULL;
 	PHYSFS_file *fileHandle;
 
+	scanlines = NULL;
 	ASSERT(image->depth != 0, "Bad depth");
 
 	fileHandle = PHYSFS_openWrite(fileName);

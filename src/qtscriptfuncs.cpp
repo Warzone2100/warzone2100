@@ -560,9 +560,10 @@ QScriptValue convStructure(STRUCTURE *psStruct, QScriptEngine *engine)
 QScriptValue convFeature(FEATURE *psFeature, QScriptEngine *engine)
 {
 	QScriptValue value = convObj(psFeature, engine);
-	value.setProperty("health", 100 * psFeature->psStats->body / MAX(1, psFeature->body), QScriptValue::ReadOnly);
-	value.setProperty("damageable", psFeature->psStats->damageable, QScriptValue::ReadOnly);
-	value.setProperty("stattype", psFeature->psStats->subType, QScriptValue::ReadOnly);
+	const FEATURE_STATS *psStats = psFeature->psStats;
+	value.setProperty("health", 100 * psStats->body / MAX(1, psFeature->body), QScriptValue::ReadOnly);
+	value.setProperty("damageable", psStats->damageable, QScriptValue::ReadOnly);
+	value.setProperty("stattype", psStats->subType, QScriptValue::ReadOnly);
 	return value;
 }
 

@@ -5233,7 +5233,7 @@ void checkForPowerGen(STRUCTURE *psBuilding)
 
 	// Find a power generator, if possible with a power module.
 	STRUCTURE *bestPowerGen = nullptr;
-	int bestSlot;
+	int bestSlot = 0;
 	for (STRUCTURE *psCurr = apsStructLists[psBuilding->player]; psCurr != nullptr; psCurr = psCurr->psNext)
 	{
 		if (psCurr->pStructureType->type == REF_POWER_GEN && psCurr->status == SS_BUILT)
@@ -7187,7 +7187,8 @@ bool structureCheckReferences(STRUCTURE *psVictimStruct)
 		{
 			for (i = 0; i < psStruct->numWeaps; i++)
 			{
-				if ((STRUCTURE *)psStruct->psTarget[i] == psVictimStruct && psVictimStruct != psStruct)
+				if (psStruct->psTarget[i] && psStruct->psTarget[i]->type == OBJ_STRUCTURE
+				    && (STRUCTURE *)psStruct->psTarget[i] == psVictimStruct && psVictimStruct != psStruct)
 				{
 #ifdef DEBUG
 					ASSERT(!"Illegal reference to structure", "Illegal reference to structure from %s line %d",
@@ -7199,7 +7200,8 @@ bool structureCheckReferences(STRUCTURE *psVictimStruct)
 		}
 		for (psDroid = apsDroidLists[plr]; psDroid != NULL; psDroid = psDroid->psNext)
 		{
-			if ((STRUCTURE *)psDroid->order.psObj == psVictimStruct)
+			if (psDroid->order.psObj && psDroid->order.psObj->type == OBJ_STRUCTURE
+			    && (STRUCTURE *)psDroid->order.psObj == psVictimStruct)
 			{
 #ifdef DEBUG
 				ASSERT(!"Illegal reference to structure", "Illegal reference to structure from %s line %d",
@@ -7209,7 +7211,8 @@ bool structureCheckReferences(STRUCTURE *psVictimStruct)
 			}
 			for (i = 0; i < psDroid->numWeaps; i++)
 			{
-				if ((STRUCTURE *)psDroid->psActionTarget[i] == psVictimStruct)
+				if (psDroid->psActionTarget[i] && psDroid->psActionTarget[i]->type == OBJ_STRUCTURE
+				    && (STRUCTURE *)psDroid->psActionTarget[i] == psVictimStruct)
 				{
 #ifdef DEBUG
 					ASSERT(!"Illegal reference to structure", "Illegal action reference to structure from %s line %d",
@@ -7218,7 +7221,8 @@ bool structureCheckReferences(STRUCTURE *psVictimStruct)
 					return false;
 				}
 			}
-			if ((STRUCTURE *)psDroid->psBaseStruct == psVictimStruct)
+			if (psDroid->psBaseStruct && psDroid->psBaseStruct->type == OBJ_STRUCTURE
+			    && (STRUCTURE *)psDroid->psBaseStruct == psVictimStruct)
 			{
 #ifdef DEBUG
 				ASSERT(!"Illegal reference to structure", "Illegal action reference to structure from %s line %d",
