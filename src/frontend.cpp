@@ -155,7 +155,7 @@ static void runUpgrdHyperlink(void)
 	ssprintf(buf, "http://gamecheck.wz2100.net/%s", segment);
 
 #if defined(WZ_OS_WIN)
-	wchar_t  wszDest[250];
+	wchar_t  wszDest[250] = {'/0'};
 	MultiByteToWideChar(CP_UTF8, 0, buf, -1, wszDest, 250);
 
 	ShellExecuteW(NULL, L"open", wszDest, NULL, NULL, SW_SHOWNORMAL);
