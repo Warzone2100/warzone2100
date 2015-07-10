@@ -847,7 +847,6 @@ event buildOilDefenseOrRetreat(buildOilDefenseOrRetreatTr)
 //mortar etc.. rules. build sensor towers and emplacements.
 event incendry(incendryTr)
 {
-
 	initEnumStruct(FALSE,sensorTower,me,me);
 
 	count = 0;
@@ -858,7 +857,12 @@ event incendry(incendryTr)
 		structure = enumStruct();
 	}
 
-	if(count < (gameTime/4200) )		// every 7 mins
+	if (not isStructureAvailable(sensorTower, me))
+	{
+		exit;
+	}
+
+	if (count < (gameTime/4200) and isStructureAvailable(sensorTower, me))		// every 7 mins
 	{
 		// if not found build a sensor tower.
 		// find a place to build.
@@ -1000,11 +1004,6 @@ event incendry(incendryTr)
 		}
 	}
 }
-
-
-
-
-
 
 /////////////////////////////////////////////////////////////////////
 // build a power gen for every 4 derricks. VITAL!

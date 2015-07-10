@@ -717,6 +717,7 @@ bool systemInitialise(void)
 	iV_TextInit();
 
 	iV_Reset();								// Reset the IV library.
+	readAIs();
 
 	return true;
 }
@@ -819,8 +820,6 @@ bool frontendInitialise(const char *ResourceFile)
 	{
 		return false;
 	}
-
-	readAIs();
 
 	iV_Reset();								// Reset the IV library.
 

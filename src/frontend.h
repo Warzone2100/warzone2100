@@ -252,4 +252,6 @@ enum
 
 };
 
+void SPinit();
+
 #endif // __INCLUDED_SRC_FRONTEND_H__
