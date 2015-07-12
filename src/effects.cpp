@@ -2203,6 +2203,7 @@ void effectSetupExplosion(EFFECT *psEffect)
 			psEffect->velocity.y = 0.0f;
 			break;
 		default:
+			ASSERT_OR_RETURN(, psEffect->imd != NULL, "Explosion type unknown!");
 			break;
 		}
 	}

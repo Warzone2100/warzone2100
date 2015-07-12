@@ -976,8 +976,8 @@ droidBuildStartAudioCallback(void *psObj)
 /* Set up a droid to build a structure - returns true if successful */
 DroidStartBuild droidStartBuild(DROID *psDroid)
 {
-	STRUCTURE *psStruct;
-
+	STRUCTURE *psStruct = NULL;
+	ASSERT_OR_RETURN(DroidStartBuildFailed, psDroid != NULL, "Bad Droid");
 	CHECK_DROID(psDroid);
 
 	/* See if we are starting a new structure */
@@ -1015,7 +1015,7 @@ DroidStartBuild droidStartBuild(DROID *psDroid)
 	{
 		/* Check the structure is still there to build (joining a partially built struct) */
 		psStruct = (STRUCTURE *)psDroid->order.psObj;
-		if (!droidNextToStruct(psDroid, (BASE_OBJECT *)psStruct))
+		if (psStruct && !droidNextToStruct(psDroid, (BASE_OBJECT *)psStruct))
 		{
 			/* Nope - stop building */
 			debug(LOG_NEVER, "not next to structure");
@@ -1023,7 +1023,7 @@ DroidStartBuild droidStartBuild(DROID *psDroid)
 	}
 
 	//check structure not already built, and we still 'own' it
-	if (psStruct->status != SS_BUILT && aiCheckAlliances(psStruct->player, psDroid->player))
+	if (psStruct && psStruct->status != SS_BUILT && aiCheckAlliances(psStruct->player, psDroid->player))
 	{
 		psDroid->actionStarted = gameTime;
 		psDroid->actionPoints = 0;
