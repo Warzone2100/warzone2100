@@ -2627,7 +2627,7 @@ static MOUSE_TARGET	itemUnderMouse(BASE_OBJECT **ppObjectUnderMouse)
 
 	/* Send the result back - if it's null then we clicked on an area of terrain */
 	/* make unseen objects just look like terrain. */
-	if (retVal == MT_NOTARGET || !(psNotDroid->visible[selectedPlayer]))
+	if (retVal == MT_NOTARGET || (psNotDroid && !(psNotDroid->visible[selectedPlayer])))
 	{
 		retVal = MT_TERRAIN;
 	}

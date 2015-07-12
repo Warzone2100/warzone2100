@@ -243,6 +243,7 @@ static void moveShuffleDroid(DROID *psDroid, Vector2i s)
 	SDWORD	lvx, lvy, rvx, rvy, svx, svy;
 	SDWORD	shuffleMove;
 
+	ASSERT_OR_RETURN(, psDroid != NULL, "Bad droid pointer");
 	CHECK_DROID(psDroid);
 
 	uint16_t shuffleDir = iAtan2(s);

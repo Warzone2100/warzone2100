@@ -625,8 +625,7 @@ static void StartMessageSequences(MESSAGE *psMessage, bool Start)
 		return;
 	}
 
-	ASSERT(psMessage->pViewData != NULL,
-	       "StartMessageSequences: invalid ViewData pointer");
+	ASSERT_OR_RETURN(, psMessage->pViewData != NULL, "Invalid ViewData pointer");
 
 	if (((VIEWDATA *)psMessage->pViewData)->type == VIEW_RPL)
 	{
