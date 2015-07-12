@@ -2137,6 +2137,7 @@ void	effectSetupGraviton(EFFECT *psEffect)
 
 void effectSetupExplosion(EFFECT *psEffect)
 {
+	ASSERT_OR_RETURN(, psEffect != NULL, "Effect is missing?");
 	/* Get an imd if it's not established */
 	if (psEffect->imd == NULL)
 	{

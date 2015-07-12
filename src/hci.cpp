@@ -3171,7 +3171,7 @@ static inline bool sortFactoryByTypeFunction(BASE_OBJECT *a, BASE_OBJECT *b)
 		return (a == NULL) < (b == NULL);
 	}
 	STRUCTURE *s = castStructure(a), *t = castStructure(b);
-	ASSERT(s != NULL && StructIsFactory(s) && t != NULL && StructIsFactory(t), "object is not a factory");
+	ASSERT_OR_RETURN(false, s != NULL && StructIsFactory(s) && t != NULL && StructIsFactory(t), "object is not a factory");
 	FACTORY *x = (FACTORY *)s->pFunctionality, *y = (FACTORY *)t->pFunctionality;
 	if (x->psAssemblyPoint->factoryType != y->psAssemblyPoint->factoryType)
 	{
@@ -5633,11 +5633,8 @@ static bool setResearchStats(BASE_OBJECT *psObj, BASE_STATS *psStats)
 /* Select a Factory */
 static bool selectManufacture(BASE_OBJECT *psObj)
 {
-	STRUCTURE		*psBuilding;
-
-	ASSERT(psObj != NULL && psObj->type == OBJ_STRUCTURE,
-	       "selectManufacture: invalid Structure pointer");
-	psBuilding = (STRUCTURE *)psObj;
+	ASSERT_OR_RETURN(false, psObj != NULL && psObj->type == OBJ_STRUCTURE, "Invalid Structure pointer");
+	STRUCTURE *psBuilding = (STRUCTURE *)psObj;
 
 	/* A Structure is a Factory if its type = REF_FACTORY or REF_CYBORG_FACTORY or
 	REF_VTOL_FACTORY and it is completely built*/

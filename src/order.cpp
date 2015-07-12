@@ -2587,8 +2587,7 @@ DroidOrder chooseOrderObj(DROID *psDroid, BASE_OBJECT *psObj, bool altOrder)
 			    psObj->type == OBJ_STRUCTURE)
 			{
 				psStruct = (STRUCTURE *) psObj;
-				ASSERT(psObj != NULL,
-				       "chooseOrderObj: invalid structure pointer");
+				ASSERT_OR_RETURN(DroidOrder(DORDER_NONE), psObj != NULL, "Invalid structure pointer");
 				if (psStruct->pStructureType->type == REF_REPAIR_FACILITY &&
 				    psStruct->status == SS_BUILT)
 				{
@@ -2701,7 +2700,7 @@ DroidOrder chooseOrderObj(DROID *psDroid, BASE_OBJECT *psObj, bool altOrder)
 	         psObj->type == OBJ_STRUCTURE)
 	{
 		psStruct = (STRUCTURE *) psObj;
-		ASSERT(psObj != NULL, "Invalid structure pointer");
+		ASSERT_OR_RETURN(DroidOrder(DORDER_NONE), psObj != NULL, "Invalid structure pointer");
 
 		/* check whether construction droid */
 		if (psDroid->droidType == DROID_CONSTRUCT ||
