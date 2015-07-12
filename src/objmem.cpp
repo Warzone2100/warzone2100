@@ -246,8 +246,7 @@ static inline void addObjectToFuncList(OBJECT *list[], OBJECT *object, int playe
 template <typename OBJECT>
 static inline void destroyObject(OBJECT *list[], OBJECT *object)
 {
-	ASSERT(object != NULL,
-	       "destroyObject: Invalid pointer");
+	ASSERT_OR_RETURN(, object != NULL, "Invalid pointer");
 
 	scriptRemoveObject(object);
 
