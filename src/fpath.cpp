@@ -680,8 +680,8 @@ bool fpathCheck(Position orig, Position dest, PROPULSION_TYPE propulsion)
 	MAPTILE *origTile = worldTile(removeZ(findNonblockingPosition(orig, propulsion)));
 	MAPTILE *destTile = worldTile(removeZ(findNonblockingPosition(dest, propulsion)));
 
-	ASSERT(propulsion != PROPULSION_TYPE_NUM, "Bad propulsion type");
-	ASSERT(origTile != NULL && destTile != NULL, "Bad tile parameter");
+	ASSERT_OR_RETURN(false, propulsion != PROPULSION_TYPE_NUM, "Bad propulsion type");
+	ASSERT_OR_RETURN(false, origTile != NULL && destTile != NULL, "Bad tile parameter");
 
 	switch (propulsion)
 	{

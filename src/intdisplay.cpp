@@ -2079,11 +2079,11 @@ void drawRadarBlips(int radarX, int radarY, float pixSizeH, float pixSizeV)
 				MESSAGE		*psCurrMsg = psProxDisp->psMessage;
 				VIEWDATA	*pViewData = (VIEWDATA *)psCurrMsg->pViewData;
 
-				ASSERT(pViewData != NULL, "Message without data!");
+				ASSERT_OR_RETURN(, pViewData != NULL, "Message without data!");
 
 				if (pViewData->type == VIEW_BEACON)
 				{
-					ASSERT(pViewData->pData != NULL, "Help message without data!");
+					ASSERT_OR_RETURN(, pViewData->pData != NULL, "Help message without data!");
 					if (pViewData->pData != NULL && (((VIEW_PROXIMITY *)pViewData->pData)->timeAdded + 60000) <= gameTime)
 					{
 						debug(LOG_MSG, "blip timeout for %d, from %d", i, (((VIEW_PROXIMITY *)pViewData->pData)->sender));
@@ -2115,7 +2115,7 @@ void drawRadarBlips(int radarX, int radarY, float pixSizeH, float pixSizeV)
 		{
 			FEATURE *psFeature = (FEATURE *)psProxDisp->psMessage->pViewData;
 
-			ASSERT(psFeature && psFeature->psStats, "Bad feature message");
+			ASSERT_OR_RETURN(, psFeature && psFeature->psStats, "Bad feature message");
 			if (psFeature && psFeature->psStats && psFeature->psStats->subType == FEAT_OIL_RESOURCE)
 			{
 				images = imagesResource;
