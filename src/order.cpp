@@ -791,11 +791,10 @@ void orderUpdateDroid(DROID *psDroid)
 	case DORDER_EMBARK:
 		{
 			// only place it can be trapped - in multiPlayer can only put cyborgs onto a Cyborg Transporter
-			DROID *temp = NULL;
+			DROID *temp = (DROID *)psDroid->order.psObj;	// NOTE: It is possible to have a NULL here 
 
-			temp = (DROID *)psDroid->order.psObj;
 			// FIXME: since we now have 2 transporter types, we should fix this in the scripts for campaign
-			if (temp->droidType == DROID_TRANSPORTER && !cyborgDroid(psDroid) && game.type != CAMPAIGN && bMultiPlayer)
+			if (temp && temp->droidType == DROID_TRANSPORTER && !cyborgDroid(psDroid) && game.type != CAMPAIGN && bMultiPlayer)
 			{
 				psDroid->order = DroidOrder(DORDER_NONE);
 				actionDroid(psDroid, DACTION_NONE);
