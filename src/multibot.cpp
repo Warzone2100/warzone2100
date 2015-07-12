@@ -313,8 +313,8 @@ bool SendDroid(const DROID_TEMPLATE *pTemplate, uint32_t x, uint32_t y, uint8_t 
 		return true;
 	}
 
-	ASSERT(x != 0 && y != 0, "SendDroid: Invalid droid coordinates");
-	ASSERT(player < MAX_PLAYERS, "invalid player %u", player);
+	ASSERT_OR_RETURN(false, x != 0 && y != 0, "SendDroid: Invalid droid coordinates");
+	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "invalid player %u", player);
 
 	// Dont send other droids during campaign setup
 	if (ingame.localJoiningInProgress)

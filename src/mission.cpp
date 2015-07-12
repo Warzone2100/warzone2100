@@ -1065,7 +1065,7 @@ void saveCampaignData(void)
 			if (isTransporter(psDroid))
 			{
 				// Empty the transporter into the mission list
-				ASSERT(psDroid->psGroup != NULL, "saveCampaignData: Transporter does not have a group");
+				ASSERT_OR_RETURN(, psDroid->psGroup != NULL, "Transporter does not have a group");
 
 				for (psCurr = psDroid->psGroup->psList; psCurr != NULL && psCurr != psDroid; psCurr = psCurrNext)
 				{
@@ -1575,7 +1575,7 @@ void resetLimboMission(void)
 Only interested in Transporters at present*/
 void missionDroidUpdate(DROID *psDroid)
 {
-	ASSERT(psDroid != NULL, "unitUpdate: Invalid unit pointer");
+	ASSERT_OR_RETURN(, psDroid != NULL, "Invalid unit pointer");
 
 	/*This is required for Transporters that are moved offWorld so the
 	saveGame doesn't try to set their position in the map - especially important
@@ -1751,6 +1751,7 @@ void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, bool goingHome)
 	UDWORD		iX, iY;
 	DROID_GROUP	*psGroup;
 
+	ASSERT_OR_RETURN(, psTransporter != NULL, "Invalid transporter");
 	if (goingHome)
 	{
 		ppCurrentList = mission.apsDroidLists;
@@ -1789,6 +1790,7 @@ void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, bool goingHome)
 			if (!pickATileGen(&droidX, &droidY, LOOK_FOR_EMPTY_TILE, zonedPAT))
 			{
 				ASSERT(false, "unloadTransporter: Unable to find a valid location");
+				return;
 			}
 			droidSetPosition(psDroid, world_coord(droidX), world_coord(droidY));
 			updateDroidOrientation(psDroid);
@@ -3125,7 +3127,7 @@ void moveDroidsToSafety(DROID *psTransporter)
 {
 	DROID       *psDroid, *psNext;
 
-	ASSERT(isTransporter(psTransporter), "unit not a Transporter");
+	ASSERT_OR_RETURN(, isTransporter(psTransporter), "unit not a Transporter");
 
 	//move droids out of Transporter into mission list
 	for (psDroid = psTransporter->psGroup->psList; psDroid != NULL && psDroid != psTransporter; psDroid = psNext)
