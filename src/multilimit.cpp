@@ -279,7 +279,7 @@ void createLimitSet(void)
 	{
 		if (asStructLimits[0][i].limit != LOTS_OF)
 		{
-			ASSERT(idx < numchanges, "Bad number of changed limits");
+			ASSERT_OR_RETURN(, idx < numchanges, "Bad number of changed limits");
 			pEntry[idx].id		= i;
 			pEntry[idx].limit	= asStructLimits[0][i].limit;
 			idx++;

@@ -2764,7 +2764,7 @@ UDWORD getHomeLandingY(void)
 
 void missionSetTransporterEntry(SDWORD iPlayer, SDWORD iEntryTileX, SDWORD iEntryTileY)
 {
-	ASSERT(iPlayer < MAX_PLAYERS, "missionSetTransporterEntry: player %i too high", iPlayer);
+	ASSERT_OR_RETURN(, iPlayer < MAX_PLAYERS, "missionSetTransporterEntry: player %i too high", iPlayer);
 
 	if ((iEntryTileX > scrollMinX) && (iEntryTileX < scrollMaxX))
 	{
@@ -2789,7 +2789,7 @@ void missionSetTransporterEntry(SDWORD iPlayer, SDWORD iEntryTileX, SDWORD iEntr
 
 void missionSetTransporterExit(SDWORD iPlayer, SDWORD iExitTileX, SDWORD iExitTileY)
 {
-	ASSERT(iPlayer < MAX_PLAYERS, "missionSetTransporterExit: player %i too high", iPlayer);
+	ASSERT_OR_RETURN(, iPlayer < MAX_PLAYERS, "missionSetTransporterExit: player %i too high", iPlayer);
 
 	if ((iExitTileX > scrollMinX) && (iExitTileX < scrollMaxX))
 	{
@@ -2814,7 +2814,7 @@ void missionSetTransporterExit(SDWORD iPlayer, SDWORD iExitTileX, SDWORD iExitTi
 
 void missionGetTransporterEntry(SDWORD iPlayer, UWORD *iX, UWORD *iY)
 {
-	ASSERT(iPlayer < MAX_PLAYERS, "missionGetTransporterEntry: player %i too high", iPlayer);
+	ASSERT_OR_RETURN(, iPlayer < MAX_PLAYERS, "missionGetTransporterEntry: player %i too high", iPlayer);
 
 	*iX = (UWORD) world_coord(mission.iTranspEntryTileX[iPlayer]);
 	*iY = (UWORD) world_coord(mission.iTranspEntryTileY[iPlayer]);
@@ -2822,7 +2822,7 @@ void missionGetTransporterEntry(SDWORD iPlayer, UWORD *iX, UWORD *iY)
 
 void missionGetTransporterExit(SDWORD iPlayer, UDWORD *iX, UDWORD *iY)
 {
-	ASSERT(iPlayer < MAX_PLAYERS, "missionGetTransporterExit: player %i too high", iPlayer);
+	ASSERT_OR_RETURN(, iPlayer < MAX_PLAYERS, "missionGetTransporterExit: player %i too high", iPlayer);
 
 	*iX = world_coord(mission.iTranspExitTileX[iPlayer]);
 	*iY = world_coord(mission.iTranspExitTileY[iPlayer]);

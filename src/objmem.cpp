@@ -444,10 +444,8 @@ void freeAllDroids(void)
 /*Remove a single Droid from a list*/
 void removeDroid(DROID *psDroidToRemove, DROID *pList[MAX_PLAYERS])
 {
-	ASSERT(psDroidToRemove->type == OBJ_DROID,
-	       "removeUnit: pointer is not a unit");
-	ASSERT(psDroidToRemove->player < MAX_PLAYERS,
-	       "removeUnit: invalid player for unit");
+	ASSERT_OR_RETURN(, psDroidToRemove->type == OBJ_DROID, "Pointer is not a unit");
+	ASSERT_OR_RETURN(, psDroidToRemove->player < MAX_PLAYERS, "Invalid player for unit");
 	removeObjectFromList(pList, psDroidToRemove, psDroidToRemove->player);
 
 	/* Whenever a droid is removed from the current list its died
