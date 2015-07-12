@@ -1035,7 +1035,7 @@ static void moveCalcDroidSlide(DROID *psDroid, int *pmx, int *pmy)
 {
 	int32_t		droidR, rad, radSq, objR, xdiff, ydiff, distSq, spmx, spmy;
 	bool            bLegs;
-
+	ASSERT_OR_RETURN(, psDroid != NULL, "Bad droid");
 	CHECK_DROID(psDroid);
 
 	bLegs = false;
@@ -1125,7 +1125,7 @@ static void moveCalcDroidSlide(DROID *psDroid, int *pmx, int *pmy)
 				}
 
 				// tell inactive droids to get out the way
-				if (psObst->type == OBJ_DROID)
+				if (psObst && psObst->type == OBJ_DROID)
 				{
 					DROID *psShuffleDroid = (DROID *)psObst;
 

@@ -1048,10 +1048,10 @@ bool checkTransporterSpace(DROID const *psTransporter, DROID const *psAssigned, 
 	DROID		*psDroid, *psNext;
 	UDWORD		capacity;
 
-	ASSERT(psTransporter != NULL, "Invalid droid pointer");
-	ASSERT(psAssigned != NULL, "Invalid droid pointer");
-	ASSERT(isTransporter(psTransporter), "Droid is not a Transporter");
-	ASSERT(psTransporter->psGroup != NULL, "tranporter doesn't have a group");
+	ASSERT_OR_RETURN(false, psTransporter != NULL, "Invalid droid pointer");
+	ASSERT_OR_RETURN(false, psAssigned != NULL, "Invalid droid pointer");
+	ASSERT_OR_RETURN(false, isTransporter(psTransporter), "Droid is not a Transporter");
+	ASSERT_OR_RETURN(false, psTransporter->psGroup != NULL, "tranporter doesn't have a group");
 
 	//work out how much space is currently left
 	capacity = TRANSPORTER_CAPACITY;
@@ -1348,8 +1348,8 @@ void resetTransporter()
 /*checks the order of the droid to see if its currently flying*/
 bool transporterFlying(DROID *psTransporter)
 {
-	ASSERT(psTransporter != NULL, "Invalid droid pointer");
-	ASSERT(isTransporter(psTransporter), "Droid is not a Transporter");
+	ASSERT_OR_RETURN(false, psTransporter != NULL, "Invalid droid pointer");
+	ASSERT_OR_RETURN(false, isTransporter(psTransporter), "Droid is not a Transporter");
 
 	return psTransporter->order.type == DORDER_TRANSPORTOUT ||
 	       psTransporter->order.type == DORDER_TRANSPORTIN ||

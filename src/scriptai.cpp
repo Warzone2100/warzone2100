@@ -173,10 +173,8 @@ bool scrGroupAddGroup(void)
 		return false;
 	}
 
-	ASSERT(psTo != NULL,
-	       "scrGroupAddGroup: Invalid group pointer");
-	ASSERT(psFrom != NULL,
-	       "scrGroupAddGroup: Invalid group pointer");
+	ASSERT_OR_RETURN(false, psTo != NULL, "Invalid group pointer");
+	ASSERT_OR_RETURN(false, psFrom != NULL, "Invalid group pointer");
 
 	for (psDroid = psFrom->psList; psDroid; psDroid = psNext)
 	{
@@ -271,8 +269,7 @@ bool scrInitIterateGroup(void)
 		return false;
 	}
 
-	ASSERT(psGroup != NULL,
-	       "scrInitGroupIterate: invalid group pointer");
+	ASSERT_OR_RETURN(false, psGroup != NULL, "Invalid group pointer");
 
 	psScrIterateGroup = psGroup;
 	psScrIterateGroupDroid = psGroup->psList;
@@ -421,10 +418,8 @@ bool scrOrderGroupObj(void)
 		return false;
 	}
 
-	ASSERT(psGroup != NULL,
-	       "scrOrderGroupObj: Invalid group pointer");
-	ASSERT(psObj != NULL,
-	       "scrOrderGroupObj: Invalid object pointer");
+	ASSERT_OR_RETURN(false, psGroup != NULL, "Invalid group pointer");
+	ASSERT_OR_RETURN(false, psObj != NULL, "Invalid object pointer");
 
 	if (order != DORDER_ATTACK &&
 	    order != DORDER_HELPBUILD &&
@@ -435,8 +430,7 @@ bool scrOrderGroupObj(void)
 	    order != DORDER_FIRESUPPORT &&
 	    order != DORDER_DROIDREPAIR)
 	{
-		ASSERT(false,
-		       "scrOrderGroupObj: Invalid order");
+		ASSERT(false, "Invalid order");
 		return false;
 	}
 
@@ -2056,9 +2050,7 @@ bool scrInitIterateGroupB(void)
 		return false;
 	}
 
-	ASSERT(psGroup != NULL,
-	       "scrInitIterateGroupB: invalid group pointer");
-
+	ASSERT_OR_RETURN(false, psGroup != NULL, "Invalid group pointer");
 	ASSERT_OR_RETURN(false, bucket < MAX_PLAYERS, "Invalid bucket");
 
 	psScrIterateGroupB[bucket] = psGroup;

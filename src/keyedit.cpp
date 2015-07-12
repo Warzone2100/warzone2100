@@ -139,7 +139,7 @@ static bool pushedKeyCombo(KEY_CODE subkey)
 	psMapping = keyGetMappingFromFunction((void *)selectedKeyMap->function);
 
 	/* Cough if it's not there */
-	ASSERT(psMapping != NULL, "Trying to patch a non-existant function mapping - whoop whoop!!!");
+	ASSERT_OR_RETURN(false, psMapping != NULL, "Trying to patch a non-existant function mapping - whoop whoop!!!");
 
 	/* Now alter it to the new values */
 	psMapping->metaKeyCode = metakey;

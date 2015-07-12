@@ -1844,6 +1844,7 @@ STRUCTURE *buildBlueprint(STRUCTURE_STATS const *psStats, Vector2i xy, uint16_t 
 
 static bool setFunctionality(STRUCTURE	*psBuilding, STRUCTURE_TYPE functionType)
 {
+	ASSERT_OR_RETURN(false, psBuilding != NULL, "Invalid pointer");
 	CHECK_STRUCTURE(psBuilding);
 
 	switch (functionType)

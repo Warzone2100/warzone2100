@@ -447,12 +447,11 @@ bool intAddMessageView(MESSAGE *psMessage)
 	sLabInit.height = INTMAP_TITLEHEIGHT;
 	//print research name in title bar
 
-	ASSERT(psMessage->type != MSG_PROXIMITY,
-	       "intAddMessageView:Invalid message type for research");
+	ASSERT_OR_RETURN(false, psMessage->type != MSG_PROXIMITY, "Invalid message type for research");
 
 	psResearch = getResearchForMsg((VIEWDATA *)psMessage->pViewData);
 
-	ASSERT(psResearch != NULL, "Research not found");
+	ASSERT_OR_RETURN(false, psResearch != NULL, "Research not found");
 	//sLabInit.pText=psResearch->pName;
 	sLabInit.pText = psResearch->name;
 
