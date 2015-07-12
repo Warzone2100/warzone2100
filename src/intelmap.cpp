@@ -689,11 +689,10 @@ button has been pressed
 void intIntelButtonPressed(bool proxMsg, UDWORD id)
 {
 	MESSAGE			*psMessage;
-	UDWORD			currID;//, i;
+	UDWORD			currID;
 	RESEARCH		*psResearch;
 
-	ASSERT(proxMsg != true,
-	       "intIntelButtonPressed: Shouldn't be able to get a proximity message!");
+	ASSERT_OR_RETURN(, proxMsg != true, "Shouldn't be able to get a proximity message!");
 
 	if (id == 0)
 	{
@@ -746,65 +745,68 @@ void intIntelButtonPressed(bool proxMsg, UDWORD id)
 		{
 			return;
 		}
-		// If its a video sequence then play it anyway
-		if (((VIEWDATA *)psMessage->pViewData)->type == VIEW_RPL)
-		{
 
-			if (psMessage->pViewData)
+		if ((VIEWDATA *)psMessage->pViewData)
+		{		// If its a video sequence then play it anyway
+			if (((VIEWDATA *)psMessage->pViewData)->type == VIEW_RPL)
 			{
-				intAddMessageView(psMessage);
-			}
 
-			StartMessageSequences(psMessage, true);
-
-		}
-		else if (((VIEWDATA *)psMessage->pViewData)->type == VIEW_RES)
-		{
-			psResearch = getResearchForMsg((VIEWDATA *)psMessage->pViewData);
-			if (psResearch != NULL)
-			{
-				static const float maxVolume = 1.f;
-				static AUDIO_STREAM *playing = NULL;
-
-				// only play the sample once, otherwise, they tend to overlap each other
-				if (sound_isStreamPlaying(playing))
+				if (psMessage->pViewData)
 				{
-					sound_StopStream(playing);
+					intAddMessageView(psMessage);
 				}
 
-				switch (psResearch->iconID)
-				{
-				case IMAGE_RES_DROIDTECH:
-					playing = audio_PlayStream("sequenceaudio/res_droid.ogg", maxVolume, NULL, NULL);
-					break;
-				case IMAGE_RES_WEAPONTECH:
-					playing = audio_PlayStream("sequenceaudio/res_weapons.ogg", maxVolume, NULL, NULL);
-					break;
-				case IMAGE_RES_COMPUTERTECH:
-					playing = audio_PlayStream("sequenceaudio/res_com.ogg", maxVolume, NULL, NULL);
-					break;
-				case IMAGE_RES_POWERTECH:
-					playing = audio_PlayStream("sequenceaudio/res_pow.ogg", maxVolume, NULL, NULL);
-					break;
-				case IMAGE_RES_SYSTEMTECH:
-					playing = audio_PlayStream("sequenceaudio/res_systech.ogg", maxVolume, NULL, NULL);
-					break;
-				case IMAGE_RES_STRUCTURETECH:
-					playing = audio_PlayStream("sequenceaudio/res_strutech.ogg", maxVolume, NULL, NULL);
-					break;
-				case IMAGE_RES_CYBORGTECH:
-					playing = audio_PlayStream("sequenceaudio/res_droid.ogg", maxVolume, NULL, NULL);
-					break;
-				case IMAGE_RES_DEFENCE:
-					playing = audio_PlayStream("sequenceaudio/res_strutech.ogg", maxVolume, NULL, NULL);
-					break;
-				}
-			}
+				StartMessageSequences(psMessage, true);
 
-			//and finally for the dumb?
-			if (psMessage->pViewData)
+			}
+			else if (((VIEWDATA *)psMessage->pViewData)->type == VIEW_RES)
 			{
-				intAddMessageView(psMessage);
+				psResearch = getResearchForMsg((VIEWDATA *)psMessage->pViewData);
+				if (psResearch != NULL)
+				{
+					static const float maxVolume = 1.f;
+					static AUDIO_STREAM *playing = NULL;
+
+					// only play the sample once, otherwise, they tend to overlap each other
+					if (sound_isStreamPlaying(playing))
+					{
+						sound_StopStream(playing);
+					}
+
+					switch (psResearch->iconID)
+					{
+					case IMAGE_RES_DROIDTECH:
+						playing = audio_PlayStream("sequenceaudio/res_droid.ogg", maxVolume, NULL, NULL);
+						break;
+					case IMAGE_RES_WEAPONTECH:
+						playing = audio_PlayStream("sequenceaudio/res_weapons.ogg", maxVolume, NULL, NULL);
+						break;
+					case IMAGE_RES_COMPUTERTECH:
+						playing = audio_PlayStream("sequenceaudio/res_com.ogg", maxVolume, NULL, NULL);
+						break;
+					case IMAGE_RES_POWERTECH:
+						playing = audio_PlayStream("sequenceaudio/res_pow.ogg", maxVolume, NULL, NULL);
+						break;
+					case IMAGE_RES_SYSTEMTECH:
+						playing = audio_PlayStream("sequenceaudio/res_systech.ogg", maxVolume, NULL, NULL);
+						break;
+					case IMAGE_RES_STRUCTURETECH:
+						playing = audio_PlayStream("sequenceaudio/res_strutech.ogg", maxVolume, NULL, NULL);
+						break;
+					case IMAGE_RES_CYBORGTECH:
+						playing = audio_PlayStream("sequenceaudio/res_droid.ogg", maxVolume, NULL, NULL);
+						break;
+					case IMAGE_RES_DEFENCE:
+						playing = audio_PlayStream("sequenceaudio/res_strutech.ogg", maxVolume, NULL, NULL);
+						break;
+					}
+				}
+
+				//and finally for the dumb?
+				if (psMessage->pViewData)
+				{
+					intAddMessageView(psMessage);
+				}
 			}
 		}
 	}

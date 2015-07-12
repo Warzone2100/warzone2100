@@ -228,7 +228,7 @@ void intUpdateProgressBar(WIDGET *psWidget, W_CONTEXT *psContext)
 	case OBJ_STRUCTURE:					// If it's a structure and...
 		Structure = (STRUCTURE *)psObj;
 
-		if (StructureIsManufacturingPending(Structure))  // Is it manufacturing.
+		if (StructIsFactory(Structure) && StructureIsManufacturingPending(Structure))  // Is it manufacturing.
 		{
 			Manufacture = StructureGetFactory(Structure);
 
@@ -279,19 +279,15 @@ void intUpdateProgressBar(WIDGET *psWidget, W_CONTEXT *psContext)
 
 void intUpdateQuantity(WIDGET *psWidget, W_CONTEXT *psContext)
 {
-	BASE_OBJECT		*psObj;
-	STRUCTURE		*Structure;
-	DROID_TEMPLATE         *psTemplate;
-	W_LABEL			*Label = (W_LABEL *)psWidget;
+	W_LABEL *Label = (W_LABEL *)psWidget;
+	BASE_OBJECT *psObj = (BASE_OBJECT *)Label->pUserData; // Get the object associated with this widget.
+	STRUCTURE *Structure = (STRUCTURE *)psObj;
 
-	psObj = (BASE_OBJECT *)Label->pUserData; // Get the object associated with this widget.
-	Structure = (STRUCTURE *)psObj;
-
-	if (psObj != NULL && psObj->type == OBJ_STRUCTURE && StructureIsManufacturingPending(Structure))
+	if (psObj != NULL && StructIsFactory(Structure) && StructureIsManufacturingPending(Structure))
 	{
 		ASSERT(!isDead(psObj), "Object is dead");
 
-		psTemplate = FactoryGetTemplate(StructureGetFactory(Structure));
+		DROID_TEMPLATE *psTemplate = FactoryGetTemplate(StructureGetFactory(Structure));
 		int remaining = getProduction(Structure, psTemplate).numRemaining();
 		char tmp[20];
 		ssprintf(tmp, "%d", remaining);

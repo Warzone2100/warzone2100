@@ -410,7 +410,7 @@ bool seq_AddTextForVideo(const char *pText, SDWORD xOffset, SDWORD yOffset, doub
 
 	iV_SetFont(font_scaled);
 
-	ASSERT(aSeqList[currentSeq].currentText < MAX_TEXT_OVERLAYS, "too many text lines");
+	ASSERT_OR_RETURN(false, aSeqList[currentSeq].currentText < MAX_TEXT_OVERLAYS, "too many text lines");
 
 	sourceLength = strlen(pText);
 	currentLength = sourceLength;
