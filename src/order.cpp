@@ -2966,8 +2966,7 @@ static STRUCTURE *FindAFactory(UDWORD player, UDWORD factoryType)
 {
 	STRUCTURE *psStruct;
 
-	ASSERT(player < MAX_PLAYERS,
-	       "FindAFactory: invalid player number");
+	ASSERT_OR_RETURN(NULL, player < MAX_PLAYERS, "Invalid player number");
 
 	for (psStruct = apsStructLists[player]; psStruct != NULL; psStruct = psStruct->psNext)
 	{
