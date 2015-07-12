@@ -54,7 +54,7 @@ static bool		leftFirst;
 // use col = MAX_PLAYERS for anycolour (see multiint.c)
 bool setPlayerColour(UDWORD player, UDWORD col)
 {
-	ASSERT(player < MAX_PLAYERS && col < MAX_PLAYERS, "Bad colour setting");
+	ASSERT_OR_RETURN(false, player < MAX_PLAYERS && col < MAX_PLAYERS, "Bad colour setting");
 	NetPlay.players[player].colour = col;
 	return true;
 }
