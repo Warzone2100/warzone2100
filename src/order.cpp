@@ -4078,39 +4078,42 @@ bool setFactoryState(STRUCTURE *psStruct, SECONDARY_ORDER sec, SECONDARY_STATE S
 
 
 /** This function sets the structure's secondary state to be pState.
- * @todo This function always returns true, except on an ASSERT which is not a good design.
+ * return true except on an ASSERT (which is not a good design.)
+ * or, an invalid factory.
  */
 bool getFactoryState(STRUCTURE *psStruct, SECONDARY_ORDER sec, SECONDARY_STATE *pState)
 {
 	UDWORD	state;
 
 	ASSERT_OR_RETURN(false, StructIsFactory(psStruct), "Structure is not a factory");
-
-	state = ((FACTORY *)psStruct->pFunctionality)->secondaryOrder;
-
-	switch (sec)
+	if ((FACTORY *)psStruct->pFunctionality)
 	{
-	case DSO_ATTACK_RANGE:
-		*pState = (SECONDARY_STATE)(state & DSS_ARANGE_MASK);
-		break;
-	case DSO_REPAIR_LEVEL:
-		*pState = (SECONDARY_STATE)(state & DSS_REPLEV_MASK);
-		break;
-	case DSO_ATTACK_LEVEL:
-		*pState = (SECONDARY_STATE)(state & DSS_ALEV_MASK);
-		break;
-	case DSO_PATROL:
-		*pState = (SECONDARY_STATE)(state & DSS_PATROL_MASK);
-		break;
-	case DSO_HALTTYPE:
-		*pState = (SECONDARY_STATE)(state & DSS_HALT_MASK);
-		break;
-	default:
-		*pState = (SECONDARY_STATE)0;
-		break;
-	}
+		state = ((FACTORY *)psStruct->pFunctionality)->secondaryOrder;
 
+		switch (sec)
+		{
+		case DSO_ATTACK_RANGE:
+			*pState = (SECONDARY_STATE)(state & DSS_ARANGE_MASK);
+			break;
+		case DSO_REPAIR_LEVEL:
+			*pState = (SECONDARY_STATE)(state & DSS_REPLEV_MASK);
+			break;
+		case DSO_ATTACK_LEVEL:
+			*pState = (SECONDARY_STATE)(state & DSS_ALEV_MASK);
+			break;
+		case DSO_PATROL:
+			*pState = (SECONDARY_STATE)(state & DSS_PATROL_MASK);
+			break;
+		case DSO_HALTTYPE:
+			*pState = (SECONDARY_STATE)(state & DSS_HALT_MASK);
+			break;
+		default:
+			*pState = (SECONDARY_STATE)0;
+			break;
+		}
 	return true;
+	}
+	return false;
 }
 
 
