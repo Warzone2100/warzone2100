@@ -741,14 +741,13 @@ static void processVisibilityLevel(BASE_OBJECT *psObj)
 					if (psMessage)
 					{
 						psMessage->pViewData = (MSG_VIEWDATA *)psObj;
+						debug(LOG_MSG, "Added message for oil well or artefact, pViewData=%p", psMessage->pViewData);
 					}
 					if (!bInTutorial && player == selectedPlayer)
 					{
 						// play message to indicate been seen
 						audio_QueueTrackPos(type, psObj->pos.x, psObj->pos.y, psObj->pos.z);
 					}
-					debug(LOG_MSG, "Added message for oil well or artefact, pViewData=%p at (%d, %d, %d)",
-					      psMessage->pViewData, psObj->pos.x, psObj->pos.y, psObj->pos.z);
 				}
 			}
 		}

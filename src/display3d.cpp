@@ -1363,7 +1363,7 @@ void	renderAnimComponent(const COMPONENT_OBJECT *psObj)
 	const SDWORD posX = spacetime.pos.x + psObj->position.x,
 	             posY = spacetime.pos.y + psObj->position.y;
 
-	ASSERT(psParentObj, "Invalid parent object pointer");
+	ASSERT_OR_RETURN(, psParentObj, "Invalid parent object pointer");
 
 	/* only draw visible bits */
 	if (psParentObj->type == OBJ_DROID && ((DROID *)psParentObj)->visible[selectedPlayer] != UBYTE_MAX)
@@ -2015,6 +2015,7 @@ void renderProximityMsg(PROXIMITY_DISPLAY *psProxDisp)
 	else
 	{
 		ASSERT(!"unknown proximity display message type", "Buggered proximity message type");
+		return;
 	}
 
 	dv.x = msgX - player.p.x;
@@ -2048,7 +2049,7 @@ void renderProximityMsg(PROXIMITY_DISPLAY *psProxDisp)
 	else
 	{
 		//object Proximity displays are for oil resources and artefacts
-		ASSERT(((BASE_OBJECT *)psProxDisp->psMessage->pViewData)->type == OBJ_FEATURE, "Invalid object type for proximity display");
+		ASSERT_OR_RETURN(, ((BASE_OBJECT *)psProxDisp->psMessage->pViewData)->type == OBJ_FEATURE, "Invalid object type for proximity display");
 
 		if (((FEATURE *)psProxDisp->psMessage->pViewData)->psStats->subType == FEAT_OIL_RESOURCE)
 		{
@@ -2064,9 +2065,10 @@ void renderProximityMsg(PROXIMITY_DISPLAY *psProxDisp)
 
 	pie_MatRotY(-player.r.y);
 	pie_MatRotX(-player.r.x);
-
-	pie_Draw3DShape(proxImd, getModularScaledGraphicsTime(proxImd->animInterval, proxImd->numFrames), 0, WZCOL_WHITE, pie_ADDITIVE, 192);
-
+	if (proxImd)
+	{
+		pie_Draw3DShape(proxImd, getModularScaledGraphicsTime(proxImd->animInterval, proxImd->numFrames), 0, WZCOL_WHITE, pie_ADDITIVE, 192);
+	}
 	//get the screen coords for determining when clicked on
 	calcFlagPosScreenCoords(&x, &y, &r);
 	psProxDisp->screenX = x;
