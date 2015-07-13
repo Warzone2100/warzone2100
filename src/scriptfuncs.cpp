@@ -1646,7 +1646,7 @@ bool scrGetFeature(void)
 		return false;
 	}
 
-	ASSERT(bucket >= 0 && bucket < MAX_PLAYERS, "Bucket out of bounds: %d", bucket);
+	ASSERT_OR_RETURN(false, bucket >= 0 && bucket < MAX_PLAYERS, "Bucket out of bounds: %d", bucket);
 
 	count = 0;
 	// go to the correct start point in the feature list.
@@ -1723,7 +1723,7 @@ bool scrGetFeatureB(void)
 		return false;
 	}
 
-	ASSERT(bucket >= 0 && bucket < MAX_PLAYERS, "Bucket out of bounds: %d", bucket);
+	ASSERT_OR_RETURN(false, bucket >= 0 && bucket < MAX_PLAYERS, "Bucket out of bounds: %d", bucket);
 
 	// check to see if badly called
 	if (psFeatureStatToFind[bucket] == NULL)
@@ -2010,14 +2010,13 @@ bool scrInitEnumStructB(void)
 		return false;
 	}
 
-	ASSERT(targetPlayer >= 0 && targetPlayer < MAX_PLAYERS,
+	ASSERT_OR_RETURN(false, targetPlayer >= 0 && targetPlayer < MAX_PLAYERS,
 	       "targetPlayer out of bounds: %d", targetPlayer);
 
-	ASSERT(lookingPlayer >= 0 && lookingPlayer < MAX_PLAYERS,
+	ASSERT_OR_RETURN(false, lookingPlayer >= 0 && lookingPlayer < MAX_PLAYERS,
 	       "lookingPlayer out of bounds: %d", lookingPlayer);
 
-	ASSERT(bucket >= 0 && bucket < MAX_PLAYERS,
-	       "bucket out of bounds: %d", bucket);
+	ASSERT_OR_RETURN(false, bucket >= 0 && bucket < MAX_PLAYERS, "bucket out of bounds: %d", bucket);
 
 	/* Any structure type regardless of the passed type? */
 	structfindanyB[bucket] = any;
@@ -2042,7 +2041,7 @@ bool scrEnumStructB(void)
 		return false;
 	}
 
-	ASSERT(bucket >= 0 && bucket < MAX_PLAYERS, "Bucket out of bounds: %d", bucket);
+	ASSERT_OR_RETURN(false, bucket >= 0 && bucket < MAX_PLAYERS, "Bucket out of bounds: %d", bucket);
 
 	// go to the correct start point in the structure list.
 	count = 0;
@@ -4938,6 +4937,7 @@ bool	scrDestroyUnitsInArea(void)
 	if (player >= MAX_PLAYERS)
 	{
 		ASSERT(false, "Invalid player number in scrKillDroidsInArea");
+		return false;
 	}
 
 	for (psDroid = apsDroidLists[player]; psDroid; psDroid = psNext)
@@ -9680,7 +9680,7 @@ bool scrGetBit(void)
 		return false;
 	}
 
-	ASSERT(val2 < MAX_PLAYERS && val2 >= 0, "scrGetBit(): wrong player index (%d)", val2);
+	ASSERT_OR_RETURN(false, val2 < MAX_PLAYERS && val2 >= 0, "Wrong player index (%d)", val2);
 
 	scrFunctionResult.v.bval = ((val1 & bitMask[val2]) != 0);
 	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
@@ -9704,7 +9704,7 @@ bool scrSetBit(void)
 		return false;
 	}
 
-	ASSERT(position < MAX_PLAYERS && position >= 0, "scrSetBit(): wrong position index (%d)", position);
+	ASSERT_OR_RETURN(false, position < MAX_PLAYERS && position >= 0, "Wrong position index (%d)", position);
 
 	if (bSet)
 	{
