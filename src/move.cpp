@@ -202,7 +202,7 @@ bool moveDroidTo(DROID *psDroid, UDWORD x, UDWORD y, FPATH_MOVETYPE moveType)
  */
 bool moveDroidToNoFormation(DROID *psDroid, UDWORD x, UDWORD y, FPATH_MOVETYPE moveType)
 {
-	ASSERT(x > 0 && y > 0, "Bad movement position");
+	ASSERT_OR_RETURN(false, x > 0 && y > 0, "Bad movement position");
 	return moveDroidToBase(psDroid, x, y, false, moveType);
 }
 
@@ -212,8 +212,7 @@ bool moveDroidToNoFormation(DROID *psDroid, UDWORD x, UDWORD y, FPATH_MOVETYPE m
  */
 void moveDroidToDirect(DROID *psDroid, UDWORD x, UDWORD y)
 {
-	ASSERT(psDroid != NULL && isVtolDroid(psDroid),
-	       "moveUnitToDirect: only valid for a vtol unit");
+	ASSERT_OR_RETURN(, psDroid != NULL && isVtolDroid(psDroid), "Only valid for a VTOL unit");
 
 	fpathSetDirectRoute(psDroid, x, y);
 	psDroid->sMove.Status = MOVENAVIGATE;
@@ -355,13 +354,9 @@ static void moveShuffleDroid(DROID *psDroid, Vector2i s)
  */
 void moveStopDroid(DROID *psDroid)
 {
-	PROPULSION_STATS	*psPropStats;
-
 	CHECK_DROID(psDroid);
-
-	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION];
-	ASSERT(psPropStats != NULL,
-	       "moveUpdateUnit: invalid propulsion stats pointer");
+	PROPULSION_STATS *psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION];
+	ASSERT_OR_RETURN(, psPropStats != NULL, "invalid propulsion stats pointer");
 
 	if (psPropStats->propulsionType == PROPULSION_TYPE_LIFT)
 	{
@@ -615,7 +610,7 @@ static void moveCheckSquished(DROID *psDroid, int32_t emx, int32_t emy)
 			continue;
 		}
 
-		ASSERT(psObj->type == OBJ_DROID && ((DROID *)psObj)->droidType == DROID_PERSON, "squished - eerk");
+		ASSERT_OR_RETURN(, psObj->type == OBJ_DROID && ((DROID *)psObj)->droidType == DROID_PERSON, "squished - eerk");
 
 		objR = moveObjRadius(psObj);
 		rad = droidR + objR;
@@ -1154,8 +1149,7 @@ static Vector2i moveGetObstacleVector(DROID *psDroid, Vector2i dest)
 	int32_t                 numObst = 0, distTot = 0;
 	Vector2i                dir(0, 0);
 	PROPULSION_STATS       *psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION];
-
-	ASSERT(psPropStats, "invalid propulsion stats pointer");
+	ASSERT_OR_RETURN(dir, psPropStats, "invalid propulsion stats pointer");
 
 	int ourMaxSpeed = psPropStats->maxSpeed;
 	int ourRadius = moveObjRadius(psDroid);
@@ -1934,11 +1928,13 @@ static void movePlayDroidMoveAudio(DROID *psDroid)
 	PROPULSION_TYPES	*psPropType;
 	UBYTE				iPropType = 0;
 
-	ASSERT(psDroid != NULL, "Unit pointer invalid");
+	ASSERT_OR_RETURN(, psDroid != NULL, "Unit pointer invalid");
 
 	if ((psDroid != NULL) &&
 	    (psDroid->visible[selectedPlayer]))
 	{
+		PROPULSION_STATS *psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION];
+		ASSERT_OR_RETURN(, psPropStats != NULL, "Invalid propulsion stats pointer");
 		iPropType = asPropulsionStats[(psDroid)->asBits[COMP_PROPULSION]].propulsionType;
 		psPropType = &asPropulsionTypes[iPropType];
 
@@ -1998,8 +1994,7 @@ static void movePlayAudio(DROID *psDroid, bool bStarted, bool bStoppedBefore, SD
 
 	/* get prop stats */
 	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION];
-	ASSERT(psPropStats != NULL,
-	       "moveUpdateUnit: invalid propulsion stats pointer");
+	ASSERT_OR_RETURN(, psPropStats != NULL, "Invalid propulsion stats pointer");
 	propType = psPropStats->propulsionType;
 	psPropType = &asPropulsionTypes[propType];
 
@@ -2325,7 +2320,8 @@ void moveUpdateDroid(DROID *psDroid)
 		break;
 
 	default:
-		ASSERT(false, "moveUpdateUnit: unknown move state");
+		ASSERT(false, "unknown move state");
+		return;
 		break;
 	}
 
