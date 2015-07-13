@@ -303,30 +303,25 @@ void intUpdateQuantity(WIDGET *psWidget, W_CONTEXT *psContext)
 //callback to display the factory number
 void intAddFactoryInc(WIDGET *psWidget, W_CONTEXT *psContext)
 {
-	W_LABEL         *Label = (W_LABEL *)psWidget;
-	BASE_OBJECT     *psObj = (BASE_OBJECT *)Label->pUserData;
+	W_LABEL		*Label = (W_LABEL *)psWidget;
+	BASE_OBJECT	*psObj = (BASE_OBJECT *)Label->pUserData;
 
 	// Get the object associated with this widget.
 	if (psObj != NULL && !isDead(psObj))
 	{
 		STRUCTURE	*Structure = (STRUCTURE *)psObj;
-		FACTORY		*Factory = &Structure->pFunctionality->factory;
-
-		ASSERT((Structure->pStructureType->type == REF_FACTORY ||
-		        Structure->pStructureType->type == REF_CYBORG_FACTORY ||
-		        Structure->pStructureType->type == REF_VTOL_FACTORY),
-		       "Structure is not a factory");
-
-		char tmp[20];
-		ssprintf(tmp, "%u", Factory->psAssemblyPoint->factoryInc + 1);
-		Label->aText = QString::fromUtf8(tmp);
-		Label->show();
+		if (StructIsFactory(Structure))
+		{
+			FACTORY		*Factory = &Structure->pFunctionality->factory;
+			char tmp[20];
+			ssprintf(tmp, "%u", Factory->psAssemblyPoint->factoryInc + 1);
+			Label->aText = QString::fromUtf8(tmp);
+			Label->show();
+			return;
+		}
 	}
-	else
-	{
-		Label->aText.clear();
-		Label->hide();
-	}
+	Label->aText.clear();
+	Label->hide();
 }
 
 //callback to display the production quantity number for a template
