@@ -208,7 +208,7 @@ bool checkPower(int player, uint32_t quantity)
 
 void usePower(int player, uint32_t quantity)
 {
-	ASSERT_OR_RETURN(, player < MAX_PLAYERS, "Bad player (%d)", player);
+	ASSERT_OR_RETURN(, player < MAX_PLAYERS, "Invalid player (%d)", player);
 	syncDebug("usePower%d %" PRId64"-=%u", player, asPower[player].currentPower, quantity);
 	asPower[player].currentPower = MAX(0, asPower[player].currentPower - quantity * FP_ONE);
 }
@@ -251,7 +251,7 @@ static int64_t updateExtractedPower(STRUCTURE *psBuilding)
 //returns the relevant list based on OffWorld or OnWorld
 STRUCTURE *powerStructList(int player)
 {
-	ASSERT(player < MAX_PLAYERS, "powerStructList: Bad player");
+	ASSERT_OR_RETURN(NULL, player < MAX_PLAYERS, "Invalid player %d", player);
 	if (offWorldKeepLists)
 	{
 		return (mission.apsStructLists[player]);
@@ -268,7 +268,7 @@ void updatePlayerPower(int player, int ticks)
 	STRUCTURE		*psStruct;//, *psList;
 	int64_t powerBefore = asPower[player].currentPower;
 
-	ASSERT(player < MAX_PLAYERS, "Bad player %d", player);
+	ASSERT_OR_RETURN(, player < MAX_PLAYERS, "Invalid player %d", player);
 
 	syncDebugEconomy(player, '<');
 
@@ -291,7 +291,7 @@ static void updateCurrentPower(STRUCTURE *psStruct, UDWORD player, int ticks)
 	int i;
 	int64_t extractedPower;
 
-	ASSERT(player < MAX_PLAYERS, "updateCurrentPower: Bad player");
+	ASSERT_OR_RETURN(, player < MAX_PLAYERS, "Invalid player %u", player);
 
 	//each power gen can cope with its associated resource extractors
 	extractedPower = 0;
@@ -324,7 +324,7 @@ static void updateCurrentPower(STRUCTURE *psStruct, UDWORD player, int ticks)
 
 void setPower(unsigned player, int32_t power)
 {
-	ASSERT(player < MAX_PLAYERS, "Bad player (%u)", player);
+	ASSERT_OR_RETURN(, player < MAX_PLAYERS, "Invalid player (%u)", player);
 
 	syncDebug("setPower%d %" PRId64"->%d", player, asPower[player].currentPower, power);
 	asPower[player].currentPower = power * FP_ONE;
@@ -333,7 +333,7 @@ void setPower(unsigned player, int32_t power)
 
 void setPrecisePower(unsigned player, int64_t power)
 {
-	ASSERT(player < MAX_PLAYERS, "Bad player (%u)", player);
+	ASSERT_OR_RETURN(, player < MAX_PLAYERS, "Invalid player (%u)", player);
 
 	syncDebug("setPower%d %" PRId64"->%" PRId64"", player, asPower[player].currentPower, power);
 	asPower[player].currentPower = power;
@@ -342,21 +342,21 @@ void setPrecisePower(unsigned player, int64_t power)
 
 int32_t getPower(unsigned player)
 {
-	ASSERT(player < MAX_PLAYERS, "Bad player (%u)", player);
+	ASSERT_OR_RETURN(0, player < MAX_PLAYERS, "Invalid player (%u)", player);
 
 	return asPower[player].currentPower / FP_ONE;
 }
 
 int64_t getPrecisePower(unsigned player)
 {
-	ASSERT(player < MAX_PLAYERS, "Bad player (%u)", player);
+	ASSERT_OR_RETURN(0, player < MAX_PLAYERS, "Invalid player (%u)", player);
 
 	return asPower[player].currentPower;
 }
 
 int32_t getPowerMinusQueued(unsigned player)
 {
-	ASSERT(player < MAX_PLAYERS, "Bad player (%u)", player);
+	ASSERT_OR_RETURN(0, player < MAX_PLAYERS, "Invalid player (%u)", player);
 
 	return (asPower[player].currentPower - getPreciseQueuedPower(player)) / FP_ONE;
 }
