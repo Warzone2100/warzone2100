@@ -340,14 +340,11 @@ void intAddFactoryInc(WIDGET *psWidget, W_CONTEXT *psContext)
 	{
 		STRUCTURE	*Structure = (STRUCTURE *)psObj;
 		FACTORY		*Factory = &Structure->pFunctionality->factory;
-
-		ASSERT((Structure->pStructureType->type == REF_FACTORY ||
-		        Structure->pStructureType->type == REF_CYBORG_FACTORY ||
-		        Structure->pStructureType->type == REF_VTOL_FACTORY),
-		       "intAddFactoryInc: structure is not a factory");
-
-		snprintf(Label->aText, sizeof(Label->aText), "%u", Factory->psAssemblyPoint->factoryInc + 1);
-		Label->style &= ~WIDG_HIDDEN;
+		if (StructIsFactory(Structure))
+		{
+			snprintf(Label->aText, sizeof(Label->aText), "%u", Factory->psAssemblyPoint->factoryInc + 1);
+			Label->style &= ~WIDG_HIDDEN;
+		}
 	}
 	else
 	{
