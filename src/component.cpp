@@ -669,7 +669,7 @@ static void displayCompObj(DROID *psDroid, bool bButton)
 	/* Indenting here is only to show new matrix context */
 	{
 		psShapeTemp = BODY_IMD(psDroid, psDroid->player);
-		if (psShapeTemp->nconnectors)
+		if (psShapeTemp && psShapeTemp->nconnectors)
 		{
 			/* vtol weapons attach to connector 2 (underneath);
 			 * all others to connector 1 */
