@@ -437,7 +437,7 @@ static void intDisplayReticuleButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yO
 	UBYTE	DownTime = retbutstats[psWidget->UserData].downTime;
 	UBYTE	flashing = retbutstats[psWidget->UserData].flashing;
 	UBYTE	flashTime = retbutstats[psWidget->UserData].flashTime;
-	ASSERT(psWidget->type == WIDG_BUTTON, "Not a button");
+	ASSERT_OR_RETURN(, psWidget->type == WIDG_BUTTON, "Not a button");
 	W_BUTTON *psButton = (W_BUTTON *)psWidget;
 
 	if (psButton->state & WBUT_DISABLE)
@@ -1139,7 +1139,7 @@ INT_RETVAL intRunWidgets(void)
 		/* The objects on the object screen have changed */
 		if (intMode == INT_OBJECT)
 		{
-			ASSERT(widgGetFromID(psWScreen, IDOBJ_TABFORM) != NULL, "No object form");
+			ASSERT_OR_RETURN(INT_NONE, widgGetFromID(psWScreen, IDOBJ_TABFORM) != NULL, "No object form");
 
 			/* Remove the old screen */
 			objMajor = ((ListTabWidget *)widgGetFromID(psWScreen, IDOBJ_TABFORM))->currentPage();
@@ -1732,10 +1732,10 @@ static void intRunStats(void)
 	if (intMode != INT_EDITSTAT && objMode == IOBJ_MANUFACTURE)
 	{
 		psOwner = (BASE_OBJECT *)widgGetUserData(psWScreen, IDSTAT_LOOP_LABEL);
-		ASSERT(psOwner->type == OBJ_STRUCTURE, "intRunStats: Invalid object type");
+		ASSERT_OR_RETURN(, psOwner->type == OBJ_STRUCTURE, "Invalid object type");
 
 		psStruct = (STRUCTURE *)psOwner;
-		ASSERT(StructIsFactory(psStruct), "intRunStats: Invalid Structure type");
+		ASSERT_OR_RETURN(, StructIsFactory(psStruct), "Invalid Structure type");
 
 		psFactory = (FACTORY *)psStruct->pFunctionality;
 		//adjust the loop button if necessary
@@ -1928,7 +1928,7 @@ static void intProcessObject(UDWORD id)
 	SDWORD			butIndex;
 	UDWORD			statButID;
 
-	ASSERT(widgGetFromID(psWScreen, IDOBJ_TABFORM) != NULL, "Missing form");
+	ASSERT_OR_RETURN(, widgGetFromID(psWScreen, IDOBJ_TABFORM) != NULL, "intProcessObject, missing form");
 
 	// deal with CRTL clicks
 	if (objMode == IOBJ_BUILD &&	// What..................?
@@ -2127,13 +2127,12 @@ static void intProcessStats(UDWORD id)
 	FLAG_POSITION	*psFlag;
 	int compIndex;
 
-	ASSERT(widgGetFromID(psWScreen, IDOBJ_TABFORM) != NULL, "Missing form");
+	ASSERT_OR_RETURN(, widgGetFromID(psWScreen, IDOBJ_TABFORM) != NULL, "missing form");
 
 	if (id >= IDSTAT_START &&
 	    id <= IDSTAT_END)
 	{
-		ASSERT(id - IDSTAT_START < numStatsListEntries,
-		       "intProcessStructure: Invalid structure stats id");
+		ASSERT_OR_RETURN(, id - IDSTAT_START < numStatsListEntries, "Invalid structure stats id");
 
 		/* deal with RMB clicks */
 		if (widgGetButtonKey_DEPRECATED(psWScreen) == WKEY_SECONDARY)
@@ -2562,7 +2561,7 @@ void intBuildFinished(DROID *psDroid)
 	UDWORD	droidID;
 	DROID	*psCurr;
 
-	ASSERT(psDroid != NULL, "Invalid droid pointer");
+	ASSERT_OR_RETURN(, psDroid != NULL, "Invalid droid pointer");
 
 	if ((intMode == INT_OBJECT || intMode == INT_STAT) &&
 	    objMode == IOBJ_BUILD)
@@ -2590,8 +2589,7 @@ void intBuildStarted(DROID *psDroid)
 	UDWORD	droidID;
 	DROID	*psCurr;
 
-	ASSERT(psDroid != NULL,
-	       "intBuildStarted: Invalid droid pointer");
+	ASSERT_OR_RETURN(, psDroid != NULL, "Invalid droid pointer");
 
 	if ((intMode == INT_OBJECT || intMode == INT_STAT) &&
 	    objMode == IOBJ_BUILD)
@@ -2734,7 +2732,7 @@ static unsigned rebuildFactoryListAndFindIndex(STRUCTURE *psBuilding)
 /* Tell the interface a factory has completed building ALL droids */
 void intManufactureFinished(STRUCTURE *psBuilding)
 {
-	ASSERT(psBuilding != NULL, "Invalid structure pointer");
+	ASSERT_OR_RETURN(, psBuilding != NULL, "Invalid structure pointer");
 
 	if ((intMode == INT_OBJECT || intMode == INT_STAT) && objMode == IOBJ_MANUFACTURE)
 	{
@@ -2754,7 +2752,7 @@ void intManufactureFinished(STRUCTURE *psBuilding)
 
 void intUpdateManufacture(STRUCTURE *psBuilding)
 {
-	ASSERT(psBuilding != NULL, "Invalid structure pointer");
+	ASSERT_OR_RETURN(, psBuilding != NULL, "Invalid structure pointer");
 
 	if ((intMode == INT_OBJECT || intMode == INT_STAT) && objMode == IOBJ_MANUFACTURE)
 	{
@@ -2770,7 +2768,7 @@ void intUpdateManufacture(STRUCTURE *psBuilding)
 /* Tell the interface a research facility has completed a topic */
 void intResearchFinished(STRUCTURE *psBuilding)
 {
-	ASSERT(psBuilding != NULL, "Invalid structure pointer");
+	ASSERT_OR_RETURN(, psBuilding != NULL, "Invalid structure pointer");
 
 	// just do a screen refresh
 	intRefreshScreen();
@@ -3333,7 +3331,8 @@ static bool intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected, 
 				break;
 
 			default:
-				ASSERT(false, "intAddObject: invalid structure type");
+				ASSERT(false, "Invalid structure type");
+				return false;
 			}
 			objButton->setTip(getName(((STRUCTURE *)psObj)->pStructureType));
 			break;
@@ -3374,7 +3373,7 @@ static bool intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected, 
 					sAllyResearch.pTip = getPlayerName(researches[ii].player);
 					widgAddLabel(psWScreen, &sAllyResearch);
 
-					ASSERT(sAllyResearch.id <= IDOBJ_ALLYRESEARCHEND, " ");
+					ASSERT_OR_RETURN(false, sAllyResearch.id <= IDOBJ_ALLYRESEARCHEND, " ");
 					++sAllyResearch.id;
 				}
 			}
@@ -3485,7 +3484,7 @@ static bool intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected, 
 
 		/* Set up the next button (Objects) */
 		++nextObjButtonId;
-		ASSERT(nextObjButtonId < IDOBJ_OBJEND, "Too many object buttons");
+		ASSERT_OR_RETURN(false, nextObjButtonId < IDOBJ_OBJEND, "Too many object buttons");
 
 		/* Set up the next button (Stats) */
 		sLabInit.id += 1;
@@ -3493,13 +3492,13 @@ static bool intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected, 
 		sLabInitCmdFac2.id += 1;
 
 		sBarInit.id += 1;
-		ASSERT(sBarInit.id < IDOBJ_PROGBAREND, "Too many progress bars");
+		ASSERT_OR_RETURN(false, sBarInit.id < IDOBJ_PROGBAREND, "Too many progress bars");
 
 		sBarInit2.id += 1;
-		ASSERT(sBarInit2.id < IDOBJ_POWERBAREND, "Too many power bars");
+		ASSERT_OR_RETURN(false, sBarInit2.id < IDOBJ_POWERBAREND, "Too many power bars");
 
 		++nextStatButtonId;
-		ASSERT(nextStatButtonId < IDOBJ_STATEND, "Too many stat buttons");
+		ASSERT_OR_RETURN(false, nextStatButtonId < IDOBJ_STATEND, "Too many stat buttons");
 
 		if (nextObjButtonId > IDOBJ_OBJEND)
 		{
@@ -4016,7 +4015,7 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 					widgAddLabel(psWScreen, &sLabInit);
 
 					++allyResearchIconCount;
-					ASSERT(allyResearchIconCount < IDSTAT_ALLYEND - IDSTAT_ALLYSTART, " ");
+					ASSERT_OR_RETURN(false, allyResearchIconCount < IDSTAT_ALLYEND - IDSTAT_ALLYSTART, " too many research icons? ");
 				}
 
 				if (numResearches > 0)
@@ -4089,7 +4088,7 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 /* Select a command droid */
 static bool selectCommand(BASE_OBJECT *psObj)
 {
-	ASSERT(psObj && psObj->type == OBJ_DROID, "Invalid droid pointer");
+	ASSERT_OR_RETURN(false, psObj && psObj->type == OBJ_DROID, "Invalid droid pointer");
 	DROID *psDroid = (DROID *)psObj;
 	if (psDroid->droidType == DROID_COMMAND && psDroid->died == 0)
 	{
@@ -4115,8 +4114,7 @@ static bool selectConstruction(BASE_OBJECT *psObj)
 {
 	DROID	*psDroid;
 
-	ASSERT(psObj != NULL && psObj->type == OBJ_DROID,
-	       "selectConstruction: invalid droid pointer");
+	ASSERT_OR_RETURN(false, psObj != NULL && psObj->type == OBJ_DROID, "Invalid droid pointer");
 	psDroid = (DROID *)psObj;
 
 	//check the droid type
@@ -4136,8 +4134,7 @@ static BASE_STATS *getConstructionStats(BASE_OBJECT *psObj)
 	BASE_OBJECT *Structure;
 	UDWORD x, y;
 
-	ASSERT(psObj != NULL && psObj->type == OBJ_DROID,
-	       "getConstructionStats: invalid droid pointer");
+	ASSERT_OR_RETURN(NULL, psObj != NULL && psObj->type == OBJ_DROID, "Invalid droid pointer");
 
 	if (!(droidType(psDroid) == DROID_CONSTRUCT ||
 	      droidType(psDroid) == DROID_CYBORG_CONSTRUCT))
@@ -4172,7 +4169,7 @@ static BASE_STATS *getConstructionStats(BASE_OBJECT *psObj)
 static bool setConstructionStats(BASE_OBJECT *psObj, BASE_STATS *psStats)
 {
 	DROID *psDroid = castDroid(psObj);
-	ASSERT(psDroid != NULL, "invalid droid pointer");
+	ASSERT_OR_RETURN(false, psDroid != NULL, "invalid droid pointer");
 
 	/* psStats might be NULL if the operation is canceled in the middle */
 	if (psStats != NULL)
@@ -4204,8 +4201,7 @@ static bool selectResearch(BASE_OBJECT *psObj)
 {
 	STRUCTURE	*psResFacility;
 
-	ASSERT(psObj != NULL && psObj->type == OBJ_STRUCTURE,
-	       "selectResearch: invalid Structure pointer");
+	ASSERT_OR_RETURN(false, psObj != NULL && psObj->type == OBJ_STRUCTURE, "Invalid Structure pointer");
 
 	psResFacility = (STRUCTURE *)psObj;
 
@@ -4222,13 +4218,9 @@ static bool selectResearch(BASE_OBJECT *psObj)
 /* Return the stats for a research facility */
 static BASE_STATS *getResearchStats(BASE_OBJECT *psObj)
 {
-	STRUCTURE *psBuilding;
-	RESEARCH_FACILITY *psResearchFacility;
-
-	ASSERT(psObj != NULL && psObj->type == OBJ_STRUCTURE,
-	       "getResearchTip: invalid Structure pointer");
-	psBuilding = (STRUCTURE *)psObj;
-	psResearchFacility = &psBuilding->pFunctionality->researchFacility;
+	ASSERT_OR_RETURN(NULL, psObj != NULL && psObj->type == OBJ_STRUCTURE, "Invalid Structure pointer");
+	STRUCTURE *psBuilding = (STRUCTURE *)psObj;
+	RESEARCH_FACILITY *psResearchFacility = &psBuilding->pFunctionality->researchFacility;
 
 	if (psResearchFacility->psSubjectPending != NULL && !IsResearchCompleted(&asPlayerResList[psObj->player][psResearchFacility->psSubjectPending->index]))
 	{
@@ -4247,8 +4239,7 @@ static bool setResearchStats(BASE_OBJECT *psObj, BASE_STATS *psStats)
 	UDWORD				count;
 	RESEARCH_FACILITY	*psResFacilty;
 
-	ASSERT(psObj != NULL && psObj->type == OBJ_STRUCTURE,
-	       "setResearchStats: invalid Structure pointer");
+	ASSERT_OR_RETURN(false, psObj != NULL && psObj->type == OBJ_STRUCTURE, "Invalid Structure pointer");
 	/* psStats might be NULL if the operation is canceled in the middle */
 	psBuilding = (STRUCTURE *)psObj;
 	psResFacilty = &psBuilding->pFunctionality->researchFacility;
@@ -4315,11 +4306,8 @@ static bool selectManufacture(BASE_OBJECT *psObj)
 /* Return the stats for a Factory */
 static BASE_STATS *getManufactureStats(BASE_OBJECT *psObj)
 {
-	STRUCTURE	*psBuilding;
-
-	ASSERT(psObj != NULL && psObj->type == OBJ_STRUCTURE,
-	       "getManufactureTip: invalid Structure pointer");
-	psBuilding = (STRUCTURE *)psObj;
+	ASSERT_OR_RETURN(NULL, psObj != NULL && psObj->type == OBJ_STRUCTURE, "Invalid Structure pointer");
+	STRUCTURE *psBuilding = (STRUCTURE *)psObj;
 
 	return ((BASE_STATS *)((FACTORY *)psBuilding->pFunctionality)->psSubject);
 }
@@ -4328,13 +4316,10 @@ static BASE_STATS *getManufactureStats(BASE_OBJECT *psObj)
 /* Set the stats for a Factory */
 static bool setManufactureStats(BASE_OBJECT *psObj, BASE_STATS *psStats)
 {
-	STRUCTURE		*Structure;
-
-	ASSERT(psObj != NULL && psObj->type == OBJ_STRUCTURE,
-	       "setManufactureStats: invalid Structure pointer");
+	ASSERT_OR_RETURN(false, psObj != NULL && psObj->type == OBJ_STRUCTURE, "Invalid Structure pointer");
 	/* psStats might be NULL if the operation is canceled in the middle */
 
-	Structure = (STRUCTURE *)psObj;
+	STRUCTURE *Structure = (STRUCTURE *)psObj;
 	//check to see if the factory was already building something
 	if (!((FACTORY *)Structure->pFunctionality)->psSubject)
 	{
@@ -4485,7 +4470,7 @@ static void intObjectRMBPressed(UDWORD id)
 	BASE_OBJECT		*psObj;
 	STRUCTURE		*psStructure;
 
-	ASSERT(id - IDOBJ_OBJSTART < apsObjectList.size(), "intObjectRMBPressed: Invalid object id");
+	ASSERT_OR_RETURN(, id - IDOBJ_OBJSTART < apsObjectList.size(), "Invalid object id");
 
 	/* Find the object that the ID refers to */
 	psObj = intGetObject(id);
@@ -4514,7 +4499,7 @@ static void intObjStatRMBPressed(UDWORD id)
 	BASE_OBJECT		*psObj;
 	STRUCTURE		*psStructure;
 
-	ASSERT(id - IDOBJ_STATSTART < apsObjectList.size(), "intObjStatRMBPressed: Invalid stat id");
+	ASSERT_OR_RETURN(, id - IDOBJ_STATSTART < apsObjectList.size(), "Invalid stat id");
 
 	/* Find the object that the ID refers to */
 	psObj = intGetObject(id);
@@ -4703,7 +4688,7 @@ bool intAddProximityButton(PROXIMITY_DISPLAY *psProxDisp, UDWORD inc)
 		}
 		ASSERT_OR_RETURN(false, cnt != IDPROX_END, "Ran out of proximity displays");
 	}
-	ASSERT(sBFormInit.id < IDPROX_END, "Invalid proximity message button ID %d", (int)sBFormInit.id);
+	ASSERT_OR_RETURN(false, sBFormInit.id < IDPROX_END, "Invalid proximity message button ID %d", (int)sBFormInit.id);
 
 	sBFormInit.majorID = 0;
 	sBFormInit.style = WFORM_CLICKABLE;
@@ -4726,7 +4711,7 @@ bool intAddProximityButton(PROXIMITY_DISPLAY *psProxDisp, UDWORD inc)
 /*Remove a Proximity Button - when the message is deleted*/
 void intRemoveProximityButton(PROXIMITY_DISPLAY *psProxDisp)
 {
-	ASSERT(psProxDisp->buttonID >= IDPROX_START && psProxDisp->buttonID <= IDPROX_END, "Invalid proximity ID");
+	ASSERT_OR_RETURN(, psProxDisp->buttonID >= IDPROX_START && psProxDisp->buttonID <= IDPROX_END, "Invalid proximity ID");
 	widgDelete(psWScreen, psProxDisp->buttonID);
 }
 
