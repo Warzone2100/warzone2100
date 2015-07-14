@@ -5920,8 +5920,8 @@ bool loadSaveCompList(const char *pFileName)
 			QString name = list[i];
 			int state = ini.value(name, UNAVAILABLE).toInt();
 			COMPONENT_STATS *psComp = getCompStatsFromName(name);
-			ASSERT(psComp, "Bad component %s", name.toUtf8().constData());
-			ASSERT(psComp->compType >= 0 && psComp->compType != COMP_NUMCOMPONENTS, "Bad type %d", psComp->compType);
+			ASSERT_OR_RETURN(false, psComp, "Bad component %s", name.toUtf8().constData());
+			ASSERT_OR_RETURN(false, psComp->compType >= 0 && psComp->compType != COMP_NUMCOMPONENTS, "Bad type %d", psComp->compType);
 			ASSERT_OR_RETURN(false, state == UNAVAILABLE || state == AVAILABLE || state == FOUND || state == REDUNDANT,
 			                 "Bad state %d for %s", state, name.toUtf8().constData());
 			apCompLists[player][psComp->compType][psComp->index] = state;
