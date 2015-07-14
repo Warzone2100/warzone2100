@@ -5943,8 +5943,8 @@ bool loadSaveCompList(const char *pFileName)
 				compInc = getCompFromName(j, name.toUtf8().constData());
 				type = j;
 			}
-			ASSERT(compInc >= 0, "Bad component %d", compInc);
-			ASSERT(type >= 0 && type != COMP_NUMCOMPONENTS, "Bad type %d", type);
+			ASSERT_OR_RETURN(false, compInc >= 0, "Bad component %d", compInc);
+			ASSERT_OR_RETURN(false, type >= 0 && type != COMP_NUMCOMPONENTS, "Bad type %d", type);
 			ASSERT_OR_RETURN(false, state == UNAVAILABLE || state == AVAILABLE || state == FOUND || state == REDUNDANT,
 			                 "Bad state %d for %s", state, name.toUtf8().constData());
 			apCompLists[player][type][compInc] = state;
