@@ -135,7 +135,7 @@ void clustRemoveObject(BASE_OBJECT *psObj)
 {
 	SDWORD i;
 
-	ASSERT(psObj->cluster < CLUSTER_MAX,
+	ASSERT_OR_RETURN(, psObj->cluster < CLUSTER_MAX,
 	       "clustRemoveObject: invalid cluster number");
 
 	// update the usage counter
