@@ -1010,7 +1010,7 @@ bool scrAddDroidToMissionList(void)
 	}
 
 	ASSERT_OR_RETURN(false, player >= 0 && player < MAX_PLAYERS, "Invalid player number");
-	ASSERT(psTemplate != NULL, "Invalid template pointer");
+	ASSERT_OR_RETURN(false, psTemplate != NULL, "Invalid template pointer");
 
 #ifdef SCRIPT_CHECK_MAX_UNITS
 	// Don't build a new droid if player limit reached, unless it's a transporter.
@@ -1048,7 +1048,7 @@ bool scrAddDroid(void)
 		return false;
 	}
 	ASSERT_OR_RETURN(false, player >= 0 && player < MAX_PLAYERS, "Invalid player number");
-	ASSERT(psTemplate != NULL, "Invalid template pointer");
+	ASSERT_OR_RETURN(false, psTemplate != NULL, "Invalid template pointer");
 
 #ifdef SCRIPT_CHECK_MAX_UNITS
 	// Don't build a new droid if player limit reached, unless it's a transporter.
@@ -1104,9 +1104,9 @@ bool scrAddDroidToTransporter(void)
 		return true; // allow to continue
 	}
 
-	ASSERT(psTransporter != NULL, "scrAddUnitToTransporter: invalid transporter pointer");
-	ASSERT(psDroid != NULL, "scrAddUnitToTransporter: invalid unit pointer");
-	ASSERT(isTransporter(psTransporter), "scrAddUnitToTransporter: invalid transporter type");
+	ASSERT_OR_RETURN(false, psTransporter != NULL, "Invalid transporter pointer");
+	ASSERT_OR_RETURN(false, psDroid != NULL, "Invalid unit pointer");
+	ASSERT_OR_RETURN(false, isTransporter(psTransporter), "Invalid transporter type");
 
 	/* check for space */
 	if (checkTransporterSpace(psTransporter, psDroid))
@@ -1593,7 +1593,7 @@ bool scrDestroyFeature(void)
 	}
 	if (psFeature == NULL)
 	{
-		ASSERT(psFeature != NULL, "Invalid feature pointer");
+		ASSERT_OR_RETURN(false, psFeature != NULL, "Invalid feature pointer");
 	}
 
 	removeFeature(psFeature);
@@ -1786,7 +1786,7 @@ bool scrAddFeature(void)
 
 	psStat = (FEATURE_STATS *)(asFeatureStats + iFeat);
 
-	ASSERT(psStat != NULL, "Invalid feature pointer");
+	ASSERT_OR_RETURN(false, psStat != NULL, "Invalid feature pointer");
 
 	if (psStat != NULL)
 	{
@@ -1831,7 +1831,7 @@ bool scrAddStructure(void)
 
 	psStat = (STRUCTURE_STATS *)(asStructureStats + iStruct);
 
-	ASSERT(psStat != NULL, "Invalid feature pointer");
+	ASSERT_OR_RETURN(false, psStat != NULL, "Invalid feature pointer");
 
 	if (psStat != NULL)
 	{
@@ -1896,7 +1896,7 @@ bool scrDestroyStructure(void)
 
 	if (psStruct == NULL)
 	{
-		ASSERT(psStruct != NULL, "Invalid structure pointer");
+		ASSERT_OR_RETURN(false, psStruct != NULL, "Invalid structure pointer");
 	}
 
 	removeStruct(psStruct, true);
@@ -1932,11 +1932,9 @@ bool scrInitEnumStruct(void)
 		return false;
 	}
 
-	ASSERT(targetPlayer >= 0 && targetPlayer < MAX_PLAYERS,
-	       "targetPlayer out of bounds: %d", targetPlayer);
+	ASSERT_OR_RETURN(false, targetPlayer >= 0 && targetPlayer < MAX_PLAYERS, "targetPlayer out of bounds: %d", targetPlayer);
 
-	ASSERT(lookingPlayer >= 0 && lookingPlayer < MAX_PLAYERS,
-	       "lookingPlayer out of bounds: %d", lookingPlayer);
+	ASSERT_OR_RETURN(false, lookingPlayer >= 0 && lookingPlayer < MAX_PLAYERS, "lookingPlayer out of bounds: %d", lookingPlayer);
 
 	structfindany = any;
 
@@ -2523,10 +2521,10 @@ bool scrSetScrollParams(void)
 	}
 
 	// check that the values entered are valid
-	ASSERT(minX >= 0, "Minimum scroll x value %d is less than zero - ", minX);
-	ASSERT(minY >= 0, "Minimum scroll y value %d is less than zero - ", minY);
-	ASSERT(maxX <= mapWidth, "Maximum scroll x value %d is greater than mapWidth %d", maxX, (int)mapWidth);
-	ASSERT(maxY <= mapHeight, "Maximum scroll y value %d is greater than mapHeight %d", maxY, (int)mapHeight);
+	ASSERT_OR_RETURN(false, minX >= 0, "Minimum scroll x value %d is less than zero - ", minX);
+	ASSERT_OR_RETURN(false, minY >= 0, "Minimum scroll y value %d is less than zero - ", minY);
+	ASSERT_OR_RETURN(false, maxX <= mapWidth, "Maximum scroll x value %d is greater than mapWidth %d", maxX, (int)mapWidth);
+	ASSERT_OR_RETURN(false, maxY <= mapHeight, "Maximum scroll y value %d is greater than mapHeight %d", maxY, (int)mapHeight);
 
 	prevMinX = scrollMinX;
 	prevMinY = scrollMinY;
@@ -4668,6 +4666,7 @@ bool	scrThreatInArea(void)
 					break;
 				default:
 					ASSERT(false, "Weird droid size in threat assessment");
+					totalThreat += hdThreat; // Set a default threat
 					break;
 				}
 			}
@@ -5052,7 +5051,7 @@ bool scrAddTemplate(void)
 		return false;
 	}
 
-	ASSERT(psTemplate != NULL, "scrAddTemplate: Invalid template pointer");
+	ASSERT_OR_RETURN(false, psTemplate != NULL, "Invalid template pointer");
 
 	if (addTemplate(player, psTemplate))
 	{
@@ -5536,8 +5535,7 @@ bool scrTakeOverSingleDroid(void)
 		return false;
 	}
 
-	ASSERT(psDroidToTake != NULL,
-	       "scrTakeOverSingleUnit: Invalid unit pointer");
+	ASSERT_OR_RETURN(false, psDroidToTake != NULL, "Invalid unit pointer");
 
 	psNewDroid = giftSingleDroid(psDroidToTake, playerToGain);
 
@@ -5651,8 +5649,7 @@ bool scrTakeOverSingleStructure(void)
 		return false;
 	}
 
-	ASSERT(psStructToTake != NULL,
-	       "scrTakeOverSingleStructure: Invalid structure pointer");
+	ASSERT_OR_RETURN(false, psStructToTake != NULL, "Invalid structure pointer");
 
 	structureInc = psStructToTake->pStructureType->ref - REF_STRUCTURE_START;
 	if (playerToGain == (SDWORD)selectedPlayer && StructIsFactory(psStructToTake) &&
@@ -6035,7 +6032,7 @@ bool scrIsVtol(void)
 
 	if (psDroid == NULL)
 	{
-		ASSERT(false, "scrIsVtol: null droid passed in.");
+		ASSERT_OR_RETURN(false, false, "null droid passed in.");
 	}
 
 	scrFunctionResult.v.bval = isVtolDroid(psDroid) ;
@@ -6308,12 +6305,11 @@ bool scrFactoryGetTemplate(void)
 		return false;
 	}
 
-	ASSERT(psStructure != NULL,
-	       "scrFactoryGetTemplate: Invalid structure pointer");
-	ASSERT((psStructure->pStructureType->type == REF_FACTORY ||
+	ASSERT_OR_RETURN(false, psStructure != NULL, "Invalid structure pointer");
+	ASSERT_OR_RETURN(false, (psStructure->pStructureType->type == REF_FACTORY ||
 	        psStructure->pStructureType->type == REF_CYBORG_FACTORY ||
 	        psStructure->pStructureType->type == REF_VTOL_FACTORY),
-	       "scrFactoryGetTemplate: structure is not a factory");
+	       "structure is not a factory");
 
 	if (!StructIsFactory(psStructure))
 	{
@@ -6323,8 +6319,7 @@ bool scrFactoryGetTemplate(void)
 
 	psTemplate = (DROID_TEMPLATE *)((FACTORY *)psStructure->pFunctionality)->psSubject;
 
-	ASSERT(psTemplate != NULL,
-	       "scrFactoryGetTemplate: Invalid template pointer");
+	ASSERT_OR_RETURN(false, psTemplate != NULL, "Invalid template pointer");
 
 	scrFunctionResult.v.oval = psTemplate;
 	if (!stackPushResult((INTERP_TYPE)ST_TEMPLATE, &scrFunctionResult))
@@ -6357,8 +6352,7 @@ bool scrNumTemplatesInProduction(void)
 		return false;
 	}
 
-	ASSERT(psTemplate != NULL,
-	       "scrNumTemplatesInProduction: Invalid template pointer");
+	ASSERT_OR_RETURN(false, psTemplate != NULL, "Invalid template pointer");
 
 	psBaseStats = (BASE_STATS *)psTemplate; //Convert
 
@@ -9056,7 +9050,7 @@ bool addBeaconBlip(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, co
 	{
 		pTempData = CreateBeaconViewData(sender, locX, locY);
 
-		ASSERT(pTempData != NULL, "Empty help data for radar beacon");
+		ASSERT_OR_RETURN(false, pTempData != NULL, "Empty help data for radar beacon");
 
 		psMessage->pViewData = (MSG_VIEWDATA *)pTempData;
 
@@ -10097,7 +10091,7 @@ bool scrSetTileHeight(void)
 		return false;
 	}
 
-	ASSERT(newHeight <= 255, "scrSetTileHeight: height out of bounds");
+	ASSERT_OR_RETURN(false, newHeight <= 255, "height out of bounds");
 
 	psTile = mapTile(tileX, tileY);
 
@@ -10165,7 +10159,7 @@ bool scrCalcDroidPower(void)
 		return false;
 	}
 
-	ASSERT(psDroid != NULL, "can't calculate cost of a null-droid");
+	ASSERT_OR_RETURN(false, psDroid != NULL, "can't calculate cost of a null-droid");
 
 	scrFunctionResult.v.ival = (SDWORD)calcDroidPower(psDroid);
 	if (!stackPushResult(VAL_INT, &scrFunctionResult))
@@ -10189,7 +10183,7 @@ bool scrGetDroidLevel(void)
 		return false;
 	}
 
-	ASSERT(psDroid != NULL, "null-pointer passed");
+	ASSERT_OR_RETURN(false, psDroid != NULL, "null-pointer passed");
 
 	scrFunctionResult.v.ival = (SDWORD)getDroidLevel(psDroid);
 	if (!stackPushResult(VAL_INT, &scrFunctionResult))
