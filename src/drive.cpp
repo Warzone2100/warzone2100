@@ -119,7 +119,7 @@ bool driveIsDriven(DROID *psDroid)
 
 bool driveIsFollower(DROID *psDroid)
 {
-	return (DirectControl) && (psDrivenDroid != NULL) && (psDroid != psDrivenDroid) && psDroid->selected ? true : false;
+	return (DirectControl) && (psDrivenDroid != NULL) && (psDroid && (psDroid != psDrivenDroid)) && psDroid->selected ? true : false;
 }
 
 DROID *driveGetDriven(void)
