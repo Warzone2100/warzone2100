@@ -91,8 +91,7 @@ void audio_GetStaticPos(SDWORD iWorldX, SDWORD iWorldY, SDWORD *piX, SDWORD *piY
 void audio_GetObjectPos(SIMPLE_OBJECT *psBaseObj, SDWORD *piX, SDWORD *piY, SDWORD *piZ)
 {
 	/* check is valid pointer */
-	ASSERT(psBaseObj != NULL,
-	       "audio_GetObjectPos: game object pointer invalid");
+	ASSERT_OR_RETURN(, psBaseObj != NULL, "Game object pointer invalid");
 
 	*piX = psBaseObj->pos.x;
 	*piZ = map_TileHeight(map_coord(psBaseObj->pos.x), map_coord(psBaseObj->pos.y));
