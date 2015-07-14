@@ -162,7 +162,7 @@ ANIM_OBJECT *animObj_Add(BASE_OBJECT *pParentObj, int iAnimID, UWORD uwCycles)
 	BASEANIM *psAnim = anim_GetAnim(iAnimID);
 	UWORD uwObj;
 
-	ASSERT(psAnim != NULL, "anim id %i not found\n", iAnimID);
+	ASSERT_OR_RETURN(NULL, psAnim != NULL, "anim id %i not found\n", iAnimID);
 
 	/* get object from table */
 	psObj = (ANIM_OBJECT *)hashTable_GetElement(g_pAnimObjTable);
