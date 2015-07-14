@@ -218,7 +218,7 @@ uint32_t generateSynchronisedObjectId(void)
 template <typename OBJECT>
 static inline void addObjectToList(OBJECT *list[], OBJECT *object, int player)
 {
-	ASSERT(object != NULL, "Invalid pointer");
+	ASSERT_OR_RETURN(, object != NULL, "Invalid pointer");
 
 	// Prepend the object to the top of the list
 	object->psNext = list[player];
@@ -231,7 +231,7 @@ static inline void addObjectToList(OBJECT *list[], OBJECT *object, int player)
 template <typename OBJECT>
 static inline void addObjectToFuncList(OBJECT *list[], OBJECT *object, int player)
 {
-	ASSERT(object != NULL, "Invalid pointer");
+	ASSERT_OR_RETURN(, object != NULL, "Invalid pointer");
 	ASSERT_OR_RETURN(, static_cast<OBJECT *>(object->psNextFunc) == NULL, "%s(%p) is already in a function list!", objInfo(object), object);
 
 	// Prepend the object to the top of the list
@@ -643,9 +643,8 @@ bool createFlagPosition(FLAG_POSITION **ppsNew, UDWORD player)
 /* add the Flag Position to the Flag Position Lists */
 void addFlagPosition(FLAG_POSITION *psFlagPosToAdd)
 {
-	ASSERT(psFlagPosToAdd != NULL,
-	       "addFlagPosition: Invalid FlagPosition pointer");
-	ASSERT(psFlagPosToAdd->coords.x != ~0, "flag has invalid position");
+	ASSERT_OR_RETURN(, psFlagPosToAdd != NULL, "Invalid FlagPosition pointer");
+	ASSERT_OR_RETURN(, psFlagPosToAdd->coords.x != ~0, "flag has invalid position");
 
 	psFlagPosToAdd->psNext = apsFlagPosLists[psFlagPosToAdd->player];
 	apsFlagPosLists[psFlagPosToAdd->player] = psFlagPosToAdd;
@@ -656,8 +655,7 @@ void removeFlagPosition(FLAG_POSITION *psDel)
 {
 	FLAG_POSITION		*psPrev = NULL, *psCurr;
 
-	ASSERT(psDel != NULL,
-	       "removeFlagPosition: Invalid Flag Positionpointer");
+	ASSERT_OR_RETURN(, psDel != NULL, "Invalid Flag Position pointer");
 
 	if (apsFlagPosLists[psDel->player] == psDel)
 	{
