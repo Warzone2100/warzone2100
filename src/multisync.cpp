@@ -175,7 +175,7 @@ bool sendPing(void)
 // accept and process incoming ping messages.
 bool recvPing(NETQUEUE queue)
 {
-	bool	isNew;
+	bool	isNew = false;
 	uint8_t	sender, us = selectedPlayer;
 	uint8_t challenge[sizeof(pingChallenge)];
 	EcKey::Sig challengeResponse;

@@ -1083,6 +1083,7 @@ Socket *socketAccept(Socket *sock)
 			{
 				debug(LOG_NET, "Couldn't set socket (%p) blocking status (false).  Closing.", conn);
 				socketClose(conn);
+				free(conn);
 				return NULL;
 			}
 
@@ -1146,6 +1147,7 @@ Socket *socketOpen(const SocketAddress *addr, unsigned timeout)
 	{
 		debug(LOG_NET, "Couldn't set socket (%p) blocking status (false).  Closing.", conn);
 		socketClose(conn);
+				free(conn);
 		return NULL;
 	}
 

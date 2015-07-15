@@ -2018,7 +2018,7 @@ static bool SendReadyRequest(UBYTE player, bool bReady)
 bool recvReadyRequest(NETQUEUE queue)
 {
 	UBYTE	player;
-	bool	bReady;
+	bool	bReady = false;
 
 	if (!NetPlay.isHost || !bHosted)  // Only host should act, and only if the game hasn't started yet.
 	{
