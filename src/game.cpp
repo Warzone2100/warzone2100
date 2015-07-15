@@ -422,10 +422,10 @@ static bool serializePlayer(PHYSFS_file *fileHandle, const PLAYER *serializePlay
 
 static bool deserializePlayer(PHYSFS_file *fileHandle, PLAYER *serializePlayer, int player)
 {
-	char aiName[MAX_LEN_AI_NAME];
-	uint32_t position, colour, team;
-	bool retval;
-	uint8_t allocated;
+	char aiName[MAX_LEN_AI_NAME] = { "THEREISNOAI" };
+	uint32_t position = 0, colour = 0, team = 0;
+	bool retval = false;
+	uint8_t allocated = 0;
 
 	retval = (PHYSFS_readUBE32(fileHandle, &position)
 	          && PHYSFS_read(fileHandle, serializePlayer->name, StringSize, 1) == 1
