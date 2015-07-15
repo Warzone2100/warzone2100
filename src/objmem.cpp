@@ -165,11 +165,10 @@ void objmemUpdate(void)
 		psNext = psCurr->psNext;
 		if (psCurr->died <= gameTime - deltaGameTime)
 		{
-			objmemDestroy(psCurr);
-
 			/*set the linked list up - you will never be deleting the top
 			of the list, so don't have to check*/
 			psPrev->psNext = psNext;
+			objmemDestroy(psCurr);
 		}
 		else
 		{
