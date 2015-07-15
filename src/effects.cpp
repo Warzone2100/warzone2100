@@ -303,13 +303,11 @@ void addEffect(const Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type, bool s
 
 void addEffect(const Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type, bool specified, iIMDShape *imd, int lit, unsigned effectTime)
 {
-	EFFECT *psEffect = new EFFECT();
-
 	if (gamePaused())
 	{
 		return;
 	}
-
+	EFFECT *psEffect = new EFFECT();
 	/* Reset control bits */
 	psEffect->control = 0;
 
