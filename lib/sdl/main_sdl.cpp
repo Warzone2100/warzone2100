@@ -1054,7 +1054,7 @@ static void inputHandleKeyEvent(SDL_KeyboardEvent *keyEvent)
 		debug(LOG_INPUT, "Key Code (pressed): 0x%x, %d, [%c] SDLkey=[%s]", CurrentKey, CurrentKey, (CurrentKey < 128) && (CurrentKey > 31) ? (char)CurrentKey : '?', SDL_GetKeyName(CurrentKey));
 
 		code = sdlKeyToKeyCode(CurrentKey);
-		if (code > KEY_MAXSCAN)
+		if (code >= KEY_MAXSCAN)
 		{
 			break;
 		}
