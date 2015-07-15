@@ -6386,7 +6386,7 @@ static bool writeMessageFile(const char *pFileName)
 					}
 				}
 				ASSERT(psProx != NULL, "Save message; proximity display not found for message");
-				if (psProx->type == POS_PROXDATA)
+				if (psProx && psProx->type == POS_PROXDATA)
 				{
 					//message has viewdata so store the name
 					VIEWDATA *pViewData = (VIEWDATA *)psMessage->pViewData;
