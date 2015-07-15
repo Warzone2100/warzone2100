@@ -6689,7 +6689,7 @@ bool plotStructurePreview16(char *backDropSprite, Vector2i playeridpos[])
 			QString name = ini.value("name").toString();
 			Position pos = ini.vector3i("position");
 			playerid = ini.value("startpos", scavengerSlot()).toInt();  // No conversion should be going on, this is the map makers position when player X should be.
-
+			ASSERT_OR_RETURN(false, playerid < MAX_PLAYERS, "Invalid player number");
 			if (name.startsWith("A0CommandCentre"))
 			{
 				HQ = true;
@@ -6793,6 +6793,7 @@ bool plotStructurePreview16(char *backDropSprite, Vector2i playeridpos[])
 			endian_udword(&psSaveStructure2->y);
 			endian_udword(&psSaveStructure2->player);
 			playerid = psSaveStructure2->player;
+			ASSERT_OR_RETURN(false, playerid < MAX_PLAYERS, "Invalid player number");
 			if (strncmp(psSaveStructure2->name, "A0CommandCentre", 15) == 0)
 			{
 				HQ = true;
@@ -6815,7 +6816,7 @@ bool plotStructurePreview16(char *backDropSprite, Vector2i playeridpos[])
 			endian_udword(&psSaveStructure20->y);
 			endian_udword(&psSaveStructure20->player);
 			playerid = psSaveStructure20->player;
-
+			ASSERT_OR_RETURN(false, playerid < MAX_PLAYERS, "Invalid player number");
 			if (strncmp(psSaveStructure20->name, "A0CommandCentre", 15) == 0)
 			{
 				HQ = true;
