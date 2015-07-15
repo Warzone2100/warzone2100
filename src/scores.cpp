@@ -319,7 +319,7 @@ static void drawStatBars(void)
 				infoBars[index].bQueued = true;
 
 				/* Play a sound */
-//				audio_PlayTrack(ID_SOUND_BUTTON_CLICK_5);
+				audio_PlayTrack(ID_SOUND_BUTTON_CLICK_5);
 			}
 			x = infoBars[index].topX + D_W;
 			y = infoBars[index].topY + D_H;
@@ -362,12 +362,10 @@ static void drawStatBars(void)
 			{
 				iV_DrawImage(IntImages, (UWORD)(IMAGE_LEV_0 + (index - STAT_GREEN)), x - 8, y + 2);
 			}
-
-
 		}
 		/* Move onto the next bar */
 		index++;
-		if (infoBars[index].topX == 0 && infoBars[index].topY == 0)
+		if ((index > STAT_ACE) || (infoBars[index].topX == 0 && infoBars[index].topY == 0))
 		{
 			bMoreBars = false;
 		}
