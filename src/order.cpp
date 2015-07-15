@@ -1594,6 +1594,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 			psDroid->order = DroidOrder(DORDER_NONE);
 			break;
 		}
+		ASSERT_OR_RETURN(, psOrder->psObj != NULL, "Can't command a NULL");
 		cmdDroidAddDroid((DROID *)psOrder->psObj, psDroid);
 		break;
 	case DORDER_RETREAT:
