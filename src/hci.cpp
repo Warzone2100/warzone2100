@@ -1232,6 +1232,7 @@ static void intProcessOptions(UDWORD id)
 		widgSetButtonState(psWScreen, IDOPT_PLAYERSTART + selectedPlayer, 0);
 		oldSelectedPlayer = selectedPlayer;
 		selectedPlayer = id - IDOPT_PLAYERSTART;
+		ASSERT_OR_RETURN(, selectedPlayer < MAX_PLAYERS, "Invalid player number");
 		NetPlay.players[selectedPlayer].allocated = !NetPlay.players[selectedPlayer].allocated;
 		NetPlay.players[oldSelectedPlayer].allocated = !NetPlay.players[oldSelectedPlayer].allocated;
 		// Do not change realSelectedPlayer here, so game doesn't pause.
