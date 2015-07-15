@@ -1331,7 +1331,7 @@ bool wzMainScreenSetup(int antialiasing, bool fullscreen, bool vsync)
 		}
 	}
 
-	SDL_DisplayMode current;
+	SDL_DisplayMode current = { 0, 0, 0, 0, 0 };
 	for (int i = 0; i < SDL_GetNumVideoDisplays(); ++i)
 	{
 		int display = SDL_GetCurrentDisplayMode(i, &current);
