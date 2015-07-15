@@ -3314,9 +3314,6 @@ UDWORD getCampaign(const char *fileName)
 
 		return 0;
 	}
-
-	PHYSFS_close(fileHandle);
-	return 0;
 }
 
 // -----------------------------------------------------------------------------------------
