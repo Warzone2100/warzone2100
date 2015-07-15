@@ -170,7 +170,7 @@ bool sendPing(void)
 // accept and process incoming ping messages.
 bool recvPing(NETQUEUE queue)
 {
-	bool	isNew;
+	bool	isNew = false;
 	uint8_t	sender, us = selectedPlayer;
 
 	NETbeginDecode(queue, NET_PING);
