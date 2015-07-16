@@ -1023,20 +1023,22 @@ DroidStartBuild droidStartBuild(DROID *psDroid)
 	}
 
 	//check structure not already built, and we still 'own' it
-	if (psStruct && psStruct->status != SS_BUILT && aiCheckAlliances(psStruct->player, psDroid->player))
+	if (psStruct)
 	{
-		psDroid->actionStarted = gameTime;
-		psDroid->actionPoints = 0;
-		setDroidTarget(psDroid, (BASE_OBJECT *)psStruct);
-		setDroidActionTarget(psDroid, (BASE_OBJECT *)psStruct, 0);
-	}
+		if (psStruct->status != SS_BUILT && aiCheckAlliances(psStruct->player, psDroid->player))
+		{
+			psDroid->actionStarted = gameTime;
+			psDroid->actionPoints = 0;
+			setDroidTarget(psDroid, (BASE_OBJECT *)psStruct);
+			setDroidActionTarget(psDroid, (BASE_OBJECT *)psStruct, 0);
+		}
 
-	if (psStruct->visible[selectedPlayer])
-	{
-		audio_PlayObjStaticTrackCallback(psDroid, ID_SOUND_CONSTRUCTION_START,
-		                                 droidBuildStartAudioCallback);
+		if (psStruct->visible[selectedPlayer])
+		{
+			audio_PlayObjStaticTrackCallback(psDroid, ID_SOUND_CONSTRUCTION_START,
+											 droidBuildStartAudioCallback);
+		}
 	}
-
 	CHECK_DROID(psDroid);
 
 	return DroidStartBuildSuccess;
