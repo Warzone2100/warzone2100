@@ -1895,8 +1895,7 @@ static void addPositionChooser(int player)
 
 static void addColourChooser(UDWORD player)
 {
-	UDWORD i;
-
+	ASSERT_OR_RETURN(, player < MAX_PLAYERS, "Invalid player number");
 	initChooser(player);
 
 	// add form.
@@ -1911,7 +1910,7 @@ static void addColourChooser(UDWORD player)
 	int space = MULTIOP_ROW_WIDTH - 0 - flagW * MAX_PLAYERS_IN_GUI;
 	int spaceDiv = MAX_PLAYERS_IN_GUI;
 	space = std::min(space, 5 * spaceDiv);
-	for (i = 0; i < MAX_PLAYERS_IN_GUI; i++)
+	for (unsigned int i = 0; i < MAX_PLAYERS_IN_GUI; i++)
 	{
 		addMultiBut(psWScreen, MULTIOP_COLCHOOSER_FORM, MULTIOP_COLCHOOSER + getPlayerColour(i),
 		            i * (flagW * spaceDiv + space) / spaceDiv + 7,  4, // x, y

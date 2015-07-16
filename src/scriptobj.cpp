@@ -964,6 +964,7 @@ bool scrValDefLoad(INTERP_VAL *psVal, WzConfig &ini)
 			if (psLevel == NULL)
 			{
 				debug(LOG_FATAL, "Could not find level dataset");
+				return false;	// FIXME: Why are we saying fatal, if this isn't?
 			}
 			psVal->v.sval = psLevel->pName;
 		}

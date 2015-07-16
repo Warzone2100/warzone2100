@@ -926,7 +926,7 @@ void processMouseClickInput(void)
 			else if ((item == MT_SENSOR || item == MT_SENSORSTRUCT || item == MT_SENSORSTRUCTDAM)
 			         && selection == SC_DROID_INDIRECT)
 			{
-				if (!droidSensorDroidWeapon(ObjUnderMouse, psDominantSelected))
+				if (ObjUnderMouse && !droidSensorDroidWeapon(ObjUnderMouse, psDominantSelected))
 				{
 					item = MT_BLOCKING;
 				}
@@ -939,7 +939,7 @@ void processMouseClickInput(void)
 			{
 				// NB. psSelectedVtol was set by vtolDroidSelected - yes I know its horrible, but it
 				// only smells as much as the rest of display.c so I don't feel so bad
-				if (droidSensorDroidWeapon(ObjUnderMouse, psSelectedVtol))
+				if (ObjUnderMouse && droidSensorDroidWeapon(ObjUnderMouse, psSelectedVtol))
 				{
 					selection = SC_DROID_INDIRECT;
 				}
@@ -963,7 +963,7 @@ void processMouseClickInput(void)
 				item = MT_BLOCKING;
 			}
 			// special droid at full health
-			if (arnMPointers[item][selection] == CURSOR_FIX && ObjUnderMouse->type == OBJ_DROID &&
+			if (arnMPointers[item][selection] == CURSOR_FIX && ObjUnderMouse && ObjUnderMouse->type == OBJ_DROID &&
 			    !droidIsDamaged((DROID *)ObjUnderMouse))
 			{
 				item = MT_OWNDROID;

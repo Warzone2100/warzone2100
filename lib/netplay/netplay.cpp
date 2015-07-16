@@ -2092,7 +2092,13 @@ UBYTE NETrecvFile(NETQUEUE queue)
 	}
 
 	//return the percentage count
-	return ((currPos + bytesToRead) * 100) / fileSize;
+	if (fileSize)
+	{
+
+		return ((currPos + bytesToRead) * 100) / fileSize;
+	}
+	debug(LOG_ERROR, "Received 0 byte file from host?");
+	return 100;		// file is nullbyte, so we are done.
 }
 
 static ssize_t readLobbyResponse(Socket *sock, unsigned int timeout)
