@@ -405,6 +405,7 @@
 #  define WZ_DECL_RETURNS_NONNULL  __attribute__((returns_nonnull))
 #  define WZ_DECL_ALLOCATION __attribute__((returns_nonnull, malloc, warn_unused_result))
 #else
+#  define WZ_DECL_ALLOCATION
 #  define WZ_DECL_NONNULL(...)
 #  define WZ_DECL_RETURNS_NONNULL
 #endif
