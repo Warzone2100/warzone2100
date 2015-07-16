@@ -26,17 +26,17 @@
 #include "lib/framework/lexer_input.h"
 
 /* Set the current input buffer for the lexer - used by strresLoad */
-extern void strres_set_extra(YY_EXTRA_TYPE user_defined);
+void strres_set_extra(YY_EXTRA_TYPE user_defined);
 
 /* Call the yacc parser */
-extern int strres_parse(void *psStrRes);
+WZ_DECL_NONNULL(1) int strres_parse(void *psStrRes);
 
 /* Destroy the lexer */
-extern int strres_lex_destroy(void);
+int strres_lex_destroy();
 
-void strres_error(const char *msg);
+WZ_DECL_NONNULL(1) void strres_error(const char *msg);
 
 /* Store a string */
-extern bool strresStoreString(struct STR_RES *psRes, const char *pID, const char *pString);
+WZ_DECL_NONNULL(1, 2, 3) bool strresStoreString(struct STR_RES *psRes, const char *pID, const char *pString);
 
 #endif

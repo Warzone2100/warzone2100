@@ -58,7 +58,7 @@ static uint32_t curTicks = 0; // Number of ticks since execution started
 static uint32_t lastTicks = 0;
 
 /* InitFrameStuff - needs to be called once before frame loop commences */
-static void InitFrameStuff(void)
+static void InitFrameStuff()
 {
 	frameCount = 0.0;
 	curFrames = 0;
@@ -67,12 +67,12 @@ static void InitFrameStuff(void)
 	lastTicks = 0;
 }
 
-int frameRate(void)
+int frameRate()
 {
 	return frameCount;
 }
 
-UDWORD	frameGetFrameNumber(void)
+UDWORD	frameGetFrameNumber()
 {
 	return curFrames;
 }
@@ -109,7 +109,7 @@ bool frameInitialise()
 /*!
  * Call this each cycle to do general house keeping.
  */
-void frameUpdate(void)
+void frameUpdate()
 {
 	curTicks = wzGetTicks();
 	curFrames++;
@@ -127,7 +127,7 @@ void frameUpdate(void)
 /*!
  * Cleanup framework
  */
-void frameShutDown(void)
+void frameShutDown()
 {
 	// Shutdown the resource stuff
 	debug(LOG_NEVER, "No more resources!");
@@ -171,8 +171,7 @@ PHYSFS_file *openLoadFile(const char *fileName, bool hard_fail)
 
   If hard_fail is true, we will assert and report on failures.
 ***************************************************************************/
-static bool loadFile2(const char *pFileName, char **ppFileData, UDWORD *pFileSize,
-                      bool AllocateMem, bool hard_fail)
+static bool loadFile2(const char *pFileName, char **ppFileData, UDWORD *pFileSize, bool AllocateMem, bool hard_fail)
 {
 	if (PHYSFS_isDirectory(pFileName))
 	{
@@ -191,24 +190,16 @@ static bool loadFile2(const char *pFileName, char **ppFileData, UDWORD *pFileSiz
 		return false;  // File size could not be determined. Is a directory?
 	}
 
-	//debug(LOG_WZ, "loadFile2: %s opened, size %i", pFileName, filesize);
-
 	if (AllocateMem)
 	{
 		// Allocate a buffer to store the data and a terminating zero
 		*ppFileData = (char *)malloc(filesize + 1);
-		if (*ppFileData == NULL)
-		{
-			debug(LOG_ERROR, "loadFile2: Out of memory loading %s", pFileName);
-			assert(false);
-			return false;
-		}
 	}
 	else
 	{
 		if (filesize > *pFileSize)
 		{
-			debug(LOG_ERROR, "loadFile2: No room for file %s, buffer is too small! Got: %d Need: %ld", pFileName, *pFileSize, (long)filesize);
+			debug(LOG_ERROR, "No room for file %s, buffer is too small! Got: %d Need: %ld", pFileName, *pFileSize, (long)filesize);
 			assert(false);
 			return false;
 		}
@@ -340,86 +331,6 @@ Sha256 findHashOfFile(char const *realFileName)
 	Sha256 realFileHash = sha256Sum(realFileData, realFileSize);
 	free(realFileData);
 	return realFileHash;
-}
-
-
-/* next four used in HashPJW */
-#define	BITS_IN_int		32
-#define	THREE_QUARTERS	((UDWORD) ((BITS_IN_int * 3) / 4))
-#define	ONE_EIGHTH		((UDWORD) (BITS_IN_int / 8))
-#define	HIGH_BITS		( ~((UDWORD)(~0) >> ONE_EIGHTH ))
-
-
-/***************************************************************************/
-/*
- * HashString
- *
- * Adaptation of Peter Weinberger's (PJW) generic hashing algorithm listed
- * in Binstock+Rex, "Practical Algorithms" p 69.
- *
- * Accepts string and returns hashed integer.
- */
-/***************************************************************************/
-UDWORD HashString(const char *c)
-{
-	UDWORD	iHashValue;
-
-	assert(c != NULL);
-	assert(*c != 0x0);
-
-	for (iHashValue = 0; *c; ++c)
-	{
-		unsigned int i;
-		iHashValue = (iHashValue << ONE_EIGHTH) + *c;
-
-		i = iHashValue & HIGH_BITS;
-		if (i != 0)
-		{
-			iHashValue = (iHashValue ^ (i >> THREE_QUARTERS)) &
-			             ~HIGH_BITS;
-		}
-	}
-	return iHashValue;
-}
-
-/* Converts lower case ASCII characters into upper case characters
- * \param c the character to convert
- * \return an upper case ASCII character
- */
-static inline char upcaseASCII(char c)
-{
-	// If this is _not_ a lower case character simply return
-	if (c < 'a' || c > 'z')
-	{
-		return c;
-	}
-	// Otherwise substract 32 to make the lower case character an upper case one
-	else
-	{
-		return c - 32;
-	}
-}
-
-UDWORD HashStringIgnoreCase(const char *c)
-{
-	UDWORD	iHashValue;
-
-	assert(c != NULL);
-	assert(*c != 0x0);
-
-	for (iHashValue = 0; *c; ++c)
-	{
-		unsigned int i;
-		iHashValue = (iHashValue << ONE_EIGHTH) + upcaseASCII(*c);
-
-		i = iHashValue & HIGH_BITS;
-		if (i != 0)
-		{
-			iHashValue = (iHashValue ^ (i >> THREE_QUARTERS)) &
-			             ~HIGH_BITS;
-		}
-	}
-	return iHashValue;
 }
 
 bool PHYSFS_printf(PHYSFS_file *file, const char *format, ...)

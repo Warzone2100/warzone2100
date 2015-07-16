@@ -23,11 +23,10 @@
 
 #include "lib/framework/types.h"
 
-void PlayList_Init(void);
-void PlayList_Quit(void);
+void PlayList_Init();
+void PlayList_Quit();
 bool PlayList_Read(const char *path);
-const char *PlayList_CurrentSong(void);
-const char *PlayList_NextSong(void);
-void playListTest(void);
+const char *PlayList_CurrentSong();
+const char *PlayList_NextSong();
 
 #endif // __INCLUDED_LIB_SOUND_PLAYLIST_H__

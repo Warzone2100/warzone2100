@@ -400,6 +400,14 @@
 #  define WZ_DECL_FORMAT(archetype, string_index, first_to_check)
 #endif
 
+#if WZ_CC_GNU_PREREQ(2,5)
+#  define WZ_DECL_NONNULL(...) __attribute__((nonnull(__VA_ARGS__)))
+#  define WZ_DECL_RETURNS_NONNULL  __attribute__((returns_nonnull))
+#  define WZ_DECL_ALLOCATION __attribute__((returns_nonnull, malloc, warn_unused_result))
+#else
+#  define WZ_DECL_NONNULL(...)
+#  define WZ_DECL_RETURNS_NONNULL
+#endif
 
 /*!
  * \def WZ_DECL_NORETURN

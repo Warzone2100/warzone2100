@@ -27,10 +27,10 @@
 struct STR_RES;
 
 /* Create a string resource object */
-extern struct STR_RES *strresCreate(void);
+struct STR_RES *strresCreate();
 
 /* Release a string resource object */
-extern void strresDestroy(struct STR_RES *psRes);
+WZ_DECL_NONNULL(1) void strresDestroy(struct STR_RES *psRes);
 
 /**
  * Retrieve a resource string from its identifier string.
@@ -40,12 +40,12 @@ extern void strresDestroy(struct STR_RES *psRes);
  * @return the string associated with the given @c ID string, or NULL if none
  *         could be found.
  */
-extern const char *strresGetString(const struct STR_RES *psRes, const char *ID);
+WZ_DECL_NONNULL(1, 2) const char *strresGetString(const struct STR_RES *psRes, const char *ID);
 
 /* Load a string resource file */
-extern bool strresLoad(struct STR_RES *psRes, const char *fileName);
+WZ_DECL_NONNULL(1, 2) bool strresLoad(struct STR_RES *psRes, const char *fileName);
 
 /* Get the ID string for a string */
-extern const char *strresGetIDfromString(struct STR_RES *psRes, const char *pString);
+WZ_DECL_NONNULL(1, 2) const char *strresGetIDfromString(struct STR_RES *psRes, const char *pString);
 
 #endif

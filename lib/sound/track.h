@@ -121,14 +121,12 @@ void	sound_SetStoppedCallback(AUDIO_CALLBACK pStopTrackCallback);
 UDWORD	sound_GetTrackTimeLastFinished(SDWORD iTrack);
 void	sound_SetTrackTimeLastFinished(SDWORD iTrack, UDWORD iTime);
 
-extern bool sound_isStreamPlaying(AUDIO_STREAM *stream);
-extern void sound_StopStream(AUDIO_STREAM *stream);
-extern void sound_PauseStream(AUDIO_STREAM *stream);
-extern void sound_ResumeStream(AUDIO_STREAM *stream);
-extern AUDIO_STREAM *sound_PlayStreamWithBuf(PHYSFS_file *fileHandle, float volume, void (*onFinished)(void *), void *user_data, size_t streamBufferSize, unsigned int buffer_count);
-extern float sound_GetStreamVolume(const AUDIO_STREAM *stream);
-extern void sound_SetStreamVolume(AUDIO_STREAM *stream, float volume);
-
-void soundTest(void);
+bool sound_isStreamPlaying(AUDIO_STREAM *stream);
+void sound_StopStream(AUDIO_STREAM *stream);
+void sound_PauseStream(AUDIO_STREAM *stream);
+void sound_ResumeStream(AUDIO_STREAM *stream);
+AUDIO_STREAM *sound_PlayStreamWithBuf(PHYSFS_file *fileHandle, float volume, void (*onFinished)(void *), void *user_data, size_t streamBufferSize, unsigned int buffer_count);
+float sound_GetStreamVolume(const AUDIO_STREAM *stream);
+void sound_SetStreamVolume(AUDIO_STREAM *stream, float volume);
 
 #endif	// __INCLUDED_LIB_SOUND_TRACK_H__

@@ -156,8 +156,6 @@ enum
 	FRONTEND_SIDETEXT2,					// side-ee-ways text
 	FRONTEND_SIDETEXT3,					// side-ee-ways text
 	FRONTEND_SIDETEXT4,					// side-ee-ways text
-	FRONTEND_LOADCAM2,					// loading via --GAME CAM_2A
-	FRONTEND_LOADCAM3,					// loading via --GAME CAM_3A
 	FRONTEND_PASSWORDFORM,
 	FRONTEND_HYPERLINK,
 	FRONTEND_UPGRDLINK,

@@ -208,19 +208,19 @@ struct debug_callback
  *
  * Doesn't register any callbacks!
  */
-void debug_init(void);
+void debug_init();
 
 /**
  * Shutdown the debug system and remove all output callbacks
  */
-void debug_exit(void);
+void debug_exit();
 
 /**
  * Have the stderr output callback flush its output before returning.
  *
  * NOTE: This may cause significant slowdowns on some systems.
  */
-extern void debugFlushStderr(void);
+void debugFlushStderr();
 
 /// Return the last set error message, or NULL is none set since last time we were called.
 const char *debugLastError();
@@ -278,21 +278,21 @@ static inline void objTraceEnable(UDWORD id)
 {
 	traceID = id;
 }
-static inline void objTraceDisable(void)
+static inline void objTraceDisable()
 {
 	traceID = (UDWORD) - 1;
 }
 
 // MSVC specific rotuines to set/clear allocation tracking
 #if defined(WZ_CC_MSVC) && defined(DEBUG)
-void debug_MEMCHKOFF(void);
-void debug_MEMCHKON(void);
-void debug_MEMSTATS(void);
+void debug_MEMCHKOFF();
+void debug_MEMCHKON();
+void debug_MEMSTATS();
 #endif
 
 /** Checks if a particular debub flag was enabled */
-extern bool debugPartEnabled(code_part codePart);
+bool debugPartEnabled(code_part codePart);
 
-void debugDisableAssert(void);
+void debugDisableAssert();
 
 #endif // __INCLUDED_LIB_FRAMEWORK_DEBUG_H__

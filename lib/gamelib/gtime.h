@@ -58,39 +58,40 @@ extern UDWORD deltaGraphicsTime;
 extern UDWORD deltaRealTime;
 
 /** Initialise the game clock. */
-extern void gameTimeInit(void);
+void gameTimeInit();
 
 /// Changes the game (and graphics) time.
-extern void setGameTime(uint32_t newGameTime);
+void setGameTime(uint32_t newGameTime);
 
 /** Call this each loop to update the gameTime, graphicsTime and realTime timers, and corresponding deltaGameTime, deltaGraphicsTime and deltaRealTime.
  * The game time increases in GAME_UNITS_PER_TICK increments, and deltaGameTime is either 0 or GAME_UNITS_PER_TICK.
  * @returns true iff the game time ticked.
  */
 void gameTimeUpdate(bool mayUpdate);
+
 /// Call after updating the state, and before processing any net messages that use deltaGameTime. (Sets deltaGameTime = 0.)
-void gameTimeUpdateEnd(void);
+void gameTimeUpdateEnd();
 
 /// Updates the realTime timer, and corresponding deltaRealTime.
-void realTimeUpdate(void);
+void realTimeUpdate();
 
 /* Returns true if gameTime is stopped. */
-extern bool gameTimeIsStopped(void);
+bool gameTimeIsStopped();
 
 /** Call this to stop the game timer. */
-extern void gameTimeStop(void);
+void gameTimeStop();
 
 /** Call this to restart the game timer after a call to gameTimeStop. */
-extern void gameTimeStart(void);
+void gameTimeStart();
 
 /** Call this to set the game time and to reset the time modifier, and to update the real time, setting the delta to 0. */
-extern void gameTimeReset(UDWORD time);
+void gameTimeReset(UDWORD time);
 
 /**
  *	Reset the game time modifiers.
  *	@see gameTimeSetMod
  */
-void gameTimeResetMod(void);
+void gameTimeResetMod();
 
 /** Set the time modifier. Used to speed up the game. */
 void gameTimeSetMod(Rational mod);
@@ -107,7 +108,7 @@ Rational gameTimeGetMod();
  * Operates on game time, which can be paused, and increases in GAME_UNITS_PER_TICK increments.
  * NOTE Currently unused – turns out only getModularScaledGraphicsTime was appropriate in the places this was previously used.
  */
-extern UDWORD getModularScaledGameTime(UDWORD timePeriod, UDWORD requiredRange);
+UDWORD getModularScaledGameTime(UDWORD timePeriod, UDWORD requiredRange);
 /**
  * Returns the graphics time, modulo the time period, scaled to 0..requiredRange.
  * For instance getModularScaledGraphicsTime(4096,256) will return a number that cycles through the values
@@ -116,7 +117,7 @@ extern UDWORD getModularScaledGameTime(UDWORD timePeriod, UDWORD requiredRange);
  *
  * Operates on graphics time, which can be paused.
  */
-extern UDWORD getModularScaledGraphicsTime(UDWORD timePeriod, UDWORD requiredRange);
+UDWORD getModularScaledGraphicsTime(UDWORD timePeriod, UDWORD requiredRange);
 /**
  * Returns the real time, modulo the time period, scaled to 0..requiredRange.
  * For instance getModularScaledRealTime(4096,256) will return a number that cycles through the values
@@ -125,12 +126,11 @@ extern UDWORD getModularScaledGraphicsTime(UDWORD timePeriod, UDWORD requiredRan
  *
  * Operates on real time, which can't be paused.
  */
-extern UDWORD getModularScaledRealTime(UDWORD timePeriod, UDWORD requiredRange);
+UDWORD getModularScaledRealTime(UDWORD timePeriod, UDWORD requiredRange);
 
 
 /** Break down given time into its constituent components. */
 void getTimeComponents(unsigned time, int *hours, int *minutes, int *seconds, int *milliseconds);
-
 
 
 extern float graphicsTimeFraction;  ///< Private performance calculation. Do not use.
@@ -189,7 +189,7 @@ static inline Vector3i gameTimeAdjustedAverage(Vector3i numerator, int denominat
 	return quantiseFraction(numerator, GAME_TICKS_PER_SEC * denominator, gameTime + deltaGameTime, gameTime);
 }
 
-void sendPlayerGameTime(void);                            ///< Sends a GAME_GAME_TIME message with gameTime plus latency to our game queues.
+void sendPlayerGameTime();                                ///< Sends a GAME_GAME_TIME message with gameTime plus latency to our game queues.
 void recvPlayerGameTime(NETQUEUE queue);                  ///< Processes a GAME_GAME_TIME message.
 bool checkPlayerGameTime(unsigned player);                ///< Checks that we are not waiting for a GAME_GAME_TIME message from this player. (player can be NET_ALL_PLAYERS.)
 void setPlayerGameTime(unsigned player, uint32_t time);   ///< Sets the player's time.

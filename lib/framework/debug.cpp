@@ -238,21 +238,21 @@ void debugFlushStderr()
 }
 // MSVC specific rotuines to set/clear allocation tracking
 #if defined(WZ_CC_MSVC) && defined(DEBUG)
-void debug_MEMCHKOFF(void)
+void debug_MEMCHKOFF()
 {
 	// Disable allocation tracking
 	int flags = _CrtSetDbgFlag(_CRTDBG_REPORT_FLAG);
 	flags &= ~_CRTDBG_ALLOC_MEM_DF;
 	_CrtSetDbgFlag(flags);
 }
-void debug_MEMCHKON(void)
+void debug_MEMCHKON()
 {
 	// Enable allocation tracking
 	int flags = _CrtSetDbgFlag(_CRTDBG_REPORT_FLAG);
 	flags |= _CRTDBG_ALLOC_MEM_DF;
 	_CrtSetDbgFlag(flags);
 }
-void debug_MEMSTATS(void)
+void debug_MEMSTATS()
 {
 	_CrtMemState state;
 	_CrtMemCheckpoint(&state);
@@ -260,7 +260,7 @@ void debug_MEMSTATS(void)
 }
 #endif
 
-void debug_init(void)
+void debug_init()
 {
 	/*** Initialize the debug subsystem ***/
 #if defined(WZ_CC_MSVC) && defined(DEBUG)
@@ -291,7 +291,7 @@ void debug_init(void)
 }
 
 
-void debug_exit(void)
+void debug_exit()
 {
 	debug_callback *curCallback = callbackRegistry, * tmpCallback = NULL;
 

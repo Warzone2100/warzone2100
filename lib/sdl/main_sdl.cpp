@@ -55,7 +55,7 @@
 Q_IMPORT_PLUGIN(QWindowsIntegrationPlugin)
 #endif
 
-extern void mainLoop();
+void mainLoop();
 // used in crash reports & version info
 const char *BACKEND = "SDL";
 

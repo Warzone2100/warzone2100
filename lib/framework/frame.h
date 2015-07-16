@@ -94,39 +94,36 @@ enum QUEUE_MODE
  *  @return true when the framework library is successfully initialised, false
  *          when a part of the initialisation failed.
  */
-extern bool frameInitialise(void);
+bool frameInitialise();
 
 /** Shut down the framework library.
  */
-extern void frameShutDown(void);
+void frameShutDown();
 
 /*!
  * Set the framerate limit
  *
  * \param fpsLimit Desired framerate
  */
-extern void setFramerateLimit(int fpsLimit);
+void setFramerateLimit(int fpsLimit);
 
 /*!
  * Get the framerate limit
  *
  * \return Desired framerate
  */
-extern int getFramerateLimit(void);
+int getFramerateLimit();
 
 /** Call this each cycle to allow the framework to deal with
  * windows messages, and do general house keeping.
  */
-extern void frameUpdate(void);
+void frameUpdate();
 
 /** Returns the current frame we're on - used to establish whats on screen. */
-extern UDWORD frameGetFrameNumber(void);
+UDWORD frameGetFrameNumber();
 
 /** Return framerate of the last second. */
 int frameRate();
-
-extern UDWORD HashString(const char *String);
-extern UDWORD HashStringIgnoreCase(const char *String);
 
 static inline WZ_DECL_CONST const char *bool2string(bool var)
 {

@@ -29,14 +29,14 @@ typedef enum
 	SCANLINES_BLACK
 } SCANLINE_MODE;
 
-extern bool seq_Play(const char *filename);
-extern bool seq_Playing(void);
-extern bool seq_Update(void);
-extern void seq_Shutdown(void);
-extern int seq_GetFrameNumber(void);
-extern void seq_SetDisplaySize(int sizeX, int sizeY, int posX, int posY);
-extern void seq_setScanlineMode(SCANLINE_MODE mode);
-extern SCANLINE_MODE seq_getScanlineMode(void);
+bool seq_Play(const char *filename);
+bool seq_Playing();
+bool seq_Update();
+void seq_Shutdown();
+int seq_GetFrameNumber();
+void seq_SetDisplaySize(int sizeX, int sizeY, int posX, int posY);
+void seq_setScanlineMode(SCANLINE_MODE mode);
+SCANLINE_MODE seq_getScanlineMode();
 double seq_GetFrameTime();
 
 #endif // __INCLUDED_LIB_SEQUENCE_SEQUENCE_H__

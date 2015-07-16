@@ -215,12 +215,12 @@ static unsigned int selectedLanguage = 0;
  * Return the language part of the selected locale
  */
 #if !defined(ENABLE_NLS)
-const char *getLanguage(void)
+const char *getLanguage()
 {
 	return "";
 }
 #elif defined(WZ_OS_WIN)
-const char *getLanguage(void)
+const char *getLanguage()
 {
 	USHORT usPrimaryLanguage = PRIMARYLANGID(LANGIDFROMLCID(GetThreadLocale()));
 	unsigned int i;
@@ -241,7 +241,7 @@ const char *getLanguage(void)
 	return "";
 }
 #else
-const char *getLanguage(void)
+const char *getLanguage()
 {
 	static char language[6] = { '\0' }; // large enough for xx_YY
 	const char *localeName = setlocale(LC_MESSAGES, NULL);
@@ -276,7 +276,7 @@ const char *getLanguage(void)
 #endif
 
 
-const char *getLanguageName(void)
+const char *getLanguageName()
 {
 	const char *language = getLanguage();
 	unsigned int i;
@@ -371,7 +371,7 @@ bool setLanguage(const char *language)
 }
 
 
-void setNextLanguage(void)
+void setNextLanguage()
 {
 	selectedLanguage++;
 	if (selectedLanguage > ARRAY_SIZE(map) - 1)
@@ -386,7 +386,7 @@ void setNextLanguage(void)
 }
 
 
-void initI18n(void)
+void initI18n()
 {
 	const char *textdomainDirectory = NULL;
 

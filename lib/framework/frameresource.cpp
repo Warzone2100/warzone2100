@@ -42,11 +42,89 @@ char aCurrResDir[PATH_MAX];
 static SDWORD resBlockID;
 
 // prototypes
-static void ResetResourceFile(void);
+static void ResetResourceFile();
 
 // callback to resload screen.
 static RESLOAD_CALLBACK resLoadCallback = NULL;
 
+
+/* next four used in HashPJW */
+#define	BITS_IN_int		32
+#define	THREE_QUARTERS	((UDWORD) ((BITS_IN_int * 3) / 4))
+#define	ONE_EIGHTH		((UDWORD) (BITS_IN_int / 8))
+#define	HIGH_BITS		( ~((UDWORD)(~0) >> ONE_EIGHTH ))
+
+/***************************************************************************/
+/*
+ * HashString
+ *
+ * Adaptation of Peter Weinberger's (PJW) generic hashing algorithm listed
+ * in Binstock+Rex, "Practical Algorithms" p 69.
+ *
+ * Accepts string and returns hashed integer.
+ */
+/***************************************************************************/
+static UDWORD HashString(const char *c)
+{
+	UDWORD	iHashValue;
+
+	assert(c != NULL);
+	assert(*c != 0x0);
+
+	for (iHashValue = 0; *c; ++c)
+	{
+		unsigned int i;
+		iHashValue = (iHashValue << ONE_EIGHTH) + *c;
+
+		i = iHashValue & HIGH_BITS;
+		if (i != 0)
+		{
+			iHashValue = (iHashValue ^ (i >> THREE_QUARTERS)) &
+			             ~HIGH_BITS;
+		}
+	}
+	return iHashValue;
+}
+
+/* Converts lower case ASCII characters into upper case characters
+ * \param c the character to convert
+ * \return an upper case ASCII character
+ */
+static inline char upcaseASCII(char c)
+{
+	// If this is _not_ a lower case character simply return
+	if (c < 'a' || c > 'z')
+	{
+		return c;
+	}
+	// Otherwise substract 32 to make the lower case character an upper case one
+	else
+	{
+		return c - 32;
+	}
+}
+
+static UDWORD HashStringIgnoreCase(const char *c)
+{
+	UDWORD	iHashValue;
+
+	assert(c != NULL);
+	assert(*c != 0x0);
+
+	for (iHashValue = 0; *c; ++c)
+	{
+		unsigned int i;
+		iHashValue = (iHashValue << ONE_EIGHTH) + upcaseASCII(*c);
+
+		i = iHashValue & HIGH_BITS;
+		if (i != 0)
+		{
+			iHashValue = (iHashValue ^ (i >> THREE_QUARTERS)) &
+			             ~HIGH_BITS;
+		}
+	}
+	return iHashValue;
+}
 
 /* set the callback function for the res loader*/
 void resSetLoadCallback(RESLOAD_CALLBACK funcToCall)
@@ -55,7 +133,7 @@ void resSetLoadCallback(RESLOAD_CALLBACK funcToCall)
 }
 
 /* do the callback for the resload display function */
-static inline void resDoResLoadCallback(void)
+static inline void resDoResLoadCallback()
 {
 	if (resLoadCallback)
 	{
@@ -65,7 +143,7 @@ static inline void resDoResLoadCallback(void)
 
 
 /* Initialise the resource module */
-bool resInitialise(void)
+bool resInitialise()
 {
 	ASSERT(psResTypes == NULL,
 	       "resInitialise: resource module hasn't been shut down??");
@@ -80,7 +158,7 @@ bool resInitialise(void)
 
 
 /* Shutdown the resource module */
-void resShutDown(void)
+void resShutDown()
 {
 	if (psResTypes != NULL)
 	{
@@ -213,7 +291,7 @@ static char LastResourceFilename[PATH_MAX];
  * Returns the filename of the last resource file loaded
  * The filename is always null terminated
  */
-const char *GetLastResourceFilename(void)
+const char *GetLastResourceFilename()
 {
 	return LastResourceFilename;
 }
@@ -245,7 +323,7 @@ static RESOURCEFILE LoadedResourceFiles[MAXLOADEDRESOURCES];
 
 
 // Clear out the resource list ... needs to be called during init.
-static void ResetResourceFile(void)
+static void ResetResourceFile()
 {
 	UWORD i;
 
@@ -256,7 +334,7 @@ static void ResetResourceFile(void)
 }
 
 // Returns an empty resource entry or -1 if none exsist
-static SDWORD FindEmptyResourceFile(void)
+static SDWORD FindEmptyResourceFile()
 {
 	UWORD i;
 	for (i = 0; i < MAXLOADEDRESOURCES ; i++)
@@ -570,11 +648,7 @@ bool resGetHashfromData(const char *pType, const void *pData, UDWORD *pHash)
 		}
 	}
 
-	if (psT == NULL)
-	{
-		ASSERT(false, "resGetHashfromData: Unknown type: %x", HashedType);
-		return false;
-	}
+	ASSERT_OR_RETURN(false, psT, "Unknown type: %x", HashedType);
 
 	// Find the resource
 	for (psRes = psT->psRes; psRes; psRes = psRes->psNext)
@@ -692,7 +766,7 @@ bool resPresent(const char *pType, const char *pID)
 
 
 /* Release all the resources currently loaded and the resource load functions */
-void resReleaseAll(void)
+void resReleaseAll()
 {
 	RES_TYPE *psT, *psNT;
 
@@ -709,7 +783,7 @@ void resReleaseAll(void)
 
 
 /* Release all the resources currently loaded but keep the resource load functions */
-void resReleaseAllData(void)
+void resReleaseAllData()
 {
 	RES_TYPE *psT;
 	RES_DATA *psRes, *psNRes;

@@ -29,8 +29,7 @@ int vslcatprintf(char *str, size_t size, const char *format, va_list ap)
 {
 	size_t str_len;
 
-	if (str == NULL
-	    || size == 0)
+	if (!str || size == 0)
 	{
 		return vsnprintf(NULL, 0, format, ap);
 	}
@@ -82,12 +81,6 @@ int vasprintf(char **strp, const char *format, va_list ap)
 
 	// Allocate memory for our string
 	*strp = (char *)malloc(count + 1);
-	if (*strp == NULL)
-	{
-		debug(LOG_FATAL, "Out of memory!");
-		abort();
-		return -1;
-	}
 
 	// Do the actual printing into our newly created string
 	return vsprintf(*strp, format, ap);
@@ -120,8 +113,7 @@ int wz_vsnprintf(char *str, size_t size, const char *format, va_list ap)
 	count = _vscprintf(format, aq);
 	va_end(aq);
 
-	if (count >= 0
-	    && str != NULL)
+	if (count && str)
 	{
 		// Perfrom the actual string formatting
 		_vsnprintf_s(str, size, _TRUNCATE, format, ap);

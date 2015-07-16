@@ -210,85 +210,85 @@ struct W_SLDINIT : public W_INIT
 #define WBAR_SCALE		100
 
 /** Initialise the widget module */
-extern bool widgInitialise(void);
+bool widgInitialise();
 
 /** Reset the widget module */
-extern void widgReset(void);
+void widgReset();
 
 /** Shut down the widget module */
-extern void widgShutDown(void);
+void widgShutDown();
 
 /** Add a form to the widget screen */
-W_FORM *widgAddForm(W_SCREEN *psScreen, const W_FORMINIT *psInit);
+WZ_DECL_NONNULL(1, 2) W_FORM *widgAddForm(W_SCREEN *psScreen, const W_FORMINIT *psInit);
 
 /** Add a label to the widget screen */
-W_LABEL *widgAddLabel(W_SCREEN *psScreen, const W_LABINIT *psInit);
+WZ_DECL_NONNULL(1, 2) W_LABEL *widgAddLabel(W_SCREEN *psScreen, const W_LABINIT *psInit);
 
 /** Add a button to a form */
-W_BUTTON *widgAddButton(W_SCREEN *psScreen, const W_BUTINIT *psInit);
+WZ_DECL_NONNULL(1, 2) W_BUTTON *widgAddButton(W_SCREEN *psScreen, const W_BUTINIT *psInit);
 
 /** Add an edit box to a form */
-W_EDITBOX *widgAddEditBox(W_SCREEN *psScreen, const W_EDBINIT *psInit);
+WZ_DECL_NONNULL(1, 2) W_EDITBOX *widgAddEditBox(W_SCREEN *psScreen, const W_EDBINIT *psInit);
 
 /** Add a bar graph to a form */
-W_BARGRAPH *widgAddBarGraph(W_SCREEN *psScreen, const W_BARINIT *psInit);
+WZ_DECL_NONNULL(1, 2) W_BARGRAPH *widgAddBarGraph(W_SCREEN *psScreen, const W_BARINIT *psInit);
 
 /** Add a slider to a form */
-W_SLIDER *widgAddSlider(W_SCREEN *psScreen, const W_SLDINIT *psInit);
+WZ_DECL_NONNULL(1, 2) W_SLIDER *widgAddSlider(W_SCREEN *psScreen, const W_SLDINIT *psInit);
 
 /** Delete a widget from the screen */
-extern void widgDelete(W_SCREEN *psScreen, UDWORD id);
+WZ_DECL_NONNULL(1) void widgDelete(W_SCREEN *psScreen, UDWORD id);
 
 /** Hide a widget */
-extern void widgHide(W_SCREEN *psScreen, UDWORD id);
+WZ_DECL_NONNULL(1) void widgHide(W_SCREEN *psScreen, UDWORD id);
 
 /** Reveal a widget */
-extern void widgReveal(W_SCREEN *psScreen, UDWORD id);
+WZ_DECL_NONNULL(1) void widgReveal(W_SCREEN *psScreen, UDWORD id);
 
 /** Return a pointer to a buffer containing the current string of a widget if any.
  * This will always return a valid string pointer.
  * NOTE: The string must be copied out of the buffer
  */
-extern const char *widgGetString(W_SCREEN *psScreen, UDWORD id);
+WZ_DECL_NONNULL(1) const char *widgGetString(W_SCREEN *psScreen, UDWORD id);
 
 /** Set the text in a widget */
-extern void widgSetString(W_SCREEN *psScreen, UDWORD id, const char *pText);
+WZ_DECL_NONNULL(1) void widgSetString(W_SCREEN *psScreen, UDWORD id, const char *pText);
 
 /** Get the current position of a widget */
-extern void widgGetPos(W_SCREEN *psScreen, UDWORD id, SWORD *pX, SWORD *pY);
+WZ_DECL_NONNULL(1, 3, 4) void widgGetPos(W_SCREEN *psScreen, UDWORD id, SWORD *pX, SWORD *pY);
 
 /** Get the current position of a slider bar */
-extern UDWORD widgGetSliderPos(W_SCREEN *psScreen, UDWORD id);
+WZ_DECL_NONNULL(1) UDWORD widgGetSliderPos(W_SCREEN *psScreen, UDWORD id);
 
 /** Set the current position of a slider bar */
-extern void widgSetSliderPos(W_SCREEN *psScreen, UDWORD id, UWORD pos);
+WZ_DECL_NONNULL(1) void widgSetSliderPos(W_SCREEN *psScreen, UDWORD id, UWORD pos);
 
 /** Set the current size of a bar graph */
-extern void widgSetBarSize(W_SCREEN *psScreen, UDWORD id, UDWORD size);
+WZ_DECL_NONNULL(1) void widgSetBarSize(W_SCREEN *psScreen, UDWORD id, UDWORD size);
 
 /** Set the current size of a minor bar on a double graph */
-extern void widgSetMinorBarSize(W_SCREEN *psScreen, UDWORD id, UDWORD size);
+WZ_DECL_NONNULL(1) void widgSetMinorBarSize(W_SCREEN *psScreen, UDWORD id, UDWORD size);
 
 /** Return the ID of the widget the mouse was over this frame */
-extern UDWORD widgGetMouseOver(W_SCREEN *psScreen);
+WZ_DECL_NONNULL(1) UDWORD widgGetMouseOver(W_SCREEN *psScreen);
 
 /** Return the user data for a widget */
-extern void *widgGetUserData(W_SCREEN *psScreen, UDWORD id);
+WZ_DECL_NONNULL(1) void *widgGetUserData(W_SCREEN *psScreen, UDWORD id);
 
 /** Set the user data for a widget */
-extern void widgSetUserData(W_SCREEN *psScreen, UDWORD id, void *UserData);
+WZ_DECL_NONNULL(1) void widgSetUserData(W_SCREEN *psScreen, UDWORD id, void *UserData);
 
 /** Return the user data for a widget */
-extern UDWORD widgGetUserData2(W_SCREEN *psScreen, UDWORD id);
+WZ_DECL_NONNULL(1) UDWORD widgGetUserData2(W_SCREEN *psScreen, UDWORD id);
 
 /** Set the user data for a widget */
-extern void widgSetUserData2(W_SCREEN *psScreen, UDWORD id, UDWORD UserData);
+WZ_DECL_NONNULL(1) void widgSetUserData2(W_SCREEN *psScreen, UDWORD id, UDWORD UserData);
 
 /** Get widget structure */
-extern WIDGET *widgGetFromID(W_SCREEN *psScreen, UDWORD id);
+WZ_DECL_NONNULL(1) WIDGET *widgGetFromID(W_SCREEN *psScreen, UDWORD id);
 
 /** Set tip string for a widget */
-extern void widgSetTip(W_SCREEN *psScreen, UDWORD id, QString pTip);
+WZ_DECL_NONNULL(1) void widgSetTip(W_SCREEN *psScreen, UDWORD id, QString pTip);
 
 /** Colour numbers */
 enum _w_colour
@@ -306,7 +306,7 @@ enum _w_colour
 };
 
 /** Set the global toop tip text colour. */
-extern void widgSetTipColour(PIELIGHT colour);
+void widgSetTipColour(PIELIGHT colour);
 
 // Possible states for a button or clickform.
 enum ButtonState
@@ -320,51 +320,51 @@ enum ButtonState
 };
 
 
-extern void widgSetButtonFlash(W_SCREEN *psScreen, UDWORD id);
-extern void widgClearButtonFlash(W_SCREEN *psScreen, UDWORD id);
+WZ_DECL_NONNULL(1) void widgSetButtonFlash(W_SCREEN *psScreen, UDWORD id);
+WZ_DECL_NONNULL(1) void widgClearButtonFlash(W_SCREEN *psScreen, UDWORD id);
 
 /** Get a button or clickable form's state */
-extern UDWORD widgGetButtonState(W_SCREEN *psScreen, UDWORD id);
+WZ_DECL_NONNULL(1) UDWORD widgGetButtonState(W_SCREEN *psScreen, UDWORD id);
 
 /** Set a button or clickable form's state */
-extern void widgSetButtonState(W_SCREEN *psScreen, UDWORD id, UDWORD state);
+WZ_DECL_NONNULL(1) void widgSetButtonState(W_SCREEN *psScreen, UDWORD id, UDWORD state);
 
 
 /** Return which key was used to press the last returned widget */
-extern UDWORD widgGetButtonKey_DEPRECATED(W_SCREEN *psScreen);
+WZ_DECL_NONNULL(1) UDWORD widgGetButtonKey_DEPRECATED(W_SCREEN *psScreen);
 
 /** Execute a set of widgets for one cycle.
  * Return the id of the widget that was activated, or 0 for none.
  */
-WidgetTriggers const &widgRunScreen(W_SCREEN *psScreen);
+WZ_DECL_NONNULL(1) WidgetTriggers const &widgRunScreen(W_SCREEN *psScreen);
 
 /** Display the screen's widgets in their current state
  * (Call after calling widgRunScreen, this allows the input
  *  processing to be seperated from the display of the widgets).
  */
-extern void widgDisplayScreen(W_SCREEN *psScreen);
+WZ_DECL_NONNULL(1) void widgDisplayScreen(W_SCREEN *psScreen);
 
 
 /** Set the current audio callback function and audio id's. */
-extern void WidgSetAudio(WIDGET_AUDIOCALLBACK Callback, SWORD HilightID, SWORD ClickedID, SWORD ErrorID);
+void WidgSetAudio(WIDGET_AUDIOCALLBACK Callback, SWORD HilightID, SWORD ClickedID, SWORD ErrorID);
 
 /** Get pointer to current audio callback function. */
-extern WIDGET_AUDIOCALLBACK WidgGetAudioCallback(void);
+WIDGET_AUDIOCALLBACK WidgGetAudioCallback();
 
 /** Get current audio ID for hilight. */
-extern SWORD WidgGetHilightAudioID(void);
+SWORD WidgGetHilightAudioID();
 
 /** Get current audio ID for clicked. */
-extern SWORD WidgGetClickedAudioID(void);
+SWORD WidgGetClickedAudioID();
 
 // error ID
-extern SWORD WidgGetErrorAudioID(void);
+SWORD WidgGetErrorAudioID();
 
 /** Enable or disable all sliders. */
-extern void sliderEnableDrag(bool Enable);
+void sliderEnableDrag(bool Enable);
 
-extern void setWidgetsStatus(bool var);
-extern bool getWidgetsStatus(void);
+void setWidgetsStatus(bool var);
+bool getWidgetsStatus();
 
 /** @} */
 

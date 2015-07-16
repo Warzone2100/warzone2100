@@ -176,54 +176,55 @@ struct MousePress
 typedef std::vector<MousePress> MousePresses;
 
 /** Tell the input system that we have lost the focus. */
-extern void inputLoseFocus(void);
-extern void StopTextInput(void);
+void inputLoseFocus();
+void StopTextInput();
 /** Converts the key code into an ascii string. */
-extern void keyScanToString(KEY_CODE code, char *ascii, UDWORD maxStringSize);
+WZ_DECL_NONNULL(2) void keyScanToString(KEY_CODE code, char *ascii, UDWORD maxStringSize);
 
 /** Initialise the input module. */
-extern void inputInitialise(void);
+void inputInitialise();
 
 /** This returns true if the key is currently depressed. */
-extern bool keyDown(KEY_CODE code);
+bool keyDown(KEY_CODE code);
 
 /** This returns true if the key went from being up to being down this frame. */
-extern bool keyPressed(KEY_CODE code);
+bool keyPressed(KEY_CODE code);
 
 /** This returns true if the key went from being down to being up this frame. */
-extern bool keyReleased(KEY_CODE code);
+bool keyReleased(KEY_CODE code);
 
 /** Return the current X position of the mouse. */
-extern uint16_t mouseX(void) WZ_DECL_PURE;
+uint16_t mouseX() WZ_DECL_PURE;
 
 /** Return the current Y position of the mouse. */
-extern uint16_t mouseY(void) WZ_DECL_PURE;
+uint16_t mouseY() WZ_DECL_PURE;
 
 /// Returns true iff the mouse is on the window.
 bool wzMouseInWindow();
 
 /// Return the position of the mouse where it was clicked last.
 Vector2i mousePressPos_DEPRECATED(MOUSE_KEY_CODE code) WZ_DECL_PURE;
+
 /// Return the position of the mouse where it was released last.
 Vector2i mouseReleasePos_DEPRECATED(MOUSE_KEY_CODE code) WZ_DECL_PURE;
 
 /** This returns true if the mouse key is currently depressed. */
-extern bool mouseDown(MOUSE_KEY_CODE code);
+bool mouseDown(MOUSE_KEY_CODE code);
 
 /** This returns true if the mouse key was double clicked. */
-extern bool mouseDClicked(MOUSE_KEY_CODE code);
+bool mouseDClicked(MOUSE_KEY_CODE code);
 
 /** This returns true if the mouse key went from being up to being down this frame. */
-extern bool mousePressed(MOUSE_KEY_CODE code);
+bool mousePressed(MOUSE_KEY_CODE code);
 
 /** This returns true if the mouse key went from being down to being up this frame. */
-extern bool mouseReleased(MOUSE_KEY_CODE code);
+bool mouseReleased(MOUSE_KEY_CODE code);
 
 /** Check for a mouse drag, return the drag start coords if dragging. */
-extern bool mouseDrag(MOUSE_KEY_CODE code, UDWORD *px, UDWORD *py);
+WZ_DECL_NONNULL(2, 3) bool mouseDrag(MOUSE_KEY_CODE code, UDWORD *px, UDWORD *py);
 
-extern void setMouseWarp(bool value);
-extern bool getMouseWarp();
+void setMouseWarp(bool value);
+bool getMouseWarp();
 
 /* The input buffer can contain normal character codes and these control codes */
 #define INPBUF_LEFT		KEY_LEFTARROW
@@ -250,17 +251,18 @@ extern bool getMouseWarp();
  * @param unicode is filled (unless NULL) with the unicode character corresponding
  * to the key press (using the user's native layout).
  */
-extern UDWORD inputGetKey(utf_32_char *unicode);
+UDWORD inputGetKey(utf_32_char *unicode);
+
 /// Returns all clicks/releases since last update.
 MousePresses const &inputGetClicks();
 
 /** Clear the input buffer. */
-extern void inputClearBuffer(void);
+void inputClearBuffer();
 
 /* This is called once a frame so that the system can tell
  * whether a key was pressed this turn or held down from the last frame.
  */
-extern void inputNewFrame(void);
+void inputNewFrame();
 
 static inline bool specialOrderKeyDown()
 {

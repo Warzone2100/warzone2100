@@ -38,42 +38,42 @@ struct screeninfo
 
 void wzMain(int &argc, char **argv);
 bool wzMainScreenSetup(int antialiasing = 0, bool fullscreen = false, bool vsync = true);
-void wzMainEventLoop(void);
-void wzQuit(void);              ///< Quit game
+void wzMainEventLoop();
+void wzQuit();              ///< Quit game
 void wzShutdown();
 void wzToggleFullscreen();
 bool wzIsFullscreen();
 void wzSetCursor(CURSOR index);
-void wzScreenFlip(void);	///< Swap the graphics buffers
+void wzScreenFlip();	///< Swap the graphics buffers
 void wzShowMouse(bool visible); ///< Show the Mouse?
-void wzGrabMouse(void);		///< Trap mouse cursor in application window
-void wzReleaseMouse(void);	///< Undo the wzGrabMouse operation
-bool wzActiveWindow(void);	///< Whether application currently has the mouse pointer over it
-int wzGetTicks(void);		///< Milliseconds since start of game
-void wzFatalDialog(const char *text);	///< Throw up a modal warning dialog
+void wzGrabMouse();		///< Trap mouse cursor in application window
+void wzReleaseMouse();	///< Undo the wzGrabMouse operation
+bool wzActiveWindow();	///< Whether application currently has the mouse pointer over it
+int wzGetTicks();		///< Milliseconds since start of game
+WZ_DECL_NONNULL(1) void wzFatalDialog(const char *text);	///< Throw up a modal warning dialog
 
 std::vector<screeninfo> wzAvailableResolutions();
 void wzSetSwapInterval(int swap);
-int wzGetSwapInterval(void);
-QString wzGetSelection(void);
-QString wzGetCurrentText(void);
-unsigned int wzGetCurrentKey(void);
+int wzGetSwapInterval();
+QString wzGetSelection();
+QString wzGetCurrentText();
+unsigned int wzGetCurrentKey();
 void wzDelay(unsigned int delay);	//delay in ms
 // unicode text support
-void StartTextInput(void);
-void StopTextInput(void);
+void StartTextInput();
+void StopTextInput();
 // Thread related
 WZ_THREAD *wzThreadCreate(int (*threadFunc)(void *), void *data);
-int wzThreadJoin(WZ_THREAD *thread);
-void wzThreadStart(WZ_THREAD *thread);
-void wzYieldCurrentThread(void);
-WZ_MUTEX *wzMutexCreate(void);
-void wzMutexDestroy(WZ_MUTEX *mutex);
-void wzMutexLock(WZ_MUTEX *mutex);
-void wzMutexUnlock(WZ_MUTEX *mutex);
+WZ_DECL_NONNULL(1) int wzThreadJoin(WZ_THREAD *thread);
+WZ_DECL_NONNULL(1) void wzThreadStart(WZ_THREAD *thread);
+void wzYieldCurrentThread();
+WZ_MUTEX *wzMutexCreate();
+WZ_DECL_NONNULL(1) void wzMutexDestroy(WZ_MUTEX *mutex);
+WZ_DECL_NONNULL(1) void wzMutexLock(WZ_MUTEX *mutex);
+WZ_DECL_NONNULL(1) void wzMutexUnlock(WZ_MUTEX *mutex);
 WZ_SEMAPHORE *wzSemaphoreCreate(int startValue);
-void wzSemaphoreDestroy(WZ_SEMAPHORE *semaphore);
-void wzSemaphoreWait(WZ_SEMAPHORE *semaphore);
-void wzSemaphorePost(WZ_SEMAPHORE *semaphore);
+WZ_DECL_NONNULL(1) void wzSemaphoreDestroy(WZ_SEMAPHORE *semaphore);
+WZ_DECL_NONNULL(1) void wzSemaphoreWait(WZ_SEMAPHORE *semaphore);
+WZ_DECL_NONNULL(1) void wzSemaphorePost(WZ_SEMAPHORE *semaphore);
 
 #endif

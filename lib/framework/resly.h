@@ -33,12 +33,12 @@ extern char aCurrResDir[PATH_MAX];
 
 /** Set the current input buffer for the lexer
  */
-extern void res_set_extra(YY_EXTRA_TYPE user_defined);
+void res_set_extra(YY_EXTRA_TYPE user_defined);
 
 /* Call the yacc parser */
-extern int res_parse(void);
+int res_parse();
 
 /* Destroy the lexer */
-extern int res_lex_destroy(void);
+int res_lex_destroy();
 
 #endif

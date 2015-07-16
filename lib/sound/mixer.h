@@ -24,11 +24,11 @@
 #include "lib/framework/frame.h"
 #include "audio.h"
 
-float sound_GetMusicVolume(void);
+float sound_GetMusicVolume();
 void  sound_SetMusicVolume(float volume);
-float sound_GetUIVolume(void);
+float sound_GetUIVolume();
 void  sound_SetUIVolume(float volume);
-float sound_GetEffectsVolume(void);
+float sound_GetEffectsVolume();
 void  sound_SetEffectsVolume(float volume);
 
 #endif // __INCLUDED_LIB_SOUND_MIXER_H__
