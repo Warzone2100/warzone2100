@@ -2334,9 +2334,8 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 			psDroid->action = DACTION_NONE;
 			break;
 		}
-		ASSERT(order->type == DORDER_BUILD || order->type == DORDER_HELPBUILD ||
-		       order->type == DORDER_LINEBUILD,
-		       "cannot start build action without a build order");
+		ASSERT_OR_RETURN(, order->type == DORDER_BUILD || order->type == DORDER_HELPBUILD ||
+		       order->type == DORDER_LINEBUILD, "cannot start build action without a build order");
 		ASSERT_OR_RETURN(, psAction->x > 0 && psAction->y > 0, "Bad build order position");
 		psDroid->action = DACTION_MOVETOBUILD;
 		psDroid->actionPos.x = psAction->x;
@@ -2344,13 +2343,11 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 		moveDroidToNoFormation(psDroid, psDroid->actionPos.x, psDroid->actionPos.y);
 		break;
 	case DACTION_DEMOLISH:
-		ASSERT(order->type == DORDER_DEMOLISH,
-		       "cannot start demolish action without a demolish order");
+		ASSERT_OR_RETURN(, order->type == DORDER_DEMOLISH, "cannot start demolish action without a demolish order");
 		psDroid->action = DACTION_MOVETODEMOLISH;
 		psDroid->actionPos.x = psAction->x;
 		psDroid->actionPos.y = psAction->y;
-		ASSERT((order->psObj != NULL) && (order->psObj->type == OBJ_STRUCTURE),
-		       "invalid target for demolish order");
+		ASSERT_OR_RETURN(, (order->psObj != NULL) && (order->psObj->type == OBJ_STRUCTURE), "invalid target for demolish order");
 		order->psStats = ((STRUCTURE *)order->psObj)->pStructureType;
 		setDroidActionTarget(psDroid, psAction->psObj, 0);
 		moveDroidTo(psDroid, psAction->x, psAction->y);
@@ -2363,8 +2360,8 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 		psDroid->actionPos.y = psAction->y;
 		//this needs setting so that automatic repair works
 		setDroidActionTarget(psDroid, psAction->psObj, 0);
-		ASSERT((psDroid->psActionTarget[0] != NULL) && (psDroid->psActionTarget[0]->type == OBJ_STRUCTURE),
-		       "invalid target for demolish order");
+		ASSERT_OR_RETURN(, (psDroid->psActionTarget[0] != NULL) && (psDroid->psActionTarget[0]->type == OBJ_STRUCTURE),
+		       "invalid target for repair order");
 		order->psStats = ((STRUCTURE *)psDroid->psActionTarget[0])->pStructureType;
 		if (secondaryGetState(psDroid, DSO_HALTTYPE) == DSS_HALT_HOLD &&
 		    (order->type == DORDER_NONE || order->type == DORDER_TEMP_HOLD))
@@ -2463,13 +2460,11 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 		}
 		break;
 	case DACTION_RESTORE:
-		ASSERT(order->type == DORDER_RESTORE,
-		       "cannot start restore action without a restore order");
+		ASSERT_OR_RETURN(, order->type == DORDER_RESTORE, "cannot start restore action without a restore order");
 		psDroid->action = DACTION_MOVETORESTORE;
 		psDroid->actionPos.x = psAction->x;
 		psDroid->actionPos.y = psAction->y;
-		ASSERT((order->psObj != NULL) && (order->psObj->type == OBJ_STRUCTURE),
-		       "invalid target for restore order");
+		ASSERT_OR_RETURN(, (order->psObj != NULL) && (order->psObj->type == OBJ_STRUCTURE), "invalid target for restore order");
 		order->psStats = ((STRUCTURE *)order->psObj)->pStructureType;
 		setDroidActionTarget(psDroid, psAction->psObj, 0);
 		moveDroidTo(psDroid, psAction->x, psAction->y);
