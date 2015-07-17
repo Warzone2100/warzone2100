@@ -142,7 +142,7 @@ struct EFFECT
 	EFFECT *prev, *next; // Previous and next element in linked list
 
 	EFFECT() : player(MAX_PLAYERS), control(0), group(EFFECT_FREED), frameNumber(0), size(0),
-	           baseScale(0), specific(0), birthTime(0), lastFrame(0), lifeSpan(0), radius(0),
+	           baseScale(0), specific(0), birthTime(0), lastFrame(0), frameDelay(0), lifeSpan(0), radius(0),
 	           imd(NULL), prev(NULL), next(NULL) {}
 };
 
