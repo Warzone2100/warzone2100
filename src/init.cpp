@@ -716,9 +716,6 @@ bool systemInitialise(void)
 	// Initialize the iVis text rendering module
 	iV_TextInit();
 
-	// Fix badly named OpenGL functions. Must be done after iV_TextInit, to avoid the renames being clobbered by an extra glewInit() call.
-	screen_EnableMissingFunctions();
-
 	iV_Reset();								// Reset the IV library.
 	readAIs();
 

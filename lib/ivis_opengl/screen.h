@@ -62,7 +62,6 @@ extern void screenDoDumpToDiskIfRequired(void);
 void screen_enableMapPreview(char *name, int width, int height, Vector2i *playerpositions);
 void screen_disableMapPreview(void);
 bool screen_getMapPreview(void);
-void screen_EnableMissingFunctions();
 
 struct OPENGL_DATA
 {
