@@ -224,6 +224,7 @@ dcpgettext_expr(const char *domain,
 		if (msg_ctxt_id != buf)
 		{
 			free(msg_ctxt_id);
+			msg_ctxt_id = NULL;
 		}
 #endif
 		if (translation != msg_ctxt_id)
