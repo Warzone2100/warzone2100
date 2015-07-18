@@ -1072,7 +1072,7 @@ static void inputHandleKeyEvent(SDL_KeyboardEvent *keyEvent)
 		code = keyEvent->keysym.sym;
 		debug(LOG_INPUT, "Key Code (*Depressed*): 0x%x, %d, [%c] SDLkey=[%s]", code, code, (code < 128) && (code > 31) ? (char)code : '?', SDL_GetKeyName(code));
 		code = sdlKeyToKeyCode(keyEvent->keysym.sym);
-		if (code > KEY_MAXSCAN)
+		if (code >= KEY_MAXSCAN)
 		{
 			break;
 		}
