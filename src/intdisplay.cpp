@@ -283,7 +283,7 @@ void intUpdateQuantity(WIDGET *psWidget, W_CONTEXT *psContext)
 	BASE_OBJECT *psObj = (BASE_OBJECT *)Label->pUserData; // Get the object associated with this widget.
 	STRUCTURE *Structure = (STRUCTURE *)psObj;
 
-	if (psObj != NULL && StructIsFactory(Structure) && StructureIsManufacturingPending(Structure))
+	if (psObj != NULL && psObj->type == OBJ_STRUCTURE && StructIsFactory(Structure) && StructureIsManufacturingPending(Structure))
 	{
 		ASSERT(!isDead(psObj), "Object is dead");
 
