@@ -370,12 +370,12 @@ bool SendDroid(DROID_TEMPLATE *pTemplate, uint32_t x, uint32_t y, uint8_t player
 bool recvDroid(NETQUEUE queue)
 {
 	DROID_TEMPLATE t, *pT = &t;
-	DROID *psDroid;
-	uint8_t player;
-	uint32_t id;
-	Position pos;
-	bool haveInitialOrders;
-	INITIAL_DROID_ORDERS initialOrders;
+	DROID *psDroid = NULL;
+	uint8_t player = 0;
+	uint32_t id = 0;
+	Position pos(0, 0, 0);
+	bool haveInitialOrders = false;
+	INITIAL_DROID_ORDERS initialOrders = { 0, 0, 0, 0 };
 
 	NETbeginDecode(queue, GAME_DEBUG_ADD_DROID);
 	{
