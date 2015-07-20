@@ -1648,7 +1648,7 @@ bool loadMissionExtras(const char *pGameToLoad, SWORD levelType)
 	char			aFileName[256];
 	UDWORD			fileExten;
 
-	strcpy(aFileName, pGameToLoad);
+	sstrcpy(aFileName, pGameToLoad);
 	fileExten = strlen(pGameToLoad) - 3;
 	aFileName[fileExten - 1] = '\0';
 	strcat(aFileName, "/");
@@ -1999,7 +1999,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 			{
 				NetPlay.players[i].ai = saveGameData.sNetPlay.players[i].ai;
 				NetPlay.players[i].difficulty = saveGameData.sNetPlay.players[i].difficulty;
-				strcpy(NetPlay.players[i].name, saveGameData.sNetPlay.players[i].name);
+				sstrcpy(NetPlay.players[i].name, saveGameData.sNetPlay.players[i].name);
 				if (saveGameData.sGame.skDiff[i] == UBYTE_MAX || (game.type == CAMPAIGN && i == 0))
 				{
 					NetPlay.players[i].allocated = true;
@@ -2039,7 +2039,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 	powerCalculated = false;
 
 	/* Load in the chosen file data */
-	strcpy(aFileName, pGameToLoad);
+	sstrcpy(aFileName, pGameToLoad);
 	fileExten = strlen(aFileName) - 3;			// hack - !
 	aFileName[fileExten - 1] = '\0';
 	strcat(aFileName, "/");
@@ -3784,7 +3784,7 @@ bool gameLoadV(PHYSFS_file *fileHandle, unsigned int version)
 			}
 			NetPlay.players[player].ai = saveGameData.sNetPlay.players[player].ai;
 			NetPlay.players[player].difficulty = saveGameData.sNetPlay.players[player].difficulty;
-			strcpy(NetPlay.players[player].name, saveGameData.sNetPlay.players[player].name);
+			sstrcpy(NetPlay.players[player].name, saveGameData.sNetPlay.players[player].name);
 			if ((saveGameData.sGame.skDiff[player] == UBYTE_MAX || game.type == CAMPAIGN) && player == 0)
 			{
 				NetPlay.players[player].allocated = true;
@@ -4032,7 +4032,7 @@ static bool writeGameFile(const char *fileName, SDWORD saveType)
 	saveGame.savePlayer	= selectedPlayer;
 	saveGame.multiPlayer = bMultiPlayer;
 	saveGame.sNetPlay	= NetPlay;
-	strcpy(saveGame.sPName, getPlayerName(selectedPlayer));
+	sstrcpy(saveGame.sPName, getPlayerName(selectedPlayer));
 	for (i = 0; i < MAX_PLAYERS; ++i)
 	{
 		saveGame.sPlayerIndex[i] = i;
@@ -4041,7 +4041,7 @@ static bool writeGameFile(const char *fileName, SDWORD saveType)
 	//version 34
 	for (i = 0; i < MAX_PLAYERS; ++i)
 	{
-		strcpy(saveGame.sPlayerName[i], getPlayerName(i));
+		sstrcpy(saveGame.sPlayerName[i], getPlayerName(i));
 	}
 
 	//version 38
@@ -6478,7 +6478,7 @@ static bool	writeScriptState(const char *pFileName)
 	}
 
 	// The below belongs to the new javascript stuff
-	strcpy(jsFilename, pFileName);
+	sstrcpy(jsFilename, pFileName);
 	ext = strrchr(jsFilename, '/');
 	*ext = '\0';
 	strcat(jsFilename, "/scriptstate.json");
@@ -6496,7 +6496,7 @@ bool loadScriptState(char *pFileName)
 	pFileName[strlen(pFileName) - 4] = '\0';
 
 	// The below belongs to the new javascript stuff
-	strcpy(jsFilename, pFileName);
+	sstrcpy(jsFilename, pFileName);
 	strcat(jsFilename, "/scriptstate.json");
 	loadScriptStates(jsFilename);
 
@@ -6590,13 +6590,13 @@ bool plotStructurePreview16(char *backDropSprite, Vector2i playeridpos[])
 	bool HQ = false;
 
 	psLevel = levFindDataSet(game.map, &game.hash);
-	strcpy(aFileName, psLevel->apDataFiles[0]);
+	sstrcpy(aFileName, psLevel->apDataFiles[0]);
 	aFileName[strlen(aFileName) - 4] = '\0';
 	strcat(aFileName, "/struct.bjo");
 
 	if (!PHYSFS_exists(aFileName))	// use new version of structure data
 	{
-		strcpy(aFileName, psLevel->apDataFiles[0]);
+		sstrcpy(aFileName, psLevel->apDataFiles[0]);
 		aFileName[strlen(aFileName) - 4] = '\0';
 		strcat(aFileName, "/struct.json");
 		WzConfig ini(aFileName, WzConfig::ReadOnly);
@@ -6790,12 +6790,12 @@ static void plotFeature(char *backDropSprite)
 	const PIELIGHT colourBarrel = WZCOL_MAP_PREVIEW_BARREL;
 
 	psLevel = levFindDataSet(game.map, &game.hash);
-	strcpy(aFileName, psLevel->apDataFiles[0]);
+	sstrcpy(aFileName, psLevel->apDataFiles[0]);
 	aFileName[strlen(aFileName) - 4] = '\0';
 	strcat(aFileName, "/feat.bjo");
 	if (!PHYSFS_exists(aFileName))	// use new version of feature data
 	{
-		strcpy(aFileName, psLevel->apDataFiles[0]);
+		sstrcpy(aFileName, psLevel->apDataFiles[0]);
 		aFileName[strlen(aFileName) - 4] = '\0';
 		strcat(aFileName, "/feature.json");
 		WzConfig ini(aFileName, WzConfig::ReadOnly);

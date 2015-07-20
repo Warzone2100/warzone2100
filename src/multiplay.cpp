@@ -1916,7 +1916,7 @@ UDWORD msgStackPush(SDWORD CBtype, SDWORD plFrom, SDWORD plTo, const char *tStr,
 	locx[msgStackPos] = x;
 	locy[msgStackPos] = y;
 
-	strcpy(msgStr[msgStackPos], tStr);
+	sstrcpy(msgStr[msgStackPos], tStr);
 
 	msgDroid[msgStackPos] = psDroid;
 
@@ -2014,7 +2014,7 @@ static bool msgStackSort(void)
 		locx[i] = locx[i + 1];
 		locy[i] = locy[i + 1];
 
-		strcpy(msgStr[i], msgStr[i + 1]);
+		sstrcpy(msgStr[i], msgStr[i + 1]);
 	}
 
 	//erase top element
@@ -2025,7 +2025,7 @@ static bool msgStackSort(void)
 	locx[msgStackPos] = -2;
 	locy[msgStackPos] = -2;
 
-	strcpy(msgStr[msgStackPos], "ERROR char!!!!!!!!");
+	sstrcpy(msgStr[msgStackPos], "ERROR char!!!!!!!!");
 
 	msgStackPos--;		//since removed the top element
 
@@ -2121,7 +2121,7 @@ bool msgStackFireTop(void)
 			return false;
 		}
 
-		strcpy(MultiplayMsg, msg);
+		sstrcpy(MultiplayMsg, msg);
 
 		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_BEACON);
 		break;
@@ -2142,7 +2142,7 @@ bool msgStackFireTop(void)
 			return false;
 		}
 
-		strcpy(MultiplayMsg, msg);
+		sstrcpy(MultiplayMsg, msg);
 
 		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_AI_MSG);
 		break;
