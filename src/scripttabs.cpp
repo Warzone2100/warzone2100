@@ -3195,7 +3195,7 @@ bool scrTabInitialise(void)
 
 	/* Initialize chat message struct */
 	chat_msg.numCommands = 0;
-	strcpy(chat_msg.lastMessage, "");
+	sstrcpy(chat_msg.lastMessage, "");
 
 	return true;
 }

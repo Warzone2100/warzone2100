@@ -1235,7 +1235,7 @@ void setDebugMenuEntry(char *entry, SDWORD index)
 	}
 
 	/* Set */
-	strcpy(debugMenuEntry[index], entry);
+	sstrcpy(debugMenuEntry[index], entry);
 
 	/* Re-open it if already open to recalculate height */
 	if (DebugMenuUp && bAddingNew)

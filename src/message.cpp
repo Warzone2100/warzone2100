@@ -585,7 +585,7 @@ const char *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 					ASSERT(count2 <= MAX_DATA, "Too many text strings for %s", psViewData->pName);
 					numText = count2;
 				}
-				strcpy(psViewReplay->pSeqList[dataInc].sequenceName, name);
+				sstrcpy(psViewReplay->pSeqList[dataInc].sequenceName, name);
 
 				//get the text strings for this sequence - if any
 				for (seqInc = 0; seqInc < numText; seqInc++)

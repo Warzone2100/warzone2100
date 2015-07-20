@@ -122,7 +122,7 @@ bool eventInitialise()
 	asCreateFuncs = NULL;
 	asReleaseFuncs = NULL;
 	numFuncs = 0;
-	strcpy(last_called_script_event, "<none>");
+	sstrcpy(last_called_script_event, "<none>");
 	return true;
 }
 

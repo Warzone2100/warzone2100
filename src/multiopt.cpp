@@ -284,7 +284,7 @@ bool hostCampaign(char *sGame, char *sPlayer)
 
 	if (!NetPlay.bComms)
 	{
-		strcpy(NetPlay.players[0].name, sPlayer);
+		sstrcpy(NetPlay.players[0].name, sPlayer);
 	}
 
 	return true;
