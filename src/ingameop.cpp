@@ -283,7 +283,7 @@ void intAddInGamePopup(void)
 
 	IntFormAnimated *ingamePopup = new IntFormAnimated(parent);
 	ingamePopup->id = INTINGAMEPOPUP;
-	ingamePopup->setGeometry(600, 160, 20 + D_W, (240 - 160 / 2) + D_H);
+	ingamePopup->setGeometry(20 + D_W, (240 - 160 / 2) + D_H, 600, 160);
 
 	// add the text "buttons" now
 	W_BUTINIT sButInit;
