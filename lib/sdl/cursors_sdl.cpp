@@ -1361,7 +1361,7 @@ void wzSetCursor(CURSOR cur)
 {
 	ASSERT(cur < CURSOR_MAX, "Specified cursor(%d) is over our limit of (%d)!", (int)cur, (int)CURSOR_MAX);
 	// we reset mouse cursors on the fly...(only in the mouse options screen!)
-	if ((~(war_GetColouredCursor() ^ monoCursor)) && (titleMode == MOUSE_OPTIONS))
+	if ((!(war_GetColouredCursor() ^ monoCursor)) && (titleMode == MOUSE_OPTIONS))
 	{
 		sdlFreeCursors();
 		war_GetColouredCursor() ? sdlInitColoredCursors() : sdlInitCursors();
