@@ -622,7 +622,7 @@ void readAIs()
 
 	aidata.clear();
 
-	strcpy(basepath, sSearchPath);
+	sstrcpy(basepath, sSearchPath);
 	files = PHYSFS_enumerateFiles(basepath);
 	for (i = files; *i != NULL; ++i)
 	{

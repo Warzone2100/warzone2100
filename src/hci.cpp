@@ -1251,7 +1251,7 @@ static void intProcessOptions(UDWORD id)
 			}
 			break;
 		case IDOPT_MAPSAVE:
-			strcpy(saveName, "maps/builtin-test.gam");
+			sstrcpy(saveName, "maps/builtin-test.gam");
 			if (saveGame(saveName, GTYPE_SAVE_START))
 			{
 				addConsoleMessage(_("MAP SAVED!"), LEFT_JUSTIFY, SYSTEM_MESSAGE);
