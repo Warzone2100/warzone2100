@@ -695,10 +695,10 @@ bool fpathCheck(Position orig, Position dest, PROPULSION_TYPE propulsion)
 		return origTile->hoverContinent == destTile->hoverContinent;
 	case PROPULSION_TYPE_LIFT:
 		return true;	// assume no map uses skyscrapers to isolate areas
-	case PROPULSION_TYPE_NUM:
+	default:
 		break;
 	}
 
 	ASSERT(false, "Should never get here, unknown propulsion !");
-	return true;	// should never get here
+	return false;	// should never get here
 }
