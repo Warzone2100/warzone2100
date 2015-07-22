@@ -697,10 +697,10 @@ bool fpathCheck(Position orig, Position dest, PROPULSION_TYPE propulsion)
 	case PROPULSION_TYPE_JUMP:
 	case PROPULSION_TYPE_LIFT:
 		return true;	// FIXME: This is not entirely correct for all possible maps. - Per
-	case PROPULSION_TYPE_NUM:
+	default:
 		break;
 	}
 
 	ASSERT(false, "Should never get here, unknown propulsion !");
-	return true;	// should never get here
+	return false;	// should never get here
 }
