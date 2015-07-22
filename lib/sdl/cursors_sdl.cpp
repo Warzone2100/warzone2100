@@ -1299,6 +1299,7 @@ SDL_Cursor *init_system_ColorCursor(CURSOR cur, const char *fileName)
 
 	// free up image & surface data
 	free(psSprite->bmp);
+	free(psSprite);
 	SDL_FreeSurface(surface);
 
 	return pointer;
