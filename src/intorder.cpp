@@ -31,7 +31,7 @@
 #include <set>
 
 
-#define ORDER_X			23
+#define ORDER_X			6
 #define ORDER_Y			45
 #define ORDER_WIDTH		RET_FORMWIDTH
 #define ORDER_HEIGHT	273
