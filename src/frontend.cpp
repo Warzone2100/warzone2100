@@ -445,7 +445,7 @@ void SPinit()
 	NetPlay.players[0].allocated = true;
 	NetPlay.players[0].autoGame = false;
 	game.skDiff[0] = UBYTE_MAX;
-	game.maxPlayers = MAX_PLAYERS;
+	game.maxPlayers = MAX_PLAYERS -1;	// Currently, 0 - 10 for a total of MAX_PLAYERS
 	// make sure we have a valid color choice for our SP game. Valid values are 0, 4-7
 	playercolor = war_GetSPcolor();
 
