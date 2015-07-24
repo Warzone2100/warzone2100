@@ -301,7 +301,7 @@ struct SENSOR_STATS : public COMPONENT_STATS
 
 	struct
 	{
-		int range;
+		unsigned range;
 	} upgrade[MAX_PLAYERS], base;
 };
 
@@ -313,12 +313,12 @@ struct ECM_STATS : public COMPONENT_STATS
 		memset(&base, 0, sizeof(base));
 	}
 
-	UDWORD		location;		///< specifies whether the ECM is default or for the Turret
-	iIMDShape	*pMountGraphic; ///< The turret mount to use
+	UDWORD location;          ///< specifies whether the ECM is default or for the Turret
+	iIMDShape *pMountGraphic; ///< The turret mount to use
 
 	struct
 	{
-		int range;
+		unsigned range;
 	} upgrade[MAX_PLAYERS], base;
 };
 
@@ -336,7 +336,7 @@ struct REPAIR_STATS : public COMPONENT_STATS
 
 	struct
 	{
-		short repairPoints;		///< The number of points contributed each cycle
+		unsigned repairPoints;		///< The number of points contributed each cycle
 	} upgrade[MAX_PLAYERS], base;
 };
 
@@ -352,19 +352,19 @@ struct WEAPON_STATS : public COMPONENT_STATS
 
 	struct
 	{
-		short maxRange;
-		short minRange;
-		short hitChance;
-		int firePause;     ///< Pause between each shot
-		short numRounds;     ///< The number of rounds per salvo
-		short reloadTime;    ///< Time to reload the round of ammo
-		short damage;
-		short radius;        ///< Basic blast radius of weapon
-		short radiusDamage;  ///< "Splash damage"
-		short periodicalDamage; ///< Repeat damage each second after hit
-		short periodicalDamageRadius; ///< Repeat damage radius
-		short periodicalDamageTime; ///< How long the round keeps damaging
-		short minimumDamage; ///< Minimum amount of damage done, in percentage of damage
+		unsigned maxRange;               ///< Max distance to target for long range shot
+		unsigned minRange;               ///< Min distance to target for shot
+		unsigned hitChance;              ///< Chance to hit at
+		unsigned firePause;              ///< Pause between each shot
+		uint8_t numRounds;               ///< The number of rounds per salvo
+		unsigned reloadTime;             ///< Time to reload the round of ammo
+		unsigned damage;
+		unsigned radius;                 ///< Basic blast radius of weapon
+		unsigned radiusDamage;           ///< "Splash damage"
+		unsigned periodicalDamage;       ///< Repeat damage each second after hit
+		unsigned periodicalDamageRadius; ///< Repeat damage radius
+		unsigned periodicalDamageTime;   ///< How long the round keeps damaging
+		unsigned minimumDamage;          ///< Minimum amount of damage done, in percentage of damage
 	} base, upgrade[MAX_PLAYERS];
 
 	WEAPON_CLASS	periodicalDamageWeaponClass;	///< Periodical damage weapon class by damage type (KINETIC, HEAT)
@@ -417,11 +417,11 @@ struct CONSTRUCT_STATS : public COMPONENT_STATS
 		memset(&base, 0, sizeof(base));
 	}
 
-	iIMDShape	*pMountGraphic;		///< The turret mount to use
+	iIMDShape	*pMountGraphic;              ///< The turret mount to use
 
 	struct
 	{
-		short constructPoints;		///< The number of points contributed each cycle
+		unsigned constructPoints;        ///< The number of points contributed each cycle
 	} upgrade[MAX_PLAYERS], base;
 };
 
@@ -459,9 +459,9 @@ struct BODY_STATS : public COMPONENT_STATS
 
 	struct
 	{
-		int power;
-		int body;
-		int armour;
+		unsigned power;           ///< this is the engine output of the body
+		unsigned body;
+		unsigned armour;          ///< A measure of how much protection the armour provides
 		int thermal;
 		int resistance;
 	} upgrade[MAX_PLAYERS], base;

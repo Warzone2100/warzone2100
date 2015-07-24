@@ -67,17 +67,15 @@ struct DROID_TEMPLATE : public BASE_STATS
 	 * Weapons are stored in asWeaps, _not_ here at index COMP_WEAPON! (Which is the reason we do not have a COMP_NUMCOMPONENTS sized array here.)
 	 */
 	uint8_t         asParts[DROID_MAXCOMP];
-
 	/* The weapon systems */
 	int8_t          numWeaps;                   ///< Number of weapons
 	uint8_t         asWeaps[DROID_MAXWEAPS];    ///< weapon indices
-
 	DROID_TYPE      droidType;                  ///< The type of droid
 	UDWORD          multiPlayerID;              ///< multiplayer unique descriptor(cant use id's for templates). Used for save games as well now - AB 29/10/98
 	DROID_TEMPLATE *psNext;                     ///< Pointer to next template
-	bool		prefab;                     ///< Not player designed, not saved, never delete or change
-	bool		stored;                     ///< Stored template
-	bool		enabled;                    ///< Has been enabled
+	bool            prefab;                     ///< Not player designed, not saved, never delete or change
+	bool            stored;                     ///< Stored template
+	bool            enabled;                    ///< Has been enabled
 };
 
 class DROID_GROUP;
@@ -91,15 +89,12 @@ struct DROID : public BASE_OBJECT
 	/// UTF-8 name of the droid. This is generated from the droid template
 	///  WARNING: This *can* be changed by the game player after creation & can be translated, do NOT rely on this being the same for everyone!
 	char            aName[MAX_STR_LENGTH];
-
 	DROID_TYPE      droidType;                      ///< The type of droid
-
 	/** Holds the specifics for the component parts - allows damage
 	 *  per part to be calculated. Indexed by COMPONENT_TYPE.
 	 *  Weapons need to be dealt with separately.
 	 */
 	uint8_t         asBits[DROID_MAXCOMP];
-
 	/* The other droid data.  These are all derived from the components
 	 * but stored here for easy access
 	 */
@@ -107,15 +102,11 @@ struct DROID : public BASE_OBJECT
 	UDWORD          baseSpeed;                      ///< the base speed dependant on propulsion type
 	UDWORD          originalBody;                   ///< the original body points
 	uint32_t        experience;
-
-	UDWORD          lastFrustratedTime;		///< Set when eg being stuck; used for eg firing indiscriminately at map features to clear the way
-
+	UDWORD          lastFrustratedTime;             ///< Set when eg being stuck; used for eg firing indiscriminately at map features to clear the way
 	SWORD           resistance;                     ///< used in Electronic Warfare
 	UDWORD          armour[WC_NUM_WEAPON_CLASSES];
-
 	UDWORD          numWeaps;                       ///< Watermelon:Re-enabled this,I need this one in droid.c
 	WEAPON          asWeaps[DROID_MAXWEAPS];
-
 	// The group the droid belongs to
 	DROID_GROUP    *psGroup;
 	DROID          *psGrpNext;
@@ -124,7 +115,6 @@ struct DROID : public BASE_OBJECT
 	SDWORD          listSize;                       ///< Gives the number of synchronised orders. Orders from listSize to the real end of the list may not affect game state.
 	OrderList       asOrderList;                    ///< The range [0; listSize - 1] corresponds to synchronised orders, and the range [listPendingBegin; listPendingEnd - 1] corresponds to the orders that will remain, once all orders are synchronised.
 	unsigned        listPendingBegin;               ///< Index of first order which will not be erased by a pending order. After all messages are processed, the orders in the range [listPendingBegin; listPendingEnd - 1] will remain.
-
 	/* Order data */
 	DROID_ORDER_DATA order;
 
@@ -149,17 +139,13 @@ struct DROID : public BASE_OBJECT
 	BASE_OBJECT    *psActionTarget[DROID_MAXWEAPS]; ///< Action target object
 	UDWORD          actionStarted;                  ///< Game time action started
 	UDWORD          actionPoints;                   ///< number of points done by action since start
-
 	UDWORD          expectedDamage;                 ///< Expected damage to be caused by all currently incoming projectiles. This info is shared between all players,
 	///< but shouldn't make a difference unless 3 mutual enemies happen to be fighting each other at the same time.
-
 	UBYTE           illumination;
-
 	/* Movement control data */
 	MOVE_CONTROL    sMove;
 	Spacetime       prevSpacetime;                  ///< Location of droid in previous tick.
-	uint8_t		blockedBits;			///< Bit set telling which tiles block this type of droid (TODO)
-
+	uint8_t         blockedBits;                    ///< Bit set telling which tiles block this type of droid (TODO)
 	/* anim data */
 	SDWORD          iAudioID;
 };
