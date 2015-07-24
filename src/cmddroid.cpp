@@ -116,6 +116,7 @@ DROID *cmdDroidGetDesignator(UDWORD player)
 
 void cmdDroidSetDesignator(DROID *psDroid)
 {
+	ASSERT_OR_RETURN(, psDroid != NULL, "Invalid droid!");
 	if (psDroid->droidType != DROID_COMMAND)
 	{
 		return;
