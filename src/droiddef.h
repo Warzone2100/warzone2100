@@ -139,7 +139,8 @@ struct DROID : public BASE_OBJECT
 	BASE_OBJECT    *psActionTarget[DROID_MAXWEAPS]; ///< Action target object
 	UDWORD          actionStarted;                  ///< Game time action started
 	UDWORD          actionPoints;                   ///< number of points done by action since start
-	UDWORD          expectedDamage;                 ///< Expected damage to be caused by all currently incoming projectiles. This info is shared between all players,
+	UDWORD          expectedDamageDirect;                 ///< Expected damage to be caused by all currently incoming direct projectiles. This info is shared between all players,
+	UDWORD          expectedDamageIndirect;                 ///< Expected damage to be caused by all currently incoming indirect projectiles. This info is shared between all players,
 	///< but shouldn't make a difference unless 3 mutual enemies happen to be fighting each other at the same time.
 	UBYTE           illumination;
 	/* Movement control data */

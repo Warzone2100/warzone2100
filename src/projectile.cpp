@@ -119,9 +119,10 @@ static int32_t objectDamage(BASE_OBJECT *psObj, unsigned damage, WEAPON_CLASS we
 
 static inline void setProjectileDestination(PROJECTILE *psProj, BASE_OBJECT *psObj)
 {
-	aiObjectAddExpectedDamage(psProj->psDest, -psProj->expectedDamageCaused);  // The old target shouldn't be expecting any more damage from this projectile.
+	bool bDirect = proj_Direct(psProj->psWStats);
+	aiObjectAddExpectedDamage(psProj->psDest, -psProj->expectedDamageCaused, bDirect);  // The old target shouldn't be expecting any more damage from this projectile.
 	psProj->psDest = psObj;
-	aiObjectAddExpectedDamage(psProj->psDest, psProj->expectedDamageCaused);  // Let the new target know to say its prayers.
+	aiObjectAddExpectedDamage(psProj->psDest, psProj->expectedDamageCaused, bDirect);  // Let the new target know to say its prayers.
 }
 
 

@@ -68,10 +68,10 @@ void aiUpdateDroid(DROID *psDroid);
 int aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot, int extraRange = 0);
 
 // Are there a lot of bullets heading towards the structure?
-bool aiObjectIsProbablyDoomed(BASE_OBJECT *psObject);
+bool aiObjectIsProbablyDoomed(BASE_OBJECT *psObject, bool isDirect);
 
 // Update the expected damage of the object.
-void aiObjectAddExpectedDamage(BASE_OBJECT *psObject, SDWORD damage);
+void aiObjectAddExpectedDamage(BASE_OBJECT *psObject, SDWORD damage, bool isDirect);
 
 /* See if there is a target in range added int weapon_slot*/
 bool aiChooseTarget(BASE_OBJECT *psObj,

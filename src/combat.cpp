@@ -302,7 +302,7 @@ void counterBatteryFire(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget)
 	// Also ignore cases where there are already 1000 missiles heading towards the attacker.
 	if (psTarget == NULL
 	    || (psAttacker != NULL && psAttacker->player == psTarget->player)
-	    || (psAttacker != NULL && aiObjectIsProbablyDoomed(psAttacker)))
+	    || (psAttacker != NULL && aiObjectIsProbablyDoomed(psAttacker, false)))
 	{
 		return;
 	}

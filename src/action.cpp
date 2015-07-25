@@ -671,11 +671,13 @@ void actionSanity(DROID *psDroid)
 	bool avoidOverkill = psDroid->order.type != DORDER_ATTACK &&
 	                     (psDroid->action == DACTION_ATTACK || psDroid->action == DACTION_MOVEFIRE || psDroid->action == DACTION_MOVETOATTACK ||
 	                      psDroid->action == DACTION_ROTATETOATTACK || psDroid->action == DACTION_VTOLATTACK);
+	bool bDirect = false;
 
 	// clear the target if it has died
 	for (int i = 0; i < DROID_MAXWEAPS; i++)
 	{
-		if (psDroid->psActionTarget[i] && (avoidOverkill ? aiObjectIsProbablyDoomed(psDroid->psActionTarget[i]) : psDroid->psActionTarget[i]->died))
+		bDirect = proj_Direct(asWeaponStats + psDroid->asWeaps[i].nStat);
+		if (psDroid->psActionTarget[i] && (avoidOverkill ? aiObjectIsProbablyDoomed(psDroid->psActionTarget[i], bDirect) : psDroid->psActionTarget[i]->died))
 		{
 			setDroidActionTarget(psDroid, NULL, i);
 			if (i == 0)
@@ -717,6 +719,7 @@ void actionUpdateDroid(DROID *psDroid)
 	bool hasVisibleTarget = false;
 	bool targetVisibile[DROID_MAXWEAPS] = { false };
 	bool bHasTarget;
+	bool bDirect = false;
 
 	CHECK_DROID(psDroid);
 
@@ -913,11 +916,12 @@ void actionUpdateDroid(DROID *psDroid)
 		bHasTarget = false;
 		for (i = 0; i < psDroid->numWeaps; ++i)
 		{
+			bDirect = proj_Direct(asWeaponStats + psDroid->asWeaps[i].nStat);
 			// Does this weapon have a target?
 			if (psDroid->psActionTarget[i] != NULL)
 			{
 				// Is target worth shooting yet?
-				if (aiObjectIsProbablyDoomed(psDroid->psActionTarget[i]))
+				if (aiObjectIsProbablyDoomed(psDroid->psActionTarget[i], bDirect))
 				{
 					setDroidActionTarget(psDroid, NULL, i);
 				}

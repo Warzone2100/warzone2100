@@ -211,7 +211,7 @@ static BASE_OBJECT *aiSearchSensorTargets(BASE_OBJECT *psObj, int weapon_slot, W
 			isCB = structCBSensor(psCStruct);
 			isRD = objRadarDetector((BASE_OBJECT *)psCStruct);
 		}
-		if (!psTemp || psTemp->died || !validTarget(psObj, psTemp, 0) || aiCheckAlliances(psTemp->player, psObj->player))
+		if (!psTemp || psTemp->died || aiObjectIsProbablyDoomed(psTemp, false) || !validTarget(psObj, psTemp, 0) || aiCheckAlliances(psTemp->player, psObj->player))
 		{
 			continue;
 		}
@@ -258,7 +258,7 @@ static SDWORD targetAttackWeight(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker,
 	STRUCTURE		*targetStructure = NULL;
 	WEAPON_EFFECT	weaponEffect;
 	WEAPON_STATS	*attackerWeapon;
-	bool			bEmpWeap = false, bCmdAttached = false, bTargetingCmd = false;
+	bool			bEmpWeap = false, bCmdAttached = false, bTargetingCmd = false, bDirect = false;
 
 	if (psTarget == NULL || psAttacker == NULL || psTarget->died)
 	{
@@ -322,6 +322,8 @@ static SDWORD targetAttackWeight(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker,
 		ASSERT(!"invalid attacker object type", "targetAttackWeight: Invalid attacker object type");
 		return noTarget;
 	}
+
+	bDirect = proj_Direct(attackerWeapon);
 
 	//Get weapon effect
 	weaponEffect = attackerWeapon->weaponEffect;
@@ -470,7 +472,7 @@ static SDWORD targetAttackWeight(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker,
 	}
 
 	/* Penalty for units that are already considered doomed (but the missile might miss!) */
-	if (aiObjectIsProbablyDoomed(psTarget))
+	if (aiObjectIsProbablyDoomed(psTarget, bDirect))
 	{
 		/* indirect firing units have slow reload times, so give the target a chance to die,
 		 * and give a different unit a chance to get in range, too. */
@@ -699,10 +701,18 @@ int aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot, i
 }
 
 // Are there a lot of bullets heading towards the droid?
-static bool aiDroidIsProbablyDoomed(DROID *psDroid)
+static bool aiDroidIsProbablyDoomed(DROID *psDroid, bool isDirect)
 {
-	return psDroid->expectedDamage > psDroid->body
-	       && psDroid->expectedDamage - psDroid->body > psDroid->body / 5; // Doomed if projectiles will damage 120% of remaining body points.
+	if (isDirect)
+	{
+		return psDroid->expectedDamageDirect > psDroid->body
+		      && psDroid->expectedDamageDirect - psDroid->body > psDroid->body / 5; // Doomed if projectiles will damage 120% of remaining body points.
+	}
+	else
+	{
+		return psDroid->expectedDamageIndirect > psDroid->body
+		      && psDroid->expectedDamageIndirect - psDroid->body > psDroid->body / 5; // Doomed if projectiles will damage 120% of remaining body points.
+	}
 }
 
 // Are there a lot of bullets heading towards the structure?
@@ -713,7 +723,7 @@ static bool aiStructureIsProbablyDoomed(STRUCTURE *psStructure)
 }
 
 // Are there a lot of bullets heading towards the object?
-bool aiObjectIsProbablyDoomed(BASE_OBJECT *psObject)
+bool aiObjectIsProbablyDoomed(BASE_OBJECT *psObject, bool isDirect)
 {
 	if (psObject->died)
 	{
@@ -723,7 +733,7 @@ bool aiObjectIsProbablyDoomed(BASE_OBJECT *psObject)
 	switch (psObject->type)
 	{
 	case OBJ_DROID:
-		return aiDroidIsProbablyDoomed((DROID *)psObject);
+		return aiDroidIsProbablyDoomed((DROID *)psObject, isDirect);
 	case OBJ_STRUCTURE:
 		return aiStructureIsProbablyDoomed((STRUCTURE *)psObject);
 	default:
@@ -732,7 +742,7 @@ bool aiObjectIsProbablyDoomed(BASE_OBJECT *psObject)
 }
 
 // Update the expected damage of the object.
-void aiObjectAddExpectedDamage(BASE_OBJECT *psObject, SDWORD damage)
+void aiObjectAddExpectedDamage(BASE_OBJECT *psObject, SDWORD damage, bool isDirect)
 {
 	if (psObject == NULL)
 	{
@@ -742,8 +752,16 @@ void aiObjectAddExpectedDamage(BASE_OBJECT *psObject, SDWORD damage)
 	switch (psObject->type)
 	{
 	case OBJ_DROID:
-		((DROID *)psObject)->expectedDamage += damage;
-		ASSERT((SDWORD)((DROID *)psObject)->expectedDamage >= 0, "aiObjectAddExpectedDamage: Negative amount of projectiles heading towards droid.");
+		if (isDirect)
+		{
+			((DROID *)psObject)->expectedDamageDirect += damage;
+			ASSERT((SDWORD)((DROID *)psObject)->expectedDamageDirect >= 0, "aiObjectAddExpectedDamage: Negative amount of projectiles heading towards droid.");
+		}
+		else
+		{
+			((DROID *)psObject)->expectedDamageIndirect += damage;
+			ASSERT((SDWORD)((DROID *)psObject)->expectedDamageIndirect >= 0, "aiObjectAddExpectedDamage: Negative amount of projectiles heading towards droid.");
+		}
 		break;
 	case OBJ_STRUCTURE:
 		((STRUCTURE *)psObject)->expectedDamage += damage;
@@ -987,7 +1005,7 @@ bool aiChooseSensorTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget)
 		{
 			BASE_OBJECT *psCurr = *gi;
 			// Don't target features or doomed/dead objects
-			if (psCurr->type != OBJ_FEATURE && !psCurr->died)
+			if (psCurr->type != OBJ_FEATURE && !psCurr->died && !aiObjectIsProbablyDoomed(psCurr, false))
 			{
 				if (!aiCheckAlliances(psCurr->player, psObj->player) && !aiObjIsWall(psCurr))
 				{

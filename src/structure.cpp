@@ -2569,6 +2569,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 	Vector3i iVecEffect;
 	bool				bDroidPlaced = false;
 	WEAPON_STATS		*psWStats;
+	bool				bDirect = false;
 	SDWORD				xdiff, ydiff, mindist, currdist;
 	UDWORD				i;
 	UWORD 				tmpOrigin = ORIGIN_UNKNOWN;
@@ -2643,6 +2644,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 		//structures always update their targets
 		for (i = 0; i < psStructure->numWeaps; i++)
 		{
+			bDirect = proj_Direct(asWeaponStats + psStructure->asWeaps[i].nStat);
 			if (psStructure->asWeaps[i].nStat > 0 &&
 			    asWeaponStats[psStructure->asWeaps[i].nStat].weaponSubClass != WSC_LAS_SAT)
 			{
@@ -2676,7 +2678,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 					}
 				}
 
-				if (psChosenObjs[i] != NULL && !aiObjectIsProbablyDoomed(psChosenObjs[i]))
+				if (psChosenObjs[i] != NULL && !aiObjectIsProbablyDoomed(psChosenObjs[i], bDirect))
 				{
 					// get the weapon stat to see if there is a visible turret to rotate
 					psWStats = asWeaponStats + psStructure->asWeaps[i].nStat;
