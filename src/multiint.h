@@ -129,8 +129,8 @@ void loadMapPreview(bool hideInterface);
 
 #define CON_SETTINGS		10130
 #define CON_SETTINGS_LABEL	10131
-#define CON_SETTINGSX		220
-#define	CON_SETTINGSY		190
+#define CON_SETTINGSX		220 + D_W
+#define	CON_SETTINGSY		190 + D_H
 #define CON_SETTINGSWIDTH	200
 #define CON_SETTINGSHEIGHT	100
 
