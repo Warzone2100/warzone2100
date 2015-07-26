@@ -605,7 +605,7 @@ static void displayCompObj(DROID *psDroid, bool bButton)
 			{
 				// FIXME - hideous....!!!!
 				pie_MatScale(.75f);
-				pie_Draw3DShape(psShapeTemp, 0, psDroid->player - 6, brightness, pieFlag, iPieData);
+				pie_Draw3DShape(psShapeTemp, 0, psDroid->player, brightness, pieFlag, iPieData);
 			}
 		}
 		else if (cyborgDroid(psDroid))
