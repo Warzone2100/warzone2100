@@ -324,6 +324,12 @@ static SDWORD targetAttackWeight(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker,
 	}
 
 	bDirect = proj_Direct(attackerWeapon);
+	if (psAttacker->type == OBJ_DROID && psAttackerDroid->droidType == DROID_SENSOR)
+	{
+		// Sensors are considered a direct weapon,
+		// but for computing expected damage it makes more sense to use indirect damage
+		bDirect = false;
+	}
 
 	//Get weapon effect
 	weaponEffect = attackerWeapon->weaponEffect;
@@ -1094,8 +1100,10 @@ void aiUpdateDroid(DROID *psDroid)
 		lookForTarget = true;
 	}
 	// but do not choose another target if doing anything while guarding
+	// exception for sensors, to allow re-targetting when target is doomed
 	if (orderState(psDroid, DORDER_GUARD) &&
-	    (psDroid->action != DACTION_NONE))
+	    (psDroid->action != DACTION_NONE) &&
+	    (psDroid->droidType != DROID_SENSOR))
 	{
 		lookForTarget = false;
 	}
