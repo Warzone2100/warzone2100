@@ -1595,6 +1595,10 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 			break;
 		}
 		ASSERT_OR_RETURN(, psOrder->psObj != NULL, "Can't command a NULL");
+		if (psDroid->player == selectedPlayer)
+		{
+			orderPlayFireSupportAudio(psOrder->psObj);
+		}
 		cmdDroidAddDroid((DROID *)psOrder->psObj, psDroid);
 		break;
 	case DORDER_RETREAT:
