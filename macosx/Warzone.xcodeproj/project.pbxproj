@@ -181,7 +181,6 @@
 		0246A2920BD3CCDC004D1C70 /* astar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A1A30BD3CCDB004D1C70 /* astar.cpp */; };
 		0246A2930BD3CCDC004D1C70 /* atmos.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A1A50BD3CCDB004D1C70 /* atmos.cpp */; };
 		0246A2940BD3CCDC004D1C70 /* aud.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A1A70BD3CCDB004D1C70 /* aud.cpp */; };
-		0246A2950BD3CCDC004D1C70 /* bridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A1A90BD3CCDB004D1C70 /* bridge.cpp */; };
 		0246A2960BD3CCDC004D1C70 /* bucket3d.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A1AB0BD3CCDB004D1C70 /* bucket3d.cpp */; };
 		0246A2980BD3CCDC004D1C70 /* cheat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A1B10BD3CCDB004D1C70 /* cheat.cpp */; };
 		0246A2990BD3CCDC004D1C70 /* clparse.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0246A1B30BD3CCDB004D1C70 /* clparse.cpp */; };
@@ -1361,8 +1360,6 @@
 		0246A1A60BD3CCDB004D1C70 /* atmos.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = atmos.h; path = ../src/atmos.h; sourceTree = SOURCE_ROOT; };
 		0246A1A70BD3CCDB004D1C70 /* aud.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = aud.cpp; path = ../src/aud.cpp; sourceTree = SOURCE_ROOT; };
 		0246A1A80BD3CCDB004D1C70 /* basedef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = basedef.h; path = ../src/basedef.h; sourceTree = SOURCE_ROOT; };
-		0246A1A90BD3CCDB004D1C70 /* bridge.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = bridge.cpp; path = ../src/bridge.cpp; sourceTree = SOURCE_ROOT; };
-		0246A1AA0BD3CCDB004D1C70 /* bridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = bridge.h; path = ../src/bridge.h; sourceTree = SOURCE_ROOT; };
 		0246A1AB0BD3CCDB004D1C70 /* bucket3d.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = bucket3d.cpp; path = ../src/bucket3d.cpp; sourceTree = SOURCE_ROOT; };
 		0246A1AC0BD3CCDB004D1C70 /* bucket3d.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = bucket3d.h; path = ../src/bucket3d.h; sourceTree = SOURCE_ROOT; };
 		0246A1AE0BD3CCDB004D1C70 /* projectiledef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = projectiledef.h; path = ../src/projectiledef.h; sourceTree = SOURCE_ROOT; };
@@ -2570,8 +2567,6 @@
 				0246A1A60BD3CCDB004D1C70 /* atmos.h */,
 				0246A1A70BD3CCDB004D1C70 /* aud.cpp */,
 				0246A1A80BD3CCDB004D1C70 /* basedef.h */,
-				0246A1A90BD3CCDB004D1C70 /* bridge.cpp */,
-				0246A1AA0BD3CCDB004D1C70 /* bridge.h */,
 				0246A1AB0BD3CCDB004D1C70 /* bucket3d.cpp */,
 				0246A1AC0BD3CCDB004D1C70 /* bucket3d.h */,
 				0246A1B10BD3CCDB004D1C70 /* cheat.cpp */,
@@ -4918,7 +4913,6 @@
 				0246A2920BD3CCDC004D1C70 /* astar.cpp in Sources */,
 				0246A2930BD3CCDC004D1C70 /* atmos.cpp in Sources */,
 				0246A2940BD3CCDC004D1C70 /* aud.cpp in Sources */,
-				0246A2950BD3CCDC004D1C70 /* bridge.cpp in Sources */,
 				0246A2960BD3CCDC004D1C70 /* bucket3d.cpp in Sources */,
 				0246A2980BD3CCDC004D1C70 /* cheat.cpp in Sources */,
 				0246A2990BD3CCDC004D1C70 /* clparse.cpp in Sources */,

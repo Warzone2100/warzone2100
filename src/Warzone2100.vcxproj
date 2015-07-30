@@ -306,7 +306,6 @@ call $(ProjectDir)..\build_tools\autorevision.bat $(ProjectDir)</Command>
     <ClCompile Include="atmos.cpp" />
     <ClCompile Include="aud.cpp" />
     <ClCompile Include="baseobject.cpp" />
-    <ClCompile Include="bridge.cpp" />
     <ClCompile Include="bucket3d.cpp" />
     <ClCompile Include="challenge.cpp" />
     <ClCompile Include="cheat.cpp" />
@@ -421,7 +420,6 @@ call $(ProjectDir)..\build_tools\autorevision.bat $(ProjectDir)</Command>
     <ClInclude Include="autorevision.h" />
     <ClInclude Include="basedef.h" />
     <ClInclude Include="baseobject.h" />
-    <ClInclude Include="bridge.h" />
     <ClInclude Include="bucket3d.h" />
     <ClInclude Include="challenge.h" />
     <ClInclude Include="cheat.h" />

@@ -53,7 +53,6 @@ noinst_HEADERS = \
 	atmos.h \
 	basedef.h \
 	baseobject.h \
-	bridge.h \
 	bucket3d.h \
 	cheat.h \
 	challenge.h \
@@ -184,7 +183,6 @@ COMMONSOURCES = \
 	atmos.cpp \
 	aud.cpp \
 	baseobject.cpp \
-	bridge.cpp \
 	bucket3d.cpp \
 	challenge.cpp \
 	cheat.cpp \

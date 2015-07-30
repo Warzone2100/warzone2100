@@ -36,9 +36,6 @@
     <ClCompile Include="baseobject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="bridge.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="bucket3d.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -372,9 +369,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="baseobject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="bridge.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="bucket3d.h">
