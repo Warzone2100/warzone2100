@@ -40,6 +40,7 @@
 #include <string>
 #include <istream>
 #include <deque>
+#include <mutex>
 
 // FIXME: When we switch over to full JS, use class version of this file
 
@@ -69,7 +70,7 @@ struct CONSOLE_MESSAGE
 	bool	team;			// team message or not
 	CONSOLE_MESSAGE() : timeAdded(0), JustifyType(0), player(0), team(false) {}
 };
-
+std::mutex mtx;									// prevent adding messages when we are not expecting them
 std::deque<CONSOLE_MESSAGE> ActiveMessages;		// we add all messages to this container
 std::deque<CONSOLE_MESSAGE> TeamMessages;		// history of team/private communications
 std::deque<CONSOLE_MESSAGE> HistoryMessages;	// history of all other communications
@@ -195,6 +196,7 @@ bool addConsoleMessage(const char *Text, CONSOLE_TEXT_JUSTIFICATION jusType, SDW
 
 		consoleStorage.text = messageText;
 		consoleStorage.timeAdded = realTime;		// Store the time when it was added
+		mtx.lock();									// Don't add messages unless locked!
 		if (player == INFO_MESSAGE)
 		{
 			InfoMessages.push_back(consoleStorage);
@@ -208,6 +210,7 @@ bool addConsoleMessage(const char *Text, CONSOLE_TEXT_JUSTIFICATION jusType, SDW
 			}
 			HistoryMessages.push_back(consoleStorage);	// persistent messages (all types)
 		}
+		mtx.unlock();
 	}
 	return true;
 }
@@ -228,6 +231,7 @@ void	updateConsoleMessages(void)
 	{
 		return;
 	}
+	mtx.lock();		// don't remove messages unless locked
 	for (auto i = InfoMessages.begin(); i != InfoMessages.end();)
 	{
 		if (realTime - i->timeAdded > messageDuration)
@@ -251,6 +255,7 @@ void	updateConsoleMessages(void)
 			++i;
 		}
 	}
+	mtx.unlock();
 }
 
 /**
@@ -416,6 +421,8 @@ void	displayConsoleMessages(void)
 	{
 		displayOldMessages(HistoryMode);
 	}
+
+	mtx.lock();						// don't itterate without a lock
 	if (InfoMessages.size())
 	{
 		auto i = InfoMessages.end() - 1;		// we can only show the last one...
@@ -436,9 +443,9 @@ void	displayConsoleMessages(void)
 	for (auto i = ActiveMessages.begin(); i != ActiveMessages.end(); ++i)
 	{
 		setConsoleTextColor(i->player);
-		TextYpos = iV_DrawFormattedText(i->text.c_str(), mainConsole.topX, TextYpos,
-		                                mainConsole.width, i->JustifyType);
+		TextYpos = iV_DrawFormattedText(i->text.c_str(), mainConsole.topX, TextYpos, mainConsole.width, i->JustifyType);
 	}
+	mtx.unlock();
 }
 
 /** Allows toggling of the box under the console text */
