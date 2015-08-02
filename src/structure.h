@@ -160,10 +160,6 @@ extern bool checkStructureStatus(STRUCTURE_STATS *psStats, UDWORD player, UDWORD
 extern void setAssemblyPoint(FLAG_POSITION *psAssemblyPoint, UDWORD x, UDWORD y,
                              UDWORD player, bool bCheck);
 
-/*called when a structure has been built - checks through the list of callbacks
-for the scripts*/
-extern void structureCompletedCallback(STRUCTURE_STATS *psStructType);
-
 /*initialises the flag before a new data set is loaded up*/
 extern void initFactoryNumFlag(void);
 //called at start of missions

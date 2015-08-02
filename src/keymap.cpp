@@ -35,15 +35,13 @@
 #include "lib/netplay/netplay.h"
 #include "lib/gamelib/gtime.h"
 #include "keymap.h"
+#include "qtscript.h"
 #include "console.h"
 #include "keybind.h"
 #include "display3d.h"
 #include "keymap.h"
 #include "keyedit.h"
-#include "scriptcb.h"
 #include "lib/script/script.h"
-#include "scripttabs.h"
-
 
 static UDWORD asciiKeyCodeToTable(KEY_CODE code);
 
@@ -700,7 +698,6 @@ void	keyProcessMappings(bool bExclude)
 {
 	KEY_MAPPING	*keyToProcess;
 	bool		bMetaKeyDown;
-	SDWORD		i;
 
 	/* Bomb out if there are none */
 	if (!keyMappings || !numActiveMappings || !bKeyProcessing)
@@ -812,44 +809,44 @@ void	keyProcessMappings(bool bExclude)
 	}
 
 	/* Script callback - find out what meta key was pressed */
-	cbPressedMetaKey = KEY_IGNORE;
+	int pressedMetaKey = KEY_IGNORE;
 
 	/* getLastMetaKey() can't be used here, have to do manually */
 	if (keyDown(KEY_LCTRL))
 	{
-		cbPressedMetaKey = KEY_LCTRL;
+		pressedMetaKey = KEY_LCTRL;
 	}
 	else if (keyDown(KEY_RCTRL))
 	{
-		cbPressedMetaKey = KEY_RCTRL;
+		pressedMetaKey = KEY_RCTRL;
 	}
 	else if (keyDown(KEY_LALT))
 	{
-		cbPressedMetaKey = KEY_LALT;
+		pressedMetaKey = KEY_LALT;
 	}
 	else if (keyDown(KEY_RALT))
 	{
-		cbPressedMetaKey = KEY_RALT;
+		pressedMetaKey = KEY_RALT;
 	}
 	else if (keyDown(KEY_LSHIFT))
 	{
-		cbPressedMetaKey = KEY_LSHIFT;
+		pressedMetaKey = KEY_LSHIFT;
 	}
 	else if (keyDown(KEY_RSHIFT))
 	{
-		cbPressedMetaKey = KEY_RSHIFT;
+		pressedMetaKey = KEY_RSHIFT;
 	}
 	else if (keyDown(KEY_LMETA))
 	{
-		cbPressedMetaKey = KEY_LMETA;
+		pressedMetaKey = KEY_LMETA;
 	}
 	else if (keyDown(KEY_RMETA))
 	{
-		cbPressedMetaKey = KEY_RMETA;
+		pressedMetaKey = KEY_RMETA;
 	}
 
 	/* Find out what keys were pressed */
-	for (i = 0; i < KEY_MAXSCAN; i++)
+	for (int i = 0; i < KEY_MAXSCAN; i++)
 	{
 		/* Skip meta keys */
 		switch (i)
@@ -869,13 +866,10 @@ void	keyProcessMappings(bool bExclude)
 		/* Let scripts process this key if it's pressed */
 		if (keyPressed((KEY_CODE)i))
 		{
-			cbPressedKey =  i;
-			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_KEY_PRESSED);
+			triggerEventKeyPressed(pressedMetaKey, i);
 		}
 	}
-
 }
-
 
 // ----------------------------------------------------------------------------------
 /* Sends a particular key mapping to the console */

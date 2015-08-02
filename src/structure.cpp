@@ -151,6 +151,7 @@ static void findAssemblyPointPosition(UDWORD *pX, UDWORD *pY, UDWORD player);
 static void removeStructFromMap(STRUCTURE *psStruct);
 static void resetResistanceLag(STRUCTURE *psBuilding);
 static int structureTotalReturn(STRUCTURE *psStruct);
+static void structureCompletedCallback(STRUCTURE_STATS *psStructType);
 
 // last time the maximum units message was displayed
 static UDWORD	lastMaxUnitMessage;
@@ -4989,7 +4990,7 @@ void setFlagPositionInc(FUNCTIONALITY *pFunctionality, UDWORD player, UBYTE fact
 
 /*called when a structure has been built - checks through the list of callbacks
 for the scripts*/
-void structureCompletedCallback(STRUCTURE_STATS *psStructType)
+static void structureCompletedCallback(STRUCTURE_STATS *psStructType)
 {
 
 	if (psStructType->type == REF_POWER_GEN)

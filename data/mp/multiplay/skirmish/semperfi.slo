@@ -4307,17 +4307,6 @@ function bool insideBase(int _x, int _y)
 	return TRUE;
 }
 
-event keyPressed(CALL_KEY_PRESSED, ref count, ref count2)
-{
-	if(count == KEY_P and (count2 == KEY_RCTRL or count2 == KEY_LCTRL))
-	{
-		if(_DEBUG)
-		{
-			console("The old cheat code has been removed.");
-		}
-	}
-}
-
 //---------------------------------------------------------------
 //Returns how many droids are already on the way to build the
 //same structure on the same spot (like helpbuild)

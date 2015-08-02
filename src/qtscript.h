@@ -116,5 +116,6 @@ bool triggerEventSelected();
 bool triggerEventPlayerLeft(int id);
 bool triggerEventDesignCreated(DROID_TEMPLATE *psTemplate);
 bool triggerEventSyncRequest(int from, int req_id, int x, int y, BASE_OBJECT *psObj, BASE_OBJECT *psObj2);
+bool triggerEventKeyPressed(int meta, int key);
 
 #endif

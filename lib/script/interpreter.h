@@ -276,7 +276,6 @@ enum TRIGGER_TYPE
 	CALL_TRANSPORTER_LANDED_B,
 	CALL_DORDER_STOP,		// Fired when droid is forced to stop via user interface
 	CALL_DROID_REACH_LOCATION,	// Fired when droid reached the destination and stopped on its own
-	CALL_KEY_PRESSED,		// Allows to process key presses, mainly for debug purposes
 	CALL_VTOL_RETARGET,		// VTOL is out of targets
 };
 

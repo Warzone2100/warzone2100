@@ -1473,3 +1473,20 @@ bool triggerEventSyncRequest(int from, int req_id, int x, int y, BASE_OBJECT *ps
 	}
 	return true;
 }
+
+//__ \subsection{eventKeyPressed(meta, key)}
+//__ An event that is called whenever user presses a key in the game, not counting chat
+//__ or other pop-up user interfaces. The key values are currently undocumented.
+bool triggerEventKeyPressed(int meta, int key)
+{
+	ASSERT(scriptsReady, "Scripts not initialized yet");
+	for (int i = 0; i < scripts.size(); ++i)
+	{
+		QScriptEngine *engine = scripts.at(i);
+                QScriptValueList args;
+		args += QScriptValue(meta);
+		args += QScriptValue(key);
+		callFunction(engine, "eventKeyPressed", args);
+	}
+	return true;
+}
