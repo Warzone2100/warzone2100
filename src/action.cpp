@@ -54,9 +54,6 @@
 
 #define	VTOL_ATTACK_AUDIO_DELAY		(3*GAME_TICKS_PER_SEC)
 
-/** Time to pause before a droid blows up. */
-#define  ACTION_DESTRUCT_TIME	2000
-
 /** Droids heavier than this rotate and pitch more slowly. */
 #define HEAVY_WEAPON_WEIGHT     50000
 
@@ -1739,20 +1736,6 @@ void actionUpdateDroid(DROID *psDroid)
 			}
 		}
 		break;
-	case DACTION_DESTRUCT:
-		if ((psDroid->actionStarted + ACTION_DESTRUCT_TIME) < gameTime)
-		{
-			if (psDroid->droidType == DROID_PERSON)
-			{
-				droidBurn(psDroid);
-			}
-			else
-			{
-				debug(LOG_DEATH, "Droid %d destructed", (int)psDroid->id);
-				destroyDroid(psDroid, psDroid->actionStarted + ACTION_DESTRUCT_TIME);
-			}
-		}
-		break;
 	case DACTION_MOVETODROIDREPAIR:
 		{
 			// moving to repair a droid
@@ -2187,10 +2170,6 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 		psDroid->action = DACTION_SULK;
 		// hmmm, hope this doesn't cause any problems!
 		psDroid->actionStarted = gameTime + MIN_SULK_TIME + (gameRand(MAX_SULK_TIME - MIN_SULK_TIME));
-		break;
-	case DACTION_DESTRUCT:
-		psDroid->action = DACTION_DESTRUCT;
-		psDroid->actionStarted = gameTime;
 		break;
 	case DACTION_WAITFORREPAIR:
 		psDroid->action = DACTION_WAITFORREPAIR;

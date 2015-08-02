@@ -458,7 +458,6 @@ void orderUpdateDroid(DROID *psDroid)
 		break;
 	case DORDER_MOVE:
 	case DORDER_RETREAT:
-	case DORDER_DESTRUCT:
 		// Just wait for the action to finish then clear the order
 		if (psDroid->action == DACTION_NONE || psDroid->action == DACTION_ATTACK)
 		{
@@ -1607,10 +1606,6 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		}
 		actionDroid(psDroid, DACTION_MOVE, psDroid->order.pos.x, psDroid->order.pos.y);
 		break;
-	case DORDER_DESTRUCT:
-		psDroid->order = *psOrder;
-		actionDroid(psDroid, DACTION_DESTRUCT);
-		break;
 	case DORDER_RTB:
 		// send vtols back to their return pos
 		if (isVtolDroid(psDroid) && !bMultiPlayer && psDroid->player != selectedPlayer)
@@ -1862,7 +1857,6 @@ void orderDroid(DROID *psDroid, DROID_ORDER order, QUEUE_MODE mode)
 	       "orderUnit: Invalid unit pointer");
 	ASSERT(order == DORDER_NONE ||
 	       order == DORDER_RETREAT ||
-	       order == DORDER_DESTRUCT ||
 	       order == DORDER_RTR ||
 	       order == DORDER_RTB ||
 	       order == DORDER_RECYCLE ||
@@ -3600,7 +3594,6 @@ bool secondaryGotPrimaryOrder(DROID *psDroid, DROID_ORDER order)
 
 	if (order != DORDER_NONE &&
 	    order != DORDER_STOP &&
-	    order != DORDER_DESTRUCT &&
 	    order != DORDER_GUARD)
 	{
 		//reset 2ndary order
@@ -3752,8 +3745,7 @@ void orderMoralCheck(UDWORD player)
 		    orderState(psCurr, DORDER_RUNBURN) ||
 		    orderState(psCurr, DORDER_RETREAT) ||
 		    orderState(psCurr, DORDER_RTB) ||
-		    orderState(psCurr, DORDER_RTR) ||
-		    orderState(psCurr, DORDER_DESTRUCT))
+		    orderState(psCurr, DORDER_RTR))
 		{
 			// already running - ignore
 			continue;
@@ -3820,8 +3812,7 @@ void orderGroupMoralCheck(DROID_GROUP *psGroup)
 		    orderState(psCurr, DORDER_RUNBURN) ||
 		    orderState(psCurr, DORDER_RETREAT) ||
 		    orderState(psCurr, DORDER_RTB) ||
-		    orderState(psCurr, DORDER_RTR) ||
-		    orderState(psCurr, DORDER_DESTRUCT))
+		    orderState(psCurr, DORDER_RTR))
 		{
 			// already running - ignore
 			continue;
@@ -3897,8 +3888,7 @@ void orderHealthCheck(DROID *psDroid)
 		      orderState(psDroid, DORDER_RUNBURN) ||
 		      orderState(psDroid, DORDER_RETREAT) ||
 		      orderState(psDroid, DORDER_RTB) ||
-		      orderState(psDroid, DORDER_RTR) ||
-		      orderState(psDroid, DORDER_DESTRUCT)))
+		      orderState(psDroid, DORDER_RTR)))
 		{
 			syncDebug("Droid running.");
 			orderDroidLoc(psDroid, DORDER_RUN, retreatX, retreatY, ModeImmediate);
@@ -3910,7 +3900,7 @@ void orderHealthCheck(DROID *psDroid)
 			for (psCurr = psDroid->psGroup->psList; psCurr; psCurr = psCurr->psGrpNext)
 			{
 				if (orderState(psCurr, DORDER_RUN) || orderState(psCurr, DORDER_RUNBURN) || orderState(psCurr, DORDER_RETREAT)
-				    || orderState(psCurr, DORDER_RTB) || orderState(psCurr, DORDER_RTR) || orderState(psCurr, DORDER_DESTRUCT))
+				    || orderState(psCurr, DORDER_RTB) || orderState(psCurr, DORDER_RTR))
 				{
 					// already running - ignore
 					continue;
@@ -4049,7 +4039,7 @@ const char *getDroidOrderName(DROID_ORDER order)
 	case DORDER_OBSERVE:                  return "DORDER_OBSERVE";
 	case DORDER_FIRESUPPORT:              return "DORDER_FIRESUPPORT";
 	case DORDER_RETREAT:                  return "DORDER_RETREAT";
-	case DORDER_DESTRUCT:                 return "DORDER_DESTRUCT";
+	case DORDER_UNUSED_2:                 return "DORDER_UNUSED_2";
 	case DORDER_RTB:                      return "DORDER_RTB";
 	case DORDER_RTR:                      return "DORDER_RTR";
 	case DORDER_RUN:                      return "DORDER_RUN";

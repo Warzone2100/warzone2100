@@ -49,7 +49,7 @@ enum DroidOrderType
 	DORDER_OBSERVE,         /**< keep a target in sensor view. */
 	DORDER_FIRESUPPORT,     /**< 10 - attack whatever the linked sensor droid attacks. */
 	DORDER_RETREAT,         /**< return to the players retreat position. */
-	DORDER_DESTRUCT,        /**< 12 - self destruct. */
+	DORDER_UNUSED_2,
 	DORDER_RTB,             /**< return to base. */
 	DORDER_RTR,             /**< 14 - return to repair at any repair facility. */
 	DORDER_RUN,             /**< run away after moral failure. */

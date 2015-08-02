@@ -350,7 +350,6 @@ bool scrOrderGroup(void)
 
 	if (order != DORDER_STOP &&
 	    order != DORDER_RETREAT &&
-	    order != DORDER_DESTRUCT &&
 	    order != DORDER_RTR &&
 	    order != DORDER_RTB &&
 	    order != DORDER_RUN)
@@ -462,7 +461,6 @@ bool scrOrderDroid(void)
 
 	if (order != DORDER_STOP &&
 	    order != DORDER_RETREAT &&
-	    order != DORDER_DESTRUCT &&
 	    order != DORDER_RTR &&
 	    order != DORDER_RTB &&
 	    order != DORDER_RUN &&
