@@ -194,7 +194,6 @@ extern void	kf_SelectNextCyborgFactory(void);
 extern void	kf_SelectNextPowerStation(void);
 extern void	kf_SelectNextResearch(void);
 extern void	kf_ToggleConsoleDrop(void);
-extern void	kf_ToggleShakeStatus(void);
 extern void	kf_ToggleMouseInvert(void);
 extern void	kf_SetKillerLevel(void);
 extern void	kf_SetEasyLevel(void);

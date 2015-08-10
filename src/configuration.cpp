@@ -94,7 +94,6 @@ bool loadConfig()
 	}
 	showFPS = ini.value("showFPS", false).toBool();
 	scroll_speed_accel = ini.value("scroll", DEFAULTSCROLL).toInt();
-	setShakeStatus(ini.value("shake", false).toBool());
 	setDrawShadows(ini.value("shadows", true).toBool());
 	war_setSoundEnabled(ini.value("sound", true).toBool());
 	setInvertMouseStatus(ini.value("mouseflip", true).toBool());
@@ -205,7 +204,6 @@ bool saveConfig()
 	}
 	ini.setValue("showFPS", (SDWORD)showFPS);
 	ini.setValue("scroll", (SDWORD)scroll_speed_accel);		// scroll
-	ini.setValue("shake", (SDWORD)(getShakeStatus()));		// screenshake
 	ini.setValue("mouseflip", (SDWORD)(getInvertMouseStatus()));	// flipmouse
 	ini.setValue("nomousewarp", (SDWORD)getMouseWarp()); 		// mouse warp
 	ini.setValue("coloredCursor", (SDWORD)war_GetColouredCursor());

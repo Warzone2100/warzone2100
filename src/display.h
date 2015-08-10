@@ -30,9 +30,6 @@
 /* Initialise the display system */
 extern bool dispInitialise(void);
 
-extern void shakeStart(unsigned int length);
-extern void shakeStop(void);
-
 void ProcessRadarInput();
 
 extern void processInput(void);
@@ -215,8 +212,6 @@ extern void	setDesiredPitch(SDWORD pitch);
 
 //access function for bSensorAssigned variable
 extern void setSensorAssigned(void);
-extern void	setShakeStatus(bool val);
-extern bool	getShakeStatus(void);
 
 void AddDerrickBurningMessage(void);
 

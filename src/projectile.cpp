@@ -1002,10 +1002,6 @@ static void proj_ImpactFunc(PROJECTILE *psObj)
 			position.z = psObj->pos.y;  // z = y [sic] intentional
 			position.y = map_Height(position.x, position.z);
 			addEffect(&position, EFFECT_SAT_LASER, SAT_LASER_STANDARD, false, NULL, 0, psObj->time);
-			if (clipXY(psObj->pos.x, psObj->pos.y))
-			{
-				shakeStart(1800);	// takes out lots of stuff so shake length is greater
-			}
 		}
 	}
 
@@ -1542,7 +1538,7 @@ static bool	justBeenHitByEW(BASE_OBJECT *psObj)
 
 	if (gamePaused())
 	{
-		return (false);	// Don't shake when paused...!
+		return false;
 	}
 
 	switch (psObj->type)
@@ -1552,7 +1548,7 @@ static bool	justBeenHitByEW(BASE_OBJECT *psObj)
 		if ((gameTime - psDroid->timeLastHit) < ELEC_DAMAGE_DURATION
 		    && psDroid->lastHitWeapon == WSC_ELECTRONIC)
 		{
-			return (true);
+			return true;
 		}
 		break;
 
@@ -1560,7 +1556,7 @@ static bool	justBeenHitByEW(BASE_OBJECT *psObj)
 		psFeature = (FEATURE *)psObj;
 		if ((gameTime - psFeature->timeLastHit) < ELEC_DAMAGE_DURATION)
 		{
-			return (true);
+			return true;
 		}
 		break;
 
@@ -1573,19 +1569,9 @@ static bool	justBeenHitByEW(BASE_OBJECT *psObj)
 		}
 		break;
 
-	case OBJ_PROJECTILE:
-		ASSERT(!"invalid object type: bullet", "justBeenHitByEW: invalid object type: OBJ_PROJECTILE");
-		abort();
-		break;
-
-	case OBJ_TARGET:
-		ASSERT(!"invalid object type: target", "justBeenHitByEW: invalid object type: OBJ_TARGET");
-		abort();
-		break;
-
 	default:
-		ASSERT(!"unknown object type", "justBeenHitByEW: unknown object type");
-		abort();
+		ASSERT(false, "Unknown or invalid object for EW: %s", objInfo(psObj));
+		return false;
 	}
 
 	return false;

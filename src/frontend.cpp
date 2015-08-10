@@ -711,11 +711,6 @@ static char const *graphicsOptionsScanlinesString()
 	}
 }
 
-static char const *graphicsOptionsScreenShakeString()
-{
-	return getShakeStatus() ? _("On") : _("Off");
-}
-
 static char const *graphicsOptionsSubtitlesString()
 {
 	return seq_GetSubtitles() ? _("On") : _("Off");
@@ -749,23 +744,18 @@ static bool startGraphicsOptionsMenu(void)
 	addTextButton(FRONTEND_SCANLINES_R, FRONTEND_POS3M - 55, FRONTEND_POS3Y, graphicsOptionsScanlinesString(), WBUT_SECONDARY);
 
 	////////////
-	// screenshake
-	addTextButton(FRONTEND_SSHAKE,   FRONTEND_POS4X - 35, FRONTEND_POS4Y, _("Screen Shake"), WBUT_SECONDARY);
-	addTextButton(FRONTEND_SSHAKE_R, FRONTEND_POS4M - 55, FRONTEND_POS4Y, graphicsOptionsScreenShakeString(), WBUT_SECONDARY);
-
-	////////////
 	//subtitle mode.
-	addTextButton(FRONTEND_SUBTITLES,   FRONTEND_POS6X - 35, FRONTEND_POS5Y, _("Subtitles"), WBUT_SECONDARY);
-	addTextButton(FRONTEND_SUBTITLES_R, FRONTEND_POS6M - 55, FRONTEND_POS5Y, graphicsOptionsSubtitlesString(), WBUT_SECONDARY);
+	addTextButton(FRONTEND_SUBTITLES,   FRONTEND_POS4X - 35, FRONTEND_POS4Y, _("Subtitles"), WBUT_SECONDARY);
+	addTextButton(FRONTEND_SUBTITLES_R, FRONTEND_POS4M - 55, FRONTEND_POS4Y, graphicsOptionsSubtitlesString(), WBUT_SECONDARY);
 
 	////////////
 	//shadows
-	addTextButton(FRONTEND_SHADOWS,   FRONTEND_POS7X - 35, FRONTEND_POS6Y, _("Shadows"), WBUT_SECONDARY);
-	addTextButton(FRONTEND_SHADOWS_R, FRONTEND_POS7M - 55, FRONTEND_POS6Y, graphicsOptionsShadowsString(), WBUT_SECONDARY);
+	addTextButton(FRONTEND_SHADOWS,   FRONTEND_POS5X - 35, FRONTEND_POS5Y, _("Shadows"), WBUT_SECONDARY);
+	addTextButton(FRONTEND_SHADOWS_R, FRONTEND_POS5M - 55, FRONTEND_POS5Y, graphicsOptionsShadowsString(), WBUT_SECONDARY);
 
 	// Radar
-	addTextButton(FRONTEND_RADAR,   FRONTEND_POS7X - 35, FRONTEND_POS7Y, _("Radar"), WBUT_SECONDARY);
-	addTextButton(FRONTEND_RADAR_R, FRONTEND_POS7M - 55, FRONTEND_POS7Y, graphicsOptionsRadarString(), WBUT_SECONDARY);
+	addTextButton(FRONTEND_RADAR,   FRONTEND_POS6X - 35, FRONTEND_POS6Y, _("Radar"), WBUT_SECONDARY);
+	addTextButton(FRONTEND_RADAR_R, FRONTEND_POS6M - 55, FRONTEND_POS6Y, graphicsOptionsRadarString(), WBUT_SECONDARY);
 
 	// Add some text down the side of the form
 	addSideText(FRONTEND_SIDETEXT, FRONTEND_SIDEX, FRONTEND_SIDEY, _("GRAPHICS OPTIONS"));
@@ -784,12 +774,6 @@ bool runGraphicsOptionsMenu(void)
 
 	switch (id)
 	{
-	case FRONTEND_SSHAKE:
-	case FRONTEND_SSHAKE_R:
-		setShakeStatus(!getShakeStatus());
-		widgSetString(psWScreen, FRONTEND_SSHAKE_R, graphicsOptionsScreenShakeString());
-		break;
-
 	case FRONTEND_QUIT:
 		changeTitleMode(OPTIONS);
 		break;

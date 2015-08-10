@@ -4710,30 +4710,6 @@ bool destroyStruct(STRUCTURE *psDel, unsigned impactTime)
 			addEffect(&pos, EFFECT_DESTRUCTION, DESTRUCTION_TYPE_STRUCTURE, false, NULL, 0, impactTime);
 		}
 
-		// shake the screen if we're near enough and it is explosive in nature
-		if (clipXY(pos.x, pos.z))
-		{
-			switch (type)
-			{
-			// These are the types that would cause a explosive outcome if destoryed
-			case REF_HQ:
-			case REF_POWER_GEN:
-			case REF_MISSILE_SILO:		// for campaign
-				shakeStart(1500);
-				break;
-			case REF_COMMAND_CONTROL:
-			case REF_VTOL_FACTORY:
-			case REF_CYBORG_FACTORY:
-			case REF_FACTORY:
-				shakeStart(750);
-				break;
-			case REF_RESOURCE_EXTRACTOR:
-				shakeStart(400);
-				break;
-			default:
-				break;
-			}
-		}
 		// and add a sound effect
 		audio_PlayStaticTrack(psDel->pos.x, psDel->pos.y, ID_SOUND_EXPLOSION);
 	}

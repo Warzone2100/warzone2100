@@ -62,7 +62,6 @@ static CHEAT_ENTRY cheatCodes[] =
 	{"timedemo", kf_FrameRate},	 //timedemo
 	{"kill", kf_KillSelected},	//kill slected
 	{"john kettley", kf_ToggleWeather},	//john kettley
-	{"shakey", kf_ToggleShakeStatus},	//shakey
 	{"mouseflip", kf_ToggleMouseInvert},	//mouseflip
 	{"biffer baker", kf_SetKillerLevel},	//indestructive units
 	{"easy", kf_SetEasyLevel},	//easy
