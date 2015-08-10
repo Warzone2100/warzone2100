@@ -174,6 +174,7 @@ enum
 	FRONTEND_SKIRMISH,
 	FRONTEND_CHALLENGES,
 	FRONTEND_HOST			= 20300,	//multiplayer menu options
+	FRONTEND_HOST_HIDDEN,
 	FRONTEND_JOIN,
 	FE_P0,								// player 0 buton
 	FE_P1,								// player 1 buton

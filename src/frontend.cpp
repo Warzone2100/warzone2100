@@ -563,7 +563,8 @@ static bool startMultiPlayerMenu(void)
 	addSideText(FRONTEND_SIDETEXT ,	FRONTEND_SIDEX, FRONTEND_SIDEY, _("MULTI PLAYER"));
 
 	addTextButton(FRONTEND_HOST,     FRONTEND_POS2X, FRONTEND_POS2Y, _("Host Game"), WBUT_TXTCENTRE);
-	addTextButton(FRONTEND_JOIN,     FRONTEND_POS3X, FRONTEND_POS3Y, _("Join Game"), WBUT_TXTCENTRE);
+	addTextButton(FRONTEND_HOST_HIDDEN,     FRONTEND_POS2X, FRONTEND_POS3Y, _("Host Hidden Game"), WBUT_TXTCENTRE);
+	addTextButton(FRONTEND_JOIN,     FRONTEND_POS3X, FRONTEND_POS4Y, _("Join Game"), WBUT_TXTCENTRE);
 
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_QUIT, 10, 10, 30, 29, P_("menu", "Return"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
 
@@ -581,6 +582,7 @@ bool runMultiPlayerMenu(void)
 	switch (id)
 	{
 	case FRONTEND_HOST:
+	case FRONTEND_HOST_HIDDEN:
 		// don't pretend we are running a network game. Really do it!
 		NetPlay.bComms = true; // use network = true
 		NetPlay.isUPNP_CONFIGURED = false;
@@ -589,6 +591,8 @@ bool runMultiPlayerMenu(void)
 		bMultiPlayer = true;
 		bMultiMessages = true;
 		NETinit(true);
+        // Here because defaults set by netplay
+		NetPlay.GamePublic = id != FRONTEND_HOST_HIDDEN;
 		NETdiscoverUPnPDevices();
 		game.type = SKIRMISH;		// needed?
 		lastTitleMode = MULTI;

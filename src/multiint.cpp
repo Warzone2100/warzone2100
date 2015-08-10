@@ -146,7 +146,6 @@ static bool				SettingsUp		= false;
 static UBYTE				InitialProto	= 0;
 static W_SCREEN				*psConScreen;
 static SDWORD				dwSelectedGame	= 0;						//player[] and games[] indexes
-static UDWORD				gameNumber;								// index to games icons
 static bool					safeSearch		= false;				// allow auto game finding.
 static bool disableLobbyRefresh = false;	// if we allow lobby to be refreshed or not.
 static UDWORD hideTime = 0;
@@ -154,6 +153,8 @@ static bool EnablePasswordPrompt = false;	// if we need the password prompt
 LOBBY_ERROR_TYPES LobbyError = ERROR_NOERROR;
 static char tooltipbuffer[MaxGames][256] = {{'\0'}};
 static bool toggleFilter = true;	// Used to show all games or only games that are of the same version
+static char lastJoinAddr[128]; // Last game IP that we tried to join.
+static uint32_t lastJoinPort; // Last game port we tried to join.
 /// end of globals.
 // ////////////////////////////////////////////////////////////////////////////
 // Function protos
@@ -880,7 +881,8 @@ void setLobbyError(LOBBY_ERROR_TYPES error_type)
 bool joinGame(const char *host, uint32_t port)
 {
 	PLAYERSTATS	playerStats;
-
+	sstrcpy(lastJoinAddr, host);
+	lastJoinPort = port;
 	if (ingame.localJoiningInProgress)
 	{
 		return false;
@@ -1197,7 +1199,7 @@ void runGameFind(void)
 	// we would want a modal password entry box.
 	if (id >= GAMES_GAMESTART && id <= GAMES_GAMEEND)
 	{
-		gameNumber = id - GAMES_GAMESTART;
+		UDWORD gameNumber = id - GAMES_GAMESTART;
 
 		if (NetPlay.games[gameNumber].privateGame)
 		{
@@ -1213,8 +1215,8 @@ void runGameFind(void)
 	else if (id == CON_PASSWORDYES)
 	{
 		ingame.localOptionsReceived = false;					// note, we are awaiting options
-		sstrcpy(game.name, NetPlay.games[gameNumber].name);		// store name
-		joinGame(NetPlay.games[gameNumber].desc.host, 0);
+		sstrcpy(game.name, _("Unknown Game"));
+		joinGame(lastJoinAddr, lastJoinPort);
 	}
 	else if (id == CON_PASSWORDNO)
 	{
