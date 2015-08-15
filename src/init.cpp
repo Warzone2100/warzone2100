@@ -57,7 +57,6 @@
 #include "data.h"
 #include "display.h"
 #include "display3d.h"
-#include "drive.h"
 #include "edit3d.h"
 #include "effects.h"
 #include "fpath.h"
@@ -129,8 +128,6 @@ static bool InitialiseGlobals(void)
 	featureInitVars();
 	radarInitVars();
 	Edit3DInitVars();
-
-	driveInitVars(true);
 
 	return true;
 }
@@ -1277,7 +1274,6 @@ bool stageThreeInitialise(void)
 
 	// Re-inititialise some static variables.
 
-	driveInitVars(false);
 	resizeRadar();
 
 	setAllPauseStates(false);

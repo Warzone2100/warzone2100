@@ -122,7 +122,6 @@ extern void	kf_ShowGridInfo(void);
 extern void	kf_SendGlobalMessage(void);
 extern void	kf_SendTeamMessage(void);
 extern void	kf_SelectPlayer(void);
-extern void	kf_ToggleDrivingMode(void);
 extern void	kf_ToggleConsole(void);
 extern void	kf_ToggleTeamChat(void);
 extern void	kf_SelectAllOnScreenUnits(void);

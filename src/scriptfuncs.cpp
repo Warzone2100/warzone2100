@@ -54,7 +54,6 @@
 #include "geometry.h"
 #include "visibility.h"
 #include "gateway.h"
-#include "drive.h"
 #include "display.h"
 #include "component.h"
 #include "scriptextern.h"

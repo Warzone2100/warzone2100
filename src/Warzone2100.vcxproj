@@ -321,7 +321,6 @@ call $(ProjectDir)..\build_tools\autorevision.bat $(ProjectDir)</Command>
     <ClCompile Include="difficulty.cpp" />
     <ClCompile Include="display.cpp" />
     <ClCompile Include="display3d.cpp" />
-    <ClCompile Include="drive.cpp" />
     <ClCompile Include="droid.cpp" />
     <ClCompile Include="edit3d.cpp" />
     <ClCompile Include="effects.cpp" />
@@ -438,7 +437,6 @@ call $(ProjectDir)..\build_tools\autorevision.bat $(ProjectDir)</Command>
     <ClInclude Include="display3d.h" />
     <ClInclude Include="display3ddef.h" />
     <ClInclude Include="displaydef.h" />
-    <ClInclude Include="drive.h" />
     <ClInclude Include="droid.h" />
     <ClInclude Include="droiddef.h" />
     <ClInclude Include="edit3d.h" />

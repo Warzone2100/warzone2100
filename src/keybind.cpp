@@ -84,7 +84,6 @@
 #include "mission.h"
 #include "mapgrid.h"
 #include "order.h"
-#include "drive.h"
 #include "selection.h"
 #include "difficulty.h"
 #include "scriptcb.h"		/* for console callback */
@@ -826,10 +825,6 @@ void	kf_ToggleFog(void)
 /* Toggle camera on/off */
 void	kf_ToggleCamera(void)
 {
-	if (getWarCamStatus() == false)
-	{
-		setDrivingStatus(false);
-	}
 	camToggleStatus();
 }
 
@@ -1157,8 +1152,6 @@ void	kf_SelectGrouping(UDWORD	groupNumber)
 		Selected = activateGroup(selectedPlayer, groupNumber);
 	}
 
-	// Tell the driving system that the selection may have changed.
-	driveSelectionChanged();
 	/* play group audio but only if they wern't already selected - AM */
 	if (Selected && !bAlreadySelected)
 	{
@@ -1721,35 +1714,6 @@ void	kf_ChooseIntelligence(void)
 void	kf_ChooseCancel(void)
 {
 	setKeyButtonMapping(IDRET_CANCEL);
-}
-
-// --------------------------------------------------------------------------
-void	kf_ToggleDrivingMode(void)
-{
-	addConsoleMessage("Toggle driver mode", LEFT_JUSTIFY, SYSTEM_MESSAGE); // what does this do? - per
-
-	/* No point unless we're tracking */
-	if (getWarCamStatus())
-	{
-		if (getDrivingStatus())
-		{
-			StopDriverMode();
-			addConsoleMessage("DriverMode off", LEFT_JUSTIFY, SYSTEM_MESSAGE);
-		}
-		else
-		{
-			// removed the MP check for this, so you can now play with in in MP games.
-			if (!driveModeActive())
-			{
-				StartDriverMode(NULL);
-				addConsoleMessage("DriverMode on", LEFT_JUSTIFY, SYSTEM_MESSAGE);
-			}
-		}
-	}
-	else
-	{
-		addConsoleMessage("DriverMode disabled. Must be in tracking mode. Hit space bar with a unit selected.", LEFT_JUSTIFY, SYSTEM_MESSAGE);
-	}
 }
 
 // --------------------------------------------------------------------------

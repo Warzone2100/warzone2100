@@ -57,7 +57,6 @@
 #include "multigifts.h"
 #include "random.h"
 #include "mission.h"
-#include "drive.h"
 #include "qtscript.h"
 
 /* max and min vtol heights above terrain */
@@ -118,7 +117,6 @@ const char *moveDescription(MOVE_STATUS status)
 	case MOVEPOINTTOPOINT : return "P2P";
 	case MOVETURNTOTARGET : return "Turn2target";
 	case MOVEHOVER : return "Hover";
-	case MOVEDRIVE : return "Drive";
 	case MOVEWAITROUTE : return "Waitroute";
 	case MOVESHUFFLE : return "Shuffle";
 	}
@@ -2311,12 +2309,6 @@ void moveUpdateDroid(DROID *psDroid)
 		break;
 	case MOVEHOVER:
 		moveDescending(psDroid);
-		break;
-	// Driven around by the player.
-	case MOVEDRIVE:
-		driveSetDroidMove(psDroid);
-		moveSpeed = driveGetMoveSpeed();	//psDroid->sMove.speed;
-		moveDir = DEG(driveGetMoveDir());		//psDroid->sMove.dir;
 		break;
 
 	default:

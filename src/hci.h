@@ -362,7 +362,6 @@ extern void intRemoveProximityButton(PROXIMITY_DISPLAY *psProxDisp);
 void	setKeyButtonMapping(UDWORD	val);
 
 STRUCTURE *intFindAStructure(void);
-STRUCTURE *intGotoNextStructureType(UDWORD structType, bool JumpTo, bool CancelDrive);
 DROID *intGotoNextDroidType(DROID *CurrDroid, DROID_TYPE droidType, bool AllowGroup);
 
 /// Returns the number of researches that selectedPlayer is not already researching, or 0 if there are no free laboratories.

@@ -78,7 +78,6 @@
 #include "lighting.h"
 #include "mapgrid.h"
 #include "edit3d.h"
-#include "drive.h"
 #include "fpath.h"
 #include "scriptextern.h"
 #include "cluster.h"
@@ -611,10 +610,6 @@ static void gameStateUpdate()
 
 	// update the command droids
 	cmdDroidUpdate();
-	if (getDrivingStatus())
-	{
-		driveUpdate();
-	}
 
 	fireWaitingCallbacks(); //Now is the good time to fire waiting callbacks (since interpreter is off now)
 

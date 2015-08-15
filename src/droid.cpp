@@ -41,7 +41,6 @@
 #include "loop.h"
 #include "visibility.h"
 #include "map.h"
-#include "drive.h"
 #include "droid.h"
 #include "hci.h"
 #include "game.h"
@@ -632,8 +631,6 @@ TAKE CARE with removeDroid() - usually want droidRemove since it deal with clust
 bool droidRemove(DROID *psDroid, DROID *pList[MAX_PLAYERS])
 {
 	CHECK_DROID(psDroid);
-
-	driveDroidKilled(psDroid);	// Tell the driver system it's gone.
 
 	if (isDead((BASE_OBJECT *) psDroid))
 	{
@@ -1989,19 +1986,16 @@ bool activateGroupAndMove(UDWORD playerNumber, UDWORD groupNumber)
 			}
 
 			selected = true;
-			if (!driveModeActive())
+			if (getWarCamStatus())
 			{
-				if (getWarCamStatus())
-				{
-					camToggleStatus();			 // messy - fix this
-					processWarCam(); //odd, but necessary
-					camToggleStatus();				// messy - FIXME
-				}
-				else
-				{
-					/* Centre display on him if warcam isn't active */
-					setViewPos(map_coord(psCentreDroid->pos.x), map_coord(psCentreDroid->pos.y), true);
-				}
+				camToggleStatus();			 // messy - fix this
+				processWarCam(); //odd, but necessary
+				camToggleStatus();				// messy - FIXME
+			}
+			else
+			{
+				/* Centre display on him if warcam isn't active */
+				setViewPos(map_coord(psCentreDroid->pos.x), map_coord(psCentreDroid->pos.y), true);
 			}
 		}
 	}

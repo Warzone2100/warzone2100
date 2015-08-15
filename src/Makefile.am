@@ -71,7 +71,6 @@ noinst_HEADERS = \
 	display3d.h \
 	displaydef.h \
 	display.h \
-	drive.h \
 	droiddef.h \
 	droid.h \
 	edit3d.h \
@@ -198,7 +197,6 @@ COMMONSOURCES = \
 	difficulty.cpp \
 	display3d.cpp \
 	display.cpp \
-	drive.cpp \
 	droid.cpp \
 	edit3d.cpp \
 	effects.cpp \

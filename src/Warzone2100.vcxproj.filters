@@ -81,9 +81,6 @@
     <ClCompile Include="display3d.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="drive.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="droid.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -423,9 +420,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="displaydef.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="drive.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="droid.h">

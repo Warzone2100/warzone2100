@@ -247,7 +247,7 @@ _keymapsave keyMapSaveTable[] =
 	kf_NOOP, // unused
 	kf_NOOP, // unused
 	kf_RevealMapAtPos,
-	kf_ToggleDrivingMode,
+	kf_NOOP,
 	kf_ToggleShowGateways,
 	kf_ToggleShowPath,
 	kf_PerformanceSample,
@@ -476,7 +476,6 @@ void	keyInitMappings(bool bForceDefaults)
 	keyAddMapping(KEYMAP__DEBUG, KEY_LCTRL,  KEY_X, KEYMAP_PRESSED, kf_FinishResearch,    N_("Complete current research"));
 	keyAddMapping(KEYMAP__DEBUG, KEY_LSHIFT, KEY_W, KEYMAP_PRESSED, kf_RevealMapAtPos,    N_("Reveal map at mouse position"));
 	keyAddMapping(KEYMAP__DEBUG, KEY_LCTRL,  KEY_L, KEYMAP_PRESSED, kf_TraceObject,       N_("Trace a game object"));
-	keyAddMapping(KEYMAP__DEBUG, KEY_LSHIFT, KEY_D, KEYMAP_PRESSED, kf_ToggleDrivingMode, N_("Toggle Driving Mode"));
 	saveKeyMap();	// save out the default key mappings.
 }
 

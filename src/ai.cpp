@@ -29,7 +29,6 @@
 #include "action.h"
 #include "cmddroid.h"
 #include "combat.h"
-#include "drive.h"
 #include "mapgrid.h"
 #include "map.h"
 #include "projectile.h"
@@ -653,7 +652,7 @@ int aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot, i
 					psTarget = targetInQuestion;
 				}
 				else if ((psStruct->pStructureType->type != REF_WALL && psStruct->pStructureType->type != REF_WALLCORNER)
-				         || driveModeActive() || (bMultiPlayer && !isHumanPlayer(psDroid->player)))
+				         || (bMultiPlayer && !isHumanPlayer(psDroid->player)))
 				{
 					psTarget = targetInQuestion;
 				}
@@ -1148,13 +1147,6 @@ void aiUpdateDroid(DROID *psDroid)
 	}
 
 	if (bMultiPlayer && isVtolDroid(psDroid) && isHumanPlayer(psDroid->player))
-	{
-		lookForTarget = false;
-		updateTarget = false;
-	}
-
-	// do not look for a target if droid is currently under direct control.
-	if (driveModeActive() && (psDroid == driveGetDriven()))
 	{
 		lookForTarget = false;
 		updateTarget = false;

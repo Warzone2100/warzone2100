@@ -51,7 +51,6 @@
 #include "oprint.h"
 #include "miscimd.h"
 #include "loop.h"
-#include "drive.h"
 #include "move.h"
 #include "order.h"
 #include "action.h"
@@ -150,12 +149,6 @@ static void processLeaderSelection(void)
 		}
 	}
 	else
-	{
-		return;
-	}
-
-	/* Don't do if we're driving?! */
-	if (getDrivingStatus())
 	{
 		return;
 	}
@@ -1045,10 +1038,6 @@ void	camToggleStatus(void)
 	{
 		/* Otherwise, switch it off */
 		setWarCamActive(false);
-		if (getDrivingStatus())
-		{
-			StopDriverMode();
-		}
 	}
 }
 

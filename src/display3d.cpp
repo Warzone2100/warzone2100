@@ -77,7 +77,6 @@
 #include "scriptextern.h"
 #include "scriptcb.h"
 #include "keymap.h"
-#include "drive.h"
 #include "gateway.h"
 #include "transporter.h"
 #include "warzoneconfig.h"
@@ -3054,14 +3053,7 @@ static void	drawDroidSelections(void)
 			scrY = psDroid->sDisplay.screenY;
 			scrR = psDroid->sDisplay.screenR;
 
-			if (!driveModeActive() || driveIsDriven(psDroid))
-			{
-				boxCol = WZCOL_WHITE;
-			}
-			else
-			{
-				boxCol = WZCOL_GREEN;
-			}
+			boxCol = WZCOL_WHITE;
 
 			if (psDroid->selected)
 			{
@@ -3168,14 +3160,7 @@ static void	drawDroidSelections(void)
 				    &&	(scrY + scrR) > 0
 				    &&	(scrY - scrR) < pie_GetVideoBufferHeight())
 				{
-					if (!driveModeActive() || driveIsDriven(psDroid))
-					{
-						boxCol = WZCOL_WHITE;
-					}
-					else
-					{
-						boxCol = WZCOL_GREEN;
-					}
+					boxCol = WZCOL_WHITE;
 
 					/* Power bars */
 					pie_BoxFill(scrX - scrR - 1, scrY + scrR + 2, scrX + scrR + 1, scrY + scrR + 6, WZCOL_RELOAD_BACKGROUND);
