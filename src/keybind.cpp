@@ -2317,7 +2317,7 @@ void	kf_SetDroidOrderStop()
 	{
 		if (psDroid->selected)
 		{
-			orderDroid(psDroid, DORDER_HOLD, ModeQueue);
+			orderDroid(psDroid, DORDER_STOP, ModeQueue);
 		}
 	}
 }
