@@ -1430,7 +1430,6 @@ static void initMiscVars()
 	includeRedundantDesigns = false;
 	enableConsoleDisplay(true);
 
-	setSelectedGroup(UBYTE_MAX);
 	for (unsigned n = 0; n < MAX_PLAYERS; ++n)
 	{
 		processDebugMappings(n, false);

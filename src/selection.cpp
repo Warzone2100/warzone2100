@@ -471,7 +471,6 @@ void selCommander(int n)
 					setViewPos(map_coord(psCurr->pos.x), map_coord(psCurr->pos.y), true);
 				}
 			}
-			setSelectedCommander(n);
 			return;
 		}
 	}

@@ -126,8 +126,6 @@ static SDWORD	rotY;
 static UDWORD	rotInitial;
 static UDWORD	rotInitialUp;
 static UDWORD	xMoved, yMoved;
-static STRUCTURE	*psBuilding;
-static bool	edgeOfMap = false;
 static uint32_t scrollRefTime;
 static float	scrollSpeedLeftRight; //use two directions and add them because its simple
 static float	scrollStepLeftRight;
@@ -448,10 +446,6 @@ void processInput(void)
 
 	StartOfLastFrame = currentFrame;
 	currentFrame = frameGetFrameNumber();
-
-	psBuilding = NULL;
-
-	edgeOfMap = false;
 
 	ignoreRMBC = false;
 
@@ -1192,7 +1186,7 @@ void scroll(void)
 	player.p.x += xDif;
 	player.p.z += yDif;
 
-	edgeOfMap = CheckScrollLimits();
+	CheckScrollLimits();
 }
 
 /*
@@ -1240,7 +1234,6 @@ bool CheckInScrollLimits(SDWORD *xPos, SDWORD *zPos)
 		*zPos = maxY;
 		EdgeHit = true;
 	}
-
 
 	return EdgeHit;
 }
@@ -1582,9 +1575,6 @@ static bool droidHasLeader(DROID *psDroid)
 // deal with selecting a droid
 void dealWithDroidSelect(DROID *psDroid, bool bDragBox)
 {
-	DROID	*psD;
-	bool	bGotGroup;
-
 	/*	Toggle selection on and off - allows you drag around a big
 		area of droids and then exclude certain individuals */
 	if (!bDragBox && psDroid->selected == true)
@@ -1593,13 +1583,6 @@ void dealWithDroidSelect(DROID *psDroid, bool bDragBox)
 	}
 	else if (ctrlShiftDown() || !droidHasLeader(psDroid))
 	{
-		for (psD = apsDroidLists[selectedPlayer], bGotGroup = false; psD && !bGotGroup; psD = psD->psNext)
-		{
-			if (psD->selected && (psD->group != UBYTE_MAX))
-			{
-				bGotGroup = true;
-			}
-		}
 		if (specialOrderKeyDown())
 		{
 			/* We only want to select weapon units if ALT is down on a drag */
@@ -2847,8 +2830,6 @@ void clearSel()
 		psFlagPos->selected = false;
 	}
 
-	setSelectedGroup(UBYTE_MAX);
-	setSelectedCommander(UBYTE_MAX);
 	intRefreshScreen();
 
 	triggerEventSelected();

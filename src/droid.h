@@ -233,12 +233,6 @@ extern void setUpBuildModule(DROID *psDroid);
 /* Just returns true if the droid's present body points aren't as high as the original*/
 extern bool	droidIsDamaged(DROID *psDroid);
 
-/* Returns currently active (selected) group */
-extern UDWORD	getSelectedGroup(void);
-extern void	setSelectedGroup(UDWORD groupNumber);
-extern UDWORD	getSelectedCommander(void);
-extern void	setSelectedCommander(UDWORD commander);
-
 extern char const *getDroidResourceName(char const *pName);
 
 /*checks to see if an electronic warfare weapon is attached to the droid*/

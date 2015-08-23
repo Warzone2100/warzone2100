@@ -87,7 +87,7 @@ enum SECONDARY_ORDER
 	DSO_ASSIGN_PRODUCTION,          /**< Assigns a factory to a command droid - the state is given by the factory number. */
 	DSO_ASSIGN_CYBORG_PRODUCTION,   /**< Assigns a cyborg factory to a command droid - the state is given by the factory number. */
 	DSO_CLEAR_PRODUCTION,           /**< Removes the production from a command droid. */
-	DSO_RECYCLE,                    /**< If can be recicled or not. */
+	DSO_RECYCLE,                    /**< If can be recycled or not. */
 	DSO_PATROL,                     /**< If it is assigned to patrol between current pos and next move target. */
 	DSO_UNUSED2,                    /**< The type of halt. It can be hold, guard or pursue. Used with DSS_HALT_HOLD, DSS_HALT_GUARD,  DSS_HALT_PURSUE. */
 	DSO_RETURN_TO_LOC,              /**< Generic secondary order to return to a location. Will depend on the secondary state DSS_RTL* to be specific. */

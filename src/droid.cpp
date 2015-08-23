@@ -89,8 +89,6 @@
 
 // store the experience of recently recycled droids
 UWORD	aDroidExperience[MAX_PLAYERS][MAX_RECYCLED_DROIDS];
-UDWORD	selectedGroup = UBYTE_MAX;
-UDWORD	selectedCommander = UBYTE_MAX;
 
 /** Height the transporter hovers at above the terrain. */
 #define TRANSPORTER_HOVER_HEIGHT	10
@@ -2035,7 +2033,6 @@ void assignDroidsToGroup(UDWORD	playerNumber, UDWORD groupNumber)
 	}
 	if (bAtLeastOne)
 	{
-		setSelectedGroup(groupNumber);
 		//clear the Deliv Point if one
 		for (psFlagPos = apsFlagPosLists[selectedPlayer]; psFlagPos;
 		     psFlagPos = psFlagPos->psNext)
@@ -2101,12 +2098,7 @@ bool activateGroupAndMove(UDWORD playerNumber, UDWORD groupNumber)
 
 	if (selected)
 	{
-		setSelectedGroup(groupNumber);
 		groupConsoleInformOfCentering(groupNumber);
-	}
-	else
-	{
-		setSelectedGroup(UBYTE_MAX);
 	}
 
 	return selected;
@@ -2138,7 +2130,6 @@ bool activateGroup(UDWORD playerNumber, UDWORD groupNumber)
 
 	if (selected)
 	{
-		setSelectedGroup(groupNumber);
 		//clear the Deliv Point if one
 		for (psFlagPos = apsFlagPosLists[selectedPlayer]; psFlagPos;
 		     psFlagPos = psFlagPos->psNext)
@@ -2146,10 +2137,6 @@ bool activateGroup(UDWORD playerNumber, UDWORD groupNumber)
 			psFlagPos->selected = false;
 		}
 		groupConsoleInformOfSelection(groupNumber);
-	}
-	else
-	{
-		setSelectedGroup(UBYTE_MAX);
 	}
 	return selected;
 }
@@ -2184,29 +2171,6 @@ void	groupConsoleInformOfCentering(UDWORD groupNumber)
 	{
 		CONPRINTF(ConsoleString, (ConsoleString, ngettext("Aligning with Group %u - %u Unit", "Aligning with Group %u - %u Units", num_selected), groupNumber, num_selected));
 	}
-}
-
-
-UDWORD	getSelectedGroup(void)
-{
-	return (selectedGroup);
-}
-
-void	setSelectedGroup(UDWORD groupNumber)
-{
-	selectedGroup = groupNumber;
-	selectedCommander = UBYTE_MAX;
-}
-
-UDWORD	getSelectedCommander(void)
-{
-	return (selectedCommander);
-}
-
-void	setSelectedCommander(UDWORD commander)
-{
-	selectedGroup = UBYTE_MAX;
-	selectedCommander = commander;
 }
 
 /**

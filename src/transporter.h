@@ -87,9 +87,6 @@ extern void transporterSetScriptCurrent(DROID *psTransporter);
 /* get current transporter (for script callbacks) */
 extern DROID *transporterGetScriptCurrent(void);
 
-/* check whether transporter on mission */
-//extern bool transporterOnMission( void );
-
 /*called when a Transporter has arrived back at the LZ when sending droids to safety*/
 extern void resetTransporter(void);
 
