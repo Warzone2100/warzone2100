@@ -2667,16 +2667,16 @@ static void addConsoleBox(void)
 // ////////////////////////////////////////////////////////////////////////////
 static void disableMultiButs(void)
 {
-
-	// edit box icons.
-	widgSetButtonState(psWScreen, MULTIOP_GNAME_ICON, WBUT_DISABLE);
-	widgSetButtonState(psWScreen, MULTIOP_MAP_ICON, WBUT_DISABLE);
-
-	// edit boxes
-	widgSetButtonState(psWScreen, MULTIOP_GNAME, WEDBS_DISABLE);
-
 	if (!NetPlay.isHost)
 	{
+		// edit box icons.
+		widgSetButtonState(psWScreen, MULTIOP_GNAME_ICON, WBUT_DISABLE);
+		widgSetButtonState(psWScreen, MULTIOP_MAP_ICON, WBUT_DISABLE);
+	
+		// edit boxes
+		widgSetButtonState(psWScreen, MULTIOP_GNAME, WEDBS_DISABLE);
+		
+		//Why are you guys doing it this way? widgSetButtonState() works fine. OOP for the sake of OOP? -Sub
 		((MultichoiceWidget *)widgGetFromID(psWScreen, MULTIOP_GAMETYPE))->disable();  // Scavengers.
 		((MultichoiceWidget *)widgGetFromID(psWScreen, MULTIOP_BASETYPE))->disable();  // camapign subtype.
 		((MultichoiceWidget *)widgGetFromID(psWScreen, MULTIOP_POWER))->disable();  // pow levels
@@ -2843,7 +2843,7 @@ static void processMultiopWidgets(UDWORD id)
 	PLAYERSTATS playerStats;
 
 	// host, who is setting up the game
-	if ((ingame.bHostSetup && !bHosted))
+	if (ingame.bHostSetup)
 	{
 		switch (id)												// Options buttons
 		{
@@ -2851,6 +2851,16 @@ static void processMultiopWidgets(UDWORD id)
 			sstrcpy(game.name, widgGetString(psWScreen, MULTIOP_GNAME));
 			removeWildcards(game.name);
 			widgSetString(psWScreen, MULTIOP_GNAME, game.name);
+			
+			if (NetPlay.isHost && NetPlay.bComms)
+			{
+				sstrcpy(gamestruct.name, game.name);
+				sendOptions();
+				NETupdateLobbyServer();
+				
+				addConsoleMessage(_("Game Name Updated."), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+			}
+				
 			break;
 
 		case MULTIOP_GNAME_ICON:
@@ -2873,6 +2883,14 @@ static void processMultiopWidgets(UDWORD id)
 
 			debug(LOG_WZ, "processMultiopWidgets[MULTIOP_MAP_ICON]: %s.wrf", MultiCustomMapsPath);
 			addMultiRequest(MultiCustomMapsPath, ".wrf", MULTIOP_MAP, current_tech, current_numplayers);
+			
+			if (NetPlay.isHost && bHosted && NetPlay.bComms)
+			{
+				sendOptions();
+				
+				sstrcpy(gamestruct.mapname, game.map);
+				NETupdateLobbyServer();
+			}
 			break;
 
 		case MULTIOP_MAP_PREVIEW:
@@ -3000,6 +3018,14 @@ static void processMultiopWidgets(UDWORD id)
 		setMultiStats(selectedPlayer, playerStats, false);
 		setMultiStats(selectedPlayer, playerStats, true);
 		netPlayersUpdated = true;
+
+		if (NetPlay.isHost && bHosted && NetPlay.bComms)
+		{
+			sendOptions();
+			sstrcpy(gamestruct.hostname, NetPlay.players[selectedPlayer].name);
+			NETupdateLobbyServer();
+		}
+		
 		break;
 
 	case MULTIOP_PNAME_ICON:
@@ -3643,6 +3669,13 @@ void runMultiOptions(void)
 				setMultiStats(selectedPlayer, playerStats, false);
 				setMultiStats(selectedPlayer, playerStats, true);
 				netPlayersUpdated = true;
+				
+				if (NetPlay.isHost && bHosted && NetPlay.bComms)
+				{
+					sendOptions();
+					sstrcpy(gamestruct.hostname, NetPlay.players[selectedPlayer].name);
+					NETupdateLobbyServer();
+				}
 				break;
 			case MULTIOP_MAP:
 				{
@@ -3669,6 +3702,15 @@ void runMultiOptions(void)
 
 					widgSetString(psWScreen, MULTIOP_MAP + 1, mapData->pName); //What a horrible, horrible way to do this! FIX ME! (See addBlueForm)
 					addGameOptions();
+					
+					if (NetPlay.isHost && bHosted && NetPlay.bComms && !isHoverPreview)
+					{
+						sendOptions();
+						sstrcpy(gamestruct.mapname, game.map);
+						NETupdateLobbyServer();
+					
+					}
+					
 					break;
 				}
 			default:

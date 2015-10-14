@@ -122,7 +122,7 @@ NETPLAY	NetPlay;
 PLAYER_IP	*IPlist = NULL;
 static bool		allow_joining = false;
 static	bool server_not_there = false;
-static GAMESTRUCT	gamestruct;
+GAMESTRUCT	gamestruct;
 
 // update flags
 bool netPlayersUpdated;
@@ -2331,6 +2331,20 @@ void NETfixPlayerCount(void)
 	}
 
 }
+
+void NETupdateLobbyServer(void)
+{ //Updates the data for our game in the lobby server.
+	
+	/**
+	* I made this little wrapper function because I assume vexed or whoever
+	* decided to make NETregisterServer() static, wanted the code to be clean.
+	* Well here, that's as clean as I can make it without exposing NETregisterServer().
+	* -Subsentient
+	**/
+	
+	NETregisterServer(WZ_SERVER_UPDATE);
+}
+	
 // ////////////////////////////////////////////////////////////////////////
 // Host a game with a given name and player name. & 4 user game flags
 static void NETallowJoining(void)
