@@ -1732,7 +1732,7 @@ int weaponROF(const WEAPON_STATS *psStat, int player)
 
 	if (rof == 0)
 	{
-		rof = weaponFirePause(psStat, selectedPlayer);
+		rof = weaponFirePause(psStat, player);
 		if (rof != 0)
 		{
 			rof = (UWORD)(60 * GAME_TICKS_PER_SEC / rof);
