@@ -296,6 +296,9 @@ static void loadCompStats(WzConfig &json, COMPONENT_STATS *psStats, int index)
 	loadStats(json, psStats, index);
 	psStats->buildPower = json.value("buildPower", 0).toUInt();
 	psStats->buildPoints = json.value("buildPoints", 0).toUInt();
+	psStats->body = json.value("hitpoints", 0).toUInt();
+	psStats->designable = json.value("designable", false).toBool();
+	psStats->weight = json.value("weight", 0).toUInt();
 }
 
 /*Load the weapon stats from the file exported from Access*/
@@ -317,8 +320,6 @@ bool loadWeaponStats(const char *pFileName)
 		loadCompStats(ini, psStats, i);
 		psStats->compType = COMP_WEAPON;
 
-		psStats->weight = ini.value("weight", 0).toUInt();
-		psStats->body = ini.value("hitpoints", 0).toUInt();
 		psStats->radiusLife = ini.value("radiusLife", 0).toUInt();
 
 		psStats->base.maxRange = ini.value("longRange").toUInt();
@@ -354,7 +355,6 @@ bool loadWeaponStats(const char *pFileName)
 		psStats->effectSize = ini.value("effectSize").toUInt();
 		flags = ini.value("flags", 0).toStringList();
 		psStats->vtolAttackRuns = ini.value("numAttackRuns", 0).toUInt();
-		psStats->designable = ini.value("designable").toBool();
 		psStats->penetrate = ini.value("penetrate", false).toBool();
 		// weapon size limitation
 		int weaponSize = ini.value("weaponSize", WEAPON_SIZE_ANY).toInt();
@@ -525,10 +525,7 @@ bool loadBodyStats(const char *pFileName)
 		loadCompStats(ini, psStats, i);
 		psStats->compType = COMP_BODY;
 
-		psStats->weight = ini.value("weight", 0).toInt();
-		psStats->body = ini.value("hitpoints").toInt();
 		psStats->weaponSlots = ini.value("weaponSlots").toInt();
-		psStats->designable = ini.value("designable", false).toBool();
 		psStats->bodyClass = ini.value("class").toString();
 		psStats->base.thermal = ini.value("armourHeat").toInt();
 		psStats->base.armour = ini.value("armourKinetic").toInt();
@@ -749,10 +746,7 @@ bool loadPropulsionStats(const char *pFileName)
 		loadCompStats(ini, psStats, i);
 		psStats->compType = COMP_PROPULSION;
 
-		psStats->weight = ini.value("weight").toInt();
-		psStats->body = ini.value("hitpoints").toInt();
 		psStats->maxSpeed = ini.value("speed").toInt();
-		psStats->designable = ini.value("designable", false).toBool();
 		psStats->ref = REF_PROPULSION_START + i;
 		psStats->turnSpeed = ini.value("turnSpeed", DEG(1) / 3).toInt();
 		psStats->spinSpeed = ini.value("spinSpeed", DEG(3) / 4).toInt();
@@ -819,15 +813,12 @@ bool loadSensorStats(const char *pFileName)
 		loadCompStats(ini, psStats, i);
 		psStats->compType = COMP_SENSOR;
 
-		psStats->weight = ini.value("weight", 0).toInt();
-		psStats->body = ini.value("hitpoints", 0).toInt();
 		psStats->base.range = ini.value("range").toInt();
 		for (int j = 0; j < MAX_PLAYERS; j++)
 		{
 			psStats->upgrade[j].range = psStats->base.range;
 		}
 		psStats->time = ini.value("time").toInt();
-		psStats->designable = ini.value("designable", false).toBool();
 
 		psStats->ref = REF_SENSOR_START + i;
 
@@ -911,14 +902,11 @@ bool loadECMStats(const char *pFileName)
 		loadCompStats(ini, psStats, i);
 		psStats->compType = COMP_ECM;
 
-		psStats->weight = ini.value("weight", 0).toInt();
-		psStats->body = ini.value("hitpoints", 0).toInt();
 		psStats->base.range = ini.value("range").toInt();
 		for (int j = 0; j < MAX_PLAYERS; j++)
 		{
 			psStats->upgrade[j].range = psStats->base.range;
 		}
-		psStats->designable = ini.value("designable", false).toBool();
 
 		psStats->ref = REF_ECM_START + i;
 
@@ -970,14 +958,12 @@ bool loadRepairStats(const char *pFileName)
 		loadCompStats(ini, psStats, i);
 		psStats->compType = COMP_REPAIRUNIT;
 
-		psStats->weight = ini.value("weight", 0).toInt();
 		psStats->base.repairPoints = ini.value("repairPoints").toInt();
 		for (int j = 0; j < MAX_PLAYERS; j++)
 		{
 			psStats->upgrade[j].repairPoints = psStats->base.repairPoints;
 		}
 		psStats->time = ini.value("time", 0).toInt() * WEAPON_TIME;
-		psStats->designable = ini.value("designable", false).toBool();
 
 		psStats->ref = REF_REPAIR_START + i;
 
@@ -1032,14 +1018,11 @@ bool loadConstructStats(const char *pFileName)
 		loadCompStats(ini, psStats, i);
 		psStats->compType = COMP_CONSTRUCT;
 
-		psStats->weight = ini.value("weight", 0).toInt();
-		psStats->body = ini.value("hitpoints", 0).toInt();
 		psStats->base.constructPoints = ini.value("constructPoints").toInt();
 		for (int j = 0; j < MAX_PLAYERS; j++)
 		{
 			psStats->upgrade[j].constructPoints = psStats->base.constructPoints;
 		}
-		psStats->designable = ini.value("designable", false).toBool();
 		psStats->ref = REF_CONSTRUCT_START + i;
 
 		//get the IMD for the component
