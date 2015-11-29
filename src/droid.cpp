@@ -1796,7 +1796,6 @@ DROID *reallyBuildDroid(DROID_TEMPLATE *pTemplate, Position pos, UDWORD player, 
 {
 	DROID			*psDroid;
 	DROID_GROUP		*psGrp;
-	UDWORD			inc;
 	SDWORD			i, experienceLoc;
 
 	// Don't use this assertion in single player, since droids can finish building while on an away mission
@@ -1867,11 +1866,6 @@ DROID *reallyBuildDroid(DROID_TEMPLATE *pTemplate, Position pos, UDWORD player, 
 	psDroid->body = calcDroidBaseBody(psDroid); // includes upgrades
 	ASSERT(psDroid->body > 0, "Invalid number of hitpoints");
 	psDroid->originalBody = psDroid->body;
-
-	for (inc = 0; inc < WC_NUM_WEAPON_CLASSES; inc++)
-	{
-		psDroid->armour[inc] = bodyArmour(asBodyStats + pTemplate->asParts[COMP_BODY], player, (WEAPON_CLASS)inc);
-	}
 
 	/* Set droid's initial illumination */
 	psDroid->sDisplay.imd = BODY_IMD(psDroid, psDroid->player);
