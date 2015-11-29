@@ -245,7 +245,6 @@ extern bool checkSpecificStructExists(UDWORD structInc, UDWORD player);
 
 extern int32_t getStructureDamage(const STRUCTURE *psStructure);
 
-/*Access functions for the upgradeable stats of a structure*/
 unsigned structureBodyBuilt(STRUCTURE const *psStruct);  ///< Returns the maximum body points of a structure with the current number of build points.
 extern UDWORD	structureBody(const STRUCTURE *psStruct);
 extern UDWORD	structureArmour(STRUCTURE_STATS *psStats, UBYTE player);
@@ -409,7 +408,7 @@ static inline Rotation structureGetInterpolatedWeaponRotation(STRUCTURE *psStruc
 #define setStructureTarget(_psBuilding, _psNewTarget, _idx, _targetOrigin) _setStructureTarget(_psBuilding, _psNewTarget, _idx, _targetOrigin, __LINE__, __FUNCTION__)
 static inline void _setStructureTarget(STRUCTURE *psBuilding, BASE_OBJECT *psNewTarget, UWORD idx, TARGET_ORIGIN targetOrigin, int line, const char *func)
 {
-	ASSERT_OR_RETURN(, idx < STRUCT_MAXWEAPS, "Bad index");
+	ASSERT_OR_RETURN(, idx < MAX_WEAPONS, "Bad index");
 	ASSERT_OR_RETURN(, psNewTarget == nullptr || !psNewTarget->died, "setStructureTarget set dead target");
 	psBuilding->psTarget[idx] = psNewTarget;
 	psBuilding->targetOrigin[idx] = targetOrigin;

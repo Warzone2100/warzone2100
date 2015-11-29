@@ -174,7 +174,7 @@ void displayIMDButton(iIMDShape *IMDShape, const Vector3i *Rotation, const Vecto
 
 static void sharedStructureButton(STRUCTURE_STATS *Stats, iIMDShape *strImd, const Vector3i *Rotation, const Vector3i *Position, int scale)
 {
-	iIMDShape *baseImd, *mountImd[STRUCT_MAXWEAPS], *weaponImd[STRUCT_MAXWEAPS];
+	iIMDShape *baseImd, *mountImd[MAX_WEAPONS], *weaponImd[MAX_WEAPONS];
 	Vector3i pos = *Position;
 
 	/* HACK HACK HACK!
@@ -207,7 +207,7 @@ static void sharedStructureButton(STRUCTURE_STATS *Stats, iIMDShape *strImd, con
 		}
 		//get an imd to draw on the connector priority is weapon, ECM, sensor
 		//check for weapon
-		//can only have the STRUCT_MAXWEAPS
+		//can only have the MAX_WEAPONS
 		for (int i = 0; i < MAX(1, Stats->numWeaps); i++)
 		{
 			//can only have the one

@@ -2372,7 +2372,7 @@ bool scrGetTemplate(void)
 			}
 			break;
 		case ST_WEAPON:
-			for (i = 0; i < DROID_MAXWEAPS; i++)
+			for (i = 0; i < MAX_WEAPONS; i++)
 			{
 				if (psTemplate->asWeaps[i] == (UDWORD)sVal.v.ival)
 				{
@@ -2472,7 +2472,7 @@ bool scrGetDroid(void)
 			}
 			break;
 		case ST_WEAPON:
-			for (i = 0; i < DROID_MAXWEAPS; i++)
+			for (i = 0; i < MAX_WEAPONS; i++)
 			{
 				if (psDroid->asWeaps[i].nStat == (UDWORD)sVal.v.ival)
 				{

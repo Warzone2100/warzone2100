@@ -1237,12 +1237,10 @@ bool droidUpdateRestore(DROID *psDroid)
 
 	CHECK_DROID(psDroid);
 
-	ASSERT_OR_RETURN(false, psDroid->action == DACTION_RESTORE, "unit is not restoring");
+	ASSERT_OR_RETURN(false, psDroid->action == DACTION_RESTORE, "Unit is not restoring");
 	psStruct = (STRUCTURE *)psDroid->order.psObj;
-	ASSERT_OR_RETURN(false, psStruct->type == OBJ_STRUCTURE, "target is not a structure");
-	ASSERT_OR_RETURN(false, psStruct->pStructureType->upgrade[psStruct->player].resistance != 0, "invalid structure for EW");
-
-	ASSERT_OR_RETURN(false, psDroid->asWeaps[0].nStat > 0, "droid doesn't have any weapons");
+	ASSERT_OR_RETURN(false, psStruct->type == OBJ_STRUCTURE, "Target is not a structure");
+	ASSERT_OR_RETURN(false, psDroid->asWeaps[0].nStat > 0, "Droid doesn't have any weapons");
 
 	compIndex = psDroid->asWeaps[0].nStat;
 	ASSERT_OR_RETURN(false, compIndex < numWeaponStats, "Invalid range referenced for numWeaponStats, %d > %d", compIndex, numWeaponStats);
@@ -1473,7 +1471,7 @@ UDWORD calcDroidWeight(DROID_TEMPLATE *psTemplate)
 	return weight;
 }
 
-static uint32_t calcDroidOrTemplateBody(uint8_t (&asParts)[DROID_MAXCOMP], unsigned numWeaps, uint8_t (&asWeaps)[DROID_MAXWEAPS], unsigned player)
+static uint32_t calcDroidOrTemplateBody(uint8_t (&asParts)[DROID_MAXCOMP], unsigned numWeaps, uint8_t (&asWeaps)[MAX_WEAPONS], unsigned player)
 {
 	auto &bodyStats = asBodyStats[asParts[COMP_BODY]];
 
@@ -1519,7 +1517,7 @@ UDWORD calcTemplateBody(DROID_TEMPLATE *psTemplate, UBYTE player)
 // Calculate the base body points of a droid with upgrades
 static UDWORD calcDroidBaseBody(DROID *psDroid)
 {
-	uint8_t asWeaps[DROID_MAXWEAPS];
+	uint8_t asWeaps[MAX_WEAPONS];
 	std::transform(std::begin(psDroid->asWeaps), std::end(psDroid->asWeaps), asWeaps, [](WEAPON &weap) {
 		return weap.nStat;
 	});
@@ -1539,8 +1537,7 @@ UDWORD calcDroidBaseSpeed(DROID_TEMPLATE *psTemplate, UDWORD weight, UBYTE playe
 	{
 		speed = (asPropulsionTypes[(asPropulsionStats + psTemplate->
 		                            asParts[COMP_PROPULSION])->propulsionType].powerRatioMult *
-		         bodyPower(asBodyStats + psTemplate->asParts[COMP_BODY],
-		                   player)) / MAX(1, weight);
+		         bodyPower(asBodyStats + psTemplate->asParts[COMP_BODY], player)) / MAX(1, weight);
 	}
 	else
 	{
@@ -1853,7 +1850,7 @@ void droidSetBits(DROID_TEMPLATE *pTemplate, DROID *psDroid)
 	psDroid->prevSpacetime.time = psDroid->time - 1;  // -1 for interpolation.
 
 	//create the droids weapons
-	for (int inc = 0; inc < DROID_MAXWEAPS; inc++)
+	for (int inc = 0; inc < MAX_WEAPONS; inc++)
 	{
 		psDroid->psActionTarget[inc] = NULL;
 		psDroid->asWeaps[inc].lastFired = 0;
@@ -1898,7 +1895,7 @@ void templateSetParts(const DROID *psDroid, DROID_TEMPLATE *psTemplate)
 {
 	psTemplate->numWeaps = 0;
 	psTemplate->droidType = psDroid->droidType;
-	for (int inc = 0; inc < DROID_MAXWEAPS; inc++)
+	for (int inc = 0; inc < MAX_WEAPONS; inc++)
 	{
 		//this should fix the NULL weapon stats for empty weaponslots
 		psTemplate->asWeaps[inc] = 0;
@@ -3340,13 +3337,13 @@ void checkDroid(const DROID *droid, const char *const location, const char *func
 
 	ASSERT_HELPER(droid != NULL, location, function, "CHECK_DROID: NULL pointer");
 	ASSERT_HELPER(droid->type == OBJ_DROID, location, function, "CHECK_DROID: Not droid (type %d)", (int)droid->type);
-	ASSERT_HELPER(droid->numWeaps <= DROID_MAXWEAPS, location, function, "CHECK_DROID: Bad number of droid weapons %d", (int)droid->numWeaps);
+	ASSERT_HELPER(droid->numWeaps <= MAX_WEAPONS, location, function, "CHECK_DROID: Bad number of droid weapons %d", (int)droid->numWeaps);
 	ASSERT_HELPER((unsigned)droid->listSize <= droid->asOrderList.size() && (unsigned)droid->listPendingBegin <= droid->asOrderList.size(), location, function, "CHECK_DROID: Bad number of droid orders %d %d %d", (int)droid->listSize, (int)droid->listPendingBegin, (int)droid->asOrderList.size());
 	ASSERT_HELPER(droid->player < MAX_PLAYERS, location, function, "CHECK_DROID: Bad droid owner %d", (int)droid->player);
 	ASSERT_HELPER(droidOnMap(droid), location, function, "CHECK_DROID: Droid off map");
 	ASSERT_HELPER(droid->body <= droid->originalBody, location, function, "CHECK_DROID: More body points (%u) than original body points (%u).", (unsigned)droid->body, (unsigned)droid->originalBody);
 
-	for (int i = 0; i < DROID_MAXWEAPS; ++i)
+	for (int i = 0; i < MAX_WEAPONS; ++i)
 	{
 		ASSERT_HELPER(droid->asWeaps[i].lastFired <= gameTime, location, function, "CHECK_DROID: Bad last fired time for turret %u", i);
 	}

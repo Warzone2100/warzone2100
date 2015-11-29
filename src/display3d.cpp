@@ -2097,9 +2097,9 @@ static PIELIGHT getBlueprintColour(STRUCT_STATES state)
 
 static void renderStructureTurrets(STRUCTURE *psStructure, iIMDShape *strImd, PIELIGHT buildingBrightness, int pieFlag, int pieFlagData, int ecmFlag)
 {
-	iIMDShape *mountImd[STRUCT_MAXWEAPS] = { NULL };
-	iIMDShape *weaponImd[STRUCT_MAXWEAPS] = { NULL };
-	iIMDShape *flashImd[STRUCT_MAXWEAPS] = { NULL };
+	iIMDShape *mountImd[MAX_WEAPONS] = { NULL };
+	iIMDShape *weaponImd[MAX_WEAPONS] = { NULL };
+	iIMDShape *flashImd[MAX_WEAPONS] = { NULL };
 
 	int colour = getPlayerColour(psStructure->player);
 

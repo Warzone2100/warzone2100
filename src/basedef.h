@@ -96,6 +96,8 @@ struct SIMPLE_OBJECT
 #define BASEFLAG_TARGETED  0x01 ///< Whether object is targeted by a selectedPlayer droid sensor (quite the hack)
 #define BASEFLAG_DIRTY     0x02 ///< Whether certain recalculations are needed for object on frame update
 
+#define MAX_WEAPONS 3
+
 struct BASE_OBJECT : public SIMPLE_OBJECT
 {
 	BASE_OBJECT(OBJECT_TYPE type, uint32_t id, unsigned player);

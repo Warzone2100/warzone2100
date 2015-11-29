@@ -351,7 +351,7 @@ DROID_TEMPLATE::DROID_TEMPLATE()  // This constructor replaces a memset in scrAs
 	, enabled(false)
 {
 	std::fill_n(asParts, DROID_MAXCOMP, 0);
-	std::fill_n(asWeaps, DROID_MAXWEAPS, 0);
+	std::fill_n(asWeaps, MAX_WEAPONS, 0);
 }
 
 bool loadDroidTemplates(const char *filename)

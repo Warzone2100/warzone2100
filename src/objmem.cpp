@@ -456,7 +456,7 @@ void killDroid(DROID *psDel)
 	       "killUnit: invalid player for unit");
 
 	setDroidTarget(psDel, NULL);
-	for (i = 0; i < DROID_MAXWEAPS; i++)
+	for (i = 0; i < MAX_WEAPONS; i++)
 	{
 		setDroidActionTarget(psDel, NULL, i);
 	}
@@ -551,7 +551,7 @@ void killStruct(STRUCTURE *psBuilding)
 		removeObjectFromFuncList(apsExtractorLists, psBuilding, psBuilding->player);
 	}
 
-	for (i = 0; i < STRUCT_MAXWEAPS; i++)
+	for (i = 0; i < MAX_WEAPONS; i++)
 	{
 		setStructureTarget(psBuilding, NULL, i, ORIGIN_UNKNOWN);
 	}

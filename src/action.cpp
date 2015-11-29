@@ -600,7 +600,7 @@ void actionSanity(DROID *psDroid)
 	bool bDirect = false;
 
 	// clear the target if it has died
-	for (int i = 0; i < DROID_MAXWEAPS; i++)
+	for (int i = 0; i < MAX_WEAPONS; i++)
 	{
 		bDirect = proj_Direct(asWeaponStats + psDroid->asWeaps[i].nStat);
 		if (psDroid->psActionTarget[i] && (avoidOverkill ? aiObjectIsProbablyDoomed(psDroid->psActionTarget[i], bDirect) : psDroid->psActionTarget[i]->died))
@@ -638,12 +638,11 @@ void actionUpdateDroid(DROID *psDroid)
 	BASE_OBJECT			*psTarget;
 	PROPULSION_STATS	*psPropStats;
 	bool	(*actionUpdateFunc)(DROID * psDroid) = NULL;
-	unsigned i;
 	//this is a bit field
-	bool nonNullWeapon[DROID_MAXWEAPS] = { false };
-	BASE_OBJECT			*psTargets[DROID_MAXWEAPS];
+	bool nonNullWeapon[MAX_WEAPONS] = { false };
+	BASE_OBJECT			*psTargets[MAX_WEAPONS];
 	bool hasVisibleTarget = false;
-	bool targetVisibile[DROID_MAXWEAPS] = { false };
+	bool targetVisibile[MAX_WEAPONS] = { false };
 	bool bHasTarget;
 	bool bDirect = false;
 
@@ -672,7 +671,7 @@ void actionUpdateDroid(DROID *psDroid)
 		}
 	}
 
-	for (i = 0; i < psDroid->numWeaps; ++i)
+	for (int i = 0; i < psDroid->numWeaps; ++i)
 	{
 		if (psDroid->asWeaps[i].nStat > 0)
 		{
@@ -699,7 +698,7 @@ void actionUpdateDroid(DROID *psDroid)
 		if (psDroid->numWeaps > 0 && !isVtolDroid(psDroid)
 		    && (order->type == DORDER_NONE || order->type == DORDER_HOLD || order->type == DORDER_RTR))
 		{
-			for (i = 0; i < psDroid->numWeaps; i++)
+			for (int i = 0; i < psDroid->numWeaps; i++)
 			{
 				if (nonNullWeapon[i])
 				{
@@ -798,7 +797,7 @@ void actionUpdateDroid(DROID *psDroid)
 		//added multiple weapon check
 		else if (psDroid->numWeaps > 0)
 		{
-			for (i = 0; i < psDroid->numWeaps; i++)
+			for (int i = 0; i < psDroid->numWeaps; i++)
 			{
 				if (nonNullWeapon[i])
 				{
@@ -840,7 +839,7 @@ void actionUpdateDroid(DROID *psDroid)
 		}
 		// loop through weapons and look for target for each weapon
 		bHasTarget = false;
-		for (i = 0; i < psDroid->numWeaps; ++i)
+		for (int i = 0; i < psDroid->numWeaps; ++i)
 		{
 			bDirect = proj_Direct(asWeaponStats + psDroid->asWeaps[i].nStat);
 			// Does this weapon have a target?
@@ -885,7 +884,7 @@ void actionUpdateDroid(DROID *psDroid)
 		if (bHasTarget)
 		{
 			// loop through weapons
-			for (i = 0; i < psDroid->numWeaps; ++i)
+			for (int i = 0; i < psDroid->numWeaps; ++i)
 			{
 				// has weapon a target? is target valid?
 				if (psDroid->psActionTarget[i] != NULL && validTarget(psDroid, psDroid->psActionTarget[i], i))
@@ -939,7 +938,7 @@ void actionUpdateDroid(DROID *psDroid)
 		//check the target hasn't become one the same player ID - Electronic Warfare
 		if ((electronicDroid(psDroid) && (psDroid->player == psDroid->psActionTarget[0]->player)))
 		{
-			for (i = 0; i < psDroid->numWeaps; i++)
+			for (int i = 0; i < psDroid->numWeaps; i++)
 			{
 				setDroidActionTarget(psDroid, NULL, i);
 			}
@@ -948,7 +947,7 @@ void actionUpdateDroid(DROID *psDroid)
 		}
 
 		bHasTarget = false;
-		for (i = 0; i < psDroid->numWeaps; i++)
+		for (int i = 0; i < psDroid->numWeaps; i++)
 		{
 			BASE_OBJECT *psActionTarget;
 
@@ -1075,7 +1074,7 @@ void actionUpdateDroid(DROID *psDroid)
 					break;
 				}
 
-				for (i = 0; i < psDroid->numWeaps; i++)
+				for (int i = 0; i < psDroid->numWeaps; i++)
 				{
 					if (nonNullWeapon[i]
 					    && validTarget(psDroid, psDroid->psActionTarget[0], i))
@@ -1160,7 +1159,7 @@ void actionUpdateDroid(DROID *psDroid)
 		if ((electronicDroid(psDroid) && (psDroid->player == psDroid->psActionTarget[0]->player)) ||
 		    !validTarget(psDroid, psDroid->psActionTarget[0], 0))
 		{
-			for (i = 0; i < psDroid->numWeaps; i++)
+			for (int i = 0; i < psDroid->numWeaps; i++)
 			{
 				setDroidActionTarget(psDroid, NULL, i);
 			}
@@ -1170,7 +1169,7 @@ void actionUpdateDroid(DROID *psDroid)
 		{
 			if (actionVisibleTarget(psDroid, psDroid->psActionTarget[0], 0))
 			{
-				for (i = 0; i < psDroid->numWeaps; i++)
+				for (int i = 0; i < psDroid->numWeaps; i++)
 				{
 					if (nonNullWeapon[i]
 					    && validTarget(psDroid, psDroid->psActionTarget[0], i)
@@ -1225,7 +1224,7 @@ void actionUpdateDroid(DROID *psDroid)
 			}
 			else
 			{
-				for (i = 0; i < psDroid->numWeaps; i++)
+				for (int i = 0; i < psDroid->numWeaps; i++)
 				{
 					if ((psDroid->asWeaps[i].rot.direction != 0) ||
 					    (psDroid->asWeaps[i].rot.pitch != 0))
@@ -1708,7 +1707,7 @@ void actionUpdateDroid(DROID *psDroid)
 			else if (psDroid->numWeaps > 0 && !isVtolDroid(psDroid)
 			         && (order->type == DORDER_NONE || order->type == DORDER_HOLD || order->type == DORDER_RTR))
 			{
-				for (i = 0; i < psDroid->numWeaps; i++)
+				for (int i = 0; i < psDroid->numWeaps; i++)
 				{
 					if (nonNullWeapon[i])
 					{
@@ -1860,7 +1859,7 @@ void actionUpdateDroid(DROID *psDroid)
 		}
 		else
 		{
-			for (i = 0; i < psDroid->numWeaps; i++)
+			for (int i = 0; i < psDroid->numWeaps; i++)
 			{
 				if (psDroid->asWeaps[i].rot.direction != 0 || psDroid->asWeaps[i].rot.pitch != 0)
 				{

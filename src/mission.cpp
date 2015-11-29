@@ -2914,7 +2914,7 @@ void missionDestroyObjects(void)
 		{
 			setDroidBase(psDroid, NULL);
 		}
-		for (i = 0; i < DROID_MAXWEAPS; i++)
+		for (i = 0; i < MAX_WEAPONS; i++)
 		{
 			if (psDroid->psActionTarget[i] && psDroid->psActionTarget[i]->died)
 			{
@@ -2939,7 +2939,7 @@ void missionDestroyObjects(void)
 	psStruct = apsStructLists[Player];
 	while (psStruct != NULL)
 	{
-		for (i = 0; i < STRUCT_MAXWEAPS; i++)
+		for (i = 0; i < MAX_WEAPONS; i++)
 		{
 			if (psStruct->psTarget[i] && psStruct->psTarget[i]->died)
 			{

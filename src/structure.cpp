@@ -540,9 +540,9 @@ bool loadStructureStats(QString filename)
 		psStats->pSensor = asSensorStats + sensor;
 
 		// set list of weapons
-		std::fill_n(psStats->psWeapStat, STRUCT_MAXWEAPS, (WEAPON_STATS *)NULL);
+		std::fill_n(psStats->psWeapStat, MAX_WEAPONS, (WEAPON_STATS *)NULL);
 		QStringList weapons = ini.value("weapons").toStringList();
-		ASSERT_OR_RETURN(false, weapons.size() <= STRUCT_MAXWEAPS, "Too many weapons are attached to structure '%s'. Maximum is %d", getID(psStats), STRUCT_MAXWEAPS);
+		ASSERT_OR_RETURN(false, weapons.size() <= MAX_WEAPONS, "Too many weapons are attached to structure '%s'. Maximum is %d", getID(psStats), MAX_WEAPONS);
 		psStats->numWeaps = weapons.size();
 		for (int j = 0; j < psStats->numWeaps; j++)
 		{
@@ -1470,7 +1470,7 @@ STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 		}
 
 		//set up the rest of the data
-		for (i = 0; i < STRUCT_MAXWEAPS; i++)
+		for (i = 0; i < MAX_WEAPONS; i++)
 		{
 			psBuilding->asWeaps[i].rot.direction = 0;
 			psBuilding->asWeaps[i].rot.pitch = 0;
@@ -2567,7 +2567,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 	RESEARCH			*pResearch;
 	UDWORD				structureMode = 0;
 	DROID				*psDroid;
-	BASE_OBJECT			*psChosenObjs[STRUCT_MAXWEAPS] = {NULL};
+	BASE_OBJECT			*psChosenObjs[MAX_WEAPONS] = {NULL};
 	BASE_OBJECT			*psChosenObj = NULL;
 	FACTORY				*psFactory;
 	REPAIR_FACILITY		*psRepairFac = NULL;
@@ -3602,7 +3602,7 @@ void structureUpdate(STRUCTURE *psBuilding, bool mission)
 	}
 
 	// Remove invalid targets. This must be done each frame.
-	for (i = 0; i < STRUCT_MAXWEAPS; i++)
+	for (i = 0; i < MAX_WEAPONS; i++)
 	{
 		if (psBuilding->psTarget[i] && psBuilding->psTarget[i]->died)
 		{
@@ -7172,7 +7172,7 @@ void checkStructure(const STRUCTURE *psStructure, const char *const location_des
 	ASSERT_HELPER(psStructure->type == OBJ_STRUCTURE, location_description, function, "CHECK_STRUCTURE: No structure (type num %u)", (unsigned int)psStructure->type);
 	ASSERT_HELPER(psStructure->player < MAX_PLAYERS, location_description, function, "CHECK_STRUCTURE: Out of bound player num (%u)", (unsigned int)psStructure->player);
 	ASSERT_HELPER(psStructure->pStructureType->type < NUM_DIFF_BUILDINGS, location_description, function, "CHECK_STRUCTURE: Out of bound structure type (%u)", (unsigned int)psStructure->pStructureType->type);
-	ASSERT_HELPER(psStructure->numWeaps <= STRUCT_MAXWEAPS, location_description, function, "CHECK_STRUCTURE: Out of bound weapon count (%u)", (unsigned int)psStructure->numWeaps);
+	ASSERT_HELPER(psStructure->numWeaps <= MAX_WEAPONS, location_description, function, "CHECK_STRUCTURE: Out of bound weapon count (%u)", (unsigned int)psStructure->numWeaps);
 
 	for (unsigned i = 0; i < ARRAY_SIZE(psStructure->asWeaps); ++i)
 	{
