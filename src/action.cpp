@@ -1558,16 +1558,17 @@ void actionUpdateDroid(DROID *psDroid)
 			moveStopDroid(psDroid);
 
 			// got to the edge - start doing whatever it was meant to do
+			droidStartAction(psDroid);
 			switch (psDroid->action)
 			{
 			case DACTION_MOVETODEMOLISH:
-				psDroid->action = droidStartDemolishing(psDroid) ? DACTION_DEMOLISH : DACTION_NONE;
+				psDroid->action = DACTION_DEMOLISH;
 				break;
 			case DACTION_MOVETOREPAIR:
-				psDroid->action = droidStartRepair(psDroid) ? DACTION_REPAIR : DACTION_NONE;
+				psDroid->action = DACTION_REPAIR;
 				break;
 			case DACTION_MOVETORESTORE:
-				psDroid->action = droidStartRestore(psDroid) ? DACTION_RESTORE : DACTION_NONE;
+				psDroid->action = DACTION_RESTORE;
 				break;
 			default:
 				break;
@@ -1756,14 +1757,8 @@ void actionUpdateDroid(DROID *psDroid)
 				//rotate turret to point at droid being repaired
 				//use 0 for repair droid
 				actionTargetTurret(psDroid, psDroid->psActionTarget[0], &psDroid->asWeaps[0]);
-				if (droidStartDroidRepair(psDroid))
-				{
-					psDroid->action = DACTION_DROIDREPAIR;
-				}
-				else
-				{
-					psDroid->action = DACTION_NONE;
-				}
+				droidStartAction(psDroid);
+				psDroid->action = DACTION_DROIDREPAIR;
 			}
 			if (DROID_STOPPED(psDroid))
 			{

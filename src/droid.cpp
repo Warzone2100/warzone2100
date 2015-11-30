@@ -1226,13 +1226,6 @@ bool droidUpdateBuild(DROID *psDroid)
 	return true;
 }
 
-bool droidStartDemolishing(DROID *psDroid)
-{
-	psDroid->actionStarted = gameTime;
-	psDroid->actionPoints = 0;
-	return true;
-}
-
 bool droidUpdateDemolishing(DROID *psDroid)
 {
 	CHECK_DROID(psDroid);
@@ -1253,59 +1246,10 @@ bool droidUpdateDemolishing(DROID *psDroid)
 	return true;
 }
 
-bool droidStartRepair(DROID *psDroid)
+void droidStartAction(DROID *psDroid)
 {
-	STRUCTURE	*psStruct;
-
-	CHECK_DROID(psDroid);
-
-	psStruct = (STRUCTURE *)psDroid->psActionTarget[0];
-	ASSERT_OR_RETURN(false, psStruct->type == OBJ_STRUCTURE, "target is not a structure");
-
 	psDroid->actionStarted = gameTime;
 	psDroid->actionPoints  = 0;
-
-	CHECK_DROID(psDroid);
-
-	return true;
-}
-
-
-/*Start a Repair Droid working on a damaged droid*/
-bool droidStartDroidRepair(DROID *psDroid)
-{
-	DROID	*psDroidToRepair;
-
-	CHECK_DROID(psDroid);
-
-	psDroidToRepair = (DROID *)psDroid->psActionTarget[0];
-	ASSERT_OR_RETURN(false, psDroidToRepair->type == OBJ_DROID, "target is not a unit");
-
-	psDroid->actionStarted = gameTime;
-	psDroid->actionPoints  = 0;
-
-	CHECK_DROID(psDroid);
-
-	return true;
-}
-
-/*Start a EW weapon droid working on a low resistance structure*/
-bool droidStartRestore(DROID *psDroid)
-{
-	STRUCTURE	*psStruct;
-
-	CHECK_DROID(psDroid);
-
-	ASSERT_OR_RETURN(false, psDroid->order.type == DORDER_RESTORE, "unit is not restoring");
-	psStruct = (STRUCTURE *)psDroid->order.psObj;
-	ASSERT_OR_RETURN(false, psStruct->type == OBJ_STRUCTURE, "target is not a structure");
-
-	psDroid->actionStarted = gameTime;
-	psDroid->actionPoints  = 0;
-
-	CHECK_DROID(psDroid);
-
-	return true;
 }
 
 /*continue restoring a structure*/

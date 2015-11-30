@@ -119,22 +119,16 @@ extern void droidUpdate(DROID *psDroid);
 enum DroidStartBuild {DroidStartBuildFailed, DroidStartBuildSuccess, DroidStartBuildPending};
 DroidStartBuild droidStartBuild(DROID *psDroid);
 
-/* Sets a droid to start demolishing - returns true if successful */
-extern bool	droidStartDemolishing(DROID *psDroid);
-
 /* Update a construction droid while it is demolishing
    returns true while demolishing */
 extern bool	droidUpdateDemolishing(DROID *psDroid);
 
-/* Sets a droid to start repairing - returns true if successful */
-extern bool	droidStartRepair(DROID *psDroid);
+/* Sets a droid to start a generic action */
+void droidStartAction(DROID *psDroid);
 
 /* Update a construction droid while it is repairing
    returns true while repairing */
 extern bool	droidUpdateRepair(DROID *psDroid);
-
-/*Start a Repair Droid working on a damaged droid - returns true if successful*/
-extern bool droidStartDroidRepair(DROID *psDroid);
 
 /*Updates a Repair Droid working on a damaged droid - returns true whilst repairing*/
 extern bool droidUpdateDroidRepair(DROID *psRepairDroid);
@@ -142,9 +136,6 @@ extern bool droidUpdateDroidRepair(DROID *psRepairDroid);
 /* Update a construction droid while it is building
    returns true while building continues */
 extern bool droidUpdateBuild(DROID *psDroid);
-
-/*Start a EW weapon droid working on a low resistance structure*/
-extern bool droidStartRestore(DROID *psDroid);
 
 /*continue restoring a structure*/
 extern bool droidUpdateRestore(DROID *psDroid);
