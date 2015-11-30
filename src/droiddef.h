@@ -102,8 +102,6 @@ struct DROID : public BASE_OBJECT
 	uint32_t        experience;
 	UDWORD          lastFrustratedTime;             ///< Set when eg being stuck; used for eg firing indiscriminately at map features to clear the way
 	SWORD           resistance;                     ///< used in Electronic Warfare
-	UDWORD          numWeaps;                       ///< Watermelon:Re-enabled this,I need this one in droid.c
-	WEAPON          asWeaps[MAX_WEAPONS];
 	// The group the droid belongs to
 	DROID_GROUP    *psGroup;
 	DROID          *psGrpNext;

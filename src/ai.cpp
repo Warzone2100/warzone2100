@@ -809,29 +809,7 @@ bool aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 		*targetOrigin = ORIGIN_UNKNOWN;
 	}
 
-	switch (psObj->type)
-	{
-	case OBJ_DROID:
-		if (((DROID *)psObj)->asWeaps[weapon_slot].nStat == 0)
-		{
-			return false;
-		}
-		if (((DROID *)psObj)->asWeaps[0].nStat == 0 &&
-		    ((DROID *)psObj)->droidType != DROID_SENSOR)
-		{
-			return false;	// Can't target without a weapon or sensor
-		}
-		break;
-	case OBJ_STRUCTURE:
-		if (((STRUCTURE *)psObj)->numWeaps == 0 || ((STRUCTURE *)psObj)->asWeaps[0].nStat == 0)
-		{
-			// Can't attack without a weapon
-			return false;
-		}
-		break;
-	default:
-		break;
-	}
+	ASSERT_OR_RETURN(false, psObj->numWeaps > weapon_slot, "Invalid weapon selected");
 
 	/* See if there is a something in range */
 	if (psObj->type == OBJ_DROID)
@@ -862,12 +840,11 @@ bool aiChooseTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget, int weapon_slot
 	}
 	else if (psObj->type == OBJ_STRUCTURE)
 	{
-		WEAPON_STATS	*psWStats = NULL;
 		bool	bCommanderBlock = false;
 
-		ASSERT(((STRUCTURE *)psObj)->asWeaps[weapon_slot].nStat > 0, "no weapons on structure");
+		ASSERT_OR_RETURN(false, psObj->asWeaps[weapon_slot].nStat > 0, "Invalid weapon turret");
 
-		psWStats = ((STRUCTURE *)psObj)->asWeaps[weapon_slot].nStat + asWeaponStats;
+		WEAPON_STATS *psWStats = psObj->asWeaps[weapon_slot].nStat + asWeaponStats;
 		int longRange = proj_GetLongRange(psWStats, psObj->player);
 
 		// see if there is a target from the command droids
@@ -1085,6 +1062,11 @@ void aiUpdateDroid(DROID *psDroid)
 
 	ASSERT(psDroid != NULL, "Invalid droid pointer");
 	if (!psDroid || isDead((BASE_OBJECT *)psDroid))
+	{
+		return;
+	}
+
+	if (psDroid->droidType != DROID_SENSOR && psDroid->numWeaps == 0)
 	{
 		return;
 	}

@@ -53,6 +53,9 @@ struct WEAPON
 	Rotation	rot;
 	Rotation	prevRot;
 	unsigned        usedAmmo;    ///< Amount of ammunition used up by a VTOL
+	TARGET_ORIGIN   origin;
+
+	WEAPON() : nStat(0), ammo(0), lastFired(0), shotsFired(0), usedAmmo(0), origin(ORIGIN_UNKNOWN) {}
 };
 
 // Defined in droid.cpp.

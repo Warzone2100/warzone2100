@@ -2537,7 +2537,7 @@ static void drawStructureTargetOriginIcon(STRUCTURE *psStruct, int weapon_slot)
 	scrR = scale * 20;
 
 	/* Render target origin graphics */
-	switch (psStruct->targetOrigin[weapon_slot])
+	switch (psStruct->asWeaps[weapon_slot].origin)
 	{
 	case ORIGIN_VISUAL:
 		iV_DrawImage(IntImages, IMAGE_ORIGIN_VISUAL, scrX + scrR + 5, scrY - 1);

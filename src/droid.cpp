@@ -1782,6 +1782,7 @@ void droidSetBits(DROID_TEMPLATE *pTemplate, DROID *psDroid)
 		psDroid->asWeaps[inc].rot.pitch = 0;
 		psDroid->asWeaps[inc].rot.roll = 0;
 		psDroid->asWeaps[inc].prevRot = psDroid->asWeaps[inc].rot;
+		psDroid->asWeaps[inc].origin = ORIGIN_UNKNOWN;
 		if (inc < pTemplate->numWeaps)
 		{
 			psDroid->asWeaps[inc].nStat = pTemplate->asWeaps[inc];

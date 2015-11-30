@@ -411,7 +411,7 @@ static inline void _setStructureTarget(STRUCTURE *psBuilding, BASE_OBJECT *psNew
 	ASSERT_OR_RETURN(, idx < MAX_WEAPONS, "Bad index");
 	ASSERT_OR_RETURN(, psNewTarget == nullptr || !psNewTarget->died, "setStructureTarget set dead target");
 	psBuilding->psTarget[idx] = psNewTarget;
-	psBuilding->targetOrigin[idx] = targetOrigin;
+	psBuilding->asWeaps[idx].origin = targetOrigin;
 #ifdef DEBUG
 	psBuilding->targetLine[idx] = line;
 	sstrcpy(psBuilding->targetFunc[idx], func);

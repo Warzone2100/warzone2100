@@ -241,11 +241,7 @@ struct STRUCTURE : public BASE_OBJECT
 	FUNCTIONALITY       *pFunctionality;            /* pointer to structure that contains fields necessary for functionality */
 	int                 buildRate;                  ///< Rate that this structure is being built, calculated each tick. Only meaningful if status == SS_BEING_BUILT. If construction hasn't started and build rate is 0, remove the structure.
 	int                 lastBuildRate;              ///< Needed if wanting the buildRate between buildRate being reset to 0 each tick and the trucks calculating it.
-	/* The weapons on the structure */
-	UWORD numWeaps;
-	WEAPON asWeaps[MAX_WEAPONS];
 	BASE_OBJECT *psTarget[MAX_WEAPONS];
-	UWORD targetOrigin[MAX_WEAPONS];
 #ifdef DEBUG
 	// these are to help tracking down dangling pointers
 	char targetFunc[MAX_WEAPONS][MAX_EVENT_NAME_LEN];
