@@ -1365,11 +1365,22 @@ bool wzMainScreenSetup(int antialiasing, bool fullscreen, bool vsync)
 		video_flags |= SDL_WINDOW_FULLSCREEN;
 	}
 
-	WZwindow = SDL_CreateWindow(PACKAGE_NAME,
-	                            SDL_WINDOWPOS_CENTERED_DISPLAY(0),	//NOTE: at this time, we only show on main monitor, centered
-	                            SDL_WINDOWPOS_CENTERED_DISPLAY(0),	// SDL_WINDOWPOS_CENTERED_DISPLAY(N) is used to move it to another monitor
-	                            screenWidth, screenHeight,
-	                            video_flags);
+	SDL_Rect bounds;
+	for (int i = 0; i < SDL_GetNumVideoDisplays(); i++)
+	{
+		SDL_GetDisplayBounds(i, &bounds);
+		debug(LOG_WZ, "Monitor %d: pos %d x %d : res %d x %d", i, (int)bounds.x, (int)bounds.y, (int)bounds.w, (int)bounds.h);
+	}
+	if (war_GetScreen() > SDL_GetNumVideoDisplays())
+	{
+		debug(LOG_FATAL, "Invalid screen defined in configuration");
+		SDL_Quit();
+		exit(EXIT_FAILURE);
+	}
+	SDL_GetDisplayBounds(war_GetScreen(), &bounds);
+	bounds.w -= (bounds.w + screenWidth) / 2;
+	bounds.h -= (bounds.h + screenHeight) / 2;
+	WZwindow = SDL_CreateWindow(PACKAGE_NAME, bounds.x + bounds.w, bounds.y + bounds.h, screenWidth, screenHeight, video_flags);
 
 	if (!WZwindow)
 	{

@@ -156,6 +156,7 @@ bool loadConfig()
 	// 640x480 is minimum that we will support
 	int width = ini.value("width", 640).toInt();
 	int height = ini.value("height", 480).toInt();
+	int screen = ini.value("screen", 0).toInt();
 	if (width < 640 || height < 480)	// sanity check
 	{
 		width = 640;
@@ -165,6 +166,7 @@ bool loadConfig()
 	pie_SetVideoBufferHeight(height);
 	war_SetWidth(width);
 	war_SetHeight(height);
+	war_SetScreen(screen);
 
 	if (ini.contains("bpp"))
 	{

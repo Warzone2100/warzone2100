@@ -71,6 +71,8 @@ extern void war_SetVsync(bool b);
 extern bool war_GetVsync(void);
 extern void war_SetWidth(UDWORD width);
 extern UDWORD war_GetWidth(void);
+void war_SetScreen(int screen);
+int war_GetScreen();
 extern void war_SetHeight(UDWORD height);
 extern UDWORD war_GetHeight(void);
 extern void war_SetPauseOnFocusLoss(bool enabled);

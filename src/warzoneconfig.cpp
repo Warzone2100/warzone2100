@@ -49,6 +49,7 @@ struct WARZONE_GLOBALS
 	SWORD		effectsLevel;
 	UDWORD		width;
 	UDWORD		height;
+	int		screen;
 	int8_t		SPcolor;
 	int			MPcolour;
 	FSAA_LEVEL  fsaa;
@@ -176,6 +177,16 @@ void war_SetHeight(UDWORD height)
 UDWORD war_GetHeight(void)
 {
 	return warGlobs.height;
+}
+
+void war_SetScreen(int screen)
+{
+	warGlobs.screen = screen;
+}
+
+int war_GetScreen()
+{
+	return warGlobs.screen;
 }
 
 /***************************************************************************/
