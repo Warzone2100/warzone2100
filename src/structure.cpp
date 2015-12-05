@@ -2572,7 +2572,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 	bool				bDirect = false;
 	SDWORD				xdiff, ydiff, mindist, currdist;
 	UDWORD				i;
-	UWORD 				tmpOrigin = ORIGIN_UNKNOWN;
+	TARGET_ORIGIN tmpOrigin = ORIGIN_UNKNOWN;
 
 	CHECK_STRUCTURE(psStructure);
 
