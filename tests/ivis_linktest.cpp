@@ -6,17 +6,18 @@
 #include "lib/ivis_opengl/screen.h"
 #include "lib/ivis_opengl/piemode.h"
 #include "lib/ivis_opengl/pieclip.h"
+#include "lib/ivis_opengl/textdraw.h"
 
 #include "src/console.h" // HACK
 
 // --- console dummy implementations ---
-// this should be implemented within ivis/gfxqueue
+// this should be implemented within ivis lib
 
 #define MAX_CONSOLE_TMP_STRING_LENGTH	(255)
 char ConsoleString[MAX_CONSOLE_TMP_STRING_LENGTH];
 int titleMode;
 
-bool addConsoleMessage(const char *Text, CONSOLE_TEXT_JUSTIFICATION jusType, SDWORD player)
+bool addConsoleMessage(const char *Text, CONSOLE_TEXT_JUSTIFICATION jusType, SDWORD player, bool team)
 {
 	return true;
 }
@@ -37,37 +38,42 @@ utf_32_char* UTF8toUTF32(char const*, unsigned long*)
 }
 
 
-bool war_getFullscreen(void)
+bool war_getFullscreen()
 {
 	return false;
 }
 
-bool war_GetColouredCursor(void)
+bool war_GetColouredCursor()
 {
 	return false;
 }
 
-bool war_GetVsync(void)
+bool war_GetVsync()
 {
 	return false;
 }
 
 void war_SetColouredCursor(bool enabled)
 {
+}
 
+int war_GetScreen()
+{
+	return 0;
 }
 
 // --- end linking hacks ---
 
-void mainLoop(void)
+void mainLoop()
 {
+	iV_DrawTextRotated("Press ESC to exit.", 100, 100, 0.0f);
 	pie_ScreenFlip(CLEAR_BLACK);
 	frameUpdate(); // General housekeeping
 
 	if (keyPressed(KEY_ESC))
 	{
 		inputLoseFocus();               // remove it from input stream
-		exit(1);	// FIXME, insert SDL_QUIT event instead
+		wzQuit();
 	}
 }
 
@@ -85,9 +91,12 @@ int realmain(int argc, char **argv)
 	}
 	frameInitialise();
 	screenInitialise();
+	iV_font("DejaVu Sans", "Book", "Bold");
+	iV_TextInit();
 
 	wzMainEventLoop(); // enter main loop
 
+	iV_TextShutdown();
 	frameShutDown();
 	screenShutDown();
 	wzShutdown();
