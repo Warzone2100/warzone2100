@@ -62,6 +62,7 @@ void setPower(unsigned player, int32_t power);
 void setPrecisePower(unsigned player, int64_t power);
 
 void setPowerModifier(int player, int modifier);
+void setPowerMaxStorage(int player, int max);
 
 /** Get the amount of power current held by the given player. */
 int32_t getPower(unsigned player);

@@ -2902,6 +2902,25 @@ static QScriptValue js_setPowerModifier(QScriptContext *context, QScriptEngine *
 	return QScriptValue();
 }
 
+//-- \subsection{setPowerStorageMaximum(maximum[, player])}
+//-- Set a player's power storage maximum. (Do not use this in an AI script.) (3.2+ only)
+static QScriptValue js_setPowerStorageMaximum(QScriptContext *context, QScriptEngine *engine)
+{
+	int power = context->argument(0).toInt32();
+	int player;
+	if (context->argumentCount() > 1)
+	{
+		player = context->argument(1).toInt32();
+		SCRIPT_ASSERT_PLAYER(context, player);
+	}
+	else
+	{
+		player = engine->globalObject().property("me").toInt32();
+	}
+	setPowerMaxStorage(player, power);
+	return QScriptValue();
+}
+
 //-- \subsection{enableStructure(structure type[, player])}
 //-- The given structure type is made available to the given player. It will appear in the
 //-- player's build list.
@@ -4941,6 +4960,7 @@ bool registerFunctions(QScriptEngine *engine, QString scriptName)
 	engine->globalObject().setProperty("enableResearch", engine->newFunction(js_enableResearch));
 	engine->globalObject().setProperty("setPower", engine->newFunction(js_setPower));
 	engine->globalObject().setProperty("setPowerModifier", engine->newFunction(js_setPowerModifier));
+	engine->globalObject().setProperty("setPowerStorageMaximum", engine->newFunction(js_setPowerStorageMaximum));
 	engine->globalObject().setProperty("extraPowerTime", engine->newFunction(js_extraPowerTime));
 	engine->globalObject().setProperty("setTutorialMode", engine->newFunction(js_setTutorialMode));
 	engine->globalObject().setProperty("setDesign", engine->newFunction(js_setDesign));
