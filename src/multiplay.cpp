@@ -1490,7 +1490,12 @@ bool recvTemplate(NETQUEUE queue)
 	t.pName = NULL;
 	t.ref = REF_TEMPLATE_START;
 
-	if (!researchedTemplate(&t, player, true) || !intValidTemplate(&t, NULL, true, player))
+	if (!researchedTemplate(&t, player, true) && (scavengerPlayer() != player))
+	{
+		debug(LOG_ERROR, "Invalid template received from player %d", (int)player);
+		return false;
+	}
+	if (!intValidTemplate(&t, NULL, true, player))
 	{
 		debug(LOG_ERROR, "Illegal template received from player %d", (int)player);
 		return false;
