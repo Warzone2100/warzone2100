@@ -4295,7 +4295,7 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 {
 	UDWORD		x = xOffset + psWidget->x;
 	UDWORD		y = yOffset + psWidget->y;
-	UDWORD		j = psWidget->UserData, eval;
+	UDWORD		j = psWidget->UserData;
 
 	const int nameX = 32;
 
@@ -4368,7 +4368,8 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 			iV_SetFont(font_regular);
 			iV_SetTextColour(WZCOL_FORM_TEXT);
 		}
-
+		iV_DrawImage(FrontImages, IMAGE_WEE_GUY, x + 4, y + 13);
+#if 0
 		PLAYERSTATS stat = getMultiStats(j);
 		if (stat.wins + stat.losses < 5)
 		{
@@ -4379,7 +4380,7 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 			stat = getMultiStats(j);
 
 			// star 1 total droid kills
-			eval = stat.totalKills;
+			uint32_t eval = stat.totalKills;
 			if (eval > 600)
 			{
 				iV_DrawImage(FrontImages, IMAGE_MULTIRANK1, x + 4, y + 3);
@@ -4443,6 +4444,7 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 				}
 			}
 		}
+#endif
 		game.skDiff[j] = UBYTE_MAX;	// set AI difficulty to 0xFF (i.e. not an AI)
 	}
 	else	// AI
