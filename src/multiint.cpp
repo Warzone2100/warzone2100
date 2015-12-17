@@ -4351,7 +4351,14 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 			subText += buf;
 			if (ingame.PingTimes[j] < PING_LIMIT)
 			{
-				ssprintf(buf, "%03d", ingame.PingTimes[j]);
+				if (NetPlay.isHost || j == NET_HOST_ONLY)
+				{
+					ssprintf(buf, "%03d", ingame.PingTimes[j]);
+				}
+				else
+				{
+					ssprintf(buf, "+");
+				}
 			}
 			else
 			{

@@ -830,7 +830,7 @@ static void displayExtraGubbins(UDWORD height)
 	else
 	{
 		// ping is useless for non MP games, so display something useful depending on mode.
-		if (runningMultiplayer())
+		if (NetPlay.bComms)
 		{
 			iV_DrawText(_("Ping"), MULTIMENU_FORM_X + MULTIMENU_C11, MULTIMENU_FORM_Y + MULTIMENU_FONT_OSET);
 		}
@@ -974,14 +974,21 @@ static void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 		sprintf(str, "%u", (int)getPower(player));
 		iV_DrawText(str, MULTIMENU_FORM_X + MULTIMENU_C11, y + MULTIMENU_FONT_OSET);
 	}
-	else if (runningMultiplayer())
+	else if (NetPlay.bComms)	//only bother with real MP games
 	{
 		//c11:ping
 		if (!isSelectedPlayer && isHuman)
 		{
 			if (ingame.PingTimes[player] < PING_LIMIT)
 			{
-				sprintf(str, "%03d", ingame.PingTimes[player]);
+				if (NetPlay.isHost)
+				{
+					sprintf(str, "%03d", ingame.PingTimes[player]);
+				}
+				else
+				{
+					sprintf(str, "+");
+				}
 			}
 			else
 			{
