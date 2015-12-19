@@ -57,6 +57,20 @@ function eventGameInit()
 
 
 	hackNetOff();
+	makeComponentAvailable("B4body-sml-trike01", scavengerPlayer);
+	makeComponentAvailable("B3body-sml-buggy01", scavengerPlayer);
+	makeComponentAvailable("B2JeepBody", scavengerPlayer);
+	makeComponentAvailable("BusBody", scavengerPlayer);
+	makeComponentAvailable("FireBody", scavengerPlayer);
+	makeComponentAvailable("B1BaBaPerson01", scavengerPlayer);
+	makeComponentAvailable("BaBaProp", scavengerPlayer);
+	makeComponentAvailable("BaBaLegs", scavengerPlayer);
+	makeComponentAvailable("bTrikeMG", scavengerPlayer);
+	makeComponentAvailable("BuggyMG", scavengerPlayer);
+	makeComponentAvailable("BJeepMG", scavengerPlayer);
+	makeComponentAvailable("BusCannon", scavengerPlayer);
+	makeComponentAvailable("BabaFlame", scavengerPlayer);
+	makeComponentAvailable("BaBaMG", scavengerPlayer);
 	for (var playnum = 0; playnum < maxPlayers; playnum++)
 	{
 		if (powerType == 0)

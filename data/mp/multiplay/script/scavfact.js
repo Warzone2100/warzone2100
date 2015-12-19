@@ -78,20 +78,6 @@ function scavtick()
 
 function eventGameInit()
 {
-	makeComponentAvailable("B4body-sml-trike01", me);
-	makeComponentAvailable("B3body-sml-buggy01", me);
-	makeComponentAvailable("B2JeepBody", me);
-	makeComponentAvailable("BusBody", me);
-	makeComponentAvailable("FireBody", me);
-	makeComponentAvailable("B1BaBaPerson01", me);
-	makeComponentAvailable("BaBaProp", me);
-	makeComponentAvailable("BaBaLegs", me);
-	makeComponentAvailable("bTrikeMG", me);
-	makeComponentAvailable("BuggyMG", me);
-	makeComponentAvailable("BJeepMG", me);
-	makeComponentAvailable("BusCannon", me);
-	makeComponentAvailable("BabaFlame", me);
-	makeComponentAvailable("BaBaMG", me);
 	attackGroup = newGroup();	// allocate a new group
 	groupAddArea(attackGroup, 0, 0, mapWidth, mapHeight);
 }
