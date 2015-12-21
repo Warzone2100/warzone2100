@@ -948,7 +948,7 @@ static int upnp_init(void *asdf)
 	if (NetPlay.isUPNP)
 	{
 		debug(LOG_NET, "Searching for UPnP devices for automatic port forwarding...");
-		devlist = upnpDiscover(3000, NULL, NULL, 0, 0, &result);
+		devlist = upnpDiscover(3000, NULL, NULL, 0, 0, 2, &result);
 		debug(LOG_NET, "UPnP device search finished.");
 		if (devlist)
 		{

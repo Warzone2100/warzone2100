@@ -81,7 +81,7 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>$(SolutionDir)\..;$(SolutionDir)\..\devpkg\include;$(SolutionDir)\..\devpkg\include\SDL;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;STATICLIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;STATICLIB;MINIUPNP_STATICLIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -151,6 +151,7 @@
     <ClCompile Include="..\..\3rdparty\miniupnpc\connecthostport.c" />
     <ClCompile Include="..\..\3rdparty\miniupnpc\portlistingparse.c" />
     <ClCompile Include="..\..\3rdparty\miniupnpc\receivedata.c" />
+    <ClCompile Include="..\..\3rdparty\miniupnpc\upnpdev.c" />
     <ClCompile Include="netjoin_stub.cpp" />
     <ClCompile Include="netlog.cpp" />
     <ClCompile Include="netplay.cpp" />
@@ -177,21 +178,21 @@
     <ClCompile Include="..\..\3rdparty\miniupnpc\upnpreplyparse.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\3rdparty\miniupnpc\bsdqueue.h" />
     <ClInclude Include="..\..\3rdparty\miniupnpc\codelength.h" />
     <ClInclude Include="..\..\3rdparty\miniupnpc\connecthostport.h" />
-    <ClInclude Include="..\..\3rdparty\miniupnpc\declspec.h" />
     <ClInclude Include="..\..\3rdparty\miniupnpc\igd_desc_parse.h" />
     <ClInclude Include="..\..\3rdparty\miniupnpc\minisoap.h" />
     <ClInclude Include="..\..\3rdparty\miniupnpc\minissdpc.h" />
     <ClInclude Include="..\..\3rdparty\miniupnpc\miniupnpc.h" />
     <ClInclude Include="..\..\3rdparty\miniupnpc\miniupnpcstrings.h" />
     <ClInclude Include="..\..\3rdparty\miniupnpc\miniupnpctypes.h" />
+    <ClInclude Include="..\..\3rdparty\miniupnpc\miniupnpc_declspec.h" />
     <ClInclude Include="..\..\3rdparty\miniupnpc\miniwget.h" />
     <ClInclude Include="..\..\3rdparty\miniupnpc\minixml.h" />
     <ClInclude Include="..\..\3rdparty\miniupnpc\portlistingparse.h" />
     <ClInclude Include="..\..\3rdparty\miniupnpc\receivedata.h" />
     <ClInclude Include="..\..\3rdparty\miniupnpc\upnpcommands.h" />
+    <ClInclude Include="..\..\3rdparty\miniupnpc\upnpdev.h" />
     <ClInclude Include="..\..\3rdparty\miniupnpc\upnperrors.h" />
     <ClInclude Include="..\..\3rdparty\miniupnpc\upnpreplyparse.h" />
     <ClInclude Include="netlog.h" />

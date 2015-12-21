@@ -74,50 +74,11 @@
     <ClCompile Include="..\..\3rdparty\miniupnpc\receivedata.c">
       <Filter>Source Files\miniUPnP\src files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\3rdparty\miniupnpc\upnpdev.c">
+      <Filter>Source Files\miniUPnP\src files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\3rdparty\miniupnpc\bsdqueue.h">
-      <Filter>Source Files\miniUPnP\header files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\3rdparty\miniupnpc\codelength.h">
-      <Filter>Source Files\miniUPnP\header files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\3rdparty\miniupnpc\connecthostport.h">
-      <Filter>Source Files\miniUPnP\header files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\3rdparty\miniupnpc\declspec.h">
-      <Filter>Source Files\miniUPnP\header files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\3rdparty\miniupnpc\igd_desc_parse.h">
-      <Filter>Source Files\miniUPnP\header files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\3rdparty\miniupnpc\minisoap.h">
-      <Filter>Source Files\miniUPnP\header files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\3rdparty\miniupnpc\minissdpc.h">
-      <Filter>Source Files\miniUPnP\header files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\3rdparty\miniupnpc\miniupnpc.h">
-      <Filter>Source Files\miniUPnP\header files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\3rdparty\miniupnpc\miniupnpcstrings.h">
-      <Filter>Source Files\miniUPnP\header files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\3rdparty\miniupnpc\miniwget.h">
-      <Filter>Source Files\miniUPnP\header files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\3rdparty\miniupnpc\minixml.h">
-      <Filter>Source Files\miniUPnP\header files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\3rdparty\miniupnpc\upnpcommands.h">
-      <Filter>Source Files\miniUPnP\header files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\3rdparty\miniupnpc\upnperrors.h">
-      <Filter>Source Files\miniUPnP\header files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\3rdparty\miniupnpc\upnpreplyparse.h">
-      <Filter>Source Files\miniUPnP\header files</Filter>
-    </ClInclude>
     <ClInclude Include="netqueue.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -133,13 +94,55 @@
     <ClInclude Include="nettypes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\3rdparty\miniupnpc\codelength.h">
+      <Filter>Source Files\miniUPnP\header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rdparty\miniupnpc\connecthostport.h">
+      <Filter>Source Files\miniUPnP\header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rdparty\miniupnpc\igd_desc_parse.h">
+      <Filter>Source Files\miniUPnP\header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rdparty\miniupnpc\minisoap.h">
+      <Filter>Source Files\miniUPnP\header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rdparty\miniupnpc\minissdpc.h">
+      <Filter>Source Files\miniUPnP\header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rdparty\miniupnpc\miniupnpc.h">
+      <Filter>Source Files\miniUPnP\header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rdparty\miniupnpc\miniupnpc_declspec.h">
+      <Filter>Source Files\miniUPnP\header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rdparty\miniupnpc\miniupnpcstrings.h">
+      <Filter>Source Files\miniUPnP\header files</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\3rdparty\miniupnpc\miniupnpctypes.h">
+      <Filter>Source Files\miniUPnP\header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rdparty\miniupnpc\miniwget.h">
+      <Filter>Source Files\miniUPnP\header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rdparty\miniupnpc\minixml.h">
       <Filter>Source Files\miniUPnP\header files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\3rdparty\miniupnpc\portlistingparse.h">
       <Filter>Source Files\miniUPnP\header files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\3rdparty\miniupnpc\receivedata.h">
+      <Filter>Source Files\miniUPnP\header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rdparty\miniupnpc\upnpcommands.h">
+      <Filter>Source Files\miniUPnP\header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rdparty\miniupnpc\upnpdev.h">
+      <Filter>Source Files\miniUPnP\header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rdparty\miniupnpc\upnperrors.h">
+      <Filter>Source Files\miniUPnP\header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rdparty\miniupnpc\upnpreplyparse.h">
       <Filter>Source Files\miniUPnP\header files</Filter>
     </ClInclude>
   </ItemGroup>
