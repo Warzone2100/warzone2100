@@ -1125,7 +1125,6 @@ bool loadPropulsionTypes(const char *pFileName)
 	return true;
 }
 
-/*Load the Terrain Table from the file exported from Access*/
 bool loadTerrainTable(const char *pFileName)
 {
 	asTerrainTable = (int *)malloc(sizeof(*asTerrainTable) * PROPULSION_TYPE_NUM * TER_MAX);
@@ -1134,12 +1133,16 @@ bool loadTerrainTable(const char *pFileName)
 	for (int i = 0; i < list.size(); ++i)
 	{
 		ini.beginGroup(list[i]);
-		int terrainType = list[i].toUInt();
-		QStringList speedFactors = ini.value("speedFactor").toStringList();
-		for (int j = 0; j < PROPULSION_TYPE_NUM; j++)
-		{
-			asTerrainTable[terrainType * PROPULSION_TYPE_NUM + j] = speedFactors[j].toUInt();
-		}
+		int terrainType = ini.value("id").toInt();
+		ini.beginGroup("speedFactor");
+		asTerrainTable[terrainType * PROPULSION_TYPE_NUM + PROPULSION_TYPE_WHEELED] = ini.value("wheeled", 100).toUInt();
+		asTerrainTable[terrainType * PROPULSION_TYPE_NUM + PROPULSION_TYPE_TRACKED] = ini.value("tracked", 100).toUInt();
+		asTerrainTable[terrainType * PROPULSION_TYPE_NUM + PROPULSION_TYPE_LEGGED] = ini.value("legged", 100).toUInt();
+		asTerrainTable[terrainType * PROPULSION_TYPE_NUM + PROPULSION_TYPE_HOVER] = ini.value("hover", 100).toUInt();
+		asTerrainTable[terrainType * PROPULSION_TYPE_NUM + PROPULSION_TYPE_LIFT] = ini.value("lift", 100).toUInt();
+		asTerrainTable[terrainType * PROPULSION_TYPE_NUM + PROPULSION_TYPE_PROPELLOR] = ini.value("propellor", 100).toUInt();
+		asTerrainTable[terrainType * PROPULSION_TYPE_NUM + PROPULSION_TYPE_HALF_TRACKED] = ini.value("half-tracked", 100).toUInt();
+		ini.endGroup();
 		ini.endGroup();
 	}
 	return true;

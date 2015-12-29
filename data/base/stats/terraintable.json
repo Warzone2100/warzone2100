@@ -1,146 +1,158 @@
 {
-    "0": {
-        "id": "0",
-        "speedFactor": [
-            100,
-            100,
-            100,
-            150,
-            250,
-            100,
-            100
-        ]
+    "sand": {
+        "id": 0,
+        "comment": "Sand",
+        "speedFactor": {
+            "wheeled": 100,
+            "tracked": 100,
+            "legged": 100,
+            "hover": 150,
+            "lift": 250,
+            "propellor": 100,
+            "half-tracked": 100
+        }
     },
-    "1": {
-        "id": "1",
-        "speedFactor": [
-            100,
-            100,
-            100,
-            80,
-            250,
-            100,
-            100
-        ]
+    "sandybrush": {
+        "id": 1,
+        "comment": "Sandy Brush",
+        "speedFactor": {
+            "wheeled": 100,
+            "tracked": 100,
+            "legged": 100,
+            "hover": 80,
+            "lift": 250,
+            "propellor": 100,
+            "half-tracked": 100
+        }
     },
-    "10": {
-        "id": "10",
-        "speedFactor": [
-            70,
-            90,
-            100,
-            150,
-            250,
-            100,
-            80
-        ]
+    "greenmud": {
+        "id": 2,
+        "comment": "Green Mud",
+        "speedFactor": {
+            "wheeled": 80,
+            "tracked": 100,
+            "legged": 100,
+            "hover": 150,
+            "lift": 250,
+            "propellor": 100,
+            "half-tracked": 100
+        }
     },
-    "11": {
-        "id": "11",
-        "speedFactor": [
-            60,
-            100,
-            75,
-            80,
-            250,
-            100,
-            80
-        ]
+    "bakedearth": {
+        "id": 3,
+        "comment": "Baked Earth",
+        "speedFactor": {
+            "wheeled": 80,
+            "tracked": 90,
+            "legged": 100,
+            "hover": 100,
+            "lift": 250,
+            "propellor": 100,
+            "half-tracked": 80
+        }
     },
-    "2": {
-        "id": "2",
-        "speedFactor": [
-            80,
-            100,
-            100,
-            150,
-            250,
-            100,
-            100
-        ]
+    "redbrush": {
+        "id": 4,
+        "comment": "Red Brush",
+        "speedFactor": {
+            "wheeled": 100,
+            "tracked": 100,
+            "legged": 100,
+            "hover": 80,
+            "lift": 250,
+            "propellor": 100,
+            "half-tracked": 100
+        }
     },
-    "3": {
-        "id": "3",
-        "speedFactor": [
-            80,
-            90,
-            100,
-            100,
-            250,
-            100,
-            80
-        ]
+    "pinkrock": {
+        "id": 5,
+        "comment": "Pink Rock",
+        "speedFactor": {
+            "wheeled": 80,
+            "tracked": 100,
+            "legged": 100,
+            "hover": 50,
+            "lift": 250,
+            "propellor": 100,
+            "half-tracked": 90
+        }
     },
-    "4": {
-        "id": "4",
-        "speedFactor": [
-            100,
-            100,
-            100,
-            80,
-            250,
-            100,
-            100
-        ]
+    "road": {
+        "id": 6,
+        "comment": "Road",
+        "speedFactor": {
+            "wheeled": 150,
+            "tracked": 120,
+            "legged": 100,
+            "hover": 150,
+            "lift": 250,
+            "propellor": 100,
+            "half-tracked": 135
+        }
     },
-    "5": {
-        "id": "5",
-        "speedFactor": [
-            80,
-            100,
-            100,
-            50,
-            250,
-            100,
-            90
-        ]
+    "water": {
+        "comment": "Water",
+        "id": 7,
+        "speedFactor": {
+            "wheeled": 60,
+            "tracked": 60,
+            "legged": 60,
+            "hover": 150,
+            "lift": 250,
+            "propellor": 100,
+            "half-tracked": 60
+        }
     },
-    "6": {
-        "id": "6",
-        "speedFactor": [
-            150,
-            120,
-            100,
-            150,
-            250,
-            100,
-            135
-        ]
+    "cliff_face": {
+        "id": 8,
+        "comment": "Cliff Face",
+        "speedFactor": {
+            "wheeled": 60,
+            "tracked": 60,
+            "legged": 60,
+            "hover": 80,
+            "lift": 250,
+            "propellor": 100,
+            "half-tracked": 60
+        }
     },
-    "7": {
-        "id": "7",
-        "speedFactor": [
-            60,
-            60,
-            60,
-            150,
-            250,
-            100,
-            60
-        ]
+    "rubble": {
+        "id": 9,
+        "comment": "Rubble",
+        "speedFactor": {
+            "wheeled": 80,
+            "tracked": 80,
+            "legged": 100,
+            "hover": 80,
+            "lift": 250,
+            "propellor": 100,
+            "half-tracked": 50
+        }
     },
-    "8": {
-        "id": "8",
-        "speedFactor": [
-            60,
-            60,
-            60,
-            80,
-            250,
-            100,
-            60
-        ]
+    "sheetice": {
+        "id": 10,
+        "comment": "Sheet Ice",
+        "speedFactor": {
+            "wheeled": 70,
+            "tracked": 90,
+            "legged": 100,
+            "hover": 150,
+            "lift": 250,
+            "propellor": 100,
+            "half-tracked": 100
+        }
     },
-    "9": {
-        "id": "9",
-        "speedFactor": [
-            80,
-            80,
-            100,
-            80,
-            250,
-            100,
-            50
-        ]
+    "slush": {
+        "id": 11,
+        "comment": "Slush",
+        "speedFactor": {
+            "wheeled": 60,
+            "tracked": 100,
+            "legged": 75,
+            "hover": 80,
+            "lift": 250,
+            "propellor": 100,
+            "half-tracked": 80
+        }
     }
 }
