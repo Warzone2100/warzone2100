@@ -38,7 +38,6 @@ public:
 	enum warning { ReadAndWrite, ReadOnly, ReadOnlyAndRequired };
 
 private:
-	QJsonDocument mJson;
 	QJsonObject mObj;
 	QString mName;
 	QList<QJsonObject> mObjStack;

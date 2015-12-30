@@ -42,6 +42,26 @@ WzConfig::~WzConfig()
 	}
 }
 
+static QJsonObject jsonMerge(QJsonObject original, const QJsonObject override)
+{
+	for (const QString &key : override.keys())
+	{
+		if (override[key].isObject() && original.contains(key))
+		{
+			original[key] = jsonMerge(original[key].toObject(), override[key].toObject());
+		}
+		else if (override[key].isNull())
+		{
+			original.remove(key);
+		}
+		else
+		{
+			original[key] = override[key];
+		}
+	}
+	return original;
+}
+
 WzConfig::WzConfig(const QString &name, WzConfig::warning warning, QObject *parent)
 {
 	UDWORD size;
@@ -66,8 +86,6 @@ WzConfig::WzConfig(const QString &name, WzConfig::warning warning, QObject *pare
 		}
 		else if (warning == ReadAndWrite)
 		{
-			mJson = QJsonDocument();
-			mObj = mJson.object();
 			return;
 		}
 	}
@@ -75,34 +93,32 @@ WzConfig::WzConfig(const QString &name, WzConfig::warning warning, QObject *pare
 	{
 		debug(LOG_FATAL, "Could not open \"%s\"", name.toUtf8().constData());
 	}
-	mJson = QJsonDocument::fromJson(QByteArray(data, size), &error);
+	QJsonDocument mJson = QJsonDocument::fromJson(QByteArray(data, size), &error);
 	ASSERT(!mJson.isNull(), "JSON document from %s is invalid: %s", name.toUtf8().constData(), error.errorString().toUtf8().constData());
 	ASSERT(mJson.isObject(), "JSON document from %s is not an object. Read: \n%s", name.toUtf8().constData(), data);
 	mObj = mJson.object();
-#if 0
+	free(data);
 	char **diffList = PHYSFS_enumerateFiles("diffs");
-	char **i;
-	int j;
-	for (i = diffList; *i != NULL; i++)
+	for (char **i = diffList; *i != NULL; i++)
 	{
 		std::string str(std::string("diffs/") + *i + std::string("/") + name.toUtf8().constData());
 		if (!PHYSFS_exists(str.c_str()))
 		{
 			continue;
 		}
-		QSettings tmp(QString("wz::") + str.c_str(), QSettings::IniFormat);
-		if (tmp.status() != QSettings::NoError)
+		if (!loadFile(str.c_str(), &data, &size))
 		{
-			debug(LOG_FATAL, "Could not read an override for \"%s\"", name.toUtf8().constData());
+			debug(LOG_FATAL, "jsondiff file \"%s\" could not be opened!", name.toUtf8().constData());
 		}
-		QStringList keys(tmp.allKeys());
-		for (j = 0; j < keys.length(); j++)
-		{
-			m_overrides.insert(keys[j], tmp.value(keys[j]));
-		}
+		QJsonDocument tmpJson = QJsonDocument::fromJson(QByteArray(data, size), &error);
+		ASSERT(!tmpJson.isNull(), "JSON diff from %s is invalid: %s", name.toUtf8().constData(), error.errorString().toUtf8().constData());
+		ASSERT(tmpJson.isObject(), "JSON diff from %s is not an object. Read: \n%s", name.toUtf8().constData(), data);
+		QJsonObject tmpObj = tmpJson.object();
+		mObj = jsonMerge(mObj, tmpObj);
+		free(data);
+		debug(LOG_INFO, "jsondiff \"%s\" loaded and merged", str.c_str());
 	}
 	PHYSFS_freeList(diffList);
-#endif
 }
 
 QStringList WzConfig::childGroups() const
