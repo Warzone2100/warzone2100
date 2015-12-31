@@ -50,7 +50,7 @@ static inline WZ_DECL_PURE short iV_GetImageYOffset(const IMAGEFILE *ImageFile, 
 	return Image(ImageFile, ID).yOffset();
 }
 
-ImageDef *iV_GetImage(const QString &filename, int x, int y);
+ImageDef *iV_GetImage(const QString &filename);
 IMAGEFILE *iV_LoadImageFile(const char *FileData);
 void iV_FreeImageFile(IMAGEFILE *ImageFile);
 

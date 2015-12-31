@@ -251,7 +251,6 @@ void initMission(void)
 
 	mission.ETA = -1;
 	mission.startTime = 0;
-	ASSERT(mission.psGateways.size() == 0, "Mission map has gateways");
 	mission.psGateways.clear(); // just in case
 	mission.mapHeight = 0;
 	mission.mapWidth = 0;
@@ -883,7 +882,6 @@ void restoreMissionData(void)
 	scrollMinY = mission.scrollMinY;
 	scrollMaxX = mission.scrollMaxX;
 	scrollMaxY = mission.scrollMaxY;
-	ASSERT(mission.psGateways.size() == 0, "Mission map has gateways");
 	std::swap(mission.psGateways, gwGetGateways());
 	//and clear the mission pointers
 	mission.psMapTiles	= NULL;

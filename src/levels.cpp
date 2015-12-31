@@ -839,10 +839,7 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 				return false;
 			}
 
-			if (!campaignReset())
-			{
-				return false;
-			}
+			campaignReset();
 		}
 	}
 

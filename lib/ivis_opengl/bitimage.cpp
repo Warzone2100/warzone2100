@@ -64,7 +64,7 @@ struct ImageMerge
 	std::vector<int> pages;  // List of page sizes, normally all pageSize, unless an image is too large for a normal page.
 };
 
-ImageDef *iV_GetImage(const QString &filename, int x, int y)
+ImageDef *iV_GetImage(const QString &filename)
 {
 	if (!images.contains(filename))
 	{

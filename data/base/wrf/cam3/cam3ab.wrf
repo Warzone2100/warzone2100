@@ -23,3 +23,6 @@ file            SCRIPTVAL       "cam3a-bx.vlo"
 file            SCRIPTVAL       "vtols3a-b.vlo"
 file            SCRIPTVAL       "disk2.vlo"
 file            SCRIPTVAL       "cam3day.vlo"
+
+directory       "script"
+file            JAVASCRIPT      "rules.js"

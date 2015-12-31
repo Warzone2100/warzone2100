@@ -19,3 +19,6 @@ file		SCRIPT		"cam1daynight.slo"
 directory       "script/data"
 file            SCRIPTVAL       "cam1a-c.vlo"
 file            SCRIPTVAL       "cam1night.vlo"
+
+directory "script"
+file            JAVASCRIPT      "rules.js"

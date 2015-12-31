@@ -18,3 +18,6 @@ directory       "script/data"
 file            SCRIPTVAL       "cam3-3.vlo"
 file            SCRIPTVAL       "disk2.vlo"
 file            SCRIPTVAL       "cam3day.vlo"
+
+directory       "script"
+file            JAVASCRIPT      "rules.js"
