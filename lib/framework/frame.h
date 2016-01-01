@@ -71,7 +71,10 @@ typedef uint16_t PlayerMask;
 #else
 # define WZ_WRITEDIR ".warzone2100-3.1"
 #endif
-
+// **********************************
+// We need to update this on releases
+#define WZ_GAME_VERSION "3.1.3"
+// **********************************
 enum QUEUE_MODE
 {
 	ModeQueue,      ///< Sends a message on the game queue, which will get synchronised, by sending a GAME_ message.

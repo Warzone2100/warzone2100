@@ -480,33 +480,37 @@ static void getPlatformUserDir(char *const tmpstr, size_t const size)
 static void initialize_ConfigDir(void)
 {
 	char tmpstr[PATH_MAX] = { '\0' };
+	char writepath[PATH_MAX] = { '\0' };
 
 	if (strlen(configdir) == 0)
 	{
 		getPlatformUserDir(tmpstr, sizeof(tmpstr));
-
-		if (!PHYSFS_setWriteDir(tmpstr)) // Workaround for PhysFS not creating the writedir as expected.
+		sstrcpy(writepath, tmpstr);		// save copy of original write directory
+		if (!PHYSFS_setWriteDir(tmpstr)) // We point to our write directory (must be platform-dependent notation!)
 		{
-			debug(LOG_FATAL, "Error setting write directory to \"%s\": %s",
-			      tmpstr, PHYSFS_getLastError());
+			debug(LOG_FATAL, "Error setting write directory to \"%s\": %s", tmpstr, PHYSFS_getLastError());
 			exit(1);
 		}
 
-		if (!PHYSFS_mkdir(WZ_WRITEDIR)) // s.a.
+		// Creating specific directory in relation to the actual version of the game.
+		// It will be of the format of Major version/minor version
+		// For example  Warzone 2100 3.1/3.1.3
+		// NOTE: must be in platform-independent notation!
+		sstrcpy(tmpstr, WZ_WRITEDIR);
+		sstrcat(tmpstr, "/");
+		sstrcat(tmpstr, WZ_GAME_VERSION);
+		if (!PHYSFS_mkdir(tmpstr))
 		{
-			debug(LOG_FATAL, "Error creating directory \"%s\": %s",
-			      WZ_WRITEDIR, PHYSFS_getLastError());
+			debug(LOG_FATAL, "Error creating directory \"%s\": %s", tmpstr, PHYSFS_getLastError());
 			exit(1);
 		}
-
-		// Append the Warzone subdir
-		sstrcat(tmpstr, WZ_WRITEDIR);
-		sstrcat(tmpstr, PHYSFS_getDirSeparator());
-
-		if (!PHYSFS_setWriteDir(tmpstr))
+		// Redo our write directory, NOTE: must be platform-dependent notation!
+		sstrcat(writepath, WZ_WRITEDIR);
+		sstrcat(writepath, PHYSFS_getDirSeparator());
+		sstrcat(writepath, WZ_GAME_VERSION);
+		if (!PHYSFS_setWriteDir(writepath))
 		{
-			debug(LOG_FATAL, "Error setting write directory to \"%s\": %s",
-			      tmpstr, PHYSFS_getLastError());
+			debug(LOG_FATAL, "Error setting write directory to \"%s\": %s", writepath, PHYSFS_getLastError());
 			exit(1);
 		}
 	}
@@ -524,8 +528,7 @@ static void initialize_ConfigDir(void)
 
 		if (!PHYSFS_setWriteDir(tmpstr)) // Workaround for PhysFS not creating the writedir as expected.
 		{
-			debug(LOG_FATAL, "Error setting write directory to \"%s\": %s",
-			      tmpstr, PHYSFS_getLastError());
+			debug(LOG_FATAL, "Error setting write directory to \"%s\": %s", tmpstr, PHYSFS_getLastError());
 			exit(1);
 		}
 	}
