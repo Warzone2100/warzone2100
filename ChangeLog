@@ -1,4 +1,19 @@
-2014-12-??: Version 3.1.2
+2016-01-01: Version 3.1.3
+ * General:
+   * Change: Ping only displayed for multiplayer games (commit:2199ffdd416cb5189c0ee5af4137a6248c3a2ff1)
+   * Change: Rank display removed for now (commit:30ed6e846faecf2cf186a7d94182318de65fb362)
+   * Change: Better placement of IP dialog (commit:ea673ca4e32edc41097389948aec0f7bd3883567, ticket:4159)
+   * Change: Remove hack to support some old systems that breaks with GLEW 1.12 (commit:6a6c611ca3d9d6745e5343f2ee041892772ccae6, ticket:4300)
+   * Change/fix: Change --savegame command line option into two new options that actually work (commit:6f2f5d91c88005ef632f13af2e8d493aeea24d35)
+   * Fix: Crash in campaign (commit:f661a7b213b2d7db8053bde8c21e5ab42374f652, ticket:4251)
+   * Fix: Update included miniUPNP to version 1.219 (commit:512a10d453c52b424f948c78d732f6d1fe627fb8, ticket:4321)
+   * Fix: 'kill' command for SP games (commit:d44708e1093a457fb110839c029d02ea69623715)
+   * Fix: 'Assigned to Commander' voice over issue (commit:960ed9dfd82af57421b1c5e417a42bc8890065bc, ticket:1432)
+   * Fix: Fix assert failure when Nexus AI tries to build a sensor tower (commit:a0b203bc4f570931470f6ff0d6c38d5fcd905ee6)
+   * Fix: Check if received templates are valid when received (commit:260a88ea12bd26cf2c12a68bb338af591f9ba59f)
+   * Fix: Many potential issues found with static analysis tools closed
+
+2014-12-30: Version 3.1.2
  * General:
    * Change: Some updated textures and models (commit:90f9ef01e8c684792507c49c86c99b1f72db473b)
    * Change: No longer enforce a 255 max limit on number of structure types (commit:8f7b9c8f07502c2e0cb86fd2c7d6085dfae1896d, ticket:4205)
