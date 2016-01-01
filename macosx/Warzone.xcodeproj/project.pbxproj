@@ -372,15 +372,14 @@
 		02DDA8D10BD3C3600049AB60 /* unix.c in Sources */ = {isa = PBXBuildFile; fileRef = 02DDA8CF0BD3C3600049AB60 /* unix.c */; };
 		02DDA8D40BD3C3820049AB60 /* Zlib.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02356D830BD3BB4100E9A019 /* Zlib.framework */; };
 		22E244D70E65361800EC2B3E /* baseobject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 22E244D40E65361800EC2B3E /* baseobject.cpp */; };
+		2A9D600F1C3563A30061D0F0 /* upnpdev.c in Sources */ = {isa = PBXBuildFile; fileRef = 2A9D600D1C3563A30061D0F0 /* upnpdev.c */; };
 		43119DC51353AFE7004C54BB /* pnginfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 43119DC21353AFD7004C54BB /* pnginfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		43119DC61353B002004C54BB /* pngdebug.h in Headers */ = {isa = PBXBuildFile; fileRef = 43119DC11353AFD7004C54BB /* pngdebug.h */; };
 		43119DC71353B005004C54BB /* pnglibconf.h in Headers */ = {isa = PBXBuildFile; fileRef = 43119DC31353AFD7004C54BB /* pnglibconf.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		43119DC81353B007004C54BB /* pngstruct.h in Headers */ = {isa = PBXBuildFile; fileRef = 43119DC41353AFD7004C54BB /* pngstruct.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4318439B1363955300BA2BC5 /* MiniUPnPc.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4318434B1363942200BA2BC5 /* MiniUPnPc.framework */; };
 		431843B71363958E00BA2BC5 /* MiniUPnPc.framework in Copy frameworks */ = {isa = PBXBuildFile; fileRef = 4318434B1363942200BA2BC5 /* MiniUPnPc.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		431843C8136395B000BA2BC5 /* bsdqueue.h in Headers */ = {isa = PBXBuildFile; fileRef = 43C18F7A114FF38B0028741B /* bsdqueue.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		431843C9136395B100BA2BC5 /* codelength.h in Headers */ = {isa = PBXBuildFile; fileRef = 43C18F7C114FF38B0028741B /* codelength.h */; };
-		431843CA136395B200BA2BC5 /* declspec.h in Headers */ = {isa = PBXBuildFile; fileRef = 43C18F7D114FF38B0028741B /* declspec.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		431843CB136395B300BA2BC5 /* igd_desc_parse.c in Sources */ = {isa = PBXBuildFile; fileRef = 43C18F7E114FF38B0028741B /* igd_desc_parse.c */; };
 		431843CC136395B400BA2BC5 /* igd_desc_parse.h in Headers */ = {isa = PBXBuildFile; fileRef = 43C18F7F114FF38B0028741B /* igd_desc_parse.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		431843CD136395B600BA2BC5 /* minisoap.c in Sources */ = {isa = PBXBuildFile; fileRef = 43C18F88114FF38B0028741B /* minisoap.c */; };
@@ -1647,6 +1646,9 @@
 		2234C29F0E2BE18200E7704C /* positiondef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = positiondef.h; path = ../src/positiondef.h; sourceTree = SOURCE_ROOT; };
 		22E244D40E65361800EC2B3E /* baseobject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = baseobject.cpp; path = ../src/baseobject.cpp; sourceTree = SOURCE_ROOT; };
 		22E244D50E65361800EC2B3E /* baseobject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = baseobject.h; path = ../src/baseobject.h; sourceTree = SOURCE_ROOT; };
+		2A9D600C1C3563A30061D0F0 /* miniupnpc_declspec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = miniupnpc_declspec.h; sourceTree = "<group>"; };
+		2A9D600D1C3563A30061D0F0 /* upnpdev.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = upnpdev.c; sourceTree = "<group>"; };
+		2A9D600E1C3563A30061D0F0 /* upnpdev.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = upnpdev.h; sourceTree = "<group>"; };
 		4301EC49149A3DE90054BABB /* cursors_sdl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = cursors_sdl.cpp; path = ../lib/sdl/cursors_sdl.cpp; sourceTree = SOURCE_ROOT; };
 		4301EC4A149A3DE90054BABB /* cursors_sdl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cursors_sdl.h; path = ../lib/sdl/cursors_sdl.h; sourceTree = SOURCE_ROOT; };
 		4301EC4B149A3DE90054BABB /* wz2100icon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = wz2100icon.h; path = ../lib/sdl/wz2100icon.h; sourceTree = SOURCE_ROOT; };
@@ -1802,9 +1804,7 @@
 		43B9DE9F1384675E004C7351 /* Base-Framework.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Base-Framework.xcconfig"; path = "configs/Base-Framework.xcconfig"; sourceTree = SOURCE_ROOT; };
 		43BE75E811124BB4007DF934 /* wavecast.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = wavecast.cpp; path = ../src/wavecast.cpp; sourceTree = SOURCE_ROOT; };
 		43BE75E911124BB4007DF934 /* wavecast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = wavecast.h; path = ../src/wavecast.h; sourceTree = SOURCE_ROOT; };
-		43C18F7A114FF38B0028741B /* bsdqueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = bsdqueue.h; path = ../3rdparty/miniupnpc/bsdqueue.h; sourceTree = SOURCE_ROOT; };
 		43C18F7C114FF38B0028741B /* codelength.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = codelength.h; path = ../3rdparty/miniupnpc/codelength.h; sourceTree = SOURCE_ROOT; };
-		43C18F7D114FF38B0028741B /* declspec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = declspec.h; path = ../3rdparty/miniupnpc/declspec.h; sourceTree = SOURCE_ROOT; };
 		43C18F7E114FF38B0028741B /* igd_desc_parse.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = igd_desc_parse.c; path = ../3rdparty/miniupnpc/igd_desc_parse.c; sourceTree = SOURCE_ROOT; };
 		43C18F7F114FF38B0028741B /* igd_desc_parse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = igd_desc_parse.h; path = ../3rdparty/miniupnpc/igd_desc_parse.h; sourceTree = SOURCE_ROOT; };
 		43C18F88114FF38B0028741B /* minisoap.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = minisoap.c; path = ../3rdparty/miniupnpc/minisoap.c; sourceTree = SOURCE_ROOT; };
@@ -3265,6 +3265,9 @@
 		43C18F79114FF38B0028741B /* MiniUPnPc sources */ = {
 			isa = PBXGroup;
 			children = (
+				2A9D600C1C3563A30061D0F0 /* miniupnpc_declspec.h */,
+				2A9D600D1C3563A30061D0F0 /* upnpdev.c */,
+				2A9D600E1C3563A30061D0F0 /* upnpdev.h */,
 				43CB73D3181E0E0100D1D1DD /* miniupnpctypes.h */,
 				43CB73D4181E0E0100D1D1DD /* portlistingparse.c */,
 				43CB73D5181E0E0100D1D1DD /* portlistingparse.h */,
@@ -3272,9 +3275,7 @@
 				43CB73D7181E0E0100D1D1DD /* receivedata.h */,
 				43D338561364F5A8005F6725 /* connecthostport.c */,
 				43D338571364F5A8005F6725 /* connecthostport.h */,
-				43C18F7A114FF38B0028741B /* bsdqueue.h */,
 				43C18F7C114FF38B0028741B /* codelength.h */,
-				43C18F7D114FF38B0028741B /* declspec.h */,
 				43C18F7E114FF38B0028741B /* igd_desc_parse.c */,
 				43C18F7F114FF38B0028741B /* igd_desc_parse.h */,
 				43C18F88114FF38B0028741B /* minisoap.c */,
@@ -3655,9 +3656,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				431843C8136395B000BA2BC5 /* bsdqueue.h in Headers */,
 				431843C9136395B100BA2BC5 /* codelength.h in Headers */,
-				431843CA136395B200BA2BC5 /* declspec.h in Headers */,
 				431843CC136395B400BA2BC5 /* igd_desc_parse.h in Headers */,
 				431843CE136395B700BA2BC5 /* minisoap.h in Headers */,
 				431843D0136395B900BA2BC5 /* minissdpc.h in Headers */,
@@ -4875,6 +4874,7 @@
 				0246A1070BD3CC29004D1C70 /* pieclip.cpp in Sources */,
 				0246A11D0BD3CC43004D1C70 /* ivi.cpp in Sources */,
 				0246A11E0BD3CC43004D1C70 /* pieblitfunc.cpp in Sources */,
+				2A9D600F1C3563A30061D0F0 /* upnpdev.c in Sources */,
 				0246A11F0BD3CC43004D1C70 /* piedraw.cpp in Sources */,
 				0246A1200BD3CC43004D1C70 /* piefunc.cpp in Sources */,
 				0246A1210BD3CC43004D1C70 /* piematrix.cpp in Sources */,
@@ -5582,7 +5582,7 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COMBINE_HIDPI_IMAGES = YES;
-				SDKROOT = macosx;
+				SDKROOT = macosx10.7;
 			};
 			name = Debug;
 		};
@@ -5592,7 +5592,7 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COMBINE_HIDPI_IMAGES = YES;
-				SDKROOT = macosx;
+				SDKROOT = macosx10.7;
 			};
 			name = Release;
 		};
@@ -5600,6 +5600,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 43025DFE1120A4CA006C49B1 /* Project-All.xcconfig */;
 			buildSettings = {
+				CLANG_LINK_OBJC_RUNTIME = NO;
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -5615,9 +5616,10 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				"MACOSX_DEPLOYMENT_TARGET[sdk=macosx*][arch=x86_64]" = 10.7;
 				ONLY_ACTIVE_ARCH = YES;
-				SDKROOT = macosx;
+				SDKROOT = macosx10.7;
 			};
 			name = Debug;
 		};
@@ -5625,6 +5627,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 43025DFE1120A4CA006C49B1 /* Project-All.xcconfig */;
 			buildSettings = {
+				CLANG_LINK_OBJC_RUNTIME = NO;
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -5640,8 +5643,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
-				SDKROOT = macosx;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				SDKROOT = macosx10.7;
 			};
 			name = Release;
 		};
@@ -5666,7 +5669,7 @@
 				);
 				HEADER_SEARCH_PATHS_QUOTED_1 = "";
 				HEADER_SEARCH_PATHS_QUOTED_2 = "";
-				SDKROOT = macosx;
+				SDKROOT = macosx10.7;
 			};
 			name = Debug;
 		};
@@ -5691,7 +5694,7 @@
 				);
 				HEADER_SEARCH_PATHS_QUOTED_1 = "";
 				HEADER_SEARCH_PATHS_QUOTED_2 = "";
-				SDKROOT = macosx;
+				SDKROOT = macosx10.7;
 			};
 			name = Release;
 		};
@@ -5701,7 +5704,7 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COMBINE_HIDPI_IMAGES = YES;
-				SDKROOT = macosx;
+				SDKROOT = macosx10.7;
 			};
 			name = Debug;
 		};
@@ -5711,7 +5714,7 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COMBINE_HIDPI_IMAGES = YES;
-				SDKROOT = macosx;
+				SDKROOT = macosx10.7;
 			};
 			name = Release;
 		};
@@ -5721,7 +5724,7 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COMBINE_HIDPI_IMAGES = YES;
-				SDKROOT = macosx;
+				SDKROOT = macosx10.7;
 			};
 			name = Debug;
 		};
@@ -5731,7 +5734,7 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COMBINE_HIDPI_IMAGES = YES;
-				SDKROOT = macosx;
+				SDKROOT = macosx10.7;
 			};
 			name = Release;
 		};
@@ -5741,7 +5744,7 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COMBINE_HIDPI_IMAGES = YES;
-				SDKROOT = macosx;
+				SDKROOT = macosx10.7;
 			};
 			name = Debug;
 		};
@@ -5751,7 +5754,7 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COMBINE_HIDPI_IMAGES = YES;
-				SDKROOT = macosx;
+				SDKROOT = macosx10.7;
 			};
 			name = Release;
 		};
@@ -5761,7 +5764,7 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COMBINE_HIDPI_IMAGES = YES;
-				SDKROOT = macosx;
+				SDKROOT = macosx10.7;
 			};
 			name = Debug;
 		};
@@ -5771,7 +5774,7 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COMBINE_HIDPI_IMAGES = YES;
-				SDKROOT = macosx;
+				SDKROOT = macosx10.7;
 			};
 			name = Release;
 		};
@@ -5781,7 +5784,7 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COMBINE_HIDPI_IMAGES = YES;
-				SDKROOT = macosx;
+				SDKROOT = macosx10.7;
 			};
 			name = Debug;
 		};
@@ -5791,7 +5794,7 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COMBINE_HIDPI_IMAGES = YES;
-				SDKROOT = macosx;
+				SDKROOT = macosx10.7;
 			};
 			name = Release;
 		};
@@ -5822,7 +5825,7 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COMBINE_HIDPI_IMAGES = YES;
-				SDKROOT = macosx;
+				SDKROOT = macosx10.7;
 			};
 			name = Debug;
 		};
@@ -5832,7 +5835,7 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COMBINE_HIDPI_IMAGES = YES;
-				SDKROOT = macosx;
+				SDKROOT = macosx10.7;
 			};
 			name = StaticAnalyzer;
 		};
@@ -5842,7 +5845,7 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COMBINE_HIDPI_IMAGES = YES;
-				SDKROOT = macosx;
+				SDKROOT = macosx10.7;
 			};
 			name = Release;
 		};
@@ -5852,7 +5855,7 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COMBINE_HIDPI_IMAGES = YES;
-				SDKROOT = macosx;
+				SDKROOT = macosx10.7;
 			};
 			name = Debug;
 		};
@@ -5862,7 +5865,7 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COMBINE_HIDPI_IMAGES = YES;
-				SDKROOT = macosx;
+				SDKROOT = macosx10.7;
 			};
 			name = StaticAnalyzer;
 		};
@@ -5872,7 +5875,7 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COMBINE_HIDPI_IMAGES = YES;
-				SDKROOT = macosx;
+				SDKROOT = macosx10.7;
 			};
 			name = Release;
 		};
@@ -5882,7 +5885,7 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COMBINE_HIDPI_IMAGES = YES;
-				SDKROOT = macosx;
+				SDKROOT = macosx10.7;
 			};
 			name = Debug;
 		};
@@ -5892,7 +5895,7 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COMBINE_HIDPI_IMAGES = YES;
-				SDKROOT = macosx;
+				SDKROOT = macosx10.7;
 			};
 			name = StaticAnalyzer;
 		};
@@ -5902,7 +5905,7 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COMBINE_HIDPI_IMAGES = YES;
-				SDKROOT = macosx;
+				SDKROOT = macosx10.7;
 			};
 			name = Release;
 		};
@@ -5910,6 +5913,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 43025DFE1120A4CA006C49B1 /* Project-All.xcconfig */;
 			buildSettings = {
+				CLANG_LINK_OBJC_RUNTIME = NO;
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -5925,8 +5929,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
-				SDKROOT = macosx;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				SDKROOT = macosx10.7;
 			};
 			name = StaticAnalyzer;
 		};
@@ -5951,7 +5955,7 @@
 				);
 				HEADER_SEARCH_PATHS_QUOTED_1 = "";
 				HEADER_SEARCH_PATHS_QUOTED_2 = "";
-				SDKROOT = macosx;
+				SDKROOT = macosx10.7;
 			};
 			name = StaticAnalyzer;
 		};
@@ -5968,7 +5972,7 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COMBINE_HIDPI_IMAGES = YES;
-				SDKROOT = macosx;
+				SDKROOT = macosx10.7;
 			};
 			name = StaticAnalyzer;
 		};
@@ -5978,7 +5982,7 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COMBINE_HIDPI_IMAGES = YES;
-				SDKROOT = macosx;
+				SDKROOT = macosx10.7;
 			};
 			name = StaticAnalyzer;
 		};
@@ -5988,7 +5992,7 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COMBINE_HIDPI_IMAGES = YES;
-				SDKROOT = macosx;
+				SDKROOT = macosx10.7;
 			};
 			name = StaticAnalyzer;
 		};
@@ -5998,7 +6002,7 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COMBINE_HIDPI_IMAGES = YES;
-				SDKROOT = macosx;
+				SDKROOT = macosx10.7;
 			};
 			name = StaticAnalyzer;
 		};
@@ -6008,7 +6012,7 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COMBINE_HIDPI_IMAGES = YES;
-				SDKROOT = macosx;
+				SDKROOT = macosx10.7;
 			};
 			name = StaticAnalyzer;
 		};
@@ -6018,7 +6022,7 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COMBINE_HIDPI_IMAGES = YES;
-				SDKROOT = macosx;
+				SDKROOT = macosx10.7;
 			};
 			name = StaticAnalyzer;
 		};
@@ -6028,7 +6032,7 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COMBINE_HIDPI_IMAGES = YES;
-				SDKROOT = macosx;
+				SDKROOT = macosx10.7;
 			};
 			name = StaticAnalyzer;
 		};
@@ -6069,7 +6073,7 @@
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COMBINE_HIDPI_IMAGES = YES;
 				OTHER_LDFLAGS = "-Wl,-undefined,error";
-				SDKROOT = macosx;
+				SDKROOT = macosx10.7;
 			};
 			name = Debug;
 		};
@@ -6080,7 +6084,7 @@
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COMBINE_HIDPI_IMAGES = YES;
 				OTHER_LDFLAGS = "-Wl,-undefined,error";
-				SDKROOT = macosx;
+				SDKROOT = macosx10.7;
 			};
 			name = StaticAnalyzer;
 		};
@@ -6091,7 +6095,7 @@
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COMBINE_HIDPI_IMAGES = YES;
 				OTHER_LDFLAGS = "-Wl,-undefined,error";
-				SDKROOT = macosx;
+				SDKROOT = macosx10.7;
 			};
 			name = Release;
 		};
@@ -6154,7 +6158,7 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COMBINE_HIDPI_IMAGES = YES;
-				SDKROOT = macosx;
+				SDKROOT = macosx10.7;
 			};
 			name = Debug;
 		};
@@ -6164,7 +6168,7 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COMBINE_HIDPI_IMAGES = YES;
-				SDKROOT = macosx;
+				SDKROOT = macosx10.7;
 			};
 			name = Release;
 		};
