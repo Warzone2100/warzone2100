@@ -2552,7 +2552,7 @@ static void NETallowJoining(void)
 					SocketSet_AddSocket(socket_set, connected_bsocket[index]);
 					NETmoveQueue(NETnetTmpQueue(i), NETnetQueue(index));
 
-					// Copy players ip Address.
+					// Copy player's IP address.
 					sstrcpy(NetPlay.players[index].IPtextAddress, getSocketTextAddress(connected_bsocket[index]));
 
 					if (onBanList(NetPlay.players[index].IPtextAddress))

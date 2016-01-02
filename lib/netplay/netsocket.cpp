@@ -224,18 +224,34 @@ static int addressToText(const struct sockaddr *addr, char *buf, size_t size)
 		}
 	case AF_INET6:
 		{
-			uint16_t *address = (uint16_t *) & ((const struct sockaddr_in6 *)addr)->sin6_addr.s6_addr;
 
-			return snprintf(buf, size,
-			                "%hx:%hx:%hx:%hx:%hx:%hx:%hx:%hx",
-			                ntohs(address[0]),
-			                ntohs(address[1]),
-			                ntohs(address[2]),
-			                ntohs(address[3]),
-			                ntohs(address[4]),
-			                ntohs(address[5]),
-			                ntohs(address[6]),
-			                ntohs(address[7]));
+			uint16_t *address = (uint16_t *) & ((const struct sockaddr_in6 *)addr)->sin6_addr.s6_addr;
+			// Check to see if this is really a IPv6 address
+			struct sockaddr_in6 *mappedIP = (struct sockaddr_in6 *)addr;
+			if (IN6_IS_ADDR_V4MAPPED(&mappedIP->sin6_addr))
+			{
+				// looks like it is ::ffff:(...) so lets set up a IPv4 socket address structure
+				// slightly overkill for our needs, but it shows exactly what needs to be done.
+				// At this time, we only care about the address, nothing else.
+				struct sockaddr_in addr4;
+				memcpy(&addr4.sin_addr.s_addr, mappedIP->sin6_addr.s6_addr + 12, sizeof(addr4.sin_addr.s_addr));
+				char buffer[16];
+				const char *ipv4 = inet_ntop(AF_INET, &addr4.sin_addr, buffer, sizeof(buffer));
+				return snprintf(buf, size, "%s", ipv4);
+			}
+			else
+			{
+				return snprintf(buf, size,
+								"%hx:%hx:%hx:%hx:%hx:%hx:%hx:%hx",
+								ntohs(address[0]),
+								ntohs(address[1]),
+								ntohs(address[2]),
+								ntohs(address[3]),
+								ntohs(address[4]),
+								ntohs(address[5]),
+								ntohs(address[6]),
+								ntohs(address[7]));
+			}
 		}
 	default:
 		ASSERT(!"Unknown address family", "Got non IPv4 or IPv6 address!");
