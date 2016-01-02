@@ -65,13 +65,10 @@ enum TYPE_OF_TERRAIN
 #define TILE_TRIFLIP	0x0800	// This bit describes the direction the tile is split into 2 triangles (same as triangleFlip)
 #define TILE_NUMMASK	0x01ff
 
-#define BITS_TEMPORARY		0x04	///< For used in temporary calculations
-
 static inline unsigned short TileNumber_tile(unsigned short tilenumber)
 {
 	return tilenumber & TILE_NUMMASK;
 }
-
 
 static inline unsigned short TileNumber_texture(unsigned short tilenumber)
 {

@@ -1619,14 +1619,14 @@ bool recvTemplate(NETQUEUE queue)
 	t.psNext = NULL;
 	t.ref = REF_TEMPLATE_START;
 
-	if (!researchedTemplate(&t, player, true))
+	if (!researchedTemplate(&t, player, true, true))
 	{
-		debug(LOG_ERROR, "Invalid template received from player %d", (int)player);
+		debug(LOG_ERROR, "Invalid template received from player %d with name %s", (int)player, t.name.toUtf8().constData());
 		return false;
 	}
 	if (!intValidTemplate(&t, NULL, true, player))
 	{
-		debug(LOG_ERROR, "Illegal template received from player %d", (int)player);
+		debug(LOG_ERROR, "Illegal template received from player %d with name %s", (int)player, t.name.toUtf8().constData());
 		return false;
 	}
 
