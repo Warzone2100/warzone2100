@@ -282,6 +282,7 @@ struct PLAYER_IP
 extern NETPLAY				NetPlay;
 extern SYNC_COUNTER sync_counter;
 extern PLAYER_IP	*IPlist;
+extern GAMESTRUCT	gamestruct;
 // update flags
 extern bool netPlayersUpdated;
 extern int mapDownloadProgress;
@@ -340,6 +341,7 @@ int NETGetMajorVersion();
 int NETGetMinorVersion();
 void NET_InitPlayer(int i, bool initPosition);
 void NET_InitPlayers();
+void NETupdateLobbyServer(void);
 
 void NETGameLocked(bool flag);
 void NETresetGamePassword();
