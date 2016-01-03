@@ -403,9 +403,10 @@ static void setFatalSignalHandler(SigActionHandler signalHandler)
  *       function was unsuccessful and returned zero *gdbWritePipe's value will
  *       be unchanged.
  */
-static void execGdb(int const dumpFile, int *gdbWritePipe, pid_t *pid)
+static pid_t execGdb(int const dumpFile, int *gdbWritePipe)
 {
 	int gdbPipe[2];
+	pid_t pid;
 	char *gdbArgv[] = { gdbPath, programPath, programPID, NULL };
 	char *gdbEnv[] = { NULL };
 	/* Check if the "bare minimum" is available: GDB and an absolute path
@@ -428,7 +429,7 @@ static void execGdb(int const dumpFile, int *gdbWritePipe, pid_t *pid)
 			      strlen("- GDB not available\n"));
 		}
 
-		return;
+		return 0;
 	}
 
 	// Create a pipe to use for communication with 'gdb'
@@ -439,12 +440,12 @@ static void execGdb(int const dumpFile, int *gdbWritePipe, pid_t *pid)
 
 		printf("Pipe failed\n");
 
-		return;
+		return 0;
 	}
 
 	// Fork a new child process
-	*pid = fork();
-	if (*pid == -1)
+	pid = fork();
+	if (pid == -1)
 	{
 		write(dumpFile, "Fork failed\n",
 		      strlen("Fork failed\n"));
@@ -455,21 +456,21 @@ static void execGdb(int const dumpFile, int *gdbWritePipe, pid_t *pid)
 		close(gdbPipe[0]);
 		close(gdbPipe[1]);
 
-		*pid = 0;
-		return;
+		return 0;
 	}
 
 	// Check to see if we're the parent
-	if (*pid != 0)
+	if (pid != 0)
 	{
 #ifdef WZ_OS_LINUX
 		// Allow tracing the process, some hardened kernel configurations disallow this.
-		prctl(PR_SET_PTRACER, *pid, 0, 0, 0);
+		prctl(PR_SET_PTRACER, pid, 0, 0, 0);
 #endif
 
 		// Return the write end of the pipe
 		*gdbWritePipe = gdbPipe[1];
-		return;
+
+		return pid;
 	}
 
 	close(gdbPipe[1]); // No output to pipe
@@ -491,6 +492,8 @@ static void execGdb(int const dumpFile, int *gdbWritePipe, pid_t *pid)
 
 	// Terminate the child, indicating failure
 	_exit(1);
+	// with some compiler versions, _exit is not handled properly
+	return -1;
 }
 
 /**
@@ -554,8 +557,7 @@ static bool gdbExtendedBacktrace(int const dumpFile)
 	                                  // Show the content of all registers
 	                                  "info registers\n"
 	                                  "quit\n";
-	pid_t pid = 0;
-	execGdb(dumpFile, &gdbPipe, &pid);
+	const pid_t pid = execGdb(dumpFile, &gdbPipe);
 	if (pid == 0)
 	{
 		return false;
