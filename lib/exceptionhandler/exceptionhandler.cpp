@@ -403,10 +403,9 @@ static void setFatalSignalHandler(SigActionHandler signalHandler)
  *       function was unsuccessful and returned zero *gdbWritePipe's value will
  *       be unchanged.
  */
-static pid_t execGdb(int const dumpFile, int *gdbWritePipe)
+static void execGdb(int const dumpFile, int *gdbWritePipe, pid_t *pid)
 {
 	int gdbPipe[2];
-	pid_t pid;
 	char *gdbArgv[] = { gdbPath, programPath, programPID, NULL };
 	char *gdbEnv[] = { NULL };
 	/* Check if the "bare minimum" is available: GDB and an absolute path
@@ -429,7 +428,7 @@ static pid_t execGdb(int const dumpFile, int *gdbWritePipe)
 			      strlen("- GDB not available\n"));
 		}
 
-		return 0;
+		return;
 	}
 
 	// Create a pipe to use for communication with 'gdb'
@@ -440,12 +439,12 @@ static pid_t execGdb(int const dumpFile, int *gdbWritePipe)
 
 		printf("Pipe failed\n");
 
-		return 0;
+		return;
 	}
 
 	// Fork a new child process
-	pid = fork();
-	if (pid == -1)
+	*pid = fork();
+	if (*pid == -1)
 	{
 		write(dumpFile, "Fork failed\n",
 		      strlen("Fork failed\n"));
@@ -456,21 +455,21 @@ static pid_t execGdb(int const dumpFile, int *gdbWritePipe)
 		close(gdbPipe[0]);
 		close(gdbPipe[1]);
 
-		return 0;
+		*pid = 0;
+		return;
 	}
 
 	// Check to see if we're the parent
-	if (pid != 0)
+	if (*pid != 0)
 	{
 #ifdef WZ_OS_LINUX
 		// Allow tracing the process, some hardened kernel configurations disallow this.
-		prctl(PR_SET_PTRACER, pid, 0, 0, 0);
+		prctl(PR_SET_PTRACER, *pid, 0, 0, 0);
 #endif
 
 		// Return the write end of the pipe
 		*gdbWritePipe = gdbPipe[1];
-
-		return pid;
+		return;
 	}
 
 	close(gdbPipe[1]); // No output to pipe
@@ -555,7 +554,8 @@ static bool gdbExtendedBacktrace(int const dumpFile)
 	                                  // Show the content of all registers
 	                                  "info registers\n"
 	                                  "quit\n";
-	const pid_t pid = execGdb(dumpFile, &gdbPipe);
+	pid_t pid = 0;
+	execGdb(dumpFile, &gdbPipe, &pid);
 	if (pid == 0)
 	{
 		return false;
