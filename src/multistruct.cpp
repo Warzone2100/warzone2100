@@ -28,6 +28,8 @@
 #include <string.h>
 
 #include "lib/framework/frame.h"
+#include "design.h"
+#include "template.h"
 #include "droid.h"
 #include "droiddef.h"
 #include "basedef.h"
@@ -271,7 +273,7 @@ bool recvLasSat(NETQUEUE queue)
 	return true;
 }
 
-void sendStructureInfo(STRUCTURE *psStruct, STRUCTURE_INFO structureInfo_, DROID_TEMPLATE *psTempl)
+void sendStructureInfo(STRUCTURE *psStruct, STRUCTURE_INFO structureInfo_, DROID_TEMPLATE *pT)
 {
 	uint8_t  player = psStruct->player;
 	uint32_t structId = psStruct->id;
@@ -283,9 +285,22 @@ void sendStructureInfo(STRUCTURE *psStruct, STRUCTURE_INFO structureInfo_, DROID
 	NETuint8_t(&structureInfo);
 	if (structureInfo_ == STRUCTUREINFO_MANUFACTURE)
 	{
-		uint32_t templateId = psTempl != NULL ? psTempl->multiPlayerID : 0;
-
-		NETuint32_t(&templateId);
+		int32_t droidType = pT->droidType;
+		NETqstring(pT->name);
+		NETuint32_t(&pT->multiPlayerID);
+		NETint32_t(&droidType);
+		NETuint8_t(&pT->asParts[COMP_BODY]);
+		NETuint8_t(&pT->asParts[COMP_BRAIN]);
+		NETuint8_t(&pT->asParts[COMP_PROPULSION]);
+		NETuint8_t(&pT->asParts[COMP_REPAIRUNIT]);
+		NETuint8_t(&pT->asParts[COMP_ECM]);
+		NETuint8_t(&pT->asParts[COMP_SENSOR]);
+		NETuint8_t(&pT->asParts[COMP_CONSTRUCT]);
+		NETint8_t(&pT->numWeaps);
+		for (int i = 0; i < pT->numWeaps; i++)
+		{
+			NETuint8_t(&pT->asWeaps[i]);
+		}
 	}
 	NETend();
 }
@@ -294,10 +309,10 @@ void recvStructureInfo(NETQUEUE queue)
 {
 	uint8_t         player = 0;
 	uint32_t        structId = 0;
-	uint32_t        templateId = 0;
 	uint8_t         structureInfo;
 	STRUCTURE      *psStruct;
-	DROID_TEMPLATE *psTempl = NULL;
+	DROID_TEMPLATE t, *pT = &t;
+	int32_t droidType;
 
 	NETbeginDecode(queue, GAME_STRUCTUREINFO);
 	NETuint8_t(&player);
@@ -305,33 +320,32 @@ void recvStructureInfo(NETQUEUE queue)
 	NETuint8_t(&structureInfo);
 	if (structureInfo == STRUCTUREINFO_MANUFACTURE)
 	{
-		NETuint32_t(&templateId);
-		if (templateId != 0)
+		NETqstring(pT->name);
+		NETuint32_t(&pT->multiPlayerID);
+		NETint32_t(&droidType);
+		NETuint8_t(&pT->asParts[COMP_BODY]);
+		NETuint8_t(&pT->asParts[COMP_BRAIN]);
+		NETuint8_t(&pT->asParts[COMP_PROPULSION]);
+		NETuint8_t(&pT->asParts[COMP_REPAIRUNIT]);
+		NETuint8_t(&pT->asParts[COMP_ECM]);
+		NETuint8_t(&pT->asParts[COMP_SENSOR]);
+		NETuint8_t(&pT->asParts[COMP_CONSTRUCT]);
+		NETint8_t(&pT->numWeaps);
+		for (int i = 0; i < pT->numWeaps; i++)
 		{
-			// For autogames, where we want the AI to take us over, our templates are not setup... so let's use any AI's templates.
-			if (!NetPlay.players[player].autoGame)
-			{
-				psTempl = IdToTemplate(templateId, player);
-			}
-			else
-			{
-				psTempl = IdToTemplate(templateId, ANYPLAYER);
-			}
-			if (psTempl == NULL)
-			{
-				debug(LOG_SYNC, "Synch error, don't have tempate id %u, so can't change production of factory %u!", templateId, structId);
-			}
+			NETuint8_t(&pT->asWeaps[i]);
 		}
+		pT->droidType = (DROID_TYPE)droidType;
 	}
 	NETend();
 
 	psStruct = IdToStruct(structId, player);
 
-	syncDebug("player%d,structId%u%c,structureInfo%u,templateId%u%c", player, structId, psStruct == NULL ? '^' : '*', structureInfo, templateId, psTempl == NULL ? '^' : '*');
+	syncDebug("player%d,structId%u%c,structureInfo%u", player, structId, psStruct == NULL? '^' : '*', structureInfo);
 
 	if (psStruct == NULL)
 	{
-		debug(LOG_SYNC, "Couldn't find structure %u to change production.", structId);
+		debug(LOG_ERROR, "Could not find structure %u to change production for", structId);
 		return;
 	}
 	if (!canGiveOrdersFor(queue.index, psStruct->player))
@@ -341,6 +355,17 @@ void recvStructureInfo(NETQUEUE queue)
 	}
 
 	CHECK_STRUCTURE(psStruct);
+
+	if (!researchedTemplate(pT, player, true, true))
+	{
+		debug(LOG_ERROR, "Invalid droid received from player %d with name %s", (int)player, pT->name.toUtf8().constData());
+		return;
+	}
+	if (!intValidTemplate(pT, NULL, true, player))
+	{
+		debug(LOG_ERROR, "Illegal droid received from player %d with name %s", (int)player, pT->name.toUtf8().constData());
+		return;
+	}
 
 	if (StructIsFactory(psStruct))
 	{
@@ -355,7 +380,7 @@ void recvStructureInfo(NETQUEUE queue)
 
 	switch (structureInfo)
 	{
-	case STRUCTUREINFO_MANUFACTURE:       structSetManufacture(psStruct, psTempl, ModeImmediate); break;
+	case STRUCTUREINFO_MANUFACTURE:       structSetManufacture(psStruct, pT, ModeImmediate); break;
 	case STRUCTUREINFO_CANCELPRODUCTION:  cancelProduction(psStruct, ModeImmediate, false);       break;
 	case STRUCTUREINFO_HOLDPRODUCTION:    holdProduction(psStruct, ModeImmediate);                break;
 	case STRUCTUREINFO_RELEASEPRODUCTION: releaseProduction(psStruct, ModeImmediate);             break;

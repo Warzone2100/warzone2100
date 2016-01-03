@@ -966,7 +966,7 @@ bool structSetManufacture(STRUCTURE *psStruct, DROID_TEMPLATE *psTempl, QUEUE_MO
 	}
 
 	//assign it to the Factory
-	psFact->psSubject = psTempl;
+	psFact->psSubject = new DROID_TEMPLATE(*psTempl);
 
 	//set up the start time and build time
 	if (psTempl != NULL)
@@ -1879,6 +1879,7 @@ static bool setFunctionality(STRUCTURE	*psBuilding, STRUCTURE_TYPE functionType)
 			FACTORY *psFactory = &psBuilding->pFunctionality->factory;
 			unsigned int x, y;
 
+			delete psFactory->psSubject;
 			psFactory->psSubject = NULL;
 
 			// Default the secondary order - AB 22/04/99
@@ -3245,6 +3246,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 
 				//reset the start time
 				psFactory->timeStarted = ACTION_START_TIME;
+				delete psFactory->psSubject;
 				psFactory->psSubject = NULL;
 
 				doNextProduction(psStructure, (DROID_TEMPLATE *)pSubject, ModeImmediate);
@@ -6211,6 +6213,7 @@ void cancelProduction(STRUCTURE *psBuilding, QUEUE_MODE mode, bool mayClearProdu
 		}
 
 		//clear the factory's subject
+		delete psFactory->psSubject;
 		psFactory->psSubject = NULL;
 	}
 

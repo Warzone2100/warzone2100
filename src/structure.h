@@ -429,7 +429,7 @@ static inline void _setStructureTarget(STRUCTURE *psBuilding, BASE_OBJECT *psNew
 template<typename Functionality, typename Subject>
 static inline void setStatusPendingStart(Functionality &functionality, Subject *subject)
 {
-	functionality.psSubjectPending = subject;
+	functionality.psSubjectPending = new Subject(*subject);
 	functionality.statusPending = FACTORY_START_PENDING;
 	++functionality.pendingCount;
 }
@@ -437,6 +437,7 @@ static inline void setStatusPendingStart(Functionality &functionality, Subject *
 template<typename Functionality>
 static inline void setStatusPendingCancel(Functionality &functionality)
 {
+	delete functionality.psSubjectPending;
 	functionality.psSubjectPending = NULL;
 	functionality.statusPending = FACTORY_CANCEL_PENDING;
 	++functionality.pendingCount;
@@ -477,6 +478,7 @@ static inline void popStatusPending(Functionality &functionality)
 	if (--functionality.pendingCount == 0)
 	{
 		// Subject is now synchronised, remove pending.
+		delete functionality.psSubjectPending;
 		functionality.psSubjectPending = NULL;
 		functionality.statusPending = FACTORY_NOTHING_PENDING;
 	}
