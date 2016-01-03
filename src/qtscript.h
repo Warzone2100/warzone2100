@@ -82,8 +82,11 @@ void scriptRemoveObject(BASE_OBJECT *psObj);
 /// Open debug GUI
 void jsShowDebug();
 
-/// Choose autogame AI
+/// Choose autogame AI with GUI
 void jsAutogame();
+
+/// Choose a specific autogame AI
+void jsAutogameSpecific(const QString &name, int player);
 
 /// Run-time code from user
 bool jsEvaluate(QScriptEngine *engine, const QString &text);

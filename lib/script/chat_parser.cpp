@@ -2554,7 +2554,7 @@ yyreturn:
 
 
 /* Initialize Bison and start chat processing */
-bool chatLoad(char *pData, UDWORD size)
+bool chatLoad(const char *pData, UDWORD size)
 {
 	SDWORD	cmdIndex,parseResult;
 

@@ -26,19 +26,11 @@ var fundamentalsTriggered = false; // avoid triggering it multiple times
 
 function log(message)
 {
-	if (me == selectedPlayer)
-	{
-		console(message);
-	}
 	dump(gameTime + " : " + message);
 }
 
 function logObj(obj, message)
 {
-	if (obj.selected)
-	{
-		console(message);
-	}
 	dump(gameTime + " [" + obj.name + " id=" + obj.id + "] > " + message);
 }
 

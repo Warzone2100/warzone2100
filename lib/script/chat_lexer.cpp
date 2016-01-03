@@ -2499,7 +2499,7 @@ void chat_free (void * ptr )
 
 
 /* Set the current input buffer for the lexer */
-void chatSetInputBuffer(char *pBuffer, UDWORD size)
+void chatSetInputBuffer(const char *pBuffer, UDWORD size)
 {
 	pInputBuffer = pBuffer;
 	pEndBuffer = pBuffer + size;

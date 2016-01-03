@@ -64,9 +64,9 @@ extern CHAT_MSG chat_msg;
 extern void chatGetErrorData(int *pLine, char **ppText);
 
 /* Set the current input buffer for the lexer */
-extern void chatSetInputBuffer(char *pBuffer, UDWORD size);
+extern void chatSetInputBuffer(const char *pBuffer, UDWORD size);
 
 // Load message
-extern bool chatLoad(char *pData, UDWORD size);
+extern bool chatLoad(const char *pData, UDWORD size);
 
 #endif

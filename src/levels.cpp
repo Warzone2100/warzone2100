@@ -1045,6 +1045,7 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 	if (autogame_enabled())
 	{
 		gameTimeSetMod(Rational(500));
+		jsAutogameSpecific("multiplay/skirmish/semperfi.js", selectedPlayer);
 	}
 
 	return true;

@@ -867,6 +867,19 @@ bool jsEvaluate(QScriptEngine *engine, const QString &text)
 	return true;
 }
 
+void jsAutogameSpecific(const QString &name, int player)
+{
+	QScriptEngine *engine = loadPlayerScript(name, player, DIFFICULTY_MEDIUM);
+	if (!engine)
+	{
+		console("Failed to load selected AI! Check your logs to see why.");
+		return;
+	}
+	console("Loaded the %s AI script for current player!", name.toUtf8().constData());
+	callFunction(engine, "eventGameInit", QScriptValueList());
+	callFunction(engine, "eventStartLevel", QScriptValueList());
+}
+
 void jsAutogame()
 {
 	QString srcPath(PHYSFS_getWriteDir());
@@ -879,15 +892,7 @@ void jsAutogame()
 		console("No file specified");
 		return;
 	}
-	QScriptEngine *engine = loadPlayerScript("scripts/" + basename.fileName(), selectedPlayer, DIFFICULTY_MEDIUM);
-	if (!engine)
-	{
-		console("Failed to load selected AI! Check your logs to see why.");
-		return;
-	}
-	console("Loaded the %s AI script for current player!", path.toUtf8().constData());
-	callFunction(engine, "eventGameInit", QScriptValueList());
-	callFunction(engine, "eventStartLevel", QScriptValueList());
+	jsAutogameSpecific("scripts/" + basename.fileName(), selectedPlayer);
 }
 
 void jsShowDebug()
