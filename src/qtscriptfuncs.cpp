@@ -1889,7 +1889,6 @@ static QScriptValue js_buildDroid(QScriptContext *context, QScriptEngine *engine
 			{
 				debug(LOG_SCRIPT, "deleting %s for player %d", getName(t), player);
 				deleteTemplateFromProduction(t, player, ModeQueue); // duplicate? done below?
-				SendDestroyTemplate(t, player);
 				break;
 			}
 		}
@@ -1898,7 +1897,6 @@ static QScriptValue js_buildDroid(QScriptContext *context, QScriptEngine *engine
 		psTemplate->multiPlayerID = generateNewObjectId();
 		psTemplate->psNext = apsDroidTemplates[player];
 		apsDroidTemplates[player] = psTemplate;
-		sendTemplate(player, psTemplate);
 		if (!structSetManufacture(psStruct, psTemplate, ModeQueue))
 		{
 			debug(LOG_ERROR, "Could not produce template %s in %s", getName(psTemplate), objInfo(psStruct));

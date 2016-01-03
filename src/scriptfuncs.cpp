@@ -10260,11 +10260,6 @@ bool scrAssembleWeaponTemplate(void)
 			// add template to player template list
 			pNewTemplate->psNext = apsDroidTemplates[player];
 			apsDroidTemplates[player] = pNewTemplate;		//apsTemplateList?
-
-			if (bMultiMessages)
-			{
-				sendTemplate(player, pNewTemplate);
-			}
 		}
 		else
 		{

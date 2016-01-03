@@ -31,7 +31,6 @@
 #include "lib/framework/strres.h"
 #include "map.h"
 
-#include "stats.h"									// for templates.
 #include "game.h"									// for loading maps
 #include "hci.h"
 
@@ -105,7 +104,6 @@ static SDWORD msgStackPos = -1;				//top element pointer
 // Local Prototypes
 
 static bool recvBeacon(NETQUEUE queue);
-static bool recvDestroyTemplate(NETQUEUE queue);
 static bool recvResearch(NETQUEUE queue);
 static bool sendAIMessage(char *pStr, UDWORD player, UDWORD to);
 
@@ -759,12 +757,6 @@ bool recvMessage(void)
 		processedMessage2 = true;
 		switch (type)
 		{
-		case GAME_TEMPLATE:					// new template
-			recvTemplate(queue);
-			break;
-		case GAME_TEMPLATEDEST:				// template destroy
-			recvDestroyTemplate(queue);
-			break;
 		case NET_PING:						// diagnostic ping msg.
 			recvPing(queue);
 			break;
@@ -1563,164 +1555,6 @@ bool recvTextMessageAI(NETQUEUE queue)
 
 	return true;
 }
-
-// ////////////////////////////////////////////////////////////////////////////
-// Templates
-
-static void NETtemplate(DROID_TEMPLATE *pTempl)
-{
-	NETqstring(pTempl->name);
-
-	for (unsigned i = 0; i < ARRAY_SIZE(pTempl->asParts); ++i)
-	{
-		NETuint8_t(&pTempl->asParts[i]);
-	}
-
-	NETint8_t(&pTempl->numWeaps);
-	NETbool(&pTempl->stored);	// other players don't need to know, but we need to keep the knowledge in the loop somehow...
-
-	for (int i = 0; i < DROID_MAXWEAPS; ++i)
-	{
-		NETuint8_t(&pTempl->asWeaps[i]);
-	}
-
-	NETenum(&pTempl->droidType);
-	NETuint32_t(&pTempl->multiPlayerID);
-}
-
-// send a newly created template to other players
-bool sendTemplate(uint32_t player, DROID_TEMPLATE *pTempl)
-{
-	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_TEMPLATE);
-	NETuint32_t(&player);
-	NETtemplate(pTempl);
-	return NETend();
-}
-
-// receive a template created by another player
-bool recvTemplate(NETQUEUE queue)
-{
-	uint32_t        player = 0;
-	DROID_TEMPLATE *psTempl;
-	DROID_TEMPLATE  t;
-
-	NETbeginDecode(queue, GAME_TEMPLATE);
-	NETuint32_t(&player);
-	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "invalid player size: %d", player);
-
-	NETtemplate(&t);
-	NETend();
-	if (!canGiveOrdersFor(queue.index, player))
-	{
-		return false;
-	}
-
-	t.prefab = false;
-	t.psNext = NULL;
-	t.ref = REF_TEMPLATE_START;
-
-	if (!researchedTemplate(&t, player, true, true))
-	{
-		debug(LOG_ERROR, "Invalid template received from player %d with name %s", (int)player, t.name.toUtf8().constData());
-		return false;
-	}
-	if (!intValidTemplate(&t, NULL, true, player))
-	{
-		debug(LOG_ERROR, "Illegal template received from player %d with name %s", (int)player, t.name.toUtf8().constData());
-		return false;
-	}
-
-	psTempl = IdToTemplate(t.multiPlayerID, player);
-
-	// Already exists
-	if (psTempl)
-	{
-		t.psNext = psTempl->psNext;
-		*psTempl = t;
-		debug(LOG_SYNC, "Updating MP template %d (stored=%s)", (int)t.multiPlayerID, t.stored ? "yes" : "no");
-	}
-	else
-	{
-		addTemplateBack(player, &t);  // Add to back of list, to avoid game state templates being in wrong order, which matters when saving games.
-		debug(LOG_SYNC, "Creating MP template %d (stored=%s)", (int)t.multiPlayerID, t.stored ? "yes" : "no");
-	}
-	if (!t.prefab && player == selectedPlayer)
-	{
-		storeTemplates();
-	}
-
-	return true;
-}
-
-
-// ////////////////////////////////////////////////////////////////////////////
-// inform others that you no longer have a template
-
-bool SendDestroyTemplate(DROID_TEMPLATE *t, uint8_t player)
-{
-	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_TEMPLATEDEST);
-	NETuint8_t(&player);
-	NETuint32_t(&t->multiPlayerID);
-	NETend();
-
-	return true;
-}
-
-// acknowledge another player no longer has a template
-static bool recvDestroyTemplate(NETQUEUE queue)
-{
-	uint8_t			player;
-	uint32_t		templateID;
-	DROID_TEMPLATE	*psTempl, *psTempPrev = NULL;
-
-	NETbeginDecode(queue, GAME_TEMPLATEDEST);
-	NETuint8_t(&player);
-	NETuint32_t(&templateID);
-	NETend();
-	if (!canGiveOrdersFor(queue.index, player))
-	{
-		return false;
-	}
-
-	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "invalid player size: %d", player);
-
-	// Find the template in the list
-	for (psTempl = apsDroidTemplates[player]; psTempl; psTempl = psTempl->psNext)
-	{
-		if (psTempl->multiPlayerID == templateID)
-		{
-			break;
-		}
-
-		psTempPrev = psTempl;
-	}
-
-	// If we found it then delete it
-	if (psTempl)
-	{
-		// Update the linked list
-		if (psTempPrev)
-		{
-			psTempPrev->psNext = psTempl->psNext;
-		}
-		else
-		{
-			apsDroidTemplates[player] = psTempl->psNext;
-		}
-
-		// Delete the template.
-		//before deleting the template, need to make sure not being used in production
-		deleteTemplateFromProduction(psTempl, player, ModeImmediate);
-		delete psTempl;
-	}
-	else
-	{
-		debug(LOG_ERROR, "Would delete missing template %d", templateID);
-	}
-
-	return true;
-}
-
 
 // ////////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////////
