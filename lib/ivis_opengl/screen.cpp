@@ -44,6 +44,10 @@
 #include <vector>
 #include <algorithm>
 
+#include <iostream>
+#include <string>
+#include <cstring>
+
 /* global used to indicate preferred internal OpenGL format */
 int wz_texture_compression = 0;
 
@@ -216,6 +220,38 @@ bool screen_IsVBOAvailable()
 
 	return GLEW_VERSION_1_5 || GLEW_ARB_vertex_buffer_object;
 }
+
+
+// screen_SetRandomBackdrop
+//  display a random backdrop from files in dirname starting with basename
+//  dirname has a trailing slash
+
+void screen_SetRandomBackdrop(const char *dirname, const char *basename)
+{
+	std::vector<std::string> names;  // vector to hold the strings we want
+	char **rc = PHYSFS_enumerateFiles(dirname); // all the files in dirname
+
+	// walk thru the files in our dir,
+	//  adding the ones that start with basename to our vector of strings
+	size_t len = strlen(basename);
+	for (char **i = rc; *i != NULL; i++)
+	{
+		// does our filename start with basename?
+		if (!strncmp(*i, basename, len))
+		{
+			names.push_back(*i);
+		}
+	}
+	PHYSFS_freeList(rc);
+
+	// pick a random name from our vector of names
+	int ran = rand() % names.size();
+	std::string full_path = std::string(dirname) + names[ran];
+
+	screen_SetBackDropFromFile(full_path.c_str());
+
+}
+
 
 void screen_SetBackDropFromFile(const char *filename)
 {
@@ -457,7 +493,8 @@ void screenDoDumpToDiskIfRequired(void)
 		image.bmp = (unsigned char *)malloc(channelsPerPixel * image.width * image.height);
 		if (image.bmp == NULL)
 		{
-			image.width = 0; image.height = 0;
+			image.width = 0;
+			image.height = 0;
 			debug(LOG_ERROR, "Couldn't allocate memory");
 			return;
 		}

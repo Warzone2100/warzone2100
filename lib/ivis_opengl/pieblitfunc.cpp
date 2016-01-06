@@ -41,6 +41,7 @@
 #include "piematrix.h"
 #include "screen.h"
 
+
 /***************************************************************************/
 /*
  *	Local Variables
@@ -372,34 +373,36 @@ void pie_RenderRadar(int x, int y, int width, int height)
 
 	glColor4ubv(WZCOL_WHITE.vector);
 	glBegin(GL_TRIANGLE_STRIP);
-	glTexCoord2f(0, 0);			glVertex2f(x, y);
-	glTexCoord2f(radarTexX, 0);		glVertex2f(x + width, y);
-	glTexCoord2f(0, radarTexY);		glVertex2f(x, y + height);
-	glTexCoord2f(radarTexX, radarTexY);	glVertex2f(x + width, y + height);
+	glTexCoord2f(0, 0);
+	glVertex2f(x, y);
+	glTexCoord2f(radarTexX, 0);
+	glVertex2f(x + width, y);
+	glTexCoord2f(0, radarTexY);
+	glVertex2f(x, y + height);
+	glTexCoord2f(radarTexX, radarTexY);
+	glVertex2f(x + width, y + height);
 	glEnd();
 }
 
+
+// pie_LoadBackDrop() - load and display a random backdrop picture
+
 void pie_LoadBackDrop(SCREENTYPE screenType)
 {
-	char backd[128];
-
-	//randomly load in a backdrop piccy.
-	srand((unsigned)time(NULL) + 17);   // Use offset since time alone doesn't work very well
+	// Use offset since time alone doesn't work very well
+	srand((unsigned)time(NULL) + 17);
 
 	switch (screenType)
 	{
 	case SCREEN_RANDOMBDROP:
-		snprintf(backd, sizeof(backd), "texpages/bdrops/backdrop%i.png", rand() % NUM_BACKDROPS); // Range: 0 to (NUM_BACKDROPS-1)
+		screen_SetRandomBackdrop("texpages/bdrops/", "backdrop");
 		break;
 	case SCREEN_MISSIONEND:
-		sstrcpy(backd, "texpages/bdrops/missionend.png");
+		screen_SetRandomBackdrop("textpages/bdrops/", "missionend");
 		break;
-
 	case SCREEN_CREDITS:
 	default:
-		sstrcpy(backd, "texpages/bdrops/credits.png");
+		screen_SetRandomBackdrop("texpages/bdrops/", "credits");
 		break;
 	}
-
-	screen_SetBackDropFromFile(backd);
 }

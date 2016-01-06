@@ -45,6 +45,8 @@
 extern void screenSetTextColour(UBYTE red, UBYTE green, UBYTE blue);
 
 /* backDrop */
+void screen_SetRandomBackdrop(const char *dirname,
+                              const char *basename);
 extern void screen_SetBackDropFromFile(const char *filename);
 extern void screen_StopBackDrop(void);
 extern void screen_RestartBackDrop(void);
