@@ -1027,7 +1027,7 @@ static bool upnp_add_redirect(int port)
 	                        port_str, port_str, lanaddr, "Warzone 2100", "TCP", 0, "0");	// "0" = lease time unlimited
 	if (r != UPNPCOMMAND_SUCCESS)
 	{
-		ssprintf(buf, _("Could not open require port (%s) on  (%s)"), port_str, lanaddr);
+		ssprintf(buf, _("Could not open required port (%s) on  (%s)"), port_str, lanaddr);
 		debug(LOG_NET, "%s", buf);
 		addConsoleMessage(buf, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
 		// beware of writing a line too long, it screws up console line count. \n is safe for line split
@@ -2552,7 +2552,7 @@ static void NETallowJoining(void)
 					SocketSet_AddSocket(socket_set, connected_bsocket[index]);
 					NETmoveQueue(NETnetTmpQueue(i), NETnetQueue(index));
 
-					// Copy players ip Address.
+					// Copy player's IP address.
 					sstrcpy(NetPlay.players[index].IPtextAddress, getSocketTextAddress(connected_bsocket[index]));
 
 					if (onBanList(NetPlay.players[index].IPtextAddress))

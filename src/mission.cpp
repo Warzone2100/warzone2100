@@ -1716,7 +1716,6 @@ void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, bool goingHome)
 	DROID		*psDroid, *psNext;
 	DROID		**ppCurrentList;
 	UDWORD		droidX, droidY;
-	UDWORD		iX, iY;
 	DROID_GROUP	*psGroup;
 
 	ASSERT_OR_RETURN(, psTransporter != NULL, "Invalid transporter");
@@ -1804,6 +1803,7 @@ void unloadTransporter(DROID *psTransporter, UDWORD x, UDWORD y, bool goingHome)
 			psTransporter->selected = false;
 
 			/* Send transporter offworld */
+			UDWORD iX = 0, iY = 0;
 			missionGetTransporterExit(psTransporter->player, &iX, &iY);
 			orderDroidLoc(psTransporter, DORDER_TRANSPORTRETURN, iX, iY, ModeImmediate);
 
