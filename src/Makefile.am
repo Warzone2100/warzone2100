@@ -331,7 +331,7 @@ endif
 # Here, we need to bring in the "plugins" for Qt5 and they MUST come before the other QT libs.
 # FIXME: At a future date, we should check if they want static builds, but, since we only support those for now...
 if MINGW32
-SQT5_LIBS = -lQt5PlatformSupport -lqwindows
+SQT5_LIBS =  -L$(QT5_PLUGIN)/plugins/platforms -lQt5PlatformSupport -lqwindows
 else
 SQT5_LIBS =
 endif
