@@ -1461,10 +1461,17 @@ static void NETtemplate(DROID_TEMPLATE *pTempl)
 // send a newly created template to other players
 bool sendTemplate(uint32_t player, DROID_TEMPLATE *pTempl)
 {
-	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_TEMPLATE);
-	NETuint32_t(&player);
-	NETtemplate(pTempl);
-	return NETend();
+	if(researchedTemplate(pTempl, player, true))
+	{
+		NETbeginEncode(NETgameQueue(selectedPlayer), GAME_TEMPLATE);
+		NETuint32_t(&player);
+		NETtemplate(pTempl);
+		return NETend();
+	}
+	else
+	{
+		return false;
+	}
 }
 
 // receive a template created by another player

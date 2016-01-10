@@ -114,6 +114,20 @@ bool researchedTemplate(DROID_TEMPLATE *psCurr, int player, bool allowRedundant)
 	return researchedEverything;
 }
 
+// Sends All templates that have not been previously sent but meet research requirements. ie. Valid Templates only.
+void sendResearchedTemplates(unsigned int player)
+{
+	// Iterate through the local template list.
+	for (DROID_TEMPLATE *psCurr = apsDroidTemplates[player]; psCurr != NULL; psCurr = psCurr->psNext)
+	{
+		// Check that the template has been researched and not previously sent.
+		if (bMultiPlayer && researchedTemplate(psCurr, player, true) && psCurr->researched)
+		{
+			psCurr->researched = true;
+			sendTemplate(player, psCurr);
+		}
+	}
+}
 static char const *templatesFilename()
 {
 	return bMultiPlayer ? "templates.ini" : "templatesCampaign.ini";
@@ -299,6 +313,7 @@ DROID_TEMPLATE::DROID_TEMPLATE()  // This constructor replaces a memset in scrAs
 	, psNext(NULL)
 	, prefab(false)
 	, stored(false)
+	, researched(false) // This flag defaults to false because it needs to be sent to other players at some point. No local functionality (yet)
 {
 	aName[0] = '\0';
 	std::fill_n(asParts, DROID_MAXCOMP, 0);
