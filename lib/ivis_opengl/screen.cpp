@@ -245,11 +245,17 @@ void screen_SetRandomBackdrop(const char *dirname, const char *basename)
 	PHYSFS_freeList(rc);
 
 	// pick a random name from our vector of names
-	int ran = rand() % names.size();
-	std::string full_path = std::string(dirname) + names[ran];
+	if (!names.empty())
+	{
+		int ran = rand() % names.size();
+		std::string full_path = std::string(dirname) + names[ran];
 
-	screen_SetBackDropFromFile(full_path.c_str());
-
+		screen_SetBackDropFromFile(full_path.c_str());
+	}
+	else
+	{
+		debug(LOG_ERROR, "Can't find a valid backdrop for dirname %s, basename %s", dirname, basename);
+	}
 }
 
 
