@@ -121,7 +121,7 @@ void sendResearchedTemplates(unsigned int player)
 	for (DROID_TEMPLATE *psCurr = apsDroidTemplates[player]; psCurr != NULL; psCurr = psCurr->psNext)
 	{
 		// Check that the template has been researched and not previously sent.
-		if (bMultiPlayer && researchedTemplate(psCurr, player, true) && !psCurr->researched)
+		if (bMultiPlayer && researchedTemplate(psCurr, player, true) && psCurr->researched)
 		{
 			psCurr->researched = true;
 			sendTemplate(player, psCurr);
