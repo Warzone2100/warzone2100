@@ -1178,11 +1178,6 @@ void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE
 		{
 			addConsoleMessage(_("Research Completed"), LEFT_JUSTIFY, SYSTEM_MESSAGE);
 		}
-		// Send an updated template list to all players, we need this to prevent desyncs.
-		if (bMultiPlayer && player == selectedPlayer)
-		{
-			sendResearchedTemplates(player);
-		}
 	}
 
 	if (psResearchFacility)

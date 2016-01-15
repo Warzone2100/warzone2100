@@ -22,7 +22,6 @@ bool templateIsIDF(DROID_TEMPLATE *psTemplate);
 
 /// Fills the list with Templates that can be manufactured in the Factory - based on size
 void fillTemplateList(std::vector<DROID_TEMPLATE *> &pList, STRUCTURE *psFactory);
-void sendResearchedTemplates(unsigned int player);
 
 /* gets a template from its name - relies on the name being unique */
 DROID_TEMPLATE *getTemplateFromUniqueName(const char *pName, unsigned int player);

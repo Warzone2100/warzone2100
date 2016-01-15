@@ -120,7 +120,6 @@ struct DROID_TEMPLATE : public BASE_STATS
 	bool		prefab;                     ///< Not player designed, not saved, never delete or change
 	bool		stored;                     ///< Stored template
 	bool		enabled;                    ///< Has been enabled
-	bool        researched;                 ///< Has been fully researched and sent to other players.
 };
 
 class DROID_GROUP;
