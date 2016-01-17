@@ -198,7 +198,6 @@ bool initTemplates()
 		}
 		design.enabled = allowDesign;
 		addTemplateToList(&design, &apsDroidTemplates[selectedPlayer]);
-		sendTemplate(selectedPlayer, &design);
 		localTemplates.push_back(design);
 		ini.endGroup();
 	}
