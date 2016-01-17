@@ -336,6 +336,7 @@ void recvStructureInfo(NETQUEUE queue)
 			NETuint8_t(&pT->asWeaps[i]);
 		}
 		pT->droidType = (DROID_TYPE)droidType;
+		pT = addTemplate(player, pT);
 	}
 	NETend();
 
@@ -356,12 +357,12 @@ void recvStructureInfo(NETQUEUE queue)
 
 	CHECK_STRUCTURE(psStruct);
 
-	if (!researchedTemplate(pT, player, true, true))
+	if (structureInfo == STRUCTUREINFO_MANUFACTURE && !researchedTemplate(pT, player, true, true))
 	{
 		debug(LOG_ERROR, "Invalid droid received from player %d with name %s", (int)player, pT->name.toUtf8().constData());
 		return;
 	}
-	if (!intValidTemplate(pT, NULL, true, player))
+	if (structureInfo == STRUCTUREINFO_MANUFACTURE && !intValidTemplate(pT, NULL, true, player))
 	{
 		debug(LOG_ERROR, "Illegal droid received from player %d with name %s", (int)player, pT->name.toUtf8().constData());
 		return;

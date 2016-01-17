@@ -222,7 +222,7 @@ bool initTemplates()
 			continue; // next!
 		}
 		design.enabled = allowDesign;
-		addTemplateToList(&design, &apsDroidTemplates[selectedPlayer]);
+		addTemplate(selectedPlayer, &design);
 		localTemplates.push_back(design);
 		ini.endGroup();
 	}
@@ -336,7 +336,7 @@ bool loadDroidTemplates(const char *filename)
 			if (NetPlay.players[i].allocated && available)
 			{
 				design.prefab = false;
-				addTemplateToList(&design, &apsDroidTemplates[i]);
+				addTemplate(i, &design);
 
 				// This sets up the UI templates for display purposes ONLY--we still only use apsDroidTemplates for making them.
 				// FIXME: Why are we doing this here, and not on demand ?
@@ -360,7 +360,7 @@ bool loadDroidTemplates(const char *filename)
 			else if (!NetPlay.players[i].allocated)	// AI template
 			{
 				design.prefab = true;  // prefabricated templates referenced from VLOs
-				addTemplateToList(&design, &apsDroidTemplates[i]);
+				addTemplate(i, &design);
 			}
 		}
 		debug(LOG_NEVER, "Droid template found, Name: %s, MP ID: %d, ref: %u, ID: %s, prefab: %s, type:%d (loading)",

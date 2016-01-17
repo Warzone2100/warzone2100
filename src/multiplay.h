@@ -184,9 +184,7 @@ extern bool joinGame(const char *host, uint32_t port);
 extern void	playerResponding(void);
 extern bool multiGameInit(void);
 extern bool multiGameShutdown(void);
-extern bool addTemplate(UDWORD	player, DROID_TEMPLATE *psNew);
-extern bool addTemplateToList(DROID_TEMPLATE *psNew, DROID_TEMPLATE **ppList);
-void addTemplateBack(unsigned player, DROID_TEMPLATE *psNew);
+DROID_TEMPLATE *addTemplate(UDWORD player, DROID_TEMPLATE *psNew);
 
 // syncing.
 extern bool sendScoreCheck(void);							//score check only(frontend)

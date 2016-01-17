@@ -329,31 +329,21 @@ bool multiShutdown(void)
 
 // ////////////////////////////////////////////////////////////////////////////
 // copy templates from one player to another.
-bool addTemplateToList(DROID_TEMPLATE *psNew, DROID_TEMPLATE **ppList)
+static DROID_TEMPLATE *addTemplateToList(DROID_TEMPLATE *psNew, DROID_TEMPLATE **ppList)
 {
 	DROID_TEMPLATE *psTempl = new DROID_TEMPLATE(*psNew);
 
 	psTempl->psNext = *ppList;
 	*ppList = psTempl;
 
-	return true;
+	return psTempl;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
 // copy templates from one player to another.
-bool addTemplate(UDWORD player, DROID_TEMPLATE *psNew)
+DROID_TEMPLATE *addTemplate(UDWORD player, DROID_TEMPLATE *psNew)
 {
 	return addTemplateToList(psNew, &apsDroidTemplates[player]);
-}
-
-void addTemplateBack(unsigned player, DROID_TEMPLATE *psNew)
-{
-	DROID_TEMPLATE **ppList = &apsDroidTemplates[player];
-	while (*ppList != NULL)
-	{
-		ppList = &(*ppList)->psNext;
-	}
-	addTemplateToList(psNew, ppList);
 }
 
 // ////////////////////////////////////////////////////////////////////////////

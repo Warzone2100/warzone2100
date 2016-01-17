@@ -5053,21 +5053,11 @@ bool scrAddTemplate(void)
 
 	ASSERT_OR_RETURN(false, psTemplate != NULL, "Invalid template pointer");
 
-	if (addTemplate(player, psTemplate))
+	addTemplate(player, psTemplate);
+	scrFunctionResult.v.bval = true;
+	if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
 	{
-		scrFunctionResult.v.bval = true;
-		if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
-		{
-			return false;
-		}
-	}
-	else
-	{
-		scrFunctionResult.v.bval = false;
-		if (!stackPushResult(VAL_BOOL, &scrFunctionResult))
-		{
-			return false;
-		}
+		return false;
 	}
 
 	return true;
