@@ -120,6 +120,7 @@ struct DROID_TEMPLATE : public BASE_STATS
 	bool		prefab;                     ///< Not player designed, not saved, never delete or change
 	bool		stored;                     ///< Stored template
 	bool		enabled;                    ///< Has been enabled
+	bool		isSynced;					///< if the template has been synced
 };
 
 class DROID_GROUP;

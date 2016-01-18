@@ -135,6 +135,7 @@ bool initTemplates()
 		design.pName = NULL;
 		design.droidType = (DROID_TYPE)ini.value("droidType").toInt();
 		design.multiPlayerID = generateNewObjectId();
+		design.isSynced = false;
 		design.asParts[COMP_BODY] = getCompFromName(COMP_BODY, ini.value("body", QString("ZNULLBODY")).toString().toUtf8().constData());
 		design.asParts[COMP_BRAIN] = getCompFromName(COMP_BRAIN, ini.value("brain", QString("ZNULLBRAIN")).toString().toUtf8().constData());
 		design.asParts[COMP_PROPULSION] = getCompFromName(COMP_PROPULSION, ini.value("propulsion", QString("ZNULLPROP")).toString().toUtf8().constData());
@@ -298,6 +299,7 @@ DROID_TEMPLATE::DROID_TEMPLATE()  // This constructor replaces a memset in scrAs
 	, psNext(NULL)
 	, prefab(false)
 	, stored(false)
+	, isSynced(false)
 {
 	aName[0] = '\0';
 	std::fill_n(asParts, DROID_MAXCOMP, 0);
@@ -319,6 +321,7 @@ DROID_TEMPLATE::DROID_TEMPLATE(LineView line)
 	, prefab(false)
 	, stored(false)
 	, enabled(true)
+	, isSynced(false)
 	  // Ignored columns: 6 - but used later to decide whether the template is for human players.
 {
 	std::string name = line.s(0);
@@ -659,6 +662,11 @@ void fillTemplateList(std::vector<DROID_TEMPLATE *> &pList, STRUCTURE *psFactory
 		if (((asBodyStats + psCurr->asParts[COMP_BODY])->size <= iCapacity))
 		{
 			pList.push_back(psCurr);
+			if (!psCurr->prefab && !psCurr->isSynced)
+			{
+				psCurr->isSynced = true;
+				sendTemplate(player, psCurr);
+			}
 		}
 		else if (bMultiPlayer && (iCapacity == SIZE_HEAVY))
 		{
@@ -666,6 +674,11 @@ void fillTemplateList(std::vector<DROID_TEMPLATE *> &pList, STRUCTURE *psFactory
 			if ((asBodyStats + psCurr->asParts[COMP_BODY])->size == SIZE_SUPER_HEAVY)
 			{
 				pList.push_back(psCurr);
+				if (!psCurr->prefab && !psCurr->isSynced)
+				{
+					psCurr->isSynced = true;
+					sendTemplate(player, psCurr);
+				}
 			}
 		}
 	}
