@@ -331,7 +331,7 @@ void recvStructureInfo(NETQUEUE queue)
 		NETuint8_t(&pT->asParts[COMP_SENSOR]);
 		NETuint8_t(&pT->asParts[COMP_CONSTRUCT]);
 		NETint8_t(&pT->numWeaps);
-		ASSERT_OR_RETURN(false, pT->numWeaps >= 0 && pT->numWeaps <= ARRAY_SIZE(pT->asWeaps));
+		ASSERT_OR_RETURN(false, pT->numWeaps >= 0 && pT->numWeaps <= ARRAY_SIZE(pT->asWeaps), "Bad numWeaps %d", pT->numWeaps);
 		for (int i = 0; i < pT->numWeaps; i++)
 		{
 			NETuint8_t(&pT->asWeaps[i]);
