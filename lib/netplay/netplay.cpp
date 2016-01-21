@@ -287,12 +287,24 @@ static size_t NET_fillBuffer(Socket **pSocket, SocketSet *socket_set, uint8_t *b
 	return 0;
 }
 
+static int playersPerTeam()
+{
+	for (int v = game.maxPlayers - 1; v > 1; --v)
+	{
+		if (game.maxPlayers%v == 0)
+		{
+			return v;
+		}
+	}
+	return 1;
+}
+
 void NET_InitPlayer(int i, bool initPosition)
 {
 	NetPlay.players[i].allocated = false;
 	NetPlay.players[i].autoGame = false;
 	NetPlay.players[i].heartattacktime = 0;
-	NetPlay.players[i].heartbeat = true;		// we always start with a hearbeat
+	NetPlay.players[i].heartbeat = true;  // we always start with a heartbeat
 	NetPlay.players[i].kick = false;
 	if (ingame.localJoiningInProgress)
 	{
@@ -304,7 +316,7 @@ void NET_InitPlayer(int i, bool initPosition)
 		NetPlay.players[i].colour = i;
 		setPlayerColour(i, i);  // PlayerColour[] in component.c must match this! Why is this in more than one place??!
 		NetPlay.players[i].position = i;
-		NetPlay.players[i].team = i;
+		NetPlay.players[i].team = i/playersPerTeam();
 	}
 	NetPlay.players[i].ready = false;
 	NetPlay.players[i].needFile = false;

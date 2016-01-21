@@ -2143,8 +2143,8 @@ static bool changePosition(UBYTE player, UBYTE position)
 		{
 			debug(LOG_NET, "Swapping positions between players %d(%d) and %d(%d)",
 			      player, NetPlay.players[player].position, i, NetPlay.players[i].position);
-			NetPlay.players[i].position = NetPlay.players[player].position;
-			NetPlay.players[player].position = position;
+			std::swap(NetPlay.players[i].position, NetPlay.players[player].position);
+			std::swap(NetPlay.players[i].team, NetPlay.players[player].team);
 			NETBroadcastTwoPlayerInfo(player, i);
 			netPlayersUpdated = true;
 			return true;
