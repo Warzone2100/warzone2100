@@ -919,8 +919,10 @@ bool joinGame(const char *host, uint32_t port)
 		changeTitleMode(GAMEFIND);
 
 		// Shows the lobby error.
-		addGames();
 		addConsoleBox();
+		addGames();
+		updateConsoleMessages();
+		displayConsoleMessages();
 		return false;
 	}
 	ingame.localJoiningInProgress	= true;
@@ -1125,6 +1127,14 @@ static void addGames(void)
 
 		widgAddButton(psWScreen, &sButInit);
 	}
+	if (strlen(NetPlay.MOTD))
+	{
+		permitNewConsoleMessages(true);
+		addConsoleMessage(NetPlay.MOTD, DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+	}
+	setConsolePermanence(false, false);
+	updateConsoleMessages();
+	displayConsoleMessages();
 }
 
 static void removeGames(void)
@@ -1149,6 +1159,7 @@ void runGameFind(void)
 	if (gameTime - lastupdate > 6000 && !EnablePasswordPrompt)
 	{
 		lastupdate = gameTime;
+		addConsoleBox();
 		if (safeSearch)
 		{
 			if (!NETfindGame())						// find games synchronously
@@ -1157,7 +1168,6 @@ void runGameFind(void)
 			}
 		}
 		addGames();									//redraw list
-		addConsoleBox();
 	}
 
 	WidgetTriggers const &triggers = widgRunScreen(psWScreen);
@@ -1180,12 +1190,13 @@ void runGameFind(void)
 			widgSetButtonState(psWScreen, MULTIOP_FILTER_TOGGLE, 0);
 		}
 		ingame.localOptionsReceived = true;
+		addConsoleBox();
 		if (!NETfindGame())							// find games synchronously
 		{
 			pie_LoadBackDrop(SCREEN_RANDOMBDROP);
 		}
+		addConsoleMessage(_("Refreshing..."), DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
 		addGames();									//redraw list.
-		addConsoleBox();
 	}
 	if (id == CON_PASSWORD)
 	{
@@ -1277,12 +1288,13 @@ void startGameFind(void)
 		widgHide(psWScreen, MULTIOP_FILTER_TOGGLE);
 	}
 
+	addConsoleBox();
 	if (!NETfindGame())
 	{
 		pie_LoadBackDrop(SCREEN_RANDOMBDROP);
 	}
+
 	addGames();	// now add games.
-	addConsoleBox();
 	displayConsoleMessages();
 
 	// Password stuff. Hidden by default.
@@ -1344,8 +1356,8 @@ static void hidePasswordForm(void)
 			widgReveal(psWScreen, MULTIOP_FILTER_TOGGLE);
 		}
 	}
-	addGames();
 	addConsoleBox();
+	addGames();
 }
 
 static void showPasswordForm(void)
@@ -2665,7 +2677,7 @@ static void addConsoleBox(void)
 	setConsolePermanence(true, true);
 	setConsoleLineInfo(3);											// use x lines on chat window
 
-	addConsoleMessage(_("Connecting to the lobby server..."), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+	addConsoleMessage(_("Connecting to the lobby server..."), DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
 	displayConsoleMessages();
 	return;
 }

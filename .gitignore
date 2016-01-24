@@ -132,6 +132,7 @@ Makefile.in
 /po/remove-potcdate.sed
 /po/stamp-po
 /po/warzone2100.pot
+/po/custom/fromJson.txt
 /compile
 /test-driver
 
