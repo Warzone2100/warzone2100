@@ -185,7 +185,7 @@ bool iV_loadImage_PNG(const char *fileName, iV_Image *image)
 
 static void internal_saveImage_PNG(const char *fileName, const iV_Image *image, int color_type)
 {
-	static unsigned char **scanlines;
+	unsigned char **volatile scanlines = NULL;  // Must be volatile to reliably preserve value if modified between setjmp/longjmp.
 	png_infop info_ptr = NULL;
 	png_structp png_ptr = NULL;
 	PHYSFS_file *fileHandle;
