@@ -1,15 +1,15 @@
-# Copyright (c) 2008 Rosetta Contributors and Canonical Ltd 2008
+﻿# Copyright (c) 2008 Rosetta Contributors and Canonical Ltd 2008
 # This file is distributed under the same license as the warzone2100 package.
-# 
+#
 # Jen Ockwell <jenfraggleubuntu@googlemail.com>, 2008.
 msgid ""
 msgstr ""
 "Project-Id-Version: Warzone 2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2014-12-28 21:38+0100\n"
+"POT-Creation-Date: 2015-12-2 21:38+0100\n"
 "PO-Revision-Date: 2023-11-27 20:18+0100\n"
-"Last-Translator: Kálmán „KAMI” Szalai <kami911@gmail.com>\n"
-"Language-Team: Magyar (Hungary) Mészáros Tamás <tamasm78@invitel.hu>\n"
+"Last-Translator: Magyar (Hungary) Mészáros Tamás <tamasm78@invitel.hu>\n"
+"Language-Team: Kálmán „KAMI” Szalai <kami911@gmail.com>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -12511,7 +12511,7 @@ msgstr "Látogass el a hivatalos oldalra: http://wz2100.net/"
 
 #: src/frontend.cpp:126
 msgid "Come visit the forums and all Warzone 2100 news! Click this link."
-msgstr ""
+msgstr "Látogasd meg a fórumokat és a Warzone 2100 hírket. Kattints erre a linkre."
 
 #: src/frontend.cpp:127
 #, fuzzy
@@ -12520,11 +12520,11 @@ msgstr "Látogass el a hivatalos oldalra: http://wz2100.net/"
 
 #: src/frontend.cpp:128
 msgid "Help support the project with our server costs, Click this link."
-msgstr ""
+msgstr "Segítsd támogatni a projektet a mi szerver költségeinket. Kattints erre a linkre."
 
 #: src/frontend.cpp:129
 msgid "Check for a newer version"
-msgstr ""
+msgstr "Betöltöd az újabb verziót"
 
 #: src/frontend.cpp:257
 msgid "Fast Play"
@@ -14231,7 +14231,7 @@ msgstr "Nem talál játékokat a verziódhoz."
 
 #: src/multiint.cpp:1046
 msgid "There appears to be a game update available!"
-msgstr ""
+msgstr "Mutatod, hogy elérhető e játék frissítés!"
 
 #: src/multiint.cpp:1050
 #, fuzzy
@@ -14651,7 +14651,7 @@ msgstr "Rendszer üzenet:"
 
 #: src/multijoin.cpp:479
 msgid "There is an update to the game, please visit http://wz2100.net to download new version."
-msgstr ""
+msgstr "Ott elérhető játék frissítés, kérlek látogasd meg a http://wz2100.net oldalt a letölthető új verziókért."
 
 #: src/multilimit.cpp:183
 msgid "Apply Defaults and Return To Previous Screen"
