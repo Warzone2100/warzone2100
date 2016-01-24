@@ -5,6 +5,7 @@
    * Change: Better placement of IP dialog (commit:ea673ca4e32edc41097389948aec0f7bd3883567, ticket:4159)
    * Change: Remove hack to support some old systems that breaks with GLEW 1.12 (commit:6a6c611ca3d9d6745e5343f2ee041892772ccae6, ticket:4300)
    * Change/fix: Change --savegame command line option into two new options that actually work (commit:6f2f5d91c88005ef632f13af2e8d493aeea24d35)
+   * Change: Config dir is now named after the release's version number inside the main 3.1 directory. (commit:a74a91029e0940e4f29e60f44d35be701069d089)
    * Fix: Crash in campaign (commit:f661a7b213b2d7db8053bde8c21e5ab42374f652, ticket:4251)
    * Fix: Update included miniUPNP to version 1.219 (commit:512a10d453c52b424f948c78d732f6d1fe627fb8, ticket:4321)
    * Fix: 'kill' command for SP games (commit:d44708e1093a457fb110839c029d02ea69623715)
@@ -12,6 +13,12 @@
    * Fix: Fix assert failure when Nexus AI tries to build a sensor tower (commit:a0b203bc4f570931470f6ff0d6c38d5fcd905ee6)
    * Fix: Check if received templates are valid when received (commit:260a88ea12bd26cf2c12a68bb338af591f9ba59f)
    * Fix: Many potential issues found with static analysis tools closed
+
+ * Translations:
+   * Update: Chinese (ticket:4329, commit:23a399996e8205f35f0430ae4e4de7702a2e2a65)
+   * Update: German (ticket:4272, commit:e30fa2d5c06f8f1c1904a26ded5c9ffdaf5137b1)
+   * Update: French (ticket:42951, commit:75541d50fb404e1db8a19c5cd97b0e57e7701d93)
+   * Update: Hungarian (ticket:4318, commit:66fec955924cf990614d3b78c0a86df45e8df94a)
 
 2014-12-30: Version 3.1.2
  * General:
