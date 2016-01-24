@@ -508,6 +508,7 @@ static void initialize_ConfigDir(void)
 		sstrcat(writepath, WZ_WRITEDIR);
 		sstrcat(writepath, PHYSFS_getDirSeparator());
 		sstrcat(writepath, WZ_GAME_VERSION);
+		sstrcat(writepath, PHYSFS_getDirSeparator());
 		if (!PHYSFS_setWriteDir(writepath))
 		{
 			debug(LOG_FATAL, "Error setting write directory to \"%s\": %s", writepath, PHYSFS_getLastError());
