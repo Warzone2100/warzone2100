@@ -2943,7 +2943,7 @@ bool NETfindGame(void)
 	SocketSet_DelSocket(socket_set, tcp_socket);		// mark it invalid (we are done with it)
 	socketClose(tcp_socket);
 	tcp_socket = NULL;
-	addConsoleMessage(NetPlay.MOTD, DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+
 	return true;
 }
 

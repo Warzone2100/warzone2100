@@ -636,7 +636,7 @@ void	displayConsoleMessages(void)
 	if (bTextBoxActive)
 	{
 		for (psMessage = consoleMessages, exceed = 0;
-		     psMessage && consoleVisibleLines > 0 && exceed < 4; // ho ho ho!!!
+		     psMessage && consoleVisibleLines > 0 && exceed < 4;
 		     psMessage = psMessage->psNext)
 		{
 			if (iV_GetTextWidth(psMessage->text) > mainConsole.width)
@@ -666,18 +666,16 @@ void	displayConsoleMessages(void)
 	MesY = mainConsole.topY + drop;
 
 	for (psMessage = consoleMessages, numProcessed = 0;
-	     psMessage && numProcessed < consoleVisibleLines && MesY < pie_GetVideoBufferHeight() - linePitch;
-	     psMessage = psMessage->psNext)
+	     psMessage && (numProcessed < consoleVisibleLines);
+		 psMessage = psMessage->psNext)
 	{
-
 		/* Set text color depending on message type */
 		setConsoleTextColor(psMessage->player);
 
 		/* Draw the text string */
 		MesY = iV_DrawFormattedText(psMessage->text, mainConsole.topX, MesY,
 		                            mainConsole.width, psMessage->JustifyType);
-
-		/* Move on */
+		debug(LOG_CONSOLE, " Displaying message #%d(of %d):[%s], size %d", numProcessed, consoleVisibleLines, psMessage->text, MesY);
 		++numProcessed;
 	}
 }
