@@ -514,6 +514,7 @@ static void initialize_ConfigDir(void)
 			debug(LOG_FATAL, "Error setting write directory to \"%s\": %s", writepath, PHYSFS_getLastError());
 			exit(1);
 		}
+		sstrcpy(tmpstr, writepath);
 	}
 	else
 	{
