@@ -172,8 +172,8 @@ unsigned NET_PlayerConnectionStatus[CONNECTIONSTATUS_NORMAL][MAX_PLAYERS];
  ************************************************************************************
 **/
 static char const *versionString = version_getVersionString();
-static int NETCODE_VERSION_MAJOR = 0x20A0;
-static int NETCODE_VERSION_MINOR = 0x27;
+static int NETCODE_VERSION_MAJOR = 0x2000;
+static int NETCODE_VERSION_MINOR = 0;
 
 bool NETisCorrectVersion(uint32_t game_version_major, uint32_t game_version_minor)
 {
