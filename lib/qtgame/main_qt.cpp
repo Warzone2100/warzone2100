@@ -25,6 +25,7 @@
 
 #include "lib/framework/frame.h"
 #include "lib/ivis_opengl/pieclip.h"
+#include "lib/ivis_opengl/screen.h"
 #include "wzapp_qt.h"
 
 // used in crash reports & version info
@@ -44,11 +45,13 @@ bool wzMain(int &argc, char **argv)
 	debug(LOG_MAIN, "Qt initialization");
 
 	appPtr = new QApplication(argc, argv);
+	return true;
+}
 
 	bool wzMainScreenSetup(int antialiasing, bool fullscreen, bool vsync)
 	{
 		debug(LOG_MAIN, "Qt initialization");
-		QGL::setPreferredPaintEngine(QPaintEngine::OpenGL); // Workaround for incorrect text rendering on nany platforms.
+		//QGL::setPreferredPaintEngine(QPaintEngine::OpenGL); // Workaround for incorrect text rendering on many platforms, doesn't exist in Qt5…
 
 		// Setting up OpenGL
 		QGLFormat format;
@@ -101,7 +104,7 @@ bool wzMain(int &argc, char **argv)
 		return true;
 	}
 
-	void wzMainScreenSetup()
+	void wzMainEventLoop()
 	{
 		QApplication &app = *appPtr;
 		WzMainWindow &mainwindow = *mainWindowPtr;
@@ -117,7 +120,7 @@ bool wzMain(int &argc, char **argv)
 		appPtr = NULL;
 	}
 
-	void wzIsFullscreen()
+	bool wzIsFullscreen()
 	{
 		return false; // for relevant intents and purposes, we are never in that kind of fullscreen
 	}
@@ -140,3 +143,13 @@ bool wzMain(int &argc, char **argv)
 	{
 		return WzMainWindow::instance()->swapInterval();
 	}
+
+void StartTextInput()
+{
+	// Something started?
+}
+
+void StopTextInput()
+{
+	// Whatever it was, it stopped…
+}

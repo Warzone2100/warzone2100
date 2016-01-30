@@ -20,7 +20,7 @@
 #define GLX_SWAP_INTERVAL_EXT 0x20F1
 #endif // GLX_SWAP_INTERVAL_EXT
 
-#include <QtWidgets/QX11Info>
+#include <QtX11Extras/QX11Info>
 #include <QtOpenGL/QGLWidget>
 
 
@@ -37,7 +37,6 @@ void setSwapInterval(QGLWidget const &glWidget, int *interval)
 	PFNGLXSWAPINTERVALMESAPROC glXSwapIntervalMESA;
 	PFNGLXSWAPINTERVALSGIPROC glXSwapIntervalSGI;
 	QGLContext const &context = *glWidget.context();
-	QX11Info const &xinfo = glWidget.x11Info();
 
 	glXSwapIntervalEXT = (PFNGLXSWAPINTERVALEXTPROC) context.getProcAddress("glXSwapIntervalEXT");
 	glXQueryDrawable = (PFNGLXQUERYDRAWABLEPROC) context.getProcAddress("glXQueryDrawable");
@@ -48,8 +47,8 @@ void setSwapInterval(QGLWidget const &glWidget, int *interval)
 		{
 			*interval = 0;
 		}
-		glXSwapIntervalEXT(xinfo.display(), glWidget.winId(), *interval);
-		glXQueryDrawable(xinfo.display(), glWidget.winId(), GLX_SWAP_INTERVAL_EXT, &clampedInterval);
+		glXSwapIntervalEXT(QX11Info::display(), glWidget.winId(), *interval);
+		glXQueryDrawable(QX11Info::display(), glWidget.winId(), GLX_SWAP_INTERVAL_EXT, &clampedInterval);
 		*interval = clampedInterval;
 		return;
 	}

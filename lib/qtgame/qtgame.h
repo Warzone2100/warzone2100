@@ -24,6 +24,8 @@
 #ifndef QTGAME_H
 #define QTGAME_H
 
+#include "lib/framework/wzglobal.h"
+
 #include <QtOpenGL/QGLWidget>
 
 class QtGameWidget : public QGLWidget

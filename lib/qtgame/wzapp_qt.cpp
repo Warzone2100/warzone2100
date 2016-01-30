@@ -22,14 +22,14 @@
  *  Qt-related functions.
  */
 
-#include <QtWidgets/QImage>
-#include <QtWidgets/QBitmap>
-#include <QtWidgets/QPainter>
-#include <QtWidgets/QMouseEvent>
+#include <QtGui/QImage>
+#include <QtGui/QBitmap>
+#include <QtGui/QPainter>
+#include <QtGui/QMouseEvent>
 #include <QtWidgets/QMessageBox>
-#include <QtWidgets/QIcon>
+#include <QtGui/QIcon>
 #include <QtWidgets/QApplication>
-#include <QtWidgets/QClipboard>
+#include <QtGui/QClipboard>
 
 // Get platform defines before checking for them.
 // Qt headers MUST come before platform specific stuff!
