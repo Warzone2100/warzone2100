@@ -48,101 +48,101 @@ bool wzMain(int &argc, char **argv)
 	return true;
 }
 
-	bool wzMainScreenSetup(int antialiasing, bool fullscreen, bool vsync)
+bool wzMainScreenSetup(int antialiasing, bool fullscreen, bool vsync)
+{
+	debug(LOG_MAIN, "Qt initialization");
+	//QGL::setPreferredPaintEngine(QPaintEngine::OpenGL); // Workaround for incorrect text rendering on many platforms, doesn't exist in Qt5…
+
+	// Setting up OpenGL
+	QGLFormat format;
+	format.setDoubleBuffer(true);
+	format.setAlpha(true);
+	int w = pie_GetVideoBufferWidth();
+	int h = pie_GetVideoBufferHeight();
+
+	if (antialiasing)
 	{
-		debug(LOG_MAIN, "Qt initialization");
-		//QGL::setPreferredPaintEngine(QPaintEngine::OpenGL); // Workaround for incorrect text rendering on many platforms, doesn't exist in Qt5…
+		format.setSampleBuffers(true);
+		format.setSamples(antialiasing);
+	}
+	mainWindowPtr = new WzMainWindow(QSize(w, h), format);
+	WzMainWindow &mainwindow = *mainWindowPtr;
+	mainwindow.setMinimumResolution(QSize(800, 600));
+	if (!mainwindow.context()->isValid())
+	{
+		QMessageBox::critical(NULL, "Oops!", "Warzone2100 failed to create an OpenGL context. This probably means that your graphics drivers are out of date. Try updating them!");
+		return false;
+	}
 
-		// Setting up OpenGL
-		QGLFormat format;
-		format.setDoubleBuffer(true);
-		format.setAlpha(true);
-		int w = pie_GetVideoBufferWidth();
-		int h = pie_GetVideoBufferHeight();
-
-		if (antialiasing)
+	screenWidth = w;
+	screenHeight = h;
+	if (fullscreen)
+	{
+		mainwindow.resize(w, h);
+		mainwindow.showFullScreen();
+		if (w > mainwindow.width())
 		{
-			format.setSampleBuffers(true);
-			format.setSamples(antialiasing);
+			w = mainwindow.width();
 		}
-		mainWindowPtr = new WzMainWindow(QSize(w, h), format);
-		WzMainWindow &mainwindow = *mainWindowPtr;
-		mainwindow.setMinimumResolution(QSize(800, 600));
-		if (!mainwindow.context()->isValid())
+		if (h > mainwindow.height())
 		{
-			QMessageBox::critical(NULL, "Oops!", "Warzone2100 failed to create an OpenGL context. This probably means that your graphics drivers are out of date. Try updating them!");
-			return false;
+			h = mainwindow.height();
 		}
-
-		screenWidth = w;
-		screenHeight = h;
-		if (fullscreen)
-		{
-			mainwindow.resize(w, h);
-			mainwindow.showFullScreen();
-			if (w > mainwindow.width())
-			{
-				w = mainwindow.width();
-			}
-			if (h > mainwindow.height())
-			{
-				h = mainwindow.height();
-			}
-			pie_SetVideoBufferWidth(w);
-			pie_SetVideoBufferHeight(h);
-		}
-		else
-		{
-			mainwindow.show();
-			mainwindow.setMinimumSize(w, h);
-			mainwindow.setMaximumSize(w, h);
-		}
-
-		mainwindow.setSwapInterval(vsync);
-		mainwindow.setReadyToPaint();
-
-		return true;
+		pie_SetVideoBufferWidth(w);
+		pie_SetVideoBufferHeight(h);
 	}
-
-	void wzMainEventLoop()
+	else
 	{
-		QApplication &app = *appPtr;
-		WzMainWindow &mainwindow = *mainWindowPtr;
-		mainwindow.update(); // kick off painting, needed on macosx
-		app.exec();
+		mainwindow.show();
+		mainwindow.setMinimumSize(w, h);
+		mainwindow.setMaximumSize(w, h);
 	}
 
-	void wzShutdown()
-	{
-		delete mainWindowPtr;
-		mainWindowPtr = NULL;
-		delete appPtr;
-		appPtr = NULL;
-	}
+	mainwindow.setSwapInterval(vsync);
+	mainwindow.setReadyToPaint();
 
-	bool wzIsFullscreen()
-	{
-		return false; // for relevant intents and purposes, we are never in that kind of fullscreen
-	}
+	return true;
+}
 
-	void wzToggleFullscreen()
-	{
-	}
+void wzMainEventLoop()
+{
+	QApplication &app = *appPtr;
+	WzMainWindow &mainwindow = *mainWindowPtr;
+	mainwindow.update(); // kick off painting, needed on macosx
+	app.exec();
+}
 
-	QList<QSize> wzAvailableResolutions()
-	{
-		return WzMainWindow::instance()->availableResolutions();
-	}
+void wzShutdown()
+{
+	delete mainWindowPtr;
+	mainWindowPtr = NULL;
+	delete appPtr;
+	appPtr = NULL;
+}
 
-	void wzSetSwapInterval(int swap)
-	{
-		WzMainWindow::instance()->setSwapInterval(swap);
-	}
+bool wzIsFullscreen()
+{
+	return false; // for relevant intents and purposes, we are never in that kind of fullscreen
+}
 
-	int wzGetSwapInterval()
-	{
-		return WzMainWindow::instance()->swapInterval();
-	}
+void wzToggleFullscreen()
+{
+}
+
+QList<QSize> wzAvailableResolutions()
+{
+	return WzMainWindow::instance()->availableResolutions();
+}
+
+void wzSetSwapInterval(int swap)
+{
+	WzMainWindow::instance()->setSwapInterval(swap);
+}
+
+int wzGetSwapInterval()
+{
+	return WzMainWindow::instance()->swapInterval();
+}
 
 void StartTextInput()
 {
