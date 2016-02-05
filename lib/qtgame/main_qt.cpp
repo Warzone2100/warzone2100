@@ -56,7 +56,7 @@ bool wzMainScreenSetup(int antialiasing, bool fullscreen, bool vsync)
 	// Setting up OpenGL
 	QGLFormat format;
 	format.setDoubleBuffer(true);
-	format.setAlpha(true);
+	//format.setAlpha(true);
 	int w = pie_GetVideoBufferWidth();
 	int h = pie_GetVideoBufferHeight();
 
