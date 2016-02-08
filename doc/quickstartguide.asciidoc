@@ -56,11 +56,11 @@ Timeline
 
 - *2080*: N.A.S.D.A (North American Strategic Defense Agency) formed to protect North America From Nuclear Attacks.
 
-- *2081*: N.A.S.D.A begins building  satellite defense array.
+- *2081*: N.A.S.D.A begins building satellite defense array.
 
 - *2082*: N.A.S.D.A satellite system comes on line.
 
-- *2085*: During routine testing the N.A.S.D.A system malfunctions and launches nuclear strikes against all major cities in the world. The target countries respond with nuclear counter strikes.  N.A.S.D.A fails to defend against incoming missiles.
+- *2085*: During routine testing the N.A.S.D.A system malfunctions and launches nuclear strikes against all major cities in the world. The target countries respond with nuclear counter strikes. N.A.S.D.A fails to defend against incoming missiles.
 
 - *2086*: Nuclear Winter begins. Widespread plagues and famines kill billions of people. Civilization ends. N.A.S.D.A systems lie dormant following electromagnetic pulses. A group of survivors discover an abandoned subterranean military base. They set up home there and begin THE PROJECT.
 
