@@ -119,17 +119,17 @@ static QImage loadQImage(char const *fileName, char const *format = nullptr)
 	}
 	int64_t fileSizeGuess = PHYSFS_fileLength(fileHandle);  // PHYSFS_fileLength may return -1.
 	int64_t lengthRead = 0;
-	std::vector<char> data(fileSizeGuess != -1? fileSizeGuess : 16384);
+	std::vector<unsigned char> data(fileSizeGuess != -1? fileSizeGuess : 16384);
 	while (true)
 	{
 		int64_t moreRead = PHYSFS_read(fileHandle, &data[lengthRead], 1, data.size() - lengthRead);
-		lengthRead += std::max(moreRead, 0);
+		lengthRead += std::max<int64_t>(moreRead, 0);
 		if (lengthRead < data.size())
 		{
 			PHYSFS_close(fileHandle);
 			data.resize(lengthRead);
 			QImage image;
-			image.loadFromData(&data[0], data.size(), "PNG");
+			image.loadFromData(&data[0], data.size(), format);
 			return std::move(image);
 		}
 		data.resize(data.size() + 16384);
