@@ -299,7 +299,7 @@ static int playersPerTeam()
 	return 1;
 }
 
-void NET_InitPlayer(int i, bool initPosition)
+void NET_InitPlayer(int i, bool initPosition, bool initTeams)
 {
 	NetPlay.players[i].allocated = false;
 	NetPlay.players[i].autoGame = false;
@@ -316,7 +316,7 @@ void NET_InitPlayer(int i, bool initPosition)
 		NetPlay.players[i].colour = i;
 		setPlayerColour(i, i);  // PlayerColour[] in component.c must match this! Why is this in more than one place??!
 		NetPlay.players[i].position = i;
-		NetPlay.players[i].team = i/playersPerTeam();
+		NetPlay.players[i].team = initTeams? i/playersPerTeam() : i;
 	}
 	NetPlay.players[i].ready = false;
 	NetPlay.players[i].needFile = false;
@@ -334,13 +334,13 @@ void NET_InitPlayer(int i, bool initPosition)
 	ingame.JoiningInProgress[i] = false;
 }
 
-void NET_InitPlayers()
+void NET_InitPlayers(bool initTeams)
 {
 	unsigned int i;
 
 	for (i = 0; i < MAX_CONNECTED_PLAYERS; ++i)
 	{
-		NET_InitPlayer(i, true);
+		NET_InitPlayer(i, true, initTeams);
 		NetPlay.players[i].name[0] = '\0';
 		NETinitQueue(NETnetQueue(i));
 	}
@@ -1115,7 +1115,7 @@ int NETinit(bool bFirstCall)
 {
 	debug(LOG_NET, "NETinit");
 	NETlogEntry("NETinit!", SYNC_FLAG, selectedPlayer);
-	NET_InitPlayers();
+	NET_InitPlayers(true);
 
 	SOCKETinit();
 
@@ -2686,7 +2686,7 @@ bool NEThostGame(const char *SessionName, const char *PlayerName,
 	mapDownloadProgress = 100;
 	netPlayersUpdated = true;
 
-	NET_InitPlayers();
+	NET_InitPlayers(true);
 	for (unsigned n = 0; n < MAX_PLAYERS_IN_GUI; ++n)
 	{
 		changeColour(n, rand() % (n + 1), true); // Put colours in random order.
