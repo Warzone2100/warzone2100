@@ -337,8 +337,8 @@ void NETBroadcastTwoPlayerInfo(uint32_t index1, uint32_t index2);
 extern bool NETisCorrectVersion(uint32_t game_version_major, uint32_t game_version_minor);
 extern int NETGetMajorVersion(void);
 extern int NETGetMinorVersion(void);
-void NET_InitPlayer(int i, bool initPosition);
-extern void NET_InitPlayers(void);
+void NET_InitPlayer(int i, bool initPosition, bool initTeams = false);
+extern void NET_InitPlayers(bool initTeams = false);
 
 void NETGameLocked(bool flag);
 void NETresetGamePassword(void);
