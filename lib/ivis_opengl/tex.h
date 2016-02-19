@@ -36,7 +36,7 @@ int pie_ReserveTexture(const char *name);
 
 //*************************************************************************
 
-extern int iV_GetTexture(const char *filename);
+extern int iV_GetTexture(const char *filename, bool compression = true);
 extern void iV_unloadImage(iV_Image *image);
 extern unsigned int iV_getPixelFormat(const iV_Image *image);
 

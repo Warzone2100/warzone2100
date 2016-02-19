@@ -158,11 +158,12 @@ void pie_MakeTexPageTCMaskName(char *filename)
  *        normal resource system.
  *
  *  @param filename The filename of the texture page to search for.
+ *  @param compression If we need to load it, should we use texture compression?
  *
  *  @return a non-negative index number for the texture, negative if no texture
  *          with the given filename could be found
  */
-int iV_GetTexture(const char *filename)
+int iV_GetTexture(const char *filename, bool compression)
 {
 	unsigned int i = 0;
 	iV_Image sSprite;
@@ -189,7 +190,7 @@ int iV_GetTexture(const char *filename)
 	}
 	sstrcpy(path, filename);
 	pie_MakeTexPageName(path);
-	return pie_AddTexPage(&sSprite, path, true);
+	return pie_AddTexPage(&sSprite, path, compression);
 }
 
 bool replaceTexture(const QString &oldfile, const QString &newfile)

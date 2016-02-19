@@ -1046,14 +1046,14 @@ static iIMDShape *iV_ProcessIMD(const char **ppFileData, const char *FileDataEnd
 		if (normalfile[0] != '\0')
 		{
 			debug(LOG_TEXTURE, "Loading normal map %s for %s", normalfile, pFileName);
-			normalpage = iV_GetTexture(normalfile);
+			normalpage = iV_GetTexture(normalfile, false);
 			ASSERT_OR_RETURN(NULL, normalpage >= 0, "%s could not load tex page %s", pFileName, normalfile);
 		}
 
 		if (specfile[0] != '\0')
 		{
 			debug(LOG_TEXTURE, "Loading specular map %s for %s", specfile, pFileName);
-			specpage = iV_GetTexture(specfile);
+			specpage = iV_GetTexture(specfile, false);
 			ASSERT_OR_RETURN(NULL, specpage >= 0, "%s could not load tex page %s", pFileName, specfile);
 		}
 
