@@ -2914,7 +2914,7 @@ DROID *FindATransporter(DROID const *embarkee)
 
 	for (DROID *psDroid = apsDroidLists[embarkee->player]; psDroid != NULL; psDroid = psDroid->psNext)
 	{
-		if (isCyborg && isTransporter(psDroid))
+		if ((isCyborg && psDroid->droidType == DROID_TRANSPORTER) || psDroid->droidType == DROID_SUPERTRANSPORTER)
 		{
 			unsigned dist = iHypot(removeZ(psDroid->pos - embarkee->pos));
 			if (!checkTransporterSpace(psDroid, embarkee, false))
