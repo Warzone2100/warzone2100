@@ -2323,16 +2323,23 @@ bool recvPositionRequest(NETQUEUE queue)
 	return changePosition(player, position);
 }
 
-// If so, return that team; if not, return -1; if there are no players, return team MAX_PLAYERS.
-int allPlayersOnSameTeam(int except)
+static int getPlayerTeam(int i)
 {
-	int minTeam = MAX_PLAYERS, maxTeam = 0;
+	return game.alliance != ALLIANCES_TEAMS ? i : NetPlay.players[i].team;
+}
+
+// If so, return that team; if not, return -1; if there are no players, return team MAX_PLAYERS.
+static int allPlayersOnSameTeam(int except)
+{
+	int minTeam = MAX_PLAYERS, maxTeam = 0, numPlayers = 0;
 	for (int i = 0; i < game.maxPlayers; ++i)
 	{
 		if (i != except && (NetPlay.players[i].allocated || NetPlay.players[i].ai >= 0))
 		{
-			minTeam = std::min(minTeam, NetPlay.players[i].team);
-			maxTeam = std::max(maxTeam, NetPlay.players[i].team);
+			int team = getPlayerTeam(i);
+			minTeam = std::min(minTeam, team);
+			maxTeam = std::max(maxTeam, team);
+			++numPlayers;
 		}
 	}
 	if (minTeam == MAX_PLAYERS || minTeam == maxTeam)
@@ -2489,7 +2496,7 @@ void addPlayerBox(bool players)
 		{
 			if (game.skDiff[i] || isHumanPlayer(i))
 			{
-				int myTeam = game.alliance != ALLIANCES_TEAMS ? NetPlay.players[i].team : i;
+				int myTeam = getPlayerTeam(i);
 				if (team == -1)
 				{
 					team = myTeam;
