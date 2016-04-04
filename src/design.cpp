@@ -3316,24 +3316,25 @@ bool intValidTemplate(DROID_TEMPLATE *psTempl, const char *newName, bool complai
 	/* Check all the components have been set */
 	if (psTempl->asParts[COMP_BODY] == 0)
 	{
-		debug(level, "No body given for template");
+		debug(level, "No body given for template %s", GetDefaultTemplateName(psTempl));
 		return false;
 	}
 	else if (psTempl->asParts[COMP_PROPULSION] == 0)
 	{
-		debug(level, "No propulsion given for template");
+		debug(level, "No propulsion given for template %s", GetDefaultTemplateName(psTempl));
 		return false;
 	}
 
 	// Check a turret has been installed
 	if (psTempl->numWeaps == 0 &&
+	    psTempl->droidType != DROID_TRANSPORTER &&
 	    psTempl->asParts[COMP_SENSOR] == 0 &&
 	    psTempl->asParts[COMP_ECM] == 0 &&
 	    psTempl->asParts[COMP_BRAIN] == 0 &&
 	    psTempl->asParts[COMP_REPAIRUNIT] == 0 &&
 	    psTempl->asParts[COMP_CONSTRUCT] == 0)
 	{
-		debug(level, "No turret for template");
+		debug(level, "No turret for template %s", GetDefaultTemplateName(psTempl));
 		return false;
 	}
 
@@ -3346,7 +3347,7 @@ bool intValidTemplate(DROID_TEMPLATE *psTempl, const char *newName, bool complai
 		    || (weaponSize == WEAPON_SIZE_HEAVY && bodysize == SIZE_LIGHT)
 		    || psTempl->asWeaps[i] == 0)
 		{
-			debug(level, "No weapon given for weapon droid, or wrong weapon size");
+			debug(level, "No weapon given for weapon droid, or wrong weapon size for template %s", GetDefaultTemplateName(psTempl));
 			return false;
 		}
 	}
@@ -3354,7 +3355,7 @@ bool intValidTemplate(DROID_TEMPLATE *psTempl, const char *newName, bool complai
 	// Check number of weapon slots
 	if (psTempl->numWeaps > (asBodyStats + psTempl->asParts[COMP_BODY])->weaponSlots)
 	{
-		debug(level, "Too many weapon turrets");
+		debug(level, "Too many weapon turrets for template %s", GetDefaultTemplateName(psTempl));
 		return false;
 	}
 
@@ -3365,21 +3366,21 @@ bool intValidTemplate(DROID_TEMPLATE *psTempl, const char *newName, bool complai
 	     (psTempl->asParts[COMP_REPAIRUNIT] && psTempl->asParts[COMP_REPAIRUNIT] != aDefaultRepair[player]) ||
 	     psTempl->asParts[COMP_CONSTRUCT]))
 	{
-		debug(level, "Cannot mix system and weapon turrets in a template!");
+		debug(level, "Cannot mix system and weapon turrets in template %s!", GetDefaultTemplateName(psTempl));
 		return false;
 	}
 	if (psTempl->numWeaps != 1 && psTempl->asParts[COMP_BRAIN])
 	{
-		debug(level, "Commander template needs 1 weapon turret");
+		debug(level, "Commander template %s needs 1 weapon turret", GetDefaultTemplateName(psTempl));
 		return false;
 	}
 
 	//can only have a weapon on a VTOL propulsion
 	if (checkTemplateIsVtol(psTempl))
 	{
-		if (psTempl->numWeaps == 0)
+		if (psTempl->numWeaps == 0 && psTempl->droidType != DROID_TRANSPORTER)
 		{
-			debug(level, "VTOL with system turret, not possible");
+			debug(level, "VTOL with system turret, not possible for template %s", GetDefaultTemplateName(psTempl));
 			return false;
 		}
 	}
