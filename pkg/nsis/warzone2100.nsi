@@ -335,97 +335,97 @@ SectionGroup $(TEXT_SecNLS) SecNLS
 
 Section "-NLS files" SecNLS_files
   SetOutPath "$INSTDIR\locale\ca\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\ca_ES.gmo"
+  File "/oname=warzone2100.mo" "${TOP_SRCDIR}\po\ca_ES.gmo"
 
   SetOutPath "$INSTDIR\locale\cs\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\cs.gmo"
+  File "/oname=warzone2100.mo" "${TOP_SRCDIR}\po\cs.gmo"
 
   SetOutPath "$INSTDIR\locale\da\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\da.gmo"
+  File "/oname=warzone2100.mo" "${TOP_SRCDIR}\po\da.gmo"
 
   SetOutPath "$INSTDIR\locale\de\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\de.gmo"
+  File "/oname=warzone2100.mo" "${TOP_SRCDIR}\po\de.gmo"
 
   SetOutPath "$INSTDIR\locale\el\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\el.gmo"
+  File "/oname=warzone2100.mo" "${TOP_SRCDIR}\po\el.gmo"
 
   SetOutPath "$INSTDIR\locale\en_GB\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\en_GB.gmo"
+  File "/oname=warzone2100.mo" "${TOP_SRCDIR}\po\en_GB.gmo"
 
   SetOutPath "$INSTDIR\locale\es\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\es.gmo"
+  File "/oname=warzone2100.mo" "${TOP_SRCDIR}\po\es.gmo"
 
   SetOutPath "$INSTDIR\locale\et\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\et_EE.gmo"
+  File "/oname=warzone2100.mo" "${TOP_SRCDIR}\po\et_EE.gmo"
 
   SetOutPath "$INSTDIR\locale\fi\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\fi.gmo"
+  File "/oname=warzone2100.mo" "${TOP_SRCDIR}\po\fi.gmo"
 
   SetOutPath "$INSTDIR\locale\fr\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\fr.gmo"
+  File "/oname=warzone2100.mo" "${TOP_SRCDIR}\po\fr.gmo"
 
   SetOutPath "$INSTDIR\locale\fy\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\fy.gmo"
+  File "/oname=warzone2100.mo" "${TOP_SRCDIR}\po\fy.gmo"
 
   SetOutPath "$INSTDIR\locale\ga\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\ga.gmo"
+  File "/oname=warzone2100.mo" "${TOP_SRCDIR}\po\ga.gmo"
 
   SetOutPath "$INSTDIR\locale\hr\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\hr.gmo"
+  File "/oname=warzone2100.mo" "${TOP_SRCDIR}\po\hr.gmo"
 
   SetOutPath "$INSTDIR\locale\hu\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\hu.gmo"
+  File "/oname=warzone2100.mo" "${TOP_SRCDIR}\po\hu.gmo"
 
   SetOutPath "$INSTDIR\locale\it\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\it.gmo"
+  File "/oname=warzone2100.mo" "${TOP_SRCDIR}\po\it.gmo"
 
   SetOutPath "$INSTDIR\locale\ko\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\ko.gmo"
+  File "/oname=warzone2100.mo" "${TOP_SRCDIR}\po\ko.gmo"
 
   SetOutPath "$INSTDIR\locale\la\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\la.gmo"
+  File "/oname=warzone2100.mo" "${TOP_SRCDIR}\po\la.gmo"
 
   SetOutPath "$INSTDIR\locale\lt\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\lt.gmo"
+  File "/oname=warzone2100.mo" "${TOP_SRCDIR}\po\lt.gmo"
 
   SetOutPath "$INSTDIR\locale\nb\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\nb.gmo"
+  File "/oname=warzone2100.mo" "${TOP_SRCDIR}\po\nb.gmo"
 
   SetOutPath "$INSTDIR\locale\nl\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\nl.gmo"
+  File "/oname=warzone2100.mo" "${TOP_SRCDIR}\po\nl.gmo"
 
   SetOutPath "$INSTDIR\locale\pl\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\pl.gmo"
+  File "/oname=warzone2100.mo" "${TOP_SRCDIR}\po\pl.gmo"
 
   SetOutPath "$INSTDIR\locale\pt_BR\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\pt_BR.gmo"
+  File "/oname=warzone2100.mo" "${TOP_SRCDIR}\po\pt_BR.gmo"
 
   SetOutPath "$INSTDIR\locale\pt\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\pt.gmo"
+  File "/oname=warzone2100.mo" "${TOP_SRCDIR}\po\pt.gmo"
 
   SetOutPath "$INSTDIR\locale\ro\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\ro.gmo"
+  File "/oname=warzone2100.mo" "${TOP_SRCDIR}\po\ro.gmo"
 
   SetOutPath "$INSTDIR\locale\ru\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\ru.gmo"
+  File "/oname=warzone2100.mo" "${TOP_SRCDIR}\po\ru.gmo"
 
   SetOutPath "$INSTDIR\locale\sk\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\sk.gmo"
+  File "/oname=warzone2100.mo" "${TOP_SRCDIR}\po\sk.gmo"
 
   SetOutPath "$INSTDIR\locale\sl\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\sl.gmo"
+  File "/oname=warzone2100.mo" "${TOP_SRCDIR}\po\sl.gmo"
 
   SetOutPath "$INSTDIR\locale\tr\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\tr.gmo"
+  File "/oname=warzone2100.mo" "${TOP_SRCDIR}\po\tr.gmo"
 
   SetOutPath "$INSTDIR\locale\uk\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\uk_UA.gmo"
+  File "/oname=warzone2100.mo" "${TOP_SRCDIR}\po\uk_UA.gmo"
 
   SetOutPath "$INSTDIR\locale\zh_TW\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\zh_TW.gmo"
+  File "/oname=warzone2100.mo" "${TOP_SRCDIR}\po\zh_TW.gmo"
 
   SetOutPath "$INSTDIR\locale\zh_CN\LC_MESSAGES"
-  File "/oname=${PACKAGE}.mo" "${TOP_SRCDIR}\po\zh_CN.gmo"
+  File "/oname=warzone2100.mo" "${TOP_SRCDIR}\po\zh_CN.gmo"
 
 SectionEnd
 
@@ -779,127 +779,127 @@ Section "Uninstall"
 
 ; remove all the locales
 
-  Delete "$INSTDIR\locale\ca\LC_MESSAGES\${PACKAGE}.mo"
+  Delete "$INSTDIR\locale\ca\LC_MESSAGES\warzone2100.mo"
   RMDir "$INSTDIR\locale\ca\LC_MESSAGES"
   RMDir "$INSTDIR\locale\ca"
 
-  Delete "$INSTDIR\locale\cs\LC_MESSAGES\${PACKAGE}.mo"
+  Delete "$INSTDIR\locale\cs\LC_MESSAGES\warzone2100.mo"
   RMDir "$INSTDIR\locale\cs\LC_MESSAGES"
   RMDir "$INSTDIR\locale\cs"
 
-  Delete "$INSTDIR\locale\da\LC_MESSAGES\${PACKAGE}.mo"
+  Delete "$INSTDIR\locale\da\LC_MESSAGES\warzone2100.mo"
   RMDir "$INSTDIR\locale\da\LC_MESSAGES"
   RMDir "$INSTDIR\locale\da"
 
-  Delete "$INSTDIR\locale\de\LC_MESSAGES\${PACKAGE}.mo"
+  Delete "$INSTDIR\locale\de\LC_MESSAGES\warzone2100.mo"
   RMDir "$INSTDIR\locale\de\LC_MESSAGES"
   RMDir "$INSTDIR\locale\de"
 
-  Delete "$INSTDIR\locale\el\LC_MESSAGES\${PACKAGE}.mo"
+  Delete "$INSTDIR\locale\el\LC_MESSAGES\warzone2100.mo"
   RMDir "$INSTDIR\locale\el\LC_MESSAGES"
   RMDir "$INSTDIR\locale\el"
 
-  Delete "$INSTDIR\locale\en_GB\LC_MESSAGES\${PACKAGE}.mo"
+  Delete "$INSTDIR\locale\en_GB\LC_MESSAGES\warzone2100.mo"
   RMDir "$INSTDIR\locale\en_GB\LC_MESSAGES"
   RMDir "$INSTDIR\locale\en_GB"
 
-  Delete "$INSTDIR\locale\es\LC_MESSAGES\${PACKAGE}.mo"
+  Delete "$INSTDIR\locale\es\LC_MESSAGES\warzone2100.mo"
   RMDir "$INSTDIR\locale\es\LC_MESSAGES"
   RMDir "$INSTDIR\locale\es"
 
-  Delete "$INSTDIR\locale\et\LC_MESSAGES\${PACKAGE}.mo"
+  Delete "$INSTDIR\locale\et\LC_MESSAGES\warzone2100.mo"
   RMDir "$INSTDIR\locale\et\LC_MESSAGES"
   RMDir "$INSTDIR\locale\et"
 
-  Delete "$INSTDIR\locale\fi\LC_MESSAGES\${PACKAGE}.mo"
+  Delete "$INSTDIR\locale\fi\LC_MESSAGES\warzone2100.mo"
   RMDir "$INSTDIR\locale\fi\LC_MESSAGES"
   RMDir "$INSTDIR\locale\fi"
 
-  Delete "$INSTDIR\locale\fr\LC_MESSAGES\${PACKAGE}.mo"
+  Delete "$INSTDIR\locale\fr\LC_MESSAGES\warzone2100.mo"
   RMDir "$INSTDIR\locale\fr\LC_MESSAGES"
   RMDir "$INSTDIR\locale\fr"
 
-  Delete "$INSTDIR\locale\fy\LC_MESSAGES\${PACKAGE}.mo"
+  Delete "$INSTDIR\locale\fy\LC_MESSAGES\warzone2100.mo"
   RMDir "$INSTDIR\locale\fy\LC_MESSAGES"
   RMDir "$INSTDIR\locale\fy"
 
-  Delete "$INSTDIR\locale\ga\LC_MESSAGES\${PACKAGE}.mo"
+  Delete "$INSTDIR\locale\ga\LC_MESSAGES\warzone2100.mo"
   RMDir "$INSTDIR\locale\ga\LC_MESSAGES"
   RMDir "$INSTDIR\locale\ga"
 
-  Delete "$INSTDIR\locale\hr\LC_MESSAGES\${PACKAGE}.mo"
+  Delete "$INSTDIR\locale\hr\LC_MESSAGES\warzone2100.mo"
   RMDir "$INSTDIR\locale\hr\LC_MESSAGES"
   RMDir "$INSTDIR\locale\hr"
 
-  Delete "$INSTDIR\locale\hu\LC_MESSAGES\${PACKAGE}.mo"
+  Delete "$INSTDIR\locale\hu\LC_MESSAGES\warzone2100.mo"
   RMDir "$INSTDIR\locale\hu\LC_MESSAGES"
   RMDir "$INSTDIR\locale\hu"
 
-  Delete "$INSTDIR\locale\it\LC_MESSAGES\${PACKAGE}.mo"
+  Delete "$INSTDIR\locale\it\LC_MESSAGES\warzone2100.mo"
   RMDir "$INSTDIR\locale\it\LC_MESSAGES"
   RMDir "$INSTDIR\locale\it"
 
-  Delete "$INSTDIR\locale\ko\LC_MESSAGES\${PACKAGE}.mo"
+  Delete "$INSTDIR\locale\ko\LC_MESSAGES\warzone2100.mo"
   RMDir "$INSTDIR\locale\ko\LC_MESSAGES"
   RMDir "$INSTDIR\locale\ko"
 
-  Delete "$INSTDIR\locale\la\LC_MESSAGES\${PACKAGE}.mo"
+  Delete "$INSTDIR\locale\la\LC_MESSAGES\warzone2100.mo"
   RMDir "$INSTDIR\locale\la\LC_MESSAGES"
   RMDir "$INSTDIR\locale\la"
 
-  Delete "$INSTDIR\locale\lt\LC_MESSAGES\${PACKAGE}.mo"
+  Delete "$INSTDIR\locale\lt\LC_MESSAGES\warzone2100.mo"
   RMDir "$INSTDIR\locale\lt\LC_MESSAGES"
   RMDir "$INSTDIR\locale\lt"
 
-  Delete "$INSTDIR\locale\nb\LC_MESSAGES\${PACKAGE}.mo"
+  Delete "$INSTDIR\locale\nb\LC_MESSAGES\warzone2100.mo"
   RMDir "$INSTDIR\locale\nb\LC_MESSAGES"
   RMDir "$INSTDIR\locale\nb"
 
-  Delete "$INSTDIR\locale\nl\LC_MESSAGES\${PACKAGE}.mo"
+  Delete "$INSTDIR\locale\nl\LC_MESSAGES\warzone2100.mo"
   RMDir "$INSTDIR\locale\nl\LC_MESSAGES"
   RMDir "$INSTDIR\locale\nl"
 
-  Delete "$INSTDIR\locale\pl\LC_MESSAGES\${PACKAGE}.mo"
+  Delete "$INSTDIR\locale\pl\LC_MESSAGES\warzone2100.mo"
   RMDir "$INSTDIR\locale\pl\LC_MESSAGES"
   RMDir "$INSTDIR\locale\pl"
 
-  Delete "$INSTDIR\locale\pt_BR\LC_MESSAGES\${PACKAGE}.mo"
+  Delete "$INSTDIR\locale\pt_BR\LC_MESSAGES\warzone2100.mo"
   RMDir "$INSTDIR\locale\pt_BR\LC_MESSAGES"
   RMDir "$INSTDIR\locale\pt_BR"
 
-  Delete "$INSTDIR\locale\pt\LC_MESSAGES\${PACKAGE}.mo"
+  Delete "$INSTDIR\locale\pt\LC_MESSAGES\warzone2100.mo"
   RMDir "$INSTDIR\locale\pt\LC_MESSAGES"
   RMDir "$INSTDIR\locale\pt"
 
-  Delete "$INSTDIR\locale\ro\LC_MESSAGES\${PACKAGE}.mo"
+  Delete "$INSTDIR\locale\ro\LC_MESSAGES\warzone2100.mo"
   RMDir "$INSTDIR\locale\ro\LC_MESSAGES"
   RMDir "$INSTDIR\locale\ro"
 
-  Delete "$INSTDIR\locale\ru\LC_MESSAGES\${PACKAGE}.mo"
+  Delete "$INSTDIR\locale\ru\LC_MESSAGES\warzone2100.mo"
   RMDir "$INSTDIR\locale\ru\LC_MESSAGES"
   RMDir "$INSTDIR\locale\ru"
 
-  Delete "$INSTDIR\locale\sk\LC_MESSAGES\${PACKAGE}.mo"
+  Delete "$INSTDIR\locale\sk\LC_MESSAGES\warzone2100.mo"
   RMDir "$INSTDIR\locale\sk\LC_MESSAGES"
   RMDir "$INSTDIR\locale\sk"
 
-  Delete "$INSTDIR\locale\sl\LC_MESSAGES\${PACKAGE}.mo"
+  Delete "$INSTDIR\locale\sl\LC_MESSAGES\warzone2100.mo"
   RMDir "$INSTDIR\locale\sl\LC_MESSAGES"
   RMDir "$INSTDIR\locale\sl"
 
-  Delete "$INSTDIR\locale\tr\LC_MESSAGES\${PACKAGE}.mo"
+  Delete "$INSTDIR\locale\tr\LC_MESSAGES\warzone2100.mo"
   RMDir "$INSTDIR\locale\tr\LC_MESSAGES"
   RMDir "$INSTDIR\locale\tr"
 
-  Delete "$INSTDIR\locale\uk\LC_MESSAGES\${PACKAGE}.mo"
+  Delete "$INSTDIR\locale\uk\LC_MESSAGES\warzone2100.mo"
   RMDir "$INSTDIR\locale\uk\LC_MESSAGES"
   RMDir "$INSTDIR\locale\uk"
 
-  Delete "$INSTDIR\locale\zh_TW\LC_MESSAGES\${PACKAGE}.mo"
+  Delete "$INSTDIR\locale\zh_TW\LC_MESSAGES\warzone2100.mo"
   RMDir "$INSTDIR\locale\zh_TW\LC_MESSAGES"
   RMDir "$INSTDIR\locale\zh_TW"
 
-  Delete "$INSTDIR\locale\zh_CN\LC_MESSAGES\${PACKAGE}.mo"
+  Delete "$INSTDIR\locale\zh_CN\LC_MESSAGES\warzone2100.mo"
   RMDir "$INSTDIR\locale\zh_CN\LC_MESSAGES"
   RMDir "$INSTDIR\locale\zh_CN"
 
