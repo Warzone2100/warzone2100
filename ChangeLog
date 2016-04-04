@@ -1,3 +1,10 @@
+2016-04-03: Version 3.1.4
+ * General:
+   * Fix: Loading games with teams & alliances now works again (commit:255009d7c18e8013e5f39b471e20a96bf7c9a9b4, ticket:4334)
+   * Fix: Starting games in alliance mode now always works (commit:dddf05cbe4bb31b87b8fb69c4b4ad4e634edc151, ticket:4343)
+   * Fix: Order of 'go to transport' now works again (commit:201dc762786ead3f1096d95f6fb949bc3aacbc3a, ticket:4339)
+   * Fix: Template checks & error messages. (commit:20f95af3f41a43446a93513a1d610519c6006a2b)
+
 2016-01-01: Version 3.1.3
  * General:
    * Change: Ping only displayed for multiplayer games (commit:2199ffdd416cb5189c0ee5af4137a6248c3a2ff1)
