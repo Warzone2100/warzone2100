@@ -121,11 +121,10 @@ void recvMultiStats(NETQUEUE queue)
 // Load Player Stats
 bool loadMultiStats(char *sPlayerName, PLAYERSTATS *st)
 {
-	char				fileName[255];
-	UDWORD				size;
-	char				*pFileData;
-
-	memset(st, 0, sizeof(PLAYERSTATS));	// clear in case we don't get to load
+	char fileName[255] = "";
+	char *pFileData;
+	bool notfound = false;
+	UDWORD size;
 
 	// Prevent an empty player name (where the first byte is a 0x0 terminating char already)
 	if (!*sPlayerName)
@@ -140,29 +139,35 @@ bool loadMultiStats(char *sPlayerName, PLAYERSTATS *st)
 	// check player already exists
 	if (!PHYSFS_exists(fileName))
 	{
-		PLAYERSTATS			blankstats;
-
-		memset(&blankstats, 0, sizeof(PLAYERSTATS));
-		saveMultiStats(sPlayerName, sPlayerName, &blankstats);		// didnt exist so create.
+		notfound = true;
 	}
 	else
 	{
-		int num = 0;
-
 		loadFile(fileName, &pFileData, &size);
-
-		if (strncmp(pFileData, "WZ.STA.v3", 9) != 0)
+		if (strncmp(pFileData, "WZ.STA.v3", 9) == 0)
 		{
-			return false; // wrong version or not a stats file
+			int num = sscanf(pFileData, "WZ.STA.v3\n%u %u %u %u %u",
+			                 &st->wins, &st->losses, &st->totalKills, &st->totalScore, &st->played);
+			if (num < 5)
+			{
+				notfound = true;	// corrupted file?
+			}
 		}
-
-		num = sscanf(pFileData, "WZ.STA.v3\n%u %u %u %u %u",
-		             &st->wins, &st->losses, &st->totalKills, &st->totalScore, &st->played);
-		if (num < 5)
+		else
 		{
-			st->played = 0;	// must be old, buggy format still
+			notfound = true; // wrong version or not a stats file
 		}
 		free(pFileData);
+	}
+
+	if (notfound)
+	{
+		memset(st, 0, sizeof(PLAYERSTATS));	// clear all stats
+		if (!saveMultiStats(sPlayerName, sPlayerName, st))		// didnt exist before so create new one.
+		{
+			debug(LOG_FATAL, "Unable to continue, we could not create the stats file! Check your logs!");
+			exit(-1);
+		}
 	}
 
 	// reset recent scores
@@ -192,9 +197,7 @@ bool saveMultiStats(const char *sFileName, const char *sPlayerName, const PLAYER
 
 	snprintf(fileName, sizeof(fileName), "%s%s.sta", MultiPlayersPath, sFileName);
 
-	saveFile(fileName, buffer, strlen(buffer));
-
-	return true;
+	return saveFile(fileName, buffer, strlen(buffer));
 }
 
 // ////////////////////////////////////////////////////////////////////////////

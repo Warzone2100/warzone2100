@@ -4394,83 +4394,77 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *p
 			iV_SetFont(font_regular);
 			iV_SetTextColour(WZCOL_FORM_TEXT);
 		}
-		iV_DrawImage(FrontImages, IMAGE_WEE_GUY, x + 4, y + 13);
-#if 0
+
 		PLAYERSTATS stat = getMultiStats(j);
-		if (stat.wins + stat.losses < 5)
+		uint32_t eval = stat.wins + stat.losses; //(Cannot use stat.played, since that's just the number of times the player exited via the game menu, not the number of games played.)
+		if (eval < 3)
 		{
 			iV_DrawImage(FrontImages, IMAGE_MEDAL_DUMMY, x + 4, y + 13);
 		}
 		else
 		{
-			stat = getMultiStats(j);
-
-			// star 1 total droid kills
-			uint32_t eval = stat.totalKills;
-			if (eval > 600)
+			// gold/silver/bronze star for games played
+			if (eval > 200)
 			{
 				iV_DrawImage(FrontImages, IMAGE_MULTIRANK1, x + 4, y + 3);
 			}
-			else if (eval > 300)
+			else if (eval > 100)
 			{
 				iV_DrawImage(FrontImages, IMAGE_MULTIRANK2, x + 4, y + 3);
 			}
-			else if (eval > 150)
+			else if (eval > 25)
 			{
 				iV_DrawImage(FrontImages, IMAGE_MULTIRANK3, x + 4, y + 3);
 			}
 
-			// star 2 games played (Cannot use stat.played, since that's just the number of times the player exited via the game menu, not the number of games played.)
-			eval = stat.wins + stat.losses;
-			if (eval > 200)
+			// gold/silver/bronze star for games won.
+			if (stat.wins > 100)
 			{
 				iV_DrawImage(FrontImages, IMAGE_MULTIRANK1, x + 4, y + 13);
 			}
-			else if (eval > 100)
+			else if (stat.wins > 50)
 			{
 				iV_DrawImage(FrontImages, IMAGE_MULTIRANK2, x + 4, y + 13);
 			}
-			else if (eval > 50)
+			else if (stat.wins > 10)
 			{
 				iV_DrawImage(FrontImages, IMAGE_MULTIRANK3, x + 4, y + 13);
 			}
 
-			// star 3 games won.
-			eval = stat.wins;
-			if (eval > 80)
+			// gold/silver/bronze star for total droid kills
+			if (stat.totalKills > 10000)
 			{
 				iV_DrawImage(FrontImages, IMAGE_MULTIRANK1, x + 4, y + 23);
 			}
-			else if (eval > 40)
+			else if (stat.totalKills > 5000)
 			{
 				iV_DrawImage(FrontImages, IMAGE_MULTIRANK2, x + 4, y + 23);
 			}
-			else if (eval > 10)
+			else if (stat.totalKills > 500)
 			{
 				iV_DrawImage(FrontImages, IMAGE_MULTIRANK3, x + 4, y + 23);
 			}
 
-			// medals.
-			if ((stat.wins >= 6) && (stat.wins > (2 * stat.losses))) // bronze requirement.
+			if (eval < 25 && stat.totalKills < 500 && stat.wins < 10)
 			{
-				if ((stat.wins >= 12) && (stat.wins > (4 * stat.losses))) // silver requirement.
-				{
-					if ((stat.wins >= 24) && (stat.wins > (8 * stat.losses))) // gold requirement
-					{
-						iV_DrawImage(FrontImages, IMAGE_MEDAL_GOLD, x + 16, y + 11);
-					}
-					else
-					{
-						iV_DrawImage(FrontImages, IMAGE_MEDAL_SILVER, x + 16, y + 11);
-					}
-				}
-				else
-				{
-					iV_DrawImage(FrontImages, IMAGE_MEDAL_BRONZE, x + 16, y + 11);
-				}
+				// not a noob, but not enough games played for any star
+				iV_DrawImage(FrontImages, IMAGE_WEE_GUY, x + 4, y + 13);
+			}
+
+			// medals.
+			if ((stat.wins >= 2000) && (stat.wins > (8 * stat.losses))) // gold requirement
+			{
+				iV_DrawImage(FrontImages, IMAGE_MEDAL_GOLD, x + 16, y + 11);
+			}
+			else if ((stat.wins >= 1000) && (stat.wins > (4 * stat.losses))) // silver requirement.
+			{
+				iV_DrawImage(FrontImages, IMAGE_MEDAL_SILVER, x + 16, y + 11);
+			}
+			else if ((stat.wins >= 500) && (stat.wins > (2 * stat.losses))) // bronze requirement.
+			{
+				iV_DrawImage(FrontImages, IMAGE_MEDAL_BRONZE, x + 16, y + 11);
 			}
 		}
-#endif
 		game.skDiff[j] = UBYTE_MAX;	// set AI difficulty to 0xFF (i.e. not an AI)
 	}
 	else	// AI
