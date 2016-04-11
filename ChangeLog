@@ -1,3 +1,8 @@
+2016-04-10: Version 3.1.5
+ * General:
+   * Fix: Campaign loads and transport missions visibility should now work again. (commit:c5117b0adb7bc1329df91ae170c19af2e2fffb4b, ticket:4354)
+
+
 2016-04-03: Version 3.1.4
  * General:
    * Fix: Loading games with teams & alliances now works again (commit:255009d7c18e8013e5f39b471e20a96bf7c9a9b4, ticket:4334)
