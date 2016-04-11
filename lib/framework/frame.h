@@ -73,7 +73,7 @@ typedef uint16_t PlayerMask;
 #endif
 // **********************************
 // We need to update this on releases
-#define WZ_GAME_VERSION "3.1.5"
+#define WZ_GAME_VERSION "3.1.4"
 // **********************************
 enum QUEUE_MODE
 {
