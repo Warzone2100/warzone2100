@@ -1902,7 +1902,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 		{
 			for (i = 0; i < MAX_PLAYERS; i++)
 			{
-				alliancebits[i] = 0;
+				alliancebits[i] |= 0;
 				for (j = 0; j < MAX_PLAYERS; j++)
 				{
 					alliances[i][j] = saveGameData.alliances[i][j];
