@@ -5616,14 +5616,11 @@ bool validTemplateForFactory(DROID_TEMPLATE *psTemplate, STRUCTURE *psFactory, b
 	enum code_part level = complain ? LOG_ERROR : LOG_NEVER;
 
 	//not in multiPlayer! - AB 26/5/99
-	if (!bMultiPlayer)
+	//ignore Transporter Droids
+	if (!bMultiPlayer && isTransporter(psTemplate))
 	{
-		//ignore Transporter Droids
-		if (psTemplate->droidType == DROID_TRANSPORTER || psTemplate->droidType == DROID_SUPERTRANSPORTER)
-		{
-			debug(level, "Cannot build transporter in campaign.");
-			return false;
-		}
+		debug(level, "Cannot build transporter in campaign.");
+		return false;
 	}
 
 	//check if droid is a cyborg

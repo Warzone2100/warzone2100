@@ -2842,7 +2842,8 @@ bool intValidTemplate(DROID_TEMPLATE *psTempl, const char *newName, bool complai
 	    psTempl->asParts[COMP_ECM] == 0 &&
 	    psTempl->asParts[COMP_BRAIN] == 0 &&
 	    psTempl->asParts[COMP_REPAIRUNIT] == 0 &&
-	    psTempl->asParts[COMP_CONSTRUCT] == 0)
+	    psTempl->asParts[COMP_CONSTRUCT] == 0 &&
+	    !isTransporter(psTempl))
 	{
 		debug(level, "No turret for template");
 		return false;
@@ -2892,7 +2893,7 @@ bool intValidTemplate(DROID_TEMPLATE *psTempl, const char *newName, bool complai
 	}
 
 	//can only have a VTOL weapon on a VTOL propulsion
-	if (checkTemplateIsVtol(psTempl) && psTempl->numWeaps == 0)
+	if (checkTemplateIsVtol(psTempl) && !isTransporter(psTempl) && psTempl->numWeaps == 0)
 	{
 		debug(level, "VTOL with system turret, not possible");
 		return false;

@@ -1315,7 +1315,7 @@ void IntFancyButton::displayIMD(Image image, ImdObject imdObject, int xOffset, i
 		}
 		else//(IMDType == IMDTYPE_DROIDTEMPLATE)
 		{
-			if (((DROID_TEMPLATE *)Object)->droidType == DROID_TRANSPORTER || ((DROID_TEMPLATE *)Object)->droidType == DROID_SUPERTRANSPORTER)
+			if (isTransporter((DROID_TEMPLATE *)Object))
 			{
 				if (((DROID_TEMPLATE *)Object)->droidType == DROID_TRANSPORTER)
 				{

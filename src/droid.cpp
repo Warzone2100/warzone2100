@@ -2748,11 +2748,20 @@ UBYTE checkCommandExist(UBYTE player)
 	return quantity;
 }
 
-bool isTransporter(const DROID *psDroid)
+static inline bool isTransporter(DROID_TYPE type)
 {
-	return (psDroid->droidType == DROID_TRANSPORTER || psDroid->droidType == DROID_SUPERTRANSPORTER);
+	return type == DROID_TRANSPORTER || type == DROID_SUPERTRANSPORTER;
 }
 
+bool isTransporter(DROID const *psDroid)
+{
+	return isTransporter(psDroid->droidType);
+}
+
+bool isTransporter(DROID_TEMPLATE const *psTemplate)
+{
+	return isTransporter(psTemplate->droidType);
+}
 
 //access functions for vtols
 bool isVtolDroid(const DROID *psDroid)

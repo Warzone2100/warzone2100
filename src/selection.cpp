@@ -79,7 +79,7 @@ static unsigned selSelectUnitsIf(unsigned player, T condition, U value, bool onl
 
 static bool selTransporter(DROID *droid)
 {
-	return droid->droidType == DROID_TRANSPORTER || droid->droidType == DROID_SUPERTRANSPORTER;
+	return isTransporter(droid);
 }
 static bool selTrue(DROID *droid)
 {
