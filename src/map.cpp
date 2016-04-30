@@ -1855,7 +1855,6 @@ static int dangerThreadFunc(WZ_DECL_UNUSED void *data)
 	while (lastDangerPlayer != -1)
 	{
 		dangerFloodFill(lastDangerPlayer);	// Do the actual work
-		lastDangerUpdate = gameTime;
 		wzSemaphorePost(dangerDoneSemaphore);   // Signal that we are done
 		wzSemaphoreWait(dangerSemaphore);	// Go to sleep until needed.
 	}
@@ -2004,6 +2003,9 @@ void mapUpdate()
 
 	if (gameTime > lastDangerUpdate + GAME_TICKS_FOR_DANGER && game.type == SKIRMISH)
 	{
+		syncDebug("Do danger maps.");
+		lastDangerUpdate = gameTime;
+
 		// Lock if previous job not done yet
 		wzSemaphoreWait(dangerDoneSemaphore);
 
