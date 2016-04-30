@@ -165,11 +165,9 @@ function eventGameInit()
 		makeComponentAvailable("CyborgSpade", playnum);
 		makeComponentAvailable("CyborgRepair", playnum);
 
-		// set starting power for players
-		setPower(1000, playnum);
-
 		if (baseType == CAMP_CLEAN)
 		{
+			setPower(1300, playnum);
 			for (var count = 0; count < numCleanTech; count++)
 			{
 				completeResearch(techlist[count], playnum);
@@ -189,6 +187,7 @@ function eventGameInit()
 		}
 		else if (baseType == CAMP_BASE)
 		{
+			setPower(2500, playnum);
 			for (var count = 0; count < numBaseTech; count++)
 			{
 				completeResearch(techlist[count], playnum);
@@ -207,6 +206,7 @@ function eventGameInit()
 		}
 		else // CAMP_WALLS
 		{
+			setPower(2500, playnum);
 			for (var count = 0; count < techlist.length; count++)
 			{
 				completeResearch(techlist[count], playnum);
