@@ -339,8 +339,6 @@ W_SLIDER *widgAddSlider(W_SCREEN *psScreen, const W_SLDINIT *psInit)
 /* Delete a widget from the screen */
 void widgDelete(W_SCREEN *psScreen, UDWORD id)
 {
-	ASSERT_OR_RETURN(, psScreen != NULL, "Invalid screen pointer");
-
 	delete widgGetFromID(psScreen, id);
 }
 
@@ -366,7 +364,6 @@ static WIDGET *widgFormGetFromID(WIDGET *widget, UDWORD id)
 /* Find a widget in a screen from its ID number */
 WIDGET *widgGetFromID(W_SCREEN *psScreen, UDWORD id)
 {
-	ASSERT_OR_RETURN(NULL, psScreen != NULL, "Invalid screen pointer");
 	return widgFormGetFromID(psScreen->psForm, id);
 }
 

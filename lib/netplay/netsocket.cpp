@@ -603,8 +603,7 @@ ssize_t writeAll(Socket *sock, const void *buf, size_t size, size_t *rawByteCoun
 	size_t &rawBytes = rawByteCount != NULL ? *rawByteCount : ignored;
 	rawBytes = 0;
 
-	if (!sock
-	    || sock->fd[SOCK_CONNECTION] == INVALID_SOCKET)
+	if (sock->fd[SOCK_CONNECTION] == INVALID_SOCKET)
 	{
 		debug(LOG_ERROR, "Invalid socket (EBADF)");
 		setSockErr(EBADF);
@@ -767,9 +766,6 @@ void deleteSocketSet(SocketSet *set)
  */
 void SocketSet_AddSocket(SocketSet *set, Socket *socket)
 {
-	ASSERT_OR_RETURN(, set != NULL, "NULL SocketSet provided");
-	ASSERT_OR_RETURN(, socket != NULL, "NULL Socket provided");
-
 	/* Check whether this socket is already present in this set (i.e. it
 	 * shouldn't be added again).
 	 */
@@ -789,9 +785,6 @@ void SocketSet_AddSocket(SocketSet *set, Socket *socket)
  */
 void SocketSet_DelSocket(SocketSet *set, Socket *socket)
 {
-	ASSERT_OR_RETURN(, set != NULL, "NULL SocketSet provided");
-	ASSERT_OR_RETURN(, socket != NULL, "NULL Socket provided");
-
 	size_t i = std::find(set->fds.begin(), set->fds.end(), socket) - set->fds.begin();
 	if (i != set->fds.size())
 	{
@@ -940,15 +933,13 @@ int checkSockets(const SocketSet *set, unsigned int timeout)
  */
 ssize_t readAll(Socket *sock, void *buf, size_t size, unsigned int timeout)
 {
-	ASSERT_OR_RETURN(SOCKET_ERROR, sock, "We don't have a valid socket!");
 	ASSERT(!sock->isCompressed, "readAll on compressed sockets not implemented.");
 
 	const SocketSet set = {std::vector<Socket *>(1, sock)};
 
 	size_t received = 0;
 
-	if (!sock
-	    || sock->fd[SOCK_CONNECTION] == INVALID_SOCKET)
+	if (sock->fd[SOCK_CONNECTION] == INVALID_SOCKET)
 	{
 		debug(LOG_ERROR, "Invalid socket (%p), sock->fd[SOCK_CONNECTION]=%x  (error: EBADF)", sock, sock->fd[SOCK_CONNECTION]);
 		setSockErr(EBADF);
@@ -1036,10 +1027,6 @@ static void socketCloseNow(Socket *sock)
 
 void socketClose(Socket *sock)
 {
-	if (sock == NULL)
-	{
-		return;
-	}
 	wzMutexLock(socketThreadMutex);
 	//Instead of socketThreadWrites.erase(sock);, try sending the data before actually deleting.
 	if (socketThreadWrites.find(sock) != socketThreadWrites.end())
@@ -1058,8 +1045,6 @@ void socketClose(Socket *sock)
 Socket *socketAccept(Socket *sock)
 {
 	unsigned int i;
-
-	ASSERT_OR_RETURN(NULL, sock != NULL, "NULL Socket provided");
 
 	/* Search for a socket that has a pending connection on it and accept
 	 * the first one.

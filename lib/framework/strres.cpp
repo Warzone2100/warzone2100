@@ -77,8 +77,6 @@ void strresDestroy(STR_RES *psRes)
 /* Store a string */
 bool strresStoreString(STR_RES *psRes, const char *pID, const char *pString)
 {
-	ASSERT(psRes != NULL, "Invalid string res pointer");
-
 	// Make sure that this ID string hasn't been used before
 	if (treapFind(psRes->psIDTreap, pID) != NULL)
 	{
@@ -92,7 +90,6 @@ bool strresStoreString(STR_RES *psRes, const char *pID, const char *pString)
 
 const char *strresGetString(const STR_RES *psRes, const char *ID)
 {
-	ASSERT(psRes != NULL, "Invalid string resource pointer");
 	return treapFind(psRes->psIDTreap, ID);
 }
 
@@ -123,7 +120,5 @@ bool strresLoad(STR_RES *psRes, const char *fileName)
 /* Get the ID number for a string*/
 const char *strresGetIDfromString(STR_RES *psRes, const char *pString)
 {
-	ASSERT(psRes != NULL, "Invalid string res pointer");
-
 	return treapFindKey(psRes->psIDTreap, pString);
 }

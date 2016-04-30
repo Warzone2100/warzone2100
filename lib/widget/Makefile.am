@@ -11,10 +11,8 @@ MOCHEADER = \
 	label.h \
 	listwidget.h \
 	slider.h \
-	tip.h \
-	widgbase.h \
-	widget.h \
-	widgint.h
+	widgbase.h
+
 MOCEDFILES = $(MOCHEADER:%.h=%_moc.cpp)
 %_moc.cpp: %.h
 	$(MOC5) -o $@ $<
@@ -23,6 +21,9 @@ CLEANFILES = \
 
 noinst_LIBRARIES = libwidget.a
 noinst_HEADERS = \
+	tip.h \
+	widget.h \
+	widgint.h \
 	$(MOCHEADER)
 
 #"nodist_libwidget_a_SOURCES = $(MOCEDFILES)" doesn't work here (not sure why).

@@ -166,7 +166,7 @@ bool NETlogEntry(const char *str, UDWORD a, UDWORD b)
 	time(&aclock);					/* Get time in seconds */
 	newtime = localtime(&aclock);		/* Convert time to struct */
 
-	if (!newtime || !str || !pFileHandle)
+	if (!newtime || !pFileHandle)
 	{
 		debug(LOG_ERROR, "Fatal error averted in NETlog");
 		return false;
