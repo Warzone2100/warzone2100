@@ -4249,13 +4249,15 @@ QScriptValue js_stats(QScriptContext *context, QScriptEngine *engine)
 	QScriptValue callee = context->callee();
 	int type = callee.property("type").toInt32();
 	int player = callee.property("player").toInt32();
-	int index = callee.property("index").toInt32();
+	unsigned index = callee.property("index").toUInt32();
 	QString name = callee.property("name").toString();
 	if (context->argumentCount() == 1) // setter
 	{
 		int value = context->argument(0).toInt32();
+		//syncDebug("stats[p%d,t%d,%s,i%d] = %d", player, type, name.toStdString().c_str(), index, value);
 		if (type == COMP_BODY)
 		{
+			SCRIPT_ASSERT(context, index < numBodyStats, "Bad index");
 			BODY_STATS *psStats = asBodyStats + index;
 			if (name == "HitPoints")
 			{
@@ -4286,6 +4288,7 @@ QScriptValue js_stats(QScriptContext *context, QScriptEngine *engine)
 		}
 		else if (type == COMP_SENSOR)
 		{
+			SCRIPT_ASSERT(context, index < numSensorStats, "Bad index");
 			SENSOR_STATS *psStats = asSensorStats + index;
 			SCRIPT_ASSERT(context, name == "Range", "Invalid sensor parameter");
 			psStats->upgrade[player].range = value;
@@ -4294,6 +4297,7 @@ QScriptValue js_stats(QScriptContext *context, QScriptEngine *engine)
 		}
 		else if (type == COMP_ECM)
 		{
+			SCRIPT_ASSERT(context, index < numECMStats, "Bad index");
 			ECM_STATS *psStats = asECMStats + index;
 			SCRIPT_ASSERT(context, name == "Range", "Invalid ECM parameter");
 			psStats->upgrade[player].range = value;
@@ -4302,12 +4306,14 @@ QScriptValue js_stats(QScriptContext *context, QScriptEngine *engine)
 		}
 		else if (type == COMP_CONSTRUCT)
 		{
+			SCRIPT_ASSERT(context, index < numConstructStats, "Bad index");
 			CONSTRUCT_STATS *psStats = asConstructStats + index;
 			SCRIPT_ASSERT(context, name == "ConstructorPoints", "Invalid constructor parameter");
 			psStats->upgrade[player].constructPoints = value;
 		}
 		else if (type == COMP_WEAPON)
 		{
+			SCRIPT_ASSERT(context, index < numWeaponStats, "Bad index");
 			WEAPON_STATS *psStats = asWeaponStats + index;
 			if (name == "MaxRange")
 			{
@@ -4369,6 +4375,7 @@ QScriptValue js_stats(QScriptContext *context, QScriptEngine *engine)
 		else if (type == SCRCB_RES || type == SCRCB_REP || type == SCRCB_POW || type == SCRCB_CON || type == SCRCB_REA
 		         || type == SCRCB_HIT || type == SCRCB_ELW || type == SCRCB_ARM || type == SCRCB_HEA)
 		{
+			SCRIPT_ASSERT(context, index < numStructureStats, "Bad index");
 			STRUCTURE_STATS *psStats = asStructureStats + index;
 			switch (type)
 			{
@@ -4428,6 +4435,7 @@ QScriptValue js_stats(QScriptContext *context, QScriptEngine *engine)
 	// Now read value and return it
 	if (type == COMP_BODY)
 	{
+		SCRIPT_ASSERT(context, index < numBodyStats, "Bad index");
 		BODY_STATS *psStats = asBodyStats + index;
 		if (name == "HitPoints")
 		{
@@ -4456,24 +4464,28 @@ QScriptValue js_stats(QScriptContext *context, QScriptEngine *engine)
 	}
 	else if (type == COMP_SENSOR)
 	{
+		SCRIPT_ASSERT(context, index < numSensorStats, "Bad index");
 		SENSOR_STATS *psStats = asSensorStats + index;
 		SCRIPT_ASSERT(context, name == "Range", "Invalid sensor parameter");
 		return psStats->upgrade[player].range;
 	}
 	else if (type == COMP_ECM)
 	{
+		SCRIPT_ASSERT(context, index < numECMStats, "Bad index");
 		ECM_STATS *psStats = asECMStats + index;
 		SCRIPT_ASSERT(context, name == "Range", "Invalid ECM parameter");
 		return psStats->upgrade[player].range;
 	}
 	else if (type == COMP_CONSTRUCT)
 	{
+		SCRIPT_ASSERT(context, index < numConstructStats, "Bad index");
 		CONSTRUCT_STATS *psStats = asConstructStats + index;
 		SCRIPT_ASSERT(context, name == "ConstructorPoints", "Invalid constructor parameter");
 		return psStats->upgrade[player].constructPoints;
 	}
 	else if (type == COMP_WEAPON)
 	{
+		SCRIPT_ASSERT(context, index < numWeaponStats, "Bad index");
 		WEAPON_STATS *psStats = asWeaponStats + index;
 		if (name == "MaxRange")
 		{
@@ -4535,6 +4547,7 @@ QScriptValue js_stats(QScriptContext *context, QScriptEngine *engine)
 	else if (type == SCRCB_RES || type == SCRCB_REP || type == SCRCB_POW || type == SCRCB_CON || type == SCRCB_REA
 	         || type == SCRCB_HIT || type == SCRCB_ELW || type == SCRCB_ARM || type == SCRCB_HEA)
 	{
+		SCRIPT_ASSERT(context, index < numStructureStats, "Bad index");
 		STRUCTURE_STATS *psStats = asStructureStats + index;
 		switch (type)
 		{
@@ -4553,7 +4566,7 @@ QScriptValue js_stats(QScriptContext *context, QScriptEngine *engine)
 	return QScriptValue::NullValue;
 }
 
-static void setStatsFunc(QScriptValue &base, QScriptEngine *engine, QString name, int player, int type, int index, int value)
+static void setStatsFunc(QScriptValue &base, QScriptEngine *engine, QString name, int player, int type, int index)
 {
 	QScriptValue v = engine->newFunction(js_stats);
 	base.setProperty(name, v, QScriptValue::PropertyGetter | QScriptValue::PropertySetter);
@@ -4753,11 +4766,11 @@ bool registerFunctions(QScriptEngine *engine, QString scriptName)
 		{
 			BODY_STATS *psStats = asBodyStats + j;
 			QScriptValue body = engine->newObject();
-			setStatsFunc(body, engine, "HitPoints", i, COMP_BODY, j, psStats->upgrade[i].body);
-			setStatsFunc(body, engine, "Power", i, COMP_BODY, j, psStats->upgrade[i].power);
-			setStatsFunc(body, engine, "Armour", i, COMP_BODY, j, psStats->upgrade[i].armour);
-			setStatsFunc(body, engine, "Thermal", i, COMP_BODY, j, psStats->upgrade[i].thermal);
-			setStatsFunc(body, engine, "Resistance", i, COMP_BODY, j, psStats->upgrade[i].resistance);
+			setStatsFunc(body, engine, "HitPoints", i, COMP_BODY, j);
+			setStatsFunc(body, engine, "Power", i, COMP_BODY, j);
+			setStatsFunc(body, engine, "Armour", i, COMP_BODY, j);
+			setStatsFunc(body, engine, "Thermal", i, COMP_BODY, j);
+			setStatsFunc(body, engine, "Resistance", i, COMP_BODY, j);
 			bodybase.setProperty(psStats->name, body, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		}
 		node.setProperty("Body", bodybase, QScriptValue::ReadOnly | QScriptValue::Undeletable);
@@ -4767,7 +4780,7 @@ bool registerFunctions(QScriptEngine *engine, QString scriptName)
 		{
 			SENSOR_STATS *psStats = asSensorStats + j;
 			QScriptValue sensor = engine->newObject();
-			setStatsFunc(sensor, engine, "Range", i, COMP_SENSOR, j, psStats->upgrade[i].range);
+			setStatsFunc(sensor, engine, "Range", i, COMP_SENSOR, j);
 			sensorbase.setProperty(psStats->name, sensor, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		}
 		node.setProperty("Sensor", sensorbase, QScriptValue::ReadOnly | QScriptValue::Undeletable);
@@ -4777,7 +4790,7 @@ bool registerFunctions(QScriptEngine *engine, QString scriptName)
 		{
 			ECM_STATS *psStats = asECMStats + j;
 			QScriptValue ecm = engine->newObject();
-			setStatsFunc(ecm, engine, "Range", i, COMP_ECM, j, psStats->upgrade[i].range);
+			setStatsFunc(ecm, engine, "Range", i, COMP_ECM, j);
 			ecmbase.setProperty(psStats->name, ecm, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		}
 		node.setProperty("ECM", ecmbase, QScriptValue::ReadOnly | QScriptValue::Undeletable);
@@ -4787,7 +4800,7 @@ bool registerFunctions(QScriptEngine *engine, QString scriptName)
 		{
 			REPAIR_STATS *psStats = asRepairStats + j;
 			QScriptValue repair = engine->newObject();
-			setStatsFunc(repair, engine, "RepairPoints", i, COMP_REPAIRUNIT, j, psStats->upgrade[i].repairPoints);
+			setStatsFunc(repair, engine, "RepairPoints", i, COMP_REPAIRUNIT, j);
 			repairbase.setProperty(psStats->name, repair, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		}
 		node.setProperty("Repair", repairbase, QScriptValue::ReadOnly | QScriptValue::Undeletable);
@@ -4797,7 +4810,7 @@ bool registerFunctions(QScriptEngine *engine, QString scriptName)
 		{
 			CONSTRUCT_STATS *psStats = asConstructStats + j;
 			QScriptValue con = engine->newObject();
-			setStatsFunc(con, engine, "ConstructorPoints", i, COMP_CONSTRUCT, j, psStats->upgrade[i].constructPoints);
+			setStatsFunc(con, engine, "ConstructorPoints", i, COMP_CONSTRUCT, j);
 			conbase.setProperty(psStats->name, con, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		}
 		node.setProperty("Construct", conbase, QScriptValue::ReadOnly | QScriptValue::Undeletable);
@@ -4807,19 +4820,19 @@ bool registerFunctions(QScriptEngine *engine, QString scriptName)
 		{
 			WEAPON_STATS *psStats = asWeaponStats + j;
 			QScriptValue weap = engine->newObject();
-			setStatsFunc(weap, engine, "MaxRange", i, COMP_WEAPON, j, psStats->upgrade[i].maxRange);
-			setStatsFunc(weap, engine, "MinRange", i, COMP_WEAPON, j, psStats->upgrade[i].minRange);
-			setStatsFunc(weap, engine, "HitChance", i, COMP_WEAPON, j, psStats->upgrade[i].hitChance);
-			setStatsFunc(weap, engine, "FirePause", i, COMP_WEAPON, j, psStats->upgrade[i].firePause);
-			setStatsFunc(weap, engine, "ReloadTime", i, COMP_WEAPON, j, psStats->upgrade[i].reloadTime);
-			setStatsFunc(weap, engine, "Rounds", i, COMP_WEAPON, j, psStats->upgrade[i].numRounds);
-			setStatsFunc(weap, engine, "Radius", i, COMP_WEAPON, j, psStats->upgrade[i].radius);
-			setStatsFunc(weap, engine, "Damage", i, COMP_WEAPON, j, psStats->upgrade[i].damage);
-			setStatsFunc(weap, engine, "MinimumDamage", i, COMP_WEAPON, j, psStats->upgrade[i].minimumDamage);
-			setStatsFunc(weap, engine, "RadiusDamage", i, COMP_WEAPON, j, psStats->upgrade[i].radiusDamage);
-			setStatsFunc(weap, engine, "RepeatDamage", i, COMP_WEAPON, j, psStats->upgrade[i].periodicalDamage);
-			setStatsFunc(weap, engine, "RepeatTime", i, COMP_WEAPON, j, psStats->upgrade[i].periodicalDamageTime);
-			setStatsFunc(weap, engine, "RepeatRadius", i, COMP_WEAPON, j, psStats->upgrade[i].periodicalDamageRadius);
+			setStatsFunc(weap, engine, "MaxRange", i, COMP_WEAPON, j);
+			setStatsFunc(weap, engine, "MinRange", i, COMP_WEAPON, j);
+			setStatsFunc(weap, engine, "HitChance", i, COMP_WEAPON, j);
+			setStatsFunc(weap, engine, "FirePause", i, COMP_WEAPON, j);
+			setStatsFunc(weap, engine, "ReloadTime", i, COMP_WEAPON, j);
+			setStatsFunc(weap, engine, "Rounds", i, COMP_WEAPON, j);
+			setStatsFunc(weap, engine, "Radius", i, COMP_WEAPON, j);
+			setStatsFunc(weap, engine, "Damage", i, COMP_WEAPON, j);
+			setStatsFunc(weap, engine, "MinimumDamage", i, COMP_WEAPON, j);
+			setStatsFunc(weap, engine, "RadiusDamage", i, COMP_WEAPON, j);
+			setStatsFunc(weap, engine, "RepeatDamage", i, COMP_WEAPON, j);
+			setStatsFunc(weap, engine, "RepeatTime", i, COMP_WEAPON, j);
+			setStatsFunc(weap, engine, "RepeatRadius", i, COMP_WEAPON, j);
 			wbase.setProperty(psStats->name, weap, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		}
 		node.setProperty("Weapon", wbase, QScriptValue::ReadOnly | QScriptValue::Undeletable);
@@ -4829,15 +4842,15 @@ bool registerFunctions(QScriptEngine *engine, QString scriptName)
 		{
 			STRUCTURE_STATS *psStats = asStructureStats + j;
 			QScriptValue strct = engine->newObject();
-			setStatsFunc(strct, engine, "ResearchPoints", i, SCRCB_RES, j, psStats->upgrade[i].research);
-			setStatsFunc(strct, engine, "RepairPoints", i, SCRCB_REP, j, psStats->upgrade[i].repair);
-			setStatsFunc(strct, engine, "PowerPoints", i, SCRCB_POW, j, psStats->upgrade[i].power);
-			setStatsFunc(strct, engine, "ProductionPoints", i, SCRCB_CON, j, psStats->upgrade[i].production);
-			setStatsFunc(strct, engine, "RearmPoints", i, SCRCB_REA, j, psStats->upgrade[i].rearm);
-			setStatsFunc(strct, engine, "Armour", i, SCRCB_ARM, j, psStats->upgrade[i].armour);
-			setStatsFunc(strct, engine, "Resistance", i, SCRCB_ELW, j, psStats->upgrade[i].resistance);
-			setStatsFunc(strct, engine, "Thermal", i, SCRCB_HEA, j, psStats->upgrade[i].thermal);
-			setStatsFunc(strct, engine, "HitPoints", i, SCRCB_HIT, j, psStats->upgrade[i].hitpoints);
+			setStatsFunc(strct, engine, "ResearchPoints", i, SCRCB_RES, j);
+			setStatsFunc(strct, engine, "RepairPoints", i, SCRCB_REP, j);
+			setStatsFunc(strct, engine, "PowerPoints", i, SCRCB_POW, j);
+			setStatsFunc(strct, engine, "ProductionPoints", i, SCRCB_CON, j);
+			setStatsFunc(strct, engine, "RearmPoints", i, SCRCB_REA, j);
+			setStatsFunc(strct, engine, "Armour", i, SCRCB_ARM, j);
+			setStatsFunc(strct, engine, "Resistance", i, SCRCB_ELW, j);
+			setStatsFunc(strct, engine, "Thermal", i, SCRCB_HEA, j);
+			setStatsFunc(strct, engine, "HitPoints", i, SCRCB_HIT, j);
 			structbase.setProperty(psStats->name, strct, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		}
 		node.setProperty("Building", structbase, QScriptValue::ReadOnly | QScriptValue::Undeletable);

@@ -6,6 +6,8 @@
 //
 // /////////////////////////////////////////////////////////////////
 
+receiveAllEvents(true);  // If doing this in eventGameInit, it seems to be too late in T2/T3, due to some eventResearched events triggering first.
+
 var lastHitTime = 0;
 var cheatmode = false;
 var maxOilDrums = 0;
@@ -45,7 +47,6 @@ function eventGameLoaded()
 
 function eventGameInit()
 {
-	receiveAllEvents(true);
 	setupGame();
 
 	// always at least one oil drum, and one more for every 64x64 tiles of map area
