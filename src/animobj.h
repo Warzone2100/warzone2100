@@ -30,7 +30,7 @@
 
 #include "lib/gamelib/anim.h"
 
-class BASE_OBJECT;
+struct BASE_OBJECT;
 
 #define	ANIM_MAX_COMPONENTS 10
 

@@ -260,11 +260,6 @@ static inline bool edgeLessThan(EDGE const &e1, EDGE const &e2)
 	return e1.to < e2.to;
 }
 
-static inline bool edgeEqual(EDGE const &e1, EDGE const &e2)
-{
-	return e1.from == e2.from && e1.to == e2.to;
-}
-
 static inline void flipEdge(EDGE &e)
 {
 	std::swap(e.from, e.to);

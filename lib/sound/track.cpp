@@ -267,7 +267,6 @@ const char *sound_GetTrackName(SDWORD iTrack)
 	if (iTrack <= 0
 	    || iTrack >= MAX_TRACKS
 	    || iTrack == SAMPLE_NOT_FOUND
-	    || g_apTrack == NULL
 	    || g_apTrack[iTrack] == NULL)
 	{
 		return NULL;
