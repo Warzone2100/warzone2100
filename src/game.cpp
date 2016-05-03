@@ -6383,18 +6383,33 @@ bool loadSaveStructLimits(const char *pFileName)
 		{
 			QString name = list[i];
 			int limit = ini.value(name, 0).toInt();
-			int statInc;
 
-			for (statInc = 0; statInc < numStructureStats; statInc++)
+			if (name.compare("@Droid") == 0)
 			{
-				STRUCTURE_STATS *psStats = asStructureStats + statInc;
-				if (name.compare(psStats->id) == 0)
-				{
-					asStructLimits[player][statInc].limit = limit != 255 ? limit : LOTS_OF;
-					break;
-				}
+				setMaxDroids(player, limit);
 			}
-			ASSERT_OR_RETURN(false, statInc != numStructureStats, "Did not find structure %s", name.toUtf8().constData());
+			else if (name.compare("@Commander") == 0)
+			{
+				setMaxCommanders(player, limit);
+			}
+			else if (name.compare("@Constructor") == 0)
+			{
+				setMaxConstructors(player, limit);
+			}
+			else
+			{
+				int statInc;
+				for (statInc = 0; statInc < numStructureStats; ++statInc)
+				{
+					STRUCTURE_STATS *psStats = asStructureStats + statInc;
+					if (name.compare(psStats->id) == 0)
+					{
+						asStructLimits[player][statInc].limit = limit != 255 ? limit : LOTS_OF;
+						break;
+					}
+				}
+				ASSERT_OR_RETURN(false, statInc != numStructureStats, "Did not find structure %s", name.toUtf8().constData());
+			}
 		}
 		ini.endGroup();
 	}
@@ -6413,6 +6428,11 @@ bool writeStructLimitsFile(const char *pFileName)
 	for (int player = 0; player < game.maxPlayers; player++)
 	{
 		ini.beginGroup("player_" + QString::number(player));
+
+		ini.setValue("@Droid", getMaxDroids(player));
+		ini.setValue("@Commander", getMaxCommanders(player));
+		ini.setValue("@Constructor", getMaxConstructors(player));
+
 		STRUCTURE_STATS *psStats = asStructureStats;
 		for (int i = 0; i < numStructureStats; i++, psStats++)
 		{
