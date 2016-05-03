@@ -71,15 +71,22 @@
 #define ALLIES -2
 #define ENEMIES -3
 
-#define SCRCB_RES (COMP_NUMCOMPONENTS + 0)
-#define SCRCB_REP (COMP_NUMCOMPONENTS + 1)
-#define SCRCB_POW (COMP_NUMCOMPONENTS + 2)
-#define SCRCB_CON (COMP_NUMCOMPONENTS + 3)
-#define SCRCB_REA (COMP_NUMCOMPONENTS + 4)
-#define SCRCB_ARM (COMP_NUMCOMPONENTS + 5)
-#define SCRCB_HEA (COMP_NUMCOMPONENTS + 6)
-#define SCRCB_ELW (COMP_NUMCOMPONENTS + 7)
-#define SCRCB_HIT (COMP_NUMCOMPONENTS + 8)
+enum Scrcb {
+	SCRCB_FIRST = COMP_NUMCOMPONENTS,
+	SCRCB_RES = SCRCB_FIRST,  // Research upgrade
+	SCRCB_MODULE_RES,  // Research module upgrade
+	SCRCB_REP,  // Repair upgrade
+	SCRCB_POW,  // Power upgrade
+	SCRCB_MODULE_POW,  // And so on...
+	SCRCB_CON,
+	SCRCB_MODULE_CON,
+	SCRCB_REA,
+	SCRCB_ARM,
+	SCRCB_HEA,
+	SCRCB_ELW,
+	SCRCB_HIT,
+	SCRCB_LAST = SCRCB_HIT
+};
 
 // TODO, move this stuff into a script common subsystem
 #include "scriptfuncs.h"
@@ -4372,17 +4379,19 @@ QScriptValue js_stats(QScriptContext *context, QScriptEngine *engine)
 				SCRIPT_ASSERT(context, false, "Invalid weapon method");
 			}
 		}
-		else if (type == SCRCB_RES || type == SCRCB_REP || type == SCRCB_POW || type == SCRCB_CON || type == SCRCB_REA
-		         || type == SCRCB_HIT || type == SCRCB_ELW || type == SCRCB_ARM || type == SCRCB_HEA)
+		else if (type >= SCRCB_FIRST && type <= SCRCB_LAST)
 		{
 			SCRIPT_ASSERT(context, index < numStructureStats, "Bad index");
 			STRUCTURE_STATS *psStats = asStructureStats + index;
-			switch (type)
+			switch ((Scrcb)type)
 			{
 			case SCRCB_RES: psStats->upgrade[player].research = value; break;
+			case SCRCB_MODULE_RES: psStats->upgrade[player].moduleResearch = value; break;
 			case SCRCB_REP: psStats->upgrade[player].repair = value; break;
 			case SCRCB_POW: psStats->upgrade[player].power = value; break;
+			case SCRCB_MODULE_POW: psStats->upgrade[player].modulePower = value; break;
 			case SCRCB_CON: psStats->upgrade[player].production = value; break;
+			case SCRCB_MODULE_CON: psStats->upgrade[player].moduleProduction = value; break;
 			case SCRCB_REA: psStats->upgrade[player].rearm = value; break;
 			case SCRCB_HEA: psStats->upgrade[player].thermal = value; break;
 			case SCRCB_ARM: psStats->upgrade[player].armour = value; break;
@@ -4544,17 +4553,19 @@ QScriptValue js_stats(QScriptContext *context, QScriptEngine *engine)
 			SCRIPT_ASSERT(context, false, "Invalid weapon method");
 		}
 	}
-	else if (type == SCRCB_RES || type == SCRCB_REP || type == SCRCB_POW || type == SCRCB_CON || type == SCRCB_REA
-	         || type == SCRCB_HIT || type == SCRCB_ELW || type == SCRCB_ARM || type == SCRCB_HEA)
+	else if (type >= SCRCB_FIRST && type <= SCRCB_LAST)
 	{
 		SCRIPT_ASSERT(context, index < numStructureStats, "Bad index");
 		STRUCTURE_STATS *psStats = asStructureStats + index;
 		switch (type)
 		{
 		case SCRCB_RES: return psStats->upgrade[player].research; break;
+		case SCRCB_MODULE_RES: return psStats->upgrade[player].moduleResearch; break;
 		case SCRCB_REP: return psStats->upgrade[player].repair; break;
 		case SCRCB_POW: return psStats->upgrade[player].power; break;
+		case SCRCB_MODULE_POW: return psStats->upgrade[player].modulePower; break;
 		case SCRCB_CON: return psStats->upgrade[player].production; break;
+		case SCRCB_MODULE_CON: return psStats->upgrade[player].moduleProduction; break;
 		case SCRCB_REA: return psStats->upgrade[player].rearm; break;
 		case SCRCB_ELW: return psStats->upgrade[player].resistance; break;
 		case SCRCB_HEA: return psStats->upgrade[player].thermal; break;
@@ -4843,9 +4854,12 @@ bool registerFunctions(QScriptEngine *engine, QString scriptName)
 			STRUCTURE_STATS *psStats = asStructureStats + j;
 			QScriptValue strct = engine->newObject();
 			setStatsFunc(strct, engine, "ResearchPoints", i, SCRCB_RES, j);
+			setStatsFunc(strct, engine, "ModuleResearchPoints", i, SCRCB_MODULE_RES, j);
 			setStatsFunc(strct, engine, "RepairPoints", i, SCRCB_REP, j);
 			setStatsFunc(strct, engine, "PowerPoints", i, SCRCB_POW, j);
+			setStatsFunc(strct, engine, "ModulePowerPoints", i, SCRCB_MODULE_POW, j);
 			setStatsFunc(strct, engine, "ProductionPoints", i, SCRCB_CON, j);
+			setStatsFunc(strct, engine, "ModuleProductionPoints", i, SCRCB_MODULE_CON, j);
 			setStatsFunc(strct, engine, "RearmPoints", i, SCRCB_REA, j);
 			setStatsFunc(strct, engine, "Armour", i, SCRCB_ARM, j);
 			setStatsFunc(strct, engine, "Resistance", i, SCRCB_ELW, j);

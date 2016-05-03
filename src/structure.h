@@ -510,18 +510,20 @@ static inline STRUCTURE const *castStructure(SIMPLE_OBJECT const *psObject)
 
 static inline int getBuildingResearchPoints(STRUCTURE *psStruct)
 {
-	return psStruct->pStructureType->upgrade[psStruct->player].research * (psStruct->capacity + 1);
+	auto &upgrade = psStruct->pStructureType->upgrade[psStruct->player];
+	return upgrade.research + upgrade.moduleResearch * psStruct->capacity;
 }
 
 static inline int getBuildingProductionPoints(STRUCTURE *psStruct)
 {
-	return psStruct->pStructureType->upgrade[psStruct->player].production * (psStruct->capacity + 1);
+	auto &upgrade = psStruct->pStructureType->upgrade[psStruct->player];
+	return upgrade.production + upgrade.moduleProduction * psStruct->capacity;
 }
 
 static inline int getBuildingPowerPoints(STRUCTURE *psStruct)
 {
-	int power = psStruct->pStructureType->upgrade[psStruct->player].power;
-	return power + power * psStruct->capacity / 2;
+	auto &upgrade = psStruct->pStructureType->upgrade[psStruct->player];
+	return upgrade.power + upgrade.modulePower * psStruct->capacity;
 }
 
 static inline int getBuildingRepairPoints(STRUCTURE *psStruct)

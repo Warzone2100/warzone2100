@@ -459,9 +459,12 @@ bool loadStructureStats(QString filename)
 		initModuleStats(inc, psStats->type);  // This function looks like a hack. But slightly less hacky than before.
 
 		psStats->base.research = ini.value("researchPoints", 0).toInt();
+		psStats->base.moduleResearch = ini.value("moduleResearchPoints", 0).toInt();
 		psStats->base.production = ini.value("productionPoints", 0).toInt();
+		psStats->base.moduleProduction = ini.value("moduleProductionPoints", 0).toInt();
 		psStats->base.repair = ini.value("repairPoints", 0).toInt();
 		psStats->base.power = ini.value("powerPoints", 0).toInt();
+		psStats->base.modulePower = ini.value("modulePowerPoints", 0).toInt();
 		psStats->base.rearm = ini.value("rearmPoints", 0).toInt();
 		psStats->base.resistance = ini.value("resistance", 0).toUInt();
 		psStats->base.hitpoints = ini.value("hitpoints", 1).toUInt();
@@ -470,9 +473,12 @@ bool loadStructureStats(QString filename)
 		for (int i = 0; i < MAX_PLAYERS; i++)
 		{
 			psStats->upgrade[i].research = psStats->base.research;
+			psStats->upgrade[i].moduleResearch = psStats->base.moduleResearch;
 			psStats->upgrade[i].power = psStats->base.power;
+			psStats->upgrade[i].modulePower = psStats->base.modulePower;
 			psStats->upgrade[i].repair = psStats->base.repair;
 			psStats->upgrade[i].production = psStats->base.production;
+			psStats->upgrade[i].moduleProduction = psStats->base.moduleProduction;
 			psStats->upgrade[i].rearm = psStats->base.rearm;
 			psStats->upgrade[i].resistance = ini.value("resistance", 0).toUInt();
 			psStats->upgrade[i].hitpoints = ini.value("hitpoints", 1).toUInt();

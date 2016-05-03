@@ -124,9 +124,12 @@ struct STRUCTURE_STATS : public BASE_STATS
 	struct
 	{
 		unsigned research;
+		unsigned moduleResearch;
 		unsigned repair;
 		unsigned power;
+		unsigned modulePower;
 		unsigned production;
+		unsigned moduleProduction;
 		unsigned rearm;
 		unsigned armour;
 		unsigned thermal;
