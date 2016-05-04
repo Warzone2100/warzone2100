@@ -4150,7 +4150,14 @@ bool validLocation(BASE_STATS *psStats, Vector2i pos, uint16_t direction, unsign
 						//skip the actual area the structure will cover
 						if (i < 0 || i >= b.size.x || j < 0 || j >= b.size.y)
 						{
-							STRUCTURE_PACKABILITY packObj = baseObjectPackability(mapTile(b.map.x + i, b.map.y + j)->psObject);
+							BASE_OBJECT *object = mapTile(b.map.x + i, b.map.y + j)->psObject;
+							STRUCTURE *structure = castStructure(object);
+							if (structure != nullptr && !structure->visible[player] && !aiCheckAlliances(player, structure->player))
+							{
+								continue;  // Ignore structures we can't see.
+							}
+
+							STRUCTURE_PACKABILITY packObj = baseObjectPackability(object);
 
 							if (!canPack(packThis, packObj))
 							{
@@ -4188,7 +4195,7 @@ bool validLocation(BASE_STATS *psStats, Vector2i pos, uint16_t direction, unsign
 					for (int i = 0; i < b.size.x; ++i)
 					{
 						MAPTILE const *psTile = mapTile(b.map.x + i, b.map.y + j);
-						if (TileIsOccupied(psTile))
+						if (TileIsKnownOccupied(psTile, player))
 						{
 							if (TileHasWall(psTile) && (psBuilding->type == REF_DEFENSE || psBuilding->type == REF_GATE || psBuilding->type == REF_WALL))
 							{
@@ -4212,7 +4219,7 @@ bool validLocation(BASE_STATS *psStats, Vector2i pos, uint16_t direction, unsign
 				STRUCTURE const *psStruct = getTileStructure(map_coord(pos.x), map_coord(pos.y));
 				if (psStruct && (psStruct->pStructureType->type == REF_FACTORY ||
 				                 psStruct->pStructureType->type == REF_VTOL_FACTORY) &&
-				    psStruct->status == SS_BUILT)
+				    psStruct->status == SS_BUILT && aiCheckAlliances(player, psStruct->player))
 				{
 					break;
 				}
@@ -4223,7 +4230,7 @@ bool validLocation(BASE_STATS *psStats, Vector2i pos, uint16_t direction, unsign
 			{
 				STRUCTURE const *psStruct = getTileStructure(map_coord(pos.x), map_coord(pos.y));
 				if (psStruct && psStruct->pStructureType->type == REF_RESEARCH &&
-				    psStruct->status == SS_BUILT)
+				    psStruct->status == SS_BUILT && aiCheckAlliances(player, psStruct->player))
 				{
 					break;
 				}
@@ -4234,7 +4241,7 @@ bool validLocation(BASE_STATS *psStats, Vector2i pos, uint16_t direction, unsign
 			{
 				STRUCTURE const *psStruct = getTileStructure(map_coord(pos.x), map_coord(pos.y));
 				if (psStruct && psStruct->pStructureType->type == REF_POWER_GEN &&
-				    psStruct->status == SS_BUILT)
+				    psStruct->status == SS_BUILT && aiCheckAlliances(player, psStruct->player))
 				{
 					break;
 				}

@@ -257,6 +257,12 @@ static inline bool TileIsOccupied(const MAPTILE *tile)
 	return tile->psObject != NULL;
 }
 
+static inline bool TileIsKnownOccupied(MAPTILE const *tile, unsigned player)
+{
+	return TileIsOccupied(tile) &&
+	       (tile->psObject->type != OBJ_STRUCTURE || ((STRUCTURE *)tile->psObject)->visible[player] || aiCheckAlliances(player, ((STRUCTURE *)tile->psObject)->player));
+}
+
 /** Check if tile contains a structure. Function is NOT thread-safe. */
 static inline bool TileHasStructure(const MAPTILE *tile)
 {
