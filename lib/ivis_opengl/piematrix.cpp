@@ -344,6 +344,8 @@ void pie_GetMatrix(float *matrix)
  */
 int32_t pie_RotateProject(const Vector3i *v3d, Vector2i *v2d)
 {
+	float hackScaleFactor = 3 * 330 / 1024.0;  // HACK: This seems to work by experimentation, not sure why.
+
 	/*
 	 * v = curMatrix . v3d
 	 */
@@ -362,8 +364,8 @@ int32_t pie_RotateProject(const Vector3i *v3d, Vector2i *v2d)
 	}
 	else
 	{
-		v2d->x = rendSurface.xcentre + (v.x / zz);
-		v2d->y = rendSurface.ycentre - (v.y / zz);
+		v2d->x = rendSurface.xcentre + (hackScaleFactor / zz * v.x);
+		v2d->y = rendSurface.ycentre - (hackScaleFactor / zz * v.y);
 	}
 
 	return zz;
