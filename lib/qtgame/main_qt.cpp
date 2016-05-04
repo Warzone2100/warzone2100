@@ -24,6 +24,7 @@
 #include <QtWidgets/QMessageBox>
 
 #include "lib/framework/frame.h"
+#include "lib/framework/wzapp.h"
 #include "lib/ivis_opengl/pieclip.h"
 #include "lib/ivis_opengl/screen.h"
 #include "wzapp_qt.h"
@@ -40,12 +41,11 @@ int main(int argc, char *argv[])
 QApplication *appPtr;
 WzMainWindow *mainWindowPtr;
 
-bool wzMain(int &argc, char **argv)
+void wzMain(int &argc, char **argv)
 {
 	debug(LOG_MAIN, "Qt initialization");
 
 	appPtr = new QApplication(argc, argv);
-	return true;
 }
 
 bool wzMainScreenSetup(int antialiasing, bool fullscreen, bool vsync)
@@ -129,9 +129,19 @@ void wzToggleFullscreen()
 {
 }
 
-QList<QSize> wzAvailableResolutions()
+std::vector<screeninfo> wzAvailableResolutions()
 {
-	return WzMainWindow::instance()->availableResolutions();
+	std::vector<screeninfo> res;
+	for (auto const &r : WzMainWindow::instance()->availableResolutions())
+	{
+		screeninfo info;
+		info.width = r.width();
+		info.height = r.height();
+		info.refresh_rate = 0;
+		info.screen = 0;
+		res.push_back(info);
+	}
+	return res;
 }
 
 void wzSetSwapInterval(int swap)
