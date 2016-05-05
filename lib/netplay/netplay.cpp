@@ -714,34 +714,34 @@ static bool NETsendGAMESTRUCT(Socket *sock, const GAMESTRUCT *ourgamestruct)
 	unsigned int i;
 	ssize_t result;
 
+	auto push32 = [&](uint32_t value) {
+		uint32_t swapped = htonl(value);
+		memcpy(buffer, &swapped, sizeof(swapped));
+		buffer += sizeof(swapped);
+	};
+
 	// Now dump the data into the buffer
 	// Copy 32bit large big endian numbers
-	*(uint32_t *)buffer = htonl(ourgamestruct->GAMESTRUCT_VERSION);
-	buffer += sizeof(uint32_t);
+	push32(ourgamestruct->GAMESTRUCT_VERSION);
 
 	// Copy a string
 	strlcpy(buffer, ourgamestruct->name, sizeof(ourgamestruct->name));
 	buffer += sizeof(ourgamestruct->name);
 
 	// Copy 32bit large big endian numbers
-	*(int32_t *)buffer = htonl(ourgamestruct->desc.dwSize);
-	buffer += sizeof(int32_t);
-	*(int32_t *)buffer = htonl(ourgamestruct->desc.dwFlags);
-	buffer += sizeof(int32_t);
+	push32(ourgamestruct->desc.dwSize);
+	push32(ourgamestruct->desc.dwFlags);
 
 	// Copy yet another string
 	strlcpy(buffer, ourgamestruct->desc.host, sizeof(ourgamestruct->desc.host));
 	buffer += sizeof(ourgamestruct->desc.host);
 
 	// Copy 32bit large big endian numbers
-	*(int32_t *)buffer = htonl(ourgamestruct->desc.dwMaxPlayers);
-	buffer += sizeof(int32_t);
-	*(int32_t *)buffer = htonl(ourgamestruct->desc.dwCurrentPlayers);
-	buffer += sizeof(int32_t);
+	push32(ourgamestruct->desc.dwMaxPlayers);
+	push32(ourgamestruct->desc.dwCurrentPlayers);
 	for (i = 0; i < ARRAY_SIZE(ourgamestruct->desc.dwUserFlags); ++i)
 	{
-		*(int32_t *)buffer = htonl(ourgamestruct->desc.dwUserFlags[i]);
-		buffer += sizeof(int32_t);
+		push32(ourgamestruct->desc.dwUserFlags[i]);
 	}
 
 	// Copy a string
@@ -772,40 +772,31 @@ static bool NETsendGAMESTRUCT(Socket *sock, const GAMESTRUCT *ourgamestruct)
 	buffer += sizeof(ourgamestruct->modlist);
 
 	// Copy 32bit large big endian numbers
-	*(uint32_t *)buffer = htonl(ourgamestruct->game_version_major);
-	buffer += sizeof(uint32_t);
+	push32(ourgamestruct->game_version_major);
 
 	// Copy 32bit large big endian numbers
-	*(uint32_t *)buffer = htonl(ourgamestruct->game_version_minor);
-	buffer += sizeof(uint32_t);
+	push32(ourgamestruct->game_version_minor);
 
 	// Copy 32bit large big endian numbers
-	*(uint32_t *)buffer = htonl(ourgamestruct->privateGame);
-	buffer += sizeof(uint32_t);
+	push32(ourgamestruct->privateGame);
 
 	// Copy 32bit large big endian numbers
-	*(uint32_t *)buffer = htonl(ourgamestruct->pureMap);
-	buffer += sizeof(uint32_t);
+	push32(ourgamestruct->pureMap);
 
 	// Copy 32bit large big endian numbers
-	*(uint32_t *)buffer = htonl(ourgamestruct->Mods);
-	buffer += sizeof(uint32_t);
+	push32(ourgamestruct->Mods);
 
 	// Copy 32bit large big endian numbers
-	*(uint32_t *)buffer = htonl(ourgamestruct->gameId);
-	buffer += sizeof(uint32_t);
+	push32(ourgamestruct->gameId);
 
 	// Copy 32bit large big endian numbers
-	*(uint32_t *)buffer = htonl(ourgamestruct->limits);
-	buffer += sizeof(uint32_t);
+	push32(ourgamestruct->limits);
 
 	// Copy 32bit large big endian numbers
-	*(uint32_t *)buffer = htonl(ourgamestruct->future3);
-	buffer += sizeof(uint32_t);
+	push32(ourgamestruct->future3);
 
 	// Copy 32bit large big endian numbers
-	*(uint32_t *)buffer = htonl(ourgamestruct->future4);
-	buffer += sizeof(uint32_t);
+	push32(ourgamestruct->future4);
 
 	debug(LOG_NET, "sending GAMESTRUCT, size: %u", (unsigned int)sizeof(buf));
 
