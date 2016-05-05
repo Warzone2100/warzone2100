@@ -19,4 +19,4 @@ file            SCRIPTVAL       "cam3day.vlo"
 
 /* Directory for javascript files*/
 directory "script"
-file JAVASCRIPT "rules.js"
+file JAVASCRIPT "tutorial.js"
