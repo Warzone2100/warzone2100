@@ -172,12 +172,11 @@ struct PathfindContext
 	bool matches(std::shared_ptr<PathBlockingMap> &blockingMap_, PathCoord tileS_, PathNonblockingArea dstIgnore_) const
 	{
 		// Must check myGameTime == blockingMap_->type.gameTime, otherwise blockingMap could be a deleted pointer which coincidentally compares equal to the valid pointer blockingMap_.
-		return myGameTime == blockingMap_->type.gameTime && blockingMapRef == blockingMap_ && tileS == tileS_ && dstIgnore == dstIgnore_;
+		return myGameTime == blockingMap_->type.gameTime && blockingMap == blockingMap_ && tileS == tileS_ && dstIgnore == dstIgnore_;
 	}
 	void assign(std::shared_ptr<PathBlockingMap> &blockingMap_, PathCoord tileS_, PathNonblockingArea dstIgnore_)
 	{
-		blockingMapRef = blockingMap_;
-		blockingMap = &*blockingMap_;
+		blockingMap = blockingMap_;
 		tileS = tileS_;
 		dstIgnore = dstIgnore_;
 		myGameTime = blockingMap->type.gameTime;
@@ -205,8 +204,7 @@ struct PathfindContext
 
 	std::vector<PathNode> nodes;        ///< Edge of explored region of the map.
 	std::vector<PathExploredTile> map;  ///< Map, with paths leading back to tileS.
-	PathBlockingMap const *blockingMap; ///< Map of blocking tiles for the type of object which needs a path.
-	std::shared_ptr<PathBlockingMap> blockingMapRef; ///< Same as blockingMap, just used for cleanup.
+	std::shared_ptr<PathBlockingMap> blockingMap; ///< Map of blocking tiles for the type of object which needs a path.
 	PathNonblockingArea dstIgnore;      ///< Area of structure at destination which should be considered nonblocking.
 };
 
