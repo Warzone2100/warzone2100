@@ -218,7 +218,8 @@ bool recvPing(NETQUEUE queue)
 	{
 		if (!getMultiStats(sender).identity.empty() && !getMultiStats(sender).identity.verify(challengeResponse, pingChallenge, sizeof(pingChallenge)))
 		{
-			debug(LOG_ERROR, "Bad NET_PING packet, alleged sender is %d", (int)sender);
+			// Either bad signature, or we sent more than one ping packet and this response is to an older one than the latest.
+			debug(LOG_NEVER, "Bad and/or old NET_PING packet, alleged sender is %d", (int)sender);
 			return false;
 		}
 
