@@ -266,6 +266,8 @@ enum INT_RETVAL
 	INT_QUIT,		// The game should quit
 };
 
+void hciUpdate();
+
 /* Run the widgets for the in game interface */
 extern INT_RETVAL intRunWidgets(void);
 

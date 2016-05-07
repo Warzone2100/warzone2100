@@ -1097,21 +1097,9 @@ static void intProcessEditStats(UDWORD id)
 	}
 }
 
-/* Run the widgets for the in game interface */
-INT_RETVAL intRunWidgets(void)
+void hciUpdate()
 {
-	INT_RETVAL		retCode;
-	bool			quitting = false;
-	UDWORD			structX, structY, structX2, structY2;
-	UWORD                   objMajor;
-	STRUCTURE		*psStructure;
-	DROID			*psDroid;
-	SDWORD			i;
-	UDWORD			widgOverID;
-
-	intDoScreenRefresh();
-
-	/* Update the object list if necessary */
+	// Update the object list if necessary, prune dead objects.
 	if (intMode == INT_OBJECT || intMode == INT_STAT || intMode == INT_CMDORDER)
 	{
 		// see if there is a dead object in the list
@@ -1119,20 +1107,29 @@ INT_RETVAL intRunWidgets(void)
 		{
 			if (apsObjectList[i] && apsObjectList[i]->died)
 			{
-				intObjectDied((UDWORD)(i + IDOBJ_OBJSTART));
-				apsObjectList[i] = NULL;
+				intObjectDied(i + IDOBJ_OBJSTART);
+				apsObjectList[i] = nullptr;
 			}
 		}
 	}
 
-	/* Update the previous object array */
-	for (i = 0; i < IOBJ_MAX; i++)
+	// Update the previous object array, prune dead objects.
+	for (int i = 0; i < IOBJ_MAX; ++i)
 	{
 		if (apsPreviousObj[i] && apsPreviousObj[i]->died)
 		{
 			apsPreviousObj[i] = NULL;
 		}
 	}
+}
+
+/* Run the widgets for the in game interface */
+INT_RETVAL intRunWidgets(void)
+{
+	bool			quitting = false;
+	UDWORD			structX, structY, structX2, structY2;
+
+	intDoScreenRefresh();
 
 	/* if objects in the world have changed, may have to update the interface */
 	if (objectsChanged)
@@ -1143,7 +1140,7 @@ INT_RETVAL intRunWidgets(void)
 			ASSERT_OR_RETURN(INT_NONE, widgGetFromID(psWScreen, IDOBJ_TABFORM) != NULL, "No object form");
 
 			/* Remove the old screen */
-			objMajor = ((ListTabWidget *)widgGetFromID(psWScreen, IDOBJ_TABFORM))->currentPage();
+			int objMajor = ((ListTabWidget *)widgGetFromID(psWScreen, IDOBJ_TABFORM))->currentPage();
 			intRemoveObject();
 
 			/* Add the new screen */
@@ -1563,7 +1560,7 @@ INT_RETVAL intRunWidgets(void)
 						{
 							MAPTILE *psTile = mapTile(map_coord(structX), map_coord(structY));
 							FEATURE *psFeature = (FEATURE *)psTile->psObject;
-							psStructure = (STRUCTURE *)psTile->psObject; /* reuse var */
+							STRUCTURE *psStructure = (STRUCTURE *)psTile->psObject;
 
 							if (psStructure && psTile->psObject->type == OBJ_STRUCTURE)
 							{
@@ -1574,11 +1571,10 @@ INT_RETVAL intRunWidgets(void)
 							{
 								removeFeature(psFeature);
 							}
-							psStructure = NULL;
 						}
 						else
 						{
-							psStructure = &tmp;
+							STRUCTURE *psStructure = &tmp;
 							tmp.id = generateNewObjectId();
 							tmp.pStructureType = (STRUCTURE_STATS *)psPositionStats;
 							tmp.pos.x = structX;
@@ -1616,7 +1612,7 @@ INT_RETVAL intRunWidgets(void)
 					         psPositionStats->ref < REF_TEMPLATE_START + REF_RANGE)
 					{
 						const char *msg;
-						psDroid = buildDroid((DROID_TEMPLATE *)psPositionStats,
+						DROID *psDroid = buildDroid((DROID_TEMPLATE *)psPositionStats,
 						                     world_coord(structX) + TILE_UNITS / 2, world_coord(structY) + TILE_UNITS / 2,
 						                     selectedPlayer, false, NULL);
 						cancelDeliveryRepos();
@@ -1652,9 +1648,9 @@ INT_RETVAL intRunWidgets(void)
 		}
 	}
 
-	widgOverID = widgGetMouseOver(psWScreen);
+	unsigned widgOverID = widgGetMouseOver(psWScreen);
 
-	retCode = INT_NONE;
+	INT_RETVAL retCode = INT_NONE;
 	if (quitting)
 	{
 		retCode = INT_QUIT;

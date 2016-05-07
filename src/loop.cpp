@@ -655,6 +655,9 @@ static void gameStateUpdate()
 
 	objmemUpdate();
 
+	// Clean up dead droid pointers in UI.
+	hciUpdate();
+
 	// Must end update, since we may or may not have ticked, and some message queue processing code may vary depending on whether it's in an update.
 	gameTimeUpdateEnd();
 }
