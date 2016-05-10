@@ -270,6 +270,70 @@ void WzConfig::endGroup()
 	}
 }
 
+bool WzConfig::beginArray(const QString &name)
+{
+	ASSERT(mArray.isEmpty(), "beginArray() cannot be nested");
+	mObjNameStack.append(mName);
+	mObjStack.append(mObj);
+	mName = name;
+	if (mWarning == ReadAndWrite)
+	{
+		mObj = QJsonObject();
+	}
+	else
+	{
+		if (!contains(name)) // handled in this way for backwards compatibility
+		{
+			mName = mObjNameStack.takeLast();
+			mObj = mObjStack.takeLast();
+			return false;
+		}
+		QJsonValue value = mObj.value(name);
+		ASSERT(value.isArray(), "beginArray() on non-array key \"%s\"", name.toUtf8().constData());
+		mArray = value.toArray();
+		ASSERT(mArray.first().isObject(), "beginArray() on non-object array \"%s\"", name.toUtf8().constData());
+		mObj = mArray.first().toObject();
+		mArray.removeFirst();
+	}
+	return true;
+}
+
+void WzConfig::nextArrayItem()
+{
+	if (mWarning == ReadAndWrite)
+	{
+		mArray.push_back(mObj);
+		mObj = QJsonObject();
+	}
+	else
+	{
+		mObj = mArray.first().toObject();
+		mArray.removeFirst();
+	}
+}
+
+int WzConfig::remainingArrayItems()
+{
+	return mArray.size();
+}
+
+void WzConfig::endArray()
+{
+	if (mWarning == ReadAndWrite)
+	{
+		mArray.push_back(mObj);
+		mObj = mObjStack.takeLast();
+		mObj[mName] = mArray;
+		mName = mObjNameStack.takeLast();
+	}
+	else
+	{
+		mName = mObjNameStack.takeLast();
+		mObj = mObjStack.takeLast();
+	}
+	mArray = QJsonArray();
+}
+
 void WzConfig::setValue(const QString &key, const QVariant &value)
 {
 	mObj.insert(key, QJsonValue::fromVariant(value));

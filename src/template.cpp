@@ -40,8 +40,7 @@
 #include "main.h"
 
 // Template storage
-DROID_TEMPLATE		*apsDroidTemplates[MAX_PLAYERS];
-
+std::map<int, DROID_TEMPLATE *> droidTemplates[MAX_PLAYERS];
 
 bool allowDesign = true;
 bool includeRedundantDesigns = false;
@@ -193,9 +192,10 @@ bool initTemplates()
 			debug(LOG_ERROR, "Invalid template %d / %s from stored templates", i, list[i].toUtf8().constData());
 			continue;
 		}
-		DROID_TEMPLATE *psDestTemplate = apsDroidTemplates[selectedPlayer];
-		while (psDestTemplate != NULL)
+		DROID_TEMPLATE *psDestTemplate = NULL;
+		for (auto &keyvaluepair : droidTemplates[selectedPlayer])
 		{
+			psDestTemplate = keyvaluepair.second;
 			// Check if template is identical to a loaded template
 			if (psDestTemplate->droidType == design.droidType
 			    && psDestTemplate->name.compare(design.name) == 0
@@ -213,7 +213,7 @@ bool initTemplates()
 			{
 				break;
 			}
-			psDestTemplate = psDestTemplate->psNext;
+			psDestTemplate = NULL;
 		}
 		if (psDestTemplate)
 		{
@@ -222,7 +222,7 @@ bool initTemplates()
 			continue; // next!
 		}
 		design.enabled = allowDesign;
-		addTemplate(selectedPlayer, &design);
+		copyTemplate(selectedPlayer, &design);
 		localTemplates.push_back(design);
 		ini.endGroup();
 	}
@@ -238,8 +238,9 @@ bool storeTemplates()
 		debug(LOG_ERROR, "Could not open %s", ini.fileName().toUtf8().constData());
 		return false;
 	}
-	for (DROID_TEMPLATE *psCurr = apsDroidTemplates[selectedPlayer]; psCurr != NULL; psCurr = psCurr->psNext)
+	for (auto &keyvaluepair : droidTemplates[selectedPlayer])
 	{
+		DROID_TEMPLATE *psCurr = keyvaluepair.second;
 		if (!psCurr->stored)
 		{
 			continue;    // not stored
@@ -302,7 +303,6 @@ DROID_TEMPLATE::DROID_TEMPLATE()  // This constructor replaces a memset in scrAs
 	  //, asWeaps
 	, droidType(DROID_WEAPON)
 	, multiPlayerID(0)
-	, psNext(NULL)
 	, prefab(false)
 	, stored(false)
 	, enabled(false)
@@ -336,9 +336,9 @@ bool loadDroidTemplates(const char *filename)
 			if (NetPlay.players[i].allocated && available)
 			{
 				design.prefab = false;
-				addTemplate(i, &design);
+				copyTemplate(i, &design);
 
-				// This sets up the UI templates for display purposes ONLY--we still only use apsDroidTemplates for making them.
+				// This sets up the UI templates for display purposes ONLY--we still only use droidTemplates for making them.
 				// FIXME: Why are we doing this here, and not on demand ?
 				// Only add unique designs to the UI list (Note, perhaps better to use std::map instead?)
 				std::list<DROID_TEMPLATE>::iterator it;
@@ -360,7 +360,7 @@ bool loadDroidTemplates(const char *filename)
 			else if (!NetPlay.players[i].allocated)	// AI template
 			{
 				design.prefab = true;  // prefabricated templates referenced from VLOs
-				addTemplate(i, &design);
+				copyTemplate(i, &design);
 			}
 		}
 		debug(LOG_NEVER, "Droid template found, Name: %s, MP ID: %d, ref: %u, ID: %s, prefab: %s, type:%d (loading)",
@@ -370,24 +370,35 @@ bool loadDroidTemplates(const char *filename)
 	return true;
 }
 
-//free the storage for the droid templates
-bool droidTemplateShutDown(void)
+DROID_TEMPLATE *copyTemplate(int player, DROID_TEMPLATE *psTemplate)
 {
-	unsigned int player;
-	DROID_TEMPLATE *pTemplate, *pNext;
+	DROID_TEMPLATE *dup = new DROID_TEMPLATE(*psTemplate);
+	droidTemplates[player][psTemplate->multiPlayerID] = dup;
+	return dup;
+}
 
-	for (player = 0; player < MAX_PLAYERS; player++)
+void addTemplate(int player, DROID_TEMPLATE *psTemplate)
+{
+	droidTemplates[player][psTemplate->multiPlayerID] = psTemplate;
+}
+
+void clearTemplates(int player)
+{
+	for (auto &keyvaluepair : droidTemplates[player])
 	{
-		for (pTemplate = apsDroidTemplates[player]; pTemplate != NULL; pTemplate = pNext)
-		{
-			pNext = pTemplate->psNext;
-			delete pTemplate;
-		}
-		apsDroidTemplates[player] = NULL;
+		delete keyvaluepair.second;
 	}
+	droidTemplates[player].clear();
+}
 
+//free the storage for the droid templates
+bool droidTemplateShutDown()
+{
+	for (int player = 0; player < MAX_PLAYERS; player++)
+	{
+		clearTemplates(player);
+	}
 	localTemplates.clear();
-
 	return true;
 }
 
@@ -401,11 +412,11 @@ DROID_TEMPLATE *getTemplateFromTranslatedNameNoPlayer(char const *pName)
 {
 	for (int i = 0; i < MAX_PLAYERS; i++)
 	{
-		for (DROID_TEMPLATE *psCurr = apsDroidTemplates[i]; psCurr != NULL; psCurr = psCurr->psNext)
+		for (auto &keyvaluepair : droidTemplates[i])
 		{
-			if (psCurr->id.compare(pName) == 0)
+			if (keyvaluepair.second->id.compare(pName) == 0)
 			{
-				return psCurr;
+				return keyvaluepair.second;
 			}
 		}
 	}
@@ -415,17 +426,11 @@ DROID_TEMPLATE *getTemplateFromTranslatedNameNoPlayer(char const *pName)
 /*getTemplatefFromMultiPlayerID gets template for unique ID  searching all lists */
 DROID_TEMPLATE *getTemplateFromMultiPlayerID(UDWORD multiPlayerID)
 {
-	UDWORD		player;
-	DROID_TEMPLATE	*pDroidDesign;
-
-	for (player = 0; player < MAX_PLAYERS; player++)
+	for (int player = 0; player < MAX_PLAYERS; player++)
 	{
-		for (pDroidDesign = apsDroidTemplates[player]; pDroidDesign != NULL; pDroidDesign = pDroidDesign->psNext)
+		if (droidTemplates[player].count(multiPlayerID) > 0)
 		{
-			if (pDroidDesign->multiPlayerID == multiPlayerID)
-			{
-				return pDroidDesign;
-			}
+			return droidTemplates[player][multiPlayerID];
 		}
 	}
 	return NULL;
@@ -500,8 +505,7 @@ void deleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, unsigned player, Q
 bool templateIsIDF(DROID_TEMPLATE *psTemplate)
 {
 	//add Cyborgs
-	if (!(psTemplate->droidType == DROID_WEAPON || psTemplate->droidType == DROID_CYBORG ||
-	      psTemplate->droidType == DROID_CYBORG_SUPER))
+	if (!(psTemplate->droidType == DROID_WEAPON || psTemplate->droidType == DROID_CYBORG || psTemplate->droidType == DROID_CYBORG_SUPER))
 	{
 		return false;
 	}
@@ -512,6 +516,15 @@ bool templateIsIDF(DROID_TEMPLATE *psTemplate)
 	}
 
 	return true;
+}
+
+void listTemplates()
+{
+	for (auto &keyvaluepair : droidTemplates[selectedPlayer])
+	{
+		DROID_TEMPLATE *t = keyvaluepair.second;
+		debug(LOG_INFO, "template %s : %ld : %s : %s : %s", getName(t), (long)t->multiPlayerID, t->enabled ? "Enabled" : "Disabled", t->stored ? "Stored" : "Temporal", t->prefab ? "Prefab" : "Designed");
+	}
 }
 
 /*

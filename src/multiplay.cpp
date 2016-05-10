@@ -404,38 +404,26 @@ FEATURE *IdToFeature(UDWORD id, UDWORD player)
 
 DROID_TEMPLATE *IdToTemplate(UDWORD tempId, UDWORD player)
 {
-	DROID_TEMPLATE *psTempl = NULL;
-	UDWORD		i;
-
 	// Check if we know which player this is from, in that case, assume it is a player template
 	// FIXME: nuke the ANYPLAYER hack
 	if (player != ANYPLAYER && player < MAX_PLAYERS)
 	{
-		for (psTempl = apsDroidTemplates[player]; psTempl && (psTempl->multiPlayerID != tempId); psTempl = psTempl->psNext)
-		{}		// follow templates
-
-		if (psTempl)
+		if (droidTemplates[player].count(tempId) > 0)
 		{
-			return psTempl;
+			return droidTemplates[player][tempId];
 		}
-		else
-		{
-			return NULL;
-		}
+		return NULL;
 	}
 
 	// It could be a AI template...or that of another player
-	for (i = 0; i < MAX_PLAYERS; i++)
+	for (int i = 0; i < MAX_PLAYERS; i++)
 	{
-		for (psTempl = apsDroidTemplates[i]; psTempl && psTempl->multiPlayerID != tempId; psTempl = psTempl->psNext)
-		{}	// follow templates
-
-		if (psTempl)
+		if (droidTemplates[i].count(tempId) > 0)
 		{
-			debug(LOG_NEVER, "Found template ID %d, for player %d, but found it in player's %d list?", tempId, player, i);
-			return psTempl;
+			return droidTemplates[i][tempId];
 		}
 	}
+
 	// no error, since it is possible that we don't have this template defined yet.
 	return NULL;
 }

@@ -24,6 +24,7 @@
 #include <QtCore/QVariant>
 #include <QtCore/QJsonDocument>
 #include <QtCore/QJsonObject>
+#include <QtCore/QJsonArray>
 #include <physfs.h>
 #include <stdbool.h>
 
@@ -39,6 +40,7 @@ public:
 
 private:
 	QJsonObject mObj;
+	QJsonArray mArray;
 	QString mName;
 	QList<QJsonObject> mObjStack;
 	QStringList mObjNameStack;
@@ -63,21 +65,31 @@ public:
 	QVariant value(const QString &key, const QVariant &defaultValue = QVariant()) const;
 	QJsonValue json(const QString &key, const QJsonValue &defaultValue = QJsonValue()) const;
 
-	bool beginGroup(const QString &prefix);
+	bool beginArray(const QString &name);
+	void nextArrayItem();
+	void endArray();
+	int remainingArrayItems();
+
+	bool beginGroup(const QString &name);
 	void endGroup();
+
 	QString fileName() const
 	{
 		return mFilename;
 	}
+
 	bool isWritable() const
 	{
 		return mWarning == ReadAndWrite && mStatus;
 	}
+
 	void setValue(const QString &key, const QVariant &value);
+
 	QString group()
 	{
 		return mName;
 	}
+
 	bool status()
 	{
 		return mStatus;

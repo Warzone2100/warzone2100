@@ -2312,7 +2312,6 @@ bool scrGetStructure(void)
 bool scrGetTemplate(void)
 {
 	SDWORD				player;
-	DROID_TEMPLATE		*psTemplate;
 	bool				found;
 	INTERP_VAL			sVal;
 	UDWORD				i;
@@ -2331,9 +2330,10 @@ bool scrGetTemplate(void)
 
 	//search the players' list of templates to see if one exists
 	found = false;
-	for (psTemplate = apsDroidTemplates[player]; psTemplate != NULL; psTemplate =
-	         psTemplate->psNext)
+	for (auto &keyvaluepair : droidTemplates[player])
 	{
+		DROID_TEMPLATE *psTemplate = keyvaluepair.second;
+
 		switch ((unsigned)sVal.type)  // Unsigned cast to suppress compiler warnings due to enum abuse.
 		{
 		case ST_BODY:
@@ -2396,10 +2396,9 @@ bool scrGetTemplate(void)
 	//make sure pass NULL back if not got one
 	if (!found)
 	{
-		psTemplate = NULL;
+		scrFunctionResult.v.oval = NULL;
 	}
 
-	scrFunctionResult.v.oval = psTemplate;
 	if (!stackPushResult((INTERP_TYPE)ST_TEMPLATE, &scrFunctionResult))
 	{
 		return false;
@@ -6033,56 +6032,9 @@ bool scrIsVtol(void)
 	return true;
 }
 
-// Fix the tutorial's template list(s).
-// DO NOT MODIFY THIS WITHOUT KNOWING WHAT YOU ARE DOING.  You will break the tutorial!
-// In short, we want to design a ViperLtMGWheels, but it is already available to make, so we must delete it.
+// no-op
 bool scrTutorialTemplates(void)
 {
-#if 0
-	DROID_TEMPLATE	*psCurr, *psPrev;
-
-	// find ViperLtMGWheels
-	char const *pName = getDroidResourceName("ViperLtMGWheels");
-
-	for (psCurr = apsDroidTemplates[selectedPlayer], psPrev = NULL; psCurr != NULL;	psCurr = psCurr->psNext)
-	{
-		if (psCurr->name.compare(pName) == 0)
-		{
-			if (psPrev)
-			{
-				psPrev->psNext = psCurr->psNext;
-			}
-			else
-			{
-				apsDroidTemplates[selectedPlayer] = psCurr->psNext;
-			}
-			break;
-		}
-		psPrev = psCurr;
-	}
-
-	// Delete the template in *both* lists!
-	if (psCurr)
-	{
-		for (std::list<DROID_TEMPLATE>::iterator i = localTemplates.begin(); i != localTemplates.end(); ++i)
-		{
-			DROID_TEMPLATE *dropTemplate = &*i;
-			if (psCurr->multiPlayerID == dropTemplate->multiPlayerID)
-			{
-				free(dropTemplate->pName);
-				localTemplates.erase(i);
-				break;
-			}
-		}
-		delete psCurr;
-	}
-	else
-	{
-		debug(LOG_FATAL, "tutorial template setup failed");
-		abort();
-		return false;
-	}
-#endif
 	return true;
 }
 
@@ -10246,10 +10198,7 @@ bool scrAssembleWeaponTemplate(void)
 		{
 			// set template id
 			pNewTemplate->multiPlayerID = generateNewObjectId();
-
-			// add template to player template list
-			pNewTemplate->psNext = apsDroidTemplates[player];
-			apsDroidTemplates[player] = pNewTemplate;		//apsTemplateList?
+			addTemplate(player, pNewTemplate);
 		}
 		else
 		{
@@ -10275,14 +10224,11 @@ bool scrAssembleWeaponTemplate(void)
 /* Checks if template already exists, returns it if yes */
 static DROID_TEMPLATE *scrCheckTemplateExists(SDWORD player, DROID_TEMPLATE *psTempl)
 {
-	DROID_TEMPLATE *psCurrent;
-	bool equal;
-
-	for (psCurrent = apsDroidTemplates[player]; psCurrent != NULL; psCurrent = psCurrent->psNext)
+	for (auto &keyvaluepair : droidTemplates[player])
 	{
+		DROID_TEMPLATE *psCurrent = keyvaluepair.second;
 		unsigned int weaponSlot;
-
-		equal = true;
+		bool equal = true;
 
 		// compare components
 		for (int componentType = 0; componentType < ARRAY_SIZE(psTempl->asParts); ++componentType)

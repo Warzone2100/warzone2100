@@ -3988,7 +3988,7 @@ static void intDisplayDesignForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffse
 
 
 /* save the current Template if valid. Return true if stored */
-static bool saveTemplate(void)
+static bool saveTemplate()
 {
 	if (!intValidTemplate(&sCurrDesign, aCurrName, false, selectedPlayer))
 	{
@@ -4007,6 +4007,7 @@ static bool saveTemplate(void)
 		/* create empty template and point to that */
 		localTemplates.push_back(DROID_TEMPLATE());
 		psTempl = &localTemplates.back();
+		sCurrDesign.multiPlayerID = generateNewObjectId();
 		apsTemplateList.push_back(psTempl);
 
 		psTempl->ref = REF_TEMPLATE_START;
@@ -4037,8 +4038,8 @@ static bool saveTemplate(void)
 	widgDelete(psWScreen, IDDES_TEMPLBASE);
 	intAddTemplateForm(psTempl);
 
-	// Send template to in-game template list, since localTemplates/apsDroidTemplates is for UI use only.
-	psTempl->multiPlayerID = generateNewObjectId();
+	// Add template to in-game template list, since localTemplates/apsTemplateList is for UI use only.
+	copyTemplate(selectedPlayer, psTempl);
 
 	return true;
 }

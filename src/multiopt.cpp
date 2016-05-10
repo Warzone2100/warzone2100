@@ -328,25 +328,6 @@ bool multiShutdown(void)
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-// copy templates from one player to another.
-static DROID_TEMPLATE *addTemplateToList(DROID_TEMPLATE *psNew, DROID_TEMPLATE **ppList)
-{
-	DROID_TEMPLATE *psTempl = new DROID_TEMPLATE(*psNew);
-
-	psTempl->psNext = *ppList;
-	*ppList = psTempl;
-
-	return psTempl;
-}
-
-// ////////////////////////////////////////////////////////////////////////////
-// copy templates from one player to another.
-DROID_TEMPLATE *addTemplate(UDWORD player, DROID_TEMPLATE *psNew)
-{
-	return addTemplateToList(psNew, &apsDroidTemplates[player]);
-}
-
-// ////////////////////////////////////////////////////////////////////////////
 static bool gameInit(void)
 {
 	UDWORD			player;

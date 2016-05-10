@@ -396,11 +396,11 @@ void	kf_CloneSelected(void)
 	{
 		if (psDroid->selected)
 		{
-			for (DROID_TEMPLATE *psTempl = apsDroidTemplates[selectedPlayer]; psTempl; psTempl = psTempl->psNext)
+			for (auto &keyvaluepair : droidTemplates[selectedPlayer])
 			{
-				if (psTempl->name.compare(psDroid->aName) == 0)
+				if (keyvaluepair.second->name.compare(psDroid->aName) == 0)
 				{
-					sTemplate = psTempl;
+					sTemplate = keyvaluepair.second;
 					break;
 				}
 			}

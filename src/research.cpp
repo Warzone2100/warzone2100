@@ -1037,7 +1037,6 @@ RESEARCH *getResearch(const char *pName)
 static void replaceComponent(COMPONENT_STATS *pNewComponent, COMPONENT_STATS *pOldComponent,
                              UBYTE player)
 {
-	DROID_TEMPLATE	*psTemplates;
 	COMPONENT_TYPE oldType = pOldComponent->compType;
 	int oldCompInc = pOldComponent->index;
 	COMPONENT_TYPE newType = pNewComponent->compType;
@@ -1054,8 +1053,9 @@ static void replaceComponent(COMPONENT_STATS *pNewComponent, COMPONENT_STATS *pO
 	replaceDroidComponent(apsLimboDroids[player], oldType, oldCompInc, newCompInc);
 
 	//check thru the templates
-	for (psTemplates = apsDroidTemplates[player]; psTemplates != NULL; psTemplates = psTemplates->psNext)
+	for (auto &keyvaluepair : droidTemplates[player])
 	{
+		DROID_TEMPLATE *psTemplates = keyvaluepair.second;
 		switch (oldType)
 		{
 		case COMP_BODY:

@@ -337,7 +337,7 @@ void recvStructureInfo(NETQUEUE queue)
 			NETuint8_t(&pT->asWeaps[i]);
 		}
 		pT->droidType = (DROID_TYPE)droidType;
-		pT = addTemplate(player, pT);
+		pT = copyTemplate(player, pT);
 	}
 	NETend();
 

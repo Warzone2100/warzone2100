@@ -1340,16 +1340,11 @@ static QScriptValue js_enumGateways(QScriptContext *, QScriptEngine *engine)
 static QScriptValue js_enumTemplates(QScriptContext *context, QScriptEngine *engine)
 {
 	int player = context->argument(0).toInt32();
+	QScriptValue result = engine->newArray(droidTemplates[player].size());
 	int count = 0;
-	for (DROID_TEMPLATE *psCurr = apsDroidTemplates[player]; psCurr != NULL; psCurr = psCurr->psNext)
+	for (auto &keyvaluepair : droidTemplates[player])
 	{
-		count++;
-	}
-	QScriptValue result = engine->newArray(count);
-	count = 0;
-	for (DROID_TEMPLATE *psCurr = apsDroidTemplates[player]; psCurr != NULL; psCurr = psCurr->psNext)
-	{
-		result.setProperty(count, convTemplate(psCurr, engine));
+		result.setProperty(count, convTemplate(keyvaluepair.second, engine));
 		count++;
 	}
 	return result;
@@ -1902,8 +1897,7 @@ static QScriptValue js_buildDroid(QScriptContext *context, QScriptEngine *engine
 		// Add to list
 		debug(LOG_SCRIPT, "adding template %s for player %d", getName(psTemplate), player);
 		psTemplate->multiPlayerID = generateNewObjectId();
-		psTemplate->psNext = apsDroidTemplates[player];
-		apsDroidTemplates[player] = psTemplate;
+		addTemplate(player, psTemplate);
 		if (!structSetManufacture(psStruct, psTemplate, ModeQueue))
 		{
 			debug(LOG_ERROR, "Could not produce template %s in %s", getName(psTemplate), objInfo(psStruct));
@@ -2970,10 +2964,10 @@ static QScriptValue js_setDesign(QScriptContext *context, QScriptEngine *engine)
 	allowDesign = context->argument(0).toBool();
 	// Switch on or off future templates
 	// FIXME: This dual data structure for templates is just plain insane.
-	for (psCurr = apsDroidTemplates[selectedPlayer]; psCurr != NULL; psCurr = psCurr->psNext)
+	for (auto &keyvaluepair : droidTemplates[selectedPlayer])
 	{
-		bool researched = researchedTemplate(psCurr, selectedPlayer);
-		psCurr->enabled = (researched || allowDesign);
+		bool researched = researchedTemplate(keyvaluepair.second, selectedPlayer);
+		keyvaluepair.second->enabled = (researched || allowDesign);
 	}
 	for (std::list<DROID_TEMPLATE>::iterator i = localTemplates.begin(); i != localTemplates.end(); ++i)
 	{
@@ -2991,11 +2985,11 @@ static QScriptValue js_enableTemplate(QScriptContext *context, QScriptEngine *en
 	QString templateName = context->argument(0).toString();
 	bool found = false;
 	// FIXME: This dual data structure for templates is just plain insane.
-	for (psCurr = apsDroidTemplates[selectedPlayer]; psCurr != NULL; psCurr = psCurr->psNext)
+	for (auto &keyvaluepair : droidTemplates[selectedPlayer])
 	{
-		if (templateName.compare(psCurr->id) == 0)
+		if (templateName.compare(keyvaluepair.second->id) == 0)
 		{
-			psCurr->enabled = true;
+			keyvaluepair.second->enabled = true;
 			found = true;
 		}
 	}

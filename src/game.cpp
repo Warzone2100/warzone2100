@@ -2072,37 +2072,18 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 	//load up the Droid Templates BEFORE any structures are loaded
 	if (IsScenario == false)
 	{
-		{
-			DROID_TEMPLATE	*pTemplate, *pNext;
-			for (pTemplate = apsDroidTemplates[0]; pTemplate != NULL;
-			     pTemplate = pNext)
-			{
-				pNext = pTemplate->psNext;
-				delete pTemplate;
-			}
-			apsDroidTemplates[0] = NULL;
-		}
-
-		// In Multiplayer, clear templates out first.....
 		if (bMultiPlayer)
 		{
-			for (inc = 0; inc < MAX_PLAYERS; inc++)
-			{
-				while (apsDroidTemplates[inc])				// clear the old template out.
-				{
-					DROID_TEMPLATE	*psTempl;
-					psTempl = apsDroidTemplates[inc]->psNext;
-					delete apsDroidTemplates[inc];
-					apsDroidTemplates[inc] = psTempl;
-				}
-			}
+			droidTemplateShutDown();
 		}
-		localTemplates.clear();
+		else
+		{
+			clearTemplates(0);
+			localTemplates.clear();
+		}
 
-		//load in the templates
 		aFileName[fileExten] = '\0';
 		strcat(aFileName, "templates.json");
-		//load the data into apsTemplates
 		if (!loadSaveTemplate(aFileName))
 		{
 			debug(LOG_ERROR, "Failed with: %s", aFileName);
@@ -5706,56 +5687,47 @@ bool loadSaveTemplate(const char *pFileName)
 	{
 		ini.beginGroup(list[i]);
 		int player = getPlayer(ini);
-		DROID_TEMPLATE *psTemplate = new DROID_TEMPLATE;
-		psTemplate->name = ini.value("name").toString();
-		psTemplate->ref = ini.value("ref").toInt();
-		psTemplate->droidType = (DROID_TYPE)ini.value("droidType").toInt();
-		psTemplate->multiPlayerID = ini.value("multiPlayerID").toInt();
-		psTemplate->asParts[COMP_BODY] = getCompFromName(COMP_BODY, ini.value("body", "ZNULLBODY").toString());
-		psTemplate->asParts[COMP_BRAIN] = getCompFromName(COMP_BRAIN, ini.value("brain", "ZNULLBRAIN").toString());
-		psTemplate->asParts[COMP_PROPULSION] = getCompFromName(COMP_PROPULSION, ini.value("propulsion", "ZNULLPROP").toString());
-		psTemplate->asParts[COMP_REPAIRUNIT] = getCompFromName(COMP_REPAIRUNIT, ini.value("repair", "ZNULLREPAIR").toString());
-		psTemplate->asParts[COMP_ECM] = getCompFromName(COMP_ECM, ini.value("ecm", "ZNULLECM").toString());
-		psTemplate->asParts[COMP_SENSOR] = getCompFromName(COMP_SENSOR, ini.value("sensor", "ZNULLSENSOR").toString());
-		psTemplate->asParts[COMP_CONSTRUCT] = getCompFromName(COMP_CONSTRUCT, ini.value("construct", "ZNULLCONSTRUCT").toString());
-		psTemplate->asWeaps[0] = getCompFromName(COMP_WEAPON, ini.value("weapon/1", "ZNULLWEAPON").toString());
-		psTemplate->asWeaps[1] = getCompFromName(COMP_WEAPON, ini.value("weapon/2", "ZNULLWEAPON").toString());
-		psTemplate->asWeaps[2] = getCompFromName(COMP_WEAPON, ini.value("weapon/3", "ZNULLWEAPON").toString());
-		psTemplate->numWeaps = ini.value("weapons").toInt();
-		psTemplate->enabled = ini.value("enabled").toBool();
-		psTemplate->prefab = false;		// not AI template
-
-		//store it in the apropriate player' list
-		//if a template with the same multiplayerID exists overwrite it
-		//else add this template to the top of the list
-		DROID_TEMPLATE *psDestTemplate = apsDroidTemplates[player];
-		while (psDestTemplate != NULL)
+		bool beta1_compat_hack = false; // TBD remove before release!
+		beta1_compat_hack = !ini.beginArray("templates");
+		while (ini.remainingArrayItems() > 0 || beta1_compat_hack)
 		{
-			if (psTemplate->multiPlayerID == psDestTemplate->multiPlayerID)
+			DROID_TEMPLATE *psTemplate = new DROID_TEMPLATE;
+			psTemplate->name = ini.value("name").toString();
+			psTemplate->ref = ini.value("ref").toInt();
+			psTemplate->droidType = (DROID_TYPE)ini.value("droidType").toInt();
+			psTemplate->multiPlayerID = ini.value("multiPlayerID").toInt();
+			psTemplate->asParts[COMP_BODY] = getCompFromName(COMP_BODY, ini.value("body", "ZNULLBODY").toString());
+			psTemplate->asParts[COMP_BRAIN] = getCompFromName(COMP_BRAIN, ini.value("brain", "ZNULLBRAIN").toString());
+			psTemplate->asParts[COMP_PROPULSION] = getCompFromName(COMP_PROPULSION, ini.value("propulsion", "ZNULLPROP").toString());
+			psTemplate->asParts[COMP_REPAIRUNIT] = getCompFromName(COMP_REPAIRUNIT, ini.value("repair", "ZNULLREPAIR").toString());
+			psTemplate->asParts[COMP_ECM] = getCompFromName(COMP_ECM, ini.value("ecm", "ZNULLECM").toString());
+			psTemplate->asParts[COMP_SENSOR] = getCompFromName(COMP_SENSOR, ini.value("sensor", "ZNULLSENSOR").toString());
+			psTemplate->asParts[COMP_CONSTRUCT] = getCompFromName(COMP_CONSTRUCT, ini.value("construct", "ZNULLCONSTRUCT").toString());
+			psTemplate->asWeaps[0] = getCompFromName(COMP_WEAPON, ini.value("weapon/1", "ZNULLWEAPON").toString());
+			psTemplate->asWeaps[1] = getCompFromName(COMP_WEAPON, ini.value("weapon/2", "ZNULLWEAPON").toString());
+			psTemplate->asWeaps[2] = getCompFromName(COMP_WEAPON, ini.value("weapon/3", "ZNULLWEAPON").toString());
+			psTemplate->numWeaps = ini.value("weapons").toInt();
+			psTemplate->enabled = ini.value("enabled").toBool();
+			psTemplate->prefab = false;		// not AI template
+			addTemplate(player, psTemplate);
+			if (beta1_compat_hack)
 			{
-				//whooh get rid of this one
 				break;
 			}
-			psDestTemplate = psDestTemplate->psNext;
+			ini.nextArrayItem();
 		}
-
-		if (psDestTemplate != NULL)
+		if (beta1_compat_hack)
 		{
-			psTemplate->psNext = psDestTemplate->psNext;//preserve the list
-			*psDestTemplate = *psTemplate;
+			ini.endGroup();
+			continue;
 		}
-		else
-		{
-			//add it to the top of the list
-			psTemplate->psNext = apsDroidTemplates[player];
-			apsDroidTemplates[player] = psTemplate;
-		}
+		ini.endArray();
 		ini.endGroup();
 	}
 
-	for (DROID_TEMPLATE *t = apsDroidTemplates[selectedPlayer]; t != NULL; t = t->psNext)
+	for (auto &keyvaluepair : droidTemplates[selectedPlayer])
 	{
-		localTemplates.push_front(*t);
+		localTemplates.push_back(*keyvaluepair.second);
 	}
 
 	return true;
@@ -5767,32 +5739,37 @@ bool writeTemplateFile(const char *pFileName)
 
 	for (int player = 0; player < MAX_PLAYERS; player++)
 	{
-		if (apsDroidLists[player] || apsStructLists[player])	// only write out templates of players that are still 'alive'
+		if (!apsDroidLists[player] && !apsStructLists[player])	// only write out templates of players that are still 'alive'
 		{
-			for (DROID_TEMPLATE *psCurr = apsDroidTemplates[player]; psCurr != NULL; psCurr = psCurr->psNext)
-			{
-				ini.beginGroup("template_" + QString::number(psCurr->multiPlayerID) + "_player" + QString::number(player));
-				ini.setValue("name", psCurr->name);
-				ini.setValue("ref", psCurr->ref);
-				ini.setValue("droidType", psCurr->droidType);
-				ini.setValue("multiPlayerID", psCurr->multiPlayerID);
-				setPlayer(ini, player);
-				ini.setValue("body", (asBodyStats + psCurr->asParts[COMP_BODY])->id);
-				ini.setValue("propulsion", (asPropulsionStats + psCurr->asParts[COMP_PROPULSION])->id);
-				ini.setValue("brain", (asBrainStats + psCurr->asParts[COMP_BRAIN])->id);
-				ini.setValue("repair", (asRepairStats + psCurr->asParts[COMP_REPAIRUNIT])->id);
-				ini.setValue("ecm", (asECMStats + psCurr->asParts[COMP_ECM])->id);
-				ini.setValue("sensor", (asSensorStats + psCurr->asParts[COMP_SENSOR])->id);
-				ini.setValue("construct", (asConstructStats + psCurr->asParts[COMP_CONSTRUCT])->id);
-				ini.setValue("weapons", psCurr->numWeaps);
-				ini.setValue("enabled", psCurr->enabled);
-				for (int j = 0; j < psCurr->numWeaps; j++)
-				{
-					ini.setValue("weapon/" + QString::number(j + 1), (asWeaponStats + psCurr->asWeaps[j])->id);
-				}
-				ini.endGroup();
-			}
+			continue;
 		}
+		ini.beginGroup("player_" + QString::number(player));
+		setPlayer(ini, player);
+		ini.beginArray("templates");
+		for (auto &keyvaluepair : droidTemplates[player])
+		{
+			DROID_TEMPLATE *psCurr = keyvaluepair.second;
+			ini.setValue("name", psCurr->name);
+			ini.setValue("ref", psCurr->ref);
+			ini.setValue("droidType", psCurr->droidType);
+			ini.setValue("multiPlayerID", psCurr->multiPlayerID);
+			ini.setValue("body", (asBodyStats + psCurr->asParts[COMP_BODY])->id);
+			ini.setValue("propulsion", (asPropulsionStats + psCurr->asParts[COMP_PROPULSION])->id);
+			ini.setValue("brain", (asBrainStats + psCurr->asParts[COMP_BRAIN])->id);
+			ini.setValue("repair", (asRepairStats + psCurr->asParts[COMP_REPAIRUNIT])->id);
+			ini.setValue("ecm", (asECMStats + psCurr->asParts[COMP_ECM])->id);
+			ini.setValue("sensor", (asSensorStats + psCurr->asParts[COMP_SENSOR])->id);
+			ini.setValue("construct", (asConstructStats + psCurr->asParts[COMP_CONSTRUCT])->id);
+			ini.setValue("weapons", psCurr->numWeaps);
+			ini.setValue("enabled", psCurr->enabled);
+			for (int j = 0; j < psCurr->numWeaps; j++)
+			{
+				ini.setValue("weapon/" + QString::number(j + 1), (asWeaponStats + psCurr->asWeaps[j])->id);
+			}
+			ini.nextArrayItem();
+		}
+		ini.endArray();
+		ini.endGroup();
 	}
 	return true;
 }

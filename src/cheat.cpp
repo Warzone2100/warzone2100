@@ -32,6 +32,7 @@
 #include "keymap.h"
 #include "multiplay.h"
 #include "qtscript.h"
+#include "template.h"
 
 struct CHEAT_ENTRY
 {
@@ -42,6 +43,7 @@ struct CHEAT_ENTRY
 bool Cheated = false;
 static CHEAT_ENTRY cheatCodes[] =
 {
+	{"templates", listTemplates}, // print templates
 	{"jsload", jsAutogame}, // load an AI script for selectedPlayer
 	{"jsdebug", jsShowDebug}, // show scripting states
 	{"clone wars", kf_CloneSelected}, // clone selected units
