@@ -30,6 +30,7 @@
 #include <physfs.h>
 #include "lib/framework/stdio_ext.h"
 #include "lib/framework/wzglobal.h" // required for config.h
+#include "lib/framework/wzapp.h"
 
 #if defined(WZ_OS_UNIX)
 # include <sys/utsname.h>
@@ -51,6 +52,7 @@ using std::string;
 static const std::size_t max_debug_messages = 20;
 
 static char *dbgHeader = NULL;
+static WZ_MUTEX *dbgMessagesMutex = wzMutexCreate();  // Protects dbgMessages.
 static std::deque<std::vector<char> > dbgMessages;
 
 // used to add custom info to the crash log
@@ -119,6 +121,8 @@ static void debug_exceptionhandler_data(void **, const char *const str)
 		--last;
 	}
 
+	wzMutexLock(dbgMessagesMutex);
+
 	dbgMessages.push_back(std::vector<char>(str, last));
 
 	// Ensure the message list's maximum size is maintained
@@ -126,6 +130,8 @@ static void debug_exceptionhandler_data(void **, const char *const str)
 	{
 		dbgMessages.pop_front();
 	}
+
+	wzMutexUnlock(dbgMessagesMutex);
 }
 
 void dbgDumpHeader(DumpFileHandle file)
@@ -149,15 +155,14 @@ void dbgDumpHeader(DumpFileHandle file)
 void dbgDumpLog(DumpFileHandle file)
 {
 	// Write all messages to the given file
-	for (std::deque<std::vector<char> >::const_iterator
-	     msg  = dbgMessages.begin();
-	     msg != dbgMessages.end();
-	     ++msg)
+	wzMutexLock(dbgMessagesMutex);
+	for (auto const &msg : dbgMessages)
 	{
 		dumpstr(file, "Log message: ");
-		dumpstr(file, &(*msg)[0], msg->size());
+		dumpstr(file, msg.data(), msg.size());
 		dumpEOL(file);
 	}
+	wzMutexUnlock(dbgMessagesMutex);
 
 	// Terminate with a separating newline
 	dumpEOL(file);
