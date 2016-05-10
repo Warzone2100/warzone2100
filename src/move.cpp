@@ -1249,8 +1249,8 @@ static Vector2i moveGetObstacleVector(DROID *psDroid, Vector2i dest)
 	Vector2i avoid = dest * o < 0 ? -o : o;
 
 	// Normalise dest and avoid.
-	dest = dest * 32768 / (iHypot(dest) + 1);
-	avoid = avoid * 32768 / (iHypot(avoid) + 1);
+	dest = dest * 32767 / (iHypot(dest) + 1);
+	avoid = avoid * 32767 / (iHypot(avoid) + 1);  // avoid.x and avoid.y are up to 65536, so we can multiply by at most 32767 here without potential overflow.
 
 	// combine the avoid vector and the target vector
 	int ratio = std::min(distTot * ourRadius / 2, 65536);

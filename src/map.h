@@ -366,7 +366,7 @@ extern int numGroundTypes;
 
 static inline int32_t world_coord(int32_t mapCoord)
 {
-	return mapCoord << TILE_SHIFT;
+	return (uint32_t)mapCoord << TILE_SHIFT;  // Cast because -1 << 7 is undefined, but (unsigned)-1 << 7 gives -128 as desired.
 }
 
 static inline int32_t map_coord(int32_t worldCoord)
