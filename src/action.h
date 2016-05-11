@@ -44,7 +44,7 @@ const char *getDroidActionName(DROID_ACTION action);
 #define EMP_DISABLE_TIME (10000)     // 10 secs
 
 /** How far away the repair droid can be from the damaged droid to function. */
-#define REPAIR_RANGE		(TILE_UNITS * TILE_UNITS * 4)
+#define REPAIR_RANGE  (2 * TILE_UNITS)
 
 /**
  * Update the action state for a droid.

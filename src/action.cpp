@@ -1340,9 +1340,9 @@ void actionUpdateDroid(DROID *psDroid)
 			break;
 		}
 		// moving to a location to build a structure
-		if (actionReachedBuildPos(psDroid, order->pos.x, order->pos.y, order->direction, order->psStats))
+		if (actionReachedBuildPos(psDroid, psDroid->actionPos.x, psDroid->actionPos.y, order->direction, order->psStats))
 		{
-			bool buildPosEmpty = actionRemoveDroidsFromBuildPos(psDroid->player, order->pos, order->direction, order->psStats);
+			bool buildPosEmpty = actionRemoveDroidsFromBuildPos(psDroid->player, psDroid->actionPos, order->direction, order->psStats);
 			if (!buildPosEmpty)
 			{
 				break;
@@ -1357,7 +1357,7 @@ void actionUpdateDroid(DROID *psDroid)
 			if (order->type == DORDER_BUILD && order->psObj == NULL)
 			{
 				// Starting a new structure
-				const Vector2i pos(order->pos.x, order->pos.y);
+				const Vector2i pos = psDroid->actionPos;
 
 				//need to check if something has already started building here?
 				//unless its a module!
@@ -1367,10 +1367,10 @@ void actionUpdateDroid(DROID *psDroid)
 					debug(LOG_NEVER, "DACTION_MOVETOBUILD: setUpBuildModule");
 					setUpBuildModule(psDroid);
 				}
-				else if (TileHasStructure(mapTile(map_coord(order->pos.x), map_coord(order->pos.y))))
+				else if (TileHasStructure(worldTile(pos)))
 				{
 					// structure on the build location - see if it is the same type
-					STRUCTURE *const psStruct = getTileStructure(map_coord(order->pos.x), map_coord(order->pos.y));
+					STRUCTURE *const psStruct = getTileStructure(map_coord(pos.x), map_coord(pos.y));
 					if (psStruct->pStructureType == order->psStats ||
 					    (order->psStats->type == REF_WALL && psStruct->pStructureType->type == REF_WALLCORNER))
 					{
@@ -1417,7 +1417,7 @@ void actionUpdateDroid(DROID *psDroid)
 			             psStructStats->type == REF_DEFENSE || psStructStats->type == REF_REARM_PAD))
 			{
 				// building a wall.
-				MAPTILE *const psTile = mapTile(map_coord(order->pos.x), map_coord(order->pos.y));
+				MAPTILE *const psTile = worldTile(psDroid->actionPos);
 				syncDebug("Reached build target: wall");
 				if (order->psObj == NULL
 				    && (TileHasStructure(psTile)
@@ -1426,7 +1426,7 @@ void actionUpdateDroid(DROID *psDroid)
 					if (TileHasStructure(psTile))
 					{
 						// structure on the build location - see if it is the same type
-						STRUCTURE *const psStruct = getTileStructure(map_coord(order->pos.x), map_coord(order->pos.y));
+						STRUCTURE *const psStruct = getTileStructure(map_coord(psDroid->actionPos.x), map_coord(psDroid->actionPos.y));
 						if (psStruct->pStructureType == order->psStats)
 						{
 							// same type - do a help build
@@ -1464,6 +1464,7 @@ void actionUpdateDroid(DROID *psDroid)
 			else
 			{
 				syncDebug("Reached build target: planned-help");
+				objTrace(psDroid->id, "DACTION_MOVETOBUILD: planned-help");
 				helpBuild = true;
 			}
 
@@ -1492,15 +1493,15 @@ void actionUpdateDroid(DROID *psDroid)
 			break;
 		}
 		if (DROID_STOPPED(psDroid) &&
-		    !actionReachedBuildPos(psDroid, order->pos.x, order->pos.y, order->direction, order->psStats))
+		    !actionReachedBuildPos(psDroid, psDroid->actionPos.x, psDroid->actionPos.y, order->direction, order->psStats))
 		{
 			objTrace(psDroid->id, "DACTION_BUILD: Starting to drive toward construction site");
-			moveDroidToNoFormation(psDroid, order->pos.x, order->pos.y);
+			moveDroidToNoFormation(psDroid, psDroid->actionPos.x, psDroid->actionPos.y);
 		}
 		else if (!DROID_STOPPED(psDroid) &&
 		         psDroid->sMove.Status != MOVETURNTOTARGET &&
 		         psDroid->sMove.Status != MOVESHUFFLE &&
-		         actionReachedBuildPos(psDroid, order->pos.x, order->pos.y, order->direction, order->psStats))
+		         actionReachedBuildPos(psDroid, psDroid->actionPos.x, psDroid->actionPos.y, order->direction, order->psStats))
 		{
 			objTrace(psDroid->id, "DACTION_BUILD: Stopped - at construction site");
 			moveStopDroid(psDroid);
@@ -1723,7 +1724,7 @@ void actionUpdateDroid(DROID *psDroid)
 			}
 			const int xdiff = (SDWORD)psDroid->pos.x - (SDWORD)psDroid->psActionTarget[0]->pos.x;
 			const int ydiff = (SDWORD)psDroid->pos.y - (SDWORD)psDroid->psActionTarget[0]->pos.y;
-			if (xdiff * xdiff + ydiff * ydiff < REPAIR_RANGE)
+			if (xdiff * xdiff + ydiff * ydiff < REPAIR_RANGE * REPAIR_RANGE)
 			{
 				// Got to destination - start repair
 				//rotate turret to point at droid being repaired
@@ -1780,7 +1781,7 @@ void actionUpdateDroid(DROID *psDroid)
 			//check still next to the damaged droid
 			xdiff = (SDWORD)psDroid->pos.x - (SDWORD)psDroid->psActionTarget[0]->pos.x;
 			ydiff = (SDWORD)psDroid->pos.y - (SDWORD)psDroid->psActionTarget[0]->pos.y;
-			if (xdiff * xdiff + ydiff * ydiff > REPAIR_RANGE)
+			if (xdiff * xdiff + ydiff * ydiff > REPAIR_RANGE * REPAIR_RANGE)
 			{
 				if (order->type == DORDER_REPAIR)
 				{
@@ -2086,8 +2087,7 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 			psDroid->action = DACTION_NONE;
 			break;
 		}
-		ASSERT_OR_RETURN(, order->type == DORDER_BUILD || order->type == DORDER_HELPBUILD ||
-		       order->type == DORDER_LINEBUILD, "cannot start build action without a build order");
+		//ASSERT_OR_RETURN(, order->type == DORDER_BUILD || order->type == DORDER_HELPBUILD || order->type == DORDER_LINEBUILD, "cannot start build action without a build order");
 		ASSERT_OR_RETURN(, psAction->x > 0 && psAction->y > 0, "Bad build order position");
 		psDroid->action = DACTION_MOVETOBUILD;
 		psDroid->actionPos.x = psAction->x;

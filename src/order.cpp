@@ -63,6 +63,7 @@
 #include "display3d.h"
 #include "combat.h"
 #include "console.h"
+#include "mapgrid.h"
 
 #include "random.h"
 
@@ -225,47 +226,74 @@ BASE_OBJECT *checkForRepairRange(DROID *psDroid, DROID *psTarget)
 }
 
 
-/** This function checks if there are any structures to repair on a given radius near the droid defined by REPAIR_RANGE if it is on secundary state onHold, and REPAIR_MAXDIST*REPAIR_MAXDIST if not on hold.
- * It returns a damaged structure if any was found or NULL if none was found.
- * @todo this function performs a cycle on all buildings of a given player, which is ineficient. Suggestion to improve it.
+/** This function checks if there are any structures to repair or help build in a given radius near the droid defined by REPAIR_RANGE if it is on hold, and REPAIR_MAXDIST if not on hold.
+ * It returns a damaged or incomplete structure if any was found or NULL if none was found.
  */
-BASE_OBJECT *checkForDamagedStruct(DROID *psDroid, STRUCTURE *psTarget)
+static std::pair<STRUCTURE *, DROID_ACTION> checkForDamagedStruct(DROID *psDroid)
 {
-	STRUCTURE		*psCurr;
-
-	ASSERT(psDroid->droidType == DROID_CONSTRUCT || psDroid->droidType == DROID_CYBORG_CONSTRUCT, "Invalid unit type");
-
-	if (psTarget != NULL
-	    && psTarget->died)
+	STRUCTURE *psFailedTarget = nullptr;
+	if (psDroid->action == DACTION_SULK)
 	{
-		psTarget = NULL;
+		psFailedTarget = (STRUCTURE *)psDroid->psActionTarget[0];
 	}
 
-	if ((psTarget != NULL) &&
-	    (psTarget->type == OBJ_STRUCTURE) &&
-	    (psTarget->player == psDroid->player))
+	unsigned radius = psDroid->order.type == DORDER_HOLD ? REPAIR_RANGE : REPAIR_MAXDIST;
+
+	unsigned bestDistanceSq = radius * radius;
+	std::pair<STRUCTURE *, DROID_ACTION> best = {nullptr, DACTION_NONE};
+
+	for (BASE_OBJECT *object : gridStartIterate(psDroid->pos.x, psDroid->pos.y, radius))
 	{
-		psCurr = psTarget->psNext;
-	}
-	else
-	{
-		psCurr = apsStructLists[psDroid->player];
-	}
-	for (; psCurr != NULL; psCurr = psCurr->psNext)
-	{
-		//check for damage
-		if (psCurr->status == SS_BUILT && structIsDamaged(psCurr) && !checkDroidsDemolishing(psCurr)
-		    && visibleObject(psDroid, psCurr, false)
-		    && (unsigned)droidSqDist(psDroid, psCurr) <  // Cast to unsigned, since droidSqDist returns -1 if psCurr is unreachable, which should compare greater than the maximum range.
-		    // Hold position? Repair range, else repair max dist
-		    (unsigned)(psDroid->order.type == DORDER_HOLD ? REPAIR_RANGE : REPAIR_MAXDIST * REPAIR_MAXDIST))
+		unsigned distanceSq = droidSqDist(psDroid, object);  // droidSqDist returns -1 if unreachable, (unsigned)-1 is a big number.
+
+		STRUCTURE *structure = castStructure(object);
+		if (structure == nullptr ||  // Must be a structure.
+		    structure == psFailedTarget ||  // Must not have just failed to reach it.
+		    distanceSq > bestDistanceSq ||  // Must be as close as possible.
+		    !visibleObject(psDroid, structure, false) ||  // Must be able to sense it.
+		    !aiCheckAlliances(psDroid->player, structure->player) ||  // Must be a friendly structure.
+		    checkDroidsDemolishing(structure))  // Must not be trying to get rid of it.
 		{
-			return psCurr;
+			continue;
+		}
+
+		// Check for structures to repair.
+		if (structure->status == SS_BUILT && structIsDamaged(structure))
+		{
+			bestDistanceSq = distanceSq;
+			best = {structure, DACTION_REPAIR};
+		}
+		// Check for structures to help build.
+		else if (structure->status == SS_BEING_BUILT)
+		{
+			bestDistanceSq = distanceSq;
+			best = {structure, DACTION_BUILD};
 		}
 	}
-	return NULL;
+
+	return best;
 }
 
+static bool isRepairlikeAction(DROID_ACTION action)
+{
+	switch (action)
+	{
+		case DACTION_BUILD:
+		case DACTION_BUILDWANDER:
+		case DACTION_DEMOLISH:
+		case DACTION_DROIDREPAIR:
+		case DACTION_MOVETOBUILD:
+		case DACTION_MOVETODEMOLISH:
+		case DACTION_MOVETODROIDREPAIR:
+		case DACTION_MOVETOREPAIR:
+		case DACTION_MOVETORESTORE:
+		case DACTION_REPAIR:
+		case DACTION_RESTORE:
+			return true;
+		default:
+			return false;
+	}
+}
 
 /** This function updates all the orders status, according with psdroid's current order and state.
  * @todo This is as quite complex function. Suggestion to try to refactor it.
@@ -355,20 +383,19 @@ void orderUpdateDroid(DROID *psDroid)
 		//construct droids default to repairing structures within a given range
 		else if ((psDroid->droidType == DROID_CONSTRUCT || psDroid->droidType == DROID_CYBORG_CONSTRUCT) &&
 		         !orderState(psDroid, DORDER_GUARD) &&
-		         (psDroid->order.psStats != structGetDemolishStat()))
+		         psDroid->order.psStats != structGetDemolishStat() &&
+			 !isRepairlikeAction(psDroid->action))
 		{
-			psObj = NULL;
-			if (psDroid->action == DACTION_NONE)
+			auto damaged = checkForDamagedStruct(psDroid);
+			if (damaged.second == DACTION_REPAIR)
 			{
-				psObj = checkForDamagedStruct(psDroid, NULL);
+				actionDroid(psDroid, damaged.second, damaged.first);
 			}
-			else if (psDroid->action == DACTION_SULK)
+			else if (damaged.second == DACTION_BUILD)
 			{
-				psObj = checkForDamagedStruct(psDroid, (STRUCTURE *)psDroid->psActionTarget);
-			}
-			if (psObj)
-			{
-				actionDroid(psDroid, DACTION_REPAIR, psObj);
+				psDroid->order.psStats = damaged.first->pStructureType;
+				psDroid->order.direction = damaged.first->rot.direction;
+				actionDroid(psDroid, damaged.second, damaged.first->pos.x, damaged.first->pos.y);
 			}
 		}
 		// default to guarding
@@ -518,10 +545,19 @@ void orderUpdateDroid(DROID *psDroid)
 				{
 				case DROID_CONSTRUCT:
 				case DROID_CYBORG_CONSTRUCT:
-					psObj = checkForDamagedStruct(psDroid, NULL);
-					if (psObj)
+					if (!isRepairlikeAction(psDroid->action))
 					{
-						actionDroid(psDroid, DACTION_REPAIR, psObj);
+						auto damaged = checkForDamagedStruct(psDroid);
+						if (damaged.second == DACTION_REPAIR)
+						{
+							actionDroid(psDroid, damaged.second, damaged.first);
+						}
+						else if (damaged.second == DACTION_BUILD)
+						{
+							psDroid->order.psStats = damaged.first->pStructureType;
+							psDroid->order.direction = damaged.first->rot.direction;
+							actionDroid(psDroid, damaged.second, damaged.first->pos.x, damaged.first->pos.y);
+						}
 					}
 					break;
 				case DROID_REPAIR:
@@ -1199,17 +1235,10 @@ void orderUpdateDroid(DROID *psDroid)
 		psObj = NULL;
 		if ((psDroid->droidType == DROID_CONSTRUCT || psDroid->droidType == DROID_CYBORG_CONSTRUCT))
 		{
-			if (psDroid->action == DACTION_NONE)
+			auto damaged = checkForDamagedStruct(psDroid);
+			if (damaged.first != nullptr)
 			{
-				psObj = checkForDamagedStruct(psDroid, NULL);
-			}
-			else if (psDroid->action == DACTION_SULK)
-			{
-				psObj = checkForDamagedStruct(psDroid, (STRUCTURE *)psDroid->psActionTarget);
-			}
-			if (psObj)
-			{
-				orderDroidObj(psDroid, DORDER_REPAIR, psObj, ModeImmediate);
+				orderDroidObj(psDroid, damaged.second == DACTION_REPAIR ? DORDER_REPAIR : DORDER_HELPBUILD, damaged.first, ModeImmediate);
 			}
 		}
 		break;

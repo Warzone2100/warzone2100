@@ -106,6 +106,15 @@ static UDWORD calcDroidBaseBody(DROID *psDroid);
 
 void cancelBuild(DROID *psDroid)
 {
+	if (psDroid->order.type == DORDER_NONE || psDroid->order.type == DORDER_PATROL || psDroid->order.type == DORDER_HOLD || psDroid->order.type == DORDER_SCOUT || psDroid->order.type == DORDER_GUARD)
+	{
+		objTrace(psDroid->id, "Droid build action cancelled");
+		psDroid->order.psObj = nullptr;
+		psDroid->action = DACTION_NONE;
+		setDroidActionTarget(psDroid, nullptr, 0);
+		return;  // Don't cancel orders.
+	}
+
 	if (orderDroidList(psDroid))
 	{
 		objTrace(psDroid->id, "Droid build order cancelled - changing to next order");
@@ -1064,7 +1073,7 @@ DroidStartBuild droidStartBuild(DROID *psDroid)
 	CHECK_DROID(psDroid);
 
 	/* See if we are starting a new structure */
-	if ((psDroid->order.psObj == NULL) &&
+	if (psDroid->order.psObj == nullptr &&
 	    (psDroid->order.type == DORDER_BUILD ||
 	     psDroid->order.type == DORDER_LINEBUILD))
 	{
@@ -1077,6 +1086,7 @@ DroidStartBuild droidStartBuild(DROID *psDroid)
 			ASSERT(false, "Cannot build \"%s\" for player %d.", psStructStat->name.toUtf8().constData(), psDroid->player);
 			intBuildFinished(psDroid);
 			cancelBuild(psDroid);
+			objTrace(psDroid->id, "DroidStartBuildFailed: not researched");
 			return DroidStartBuildFailed;
 		}
 
@@ -1085,12 +1095,14 @@ DroidStartBuild droidStartBuild(DROID *psDroid)
 		{
 			intBuildFinished(psDroid);
 			cancelBuild(psDroid);
+			objTrace(psDroid->id, "DroidStartBuildFailed: structure limits");
 			return DroidStartBuildFailed;
 		}
 		// Can't build on burning oil derricks.
 		if (psStructStat->type == REF_RESOURCE_EXTRACTOR && fireOnLocation(psDroid->order.pos.x, psDroid->order.pos.y))
 		{
 			// Don't cancel build, since we can wait for it to stop burning.
+			objTrace(psDroid->id, "DroidStartBuildPending: burning");
 			return DroidStartBuildPending;
 		}
 		//ok to build
@@ -1099,6 +1111,7 @@ DroidStartBuild droidStartBuild(DROID *psDroid)
 		{
 			intBuildFinished(psDroid);
 			cancelBuild(psDroid);
+			objTrace(psDroid->id, "DroidStartBuildFailed: buildStructureDir failed");
 			return DroidStartBuildFailed;
 		}
 		psStruct->body = (psStruct->body + 9) / 10;  // Structures start at 10% health. Round up.
@@ -1106,11 +1119,16 @@ DroidStartBuild droidStartBuild(DROID *psDroid)
 	else
 	{
 		/* Check the structure is still there to build (joining a partially built struct) */
-		psStruct = (STRUCTURE *)psDroid->order.psObj;
-		if (psStruct && !droidNextToStruct(psDroid, (BASE_OBJECT *)psStruct))
+		psStruct = castStructure(psDroid->order.psObj);
+		if (psStruct == nullptr)
+		{
+			psStruct = castStructure(worldTile(psDroid->actionPos)->psObject);
+		}
+		if (psStruct && !droidNextToStruct(psDroid, psStruct))
 		{
 			/* Nope - stop building */
 			debug(LOG_NEVER, "not next to structure");
+			objTrace(psDroid->id, "DroidStartBuildSuccess: not next to structure");
 		}
 	}
 
@@ -1121,18 +1139,19 @@ DroidStartBuild droidStartBuild(DROID *psDroid)
 		{
 			psDroid->actionStarted = gameTime;
 			psDroid->actionPoints = 0;
-			setDroidTarget(psDroid, (BASE_OBJECT *)psStruct);
-			setDroidActionTarget(psDroid, (BASE_OBJECT *)psStruct, 0);
+			setDroidTarget(psDroid, psStruct);
+			setDroidActionTarget(psDroid, psStruct, 0);
+			objTrace(psDroid->id, "DroidStartBuild: set target");
 		}
 
 		if (psStruct->visible[selectedPlayer])
 		{
-			audio_PlayObjStaticTrackCallback(psDroid, ID_SOUND_CONSTRUCTION_START,
-											 droidBuildStartAudioCallback);
+			audio_PlayObjStaticTrackCallback(psDroid, ID_SOUND_CONSTRUCTION_START, droidBuildStartAudioCallback);
 		}
 	}
 	CHECK_DROID(psDroid);
 
+	objTrace(psDroid->id, "DroidStartBuildSuccess");
 	return DroidStartBuildSuccess;
 }
 
@@ -1172,14 +1191,19 @@ static void addConstructorEffect(STRUCTURE *psStruct)
 bool droidUpdateBuild(DROID *psDroid)
 {
 	UDWORD		pointsToAdd, constructPoints;
-	STRUCTURE	*psStruct;
 
 	CHECK_DROID(psDroid);
 	ASSERT_OR_RETURN(false, psDroid->action == DACTION_BUILD, "%s (order %s) has wrong action for construction: %s",
 	                 droidGetName(psDroid), getDroidOrderName(psDroid->order.type), getDroidActionName(psDroid->action));
-	ASSERT_OR_RETURN(false, psDroid->order.psObj != NULL, "Trying to update a construction, but no target!");
 
-	psStruct = (STRUCTURE *)psDroid->order.psObj;
+	STRUCTURE *psStruct = castStructure(psDroid->order.psObj);
+	if (psStruct == nullptr)
+	{
+		// Target missing, stop trying to build it.
+		psDroid->action = DACTION_NONE;
+		return false;
+	}
+
 	ASSERT_OR_RETURN(false, psStruct->type == OBJ_STRUCTURE, "target is not a structure");
 	ASSERT_OR_RETURN(false, psDroid->asBits[COMP_CONSTRUCT] < numConstructStats, "Invalid construct pointer for unit");
 
@@ -1189,8 +1213,8 @@ bool droidUpdateBuild(DROID *psDroid)
 		// Update the interface
 		intBuildFinished(psDroid);
 		// Check if line order build is completed, or we are not carrying out a line order build
-		if ((map_coord(psDroid->order.pos) == map_coord(psDroid->order.pos2))
-		    || psDroid->order.type != DORDER_LINEBUILD)
+		if (psDroid->order.type != DORDER_LINEBUILD ||
+		    map_coord(psDroid->order.pos) == map_coord(psDroid->order.pos2))
 		{
 			cancelBuild(psDroid);
 		}

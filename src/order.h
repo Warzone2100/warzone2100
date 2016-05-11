@@ -135,9 +135,6 @@ extern const char *getDroidOrderName(DROID_ORDER order);
 /** \brief Gets a player's transporter. */
 DROID *FindATransporter(DROID const *embarkee);
 
-/** \brief Checks if there are any damaged buildings to repair. */
-extern BASE_OBJECT *checkForDamagedStruct(DROID *psDroid, STRUCTURE *psTarget);
-
 /** \brief Does a health check on a droid. */
 extern void orderHealthCheck(DROID *psDroid);
 
