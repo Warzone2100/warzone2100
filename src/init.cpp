@@ -736,7 +736,7 @@ void systemShutdown(void)
 	}
 
 	shutdownEffectsSystem();
-	wzSceneEnd("Main menu loop");
+	wzSceneEnd(nullptr);  // Might want to end the "Main menu loop" or "Main game loop".
 	keyClearMappings();
 
 	// free up all the load functions (all the data should already have been freed)

@@ -361,7 +361,7 @@ void wzPerfFrame()
 }
 
 static const char *sceneActive = NULL;
-void _wzSceneBegin(const char *descr)
+void wzSceneBegin(const char *descr)
 {
 	ASSERT(sceneActive == NULL, "Out of order scenes: Wanted to start %s, was in %s", descr, sceneActive);
 	if (khr_debug)
@@ -371,9 +371,9 @@ void _wzSceneBegin(const char *descr)
 	sceneActive = descr;
 }
 
-void _wzSceneEnd(const char *descr)
+void wzSceneEnd(const char *descr)
 {
-	ASSERT(strcmp(descr, sceneActive) == 0, "Out of order scenes: Wanted to stop %s, was in %s", descr, sceneActive);
+	ASSERT(descr == nullptr || strcmp(descr, sceneActive) == 0, "Out of order scenes: Wanted to stop %s, was in %s", descr, sceneActive);
 	if (khr_debug)
 	{
 		glPopDebugGroup();

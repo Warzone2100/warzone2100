@@ -89,10 +89,8 @@ void wzPerfFrame();
 /// Are performance measurements available?
 bool wzPerfAvailable();
 
-#define wzSceneBegin(x) (WZ_ASSERT_STATIC_STRING(x), _wzSceneBegin(x))
-void _wzSceneBegin(const char *descr);
-#define wzSceneEnd(x) (WZ_ASSERT_STATIC_STRING(x), _wzSceneEnd(x))
-void _wzSceneEnd(const char *descr);
+void wzSceneBegin(const char *descr);
+void wzSceneEnd(const char *descr);
 
 struct OPENGL_DATA
 {
