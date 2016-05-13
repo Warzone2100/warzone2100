@@ -30,6 +30,7 @@
 #include <QtGui/QIcon>
 #include <QtWidgets/QApplication>
 #include <QtGui/QClipboard>
+#include <QtGui/QWindow>
 
 // Get platform defines before checking for them.
 // Qt headers MUST come before platform specific stuff!
@@ -738,7 +739,10 @@ void wzQuit()
 
 void wzScreenFlip()
 {
-	WzMainWindow::instance()->swapBuffers();
+	if (WzMainWindow::instance()->windowHandle()->isExposed())  // Check isExposed(), otherwise we get «QOpenGLContext::swapBuffers() called with non-exposed window, behavior is undefined».
+	{
+		WzMainWindow::instance()->swapBuffers();
+	}
 }
 
 int wzGetTicks()
