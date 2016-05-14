@@ -4261,7 +4261,7 @@ QScriptValue js_stats(QScriptContext *context, QScriptEngine *engine)
 	if (context->argumentCount() == 1) // setter
 	{
 		int value = context->argument(0).toInt32();
-		//syncDebug("stats[p%d,t%d,%s,i%d] = %d", player, type, name.toStdString().c_str(), index, value);
+		syncDebug("stats[p%d,t%d,%s,i%d] = %d", player, type, name.toStdString().c_str(), index, value);
 		if (type == COMP_BODY)
 		{
 			SCRIPT_ASSERT(context, index < numBodyStats, "Bad index");

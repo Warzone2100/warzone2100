@@ -31,6 +31,7 @@
 #include "lib/framework/strres.h"
 #include "lib/framework/frameresource.h"
 #include "lib/framework/wzconfig.h"
+#include "lib/netplay/netplay.h"
 #include "objects.h"
 #include "lib/gamelib/gtime.h"
 #include "research.h"
@@ -491,6 +492,8 @@ void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE
 	char						consoleMsg[MAX_RESEARCH_MSG_SIZE];
 
 	ASSERT_OR_RETURN(, researchIndex < asResearch.size(), "Invalid research index %u", researchIndex);
+
+	syncDebug("researchResult(%u, %u, …)", researchIndex, player);
 
 	MakeResearchCompleted(&asPlayerResList[player][researchIndex]);
 
