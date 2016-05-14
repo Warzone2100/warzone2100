@@ -1404,7 +1404,7 @@ void actionUpdateDroid(DROID *psDroid)
 					objTrace(psDroid->id, "DACTION_MOVETOBUILD: !validLocation");
 					cancelBuild(psDroid);
 				}
-				else if (droidStartBuild(psDroid))
+				else if (droidStartBuild(psDroid) == DroidStartBuildSuccess)  // If DroidStartBuildPending, then there's a burning oil well, and we don't want to change to DACTION_BUILD until it stops burning.
 				{
 					syncDebug("Reached build target: build");
 					psDroid->action = DACTION_BUILD;
