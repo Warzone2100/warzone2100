@@ -341,11 +341,6 @@ static int stringRelevance(std::string const &string, std::string const &search)
 	return scores[str.size() + sea.size() * strDim];
 }
 
-static bool reverseSortByFirst(std::pair<int, W_BUTTON *> const &a, std::pair<int, W_BUTTON *> const &b)
-{
-	return a.first > b.first;
-}
-
 /** Searches in the given search directory for files ending with the
  *  given extension. Then will create a window with buttons for each
  *  found file.
@@ -438,7 +433,8 @@ void addMultiRequest(const char *searchDir, const char *fileExtension, UDWORD mo
 	if (mode == MULTIOP_MAP)
 	{
 		LEVEL_LIST levels = enumerateMultiMaps(mapCam, numPlayers);
-		std::vector<std::pair<int, W_BUTTON *> > buttons;
+		using Pair = std::pair<int, W_BUTTON *>;
+		std::vector<Pair> buttons;
 
 		for (auto mapData : levels)
 		{
@@ -449,14 +445,16 @@ void addMultiRequest(const char *searchDir, const char *fileExtension, UDWORD mo
 			button->setString(mapData->pName);
 			button->pUserData = mapData;
 			button->displayFunction = displayRequestOption;
-			buttons.push_back(std::make_pair(stringRelevance(mapData->pName, searchString), button));
+			buttons.push_back({stringRelevance(mapData->pName, searchString), button});
 
 			++nextButtonId;
 		}
-		std::stable_sort(buttons.begin(), buttons.end(), reverseSortByFirst);
-		for (std::vector<std::pair<int, W_BUTTON *> >::const_iterator i = buttons.begin(); i != buttons.end(); ++i)
+		std::stable_sort(buttons.begin(), buttons.end(), [](Pair const &a, Pair const &b) {
+			return a.first > b.first;
+		});
+		for (Pair const &p : buttons)
 		{
-			requestList->addWidgetToLayout(i->second);
+			requestList->addWidgetToLayout(p.second);
 		}
 
 		// if it's map select then add the cam style buttons.

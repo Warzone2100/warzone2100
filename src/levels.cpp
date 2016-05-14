@@ -1060,8 +1060,7 @@ LEVEL_LIST enumerateMultiMaps(int camToUse, int numPlayers)
 	{
 		if (game.type == SKIRMISH)
 		{
-			int cam;
-
+			int cam = 1;
 			if (lev->type == MULTI_SKIRMISH2)
 			{
 				cam = 2;
@@ -1070,15 +1069,12 @@ LEVEL_LIST enumerateMultiMaps(int camToUse, int numPlayers)
 			{
 				cam = 3;
 			}
-			else
-			{
-				cam = 1;
-			}
+
 			if ((lev->type == SKIRMISH || lev->type == MULTI_SKIRMISH2 || lev->type == MULTI_SKIRMISH3)
 			    && (numPlayers == 0 || numPlayers == lev->players)
 			    && cam == camToUse)
 			{
-				list.push_front(lev);
+				list.push_back(lev);
 			}
 		}
 	}
