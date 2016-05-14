@@ -1522,63 +1522,57 @@ UDWORD calcDroidWeight(DROID_TEMPLATE *psTemplate)
 	return weight;
 }
 
-/* Calculate the body points of a droid from it's template */
-UDWORD calcTemplateBody(DROID_TEMPLATE *psTemplate, UBYTE player)
+static uint32_t calcDroidOrTemplateBody(uint8_t (&asParts)[DROID_MAXCOMP], unsigned numWeaps, uint8_t (&asWeaps)[DROID_MAXWEAPS], unsigned player)
 {
-	UDWORD body, i;
+	auto &bodyStats = asBodyStats[asParts[COMP_BODY]];
 
-	if (psTemplate == NULL)
+	// Get the basic component body points
+	uint32_t body =
+	    bodyStats.body +
+	    asBrainStats[asParts[COMP_BRAIN]].body +
+	    asSensorStats[asParts[COMP_SENSOR]].body +
+	    asECMStats[asParts[COMP_ECM]].body +
+	    asRepairStats[asParts[COMP_REPAIRUNIT]].body +
+	    asConstructStats[asParts[COMP_CONSTRUCT]].body;
+
+	// propulsion body points are a percentage of the body's body points
+	body += bodyStats.body * asPropulsionStats[asParts[COMP_PROPULSION]].body / 100;
+
+	// Add the weapon body points
+	for (unsigned i = 0; i < numWeaps; ++i)
 	{
-		ASSERT(false, "null template");
-		return 0;
+		if (asWeaps[i] > 0)
+		{
+			body += asWeaponStats[asWeaps[i]].body;
+		}
 	}
-	BODY_STATS *psStats = asBodyStats + psTemplate->asParts[COMP_BODY];
-	/* Get the basic component body points */
-	body =
-	    (asBodyStats + psTemplate->asParts[COMP_BODY])->body +
-	    (asBrainStats + psTemplate->asParts[COMP_BRAIN])->body +
-	    (asSensorStats + psTemplate->asParts[COMP_SENSOR])->body +
-	    (asECMStats + psTemplate->asParts[COMP_ECM])->body +
-	    (asRepairStats + psTemplate->asParts[COMP_REPAIRUNIT])->body +
-	    (asConstructStats + psTemplate->asParts[COMP_CONSTRUCT])->body;
 
-	/* propulsion body points are a percentage of the bodys' body points */
-	body += ((asPropulsionStats + psTemplate->asParts[COMP_PROPULSION])->body * psStats->body) / 100;
-
-	/* Add the weapon body points */
-	for (i = 0; i < psTemplate->numWeaps; i++)
-	{
-		body += asWeaponStats[psTemplate->asWeaps[i]].body;
-	}
+	//add on any upgrade value that may need to be applied
+	body = body * bodyStats.upgrade[player].body / std::max(bodyStats.body, 1u);
 
 	return body;
 }
 
-/* Calculate the base body points of a droid without upgrades*/
+// Calculate the body points of a droid from its template
+UDWORD calcTemplateBody(DROID_TEMPLATE *psTemplate, UBYTE player)
+{
+	if (psTemplate == nullptr)
+	{
+		ASSERT(false, "null template");
+		return 0;
+	}
+
+	return calcDroidOrTemplateBody(psTemplate->asParts, psTemplate->numWeaps, psTemplate->asWeaps, player);
+}
+
+// Calculate the base body points of a droid with upgrades
 static UDWORD calcDroidBaseBody(DROID *psDroid)
 {
-	/* Get the basic component body points */
-	int body =
-	    (asBodyStats + psDroid->asBits[COMP_BODY])->upgrade[psDroid->player].body +
-	    (asBrainStats + psDroid->asBits[COMP_BRAIN])->body +
-	    (asSensorStats + psDroid->asBits[COMP_SENSOR])->body +
-	    (asECMStats + psDroid->asBits[COMP_ECM])->body +
-	    (asRepairStats + psDroid->asBits[COMP_REPAIRUNIT])->body +
-	    (asConstructStats + psDroid->asBits[COMP_CONSTRUCT])->body;
-
-	/* propulsion body points are a percentage of the bodys' body points */
-	body += (((asPropulsionStats + psDroid->asBits[COMP_PROPULSION])->body *
-	          (asBodyStats + psDroid->asBits[COMP_BODY])->body) / 100);
-
-	/* Add the weapon body points */
-	for (int i = 0; i < psDroid->numWeaps; i++)
-	{
-		if (psDroid->asWeaps[i].nStat > 0)
-		{
-			body += (asWeaponStats + psDroid->asWeaps[i].nStat)->body;
-		}
-	}
-	return body;
+	uint8_t asWeaps[DROID_MAXWEAPS];
+	std::transform(std::begin(psDroid->asWeaps), std::end(psDroid->asWeaps), asWeaps, [](WEAPON &weap) {
+		return weap.nStat;
+	});
+	return calcDroidOrTemplateBody(psDroid->asBits, psDroid->numWeaps, asWeaps, psDroid->player);
 }
 
 

@@ -2574,6 +2574,7 @@ static void intSetTemplateBodyShadowStats(COMPONENT_STATS *psStats)
 	COMPONENT_TYPE type = psStats->compType;
 	UDWORD body;
 	UDWORD bodyBody        = asBodyStats[sCurrDesign.asParts[COMP_BODY]].body;
+	uint32_t bodyUpgradeBody = asBodyStats[sCurrDesign.asParts[COMP_BODY]].upgrade[selectedPlayer].body;
 	UDWORD brainBody       = asBrainStats[sCurrDesign.asParts[COMP_BRAIN]].body;
 	UDWORD sensorBody      = asSensorStats[sCurrDesign.asParts[COMP_SENSOR]].body;
 	UDWORD ECMBody         = asECMStats[sCurrDesign.asParts[COMP_ECM]].body;
@@ -2602,6 +2603,7 @@ static void intSetTemplateBodyShadowStats(COMPONENT_STATS *psStats)
 	{
 	case COMP_BODY:
 		bodyBody = newComponentBody;
+		bodyUpgradeBody = ((BODY_STATS *)psStats)->upgrade[selectedPlayer].body;
 		break;
 	case COMP_PROPULSION:
 		propulsionBody = newComponentBody;
@@ -2642,11 +2644,11 @@ static void intSetTemplateBodyShadowStats(COMPONENT_STATS *psStats)
 	body = bodyBody + brainBody + sensorBody + ECMBody + repairBody + constructBody;
 
 	/* propulsion HP are a percentage of the body's HP */
-	body += (propulsionBody * bodyBody) / 100;
+	body += bodyBody * propulsionBody / 100;
 
 	//add weapon HP
 	body += weaponBody1 + weaponBody2 + weaponBody3;
-	body += (body * asBodyStats[sCurrDesign.asParts[COMP_BODY]].upgrade[selectedPlayer].body / 100);
+	body = body * bodyUpgradeBody / std::max(bodyBody, 1u);
 	widgSetMinorBarSize(psWScreen, IDDES_BODYPOINTS, body);
 }
 
