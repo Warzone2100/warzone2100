@@ -1378,8 +1378,7 @@ std::vector<AllyResearch> const &listAllyResearch(unsigned ref)
 				r.timeToResearch = -1;
 				if (r.powerNeeded == -1)
 				{
-					r.timeToResearch = (subject.researchPoints - playerRes.currentPoints)
-					                   / MAX(psStruct->pStructureType->base.research, 1u);
+					r.timeToResearch = (subject.researchPoints - playerRes.currentPoints) / std::max(getBuildingResearchPoints(psStruct), 1);
 				}
 				r.active = psStruct->status == SS_BUILT;
 				researches[cRef].push_back(r);
