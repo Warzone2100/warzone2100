@@ -520,6 +520,8 @@ bool runMultiRequester(UDWORD id, UDWORD *mode, QString *chosen, LEVEL_DATASET *
 	static unsigned hoverId = 0;
 	static unsigned hoverStartTime = 0;
 
+	*isHoverPreview = false;
+
 	if ((id == M_REQUEST_CLOSE) || CancelPressed())			// user hit close box || hit the cancel key
 	{
 		closeMultiRequester();
