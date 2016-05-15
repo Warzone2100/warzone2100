@@ -36,7 +36,7 @@
 #define TRANSPORTER_CAPACITY		10
 
 /// how much cargo capacity a droid takes up
-UDWORD transporterSpaceRequired(DROID const *psDroid);
+int transporterSpaceRequired(const DROID *psDroid);
 
 //initialises Transporter variables
 extern void initTransporters(void);
