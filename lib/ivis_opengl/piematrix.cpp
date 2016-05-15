@@ -344,7 +344,7 @@ void pie_GetMatrix(float *matrix)
  */
 int32_t pie_RotateProject(const Vector3i *v3d, Vector2i *v2d)
 {
-	float hackScaleFactor = 3 * 330 / 1024.0;  // HACK: This seems to work by experimentation, not sure why.
+	float hackScaleFactor = 1.0 / (3 * 330);  // HACK: This seems to work by experimentation, not sure why.
 
 	/*
 	 * v = curMatrix . v3d
@@ -355,20 +355,20 @@ int32_t pie_RotateProject(const Vector3i *v3d, Vector2i *v2d)
 	    v3d->x * psMatrix->c + v3d->y * psMatrix->f + v3d->z * psMatrix->i + psMatrix->l
 	);
 
-	const int zz = v.z >> STRETCHED_Z_SHIFT;
+	const float zz = v.z * hackScaleFactor;
 
-	if (zz < MIN_STRETCHED_Z)
+	if (zz < MIN_STRETCHED_Z * hackScaleFactor)
 	{
 		v2d->x = LONG_WAY; //just along way off screen
 		v2d->y = LONG_WAY;
 	}
 	else
 	{
-		v2d->x = rendSurface.xcentre + (hackScaleFactor / zz * v.x);
-		v2d->y = rendSurface.ycentre - (hackScaleFactor / zz * v.y);
+		v2d->x = rendSurface.xcentre + v.x / zz;
+		v2d->y = rendSurface.ycentre - v.y / zz;
 	}
 
-	return zz;
+	return zz / (1 << STRETCHED_Z_SHIFT);
 }
 
 void pie_PerspectiveBegin(void)

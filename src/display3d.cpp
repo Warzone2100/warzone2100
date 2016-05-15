@@ -3363,16 +3363,13 @@ void calcScreenCoords(DROID *psDroid)
 	origin = Vector3i(0, wsRadius, 0); // take the center of the object
 
 	/* get the screen coordinates */
-	// FP12_SHIFT-STRETCHED_Z_SHIFT is the shift of the scaling on the depth returned
-	const float cZ = pie_RotateProject(&origin, &center) / (float)(1 << (FP12_SHIFT - STRETCHED_Z_SHIFT));
+	float magic = float(1 << STRETCHED_Z_SHIFT) / 40;  // The 40 comes from experimentation, it makes the boxes have approximately the right size.
+	const float cZ = pie_RotateProject(&origin, &center) * magic;
 
 	//Watermelon:added a crash protection hack...
 	if (cZ >= 0)
 	{
-		// 330 is the near plane depth from pie_PerspectiveBegin
-		// not sure where magic comes from, could be another 1<<FP12_SHIFT-STRETCHED_Z_SHIFT
-		const int magic = 4;
-		radius = (wsRadius * 330 * magic) / cZ;
+		radius = wsRadius / cZ * pie_GetResScalingFactor();
 	}
 	else
 	{
