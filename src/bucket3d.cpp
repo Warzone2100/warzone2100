@@ -40,7 +40,6 @@
 #define CLIP_RIGHT	((SDWORD)pie_GetVideoBufferWidth())
 #define CLIP_TOP	((SDWORD)0)
 #define CLIP_BOTTOM ((SDWORD)pie_GetVideoBufferHeight())
-//scale depth = 1<<FP12_SHIFT>>STRETCHED_Z_SHIFT<<xpshift
 // Gerard - HACK Multiplied by 7 to fix clipping
 // someone needs to take a good look at the radius calculation
 #define SCALE_DEPTH (FP12_MULTIPLIER*7)

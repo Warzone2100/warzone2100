@@ -357,7 +357,7 @@ int32_t pie_RotateProject(const Vector3i *v3d, Vector2i *v2d)
 
 	const float zz = v.z * hackScaleFactor;
 
-	if (zz < MIN_STRETCHED_Z * hackScaleFactor)
+	if (zz < 256 * hackScaleFactor)
 	{
 		v2d->x = LONG_WAY; //just along way off screen
 		v2d->y = LONG_WAY;

@@ -37,11 +37,7 @@
  *	Global Definitions (CONSTANTS)
  */
 /***************************************************************************/
-#define STRETCHED_Z_SHIFT		10 // stretchs z range for (1000 to 4000) to (8000 to 32000)
-#define MAX_Z				(32000) // raised to 32000 from 6000 when stretched
-#define MIN_STRETCHED_Z			256
 #define LONG_WAY			(1<<15)
-#define INTERFACE_DEPTH		(MAX_Z - 1)
 #define BUTTON_DEPTH		2000 // will be stretched to 16000
 
 #define OLD_TEXTURE_SIZE_FIX 256.0f
