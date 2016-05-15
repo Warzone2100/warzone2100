@@ -13,6 +13,7 @@
    * Fix: Building aborted on burning oil wells (commit:2da928680fdb4a34b9a46b4ae41845f84f41d9fe, ticket:4379)
    * Fix: Let idle trucks help with building structures as well as repairing them (commit:24c8416c1345594e834629d0cf467e37088964b7, ticket:737)
    * Fix: Specific .png files which were causing libpng warnings (commit:0fde4c81152463389e906998f4590873d8058eb7, ticket:4320)
+   * Fix: WzScript-based AIs were trying to build illegal cyborgs (commit:f9a723424f51ffa578b1bfce179f1bf30f277675, ticket:4364)
  * Graphics:
    * Change: Enable coloured cursors by default (commit:a1c76bacd80cdd4a5652f5f25fb6a697b9174510, ticket:4387)
    * Fix: Shadow rendering (commit:c0f41c445e19546271ea1dcc23010db2f4f5fa26, ticket:4378)

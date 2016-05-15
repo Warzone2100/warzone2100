@@ -1713,18 +1713,16 @@ function STRUCTURE findIdleStructure(STRUCTURESTAT _structType, bool _bIdleOnly)
 // build repair droids.
 event repairDroids(repairDroidsTr)
 {
-
 	// if we're running low on repair droids, build some..
 	if(numRepairUnits <3)
 	{
 		initEnumStruct(FALSE,factory,me,me);
 		structure= enumStruct();							// find factory.
-		if( (structure != NULLOBJECT) and (getDroidCount(me) < MAX_DROIDS) )
+		if ((structure != NULLOBJECT) and (getDroidCount(me) < MAX_DROIDS) and (skCanBuildTemplate(me, structure, repairUnit)))
 		{
 			buildDroid(repairUnit, structure, me, 1);	// build repairunit.
 		}
 	}
-
 }
 
 
