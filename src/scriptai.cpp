@@ -45,6 +45,7 @@
 #include "src/scriptfuncs.h"
 #include "fpath.h"
 #include "multigifts.h"
+#include "template.h"
 
 static INTERP_VAL	scrFunctionResult;	//function return value to be pushed to stack
 
@@ -1364,71 +1365,9 @@ bool scrSkCanBuildTemplate(void)
 		goto failTempl;
 	}
 
-	// weapon/sensor
-
-	switch (droidTemplateType(psTempl))
+	if (!researchedTemplate(psTempl, player, true, false))
 	{
-	case DROID_CYBORG:		        // cyborg-type thang.. no need to check weapon.
-	case DROID_CYBORG_SUPER:		// super cyborg-type thang
-		break;
-	case DROID_WEAPON:
-		if (apCompLists[player][COMP_WEAPON][ psTempl->asWeaps[0] ] != AVAILABLE)
-		{
-			goto failTempl;
-		}
-		break;
-	case DROID_SENSOR:
-		if (apCompLists[player][COMP_SENSOR][psTempl->asParts[COMP_SENSOR]] != AVAILABLE)
-		{
-			goto failTempl;
-		}
-		break;
-	case DROID_ECM:
-		if (apCompLists[player][COMP_ECM][psTempl->asParts[COMP_ECM]] != AVAILABLE)
-		{
-			goto failTempl;
-		}
-		break;
-	case DROID_REPAIR:
-		if (apCompLists[player][COMP_REPAIRUNIT][psTempl->asParts[COMP_REPAIRUNIT]] != AVAILABLE)
-		{
-			goto failTempl;
-		}
-		break;
-	case DROID_CYBORG_REPAIR:
-		if (apCompLists[player][COMP_REPAIRUNIT][psTempl->asParts[COMP_REPAIRUNIT]] != AVAILABLE)
-		{
-			goto failTempl;
-		}
-		break;
-	case DROID_COMMAND:
-		if (apCompLists[player][COMP_BRAIN][psTempl->asParts[COMP_BRAIN]] != AVAILABLE)
-		{
-			goto failTempl;
-		}
-		break;
-	case DROID_CONSTRUCT:
-		if (apCompLists[player][COMP_CONSTRUCT][psTempl->asParts[COMP_CONSTRUCT]] != AVAILABLE)
-		{
-			goto failTempl;
-		}
-		break;
-	case DROID_CYBORG_CONSTRUCT:
-		if (apCompLists[player][COMP_CONSTRUCT][psTempl->asParts[COMP_CONSTRUCT]] != AVAILABLE)
-		{
-			goto failTempl;
-		}
-		break;
-
-	case DROID_PERSON:		        // person
-	case DROID_TRANSPORTER:	        // guess what this is!
-	case DROID_SUPERTRANSPORTER:
-	case DROID_DEFAULT:		        // Default droid
-	case DROID_ANY:
-	default:
-		debug(LOG_FATAL, "scrSkCanBuildTemplate: Unhandled template type");
-		abort();
-		break;
+		goto failTempl;
 	}
 
 	scrFunctionResult.v.bval = true;
