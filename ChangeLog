@@ -1,3 +1,22 @@
+2016-05-17: Version 3.2.0 beta2
+ * Balance:
+   * Fix: Some weapon accuracy values tweaked to be closer to the 3.1 experience (commit:dc6ddae6953c7f8cb2b0bd073641f02ed348da8b)
+   * Fix: Inconsistent application of body upgrades (commit:11150dacac874ee973b94cee3a63175ed933d112, ticket:4369)
+ * General:
+   * Fix: Crash on choosing AI while another player clicks ready (commit:c58e747775fa3618d61b325e38fd4f15281220e3, ticket:4392)
+   * Fix: Small bodied droids did not count for transport capacity (commit:5e457617b67cf02baceaad38efd7f7fe443a8db6, ticket:4394)
+   * Fix: Designed templates did not survive save and load (commit:0556c63f676828db552420bff3e979b5a0be1c72, ticket:4372)
+   * Fix: Droid selection bounding box improvements (commit:07e33362d4ee5d9c4b1d9f3ccd63ecc88f73d93b, ticket:4157)
+   * Fix: Allied research time display (commit:1ee5fcb42ae5fe20ebbc35b911ee09696d2bbb3e)
+   * Fix: Alphabetical map name sorting, was reversed (commit:c82e091c62b3273411012d3035e342912fce4ef8)
+   * Fix: Visibility issues in loaded games (commit:c94b5437e41a2a86d7bc024c23889ac6ef1bdc24, ticket:4388)
+   * Fix: Building aborted on burning oil wells (commit:2da928680fdb4a34b9a46b4ae41845f84f41d9fe, ticket:4379)
+   * Fix: Let idle trucks help with building structures as well as repairing them (commit:24c8416c1345594e834629d0cf467e37088964b7, ticket:737)
+   * Fix: Specific .png files which were causing libpng warnings (commit:0fde4c81152463389e906998f4590873d8058eb7, ticket:4320)
+ * Graphics:
+   * Change: Enable coloured cursors by default (commit:a1c76bacd80cdd4a5652f5f25fb6a697b9174510, ticket:4387)
+   * Fix: Shadow rendering (commit:c0f41c445e19546271ea1dcc23010db2f4f5fa26, ticket:4378)
+
 2016-05-07: Version 3.2.0 beta1
  * UI:
    * Add: Add teams mode without shared research (commit:8713039c5f1309bbb5e1c269d83cf91877b99646)
