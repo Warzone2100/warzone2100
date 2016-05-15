@@ -57,7 +57,7 @@ void transporterRemoveDroid(DROID *psTransport, DROID *psDroid, QUEUE_MODE mode)
 bool checkTransporterSpace(DROID const *psTransporter, DROID const *psAssigned, bool mayFlash = true);
 /*calculates how much space is remaining on the transporter - allows droids to take
 up different amount depending on their body size - currently all are set to one!*/
-extern UDWORD calcRemainingCapacity(DROID *psTransporter);
+int calcRemainingCapacity(const DROID *psTransporter);
 
 extern bool transporterIsEmpty(const DROID *psTransporter);
 

@@ -102,18 +102,11 @@
 //start y position of the available droids buttons
 #define AVAIL_STARTY			0
 
-//They all take up the same amount of space now - AB 30/10/98
-//defines how much space each sized droid takes up on the Transporter
-#define	LIGHT_DROID					1
-#define MEDIUM_DROID				2
-#define HEAVY_DROID					3
-
-
 /* the widget screen */
 extern W_SCREEN		*psWScreen;
 
 /* Static variables */
-static	DROID			*psCurrTransporter;
+static DROID *psCurrTransporter = NULL;
 static	DROID			*g_psCurScriptTransporter = NULL;
 static	bool			onMission;
 static	UDWORD			g_iLaunchTime = 0;
@@ -134,9 +127,6 @@ static DROID *transInterfaceDroidList(void);
 static void intTransporterAddDroid(UDWORD id);
 static void intRemoveTransDroidsAvail(void);
 static void intRemoveTransDroidsAvailNoAnim(void);
-static bool _intRefreshTransporter(void);
-static bool _intAddTransporter(DROID *psSelected, bool offWorld);
-static void _intProcessTransporter(UDWORD id);
 
 //initialises Transporter variables
 void initTransporters(void)
@@ -149,14 +139,8 @@ void initTransporters(void)
 //
 bool intRefreshTransporter(void)
 {
-	return _intRefreshTransporter();
-}
-
-static bool _intRefreshTransporter(void)
-{
 	// Is the transporter screen up?
-	if ((intMode == INT_TRANSPORTER) &&
-	    (widgGetFromID(psWScreen, IDTRANS_FORM) != NULL))
+	if (intMode == INT_TRANSPORTER && widgGetFromID(psWScreen, IDTRANS_FORM) != NULL)
 	{
 		bool Ret;
 		// Refresh it by re-adding it.
@@ -170,26 +154,17 @@ static bool _intRefreshTransporter(void)
 
 bool intAddTransporter(DROID *psSelected, bool offWorld)
 {
-	return (_intAddTransporter(psSelected, offWorld));
-}
-
-/*Add the Transporter Interface*/
-static bool _intAddTransporter(DROID *psSelected, bool offWorld)
-{
-	bool			Animate = true;
+	bool Animate = true;
 
 	onMission = offWorld;
 	psCurrTransporter = psSelected;
 
 	/*if transporter has died - close the interface - this can only happen in
 	multiPlayer where the transporter can be killed*/
-	if (bMultiPlayer)
+	if (bMultiPlayer && psCurrTransporter && isDead((BASE_OBJECT *)psCurrTransporter))
 	{
-		if (psCurrTransporter && isDead((BASE_OBJECT *)psCurrTransporter))
-		{
-			intRemoveTransNoAnim();
-			return true;
-		}
+		intRemoveTransNoAnim();
+		return true;
 	}
 
 	// Add the main Transporter form
@@ -239,12 +214,9 @@ static bool _intAddTransporter(DROID *psSelected, bool offWorld)
 	}
 
 	//if on a mission - add the Droids back at home base form
-	if (onMission)
+	if (onMission && !intAddDroidsAvailForm())
 	{
-		if (!intAddDroidsAvailForm())
-		{
-			return false;
-		}
+		return false;
 	}
 
 	return true;
@@ -638,9 +610,9 @@ bool intAddDroidsAvailForm(void)
 
 /*calculates how much space is remaining on the transporter - allows droids to take
 up different amount depending on their body size - currently all are set to one!*/
-UDWORD calcRemainingCapacity(DROID *psTransporter)
+int calcRemainingCapacity(const DROID *psTransporter)
 {
-	SDWORD	capacity = TRANSPORTER_CAPACITY;
+	int capacity = TRANSPORTER_CAPACITY;
 	DROID *psDroid, *psNext;
 
 	// If it's dead then just return 0.
@@ -649,11 +621,12 @@ UDWORD calcRemainingCapacity(DROID *psTransporter)
 		return 0;
 	}
 
-	for (psDroid = psTransporter->psGroup->psList; psDroid != NULL && psDroid !=
-	     psTransporter; psDroid = psNext)
+	for (psDroid = psTransporter->psGroup->psList; psDroid != NULL && psDroid != psTransporter; psDroid = psNext)
 	{
 		psNext = psDroid->psGrpNext;
-		capacity -= transporterSpaceRequired(psDroid);
+		const int space = transporterSpaceRequired(psDroid);
+		ASSERT(space > 0, "Invalid space required for %s", objInfo(psDroid));
+		capacity -= space;
 	}
 
 	if (capacity < 0)
@@ -661,7 +634,7 @@ UDWORD calcRemainingCapacity(DROID *psTransporter)
 		capacity = 0;
 	}
 
-	return (UDWORD)capacity;
+	return capacity;
 }
 
 bool transporterIsEmpty(const DROID *psTransporter)
@@ -677,17 +650,15 @@ bool transporterIsEmpty(const DROID *psTransporter)
 
 static void intSetTransCapacityLabel(QString &text)
 {
-	UDWORD capacity = TRANSPORTER_CAPACITY;
-
 	if (psCurrTransporter)
 	{
-		capacity = calcRemainingCapacity(psCurrTransporter);
+		int capacity = calcRemainingCapacity(psCurrTransporter);
 
 		//change round the way the remaining capacity is displayed - show 0/10 when empty now
 		capacity = TRANSPORTER_CAPACITY - capacity;
 
 		char tmp[40];
-		ssprintf(tmp, "%02u/10", capacity);
+		ssprintf(tmp, "%02d/10", capacity);
 		text = QString::fromUtf8(tmp);
 	}
 }
@@ -702,11 +673,6 @@ void intUpdateTransCapacity(WIDGET *psWidget, W_CONTEXT *psContext)
 
 /* Process return codes from the Transporter Screen*/
 void intProcessTransporter(UDWORD id)
-{
-	_intProcessTransporter(id);
-}
-
-static void _intProcessTransporter(UDWORD id)
 {
 	if (id >= IDTRANS_START && id <= IDTRANS_END)
 	{
@@ -855,8 +821,7 @@ void setCurrentTransporter(UDWORD id)
 	currID = IDTRANS_START;
 
 	//loop thru all the droids to find the selected one
-	for (psDroid = transInterfaceDroidList(); psDroid != NULL; psDroid =
-	         psDroid->psNext)
+	for (psDroid = transInterfaceDroidList(); psDroid != NULL; psDroid = psDroid->psNext)
 	{
 		if (isTransporter(psDroid) &&
 		    (psDroid->action != DACTION_TRANSPORTOUT &&
@@ -958,7 +923,7 @@ void transporterRemoveDroid(DROID *psTransport, DROID *psDroid, QUEUE_MODE mode)
 }
 
 /*adds a droid to the current transporter via the interface*/
-void intTransporterAddDroid(UDWORD id)
+static void intTransporterAddDroid(UDWORD id)
 {
 	DROID		*psDroid, *psNext;
 	UDWORD		currID;
@@ -1152,8 +1117,7 @@ bool updateTransporter(DROID *psTransporter)
 	ASSERT_OR_RETURN(true, isTransporter(psTransporter), "Invalid droid type");
 
 	//if not moving to mission site, exit
-	if (psTransporter->action != DACTION_TRANSPORTOUT &&
-	    psTransporter->action != DACTION_TRANSPORTIN)
+	if (psTransporter->action != DACTION_TRANSPORTOUT && psTransporter->action != DACTION_TRANSPORTIN)
 	{
 		return true;
 	}
