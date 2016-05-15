@@ -691,7 +691,7 @@ QScriptValue convDroid(DROID *psDroid, QScriptEngine *engine)
 	{
 		value.setProperty("cargoCapacity", TRANSPORTER_CAPACITY, QScriptValue::ReadOnly);
 		value.setProperty("cargoLeft", calcRemainingCapacity(psDroid), QScriptValue::ReadOnly);
-		value.setProperty("cargoCount", psDroid->psGroup->getNumMembers(), QScriptValue::ReadOnly);
+		value.setProperty("cargoCount", psDroid->psGroup != nullptr? psDroid->psGroup->getNumMembers() : 0, QScriptValue::ReadOnly);
 	}
 	value.setProperty("isRadarDetector", objRadarDetector(psDroid), QScriptValue::ReadOnly);
 	value.setProperty("isCB", cbSensorDroid(psDroid), QScriptValue::ReadOnly);
