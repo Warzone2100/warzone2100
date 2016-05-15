@@ -141,39 +141,26 @@ static bool startTitleMenu(void)
 static void runUpgrdHyperlink(void)
 {
 	//FIXME: There is no decent way we can re-init the display to switch to window or fullscreen within game. refs: screenToggleMode().
-	char buf[250] = { '\0' };
-	const char *segment;
-	const char vcs_branch_cstr[] = VCS_BRANCH;
-	const char vcs_tag[] = VCS_TAG;
-
-	if (strlen(vcs_tag))
+	std::string link = "http://gamecheck.wz2100.net/";
+	std::string version = version_getVersionString();
+	for (char ch : version)
 	{
-		segment = vcs_tag;
+		link += ch == ' '? '_' : ch;
 	}
-	else if (strlen(vcs_branch_cstr))
-	{
-		segment = vcs_branch_cstr;
-	}
-	else
-	{
-		segment = "unknown";
-	}
-
-	ssprintf(buf, "http://gamecheck.wz2100.net/%s", segment);
 
 #if defined(WZ_OS_WIN)
 	wchar_t  wszDest[250] = {'/0'};
-	MultiByteToWideChar(CP_UTF8, 0, buf, -1, wszDest, 250);
+	MultiByteToWideChar(CP_UTF8, 0, link.c_str(), -1, wszDest, 250);
 
 	ShellExecuteW(NULL, L"open", wszDest, NULL, NULL, SW_SHOWNORMAL);
 #elif defined (WZ_OS_MAC)
 	char lbuf[250] = {'\0'};
-	ssprintf(lbuf, "open %s &", buf);
+	ssprintf(lbuf, "open %s &", link.c_str());
 	system(lbuf);
 #else
 	// for linux
 	char lbuf[250] = {'\0'};
-	ssprintf(lbuf, "xdg-open %s &", buf);
+	ssprintf(lbuf, "xdg-open %s &", link.c_str());
 	int stupidWarning = system(lbuf);
 	(void)stupidWarning;  // Why is system() a warn_unused_result function..?
 #endif
