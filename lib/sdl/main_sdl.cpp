@@ -1301,6 +1301,19 @@ bool wzMainScreenSetup(int antialiasing, bool fullscreen, bool vsync)
 		return false;
 	}
 
+	// Set the double buffer OpenGL attribute.
+	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+
+	// Enable stencil buffer, needed for shadows to work.
+	SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
+
+	// Enable FSAA anti-aliasing if and at the level requested by the user
+	if (antialiasing)
+	{
+		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
+		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, antialiasing);
+	}
+
 	// Populated our resolution list (does all displays now)
 	SDL_DisplayMode	displaymode;
 	struct screeninfo screenlist;
@@ -1360,7 +1373,7 @@ bool wzMainScreenSetup(int antialiasing, bool fullscreen, bool vsync)
 	//// The flags to pass to SDL_CreateWindow
 	int video_flags  = SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN;
 
-	if (war_getFullscreen())
+	if (fullscreen)
 	{
 		video_flags |= SDL_WINDOW_FULLSCREEN;
 	}
@@ -1395,15 +1408,6 @@ bool wzMainScreenSetup(int antialiasing, bool fullscreen, bool vsync)
 		debug(LOG_ERROR, "Failed to create a openGL context! [%s]", SDL_GetError());
 		return false;
 	}
-	// Set the double buffer OpenGL attribute.
-	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-
-	// Enable FSAA anti-aliasing if and at the level requested by the user
-	if (antialiasing)
-	{
-		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
-		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, antialiasing);
-	}
 
 	int bpp = SDL_BITSPERPIXEL(SDL_GetWindowPixelFormat(WZwindow));
 	debug(LOG_WZ, "Bpp = %d format %s" , bpp, getSDL_fmt_string(SDL_GetWindowPixelFormat(WZwindow)));
@@ -1433,7 +1437,7 @@ bool wzMainScreenSetup(int antialiasing, bool fullscreen, bool vsync)
 	}
 
 	// Enable/disable vsync if requested by the user
-	wzSetSwapInterval(war_GetVsync());
+	wzSetSwapInterval(vsync);
 
 	int value = 0;
 	if (SDL_GL_GetAttribute(SDL_GL_DOUBLEBUFFER, &value) == -1 || value == 0)
