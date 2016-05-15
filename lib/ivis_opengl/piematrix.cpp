@@ -368,7 +368,7 @@ int32_t pie_RotateProject(const Vector3i *v3d, Vector2i *v2d)
 		v2d->y = rendSurface.ycentre - v.y / zz;
 	}
 
-	return zz / (1 << STRETCHED_Z_SHIFT);
+	return zz;
 }
 
 void pie_PerspectiveBegin(void)

@@ -3363,7 +3363,7 @@ void calcScreenCoords(DROID *psDroid)
 	origin = Vector3i(0, wsRadius, 0); // take the center of the object
 
 	/* get the screen coordinates */
-	float magic = float(1 << STRETCHED_Z_SHIFT) / 40;  // The 40 comes from experimentation, it makes the boxes have approximately the right size.
+	float magic = 0.025f;  // The 0.025f comes from experimentation, it makes the boxes have approximately the right size.
 	const float cZ = pie_RotateProject(&origin, &center) * magic;
 
 	//Watermelon:added a crash protection hack...
