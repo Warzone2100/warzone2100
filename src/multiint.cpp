@@ -2055,7 +2055,6 @@ bool recvReadyRequest(NETQUEUE queue)
 
 static bool changeReadyStatus(UBYTE player, bool bReady)
 {
-	drawReadyButton(player);
 	NetPlay.players[player].ready = bReady;
 	NETBroadcastPlayerInfo(player);
 	netPlayersUpdated = true;
