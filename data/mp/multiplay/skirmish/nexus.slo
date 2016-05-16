@@ -1718,9 +1718,12 @@ event repairDroids(repairDroidsTr)
 	{
 		initEnumStruct(FALSE,factory,me,me);
 		structure= enumStruct();							// find factory.
-		if ((structure != NULLOBJECT) and (getDroidCount(me) < MAX_DROIDS) and (skCanBuildTemplate(me, structure, repairUnit)))
+		if (structure != NULLOBJECT)
 		{
-			buildDroid(repairUnit, structure, me, 1);	// build repairunit.
+			if ((getDroidCount(me) < MAX_DROIDS) and (skCanBuildTemplate(me, structure, repairUnit)))
+			{
+				buildDroid(repairUnit, structure, me, 1);	// build repairunit.
+			}
 		}
 	}
 }

@@ -155,7 +155,6 @@ private int				count,count2,result;
 
 private bool			powerSave,_DEBUG,bRunning;
 // Hopefully this will be at least as large as MAX_PLAYERS... Why can't I just use MAX_PLAYERS as the array size?!
-// P.S. And why can't I put a comment on the same line as a #define??!! Gah, who cares if the lua2 branch works, lets switch to it, anyway.
 #define MAX_PLAYERS_HACK 17
 private	int				allianceTime[MAX_PLAYERS_HACK];
 private int				sender,x,y,beaconX[MAX_PLAYERS_HACK],beaconY[MAX_PLAYERS_HACK],tBeacon[MAX_PLAYERS_HACK],
@@ -2045,18 +2044,19 @@ function STRUCTURE findIdleStructure(STRUCTURESTAT _structType, bool _bIdleOnly)
 // build repair droids.
 event repairDroids(repairDroidsTr)
 {
-
 	// if we're running low on repair droids, build some..
 	if(numRepairUnits <3)
 	{
 		initEnumStruct(FALSE,factory,me,me);
 		structure= enumStruct();							// find factory.
-		if( (structure != NULLOBJECT) and (getDroidCount(me) < MAX_DROIDS) )
+		if (structure != NULLOBJECT)
 		{
-			buildDroid(repairUnit, structure, me, 1);	// build repairunit.
+			if ((getDroidCount(me) < MAX_DROIDS) and (skCanBuildTemplate(me, structure, repairUnit)))
+			{
+				buildDroid(repairUnit, structure, me, 1);	// build repairunit.
+			}
 		}
 	}
-
 }
 
 
@@ -2149,7 +2149,6 @@ function void factoryBuildDroid(STRUCTURE _factory)
 // put cyborg factories to work
 event cyborgFactoryEvent(cyborgFactoryEventTr)
 {
-
 	if(not ((defendGroup.members < maxCyborgs) or (maxCyborgs == UNLIMITED)))
 	{
 		exit;		//we need no cyborgs
@@ -2241,7 +2240,6 @@ event chooseScoutArea(chooseScoutAreaTr)
 
 event expandScoutArea(expandScoutAreaTr)
 {
-
 	//expand the scouting area slightly
 	scoutTLX	= scoutTLX - ((mapWidth*128)/ tileExpand);
 	scoutTLY	= scoutTLY - ((mapHeight*128)/ tileExpand);
@@ -3728,16 +3726,8 @@ function bool attemptToHelp(int _playerToHelp, int _x, int _y)
 		if(haveHelpers() or _DEBUG)
 		{
 			dbg("got attackers", me);
-			//if(allyBaseAtLoc(_playerToHelp, _x, _y))	//is he just trying to misuse us?
-			//{
-				helpPlayer(_playerToHelp, _x, _y);
-				return TRUE;
-			//}
-			//else
-			//{
-			//	dbg("ally needs no help", me);
-			//	messagePlayer(ALL_ALLIES, M_ANNOYED, MAX_PROBABILITY / 2);
-			//}
+			helpPlayer(_playerToHelp, _x, _y);
+			return TRUE;
 		}
 		else
 		{
@@ -3897,11 +3887,6 @@ function bool canStopHelpingAlly()
 	if(!friendlyPlayer(lastHelpPlayer)){
 		return TRUE;
 	}
-
-	/* Nothing to defend anymore */
-	//if(!allyBaseAtLoc(lastHelpPlayer, helpX, helpY)){
-	//	return TRUE;
-	//}
 
 	return FALSE;
 }

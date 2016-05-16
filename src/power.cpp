@@ -71,8 +71,8 @@ struct PlayerPower
 	// All fields are 32.32 fixed point.
 	int64_t currentPower;                  ///< The current amount of power available to the player.
 	std::vector<PowerRequest> powerQueue;  ///< Requested power.
-	int powerModifier;                 ///< Percentage modifier on power from each derrick.
-	int64_t max;
+	int powerModifier;                     ///< Percentage modifier on power from each derrick.
+	int64_t maxStorage;                    ///< Maximum storage of power, in total.
 };
 
 static PlayerPower asPower[MAX_PLAYERS];
@@ -84,8 +84,8 @@ void setPowerModifier(int player, int modifier)
 
 void setPowerMaxStorage(int player, int max)
 {
-	asPower[player].max = max * FP_ONE;
-	asPower[player].currentPower = std::min<int64_t>(asPower[player].max, asPower[player].currentPower);
+	asPower[player].maxStorage = max * FP_ONE;
+	asPower[player].currentPower = std::min<int64_t>(asPower[player].maxStorage, asPower[player].currentPower);
 }
 
 /*allocate the space for the playerPower*/
@@ -104,7 +104,7 @@ void clearPlayerPower()
 		asPower[player].currentPower = 0;
 		asPower[player].powerModifier = 100;
 		asPower[player].powerQueue.clear();
-		asPower[player].max = MAX_POWER * FP_ONE;
+		asPower[player].maxStorage = MAX_POWER * FP_ONE;
 	}
 }
 
@@ -226,7 +226,7 @@ void addPower(int player, int32_t quantity)
 	ASSERT_OR_RETURN(, player < MAX_PLAYERS, "Bad player (%d)", player);
 	syncDebug("addPower%d %" PRId64"+=%d", player, asPower[player].currentPower, quantity);
 	asPower[player].currentPower += quantity * FP_ONE;
-	CLIP(asPower[player].currentPower, 0, asPower[player].max);
+	CLIP(asPower[player].currentPower, 0, asPower[player].maxStorage);
 }
 
 /*resets the power calc flag for all players*/
@@ -324,9 +324,9 @@ static void updateCurrentPower(STRUCTURE *psStruct, UDWORD player, int ticks)
 
 	asPower[player].currentPower += (extractedPower * multiplier) / 100 * ticks;
 	ASSERT(asPower[player].currentPower >= 0, "negative power");
-	if (asPower[player].currentPower > asPower[player].max)
+	if (asPower[player].currentPower > asPower[player].maxStorage)
 	{
-		asPower[player].currentPower = asPower[player].max;
+		asPower[player].currentPower = asPower[player].maxStorage;
 	}
 }
 
