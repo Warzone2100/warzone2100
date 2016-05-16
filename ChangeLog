@@ -1,4 +1,4 @@
-2016-05-17: Version 3.2.0 beta2
+2016-05-16: Version 3.2.0 beta2
  * Balance:
    * Fix: Some weapon accuracy values tweaked to be closer to the 3.1 experience (commit:dc6ddae6953c7f8cb2b0bd073641f02ed348da8b)
    * Fix: Inconsistent application of body upgrades (commit:11150dacac874ee973b94cee3a63175ed933d112, ticket:4369)
@@ -13,7 +13,7 @@
    * Fix: Building aborted on burning oil wells (commit:2da928680fdb4a34b9a46b4ae41845f84f41d9fe, ticket:4379)
    * Fix: Let idle trucks help with building structures as well as repairing them (commit:24c8416c1345594e834629d0cf467e37088964b7, ticket:737)
    * Fix: Specific .png files which were causing libpng warnings (commit:0fde4c81152463389e906998f4590873d8058eb7, ticket:4320)
-   * Fix: WzScript-based AIs were trying to build illegal cyborgs (commit:f9a723424f51ffa578b1bfce179f1bf30f277675, ticket:4364)
+   * Fix: WzScript-based AIs were trying to build illegal cyborgs (commit:f9a723424f51ffa578b1bfce179f1bf30f277675, commit:712e3adffd334d7fdba3cef210aeb41560b204f7, ticket:4364)
  * Graphics:
    * Change: Enable coloured cursors by default (commit:a1c76bacd80cdd4a5652f5f25fb6a697b9174510, ticket:4387)
    * Fix: Shadow rendering (commit:c0f41c445e19546271ea1dcc23010db2f4f5fa26, ticket:4378)
