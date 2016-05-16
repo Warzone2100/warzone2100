@@ -4,8 +4,8 @@
 //
 
 1 VERSIONINFO
- FILEVERSION 9,9,9,9
- PRODUCTVERSION 9,9,9,9
+ FILEVERSION 3,2,0,2
+ PRODUCTVERSION 3,2,0,2
  FILEFLAGSMASK 0x0L
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -22,12 +22,12 @@ BEGIN
 		BEGIN
 			VALUE "CompanyName", "Warzone 2100 Project"
 			VALUE "FileDescription", "Warzone 2100"
-			VALUE "FileVersion", "master"
+			VALUE "FileVersion", "3.2.0_beta2"
 			VALUE "InternalName", "Warzone 2100"
 			VALUE "LegalCopyright", "Copyright (C) 2005-2016 Warzone 2100 Project"
 			VALUE "OriginalFilename", "warzone2100.exe"
 			VALUE "ProductName", "Warzone 2100"
-			VALUE "ProductVersion", "master"
+			VALUE "ProductVersion", "3.2.0_beta2"
 		END
 	END
 	BLOCK "VarFileInfo"
