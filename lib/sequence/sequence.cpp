@@ -990,9 +990,9 @@ void seq_SetDisplaySize(int sizeX, int sizeY, int posX, int posY)
 		if (aspect > videoAspect) // x offset
 		{
 			int offset = (screenWidth - screenHeight * videoAspect) / 2;
-			vertices[0][0] += offset;
+			vertices[1][0] += offset;
 			vertices[3][0] += offset;
-			vertices[1][0] -= offset;
+			vertices[0][0] -= offset;
 			vertices[2][0] -= offset;
 		}
 		else // y offset
