@@ -142,6 +142,7 @@ WIDGET::WIDGET(WIDGET *parent, WIDGET_TYPE type)
 WIDGET::~WIDGET()
 {
 	setScreenPointer(nullptr);  // Clear any pointers to us directly from screenPointer.
+	tipStop(this);  // Stop showing tooltip, if we are.
 
 	if (parentWidget != NULL)
 	{
