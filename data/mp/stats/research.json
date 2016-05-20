@@ -2159,7 +2159,7 @@
             {
                 "class": "Building",
                 "parameter": "ProductionPoints",
-                "value": 30
+                "value": 90
             }
         ],
         "subgroupIconID": "IMAGE_RES_GRPUPG"
@@ -2181,7 +2181,7 @@
             {
                 "class": "Building",
                 "parameter": "ProductionPoints",
-                "value": 30
+                "value": 90
             }
         ],
         "subgroupIconID": "IMAGE_RES_GRPUPG"
@@ -2200,7 +2200,7 @@
             {
                 "class": "Building",
                 "parameter": "ProductionPoints",
-                "value": 30
+                "value": 60
             }
         ],
         "subgroupIconID": "IMAGE_RES_GRPUPG",
