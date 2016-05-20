@@ -168,7 +168,7 @@ bool resizeRadar()
 	memset(radarBuffer, 0, radarBufferSize);
 	if (rotateRadar)
 	{
-		RadarZoomMultiplier = std::max(RADWIDTH, RADHEIGHT) / std::max({radarTexWidth, radarTexHeight, 1});
+		RadarZoomMultiplier = (float)std::max(RADWIDTH, RADHEIGHT) / std::max({radarTexWidth, radarTexHeight, 1});
 	}
 	else
 	{
@@ -219,8 +219,8 @@ uint8_t GetRadarZoom()
 /** Calculate the radar pixel sizes. Returns pixels per tile. */
 static void CalcRadarPixelSize(float *SizeH, float *SizeV)
 {
-	*SizeH = radarHeight / std::max(radarTexHeight, 1);
-	*SizeV = radarWidth / std::max(radarTexWidth, 1);
+	*SizeH = (float)radarHeight / std::max(radarTexHeight, 1);
+	*SizeV = (float)radarWidth / std::max(radarTexWidth, 1);
 }
 
 /** Given a position within the radar, return a world coordinate. */
