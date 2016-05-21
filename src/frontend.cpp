@@ -972,16 +972,43 @@ bool runAudioOptionsMenu(void)
 	return true;
 }
 
+static char const *videoOptionsWindowModeString()
+{
+	return war_getFullscreen()? _("Fullscreen") : _("Windowed");
+}
+
+static char const *videoOptionsFsaaString()
+{
+	switch (war_getFSAA())
+	{
+	case FSAA_OFF: return _("Off");
+	case FSAA_2X: return "2X";
+	case FSAA_4X: return "4X";
+	case FSAA_8X: return "8X";
+	// Some cards can do 16x & 32x ...
+	default: return _("Unsupported");
+	}
+}
+
+static std::string videoOptionsTextureSizeString()
+{
+	char textureSize[20];
+	ssprintf(textureSize, "%d", getTextureSize());
+	return textureSize;
+}
+
+static char const *videoOptionsVsyncString()
+{
+	return war_GetVsync()? _("On") : _("Off");
+}
+
 // ////////////////////////////////////////////////////////////////////////////
 // Video Options
 static bool startVideoOptionsMenu(void)
 {
 	// Generate the resolution string
 	char resolution[43];
-	char textureSize[20];
 	ssprintf(resolution, "%d x %d", war_GetWidth(), war_GetHeight());
-	// Generate texture size string
-	ssprintf(textureSize, "%d", getTextureSize());
 
 	addBackdrop();
 	addTopForm();
@@ -997,16 +1024,8 @@ static bool startVideoOptionsMenu(void)
 	label->setTextAlignment(WLAB_ALIGNBOTTOMLEFT);
 
 	// Fullscreen/windowed
-	addTextButton(FRONTEND_WINDOWMODE, FRONTEND_POS2X - 35, FRONTEND_POS2Y, _("Graphics Mode*"), 0);
-
-	if (war_getFullscreen())
-	{
-		addTextButton(FRONTEND_WINDOWMODE_R, FRONTEND_POS2M - 55, FRONTEND_POS2Y, _("Fullscreen"), 0);
-	}
-	else
-	{
-		addTextButton(FRONTEND_WINDOWMODE_R, FRONTEND_POS2M - 55, FRONTEND_POS2Y, _("Windowed"), 0);
-	}
+	addTextButton(FRONTEND_WINDOWMODE, FRONTEND_POS2X - 35, FRONTEND_POS2Y, _("Graphics Mode*"), WBUT_SECONDARY);
+	addTextButton(FRONTEND_WINDOWMODE_R, FRONTEND_POS2M - 55, FRONTEND_POS2Y, videoOptionsWindowModeString(), WBUT_SECONDARY);
 
 	// Resolution
 	addTextButton(FRONTEND_RESOLUTION, FRONTEND_POS3X - 35, FRONTEND_POS3Y, _("Resolution*"), WBUT_SECONDARY);
@@ -1014,48 +1033,16 @@ static bool startVideoOptionsMenu(void)
 	widgSetString(psWScreen, FRONTEND_RESOLUTION_R, resolution);
 
 	// Texture size
-	addTextButton(FRONTEND_TEXTURESZ, FRONTEND_POS4X - 35, FRONTEND_POS4Y, _("Texture size"), 0);
-	addTextButton(FRONTEND_TEXTURESZ_R, FRONTEND_POS4M - 55, FRONTEND_POS4Y, textureSize, 0);
+	addTextButton(FRONTEND_TEXTURESZ, FRONTEND_POS4X - 35, FRONTEND_POS4Y, _("Texture size"), WBUT_SECONDARY);
+	addTextButton(FRONTEND_TEXTURESZ_R, FRONTEND_POS4M - 55, FRONTEND_POS4Y, videoOptionsTextureSizeString().c_str(), WBUT_SECONDARY);
 
 	// Vsync
-	addTextButton(FRONTEND_VSYNC, FRONTEND_POS5X - 35, FRONTEND_POS5Y, _("Vertical sync"), 0);
-
-	if (war_GetVsync())
-	{
-		addTextButton(FRONTEND_VSYNC_R, FRONTEND_POS5M - 55, FRONTEND_POS5Y, _("On"), 0);
-	}
-	else
-	{
-		addTextButton(FRONTEND_VSYNC_R, FRONTEND_POS5M - 55, FRONTEND_POS5Y, _("Off"), 0);
-	}
-
+	addTextButton(FRONTEND_VSYNC, FRONTEND_POS5X - 35, FRONTEND_POS5Y, _("Vertical sync"), WBUT_SECONDARY);
+	addTextButton(FRONTEND_VSYNC_R, FRONTEND_POS5M - 55, FRONTEND_POS5Y, videoOptionsVsyncString(), WBUT_SECONDARY);
 
 	// FSAA
-	addTextButton(FRONTEND_FSAA, FRONTEND_POS5X - 35, FRONTEND_POS6Y, "FSAA*", 0);
-
-	switch (war_getFSAA())
-	{
-	case FSAA_OFF:
-		addTextButton(FRONTEND_FSAA_R, FRONTEND_POS5M - 55, FRONTEND_POS6Y, _("Off"), 0);
-		break;
-
-	case FSAA_2X:
-		addTextButton(FRONTEND_FSAA_R, FRONTEND_POS5M - 55, FRONTEND_POS6Y, "2X", 0);
-		break;
-
-	case FSAA_4X:
-		addTextButton(FRONTEND_FSAA_R, FRONTEND_POS5M - 55, FRONTEND_POS6Y, "4X", 0);
-		break;
-
-	case FSAA_8X:
-		addTextButton(FRONTEND_FSAA_R, FRONTEND_POS5M - 55, FRONTEND_POS6Y, "8X", 0);
-		break;
-
-	default:
-		// Some cards can do 16x & 32x ...
-		addTextButton(FRONTEND_FSAA_R, FRONTEND_POS5M - 55, FRONTEND_POS6Y, _("Unsupported"), 0);
-		break;
-	}
+	addTextButton(FRONTEND_FSAA, FRONTEND_POS5X - 35, FRONTEND_POS6Y, "FSAA*", WBUT_SECONDARY);
+	addTextButton(FRONTEND_FSAA_R, FRONTEND_POS5M - 55, FRONTEND_POS6Y, videoOptionsFsaaString(), WBUT_SECONDARY);
 
 	// Add some text down the side of the form
 	addSideText(FRONTEND_SIDETEXT, FRONTEND_SIDEX, FRONTEND_SIDEY, _("VIDEO OPTIONS"));
@@ -1072,54 +1059,22 @@ bool runVideoOptionsMenu(void)
 	WidgetTriggers const &triggers = widgRunScreen(psWScreen);
 	unsigned id = triggers.empty() ? 0 : triggers.front().widget->id; // Just use first click here, since the next click could be on another menu.
 
-	int level;
-
 	switch (id)
 	{
 	case FRONTEND_WINDOWMODE:
 	case FRONTEND_WINDOWMODE_R:
-		if (war_getFullscreen())
-		{
-			war_setFullscreen(false);
-			widgSetString(psWScreen, FRONTEND_WINDOWMODE_R, _("Windowed"));
-		}
-		else
-		{
-			war_setFullscreen(true);
-			widgSetString(psWScreen, FRONTEND_WINDOWMODE_R, _("Fullscreen"));
-		}
+		war_setFullscreen(!war_getFullscreen());
+		widgSetString(psWScreen, FRONTEND_WINDOWMODE_R, videoOptionsWindowModeString());
 		break;
 
 	case FRONTEND_FSAA:
 	case FRONTEND_FSAA_R:
-		switch (level = war_getFSAA())
 		{
-		case FSAA_OFF:
-			war_setFSAA((FSAA_LEVEL)(level + 1));
-			widgSetString(psWScreen, FRONTEND_FSAA_R, "2X");
-			break;
-		case FSAA_2X:
-			war_setFSAA((FSAA_LEVEL)(level + 1));
-			widgSetString(psWScreen, FRONTEND_FSAA_R, "4X");
-			break;
-
-		case FSAA_4X:
-			war_setFSAA((FSAA_LEVEL)(level + 1));
-			widgSetString(psWScreen, FRONTEND_FSAA_R, "8X");
-			break;
-
-		case FSAA_8X:
-			war_setFSAA((FSAA_LEVEL)(level + 1));
-			widgSetString(psWScreen, FRONTEND_FSAA_R, _("Off"));
-			break;
-
-		default:
-			// we can't check what the max level the card is capable of, without first creating that level, and testing.
-			ASSERT(!"invalid FSAA level ?", "Invalid FSAA level: %u", (unsigned int)level);
-			addTextButton(FRONTEND_FSAA_R, FRONTEND_POS5M - 55, FRONTEND_POS6Y, _("Unsupported"), 0);
+			int step = !mouseReleased(MOUSE_RMB)? 1 : FSAA_MAX - 1;
+			war_setFSAA((FSAA_LEVEL)(war_getFSAA() + step));
+			widgSetString(psWScreen, FRONTEND_FSAA_R, videoOptionsFsaaString());
 			break;
 		}
-		break;
 
 	case FRONTEND_RESOLUTION:
 	case FRONTEND_RESOLUTION_R:
@@ -1171,59 +1126,37 @@ bool runVideoOptionsMenu(void)
 			break;
 		}
 
-	case FRONTEND_TRAP:
-	case FRONTEND_TRAP_R:
-		if (war_GetTrapCursor())
-		{
-			war_SetTrapCursor(false);
-			widgSetString(psWScreen, FRONTEND_TRAP_R, _("Off"));
-		}
-		else
-		{
-			war_SetTrapCursor(true);
-			widgSetString(psWScreen, FRONTEND_TRAP_R, _("On"));
-		}
-		break;
-
 	case FRONTEND_TEXTURESZ:
 	case FRONTEND_TEXTURESZ_R:
 		{
-			int newTexSize = getTextureSize() * 2;
+			int newTexSize = !mouseReleased(MOUSE_RMB)? getTextureSize() * 2 : getTextureSize() / 2;
+			constexpr int minTexSize = 128, maxTexSize = 2048;
 
-			// Clip such that 128 <= size <= 2048
-			if (newTexSize > 2048)
+			// Clip such that minTexSize <= size <= maxTexSize
+			if (newTexSize > maxTexSize)
 			{
-				newTexSize = 128;
+				newTexSize = minTexSize;
+			}
+			else if (newTexSize < minTexSize)
+			{
+				newTexSize = maxTexSize;
 			}
 
 			// Set the new size
 			setTextureSize(newTexSize);
 
-			// Generate the string representation of the new size
-			char textureSize[20];
-			ssprintf(textureSize, "%d", newTexSize);
-
 			// Update the widget
-			widgSetString(psWScreen, FRONTEND_TEXTURESZ_R, textureSize);
+			widgSetString(psWScreen, FRONTEND_TEXTURESZ_R, videoOptionsTextureSizeString().c_str());
 
 			break;
 		}
 
 	case FRONTEND_VSYNC:
 	case FRONTEND_VSYNC_R:
-		{
-			wzSetSwapInterval(!war_GetVsync());
-			war_SetVsync(wzGetSwapInterval());
-			if (war_GetVsync())
-			{
-				widgSetString(psWScreen, FRONTEND_VSYNC_R, _("On"));
-			}
-			else
-			{
-				widgSetString(psWScreen, FRONTEND_VSYNC_R, _("Off"));
-			}
-			break;
-		}
+		wzSetSwapInterval(!war_GetVsync());
+		war_SetVsync(wzGetSwapInterval());
+		widgSetString(psWScreen, FRONTEND_VSYNC_R, videoOptionsVsyncString());
+		break;
 
 	case FRONTEND_QUIT:
 		changeTitleMode(OPTIONS);
