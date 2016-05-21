@@ -29,6 +29,7 @@
 #include "lib/framework/wzapp.h"
 #include "lib/framework/strres.h"
 #include "lib/widget/widget.h"
+#include "lib/widget/label.h"
 #include "lib/netplay/netplay.h"
 #include "lib/ivis_opengl/piestate.h"		// for getrendertype
 #include "lib/sound/audio.h"					// for sound.
@@ -84,20 +85,14 @@ static bool addIGTextButton(UDWORD id, UWORD x, UWORD y, UWORD width, const char
 
 static bool addQuitOptions(void)
 {
-	if (widgGetFromID(psWScreen, INTINGAMEOP))
-	{
-		widgDelete(psWScreen, INTINGAMEOP);		// get rid of the old stuff.
-	}
-
-	if (widgGetFromID(psWScreen, INTINGAMEPOPUP))
-	{
-		widgDelete(psWScreen, INTINGAMEPOPUP);		// get rid of the old stuff.
-	}
+	// get rid of the old stuff.
+	delete widgGetFromID(psWScreen, INTINGAMEOP);
+	delete widgGetFromID(psWScreen, INTINGAMEPOPUP);
 
 	WIDGET *parent = psWScreen->psForm;
 
 	// add form
-	IntFormAnimated *inGameOp = new IntFormAnimated(parent);
+	auto inGameOp = new IntFormAnimated(parent);
 	inGameOp->id = INTINGAMEOP;
 	inGameOp->setGeometry(INTINGAMEOP3_X, INTINGAMEOP3_Y, INTINGAMEOP3_W, INTINGAMEOP3_H);
 
@@ -106,23 +101,15 @@ static bool addQuitOptions(void)
 
 	if (NetPlay.isHost && bMultiPlayer && NetPlay.bComms)		// only show for real MP games
 	{
-		IntFormAnimated *inGamePopup = new IntFormAnimated(parent);
-		inGamePopup->id = INTINGAMEOP;
-		inGamePopup->setGeometry(600, 26, 20 + D_W, 130);
+		auto inGamePopup = new IntFormAnimated(parent);
+		inGamePopup->id = INTINGAMEPOPUP;
+		inGamePopup->setGeometry((pie_GetVideoBufferWidth() - 600)/2, inGameOp->y() - 26 - 20, 600, 26);
 
-		W_BUTINIT sButInit;
-
-		sButInit.formID		= INTINGAMEPOPUP;
-		sButInit.style		= OPALIGN;
-		sButInit.width		= 600;
-		sButInit.height		= 10;
-		sButInit.x			= 0;
-		sButInit.y			= 8;
-		sButInit.pDisplay	= displayTextOption;
-		sButInit.id			= INTINGAMEOP_POPUP_MSG3;
-		sButInit.pText		= _("WARNING: You're the host. If you quit, the game ends for everyone!");
-
-		widgAddButton(psWScreen, &sButInit);
+		auto label = new W_LABEL(inGamePopup);
+		label->setGeometry(0, 0, inGamePopup->width(), inGamePopup->height());
+		label->setString(_("WARNING: You're the host. If you quit, the game ends for everyone!"));
+		label->setTextAlignment(WLAB_ALIGNCENTRE);
+		label->setFont(font_medium, WZCOL_YELLOW);
 	}
 
 	return true;
@@ -131,10 +118,7 @@ static bool addQuitOptions(void)
 
 static bool addSlideOptions(void)
 {
-	if (widgGetFromID(psWScreen, INTINGAMEOP))
-	{
-		widgDelete(psWScreen, INTINGAMEOP);		// get rid of the old stuff.
-	}
+	delete widgGetFromID(psWScreen, INTINGAMEOP);  // get rid of the old stuff.
 
 	WIDGET *parent = psWScreen->psForm;
 
@@ -413,8 +397,6 @@ bool intCloseInGameOptions(bool bPutUpLoadSave, bool bResetMissionWidgets)
 // process clicks made by user.
 void intProcessInGameOptions(UDWORD id)
 {
-
-
 	switch (id)
 	{
 	// NORMAL KEYS
@@ -493,8 +475,4 @@ void intProcessInGameOptions(UDWORD id)
 	default:
 		break;
 	}
-
-
 }
-
-
