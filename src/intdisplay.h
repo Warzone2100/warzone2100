@@ -203,7 +203,7 @@ public:
 	void setStatsAndTip(BASE_STATS *stats)
 	{
 		setStats(stats);
-		setTip(stats->name);
+		setTip(getName(stats));
 	}
 
 protected:

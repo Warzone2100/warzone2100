@@ -3925,7 +3925,7 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 		statList->addWidgetToLayout(button);
 
 		BASE_STATS *Stat = ppsStatsList[i];
-		QString tipString = ppsStatsList[i]->name;
+		QString tipString = getName(ppsStatsList[i]);
 		unsigned powerCost = 0;
 		W_BARGRAPH *bar;
 		if (Stat->ref >= REF_STRUCTURE_START &&

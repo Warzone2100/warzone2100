@@ -253,7 +253,7 @@ struct BASE_STATS
 	int	index;	///< Index into containing array
 };
 
-#define getName(_psStats) (_psStats)->name.toUtf8().constData()
+#define getName(_psStats) ((_psStats)->name.isEmpty()? "" : gettext((_psStats)->name.toUtf8().constData()))
 #define getID(_psStats) (_psStats)->id.toUtf8().constData()
 
 /* Stats common to all droid components */
