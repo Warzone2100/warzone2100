@@ -3103,7 +3103,8 @@ static QScriptValue js_allianceExistsBetween(QScriptContext *context, QScriptEng
 //-- Mark string for translation.
 static QScriptValue js_translate(QScriptContext *context, QScriptEngine *engine)
 {
-	return QScriptValue(gettext(context->argument(0).toString().toUtf8().constData()));
+	// The redundant QString cast is a workaround for a Qt5 bug, the QScriptValue(char const *) constructor interprets as Latin1 instead of UTF-8!
+	return QScriptValue(QString(gettext(context->argument(0).toString().toUtf8().constData())));
 }
 
 //-- \subsection{playerPower(player)}
@@ -5121,7 +5122,7 @@ bool registerFunctions(QScriptEngine *engine, QString scriptName)
 	for (int i = 0; i < game.maxPlayers; i++)
 	{
 		QScriptValue vector = engine->newObject();
-		vector.setProperty("name", NetPlay.players[i].name, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+		vector.setProperty("name", QString(NetPlay.players[i].name), QScriptValue::ReadOnly | QScriptValue::Undeletable);  // QString cast to work around bug in Qt5 QScriptValue(char *) constructor.
 		vector.setProperty("difficulty", NetPlay.players[i].difficulty, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		vector.setProperty("colour", NetPlay.players[i].colour, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		vector.setProperty("position", NetPlay.players[i].position, QScriptValue::ReadOnly | QScriptValue::Undeletable);
