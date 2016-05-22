@@ -654,7 +654,7 @@
         ]
     },
     "ConstructionDroid": {
-        "available": 1,
+        "available": true,
         "body": "Body1REC",
         "construct": "Spade1Mk1",
         "id": "ConstructionDroid",
@@ -671,7 +671,7 @@
         "type": "DROID"
     },
     "Cyb-Atmiss-GROUND": {
-        "available": 1,
+        "available": true,
         "body": "CyborgLightBody",
         "id": "Cyb-Atmiss-GROUND",
         "name": "Scourge",
@@ -682,7 +682,7 @@
         ]
     },
     "Cyb-Cannon-GROUND": {
-        "available": 1,
+        "available": true,
         "body": "CyborgLightBody",
         "id": "Cyb-Cannon-GROUND",
         "name": "Heavy Gunner",
@@ -693,7 +693,7 @@
         ]
     },
     "Cyb-Chain-GROUND": {
-        "available": 1,
+        "available": true,
         "body": "CyborgLightBody",
         "id": "Cyb-Chain-GROUND",
         "name": "Machinegunner",
@@ -704,7 +704,7 @@
         ]
     },
     "Cyb-ComEng": {
-        "available": 1,
+        "available": true,
         "body": "CyborgLightBody",
         "construct": "CyborgSpade",
         "id": "Cyb-ComEng",
@@ -713,7 +713,7 @@
         "type": "CYBORG_CONSTRUCT"
     },
     "Cyb-Flamer-GROUND": {
-        "available": 1,
+        "available": true,
         "body": "CyborgLightBody",
         "id": "Cyb-Flamer-GROUND",
         "name": "Cyborg Flamer",
@@ -724,7 +724,7 @@
         ]
     },
     "Cyb-Gren": {
-        "available": 1,
+        "available": true,
         "body": "CyborgLightBody",
         "id": "Cyb-Gren",
         "name": "Grenadier",
@@ -735,7 +735,7 @@
         ]
     },
     "Cyb-Hvy-A-T": {
-        "available": 1,
+        "available": true,
         "body": "CyborgHeavyBody",
         "id": "Cyb-Hvy-A-T",
         "name": "Super Scourge Cyborg",
@@ -746,7 +746,7 @@
         ]
     },
     "Cyb-Hvy-Acannon": {
-        "available": 1,
+        "available": true,
         "body": "CyborgHeavyBody",
         "id": "Cyb-Hvy-Acannon",
         "name": "Super Auto-Cannon Cyborg",
@@ -757,7 +757,7 @@
         ]
     },
     "Cyb-Hvy-HPV": {
-        "available": 1,
+        "available": true,
         "body": "CyborgHeavyBody",
         "id": "Cyb-Hvy-HPV",
         "name": "Super HPV Cyborg",
@@ -768,7 +768,7 @@
         ]
     },
     "Cyb-Hvy-Mcannon": {
-        "available": 1,
+        "available": true,
         "body": "CyborgHeavyBody",
         "id": "Cyb-Hvy-Mcannon",
         "name": "Super Heavy-Gunner",
@@ -779,7 +779,7 @@
         ]
     },
     "Cyb-Hvy-PulseLsr": {
-        "available": 1,
+        "available": true,
         "body": "CyborgHeavyBody",
         "id": "Cyb-Hvy-PulseLsr",
         "name": "Super Pulse Laser Cyborg",
@@ -790,7 +790,7 @@
         ]
     },
     "Cyb-Hvy-RailGunner": {
-        "available": 1,
+        "available": true,
         "body": "CyborgHeavyBody",
         "id": "Cyb-Hvy-RailGunner",
         "name": "Super Rail-Gunner",
@@ -801,7 +801,7 @@
         ]
     },
     "Cyb-Hvy-TK": {
-        "available": 1,
+        "available": true,
         "body": "CyborgHeavyBody",
         "id": "Cyb-Hvy-TK",
         "name": "Super Tank-Killer Cyborg",
@@ -812,7 +812,7 @@
         ]
     },
     "Cyb-Laser1-GROUND": {
-        "available": 1,
+        "available": true,
         "body": "CyborgLightBody",
         "id": "Cyb-Laser1-GROUND",
         "name": "Flashlight Gunner",
@@ -823,7 +823,7 @@
         ]
     },
     "Cyb-Mechanic": {
-        "available": 1,
+        "available": true,
         "body": "CyborgLightBody",
         "id": "Cyb-Mechanic",
         "name": "Cyborg Mechanic",
@@ -832,7 +832,7 @@
         "type": "CYBORG_REPAIR"
     },
     "Cyb-Rail1-GROUND": {
-        "available": 1,
+        "available": true,
         "body": "CyborgLightBody",
         "id": "Cyb-Rail1-GROUND",
         "name": "Needle Gunner",
@@ -843,7 +843,7 @@
         ]
     },
     "Cyb-Rocket-GROUND": {
-        "available": 1,
+        "available": true,
         "body": "CyborgLightBody",
         "id": "Cyb-Rocket-GROUND",
         "name": "Lancer",
@@ -854,7 +854,7 @@
         ]
     },
     "Cyb-RotMG-GROUND": {
-        "available": 1,
+        "available": true,
         "body": "CyborgLightBody",
         "id": "Cyb-RotMG-GROUND",
         "name": "Assault Gunner",
@@ -865,7 +865,7 @@
         ]
     },
     "Cyb-Thermite": {
-        "available": 1,
+        "available": true,
         "body": "CyborgLightBody",
         "id": "Cyb-Thermite",
         "name": "Thermite Flamer",
@@ -2313,7 +2313,7 @@
         ]
     },
     "SuperTransport": {
-        "available": 1,
+        "available": true,
         "body": "SuperTransportBody",
         "id": "SuperTransport",
         "name": "Super Transport",
@@ -2371,7 +2371,7 @@
         ]
     },
     "Transporter": {
-        "available": 1,
+        "available": true,
         "body": "TransporterBody",
         "id": "Transporter",
         "name": "Cyborg Transport",

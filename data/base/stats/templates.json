@@ -1,6 +1,5 @@
 {
     "ASPOTTER": {
-        "available": 6,
         "body": "Body1REC",
         "id": "ASPOTTER",
         "name": "*SPOTTER*",
@@ -11,7 +10,6 @@
         ]
     },
     "ATESTVEHICLE": {
-        "available": 6,
         "body": "Body5REC",
         "id": "ATESTVEHICLE",
         "name": "*TEST VEHICLE*",
@@ -22,7 +20,6 @@
         ]
     },
     "ATESTVTOL": {
-        "available": 6,
         "body": "Body7ABT",
         "id": "ATESTVTOL",
         "name": "*TEST VTOL*",
@@ -33,7 +30,6 @@
         ]
     },
     "BaBaCivilian": {
-        "available": 7,
         "body": "B1BaBaPerson01",
         "id": "BaBaCivilian",
         "name": "Civilian",
@@ -41,7 +37,6 @@
         "type": "PERSON"
     },
     "BaBaPeople": {
-        "available": 7,
         "body": "B1BaBaPerson01",
         "id": "BaBaPeople",
         "name": "Scavenger",
@@ -52,7 +47,6 @@
         ]
     },
     "BabaBusCan": {
-        "available": 7,
         "body": "BusBody",
         "id": "BabaBusCan",
         "name": "School Bus",
@@ -63,7 +57,6 @@
         ]
     },
     "BabaFireCan": {
-        "available": 7,
         "body": "FireBody",
         "id": "BabaFireCan",
         "name": "Cannon Fire Truck",
@@ -74,7 +67,6 @@
         ]
     },
     "BabaFireTruck": {
-        "available": 7,
         "body": "FireBody",
         "id": "BabaFireTruck",
         "name": "Fire Truck",
@@ -85,7 +77,6 @@
         ]
     },
     "BabaJeep": {
-        "available": 7,
         "body": "B2JeepBody",
         "id": "BabaJeep",
         "name": "Jeep",
@@ -96,7 +87,6 @@
         ]
     },
     "BabaPickUp": {
-        "available": 7,
         "body": "B2RKJeepBody",
         "construct": "Spade1Mk1",
         "id": "BabaPickUp",
@@ -104,7 +94,6 @@
         "type": "DROID"
     },
     "BabaRKJeep": {
-        "available": 7,
         "body": "B2RKJeepBody",
         "id": "BabaRKJeep",
         "name": "Rocket Jeep",
@@ -115,7 +104,6 @@
         ]
     },
     "BarbarianBuggy": {
-        "available": 7,
         "body": "B3body-sml-buggy01",
         "id": "BarbarianBuggy",
         "name": "Buggy",
@@ -126,7 +114,6 @@
         ]
     },
     "BarbarianRKBuggy": {
-        "available": 7,
         "body": "B3bodyRKbuggy01",
         "id": "BarbarianRKBuggy",
         "name": "Rocket Buggy",
@@ -137,7 +124,6 @@
         ]
     },
     "BarbarianTrike": {
-        "available": 7,
         "body": "B4body-sml-trike01",
         "id": "BarbarianTrike",
         "name": "Trike",
@@ -148,7 +134,6 @@
         ]
     },
     "CO-H-COM-H": {
-        "available": 2,
         "body": "Body9REC",
         "brain": "CommandBrain01",
         "id": "CO-H-COM-H",
@@ -160,7 +145,6 @@
         ]
     },
     "CO-H-Command-Track": {
-        "available": 2,
         "body": "Body9REC",
         "brain": "CommandBrain01",
         "id": "CO-H-Command-Track",
@@ -172,7 +156,6 @@
         ]
     },
     "CO-H-HPVCannon-Tracks": {
-        "available": 2,
         "body": "Body9REC",
         "id": "CO-H-HPVCannon-Tracks",
         "name": "*CO-H-HPVCannon-Tracks*",
@@ -183,7 +166,6 @@
         ]
     },
     "CO-H-How105-Tracks": {
-        "available": 2,
         "body": "Body9REC",
         "id": "CO-H-How105-Tracks",
         "name": "*CO-H-How105-Tracks*",
@@ -194,7 +176,6 @@
         ]
     },
     "CO-H-How150-Tracks": {
-        "available": 2,
         "body": "Body9REC",
         "id": "CO-H-How150-Tracks",
         "name": "*CO-H-How150-Tracks*",
@@ -205,7 +186,6 @@
         ]
     },
     "CO-H-HvyCan-Tracks": {
-        "available": 2,
         "body": "Body9REC",
         "id": "CO-H-HvyCan-Tracks",
         "name": "*CO-H-HvyCan-Tracks*",
@@ -216,7 +196,6 @@
         ]
     },
     "CO-H-QuadBofAA-T": {
-        "available": 2,
         "body": "Body6SUPP",
         "id": "CO-H-QuadBofAA-T",
         "name": "*CO-H-QuadBofAA-T*",
@@ -227,7 +206,6 @@
         ]
     },
     "CO-H-QuadRotAA-T": {
-        "available": 2,
         "body": "Body9REC",
         "id": "CO-H-QuadRotAA-T",
         "name": "*CO-H-QuadRotAA-T*",
@@ -238,7 +216,6 @@
         ]
     },
     "CO-H-Rkt-BB-T": {
-        "available": 2,
         "body": "Body9REC",
         "id": "CO-H-Rkt-BB-T",
         "name": "*CO-H-Rkt-BB-T*",
@@ -249,7 +226,6 @@
         ]
     },
     "CO-H-RotCan-Track": {
-        "available": 2,
         "body": "Body9REC",
         "id": "CO-H-RotCan-Track",
         "name": "*CO-H-RotCan-Track*",
@@ -260,7 +236,6 @@
         ]
     },
     "CO-H-RotHow-Track": {
-        "available": 2,
         "body": "Body9REC",
         "id": "CO-H-RotHow-Track",
         "name": "*CO-H-RotHow-Track*",
@@ -271,7 +246,6 @@
         ]
     },
     "CO-L-Bomb1-VTOL": {
-        "available": 2,
         "body": "Body2SUP",
         "id": "CO-L-Bomb1-VTOL",
         "name": "*CO-L-Bomb1-VTOL*",
@@ -282,7 +256,6 @@
         ]
     },
     "CO-L-Rocket-LtA-T-VTOL": {
-        "available": 2,
         "body": "Body2SUP",
         "id": "CO-L-Rocket-LtA-T-VTOL",
         "name": "*CO-L-LtATRkt-VTOL*",
@@ -293,7 +266,6 @@
         ]
     },
     "CO-L-RotMG-VTOL": {
-        "available": 2,
         "body": "Body2SUP",
         "id": "CO-L-RotMG-VTOL",
         "name": "*CO-L-RotMG-VTOL*",
@@ -304,7 +276,6 @@
         ]
     },
     "CO-M-Bomb1-VTOL": {
-        "available": 2,
         "body": "Body6SUPP",
         "id": "CO-M-Bomb1-VTOL",
         "name": "*CO-M-Bomb1-VTOL*",
@@ -315,7 +286,6 @@
         ]
     },
     "CO-M-Bomb2-VTOL": {
-        "available": 2,
         "body": "Body6SUPP",
         "id": "CO-M-Bomb2-VTOL",
         "name": "*CO-M-Bomb2-VTOL*",
@@ -326,7 +296,6 @@
         ]
     },
     "CO-M-CBS-T": {
-        "available": 2,
         "body": "Body6SUPP",
         "id": "CO-M-CBS-T",
         "name": "*CO-M-CBS-T*",
@@ -335,7 +304,6 @@
         "type": "DROID"
     },
     "CO-M-Con-T": {
-        "available": 2,
         "body": "Body6SUPP",
         "construct": "Spade1Mk1",
         "id": "CO-M-Con-T",
@@ -344,7 +312,6 @@
         "type": "DROID"
     },
     "CO-M-HMG-T": {
-        "available": 2,
         "body": "Body6SUPP",
         "id": "CO-M-HMG-T",
         "name": "*CO-M-HMG-T*",
@@ -355,7 +322,6 @@
         ]
     },
     "CO-M-HPVCannon-Tracks": {
-        "available": 2,
         "body": "Body6SUPP",
         "id": "CO-M-HPVCannon-Tracks",
         "name": "*CO-M-HPVCannon-Tracks*",
@@ -366,7 +332,6 @@
         ]
     },
     "CO-M-HVAT-Hover": {
-        "available": 2,
         "body": "Body6SUPP",
         "id": "CO-M-HVAT-Hover",
         "name": "*CCO-M-HVAT-Hover*",
@@ -377,7 +342,6 @@
         ]
     },
     "CO-M-HVAT-V": {
-        "available": 2,
         "body": "Body6SUPP",
         "id": "CO-M-HVAT-V",
         "name": "*CO-M-HVAT-V*",
@@ -388,7 +352,6 @@
         ]
     },
     "CO-M-HvFlame-Track": {
-        "available": 2,
         "body": "Body6SUPP",
         "id": "CO-M-HvFlame-Track",
         "name": "*CO-M-HvFlame-Track*",
@@ -399,7 +362,6 @@
         ]
     },
     "CO-M-HvMortar-T": {
-        "available": 2,
         "body": "Body6SUPP",
         "id": "CO-M-HvMortar-T",
         "name": "*CO-M-HvMortar-T*",
@@ -410,7 +372,6 @@
         ]
     },
     "CO-M-LTAT-Hover": {
-        "available": 2,
         "body": "Body6SUPP",
         "id": "CO-M-LTAT-Hover",
         "name": "*CCO-M-LTAT-Hover*",
@@ -421,7 +382,6 @@
         ]
     },
     "CO-M-MedCan-Tracks": {
-        "available": 2,
         "body": "Body6SUPP",
         "id": "CO-M-MedCan-Tracks",
         "name": "*CO-M-MedCan-Tracks*",
@@ -432,7 +392,6 @@
         ]
     },
     "CO-M-ROTMG-T": {
-        "available": 2,
         "body": "Body6SUPP",
         "id": "CO-M-ROTMG-T",
         "name": "*CO-M-ROTMG-T*",
@@ -443,7 +402,6 @@
         ]
     },
     "CO-M-RR-HT": {
-        "available": 2,
         "body": "Body6SUPP",
         "id": "CO-M-RR-HT",
         "name": "*CO-M-RR-HT*",
@@ -454,7 +412,6 @@
         ]
     },
     "CO-M-Repair-T": {
-        "available": 2,
         "body": "Body6SUPP",
         "id": "CO-M-Repair-T",
         "name": "*CO-M-Repair-T*",
@@ -463,7 +420,6 @@
         "type": "DROID"
     },
     "CO-M-Rocket-HvyA-T-Track": {
-        "available": 2,
         "body": "Body6SUPP",
         "id": "CO-M-Rocket-HvyA-T-Track",
         "name": "*CO-M-Rocket-HvyA-T-Track*",
@@ -474,7 +430,6 @@
         ]
     },
     "CO-M-Rocket-LtA-T-T": {
-        "available": 2,
         "body": "Body6SUPP",
         "id": "CO-M-Rocket-LtA-T-T",
         "name": "*CO-M-Rocket-LtA-T-T*",
@@ -485,7 +440,6 @@
         ]
     },
     "CO-M-RotMortar-T": {
-        "available": 2,
         "body": "Body6SUPP",
         "id": "CO-M-RotMortar-T",
         "name": "*CO-M-RotMortar-T*",
@@ -496,7 +450,6 @@
         ]
     },
     "CO-M-Sensor-T": {
-        "available": 2,
         "body": "Body6SUPP",
         "id": "CO-M-Sensor-T",
         "name": "*CO-M-Sensor-T*",
@@ -505,7 +458,6 @@
         "type": "DROID"
     },
     "CO-M-VTOLCBS-T": {
-        "available": 2,
         "body": "Body6SUPP",
         "id": "CO-M-VTOLCBS-T",
         "name": "*CO-M-VTOLCBS-T*",
@@ -514,7 +466,6 @@
         "type": "DROID"
     },
     "CO-M-Vstrike-T": {
-        "available": 2,
         "body": "Body6SUPP",
         "id": "CO-M-Vstrike-T",
         "name": "*CO-M-Vstrike-T*",
@@ -523,7 +474,6 @@
         "type": "DROID"
     },
     "CobraComHalftrack": {
-        "available": 6,
         "body": "Body5REC",
         "brain": "CommandBrain01",
         "id": "CobraComHalftrack",
@@ -535,7 +485,6 @@
         ]
     },
     "CobraFlameTracks": {
-        "available": 6,
         "body": "Body5REC",
         "id": "CobraFlameTracks",
         "name": "Flamer Cobra Tracks",
@@ -546,7 +495,6 @@
         ]
     },
     "CobraHMGHalfTrack": {
-        "available": 4,
         "body": "Body5REC",
         "id": "CobraHMGHalfTrack",
         "name": "Heavy Machinegun Cobra Half-tracks",
@@ -557,7 +505,6 @@
         ]
     },
     "CobraHvyCnTrks": {
-        "available": 6,
         "body": "Body5REC",
         "id": "CobraHvyCnTrks",
         "name": "Heavy Cannon Cobra Tracks",
@@ -568,7 +515,6 @@
         ]
     },
     "CobraHvyMortarHalftrack": {
-        "available": 6,
         "body": "Body5REC",
         "id": "CobraHvyMortarHalftrack",
         "name": "Bombard Cobra Half-tracks",
@@ -579,7 +525,6 @@
         ]
     },
     "CobraLtA-Thalftrack": {
-        "available": 6,
         "body": "Body5REC",
         "id": "CobraLtA-Thalftrack",
         "name": "Lancer Cobra Half-tracks",
@@ -590,7 +535,6 @@
         ]
     },
     "CobraLtCnTrks": {
-        "available": 4,
         "body": "Body5REC",
         "id": "CobraLtCnTrks",
         "name": "Light Cannon Cobra Tracks",
@@ -601,7 +545,6 @@
         ]
     },
     "CobraMRLHalftrack": {
-        "available": 6,
         "body": "Body5REC",
         "id": "CobraMRLHalftrack",
         "name": "Mini-Rocket Artillery Cobra Half-tracks",
@@ -612,7 +555,6 @@
         ]
     },
     "CobraMedCnTrks": {
-        "available": 6,
         "body": "Body5REC",
         "id": "CobraMedCnTrks",
         "name": "Medium Cannon Cobra Tracks",
@@ -623,7 +565,6 @@
         ]
     },
     "CobraMortarHalfTrack": {
-        "available": 4,
         "body": "Body5REC",
         "id": "CobraMortarHalfTrack",
         "name": "Mortar Cobra Half-tracks",
@@ -634,7 +575,6 @@
         ]
     },
     "CobraSensorHalftrack": {
-        "available": 6,
         "body": "Body5REC",
         "id": "CobraSensorHalftrack",
         "name": "Sensor Cobra Half-tracks",
@@ -643,7 +583,6 @@
         "type": "DROID"
     },
     "CobraSpadeTracks": {
-        "available": 6,
         "body": "Body5REC",
         "construct": "Spade1Mk1",
         "id": "CobraSpadeTracks",
@@ -652,6 +591,7 @@
         "type": "DROID"
     },
     "ConstructionDroid": {
+        "available": true,
         "body": "Body1REC",
         "construct": "Spade1Mk1",
         "id": "ConstructionDroid",
@@ -660,7 +600,6 @@
         "type": "DROID"
     },
     "ConstructorDroid": {
-        "available": 5,
         "body": "Body1REC",
         "construct": "Spade1Mk1",
         "id": "ConstructorDroid",
@@ -669,6 +608,7 @@
         "type": "DROID"
     },
     "Cyb-Atmiss-GROUND": {
+        "available": true,
         "body": "Cyb-Bod-Atmiss",
         "id": "Cyb-Atmiss-GROUND",
         "name": "Scourge",
@@ -679,6 +619,7 @@
         ]
     },
     "Cyb-Cannon-GROUND": {
+        "available": true,
         "body": "CyborgCannonGrd",
         "id": "Cyb-Cannon-GROUND",
         "name": "Heavy Gunner",
@@ -689,7 +630,7 @@
         ]
     },
     "Cyb-Chain-GROUND": {
-        "available": 0,
+        "available": true,
         "body": "CyborgChain1Ground",
         "id": "Cyb-Chain-GROUND",
         "name": "Machinegunner",
@@ -700,6 +641,7 @@
         ]
     },
     "Cyb-Flamer-GROUND": {
+        "available": true,
         "body": "CyborgFlamerGrd",
         "id": "Cyb-Flamer-GROUND",
         "name": "Cyborg Flamer",
@@ -710,7 +652,7 @@
         ]
     },
     "Cyb-Laser1-GROUND": {
-        "available": 0,
+        "available": true,
         "body": "Cyb-Bod-Las1",
         "id": "Cyb-Laser1-GROUND",
         "name": "Flashlight Gunner",
@@ -721,6 +663,7 @@
         ]
     },
     "Cyb-Rail1-GROUND": {
+        "available": true,
         "body": "Cyb-Bod-Rail1",
         "id": "Cyb-Rail1-GROUND",
         "name": "Needle Gunner",
@@ -731,6 +674,7 @@
         ]
     },
     "Cyb-Rocket-GROUND": {
+        "available": true,
         "body": "CyborgRkt1Ground",
         "id": "Cyb-Rocket-GROUND",
         "name": "Lancer",
@@ -741,6 +685,7 @@
         ]
     },
     "Cyb-RotMG-GROUND": {
+        "available": true,
         "body": "CybRotMgGrd",
         "id": "Cyb-RotMG-GROUND",
         "name": "Assault Gunner",
@@ -751,7 +696,7 @@
         ]
     },
     "CyborgCannon01Grd": {
-        "available": 5,
+        "available": true,
         "body": "CyborgCannonGrd",
         "id": "CyborgCannon01Grd",
         "name": "Heavy Gunner",
@@ -762,7 +707,7 @@
         ]
     },
     "CyborgChain01Ground": {
-        "available": 5,
+        "available": true,
         "body": "CyborgChain1Ground",
         "id": "CyborgChain01Ground",
         "name": "Machinegunner",
@@ -773,7 +718,7 @@
         ]
     },
     "CyborgFlamer01Grd": {
-        "available": 5,
+        "available": true,
         "body": "CyborgFlamerGrd",
         "id": "CyborgFlamer01Grd",
         "name": "Flamer",
@@ -784,7 +729,7 @@
         ]
     },
     "CyborgRkt01Ground": {
-        "available": 5,
+        "available": true,
         "body": "CyborgRkt1Ground",
         "id": "CyborgRkt01Ground",
         "name": "Lancer",
@@ -795,7 +740,6 @@
         ]
     },
     "NP-H-HvyCannon-Hover": {
-        "available": 1,
         "body": "Body12SUP",
         "id": "NP-H-HvyCannon-Hover",
         "name": "*NP-H-HvyCannon-Hover*",
@@ -806,7 +750,6 @@
         ]
     },
     "NP-H-HvyCannon-Tracks": {
-        "available": 1,
         "body": "Body12SUP",
         "id": "NP-H-HvyCannon-Tracks",
         "name": "*NP-H-HvyCannon-Tracks*",
@@ -817,7 +760,6 @@
         ]
     },
     "NP-H-MdCannon-Tracks": {
-        "available": 1,
         "body": "Body12SUP",
         "id": "NP-H-MdCannon-Tracks",
         "name": "*NP-H-MdCannon-Tracks*",
@@ -828,7 +770,6 @@
         ]
     },
     "NP-L-HMG-Halftrack": {
-        "available": 1,
         "body": "Body4ABT",
         "id": "NP-L-HMG-Halftrack",
         "name": "*NP-L-HMG-Half-track*",
@@ -839,7 +780,6 @@
         ]
     },
     "NP-L-LtAT-Halftrack": {
-        "available": 1,
         "body": "Body4ABT",
         "id": "NP-L-LtAT-Halftrack",
         "name": "*NP-L-LtAT-Half-track*",
@@ -850,7 +790,6 @@
         ]
     },
     "NP-L-LtCannon-Halftrack": {
-        "available": 1,
         "body": "Body4ABT",
         "id": "NP-L-LtCannon-Halftrack",
         "name": "*NP-L-LtCannon-Halftrack*",
@@ -861,7 +800,6 @@
         ]
     },
     "NP-L-MRLS-Halftrack": {
-        "available": 1,
         "body": "Body4ABT",
         "id": "NP-L-MRLS-Halftrack",
         "name": "*NP-L-MRLS-Half-track*",
@@ -872,7 +810,6 @@
         ]
     },
     "NP-L-RocketPod-Wheels": {
-        "available": 1,
         "body": "Body4ABT",
         "id": "NP-L-RocketPod-Wheels",
         "name": "*NP-L-RocketPod-Wheels*",
@@ -883,7 +820,6 @@
         ]
     },
     "NP-L-Sensor-Wheels": {
-        "available": 1,
         "body": "Body4ABT",
         "id": "NP-L-Sensor-Wheels",
         "name": "*NP-L-Sensor-Wheels*",
@@ -892,7 +828,6 @@
         "type": "DROID"
     },
     "NP-M-BB-Halftrack": {
-        "available": 1,
         "body": "Body8MBT",
         "id": "NP-M-BB-Halftrack",
         "name": "*NP-M-BB-Half-track*",
@@ -903,7 +838,6 @@
         ]
     },
     "NP-M-CBS-Halftrack": {
-        "available": 1,
         "body": "Body8MBT",
         "id": "NP-M-CBS-Halftrack",
         "name": "*NP-M-CBS-Halftrack*",
@@ -912,7 +846,6 @@
         "type": "DROID"
     },
     "NP-M-CON-HalfTrack": {
-        "available": 1,
         "body": "Body8MBT",
         "construct": "Spade1Mk1",
         "id": "NP-M-CON-HalfTrack",
@@ -921,7 +854,6 @@
         "type": "DROID"
     },
     "NP-M-CON-Track": {
-        "available": 1,
         "body": "Body8MBT",
         "construct": "Spade1Mk1",
         "id": "NP-M-CON-Track",
@@ -930,7 +862,6 @@
         "type": "DROID"
     },
     "NP-M-Command-Halftrack": {
-        "available": 1,
         "body": "Body8MBT",
         "brain": "CommandBrain01",
         "id": "NP-M-Command-Halftrack",
@@ -942,7 +873,6 @@
         ]
     },
     "NP-M-Command-Track": {
-        "available": 1,
         "body": "Body8MBT",
         "brain": "CommandBrain01",
         "id": "NP-M-Command-Track",
@@ -954,7 +884,6 @@
         ]
     },
     "NP-M-HvyMortar-Halftrack": {
-        "available": 1,
         "body": "Body8MBT",
         "id": "NP-M-HvyMortar-Halftrack",
         "name": "*NP-M-HvyMortar-Half-track*",
@@ -965,7 +894,6 @@
         ]
     },
     "NP-M-LitCannon-Halftrack": {
-        "available": 1,
         "body": "Body8MBT",
         "id": "NP-M-LitCannon-Halftrack",
         "name": "*NP-M-LtCannon-Half-track*",
@@ -976,7 +904,6 @@
         ]
     },
     "NP-M-LtAT-Hover": {
-        "available": 1,
         "body": "Body8MBT",
         "id": "NP-M-LtAT-Hover",
         "name": "*NP-M-LtAT-Hover*",
@@ -987,7 +914,6 @@
         ]
     },
     "NP-M-LtMortar-Halftrack": {
-        "available": 1,
         "body": "Body8MBT",
         "id": "NP-M-LtMortar-Halftrack",
         "name": "*NP-M-LtMortar-Half-track*",
@@ -998,7 +924,6 @@
         ]
     },
     "NP-M-MG3-Hover": {
-        "available": 1,
         "body": "Body8MBT",
         "id": "NP-M-MG3-Hover",
         "name": "*NP-M-MG3-Hover*",
@@ -1009,7 +934,6 @@
         ]
     },
     "NP-M-MdCannon-Halftrack": {
-        "available": 1,
         "body": "Body8MBT",
         "id": "NP-M-MdCannon-Halftrack",
         "name": "*NP-M-MdCannon-Half-track*",
@@ -1020,7 +944,6 @@
         ]
     },
     "NP-M-MdCannon-Tracks": {
-        "available": 1,
         "body": "Body8MBT",
         "id": "NP-M-MdCannon-Tracks",
         "name": "*NP-M-MdCannon-Tracks*",
@@ -1031,7 +954,6 @@
         ]
     },
     "NP-M-Repair-HalfTrack": {
-        "available": 1,
         "body": "Body8MBT",
         "id": "NP-M-Repair-HalfTrack",
         "name": "*NP-M-Repair-Half-track*",
@@ -1040,7 +962,6 @@
         "type": "DROID"
     },
     "NP-M-Sensor-Wheels": {
-        "available": 1,
         "body": "Body8MBT",
         "id": "NP-M-Sensor-Wheels",
         "name": "*NP-M-Sensor-Wheels*",
@@ -1049,7 +970,6 @@
         "type": "DROID"
     },
     "NX-Cyb-Miss-JUMP": {
-        "available": 3,
         "body": "CybNXMissJmp",
         "id": "NX-Cyb-Miss-JUMP",
         "name": "*NX-Cyb-Miss-JUMP*",
@@ -1061,7 +981,6 @@
         ]
     },
     "NX-Cyb-PulseLas-JUMP": {
-        "available": 3,
         "body": "CybNXPulseLasJmp",
         "id": "NX-Cyb-PulseLas-JUMP",
         "name": "*NX-Cyb-PulseLas-JUMP*",
@@ -1073,7 +992,6 @@
         ]
     },
     "NX-Cyb-Rail1-JUMP": {
-        "available": 3,
         "body": "CybNXRail1Jmp",
         "id": "NX-Cyb-Rail1-JUMP",
         "name": "*NX-Cyb-JUMP*",
@@ -1085,7 +1003,6 @@
         ]
     },
     "NX-H-CBS-Hover": {
-        "available": 3,
         "body": "Body10MBT",
         "id": "NX-H-CBS-Hover",
         "name": "*NX-H-CBS-Hover*",
@@ -1094,7 +1011,6 @@
         "type": "DROID"
     },
     "NX-H-HvMiss-Hover": {
-        "available": 3,
         "body": "Body10MBT",
         "id": "NX-H-HvMiss-Hover",
         "name": "*NX-H-HvMiss-Hover*",
@@ -1106,7 +1022,6 @@
         ]
     },
     "NX-H-Rail2-VTOL": {
-        "available": 3,
         "body": "Body7ABT",
         "id": "NX-H-Rail2-VTOL",
         "name": "*NX-H-Rail2-VTOL*",
@@ -1118,7 +1033,6 @@
         ]
     },
     "NX-H-Rail3-Hover": {
-        "available": 3,
         "body": "Body10MBT",
         "id": "NX-H-Rail3-Hover",
         "name": "*NX-H-Rail3-Hover*",
@@ -1130,7 +1044,6 @@
         ]
     },
     "NX-L-Flash-Hover": {
-        "available": 3,
         "body": "Body3MBT",
         "id": "NX-L-Flash-Hover",
         "name": "*NX-L-Flash-Hover*",
@@ -1142,7 +1055,6 @@
         ]
     },
     "NX-L-Link-Hov": {
-        "available": 3,
         "body": "Body3MBT",
         "id": "NX-L-Link-Hov",
         "name": "*NX-L-Link-Hov*",
@@ -1154,7 +1066,6 @@
         ]
     },
     "NX-L-Missile-A-T-VTOL": {
-        "available": 3,
         "body": "Body3MBT",
         "id": "NX-L-Missile-A-T-VTOL",
         "name": "*NX-L-ASMiss-VTOL*",
@@ -1166,7 +1077,6 @@
         ]
     },
     "NX-L-Missile-MdArt-Hover": {
-        "available": 3,
         "body": "Body3MBT",
         "id": "NX-L-Missile-MdArt-Hover",
         "name": "*NX-L-MdMiss-Hover*",
@@ -1178,7 +1088,6 @@
         ]
     },
     "NX-L-PulseLas-VTOL": {
-        "available": 3,
         "body": "Body3MBT",
         "id": "NX-L-PulseLas-VTOL",
         "name": "*NX-L-PulseLas-VTOL*",
@@ -1190,7 +1099,6 @@
         ]
     },
     "NX-L-Rail1-VTOL": {
-        "available": 3,
         "body": "Body3MBT",
         "id": "NX-L-Rail1-VTOL",
         "name": "*NX-L-Rail1-VTOL*",
@@ -1202,7 +1110,6 @@
         ]
     },
     "NX-L-Repair-Hover": {
-        "available": 3,
         "body": "Body3MBT",
         "id": "NX-L-Repair-Hover",
         "name": "*NX-L-Repair-Hover*",
@@ -1212,7 +1119,6 @@
         "type": "DROID"
     },
     "NX-L-Sens-Hov": {
-        "available": 3,
         "body": "Body3MBT",
         "id": "NX-L-Sens-Hov",
         "name": "*NX-L-Sens-Hov*",
@@ -1221,7 +1127,6 @@
         "type": "DROID"
     },
     "NX-M-Bomb2-VTOL": {
-        "available": 3,
         "body": "Body7ABT",
         "id": "NX-M-Bomb2-VTOL",
         "name": "*NX-M-Bomb2-VTOL*",
@@ -1233,7 +1138,6 @@
         ]
     },
     "NX-M-Bomb4-VTOL": {
-        "available": 3,
         "body": "Body7ABT",
         "id": "NX-M-Bomb4-VTOL",
         "name": "*NX-M-Bomb4-VTOL*",
@@ -1245,7 +1149,6 @@
         ]
     },
     "NX-M-Com-Hover": {
-        "available": 3,
         "body": "Body7ABT",
         "brain": "CommandBrain01",
         "id": "NX-M-Com-Hover",
@@ -1258,7 +1161,6 @@
         ]
     },
     "NX-M-Con-Hover": {
-        "available": 3,
         "body": "Body7ABT",
         "construct": "Spade1Mk1",
         "id": "NX-M-Con-Hover",
@@ -1268,7 +1170,6 @@
         "type": "DROID"
     },
     "NX-M-HvSam-Hover": {
-        "available": 3,
         "body": "Body7ABT",
         "id": "NX-M-HvSam-Hover",
         "name": "*NX-M-HvSam-Hover*",
@@ -1280,7 +1181,6 @@
         ]
     },
     "NX-M-Link-Hover": {
-        "available": 3,
         "body": "Body7ABT",
         "id": "NX-M-Link-Hover",
         "name": "*NX-M-Link-Hover*",
@@ -1292,7 +1192,6 @@
         ]
     },
     "NX-M-Missile-A-T-Hover": {
-        "available": 3,
         "body": "Body7ABT",
         "id": "NX-M-Missile-A-T-Hover",
         "name": "*NX-M-ATMiss-Hov*",
@@ -1304,7 +1203,6 @@
         ]
     },
     "NX-M-PulseLas-Hover": {
-        "available": 3,
         "body": "Body7ABT",
         "id": "NX-M-PulseLas-Hover",
         "name": "*NX-M-Laser2-Hover*",
@@ -1316,7 +1214,6 @@
         ]
     },
     "NX-M-Rail2-Hover": {
-        "available": 3,
         "body": "Body7ABT",
         "id": "NX-M-Rail2-Hover",
         "name": "*NX-M-Rail2-Hover*",
@@ -1328,7 +1225,6 @@
         ]
     },
     "NX-M-Strike-Hover": {
-        "available": 3,
         "body": "Body7ABT",
         "id": "NX-M-Strike-Hover",
         "name": "*NX-M-Strike-Hover*",
@@ -1337,7 +1233,6 @@
         "type": "DROID"
     },
     "NX-M-VTOLCBS-Hover": {
-        "available": 3,
         "body": "Body7ABT",
         "id": "NX-M-VTOLCBS-Hover",
         "name": "*NX-M-VTOLCBS-Hover*",
@@ -1346,7 +1241,6 @@
         "type": "DROID"
     },
     "P0CobraFlameTracks": {
-        "available": 2,
         "body": "Body5REC",
         "id": "P0CobraFlameTracks",
         "name": "Cobra Flamer Tracks",
@@ -1357,7 +1251,6 @@
         ]
     },
     "P0CobraHvyMGHtrack": {
-        "available": 2,
         "body": "Body5REC",
         "id": "P0CobraHvyMGHtrack",
         "name": "Heavy Machinegun Cobra Half-tracks",
@@ -1368,7 +1261,6 @@
         ]
     },
     "P0CobraLtATRktHtrack": {
-        "available": 2,
         "body": "Body5REC",
         "id": "P0CobraLtATRktHtrack",
         "name": "Lancer Cobra Half-tracks",
@@ -1379,7 +1271,6 @@
         ]
     },
     "P0CobraMedCnTrks": {
-        "available": 2,
         "body": "Body5REC",
         "id": "P0CobraMedCnTrks",
         "name": "Cobra Medium Cannon Tracks",
@@ -1390,7 +1281,6 @@
         ]
     },
     "P0CobraRepairTrks": {
-        "available": 2,
         "body": "Body5REC",
         "id": "P0CobraRepairTrks",
         "name": "Repair Turret Cobra Tracks",
@@ -1399,7 +1289,6 @@
         "type": "DROID"
     },
     "P0CobraSpadeTracks": {
-        "available": 2,
         "body": "Body5REC",
         "construct": "Spade1Mk1",
         "id": "P0CobraSpadeTracks",
@@ -1408,7 +1297,6 @@
         "type": "DROID"
     },
     "P0PythonComTracks": {
-        "available": 2,
         "body": "Body11ABT",
         "brain": "CommandBrain01",
         "id": "P0PythonComTracks",
@@ -1420,7 +1308,6 @@
         ]
     },
     "P0PythonHvyCnTrks": {
-        "available": 2,
         "body": "Body11ABT",
         "id": "P0PythonHvyCnTrks",
         "name": "Python Heavy Cannon Tracks",
@@ -1431,7 +1318,6 @@
         ]
     },
     "P0cam3CobCONTrk": {
-        "available": 3,
         "body": "Body5REC",
         "construct": "Spade1Mk1",
         "id": "P0cam3CobCONTrk",
@@ -1440,7 +1326,6 @@
         "type": "DROID"
     },
     "P0cam3PyAsltGnTrk": {
-        "available": 3,
         "body": "Body11ABT",
         "id": "P0cam3PyAsltGnTrk",
         "name": "Assault Gun Python Tracks",
@@ -1451,7 +1336,6 @@
         ]
     },
     "P0cam3PyFlakHT": {
-        "available": 3,
         "body": "Body11ABT",
         "id": "P0cam3PyFlakHT",
         "name": "Cyclone AA Python Half-tracks",
@@ -1462,7 +1346,6 @@
         ]
     },
     "P0cam3PyHPVcanTrk": {
-        "available": 3,
         "body": "Body11ABT",
         "id": "P0cam3PyHPVcanTrk",
         "name": "HPV Cannon Python Tracks",
@@ -1473,7 +1356,6 @@
         ]
     },
     "P0cam3PyHvyATTrk": {
-        "available": 3,
         "body": "Body11ABT",
         "id": "P0cam3PyHvyATTrk",
         "name": "Tank Killer Python Tracks",
@@ -1484,7 +1366,6 @@
         ]
     },
     "P6-L-Bomb1-V": {
-        "available": 6,
         "body": "Body1REC",
         "id": "P6-L-Bomb1-V",
         "name": "*Skirmish BOMBVTOL*",
@@ -1495,7 +1376,6 @@
         ]
     },
     "P6-L-LTAT-V": {
-        "available": 6,
         "body": "Body1REC",
         "id": "P6-L-LTAT-V",
         "name": "*Skirmish ATVTOL*",
@@ -1506,7 +1386,6 @@
         ]
     },
     "P6-M-QMG1-HT": {
-        "available": 6,
         "body": "Body5REC",
         "id": "P6-M-QMG1-HT",
         "name": "*P6-M-QMG1-HT*",
@@ -1517,7 +1396,6 @@
         ]
     },
     "PythonComTracks": {
-        "available": 6,
         "body": "Body11ABT",
         "brain": "CommandBrain01",
         "id": "PythonComTracks",
@@ -1529,7 +1407,6 @@
         ]
     },
     "PythonHvyCnTrks": {
-        "available": 6,
         "body": "Body11ABT",
         "id": "PythonHvyCnTrks",
         "name": "Heavy Cannon Python Tracks",
@@ -1540,7 +1417,6 @@
         ]
     },
     "PythonLtCnTrks": {
-        "available": 6,
         "body": "Body11ABT",
         "id": "PythonLtCnTrks",
         "name": "Light Cannon Python Tracks",
@@ -1551,7 +1427,6 @@
         ]
     },
     "PythonMedCnTrks": {
-        "available": 6,
         "body": "Body11ABT",
         "id": "PythonMedCnTrks",
         "name": "Medium Cannon Python Tracks",
@@ -1562,7 +1437,6 @@
         ]
     },
     "SuperTank": {
-        "available": 6,
         "body": "Superbody",
         "id": "SuperTank",
         "name": "*Kev's Super Tank*",
@@ -1573,7 +1447,6 @@
         ]
     },
     "SuperTank2": {
-        "available": 6,
         "body": "Superbody",
         "id": "SuperTank2",
         "name": "*Alex's Killa*",
@@ -1584,7 +1457,6 @@
         ]
     },
     "Transporter": {
-        "available": 2,
         "body": "TransporterBody",
         "id": "Transporter",
         "name": "Transport",
@@ -1595,7 +1467,6 @@
         ]
     },
     "ViperBBWheels": {
-        "available": 6,
         "body": "Body1REC",
         "id": "ViperBBWheels",
         "name": "Bunker Buster Viper Wheels",
@@ -1606,7 +1477,6 @@
         ]
     },
     "ViperFlameWheels": {
-        "available": 4,
         "body": "Body1REC",
         "id": "ViperFlameWheels",
         "name": "Flamer Viper Wheels",
@@ -1617,7 +1487,6 @@
         ]
     },
     "ViperHMGHalftrack": {
-        "available": 6,
         "body": "Body1REC",
         "id": "ViperHMGHalftrack",
         "name": "Heavy Machinegun Viper Half-tracks",
@@ -1628,7 +1497,6 @@
         ]
     },
     "ViperHMGTracks": {
-        "available": 6,
         "body": "Body1REC",
         "id": "ViperHMGTracks",
         "name": "Heavy Machinegun Viper Tracks",
@@ -1639,7 +1507,6 @@
         ]
     },
     "ViperLtA-Twheels": {
-        "available": 6,
         "body": "Body1REC",
         "id": "ViperLtA-Twheels",
         "name": "Lancer Viper Wheels",
@@ -1650,7 +1517,6 @@
         ]
     },
     "ViperLtCannonTracks": {
-        "available": 4,
         "body": "Body1REC",
         "id": "ViperLtCannonTracks",
         "name": "Light Cannon Viper Tracks",
@@ -1661,7 +1527,6 @@
         ]
     },
     "ViperLtCannonWheels": {
-        "available": 4,
         "body": "Body1REC",
         "id": "ViperLtCannonWheels",
         "name": "Light Cannon Viper Wheels",
@@ -1672,7 +1537,7 @@
         ]
     },
     "ViperLtMGWheels": {
-        "available": 0,
+        "available": true,
         "body": "Body1REC",
         "id": "ViperLtMGWheels",
         "name": "Machinegun Viper Wheels",
@@ -1683,7 +1548,6 @@
         ]
     },
     "ViperMG01Wheels": {
-        "available": 6,
         "body": "Body1REC",
         "id": "ViperMG01Wheels",
         "name": "Machinegun Viper Wheels",
@@ -1694,7 +1558,6 @@
         ]
     },
     "ViperMG02Halftrack": {
-        "available": 6,
         "body": "Body1REC",
         "id": "ViperMG02Halftrack",
         "name": "Twin Machinegun Viper Half-tracks",
@@ -1705,7 +1568,6 @@
         ]
     },
     "ViperMG02Wheels": {
-        "available": 6,
         "body": "Body1REC",
         "id": "ViperMG02Wheels",
         "name": "Twin Machinegun Viper Wheels",
@@ -1716,7 +1578,6 @@
         ]
     },
     "ViperMRLWheels": {
-        "available": 6,
         "body": "Body1REC",
         "id": "ViperMRLWheels",
         "name": "Mini-Rocket Artillery Viper Wheels",
@@ -1727,7 +1588,6 @@
         ]
     },
     "ViperMedCnTrks": {
-        "available": 6,
         "body": "Body1REC",
         "id": "ViperMedCnTrks",
         "name": "Medium Cannon Viper Tracks",
@@ -1738,7 +1598,6 @@
         ]
     },
     "ViperPODWheels": {
-        "available": 6,
         "body": "Body1REC",
         "id": "ViperPODWheels",
         "name": "Mini-Rocket Viper Wheels",
@@ -1749,7 +1608,6 @@
         ]
     },
     "ViperRepairHalftrack": {
-        "available": 6,
         "body": "Body1REC",
         "id": "ViperRepairHalftrack",
         "name": "Repair Turret Viper Half-tracks",
@@ -1758,7 +1616,6 @@
         "type": "DROID"
     },
     "ViperRepairWheels": {
-        "available": 6,
         "body": "Body1REC",
         "id": "ViperRepairWheels",
         "name": "Repair Turret Viper Wheels",
@@ -1767,7 +1624,6 @@
         "type": "DROID"
     },
     "ViperSensorWheels": {
-        "available": 4,
         "body": "Body1REC",
         "id": "ViperSensorWheels",
         "name": "Sensor Turret Viper Wheels",
