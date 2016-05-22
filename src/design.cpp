@@ -4180,12 +4180,12 @@ void updateStoreButton(bool isStored)
 	if (isStored)
 	{
 		imageset = PACKDWORD_TRI(0, IMAGE_DES_DELETEH, IMAGE_DES_DELETE);
-		widgGetFromID(psWScreen, IDDES_STOREBUTTON)->setTip(_("Delete Template"));
+		widgGetFromID(psWScreen, IDDES_STOREBUTTON)->setTip(_("Do Not Store Design"));
 	}
 	else
 	{
 		imageset = PACKDWORD_TRI(0, IMAGE_DES_SAVEH, IMAGE_DES_SAVE);
-		widgGetFromID(psWScreen, IDDES_STOREBUTTON)->setTip(_("Store Template"));
+		widgGetFromID(psWScreen, IDDES_STOREBUTTON)->setTip(_("Store Design"));
 	}
 
 	widgSetUserData2(psWScreen, IDDES_STOREBUTTON, imageset);

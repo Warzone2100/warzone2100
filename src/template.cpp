@@ -94,12 +94,28 @@ bool researchedTemplate(const DROID_TEMPLATE *psCurr, int player, bool allowRedu
 	return researchedEverything;
 }
 
-static DROID_TEMPLATE loadTemplateCommon(WzConfig &ini)
+DROID_TEMPLATE loadTemplateCommon(WzConfig &ini)
 {
 	DROID_TEMPLATE design;
 	QString droidType = ini.value("type").toString();
 
-	if (droidType == "PERSON")
+	if (droidType == "ECM")
+	{
+		design.droidType = DROID_ECM;
+	}
+	else if (droidType == "SENSOR")
+	{
+		design.droidType = DROID_SENSOR;
+	}
+	else if (droidType == "CONSTRUCT")
+	{
+		design.droidType = DROID_CONSTRUCT;
+	}
+	else if (droidType == "WEAPON")
+	{
+		design.droidType = DROID_WEAPON;
+	}
+	else if (droidType == "PERSON")
 	{
 		design.droidType = DROID_PERSON;
 	}
@@ -164,10 +180,14 @@ bool initTemplates()
 		debug(LOG_WZ, "Could not open %s", ini.fileName().toUtf8().constData());
 		return false;
 	}
-	QStringList list = ini.childGroups();
-	for (int i = 0; i < list.size(); ++i)
+	int version = ini.value("version", 0).toInt();
+	if (version == 0)
 	{
-		ini.beginGroup(list[i]);
+		return true; // too old version
+	}
+	ini.beginArray("templates");
+	while (ini.remainingArrayItems())
+	{
 		DROID_TEMPLATE design = loadTemplateCommon(ini);
 		design.multiPlayerID = generateNewObjectId();
 		design.prefab = false;		// not AI template
@@ -183,13 +203,13 @@ bool initTemplates()
 		    || (design.numWeaps > 1 && !(asWeaponStats + design.asWeaps[1])->designable)
 		    || (design.numWeaps > 2 && !(asWeaponStats + design.asWeaps[2])->designable))
 		{
-			debug(LOG_ERROR, "Template %d / %s from stored templates cannot be designed", i, list[i].toUtf8().constData());
+			debug(LOG_ERROR, "Template %s from stored templates cannot be designed", design.name.toUtf8().constData());
 			continue;
 		}
 		bool valid = intValidTemplate(&design, ini.value("name").toString().toUtf8().constData(), false, selectedPlayer);
 		if (!valid)
 		{
-			debug(LOG_ERROR, "Invalid template %d / %s from stored templates", i, list[i].toUtf8().constData());
+			debug(LOG_ERROR, "Invalid template %s from stored templates", design.name.toUtf8().constData());
 			continue;
 		}
 		DROID_TEMPLATE *psDestTemplate = NULL;
@@ -218,15 +238,68 @@ bool initTemplates()
 		if (psDestTemplate)
 		{
 			psDestTemplate->stored = true; // assimilate it
-			ini.endGroup();
+			ini.nextArrayItem();
 			continue; // next!
 		}
 		design.enabled = allowDesign;
 		copyTemplate(selectedPlayer, &design);
 		localTemplates.push_back(design);
-		ini.endGroup();
+		ini.nextArrayItem();
 	}
+	ini.endArray();
 	return true;
+}
+
+void saveTemplateCommon(WzConfig &ini, DROID_TEMPLATE *psCurr)
+{
+	ini.setValue("name", psCurr->name);
+	switch (psCurr->droidType)
+	{
+	case DROID_ECM: ini.setValue("type", "ECM"); break;
+	case DROID_SENSOR: ini.setValue("type", "SENSOR"); break;
+	case DROID_CONSTRUCT: ini.setValue("type", "CONSTRUCT"); break;
+	case DROID_WEAPON: ini.setValue("type", "WEAPON"); break;
+	case DROID_PERSON: ini.setValue("type", "PERSON"); break;
+	case DROID_CYBORG: ini.setValue("type", "CYBORG"); break;
+	case DROID_CYBORG_SUPER: ini.setValue("type", "CYBORG_SUPER"); break;
+	case DROID_CYBORG_CONSTRUCT: ini.setValue("type", "CYBORG_CONSTRUCT"); break;
+	case DROID_CYBORG_REPAIR: ini.setValue("type", "CYBORG_REPAIR"); break;
+	case DROID_TRANSPORTER: ini.setValue("type", "TRANSPORTER"); break;
+	case DROID_SUPERTRANSPORTER: ini.setValue("type", "SUPERTRANSPORTER"); break;
+	case DROID_DEFAULT: ini.setValue("type", "DROID"); break;
+	default: ASSERT(false, "No such droid type \"%d\" for %s", psCurr->droidType, psCurr->name.toUtf8().constData());
+	}
+	ini.setValue("body", (asBodyStats + psCurr->asParts[COMP_BODY])->id);
+	ini.setValue("propulsion", (asPropulsionStats + psCurr->asParts[COMP_PROPULSION])->id);
+	if (psCurr->asParts[COMP_BRAIN] != 0)
+	{
+		ini.setValue("brain", (asBrainStats + psCurr->asParts[COMP_BRAIN])->id);
+	}
+	if ((asRepairStats + psCurr->asParts[COMP_REPAIRUNIT])->location == LOC_TURRET) // avoid auto-repair...
+	{
+		ini.setValue("repair", (asRepairStats + psCurr->asParts[COMP_REPAIRUNIT])->id);
+	}
+	if ((asECMStats + psCurr->asParts[COMP_ECM])->location == LOC_TURRET)
+	{
+		ini.setValue("ecm", (asECMStats + psCurr->asParts[COMP_ECM])->id);
+	}
+	if ((asSensorStats + psCurr->asParts[COMP_SENSOR])->location == LOC_TURRET)
+	{
+		ini.setValue("sensor", (asSensorStats + psCurr->asParts[COMP_SENSOR])->id);
+	}
+	if (psCurr->asParts[COMP_CONSTRUCT] != 0)
+	{
+		ini.setValue("construct", (asConstructStats + psCurr->asParts[COMP_CONSTRUCT])->id);
+	}
+	QStringList weapons;
+	for (int j = 0; j < psCurr->numWeaps; j++)
+	{
+		weapons += (asWeaponStats + psCurr->asWeaps[j])->id;
+	}
+	if (weapons.size())
+	{
+		ini.setValue("weapons", weapons);
+	}
 }
 
 bool storeTemplates()
@@ -238,56 +311,18 @@ bool storeTemplates()
 		debug(LOG_ERROR, "Could not open %s", ini.fileName().toUtf8().constData());
 		return false;
 	}
+	ini.setValue("version", 1); // for breaking backwards compatibility in a nice way
+	ini.beginArray("templates");
 	for (auto &keyvaluepair : droidTemplates[selectedPlayer])
 	{
 		DROID_TEMPLATE *psCurr = keyvaluepair.second;
-		if (!psCurr->stored)
+		if (psCurr->stored)
 		{
-			continue;    // not stored
+			saveTemplateCommon(ini, psCurr);
+			ini.nextArrayItem();
 		}
-		ini.beginGroup("template_" + QString::number(psCurr->multiPlayerID));
-		ini.setValue("name", psCurr->name);
-		switch (psCurr->droidType)
-		{
-		case DROID_PERSON: ini.setValue("type", "PERSON"); break;
-		case DROID_CYBORG: ini.setValue("type", "CYBORG"); break;
-		case DROID_CYBORG_SUPER: ini.setValue("type", "CYBORG_SUPER"); break;
-		case DROID_CYBORG_CONSTRUCT: ini.setValue("type", "CYBORG_CONSTRUCT"); break;
-		case DROID_CYBORG_REPAIR: ini.setValue("type", "CYBORG_REPAIR"); break;
-		case DROID_TRANSPORTER: ini.setValue("type", "TRANSPORTER"); break;
-		case DROID_SUPERTRANSPORTER: ini.setValue("type", "SUPERTRANSPORTER"); break;
-		case DROID_DEFAULT: ini.setValue("type", "DROID"); break;
-		default: ASSERT(false, "No such droid type \"%d\" for %s", psCurr->droidType, psCurr->name.toUtf8().constData());
-		}
-		ini.setValue("body", (asBodyStats + psCurr->asParts[COMP_BODY])->id);
-		ini.setValue("propulsion", (asPropulsionStats + psCurr->asParts[COMP_PROPULSION])->id);
-		if (psCurr->asParts[COMP_BRAIN] != 0)
-		{
-			ini.setValue("brain", (asBrainStats + psCurr->asParts[COMP_BRAIN])->id);
-		}
-		if ((asRepairStats + psCurr->asParts[COMP_REPAIRUNIT])->location == LOC_TURRET) // avoid auto-repair...
-		{
-			ini.setValue("repair", (asRepairStats + psCurr->asParts[COMP_REPAIRUNIT])->id);
-		}
-		if ((asECMStats + psCurr->asParts[COMP_ECM])->location == LOC_TURRET)
-		{
-			ini.setValue("ecm", (asECMStats + psCurr->asParts[COMP_ECM])->id);
-		}
-		if ((asSensorStats + psCurr->asParts[COMP_SENSOR])->location == LOC_TURRET)
-		{
-			ini.setValue("sensor", (asSensorStats + psCurr->asParts[COMP_SENSOR])->id);
-		}
-		if (psCurr->asParts[COMP_CONSTRUCT] != 0)
-		{
-			ini.setValue("construct", (asConstructStats + psCurr->asParts[COMP_CONSTRUCT])->id);
-		}
-		ini.setValue("weapons", psCurr->numWeaps);
-		for (int j = 0; j < psCurr->numWeaps; j++)
-		{
-			ini.setValue("weapon/" + QString::number(j + 1), (asWeaponStats + psCurr->asWeaps[j])->id);
-		}
-		ini.endGroup();
 	}
+	ini.endArray();
 	return true;
 }
 

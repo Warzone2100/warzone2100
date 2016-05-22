@@ -65,7 +65,7 @@ public:
 	QVariant value(const QString &key, const QVariant &defaultValue = QVariant()) const;
 	QJsonValue json(const QString &key, const QJsonValue &defaultValue = QJsonValue()) const;
 
-	bool beginArray(const QString &name);
+	void beginArray(const QString &name);
 	void nextArrayItem();
 	void endArray();
 	int remainingArrayItems();

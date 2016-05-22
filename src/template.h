@@ -1,6 +1,7 @@
 #ifndef TEMPLATE_H
 #define TEMPLATE_H
 
+#include "lib/framework/wzconfig.h"
 #include "droiddef.h"
 
 //storage
@@ -40,5 +41,8 @@ DROID_TEMPLATE *getTemplateFromMultiPlayerID(UDWORD multiPlayerID);
 bool researchedTemplate(const DROID_TEMPLATE *psCurr, int player, bool allowRedundant = false, bool verbose = false);
 
 void listTemplates();
+
+void saveTemplateCommon(WzConfig &ini, DROID_TEMPLATE *psCurr);
+DROID_TEMPLATE loadTemplateCommon(WzConfig &ini);
 
 #endif // TEMPLATE_H

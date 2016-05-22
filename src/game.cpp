@@ -5683,43 +5683,26 @@ bool loadSaveTemplate(const char *pFileName)
 	WzConfig ini(pFileName, WzConfig::ReadOnly);
 	QStringList list = ini.childGroups();
 
+	int version = ini.value("version", 0).toInt();
+	if (version == 0)
+	{
+		return false;
+	}
 	for (int i = 0; i < list.size(); ++i)
 	{
 		ini.beginGroup(list[i]);
 		int player = getPlayer(ini);
-		bool beta1_compat_hack = false; // TBD remove before release!
-		beta1_compat_hack = !ini.beginArray("templates");
-		while (ini.remainingArrayItems() > 0 || beta1_compat_hack)
+		ini.beginArray("templates");
+		while (ini.remainingArrayItems() > 0)
 		{
-			DROID_TEMPLATE *psTemplate = new DROID_TEMPLATE;
-			psTemplate->name = ini.value("name").toString();
-			psTemplate->ref = ini.value("ref").toInt();
-			psTemplate->droidType = (DROID_TYPE)ini.value("droidType").toInt();
-			psTemplate->multiPlayerID = ini.value("multiPlayerID").toInt();
-			psTemplate->asParts[COMP_BODY] = getCompFromName(COMP_BODY, ini.value("body", "ZNULLBODY").toString());
-			psTemplate->asParts[COMP_BRAIN] = getCompFromName(COMP_BRAIN, ini.value("brain", "ZNULLBRAIN").toString());
-			psTemplate->asParts[COMP_PROPULSION] = getCompFromName(COMP_PROPULSION, ini.value("propulsion", "ZNULLPROP").toString());
-			psTemplate->asParts[COMP_REPAIRUNIT] = getCompFromName(COMP_REPAIRUNIT, ini.value("repair", "ZNULLREPAIR").toString());
-			psTemplate->asParts[COMP_ECM] = getCompFromName(COMP_ECM, ini.value("ecm", "ZNULLECM").toString());
-			psTemplate->asParts[COMP_SENSOR] = getCompFromName(COMP_SENSOR, ini.value("sensor", "ZNULLSENSOR").toString());
-			psTemplate->asParts[COMP_CONSTRUCT] = getCompFromName(COMP_CONSTRUCT, ini.value("construct", "ZNULLCONSTRUCT").toString());
-			psTemplate->asWeaps[0] = getCompFromName(COMP_WEAPON, ini.value("weapon/1", "ZNULLWEAPON").toString());
-			psTemplate->asWeaps[1] = getCompFromName(COMP_WEAPON, ini.value("weapon/2", "ZNULLWEAPON").toString());
-			psTemplate->asWeaps[2] = getCompFromName(COMP_WEAPON, ini.value("weapon/3", "ZNULLWEAPON").toString());
-			psTemplate->numWeaps = ini.value("weapons").toInt();
-			psTemplate->enabled = ini.value("enabled").toBool();
-			psTemplate->prefab = false;		// not AI template
-			addTemplate(player, psTemplate);
-			if (beta1_compat_hack)
-			{
-				break;
-			}
+			DROID_TEMPLATE t = loadTemplateCommon(ini);
+			t.name = ini.value("name").toString();
+			t.multiPlayerID = ini.value("multiPlayerID", generateNewObjectId()).toInt();
+			t.enabled = ini.value("enabled", false).toBool();
+			t.stored = ini.value("stored", false).toBool();
+			t.prefab = ini.value("prefab", false).toBool();
+			copyTemplate(player, &t);
 			ini.nextArrayItem();
-		}
-		if (beta1_compat_hack)
-		{
-			ini.endGroup();
-			continue;
 		}
 		ini.endArray();
 		ini.endGroup();
@@ -5737,6 +5720,7 @@ bool writeTemplateFile(const char *pFileName)
 {
 	WzConfig ini(pFileName, WzConfig::ReadAndWrite);
 
+	ini.setValue("version", 1);
 	for (int player = 0; player < MAX_PLAYERS; player++)
 	{
 		if (!apsDroidLists[player] && !apsStructLists[player])	// only write out templates of players that are still 'alive'
@@ -5749,23 +5733,12 @@ bool writeTemplateFile(const char *pFileName)
 		for (auto &keyvaluepair : droidTemplates[player])
 		{
 			DROID_TEMPLATE *psCurr = keyvaluepair.second;
-			ini.setValue("name", psCurr->name);
+			saveTemplateCommon(ini, psCurr);
 			ini.setValue("ref", psCurr->ref);
-			ini.setValue("droidType", psCurr->droidType);
 			ini.setValue("multiPlayerID", psCurr->multiPlayerID);
-			ini.setValue("body", (asBodyStats + psCurr->asParts[COMP_BODY])->id);
-			ini.setValue("propulsion", (asPropulsionStats + psCurr->asParts[COMP_PROPULSION])->id);
-			ini.setValue("brain", (asBrainStats + psCurr->asParts[COMP_BRAIN])->id);
-			ini.setValue("repair", (asRepairStats + psCurr->asParts[COMP_REPAIRUNIT])->id);
-			ini.setValue("ecm", (asECMStats + psCurr->asParts[COMP_ECM])->id);
-			ini.setValue("sensor", (asSensorStats + psCurr->asParts[COMP_SENSOR])->id);
-			ini.setValue("construct", (asConstructStats + psCurr->asParts[COMP_CONSTRUCT])->id);
-			ini.setValue("weapons", psCurr->numWeaps);
 			ini.setValue("enabled", psCurr->enabled);
-			for (int j = 0; j < psCurr->numWeaps; j++)
-			{
-				ini.setValue("weapon/" + QString::number(j + 1), (asWeaponStats + psCurr->asWeaps[j])->id);
-			}
+			ini.setValue("stored", psCurr->stored);
+			ini.setValue("prefab", psCurr->prefab);
 			ini.nextArrayItem();
 		}
 		ini.endArray();
