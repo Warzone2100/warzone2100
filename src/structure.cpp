@@ -5623,7 +5623,7 @@ void printStructureInfo(STRUCTURE *psStructure)
 
 /*Checks the template type against the factory type - returns false
 if not a good combination!*/
-bool validTemplateForFactory(DROID_TEMPLATE *psTemplate, STRUCTURE *psFactory, bool complain)
+bool validTemplateForFactory(const DROID_TEMPLATE *psTemplate, STRUCTURE *psFactory, bool complain)
 {
 	ASSERT_OR_RETURN(false, psTemplate, "Invalid template!");
 	enum code_part level = complain ? LOG_ERROR : LOG_NEVER;

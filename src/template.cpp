@@ -46,7 +46,7 @@ bool allowDesign = true;
 bool includeRedundantDesigns = false;
 
 
-static bool researchedItem(DROID_TEMPLATE *psCurr, int player, COMPONENT_TYPE partIndex, int part, bool allowZero, bool allowRedundant)
+static bool researchedItem(const DROID_TEMPLATE *psCurr, int player, COMPONENT_TYPE partIndex, int part, bool allowZero, bool allowRedundant)
 {
 	if (allowZero && part <= 0)
 	{
@@ -56,18 +56,18 @@ static bool researchedItem(DROID_TEMPLATE *psCurr, int player, COMPONENT_TYPE pa
 	return availability == AVAILABLE || (allowRedundant && availability == REDUNDANT);
 }
 
-static bool researchedPart(DROID_TEMPLATE *psCurr, int player, COMPONENT_TYPE partIndex, bool allowZero, bool allowRedundant)
+static bool researchedPart(const DROID_TEMPLATE *psCurr, int player, COMPONENT_TYPE partIndex, bool allowZero, bool allowRedundant)
 {
 	return researchedItem(psCurr, player, partIndex, psCurr->asParts[partIndex], allowZero, allowRedundant);
 }
 
-static bool researchedWeap(DROID_TEMPLATE *psCurr, int player, int weapIndex, bool allowRedundant)
+static bool researchedWeap(const DROID_TEMPLATE *psCurr, int player, int weapIndex, bool allowRedundant)
 {
 	int availability = apCompLists[player][COMP_WEAPON][psCurr->asWeaps[weapIndex]];
 	return availability == AVAILABLE || (allowRedundant && availability == REDUNDANT);
 }
 
-bool researchedTemplate(DROID_TEMPLATE *psCurr, int player, bool allowRedundant, bool verbose)
+bool researchedTemplate(const DROID_TEMPLATE *psCurr, int player, bool allowRedundant, bool verbose)
 {
 	ASSERT_OR_RETURN(false, psCurr, "Given a null template");
 	bool resBody = researchedPart(psCurr, player, COMP_BODY, false, allowRedundant);
@@ -530,20 +530,19 @@ void listTemplates()
 /*
 fills the list with Templates that can be manufactured
 in the Factory - based on size. There is a limit on how many can be manufactured
-at any one time. Pass back the number available.
+at any one time.
 */
 void fillTemplateList(std::vector<DROID_TEMPLATE *> &pList, STRUCTURE *psFactory)
 {
 	const int player = psFactory->player;
 	pList.clear();
 
-	DROID_TEMPLATE	*psCurr;
 	BODY_SIZE	iCapacity = (BODY_SIZE)psFactory->capacity;
 
 	/* Add the templates to the list*/
-	for (std::list<DROID_TEMPLATE>::iterator i = localTemplates.begin(); i != localTemplates.end(); ++i)
+	for (DROID_TEMPLATE &i : localTemplates)
 	{
-		psCurr = &*i;
+		DROID_TEMPLATE *psCurr = &i;
 		// Must add droids if currently in production.
 		if (!getProduction(psFactory, psCurr).quantity)
 		{

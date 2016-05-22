@@ -37,7 +37,7 @@ DROID_TEMPLATE *getTemplateFromTranslatedNameNoPlayer(char const *pName);
 DROID_TEMPLATE *getTemplateFromMultiPlayerID(UDWORD multiPlayerID);
 
 /// Have we researched the components of this template?
-bool researchedTemplate(DROID_TEMPLATE *psCurr, int player, bool allowRedundant = false, bool verbose = false);
+bool researchedTemplate(const DROID_TEMPLATE *psCurr, int player, bool allowRedundant = false, bool verbose = false);
 
 void listTemplates();
 
