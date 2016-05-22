@@ -2991,6 +2991,7 @@ static QScriptValue js_enableTemplate(QScriptContext *context, QScriptEngine *en
 		{
 			keyvaluepair.second->enabled = true;
 			found = true;
+			break;
 		}
 	}
 	if (!found)
@@ -3004,6 +3005,40 @@ static QScriptValue js_enableTemplate(QScriptContext *context, QScriptEngine *en
 		if (templateName.compare(psCurr->id) == 0)
 		{
 			psCurr->enabled = true;
+			break;
+		}
+	}
+	return QScriptValue();
+}
+
+//-- \subsection{removeTemplate(template name)} Remove a template.
+static QScriptValue js_removeTemplate(QScriptContext *context, QScriptEngine *engine)
+{
+	DROID_TEMPLATE *psCurr;
+	QString templateName = context->argument(0).toString();
+	bool found = false;
+	// FIXME: This dual data structure for templates is just plain insane.
+	for (auto &keyvaluepair : droidTemplates[selectedPlayer])
+	{
+		if (templateName.compare(keyvaluepair.second->id) == 0)
+		{
+			keyvaluepair.second->enabled = false;
+			found = true;
+			break;
+		}
+	}
+	if (!found)
+	{
+		debug(LOG_ERROR, "Template %s was not found!", templateName.toUtf8().constData());
+		return QScriptValue(false);
+	}
+	for (std::list<DROID_TEMPLATE>::iterator i = localTemplates.begin(); i != localTemplates.end(); ++i)
+	{
+		psCurr = &*i;
+		if (templateName.compare(psCurr->id) == 0)
+		{
+			localTemplates.erase(i);
+			break;
 		}
 	}
 	return QScriptValue();
@@ -4985,6 +5020,7 @@ bool registerFunctions(QScriptEngine *engine, QString scriptName)
 	engine->globalObject().setProperty("setTutorialMode", engine->newFunction(js_setTutorialMode));
 	engine->globalObject().setProperty("setDesign", engine->newFunction(js_setDesign));
 	engine->globalObject().setProperty("enableTemplate", engine->newFunction(js_enableTemplate));
+	engine->globalObject().setProperty("removeTemplate", engine->newFunction(js_removeTemplate));
 	engine->globalObject().setProperty("setMiniMap", engine->newFunction(js_setMiniMap));
 	engine->globalObject().setProperty("setReticuleButton", engine->newFunction(js_setReticuleButton));
 	engine->globalObject().setProperty("showInterface", engine->newFunction(js_showInterface));

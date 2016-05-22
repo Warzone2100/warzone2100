@@ -19,4 +19,6 @@ function eventStartLevel()
 {
 	setMiniMap(true);
 	setDesign(false);
+	removeTemplate("ConstructionDroid");
+	removeTemplate("ViperLtMGWheels");
 }
