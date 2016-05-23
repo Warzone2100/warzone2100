@@ -1334,7 +1334,7 @@ bool wzMainScreenSetup(int antialiasing, bool fullscreen, bool vsync)
 			debug(LOG_WZ, "Monitor[%d]%dx%d %d %s", i, displaymode.w, displaymode.h, displaymode.refresh_rate, getSDL_fmt_string(displaymode.format));
 			if (displaymode.refresh_rate < 59)
 			{
-				continue;    // only store 60Hz & higher modes, some display report 59 on linux
+				//continue;    // only store 60Hz & higher modes, some display report 59 on linux
 			}
 			screenlist.height = displaymode.h;
 			screenlist.width = displaymode.w;

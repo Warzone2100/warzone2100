@@ -194,6 +194,7 @@ bool saveConfig()
 	ini.setValue("music_enabled", war_GetMusicEnabled());
 	ini.setValue("width", war_GetWidth());
 	ini.setValue("height", war_GetHeight());
+	ini.setValue("screen", war_GetScreen());
 	ini.setValue("bpp", pie_GetVideoBufferDepth());
 	ini.setValue("fullscreen", war_getFullscreen());
 	ini.setValue("language", getLanguage());

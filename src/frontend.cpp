@@ -982,12 +982,19 @@ static char const *videoOptionsFsaaString()
 	switch (war_getFSAA())
 	{
 	case FSAA_OFF: return _("Off");
-	case FSAA_2X: return "2X";
-	case FSAA_4X: return "4X";
-	case FSAA_8X: return "8X";
+	case FSAA_2X: return "2×";
+	case FSAA_4X: return "4×";
+	case FSAA_8X: return "8×";
 	// Some cards can do 16x & 32x ...
 	default: return _("Unsupported");
 	}
+}
+
+static std::string videoOptionsResolutionString()
+{
+	char resolution[100];
+	ssprintf(resolution, "[%d] %d × %d", war_GetScreen(), war_GetWidth(), war_GetHeight());
+	return resolution;
 }
 
 static std::string videoOptionsTextureSizeString()
@@ -1006,10 +1013,6 @@ static char const *videoOptionsVsyncString()
 // Video Options
 static bool startVideoOptionsMenu(void)
 {
-	// Generate the resolution string
-	char resolution[43];
-	ssprintf(resolution, "%d x %d", war_GetWidth(), war_GetHeight());
-
 	addBackdrop();
 	addTopForm();
 	addBottomForm();
@@ -1029,8 +1032,7 @@ static bool startVideoOptionsMenu(void)
 
 	// Resolution
 	addTextButton(FRONTEND_RESOLUTION, FRONTEND_POS3X - 35, FRONTEND_POS3Y, _("Resolution*"), WBUT_SECONDARY);
-	addTextButton(FRONTEND_RESOLUTION_R, FRONTEND_POS3M - 55, FRONTEND_POS3Y, resolution, WBUT_SECONDARY);
-	widgSetString(psWScreen, FRONTEND_RESOLUTION_R, resolution);
+	addTextButton(FRONTEND_RESOLUTION_R, FRONTEND_POS3M - 55, FRONTEND_POS3Y, videoOptionsResolutionString().c_str(), WBUT_SECONDARY);
 
 	// Texture size
 	addTextButton(FRONTEND_TEXTURESZ, FRONTEND_POS4X - 35, FRONTEND_POS4Y, _("Texture size"), WBUT_SECONDARY);
@@ -1055,7 +1057,6 @@ static bool startVideoOptionsMenu(void)
 
 bool runVideoOptionsMenu(void)
 {
-	std::vector<screeninfo> modes = wzAvailableResolutions();
 	WidgetTriggers const &triggers = widgRunScreen(psWScreen);
 	unsigned id = triggers.empty() ? 0 : triggers.front().widget->id; // Just use first click here, since the next click could be on another menu.
 
@@ -1079,50 +1080,55 @@ bool runVideoOptionsMenu(void)
 	case FRONTEND_RESOLUTION:
 	case FRONTEND_RESOLUTION_R:
 		{
-			int current, count;
+			auto compareKey = [](screeninfo const &x) { return std::make_tuple(x.screen, x.width, x.height); };
+			auto compareLess = [&](screeninfo const &a, screeninfo const &b) { return compareKey(a) < compareKey(b); };
+			auto compareEq = [&](screeninfo const &a, screeninfo const &b) { return compareKey(a) == compareKey(b); };
 
-			// Get the current mode offset
-			for (count = 0, current = 0; count < modes.size(); count++)
-			{
-				if (war_GetWidth() == modes[count].width && war_GetHeight() == modes[count].height)
-				{
-					current = count;
-				}
-			}
+			// Get resolutions, sorted with duplicates removed.
+			std::vector<screeninfo> modes = wzAvailableResolutions();
+			std::sort(modes.begin(), modes.end(), compareLess);
+			modes.erase(std::unique(modes.begin(), modes.end(), compareEq), modes.end());
 
-			// Increment and clip if required
-			if (!mouseReleased(MOUSE_RMB))
-			{
-				if (--current < 0)
-				{
-					current = count - 1;
-				}
-			}
-			else
-			{
-				if (++current == count)
-				{
-					current = 0;
-				}
-			}
-
-			// We can't pick resolutions if there are any.
+			// We can't pick resolutions if there aren't any.
 			if (modes.empty())
 			{
 				debug(LOG_ERROR, "No resolutions available to change.");
 				break;
 			}
 
-			// Set the new width and height (takes effect on restart)
-			war_SetWidth(modes[current].width);
-			war_SetHeight(modes[current].height);
+			// Get currently configured resolution.
+			screeninfo config;
+			config.screen = war_GetScreen();
+			config.width = war_GetWidth();
+			config.height = war_GetHeight();
+			config.refresh_rate = -1;  // Unused.
 
-			// Generate the textual representation of the new width and height
-			char resolution[43];
-			ssprintf(resolution, "[%d] %d x %d@%d", modes[current].screen, modes[current].width, modes[current].height, modes[current].refresh_rate);
+			// Find current resolution in list.
+			auto current = std::lower_bound(modes.begin(), modes.end(), config, compareLess);
+			if (current == modes.end() || !compareEq(*current, config))
+			{
+				--current;  // If current resolution doesn't exist, round down to next-highest one.
+			}
+
+			// Increment/decrement and loop if required.
+			if (!mouseReleased(MOUSE_RMB))
+			{
+				++current;
+				current = current == modes.end()? modes.begin() : current;
+			}
+			else
+			{
+				current = current == modes.begin()? modes.end() : current;
+				--current;
+			}
+
+			// Set the new width and height (takes effect on restart)
+			war_SetScreen(current->screen);
+			war_SetWidth(current->width);
+			war_SetHeight(current->height);
 
 			// Update the widget
-			widgSetString(psWScreen, FRONTEND_RESOLUTION_R, resolution);
+			widgSetString(psWScreen, FRONTEND_RESOLUTION_R, videoOptionsResolutionString().c_str());
 			break;
 		}
 
@@ -1562,7 +1568,7 @@ bool runGameOptionsMenu(void)
 		int chosenColour = id - FE_MP_PR - 1;
 		for (int colour = -1; colour < MAX_PLAYERS_IN_GUI; ++colour)
 		{
-			int thisID = FE_MP_PR + colour + 1;
+			unsigned thisID = FE_MP_PR + colour + 1;
 			widgSetButtonState(psWScreen, thisID, id == thisID ? WBUT_LOCK : 0);
 		}
 		war_setMPcolour(chosenColour);
