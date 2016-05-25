@@ -46,6 +46,9 @@ const char *getDroidActionName(DROID_ACTION action);
 /** How far away the repair droid can be from the damaged droid to function. */
 #define REPAIR_RANGE  (2 * TILE_UNITS)
 
+/// The maximum distance a repair droid will automatically go in guard mode.
+#define REPAIR_MAXDIST  (5 * TILE_UNITS)
+
 /**
  * Update the action state for a droid.
  *

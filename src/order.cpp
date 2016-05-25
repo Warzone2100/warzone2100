@@ -87,9 +87,6 @@
 /** The distance a droid has in guard mode. Equivalent to GUARD_BASEDIST, but used for droids being on a command group. */
 #define DEFEND_CMD_BASEDIST		(TILE_UNITS * 5)
 
-/** The maximum distance a repair droid has in guard mode. */
-#define REPAIR_MAXDIST		(TILE_UNITS * 5)
-
 /** The maximum distance a constructor droid has in guard mode. */
 #define CONSTRUCT_MAXDIST		(TILE_UNITS * 8)
 

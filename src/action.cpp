@@ -1716,15 +1716,15 @@ void actionUpdateDroid(DROID *psDroid)
 		break;
 	case DACTION_MOVETODROIDREPAIR:
 		{
+			Vector2i diff = removeZ(psDroid->pos - psDroid->psActionTarget[0]->pos);
 			// moving to repair a droid
-			if (!psDroid->psActionTarget[0])
+			if (!psDroid->psActionTarget[0] ||  // Target missing.
+				(psDroid->order.type != DORDER_DROIDREPAIR && diff * diff > 2 * REPAIR_MAXDIST * REPAIR_MAXDIST))  // Target farther then 1.4142 * REPAIR_MAXDIST and we aren't ordered to follow.
 			{
 				psDroid->action = DACTION_NONE;
 				return;
 			}
-			const int xdiff = (SDWORD)psDroid->pos.x - (SDWORD)psDroid->psActionTarget[0]->pos.x;
-			const int ydiff = (SDWORD)psDroid->pos.y - (SDWORD)psDroid->psActionTarget[0]->pos.y;
-			if (xdiff * xdiff + ydiff * ydiff < REPAIR_RANGE * REPAIR_RANGE)
+			if (diff * diff < REPAIR_RANGE * REPAIR_RANGE)
 			{
 				// Got to destination - start repair
 				//rotate turret to point at droid being repaired
