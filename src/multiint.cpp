@@ -4064,14 +4064,10 @@ void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 		iV_SetTextColour(WZCOL_YELLOW);
 		// make the 'header' for the table...
 		drawBlueBox(x , y - 12 , GAMES_GAMEWIDTH, 12);
-		ssprintf(tmp, "Game Name");
-		iV_DrawText(tmp, x - 2 + GAMES_GAMENAME_START + 48, y - 3);
-		ssprintf(tmp, "Map Name");
-		iV_DrawText(tmp, x - 2 + GAMES_MAPNAME_START + 48, y - 3);
-		ssprintf(tmp, "Players");
-		iV_DrawText(tmp, x - 2 + GAMES_PLAYERS_START, y - 3);
-		ssprintf(tmp, "Status");
-		iV_DrawText(tmp, x - 2 + GAMES_STATUS_START + 48, y - 3);
+		iV_DrawText(_("Game Name"), x - 2 + GAMES_GAMENAME_START + 48, y - 3);
+		iV_DrawText(_("Map Name"), x - 2 + GAMES_MAPNAME_START + 48, y - 3);
+		iV_DrawText(_("Players"), x - 2 + GAMES_PLAYERS_START, y - 3);
+		iV_DrawText(_("Status"), x - 2 + GAMES_STATUS_START + 48, y - 3);
 	}
 }
 
