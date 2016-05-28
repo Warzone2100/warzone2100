@@ -185,7 +185,7 @@ static void queue(const Q &q, int32_t &v)
 	// Example: int32_t -5 -4 -3 -2 -1  0  1  2  3  4  5
 	// becomes uint32_t  9  7  5  3  1  0  2  4  6  8 10
 
-	uint32_t b = v << 1 ^ (-((uint32_t)v >> 31));
+	uint32_t b = (uint32_t)v << 1 ^ (-((uint32_t)v >> 31));
 	queue(q, b);
 	if (Q::Direction == Q::Read)
 	{
