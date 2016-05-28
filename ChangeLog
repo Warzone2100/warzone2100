@@ -1,3 +1,24 @@
+2016-05-28: Version 3.2.0 beta3
+ * General:
+   * Fix: Some maps would not load or give wrong minimap resolution (commit:e75d0f926540a505ca750691bdf0a1a95e8df8b4, ticket:4404, ticket:4405)
+   * Fix: Several issues related to saving and loading templates (commit:73dba8a5ed032f9388c8eb940595cd287029ae6c, ticket:4406)
+   * Fix: Superfluous templates removed and cyborgs added to cam2/cam3 starts (commit:fa8c431511308eeff70136f64febf4a62898334f, commit:0f312d0c8ca14c22dd448543771eec3c5cc9c561)
+   * Fix: Lobby console output (commit:c3080516a4e10c90cd6ef911c9ba5c874382217c, ticket:4403)
+   * Fix: Default template should not be present in tutorial (commit:85ac04406facd3a97342d1da45c256bc0fa47207, ticket:4402)
+   * Fix: Broken warning on exiting multiplayer games (commit:b93cac88d978dd0dd06a2c29928e12f5e2759b18, ticket:4384)
+   * Fix: Skewed video playback resolution (commit:be9548bdec4ac6e6644c04f5a0a2536e6190804e, ticket:4382)
+   * Fix: Dangling tooltip on removing owning widget (commit:04a68d30fea972502d83c64b0790ee7a48ad811e, ticket:4396)
+   * Fix: Cycle through menu lists consistently (commit:95d5bb5483e0919a2bb1dffa82ed85b0b3423501, ticket:3318)
+ * Balance:
+   * Fix: Improve repair droid targeting (commit:2b9b042cd8d0e9f9c736c39e0fe1d027416e8fff, ticket:9d2108ed87e5e1f6319d78f53c12e1ca84be7869, ticket:3895, ticket:3362)
+   * Fix: Factory upgrades were set to incorrect values (commit:9e6857a7424518d834b7509f8dd9a44cdcebd696)
+ * Graphics:
+   * Fix: Resolution and screen settings (commit:630c624433ead2663c1576a8491f409ea5a5766e, ticket:4410, ticket:4386)
+ * Translations:
+   * Fix: Garbled translations in scripts due to parsing as Latin1 instead of UTF-8 (commit:ee69d3ae2974f41844cd311171053d81c3c43aac, ticket:4380)
+   * Fix: Language names for NSIS installer (commit:11fc451b41c98cd780ed1d5a3886cb6d30190ce6)
+   * Fix: Untranslatable text in lobby (commit:f03488e704b8a5fb93d6f861b615a2ba2348069c, ticket:4296)
+
 2016-05-16: Version 3.2.0 beta2
  * Balance:
    * Fix: Some weapon accuracy values tweaked to be closer to the 3.1 experience (commit:dc6ddae6953c7f8cb2b0bd073641f02ed348da8b)
