@@ -10,7 +10,7 @@
    * Fix: Dangling tooltip on removing owning widget (commit:04a68d30fea972502d83c64b0790ee7a48ad811e, ticket:4396)
    * Fix: Cycle through menu lists consistently (commit:95d5bb5483e0919a2bb1dffa82ed85b0b3423501, ticket:3318)
  * Balance:
-   * Fix: Improve repair droid targeting (commit:2b9b042cd8d0e9f9c736c39e0fe1d027416e8fff, ticket:9d2108ed87e5e1f6319d78f53c12e1ca84be7869, ticket:3895, ticket:3362)
+   * Fix: Improve repair droid targeting (commit:2b9b042cd8d0e9f9c736c39e0fe1d027416e8fff, commit:9d2108ed87e5e1f6319d78f53c12e1ca84be7869, ticket:3895, ticket:3362)
    * Fix: Factory upgrades were set to incorrect values (commit:9e6857a7424518d834b7509f8dd9a44cdcebd696)
  * Graphics:
    * Fix: Resolution and screen settings (commit:630c624433ead2663c1576a8491f409ea5a5766e, ticket:4410, ticket:4386)
