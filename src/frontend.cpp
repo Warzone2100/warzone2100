@@ -102,6 +102,24 @@ bool CancelPressed(void)
 	return cancel;
 }
 
+// Cycle through options, one at a time.
+template <typename T>
+static T stepCycle(T value, T min, T max)
+{
+	return !mouseReleased(MOUSE_RMB) ?
+	       value < max ? T(value + 1) : min :  // Cycle forwards. The T cast is to cycle through enums.
+	       min < value ? T(value - 1) : max;  // Cycle backwards.
+}
+
+// Cycle through options, which are powers of two, such as [128, 256, 512, 1024, 2048].
+template <typename T>
+static T pow2Cycle(T value, T min, T max)
+{
+	return !mouseReleased(MOUSE_RMB) ?
+	       value < max ? value * 2 : min :  // Cycle forwards.
+	       min < value ? value / 2 : max;  // Cycle backwards.
+}
+
 
 // ////////////////////////////////////////////////////////////////////////////
 // Title Screen
@@ -674,6 +692,47 @@ bool runOptionsMenu(void)
 	return true;
 }
 
+static char const *graphicsOptionsFmvmodeString()
+{
+	switch (war_GetFMVmode())
+	{
+	case FMV_1X: return _("1×");
+	case FMV_2X: return _("2×");
+	case FMV_FULLSCREEN: return _("Fullscreen");
+	default: return _("Unsupported");
+	}
+}
+
+static char const *graphicsOptionsScanlinesString()
+{
+	switch (war_getScanlineMode())
+	{
+	case SCANLINES_OFF: return _("Off");
+	case SCANLINES_50: return _("50%");
+	case SCANLINES_BLACK: return _("Black");
+	default: return _("Unsupported");
+	}
+}
+
+static char const *graphicsOptionsScreenShakeString()
+{
+	return getShakeStatus() ? _("On") : _("Off");
+}
+
+static char const *graphicsOptionsSubtitlesString()
+{
+	return seq_GetSubtitles() ? _("On") : _("Off");
+}
+
+static char const *graphicsOptionsShadowsString()
+{
+	return getDrawShadows() ? _("On") : _("Off");
+}
+
+static char const *graphicsOptionsRadarString()
+{
+	return rotateRadar ? _("Rotating") : _("Fixed");
+}
 
 // ////////////////////////////////////////////////////////////////////////////
 // Graphics Options
@@ -685,85 +744,31 @@ static bool startGraphicsOptionsMenu(void)
 
 	////////////
 	//FMV mode.
-	addTextButton(FRONTEND_FMVMODE,	FRONTEND_POS2X - 35, FRONTEND_POS2Y, _("Video Playback"), 0);
-	switch (war_GetFMVmode())
-	{
-	case FMV_1X:
-		addTextButton(FRONTEND_FMVMODE_R, FRONTEND_POS2M - 55, FRONTEND_POS2Y, _("1X"), 0);
-		break;
-
-	case FMV_2X:
-		addTextButton(FRONTEND_FMVMODE_R, FRONTEND_POS2M - 55, FRONTEND_POS2Y, _("2X"), 0);
-		break;
-
-	case FMV_FULLSCREEN:
-		addTextButton(FRONTEND_FMVMODE_R, FRONTEND_POS2M - 55, FRONTEND_POS2Y, _("Fullscreen"), 0);
-		break;
-
-	default:
-		ASSERT(!"invalid FMV mode", "Invalid FMV mode: %u", (unsigned int)war_GetFMVmode());
-		break;
-	}
+	addTextButton(FRONTEND_FMVMODE,   FRONTEND_POS2X - 35, FRONTEND_POS2Y, _("Video Playback"), WBUT_SECONDARY);
+	addTextButton(FRONTEND_FMVMODE_R, FRONTEND_POS2M - 55, FRONTEND_POS2Y, graphicsOptionsFmvmodeString(), WBUT_SECONDARY);
 
 	// Scanlines
-	addTextButton(FRONTEND_SCANLINES, FRONTEND_POS3X - 35, FRONTEND_POS3Y, _("Scanlines"), 0);
-	switch (war_getScanlineMode())
-	{
-	case SCANLINES_OFF:
-		addTextButton(FRONTEND_SCANLINES_R, FRONTEND_POS3M - 55, FRONTEND_POS3Y, _("Off"), 0);
-		break;
-
-	case SCANLINES_50:
-		addTextButton(FRONTEND_SCANLINES_R, FRONTEND_POS3M - 55, FRONTEND_POS3Y, _("50%"), 0);
-		break;
-
-	case SCANLINES_BLACK:
-		addTextButton(FRONTEND_SCANLINES_R, FRONTEND_POS3M - 55, FRONTEND_POS3Y, _("Black"), 0);
-		break;
-	}
+	addTextButton(FRONTEND_SCANLINES,   FRONTEND_POS3X - 35, FRONTEND_POS3Y, _("Scanlines"), WBUT_SECONDARY);
+	addTextButton(FRONTEND_SCANLINES_R, FRONTEND_POS3M - 55, FRONTEND_POS3Y, graphicsOptionsScanlinesString(), WBUT_SECONDARY);
 
 	////////////
 	// screenshake
-	addTextButton(FRONTEND_SSHAKE,	 FRONTEND_POS4X - 35,   FRONTEND_POS4Y, _("Screen Shake"), 0);
-	if (getShakeStatus())
-	{
-		// shaking on
-		addTextButton(FRONTEND_SSHAKE_R, FRONTEND_POS4M - 55,  FRONTEND_POS4Y, _("On"), 0);
-	}
-	else
-	{
-		//shaking off.
-		addTextButton(FRONTEND_SSHAKE_R, FRONTEND_POS4M - 55,  FRONTEND_POS4Y, _("Off"), 0);
-	}
+	addTextButton(FRONTEND_SSHAKE,   FRONTEND_POS4X - 35, FRONTEND_POS4Y, _("Screen Shake"), WBUT_SECONDARY);
+	addTextButton(FRONTEND_SSHAKE_R, FRONTEND_POS4M - 55, FRONTEND_POS4Y, graphicsOptionsScreenShakeString(), WBUT_SECONDARY);
 
 	////////////
 	//subtitle mode.
-	addTextButton(FRONTEND_SUBTITLES, FRONTEND_POS6X - 35, FRONTEND_POS5Y, _("Subtitles"), 0);
-	if (!seq_GetSubtitles())
-	{
-		addTextButton(FRONTEND_SUBTITLES_R, FRONTEND_POS6M - 55, FRONTEND_POS5Y, _("Off"), 0);
-	}
-	else
-	{
-		addTextButton(FRONTEND_SUBTITLES_R, FRONTEND_POS6M - 55, FRONTEND_POS5Y, _("On"), 0);
-	}
+	addTextButton(FRONTEND_SUBTITLES,   FRONTEND_POS6X - 35, FRONTEND_POS5Y, _("Subtitles"), WBUT_SECONDARY);
+	addTextButton(FRONTEND_SUBTITLES_R, FRONTEND_POS6M - 55, FRONTEND_POS5Y, graphicsOptionsSubtitlesString(), WBUT_SECONDARY);
 
 	////////////
 	//shadows
-	addTextButton(FRONTEND_SHADOWS, FRONTEND_POS7X - 35, FRONTEND_POS6Y, _("Shadows"), 0);
-	if (getDrawShadows())
-	{
-		addTextButton(FRONTEND_SHADOWS_R, FRONTEND_POS7M - 55,  FRONTEND_POS6Y, _("On"), 0);
-	}
-	else
-	{
-		// not flipped
-		addTextButton(FRONTEND_SHADOWS_R, FRONTEND_POS7M - 55,  FRONTEND_POS6Y, _("Off"), 0);
-	}
+	addTextButton(FRONTEND_SHADOWS,   FRONTEND_POS7X - 35, FRONTEND_POS6Y, _("Shadows"), WBUT_SECONDARY);
+	addTextButton(FRONTEND_SHADOWS_R, FRONTEND_POS7M - 55, FRONTEND_POS6Y, graphicsOptionsShadowsString(), WBUT_SECONDARY);
 
 	// Radar
-	addTextButton(FRONTEND_RADAR, FRONTEND_POS7X - 35, FRONTEND_POS7Y, _("Radar"), 0);
-	addTextButton(FRONTEND_RADAR_R, FRONTEND_POS7M - 55, FRONTEND_POS7Y, rotateRadar ? _("Rotating") : _("Fixed"), 0);
+	addTextButton(FRONTEND_RADAR,   FRONTEND_POS7X - 35, FRONTEND_POS7Y, _("Radar"), WBUT_SECONDARY);
+	addTextButton(FRONTEND_RADAR_R, FRONTEND_POS7M - 55, FRONTEND_POS7Y, graphicsOptionsRadarString(), WBUT_SECONDARY);
 
 	// Add some text down the side of the form
 	addSideText(FRONTEND_SIDETEXT, FRONTEND_SIDEX, FRONTEND_SIDEY, _("GRAPHICS OPTIONS"));
@@ -777,7 +782,6 @@ static bool startGraphicsOptionsMenu(void)
 
 bool runGraphicsOptionsMenu(void)
 {
-	int mode = 0;
 	WidgetTriggers const &triggers = widgRunScreen(psWScreen);
 	unsigned id = triggers.empty() ? 0 : triggers.front().widget->id; // Just use first click here, since the next click could be on another menu.
 
@@ -785,16 +789,8 @@ bool runGraphicsOptionsMenu(void)
 	{
 	case FRONTEND_SSHAKE:
 	case FRONTEND_SSHAKE_R:
-		if (getShakeStatus())
-		{
-			setShakeStatus(false);
-			widgSetString(psWScreen, FRONTEND_SSHAKE_R, _("Off"));
-		}
-		else
-		{
-			setShakeStatus(true);
-			widgSetString(psWScreen, FRONTEND_SSHAKE_R, _("On"));
-		}
+		setShakeStatus(!getShakeStatus());
+		widgSetString(psWScreen, FRONTEND_SSHAKE_R, graphicsOptionsScreenShakeString());
 		break;
 
 	case FRONTEND_QUIT:
@@ -803,82 +799,31 @@ bool runGraphicsOptionsMenu(void)
 
 	case FRONTEND_SUBTITLES:
 	case FRONTEND_SUBTITLES_R:
-		if (seq_GetSubtitles())
-		{
-			// turn off
-			seq_SetSubtitles(false);
-			widgSetString(psWScreen, FRONTEND_SUBTITLES_R, _("Off"));
-		}
-		else
-		{
-			// turn on
-			seq_SetSubtitles(true);
-			widgSetString(psWScreen, FRONTEND_SUBTITLES_R, _("On"));
-		}
+		seq_SetSubtitles(!seq_GetSubtitles());
+		widgSetString(psWScreen, FRONTEND_SUBTITLES_R, graphicsOptionsSubtitlesString());
 		break;
 
 	case FRONTEND_SHADOWS:
 	case FRONTEND_SHADOWS_R:
 		setDrawShadows(!getDrawShadows());
-		if (getDrawShadows())
-		{
-			widgSetString(psWScreen, FRONTEND_SHADOWS_R, _("On"));
-		}
-		else
-		{
-			widgSetString(psWScreen, FRONTEND_SHADOWS_R, _("Off"));
-		}
+		widgSetString(psWScreen, FRONTEND_SHADOWS_R, graphicsOptionsShadowsString());
 		break;
 
 	case FRONTEND_FMVMODE:
 	case FRONTEND_FMVMODE_R:
-		switch (mode = war_GetFMVmode())
-		{
-		case FMV_1X:
-			war_SetFMVmode((FMV_MODE)(mode + 1));
-			widgSetString(psWScreen, FRONTEND_FMVMODE_R, _("2X"));
-			break;
-
-		case FMV_2X:
-			war_SetFMVmode((FMV_MODE)(mode + 1));
-			widgSetString(psWScreen, FRONTEND_FMVMODE_R, _("Fullscreen"));
-			break;
-
-		case FMV_FULLSCREEN:
-			war_SetFMVmode((FMV_MODE)(mode + 1));
-			widgSetString(psWScreen, FRONTEND_FMVMODE_R, _("1X"));
-			break;
-
-		default:
-			ASSERT(!"invalid FMV mode", "Invalid FMV mode: %u", (unsigned int)mode);
-			break;
-		}
+		war_SetFMVmode(stepCycle(war_GetFMVmode(), FMV_FULLSCREEN, FMV_MODE(FMV_MAX - 1)));
+		widgSetString(psWScreen, FRONTEND_FMVMODE_R, graphicsOptionsFmvmodeString());
 		break;
 
 	case FRONTEND_SCANLINES:
 	case FRONTEND_SCANLINES_R:
-		switch (mode = war_getScanlineMode())
-		{
-		case SCANLINES_OFF:
-			war_setScanlineMode(SCANLINES_50);
-			widgSetString(psWScreen, FRONTEND_SCANLINES_R, _("50%"));
-			break;
-
-		case SCANLINES_50:
-			war_setScanlineMode(SCANLINES_BLACK);
-			widgSetString(psWScreen, FRONTEND_SCANLINES_R, _("Black"));
-			break;
-
-		case SCANLINES_BLACK:
-			war_setScanlineMode(SCANLINES_OFF);
-			widgSetString(psWScreen, FRONTEND_SCANLINES_R, _("Off"));
-			break;
-		}
+		war_setScanlineMode(stepCycle(war_getScanlineMode(), SCANLINES_OFF, SCANLINES_BLACK));
+		widgSetString(psWScreen, FRONTEND_SCANLINES_R, graphicsOptionsScanlinesString());
 		break;
 
 	case FRONTEND_RADAR_R:
 		rotateRadar = !rotateRadar;
-		widgSetString(psWScreen, FRONTEND_RADAR_R, rotateRadar ? _("Rotating") : _("Fixed"));
+		widgSetString(psWScreen, FRONTEND_RADAR_R, graphicsOptionsRadarString());
 		break;
 
 	default:
@@ -982,9 +927,9 @@ static char const *videoOptionsFsaaString()
 	switch (war_getFSAA())
 	{
 	case FSAA_OFF: return _("Off");
-	case FSAA_2X: return "2×";
-	case FSAA_4X: return "4×";
-	case FSAA_8X: return "8×";
+	case FSAA_2X: return _("2×");
+	case FSAA_4X: return _("4×");
+	case FSAA_8X: return _("8×");
 	// Some cards can do 16x & 32x ...
 	default: return _("Unsupported");
 	}
@@ -1071,8 +1016,7 @@ bool runVideoOptionsMenu(void)
 	case FRONTEND_FSAA:
 	case FRONTEND_FSAA_R:
 		{
-			int step = !mouseReleased(MOUSE_RMB)? 1 : FSAA_MAX - 1;
-			war_setFSAA((FSAA_LEVEL)(war_getFSAA() + step));
+			war_setFSAA(stepCycle(war_getFSAA(), FSAA_OFF, FSAA_LEVEL(FSAA_MAX - 1)));
 			widgSetString(psWScreen, FRONTEND_FSAA_R, videoOptionsFsaaString());
 			break;
 		}
@@ -1111,16 +1055,7 @@ bool runVideoOptionsMenu(void)
 			}
 
 			// Increment/decrement and loop if required.
-			if (!mouseReleased(MOUSE_RMB))
-			{
-				++current;
-				current = current == modes.end()? modes.begin() : current;
-			}
-			else
-			{
-				current = current == modes.begin()? modes.end() : current;
-				--current;
-			}
+			current = stepCycle(current, modes.begin(), modes.end() - 1);
 
 			// Set the new width and height (takes effect on restart)
 			war_SetScreen(current->screen);
@@ -1135,18 +1070,7 @@ bool runVideoOptionsMenu(void)
 	case FRONTEND_TEXTURESZ:
 	case FRONTEND_TEXTURESZ_R:
 		{
-			int newTexSize = !mouseReleased(MOUSE_RMB)? getTextureSize() * 2 : getTextureSize() / 2;
-			constexpr int minTexSize = 128, maxTexSize = 2048;
-
-			// Clip such that minTexSize <= size <= maxTexSize
-			if (newTexSize > maxTexSize)
-			{
-				newTexSize = minTexSize;
-			}
-			else if (newTexSize < minTexSize)
-			{
-				newTexSize = maxTexSize;
-			}
+			int newTexSize = pow2Cycle(getTextureSize(), 128, 2048);
 
 			// Set the new size
 			setTextureSize(newTexSize);
@@ -1183,6 +1107,31 @@ bool runVideoOptionsMenu(void)
 }
 
 
+static char const *mouseOptionsMflipString()
+{
+	return getInvertMouseStatus() ? _("On") : _("Off");
+}
+
+static char const *mouseOptionsTrapString()
+{
+	return war_GetTrapCursor() ? _("On") : _("Off");
+}
+
+static char const *mouseOptionsMbuttonsString()
+{
+	return getRightClickOrders() ? _("On") : _("Off");
+}
+
+static char const *mouseOptionsMmrotateString()
+{
+	return getMiddleClickRotate() ? _("Middle Mouse") : _("Right Mouse");
+}
+
+static char const *mouseOptionsCursorModeString()
+{
+	return war_GetColouredCursor() ? _("On") : _("Off");
+}
+
 // ////////////////////////////////////////////////////////////////////////////
 // Mouse Options
 static bool startMouseOptionsMenu(void)
@@ -1193,70 +1142,26 @@ static bool startMouseOptionsMenu(void)
 
 	////////////
 	// mouseflip
-	addTextButton(FRONTEND_MFLIP,	 FRONTEND_POS2X - 35,   FRONTEND_POS2Y, _("Reverse Rotation"), 0);
-	if (getInvertMouseStatus())
-	{
-		// flipped
-		addTextButton(FRONTEND_MFLIP_R, FRONTEND_POS2M - 25,  FRONTEND_POS2Y, _("On"), 0);
-	}
-	else
-	{
-		// not flipped
-		addTextButton(FRONTEND_MFLIP_R, FRONTEND_POS2M - 25,  FRONTEND_POS2Y, _("Off"), 0);
-	}
+	addTextButton(FRONTEND_MFLIP,   FRONTEND_POS2X - 35, FRONTEND_POS2Y, _("Reverse Rotation"), WBUT_SECONDARY);
+	addTextButton(FRONTEND_MFLIP_R, FRONTEND_POS2M - 25, FRONTEND_POS2Y, mouseOptionsMflipString(), WBUT_SECONDARY);
 
 	// Cursor trapping
-	addTextButton(FRONTEND_TRAP, FRONTEND_POS3X - 35, FRONTEND_POS3Y, _("Trap Cursor"), 0);
-
-	if (war_GetTrapCursor())
-	{
-		addTextButton(FRONTEND_TRAP_R, FRONTEND_POS3M - 25, FRONTEND_POS3Y, _("On"), 0);
-	}
-	else
-	{
-		addTextButton(FRONTEND_TRAP_R, FRONTEND_POS3M - 25, FRONTEND_POS3Y, _("Off"), 0);
-	}
+	addTextButton(FRONTEND_TRAP,   FRONTEND_POS3X - 35, FRONTEND_POS3Y, _("Trap Cursor"), WBUT_SECONDARY);
+	addTextButton(FRONTEND_TRAP_R, FRONTEND_POS3M - 25, FRONTEND_POS3Y, mouseOptionsTrapString(), WBUT_SECONDARY);
 
 	////////////
 	// left-click orders
-	addTextButton(FRONTEND_MBUTTONS,	 FRONTEND_POS2X - 35,   FRONTEND_POS4Y, _("Switch Mouse Buttons"), 0);
-	if (getRightClickOrders())
-	{
-		// right-click orders
-		addTextButton(FRONTEND_MBUTTONS_R, FRONTEND_POS2M - 25,  FRONTEND_POS4Y, _("On"), 0);
-	}
-	else
-	{
-		// left-click orders
-		addTextButton(FRONTEND_MBUTTONS_R, FRONTEND_POS2M - 25,  FRONTEND_POS4Y, _("Off"), 0);
-	}
+	addTextButton(FRONTEND_MBUTTONS,   FRONTEND_POS2X - 35, FRONTEND_POS4Y, _("Switch Mouse Buttons"), WBUT_SECONDARY);
+	addTextButton(FRONTEND_MBUTTONS_R, FRONTEND_POS2M - 25, FRONTEND_POS4Y, mouseOptionsMbuttonsString(), WBUT_SECONDARY);
 
 	////////////
 	// middle-click rotate
-	addTextButton(FRONTEND_MMROTATE,	 FRONTEND_POS2X - 35,   FRONTEND_POS5Y, _("Rotate Screen"), 0);
-	if (getMiddleClickRotate())
-	{
-		// right-click orders
-		addTextButton(FRONTEND_MMROTATE_R, FRONTEND_POS2M - 25,  FRONTEND_POS5Y, _("Middle Mouse"), 0);
-	}
-	else
-	{
-		// left-click orders
-		addTextButton(FRONTEND_MMROTATE_R, FRONTEND_POS2M - 25,  FRONTEND_POS5Y, _("Right Mouse"), 0);
-	}
+	addTextButton(FRONTEND_MMROTATE,   FRONTEND_POS2X - 35, FRONTEND_POS5Y, _("Rotate Screen"), WBUT_SECONDARY);
+	addTextButton(FRONTEND_MMROTATE_R, FRONTEND_POS2M - 25, FRONTEND_POS5Y, mouseOptionsMmrotateString(), WBUT_SECONDARY);
 
 	// Hardware / software cursor toggle
-	addTextButton(FRONTEND_CURSORMODE, FRONTEND_POS4X - 35, FRONTEND_POS6Y, _("Colored Cursors"), 0);
-
-	if (war_GetColouredCursor())
-	{
-		addTextButton(FRONTEND_CURSORMODE_R, FRONTEND_POS4M - 25, FRONTEND_POS6Y, _("On"), 0);
-	}
-	else
-	{
-		addTextButton(FRONTEND_CURSORMODE_R, FRONTEND_POS4M - 25, FRONTEND_POS6Y, _("Off"), 0);
-	}
-
+	addTextButton(FRONTEND_CURSORMODE,   FRONTEND_POS4X - 35, FRONTEND_POS6Y, _("Colored Cursors"), WBUT_SECONDARY);
+	addTextButton(FRONTEND_CURSORMODE_R, FRONTEND_POS4M - 25, FRONTEND_POS6Y, mouseOptionsCursorModeString(), WBUT_SECONDARY);
 
 	// Add some text down the side of the form
 	addSideText(FRONTEND_SIDETEXT, FRONTEND_SIDEX, FRONTEND_SIDEY, _("MOUSE OPTIONS"));
@@ -1276,75 +1181,32 @@ bool runMouseOptionsMenu(void)
 	{
 	case FRONTEND_MFLIP:
 	case FRONTEND_MFLIP_R:
-		if (getInvertMouseStatus())
-		{
-			//	 flipped
-			setInvertMouseStatus(false);
-			widgSetString(psWScreen, FRONTEND_MFLIP_R, _("Off"));
-		}
-		else
-		{
-			// not flipped
-			setInvertMouseStatus(true);
-			widgSetString(psWScreen, FRONTEND_MFLIP_R, _("On"));
-		}
+		setInvertMouseStatus(!getInvertMouseStatus());
+		widgSetString(psWScreen, FRONTEND_MFLIP_R, mouseOptionsMflipString());
 		break;
 	case FRONTEND_TRAP:
 	case FRONTEND_TRAP_R:
-		if (war_GetTrapCursor())
-		{
-			war_SetTrapCursor(false);
-			widgSetString(psWScreen, FRONTEND_TRAP_R, _("Off"));
-		}
-		else
-		{
-			war_SetTrapCursor(true);
-			widgSetString(psWScreen, FRONTEND_TRAP_R, _("On"));
-		}
+		war_SetTrapCursor(!war_GetTrapCursor());
+		widgSetString(psWScreen, FRONTEND_TRAP_R, mouseOptionsTrapString());
 		break;
 
 	case FRONTEND_MBUTTONS:
 	case FRONTEND_MBUTTONS_R:
-		if (getRightClickOrders())
-		{
-			setRightClickOrders(false);
-			widgSetString(psWScreen, FRONTEND_MBUTTONS_R, _("Off"));
-		}
-		else
-		{
-			setRightClickOrders(true);
-			widgSetString(psWScreen, FRONTEND_MBUTTONS_R, _("On"));
-		}
+		setRightClickOrders(!getRightClickOrders());
+		widgSetString(psWScreen, FRONTEND_MBUTTONS_R, mouseOptionsMbuttonsString());
 		break;
 
 	case FRONTEND_MMROTATE:
 	case FRONTEND_MMROTATE_R:
-		if (getMiddleClickRotate())
-		{
-			setMiddleClickRotate(false);
-			widgSetString(psWScreen, FRONTEND_MMROTATE_R, _("Right Mouse"));
-		}
-		else
-		{
-			setMiddleClickRotate(true);
-			widgSetString(psWScreen, FRONTEND_MMROTATE_R, _("Middle Mouse"));
-		}
+		setMiddleClickRotate(!getMiddleClickRotate());
+		widgSetString(psWScreen, FRONTEND_MMROTATE_R, mouseOptionsMmrotateString());
 		break;
 
 	case FRONTEND_CURSORMODE:
 	case FRONTEND_CURSORMODE_R:
-		if (war_GetColouredCursor())
-		{
-			war_SetColouredCursor(false);
-			widgSetString(psWScreen, FRONTEND_CURSORMODE_R, _("Off"));
-			wzSetCursor(CURSOR_DEFAULT);
-		}
-		else
-		{
-			war_SetColouredCursor(true);
-			widgSetString(psWScreen, FRONTEND_CURSORMODE_R, _("On"));
-			wzSetCursor(CURSOR_DEFAULT);
-		}
+		war_SetColouredCursor(!war_GetColouredCursor());
+		widgSetString(psWScreen, FRONTEND_CURSORMODE_R, mouseOptionsCursorModeString());
+		wzSetCursor(CURSOR_DEFAULT);
 		break;
 
 	case FRONTEND_QUIT:
@@ -1365,6 +1227,19 @@ bool runMouseOptionsMenu(void)
 	return true;
 }
 
+static char const *gameOptionsDifficultyString()
+{
+	switch (getDifficultyLevel())
+	{
+	case DL_EASY: return _("Easy");
+	case DL_NORMAL: return _("Normal");
+	case DL_HARD: return _("Hard");
+	case DL_INSANE: return _("Insane");
+	case DL_TOUGH: return _("Tough");
+	case DL_KILLER: return _("Killer");
+	}
+	return _("Unsupported");
+}
 
 // ////////////////////////////////////////////////////////////////////////////
 // Game Options Menu
@@ -1378,24 +1253,12 @@ static bool startGameOptionsMenu(void)
 	addBottomForm();
 
 	// language
-	addTextButton(FRONTEND_LANGUAGE,  FRONTEND_POS2X - 25, FRONTEND_POS2Y, _("Language"), 0);
-	addTextButton(FRONTEND_LANGUAGE_R,  FRONTEND_POS2M - 25, FRONTEND_POS2Y, getLanguageName(), 0);
+	addTextButton(FRONTEND_LANGUAGE,  FRONTEND_POS2X - 25, FRONTEND_POS2Y, _("Language"), WBUT_SECONDARY);
+	addTextButton(FRONTEND_LANGUAGE_R,  FRONTEND_POS2M - 25, FRONTEND_POS2Y, getLanguageName(), WBUT_SECONDARY);
 
 	// Difficulty
-	addTextButton(FRONTEND_DIFFICULTY, FRONTEND_POS3X - 25, FRONTEND_POS3Y, _("Campaign Difficulty"), 0);
-	switch (getDifficultyLevel())
-	{
-	case DL_EASY:
-		addTextButton(FRONTEND_DIFFICULTY_R, FRONTEND_POS3M - 25, FRONTEND_POS3Y, _("Easy"), 0);
-		break;
-	case DL_NORMAL:
-		addTextButton(FRONTEND_DIFFICULTY_R, FRONTEND_POS3M - 25, FRONTEND_POS3Y, _("Normal"), 0);
-		break;
-	case DL_HARD:
-	default:
-		addTextButton(FRONTEND_DIFFICULTY_R, FRONTEND_POS3M - 25, FRONTEND_POS3Y, _("Hard"), 0);
-		break;
-	}
+	addTextButton(FRONTEND_DIFFICULTY,   FRONTEND_POS3X - 25, FRONTEND_POS3Y, _("Campaign Difficulty"), WBUT_SECONDARY);
+	addTextButton(FRONTEND_DIFFICULTY_R, FRONTEND_POS3M - 25, FRONTEND_POS3Y, gameOptionsDifficultyString(), WBUT_SECONDARY);
 
 	// Scroll speed
 	addTextButton(FRONTEND_SCROLLSPEED, FRONTEND_POS4X - 25, FRONTEND_POS4Y, _("Scroll Speed"), 0);
@@ -1451,7 +1314,7 @@ bool runGameOptionsMenu(void)
 	switch (id)
 	{
 	case FRONTEND_LANGUAGE_R:
-		setNextLanguage();
+		setNextLanguage(mouseReleased(MOUSE_RMB));
 		widgSetString(psWScreen, FRONTEND_LANGUAGE_R, getLanguageName());
 		/* Hack to reset current menu text, which looks fancy. */
 		widgSetString(psWScreen, FRONTEND_SIDETEXT, _("GAME OPTIONS"));
@@ -1462,24 +1325,7 @@ bool runGameOptionsMenu(void)
 		widgSetString(psWScreen, FRONTEND_COLOUR_MP, _("Skirmish/Multiplayer"));
 		widgSetString(psWScreen, FRONTEND_DIFFICULTY, _("Campaign Difficulty"));
 		widgSetString(psWScreen, FRONTEND_SCROLLSPEED, _("Scroll Speed"));
-
-		switch (getDifficultyLevel())
-		{
-		case DL_EASY:
-			widgSetString(psWScreen, FRONTEND_DIFFICULTY_R, _("Easy"));
-			break;
-		case DL_NORMAL:
-			widgSetString(psWScreen, FRONTEND_DIFFICULTY_R, _("Normal"));
-			break;
-		case DL_HARD:
-			widgSetString(psWScreen, FRONTEND_DIFFICULTY_R, _("Hard"));
-			break;
-		case DL_INSANE:
-		case DL_TOUGH:
-		case DL_KILLER:
-			debug(LOG_ERROR, "Unused difficulty level selected!");
-			break;
-		}
+		widgSetString(psWScreen, FRONTEND_DIFFICULTY_R, gameOptionsDifficultyString());
 		break;
 
 	case FRONTEND_SCROLLSPEED:
@@ -1487,23 +1333,8 @@ bool runGameOptionsMenu(void)
 
 	case FRONTEND_DIFFICULTY:
 	case FRONTEND_DIFFICULTY_R:
-		switch (getDifficultyLevel())
-		{
-		case DL_EASY:
-			setDifficultyLevel(DL_NORMAL);
-			widgSetString(psWScreen, FRONTEND_DIFFICULTY_R, _("Normal"));
-			break;
-		case DL_NORMAL:
-			setDifficultyLevel(DL_HARD);
-			widgSetString(psWScreen, FRONTEND_DIFFICULTY_R, _("Hard"));
-			break;
-		case DL_HARD:
-			setDifficultyLevel(DL_EASY);
-			widgSetString(psWScreen, FRONTEND_DIFFICULTY_R, _("Easy"));
-			break;
-		default: // DL_TOUGH and DL_KILLER
-			break;
-		}
+		setDifficultyLevel(stepCycle(getDifficultyLevel(), DL_EASY, DL_HARD));
+		widgSetString(psWScreen, FRONTEND_DIFFICULTY_R, gameOptionsDifficultyString());
 		break;
 
 	case FRONTEND_SCROLLSPEED_SL:

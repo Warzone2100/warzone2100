@@ -52,7 +52,7 @@
 WZ_DECL_PURE const char *getLanguage();
 WZ_DECL_PURE const char *getLanguageName();
 WZ_DECL_NONNULL(1) bool setLanguage(const char *name);
-void setNextLanguage();
+void setNextLanguage(bool prev = false);
 void initI18n();
 
 #endif // _i18n_h

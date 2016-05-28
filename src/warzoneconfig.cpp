@@ -134,7 +134,7 @@ void war_setFSAA(unsigned int fsaa)
 	warGlobs.fsaa = (FSAA_LEVEL)(fsaa % FSAA_MAX);
 }
 
-unsigned int war_getFSAA()
+FSAA_LEVEL war_getFSAA()
 {
 	return warGlobs.fsaa;
 }

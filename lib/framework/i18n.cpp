@@ -371,17 +371,13 @@ bool setLanguage(const char *language)
 }
 
 
-void setNextLanguage()
+void setNextLanguage(bool prev)
 {
-	selectedLanguage++;
-	if (selectedLanguage > ARRAY_SIZE(map) - 1)
-	{
-		selectedLanguage = 0;
-	}
+	selectedLanguage = (selectedLanguage + ARRAY_SIZE(map) + (prev? -1 : 1)) % ARRAY_SIZE(map);
 
 	if (!setLanguage(map[selectedLanguage].language) && selectedLanguage != 0)
 	{
-		setNextLanguage(); // try next
+		setNextLanguage(prev); // try next
 	}
 }
 

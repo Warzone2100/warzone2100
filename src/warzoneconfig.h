@@ -62,7 +62,7 @@ extern bool war_GetAllowSubtitles(void);
 extern void war_setFullscreen(bool);
 extern bool war_getFullscreen(void);
 extern void war_setFSAA(unsigned int);
-extern unsigned int war_getFSAA(void);
+FSAA_LEVEL war_getFSAA();
 extern void war_SetTrapCursor(bool b);
 extern bool war_GetTrapCursor(void);
 extern bool war_GetColouredCursor(void);
