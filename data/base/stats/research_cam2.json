@@ -2026,6 +2026,13 @@
                 "filterValue": "A-A GUN",
                 "parameter": "FirePause",
                 "value": -10
+            },
+            {
+                "class": "Weapon",
+                "filterParameter": "ImpactClass",
+                "filterValue": "A-A GUN",
+                "parameter": "ReloadTime",
+                "value": -10
             }
         ],
         "statID": "QuadMg1AAGun",
@@ -2046,6 +2053,13 @@
                 "filterParameter": "ImpactClass",
                 "filterValue": "A-A GUN",
                 "parameter": "FirePause",
+                "value": -10
+            },
+            {
+                "class": "Weapon",
+                "filterParameter": "ImpactClass",
+                "filterValue": "A-A GUN",
+                "parameter": "ReloadTime",
                 "value": -10
             }
         ],
@@ -2069,6 +2083,13 @@
                 "filterParameter": "ImpactClass",
                 "filterValue": "A-A GUN",
                 "parameter": "FirePause",
+                "value": -10
+            },
+            {
+                "class": "Weapon",
+                "filterParameter": "ImpactClass",
+                "filterValue": "A-A GUN",
+                "parameter": "ReloadTime",
                 "value": -10
             }
         ],
@@ -2416,6 +2437,13 @@
                 "filterValue": "CANNON",
                 "parameter": "FirePause",
                 "value": -10
+            },
+            {
+                "class": "Weapon",
+                "filterParameter": "ImpactClass",
+                "filterValue": "CANNON",
+                "parameter": "ReloadTime",
+                "value": -10
             }
         ],
         "statID": "Cannon1Mk1",
@@ -2437,6 +2465,13 @@
                 "filterParameter": "ImpactClass",
                 "filterValue": "CANNON",
                 "parameter": "FirePause",
+                "value": -10
+            },
+            {
+                "class": "Weapon",
+                "filterParameter": "ImpactClass",
+                "filterValue": "CANNON",
+                "parameter": "ReloadTime",
                 "value": -10
             }
         ],
@@ -2460,6 +2495,13 @@
                 "filterParameter": "ImpactClass",
                 "filterValue": "CANNON",
                 "parameter": "FirePause",
+                "value": -10
+            },
+            {
+                "class": "Weapon",
+                "filterParameter": "ImpactClass",
+                "filterValue": "CANNON",
+                "parameter": "ReloadTime",
                 "value": -10
             }
         ],
@@ -2675,6 +2717,13 @@
                 "filterValue": "FLAME",
                 "parameter": "FirePause",
                 "value": -20
+            },
+            {
+                "class": "Weapon",
+                "filterParameter": "ImpactClass",
+                "filterValue": "FLAME",
+                "parameter": "ReloadTime",
+                "value": -20
             }
         ],
         "statID": "Flame1Mk1",
@@ -2697,6 +2746,13 @@
                 "filterValue": "FLAME",
                 "parameter": "FirePause",
                 "value": -20
+            },
+            {
+                "class": "Weapon",
+                "filterParameter": "ImpactClass",
+                "filterValue": "FLAME",
+                "parameter": "ReloadTime",
+                "value": -20
             }
         ],
         "statID": "Flame1Mk1",
@@ -2718,6 +2774,13 @@
                 "filterParameter": "ImpactClass",
                 "filterValue": "FLAME",
                 "parameter": "FirePause",
+                "value": -20
+            },
+            {
+                "class": "Weapon",
+                "filterParameter": "ImpactClass",
+                "filterValue": "FLAME",
+                "parameter": "ReloadTime",
                 "value": -20
             }
         ],
@@ -2897,6 +2960,13 @@
                 "filterValue": "HOWITZERS",
                 "parameter": "FirePause",
                 "value": -10
+            },
+            {
+                "class": "Weapon",
+                "filterParameter": "ImpactClass",
+                "filterValue": "HOWITZERS",
+                "parameter": "ReloadTime",
+                "value": -10
             }
         ],
         "statID": "Howitzer105Mk1",
@@ -2918,6 +2988,13 @@
                 "filterParameter": "ImpactClass",
                 "filterValue": "HOWITZERS",
                 "parameter": "FirePause",
+                "value": -10
+            },
+            {
+                "class": "Weapon",
+                "filterParameter": "ImpactClass",
+                "filterValue": "HOWITZERS",
+                "parameter": "ReloadTime",
                 "value": -10
             }
         ],
@@ -2941,6 +3018,13 @@
                 "filterParameter": "ImpactClass",
                 "filterValue": "HOWITZERS",
                 "parameter": "FirePause",
+                "value": -20
+            },
+            {
+                "class": "Weapon",
+                "filterParameter": "ImpactClass",
+                "filterValue": "HOWITZERS",
+                "parameter": "ReloadTime",
                 "value": -20
             }
         ],
@@ -3099,6 +3183,13 @@
                 "filterValue": "MACHINE GUN",
                 "parameter": "FirePause",
                 "value": -20
+            },
+            {
+                "class": "Weapon",
+                "filterParameter": "ImpactClass",
+                "filterValue": "MACHINE GUN",
+                "parameter": "ReloadTime",
+                "value": -20
             }
         ],
         "statID": "MG1Mk1",
@@ -3122,6 +3213,13 @@
                 "filterValue": "MACHINE GUN",
                 "parameter": "FirePause",
                 "value": -20
+            },
+            {
+                "class": "Weapon",
+                "filterParameter": "ImpactClass",
+                "filterValue": "MACHINE GUN",
+                "parameter": "ReloadTime",
+                "value": -20
             }
         ],
         "statID": "MG1Mk1",
@@ -3144,6 +3242,13 @@
                 "filterParameter": "ImpactClass",
                 "filterValue": "MACHINE GUN",
                 "parameter": "FirePause",
+                "value": -20
+            },
+            {
+                "class": "Weapon",
+                "filterParameter": "ImpactClass",
+                "filterValue": "MACHINE GUN",
+                "parameter": "ReloadTime",
                 "value": -20
             }
         ],
@@ -3399,6 +3504,13 @@
                 "filterValue": "MORTARS",
                 "parameter": "FirePause",
                 "value": -10
+            },
+            {
+                "class": "Weapon",
+                "filterParameter": "ImpactClass",
+                "filterValue": "MORTARS",
+                "parameter": "ReloadTime",
+                "value": -10
             }
         ],
         "statID": "Mortar1Mk1",
@@ -3419,6 +3531,13 @@
                 "filterParameter": "ImpactClass",
                 "filterValue": "MORTARS",
                 "parameter": "FirePause",
+                "value": -10
+            },
+            {
+                "class": "Weapon",
+                "filterParameter": "ImpactClass",
+                "filterValue": "MORTARS",
+                "parameter": "ReloadTime",
                 "value": -10
             }
         ],
@@ -3441,6 +3560,13 @@
                 "filterParameter": "ImpactClass",
                 "filterValue": "MORTARS",
                 "parameter": "FirePause",
+                "value": -10
+            },
+            {
+                "class": "Weapon",
+                "filterParameter": "ImpactClass",
+                "filterValue": "MORTARS",
+                "parameter": "ReloadTime",
                 "value": -10
             }
         ],
@@ -3624,6 +3750,13 @@
                 "filterValue": "ROCKET",
                 "parameter": "FirePause",
                 "value": -20
+            },
+            {
+                "class": "Weapon",
+                "filterParameter": "ImpactClass",
+                "filterValue": "ROCKET",
+                "parameter": "ReloadTime",
+                "value": -20
             }
         ],
         "statID": "Rocket-Pod",
@@ -3642,6 +3775,13 @@
                 "filterParameter": "ImpactClass",
                 "filterValue": "ROCKET",
                 "parameter": "FirePause",
+                "value": -20
+            },
+            {
+                "class": "Weapon",
+                "filterParameter": "ImpactClass",
+                "filterValue": "ROCKET",
+                "parameter": "ReloadTime",
                 "value": -20
             }
         ],
@@ -3891,6 +4031,13 @@
                 "filterValue": "SLOW ROCKET",
                 "parameter": "FirePause",
                 "value": -20
+            },
+            {
+                "class": "Weapon",
+                "filterParameter": "ImpactClass",
+                "filterValue": "SLOW ROCKET",
+                "parameter": "ReloadTime",
+                "value": -20
             }
         ],
         "statID": "Rocket-LtA-T",
@@ -3912,6 +4059,13 @@
                 "filterParameter": "ImpactClass",
                 "filterValue": "SLOW ROCKET",
                 "parameter": "FirePause",
+                "value": -20
+            },
+            {
+                "class": "Weapon",
+                "filterParameter": "ImpactClass",
+                "filterValue": "SLOW ROCKET",
+                "parameter": "ReloadTime",
                 "value": -20
             }
         ],
@@ -3935,6 +4089,13 @@
                 "filterParameter": "ImpactClass",
                 "filterValue": "SLOW ROCKET",
                 "parameter": "FirePause",
+                "value": -20
+            },
+            {
+                "class": "Weapon",
+                "filterParameter": "ImpactClass",
+                "filterValue": "SLOW ROCKET",
+                "parameter": "ReloadTime",
                 "value": -20
             }
         ],

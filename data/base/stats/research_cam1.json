@@ -1828,6 +1828,13 @@
                 "filterValue": "FLAME",
                 "parameter": "FirePause",
                 "value": -20
+            },
+            {
+                "class": "Weapon",
+                "filterParameter": "ImpactClass",
+                "filterValue": "FLAME",
+                "parameter": "ReloadTime",
+                "value": -20
             }
         ],
         "statID": "Flame1Mk1",
@@ -1957,6 +1964,13 @@
                 "filterParameter": "ImpactClass",
                 "filterValue": "MACHINE GUN",
                 "parameter": "FirePause",
+                "value": -20
+            },
+            {
+                "class": "Weapon",
+                "filterParameter": "ImpactClass",
+                "filterValue": "MACHINE GUN",
+                "parameter": "ReloadTime",
                 "value": -20
             }
         ],
@@ -2163,6 +2177,13 @@
                 "filterValue": "MORTARS",
                 "parameter": "FirePause",
                 "value": -10
+            },
+            {
+                "class": "Weapon",
+                "filterParameter": "ImpactClass",
+                "filterValue": "MORTARS",
+                "parameter": "ReloadTime",
+                "value": -10
             }
         ],
         "statID": "Mortar1Mk1",
@@ -2353,6 +2374,13 @@
                 "filterValue": "ROCKET",
                 "parameter": "FirePause",
                 "value": -20
+            },
+            {
+                "class": "Weapon",
+                "filterParameter": "ImpactClass",
+                "filterValue": "ROCKET",
+                "parameter": "ReloadTime",
+                "value": -20
             }
         ],
         "statID": "Rocket-Pod",
@@ -2375,6 +2403,13 @@
                 "filterValue": "ROCKET",
                 "parameter": "FirePause",
                 "value": -20
+            },
+            {
+                "class": "Weapon",
+                "filterParameter": "ImpactClass",
+                "filterValue": "ROCKET",
+                "parameter": "ReloadTime",
+                "value": -20
             }
         ],
         "statID": "Rocket-Pod",
@@ -2396,6 +2431,13 @@
                 "filterParameter": "ImpactClass",
                 "filterValue": "ROCKET",
                 "parameter": "FirePause",
+                "value": -20
+            },
+            {
+                "class": "Weapon",
+                "filterParameter": "ImpactClass",
+                "filterValue": "ROCKET",
+                "parameter": "ReloadTime",
                 "value": -20
             }
         ],
