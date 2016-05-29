@@ -84,7 +84,7 @@ bool actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, WEAPON *
 void actionAlignTurret(BASE_OBJECT *psObj, int weapon_slot);
 
 /** Check if a target is within weapon range. */
-bool actionInRange(DROID *psDroid, BASE_OBJECT *psObj, int weapon_slot);
+bool actionInRange(const DROID *psDroid, const BASE_OBJECT *psObj, int weapon_slot);
 
 /** Return whether a droid can see a target to fire on it. */
 bool actionVisibleTarget(DROID *psDroid, BASE_OBJECT *psTarget, int weapon_slot);

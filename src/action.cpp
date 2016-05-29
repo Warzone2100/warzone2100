@@ -151,53 +151,9 @@ const char *getDroidActionName(DROID_ACTION action)
 	return name[action];
 }
 
-/* Check if a target is at correct range to attack */
-static bool actionInAttackRange(DROID *psDroid, BASE_OBJECT *psObj, int weapon_slot)
-{
-	SDWORD			dx, dy, radSq, rangeSq, longRange;
-	WEAPON_STATS	*psStats;
-	int compIndex;
-
-	CHECK_DROID(psDroid);
-	if (psDroid->asWeaps[0].nStat == 0)
-	{
-		return false;
-	}
-
-	dx = (SDWORD)psDroid->pos.x - (SDWORD)psObj->pos.x;
-	dy = (SDWORD)psDroid->pos.y - (SDWORD)psObj->pos.y;
-
-	radSq = dx * dx + dy * dy;
-
-	compIndex = psDroid->asWeaps[weapon_slot].nStat;
-	ASSERT_OR_RETURN(false, compIndex < numWeaponStats, "Invalid range referenced for numWeaponStats, %d > %d", compIndex, numWeaponStats);
-	psStats = asWeaponStats + compIndex;
-
-	longRange = proj_GetLongRange(psStats, psDroid->player);
-	rangeSq = longRange * longRange;
-
-	/* check max range */
-	if (radSq <= rangeSq)
-	{
-		/* check min range */
-		const int minrange = psStats->upgrade[psDroid->player].minRange;
-		if (radSq >= minrange * minrange || !proj_Direct(psStats))
-		{
-			return true;
-		}
-	}
-
-	return false;
-}
-
-
 // check if a target is within weapon range
-bool actionInRange(DROID *psDroid, BASE_OBJECT *psObj, int weapon_slot)
+bool actionInRange(const DROID *psDroid, const BASE_OBJECT *psObj, int weapon_slot)
 {
-	SDWORD			dx, dy, radSq, rangeSq, longRange;
-	WEAPON_STATS	*psStats;
-	int compIndex;
-
 	CHECK_DROID(psDroid);
 
 	if (psDroid->asWeaps[0].nStat == 0)
@@ -205,17 +161,16 @@ bool actionInRange(DROID *psDroid, BASE_OBJECT *psObj, int weapon_slot)
 		return false;
 	}
 
-	compIndex = psDroid->asWeaps[weapon_slot].nStat;
+	const int compIndex = psDroid->asWeaps[weapon_slot].nStat;
 	ASSERT_OR_RETURN(false, compIndex < numWeaponStats, "Invalid range referenced for numWeaponStats, %d > %d", compIndex, numWeaponStats);
-	psStats = asWeaponStats + compIndex;
+	const WEAPON_STATS *psStats = asWeaponStats + compIndex;
 
-	dx = (SDWORD)psDroid->pos.x - (SDWORD)psObj->pos.x;
-	dy = (SDWORD)psDroid->pos.y - (SDWORD)psObj->pos.y;
+	const int dx = (SDWORD)psDroid->pos.x - (SDWORD)psObj->pos.x;
+	const int dy = (SDWORD)psDroid->pos.y - (SDWORD)psObj->pos.y;
 
-	radSq = dx * dx + dy * dy;
-
-	longRange = proj_GetLongRange(psStats, psDroid->player);
-	rangeSq = longRange * longRange;
+	const int radSq = dx * dx + dy * dy;
+	const int longRange = proj_GetLongRange(psStats, psDroid->player);
+	const int rangeSq = longRange * longRange;
 
 	/* check max range */
 	if (radSq <= rangeSq)
@@ -230,7 +185,6 @@ bool actionInRange(DROID *psDroid, BASE_OBJECT *psObj, int weapon_slot)
 
 	return false;
 }
-
 
 // check if a target is inside minimum weapon range
 static bool actionInsideMinRange(DROID *psDroid, BASE_OBJECT *psObj, WEAPON_STATS *psStats)
@@ -1239,8 +1193,7 @@ void actionUpdateDroid(DROID *psDroid)
 						}
 
 
-						if (actionInAttackRange(psDroid, psDroid->psActionTarget[0], i)
-						    && !chaseBloke)
+						if (actionInRange(psDroid, psDroid->psActionTarget[0], i) && !chaseBloke)
 						{
 							/* init vtol attack runs count if necessary */
 							if (psPropStats->propulsionType == PROPULSION_TYPE_LIFT)
