@@ -65,7 +65,7 @@
 #include "version.h"
 #include "warzoneconfig.h"
 #include "wrappers.h"
-#include "autorevision.h"
+
 
 struct CAMPAIGN_FILE
 {

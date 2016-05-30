@@ -25,7 +25,7 @@
 #include "version.h"
 #include "stringdef.h"
 
-#include "src/autorevision.h"
+#include "src/autorevision.h"  // Apparently must add the "src/" so make doesn't needlessly recompile version.cpp every time.
 
 static const char vcs_branch_cstr[] = VCS_BRANCH;
 static const char vcs_tag[] = VCS_TAG;
