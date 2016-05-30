@@ -425,7 +425,7 @@ static GAMECODE renderLoop()
 }
 
 // Carry out the various counting operations we perform each loop
-void countUpdate()
+static void countUpdate(bool synch)
 {
 	for (unsigned i = 0; i < MAX_PLAYERS; i++)
 	{
@@ -540,6 +540,10 @@ void countUpdate()
 				setLasSatExists(true, i);
 			}
 		}
+		if (synch)
+		{
+			syncDebug("counts[%d] = {droid: %d, command: %d, constructor: %d, mission: %d, transporter: %d}", i, numDroids[i], numCommandDroids[i], numConstructorDroids[i], numMissionDroids[i], numTransporterDroids[i]);
+		}
 	}
 }
 
@@ -640,7 +644,6 @@ static void gameStateUpdate()
 			structureUpdate(psCBuilding, true); // update for mission
 		}
 	}
-	countUpdate();
 
 	missionTimerUpdate();
 
@@ -660,6 +663,9 @@ static void gameStateUpdate()
 
 	// Must end update, since we may or may not have ticked, and some message queue processing code may vary depending on whether it's in an update.
 	gameTimeUpdateEnd();
+
+	// Must be at the beginning or end of each tick, since countUpdate is also called randomly (unsynchronised) between ticks.
+	countUpdate(true);
 }
 
 /* The main game loop */
@@ -672,7 +678,7 @@ GAMECODE gameLoop(void)
 	const Rational renderFraction(2, 5);  // Minimum fraction of time spent rendering.
 	const Rational updateFraction = Rational(1) - renderFraction;
 
-	countUpdate(); // kick off with correct counts
+	countUpdate(false); // kick off with correct counts
 
 	while (true)
 	{
