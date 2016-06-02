@@ -290,9 +290,6 @@ static UDWORD			statID;
 /* The stats for the current getStructPos */
 static BASE_STATS		*psPositionStats;
 
-/* The tab positions of the object form when the structure form is displayed */
-static UWORD			objMajor;
-
 /* Store a list of stats pointers from the main structure stats */
 static STRUCTURE_STATS	**apsStructStatsList;
 
@@ -719,15 +716,6 @@ static void intDoScreenRefresh(void)
 				intRemoveStatsNoAnim();
 			}
 
-			if (psObjSelected &&
-			    psObjSelected->died)
-			{
-				// refresh when unit dies
-				psObjSelected = NULL;
-				objMajor = 0;
-				statMajor = 0;
-			}
-
 			// see if there was a delivery point being positioned
 			psFlag = intFindSelectedDelivPoint();
 
@@ -1120,6 +1108,12 @@ void hciUpdate()
 		{
 			apsPreviousObj[i] = NULL;
 		}
+	}
+
+	if (psObjSelected && psObjSelected->died)
+	{
+		// refresh when unit dies
+		psObjSelected = nullptr;
 	}
 }
 
@@ -1757,7 +1751,7 @@ static void intAddObjectStats(BASE_OBJECT *psObj, UDWORD id)
 	intStopStructPosition();
 
 	/* Get the current tab pos */
-	objMajor = ((ListTabWidget *)widgGetFromID(psWScreen, IDOBJ_TABFORM))->currentPage();
+	int objMajor = ((ListTabWidget *)widgGetFromID(psWScreen, IDOBJ_TABFORM))->currentPage();
 
 	// Store the tab positions.
 	if (intMode == INT_STAT)
@@ -2247,7 +2241,7 @@ static void intProcessStats(UDWORD id)
 				}
 
 				// Get the tabs on the object form
-				objMajor = ((ListTabWidget *)widgGetFromID(psWScreen, IDOBJ_TABFORM))->currentPage();
+				int objMajor = ((ListTabWidget *)widgGetFromID(psWScreen, IDOBJ_TABFORM))->currentPage();
 
 				// Close the stats box
 				intRemoveStats();
@@ -2286,7 +2280,7 @@ static void intProcessStats(UDWORD id)
 	else if (id == IDSTAT_CLOSE)
 	{
 		/* Get the tabs on the object form */
-		objMajor = ((ListTabWidget *)widgGetFromID(psWScreen, IDOBJ_TABFORM))->currentPage();
+		int objMajor = ((ListTabWidget *)widgGetFromID(psWScreen, IDOBJ_TABFORM))->currentPage();
 
 		/* Close the structure box without doing anything */
 		intRemoveStats();
