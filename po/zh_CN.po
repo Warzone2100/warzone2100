@@ -10178,7 +10178,7 @@ msgstr "来自核武器的沉重打击。在核武器打击中的幸存者受到
 
 #: data/base/sequenceaudio/devastation.txt:11
 msgid "We'd fled Seattle early in '86. We'd heard that the Rocky Mountains were relatively rad-free."
-msgstr "在1986年初，我们从西雅图逃出。我们听所Rocky Moountain的核辐射危险相对较低。"
+msgstr "在2086年初，我们从西雅图逃出。我们听所Rocky Moountain的核辐射危险相对较低。"
 
 #: data/base/sequenceaudio/devastation.txt:13
 msgid "After fighting off bands of marauders we came across the base. Its personnel were dead. Killed by any one of a number of virulent diseases."
