@@ -2832,9 +2832,10 @@ static void loadMapSettings2()
 		{
 			sstrcpy(nameOverrides[i], ini.value("name").toString().toUtf8().constData());
 		}
+		NetPlay.players[i].position = MAX_PLAYERS;  // Invalid value, fix later.
 		if (ini.contains("position"))
 		{
-			changePosition(i, ini.value("position", NetPlay.players[i].position).toInt());
+			NetPlay.players[i].position = std::min(std::max(ini.value("position").toInt(), 0), MAX_PLAYERS);
 		}
 		if (ini.contains("difficulty"))
 		{
@@ -2849,6 +2850,35 @@ static void loadMapSettings2()
 			}
 		}
 		ini.endGroup();
+	}
+
+	// Fix duplicate or unset player positions.
+	PlayerMask havePosition = 0;
+	for (int i = 0; i < MAX_PLAYERS; ++i)
+	{
+		if (NetPlay.players[i].position < MAX_PLAYERS)
+		{
+			PlayerMask old = havePosition;
+			havePosition |= PlayerMask(1) << NetPlay.players[i].position;
+			if (havePosition == old)
+			{
+				ASSERT(false, "Duplicate position %d", NetPlay.players[i].position);
+				NetPlay.players[i].position = MAX_PLAYERS;
+			}
+		}
+	}
+	int pos = 0;
+	for (int i = 0; i < MAX_PLAYERS; ++i)
+	{
+		if (NetPlay.players[i].position >= MAX_PLAYERS)
+		{
+			while ((havePosition & (PlayerMask(1) << pos)) != 0)
+			{
+				++pos;
+			}
+			NetPlay.players[i].position = pos;
+			++pos;
+		}
 	}
 }
 
