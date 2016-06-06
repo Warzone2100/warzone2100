@@ -2549,17 +2549,13 @@ static void intObjectDied(UDWORD objID)
 /* Tell the interface a construction droid has finished building */
 void intBuildFinished(DROID *psDroid)
 {
-	UDWORD	droidID;
-	DROID	*psCurr;
-
 	ASSERT_OR_RETURN(, psDroid != NULL, "Invalid droid pointer");
 
-	if ((intMode == INT_OBJECT || intMode == INT_STAT) &&
-	    objMode == IOBJ_BUILD)
+	if ((intMode == INT_OBJECT || intMode == INT_STAT) && objMode == IOBJ_BUILD)
 	{
-		/* Find which button the droid is on and clear it's stats */
-		droidID = 0;
-		for (psCurr = apsDroidLists[selectedPlayer]; psCurr; psCurr = psCurr->psNext)
+		// Find which button the droid is on and clear its stats
+		unsigned droidID = 0;
+		for (DROID *psCurr = apsDroidLists[selectedPlayer]; psCurr; psCurr = psCurr->psNext)
 		{
 			if (objSelectFunc((BASE_OBJECT *)psCurr))
 			{
@@ -2577,23 +2573,20 @@ void intBuildFinished(DROID *psDroid)
 /* Tell the interface a construction droid has started building*/
 void intBuildStarted(DROID *psDroid)
 {
-	UDWORD	droidID;
-	DROID	*psCurr;
-
 	ASSERT_OR_RETURN(, psDroid != NULL, "Invalid droid pointer");
 
-	if ((intMode == INT_OBJECT || intMode == INT_STAT) &&
-	    objMode == IOBJ_BUILD)
+	if ((intMode == INT_OBJECT || intMode == INT_STAT) && objMode == IOBJ_BUILD)
 	{
-		/* Find which button the droid is on and clear it's stats */
-		droidID = 0;
-		for (psCurr = apsDroidLists[selectedPlayer]; psCurr; psCurr = psCurr->psNext)
+		// Find which button the droid is on and clear its stats
+		unsigned droidID = 0;
+		for (DROID *psCurr = apsDroidLists[selectedPlayer]; psCurr; psCurr = psCurr->psNext)
 		{
-			if (objSelectFunc((BASE_OBJECT *)psCurr))
+			if (objSelectFunc(psCurr))
 			{
 				if (psCurr == psDroid)
 				{
-					intSetStats(droidID + IDOBJ_STATSTART, ((STRUCTURE *)psCurr->order.psObj)->pStructureType);
+					STRUCTURE *target = castStructure(psCurr->order.psObj);
+					intSetStats(droidID + IDOBJ_STATSTART, target != nullptr? target->pStructureType : nullptr);
 					break;
 				}
 				droidID++;
