@@ -1950,7 +1950,8 @@ void orderDroidObj(DROID *psDroid, DROID_ORDER order, BASE_OBJECT *psObj, QUEUE_
 {
 	ASSERT(psDroid != NULL, "Invalid unit pointer");
 	ASSERT(validOrderForObj(order), "Invalid order for object");
-	ASSERT(!isBlueprint(psObj), "Target %s is a blueprint", objInfo(psObj));
+	ASSERT_OR_RETURN(, !isBlueprint(psObj), "Target %s is a blueprint", objInfo(psObj));
+	ASSERT_OR_RETURN(, !psObj->died, "Target dead");
 
 	DroidOrder sOrder(order, psObj);
 	if (mode == ModeQueue) //ajl

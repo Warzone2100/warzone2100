@@ -333,7 +333,7 @@ void counterBatteryFire(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget)
 				}
 				else if (psViewer->type == OBJ_STRUCTURE)
 				{
-					((STRUCTURE *)psViewer)->psTarget[0] = psAttacker;
+					setStructureTarget((STRUCTURE *)psViewer, psAttacker, 0, ORIGIN_CB_SENSOR);
 				}
 			}
 		}

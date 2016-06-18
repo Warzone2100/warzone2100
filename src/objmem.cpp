@@ -90,6 +90,51 @@ void objmemShutdown(void)
 {
 }
 
+// Check that psVictim is not referred to by any other object in the game. We can dump out some extra data in debug builds that help track down sources of dangling pointer errors.
+#ifdef DEBUG
+#define BADREF(func, line) "Illegal reference to object %d from %s line %d", psVictim->id, func, line
+#else
+#define BADREF(func, line) "Illegal reference to object %d", psVictim->id
+#endif
+static bool checkReferences(BASE_OBJECT *psVictim)
+{
+	for (int plr = 0; plr < MAX_PLAYERS; ++plr)
+	{
+		for (STRUCTURE *psStruct = apsStructLists[plr]; psStruct != nullptr; psStruct = psStruct->psNext)
+		{
+			if (psStruct == psVictim)
+			{
+				continue;  // Don't worry about self references.
+			}
+
+			for (unsigned i = 0; i < psStruct->numWeaps; ++i)
+			{
+				ASSERT_OR_RETURN(false, psStruct->psTarget[i] != psVictim, BADREF(psStruct->targetFunc[i], psStruct->targetLine[i]));
+			}
+		}
+		for (DROID *psDroid = apsDroidLists[plr]; psDroid != nullptr; psDroid = psDroid->psNext)
+		{
+			if (psDroid == psVictim)
+			{
+				continue;  // Don't worry about self references.
+			}
+
+			ASSERT_OR_RETURN(false, psDroid->order.psObj != psVictim, "Illegal reference to object %d", psVictim->id);
+
+			ASSERT_OR_RETURN(false, psDroid->psBaseStruct != psVictim, "Illegal reference to object %d", psVictim->id);
+
+			for (unsigned i = 0; i < psDroid->numWeaps; ++i)
+			{
+				if (psDroid->psActionTarget[i] == psVictim)
+				{
+					ASSERT_OR_RETURN(false, psDroid->psActionTarget[i] != psVictim, BADREF(psDroid->actionTargetFunc[i], psDroid->actionTargetLine[i]));
+				}
+			}
+		}
+	}
+	return true;
+}
+
 /* Remove an object from the destroyed list, finally freeing its memory
  * Hopefully by this time, no pointers still refer to it! */
 static bool objmemDestroy(BASE_OBJECT *psObj)
@@ -98,18 +143,10 @@ static bool objmemDestroy(BASE_OBJECT *psObj)
 	{
 	case OBJ_DROID:
 		debug(LOG_MEMORY, "freeing droid at %p", psObj);
-		if (!droidCheckReferences((DROID *)psObj))
-		{
-			return false;
-		}
 		break;
 
 	case OBJ_STRUCTURE:
 		debug(LOG_MEMORY, "freeing structure at %p", psObj);
-		if (!structureCheckReferences((STRUCTURE *)psObj))
-		{
-			return false;
-		}
 		break;
 
 	case OBJ_FEATURE:
@@ -117,7 +154,11 @@ static bool objmemDestroy(BASE_OBJECT *psObj)
 		break;
 
 	default:
-		ASSERT(!"unknown object type", "objmemDestroy: unknown object type in destroyed list at 0x%p", psObj);
+		ASSERT(!"unknown object type", "unknown object type in destroyed list at 0x%p", psObj);
+	}
+	if (!checkReferences(psObj))
+	{
+		return false;
 	}
 	debug(LOG_MEMORY, "BASE_OBJECT* 0x%p is freed.", psObj);
 	delete psObj;

@@ -526,7 +526,8 @@ static SDWORD targetAttackWeight(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker,
 // Returns integer representing target priority, -1 if failed
 int aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot, int extraRange)
 {
-	SDWORD				bestMod = 0, newMod, failure = -1;
+	constexpr int failure = -1;
+	int bestMod = 0;
 	BASE_OBJECT                     *psTarget = NULL, *bestTarget = NULL, *tempTarget;
 	bool				electronic = false;
 	STRUCTURE			*targetStructure;
@@ -670,7 +671,7 @@ int aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot, i
 			/* Check if our weapon is most effective against this object */
 			if (psTarget != NULL && psTarget == targetInQuestion)		//was assigned?
 			{
-				newMod = targetAttackWeight(psTarget, (BASE_OBJECT *)psDroid, weapon_slot);
+				int newMod = targetAttackWeight(psTarget, (BASE_OBJECT *)psDroid, weapon_slot);
 
 				/* Remember this one if it's our best target so far */
 				if (newMod >= 0 && (newMod > bestMod || bestTarget == NULL))

@@ -307,9 +307,6 @@ extern bool cyborgDroid(const DROID *psDroid);
 bool isConstructionDroid(DROID const *psDroid);
 bool isConstructionDroid(BASE_OBJECT const *psObject);
 
-// check for illegal references to droid we want to release
-bool droidCheckReferences(DROID *psVictimDroid);
-
 /** Check if droid is in a legal world position and is not on its way to drive off the map. */
 bool droidOnMap(const DROID *psDroid);
 

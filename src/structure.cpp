@@ -7188,68 +7188,6 @@ StructureBounds getStructureBounds(STRUCTURE_STATS const *stats, Vector2i pos, u
 	return StructureBounds(map, size);
 }
 
-// Check that psVictimStruct is not referred to by any other object in the game
-bool structureCheckReferences(STRUCTURE *psVictimStruct)
-{
-	int plr, i;
-
-	for (plr = 0; plr < MAX_PLAYERS; plr++)
-	{
-		STRUCTURE *psStruct;
-		DROID *psDroid;
-
-		for (psStruct = apsStructLists[plr]; psStruct != NULL; psStruct = psStruct->psNext)
-		{
-			for (i = 0; i < psStruct->numWeaps; i++)
-			{
-				if (psStruct->psTarget[i] && psStruct->psTarget[i]->type == OBJ_STRUCTURE
-				    && (STRUCTURE *)psStruct->psTarget[i] == psVictimStruct && psVictimStruct != psStruct)
-				{
-#ifdef DEBUG
-					ASSERT(!"Illegal reference to structure", "Illegal reference to structure from %s line %d",
-					       psStruct->targetFunc[i], psStruct->targetLine[i]);
-#endif
-					return false;
-				}
-			}
-		}
-		for (psDroid = apsDroidLists[plr]; psDroid != NULL; psDroid = psDroid->psNext)
-		{
-			if (psDroid->order.psObj && psDroid->order.psObj->type == OBJ_STRUCTURE
-			    && (STRUCTURE *)psDroid->order.psObj == psVictimStruct)
-			{
-#ifdef DEBUG
-				ASSERT(!"Illegal reference to structure", "Illegal reference to structure from %s line %d",
-				       psDroid->targetFunc, psDroid->targetLine);
-#endif
-				return false;
-			}
-			for (i = 0; i < psDroid->numWeaps; i++)
-			{
-				if (psDroid->psActionTarget[i] && psDroid->psActionTarget[i]->type == OBJ_STRUCTURE
-				    && (STRUCTURE *)psDroid->psActionTarget[i] == psVictimStruct)
-				{
-#ifdef DEBUG
-					ASSERT(!"Illegal reference to structure", "Illegal action reference to structure from %s line %d",
-					       psDroid->actionTargetFunc[i], psDroid->actionTargetLine[i]);
-#endif
-					return false;
-				}
-			}
-			if (psDroid->psBaseStruct && psDroid->psBaseStruct->type == OBJ_STRUCTURE
-			    && (STRUCTURE *)psDroid->psBaseStruct == psVictimStruct)
-			{
-#ifdef DEBUG
-				ASSERT(!"Illegal reference to structure", "Illegal action reference to structure from %s line %d",
-				       psDroid->baseFunc, psDroid->baseLine);
-#endif
-				return false;
-			}
-		}
-	}
-	return true;
-}
-
 void checkStructure(const STRUCTURE *psStructure, const char *const location_description, const char *function, const int recurse)
 {
 	if (recurse < 0)

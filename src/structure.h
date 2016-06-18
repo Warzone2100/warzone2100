@@ -367,8 +367,6 @@ extern bool checkFactoryExists(UDWORD player, UDWORD factoryType, UDWORD inc);
 selected - returns true if valid*/
 extern bool lasSatStructSelected(STRUCTURE *psStruct);
 
-bool structureCheckReferences(STRUCTURE *psVictimStruct);
-
 void cbNewDroid(STRUCTURE *psFactory, DROID *psDroid);
 
 WZ_DECL_PURE Vector2i getStructureSize(STRUCTURE const *psBuilding);
@@ -411,10 +409,10 @@ static inline Rotation structureGetInterpolatedWeaponRotation(STRUCTURE *psStruc
 #define setStructureTarget(_psBuilding, _psNewTarget, _idx, _targetOrigin) _setStructureTarget(_psBuilding, _psNewTarget, _idx, _targetOrigin, __LINE__, __FUNCTION__)
 static inline void _setStructureTarget(STRUCTURE *psBuilding, BASE_OBJECT *psNewTarget, UWORD idx, TARGET_ORIGIN targetOrigin, int line, const char *func)
 {
-	assert(idx < STRUCT_MAXWEAPS);
+	ASSERT_OR_RETURN(, idx < STRUCT_MAXWEAPS, "Bad index");
+	ASSERT_OR_RETURN(, psNewTarget == nullptr || !psNewTarget->died, "setStructureTarget set dead target");
 	psBuilding->psTarget[idx] = psNewTarget;
 	psBuilding->targetOrigin[idx] = targetOrigin;
-	ASSERT(psNewTarget == NULL || !psNewTarget->died, "setStructureTarget set dead target");
 #ifdef DEBUG
 	psBuilding->targetLine[idx] = line;
 	sstrcpy(psBuilding->targetFunc[idx], func);

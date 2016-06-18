@@ -663,7 +663,7 @@ bool recvDroidInfo(NETQUEUE queue)
 			}
 			if (!canGiveOrdersFor(queue.index, psDroid->player))
 			{
-				debug(LOG_WARNING, "Droid order for wrong player.");
+				debug(LOG_WARNING, "Droid order (by %d) for wrong player (%d).", queue.index, psDroid->player);
 				syncDebug("Wrong player.");
 				continue;
 			}

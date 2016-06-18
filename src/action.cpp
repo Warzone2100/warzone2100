@@ -1875,6 +1875,8 @@ void actionUpdateDroid(DROID *psDroid)
 /* Overall action function that is called by the specific action functions */
 static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 {
+	ASSERT_OR_RETURN(, psAction->psObj == nullptr || !psAction->psObj->died, "Droid dead");
+
 	SDWORD			pbx, pby;
 	WEAPON_STATS		*psWeapStats = getWeaponStats(psDroid, 0);
 	Vector2i                pos;
