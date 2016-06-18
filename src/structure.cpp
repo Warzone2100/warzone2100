@@ -1284,18 +1284,20 @@ void alignStructure(STRUCTURE *psBuilding)
 		psBuilding->pos.z = TILE_MIN_HEIGHT;
 		psBuilding->foundationDepth = TILE_MAX_HEIGHT;
 
-		int h = map_Height(psBuilding->pos.x + s->max.x, psBuilding->pos.y + s->min.z);
-		h = std::max(h, map_Height(psBuilding->pos.x + s->max.x, psBuilding->pos.y + s->max.z));
-		h = std::max(h, map_Height(psBuilding->pos.x + s->min.x, psBuilding->pos.y + s->max.z));
-		h = std::max(h, map_Height(psBuilding->pos.x + s->min.x, psBuilding->pos.y + s->min.z));
-		syncDebug("pointHeight=%d", h);  // s->max is based on floats! If this causes desynchs, need to fix!
-		psBuilding->pos.z = std::max(psBuilding->pos.z, h);
-		h = map_Height(psBuilding->pos.x + s->max.x, psBuilding->pos.y + s->min.z);
-		h = std::min(h, map_Height(psBuilding->pos.x + s->max.x, psBuilding->pos.y + s->max.z));
-		h = std::min(h, map_Height(psBuilding->pos.x + s->min.x, psBuilding->pos.y + s->max.z));
-		h = std::min(h, map_Height(psBuilding->pos.x + s->min.x, psBuilding->pos.y + s->min.z));
-		psBuilding->foundationDepth = std::min<float>(psBuilding->foundationDepth, h);
-		syncDebug("foundationDepth=%d", h);  // s->max is based on floats! If this causes desynchs, need to fix!
+		Vector2i dir = iSinCosR(psBuilding->rot.direction, 1);
+		// Rotate s->max.{x, z} and s->min.{x, z} by angle rot.direction.
+		Vector2i p1 = {s->max.x * dir.y - s->max.z * dir.x, s->max.x * dir.x + s->max.z * dir.y};
+		Vector2i p2 = {s->min.x * dir.y - s->min.z * dir.x, s->min.x * dir.x + s->min.z * dir.y};
+
+		int h1 = map_Height(psBuilding->pos.x + p1.x, psBuilding->pos.y + p2.y);
+		int h2 = map_Height(psBuilding->pos.x + p1.x, psBuilding->pos.y + p1.y);
+		int h3 = map_Height(psBuilding->pos.x + p2.x, psBuilding->pos.y + p1.y);
+		int h4 = map_Height(psBuilding->pos.x + p2.x, psBuilding->pos.y + p2.y);
+		int minH = std::min({h1, h2, h3, h4});
+		int maxH = std::max({h1, h2, h3, h4});
+		psBuilding->pos.z = std::max(psBuilding->pos.z, maxH);
+		psBuilding->foundationDepth = std::min<float>(psBuilding->foundationDepth, minH);
+		syncDebug("minH=%d,maxH=%d,pointHeight=%d", minH, maxH, psBuilding->pos.z);  // s->max is based on floats! If this causes desynchs, need to fix!
 	}
 }
 
