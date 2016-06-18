@@ -385,6 +385,11 @@ void pie_SetShaderStretchDepth(float stretch)
 	shaderStretch = stretch;
 }
 
+float pie_GetShaderStretchDepth()
+{
+	return shaderStretch;
+}
+
 void pie_ActivateShader(int shaderMode, const iIMDShape *shape, PIELIGHT teamcolour, PIELIGHT colour)
 {
 	int maskpage = shape->tcmaskpage;

@@ -135,6 +135,7 @@ typedef struct
 	PIELIGHT	teamcolour;
 	int		flag;
 	int		flag_data;
+	float		stretch;
 } SHAPE;
 
 static std::vector<ShadowcastingShape> scshapes;
@@ -428,6 +429,7 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, int
 		tshape.teamcolour = teamcolour;
 		tshape.flag = pieFlag;
 		tshape.flag_data = pieFlagData;
+		tshape.stretch = pie_GetShaderStretchDepth();
 		pie_GetMatrix(&tshape.matrix[0][0]);
 
 		if (pieFlag & pie_HEIGHT_SCALED)	// construct
@@ -549,14 +551,18 @@ void pie_RemainingPasses(void)
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 	for (unsigned i = 0; i < shapes.size(); ++i)
 	{
+		pie_SetShaderStretchDepth(shapes[i].stretch);
 		pie_Draw3DShape2(shapes[i].shape, shapes[i].frame, shapes[i].colour, shapes[i].teamcolour, shapes[i].flag, shapes[i].flag_data, shapes[i].matrix);
+		pie_SetShaderStretchDepth(0);
 	}
 	// Draw translucent models last
 	// TODO, sort list by Z order to do translucency correctly
 	GL_DEBUG("Remaining passes - translucent models");
 	for (unsigned i = 0; i < tshapes.size(); ++i)
 	{
+		pie_SetShaderStretchDepth(tshapes[i].stretch);
 		pie_Draw3DShape2(tshapes[i].shape, tshapes[i].frame, tshapes[i].colour, tshapes[i].teamcolour, tshapes[i].flag, tshapes[i].flag_data, tshapes[i].matrix);
+		pie_SetShaderStretchDepth(0);
 	}
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_NORMAL_ARRAY);

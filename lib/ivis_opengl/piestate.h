@@ -90,6 +90,7 @@ GLuint pie_LoadShader(const char *programName, const char *vertexPath, const cha
 void pie_ActivateShader(int shaderMode, const iIMDShape *shape, PIELIGHT teamcolour, PIELIGHT colour);
 void pie_DeactivateShader();
 void pie_SetShaderStretchDepth(float stretch);
+float pie_GetShaderStretchDepth();
 void pie_SetShaderTime(uint32_t shaderTime);
 void pie_SetShaderEcmEffect(bool value);
 
