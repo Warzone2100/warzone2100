@@ -1,3 +1,16 @@
+2016-06-19: Version 3.2.0 beta4
+ * General:
+   * Change: Add default teams for Clover, Manhattan and MizaMaze (commit:d53404f63bdc543e577ca3ecd00e0ab783bdc8a5)
+   * Fix: Crash if construction droids were doing construction without being ordered to (commit:4c6d778351333bde00bedb1958965df23ccd1c98, ticket:4417, ticket:4417)
+   * Fix: Loading of default teams, given non-default starting positions (commit:d53404f63bdc543e577ca3ecd00e0ab783bdc8a5, ticket:4341)
+   * Fix: Desynch on destroying droids while trying to build droids at droid limit (commit:63506e684962a0639927abe5d7866f4b0bf1c6b0)
+ * Graphics:
+   * Change: Add team colour to repair facility turret (commit:2fd3a506080eaaca2e9cb96bf90e36199c152ab2, ticket:4415)
+   * Fix: Stretch to ground of defensive and wall structures did not work (commit:94d0afe21c515e63f8543aa694eba43be6584a95)
+   * Fix: Structure direction not taken into account when stretching to ground (commit:04df320e5a4df64c9e06153d5da00f951db55af8, ticket:4366)
+ * Balance:
+   * Fix: Weapon rate of fire upgrades did not take effect on burst-fire weapons (commit:9498600700129d69d3633adecef76ea1a4de33c0, ticket:4411)
+
 2016-05-28: Version 3.2.0 beta3
  * General:
    * Fix: Some maps would not load or give wrong minimap resolution (commit:e75d0f926540a505ca750691bdf0a1a95e8df8b4, ticket:4404, ticket:4405)
