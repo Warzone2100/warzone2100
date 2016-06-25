@@ -186,7 +186,7 @@ static void showPasswordForm(void);
 
 // Game option functions
 static	void	addGameOptions();
-static	void	addChatBox(void);
+static void addChatBox(bool preserveOldChat = false);
 static void		addConsoleBox(void);
 static	void	disableMultiButs(void);
 static	void	processMultiopWidgets(UDWORD);
@@ -2596,7 +2596,7 @@ void kickPlayer(uint32_t player_id, const char *reason, LOBBY_ERROR_TYPES type)
 	NETplayerKicked(player_id);
 }
 
-static void addChatBox(void)
+static void addChatBox(bool preserveOldChat)
 {
 	if (widgGetFromID(psWScreen, FRONTEND_TOPFORM))
 	{
@@ -2616,13 +2616,16 @@ static void addChatBox(void)
 
 	addSideText(FRONTEND_SIDETEXT4, MULTIOP_CHATBOXX - 3, MULTIOP_CHATBOXY, _("CHAT"));
 
-	flushConsoleMessages();											// add the chatbox.
-	initConsoleMessages();
+	if (!preserveOldChat)
+	{
+		flushConsoleMessages();  // add the chatbox.
+		initConsoleMessages();
+		setConsoleBackdropStatus(false);
+		setConsoleSizePos(MULTIOP_CHATBOXX + 4 + D_W, MULTIOP_CHATBOXY + 14 + D_H, MULTIOP_CHATBOXW - 4);
+		setConsolePermanence(true, true);
+		setConsoleLineInfo(5);  // use x lines on chat window
+	}
 	enableConsoleDisplay(true);
-	setConsoleBackdropStatus(false);
-	setConsoleSizePos(MULTIOP_CHATBOXX + 4 + D_W, MULTIOP_CHATBOXY + 14 + D_H, MULTIOP_CHATBOXW - 4);
-	setConsolePermanence(true, true);
-	setConsoleLineInfo(5);											// use x lines on chat window
 
 	W_EDBINIT sEdInit;                                                                                      // add the edit box
 	sEdInit.formID = MULTIOP_CHATBOX;
@@ -3867,7 +3870,7 @@ bool startMultiOptions(bool bReenter)
 	{
 		addPlayerBox(false);								// Players
 		addGameOptions();
-		addChatBox();
+		addChatBox(bReenter);
 
 		if (ingame.bHostSetup)
 		{
@@ -3903,7 +3906,7 @@ bool startMultiOptions(bool bReenter)
 			{
 				ssprintf(buf, _("Hit the ready box to begin your challenge!"));
 			}
-			else
+			else if (!bHosted)
 			{
 				ssprintf(buf, _("Press the start hosting button to begin hosting a game."));
 			}

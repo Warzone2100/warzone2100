@@ -1799,14 +1799,7 @@ void changeTitleMode(tMode mode)
 		startConnectionScreen();
 		break;
 	case MULTIOPTION:
-		if (oldMode == MULTILIMIT)
-		{
-			startMultiOptions(true);
-		}
-		else
-		{
-			startMultiOptions(false);
-		}
+		startMultiOptions(oldMode == MULTILIMIT);
 		break;
 	case GAMEFIND:
 		startGameFind();
