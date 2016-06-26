@@ -1,6 +1,6 @@
 {
     "AI": {
-        "js": "nullbot.js",
+        "js": "nb_generic.js",
         "name": "NullBot",
         "tip": "NullBot - an adaptive skirmish AI"
     }
