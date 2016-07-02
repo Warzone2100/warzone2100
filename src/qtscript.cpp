@@ -1322,7 +1322,7 @@ bool triggerEventChat(int from, int to, const char *message)
 			QScriptValueList args;
 			args += QScriptValue(from);
 			args += QScriptValue(to);
-			args += QScriptValue(message);
+			args += QScriptValue(QString(message));
 			callFunction(engine, "eventChat", args);
 		}
 	}
@@ -1349,7 +1349,7 @@ bool triggerEventBeacon(int from, int to, const char *message, int x, int y)
 			args += QScriptValue(to);
 			if (message)
 			{
-				args += QScriptValue(message);
+				args += QScriptValue(QString(message));
 			}
 			callFunction(engine, "eventBeacon", args);
 		}
