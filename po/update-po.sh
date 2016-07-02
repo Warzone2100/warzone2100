@@ -3,7 +3,9 @@
 # We need to be in the working copy's root directory
 cd "`dirname "$0"`/.."
 
-find data -name '*.json' -type f '-!' -path 'data/mp/multiplay/maps/*' -exec grep '"name": ".*"' {} + | sed -r 's/.*"name": "([^"]*)".*/_("\1")/' > po/custom/fromJson.txt
+find data -name '*.json' -type f '-!' -path 'data/mp/multiplay/maps/*' -exec \
+	grep '"name": ".*"' {} + |
+	sed -r 's/.*"name": "([^"]*)".*/_("\1")/' > po/custom/fromJson.txt
 
 # Add the comment to the top of the file
 cat > po/POTFILES.in << EOF
