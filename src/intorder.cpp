@@ -702,39 +702,24 @@ bool intAddOrder(BASE_OBJECT *psObj)
 			{
 			case ORD_BTYPE_RADIO:
 			case ORD_BTYPE_BOOLEAN:
-				if ((State & OrderButtons[OrdIndex].StateMask) == (UDWORD)OrderButtons[OrdIndex].States[i])
-				{
-					widgSetButtonState(psWScreen, sButInit.id, WBUT_CLICKLOCK);
-				}
-				else
-				{
-					widgSetButtonState(psWScreen, sButInit.id, 0);
-				}
+			 {
+				bool selected = (State & OrderButtons[OrdIndex].StateMask) == (UDWORD)OrderButtons[OrdIndex].States[i];
+				widgSetButtonState(psWScreen, sButInit.id, selected? WBUT_CLICKLOCK : 0);
 				break;
-
+			 }
 			case ORD_BTYPE_BOOLEAN_DEPEND:
-				if ((State & OrderButtons[OrdIndex].StateMask) == (UDWORD)OrderButtons[OrdIndex].States[i])
-				{
-					widgSetButtonState(psWScreen, sButInit.id, WBUT_CLICKLOCK);
-				}
-				else
-				{
-					if (i == 0)
-					{
-						widgSetButtonState(psWScreen, sButInit.id, 0);
-					}
-					else
-					{
-						widgSetButtonState(psWScreen, sButInit.id, WBUT_DISABLE);
-					}
-				}
+			 {
+				bool selected = (State & OrderButtons[OrdIndex].StateMask) == (UDWORD)OrderButtons[OrdIndex].States[i];
+				bool first = i == 0;
+				widgSetButtonState(psWScreen, sButInit.id, selected? WBUT_CLICKLOCK : first? 0 : WBUT_DISABLE);
 				break;
+			 }
 			case ORD_BTYPE_BOOLEAN_COMBINE:
-				if (State & (UDWORD)OrderButtons[OrdIndex].States[i])
-				{
-					widgSetButtonState(psWScreen, sButInit.id, WBUT_CLICKLOCK);
-				}
+			 {
+				bool selected = State & (UDWORD)OrderButtons[OrdIndex].States[i];
+				widgSetButtonState(psWScreen, sButInit.id, selected? WBUT_CLICKLOCK : 0);
 				break;
+			 }
 			}
 
 			// may not add a button if the factory doesn't exist
@@ -1045,39 +1030,24 @@ static bool intRefreshOrderButtons(void)
 			{
 			case ORD_BTYPE_RADIO:
 			case ORD_BTYPE_BOOLEAN:
-				if ((State & OrderButtons[OrdIndex].StateMask) == (UDWORD)OrderButtons[OrdIndex].States[i])
-				{
-					widgSetButtonState(psWScreen, id, WBUT_CLICKLOCK);
-				}
-				else
-				{
-					widgSetButtonState(psWScreen, id, 0);
-				}
+			 {
+				bool selected = (State & OrderButtons[OrdIndex].StateMask) == (UDWORD)OrderButtons[OrdIndex].States[i];
+				widgSetButtonState(psWScreen, id, selected? WBUT_CLICKLOCK : 0);
 				break;
-
+			 }
 			case ORD_BTYPE_BOOLEAN_DEPEND:
-				if ((State & OrderButtons[OrdIndex].StateMask) == (UDWORD)OrderButtons[OrdIndex].States[i])
-				{
-					widgSetButtonState(psWScreen, id, WBUT_CLICKLOCK);
-				}
-				else
-				{
-					if (i == 0)
-					{
-						widgSetButtonState(psWScreen, id, 0);
-					}
-					else
-					{
-						widgSetButtonState(psWScreen, id, WBUT_DISABLE);
-					}
-				}
+			 {
+				bool selected = (State & OrderButtons[OrdIndex].StateMask) == (UDWORD)OrderButtons[OrdIndex].States[i];
+				bool first = i == 0;
+				widgSetButtonState(psWScreen, id, selected? WBUT_CLICKLOCK : first? 0 : WBUT_DISABLE);
 				break;
+			 }
 			case ORD_BTYPE_BOOLEAN_COMBINE:
-				if (State & (UDWORD)OrderButtons[OrdIndex].States[i])
-				{
-					widgSetButtonState(psWScreen, id, WBUT_CLICKLOCK);
-				}
+			 {
+				bool selected = State & (UDWORD)OrderButtons[OrdIndex].States[i];
+				widgSetButtonState(psWScreen, id, selected? WBUT_CLICKLOCK : 0);
 				break;
+			 }
 			}
 
 			id ++;
