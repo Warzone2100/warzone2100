@@ -943,10 +943,10 @@ bool loadLabels(const char *filename)
 			p.id = groupidx--;
 			p.type = SCRIPT_GROUP;
 			p.player = ini.value("player").toInt();
-			QStringList list = ini.value("members").toStringList();
-			for (QStringList::iterator j = list.begin(); j != list.end(); j++)
+			QStringList memberList = ini.value("members").toStringList();
+			for (QString const &j : memberList)
 			{
-				int id = (*j).toInt();
+				int id = j.toInt();
 				BASE_OBJECT *psObj = IdToPointer(id, p.player);
 				ASSERT(psObj, "Unit %d belonging to player %d not found from label %s",
 				       id, p.player, list[i].toUtf8().constData());
