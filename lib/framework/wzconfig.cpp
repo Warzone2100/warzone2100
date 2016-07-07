@@ -40,6 +40,7 @@ WzConfig::~WzConfig()
 		QByteArray json = doc.toJson();
 		saveFile(mFilename.toUtf8().constData(), json.constData(), json.size());
 	}
+	debug(LOG_SAVE, "%s %s", mWarning == ReadAndWrite? "Saving" : "Closing", mFilename.toUtf8().constData());
 }
 
 static QJsonObject jsonMerge(QJsonObject original, const QJsonObject override)
@@ -119,11 +120,20 @@ WzConfig::WzConfig(const QString &name, WzConfig::warning warning, QObject *pare
 		debug(LOG_INFO, "jsondiff \"%s\" loaded and merged", str.c_str());
 	}
 	PHYSFS_freeList(diffList);
+	debug(LOG_SAVE, "Opening %s", name.toUtf8().constData());
 }
 
 QStringList WzConfig::childGroups() const
 {
-	return mObj.keys();
+	QStringList keys;
+	for (QString const &key : mObj.keys())
+	{
+		if (mObj[key].isObject())
+		{
+			keys.push_back(key);
+		}
+	}
+	return keys;
 }
 
 QStringList WzConfig::childKeys() const
@@ -177,7 +187,7 @@ Vector3f WzConfig::vector3f(const QString &name)
 		return r;
 	}
 	QStringList v = value(name).toStringList();
-	ASSERT(v.size() == 3, "Bad list of %s", name.toUtf8().constData());
+	ASSERT(v.size() == 3, "%s: Bad list of %s", mFilename.toUtf8().constData(), name.toUtf8().constData());
 	r.x = v[0].toDouble();
 	r.y = v[1].toDouble();
 	r.z = v[2].toDouble();
@@ -201,7 +211,7 @@ Vector3i WzConfig::vector3i(const QString &name)
 		return r;
 	}
 	QStringList v = value(name).toStringList();
-	ASSERT(v.size() == 3, "Bad list of %s", name.toUtf8().constData());
+	ASSERT(v.size() == 3, "%s: Bad list of %s", mFilename.toUtf8().constData(), name.toUtf8().constData());
 	r.x = v[0].toInt();
 	r.y = v[1].toInt();
 	r.z = v[2].toInt();
@@ -247,7 +257,7 @@ bool WzConfig::beginGroup(const QString &prefix)
 			return false;
 		}
 		QJsonValue value = mObj.value(prefix);
-		ASSERT(value.isObject(), "beginGroup() on non-object key \"%s\"", prefix.toUtf8().constData());
+		ASSERT(value.isObject(), "%s: beginGroup() on non-object key \"%s\"", mFilename.toUtf8().constData(), prefix.toUtf8().constData());
 		mObj = value.toObject();
 	}
 	return true;
@@ -287,9 +297,9 @@ void WzConfig::beginArray(const QString &name)
 			return;
 		}
 		QJsonValue value = mObj.value(name);
-		ASSERT(value.isArray(), "beginArray() on non-array key \"%s\"", name.toUtf8().constData());
+		ASSERT(value.isArray(), "%s: beginArray() on non-array key \"%s\"", mFilename.toUtf8().constData(), name.toUtf8().constData());
 		mArray = value.toArray();
-		ASSERT(mArray.first().isObject(), "beginArray() on non-object array \"%s\"", name.toUtf8().constData());
+		ASSERT(mArray.first().isObject(), "%s: beginArray() on non-object array \"%s\"", mFilename.toUtf8().constData(), name.toUtf8().constData());
 		mObj = mArray.first().toObject();
 	}
 }

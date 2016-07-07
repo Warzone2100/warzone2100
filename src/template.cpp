@@ -151,6 +151,10 @@ DROID_TEMPLATE loadTemplateCommon(WzConfig &ini)
 	{
 		design.droidType = DROID_COMMAND;
 	}
+	else if (droidType == "REPAIR")
+	{
+		design.droidType = DROID_REPAIR;
+	}
 	else
 	{
 		ASSERT(false, "No such droid type \"%s\" for %s", droidType.toUtf8().constData(), getID(&design));
@@ -266,6 +270,8 @@ void saveTemplateCommon(WzConfig &ini, DROID_TEMPLATE *psCurr)
 	case DROID_CYBORG_REPAIR: ini.setValue("type", "CYBORG_REPAIR"); break;
 	case DROID_TRANSPORTER: ini.setValue("type", "TRANSPORTER"); break;
 	case DROID_SUPERTRANSPORTER: ini.setValue("type", "SUPERTRANSPORTER"); break;
+	case DROID_COMMAND: ini.setValue("type", "DROID_COMMAND"); break;
+	case DROID_REPAIR: ini.setValue("type", "REPAIR"); break;
 	case DROID_DEFAULT: ini.setValue("type", "DROID"); break;
 	default: ASSERT(false, "No such droid type \"%d\" for %s", psCurr->droidType, psCurr->name.toUtf8().constData());
 	}
