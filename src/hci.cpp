@@ -314,7 +314,7 @@ UDWORD			numExtraSys;
 COMPONENT_STATS	**apsExtraSysList;
 
 // store the objects that are being used for the object bar
-std::vector<BASE_OBJECT *> apsObjectList;
+static std::vector<BASE_OBJECT *> apsObjectList;
 
 /* Flags to check whether the power bars are currently on the screen */
 static bool				powerBarUp = false;
@@ -559,6 +559,8 @@ bool intInitialise(void)
 	// allocate the object list
 	apsObjectList.clear();
 
+	psObjSelected = nullptr;
+
 	intInitialiseGraphics();
 
 	psWScreen = new W_SCREEN;
@@ -627,6 +629,7 @@ void interfaceShutDown(void)
 	free(apsComponentList);
 	free(apsExtraSysList);
 	apsObjectList.clear();
+	psObjSelected = nullptr;
 
 	psWScreen = NULL;
 	apsStructStatsList = NULL;
