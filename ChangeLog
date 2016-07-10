@@ -1,3 +1,12 @@
+2016-07-10: Version 3.2.0
+ * General:
+   * Fix: Clear factory indicators when switching between commanders (commit:75da8d95bdd89724b8fe3d7b7816928e7773d071, ticket:1131)
+   * Fix: Do not clear chat on setting structure limits (commit:a10dc950080ec4ad757591f644afe1d2e917f74c, ticket:4276)
+   * Fix: Crash while loading map (commit:db886e7be065e3da25d1e7a106de5ede5e677a97, ticket:4426)
+   * Fix: Saving/loading of command and repair droids (commit:3c0e4c77da70c81e86e4383ec38e4a1da5e7e5de, ticket:4426)
+ * AI:
+   * Change: Update the NullBot AI to version 3.06 (commit:11ef36281652b2933d982bf2379f54dc2d4da6f5)
+
 2016-06-19: Version 3.2.0 beta4
  * General:
    * Change: Add default teams for Clover, Manhattan and MizaMaze (commit:d53404f63bdc543e577ca3ecd00e0ab783bdc8a5)
