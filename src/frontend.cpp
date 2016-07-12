@@ -378,7 +378,7 @@ static void startCampaignSelector()
 	QList<CAMPAIGN_FILE> list = readCampaignFiles();
 	for (int i = 0; i < list.size(); i++)
 	{
-		ssprintf(hackList[i], list[i].name.toUtf8().constData()); // since widget system is crazy and takes pointers not copies
+		ssprintf(hackList[i], "%s", list[i].name.toUtf8().constData()); // since widget system is crazy and takes pointers not copies
 		addTextButton(FRONTEND_CAMPAIGN_1 + i,  FRONTEND_POS1X, FRONTEND_POS2Y + 40 * i, hackList[i], WBUT_TXTCENTRE);
 	}
 	addSideText(FRONTEND_SIDETEXT, FRONTEND_SIDEX, FRONTEND_SIDEY, _("CAMPAIGNS"));
