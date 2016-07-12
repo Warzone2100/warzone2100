@@ -373,8 +373,8 @@ int32_t pie_RotateProject(const Vector3i *v3d, Vector2i *v2d)
 
 void pie_PerspectiveBegin(void)
 {
-	const float width = pie_GetVideoBufferWidth();
-	const float height = pie_GetVideoBufferHeight();
+	const float width = std::max(pie_GetVideoBufferWidth(), 1);  // Require width > 0 && height > 0, to avoid glScalef(1, 1, -1) crashing in some graphics drivers.
+	const float height = std::max(pie_GetVideoBufferHeight(), 1);
 	const float xangle = width / 6.0f;
 	const float yangle = height / 6.0f;
 
