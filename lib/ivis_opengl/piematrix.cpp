@@ -393,7 +393,7 @@ void pie_PerspectiveEnd(void)
 {
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glOrtho(0.0f, (double) pie_GetVideoBufferWidth(), (double) pie_GetVideoBufferHeight(), 0.0f, 1.0f, -1.0f);
+	glOrtho(0.0f, std::max(pie_GetVideoBufferWidth(), 1), std::max(pie_GetVideoBufferHeight(), 1), 0.0f, 1.0f, -1.0f);
 	glMatrixMode(GL_MODELVIEW);
 }
 

@@ -92,7 +92,8 @@
         "researchPoints": 1200,
         "researchPower": 37,
         "resultComponents": [
-            "CommandBrain01"
+            "CommandBrain01",
+            "CommandTurret1"
         ],
         "statID": "CommandBrain01"
     },
