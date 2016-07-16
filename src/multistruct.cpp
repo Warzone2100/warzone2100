@@ -199,8 +199,6 @@ bool recvDestroyStructure(NETQUEUE queue)
 		// Remove the struct from remote players machine
 		destroyStruct(psStruct, gameTime - deltaGameTime + 1);  // deltaGameTime is actually 0 here, since we're between updates. However, the value of gameTime - deltaGameTime + 1 will not change when we start the next tick.
 		turnOffMultiMsg(false);
-		// NOTE: I do not think this should be here!
-		technologyGiveAway(psStruct);
 	}
 
 	return true;

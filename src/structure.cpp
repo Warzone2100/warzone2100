@@ -4638,11 +4638,6 @@ bool destroyStruct(STRUCTURE *psDel, unsigned impactTime)
 
 	CHECK_STRUCTURE(psDel);
 
-	if (bMultiPlayer)
-	{
-		technologyGiveAway(psDel);  // Drop an artefact, if applicable.
-	}
-
 	/* Firstly, are we dealing with a wall section */
 	const STRUCTURE_TYPE type = psDel->pStructureType->type;
 	const bool bMinor = type == REF_WALL || type == REF_WALLCORNER;
@@ -4772,6 +4767,11 @@ bool destroyStruct(STRUCTURE *psDel, unsigned impactTime)
 	{
 		animObj_Remove(psDel->psCurAnim, psDel->psCurAnim->psAnim->uwID);
 		psDel->psCurAnim = NULL;
+	}
+
+	if (bMultiPlayer)
+	{
+		technologyGiveAway(psDel);  // Drop an artefact, if applicable.
 	}
 
 	// updates score stats only if not wall
