@@ -25,6 +25,8 @@
 
 #include "jpeg_encoder.h"
 
+#include <assert.h>
+
 typedef char INT8;
 typedef unsigned char UINT8;
 typedef short INT16;
@@ -283,130 +285,6 @@ static void quantization(INT16 *data, UINT8 *zigzag_table, INT16 *Temp, UINT16 *
 }
 
 
-static void read_400_format(JPEG_ENCODER_STRUCTURE *jpeg_encoder_structure, UINT8 *input_ptr)
-{
-	INT32 i, j;
-	INT16 *Y1_Ptr = Y1;
-
-	UINT16 rows = jpeg_encoder_structure->rows;
-	UINT16 cols = jpeg_encoder_structure->cols;
-	UINT16 incr = jpeg_encoder_structure->incr;
-
-	for (i = rows; i > 0; i--)
-	{
-		for (j = cols; j > 0; j--)
-		{
-			*Y1_Ptr++ = (*input_ptr++) - 128;
-		}
-
-		for (j = 8 - cols; j > 0; j--)
-		{
-			*Y1_Ptr = *(Y1_Ptr - 1);
-			Y1_Ptr++;
-		}
-
-		input_ptr += incr;
-	}
-
-	for (i = 8 - rows; i > 0; i--)
-	{
-		for (j = 8; j > 0; j--)
-		{
-			*Y1_Ptr = *(Y1_Ptr - 8);
-			Y1_Ptr++;
-		}
-	}
-}
-
-
-static void read_422_format(JPEG_ENCODER_STRUCTURE *jpeg_encoder_structure, UINT8 *input_ptr)
-{
-	INT32 i, j;
-	UINT16 Y1_cols, Y2_cols;
-
-	INT16 *Y1_Ptr = Y1;
-	INT16 *Y2_Ptr = Y2;
-	INT16 *CB_Ptr = CB;
-	INT16 *CR_Ptr = CR;
-
-	UINT16 rows = jpeg_encoder_structure->rows;
-	UINT16 cols = jpeg_encoder_structure->cols;
-	UINT16 incr = jpeg_encoder_structure->incr;
-
-	if (cols <= 8)
-	{
-		Y1_cols = cols;
-		Y2_cols = 0;
-	}
-	else
-	{
-		Y1_cols = 8;
-		Y2_cols = (UINT16)(cols - 8);
-	}
-
-	for (i = rows; i > 0; i--)
-	{
-		for (j = Y1_cols >> 1; j > 0; j--)
-		{
-			*CB_Ptr++ = (*input_ptr++) - 128;
-			*Y1_Ptr++ = (*input_ptr++) - 128;
-			*CR_Ptr++ = (*input_ptr++) - 128;
-			*Y1_Ptr++ = (*input_ptr++) - 128;
-		}
-
-		for (j = Y2_cols >> 1; j > 0; j--)
-		{
-			*CB_Ptr++ = (*input_ptr++) - 128;
-			*Y2_Ptr++ = (*input_ptr++) - 128;
-			*CR_Ptr++ = (*input_ptr++) - 128;
-			*Y2_Ptr++ = (*input_ptr++) - 128;
-		}
-
-		if (cols <= 8)
-		{
-			for (j = 8 - Y1_cols; j > 0; j--)
-			{
-				*Y1_Ptr = *(Y1_Ptr - 1);
-				Y1_Ptr++;
-			}
-
-			for (j = 8 - Y2_cols; j > 0; j--)
-			{
-				*Y2_Ptr = *(Y1_Ptr - 1);
-				Y2_Ptr++;
-			}
-		}
-		else
-		{
-			for (j = 8 - Y2_cols; j > 0; j--)
-			{
-				*Y2_Ptr = *(Y2_Ptr - 1);
-				Y2_Ptr++;
-			}
-		}
-
-		for (j = (16 - cols) >> 1; j > 0; j--)
-		{
-			*CB_Ptr = *(CB_Ptr - 1);  CB_Ptr++;
-			*CR_Ptr = *(CR_Ptr - 1);  CR_Ptr++;
-		}
-
-		input_ptr += incr;
-	}
-
-	for (i = 8 - rows; i > 0; i--)
-	{
-		for (j = 8; j > 0; j--)
-		{
-			*Y1_Ptr = *(Y1_Ptr - 8);  Y1_Ptr++;
-			*Y2_Ptr = *(Y2_Ptr - 8);  Y2_Ptr++;
-			*CB_Ptr = *(CB_Ptr - 8);  CB_Ptr++;
-			*CR_Ptr = *(CR_Ptr - 8);  CR_Ptr++;
-		}
-	}
-}
-
-
 // RGB24 format is 3 bytes per pixel, in the order red - green - blue. This function reads two rgb pixels
 // at a time (ie 6 pixel bytes), then computes Y for each pixel, and the average of U & V for the two pixels.
 // So four values are calculated & saved (Y, Y, U & V).
@@ -504,37 +382,15 @@ static void initialization(JPEG_ENCODER_STRUCTURE *jpeg, UINT32 image_format, UI
 {
 	UINT16 mcu_width, mcu_height, bytes_per_pixel;
 
-	if (image_format == JPEG_FORMAT_FOUR_ZERO_ZERO)
-	{
-		jpeg->mcu_width = mcu_width = 8;
-		jpeg->mcu_height = mcu_height = 8;
+	assert(image_format == JPEG_FORMAT_RGB);
 
-		jpeg->horizontal_mcus = (UINT16)((image_width + mcu_width - 1) >> 3);
-		jpeg->vertical_mcus = (UINT16)((image_height + mcu_height - 1) >> 3);
+	jpeg->mcu_width = mcu_width = 16;
+	jpeg->horizontal_mcus = (UINT16)((image_width + mcu_width - 1) >> 4);
 
-		bytes_per_pixel = 1;
-		read_format = read_400_format;
-	}
-	else if (image_format == JPEG_FORMAT_RGB)
-	{
-		jpeg->mcu_width = mcu_width = 16;
-		jpeg->horizontal_mcus = (UINT16)((image_width + mcu_width - 1) >> 4);
-
-		jpeg->mcu_height = mcu_height = 8;
-		jpeg->vertical_mcus = (UINT16)((image_height + mcu_height - 1) >> 3);
-		bytes_per_pixel = 3;
-		read_format = read_rgb24_format;
-	}
-	else                    // it's 422
-	{
-		jpeg->mcu_width = mcu_width = 16;
-		jpeg->horizontal_mcus = (UINT16)((image_width + mcu_width - 1) >> 4);
-
-		jpeg->mcu_height = mcu_height = 8;
-		jpeg->vertical_mcus = (UINT16)((image_height + mcu_height - 1) >> 3);
-		bytes_per_pixel = 2;
-		read_format = read_422_format;
-	}
+	jpeg->mcu_height = mcu_height = 8;
+	jpeg->vertical_mcus = (UINT16)((image_height + mcu_height - 1) >> 3);
+	bytes_per_pixel = 3;
+	read_format = read_rgb24_format;
 
 	jpeg->rows_in_bottom_mcus = (UINT16)(image_height - (jpeg->vertical_mcus - 1) * mcu_height);
 	jpeg->cols_in_right_mcus = (UINT16)(image_width - (jpeg->horizontal_mcus - 1) * mcu_width);
