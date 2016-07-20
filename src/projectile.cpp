@@ -449,8 +449,6 @@ bool proj_SendProjectileAngled(WEAPON *psWeap, SIMPLE_OBJECT *psAttacker, int pl
 
 	psProj->bVisible = false;
 
-	psProj->died = 0;
-
 	// Must set ->psDest and ->expectedDamageCaused before first call to setProjectileDestination().
 	psProj->psDest = NULL;
 	psProj->expectedDamageCaused = objGuessFutureDamage(psStats, player, psTarget);

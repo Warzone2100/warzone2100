@@ -185,17 +185,10 @@ void objmemUpdate(void)
 	   were destroyed before this turn */
 
 	/* First remove the objects from the start of the list */
-	while (psDestroyedObj != NULL && psDestroyedObj->died <= gameTime - deltaGameTime)
+	while (psDestroyedObj != nullptr && psDestroyedObj->died <= gameTime - deltaGameTime)
 	{
 		psNext = psDestroyedObj->psNext;
-		if (!objmemDestroy(psDestroyedObj))
-		{
-			if (psDestroyedObj->type == OBJ_DROID)
-			{
-				debug(LOG_DEATH, "skipping %p (%s: id %u) this round, will try again later.", psDestroyedObj, ((DROID *)psDestroyedObj)->aName, ((DROID *)psDestroyedObj)->id);
-				return;
-			}
-		}
+		objmemDestroy(psDestroyedObj);
 		psDestroyedObj = psNext;
 	}
 
@@ -287,6 +280,7 @@ template <typename OBJECT>
 static inline void destroyObject(OBJECT *list[], OBJECT *object)
 {
 	ASSERT_OR_RETURN(, object != NULL, "Invalid pointer");
+	ASSERT(gameTime - deltaGameTime < gameTime || gameTime == 2, "Expected %u < %u, bad time", gameTime - deltaGameTime, gameTime);
 
 	// If the message to remove is the first one in the list then mark the next one as the first
 	if (list[object->player] == object)

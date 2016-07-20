@@ -921,7 +921,7 @@ void orderUpdateDroid(DROID *psDroid)
 		}
 		break;
 	case DORDER_RUNBURN:
-		if (psDroid->actionStarted + RUN_BURN_TIME < gameTime)
+		if (psDroid->actionStarted + RUN_BURN_TIME <= gameTime)
 		{
 			debug(LOG_DEATH, "orderUpdateDroid: Droid %d burned to death", psDroid->id); // why is this an order?
 			destroyDroid(psDroid, psDroid->actionStarted + RUN_BURN_TIME);
@@ -933,7 +933,7 @@ void orderUpdateDroid(DROID *psDroid)
 			// got there so stop running
 			psDroid->order = DroidOrder(DORDER_NONE);
 		}
-		if (psDroid->actionStarted + RUN_TIME < gameTime)
+		if (psDroid->actionStarted + RUN_TIME <= gameTime)
 		{
 			// been running long enough
 			actionDroid(psDroid, DACTION_NONE);

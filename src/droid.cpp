@@ -337,7 +337,6 @@ DROID::DROID(uint32_t id, unsigned player)
 		visible[vPlayer] = hasSharedVision(vPlayer, player) ? UINT8_MAX : 0;
 	}
 	memset(seenThisTick, 0, sizeof(seenThisTick));
-	died = 0;
 	periodicalDamageStart = 0;
 	periodicalDamage = 0;
 	sDisplay.screenX = OFF_SCREEN;
@@ -594,6 +593,8 @@ static void removeDroidFX(DROID *psDel, unsigned impactTime)
 
 bool destroyDroid(DROID *psDel, unsigned impactTime)
 {
+	ASSERT(gameTime - deltaGameTime < impactTime, "Expected %u < %u, gameTime = %u, bad impactTime", gameTime - deltaGameTime, impactTime, gameTime);
+
 	if (psDel->lastHitWeapon == WSC_LAS_SAT)		// darken tile if lassat.
 	{
 		UDWORD width, breadth, mapX, mapY;

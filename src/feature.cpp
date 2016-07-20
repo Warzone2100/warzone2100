@@ -422,6 +422,7 @@ bool destroyFeature(FEATURE *psDel, unsigned impactTime)
 	Vector3i pos;
 
 	ASSERT_OR_RETURN(false, psDel != NULL, "Invalid feature pointer");
+	ASSERT(gameTime - deltaGameTime < impactTime, "Expected %u < %u, gameTime = %u, bad impactTime", gameTime - deltaGameTime, impactTime, gameTime);
 
 	/* Only add if visible and damageable*/
 	if (psDel->visible[selectedPlayer] && psDel->psStats->damageable)
