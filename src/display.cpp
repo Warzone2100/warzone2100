@@ -698,12 +698,14 @@ UDWORD getTargetType(void)
 }
 
 //don't want to do any of these whilst in the Intelligence Screen
-void processMouseClickInput(void)
+CURSOR processMouseClickInput()
 {
 	UDWORD	i;
 	SELECTION_TYPE	selection;
 	MOUSE_TARGET	item = MT_NOTARGET;
 	bool OverRadar = OverRadarAndNotDragging();
+
+	CURSOR cursor = CURSOR_DEFAULT;
 
 	ignoreOrder = CheckFinishedFindPosition();
 
@@ -726,7 +728,7 @@ void processMouseClickInput(void)
 			{
 				// Never, *ever* let user control the transport in SP games--it breaks the scripts!
 				ASSERT(game.type == CAMPAIGN, "Game type was set incorrectly!");
-				return;
+				return cursor;
 			}
 			else
 			{
@@ -802,17 +804,17 @@ void processMouseClickInput(void)
 
 	if (gamePaused())
 	{
-		wzSetCursor(CURSOR_DEFAULT);
+		cursor = CURSOR_DEFAULT;
 	}
 	if (buildState == BUILD3D_VALID)
 	{
 		// special casing for building
-		wzSetCursor(CURSOR_BUILD);
+		cursor = CURSOR_BUILD;
 	}
 	else if (buildState == BUILD3D_POS)
 	{
 		// special casing for building - can't build here
-		wzSetCursor(CURSOR_NOTPOSSIBLE);
+		cursor = CURSOR_NOTPOSSIBLE;
 	}
 	else if (selection != SC_INVALID)
 	{
@@ -976,29 +978,29 @@ void processMouseClickInput(void)
 			    arnMPointers[item][selection] == CURSOR_MOVE && bMultiPlayer)
 			{
 				// Alt+move = disembark transporter
-				wzSetCursor(CURSOR_DISEMBARK);
+				cursor = CURSOR_DISEMBARK;
 			}
 			else if (specialOrderKeyDown() && selection == SC_DROID_DIRECT &&
 			         arnMPointers[item][selection] == CURSOR_MOVE)
 			{
 				// Alt+move = scout
-				wzSetCursor(CURSOR_SCOUT);
+				cursor = CURSOR_SCOUT;
 			}
 			else if (arnMPointers[item][selection] == CURSOR_NOTPOSSIBLE &&
 			         ObjUnderMouse && (ObjUnderMouse->player == selectedPlayer) &&
 			         ObjUnderMouse->type == OBJ_STRUCTURE && ((STRUCTURE *)ObjUnderMouse)->asWeaps[0].nStat &&
 			         (asWeaponStats[((STRUCTURE *)ObjUnderMouse)->asWeaps[0].nStat].weaponSubClass == WSC_LAS_SAT))
 			{
-				wzSetCursor(CURSOR_SELECT); // Special casing for LasSat
+				cursor = CURSOR_SELECT; // Special casing for LasSat
 			}
 			else
 			{
-				wzSetCursor(arnMPointers[item][selection]);
+				cursor = arnMPointers[item][selection];
 			}
 		}
 		else
 		{
-			wzSetCursor(CURSOR_DEFAULT);
+			cursor = CURSOR_DEFAULT;
 		}
 	}
 	else
@@ -1013,22 +1015,22 @@ void processMouseClickInput(void)
 			if (item == MT_ENEMYDROID || item == MT_ENEMYSTR || item == MT_DAMFEATURE)
 			{
 				//display attack cursor
-				wzSetCursor(CURSOR_ATTACK);
+				cursor = CURSOR_ATTACK;
 			}
 			else if (ObjUnderMouse && ObjUnderMouse->player == selectedPlayer && (ObjUnderMouse->type == OBJ_DROID ||
 			         (ObjUnderMouse->type == OBJ_STRUCTURE && lasSatStructSelected((STRUCTURE *)ObjUnderMouse))))
 			{
 				// Special casing for selectables
-				wzSetCursor(CURSOR_SELECT);
+				cursor = CURSOR_SELECT;
 			}
 			else if (ObjUnderMouse && ObjUnderMouse->player == selectedPlayer && ObjUnderMouse->type == OBJ_STRUCTURE)
 			{
-				wzSetCursor(CURSOR_DEFAULT);
+				cursor = CURSOR_DEFAULT;
 			}
 			else
 			{
 				//display block cursor
-				wzSetCursor(CURSOR_NOTPOSSIBLE);
+				cursor = CURSOR_NOTPOSSIBLE;
 			}
 		}
 		else if (ObjUnderMouse && (ObjUnderMouse->player == selectedPlayer) &&
@@ -1036,31 +1038,32 @@ void processMouseClickInput(void)
 		           && (asWeaponStats[((STRUCTURE *)ObjUnderMouse)->asWeaps[0].nStat].weaponSubClass == WSC_LAS_SAT))
 		          || ObjUnderMouse->type == OBJ_DROID))
 		{
-			wzSetCursor(CURSOR_SELECT); // Special casing for LasSat or own unit
+			cursor = CURSOR_SELECT; // Special casing for LasSat or own unit
 		}
 		else
 		{
 			// when one of the arrow key gets pressed, set cursor appropriately
 			if (keyDown(KEY_UPARROW))
 			{
-				wzSetCursor(CURSOR_UARROW);
+				cursor = CURSOR_UARROW;
 			}
 			else if (keyDown(KEY_DOWNARROW))
 			{
-				wzSetCursor(CURSOR_DARROW);
+				cursor = CURSOR_DARROW;
 			}
 			else if (keyDown(KEY_LEFTARROW))
 			{
-				wzSetCursor(CURSOR_LARROW);
+				cursor = CURSOR_LARROW;
 			}
 			else if (keyDown(KEY_RIGHTARROW))
 			{
-				wzSetCursor(CURSOR_RARROW);
+				cursor = CURSOR_RARROW;
 			}
 		}
 	}
 
 	CurrentItemUnderMouse = item;
+	return cursor;
 }
 
 static void calcScroll(float *y, float *dydt, float accel, float decel, float targetVelocity, float dt)
@@ -1097,7 +1100,7 @@ static void calcScroll(float *y, float *dydt, float accel, float decel, float ta
 	*y += *dydt * dt;
 }
 
-void scroll(void)
+CURSOR scroll()
 {
 	SDWORD	xDif, yDif;
 	uint32_t timeDiff;
@@ -1108,9 +1111,11 @@ void scroll(void)
 
 	static float xDiffFrac = 0, yDiffFrac = 0;
 
+	CURSOR cursor = CURSOR_DEFAULT;
+
 	if (InGameOpUp || bDisplayMultiJoiningStatus || isInGamePopupUp)		// cant scroll when menu up. or when over radar
 	{
-		return;
+		return cursor;
 	}
 
 	if (mouseScroll && wzMouseInWindow())
@@ -1123,23 +1128,19 @@ void scroll(void)
 		// when mouse cursor goes to an edge, set cursor appropriately
 		if (scrollDirUpDown > 0)
 		{
-			wzSetCursor(CURSOR_UARROW);
+			cursor = CURSOR_UARROW;
 		}
 		else if (scrollDirUpDown < 0)
 		{
-			wzSetCursor(CURSOR_DARROW);
+			cursor = CURSOR_DARROW;
 		}
 		else if (scrollDirLeftRight < 0)
 		{
-			wzSetCursor(CURSOR_LARROW);
+			cursor = CURSOR_LARROW;
 		}
 		else if (scrollDirLeftRight > 0)
 		{
-			wzSetCursor(CURSOR_RARROW);
-		}
-		else
-		{
-			wzSetCursor(CURSOR_DEFAULT);
+			cursor = CURSOR_RARROW;
 		}
 	}
 	if (!keyDown(KEY_LCTRL) && !keyDown(KEY_RCTRL))
@@ -1187,6 +1188,8 @@ void scroll(void)
 	player.p.z += yDif;
 
 	CheckScrollLimits();
+
+	return cursor;
 }
 
 /*
