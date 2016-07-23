@@ -244,7 +244,7 @@ extern UDWORD			objStatID;
 
 /* The current template for the design screen to start with*/
 extern std::vector<DROID_TEMPLATE *> apsTemplateList;  ///< Either a list of templates a factory can build or a list of designable templates, for UI use only.
-extern std::list<DROID_TEMPLATE> localTemplates;       ///< Unsychnronised list, for UI use only.
+extern std::list<DROID_TEMPLATE> localTemplates;       ///< Unsynchronised list, for UI use only.
 
 /* pointer to hold the imd to use for a new template in the design screen */
 extern iIMDShape	*pNewDesignIMD;

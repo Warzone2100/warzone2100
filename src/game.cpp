@@ -5683,6 +5683,17 @@ bool loadSaveTemplate(const char *pFileName)
 	WzConfig ini(pFileName, WzConfig::ReadOnly);
 	QStringList list = ini.childGroups();
 
+	auto loadTemplate = [&]() {
+		DROID_TEMPLATE t = loadTemplateCommon(ini);
+		t.name = ini.value("name").toString();
+		t.multiPlayerID = ini.value("multiPlayerID", generateNewObjectId()).toInt();
+		t.enabled = ini.value("enabled", false).toBool();
+		t.stored = ini.value("stored", false).toBool();
+		t.prefab = ini.value("prefab", false).toBool();
+		ini.nextArrayItem();
+		return t;
+	};
+
 	int version = ini.value("version", 0).toInt();
 	if (version == 0)
 	{
@@ -5695,22 +5706,28 @@ bool loadSaveTemplate(const char *pFileName)
 		ini.beginArray("templates");
 		while (ini.remainingArrayItems() > 0)
 		{
-			DROID_TEMPLATE t = loadTemplateCommon(ini);
-			t.name = ini.value("name").toString();
-			t.multiPlayerID = ini.value("multiPlayerID", generateNewObjectId()).toInt();
-			t.enabled = ini.value("enabled", false).toBool();
-			t.stored = ini.value("stored", false).toBool();
-			t.prefab = ini.value("prefab", false).toBool();
-			copyTemplate(player, &t);
-			ini.nextArrayItem();
+			addTemplate(player, new DROID_TEMPLATE(loadTemplate()));
 		}
 		ini.endArray();
 		ini.endGroup();
 	}
 
-	for (auto &keyvaluepair : droidTemplates[selectedPlayer])
+	if (ini.contains("localTemplates"))
 	{
-		localTemplates.push_back(*keyvaluepair.second);
+		ini.beginArray("localTemplates");
+		while (ini.remainingArrayItems() > 0)
+		{
+			localTemplates.emplace_back(loadTemplate());
+		}
+		ini.endArray();
+	}
+	else
+	{
+		// Old savegame compatibility, should remove this branch sometime.
+		for (auto &keyvaluepair : droidTemplates[selectedPlayer])
+		{
+			localTemplates.push_back(*keyvaluepair.second);
+		}
 	}
 
 	return true;
@@ -5719,6 +5736,16 @@ bool loadSaveTemplate(const char *pFileName)
 bool writeTemplateFile(const char *pFileName)
 {
 	WzConfig ini(pFileName, WzConfig::ReadAndWrite);
+
+	auto writeTemplate = [&](DROID_TEMPLATE *psCurr) {
+		saveTemplateCommon(ini, psCurr);
+		ini.setValue("ref", psCurr->ref);
+		ini.setValue("multiPlayerID", psCurr->multiPlayerID);
+		ini.setValue("enabled", psCurr->enabled);
+		ini.setValue("stored", psCurr->stored);
+		ini.setValue("prefab", psCurr->prefab);
+		ini.nextArrayItem();
+	};
 
 	ini.setValue("version", 1);
 	for (int player = 0; player < MAX_PLAYERS; player++)
@@ -5732,18 +5759,17 @@ bool writeTemplateFile(const char *pFileName)
 		ini.beginArray("templates");
 		for (auto &keyvaluepair : droidTemplates[player])
 		{
-			DROID_TEMPLATE *psCurr = keyvaluepair.second;
-			saveTemplateCommon(ini, psCurr);
-			ini.setValue("ref", psCurr->ref);
-			ini.setValue("multiPlayerID", psCurr->multiPlayerID);
-			ini.setValue("enabled", psCurr->enabled);
-			ini.setValue("stored", psCurr->stored);
-			ini.setValue("prefab", psCurr->prefab);
-			ini.nextArrayItem();
+			writeTemplate(keyvaluepair.second);
 		}
 		ini.endArray();
 		ini.endGroup();
 	}
+	ini.beginArray("localTemplates");
+	for (auto &psCurr : localTemplates)
+	{
+		writeTemplate(&psCurr);
+	}
+	ini.endArray();
 	return true;
 }
 
