@@ -17,9 +17,12 @@ dist_noinst_DATA = \
 install-data-local:
 	$(MKDIR_P) $(DESTDIR)$(icondir)
 	$(MKDIR_P) $(DESTDIR)$(applicationdir)
+	$(MKDIR_P) $(DESTDIR)$(appdatadir)
 	$(INSTALL_DATA) $(srcdir)/warzone2100.png $(DESTDIR)$(icondir)/warzone2100.png
 	$(INSTALL_DATA) $(srcdir)/warzone2100.desktop $(DESTDIR)$(applicationdir)/warzone2100.desktop
+	$(INSTALL_DATA) $(srcdir)/warzone2100.appdata.xml $(DESTDIR)$(appdatadir)/warzone2100.appdata.xml
 
 uninstall-local:
 	$(RM) $(DESTDIR)$(icondir)/warzone2100.png
 	$(RM) $(DESTDIR)$(applicationdir)/warzone2100.desktop
+	$(RM) $(DESTDIR)$(appdatadir)/warzone2100.appdata.xml
