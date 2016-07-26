@@ -1,3 +1,14 @@
+2016-07-28: Version 3.2.1
+ * General:
+   * Fix: Cursor flickering on some hardware (commit:ec3eb89550752db7098952af6aa79b20d4bfc9de, ticket:4450)
+   * Fix: Assert on burning babas in campaign (commit:31d9772e4ccda50de48325801397215e3a025f92)
+   * Fix: Assert when placing artefacts (commit:commit d3f56e0be196a1ed0f4f7c20f8a71cd144d70ffb)
+   * Fix: Crash on transition between alpha and beta campaign (commit:75778395a1ff635786329c12a2a9a637640b4be0, ticket:4439)
+   * Fix: Disappearing commander designs in campaign (commit:5a1142606b8fd86efdfe21dee856a2795ebc335c, ticket:4438)
+   * Fix: Wrong hit chance for cyborg grenadier, changed from 70 to 65 (commit:8a929fcbd29a433c1a150573555748c8b35ee6ad, ticket:4436)
+   * Fix: Reorder libs to fix linker error (commit:ff9631198cdfe7751a0f5c164ab15817c4cc6242)
+   * Fix: Incorrect rendering of structure turrets (commit:d1bfaa32c3b8bb85d8e046ad9b110d3d7fb4e0a6, ticket:4453)
+
 2016-07-10: Version 3.2.0
  * General:
    * Fix: Clear factory indicators when switching between commanders (commit:75da8d95bdd89724b8fe3d7b7816928e7773d071, ticket:1131)
