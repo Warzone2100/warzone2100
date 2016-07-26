@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone 2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2016-07-10 23:18+0200\n"
+"POT-Creation-Date: 2016-07-26 21:49+0200\n"
 "PO-Revision-Date: 2023-11-27 20:18+0100\n"
 "Last-Translator: Magyar (Hungary) Mészáros Tamás <tamasm78@invitel.hu>\n"
 "Language-Team: Kálmán „KAMI” Szalai <kami911@gmail.com>\n"
@@ -3280,7 +3280,7 @@ msgstr "Repülés a Nyugati Szektorba"
 
 #: data/base/sequenceaudio/cam1/c001.txa:10
 msgid "Team Alpha nears its destination"
-msgstr "Alpha csapat közeledik a célja felé."
+msgstr "Alfa csapat közeledik a célja felé."
 
 #: data/base/sequenceaudio/cam1/c001.txt:1
 msgid "Transport destinations follow:"
@@ -4363,19 +4363,19 @@ msgstr "Parancsnoki lövegtorony IV"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:72
 msgid "EASY"
-msgstr ""
+msgstr "Könnyű"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:73
 msgid "MEDIUM"
-msgstr ""
+msgstr "Közepes"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:74
 msgid "HARD"
-msgstr ""
+msgstr "Nehéz"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:75
 msgid "INSANE"
-msgstr ""
+msgstr "Őrült"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:87
 #, fuzzy
@@ -4384,15 +4384,15 @@ msgstr "Az irányítás átadása sikeres."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:91
 msgid "No such personality! Try one of these:"
-msgstr ""
+msgstr "Nincs ilyen személyiség! Próbálja ki az alábbit:"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:97
 msgid "Forced research cleared, will research anything I want now."
-msgstr ""
+msgstr "Erőltetett kutatás törölve, akkor a kutatok, amikor akarok."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:101
 msgid "Research blocked, will research nothing now."
-msgstr ""
+msgstr "Kutatási blokkolt, nem kutatunk semmit."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:105
 msgid "Researching fundamental technology."
@@ -4405,19 +4405,19 @@ msgstr "Kutat"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:116
 msgid "No such research path! Try one of these:"
-msgstr ""
+msgstr "Nincs ilyen kutatási útvonal! Próbálja ki az alábbit:"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:122
 msgid "Sorry, I have no trucks."
-msgstr ""
+msgstr "Sajnos nincs teherautók."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:125
 msgid "You can use this one."
-msgstr ""
+msgstr "Használhatja ezt."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:127
 msgid "Sorry, droid transfer failed."
-msgstr ""
+msgstr "Sajnos droid átvitel sikertelen."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:133
 #, fuzzy
@@ -4431,15 +4431,15 @@ msgstr "Egy jeladó kihelyezése"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:140
 msgid "Coming!"
-msgstr ""
+msgstr "Jövök!"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:142
 msgid "Sorry, I don't have any free forces to send for help!"
-msgstr ""
+msgstr "Bocs, de nincs szabad erőnk segítségért küldeni!"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:147
 msgid "Any time, big boss!"
-msgstr ""
+msgstr "Bármikor, nagy főnök!"
 
 #: lib/framework/i18n.cpp:100
 #: lib/framework/i18n.cpp:163
@@ -4671,7 +4671,7 @@ msgstr "Aerodinamikus ejtőernyő"
 
 #: po/custom/fromJson.txt:39
 msgid "Ally"
-msgstr ""
+msgstr "Szövetséges"
 
 #: po/custom/fromJson.txt:40
 msgid "Angel Missile"
@@ -4856,11 +4856,11 @@ msgstr "Avenger SAM kilövő állás"
 
 #: po/custom/fromJson.txt:86
 msgid "BaBaLegs"
-msgstr ""
+msgstr "BaBALeges"
 
 #: po/custom/fromJson.txt:87
 msgid "BaBaProp"
-msgstr ""
+msgstr "BaBaProp"
 
 #: po/custom/fromJson.txt:88
 #, fuzzy
@@ -5686,7 +5686,7 @@ msgstr "Nehéz rakéta bástya"
 
 #: po/custom/fromJson.txt:310
 msgid "Heavyweaponslab"
-msgstr ""
+msgstr "Nehézfegyver labor"
 
 #: po/custom/fromJson.txt:311
 msgid "HE Bomb Shells"
@@ -5706,7 +5706,7 @@ msgstr "Nagy hatóerejű tarack gránát Mk3"
 
 #: po/custom/fromJson.txt:315
 msgid "Helicopter"
-msgstr ""
+msgstr "Helikopter"
 
 #: po/custom/fromJson.txt:316
 msgid "Hellstorm"
@@ -5762,7 +5762,7 @@ msgstr "HESH rakéta robbanófej Mk3"
 
 #: po/custom/fromJson.txt:330
 msgid "Hide Behind Me"
-msgstr ""
+msgstr "Rejts el mögém"
 
 #: po/custom/fromJson.txt:331
 msgid "Hi-Energy Laser Emitter"
@@ -6061,7 +6061,7 @@ msgstr "Lézerműhold parancsnoki állás"
 
 #: po/custom/fromJson.txt:407
 msgid "LasSat"
-msgstr ""
+msgstr "LasSat"
 
 #: po/custom/fromJson.txt:408
 msgid "Leopard"
@@ -6321,7 +6321,7 @@ msgstr "Több lövegtornyos alváz - Dragon"
 
 #: po/custom/fromJson.txt:478
 msgid "Nanolab"
-msgstr ""
+msgstr "Nanolabor"
 
 #: po/custom/fromJson.txt:480
 msgid "Needle Gun"
@@ -6415,11 +6415,11 @@ msgstr "NEXUS fal"
 
 #: po/custom/fromJson.txt:504
 msgid "No Place To Hide"
-msgstr ""
+msgstr "Nincs hely elrejteni"
 
 #: po/custom/fromJson.txt:505
 msgid "NullBot"
-msgstr ""
+msgstr "NullBot"
 
 #: po/custom/fromJson.txt:506
 msgid "Oil Derrick"
@@ -6805,7 +6805,7 @@ msgstr "Forgó aknavető - Pepperpot"
 
 #: po/custom/fromJson.txt:603
 msgid "Rotaryweaponslab"
-msgstr ""
+msgstr "Forgófegyver labor"
 
 #: po/custom/fromJson.txt:604
 msgid "Ruined Factory"
@@ -6913,11 +6913,11 @@ msgstr "Önreprodukáló gyártás"
 
 #: po/custom/fromJson.txt:632
 msgid "Semperfi"
-msgstr ""
+msgstr "Semperfi"
 
 #: po/custom/fromJson.txt:633
 msgid "Semperfi JS"
-msgstr ""
+msgstr "Semperfi JS"
 
 #: po/custom/fromJson.txt:634
 msgid "Sensor Cobra Half-tracks"
@@ -6957,11 +6957,11 @@ msgstr "Seraph rakéta üteg"
 
 #: po/custom/fromJson.txt:644
 msgid "Smashedcornerwall"
-msgstr ""
+msgstr "Törött sarokfal"
 
 #: po/custom/fromJson.txt:645
 msgid "Smashedwall"
-msgstr ""
+msgstr "Törött fal"
 
 #: po/custom/fromJson.txt:646
 msgid "Stabilized Mini-Rockets"
@@ -7247,7 +7247,7 @@ msgstr "Turbófeltöltős motor Mk3"
 
 #: po/custom/fromJson.txt:726
 msgid "Turtle AI"
-msgstr ""
+msgstr "Turtle AI"
 
 #: po/custom/fromJson.txt:727
 msgid "Twin Assault Cannon"
@@ -7543,11 +7543,11 @@ msgstr "VTOL iker gépfegyver"
 
 #: po/custom/fromJson.txt:801
 msgid "Wall"
-msgstr ""
+msgstr "Fal"
 
 #: po/custom/fromJson.txt:802
 msgid "Wallcorner"
-msgstr ""
+msgstr "Falsarok"
 
 #: po/custom/fromJson.txt:803
 msgid "Warehouse"
@@ -7825,7 +7825,7 @@ msgstr "Szöveg tömörítés kikapcsolása"
 
 #: src/clparse.cpp:273
 msgid "Run games automatically for testing"
-msgstr ""
+msgstr "Játékok futtatása automatikus tesztelésre"
 
 #: src/cmddroid.cpp:108
 msgid "Commander needs a higher level to command more units"
@@ -8012,16 +8012,16 @@ msgstr "Várakozás további játékosra"
 msgid "Out of sync"
 msgstr "Szinkronizációból kilépett"
 
-#: src/display.cpp:1625
+#: src/display.cpp:1628
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "Nem lehet építeni, amíg az olajmező lángol."
 
-#: src/display.cpp:1641
+#: src/display.cpp:1644
 #, fuzzy, c-format
 msgid "%s - Hitpoints %d/%d - Experience %.1f, %s"
 msgstr "%s - sérülés %d%% - tapasztalat %f, %s"
 
-#: src/display.cpp:1805
+#: src/display.cpp:1808
 #, fuzzy, c-format
 msgid "%s - Allied - Hitpoints %d/%d - Experience %d, %s"
 msgstr "%s - szövetséges - kár %d%% - tapasztalat %d, %s"
@@ -8030,78 +8030,78 @@ msgstr "%s - szövetséges - kár %d%% - tapasztalat %d, %s"
 msgid "Unit Lost!"
 msgstr "Egység Elveszett!"
 
-#: src/droid.cpp:1276
+#: src/droid.cpp:1277
 msgid "Structure Restored"
 msgstr "Szerkezet Helyrállítva"
 
-#: src/droid.cpp:2057
+#: src/droid.cpp:2058
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] "csoport %u kiválasztott - %u egység"
 msgstr[1] "csoport %u kiválasztott - %u egységek"
 
-#: src/droid.cpp:2066
+#: src/droid.cpp:2067
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] "%u egység hozzárendelve a %u csoporthoz"
 msgstr[1] "%u egységek hozzárendelve a %u csoporthoz"
 
-#: src/droid.cpp:2077
+#: src/droid.cpp:2078
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "csoport középen %u - %u egység"
 msgstr[1] "csoport középen %u - %u egységek"
 
-#: src/droid.cpp:2081
+#: src/droid.cpp:2082
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] "csoport igazítás %u - %u egység"
 msgstr[1] "csoport igazítás %u - %u egységek"
 
-#: src/droid.cpp:2237
+#: src/droid.cpp:2238
 msgid "Rookie"
 msgstr "Újonc"
 
-#: src/droid.cpp:2238
+#: src/droid.cpp:2239
 msgctxt "rank"
 msgid "Green"
 msgstr "Zöldfülű"
 
-#: src/droid.cpp:2239
+#: src/droid.cpp:2240
 msgid "Trained"
 msgstr "Edzett"
 
-#: src/droid.cpp:2240
+#: src/droid.cpp:2241
 msgid "Regular"
 msgstr "Reguláris"
 
-#: src/droid.cpp:2241
+#: src/droid.cpp:2242
 msgid "Professional"
 msgstr "Professzionális"
 
-#: src/droid.cpp:2242
+#: src/droid.cpp:2243
 msgid "Veteran"
 msgstr "Veterán"
 
-#: src/droid.cpp:2243
+#: src/droid.cpp:2244
 msgid "Elite"
 msgstr "Elit"
 
-#: src/droid.cpp:2244
+#: src/droid.cpp:2245
 msgid "Special"
 msgstr "Speciális"
 
-#: src/droid.cpp:2245
+#: src/droid.cpp:2246
 msgid "Hero"
 msgstr "Hős"
 
-#: src/droid.cpp:3156
+#: src/droid.cpp:3157
 msgid "Unit transfer failed -- unit limits exceeded"
-msgstr ""
+msgstr "Egység átvitel sikertelen - egység határértékek túllépése"
 
 #: src/frontend.cpp:134
 msgid "Single Player"
@@ -8144,7 +8144,7 @@ msgstr "Látogass el a hivatalos oldalra: http://wz2100.net/"
 
 #: src/frontend.cpp:151
 msgid "Come visit the forums and all Warzone 2100 news! Click this link."
-msgstr "Látogasd meg a fórumokat és a Warzone 2100 hírket. Kattints erre a linkre."
+msgstr "Látogasd meg a fórumokat és a Warzone 2100 híreket. Kattints erre a linkre."
 
 #: src/frontend.cpp:152
 #, fuzzy
@@ -8275,12 +8275,12 @@ msgstr "Billentyűzet beállítása"
 
 #: src/frontend.cpp:699
 msgid "1×"
-msgstr ""
+msgstr "1×"
 
 #: src/frontend.cpp:700
 #: src/frontend.cpp:930
 msgid "2×"
-msgstr ""
+msgstr "2×"
 
 #: src/frontend.cpp:701
 #: src/frontend.cpp:922
@@ -8392,7 +8392,7 @@ msgstr ""
 
 #: src/frontend.cpp:932
 msgid "8×"
-msgstr ""
+msgstr "8×"
 
 #: src/frontend.cpp:971
 msgid "* Takes effect on game restart"
@@ -8473,7 +8473,7 @@ msgstr "Örült"
 
 #: src/frontend.cpp:1238
 msgid "Tough"
-msgstr ""
+msgstr "Szívós"
 
 #: src/frontend.cpp:1239
 #, fuzzy
@@ -8522,8 +8522,8 @@ msgid "Mod: "
 msgstr "Mód:"
 
 #: src/hci.cpp:1184
-#: src/loop.cpp:257
-#: src/loop.cpp:273
+#: src/loop.cpp:258
+#: src/loop.cpp:274
 msgid "GAME SAVED: "
 msgstr "JÁTÉK MENTVE:"
 
@@ -8597,11 +8597,11 @@ msgstr "Eszköztár sor"
 
 #: src/hci.cpp:3736
 msgid "Hiding Obsolete Tech"
-msgstr ""
+msgstr "Elavult technika elrejtése"
 
 #: src/hci.cpp:3738
 msgid "Showing Obsolete Tech"
-msgstr ""
+msgstr "Elavult technika mutatása"
 
 #: src/hci.cpp:3805
 msgid "Factory Delivery Point"
@@ -8623,7 +8623,7 @@ msgstr ""
 
 #: src/hci.cpp:5216
 msgid "Chat: All"
-msgstr ""
+msgstr "Csevegés: Mindenki"
 
 #: src/hci.cpp:5221
 #, fuzzy
@@ -8948,7 +8948,7 @@ msgstr "Mindent vizsgált!"
 
 #: src/keybind.cpp:1501
 msgid "Selected buildings instantly recharged!"
-msgstr ""
+msgstr "Kiválasztott objektumok azonnal feltölthető!"
 
 #: src/keybind.cpp:1542
 #, c-format
@@ -9005,11 +9005,11 @@ msgstr "A kiválasztott épületek és droidok lerombolása."
 
 #: src/keybind.cpp:2360
 msgid "Reveal OFF"
-msgstr ""
+msgstr "Felvedés KI"
 
 #: src/keybind.cpp:2365
 msgid "Reveal ON"
-msgstr ""
+msgstr "Felfedés Be"
 
 #: src/keybind.cpp:2446
 msgid "Centered on player HQ, direction NORTH"
@@ -9384,7 +9384,7 @@ msgstr "Kijelző konzol váltás"
 
 #: src/keymap.cpp:394
 msgid "Toggle Team Chat History"
-msgstr ""
+msgstr "Kijelző Csapat Csevegés Előzmény"
 
 #: src/keymap.cpp:397
 msgid "Center View on HQ"
@@ -9408,7 +9408,7 @@ msgstr "Pozíció tartás"
 
 #: src/keymap.cpp:406
 msgid "Stop Droid"
-msgstr ""
+msgstr "Droid állj"
 
 #: src/keymap.cpp:408
 #, fuzzy
@@ -9587,7 +9587,7 @@ msgstr "Talaj háromszög átfordítása"
 
 #: src/keymap.cpp:469
 msgid "Make a performance measurement sample"
-msgstr ""
+msgstr "Teljesítmény mérési mintát készít"
 
 #: src/keymap.cpp:472
 msgid "Make all items available"
@@ -9611,7 +9611,7 @@ msgstr "Teljes jelenlegi kutatás"
 
 #: src/keymap.cpp:477
 msgid "Reveal map at mouse position"
-msgstr ""
+msgstr "Felfedi a térképet az egér pozíciónál"
 
 #: src/keymap.cpp:478
 msgid "Trace a game object"
@@ -9621,8 +9621,8 @@ msgstr "Játékcél felkutatása"
 msgid "Toggle Driving Mode"
 msgstr "Egységkövető kamera"
 
-#: src/loop.cpp:264
-#: src/loop.cpp:280
+#: src/loop.cpp:265
+#: src/loop.cpp:281
 msgid "Could not save game!"
 msgstr "Nem lehet menteni a játékot!"
 
@@ -9823,7 +9823,7 @@ msgstr "Kapcsolódási hiba."
 
 #: src/multiint.cpp:1198
 msgid "Refreshing..."
-msgstr ""
+msgstr "Frissítés..."
 
 #: src/multiint.cpp:1239
 msgid "Searching"
@@ -10057,7 +10057,7 @@ msgstr "Csapatválasztás"
 
 #: src/multiint.cpp:2488
 msgid "Teams locked"
-msgstr ""
+msgstr "Csapatok lezárása"
 
 #: src/multiint.cpp:2514
 msgid "Click to change player colour"
@@ -10078,7 +10078,7 @@ msgstr "Játékos"
 
 #: src/multiint.cpp:2557
 msgid "(none)"
-msgstr ""
+msgstr "Nincs"
 
 #: src/multiint.cpp:2617
 msgid "CHAT"
@@ -10164,7 +10164,7 @@ msgstr "Verzió: %s"
 
 #: src/multiint.cpp:4101
 msgid "Map Name"
-msgstr ""
+msgstr "Térkép Név"
 
 #: src/multiint.cpp:4102
 msgid "Players"
@@ -10172,7 +10172,7 @@ msgstr "Játékosok"
 
 #: src/multiint.cpp:4103
 msgid "Status"
-msgstr ""
+msgstr "Státusz"
 
 #: src/multiint.cpp:4133
 #, c-format
@@ -10621,66 +10621,66 @@ msgstr "Szabályozási értéket elérték - Termelés megállt"
 msgid "Can't build anymore \"%s\", Construction Unit Limit Reached — Production Halted"
 msgstr "Szabályozási értéket elérték - Termelés megállt"
 
-#: src/structure.cpp:5533
+#: src/structure.cpp:5534
 #, fuzzy, c-format
 msgid "%s - %u Unit assigned - Hitpoints %d/%d"
 msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
 msgstr[0] "%s - %u Egység felhatalmazása - Kár %3.0f%%"
 msgstr[1] "%s - %u Egységek felhatalmazása - Kár %3.0f%%"
 
-#: src/structure.cpp:5552
+#: src/structure.cpp:5553
 #, fuzzy, c-format
 msgid "%s - %u Unit assigned - Damage %3.0f%%"
 msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
 msgstr[0] "%s - %u Egység felhatalmazása - Kár %3.0f%%"
 msgstr[1] "%s - %u Egységek felhatalmazása - Kár %3.0f%%"
 
-#: src/structure.cpp:5557
-#: src/structure.cpp:5567
-#: src/structure.cpp:5574
-#: src/structure.cpp:5600
-#: src/structure.cpp:5609
-#: src/structure.cpp:5616
+#: src/structure.cpp:5558
+#: src/structure.cpp:5568
+#: src/structure.cpp:5575
+#: src/structure.cpp:5601
+#: src/structure.cpp:5610
+#: src/structure.cpp:5617
 #, c-format
 msgid "%s - Hitpoints %d/%d"
-msgstr ""
+msgstr "%s - Életerő %d/%d"
 
-#: src/structure.cpp:5590
+#: src/structure.cpp:5591
 #, fuzzy, c-format
 msgid "%s - Connected %u of %u - Hitpoints %d/%d"
 msgstr "%s - kapcsolódott %u, összesen: %u - kár %3.0f%%"
 
-#: src/structure.cpp:5740
-#: src/structure.cpp:5787
+#: src/structure.cpp:5741
+#: src/structure.cpp:5788
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Elektronikusan sérült"
 
-#: src/structure.cpp:5914
+#: src/structure.cpp:5915
 msgid "Electronic Reward - Visibility Report"
 msgstr "Elektronikus jutalom - Felderítési jelentés"
 
-#: src/structure.cpp:5953
+#: src/structure.cpp:5954
 msgid "Factory Reward - Propulsion"
 msgstr "Gyári jutalom - hajtómű"
 
-#: src/structure.cpp:5975
+#: src/structure.cpp:5976
 msgid "Factory Reward - Body"
 msgstr "Gyári jutalom - karosszéria"
 
-#: src/structure.cpp:5997
+#: src/structure.cpp:5998
 msgid "Factory Reward - Weapon"
 msgstr "Gyári jutalom - fegyver"
 
-#: src/structure.cpp:6005
+#: src/structure.cpp:6006
 msgid "Factory Reward - Nothing"
 msgstr "Gyári jutalom - nincs"
 
-#: src/structure.cpp:6032
+#: src/structure.cpp:6033
 msgid "Repair Facility Award - Repair"
 msgstr "Szervizüzem jutalom - javítás"
 
-#: src/structure.cpp:6038
+#: src/structure.cpp:6039
 msgid "Repair Facility Award - Nothing"
 msgstr "Szervizüzem jutalom - nincs"
 
