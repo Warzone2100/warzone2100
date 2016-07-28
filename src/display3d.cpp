@@ -2421,10 +2421,6 @@ void renderStructure(STRUCTURE *psStructure)
 		pieFlag = pie_STATIC_SHADOW | ecmFlag;
 		pieFlagData = 0;
 	}
-	if (defensive && !structureIsBlueprint(psStructure) && !(strImd->flags & iV_IMD_NOSTRETCH))
-	{
-		pie_SetShaderStretchDepth(psStructure->pos.z - psStructure->foundationDepth);
-	}
 	while (strImd)
 	{
 		int animFrame = 0;
@@ -2432,14 +2428,18 @@ void renderStructure(STRUCTURE *psStructure)
 		{
 			animFrame = getModularScaledGraphicsTime(strImd->animInterval, strImd->numFrames);
 		}
+		if (defensive && !structureIsBlueprint(psStructure) && !(strImd->flags & iV_IMD_NOSTRETCH))
+		{
+			pie_SetShaderStretchDepth(psStructure->pos.z - psStructure->foundationDepth);
+		}
 		pie_Draw3DShape(strImd, animFrame, colour, buildingBrightness, pieFlag, pieFlagData);
+		pie_SetShaderStretchDepth(0);
 		if (psStructure->sDisplay.imd->nconnectors > 0)
 		{
 			renderStructureTurrets(psStructure, strImd, buildingBrightness, pieFlag, pieFlagData, ecmFlag);
 		}
 		strImd = strImd->next;
 	}
-	pie_SetShaderStretchDepth(0);
 	setScreenDisp(&psStructure->sDisplay);
 	pie_MatEnd();
 }
