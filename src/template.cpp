@@ -208,12 +208,14 @@ bool initTemplates()
 		    || (design.numWeaps > 2 && !(asWeaponStats + design.asWeaps[2])->designable))
 		{
 			debug(LOG_ERROR, "Template %s from stored templates cannot be designed", design.name.toUtf8().constData());
+			ini.nextArrayItem();
 			continue;
 		}
 		bool valid = intValidTemplate(&design, ini.value("name").toString().toUtf8().constData(), false, selectedPlayer);
 		if (!valid)
 		{
 			debug(LOG_ERROR, "Invalid template %s from stored templates", design.name.toUtf8().constData());
+			ini.nextArrayItem();
 			continue;
 		}
 		DROID_TEMPLATE *psDestTemplate = NULL;
