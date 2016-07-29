@@ -235,7 +235,7 @@ extern void kf_SpeedUp(void);
 extern void kf_SlowDown(void);
 extern void kf_NormalSpeed(void);
 
-extern void kf_CloneSelected(void);
+void kf_CloneSelected(int);
 extern void kf_Reload(void);
 
 #define SPIN_SCALING	(360*DEG_1)

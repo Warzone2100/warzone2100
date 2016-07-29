@@ -313,12 +313,11 @@ void kf_ToggleSensorDisplay(void)
 /* Halves all the heights of the map tiles */
 void	kf_HalveHeights(void)
 {
-	UDWORD	i, j;
 	MAPTILE	*psTile;
 
-	for (i = 0; i < mapWidth; i++)
+	for (int i = 0; i < mapWidth; ++i)
 	{
-		for (j = 0; j < mapHeight; j++)
+		for (int j = 0; j < mapHeight; ++j)
 		{
 			psTile = mapTile(i, j);
 			psTile->height /= 2;
@@ -378,10 +377,9 @@ void	kf_DebugDroidInfo(void)
 	}
 }
 
-void	kf_CloneSelected(void)
+void kf_CloneSelected(int limit)
 {
 	DROID_TEMPLATE	*sTemplate = NULL;
-	const int	limit = 10;	// make 10 clones
 	const char *msg;
 #ifndef DEBUG
 	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
@@ -407,14 +405,15 @@ void	kf_CloneSelected(void)
 
 			if (!sTemplate)
 			{
-				debug(LOG_ERROR, "Cloning vat has been destoryed. We can't find the template for this droid: %s, id:%u, type:%d!", psDroid->aName, psDroid->id, psDroid->droidType);
+				debug(LOG_ERROR, "Cloning vat has been destroyed. We can't find the template for this droid: %s, id:%u, type:%d!", psDroid->aName, psDroid->id, psDroid->droidType);
 				return;
 			}
 
 			// create a new droid army
 			for (int i = 0; i < limit; i++)
 			{
-				DROID *psNewDroid = buildDroid(sTemplate, psDroid->pos.x + (i * 12), psDroid->pos.y + (i * 14), psDroid->player, false, NULL);
+				Vector2i pos = removeZ(psDroid->pos) + iSinCosR(40503 * i, iSqrt(50 * 50 * i));  // 40503 = 65536/φ
+				DROID *psNewDroid = buildDroid(sTemplate, pos.x, pos.y, psDroid->player, false, nullptr);
 				if (psNewDroid)
 				{
 					addDroid(psNewDroid, apsDroidLists);
@@ -424,12 +423,12 @@ void	kf_CloneSelected(void)
 					psScrCBNewDroid = NULL;
 					triggerEventDroidBuilt(psNewDroid, NULL);
 				}
-				else
+				else if (!bMultiMessages)
 				{
 					debug(LOG_ERROR, "Cloning has failed for template:%s id:%d", getID(sTemplate), sTemplate->multiPlayerID);
 				}
 			}
-			sasprintf((char **)&msg, _("Player %u is cheating a new droid army of: %s."), selectedPlayer, psDroid->aName);
+			sasprintf((char **)&msg, _("Player %u is cheating a new droid army of: %d × %s."), selectedPlayer, limit, psDroid->aName);
 			sendTextMessage(msg, true);
 			Cheated = true;
 			audio_PlayTrack(ID_SOUND_NEXUS_LAUGH1);
@@ -1330,7 +1329,6 @@ void	kf_ToggleGodMode(void)
 	if (godMode)
 	{
 		FEATURE	*psFeat = apsFeatureLists[0];
-		int player;
 
 		godMode = false;
 		setRevealStatus(pastReveal);
@@ -1342,7 +1340,7 @@ void	kf_ToggleGodMode(void)
 		}
 
 		// and the structures
-		for (player = 0; player < MAX_PLAYERS; ++player)
+		for (unsigned player = 0; player < MAX_PLAYERS; ++player)
 		{
 			if (player != selectedPlayer)
 			{

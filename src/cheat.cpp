@@ -37,7 +37,7 @@
 struct CHEAT_ENTRY
 {
 	const char *pName;
-	void (*function)(void);	// pointer to void* function
+	void (*function)();  // pointer to void* function
 };
 
 bool Cheated = false;
@@ -46,7 +46,9 @@ static CHEAT_ENTRY cheatCodes[] =
 	{"templates", listTemplates}, // print templates
 	{"jsload", jsAutogame}, // load an AI script for selectedPlayer
 	{"jsdebug", jsShowDebug}, // show scripting states
-	{"clone wars", kf_CloneSelected}, // clone selected units
+	{"clone wars", []{ kf_CloneSelected(10); }}, // clone selected units
+	{"clone wars!", []{ kf_CloneSelected(40); }}, // clone selected units
+	{"clone wars!!", []{ kf_CloneSelected(135); }}, // clone selected units
 	{"noassert", kf_NoAssert}, // turn off asserts
 	{"count me", kf_ShowNumObjects}, // give a count of objects in the world
 	{"give all", kf_AllAvailable},	// give all
