@@ -1,5 +1,6 @@
 dist_noinst_DATA = \
 	warzone2100.desktop \
+	warzone2100.appdata.xml \
 	warzone2100.ico \
 	warzone2100.obsolete.ico \
 	warzone2100.png \
