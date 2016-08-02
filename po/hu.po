@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone 2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2016-07-31 15:40+0200\n"
+"POT-Creation-Date: 2016-08-02 17:03+0200\n"
 "PO-Revision-Date: 2023-11-27 20:18+0100\n"
 "Last-Translator: Magyar (Hungary) Mészáros Tamás <tamasm78@invitel.hu>\n"
 "Language-Team: Kálmán „KAMI” Szalai <kami911@gmail.com>\n"
@@ -1205,7 +1205,7 @@ msgid "Demolish"
 msgstr "lebont"
 
 #: data/base/messages/strings/names.txt:156
-#: po/custom/fromJson.txt:479
+#: po/custom/fromJson.txt:482
 msgid "Naval"
 msgstr "Tengerészet"
 
@@ -1233,19 +1233,19 @@ msgstr "Sárkány Fogak"
 
 #: data/base/messages/strings/names.txt:215
 #: data/mp/messages/strings/names.txt:251
-#: po/custom/fromJson.txt:350
+#: po/custom/fromJson.txt:353
 msgid "Howitzer Emplacement"
 msgstr "Tarackállás"
 
 #: data/base/messages/strings/names.txt:216
 #: data/mp/messages/strings/names.txt:252
-#: po/custom/fromJson.txt:234
+#: po/custom/fromJson.txt:237
 msgid "Ground Shaker Emplacement"
 msgstr "Ground Shaker állás"
 
 #: data/base/messages/strings/names.txt:217
 #: data/mp/messages/strings/names.txt:253
-#: po/custom/fromJson.txt:317
+#: po/custom/fromJson.txt:320
 msgid "Hellstorm Emplacement"
 msgstr "Hellstorm állás"
 
@@ -1320,13 +1320,13 @@ msgstr "Cyborg ugrómű"
 
 #: data/base/messages/strings/names.txt:298
 #: data/mp/messages/strings/names.txt:381
-#: po/custom/fromJson.txt:159
+#: po/custom/fromJson.txt:161
 msgid "Cyborg Propulsion II"
 msgstr "Cyborg hajtómű II"
 
 #: data/base/messages/strings/names.txt:299
 #: data/mp/messages/strings/names.txt:382
-#: po/custom/fromJson.txt:160
+#: po/custom/fromJson.txt:162
 msgid "Cyborg Propulsion III"
 msgstr "Cyborg hajtómű III"
 
@@ -1337,13 +1337,13 @@ msgstr "NP-vasbeton"
 
 #: data/base/messages/strings/names.txt:314
 #: data/mp/messages/strings/names.txt:395
-#: po/custom/fromJson.txt:293
+#: po/custom/fromJson.txt:296
 msgid "Heavy Machinegun Bunker"
 msgstr "Nehéz gépfegyver bunker"
 
 #: data/base/messages/strings/names.txt:316
 #: data/mp/messages/strings/names.txt:397
-#: po/custom/fromJson.txt:213
+#: po/custom/fromJson.txt:215
 msgid "Flashlight Emplacement"
 msgstr "Könnyűlézer állás"
 
@@ -1352,7 +1352,7 @@ msgid "Heavy Machinegun Guard Tower"
 msgstr "Nehéz gépfegyveres őrtorony"
 
 #: data/base/messages/strings/names.txt:323
-#: po/custom/fromJson.txt:208
+#: po/custom/fromJson.txt:210
 msgid "Flamer Guard Tower"
 msgstr "Lángszóró őrtorony"
 
@@ -1362,7 +1362,7 @@ msgstr "Tankelhárító őrtorony"
 
 #: data/base/messages/strings/names.txt:327
 #: data/mp/messages/strings/names.txt:409
-#: po/custom/fromJson.txt:209
+#: po/custom/fromJson.txt:211
 msgid "Flamer Hardpoint"
 msgstr "Lángszóró talapzat"
 
@@ -2123,7 +2123,7 @@ msgstr "Cyborg gyártás fejlesztve"
 
 #: data/base/messages/strings/resstrings.txt:348
 #: data/mp/messages/strings/resstrings.txt:172
-#: po/custom/fromJson.txt:577
+#: po/custom/fromJson.txt:582
 msgid "Robotic Cyborg Production"
 msgstr "Robotizált Cyborg gyártás"
 
@@ -2187,7 +2187,7 @@ msgstr "Kutatás fejlesztve"
 
 #: data/base/messages/strings/resstrings.txt:390
 #: data/mp/messages/strings/resstrings.txt:192
-#: po/custom/fromJson.txt:174
+#: po/custom/fromJson.txt:176
 msgid "Dedicated Synaptic Link Data Analysis"
 msgstr "Célirányos szinaptikus kapcsolatú adatelemzés"
 
@@ -2208,7 +2208,7 @@ msgstr "Megnövekedett sebzés ellenállás"
 
 #: data/base/messages/strings/resstrings.txt:400
 #: data/mp/messages/strings/resstrings.txt:197
-#: po/custom/fromJson.txt:244
+#: po/custom/fromJson.txt:247
 msgid "Hardened Base Structure Materials"
 msgstr "Edzett bázis épület alapanyagok"
 
@@ -2224,7 +2224,7 @@ msgstr "Gyártás fejlesztve"
 
 #: data/base/messages/strings/resstrings.txt:412
 #: data/mp/messages/strings/resstrings.txt:202
-#: po/custom/fromJson.txt:588
+#: po/custom/fromJson.txt:593
 msgid "Robotic VTOL Production"
 msgstr "Robotizált VTOL gyártás"
 
@@ -2245,7 +2245,7 @@ msgstr "VTOL újratöltési idő csökkent"
 
 #: data/base/messages/strings/resstrings.txt:422
 #: data/mp/messages/strings/resstrings.txt:207
-#: po/custom/fromJson.txt:78
+#: po/custom/fromJson.txt:79
 msgid "Automated VTOL Rearming"
 msgstr "Automatizált VTOL újratöltés"
 
@@ -2438,7 +2438,7 @@ msgstr "Jármű motor fejlesztés"
 
 #: data/base/messages/strings/resstrings.txt:560
 #: data/mp/messages/strings/resstrings.txt:257
-#: po/custom/fromJson.txt:723
+#: po/custom/fromJson.txt:728
 msgid "Turbo-Charged Engine"
 msgstr "Turbófeltöltős motor"
 
@@ -4068,12 +4068,12 @@ msgid "Slowly, out of the ashes we will rise again..."
 msgstr "Lassanként a hamvakból újra felemelkedünk..."
 
 #: data/mp/messages/strings/names.txt:15
-#: po/custom/fromJson.txt:430
+#: po/custom/fromJson.txt:433
 msgid "Machinegun Viper Wheels"
 msgstr "Viper gépfegyver"
 
 #: data/mp/messages/strings/names.txt:213
-#: po/custom/fromJson.txt:635
+#: po/custom/fromJson.txt:640
 msgid "Sensor Tower"
 msgstr "Érzékelő torony"
 
@@ -4082,7 +4082,7 @@ msgid "Tornado AA Site"
 msgstr "Tornado légvédelmi platform"
 
 #: data/mp/messages/strings/names.txt:271
-#: po/custom/fromJson.txt:422
+#: po/custom/fromJson.txt:425
 msgid "Machinegun"
 msgstr "Gépfegyver"
 
@@ -4091,7 +4091,7 @@ msgid "VTOL Flak Cannon"
 msgstr "VTOL légelhárító löveg"
 
 #: data/mp/messages/strings/names.txt:293
-#: po/custom/fromJson.txt:127
+#: po/custom/fromJson.txt:129
 msgid "Collective Wall"
 msgstr "Kollektíva fal"
 
@@ -4169,42 +4169,42 @@ msgid "CAM3 RESEARCH"
 msgstr "CAM3 KUTATÁS"
 
 #: data/mp/messages/strings/names.txt:361
-#: po/custom/fromJson.txt:466
+#: po/custom/fromJson.txt:469
 msgid "Missile Targeting Codes"
 msgstr "Rakéta célzó kódok"
 
 #: data/mp/messages/strings/names.txt:362
-#: po/custom/fromJson.txt:630
+#: po/custom/fromJson.txt:635
 msgid "Second Level Missile Targeting Codes"
 msgstr "Második szintű rakéta célzó kódok"
 
 #: data/mp/messages/strings/names.txt:363
-#: po/custom/fromJson.txt:706
+#: po/custom/fromJson.txt:711
 msgid "Third Level Missile Firing Codes"
 msgstr "Harmadik szintű rakéta indító kódok"
 
 #: data/mp/messages/strings/names.txt:371
-#: po/custom/fromJson.txt:286
+#: po/custom/fromJson.txt:289
 msgid "Heavy Gunner Cyborg"
 msgstr "Cyborg nehéz ágyú"
 
 #: data/mp/messages/strings/names.txt:372
-#: po/custom/fromJson.txt:207
+#: po/custom/fromJson.txt:209
 msgid "Flamer Cyborg"
 msgstr "Cyborg lángszóró"
 
 #: data/mp/messages/strings/names.txt:373
-#: po/custom/fromJson.txt:427
+#: po/custom/fromJson.txt:430
 msgid "Machinegunner Cyborg"
 msgstr "Gépfegyveres Cyborg"
 
 #: data/mp/messages/strings/names.txt:380
-#: po/custom/fromJson.txt:158
+#: po/custom/fromJson.txt:160
 msgid "Cyborg Propulsion"
 msgstr "Cyborg hajtómű"
 
 #: data/mp/messages/strings/names.txt:404
-#: po/custom/fromJson.txt:301
+#: po/custom/fromJson.txt:304
 msgid "Heavy Machinegun Tower"
 msgstr "Nehéz gépfegyveres torony"
 
@@ -4213,7 +4213,7 @@ msgid "Flamer Tower"
 msgstr "Lángszóró torony"
 
 #: data/mp/messages/strings/names.txt:406
-#: po/custom/fromJson.txt:400
+#: po/custom/fromJson.txt:403
 msgid "Lancer Tower"
 msgstr "Tankelhárító torony"
 
@@ -4234,7 +4234,7 @@ msgid "Advanced Repair Facility Mk3"
 msgstr "Fejlett szervizüzem Mk3"
 
 #: data/mp/messages/strings/names.txt:469
-#: po/custom/fromJson.txt:307
+#: po/custom/fromJson.txt:310
 msgid "Heavy Repair Turret"
 msgstr "Nehéz javító torony"
 
@@ -4243,7 +4243,7 @@ msgid "Nexus Intruder Program"
 msgstr "NEXUS behatoló program"
 
 #: data/mp/messages/strings/names.txt:490
-#: po/custom/fromJson.txt:499
+#: po/custom/fromJson.txt:502
 msgid "Nexus Resistance Circuits"
 msgstr "NEXUS ellenálló áramkörök"
 
@@ -4256,93 +4256,93 @@ msgid "Nexus Resistance Circuits Mk3"
 msgstr "NEXUS ellenálló áramkörök Mk3"
 
 #: data/mp/messages/strings/names.txt:504
-#: po/custom/fromJson.txt:345
+#: po/custom/fromJson.txt:348
 msgid "Hover Propulsion II"
 msgstr "Légpárnás hajtómű II"
 
 #: data/mp/messages/strings/names.txt:506
-#: po/custom/fromJson.txt:236
+#: po/custom/fromJson.txt:239
 msgid "Half-tracked Propulsion II"
 msgstr "Féllánctalpas hajtómű II"
 
 #: data/mp/messages/strings/names.txt:508
-#: po/custom/fromJson.txt:709
+#: po/custom/fromJson.txt:714
 msgid "Tracked Propulsion II"
 msgstr "lánctalpas hajtómű II"
 
 #: data/mp/messages/strings/names.txt:510
-#: po/custom/fromJson.txt:789
+#: po/custom/fromJson.txt:794
 msgid "VTOL Propulsion II"
 msgstr "VTOL hajtómű II"
 
 #: data/mp/messages/strings/names.txt:512
-#: po/custom/fromJson.txt:805
+#: po/custom/fromJson.txt:810
 msgid "Wheeled Propulsion II"
 msgstr "Kerekes hajtómű II"
 
 #: data/mp/messages/strings/names.txt:537
-#: po/custom/fromJson.txt:182
+#: po/custom/fromJson.txt:184
 msgid "Depleted Uranium MG Bullets Mk2"
 msgstr "Szegényített uránmagvas MG lőszer Mk2"
 
 #: data/mp/messages/strings/names.txt:566
-#: po/custom/fromJson.txt:423
+#: po/custom/fromJson.txt:426
 msgid "Machinegun Artifact"
 msgstr "Gépfegyver lelet"
 
 #: data/mp/messages/strings/names.txt:569
-#: po/custom/fromJson.txt:490
+#: po/custom/fromJson.txt:493
 msgid "New Paradigm Command Center"
 msgstr "Új Paradigma parancsnoki központ"
 
 #: data/mp/messages/strings/names.txt:570
-#: po/custom/fromJson.txt:125
+#: po/custom/fromJson.txt:127
 msgid "Collective Command Center"
 msgstr "Kollektíva parancsnoki központ"
 
 #: data/mp/messages/strings/names.txt:723
 #: data/mp/messages/strings/names.txt:724
-#: po/custom/fromJson.txt:465
+#: po/custom/fromJson.txt:468
 msgid "Missile Silo"
 msgstr "Rakéta siló"
 
 #: data/mp/messages/strings/names.txt:775
-#: po/custom/fromJson.txt:661
+#: po/custom/fromJson.txt:666
 msgid "Super Heavy-Gunner"
 msgstr "Szuper nehézfegyveres"
 
 #: data/mp/messages/strings/names.txt:777
-#: po/custom/fromJson.txt:654
+#: po/custom/fromJson.txt:659
 msgid "Super Auto-Cannon Cyborg"
 msgstr "Cyborg szuper automata ágyú"
 
 #: data/mp/messages/strings/names.txt:779
-#: po/custom/fromJson.txt:668
+#: po/custom/fromJson.txt:673
 msgid "Super HPV Cyborg"
 msgstr "Cyborg szuper nagysebességű ágyú"
 
 #: data/mp/messages/strings/names.txt:781
-#: po/custom/fromJson.txt:672
+#: po/custom/fromJson.txt:677
 msgid "Super Tank-Killer Cyborg"
 msgstr "Cyborg szuper Tank Killer rakéta"
 
 #: data/mp/messages/strings/names.txt:788
-#: po/custom/fromJson.txt:605
+#: po/custom/fromJson.txt:610
 msgid "Satellite Uplink Center"
 msgstr "Műhold parabola központ"
 
 #: data/mp/messages/strings/names.txt:799
-#: po/custom/fromJson.txt:669
+#: po/custom/fromJson.txt:674
 msgid "Super Pulse Laser Cyborg"
 msgstr "Cyborg szuper impulzus lézer"
 
 #: data/mp/messages/strings/names.txt:801
-#: po/custom/fromJson.txt:670
+#: po/custom/fromJson.txt:675
 msgid "Super Rail-Gunner"
 msgstr "Szuper sínágyús"
 
 #: data/mp/messages/strings/names.txt:803
-#: po/custom/fromJson.txt:671
+#: po/custom/fromJson.txt:676
 msgid "Super Scourge Cyborg"
 msgstr "Cyborg szuper Scourge rakéta"
 
@@ -4668,2928 +4668,2950 @@ msgid "Ally"
 msgstr "Szövetséges"
 
 #: po/custom/fromJson.txt:40
+msgid "Alpha Campaign"
+msgstr "Alfa küldetés"
+
+#: po/custom/fromJson.txt:41
 msgid "Angel Missile"
 msgstr "Angyal rakéta"
 
-#: po/custom/fromJson.txt:41
+#: po/custom/fromJson.txt:42
 msgid "Angel Missile Battery"
 msgstr "Angyal rakéta üteg"
 
-#: po/custom/fromJson.txt:42
+#: po/custom/fromJson.txt:43
 msgid "Angel Missile Emplacement"
 msgstr "Angel rakéta állás"
 
-#: po/custom/fromJson.txt:43
+#: po/custom/fromJson.txt:44
 msgid "APDSB MG Bullets"
 msgstr "APDSB MG lőszer"
 
-#: po/custom/fromJson.txt:44
+#: po/custom/fromJson.txt:45
 msgid "APDSB MG Bullets Mk2"
 msgstr "APDSB MG lőszer Mk2"
 
-#: po/custom/fromJson.txt:45
+#: po/custom/fromJson.txt:46
 msgid "APDSB MG Bullets Mk3"
 msgstr "APDSB MG lőszer Mk3"
 
-#: po/custom/fromJson.txt:46
+#: po/custom/fromJson.txt:47
 msgid "APFSDS Cannon Rounds"
 msgstr "APFSDS ágyúlőszer"
 
-#: po/custom/fromJson.txt:47
+#: po/custom/fromJson.txt:48
 msgid "APFSDS Cannon Rounds Mk2"
 msgstr "APFSDS ágyúlőszer Mk2"
 
-#: po/custom/fromJson.txt:48
+#: po/custom/fromJson.txt:49
 msgid "APFSDS Cannon Rounds Mk3"
 msgstr "APFSDS ágyúlőszer Mk3"
 
-#: po/custom/fromJson.txt:49
+#: po/custom/fromJson.txt:50
 msgid "Archangel Missile"
 msgstr "Archangel rakéta"
 
-#: po/custom/fromJson.txt:50
+#: po/custom/fromJson.txt:51
 msgid "Archangel Missile Battery"
 msgstr "Archangel rakéta üteg"
 
-#: po/custom/fromJson.txt:51
+#: po/custom/fromJson.txt:52
 msgid "Archangel Missile Emplacement"
 msgstr "Archangel rakéta állás"
 
-#: po/custom/fromJson.txt:52
+#: po/custom/fromJson.txt:53
 msgid "Artifact"
 msgstr "Tárgyi lelet"
 
-#: po/custom/fromJson.txt:53
+#: po/custom/fromJson.txt:54
 msgid "Assault Cannon"
 msgstr "Ostromágyú"
 
-#: po/custom/fromJson.txt:54
+#: po/custom/fromJson.txt:55
 msgid "Assault Cannon Emplacement"
 msgstr "Ostromágyú állás"
 
-#: po/custom/fromJson.txt:55
+#: po/custom/fromJson.txt:56
 msgid "Assault Cannon Guard Tower"
 msgstr "Ostromágyús őrtorony"
 
-#: po/custom/fromJson.txt:56
+#: po/custom/fromJson.txt:57
 msgid "Assault Cannon Hardpoint"
 msgstr "Ostromágyú talapzat"
 
-#: po/custom/fromJson.txt:57
+#: po/custom/fromJson.txt:58
 msgid "Assault Cannon Mantis Hover"
 msgstr "Mantis légpárnás ostromágyú"
 
-#: po/custom/fromJson.txt:58
+#: po/custom/fromJson.txt:59
 msgid "Assault Gun"
 msgstr "Ostromfegyver"
 
-#: po/custom/fromJson.txt:59
+#: po/custom/fromJson.txt:60
 msgid "Assault Gun Emplacement"
 msgstr "Ostromfegyver állás"
 
-#: po/custom/fromJson.txt:60
+#: po/custom/fromJson.txt:61
 msgid "Assault Gun Guard Tower"
 msgstr "Ostromfegyveres őrtorony"
 
-#: po/custom/fromJson.txt:61
+#: po/custom/fromJson.txt:62
 msgid "Assault Gun Hardpoint"
 msgstr "Ostromfegyver talapzat"
 
-#: po/custom/fromJson.txt:62
+#: po/custom/fromJson.txt:63
 msgid "Assault Gunner"
 msgstr "Ostromfegyveres"
 
-#: po/custom/fromJson.txt:63
+#: po/custom/fromJson.txt:64
 msgid "Assault Gunner Cyborg"
 msgstr "Ostromfegyveres Cyborg"
 
-#: po/custom/fromJson.txt:64
+#: po/custom/fromJson.txt:65
 msgid "Assault Gun Python Half Track"
 msgstr "Python féllánctalpas rohamlöveg"
 
-#: po/custom/fromJson.txt:65
+#: po/custom/fromJson.txt:66
 msgid "Assault Gun Python Hover"
 msgstr "Python légpárnás rohamlöveg"
 
-#: po/custom/fromJson.txt:66
+#: po/custom/fromJson.txt:67
 msgid "Assault Gun Python Tracks"
 msgstr "Python féllánctalpas ostromfegyver"
 
-#: po/custom/fromJson.txt:67
+#: po/custom/fromJson.txt:68
 msgid "Assault Gun Tower"
 msgstr "Ostromlöveg torony"
 
-#: po/custom/fromJson.txt:68
+#: po/custom/fromJson.txt:69
 msgid "Automated Cyborg Production"
 msgstr "Automatizált Cyborg gyártás"
 
-#: po/custom/fromJson.txt:69
+#: po/custom/fromJson.txt:70
 msgid "Automated Cyborg Production Mk2"
 msgstr "Automatizált Cyborg gyártás Mk2"
 
-#: po/custom/fromJson.txt:70
+#: po/custom/fromJson.txt:71
 msgid "Automated Cyborg Production Mk3"
 msgstr "Automatizált Cyborg gyártás Mk3"
 
-#: po/custom/fromJson.txt:71
+#: po/custom/fromJson.txt:72
 msgid "Automated Factory Production"
 msgstr "Automatizált gyári termelés"
 
-#: po/custom/fromJson.txt:72
+#: po/custom/fromJson.txt:73
 msgid "Automated Factory Production Mk2"
 msgstr "Automatizált gyári termelés Mk2"
 
-#: po/custom/fromJson.txt:73
+#: po/custom/fromJson.txt:74
 msgid "Automated Factory Production Mk3"
 msgstr "Automatizált gyári termelés Mk3"
 
-#: po/custom/fromJson.txt:74
+#: po/custom/fromJson.txt:75
 msgid "Automated Manufacturing"
 msgstr "Automatizált gyártás"
 
-#: po/custom/fromJson.txt:75
+#: po/custom/fromJson.txt:76
 msgid "Automated Repair Facility"
 msgstr "Automatikus szervizüzem"
 
-#: po/custom/fromJson.txt:76
+#: po/custom/fromJson.txt:77
 msgid "Automated Repair Facility Upgrade Mk2"
 msgstr "Automatikus szervizüzem fejlesztés Mk2"
 
-#: po/custom/fromJson.txt:77
+#: po/custom/fromJson.txt:78
 msgid "Automated Repair Facility Upgrade Mk3"
 msgstr "Automatikus szervizüzem fejlesztés Mk3"
 
-#: po/custom/fromJson.txt:79
+#: po/custom/fromJson.txt:80
 msgid "Automated VTOL Rearming Mk2"
 msgstr "Automatizált VTOL újratöltés Mk2"
 
-#: po/custom/fromJson.txt:80
+#: po/custom/fromJson.txt:81
 msgid "Automated VTOL Rearming Mk3"
 msgstr "Automatizált VTOL újratöltés Mk3"
 
-#: po/custom/fromJson.txt:81
+#: po/custom/fromJson.txt:82
 msgid "Auto Repair"
 msgstr "Automatikus javítás"
 
-#: po/custom/fromJson.txt:82
+#: po/custom/fromJson.txt:83
 msgid "Auto-Repair"
 msgstr "Automatikus javítás"
 
-#: po/custom/fromJson.txt:83
+#: po/custom/fromJson.txt:84
 msgid "Avenger Hardpoint"
 msgstr "Avenger talapzat"
 
-#: po/custom/fromJson.txt:84
+#: po/custom/fromJson.txt:85
 msgid "Avenger SAM"
 msgstr "Avenger SAM"
 
-#: po/custom/fromJson.txt:85
+#: po/custom/fromJson.txt:86
 msgid "Avenger SAM Site"
 msgstr "Avenger SAM kilövő állás"
 
-#: po/custom/fromJson.txt:86
+#: po/custom/fromJson.txt:87
 msgid "BaBaLegs"
 msgstr "BaBALeges"
 
-#: po/custom/fromJson.txt:87
+#: po/custom/fromJson.txt:88
 msgid "BaBaProp"
 msgstr "BaBaProp"
 
-#: po/custom/fromJson.txt:88
+#: po/custom/fromJson.txt:89
 msgid "Back to Basics"
 msgstr "Térj vissza az alapokhoz!"
 
-#: po/custom/fromJson.txt:89
+#: po/custom/fromJson.txt:90
+msgid "Beta Campaign"
+msgstr "Béta küldetés"
+
+#: po/custom/fromJson.txt:91
 msgid "Bombard"
 msgstr "Bombavető"
 
-#: po/custom/fromJson.txt:90
+#: po/custom/fromJson.txt:92
 msgid "Bombard Cobra Half-tracks"
 msgstr "Cobra féllánctalpas bombavető"
 
-#: po/custom/fromJson.txt:91
+#: po/custom/fromJson.txt:93
 msgid "Bombard Pit"
 msgstr "Bombavető árok"
 
-#: po/custom/fromJson.txt:92
+#: po/custom/fromJson.txt:94
 msgid "Bug"
 msgstr "Bogár"
 
-#: po/custom/fromJson.txt:93
+#: po/custom/fromJson.txt:95
 msgid "Buggy"
 msgstr "Homokfutó"
 
-#: po/custom/fromJson.txt:94
+#: po/custom/fromJson.txt:96
 msgid "Bunker Buster"
 msgstr "Bunkertörő"
 
-#: po/custom/fromJson.txt:95
+#: po/custom/fromJson.txt:97
 msgid "Bunker Buster Cobra Hover"
 msgstr "Cobra légpárnás bunkertörő"
 
-#: po/custom/fromJson.txt:96
+#: po/custom/fromJson.txt:98
 msgid "Bunker Buster Cobra Tracks"
 msgstr "Cobra lánctalpas bunkertörő"
 
-#: po/custom/fromJson.txt:97
+#: po/custom/fromJson.txt:99
 msgid "Bunker Buster Mantis Tracks"
 msgstr "Mantis lánctalpas bunkertörő"
 
-#: po/custom/fromJson.txt:98
+#: po/custom/fromJson.txt:100
 msgid "Bunker Buster Rocket"
 msgstr "Bunkertörő rakéta"
 
-#: po/custom/fromJson.txt:99
+#: po/custom/fromJson.txt:101
 msgid "Bunker Buster Rockets Viper Wheels"
 msgstr "Viper bunkertörő rakéta"
 
-#: po/custom/fromJson.txt:100
+#: po/custom/fromJson.txt:102
 msgid "Bunker Buster Scorpion Tracks"
 msgstr "Scorpion lánctalpas bunkertörő"
 
-#: po/custom/fromJson.txt:101
+#: po/custom/fromJson.txt:103
 msgid "Bunker Buster Scorpion VTOL"
 msgstr "VTOL Scorpion bunkertörő"
 
-#: po/custom/fromJson.txt:102
+#: po/custom/fromJson.txt:104
 msgid "Bunker Buster Viper Wheels"
 msgstr "Viper bunkertörő"
 
-#: po/custom/fromJson.txt:103
+#: po/custom/fromJson.txt:105
 msgid "Cannon Autoloader"
 msgstr "Automatikus ágyútöltés"
 
-#: po/custom/fromJson.txt:104
+#: po/custom/fromJson.txt:106
 msgid "Cannon Autoloader Mk2"
 msgstr "Automatikus ágyútöltés Mk2"
 
-#: po/custom/fromJson.txt:105
+#: po/custom/fromJson.txt:107
 msgid "Cannon Autoloader Mk3"
 msgstr "Automatikus ágyútöltés Mk3"
 
-#: po/custom/fromJson.txt:106
+#: po/custom/fromJson.txt:108
 msgid "Cannon Fire Truck"
 msgstr "Tűzoltó autó"
 
-#: po/custom/fromJson.txt:107
+#: po/custom/fromJson.txt:109
 msgid "Cannon Fortress"
 msgstr "Ágyú erődítmény"
 
-#: po/custom/fromJson.txt:108
+#: po/custom/fromJson.txt:110
 msgid "Cannon Laser Designator"
 msgstr "Ágyú lézeres kijelölő"
 
-#: po/custom/fromJson.txt:109
+#: po/custom/fromJson.txt:111
 msgid "Cannon Laser Rangefinder"
 msgstr "Ágyú lézeres távolságmérő"
 
-#: po/custom/fromJson.txt:110
+#: po/custom/fromJson.txt:112
 msgid "Cannon Rapid Loader"
 msgstr "Gyors ágyútöltés"
 
-#: po/custom/fromJson.txt:111
+#: po/custom/fromJson.txt:113
 msgid "Cannon Rapid Loader Mk2"
 msgstr "Gyors ágyútöltés Mk2"
 
-#: po/custom/fromJson.txt:112
+#: po/custom/fromJson.txt:114
 msgid "Cannon Rapid Loader Mk3"
 msgstr "Gyors ágyútöltés Mk3"
 
-#: po/custom/fromJson.txt:113
+#: po/custom/fromJson.txt:115
 msgid "Cannon Tower"
 msgstr "Ágyú torony"
 
-#: po/custom/fromJson.txt:114
+#: po/custom/fromJson.txt:116
 msgid "CB Radar Turret"
 msgstr "CB radar torony"
 
-#: po/custom/fromJson.txt:115
+#: po/custom/fromJson.txt:117
 msgid "CB Tower"
 msgstr "CB torony"
 
-#: po/custom/fromJson.txt:116
+#: po/custom/fromJson.txt:118
 msgid "CB Turret"
 msgstr "CB lövegtorony"
 
-#: po/custom/fromJson.txt:117
+#: po/custom/fromJson.txt:119
 msgid "Chaingun Upgrade"
 msgstr "Láncfegyver fejlesztés"
 
-#: po/custom/fromJson.txt:118
+#: po/custom/fromJson.txt:120
 msgid "Civilian"
 msgstr "Civil"
 
-#: po/custom/fromJson.txt:119
+#: po/custom/fromJson.txt:121
 msgid "Cluster Bomb Bay"
 msgstr "Kazettás bomba rekesz"
 
-#: po/custom/fromJson.txt:120
+#: po/custom/fromJson.txt:122
 msgid "Cluster Bombs Bay"
 msgstr "Kazettás bomba szekrény"
 
-#: po/custom/fromJson.txt:121
+#: po/custom/fromJson.txt:123
 msgid "Cobra"
 msgstr "Cobra"
 
-#: po/custom/fromJson.txt:122
+#: po/custom/fromJson.txt:124
 msgid "Cobra Flamer Tracks"
 msgstr "Cobra lánctalpas lángszóró"
 
-#: po/custom/fromJson.txt:123
+#: po/custom/fromJson.txt:125
 msgid "Cobra Medium Cannon Tracks"
 msgstr "Cobra lánctalpas közepes ágyú"
 
-#: po/custom/fromJson.txt:124
+#: po/custom/fromJson.txt:126
 msgid "Cobra Truck"
 msgstr "Cobra munkagép"
 
-#: po/custom/fromJson.txt:126
+#: po/custom/fromJson.txt:128
 msgid "Collective CWall"
 msgstr "Kollektíva körfal"
 
-#: po/custom/fromJson.txt:128
+#: po/custom/fromJson.txt:130
 msgid "Combat Engineer"
 msgstr "Hadi mérnök"
 
-#: po/custom/fromJson.txt:129
+#: po/custom/fromJson.txt:131
 msgid "Command Center"
 msgstr "Parancsnoki központ"
 
-#: po/custom/fromJson.txt:130
+#: po/custom/fromJson.txt:132
 msgid "Command Relay Center"
 msgstr "Parancsközvetítő központ"
 
-#: po/custom/fromJson.txt:131
+#: po/custom/fromJson.txt:133
 msgid "Command Relay Post"
 msgstr "Parancsközvetítő őrhely"
 
-#: po/custom/fromJson.txt:132
+#: po/custom/fromJson.txt:134
 msgid "Command Turret"
 msgstr "Parancsnoki lövegtorony"
 
-#: po/custom/fromJson.txt:133
+#: po/custom/fromJson.txt:135
 msgid "Command Turret Cobra Half-tracks"
 msgstr "Cobra parancsnoki féllánctalpas"
 
-#: po/custom/fromJson.txt:134
+#: po/custom/fromJson.txt:136
 msgid "Command Turret Cobra Tracks"
 msgstr "Cobra parancsnoki lánctalpas"
 
-#: po/custom/fromJson.txt:135
+#: po/custom/fromJson.txt:137
 msgid "Command Turret Mantis Tracks"
 msgstr "Mantis parancsnoki lánctalpas"
 
-#: po/custom/fromJson.txt:136
+#: po/custom/fromJson.txt:138
 msgid "Command Turret Python Tracks"
 msgstr "Python parancsnoki lánctalpas"
 
-#: po/custom/fromJson.txt:137
+#: po/custom/fromJson.txt:139
 msgid "Command Turret Scorpion Tracks"
 msgstr "Scorpion parancsnoki lánctalpas"
 
-#: po/custom/fromJson.txt:138
+#: po/custom/fromJson.txt:140
 msgid "Command Turret Viper Tracks"
 msgstr "Viper parancsnoki lánctalpas"
 
-#: po/custom/fromJson.txt:139
+#: po/custom/fromJson.txt:141
 msgid "Composite Alloys"
 msgstr "Kompozit ötvözetek"
 
-#: po/custom/fromJson.txt:140
+#: po/custom/fromJson.txt:142
 msgid "Composite Alloys Mk2"
 msgstr "Kompozit ötvözetek Mk2"
 
-#: po/custom/fromJson.txt:141
+#: po/custom/fromJson.txt:143
 msgid "Composite Alloys Mk3"
 msgstr "Kompozit ötvözetek Mk3"
 
-#: po/custom/fromJson.txt:142
+#: po/custom/fromJson.txt:144
 msgid "Construction Unit"
 msgstr "Építő egység"
 
-#: po/custom/fromJson.txt:143
+#: po/custom/fromJson.txt:145
 msgid "Cyborg Composite Alloys"
 msgstr "Cyborg kompozit ötvözetek"
 
-#: po/custom/fromJson.txt:144
+#: po/custom/fromJson.txt:146
 msgid "Cyborg Composite Alloys Mk2"
 msgstr "Cyborg kompozit ötvözetek Mk2"
 
-#: po/custom/fromJson.txt:145
+#: po/custom/fromJson.txt:147
 msgid "Cyborg Composite Alloys Mk3"
 msgstr "Cyborg kompozit ötvözetek Mk3"
 
-#: po/custom/fromJson.txt:146
+#: po/custom/fromJson.txt:148
 msgid "Cyborg Dense Composite Alloys"
 msgstr "Cyborg sűrű kompozit ötvözetek"
 
-#: po/custom/fromJson.txt:147
+#: po/custom/fromJson.txt:149
 msgid "Cyborg Dense Composite Alloys Mk2"
 msgstr "Cyborg sűrű kompozit ötvözetek Mk2"
 
-#: po/custom/fromJson.txt:148
+#: po/custom/fromJson.txt:150
 msgid "Cyborg Dense Composite Alloys Mk3"
 msgstr "Cyborg sűrű kompozit ötvözetek Mk3"
 
-#: po/custom/fromJson.txt:149
+#: po/custom/fromJson.txt:151
 msgid "Cyborg Factory"
 msgstr "Cyborg gyár"
 
-#: po/custom/fromJson.txt:150
+#: po/custom/fromJson.txt:152
 msgid "Cyborg Flamer"
 msgstr "Cyborg lángszóró"
 
-#: po/custom/fromJson.txt:151
+#: po/custom/fromJson.txt:153
 msgid "Cyborg Heavy Body"
 msgstr "Cyborg Nehéz karosszéria"
 
-#: po/custom/fromJson.txt:152
+#: po/custom/fromJson.txt:154
 msgid "Cyborg High Intensity Thermal Armor"
 msgstr "Cyborg nagy erejű hőpajzs"
 
-#: po/custom/fromJson.txt:153
+#: po/custom/fromJson.txt:155
 msgid "Cyborg High Intensity Thermal Armor Mk2"
 msgstr "Cyborg nagy erejű hőpajzs Mk2"
 
-#: po/custom/fromJson.txt:154
+#: po/custom/fromJson.txt:156
 msgid "Cyborg High Intensity Thermal Armor Mk3"
 msgstr "Cyborg nagy erejű hőpajzs Mk3"
 
-#: po/custom/fromJson.txt:155
+#: po/custom/fromJson.txt:157
 msgid "Cyborg Lancer"
 msgstr "Cyborg lángszóró"
 
-#: po/custom/fromJson.txt:156
+#: po/custom/fromJson.txt:158
 msgid "Cyborg Light Body"
 msgstr "Cyborg Könnyű karosszéria"
 
-#: po/custom/fromJson.txt:157
+#: po/custom/fromJson.txt:159
 msgid "Cyborg Mechanic"
 msgstr "Cyborg szerelő"
 
-#: po/custom/fromJson.txt:161
+#: po/custom/fromJson.txt:163
 msgid "Cyborg Superdense Composite Alloys"
 msgstr "Cyborg szupersűrű kompozit ötvözetek"
 
-#: po/custom/fromJson.txt:162
+#: po/custom/fromJson.txt:164
 msgid "Cyborg Superdense Composite Alloys Mk2"
 msgstr "Cyborg szupersűrű kompozit ötvözetek Mk2"
 
-#: po/custom/fromJson.txt:163
+#: po/custom/fromJson.txt:165
 msgid "Cyborg Superdense Composite Alloys Mk3"
 msgstr "Cyborg szupersűrű kompozit ötvözetek Mk3"
 
-#: po/custom/fromJson.txt:164
+#: po/custom/fromJson.txt:166
 msgid "Cyborg Superdense Thermal Armor"
 msgstr "Cyborg szupersűrű hőpáncél"
 
-#: po/custom/fromJson.txt:165
+#: po/custom/fromJson.txt:167
 msgid "Cyborg Superdense Thermal Armor Mk2"
 msgstr "Cyborg szupersűrű hőpáncél Mk2"
 
-#: po/custom/fromJson.txt:166
+#: po/custom/fromJson.txt:168
 msgid "Cyborg Superdense Thermal Armor Mk3"
 msgstr "Cyborg szupersűrű hőpáncél Mk3"
 
-#: po/custom/fromJson.txt:167
+#: po/custom/fromJson.txt:169
 msgid "Cyborg Thermal Armor"
 msgstr "Cyborg hőpajzs"
 
-#: po/custom/fromJson.txt:168
+#: po/custom/fromJson.txt:170
 msgid "Cyborg Thermal Armor Mk2"
 msgstr "Cyborg hőpajzs Mk2"
 
-#: po/custom/fromJson.txt:169
+#: po/custom/fromJson.txt:171
 msgid "Cyborg Thermal Armor Mk3"
 msgstr "Cyborg hőpajzs Mk3"
 
-#: po/custom/fromJson.txt:170
+#: po/custom/fromJson.txt:172
 msgid "Cyborg Transport"
 msgstr "Cyborg szállítóeszköz"
 
-#: po/custom/fromJson.txt:171
+#: po/custom/fromJson.txt:173
 msgid "Cyclone AA Flak Site"
 msgstr "Cyclone légelhárító platform"
 
-#: po/custom/fromJson.txt:172
+#: po/custom/fromJson.txt:174
 msgid "Cyclone AA Python Half-tracks"
 msgstr "Python féllánctalpas Cyclone légvédelem"
 
-#: po/custom/fromJson.txt:173
+#: po/custom/fromJson.txt:175
 msgid "Cyclone Flak Turret"
 msgstr "Cyclone légelhárító lövegtorony"
 
-#: po/custom/fromJson.txt:175
+#: po/custom/fromJson.txt:177
 msgid "Dedicated Synaptic Link Data Analysis Mk2"
 msgstr "Célirányos szinaptikus kapcsolatú adatelemzés Mk2"
 
-#: po/custom/fromJson.txt:176
+#: po/custom/fromJson.txt:178
 msgid "Dedicated Synaptic Link Data Analysis Mk3"
 msgstr "Célirányos szinaptikus kapcsolatú adatelemzés Mk3"
 
-#: po/custom/fromJson.txt:177
+#: po/custom/fromJson.txt:179
 msgid "Demolish Structure"
 msgstr "Építmény lerombolása"
 
-#: po/custom/fromJson.txt:178
+#: po/custom/fromJson.txt:180
 msgid "Dense Composite Alloys"
 msgstr "Sűrű kompozit ötvözetek"
 
-#: po/custom/fromJson.txt:179
+#: po/custom/fromJson.txt:181
 msgid "Dense Composite Alloys Mk2"
 msgstr "Sűrű kompozit ötvözetek Mk2"
 
-#: po/custom/fromJson.txt:180
+#: po/custom/fromJson.txt:182
 msgid "Dense Composite Alloys Mk3"
 msgstr "Sűrű kompozit ötvözetek Mk3"
 
-#: po/custom/fromJson.txt:181
+#: po/custom/fromJson.txt:183
 msgid "Depleted Uranium MG Bullets"
 msgstr "Szegényített uránmagvas MG lőszer"
 
-#: po/custom/fromJson.txt:183
+#: po/custom/fromJson.txt:185
 msgid "Downed Transport"
 msgstr "Szállítmány landolt"
 
-#: po/custom/fromJson.txt:184
+#: po/custom/fromJson.txt:186
 msgid "Dragon"
 msgstr "Sárkány"
 
-#: po/custom/fromJson.txt:185
+#: po/custom/fromJson.txt:187
 msgid "Electronic Countermeasures"
 msgstr "Elektronikai laboratórium"
 
-#: po/custom/fromJson.txt:186
+#: po/custom/fromJson.txt:188
 msgid "Electronic Countermeasures Mk2"
 msgstr "Elektronikai Számláló mérés Mk2"
 
-#: po/custom/fromJson.txt:187
+#: po/custom/fromJson.txt:189
 msgid "EMP Cannon"
 msgstr "EMP ágyú"
 
-#: po/custom/fromJson.txt:188
+#: po/custom/fromJson.txt:190
 msgid "EMP Cannon Tower"
 msgstr "EMP ágyú torony"
 
-#: po/custom/fromJson.txt:189
+#: po/custom/fromJson.txt:191
 msgid "EMP Missile Launcher"
 msgstr "EMP rakétakilövő"
 
-#: po/custom/fromJson.txt:190
+#: po/custom/fromJson.txt:192
 msgid "EMP Mortar"
 msgstr "EMP aknavető"
 
-#: po/custom/fromJson.txt:191
+#: po/custom/fromJson.txt:193
 msgid "EMP Mortar Pit"
 msgstr "EMP aknavető árok"
 
-#: po/custom/fromJson.txt:192
+#: po/custom/fromJson.txt:194
 msgid "Enemy"
 msgstr "Ellenség"
 
-#: po/custom/fromJson.txt:193
+#: po/custom/fromJson.txt:195
 msgid "Engineering"
 msgstr "Mérnöki tudományok"
 
-#: po/custom/fromJson.txt:194
+#: po/custom/fromJson.txt:196
 msgid "Factory"
 msgstr "Gyár"
 
-#: po/custom/fromJson.txt:195
+#: po/custom/fromJson.txt:197
 msgid "Factory Module"
 msgstr "Gyári modul"
 
-#: po/custom/fromJson.txt:196
+#: po/custom/fromJson.txt:198
 msgid "Fast Fire Mini-Rockets"
 msgstr "Gyorstüzelésű kisrakéták"
 
-#: po/custom/fromJson.txt:197
+#: po/custom/fromJson.txt:199
 msgid "Fast Fire Mini-Rockets Mk2"
 msgstr "Gyorstüzelésű kisrakéták Mk2"
 
-#: po/custom/fromJson.txt:198
+#: po/custom/fromJson.txt:200
 msgid "Fast Fire Mini-Rockets Mk3"
 msgstr "Gyorstüzelésű kisrakéták Mk3"
 
-#: po/custom/fromJson.txt:199
+#: po/custom/fromJson.txt:201
 msgid "Fast Loader"
 msgstr "Gyors töltés"
 
-#: po/custom/fromJson.txt:200
+#: po/custom/fromJson.txt:202
 msgid "Fire Truck"
 msgstr "Tűzoltóautó"
 
-#: po/custom/fromJson.txt:201
+#: po/custom/fromJson.txt:203
 msgid "Flamer"
 msgstr "Lángszóró"
 
-#: po/custom/fromJson.txt:202
+#: po/custom/fromJson.txt:204
 msgid "Flamer Autoloader"
 msgstr "Automatikus lángszóró töltés"
 
-#: po/custom/fromJson.txt:203
+#: po/custom/fromJson.txt:205
 msgid "Flamer Autoloader Mk2"
 msgstr "Automatikus lángszóró töltés Mk2"
 
-#: po/custom/fromJson.txt:204
+#: po/custom/fromJson.txt:206
 msgid "Flamer Autoloader Mk3"
 msgstr "Automatikus lángszóró töltés Mk3"
 
-#: po/custom/fromJson.txt:205
+#: po/custom/fromJson.txt:207
 msgid "Flamer Bunker"
 msgstr "Lángszóró bunker"
 
-#: po/custom/fromJson.txt:206
+#: po/custom/fromJson.txt:208
 msgid "Flamer Cobra Tracks"
 msgstr "Cobra lánctalpas lángszóró"
 
-#: po/custom/fromJson.txt:210
+#: po/custom/fromJson.txt:212
 msgid "Flamer Viper Half-Tracks"
 msgstr "Viper féllánctalpas lángszóró"
 
-#: po/custom/fromJson.txt:211
+#: po/custom/fromJson.txt:213
 msgid "Flamer Viper Wheels"
 msgstr "Viper lángszóró"
 
-#: po/custom/fromJson.txt:212
+#: po/custom/fromJson.txt:214
 msgid "Flashlight"
 msgstr "Könnyűlézer"
 
-#: po/custom/fromJson.txt:214
+#: po/custom/fromJson.txt:216
 msgid "Flashlight Gunner"
 msgstr "Könnyű lézeres"
 
-#: po/custom/fromJson.txt:215
+#: po/custom/fromJson.txt:217
 msgid "Flashlight Gunner Cyborg"
 msgstr "Cyborg könnyűlézeres"
 
-#: po/custom/fromJson.txt:216
+#: po/custom/fromJson.txt:218
 msgid "Flashlight Hardpoint"
 msgstr "Könnyűlézer talapzat"
 
-#: po/custom/fromJson.txt:217
+#: po/custom/fromJson.txt:219
 msgid "Flashlight Retribution Hover"
 msgstr "Retribution légpárnás könnyűlézer"
 
-#: po/custom/fromJson.txt:218
+#: po/custom/fromJson.txt:220
 msgid "Fuel Injection Engine"
 msgstr "Üzemanyag befecskendezéses motor"
 
-#: po/custom/fromJson.txt:219
+#: po/custom/fromJson.txt:221
 msgid "Fuel Injection Engine Mk2"
 msgstr "Üzemanyag befecskendezéses motor Mk2"
 
-#: po/custom/fromJson.txt:220
+#: po/custom/fromJson.txt:222
 msgid "Fuel Injection Engine Mk3"
 msgstr "Üzemanyag befecskendezéses motor Mk3"
 
-#: po/custom/fromJson.txt:221
+#: po/custom/fromJson.txt:223
+msgid "Gamma Campaign"
+msgstr "Gamma küldetés"
+
+#: po/custom/fromJson.txt:224
 msgid "Gas Turbine Engine"
 msgstr "Gázturbina motor"
 
-#: po/custom/fromJson.txt:222
+#: po/custom/fromJson.txt:225
 msgid "Gas Turbine Engine Mk2"
 msgstr "Gázturbina motor Mk2"
 
-#: po/custom/fromJson.txt:223
+#: po/custom/fromJson.txt:226
 msgid "Gas Turbine Engine Mk3"
 msgstr "Gázturbina motor Mk3"
 
-#: po/custom/fromJson.txt:224
+#: po/custom/fromJson.txt:227
 msgid "Gas Turbine Generator"
 msgstr "Gázturbina generátor"
 
-#: po/custom/fromJson.txt:225
+#: po/custom/fromJson.txt:228
 msgid "Gas Turbine Generator Mk2"
 msgstr "Gázturbina generátor Mk2"
 
-#: po/custom/fromJson.txt:226
+#: po/custom/fromJson.txt:229
 msgid "Gas Turbine Generator Mk3"
 msgstr "Gázturbina generátor Mk3"
 
-#: po/custom/fromJson.txt:227
+#: po/custom/fromJson.txt:230
 msgid "Gauss Cannon"
 msgstr "Gauss ágyú"
 
-#: po/custom/fromJson.txt:228
+#: po/custom/fromJson.txt:231
 msgid "Gauss Cannon Emplacement"
 msgstr "Gauss ágyúállás"
 
-#: po/custom/fromJson.txt:229
+#: po/custom/fromJson.txt:232
 msgid "Gauss Cannon Hardpoint"
 msgstr "Gauss ágyú talapzat"
 
-#: po/custom/fromJson.txt:230
+#: po/custom/fromJson.txt:233
 msgid "Gauss Cannon Python Tracks"
 msgstr "Python lánctalpas Gauss ágyú"
 
-#: po/custom/fromJson.txt:231
+#: po/custom/fromJson.txt:234
 msgid "Gauss Cannon Wyvern Tracks"
 msgstr "Wyvern lánctalpas Gauss ágyú"
 
-#: po/custom/fromJson.txt:232
+#: po/custom/fromJson.txt:235
 msgid "Grenadier"
 msgstr "Gránátos"
 
-#: po/custom/fromJson.txt:233
+#: po/custom/fromJson.txt:236
 msgid "Ground Shaker"
 msgstr "Ground Shaker"
 
-#: po/custom/fromJson.txt:235
+#: po/custom/fromJson.txt:238
 msgid "Half-tracked Propulsion"
 msgstr "Féllánctalpas hajtómű"
 
-#: po/custom/fromJson.txt:237
+#: po/custom/fromJson.txt:240
 msgid "Half-tracks"
 msgstr "féllánctalp"
 
-#: po/custom/fromJson.txt:238
+#: po/custom/fromJson.txt:241
 msgid "Half-tracks II"
 msgstr "féllánctalp II"
 
-#: po/custom/fromJson.txt:239
+#: po/custom/fromJson.txt:242
 msgid "Half-tracks III"
 msgstr "féllánctalp III"
 
-#: po/custom/fromJson.txt:240
+#: po/custom/fromJson.txt:243
 msgid "Hardcrete"
 msgstr "Vasbeton"
 
-#: po/custom/fromJson.txt:241
+#: po/custom/fromJson.txt:244
 msgid "Hardcrete Corner Wall"
 msgstr "Vasbeton fal sarokelem"
 
-#: po/custom/fromJson.txt:242
+#: po/custom/fromJson.txt:245
 msgid "Hardcrete Gate"
 msgstr "Vasbeton kapu"
 
-#: po/custom/fromJson.txt:243
+#: po/custom/fromJson.txt:246
 msgid "Hardcrete Wall"
 msgstr "Vasbeton fal"
 
-#: po/custom/fromJson.txt:245
+#: po/custom/fromJson.txt:248
 msgid "Hardened Base Structure Materials Mk2"
 msgstr "Edzett bázisépület alapanyagok Mk2"
 
-#: po/custom/fromJson.txt:246
+#: po/custom/fromJson.txt:249
 msgid "Hardened Base Structure Materials Mk3"
 msgstr "Edzett bázisépület alapanyagok Mk3"
 
-#: po/custom/fromJson.txt:247
+#: po/custom/fromJson.txt:250
 msgid "Hardened MG Bullets"
 msgstr "Edzett gépfegyver lőszer"
 
-#: po/custom/fromJson.txt:248
+#: po/custom/fromJson.txt:251
 msgid "Hardened Rail Dart"
 msgstr "Edzett nyíllövedék"
 
-#: po/custom/fromJson.txt:249
+#: po/custom/fromJson.txt:252
 msgid "Hardened Rail Dart Mk2"
 msgstr "Edzett nyíllövedék Mk2"
 
-#: po/custom/fromJson.txt:250
+#: po/custom/fromJson.txt:253
 msgid "Hardened Rail Dart Mk3"
 msgstr "Edzett nyíllövedék Mk3"
 
-#: po/custom/fromJson.txt:251
+#: po/custom/fromJson.txt:254
 msgid "Hardened Sensor Tower"
 msgstr "Edzett acél érzékelő torony"
 
-#: po/custom/fromJson.txt:252
+#: po/custom/fromJson.txt:255
 msgid "HEAP Bomb Bay"
 msgstr "Nagy hatóerejű páncéltörő bomba szekrény"
 
-#: po/custom/fromJson.txt:253
+#: po/custom/fromJson.txt:256
 msgid "Heap Bomb Bay Mantis VTOL"
 msgstr "VTOL Mantis szőnyegbombázó"
 
-#: po/custom/fromJson.txt:254
+#: po/custom/fromJson.txt:257
 msgid "Heap Bomb Bay Retribution VTOL"
 msgstr "VTOL Retribution szőnyegbombázó"
 
-#: po/custom/fromJson.txt:255
+#: po/custom/fromJson.txt:258
 msgid "HEAP Howitzer Shells"
 msgstr "Nagy hatóerejű páncéltörő tarack gránát"
 
-#: po/custom/fromJson.txt:256
+#: po/custom/fromJson.txt:259
 msgid "HEAP Howitzer Shells Mk2"
 msgstr "Nagy hatóerejű páncéltörő tarack gránát Mk2"
 
-#: po/custom/fromJson.txt:257
+#: po/custom/fromJson.txt:260
 msgid "HEAP Howitzer Shells Mk3"
 msgstr "Nagy hatóerejű páncéltörő tarack gránát Mk3"
 
-#: po/custom/fromJson.txt:258
+#: po/custom/fromJson.txt:261
 msgid "HEAP Mini-Rockets"
 msgstr "Nagy hatóerejű páncéltörő kisrakéták"
 
-#: po/custom/fromJson.txt:259
+#: po/custom/fromJson.txt:262
 msgid "HEAP Mini-Rockets Mk2"
 msgstr "Nagy hatóerejű páncéltörő kisrakéták Mk2"
 
-#: po/custom/fromJson.txt:260
+#: po/custom/fromJson.txt:263
 msgid "HEAP Mini-Rockets Mk3"
 msgstr "Nagy hatóerejű páncéltörő kisrakéták Mk3"
 
-#: po/custom/fromJson.txt:261
+#: po/custom/fromJson.txt:264
 msgid "HEAP Mortar Shells"
 msgstr "Nagy hatóerejű páncéltörő aknavető gránát"
 
-#: po/custom/fromJson.txt:262
+#: po/custom/fromJson.txt:265
 msgid "HEAP Mortar Shells Mk2"
 msgstr "Nagy hatóerejű páncéltörő mozsár gránát Mk2"
 
-#: po/custom/fromJson.txt:263
+#: po/custom/fromJson.txt:266
 msgid "HEAP Mortar Shells Mk3"
 msgstr "Nagy hatóerejű páncéltörő aknavető gránát Mk3"
 
-#: po/custom/fromJson.txt:264
+#: po/custom/fromJson.txt:267
 msgid "HEAT Cannon Shells"
 msgstr "Nagy hatóerejű tankelhárító ágyú gránátok"
 
-#: po/custom/fromJson.txt:265
+#: po/custom/fromJson.txt:268
 msgid "HEAT Cannon Shells Mk2"
 msgstr "Nagy hatóerejű tankelhárító ágyú gránátok Mk2"
 
-#: po/custom/fromJson.txt:266
+#: po/custom/fromJson.txt:269
 msgid "HEAT Cannon Shells Mk3"
 msgstr "Nagy hatóerejű tankelhárító ágyú gránátok Mk3"
 
-#: po/custom/fromJson.txt:267
+#: po/custom/fromJson.txt:270
 msgid "HEAT Rocket Warhead"
 msgstr "HEAT rakéta robbanófej"
 
-#: po/custom/fromJson.txt:268
+#: po/custom/fromJson.txt:271
 msgid "HEAT Rocket Warhead Mk2"
 msgstr "HEAT rakéta robbanófej Mk2"
 
-#: po/custom/fromJson.txt:269
+#: po/custom/fromJson.txt:272
 msgid "HEAT Rocket Warhead Mk3"
 msgstr "HEAT rakéta robbanófej Mk3"
 
-#: po/custom/fromJson.txt:270
+#: po/custom/fromJson.txt:273
 msgid "Heavy Body - Mantis"
 msgstr "Nehéz karosszéria - Mantis"
 
-#: po/custom/fromJson.txt:271
+#: po/custom/fromJson.txt:274
 msgid "Heavy Body - Python"
 msgstr "Nehéz karosszéria - Python"
 
-#: po/custom/fromJson.txt:272
+#: po/custom/fromJson.txt:275
 msgid "Heavy Body - Tiger"
 msgstr "Nehéz karosszéria - Tiger"
 
-#: po/custom/fromJson.txt:273
+#: po/custom/fromJson.txt:276
 msgid "Heavy Body - Vengeance"
 msgstr "Nehéz karosszéria - Vengeance"
 
-#: po/custom/fromJson.txt:274
+#: po/custom/fromJson.txt:277
 msgid "Heavy Body - Wyvern"
 msgstr "Nehéz karosszéria - Wyvern"
 
-#: po/custom/fromJson.txt:275
+#: po/custom/fromJson.txt:278
 msgid "Heavy Cannon"
 msgstr "Nehéz ágyú"
 
-#: po/custom/fromJson.txt:276
+#: po/custom/fromJson.txt:279
 msgid "Heavy Cannon Cobra Hover"
 msgstr "Cobra légpárnás nehéz ágyú"
 
-#: po/custom/fromJson.txt:277
+#: po/custom/fromJson.txt:280
 msgid "Heavy Cannon Cobra Tracks"
 msgstr "Cobra lánctalpas nehéz ágyú"
 
-#: po/custom/fromJson.txt:278
+#: po/custom/fromJson.txt:281
 msgid "Heavy Cannon Hardpoint"
 msgstr "Nehéz ágyú talapzat"
 
-#: po/custom/fromJson.txt:279
+#: po/custom/fromJson.txt:282
 msgid "Heavy Cannon Mantis Tracks"
 msgstr "Mantis lánctalpas nehéz ágyú"
 
-#: po/custom/fromJson.txt:280
+#: po/custom/fromJson.txt:283
 msgid "Heavy Cannon Python Hover"
 msgstr "Python lánctalpas nehéz ágyú"
 
-#: po/custom/fromJson.txt:281
+#: po/custom/fromJson.txt:284
 msgid "Heavy Cannon Python Tracks"
 msgstr "Python lánctalpas nehéz ágyú"
 
-#: po/custom/fromJson.txt:282
+#: po/custom/fromJson.txt:285
 msgid "Heavy Cannon Scorpion Tracks"
 msgstr "Scorpion lánctalpas nehéz ágyú"
 
-#: po/custom/fromJson.txt:283
+#: po/custom/fromJson.txt:286
 msgid "Heavy Cannon Tiger Tracks"
 msgstr "Tiger lánctalpas nehéz ágyú"
 
-#: po/custom/fromJson.txt:284
+#: po/custom/fromJson.txt:287
 msgid "Heavy Flamer - Inferno"
 msgstr "Nehéz lágszóró - Inferno"
 
-#: po/custom/fromJson.txt:285
+#: po/custom/fromJson.txt:288
 msgid "Heavy Gunner"
 msgstr "Nehézfegyveres"
 
-#: po/custom/fromJson.txt:287
+#: po/custom/fromJson.txt:290
 msgid "Heavy Howitzer - Ground Shaker"
 msgstr "Nehéz tarack - Ground Shaker"
 
-#: po/custom/fromJson.txt:288
+#: po/custom/fromJson.txt:291
 msgid "Heavy Laser"
 msgstr "Nehéz Lézer"
 
-#: po/custom/fromJson.txt:289
+#: po/custom/fromJson.txt:292
 msgid "Heavy Laser Emplacement"
 msgstr "Nehéz lézer állás"
 
-#: po/custom/fromJson.txt:290
+#: po/custom/fromJson.txt:293
 msgid "Heavy Laser Tiger Tracks"
 msgstr "Tiger lánctalpas nehéz lézer"
 
-#: po/custom/fromJson.txt:291
+#: po/custom/fromJson.txt:294
 msgid "Heavy Laser Wyvern Tracks"
 msgstr "Wyvern lánctalpas nehéz lézer"
 
-#: po/custom/fromJson.txt:292
+#: po/custom/fromJson.txt:295
 msgid "Heavy Machinegun"
 msgstr "Nehéz gépfegyver"
 
-#: po/custom/fromJson.txt:294
+#: po/custom/fromJson.txt:297
 msgid "Heavy Machinegun Cobra Half-tracks"
 msgstr "Cobra féllánctalpas nehéz gépfegyver"
 
-#: po/custom/fromJson.txt:295
+#: po/custom/fromJson.txt:298
 msgid "Heavy Machinegun Cobra Hover"
 msgstr "Cobra nehéz gépfegyver torony"
 
-#: po/custom/fromJson.txt:296
+#: po/custom/fromJson.txt:299
 msgid "Heavy Machinegun Cobra Tracks"
 msgstr "Viper lánctalpas nehéz gépfegyver"
 
-#: po/custom/fromJson.txt:297
+#: po/custom/fromJson.txt:300
 msgid "Heavy Machinegun Cobra Wheels"
 msgstr "Cobra nehéz gépfegyver"
 
-#: po/custom/fromJson.txt:298
+#: po/custom/fromJson.txt:301
 msgid "Heavy Machinegun Hardpoint"
 msgstr "Nehéz gépfegyver talapzat"
 
-#: po/custom/fromJson.txt:299
+#: po/custom/fromJson.txt:302
 msgid "Heavy Machinegun Scorpion Half Tracks"
 msgstr "Scorpion féllánctalpas nehéz gépfegyver"
 
-#: po/custom/fromJson.txt:300
+#: po/custom/fromJson.txt:303
 msgid "Heavy Machinegun Scorpion Tracks"
 msgstr "Scorpion lánctalpas nehéz gépfegyver"
 
-#: po/custom/fromJson.txt:302
+#: po/custom/fromJson.txt:305
 msgid "Heavy Machinegun Viper Half-tracks"
 msgstr "Cobra féllánctalpas nehéz gépfegyver"
 
-#: po/custom/fromJson.txt:303
+#: po/custom/fromJson.txt:306
 msgid "Heavy Machinegun Viper Tracks"
 msgstr "Viper lánctalpas nehéz gépfegyver"
 
-#: po/custom/fromJson.txt:304
+#: po/custom/fromJson.txt:307
 msgid "Heavy Machinegun Viper Wheels"
 msgstr "Viper nehéz gépfegyver"
 
-#: po/custom/fromJson.txt:305
+#: po/custom/fromJson.txt:308
 msgid "Heavy Mortar - Bombard"
 msgstr "Nehéz aknavető - Bombard"
 
-#: po/custom/fromJson.txt:306
+#: po/custom/fromJson.txt:309
 msgid "Heavy Repair Scorpion Hover"
 msgstr "Scorpion nehéz légpárnás szervizkocsi"
 
-#: po/custom/fromJson.txt:308
+#: po/custom/fromJson.txt:311
 msgid "Heavy Repair Turret Cobra Hover"
 msgstr "Cobra légpárnás nehéz szervizkocsi"
 
-#: po/custom/fromJson.txt:309
+#: po/custom/fromJson.txt:312
 msgid "Heavy Rocket Bastion"
 msgstr "Nehéz rakéta bástya"
 
-#: po/custom/fromJson.txt:310
+#: po/custom/fromJson.txt:313
 msgid "Heavyweaponslab"
 msgstr "Nehézfegyver labor"
 
-#: po/custom/fromJson.txt:311
+#: po/custom/fromJson.txt:314
 msgid "HE Bomb Shells"
 msgstr "Nagy hatóerejű bombagránát"
 
-#: po/custom/fromJson.txt:312
+#: po/custom/fromJson.txt:315
 msgid "HE Howitzer Shells"
 msgstr "Nagy hatóerejű tarack gránát"
 
-#: po/custom/fromJson.txt:313
+#: po/custom/fromJson.txt:316
 msgid "HE Howitzer Shells Mk2"
 msgstr "Nagy hatóerejű tarack gránát Mk2"
 
-#: po/custom/fromJson.txt:314
+#: po/custom/fromJson.txt:317
 msgid "HE Howitzer Shells Mk3"
 msgstr "Nagy hatóerejű tarack gránát Mk3"
 
-#: po/custom/fromJson.txt:315
+#: po/custom/fromJson.txt:318
 msgid "Helicopter"
 msgstr "Helikopter"
 
-#: po/custom/fromJson.txt:316
+#: po/custom/fromJson.txt:319
 msgid "Hellstorm"
 msgstr "Pokolivihar"
 
-#: po/custom/fromJson.txt:318
+#: po/custom/fromJson.txt:321
 msgid "HE Mini-Rockets"
 msgstr "Nagy hatóerejű kisrakéták"
 
-#: po/custom/fromJson.txt:319
+#: po/custom/fromJson.txt:322
 msgid "HE Mini-Rockets Mk2"
 msgstr "Nagy hatóerejű kisrakéták Mk2"
 
-#: po/custom/fromJson.txt:320
+#: po/custom/fromJson.txt:323
 msgid "HE Mini-Rockets Mk3"
 msgstr "Nagy hatóerejű kisrakéták Mk3"
 
-#: po/custom/fromJson.txt:321
+#: po/custom/fromJson.txt:324
 msgid "HE Mortar Shells"
 msgstr "Nagy hatóerejű aknavető gránát"
 
-#: po/custom/fromJson.txt:322
+#: po/custom/fromJson.txt:325
 msgid "HE Mortar Shells Mk2"
 msgstr "Nagy hatóerejű aknavető gránát Mk2"
 
-#: po/custom/fromJson.txt:323
+#: po/custom/fromJson.txt:326
 msgid "HE Mortar Shells Mk3"
 msgstr "Nagy hatóerejű aknavető gránát Mk3"
 
-#: po/custom/fromJson.txt:324
+#: po/custom/fromJson.txt:327
 msgid "HE Rockets"
 msgstr "Nagy hatóerejű rakéta"
 
-#: po/custom/fromJson.txt:325
+#: po/custom/fromJson.txt:328
 msgid "HE Rockets Mk2"
 msgstr "Nagy hatóerejű rakéta Mk2"
 
-#: po/custom/fromJson.txt:326
+#: po/custom/fromJson.txt:329
 msgid "HE Rockets Mk3"
 msgstr "Nagy hatóerejű rakéta Mk3"
 
-#: po/custom/fromJson.txt:327
+#: po/custom/fromJson.txt:330
 msgid "HESH Rocket Warhead"
 msgstr "HESH rakéta robbanófej"
 
-#: po/custom/fromJson.txt:328
+#: po/custom/fromJson.txt:331
 msgid "HESH Rocket Warhead Mk2"
 msgstr "HESH rakéta robbanófej Mk2"
 
-#: po/custom/fromJson.txt:329
+#: po/custom/fromJson.txt:332
 msgid "HESH Rocket Warhead Mk3"
 msgstr "HESH rakéta robbanófej Mk3"
 
-#: po/custom/fromJson.txt:330
+#: po/custom/fromJson.txt:333
 msgid "Hide Behind Me"
 msgstr "Rejts el mögém"
 
-#: po/custom/fromJson.txt:331
+#: po/custom/fromJson.txt:334
 msgid "Hi-Energy Laser Emitter"
 msgstr "Nagyenergiájú lézer emitter"
 
-#: po/custom/fromJson.txt:332
+#: po/custom/fromJson.txt:335
 msgid "Hi-Energy Laser Emitter Mk2"
 msgstr "Nagyenergiájú lézer emitter Mk2"
 
-#: po/custom/fromJson.txt:333
+#: po/custom/fromJson.txt:336
 msgid "Hi-Energy Laser Emitter Mk3"
 msgstr "Nagyenergiájú lézer emitter Mk3"
 
-#: po/custom/fromJson.txt:334
+#: po/custom/fromJson.txt:337
 msgid "High Intensity Thermal Armor"
 msgstr "Nagy erejű hőpajzs"
 
-#: po/custom/fromJson.txt:335
+#: po/custom/fromJson.txt:338
 msgid "High Intensity Thermal Armor Mk2"
 msgstr "Nagy erejű hőpajzs Mk2"
 
-#: po/custom/fromJson.txt:336
+#: po/custom/fromJson.txt:339
 msgid "High Intensity Thermal Armor Mk3"
 msgstr "Nagy erejű hőpajzs Mk3"
 
-#: po/custom/fromJson.txt:337
+#: po/custom/fromJson.txt:340
 msgid "High Temperature Flamer Gel"
 msgstr "Magas hőfokú lángszóró gél"
 
-#: po/custom/fromJson.txt:338
+#: po/custom/fromJson.txt:341
 msgid "High Temperature Flamer Gel Mk2"
 msgstr "Magas hőfokú lángszóró gél Mk2"
 
-#: po/custom/fromJson.txt:339
+#: po/custom/fromJson.txt:342
 msgid "High Temperature Flamer Gel Mk3"
 msgstr "Magas hőfokú lángszóró gél Mk3"
 
-#: po/custom/fromJson.txt:340
+#: po/custom/fromJson.txt:343
 msgid "Hover"
 msgstr "légpárna"
 
-#: po/custom/fromJson.txt:341
+#: po/custom/fromJson.txt:344
 msgid "Hover AI"
 msgstr "Légpárnás AI"
 
-#: po/custom/fromJson.txt:342
+#: po/custom/fromJson.txt:345
 msgid "Hover II"
 msgstr "légpárna II"
 
-#: po/custom/fromJson.txt:343
+#: po/custom/fromJson.txt:346
 msgid "Hover III"
 msgstr "légpárna III"
 
-#: po/custom/fromJson.txt:344
+#: po/custom/fromJson.txt:347
 msgid "Hover Propulsion"
 msgstr "Légpárnás hajtómű"
 
-#: po/custom/fromJson.txt:346
+#: po/custom/fromJson.txt:349
 msgid "Howitzer"
 msgstr "Tarack"
 
-#: po/custom/fromJson.txt:347
+#: po/custom/fromJson.txt:350
 msgid "Howitzer Autoloader"
 msgstr "Automatikus tarack töltés"
 
-#: po/custom/fromJson.txt:348
+#: po/custom/fromJson.txt:351
 msgid "Howitzer Autoloader Mk2"
 msgstr "Automatikus tarack töltés Mk2"
 
-#: po/custom/fromJson.txt:349
+#: po/custom/fromJson.txt:352
 msgid "Howitzer Autoloader Mk3"
 msgstr "Automatikus tarack töltés Mk3"
 
-#: po/custom/fromJson.txt:351
+#: po/custom/fromJson.txt:354
 msgid "Howitzer Fast Loader"
 msgstr "Tarack gyors újratöltés"
 
-#: po/custom/fromJson.txt:352
+#: po/custom/fromJson.txt:355
 msgid "HPV Cannon Emplacement"
 msgstr "Nagysebességű ágyúállás"
 
-#: po/custom/fromJson.txt:353
+#: po/custom/fromJson.txt:356
 msgid "HPV Cannon Hardpoint"
 msgstr "Nagysebességű ágyú talapzat"
 
-#: po/custom/fromJson.txt:354
+#: po/custom/fromJson.txt:357
 msgid "HPV Cannon Python Tracks"
 msgstr "Python lánctalpas nagysebességű ágyú"
 
-#: po/custom/fromJson.txt:355
+#: po/custom/fromJson.txt:358
 msgid "Hurricane AA Site"
 msgstr "Hurricane légvédelmi platform"
 
-#: po/custom/fromJson.txt:356
+#: po/custom/fromJson.txt:359
 msgid "Hurricane AA Turret"
 msgstr "Hurricane légvédelmi lövegtorony"
 
-#: po/custom/fromJson.txt:357
+#: po/custom/fromJson.txt:360
 msgid "Hut"
 msgstr "Bódé"
 
-#: po/custom/fromJson.txt:358
+#: po/custom/fromJson.txt:361
 msgid "HVAPFSDS Cannon Rounds"
 msgstr "HVAPFSDS ágyúlőszer"
 
-#: po/custom/fromJson.txt:359
+#: po/custom/fromJson.txt:362
 msgid "HVAPFSDS Cannon Rounds Mk2"
 msgstr "HVAPFSDS ágyúlőszer Mk2"
 
-#: po/custom/fromJson.txt:360
+#: po/custom/fromJson.txt:363
 msgid "HVAPFSDS Cannon Rounds Mk3"
 msgstr "HVAPFSDS ágyúlőszer Mk3"
 
-#: po/custom/fromJson.txt:361
+#: po/custom/fromJson.txt:364
 msgid "Hyper Fire Chaingun Upgrade"
 msgstr "Sebes tüzelésű láncfegyver fejlesztés"
 
-#: po/custom/fromJson.txt:362
+#: po/custom/fromJson.txt:365
 msgid "Hyper Velocity Cannon"
 msgstr "Nagysebességű ágyú"
 
-#: po/custom/fromJson.txt:363
+#: po/custom/fromJson.txt:366
 msgid "Hyper Velocity Cannon Emplacement"
 msgstr "Nagysebességű ágyúállás"
 
-#: po/custom/fromJson.txt:364
+#: po/custom/fromJson.txt:367
 msgid "Hyper Velocity Cannon Hardpoint"
 msgstr "Nagysebességű ágyú talapzat"
 
-#: po/custom/fromJson.txt:365
+#: po/custom/fromJson.txt:368
 msgid "Hyper Velocity Cannon Python Hover"
 msgstr "Python légpárnás nagy sebességű ágyú"
 
-#: po/custom/fromJson.txt:366
+#: po/custom/fromJson.txt:369
 msgid "Hyper Velocity Cannon Python Tracks"
 msgstr "Python lánctalpas nagysebességű ágyú"
 
-#: po/custom/fromJson.txt:367
+#: po/custom/fromJson.txt:370
 msgid "Improved Bomb Warhead"
 msgstr "Tökéletesített robbanófej"
 
-#: po/custom/fromJson.txt:368
+#: po/custom/fromJson.txt:371
 msgid "Improved Engineering"
 msgstr "Fejlesztett mérnöki tudományok"
 
-#: po/custom/fromJson.txt:369
+#: po/custom/fromJson.txt:372
 msgid "Improved Hardcrete"
 msgstr "Továbbfejlesztett vasbeton"
 
-#: po/custom/fromJson.txt:370
+#: po/custom/fromJson.txt:373
 msgid "Improved Hardcrete Mk2"
 msgstr "Továbbfejlesztett vasbeton Mk2"
 
-#: po/custom/fromJson.txt:371
+#: po/custom/fromJson.txt:374
 msgid "Improved Hardcrete Mk3"
 msgstr "Továbbfejlesztett vasbeton Mk3"
 
-#: po/custom/fromJson.txt:372
+#: po/custom/fromJson.txt:375
 msgid "Improved Laser Focusing"
 msgstr "Jobb lézer fókusz"
 
-#: po/custom/fromJson.txt:373
+#: po/custom/fromJson.txt:376
 msgid "Improved Rocket Wire Guidance"
 msgstr "Jobb vezetékes rakétavezérlés"
 
-#: po/custom/fromJson.txt:374
+#: po/custom/fromJson.txt:377
 msgid "Incendiary Howitzer"
 msgstr "Gyújtó tarack"
 
-#: po/custom/fromJson.txt:375
+#: po/custom/fromJson.txt:378
 msgid "Incendiary Howitzer Emplacement"
 msgstr "Gyújtó tarackállás"
 
-#: po/custom/fromJson.txt:376
+#: po/custom/fromJson.txt:379
 msgid "Incendiary Mortar"
 msgstr "Gyújtó akna"
 
-#: po/custom/fromJson.txt:377
+#: po/custom/fromJson.txt:380
 msgid "Incendiary Mortar Pit"
 msgstr "Gyújtóakna árok"
 
-#: po/custom/fromJson.txt:378
+#: po/custom/fromJson.txt:381
 msgid "Indirectweaponslab"
 msgstr "Új indirekt fegyver labor"
 
-#: po/custom/fromJson.txt:379
+#: po/custom/fromJson.txt:382
 msgid "Inferno"
 msgstr "Inferno lángszóró"
 
-#: po/custom/fromJson.txt:380
+#: po/custom/fromJson.txt:383
 msgid "Inferno Bunker"
 msgstr "Inferno lángszóró bunker"
 
-#: po/custom/fromJson.txt:381
+#: po/custom/fromJson.txt:384
 msgid "Inferno Cobra Half-Tracks"
 msgstr "Cobra féllánctalpas Inferno lángszóró"
 
-#: po/custom/fromJson.txt:382
+#: po/custom/fromJson.txt:385
 msgid "Inferno Cobra Hover"
 msgstr "Cobra légpárnás Inferno lángszóró"
 
-#: po/custom/fromJson.txt:383
+#: po/custom/fromJson.txt:386
 msgid "Inferno Emplacement"
 msgstr "Inferno lángszóró állás"
 
-#: po/custom/fromJson.txt:384
+#: po/custom/fromJson.txt:387
 msgid "Inferno Hardpoint"
 msgstr "Inferno lángszóró talapzat"
 
-#: po/custom/fromJson.txt:385
+#: po/custom/fromJson.txt:388
 msgid "Inferno Python Hover"
 msgstr "Python légpárnás Inferno lángszóró"
 
-#: po/custom/fromJson.txt:386
+#: po/custom/fromJson.txt:389
 msgid "Jammer Tower"
 msgstr "Lángszóró torony"
 
-#: po/custom/fromJson.txt:387
+#: po/custom/fromJson.txt:390
 msgid "Jammer Turret"
 msgstr "Kódoló torony"
 
-#: po/custom/fromJson.txt:388
+#: po/custom/fromJson.txt:391
 msgid "Jeep"
 msgstr "Terepjáró"
 
-#: po/custom/fromJson.txt:389
+#: po/custom/fromJson.txt:392
 msgid "Lancer"
 msgstr "Tankelhárító"
 
-#: po/custom/fromJson.txt:390
+#: po/custom/fromJson.txt:393
 msgid "Lancer AT Rocket"
 msgstr "Tankelhárító rakéta"
 
-#: po/custom/fromJson.txt:391
+#: po/custom/fromJson.txt:394
 msgid "Lancer Bunker"
 msgstr "Tankelhárító bunker"
 
-#: po/custom/fromJson.txt:392
+#: po/custom/fromJson.txt:395
 msgid "Lancer Cobra Half-tracks"
 msgstr "Cobra féllánctalpas tankelhárító"
 
-#: po/custom/fromJson.txt:393
+#: po/custom/fromJson.txt:396
 msgid "Lancer Cobra Tracks"
 msgstr "Cobra lánctalpas tankelhárító"
 
-#: po/custom/fromJson.txt:394
+#: po/custom/fromJson.txt:397
 msgid "Lancer Cyborg"
 msgstr "Cyborg tankelhárító"
 
-#: po/custom/fromJson.txt:395
+#: po/custom/fromJson.txt:398
 msgid "Lancer Hardpoint"
 msgstr "Tankelhárító talapzat"
 
-#: po/custom/fromJson.txt:396
+#: po/custom/fromJson.txt:399
 msgid "Lancer Mantis Tracks"
 msgstr "Mantis lánctalpas tankelhárító"
 
-#: po/custom/fromJson.txt:397
+#: po/custom/fromJson.txt:400
 msgid "Lancer Python Tracks"
 msgstr "Python lánctalpas tankelhárító"
 
-#: po/custom/fromJson.txt:398
+#: po/custom/fromJson.txt:401
 msgid "Lancer Scorpion Tracks"
 msgstr "Scorpion lánctalpas tankelhárító"
 
-#: po/custom/fromJson.txt:399
+#: po/custom/fromJson.txt:402
 msgid "Lancer Scorpion VTOL"
 msgstr "VTOL Scorpion tankelhárító"
 
-#: po/custom/fromJson.txt:401
+#: po/custom/fromJson.txt:404
 msgid "Lancer Viper Tracks"
 msgstr "Viper lánctalpas tankelhárító"
 
-#: po/custom/fromJson.txt:402
+#: po/custom/fromJson.txt:405
 msgid "Lancer Viper Wheels"
 msgstr "Viper tankelhárító"
 
-#: po/custom/fromJson.txt:403
+#: po/custom/fromJson.txt:406
 msgid "Laser - Flashlight"
 msgstr "Lézer - könnyű lézer"
 
-#: po/custom/fromJson.txt:404
+#: po/custom/fromJson.txt:407
 msgid "Laser Guided Bombsight"
 msgstr "Lézer irányítású bombacélzó"
 
-#: po/custom/fromJson.txt:405
+#: po/custom/fromJson.txt:408
 msgid "Laseropticslab"
 msgstr "Lézeroptikai laboratórium"
 
-#: po/custom/fromJson.txt:406
+#: po/custom/fromJson.txt:409
 msgid "Laser Satellite Command Post"
 msgstr "Lézerműhold parancsnoki állás"
 
-#: po/custom/fromJson.txt:407
+#: po/custom/fromJson.txt:410
 msgid "LasSat"
 msgstr "LasSat"
 
-#: po/custom/fromJson.txt:408
+#: po/custom/fromJson.txt:411
 msgid "Leopard"
 msgstr "Leopard"
 
-#: po/custom/fromJson.txt:409
+#: po/custom/fromJson.txt:412
 msgid "Light Body - Bug"
 msgstr "Könnyű karosszéria - Bug"
 
-#: po/custom/fromJson.txt:410
+#: po/custom/fromJson.txt:413
 msgid "Light Body - Leopard"
 msgstr "Könnyű karosszéria - Leopard"
 
-#: po/custom/fromJson.txt:411
+#: po/custom/fromJson.txt:414
 msgid "Light Body - Retaliation"
 msgstr "Könnyű karosszéria - Retaliation"
 
-#: po/custom/fromJson.txt:412
+#: po/custom/fromJson.txt:415
 msgid "Light Body - Viper"
 msgstr "Könnyű karosszéria - Viper"
 
-#: po/custom/fromJson.txt:413
+#: po/custom/fromJson.txt:416
 msgid "Light Cannon"
 msgstr "Könnyű ágyú"
 
-#: po/custom/fromJson.txt:414
+#: po/custom/fromJson.txt:417
 msgid "Light Cannon Bunker"
 msgstr "Könnyű ágyú bunker"
 
-#: po/custom/fromJson.txt:415
+#: po/custom/fromJson.txt:418
 msgid "Light Cannon Cobra Tracks"
 msgstr "Cobra lánctalpas könnyű ágyú"
 
-#: po/custom/fromJson.txt:416
+#: po/custom/fromJson.txt:419
 msgid "Light Cannon Hardpoint"
 msgstr "Könnyű ágyú talapzat"
 
-#: po/custom/fromJson.txt:417
+#: po/custom/fromJson.txt:420
 msgid "Light Cannon Python Tracks"
 msgstr "Python lánctalpas könnyű ágyú"
 
-#: po/custom/fromJson.txt:418
+#: po/custom/fromJson.txt:421
 msgid "Light Cannon Viper Half-tracks"
 msgstr "Viper féllánctalpas könnyű löveg"
 
-#: po/custom/fromJson.txt:419
+#: po/custom/fromJson.txt:422
 msgid "Light Cannon Viper Tracks"
 msgstr "Viper lánctalpas könnyű ágyú"
 
-#: po/custom/fromJson.txt:420
+#: po/custom/fromJson.txt:423
 msgid "Light Cannon Viper Wheels"
 msgstr "Viper könnyű ágyú"
 
-#: po/custom/fromJson.txt:421
+#: po/custom/fromJson.txt:424
 msgid "Look-Out Tower"
 msgstr "Kilátó"
 
-#: po/custom/fromJson.txt:424
+#: po/custom/fromJson.txt:427
 msgid "Machinegun Bunker"
 msgstr "Gépfegyver bunker"
 
-#: po/custom/fromJson.txt:425
+#: po/custom/fromJson.txt:428
 msgid "Machinegun Guard Tower"
 msgstr "Gépfegyveres őrtorony"
 
-#: po/custom/fromJson.txt:426
+#: po/custom/fromJson.txt:429
 msgid "Machinegunner"
 msgstr "Gépfegyveres"
 
-#: po/custom/fromJson.txt:428
+#: po/custom/fromJson.txt:431
 msgid "Machinegun Viper Half-Tracks"
 msgstr "Viper féllánctalpas gépfegyver"
 
-#: po/custom/fromJson.txt:429
+#: po/custom/fromJson.txt:432
 msgid "Machinegun Viper Tracks"
 msgstr "Viper lánctalpas gépfegyver"
 
-#: po/custom/fromJson.txt:431
+#: po/custom/fromJson.txt:434
 msgid "Mantis"
 msgstr "Mantis"
 
-#: po/custom/fromJson.txt:432
+#: po/custom/fromJson.txt:435
 msgid "Mass Driver"
 msgstr "Elektromágneses katapult"
 
-#: po/custom/fromJson.txt:433
+#: po/custom/fromJson.txt:436
 msgid "Mass Driver Fortress"
 msgstr "Elektromágneses katapult erődítmény"
 
-#: po/custom/fromJson.txt:434
+#: po/custom/fromJson.txt:437
 msgid "Medium Body - Cobra"
 msgstr "Közepes karosszéria - Cobra"
 
-#: po/custom/fromJson.txt:435
+#: po/custom/fromJson.txt:438
 msgid "Medium Body - Panther"
 msgstr "Közepes karosszéria- Panther"
 
-#: po/custom/fromJson.txt:436
+#: po/custom/fromJson.txt:439
 msgid "Medium Body - Retribution"
 msgstr "Közepes karosszéria - Retribution"
 
-#: po/custom/fromJson.txt:437
+#: po/custom/fromJson.txt:440
 msgid "Medium Body - Scorpion"
 msgstr "Közepes karosszéria - Scorpion"
 
-#: po/custom/fromJson.txt:438
+#: po/custom/fromJson.txt:441
 msgid "Medium Cannon"
 msgstr "Közepes ágyú"
 
-#: po/custom/fromJson.txt:439
+#: po/custom/fromJson.txt:442
 msgid "Medium Cannon Cobra Half Track"
 msgstr "Cobra féllánctalpas löveg"
 
-#: po/custom/fromJson.txt:440
+#: po/custom/fromJson.txt:443
 msgid "Medium Cannon Cobra Hover"
 msgstr "Cobra légpárnás ágyú"
 
-#: po/custom/fromJson.txt:441
+#: po/custom/fromJson.txt:444
 msgid "Medium Cannon Cobra Tracks"
 msgstr "Cobra lánctalpas közepes ágyú"
 
-#: po/custom/fromJson.txt:442
+#: po/custom/fromJson.txt:445
 msgid "Medium Cannon Hardpoint"
 msgstr "Közepes ágyú talapzat"
 
-#: po/custom/fromJson.txt:443
+#: po/custom/fromJson.txt:446
 msgid "Medium Cannon Python Hover"
 msgstr "Python légpárnás ágyú"
 
-#: po/custom/fromJson.txt:444
+#: po/custom/fromJson.txt:447
 msgid "Medium Cannon Python Tracks"
 msgstr "Python lánctalpas ágyú"
 
-#: po/custom/fromJson.txt:445
+#: po/custom/fromJson.txt:448
 msgid "Medium Cannon Scorpion Hover"
 msgstr "Scorpion légpárnás ágyú"
 
-#: po/custom/fromJson.txt:446
+#: po/custom/fromJson.txt:449
 msgid "Medium Cannon Scorpion Tracks"
 msgstr "Scorpion lánctalpas ágyú"
 
-#: po/custom/fromJson.txt:447
+#: po/custom/fromJson.txt:450
 msgid "Medium Cannon Viper Tracks"
 msgstr "Viper lánctalpas közepes ágyú"
 
-#: po/custom/fromJson.txt:448
+#: po/custom/fromJson.txt:451
 msgid "Mini-Rocket Array"
 msgstr "Kisrakéta sor"
 
-#: po/custom/fromJson.txt:449
+#: po/custom/fromJson.txt:452
 msgid "Mini-Rocket Array Cobra Half-tracks"
 msgstr "Cobra féllánctalpas kisrakéta sor"
 
-#: po/custom/fromJson.txt:450
+#: po/custom/fromJson.txt:453
 msgid "Mini-Rocket Array Cobra Tracks"
 msgstr "Cobra lánctalpas kisrakéta sor"
 
-#: po/custom/fromJson.txt:451
+#: po/custom/fromJson.txt:454
 msgid "Mini-Rocket Array Viper Half Track"
 msgstr "Viper féllánctalpas kisrakéta sor"
 
-#: po/custom/fromJson.txt:452
+#: po/custom/fromJson.txt:455
 msgid "Mini-Rocket Array Viper Wheels"
 msgstr "Viper kisrakéta sor"
 
-#: po/custom/fromJson.txt:453
+#: po/custom/fromJson.txt:456
 msgid "Mini-Rocket Artillery"
 msgstr "Tüzérségi kisrakéta"
 
-#: po/custom/fromJson.txt:454
+#: po/custom/fromJson.txt:457
 msgid "Mini-Rocket Artillery Cobra Half-tracks"
 msgstr "Cobra féllánctalpas tüzérségi kisrakéta"
 
-#: po/custom/fromJson.txt:455
+#: po/custom/fromJson.txt:458
 msgid "Mini-Rocket Artillery Viper Wheels"
 msgstr "Viper tüzérségi kisrakéta"
 
-#: po/custom/fromJson.txt:456
+#: po/custom/fromJson.txt:459
 msgid "Mini-Rocket Battery"
 msgstr "Kisrakéta üteg"
 
-#: po/custom/fromJson.txt:457
+#: po/custom/fromJson.txt:460
 msgid "Mini-Rocket Cobra Half-Tracks"
 msgstr "Cobra féllánctalpas kisrakéta"
 
-#: po/custom/fromJson.txt:458
+#: po/custom/fromJson.txt:461
 msgid "Mini-Rocket Cobra Tracks"
 msgstr "Cobra lánctalpas kisrakéta"
 
-#: po/custom/fromJson.txt:459
+#: po/custom/fromJson.txt:462
 msgid "Mini-Rocket Guard Tower"
 msgstr "Kisrakéta őrtorony"
 
-#: po/custom/fromJson.txt:460
+#: po/custom/fromJson.txt:463
 msgid "Mini-Rocket Pod"
 msgstr "Kisrakéta indító"
 
-#: po/custom/fromJson.txt:461
+#: po/custom/fromJson.txt:464
 msgid "Mini-Rocket Tower"
 msgstr "Kisrakéta torony"
 
-#: po/custom/fromJson.txt:462
+#: po/custom/fromJson.txt:465
 msgid "Mini-Rocket Viper Half Track"
 msgstr "Viper féllánctalpas kisrakéta"
 
-#: po/custom/fromJson.txt:463
+#: po/custom/fromJson.txt:466
 msgid "Mini-Rocket Viper Wheels"
 msgstr "Viper kisrakéta"
 
-#: po/custom/fromJson.txt:464
+#: po/custom/fromJson.txt:467
 msgid "Missile Fortress"
 msgstr "Rakéta erődítmény"
 
-#: po/custom/fromJson.txt:467
+#: po/custom/fromJson.txt:470
 msgid "Mobile Repair Turret"
 msgstr "Önjáró szerviztorony"
 
-#: po/custom/fromJson.txt:468
+#: po/custom/fromJson.txt:471
 msgid "Mortar"
 msgstr "Aknavető"
 
-#: po/custom/fromJson.txt:469
+#: po/custom/fromJson.txt:472
 msgid "Mortar Autoloader"
 msgstr "Automatikus aknavető töltés"
 
-#: po/custom/fromJson.txt:470
+#: po/custom/fromJson.txt:473
 msgid "Mortar Autoloader Mk2"
 msgstr "Automatikus aknavető töltés Mk2"
 
-#: po/custom/fromJson.txt:471
+#: po/custom/fromJson.txt:474
 msgid "Mortar Autoloader Mk3"
 msgstr "Automatikus aknavető töltés Mk3"
 
-#: po/custom/fromJson.txt:472
+#: po/custom/fromJson.txt:475
 msgid "Mortar Cobra Half-tracks"
 msgstr "Cobra féllánctalpas aknavető"
 
-#: po/custom/fromJson.txt:473
+#: po/custom/fromJson.txt:476
 msgid "Mortar Fast Loader"
 msgstr "Gyors aknavető töltés"
 
-#: po/custom/fromJson.txt:474
+#: po/custom/fromJson.txt:477
 msgid "Mortar Pit"
 msgstr "Aknavető árok"
 
-#: po/custom/fromJson.txt:475
+#: po/custom/fromJson.txt:478
 msgid "Mortar Targeting Computer"
 msgstr "Aknavető célzó számítógép"
 
-#: po/custom/fromJson.txt:476
+#: po/custom/fromJson.txt:479
 msgid "MRL Emplacement"
 msgstr "Kisrakéta indító állás"
 
-#: po/custom/fromJson.txt:477
+#: po/custom/fromJson.txt:480
 msgid "Multi Turret Body - Dragon"
 msgstr "Több lövegtornyos alváz - Dragon"
 
-#: po/custom/fromJson.txt:478
+#: po/custom/fromJson.txt:481
 msgid "Nanolab"
 msgstr "Nanolabor"
 
-#: po/custom/fromJson.txt:480
+#: po/custom/fromJson.txt:483
 msgid "Needle Gun"
 msgstr "Nyíllövedékes ágyú"
 
-#: po/custom/fromJson.txt:481
+#: po/custom/fromJson.txt:484
 msgid "Needle Gunner"
 msgstr "Nyíllövedék ágyús"
 
-#: po/custom/fromJson.txt:482
+#: po/custom/fromJson.txt:485
 msgid "Needle Gunner Cyborg"
 msgstr "Cyborg nyíllövedékes ágyú"
 
-#: po/custom/fromJson.txt:483
+#: po/custom/fromJson.txt:486
 msgid "Needle Gun Retribution Tracks"
 msgstr "Retribution lánctalpas nyíllövedékes ágyú"
 
-#: po/custom/fromJson.txt:484
+#: po/custom/fromJson.txt:487
 msgid "Needle Gun Tiger Tracks"
 msgstr "Tiger lánctalpas nyíllövedékes ágyú"
 
-#: po/custom/fromJson.txt:485
+#: po/custom/fromJson.txt:488
 msgid "Needle Gun Tower"
 msgstr "Nyíllövedékes ágyú torony"
 
-#: po/custom/fromJson.txt:486
+#: po/custom/fromJson.txt:489
 msgid "Needle Gun Vengeance Tracks"
 msgstr "Vengeance lánctalpas nyíllövedékes ágyú"
 
-#: po/custom/fromJson.txt:487
+#: po/custom/fromJson.txt:490
 msgid "Neural Synapse Research Brain"
 msgstr "Idegi szinaptikus kutató agy"
 
-#: po/custom/fromJson.txt:488
+#: po/custom/fromJson.txt:491
 msgid "Neural Synapse Research Brain Mk2"
 msgstr "Idegi szinaptikus kutató agy Mk2"
 
-#: po/custom/fromJson.txt:489
+#: po/custom/fromJson.txt:492
 msgid "Neural Synapse Research Brain Mk3"
 msgstr "Idegi szinaptikus kutató agy Mk3"
 
-#: po/custom/fromJson.txt:491
+#: po/custom/fromJson.txt:494
 msgid "Nexus"
 msgstr "NEXUS"
 
-#: po/custom/fromJson.txt:492
+#: po/custom/fromJson.txt:495
 msgid "NEXUS CWall"
 msgstr "NEXUS körfal"
 
-#: po/custom/fromJson.txt:493
+#: po/custom/fromJson.txt:496
 msgid "NEXUS Intruder Program"
 msgstr "NEXUS behatoló program"
 
-#: po/custom/fromJson.txt:494
+#: po/custom/fromJson.txt:497
 msgid "Nexus Link"
 msgstr "NEXUS dekóder"
 
-#: po/custom/fromJson.txt:495
+#: po/custom/fromJson.txt:498
 msgid "NEXUS Link"
 msgstr "NEXUS dekóder"
 
-#: po/custom/fromJson.txt:496
+#: po/custom/fromJson.txt:499
 msgid "Nexus Link Tower"
 msgstr "NEXUS dekóder torony"
 
-#: po/custom/fromJson.txt:497
+#: po/custom/fromJson.txt:500
 msgid "Nexus Link Turret"
 msgstr "NEXUS dekóder torony"
 
-#: po/custom/fromJson.txt:498
+#: po/custom/fromJson.txt:501
 msgid "Nexus Missile Silo"
 msgstr "Nexus Rakéta siló"
 
-#: po/custom/fromJson.txt:500
+#: po/custom/fromJson.txt:503
 msgid "NEXUS Resistance Circuits"
 msgstr "NEXUS ellenálló áramkörök"
 
-#: po/custom/fromJson.txt:501
+#: po/custom/fromJson.txt:504
 msgid "NEXUS Resistance Circuits Mk2"
 msgstr "NEXUS ellenálló áramkörök Mk2"
 
-#: po/custom/fromJson.txt:502
+#: po/custom/fromJson.txt:505
 msgid "NEXUS Resistance Circuits Mk3"
 msgstr "NEXUS ellenálló áramkörök Mk3"
 
-#: po/custom/fromJson.txt:503
+#: po/custom/fromJson.txt:506
 msgid "NEXUS Wall"
 msgstr "NEXUS fal"
 
-#: po/custom/fromJson.txt:504
+#: po/custom/fromJson.txt:507
 msgid "No Place To Hide"
 msgstr "Nincs hely elrejteni"
 
-#: po/custom/fromJson.txt:505
+#: po/custom/fromJson.txt:508
 msgid "NullBot"
 msgstr "NullBot"
 
-#: po/custom/fromJson.txt:506
+#: po/custom/fromJson.txt:509
 msgid "Oil Derrick"
 msgstr "Olajkút"
 
-#: po/custom/fromJson.txt:507
+#: po/custom/fromJson.txt:510
 msgid "Oil Drum"
 msgstr "Olajtartály"
 
-#: po/custom/fromJson.txt:508
+#: po/custom/fromJson.txt:511
 msgid "Oil Resource"
 msgstr "Olajforrás"
 
-#: po/custom/fromJson.txt:509
+#: po/custom/fromJson.txt:512
+#, fuzzy
+msgid "Original Campaign"
+msgstr "Új küldetés"
+
+#: po/custom/fromJson.txt:513
+#, fuzzy
+msgid "Original Skirmish"
+msgstr "Egyjátékos csata"
+
+#: po/custom/fromJson.txt:514
 msgid "Panther"
 msgstr "Panther"
 
-#: po/custom/fromJson.txt:510
+#: po/custom/fromJson.txt:515
 msgid "Pepperpot"
 msgstr "Pepperpot aknavető"
 
-#: po/custom/fromJson.txt:511
+#: po/custom/fromJson.txt:516
 msgid "Pepperpot Pit"
 msgstr "Pepperpot aknavető árok"
 
-#: po/custom/fromJson.txt:512
+#: po/custom/fromJson.txt:517
 msgid "Phosphor Bomb Bay"
 msgstr "Foszforbomba szekrény"
 
-#: po/custom/fromJson.txt:513
+#: po/custom/fromJson.txt:518
 msgid "Phosphor Bomb Bay Mantis VTOL"
 msgstr "VTOL Mantis gyújtóbombás bombázó"
 
-#: po/custom/fromJson.txt:514
+#: po/custom/fromJson.txt:519
 msgid "Pick-Up Truck"
 msgstr "Platós munkagép"
 
-#: po/custom/fromJson.txt:515
+#: po/custom/fromJson.txt:520
 msgid "Plascrete"
 msgstr "Kompozit beton"
 
-#: po/custom/fromJson.txt:516
+#: po/custom/fromJson.txt:521
 msgid "Plascrete Mk2"
 msgstr "Kompozit beton Mk2"
 
-#: po/custom/fromJson.txt:517
+#: po/custom/fromJson.txt:522
 msgid "Plascrete Mk3"
 msgstr "Kompozit beton Mk3"
 
-#: po/custom/fromJson.txt:518
+#: po/custom/fromJson.txt:523
 msgid "Plasma Cannon"
 msgstr "Plazmaágyú"
 
-#: po/custom/fromJson.txt:519
+#: po/custom/fromJson.txt:524
 msgid "Plasma Cannon Emplacement"
 msgstr "Plazmaágyú állás"
 
-#: po/custom/fromJson.txt:520
+#: po/custom/fromJson.txt:525
 msgid "Plasma Cannon Wyvern Tracks"
 msgstr "Wyvern lánctalpas plazmaágyú"
 
-#: po/custom/fromJson.txt:521
+#: po/custom/fromJson.txt:526
 msgid "Plasmite Bomb"
 msgstr "Plazma bomba"
 
-#: po/custom/fromJson.txt:522
+#: po/custom/fromJson.txt:527
 msgid "Plasmite Flamer"
 msgstr "Plazmavető"
 
-#: po/custom/fromJson.txt:523
+#: po/custom/fromJson.txt:528
 msgid "Plasmite Flamer Bunker"
 msgstr "Plazmavető bunker"
 
-#: po/custom/fromJson.txt:524
+#: po/custom/fromJson.txt:529
 msgid "Plasmite Retribution VTOL"
 msgstr "VTOL Retribution plazmavető"
 
-#: po/custom/fromJson.txt:525
+#: po/custom/fromJson.txt:530
 msgid "Plasteel"
 msgstr "Kompozit acél"
 
-#: po/custom/fromJson.txt:526
+#: po/custom/fromJson.txt:531
 msgid "Plasteel Mk2"
 msgstr "Kompozit acél Mk2"
 
-#: po/custom/fromJson.txt:527
+#: po/custom/fromJson.txt:532
 msgid "Plasteel Mk3"
 msgstr "Kompozit acél Mk3"
 
-#: po/custom/fromJson.txt:528
+#: po/custom/fromJson.txt:533
 msgid "Power Generator"
 msgstr "Erőmű"
 
-#: po/custom/fromJson.txt:529
+#: po/custom/fromJson.txt:534
 msgid "Powerlab"
 msgstr "Energia labor"
 
-#: po/custom/fromJson.txt:530
+#: po/custom/fromJson.txt:535
 msgid "Power Module"
 msgstr "Energiamodul"
 
-#: po/custom/fromJson.txt:531
+#: po/custom/fromJson.txt:536
 msgid "Pulse Laser"
 msgstr "Impulzus lézer"
 
-#: po/custom/fromJson.txt:532
+#: po/custom/fromJson.txt:537
 msgid "Pulse Laser Emplacement"
 msgstr "Impulzus lézer állás"
 
-#: po/custom/fromJson.txt:533
+#: po/custom/fromJson.txt:538
 msgid "Pulse Laser Hardpoint"
 msgstr "Impulzus lézer talapzat"
 
-#: po/custom/fromJson.txt:534
+#: po/custom/fromJson.txt:539
 msgid "Pulse Laser Leopard Hover"
 msgstr "Leopard légpárnás impulzus lézer"
 
-#: po/custom/fromJson.txt:535
+#: po/custom/fromJson.txt:540
 msgid "Pulse Laser Mantis Tracks"
 msgstr "Mantis lánctalpas impulzus lézer"
 
-#: po/custom/fromJson.txt:536
+#: po/custom/fromJson.txt:541
 msgid "Pulse Laser Panther Hover"
 msgstr "Panther légpárnás impulzus lézer"
 
-#: po/custom/fromJson.txt:537
+#: po/custom/fromJson.txt:542
 msgid "Pulse Laser Python Tracks"
 msgstr "Python lánctalpas impulzus lézer"
 
-#: po/custom/fromJson.txt:538
+#: po/custom/fromJson.txt:543
 msgid "Pulse Laser Tiger Hover"
 msgstr "Tiger légpárnás impulzus lézer"
 
-#: po/custom/fromJson.txt:539
+#: po/custom/fromJson.txt:544
 msgid "Pulse Laser Tiger Tracks"
 msgstr "Tiger impulzus lézer"
 
-#: po/custom/fromJson.txt:540
+#: po/custom/fromJson.txt:545
 msgid "Pulse Laser Tower"
 msgstr "Impulzus lézer torony"
 
-#: po/custom/fromJson.txt:541
+#: po/custom/fromJson.txt:546
 msgid "Pulse Laser Wyvern Tracks"
 msgstr "Wyvern lánctalpas impulzus lézer"
 
-#: po/custom/fromJson.txt:542
+#: po/custom/fromJson.txt:547
 msgid "Python"
 msgstr "Python"
 
-#: po/custom/fromJson.txt:543
+#: po/custom/fromJson.txt:548
 msgid "Python Heavy Cannon Tracks"
 msgstr "Python lánctalpas nehéz ágyú"
 
-#: po/custom/fromJson.txt:544
+#: po/custom/fromJson.txt:549
 msgid "Radar Detector"
 msgstr "Radarérzékelő"
 
-#: po/custom/fromJson.txt:545
+#: po/custom/fromJson.txt:550
 msgid "Radar Detector Tower"
 msgstr "Radarérzékelő torony"
 
-#: po/custom/fromJson.txt:546
+#: po/custom/fromJson.txt:551
 msgid "Rail Gun"
 msgstr "Sínágyú"
 
-#: po/custom/fromJson.txt:547
+#: po/custom/fromJson.txt:552
 msgid "Railgun Emplacement"
 msgstr "Sínágyú állás"
 
-#: po/custom/fromJson.txt:548
+#: po/custom/fromJson.txt:553
 msgid "Rail Gun Emplacement"
 msgstr "Sínágyú ágyúállás"
 
-#: po/custom/fromJson.txt:549
+#: po/custom/fromJson.txt:554
 msgid "Rail Gun Hardpoint"
 msgstr "Sínágyú talapzat"
 
-#: po/custom/fromJson.txt:550
+#: po/custom/fromJson.txt:555
 msgid "Rail Gun Mantis Tracks"
 msgstr "Mantis lánctalpas sínágyú"
 
-#: po/custom/fromJson.txt:551
+#: po/custom/fromJson.txt:556
 msgid "Rail Gun ROF"
 msgstr "Sínágyú tűzgyorsaság"
 
-#: po/custom/fromJson.txt:552
+#: po/custom/fromJson.txt:557
 msgid "Rail Gun ROF Mk2"
 msgstr "Sínágyú tűzgyorsaság Mk2"
 
-#: po/custom/fromJson.txt:553
+#: po/custom/fromJson.txt:558
 msgid "Rail Gun ROF Mk3"
 msgstr "Sínágyú tűzgyorsaság Mk3"
 
-#: po/custom/fromJson.txt:554
+#: po/custom/fromJson.txt:559
 msgid "Rail Gun Tiger Hover"
 msgstr "Tiger légpárnás sínágyú"
 
-#: po/custom/fromJson.txt:555
+#: po/custom/fromJson.txt:560
 msgid "Rail Target Prediction Computer"
 msgstr "Sínágyú célkereső számítógép"
 
-#: po/custom/fromJson.txt:556
+#: po/custom/fromJson.txt:561
 msgid "Rapid Fire Chaingun"
 msgstr "Gyorstüzelésű láncfegyver"
 
-#: po/custom/fromJson.txt:557
+#: po/custom/fromJson.txt:562
 msgid "Rapid Fire Chaingun Upgrade"
 msgstr "Gyorstüzelésű láncfegyver fejlesztés"
 
-#: po/custom/fromJson.txt:558
+#: po/custom/fromJson.txt:563
 msgid "Reinforced Base Structure Materials"
 msgstr "Megerősített bázisépület alapanyagok"
 
-#: po/custom/fromJson.txt:559
+#: po/custom/fromJson.txt:564
 msgid "Reinforced Base Structure Materials Mk2"
 msgstr "Megerősített bázisépület alapanyagok Mk2"
 
-#: po/custom/fromJson.txt:560
+#: po/custom/fromJson.txt:565
 msgid "Reinforced Base Structure Materials Mk3"
 msgstr "Megerősített bázisépület alapanyagok Mk3"
 
-#: po/custom/fromJson.txt:561
+#: po/custom/fromJson.txt:566
 msgid "Repair Center Turret"
 msgstr "Javító torony központ"
 
-#: po/custom/fromJson.txt:562
+#: po/custom/fromJson.txt:567
 msgid "Repair Cobra Tracks"
 msgstr "Cobra lánctalpas szervizkocsi"
 
-#: po/custom/fromJson.txt:563
+#: po/custom/fromJson.txt:568
 msgid "Repair Facility"
 msgstr "Szervizüzem"
 
-#: po/custom/fromJson.txt:564
+#: po/custom/fromJson.txt:569
 msgid "Repair Scorpion Tracks"
 msgstr "Scorpion lánctalpas szervizkocsi"
 
-#: po/custom/fromJson.txt:565
+#: po/custom/fromJson.txt:570
 msgid "Repair Turret"
 msgstr "Szerviztorony"
 
-#: po/custom/fromJson.txt:566
+#: po/custom/fromJson.txt:571
 msgid "Repair Turret Cobra Tracks"
 msgstr "Cobra lánctalpas szervizkocsi"
 
-#: po/custom/fromJson.txt:567
+#: po/custom/fromJson.txt:572
 msgid "Repair Turret Mantis Tracks"
 msgstr "Mantis lánctalpas szervizkocsi"
 
-#: po/custom/fromJson.txt:568
+#: po/custom/fromJson.txt:573
 msgid "Repair Turret Viper Half-track"
 msgstr "Viper féllánctalpas szervizkocsi"
 
-#: po/custom/fromJson.txt:569
+#: po/custom/fromJson.txt:574
 msgid "Repair Turret Viper Half-tracks"
 msgstr "Viper féllánctalpas szervizkocsi"
 
-#: po/custom/fromJson.txt:570
+#: po/custom/fromJson.txt:575
 msgid "Repair Turret Viper Wheels"
 msgstr "Viper szervizkocsi"
 
-#: po/custom/fromJson.txt:571
+#: po/custom/fromJson.txt:576
 msgid "Research Facility"
 msgstr "Kutató létesítmény"
 
-#: po/custom/fromJson.txt:572
+#: po/custom/fromJson.txt:577
 msgid "Research Module"
 msgstr "Kutató modul"
 
-#: po/custom/fromJson.txt:573
+#: po/custom/fromJson.txt:578
 msgid "Retaliation"
 msgstr "Megtorlás"
 
-#: po/custom/fromJson.txt:574
+#: po/custom/fromJson.txt:579
 msgid "Retribution"
 msgstr "Megbüntető"
 
-#: po/custom/fromJson.txt:575
+#: po/custom/fromJson.txt:580
 msgid "Ripple Rocket Battery"
 msgstr "Ripple rakéta üteg"
 
-#: po/custom/fromJson.txt:576
+#: po/custom/fromJson.txt:581
 msgid "Ripple Rockets"
 msgstr "Ripple rakéták"
 
-#: po/custom/fromJson.txt:578
+#: po/custom/fromJson.txt:583
 msgid "Robotic Cyborg Production Mk2"
 msgstr "Robotizált Cyborg gyártás Mk2"
 
-#: po/custom/fromJson.txt:579
+#: po/custom/fromJson.txt:584
 msgid "Robotic Cyborg Production Mk3"
 msgstr "Robotizált Cyborg gyártás Mk3"
 
-#: po/custom/fromJson.txt:580
+#: po/custom/fromJson.txt:585
 msgid "Robotic Factory Production"
 msgstr "Robotizált gyári termelés"
 
-#: po/custom/fromJson.txt:581
+#: po/custom/fromJson.txt:586
 msgid "Robotic Factory Production Mk2"
 msgstr "Robotizált gyári termelés Mk2"
 
-#: po/custom/fromJson.txt:582
+#: po/custom/fromJson.txt:587
 msgid "Robotic Factory Production Mk3"
 msgstr "Robotizált gyári termelés Mk3"
 
-#: po/custom/fromJson.txt:583
+#: po/custom/fromJson.txt:588
 msgid "Robotic Manufacturing"
 msgstr "Robotizált gyártás"
 
-#: po/custom/fromJson.txt:584
+#: po/custom/fromJson.txt:589
 msgid "Robotic Repair Facility"
 msgstr "Robotvezérlésű szervizüzem"
 
-#: po/custom/fromJson.txt:585
+#: po/custom/fromJson.txt:590
 msgid "Robotic Repair Facility Upgrade"
 msgstr "Robotvezérlésű szervizüzem fejlesztés"
 
-#: po/custom/fromJson.txt:586
+#: po/custom/fromJson.txt:591
 msgid "Robotic Repair Facility Upgrade Mk2"
 msgstr "Robotvezérlésű szervizüzem fejlesztés Mk2"
 
-#: po/custom/fromJson.txt:587
+#: po/custom/fromJson.txt:592
 msgid "Robotic Repair Facility Upgrade Mk3"
 msgstr "Robotvezérlésű szervizüzem fejlesztés Mk3"
 
-#: po/custom/fromJson.txt:589
+#: po/custom/fromJson.txt:594
 msgid "Robotic VTOL Production Mk2"
 msgstr "Robotizált VTOL gyártás Mk2"
 
-#: po/custom/fromJson.txt:590
+#: po/custom/fromJson.txt:595
 msgid "Robotic VTOL Production Mk3"
 msgstr "Robotizált VTOL gyártás Mk3"
 
-#: po/custom/fromJson.txt:591
+#: po/custom/fromJson.txt:596
 msgid "Robotic VTOL Rearming"
 msgstr "Robotizált VTOL újratöltés"
 
-#: po/custom/fromJson.txt:592
+#: po/custom/fromJson.txt:597
 msgid "Robotic VTOL Rearming Mk2"
 msgstr "Robotizált VTOL újratöltés Mk2"
 
-#: po/custom/fromJson.txt:593
+#: po/custom/fromJson.txt:598
 msgid "Robotic VTOL Rearming Mk3"
 msgstr "Robotizált VTOL újratöltés Mk3"
 
-#: po/custom/fromJson.txt:594
+#: po/custom/fromJson.txt:599
 msgid "Rocket Autoloader"
 msgstr "Automatikus rakéta töltés"
 
-#: po/custom/fromJson.txt:595
+#: po/custom/fromJson.txt:600
 msgid "Rocket Autoloader Mk2"
 msgstr "Automatikus rakéta töltés Mk2"
 
-#: po/custom/fromJson.txt:596
+#: po/custom/fromJson.txt:601
 msgid "Rocket Autoloader Mk3"
 msgstr "Automatikus rakéta töltés Mk3"
 
-#: po/custom/fromJson.txt:597
+#: po/custom/fromJson.txt:602
 msgid "Rocket Buggy"
 msgstr "Rakétás homokfutó"
 
-#: po/custom/fromJson.txt:598
+#: po/custom/fromJson.txt:603
 msgid "Rocket Jeep"
 msgstr "Rakétás terepjáró"
 
-#: po/custom/fromJson.txt:599
+#: po/custom/fromJson.txt:604
 msgid "Rocket Laser Designator"
 msgstr "Lézeres rakéta célkijelölés"
 
-#: po/custom/fromJson.txt:600
+#: po/custom/fromJson.txt:605
 msgid "Rotary Howitzer - Hellstorm"
 msgstr "Forgó tarack - Hellstorm"
 
-#: po/custom/fromJson.txt:601
+#: po/custom/fromJson.txt:606
 msgid "Rotary MG Bunker"
 msgstr "Forgó gépfegyver bunker"
 
-#: po/custom/fromJson.txt:602
+#: po/custom/fromJson.txt:607
 msgid "Rotary Mortar - Pepperpot"
 msgstr "Forgó aknavető - Pepperpot"
 
-#: po/custom/fromJson.txt:603
+#: po/custom/fromJson.txt:608
 msgid "Rotaryweaponslab"
 msgstr "Forgófegyver labor"
 
-#: po/custom/fromJson.txt:604
+#: po/custom/fromJson.txt:609
 msgid "Ruined Factory"
 msgstr "Elhagyott gyár"
 
-#: po/custom/fromJson.txt:606
+#: po/custom/fromJson.txt:611
 msgid "Scavenger"
 msgstr "Dögevő"
 
-#: po/custom/fromJson.txt:607
+#: po/custom/fromJson.txt:612
 msgid "Scavenger AT-Rocket Pit"
 msgstr "Dögevő tankelhárító rakéta árok"
 
-#: po/custom/fromJson.txt:608
+#: po/custom/fromJson.txt:613
 msgid "Scavenger Bunker"
 msgstr "Dögevő bunker"
 
-#: po/custom/fromJson.txt:609
+#: po/custom/fromJson.txt:614
 msgid "Scavenger CornerWall"
 msgstr "Dögevő körfal"
 
-#: po/custom/fromJson.txt:610
+#: po/custom/fromJson.txt:615
 msgid "Scavenger Factory"
 msgstr "Dögevő gyár"
 
-#: po/custom/fromJson.txt:611
+#: po/custom/fromJson.txt:616
 msgid "Scavenger Flame Tower"
 msgstr "Dögevő lángszóró-torony"
 
-#: po/custom/fromJson.txt:612
+#: po/custom/fromJson.txt:617
 msgid "Scavenger Gun Tower"
 msgstr "Dögevő fegyvertorony"
 
-#: po/custom/fromJson.txt:613
+#: po/custom/fromJson.txt:618
 msgid "Scavenger Horizontal Wall"
 msgstr "Dögevő vízszintes fal"
 
-#: po/custom/fromJson.txt:614
+#: po/custom/fromJson.txt:619
 msgid "Scavenger Power Generator"
 msgstr "Dögevő erőmű"
 
-#: po/custom/fromJson.txt:615
+#: po/custom/fromJson.txt:620
 msgid "Scavenger Rocket Pit"
 msgstr "Dögevő rakéta árok"
 
-#: po/custom/fromJson.txt:616
+#: po/custom/fromJson.txt:621
 msgid "School Bus"
 msgstr "Iskolabusz"
 
-#: po/custom/fromJson.txt:617
+#: po/custom/fromJson.txt:622
 msgid "Scorpion"
 msgstr "Skorpió"
 
-#: po/custom/fromJson.txt:618
+#: po/custom/fromJson.txt:623
 msgid "Scourge"
 msgstr "Scourge rakéta"
 
-#: po/custom/fromJson.txt:619
+#: po/custom/fromJson.txt:624
 msgid "Scourge Cyborg"
 msgstr "Cyborg Scourge rakéta"
 
-#: po/custom/fromJson.txt:620
+#: po/custom/fromJson.txt:625
 msgid "Scourge Mantis Hover"
 msgstr "Mantis légpárnás Scourge rakéta"
 
-#: po/custom/fromJson.txt:621
+#: po/custom/fromJson.txt:626
 msgid "Scourge Mantis Tracks"
 msgstr "Mantis lánctalpas Scourge rakéta"
 
-#: po/custom/fromJson.txt:622
+#: po/custom/fromJson.txt:627
 msgid "Scourge Missile"
 msgstr "Scourge rakéta"
 
-#: po/custom/fromJson.txt:623
+#: po/custom/fromJson.txt:628
 msgid "Scourge Missile Hardpoint"
 msgstr "Scourge rakéta talapzat"
 
-#: po/custom/fromJson.txt:624
+#: po/custom/fromJson.txt:629
 msgid "Scourge Missile Tower"
 msgstr "Scourge rakéta torony"
 
-#: po/custom/fromJson.txt:625
+#: po/custom/fromJson.txt:630
 msgid "Scourge Missile Wyvern Tracks"
 msgstr "Wyvern lánctalpas Scourge rakéta"
 
-#: po/custom/fromJson.txt:626
+#: po/custom/fromJson.txt:631
 msgid "Scourge Python Tracks"
 msgstr "Python lánctalpas Scourge rakéta"
 
-#: po/custom/fromJson.txt:627
+#: po/custom/fromJson.txt:632
 msgid "Scourge Retaliation VTOL"
 msgstr "VTOL Retaliation Scourge rakéta"
 
-#: po/custom/fromJson.txt:628
+#: po/custom/fromJson.txt:633
 msgid "Scrambler Turret"
 msgstr "Kódoló torony"
 
-#: po/custom/fromJson.txt:629
+#: po/custom/fromJson.txt:634
 msgid "Search & Destroy Missiles"
 msgstr "Kutató, megsemmisítő rakéták"
 
-#: po/custom/fromJson.txt:631
+#: po/custom/fromJson.txt:636
 msgid "Self-Replicating Manufacturing"
 msgstr "Önreprodukáló gyártás"
 
-#: po/custom/fromJson.txt:632
+#: po/custom/fromJson.txt:637
 msgid "Semperfi"
 msgstr "Semperfi"
 
-#: po/custom/fromJson.txt:633
+#: po/custom/fromJson.txt:638
 msgid "Semperfi JS"
 msgstr "Semperfi JS"
 
-#: po/custom/fromJson.txt:634
+#: po/custom/fromJson.txt:639
 msgid "Sensor Cobra Half-tracks"
 msgstr "Cobra féllánctalpas érzékelő"
 
-#: po/custom/fromJson.txt:636
+#: po/custom/fromJson.txt:641
 msgid "Sensor Turret"
 msgstr "Érzékelő torony"
 
-#: po/custom/fromJson.txt:637
+#: po/custom/fromJson.txt:642
 msgid "Sensor Turret Cobra Half-tracks"
 msgstr "Cobra féllánctalpas felderítő"
 
-#: po/custom/fromJson.txt:638
+#: po/custom/fromJson.txt:643
 msgid "Sensor Turret Viper Wheels"
 msgstr "Viper felderítő"
 
-#: po/custom/fromJson.txt:639
+#: po/custom/fromJson.txt:644
 msgid "Sensor Upgrade"
 msgstr "Érzékelő fejlesztés"
 
-#: po/custom/fromJson.txt:640
+#: po/custom/fromJson.txt:645
 msgid "Sensor Upgrade Mk2"
 msgstr "Érzékelő fejlesztés Mk2"
 
-#: po/custom/fromJson.txt:641
+#: po/custom/fromJson.txt:646
 msgid "Sensor Upgrade Mk3"
 msgstr "Érzékelő fejlesztés Mk3"
 
-#: po/custom/fromJson.txt:642
+#: po/custom/fromJson.txt:647
 msgid "Seraph Missile Array"
 msgstr "Seraph rakéta sor"
 
-#: po/custom/fromJson.txt:643
+#: po/custom/fromJson.txt:648
 msgid "Seraph Missile Battery"
 msgstr "Seraph rakéta üteg"
 
-#: po/custom/fromJson.txt:644
+#: po/custom/fromJson.txt:649
 msgid "Smashedcornerwall"
 msgstr "Törött sarokfal"
 
-#: po/custom/fromJson.txt:645
+#: po/custom/fromJson.txt:650
 msgid "Smashedwall"
 msgstr "Törött fal"
 
-#: po/custom/fromJson.txt:646
+#: po/custom/fromJson.txt:651
 msgid "Stabilized Mini-Rockets"
 msgstr "Stabilizált kisrakéták"
 
-#: po/custom/fromJson.txt:647
+#: po/custom/fromJson.txt:652
 msgid "Stabilized Mini-Rockets Mk2"
 msgstr "Stabilizált kisrakéták Mk2"
 
-#: po/custom/fromJson.txt:648
+#: po/custom/fromJson.txt:653
 msgid "Stabilized Rockets"
 msgstr "Stabilizált rakéták"
 
-#: po/custom/fromJson.txt:649
+#: po/custom/fromJson.txt:654
 msgid "Stormbringer AA Laser"
 msgstr "Stormbringer légvédelmi lézer"
 
-#: po/custom/fromJson.txt:650
+#: po/custom/fromJson.txt:655
 msgid "Stormbringer Emplacement"
 msgstr "Stormbringer állás"
 
-#: po/custom/fromJson.txt:651
+#: po/custom/fromJson.txt:656
 msgid "Sunburst AA"
 msgstr "Sunburst légvédelem"
 
-#: po/custom/fromJson.txt:652
+#: po/custom/fromJson.txt:657
 msgid "Sunburst AA Rocket Array"
 msgstr "Sunburst légvédelmi rakétasor"
 
-#: po/custom/fromJson.txt:653
+#: po/custom/fromJson.txt:658
 msgid "Sunburst AA Site"
 msgstr "Sunburst légvédelmi platform"
 
-#: po/custom/fromJson.txt:655
+#: po/custom/fromJson.txt:660
 msgid "Supercrete"
 msgstr "Szuper beton"
 
-#: po/custom/fromJson.txt:656
+#: po/custom/fromJson.txt:661
 msgid "Supercrete Mk2"
 msgstr "Szuper beton Mk2"
 
-#: po/custom/fromJson.txt:657
+#: po/custom/fromJson.txt:662
 msgid "Supercrete Mk3"
 msgstr "Szuper beton Mk3"
 
-#: po/custom/fromJson.txt:658
+#: po/custom/fromJson.txt:663
 msgid "Superdense Composite Alloys"
 msgstr "Szupersűrű kompozit ötvözetek"
 
-#: po/custom/fromJson.txt:659
+#: po/custom/fromJson.txt:664
 msgid "Superdense Composite Alloys Mk2"
 msgstr "Szupersűrű kompozit ötvözetek Mk2"
 
-#: po/custom/fromJson.txt:660
+#: po/custom/fromJson.txt:665
 msgid "Superdense Composite Alloys Mk3"
 msgstr "Szupersűrű kompozit ötvözetek Mk3"
 
-#: po/custom/fromJson.txt:662
+#: po/custom/fromJson.txt:667
 msgid "Superhot Flamer Gel"
 msgstr "Szuperforró lángszóró gél"
 
-#: po/custom/fromJson.txt:663
+#: po/custom/fromJson.txt:668
 msgid "Superhot Flamer Gel Mk2"
 msgstr "Szuperforró lángszóró gél Mk2"
 
-#: po/custom/fromJson.txt:664
+#: po/custom/fromJson.txt:669
 msgid "Superhot Flamer Gel Mk3"
 msgstr "Szuperforró lángszóró gél Mk3"
 
-#: po/custom/fromJson.txt:665
+#: po/custom/fromJson.txt:670
 msgid "Superhot Plasmite gel"
 msgstr "Szuper-forró plazma gél"
 
-#: po/custom/fromJson.txt:666
+#: po/custom/fromJson.txt:671
 msgid "Superhot Plasmite gel Mk2"
 msgstr "Szuper-forró plazma gél Mk2"
 
-#: po/custom/fromJson.txt:667
+#: po/custom/fromJson.txt:672
 msgid "Superhot Plasmite gel Mk3"
 msgstr "Szuper-forró plazma gél Mk3"
 
-#: po/custom/fromJson.txt:673
+#: po/custom/fromJson.txt:678
 #: src/design.cpp:1054
 msgid "Super Transport"
 msgstr "Extra szállítóeszköz"
 
-#: po/custom/fromJson.txt:674
+#: po/custom/fromJson.txt:679
 msgid "Super Transport Body"
 msgstr "Extra szállító karosszéria"
 
-#: po/custom/fromJson.txt:675
+#: po/custom/fromJson.txt:680
 msgid "Synaptic Link"
 msgstr "Szinaptikus kapcsolat"
 
-#: po/custom/fromJson.txt:676
+#: po/custom/fromJson.txt:681
 msgid "Synaptic Link Data Analysis"
 msgstr "Szinaptikus kapcsolatú adatelemzés"
 
-#: po/custom/fromJson.txt:677
+#: po/custom/fromJson.txt:682
 msgid "Synaptic Link Data Analysis Mk2"
 msgstr "Szinaptikus kapcsolatú adatelemzés Mk2"
 
-#: po/custom/fromJson.txt:678
+#: po/custom/fromJson.txt:683
 msgid "Synaptic Link Data Analysis Mk3"
 msgstr "Szinaptikus kapcsolatú adatelemzés Mk3"
 
-#: po/custom/fromJson.txt:679
+#: po/custom/fromJson.txt:684
 msgid "Tank Killer"
 msgstr "Tank Killer rakéta"
 
-#: po/custom/fromJson.txt:680
+#: po/custom/fromJson.txt:685
 msgid "Tank Killer Emplacement"
 msgstr "Tank Killer rakétaállás"
 
-#: po/custom/fromJson.txt:681
+#: po/custom/fromJson.txt:686
 msgid "Tank Killer Hardpoint"
 msgstr "Tank Killer rakéta talapzat"
 
-#: po/custom/fromJson.txt:682
+#: po/custom/fromJson.txt:687
 msgid "Tank Killer Mantis Hover"
 msgstr "Mantis légpárnás Tank Killer rakéta"
 
-#: po/custom/fromJson.txt:683
+#: po/custom/fromJson.txt:688
 msgid "Tank Killer Mantis Tracks"
 msgstr "Python lánctalpas Tank Killer rakéta"
 
-#: po/custom/fromJson.txt:684
+#: po/custom/fromJson.txt:689
 msgid "Tank Killer Python Tracks"
 msgstr "Python lánctalpas Tank Killer rakéta"
 
-#: po/custom/fromJson.txt:685
+#: po/custom/fromJson.txt:690
 msgid "Tank Killer Rocket"
 msgstr "Tank Killer rakéta"
 
-#: po/custom/fromJson.txt:686
+#: po/custom/fromJson.txt:691
 msgid "Tank Killer Vengeance Tracks"
 msgstr "Vengeance lánctalpas Tank Killer rakéta"
 
-#: po/custom/fromJson.txt:687
+#: po/custom/fromJson.txt:692
 msgid "Tank Traps"
 msgstr "Tankcsapdák"
 
-#: po/custom/fromJson.txt:688
+#: po/custom/fromJson.txt:693
 msgid "Target Acquisition Artillery Shells"
 msgstr "Célfelismerő tüzérségi gránátok"
 
-#: po/custom/fromJson.txt:689
+#: po/custom/fromJson.txt:694
 msgid "Target Acquisition Artillery Shells Mk2"
 msgstr "Célfelismerő tüzérségi gránátok Mk2"
 
-#: po/custom/fromJson.txt:690
+#: po/custom/fromJson.txt:695
 msgid "Target Acquisition Bombsight"
 msgstr "Célfelismerő bombacélzó"
 
-#: po/custom/fromJson.txt:691
+#: po/custom/fromJson.txt:696
 msgid "Target Acquisition Mortar Shells"
 msgstr "Célfelismerő aknavető gránátok"
 
-#: po/custom/fromJson.txt:692
+#: po/custom/fromJson.txt:697
 msgid "Target Prediction Artillery Shells"
 msgstr "Célkereső tüzérségi gránátok"
 
-#: po/custom/fromJson.txt:693
+#: po/custom/fromJson.txt:698
 msgid "Target Prediction Computer"
 msgstr "Célkereső számítógép"
 
-#: po/custom/fromJson.txt:694
+#: po/custom/fromJson.txt:699
 msgid "Target Prediction Missiles"
 msgstr "Célkeresős rakéta"
 
-#: po/custom/fromJson.txt:695
+#: po/custom/fromJson.txt:700
 msgid "Thermal Armor"
 msgstr "Hőpajzs"
 
-#: po/custom/fromJson.txt:696
+#: po/custom/fromJson.txt:701
 msgid "Thermal Armor Mk2"
 msgstr "Hőpajzs Mk2"
 
-#: po/custom/fromJson.txt:697
+#: po/custom/fromJson.txt:702
 msgid "Thermal Armor Mk3"
 msgstr "Hőpajzs Mk3"
 
-#: po/custom/fromJson.txt:698
+#: po/custom/fromJson.txt:703
 msgid "Thermal Imaging Bombsight"
 msgstr "Hőkép bombacélzó"
 
-#: po/custom/fromJson.txt:699
+#: po/custom/fromJson.txt:704
 msgid "Thermal Imaging Mortar Shells"
 msgstr "Hőkép követő aknavető gránát"
 
-#: po/custom/fromJson.txt:700
+#: po/custom/fromJson.txt:705
 msgid "Thermal Imaging Rockets"
 msgstr "Hőkép követő rakéta"
 
-#: po/custom/fromJson.txt:701
+#: po/custom/fromJson.txt:706
 msgid "Thermite Bomb Bay"
 msgstr "Termitbomba szekrény"
 
-#: po/custom/fromJson.txt:702
+#: po/custom/fromJson.txt:707
 msgid "Thermite Flamer"
 msgstr "Termit lángszóró"
 
-#: po/custom/fromJson.txt:703
+#: po/custom/fromJson.txt:708
 msgid "Thermopole Energizer"
 msgstr "Hő újrahasznosító"
 
-#: po/custom/fromJson.txt:704
+#: po/custom/fromJson.txt:709
 msgid "Thermopole Energizer Mk2"
 msgstr "Hő újrahasznosító Mk2"
 
-#: po/custom/fromJson.txt:705
+#: po/custom/fromJson.txt:710
 msgid "Thermopole Energizer Mk3"
 msgstr "Hő újrahasznosító Mk3"
 
-#: po/custom/fromJson.txt:707
+#: po/custom/fromJson.txt:712
 msgid "Tiger"
 msgstr "Tiger"
 
-#: po/custom/fromJson.txt:708
+#: po/custom/fromJson.txt:713
 msgid "Tracked Propulsion"
 msgstr "Lánctalpas hajtómű"
 
-#: po/custom/fromJson.txt:710
+#: po/custom/fromJson.txt:715
 msgid "Tracks"
 msgstr "lánctalp"
 
-#: po/custom/fromJson.txt:711
+#: po/custom/fromJson.txt:716
 msgid "Tracks II"
 msgstr "lánctalp II"
 
-#: po/custom/fromJson.txt:712
+#: po/custom/fromJson.txt:717
 msgid "Tracks III"
 msgstr "lánctalp III"
 
-#: po/custom/fromJson.txt:713
+#: po/custom/fromJson.txt:718
 #: src/design.cpp:1049
 msgid "Transport"
 msgstr "Szállító"
 
-#: po/custom/fromJson.txt:714
+#: po/custom/fromJson.txt:719
 msgid "Transport Body"
 msgstr "szállító karosszéria"
 
-#: po/custom/fromJson.txt:715
+#: po/custom/fromJson.txt:720
 msgid "Trike"
 msgstr "Trike"
 
-#: po/custom/fromJson.txt:716
+#: po/custom/fromJson.txt:721
 msgid "Truck"
 msgstr "Munkagép"
 
-#: po/custom/fromJson.txt:717
+#: po/custom/fromJson.txt:722
 msgid "Truck Cobra Hover"
 msgstr "Cobra légpárnás munkagép"
 
-#: po/custom/fromJson.txt:718
+#: po/custom/fromJson.txt:723
 msgid "Truck Mantis Hover"
 msgstr "Mantis légpárnás munkagép"
 
-#: po/custom/fromJson.txt:719
+#: po/custom/fromJson.txt:724
 msgid "Truck Scorpion Hover"
 msgstr "Scorpion légpárnás munkagép"
 
-#: po/custom/fromJson.txt:720
+#: po/custom/fromJson.txt:725
 msgid "Tungsten-Tipped MG Bullets"
 msgstr "Wolfram magvas MG lőszer"
 
-#: po/custom/fromJson.txt:721
+#: po/custom/fromJson.txt:726
 msgid "Tungsten-Tipped MG Bullets Mk2"
 msgstr "Wolfram magvas MG lőszer Mk2"
 
-#: po/custom/fromJson.txt:722
+#: po/custom/fromJson.txt:727
 msgid "Tungsten-Tipped MG Bullets Mk3"
 msgstr "Wolfram magvas MG lőszer Mk3"
 
-#: po/custom/fromJson.txt:724
+#: po/custom/fromJson.txt:729
 msgid "Turbo-Charged Engine Mk2"
 msgstr "Turbófeltöltős motor Mk2"
 
-#: po/custom/fromJson.txt:725
+#: po/custom/fromJson.txt:730
 msgid "Turbo-Charged Engine Mk3"
 msgstr "Turbófeltöltős motor Mk3"
 
-#: po/custom/fromJson.txt:726
+#: po/custom/fromJson.txt:731
 msgid "Turtle AI"
 msgstr "Turtle AI"
 
-#: po/custom/fromJson.txt:727
+#: po/custom/fromJson.txt:732
 msgid "Twin Assault Cannon"
 msgstr "Iker ostromágyú"
 
-#: po/custom/fromJson.txt:728
+#: po/custom/fromJson.txt:733
 msgid "Twin Assault Cannon Bunker"
 msgstr "Iker ostromágyú bunker"
 
-#: po/custom/fromJson.txt:729
+#: po/custom/fromJson.txt:734
 msgid "Twin Assault Gun"
 msgstr "Iker ostromlöveg"
 
-#: po/custom/fromJson.txt:730
+#: po/custom/fromJson.txt:735
 msgid "Twin Assault Gun Hardpoint"
 msgstr "Iker rohamlöveg talapzat"
 
-#: po/custom/fromJson.txt:731
+#: po/custom/fromJson.txt:736
 msgid "Twin Machinegun"
 msgstr "Iker gépfegyver"
 
-#: po/custom/fromJson.txt:732
+#: po/custom/fromJson.txt:737
 msgid "Twin Machinegun Bunker"
 msgstr "Iker gépfegyver bunker"
 
-#: po/custom/fromJson.txt:733
+#: po/custom/fromJson.txt:738
 msgid "Twin Machinegun Guard Tower"
 msgstr "Iker gépfegyveres őrtorony"
 
-#: po/custom/fromJson.txt:734
+#: po/custom/fromJson.txt:739
 msgid "Twin Machinegun Viper Half-tracks"
 msgstr "Viper féllánctalpas iker gépfegyver"
 
-#: po/custom/fromJson.txt:735
+#: po/custom/fromJson.txt:740
 msgid "Twin Machinegun Viper Tracks"
 msgstr "Viper lánctalpas iker gépfegyver"
 
-#: po/custom/fromJson.txt:736
+#: po/custom/fromJson.txt:741
 msgid "Twin Machinegun Viper Wheels"
 msgstr "Viper iker gépfegyver"
 
-#: po/custom/fromJson.txt:737
+#: po/custom/fromJson.txt:742
 msgid "Uplink Sensor"
 msgstr "Parabola érzékelő"
 
-#: po/custom/fromJson.txt:738
+#: po/custom/fromJson.txt:743
 msgid "Vapor Turbine Generator"
 msgstr "Gőzturbina generátor"
 
-#: po/custom/fromJson.txt:739
+#: po/custom/fromJson.txt:744
 msgid "Vapor Turbine Generator Mk2"
 msgstr "Gőzturbina generátor Mk2"
 
-#: po/custom/fromJson.txt:740
+#: po/custom/fromJson.txt:745
 msgid "Vapor Turbine Generator Mk3"
 msgstr "Gőzturbina generátor Mk3"
 
-#: po/custom/fromJson.txt:741
+#: po/custom/fromJson.txt:746
 msgid "Vehicle Superdense Thermal Armor"
 msgstr "Szupersűrű jármű hőpáncél"
 
-#: po/custom/fromJson.txt:742
+#: po/custom/fromJson.txt:747
 msgid "Vehicle Superdense Thermal Armor Mk2"
 msgstr "Szupersűrű jármű hőpáncél Mk2"
 
-#: po/custom/fromJson.txt:743
+#: po/custom/fromJson.txt:748
 msgid "Vehicle Superdense Thermal Armor Mk3"
 msgstr "Szupersűrű jármű hőpáncél Mk3"
 
-#: po/custom/fromJson.txt:744
+#: po/custom/fromJson.txt:749
 msgid "Vengeance"
 msgstr "Bosszú"
 
-#: po/custom/fromJson.txt:745
+#: po/custom/fromJson.txt:750
 msgid "Vengeance Tracks Gauss Cannon"
 msgstr "Vengeance lánctalpas Gauss ágyú"
 
-#: po/custom/fromJson.txt:746
+#: po/custom/fromJson.txt:751
 msgid "Vengeance Tracks Gauss Scourge"
 msgstr "Vengeance lánctalpas Gauss Scourge rakéta"
 
-#: po/custom/fromJson.txt:747
+#: po/custom/fromJson.txt:752
 msgid "Vengeance Tracks Rail Gun"
 msgstr "Vengeance lánctalpas sínágyú"
 
-#: po/custom/fromJson.txt:748
+#: po/custom/fromJson.txt:753
 msgid "Vindicator Hardpoint"
 msgstr "Vindicator talapzat"
 
-#: po/custom/fromJson.txt:749
+#: po/custom/fromJson.txt:754
 msgid "Vindicator SAM"
 msgstr "Vindicator SAM"
 
-#: po/custom/fromJson.txt:750
+#: po/custom/fromJson.txt:755
 msgid "Vindicator SAM Site"
 msgstr "Vindicator SAM kilövő állás"
 
-#: po/custom/fromJson.txt:751
+#: po/custom/fromJson.txt:756
 msgid "Viper"
 msgstr "Viper"
 
-#: po/custom/fromJson.txt:752
+#: po/custom/fromJson.txt:757
 msgid "VTOL"
 msgstr "VTOL"
 
-#: po/custom/fromJson.txt:753
+#: po/custom/fromJson.txt:758
 msgid "VTOL Assault Cannon"
 msgstr "VTOL ostromágyú"
 
-#: po/custom/fromJson.txt:754
+#: po/custom/fromJson.txt:759
 msgid "VTOL Assault Gun"
 msgstr "VTOL ostromfegyver"
 
-#: po/custom/fromJson.txt:755
+#: po/custom/fromJson.txt:760
 msgid "VTOL Bunker Buster"
 msgstr "VTOL bunkertörő"
 
-#: po/custom/fromJson.txt:756
+#: po/custom/fromJson.txt:761
 msgid "VTOL Bunker Buster Bug VTOL"
 msgstr "VTOL Bug bunkertörő"
 
-#: po/custom/fromJson.txt:757
+#: po/custom/fromJson.txt:762
 msgid "VTOL Bunker Buster Scorpion VTOL"
 msgstr "VTOL Scorpion bunkertörő"
 
-#: po/custom/fromJson.txt:758
+#: po/custom/fromJson.txt:763
 msgid "VTOL Cannon"
 msgstr "VTOL ágyú"
 
-#: po/custom/fromJson.txt:759
+#: po/custom/fromJson.txt:764
 msgid "VTOL CB Radar Tower"
 msgstr "VTOL CB radar torony"
 
-#: po/custom/fromJson.txt:760
+#: po/custom/fromJson.txt:765
 msgid "VTOL CB Radar Turret"
 msgstr "VTOL CB radar torony"
 
-#: po/custom/fromJson.txt:761
+#: po/custom/fromJson.txt:766
 msgid "VTOL CB Tower"
 msgstr "VTOL CB torony"
 
-#: po/custom/fromJson.txt:762
+#: po/custom/fromJson.txt:767
 msgid "VTOL CB Turret"
 msgstr "VTOL CB lövegtorony"
 
-#: po/custom/fromJson.txt:763
+#: po/custom/fromJson.txt:768
 msgid "VTOL Cluster Bomb Bay"
 msgstr "VTOL kazettás bomba rekesz"
 
-#: po/custom/fromJson.txt:764
+#: po/custom/fromJson.txt:769
 msgid "VTOL Cluster Bomb Bay Bug VTOL"
 msgstr "VTOL Bug kazettás bomba rekesz"
 
-#: po/custom/fromJson.txt:765
+#: po/custom/fromJson.txt:770
 msgid "VTOL Cluster Bomb Bay Scorpion VTOL"
 msgstr "VTOL Scorpion kazettás bomba rekesz"
 
-#: po/custom/fromJson.txt:766
+#: po/custom/fromJson.txt:771
 msgid "VTOL Cluster Bombs Bay"
 msgstr "VTOL kazettás bomba szekrény"
 
-#: po/custom/fromJson.txt:767
+#: po/custom/fromJson.txt:772
 msgid "VTOL EMP Missile Launcher"
 msgstr "VTOL EMP rakétakilövő"
 
-#: po/custom/fromJson.txt:768
+#: po/custom/fromJson.txt:773
 msgid "VTOL Factory"
 msgstr "VTOL gyár"
 
-#: po/custom/fromJson.txt:769
+#: po/custom/fromJson.txt:774
 msgid "VTOL Flashlight"
 msgstr "VTOL könnyűlézer"
 
-#: po/custom/fromJson.txt:770
+#: po/custom/fromJson.txt:775
 msgid "VTOL Heap Bomb Bay"
 msgstr "VTOL szőnyegbomba szekrény"
 
-#: po/custom/fromJson.txt:771
+#: po/custom/fromJson.txt:776
 msgid "VTOL Heavy Laser"
 msgstr "VTOL nehéz lézer"
 
-#: po/custom/fromJson.txt:772
+#: po/custom/fromJson.txt:777
 msgid "VTOL Heavy Machinegun"
 msgstr "VTOL nehéz gépfegyver"
 
-#: po/custom/fromJson.txt:773
+#: po/custom/fromJson.txt:778
 msgid "VTOL Hyper Velocity Cannon"
 msgstr "VTOL nagysebességű ágyú"
 
-#: po/custom/fromJson.txt:774
+#: po/custom/fromJson.txt:779
 msgid "VTOL Hyper Velocity Cannon Bug VTOL"
 msgstr "VTOL Bug nagysebességű ágyú"
 
-#: po/custom/fromJson.txt:775
+#: po/custom/fromJson.txt:780
 msgid "VTOL Hyper Velocity Cannon Mantis VTOL"
 msgstr "VTOL Mantis nagysebességű ágyú"
 
-#: po/custom/fromJson.txt:776
+#: po/custom/fromJson.txt:781
 msgid "VTOL Hyper Velocity Cannon Scorpion VTOL"
 msgstr "VTOL Scorpion nagysebességű ágyú"
 
-#: po/custom/fromJson.txt:777
+#: po/custom/fromJson.txt:782
 msgid "VTOL II"
 msgstr "VTOL II"
 
-#: po/custom/fromJson.txt:778
+#: po/custom/fromJson.txt:783
 msgid "VTOL III"
 msgstr "VTOL III"
 
-#: po/custom/fromJson.txt:779
+#: po/custom/fromJson.txt:784
 msgid "VTOL Lancer"
 msgstr "VTOL tankelhárító"
 
-#: po/custom/fromJson.txt:780
+#: po/custom/fromJson.txt:785
 msgid "VTOL Lancer Bug VTOL"
 msgstr "VTOL Bug tankelhárító"
 
-#: po/custom/fromJson.txt:781
+#: po/custom/fromJson.txt:786
 msgid "VTOL Lancer Mantis VTOL"
 msgstr "VTOL Mantis tankelhárító"
 
-#: po/custom/fromJson.txt:782
+#: po/custom/fromJson.txt:787
 msgid "VTOL Lancer Scorpion VTOL"
 msgstr "VTOL Scorpion tankelhárító"
 
-#: po/custom/fromJson.txt:783
+#: po/custom/fromJson.txt:788
 msgid "VTOL Machinegun"
 msgstr "VTOL gépfegyver"
 
-#: po/custom/fromJson.txt:784
+#: po/custom/fromJson.txt:789
 msgid "VTOL Mini-Rocket"
 msgstr "VTOL kisrakéta"
 
-#: po/custom/fromJson.txt:785
+#: po/custom/fromJson.txt:790
 msgid "VTOL Needle Gun"
 msgstr "VTOL nyíllövedékes ágyú"
 
-#: po/custom/fromJson.txt:786
+#: po/custom/fromJson.txt:791
 msgid "VTOL Phosphor Bomb Bay"
 msgstr "VTOL foszforbomba szekrény"
 
-#: po/custom/fromJson.txt:787
+#: po/custom/fromJson.txt:792
 msgid "VTOL Plasmite Bomb Bay"
 msgstr "VTOL plazama bomba szekrény"
 
-#: po/custom/fromJson.txt:788
+#: po/custom/fromJson.txt:793
 msgid "VTOL Propulsion"
 msgstr "VTOL hajtómű"
 
-#: po/custom/fromJson.txt:790
+#: po/custom/fromJson.txt:795
 msgid "VTOL Pulse Laser"
 msgstr "VTOL impulzus lézer"
 
-#: po/custom/fromJson.txt:791
+#: po/custom/fromJson.txt:796
 msgid "VTOL Radar Tower"
 msgstr "VTOL radar torony"
 
-#: po/custom/fromJson.txt:792
+#: po/custom/fromJson.txt:797
 msgid "VTOL Rail Gun"
 msgstr "VTOL sínágyú"
 
-#: po/custom/fromJson.txt:793
+#: po/custom/fromJson.txt:798
 msgid "VTOL Rearming Pad"
 msgstr "VTOL újratöltő platform"
 
-#: po/custom/fromJson.txt:794
+#: po/custom/fromJson.txt:799
 msgid "VTOL Scourge Missile"
 msgstr "VTOL Scourge rakéta"
 
-#: po/custom/fromJson.txt:795
+#: po/custom/fromJson.txt:800
 msgid "VTOL Strike Tower"
 msgstr "VTOL csapásmérő torony"
 
-#: po/custom/fromJson.txt:796
+#: po/custom/fromJson.txt:801
 msgid "VTOL Strike Turret"
 msgstr "VTOL csapásmérő lövegtorony"
 
-#: po/custom/fromJson.txt:797
+#: po/custom/fromJson.txt:802
 msgid "VTOL Sunburst AA"
 msgstr "VTOL Sunburst légvédelem"
 
-#: po/custom/fromJson.txt:798
+#: po/custom/fromJson.txt:803
 msgid "VTOL Tank Killer"
 msgstr "VTOL Tank Killer rakéta"
 
-#: po/custom/fromJson.txt:799
+#: po/custom/fromJson.txt:804
 msgid "VTOL Thermite Bomb Bay"
 msgstr "VTOL termitbomba szekrény"
 
-#: po/custom/fromJson.txt:800
+#: po/custom/fromJson.txt:805
 msgid "VTOL Twin Machinegun"
 msgstr "VTOL iker gépfegyver"
 
-#: po/custom/fromJson.txt:801
+#: po/custom/fromJson.txt:806
 msgid "Wall"
 msgstr "Fal"
 
-#: po/custom/fromJson.txt:802
+#: po/custom/fromJson.txt:807
 msgid "Wallcorner"
 msgstr "Falsarok"
 
-#: po/custom/fromJson.txt:803
+#: po/custom/fromJson.txt:808
 msgid "Warehouse"
 msgstr "Raktár"
 
-#: po/custom/fromJson.txt:804
+#: po/custom/fromJson.txt:809
 msgid "Wheeled Propulsion"
 msgstr "Kerekes hajtómű"
 
-#: po/custom/fromJson.txt:806
+#: po/custom/fromJson.txt:811
 msgid "Wheels"
 msgstr "kerekek"
 
-#: po/custom/fromJson.txt:807
+#: po/custom/fromJson.txt:812
 msgid "Wheels II"
 msgstr "kerekek II"
 
-#: po/custom/fromJson.txt:808
+#: po/custom/fromJson.txt:813
 msgid "Wheels III"
 msgstr "kerekek III"
 
-#: po/custom/fromJson.txt:809
+#: po/custom/fromJson.txt:814
 msgid "Whirlwind AA Site"
 msgstr "Whirlwind légvédelmi platform"
 
-#: po/custom/fromJson.txt:810
+#: po/custom/fromJson.txt:815
 msgid "Whirlwind AA Turret"
 msgstr "Whirlwind légvédelmi lövegtorony"
 
-#: po/custom/fromJson.txt:811
+#: po/custom/fromJson.txt:816
 msgid "Whirlwind Hardpoint"
 msgstr "Whirlwind talapzat"
 
-#: po/custom/fromJson.txt:812
+#: po/custom/fromJson.txt:817
 msgid "Wide Spectrum Sensor"
 msgstr "Széles spektrumú érzékelő"
 
-#: po/custom/fromJson.txt:813
+#: po/custom/fromJson.txt:818
 msgid "Wide Spectrum Sensor Tower"
 msgstr "Széles spektrumú érzékelő torony"
 
-#: po/custom/fromJson.txt:814
+#: po/custom/fromJson.txt:819
 msgid "Wreck"
 msgstr "Roncs"
 
-#: po/custom/fromJson.txt:815
+#: po/custom/fromJson.txt:820
 msgid "Wrecked Bridge"
 msgstr "Roncs híd"
 
-#: po/custom/fromJson.txt:816
+#: po/custom/fromJson.txt:821
 msgid "Wrecked Tanker"
 msgstr "Roncs tartálykocsi"
 
-#: po/custom/fromJson.txt:817
+#: po/custom/fromJson.txt:822
 msgid "Wrecked Van"
 msgstr "Roncs furgon"
 
-#: po/custom/fromJson.txt:818
+#: po/custom/fromJson.txt:823
 msgid "Wrecked Vehicle"
 msgstr "Roncs jármű"
 
-#: po/custom/fromJson.txt:819
+#: po/custom/fromJson.txt:824
 msgid "Wyvern"
 msgstr "Wyvern"
 
@@ -8143,15 +8165,15 @@ msgstr "Gyakorlások"
 #. TRANSLATORS: "Return", in this context, means "return to previous screen/menu"
 #: src/frontend.cpp:273
 #: src/frontend.cpp:336
-#: src/frontend.cpp:385
-#: src/frontend.cpp:573
-#: src/frontend.cpp:647
-#: src/frontend.cpp:778
-#: src/frontend.cpp:867
-#: src/frontend.cpp:998
-#: src/frontend.cpp:1170
-#: src/frontend.cpp:1301
-#: src/frontend.cpp:1321
+#: src/frontend.cpp:382
+#: src/frontend.cpp:570
+#: src/frontend.cpp:644
+#: src/frontend.cpp:775
+#: src/frontend.cpp:864
+#: src/frontend.cpp:995
+#: src/frontend.cpp:1167
+#: src/frontend.cpp:1298
+#: src/frontend.cpp:1318
 msgctxt "menu"
 msgid "Return"
 msgstr "Vissza"
@@ -8181,311 +8203,311 @@ msgid "SINGLE PLAYER"
 msgstr "EGYJÁTÉKOS"
 
 #: src/frontend.cpp:340
-#: src/frontend.cpp:389
+#: src/frontend.cpp:386
 msgid "Campaign videos are missing! Get them from http://wz2100.net"
 msgstr "Küldetés video hiányzik! Látogasd meg a http://wz2100.net oldalt"
 
-#: src/frontend.cpp:384
+#: src/frontend.cpp:381
 msgid "CAMPAIGNS"
 msgstr "ELSŐ KÜLDETÉS"
 
-#: src/frontend.cpp:508
+#: src/frontend.cpp:505
 #: src/ingameop.cpp:432
 msgid "Load Campaign Saved Game"
 msgstr "Mentett játék betöltése"
 
-#: src/frontend.cpp:514
+#: src/frontend.cpp:511
 #: src/ingameop.cpp:436
 msgid "Load Skirmish Saved Game"
 msgstr "Mentett játék betöltése"
 
-#: src/frontend.cpp:568
+#: src/frontend.cpp:565
 msgid "MULTI PLAYER"
 msgstr "TÖBBJÁTÉKOS"
 
-#: src/frontend.cpp:570
+#: src/frontend.cpp:567
 msgid "Host Game"
 msgstr "Host játék"
 
-#: src/frontend.cpp:571
+#: src/frontend.cpp:568
 msgid "Join Game"
 msgstr "Játék folytatás"
 
-#: src/frontend.cpp:576
+#: src/frontend.cpp:573
 msgid "TCP port 2100 must be opened in your firewall or router to host games!"
 msgstr "TCP 2100 port megnyitotta a tűzfalad vagy routered a távoli játékokhoz!"
 
-#: src/frontend.cpp:640
+#: src/frontend.cpp:637
 #: src/multiint.cpp:1575
 msgid "OPTIONS"
 msgstr "BEÁLLÍTÁSOK"
 
-#: src/frontend.cpp:641
+#: src/frontend.cpp:638
 msgid "Game Options"
 msgstr "Játék Beállítások"
 
-#: src/frontend.cpp:642
+#: src/frontend.cpp:639
 msgid "Graphics Options"
 msgstr "Grafikai Beállítások"
 
-#: src/frontend.cpp:643
+#: src/frontend.cpp:640
 msgid "Video Options"
 msgstr "Video beállítás"
 
-#: src/frontend.cpp:644
+#: src/frontend.cpp:641
 #: src/ingameop.cpp:209
 msgid "Audio Options"
 msgstr "Hang beállítás"
 
-#: src/frontend.cpp:645
+#: src/frontend.cpp:642
 msgid "Mouse Options"
 msgstr "Egér beállítás"
 
-#: src/frontend.cpp:646
+#: src/frontend.cpp:643
 msgid "Key Mappings"
 msgstr "Billentyűzet beállítása"
 
-#: src/frontend.cpp:699
+#: src/frontend.cpp:696
 msgid "1×"
 msgstr "1×"
 
-#: src/frontend.cpp:700
-#: src/frontend.cpp:930
+#: src/frontend.cpp:697
+#: src/frontend.cpp:927
 msgid "2×"
 msgstr "2×"
 
-#: src/frontend.cpp:701
-#: src/frontend.cpp:922
+#: src/frontend.cpp:698
+#: src/frontend.cpp:919
 msgid "Fullscreen"
 msgstr "Teljes képernyő"
 
-#: src/frontend.cpp:702
-#: src/frontend.cpp:713
-#: src/frontend.cpp:934
-#: src/frontend.cpp:1241
+#: src/frontend.cpp:699
+#: src/frontend.cpp:710
+#: src/frontend.cpp:931
+#: src/frontend.cpp:1238
 msgid "Unsupported"
 msgstr "Nem támogatott"
 
-#: src/frontend.cpp:710
-#: src/frontend.cpp:719
-#: src/frontend.cpp:724
-#: src/frontend.cpp:729
-#: src/frontend.cpp:929
-#: src/frontend.cpp:954
-#: src/frontend.cpp:1112
-#: src/frontend.cpp:1117
-#: src/frontend.cpp:1122
-#: src/frontend.cpp:1132
+#: src/frontend.cpp:707
+#: src/frontend.cpp:716
+#: src/frontend.cpp:721
+#: src/frontend.cpp:726
+#: src/frontend.cpp:926
+#: src/frontend.cpp:951
+#: src/frontend.cpp:1109
+#: src/frontend.cpp:1114
+#: src/frontend.cpp:1119
+#: src/frontend.cpp:1129
 msgid "Off"
 msgstr "Ki"
 
-#: src/frontend.cpp:711
+#: src/frontend.cpp:708
 msgid "50%"
 msgstr "50%"
 
-#: src/frontend.cpp:712
+#: src/frontend.cpp:709
 #: src/multiplay.cpp:2019
 msgid "Black"
 msgstr "Fekete"
 
-#: src/frontend.cpp:719
-#: src/frontend.cpp:724
-#: src/frontend.cpp:729
-#: src/frontend.cpp:954
-#: src/frontend.cpp:1112
-#: src/frontend.cpp:1117
-#: src/frontend.cpp:1122
-#: src/frontend.cpp:1132
+#: src/frontend.cpp:716
+#: src/frontend.cpp:721
+#: src/frontend.cpp:726
+#: src/frontend.cpp:951
+#: src/frontend.cpp:1109
+#: src/frontend.cpp:1114
+#: src/frontend.cpp:1119
+#: src/frontend.cpp:1129
 msgid "On"
 msgstr "Be"
 
-#: src/frontend.cpp:734
+#: src/frontend.cpp:731
 msgid "Rotating"
 msgstr "Forgatás"
 
-#: src/frontend.cpp:734
+#: src/frontend.cpp:731
 msgid "Fixed"
 msgstr "Rögzített"
 
-#: src/frontend.cpp:747
+#: src/frontend.cpp:744
 msgid "Video Playback"
 msgstr "Video visszajátszás"
 
-#: src/frontend.cpp:751
+#: src/frontend.cpp:748
 msgid "Scanlines"
 msgstr "Kereső"
 
-#: src/frontend.cpp:756
+#: src/frontend.cpp:753
 msgid "Screen Shake"
 msgstr "Képernyő villódzás"
 
-#: src/frontend.cpp:761
+#: src/frontend.cpp:758
 msgid "Subtitles"
 msgstr "Feliratok"
 
-#: src/frontend.cpp:766
+#: src/frontend.cpp:763
 msgid "Shadows"
 msgstr "Árnyékok"
 
-#: src/frontend.cpp:770
+#: src/frontend.cpp:767
 msgid "Radar"
 msgstr "Radar"
 
-#: src/frontend.cpp:774
+#: src/frontend.cpp:771
 msgid "GRAPHICS OPTIONS"
 msgstr "GRAFIKA BEÁLLÍTÁS"
 
-#: src/frontend.cpp:855
+#: src/frontend.cpp:852
 #: src/ingameop.cpp:131
 msgid "Voice Volume"
 msgstr "Beszéd hang"
 
-#: src/frontend.cpp:859
+#: src/frontend.cpp:856
 #: src/ingameop.cpp:136
 msgid "FX Volume"
 msgstr "FX hang"
 
-#: src/frontend.cpp:863
+#: src/frontend.cpp:860
 #: src/ingameop.cpp:141
 msgid "Music Volume"
 msgstr "Zenei hang"
 
-#: src/frontend.cpp:870
+#: src/frontend.cpp:867
 msgid "AUDIO OPTIONS"
 msgstr "HANG BEÁLLÍTÁS"
 
-#: src/frontend.cpp:922
+#: src/frontend.cpp:919
 msgid "Windowed"
 msgstr "Ablakos"
 
-#: src/frontend.cpp:931
+#: src/frontend.cpp:928
 msgid "4×"
 msgstr ""
 
-#: src/frontend.cpp:932
+#: src/frontend.cpp:929
 msgid "8×"
 msgstr "8×"
 
-#: src/frontend.cpp:971
+#: src/frontend.cpp:968
 msgid "* Takes effect on game restart"
 msgstr "* Játék újraindításakor effekteket bekapcsolja"
 
-#: src/frontend.cpp:975
+#: src/frontend.cpp:972
 msgid "Graphics Mode*"
 msgstr "Grafikus Mód*"
 
-#: src/frontend.cpp:979
+#: src/frontend.cpp:976
 msgid "Resolution*"
 msgstr "Felbontás*"
 
-#: src/frontend.cpp:983
+#: src/frontend.cpp:980
 msgid "Texture size"
 msgstr "Szöveg méret"
 
-#: src/frontend.cpp:987
+#: src/frontend.cpp:984
 msgid "Vertical sync"
 msgstr "Vízszintes szinkronizáció"
 
-#: src/frontend.cpp:995
+#: src/frontend.cpp:992
 msgid "VIDEO OPTIONS"
 msgstr "VIDEO BEÁLLÍTÁS"
 
-#: src/frontend.cpp:1127
+#: src/frontend.cpp:1124
 msgid "Middle Mouse"
 msgstr "Középső egérgomb"
 
-#: src/frontend.cpp:1127
+#: src/frontend.cpp:1124
 msgid "Right Mouse"
 msgstr "Jobb egérgomb"
 
-#: src/frontend.cpp:1145
+#: src/frontend.cpp:1142
 msgid "Reverse Rotation"
 msgstr "Fordított forgatás"
 
-#: src/frontend.cpp:1149
+#: src/frontend.cpp:1146
 msgid "Trap Cursor"
 msgstr "Kurzor rögzítés"
 
 # célpont megadása jobb gombról átkerül a balra
-#: src/frontend.cpp:1154
+#: src/frontend.cpp:1151
 msgid "Switch Mouse Buttons"
 msgstr "Váltott egérparancs"
 
-#: src/frontend.cpp:1159
+#: src/frontend.cpp:1156
 msgid "Rotate Screen"
 msgstr "Képernyő forgatás"
 
-#: src/frontend.cpp:1163
+#: src/frontend.cpp:1160
 msgid "Colored Cursors"
 msgstr "Kiszínezett kurzorok"
 
-#: src/frontend.cpp:1167
+#: src/frontend.cpp:1164
 msgid "MOUSE OPTIONS"
 msgstr "EGÉR BEÁLLÍTÁS"
 
-#: src/frontend.cpp:1234
+#: src/frontend.cpp:1231
 #: src/multiint.cpp:211
 msgid "Easy"
 msgstr "Könnyű"
 
-#: src/frontend.cpp:1235
+#: src/frontend.cpp:1232
 msgid "Normal"
 msgstr "Normális"
 
-#: src/frontend.cpp:1236
+#: src/frontend.cpp:1233
 #: src/multiint.cpp:211
 msgid "Hard"
 msgstr "Nehéz"
 
-#: src/frontend.cpp:1237
+#: src/frontend.cpp:1234
 #: src/multiint.cpp:211
 msgid "Insane"
 msgstr "Örült"
 
-#: src/frontend.cpp:1238
+#: src/frontend.cpp:1235
 msgid "Tough"
 msgstr "Szívós"
 
-#: src/frontend.cpp:1239
+#: src/frontend.cpp:1236
 msgid "Killer"
 msgstr "Gyilkos"
 
-#: src/frontend.cpp:1256
-#: src/frontend.cpp:1322
+#: src/frontend.cpp:1253
+#: src/frontend.cpp:1319
 msgid "Language"
 msgstr "Nyelv"
 
-#: src/frontend.cpp:1260
-#: src/frontend.cpp:1326
+#: src/frontend.cpp:1257
+#: src/frontend.cpp:1323
 msgid "Campaign Difficulty"
 msgstr "Küldetés nehézsége"
 
-#: src/frontend.cpp:1264
-#: src/frontend.cpp:1327
+#: src/frontend.cpp:1261
+#: src/frontend.cpp:1324
 msgid "Scroll Speed"
 msgstr "Görgetés sebessége"
 
-#: src/frontend.cpp:1268
-#: src/frontend.cpp:1323
+#: src/frontend.cpp:1265
+#: src/frontend.cpp:1320
 msgid "Unit Colour:"
 msgstr "Egység Színek"
 
-#: src/frontend.cpp:1288
-#: src/frontend.cpp:1324
+#: src/frontend.cpp:1285
+#: src/frontend.cpp:1321
 msgid "Campaign"
 msgstr "Új küldetés"
 
-#: src/frontend.cpp:1298
-#: src/frontend.cpp:1325
+#: src/frontend.cpp:1295
+#: src/frontend.cpp:1322
 msgid "Skirmish/Multiplayer"
 msgstr "Többjátékos mód"
 
-#: src/frontend.cpp:1304
-#: src/frontend.cpp:1320
+#: src/frontend.cpp:1301
+#: src/frontend.cpp:1317
 msgid "GAME OPTIONS"
 msgstr "JÁTÉK OPCIÓK"
 
-#: src/frontend.cpp:1434
+#: src/frontend.cpp:1431
 #: src/multiint.cpp:2645
 msgid "Mod: "
 msgstr "Mód:"

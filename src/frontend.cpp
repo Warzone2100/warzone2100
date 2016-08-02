@@ -369,8 +369,6 @@ static QList<CAMPAIGN_FILE> readCampaignFiles()
 
 static void startCampaignSelector()
 {
-	static char hackList[10][100]; // sigh...
-
 	addBackdrop();
 	addTopForm();
 	addBottomForm();
@@ -378,8 +376,7 @@ static void startCampaignSelector()
 	QList<CAMPAIGN_FILE> list = readCampaignFiles();
 	for (int i = 0; i < list.size(); i++)
 	{
-		ssprintf(hackList[i], "%s", list[i].name.toUtf8().constData()); // since widget system is crazy and takes pointers not copies
-		addTextButton(FRONTEND_CAMPAIGN_1 + i,  FRONTEND_POS1X, FRONTEND_POS2Y + 40 * i, hackList[i], WBUT_TXTCENTRE);
+		addTextButton(FRONTEND_CAMPAIGN_1 + i, FRONTEND_POS1X, FRONTEND_POS2Y + 40 * i, gettext(list[i].name.toUtf8().constData()), WBUT_TXTCENTRE);
 	}
 	addSideText(FRONTEND_SIDETEXT, FRONTEND_SIDEX, FRONTEND_SIDEY, _("CAMPAIGNS"));
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_QUIT, 10, 10, 30, 29, P_("menu", "Return"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);

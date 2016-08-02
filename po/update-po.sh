@@ -4,8 +4,8 @@
 cd "`dirname "$0"`/.."
 
 find data -name '*.json' -type f '-!' -path 'data/mp/multiplay/maps/*' -exec \
-	grep '"name": ".*"' {} + |
-	sed -r 's/.*"name": "([^"]*)".*/_("\1")/' |
+	grep '"name"\s*:\s*".*"' {} + |
+	sed -r 's/.*"name"\s*:\s*"([^"]*)".*/_("\1")/' |
 	grep -v -e "\*" -e "NULL" -e "CAM" |
 	sort | uniq > po/custom/fromJson.txt
 
