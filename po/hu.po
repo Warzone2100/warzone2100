@@ -8382,7 +8382,7 @@ msgstr "Ablakos"
 
 #: src/frontend.cpp:928
 msgid "4×"
-msgstr ""
+msgstr "4×"
 
 #: src/frontend.cpp:929
 msgid "8×"
@@ -8611,6 +8611,8 @@ msgid ""
 "\n"
 "Cost: %1"
 msgstr ""
+"\n"
+"Költség: %1"
 
 #: src/hci.cpp:5216
 msgid "Chat: All"
@@ -8825,9 +8827,9 @@ msgid "Fine, weapon & sensor display is off!"
 msgstr "Bírság, fegyver és érzékelő kijelző kikapcsolva!"
 
 #: src/keybind.cpp:431
-#, fuzzy, c-format
+#, c-format
 msgid "Player %u is cheating a new droid army of: %d × %s."
-msgstr "Player %u csalt (hibakeresés menü), új droidserege lett: %s."
+msgstr "Player %u csalt (hibakeresés menü), új droidserege lett: %d × %s."
 
 #: src/keybind.cpp:479
 #: src/keybind.cpp:509
