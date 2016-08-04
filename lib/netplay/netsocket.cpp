@@ -216,18 +216,16 @@ static void freeaddrinfo(struct addrinfo *res)
 
 static int addressToText(const struct sockaddr *addr, char *buf, size_t size)
 {
+	auto handleIpv4 = [&](in_addr_t s_addr) {
+		uint32_t val = ntohl(s_addr);
+		return snprintf(buf, size, "%u.%u.%u.%u", (val>>24)&0xFF, (val>>16)&0xFF, (val>>8)&0xFF, val&0xFF);
+	};
+
 	switch (addr->sa_family)
 	{
 	case AF_INET:
 		{
-			unsigned char *address = (unsigned char *) & ((const struct sockaddr_in *)addr)->sin_addr.s_addr;
-
-			return snprintf(buf, size,
-			                "%hhu.%hhu.%hhu.%hhu",
-			                address[0],
-			                address[1],
-			                address[2],
-			                address[3]);
+			return handleIpv4(((const struct sockaddr_in *)addr)->sin_addr.s_addr);
 		}
 	case AF_INET6:
 		{
@@ -242,9 +240,7 @@ static int addressToText(const struct sockaddr *addr, char *buf, size_t size)
 				// At this time, we only care about the address, nothing else.
 				struct sockaddr_in addr4;
 				memcpy(&addr4.sin_addr.s_addr, mappedIP->sin6_addr.s6_addr + 12, sizeof(addr4.sin_addr.s_addr));
-				char buffer[16];
-				const char *ipv4 = inet_ntop(AF_INET, &addr4.sin_addr, buffer, sizeof(buffer));
-				return snprintf(buf, size, "%s", ipv4);
+				return handleIpv4(addr4.sin_addr.s_addr);
 			}
 			else
 			{
