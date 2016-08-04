@@ -1,0 +1,24 @@
+{
+    "map": {
+        "file": "4c-fishnet",
+        "id": "map",
+        "maxPlayers": 4,
+        "name": "Fishnet"
+    },
+    "player_0": {
+        "id": "player_0",
+        "team": 0
+    },
+    "player_1": {
+        "id": "player_1",
+        "team": 1
+    },
+    "player_2": {
+        "id": "player_2",
+        "team": 1
+    },
+    "player_3": {
+        "id": "player_3",
+        "team": 0
+    }
+}

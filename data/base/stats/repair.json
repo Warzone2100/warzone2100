@@ -1,0 +1,28 @@
+{
+    "LightRepair1": {
+        "buildPoints": 250,
+        "buildPower": 50,
+        "designable": 1,
+        "id": "LightRepair1",
+        "location": "TURRET",
+        "model": "GNMREPAR.PIE",
+        "mountModel": "TRMECM1.PIE",
+        "name": "Repair Turret",
+        "repairPoints": 15,
+        "time": 7,
+        "weight": 800
+    },
+    "NEXUSrepair": {
+        "id": "NEXUSrepair",
+        "location": "DEFAULT",
+        "name": "*NEXUSrepair*",
+        "repairPoints": 100,
+        "time": 100
+    },
+    "ZNULLREPAIR": {
+        "id": "ZNULLREPAIR",
+        "location": "DEFAULT",
+        "name": "Z NULL REPAIR",
+        "time": 100
+    }
+}

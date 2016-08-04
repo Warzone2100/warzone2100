@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -324,7 +324,7 @@ static void giftResearch(uint8_t from, uint8_t to, bool send)
 		NETuint32_t(&dummy);
 		NETend();
 	}
-	else
+	else if (alliancesCanGiveResearchAndRadar(game.alliance))
 	{
 		if (to == selectedPlayer)
 		{
@@ -362,24 +362,32 @@ void giftPower(uint8_t from, uint8_t to, uint32_t amount, bool send)
 	}
 	else
 	{
-		uint32_t gifval;
+		int value = 0;
 
-		if (from == ANYPLAYER || amount != 0)
+		if (from == ANYPLAYER && !NetPlay.bComms)
 		{
-			gifval = amount;
+			// basically cheating power, so we check that we are not in multiplayer
+			addPower(to, amount);
 		}
-		else
+		else if (from == ANYPLAYER && NetPlay.bComms)
 		{
-			// Give 1/3 of our power away
-			gifval = getPower(from) / 3;
-			usePower(from, gifval);
+			debug(LOG_WARNING, "Someone tried to cheat power in multiplayer - ignored!");
 		}
-
-		addPower(to, gifval);
-
+		else if (amount == 0) // the GUI option
+		{
+			value = getPower(from) / 3;
+			usePower(from, value);
+			addPower(to, value);
+		}
+		else // for scripts etc that can give precise amounts
+		{
+			value = MIN(getPower(from), amount);
+			usePower(from, value);
+			addPower(to, value);
+		}
 		if (from != ANYPLAYER && to == selectedPlayer)
 		{
-			CONPRINTF(ConsoleString, (ConsoleString, _("%s Gives You %u Power"), getPlayerName(from), gifval));
+			CONPRINTF(ConsoleString, (ConsoleString, _("%s Gives You %d Power"), getPlayerName(from), value));
 		}
 	}
 }
@@ -473,7 +481,7 @@ void formAlliance(uint8_t p1, uint8_t p2, bool prop, bool allowAudio, bool allow
 	syncDebug("Form alliance %d %d", p1, p2);
 	alliances[p1][p2] = ALLIANCE_FORMED;
 	alliances[p2][p1] = ALLIANCE_FORMED;
-	if (game.alliance == ALLIANCES_TEAMS)	// this is for shared vision only
+	if (alliancesSharedVision(game.alliance))	// this is for shared vision only
 	{
 		alliancebits[p1] |= 1 << p2;
 		alliancebits[p2] |= 1 << p1;
@@ -485,7 +493,7 @@ void formAlliance(uint8_t p1, uint8_t p2, bool prop, bool allowAudio, bool allow
 	}
 
 	// Not campaign and alliances are transitive
-	if (game.alliance == ALLIANCES_TEAMS)
+	if (alliancesSharedVision(game.alliance))
 	{
 		giftRadar(p1, p2, false);
 		giftRadar(p2, p1, false);
@@ -656,53 +664,6 @@ void recvMultiPlayerFeature(NETQUEUE queue)
 	}
 }
 
-bool addOilDrum(uint8_t count)
-{
-	syncDebug("Adding %d oil drums.", count);
-
-	int featureIndex;
-	for (featureIndex = 0; featureIndex < numFeatureStats && asFeatureStats[featureIndex].subType != FEAT_OIL_DRUM; ++featureIndex) {}
-	if (featureIndex >= numFeatureStats)
-	{
-		debug(LOG_WARNING, "No oil drum feature!");
-		return false;  // Return value ignored.
-	}
-
-	for (unsigned n = 0; n < count; ++n)
-	{
-		uint32_t x, y;
-		for (int i = 0; i < 3; ++i)  // try three times
-		{
-			// Between 10 and mapwidth - 10
-			x = gameRand(mapWidth - 20) + 10;
-			y = gameRand(mapHeight - 20) + 10;
-
-			if (pickATileGen(&x, &y, LOOK_FOR_EMPTY_TILE, zonedPAT))
-			{
-				break;
-			}
-			x = INVALID_XY;
-		}
-		if (x == INVALID_XY)
-		{
-			syncDebug("Did not find location for oil drum.");
-			debug(LOG_FEATURE, "Unable to find a free location.");
-			continue;
-		}
-		FEATURE *pF = buildFeature(&asFeatureStats[featureIndex], world_coord(x), world_coord(y), false);
-		if (pF)
-		{
-			pF->player = ANYPLAYER;
-			syncDebugFeature(pF, '+');
-		}
-		else
-		{
-			debug(LOG_ERROR, "Couldn't build oil drum?");
-		}
-	}
-	return true;
-}
-
 // ///////////////////////////////////////////////////////////////
 bool pickupArtefact(int toPlayer, int fromPlayer)
 {
@@ -719,14 +680,14 @@ bool pickupArtefact(int toPlayer, int fromPlayer)
 					MakeResearchPossible(&asPlayerResList[toPlayer][topic]);
 					if (toPlayer == selectedPlayer)
 					{
-						CONPRINTF(ConsoleString, (ConsoleString, _("You Discover Blueprints For %s"), getName(asResearch[topic].pName)));
+						CONPRINTF(ConsoleString, (ConsoleString, _("You Discover Blueprints For %s"), getName(&asResearch[topic])));
 					}
 					break;
 				}
 				// Invalid topic
 				else
 				{
-					debug(LOG_WARNING, "%s is a invalid research topic?", getName(asResearch[topic].pName));
+					debug(LOG_WARNING, "%s is a invalid research topic?", getName(&asResearch[topic]));
 				}
 			}
 		}

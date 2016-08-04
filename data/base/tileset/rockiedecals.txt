@@ -1,4 +1,4 @@
-rockie_decals,42
+rockie_decals,40
 01
 08
 09
@@ -34,9 +34,7 @@ rockie_decals,42
 70
 71
 72
-73
 74
-75
 76
 77
 78

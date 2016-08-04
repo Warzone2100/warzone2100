@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -90,7 +90,7 @@ extern bool assertEnabled;
  */
 #define ASSERT_HELPER(expr, location_description, function, ...) \
 	( \
-	  (expr) ? /* if (expr) */ \
+	  likely(expr) ? /* if (expr) */ \
 	  (void)0 \
 	  : /* else */\
 	  ASSERT_FAILURE(expr, #expr, location_description, function, __VA_ARGS__) \
@@ -112,7 +112,7 @@ extern bool assertEnabled;
  * and also provides asserts and debug output for debugging.
  */
 #define ASSERT_OR_RETURN(retval, expr, ...) \
-	do { bool _wzeval = (expr); if (!_wzeval) { ASSERT_FAILURE(expr, #expr, AT_MACRO, __FUNCTION__, __VA_ARGS__); return retval; } } while (0)
+	do { bool _wzeval = likely(expr); if (!_wzeval) { ASSERT_FAILURE(expr, #expr, AT_MACRO, __FUNCTION__, __VA_ARGS__); return retval; } } while (0)
 
 
 /**
@@ -137,6 +137,10 @@ template<> class StaticAssert<true> {};
  */
 #define STATIC_ASSERT( expr ) \
 	(void)STATIC_ASSERT_EXPR(expr)
+
+#ifndef WZ_CXX11
+#define static_assert(expr, str) STATIC_ASSERT(expr)
+#endif
 
 
 /***
@@ -204,19 +208,22 @@ struct debug_callback
  *
  * Doesn't register any callbacks!
  */
-void debug_init(void);
+void debug_init();
 
 /**
  * Shutdown the debug system and remove all output callbacks
  */
-void debug_exit(void);
+void debug_exit();
 
 /**
  * Have the stderr output callback flush its output before returning.
  *
  * NOTE: This may cause significant slowdowns on some systems.
  */
-extern void debugFlushStderr(void);
+void debugFlushStderr();
+
+/// Return the last set error message, or NULL is none set since last time we were called.
+const char *debugLastError();
 
 /**
  * Register a callback to be called on every call to debug()
@@ -271,21 +278,21 @@ static inline void objTraceEnable(UDWORD id)
 {
 	traceID = id;
 }
-static inline void objTraceDisable(void)
+static inline void objTraceDisable()
 {
 	traceID = (UDWORD) - 1;
 }
 
 // MSVC specific rotuines to set/clear allocation tracking
 #if defined(WZ_CC_MSVC) && defined(DEBUG)
-void debug_MEMCHKOFF(void);
-void debug_MEMCHKON(void);
-void debug_MEMSTATS(void);
+void debug_MEMCHKOFF();
+void debug_MEMCHKON();
+void debug_MEMSTATS();
 #endif
 
 /** Checks if a particular debub flag was enabled */
-extern bool debugPartEnabled(code_part codePart);
+bool debugPartEnabled(code_part codePart);
 
-void debugDisableAssert(void);
+void debugDisableAssert();
 
 #endif // __INCLUDED_LIB_FRAMEWORK_DEBUG_H__

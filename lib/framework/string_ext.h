@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -70,7 +70,7 @@ static inline char *strdup2(const char *s, char *fileName, int line)
  * \note This is the same as strnlen(string, maxlen - 1) + 1 when using the
  *       GNU C library.
  */
-static inline size_t strnlen1(const char *string, size_t maxlen)
+WZ_DECL_PURE static inline size_t strnlen1(const char *string, size_t maxlen)
 {
 	// Find the first NUL char
 	const char *end = (const char *)memchr(string, '\0', maxlen); // Cast required for C++
@@ -104,10 +104,12 @@ static inline size_t strnlen1(const char *string, size_t maxlen)
  * \param size the buffer size (in bytes) of buffer \c dest
  * \return Length to string src, if >= size truncation occured
  */
-static inline size_t strlcpy(char *dest, const char *src, size_t size)
+static inline size_t strlcpy(char *WZ_DECL_RESTRICT dest, const char *WZ_DECL_RESTRICT src, size_t size)
 {
+#ifdef DEBUG
 	ASSERT_OR_RETURN(0, src != NULL, "strlcpy was passed an invalid src parameter.");
 	ASSERT_OR_RETURN(0, dest != NULL, "strlcpy was passed an invalid dest parameter.");
+#endif
 
 	if (size > 0)
 	{
@@ -139,12 +141,14 @@ static inline size_t strlcpy(char *dest, const char *src, size_t size)
  * \param size the buffer size (in bytes) of buffer \c dest
  * \return Length to string src + dest, if >= size truncation occured.
  */
-static inline size_t strlcat(char *dest, const char *src, size_t size)
+static inline size_t strlcat(char *WZ_DECL_RESTRICT dest, const char *WZ_DECL_RESTRICT src, size_t size)
 {
 	size_t len;
 
+#ifdef DEBUG
 	ASSERT_OR_RETURN(0, src != NULL, "strlcat was passed an invalid src parameter.");
 	ASSERT_OR_RETURN(0, dest != NULL, "strlcat was passed an invalid dest parameter.");
+#endif
 
 	len = strlen(src);
 

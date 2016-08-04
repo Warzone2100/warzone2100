@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -75,17 +75,21 @@ Spacetime interpolateObjectSpacetime(const SIMPLE_OBJECT *obj, uint32_t t)
 SIMPLE_OBJECT::SIMPLE_OBJECT(OBJECT_TYPE type, uint32_t id, unsigned player)
 	: type(type)
 	, id(id)
+	, pos(0, 0, 0)
+	, rot(0, 0, 0)
 	, player(player)
 	, born(gameTime)
 	, died(0)
+	, time(0)
 {}
 
 SIMPLE_OBJECT::~SIMPLE_OBJECT()
 {
-#ifdef DEBUG
-	const_cast<OBJECT_TYPE &>(type) = (OBJECT_TYPE)(type + 1000000000);  // Hopefully this will trigger an assert              if someone uses the freed object.
-	player += 100;                                                       // Hopefully this will trigger an assert and/or crash if someone uses the freed object.
-#endif //DEBUG
+	// Make sure to get rid of some final references in the sound code to this object first
+	audio_RemoveObj(this);
+
+	const_cast<OBJECT_TYPE volatile &>(type) = (OBJECT_TYPE)(type + 1000000000);  // Hopefully this will trigger an assert              if someone uses the freed object.
+	const_cast<UBYTE volatile &>(player) += 100;                                  // Hopefully this will trigger an assert and/or crash if someone uses the freed object.
 }
 
 BASE_OBJECT::BASE_OBJECT(OBJECT_TYPE type, uint32_t id, unsigned player)
@@ -96,9 +100,20 @@ BASE_OBJECT::BASE_OBJECT(OBJECT_TYPE type, uint32_t id, unsigned player)
 	, lastEmission(0)
 	, lastHitWeapon(WSC_NUM_WEAPON_SUBCLASSES)  // No such weapon.
 	, timeLastHit(UDWORD_MAX)
-	, bTargetted(false)
+	, body(0)
+	, periodicalDamageStart(0)
+	, periodicalDamage(0)
+	, flags(0)
 	, watchedTiles(NULL)
-{}
+	, psCurAnim(NULL)
+{
+	memset(visible, 0, sizeof(visible));
+	sDisplay.imd = NULL;
+	sDisplay.frameNumber = 0;
+	sDisplay.screenX = 0;
+	sDisplay.screenY = 0;
+	sDisplay.screenR = 0;
+}
 
 BASE_OBJECT::~BASE_OBJECT()
 {

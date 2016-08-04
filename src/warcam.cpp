@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -56,7 +56,6 @@
 #include "order.h"
 #include "action.h"
 #include "intdisplay.h"
-#include "e3demo.h"
 #include "display3d.h"
 #include "selection.h"
 
@@ -94,6 +93,9 @@ static	bool bRadarTrackingRequested = false;
 
 /* World coordinates for a radar track/jump */
 static  float	 radarX, radarY;
+
+// Prototypes
+static bool camTrackCamera(void);
 
 //-----------------------------------------------------------------------------------
 /* Sets the camera to inactive to begin with */
@@ -138,11 +140,6 @@ static void processLeaderSelection(void)
 	bool bSuccess;
 	UDWORD dif;
 	UDWORD bestSoFar;
-
-	if (demoGetStatus())
-	{
-		return;
-	}
 
 	if (getWarCamStatus())
 	{
@@ -319,12 +316,10 @@ static BASE_OBJECT *camFindTarget(void)
 }
 
 
-bool camTrackCamera(void);
-
 /* Updates the camera position/angle along with the object movement */
 bool	processWarCam(void)
 {
-	BASE_OBJECT	*foundTarget;
+	BASE_OBJECT *foundTarget;
 	bool Status = true;
 
 	/* Get out if the camera isn't active */
@@ -355,15 +350,10 @@ bool	processWarCam(void)
 					CONPRINTF(ConsoleString, (ConsoleString, "WZ/CAM  - %s", droidGetName((DROID *)foundTarget)));
 				}
 			}
-			else
-			{
-//					CONPRINTF(ConsoleString,(ConsoleString,"DROID-CAM V0.1 Enabled - Now tracking new location"));
-			}
 		}
 		else
 		{
 			/* We've requested a track with no droid selected */
-//				addConsoleMessage("Droid-CAM V0.1 ERROR - No targets(s) selected",DEFAULT_JUSTIFY,SYSTEM_MESSAGE);
 			trackingCamera.status = CAM_INACTIVE;
 		}
 		break;
@@ -399,12 +389,12 @@ bool	processWarCam(void)
 		}
 		/* Switch to inactive mode */
 		trackingCamera.status = CAM_INACTIVE;
-//			addConsoleMessage("Droid-CAM V0.1 Disabled",DEFAULT_JUSTIFY,SYSTEM_MESSAGE);
 		Status = false;
 		break;
-	default:
-		debug(LOG_FATAL, "Weirdy status for tracking Camera");
-		abort();
+	case CAM_INACTIVE:
+	case CAM_TRACK_OBJECT:
+	case CAM_TRACK_LOCATION:
+		ASSERT(false, "Unexpected status for tracking camera");
 		break;
 	}
 
@@ -631,7 +621,7 @@ static void updateCameraAcceleration(UBYTE update)
 		const int angle = 90 - abs((player.r.x / 182) % 90);
 
 		const DROID *psDroid = (DROID *)trackingCamera.target;
-		const PROPULSION_STATS *psPropStats = &asPropulsionStats[psDroid->asBits[COMP_PROPULSION].nStat];
+		const PROPULSION_STATS *psPropStats = &asPropulsionStats[psDroid->asBits[COMP_PROPULSION]];
 
 		if (psPropStats->propulsionType == PROPULSION_TYPE_LIFT)
 		{
@@ -747,7 +737,7 @@ static void updateCameraRotationAcceleration(UBYTE update)
 	if (trackingCamera.target->type == OBJ_DROID)
 	{
 		DROID *psDroid = (DROID *)trackingCamera.target;
-		psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
+		psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION];
 		if (psPropStats->propulsionType == PROPULSION_TYPE_LIFT)
 		{
 			int droidHeight, difHeight, droidMapHeight;
@@ -807,12 +797,6 @@ static void updateCameraRotationAcceleration(UBYTE update)
 			xConcern = trackingCamera.target->rot.pitch;
 			xConcern += DEG(-16);
 		}
-
-		//xConcern = DEG(trackingCamera.target->pitch);
-		//	if(xConcern>DEG(MINCAMROTX))
-		//	{
-		//		xConcern = DEG(MINCAMROTX);
-		//	}
 		while (trackingCamera.rotation.x < 0)
 		{
 			trackingCamera.rotation.x += DEG(360);
@@ -877,7 +861,6 @@ static void updateCameraRotationVelocity(UBYTE update)
 	{
 		trackingCamera.rotVel.z += realTimeAdjustedIncrement(trackingCamera.rotAccel.z);
 	}
-
 }
 
 //-----------------------------------------------------------------------------------
@@ -900,30 +883,16 @@ static void updateCameraRotationPosition(UBYTE update)
 
 /* Returns how far away we are from our goal in rotation */
 /* Updates the viewpoint according to the object being tracked */
-bool	camTrackCamera(void)
+static bool camTrackCamera()
 {
-	PROPULSION_STATS	*psPropStats;
-	DROID	*psDroid;
-	bool	bFlying;
-
-	bFlying = false;
+	PROPULSION_STATS *psPropStats;
+	DROID *psDroid;
+	bool bFlying = false;
 
 	/* Most importantly - see if the target we're tracking is dead! */
 	if (trackingCamera.target->died)
 	{
-		setFindNewTarget();
 		return (false);
-	}
-
-	/*	Cancel tracking if it's no longer selected.
-		This may not be desirable? 	*/
-	if (trackingCamera.target->type == OBJ_DROID)
-	{
-
-//		if(!trackingCamera.target->selected)
-//		{
-//			return(false);
-//		}
 	}
 
 	/* Update the acceleration,velocity and position of the camera for movement */
@@ -939,24 +908,12 @@ bool	camTrackCamera(void)
 	if (trackingCamera.target->type == OBJ_DROID)
 	{
 		psDroid = (DROID *)trackingCamera.target;
-		psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
+		psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION];
 		if (psPropStats->propulsionType == PROPULSION_TYPE_LIFT)
 		{
 			bFlying = true;
 		}
 	}
-	/*
-		bIsBuilding = false;
-		if(trackingCamera.target->type == OBJ_DROID)
-		{
-			psDroid= (DROID*)trackingCamera.target;
-			if(DroidIsBuilding(psDroid))
-			{
-				bIsBuilding = true;
-			}
-		}
-	*/
-
 
 	if (bRadarAllign || trackingCamera.target->type == OBJ_DROID)
 	{
@@ -974,12 +931,6 @@ bool	camTrackCamera(void)
 		updateCameraRotationVelocity(CAM_ALL);
 		updateCameraRotationPosition(CAM_ALL);
 	}
-	/*
-	else if(bIsBuilding)
-	{
-		updateCameraRotationVelocity(CAM_X_ONLY);
-	}
-	*/
 	else
 	{
 		updateCameraRotationVelocity(CAM_X_AND_Y);
@@ -993,7 +944,6 @@ bool	camTrackCamera(void)
 
 	/* Update the rotations that're now stored in trackingCamera.rotation */
 	player.r.x = trackingCamera.rotation.x;
-	/*if(!bIsBuilding)*/
 	player.r.y = trackingCamera.rotation.y;
 	player.r.z = trackingCamera.rotation.z;
 
@@ -1003,12 +953,6 @@ bool	camTrackCamera(void)
 		player.r.x = DEG(360 + MAX_PLAYER_X_ANGLE);
 	}
 
-	/*
-	if(bIsBuilding)
-	{
-		player.r.y+=DEG(1);
-	}
-	*/
 	/* Clip the position to the edge of the map */
 	CheckScrollLimits();
 
@@ -1124,13 +1068,12 @@ void	requestRadarTrack(SDWORD x, SDWORD y)
 	bRadarTrackingRequested = true;
 	trackingCamera.status = CAM_REQUEST;
 	processWarCam();
-// 	setWarCamActive(true);
 }
 
 /* Returns whether we're presently tracking to a new _location_ */
 bool	getRadarTrackingStatus(void)
 {
-	bool	retVal;
+	bool retVal;
 
 	if (trackingCamera.status == CAM_INACTIVE)
 	{
@@ -1138,8 +1081,6 @@ bool	getRadarTrackingStatus(void)
 	}
 	else
 	{
-		//if(/*trackingCamera.target && */trackingCamera.target->type == OBJ_TARGET)
-		//if you know why the above check was commented out please tell me AB 19/11/98
 		if (trackingCamera.target && trackingCamera.target->type == OBJ_TARGET)
 		{
 			retVal = true;

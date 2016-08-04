@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -962,18 +962,6 @@ FUNC_SYMBOL asFuncTable[] =
 	{
 		"setGroupSecondary",	scrSetGroupSecondary,	VAL_VOID,
 		3, { (INTERP_TYPE)ST_GROUP, VAL_INT, VAL_INT },
-		0, 0, NULL, 0, 0, NULL, NULL
-	},
-
-	{
-		"initIterateCluster", scrInitIterateCluster,	VAL_VOID,
-		1, { VAL_INT },
-		0, 0, NULL, 0, 0, NULL, NULL
-	},
-
-	{
-		"iterateCluster",		scrIterateCluster,	(INTERP_TYPE)ST_BASEOBJECT,
-		0, { VAL_VOID },
 		0, 0, NULL, 0, 0, NULL, NULL
 	},
 
@@ -1984,12 +1972,6 @@ FUNC_SYMBOL asFuncTable[] =
 	},
 
 	{
-		"weaponShortHitUpgrade",	scrWeaponShortHitUpgrade,	VAL_INT,
-		2, { VAL_INT, (INTERP_TYPE)ST_WEAPON },
-		0, 0, NULL, 0, 0, NULL, NULL
-	},
-
-	{
 		"weaponLongHitUpgrade",	scrWeaponLongHitUpgrade,	VAL_INT,
 		2, { VAL_INT, (INTERP_TYPE)ST_WEAPON },
 		0, 0, NULL, 0, 0, NULL, NULL
@@ -2399,22 +2381,10 @@ VAR_SYMBOL asObjTable[] =
 
 	/* Weapon Stats */
 
-	//weapon short range
-	{
-		"shortRange",	VAL_INT,	ST_OBJECT,
-		(INTERP_TYPE)ST_WEAPON,	WEAPID_SHORT_RANGE,	scrWeaponObjGet,	NULL, 0, {0}, NULL
-	},
-
 	//weapon long range
 	{
 		"longRange",	VAL_INT,	ST_OBJECT,
 		(INTERP_TYPE)ST_WEAPON,	WEAPID_LONG_RANGE,	scrWeaponObjGet,	NULL, 0, {0}, NULL
-	},
-
-	//weapon short hit chance
-	{
-		"shortHit",	VAL_INT,	ST_OBJECT,
-		(INTERP_TYPE)ST_WEAPON,	WEAPID_SHORT_HIT,	scrWeaponObjGet,	NULL, 0, {0}, NULL
 	},
 
 	//weapon long hit chance
@@ -2484,7 +2454,6 @@ CONST_SYMBOL asConstantTable[] =
 	{ "IDRET_INTELMAP",		VAL_INT,	false,	IDRET_INTEL_MAP,	NULL, NULL, 0.0f },
 	{ "IDRET_DESIGN",		VAL_INT,	false,	IDRET_DESIGN,		NULL, NULL, 0.0f },
 	{ "IDRET_COMMAND",		VAL_INT,	false,	IDRET_COMMAND,		NULL, NULL, 0.0f },
-	{ "IDRET_ORDER",		VAL_INT,	false,	IDRET_ORDER,		NULL, NULL, 0.0f },
 	{ "IDRET_TRANSPORTER",	VAL_INT,	false,	IDRET_TRANSPORTER,	NULL, NULL, 0.0f },
 
 	// Design screen buttons
@@ -2576,7 +2545,6 @@ CONST_SYMBOL asConstantTable[] =
 	{ "DORDER_OBSERVE",		VAL_INT,	false,	DORDER_OBSERVE,		NULL, NULL, 0.0f },
 	{ "DORDER_FIRESUPPORT",	VAL_INT,	false,	DORDER_FIRESUPPORT,	NULL, NULL, 0.0f },
 	{ "DORDER_RETREAT",		VAL_INT,	false,	DORDER_RETREAT,		NULL, NULL, 0.0f },
-	{ "DORDER_DESTRUCT",	VAL_INT,	false,	DORDER_DESTRUCT,	NULL, NULL, 0.0f },
 	{ "DORDER_RTB",			VAL_INT,	false,	DORDER_RTB,			NULL, NULL, 0.0f },
 	{ "DORDER_RTR",			VAL_INT,	false,	DORDER_RTR,			NULL, NULL, 0.0f },
 	{ "DORDER_RUN",			VAL_INT,	false,	DORDER_RUN,			NULL, NULL, 0.0f },
@@ -2592,7 +2560,6 @@ CONST_SYMBOL asConstantTable[] =
 	{ "DACTION_NONE",				VAL_INT,	false,	DACTION_NONE,				NULL, NULL, 0.0f },
 	{ "DACTION_MOVE",				VAL_INT,	false,	DACTION_MOVE,				NULL, NULL, 0.0f },
 	{ "DACTION_BUILD",				VAL_INT,	false,	DACTION_BUILD,				NULL, NULL, 0.0f },
-	{ "DACTION_BUILD_FOUNDATION",	VAL_INT,	false,	DACTION_BUILD_FOUNDATION,	NULL, NULL, 0.0f },
 	{ "DACTION_DEMOLISH",			VAL_INT,	false,	DACTION_DEMOLISH,			NULL, NULL, 0.0f },
 	{ "DACTION_REPAIR",				VAL_INT,	false,	DACTION_REPAIR,				NULL, NULL, 0.0f },
 	{ "DACTION_ATTACK",				VAL_INT,	false,	DACTION_ATTACK,				NULL, NULL, 0.0f },
@@ -2600,7 +2567,6 @@ CONST_SYMBOL asConstantTable[] =
 	{ "DACTION_FIRESUPPORT",		VAL_INT,	false,	DACTION_FIRESUPPORT,		NULL, NULL, 0.0f },
 	{ "DACTION_SULK",				VAL_INT,	false,	DACTION_SULK,				NULL, NULL, 0.0f },
 
-	{ "DACTION_DESTRUCT",			VAL_INT,	false,	DACTION_DESTRUCT,			NULL, NULL, 0.0f },
 	{ "DACTION_TRANSPORTOUT",		VAL_INT,	false,	DACTION_TRANSPORTOUT,		NULL, NULL, 0.0f },
 	{ "DACTION_TRANSPORTWAITTOFLYIN", VAL_INT,	false,	DACTION_TRANSPORTWAITTOFLYIN, NULL, NULL, 0.0f },
 	{ "DACTION_TRANSPORTIN",		VAL_INT,	false,	DACTION_TRANSPORTIN,		NULL, NULL, 0.0f },
@@ -2612,7 +2578,6 @@ CONST_SYMBOL asConstantTable[] =
 
 	{ "DACTION_MOVETOREPAIR",		VAL_INT,	false,	DACTION_MOVETOREPAIR,		NULL, NULL, 0.0f },
 	{ "DACTION_BUILDWANDER",		VAL_INT,	false,	DACTION_BUILDWANDER,		NULL, NULL, 0.0f },
-	{ "DACTION_FOUNDATION_WANDER",	VAL_INT,	false,	DACTION_FOUNDATION_WANDER,	NULL, NULL, 0.0f },
 	{ "DACTION_MOVETOATTACK",		VAL_INT,	false,	DACTION_MOVETOATTACK,		NULL, NULL, 0.0f },
 	{ "DACTION_ROTATETOATTACK",		VAL_INT,	false,	DACTION_ROTATETOATTACK,		NULL, NULL, 0.0f },
 	{ "DACTION_MOVETOOBSERVE",		VAL_INT,	false,	DACTION_MOVETOOBSERVE,		NULL, NULL, 0.0f },
@@ -2632,27 +2597,19 @@ CONST_SYMBOL asConstantTable[] =
 	{ "DACTION_FIRESUPPORT_RETREAT", VAL_INT,	false,	DACTION_FIRESUPPORT_RETREAT, NULL, NULL, 0.0f },
 
 	// secondary orders
-	{ "DSO_ATTACK_RANGE",	VAL_INT,	false,	DSO_ATTACK_RANGE,	NULL, NULL, 0.0f },
 	{ "DSO_REPAIR_LEVEL",	VAL_INT,	false,	DSO_REPAIR_LEVEL,	NULL, NULL, 0.0f },
 	{ "DSO_ATTACK_LEVEL",	VAL_INT,	false,	DSO_ATTACK_LEVEL,	NULL, NULL, 0.0f },
 	{ "DSO_RECYCLE",		VAL_INT,	false,	DSO_RECYCLE,		NULL, NULL, 0.0f },
 	{ "DSO_PATROL",			VAL_INT,	false,	DSO_PATROL,			NULL, NULL, 0.0f },
-	{ "DSO_HALTTYPE",		VAL_INT,	false,	DSO_HALTTYPE,		NULL, NULL, 0.0f },
 	{ "DSO_RETURN_TO_LOC",	VAL_INT,	false,	DSO_RETURN_TO_LOC,	NULL, NULL, 0.0f },
 
 	// secondary order stats
-	{ "DSS_ARANGE_SHORT",	VAL_INT,	false,	DSS_ARANGE_SHORT,	NULL, NULL, 0.0f },
-	{ "DSS_ARANGE_LONG",	VAL_INT,	false,	DSS_ARANGE_LONG,	NULL, NULL, 0.0f },
-	{ "DSS_ARANGE_DEFAULT",	VAL_INT,	false,	DSS_ARANGE_DEFAULT,	NULL, NULL, 0.0f },
 	{ "DSS_REPLEV_LOW",		VAL_INT,	false,	DSS_REPLEV_LOW,		NULL, NULL, 0.0f },
 	{ "DSS_REPLEV_HIGH",	VAL_INT,	false,	DSS_REPLEV_HIGH,	NULL, NULL, 0.0f },
 	{ "DSS_REPLEV_NEVER",	VAL_INT,	false,	DSS_REPLEV_NEVER,	NULL, NULL, 0.0f },
 	{ "DSS_ALEV_ALWAYS",	VAL_INT,	false,	DSS_ALEV_ALWAYS,	NULL, NULL, 0.0f },
 	{ "DSS_ALEV_ATTACKED",	VAL_INT,	false,	DSS_ALEV_ATTACKED,	NULL, NULL, 0.0f },
 	{ "DSS_ALEV_NEVER",		VAL_INT,	false,	DSS_ALEV_NEVER,		NULL, NULL, 0.0f },
-	{ "DSS_HALT_HOLD",		VAL_INT,	false,	DSS_HALT_HOLD,		NULL, NULL, 0.0f },
-	{ "DSS_HALT_GUARD",		VAL_INT,	false,	DSS_HALT_GUARD,		NULL, NULL, 0.0f },
-	{ "DSS_HALT_PERSUE",	VAL_INT,	false,	DSS_HALT_PURSUE,	NULL, NULL, 0.0f },
 	{ "DSS_RECYCLE_SET",	VAL_INT,	false,	DSS_RECYCLE_SET,	NULL, NULL, 0.0f },
 	{ "DSS_ASSPROD_START",	VAL_INT,	false,	DSS_ASSPROD_START,	NULL, NULL, 0.0f },
 	{ "DSS_ASSPROD_END ",	VAL_INT,	false,	DSS_ASSPROD_END ,	NULL, NULL, 0.0f },
@@ -2793,6 +2750,7 @@ CONST_SYMBOL asConstantTable[] =
 	{ "NO_ALLIANCES",	VAL_INT,	false,	NO_ALLIANCES,		NULL, NULL, 0.0f },
 	{ "ALLIANCES",		VAL_INT,	false,	ALLIANCES,			NULL, NULL, 0.0f },
 	{ "ALLIANCES_TEAMS", VAL_INT,	false,	ALLIANCES_TEAMS,	NULL, NULL, 0.0f },
+	{ "ALLIANCES_UNSHARED", VAL_INT,        false,  ALLIANCES_UNSHARED,             NULL, NULL, 0.0f },
 
 	//Group types
 	{ "GT_NORMAL",		VAL_INT,	false,	GT_NORMAL,			NULL, NULL, 0.0f },
@@ -3051,11 +3009,6 @@ CALLBACK_SYMBOL asCallbackTable[] =
 	},
 
 	{
-		"CALL_KEY_PRESSED",	(TRIGGER_TYPE)CALL_KEY_PRESSED,
-		scrCBProcessKeyPress,	2,	{ VAL_REF | VAL_INT, VAL_REF | VAL_INT}
-	},
-
-	{
 		"CALL_VTOL_RETARGET",	(TRIGGER_TYPE)CALL_VTOL_RETARGET,
 		scrCBVTOLRetarget,	2, 	{ VAL_INT, VAL_REF | (INTERP_TYPE)ST_DROID }
 	},
@@ -3101,8 +3054,6 @@ TYPE_EQUIV asEquivTable[] =
 // Initialise the script system
 bool scrTabInitialise(void)
 {
-	unsigned int i;
-
 	if (!scriptInitialise())
 	{
 		return false;
@@ -3186,12 +3137,6 @@ bool scrTabInitialise(void)
 	// initialise various variables
 	scrGameLevel = 0;
 	bInTutorial = false;
-
-	/* Initialize debug output */
-	for (i = 0; i < DEBUGMENU_MAX_ENTRIES; i++)
-	{
-		debugMenuEntry[i][0] = '\0';
-	}
 
 	/* Initialize chat message struct */
 	chat_msg.numCommands = 0;

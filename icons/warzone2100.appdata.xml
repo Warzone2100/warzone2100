@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application>
+	<id type="desktop">warzone2100.desktop</id>
+	<metadata_license>CC0-1.0</metadata_license>
+	<license>GPL-2.0+</license>
+	<summary>Real-Time-Strategy War Game</summary>
+	<name>Warzone 2100</name>
+	<description>
+		<p>
+			In Warzone 2100, you command the forces of The Project in a battle to rebuild the world after mankind has almost been destroyed by nuclear missiles.
+		</p>
+		<p>
+			The game offers campaign, multi-player, and single-player skirmish modes. An extensive tech tree with over 400 different technologies, combined with the unit design system, allows for a wide variety of possible units and tactics.
+		</p>
+		<p>
+			Warzone 2100 was originally developed as a commercial game by Pumpkin Studios and published in 1999, and was released as open source by them in 2004, for the community to continue working on it.
+		</p>
+	</description>
+	<url type="homepage">https://wz2100.net/</url>
+	<screenshots>
+		<screenshot type="default">https://wz2100.net/static/img/wz2100-CAM_3A50.png</screenshot>
+	</screenshots>
+</application>

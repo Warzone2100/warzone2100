@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -31,7 +31,6 @@
 #include "lib/framework/strres.h"
 #include "map.h"
 
-#include "stats.h"									// for templates.
 #include "game.h"									// for loading maps
 #include "hci.h"
 
@@ -55,6 +54,7 @@
 #include "effects.h"
 #include "lib/gamelib/gtime.h"
 #include "keybind.h"
+#include "qtscript.h"
 #include "design.h"
 
 #include "lib/script/script.h"				//Because of "ScriptTabs.h"
@@ -104,8 +104,8 @@ static SDWORD msgStackPos = -1;				//top element pointer
 // Local Prototypes
 
 static bool recvBeacon(NETQUEUE queue);
-static bool recvDestroyTemplate(NETQUEUE queue);
 static bool recvResearch(NETQUEUE queue);
+static bool sendAIMessage(char *pStr, UDWORD player, UDWORD to);
 
 bool		multiplayPlayersReady(bool bNotifyStatus);
 void		startMultiplayerGame(void);
@@ -329,6 +329,35 @@ DROID *IdToDroid(UDWORD id, UDWORD player)
 	return NULL;
 }
 
+// find off-world droids
+DROID *IdToMissionDroid(UDWORD id, UDWORD player)
+{
+	if (player == ANYPLAYER)
+	{
+		for (int i = 0; i < MAX_PLAYERS; i++)
+		{
+			for (DROID *d = mission.apsDroidLists[i]; d; d = d->psNext)
+			{
+				if (d->id == id)
+				{
+					return d;
+				}
+			}
+		}
+	}
+	else if (player < MAX_PLAYERS)
+	{
+		for (DROID *d = mission.apsDroidLists[player]; d; d = d->psNext)
+		{
+			if (d->id == id)
+			{
+				return d;
+			}
+		}
+	}
+	return NULL;
+}
+
 // ////////////////////////////////////////////////////////////////////////////
 // find a structure
 STRUCTURE *IdToStruct(UDWORD id, UDWORD player)
@@ -375,38 +404,26 @@ FEATURE *IdToFeature(UDWORD id, UDWORD player)
 
 DROID_TEMPLATE *IdToTemplate(UDWORD tempId, UDWORD player)
 {
-	DROID_TEMPLATE *psTempl = NULL;
-	UDWORD		i;
-
 	// Check if we know which player this is from, in that case, assume it is a player template
 	// FIXME: nuke the ANYPLAYER hack
 	if (player != ANYPLAYER && player < MAX_PLAYERS)
 	{
-		for (psTempl = apsDroidTemplates[player]; psTempl && (psTempl->multiPlayerID != tempId); psTempl = psTempl->psNext)
-		{}		// follow templates
-
-		if (psTempl)
+		if (droidTemplates[player].count(tempId) > 0)
 		{
-			return psTempl;
+			return droidTemplates[player][tempId];
 		}
-		else
-		{
-			return NULL;
-		}
+		return NULL;
 	}
 
 	// It could be a AI template...or that of another player
-	for (i = 0; i < MAX_PLAYERS; i++)
+	for (int i = 0; i < MAX_PLAYERS; i++)
 	{
-		for (psTempl = apsDroidTemplates[i]; psTempl && psTempl->multiPlayerID != tempId; psTempl = psTempl->psNext)
-		{}	// follow templates
-
-		if (psTempl)
+		if (droidTemplates[i].count(tempId) > 0)
 		{
-			debug(LOG_NEVER, "Found template ID %d, for player %d, but found it in player's %d list?", tempId, player, i);
-			return psTempl;
+			return droidTemplates[i][tempId];
 		}
 	}
+
 	// no error, since it is possible that we don't have this template defined yet.
 	return NULL;
 }
@@ -588,6 +605,60 @@ Vector3i cameraToHome(UDWORD player, bool scroll)
 	return res;
 }
 
+static void recvSyncRequest(NETQUEUE queue)
+{
+	int32_t req_id, x, y, obj_id, obj_id2, player_id, player_id2;
+	BASE_OBJECT *psObj = NULL, *psObj2 = NULL;
+
+	NETbeginDecode(queue, GAME_SYNC_REQUEST);
+	NETint32_t(&req_id);
+	NETint32_t(&x);
+	NETint32_t(&y);
+	NETint32_t(&obj_id);
+	NETint32_t(&player_id);
+	NETint32_t(&obj_id2);
+	NETint32_t(&player_id2);
+	NETend();
+
+	syncDebug("sync request received from%d req_id%d x%u y%u %obj1 %obj2", queue.index, req_id, x, y, obj_id, obj_id2);
+	if (obj_id)
+	{
+		psObj = IdToPointer(obj_id, player_id);
+	}
+	if (obj_id2)
+	{
+		psObj2 = IdToPointer(obj_id2, player_id2);
+	}
+	triggerEventSyncRequest(queue.index, req_id, x, y, psObj, psObj2);
+}
+
+static void sendObj(BASE_OBJECT *psObj)
+{
+	if (psObj)
+	{
+		int32_t obj_id = psObj->id;
+		int32_t player = psObj->player;
+		NETint32_t(&obj_id);
+		NETint32_t(&player);
+	}
+	else
+	{
+		int32_t dummy = 0;
+		NETint32_t(&dummy);
+		NETint32_t(&dummy);
+	}
+}
+
+void sendSyncRequest(int32_t req_id, int32_t x, int32_t y, BASE_OBJECT *psObj, BASE_OBJECT *psObj2)
+{
+	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_SYNC_REQUEST);
+	NETint32_t(&req_id);
+	NETint32_t(&x);
+	NETint32_t(&y);
+	sendObj(psObj);
+	sendObj(psObj2);
+	NETend();
+}
 
 // ////////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////////
@@ -627,6 +698,9 @@ bool recvMessage(void)
 				break;
 			case NET_BEACONMSG:					//beacon (blip) message
 				recvBeacon(queue);
+				break;
+			case GAME_SYNC_REQUEST:
+				recvSyncRequest(queue);
 				break;
 			case GAME_DROIDDISEMBARK:
 				recvDroidDisEmbark(queue);           //droid has disembarked from a Transporter
@@ -671,12 +745,6 @@ bool recvMessage(void)
 		processedMessage2 = true;
 		switch (type)
 		{
-		case GAME_TEMPLATE:					// new template
-			recvTemplate(queue);
-			break;
-		case GAME_TEMPLATEDEST:				// template destroy
-			recvDestroyTemplate(queue);
-			break;
 		case NET_PING:						// diagnostic ping msg.
 			recvPing(queue);
 			break;
@@ -725,6 +793,10 @@ bool recvMessage(void)
 					break;
 				}
 				// This player is now with us!
+				if (ingame.JoiningInProgress[player_id])
+				{
+					addKnownPlayer(NetPlay.players[player_id].name, getMultiStats(player_id).identity);
+				}
 				ingame.JoiningInProgress[player_id] = false;
 				break;
 			}
@@ -833,6 +905,7 @@ void HandleBadParam(const char *msg, const int from, const int actual)
 		kickPlayer(actual, buf, KICK_TYPE);
 	}
 }
+
 // ////////////////////////////////////////////////////////////////////////////
 // Research Stuff. Nat games only send the result of research procedures.
 bool SendResearch(uint8_t player, uint32_t index, bool trigger)
@@ -962,7 +1035,7 @@ bool recvResearchStatus(NETQUEUE queue)
 	RESEARCH_FACILITY	*psResFacilty;
 	RESEARCH			*pResearch;
 	uint8_t				player;
-	bool				bStart;
+	bool bStart = false;
 	uint32_t			index, structRef;
 
 	NETbeginDecode(queue, GAME_RESEARCHSTATUS);
@@ -1025,7 +1098,7 @@ bool recvResearchStatus(NETQUEUE queue)
 
 			if (!researchAvailable(index, player, ModeImmediate) && bMultiPlayer)
 			{
-				debug(LOG_ERROR, "Player %d researching impossible topic \"%s\".", player, asResearch[index].pName);
+				debug(LOG_ERROR, "Player %d researching impossible topic \"%s\".", player, getName(&asResearch[index]));
 				return false;
 			}
 
@@ -1074,13 +1147,65 @@ bool recvResearchStatus(NETQUEUE queue)
 	return true;
 }
 
+static void printchatmsg(const char *text, int from, bool team = false)
+{
+	char msg[MAX_CONSOLE_STRING_LENGTH];
+
+	sstrcpy(msg, NetPlay.players[from].name);		// name
+	sstrcat(msg, ": ");					// seperator
+	sstrcat(msg, text);					// add message
+	addConsoleMessage(msg, DEFAULT_JUSTIFY, from, team);		// display
+}
+
 // ////////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////////
+// Text Messaging between team.
+void sendTeamMessage(const char *pStr, uint32_t from)
+{
+	char	display[MAX_CONSOLE_STRING_LENGTH];
+	bool team = true;
+
+	sstrcpy(display, pStr);
+	// This is for local display
+	if (from == selectedPlayer)
+	{
+		printchatmsg(display, from, team);
+	}
+
+	for (int i = 0; i < game.maxPlayers; i++)
+	{
+		if (i != from && aiCheckAlliances(from, i))
+		{
+			if (i == selectedPlayer)
+			{
+				printchatmsg(display, from); // also display it
+			}
+			if (isHumanPlayer(i))
+			{
+				NETbeginEncode(NETnetQueue(i), NET_TEXTMSG);
+				NETuint32_t(&from);				// who this msg is from
+				NETbool(&team);
+				NETstring(display, MAX_CONSOLE_STRING_LENGTH);	// the message to send
+				NETend();
+			}
+			else if (myResponsibility(i))
+			{
+				msgStackPush(CALL_AI_MSG, from, i, display, -1, -1, NULL);
+				triggerEventChat(from, i, display);
+			}
+			else	//also send to AIs now (non-humans), needed for AI
+			{
+				sendAIMessage(display, from, i);
+			}
+		}
+	}
+}
+
 // Text Messaging between players. proceed string with players to send to.
 // eg "123hi there" sends "hi there" to players 1,2 and 3.
-bool sendTextMessage(const char *pStr, bool all)
+bool sendTextMessage(const char *pStr, bool all, uint32_t from)
 {
-	bool				normal = true;
+	bool				normal = true, team = false;
 	bool				sendto[MAX_PLAYERS];
 	int					posTable[MAX_PLAYERS];
 	UDWORD				i;
@@ -1088,21 +1213,19 @@ bool sendTextMessage(const char *pStr, bool all)
 	char				msg[MAX_CONSOLE_STRING_LENGTH];
 	char				*curStr = (char *)pStr;
 
-	if (!ingame.localOptionsReceived)
-	{
-		if (!bMultiPlayer)
-		{
-			// apparently we are not in a mp game, so dump the message to the console.
-			addConsoleMessage(curStr, LEFT_JUSTIFY, SYSTEM_MESSAGE);
-		}
-		return true;
-	}
-
 	memset(display, 0x0, sizeof(display));	//clear buffer
-	memset(msg, 0x0, sizeof(display));		//clear buffer
+	memset(msg, 0x0, sizeof(msg));		//clear buffer
 	memset(sendto, 0x0, sizeof(sendto));		//clear private flag
 	memset(posTable, 0x0, sizeof(posTable));		//clear buffer
 	sstrcpy(msg, curStr);
+
+	// This is for local display
+	if (from == selectedPlayer)
+	{
+		printchatmsg(curStr, from);
+	}
+
+	triggerEventChat(from, from, pStr); // send to self
 
 	if (!all)
 	{
@@ -1117,7 +1240,7 @@ bool sendTextMessage(const char *pStr, bool all)
 			curStr++;
 			for (i = 0; i < game.maxPlayers; i++)
 			{
-				if (i != selectedPlayer && aiCheckAlliances(selectedPlayer, i))
+				if (i != from && aiCheckAlliances(from, i))
 				{
 					sendto[i] = true;
 				}
@@ -1165,26 +1288,53 @@ bool sendTextMessage(const char *pStr, bool all)
 	if (all)	//broadcast
 	{
 		NETbeginEncode(NETbroadcastQueue(), NET_TEXTMSG);
-		NETuint32_t(&selectedPlayer);		// who this msg is from
+		NETuint32_t(&from);		// who this msg is from
+		NETbool(&team);			// team specific?
 		NETstring(msg, MAX_CONSOLE_STRING_LENGTH);	// the message to send
 		NETend();
+		for (i = 0; i < MAX_PLAYERS; i++)
+		{
+			if (i == selectedPlayer && from != i)
+			{
+				printchatmsg(display, from); // also display it
+			}
+			if (i != from && !isHumanPlayer(i) && myResponsibility(i))
+			{
+				msgStackPush(CALL_AI_MSG, from, i, msg, -1, -1, NULL);
+				triggerEventChat(from, i, msg);
+			}
+			else if (i != from && !isHumanPlayer(i) && !myResponsibility(i))
+			{
+				sendAIMessage(msg, from, i);
+			}
+		}
 	}
 	else if (normal)
 	{
 		for (i = 0; i < MAX_PLAYERS; i++)
 		{
-			if (i != selectedPlayer && openchannels[i])
+			if (i != from && openchannels[i])
 			{
+				if (i == selectedPlayer)
+				{
+					printchatmsg(curStr, from); // also display it
+				}
 				if (isHumanPlayer(i))
 				{
 					NETbeginEncode(NETnetQueue(i), NET_TEXTMSG);
-					NETuint32_t(&selectedPlayer);		// who this msg is from
+					NETuint32_t(&from);		// who this msg is from
+					NETbool(&team);			// team specific?
 					NETstring(msg, MAX_CONSOLE_STRING_LENGTH);	// the message to send
 					NETend();
 				}
-				else	//also send to AIs now (non-humans), needed for AI
+				else if (myResponsibility(i))
 				{
-					sendAIMessage(msg, selectedPlayer, i);
+					msgStackPush(CALL_AI_MSG, from, i, msg, -1, -1, NULL);
+					triggerEventChat(from, i, msg);
+				}
+				else	// send to AIs on different host
+				{
+					sendAIMessage(msg, from, i);
 				}
 			}
 		}
@@ -1195,27 +1345,30 @@ bool sendTextMessage(const char *pStr, bool all)
 		{
 			if (sendto[i])
 			{
+				if (i == selectedPlayer)
+				{
+					printchatmsg(display, from); // also display it
+				}
 				if (isHumanPlayer(i))
 				{
 					NETbeginEncode(NETnetQueue(i), NET_TEXTMSG);
-					NETuint32_t(&selectedPlayer);				// who this msg is from
+					NETuint32_t(&from);				// who this msg is from
+					NETbool(&team); // team specific?
 					NETstring(display, MAX_CONSOLE_STRING_LENGTH);	// the message to send
 					NETend();
 				}
+				else if (myResponsibility(i))
+				{
+					msgStackPush(CALL_AI_MSG, from, i, curStr, -1, -1, NULL);
+					triggerEventChat(from, i, curStr);
+				}
 				else	//also send to AIs now (non-humans), needed for AI
 				{
-					sendAIMessage(curStr, selectedPlayer, i);
+					sendAIMessage(curStr, from, i);
 				}
 			}
 		}
 	}
-
-	//This is for local display
-	sstrcpy(msg, NetPlay.players[selectedPlayer].name);		// name
-	sstrcat(msg, ": ");						// seperator
-	sstrcat(msg, (normal ? curStr : display));						// add message
-
-	addConsoleMessage(msg, DEFAULT_JUSTIFY, selectedPlayer);	// display
 
 	return true;
 }
@@ -1234,56 +1387,37 @@ void printConsoleNameChange(const char *oldName, const char *newName)
 
 
 //AI multiplayer message, send from a certain player index to another player index
-bool sendAIMessage(char *pStr, UDWORD player, UDWORD to)
+static bool sendAIMessage(char *pStr, UDWORD player, UDWORD to)
 {
 	UDWORD	sendPlayer;
 
-	//check if this is one of the local players, don't need net send then
-	if (to == selectedPlayer || myResponsibility(to))	//(the only) human on this machine or AI on this machine
+	if (!ingame.localOptionsReceived)
 	{
-		//Just show "him" the message
-		displayAIMessage(pStr, player, to);
-
-		//Received a console message from a player callback
-		//store and call later
-		//-------------------------------------------------
-		if (!msgStackPush(CALL_AI_MSG, player, to, pStr, -1, -1, NULL))
-		{
-			debug(LOG_ERROR, "sendAIMessage() - msgStackPush - stack failed");
-			return false;
-		}
-	}
-	else		//not a local player (use multiplayer mode)
-	{
-		if (!ingame.localOptionsReceived)
-		{
-			return true;
-		}
-
-		//find machine that is hosting this human or AI
-		sendPlayer = whosResponsible(to);
-
-		if (sendPlayer >= MAX_PLAYERS)
-		{
-			debug(LOG_ERROR, "sendAIMessage() - sendPlayer >= MAX_PLAYERS");
-			return false;
-		}
-
-		if (!isHumanPlayer(sendPlayer))		//NETsend can't send to non-humans
-		{
-			debug(LOG_ERROR, "sendAIMessage() - player is not human.");
-			return false;
-		}
-
-		//send to the player who is hosting 'to' player (might be himself if human and not AI)
-		NETbeginEncode(NETnetQueue(sendPlayer), NET_AITEXTMSG);
-		NETuint32_t(&player);			//save the actual sender
-		//save the actual player that is to get this msg on the source machine (source can host many AIs)
-		NETuint32_t(&to);				//save the actual receiver (might not be the same as the one we are actually sending to, in case of AIs)
-		NETstring(pStr, MAX_CONSOLE_STRING_LENGTH);		// copy message in.
-		NETend();
+		return true;
 	}
 
+	// find machine that is hosting this human or AI
+	sendPlayer = whosResponsible(to);
+
+	if (sendPlayer >= MAX_PLAYERS)
+	{
+		debug(LOG_ERROR, "sendAIMessage() - sendPlayer >= MAX_PLAYERS");
+		return false;
+	}
+
+	if (!isHumanPlayer(sendPlayer))		//NETsend can't send to non-humans
+	{
+		debug(LOG_ERROR, "sendAIMessage() - player is not human.");
+		return false;
+	}
+
+	//send to the player who is hosting 'to' player (might be himself if human and not AI)
+	NETbeginEncode(NETnetQueue(sendPlayer), NET_AITEXTMSG);
+	NETuint32_t(&player);			//save the actual sender
+	//save the actual player that is to get this msg on the source machine (source can host many AIs)
+	NETuint32_t(&to);				//save the actual receiver (might not be the same as the one we are actually sending to, in case of AIs)
+	NETstring(pStr, MAX_CONSOLE_STRING_LENGTH);		// copy message in.
+	NETend();
 	return true;
 }
 
@@ -1321,35 +1455,21 @@ bool sendBeacon(int32_t locX, int32_t locY, int32_t forPlayer, int32_t sender, c
 	return true;
 }
 
-void displayAIMessage(char *pStr, SDWORD from, SDWORD to)
-{
-	char				tmp[255];
-
-	if (isHumanPlayer(to))		//display text only if receiver is the (human) host machine itself
-	{
-		sstrcpy(tmp, getPlayerName(from));
-		strcat(tmp, ": ");											// seperator
-		strcat(tmp, pStr);											// add message
-
-		addConsoleMessage(tmp, DEFAULT_JUSTIFY, from);
-	}
-}
-
 // Write a message to the console.
 bool recvTextMessage(NETQUEUE queue)
 {
 	UDWORD	playerIndex;
 	char	msg[MAX_CONSOLE_STRING_LENGTH];
 	char newmsg[MAX_CONSOLE_STRING_LENGTH];
+	bool team = false;
 
 	memset(msg, 0x0, sizeof(msg));
 	memset(newmsg, 0x0, sizeof(newmsg));
 
 	NETbeginDecode(queue, NET_TEXTMSG);
-	// Who this msg is from
-	NETuint32_t(&playerIndex);
-	// The message to send
-	NETstring(newmsg, MAX_CONSOLE_STRING_LENGTH);
+	NETuint32_t(&playerIndex);	// Who this msg is from
+	NETbool(&team);	// team specific?
+	NETstring(newmsg, MAX_CONSOLE_STRING_LENGTH);	// The message to receive
 	NETend();
 
 	if (whosResponsible(playerIndex) != queue.index)
@@ -1368,7 +1488,7 @@ bool recvTextMessage(NETQUEUE queue)
 	// Add message
 	sstrcat(msg, newmsg);
 
-	addConsoleMessage(msg, DEFAULT_JUSTIFY, playerIndex);
+	addConsoleMessage(msg, DEFAULT_JUSTIFY, playerIndex, team);
 
 	// Multiplayer message callback
 	// Received a console message from a player, save
@@ -1391,7 +1511,7 @@ bool recvTextMessage(NETQUEUE queue)
 	return true;
 }
 
-//AI multiplayer message - received message from AI (from scripts)
+//AI multiplayer message - received message for AI (for hosted scripts)
 bool recvTextMessageAI(NETQUEUE queue)
 {
 	UDWORD	sender, receiver;
@@ -1409,12 +1529,8 @@ bool recvTextMessageAI(NETQUEUE queue)
 		sender = queue.index;  // Fix corrupted sender.
 	}
 
-	//sstrcpy(msg, getPlayerName(sender));  // name
-	//sstrcat(msg, " : ");                  // seperator
 	sstrcpy(msg, newmsg);
-
-	//Display the message and make the script callback
-	displayAIMessage(msg, sender, receiver);
+	triggerEventChat(sender, receiver, newmsg);
 
 	//Received a console message from a player callback
 	//store and call later
@@ -1427,179 +1543,6 @@ bool recvTextMessageAI(NETQUEUE queue)
 
 	return true;
 }
-
-// ////////////////////////////////////////////////////////////////////////////
-// Templates
-
-static void NETtemplate(DROID_TEMPLATE *pTempl)
-{
-	uint32_t storeCount = 0; // loading hack, should not be sent on network
-
-	NETstring(pTempl->aName, sizeof(pTempl->aName));
-
-	for (unsigned i = 0; i < ARRAY_SIZE(pTempl->asParts); ++i)
-	{
-		// signed, but sent as a bunch of bits...
-		NETint32_t(&pTempl->asParts[i]);
-	}
-
-	NETuint32_t(&pTempl->buildPoints);
-	NETuint32_t(&pTempl->powerPoints);
-	NETuint32_t(&storeCount); // remains here for network compatibility only
-	NETuint32_t(&pTempl->numWeaps);
-	NETbool(&pTempl->stored);	// other players don't need to know, but we need to keep the knowledge in the loop somehow...
-
-	for (int i = 0; i < DROID_MAXWEAPS; ++i)
-	{
-		NETuint32_t(&pTempl->asWeaps[i]);
-	}
-
-	NETenum(&pTempl->droidType);
-	NETuint32_t(&pTempl->multiPlayerID);
-}
-
-// send a newly created template to other players
-bool sendTemplate(uint32_t player, DROID_TEMPLATE *pTempl)
-{
-	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_TEMPLATE);
-	NETuint32_t(&player);
-	NETtemplate(pTempl);
-	return NETend();
-}
-
-// receive a template created by another player
-bool recvTemplate(NETQUEUE queue)
-{
-	uint32_t        player;
-	DROID_TEMPLATE *psTempl;
-	DROID_TEMPLATE  t;
-
-	NETbeginDecode(queue, GAME_TEMPLATE);
-	NETuint32_t(&player);
-	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "invalid player size: %d", player);
-
-	NETtemplate(&t);
-	NETend();
-	if (!canGiveOrdersFor(queue.index, player))
-	{
-		return false;
-	}
-
-	t.prefab = false;
-	t.psNext = NULL;
-	t.pName = NULL;
-	t.ref = REF_TEMPLATE_START;
-
-	if (!researchedTemplate(&t, player, true))
-	{
-		debug(LOG_ERROR, "Invalid template received from player %d", (int)player);
-		return false;
-	}
-	if (!intValidTemplate(&t, NULL, true, player))
-	{
-		debug(LOG_ERROR, "Illegal template received from player %d", (int)player);
-		return false;
-	}
-	int buildPoints = calcTemplateBuild(&t);
-	int powerPoints = calcTemplatePower(&t);
-	if (buildPoints != t.buildPoints || powerPoints != t.powerPoints)
-	{
-		debug(LOG_ERROR, "Illegal template point values received from player %d [%d vs %d,%d vs %d]",
-		      (int)player, buildPoints, calcTemplateBuild(&t), powerPoints, calcTemplatePower(&t));
-		return false;
-	}
-
-	psTempl = IdToTemplate(t.multiPlayerID, player);
-
-	// Already exists
-	if (psTempl)
-	{
-		t.psNext = psTempl->psNext;
-		*psTempl = t;
-		debug(LOG_SYNC, "Updating MP template %d (stored=%s)", (int)t.multiPlayerID, t.stored ? "yes" : "no");
-	}
-	else
-	{
-		addTemplateBack(player, &t);  // Add to back of list, to avoid game state templates being in wrong order, which matters when saving games.
-		debug(LOG_SYNC, "Creating MP template %d (stored=%s)", (int)t.multiPlayerID, t.stored ? "yes" : "no");
-	}
-	if (!t.prefab && player == selectedPlayer)
-	{
-		storeTemplates();
-	}
-
-	return true;
-}
-
-
-// ////////////////////////////////////////////////////////////////////////////
-// inform others that you no longer have a template
-
-bool SendDestroyTemplate(DROID_TEMPLATE *t, uint8_t player)
-{
-	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_TEMPLATEDEST);
-	NETuint8_t(&player);
-	NETuint32_t(&t->multiPlayerID);
-	NETend();
-
-	return true;
-}
-
-// acknowledge another player no longer has a template
-static bool recvDestroyTemplate(NETQUEUE queue)
-{
-	uint8_t			player;
-	uint32_t		templateID;
-	DROID_TEMPLATE	*psTempl, *psTempPrev = NULL;
-
-	NETbeginDecode(queue, GAME_TEMPLATEDEST);
-	NETuint8_t(&player);
-	NETuint32_t(&templateID);
-	NETend();
-	if (!canGiveOrdersFor(queue.index, player))
-	{
-		return false;
-	}
-
-	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "invalid player size: %d", player);
-
-	// Find the template in the list
-	for (psTempl = apsDroidTemplates[player]; psTempl; psTempl = psTempl->psNext)
-	{
-		if (psTempl->multiPlayerID == templateID)
-		{
-			break;
-		}
-
-		psTempPrev = psTempl;
-	}
-
-	// If we found it then delete it
-	if (psTempl)
-	{
-		// Update the linked list
-		if (psTempPrev)
-		{
-			psTempPrev->psNext = psTempl->psNext;
-		}
-		else
-		{
-			apsDroidTemplates[player] = psTempl->psNext;
-		}
-
-		// Delete the template.
-		//before deleting the template, need to make sure not being used in production
-		deleteTemplateFromProduction(psTempl, player, ModeImmediate);
-		delete psTempl;
-	}
-	else
-	{
-		debug(LOG_ERROR, "Would delete missing template %d", templateID);
-	}
-
-	return true;
-}
-
 
 // ////////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////////
@@ -1636,7 +1579,7 @@ bool recvDestroyFeature(NETQUEUE queue)
 		return false;
 	}
 
-	debug(LOG_FEATURE, "p%d feature id %d destroyed (%s)", pF->player, pF->id, pF->psStats->pName);
+	debug(LOG_FEATURE, "p%d feature id %d destroyed (%s)", pF->player, pF->id, getName(pF->psStats));
 	// Remove the feature locally
 	turnOffMultiMsg(true);
 	destroyFeature(pF, gameTime - deltaGameTime + 1);  // deltaGameTime is actually 0 here, since we're between updates. However, the value of gameTime - deltaGameTime + 1 will not change when we start the next tick.

@@ -1,0 +1,8 @@
+{
+    "AI": {
+        "name": "Nexus",
+        "slo": "nexus.slo",
+        "tip": "Default AI",
+        "vlo": "nexus.vlo"
+    }
+}

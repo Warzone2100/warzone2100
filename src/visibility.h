@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@
 
 #include "objectdef.h"
 #include "raycast.h"
+#include "stats.h"
 
 #define LINE_OF_FIRE_MINIMUM 5
 
@@ -55,7 +56,6 @@ extern STRUCTURE *visGetBlockingWall(const BASE_OBJECT *psViewer, const BASE_OBJ
 
 bool hasSharedVision(unsigned viewer, unsigned ally);
 
-extern void processVisibilityLevel(BASE_OBJECT *psObj);
 extern void processVisibility(void);  ///< Calls processVisibilitySelf and processVisibilityVision on all objects.
 
 // update the visibility reduction
@@ -76,20 +76,32 @@ static inline bool visObjInRange(BASE_OBJECT *psObj1, BASE_OBJECT *psObj2, SDWOR
 
 static inline int objSensorRange(const BASE_OBJECT *psObj)
 {
-	return psObj->sensorRange;
+	if (psObj->type == OBJ_DROID)
+	{
+		return asSensorStats[((DROID *)psObj)->asBits[COMP_SENSOR]].upgrade[psObj->player].range;
+	}
+	else if (psObj->type == OBJ_STRUCTURE)
+	{
+		return ((STRUCTURE *)psObj)->pStructureType->pSensor->upgrade[psObj->player].range;
+	}
+	return 0;
 }
 
 static inline int objJammerPower(const BASE_OBJECT *psObj)
 {
-	return psObj->ECMMod;
+	if (psObj->type == OBJ_DROID)
+	{
+		return asECMStats[((DROID *)psObj)->asBits[COMP_ECM]].upgrade[psObj->player].range;
+	}
+	else if (psObj->type == OBJ_STRUCTURE)
+	{
+		return ((STRUCTURE *)psObj)->pStructureType->pECM->upgrade[psObj->player].range;
+	}
+	return 0;
 }
 
-static inline int objConcealment(const BASE_OBJECT *psObj)
-{
-	return psObj->ECMMod;
-}
-
-void objSensorCache(BASE_OBJECT *psObj, SENSOR_STATS *psSensor);
-void objEcmCache(BASE_OBJECT *psObj, ECM_STATS *psEcm);
+void removeSpotters();
+bool removeSpotter(uint32_t id);
+uint32_t addSpotter(int x, int y, int player, int radius, bool radar, uint32_t expiry = 0);
 
 #endif // __INCLUDED_SRC_VISIBILITY__

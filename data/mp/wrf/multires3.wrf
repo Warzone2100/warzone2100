@@ -1,17 +1,5 @@
-/***********************************************************/
-/*  You may have to modify this file for it to be correct! */ 
-/*******************       wrf\multiRes3.wrf      *******************/
-
-
-directory	"stats/research/multiplayer"
-file		RESCH	"research.txt"
-file		RPREREQ	"prresearch.txt"
-file		RCOMPRED	"redcomponents.txt"
-file		RCOMPRES	"resultcomponent.txt"
-file		RSTRREQ	"researchstruct.txt"
-file		RSTRRED	"redstructure.txt"
-file		RSTRRES	"resultstructure.txt"
-file		RFUNC	"researchfunctions.txt"
+directory	"stats"
+file		RESCH	"research.json"
 directory	"multiplay/script"
 file		SCRIPT	"camtech.slo"
 directory	"multiplay/script"

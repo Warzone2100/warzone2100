@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -26,10 +26,11 @@
 #include <QtGui/QBitmap>
 #include <QtGui/QPainter>
 #include <QtGui/QMouseEvent>
-#include <QtGui/QMessageBox>
+#include <QtWidgets/QMessageBox>
 #include <QtGui/QIcon>
-#include <QtGui/QApplication>
+#include <QtWidgets/QApplication>
 #include <QtGui/QClipboard>
+#include <QtGui/QWindow>
 
 // Get platform defines before checking for them.
 // Qt headers MUST come before platform specific stuff!
@@ -86,7 +87,7 @@ static MOUSE_KEY_CODE dragKey;
 static SDWORD dragX, dragY;
 
 /** The current mouse button state */
-static INPUT_STATE aMouseState[MOUSE_BAD];
+static INPUT_STATE aMouseState[MOUSE_END];
 static MousePresses mousePresses;
 
 /** The input string buffer */
@@ -105,14 +106,41 @@ static bool mouseInWindow = false;
 static CURSOR lastCursor = CURSOR_ARROW;
 static bool crashing = false;
 
-unsigned screenWidth = 0;   // Declared in frameint.h.
-unsigned screenHeight = 0;  // Declared in frameint.h.
+unsigned screenWidth = 0;   // Declared in screen.h
+unsigned screenHeight = 0;  // Declared in screen.h
 static void inputAddBuffer(UDWORD key, utf_32_char unicode);
 static int WZkeyToQtKey(int code);
 
+static QImage loadQImage(char const *fileName, char const *format = nullptr)
+{
+	PHYSFS_file *fileHandle = PHYSFS_openRead(fileName);
+	if (fileHandle == nullptr)
+	{
+		return {};
+	}
+	int64_t fileSizeGuess = PHYSFS_fileLength(fileHandle);  // PHYSFS_fileLength may return -1.
+	int64_t lengthRead = 0;
+	std::vector<unsigned char> data(fileSizeGuess != -1? fileSizeGuess : 16384);
+	while (true)
+	{
+		int64_t moreRead = PHYSFS_read(fileHandle, &data[lengthRead], 1, data.size() - lengthRead);
+		lengthRead += std::max<int64_t>(moreRead, 0);
+		if (lengthRead < data.size())
+		{
+			PHYSFS_close(fileHandle);
+			data.resize(lengthRead);
+			QImage image;
+			image.loadFromData(&data[0], data.size(), format);
+			return std::move(image);
+		}
+		data.resize(data.size() + 16384);
+	}
+}
+
+
 void WzMainWindow::loadCursor(CURSOR cursor, char const *name)
 {
-	cursors[cursor] = new QCursor(QPixmap::fromImage(QImage(name, "PNG")));
+	cursors[cursor] = new QCursor(QPixmap::fromImage(loadQImage(name, "PNG")));
 }
 
 WzMainWindow::WzMainWindow(QSize resolution, const QGLFormat &format, QWidget *parent) : QtGameWidget(resolution, format, parent)
@@ -120,38 +148,38 @@ WzMainWindow::WzMainWindow(QSize resolution, const QGLFormat &format, QWidget *p
 	myself = this;
 	notReadyToPaint = true;
 	tickCount.start();
-	for (int i = 0; i < CURSOR_MAX; cursors[i++] = NULL) ;
+	std::fill_n(cursors, CURSOR_MAX, nullptr);
 	setAutoFillBackground(false);
 	setAutoBufferSwap(false);
 	setMouseTracking(true);
 
 	// Mac apps typically don't have window icons unless document-based.
 #if !defined(WZ_OS_MAC)
-	setWindowIcon(QIcon(QPixmap::fromImage(QImage("wz::images/warzone2100.png", "PNG"))));
+	setWindowIcon(QIcon(QPixmap::fromImage(loadQImage("images/warzone2100.png", "PNG"))));
 #endif
 	setWindowTitle(PACKAGE_NAME);
 
-	loadCursor(CURSOR_EMBARK, "wz::images/intfac/image_cursor_embark.png");
-	loadCursor(CURSOR_DEST, "wz::images/intfac/image_cursor_dest.png");
-	loadCursor(CURSOR_DEFAULT, "wz::images/intfac/image_cursor_default.png");
-	loadCursor(CURSOR_BUILD, "wz::images/intfac/image_cursor_build.png");
-	loadCursor(CURSOR_SCOUT, "wz::images/intfac/image_cursor_scout.png");
-	loadCursor(CURSOR_DISEMBARK, "wz::images/intfac/image_cursor_disembark.png");
-	loadCursor(CURSOR_ATTACK, "wz::images/intfac/image_cursor_attack.png");
-	loadCursor(CURSOR_GUARD, "wz::images/intfac/image_cursor_guard.png");
-	loadCursor(CURSOR_FIX, "wz::images/intfac/image_cursor_fix.png");
-	loadCursor(CURSOR_SELECT, "wz::images/intfac/image_cursor_select.png");
+	loadCursor(CURSOR_EMBARK, "images/intfac/image_cursor_embark.png");
+	loadCursor(CURSOR_DEST, "images/intfac/image_cursor_dest.png");
+	loadCursor(CURSOR_DEFAULT, "images/intfac/image_cursor_default.png");
+	loadCursor(CURSOR_BUILD, "images/intfac/image_cursor_build.png");
+	loadCursor(CURSOR_SCOUT, "images/intfac/image_cursor_scout.png");
+	loadCursor(CURSOR_DISEMBARK, "images/intfac/image_cursor_disembark.png");
+	loadCursor(CURSOR_ATTACK, "images/intfac/image_cursor_attack.png");
+	loadCursor(CURSOR_GUARD, "images/intfac/image_cursor_guard.png");
+	loadCursor(CURSOR_FIX, "images/intfac/image_cursor_fix.png");
+	loadCursor(CURSOR_SELECT, "images/intfac/image_cursor_select.png");
 //	loadCursor(CURSOR_REPAIR, 64, 160, buffer);		// FIX ME: This IS in infac.img, but the define is MIA
-	loadCursor(CURSOR_SEEKREPAIR, "wz::images/intfac/image_cursor_repair.png");  // FIX ME: This is NOT in infac.img!
-	loadCursor(CURSOR_PICKUP, "wz::images/intfac/image_cursor_pickup.png");
-	loadCursor(CURSOR_NOTPOSSIBLE, "wz::images/intfac/image_cursor_notpos.png");
-	loadCursor(CURSOR_MOVE, "wz::images/intfac/image_cursor_move.png");
-	loadCursor(CURSOR_LOCKON, "wz::images/intfac/image_cursor_lockon.png");
+	loadCursor(CURSOR_SEEKREPAIR, "images/intfac/image_cursor_repair.png");  // FIX ME: This is NOT in infac.img!
+	loadCursor(CURSOR_PICKUP, "images/intfac/image_cursor_pickup.png");
+	loadCursor(CURSOR_NOTPOSSIBLE, "images/intfac/image_cursor_notpos.png");
+	loadCursor(CURSOR_MOVE, "images/intfac/image_cursor_move.png");
+	loadCursor(CURSOR_LOCKON, "images/intfac/image_cursor_lockon.png");
 //	loadCursor(CURSOR_ECM, 224, 160, buffer);		// FIX ME: Not defined yet!
-	loadCursor(CURSOR_JAM, "wz::images/intfac/image_cursor_ecm.png");  // FIX ME: This is NOT in infac.img, and is using IMAGE CURSOR ECM ?
-	loadCursor(CURSOR_ATTACH, "wz::images/intfac/image_cursor_attach.png");
-	loadCursor(CURSOR_BRIDGE, "wz::images/intfac/image_cursor_bridge.png");
-	loadCursor(CURSOR_BOMB, "wz::images/intfac/image_cursor_bomb.png");
+	loadCursor(CURSOR_JAM, "images/intfac/image_cursor_ecm.png");  // FIX ME: This is NOT in infac.img, and is using IMAGE CURSOR ECM ?
+	loadCursor(CURSOR_ATTACH, "images/intfac/image_cursor_attach.png");
+	loadCursor(CURSOR_BRIDGE, "images/intfac/image_cursor_bridge.png");
+	loadCursor(CURSOR_BOMB, "images/intfac/image_cursor_bomb.png");
 
 	// Reused (unused) cursors
 	cursors[CURSOR_ARROW] = new QCursor(Qt::ArrowCursor);
@@ -239,8 +267,6 @@ void WzMainWindow::resizeGL(int width, int height)
 	glLoadIdentity();
 	glCullFace(GL_FRONT);
 	glEnable(GL_CULL_FACE);
-
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 }
 
 void WzMainWindow::paintGL()
@@ -346,7 +372,7 @@ MOUSE_KEY_CODE WzMainWindow::buttonToIdx(Qt::MouseButton button)
 		break;
 	default:
 	case Qt::NoButton:
-		idx = MOUSE_BAD;
+		idx = MOUSE_END;
 		debug(LOG_INPUT, "NoButton (strange case ?");
 		break;	// strange case
 	}
@@ -363,7 +389,7 @@ void WzMainWindow::mousePressEvent(QMouseEvent *event)
 	Qt::MouseButtons presses = event->buttons();	// full state info for all buttons
 	MOUSE_KEY_CODE idx = buttonToIdx(event->button());			// index of button that caused event
 
-	if (idx == MOUSE_BAD)
+	if (idx == MOUSE_END)
 	{
 		debug(LOG_ERROR, "bad mouse idx");	// FIXME remove
 		return; // not recognized mouse button
@@ -434,7 +460,7 @@ void WzMainWindow::mouseReleaseEvent(QMouseEvent *event)
 
 	MOUSE_KEY_CODE idx = buttonToIdx(event->button());
 
-	if (idx == MOUSE_BAD)
+	if (idx == MOUSE_END)
 	{
 		return; // not recognized mouse button
 	}
@@ -713,7 +739,10 @@ void wzQuit()
 
 void wzScreenFlip()
 {
-	WzMainWindow::instance()->swapBuffers();
+	if (WzMainWindow::instance()->windowHandle()->isExposed())  // Check isExposed(), otherwise we get «QOpenGLContext::swapBuffers() called with non-exposed window, behavior is undefined».
+	{
+		WzMainWindow::instance()->swapBuffers();
+	}
 }
 
 int wzGetTicks()
@@ -791,14 +820,6 @@ Vector2i mousePressPos_DEPRECATED(MOUSE_KEY_CODE code)
 Vector2i mouseReleasePos_DEPRECATED(MOUSE_KEY_CODE code)
 {
 	return aMouseState[code].releasePos;
-}
-
-void setMousePos(uint16_t x, uint16_t y)
-{
-	if (getMouseWarp())
-	{
-		WzMainWindow::instance()->cursor().setPos(x, y);
-	}
 }
 
 /* This returns true if the mouse key is currently depressed */
@@ -879,7 +900,7 @@ void inputInitialise(void)
 		aKeyState[i].state = KEY_UP;
 	}
 
-	for (i = 0; i < MOUSE_BAD; i++)
+	for (i = 0; i < MOUSE_END; i++)
 	{
 		aMouseState[i].state = KEY_UP;
 	}
@@ -959,7 +980,7 @@ void inputNewFrame(void)
 	}
 
 	/* Do the mouse */
-	for (i = 0; i < MOUSE_BAD; i++)
+	for (i = 0; i < MOUSE_END; i++)
 	{
 		if (aMouseState[i].state == KEY_PRESSED)
 		{
@@ -989,7 +1010,7 @@ void inputLoseFocus()
 	{
 		aKeyState[i].state = KEY_UP;
 	}
-	for (i = 0; i < MOUSE_BAD; i++)
+	for (i = 0; i < MOUSE_END; i++)
 	{
 		aMouseState[i].state = KEY_UP;
 	}

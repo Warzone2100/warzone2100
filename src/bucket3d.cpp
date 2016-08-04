@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -40,7 +40,6 @@
 #define CLIP_RIGHT	((SDWORD)pie_GetVideoBufferWidth())
 #define CLIP_TOP	((SDWORD)0)
 #define CLIP_BOTTOM ((SDWORD)pie_GetVideoBufferHeight())
-//scale depth = 1<<FP12_SHIFT>>STRETCHED_Z_SHIFT<<xpshift
 // Gerard - HACK Multiplied by 7 to fix clipping
 // someone needs to take a good look at the radius calculation
 #define SCALE_DEPTH (FP12_MULTIPLIER*7)
@@ -81,7 +80,6 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void *pObject)
 
 		position.x = position.x - player.p.x;
 		position.z = -(position.z - player.p.z);
-		position.y = position.y;
 
 		/* 16 below is HACK!!! */
 		z = pie_RotateProject(&position, &pixel) - 16;
@@ -139,9 +137,6 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void *pObject)
 		position.x = psSimpObj->pos.x - player.p.x;
 		position.z = -(psSimpObj->pos.y - player.p.z);
 
-		//if((objectType == RENDER_STRUCTURE) && (((STRUCTURE*)pObject)->
-		//	pStructureType->type >= REF_DEFENSE) &&
-		//	(((STRUCTURE*)pObject)->pStructureType->type<=REF_TOWER4))
 		if ((objectType == RENDER_STRUCTURE) &&
 		    ((((STRUCTURE *)pObject)->pStructureType->type == REF_DEFENSE) ||
 		     (((STRUCTURE *)pObject)->pStructureType->type == REF_WALL) ||
@@ -204,11 +199,10 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void *pObject)
 		position.y += psCompObj->psShape->ocen.z;
 		position.z -= psCompObj->psShape->ocen.y;
 
-		pie_MatBegin();
+		pie_MatBegin(true);
 
 		/* object (animation) translations - ivis z and y flipped */
-		pie_TRANSLATE(psCompObj->position.x, psCompObj->position.z,
-		              psCompObj->position.y);
+		pie_TRANSLATE(psCompObj->position.x, psCompObj->position.z, psCompObj->position.y);
 
 		/* object (animation) rotations */
 		pie_MatRotY(-psCompObj->orientation.z);
@@ -233,7 +227,7 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void *pObject)
 			position.y += 4;
 		}
 
-		psBStats = asBodyStats + psDroid->asBits[COMP_BODY].nStat;
+		psBStats = asBodyStats + psDroid->asBits[COMP_BODY];
 		droidSize = psBStats->pIMD->radius;
 		z = pie_RotateProject(&position, &pixel) - (droidSize * 2);
 
@@ -423,12 +417,12 @@ void bucketAddTypeToList(RENDER_TYPE objectType, void *pObject)
 	bucketArray.push_back(newTag);
 }
 
-
 /* render Objects in list */
 void bucketRenderCurrentList(void)
 {
 	std::sort(bucketArray.begin(), bucketArray.end());
 
+	pie_MatBegin(true);
 	for (std::vector<BUCKET_TAG>::const_iterator thisTag = bucketArray.begin(); thisTag != bucketArray.end(); ++thisTag)
 	{
 		switch (thisTag->objectType)
@@ -440,7 +434,7 @@ void bucketRenderCurrentList(void)
 			renderEffect((EFFECT *)thisTag->pObject);
 			break;
 		case RENDER_DROID:
-			renderDroid((DROID *)thisTag->pObject);
+			displayComponentObject((DROID *)thisTag->pObject);
 			break;
 		case RENDER_SHADOW:
 			renderShadow((DROID *)thisTag->pObject, getImdFromIndex(MI_SHADOW));
@@ -465,8 +459,8 @@ void bucketRenderCurrentList(void)
 			break;
 		}
 	}
+	pie_MatEnd();
 
 	//reset the bucket array as we go
-	//reset the tag array
-	bucketArray.clear();
+	bucketArray.resize(0);
 }

@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -24,6 +24,7 @@
  *
  */
 
+#include <QtCore/QFile>
 
 #include "lib/framework/frame.h"
 #include "lib/framework/opengl.h"
@@ -32,11 +33,13 @@
 #include <png.h>
 #include "lib/ivis_opengl/png_util.h"
 #include "lib/ivis_opengl/tex.h"
-#include "lib/framework/frameint.h"
 #include "lib/ivis_opengl/textdraw.h"
 #include "lib/ivis_opengl/piestate.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
 #include "lib/ivis_opengl/pieclip.h"
+#include "lib/ivis_opengl/piefunc.h"
+#include "lib/ivis_opengl/piemode.h"
+#include "lib/ivis_opengl/pieblitfunc.h"
 
 #include "screen.h"
 #include "src/console.h"
@@ -44,21 +47,98 @@
 #include <vector>
 #include <algorithm>
 
+#include <iostream>
+#include <string>
+#include <vector>
+#include <cstring>
+
+//using namespace std;
+
 /* global used to indicate preferred internal OpenGL format */
 int wz_texture_compression = 0;
 
+// for compatibility with older versions of GLEW
+#ifndef GLEW_ARB_timer_query
+#define GLEW_ARB_timer_query false
+#endif
+#ifndef GLEW_KHR_debug
+#define GLEW_KHR_debug false
+#define GL_DEBUG_SOURCE_APPLICATION 0x824A
+static void glPopDebugGroup() {}
+static void glPushDebugGroup(int, unsigned, unsigned, const char *) {}
+#else
+#ifndef glPopDebugGroup // hack to workaround a glew 1.9 bug
+static void glPopDebugGroup() {}
+#endif
+#endif
 
 static bool		bBackDrop = false;
 static char		screendump_filename[PATH_MAX];
 static bool		screendump_required = false;
-static GLuint		backDropTexture = 0;
+
+static GFX *backdropGfx = NULL;
+
+static bool perfStarted = false;
+static GLuint perfpos[PERF_COUNT];
+struct PERF_STORE
+{
+	GLuint64 counters[PERF_COUNT];
+};
+static QList<PERF_STORE> perfList;
+static PERF_POINT queryActive = PERF_COUNT;
 
 static int preview_width = 0, preview_height = 0;
 static Vector2i player_pos[MAX_PLAYERS];
 static bool mappreview = false;
-static char mapname[256];
 OPENGL_DATA opengl;
-extern bool writeGameInfo(const char *pFileName); // Used to help debug issues when we have fatal errors.
+static bool khr_debug = false;
+
+static const char *cbsource(GLenum source)
+{
+	switch (source)
+	{
+	case GL_DEBUG_SOURCE_API: return "API";
+	case GL_DEBUG_SOURCE_WINDOW_SYSTEM: return "WM";
+	case GL_DEBUG_SOURCE_SHADER_COMPILER: return "SC";
+	case GL_DEBUG_SOURCE_THIRD_PARTY: return "3P";
+	case GL_DEBUG_SOURCE_APPLICATION: return "WZ";
+default: case GL_DEBUG_SOURCE_OTHER: return "OTHER";
+	}
+}
+
+static const char *cbtype(GLenum type)
+{
+	switch (type)
+	{
+	case GL_DEBUG_TYPE_ERROR: return "Error";
+	case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR: return "Deprecated";
+	case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR: return "Undefined";
+	case GL_DEBUG_TYPE_PORTABILITY: return "Portability";
+	case GL_DEBUG_TYPE_PERFORMANCE: return "Performance";
+	case GL_DEBUG_TYPE_MARKER: return "Marker";
+default: case GL_DEBUG_TYPE_OTHER: return "Other";
+	}
+}
+
+static const char *cbseverity(GLenum severity)
+{
+	switch (severity)
+	{
+	case GL_DEBUG_SEVERITY_HIGH: return "High";
+	case GL_DEBUG_SEVERITY_MEDIUM: return "Medium";
+	case GL_DEBUG_SEVERITY_LOW: return "Low";
+	case GL_DEBUG_SEVERITY_NOTIFICATION: return "Notification";
+	default: return "Other";
+	}
+}
+
+static void khr_callback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar *message, const void *userParam)
+{
+	(void)userParam; // we pass in NULL here
+	(void)length; // length of message, buggy on some drivers, don't use
+	(void)id; // message id
+	debug(LOG_ERROR, "GL::%s(%s:%s) : %s", cbsource(source), cbtype(type), cbseverity(severity), message);
+}
 
 /* Initialise the double buffered display */
 bool screenInitialise()
@@ -86,6 +166,15 @@ bool screenInitialise()
 	addDumpInfo(opengl.version);
 	debug(LOG_3D, "%s", opengl.version);
 	ssprintf(opengl.GLEWversion, "GLEW Version: %s", glewGetString(GLEW_VERSION));
+	if (strncmp(opengl.GLEWversion, "1.9.", 4) == 0) // work around known bug with KHR_debug extension support in this release
+	{
+		debug(LOG_WARNING, "Your version of GLEW is old and buggy, please upgrade to at least version 1.10.");
+		khr_debug = false;
+	}
+	else
+	{
+		khr_debug = GLEW_KHR_debug;
+	}
 	addDumpInfo(opengl.GLEWversion);
 	debug(LOG_3D, "%s", opengl.GLEWversion);
 
@@ -138,119 +227,236 @@ bool screenInitialise()
 	debug(LOG_3D, "  * texture cube_map %s supported.", GLEW_ARB_texture_cube_map ? "is" : "is NOT");
 	glGetIntegerv(GL_MAX_TEXTURE_UNITS, &glMaxTUs);
 	debug(LOG_3D, "  * Total number of Texture Units (TUs) supported is %d.", (int) glMaxTUs);
+	debug(LOG_3D, "  * GL_ARB_timer_query %s supported!", GLEW_ARB_timer_query ? "is" : "is NOT");
+	debug(LOG_3D, "  * KHR_DEBUG support %s detected", khr_debug ? "was" : "was NOT");
+
+	if (!GLEW_VERSION_2_0)
+	{
+		debug(LOG_FATAL, "OpenGL 2.0 not supported! Please upgrade your drivers.");
+		return false;
+	}
 
 	screenWidth = MAX(screenWidth, 640);
 	screenHeight = MAX(screenHeight, 480);
 
 	std::pair<int, int> glslVersion(0, 0);
-	if (GLEW_ARB_shading_language_100 && GLEW_ARB_shader_objects)
+	sscanf((char const *)glGetString(GL_SHADING_LANGUAGE_VERSION), "%d.%d", &glslVersion.first, &glslVersion.second);
+
+	/* Dump information about OpenGL 2.0+ implementation to the console and the dump file */
+	GLint glMaxTIUs, glMaxTCs, glMaxTIUAs, glmaxSamples, glmaxSamplesbuf;
+
+	debug(LOG_3D, "  * OpenGL GLSL Version : %s", glGetString(GL_SHADING_LANGUAGE_VERSION));
+	ssprintf(opengl.GLSLversion, "OpenGL GLSL Version : %s", glGetString(GL_SHADING_LANGUAGE_VERSION));
+	addDumpInfo(opengl.GLSLversion);
+
+	glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &glMaxTIUs);
+	debug(LOG_3D, "  * Total number of Texture Image Units (TIUs) supported is %d.", (int) glMaxTIUs);
+	glGetIntegerv(GL_MAX_TEXTURE_COORDS, &glMaxTCs);
+	debug(LOG_3D, "  * Total number of Texture Coords (TCs) supported is %d.", (int) glMaxTCs);
+	glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS_ARB, &glMaxTIUAs);
+	debug(LOG_3D, "  * Total number of Texture Image Units ARB(TIUAs) supported is %d.", (int) glMaxTIUAs);
+	glGetIntegerv(GL_SAMPLE_BUFFERS, &glmaxSamplesbuf);
+	debug(LOG_3D, "  * (current) Max Sample buffer is %d.", (int) glmaxSamplesbuf);
+	glGetIntegerv(GL_SAMPLES, &glmaxSamples);
+	debug(LOG_3D, "  * (current) Max Sample level is %d.", (int) glmaxSamples);
+
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
+	pie_Skybox_Init();
+
+	// Generate backdrop render
+	backdropGfx = new GFX(GFX_TEXTURE, GL_TRIANGLE_STRIP, 2);
+
+	if (GLEW_ARB_timer_query)
 	{
-		sscanf((char const *)glGetString(GL_SHADING_LANGUAGE_VERSION), "%d.%d", &glslVersion.first, &glslVersion.second);
-
-		/* Dump information about OpenGL 2.0+ implementation to the console and the dump file */
-		GLint glMaxTIUs, glMaxTCs, glMaxTIUAs, glmaxSamples, glmaxSamplesbuf;
-
-		debug(LOG_3D, "  * OpenGL GLSL Version : %s", glGetString(GL_SHADING_LANGUAGE_VERSION));
-		ssprintf(opengl.GLSLversion, "OpenGL GLSL Version : %s", glGetString(GL_SHADING_LANGUAGE_VERSION));
-		addDumpInfo(opengl.GLSLversion);
-
-		glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &glMaxTIUs);
-		debug(LOG_3D, "  * Total number of Texture Image Units (TIUs) supported is %d.", (int) glMaxTIUs);
-		glGetIntegerv(GL_MAX_TEXTURE_COORDS, &glMaxTCs);
-		debug(LOG_3D, "  * Total number of Texture Coords (TCs) supported is %d.", (int) glMaxTCs);
-		glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS_ARB, &glMaxTIUAs);
-		debug(LOG_3D, "  * Total number of Texture Image Units ARB(TIUAs) supported is %d.", (int) glMaxTIUAs);
-		glGetIntegerv(GL_SAMPLE_BUFFERS, &glmaxSamplesbuf);
-		debug(LOG_3D, "  * (current) Max Sample buffer is %d.", (int) glmaxSamplesbuf);
-		glGetIntegerv(GL_SAMPLES, &glmaxSamples);
-		debug(LOG_3D, "  * (current) Max Sample level is %d.", (int) glmaxSamples);
+		glGenQueries(PERF_COUNT, perfpos);
 	}
 
-	bool haveARB_vertex_buffer_object = GLEW_ARB_vertex_buffer_object || GLEW_VERSION_1_5;
-	bool haveARB_texture_env_crossbar = GLEW_ARB_texture_env_crossbar || GLEW_NV_texture_env_combine4 || GLEW_VERSION_1_4;
-	bool canRunFallback = GLEW_VERSION_1_2 && haveARB_vertex_buffer_object && haveARB_texture_env_crossbar;
-	bool canRunShaders = GLEW_VERSION_1_2 && haveARB_vertex_buffer_object && glslVersion >= std::make_pair(1, 20);  // glGetString(GL_SHADING_LANGUAGE_VERSION) >= "1.20"
-
-	pie_SetFallbackAvailability(canRunFallback);
-
-	if (canRunShaders)
+	if (khr_debug)
 	{
-		if (pie_LoadShaders())
-		{
-			pie_SetShaderAvailability(true);
-		}
+		glDebugMessageCallback((GLDEBUGPROC)khr_callback, NULL);
+		glEnable(GL_DEBUG_OUTPUT);
+		// Do not want to output notifications. Some drivers spam them too much.
+		glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DEBUG_SEVERITY_NOTIFICATION, 0, NULL, GL_FALSE);
+		debug(LOG_3D, "Enabling KHR_debug message callback");
 	}
-	else if (canRunFallback)
-	{
-		// corner cases: vbo(core 1.5 or ARB ext), texture crossbar (core 1.4 or ARB ext)
-		debug(LOG_POPUP, _("OpenGL GLSL shader version 1.20 is not supported by your system. Some things may look wrong. Please upgrade your graphics driver/hardware, if possible."));
-	}
-	else
-	{
-		// We write this file in hopes that people will upload the information in it to us.
-		writeGameInfo("WZdebuginfo.txt");
-		debug(LOG_FATAL, _("OpenGL 1.2 + VBO + TEC is not supported by your system. The game requires this. Please upgrade your graphics drivers/hardware, if possible."));
-		exit(1);
-	}
-
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_ACCUM_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
 	glErrors();
 	return true;
 }
 
+bool wzPerfAvailable()
+{
+	return GLEW_ARB_timer_query;
+}
+
+void wzPerfStart()
+{
+	if (GLEW_ARB_timer_query)
+	{
+		char text[80];
+		ssprintf(text, "Starting performance sample %02d", perfList.size());
+		GL_DEBUG(text);
+		perfStarted = true;
+	}
+}
+
+void wzPerfShutdown()
+{
+	if (perfList.size() == 0)
+	{
+		return;
+	}
+	QString ourfile = PHYSFS_getWriteDir();
+	ourfile.append("gfx-performance.csv");
+	// write performance counter list to file
+	QFile perf(ourfile);
+	perf.open(QIODevice::WriteOnly);
+	perf.write("START, EFF, TERRAIN, SKY, LOAD, PRTCL, WATER, MODELS, MISC, GUI\n");
+	for (int i = 0; i < perfList.size(); i++)
+	{
+		QString line;
+		line += QString::number(perfList[i].counters[PERF_START_FRAME]);
+		for (int j = 1; j < PERF_COUNT; j++)
+		{
+			line += ", " + QString::number(perfList[i].counters[j]);
+		}
+		line += "\n";
+		perf.write(line.toUtf8());
+	}
+	// all done, clear data
+	perfStarted = false;
+	perfList.clear();
+	queryActive = PERF_COUNT;
+}
+
+// call after swap buffers
+void wzPerfFrame()
+{
+	if (!perfStarted)
+	{
+		return; // not started yet
+	}
+	ASSERT(queryActive == PERF_COUNT, "Missing wfPerfEnd() call");
+	PERF_STORE store;
+	for (int i = 0; i < PERF_COUNT; i++)
+	{
+		glGetQueryObjectui64v(perfpos[i], GL_QUERY_RESULT, &store.counters[i]);
+	}
+	glErrors();
+	perfList.append(store);
+	perfStarted = false;
+
+	// Make a screenshot to document sample content
+	time_t aclock;
+	struct tm *t;
+
+	time(&aclock);           /* Get time in seconds */
+	t = localtime(&aclock);  /* Convert time to struct */
+
+	ssprintf(screendump_filename, "screenshots/wz2100-perf-sample-%02d-%04d%02d%02d_%02d%02d%02d.png", perfList.size() - 1,
+	         t->tm_year + 1900, t->tm_mon + 1, t->tm_mday, t->tm_hour, t->tm_min, t->tm_sec);
+	screendump_required = true;
+	GL_DEBUG("Performance sample complete");
+}
+
+static const char *sceneActive = NULL;
+void wzSceneBegin(const char *descr)
+{
+	ASSERT(sceneActive == NULL, "Out of order scenes: Wanted to start %s, was in %s", descr, sceneActive);
+	if (khr_debug)
+	{
+		glPushDebugGroup(GL_DEBUG_SOURCE_APPLICATION, 0, -1, descr);
+	}
+	sceneActive = descr;
+}
+
+void wzSceneEnd(const char *descr)
+{
+	ASSERT(descr == nullptr || strcmp(descr, sceneActive) == 0, "Out of order scenes: Wanted to stop %s, was in %s", descr, sceneActive);
+	if (khr_debug)
+	{
+		glPopDebugGroup();
+	}
+	sceneActive = NULL;
+}
+
+void wzPerfBegin(PERF_POINT pp, const char *descr)
+{
+	ASSERT(queryActive == PERF_COUNT || pp > queryActive, "Out of order timer query call");
+	queryActive = pp;
+	if (khr_debug)
+	{
+		glPushDebugGroup(GL_DEBUG_SOURCE_APPLICATION, pp, -1, descr);
+	}
+	if (!perfStarted)
+	{
+		return;
+	}
+	glBeginQuery(GL_TIME_ELAPSED, perfpos[pp]);
+	glErrors();
+}
+
+void wzPerfEnd(PERF_POINT pp)
+{
+	ASSERT(queryActive == pp, "Mismatched wzPerfBegin...End");
+	queryActive = PERF_COUNT;
+	if (khr_debug)
+	{
+		glPopDebugGroup();
+	}
+	if (!perfStarted)
+	{
+		return;
+	}
+	glEndQuery(GL_TIME_ELAPSED);
+}
+
 void screenShutDown(void)
 {
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_ACCUM_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+	pie_ShutDown();
+	pie_TexShutDown();
+	iV_TextShutdown();
+
+	pie_Skybox_Shutdown();
+
+	delete backdropGfx;
+
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+	glErrors();
+}
+
+/// Display a random backdrop from files in dirname starting with basename.
+/// dirname must have a trailing slash.
+void screen_SetRandomBackdrop(const char *dirname, const char *basename)
+{
+	std::vector<std::string> names;  // vector to hold the strings we want
+	char **rc = PHYSFS_enumerateFiles(dirname); // all the files in dirname
+
+	// Walk thru the files in our dir, adding the ones that start with basename to our vector of strings
+	size_t len = strlen(basename);
+	for (char **i = rc; *i != NULL; i++)
+	{
+		// does our filename start with basename?
+		if (!strncmp(*i, basename, len))
+		{
+			names.push_back(*i);
+		}
+	}
+	PHYSFS_freeList(rc);
+
+	// pick a random name from our vector of names
+	int ran = rand() % names.size();
+	std::string full_path = std::string(dirname) + names[ran];
+
+	screen_SetBackDropFromFile(full_path.c_str());
 }
 
 void screen_SetBackDropFromFile(const char *filename)
 {
-	// HACK : We should use a resource handler here!
-	const char *extension = strrchr(filename, '.');// determine the filetype
-	iV_Image image;
-
-	if (!extension)
-	{
-		debug(LOG_ERROR, "Image without extension: \"%s\"!", filename);
-		return; // filename without extension... don't bother
-	}
-
-	// Make sure the current texture page is reloaded after we are finished
-	// Otherwise WZ will think it is still loaded and not load it again
-	pie_SetTexturePage(TEXPAGE_EXTERN);
-
-	if (strcmp(extension, ".png") == 0)
-	{
-		if (iV_loadImage_PNG(filename, &image))
-		{
-			if (backDropTexture == 0)
-			{
-				glGenTextures(1, &backDropTexture);
-			}
-
-			glBindTexture(GL_TEXTURE_2D, backDropTexture);
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
-			             image.width, image.height,
-			             0, iV_getPixelFormat(&image), GL_UNSIGNED_BYTE, image.bmp);
-			glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-
-			iV_unloadImage(&image);
-		}
-		return;
-	}
-	else
-	{
-		debug(LOG_ERROR, "Unknown extension \"%s\" for image \"%s\"!", extension, filename);
-	}
+	backdropGfx->loadTexture(filename);
+	screen_Upload(NULL);
 }
-//===================================================================
 
 void screen_StopBackDrop(void)
 {
@@ -267,98 +473,23 @@ bool screen_GetBackDrop(void)
 	return bBackDrop;
 }
 
-//******************************************************************
-//slight hack to display maps (or whatever) in background.
-//bitmap MUST be (BACKDROP_HACK_WIDTH * BACKDROP_HACK_HEIGHT) for now.
-void screen_Upload(const char *newBackDropBmp, bool preview)
+void screen_Display()
 {
-	static bool processed = false;
-	int x1 = 0, x2 = screenWidth, y1 = 0, y2 = screenHeight, i, scale = 0, w = 0, h = 0;
-	float tx = 1, ty = 1;
-	const float aspect = screenWidth / (float)screenHeight, backdropAspect = 4 / (float)3;
-
-	if (aspect < backdropAspect)
-	{
-		int offset = (screenWidth - screenHeight * backdropAspect) / 2;
-		x1 += offset;
-		x2 -= offset;
-	}
-	else
-	{
-		int offset = (screenHeight - screenWidth / backdropAspect) / 2;
-		y1 += offset;
-		y2 -= offset;
-	}
-
-	if (newBackDropBmp != NULL)
-	{
-		if (processed)	// lets free a texture when we use a new one.
-		{
-			glDeleteTextures(1, &backDropTexture);
-		}
-
-		glGenTextures(1, &backDropTexture);
-		pie_SetTexturePage(TEXPAGE_NONE);
-		glBindTexture(GL_TEXTURE_2D, backDropTexture);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,
-		             BACKDROP_HACK_WIDTH, BACKDROP_HACK_HEIGHT,
-		             0, GL_RGB, GL_UNSIGNED_BYTE, newBackDropBmp);
-
-		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-		processed = true;
-	}
-
 	pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_OFF);
 
-	// Make sure the current texture page is reloaded after we are finished
-	// Otherwise WZ will think it is still loaded and not load it again
-	pie_SetTexturePage(TEXPAGE_EXTERN);
-
-	glBindTexture(GL_TEXTURE_2D, backDropTexture);
+	// Draw backdrop
 	glColor3f(1, 1, 1);
+	backdropGfx->draw();
 
-	if (preview)
+	if (mappreview)
 	{
-		int s1, s2;
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		int s1 = screenWidth / preview_width;
+		int s2 = screenHeight / preview_height;
+		int scale = MIN(s1, s2);
+		int w = preview_width * scale;
+		int h = preview_height * scale;
 
-		s1 = screenWidth / preview_width;
-		s2 = screenHeight / preview_height;
-		scale = MIN(s1, s2);
-
-		w = preview_width * scale;
-		h = preview_height * scale;
-		x1 = screenWidth / 2 - w / 2;
-		x2 = screenWidth / 2 + w / 2;
-		y1 = screenHeight / 2 - h / 2;
-		y2 = screenHeight / 2 + h / 2;
-
-		tx = preview_width / (float)BACKDROP_HACK_WIDTH;
-		ty = preview_height / (float)BACKDROP_HACK_HEIGHT;
-	}
-	else
-	{
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	}
-
-	glBegin(GL_TRIANGLE_STRIP);
-	glTexCoord2f(0, 0);
-	glVertex2f(x1, y1);
-	glTexCoord2f(tx, 0);
-	glVertex2f(x2, y1);
-	glTexCoord2f(0, ty);
-	glVertex2f(x1, y2);
-	glTexCoord2f(tx, ty);
-	glVertex2f(x2, y2);
-	glEnd();
-
-	if (preview)
-	{
-		for (i = 0; i < MAX_PLAYERS; i++)
+		for (int i = 0; i < MAX_PLAYERS; i++)
 		{
 			int x = player_pos[i].x;
 			int y = player_pos[i].y;
@@ -385,13 +516,60 @@ void screen_Upload(const char *newBackDropBmp, bool preview)
 	pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
 }
 
-void screen_enableMapPreview(char *name, int width, int height, Vector2i *playerpositions)
+//******************************************************************
+//slight hack to display maps (or whatever) in background.
+//bitmap MUST be (BACKDROP_HACK_WIDTH * BACKDROP_HACK_HEIGHT) for now.
+void screen_Upload(const char *newBackDropBmp)
+{
+	GLfloat x1 = 0, x2 = screenWidth, y1 = 0, y2 = screenHeight;
+	GLfloat tx = 1, ty = 1;
+	int scale = 0, w = 0, h = 0;
+	const float aspect = screenWidth / (float)screenHeight, backdropAspect = 4 / (float)3;
+
+	if (aspect < backdropAspect)
+	{
+		int offset = (screenWidth - screenHeight * backdropAspect) / 2;
+		x1 += offset;
+		x2 -= offset;
+	}
+	else
+	{
+		int offset = (screenHeight - screenWidth / backdropAspect) / 2;
+		y1 += offset;
+		y2 -= offset;
+	}
+
+	if (newBackDropBmp) // preview
+	{
+		backdropGfx->makeTexture(BACKDROP_HACK_WIDTH, BACKDROP_HACK_HEIGHT, GL_NEAREST, GL_RGB, newBackDropBmp);
+
+		int s1 = screenWidth / preview_width;
+		int s2 = screenHeight / preview_height;
+		scale = MIN(s1, s2);
+
+		w = preview_width * scale;
+		h = preview_height * scale;
+		x1 = screenWidth / 2 - w / 2;
+		x2 = screenWidth / 2 + w / 2;
+		y1 = screenHeight / 2 - h / 2;
+		y2 = screenHeight / 2 + h / 2;
+
+		tx = preview_width / (float)BACKDROP_HACK_WIDTH;
+		ty = preview_height / (float)BACKDROP_HACK_HEIGHT;
+	}
+
+	// Generate coordinates and put them into VBOs
+	GLfloat texcoords[8] = { 0.0f, 0.0f,  tx, 0.0,  0.0f, ty,  tx, ty };
+	GLfloat vertices[8] = { x1, y1,  x2, y1,  x1, y2,  x2, y2 };
+	backdropGfx->buffers(4, vertices, texcoords);
+}
+
+void screen_enableMapPreview(int width, int height, Vector2i *playerpositions)
 {
 	int i;
 	mappreview = true;
 	preview_width = width;
 	preview_height = height;
-	sstrcpy(mapname, name);
 	for (i = 0; i < MAX_PLAYERS; i++)
 	{
 		player_pos[i].x = playerpositions[i].x;
@@ -402,12 +580,6 @@ void screen_enableMapPreview(char *name, int width, int height, Vector2i *player
 void screen_disableMapPreview(void)
 {
 	mappreview = false;
-	sstrcpy(mapname, "none");
-}
-
-bool screen_getMapPreview(void)
-{
-	return mappreview;
 }
 
 // Screenshot code goes below this
@@ -432,25 +604,12 @@ void screenDoDumpToDiskIfRequired(void)
 	{
 		return;
 	}
-	debug(LOG_3D, "Saving screenshot %s\n", fileName);
+	debug(LOG_3D, "Saving screenshot %s", fileName);
 
-	if (image.width != screenWidth || image.height != screenHeight)
-	{
-		if (image.bmp != NULL)
-		{
-			free(image.bmp);
-		}
+	image.width = screenWidth;
+	image.height = screenHeight;
+	image.bmp = (unsigned char *)malloc(channelsPerPixel * image.width * image.height);
 
-		image.width = screenWidth;
-		image.height = screenHeight;
-		image.bmp = (unsigned char *)malloc(channelsPerPixel * image.width * image.height);
-		if (image.bmp == NULL)
-		{
-			image.width = 0; image.height = 0;
-			debug(LOG_ERROR, "Couldn't allocate memory");
-			return;
-		}
-	}
 	glPixelStorei(GL_PACK_ALIGNMENT, 1);
 	glReadPixels(0, 0, image.width, image.height, GL_RGB, GL_UNSIGNED_BYTE, image.bmp);
 
@@ -474,7 +633,7 @@ void screenDoDumpToDiskIfRequired(void)
  *
  *  \param path The directory path to save the screenshot in.
  */
-void screenDumpToDisk(const char *path)
+void screenDumpToDisk(const char *path, const char *level)
 {
 	unsigned int screendump_num = 0;
 	time_t aclock;
@@ -483,11 +642,11 @@ void screenDumpToDisk(const char *path)
 	time(&aclock);           /* Get time in seconds */
 	t = localtime(&aclock);  /* Convert time to struct */
 
-	ssprintf(screendump_filename, "%s/wz2100-%04d%02d%02d_%02d%02d%02d-%s.png", path, t->tm_year + 1900, t->tm_mon + 1, t->tm_mday, t->tm_hour, t->tm_min, t->tm_sec, getLevelName());
+	ssprintf(screendump_filename, "%s/wz2100-%04d%02d%02d_%02d%02d%02d-%s.png", path, t->tm_year + 1900, t->tm_mon + 1, t->tm_mday, t->tm_hour, t->tm_min, t->tm_sec, level);
 
 	while (PHYSFS_exists(screendump_filename))
 	{
-		ssprintf(screendump_filename, "%s/wz2100-%04d%02d%02d_%02d%02d%02d-%s-%d.png", path, t->tm_year + 1900, t->tm_mon + 1, t->tm_mday, t->tm_hour, t->tm_min, t->tm_sec, getLevelName(), ++screendump_num);
+		ssprintf(screendump_filename, "%s/wz2100-%04d%02d%02d_%02d%02d%02d-%s-%d.png", path, t->tm_year + 1900, t->tm_mon + 1, t->tm_mday, t->tm_hour, t->tm_min, t->tm_sec, level, ++screendump_num);
 	}
 	screendump_required = true;
 }

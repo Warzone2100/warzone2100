@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -56,12 +56,13 @@ struct wzSearchPath
 
 enum searchPathMode { mod_clean, mod_campaign, mod_multiplay, mod_override };
 
-void cleanSearchPath(void);
 void registerSearchPath(const char path[], unsigned int priority);
-bool rebuildSearchPath(searchPathMode mode, bool force);
+bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map = NULL);
 
 bool buildMapList(void);
 bool CheckForMod(char *theMap);
+
+bool loadLevFile(const char *filename, searchPathMode datadir, bool ignoreWrf, char const *realFileName);
 
 extern IMAGEFILE	*FrontImages;
 

@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -37,18 +37,18 @@ void ProcessRadarInput();
 
 extern void processInput(void);
 /*don't want to do any of these whilst in the Intelligence Screen*/
-extern void processMouseClickInput(void);
+CURSOR processMouseClickInput();
 
-extern void	scroll(void);
+CURSOR scroll();
 extern void resetScroll(void);
 extern void setMouseScroll(bool);
 
 extern bool DrawnInLastFrame(SDWORD Frame);
 
 // Clear all selections.
-extern void clearSel(void);
+extern void clearSel();
 // Clear all selections and stop driver mode.
-extern void clearSelection(void);
+extern void clearSelection();
 // deal with selecting a droid
 extern void dealWithDroidSelect(DROID *psDroid, bool bDragBox);
 
@@ -224,5 +224,10 @@ void AddDerrickBurningMessage(void);
 extern bool ctrlShiftDown(void);
 
 extern UDWORD getTargetType(void);
+
+void setZoom(float zoomSpeed, float zoomTarget);
+float getZoom();
+float getZoomSpeed();
+void zoom();
 
 #endif // __INCLUDED_SRC_DISPLAY_H__

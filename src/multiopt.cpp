@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -200,7 +200,6 @@ void recvOptions(NETQUEUE queue)
 	// clear out the old level list.
 	levShutDown();
 	levInitialise();
-	setCurrentMap(NULL, 42);
 	rebuildSearchPath(mod_multiplay, true);	// MUST rebuild search path for the new maps we just got!
 	buildMapList();
 	LEVEL_DATASET *mapData = levFindDataSet(game.map, &game.hash);
@@ -329,49 +328,6 @@ bool multiShutdown(void)
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-// copy templates from one player to another.
-bool addTemplateToList(DROID_TEMPLATE *psNew, DROID_TEMPLATE **ppList)
-{
-	DROID_TEMPLATE *psTempl = new DROID_TEMPLATE(*psNew);
-	psTempl->pName = NULL;
-
-	if (psNew->pName)
-	{
-		psTempl->pName = strdup(psNew->pName);
-	}
-
-	psTempl->psNext = *ppList;
-	*ppList = psTempl;
-
-	return true;
-}
-
-// ////////////////////////////////////////////////////////////////////////////
-// copy templates from one player to another.
-bool addTemplate(UDWORD player, DROID_TEMPLATE *psNew)
-{
-	return addTemplateToList(psNew, &apsDroidTemplates[player]);
-}
-
-void addTemplateBack(unsigned player, DROID_TEMPLATE *psNew)
-{
-	DROID_TEMPLATE **ppList = &apsDroidTemplates[player];
-	while (*ppList != NULL)
-	{
-		ppList = &(*ppList)->psNext;
-	}
-	addTemplateToList(psNew, ppList);
-}
-
-// ////////////////////////////////////////////////////////////////////////////
-// setup templates
-bool multiTemplateSetup(void)
-{
-	// do nothing now
-	return true;
-}
-
-// ////////////////////////////////////////////////////////////////////////////
 static bool gameInit(void)
 {
 	UDWORD			player;
@@ -409,7 +365,6 @@ static bool gameInit(void)
 	{
 		playerCount += NetPlay.players[index].ai >= 0 || NetPlay.players[index].allocated;
 	}
-	addOilDrum(playerCount * 2);  // Calculating playerCount instead of using NetPlay.playercount, since the latter seems to be 0 for non-hosts.
 
 	playerResponding();			// say howdy!
 

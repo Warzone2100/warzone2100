@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -29,8 +29,7 @@
 
 enum FEATURE_TYPE
 {
-	FEAT_HOVER = 1, // hack since the one prior to this was removed
-	FEAT_TANK,
+	FEAT_TANK = 2, // hack to keep enums the same value
 	FEAT_GEN_ARTE,
 	FEAT_OIL_RESOURCE,
 	FEAT_BOULDER,
@@ -41,13 +40,13 @@ enum FEATURE_TYPE
 	FEAT_OIL_DRUM,
 	FEAT_TREE,
 	FEAT_SKYSCRAPER,
+	FEAT_COUNT
 };
 
 /* Stats for a feature */
 struct FEATURE_STATS : public BASE_STATS
 {
-	FEATURE_STATS() {}
-	FEATURE_STATS(LineView line);
+	FEATURE_STATS(int idx = 0) : BASE_STATS(idx), subType(FEAT_COUNT), psImd(NULL), tileDraw(false), allowLOS(false), visibleAtStart(false), damageable(false) {}
 
 	FEATURE_TYPE    subType;                ///< type of feature
 

@@ -1,0 +1,194 @@
+{
+    "RES_CY_LG2": {
+        "id": "RES_CY_LG2",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_droid.ogg",
+        "text": [
+            "Cyborg Propulsion Improved",
+            "New armored construction",
+            "Increases Body Points",
+            "All Cyborgs upgraded automatically"
+        ]
+    },
+    "RES_ENGIN2": {
+        "id": "RES_ENGIN2",
+        "imdName": "MICAPSUL.PIE",
+        "sequenceName": "res_systech.ogg",
+        "text": [
+            "Research Breakthrough Improves Construction Rates",
+            "Improved Engineering Techniques",
+            "Construction speed +20%",
+            "All trucks upgraded automatically"
+        ]
+    },
+    "RES_POWU1": {
+        "id": "RES_POWU1",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_pow.ogg",
+        "text": [
+            "Improved Power Generator Performance",
+            "Gas turbine boosts power output",
+            "Power output +25%",
+            "All power generators upgraded automatically"
+        ]
+    },
+    "RES_SY_CBSU2": {
+        "id": "RES_SY_CBSU2",
+        "imdName": "MICAPSUL.PIE",
+        "sequenceName": "res_systech.ogg",
+        "text": [
+            "CB Sensor Improved",
+            "Improved fire detection systems",
+            "Extends CB Range",
+            "All CB sensors upgraded automatically"
+        ]
+    },
+    "RES_SY_VCBSTW1": {
+        "id": "RES_SY_VCBSTW1",
+        "imdName": "MICAPSUL.PIE",
+        "sequenceName": "res_systech.ogg",
+        "text": [
+            "New Systems Tower Available",
+            "VTOL CB Tower detects enemy indirect fire batteries",
+            "Orders assigned VTOLs to attack the enemy batteries",
+            "VTOLs attack until enemy battery is suppressed"
+        ]
+    },
+    "RES_SY_VCBSU2": {
+        "id": "RES_SY_VCBSU2",
+        "imdName": "MICAPSUL.PIE",
+        "sequenceName": "res_systech.ogg",
+        "text": [
+            "VTOL CB Improved",
+            "Improved fire detection systems",
+            "Extends VTOL CB Range",
+            "All VTOL CB sensors upgraded automatically"
+        ]
+    },
+    "RES_SY_VS2": {
+        "id": "RES_SY_VS2",
+        "imdName": "MICAPSUL.PIE",
+        "sequenceName": "res_systech.ogg",
+        "text": [
+            "VTOL Strike Improved",
+            "Improved target recognition systems",
+            "Extends VTOL Strike Range",
+            "All VTOL Strike sensors upgraded automatically"
+        ]
+    },
+    "RES_SY_VSTU1": {
+        "id": "RES_SY_VSTU1",
+        "imdName": "MICAPSUL.PIE",
+        "sequenceName": "res_systech.ogg",
+        "text": [
+            "New Systems Turret Available",
+            "VTOL Strike turret used to spot targets",
+            "Assigned VTOLs attack the designated targets",
+            "Select new targets to continue the VTOL strikes"
+        ]
+    },
+    "RES_SY_VSTW1": {
+        "id": "RES_SY_VSTW1",
+        "imdName": "MICAPSUL.PIE",
+        "sequenceName": "res_systech.ogg",
+        "text": [
+            "New Systems Tower Available",
+            "VTOL Strike Tower detects approaching enemies",
+            "Assigned VTOLs attack the enemy units",
+            "Strike mission continues until enemy destroyed or they retreat"
+        ]
+    },
+    "RES_WT13_HPV": {
+        "id": "RES_WT13_HPV",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_struttech.ogg",
+        "text": [
+            "New Defensive Structure Available",
+            "Armored hardpoint with Hyper-Velocity Cannon",
+            "Automatically targets enemies within sensor range",
+            "Defensive Strength: High"
+        ]
+    },
+    "RES_W_AAAC2": {
+        "id": "RES_W_AAAC2",
+        "imdName": "MICAPSUL.PIE",
+        "sequenceName": "res_weapons.ogg",
+        "text": [
+            "AA Upgrade",
+            "Self-guided rocket powered shells",
+            "AA accuracy +10%",
+            "All AA weapons upgraded automatically"
+        ]
+    },
+    "RES_W_BAC2": {
+        "id": "RES_W_BAC2",
+        "imdName": "MICAPSUL.PIE",
+        "sequenceName": "res_weapons.ogg",
+        "text": [
+            "Bomb Upgrade",
+            "Improved trinitramine explosive formula",
+            "Bomb damage +25%",
+            "All bomb bays upgraded automatically"
+        ]
+    },
+    "RES_W_BMB3": {
+        "id": "RES_W_BMB3",
+        "imdName": "MICAPSUL.PIE",
+        "sequenceName": "res_weapons.ogg",
+        "text": [
+            "New Bomb Bay Available",
+            "Drops incendiary bombs",
+            "Best Targets: Bunkers and Hardpoints",
+            "Body Points: Low"
+        ]
+    },
+    "RES_W_MG4": {
+        "id": "RES_W_MG4",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_weapons.ogg",
+        "text": [
+            "New Weapon Turret Available",
+            "\n\"Multi-barrel",
+            " rapid-fire machinegun\"",
+            "\n\"Best Targets: Infantry",
+            " base structures",
+            " wheeled vehicles\"",
+            "Replaces all machineguns"
+        ]
+    },
+    "RES_W_MG_ROF3": {
+        "id": "RES_W_MG_ROF3",
+        "imdName": "MICAPSUL.PIE",
+        "sequenceName": "res_weapons.ogg",
+        "text": [
+            "Machinegun Upgrade",
+            "Robotic advances make new chaingun upgrade available",
+            "Machinegun reload time -15%",
+            "All machineguns upgraded automatically"
+        ]
+    },
+    "RES_W_M_AC2": {
+        "id": "RES_W_M_AC2",
+        "imdName": "MICAPSUL.PIE",
+        "sequenceName": "res_weapons.ogg",
+        "text": [
+            "Mortar Upgrade",
+            "Shells detect and home to thermal heat signatures",
+            "Mortar accuracy +10%",
+            "All mortars upgraded automatically"
+        ]
+    },
+    "RES_W_RHOW": {
+        "id": "RES_W_RHOW",
+        "imdName": "MICAPSUL.PIE",
+        "sequenceName": "res_weapons.ogg",
+        "text": [
+            "New Indirect Fire Weapon Available",
+            "105mm multi-barrel Howitzer may be assigned to a sensor",
+            "\n\"Best Targets: Base Structures",
+            " infantry",
+            " wheeled vehicles\"",
+            "Body Points: Low"
+        ]
+    }
+}

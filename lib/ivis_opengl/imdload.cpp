@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -24,15 +24,148 @@
  * Load IMD (.pie) files
  */
 
+#include <QtCore/QMap>
+#include <QtCore/QString>
+
 #include "lib/framework/frame.h"
 #include "lib/framework/string_ext.h"
 #include "lib/framework/frameresource.h"
 #include "lib/framework/fixedpoint.h"
+#include "lib/framework/file.h"
+#include "lib/framework/physfs_ext.h"
 #include "lib/ivis_opengl/piematrix.h"
+#include "lib/ivis_opengl/piestate.h"
 
 #include "ivisdef.h" // for imd structures
 #include "imd.h" // for imd structures
 #include "tex.h" // texture page loading
+
+typedef QMap<QString, iIMDShape *> MODELMAP;
+static MODELMAP models;
+
+static iIMDShape *iV_ProcessIMD(const char **ppFileData, const char *FileDataEnd);
+
+iIMDShape::iIMDShape()
+{
+	flags = 0;
+	nconnectors = 0; // Default number of connectors must be 0
+	npoints = 0;
+	npolys = 0;
+	points = NULL;
+	polys = NULL;
+	connectors = NULL;
+	next = NULL;
+	shadowEdgeList = NULL;
+	nShadowEdges = 0;
+	texpage = iV_TEX_INVALID;
+	tcmaskpage = iV_TEX_INVALID;
+	normalpage = iV_TEX_INVALID;
+	specularpage = iV_TEX_INVALID;
+	numFrames = 0;
+	shaderProgram = 0;
+}
+
+static void iV_IMDRelease(iIMDShape *s)
+{
+	unsigned int i;
+	iIMDShape *d;
+
+	if (s)
+	{
+		if (s->points)
+		{
+			free(s->points);
+		}
+		if (s->connectors)
+		{
+			free(s->connectors);
+		}
+		if (s->polys)
+		{
+			for (i = 0; i < s->npolys; i++)
+			{
+				if (s->polys[i].texCoord)
+				{
+					free(s->polys[i].texCoord);
+				}
+			}
+			free(s->polys);
+		}
+		if (s->shadowEdgeList)
+		{
+			free(s->shadowEdgeList);
+			s->shadowEdgeList = NULL;
+		}
+		glDeleteBuffers(VBO_COUNT, s->buffers);
+		// shader deleted later, if any
+		d = s->next;
+		delete s;
+		iV_IMDRelease(d);
+	}
+}
+
+void modelShutdown()
+{
+	for (MODELMAP::iterator i = models.begin(); i != models.end(); i = models.erase(i))
+	{
+		iV_IMDRelease(i.value());
+	}
+	models.clear();
+}
+
+static bool tryLoad(const QString &path, const QString &filename)
+{
+	if (PHYSFS_exists(path + filename))
+	{
+		char *pFileData = NULL, *fileEnd;
+		UDWORD size = 0;
+		if (!loadFile(QString(path + filename).toUtf8().constData(), &pFileData, &size))
+		{
+			debug(LOG_ERROR, "Failed to load model file: %s", QString(path + filename).toUtf8().constData());
+			return false;
+		}
+		fileEnd = pFileData + size;
+		iIMDShape *s = iV_ProcessIMD((const char **)&pFileData, fileEnd);
+		if (s)
+		{
+			models.insert(filename, s);
+		}
+		return true;
+	}
+	return false;
+}
+
+const QString &modelName(iIMDShape *model)
+{
+	for (MODELMAP::iterator i = models.begin(); i != models.end(); ++i)
+	{
+		if (i.value() == model)
+		{
+			return i.key();
+		}
+	}
+	ASSERT(false, "An IMD pointer could not be backtraced to a filename!");
+	static QString error;
+	return error;
+}
+
+iIMDShape *modelGet(const QString &filename)
+{
+	QString name(filename.toLower());
+	if (models.contains(name))
+	{
+		return models[name]; // cached
+	}
+	else if (tryLoad("structs/", name) || tryLoad("misc/", name) || tryLoad("effects/", name)
+	         || tryLoad("components/prop/", name) || tryLoad("components/weapons/", name)
+	         || tryLoad("components/bodies/", name) || tryLoad("features/", name)
+	         || tryLoad("misc/micnum/", name) || tryLoad("misc/minum/", name) || tryLoad("misc/mivnum/", name) || tryLoad("misc/researchimds/", name))
+	{
+		return models[name];
+	}
+	debug(LOG_ERROR, "Could not find: %s", name.toUtf8().constData());
+	return NULL;
+}
 
 static bool AtEndOfFile(const char *CurPos, const char *EndOfFile)
 {
@@ -92,7 +225,6 @@ static bool _imd_load_polys(const char **ppFileData, iIMDShape *s, int pieVersio
 		pFileData += cnt;
 
 		poly->flags = flags;
-		poly->npnts = npnts;
 		ASSERT_OR_RETURN(false, npnts == 3, "Invalid polygon size (%d)", npnts);
 		if (sscanf(pFileData, "%d %d %d%n", &poly->pindex[0], &poly->pindex[1], &poly->pindex[2], &cnt) != 3)
 		{
@@ -114,9 +246,9 @@ static bool _imd_load_polys(const char **ppFileData, iIMDShape *s, int pieVersio
 			p1.y = s->points[poly->pindex[1]].y;
 			p1.z = s->points[poly->pindex[1]].z;
 
-			p2.x = s->points[poly->pindex[poly->npnts - 1]].x;
-			p2.y = s->points[poly->pindex[poly->npnts - 1]].y;
-			p2.z = s->points[poly->pindex[poly->npnts - 1]].z;
+			p2.x = s->points[poly->pindex[2]].x;
+			p2.y = s->points[poly->pindex[2]].y;
+			p2.z = s->points[poly->pindex[2]].z;
 
 			poly->normal = pie_SurfaceNormal3fv(p0, p1, p2);
 		}
@@ -178,9 +310,9 @@ static bool _imd_load_polys(const char **ppFileData, iIMDShape *s, int pieVersio
 				poly->texAnim.y = 0;
 			}
 
-			poly->texCoord = (Vector2f *)malloc(sizeof(*poly->texCoord) * nFrames * poly->npnts);
+			poly->texCoord = (Vector2f *)malloc(sizeof(*poly->texCoord) * nFrames * 3);
 			ASSERT_OR_RETURN(false, poly->texCoord, "Out of memory allocating texture coordinates");
-			for (j = 0; j < poly->npnts; j++)
+			for (j = 0; j < 3; j++)
 			{
 				float VertexU, VertexV;
 
@@ -201,7 +333,7 @@ static bool _imd_load_polys(const char **ppFileData, iIMDShape *s, int pieVersio
 				{
 					const float uFrame = (frame % framesPerLine) * poly->texAnim.x;
 					const float vFrame = (frame / framesPerLine) * poly->texAnim.y;
-					Vector2f *c = &poly->texCoord[frame * poly->npnts + j];
+					Vector2f *c = &poly->texCoord[frame * 3 + j];
 
 					c->x = VertexU + uFrame;
 					c->y = VertexV + vFrame;
@@ -242,31 +374,14 @@ static bool ReadPoints(const char **ppFileData, iIMDShape *s)
 	return true;
 }
 
-
-static bool _imd_load_points(const char **ppFileData, iIMDShape *s)
+void _imd_calc_bounds(iIMDShape *s, Vector3f *p, int size)
 {
-	Vector3f *p = NULL;
-	int32_t xmax, ymax, zmax;
+	int32_t xmax, ymax, zmax, count;
 	double dx, dy, dz, rad_sq, rad, old_to_p_sq, old_to_p, old_to_new;
 	double xspan, yspan, zspan, maxspan;
 	Vector3f dia1, dia2, cen;
 	Vector3f vxmin(0, 0, 0), vymin(0, 0, 0), vzmin(0, 0, 0),
 	         vxmax(0, 0, 0), vymax(0, 0, 0), vzmax(0, 0, 0);
-
-	//load the points then pass through a second time to setup bounding datavalues
-	s->points = (Vector3f *)malloc(sizeof(Vector3f) * s->npoints);
-	if (s->points == NULL)
-	{
-		return false;
-	}
-
-	// Read in points and remove duplicates (!)
-	if (ReadPoints(ppFileData, s) == false)
-	{
-		free(s->points);
-		s->points = NULL;
-		return false;
-	}
 
 	s->max.x = s->max.y = s->max.z = -FP12_MULTIPLIER;
 	s->min.x = s->min.y = s->min.z = FP12_MULTIPLIER;
@@ -275,7 +390,7 @@ static bool _imd_load_points(const char **ppFileData, iIMDShape *s)
 	vxmin.x = vymin.y = vzmin.z = FP12_MULTIPLIER;
 
 	// set up bounding data for minimum number of vertices
-	for (p = s->points; p < s->points + s->npoints; p++)
+	for (count = 0; count < size; p++, count++)
 	{
 		if (p->x > s->max.x)
 		{
@@ -436,6 +551,26 @@ static bool _imd_load_points(const char **ppFileData, iIMDShape *s)
 	s->ocen = cen;
 
 // END: tight bounding sphere
+}
+
+static bool _imd_load_points(const char **ppFileData, iIMDShape *s)
+{
+	//load the points then pass through a second time to setup bounding datavalues
+	s->points = (Vector3f *)malloc(sizeof(Vector3f) * s->npoints);
+	if (s->points == NULL)
+	{
+		return false;
+	}
+
+	// Read in points and remove duplicates (!)
+	if (ReadPoints(ppFileData, s) == false)
+	{
+		free(s->points);
+		s->points = NULL;
+		return false;
+	}
+
+	_imd_calc_bounds(s, s->points, s->npoints);
 
 	return true;
 }
@@ -451,19 +586,13 @@ static bool _imd_load_points(const char **ppFileData, iIMDShape *s)
  * \pre s->nconnectors set
  * \post s->connectors allocated
  */
-static bool _imd_load_connectors(const char **ppFileData, iIMDShape *s)
+bool _imd_load_connectors(const char **ppFileData, iIMDShape *s)
 {
 	const char *pFileData = *ppFileData;
 	int cnt;
 	Vector3i *p = NULL, newVector(0, 0, 0);
 
 	s->connectors = (Vector3i *)malloc(sizeof(Vector3i) * s->nconnectors);
-	if (s->connectors == NULL)
-	{
-		debug(LOG_ERROR, "(_load_connectors) MALLOC fail");
-		return false;
-	}
-
 	for (p = s->connectors; p < s->connectors + s->nconnectors; p++)
 	{
 		if (sscanf(pFileData, "%d %d %d%n",                         &newVector.x, &newVector.y, &newVector.z, &cnt) != 3 &&
@@ -481,6 +610,47 @@ static bool _imd_load_connectors(const char **ppFileData, iIMDShape *s)
 	return true;
 }
 
+// performance hack
+static QVector<GLfloat> vertices;
+static QVector<GLfloat> normals;
+static QVector<GLfloat> texcoords;
+static QVector<GLfloat> tangents;
+static QVector<uint16_t> indices; // size is npolys * 3 * numFrames
+static int vertexCount;
+
+static inline int addVertex(iIMDShape *s, int i, const iIMDPoly *p, int frameidx)
+{
+	// if texture animation flag is present, fetch animation coordinates for this polygon
+	// otherwise just show the first set of texel coordinates
+	int frame = (p->flags & iV_IMD_TEXANIM) ? frameidx : 0;
+
+	// See if we already have this defined, if so, return reference to it.
+	for (int j = 0; j < vertexCount; j++)
+	{
+		if (texcoords[j * 2 + 0] == p->texCoord[frame * 3 + i].x
+		    && texcoords[j * 2 + 1] == p->texCoord[frame * 3 + i].y
+		    && vertices[j * 3 + 0] == s->points[p->pindex[i]].x
+		    && vertices[j * 3 + 1] == s->points[p->pindex[i]].y
+		    && vertices[j * 3 + 2] == s->points[p->pindex[i]].z
+		    && normals[j * 3 + 0] == p->normal.x
+		    && normals[j * 3 + 1] == p->normal.y
+		    && normals[j * 3 + 2] == p->normal.z)
+		{
+			return j;
+		}
+	}
+	// We don't have it, add it.
+	normals.append(p->normal.x);
+	normals.append(p->normal.y);
+	normals.append(p->normal.z);
+	texcoords.append(p->texCoord[frame * 3 + i].x);
+	texcoords.append(p->texCoord[frame * 3 + i].y);
+	vertices.append(s->points[p->pindex[i]].x);
+	vertices.append(s->points[p->pindex[i]].y);
+	vertices.append(s->points[p->pindex[i]].z);
+	vertexCount++;
+	return vertexCount - 1;
+}
 
 /*!
  * Load shape levels recursively
@@ -493,69 +663,43 @@ static bool _imd_load_connectors(const char **ppFileData, iIMDShape *s)
  */
 static iIMDShape *_imd_load_level(const char **ppFileData, const char *FileDataEnd, int nlevels, int pieVersion)
 {
-	const char *pTmp, *pFileData = *ppFileData;
+	const char *pFileName = GetLastResourceFilename(); // Last loaded filename
+	const char *pFileData = *ppFileData;
 	char buffer[PATH_MAX] = {'\0'};
 	int cnt = 0, n = 0, i;
 	iIMDShape *s = NULL;
+	float dummy;
 
 	if (nlevels == 0)
 	{
 		return NULL;
 	}
 
-	// Load optional MATERIALS directive
-	pTmp = pFileData;	// remember position
 	i = sscanf(pFileData, "%255s %n", buffer, &cnt);
 	ASSERT_OR_RETURN(NULL, i == 1, "Bad directive following LEVEL");
 
-	s = (iIMDShape *)malloc(sizeof(iIMDShape));
-	if (s == NULL)
-	{
-		/* Failed to allocate memory for s */
-		debug(LOG_ERROR, "_imd_load_level: Memory allocation error");
-		return NULL;
-	}
-	s->flags = 0;
-	s->nconnectors = 0; // Default number of connectors must be 0
-	s->npoints = 0;
-	s->npolys = 0;
-	s->points = NULL;
-	s->polys = NULL;
-	s->connectors = NULL;
-	s->next = NULL;
-	s->shadowEdgeList = NULL;
-	s->nShadowEdges = 0;
-	s->texpage = iV_TEX_INVALID;
-	s->tcmaskpage = iV_TEX_INVALID;
-	s->normalpage = iV_TEX_INVALID;
-	memset(s->material, 0, sizeof(s->material));
-	s->material[LIGHT_AMBIENT][3] = 1.0f;
-	s->material[LIGHT_DIFFUSE][3] = 1.0f;
-	s->material[LIGHT_SPECULAR][3] = 1.0f;
+	s = new iIMDShape;
+
+	// Optionally load and ignore deprecated MATERIALS directive
 	if (strcmp(buffer, "MATERIALS") == 0)
 	{
-		i = sscanf(pFileData, "%255s %f %f %f %f %f %f %f %f %f %f%n", buffer,
-		           &s->material[LIGHT_AMBIENT][0], &s->material[LIGHT_AMBIENT][1], &s->material[LIGHT_AMBIENT][2],
-		           &s->material[LIGHT_DIFFUSE][0], &s->material[LIGHT_DIFFUSE][1], &s->material[LIGHT_DIFFUSE][2],
-		           &s->material[LIGHT_SPECULAR][0], &s->material[LIGHT_SPECULAR][1], &s->material[LIGHT_SPECULAR][2],
-		           &s->shininess, &cnt);
+		i = sscanf(pFileData, "%255s %f %f %f %f %f %f %f %f %f %f%n", buffer, &dummy, &dummy, &dummy, &dummy,
+		           &dummy, &dummy, &dummy, &dummy, &dummy, &dummy, &cnt);
 		ASSERT_OR_RETURN(NULL, i == 11, "Bad MATERIALS directive");
+		debug(LOG_WARNING, "MATERIALS directive no longer supported!");
 		pFileData += cnt;
 	}
-	else
+	else if (strcmp(buffer, "SHADERS") == 0)
 	{
-		// Set default values
-		s->material[LIGHT_AMBIENT][0] = 1.0f;
-		s->material[LIGHT_AMBIENT][1] = 1.0f;
-		s->material[LIGHT_AMBIENT][2] = 1.0f;
-		s->material[LIGHT_DIFFUSE][0] = 1.0f;
-		s->material[LIGHT_DIFFUSE][1] = 1.0f;
-		s->material[LIGHT_DIFFUSE][2] = 1.0f;
-		s->material[LIGHT_SPECULAR][0] = 1.0f;
-		s->material[LIGHT_SPECULAR][1] = 1.0f;
-		s->material[LIGHT_SPECULAR][2] = 1.0f;
-		s->shininess = 10;
-		pFileData = pTmp;
+		char vertex[PATH_MAX], fragment[PATH_MAX];
+
+		if (sscanf(pFileData, "%255s %255s %255s%n", buffer, vertex, fragment, &cnt) != 3)
+		{
+			debug(LOG_ERROR, "%s shader corrupt: %s", pFileName, buffer);
+			return NULL;
+		}
+		s->shaderProgram = pie_LoadShader(pFileName, vertex, fragment);
+		pFileData += cnt;
 	}
 
 	if (sscanf(pFileData, "%255s %d%n", buffer, &s->npoints, &cnt) != 2)
@@ -582,7 +726,6 @@ static iIMDShape *_imd_load_level(const char **ppFileData, const char *FileDataE
 
 	_imd_load_polys(&pFileData, s, pieVersion);
 
-
 	// NOW load optional stuff
 	while (!AtEndOfFile(pFileData, FileDataEnd)) // check for end of file (give or take white space)
 	{
@@ -593,9 +736,7 @@ static iIMDShape *_imd_load_level(const char **ppFileData, const char *FileDataE
 		}
 		pFileData += cnt;
 
-		// check for next level ... or might be a BSP - This should handle an imd if it has a BSP tree attached to it
-		// might be "BSP" or "LEVEL"
-		if (strcmp(buffer, "LEVEL") == 0)
+		if (strcmp(buffer, "LEVEL") == 0)	// check for next level
 		{
 			debug(LOG_3D, "imd[_load_level] = npoints %d, npolys %d", s->npoints, s->npolys);
 			s->next = _imd_load_level(&pFileData, FileDataEnd, nlevels - 1, pieVersion);
@@ -613,11 +754,41 @@ static iIMDShape *_imd_load_level(const char **ppFileData, const char *FileDataE
 		}
 	}
 
+	// FINALLY, massage the data into what can stream directly to OpenGL
+	glGenBuffers(VBO_COUNT, s->buffers);
+	vertexCount = 0;
+	for (int k = 0; k < MAX(1, s->numFrames); k++)
+	{
+		// Go through all polygons for each frame
+		for (int i = 0; i < s->npolys; i++)
+		{
+			const iIMDPoly *pPolys = &s->polys[i];
+
+			// Do we already have the vertex data for this polygon?
+			indices.append(addVertex(s, 0, pPolys, k));
+			indices.append(addVertex(s, 1, pPolys, k));
+			indices.append(addVertex(s, 2, pPolys, k));
+		}
+	}
+	glBindBuffer(GL_ARRAY_BUFFER, s->buffers[VBO_VERTEX]);
+	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(GLfloat), vertices.constData(), GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, s->buffers[VBO_NORMAL]);
+	glBufferData(GL_ARRAY_BUFFER, normals.size() * sizeof(GLfloat), normals.constData(), GL_STATIC_DRAW);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, s->buffers[VBO_INDEX]);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(uint16_t), indices.constData(), GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, s->buffers[VBO_TEXCOORD]);
+	glBufferData(GL_ARRAY_BUFFER, texcoords.size() * sizeof(GLfloat), texcoords.constData(), GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0); // unbind
+
+	indices.resize(0);
+	vertices.resize(0);
+	texcoords.resize(0);
+	normals.resize(0);
+
 	*ppFileData = pFileData;
 
 	return s;
 }
-
 
 /*!
  * Load ppFileData into a shape
@@ -626,19 +797,21 @@ static iIMDShape *_imd_load_level(const char **ppFileData, const char *FileDataE
  * \return The shape, constructed from the data read
  */
 // ppFileData is incremented to the end of the file on exit!
-iIMDShape *iV_ProcessIMD(const char **ppFileData, const char *FileDataEnd)
+static iIMDShape *iV_ProcessIMD(const char **ppFileData, const char *FileDataEnd)
 {
-	const char *pFileName = GetLastResourceFilename(); // Last loaded texture page filename
+	const char *pFileName = GetLastResourceFilename(); // Last loaded filename
 	const char *pFileData = *ppFileData;
-	char buffer[PATH_MAX], texfile[PATH_MAX], normalfile[PATH_MAX];
+	char buffer[PATH_MAX], texfile[PATH_MAX], normalfile[PATH_MAX], specfile[PATH_MAX];
 	int cnt, nlevels;
-	iIMDShape *shape, *psShape;
+	iIMDShape *shape;
 	UDWORD level;
 	int32_t imd_version;
 	uint32_t imd_flags;
 	bool bTextured = false;
+	GLuint shader = 0;
 
 	memset(normalfile, 0, sizeof(normalfile));
+	memset(specfile, 0, sizeof(specfile));
 
 	if (sscanf(pFileData, "%255s %d%n", buffer, &imd_version, &cnt) != 2)
 	{
@@ -756,7 +929,70 @@ iIMDShape *iV_ProcessIMD(const char **ppFileData, const char *FileDataEnd)
 		}
 		sstrcat(normalfile, ".png");
 
-		/* -Now- read in LEVELS directive */
+		/* Now read in LEVELS directive */
+		if (sscanf(pFileData, "%255s %d%n", buffer, &nlevels, &cnt) != 2)
+		{
+			debug(LOG_ERROR, "iV_ProcessIMD %s bad levels info: %s", pFileName, buffer);
+			return NULL;
+		}
+		pFileData += cnt;
+	}
+
+	if (strncmp(buffer, "SPECULARMAP", 11) == 0)
+	{
+		char ch, texType[PATH_MAX];
+		int i;
+
+		/* the first parameter for textures is always ignored; which is why we ignore nlevels read in above */
+		ch = *pFileData++;
+
+		// Run up to the dot or till the buffer is filled. Leave room for the extension.
+		for (i = 0; i < PATH_MAX - 5 && (ch = *pFileData++) != '\0' && ch != '.'; ++i)
+		{
+			specfile[i] = ch;
+		}
+		specfile[i] = '\0';
+
+		if (sscanf(pFileData, "%255s%n", texType, &cnt) != 1)
+		{
+			debug(LOG_ERROR, "%s specular map info corrupt: %s", pFileName, buffer);
+			return NULL;
+		}
+		pFileData += cnt;
+
+		if (strcmp(texType, "png") != 0)
+		{
+			debug(LOG_ERROR, "%s: only png specular maps supported", pFileName);
+			return NULL;
+		}
+		sstrcat(specfile, ".png");
+
+		/* Try -again- to read in LEVELS directive */
+		if (sscanf(pFileData, "%255s %d%n", buffer, &nlevels, &cnt) != 2)
+		{
+			debug(LOG_ERROR, "iV_ProcessIMD %s bad levels info: %s", pFileName, buffer);
+			return NULL;
+		}
+		pFileData += cnt;
+	}
+
+	// DEPRECATED SHADERS DIRECTIVE! Has been moved into levels block now. Remove me later.
+	if (strncmp(buffer, "SHADERS", 7) == 0)
+	{
+		char vertex[PATH_MAX], fragment[PATH_MAX];
+
+		/* the first parameter for "textures" is always ignored; which is why we ignore nlevels read in above */
+		pFileData++;
+
+		if (sscanf(pFileData, "%255s %255s%n", vertex, fragment, &cnt) != 2)
+		{
+			debug(LOG_ERROR, "%s shader corrupt: %s", pFileName, buffer);
+			return NULL;
+		}
+		pFileData += cnt;
+		shader = pie_LoadShader(pFileName, vertex, fragment);
+
+		/* Try -yet again- to read in LEVELS directive */
 		if (sscanf(pFileData, "%255s %d%n", buffer, &nlevels, &cnt) != 2)
 		{
 			debug(LOG_ERROR, "iV_ProcessIMD %s bad levels info: %s", pFileName, buffer);
@@ -792,25 +1028,41 @@ iIMDShape *iV_ProcessIMD(const char **ppFileData, const char *FileDataEnd)
 		return NULL;
 	}
 
+	// assign shader to all levels, if old deprecated SHADERS directive used. FIXME remove this later.
+	for (iIMDShape *psShape = shape; shader && psShape != NULL; psShape = psShape->next)
+	{
+		shape->shaderProgram = shader;
+	}
+
 	// load texture page if specified
 	if (bTextured)
 	{
 		int texpage = iV_GetTexture(texfile);
 		int normalpage = iV_TEX_INVALID;
-
-		if (normalfile[0] != '\0')
-		{
-			debug(LOG_WARNING, "Loading normal map %s for %s", normalfile, pFileName);
-			normalpage = iV_GetTexture(normalfile);
-		}
+		int specpage = iV_TEX_INVALID;
 
 		ASSERT_OR_RETURN(NULL, texpage >= 0, "%s could not load tex page %s", pFileName, texfile);
 
+		if (normalfile[0] != '\0')
+		{
+			debug(LOG_TEXTURE, "Loading normal map %s for %s", normalfile, pFileName);
+			normalpage = iV_GetTexture(normalfile, false);
+			ASSERT_OR_RETURN(NULL, normalpage >= 0, "%s could not load tex page %s", pFileName, normalfile);
+		}
+
+		if (specfile[0] != '\0')
+		{
+			debug(LOG_TEXTURE, "Loading specular map %s for %s", specfile, pFileName);
+			specpage = iV_GetTexture(specfile, false);
+			ASSERT_OR_RETURN(NULL, specpage >= 0, "%s could not load tex page %s", pFileName, specfile);
+		}
+
 		// assign tex pages and flags to all levels
-		for (psShape = shape; psShape != NULL; psShape = psShape->next)
+		for (iIMDShape *psShape = shape; psShape != NULL; psShape = psShape->next)
 		{
 			psShape->texpage = texpage;
 			psShape->normalpage = normalpage;
+			psShape->specularpage = specpage;
 			psShape->flags = imd_flags;
 		}
 
@@ -826,7 +1078,7 @@ iIMDShape *iV_ProcessIMD(const char **ppFileData, const char *FileDataEnd)
 			ASSERT_OR_RETURN(shape, texpage_mask >= 0, "%s could not load tcmask %s", pFileName, texfile);
 
 			// Propagate settings through levels
-			for (psShape = shape; psShape != NULL; psShape = psShape->next)
+			for (iIMDShape *psShape = shape; psShape != NULL; psShape = psShape->next)
 			{
 				psShape->tcmaskpage = texpage_mask;
 			}

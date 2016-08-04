@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -90,9 +90,8 @@
 #define SAVEENTRY_EDIT			ID_LOADSAVE + totalslots + totalslots		// save edit box. must be highest value possible I guess. -Q
 
 // ////////////////////////////////////////////////////////////////////////////
-static void displayLoadBanner(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
-static void displayLoadSlot(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
-static void displayLoadSaveEdit(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+static void displayLoadBanner(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
+static void displayLoadSlot(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 
 static	W_SCREEN	*psRequestScreen;					// Widget screen for requester
 static	bool		mode;
@@ -175,8 +174,6 @@ bool addLoadSave(LOADSAVE_MODE savemode, const char *title)
 
 				displayWorld();									// Just display the 3d, no interface
 
-				pie_UploadDisplayBuffer();			// Upload the current display back buffer into system memory.
-
 				radarOnScreen = radOnScreen;
 				bRender3DOnly = false;
 			}
@@ -193,32 +190,25 @@ bool addLoadSave(LOADSAVE_MODE savemode, const char *title)
 		intRemoveReticule();
 	}
 
-	psRequestScreen = widgCreateScreen(); // init the screen
-	widgSetTipFont(psRequestScreen, font_regular);
+	psRequestScreen = new W_SCREEN;
+
+	WIDGET *parent = psRequestScreen->psForm;
 
 	/* add a form to place the tabbed form on */
-	W_FORMINIT sFormInit;
-	sFormInit.formID = 0;				//this adds the blue background, and the "box" behind the buttons -Q
-	sFormInit.id = LOADSAVE_FORM;
-	sFormInit.style = WFORM_PLAIN;
-	sFormInit.x = (SWORD) LOADSAVE_X;
-	sFormInit.y = (SWORD) LOADSAVE_Y;
-	sFormInit.width = LOADSAVE_W;
 	// we need the form to be long enough for all resolutions, so we take the total number of items * height
 	// and * the gaps, add the banner, and finally, the fudge factor ;)
-	sFormInit.height = (slotsInColumn * LOADENTRY_H + LOADSAVE_HGAP * slotsInColumn) + LOADSAVE_BANNER_DEPTH + 20;
-	sFormInit.disableChildren = true;
-	sFormInit.pDisplay = intOpenPlainForm;
-	widgAddForm(psRequestScreen, &sFormInit);
+	IntFormAnimated *loadSaveForm = new IntFormAnimated(parent);
+	loadSaveForm->id = LOADSAVE_FORM;
+	loadSaveForm->setGeometry(LOADSAVE_X, LOADSAVE_Y, LOADSAVE_W, slotsInColumn * (LOADENTRY_H + LOADSAVE_HGAP) + LOADSAVE_BANNER_DEPTH + 20);
 
 	// Add Banner
+	W_FORMINIT sFormInit;
 	sFormInit.formID = LOADSAVE_FORM;
 	sFormInit.id = LOADSAVE_BANNER;
 	sFormInit.x = LOADSAVE_HGAP;
 	sFormInit.y = LOADSAVE_VGAP;
 	sFormInit.width = LOADSAVE_W - (2 * LOADSAVE_HGAP);
 	sFormInit.height = LOADSAVE_BANNER_DEPTH;
-	sFormInit.disableChildren = false;
 	sFormInit.pDisplay = displayLoadBanner;
 	sFormInit.UserData = bLoad;
 	widgAddForm(psRequestScreen, &sFormInit);
@@ -337,7 +327,6 @@ bool addLoadSave(LOADSAVE_MODE savemode, const char *title)
 // ////////////////////////////////////////////////////////////////////////////
 bool closeLoadSave(void)
 {
-	widgDelete(psRequestScreen, LOADSAVE_FORM);
 	bLoadSaveUp = false;
 
 	if ((bLoadSaveMode == LOAD_INGAME_MISSION) || (bLoadSaveMode == SAVE_INGAME_MISSION)
@@ -358,7 +347,8 @@ bool closeLoadSave(void)
 		intShowPowerBar();
 
 	}
-	widgReleaseScreen(psRequestScreen);
+	delete psRequestScreen;
+	psRequestScreen = NULL;
 	// need to "eat" up the return key so it don't pass back to game.
 	inputLoseFocus();
 	return true;
@@ -443,12 +433,13 @@ bool runLoadSave(bool bResetMissionWidgets)
 	// clicked a load entry
 	if (id >= LOADENTRY_START  &&  id <= LOADENTRY_END)
 	{
+		W_BUTTON *slotButton = (W_BUTTON *)widgGetFromID(psRequestScreen, id);
 
 		if (mode)								// Loading, return that entry.
 		{
-			if (((W_BUTTON *)widgGetFromID(psRequestScreen, id))->pText)
+			if (!slotButton->pText.isEmpty())
 			{
-				sprintf(sRequestResult, "%s%s%s", NewSaveGamePath, ((W_BUTTON *)widgGetFromID(psRequestScreen, id))->pText, sExt);
+				ssprintf(sRequestResult, "%s%s%s", NewSaveGamePath, ((W_BUTTON *)widgGetFromID(psRequestScreen, id))->pText.toUtf8().constData(), sExt);
 			}
 			else
 			{
@@ -462,39 +453,33 @@ bool runLoadSave(bool bResetMissionWidgets)
 
 			if (! widgGetFromID(psRequestScreen, SAVEENTRY_EDIT))
 			{
-				// add blank box.
-				W_EDBINIT sEdInit;
-				sEdInit.formID = LOADSAVE_FORM;
-				sEdInit.id    = SAVEENTRY_EDIT;
-				sEdInit.x	  =	widgGetFromID(psRequestScreen, id)->x;
-				sEdInit.y     =	widgGetFromID(psRequestScreen, id)->y;
-				sEdInit.width = widgGetFromID(psRequestScreen, id)->width;
-				sEdInit.height = widgGetFromID(psRequestScreen, id)->height;
-				sEdInit.pText = ((W_BUTTON *)widgGetFromID(psRequestScreen, id))->pText;
-				sEdInit.pBoxDisplay = displayLoadSaveEdit;
-				widgAddEditBox(psRequestScreen, &sEdInit);
+				WIDGET *parent = widgGetFromID(psRequestScreen, LOADSAVE_FORM);
 
-				if (((W_BUTTON *)widgGetFromID(psRequestScreen, id))->pText != NULL)
+				// add blank box.
+				W_EDITBOX *saveEntryEdit = new W_EDITBOX(parent);
+				saveEntryEdit->id = SAVEENTRY_EDIT;
+				saveEntryEdit->setGeometry(slotButton->geometry());
+				saveEntryEdit->setString(slotButton->getString());
+				saveEntryEdit->setBoxColours(WZCOL_MENU_LOAD_BORDER, WZCOL_MENU_LOAD_BORDER, WZCOL_MENU_BACKGROUND);
+
+				if (!slotButton->pText.isEmpty())
 				{
-					snprintf(sDelete, sizeof(sDelete), "%s%s%s", NewSaveGamePath,
-					         ((W_BUTTON *)widgGetFromID(psRequestScreen, id))->pText, sExt);
+					ssprintf(sDelete, "%s%s%s", NewSaveGamePath, slotButton->pText.toUtf8().constData(), sExt);
 				}
 				else
 				{
 					sstrcpy(sDelete, "");
 				}
 
-				widgHide(psRequestScreen, id);		// hide the old button
+				slotButton->hide();  // hide the old button
 				chosenSlotId = id;
 
 				// auto click in the edit box we just made.
-				context.psScreen	= psRequestScreen;
-				context.psForm		= (W_FORM *)psRequestScreen->psForm;
 				context.xOffset		= 0;
 				context.yOffset		= 0;
 				context.mx			= mouseX();
 				context.my			= mouseY();
-				widgGetFromID(psRequestScreen, SAVEENTRY_EDIT)->clicked(&context);
+				saveEntryEdit->clicked(&context);
 			}
 			else
 			{
@@ -524,13 +509,11 @@ bool runLoadSave(bool bResetMissionWidgets)
 			if (i != chosenSlotId)
 			{
 
-				if (((W_BUTTON *)widgGetFromID(psRequestScreen, i))->pText
-				    && strcmp(sTemp,	((W_BUTTON *)widgGetFromID(psRequestScreen, i))->pText) == 0)
+				if (!((W_BUTTON *)widgGetFromID(psRequestScreen, i))->pText.isEmpty()
+				    && strcmp(sTemp, ((W_BUTTON *)widgGetFromID(psRequestScreen, i))->pText.toUtf8().constData()) == 0)
 				{
 					widgDelete(psRequestScreen, SAVEENTRY_EDIT);	//unselect this box, and go back ..
 					widgReveal(psRequestScreen, chosenSlotId);
-					// move mouse to same box..
-					//	setMousePos(widgGetFromID(psRequestScreen,i)->pos.x ,widgGetFromID(psRequestScreen,i)->pos.y);
 					audio_PlayTrack(ID_SOUND_BUILD_FAIL);
 					return true;
 				}
@@ -646,11 +629,11 @@ void removeWildcards(char *pStr)
 // ////////////////////////////////////////////////////////////////////////////
 // DISPLAY FUNCTIONS
 
-static void displayLoadBanner(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
+static void displayLoadBanner(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
 	PIELIGHT col;
-	UDWORD	x = xOffset + psWidget->x;
-	UDWORD	y = yOffset + psWidget->y;
+	int x = xOffset + psWidget->x();
+	int y = yOffset + psWidget->y();
 
 	if (psWidget->pUserData)
 	{
@@ -661,28 +644,27 @@ static void displayLoadBanner(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, 
 		col = WZCOL_MENU_LOAD_BORDER;
 	}
 
-	pie_BoxFill(x, y, x + psWidget->width, y + psWidget->height, col);
-	pie_BoxFill(x + 2, y + 2, x + psWidget->width - 2, y + psWidget->height - 2, WZCOL_MENU_BACKGROUND);
+	pie_BoxFill(x, y, x + psWidget->width(), y + psWidget->height(), col);
+	pie_BoxFill(x + 2, y + 2, x + psWidget->width() - 2, y + psWidget->height() - 2, WZCOL_MENU_BACKGROUND);
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-static void displayLoadSlot(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
+static void displayLoadSlot(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
-
-	UDWORD	x = xOffset + psWidget->x;
-	UDWORD	y = yOffset + psWidget->y;
+	int x = xOffset + psWidget->x();
+	int y = yOffset + psWidget->y();
 	char  butString[64];
 
-	drawBlueBox(x, y, psWidget->width, psWidget->height);	//draw box
+	drawBlueBox(x, y, psWidget->width(), psWidget->height());  //draw box
 
-	if (((W_BUTTON *)psWidget)->pText)
+	if (!((W_BUTTON *)psWidget)->pText.isEmpty())
 	{
-		sstrcpy(butString, ((W_BUTTON *)psWidget)->pText);
+		sstrcpy(butString, ((W_BUTTON *)psWidget)->pText.toUtf8().constData());
 
 		iV_SetFont(font_regular);									// font
 		iV_SetTextColour(WZCOL_FORM_TEXT);
 
-		while (iV_GetTextWidth(butString) > psWidget->width)
+		while (iV_GetTextWidth(butString) > psWidget->width())
 		{
 			butString[strlen(butString) - 1] = '\0';
 		}
@@ -692,19 +674,6 @@ static void displayLoadSlot(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ
 	}
 }
 
-// ////////////////////////////////////////////////////////////////////////////
-static void displayLoadSaveEdit(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
-{
-	UDWORD	x = xOffset + psWidget->x;
-	UDWORD	y = yOffset + psWidget->y;
-	UDWORD	w = psWidget->width;
-	UDWORD  h = psWidget->height;
-
-	pie_BoxFill(x, y, x + w, y + h, WZCOL_MENU_LOAD_BORDER);
-	pie_BoxFill(x + 1, y + 1, x + w - 1, y + h - 1, WZCOL_MENU_BACKGROUND);
-}
-
-// ////////////////////////////////////////////////////////////////////////////
 void drawBlueBox(UDWORD x, UDWORD y, UDWORD w, UDWORD h)
 {
 	pie_BoxFill(x - 1, y - 1, x + w + 1, y + h + 1, WZCOL_MENU_BORDER);

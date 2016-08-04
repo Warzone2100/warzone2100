@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 2007  Giel van Schijndel
-	Copyright (C) 2007-2013  Warzone 2100 Project
+	Copyright (C) 2007-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -23,7 +23,6 @@
 
 #include "lib/framework/stdio_ext.h"
 
-#if !defined(WZ_NOSOUND)
 #ifdef WZ_OS_MAC
 # include <OpenAL/al.h>
 # include <OpenAL/alc.h>
@@ -117,4 +116,3 @@ ALenum __sound_GetContextError(ALCdevice *device, const char *location_descripti
 
 	return error;
 }
-#endif // !defined(WZ_NOSOUND)

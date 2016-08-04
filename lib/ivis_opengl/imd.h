@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -19,7 +19,6 @@
 */
 #ifndef _imd_
 #define _imd_
-
 
 #include "ivisdef.h"
 
@@ -42,15 +41,17 @@
 
 // polygon flags	b0..b7: col, b24..b31: anim index
 
-
 #define iV_IMD_TEX 0x00000200		// this is both a polygon and pie flag
 #define iV_IMD_TEXANIM 0x00004000 // iV_IMD_TEX must be set also
 
 //*************************************************************************
 
-extern iIMDShape *iV_ProcessIMD(const char **ppFileData, const char *FileDataEnd);
+void modelShutdown();
 
-extern bool iV_IMDSave(char *filename, iIMDShape *s, bool PieIMD);
-extern void iV_IMDRelease(iIMDShape *s);
+/// Get filename of model pointer. This is really slow, so do not abuse for logging
+/// purposes, for example.
+const QString &modelName(iIMDShape *model);
+
+iIMDShape *modelGet(const QString &filename);
 
 #endif

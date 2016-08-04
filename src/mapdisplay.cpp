@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -53,9 +53,6 @@ void renderResearchToBuffer(RESEARCH *psResearch, UDWORD OriginX, UDWORD OriginY
 
 	pie_SetGeometricOffset(OriginX + 10, OriginY + 10);
 
-	// Pitch down a bit
-	//pie_MatRotX(-65536/12);
-
 	// Rotate round
 	// full rotation once every 2 seconds..
 	angle = (realTime % ROTATE_TIME) * 360 / ROTATE_TIME;
@@ -104,18 +101,17 @@ void renderResearchToBuffer(RESEARCH *psResearch, UDWORD OriginX, UDWORD OriginY
 		else
 		{
 			compID = StatIsComponent(psResearch->psStat);
-			if (compID != COMP_UNKNOWN)
+			if (compID != COMP_NUMCOMPONENTS)
 			{
 				//this defines how the button is drawn
 				IMDType = IMDTYPE_COMPONENT;
 				psResGraphic = psResearch->psStat;
 				// FIXME: Another kludge to deal with the superTransport to make it "fit" the display.
-				// Using pName, should be safe to compare, pName doesn't get translated.
-				if (!strcmp("R-SuperTransport", psResearch->pName))
+				if (psResearch->id.compare("R-SuperTransport") == 0)
 				{
 					scale = RESEARCH_COMPONENT_SCALE / 3;
 				}
-				else if (!strcmp("R-Cyborg-Transport", psResearch->pName))
+				else if (psResearch->id.compare("R-Cyborg-Transport") == 0)
 				{
 					scale = RESEARCH_COMPONENT_SCALE / 2;
 				}
@@ -164,15 +160,15 @@ void renderResearchToBuffer(RESEARCH *psResearch, UDWORD OriginX, UDWORD OriginY
 	/* display the IMDs */
 	if (IMDType == IMDTYPE_COMPONENT)
 	{
-		displayComponentButton(psResGraphic, &Rotation, &Position, true, scale);
+		displayComponentButton(psResGraphic, &Rotation, &Position, scale);
 	}
 	else if (IMDType == IMDTYPE_RESEARCH)
 	{
-		displayResearchButton(psResGraphic, &Rotation, &Position, true, scale);
+		displayResearchButton(psResGraphic, &Rotation, &Position, scale);
 	}
 	else if (IMDType == IMDTYPE_STRUCTURESTAT)
 	{
-		displayStructureStatButton((STRUCTURE_STATS *)psResGraphic, &Rotation, &Position, true, scale);
+		displayStructureStatButton((STRUCTURE_STATS *)psResGraphic, &Rotation, &Position, scale);
 	}
 	else
 	{

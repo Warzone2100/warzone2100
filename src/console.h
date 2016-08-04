@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -28,35 +28,39 @@
 enum CONSOLE_TEXT_JUSTIFICATION
 {
 	LEFT_JUSTIFY,
+	DEFAULT_JUSTIFY = LEFT_JUSTIFY,
 	RIGHT_JUSTIFY,
-	CENTRE_JUSTIFY,
-	DEFAULT_JUSTIFY
+	CENTRE_JUSTIFY
 };
 
 /* ID to use for addConsoleMessage() in case of a system message */
 #define	SYSTEM_MESSAGE				(-1)
-#define NOTIFY_MESSAGE				(-2)		// mainly used for lobby messages
+#define NOTIFY_MESSAGE				(-2)	// mainly used for lobby & error messages
+#define INFO_MESSAGE				(-3)	// This type is not stored, it is used for simple messages
 
 extern char ConsoleString[MAX_CONSOLE_TMP_STRING_LENGTH];
 
-bool addConsoleMessage(const char *Text, CONSOLE_TEXT_JUSTIFICATION jusType, SDWORD player);
+bool addConsoleMessage(const char *Text, CONSOLE_TEXT_JUSTIFICATION jusType, SDWORD player, bool team = false);
 void updateConsoleMessages(void);
 void initConsoleMessages(void);
 void removeTopConsoleMessage(void);
 void displayConsoleMessages(void);
+void displayOldMessages(void);
 void flushConsoleMessages(void);
 void setConsoleBackdropStatus(bool state);
 void enableConsoleDisplay(bool state);
 bool getConsoleDisplayStatus(void);
-void setDefaultConsoleJust(CONSOLE_TEXT_JUSTIFICATION defJ);
 void setConsoleSizePos(UDWORD x, UDWORD y, UDWORD width);
 void setConsolePermanence(bool state, bool bClearOld);
+void clearActiveConsole(void);
 bool mouseOverConsoleBox(void);
-UDWORD getNumberConsoleMessages(void);
+bool mouseOverHistoryConsoleBox(void);
+int getNumberConsoleMessages(void);
 void setConsoleLineInfo(UDWORD vis);
 UDWORD getConsoleLineInfo(void);
 void permitNewConsoleMessages(bool allow);
 void toggleConsoleDrop(void);
+void setHistoryMode(bool mode);
 
 #if defined(DEBUG)
 # define debug_console(...) \
@@ -69,22 +73,16 @@ extern void console(const char *pFormat, ...); /// Print always to the ingame co
 
 /**
  Usage:
-
-  CONPRINTF(StringPointer,(StringPointer,"format",data));
-
-  StringPointer should always be ConsoleString.
+	CONPRINTF(StringPointer,(StringPointer,"format",data));
+	StringPointer should always be ConsoleString.
+	NOTE: This class of messages are NOT saved in the history
+	logs.  These are "one shot" type of messages.
 
  eg.
-
 	CONPRINTF(ConsoleString,(ConsoleString,"Hello %d",123));
-
-	Doing it this way will work on both PC and Playstation.
-
-	Be very carefull that the resulting string is no longer
-	than MAX_CONSOLE_TMP_STRING_LENGTH.
 */
 #define CONPRINTF(s,x) \
 	sprintf x; \
-	addConsoleMessage(s,DEFAULT_JUSTIFY,SYSTEM_MESSAGE)
+	addConsoleMessage(s, DEFAULT_JUSTIFY, INFO_MESSAGE)
 
 #endif // __INCLUDED_SRC_CONSOLE_H__

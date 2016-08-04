@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -32,6 +32,12 @@
 #define IDTRANS_LAUNCH			9010	//The Transporter Launch button
 #define	IDTRANS_CAPACITY		9500	//The Transporter capacity label
 
+//defines how much space is on the Transporter
+#define TRANSPORTER_CAPACITY		10
+
+/// how much cargo capacity a droid takes up
+int transporterSpaceRequired(const DROID *psDroid);
+
 //initialises Transporter variables
 extern void initTransporters(void);
 // Refresh the transporter screen.
@@ -51,7 +57,7 @@ void transporterRemoveDroid(DROID *psTransport, DROID *psDroid, QUEUE_MODE mode)
 bool checkTransporterSpace(DROID const *psTransporter, DROID const *psAssigned, bool mayFlash = true);
 /*calculates how much space is remaining on the transporter - allows droids to take
 up different amount depending on their body size - currently all are set to one!*/
-extern UDWORD calcRemainingCapacity(DROID *psTransporter);
+int calcRemainingCapacity(const DROID *psTransporter);
 
 extern bool transporterIsEmpty(const DROID *psTransporter);
 
@@ -80,9 +86,6 @@ extern void transporterSetScriptCurrent(DROID *psTransporter);
 
 /* get current transporter (for script callbacks) */
 extern DROID *transporterGetScriptCurrent(void);
-
-/* check whether transporter on mission */
-//extern bool transporterOnMission( void );
 
 /*called when a Transporter has arrived back at the LZ when sending droids to safety*/
 extern void resetTransporter(void);

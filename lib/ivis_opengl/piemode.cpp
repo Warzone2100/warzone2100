@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -34,7 +34,6 @@
 #include "lib/ivis_opengl/piestate.h"
 #include "lib/ivis_opengl/piemode.h"
 #include "piematrix.h"
-#include "lib/ivis_opengl/ivi.h"
 #include "lib/ivis_opengl/piefunc.h"
 #include "lib/ivis_opengl/tex.h"
 #include "lib/ivis_opengl/pieclip.h"
@@ -66,7 +65,6 @@ bool pie_Initialise(void)
 	}
 
 	pie_MatInit();
-	_TEX_INDEX = 0;
 
 	rendSurface.width	= pie_GetVideoBufferWidth();
 	rendSurface.height	= pie_GetVideoBufferHeight();
@@ -97,6 +95,7 @@ void pie_ScreenFlip(int clearMode)
 
 	screenDoDumpToDiskIfRequired();
 	wzScreenFlip();
+	wzPerfFrame();
 	if (clearMode & CLEAR_OFF_AND_NO_BUFFER_DOWNLOAD)
 	{
 		return;
@@ -112,7 +111,7 @@ void pie_ScreenFlip(int clearMode)
 
 	if (screen_GetBackDrop())
 	{
-		screen_Upload(NULL, screen_getMapPreview());
+		screen_Display();
 	}
 }
 

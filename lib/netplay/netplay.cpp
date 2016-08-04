@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -167,12 +167,12 @@ unsigned NET_PlayerConnectionStatus[CONNECTIONSTATUS_NORMAL][MAX_PLAYERS];
 
 // ////////////////////////////////////////////////////////////////////////////
 /************************************************************************************
- **  NOTE (!)  Change the versionString when net code changes!!
- **            ie ("trunk", "2.1.3", "3.0", ...)
+ **  NOTE (!)  Increment NETCODE_VERSION_MINOR on each release.
+ **
  ************************************************************************************
 **/
 static char const *versionString = version_getVersionString();
-static int NETCODE_VERSION_MAJOR = 0xB00;
+static int NETCODE_VERSION_MAJOR = 0x1000;
 static int NETCODE_VERSION_MINOR = 0;
 
 bool NETisCorrectVersion(uint32_t game_version_major, uint32_t game_version_minor)
@@ -714,34 +714,34 @@ static bool NETsendGAMESTRUCT(Socket *sock, const GAMESTRUCT *ourgamestruct)
 	unsigned int i;
 	ssize_t result;
 
+	auto push32 = [&](uint32_t value) {
+		uint32_t swapped = htonl(value);
+		memcpy(buffer, &swapped, sizeof(swapped));
+		buffer += sizeof(swapped);
+	};
+
 	// Now dump the data into the buffer
 	// Copy 32bit large big endian numbers
-	*(uint32_t *)buffer = htonl(ourgamestruct->GAMESTRUCT_VERSION);
-	buffer += sizeof(uint32_t);
+	push32(ourgamestruct->GAMESTRUCT_VERSION);
 
 	// Copy a string
 	strlcpy(buffer, ourgamestruct->name, sizeof(ourgamestruct->name));
 	buffer += sizeof(ourgamestruct->name);
 
 	// Copy 32bit large big endian numbers
-	*(int32_t *)buffer = htonl(ourgamestruct->desc.dwSize);
-	buffer += sizeof(int32_t);
-	*(int32_t *)buffer = htonl(ourgamestruct->desc.dwFlags);
-	buffer += sizeof(int32_t);
+	push32(ourgamestruct->desc.dwSize);
+	push32(ourgamestruct->desc.dwFlags);
 
 	// Copy yet another string
 	strlcpy(buffer, ourgamestruct->desc.host, sizeof(ourgamestruct->desc.host));
 	buffer += sizeof(ourgamestruct->desc.host);
 
 	// Copy 32bit large big endian numbers
-	*(int32_t *)buffer = htonl(ourgamestruct->desc.dwMaxPlayers);
-	buffer += sizeof(int32_t);
-	*(int32_t *)buffer = htonl(ourgamestruct->desc.dwCurrentPlayers);
-	buffer += sizeof(int32_t);
+	push32(ourgamestruct->desc.dwMaxPlayers);
+	push32(ourgamestruct->desc.dwCurrentPlayers);
 	for (i = 0; i < ARRAY_SIZE(ourgamestruct->desc.dwUserFlags); ++i)
 	{
-		*(int32_t *)buffer = htonl(ourgamestruct->desc.dwUserFlags[i]);
-		buffer += sizeof(int32_t);
+		push32(ourgamestruct->desc.dwUserFlags[i]);
 	}
 
 	// Copy a string
@@ -772,40 +772,31 @@ static bool NETsendGAMESTRUCT(Socket *sock, const GAMESTRUCT *ourgamestruct)
 	buffer += sizeof(ourgamestruct->modlist);
 
 	// Copy 32bit large big endian numbers
-	*(uint32_t *)buffer = htonl(ourgamestruct->game_version_major);
-	buffer += sizeof(uint32_t);
+	push32(ourgamestruct->game_version_major);
 
 	// Copy 32bit large big endian numbers
-	*(uint32_t *)buffer = htonl(ourgamestruct->game_version_minor);
-	buffer += sizeof(uint32_t);
+	push32(ourgamestruct->game_version_minor);
 
 	// Copy 32bit large big endian numbers
-	*(uint32_t *)buffer = htonl(ourgamestruct->privateGame);
-	buffer += sizeof(uint32_t);
+	push32(ourgamestruct->privateGame);
 
 	// Copy 32bit large big endian numbers
-	*(uint32_t *)buffer = htonl(ourgamestruct->pureMap);
-	buffer += sizeof(uint32_t);
+	push32(ourgamestruct->pureMap);
 
 	// Copy 32bit large big endian numbers
-	*(uint32_t *)buffer = htonl(ourgamestruct->Mods);
-	buffer += sizeof(uint32_t);
+	push32(ourgamestruct->Mods);
 
 	// Copy 32bit large big endian numbers
-	*(uint32_t *)buffer = htonl(ourgamestruct->gameId);
-	buffer += sizeof(uint32_t);
+	push32(ourgamestruct->gameId);
 
 	// Copy 32bit large big endian numbers
-	*(uint32_t *)buffer = htonl(ourgamestruct->limits);
-	buffer += sizeof(uint32_t);
+	push32(ourgamestruct->limits);
 
 	// Copy 32bit large big endian numbers
-	*(uint32_t *)buffer = htonl(ourgamestruct->future3);
-	buffer += sizeof(uint32_t);
+	push32(ourgamestruct->future3);
 
 	// Copy 32bit large big endian numbers
-	*(uint32_t *)buffer = htonl(ourgamestruct->future4);
-	buffer += sizeof(uint32_t);
+	push32(ourgamestruct->future4);
 
 	debug(LOG_NET, "sending GAMESTRUCT, size: %u", (unsigned int)sizeof(buf));
 
@@ -1459,7 +1450,7 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 			NETuint8_t(&sender);
 			NETuint8_t(&receiver);
 			NETnetMessage(&message);  // Must delete message later.
-			std::auto_ptr<NetMessage const> deleteLater(message);
+			std::unique_ptr<NetMessage const> deleteLater(message);
 			if (!NETend())
 			{
 				debug(LOG_ERROR, "Incomplete NET_SEND_TO_PLAYER.");
@@ -2955,7 +2946,7 @@ bool NETfindGame(void)
 	SocketSet_DelSocket(socket_set, tcp_socket);		// mark it invalid (we are done with it)
 	socketClose(tcp_socket);
 	tcp_socket = NULL;
-	addConsoleMessage(NetPlay.MOTD, DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+
 	return true;
 }
 
@@ -3756,6 +3747,8 @@ const char *messageTypeToString(unsigned messageType_)
 	case GAME_GAME_TIME:                return "GAME_GAME_TIME";
 	case GAME_PLAYER_LEFT:              return "GAME_PLAYER_LEFT";
 	case GAME_DROIDDISEMBARK:           return "GAME_DROIDDISEMBARK";
+	case GAME_SYNC_REQUEST:             return "GAME_SYNC_REQUEST";
+
 	// The following messages are used for debug mode.
 	case GAME_DEBUG_MODE:               return "GAME_DEBUG_MODE";
 	case GAME_DEBUG_ADD_DROID:          return "GAME_DEBUG_ADD_DROID";

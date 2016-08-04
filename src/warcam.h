@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -38,7 +38,7 @@
 #define ROT_VELOCITY_CONSTANT 2.5f
 
 /* The different tracking states */
-enum
+enum WARSTATUS
 {
 	CAM_INACTIVE,
 	CAM_REQUEST,
@@ -51,20 +51,20 @@ enum
 /* Storage for old viewnagles etc */
 struct WARCAM
 {
-	UDWORD	status;
-	UDWORD	trackClass;
-	UDWORD	lastUpdate;
-	iView	oldView;
+	WARSTATUS status;
+	UDWORD trackClass;
+	UDWORD lastUpdate;
+	iView oldView;
 
-	Vector3f	acceleration;
-	Vector3f	velocity;
-	Vector3f	position;
+	Vector3f acceleration;
+	Vector3f velocity;
+	Vector3f position;
 
-	Vector3f	rotation;
-	Vector3f	rotVel;
-	Vector3f	rotAccel;
+	Vector3f rotation;
+	Vector3f rotVel;
+	Vector3f rotAccel;
 
-	UDWORD	oldDistance;
+	UDWORD oldDistance;
 	BASE_OBJECT *target;
 };
 

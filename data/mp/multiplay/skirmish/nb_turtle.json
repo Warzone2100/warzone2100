@@ -1,0 +1,7 @@
+{
+    "AI": {
+        "js": "nb_turtle.js",
+        "name": "Turtle AI",
+        "tip": "Tower wars AI, based on NullBot"
+    }
+}

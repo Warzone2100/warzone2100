@@ -32,7 +32,6 @@
 #define ALL_ALLIES				-1
 
 #define	BASE_DEFEND_DURATION	(3 * 60)
-#define	BASE_DEFEND_RADIUS		(15 * TILE)
 
 // Delay before we repeat our request, in seconds
 #define HELP_REQUEST_INTERVAL	(3 * 60)
@@ -163,7 +162,7 @@ private int				sender,x,y,beaconX[8],beaconY[8],tBeacon[8],
 						tLastHelpRequest,lastHelpPlayer,tHelp,tHelpTimeout,helpX,helpY;
 private string			message;
 
-private	int				defendX,defendY,defendRadius,tDefendStart,tDefendTimeout,
+private	int				defendX,defendY,__defendRadiusUnused,tDefendStart,tDefendTimeout,
 						defendMoveType,baseRange,curTech,numVtolAttackGroups,numAttackVtols,
 						numDefendVtols,rebuildStructX[MAX_REBUILD_STRUCT],rebuildStructY[MAX_REBUILD_STRUCT],countRebuildStruct;
 private	STRUCTURESTAT	rebuildStructStat[MAX_REBUILD_STRUCT];
@@ -261,7 +260,7 @@ function void messagePlayerAddressed(int _playerToMessage, int _playersToAddress
 function bool canSeeAllies();
 function bool baseInTrouble();
 function string m_affirmative();
-function void defendLocation(int _defendX, int _defendY, int _tDefendTimeout, int _defendRadius, bool _bMove);
+function void defendLocation(int _defendX, int _defendY, int _tDefendTimeout, bool _bMove);
 function void stopDefendingLocation();
 function bool defendingLocation();
 function bool defendLocationTimeout();
@@ -325,7 +324,6 @@ event initialisedEvent(CALL_GAMEINIT)
 	helpY = -1;
 	defendX = -1;
 	defendY = -1;
-	defendRadius = -1;
 	tDefendStart = -1;
 	tDefendTimeout = -1;
 	defendMoveType = -1;		//move or scout
@@ -384,6 +382,19 @@ event initialisedEvent(CALL_GAMEINIT)
 		bRunning = false;
 		shutDownAI();
 	}
+}
+
+// check whether we have at least one structure of that type
+function bool haveStructure(STRUCTURESTAT type) 
+{
+	return getStructure(type, me) != NULLOBJECT;
+}
+
+// check if we are getting any income
+function bool havePowerSource()
+{
+	// we don't check buildings being finished here
+	return haveStructure(powGen) and haveStructure(derrick);
 }
 
 // I am not sure why we need this hack, but the AI can still end up not researching anything at times
@@ -542,7 +553,7 @@ event buildFundamentals(inactive)
 
 event startLevel(startLevelTr)
 {
-	setEventTrigger(buildFundamentals, chainloadTr);
+	setEventTrigger(buildFundamentals, slowloadTr);
 	setEventTrigger(conDroids, chainloadTr);
 	setEventTrigger(doResearch, chainloadTr);
 	setEventTrigger(buildDerrick, slowloadTr);
@@ -667,6 +678,13 @@ event buildDerrick(buildDerrickTr)
 	local FEATURE	_oil, _closestOil;
 	local int	_bestDist, _newDist;
 	local DROID	_search;
+
+	// what if we can't waste power on building derricks because we don't have a gen yet?
+	if (playerPower(me) < 300 and haveStructure(derrick) and not haveStructure(powGen))
+	{
+		setEventTrigger(buildDerrick, slowloadTr);
+		exit;
+	}
 
 	_bestDist = 99999;
 	_closestOil = NULLOBJECT;
@@ -827,6 +845,11 @@ event buildOilDefenseOrRetreat(buildOilDefenseOrRetreatTr)
 //mortar etc.. rules. build sensor towers and emplacements.
 event incendry(incendryTr)
 {
+	if (not isStructureAvailable(sensorTower, me))
+	{
+		exit;
+	}
+
 	initEnumStruct(FALSE,sensorTower,me,me);
 
 	count = 0;
@@ -837,12 +860,7 @@ event incendry(incendryTr)
 		structure = enumStruct();
 	}
 
-	if (not isStructureAvailable(sensorTower, me))
-	{
-		exit;
-	}
-
-	if (count < (gameTime/4200) and isStructureAvailable(sensorTower, me))		// every 7 mins
+	if (count < (gameTime/4200))		// every 7 mins
 	{
 		// if not found build a sensor tower.
 		// find a place to build.
@@ -1088,6 +1106,10 @@ event buildExpand( buildExpandTr )
 //	Structure (fac/res/pow) upgrades
 event upgradeStructures(upgradeStructuresTr )
 {
+	if (not havePowerSource()) 
+	{
+		exit;
+	}
 	initIterateGroup(buildGroup);				// find idle droids in build group.
 	droid = iterateGroup(buildGroup);
 	while(droid != NULLOBJECT)
@@ -1503,7 +1525,7 @@ event structBuilt(structBuiltTr)
 
 	// Check if available trucks need to build more absolute necessities right away. We need a trigger here because
 	// droids involved in building have not yet come out of their build orders.
-	setEventTrigger(buildFundamentals, chainloadTr);
+	setEventTrigger(buildFundamentals, slowloadTr);
 
 	//see if we have just rebuilt a destroyed structure
 	_count = 0;
@@ -1691,18 +1713,19 @@ function STRUCTURE findIdleStructure(STRUCTURESTAT _structType, bool _bIdleOnly)
 // build repair droids.
 event repairDroids(repairDroidsTr)
 {
-
 	// if we're running low on repair droids, build some..
 	if(numRepairUnits <3)
 	{
 		initEnumStruct(FALSE,factory,me,me);
 		structure= enumStruct();							// find factory.
-		if( (structure != NULLOBJECT) and (getDroidCount(me) < MAX_DROIDS) )
+		if (structure != NULLOBJECT)
 		{
-			buildDroid(repairUnit, structure, me, 1);	// build repairunit.
+			if ((getDroidCount(me) < MAX_DROIDS) and (skCanBuildTemplate(me, structure, repairUnit)))
+			{
+				buildDroid(repairUnit, structure, me, 1);	// build repairunit.
+			}
 		}
 	}
-
 }
 
 
@@ -1728,6 +1751,11 @@ event factoryEvent(factoryEventTr)
 
 function bool needTank()
 {
+	if(not havePowerSource())
+	{
+		return FALSE;
+	}
+	
 	if((defendGroup.members < maxDefenders[curTech]) or (maxDefenders[curTech] == UNLIMITED))
 	{
 		return TRUE;
@@ -2216,6 +2244,13 @@ event doResearch(doResearchTr)
 {
 	local	int		_techIndex,_numResearching;
 
+	// don't throw in half of your money on research in T3 no bases when we don't have any income yet
+	if (isStructureAvailable(facModule,me) and not havePowerSource())
+	{
+		setEventTrigger(doResearch, doResearchTr);
+		exit;
+	}
+	
 	_techIndex = 0;	//research start
 	_numResearching = numStructBusyByType(resLab);
 
@@ -3312,7 +3347,7 @@ function void helpPlayer(int _playerToHelp, int _helpX, int _helpY)
 	helpY = _helpY;
 
 	/* Scouts and attackers go to help */
-	defendLocation(_helpX, _helpY, tHelpTimeout, BASE_DEFEND_RADIUS, (_playerToHelp == me));
+	defendLocation(_helpX, _helpY, tHelpTimeout, (_playerToHelp == me));
 }
 
 /* Returns a random affirmative responce */
@@ -3700,17 +3735,17 @@ function void doRequestHelp(int _helpX, int _helpY)
 	messagePlayer(ALL_ALLIES, M_REQUEST_HELP, MAX_PROBABILITY);
 }
 
-function void defendLocation(int _defendX, int _defendY, int _tDefendTimeout, int _defendRadius, bool _bMove)
+function void defendLocation(int _defendX, int _defendY, int _tDefendTimeout, bool _bMove)
 {
-	dbg("starting defending for " & _tDefendTimeout - (gameTime / 10) & " secs, with defend radius " & _defendRadius, me);
+	local int defendRadius;
 
-	ASSERT(_defendRadius >= TILE,
-		"defendLocation: defendRadius too low:" & _defendRadius, me);
+	defendRadius = 15 * TILE;
+
+	dbg("starting defending for " & _tDefendTimeout - (gameTime / 10) & " secs, with defend radius " & defendRadius, me);
 
 	defendX = _defendX;
 	defendY = _defendY;
 
-	defendRadius = _defendRadius;
 	tDefendStart = gameTime / 10;
 
 	/* Should already include travel time */
@@ -3725,7 +3760,7 @@ function void defendLocation(int _defendX, int _defendY, int _tDefendTimeout, in
 	/* Send attackers */
 	if(attackGroup.members > 0)
 	{
-		if(distBetweenTwoPoints(attackGroup.x, attackGroup.y, _defendX, _defendY) > _defendRadius)
+		if(distBetweenTwoPoints(attackGroup.x, attackGroup.y, _defendX, _defendY) > defendRadius)
 		{
 			orderGroupLoc(attackGroup, defendMoveType, _defendX, _defendY);
 		}
@@ -3740,8 +3775,6 @@ function void stopDefendingLocation()
 
 	defendX = -1;
 	defendY = -1;
-
-	defendRadius = -1;
 
 	tDefendStart = -1;
 	tDefendTimeout = -1;
@@ -3764,23 +3797,23 @@ function bool defendingLocation()
 
 event manageDefendLocationEv(inactive)
 {
+	local int defendRadius;
 	local DROID _droid;
 
-	dbg("manageDefendLocationEv", me);
+	if (not defendingLocation())
+	{
+		exit;
+	}
 
-	ASSERT(defendRadius >= TILE,
-		"manageDefendLocationEv: defendRadius too low:" & defendRadius, me);
+	defendRadius = 15 * TILE;
+
+	dbg("manageDefendLocationEv", me);
 
 	ASSERT(defendMoveType == DORDER_MOVE || defendMoveType == DORDER_SCOUT,
 		"manageDefendLocationEv: wrong move order:" & defendMoveType, me);
 
 	ASSERT(defendX > 0 && defendY > 0,
 		"manageDefendLocationEv: x/y coordinates:" & defendX & "/" & defendY, me);
-
-	if(!(defendX > 0 && defendY > 0)){
-		dbg("not defending???????", me);
-		exit;		//not defending?
-	}
 
 	/* Collect attackers */
 	initIterateGroup(attackGroup);
@@ -3836,18 +3869,6 @@ function bool insideBase(int _x, int _y)
 	}
 
 	return TRUE;
-}
-
-event keyPressed(CALL_KEY_PRESSED, ref count, ref count2)
-{
-	if(count == KEY_P and (count2 == KEY_RCTRL or count2 == KEY_LCTRL))
-	{
-		if(_DEBUG)
-		{
-			addPower(1000, me);
-			console("add power");
-		}
-	}
 }
 
 event watchMenu(everySec)

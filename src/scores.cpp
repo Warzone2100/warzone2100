@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -173,9 +173,7 @@ STAT_BAR	infoBars[] =
 };
 
 // --------------------------------------------------------------------
-static void drawStatBars(void);
 static void fillUpStats(void);
-static void dispAdditionalInfo(void);
 // --------------------------------------------------------------------
 
 /* The present mission data */
@@ -254,13 +252,6 @@ void	scoreUpdateVar(DATA_INDEX var)
 	}
 }
 
-
-// --------------------------------------------------------------------
-void	scoreDataToScreen(void)
-{
-	drawStatBars();
-}
-
 // Builds an ascii string for the passed in components 4:02:23 for example.
 void getAsciiTime(char *psText, unsigned time)
 {
@@ -280,14 +271,10 @@ void getAsciiTime(char *psText, unsigned time)
 	}
 }
 
-
-// -----------------------------------------------------------------------------------
-static void drawStatBars(void)
+void scoreDataToScreen(WIDGET *psWidget)
 {
-	UDWORD	index;
-	bool	bMoreBars;
-	UDWORD	x, y;
-	UDWORD	width, height;
+	int index, x, y, width, height;
+	bool bMoreBars;
 
 	if (!bDispStarted)
 	{
@@ -370,15 +357,8 @@ static void drawStatBars(void)
 			bMoreBars = false;
 		}
 	}
-	dispAdditionalInfo();
-}
 
-// -----------------------------------------------------------------------------------
-void	dispAdditionalInfo(void)
-{
-
-	/* We now need to display the mission time, game time,
-		average unit experience level an number of artefacts found */
+	/* We now need to display the mission time, game time, average unit experience level an number of artefacts found */
 
 	/* Firstly, top of the screen, number of artefacts found */
 	sprintf(text, _("ARTIFACTS RECOVERED: %d"), missionData.artefactsFound);
@@ -512,12 +492,7 @@ void	fillUpStats(void)
 /* This will save out the score data */
 bool writeScoreData(const char *fileName)
 {
-	WzConfig ini(fileName);
-	if (ini.status() != QSettings::NoError)
-	{
-		debug(LOG_ERROR, "Could not open %s", fileName);
-		return false;
-	}
+	WzConfig ini(fileName, WzConfig::ReadAndWrite);
 
 	// Dump the scores for the current player
 	ini.setValue("unitsBuilt", missionData.unitsBuilt);
@@ -540,12 +515,7 @@ bool writeScoreData(const char *fileName)
 /* This will read in the score data */
 bool readScoreData(const char *fileName)
 {
-	WzConfig ini(fileName);
-	if (ini.status() != QSettings::NoError)
-	{
-		debug(LOG_ERROR, "Could not open %s", fileName);
-		return false;
-	}
+	WzConfig ini(fileName, WzConfig::ReadOnly);
 
 	// Retrieve the score data for the current player
 	missionData.unitsBuilt = ini.value("unitsBuilt").toInt();

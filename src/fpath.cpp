@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -689,14 +689,12 @@ bool fpathCheck(Position orig, Position dest, PROPULSION_TYPE propulsion)
 	case PROPULSION_TYPE_WHEELED:
 	case PROPULSION_TYPE_TRACKED:
 	case PROPULSION_TYPE_LEGGED:
-	case PROPULSION_TYPE_SKI: 	// ?!
 	case PROPULSION_TYPE_HALF_TRACKED:
 		return origTile->limitedContinent == destTile->limitedContinent;
 	case PROPULSION_TYPE_HOVER:
 		return origTile->hoverContinent == destTile->hoverContinent;
-	case PROPULSION_TYPE_JUMP:
 	case PROPULSION_TYPE_LIFT:
-		return true;	// FIXME: This is not entirely correct for all possible maps. - Per
+		return true;	// assume no map uses skyscrapers to isolate areas
 	default:
 		break;
 	}

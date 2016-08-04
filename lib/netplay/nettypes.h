@@ -1,6 +1,6 @@
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2007-2013  Warzone 2100 Project
+	Copyright (C) 2007-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -27,6 +27,8 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/vector.h"
 #include "lib/netplay/netqueue.h"
+
+class QString;
 
 enum PACKETDIR
 {
@@ -86,9 +88,11 @@ void NETint64_t(int64_t *ip);
 void NETuint64_t(uint64_t *ip);
 void NETbool(bool *bp);
 void NETbool(bool *bp);
+void NETqstring(QString &str);
 void NETstring(char *str, uint16_t maxlen);
 void NETstring(char const *str, uint16_t maxlen);  ///< Encode-only version of NETstring.
 void NETbin(uint8_t *str, uint32_t len);
+void NETbytes(std::vector<uint8_t> *vec, unsigned maxLen = 10000);
 
 PACKETDIR NETgetPacketDir(void);
 

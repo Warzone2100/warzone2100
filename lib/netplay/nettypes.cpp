@@ -1,6 +1,6 @@
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2007-2013  Warzone 2100 Project
+	Copyright (C) 2007-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -26,6 +26,7 @@
 #include "lib/framework/wzglobal.h"
 #include "lib/framework/string_ext.h"
 #include <string.h>
+#include <QtCore/QStringList>
 
 #ifndef WZ_OS_WIN
 #include <arpa/inet.h>
@@ -184,7 +185,7 @@ static void queue(const Q &q, int32_t &v)
 	// Example: int32_t -5 -4 -3 -2 -1  0  1  2  3  4  5
 	// becomes uint32_t  9  7  5  3  1  0  2  4  6  8 10
 
-	uint32_t b = v << 1 ^ (-((uint32_t)v >> 31));
+	uint32_t b = (uint32_t)v << 1 ^ (-((uint32_t)v >> 31));
 	queue(q, b);
 	if (Q::Direction == Q::Read)
 	{
@@ -620,7 +621,6 @@ void NETbool(bool *bp)
 	*bp = !!i;
 }
 
-
 /** Sends or receives a string to or from the current network package.
  *  \param str    When encoding a packet this is the (NUL-terminated string to
  *                be sent in the current network package. When decoding this
@@ -664,10 +664,63 @@ void NETstring(char *str, uint16_t maxlen)
 	}
 }
 
+void NETqstring(QString &str)
+{
+	uint32_t len = str.size();
+
+	queueAuto(len);
+
+	if (NETgetPacketDir() == PACKET_DECODE)
+	{
+		str.resize(len);
+	}
+	for (unsigned i = 0; i < len; ++i)
+	{
+		uint16_t c;
+		if (NETgetPacketDir() == PACKET_ENCODE)
+		{
+			c = str[i].unicode();
+		}
+		queueAuto(c);
+		if (NETgetPacketDir() == PACKET_DECODE)
+		{
+			str[i] = QChar(c);
+		}
+	}
+}
+
 void NETstring(char const *str, uint16_t maxlen)
 {
 	ASSERT(NETgetPacketDir() == PACKET_ENCODE, "Writing to const!");
 	NETstring(const_cast<char *>(str), maxlen);
+}
+
+void NETbytes(std::vector<uint8_t> *vec, unsigned maxLen)
+{
+	/*
+	 * Strings sent over the network are prefixed with their length, sent as an
+	 * unsigned 16-bit integer, not including \0 termination.
+	 */
+
+	uint32_t len = NETgetPacketDir() == PACKET_ENCODE ? vec->size() : 0;
+	queueAuto(len);
+
+	if (len > maxLen)
+	{
+		debug(LOG_ERROR, "NETstring: %s packet, length %u truncated at %u", NETgetPacketDir() == PACKET_ENCODE ? "Encoding" : "Decoding", len, maxLen);
+	}
+
+	len = std::min<unsigned>(len, maxLen);  // Truncate length if necessary.
+	if (NETgetPacketDir() == PACKET_DECODE)
+	{
+		vec->clear();
+		vec->resize(len);  // vec->assign(len, 0) would call the wrong version of assign, here.
+	}
+
+	for (unsigned i = 0; i < len; ++i)
+	{
+		queueAuto((*vec)[i]);
+	}
 }
 
 void NETbin(uint8_t *str, uint32_t len)

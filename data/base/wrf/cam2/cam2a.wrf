@@ -28,3 +28,6 @@ file            SCRIPTVAL       "cam2ax.vlo"
 file            SCRIPTVAL       "vtols2a.vlo"
 file            SCRIPTVAL       "cam2arein.vlo"	
 file            SCRIPTVAL       "cam2tech.vlo"
+
+directory       "script"
+file            JAVASCRIPT      "rules.js"

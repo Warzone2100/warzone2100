@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -80,14 +80,14 @@ static	W_SCREEN	*psRequestScreen;					// Widget screen for requester
 bool		challengesUp = false;		///< True when interface is up and should be run.
 bool		challengeActive = false;	///< Whether we are running a challenge
 
-static void displayLoadBanner(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
+static void displayLoadBanner(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
 	PIELIGHT col = WZCOL_GREEN;
-	UDWORD	x = xOffset + psWidget->x;
-	UDWORD	y = yOffset + psWidget->y;
+	UDWORD	x = xOffset + psWidget->x();
+	UDWORD	y = yOffset + psWidget->y();
 
-	pie_BoxFill(x, y, x + psWidget->width, y + psWidget->height, col);
-	pie_BoxFill(x + 2, y + 2, x + psWidget->width - 2, y + psWidget->height - 2, WZCOL_MENU_BACKGROUND);
+	pie_BoxFill(x, y, x + psWidget->width(), y + psWidget->height(), col);
+	pie_BoxFill(x + 2, y + 2, x + psWidget->width() - 2, y + psWidget->height() - 2, WZCOL_MENU_BACKGROUND);
 }
 
 // quite the hack, game name is stored in global sRequestResult
@@ -96,17 +96,17 @@ void updateChallenge(bool gameWon)
 	char sPath[64], *fStr;
 	int seconds = 0, newtime = (gameTime - mission.startTime) / GAME_TICKS_PER_SEC;
 	bool victory = false;
-	WzConfig scores(CHALLENGE_SCORES);
+	WzConfig scores(CHALLENGE_SCORES, WzConfig::ReadAndWrite);
 
 	fStr = strrchr(sRequestResult, '/');
 	fStr++;	// skip slash
-	if (fStr == '\0')
+	if (*fStr == '\0')
 	{
 		debug(LOG_ERROR, "Bad path to challenge file (%s)", sRequestResult);
 		return;
 	}
 	sstrcpy(sPath, fStr);
-	sPath[strlen(sPath) - 4] = '\0';	// remove .ini
+	sPath[strlen(sPath) - 5] = '\0';	// remove .json
 	scores.beginGroup(sPath);
 	victory = scores.value("Victory", false).toBool();
 	seconds = scores.value("Seconds", 0).toInt();
@@ -126,23 +126,23 @@ void updateChallenge(bool gameWon)
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-static void displayLoadSlot(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
+static void displayLoadSlot(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
 
-	UDWORD	x = xOffset + psWidget->x;
-	UDWORD	y = yOffset + psWidget->y;
+	UDWORD	x = xOffset + psWidget->x();
+	UDWORD	y = yOffset + psWidget->y();
 	char  butString[64];
 
-	drawBlueBox(x, y, psWidget->width, psWidget->height);	//draw box
+	drawBlueBox(x, y, psWidget->width(), psWidget->height());	//draw box
 
-	if (((W_BUTTON *)psWidget)->pText)
+	if (!((W_BUTTON *)psWidget)->pText.isEmpty())
 	{
-		sstrcpy(butString, ((W_BUTTON *)psWidget)->pText);
+		sstrcpy(butString, ((W_BUTTON *)psWidget)->pText.toUtf8().constData());
 
 		iV_SetFont(font_regular);									// font
 		iV_SetTextColour(WZCOL_FORM_TEXT);
 
-		while (iV_GetTextWidth(butString) > psWidget->width)
+		while (iV_GetTextWidth(butString) > psWidget->width())
 		{
 			butString[strlen(butString) - 1] = '\0';
 		}
@@ -167,32 +167,24 @@ bool addChallenges()
 
 	(void) PHYSFS_mkdir(sSearchPath); // just in case
 
-	psRequestScreen = widgCreateScreen(); // init the screen
-	widgSetTipFont(psRequestScreen, font_regular);
+	psRequestScreen = new W_SCREEN; // init the screen
+
+	WIDGET *parent = psRequestScreen->psForm;
 
 	/* add a form to place the tabbed form on */
-	W_FORMINIT sFormInit;
-	sFormInit.formID = 0;				//this adds the blue background, and the "box" behind the buttons -Q
-	sFormInit.id = CHALLENGE_FORM;
-	sFormInit.style = WFORM_PLAIN;
-	sFormInit.x = (SWORD) CHALLENGE_X;
-	sFormInit.y = (SWORD) CHALLENGE_Y;
-	sFormInit.width = CHALLENGE_W;
-	// we need the form to be long enough for all resolutions, so we take the total number of items * height
-	// and * the gaps, add the banner, and finally, the fudge factor ;)
-	sFormInit.height = (slotsInColumn * CHALLENGE_ENTRY_H + CHALLENGE_HGAP * slotsInColumn) + CHALLENGE_BANNER_DEPTH + 20;
-	sFormInit.disableChildren = true;
-	sFormInit.pDisplay = intOpenPlainForm;
-	widgAddForm(psRequestScreen, &sFormInit);
+	IntFormAnimated *challengeForm = new IntFormAnimated(parent);
+	challengeForm->id = CHALLENGE_FORM;
+	challengeForm->setGeometry(CHALLENGE_X, CHALLENGE_Y, CHALLENGE_W, (slotsInColumn * CHALLENGE_ENTRY_H + CHALLENGE_HGAP * slotsInColumn) + CHALLENGE_BANNER_DEPTH + 20);
 
 	// Add Banner
+	W_FORMINIT sFormInit;
 	sFormInit.formID = CHALLENGE_FORM;
 	sFormInit.id = CHALLENGE_BANNER;
+	sFormInit.style = WFORM_PLAIN;
 	sFormInit.x = CHALLENGE_HGAP;
 	sFormInit.y = CHALLENGE_VGAP;
 	sFormInit.width = CHALLENGE_W - (2 * CHALLENGE_HGAP);
 	sFormInit.height = CHALLENGE_BANNER_DEPTH;
-	sFormInit.disableChildren = false;
 	sFormInit.pDisplay = displayLoadBanner;
 	sFormInit.UserData = 0;
 	widgAddForm(psRequestScreen, &sFormInit);
@@ -259,7 +251,7 @@ bool addChallenges()
 	slotCount = 0;
 
 	sstrcpy(sPath, sSearchPath);
-	sstrcat(sPath, "/*.ini");
+	sstrcat(sPath, "/*.json");
 
 	debug(LOG_SAVE, "Searching \"%s\" for challenges", sPath);
 
@@ -273,7 +265,7 @@ bool addChallenges()
 		int seconds;
 
 		// See if this filename contains the extension we're looking for
-		if (!strstr(*i, ".ini"))
+		if (!strstr(*i, ".json"))
 		{
 			// If it doesn't, move on to the next filename
 			continue;
@@ -281,28 +273,28 @@ bool addChallenges()
 
 		/* First grab any high score associated with this challenge */
 		sstrcpy(sPath, *i);
-		sPath[strlen(sPath) - 4] = '\0';	// remove .ini
+		sPath[strlen(sPath) - 5] = '\0';	// remove .json
 		highscore = "no score";
-		WzConfig scores(CHALLENGE_SCORES);
+		WzConfig scores(CHALLENGE_SCORES, WzConfig::ReadOnly);
 		scores.beginGroup(sPath);
-		name = scores.value("Player", "NO NAME").toString();
-		victory = scores.value("Victory", false).toBool();
-		seconds = scores.value("Seconds", -1).toInt();
+		name = scores.value("player", "NO NAME").toString();
+		victory = scores.value("victory", false).toBool();
+		seconds = scores.value("seconds", -1).toInt();
 		if (seconds > 0)
 		{
 			QTime format = QTime(0, 0, 0).addSecs(seconds);
 			highscore = format.toString(Qt::TextDate) + " by " + name + " (" + QString(victory ? "Victory" : "Survived") + ")";
 		}
+		scores.endGroup();
 		ssprintf(sPath, "%s/%s", sSearchPath, *i);
-		WzConfig challenge(sPath);
-		if (challenge.status() != QSettings::NoError)
-		{
-			debug(LOG_ERROR, "failure to open %s", sPath);
-		}
+		WzConfig challenge(sPath, WzConfig::ReadOnlyAndRequired);
+		ASSERT(challenge.contains("challenge"), "Invalid challenge file %s - no challenge section!", sPath);
 		challenge.beginGroup("challenge");
-		name = challenge.value("Name", "BAD NAME").toString();
-		map = challenge.value("Map", "BAD MAP").toString();
-		difficulty = challenge.value("Difficulty", "BAD DIFFICULTY").toString();
+		ASSERT(challenge.contains("name"), "Invalid challenge file %s - no name", sPath);
+		name = challenge.value("name", "BAD NAME").toString();
+		ASSERT(challenge.contains("map"), "Invalid challenge file %s - no map", sPath);
+		map = challenge.value("map", "BAD MAP").toString();
+		difficulty = challenge.value("difficulty", "BAD DIFFICULTY").toString();
 		description = map + ", " + difficulty + ", " + highscore + ". " + challenge.value("Description", "").toString();
 
 		button = (W_BUTTON *)widgGetFromID(psRequestScreen, CHALLENGE_ENTRY_START + slotCount);
@@ -310,8 +302,8 @@ bool addChallenges()
 		debug(LOG_SAVE, "We found [%s]", *i);
 
 		/* Set the button-text */
-		sstrcpy(sSlotCaps[slotCount], name.toAscii().constData());		// store it!
-		sstrcpy(sSlotTips[slotCount], description.toAscii().constData());	// store it, too!
+		sstrcpy(sSlotCaps[slotCount], name.toUtf8().constData());		// store it!
+		sstrcpy(sSlotTips[slotCount], description.toUtf8().constData());	// store it, too!
 		sstrcpy(sSlotFile[slotCount], sPath);					// store filename
 
 		/* Add button */
@@ -323,6 +315,7 @@ bool addChallenges()
 		{
 			break;
 		}
+		challenge.endGroup();
 	}
 	PHYSFS_freeList(files);
 
@@ -334,8 +327,8 @@ bool addChallenges()
 // ////////////////////////////////////////////////////////////////////////////
 bool closeChallenges()
 {
-	widgDelete(psRequestScreen, CHALLENGE_FORM);
-	widgReleaseScreen(psRequestScreen);
+	delete psRequestScreen;
+	psRequestScreen = NULL;
 	// need to "eat" up the return key so it don't pass back to game.
 	inputLoseFocus();
 	challengesUp = false;
@@ -364,7 +357,7 @@ bool runChallenges(void)
 		// clicked a load entry
 		if (id >= CHALLENGE_ENTRY_START  &&  id <= CHALLENGE_ENTRY_END)
 		{
-			if (((W_BUTTON *)widgGetFromID(psRequestScreen, id))->pText)
+			if (!((W_BUTTON *)widgGetFromID(psRequestScreen, id))->pText.isEmpty())
 			{
 				sstrcpy(sRequestResult, (const char *)((W_BUTTON *)widgGetFromID(psRequestScreen, id))->pUserData);
 			}

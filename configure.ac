@@ -1,5 +1,5 @@
 AC_PREREQ([2.56])
-AC_INIT([Warzone 2100],[bugfixes],[http://wz2100.net/],[warzone2100])
+AC_INIT([Warzone 2100],[master],[http://wz2100.net/],[warzone2100])
 
 AM_INIT_AUTOMAKE([1.11 tar-ustar no-dist-gzip dist-xz])
 
@@ -9,13 +9,11 @@ AC_SUBST([XZ_OPT], ["-6"])
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_SRCDIR([lib/framework/frame.cpp])
 
-
 # HACK
 # Workaround stupid autoconf CFLAGS default
 # (Bash considers set but empty variables different from null for the ${VAR:+alt} operator)
-CFLAGS="${CFLAGS}"
-CXXFLAGS="${CXXFLAGS}"
-
+CFLAGS="${CFLAGS} -fPIC"
+CXXFLAGS="${CXXFLAGS} -fPIC -std=c++11"
 
 # Make cross compilation options available in --help
 AC_CANONICAL_HOST
@@ -60,6 +58,9 @@ AM_CONDITIONAL(HACHA, test -n "$HACHA")
 # Enable Compiler/LibC GNU extensions
 AC_GNU_SOURCE
 
+# __builtin_expect
+AX_C___BUILTIN_EXPECT
+
 # Check for the strlcpy and strlcat functions
 AX_CHECK_STRLCPY
 AX_CHECK_STRLCAT
@@ -88,22 +89,26 @@ AM_CONDITIONAL([BACKEND_SDL], test "$backend" = "sdl")
 # Check for Qt
 if test "$backend" = "qt"; then
 	AC_MSG_RESULT([Qt])
-	PKG_CHECK_MODULES(QT4, QtCore QtGui QtOpenGL QtNetwork QtScript,,[:])
+	PKG_CHECK_MODULES(QT5, Qt5Core Qt5Gui Qt5Widgets Qt5Script Qt5OpenGL Qt5X11Extras,,[:])
 else
 	AC_MSG_RESULT([SDL])
-	PKG_CHECK_MODULES(QT4, QtCore QtNetwork QtScript,,[:])
+	PKG_CHECK_MODULES(QT5, Qt5Core Qt5Gui Qt5Widgets Qt5Script,,[:])
 fi
 if test "$pkg_failed" = "yes" ; then
-	AC_MSG_ERROR([Qt not found - required!])
+	AC_MSG_ERROR([Qt 5 not found - required!])
 fi
-QT4_INCLUDES=$QT4_FRONTEND_CFLAGS
-QT4_LDFLAGS=$QT4_FRONTEND_LIBS
-QT4_LIB=$QT4_FRONTEND_LIBS
-QT4_VERSION=`$PKG_CONFIG --modversion QtCore`
-AC_SUBST(QT4_VERSION)
-AC_PATH_PROGS(MOC4, [moc-qt4 moc])
-AC_PATH_PROGS(UIC4, [uic-qt4 uic])
-AC_PATH_PROGS(RCC4, [rcc-qt4 rcc])
+QT5_INCLUDES=$QT5_FRONTEND_CFLAGS
+QT5_LDFLAGS=$QT5_FRONTEND_LIBS
+QT5_LIB=$QT5_FRONTEND_LIBS
+QT5_PLUGIN=`$PKG_CONFIG --variable=exec_prefix Qt5Core`
+AC_SUBST([QT5_PLUGIN])
+QT5_VERSION=`$PKG_CONFIG --modversion Qt5Core`
+AC_SUBST(QT5_VERSION)
+QT_PATH=`$PKG_CONFIG --variable=exec_prefix Qt5Core`
+QT_HOST_PATH=`$PKG_CONFIG --variable=host_bins Qt5Core`
+AC_PATH_PROGS(MOC5, [moc-qt5 moc], moc, ["${QT_HOST_PATH}" "${QT_PATH}/bin"])
+AC_PATH_PROGS(UIC5, [uic-qt5 uic], uic, ["${QT_HOST_PATH}" "${QT_PATH}/bin"])
+AC_PATH_PROGS(RCC5, [rcc-qt5 rcc], rcc, ["${QT_HOST_PATH}" "${QT_PATH}/bin"])
 
 # Check for compiler
 case ${CC} in
@@ -215,6 +220,10 @@ AC_ARG_WITH(applicationdir,
 	[ with_applicationdir=${withval} ], [ with_applicationdir=${datadir}/applications ])
 AC_SUBST([applicationdir], [${with_applicationdir}])
 
+AC_ARG_WITH(appdatadir,
+	AS_HELP_STRING([--with-appdatadir=DIR],[application files [DATADIR/appdata]]),
+	[ with_appdatadir=${withval} ], [ with_appdatadir=${datadir}/appdata ])
+AC_SUBST([appdatadir], [${with_appdatadir}])
 
 # Commandline options - enable:
 
@@ -245,13 +254,6 @@ if test "x$enable_static" = "xyes" ; then
 	PKG_CONFIG="${PKG_CONFIG} --static"
 fi
 
-AC_ARG_ENABLE([sound],
-	AS_HELP_STRING([--disable-sound], [Disable sound [no]]),
-	[ enable_sound="${enableval}" ], [ enable_sound="yes" ])
-AS_IF([test "x$enable_sound" != "xyes"],[
-	AC_DEFINE([WZ_NOSOUND], [], [Causes sound to be disabled])
-])
-
 # -O0 turns off all optimizations; this is necessary for accurate debugging
 # -Wno-unused-label is necessary because flex produces unused labels that we cannot fix
 # Add later for stricter checking: -Wextra -Wmissing-declarations -Wstrict-prototypes
@@ -271,7 +273,7 @@ AX_C_CHECK_FLAG([-Werror -Wno-enum-compare], , , CFLAGS_IGNORE_WARNINGS="${CFLAG
 WZ_CPPFLAGS="${WZ_CPPFLAGS} -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS"
 
 # zlib
-LDFLAGS="-lz ${LDFLAGS}"
+LDFLAGS="-lz ${LDFLAGS} -fPIC"
 
 if test "x$enable_warnings" = "xyes" ; then
 	# Only disable -Werror for the warning.
@@ -290,30 +292,45 @@ if test "x$enable_debug" = "xyes" ; then
 		WZ_CXXFLAGS="${WZ_CXXFLAGS} -O0 -g -Wcheck -Werror"
 		WZ_CPPFLAGS="${WZ_CPPFLAGS} -DDEBUG"
 	else
-		WZ_CFLAGS="${WZ_CFLAGS} -O0 -g -Werror ${WZ_WARNINGS_GCC_C}"
-		WZ_CXXFLAGS="${WZ_CXXFLAGS} -O0 -g -Werror ${WZ_WARNINGS_GCC_CXX}"
+		# -ggdb is very useful when running the linux perf tool
+		WZ_CFLAGS="${WZ_CFLAGS} -O0 -ggdb -Werror ${WZ_WARNINGS_GCC_C}"
+		WZ_CXXFLAGS="${WZ_CXXFLAGS} -O0 -ggdb -Werror ${WZ_WARNINGS_GCC_CXX}"
 		WZ_C99FLAGS="${WZ_C99FLAGS} -Wno-declaration-after-statement"
 		WZ_CPPFLAGS="${WZ_CPPFLAGS} -DDEBUG"
 	fi
+# debugging with optimizations for gcc or clang
 elif test "x$enable_debug" = "xoptimised" ; then
-	WZ_CFLAGS="${WZ_CFLAGS} -O2 -g -Werror ${WZ_WARNINGS_GCC_C}"
-	WZ_CXXFLAGS="${WZ_CXXFLAGS} -O2 -g -Werror ${WZ_WARNINGS_GCC_CXX}"
+	WZ_CFLAGS="${WZ_CFLAGS} -O2 -ggdb -fno-omit-frame-pointer -Werror ${WZ_WARNINGS_GCC_C}"
+	WZ_CXXFLAGS="${WZ_CXXFLAGS} -O2 -ggdb -fno-omit-frame-pointer -Werror ${WZ_WARNINGS_GCC_CXX}"
 	WZ_C99FLAGS="${WZ_C99FLAGS} -Wno-declaration-after-statement"
 	WZ_CPPFLAGS="${WZ_CPPFLAGS} -DDEBUG"
+# debug build while ignoring warnings for gcc or clang
 elif test "x$enable_debug" = "xrelaxed" ; then
-	WZ_CFLAGS="${WZ_CFLAGS} -g -O0 ${WZ_WARNINGS_GCC_C}"
-	WZ_CXXFLAGS="${WZ_CXXFLAGS} -g -O0 ${WZ_WARNINGS_GCC_CXX}"
+	WZ_CFLAGS="${WZ_CFLAGS} -ggdb -O0 ${WZ_WARNINGS_GCC_C}"
+	WZ_CXXFLAGS="${WZ_CXXFLAGS} -ggdb -O0 ${WZ_WARNINGS_GCC_CXX}"
 	WZ_CPPFLAGS="${WZ_CPPFLAGS} -DDEBUG"
+# profiling builds using gprof (probably a better idea to use perf, if you can)
 elif test "x$enable_debug" = "xdebugprofile" ; then
-	WZ_CFLAGS="${WZ_CFLAGS} -g -O0 -pg ${WZ_WARNINGS_GCC_C}"
-	WZ_CXXFLAGS="${WZ_CXXFLAGS} -g -O0 -pg ${WZ_WARNINGS_GCC_CXX}"
+	WZ_CFLAGS="${WZ_CFLAGS} -ggdb -O0 -pg ${WZ_WARNINGS_GCC_C}"
+	WZ_CXXFLAGS="${WZ_CXXFLAGS} -ggdb -O0 -pg ${WZ_WARNINGS_GCC_CXX}"
 	WZ_CPPFLAGS="${WZ_CPPFLAGS} -DDEBUG"
 	LDFLAGS="-pg ${LDFLAGS}"
 elif test "x$enable_debug" = "xprofile" ; then
-	WZ_CFLAGS="${WZ_CFLAGS} -g -Os -pg ${WZ_WARNINGS_GCC_C}"
-	WZ_CXXFLAGS="${WZ_CXXFLAGS} -g -Os -pg ${WZ_WARNINGS_GCC_CXX}"
+	WZ_CFLAGS="${WZ_CFLAGS} -ggdb -Os -fno-omit-frame-pointer -pg ${WZ_WARNINGS_GCC_C}"
+	WZ_CXXFLAGS="${WZ_CXXFLAGS} -ggdb -Os -fno-omit-frame-pointer -pg ${WZ_WARNINGS_GCC_CXX}"
 	WZ_CPPFLAGS="${WZ_CPPFLAGS} -DNDEBUG"
 	LDFLAGS="-pg ${LDFLAGS}"
+elif test "x$enable_debug" = "xsanitize-undefined" ; then
+	WZ_CFLAGS="${WZ_CFLAGS} -ggdb -Os -fno-omit-frame-pointer ${WZ_WARNINGS_GCC_C} -Werror -fsanitize=undefined"
+	WZ_CXXFLAGS="${WZ_CXXFLAGS} -ggdb -Os -fno-omit-frame-pointer ${WZ_WARNINGS_GCC_CXX} -Werror -fsanitize=undefined"
+	WZ_CPPFLAGS="${WZ_CPPFLAGS} -DDEBUG"
+	LDFLAGS="${LDFLAGS} -fsanitize=undefined"
+elif test "x$enable_debug" = "xsanitize-address" ; then
+	WZ_CFLAGS="${WZ_CFLAGS} -ggdb -Os -fno-omit-frame-pointer ${WZ_WARNINGS_GCC_C} -Werror -fsanitize=address"
+	WZ_CXXFLAGS="${WZ_CXXFLAGS} -ggdb -Os -fno-omit-frame-pointer ${WZ_WARNINGS_GCC_CXX} -Werror -fsanitize=address"
+	WZ_CPPFLAGS="${WZ_CPPFLAGS} -DDEBUG"
+	LDFLAGS="${LDFLAGS} -fsanitize=address"
+# normal, non-debug build
 else
 	WZ_CFLAGS="${WZ_CFLAGS} -g ${WZ_WARNINGS_GCC_C}"
 	WZ_CXXFLAGS="${WZ_CXXFLAGS} -g ${WZ_WARNINGS_GCC_CXX}"
@@ -383,18 +400,16 @@ fi
 # Checks for modules:
 
 if test "$backend" = "sdl"; then
-	PKG_CHECK_MODULES([SDL], [sdl >= 1.2])
+	PKG_CHECK_MODULES([SDL], [sdl2 >= 2.0.0])
 fi
 PKG_CHECK_MODULES([PNG], [libpng >= 1.2])
 PKG_CHECK_MODULES([THEORA], [theora >= 1.0])
-
-AS_IF([test "x$enable_sound" = "xyes"],[
-	PKG_CHECK_MODULES([OPENAL], [openal >= 0.0.8])
-	PKG_CHECK_MODULES([VORBIS], [vorbis >= 1.1])
-	PKG_CHECK_MODULES([VORBISFILE], [vorbisfile >= 1.1])
-])
+PKG_CHECK_MODULES([OPENAL], [openal >= 0.0.8])
+PKG_CHECK_MODULES([VORBIS], [vorbis >= 1.1])
+PKG_CHECK_MODULES([VORBISFILE], [vorbisfile >= 1.1])
 
 PKG_CHECK_MODULES([GLEW], [glew >= 1.5.2])
+PKG_CHECK_MODULES([LIBCRYPTO], [libcrypto >= 1.0.0])
 
 # Checks for libraries:
 

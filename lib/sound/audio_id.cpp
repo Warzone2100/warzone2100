@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -45,6 +45,7 @@ static AUDIO_ID_MAP asAudioID[] =
 
 	{ID_SOUND_WINDOWCLOSE,                         "beep1.ogg"},
 	{ID_SOUND_WINDOWOPEN,                          "beep2.ogg"},
+	{ID_SOUND_BUTTON_CLICK_3,                      "beep3.ogg"},
 	{ID_SOUND_SELECT,                              "beep4.ogg"},
 	{ID_SOUND_BUTTON_CLICK_5,                      "beep5.ogg"},
 	{FE_AUDIO_MESSAGEEND,                          "beep6.ogg"},

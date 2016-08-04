@@ -316,8 +316,8 @@ featfailure:
 	}
 	else
 	{
-		debug(LOG_INFO, "Unknown terrain signature in %s: %hu %hu %hu", path,
-			  terrainTypes[0], terrainTypes[1], terrainTypes[2]);
+		debug(LOG_ERROR, "Unknown terrain signature in %s: %u %u %u", path,
+		      terrainTypes[0], terrainTypes[1], terrainTypes[2]);
 		map->tileset = TILESET_ARIZONA;  // Set something random. Why just have 3 tilesets, anyway?
 	}
 	

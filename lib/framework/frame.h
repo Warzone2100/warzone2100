@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -29,6 +29,10 @@
 // Workaround X11 headers #defining Status
 #ifdef Status
 # undef Status
+#endif
+
+#ifndef WZ_CXX11
+# define nullptr NULL
 #endif
 
 #include "types.h"
@@ -90,41 +94,36 @@ enum QUEUE_MODE
  *  @return true when the framework library is successfully initialised, false
  *          when a part of the initialisation failed.
  */
-extern bool frameInitialise(void);
+bool frameInitialise();
 
 /** Shut down the framework library.
- * This clears up all the Direct Draw stuff and ensures
- * that Windows gets restored properly after Full screen mode.
  */
-extern void frameShutDown(void);
+void frameShutDown();
 
 /*!
  * Set the framerate limit
  *
  * \param fpsLimit Desired framerate
  */
-extern void setFramerateLimit(int fpsLimit);
+void setFramerateLimit(int fpsLimit);
 
 /*!
  * Get the framerate limit
  *
  * \return Desired framerate
  */
-extern int getFramerateLimit(void);
+int getFramerateLimit();
 
 /** Call this each cycle to allow the framework to deal with
  * windows messages, and do general house keeping.
  */
-extern void frameUpdate(void);
+void frameUpdate();
 
 /** Returns the current frame we're on - used to establish whats on screen. */
-extern UDWORD frameGetFrameNumber(void);
+UDWORD frameGetFrameNumber();
 
 /** Return framerate of the last second. */
 int frameRate();
-
-extern UDWORD HashString(const char *String);
-extern UDWORD HashStringIgnoreCase(const char *String);
 
 static inline WZ_DECL_CONST const char *bool2string(bool var)
 {

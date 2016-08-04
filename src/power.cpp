@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -46,9 +46,6 @@
 
 
 #define EXTRACT_POINTS      1
-#define EASY_POWER_MOD      110
-#define NORMAL_POWER_MOD    100
-#define HARD_POWER_MOD      90
 #define MAX_POWER           1000000
 
 #define FP_ONE ((int64_t)1 << 32)
@@ -57,7 +54,7 @@
 bool	powerCalculated;
 
 /* Updates the current power based on the extracted power and a Power Generator*/
-static void updateCurrentPower(POWER_GEN *psPowerGen, UDWORD player);
+static void updateCurrentPower(STRUCTURE *psStruct, UDWORD player, int ticks);
 static int64_t updateExtractedPower(STRUCTURE *psBuilding);
 
 //returns the relevant list based on OffWorld or OnWorld
@@ -74,9 +71,22 @@ struct PlayerPower
 	// All fields are 32.32 fixed point.
 	int64_t currentPower;                  ///< The current amount of power available to the player.
 	std::vector<PowerRequest> powerQueue;  ///< Requested power.
+	int powerModifier;                     ///< Percentage modifier on power from each derrick.
+	int64_t maxStorage;                    ///< Maximum storage of power, in total.
 };
 
 static PlayerPower asPower[MAX_PLAYERS];
+
+void setPowerModifier(int player, int modifier)
+{
+	asPower[player].powerModifier = modifier;
+}
+
+void setPowerMaxStorage(int player, int max)
+{
+	asPower[player].maxStorage = max * FP_ONE;
+	asPower[player].currentPower = std::min<int64_t>(asPower[player].maxStorage, asPower[player].currentPower);
+}
 
 /*allocate the space for the playerPower*/
 bool allocPlayerPower()
@@ -92,7 +102,9 @@ void clearPlayerPower()
 	for (unsigned player = 0; player < MAX_PLAYERS; player++)
 	{
 		asPower[player].currentPower = 0;
+		asPower[player].powerModifier = 100;
 		asPower[player].powerQueue.clear();
+		asPower[player].maxStorage = MAX_POWER * FP_ONE;
 	}
 }
 
@@ -157,7 +169,7 @@ int32_t checkPowerRequest(STRUCTURE *psStruct)
 	return power != -1 ? power / FP_ONE : -1;
 }
 
-static int64_t getQueuedPower(unsigned player)
+static int64_t getPreciseQueuedPower(unsigned player)
 {
 	PlayerPower const *p = &asPower[player];
 
@@ -167,6 +179,18 @@ static int64_t getQueuedPower(unsigned player)
 		requiredPower += p->powerQueue[n].amount;
 	}
 	return requiredPower;
+}
+
+int getQueuedPower(int player)
+{
+	PlayerPower const *p = &asPower[player];
+
+	int64_t requiredPower = 0;
+	for (size_t n = 0; n < p->powerQueue.size(); ++n)
+	{
+		requiredPower += p->powerQueue[n].amount;
+	}
+	return requiredPower / FP_ONE;
 }
 
 static void syncDebugEconomy(unsigned player, char ch)
@@ -202,7 +226,7 @@ void addPower(int player, int32_t quantity)
 	ASSERT_OR_RETURN(, player < MAX_PLAYERS, "Bad player (%d)", player);
 	syncDebug("addPower%d %" PRId64"+=%d", player, asPower[player].currentPower, quantity);
 	asPower[player].currentPower += quantity * FP_ONE;
-	CLIP(asPower[player].currentPower, 0, MAX_POWER * FP_ONE);
+	CLIP(asPower[player].currentPower, 0, asPower[player].maxStorage);
 }
 
 /*resets the power calc flag for all players*/
@@ -215,7 +239,6 @@ void powerCalc(bool on)
 static int64_t updateExtractedPower(STRUCTURE *psBuilding)
 {
 	RES_EXTRACTOR		*pResExtractor;
-	int                     modifier = NORMAL_POWER_MOD;
 	int64_t                 extractedPoints;
 
 	pResExtractor = (RES_EXTRACTOR *) psBuilding->pFunctionality;
@@ -223,20 +246,10 @@ static int64_t updateExtractedPower(STRUCTURE *psBuilding)
 
 	//only extracts points whilst its active ie associated with a power gen
 	//and has got some power to extract
-	if (pResExtractor->active)
+	if (pResExtractor->psPowerGen != nullptr)
 	{
-		// Add modifier according to difficulty level
-		if (game.type == CAMPAIGN)  // other types do not make sense
-		{
-			switch (getDifficultyLevel())
-			{
-			case DL_EASY: modifier = EASY_POWER_MOD; break;
-			case DL_HARD: modifier = HARD_POWER_MOD; break;
-			default: break;
-			}
-		}
 		// include modifier as a %
-		extractedPoints = modifier * EXTRACT_POINTS * FP_ONE / (100 * GAME_UPDATES_PER_SEC);
+		extractedPoints = asPower[psBuilding->player].powerModifier * EXTRACT_POINTS * FP_ONE / (100 * GAME_UPDATES_PER_SEC);
 		syncDebug("updateExtractedPower%d = %" PRId64"", psBuilding->player, extractedPoints);
 	}
 	ASSERT(extractedPoints >= 0, "extracted negative amount of power");
@@ -258,7 +271,7 @@ STRUCTURE *powerStructList(int player)
 }
 
 /* Update current power based on what Power Generators exist */
-void updatePlayerPower(UDWORD player)
+void updatePlayerPower(int player, int ticks)
 {
 	STRUCTURE		*psStruct;//, *psList;
 	int64_t powerBefore = asPower[player].currentPower;
@@ -271,7 +284,7 @@ void updatePlayerPower(UDWORD player)
 	{
 		if (psStruct->pStructureType->type == REF_POWER_GEN && psStruct->status == SS_BUILT)
 		{
-			updateCurrentPower((POWER_GEN *)psStruct->pFunctionality, player);
+			updateCurrentPower(psStruct, player, ticks);
 		}
 	}
 	syncDebug("updatePlayerPower%u %" PRId64"->%" PRId64"", player, powerBefore, asPower[player].currentPower);
@@ -280,8 +293,9 @@ void updatePlayerPower(UDWORD player)
 }
 
 /* Updates the current power based on the extracted power and a Power Generator*/
-static void updateCurrentPower(POWER_GEN *psPowerGen, UDWORD player)
+static void updateCurrentPower(STRUCTURE *psStruct, UDWORD player, int ticks)
 {
+	POWER_GEN *psPowerGen = (POWER_GEN *)psStruct->pFunctionality;
 	int i;
 	int64_t extractedPower;
 
@@ -305,13 +319,14 @@ static void updateCurrentPower(POWER_GEN *psPowerGen, UDWORD player)
 		}
 	}
 
-	syncDebug("updateCurrentPower%d = %" PRId64",%u", player, extractedPower, psPowerGen->multiplier);
+	int multiplier = getBuildingPowerPoints(psStruct);
+	syncDebug("updateCurrentPower%d = %" PRId64",%u", player, extractedPower, multiplier);
 
-	asPower[player].currentPower += (extractedPower * psPowerGen->multiplier) / 100;
+	asPower[player].currentPower += (extractedPower * multiplier) / 100 * ticks;
 	ASSERT(asPower[player].currentPower >= 0, "negative power");
-	if (asPower[player].currentPower > MAX_POWER * FP_ONE)
+	if (asPower[player].currentPower > asPower[player].maxStorage)
 	{
-		asPower[player].currentPower = MAX_POWER * FP_ONE;
+		asPower[player].currentPower = asPower[player].maxStorage;
 	}
 }
 
@@ -351,7 +366,7 @@ int32_t getPowerMinusQueued(unsigned player)
 {
 	ASSERT_OR_RETURN(0, player < MAX_PLAYERS, "Invalid player (%u)", player);
 
-	return (asPower[player].currentPower - getQueuedPower(player)) / FP_ONE;
+	return (asPower[player].currentPower - getPreciseQueuedPower(player)) / FP_ONE;
 }
 
 bool requestPowerFor(STRUCTURE *psStruct, int32_t amount)

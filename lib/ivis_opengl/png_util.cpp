@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -92,18 +92,13 @@ bool iV_loadImage_PNG(const char *fileName, iV_Image *image)
 
 	// Open file
 	PHYSFS_file *fileHandle = PHYSFS_openRead(fileName);
-	if (fileHandle == NULL)
-	{
-		debug(LOG_ERROR, "pie_PNGLoadFile: PHYSFS_openRead(%s) failed with error: %s\n", fileName, PHYSFS_getLastError());
-		PNGReadCleanup(&info_ptr, &png_ptr, fileHandle);
-		return false;
-	}
+	ASSERT_OR_RETURN(false, fileHandle != NULL, "Could not open %s: %s", fileName, PHYSFS_getLastError());
 
 	// Read PNG header from file
 	readSize = PHYSFS_read(fileHandle, PNGheader, 1, PNG_BYTES_TO_CHECK);
 	if (readSize < PNG_BYTES_TO_CHECK)
 	{
-		debug(LOG_ERROR, "pie_PNGLoadFile: PHYSFS_read(%s) failed with error: %s\n", fileName, PHYSFS_getLastError());
+		debug(LOG_FATAL, "pie_PNGLoadFile: PHYSFS_read(%s) failed with error: %s\n", fileName, PHYSFS_getLastError());
 		PNGReadCleanup(&info_ptr, &png_ptr, fileHandle);
 		return false;
 	}
@@ -111,7 +106,7 @@ bool iV_loadImage_PNG(const char *fileName, iV_Image *image)
 	// Verify the PNG header to be correct
 	if (png_sig_cmp(PNGheader, 0, PNG_BYTES_TO_CHECK))
 	{
-		debug(LOG_3D, "pie_PNGLoadMem: Did not recognize PNG header in %s", fileName);
+		debug(LOG_FATAL, "pie_PNGLoadMem: Did not recognize PNG header in %s", fileName);
 		PNGReadCleanup(&info_ptr, &png_ptr, fileHandle);
 		return false;
 	}
@@ -119,7 +114,7 @@ bool iV_loadImage_PNG(const char *fileName, iV_Image *image)
 	png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
 	if (png_ptr == NULL)
 	{
-		debug(LOG_3D, "pie_PNGLoadMem: Unable to create png struct");
+		debug(LOG_FATAL, "pie_PNGLoadMem: Unable to create png struct");
 		PNGReadCleanup(&info_ptr, &png_ptr, fileHandle);
 		return false;
 	}
@@ -127,7 +122,7 @@ bool iV_loadImage_PNG(const char *fileName, iV_Image *image)
 	info_ptr = png_create_info_struct(png_ptr);
 	if (info_ptr == NULL)
 	{
-		debug(LOG_3D, "pie_PNGLoadMem: Unable to create png info struct");
+		debug(LOG_FATAL, "pie_PNGLoadMem: Unable to create png info struct");
 		PNGReadCleanup(&info_ptr, &png_ptr, fileHandle);
 		return false;
 	}
@@ -136,7 +131,7 @@ bool iV_loadImage_PNG(const char *fileName, iV_Image *image)
 	// setjmp evaluates to false so the else branch will be executed at first
 	if (setjmp(png_jmpbuf(png_ptr)))
 	{
-		debug(LOG_3D, "pie_PNGLoadMem: Error decoding PNG data in %s", fileName);
+		debug(LOG_FATAL, "pie_PNGLoadMem: Error decoding PNG data in %s", fileName);
 		PNGReadCleanup(&info_ptr, &png_ptr, fileHandle);
 		return false;
 	}
@@ -195,6 +190,7 @@ static void internal_saveImage_PNG(const char *fileName, const iV_Image *image, 
 	png_structp png_ptr = NULL;
 	PHYSFS_file *fileHandle;
 
+	scanlines = NULL;
 	ASSERT(image->depth != 0, "Bad depth");
 
 	fileHandle = PHYSFS_openWrite(fileName);

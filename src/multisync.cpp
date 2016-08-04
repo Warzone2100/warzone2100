@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -48,6 +48,7 @@ static UDWORD averagePing(void);
 #define PING_FREQUENCY          4000                            // how often to update pingtimes. in approx millisecs.
 
 static UDWORD				PingSend[MAX_PLAYERS];	//stores the time the ping was called.
+static uint8_t pingChallenge[8];                                // Random data sent with the last ping.
 
 
 // ////////////////////////////////////////////////////////////////////////
@@ -153,9 +154,13 @@ bool sendPing(void)
 		}
 	}
 
+	uint64_t pingChallengei = (uint64_t)rand() << 32 | rand();
+	memcpy(pingChallenge, &pingChallengei, sizeof(pingChallenge));
+
 	NETbeginEncode(NETbroadcastQueue(), NET_PING);
 	NETuint8_t(&player);
 	NETbool(&isNew);
+	NETbin(pingChallenge, sizeof(pingChallenge));
 	NETend();
 
 	// Note when we sent the ping
@@ -172,10 +177,20 @@ bool recvPing(NETQUEUE queue)
 {
 	bool	isNew = false;
 	uint8_t	sender, us = selectedPlayer;
+	uint8_t challenge[sizeof(pingChallenge)];
+	EcKey::Sig challengeResponse;
 
 	NETbeginDecode(queue, NET_PING);
 	NETuint8_t(&sender);
 	NETbool(&isNew);
+	if (isNew)
+	{
+		NETbin(challenge, sizeof(pingChallenge));
+	}
+	else
+	{
+		NETbytes(&challengeResponse);
+	}
 	NETend();
 
 	if (sender >= MAX_PLAYERS)
@@ -187,17 +202,27 @@ bool recvPing(NETQUEUE queue)
 	// If this is a new ping, respond to it
 	if (isNew)
 	{
+		challengeResponse = getMultiStats(us).identity.sign(&challenge, sizeof(pingChallenge));
+
 		NETbeginEncode(NETnetQueue(sender), NET_PING);
 		// We are responding to a new ping
 		isNew = false;
 
 		NETuint8_t(&us);
 		NETbool(&isNew);
+		NETbytes(&challengeResponse);
 		NETend();
 	}
 	// They are responding to one of our pings
 	else
 	{
+		if (!getMultiStats(sender).identity.empty() && !getMultiStats(sender).identity.verify(challengeResponse, pingChallenge, sizeof(pingChallenge)))
+		{
+			// Either bad signature, or we sent more than one ping packet and this response is to an older one than the latest.
+			debug(LOG_NEVER, "Bad and/or old NET_PING packet, alleged sender is %d", (int)sender);
+			return false;
+		}
+
 		// Work out how long it took them to respond
 		ingame.PingTimes[sender] = (realTime - PingSend[sender]) / 2;
 

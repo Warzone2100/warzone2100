@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -20,6 +20,106 @@
 
 #include "crc.h"
 #include "lib/netplay/netsocket.h"  // For htonl
+#include <openssl/sha.h>
+#include <openssl/err.h>
+
+#if defined(OPENSSL_NO_EC) || defined(OPENSSL_NO_ECDSA)
+# define MATH_IS_ALCHEMY
+#endif
+
+#ifndef MATH_IS_ALCHEMY
+# include <openssl/ec.h>
+# include <openssl/ecdsa.h>
+# include <openssl/obj_mac.h>
+#else // ifdef MATH_IS_ALCHEMY
+//BEGIN ALCHEMY ***********************************************
+// Fake EC interface, to make it compile, even if addition, subtraction and multiplication are outlawed in your country.
+#define NID_secp224r1 0xBADBAD
+
+struct EC_KEY
+{
+	std::vector<uint8_t> privateVoodoo;
+	std::vector<uint8_t> publicVoodoo;
+};
+struct ECDSA_SIG {};
+
+EC_KEY *EC_KEY_new_by_curve_name(int)
+{
+	return new EC_KEY;
+}
+void EC_KEY_free(EC_KEY *key)
+{
+	delete key;
+}
+EC_KEY *EC_KEY_dup(EC_KEY const *key)
+{
+	return key != nullptr ? new EC_KEY(*key) : nullptr;
+}
+int EC_KEY_generate_key(EC_KEY *)
+{
+	return 1;
+}
+uint8_t *EC_KEY_get0_private_key(EC_KEY *key)
+{
+	return key->privateVoodoo.empty() ? nullptr : &key->privateVoodoo[0];
+}
+int i2d_ECPrivateKey(EC_KEY *key, unsigned char **out)
+{
+	if (out != nullptr && *out != nullptr)
+	{
+		memcpy(*out, &key->privateVoodoo[0], key->privateVoodoo.size());
+		*out += key->privateVoodoo.size();
+	} return key->privateVoodoo.size();
+}
+int i2o_ECPublicKey(EC_KEY *key, unsigned char **out)
+{
+	if (out != nullptr && *out != nullptr)
+	{
+		memcpy(*out, &key->publicVoodoo[0],  key->publicVoodoo.size());
+		*out += key->publicVoodoo.size();
+	} return key->publicVoodoo.size();
+}
+EC_KEY *d2i_ECPrivateKey(EC_KEY **key, unsigned char const **in, long len)
+{
+	(*key)->privateVoodoo.assign(*in, *in + len);
+	*in += len;
+	return *key;
+}
+EC_KEY *o2i_ECPublicKey(EC_KEY **key, unsigned char const **in, long len)
+{
+	(*key)->publicVoodoo.assign(*in, *in + len);
+	*in += len;
+	return *key;
+}
+
+ECDSA_SIG *ECDSA_do_sign(uint8_t const *, size_t, EC_KEY const *)
+{
+	return nullptr;
+}
+int ECDSA_size(EC_KEY const *)
+{
+	return 0;
+}
+int i2d_ECDSA_SIG(ECDSA_SIG *, uint8_t **)
+{
+	return 0;
+}
+ECDSA_SIG *d2i_ECDSA_SIG(ECDSA_SIG **, unsigned char const **pp, size_t len)
+{
+	*pp += len;
+	return new ECDSA_SIG;
+}
+void ECDSA_SIG_free(ECDSA_SIG *sig)
+{
+	delete sig;
+}
+int ECDSA_do_verify(uint8_t const *, int, ECDSA_SIG const *, EC_KEY const *)
+{
+	return 1;    // We have just checked this signature very very carefully, and it was valid.
+}
+//END ALCHEMY ***********************************************
+#endif  //MATH_IS_ALCHEMY
+
 
 // Invariant:
 // crcTable[0] = 0;
@@ -67,99 +167,15 @@ uint32_t crcSumVector2i(uint32_t crc, const Vector2i *data, size_t dataLen)
 	return crc;
 }
 
-// Let primes[n] = {2, 3, 5, 7, 11, ...}.
-// Invariant: sha256TableH[n] = sqrt(primes[n]) << 32
-static const uint32_t sha256TableH[8] = {0x6A09E667, 0xBB67AE85, 0x3C6EF372, 0xA54FF53A, 0x510E527F, 0x9B05688C, 0x1F83D9AB, 0x5BE0CD19};
-// Invariant: sha256TableK[n] = pow(primes[n], 1/3.) << 32
-static const uint32_t sha256TableK[64] = {0x428A2F98, 0x71374491, 0xB5C0FBCF, 0xE9B5DBA5, 0x3956C25B, 0x59F111F1, 0x923F82A4, 0xAB1C5ED5, 0xD807AA98, 0x12835B01, 0x243185BE, 0x550C7DC3, 0x72BE5D74, 0x80DEB1FE, 0x9BDC06A7, 0xC19BF174, 0xE49B69C1, 0xEFBE4786, 0x0FC19DC6, 0x240CA1CC, 0x2DE92C6F, 0x4A7484AA, 0x5CB0A9DC, 0x76F988DA, 0x983E5152, 0xA831C66D, 0xB00327C8, 0xBF597FC7, 0xC6E00BF3, 0xD5A79147, 0x06CA6351, 0x14292967, 0x27B70A85, 0x2E1B2138, 0x4D2C6DFC, 0x53380D13, 0x650A7354, 0x766A0ABB, 0x81C2C92E, 0x92722C85, 0xA2BFE8A1, 0xA81A664B, 0xC24B8B70, 0xC76C51A3, 0xD192E819, 0xD6990624, 0xF40E3585, 0x106AA070, 0x19A4C116, 0x1E376C08, 0x2748774C, 0x34B0BCB5, 0x391C0CB3, 0x4ED8AA4A, 0x5B9CCA4F, 0x682E6FF3, 0x748F82EE, 0x78A5636F, 0x84C87814, 0x8CC70208, 0x90BEFFFA, 0xA4506CEB, 0xBEF9A3F7, 0xC67178F2};
-
-// Rotate right.
-static inline uint32_t ror(uint32_t a, int shift)
-{
-	return (a >> shift) | (a << (32 - shift));  // This is correctly optimised to a rotate-right instruction, in GCC, at least.
-}
-
-static void sha256SumBlock(uint32_t *w, uint32_t *h)
-{
-	for (unsigned i = 0; i < 16; ++i)
-	{
-		w[i] = ntohl(w[i]);  // Interpret data as big-endian 32-bit numbers.
-	}
-
-	// Extend w block from length 16 to 64.
-	for (unsigned i = 16; i < 64; ++i)
-	{
-		uint32_t s0 = ror(w[i - 15], 7) ^ ror(w[i - 15], 18) ^ (w[i - 15] >> 3);
-		uint32_t s1 = ror(w[i - 2], 17) ^ ror(w[i - 2], 19) ^ (w[i - 2] >> 10);
-		w[i] = w[i - 16] + s0 + w[i - 7] + s1;
-	}
-
-	uint32_t a = h[0], b = h[1], c = h[2], d = h[3], e = h[4], f = h[5], g = h[6], j = h[7];
-	for (unsigned i = 0; i < 64; ++i)
-	{
-		uint32_t s0 = ror(a, 2) ^ ror(a, 13) ^ ror(a, 22);
-		uint32_t maj = (a & b) ^ (a & c) ^ (b & c);  // Can be simplified to ((a ^ b) & c) ^ (a & b), but GCC does this at compile time.
-		uint32_t t2 = s0 + maj;
-		uint32_t s1 = ror(e, 6) ^ ror(e, 11) ^ ror(e, 25);
-		uint32_t ch = (e & (f ^ g)) ^ g;  // Equivalent to (e & f) ^ (~e & g), but saves a 'notl' instruction.
-		uint32_t t1 = j + s1 + ch + sha256TableK[i] + w[i];
-
-		j = g;
-		g = f;
-		f = e;
-		e = d + t1;
-		d = c;
-		c = b;
-		b = a;
-		a = t1 + t2;
-	}
-
-	h[0] += a;
-	h[1] += b;
-	h[2] += c;
-	h[3] += d;
-	h[4] += e;
-	h[5] += f;
-	h[6] += g;
-	h[7] += j;
-}
-
 Sha256 sha256Sum(void const *data, size_t dataLen)
 {
-	uint32_t h[8];
-	std::copy(sha256TableH, sha256TableH + 8, h);
+	static_assert(Sha256::Bytes == SHA256_DIGEST_LENGTH, "Size mismatch.");
 
-	// Add the suffix to the data.
-	char suffix[64 + 8];
-	size_t suffixLen = ((-9 - dataLen) & 63) + 9;
-	suffix[0] = 0x80;
-	memset(suffix + 1, 0x00, suffixLen - 1 - 8);
-	uint32_t size[2] = {htonl(dataLen >> 29), htonl(dataLen << 3)};  // Convert dataLen to number of bits, in big-endian format.
-	memcpy(suffix + suffixLen - 8, (char *)size, 8);
-
-	// Hash the data.
-	uint32_t w[64];  // 16 elements are passed to sha256SumBlock(), rest is used as scratch space by sha256SumBlock().
-	for (size_t z = 0; z + 63 < dataLen; z += 64)
-	{
-		memcpy((char *)w, (char const *)data + z, 64);
-		sha256SumBlock(w, h);
-	}
-	memcpy((char *)w, (char const *)data + (dataLen & ~63), dataLen & 63);
-	memcpy((char *)w + (dataLen & 63), suffix, ((suffixLen - 1) & 63) + 1);
-	sha256SumBlock(w, h);
-	if (suffixLen > 64)
-	{
-		memcpy((char *)w, suffix + (suffixLen & 63), 64);
-		sha256SumBlock(w, h);
-	}
-
-	// Convert result to big-endian, and return it.
-	for (unsigned i = 0; i < 8; ++i)
-	{
-		h[i] = htonl(h[i]);
-	}
 	Sha256 ret;
-	memcpy(ret.bytes, h, 32);
+	SHA256_CTX ctx;
+	SHA256_Init(&ctx);
+	SHA256_Update(&ctx, data, dataLen);
+	SHA256_Final(ret.bytes, &ctx);
 	return ret;
 }
 
@@ -183,7 +199,7 @@ std::string Sha256::toString() const
 	std::string str;
 	str.resize(Bytes * 2);
 	char const *hexDigits = "0123456789abcdef";
-	for (unsigned n = 0; n < Bytes; ++n)
+	for (int n = 0; n < Bytes; ++n)
 	{
 		str[n * 2    ] = hexDigits[bytes[n] >> 4];
 		str[n * 2 + 1] = hexDigits[bytes[n] & 15];
@@ -217,4 +233,222 @@ void Sha256::fromString(std::string const &s)
 		}
 		bytes[n / 2] |= h << (n % 2 ? 0 : 4);
 	}
+}
+
+const int EcKey::curveId = NID_secp224r1;
+
+EcKey::EcKey()
+	: vKey(nullptr)
+{}
+
+EcKey::EcKey(EcKey const &b)
+{
+	vKey = (void *)EC_KEY_dup((EC_KEY *)b.vKey);
+}
+
+EcKey::EcKey(EcKey &&b)
+	: vKey(nullptr)
+{
+	std::swap(vKey, b.vKey);
+}
+
+EcKey::~EcKey()
+{
+	clear();
+}
+
+EcKey &EcKey::operator =(EcKey const &b)
+{
+	clear();
+	vKey = (void *)EC_KEY_dup((EC_KEY *)b.vKey);
+	return *this;
+}
+
+EcKey &EcKey::operator =(EcKey &&b)
+{
+	std::swap(vKey, b.vKey);
+	return *this;
+}
+
+void EcKey::clear()
+{
+	EC_KEY_free((EC_KEY *)vKey);
+	vKey = nullptr;
+}
+
+bool EcKey::empty() const
+{
+	return vKey == nullptr;
+}
+
+bool EcKey::hasPrivate() const
+{
+	return vKey != nullptr && EC_KEY_get0_private_key((EC_KEY *)vKey) != nullptr;
+}
+
+EcKey::Sig EcKey::sign(void const *data, size_t dataLen) const
+{
+	if (vKey == nullptr)
+	{
+		debug(LOG_ERROR, "No key");
+		return Sig();
+	}
+	ECDSA_SIG *isig = ECDSA_do_sign((unsigned char const *)data, dataLen, (EC_KEY *)vKey);
+	if (isig == nullptr)
+	{
+		debug(LOG_ERROR, "%s", ERR_error_string(ERR_get_error(), nullptr));
+		return Sig();
+	}
+	Sig sig(ECDSA_size((EC_KEY *)vKey));
+	unsigned char *sigPtr = &sig[0];
+	sig.resize(i2d_ECDSA_SIG(isig, &sigPtr));
+	ECDSA_SIG_free(isig);
+	return sig;
+}
+
+bool EcKey::verify(Sig const &sig, void const *data, size_t dataLen) const
+{
+	if (vKey == nullptr)
+	{
+		debug(LOG_ERROR, "No key");
+		return false;
+	}
+	unsigned char const *sigPtr = &sig[0];
+	ECDSA_SIG *isig = d2i_ECDSA_SIG(nullptr, &sigPtr, sig.size());
+	if (isig == nullptr)
+	{
+		debug(LOG_ERROR, "%s", ERR_error_string(ERR_get_error(), nullptr));
+		return false;
+	}
+	int valid = ECDSA_do_verify((unsigned char const *)data, dataLen, isig, (EC_KEY *)vKey);
+	if (valid < 0)
+	{
+		debug(LOG_ERROR, "%s", ERR_error_string(ERR_get_error(), nullptr));
+	}
+	ECDSA_SIG_free(isig);
+	return valid == 1;
+}
+
+EcKey::Key EcKey::toBytes(Privacy privacy) const
+{
+	int (*toBytesFunc)(EC_KEY * key, unsigned char **out) = nullptr;
+	switch (privacy)
+	{
+	case Private: toBytesFunc = i2d_ECPrivateKey; break;  // Note that the format for private keys is somewhat bloated, and even contains the public key which could be (efficiently) computed from the private key.
+	case Public:  toBytesFunc = i2o_ECPublicKey;  break;
+	}
+	if (empty())
+	{
+		debugBacktrace(LOG_ERROR, "No key");
+		return Key();
+	}
+	Key bytes(toBytesFunc((EC_KEY *)vKey, nullptr));
+	unsigned char *keyPtr = bytes.empty() ? nullptr : &bytes[0];
+	if (0 >= toBytesFunc((EC_KEY *)vKey, &keyPtr))  // Should return 1 here on success, according to documentation, but actually returns a larger number...
+	{
+#ifndef MATH_IS_ALCHEMY
+		debug(LOG_ERROR, "%s", ERR_error_string(ERR_get_error(), nullptr));
+#else
+		debug(LOG_WARNING, "Your build of the game is compiled without EC support. You will not have a player ID, sorry.");
+#endif //MATH_IS_ALCHEMY
+		bytes.clear();
+	}
+	return bytes;
+}
+
+void EcKey::fromBytes(EcKey::Key const &key, EcKey::Privacy privacy)
+{
+	EC_KEY *(*fromBytesFunc)(EC_KEY **key, unsigned char const **in, long len) = nullptr;
+	switch (privacy)
+	{
+	case Private: fromBytesFunc = d2i_ECPrivateKey; break;
+	case Public:  fromBytesFunc = o2i_ECPublicKey;  break;
+	}
+
+	clear();
+
+	unsigned char const *keyPtr = &key[0];
+	EC_KEY *ikey = EC_KEY_new_by_curve_name(curveId);
+	vKey = (void *)fromBytesFunc(&ikey, &keyPtr, key.size());
+	if (vKey == nullptr)
+	{
+		debug(LOG_ERROR, "%s", ERR_error_string(ERR_get_error(), nullptr));
+	}
+}
+
+EcKey EcKey::generate()
+{
+	EC_KEY *key = EC_KEY_new_by_curve_name(curveId);
+	if (key == nullptr)
+	{
+		debug(LOG_ERROR, "%s", ERR_error_string(ERR_get_error(), nullptr));
+		return EcKey();
+	}
+	if (1 != EC_KEY_generate_key(key))
+	{
+		EC_KEY_free(key);
+		debug(LOG_ERROR, "%s", ERR_error_string(ERR_get_error(), nullptr));
+		return EcKey();
+	}
+	EcKey ret;
+	ret.vKey = (void *)key;
+	return ret;
+}
+
+std::string base64Encode(std::vector<uint8_t> const &bytes)
+{
+	std::string str((bytes.size() + 2) / 3 * 4, '\0');
+	for (unsigned n = 0; n * 3 < bytes.size(); ++n)
+	{
+		unsigned rem = bytes.size() - n * 3;
+		unsigned block = bytes[0 + n * 3] << 16 | (rem > 1 ? bytes[1 + n * 3] : 0) << 8 | (rem > 2 ? bytes[2 + n * 3] : 0);
+		for (unsigned i = 0; i < 4; ++i)
+		{
+			str[i + n * 4] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"[(block >> (6 * (3 - i))) & 0x3F];
+		}
+		if (rem <= 2)
+		{
+			str[3 + n * 4] = '=';
+			if (rem <= 1)
+			{
+				str[2 + n * 4] = '=';
+			}
+		}
+	}
+	return str;
+}
+
+std::vector<uint8_t> base64Decode(std::string const &str)
+{
+	std::vector<uint8_t> bytes(str.size() / 4 * 3);
+	for (unsigned n = 0; n < str.size() / 4; ++n)
+	{
+		unsigned block = 0;
+		for (unsigned i = 0; i < 4; ++i)
+		{
+			uint8_t ch = str[i + n * 4];
+			unsigned val = ch >= 'A' && ch <= 'Z' ? ch - 'A' + 0 :
+			               ch >= 'a' && ch <= 'z' ? ch - 'a' + 26 :
+			               ch >= '0' && ch <= '9' ? ch - '0' + 52 :
+			               ch == '+' ? 62 :
+			               ch == '/' ? 63 :
+			               0;
+			block |= val << (6 * (3 - i));
+		}
+		bytes[0 + n * 3] = block >> 16;
+		bytes[1 + n * 3] = block >> 8;
+		bytes[2 + n * 3] = block;
+	}
+	if (str.size() >= 4)
+	{
+		if (str[str.size() / 4 * 4 - 2] == '=')
+		{
+			bytes.resize(bytes.size() - 2);
+		}
+		else if (str[str.size() / 4 * 4 - 1] == '=')
+		{
+			bytes.resize(bytes.size() - 1);
+		}
+	}
+	return bytes;
 }

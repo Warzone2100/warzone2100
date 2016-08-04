@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -39,7 +39,6 @@ extern void recvMultiPlayerFeature(NETQUEUE queue);
 extern void sendMultiPlayerFeature(uint32_t ref, uint32_t x, uint32_t y, uint32_t id);
 
 bool pickupArtefact(int toPlayer, int fromPlayer);
-extern bool	addOilDrum(uint8_t count);
 void giftPower(uint8_t from, uint8_t to, uint32_t amount, bool send);
 extern void giftRadar(uint8_t from, uint8_t to, bool send);
 

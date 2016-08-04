@@ -87,3 +87,11 @@ E0,E0,E0,ff	// team11 - white
 ff,80,40,ff	// construction bar text
 00,ff,00,ff	// power queue bar text
 80,c0,00,ff	// WZCOL_MAP_PREVIEW_BARREL
+00,00,ff,ff	// constructor beam
+ff,00,00,ff	// demolish beam
+68,38,38,ff	// This player has ridiculously high ping.
+98,98,98,ff	// Don't know this player.
+ff,ff,f0,ff	// Seen this player before.
+b0,b0,ff,ff	// Server knows this player.
+10,10,80,80	// Default filled GUI box colour
+1b,ff,5f,ff // Info messages text color

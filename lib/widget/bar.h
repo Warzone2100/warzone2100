@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -27,12 +27,23 @@
 #include "widget.h"
 
 
-struct W_BARGRAPH : public WIDGET
+class W_BARGRAPH : public WIDGET
 {
+	Q_OBJECT
+
+public:
 	W_BARGRAPH(W_BARINIT const *init);
 
 	void highlight(W_CONTEXT *psContext);
-	void highlightLost(W_CONTEXT *);
+	void highlightLost();
+	void display(int xOffset, int yOffset);
+
+	void setTip(QString string);
+
+	void setBackgroundColour(PIELIGHT colour)
+	{
+		backgroundColour = colour;
+	}
 
 	WBAR_ORIENTATION barPos;                        // Orientation of the bar on the widget
 	UWORD		majorSize;			// Percentage of the main bar that is filled
@@ -45,23 +56,14 @@ struct W_BARGRAPH : public WIDGET
 	PIELIGHT	majorCol;			// Colour for the major bar
 	PIELIGHT	minorCol;			// Colour for the minor bar
 	PIELIGHT        textCol;                        // Colour for the text on the bar.
-	const char	*pTip;				// The tool tip for the graph
+	QString         pTip;                           // The tool tip for the graph
 	QString         text;                           // Text on the bar.
+
+//private:
+	PIELIGHT backgroundColour;
 };
 
-/* Create a barGraph widget data structure */
-extern W_BARGRAPH *barGraphCreate(const W_BARINIT *psInit);
-
-/* Free the memory used by a barGraph */
-extern void barGraphFree(W_BARGRAPH *psWidget);
-
-/* The bar graph display function */
-extern void barGraphDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
-
-/* The double bar graph display function */
-extern void barGraphDisplayDouble(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
-
 /* The trough bar graph display function */
-extern void barGraphDisplayTrough(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+void barGraphDisplayTrough(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 
 #endif // __INCLUDED_LIB_WIDGET_BAR_H__

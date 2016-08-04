@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -205,7 +205,7 @@ static bool eventLoadContext(WzConfig &ini)
 					break;
 				case VAL_STRING:
 					data.v.sval = (char *)malloc(MAXSTRLEN);
-					strcpy(data.v.sval, ini.value("var/" + QString::number(i) + "/data").toString().toAscii().constData());
+					strcpy(data.v.sval, ini.value("var/" + QString::number(i) + "/data").toString().toUtf8().constData());
 					break;
 				case VAL_OBJ_GETSET:
 				case VAL_FUNC_EXTERN:
@@ -343,7 +343,7 @@ static bool eventLoadTriggerList(WzConfig &ini, QString tname)
 // Save the state of the event system
 bool eventSaveState(const char *pFilename)
 {
-	WzConfig ini(pFilename);
+	WzConfig ini(pFilename, WzConfig::ReadAndWrite);
 	if (!eventSaveContext(ini) || !eventSaveTriggerList(psTrigList, "trig", ini) || !eventSaveTriggerList(psCallbackList, "callback", ini))
 	{
 		return false;
@@ -354,7 +354,7 @@ bool eventSaveState(const char *pFilename)
 // Load the state of the event system
 bool eventLoadState(const char *pFilename)
 {
-	WzConfig ini(pFilename);
+	WzConfig ini(pFilename, WzConfig::ReadOnly);
 	// load the event contexts
 	if (!eventLoadContext(ini) || !eventLoadTriggerList(ini, "trig") || !eventLoadTriggerList(ini, "callback"))
 	{

@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -678,8 +678,7 @@ bool scrCBTransporterLandedB(void)
 
 	psTransporter = transporterGetScriptCurrent();
 
-	if ((psTransporter == NULL) ||
-	    (psTransporter->player != (UDWORD)player))
+	if (psTransporter == NULL || psTransporter->player != (UDWORD)player)
 	{
 		retval = false;
 	}
@@ -687,9 +686,6 @@ bool scrCBTransporterLandedB(void)
 	{
 		*ppsTransp = psTransporter;		//return landed transporter
 
-		/* if not selectedPlayer unload droids */
-		//if ( (UDWORD)player != selectedPlayer )
-		//{
 		/* transfer droids from transporter group to current group */
 		for (psDroid = psTransporter->psGroup->psList; psDroid; psDroid = psNext)
 		{
@@ -699,7 +695,6 @@ bool scrCBTransporterLandedB(void)
 				psGroup->add(psDroid);
 			}
 		}
-		//}
 
 		retval = true;
 	}
@@ -1116,8 +1111,7 @@ bool scrCBDorderReachedLocation(void)
 	DROID		**ppsDroid;
 	bool	triggered = false;
 
-	if (!stackPopParams(3, VAL_INT, &player, VAL_REF | ST_DROID, &ppsDroid
-	                    , VAL_REF | VAL_INT, &Order))
+	if (!stackPopParams(3, VAL_INT, &player, VAL_REF | ST_DROID, &ppsDroid, VAL_REF | VAL_INT, &Order))
 	{
 		debug(LOG_ERROR, "scrCBDorderReachedLocation: failed to pop");
 		return false;
@@ -1125,7 +1119,7 @@ bool scrCBDorderReachedLocation(void)
 
 	if (psScrCBOrderDroid == NULL)	//if droid was destroyed
 	{
-		ASSERT(false, "scrCBDorderReachedLocation: psScrCBOrderDroid is NULL");
+		ASSERT(false, "psScrCBOrderDroid is NULL");
 		triggered = false;
 		*ppsDroid = NULL;
 	}

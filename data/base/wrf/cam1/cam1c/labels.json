@@ -1,0 +1,59 @@
+{
+	"position_0": { "label": "startPosition", "pos": [ 1920, 6656 ]},
+	"area_0": { "label": "landingZone", "pos1": [ 1280, 6528 ], "pos2": [ 1536, 6784 ]},
+	"object_0": { "label": "NPResearchFacility", "id": 2051, "player": 1, "type": 1 },
+
+	"area_1": { "label": "EastNPLZ", "pos1": [ 13504, 4672 ], "pos2": [ 13760, 4928 ]},
+	"area_2": { "label": "WestNPLZ", "pos1": [ 8896, 10048 ], "pos2": [ 9152, 10304 ]},
+
+	"area_3": { "label": "PhantomLZ1", "pos1": [ 7104, 6208 ], "pos2": [ 7360, 6464 ]},
+	"area_4": { "label": "PhantomLZ2", "pos1": [ 6080, 6720 ], "pos2": [ 6336, 6976 ]},
+	"area_5": { "label": "PhantomLZ3", "pos1": [ 7744, 4544 ], "pos2": [ 8000, 4800 ]},
+	"area_6": { "label": "PhantomLZ4", "pos1": [ 6720, 3392 ], "pos2": [ 6976, 3648 ]},
+	"area_7": { "label": "PhantomLZ5", "pos1": [ 10432, 8256 ], "pos2": [ 10678, 8512 ]},
+
+	"object_1": { "label": "ScavSouthFactory", "id": 1888, "player": 7, "type": 1 },
+	"position_1": { "label": "ScavSouthFactoryAssembly", "pos": [ 13248, 13632 ]},
+
+	"object_2": { "label": "ScavCentralFactory", "id": 2265, "player": 7, "type": 1 },
+	"radius_0": {"label": "ScavCentralFactoryTrigger", "subscriber": 0, "pos" : [ 8448, 7040 ], "radius": 1920 },
+
+	"object_3": { "label": "ScavNorthFactory", "id": 2168, "player": 7, "type": 1 },
+	"radius_1": {"label": "ScavNorthFactoryTrigger", "subscriber": 0, "pos" : [ 8576, 384 ], "radius": 1920 },
+	"position_2": { "label": "ScavNorthFactoryAssembly", "pos": [ 8384, 704 ]},
+
+	"object_4": { "label": "NPCentralFactory", "id": 2135, "player": 1, "type": 1 },
+	"position_3": { "label": "NPCentralFactoryAssembly", "pos": [ 12736, 11456 ]},
+
+	"object_5": { "label": "NPNorthFactory", "id": 2136, "player": 1, "type": 1 },
+	"radius_2": {"label": "NPNorthFactoryTrigger", "subscriber": 0, "pos" : [ 11520, 3712 ], "radius": 1920 },
+	"position_4": { "label": "NPNorthFactoryAssembly", "pos": [ 9920, 3136 ]},
+
+	"area_8": { "label": "RocketScoutForce", "pos1": [ 8384, 13760 ], "pos2": [8640, 14144]},
+	"area_9": { "label": "RocketForce", "pos1": [ 8640, 13760 ], "pos2": [8896, 14144]},
+	"area_10": { "label": "TankScoutForce", "pos1": [ 9280, 13760 ], "pos2": [9920, 14272]},
+	"object_6": { "label": "TankScoutForceCommander", "id": 3387, "player": 1, "type": 0 },
+	"area_11": { "label": "TankForce", "pos1": [ 9280, 14272 ], "pos2": [9920, 14656]},
+	"object_7": { "label": "TankForceCommander", "id": 3388, "player": 1, "type": 0 },
+	"area_12": { "label": "AmbushForce", "pos1": [ 10944, 10816 ], "pos2": [ 11712, 11712 ]},
+	"object_8": { "label": "AmbushForceCommander", "id": 3276, "player": 1, "type": 0 },
+
+	"area_13": {"label": "ScavSouthDerrick", "pos1": [ 9920, 14272 ], "pos2": [ 11072, 16192 ]},
+	"area_14": {"label": "ScavSouthEastHighground", "pos1": [ 11200, 11968 ], "pos2": [ 14912, 14784 ]},
+	"area_15": {"label": "ScavNorthBase", "pos1": [ 8000, 192 ], "pos2": [ 9664, 1600 ]},
+	"area_16": {"label": "ScavSouthPodPits", "pos1": [ 8384, 2624 ], "pos2": [ 10048, 4672 ]},
+	"area_17": {"label": "MixedCentralBase", "pos1": [ 8256, 4928 ], "pos2": [ 10048, 8640 ]},
+	"area_18": {"label": "ScavSouthEastBase", "pos1": [ 10176, 12992 ], "pos2": [ 14528, 14784 ]},
+	"area_19": {"label": "NPEastBase", "pos1": [ 9408, 8640 ], "pos2": [ 13760, 11328 ]},
+	"area_20": {"label": "NPNorthEastGenerator", "pos1": [ 12992, 1088 ], "pos2": [ 15040, 3776 ]},
+	"area_21": {"label": "NPNorthEastBase", "pos1": [ 10176, 1216 ], "pos2": [ 12352, 4544 ]},
+
+	"radius_3": { "label": "RemoveBeacon", "subscriber": 0, "pos" : [ 6848, 13888 ], "radius": 640 },
+	"area_22": { "label": "AmbushTrigger", "subscriber": 0, "pos1": [ 8896, 13760 ], "pos2": [ 10048, 14656 ]},
+	"position_5": { "label": "AmbushTarget", "pos": [ 8352, 13880 ]},
+
+	"area_23": { "label": "NPLZ1", "pos1": [ 12992, 3904 ], "pos2": [ 14272, 5568 ]},
+	"area_24": { "label": "NPLZ1Trigger", "subscriber": 0, "pos1": [ 10560, 6400 ], "pos2": [ 16448, 8256 ]},
+	"area_25": { "label": "NPLZ2", "pos1": [ 8512, 9792 ], "pos2": [ 9664, 10944 ]},
+	"area_26": { "label": "NPLZ2Trigger", "subscriber": 0, "pos1": [ 7616, 4800 ], "pos2": [ 9408, 5696 ]}
+}

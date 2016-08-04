@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -68,8 +68,6 @@
 
 #include "multimenu.h"
 
-//#define NO_VIDEO
-
 /* Intelligence Map screen IDs */
 #define IDINTMAP_MSGFORM		6001	//The intelligence map tabbed form
 #define IDINTMAP_CLOSE			6004	//The close button icon for the 3D view
@@ -78,7 +76,6 @@
 #define IDINTMAP_FLICVIEW		6008	//The Flic View part of MSGVIEW
 #define IDINTMAP_TEXTVIEW		6009	//The Text area of MSGVIEW
 #define	IDINTMAP_TITLELABEL		6010	//The title text
-#define IDINTMAP_SEQTEXT		6011	//Sequence subtitle text
 
 #define IDINTMAP_MSGSTART		6100	//The first button on the intelligence form
 #define	IDINTMAP_MSGEND			6139	//The last button on the intelligence form (40 MAX)
@@ -97,9 +94,7 @@
 #define INTMAP_LABELHEIGHT		20
 
 /*tabbed message form screen positions */
-#define INTMAP_MSGX				OBJ_TABX
 #define INTMAP_MSGY				OBJ_TABY
-#define INTMAP_MSGWIDTH			OBJ_WIDTH
 #define INTMAP_MSGHEIGHT		OBJ_HEIGHT
 
 //define the 3D View sizes and positions that are required - relative to INTMAP_FORM
@@ -166,23 +161,32 @@ static bool				playCurrent;
 /* functions declarations ****************/
 static bool intAddMessageForm(bool playCurrent);
 /*Displays the buttons used on the intelligence map */
-static void intDisplayMessageButton(WIDGET *psWidget, UDWORD xOffset,
-                                    UDWORD yOffset, PIELIGHT *pColours);
+class IntMessageButton : public IntFancyButton
+{
+public:
+	IntMessageButton(WIDGET *parent);
+
+	virtual void display(int xOffset, int yOffset);
+
+	void setMessage(MESSAGE *msg)
+	{
+		psMsg = msg;
+	}
+
+protected:
+	MESSAGE *psMsg;
+};
 
 /*deal with the actual button press - proxMsg is set to true if a proximity
   button has been pressed*/
 static void intIntelButtonPressed(bool proxMsg, UDWORD id);
 
-static void intDisplayPIEView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
-#ifndef NO_VIDEO
-static void intDisplayFLICView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
-#endif
-static void intDisplayTEXTView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+static void intDisplayPIEView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
+static void intDisplayFLICView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
+static void intDisplayTEXTView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 static void addVideoText(SEQ_DISPLAY *psSeqDisplay, UDWORD sequence);
 
-static void intDisplaySeqTextView(WIDGET *psWidget,
-                                  UDWORD xOffset, UDWORD yOffset,
-                                  PIELIGHT *pColours);
+static void intDisplaySeqTextView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 static bool intDisplaySeqTextViewPage(VIEW_REPLAY *psViewReplay,
                                       UDWORD x0, UDWORD y0,
                                       UDWORD width, UDWORD height,
@@ -249,35 +253,12 @@ bool intAddIntelMap(void)
 	//set pause states before putting the interface up
 	setIntelligencePauseState();
 
-	W_FORMINIT sFormInit;
+	WIDGET *parent = psWScreen->psForm;
 
 	// Add the main Intelligence Map form
-
-	sFormInit.formID = 0;
-	sFormInit.id = IDINTMAP_FORM;
-	sFormInit.style = WFORM_PLAIN;
-	sFormInit.x = (SWORD)INTMAP_X;
-	sFormInit.y = (SWORD)INTMAP_Y;
-	sFormInit.width = INTMAP_WIDTH;
-	sFormInit.height = INTMAP_HEIGHT;
-
-	// If the window was closed then do open animation.
-	if (Animate)
-	{
-		sFormInit.pDisplay = intOpenPlainForm;
-		sFormInit.disableChildren = true;
-	}
-	else
-	{
-		// otherwise just recreate it.
-		sFormInit.pDisplay = intDisplayPlainForm;
-	}
-
-	//sFormInit.pDisplay = intDisplayPlainForm;
-	if (!widgAddForm(psWScreen, &sFormInit))
-	{
-		return false;
-	}
+	IntFormAnimated *intMapForm = new IntFormAnimated(parent, Animate);  // Do not animate the opening, if the window was already open.
+	intMapForm->id = IDINTMAP_FORM;
+	intMapForm->setGeometry(INTMAP_X, INTMAP_Y, INTMAP_WIDTH, INTMAP_HEIGHT);
 
 	if (!intAddMessageForm(playCurrent))
 	{
@@ -295,89 +276,22 @@ bool intAddIntelMap(void)
 /* Add the Message sub form */
 static bool intAddMessageForm(bool playCurrent)
 {
-	UDWORD			numButtons, i;
-	MESSAGE			*psMessage;
-	RESEARCH		*psResearch;
-	SDWORD			BufferID;
+	WIDGET *msgForm = widgGetFromID(psWScreen, IDINTMAP_FORM);
 
 	/* Add the Message form */
-	W_FORMINIT sFormInit;
-	sFormInit.formID = IDINTMAP_FORM;
-	sFormInit.id = IDINTMAP_MSGFORM;
-	sFormInit.style = WFORM_TABBED;
-	sFormInit.width = INTMAP_MSGWIDTH;
-	sFormInit.height = INTMAP_MSGHEIGHT;
-	sFormInit.x = INTMAP_MSGX;
-	sFormInit.y = INTMAP_MSGY;
-
-	sFormInit.majorPos = WFORM_TABTOP;
-	sFormInit.minorPos = WFORM_TABNONE;
-	sFormInit.majorSize = OBJ_TABWIDTH;
-	sFormInit.majorOffset = OBJ_TABOFFSET;
-	sFormInit.tabVertOffset = (OBJ_TABHEIGHT / 2);
-	sFormInit.tabMajorThickness = OBJ_TABHEIGHT;
-
-	numButtons = 0;
-	/*work out the number of buttons */
-	for (psMessage = apsMessages[selectedPlayer]; psMessage; psMessage =
-	         psMessage->psNext)
-	{
-		//ignore proximity messages here
-		if (psMessage->type != MSG_PROXIMITY)
-		{
-			numButtons++;
-		}
-
-		// stop adding the buttons once max has been reached
-		if (numButtons > (IDINTMAP_MSGEND - IDINTMAP_MSGSTART))
-		{
-			break;
-		}
-	}
-
-	//set the number of tabs required
-	sFormInit.numMajor = numForms((OBJ_BUTWIDTH + OBJ_GAP) * numButtons,
-	                              (OBJ_WIDTH - OBJ_GAP) * 2);
-
-	sFormInit.pUserData = &StandardTab;
-	sFormInit.pTabDisplay = intDisplayTab;
-
-	if (sFormInit.numMajor > MAX_TAB_STD_SHOWN)
-	{
-		// we do NOT use smallTab icons here, so be safe and only display max # of
-		// standard sized tab icons.
-		sFormInit.numMajor = MAX_TAB_STD_SHOWN;
-	}
-	//set minor tabs to 1
-	for (i = 0; i < sFormInit.numMajor; i++)
-	{
-		sFormInit.aNumMinors[i] = 1;
-	}
-
-	if (!widgAddForm(psWScreen, &sFormInit))
-	{
-		return false;
-	}
-
+	IntListTabWidget *msgList = new IntListTabWidget(msgForm);
+	msgList->id = IDINTMAP_MSGFORM;
+	msgList->setChildSize(OBJ_BUTWIDTH, OBJ_BUTHEIGHT);
+	msgList->setChildSpacing(OBJ_GAP, OBJ_GAP);
+	int msgListWidth = OBJ_BUTWIDTH * 5 + OBJ_GAP * 4;
+	msgList->setGeometry((msgForm->width() - msgListWidth) / 2, INTMAP_MSGY, msgListWidth, msgForm->height() - INTMAP_MSGY);
 
 	/* Add the message buttons */
-	W_FORMINIT sBFormInit;
-	sBFormInit.formID = IDINTMAP_MSGFORM;
-	sBFormInit.id = IDINTMAP_MSGSTART;
-	sBFormInit.majorID = 0;
-	sBFormInit.minorID = 0;
-	sBFormInit.style = WFORM_CLICKABLE;
-	sBFormInit.x = OBJ_STARTX;
-	sBFormInit.y = OBJ_STATSTARTY;
-	sBFormInit.width = OBJ_BUTWIDTH;
-	sBFormInit.height = OBJ_BUTHEIGHT;
-
-	ClearObjectBuffers();
+	int nextButtonId = IDINTMAP_MSGSTART;
 
 	//add each button
 	messageID = 0;
-	for (psMessage = apsMessages[selectedPlayer]; psMessage; psMessage =
-	         psMessage->psNext)
+	for (MESSAGE *psMessage = apsMessages[selectedPlayer]; psMessage != nullptr; psMessage = psMessage->psNext)
 	{
 		/*if (psMessage->type == MSG_TUTORIAL)
 		{
@@ -391,72 +305,51 @@ static bool intAddMessageForm(bool playCurrent)
 			continue;
 		}
 
+		IntMessageButton *button = new IntMessageButton(msgList);
+		button->id = nextButtonId;
+		button->setMessage(psMessage);
+		msgList->addWidgetToLayout(button);
+
 		/* Set the tip and add the button */
+		RESEARCH *psResearch;
 		switch (psMessage->type)
 		{
 		case MSG_RESEARCH:
-			psResearch =  getResearchForMsg((VIEWDATA *)psMessage->pViewData);
+			psResearch = getResearchForMsg((VIEWDATA *)psMessage->pViewData);
 			if (psResearch)
 			{
-				sBFormInit.pTip = getStatName(psResearch);
+				button->setTip(psResearch->name);
 			}
 			else
 			{
-				sBFormInit.pTip = _("Research Update");
+				button->setTip(_("Research Update"));
 			}
 			break;
 		case MSG_CAMPAIGN:
-			sBFormInit.pTip = _("Project Goals");
+			button->setTip(_("Project Goals"));
 			break;
 		case MSG_MISSION:
-			sBFormInit.pTip = _("Current Objective");
+			button->setTip(_("Current Objective"));
 			break;
 		default:
 			break;
 		}
 
-		BufferID = GetObjectBuffer();
-		ASSERT(BufferID >= 0, "Unable to acquire object buffer.");
-		RENDERBUTTON_INUSE(&ObjectBuffers[BufferID]);
-		ObjectBuffers[BufferID].Data = (void *)psMessage;
-		sBFormInit.pUserData = &ObjectBuffers[BufferID];
-		sBFormInit.pDisplay = intDisplayMessageButton;
-
-		if (!widgAddForm(psWScreen, &sBFormInit))
-		{
-			return false;
-		}
-
 		/* if the current message matches psSelected lock the button */
 		if (psMessage == psCurrentMsg)
 		{
-			messageID = sBFormInit.id;
-			widgSetButtonState(psWScreen, messageID, WBUT_LOCK);
-			widgSetTabs(psWScreen, IDINTMAP_MSGFORM, sBFormInit.majorID, 0);
+			messageID = nextButtonId;
+			button->setState(WBUT_LOCK);
+			msgList->setCurrentPage(msgList->pages() - 1);
 		}
 
 		/* Update the init struct for the next button */
-		sBFormInit.id += 1;
+		++nextButtonId;
 
 		// stop adding the buttons when at max
-		if (sBFormInit.id > IDINTMAP_MSGEND)
+		if (nextButtonId > IDINTMAP_MSGEND)
 		{
 			break;
-		}
-
-		ASSERT(sBFormInit.id < (IDINTMAP_MSGEND + 1), "Too many message buttons");
-
-		sBFormInit.x += OBJ_BUTWIDTH + OBJ_GAP;
-		if (sBFormInit.x + OBJ_BUTWIDTH + OBJ_GAP > INTMAP_MSGWIDTH)
-		{
-			sBFormInit.x = OBJ_STARTX;
-			sBFormInit.y += OBJ_BUTHEIGHT + OBJ_GAP;
-		}
-
-		if (sBFormInit.y + OBJ_BUTHEIGHT + OBJ_GAP > INTMAP_MSGHEIGHT)
-		{
-			sBFormInit.y = OBJ_STATSTARTY;
-			sBFormInit.majorID += 1;
 		}
 	}
 	//check to play current message instantly
@@ -492,39 +385,17 @@ bool intAddMessageView(MESSAGE *psMessage)
 		intCloseMultiMenuNoAnim();
 	}
 
-	/* Add the base form */
-	W_FORMINIT sFormInit;
-	sFormInit.formID = 0;
-	sFormInit.id = IDINTMAP_MSGVIEW;
-	sFormInit.style = WFORM_PLAIN;
-	//size and position depends on the type of message - ONLY RESEARCH now
-	sFormInit.width = INTMAP_RESEARCHWIDTH;
-	sFormInit.height = INTMAP_RESEARCHHEIGHT;
-	sFormInit.x = (SWORD)INTMAP_RESEARCHX;
-	sFormInit.y = (SWORD)INTMAP_RESEARCHY;
+	WIDGET *parent = psWScreen->psForm;
 
-	// If the window was closed then do open animation.
-	if (Animate)
-	{
-		sFormInit.pDisplay = intOpenPlainForm;
-		sFormInit.disableChildren = true;
-	}
-	else
-	{
-		// otherwise just display it.
-		sFormInit.pDisplay = intDisplayPlainForm;
-	}
-
-	if (!widgAddForm(psWScreen, &sFormInit))
-	{
-		return false;
-	}
+	IntFormAnimated *intMapMsgView = new IntFormAnimated(parent, Animate);  // Do not animate the opening, if the window was already open.
+	intMapMsgView->id = IDINTMAP_MSGVIEW;
+	intMapMsgView->setGeometry(INTMAP_RESEARCHX, INTMAP_RESEARCHY, INTMAP_RESEARCHWIDTH, INTMAP_RESEARCHHEIGHT);
 
 	/* Add the close box */
 	W_BUTINIT sButInit;
 	sButInit.formID = IDINTMAP_MSGVIEW;
 	sButInit.id = IDINTMAP_CLOSE;
-	sButInit.x = (SWORD)(sFormInit.width - OPT_GAP - CLOSE_SIZE);
+	sButInit.x = intMapMsgView->width() - OPT_GAP - CLOSE_SIZE;
 	sButInit.y = OPT_GAP;
 	sButInit.width = CLOSE_SIZE;
 	sButInit.height = CLOSE_SIZE;
@@ -540,70 +411,28 @@ bool intAddMessageView(MESSAGE *psMessage)
 	    ((VIEWDATA *)psMessage->pViewData)->type == VIEW_RPL)
 	{
 		VIEW_REPLAY	*psViewReplay;
-		size_t		i, cur_seq, cur_seqpage;
 
 		psViewReplay = (VIEW_REPLAY *)((VIEWDATA *)psMessage->pViewData)->pData;
 
 		/* Add a big tabbed text box for the subtitle text */
-		sFormInit = W_FORMINIT();
+		IntListTabWidget *seqList = new IntListTabWidget(intMapMsgView);
+		seqList->setChildSize(INTMAP_SEQTEXTTABWIDTH, INTMAP_SEQTEXTTABHEIGHT);
+		seqList->setChildSpacing(2, 2);
+		seqList->setGeometry(INTMAP_SEQTEXTX, INTMAP_SEQTEXTY, INTMAP_SEQTEXTWIDTH, INTMAP_SEQTEXTHEIGHT);
+		seqList->setTabPosition(ListTabWidget::Bottom);
+		// Don't think the tabs are actually ever used...
 
-		sFormInit.id = IDINTMAP_SEQTEXT;
-		sFormInit.formID = IDINTMAP_MSGVIEW;
-		sFormInit.style = WFORM_TABBED;
-		sFormInit.x = INTMAP_SEQTEXTX;
-		sFormInit.y = INTMAP_SEQTEXTY;
-		sFormInit.width = INTMAP_SEQTEXTWIDTH;
-		sFormInit.height = INTMAP_SEQTEXTHEIGHT;
-
-		sFormInit.majorPos = WFORM_TABBOTTOM;
-		sFormInit.minorPos = WFORM_TABNONE;
-		sFormInit.majorSize = OBJ_TABWIDTH;
-		sFormInit.majorOffset = OBJ_TABOFFSET;
-		sFormInit.tabVertOffset = (OBJ_TABHEIGHT / 2);
-		sFormInit.tabMajorThickness = OBJ_TABHEIGHT;
-
-		sFormInit.numMajor = 0;
-
-		cur_seq = cur_seqpage = 0;
+		size_t cur_seq = 0, cur_seqpage = 0;
+		int nextPageId = IDINTMAP_SEQTEXTSTART;
 		do
 		{
-			sFormInit.aNumMinors[sFormInit.numMajor] = 1;
-			sFormInit.numMajor++;
+			W_FORM *page = new W_FORM(seqList);
+			page->id = nextPageId++;
+			page->displayFunction = intDisplaySeqTextView;
+			page->pUserData = psViewReplay;
+			seqList->addWidgetToLayout(page);
 		}
-		while (!intDisplaySeqTextViewPage(psViewReplay, 0, 0,
-		                                  sFormInit.width, sFormInit.height,
-		                                  false, &cur_seq, &cur_seqpage));
-
-		sFormInit.pUserData = &StandardTab;
-		sFormInit.pTabDisplay = intDisplayTab;
-
-		if (!widgAddForm(psWScreen, &sFormInit))
-		{
-			return false;
-		}
-
-		W_FORMINIT sTabForm;
-		sTabForm.formID = IDINTMAP_SEQTEXT;
-		sTabForm.id = IDINTMAP_SEQTEXTSTART;
-		sTabForm.majorID = 0;
-		sTabForm.minorID = 0;
-		sTabForm.style = WFORM_PLAIN;
-		sTabForm.x = INTMAP_SEQTEXTTABX;
-		sTabForm.y = INTMAP_SEQTEXTTABY;
-		sTabForm.width = INTMAP_SEQTEXTTABWIDTH;
-		sTabForm.height = INTMAP_SEQTEXTTABHEIGHT;
-		sTabForm.pDisplay = intDisplaySeqTextView;
-		sTabForm.pUserData = psViewReplay;
-
-		for (i = 0; i < sFormInit.numMajor; i++)
-		{
-			sTabForm.id = IDINTMAP_SEQTEXTSTART + i;
-			sTabForm.majorID = i;
-			if (!widgAddForm(psWScreen, &sTabForm))
-			{
-				return false;
-			}
-		}
+		while (!intDisplaySeqTextViewPage(psViewReplay, 0, 0, INTMAP_SEQTEXTTABWIDTH, INTMAP_SEQTEXTHEIGHT, false, &cur_seq, &cur_seqpage));
 
 		return true;
 	}
@@ -624,7 +453,7 @@ bool intAddMessageView(MESSAGE *psMessage)
 
 	ASSERT_OR_RETURN(false, psResearch != NULL, "Research not found");
 	//sLabInit.pText=psResearch->pName;
-	sLabInit.pText = getStatName(psResearch);
+	sLabInit.pText = psResearch->name;
 
 	sLabInit.FontID = font_regular;
 	if (!widgAddLabel(psWScreen, &sLabInit))
@@ -633,8 +462,7 @@ bool intAddMessageView(MESSAGE *psMessage)
 	}
 
 	/*Add the PIE box*/
-
-	sFormInit = W_FORMINIT();
+	W_FORMINIT sFormInit;
 	sFormInit.formID = IDINTMAP_MSGVIEW;
 	sFormInit.id = IDINITMAP_PIEVIEW;
 	sFormInit.style = WFORM_PLAIN;
@@ -649,7 +477,6 @@ bool intAddMessageView(MESSAGE *psMessage)
 		return false;
 	}
 
-#ifndef NO_VIDEO
 	/*Add the Flic box */
 	sFormInit = W_FORMINIT();
 	sFormInit.formID = IDINTMAP_MSGVIEW;
@@ -665,7 +492,6 @@ bool intAddMessageView(MESSAGE *psMessage)
 	{
 		return false;
 	}
-#endif
 
 	/*Add the text box*/
 	sFormInit = W_FORMINIT();
@@ -768,37 +594,20 @@ static bool intDisplaySeqTextViewPage(VIEW_REPLAY *psViewReplay,
 /**
  * Draw the text window for the intelligence display
  */
-static void intDisplaySeqTextView(WIDGET *psWidget,
-                                  UDWORD xOffset, UDWORD yOffset,
-                                  WZ_DECL_UNUSED PIELIGHT *pColours)
+static void intDisplaySeqTextView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
-	W_TABFORM *Form = (W_TABFORM *)psWidget;
-	VIEW_REPLAY *psViewReplay = (VIEW_REPLAY *)Form->pUserData;
+	VIEW_REPLAY *psViewReplay = (VIEW_REPLAY *)psWidget->pUserData;
 	size_t cur_seq, cur_seqpage;
-	UDWORD x0, y0, page;
 
-	x0 = xOffset + Form->x;
-	y0 = yOffset + Form->y;
+	int x0 = xOffset + psWidget->x();
+	int y0 = yOffset + psWidget->y();
 
-	RenderWindowFrame(FRAME_NORMAL, x0, y0, Form->width, Form->height);
+	RenderWindowFrame(FRAME_NORMAL, x0, y0, psWidget->width(), psWidget->height());
 
 	/* work out where we're up to in the text */
 	cur_seq = cur_seqpage = 0;
-	if (Form->style & WFORM_TABBED)
-	{
-		// Gerard 2007-04-07: dead code?
-		ASSERT(!"the form is tabbed", "intDisplaySeqTextView: the form is tabbed");
-		for (page = 0; page < Form->majorT; page++)
-		{
-			intDisplaySeqTextViewPage(psViewReplay, x0, y0,
-			                          Form->width, Form->height,
-			                          false, &cur_seq, &cur_seqpage);
-		}
-	}
 
-	intDisplaySeqTextViewPage(psViewReplay, x0, y0,
-	                          Form->width - 40, Form->height,
-	                          true, &cur_seq, &cur_seqpage);
+	intDisplaySeqTextViewPage(psViewReplay, x0, y0, psWidget->width() - 40, psWidget->height(), true, &cur_seq, &cur_seqpage);
 }
 
 
@@ -1041,25 +850,19 @@ static void intCleanUpIntelMap(void)
 /* Remove the Intelligence Map widgets from the screen */
 void intRemoveIntelMap(void)
 {
-	WIDGET		*Widg;
-	W_TABFORM	*Form;
-
 	//remove 3dView if still there
-	Widg = widgGetFromID(psWScreen, IDINTMAP_MSGVIEW);
+	WIDGET *Widg = widgGetFromID(psWScreen, IDINTMAP_MSGVIEW);
 	if (Widg)
 	{
 		intRemoveMessageView(false);
 	}
 
 	// Start the window close animation.
-	Form = (W_TABFORM *)widgGetFromID(psWScreen, IDINTMAP_FORM);
-	if (Form)
+	IntFormAnimated *form = (IntFormAnimated *)widgGetFromID(psWScreen, IDINTMAP_FORM);
+	if (form)
 	{
-		Form->display = intClosePlainForm;
-		Form->disableChildren = true;
-		Form->pUserData = NULL; // Used to signal when the close anim has finished.
+		form->closeAnimateDelete();
 	}
-	ClosingIntelMap = true;
 	//remove the text label
 	widgDelete(psWScreen, IDINTMAP_PAUSELABEL);
 
@@ -1098,63 +901,44 @@ void intRemoveIntelMapNoAnim(void)
 /* Remove the Message View from the Intelligence screen */
 void intRemoveMessageView(bool animated)
 {
-	W_TABFORM		*Form;
-	VIEW_RESEARCH	*psViewResearch;
-
 	//remove 3dView if still there
-	Form = (W_TABFORM *)widgGetFromID(psWScreen, IDINTMAP_MSGVIEW);
-	if (Form)
+	IntFormAnimated *form = (IntFormAnimated *)widgGetFromID(psWScreen, IDINTMAP_MSGVIEW);
+	if (form == nullptr)
 	{
+		return;
+	}
 
-		//stop the video
-		psViewResearch = (VIEW_RESEARCH *)Form->pUserData;
-		seq_RenderVideoToBuffer(psViewResearch->sequenceName, SEQUENCE_KILL);
+	//stop the video
+	VIEW_RESEARCH *psViewResearch = (VIEW_RESEARCH *)form->pUserData;
+	seq_RenderVideoToBuffer(psViewResearch->sequenceName, SEQUENCE_KILL);
 
-		if (animated)
-		{
-
-			widgDelete(psWScreen, IDINTMAP_CLOSE);
-
-
-			// Start the window close animation.
-			Form->display = intClosePlainForm;
-			Form->disableChildren = true;
-			Form->pUserData = NULL; // Used to signal when the close anim has finished.
-			ClosingMessageView = true;
-		}
-		else
-		{
-			//remove without the animating close window
-			widgDelete(psWScreen, IDINTMAP_MSGVIEW);
-
-		}
+	if (animated)
+	{
+		// Start the window close animation.
+		form->closeAnimateDelete();
+	}
+	else
+	{
+		//remove without the animating close window
+		delete form;
 	}
 }
 
+IntMessageButton::IntMessageButton(WIDGET *parent)
+	: IntFancyButton(parent)
+	, psMsg(nullptr)
+{}
 
 /*Displays the buttons used on the intelligence map */
-void intDisplayMessageButton(WIDGET *psWidget, UDWORD xOffset,
-                             UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
+void IntMessageButton::display(int xOffset, int yOffset)
 {
-	W_CLICKFORM		*psButton = (W_CLICKFORM *)psWidget;
-	RENDERED_BUTTON *psBuffer = (RENDERED_BUTTON *)psButton->pUserData;
-	MESSAGE			*psMsg;
-	bool			Hilight = false;
-	UDWORD			Down = 0, IMDType = 0, compID;
-	SDWORD			image = -1;
 	RESEARCH		*pResearch = NULL;
-	BASE_STATS      *psResGraphic = NULL;
 	bool MovieButton = false;
+	ImdObject object;
+	Image image;
 
-	OpenButtonRender((UWORD)(xOffset + psButton->x), (UWORD)(yOffset + psButton->y),
-	                 psButton->width, psButton->height);
+	initDisplay();
 
-	Down = psButton->state & (WBUTS_DOWN | WBUTS_CLICKLOCK);
-	Hilight = psButton->state & WBUTS_HILITE;
-
-	// Get the object associated with this widget.
-	psMsg = (MESSAGE *)psBuffer->Data;
-	ASSERT_OR_RETURN(, psMsg != NULL, "psBuffer->Data empty. Why?");
 	//shouldn't have any proximity messages here...
 	if (psMsg->type == MSG_PROXIMITY)
 	{
@@ -1173,39 +957,35 @@ void intDisplayMessageButton(WIDGET *psWidget, UDWORD xOffset,
 			if (StatIsStructure(pResearch->psStat))
 			{
 				//this defines how the button is drawn
-				IMDType = IMDTYPE_STRUCTURESTAT;
-				psResGraphic = pResearch->psStat;
+				object = ImdObject::StructureStat(pResearch->psStat);
 			}
 			else
 			{
-				compID = StatIsComponent(pResearch->psStat);
-				if (compID != COMP_UNKNOWN)
+				int compID = StatIsComponent(pResearch->psStat);
+				if (compID != COMP_NUMCOMPONENTS)
 				{
 					//this defines how the button is drawn
-					IMDType = IMDTYPE_COMPONENT;
-					psResGraphic = pResearch->psStat;
+					object = ImdObject::Component(pResearch->psStat);
 				}
 				else
 				{
 					ASSERT(false, "intDisplayMessageButton: invalid stat");
-					IMDType = IMDTYPE_RESEARCH;
-					psResGraphic = (BASE_STATS *)pResearch;
+					object = ImdObject::Research(pResearch);
 				}
 			}
 		}
 		else
 		{
 			//no Stat for this research topic so use the research topic to define what is drawn
-			psResGraphic = (BASE_STATS *)pResearch;
-			IMDType = IMDTYPE_RESEARCH;
+			object = ImdObject::Research(pResearch);
 		}
 		break;
 	case MSG_CAMPAIGN:
-		image = IMAGE_INTEL_CAMPAIGN;
+		image = Image(IntImages, IMAGE_INTEL_CAMPAIGN);
 		MovieButton = true;
 		break;
 	case MSG_MISSION:
-		image = IMAGE_INTEL_MISSION;
+		image = Image(IntImages, IMAGE_INTEL_MISSION);
 		MovieButton = true;
 		break;
 	default:
@@ -1218,57 +998,27 @@ void intDisplayMessageButton(WIDGET *psWidget, UDWORD xOffset,
 	{
 		if (pResearch->iconID != NO_RESEARCH_ICON)
 		{
-			image = pResearch->iconID;
+			image = Image(IntImages, pResearch->iconID);
 		}
 
 		//do we have the same icon for the top right hand corner?
-		if (image > 0)
-		{
-			RenderToButton(IntImages, (UWORD)image, psResGraphic, selectedPlayer, psBuffer, Down, IMDType, TOPBUTTON);
-		}
-		else
-		{
-			RenderToButton(NULL, 0, pResearch, selectedPlayer, psBuffer, Down, IMDType, TOPBUTTON); //ajl, changed from 0 to selectedPlayer
-		}
+		displayIMD(image, object, xOffset, yOffset);
 	}
 	else
 		//draw buttons for mission and general messages
 	{
-		if (image > 0)
-		{
-
-			if (MovieButton)
-			{
-				// draw the button with the relevant image, don't add Down to the image ID if it's
-				// a movie button.
-				RenderImageToButton(IntImages, (UWORD)(image), psBuffer, Down, TOPBUTTON);
-			}
-			else
-			{
-				//draw the button with the relevant image
-				RenderImageToButton(IntImages, (UWORD)(image + Down), psBuffer, Down, TOPBUTTON);
-			}
-
-		}
+		// Draw the button with the relevant image, don't add isDown() to the image ID if it's a movie button.
+		displayImage(MovieButton ? image : Image(image.images, image.id + isDown()), xOffset, yOffset);
 	}
-
-	CloseButtonRender();
-
-	if (Hilight)
-	{
-
-		iV_DrawImage(IntImages, IMAGE_BUT_HILITE, xOffset + psButton->x,
-		             yOffset + psButton->y);
-	}
+	displayIfHighlight(xOffset, yOffset);
+	doneDisplay();
 }
 
 
 /* displays the PIE view for the current message */
-void intDisplayPIEView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
+void intDisplayPIEView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
-	W_TABFORM		*Form = (W_TABFORM *)psWidget;
-	MESSAGE			*psMessage = (MESSAGE *)Form->pUserData;
-	UDWORD			x0, y0, x1, y1;
+	MESSAGE *psMessage = (MESSAGE *)psWidget->pUserData;
 	SWORD			image = -1;
 	RESEARCH        *psResearch;
 
@@ -1280,17 +1030,13 @@ void intDisplayPIEView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL
 
 	if (psMessage->pViewData)
 	{
-		x0 = xOffset + Form->x;
-		y0 = yOffset + Form->y;
-		x1 = x0 + Form->width;
-		y1 = y0 + Form->height;
+		int x0 = xOffset + psWidget->x();
+		int y0 = yOffset + psWidget->y();
+		int x1 = x0 + psWidget->width();
+		int y1 = y0 + psWidget->height();
 
 		//moved from after close render
 		RenderWindowFrame(FRAME_NORMAL, x0 - 1, y0 - 1, x1 - x0 + 2, y1 - y0 + 2);
-
-		OpenButtonRender((UWORD)(xOffset + Form->x), (UWORD)(yOffset + Form->y),
-		                 Form->width, Form->height);
-		//OpenButtonRender(Form->x, Form->y,Form->width, Form->height);
 
 		if (((VIEWDATA *)psMessage->pViewData)->type != VIEW_RES)
 		{
@@ -1302,8 +1048,6 @@ void intDisplayPIEView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL
 		psResearch = getResearchForMsg((VIEWDATA *)psCurrentMsg->pViewData);
 		renderResearchToBuffer(psResearch, x0 + (x1 - x0) / 2, y0 + (y1 - y0) / 2);
 
-		CloseButtonRender();
-
 		//draw image icon in top left of window
 		image = (SWORD)getResearchForMsg((VIEWDATA *)psMessage->pViewData)->iconID;
 		if (image > 0)
@@ -1313,14 +1057,10 @@ void intDisplayPIEView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL
 	}
 }
 
-#ifndef NO_VIDEO
 /* displays the FLIC view for the current message */
-void intDisplayFLICView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
+void intDisplayFLICView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
-
-	W_TABFORM		*Form = (W_TABFORM *)psWidget;
-	MESSAGE			*psMessage = (MESSAGE *)Form->pUserData;
-	UDWORD			x0, y0, x1, y1;
+	MESSAGE *psMessage = (MESSAGE *)psWidget->pUserData;
 	VIEW_RESEARCH	*psViewResearch;
 
 	//shouldn't have any proximity messages here...
@@ -1331,13 +1071,10 @@ void intDisplayFLICView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DEC
 
 	if (psMessage->pViewData)
 	{
-		OpenButtonRender((UWORD)(xOffset + Form->x), (UWORD)(yOffset + Form->y),
-		                 Form->width, Form->height);
-
-		x0 = xOffset + Form->x;
-		y0 = yOffset + Form->y;
-		x1 = x0 + Form->width;
-		y1 = y0 + Form->height;
+		int x0 = xOffset + psWidget->x();
+		int y0 = yOffset + psWidget->y();
+		int x1 = x0 + psWidget->width();
+		int y1 = y0 + psWidget->height();
 
 		if (((VIEWDATA *)psMessage->pViewData)->type != VIEW_RES)
 		{
@@ -1351,28 +1088,23 @@ void intDisplayFLICView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DEC
 		seq_SetDisplaySize(192, 168, x0, y0);
 		//render a frame of the current movie *must* force above resolution!
 		seq_RenderVideoToBuffer(psViewResearch->sequenceName, SEQUENCE_HOLD);
-		CloseButtonRender();
 	}
 }
-#endif
 
 /**
  * Displays the TEXT view for the current message.
  * If this function breaks, please merge it with intDisplaySeqTextViewPage
  * which presumably does almost the same.
  */
-void intDisplayTEXTView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
+void intDisplayTEXTView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
-	W_TABFORM		*Form = (W_TABFORM *)psWidget;
-	MESSAGE			*psMessage = (MESSAGE *)Form->pUserData;
-	UDWORD			x0, y0, x1, y1, i, linePitch;
-	UDWORD			ty;
+	MESSAGE *psMessage = (MESSAGE *)psWidget->pUserData;
 
-	x0 = xOffset + Form->x;
-	y0 = yOffset + Form->y;
-	x1 = x0 + Form->width;
-	y1 = y0 + Form->height;
-	ty = y0;
+	int x0 = xOffset + psWidget->x();
+	int y0 = yOffset + psWidget->y();
+	int x1 = x0 + psWidget->width();
+	int y1 = y0 + psWidget->height();
+	int ty = y0;
 
 	RenderWindowFrame(FRAME_NORMAL, x0, y0, x1 - x0, y1 - y0);
 
@@ -1380,7 +1112,7 @@ void intDisplayTEXTView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DEC
 	{
 		iV_SetFont(font_regular);
 		/* Get the travel to the next line */
-		linePitch = iV_GetTextLineSize();
+		int linePitch = iV_GetTextLineSize();
 		/* Fix for spacing.... */
 		linePitch += 3;
 		ty += 3;
@@ -1389,10 +1121,10 @@ void intDisplayTEXTView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DEC
 
 		iV_SetTextColour(WZCOL_TEXT_BRIGHT);
 		//add each message
-		for (i = 0; i < ((VIEWDATA *)psMessage->pViewData)->textMsg.size(); i++)
+		for (unsigned i = 0; i < ((VIEWDATA *)psMessage->pViewData)->textMsg.size(); i++)
 		{
 			//check haven't run out of room first!
-			if (i * linePitch > Form->height)
+			if (i * linePitch > psWidget->height())
 			{
 				ASSERT(false, "intDisplayTEXTView: Run out of room!");
 				return;

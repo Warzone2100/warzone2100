@@ -19,3 +19,6 @@ directory       "script/data"
 
 file            SCRIPTVAL       "cam1-1s.vlo"
 file            SCRIPTVAL       "cam1night.vlo"
+
+directory "script"
+file            JAVASCRIPT      "rules.js"

@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -77,20 +77,19 @@ const char *objInfo(const BASE_OBJECT *psObj)
 	case OBJ_DROID:
 		{
 			const DROID *psDroid = (const DROID *)psObj;
-
 			return droidGetName(psDroid);
 		}
 	case OBJ_STRUCTURE:
 		{
 			const STRUCTURE *psStruct = (const STRUCTURE *)psObj;
-
-			return getName(psStruct->pStructureType->pName);
+			sstrcpy(info, getName(psStruct->pStructureType));
+			break;
 		}
 	case OBJ_FEATURE:
 		{
 			const FEATURE *psFeat = (const FEATURE *)psObj;
-
-			return getName(psFeat->psStats->pName);
+			sstrcpy(info, getName(psFeat->psStats));
+			break;
 		}
 	case OBJ_PROJECTILE:
 		sstrcpy(info, "Projectile");	// TODO

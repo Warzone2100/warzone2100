@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -49,10 +49,10 @@ struct WARZONE_GLOBALS
 	SWORD		effectsLevel;
 	UDWORD		width;
 	UDWORD		height;
+	int		screen;
 	int8_t		SPcolor;
 	int			MPcolour;
 	FSAA_LEVEL  fsaa;
-	RENDER_MODE shaders;
 	bool		Fullscreen;
 	bool		soundEnabled;
 	bool		trapCursor;
@@ -88,10 +88,10 @@ void war_SetDefaultStates(void)//Sets all states
 	war_SetVsync(true);
 	war_setSoundEnabled(true);
 	war_SetPauseOnFocusLoss(false);
+	war_SetColouredCursor(true);
 	war_SetMusicEnabled(true);
 	war_SetSPcolor(0);		//default color is green
 	war_setMPcolour(-1);            // Default color is random.
-	war_SetShaders(SHADERS_ON);
 }
 
 void war_SetSPcolor(int color)
@@ -134,19 +134,9 @@ void war_setFSAA(unsigned int fsaa)
 	warGlobs.fsaa = (FSAA_LEVEL)(fsaa % FSAA_MAX);
 }
 
-unsigned int war_getFSAA()
+FSAA_LEVEL war_getFSAA()
 {
 	return warGlobs.fsaa;
-}
-
-void war_SetShaders(unsigned shaders)
-{
-	warGlobs.shaders = (RENDER_MODE)shaders;
-}
-
-unsigned war_GetShaders()
-{
-	return warGlobs.shaders;
 }
 
 void war_SetTrapCursor(bool b)
@@ -189,6 +179,16 @@ UDWORD war_GetHeight(void)
 	return warGlobs.height;
 }
 
+void war_SetScreen(int screen)
+{
+	warGlobs.screen = screen;
+}
+
+int war_GetScreen()
+{
+	return warGlobs.screen;
+}
+
 /***************************************************************************/
 /***************************************************************************/
 void war_SetFMVmode(FMV_MODE mode)
@@ -221,6 +221,16 @@ void war_SetPauseOnFocusLoss(bool enabled)
 bool war_GetPauseOnFocusLoss()
 {
 	return warGlobs.pauseOnFocusLoss;
+}
+
+void war_SetColouredCursor(bool enabled)
+{
+	warGlobs.ColouredCursor = enabled;
+}
+
+bool war_GetColouredCursor(void)
+{
+	return warGlobs.ColouredCursor;
 }
 
 void war_setSoundEnabled(bool soundEnabled)

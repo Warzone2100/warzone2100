@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -28,14 +28,10 @@
 #include "init.h"
 #include "game.h"
 
-// maximum number of WRF/WDG files
-
+/// maximum number of data files
 #define LEVEL_MAXFILES	9
 
-
-// types of level datasets
-
-
+/// types of level datasets
 enum LEVEL_TYPE
 {
 	LDS_COMPLETE,		// all data required for a stand alone level
@@ -51,32 +47,32 @@ enum LEVEL_TYPE
 	LDS_NONE,			//flags when not got a mission to go back to or when
 	//already on one - ****LEAVE AS LAST ONE****
 	LDS_MULTI_TYPE_START,           ///< Start number for custom type numbers (as used by a `type` instruction)
-};
 
-// the WRF/WDG files needed for a particular level
-// the WRF/WDG files needed for a particular level
+	CAMPAIGN = 12,
+	SKIRMISH = 14,
+	MULTI_SKIRMISH2 = 18,
+	MULTI_SKIRMISH3 = 19
+};
 
 struct LEVEL_DATASET
 {
-	SWORD	type;					// type of map
+	LEVEL_TYPE type;				// type of map
 	SWORD	players;				// number of players for the map
 	SWORD	game;					// index of WRF/WDG that loads the scenario file
 	char	*pName;					// title for the level
 	searchPathMode	dataDir;					// title for the level
-	char	*apDataFiles[LEVEL_MAXFILES];		// the WRF/WDG files for the level
+	char	*apDataFiles[LEVEL_MAXFILES];		// the WRF/GAM files for the level
 	// in load order
 	LEVEL_DATASET *psBaseData;                      // LEVEL_DATASET that must be loaded for this level to load
 	LEVEL_DATASET *psChange;                        // LEVEL_DATASET used when changing to this level from another
-
-	LEVEL_DATASET *psNext;
 
 	char           *realFileName;                   ///< Filename of the file containing the level, or NULL if the level is built in.
 	Sha256          realFileHash;                   ///< Use levGetFileHash() to read this value. SHA-256 hash of the file containing the level, or 0x00×32 if the level is built in or not yet calculated.
 };
 
+typedef std::list<LEVEL_DATASET *> LEVEL_LIST;
 
-// the current level descriptions
-extern LEVEL_DATASET	*psLevels;
+LEVEL_LIST enumerateMultiMaps(int camToUse, int numPlayers);
 
 // parse a level description data file
 bool levParse(const char *buffer, size_t size, searchPathMode datadir, bool ignoreWrf, char const *realFileName);

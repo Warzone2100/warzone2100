@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -22,10 +22,16 @@
  */
 
 #include "lib/framework/frame.h"
+#include "lib/ivis_opengl/bitimage.h"
+#include "lib/ivis_opengl/tex.h"
+#include "src/warzoneconfig.h"
+#include "src/frontend.h"
 #include "cursors_sdl.h"
+#include <SDL2/SDL.h>
 
 static CURSOR currentCursor = CURSOR_MAX;
 static SDL_Cursor *aCursors[CURSOR_MAX];
+static bool monoCursor;
 
 /* TODO: do bridge and attach need swapping? */
 static const char *cursor_arrow[] =
@@ -1252,6 +1258,56 @@ static const struct
 	{ cursor_select,        CURSOR_SELECT },
 };
 
+/**
+	init_system_ColorCursor()-- Create a colored mouse cursor image
+ */
+SDL_Cursor *init_system_ColorCursor(CURSOR cur, const char *fileName)
+{
+
+	iV_Image *psSprite = (iV_Image *)malloc(sizeof(iV_Image));
+	if (!psSprite)
+	{
+		debug(LOG_FATAL, "Could not allocate memory for cursor sprite. Exiting.");
+		exit(-1);
+	}
+
+	if (!iV_loadImage_PNG(fileName, psSprite))
+	{
+		debug(LOG_FATAL, "Could not load cursor sprite. Exiting.");
+		exit(-1);
+	}
+
+#if SDL_BYTEORDER == SDL_BIG_ENDIAN
+	uint32_t rmask = 0xff000000;
+	uint32_t gmask = 0x00ff0000;
+	uint32_t bmask = 0x0000ff00;
+	uint32_t amask = 0x000000ff;
+#else
+	uint32_t rmask = 0x000000ff;
+	uint32_t gmask = 0x0000ff00;
+	uint32_t bmask = 0x00ff0000;
+	uint32_t amask = 0xff000000;
+#endif
+
+	SDL_Surface *surface = SDL_CreateRGBSurfaceFrom(psSprite->bmp, psSprite->width, psSprite->height, psSprite->depth * 8, psSprite->width * 4, rmask, gmask, bmask, amask);
+	SDL_Cursor *pointer = SDL_CreateColorCursor(surface, psSprite->width / 2, psSprite->height / 2);	// We center the hotspot for all (FIXME ?)
+	if (!pointer)
+	{
+		debug(LOG_FATAL, "Could not create cursor because %s", SDL_GetError());
+		exit(-1);
+	}
+
+	// free up image & surface data
+	free(psSprite->bmp);
+	free(psSprite);
+	SDL_FreeSurface(surface);
+
+	return pointer;
+}
+
+/**
+	init_system_cursor32()-- Create a monochrome mouse cursor image
+ */
 SDL_Cursor *init_system_cursor32(CURSOR cur)
 {
 	int i, row, col;
@@ -1299,13 +1355,20 @@ SDL_Cursor *init_system_cursor32(CURSOR cur)
 	return SDL_CreateCursor(data, mask, 32, 32, hot_x, hot_y);
 }
 
-/** Set the current cursor from a Resource ID
+/**
+	wzSetCursor()-- Set the current cursor
  */
 void wzSetCursor(CURSOR cur)
 {
-	ASSERT(cur < CURSOR_MAX, "frameSetCursorFromRes: bad resource ID");
-
-	//If we are already using this cursor then  return
+	ASSERT(cur < CURSOR_MAX, "Specified cursor(%d) is over our limit of (%d)!", (int)cur, (int)CURSOR_MAX);
+	// we reset mouse cursors on the fly...(only in the mouse options screen!)
+	if ((!(war_GetColouredCursor() ^ monoCursor)) && (titleMode == MOUSE_OPTIONS))
+	{
+		sdlFreeCursors();
+		war_GetColouredCursor() ? sdlInitColoredCursors() : sdlInitCursors();
+		SDL_SetCursor(aCursors[cur]);
+	}
+	// If we are already using this cursor then  return
 	if (cur != currentCursor)
 	{
 		SDL_SetCursor(aCursors[cur]);
@@ -1313,8 +1376,48 @@ void wzSetCursor(CURSOR cur)
 	}
 }
 
+/**
+  sdlInitColoredCursors() --Setup the mouse cursor with bitmaps
+*/
+void sdlInitColoredCursors()
+{
+	monoCursor = false;
+	aCursors[CURSOR_ARROW]       = init_system_cursor32(CURSOR_ARROW);
+	aCursors[CURSOR_DEST]        = init_system_ColorCursor(CURSOR_DEST, "images/intfac/image_cursor_dest.png");
+	aCursors[CURSOR_SIGHT]       = init_system_cursor32(CURSOR_SIGHT);
+	aCursors[CURSOR_TARGET]      = init_system_cursor32(CURSOR_TARGET);
+	aCursors[CURSOR_LARROW]      = init_system_ColorCursor(CURSOR_LARROW, "images/intfac/image_cursor_larrow.png");
+	aCursors[CURSOR_RARROW]      = init_system_ColorCursor(CURSOR_RARROW, "images/intfac/image_cursor_rarrow.png");
+	aCursors[CURSOR_DARROW]      = init_system_ColorCursor(CURSOR_DARROW, "images/intfac/image_cursor_darrow.png");
+	aCursors[CURSOR_UARROW]      = init_system_ColorCursor(CURSOR_UARROW, "images/intfac/image_cursor_uarrow.png");
+	aCursors[CURSOR_DEFAULT]     = init_system_ColorCursor(CURSOR_DEFAULT, "images/intfac/image_cursor_default.png");
+	aCursors[CURSOR_EDGEOFMAP]   = init_system_cursor32(CURSOR_EDGEOFMAP);
+	aCursors[CURSOR_ATTACH]      = init_system_ColorCursor(CURSOR_ATTACH, "images/intfac/image_cursor_attach.png");
+	aCursors[CURSOR_ATTACK]      = init_system_ColorCursor(CURSOR_ATTACK, "images/intfac/image_cursor_attack.png");
+	aCursors[CURSOR_BOMB]        = init_system_ColorCursor(CURSOR_BOMB, "images/intfac/image_cursor_bomb.png");
+	aCursors[CURSOR_BRIDGE]      = init_system_ColorCursor(CURSOR_BRIDGE, "images/intfac/image_cursor_bridge.png");
+	aCursors[CURSOR_BUILD]       = init_system_ColorCursor(CURSOR_BUILD, "images/intfac/image_cursor_build.png");
+	aCursors[CURSOR_EMBARK]      = init_system_ColorCursor(CURSOR_EMBARK, "images/intfac/image_cursor_embark.png");
+	aCursors[CURSOR_DISEMBARK]   = init_system_ColorCursor(CURSOR_DISEMBARK, "images/intfac/image_cursor_disembark.png");
+	aCursors[CURSOR_FIX]         = init_system_ColorCursor(CURSOR_FIX, "images/intfac/image_cursor_fix.png");
+	aCursors[CURSOR_GUARD]       = init_system_ColorCursor(CURSOR_GUARD, "images/intfac/image_cursor_guard.png");
+	aCursors[CURSOR_JAM]         = init_system_ColorCursor(CURSOR_JAM, "images/intfac/image_cursor_ecm.png");
+	aCursors[CURSOR_LOCKON]      = init_system_ColorCursor(CURSOR_LOCKON, "images/intfac/image_cursor_lockon.png");
+	aCursors[CURSOR_SCOUT]       = init_system_ColorCursor(CURSOR_SCOUT, "images/intfac/image_cursor_scout.png");
+	aCursors[CURSOR_MENU]        = init_system_cursor32(CURSOR_MENU);
+	aCursors[CURSOR_MOVE]        = init_system_ColorCursor(CURSOR_MOVE, "images/intfac/image_cursor_move.png");
+	aCursors[CURSOR_NOTPOSSIBLE] = init_system_ColorCursor(CURSOR_NOTPOSSIBLE, "images/intfac/image_cursor_notpos.png");
+	aCursors[CURSOR_PICKUP]      = init_system_ColorCursor(CURSOR_PICKUP, "images/intfac/image_cursor_pickup.png");
+	aCursors[CURSOR_SEEKREPAIR]  = init_system_ColorCursor(CURSOR_SEEKREPAIR, "images/intfac/image_cursor_repair.png");
+	aCursors[CURSOR_SELECT]      = init_system_ColorCursor(CURSOR_SELECT, "images/intfac/image_cursor_select.png");
+}
+
+/**
+  sdlInitCursors() --Setup the mouse cursor with monochrome data
+*/
 void sdlInitCursors()
 {
+	monoCursor = true;
 	aCursors[CURSOR_ARROW]       = init_system_cursor32(CURSOR_ARROW);
 	aCursors[CURSOR_DEST]        = init_system_cursor32(CURSOR_DEST);
 	aCursors[CURSOR_SIGHT]       = init_system_cursor32(CURSOR_SIGHT);

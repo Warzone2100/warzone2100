@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -36,8 +36,8 @@
 #include "lib/ivis_opengl/piemode.h"
 #include "lib/ivis_opengl/piestate.h"
 #include "lib/ivis_opengl/screen.h"
+#include "lib/ivis_opengl/pieblitfunc.h"
 #include "lib/ivis_opengl/tex.h"
-#include "lib/ivis_opengl/ivi.h"
 #include "lib/netplay/netplay.h"
 #include "lib/script/script.h"
 #include "lib/sound/audio_id.h"
@@ -98,7 +98,7 @@
 #include "qtscript.h"
 #include "template.h"
 
-static void	initMiscVars(void);
+static void initMiscVars();
 
 static const char UserMusicPath[] = "music";
 
@@ -107,10 +107,7 @@ char fileLoadBuffer[FILE_LOAD_BUFFER_SIZE];
 
 IMAGEFILE *FrontImages;
 
-bool DirectControl = false;
-
 static wzSearchPath *searchPathRegistry = NULL;
-
 
 // Each module in the game should have a call from here to initialise
 // any globals and statics to there default values each time the game
@@ -139,7 +136,7 @@ static bool InitialiseGlobals(void)
 }
 
 
-static bool loadLevFile(const char *filename, searchPathMode datadir, bool ignoreWrf, char const *realFileName)
+bool loadLevFile(const char *filename, searchPathMode datadir, bool ignoreWrf, char const *realFileName)
 {
 	char *pBuffer;
 	UDWORD size;
@@ -155,12 +152,12 @@ static bool loadLevFile(const char *filename, searchPathMode datadir, bool ignor
 
 	if (!PHYSFS_exists(filename) || !loadFile(filename, &pBuffer, &size))
 	{
-		debug(LOG_ERROR, "loadLevFile: File not found: %s\n", filename);
+		debug(LOG_ERROR, "File not found: %s\n", filename);
 		return false; // only in NDEBUG case
 	}
 	if (!levParse(pBuffer, size, datadir, ignoreWrf, realFileName))
 	{
-		debug(LOG_ERROR, "loadLevFile: Parse error in %s\n", filename);
+		debug(LOG_ERROR, "Parse error in %s\n", filename);
 		return false;
 	}
 	free(pBuffer);
@@ -169,7 +166,7 @@ static bool loadLevFile(const char *filename, searchPathMode datadir, bool ignor
 }
 
 
-void cleanSearchPath(void)
+static void cleanSearchPath()
 {
 	wzSearchPath *curSearchPath = searchPathRegistry, * tmpSearchPath = NULL;
 
@@ -251,7 +248,7 @@ void registerSearchPath(const char path[], unsigned int priority)
  * Priority:
  * maps > mods > base > base.wz
  */
-bool rebuildSearchPath(searchPathMode mode, bool force)
+bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map)
 {
 	static searchPathMode current_mode = mod_clean;
 	static std::string current_current_map;
@@ -714,9 +711,11 @@ bool systemInitialise(void)
 	}
 
 	// Initialize the iVis text rendering module
+	wzSceneBegin("Main menu loop");
 	iV_TextInit();
 
-	iV_Reset();								// Reset the IV library.
+	pie_InitRadar();
+
 	readAIs();
 
 	return true;
@@ -730,12 +729,14 @@ extern char *mod_list;
 
 void systemShutdown(void)
 {
+	pie_ShutdownRadar();
 	if (mod_list)
 	{
 		free(mod_list);
 	}
 
 	shutdownEffectsSystem();
+	wzSceneEnd(nullptr);  // Might want to end the "Main menu loop" or "Main game loop".
 	keyClearMappings();
 
 	// free up all the load functions (all the data should already have been freed)
@@ -759,7 +760,6 @@ void systemShutdown(void)
 	}
 
 	debug(LOG_MAIN, "shutting down graphics subsystem");
-	iV_ShutDown();
 	levShutDown();
 	widgShutDown();
 	fpathShutdown();
@@ -767,6 +767,7 @@ void systemShutdown(void)
 	debug(LOG_MAIN, "shutting down everything else");
 	pal_ShutDown();		// currently unused stub
 	frameShutDown();	// close screen / SDL / resources / cursors / trig
+	screenShutDown();
 	closeConfig();		// "registry" close
 	cleanSearchPath();	// clean PHYSFS search paths
 	debug_exit();		// cleanup debug routines
@@ -775,38 +776,6 @@ void systemShutdown(void)
 }
 
 /***************************************************************************/
-
-static bool
-init_ObjectDead(void *psObj)
-{
-	BASE_OBJECT	*psBaseObj = (BASE_OBJECT *) psObj;
-	DROID		*psDroid;
-	STRUCTURE	*psStructure;
-
-	CHECK_OBJECT(psBaseObj);
-
-	if (psBaseObj->died == true)
-	{
-		switch (psBaseObj->type)
-		{
-		case OBJ_DROID:
-			psDroid = (DROID *) psBaseObj;
-			psDroid->psCurAnim = NULL;
-			break;
-
-		case OBJ_STRUCTURE:
-			psStructure = (STRUCTURE *) psBaseObj;
-			psStructure->psCurAnim = NULL;
-			break;
-
-		default:
-			debug(LOG_ERROR, "init_ObjectAnimRemoved: unrecognised object type");
-			return false;
-		}
-	}
-
-	return psBaseObj->died;
-}
 
 // ////////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////////
@@ -820,8 +789,6 @@ bool frontendInitialise(const char *ResourceFile)
 	{
 		return false;
 	}
-
-	iV_Reset();								// Reset the IV library.
 
 	if (!scrTabInitialise())				// Initialise the script system
 	{
@@ -843,7 +810,7 @@ bool frontendInitialise(const char *ResourceFile)
 		return false;
 	}
 
-	if (!animObj_Init(init_ObjectDead))
+	if (!animObj_Init())
 	{
 		return false;
 	}
@@ -930,6 +897,7 @@ bool frontendShutdown(void)
 	}
 
 	debug(LOG_TEXTURE, "=== frontendShutdown ===");
+	modelShutdown();
 	pie_TexShutDown();
 	pie_TexInit(); // ready for restart
 	freeComponentLists();
@@ -947,14 +915,14 @@ bool frontendShutdown(void)
 bool stageOneInitialise(void)
 {
 	debug(LOG_WZ, "== stageOneInitalise ==");
+	wzSceneEnd("Main menu loop");
+	wzSceneBegin("Main game loop");
 
 	// Initialise all globals and statics everwhere.
 	if (!InitialiseGlobals())
 	{
 		return false;
 	}
-
-	iV_Reset(); // Reset the IV library
 
 	if (!stringsInitialise())	/* Initialise the string system */
 	{
@@ -991,7 +959,7 @@ bool stageOneInitialise(void)
 		return false;
 	}
 
-	if (!animObj_Init(init_ObjectDead))
+	if (!animObj_Init())
 	{
 		return false;
 	}
@@ -1007,23 +975,12 @@ bool stageOneInitialise(void)
 		return false;
 	}
 
-	/* Initialise the movement system */
-	if (!moveInitialise())
-	{
-		return false;
-	}
-
 	if (!proj_InitSystem())
 	{
 		return false;
 	}
 
 	if (!scrTabInitialise())	// Initialise the old wzscript system
-	{
-		return false;
-	}
-
-	if (!initScripts())		// Initialise the new javascript system
 	{
 		return false;
 	}
@@ -1053,6 +1010,11 @@ bool stageOneInitialise(void)
 bool stageOneShutDown(void)
 {
 	debug(LOG_WZ, "== stageOneShutDown ==");
+
+	atmosSetWeatherType(WT_NONE); // reset weather and free its data
+	wzPerfShutdown();
+
+	pie_FreeShaders();
 
 	if (audio_Disabled() == false)
 	{
@@ -1100,20 +1062,17 @@ bool stageOneShutDown(void)
 		return false;
 	}
 
-	if (!shutdownScripts())
-	{
-		return false;
-	}
-
 	debug(LOG_TEXTURE, "=== stageOneShutDown ===");
+	modelShutdown();
 	pie_TexShutDown();
-	// no map for the main menu
-	setCurrentMap(NULL, 1);
+
 	// Use mod_multiplay as the default (campaign might have set it to mod_singleplayer)
 	rebuildSearchPath(mod_multiplay, true);
 	pie_TexInit(); // restart it
 
 	initMiscVars();
+	wzSceneEnd("Main game loop");
+	wzSceneBegin("Main menu loop");
 
 	return true;
 }
@@ -1135,14 +1094,6 @@ bool stageTwoInitialise(void)
 		setLasSatExists(false, i);
 	}
 
-	if (bMultiPlayer)
-	{
-		if (!multiTemplateSetup())
-		{
-			return false;
-		}
-	}
-
 	if (!dispInitialise())		/* Initialise the display system */
 	{
 		return false;
@@ -1150,7 +1101,6 @@ bool stageTwoInitialise(void)
 
 	if (!initMiscImds())			/* Set up the explosions */
 	{
-		iV_ShutDown();
 		debug(LOG_FATAL, "Can't find all the explosions graphics?");
 		abort();
 		return false;
@@ -1175,6 +1125,11 @@ bool stageTwoInitialise(void)
 	}
 
 	if (!gwInitialise())
+	{
+		return false;
+	}
+
+	if (!initScripts())		// Initialise the new javascript system
 	{
 		return false;
 	}
@@ -1261,7 +1216,6 @@ bool stageThreeInitialise(void)
 	DROID		*psDroid;
 
 	debug(LOG_WZ, "== stageThreeInitalise ==");
-	bTrackingTransporter = false;
 
 	loopMissionState = LMS_NORMAL;
 
@@ -1280,6 +1234,7 @@ bool stageThreeInitialise(void)
 
 	effectResetUpdates();
 	initLighting(0, 0, mapWidth, mapHeight);
+	pie_InitLighting();
 
 	if (bMultiPlayer)
 	{
@@ -1293,6 +1248,8 @@ bool stageThreeInitialise(void)
 
 	// Load any stored templates; these need to be available ASAP
 	initTemplates();
+
+	prepareScripts(getLevelLoadType() == GTYPE_SAVE_MIDMISSION || getLevelLoadType() == GTYPE_SAVE_START);
 
 	if (!fpathInitialise())
 	{
@@ -1317,7 +1274,7 @@ bool stageThreeInitialise(void)
 	setAllPauseStates(false);
 
 	/* decide if we have to create teams, ONLY in multiplayer mode!*/
-	if (bMultiPlayer && game.alliance == ALLIANCES_TEAMS)
+	if (bMultiPlayer && alliancesSharedVision(game.alliance))
 	{
 		createTeamAlliances();
 
@@ -1347,9 +1304,12 @@ bool stageThreeInitialise(void)
 		}
 	}
 
-	// ffs JS   (and its a global!)
 	if (getLevelLoadType() != GTYPE_SAVE_MIDMISSION)
 	{
+		if (getDebugMappingStatus())
+		{
+			triggerEventCheatMode(true);
+		}
 		eventFireCallbackTrigger((TRIGGER_TYPE)CALL_GAMEINIT);
 		triggerEvent(TRIGGER_GAME_INIT);
 	}
@@ -1363,6 +1323,15 @@ bool stageThreeInitialise(void)
 bool stageThreeShutDown(void)
 {
 	debug(LOG_WZ, "== stageThreeShutDown ==");
+
+	removeSpotters();
+
+	// There is an assymetry in scripts initialization and destruction, due
+	// the many different ways scripts get loaded.
+	if (!shutdownScripts())
+	{
+		return false;
+	}
 
 	challengesUp = false;
 	challengeActive = false;
@@ -1393,13 +1362,9 @@ bool stageThreeShutDown(void)
 		return false;
 	}
 
-	/*
-		When this line wasn't at this point. The PSX version always failed on the next script after the tutorial ... unexplained why?
-	*/
-//	bInTutorial=false;
 	scrExternReset();
 
-	//reset the run data so that doesn't need to be initialised in the scripts
+	// reset the run data so that doesn't need to be initialised in the scripts
 	initRunData();
 
 	resetVTOLLandingPos();
@@ -1447,14 +1412,13 @@ bool saveGameReset(void)
 		return false;
 	}
 
-	//clear out any messages
 	freeMessages();
 
 	return true;
 }
 
 // --- Miscellaneous Initialisation stuff that really should be done each restart
-static void	initMiscVars(void)
+static void initMiscVars()
 {
 	selectedPlayer = 0;
 	realSelectedPlayer = 0;
@@ -1463,9 +1427,9 @@ static void	initMiscVars(void)
 	radarOnScreen = true;
 	radarPermitted = true;
 	allowDesign = true;
+	includeRedundantDesigns = false;
 	enableConsoleDisplay(true);
 
-	setSelectedGroup(UBYTE_MAX);
 	for (unsigned n = 0; n < MAX_PLAYERS; ++n)
 	{
 		processDebugMappings(n, false);

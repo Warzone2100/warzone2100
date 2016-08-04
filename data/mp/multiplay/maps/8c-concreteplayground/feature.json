@@ -1,0 +1,3837 @@
+{
+    "feature_0001": {
+        "name": "building2",
+        "position": [
+            11840,
+            17600,
+            109
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0002": {
+        "name": "building3",
+        "position": [
+            12096,
+            17216,
+            96
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0003": {
+        "name": "building3",
+        "position": [
+            13632,
+            17344,
+            98
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0004": {
+        "name": "building3",
+        "position": [
+            11200,
+            19264,
+            96
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0006": {
+        "name": "building12",
+        "position": [
+            12032,
+            18496,
+            110
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0007": {
+        "name": "building11",
+        "position": [
+            12096,
+            19264,
+            100
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0008": {
+        "name": "building11",
+        "position": [
+            12992,
+            18240,
+            92
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0009": {
+        "name": "building11",
+        "position": [
+            12096,
+            20288,
+            96
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0010": {
+        "name": "building8",
+        "position": [
+            11584,
+            20288,
+            98
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0012": {
+        "name": "building3",
+        "position": [
+            192,
+            19392,
+            355
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0013": {
+        "name": "building2",
+        "position": [
+            12992,
+            19136,
+            98
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0014": {
+        "name": "WreckedDroidHub",
+        "position": [
+            12992,
+            15424,
+            94
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0020": {
+        "name": "WreckedBuilding9",
+        "position": [
+            12672,
+            20224,
+            98
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0021": {
+        "name": "WaterTower",
+        "position": [
+            13120,
+            17600,
+            101
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0022": {
+        "name": "WaterTower",
+        "position": [
+            12992,
+            17728,
+            100
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0023": {
+        "name": "Pylon",
+        "position": [
+            8640,
+            19776,
+            97
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "feature_0024": {
+        "name": "Pylon",
+        "position": [
+            9408,
+            19776,
+            104
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "feature_0025": {
+        "name": "Pylon",
+        "position": [
+            10176,
+            19776,
+            113
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "feature_0026": {
+        "name": "OilResource",
+        "position": [
+            12736,
+            17600,
+            105
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0770": {
+        "name": "OilResource",
+        "position": [
+            14528,
+            9664,
+            11
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0771": {
+        "name": "OilResource",
+        "position": [
+            17728,
+            13888,
+            90
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0772": {
+        "name": "OilResource",
+        "position": [
+            5824,
+            15936,
+            95
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0773": {
+        "name": "OilResource",
+        "position": [
+            4160,
+            24384,
+            112
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0774": {
+        "name": "OilResource",
+        "position": [
+            13760,
+            30528,
+            347
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0775": {
+        "name": "OilResource",
+        "position": [
+            16960,
+            21184,
+            100
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0776": {
+        "name": "OilResource",
+        "position": [
+            5568,
+            7488,
+            100
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0777": {
+        "name": "OilResource",
+        "position": [
+            26048,
+            5184,
+            97
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0778": {
+        "name": "OilResource",
+        "position": [
+            24512,
+            15296,
+            95
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0779": {
+        "name": "OilResource",
+        "position": [
+            24000,
+            23744,
+            109
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0780": {
+        "name": "OilResource",
+        "position": [
+            17600,
+            704,
+            362
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0781": {
+        "name": "OilResource",
+        "position": [
+            832,
+            6848,
+            356
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0782": {
+        "name": "OilResource",
+        "position": [
+            832,
+            27072,
+            244
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0783": {
+        "name": "OilResource",
+        "position": [
+            2112,
+            24512,
+            348
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0784": {
+        "name": "OilResource",
+        "position": [
+            832,
+            15040,
+            372
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0785": {
+        "name": "OilResource",
+        "position": [
+            832,
+            17984,
+            373
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0786": {
+        "name": "OilResource",
+        "position": [
+            960,
+            2368,
+            370
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0787": {
+        "name": "OilResource",
+        "position": [
+            30656,
+            5440,
+            360
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0788": {
+        "name": "OilResource",
+        "position": [
+            29888,
+            8000,
+            376
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0789": {
+        "name": "OilResource",
+        "position": [
+            30272,
+            25536,
+            362
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0790": {
+        "name": "OilResource",
+        "position": [
+            31168,
+            26688,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0791": {
+        "name": "OilResource",
+        "position": [
+            30016,
+            15424,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0792": {
+        "name": "OilResource",
+        "position": [
+            30272,
+            17856,
+            245
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0793": {
+        "name": "OilResource",
+        "position": [
+            11328,
+            13632,
+            89
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0794": {
+        "name": "building2",
+        "position": [
+            17472,
+            960,
+            352
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0795": {
+        "name": "building3",
+        "position": [
+            18240,
+            960,
+            342
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0796": {
+        "name": "building7",
+        "position": [
+            18496,
+            1600,
+            347
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0797": {
+        "name": "building8",
+        "position": [
+            18112,
+            1472,
+            343
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0798": {
+        "name": "building10",
+        "position": [
+            17280,
+            1600,
+            349
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0799": {
+        "name": "building11",
+        "position": [
+            17600,
+            2240,
+            342
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0800": {
+        "name": "building12",
+        "position": [
+            17408,
+            2880,
+            364
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0801": {
+        "name": "building1",
+        "position": [
+            18368,
+            2880,
+            352
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0802": {
+        "name": "building3",
+        "position": [
+            17600,
+            4032,
+            354
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0803": {
+        "name": "building7",
+        "position": [
+            17472,
+            5056,
+            370
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0804": {
+        "name": "building1",
+        "position": [
+            13120,
+            27968,
+            358
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0805": {
+        "name": "building2",
+        "position": [
+            13760,
+            28352,
+            354
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0806": {
+        "name": "building3",
+        "position": [
+            13760,
+            29120,
+            350
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0807": {
+        "name": "building7",
+        "position": [
+            14400,
+            29632,
+            350
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0808": {
+        "name": "building7",
+        "position": [
+            13248,
+            28608,
+            358
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0809": {
+        "name": "building8",
+        "position": [
+            13248,
+            29632,
+            352
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0810": {
+        "name": "building10",
+        "position": [
+            14336,
+            30400,
+            343
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0811": {
+        "name": "building11",
+        "position": [
+            14400,
+            31424,
+            351
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0812": {
+        "name": "building12",
+        "position": [
+            13184,
+            30528,
+            350
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0813": {
+        "name": "building7",
+        "position": [
+            14528,
+            28096,
+            362
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0814": {
+        "name": "building3",
+        "position": [
+            15168,
+            28096,
+            354
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0815": {
+        "name": "building3",
+        "position": [
+            15424,
+            26176,
+            92
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0816": {
+        "name": "building8",
+        "position": [
+            5568,
+            29248,
+            116
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0817": {
+        "name": "building7",
+        "position": [
+            6208,
+            30144,
+            110
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0818": {
+        "name": "building8",
+        "position": [
+            5696,
+            30912,
+            114
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0819": {
+        "name": "building10",
+        "position": [
+            4864,
+            31168,
+            105
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0820": {
+        "name": "building11",
+        "position": [
+            6848,
+            30784,
+            104
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0821": {
+        "name": "building12",
+        "position": [
+            4480,
+            28608,
+            112
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0822": {
+        "name": "building12",
+        "position": [
+            3712,
+            27072,
+            112
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0823": {
+        "name": "building1",
+        "position": [
+            4544,
+            26560,
+            100
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0824": {
+        "name": "building2",
+        "position": [
+            4544,
+            25536,
+            99
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0825": {
+        "name": "building8",
+        "position": [
+            4032,
+            25024,
+            104
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0826": {
+        "name": "building10",
+        "position": [
+            6016,
+            25024,
+            113
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0827": {
+        "name": "building11",
+        "position": [
+            5568,
+            24512,
+            97
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0828": {
+        "name": "building3",
+        "position": [
+            2624,
+            28864,
+            354
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0829": {
+        "name": "building3",
+        "position": [
+            960,
+            29248,
+            250
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0830": {
+        "name": "building2",
+        "position": [
+            320,
+            28864,
+            246
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0831": {
+        "name": "building8",
+        "position": [
+            960,
+            27456,
+            252
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0832": {
+        "name": "building11",
+        "position": [
+            320,
+            26560,
+            248
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0833": {
+        "name": "building12",
+        "position": [
+            896,
+            25536,
+            246
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0834": {
+        "name": "building1",
+        "position": [
+            960,
+            23872,
+            259
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0835": {
+        "name": "building3",
+        "position": [
+            1472,
+            22720,
+            364
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0836": {
+        "name": "building7",
+        "position": [
+            2240,
+            22464,
+            368
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0837": {
+        "name": "building8",
+        "position": [
+            2752,
+            21824,
+            346
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0838": {
+        "name": "building10",
+        "position": [
+            896,
+            21824,
+            341
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0839": {
+        "name": "building11",
+        "position": [
+            960,
+            19648,
+            354
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0840": {
+        "name": "building12",
+        "position": [
+            896,
+            16576,
+            368
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0841": {
+        "name": "building2",
+        "position": [
+            3648,
+            14656,
+            372
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0842": {
+        "name": "building7",
+        "position": [
+            4032,
+            14656,
+            372
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0843": {
+        "name": "building8",
+        "position": [
+            6080,
+            14528,
+            364
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0844": {
+        "name": "building10",
+        "position": [
+            4992,
+            13248,
+            240
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0845": {
+        "name": "building11",
+        "position": [
+            4544,
+            13248,
+            246
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0846": {
+        "name": "building12",
+        "position": [
+            4224,
+            12736,
+            245
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0848": {
+        "name": "building10",
+        "position": [
+            896,
+            7488,
+            367
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0849": {
+        "name": "building12",
+        "position": [
+            896,
+            7872,
+            352
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0850": {
+        "name": "building7",
+        "position": [
+            1344,
+            5312,
+            344
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0851": {
+        "name": "building8",
+        "position": [
+            1984,
+            5312,
+            350
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0852": {
+        "name": "building10",
+        "position": [
+            3328,
+            4928,
+            365
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0853": {
+        "name": "building11",
+        "position": [
+            4032,
+            4288,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0855": {
+        "name": "building1",
+        "position": [
+            1984,
+            1856,
+            248
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0856": {
+        "name": "building3",
+        "position": [
+            9792,
+            1216,
+            96
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0857": {
+        "name": "building8",
+        "position": [
+            10304,
+            1728,
+            94
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0858": {
+        "name": "building11",
+        "position": [
+            9152,
+            2496,
+            105
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0859": {
+        "name": "building12",
+        "position": [
+            10880,
+            2496,
+            95
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0860": {
+        "name": "building1",
+        "position": [
+            9792,
+            3136,
+            96
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0862": {
+        "name": "building2",
+        "position": [
+            9152,
+            1728,
+            92
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0863": {
+        "name": "building7",
+        "position": [
+            3392,
+            7360,
+            105
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0864": {
+        "name": "building8",
+        "position": [
+            4288,
+            7360,
+            92
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0865": {
+        "name": "building11",
+        "position": [
+            4928,
+            8128,
+            88
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0866": {
+        "name": "building12",
+        "position": [
+            4352,
+            8896,
+            96
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0867": {
+        "name": "building2",
+        "position": [
+            4928,
+            9664,
+            96
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0868": {
+        "name": "building7",
+        "position": [
+            6208,
+            8896,
+            114
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0869": {
+        "name": "building11",
+        "position": [
+            6848,
+            10176,
+            102
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0870": {
+        "name": "building12",
+        "position": [
+            7936,
+            13248,
+            94
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0871": {
+        "name": "building2",
+        "position": [
+            8640,
+            13888,
+            92
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0872": {
+        "name": "building3",
+        "position": [
+            7232,
+            15808,
+            97
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0873": {
+        "name": "building1",
+        "position": [
+            5824,
+            16448,
+            104
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0874": {
+        "name": "building10",
+        "position": [
+            4096,
+            17600,
+            16
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0875": {
+        "name": "building11",
+        "position": [
+            4928,
+            18240,
+            25
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0876": {
+        "name": "building3",
+        "position": [
+            5184,
+            19648,
+            96
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0877": {
+        "name": "building10",
+        "position": [
+            7552,
+            20288,
+            107
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0878": {
+        "name": "building3",
+        "position": [
+            7616,
+            21440,
+            110
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0879": {
+        "name": "building10",
+        "position": [
+            7552,
+            24000,
+            103
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0880": {
+        "name": "building1",
+        "position": [
+            17600,
+            13376,
+            93
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0881": {
+        "name": "building3",
+        "position": [
+            17344,
+            14656,
+            97
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0882": {
+        "name": "building8",
+        "position": [
+            17856,
+            15168,
+            92
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0883": {
+        "name": "building11",
+        "position": [
+            18112,
+            16320,
+            88
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0884": {
+        "name": "building8",
+        "position": [
+            18624,
+            14016,
+            86
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0885": {
+        "name": "building7",
+        "position": [
+            18624,
+            13120,
+            86
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0886": {
+        "name": "building1",
+        "position": [
+            14784,
+            4288,
+            104
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0887": {
+        "name": "building8",
+        "position": [
+            19008,
+            5696,
+            91
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0888": {
+        "name": "building10",
+        "position": [
+            20224,
+            3520,
+            82
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0889": {
+        "name": "building11",
+        "position": [
+            20288,
+            2240,
+            88
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0890": {
+        "name": "building12",
+        "position": [
+            24704,
+            2368,
+            82
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0891": {
+        "name": "building2",
+        "position": [
+            25408,
+            2368,
+            86
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0892": {
+        "name": "building7",
+        "position": [
+            26048,
+            1344,
+            90
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0893": {
+        "name": "building10",
+        "position": [
+            26624,
+            832,
+            80
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0894": {
+        "name": "building2",
+        "position": [
+            25792,
+            3392,
+            84
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0895": {
+        "name": "building7",
+        "position": [
+            26944,
+            4416,
+            96
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0896": {
+        "name": "building3",
+        "position": [
+            23616,
+            5184,
+            78
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0897": {
+        "name": "building1",
+        "position": [
+            24768,
+            4416,
+            82
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0900": {
+        "name": "building10",
+        "position": [
+            27904,
+            7872,
+            98
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0901": {
+        "name": "building11",
+        "position": [
+            27072,
+            8512,
+            94
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0902": {
+        "name": "building12",
+        "position": [
+            25856,
+            7360,
+            118
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0903": {
+        "name": "building7",
+        "position": [
+            24000,
+            7360,
+            94
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0904": {
+        "name": "building8",
+        "position": [
+            24384,
+            8512,
+            92
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0905": {
+        "name": "building10",
+        "position": [
+            23296,
+            9024,
+            96
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0906": {
+        "name": "building11",
+        "position": [
+            23488,
+            9280,
+            102
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0907": {
+        "name": "building1",
+        "position": [
+            23360,
+            9920,
+            104
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0908": {
+        "name": "building3",
+        "position": [
+            22720,
+            10432,
+            88
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0909": {
+        "name": "building8",
+        "position": [
+            23360,
+            12736,
+            102
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0910": {
+        "name": "building10",
+        "position": [
+            22656,
+            12736,
+            93
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0911": {
+        "name": "building11",
+        "position": [
+            23360,
+            13760,
+            103
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0912": {
+        "name": "building12",
+        "position": [
+            22528,
+            14528,
+            104
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0913": {
+        "name": "building2",
+        "position": [
+            25024,
+            14528,
+            99
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0914": {
+        "name": "building3",
+        "position": [
+            25536,
+            14400,
+            96
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0915": {
+        "name": "building7",
+        "position": [
+            25536,
+            15168,
+            102
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0916": {
+        "name": "building10",
+        "position": [
+            25472,
+            16320,
+            101
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0917": {
+        "name": "building11",
+        "position": [
+            23744,
+            15296,
+            94
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0918": {
+        "name": "building1",
+        "position": [
+            26688,
+            17216,
+            109
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0919": {
+        "name": "building3",
+        "position": [
+            26816,
+            18112,
+            95
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0920": {
+        "name": "building8",
+        "position": [
+            24256,
+            17984,
+            108
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0921": {
+        "name": "building10",
+        "position": [
+            22784,
+            17856,
+            96
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0922": {
+        "name": "building11",
+        "position": [
+            21952,
+            18112,
+            96
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0923": {
+        "name": "building2",
+        "position": [
+            22336,
+            17984,
+            94
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0924": {
+        "name": "building7",
+        "position": [
+            21824,
+            17216,
+            99
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0925": {
+        "name": "building1",
+        "position": [
+            21056,
+            20288,
+            92
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0926": {
+        "name": "building3",
+        "position": [
+            21312,
+            20672,
+            95
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0927": {
+        "name": "building8",
+        "position": [
+            21056,
+            21312,
+            94
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0928": {
+        "name": "building10",
+        "position": [
+            21888,
+            21952,
+            104
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0929": {
+        "name": "building11",
+        "position": [
+            21056,
+            22976,
+            94
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0931": {
+        "name": "building3",
+        "position": [
+            23232,
+            23616,
+            113
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0932": {
+        "name": "building7",
+        "position": [
+            23232,
+            24128,
+            96
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0933": {
+        "name": "building8",
+        "position": [
+            24128,
+            24512,
+            86
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0934": {
+        "name": "building1",
+        "position": [
+            25536,
+            26432,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0935": {
+        "name": "building3",
+        "position": [
+            26688,
+            26304,
+            98
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0936": {
+        "name": "building10",
+        "position": [
+            27520,
+            26688,
+            100
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0937": {
+        "name": "building3",
+        "position": [
+            27328,
+            26304,
+            81
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0938": {
+        "name": "building11",
+        "position": [
+            22080,
+            26816,
+            102
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0940": {
+        "name": "building1",
+        "position": [
+            22080,
+            28352,
+            90
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0941": {
+        "name": "building3",
+        "position": [
+            21568,
+            29888,
+            102
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0942": {
+        "name": "building8",
+        "position": [
+            20928,
+            30144,
+            94
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0945": {
+        "name": "Pylon",
+        "position": [
+            18112,
+            11456,
+            103
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0946": {
+        "name": "Pylon",
+        "position": [
+            18112,
+            9920,
+            94
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0947": {
+        "name": "Pylon",
+        "position": [
+            18112,
+            8384,
+            98
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0948": {
+        "name": "Pylon",
+        "position": [
+            12224,
+            3648,
+            99
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "feature_0949": {
+        "name": "Pylon",
+        "position": [
+            13760,
+            3648,
+            117
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "feature_0950": {
+        "name": "Pylon",
+        "position": [
+            17600,
+            29632,
+            94
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "feature_0951": {
+        "name": "Pylon",
+        "position": [
+            19392,
+            29632,
+            94
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "feature_0952": {
+        "name": "Pylon",
+        "position": [
+            20800,
+            29632,
+            106
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "feature_0953": {
+        "name": "building1",
+        "position": [
+            24128,
+            28096,
+            352
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0954": {
+        "name": "building3",
+        "position": [
+            24128,
+            28608,
+            356
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0955": {
+        "name": "building2",
+        "position": [
+            24512,
+            28224,
+            368
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0956": {
+        "name": "building8",
+        "position": [
+            24256,
+            30528,
+            354
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0957": {
+        "name": "building10",
+        "position": [
+            24064,
+            31168,
+            362
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0958": {
+        "name": "building11",
+        "position": [
+            24384,
+            31424,
+            372
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0959": {
+        "name": "building12",
+        "position": [
+            28288,
+            29760,
+            252
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0962": {
+        "name": "building1",
+        "position": [
+            30144,
+            29760,
+            242
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0963": {
+        "name": "building3",
+        "position": [
+            30784,
+            29760,
+            246
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0964": {
+        "name": "building12",
+        "position": [
+            30080,
+            28992,
+            254
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0965": {
+        "name": "building11",
+        "position": [
+            31168,
+            29632,
+            253
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0966": {
+        "name": "building1",
+        "position": [
+            28224,
+            23488,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0967": {
+        "name": "building2",
+        "position": [
+            28096,
+            22976,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0968": {
+        "name": "building10",
+        "position": [
+            26624,
+            24768,
+            357
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0969": {
+        "name": "building1",
+        "position": [
+            23232,
+            21824,
+            356
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0970": {
+        "name": "building2",
+        "position": [
+            23872,
+            21312,
+            356
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0971": {
+        "name": "building3",
+        "position": [
+            23360,
+            21312,
+            370
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0972": {
+        "name": "building7",
+        "position": [
+            24256,
+            20672,
+            338
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0973": {
+        "name": "building8",
+        "position": [
+            23360,
+            20032,
+            370
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0974": {
+        "name": "building10",
+        "position": [
+            23808,
+            20544,
+            362
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0975": {
+        "name": "building11",
+        "position": [
+            24896,
+            20032,
+            358
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0976": {
+        "name": "building1",
+        "position": [
+            28480,
+            19904,
+            358
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0978": {
+        "name": "building3",
+        "position": [
+            30528,
+            17088,
+            250
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0979": {
+        "name": "building8",
+        "position": [
+            30656,
+            16704,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0980": {
+        "name": "building10",
+        "position": [
+            29312,
+            14144,
+            242
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0983": {
+        "name": "building2",
+        "position": [
+            27584,
+            10944,
+            366
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0984": {
+        "name": "building8",
+        "position": [
+            27584,
+            10176,
+            358
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0985": {
+        "name": "building11",
+        "position": [
+            30528,
+            9408,
+            358
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0986": {
+        "name": "building2",
+        "position": [
+            31168,
+            9536,
+            364
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0987": {
+        "name": "building7",
+        "position": [
+            30528,
+            8640,
+            352
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0988": {
+        "name": "building10",
+        "position": [
+            31104,
+            6336,
+            351
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0989": {
+        "name": "building11",
+        "position": [
+            30656,
+            6208,
+            358
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0991": {
+        "name": "building12",
+        "position": [
+            31104,
+            5440,
+            368
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0992": {
+        "name": "building2",
+        "position": [
+            30528,
+            4672,
+            362
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0993": {
+        "name": "building10",
+        "position": [
+            28672,
+            3264,
+            356
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0994": {
+        "name": "building2",
+        "position": [
+            28736,
+            2112,
+            365
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0995": {
+        "name": "building7",
+        "position": [
+            28736,
+            1472,
+            364
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0996": {
+        "name": "building10",
+        "position": [
+            31104,
+            4032,
+            357
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0997": {
+        "name": "building11",
+        "position": [
+            30528,
+            3904,
+            362
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0998": {
+        "name": "building12",
+        "position": [
+            28800,
+            15936,
+            352
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0999": {
+        "name": "building3",
+        "position": [
+            27840,
+            15936,
+            344
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_1000": {
+        "name": "building7",
+        "position": [
+            28352,
+            15808,
+            372
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_1001": {
+        "name": "building1",
+        "position": [
+            7616,
+            7232,
+            116
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_1004": {
+        "name": "building1",
+        "position": [
+            7872,
+            10944,
+            94
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_1005": {
+        "name": "building1",
+        "position": [
+            7616,
+            20544,
+            98
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_1006": {
+        "name": "building1",
+        "position": [
+            22336,
+            23488,
+            102
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_1007": {
+        "name": "building1",
+        "position": [
+            22080,
+            27328,
+            100
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_1008": {
+        "name": "building2",
+        "position": [
+            21568,
+            27328,
+            94
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_1009": {
+        "name": "Pylon",
+        "position": [
+            19392,
+            15808,
+            94
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "feature_1010": {
+        "name": "Pylon",
+        "position": [
+            20928,
+            15808,
+            99
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "feature_1011": {
+        "name": "Pylon",
+        "position": [
+            22464,
+            15808,
+            85
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "feature_1012": {
+        "name": "building1",
+        "position": [
+            30656,
+            14016,
+            244
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_1013": {
+        "name": "building2",
+        "position": [
+            31168,
+            14016,
+            240
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_1014": {
+        "name": "building2",
+        "position": [
+            29888,
+            13504,
+            244
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_1015": {
+        "name": "building2",
+        "position": [
+            27584,
+            13504,
+            364
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_1016": {
+        "name": "building1",
+        "position": [
+            28864,
+            13504,
+            246
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_1017": {
+        "name": "building8",
+        "position": [
+            30656,
+            13504,
+            240
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_1018": {
+        "name": "building1",
+        "position": [
+            27072,
+            24768,
+            374
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_1019": {
+        "name": "building2",
+        "position": [
+            27072,
+            23744,
+            377
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_1020": {
+        "name": "building2",
+        "position": [
+            27072,
+            21824,
+            364
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_1021": {
+        "name": "building1",
+        "position": [
+            27072,
+            22720,
+            350
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_1022": {
+        "name": "building2",
+        "position": [
+            28480,
+            21440,
+            160
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_1023": {
+        "name": "building1",
+        "position": [
+            28480,
+            20672,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_1024": {
+        "name": "building2",
+        "position": [
+            29504,
+            20672,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_1026": {
+        "name": "building8",
+        "position": [
+            30400,
+            20544,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_1027": {
+        "name": "building7",
+        "position": [
+            31168,
+            20416,
+            254
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_1028": {
+        "name": "building1",
+        "position": [
+            31168,
+            4800,
+            352
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_1030": {
+        "name": "building2",
+        "position": [
+            27712,
+            11968,
+            370
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_1031": {
+        "name": "building11",
+        "position": [
+            27712,
+            12608,
+            364
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_1032": {
+        "name": "building8",
+        "position": [
+            27840,
+            31424,
+            246
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_1033": {
+        "name": "building11",
+        "position": [
+            27840,
+            30400,
+            242
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_1034": {
+        "name": "building7",
+        "position": [
+            27968,
+            28864,
+            254
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_1035": {
+        "name": "building1",
+        "position": [
+            27840,
+            28096,
+            356
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_1036": {
+        "name": "building2",
+        "position": [
+            27840,
+            29632,
+            244
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_1037": {
+        "name": "building1",
+        "position": [
+            19904,
+            5824,
+            98
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_1038": {
+        "name": "building1",
+        "position": [
+            17344,
+            6080,
+            114
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_1039": {
+        "name": "building1",
+        "position": [
+            576,
+            11200,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_1040": {
+        "name": "building2",
+        "position": [
+            1344,
+            11328,
+            252
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_1041": {
+        "name": "building8",
+        "position": [
+            2368,
+            11200,
+            260
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_1042": {
+        "name": "building1",
+        "position": [
+            3520,
+            14016,
+            376
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_1043": {
+        "name": "building2",
+        "position": [
+            3648,
+            13248,
+            246
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_1044": {
+        "name": "building3",
+        "position": [
+            3520,
+            12736,
+            252
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_1047": {
+        "name": "building7",
+        "position": [
+            3520,
+            11840,
+            368
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_1048": {
+        "name": "building8",
+        "position": [
+            1728,
+            23744,
+            374
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_1049": {
+        "name": "building2",
+        "position": [
+            2624,
+            23616,
+            352
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_1050": {
+        "name": "building2",
+        "position": [
+            22592,
+            13760,
+            96
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_1051": {
+        "name": "building1",
+        "position": [
+            30144,
+            27200,
+            372
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_1052": {
+        "name": "building2",
+        "position": [
+            31168,
+            27072,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_1053": {
+        "name": "building1",
+        "position": [
+            9152,
+            4672,
+            90
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_1054": {
+        "name": "building2",
+        "position": [
+            8512,
+            4800,
+            98
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_1056": {
+        "name": "building2",
+        "position": [
+            4928,
+            19136,
+            112
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_1057": {
+        "name": "building3",
+        "position": [
+            5056,
+            17344,
+            10
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_1058": {
+        "name": "building7",
+        "position": [
+            4928,
+            16448,
+            46
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_1061": {
+        "name": "building8",
+        "position": [
+            5184,
+            15680,
+            94
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_1062": {
+        "name": "building11",
+        "position": [
+            3264,
+            6592,
+            117
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_1063": {
+        "name": "building2",
+        "position": [
+            6080,
+            17344,
+            110
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_1064": {
+        "name": "building2",
+        "position": [
+            25920,
+            4288,
+            96
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_1065": {
+        "name": "building2",
+        "position": [
+            23872,
+            4288,
+            88
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_1066": {
+        "name": "building2",
+        "position": [
+            5056,
+            4160,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_1067": {
+        "name": "building3",
+        "position": [
+            5824,
+            4288,
+            256
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_1068": {
+        "name": "building7",
+        "position": [
+            6848,
+            4160,
+            356
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_4275817112": {
+        "name": "building1",
+        "position": [
+            12736,
+            17216,
+            97
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    }
+}

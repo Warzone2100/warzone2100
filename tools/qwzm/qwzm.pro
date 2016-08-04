@@ -24,9 +24,9 @@ OBJECTS_DIR = built
 # "config" and override the two variables below (with "=").
 QGLVIEWER_INCL = /usr/include/QGLViewer
 QGLVIEWER_LIBS = -lQGLViewer
-include("config")
+#include("config")
 INCLUDEPATH += $$QGLVIEWER_INCL
-LIBS += -l3ds \
+LIBS += -l3ds -lGLU -lpng \
 	-lm \
 	$$QGLVIEWER_LIBS
 QT += opengl \

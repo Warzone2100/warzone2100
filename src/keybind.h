@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -31,7 +31,6 @@ extern void	kf_BuildInfo(void);
 extern void	kf_ToggleFPS(void);			//FPS counter NOT same as kf_Framerate! -Q
 extern void	kf_ToggleSamples(void);		// Displays # of sound samples in Queue/list.
 extern void kf_ToggleOrders(void);		//displays unit's Order/action state.
-extern void kf_ToggleLevelName(void);
 extern void	kf_FrameRate(void);
 extern void	kf_ShowNumObjects(void);
 extern void	kf_ToggleRadar(void);
@@ -40,7 +39,6 @@ extern void	kf_RecalcLighting(void);
 extern void	kf_ScreenDump(void);
 extern void	kf_AllAvailable(void);
 extern void	kf_TriFlip(void);
-extern void	kf_ToggleWidgets(void);
 extern void	kf_ToggleBackgroundFog(void);
 extern void	kf_ToggleDistanceFog(void);
 extern void	kf_ToggleMistFog(void);
@@ -104,7 +102,6 @@ extern void	kf_LevelSea(void);
 extern void	kf_TestWater(void);
 extern void	kf_toggleTrapCursor(void);
 extern void	kf_TogglePauseMode(void);
-extern void	kf_ToggleDemoMode(void);
 extern void	kf_ToggleRadarAllign(void);
 
 extern void	kf_ToggleEnergyBars(void);
@@ -122,13 +119,16 @@ extern void	kf_ChooseCancel(void);
 extern void	kf_ToggleWeather(void);
 extern void	kf_KillSelected(void);
 extern void	kf_ShowGridInfo(void);
-extern void	kf_SendTextMessage(void);
+extern void	kf_SendGlobalMessage(void);
+extern void	kf_SendTeamMessage(void);
 extern void	kf_SelectPlayer(void);
 extern void	kf_ToggleDrivingMode(void);
 extern void	kf_ToggleConsole(void);
+extern void	kf_ToggleTeamChat(void);
 extern void	kf_SelectAllOnScreenUnits(void);
 extern void	kf_SelectAllUnits(void);
 extern void	kf_SelectAllVTOLs(void);
+void kf_SelectAllArmedVTOLs();
 extern void	kf_SelectAllHovers(void);
 extern void	kf_SelectAllWheeled(void);
 extern void	kf_SelectAllTracked(void);
@@ -145,10 +145,6 @@ void kf_SelectAllLandCombatUnits();
 void kf_SelectAllCombatCyborgs();
 extern void	kf_SelectAllSameType(void);
 
-extern void	kf_SetDroidRangeShort(void);
-extern void	kf_SetDroidRangeDefault(void);
-extern void	kf_SetDroidRangeLong(void);
-
 extern void	kf_SetDroidRetreatMedium(void);
 extern void	kf_SetDroidRetreatHeavy(void);
 extern void	kf_SetDroidRetreatNever(void);
@@ -157,7 +153,9 @@ extern void	kf_SetDroidAttackAtWill(void);
 extern void	kf_SetDroidAttackReturn(void);
 extern void	kf_SetDroidAttackCease(void);
 
-extern void	kf_SetDroidMoveHold(void);
+void kf_SetDroidOrderHold();
+void kf_SetDroidOrderStop();
+
 extern void	kf_SetDroidMoveGuard(void);
 extern void	kf_SetDroidMovePursue(void);   //not there?
 extern void	kf_SetDroidMovePatrol(void);   // not there?
@@ -178,8 +176,6 @@ extern bool	bAllowOtherKeyPresses;
 extern void	kf_TriggerRayCast(void);
 extern void	kf_ToggleFormationSpeedLimiting(void);
 extern void	kf_ToggleSensorDisplay(void);		//Was commented out.  Re-enabled --Q 5/10/05
-extern void	kf_SensorDisplayOn(void);
-extern void	kf_SensorDisplayOff(void);
 extern void	kf_JumpToResourceExtractor(void);
 extern void	kf_JumpToRepairUnits(void);
 extern void	kf_JumpToConstructorUnits(void);
@@ -239,10 +235,8 @@ extern void kf_SpeedUp(void);
 extern void kf_SlowDown(void);
 extern void kf_NormalSpeed(void);
 
-extern void kf_CloneSelected(void);
+void kf_CloneSelected(int);
 extern void kf_Reload(void);
-
-extern void kf_ToggleLogical(void);
 
 #define SPIN_SCALING	(360*DEG_1)
 #define	SECS_PER_SPIN	2
@@ -255,7 +249,7 @@ void kf_TileInfo(void);
 
 void kf_NoAssert(void);
 
-extern void	kf_ToggleWatchWindow(void);
+void kf_RevealMapAtPos();
 
 bool runningMultiplayer(void);
 
@@ -265,5 +259,7 @@ void	kf_BuildNextPage(void);
 void	kf_BuildPrevPage(void);
 extern void kf_DamageMe(void);
 extern void kf_AutoGame(void);
+
+void kf_PerformanceSample();
 
 #endif // __INCLUDED_SRC_KEYBIND_H__

@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -35,15 +35,13 @@
 #include "lib/netplay/netplay.h"
 #include "lib/gamelib/gtime.h"
 #include "keymap.h"
+#include "qtscript.h"
 #include "console.h"
 #include "keybind.h"
 #include "display3d.h"
 #include "keymap.h"
 #include "keyedit.h"
-#include "scriptcb.h"
 #include "lib/script/script.h"
-#include "scripttabs.h"
-
 
 static UDWORD asciiKeyCodeToTable(KEY_CODE code);
 
@@ -110,7 +108,7 @@ _keymapsave keyMapSaveTable[] =
 	kf_ToggleRadar,
 	kf_ToggleConsole,
 	kf_ToggleEnergyBars,
-	kf_NOOP,
+	kf_ToggleTeamChat,
 	kf_ScreenDump ,
 	kf_MoveToLastMessagePos,
 	kf_AssignGrouping_1,
@@ -159,15 +157,15 @@ _keymapsave keyMapSaveTable[] =
 	kf_SetDroidAttackReturn ,
 	kf_SetDroidAttackAtWill ,
 	kf_SetDroidReturnToBase ,
-	kf_SetDroidRangeDefault,
+	kf_NOOP,
 	kf_ToggleFormationSpeedLimiting,
-	kf_SetDroidRangeShort,
-	kf_SetDroidMovePursue ,
+	kf_NOOP,
+	kf_NOOP,
 	kf_SetDroidMovePatrol ,
 	kf_SetDroidGoForRepair ,
-	kf_SetDroidMoveHold ,
-	kf_SendTextMessage,
-	kf_SetDroidRangeLong,
+	kf_SetDroidOrderHold,
+	kf_SendGlobalMessage,
+	kf_SendTeamMessage,
 	kf_ScatterDroids,
 	kf_SetDroidRetreatMedium,
 	kf_SetDroidRetreatHeavy,
@@ -208,8 +206,8 @@ _keymapsave keyMapSaveTable[] =
 	kf_ToggleRadarJump,
 	kf_MovePause,
 	kf_NOOP,
-	kf_SensorDisplayOn,
-	kf_SensorDisplayOff,
+	kf_NOOP,
+	kf_NOOP,
 	kf_ToggleRadarTerrain,          //radar terrain on/off
 	kf_ToggleRadarAllyEnemy,        //enemy/ally radar color toggle
 	kf_ToggleSensorDisplay,		//  Was commented out below. moved also!.  Re-enabled --Q 5/10/05
@@ -238,7 +236,7 @@ _keymapsave keyMapSaveTable[] =
 	kf_ToggleVisibility,
 	kf_FinishResearch,
 	kf_LowerTile,
-	kf_ToggleDemoMode,
+	kf_NOOP, // unused
 	kf_ToggleGodMode,
 	kf_EndMissionOffWorld,
 	kf_SystemClose,
@@ -248,13 +246,13 @@ _keymapsave keyMapSaveTable[] =
 	kf_TriFlip,
 	kf_NOOP, // unused
 	kf_NOOP, // unused
-	kf_ToggleWatchWindow,
+	kf_RevealMapAtPos,
 	kf_ToggleDrivingMode,
 	kf_ToggleShowGateways,
 	kf_ToggleShowPath,
-	kf_MapCheck,
+	kf_PerformanceSample,
 	kf_SetDroidGoToTransport,
-	kf_SetDroidMoveGuard,
+	kf_NOOP,
 	kf_toggleTrapCursor,
 	kf_SelectAllCyborgs,
 	kf_SelectAllCombatCyborgs,
@@ -265,6 +263,8 @@ _keymapsave keyMapSaveTable[] =
 	kf_SelectAllRepairTanks,
 	kf_SelectAllSensorUnits,
 	kf_SelectAllTrucks,
+	kf_SetDroidOrderStop,
+	kf_SelectAllArmedVTOLs,
 	NULL		// last function!
 };
 
@@ -390,7 +390,8 @@ void	keyInitMappings(bool bForceDefaults)
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, (KEY_CODE)KEY_MAXSCAN, KEYMAP_PRESSED, kf_JumpToSensorUnits,       N_("View next Sensor Unit"));
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, (KEY_CODE)KEY_MAXSCAN, KEYMAP_PRESSED, kf_JumpToCommandUnits,      N_("View next Commander"));
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_TAB,               KEYMAP_PRESSED, kf_ToggleOverlays,          N_("Toggle Overlays"));
-	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_BACKQUOTE,         KEYMAP_PRESSED, kf_ToggleConsoleDrop,       N_("Console On/Off"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_BACKQUOTE,         KEYMAP_PRESSED, kf_ToggleConsoleDrop,       N_("Toggle Console History "));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL,  KEY_BACKQUOTE,         KEYMAP_PRESSED, kf_ToggleTeamChat,          N_("Toggle Team Chat History"));
 	//                                **********************************
 	// IN GAME MAPPINGS - Single key presses - ALL __DEBUG keymappings will be removed for master
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_B,      KEYMAP_PRESSED, kf_CentreOnBase,          N_("Center View on HQ"));
@@ -398,22 +399,16 @@ void	keyInitMappings(bool bForceDefaults)
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_D,      KEYMAP_PRESSED, kf_JumpToUnassignedUnits, N_("View Unassigned Units"));
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_E,      KEYMAP_PRESSED, kf_SetDroidAttackReturn,  N_("Return Fire"));
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_F,      KEYMAP_PRESSED, kf_SetDroidAttackAtWill,  N_("Fire at Will"));
-	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_G,      KEYMAP_PRESSED, kf_SetDroidMoveGuard,     N_("Guard Position"));
-	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_H,      KEYMAP_PRESSED, kf_SetDroidReturnToBase,  N_("Return to HQ"));
-	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_I,      KEYMAP_PRESSED, kf_SetDroidRangeDefault,  N_("Optimum Range"));
-	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_O,      KEYMAP_PRESSED, kf_SetDroidRangeShort,    N_("Short Range"));
-	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_P,      KEYMAP_PRESSED, kf_SetDroidMovePursue,    N_("Pursue"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LSHIFT, KEY_H,      KEYMAP_PRESSED, kf_SetDroidReturnToBase,  N_("Return to HQ"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_H,      KEYMAP_PRESSED, kf_SetDroidOrderHold,     N_("Hold Position"));
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_Q,      KEYMAP_PRESSED, kf_SetDroidMovePatrol,    N_("Patrol"));
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_R,      KEYMAP_PRESSED, kf_SetDroidGoForRepair,   N_("Return For Repair"));
-	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_S,      KEYMAP_PRESSED, kf_SetDroidMoveHold,      N_("Hold Position"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_S,      KEYMAP_PRESSED, kf_SetDroidOrderStop,     N_("Stop Droid"));
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_T,      KEYMAP_PRESSED, kf_SetDroidGoToTransport, N_("Go to Transport"));
-	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_RETURN, KEYMAP_PRESSED, kf_SendTextMessage,       N_("Send Text Message"));
-	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_U,      KEYMAP_PRESSED, kf_SetDroidRangeLong,     N_("Long Range"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_RETURN, KEYMAP_PRESSED, kf_SendGlobalMessage,     N_("Send Global Text Message"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL,  KEY_RETURN, KEYMAP_PRESSED, kf_SendTeamMessage,       N_("Send Team Text Message"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LALT,   KEY_H,      KEYMAP_PRESSED, kf_AddHelpBlip,           N_("Drop a beacon"));
 
-	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LALT, KEY_H, KEYMAP_PRESSED, kf_AddHelpBlip, N_("Drop a beacon"));
-
-	keyAddMapping(KEYMAP_ALWAYS,     KEY_IGNORE, KEY_Z,   KEYMAP_PRESSED,  kf_SensorDisplayOn,      N_("Sensor display On"));
-	keyAddMapping(KEYMAP_ALWAYS,     KEY_IGNORE, KEY_Z,   KEYMAP_RELEASED, kf_SensorDisplayOff,     N_("Sensor display Off"));
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LALT,   KEY_S,   KEYMAP_PRESSED,  kf_ToggleShadows,        N_("Toggles shadows"));
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LALT,   KEY_T,   KEYMAP_PRESSED,  kf_toggleTrapCursor,     N_("Trap cursor"));
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL,  KEY_TAB, KEYMAP_PRESSED,  kf_ToggleRadarTerrain,   N_("Toggle radar terrain"));
@@ -436,6 +431,7 @@ void	keyInitMappings(bool bForceDefaults)
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL, KEY_T, KEYMAP_PRESSED, kf_SelectAllTracked,       N_("Select all Tracks"));
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL, KEY_U, KEYMAP_PRESSED, kf_SelectAllUnits,         N_("Select EVERY unit"));
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL, KEY_V, KEYMAP_PRESSED, kf_SelectAllVTOLs,         N_("Select all VTOLs"));
+	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LSHIFT, KEY_V, KEYMAP_PRESSED, kf_SelectAllArmedVTOLs,   N_("Select all fully-armed VTOLs"));
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL, KEY_W, KEYMAP_PRESSED, kf_SelectAllWheeled,       N_("Select all Wheels"));
 	keyAddMapping(KEYMAP__DEBUG,     KEY_LCTRL, KEY_Y, KEYMAP_PRESSED, kf_FrameRate,              N_("Show frame rate"));
 	keyAddMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL, KEY_Z, KEYMAP_PRESSED, kf_SelectAllSameType,      N_("Select all Similar Units"));
@@ -466,12 +462,11 @@ void	keyInitMappings(bool bForceDefaults)
 	keyAddMapping(KEYMAP__DEBUG, KEY_IGNORE, KEY_V,         KEYMAP_PRESSED, kf_ToggleVisibility,    N_("Toggle visibility"));
 	keyAddMapping(KEYMAP__DEBUG, KEY_IGNORE, KEY_W,         KEYMAP_DOWN,    kf_RaiseTile,           N_("Raise tile height"));
 	keyAddMapping(KEYMAP__DEBUG, KEY_IGNORE, KEY_A,         KEYMAP_DOWN,    kf_LowerTile,           N_("Lower tile height"));
-	keyAddMapping(KEYMAP__DEBUG, KEY_IGNORE, KEY_Y,         KEYMAP_PRESSED, kf_ToggleDemoMode,      N_("Toggles on/off DEMO Mode"));
 	keyAddMapping(KEYMAP__DEBUG, KEY_LCTRL,  KEY_B,         KEYMAP_PRESSED, kf_EndMissionOffWorld,  N_("End Mission"));
 	keyAddMapping(KEYMAP__DEBUG, KEY_LCTRL,  KEY_J,         KEYMAP_PRESSED, kf_ToggleFog,           N_("Toggles All fog"));
 	keyAddMapping(KEYMAP__DEBUG, KEY_LCTRL,  KEY_Q,         KEYMAP_PRESSED, kf_ToggleWeather,       N_("Trigger some weather"));
 	keyAddMapping(KEYMAP__DEBUG, KEY_IGNORE, KEY_K,         KEYMAP_PRESSED, kf_TriFlip,             N_("Flip terrain triangle"));
-	keyAddMapping(KEYMAP__DEBUG, KEY_LCTRL,  KEY_K,         KEYMAP_PRESSED, kf_MapCheck,            N_("Realign height of all objects on the map"));
+	keyAddMapping(KEYMAP__DEBUG, KEY_LCTRL,  KEY_K,         KEYMAP_PRESSED, kf_PerformanceSample,   N_("Make a performance measurement sample"));
 
 	//These ones are necessary for debugging
 	keyAddMapping(KEYMAP__DEBUG, KEY_LALT,   KEY_A, KEYMAP_PRESSED, kf_AllAvailable,      N_("Make all items available"));
@@ -479,40 +474,10 @@ void	keyInitMappings(bool bForceDefaults)
 	keyAddMapping(KEYMAP__DEBUG, KEY_LCTRL,  KEY_G, KEYMAP_PRESSED, kf_ToggleGodMode,     N_("Toggle god Mode Status"));
 	keyAddMapping(KEYMAP__DEBUG, KEY_LCTRL,  KEY_O, KEYMAP_PRESSED, kf_ChooseOptions,     N_("Display Options Screen"));
 	keyAddMapping(KEYMAP__DEBUG, KEY_LCTRL,  KEY_X, KEYMAP_PRESSED, kf_FinishResearch,    N_("Complete current research"));
-	keyAddMapping(KEYMAP__DEBUG, KEY_LSHIFT, KEY_W, KEYMAP_PRESSED, kf_ToggleWatchWindow, N_("Toggle watch window"));
+	keyAddMapping(KEYMAP__DEBUG, KEY_LSHIFT, KEY_W, KEYMAP_PRESSED, kf_RevealMapAtPos,    N_("Reveal map at mouse position"));
 	keyAddMapping(KEYMAP__DEBUG, KEY_LCTRL,  KEY_L, KEYMAP_PRESSED, kf_TraceObject,       N_("Trace a game object"));
 	keyAddMapping(KEYMAP__DEBUG, KEY_LSHIFT, KEY_D, KEYMAP_PRESSED, kf_ToggleDrivingMode, N_("Toggle Driving Mode"));
 	saveKeyMap();	// save out the default key mappings.
-
-//  ------------------------ OLD STUFF - Store here!
-	/*
-	keyAddMapping(KEYMAP__DEBUG, KEY_LSHIFT, KEY_D, KEYMAP_PRESSED, kf_ToggleDrivingMode, 			"Toggle Driving Mode");
-	keyAddMapping(KEYMAP__DEBUG, KEY_IGNORE, KEY_E, KEYMAP_PRESSED, kf_ToggleDroidInfo,"Display droid info whilst tracking");
-	keyAddMapping(KEYMAP__DEBUG, KEY_IGNORE, KEY_I, KEYMAP_PRESSED, kf_ToggleWidgets,"Toggle Widgets");
-	keyAddMapping(KEYMAP__DEBUG, KEY_IGNORE, KEY_J, KEYMAP_PRESSED, kf_ToggleRadarAllign,"Toggles Radar allignment");
-	keyAddMapping(KEYMAP__DEBUG, KEY_IGNORE, KEY_R, KEYMAP_PRESSED, kf_ShowNumObjects,"Show number of Objects");
-	keyAddMapping(KEYMAP_ALWAYS, KEY_IGNORE, KEY_T, KEYMAP_PRESSED, kf_SendTextMessage,"Send Text Message");
-	keyAddMapping(KEYMAP_ALWAYS, KEY_IGNORE, KEY_U, KEYMAP_PRESSED, kf_ToggleBackgroundFog,"Toggle Background Fog");
-	keyAddMapping(KEYMAP__DEBUG, KEY_IGNORE, KEY_V, KEYMAP_PRESSED, kf_BuildInfo,"Build date and time");
-	keyAddMapping(KEYMAP__DEBUG, KEY_IGNORE, KEY_Y, KEYMAP_PRESSED, kf_ToggleDemoMode,"Toggles on/off DEMO Mode");
-	keyAddMapping(KEYMAP__DEBUG, KEY_IGNORE, KEY_Z, KEYMAP_PRESSED, kf_ShowGridInfo,"DBPRINTF map grid coverage");
-
-	keyAddMapping(KEYMAP__DEBUG, KEY_IGNORE, KEY_SCROLLLOCK, KEYMAP_PRESSED, kf_TogglePauseMode,	_("Toggle Pause Mode"));		//not needed, done with KEY_ESC
-	keyAddMapping(KEYMAP__DEBUG, KEY_IGNORE, KEY_J, KEYMAP_PRESSED, kf_MaxScrollLimits,				"Maximum scroll limits");
-	keyAddMapping(KEYMAP__DEBUG, KEY_IGNORE, KEY_N, KEYMAP_PRESSED, kf_GiveTemplateSet,				"Give template set(s) to player 0 ");
-	keyAddMapping(KEYMAP__DEBUG, KEY_LCTRL, KEY_KP_MINUS, KEYMAP_PRESSED, kf_SystemClose,			"System Close (EXIT)");			//not working right now
-	keyAddMapping(KEYMAP__DEBUG, KEY_LCTRL, KEY_I, KEYMAP_PRESSED, kf_RecalcLighting,				"Recalculate lighting");
-
-	// This is not needed, use ctrl-o
-	keyAddMapping(KEYMAP__DEBUG, KEY_LALT, KEY_F1, KEYMAP_PRESSED, kf_SelectPlayer,					"Select player  0");
-	keyAddMapping(KEYMAP__DEBUG, KEY_LALT, KEY_F2, KEYMAP_PRESSED, kf_SelectPlayer,					"Select player  1");
-	keyAddMapping(KEYMAP__DEBUG, KEY_LALT, KEY_F3, KEYMAP_PRESSED, kf_SelectPlayer,					"Select player  2");
-	keyAddMapping(KEYMAP__DEBUG, KEY_LALT, KEY_F4, KEYMAP_PRESSED, kf_SelectPlayer,					"Select player  3");
-	keyAddMapping(KEYMAP__DEBUG, KEY_LALT, KEY_F5, KEYMAP_PRESSED, kf_SelectPlayer,					"Select player  4");
-	keyAddMapping(KEYMAP__DEBUG, KEY_LALT, KEY_F6, KEYMAP_PRESSED, kf_SelectPlayer,					"Select player  5");
-	keyAddMapping(KEYMAP__DEBUG, KEY_LALT, KEY_F7, KEYMAP_PRESSED, kf_SelectPlayer,					"Select player  6");
-	keyAddMapping(KEYMAP__DEBUG, KEY_LALT, KEY_F8, KEYMAP_PRESSED, kf_SelectPlayer,					"Select player  7");
-	*/
 }
 
 // ----------------------------------------------------------------------------------
@@ -733,7 +698,6 @@ void	keyProcessMappings(bool bExclude)
 {
 	KEY_MAPPING	*keyToProcess;
 	bool		bMetaKeyDown;
-	SDWORD		i;
 
 	/* Bomb out if there are none */
 	if (!keyMappings || !numActiveMappings || !bKeyProcessing)
@@ -845,44 +809,44 @@ void	keyProcessMappings(bool bExclude)
 	}
 
 	/* Script callback - find out what meta key was pressed */
-	cbPressedMetaKey = KEY_IGNORE;
+	int pressedMetaKey = KEY_IGNORE;
 
 	/* getLastMetaKey() can't be used here, have to do manually */
 	if (keyDown(KEY_LCTRL))
 	{
-		cbPressedMetaKey = KEY_LCTRL;
+		pressedMetaKey = KEY_LCTRL;
 	}
 	else if (keyDown(KEY_RCTRL))
 	{
-		cbPressedMetaKey = KEY_RCTRL;
+		pressedMetaKey = KEY_RCTRL;
 	}
 	else if (keyDown(KEY_LALT))
 	{
-		cbPressedMetaKey = KEY_LALT;
+		pressedMetaKey = KEY_LALT;
 	}
 	else if (keyDown(KEY_RALT))
 	{
-		cbPressedMetaKey = KEY_RALT;
+		pressedMetaKey = KEY_RALT;
 	}
 	else if (keyDown(KEY_LSHIFT))
 	{
-		cbPressedMetaKey = KEY_LSHIFT;
+		pressedMetaKey = KEY_LSHIFT;
 	}
 	else if (keyDown(KEY_RSHIFT))
 	{
-		cbPressedMetaKey = KEY_RSHIFT;
+		pressedMetaKey = KEY_RSHIFT;
 	}
 	else if (keyDown(KEY_LMETA))
 	{
-		cbPressedMetaKey = KEY_LMETA;
+		pressedMetaKey = KEY_LMETA;
 	}
 	else if (keyDown(KEY_RMETA))
 	{
-		cbPressedMetaKey = KEY_RMETA;
+		pressedMetaKey = KEY_RMETA;
 	}
 
 	/* Find out what keys were pressed */
-	for (i = 0; i < KEY_MAXSCAN; i++)
+	for (int i = 0; i < KEY_MAXSCAN; i++)
 	{
 		/* Skip meta keys */
 		switch (i)
@@ -902,13 +866,10 @@ void	keyProcessMappings(bool bExclude)
 		/* Let scripts process this key if it's pressed */
 		if (keyPressed((KEY_CODE)i))
 		{
-			cbPressedKey =  i;
-			eventFireCallbackTrigger((TRIGGER_TYPE)CALL_KEY_PRESSED);
+			triggerEventKeyPressed(pressedMetaKey, i);
 		}
 	}
-
 }
-
 
 // ----------------------------------------------------------------------------------
 /* Sends a particular key mapping to the console */

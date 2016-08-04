@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -32,15 +32,27 @@
 #include "main.h"
 #include "mission.h" // for cheats
 #include "multistat.h"
+#include <QtCore/QSettings>
+
 
 // ////////////////////////////////////////////////////////////////////////////
 // STATS STUFF
 // ////////////////////////////////////////////////////////////////////////////
 static PLAYERSTATS playerStats[MAX_PLAYERS];
 
+PLAYERSTATS::PLAYERSTATS()
+	: played(0)
+	, wins(0)
+	, losses(0)
+	, totalKills(0)
+	, totalScore(0)
+	, recentKills(0)
+	, recentScore(0)
+{}
+
 // ////////////////////////////////////////////////////////////////////////////
 // Get Player's stats
-PLAYERSTATS getMultiStats(UDWORD player)
+PLAYERSTATS const &getMultiStats(UDWORD player)
 {
 	return playerStats[player];
 }
@@ -73,6 +85,12 @@ bool setMultiStats(uint32_t playerIndex, PLAYERSTATS plStats, bool bLocal)
 		NETuint32_t(&playerStats[playerIndex].totalScore);
 		NETuint32_t(&playerStats[playerIndex].recentKills);
 		NETuint32_t(&playerStats[playerIndex].recentScore);
+		EcKey::Key identity;
+		if (!playerStats[playerIndex].identity.empty())
+		{
+			identity = playerStats[playerIndex].identity.toBytes(EcKey::Public);
+		}
+		NETbytes(&identity);
 		NETend();
 	}
 
@@ -113,6 +131,22 @@ void recvMultiStats(NETQUEUE queue)
 		NETuint32_t(&playerStats[playerIndex].totalScore);
 		NETuint32_t(&playerStats[playerIndex].recentKills);
 		NETuint32_t(&playerStats[playerIndex].recentScore);
+		EcKey::Key identity;
+		NETbytes(&identity);
+		EcKey::Key prevIdentity;
+		if (!playerStats[playerIndex].identity.empty())
+		{
+			prevIdentity = playerStats[playerIndex].identity.toBytes(EcKey::Public);
+		}
+		playerStats[playerIndex].identity.clear();
+		if (!identity.empty())
+		{
+			playerStats[playerIndex].identity.fromBytes(identity, EcKey::Public);
+		}
+		if (identity != prevIdentity)
+		{
+			ingame.PingTimes[playerIndex] = PING_LIMIT;
+		}
 	}
 	NETend();
 }
@@ -125,7 +159,7 @@ bool loadMultiStats(char *sPlayerName, PLAYERSTATS *st)
 	UDWORD				size;
 	char				*pFileData;
 
-	memset(st, 0, sizeof(PLAYERSTATS));	// clear in case we don't get to load
+	*st = PLAYERSTATS();  // clear in case we don't get to load
 
 	// Prevent an empty player name (where the first byte is a 0x0 terminating char already)
 	if (!*sPlayerName)
@@ -138,17 +172,8 @@ bool loadMultiStats(char *sPlayerName, PLAYERSTATS *st)
 	debug(LOG_WZ, "loadMultiStats: %s", fileName);
 
 	// check player already exists
-	if (!PHYSFS_exists(fileName))
+	if (PHYSFS_exists(fileName))
 	{
-		PLAYERSTATS			blankstats;
-
-		memset(&blankstats, 0, sizeof(PLAYERSTATS));
-		saveMultiStats(sPlayerName, sPlayerName, &blankstats);		// didnt exist so create.
-	}
-	else
-	{
-		int num = 0;
-
 		loadFile(fileName, &pFileData, &size);
 
 		if (strncmp(pFileData, "WZ.STA.v3", 9) != 0)
@@ -156,13 +181,21 @@ bool loadMultiStats(char *sPlayerName, PLAYERSTATS *st)
 			return false; // wrong version or not a stats file
 		}
 
-		num = sscanf(pFileData, "WZ.STA.v3\n%u %u %u %u %u",
-		             &st->wins, &st->losses, &st->totalKills, &st->totalScore, &st->played);
-		if (num < 5)
-		{
-			st->played = 0;	// must be old, buggy format still
-		}
+		char identity[1001];
+		identity[0] = '\0';
+		sscanf(pFileData, "WZ.STA.v3\n%u %u %u %u %u\n%1000[A-Za-z0-9+/=]",
+		       &st->wins, &st->losses, &st->totalKills, &st->totalScore, &st->played, identity);
 		free(pFileData);
+		if (identity[0] != '\0')
+		{
+			st->identity.fromBytes(base64Decode(identity), EcKey::Private);
+		}
+	}
+
+	if (st->identity.empty())
+	{
+		st->identity = EcKey::generate();  // Generate new identity.
+		saveMultiStats(sPlayerName, sPlayerName, st);  // Save new identity.
 	}
 
 	// reset recent scores
@@ -181,14 +214,13 @@ bool loadMultiStats(char *sPlayerName, PLAYERSTATS *st)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Save Player Stats
-#define MAX_STA_SIZE 500
 bool saveMultiStats(const char *sFileName, const char *sPlayerName, const PLAYERSTATS *st)
 {
-	char buffer[MAX_STA_SIZE];
+	char buffer[1000];
 	char fileName[255] = "";
 
-	snprintf(buffer, MAX_STA_SIZE, "WZ.STA.v3\n%u %u %u %u %u",
-	         st->wins, st->losses, st->totalKills, st->totalScore, st->played);
+	ssprintf(buffer, "WZ.STA.v3\n%u %u %u %u %u\n%s\n",
+	         st->wins, st->losses, st->totalKills, st->totalScore, st->played, base64Encode(st->identity.toBytes(EcKey::Private)).c_str());
 
 	snprintf(fileName, sizeof(fileName), "%s%s.sta", MultiPlayersPath, sFileName);
 
@@ -283,4 +315,39 @@ void updateMultiStatsKills(BASE_OBJECT *psKilled, UDWORD player)
 	{
 		ingame.skScores[player][1]++;
 	}
+}
+
+static std::map<std::string, EcKey::Key> knownPlayers;
+static QSettings *knownPlayersIni = nullptr;
+
+std::map<std::string, EcKey::Key> const &getKnownPlayers()
+{
+	if (knownPlayersIni == nullptr)
+	{
+		knownPlayersIni = new QSettings(PHYSFS_getWriteDir() + QString("/") + "knownPlayers.ini", QSettings::IniFormat);
+		QStringList names = knownPlayersIni->allKeys();
+		for (int i = 0; i < names.size(); ++i)
+		{
+			knownPlayers[names[i].toUtf8().constData()] = base64Decode(knownPlayersIni->value(names[i]).toString().toStdString());
+		}
+	}
+	return knownPlayers;
+}
+
+void addKnownPlayer(std::string const &name, EcKey const &key, bool override)
+{
+	if (key.empty())
+	{
+		return;
+	}
+
+	if (!override && knownPlayers.find(name) != knownPlayers.end())
+	{
+		return;
+	}
+
+	getKnownPlayers();  // Init knownPlayersIni.
+	knownPlayers[name] = key.toBytes(EcKey::Public);
+	knownPlayersIni->setValue(QString::fromUtf8(name.c_str()), base64Encode(key.toBytes(EcKey::Public)).c_str());
+	knownPlayersIni->sync();
 }

@@ -1,6 +1,6 @@
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2013  Warzone 2100 Project
+	Copyright (C) 2013-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -241,6 +241,8 @@ enum
 	IMAGE_RELOAD_HI,
 	IMAGE_GAMEVERSION,
 	IMAGE_GAMEVERSION_HI,
+	IMAGE_ALLI_UNSHARED,
+	IMAGE_ALLI_UNSHARED_HI,
 };
 
 #endif //__INCLUDED_SRC_FREND_H__

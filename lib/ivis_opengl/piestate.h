@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -40,6 +40,8 @@
  */
 /***************************************************************************/
 
+struct SHADER_PROGRAM;
+
 struct RENDER_STATE
 {
 	bool				fogEnabled;
@@ -47,7 +49,6 @@ struct RENDER_STATE
 	PIELIGHT			fogColour;
 	SDWORD				texPage;
 	REND_MODE			rendMode;
-	bool				keyingOn;
 };
 
 void rendStatesRendModeHack();  // Sets rendStates.rendMode = REND_ALPHA; (Added during merge, since the renderStates is now static.)
@@ -79,24 +80,17 @@ extern PIELIGHT pie_GetFogColour(void) WZ_DECL_PURE;
 extern void pie_UpdateFogDistance(float begin, float end);
 //render states
 extern void pie_SetTexturePage(SDWORD num);
-extern void pie_SetAlphaTest(bool keyingOn);
 extern void pie_SetRendMode(REND_MODE rendMode);
 
-// Shaders control center
-extern bool pie_GetShaderAvailability(void);
-extern void pie_SetShaderAvailability(bool);
-extern bool pie_GetFallbackAvailability(void);
-extern void pie_SetFallbackAvailability(bool);
-extern bool pie_GetShaderUsage(void);
-extern void pie_SetShaderUsage(bool);
+bool pie_LoadShaders();
+void pie_FreeShaders();
+GLuint pie_LoadShader(const char *programName, const char *vertexPath, const char *fragmentPath);
 
-bool pie_LoadShaders(void);
 // Actual shaders (we do not want to export these calls)
-void pie_DeactivateShader(void);
-void pie_DeactivateFallback(void);
-void pie_ActivateShader(SHADER_MODE shaderMode, iIMDShape *shape, PIELIGHT teamcolour, PIELIGHT colour);
-void pie_ActivateFallback(SHADER_MODE shaderMode, iIMDShape *shape, PIELIGHT teamcolour, PIELIGHT colour);
+void pie_ActivateShader(int shaderMode, const iIMDShape *shape, PIELIGHT teamcolour, PIELIGHT colour);
+void pie_DeactivateShader();
 void pie_SetShaderStretchDepth(float stretch);
+float pie_GetShaderStretchDepth();
 void pie_SetShaderTime(uint32_t shaderTime);
 void pie_SetShaderEcmEffect(bool value);
 

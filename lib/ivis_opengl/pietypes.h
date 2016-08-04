@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -37,11 +37,7 @@
  *	Global Definitions (CONSTANTS)
  */
 /***************************************************************************/
-#define STRETCHED_Z_SHIFT		10 // stretchs z range for (1000 to 4000) to (8000 to 32000)
-#define MAX_Z				(32000) // raised to 32000 from 6000 when stretched
-#define MIN_STRETCHED_Z			256
 #define LONG_WAY			(1<<15)
-#define INTERFACE_DEPTH		(MAX_Z - 1)
 #define BUTTON_DEPTH		2000 // will be stretched to 16000
 
 #define OLD_TEXTURE_SIZE_FIX 256.0f
@@ -57,7 +53,6 @@
 #define pie_SHADOW              0x80
 #define pie_STATIC_SHADOW       0x100
 #define pie_PREMULTIPLIED       0x200
-#define pie_FORCE_IMMEDIATE     0x400
 
 #define pie_RAISE_SCALE			256
 
@@ -83,7 +78,6 @@ enum DEPTH_MODE
 {
 	DEPTH_CMP_LEQ_WRT_ON,
 	DEPTH_CMP_ALWAYS_WRT_ON,
-	DEPTH_CMP_LEQ_WRT_OFF,
 	DEPTH_CMP_ALWAYS_WRT_OFF
 };
 

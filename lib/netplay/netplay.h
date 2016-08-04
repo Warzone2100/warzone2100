@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -104,6 +104,7 @@ enum MESSAGE_TYPES
 	GAME_GAME_TIME,                 ///< Game time. Used for synchronising, so that all messages are executed at the same gameTime on all clients.
 	GAME_PLAYER_LEFT,               ///< Player has left or dropped.
 	GAME_DROIDDISEMBARK,            ///< droid disembarked from a Transporter
+	GAME_SYNC_REQUEST,		///< Game event generated from scripts that is meant to be synced
 	// The following messages are used for debug mode.
 	GAME_DEBUG_MODE,                ///< Request enable/disable debug mode.
 	GAME_DEBUG_ADD_DROID,           ///< Add droid.
@@ -288,60 +289,60 @@ extern char iptoconnect[PATH_MAX]; // holds IP/hostname from command line
 
 // ////////////////////////////////////////////////////////////////////////
 // functions available to you.
-extern int   NETinit(bool bFirstCall);				// init
-bool NETsend(NETQUEUE queue, NetMessage const *message);                 ///< send to player, or broadcast if player == NET_ALL_PLAYERS.
-extern bool NETrecvNet(NETQUEUE *queue, uint8_t *type);                  ///< recv a message from the net queues if possible.
-extern bool NETrecvGame(NETQUEUE *queue, uint8_t *type);                 ///< recv a message from the game queues which is sceduled to execute by time, if possible.
-void NETflush(void);                                                     ///< Flushes any data stuck in compression buffers.
+int NETinit(bool bFirstCall);
+WZ_DECL_NONNULL(2) bool NETsend(NETQUEUE queue, NetMessage const *message);   ///< send to player, or broadcast if player == NET_ALL_PLAYERS.
+WZ_DECL_NONNULL(1, 2) bool NETrecvNet(NETQUEUE *queue, uint8_t *type);        ///< recv a message from the net queues if possible.
+WZ_DECL_NONNULL(1, 2) bool NETrecvGame(NETQUEUE *queue, uint8_t *type);       ///< recv a message from the game queues which is sceduled to execute by time, if possible.
+void NETflush();                                                              ///< Flushes any data stuck in compression buffers.
 
-int NETsendFile(char *mapName, Sha256 const &fileHash, UDWORD player);  // send file chunk.
-extern UBYTE   NETrecvFile(NETQUEUE queue);                     // recv file chunk
+int NETsendFile(char *mapName, Sha256 const &fileHash, UDWORD player);  ///< Send file chunk.
+UBYTE NETrecvFile(NETQUEUE queue);                                ///< Receive file chunk.
 
-extern int NETclose(void);					// close current game
-extern int NETshutdown(void);					// leave the game in play.
+int NETclose();					// close current game
+int NETshutdown();					// leave the game in play.
 
-extern void NETaddRedirects(void);
-extern void NETremRedirects(void);
-extern void NETdiscoverUPnPDevices(void);
+void NETaddRedirects();
+void NETremRedirects();
+void NETdiscoverUPnPDevices();
 
 enum NetStatisticType {NetStatisticRawBytes, NetStatisticUncompressedBytes, NetStatisticPackets};
 unsigned NETgetStatistic(NetStatisticType type, bool sent, bool isTotal = false);     // Return some statistic. Call regularly for good results.
 
-extern void NETplayerKicked(UDWORD index);			// Cleanup after player has been kicked
+void NETplayerKicked(UDWORD index);			// Cleanup after player has been kicked
 
 // from netjoin.c
-extern SDWORD	NETgetGameFlags(UDWORD flag);			// return one of the four flags(dword) about the game.
-extern int32_t	NETgetGameFlagsUnjoined(unsigned int gameid, unsigned int flag);	// return one of the four flags(dword) about the game.
-extern bool	NETsetGameFlags(UDWORD flag, SDWORD value);	// set game flag(1-4) to value.
-extern bool	NEThaltJoining(void);				// stop new players joining this game
-extern bool	NETfindGame(void);		// find games being played(uses GAME_GUID);
-extern bool	NETjoinGame(const char *host, uint32_t port, const char *playername); // join game given with playername
-extern bool	NEThostGame(const char *SessionName, const char *PlayerName,// host a game
-                        SDWORD one, SDWORD two, SDWORD three, SDWORD four, UDWORD plyrs);
-extern bool	NETchangePlayerName(UDWORD player, char *newName);// change a players name.
-void            NETfixDuplicatePlayerNames(void);  // Change a player's name automatically, if there are duplicates.
+SDWORD NETgetGameFlags(UDWORD flag);			// return one of the four flags(dword) about the game.
+int32_t NETgetGameFlagsUnjoined(unsigned int gameid, unsigned int flag);	// return one of the four flags(dword) about the game.
+bool NETsetGameFlags(UDWORD flag, SDWORD value);	// set game flag(1-4) to value.
+bool NEThaltJoining();				// stop new players joining this game
+bool NETfindGame();		// find games being played(uses GAME_GUID);
+bool NETjoinGame(const char *host, uint32_t port, const char *playername); // join game given with playername
+bool NEThostGame(const char *SessionName, const char *PlayerName,// host a game
+                 SDWORD one, SDWORD two, SDWORD three, SDWORD four, UDWORD plyrs);
+bool NETchangePlayerName(UDWORD player, char *newName);// change a players name.
+void NETfixDuplicatePlayerNames();  // Change a player's name automatically, if there are duplicates.
 
 #include "netlog.h"
 
-extern void NETsetMasterserverName(const char *hostname);
-extern const char *NETgetMasterserverName(void);
-extern void NETsetMasterserverPort(unsigned int port);
-extern unsigned int NETgetMasterserverPort(void);
-extern void NETsetGameserverPort(unsigned int port);
-extern unsigned int NETgetGameserverPort(void);
+void NETsetMasterserverName(const char *hostname);
+const char *NETgetMasterserverName();
+void NETsetMasterserverPort(unsigned int port);
+unsigned int NETgetMasterserverPort();
+void NETsetGameserverPort(unsigned int port);
+unsigned int NETgetGameserverPort();
 
-extern bool NETsetupTCPIP(const char *machine);
-extern void NETsetGamePassword(const char *password);
-extern void NETBroadcastPlayerInfo(uint32_t index);
+bool NETsetupTCPIP(const char *machine);
+void NETsetGamePassword(const char *password);
+void NETBroadcastPlayerInfo(uint32_t index);
 void NETBroadcastTwoPlayerInfo(uint32_t index1, uint32_t index2);
-extern bool NETisCorrectVersion(uint32_t game_version_major, uint32_t game_version_minor);
-extern int NETGetMajorVersion(void);
-extern int NETGetMinorVersion(void);
+bool NETisCorrectVersion(uint32_t game_version_major, uint32_t game_version_minor);
+int NETGetMajorVersion();
+int NETGetMinorVersion();
 void NET_InitPlayer(int i, bool initPosition, bool initTeams = false);
-extern void NET_InitPlayers(bool initTeams = false);
+void NET_InitPlayers(bool initTeams = false);
 
 void NETGameLocked(bool flag);
-void NETresetGamePassword(void);
+void NETresetGamePassword();
 
 void NETsetPlayerConnectionStatus(CONNECTION_STATUS status, unsigned player);    ///< Cumulative, except that CONNECTIONSTATUS_NORMAL resets.
 bool NETcheckPlayerConnectionStatus(CONNECTION_STATUS status, unsigned player);  ///< True iff connection status icon hasn't expired for this player. CONNECTIONSTATUS_NORMAL means any status, NET_ALL_PLAYERS means all players.
@@ -350,8 +351,7 @@ const char *messageTypeToString(unsigned messageType);
 
 /// Sync debugging. Only prints anything, if different players would print different things.
 #define syncDebug(...) do { _syncDebug(__FUNCTION__, __VA_ARGS__); } while(0)
-void _syncDebug(const char *function, const char *str, ...)
-WZ_DECL_FORMAT(printf, 2, 3);
+void _syncDebug(const char *function, const char *str, ...) WZ_DECL_FORMAT(printf, 2, 3);
 /// Faster than syncDebug. Make sure that str is a format string that takes ints only.
 void _syncDebugIntList(const char *function, const char *str, int *ints, size_t numInts);
 #define syncDebugBacktrace() do { _syncDebugBacktrace(__FUNCTION__); } while(0)

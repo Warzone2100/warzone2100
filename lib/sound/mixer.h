@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -24,11 +24,11 @@
 #include "lib/framework/frame.h"
 #include "audio.h"
 
-float sound_GetMusicVolume(void);
+float sound_GetMusicVolume();
 void  sound_SetMusicVolume(float volume);
-float sound_GetUIVolume(void);
+float sound_GetUIVolume();
 void  sound_SetUIVolume(float volume);
-float sound_GetEffectsVolume(void);
+float sound_GetEffectsVolume();
 void  sound_SetEffectsVolume(float volume);
 
 #endif // __INCLUDED_LIB_SOUND_MIXER_H__

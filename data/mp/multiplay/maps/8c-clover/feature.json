@@ -1,0 +1,1133 @@
+{
+    "feature_0001": {
+        "name": "OilResource",
+        "position": [
+            13760,
+            8256,
+            334
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0019": {
+        "name": "OilResource",
+        "position": [
+            2368,
+            8128,
+            335
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0020": {
+        "name": "OilResource",
+        "position": [
+            2624,
+            8384,
+            335
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0028": {
+        "name": "OilResource",
+        "position": [
+            12736,
+            2880,
+            286
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0029": {
+        "name": "OilResource",
+        "position": [
+            12992,
+            2880,
+            286
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0035": {
+        "name": "OilResource",
+        "position": [
+            2624,
+            13376,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0036": {
+        "name": "OilResource",
+        "position": [
+            2624,
+            13120,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0044": {
+        "name": "OilResource",
+        "position": [
+            7744,
+            14016,
+            335
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0045": {
+        "name": "OilResource",
+        "position": [
+            7488,
+            14016,
+            335
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0052": {
+        "name": "OilResource",
+        "position": [
+            14016,
+            14016,
+            200
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0053": {
+        "name": "OilResource",
+        "position": [
+            11840,
+            12352,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0060": {
+        "name": "OilResource",
+        "position": [
+            7104,
+            2880,
+            335
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0061": {
+        "name": "OilResource",
+        "position": [
+            7104,
+            3136,
+            335
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0068": {
+        "name": "OilResource",
+        "position": [
+            2624,
+            3136,
+            267
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0069": {
+        "name": "OilResource",
+        "position": [
+            2624,
+            2880,
+            266
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0073": {
+        "name": "OilResource",
+        "position": [
+            7360,
+            4544,
+            335
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0074": {
+        "name": "OilResource",
+        "position": [
+            4032,
+            4544,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0075": {
+        "name": "OilResource",
+        "position": [
+            12736,
+            4672,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0076": {
+        "name": "OilResource",
+        "position": [
+            11712,
+            7872,
+            335
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0077": {
+        "name": "OilResource",
+        "position": [
+            14016,
+            13760,
+            200
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0078": {
+        "name": "OilResource",
+        "position": [
+            8128,
+            11456,
+            335
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0079": {
+        "name": "OilResource",
+        "position": [
+            4928,
+            12224,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0080": {
+        "name": "OilResource",
+        "position": [
+            4800,
+            7616,
+            335
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0349": {
+        "name": "OilResource",
+        "position": [
+            6976,
+            11456,
+            334
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0359": {
+        "name": "OilResource",
+        "position": [
+            5056,
+            14016,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0379": {
+        "name": "OilResource",
+        "position": [
+            4672,
+            8768,
+            334
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0389": {
+        "name": "OilResource",
+        "position": [
+            5184,
+            3136,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0399": {
+        "name": "OilResource",
+        "position": [
+            8384,
+            4544,
+            334
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0409": {
+        "name": "OilResource",
+        "position": [
+            11584,
+            2880,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0419": {
+        "name": "OilResource",
+        "position": [
+            11584,
+            8768,
+            334
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0429": {
+        "name": "OilResource",
+        "position": [
+            11072,
+            13248,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0439": {
+        "name": "OilResource",
+        "position": [
+            7744,
+            9024,
+            335
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0440": {
+        "name": "OilResource",
+        "position": [
+            7744,
+            5952,
+            289
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0441": {
+        "name": "OilResource",
+        "position": [
+            9536,
+            7488,
+            322
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0442": {
+        "name": "OilResource",
+        "position": [
+            6592,
+            7616,
+            289
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0443": {
+        "name": "OilResource",
+        "position": [
+            7616,
+            1088,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0444": {
+        "name": "OilResource",
+        "position": [
+            10816,
+            5056,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0445": {
+        "name": "OilResource",
+        "position": [
+            15040,
+            8384,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0446": {
+        "name": "OilResource",
+        "position": [
+            11072,
+            10432,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0447": {
+        "name": "OilResource",
+        "position": [
+            7616,
+            15168,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0448": {
+        "name": "OilResource",
+        "position": [
+            3904,
+            10432,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0449": {
+        "name": "OilResource",
+        "position": [
+            1344,
+            7872,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0450": {
+        "name": "OilResource",
+        "position": [
+            4416,
+            5568,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0451": {
+        "name": "Ruin4",
+        "position": [
+            8896,
+            8896,
+            335
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0452": {
+        "name": "Ruin3",
+        "position": [
+            9152,
+            9024,
+            335
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0453": {
+        "name": "Ruin1",
+        "position": [
+            8896,
+            9152,
+            335
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0454": {
+        "name": "Ruin5",
+        "position": [
+            8768,
+            9152,
+            335
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0455": {
+        "name": "Boulder2",
+        "position": [
+            9536,
+            10432,
+            88
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0456": {
+        "name": "WaterTower",
+        "position": [
+            9024,
+            8896,
+            335
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0458": {
+        "name": "Ruin3",
+        "position": [
+            6720,
+            5184,
+            335
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0459": {
+        "name": "Ruin1",
+        "position": [
+            6592,
+            5184,
+            335
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0460": {
+        "name": "Ruin5",
+        "position": [
+            6848,
+            5440,
+            335
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0461": {
+        "name": "WaterTower",
+        "position": [
+            6592,
+            5312,
+            335
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0462": {
+        "name": "Boulder3",
+        "position": [
+            5696,
+            5440,
+            335
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0463": {
+        "name": "Boulder3",
+        "position": [
+            6080,
+            7488,
+            335
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0464": {
+        "name": "Boulder2",
+        "position": [
+            6336,
+            9024,
+            335
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0465": {
+        "name": "Boulder2",
+        "position": [
+            6208,
+            9792,
+            510
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0466": {
+        "name": "Boulder1",
+        "position": [
+            6080,
+            12096,
+            335
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0467": {
+        "name": "Boulder1",
+        "position": [
+            5824,
+            14272,
+            347
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0468": {
+        "name": "Boulder1",
+        "position": [
+            3648,
+            15040,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0469": {
+        "name": "Boulder3",
+        "position": [
+            4032,
+            14656,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0470": {
+        "name": "Boulder3",
+        "position": [
+            1472,
+            1216,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0471": {
+        "name": "Boulder3",
+        "position": [
+            5184,
+            1472,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0472": {
+        "name": "Boulder2",
+        "position": [
+            6592,
+            1728,
+            339
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0473": {
+        "name": "Boulder2",
+        "position": [
+            11456,
+            2112,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0474": {
+        "name": "Boulder1",
+        "position": [
+            11072,
+            2496,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0475": {
+        "name": "Boulder1",
+        "position": [
+            14656,
+            2752,
+            426
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0476": {
+        "name": "Boulder2",
+        "position": [
+            14400,
+            4544,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0477": {
+        "name": "Boulder2",
+        "position": [
+            14144,
+            9536,
+            335
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0478": {
+        "name": "Boulder3",
+        "position": [
+            15424,
+            11072,
+            371
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0479": {
+        "name": "Boulder3",
+        "position": [
+            14144,
+            12224,
+            342
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0480": {
+        "name": "Boulder1",
+        "position": [
+            15424,
+            14912,
+            4
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0481": {
+        "name": "Boulder1",
+        "position": [
+            13248,
+            15808,
+            360
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0482": {
+        "name": "Boulder2",
+        "position": [
+            11712,
+            14656,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0483": {
+        "name": "Boulder2",
+        "position": [
+            10176,
+            13888,
+            13
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0484": {
+        "name": "Boulder1",
+        "position": [
+            9792,
+            12224,
+            335
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0485": {
+        "name": "Boulder1",
+        "position": [
+            8640,
+            11840,
+            335
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0486": {
+        "name": "Ruin1",
+        "position": [
+            11200,
+            14144,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0488": {
+        "name": "Ruin4",
+        "position": [
+            11328,
+            14144,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0489": {
+        "name": "Ruin5",
+        "position": [
+            11328,
+            14016,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0490": {
+        "name": "WreckedVertCampVan",
+        "position": [
+            11072,
+            14016,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0491": {
+        "name": "Ruin1",
+        "position": [
+            10688,
+            1600,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0492": {
+        "name": "Ruin4",
+        "position": [
+            10816,
+            1728,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0493": {
+        "name": "Ruin5",
+        "position": [
+            10816,
+            1600,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0495": {
+        "name": "WreckedSuzukiJeep",
+        "position": [
+            10688,
+            1856,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0496": {
+        "name": "Boulder1",
+        "position": [
+            7616,
+            5184,
+            510
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_4275817112": {
+        "name": "OilResource",
+        "position": [
+            13760,
+            8000,
+            334
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    }
+}

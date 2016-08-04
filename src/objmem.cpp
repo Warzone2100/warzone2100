@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -90,6 +90,51 @@ void objmemShutdown(void)
 {
 }
 
+// Check that psVictim is not referred to by any other object in the game. We can dump out some extra data in debug builds that help track down sources of dangling pointer errors.
+#ifdef DEBUG
+#define BADREF(func, line) "Illegal reference to object %d from %s line %d", psVictim->id, func, line
+#else
+#define BADREF(func, line) "Illegal reference to object %d", psVictim->id
+#endif
+static bool checkReferences(BASE_OBJECT *psVictim)
+{
+	for (int plr = 0; plr < MAX_PLAYERS; ++plr)
+	{
+		for (STRUCTURE *psStruct = apsStructLists[plr]; psStruct != nullptr; psStruct = psStruct->psNext)
+		{
+			if (psStruct == psVictim)
+			{
+				continue;  // Don't worry about self references.
+			}
+
+			for (unsigned i = 0; i < psStruct->numWeaps; ++i)
+			{
+				ASSERT_OR_RETURN(false, psStruct->psTarget[i] != psVictim, BADREF(psStruct->targetFunc[i], psStruct->targetLine[i]));
+			}
+		}
+		for (DROID *psDroid = apsDroidLists[plr]; psDroid != nullptr; psDroid = psDroid->psNext)
+		{
+			if (psDroid == psVictim)
+			{
+				continue;  // Don't worry about self references.
+			}
+
+			ASSERT_OR_RETURN(false, psDroid->order.psObj != psVictim, "Illegal reference to object %d", psVictim->id);
+
+			ASSERT_OR_RETURN(false, psDroid->psBaseStruct != psVictim, "Illegal reference to object %d", psVictim->id);
+
+			for (unsigned i = 0; i < psDroid->numWeaps; ++i)
+			{
+				if (psDroid->psActionTarget[i] == psVictim)
+				{
+					ASSERT_OR_RETURN(false, psDroid->psActionTarget[i] != psVictim, BADREF(psDroid->actionTargetFunc[i], psDroid->actionTargetLine[i]));
+				}
+			}
+		}
+	}
+	return true;
+}
+
 /* Remove an object from the destroyed list, finally freeing its memory
  * Hopefully by this time, no pointers still refer to it! */
 static bool objmemDestroy(BASE_OBJECT *psObj)
@@ -98,18 +143,10 @@ static bool objmemDestroy(BASE_OBJECT *psObj)
 	{
 	case OBJ_DROID:
 		debug(LOG_MEMORY, "freeing droid at %p", psObj);
-		if (!droidCheckReferences((DROID *)psObj))
-		{
-			return false;
-		}
 		break;
 
 	case OBJ_STRUCTURE:
 		debug(LOG_MEMORY, "freeing structure at %p", psObj);
-		if (!structureCheckReferences((STRUCTURE *)psObj))
-		{
-			return false;
-		}
 		break;
 
 	case OBJ_FEATURE:
@@ -117,10 +154,14 @@ static bool objmemDestroy(BASE_OBJECT *psObj)
 		break;
 
 	default:
-		ASSERT(!"unknown object type", "objmemDestroy: unknown object type in destroyed list at 0x%p", psObj);
+		ASSERT(!"unknown object type", "unknown object type in destroyed list at 0x%p", psObj);
 	}
-	delete psObj;
+	if (!checkReferences(psObj))
+	{
+		return false;
+	}
 	debug(LOG_MEMORY, "BASE_OBJECT* 0x%p is freed.", psObj);
+	delete psObj;
 	return true;
 }
 
@@ -144,17 +185,10 @@ void objmemUpdate(void)
 	   were destroyed before this turn */
 
 	/* First remove the objects from the start of the list */
-	while (psDestroyedObj != NULL && psDestroyedObj->died <= gameTime - deltaGameTime)
+	while (psDestroyedObj != nullptr && psDestroyedObj->died <= gameTime - deltaGameTime)
 	{
 		psNext = psDestroyedObj->psNext;
-		if (!objmemDestroy(psDestroyedObj))
-		{
-			if (psDestroyedObj->type == OBJ_DROID)
-			{
-				debug(LOG_DEATH, "skipping %p (%s: id %u) this round, will try again later.", psDestroyedObj, ((DROID *)psDestroyedObj)->aName, ((DROID *)psDestroyedObj)->id);
-				return;
-			}
-		}
+		objmemDestroy(psDestroyedObj);
 		psDestroyedObj = psNext;
 	}
 
@@ -246,8 +280,7 @@ template <typename OBJECT>
 static inline void destroyObject(OBJECT *list[], OBJECT *object)
 {
 	ASSERT_OR_RETURN(, object != NULL, "Invalid pointer");
-
-	scriptRemoveObject(object);
+	ASSERT(gameTime - deltaGameTime < gameTime || gameTime == 2, "Expected %u < %u, bad time", gameTime - deltaGameTime, gameTime);
 
 	// If the message to remove is the first one in the list then mark the next one as the first
 	if (list[object->player] == object)
@@ -256,6 +289,7 @@ static inline void destroyObject(OBJECT *list[], OBJECT *object)
 		object->psNext = psDestroyedObj;
 		psDestroyedObj = (BASE_OBJECT *)object;
 		object->died = gameTime;
+		scriptRemoveObject(object);
 		return;
 	}
 
@@ -266,8 +300,7 @@ static inline void destroyObject(OBJECT *list[], OBJECT *object)
 		psPrev = psCurr;
 	}
 
-	ASSERT(psCurr != NULL,
-	       "destroyObject: object not found in list");
+	ASSERT(psCurr != NULL, "Object %s(%d) not found in list", objInfo(object), object->id);
 
 	if (psCurr != NULL)
 	{
@@ -282,6 +315,7 @@ static inline void destroyObject(OBJECT *list[], OBJECT *object)
 		// Set destruction time
 		object->died = gameTime;
 	}
+	scriptRemoveObject(object);
 }
 
 /* Remove an object from the active list

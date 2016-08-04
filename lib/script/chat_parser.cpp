@@ -1,6 +1,6 @@
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -2554,7 +2554,7 @@ yyreturn:
 
 
 /* Initialize Bison and start chat processing */
-bool chatLoad(char *pData, UDWORD size)
+bool chatLoad(const char *pData, UDWORD size)
 {
 	SDWORD	cmdIndex,parseResult;
 

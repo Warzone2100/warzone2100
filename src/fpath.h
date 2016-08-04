@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -25,6 +25,9 @@
 #define __INCLUDED_SRC_FPATH_H__
 
 #include "droiddef.h"
+
+#include <memory>
+
 
 /** Return values for routing
  *
@@ -51,7 +54,7 @@ struct PATHJOB
 	UDWORD		droidID;
 	FPATH_MOVETYPE	moveType;
 	int		owner;		///< Player owner
-	PathBlockingMap *blockingMap;   ///< Map of blocking tiles.
+	std::shared_ptr<PathBlockingMap> blockingMap;   ///< Map of blocking tiles.
 	bool		acceptNearest;
 	bool            deleted;        ///< Droid was deleted, so throw away result when complete. Must still process this PATHJOB, since processing order can affect resulting paths (but can't affect the path length).
 };

@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -241,8 +241,6 @@ bool sendDroidDisembark(DROID const *psTransporter, DROID const *psDroid)
 }
 
 /** Receive info about a droid that is being unloaded from a transporter
- *
- *  \sa sendDroidDisEmbark()
  */
 bool recvDroidDisEmbark(NETQUEUE queue)
 {
@@ -306,7 +304,7 @@ bool recvDroidDisEmbark(NETQUEUE queue)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Send a new Droid to the other players
-bool SendDroid(const DROID_TEMPLATE *pTemplate, uint32_t x, uint32_t y, uint8_t player, uint32_t id, const INITIAL_DROID_ORDERS *initialOrdersP)
+bool SendDroid(DROID_TEMPLATE *pTemplate, uint32_t x, uint32_t y, uint8_t player, uint32_t id, const INITIAL_DROID_ORDERS *initialOrdersP)
 {
 	if (!bMultiMessages)
 	{
@@ -333,13 +331,26 @@ bool SendDroid(const DROID_TEMPLATE *pTemplate, uint32_t x, uint32_t y, uint8_t 
 	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_DEBUG_ADD_DROID);
 	{
 		Position pos(x, y, 0);
-		uint32_t templateID = pTemplate->multiPlayerID;
 		bool haveInitialOrders = initialOrdersP != NULL;
+		int32_t droidType = pTemplate->droidType;
 
 		NETuint8_t(&player);
 		NETuint32_t(&id);
 		NETPosition(&pos);
-		NETuint32_t(&templateID);
+		NETqstring(pTemplate->name);
+		NETint32_t(&droidType);
+		NETuint8_t(&pTemplate->asParts[COMP_BODY]);
+		NETuint8_t(&pTemplate->asParts[COMP_BRAIN]);
+		NETuint8_t(&pTemplate->asParts[COMP_PROPULSION]);
+		NETuint8_t(&pTemplate->asParts[COMP_REPAIRUNIT]);
+		NETuint8_t(&pTemplate->asParts[COMP_ECM]);
+		NETuint8_t(&pTemplate->asParts[COMP_SENSOR]);
+		NETuint8_t(&pTemplate->asParts[COMP_CONSTRUCT]);
+		NETint8_t(&pTemplate->numWeaps);
+		for (int i = 0; i < pTemplate->numWeaps; i++)
+		{
+			NETuint8_t(&pTemplate->asWeaps[i]);
+		}
 		NETbool(&haveInitialOrders);
 		if (haveInitialOrders)
 		{
@@ -358,21 +369,37 @@ bool SendDroid(const DROID_TEMPLATE *pTemplate, uint32_t x, uint32_t y, uint8_t 
 // receive droid creation information from other players
 bool recvDroid(NETQUEUE queue)
 {
-	DROID_TEMPLATE *pT = NULL;
+	DROID_TEMPLATE t, *pT = &t;
 	DROID *psDroid = NULL;
 	uint8_t player = 0;
 	uint32_t id = 0;
 	Position pos(0, 0, 0);
-	uint32_t templateID = 0;
 	bool haveInitialOrders = false;
 	INITIAL_DROID_ORDERS initialOrders = { 0, 0, 0, 0 };
 
 	NETbeginDecode(queue, GAME_DEBUG_ADD_DROID);
 	{
+		int32_t droidType;
+
 		NETuint8_t(&player);
 		NETuint32_t(&id);
 		NETPosition(&pos);
-		NETuint32_t(&templateID);
+		NETqstring(pT->name);
+		pT->id = pT->name;
+		NETint32_t(&droidType);
+		NETuint8_t(&pT->asParts[COMP_BODY]);
+		NETuint8_t(&pT->asParts[COMP_BRAIN]);
+		NETuint8_t(&pT->asParts[COMP_PROPULSION]);
+		NETuint8_t(&pT->asParts[COMP_REPAIRUNIT]);
+		NETuint8_t(&pT->asParts[COMP_ECM]);
+		NETuint8_t(&pT->asParts[COMP_SENSOR]);
+		NETuint8_t(&pT->asParts[COMP_CONSTRUCT]);
+		NETint8_t(&pT->numWeaps);
+		ASSERT_OR_RETURN(false, pT->numWeaps >= 0 && pT->numWeaps <= ARRAY_SIZE(pT->asWeaps), "Bad numWeaps %d", pT->numWeaps);
+		for (int i = 0; i < pT->numWeaps; i++)
+		{
+			NETuint8_t(&pT->asWeaps[i]);
+		}
 		NETbool(&haveInitialOrders);
 		if (haveInitialOrders)
 		{
@@ -381,8 +408,7 @@ bool recvDroid(NETQUEUE queue)
 			NETint32_t(&initialOrders.moveToY);
 			NETuint32_t(&initialOrders.factoryId);  // For making scripts happy.
 		}
-
-		pT = IdToTemplate(templateID, player);
+		pT->droidType = (DROID_TYPE)droidType;
 	}
 	NETend();
 
@@ -399,14 +425,6 @@ bool recvDroid(NETQUEUE queue)
 	{
 		debug(LOG_ERROR, "Received bad droid position (%d, %d) from %d about p%d (%s)", (int)pos.x, (int)pos.y,
 		      queue.index, player, isHumanPlayer(player) ? "Human" : "AI");
-		return false;
-	}
-
-	// If we can not find the template ask for the entire droid instead
-	if (!pT)
-	{
-		debug(LOG_ERROR, "Packet from %d refers to non-existent template %u, [%s : p%d]",
-		      queue.index, templateID, isHumanPlayer(player) ? "Human" : "AI", player);
 		return false;
 	}
 
@@ -645,7 +663,7 @@ bool recvDroidInfo(NETQUEUE queue)
 			}
 			if (!canGiveOrdersFor(queue.index, psDroid->player))
 			{
-				debug(LOG_WARNING, "Droid order for wrong player.");
+				debug(LOG_WARNING, "Droid order (by %d) for wrong player (%d).", queue.index, psDroid->player);
 				syncDebug("Wrong player.");
 				continue;
 			}

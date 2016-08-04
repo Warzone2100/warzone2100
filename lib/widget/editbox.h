@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -26,8 +26,6 @@
 
 #include "widget.h"
 #include "widgbase.h"
-#include "lib/ivis_opengl/textdraw.h"
-#include "lib/framework/utf.h"
 
 /* Edit Box states */
 #define WEDBS_FIXED		0x0001		// No editing is going on
@@ -37,35 +35,45 @@
 #define WEDBS_HILITE	0x0010		//
 #define WEDBS_DISABLE   0x0020		// disable button from selection
 
-
-struct W_EDITBOX : public WIDGET
+class W_EDITBOX : public WIDGET
 {
+	Q_OBJECT
+
+public:
 	W_EDITBOX(W_EDBINIT const *init);
+	W_EDITBOX(WIDGET *parent);
 
-	void initialise();  // Moves the cursor to the end.
-	void setString(char const *utf8);
-
-	void clicked(W_CONTEXT *psContext, WIDGET_KEY key);
+	void clicked(W_CONTEXT *psContext, WIDGET_KEY key = WKEY_PRIMARY);
 	void highlight(W_CONTEXT *psContext);
-	void highlightLost(W_CONTEXT *psContext);
-	void focusLost(W_SCREEN *psScreen);
+	void highlightLost();
+	void focusLost();
 	void run(W_CONTEXT *psContext);
+	void display(int xOffset, int yOffset);
+
+	void setState(unsigned state);
+	QString getString() const;
+	void setString(QString string);
+	void setMaxStringSize(int size);
+
+	void setBoxColours(PIELIGHT first, PIELIGHT second, PIELIGHT background);
 
 	UDWORD		state;						// The current edit box state
-	QString         aText;                  // The text in the edit box
-	iV_fonts        FontID;
-	int 		blinkOffset;		// Cursor should be visible at time blinkOffset.
-	int             insPos;                 // The insertion point in the buffer
-	int             printStart;					// Where in the string appears at the far left of the box
-	int             printChars;					// The number of characters appearing in the box
-	int             printWidth;					// The pixel width of the characters in the box
+	QString		aText;						// The text in the edit box
+	iV_fonts	FontID;
+	int			blinkOffset;				// Cursor should be visible at time blinkOffset.
+	int			maxStringSize;				// max characters string will accept
+	int			insPos;						// The insertion point in the buffer
+	int			printStart;					// Where in the string appears at the far left of the box
+	int			printChars;					// The number of characters appearing in the box
+	int			printWidth;					// The pixel width of the characters in the box
 	WIDGET_DISPLAY	pBoxDisplay;			// Optional callback to display the edit box background.
-	FONT_DISPLAY pFontDisplay;				// Optional callback to display a string.
 	SWORD HilightAudioID;					// Audio ID for form clicked sound
 	SWORD ClickedAudioID;					// Audio ID for form hilighted sound
+	SWORD ErrorAudioID;						// Audio ID for error sound
 	WIDGET_AUDIOCALLBACK AudioCallback;		// Pointer to audio callback function
 
 private:
+	void initialise();  // Moves the cursor to the end.
 	void delCharRight();
 	void delCharLeft();
 	void insertChar(QChar ch);
@@ -73,15 +81,8 @@ private:
 	void fitStringStart();  // Calculate how much of the start of a string can fit into the edit box
 	void fitStringEnd();
 	void setCursorPosPixels(int xPos);
+
+	PIELIGHT boxColourFirst, boxColourSecond, boxColourBackground;
 };
-
-/* Create an edit box widget data structure */
-extern W_EDITBOX *editBoxCreate(const W_EDBINIT *psInit);
-
-/* The edit box display function */
-extern void editBoxDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
-
-/* set state of edit box */
-extern void editBoxSetState(W_EDITBOX *psEditBox, UDWORD state);
 
 #endif // __INCLUDED_LIB_WIDGET_EDITBOX_H__

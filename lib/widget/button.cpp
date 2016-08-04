@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -22,221 +22,128 @@
  */
 
 #include "lib/framework/frame.h"
-#include "lib/framework/frameint.h"
 #include "widget.h"
 #include "widgint.h"
 #include "button.h"
+#if defined(WZ_CC_MSVC)
+#include "button_moc.h"		// this is generated on the pre-build event.
+#endif
 #include "form.h"
 #include "tip.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
 #include "lib/gamelib/gtime.h"
 
 
-/* Initialise the button module */
-bool buttonStartUp(void)
-{
-	return true;
-}
-
 W_BUTINIT::W_BUTINIT()
 	: pText(NULL)
-	, pTip(NULL)
 	, FontID(font_regular)
 {}
 
 W_BUTTON::W_BUTTON(W_BUTINIT const *init)
 	: WIDGET(init, WIDG_BUTTON)
-	, pText(init->pText)
+	, state(WBUT_PLAIN)
+	, pText(QString::fromUtf8(init->pText))
 	, pTip(init->pTip)
 	, HilightAudioID(WidgGetHilightAudioID())
 	, ClickedAudioID(WidgGetClickedAudioID())
 	, AudioCallback(WidgGetAudioCallback())
 	, FontID(init->FontID)
 {
-	if (display == NULL)
-	{
-		display = buttonDisplay;
-	}
-
-	buttonInitialise(this);
+	ASSERT((init->style & ~(WBUT_PLAIN | WIDG_HIDDEN | WBUT_NOPRIMARY | WBUT_SECONDARY | WBUT_TXTCENTRE)) == 0, "unknown button style");
 }
 
-/* Create a button widget data structure */
-W_BUTTON *buttonCreate(const W_BUTINIT *psInit)
+W_BUTTON::W_BUTTON(WIDGET *parent)
+	: WIDGET(parent, WIDG_BUTTON)
+	, state(WBUT_PLAIN)
+	, HilightAudioID(WidgGetHilightAudioID())
+	, ClickedAudioID(WidgGetClickedAudioID())
+	, AudioCallback(WidgGetAudioCallback())
+	, FontID(font_regular)
+{}
+
+unsigned W_BUTTON::getState()
 {
-	if (psInit->style & ~(WBUT_PLAIN | WIDG_HIDDEN | WFORM_NOCLICKMOVE
-	                      | WBUT_NOPRIMARY | WBUT_SECONDARY | WBUT_TXTCENTRE))
-	{
-		ASSERT(!"unknown button style", "buttonCreate: unknown button style");
-		return NULL;
-	}
-
-	/* Allocate the required memory */
-	W_BUTTON *psWidget = new W_BUTTON(psInit);
-	if (psWidget == NULL)
-	{
-		debug(LOG_FATAL, "buttonCreate: Out of memory");
-		abort();
-		return NULL;
-	}
-
-	return psWidget;
+	return state & (WBUT_DISABLE | WBUT_LOCK | WBUT_CLICKLOCK | WBUT_FLASH | WBUT_DOWN | WBUT_HIGHLIGHT);
 }
 
-
-/* Free the memory used by a button */
-void buttonFree(W_BUTTON *psWidget)
+void W_BUTTON::setFlash(bool enable)
 {
-	ASSERT(psWidget != NULL,
-	       "buttonFree: invalid button pointer");
-
-	delete psWidget;
-}
-
-
-/* Initialise a button widget before it is run */
-void buttonInitialise(W_BUTTON *psWidget)
-{
-	ASSERT(psWidget != NULL,
-	       "buttonDisplay: Invalid widget pointer");
-
-	psWidget->state = WBUTS_NORMAL;
-}
-
-
-/* Get a button's state */
-UDWORD buttonGetState(W_BUTTON *psButton)
-{
-	UDWORD State = 0;
-
-	if (psButton->state & WBUTS_GREY)
+	dirty = true;
+	if (enable)
 	{
-		State |= WBUT_DISABLE;
-	}
-
-	if (psButton->state & WBUTS_LOCKED)
-	{
-		State |= WBUT_LOCK;
-	}
-
-	if (psButton->state & WBUTS_CLICKLOCK)
-	{
-		State |= WBUT_CLICKLOCK;
-	}
-
-	if (psButton->state & WBUTS_FLASH)
-	{
-		State |= WBUT_FLASH;
-	}
-
-	return State;
-}
-
-
-void buttonSetFlash(W_BUTTON *psButton)
-{
-	psButton->state |= WBUTS_FLASH;
-}
-
-
-void buttonClearFlash(W_BUTTON *psButton)
-{
-	psButton->state &= ~WBUTS_FLASH;
-	psButton->state &= ~WBUTS_FLASHON;
-}
-
-
-/* Set a button's state */
-void buttonSetState(W_BUTTON *psButton, UDWORD state)
-{
-	ASSERT(!((state & WBUT_LOCK) && (state & WBUT_CLICKLOCK)), "Cannot have both WBUT_LOCK and WBUT_CLICKLOCK");
-
-	if (state & WBUT_DISABLE)
-	{
-		psButton->state |= WBUTS_GREY;
+		state |= WBUT_FLASH;
 	}
 	else
 	{
-		psButton->state &= ~WBUTS_GREY;
-	}
-	if (state & WBUT_LOCK)
-	{
-		psButton->state |= WBUTS_LOCKED;
-	}
-	else
-	{
-		psButton->state &= ~WBUTS_LOCKED;
-	}
-	if (state & WBUT_CLICKLOCK)
-	{
-		psButton->state |= WBUTS_CLICKLOCK;
-	}
-	else
-	{
-		psButton->state &= ~WBUTS_CLICKLOCK;
+		state &= ~WBUT_FLASH;
 	}
 }
 
-
-/* Run a button widget */
-void W_BUTTON::run(W_CONTEXT *)
+void W_BUTTON::setState(unsigned newState)
 {
-	W_BUTTON *psButton = this;
-	if (psButton->state & WBUTS_FLASH)
-	{
-		if (((realTime / 250) % 2) == 0)
-		{
-			psButton->state &= ~WBUTS_FLASHON;
-		}
-		else
-		{
-			psButton->state |= WBUTS_FLASHON;
-		}
-	}
+	ASSERT(!((newState & WBUT_LOCK) && (newState & WBUT_CLICKLOCK)), "Cannot have both WBUT_LOCK and WBUT_CLICKLOCK");
+
+	unsigned mask = WBUT_DISABLE | WBUT_LOCK | WBUT_CLICKLOCK;
+	state = (state & ~mask) | (newState & mask);
+	dirty = true;
 }
 
+QString W_BUTTON::getString() const
+{
+	return pText;
+}
 
-/* Respond to a mouse click */
+void W_BUTTON::setString(QString string)
+{
+	pText = string;
+	dirty = true;
+}
+
+void W_BUTTON::setTip(QString string)
+{
+	pTip = string;
+}
+
 void W_BUTTON::clicked(W_CONTEXT *, WIDGET_KEY key)
 {
-	W_BUTTON *psWidget = this;
+	dirty = true;
+
 	/* Can't click a button if it is disabled or locked down */
-	if (!(psWidget->state & (WBUTS_GREY | WBUTS_LOCKED)))
+	if ((state & (WBUT_DISABLE | WBUT_LOCK)) == 0)
 	{
 		// Check this is the correct key
-		if ((!(psWidget->style & WBUT_NOPRIMARY) && key == WKEY_PRIMARY) ||
-		    ((psWidget->style & WBUT_SECONDARY) && key == WKEY_SECONDARY))
+		if ((!(style & WBUT_NOPRIMARY) && key == WKEY_PRIMARY) ||
+		    ((style & WBUT_SECONDARY) && key == WKEY_SECONDARY))
 		{
-			if (psWidget->AudioCallback)
+			if (AudioCallback)
 			{
-				psWidget->AudioCallback(psWidget->ClickedAudioID);
+				AudioCallback(ClickedAudioID);
 			}
-			psWidget->state &= ~WBUTS_FLASH;	// Stop it flashing
-			psWidget->state &= ~WBUTS_FLASHON;
-			psWidget->state |= WBUTS_DOWN;
+			state &= ~WBUT_FLASH;	// Stop it flashing
+			state |= WBUT_DOWN;
 		}
 	}
 
 	/* Kill the tip if there is one */
-	if (psWidget->pTip)
+	if (!pTip.isEmpty())
 	{
-		tipStop((WIDGET *)psWidget);
+		tipStop(this);
 	}
 }
 
 /* Respond to a mouse button up */
-void W_BUTTON::released(W_CONTEXT *psContext, WIDGET_KEY key)
+void W_BUTTON::released(W_CONTEXT *, WIDGET_KEY key)
 {
-	W_SCREEN *psScreen = psContext->psScreen;
-	W_BUTTON *psWidget = this;
-	if (psWidget->state & WBUTS_DOWN)
+	if (state & WBUT_DOWN)
 	{
 		// Check this is the correct key
-		if ((!(psWidget->style & WBUT_NOPRIMARY) && key == WKEY_PRIMARY) ||
-		    ((psWidget->style & WBUT_SECONDARY) && key == WKEY_SECONDARY))
+		if ((!(style & WBUT_NOPRIMARY) && key == WKEY_PRIMARY) ||
+		    ((style & WBUT_SECONDARY) && key == WKEY_SECONDARY))
 		{
-			widgSetReturn(psScreen, (WIDGET *)psWidget);
-			psWidget->state &= ~WBUTS_DOWN;
+			emit clicked();
+			screenPointer->setReturn(this);
+			state &= ~WBUT_DOWN;
+			dirty = true;
 		}
 	}
 }
@@ -245,148 +152,157 @@ void W_BUTTON::released(W_CONTEXT *psContext, WIDGET_KEY key)
 /* Respond to a mouse moving over a button */
 void W_BUTTON::highlight(W_CONTEXT *psContext)
 {
-	W_BUTTON *psWidget = this;
-	psWidget->state |= WBUTS_HILITE;
-
-	if (psWidget->AudioCallback)
+	if ((state & WBUT_HIGHLIGHT) == 0)
 	{
-		psWidget->AudioCallback(psWidget->HilightAudioID);
+		state |= WBUT_HIGHLIGHT;
+		dirty = true;
 	}
-
-	/* If there is a tip string start the tool tip */
-	if (psWidget->pTip)
+	if (AudioCallback)
 	{
-		tipStart((WIDGET *)psWidget, psWidget->pTip, psContext->psScreen->TipFontID,
-		         psContext->psForm->aColours,
-		         psWidget->x + psContext->xOffset, psWidget->y + psContext->yOffset,
-		         psWidget->width, psWidget->height);
+		AudioCallback(HilightAudioID);
+	}
+	/* If there is a tip string start the tool tip */
+	if (!pTip.isEmpty())
+	{
+		tipStart(this, pTip, screenPointer->TipFontID, x() + psContext->xOffset, y() + psContext->yOffset, width(), height());
 	}
 }
 
 
 /* Respond to the mouse moving off a button */
-void W_BUTTON::highlightLost(W_CONTEXT *)
+void W_BUTTON::highlightLost()
 {
-	W_BUTTON *psWidget = this;
-	psWidget->state &= ~(WBUTS_DOWN | WBUTS_HILITE);
-	if (psWidget->pTip)
+	state &= ~(WBUT_DOWN | WBUT_HIGHLIGHT);
+	dirty = true;
+	if (!pTip.isEmpty())
 	{
-		tipStop((WIDGET *)psWidget);
+		tipStop(this);
 	}
 }
 
-
-/* Display a button */
-void buttonDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+void W_BUTTON::display(int xOffset, int yOffset)
 {
-	W_BUTTON	*psButton;
-	SDWORD		x0, y0, x1, y1, fx, fy, fw;
+	int x0 = x() + xOffset;
+	int y0 = y() + yOffset;
+	int x1 = x0 + width();
+	int y1 = y0 + height();
 
-	ASSERT(psWidget != NULL && pColours != NULL, "Invalid pointers");
-	if (!psWidget || !pColours)
+	bool haveText = !pText.isEmpty();
+
+	bool isDown = (state & (WBUT_DOWN | WBUT_LOCK | WBUT_CLICKLOCK)) != 0;
+	bool isDisabled = (state & WBUT_DISABLE) != 0;
+	bool isHighlight = (state & WBUT_HIGHLIGHT) != 0;
+
+	// Display the button.
+	if (!images.normal.isNull())
 	{
-		return;
-	}
-
-	psButton = (W_BUTTON *)psWidget;
-
-	x0 = psButton->x + xOffset;
-	y0 = psButton->y + yOffset;
-	x1 = x0 + psButton->width;
-	y1 = y0 + psButton->height;
-
-	if (psButton->state & (WBUTS_DOWN | WBUTS_LOCKED | WBUTS_CLICKLOCK))
-	{
-		/* Display the button down */
-		pie_BoxFill(x0, y0, x1, y1, pColours[WCOL_BKGRND]);
-		iV_Line(x0, y0, x1, y0, pColours[WCOL_DARK]);
-		iV_Line(x0, y0, x0, y1, pColours[WCOL_DARK]);
-		iV_Line(x0, y1, x1, y1, pColours[WCOL_LIGHT]);
-		iV_Line(x1, y1, x1, y0, pColours[WCOL_LIGHT]);
-
-		if (psButton->pText)
+		iV_DrawImage(images.normal, x0, y0);
+		if (isDown && !images.down.isNull())
 		{
-			iV_SetFont(psButton->FontID);
-			iV_SetTextColour(pColours[WCOL_TEXT]);
-			fw = iV_GetTextWidth(psButton->pText);
-			if (psButton->style & WBUT_NOCLICKMOVE)
-			{
-				fx = x0 + (psButton->width - fw) / 2 + 1;
-				fy = y0 + 1 + (psButton->height - iV_GetTextLineSize()) / 2 - iV_GetTextAboveBase();
-			}
-			else
-			{
-				fx = x0 + (psButton->width - fw) / 2;
-				fy = y0 + (psButton->height - iV_GetTextLineSize()) / 2 - iV_GetTextAboveBase();
-			}
-			iV_DrawText(psButton->pText, fx, fy);
+			iV_DrawImage(images.down, x0, y0);
 		}
-
-		if (psButton->state & WBUTS_HILITE)
+		if (isDisabled && !images.disabled.isNull())
 		{
-			/* Display the button hilite */
-			iV_Line(x0 + 3, y0 + 3, x1 - 2, y0 + 3, pColours[WCOL_HILITE]);
-			iV_Line(x0 + 3, y0 + 3, x0 + 3, y1 - 2, pColours[WCOL_HILITE]);
-			iV_Line(x0 + 3, y1 - 2, x1 - 2, y1 - 2, pColours[WCOL_HILITE]);
-			iV_Line(x1 - 2, y1 - 2, x1 - 2, y0 + 3, pColours[WCOL_HILITE]);
+			iV_DrawImage(images.disabled, x0, y0);
 		}
-	}
-	else if (psButton->state & WBUTS_GREY)
-	{
-		/* Display the disabled button */
-		pie_BoxFill(x0, y0, x1, y1, pColours[WCOL_BKGRND]);
-		iV_Line(x0, y0, x1, y0, pColours[WCOL_LIGHT]);
-		iV_Line(x0, y0, x0, y1, pColours[WCOL_LIGHT]);
-		iV_Line(x0, y1, x1, y1, pColours[WCOL_DARK]);
-		iV_Line(x1, y1, x1, y0, pColours[WCOL_DARK]);
-
-		if (psButton->pText)
+		if (isHighlight && !images.highlighted.isNull())
 		{
-			iV_SetFont(psButton->FontID);
-			fw = iV_GetTextWidth(psButton->pText);
-			fx = x0 + (psButton->width - fw) / 2;
-			fy = y0 + (psButton->height - iV_GetTextLineSize()) / 2 - iV_GetTextAboveBase();
-			iV_SetTextColour(pColours[WCOL_LIGHT]);
-			iV_DrawText(psButton->pText, fx + 1, fy + 1);
-			iV_SetTextColour(pColours[WCOL_DISABLE]);
-			iV_DrawText(psButton->pText, fx, fy);
-		}
-
-		if (psButton->state & WBUTS_HILITE)
-		{
-			/* Display the button hilite */
-			iV_Line(x0 + 2, y0 + 2, x1 - 3, y0 + 2, pColours[WCOL_HILITE]);
-			iV_Line(x0 + 2, y0 + 2, x0 + 2, y1 - 3, pColours[WCOL_HILITE]);
-			iV_Line(x0 + 2, y1 - 3, x1 - 3, y1 - 3, pColours[WCOL_HILITE]);
-			iV_Line(x1 - 3, y1 - 3, x1 - 3, y0 + 2, pColours[WCOL_HILITE]);
+			iV_DrawImage(images.highlighted, x0, y0);
 		}
 	}
 	else
 	{
-		/* Display the button up */
-		pie_BoxFill(x0, y0, x1, y1, pColours[WCOL_BKGRND]);
-		iV_Line(x0, y0, x1, y0, pColours[WCOL_LIGHT]);
-		iV_Line(x0, y0, x0, y1, pColours[WCOL_LIGHT]);
-		iV_Line(x0, y1, x1, y1, pColours[WCOL_DARK]);
-		iV_Line(x1, y1, x1, y0, pColours[WCOL_DARK]);
-
-		if (psButton->pText)
+		iV_ShadowBox(x0, y0, x1, y1, 0, WZCOL_FORM_LIGHT, isDisabled ? WZCOL_FORM_LIGHT : WZCOL_FORM_DARK, WZCOL_FORM_BACKGROUND);
+		if (isHighlight)
 		{
-			iV_SetFont(psButton->FontID);
-			iV_SetTextColour(pColours[WCOL_TEXT]);
-			fw = iV_GetTextWidth(psButton->pText);
-			fx = x0 + (psButton->width - fw) / 2;
-			fy = y0 + (psButton->height - iV_GetTextLineSize()) / 2 - iV_GetTextAboveBase();
-			iV_DrawText(psButton->pText, fx, fy);
+			iV_Box(x0 + 2, y0 + 2, x1 - 3, y1 - 3, WZCOL_FORM_HILITE);
 		}
+	}
 
-		if (psButton->state & WBUTS_HILITE)
+	if (haveText)
+	{
+		QByteArray textBytes = pText.toUtf8();
+
+		iV_SetFont(FontID);
+		int fw = iV_GetTextWidth(textBytes.constData());
+		int fx = x0 + (width() - fw) / 2;
+		int fy = y0 + (height() - iV_GetTextLineSize()) / 2 - iV_GetTextAboveBase();
+		if (isDisabled)
 		{
-			/* Display the button hilite */
-			iV_Line(x0 + 2, y0 + 2, x1 - 3, y0 + 2, pColours[WCOL_HILITE]);
-			iV_Line(x0 + 2, y0 + 2, x0 + 2, y1 - 3, pColours[WCOL_HILITE]);
-			iV_Line(x0 + 2, y1 - 3, x1 - 3, y1 - 3, pColours[WCOL_HILITE]);
-			iV_Line(x1 - 3, y1 - 3, x1 - 3, y0 + 2, pColours[WCOL_HILITE]);
+			iV_SetTextColour(WZCOL_FORM_LIGHT);
+			iV_DrawText(textBytes.constData(), fx + 1, fy + 1);
+			iV_SetTextColour(WZCOL_FORM_DISABLE);
 		}
+		else
+		{
+			iV_SetTextColour(WZCOL_FORM_TEXT);
+		}
+		iV_DrawText(textBytes.constData(), fx, fy);
+	}
+
+	if (isDisabled && !images.normal.isNull() && images.disabled.isNull())
+	{
+		// disabled, render something over it!
+		iV_TransBoxFill(x0, y0, x0 + width(), y0 + height());
+	}
+}
+
+void W_BUTTON::setImages(Images const &images_)
+{
+	images = images_;
+	dirty = true;
+	if (!images.normal.isNull())
+	{
+		setGeometry(x(), y(), images.normal.width(), images.normal.height());
+	}
+}
+
+void W_BUTTON::setImages(Image image, Image imageDown, Image imageHighlight, Image imageDisabled)
+{
+	dirty = true;
+	setImages(Images(image, imageDown, imageHighlight, imageDisabled));
+}
+
+void StateButton::setState(int state)
+{
+	if (currentState == state)
+	{
+		return;
+	}
+	dirty = true;
+	currentState = state;
+	std::map<int, Images>::const_iterator image = imageSets.find(state);
+	if (image != imageSets.end())
+	{
+		W_BUTTON::setImages(image->second);
+	}
+	std::map<int, QString>::const_iterator tip = tips.find(state);
+	if (tip != tips.end())
+	{
+		W_BUTTON::setTip(tip->second);
+	}
+}
+
+void StateButton::setTip(int state, QString string)
+{
+	tips[state] = string;
+	if (currentState == state)
+	{
+		W_BUTTON::setTip(string);
+	}
+}
+
+void StateButton::setTip(int state, char const *stringUtf8)
+{
+	setTip(state, QString::fromUtf8(stringUtf8));
+}
+
+void StateButton::setImages(int state, Images const &images)
+{
+	imageSets[state] = images;
+	dirty = true;
+	if (currentState == state)
+	{
+		W_BUTTON::setImages(images);
 	}
 }

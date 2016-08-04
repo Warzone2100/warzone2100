@@ -1,0 +1,23 @@
+{
+    "challenge": {
+        "bases": 3,
+        "description": "A level that players should be able to beat before playing online. The AI starts with a good defense.",
+        "difficulty": "Easy",
+        "map": "Sk-HighGround",
+        "maxPlayers": 2,
+        "name": "Back to Basics",
+        "powerLevel": 1,
+        "scavengers": "true",
+        "version": 2
+    },
+    "locked": {
+        "position": "false"
+    },
+    "player_0": {
+        "team": 0
+    },
+    "player_1": {
+        "difficulty": "Medium",
+        "team": 1
+    }
+}

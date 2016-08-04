@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -20,6 +20,9 @@
 /** \file
  *  Matrix manipulation functions.
  */
+
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 #include "lib/framework/frame.h"
 #include "lib/framework/opengl.h"
@@ -50,45 +53,24 @@ struct SDMATRIX
 	       d, e, f,
 	       g, h, i,
 	       j, k, l;
+	bool cached;
+	glm::mat4 matrix;
+
+	SDMATRIX() : a(FP12_MULTIPLIER), b(0), c(0), d(0), e(FP12_MULTIPLIER), f(0), g(0), h(0), i(FP12_MULTIPLIER), j(0), k(0), l(0) {}
 };
 static SDMATRIX	aMatrixStack[MATRIX_MAX];
 static SDMATRIX *psMatrix = &aMatrixStack[0];
 
-bool drawing_interface = true;
-
 //*************************************************************************
 
-static const SDMATRIX Identitymatrix =
-{
-	FP12_MULTIPLIER,                  0,               0,
-	0,    FP12_MULTIPLIER,               0,
-	0,                  0, FP12_MULTIPLIER,
-	0,                  0,               0,
-};
 static SDWORD _MATRIX_INDEX;
-
-//*************************************************************************
-//*** reset transformation matrix stack and make current identity
-//*
-//******
-
-static void pie_MatReset(void)
-{
-	psMatrix = &aMatrixStack[0];
-
-	// make 1st matrix identity
-	*psMatrix = Identitymatrix;
-
-	glLoadIdentity();
-}
-
 
 //*************************************************************************
 //*** create new matrix from current transformation matrix and make current
 //*
 //******
 
-void pie_MatBegin(void)
+void pie_MatBegin(bool cached)
 {
 	_MATRIX_INDEX++;
 	ASSERT(_MATRIX_INDEX < MATRIX_MAX, "pie_MatBegin past top of the stack");
@@ -96,7 +78,16 @@ void pie_MatBegin(void)
 	psMatrix++;
 	aMatrixStack[_MATRIX_INDEX] = aMatrixStack[_MATRIX_INDEX - 1];
 
-	glPushMatrix();
+	psMatrix->cached = cached;
+
+	if (!cached)
+	{
+		glPushMatrix();
+	}
+	else if (!aMatrixStack[_MATRIX_INDEX - 1].cached)
+	{
+		glGetFloatv(GL_MODELVIEW_MATRIX, &psMatrix->matrix[0][0]);
+	}
 }
 
 
@@ -104,15 +95,16 @@ void pie_MatBegin(void)
 //*** make current transformation matrix previous one on stack
 //*
 //******
-
-void pie_MatEnd(void)
+void pie_MatEnd()
 {
 	_MATRIX_INDEX--;
 	ASSERT(_MATRIX_INDEX >= 0, "pie_MatEnd of the bottom of the stack");
 
+	if (!psMatrix->cached)
+	{
+		glPopMatrix();
+	}
 	psMatrix--;
-
-	glPopMatrix();
 }
 
 
@@ -130,7 +122,15 @@ void pie_TRANSLATE(int32_t x, int32_t y, int32_t z)
 	psMatrix->k += x * psMatrix->b + y * psMatrix->e + z * psMatrix->h;
 	psMatrix->l += x * psMatrix->c + y * psMatrix->f + z * psMatrix->i;
 
-	glTranslatef(x, y, z);
+	if (!psMatrix->cached)
+	{
+		glTranslatef(x, y, z);
+	}
+	else
+	{
+		glm::vec3 v(x, y, z);
+		psMatrix->matrix = glm::translate(psMatrix->matrix, v);
+	}
 }
 
 //*************************************************************************
@@ -163,7 +163,15 @@ void pie_MatScale(float scale)
 	psMatrix->h = psMatrix->h * scale;
 	psMatrix->i = psMatrix->i * scale;
 
-	glScalef(scale, scale, scale);
+	if (!psMatrix->cached)
+	{
+		glScalef(scale, scale, scale);
+	}
+	else
+	{
+		glm::vec3 v(scale, scale, scale);
+		psMatrix->matrix = glm::scale(psMatrix->matrix, v);
+	}
 }
 
 
@@ -171,7 +179,6 @@ void pie_MatScale(float scale)
 //*** matrix rotate y (yaw) current transformation matrix
 //*
 //******
-
 void pie_MatRotY(uint16_t y)
 {
 	/*
@@ -203,7 +210,15 @@ void pie_MatRotY(uint16_t y)
 		psMatrix->i = (sra * psMatrix->c + cra * psMatrix->i) >> 16;
 		psMatrix->c = t;
 
-		glRotatef(UNDEG(y), 0.0f, 1.0f, 0.0f);
+		if (!psMatrix->cached)
+		{
+			glRotatef(UNDEG(y), 0.0f, 1.0f, 0.0f);
+		}
+		else
+		{
+			glm::vec3 v(0.0f, 1.0f, 0.0f);
+			psMatrix->matrix = glm::rotate(psMatrix->matrix, UNDEG(y), v);
+		}
 	}
 }
 
@@ -212,7 +227,6 @@ void pie_MatRotY(uint16_t y)
 //*** matrix rotate z (roll) current transformation matrix
 //*
 //******
-
 void pie_MatRotZ(uint16_t z)
 {
 	/*
@@ -244,7 +258,15 @@ void pie_MatRotZ(uint16_t z)
 		psMatrix->f = (cra * psMatrix->f - sra * psMatrix->c) >> 16;
 		psMatrix->c = t;
 
-		glRotatef(UNDEG(z), 0.0f, 0.0f, 1.0f);
+		if (!psMatrix->cached)
+		{
+			glRotatef(UNDEG(z), 0.0f, 0.0f, 1.0f);
+		}
+		else
+		{
+			glm::vec3 v(0.0f, 0.0f, 1.0f);
+			psMatrix->matrix = glm::rotate(psMatrix->matrix, UNDEG(z), v);
+		}
 	}
 }
 
@@ -253,7 +275,6 @@ void pie_MatRotZ(uint16_t z)
 //*** matrix rotate x (pitch) current transformation matrix
 //*
 //******
-
 void pie_MatRotX(uint16_t x)
 {
 	/*
@@ -285,10 +306,34 @@ void pie_MatRotX(uint16_t x)
 		psMatrix->i = (cra * psMatrix->i - sra * psMatrix->f) >> 16;
 		psMatrix->f = t;
 
-		glRotatef(UNDEG(x), 1.0f, 0.0f, 0.0f);
+		if (!psMatrix->cached)
+		{
+			glRotatef(UNDEG(x), 1.0f, 0.0f, 0.0f);
+		}
+		else
+		{
+			glm::vec3 v(1.0f, 0.0f, 0.0f);
+			psMatrix->matrix = glm::rotate(psMatrix->matrix, UNDEG(x), v);
+		}
+
 	}
 }
 
+//*************************************************************************
+//*** get current transformation matrix
+//*
+//******
+void pie_GetMatrix(float *matrix)
+{
+	if (!psMatrix->cached)
+	{
+		glGetFloatv(GL_MODELVIEW_MATRIX, matrix);
+	}
+	else
+	{
+		memcpy(matrix, &psMatrix->matrix[0][0], sizeof(float) * 16);
+	}
+}
 
 /*!
  * 3D vector perspective projection
@@ -299,6 +344,8 @@ void pie_MatRotX(uint16_t x)
  */
 int32_t pie_RotateProject(const Vector3i *v3d, Vector2i *v2d)
 {
+	float hackScaleFactor = 1.0 / (3 * 330);  // HACK: This seems to work by experimentation, not sure why.
+
 	/*
 	 * v = curMatrix . v3d
 	 */
@@ -308,17 +355,17 @@ int32_t pie_RotateProject(const Vector3i *v3d, Vector2i *v2d)
 	    v3d->x * psMatrix->c + v3d->y * psMatrix->f + v3d->z * psMatrix->i + psMatrix->l
 	);
 
-	const int zz = v.z >> STRETCHED_Z_SHIFT;
+	const float zz = v.z * hackScaleFactor;
 
-	if (zz < MIN_STRETCHED_Z)
+	if (zz < 256 * hackScaleFactor)
 	{
 		v2d->x = LONG_WAY; //just along way off screen
 		v2d->y = LONG_WAY;
 	}
 	else
 	{
-		v2d->x = rendSurface.xcentre + (v.x / zz);
-		v2d->y = rendSurface.ycentre - (v.y / zz);
+		v2d->x = rendSurface.xcentre + v.x / zz;
+		v2d->y = rendSurface.ycentre - v.y / zz;
 	}
 
 	return zz;
@@ -326,8 +373,8 @@ int32_t pie_RotateProject(const Vector3i *v3d, Vector2i *v2d)
 
 void pie_PerspectiveBegin(void)
 {
-	const float width = pie_GetVideoBufferWidth();
-	const float height = pie_GetVideoBufferHeight();
+	const float width = std::max(pie_GetVideoBufferWidth(), 1);  // Require width > 0 && height > 0, to avoid glScalef(1, 1, -1) crashing in some graphics drivers.
+	const float height = std::max(pie_GetVideoBufferHeight(), 1);
 	const float xangle = width / 6.0f;
 	const float yangle = height / 6.0f;
 
@@ -346,20 +393,18 @@ void pie_PerspectiveEnd(void)
 {
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glOrtho(0.0f, (double) pie_GetVideoBufferWidth(), (double) pie_GetVideoBufferHeight(), 0.0f, 1.0f, -1.0f);
+	glOrtho(0.0f, std::max(pie_GetVideoBufferWidth(), 1), std::max(pie_GetVideoBufferHeight(), 1), 0.0f, 1.0f, -1.0f);
 	glMatrixMode(GL_MODELVIEW);
 }
 
 void pie_Begin3DScene(void)
 {
 	glDepthRange(0.1, 1);
-	drawing_interface = false;
 }
 
 void pie_BeginInterface(void)
 {
 	glDepthRange(0, 0.1);
-	drawing_interface = true;
 }
 
 void pie_SetGeometricOffset(int x, int y)
@@ -368,11 +413,10 @@ void pie_SetGeometricOffset(int x, int y)
 	rendSurface.ycentre = y;
 }
 
-/** Sets up transformation matrices/quaternions and trig tables
- */
+/** Sets up transformation matrices */
 void pie_MatInit(void)
 {
-	// init matrix/quat stack
-	pie_MatReset();
+	psMatrix = &aMatrixStack[0];
+	glLoadIdentity();
 }
 

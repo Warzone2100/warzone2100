@@ -1,12 +1,11 @@
-AM_CPPFLAGS = -DYY_NO_INPUT $(SDL_CFLAGS) $(WZ_CPPFLAGS) $(QT4_CFLAGS)
+AM_CPPFLAGS = -DYY_NO_INPUT $(SDL_CFLAGS) $(WZ_CPPFLAGS) $(QT5_CFLAGS)
 AM_CFLAGS = $(WZ_CFLAGS)
-AM_CXXFLAGS = $(WZ_CXXFLAGS) $(QT4_CFLAGS)
+AM_CXXFLAGS = $(WZ_CXXFLAGS) $(QT5_CFLAGS)
 
 
 noinst_LIBRARIES = libgamelib.a
 noinst_HEADERS = \
 	anim.h \
-	animobj.h \
 	audp_parser.h \
 	gtime.h \
 	hashtable.h \
@@ -14,7 +13,6 @@ noinst_HEADERS = \
 
 libgamelib_a_SOURCES = \
 	anim.cpp \
-	animobj.cpp \
 	audp_lexer.cpp \
 	audp_parser.cpp \
 	gtime.cpp \

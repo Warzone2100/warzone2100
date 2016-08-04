@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -33,7 +33,7 @@
 #include "lib/framework/resly.h"
 #include "lib/gamelib/parser.h"
 #include "lib/ivis_opengl/bitimage.h"
-#include "lib/ivis_opengl/tex.h"
+#include "lib/ivis_opengl/png_util.h"
 #include "lib/script/script.h"
 #include "lib/sound/audio.h"
 
@@ -41,7 +41,6 @@
 #include "data.h"
 #include "droid.h"
 #include "feature.h"
-#include "function.h"
 #include "mechanics.h"
 #include "message.h"
 #include "multiplay.h"
@@ -51,9 +50,6 @@
 #include "template.h"
 #include "text.h"
 #include "texture.h"
-
-#define DT_TEXPAGE "TEXPAGE"
-#define DT_TCMASK "TCMASK"
 
 // whether a save game is currently being loaded
 static bool saveFlag = false;
@@ -142,34 +138,28 @@ void dataClearSaveFlag(void)
 }
 
 /* Load the body stats */
-static bool bufferSBODYLoad(const char *pBuffer, UDWORD size, void **ppData)
+static bool bufferSBODYLoad(const char *fileName, void **ppData)
 {
-	calcDataHash((uint8_t *)pBuffer, size, DATA_SBODY);
-
-	if (!loadBodyStats(pBuffer, size)
-	    || !allocComponentList(COMP_BODY, numBodyStats))
+	if (!loadBodyStats(fileName) || !allocComponentList(COMP_BODY, numBodyStats))
 	{
 		return false;
 	}
-
-	// set a dummy value so the release function gets called
 	*ppData = (void *)1;
 	return true;
 }
 
 static void dataReleaseStats(WZ_DECL_UNUSED void *pData)
 {
+	// FIXME, huge hack, is called many times!
 	freeComponentLists();
 	statsShutDown();
 }
 
 
 /* Load the weapon stats */
-static bool bufferSWEAPONLoad(const char *pBuffer, UDWORD size, void **ppData)
+static bool bufferSWEAPONLoad(const char *fileName, void **ppData)
 {
-	calcDataHash((uint8_t *)pBuffer, size, DATA_SWEAPON);
-
-	if (!loadWeaponStats(pBuffer, size)
+	if (!loadWeaponStats(fileName)
 	    || !allocComponentList(COMP_WEAPON, numWeaponStats))
 	{
 		return false;
@@ -181,11 +171,9 @@ static bool bufferSWEAPONLoad(const char *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load the constructor stats */
-static bool bufferSCONSTRLoad(const char *pBuffer, UDWORD size, void **ppData)
+static bool bufferSCONSTRLoad(const char *fileName, void **ppData)
 {
-	calcDataHash((uint8_t *)pBuffer, size, DATA_SCONSTR);
-
-	if (!loadConstructStats(pBuffer, size)
+	if (!loadConstructStats(fileName)
 	    || !allocComponentList(COMP_CONSTRUCT, numConstructStats))
 	{
 		return false;
@@ -197,11 +185,9 @@ static bool bufferSCONSTRLoad(const char *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load the ECM stats */
-static bool bufferSECMLoad(const char *pBuffer, UDWORD size, void **ppData)
+static bool bufferSECMLoad(const char *fileName, void **ppData)
 {
-	calcDataHash((uint8_t *)pBuffer, size, DATA_SECM);
-
-	if (!loadECMStats(pBuffer, size)
+	if (!loadECMStats(fileName)
 	    || !allocComponentList(COMP_ECM, numECMStats))
 	{
 		return false;
@@ -213,27 +199,21 @@ static bool bufferSECMLoad(const char *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load the Propulsion stats */
-static bool bufferSPROPLoad(const char *pBuffer, UDWORD size, void **ppData)
+static bool bufferSPROPLoad(const char *fileName, void **ppData)
 {
-	calcDataHash((uint8_t *)pBuffer, size, DATA_SPROP);
-
-	if (!loadPropulsionStats(pBuffer, size)
-	    || !allocComponentList(COMP_PROPULSION, numPropulsionStats))
+	if (!loadPropulsionStats(fileName) || !allocComponentList(COMP_PROPULSION, numPropulsionStats))
 	{
 		return false;
 	}
 
 	//not interested in this value
-	*ppData = NULL;
+	*ppData = (void *)1;
 	return true;
 }
 
-/* Load the Sensor stats */
-static bool bufferSSENSORLoad(const char *pBuffer, UDWORD size, void **ppData)
+static bool bufferSSENSORLoad(const char *fileName, void **ppData)
 {
-	calcDataHash((uint8_t *)pBuffer, size, DATA_SSENSOR);
-
-	if (!loadSensorStats(pBuffer, size)
+	if (!loadSensorStats(fileName)
 	    || !allocComponentList(COMP_SENSOR, numSensorStats))
 	{
 		return false;
@@ -245,12 +225,9 @@ static bool bufferSSENSORLoad(const char *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load the Repair stats */
-static bool bufferSREPAIRLoad(const char *pBuffer, UDWORD size, void **ppData)
+static bool bufferSREPAIRLoad(const char *fileName, void **ppData)
 {
-	calcDataHash((uint8_t *)pBuffer, size, DATA_SREPAIR);
-
-	if (!loadRepairStats(pBuffer, size)
-	    || !allocComponentList(COMP_REPAIRUNIT, numRepairStats))
+	if (!loadRepairStats(fileName) || !allocComponentList(COMP_REPAIRUNIT, numRepairStats))
 	{
 		return false;
 	}
@@ -261,27 +238,21 @@ static bool bufferSREPAIRLoad(const char *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load the Brain stats */
-static bool bufferSBRAINLoad(const char *pBuffer, UDWORD size, void **ppData)
+static bool bufferSBRAINLoad(const char *fileName, void **ppData)
 {
-	calcDataHash((uint8_t *)pBuffer, size, DATA_SBRAIN);
-
-	if (!loadBrainStats(pBuffer, size)
-	    || !allocComponentList(COMP_BRAIN, numBrainStats))
+	if (!loadBrainStats(fileName) || !allocComponentList(COMP_BRAIN, numBrainStats))
 	{
 		return false;
 	}
-
 	//not interested in this value
 	*ppData = NULL;
 	return true;
 }
 
 /* Load the PropulsionType stats */
-static bool bufferSPROPTYPESLoad(const char *pBuffer, UDWORD size, void **ppData)
+static bool bufferSPROPTYPESLoad(const char *fileName, void **ppData)
 {
-	calcDataHash((uint8_t *)pBuffer, size, DATA_SPROPTY);
-
-	if (!loadPropulsionTypes(pBuffer, size))
+	if (!loadPropulsionTypes(fileName))
 	{
 		return false;
 	}
@@ -293,9 +264,9 @@ static bool bufferSPROPTYPESLoad(const char *pBuffer, UDWORD size, void **ppData
 }
 
 /* Load the propulsion type sound stats */
-static bool bufferSPROPSNDLoad(const char *pBuffer, UDWORD size, void **ppData)
+static bool bufferSPROPSNDLoad(const char *fileName, void **ppData)
 {
-	if (!loadPropulsionSounds(pBuffer, size))
+	if (!loadPropulsionSounds(fileName))
 	{
 		return false;
 	}
@@ -306,11 +277,9 @@ static bool bufferSPROPSNDLoad(const char *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load the STERRTABLE stats */
-static bool bufferSTERRTABLELoad(const char *pBuffer, UDWORD size, void **ppData)
+static bool bufferSTERRTABLELoad(const char *fileName, void **ppData)
 {
-	calcDataHash((uint8_t *)pBuffer, size, DATA_STERRT);
-
-	if (!loadTerrainTable(pBuffer, size))
+	if (!loadTerrainTable(fileName))
 	{
 		return false;
 	}
@@ -320,38 +289,18 @@ static bool bufferSTERRTABLELoad(const char *pBuffer, UDWORD size, void **ppData
 	return true;
 }
 
-/* Load the body/propulsion IMDs stats */
-static bool bufferSBPIMDLoad(const char *pBuffer, UDWORD size, void **ppData)
+/* Load the body/propulsion IMDs stats -- FIXME, REMOVE IT, NOT USED */
+static bool bufferSBPIMDLoad(const char *fileName, void **ppData)
 {
-	if (!loadBodyPropulsionIMDs(pBuffer, size))
-	{
-		return false;
-	}
-
-	//not interested in this value
-	*ppData = NULL;
-	return true;
-}
-
-/* Load the weapon sound stats */
-static bool bufferSWEAPSNDLoad(const char *pBuffer, UDWORD size, void **ppData)
-{
-	if (!loadWeaponSounds(pBuffer, size))
-	{
-		return false;
-	}
-
 	//not interested in this value
 	*ppData = NULL;
 	return true;
 }
 
 /* Load the Weapon Effect modifier stats */
-static bool bufferSWEAPMODLoad(const char *pBuffer, UDWORD size, void **ppData)
+static bool bufferSWEAPMODLoad(const char *fileName, void **ppData)
 {
-	calcDataHash((uint8_t *)pBuffer, size, DATA_SWEAPMOD);
-
-	if (!loadWeaponModifiers(pBuffer, size))
+	if (!loadWeaponModifiers(fileName))
 	{
 		return false;
 	}
@@ -363,11 +312,9 @@ static bool bufferSWEAPMODLoad(const char *pBuffer, UDWORD size, void **ppData)
 
 
 /* Load the Template stats */
-static bool bufferSTEMPLLoad(const char *pBuffer, UDWORD size, void **ppData)
+static bool bufferSTEMPLLoad(const char *fileName, void **ppData)
 {
-	calcDataHash((uint8_t *)pBuffer, size, DATA_STEMP);
-
-	if (!loadDroidTemplates(pBuffer, size))
+	if (!loadDroidTemplates(fileName))
 	{
 		return false;
 	}
@@ -384,28 +331,15 @@ static void dataSTEMPLRelease(WZ_DECL_UNUSED void *pData)
 	droidTemplateShutDown();
 }
 
-/* Load the Template weapons stats */
-static bool bufferSTEMPWEAPLoad(const char *pBuffer, UDWORD size, void **ppData)
+/* Load the Structure stats */
+static bool bufferSSTRUCTLoad(const char *fileName, void **ppData)
 {
-	calcDataHash((uint8_t *)pBuffer, size, DATA_STEMPWEAP);
-
-	if (!loadDroidWeapons(pBuffer, size))
+	if (!loadStructureStats(QString(fileName)))
 	{
 		return false;
 	}
 
-	//not interested in this value
-	*ppData = NULL;
-	return true;
-}
-
-/* Load the Structure stats */
-static bool bufferSSTRUCTLoad(const char *pBuffer, UDWORD size, void **ppData)
-{
-	calcDataHash((uint8_t *)pBuffer, size, DATA_SSTRUCT);
-
-	if (!loadStructureStats(pBuffer, size)
-	    || !allocStructLists())
+	if (!allocStructLists())
 	{
 		return false;
 	}
@@ -422,42 +356,10 @@ static void dataSSTRUCTRelease(WZ_DECL_UNUSED void *pData)
 	structureStatsShutDown();
 }
 
-/* Load the Structure Weapons stats */
-static bool bufferSSTRWEAPLoad(const char *pBuffer, UDWORD size, void **ppData)
-{
-	calcDataHash((uint8_t *)pBuffer, size, DATA_SSTRWEAP);
-
-	if (!loadStructureWeapons(pBuffer, size))
-	{
-		return false;
-	}
-
-	//not interested in this value
-	*ppData = NULL;
-	return true;
-}
-
-/* Load the Structure Functions stats */
-static bool bufferSSTRFUNCLoad(const char *pBuffer, UDWORD size, void **ppData)
-{
-	calcDataHash((uint8_t *)pBuffer, size, DATA_STRFUNC);
-
-	if (!loadStructureFunctions(pBuffer, size))
-	{
-		return false;
-	}
-
-	//not interested in this value
-	*ppData = NULL;
-	return true;
-}
-
 /* Load the Structure strength modifier stats */
-static bool bufferSSTRMODLoad(const char *pBuffer, UDWORD size, void **ppData)
+static bool bufferSSTRMODLoad(const char *fileName, void **ppData)
 {
-	calcDataHash((uint8_t *)pBuffer, size, DATA_SSTRMOD);
-
-	if (!loadStructureStrengthModifiers(pBuffer, size))
+	if (!loadStructureStrengthModifiers(fileName))
 	{
 		return false;
 	}
@@ -468,15 +370,12 @@ static bool bufferSSTRMODLoad(const char *pBuffer, UDWORD size, void **ppData)
 }
 
 /* Load the Feature stats */
-static bool bufferSFEATLoad(const char *pBuffer, UDWORD size, void **ppData)
+static bool bufferSFEATLoad(const char *fileName, void **ppData)
 {
-	calcDataHash((uint8_t *)pBuffer, size, DATA_SFEAT);
-
-	if (!loadFeatureStats(pBuffer, size))
+	if (!loadFeatureStats(fileName))
 	{
 		return false;
 	}
-
 	// set a dummy value so the release function gets called
 	*ppData = (void *)1;
 	return true;
@@ -488,30 +387,6 @@ static void dataSFEATRelease(WZ_DECL_UNUSED void *pData)
 	featureStatsShutDown();
 }
 
-/* Load the Functions stats */
-static bool bufferSFUNCLoad(const char *pBuffer, UDWORD size, void **ppData)
-{
-	calcDataHash((uint8_t *)pBuffer, size, DATA_SFUNC);
-
-	if (!loadFunctionStats(pBuffer, size))
-	{
-		return false;
-	}
-
-	//adjust max values of stats used in the design screen due to any possible upgrades
-	adjustMaxDesignStats();
-
-	// set a dummy value so the release function gets called
-	*ppData = (void *)1;
-	return true;
-}
-
-// release the function stats
-static void dataSFUNCRelease(WZ_DECL_UNUSED void *pData)
-{
-	FunctionShutDown();
-}
-
 // release the research stats
 static void dataRESCHRelease(WZ_DECL_UNUSED void *pData)
 {
@@ -520,133 +395,22 @@ static void dataRESCHRelease(WZ_DECL_UNUSED void *pData)
 }
 
 /* Load the Research stats */
-static bool bufferRESCHLoad(const char *pBuffer, UDWORD size, void **ppData)
+static bool bufferRESCHLoad(const char *fileName, void **ppData)
 {
-	calcDataHash((uint8_t *)pBuffer, size, DATA_RESCH);
+	//calcDataHash((uint8_t *)pBuffer, size, DATA_RESCH);
 
 	//check to see if already loaded
-	if (asResearch.size() > 0)
+	if (!asResearch.empty())
 	{
 		//release previous data before loading in the new
 		dataRESCHRelease(NULL);
 	}
 
-	if (!loadResearch(pBuffer, size))
+	if (!loadResearch(QString(fileName)))
 	{
 		return false;
 	}
 
-
-	/* set a dummy value so the release function gets called - the Release
-	 * function is now called when load up the next set
-	// *ppData = (void *)1;
-	 * pass back NULL so that can load the same name file for the next campaign*/
-	*ppData = NULL;
-	return true;
-}
-
-/* Load the research pre-requisites */
-static bool bufferRPREREQLoad(const char *pBuffer, UDWORD size, void **ppData)
-{
-	calcDataHash((uint8_t *)pBuffer, size, DATA_RPREREQ);
-
-	if (!loadResearchPR(pBuffer, size))
-	{
-		return false;
-	}
-
-	//not interested in this value
-	*ppData = NULL;
-	return true;
-}
-
-/* Load the research components made redundant */
-static bool bufferRCOMPREDLoad(const char *pBuffer, UDWORD size, void **ppData)
-{
-	calcDataHash((uint8_t *)pBuffer, size, DATA_RCOMPRED);
-
-	if (!loadResearchArtefacts(pBuffer, size, RED_LIST))
-	{
-		return false;
-	}
-
-	//not interested in this value
-	*ppData = NULL;
-	return true;
-}
-
-/* Load the research component results */
-static bool bufferRCOMPRESLoad(const char *pBuffer, UDWORD size, void **ppData)
-{
-	calcDataHash((uint8_t *)pBuffer, size, DATA_RCOMPRES);
-
-	if (!loadResearchArtefacts(pBuffer, size, RES_LIST))
-	{
-		return false;
-	}
-
-	//not interested in this value
-	*ppData = NULL;
-	return true;
-}
-
-/* Load the research structures required */
-static bool bufferRSTRREQLoad(const char *pBuffer, UDWORD size, void **ppData)
-{
-	calcDataHash((uint8_t *)pBuffer, size, DATA_RSTRREQ);
-
-	if (!loadResearchStructures(pBuffer, size, REQ_LIST))
-	{
-		return false;
-	}
-
-	//not interested in this value
-	*ppData = NULL;
-	return true;
-}
-
-/* Load the research structures made redundant */
-static bool bufferRSTRREDLoad(const char *pBuffer, UDWORD size, void **ppData)
-{
-	calcDataHash((uint8_t *)pBuffer, size, DATA_RSTRRED);
-
-	if (!loadResearchStructures(pBuffer, size, RED_LIST))
-	{
-		return false;
-	}
-
-	//not interested in this value
-	*ppData = NULL;
-	return true;
-}
-
-/* Load the research structure results */
-static bool bufferRSTRRESLoad(const char *pBuffer, UDWORD size, void **ppData)
-{
-	calcDataHash((uint8_t *)pBuffer, size, DATA_RSTRRES);
-
-	if (!loadResearchStructures(pBuffer, size, RES_LIST))
-	{
-		return false;
-	}
-
-	//not interested in this value
-	*ppData = NULL;
-	return true;
-}
-
-/* Load the research functions */
-static bool bufferRFUNCLoad(const char *pBuffer, UDWORD size, void **ppData)
-{
-	calcDataHash((uint8_t *)pBuffer, size, DATA_RFUNC);
-
-	if (!loadResearchFunctions(pBuffer, size))
-	{
-		return false;
-	}
-
-	//not interested in this value
-	*ppData = NULL;
 	return true;
 }
 
@@ -686,24 +450,6 @@ static void dataSMSGRelease(void *pData)
 	viewDataShutDown((const char *)pData);
 }
 
-/* Load an imd */
-static bool dataIMDBufferLoad(const char *pBuffer, UDWORD size, void **ppData)
-{
-	iIMDShape	*psIMD;
-	const char *pBufferPosition = pBuffer;
-
-	psIMD = iV_ProcessIMD(&pBufferPosition, pBufferPosition + size);
-	if (psIMD == NULL)
-	{
-		debug(LOG_ERROR, "IMD load failed - %s", GetLastResourceFilename());
-		return false;
-	}
-
-	*ppData = psIMD;
-	return true;
-}
-
-
 /*!
  * Load an image from file
  */
@@ -742,11 +488,6 @@ static bool dataTERTILESLoad(const char *fileName, void **ppData)
 	return true;
 }
 
-static void dataTERTILESRelease(WZ_DECL_UNUSED void *pData)
-{
-}
-
-
 static bool dataIMGLoad(const char *fileName, void **ppData)
 {
 	*ppData = iV_LoadImageFile(fileName);
@@ -762,74 +503,6 @@ static bool dataIMGLoad(const char *fileName, void **ppData)
 static void dataIMGRelease(void *pData)
 {
 	iV_FreeImageFile((IMAGEFILE *)pData);
-}
-
-
-/* Load a texturepage into memory */
-static bool dataTexPageLoad(const char *fileName, void **ppData)
-{
-	char texpage[PATH_MAX] = {'\0'};
-
-	// This hackery is needed, because fileName will include the directory name, whilst the LastResourceFilename will not, and we need a short name to identify the texpage
-	sstrcpy(texpage, GetLastResourceFilename());
-
-	pie_MakeTexPageName(texpage);
-	if (!dataImageLoad(fileName, ppData))
-	{
-		return false;
-	}
-
-	// see if this texture page has already been loaded
-	if (resPresent(DT_TEXPAGE, texpage))
-	{
-		// replace the old texture page with the new one
-		debug(LOG_TEXTURE, "replacing %s with new texture %s", texpage, fileName);
-		pie_ReplaceTexPage((iV_Image *)*ppData, texpage, getTextureSize(), true);
-	}
-	else
-	{
-		debug(LOG_TEXTURE, "adding page %s with texture %s", texpage, fileName);
-		SetLastResourceFilename(texpage);
-		pie_AddTexPage((iV_Image *)*ppData, texpage, 0, getTextureSize(), true);
-	}
-
-	return true;
-}
-
-/* Load a team colour mask texturepage into memory */
-static bool dataTexPageTCMaskLoad(const char *fileName, void **ppData)
-{
-	char texpage[PATH_MAX] = {'\0'};
-
-	// This hackery is needed, because fileName will include the directory name, whilst the LastResourceFilename will not, and we need a short name to identify the texpage
-	sstrcpy(texpage, GetLastResourceFilename());
-
-	// Check if a corresponding texpage exists, exit if no
-	pie_MakeTexPageName(texpage);
-	ASSERT_OR_RETURN(false, resPresent(DT_TEXPAGE, texpage), "Corresponding texpage %s doesn't exists!", texpage);
-
-	pie_MakeTexPageTCMaskName(texpage);
-
-	if (!dataImageLoad(fileName, ppData))
-	{
-		return false;
-	}
-
-	// see if this texture page has already been loaded
-	if (resPresent(DT_TCMASK, texpage))
-	{
-		// replace the old texture page with the new one
-		debug(LOG_TEXTURE, "replacing %s with new tcmask %s", texpage, fileName);
-		pie_ReplaceTexPage((iV_Image *)*ppData, texpage, getTextureSize(), false);
-	}
-	else
-	{
-		debug(LOG_TEXTURE, "adding page %s with tcmask %s", texpage, fileName);
-		SetLastResourceFilename(texpage);
-		pie_AddTexPage((iV_Image *)*ppData, texpage, 0, getTextureSize(), false);
-	}
-
-	return true;
 }
 
 /*!
@@ -1092,38 +765,8 @@ struct RES_TYPE_MIN_BUF
 
 static const RES_TYPE_MIN_BUF BufferResourceTypes[] =
 {
-	{"SWEAPON", bufferSWEAPONLoad, NULL},
-	{"SBODY", bufferSBODYLoad, dataReleaseStats},
-	{"SBRAIN", bufferSBRAINLoad, NULL},
-	{"SPROP", bufferSPROPLoad, NULL},
-	{"SSENSOR", bufferSSENSORLoad, NULL},
-	{"SECM", bufferSECMLoad, NULL},
-	{"SREPAIR", bufferSREPAIRLoad, NULL},
-	{"SCONSTR", bufferSCONSTRLoad, NULL},
-	{"SPROPTYPES", bufferSPROPTYPESLoad, NULL},
-	{"SPROPSND", bufferSPROPSNDLoad, NULL},
-	{"STERRTABLE", bufferSTERRTABLELoad, NULL},
-	{"SBPIMD", bufferSBPIMDLoad, NULL},
-	{"SWEAPSND", bufferSWEAPSNDLoad, NULL},
-	{"SWEAPMOD", bufferSWEAPMODLoad, NULL},
-	{"STEMPL", bufferSTEMPLLoad, dataSTEMPLRelease},               //template and associated files
-	{"STEMPWEAP", bufferSTEMPWEAPLoad, NULL},
-	{"SSTRUCT", bufferSSTRUCTLoad, dataSSTRUCTRelease},            //structure stats and associated files
-	{"SSTRFUNC", bufferSSTRFUNCLoad, NULL},
-	{"SSTRWEAP", bufferSSTRWEAPLoad, NULL},
-	{"SSTRMOD", bufferSSTRMODLoad, NULL},
-	{"SFEAT", bufferSFEATLoad, dataSFEATRelease},                  //feature stats file
-	{"SFUNC", bufferSFUNCLoad, dataSFUNCRelease},                  //function stats file
-	{"RESCH", bufferRESCHLoad, dataRESCHRelease},                  //research stats files
-	{"RPREREQ", bufferRPREREQLoad, NULL},
-	{"RCOMPRED", bufferRCOMPREDLoad, NULL},
-	{"RCOMPRES", bufferRCOMPRESLoad, NULL},
-	{"RSTRREQ", bufferRSTRREQLoad, NULL},
-	{"RSTRRED", bufferRSTRREDLoad, NULL},
-	{"RSTRRES", bufferRSTRRESLoad, NULL},
-	{"RFUNC", bufferRFUNCLoad, NULL},
 	{"SMSG", bufferSMSGLoad, dataSMSGRelease},
-	{"IMD", dataIMDBufferLoad, (RES_FREE)iV_IMDRelease},
+	{"IMD", NULL, NULL}, // ignored
 };
 
 struct RES_TYPE_MIN_FILE
@@ -1135,20 +778,38 @@ struct RES_TYPE_MIN_FILE
 
 static const RES_TYPE_MIN_FILE FileResourceTypes[] =
 {
+	{"SFEAT", bufferSFEATLoad, dataSFEATRelease},                  //feature stats file
+	{"STEMPL", bufferSTEMPLLoad, dataSTEMPLRelease},               //template and associated files
 	{"WAV", dataAudioLoad, (RES_FREE)sound_ReleaseTrack},
+	{"SWEAPON", bufferSWEAPONLoad, dataReleaseStats},
+	{"SBPIMD", bufferSBPIMDLoad, dataReleaseStats},
+	{"SBRAIN", bufferSBRAINLoad, dataReleaseStats},
+	{"SSENSOR", bufferSSENSORLoad, dataReleaseStats},
+	{"SECM", bufferSECMLoad, dataReleaseStats},
+	{"SREPAIR", bufferSREPAIRLoad, dataReleaseStats},
+	{"SCONSTR", bufferSCONSTRLoad, dataReleaseStats},
+	{"SPROP", bufferSPROPLoad, dataReleaseStats},
+	{"SPROPTYPES", bufferSPROPTYPESLoad, dataReleaseStats},
+	{"STERRTABLE", bufferSTERRTABLELoad, dataReleaseStats},
+	{"SBODY", bufferSBODYLoad, dataReleaseStats},
+	{"SWEAPMOD", bufferSWEAPMODLoad, dataReleaseStats},
+	{"SPROPSND", bufferSPROPSNDLoad, dataReleaseStats},
 	{"AUDIOCFG", dataAudioCfgLoad, NULL},
 	{"ANI", dataAnimLoad, dataAnimRelease},
 	{"ANIMCFG", dataAnimCfgLoad, NULL},
 	{"IMGPAGE", dataImageLoad, dataImageRelease},
-	{"TERTILES", dataTERTILESLoad, dataTERTILESRelease},
+	{"TERTILES", dataTERTILESLoad, NULL},
 	{"IMG", dataIMGLoad, dataIMGRelease},
-	{DT_TEXPAGE, dataTexPageLoad, dataImageRelease},
-	{DT_TCMASK, dataTexPageTCMaskLoad, dataImageRelease},
+	{"TEXPAGE", NULL, NULL}, // ignored
+	{"TCMASK", NULL, NULL}, // ignored
 	{"SCRIPT", dataScriptLoad, dataScriptRelease},
 	{"SCRIPTVAL", dataScriptLoadVals, NULL},
 	{"STR_RES", dataStrResLoad, dataStrResRelease},
 	{"RESEARCHMSG", dataResearchMsgLoad, dataSMSGRelease },
+	{"SSTRMOD", bufferSSTRMODLoad, NULL},
 	{"JAVASCRIPT", jsLoad, NULL},
+	{"SSTRUCT", bufferSSTRUCTLoad, dataSSTRUCTRelease},            //structure stats and associated files
+	{"RESCH", bufferRESCHLoad, dataRESCHRelease},                  //research stats files
 };
 
 /* Pass all the data loading functions to the framework library */

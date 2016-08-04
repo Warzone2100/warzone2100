@@ -1,6 +1,6 @@
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -49,10 +49,10 @@
 // Make xgettext recognize the context
 #define NP_(Context, String) gettext_noop(String)
 
-extern WZ_DECL_CONST const char *getLanguage(void);
-extern WZ_DECL_CONST const char *getLanguageName(void);
-extern bool setLanguage(const char *name);
-extern void setNextLanguage(void);
-extern void initI18n(void);
+WZ_DECL_PURE const char *getLanguage();
+WZ_DECL_PURE const char *getLanguageName();
+WZ_DECL_NONNULL(1) bool setLanguage(const char *name);
+void setNextLanguage(bool prev = false);
+void initI18n();
 
 #endif // _i18n_h

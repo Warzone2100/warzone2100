@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -44,7 +44,10 @@ const char *getDroidActionName(DROID_ACTION action);
 #define EMP_DISABLE_TIME (10000)     // 10 secs
 
 /** How far away the repair droid can be from the damaged droid to function. */
-#define REPAIR_RANGE		(TILE_UNITS * TILE_UNITS * 4)
+#define REPAIR_RANGE  (2 * TILE_UNITS)
+
+/// The maximum distance a repair droid will automatically go in guard mode.
+#define REPAIR_MAXDIST  (5 * TILE_UNITS)
 
 /**
  * Update the action state for a droid.
@@ -81,10 +84,7 @@ bool actionTargetTurret(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, WEAPON *
 void actionAlignTurret(BASE_OBJECT *psObj, int weapon_slot);
 
 /** Check if a target is within weapon range. */
-bool actionInRange(DROID *psDroid, BASE_OBJECT *psObj, int weapon_slot);
-
-/** Check if a target is inside minimum weapon range. */
-bool actionInsideMinRange(DROID *psDroid, BASE_OBJECT *psObj, WEAPON_STATS *psWeapStats);
+bool actionInRange(const DROID *psDroid, const BASE_OBJECT *psObj, int weapon_slot);
 
 /** Return whether a droid can see a target to fire on it. */
 bool actionVisibleTarget(DROID *psDroid, BASE_OBJECT *psTarget, int weapon_slot);

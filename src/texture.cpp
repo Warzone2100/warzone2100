@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -76,21 +76,12 @@ static int newPage(const char *name, int level, int width, int height, int count
 {
 	int texPage = firstPage + ((count + 1) / TILES_IN_PAGE);
 
-	// debug(LOG_TEXTURE, "newPage: texPage=%d firstPage=%d %s %d (%d,%d) (count %d + 1) / %d _TEX_INDEX=%u",
-	//      texPage, firstPage, name, level, width, height, count, TILES_IN_PAGE, _TEX_INDEX);
-	if (texPage == _TEX_INDEX)
+	if (texPage == pie_NumberOfPages())
 	{
 		// We need to create a new texture page; create it and increase texture table to store it
-		glGenTextures(1, &_TEX_PAGE[texPage].id);
-		_TEX_INDEX++;
+		pie_ReserveTexture(name);
 	}
 	terrainPage = texPage;
-
-	ASSERT(_TEX_INDEX > texPage, "newPage: Index too low (%d > %d)", _TEX_INDEX, texPage);
-	ASSERT(_TEX_INDEX < iV_TEX_MAX, "Too many texture pages used");
-
-	sstrcpy(_TEX_PAGE[texPage].name, name);
-
 	pie_SetTexturePage(texPage);
 
 	// Specify first and last mipmap level to be used
@@ -100,7 +91,6 @@ static int newPage(const char *name, int level, int width, int height, int count
 	// debug(LOG_TEXTURE, "newPage: glTexImage2D(page=%d, level=%d) opengl id=%u", texPage, level, _TEX_PAGE[texPage].id);
 	glTexImage2D(GL_TEXTURE_2D, level, wz_texture_compression, width, height, 0,
 	             GL_RGBA, GL_UNSIGNED_BYTE, NULL);
-	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -125,17 +115,16 @@ bool texLoad(const char *fileName)
 	int texPage;
 	GLint glval;
 
-	firstPage = _TEX_INDEX;
+	firstPage = pie_NumberOfPages();
 
-	ASSERT_OR_RETURN(false, _TEX_INDEX < iV_TEX_MAX, "Too many texture pages used");
 	ASSERT_OR_RETURN(false, MIPMAP_MAX == TILE_WIDTH && MIPMAP_MAX == TILE_HEIGHT, "Bad tile sizes");
 
 	// store the filename so we can later determine which tileset we are using
-	if (tileset)
+	if (tilesetDir)
 	{
-		free(tileset);
+		free(tilesetDir);
 	}
-	tileset = strdup(fileName);
+	tilesetDir = strdup(fileName);
 
 	// reset defaults
 	mipmap_max = MIPMAP_MAX;
@@ -250,12 +239,12 @@ bool texLoad(const char *fileName)
 				xOffset = 0;
 				yOffset = 0;
 				debug(LOG_TEXTURE, "texLoad: Extra page added at %d for %s, was page %d, opengl id %u",
-				      k, partialPath, texPage, (unsigned int)_TEX_PAGE[texPage].id);
+				      k, partialPath, texPage, (unsigned)pie_Texture(texPage));
 				texPage = newPage(fileName, j, xSize, ySize, k);
 			}
 		}
 		debug(LOG_TEXTURE, "texLoad: Found %d textures for %s mipmap level %d, added to page %d, opengl id %u",
-		      k, partialPath, i, texPage, (unsigned int)_TEX_PAGE[texPage].id);
+		      k, partialPath, i, texPage, (unsigned)pie_Texture(texPage));
 		i /= 2;	// halve the dimensions for the next series; OpenGL mipmaps start with largest at level zero
 	}
 

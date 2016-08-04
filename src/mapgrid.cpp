@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -100,7 +100,7 @@ static bool isInRadius(int32_t x, int32_t y, uint32_t radius)
 // initialise the grid system to start iterating through units that
 // could affect a location (x,y in world coords)
 template<class Condition>
-GridList const &gridStartIterateFiltered(int32_t x, int32_t y, uint32_t radius, PointTree::Filter *filter, Condition const &condition)
+static GridList const &gridStartIterateFiltered(int32_t x, int32_t y, uint32_t radius, PointTree::Filter *filter, Condition const &condition)
 {
 	if (filter == NULL)
 	{
@@ -138,6 +138,20 @@ GridList const &gridStartIterateFiltered(int32_t x, int32_t y, uint32_t radius, 
 	return gridList;
 }
 
+template<class Condition>
+static GridList const &gridStartIterateFilteredArea(int32_t x, int32_t y, int32_t x2, int32_t y2, Condition const &condition)
+{
+	gridPointTree->query(x, y, x2, y2);
+
+	static GridList gridList;
+	gridList.resize(gridPointTree->lastQueryResults.size());
+	for (unsigned n = 0; n < gridList.size(); ++n)
+	{
+		gridList[n] = (BASE_OBJECT *)gridPointTree->lastQueryResults[n];
+	}
+	return gridList;
+}
+
 struct ConditionTrue
 {
 	bool test(BASE_OBJECT *) const
@@ -149,6 +163,11 @@ struct ConditionTrue
 GridList const &gridStartIterate(int32_t x, int32_t y, uint32_t radius)
 {
 	return gridStartIterateFiltered(x, y, radius, NULL, ConditionTrue());
+}
+
+GridList const &gridStartIterateArea(int32_t x, int32_t y, uint32_t x2, uint32_t y2)
+{
+	return gridStartIterateFilteredArea(x, y, x2, y2, ConditionTrue());
 }
 
 struct ConditionDroidsByPlayer

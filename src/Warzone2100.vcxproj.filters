@@ -90,9 +90,6 @@
     <ClCompile Include="droid.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="e3demo.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="edit3d.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -106,9 +103,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="frontend.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="function.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="game.cpp">
@@ -342,6 +336,12 @@
     <ClCompile Include="template.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="qtscriptdebug.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="animobj.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="action.h">
@@ -437,9 +437,6 @@
     <ClInclude Include="droiddef.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="e3demo.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="edit3d.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -459,12 +456,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="frontend.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="function.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="functiondef.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="game.h">
@@ -716,7 +707,22 @@
     <ClInclude Include="qtscriptfuncs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="scriptvals_parser.hpp">
+    <ClInclude Include="actiondef.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="qtscriptdebug.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="random.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="template.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="terrain.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="animobj.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

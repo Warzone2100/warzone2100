@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -64,12 +64,6 @@ bool allocComponentList(COMPONENT_TYPE	type, SDWORD number)
 		}
 
 		apCompLists[inc][type] = (UBYTE *) malloc(sizeof(UBYTE) * number);
-		if (apCompLists[inc][type] == NULL)
-		{
-			debug(LOG_FATAL, "Out of memory assigning Player Component Lists");
-			abort();
-			return false;
-		}
 
 		//initialise the players' lists
 		for (comp = 0; comp < number; comp++)
@@ -141,14 +135,7 @@ bool allocStructLists(void)
 	{
 		if (numStructureStats)
 		{
-			apStructTypeLists[inc] = (UBYTE *) malloc(sizeof(UBYTE) *
-			                         numStructureStats);
-			if (apStructTypeLists[inc] == NULL)
-			{
-				debug(LOG_FATAL, "Out of memory assigning Player Structure Lists");
-				abort();
-				return false;
-			}
+			apStructTypeLists[inc] = (UBYTE *) malloc(sizeof(UBYTE) * numStructureStats);
 			for (stat = 0; stat < (SDWORD)numStructureStats; stat++)
 			{
 				apStructTypeLists[inc][stat] = UNAVAILABLE;

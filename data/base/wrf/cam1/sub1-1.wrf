@@ -22,3 +22,6 @@ directory       "script/data"
 file            SCRIPTVAL       "cam1-1.vlo"
 file            SCRIPTVAL       "cam1-1-ai.vlo"
 file            SCRIPTVAL       "cam1mkday.vlo"
+
+directory "script"
+file            JAVASCRIPT      "rules.js"

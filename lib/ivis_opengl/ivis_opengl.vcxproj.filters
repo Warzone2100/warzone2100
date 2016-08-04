@@ -14,13 +14,7 @@
     <ClCompile Include="bitimage.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="imd.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="imdload.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ivi.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="jpeg_encoder.cpp">
@@ -53,9 +47,6 @@
     <ClCompile Include="png_util.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="rendmode.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="screen.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -74,9 +65,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="imd.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ivi.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ivisdef.h">
@@ -110,9 +98,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="png_util.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="rendmode.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="tex.h">

@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -28,7 +28,6 @@
 #include "lib/framework/trig.h"
 #include "lib/framework/math_ext.h"
 #include "lib/gamelib/gtime.h"
-#include "lib/gamelib/animobj.h"
 #include "lib/netplay/netplay.h"
 #include "lib/sound/audio.h"
 #include "lib/sound/audio_id.h"
@@ -36,6 +35,7 @@
 
 #include "move.h"
 
+//#include "animobj.h"
 #include "objects.h"
 #include "visibility.h"
 #include "map.h"
@@ -58,15 +58,12 @@
 #include "random.h"
 #include "mission.h"
 #include "drive.h"
+#include "qtscript.h"
 
 /* max and min vtol heights above terrain */
 #define	VTOL_HEIGHT_MIN				250
 #define	VTOL_HEIGHT_LEVEL			300
 #define	VTOL_HEIGHT_MAX				350
-
-/* minimum distance for cyborgs to jump */
-#define	CYBORG_MIN_JUMP_DISTANCE	500
-#define	CYBORG_MAX_JUMP_HEIGHT		200
 
 // Maximum size of an object for collision
 #define OBJ_MAXRADIUS	(TILE_UNITS * 4)
@@ -102,60 +99,10 @@
 // how far to move for a shuffle
 #define SHUFFLE_MOVE		(2*TILE_UNITS/2)
 
-/***********************************************************************************/
-/*             Tracked model defines                                               */
-
-// The magnitude of direction change required for a droid to spin on the spot
-#define TRACKED_SPIN_ANGLE              DEG(45)
-// How fast a tracked droid accelerates
-#define TRACKED_ACCEL			250
-// How fast a tracked droid decelerates
-#define TRACKED_DECEL			800
-// How fast a tracked droid decelerates
-#define TRACKED_SKID_DECEL		600
-// How fast a wheeled droid decelerates
-#define WHEELED_SKID_DECEL		350
-// How fast a hover droid decelerates
-#define HOVER_SKID_DECEL		120
-
-/************************************************************************************/
-/*             Person model defines                                                 */
-
-// The magnitude of direction change required for a person to spin on the spot
-#define PERSON_SPIN_ANGLE               DEG(45)
-// The speed at which people spin
-#define PERSON_SPIN_SPEED		DEG(500)
-// The speed at which people turn while going forward
-#define PERSON_TURN_SPEED		DEG(250)
-// How fast a person accelerates
-#define PERSON_ACCEL			250
-// How fast a person decelerates
-#define PERSON_DECEL			450
-
-
-/************************************************************************************/
-/*             VTOL model defines                                                 */
-
-// The magnitude of direction change required for a vtol to spin on the spot
-#define VTOL_SPIN_ANGLE                 DEG(180)
-// The speed at which vtols spin (zero means can't spin)
-#define VTOL_SPIN_SPEED                 DEG(200)
-// The minimum speed at which vtols turn while going forward
-#define VTOL_TURN_SPEED			DEG(100)
-// How fast vtols accelerate
-#define VTOL_ACCEL				200
-// How fast vtols decelerate
-#define VTOL_DECEL				200
-// How fast vtols 'skid'
-#define VTOL_SKID_DECEL			600
-
 /// Extra precision added to movement calculations.
 #define EXTRA_BITS                              8
 #define EXTRA_PRECISION                         (1 << EXTRA_BITS)
 
-
-static uint32_t oilTimer = 0;
-static unsigned drumCount = 0;
 
 /* Function prototypes */
 static void	moveUpdatePersonModel(DROID *psDroid, SDWORD speed, uint16_t direction);
@@ -176,16 +123,6 @@ const char *moveDescription(MOVE_STATUS status)
 	case MOVESHUFFLE : return "Shuffle";
 	}
 	return "Error";	// satisfy compiler
-}
-
-/** Initialise the movement system
- */
-bool moveInitialise(void)
-{
-	oilTimer = 0;
-	drumCount = 0;
-
-	return true;
 }
 
 /** Set a target location in world coordinates for a droid to move to
@@ -418,9 +355,8 @@ static void moveShuffleDroid(DROID *psDroid, Vector2i s)
 void moveStopDroid(DROID *psDroid)
 {
 	CHECK_DROID(psDroid);
-
-	PROPULSION_STATS *psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
-	ASSERT_OR_RETURN(, psPropStats != NULL, "Invalid propulsion stats pointer");
+	PROPULSION_STATS *psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION];
+	ASSERT_OR_RETURN(, psPropStats != NULL, "invalid propulsion stats pointer");
 
 	if (psPropStats->propulsionType == PROPULSION_TYPE_LIFT)
 	{
@@ -621,7 +557,7 @@ static SDWORD moveObjRadius(const BASE_OBJECT *psObj)
 			}
 			else
 			{
-				const BODY_STATS *psBdyStats = &asBodyStats[psDroid->asBits[COMP_BODY].nStat];
+				const BODY_STATS *psBdyStats = &asBodyStats[psDroid->asBits[COMP_BODY]];
 				switch (psBdyStats->size)
 				{
 				case SIZE_LIGHT:
@@ -1212,7 +1148,7 @@ static Vector2i moveGetObstacleVector(DROID *psDroid, Vector2i dest)
 {
 	int32_t                 numObst = 0, distTot = 0;
 	Vector2i                dir(0, 0);
-	PROPULSION_STATS       *psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
+	PROPULSION_STATS       *psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION];
 	ASSERT_OR_RETURN(dir, psPropStats, "invalid propulsion stats pointer");
 
 	int ourMaxSpeed = psPropStats->maxSpeed;
@@ -1253,7 +1189,7 @@ static Vector2i moveGetObstacleVector(DROID *psDroid, Vector2i dest)
 			continue;
 		}
 
-		PROPULSION_STATS *obstaclePropStats = asPropulsionStats + psObstacle->asBits[COMP_PROPULSION].nStat;
+		PROPULSION_STATS *obstaclePropStats = asPropulsionStats + psObstacle->asBits[COMP_PROPULSION];
 		int obstacleMaxSpeed = obstaclePropStats->maxSpeed;
 		int obstacleRadius = moveObjRadius(psObstacle);
 		int totalRadius = ourRadius + obstacleRadius;
@@ -1300,7 +1236,7 @@ static Vector2i moveGetObstacleVector(DROID *psDroid, Vector2i dest)
 		numObst += 1;
 	}
 
-	if (dir == Vector2i(0, 0))
+	if (dir == Vector2i(0, 0) || numObst == 0)
 	{
 		return dest;
 	}
@@ -1313,8 +1249,8 @@ static Vector2i moveGetObstacleVector(DROID *psDroid, Vector2i dest)
 	Vector2i avoid = dest * o < 0 ? -o : o;
 
 	// Normalise dest and avoid.
-	dest = dest * 32768 / (iHypot(dest) + 1);
-	avoid = avoid * 32768 / (iHypot(avoid) + 1);
+	dest = dest * 32767 / (iHypot(dest) + 1);
+	avoid = avoid * 32767 / (iHypot(avoid) + 1);  // avoid.x and avoid.y are up to 65536, so we can multiply by at most 32767 here without potential overflow.
 
 	// combine the avoid vector and the target vector
 	int ratio = std::min(distTot * ourRadius / 2, 65536);
@@ -1377,14 +1313,14 @@ SDWORD moveCalcDroidSpeed(DROID *psDroid)
 	// NOTE: This screws up since the transporter is offscreen still (on a mission!), and we are trying to find terrainType of a tile (that is offscreen!)
 	if (psDroid->droidType == DROID_TRANSPORTER && missionIsOffworld())
 	{
-		PROPULSION_STATS	*propulsion = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
+		PROPULSION_STATS	*propulsion = asPropulsionStats + psDroid->asBits[COMP_PROPULSION];
 		speed = propulsion->maxSpeed;
 	}
 	else
 	{
 		mapX = map_coord(psDroid->pos.x);
 		mapY = map_coord(psDroid->pos.y);
-		speed = calcDroidSpeed(psDroid->baseSpeed, terrainType(mapTile(mapX, mapY)), psDroid->asBits[COMP_PROPULSION].nStat, getDroidEffectiveLevel(psDroid));
+		speed = calcDroidSpeed(psDroid->baseSpeed, terrainType(mapTile(mapX, mapY)), psDroid->asBits[COMP_PROPULSION], getDroidEffectiveLevel(psDroid));
 	}
 
 
@@ -1405,7 +1341,7 @@ SDWORD moveCalcDroidSpeed(DROID *psDroid)
 		if (psDroid->asWeaps[0].nStat > 0 && psDroid->asWeaps[0].lastFired + FOM_MOVEPAUSE > gameTime)
 		{
 			psWStats = asWeaponStats + psDroid->asWeaps[0].nStat;
-			if (psWStats->fireOnMove == FOM_NO)
+			if (!psWStats->fireOnMove)
 			{
 				speed = 0;
 			}
@@ -1624,33 +1560,9 @@ static void moveUpdateGroundModel(DROID *psDroid, SDWORD speed, uint16_t directi
 	uint16_t                iDroidDir;
 	uint16_t                slideDir;
 	PROPULSION_STATS	*psPropStats;
-	int32_t                 spinSpeed, turnSpeed, spinAngle, skidDecel, dx, dy, bx, by;
+	int32_t                 spinSpeed, spinAngle, turnSpeed, dx, dy, bx, by;
 
 	CHECK_DROID(psDroid);
-
-	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
-	switch (psPropStats->propulsionType)
-	{
-	case PROPULSION_TYPE_HOVER:
-		spinSpeed = psDroid->baseSpeed * DEG(3) / 4;
-		turnSpeed = psDroid->baseSpeed * DEG(1) / 4;
-		spinAngle = DEG(180);
-		skidDecel = HOVER_SKID_DECEL;
-		break;
-	case PROPULSION_TYPE_WHEELED:
-		spinSpeed = psDroid->baseSpeed * DEG(3) / 4;
-		turnSpeed = psDroid->baseSpeed * DEG(1) / 3;
-		spinAngle = DEG(180);
-		skidDecel = WHEELED_SKID_DECEL;
-		break;
-	case PROPULSION_TYPE_TRACKED:
-	default:
-		spinSpeed = psDroid->baseSpeed * DEG(3) / 4;
-		turnSpeed = psDroid->baseSpeed * DEG(1) / 3;
-		spinAngle = TRACKED_SPIN_ANGLE;
-		skidDecel = TRACKED_SKID_DECEL;
-		break;
-	}
 
 	// nothing to do if the droid is stopped
 	if (moveDroidStopped(psDroid, speed) == true)
@@ -1658,14 +1570,17 @@ static void moveUpdateGroundModel(DROID *psDroid, SDWORD speed, uint16_t directi
 		return;
 	}
 
-	// Used to update some kind of weird neighbour list here.
+	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION];
+	spinSpeed = psDroid->baseSpeed * psPropStats->spinSpeed;
+	turnSpeed = psDroid->baseSpeed * psPropStats->turnSpeed;
+	spinAngle = DEG(psPropStats->spinAngle);
 
 	moveCheckFinalWaypoint(psDroid, &speed);
 
 	moveUpdateDroidDirection(psDroid, &speed, direction, spinAngle, spinSpeed, turnSpeed, &iDroidDir);
 
-	fNormalSpeed = moveCalcNormalSpeed(psDroid, speed, iDroidDir, TRACKED_ACCEL, TRACKED_DECEL);
-	fPerpSpeed   = moveCalcPerpSpeed(psDroid, iDroidDir, skidDecel);
+	fNormalSpeed = moveCalcNormalSpeed(psDroid, speed, iDroidDir, psPropStats->acceleration, psPropStats->deceleration);
+	fPerpSpeed   = moveCalcPerpSpeed(psDroid, iDroidDir, psPropStats->skidDeceleration);
 
 	moveCombineNormalAndPerpSpeeds(psDroid, fNormalSpeed, fPerpSpeed, iDroidDir);
 	moveGetDroidPosDiffs(psDroid, &dx, &dy);
@@ -1692,9 +1607,10 @@ static void moveUpdateGroundModel(DROID *psDroid, SDWORD speed, uint16_t directi
 static void moveUpdatePersonModel(DROID *psDroid, SDWORD speed, uint16_t direction)
 {
 	int			fPerpSpeed, fNormalSpeed;
-	int32_t			dx, dy;
+	int32_t                 spinSpeed, turnSpeed, dx, dy;
 	uint16_t                iDroidDir;
 	uint16_t                slideDir;
+	PROPULSION_STATS	*psPropStats;
 
 	CHECK_DROID(psDroid);
 
@@ -1718,7 +1634,7 @@ static void moveUpdatePersonModel(DROID *psDroid, SDWORD speed, uint16_t directi
 			/* add firing anim */
 			if (psDroid->psCurAnim == NULL)
 			{
-				psDroid->psCurAnim = animObj_Add(psDroid, ID_ANIM_DROIDFIRE, 0, 0);
+				psDroid->psCurAnim = animObj_Add(psDroid, ID_ANIM_DROIDFIRE, 0);
 			}
 			else
 			{
@@ -1736,11 +1652,13 @@ static void moveUpdatePersonModel(DROID *psDroid, SDWORD speed, uint16_t directi
 		return;
 	}
 
-	// Used to update some kind of weird neighbour list here.
+	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION];
+	spinSpeed = psDroid->baseSpeed * psPropStats->spinSpeed;
+	turnSpeed = psDroid->baseSpeed * psPropStats->turnSpeed;
 
-	moveUpdateDroidDirection(psDroid, &speed, direction, PERSON_SPIN_ANGLE, PERSON_SPIN_SPEED, PERSON_TURN_SPEED, &iDroidDir);
+	moveUpdateDroidDirection(psDroid, &speed, direction, DEG(psPropStats->spinAngle), spinSpeed, turnSpeed, &iDroidDir);
 
-	fNormalSpeed = moveCalcNormalSpeed(psDroid, speed, iDroidDir, PERSON_ACCEL, PERSON_DECEL);
+	fNormalSpeed = moveCalcNormalSpeed(psDroid, speed, iDroidDir, psPropStats->acceleration, psPropStats->deceleration);
 
 	/* people don't skid at the moment so set zero perpendicular speed */
 	fPerpSpeed = 0;
@@ -1775,9 +1693,8 @@ static void moveUpdatePersonModel(DROID *psDroid, SDWORD speed, uint16_t directi
 			// Only add the animation if the droid is on screen, saves memory and time.
 			if (clipXY(psDroid->pos.x, psDroid->pos.y))
 			{
-				debug(LOG_NEVER, "Added person run anim\n");
-				psDroid->psCurAnim = animObj_Add((BASE_OBJECT *) psDroid,
-				                                 ID_ANIM_DROIDRUN, 0, 0);
+				debug(LOG_NEVER, "Added person run anim");
+				psDroid->psCurAnim = animObj_Add(psDroid, ID_ANIM_DROIDRUN, 0);
 			}
 		}
 		else
@@ -1788,7 +1705,7 @@ static void moveUpdatePersonModel(DROID *psDroid, SDWORD speed, uint16_t directi
 				const bool bRet = animObj_Remove(psDroid->psCurAnim, psDroid->psCurAnim->psAnim->uwID);
 				ASSERT(bRet, "animObj_Remove failed");
 				psDroid->psCurAnim = NULL;
-				debug(LOG_NEVER, "Removed person run anim\n");
+				debug(LOG_NEVER, "Removed person run anim");
 			}
 		}
 	}
@@ -1852,8 +1769,9 @@ static void moveUpdateVtolModel(DROID *psDroid, SDWORD speed, uint16_t direction
 	int fPerpSpeed, fNormalSpeed;
 	uint16_t   iDroidDir;
 	uint16_t   slideDir;
-	int32_t iMapZ, iSpinSpeed, iTurnSpeed, dx, dy;
+	int32_t spinSpeed, turnSpeed, iMapZ, iSpinSpeed, iTurnSpeed, dx, dy;
 	uint16_t targetRoll;
+	PROPULSION_STATS	*psPropStats;
 
 	CHECK_DROID(psDroid);
 
@@ -1863,21 +1781,25 @@ static void moveUpdateVtolModel(DROID *psDroid, SDWORD speed, uint16_t direction
 		return;
 	}
 
+	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION];
+	spinSpeed = DEG(psPropStats->spinSpeed);
+	turnSpeed = DEG(psPropStats->turnSpeed);
+
 	moveCheckFinalWaypoint(psDroid, &speed);
 
 	if (isTransporter(psDroid))
 	{
-		moveUpdateDroidDirection(psDroid, &speed, direction, VTOL_SPIN_ANGLE, VTOL_SPIN_SPEED, VTOL_TURN_SPEED, &iDroidDir);
+		moveUpdateDroidDirection(psDroid, &speed, direction, DEG(psPropStats->spinAngle), spinSpeed, turnSpeed, &iDroidDir);
 	}
 	else
 	{
-		iSpinSpeed = std::max<int>(psDroid->baseSpeed * DEG(1) / 2, VTOL_SPIN_SPEED);
-		iTurnSpeed = std::max<int>(psDroid->baseSpeed * DEG(1) / 8, VTOL_TURN_SPEED);
-		moveUpdateDroidDirection(psDroid, &speed, direction, VTOL_SPIN_ANGLE, iSpinSpeed, iTurnSpeed, &iDroidDir);
+		iSpinSpeed = std::max<int>(psDroid->baseSpeed * DEG(1) / 2, spinSpeed);
+		iTurnSpeed = std::max<int>(psDroid->baseSpeed * DEG(1) / 8, turnSpeed);
+		moveUpdateDroidDirection(psDroid, &speed, direction, DEG(psPropStats->spinAngle), iSpinSpeed, iTurnSpeed, &iDroidDir);
 	}
 
-	fNormalSpeed = moveCalcNormalSpeed(psDroid, speed, iDroidDir, VTOL_ACCEL, VTOL_DECEL);
-	fPerpSpeed   = moveCalcPerpSpeed(psDroid, iDroidDir, VTOL_SKID_DECEL);
+	fNormalSpeed = moveCalcNormalSpeed(psDroid, speed, iDroidDir, psPropStats->acceleration, psPropStats->deceleration);
+	fPerpSpeed   = moveCalcPerpSpeed(psDroid, iDroidDir, psPropStats->skidDeceleration);
 
 	moveCombineNormalAndPerpSpeeds(psDroid, fNormalSpeed, fPerpSpeed, iDroidDir);
 
@@ -1904,64 +1826,8 @@ static void moveUpdateVtolModel(DROID *psDroid, SDWORD speed, uint16_t direction
 	}
 }
 
-#define CYBORG_VERTICAL_SPEED	((int)psDroid->baseSpeed / 2)
-
-static void
-moveCyborgLaunchAnimDone(ANIM_OBJECT *psObj)
-{
-	DROID	*psDroid = (DROID *)psObj->psParent;
-
-	ASSERT_OR_RETURN(, psDroid != NULL, "Invalid cyborg pointer");
-
-	/* raise cyborg a little bit so flying - terrible hack - GJ */
-	// Actually, worse than a terrible hack, since it would break synch...
-	//psDroid->pos.z++;
-	//psDroid->sMove.iVertSpeed = CYBORG_VERTICAL_SPEED;
-
-	psDroid->psCurAnim = NULL;
-}
-
-static void
-moveCyborgTouchDownAnimDone(ANIM_OBJECT *psObj)
-{
-	DROID	*psDroid = (DROID *)psObj->psParent;
-
-	ASSERT_OR_RETURN(, psDroid != NULL, "Invalid cyborg pointer");
-
-	psDroid->psCurAnim = NULL;
-	// See comment in moveCyborgLaunchAnimDone().
-	//psDroid->pos.z = map_Height( psDroid->pos.x, psDroid->pos.y );
-}
-
-
-static void moveUpdateJumpCyborgModel(DROID *psDroid, SDWORD speed, uint16_t direction)
-{
-	int	fPerpSpeed, fNormalSpeed;
-	uint16_t iDroidDir;
-	int32_t dx, dy;
-
-	// nothing to do if the droid is stopped
-	if (moveDroidStopped(psDroid, speed) == true)
-	{
-		return;
-	}
-
-	// Used to update some kind of weird neighbour list here.
-
-	moveUpdateDroidDirection(psDroid, &speed, direction, VTOL_SPIN_ANGLE, psDroid->baseSpeed * DEG(1), psDroid->baseSpeed * DEG(1) / 3, &iDroidDir);
-
-	fNormalSpeed = moveCalcNormalSpeed(psDroid, speed, iDroidDir, VTOL_ACCEL, VTOL_DECEL);
-	fPerpSpeed   = 0;
-	moveCombineNormalAndPerpSpeeds(psDroid, fNormalSpeed, fPerpSpeed, iDroidDir);
-
-	moveGetDroidPosDiffs(psDroid, &dx, &dy);
-	moveUpdateDroidPos(psDroid, dx, dy);
-}
-
 static void moveUpdateCyborgModel(DROID *psDroid, SDWORD moveSpeed, uint16_t moveDir, UBYTE oldStatus)
 {
-	int32_t                 iMapZ = map_Height(removeZ(psDroid->pos));
-
 	CHECK_DROID(psDroid);
 
 	// nothing to do if the droid is stopped
@@ -1975,115 +1841,34 @@ static void moveUpdateCyborgModel(DROID *psDroid, SDWORD moveSpeed, uint16_t mov
 			}
 			psDroid->psCurAnim = NULL;
 		}
-
 		return;
 	}
 
-	PROPULSION_STATS *psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
-	ASSERT_OR_RETURN(, psPropStats != NULL, "Invalid propulsion stats pointer");
-
-	/* do vertical movement */
-	if (psPropStats->propulsionType == PROPULSION_TYPE_JUMP)
+	if (psDroid->psCurAnim == NULL)
 	{
-		int iDz = gameTimeAdjustedIncrement(psDroid->sMove.iVertSpeed);
-		int iDroidZ = psDroid->pos.z;
-
-		if (iDroidZ + iDz < iMapZ)
+		// Only add the animation if the droid is on screen, saves memory and time.
+		if (clipXY(psDroid->pos.x, psDroid->pos.y))
 		{
-			psDroid->sMove.iVertSpeed = 0;
-			psDroid->pos.z = iMapZ;
-		}
-		else
-		{
-			psDroid->pos.z = psDroid->pos.z + iDz;
-		}
-		if (psDroid->pos.z >= iMapZ + CYBORG_MAX_JUMP_HEIGHT && psDroid->sMove.iVertSpeed > 0)
-		{
-			psDroid->sMove.iVertSpeed = -CYBORG_VERTICAL_SPEED;
-		}
-	}
-
-	/* calculate move distance */
-	Vector2i iD = psDroid->sMove.destination - removeZ(psDroid->pos);
-	int32_t iDist = iHypot(iD);
-
-	/* set jumping cyborg walking short distances */
-	if ((psPropStats->propulsionType != PROPULSION_TYPE_JUMP) ||
-	    ((psDroid->sMove.iVertSpeed == 0)      &&
-	     (iDist < CYBORG_MIN_JUMP_DISTANCE)))
-	{
-		if (psDroid->psCurAnim == NULL)
-		{
-			// Only add the animation if the droid is on screen, saves memory and time.
-			if (clipXY(psDroid->pos.x, psDroid->pos.y))
+			if (psDroid->droidType == DROID_CYBORG_SUPER)
 			{
-				if (psDroid->droidType == DROID_CYBORG_SUPER)
-				{
-					psDroid->psCurAnim = animObj_Add(psDroid, ID_ANIM_SUPERCYBORG_RUN, 0, 0);
-				}
-				else if (cyborgDroid(psDroid))
-				{
-					psDroid->psCurAnim = animObj_Add(psDroid, ID_ANIM_CYBORG_RUN, 0, 0);
-				}
+				psDroid->psCurAnim = animObj_Add(psDroid, ID_ANIM_SUPERCYBORG_RUN, 0);
 			}
-		}
-		else
-		{
-			// If the droid went off screen then remove the animation, saves memory and time.
-			if (!clipXY(psDroid->pos.x, psDroid->pos.y))
+			else if (cyborgDroid(psDroid))
 			{
-				const bool bRet = animObj_Remove(psDroid->psCurAnim, psDroid->psCurAnim->psAnim->uwID);
-				ASSERT(bRet, "animObj_Remove failed");
-				psDroid->psCurAnim = NULL;
-			}
-		}
-
-		/* use baba person movement */
-		moveUpdatePersonModel(psDroid, moveSpeed, moveDir);
-	}
-	else
-	{
-		/* jumping cyborg: remove walking animation if present */
-		if (psDroid->psCurAnim != NULL)
-		{
-			if ((psDroid->psCurAnim->uwID == ID_ANIM_CYBORG_RUN
-			     || psDroid->psCurAnim->uwID == ID_ANIM_SUPERCYBORG_RUN
-			     || psDroid->psCurAnim->uwID == ID_ANIM_CYBORG_PACK_RUN)
-			    && !animObj_Remove(psDroid->psCurAnim, psDroid->psCurAnim->uwID))
-			{
-				debug(LOG_NEVER, "couldn't remove walk anim");
-			}
-			psDroid->psCurAnim = NULL;
-		}
-
-		/* add jumping or landing anim */
-		if ((oldStatus == MOVEPOINTTOPOINT) &&
-		    (psDroid->sMove.Status == MOVEINACTIVE))
-		{
-			psDroid->psCurAnim = animObj_Add(psDroid, ID_ANIM_CYBORG_PACK_LAND, 0, 1);
-			animObj_SetDoneFunc(psDroid->psCurAnim, moveCyborgTouchDownAnimDone);
-		}
-		else if (psDroid->sMove.Status == MOVEPOINTTOPOINT)
-		{
-			if (psDroid->pos.z == iMapZ)
-			{
-				if (psDroid->sMove.iVertSpeed == 0)
-				{
-					psDroid->psCurAnim = animObj_Add(psDroid, ID_ANIM_CYBORG_PACK_JUMP, 0, 1);
-					animObj_SetDoneFunc(psDroid->psCurAnim, moveCyborgLaunchAnimDone);
-				}
-				else
-				{
-					psDroid->psCurAnim = animObj_Add(psDroid, ID_ANIM_CYBORG_PACK_LAND, 0, 1);
-					animObj_SetDoneFunc(psDroid->psCurAnim, moveCyborgTouchDownAnimDone);
-				}
-			}
-			else
-			{
-				moveUpdateJumpCyborgModel(psDroid, moveSpeed, moveDir);
+				psDroid->psCurAnim = animObj_Add(psDroid, ID_ANIM_CYBORG_RUN, 0);
 			}
 		}
 	}
+	// If the droid went off screen then remove the animation, saves memory and time
+	else if (!clipXY(psDroid->pos.x, psDroid->pos.y))
+	{
+		const bool bRet = animObj_Remove(psDroid->psCurAnim, psDroid->psCurAnim->psAnim->uwID);
+		ASSERT(bRet, "animObj_Remove failed");
+		psDroid->psCurAnim = NULL;
+	}
+
+	/* use baba person movement */
+	moveUpdatePersonModel(psDroid, moveSpeed, moveDir);
 
 	psDroid->rot.pitch = 0;
 	psDroid->rot.roll  = 0;
@@ -2148,7 +1933,9 @@ static void movePlayDroidMoveAudio(DROID *psDroid)
 	if ((psDroid != NULL) &&
 	    (psDroid->visible[selectedPlayer]))
 	{
-		iPropType = asPropulsionStats[(psDroid)->asBits[COMP_PROPULSION].nStat].propulsionType;
+		PROPULSION_STATS *psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION];
+		ASSERT_OR_RETURN(, psPropStats != NULL, "Invalid propulsion stats pointer");
+		iPropType = asPropulsionStats[(psDroid)->asBits[COMP_PROPULSION]].propulsionType;
 		psPropType = &asPropulsionTypes[iPropType];
 
 		/* play specific wheeled and transporter or stats-specified noises */
@@ -2206,7 +1993,7 @@ static void movePlayAudio(DROID *psDroid, bool bStarted, bool bStoppedBefore, SD
 	AUDIO_CALLBACK		pAudioCallback = NULL;
 
 	/* get prop stats */
-	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
+	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION];
 	ASSERT_OR_RETURN(, psPropStats != NULL, "Invalid propulsion stats pointer");
 	propType = psPropStats->propulsionType;
 	psPropType = &asPropulsionTypes[propType];
@@ -2275,21 +2062,6 @@ static bool pickupOilDrum(int toPlayer, int fromPlayer)
 		CONPRINTF(ConsoleString, (ConsoleString, _("You found %u power in an oil drum."), OILDRUM_POWER));
 	}
 
-	// fromPlayer == ANYPLAYER seems to mean that the drum was not pre-placed on the map.
-	if (bMultiPlayer && fromPlayer == ANYPLAYER)
-	{
-		// when player finds oil, we init the timer, and flag that we need a drum
-		if (!oilTimer)
-		{
-			oilTimer = gameTime;
-		}
-		// if player finds more than one drum (before timer expires), then we tack on ~50 sec to timer.
-		if (drumCount++ == 0)
-		{
-			oilTimer += GAME_TICKS_PER_SEC * 50;
-		}
-	}
-
 	return true;
 }
 
@@ -2318,9 +2090,11 @@ static void checkLocalFeatures(DROID *psDroid)
 			{
 			case FEAT_OIL_DRUM:
 				pickedUp = pickupOilDrum(psDroid->player, psObj->player);
+				triggerEventPickup((FEATURE *)psObj, psDroid);
 				break;
 			case FEAT_GEN_ARTE:
 				pickedUp = pickupArtefact(psDroid->player, psObj->player);
+				triggerEventPickup((FEATURE *)psObj, psDroid);
 				break;
 			default:
 				break;
@@ -2336,14 +2110,6 @@ static void checkLocalFeatures(DROID *psDroid)
 		turnOffMultiMsg(true);
 		removeFeature((FEATURE *)psObj);  // remove artifact+.
 		turnOffMultiMsg(false);
-	}
-
-	// once they found a oil drum, we then wait ~600 secs before we pop up new one(s).
-	if (oilTimer + GAME_TICKS_PER_SEC * 600u < gameTime && drumCount > 0)
-	{
-		addOilDrum(drumCount);
-		oilTimer = 0;
-		drumCount = 0;
 	}
 }
 
@@ -2361,7 +2127,7 @@ void moveUpdateDroid(DROID *psDroid)
 
 	CHECK_DROID(psDroid);
 
-	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
+	psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION];
 	ASSERT_OR_RETURN(, psPropStats != NULL, "Invalid propulsion stats pointer");
 
 	// If the droid has been attacked by an EMP weapon, it is temporarily disabled
@@ -2587,6 +2353,8 @@ void moveUpdateDroid(DROID *psDroid)
 
 		// object moved from one tile to next, check to see if droid is near stuff.(oil)
 		checkLocalFeatures(psDroid);
+
+		triggerEventDroidMoved(psDroid, oldx, oldy);
 	}
 
 	// See if it's got blocked
@@ -2628,7 +2396,7 @@ void moveUpdateDroid(DROID *psDroid)
 		objTrace(psDroid->id, "MOVETURNTOTARGET complete");
 	}
 
-	if (psDroid->burnStart != 0 && psDroid->droidType != DROID_PERSON && psDroid->visible[selectedPlayer])
+	if (psDroid->periodicalDamageStart != 0 && psDroid->droidType != DROID_PERSON && psDroid->visible[selectedPlayer])
 	{
 		pos.x = psDroid->pos.x + (18 - rand() % 36);
 		pos.z = psDroid->pos.y + (18 - rand() % 36);

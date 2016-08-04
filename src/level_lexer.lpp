@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -131,7 +131,7 @@ miss_clear                                      return LTK_MCLEAR;
 							}
 
 	/* Match integer numbers */
--?[0-9]+					{ levVal = atol(yytext); return LTK_INTEGER; }
+-?[0-9]+					{ levVal = (LEVEL_TYPE)atol(yytext); return LTK_INTEGER; }
 
 	/* Skip white space */
 [ \t\n\x0d\x0a]						;

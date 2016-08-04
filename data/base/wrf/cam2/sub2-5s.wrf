@@ -19,3 +19,6 @@ directory       "script/binary"
 directory       "script/data"
 file            SCRIPTVAL       "cam2-5s.vlo"
 file            SCRIPTVAL       "cam2day.vlo"
+
+directory       "script"
+file            JAVASCRIPT      "rules.js"

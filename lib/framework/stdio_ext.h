@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 2007  Giel van Schijndel
-	Copyright (C) 2007-2013  Warzone 2100 Project
+	Copyright (C) 2007-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -25,28 +25,9 @@
 #include <stdio.h>
 #include <stdarg.h>
 
-#if defined(WZ_CC_MSVC) || defined(DOXYGEN)
-/** A variant on snprintf which appends its output string to the given string
- *  buffer, rather than to replace it.
- *  \param str the string to append to
- *  \param size the size of the buffer \c str expressed in bytes
- *  \param format the formatting string
- *  \param ap a variable arguments list of variables to use in the formatting
- *            string
- *  \return the amount of characters appended to the string
- */
-extern int vslcatprintf(char *str, size_t size, const char *format, va_list ap);
-
-
-/** A variant on snprintf which appends its output string to the given string
- *  The function's interface is similar to vslcatprintf(), so look at that
- *  function's description.
- */
-extern int slcatprintf(char *str, size_t size, const char *format, ...) WZ_DECL_FORMAT(printf, 3, 4);
-
-
 // These functions are GNU extensions; so make sure they are available on Windows also
 
+#if defined(WZ_CC_MSVC) || defined(DOXYGEN)
 /**
  * This function is analogue to vsprintf, except that it allocates a string
  * large enough to hold the output including the terminating NUL character.
@@ -66,7 +47,7 @@ extern int slcatprintf(char *str, size_t size, const char *format, ...) WZ_DECL_
  *         vsprintf. If memory allocation wasn't possible or some other error
  *         occurred, -1 is returned.
  */
-extern int vasprintf(char **strp, const char *format, va_list ap);
+WZ_DECL_NONNULL(1, 2) int vasprintf(char **strp, const char *format, va_list ap);
 
 
 /**
@@ -75,14 +56,14 @@ extern int vasprintf(char **strp, const char *format, va_list ap);
  *
  * @see vasprintf()
  */
-extern int asprintf(char **strp, const char *format, ...) WZ_DECL_FORMAT(printf, 2, 3);
+WZ_DECL_NONNULL(1, 2) int asprintf(char **strp, const char *format, ...) WZ_DECL_FORMAT(printf, 2, 3);
 #endif
 
 #if defined(WZ_CC_MSVC)
 // Make sure that these functions are available, and work according to the C99 spec on MSVC also
 
-extern int wz_vsnprintf(char *str, size_t size, const char *format, va_list ap);
-extern int wz_snprintf(char *str, size_t size, const char *format, ...);
+ int wz_vsnprintf(char *str, size_t size, const char *format, va_list ap);
+WZ_DECL_NONNULL(3) int wz_snprintf(char *str, size_t size, const char *format, ...);
 
 // Necessary to prevent conflicting symbols with MSVC's own (incorrect!) implementations of these functions
 # define vsnprintf wz_vsnprintf
@@ -112,8 +93,8 @@ extern int wz_snprintf(char *str, size_t size, const char *format, ...);
 	} while(0)
 
 /// Equivalent to vasprintf, except that strp is NULL instead of undefined, if the function returns -1. Does not give compiler warnings/-Werrors if not checking the return value.
-int vasprintfNull(char **strp, const char *format, va_list ap);
+WZ_DECL_NONNULL(1, 2) int vasprintfNull(char **strp, const char *format, va_list ap);
 /// Equivalent to asprintf, except that strp is NULL instead of undefined, if the function returns -1. Does not give compiler warnings/-Werrors if not checking the return value.
-int asprintfNull(char **strp, const char *format, ...);
+WZ_DECL_NONNULL(1, 2) int asprintfNull(char **strp, const char *format, ...);
 
 #endif // STDIO_EXT_H

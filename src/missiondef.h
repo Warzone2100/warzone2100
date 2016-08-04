@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -29,14 +29,17 @@
 #include "droiddef.h"
 #include "featuredef.h"
 #include "power.h"
+#include "gateway.h"
 
 //mission types
 
 //used to set the reinforcement time on hold whilst the Transporter is unable to land
 //hopefully they'll never need to set it this high for other reasons!
-#define SCR_LZ_COMPROMISED_TIME     999999
+#define SCR_LZ_COMPROMISED_TIME     999990
 //this is used to compare the value passed in from the scripts with which is multiplied by 100
-#define LZ_COMPROMISED_TIME         99999900
+#define LZ_COMPROMISED_TIME         99999000
+//same value in seconds, as passed from JavaScript
+#define JS_LZ_COMPROMISED_TIME         99999
 
 struct LANDING_ZONE
 {
@@ -45,8 +48,6 @@ struct LANDING_ZONE
 	uint8_t x2;
 	uint8_t y2;
 };
-
-struct GATEWAY;
 
 //storage structure for values that need to be kept between missions
 struct MISSION
@@ -57,7 +58,7 @@ struct MISSION
 	int32_t                         mapHeight;                      //the original mapHeight
 	uint8_t                        *psBlockMap[AUX_MAX];
 	uint8_t                        *psAuxMap[MAX_PLAYERS + AUX_MAX];
-	GATEWAY                        *psGateways;                     //the gateway list
+	GATEWAY_LIST                    psGateways;                     //the gateway list
 	int32_t                         scrollMinX;                     //scroll coords for original map
 	int32_t                         scrollMinY;
 	int32_t                         scrollMaxX;

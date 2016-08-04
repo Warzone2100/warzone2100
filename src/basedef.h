@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@
 #define __INCLUDED_BASEDEF_H__
 
 #include "lib/framework/vector.h"
+#include "animobj.h"
 #include "displaydef.h"
 #include "statsdef.h"
 
@@ -92,6 +93,9 @@ struct SIMPLE_OBJECT
 	uint32_t        time;                           ///< Game time of given space-time position.
 };
 
+#define BASEFLAG_TARGETED  0x01 ///< Whether object is targeted by a selectedPlayer droid sensor (quite the hack)
+#define BASEFLAG_DIRTY     0x02 ///< Whether certain recalculations are needed for object on frame update
+
 struct BASE_OBJECT : public SIMPLE_OBJECT
 {
 	BASE_OBJECT(OBJECT_TYPE type, uint32_t id, unsigned player);
@@ -108,13 +112,11 @@ struct BASE_OBJECT : public SIMPLE_OBJECT
 	WEAPON_SUBCLASS     lastHitWeapon;              ///< The weapon that last hit it
 	UDWORD              timeLastHit;                ///< The time the structure was last attacked
 	UDWORD              body;                       ///< Hit points with lame name
-	UDWORD              burnStart;                  ///< When the object entered the fire
-	UDWORD              burnDamage;                 ///< How much damage has been done since the object entered the fire
-	SDWORD              sensorRange;                ///< Range of sensor
-	SDWORD              ECMMod;                     ///< Ability to conceal others from sensors
-	bool                bTargetted;                 ///< Whether object is targetted by a selectedPlayer droid sensor (quite the hack)
+	UDWORD              periodicalDamageStart;                  ///< When the object entered the fire
+	UDWORD              periodicalDamage;                 ///< How much damage has been done since the object entered the fire
+	uint16_t            flags;                      ///< Various flags
 	TILEPOS             *watchedTiles;              ///< Variable size array of watched tiles, NULL for features
-	UDWORD              armour[WC_NUM_WEAPON_CLASSES];
+	ANIM_OBJECT         *psCurAnim;                 ///< Animation frames
 
 	NEXTOBJ             psNext;                     ///< Pointer to the next object in the object list
 	NEXTOBJ             psNextFunc;                 ///< Pointer to the next object in the function list

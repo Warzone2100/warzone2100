@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -43,7 +43,7 @@ struct MULTIPLAYERGAME
 	Sha256          hash;                                           ///< Hash of map file. Zero if built in.
 	uint32_t    power;						// power level for arena game
 	uint8_t		base;						// clean/base/base&defence
-	uint8_t		alliance;					// no/yes/AIs vs Humans
+	uint8_t		alliance;					// no/yes/locked
 	uint8_t		skDiff[MAX_PLAYERS];		// skirmish game difficulty settings. 0x0=OFF 0xff=HUMAN
 	bool		mapHasScavengers;
 	bool		isMapMod;					// if a map has mods
@@ -106,29 +106,15 @@ extern UBYTE				bDisplayMultiJoiningStatus;	// draw load progress?
 
 #define ANYPLAYER				99
 
-#define CAMPAIGN				12
-#define	SKIRMISH				14
-#define MULTI_SKIRMISH2			18
-#define MULTI_SKIRMISH3			19
-
-#define MULTI_CAMPAIGN2			15
-#define MULTI_CAMPAIGN3			16
-
 #define CAMP_CLEAN				0			// campaign subtypes
 #define CAMP_BASE				1
 #define CAMP_WALLS				2
 
-#define DEATHMATCHTEMPLATES		4			// game templates are stored in player x.
-#define CAMPAIGNTEMPLATES		5
-
-//#define PING_LO                               0                       // this ping is kickin'.
-#define PING_MED				200			// this ping is crawlin'
-#define PING_HI					400			// this ping just plain sucks :P
 #define PING_LIMIT                              4000                    // If ping is bigger than this, then worry and panic, and don't even try showing the ping.
 
-#define LEV_LOW					400			// how many points to allocate for res levels???
-#define LEV_MED					700
-#define LEV_HI					1000
+#define LEV_LOW					0
+#define LEV_MED					1
+#define LEV_HI					2
 
 #define DIFF_SLIDER_STOPS		20			//max number of stops for the multiplayer difficulty slider
 
@@ -138,6 +124,7 @@ extern UBYTE				bDisplayMultiJoiningStatus;	// draw load progress?
 extern WZ_DECL_WARN_UNUSED_RESULT BASE_OBJECT		*IdToPointer(UDWORD id, UDWORD player);
 extern WZ_DECL_WARN_UNUSED_RESULT STRUCTURE		*IdToStruct(UDWORD id, UDWORD player);
 extern WZ_DECL_WARN_UNUSED_RESULT DROID			*IdToDroid(UDWORD id, UDWORD player);
+extern WZ_DECL_WARN_UNUSED_RESULT DROID			*IdToMissionDroid(UDWORD id, UDWORD player);
 extern WZ_DECL_WARN_UNUSED_RESULT FEATURE		*IdToFeature(UDWORD id, UDWORD player);
 extern WZ_DECL_WARN_UNUSED_RESULT DROID_TEMPLATE	*IdToTemplate(UDWORD tempId, UDWORD player);
 
@@ -157,12 +144,10 @@ extern char		playerName[MAX_PLAYERS][MAX_STR_LENGTH];	//Array to store all playe
 extern bool	multiPlayerLoop(void);							// for loop.c
 
 extern bool recvMessage(void);
-bool sendTemplate(uint32_t player, DROID_TEMPLATE *t);
-extern bool SendDestroyTemplate(DROID_TEMPLATE *t, uint8_t player);
 extern bool SendResearch(uint8_t player, uint32_t index, bool trigger);
 extern bool SendDestroyFeature(FEATURE *pF);					// send a destruct feature message.
-extern bool sendTextMessage(const char *pStr, bool cast);		// send a text message
-extern bool sendAIMessage(char *pStr, UDWORD player, UDWORD to);	//send AI message
+extern bool sendTextMessage(const char *pStr, bool cast, uint32_t from = selectedPlayer);	// send a text message
+extern void sendTeamMessage(const char *pStr, uint32_t from = selectedPlayer);	// send a team chat message
 void printConsoleNameChange(const char *oldName, const char *newName);  ///< Print message to console saying a name changed.
 
 extern void turnOffMultiMsg(bool bDoit);
@@ -180,7 +165,7 @@ extern bool sendLasSat(UBYTE player, STRUCTURE *psStruct, BASE_OBJECT *psObj);
 void sendStructureInfo(STRUCTURE *psStruct, STRUCTURE_INFO structureInfo, DROID_TEMPLATE *psTempl);
 
 // droids . multibot
-extern bool SendDroid(const DROID_TEMPLATE *pTemplate, uint32_t x, uint32_t y, uint8_t player, uint32_t id, const INITIAL_DROID_ORDERS *initialOrders);
+extern bool SendDroid(DROID_TEMPLATE *pTemplate, uint32_t x, uint32_t y, uint8_t player, uint32_t id, const INITIAL_DROID_ORDERS *initialOrders);
 extern bool SendDestroyDroid(const DROID *psDroid);
 void sendQueuedDroidInfo(void);  ///< Actually sends the droid orders which were queued by SendDroidInfo.
 void sendDroidInfo(DROID *psDroid, DroidOrder const &order, bool add);
@@ -191,7 +176,6 @@ extern bool sendDroidSecondary(const DROID *psDroid, SECONDARY_ORDER sec, SECOND
 bool sendDroidDisembark(DROID const *psTransporter, DROID const *psDroid);
 
 // Startup. mulitopt
-extern bool multiTemplateSetup(void);
 extern bool multiShutdown(void);
 extern bool sendLeavingMsg(void);
 
@@ -200,9 +184,6 @@ extern bool joinGame(const char *host, uint32_t port);
 extern void	playerResponding(void);
 extern bool multiGameInit(void);
 extern bool multiGameShutdown(void);
-extern bool addTemplate(UDWORD	player, DROID_TEMPLATE *psNew);
-extern bool addTemplateToList(DROID_TEMPLATE *psNew, DROID_TEMPLATE **ppList);
-void addTemplateBack(unsigned player, DROID_TEMPLATE *psNew);
 
 // syncing.
 extern bool sendScoreCheck(void);							//score check only(frontend)
@@ -233,5 +214,7 @@ extern	void startMultiplayerGame(void);
 extern	void resetReadyStatus(bool bSendOptions);
 
 STRUCTURE *findResearchingFacilityByResearchIndex(unsigned player, unsigned index);
+
+void sendSyncRequest(int32_t req_id, int32_t x, int32_t y, BASE_OBJECT *psObj, BASE_OBJECT *psObj2);
 
 #endif // __INCLUDED_SRC_MULTIPLAY_H__

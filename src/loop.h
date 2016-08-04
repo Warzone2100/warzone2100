@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@
 #define __INCLUDED_SRC_LOOP_H__
 
 #include "lib/framework/frame.h"
+#include "levels.h"
 
 enum GAMECODE
 {
@@ -50,7 +51,7 @@ enum LOOP_MISSION_STATE
 extern LOOP_MISSION_STATE		loopMissionState;
 
 // this is set by scrStartMission to say what type of new level is to be started
-extern SDWORD	nextMissionType;
+extern LEVEL_TYPE nextMissionType;
 
 extern unsigned int loopPieCount;
 extern unsigned int loopPolyCount;
@@ -71,10 +72,8 @@ extern bool audioPaused(void);
 extern bool scriptPaused(void);
 extern bool scrollPaused(void);
 extern bool consolePaused(void);
-extern bool editPaused(void);
 
 extern void setGameUpdatePause(bool state);
-extern void setEditPause(bool state);
 extern void setAudioPause(bool state);
 extern void setScriptPause(bool state);
 extern void setScrollPause(bool state);

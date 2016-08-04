@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -140,6 +140,10 @@ struct EFFECT
 	uint16_t          radius;      // Used for area effects
 	iIMDShape         *imd;        // pointer to the imd the effect uses.
 	EFFECT *prev, *next; // Previous and next element in linked list
+
+	EFFECT() : player(MAX_PLAYERS), control(0), group(EFFECT_FREED), type(EXPLOSION_TYPE_SMALL), frameNumber(0), size(0),
+	           baseScale(0), specific(0), birthTime(0), lastFrame(0), frameDelay(0), lifeSpan(0), radius(0),
+	           imd(NULL), prev(NULL), next(NULL) {}
 };
 
 /* Maximum number of effects in the world - need to investigate what this should be */

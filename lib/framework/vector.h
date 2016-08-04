@@ -1,6 +1,6 @@
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2007-2013  Warzone 2100 Project
+	Copyright (C) 2007-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -32,7 +32,7 @@ struct Rotation;
 struct Vector3i;
 struct Vector2i
 {
-	Vector2i() {}
+	Vector2i() : x(0), y(0) {}
 	Vector2i(int x, int y) : x(x), y(y) {}
 	Vector2i(Vector3i const &r); // discards the z value
 
@@ -40,7 +40,7 @@ struct Vector2i
 };
 struct Vector2f
 {
-	Vector2f() {}
+	Vector2f() : x(0.0f), y(0.0f) {}
 	Vector2f(float x, float y) : x(x), y(y) {}
 	Vector2f(Vector2i const &v) : x(v.x), y(v.y) {}
 
@@ -48,7 +48,7 @@ struct Vector2f
 };
 struct Vector3i
 {
-	Vector3i() {}
+	Vector3i() : x(0), y(0), z(0) {}
 	Vector3i(int x, int y, int z) : x(x), y(y), z(z) {}
 	Vector3i(Vector2i const &xy, int z) : x(xy.x), y(xy.y), z(z) {}
 	Vector3i(Rotation const &r);
@@ -56,7 +56,7 @@ struct Vector3i
 };
 struct Vector3f
 {
-	Vector3f() {}
+	Vector3f() : x(0.0f), y(0.0f), z(0.0f) {}
 	Vector3f(float x, float y, float z) : x(x), y(y), z(z) {}
 	Vector3f(Vector3i const &v) : x(v.x), y(v.y), z(v.z) {}
 	Vector3f(Vector2f const &xy, float z) : x(xy.x), y(xy.y), z(z) {}

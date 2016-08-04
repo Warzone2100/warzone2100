@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -55,34 +55,37 @@ union PIELIGHT
 	UDWORD rgba;
 	UBYTE vector[4];
 };
-struct PIERECT  ///< Screen rectangle.
-{
-	SWORD x, y, w, h;
-};
-struct PIEIMAGE  ///< An area of texture.
-{
-	SDWORD texPage;
-	SWORD tu, tv, tw, th;
-	float invTextureSize;
-};
+
+/***************************************************************************/
+/*
+ *	Debugging
+ */
+/***************************************************************************/
+
+#define GL_DEBUG(_str) \
+	do { \
+		if (GLEW_GREMEDY_string_marker) \
+		{ \
+			glStringMarkerGREMEDY(0, _str); \
+		} \
+	} while(0)
 
 /***************************************************************************/
 /*
  *	Global ProtoTypes
  */
 /***************************************************************************/
-extern void pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, int pieFlag, int pieFlagData);
-extern void pie_DrawImage(const PIEIMAGE *image, const PIERECT *dest);
-void pie_DrawImage(const PIEIMAGE *image, const PIERECT *dest, PIELIGHT colour);
+void pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, int pieFlag, int pieFlagData);
 
 extern void pie_GetResetCounts(unsigned int *pPieCount, unsigned int *pPolyCount, unsigned int *pStateCount);
 
 /** Setup stencil shadows and OpenGL lighting. */
-void pie_BeginLighting(const Vector3f *light, bool drawshadows);
+void pie_BeginLighting(const Vector3f *light);
+void pie_setShadows(bool drawShadows);
 
-/* Stop using stencil shadows and OpenGL lighting (if enabled). */
-void pie_EndLighting(void);
-
+/** Set light parameters */
+void pie_InitLighting();
+void pie_SetupLighting();
 void pie_Lighting0(LIGHTING_TYPE entry, float value[4]);
 
 void pie_RemainingPasses(void);

@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -40,11 +40,10 @@
 // -----------------------------------------------------------------------------
 /* Roughly one per tile */
 #define	MAX_ATMOS_PARTICLES		(MAP_MAXWIDTH * MAP_MAXHEIGHT)
-#define	SNOW_SPEED_DRIFT		(40 - rand()%80)
-#define SNOW_SPEED_FALL			(0-(rand()%40 + 80))
-#define	RAIN_SPEED_DRIFT		(rand()%50)
-#define	RAIN_SPEED_FALL			(0-((rand()%300) + 700))
-
+#define	SNOW_SPEED_DRIFT		(40 - rand() % 80)
+#define SNOW_SPEED_FALL			(0 - (rand() % 40 + 80))
+#define	RAIN_SPEED_DRIFT		(rand() % 50)
+#define	RAIN_SPEED_FALL			(0 - ((rand() % 300) + 700))
 
 enum AP_TYPE
 {
@@ -54,32 +53,26 @@ enum AP_TYPE
 
 enum AP_STATUS
 {
-	APS_ACTIVE,
 	APS_INACTIVE,
+	APS_ACTIVE
 };
 
-static ATPART	asAtmosParts[MAX_ATMOS_PARTICLES];
-static	UDWORD	freeParticle;
-static	UDWORD	weather;
+static ATPART	*asAtmosParts = NULL;
+static UDWORD	freeParticle;
+static WT_CLASS	weather = WT_NONE;
 
 /* Setup all the particles */
-void	atmosInitSystem(void)
+void atmosInitSystem()
 {
-	UDWORD	i;
-
-	for (i = 0; i < MAX_ATMOS_PARTICLES; i++)
+	if (!asAtmosParts && weather != WT_NONE)
 	{
-		/* None are being used initially */
-		asAtmosParts[i].status = APS_INACTIVE;
+		// calloc sets all to APS_INACTIVE initially
+		asAtmosParts = (ATPART *)calloc(MAX_ATMOS_PARTICLES, sizeof(*asAtmosParts));
 	}
 	/* Start at the beginning */
 	freeParticle = 0;
-
-	/* No weather to start with */
-	weather	= WT_NONE;
 }
 
-// -----------------------------------------------------------------------------
 /*	Makes a particle wrap around - if it goes off the grid, then it returns
 	on the other side - provided it's still on world... Which it should be */
 static void testParticleWrap(ATPART *psPart)
@@ -109,7 +102,6 @@ static void testParticleWrap(ATPART *psPart)
 	}
 }
 
-// -----------------------------------------------------------------------------
 /* Moves one of the particles */
 static void processParticle(ATPART *psPart)
 {
@@ -182,15 +174,13 @@ static void processParticle(ATPART *psPart)
 	}
 }
 
-// -----------------------------------------------------------------------------
 /* Adds a particle to the system if it can */
-static void atmosAddParticle(Vector3i *pos, AP_TYPE type)
+static void atmosAddParticle(const Vector3f &pos, AP_TYPE type)
 {
 	UDWORD	activeCount;
 	UDWORD	i;
 
-	for (i = freeParticle, activeCount = 0; (asAtmosParts[i].status == APS_ACTIVE)
-	     && activeCount < MAX_ATMOS_PARTICLES; i++)
+	for (i = freeParticle, activeCount = 0; asAtmosParts[i].status == APS_ACTIVE && activeCount < MAX_ATMOS_PARTICLES; i++)
 	{
 		activeCount++;
 		/* Check for wrap around */
@@ -211,7 +201,6 @@ static void atmosAddParticle(Vector3i *pos, AP_TYPE type)
 	{
 		freeParticle = i;
 	}
-
 
 	/* Record it's type */
 	asAtmosParts[freeParticle].type = (UBYTE)type;
@@ -235,32 +224,25 @@ static void atmosAddParticle(Vector3i *pos, AP_TYPE type)
 	}
 
 	/* Setup position */
-	asAtmosParts[freeParticle].position.x = (float)pos->x;
-	asAtmosParts[freeParticle].position.y = (float)pos->y;
-	asAtmosParts[freeParticle].position.z = (float)pos->z;
+	asAtmosParts[freeParticle].position = pos;
 
 	/* Setup its velocity */
 	if (type == AP_RAIN)
 	{
-		asAtmosParts[freeParticle].velocity.x = (float)RAIN_SPEED_DRIFT;
-		asAtmosParts[freeParticle].velocity.y = (float)RAIN_SPEED_FALL;
-		asAtmosParts[freeParticle].velocity.z = (float)RAIN_SPEED_DRIFT;
+		asAtmosParts[freeParticle].velocity = Vector3f(RAIN_SPEED_DRIFT, RAIN_SPEED_FALL, RAIN_SPEED_DRIFT);
 	}
 	else
 	{
-		asAtmosParts[freeParticle].velocity.x = (float)SNOW_SPEED_DRIFT;
-		asAtmosParts[freeParticle].velocity.y = (float)SNOW_SPEED_FALL;
-		asAtmosParts[freeParticle].velocity.z = (float)SNOW_SPEED_DRIFT;
+		asAtmosParts[freeParticle].velocity = Vector3f(SNOW_SPEED_DRIFT, SNOW_SPEED_FALL, SNOW_SPEED_DRIFT);
 	}
 }
 
-// -----------------------------------------------------------------------------
 /* Move the particles */
-void	atmosUpdateSystem(void)
+void atmosUpdateSystem()
 {
 	UDWORD	i;
 	UDWORD	numberToAdd;
-	Vector3i pos;
+	Vector3f pos;
 
 	// we don't want to do any of this while paused.
 	if (!gamePaused() && weather != WT_NONE)
@@ -295,14 +277,12 @@ void	atmosUpdateSystem(void)
 				switch (weather)
 				{
 				case WT_SNOWING:
-					atmosAddParticle(&pos, AP_SNOW);
+					atmosAddParticle(pos, AP_SNOW);
 					break;
 				case WT_RAINING:
-					atmosAddParticle(&pos, AP_RAIN);
+					atmosAddParticle(pos, AP_RAIN);
 					break;
 				case WT_NONE:
-					break;
-				default:
 					break;
 				}
 			}
@@ -310,8 +290,7 @@ void	atmosUpdateSystem(void)
 	}
 }
 
-// -----------------------------------------------------------------------------
-void	atmosDrawParticles(void)
+void atmosDrawParticles()
 {
 	UDWORD	i;
 
@@ -335,8 +314,7 @@ void	atmosDrawParticles(void)
 	}
 }
 
-// -----------------------------------------------------------------------------
-void	renderParticle(ATPART *psPart)
+void renderParticle(ATPART *psPart)
 {
 	Vector3i dv;
 
@@ -344,7 +322,7 @@ void	renderParticle(ATPART *psPart)
 	dv.x = psPart->position.x - player.p.x;
 	dv.y = psPart->position.y;
 	dv.z = -(psPart->position.z - player.p.z);
-	pie_MatBegin();					/* Push the current matrix */
+	pie_MatBegin(true);					/* Push the current matrix */
 	pie_TRANSLATE(dv.x, dv.y, dv.z);
 	/* Make it face camera */
 	pie_MatRotY(-player.r.y);
@@ -356,21 +334,21 @@ void	renderParticle(ATPART *psPart)
 	pie_MatEnd();
 }
 
-// -----------------------------------------------------------------------------
-void	atmosSetWeatherType(WT_CLASS type)
+void atmosSetWeatherType(WT_CLASS type)
 {
-	if (type == WT_NONE)
-	{
-		atmosInitSystem();
-	}
-	else
+	if (type != weather)
 	{
 		weather = type;
+		atmosInitSystem();
+	}
+	if (type == WT_NONE && asAtmosParts)
+	{
+		free(asAtmosParts);
+		asAtmosParts = NULL;
 	}
 }
 
-// -----------------------------------------------------------------------------
-WT_CLASS	atmosGetWeatherType(void)
+WT_CLASS atmosGetWeatherType()
 {
-	return (WT_CLASS)weather;
+	return weather;
 }

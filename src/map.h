@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -65,19 +65,17 @@ enum TYPE_OF_TERRAIN
 #define TILE_TRIFLIP	0x0800	// This bit describes the direction the tile is split into 2 triangles (same as triangleFlip)
 #define TILE_NUMMASK	0x01ff
 
-#define BITS_TEMPORARY		0x04	///< For used in temporary calculations
-
 static inline unsigned short TileNumber_tile(unsigned short tilenumber)
 {
 	return tilenumber & TILE_NUMMASK;
 }
-
 
 static inline unsigned short TileNumber_texture(unsigned short tilenumber)
 {
 	return tilenumber & ~TILE_NUMMASK;
 }
 
+#define BITS_MARKED		0x01	///< Is this tile marked?
 #define BITS_DECAL		0x02	///< Does this tile has a decal? If so, the tile from "texture" is drawn on top of the terrain.
 #define BITS_FPATHBLOCK		0x10	///< Bit set temporarily by find path to mark a blocking tile
 #define BITS_ON_FIRE            0x20    ///< Whether tile is burning
@@ -118,7 +116,7 @@ extern MAPTILE *psMapTiles;
 extern float waterLevel;
 extern GROUND_TYPE *psGroundTypes;
 extern int numGroundTypes;
-extern char *tileset;
+extern char *tilesetDir;
 
 #define AIR_BLOCKED		0x01	///< Aircraft cannot pass tile
 #define FEATURE_BLOCKED		0x02	///< Ground units cannot pass tile due to item in the way
@@ -259,6 +257,12 @@ static inline bool TileIsOccupied(const MAPTILE *tile)
 	return tile->psObject != NULL;
 }
 
+static inline bool TileIsKnownOccupied(MAPTILE const *tile, unsigned player)
+{
+	return TileIsOccupied(tile) &&
+	       (tile->psObject->type != OBJ_STRUCTURE || ((STRUCTURE *)tile->psObject)->visible[player] || aiCheckAlliances(player, ((STRUCTURE *)tile->psObject)->player));
+}
+
 /** Check if tile contains a structure. Function is NOT thread-safe. */
 static inline bool TileHasStructure(const MAPTILE *tile)
 {
@@ -344,7 +348,6 @@ extern MAPTILE *psMapTiles;
 
 extern GROUND_TYPE *psGroundTypes;
 extern int numGroundTypes;
-extern char *tileset;
 
 /*
  * Usage-Example:
@@ -363,7 +366,7 @@ extern char *tileset;
 
 static inline int32_t world_coord(int32_t mapCoord)
 {
-	return mapCoord << TILE_SHIFT;
+	return (uint32_t)mapCoord << TILE_SHIFT;  // Cast because -1 << 7 is undefined, but (unsigned)-1 << 7 gives -128 as desired.
 }
 
 static inline int32_t map_coord(int32_t worldCoord)
@@ -408,9 +411,6 @@ static inline void clip_world_offmap(int *worldX, int *worldY)
 
 /* Shutdown the map module */
 extern bool mapShutdown(void);
-
-/* Create a new map of a specified size */
-extern bool mapNew(UDWORD width, UDWORD height);
 
 /* Load the map data */
 extern bool mapLoad(char *filename, bool preview);

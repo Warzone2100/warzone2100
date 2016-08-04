@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -149,33 +149,6 @@ IMAGEFRAME FrameRadar =
 	},
 };
 
-// Tab definitions, defines graphics to use for major and minor tabs.
-TABDEF	StandardTab =
-{
-	IMAGE_TAB1,			// Major tab normal.
-	IMAGE_TAB1DOWN,		// Major tab clicked.
-	IMAGE_TABHILIGHT,	// Major tab hilighted by mouse.
-	IMAGE_TABSELECTED,	// Major tab currently selected.
-
-	IMAGE_TAB1,			// Minor tab tab Normal.
-	IMAGE_TAB1DOWN,		// Minor tab clicked.
-	IMAGE_TABHILIGHT,	// Minor tab hilighted by mouse.
-	IMAGE_TABSELECTED,	// Minor tab currently selected.
-};
-
-TABDEF	SmallTab =
-{
-	IMAGE_TAB1_SM,			// Major tab normal.
-	IMAGE_TAB1DOWN_SM,		// Major tab clicked.
-	IMAGE_TABHILIGHT_SM,	// Major tab hilighted by mouse.
-	IMAGE_TAB1SELECTED_SM,	// Major tab currently selected.
-
-	IMAGE_TAB1_SM,			// Minor tab tab Normal.
-	IMAGE_TAB1DOWN_SM,		// Minor tab clicked.
-	IMAGE_TABHILIGHT_SM,	// Minor tab hilighted by mouse.
-	IMAGE_TAB1SELECTED_SM,	// Minor tab currently selected.
-};
-
 // Read bitmaps used by the interface.
 //
 bool imageInitBitmaps(void)
@@ -187,7 +160,7 @@ bool imageInitBitmaps(void)
 
 // Render a window frame.
 //
-static void RenderWindow(FRAMETYPE frame, UDWORD x, UDWORD y, UDWORD Width, UDWORD Height, bool Opaque)
+void RenderWindowFrame(FRAMETYPE frame, UDWORD x, UDWORD y, UDWORD Width, UDWORD Height)
 {
 	SWORD WTopRight = 0;
 	SWORD WTopLeft = 0;
@@ -198,18 +171,8 @@ static void RenderWindow(FRAMETYPE frame, UDWORD x, UDWORD y, UDWORD Width, UDWO
 	SWORD HBottomRight = 0;
 	SWORD HBottomLeft = 0;
 	UWORD RectI;
-	FRAMERECT *Rect;
-	bool Masked = false;
-	IMAGEFRAME *Frame;
-
-	if (frame == 0)
-	{
-		Frame = &FrameNormal;
-	}
-	else
-	{
-		Frame = &FrameRadar;
-	}
+	const FRAMERECT *Rect;
+	const IMAGEFRAME *Frame = (frame == FRAME_NORMAL) ? &FrameNormal : &FrameRadar;
 
 	x += Frame->OffsetX0;
 	y += Frame->OffsetY0;
@@ -223,108 +186,24 @@ static void RenderWindow(FRAMETYPE frame, UDWORD x, UDWORD y, UDWORD Width, UDWO
 		switch (Rect->Type)
 		{
 		case FR_FRAME:
-			if (Opaque == false)
-			{
-				if (Masked == false)
-				{
-					Width &= 0xfffc;	// Software transboxfill needs to be a multiple of 4 pixels.
-					Masked = true;
-				}
-
-
-				iV_TransBoxFill(x + Rect->TLXOffset,
-				                y + Rect->TLYOffset,
-				                x + Width - INCEND + Rect->BRXOffset,
-				                y + Height - INCEND + Rect->BRYOffset);
-			}
-			else
-			{
-
-				pie_BoxFill(x + Rect->TLXOffset, y + Rect->TLYOffset, x + Width - INCEND + Rect->BRXOffset,
-				            y + Height - INCEND + Rect->BRYOffset, psPalette[Rect->ColourIndex]);
-			}
+			iV_TransBoxFill(x + Rect->TLXOffset, y + Rect->TLYOffset,
+			                x + Width - INCEND + Rect->BRXOffset, y + Height - INCEND + Rect->BRYOffset);
 			break;
-
 		case FR_LEFT:
-			if (Opaque == false)
-			{
-				if (Masked == false)
-				{
-					Width &= 0xfffc;	// Software transboxfill needs to be a multiple of 4 pixels.
-					Masked = true;
-				}
-				iV_TransBoxFill(x + Rect->TLXOffset,
-				                y + Rect->TLYOffset,
-				                x + Rect->BRXOffset,
-				                y + Height - INCEND + Rect->BRYOffset);
-			}
-			else
-			{
-				pie_BoxFill(x + Rect->TLXOffset, y + Rect->TLYOffset, x + Rect->BRXOffset,
-				            y + Height - INCEND + Rect->BRYOffset, psPalette[Rect->ColourIndex]);
-			}
+			iV_TransBoxFill(x + Rect->TLXOffset, y + Rect->TLYOffset,
+			                x + Rect->BRXOffset, y + Height - INCEND + Rect->BRYOffset);
 			break;
-
 		case FR_RIGHT:
-			if (Opaque == false)
-			{
-				if (Masked == false)
-				{
-					Width &= 0xfffc;	// Software transboxfill needs to be a multiple of 4 pixels.
-					Masked = true;
-				}
-				iV_TransBoxFill(x + Width - INCEND + Rect->TLXOffset,
-				                y + Rect->TLYOffset,
-				                x + Width - INCEND + Rect->BRXOffset,
-				                y + Height - INCEND + Rect->BRYOffset);
-			}
-			else
-			{
-				pie_BoxFill(x + Width - INCEND + Rect->TLXOffset, y + Rect->TLYOffset,
-				            x + Width - INCEND + Rect->BRXOffset, y + Height - INCEND + Rect->BRYOffset,
-				            psPalette[Rect->ColourIndex]);
-			}
+			iV_TransBoxFill(x + Width - INCEND + Rect->TLXOffset, y + Rect->TLYOffset,
+			                x + Width - INCEND + Rect->BRXOffset, y + Height - INCEND + Rect->BRYOffset);
 			break;
-
 		case FR_TOP:
-			if (Opaque == false)
-			{
-				if (Masked == false)
-				{
-					Width &= 0xfffc;	// Software transboxfill needs to be a multiple of 4 pixels.
-					Masked = true;
-				}
-				iV_TransBoxFill(x + Rect->TLXOffset,
-				                y + Rect->TLYOffset,
-				                x + Width - INCEND + Rect->BRXOffset,
-				                y + Rect->BRYOffset);
-			}
-			else
-			{
-				pie_BoxFill(x + Rect->TLXOffset, y + Rect->TLYOffset, x + Width - INCEND + Rect->BRXOffset,
-				            y + Rect->BRYOffset, psPalette[Rect->ColourIndex]);
-			}
+			iV_TransBoxFill(x + Rect->TLXOffset, y + Rect->TLYOffset,
+			                x + Width - INCEND + Rect->BRXOffset, y + Rect->BRYOffset);
 			break;
-
 		case FR_BOTTOM:
-			if (Opaque == false)
-			{
-				if (Masked == false)
-				{
-					Width &= 0xfffc;	// Software transboxfill needs to be a multiple of 4 pixels.
-					Masked = true;
-				}
-				iV_TransBoxFill(x + Rect->TLXOffset,
-				                y + Height - INCEND + Rect->TLYOffset,
-				                x + Width - INCEND + Rect->BRXOffset,
-				                y + Height - INCEND + Rect->BRYOffset);
-			}
-			else
-			{
-				pie_BoxFill(x + Rect->TLXOffset, y + Height - INCEND + Rect->TLYOffset,
-				            x + Width - INCEND + Rect->BRXOffset, y + Height - INCEND + Rect->BRYOffset,
-				            psPalette[Rect->ColourIndex]);
-			}
+			iV_TransBoxFill(x + Rect->TLXOffset, y + Height - INCEND + Rect->TLYOffset,
+			                x + Width - INCEND + Rect->BRXOffset, y + Height - INCEND + Rect->BRYOffset);
 			break;
 		case FR_IGNORE:
 			break; // ignored
@@ -361,35 +240,33 @@ static void RenderWindow(FRAMETYPE frame, UDWORD x, UDWORD y, UDWORD Width, UDWO
 
 	if (Frame->TopEdge >= 0)
 	{
-		iV_DrawImageRect(IntImages, Frame->TopEdge,
-		                 x + iV_GetImageWidth(IntImages, Frame->TopLeft), y,
-		                 Width - WTopLeft - WTopRight, iV_GetImageHeight(IntImages, Frame->TopEdge));
+		iV_DrawImageRepeatX(IntImages, Frame->TopEdge, x + iV_GetImageWidth(IntImages, Frame->TopLeft), y,
+		                    Width - WTopLeft - WTopRight);
 	}
 
 	if (Frame->BottomEdge >= 0)
 	{
-		iV_DrawImageRect(IntImages, Frame->BottomEdge,
-		                 x + WBottomLeft, y + Height - iV_GetImageHeight(IntImages, Frame->BottomEdge),
-		                 Width - WBottomLeft - WBottomRight, iV_GetImageHeight(IntImages, Frame->BottomEdge));
+		iV_DrawImageRepeatX(IntImages, Frame->BottomEdge, x + WBottomLeft, y + Height - iV_GetImageHeight(IntImages, Frame->BottomEdge),
+		                    Width - WBottomLeft - WBottomRight);
 	}
 
 	if (Frame->LeftEdge >= 0)
 	{
-		iV_DrawImageRect(IntImages, Frame->LeftEdge,
-		                 x, y + HTopLeft,
-		                 iV_GetImageWidth(IntImages, Frame->LeftEdge), Height - HTopLeft - HBottomLeft);
+		iV_DrawImageRepeatY(IntImages, Frame->LeftEdge, x, y + HTopLeft, Height - HTopLeft - HBottomLeft);
 	}
 
 	if (Frame->RightEdge >= 0)
 	{
-		iV_DrawImageRect(IntImages, Frame->RightEdge,
-		                 x + Width - iV_GetImageWidth(IntImages, Frame->RightEdge), y + HTopRight,
-		                 iV_GetImageWidth(IntImages, Frame->RightEdge), Height - HTopRight - HBottomRight);
+		iV_DrawImageRepeatY(IntImages, Frame->RightEdge, x + Width - iV_GetImageWidth(IntImages, Frame->RightEdge), y + HTopRight,
+		                    Height - HTopRight - HBottomRight);
 	}
 }
 
-void RenderWindowFrame(FRAMETYPE frame, UDWORD x, UDWORD y, UDWORD Width, UDWORD Height)
+IntListTabWidget::IntListTabWidget(WIDGET *parent)
+	: ListTabWidget(parent)
 {
-	RenderWindow(frame, x, y, Width, Height, false);
+	tabWidget()->setHeight(15);
+	tabWidget()->addStyle(TabSelectionStyle(Image(IntImages, IMAGE_TAB1),    Image(IntImages, IMAGE_TAB1DOWN),    Image(IntImages, IMAGE_TABHILIGHT),    Image(), Image(), Image(), Image(), Image(), Image(), 2));
+	tabWidget()->addStyle(TabSelectionStyle(Image(IntImages, IMAGE_TAB1_SM), Image(IntImages, IMAGE_TAB1DOWN_SM), Image(IntImages, IMAGE_TABHILIGHT_SM), Image(), Image(), Image(), Image(), Image(), Image(), 2));
+	tabWidget()->addStyle(TabSelectionStyle(Image(IntImages, IMAGE_TAB1_SM), Image(IntImages, IMAGE_TAB1DOWN_SM), Image(IntImages, IMAGE_TABHILIGHT_SM), Image(IntImages, IMAGE_LFTTAB), Image(IntImages, IMAGE_LFTTABD), Image(IntImages, IMAGE_LFTTABD), Image(IntImages, IMAGE_RGTTAB), Image(IntImages, IMAGE_RGTTABD), Image(IntImages, IMAGE_RGTTABD), 2));
 }
-

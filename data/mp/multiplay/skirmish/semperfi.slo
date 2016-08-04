@@ -32,7 +32,6 @@
 #define ALL_ALLIES				-1
 
 #define	BASE_DEFEND_DURATION	(3 * 60)
-#define	BASE_DEFEND_RADIUS		(15 * TILE)
 
 // Delay before we repeat our request, in seconds
 #define HELP_REQUEST_INTERVAL	(3 * 60)
@@ -156,14 +155,13 @@ private int				count,count2,result;
 
 private bool			powerSave,_DEBUG,bRunning;
 // Hopefully this will be at least as large as MAX_PLAYERS... Why can't I just use MAX_PLAYERS as the array size?!
-// P.S. And why can't I put a comment on the same line as a #define??!! Gah, who cares if the lua2 branch works, lets switch to it, anyway.
 #define MAX_PLAYERS_HACK 17
 private	int				allianceTime[MAX_PLAYERS_HACK];
 private int				sender,x,y,beaconX[MAX_PLAYERS_HACK],beaconY[MAX_PLAYERS_HACK],tBeacon[MAX_PLAYERS_HACK],
 						tLastHelpRequest,lastHelpPlayer,tHelp,tHelpTimeout,helpX,helpY;
 private string			message;
 
-private	int				defendX,defendY,defendRadius,tDefendStart,tDefendTimeout,
+private	int				defendX,defendY,__defendRadiusUnused,tDefendStart,tDefendTimeout,
 						defendMoveType,curTech,numVtolAttackGroups,numAttackVtols,
 						numDefendVtols,rebuildStructX[MAX_REBUILD_STRUCT],rebuildStructY[MAX_REBUILD_STRUCT],countRebuildStruct;
 private	STRUCTURESTAT	rebuildStructStat[MAX_REBUILD_STRUCT];
@@ -263,7 +261,7 @@ function void messagePlayerAddressed(int _playerToMessage, int _playersToAddress
 function bool canSeeAllies();
 function bool baseInTrouble();
 function string m_affirmative();
-function void defendLocation(int _defendX, int _defendY, int _tDefendTimeout, int _defendRadius, bool _bMove);
+function void defendLocation(int _defendX, int _defendY, int _tDefendTimeout, bool _bMove);
 function void stopDefendingLocation();
 function bool defendingLocation();
 function bool defendLocationTimeout();
@@ -323,7 +321,6 @@ event initialisedEvent(CALL_GAMEINIT)
 	helpY = -1;
 	defendX = -1;
 	defendY = -1;
-	defendRadius = -1;
 	tDefendStart = -1;
 	tDefendTimeout = -1;
 	defendMoveType = -1;		//move or scout
@@ -379,6 +376,19 @@ event initialisedEvent(CALL_GAMEINIT)
 		bRunning = false;
 		shutDownAI();
 	}
+}
+
+// check whether we have at least one structure of that type
+function bool haveStructure(STRUCTURESTAT type) 
+{
+	return getStructure(type, me) != NULLOBJECT;
+}
+
+// check if we are getting any income
+function bool havePowerSource()
+{
+	// we don't check buildings being finished here
+	return haveStructure(powGen) and haveStructure(derrick);
 }
 
 function void dbgPlr(string message)
@@ -685,6 +695,11 @@ event arrived(reachedTr)
 function bool tryUpgrade()
 {
 	local	STRUCTURE	struct;
+	
+	if (not havePowerSource())
+	{
+		return false;
+	}
 
 	if (isStructureAvailable(powModule, me))
 	{
@@ -1013,7 +1028,7 @@ event startLevel(startLevelTr)
 	}
 	else
 	{
-		setEventTrigger(buildFundamentals, chainloadTr);
+		setEventTrigger(buildFundamentals, slowloadTr);
 	}
 	setEventTrigger(startLevel, inactive);
 }
@@ -1161,6 +1176,13 @@ event buildDerrick(inactive)
 	local FEATURE	_oil, _closestOil;
 	local int	_bestDist, _newDist;
 	local DROID	_search;
+
+	// what if we can't waste power on building derricks because we don't have a gen yet?
+	if (playerPower(me) < 300 and haveStructure(derrick) and not haveStructure(powGen))
+	{
+		setEventTrigger(buildDerrick, slowloadTr);
+		exit;
+	}
 
 	_bestDist = 99999;
 	_closestOil = NULLOBJECT;
@@ -1338,6 +1360,11 @@ event incendry(inactive)
 	local int result;
 	local bool boolResult;
 	local STRUCTURE structure2;
+
+	if (not isStructureAvailable(sensorTower, me))
+	{
+		exit;
+	}
 
 	initEnumStruct(FALSE,sensorTower,me,me);
 
@@ -1674,7 +1701,14 @@ event droidBuiltAssign(droidBuiltTr)
 		{
 			if(droid.droidType == DROID_CYBORG)
 			{
-				groupAddDroid(defendGroup, droid);
+				if (random(2) == 1) 
+				{
+					groupAddDroid(attackGroup, droid);
+				}
+				else
+				{
+					groupAddDroid(defendGroup, droid);
+				}
 			}
 			else
 			{
@@ -1721,7 +1755,7 @@ event droidBuilt(droidBuiltTr)
 
 	if (droid.droidType == DROID_CONSTRUCT)
 	{
-		setEventTrigger(buildFundamentals, chainloadTr);	// activate
+		setEventTrigger(buildFundamentals, slowloadTr);	// activate
 	}
 
 	/* Start building next droid */
@@ -1771,7 +1805,7 @@ event structBuilt(structBuiltTr)
 		{
 			dbgPlr("Nothing more to do for rush group - disbanding it!");
 			groupAddGroup(buildGroup, rushGroup);
-			setEventTrigger(buildFundamentals, chainloadTr);
+			setEventTrigger(buildFundamentals, slowloadTr);
 			exit;
 		}
 	}
@@ -1822,7 +1856,7 @@ event structBuilt(structBuiltTr)
 
 	// Check if available trucks need to build more absolute necessities right away. We need a trigger here because
 	// droids involved in building have not yet come out of their build orders.
-	setEventTrigger(buildFundamentals, chainloadTr);
+	setEventTrigger(buildFundamentals, slowloadTr);
 
 	//see if we have just rebuilt a destroyed structure
 	_count = 0;
@@ -2010,18 +2044,19 @@ function STRUCTURE findIdleStructure(STRUCTURESTAT _structType, bool _bIdleOnly)
 // build repair droids.
 event repairDroids(repairDroidsTr)
 {
-
 	// if we're running low on repair droids, build some..
 	if(numRepairUnits <3)
 	{
 		initEnumStruct(FALSE,factory,me,me);
 		structure= enumStruct();							// find factory.
-		if( (structure != NULLOBJECT) and (getDroidCount(me) < MAX_DROIDS) )
+		if (structure != NULLOBJECT)
 		{
-			buildDroid(repairUnit, structure, me, 1);	// build repairunit.
+			if ((getDroidCount(me) < MAX_DROIDS) and (skCanBuildTemplate(me, structure, repairUnit)))
+			{
+				buildDroid(repairUnit, structure, me, 1);	// build repairunit.
+			}
 		}
 	}
-
 }
 
 
@@ -2047,6 +2082,11 @@ event factoryEvent(factoryEventTr)
 
 function bool needTank()
 {
+	if(not havePowerSource())
+	{
+		return FALSE;
+	}
+	
 	if((defendGroup.members < maxDefenders[curTech]) or (maxDefenders[curTech] == UNLIMITED))
 	{
 		return TRUE;
@@ -2109,7 +2149,6 @@ function void factoryBuildDroid(STRUCTURE _factory)
 // put cyborg factories to work
 event cyborgFactoryEvent(cyborgFactoryEventTr)
 {
-
 	if(not ((defendGroup.members < maxCyborgs) or (maxCyborgs == UNLIMITED)))
 	{
 		exit;		//we need no cyborgs
@@ -2201,7 +2240,6 @@ event chooseScoutArea(chooseScoutAreaTr)
 
 event expandScoutArea(expandScoutAreaTr)
 {
-
 	//expand the scouting area slightly
 	scoutTLX	= scoutTLX - ((mapWidth*128)/ tileExpand);
 	scoutTLY	= scoutTLY - ((mapHeight*128)/ tileExpand);
@@ -2569,6 +2607,13 @@ event doResearch(doResearchTr)
 	local	int		_techIndex,_numResearching;
 	local bool boolResult;
 
+	// don't throw in half of your money on research in T3 no bases when we don't have any income yet
+	if (isStructureAvailable(facModule,me) and not havePowerSource())
+	{
+		setEventTrigger(doResearch, doResearchTr);
+		exit;
+	}
+	
 	_techIndex = 0;	//research start
 	_numResearching = numStructBusyByType(resLab);
 
@@ -3681,16 +3726,8 @@ function bool attemptToHelp(int _playerToHelp, int _x, int _y)
 		if(haveHelpers() or _DEBUG)
 		{
 			dbg("got attackers", me);
-			//if(allyBaseAtLoc(_playerToHelp, _x, _y))	//is he just trying to misuse us?
-			//{
-				helpPlayer(_playerToHelp, _x, _y);
-				return TRUE;
-			//}
-			//else
-			//{
-			//	dbg("ally needs no help", me);
-			//	messagePlayer(ALL_ALLIES, M_ANNOYED, MAX_PROBABILITY / 2);
-			//}
+			helpPlayer(_playerToHelp, _x, _y);
+			return TRUE;
 		}
 		else
 		{
@@ -3734,7 +3771,7 @@ function void helpPlayer(int _playerToHelp, int _helpX, int _helpY)
 	helpY = _helpY;
 
 	/* Scouts and attackers go to help */
-	defendLocation(_helpX, _helpY, tHelpTimeout, BASE_DEFEND_RADIUS, (_playerToHelp == me));
+	defendLocation(_helpX, _helpY, tHelpTimeout, (_playerToHelp == me));
 }
 
 /* Returns a random affirmative responce */
@@ -3850,11 +3887,6 @@ function bool canStopHelpingAlly()
 	if(!friendlyPlayer(lastHelpPlayer)){
 		return TRUE;
 	}
-
-	/* Nothing to defend anymore */
-	//if(!allyBaseAtLoc(lastHelpPlayer, helpX, helpY)){
-	//	return TRUE;
-	//}
 
 	return FALSE;
 }
@@ -4119,17 +4151,17 @@ function void doRequestHelp(int _helpX, int _helpY)
 	messagePlayer(ALL_ALLIES, M_REQUEST_HELP, MAX_PROBABILITY);
 }
 
-function void defendLocation(int _defendX, int _defendY, int _tDefendTimeout, int _defendRadius, bool _bMove)
+function void defendLocation(int _defendX, int _defendY, int _tDefendTimeout, bool _bMove)
 {
-	dbg("starting defending for " & _tDefendTimeout - (gameTime / 10) & " secs, with defend radius " & _defendRadius, me);
+	local int defendRadius;
 
-	ASSERT(_defendRadius >= TILE,
-		"defendLocation: defendRadius too low:" & _defendRadius, me);
+	defendRadius = 15 * TILE;
+
+	dbg("starting defending for " & _tDefendTimeout - (gameTime / 10) & " secs, with defend radius " & defendRadius, me);
 
 	defendX = _defendX;
 	defendY = _defendY;
 
-	defendRadius = _defendRadius;
 	tDefendStart = gameTime / 10;
 
 	/* Should already include travel time */
@@ -4144,7 +4176,7 @@ function void defendLocation(int _defendX, int _defendY, int _tDefendTimeout, in
 	/* Send attackers */
 	if(attackGroup.members > 0)
 	{
-		if(distBetweenTwoPoints(attackGroup.x, attackGroup.y, _defendX, _defendY) > _defendRadius)
+		if(distBetweenTwoPoints(attackGroup.x, attackGroup.y, _defendX, _defendY) > defendRadius)
 		{
 			orderGroupLoc(attackGroup, defendMoveType, _defendX, _defendY);
 		}
@@ -4159,8 +4191,6 @@ function void stopDefendingLocation()
 
 	defendX = -1;
 	defendY = -1;
-
-	defendRadius = -1;
 
 	tDefendStart = -1;
 	tDefendTimeout = -1;
@@ -4183,12 +4213,17 @@ function bool defendingLocation()
 
 event manageDefendLocationEv(inactive)
 {
+	local int defendRadius;
 	local DROID _droid;
 
-	dbg("manageDefendLocationEv", me);
+	if (not defendingLocation())
+	{
+		exit;
+	}
 
-	ASSERT(defendRadius >= TILE,
-		"manageDefendLocationEv: defendRadius too low:" & defendRadius, me);
+	defendRadius = 15 * TILE;
+
+	dbg("manageDefendLocationEv", me);
 
 	ASSERT(defendMoveType == DORDER_MOVE || defendMoveType == DORDER_SCOUT,
 		"manageDefendLocationEv: wrong move order:" & defendMoveType, me);
@@ -4255,17 +4290,6 @@ function bool insideBase(int _x, int _y)
 	}
 
 	return TRUE;
-}
-
-event keyPressed(CALL_KEY_PRESSED, ref count, ref count2)
-{
-	if(count == KEY_P and (count2 == KEY_RCTRL or count2 == KEY_LCTRL))
-	{
-		if(_DEBUG)
-		{
-			console("The old cheat code has been removed.");
-		}
-	}
 }
 
 //---------------------------------------------------------------

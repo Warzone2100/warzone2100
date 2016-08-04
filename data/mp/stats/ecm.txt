@@ -1,3 +1,0 @@
-ZNULLECM,Level All,0,0,0,0,0,0,0,0,DEFAULT,0,0,0
-RepairCentre,Level All,0,0,0,0,0,0,GNHREPAR.PIE,0,TURRET,0,0,0
-ECM1TurretMk1,Level All,0,0,0,0,0,0,gnmecm1.pie,trmecm2.pie,TURRET,0,1024,1

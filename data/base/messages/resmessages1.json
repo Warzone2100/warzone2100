@@ -1,0 +1,658 @@
+{
+    "RES_CN1MK1": {
+        "id": "RES_CN1MK1",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_weapons.ogg",
+        "text": [
+            "New Weapon Turret Available",
+            "Light Cannon firing 40mm rounds",
+            "Best Targets: Vehicles",
+            "Body Points: Medium"
+        ]
+    },
+    "RES_CN2MK1": {
+        "id": "RES_CN2MK1",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_weapons.ogg",
+        "text": [
+            "New Weapon Turret Available",
+            "Medium Cannon firing 76mm rounds",
+            "Best Targets: Vehicles",
+            "Body Points: Medium"
+        ]
+    },
+    "RES_CN3MK1": {
+        "id": "RES_CN3MK1",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_weapons.ogg",
+        "text": [
+            "New Weapon Turret Available",
+            "Heavy Cannon firing 120 mm rounds",
+            "Best Targets: Vehicles",
+            "Body Points: High"
+        ]
+    },
+    "RES_CYMET1": {
+        "id": "RES_CYMET1",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_droid.ogg",
+        "text": [
+            "Cyborg Materials Improved",
+            "Layered composite alloys and energy-absorbing fibres",
+            "Increases Kinetic Armor and Body Points",
+            "All Cyborgs upgraded automatically"
+        ]
+    },
+    "RES_CYW_CN1": {
+        "id": "RES_CYW_CN1",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_droid.ogg",
+        "text": [
+            "New Cyborg Available",
+            "Armed with Cyborg Cannon",
+            "Body Points: Medium",
+            "Requires Cyborg factory to produce"
+        ]
+    },
+    "RES_CYW_FL1": {
+        "id": "RES_CYW_FL1",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_droid.ogg",
+        "text": [
+            "New Cyborg Available",
+            "Armed with Cyborg Flamer",
+            "Body Points: Medium",
+            "Requires Cyborg factory to produce"
+        ]
+    },
+    "RES_CYW_MG1": {
+        "id": "RES_CYW_MG1",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_droid.ogg",
+        "text": [
+            "New Cyborg Available",
+            "Armed with Cyborg Machinegun",
+            "Body Points: Medium",
+            "Requires Cyborg factory to produce"
+        ]
+    },
+    "RES_CYW_RK1": {
+        "id": "RES_CYW_RK1",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_droid.ogg",
+        "text": [
+            "New Cyborg Available",
+            "Armed with Lance Anti-Tank rocket",
+            "Body Points: Medium",
+            "Requires Cyborg factory to produce"
+        ]
+    },
+    "RES_C_CT1": {
+        "id": "RES_C_CT1",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_com.ogg",
+        "text": [
+            "New Systems Turret Available for Design",
+            "New battlefield computer system",
+            "Commander leads groups acts as factory delivery point",
+            "Body Points: High"
+        ]
+    },
+    "RES_C_SL1": {
+        "id": "RES_C_SL1",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_com.ogg",
+        "text": [
+            "Computer Technology Breakthrough",
+            "Synaptic Link allows humans to interface directly with computers",
+            "Cyborgs can now be researched",
+            "New research options available"
+        ]
+    },
+    "RES_DF_P1": {
+        "id": "RES_DF_P1",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_struttech.ogg",
+        "text": [
+            "New Defensive Structure Available",
+            "Armored bunker with Machinegun",
+            "Automatically targets enemies within sensor range",
+            "Defensive Strength: High"
+        ]
+    },
+    "RES_DF_WU1": {
+        "id": "RES_DF_WU1",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_struttech.ogg",
+        "text": [
+            "Defenses Improved",
+            "Improved Titanium-reinforced concrete",
+            "Increases Armour and Body Points",
+            "All defenses and walls upgraded automatically"
+        ]
+    },
+    "RES_EMP_PODTOW": {
+        "id": "RES_EMP_PODTOW",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_struttech.ogg",
+        "text": [
+            "New Defensive Structure Available",
+            "Armored guard tower with Mini-Pod Rocket",
+            "Automatically targets enemies within sensor range",
+            "Defensive Strength: Medium"
+        ]
+    },
+    "RES_FLAME1": {
+        "id": "RES_FLAME1",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_weapons.ogg",
+        "text": [
+            "New Weapon Turret Available",
+            "Flame-thrower firing Propylene Oxide gel",
+            "\n\"Best Targets: Bunkers",
+            " wheeled and hover vehicles\"",
+            "Body Points: Very low"
+        ]
+    },
+    "RES_HALFT1": {
+        "id": "RES_HALFT1",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_droid.ogg",
+        "text": [
+            "New Propulsion Available",
+            "Armored Half-tracks",
+            "Speed: Medium",
+            "Body Points: Medium"
+        ]
+    },
+    "RES_MG1MK1": {
+        "id": "RES_MG1MK1",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_weapons.ogg",
+        "text": [
+            "New Weapon Turret Available",
+            "7.62mm machinegun",
+            "\n\"Best Targets: Infantry",
+            " base structures",
+            " wheeled vehicles\"",
+            "Body Points: Low"
+        ]
+    },
+    "RES_MG2MK1": {
+        "id": "RES_MG2MK1",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_weapons.ogg",
+        "text": [
+            "New Weapon Turret Available",
+            "Twin 7.62mm machineguns",
+            "\n\"Best Targets: Infantry",
+            " base structures",
+            " wheeled vehicles\"",
+            "Body Points: Low"
+        ]
+    },
+    "RES_MORTA1": {
+        "id": "RES_MORTA1",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_weapons.ogg",
+        "text": [
+            "New Indirect Fire Weapon Available",
+            "May be targeted directly or assigned to a sensor turret or tower",
+            "\n\"Best Targets: Base structures",
+            " infantry",
+            " wheeled vehicles\"",
+            "Body Points: Very Low"
+        ]
+    },
+    "RES_PB_ATR": {
+        "id": "RES_PB_ATR",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_struttech.ogg",
+        "text": [
+            "New Defensive Structure Available",
+            "Armored bunker with Lancer AT rocket",
+            "Automatically targets enemies within sensor range",
+            "Defensive Strength: High"
+        ]
+    },
+    "RES_PB_FL": {
+        "id": "RES_PB_FL",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_struttech.ogg",
+        "text": [
+            "New Defensive Structure Available",
+            "Armored bunker with Flamer",
+            "Automatically targets enemies within sensor range",
+            "Defensive Strength: High"
+        ]
+    },
+    "RES_PB_LC": {
+        "id": "RES_PB_LC",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_struttech.ogg",
+        "text": [
+            "New Defensive Structure Available",
+            "Armored bunker with Light Cannon",
+            "Automatically targets enemies within sensor range",
+            "Defensive Strength: High"
+        ]
+    },
+    "RES_POWMD1": {
+        "id": "RES_POWMD1",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_pow.ogg",
+        "text": [
+            "Power Module Available",
+            "Improved Power Generator Performance",
+            "Burns oil more efficiently",
+            "Use a truck to add the module to a power generator"
+        ]
+    },
+    "RES_REPAI1": {
+        "id": "RES_REPAI1",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_struttech.ogg",
+        "text": [
+            "New Base Structure Available",
+            "New Repair Facility Repairs Damaged Units",
+            "Use the Command Console to send units back for repair",
+            "Or select the Repair Facility as a unit's target"
+        ]
+    },
+    "RES_ST_CR1": {
+        "id": "RES_ST_CR1",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_struttech.ogg",
+        "text": [
+            "New Base Structure Available",
+            "Enables command turret research",
+            "Directs and collates information for command turrets",
+            "Controls up to five commanders"
+        ]
+    },
+    "RES_ST_FCY01": {
+        "id": "RES_ST_FCY01",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_struttech.ogg",
+        "text": [
+            "Cyborg Production Improved",
+            "Automated Cyborg Production",
+            "Increases Cyborg factory output",
+            "All Cyborg factories upgraded automatically"
+        ]
+    },
+    "RES_ST_FCY1": {
+        "id": "RES_ST_FCY1",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_struttech.ogg",
+        "text": [
+            "New Base Structure Available",
+            "Cyborg Factory",
+            "Produces Cyborgs",
+            "Research makes additional Cyborgs available"
+        ]
+    },
+    "RES_ST_FM1": {
+        "id": "RES_ST_FM1",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_struttech.ogg",
+        "text": [
+            "Production Improved",
+            "Factory module enables medium and large bodies",
+            "Increases factory output",
+            "Use a truck to add modules to a factory"
+        ]
+    },
+    "RES_ST_FU1": {
+        "id": "RES_ST_FU1",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_struttech.ogg",
+        "text": [
+            "Vehicle Production Improved",
+            "Automated Factory Production",
+            "Increases factory output",
+            "All vehicle factories upgraded automatically"
+        ]
+    },
+    "RES_ST_MAT1": {
+        "id": "RES_ST_MAT1",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_struttech.ogg",
+        "text": [
+            "Increases Damage Resistance",
+            "Reinforced Base Structure Materials",
+            "Increases Armor and Body Points",
+            "All base structures upgraded automatically"
+        ]
+    },
+    "RES_ST_RFU1": {
+        "id": "RES_ST_RFU1",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_struttech.ogg",
+        "text": [
+            "Repair Facility Improved",
+            "New automated repair techniques",
+            "Increases Repair Speed",
+            "All repair facilities upgraded automatically"
+        ]
+    },
+    "RES_ST_RM1": {
+        "id": "RES_ST_RM1",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_struttech.ogg",
+        "text": [
+            "Research Module Available",
+            "Research module expands research facilities",
+            "Increases research speed",
+            "Use a truck to add the module to a research facility"
+        ]
+    },
+    "RES_ST_RU1": {
+        "id": "RES_ST_RU1",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_struttech.ogg",
+        "text": [
+            "Research Improved",
+            "Synaptic link data analysis",
+            "Increases research speed",
+            "All research facilities upgraded automatically"
+        ]
+    },
+    "RES_TOWER1": {
+        "id": "RES_TOWER1",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_struttech.ogg",
+        "text": [
+            "New Defensive Structure Available",
+            "Steel tower with machinegun",
+            "Automatically targets enemies within sensor range",
+            "Defensive Strength: Low"
+        ]
+    },
+    "RES_TRACK1": {
+        "id": "RES_TRACK1",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_droid.ogg",
+        "text": [
+            "New Propulsion Available",
+            "Armored Tracks",
+            "Speed: Slow",
+            "Body Points: High"
+        ]
+    },
+    "RES_TTRAP1": {
+        "id": "RES_TTRAP1",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_struttech.ogg",
+        "text": [
+            "New Defensive Structure Available",
+            "Reinforced concrete tank traps",
+            "Prevents enemy movement",
+            "Defensive Strength: Medium"
+        ]
+    },
+    "RES_V_B01": {
+        "id": "RES_V_B01",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_droid.ogg",
+        "text": [
+            "Project Light Body",
+            "Light body vulnerable to heavy weapons",
+            "Good scout vehicle",
+            "Low power cost and low production times"
+        ]
+    },
+    "RES_V_B04": {
+        "id": "RES_V_B04",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_droid.ogg",
+        "text": [
+            "New Paradigm Light Body",
+            "Inferior armor and body points to Viper",
+            "Faster than Viper",
+            "Power cost and production time similar to Viper"
+        ]
+    },
+    "RES_V_B05": {
+        "id": "RES_V_B05",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_droid.ogg",
+        "text": [
+            "Project Medium Body",
+            "Medium body increases armor and body points",
+            "Good medium tank and support vehicle",
+            "Average power costs and production times"
+        ]
+    },
+    "RES_V_B08": {
+        "id": "RES_V_B08",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_droid.ogg",
+        "text": [
+            "New Paradigm Medium body",
+            "Inferior armor and body points to Cobra",
+            "Faster than Cobra",
+            "Power cost and production time similar to Cobra"
+        ]
+    },
+    "RES_V_B11": {
+        "id": "RES_V_B11",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_droid.ogg",
+        "text": [
+            "Project Heavy Body",
+            "Heavy body increases armor and body points",
+            "Good main battle tank and heavy artillery platform",
+            "Very high power costs and very slow to produce"
+        ]
+    },
+    "RES_V_B12": {
+        "id": "RES_V_B12",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_droid.ogg",
+        "text": [
+            "New Paradigm Heavy Body",
+            "Less armor and body points than Python",
+            "Faster than Python",
+            "Power cost and production time the same as Python"
+        ]
+    },
+    "RES_V_EN1": {
+        "id": "RES_V_EN1",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_droid.ogg",
+        "text": [
+            "Vehicle Engine Upgrade",
+            "Fuel Injection Engine",
+            "Improves vehicle speed",
+            "All vehicles upgraded automatically"
+        ]
+    },
+    "RES_V_MET1": {
+        "id": "RES_V_MET1",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_droid.ogg",
+        "text": [
+            "Vehicle Bodies Improved",
+            "Layered composite alloys and energy-absorbing fibres",
+            "Increases kinetic armor and body points",
+            "All vehicles upgraded automatically"
+        ]
+    },
+    "RES_V_P_H1": {
+        "id": "RES_V_P_H1",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_droid.ogg",
+        "text": [
+            "New Propulsion Available",
+            "Amphibious hover propulsion",
+            "Speed: Fast",
+            "Body Points: Low"
+        ]
+    },
+    "RES_V_P_W1": {
+        "id": "RES_V_P_W1",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_droid.ogg",
+        "text": [
+            "New Propulsion Available",
+            "Wheeled Propulsion",
+            "Speed: Fast",
+            "Body Points: Low"
+        ]
+    },
+    "RES_WT2_LC": {
+        "id": "RES_WT2_LC",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_struttech.ogg",
+        "text": [
+            "New Defensive Structure Available",
+            "Armored hardpoint with Light Cannon",
+            "Automatically targets enemies within sensor range",
+            "Defensive Strength: High"
+        ]
+    },
+    "RES_WT3_MC": {
+        "id": "RES_WT3_MC",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_struttech.ogg",
+        "text": [
+            "New Defensive Structure Available",
+            "Armored hardpoint with Medium Cannon",
+            "Automatically targets enemies within sensor range",
+            "Defensive Strength: High"
+        ]
+    },
+    "RES_WT4_HC": {
+        "id": "RES_WT4_HC",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_struttech.ogg",
+        "text": [
+            "New Defensive Structure Available",
+            "Armored hardpoint with Heavy Cannon",
+            "Automatically targets enemies within sensor range",
+            "Defensive Strength: High"
+        ]
+    },
+    "RES_W_CN_D1": {
+        "id": "RES_W_CN_D1",
+        "imdName": "MICAPSUL.PIE",
+        "sequenceName": "res_weapons.ogg",
+        "text": [
+            "Cannon Upgrade",
+            "High Explosive Anti-Tank Cannon Shells",
+            "Increases Cannon damage",
+            "All cannons upgraded automatically"
+        ]
+    },
+    "RES_W_FL_D1": {
+        "id": "RES_W_FL_D1",
+        "imdName": "MICAPSUL.PIE",
+        "sequenceName": "res_weapons.ogg",
+        "text": [
+            "Flamer Upgrade",
+            "Propylene Oxide gel treated to burn at higher temperatures",
+            "Increases Flamer damage",
+            "All flamers upgraded automatically"
+        ]
+    },
+    "RES_W_MG_D1": {
+        "id": "RES_W_MG_D1",
+        "imdName": "MICAPSUL.PIE",
+        "sequenceName": "res_weapons.ogg",
+        "text": [
+            "Machinegun Upgrade",
+            "Hardened case machinegun bullets",
+            "Increases Machinegun damage",
+            "All machineguns upgraded automatically"
+        ]
+    },
+    "RES_W_MG_D2": {
+        "id": "RES_W_MG_D2",
+        "imdName": "MICAPSUL.PIE",
+        "sequenceName": "res_weapons.ogg",
+        "text": [
+            "Machinegun Upgrade",
+            "Armor-Piercing Discard Sabot Bullets",
+            "Increases Machinegun damage",
+            "All machineguns upgraded automatically"
+        ]
+    },
+    "RES_W_M_D1": {
+        "id": "RES_W_M_D1",
+        "imdName": "MICAPSUL.PIE",
+        "sequenceName": "res_weapons.ogg",
+        "text": [
+            "Mortar Upgrade",
+            "Improved high explosive shells",
+            "Increases Mortar damage",
+            "All mortars upgraded automatically"
+        ]
+    },
+    "RES_W_RK_AC1": {
+        "id": "RES_W_RK_AC1",
+        "imdName": "MICAPSUL.PIE",
+        "sequenceName": "res_weapons.ogg",
+        "text": [
+            "Mini-Rocket Upgrade",
+            "Fin-stabilization improves flight trajectory",
+            "Increases Mini-Rocket accuracy",
+            "All mini-rockets upgraded automatically"
+        ]
+    },
+    "RES_W_RK_D1": {
+        "id": "RES_W_RK_D1",
+        "imdName": "MICAPSUL.PIE",
+        "sequenceName": "res_weapons.ogg",
+        "text": [
+            "Mini-Rocket Upgrade",
+            "Improved shaped charge warhead",
+            "Increases Mini-Rocket damage",
+            "All mini-rockets upgraded automatically"
+        ]
+    },
+    "RES_W_RK_MP1": {
+        "id": "RES_W_RK_MP1",
+        "imdName": "MICAPSUL.PIE",
+        "sequenceName": "res_weapons.ogg",
+        "text": [
+            "New Rocket Available",
+            "Fast firing light anti-vehicle rockets",
+            "Best Targets: Wheeled and hover vehicles",
+            "Body Points: Very Low"
+        ]
+    },
+    "RES_W_RK_ROF1": {
+        "id": "RES_W_RK_ROF1",
+        "imdName": "MICAPSUL.PIE",
+        "sequenceName": "res_weapons.ogg",
+        "text": [
+            "Mini-Rocket Upgrade",
+            "Automated reload system",
+            "Increases Mini-Rockets ROF",
+            "All mini-rockets upgraded automatically"
+        ]
+    },
+    "RES_W_SRK_AC1": {
+        "id": "RES_W_SRK_AC1",
+        "imdName": "MICAPSUL.PIE",
+        "sequenceName": "res_weapons.ogg",
+        "text": [
+            "Rocket Upgrade",
+            "Tracks and directs in-flight rocket to target",
+            "Increases Rocket accuracy",
+            "All rockets upgraded automatically"
+        ]
+    },
+    "RES_W_SRK_D1": {
+        "id": "RES_W_SRK_D1",
+        "imdName": "MICAPSUL.PIE",
+        "sequenceName": "res_weapons.ogg",
+        "text": [
+            "Rocket Upgrade",
+            "High Explosive Anti-Tank warhead",
+            "Increases Rocket damage",
+            "All rockets upgraded automatically"
+        ]
+    }
+}

@@ -11,12 +11,16 @@ file		SMSG		"brief1-4a.txt"
 /* Directory for uncompiled script files */
 directory       "script/text"
 
-file		SCRIPT		"cam1-4as.slo"
 file		SCRIPT		"cam1daynight.slo"
 
 
 /* Directory for script value files*/
 directory       "script/data"
 
-file            SCRIPTVAL       "cam1-4as.vlo"
 file            SCRIPTVAL       "cam1day.vlo"
+
+/* Directory for javascript files*/
+directory "script"
+file JAVASCRIPT "rules.js"
+directory "script/campaign"
+file JAVASCRIPT "cam1-4as.js"

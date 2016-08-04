@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -23,42 +23,11 @@
 
 #include "droid.h"
 
-extern bool DirectControl;
-extern DROID *psDrivenDroid;
-
-static inline bool driveHasDriven(void)
-{
-	return (DirectControl) && (psDrivenDroid != NULL) ? true : false;
-}
-
-
-// Returns true if drive mode is active.
-//
-static inline bool driveModeActive(void)
-{
-	return DirectControl;
-}
-
-
-// Return true if the specified droid is the driven droid.
-//
-static inline bool driveIsDriven(DROID *psDroid)
-{
-	return (DirectControl) && (psDrivenDroid != NULL) && (psDroid == psDrivenDroid) ? true : false;
-}
-
-
-static inline bool driveIsFollower(DROID *psDroid)
-{
-	return (DirectControl) && (psDrivenDroid != NULL) && (psDroid != psDrivenDroid) && psDroid->selected ? true : false;
-}
-
-
-static inline DROID *driveGetDriven(void)
-{
-	return psDrivenDroid;
-}
-
+bool driveHasDriven();
+bool driveModeActive();	// Returns true if drive mode is active.
+bool driveIsDriven(DROID *psDroid);	// Return true if the specified droid is the driven droid.
+bool driveIsFollower(DROID *psDroid);
+DROID *driveGetDriven();
 
 void driveInitVars(bool Restart);
 bool StartDriverMode(DROID *psOldDroid);
@@ -84,7 +53,6 @@ void driveStartBuild(void);
 bool driveAllowControl(void);
 void driveDisableTactical(void);
 bool driveTacticalActive(void);
-void driveTacticalSelectionChanged(void);
 void driveProcessRadarInput(int x, int y);
 bool driveWasDriving(void);
 void driveDisableDriving(void);

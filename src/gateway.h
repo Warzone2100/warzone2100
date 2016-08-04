@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -26,29 +26,24 @@
 
 struct GATEWAY
 {
-	UBYTE			x1, y1, x2, y2;
-	GATEWAY        *psNext;
+	UBYTE x1, y1, x2, y2;
 };
 
+typedef std::list<GATEWAY *> GATEWAY_LIST;
+
 /// Initialise the gateway system
-bool gwInitialise(void);
+bool gwInitialise();
 
 /// Shutdown the gateway system
-void gwShutDown(void);
+void gwShutDown();
 
 /// Add a gateway to the system
-bool gwNewGateway(SDWORD x1, SDWORD y1, SDWORD x2, SDWORD y2);
-
-/// Release a gateway
-void gwFreeGateway(GATEWAY *psDel);
+bool gwNewGateway(int x1, int y1, int x2, int y2);
 
 /// Get number of gateways.
-UDWORD gwNumGateways(void);
+int gwNumGateways();
 
 /// Get the gateway list.
-GATEWAY *gwGetGateways(void);
-
-/// Set gateway list
-void gwSetGateways(GATEWAY *ps);
+GATEWAY_LIST &gwGetGateways();
 
 #endif // __INCLUDED_SRC_GATEWAY_H__

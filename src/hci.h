@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -33,7 +33,7 @@
 
 
 #define BASE_COORDS_X	(640)
-#define BASE_COORDS_Y	(480)
+#define BASE_COORDS_Y	(460)
 #define E_W (pie_GetVideoBufferWidth() - BASE_COORDS_X)
 #define E_H (pie_GetVideoBufferHeight() - BASE_COORDS_Y)
 #define D_W	((pie_GetVideoBufferWidth() - BASE_COORDS_X)/2)
@@ -50,10 +50,8 @@
 #define IDRET_CANCEL			8		// central cancel button
 #define IDRET_COMMAND			9		// command droid button
 #define IDRET_TRANSPORTER		10		// transporter button
-#define IDRET_ORDER				11		// droid order button
 #define IDPOW_POWERBAR_T		102		// power bar - trough
 #define	IDTRANTIMER_BUTTON		11012	//transporter button on timer display
-
 
 
 /* Object screen IDs */
@@ -88,14 +86,13 @@
 #define IDSTAT_TABFORM			14004		// The tab form with the stats buttons
 #define IDSTAT_START			14100		// The first stats ID
 #define IDSTAT_END				14999		// The last stats ID enough for 899 things
-#define IDSTAT_TABSCRL_LEFT		15000		// Our left Tab scroll button
-#define IDSTAT_TABSCRL_RIGHT	15002		// Our right Tab scroll button
-#define IDSTAT_TIMEBARSTART		4300
-#define IDSTAT_TIMEBAREND		4399
+#define IDSTAT_TIMEBARSTART             16205000
+#define IDSTAT_TIMEBAREND               16205999
 #define IDSTAT_SLIDER			4400
 #define IDSTAT_LOOP_BUTTON		4403
 #define IDSTAT_LOOP_LABEL		4404
 #define IDSTAT_DP_BUTTON		4405
+#define IDSTAT_OBSOLETE_BUTTON          4406
 #define IDSTAT_RESICONSTART		4500
 #define IDSTAT_RESICONEND		4599
 #define IDSTAT_PRODSTART		4600
@@ -105,15 +102,25 @@
 #define IDSTAT_ALLYEND			5100
 
 // Reticule position.
-#define RET_X				24
+#define RET_X				6
 #define RET_Y				(324+E_H)
 #define RET_FORMWIDTH		132
 #define RET_FORMHEIGHT		132
 
+// chat stuff
+#define CHAT_CONSOLEBOX	0x4A001
+#define CHAT_EDITBOX	0x4A004
+#define CHAT_TEAM		0x1
+#define CHAT_GLOB		0x2
+#define CHAT_CONSOLEBOXX	RET_X + RET_FORMWIDTH + D_W
+#define CHAT_CONSOLEBOXY	(1)
+#define CHAT_CONSOLEBOXW	240
+#define CHAT_CONSOLEBOXH	16
+
 /* Option positions */
 #define OPT_GAP			5
 
-// Object screen position.
+// Object screen position. (aka where the factories, research builds show up) [right of command retile]
 #define BASE_GAP		6
 #define OBJ_BACKX		(RET_X + RET_FORMWIDTH + BASE_GAP + D_W)	// X coord of object screen back form.
 #define OBJ_BACKY		RET_Y	// Y coord of object screen back form.
@@ -142,24 +149,16 @@
 #define POW_Y			(OBJ_BACKY + OBJ_BACKHEIGHT + 6)
 #define POW_BARWIDTH	308
 
-//tab details
-#define OBJ_TABWIDTH	26
-#define OBJ_TABHEIGHT	11
-#define	OBJ_TABOFFSET	2
-//tab scroll buttons details
-#define TABSCRL_HEIGHT	10
-#define TABSCRL_WIDTH	7
-
 /* close button data */
 #define CLOSE_WIDTH		15
 #define CLOSE_HEIGHT	15
 #define CLOSE_SIZE		15
 
-// Stat screen position.
-#define STAT_X				23
-#define STAT_Y				(45 + E_H)
+// Stat screen position. [aka, the 'dialog' of items you research/create]
+#define STAT_X			6
+#define STAT_Y			(E_H)
 #define STAT_WIDTH			RET_FORMWIDTH	// Width of the tab form.
-#define STAT_HEIGHT			273				// Height of the tab form.
+#define STAT_HEIGHT		322			// Height of the tab form.
 #define STAT_TABWIDTH		15
 #define STAT_TABFORMX		0	// Offset of the tab form within the main form.
 #define STAT_TABFORMY		18	// Offset of the tab form within the main form.
@@ -176,18 +175,7 @@
 #define UNPACKDWORD_TRI_B(a) ( ((a)>>10) & 0x3ff )
 #define UNPACKDWORD_TRI_C(a) ( (a) & 0x3ff)
 
-// 4 8 bit values packed into a DWORD.
-#define PACKDWORD_QUAD(a,b,c,d) ( (((a) & 0xff) << 24) | (((b) & 0xff) << 16) | (((c) & 0xff) << 8) | ((d) & 0xff)  )
-#define UNPACKDWORD_QUAD_A(a) ( ((a)>>24) & 0xff )
-#define UNPACKDWORD_QUAD_B(a) ( ((a)>>16) & 0xff )
-#define UNPACKDWORD_QUAD_C(a) ( ((a)>>8) & 0xff )
-#define UNPACKDWORD_QUAD_D(a) ( (a) & 0xff)
-
-
-//#define BUILDPOINTS_STRUCTDIV 1
-//#define BUILDPOINTS_DROIDDIV 5
-//#define POWERPOINTS_STRUCTDIV 1
-#define POWERPOINTS_DROIDDIV	5 //3
+#define POWERPOINTS_DROIDDIV	5
 
 #define OBJ_BUTWIDTH		60		// Button width.
 #define OBJ_BUTHEIGHT		46		// Button height.
@@ -234,7 +222,6 @@ enum INTMODE
 	INT_INTELMAP,	// Intelligence Map
 	INT_ORDER,
 	INT_INGAMEOP,	// in game options.
-	//INT_TUTORIAL,	// Tutorial mode - message display
 	INT_TRANSPORTER, //Loading/unloading a Transporter
 	INT_MISSIONRES,	// Results of a mission display.
 	INT_MULTIMENU,	// multiplayer only, player stats etc...
@@ -254,21 +241,13 @@ extern UDWORD			intLastWidget;
 
 /* The button ID of the objects stat when the stat screen is displayed */
 extern UDWORD			objStatID;
-// when the window for building / whatever else is up...
-extern bool SecondaryWindowUp;
+
 /* The current template for the design screen to start with*/
 extern std::vector<DROID_TEMPLATE *> apsTemplateList;  ///< Either a list of templates a factory can build or a list of designable templates, for UI use only.
-extern std::list<DROID_TEMPLATE> localTemplates;       ///< Unsychnronised list, for UI use only.
+extern std::list<DROID_TEMPLATE> localTemplates;       ///< Unsynchronised list, for UI use only.
 
 /* pointer to hold the imd to use for a new template in the design screen */
 extern iIMDShape	*pNewDesignIMD;
-
-extern bool ClosingMessageView;
-extern bool ClosingIntelMap;
-extern bool	ClosingTrans;
-extern bool	ClosingTransCont;
-extern bool	ClosingTransDroids;
-extern bool ClosingOrder;
 
 /* Initialise the in game interface */
 extern bool intInitialise(void);
@@ -284,14 +263,10 @@ enum INT_RETVAL
 {
 	INT_NONE,		// no key clicks have been intercepted
 	INT_INTERCEPT,	// key clicks have been intercepted
-	//INT_FULLSCREENPAUSE,	// The widget interface is full screen and
-	// the rest of the game should pause
-	//INT_INTELPAUSE,			// The Intelligence Map is up and all update
-	// routines should pause - hopefully!
-	INT_INTELNOSCROLL,		//The 3DView of the intelligence screen is up
-	// and we don't want scroll (or update!)
 	INT_QUIT,		// The game should quit
 };
+
+void hciUpdate();
 
 /* Run the widgets for the in game interface */
 extern INT_RETVAL intRunWidgets(void);
@@ -300,8 +275,10 @@ extern INT_RETVAL intRunWidgets(void);
 extern void intDisplayWidgets(void);
 
 /* Add the reticule widgets to the widget screen */
-extern bool intAddReticule(void);
-extern void intRemoveReticule(void);
+bool intAddReticule();
+bool intAddPower();
+void intRemoveReticule();
+void setReticuleStats(int ButId, QString tip, QString filename, QString filenameDown);
 
 /* Set the map view point to the world coordinates x,y */
 extern void intSetMapPos(UDWORD x, UDWORD y);
@@ -337,14 +314,8 @@ extern bool intBuildMode(void);
 // add the construction interface if a constructor droid is selected
 void intCommanderSelected(DROID *psDroid);
 
-extern UWORD numForms(UDWORD total, UDWORD perForm);
-
 //sets up the Intelligence Screen as far as the interface is concerned
-//extern void addIntelScreen(bool playImmediate);
 extern void addIntelScreen(void);
-
-// update shadow...
-extern void intSetShadowPower(UDWORD quantity);
 
 /* Reset the widget screen to just the reticule */
 extern void intResetScreen(bool NoAnim);
@@ -374,13 +345,9 @@ extern void flashReticuleButton(UDWORD buttonID);
 extern void stopReticuleButtonFlash(UDWORD buttonID);
 
 //toggles the Power Bar display on and off
-extern void togglePowerBar(void);
-
-//displays the Power Bar
-extern void intShowPowerBar(void);
-
-//hides the power bar from the display
-//extern void intHidePowerBar(void);
+void togglePowerBar();
+void intShowPowerBar();
+void intHidePowerBar();
 
 //hides the power bar from the display - regardless of what player requested!
 extern void forceHidePowerBar(void);
@@ -394,14 +361,13 @@ extern void intRemoveProximityButton(PROXIMITY_DISPLAY *psProxDisp);
 /* Allows us to fool the widgets with a keypress */
 void	setKeyButtonMapping(UDWORD	val);
 
-
-
 STRUCTURE *intFindAStructure(void);
 STRUCTURE *intGotoNextStructureType(UDWORD structType, bool JumpTo, bool CancelDrive);
-DROID *intGotoNextDroidType(DROID *CurrDroid, UDWORD droidType, bool AllowGroup);
+DROID *intGotoNextDroidType(DROID *CurrDroid, DROID_TYPE droidType, bool AllowGroup);
 
 /// Returns the number of researches that selectedPlayer is not already researching, or 0 if there are no free laboratories.
 int intGetResearchState();
+
 /// Flashes the button if the research button should flash, and more researches are available to research than before.
 /// Stops the button from flashing, if the research button shouldn't flash, and prevState is non-zero.
 void intNotifyResearchButton(int prevState);
@@ -415,10 +381,14 @@ extern BASE_OBJECT *getCurrentSelected(void);
 //initialise all the previous obj - particularly useful for when go Off world!
 extern void intResetPreviousObj(void);
 
-extern void HandleClosingWindows(void);
-
 extern bool intIsRefreshing(void);
 
 extern void intDemolishCancel(void);
+
+StateButton *makeObsoleteButton(WIDGET *parent);  ///< Makes a button to toggle showing obsolete items.
+
+extern void chatDialog(int mode);
+extern bool isChatUp(void);
+extern bool isSecondaryWindowUp(void);
 
 #endif // __INCLUDED_SRC_HCI_H__

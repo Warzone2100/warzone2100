@@ -1,24 +1,12 @@
-AM_CPPFLAGS = -DYY_NO_INPUT $(SDL_CFLAGS) $(WZ_CPPFLAGS) $(QT4_CFLAGS)
+AM_CPPFLAGS = -DYY_NO_INPUT $(SDL_CFLAGS) $(WZ_CPPFLAGS) $(QT5_CFLAGS)
 AM_CFLAGS = $(WZ_CFLAGS)
-AM_CXXFLAGS = $(WZ_CXXFLAGS) $(QT4_CFLAGS)
-
-MOCHEADER = \
-	wzconfig.h
-MOCEDFILES = $(MOCHEADER:%.h=%_moc.cpp)
-
-%_moc.cpp: %.h
-	$(MOC4) -o $@ $<
-
-
-CLEANFILES = \
-	$(MOCEDFILES)
+AM_CXXFLAGS = $(WZ_CXXFLAGS) $(QT5_CFLAGS)
 
 EXTRA_DIST = \
 	cocoa_wrapper.h cocoa_wrapper.mm
 
 noinst_LIBRARIES = libframework.a
 noinst_HEADERS = \
-	$(MOCHEADER) \
 	config-macosx.h \
 	crc.h \
 	cursors.h \
@@ -27,14 +15,12 @@ noinst_HEADERS = \
 	file.h \
 	fixedpoint.h \
 	frame.h \
-	frameint.h \
 	frameresource.h \
 	geometry.h \
 	gettext.h \
 	i18n.h \
 	input.h \
 	lexer_input.h \
-	listmacs.h \
 	macros.h \
 	math_ext.h \
 	opengl.h \
@@ -53,11 +39,8 @@ noinst_HEADERS = \
 	utf.h \
 	vector.h \
 	wzapp.h \
-	wzfs.h \
+	wzconfig.h \
 	wzglobal.h
-
-nodist_libframework_a_SOURCES = \
-	wzconfig_moc.cpp
 
 libframework_a_SOURCES = \
 	crc.cpp \

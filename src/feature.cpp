@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/frameresource.h"
 #include "lib/framework/strres.h"
+#include "lib/framework/wzconfig.h"
 
 #include "lib/gamelib/gtime.h"
 #include "lib/sound/audio.h"
@@ -62,21 +63,6 @@ UDWORD			numFeatureStats;
 //Value is stored for easy access to this feature in destroyDroid()/destroyStruct()
 FEATURE_STATS *oilResFeature = NULL;
 
-static const StringToEnum<FEATURE_TYPE> map_FEATURE_TYPE[] =
-{
-	{ "PROPULSION_TYPE_HOVER WRECK", FEAT_HOVER },
-	{ "TANK WRECK", FEAT_TANK },
-	{ "GENERIC ARTEFACT", FEAT_GEN_ARTE },
-	{ "OIL RESOURCE", FEAT_OIL_RESOURCE },
-	{ "BOULDER", FEAT_BOULDER },
-	{ "VEHICLE", FEAT_VEHICLE },
-	{ "BUILDING", FEAT_BUILDING },
-	{ "OIL DRUM", FEAT_OIL_DRUM },
-	{ "TREE", FEAT_TREE },
-	{ "SKYSCRAPER", FEAT_SKYSCRAPER }
-};
-
-
 void featureInitVars(void)
 {
 	asFeatureStats = NULL;
@@ -84,54 +70,77 @@ void featureInitVars(void)
 	oilResFeature = NULL;
 }
 
-FEATURE_STATS::FEATURE_STATS(LineView line)
-	: BASE_STATS(REF_FEATURE_START + line.line(), line.s(0))
-	, subType(line.e(7, map_FEATURE_TYPE))
-	, psImd(line.imdShape(6))
-	, baseWidth(line.u16(1))
-	, baseBreadth(line.u16(2))
-	, tileDraw(line.b(8))
-	, allowLOS(line.b(9))
-	, visibleAtStart(line.b(10))
-	, damageable(line.b(3))
-	, body(line.u32(5))
-	, armourValue(line.u32(4))
-{
-	if (damageable && body == 0)
-	{
-		debug(LOG_ERROR, "The feature \"%s\", ref %d is damageable, but has no body points!  The files need to be updated / fixed.  Assigning 1 body point to feature.", pName, ref);
-		body = 1;
-	}
-}
-
 /* Load the feature stats */
-bool loadFeatureStats(const char *pFeatureData, UDWORD bufferSize)
+bool loadFeatureStats(const char *pFileName)
 {
-	// Skip descriptive header
-	if (strncmp(pFeatureData, "Feature ", 8) == 0)
+	WzConfig ini(pFileName, WzConfig::ReadOnlyAndRequired);
+	QStringList list = ini.childGroups();
+	asFeatureStats = new FEATURE_STATS[list.size()];
+	numFeatureStats = list.size();
+	for (int i = 0; i < list.size(); ++i)
 	{
-		pFeatureData = strchr(pFeatureData, '\n') + 1;
-	}
-
-	TableView table(pFeatureData, bufferSize);
-
-	asFeatureStats = new FEATURE_STATS[table.size()];
-	numFeatureStats = table.size();
-
-	for (unsigned i = 0; i < table.size(); ++i)
-	{
-		asFeatureStats[i] = FEATURE_STATS(LineView(table, i));
-		if (table.isError())
+		ini.beginGroup(list[i]);
+		asFeatureStats[i] = FEATURE_STATS(REF_FEATURE_START + i);
+		FEATURE_STATS *p = &asFeatureStats[i];
+		p->name = ini.value("name").toString();
+		p->id = list[i];
+		QString subType = ini.value("type").toString();
+		if (subType == "TANK WRECK")
 		{
-			debug(LOG_ERROR, "%s", table.getError().toUtf8().constData());
-			return false;
+			p->subType = FEAT_TANK;
 		}
+		else if (subType == "GENERIC ARTEFACT")
+		{
+			p->subType = FEAT_GEN_ARTE;
+		}
+		else if (subType == "OIL RESOURCE")
+		{
+			p->subType = FEAT_OIL_RESOURCE;
+		}
+		else if (subType == "BOULDER")
+		{
+			p->subType = FEAT_BOULDER;
+		}
+		else if (subType == "VEHICLE")
+		{
+			p->subType = FEAT_VEHICLE;
+		}
+		else if (subType == "BUILDING")
+		{
+			p->subType = FEAT_BUILDING;
+		}
+		else if (subType == "OIL DRUM")
+		{
+			p->subType = FEAT_OIL_DRUM;
+		}
+		else if (subType == "TREE")
+		{
+			p->subType = FEAT_TREE;
+		}
+		else if (subType == "SKYSCRAPER")
+		{
+			p->subType = FEAT_SKYSCRAPER;
+		}
+		else
+		{
+			ASSERT(false, "Unknown feature type: %s", subType.toUtf8().constData());
+		}
+		p->psImd = modelGet(ini.value("model").toString());
+		p->baseWidth = ini.value("width", 1).toInt();
+		p->baseBreadth = ini.value("breadth", 1).toInt();
+		p->tileDraw = ini.value("tileDraw", 1).toInt();
+		p->allowLOS = ini.value("lineOfSight", 1).toInt();
+		p->visibleAtStart = ini.value("startVisible", 1).toInt();
+		p->damageable = ini.value("damageable", 1).toInt();
+		p->body = ini.value("hitpoints", 1).toInt();
+		p->armourValue = ini.value("armour", 1).toInt();
 
 		//and the oil resource - assumes only one!
 		if (asFeatureStats[i].subType == FEAT_OIL_RESOURCE)
 		{
 			oilResFeature = &asFeatureStats[i];
 		}
+		ini.endGroup();
 	}
 
 	return true;
@@ -140,10 +149,6 @@ bool loadFeatureStats(const char *pFeatureData, UDWORD bufferSize)
 /* Release the feature stats memory */
 void featureStatsShutDown(void)
 {
-	for (unsigned i = 0; i < numFeatureStats; ++i)
-	{
-		free(asFeatureStats[i].pName);
-	}
 	delete[] asFeatureStats;
 	asFeatureStats = NULL;
 	numFeatureStats = 0;
@@ -155,16 +160,16 @@ void featureStatsShutDown(void)
  *  \param weaponClass,weaponSubClass the class and subclass of the weapon that deals the damage
  *  \return < 0 never, >= 0 always
  */
-int32_t featureDamage(FEATURE *psFeature, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime, bool isDamagePerSecond)
+int32_t featureDamage(FEATURE *psFeature, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime, bool isDamagePerSecond, int minDamage)
 {
 	int32_t relativeDamage;
 
 	ASSERT_OR_RETURN(0, psFeature != NULL, "Invalid feature pointer");
 
 	debug(LOG_ATTACK, "feature (id %d): body %d armour %d damage: %d",
-	      psFeature->id, psFeature->body, psFeature->armour[weaponClass], damage);
+	      psFeature->id, psFeature->body, psFeature->psStats->armourValue, damage);
 
-	relativeDamage = objDamage(psFeature, damage, psFeature->psStats->body, weaponClass, weaponSubClass, isDamagePerSecond);
+	relativeDamage = objDamage(psFeature, damage, psFeature->psStats->body, weaponClass, weaponSubClass, isDamagePerSecond, minDamage);
 
 	// If the shell did sufficient damage to destroy the feature
 	if (relativeDamage < 0)
@@ -241,18 +246,11 @@ FEATURE *buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y, bool FromSave)
 		psFeature->rot.direction = 0;
 	}
 	psFeature->body = psStats->body;
-	psFeature->burnStart = 0;
-	psFeature->burnDamage = 0;
-	objSensorCache(psFeature, NULL);
-	objEcmCache(psFeature, NULL);
+	psFeature->periodicalDamageStart = 0;
+	psFeature->periodicalDamage = 0;
 
 	// it has never been drawn
 	psFeature->sDisplay.frameNumber = 0;
-
-	for (int j = 0; j < WC_NUM_WEAPON_CLASSES; j++)
-	{
-		psFeature->armour[j] = psFeature->psStats->armourValue;
-	}
 
 	memset(psFeature->seenThisTick, 0, sizeof(psFeature->seenThisTick));
 	memset(psFeature->visible, 0, sizeof(psFeature->visible));
@@ -269,8 +267,8 @@ FEATURE *buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y, bool FromSave)
 			MAPTILE *psTile = mapTile(b.map.x + width, b.map.y + breadth);
 
 			//check not outside of map - for load save game
-			ASSERT_OR_RETURN(NULL, b.map.x + width < mapWidth, "x coord bigger than map width - %s, id = %d", getName(psFeature->psStats->pName), psFeature->id);
-			ASSERT_OR_RETURN(NULL, b.map.y + breadth < mapHeight, "y coord bigger than map height - %s, id = %d", getName(psFeature->psStats->pName), psFeature->id);
+			ASSERT_OR_RETURN(NULL, b.map.x + width < mapWidth, "x coord bigger than map width - %s, id = %d", getName(psFeature->psStats), psFeature->id);
+			ASSERT_OR_RETURN(NULL, b.map.y + breadth < mapHeight, "y coord bigger than map height - %s, id = %d", getName(psFeature->psStats), psFeature->id);
 
 			if (width != psStats->baseWidth && breadth != psStats->baseBreadth)
 			{
@@ -279,8 +277,8 @@ FEATURE *buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y, bool FromSave)
 					FEATURE *psBlock = (FEATURE *)psTile->psObject;
 
 					debug(LOG_ERROR, "%s(%d) already placed at (%d+%d, %d+%d) when trying to place %s(%d) at (%d+%d, %d+%d) - removing it",
-					      getName(psBlock->psStats->pName), psBlock->id, map_coord(psBlock->pos.x), psBlock->psStats->baseWidth, map_coord(psBlock->pos.y),
-					      psBlock->psStats->baseBreadth, getName(psFeature->psStats->pName), psFeature->id, b.map.x, b.size.x, b.map.y, b.size.y);
+					      getName(psBlock->psStats), psBlock->id, map_coord(psBlock->pos.x), psBlock->psStats->baseWidth, map_coord(psBlock->pos.y),
+					      psBlock->psStats->baseBreadth, getName(psFeature->psStats), psFeature->id, b.map.x, b.size.x, b.map.y, b.size.y);
 
 					removeFeature(psBlock);
 				}
@@ -343,16 +341,13 @@ void featureUpdate(FEATURE *psFeat)
 {
 	syncDebugFeature(psFeat, '<');
 
-	// update the visibility for the feature
-	processVisibilityLevel((BASE_OBJECT *)psFeat);
-
-	/* Update the fire damage data */
-	if (psFeat->burnStart != 0 && psFeat->burnStart != gameTime - deltaGameTime)  // -deltaGameTime, since projectiles are updated after features.
+	/* Update the periodical damage data */
+	if (psFeat->periodicalDamageStart != 0 && psFeat->periodicalDamageStart != gameTime - deltaGameTime)  // -deltaGameTime, since projectiles are updated after features.
 	{
-		// The burnStart has been set, but is not from the previous tick, so we must be out of the fire.
-		psFeat->burnDamage = 0;  // Reset burn damage done this tick.
-		// Finished burning.
-		psFeat->burnStart = 0;
+		// The periodicalDamageStart has been set, but is not from the previous tick, so we must be out of the periodical damage.
+		psFeat->periodicalDamage = 0;  // Reset periodical damage done this tick.
+		// Finished periodical damaging
+		psFeat->periodicalDamageStart = 0;
 	}
 
 	syncDebugFeature(psFeat, '>');
@@ -427,6 +422,7 @@ bool destroyFeature(FEATURE *psDel, unsigned impactTime)
 	Vector3i pos;
 
 	ASSERT_OR_RETURN(false, psDel != NULL, "Invalid feature pointer");
+	ASSERT(gameTime - deltaGameTime < impactTime, "Expected %u < %u, gameTime = %u, bad impactTime", gameTime - deltaGameTime, impactTime, gameTime);
 
 	/* Only add if visible and damageable*/
 	if (psDel->visible[selectedPlayer] && psDel->psStats->damageable)
@@ -525,13 +521,12 @@ bool destroyFeature(FEATURE *psDel, unsigned impactTime)
 
 SDWORD getFeatureStatFromName(const char *pName)
 {
-	unsigned int inc;
 	FEATURE_STATS *psStat;
 
-	for (inc = 0; inc < numFeatureStats; inc++)
+	for (int inc = 0; inc < numFeatureStats; inc++)
 	{
 		psStat = &asFeatureStats[inc];
-		if (!strcmp(psStat->pName, pName))
+		if (psStat->id.compare(pName) == 0)
 		{
 			return inc;
 		}

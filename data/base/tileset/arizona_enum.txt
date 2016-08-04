@@ -1,9 +1,9 @@
 arizona_enum,8
-a_red
+a_water
 a_cliff
-a_yellow
 a_concrete
 a_mud
 a_green
-a_water
+a_red
+a_yellow
 a_sand

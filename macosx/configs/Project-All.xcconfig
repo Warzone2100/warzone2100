@@ -1,13 +1,11 @@
 // Global settings for all configurations
 
 
-ARCHS = i386 x86_64
-SDKROOT = macosx10.5
-SDKROOT[arch=x86_64] = macosx
+ARCHS = x86_64
+SDKROOT = macosx
 DEBUG_INFORMATION_FORMAT = dwarf-with-dsym
 GCC_VERSION = com.apple.compilers.llvm.clang.1_0
-MACOSX_DEPLOYMENT_TARGET = 10.5
-MACOSX_DEPLOYMENT_TARGET[sdk=macosx*][arch=x86_64] = 10.6
+MACOSX_DEPLOYMENT_TARGET = 10.6
 COPY_PHASE_STRIP = NO
 DEAD_CODE_STRIPPING = YES
 GCC_AUTO_VECTORIZATION = YES
@@ -29,5 +27,6 @@ LIBRARY_SEARCH_PATHS_QUOTED_3 = "$(SRCROOT)/external/QT"
 
 HEADER_SEARCH_PATHS_QUOTED_1 = "$(SRCROOT)/external/glew/include/**"
 HEADER_SEARCH_PATHS_QUOTED_2 = "$(SRCROOT)/../3rdparty/SDL/mac/include"
+HEADER_SEARCH_PATHS_QUOTED_3 = "$(SRCROOT)/../3rdparty"
 
 BACKEND = BACKEND_SDL // May also be BACKEND_QT but requires additional changes to the project file to switch

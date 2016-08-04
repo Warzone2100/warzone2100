@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -192,6 +192,10 @@ TITLECODE titleLoop(void)
 		runTitleMenu();
 		break;
 
+	case CAMPAIGNS:
+		runCampaignSelector();
+		break;
+
 	case SINGLE:
 		runSinglePlayerMenu();
 		break;
@@ -200,20 +204,10 @@ TITLECODE titleLoop(void)
 		runTutorialMenu();
 		break;
 
-//		case GRAPHICS:
-//			runGraphicsOptionsMenu();
-//			break;
-
 	case CREDITS:
 		runCreditsScreen();
 		break;
 
-//		case DEMOMODE:
-//			runDemoMenu();
-//			break;
-//	case VIDEO:
-//			runVideoOptionsMenu();
-//			break;
 	case OPTIONS:
 		runOptionsMenu();
 		break;
@@ -273,10 +267,9 @@ TITLECODE titleLoop(void)
 	pie_SetFogStatus(false);
 	pie_ScreenFlip(CLEAR_BLACK);//title loop
 
-	if ((keyDown(KEY_LALT) || keyDown(KEY_RALT))
-	    /* Check for toggling display mode */
-	    && keyPressed(KEY_RETURN))
+	if ((keyDown(KEY_LALT) || keyDown(KEY_RALT)) && keyPressed(KEY_RETURN))
 	{
+		war_setFullscreen(!war_getFullscreen());
 		wzToggleFullscreen();
 	}
 	return RetCode;
@@ -356,12 +349,9 @@ void initLoadingScreen(bool drawbdrop)
 // fill buffers with the static screen
 void startCreditsScreen(void)
 {
-	SCREENTYPE	screen = SCREEN_CREDITS;
-
 	lastChange = gameTime;
-	// fill buffers
 
-	pie_LoadBackDrop(screen);
+	pie_LoadBackDrop(SCREEN_CREDITS);
 
 	pie_SetFogStatus(false);
 	pie_ScreenFlip(CLEAR_BLACK);//init loading

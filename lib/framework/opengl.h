@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 2010  Giel van Schijndel
-	Copyright (C) 2013  Warzone 2100 Project
+	Copyright (C) 2013-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -31,9 +31,9 @@
  * define __STDC_LIMIT_MACROS before including stdint.h
  */
 #include "lib/framework/wzglobal.h"
-#if defined(WZ_CC_MSVC)
+#ifndef GLEW_STATIC
 #define GLEW_STATIC
-#endif
+#endif //GLEW_STATIC
 #include <GL/glew.h>
 
 #endif

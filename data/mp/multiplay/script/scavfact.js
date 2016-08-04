@@ -13,12 +13,12 @@ function produceDroid(fac1) {
 		// We now have switch statements! And we can use the built-in Math library
 		switch (Math.floor(Math.random() * 10))
 		{
-		case 0:	buildDroid(fac1, "Trike", "B4body-sml-trike01", "BaBaProp", "", DROID_WEAPON, "bTrikeMG"); break;
-		case 1: buildDroid(fac1, "Buggy", "B3body-sml-buggy01", "BaBaProp", "", DROID_WEAPON, "BuggyMG"); break;
-		case 2: buildDroid(fac1, "Jeep", "B2JeepBody", "BaBaProp", "", DROID_WEAPON, "BJeepMG"); break;
-		case 3: buildDroid(fac1, "Cannonbus", "BusBody", "BaBaProp", "", DROID_WEAPON, "BusCannon"); break;
-		case 4: buildDroid(fac1, "Firebus", "FireBody", "BaBaProp", "", DROID_WEAPON, "BabaFlame"); break;
-		default: buildDroid(fac1, "Bloke", "B1BaBaPerson01", "BaBaLegs", "", DROID_PERSON, "BaBaMG"); break;
+		case 0:	buildDroid(fac1, "Trike", "B4body-sml-trike01", "BaBaProp", null, null, "bTrikeMG"); break;
+		case 1: buildDroid(fac1, "Buggy", "B3body-sml-buggy01", "BaBaProp", null, null, "BuggyMG"); break;
+		case 2: buildDroid(fac1, "Jeep", "B2JeepBody", "BaBaProp", null, null, "BJeepMG"); break;
+		case 3: buildDroid(fac1, "Cannonbus", "BusBody", "BaBaProp", null, null, "BusCannon"); break;
+		case 4: buildDroid(fac1, "Firebus", "FireBody", "BaBaProp", null, null, "BabaFlame"); break;
+		default: buildDroid(fac1, "Bloke", "B1BaBaPerson01", "BaBaLegs", null, null, "BaBaMG"); break;
 		}
 	}	
 }

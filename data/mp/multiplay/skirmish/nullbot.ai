@@ -1,4 +1,0 @@
-[AI]
-name = "NullBot"
-js = nullbot.js
-tip = "NullBot - an adaptive skirmish AI"

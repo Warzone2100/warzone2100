@@ -12,10 +12,12 @@ BASELIST = \
 	palette.txt \
 	anims \
 	audio \
+	campaigns \
 	components \
 	effects \
 	features \
 	gamedesc.lev \
+	ruleset.json \
 	images \
 	messages \
 	misc \
@@ -30,6 +32,7 @@ BASELIST = \
 
 PATCHLIST = \
 	addon.lev \
+	ruleset.json \
 	anims \
 	challenges \
 	components \

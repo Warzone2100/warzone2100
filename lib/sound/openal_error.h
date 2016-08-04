@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 2007  Giel van Schijndel
-	Copyright (C) 2007-2013  Warzone 2100 Project
+	Copyright (C) 2007-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -21,7 +21,6 @@
 #ifndef __INCLUDED_LIB_SOUND_OPENAL_ERROR_H__
 #define __INCLUDED_LIB_SOUND_OPENAL_ERROR_H__
 
-#if !defined(WZ_NOSOUND)
 #include "lib/framework/frame.h"
 
 #ifdef WZ_OS_MAC
@@ -49,10 +48,5 @@ extern ALenum __sound_GetContextError(ALCdevice *device, const char *location_de
  */
 #define sound_GetContextError(device) \
 	__sound_GetContextError(device, AT_MACRO)
-
-#else // !defined(WZ_NOSOUND)
-# define sound_GetError(err_code)       AL_NO_ERROR
-# define sound_GetContextError(err_code) ALC_NO_ERROR
-#endif // !defined(WZ_NOSOUND)
 
 #endif // __INCLUDED_LIB_SOUND_OPENAL_ERROR_H__

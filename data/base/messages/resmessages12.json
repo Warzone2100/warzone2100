@@ -1,0 +1,237 @@
+{
+    "RES_DF_WT1": {
+        "id": "RES_DF_WT1",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_struttech.ogg",
+        "text": [
+            "New Defensive Structure Available",
+            "Armored hardpoint with Heavy Machinegun",
+            "Automatically targets enemies within sensor range",
+            "Defensive Strength: High"
+        ]
+    },
+    "RES_EMP_MRL": {
+        "id": "RES_EMP_MRL",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_struttech.ogg",
+        "text": [
+            "New Defensive Structure Available",
+            "Mini-rocket armored strongpoint",
+            "Assigned automatically to nearest sensor or CB tower",
+            "Defensive Strength: Medium"
+        ]
+    },
+    "RES_EMP_Mpit": {
+        "id": "RES_EMP_Mpit",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_struttech.ogg",
+        "text": [
+            "New Defensive Structure Available",
+            "Armored Mortar battery pit",
+            "Assigned automatically to nearest sensor or CB tower",
+            "Defensive Strength: Medium"
+        ]
+    },
+    "RES_ENGIN1": {
+        "id": "RES_ENGIN1",
+        "imdName": "MICAPSUL.PIE",
+        "sequenceName": "res_systech.ogg",
+        "text": [
+            "Research Breakthrough Improves Construction Rates",
+            "Improved Engineering Techniques",
+            "Increases construction speed",
+            "All trucks upgraded automatically"
+        ]
+    },
+    "RES_MG3MK1": {
+        "id": "RES_MG3MK1",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_weapons.ogg",
+        "text": [
+            "New Weapon Turret Available",
+            ".50-calibre heavy machinegun",
+            "\n\"Best Targets: Infantry",
+            " base structures",
+            " wheeled vehicles\"",
+            "Body Points: Medium"
+        ]
+    },
+    "RES_SY_CBSTU1": {
+        "id": "RES_SY_CBSTU1",
+        "imdName": "MICAPSUL.PIE",
+        "sequenceName": "res_systech.ogg",
+        "text": [
+            "New Systems Turret Available for Design",
+            "Counter-battery turret detects enemy indirect fire batteries",
+            "Orders assigned indirect fire units to fire at the enemy batteries",
+            "Counter-battery fire continues until enemy battery is suppressed"
+        ]
+    },
+    "RES_SY_CBSU1": {
+        "id": "RES_SY_CBSU1",
+        "imdName": "MICAPSUL.PIE",
+        "sequenceName": "res_systech.ogg",
+        "text": [
+            "CB Sensor Improved",
+            "New fire detection systems",
+            "Extends CB Range",
+            "All CB sensors upgraded automatically"
+        ]
+    },
+    "RES_WT6_ATR": {
+        "id": "RES_WT6_ATR",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_struttech.ogg",
+        "text": [
+            "New Defensive Structure Available",
+            "Armored hardpoint with Lancer AT missile",
+            "Automatically targets enemies within sensor range",
+            "Defensive Strength: High"
+        ]
+    },
+    "RES_W_CNAC1": {
+        "id": "RES_W_CNAC1",
+        "imdName": "MICAPSUL.PIE",
+        "sequenceName": "res_weapons.ogg",
+        "text": [
+            "Cannon Upgrade",
+            "Determines range to target",
+            "Increases Cannon accuracy",
+            "All cannons upgraded automatically"
+        ]
+    },
+    "RES_W_CN_D4": {
+        "id": "RES_W_CN_D4",
+        "imdName": "MICAPSUL.PIE",
+        "sequenceName": "res_weapons.ogg",
+        "text": [
+            "Cannon Upgrade",
+            "Armor-Piercing Fin-Stabilized Discarding Sabot",
+            "Increases Cannon damage",
+            "All cannons upgraded automatically"
+        ]
+    },
+    "RES_W_CN_ROF1": {
+        "id": "RES_W_CN_ROF1",
+        "imdName": "MICAPSUL.PIE",
+        "sequenceName": "res_weapons.ogg",
+        "text": [
+            "Cannon Upgrade",
+            "Automatic loading mechanism replaces manual loader",
+            "Increases Cannon ROF",
+            "All cannons upgraded automatically"
+        ]
+    },
+    "RES_W_FL_ROF1": {
+        "id": "RES_W_FL_ROF1",
+        "imdName": "MICAPSUL.PIE",
+        "sequenceName": "res_weapons.ogg",
+        "text": [
+            "Flamer Upgrade",
+            "Automatic loading mechanism replaces manual loader",
+            "Increases Flamer ROF",
+            "All flamers upgraded automatically"
+        ]
+    },
+    "RES_W_M2": {
+        "id": "RES_W_M2",
+        "imdName": "MICAPSUL.PIE",
+        "sequenceName": "res_weapons.ogg",
+        "text": [
+            "New Indirect Fire Weapon Available",
+            "May be assigned to a sensor",
+            "\n\"Best Targets: Base structures",
+            " infantry",
+            " wheeled vehicles\"",
+            "Body Points: Very Low"
+        ]
+    },
+    "RES_W_MG_ROF1": {
+        "id": "RES_W_MG_ROF1",
+        "imdName": "MICAPSUL.PIE",
+        "sequenceName": "res_weapons.ogg",
+        "text": [
+            "Machinegun Upgrade",
+            "Chaingun mechanism replaces belt-feed",
+            "Increases Machinegun ROF",
+            "All machineguns upgraded automatically"
+        ]
+    },
+    "RES_W_M_AC1": {
+        "id": "RES_W_M_AC1",
+        "imdName": "MICAPSUL.PIE",
+        "sequenceName": "res_weapons.ogg",
+        "text": [
+            "Mortar Upgrade",
+            "Targeting systems compensate for distance and weather conditions",
+            "Increases Mortar accuracy",
+            "All mortars upgraded automatically"
+        ]
+    },
+    "RES_W_M_ROF1": {
+        "id": "RES_W_M_ROF1",
+        "imdName": "MICAPSUL.PIE",
+        "sequenceName": "res_weapons.ogg",
+        "text": [
+            "Mortar Upgrade",
+            "Automatic loader replaces manual feed",
+            "Increases Mortar ROF",
+            "All mortars upgraded automatically"
+        ]
+    },
+    "RES_W_RK_HvAT": {
+        "id": "RES_W_RK_HvAT",
+        "imdName": "MICAPSUL.PIE",
+        "sequenceName": "res_weapons.ogg",
+        "text": [
+            "New Rocket Available",
+            "Heavy anti-tank rocket",
+            "Best Targets: Vehicles",
+            "Body Points: Very Low"
+        ]
+    },
+    "RES_W_RK_IDF": {
+        "id": "RES_W_RK_IDF",
+        "imdName": "MICAPSUL.PIE",
+        "sequenceName": "res_weapons.ogg",
+        "text": [
+            "New Rocket Available",
+            "Rocket artillery; can be assigned to a sensor",
+            "Best Targets: Vehicles and Emplacements",
+            "Body Points: Very Low"
+        ]
+    },
+    "RES_W_RK_MRL1": {
+        "id": "RES_W_RK_MRL1",
+        "imdName": "MICAPSUL.PIE",
+        "sequenceName": "res_weapons.ogg",
+        "text": [
+            "New Rocket Available",
+            "Fires salvoes of mini-rockets",
+            "Best Targets: Base structures",
+            "Body Points: Very Low"
+        ]
+    },
+    "RES_W_SRK_AC2": {
+        "id": "RES_W_SRK_AC2",
+        "imdName": "MICAPSUL.PIE",
+        "sequenceName": "res_weapons.ogg",
+        "text": [
+            "Rocket Upgrade",
+            "Rocket tracks the laser designator to the target",
+            "Increases Rocket accuracy",
+            "All rockets upgraded automatically"
+        ]
+    },
+    "RES_W_SRK_ROF1": {
+        "id": "RES_W_SRK_ROF1",
+        "imdName": "MICAPSUL.PIE",
+        "sequenceName": "res_weapons.ogg",
+        "text": [
+            "Rocket Upgrade",
+            "Autoloader increases reload rate",
+            "Increases Rocket ROF",
+            "All rockets upgraded automatically"
+        ]
+    }
+}

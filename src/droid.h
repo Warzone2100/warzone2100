@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -38,29 +38,16 @@
 
 #define DROID_RESISTANCE_FACTOR     30
 
-#define MAX_MP_DROIDS 150
-#define MAX_SP_DROIDS 100
-#define MAX_SP_AI_DROIDS 999
 // Changing this breaks campaign saves!
 #define MAX_RECYCLED_DROIDS 450
 
 //used to stop structures being built too near the edge and droids being placed down
 #define TOO_NEAR_EDGE	3
 
-/* Define max number of allowed droids per droid type */
-#define MAX_COMMAND_DROIDS		10		// max number of commanders a player can have
-#define MAX_CONSTRUCTOR_DROIDS	15		// max number of constructors a player can have
-
 /* Experience modifies */
 #define EXP_REDUCE_DAMAGE		6		// damage of a droid is reduced by this value per experience level, in %
 #define EXP_ACCURACY_BONUS		5		// accuracy of a droid is increased by this value per experience level, in %
 #define EXP_SPEED_BONUS			5		// speed of a droid is increased by this value per experience level, in %
-
-/* Misc accuracy modifiers */
-#define	FOM_PARTIAL_ACCURACY_PENALTY	50	// penalty for not being fully able to fire while moving, in %
-
-/* Minumum number of droids a commander can control in its group */
-#define	MIN_CMD_GROUP_DROIDS	6
 
 enum PICKTILE
 {
@@ -77,9 +64,7 @@ extern UWORD	aDroidExperience[MAX_PLAYERS][MAX_RECYCLED_DROIDS];
 // initialise droid module
 extern bool droidInit(void);
 
-extern void removeDroidBase(DROID *psDel);
-
-extern bool loadDroidWeapons(const char *pWeaponData, UDWORD bufferSize);
+bool removeDroidBase(DROID *psDel);
 
 struct INITIAL_DROID_ORDERS
 {
@@ -109,9 +94,6 @@ extern UDWORD calcDroidPoints(DROID *psDroid);
 /* Calculate the body points of a droid from it's template */
 extern UDWORD calcTemplateBody(DROID_TEMPLATE *psTemplate, UBYTE player);
 
-/* Calculate the base body points of a droid without upgrades*/
-extern UDWORD calcDroidBaseBody(DROID *psDroid);
-
 /* Calculate the base speed of a droid from it's template */
 extern UDWORD calcDroidBaseSpeed(DROID_TEMPLATE *psTemplate, UDWORD weight, UBYTE player);
 
@@ -128,7 +110,7 @@ extern UDWORD	calcTemplatePower(DROID_TEMPLATE *psTemplate);
 bool idfDroid(DROID *psDroid);
 
 /* Do damage to a droid */
-int32_t droidDamage(DROID *psDroid, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime, bool isDamagePerSecond);
+int32_t droidDamage(DROID *psDroid, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime, bool isDamagePerSecond, int minDamage);
 
 /* The main update routine for all droids */
 extern void droidUpdate(DROID *psDroid);
@@ -137,22 +119,16 @@ extern void droidUpdate(DROID *psDroid);
 enum DroidStartBuild {DroidStartBuildFailed, DroidStartBuildSuccess, DroidStartBuildPending};
 DroidStartBuild droidStartBuild(DROID *psDroid);
 
-/* Sets a droid to start demolishing - returns true if successful */
-extern bool	droidStartDemolishing(DROID *psDroid);
-
 /* Update a construction droid while it is demolishing
    returns true while demolishing */
 extern bool	droidUpdateDemolishing(DROID *psDroid);
 
-/* Sets a droid to start repairing - returns true if successful */
-extern bool	droidStartRepair(DROID *psDroid);
+/* Sets a droid to start a generic action */
+void droidStartAction(DROID *psDroid);
 
 /* Update a construction droid while it is repairing
    returns true while repairing */
 extern bool	droidUpdateRepair(DROID *psDroid);
-
-/*Start a Repair Droid working on a damaged droid - returns true if successful*/
-extern bool droidStartDroidRepair(DROID *psDroid);
 
 /*Updates a Repair Droid working on a damaged droid - returns true whilst repairing*/
 extern bool droidUpdateDroidRepair(DROID *psRepairDroid);
@@ -161,9 +137,6 @@ extern bool droidUpdateDroidRepair(DROID *psRepairDroid);
    returns true while building continues */
 extern bool droidUpdateBuild(DROID *psDroid);
 
-/*Start a EW weapon droid working on a low resistance structure*/
-extern bool droidStartRestore(DROID *psDroid);
-
 /*continue restoring a structure*/
 extern bool droidUpdateRestore(DROID *psDroid);
 
@@ -171,7 +144,7 @@ extern bool droidUpdateRestore(DROID *psDroid);
 extern void recycleDroid(DROID *psDel);
 
 /* Remove a droid and free it's memory */
-void destroyDroid(DROID *psDel, unsigned impactTime);
+bool destroyDroid(DROID *psDel, unsigned impactTime);
 
 /* Same as destroy droid except no graphical effects */
 extern void	vanishDroid(DROID *psDel);
@@ -251,12 +224,6 @@ extern void setUpBuildModule(DROID *psDroid);
 /* Just returns true if the droid's present body points aren't as high as the original*/
 extern bool	droidIsDamaged(DROID *psDroid);
 
-/* Returns currently active (selected) group */
-extern UDWORD	getSelectedGroup(void);
-extern void	setSelectedGroup(UDWORD groupNumber);
-extern UDWORD	getSelectedCommander(void);
-extern void	setSelectedCommander(UDWORD commander);
-
 extern char const *getDroidResourceName(char const *pName);
 
 /*checks to see if an electronic warfare weapon is attached to the droid*/
@@ -272,7 +239,8 @@ extern UBYTE checkCommandExist(UBYTE player);
 a defined range*/
 extern BASE_OBJECT *checkForRepairRange(DROID *psDroid, DROID *psTarget);
 // Returns true if the droid is a transporter.
-extern bool isTransporter(const DROID *psDroid);
+bool isTransporter(DROID const *psDroid);
+bool isTransporter(DROID_TEMPLATE const *psTemplate);
 /// Returns true if the droid has VTOL propulsion, and is not a transport.
 extern bool isVtolDroid(const DROID *psDroid);
 /// Returns true if the droid has VTOL propulsion and is moving.
@@ -339,13 +307,13 @@ extern bool cyborgDroid(const DROID *psDroid);
 bool isConstructionDroid(DROID const *psDroid);
 bool isConstructionDroid(BASE_OBJECT const *psObject);
 
-// check for illegal references to droid we want to release
-bool droidCheckReferences(DROID *psVictimDroid);
-
 /** Check if droid is in a legal world position and is not on its way to drive off the map. */
 bool droidOnMap(const DROID *psDroid);
 
 void droidSetPosition(DROID *psDroid, int x, int y);
+
+/// Return a percentage of how fully armed the object is, or -1 if N/A.
+int droidReloadBar(BASE_OBJECT *psObj, WEAPON *psWeap, int weapon_slot);
 
 static inline int droidSensorRange(const DROID *psDroid)
 {
@@ -357,47 +325,42 @@ static inline int droidJammerPower(const DROID *psDroid)
 	return objJammerPower((const BASE_OBJECT *)psDroid);
 }
 
-static inline int droidConcealment(const DROID *psDroid)
-{
-	return objConcealment((const BASE_OBJECT *)psDroid);
-}
-
 /*
  * Component stat helper functions
  */
 static inline BODY_STATS *getBodyStats(DROID *psDroid)
 {
-	return asBodyStats + psDroid->asBits[COMP_BODY].nStat;
+	return asBodyStats + psDroid->asBits[COMP_BODY];
 }
 
 static inline BRAIN_STATS *getBrainStats(DROID *psDroid)
 {
-	return asBrainStats + psDroid->asBits[COMP_BRAIN].nStat;
+	return asBrainStats + psDroid->asBits[COMP_BRAIN];
 }
 
 static inline PROPULSION_STATS *getPropulsionStats(DROID *psDroid)
 {
-	return asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
+	return asPropulsionStats + psDroid->asBits[COMP_PROPULSION];
 }
 
 static inline SENSOR_STATS *getSensorStats(DROID *psDroid)
 {
-	return asSensorStats + psDroid->asBits[COMP_SENSOR].nStat;
+	return asSensorStats + psDroid->asBits[COMP_SENSOR];
 }
 
 static inline ECM_STATS *getECMStats(DROID *psDroid)
 {
-	return asECMStats + psDroid->asBits[COMP_ECM].nStat;
+	return asECMStats + psDroid->asBits[COMP_ECM];
 }
 
 static inline REPAIR_STATS *getRepairStats(DROID *psDroid)
 {
-	return asRepairStats + psDroid->asBits[COMP_REPAIRUNIT].nStat;
+	return asRepairStats + psDroid->asBits[COMP_REPAIRUNIT];
 }
 
 static inline CONSTRUCT_STATS *getConstructStats(DROID *psDroid)
 {
-	return asConstructStats + psDroid->asBits[COMP_CONSTRUCT].nStat;
+	return asConstructStats + psDroid->asBits[COMP_CONSTRUCT];
 }
 
 static inline WEAPON_STATS *getWeaponStats(DROID *psDroid, int weapon_slot)

@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -69,7 +69,11 @@ typedef struct _poptContext
 } *poptContext;
 
 /// TODO: Find a way to use the real qFatal from Qt
+#undef qFatal
 #define qFatal(...) { fprintf(stderr, __VA_ARGS__); fprintf(stderr, "\n"); exit(1); }
+
+/// Enable automatic test games
+static bool wz_autogame = false;
 
 static void poptPrintHelp(poptContext ctx, FILE *output, WZ_DECL_UNUSED int unused)
 {
@@ -233,7 +237,7 @@ typedef enum
 	CLI_CRASH,
 	CLI_TEXTURECOMPRESSION,
 	CLI_NOTEXTURECOMPRESSION,
-	CLI_FALLBACKMODE,
+	CLI_AUTOGAME,
 } CLI_OPTIONS;
 
 static const struct poptOption *getOptionsTable(void)
@@ -262,11 +266,11 @@ static const struct poptOption *getOptionsTable(void)
 		{ "noshadows",  '\0', POPT_ARG_NONE,   NULL, CLI_NOSHADOWS,  N_("Disable shadows"),                   NULL },
 		{ "sound",      '\0', POPT_ARG_NONE,   NULL, CLI_SOUND,      N_("Enable sound"),                      NULL },
 		{ "nosound",    '\0', POPT_ARG_NONE,   NULL, CLI_NOSOUND,    N_("Disable sound"),                     NULL },
-		{ "join",       '\0', POPT_ARG_STRING, NULL, CLI_CONNECTTOIP, N_("connect directly to IP/hostname"),   N_("host") },
-		{ "host",       '\0', POPT_ARG_NONE,   NULL, CLI_HOSTLAUNCH, N_("go directly to host screen"),        NULL },
+		{ "join",       '\0', POPT_ARG_STRING, NULL, CLI_CONNECTTOIP, N_("Connect directly to IP/hostname"),   N_("host") },
+		{ "host",       '\0', POPT_ARG_NONE,   NULL, CLI_HOSTLAUNCH, N_("Go directly to host screen"),        NULL },
 		{ "texturecompression", '\0', POPT_ARG_NONE, NULL, CLI_TEXTURECOMPRESSION, N_("Enable texture compression"), NULL },
 		{ "notexturecompression", '\0', POPT_ARG_NONE, NULL, CLI_NOTEXTURECOMPRESSION, N_("Disable texture compression"), NULL },
-		{ "fallback-mode", '\0', POPT_ARG_NONE, NULL, CLI_FALLBACKMODE, N_("Only use OpenGL 1.5"), NULL },
+		{ "autogame",   '\0', POPT_ARG_NONE,   NULL, CLI_AUTOGAME,   N_("Run games automatically for testing"), NULL },
 		// Terminating entry
 		{ NULL,         '\0', 0,               NULL, 0,              NULL,                                    NULL },
 	};
@@ -620,11 +624,16 @@ bool ParseCommandLine(int argc, const char **argv)
 			wz_texture_compression = GL_RGBA;
 			break;
 
-		case CLI_FALLBACKMODE:
-			war_SetShaders(SHADERS_OFF);
+		case CLI_AUTOGAME:
+			wz_autogame = true;
 			break;
 		};
 	}
 
 	return true;
+}
+
+bool autogame_enabled()
+{
+	return wz_autogame;
 }

@@ -1,0 +1,40 @@
+{
+    "map": {
+        "file": "8c-beggarskanyon",
+        "id": "map",
+        "maxPlayers": 8,
+        "name": "Beggar's Kanyon"
+    },
+    "player_0": {
+        "id": "player_0",
+        "team": 0
+    },
+    "player_1": {
+        "id": "player_1",
+        "team": 0
+    },
+    "player_2": {
+        "id": "player_2",
+        "team": 0
+    },
+    "player_3": {
+        "id": "player_3",
+        "team": 0
+    },
+    "player_4": {
+        "id": "player_4",
+        "team": 1
+    },
+    "player_5": {
+        "id": "player_5",
+        "team": 1
+    },
+    "player_6": {
+        "id": "player_6",
+        "team": 1
+    },
+    "player_7": {
+        "id": "player_7",
+        "team": 1
+    }
+}

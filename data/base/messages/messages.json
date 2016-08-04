@@ -1,0 +1,56 @@
+{
+    "MSG1": {
+        "audioName": "Structure Research Completed.ogg",
+        "id": "MSG1",
+        "imdName": "MICAPSUL.PIE",
+        "sequenceName": "res_pow.ogg",
+        "text": [
+            "Structure Research Completed"
+        ]
+    },
+    "MSG2": {
+        "audioName": "Power Research Completed.ogg",
+        "id": "MSG2",
+        "imdName": "MICAPSUL.PIE",
+        "sequenceName": "res_pow.ogg",
+        "text": [
+            "Power Research Completed"
+        ]
+    },
+    "MSG3": {
+        "audioName": "Computer Research Completed.ogg",
+        "id": "MSG3",
+        "imdName": "MICAPSUL.PIE",
+        "sequenceName": "res_pow.ogg",
+        "text": [
+            "Computer Research Completed"
+        ]
+    },
+    "MSG4": {
+        "audioName": "Droid Research Completed.ogg",
+        "id": "MSG4",
+        "imdName": "MICAPSUL.PIE",
+        "sequenceName": "res_pow.ogg",
+        "text": [
+            "Unit Research Completed"
+        ]
+    },
+    "MSG5": {
+        "audioName": "Systems Research Completed.ogg",
+        "id": "MSG5",
+        "imdName": "MICAPSUL.PIE",
+        "sequenceName": "res_pow.ogg",
+        "text": [
+            "Systems Research Completed"
+        ]
+    },
+    "MSG6": {
+        "audioName": "Weapon Research Completed.ogg",
+        "id": "MSG6",
+        "imdName": "MICAPSUL.PIE",
+        "sequenceName": "res_pow.ogg",
+        "text": [
+            "Weapon Research Completed"
+        ]
+    }
+}

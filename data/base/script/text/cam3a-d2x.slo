@@ -20,14 +20,13 @@ public		INTMESSAGE	brief, brief2, resMsg[4];
 public		SOUND		failedSnd, warnSatSnd;
 private		int		uplinkX[3], uplinkY[3], tempX, tempY, temp;
 private		int		lasX1, lasX2, lasY1, lasY2, yMax, chance, timeLimit;
-//private		STRUCTURE	target;
 private		BASEOBJ		target;
 private		BOOL		flag;
 private		int		numTargets, targets[13], res;
 //player research topics for missile codes
 public		RESEARCHSTAT	playerRes[4];
 private		int		count, uplinkPlayer;
-private     RESEARCHSTAT    researchDone;
+private		RESEARCHSTAT    researchDone;
 private		GROUP		grpGroup[1];
 private		DROID		droid;
 private		STRUCTURE	testStruc,structure;	
@@ -53,11 +52,11 @@ event missileLaunch;
 
 event start(CALL_GAMEINIT)
 {
-//don't let player see 3B anymore
+	// don't let player see 3B anymore
 	setScrollMinY(126);
 	//setScrollParams(0, 64, 58, 256);
 
-//need to give player research for NEXUS intruder program
+	// need to give player research for NEXUS intruder program
 	res = 0;					//keeps track of research to test done
 	enableResearch(playerRes[res], player);
 
@@ -66,11 +65,11 @@ event start(CALL_GAMEINIT)
 	lasX2 = 8000;
 	lasY2 = 16384;
 	chance = 50;	//starting chance to hit %age
-//allow LasSats to hit gamma base
+	// allow LasSats to hit gamma base
 	yMax = 32576;	//allow 3AD!!	//24576;
-//setup target types
+	// setup target types
 	numTargets = 13;
-//use wall more than anything else so picks more often
+	// use wall more than anything else so picks more often
 	targets[0] = ST_HQ;		//ST_WALL
 	targets[1] = ST_FACTORY;
 	targets[2] = ST_POWER_GEN;
@@ -88,24 +87,24 @@ event start(CALL_GAMEINIT)
 
 event nukeEm(wait, 5)
 {
-//need to nuke all player structures in 3AB
+	// need to nuke all player structures in 3AB
 	count = 0;
 	while (count < 20)
 	{
 		killStructsInArea(player, count, 0, 0, 8128, 16384, FALSE, FALSE);
 		count = count + 1;
 	}
-//need to nuke all player units in 3AB
-			killDroidsInArea(0,0,8128, 16384, player);
+	// need to nuke all player units in 3AB
+	killDroidsInArea(0,0,8128, 16384, player);
 }
 
 //to check if player no longer has the silos
 event captureDeadEvnt(inactive)
 {
-//don't allow win
+	// don't allow win
 	setEventTrigger(resDone, inactive);
 	setEventTrigger(missileLaunch, inactive);
-//need to play audio if possible
+	// need to play audio if possible
 	addConsoleText(_("Objective Destroyed"), player);
 	playSound(failedSnd, player);
 	pause(20);
@@ -115,8 +114,8 @@ event captureDeadEvnt(inactive)
 
 event allowLose(wait, 20)
 {
-//need to find missile silos belonging to Player
-//they need to be of a type not used by anything else
+	// need to find missile silos belonging to Player
+	// they need to be of a type not used by anything else
 	initEnumStruct(FALSE, siloStat, player, player);
 	testStruc = enumStruct();
 	count = 0;
@@ -138,19 +137,17 @@ event clearMessage(inactive)
 
 event nexusGo(nexusGoTrig)	//wait 5mins
 {
-//start Nexus forces attacking when time is up
-//give player warning
+	// start Nexus forces attacking when time is up
+	// give player warning
 	addMessage(brief2, MISS_MSG, 0, true);
-//set timelimit
+	// set timelimit
 	setMissionTime(timeLimit);
-//Start Las Sat firing
-	//setEventTrigger(fireLasSat, fireLasSatTrig);
 }
 
 event missileLaunch(inactive)
 {
-//either done here or as part of win sequence?
-//may want countdown here...
+	// either done here or as part of win sequence?
+	// may want countdown here...
 	extraVictoryFlag = TRUE;	//only when player done all research
 	//addMessage(winMsg, MISS_MSG, 0, true);
 	setEventTrigger(fireLasSat, inactive);
@@ -158,34 +155,31 @@ event missileLaunch(inactive)
 
 event resDone(resDoneTrig)
 {
-//play research done messages (4 in all)
-    //check that the research completed is the one we are interested in
-    if (researchDone == playerRes[res])
-    {
-    	if (res < 3)
-	    {
-		    addMessage(resMsg[res], MISS_MSG, 0, true);
-    		res = res + 1;
-            //enable the next research topic
-            enableResearch(playerRes[res], player);
-	    }
-	    else if (res >= 3)
-	    {
-		addMessage(resMsg[res], MISS_MSG, 0, true);
-		setEventTrigger(missileLaunch, missileLaunchTrig);
-		setEventTrigger(resDone, inactive);
-	    }
-    }
+	// play research done messages (4 in all)
+	// check that the research completed is the one we are interested in
+	if (researchDone == playerRes[res])
+	{
+		if (res < 3)
+		{
+			addMessage(resMsg[res], MISS_MSG, 0, true);
+			res = res + 1;
+			// enable the next research topic
+			enableResearch(playerRes[res], player);
+		}
+		else if (res >= 3)
+		{
+			addMessage(resMsg[res], MISS_MSG, 0, true);
+			setEventTrigger(missileLaunch, missileLaunchTrig);
+			setEventTrigger(resDone, inactive);
+		}
+	}
 }
-
-
 
 event fireLasSat(fireLasSatTrig)
 {
-//find a target in area
+	// find a target in area
 	resetStructTargets();
 	setStructTarPref(targets[random(numTargets)]);		//pick random target type preference
-	//setStructTarPref(targets[4]);		//pick walls to check
 	target = structTargetInArea(player, -1, lasX1, lasY1, lasX2, lasY2);
 	//if no structures to hit go for Droids
 	if (target == NULLOBJECT)
@@ -215,7 +209,7 @@ event fireLasSat(fireLasSatTrig)
 				tempY = tempY - 64 + random(128);
 				fireWeaponAtLoc(lasSat, tempX, tempY);
 			}
-//if can't miss, then hit close by anyway!
+			// if can't miss, then hit close by anyway!
 			else
 			{
 				//pick random coords (hopefully miss!)
@@ -227,19 +221,19 @@ event fireLasSat(fireLasSatTrig)
 	}
 	else
 	{
-//pick random coords (hopefully miss!)
+		// pick random coords (hopefully miss!)
 		tempX = lasX1 + random(lasX2 - lasX1);
 		tempY = lasY1 + random(lasY2 - lasY1);
 		fireWeaponAtLoc(lasSat, tempX, tempY);
 	}
 
-//warn player that lassat has fired!
+	// warn player that lassat has fired!
 	if (random(100) < 50)
 	{
 		playSoundPos(warnSatSnd, selectedPlayer, tempX, tempY, 0);	//warn player!!
 	}
 
-//set random time for next firing
+	// set random time for next firing
 	temp = random(4);
 	if (temp == 0)
 	{
@@ -266,6 +260,4 @@ event moveSat(moveSatTrig)
 		lasY2 = lasY2 + 128; //add another tile to limit, so creeps into 3A in 10 mins
 		//lasY1 = lasY1 + 64; //add another 1/2 tile to limit, so stops targetting north so much
 	}
-
 }
-

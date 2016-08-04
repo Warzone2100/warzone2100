@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -651,7 +651,6 @@ extern bool scrMoveDroidStopped(void);
 extern bool scrUpdateVisibleTiles(void);
 extern bool scrCheckVisibleTile(void);
 extern bool scrAssembleWeaponTemplate(void);
-extern bool scrWeaponShortHitUpgrade(void);
 extern bool scrWeaponLongHitUpgrade(void);
 extern bool scrWeaponDamageUpgrade(void);
 extern bool scrWeaponFirePauseUpgrade(void);
@@ -672,8 +671,8 @@ extern UDWORD numPlayerWeapStructsInRange(SDWORD player, SDWORD lookingPlayer, S
 extern UDWORD playerWeapDroidsCostInRange(SDWORD player, SDWORD lookingPlayer, SDWORD range, SDWORD rangeX, SDWORD rangeY, bool bVTOLs);
 extern UDWORD playerWeapStructsCostInRange(SDWORD player, SDWORD lookingPlayer, SDWORD range, SDWORD rangeX, SDWORD rangeY, bool bFinished);
 extern UDWORD numEnemyObjInRange(SDWORD player, SDWORD range, SDWORD rangeX, SDWORD rangeY, bool bVTOLs, bool bFinished);
-extern bool addBeaconBlip(SDWORD x, SDWORD y, SDWORD forPlayer, SDWORD sender, char *textMsg);
-extern bool sendBeaconToPlayer(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, char *beaconMsg);
+extern bool addBeaconBlip(SDWORD x, SDWORD y, SDWORD forPlayer, SDWORD sender, const char *textMsg);
+extern bool sendBeaconToPlayer(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, const char *beaconMsg);
 extern MESSAGE *findBeaconMsg(UDWORD player, SDWORD sender);
 extern SDWORD getNumRepairedBy(struct DROID *psDroidToCheck, SDWORD player);
 extern bool objectInRangeVis(struct BASE_OBJECT *psList, SDWORD x, SDWORD y, SDWORD range, SDWORD lookingPlayer);
@@ -682,7 +681,6 @@ extern bool scrExp(void);
 extern bool scrSqrt(void);
 extern bool scrLog(void);
 
-extern bool addBeaconBlip(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, char *textMsg);
 extern VIEWDATA *CreateBeaconViewData(SDWORD sender, UDWORD LocX, UDWORD LocY);
 
 extern bool scrEnumUnbuilt(void);

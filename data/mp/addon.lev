@@ -19,15 +19,9 @@
 /* ************************ */
 /* GAMETYPES                */
 /*                          */
-/*  CAMPAIGN             12 */
-/*  CAMPAIGN RESEARCH 2  15 */
-/*                          */
-/*  SKIRMISH             14 */
-/*  SKIRMISH RESEARCH 2  18 */
-/*                          */
-/*  reserved (dont use)     */
-/*  TEAMPLAY             13 */
-/*  DMATCH               11 */
+/*  SKIRMISH T1          14 */
+/*  SKIRMISH T2          18 */
+/*  SKIRMISH T3          19 */
 /* ************************ */
 
 /********************************************************/
@@ -39,7 +33,6 @@ data		"wrf/vidmem.wrf"
 data		"wrf/basic.wrf"
 data		"wrf/cam1.wrf"
 data		"wrf/audio.wrf"
-data		"wrf/piestats.wrf"
 data		"wrf/stats.wrf"
 data		"wrf/multires.wrf"
 
@@ -48,7 +41,6 @@ data		"wrf/vidmem2.wrf"
 data		"wrf/basic.wrf"
 data		"wrf/cam2.wrf"
 data		"wrf/audio.wrf"
-data		"wrf/piestats.wrf"
 data		"wrf/stats.wrf"
 data		"wrf/multires.wrf"
 
@@ -57,7 +49,6 @@ data		"wrf/vidmem3.wrf"
 data		"wrf/basic.wrf"
 data		"wrf/cam3.wrf"
 data		"wrf/audio.wrf"
-data		"wrf/piestats.wrf"
 data		"wrf/stats.wrf"
 data		"wrf/multires.wrf"
 
@@ -137,7 +128,6 @@ data		"wrf/vidmem.wrf"
 data		"wrf/basic.wrf"
 data		"wrf/cam1.wrf"
 data		"wrf/audio.wrf"
-data		"wrf/piestats.wrf"
 data		"wrf/stats.wrf"
 data		"wrf/multires2.wrf"
 
@@ -146,7 +136,6 @@ data		"wrf/vidmem2.wrf"
 data		"wrf/basic.wrf"
 data		"wrf/cam2.wrf"
 data		"wrf/audio.wrf"
-data		"wrf/piestats.wrf"
 data		"wrf/stats.wrf"
 data		"wrf/multires2.wrf"
 
@@ -155,7 +144,6 @@ data		"wrf/vidmem3.wrf"
 data		"wrf/basic.wrf"
 data		"wrf/cam3.wrf"
 data		"wrf/audio.wrf"
-data		"wrf/piestats.wrf"
 data		"wrf/stats.wrf"
 data		"wrf/multires2.wrf"
 
@@ -201,46 +189,6 @@ type		14
 dataset		MULTI_CAM_3
 game		"multiplay/maps/8c-thepit.gam"
 
-/********************************************************/
-/********************************************************/
-/*    		MultiPlayer technology enablers             */
-/*			alex lee april 99                           */
-
-/* ************************ */
-/* CAMPAIGN SETS            */
-/* tech level 1             */
-/*  cam 1       MULTI_CAM_1 */
-/*  cam 2       MULTI_CAM_2 */
-/*  cam 3       MULTI_CAM_3 */
-/* ************************ */
-/* tech level 2             */
-/*  cam 1       MULTI_T2_C1 */
-/*  cam 2       MULTI_T2_C2 */
-/*  cam 3       MULTI_T2_C3 */
-/* ************************ */
-/* tech level 3             */
-/*  cam 1       MULTI_T3_C1 */
-/*  cam 2       MULTI_T3_C2 */
-/*  cam 3       MULTI_T3_C3 */
-/* ************************ */
-
-/* ************************ */
-/* GAMETYPES                */
-/*                          */
-/*  CAMPAIGN             12 */
-/*  CAMPAIGN RESEARCH 2  15 */
-/*  CAMPAIGN RESEARCH 3  16 */
-/*                          */
-/*  SKIRMISH             14 */
-/*  SKIRMISH RESEARCH 2  18 */
-/*  SKIRMISH RESEARCH 3  19 */
-
-/*                          */
-/*  reserved (dont use)     */
-/*  TEAMPLAY             13 */
-/*  DMATCH               11 */
-/* ************************ */
-
 /* ************************ */
 /* tech level 3				*/
 campaign	MULTI_T3_C1
@@ -248,7 +196,6 @@ data		"wrf/vidmem.wrf"
 data		"wrf/basic.wrf"
 data		"wrf/cam1.wrf"
 data		"wrf/audio.wrf"
-data		"wrf/piestats.wrf"
 data		"wrf/stats.wrf"
 data		"wrf/multires3.wrf"
 
@@ -257,7 +204,6 @@ data		"wrf/vidmem2.wrf"
 data		"wrf/basic.wrf"
 data		"wrf/cam2.wrf"
 data		"wrf/audio.wrf"
-data		"wrf/piestats.wrf"
 data		"wrf/stats.wrf"
 data		"wrf/multires3.wrf"
 
@@ -266,7 +212,6 @@ data		"wrf/vidmem3.wrf"
 data		"wrf/basic.wrf"
 data		"wrf/cam3.wrf"
 data		"wrf/audio.wrf"
-data		"wrf/piestats.wrf"
 data		"wrf/stats.wrf"
 data		"wrf/multires3.wrf"
 

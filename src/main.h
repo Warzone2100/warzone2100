@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -41,6 +41,7 @@ extern char datadir[PATH_MAX];
 extern char configdir[PATH_MAX];
 extern char KeyMapPath[PATH_MAX];
 extern char MultiPlayersPath[PATH_MAX];
+extern char rulesettag[40];
 
 #define MAX_MODS 100
 
@@ -51,8 +52,5 @@ extern char *multiplay_mods[MAX_MODS];
 extern char *override_mods[MAX_MODS];
 extern char *override_mod_list;
 extern bool use_override_mods;
-
-void setCurrentMap(char *map, int maxPlayers);
-extern char *current_map;
 
 #endif // __INCLUDED_SRC_MAIN_H__

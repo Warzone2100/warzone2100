@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -220,7 +220,7 @@ bool scrBaseObjGet(UDWORD index)
 			return false;
 		}
 		type = (INTERP_TYPE)ST_BODY;
-		scrFunctionResult.v.ival = (SDWORD)((DROID *)psObj)->asBits[COMP_BODY].nStat;
+		scrFunctionResult.v.ival = (SDWORD)((DROID *)psObj)->asBits[COMP_BODY];
 		break;
 	case OBJID_PROPULSION:
 		if (psObj->type != OBJ_DROID)
@@ -229,7 +229,7 @@ bool scrBaseObjGet(UDWORD index)
 			return false;
 		}
 		type = (INTERP_TYPE)ST_PROPULSION;
-		scrFunctionResult.v.ival = (SDWORD)((DROID *)psObj)->asBits[COMP_PROPULSION].nStat;
+		scrFunctionResult.v.ival = (SDWORD)((DROID *)psObj)->asBits[COMP_PROPULSION];
 		break;
 	case OBJID_WEAPON:		//TODO: only returns first weapon now
 		type = (INTERP_TYPE)ST_WEAPON;
@@ -460,60 +460,29 @@ bool scrWeaponObjGet(UDWORD index)
 
 	switch (index)
 	{
-	case WEAPID_SHORT_RANGE:
-
-		type = VAL_INT;
-
-		scrFunctionResult.v.ival = asWeaponStats[weapIndex].shortRange;
-
-		break;
 	case WEAPID_LONG_RANGE:
-
 		type = VAL_INT;
-
-		scrFunctionResult.v.ival = asWeaponStats[weapIndex].longRange;
-
-		break;
-	case WEAPID_SHORT_HIT:
-		type = VAL_INT;
-
-		scrFunctionResult.v.ival = asWeaponStats[weapIndex].shortHit;
-
+		scrFunctionResult.v.ival = asWeaponStats[weapIndex].base.maxRange;
 		break;
 	case WEAPID_LONG_HIT:
-
 		type = VAL_INT;
-
-		scrFunctionResult.v.ival = asWeaponStats[weapIndex].longHit;
-
+		scrFunctionResult.v.ival = asWeaponStats[weapIndex].base.hitChance;
 		break;
 	case WEAPID_DAMAGE:
-
 		type = VAL_INT;
-
-		scrFunctionResult.v.ival = asWeaponStats[weapIndex].damage;
-
+		scrFunctionResult.v.ival = asWeaponStats[weapIndex].base.damage;
 		break;
 	case WEAPID_FIRE_PAUSE:
-
 		type = VAL_INT;
-
-		scrFunctionResult.v.ival = asWeaponStats[weapIndex].firePause;
-
+		scrFunctionResult.v.ival = asWeaponStats[weapIndex].base.firePause;
 		break;
 	case WEAPID_RELOAD_TIME:
-
 		type = VAL_INT;
-
-		scrFunctionResult.v.ival = asWeaponStats[weapIndex].reloadTime;
-
+		scrFunctionResult.v.ival = asWeaponStats[weapIndex].base.reloadTime;
 		break;
 	case WEAPID_NUM_ROUNDS:
-
 		type = VAL_INT;
-
-		scrFunctionResult.v.ival = asWeaponStats[weapIndex].numRounds;
-
+		scrFunctionResult.v.ival = asWeaponStats[weapIndex].base.numRounds;
 		break;
 	default:
 		ASSERT(false, "unknown variable index");
@@ -628,70 +597,70 @@ bool scrGroupObjGet(UDWORD index)
 
 
 // get the name from a stat pointer
-static char *scrGetStatName(INTERP_TYPE type, UDWORD data)
+static const QString scrGetStatName(INTERP_TYPE type, UDWORD data)
 {
-	char	*pName = NULL;
+	QString pName;
 
 	switch ((unsigned)type)  // Unsigned cast to suppress compiler warnings due to enum abuse.
 	{
 	case ST_STRUCTURESTAT:
 		if (data < numStructureStats)
 		{
-			pName = asStructureStats[data].pName;
+			pName = asStructureStats[data].id;
 		}
 		break;
 	case ST_FEATURESTAT:
 		if (data < numFeatureStats)
 		{
-			pName = asFeatureStats[data].pName;
+			pName = asFeatureStats[data].id;
 		}
 		break;
 	case ST_BODY:
 		if (data < numBodyStats)
 		{
-			pName = asBodyStats[data].pName;
+			pName = asBodyStats[data].id;
 		}
 		break;
 	case ST_PROPULSION:
 		if (data < numPropulsionStats)
 		{
-			pName = asPropulsionStats[data].pName;
+			pName = asPropulsionStats[data].id;
 		}
 		break;
 	case ST_ECM:
 		if (data < numECMStats)
 		{
-			pName = asECMStats[data].pName;
+			pName = asECMStats[data].id;
 		}
 		break;
 	case ST_SENSOR:
 		if (data < numSensorStats)
 		{
-			pName = asSensorStats[data].pName;
+			pName = asSensorStats[data].id;
 		}
 		break;
 	case ST_CONSTRUCT:
 		if (data < numConstructStats)
 		{
-			pName = asConstructStats[data].pName;
+			pName = asConstructStats[data].id;
 		}
 		break;
 	case ST_WEAPON:
 		if (data < numWeaponStats)
 		{
-			pName = asWeaponStats[data].pName;
+			pName = asWeaponStats[data].id;
 		}
 		break;
 	case ST_REPAIR:
 		if (data < numRepairStats)
 		{
-			pName = asRepairStats[data].pName;
+			pName = asRepairStats[data].id;
 		}
 		break;
 	case ST_BRAIN:
 		if (data < numBrainStats)
 		{
-			pName = asBrainStats[data].pName;
+			pName = asBrainStats[data].id;
 		}
 		break;
 	case ST_BASESTATS:
@@ -702,11 +671,7 @@ static char *scrGetStatName(INTERP_TYPE type, UDWORD data)
 		break;
 	}
 
-	if (pName == NULL)
-	{
-		debug(LOG_FATAL, "scrGetStatName: cannot get name for a base stat");
-		abort();
-	}
+	ASSERT(!pName.isEmpty(), "cannot get name for a base stat");
 
 	return pName;
 }
@@ -716,7 +681,7 @@ static char *scrGetStatName(INTERP_TYPE type, UDWORD data)
 bool scrValDefSave(INTERP_VAL *psVal, WzConfig &ini)
 {
 	VIEWDATA	*psIntMessage;
-	const char	*pName;
+	QString		pName;
 	RESEARCH	*psResearch;
 	DROID		*psCDroid;
 
@@ -753,7 +718,7 @@ bool scrValDefSave(INTERP_VAL *psVal, WzConfig &ini)
 	case ST_REPAIR:
 	case ST_BRAIN:
 		pName = scrGetStatName(psVal->type, psVal->v.ival);
-		if (pName)
+		if (!pName.isEmpty())
 		{
 			ini.setValue("data", QString(pName));
 		}
@@ -781,10 +746,10 @@ bool scrValDefSave(INTERP_VAL *psVal, WzConfig &ini)
 		break;
 	case ST_RESEARCH:
 		psResearch = (RESEARCH *)psVal->v.oval;
-		if (psResearch && psResearch->pName && psResearch->pName[0] != '\0')
+		if (psResearch && !psResearch->id.isEmpty())
 		{
-			ini.setValue("data", QString(psResearch->pName));
-			ASSERT(psResearch == getResearch(psResearch->pName), "Research %s not found!", psResearch->pName);
+			ini.setValue("data", psResearch->id);
+			ASSERT(psResearch == getResearch(getID(psResearch)), "Research %s not found!", getID(psResearch));
 		}
 		break;
 	case ST_GROUP:
@@ -817,17 +782,13 @@ bool scrValDefSave(INTERP_VAL *psVal, WzConfig &ini)
 			// can also return NULL
 			pName = sound_GetTrackName((UDWORD)psVal->v.ival);
 		}
-		else
-		{
-			pName = NULL;
-		}
-		if (!pName)
+		if (pName.isEmpty())
 		{
 			debug(LOG_WARNING, "Could not get sound track name");
 		}
-		if (pName)
+		else
 		{
-			ini.setValue("data", QString(pName));
+			ini.setValue("data", pName);
 		}
 		break;
 	case ST_STRUCTUREID:
@@ -855,7 +816,7 @@ bool scrValDefLoad(INTERP_VAL *psVal, WzConfig &ini)
 	case ST_INTMESSAGE:
 		if (ini.contains("data"))
 		{
-			psVal->v.oval = (void *)getViewData(ini.value("data").toString().toAscii().constData());
+			psVal->v.oval = (void *)getViewData(ini.value("data").toString().toUtf8().constData());
 		}
 		else
 		{
@@ -882,7 +843,7 @@ bool scrValDefLoad(INTERP_VAL *psVal, WzConfig &ini)
 		index = 0;
 		if (ini.contains("data"))
 		{
-			index = getStructStatFromName(ini.value("data").toString().toAscii().constData());
+			index = getStructStatFromName(ini.value("data").toString().toUtf8().constData());
 			if (index == -1)
 			{
 				debug(LOG_FATAL, "Could not find stat");
@@ -895,7 +856,7 @@ bool scrValDefLoad(INTERP_VAL *psVal, WzConfig &ini)
 		index = 0;
 		if (ini.contains("data"))
 		{
-			index = getFeatureStatFromName(ini.value("data").toString().toAscii().constData());
+			index = getFeatureStatFromName(ini.value("data").toString().toUtf8().constData());
 			if (index == -1)
 			{
 				debug(LOG_FATAL, "Could not find stat");
@@ -905,7 +866,7 @@ bool scrValDefLoad(INTERP_VAL *psVal, WzConfig &ini)
 		psVal->v.ival = index;
 		break;
 	case ST_BODY:
-		index = getCompFromResName(COMP_BODY, ini.value("data").toString().toAscii().constData());
+		index = getCompFromName(COMP_BODY, ini.value("data").toString());
 		if (index == -1)
 		{
 			debug(LOG_FATAL, "Could not find body component");
@@ -914,7 +875,7 @@ bool scrValDefLoad(INTERP_VAL *psVal, WzConfig &ini)
 		psVal->v.ival = index;
 		break;
 	case ST_PROPULSION:
-		index = getCompFromResName(COMP_PROPULSION, ini.value("data").toString().toAscii().constData());
+		index = getCompFromName(COMP_PROPULSION, ini.value("data").toString());
 		if (index == -1)
 		{
 			debug(LOG_FATAL, "Could not find propulsion component");
@@ -923,7 +884,7 @@ bool scrValDefLoad(INTERP_VAL *psVal, WzConfig &ini)
 		psVal->v.ival = index;
 		break;
 	case ST_ECM:
-		index = getCompFromResName(COMP_ECM, ini.value("data").toString().toAscii().constData());
+		index = getCompFromName(COMP_ECM, ini.value("data").toString());
 		if (index == -1)
 		{
 			debug(LOG_FATAL, "Could not find ECM component");
@@ -932,7 +893,7 @@ bool scrValDefLoad(INTERP_VAL *psVal, WzConfig &ini)
 		psVal->v.ival = index;
 		break;
 	case ST_SENSOR:
-		index = getCompFromResName(COMP_SENSOR, ini.value("data").toString().toAscii().constData());
+		index = getCompFromName(COMP_SENSOR, ini.value("data").toString());
 		if (index == -1)
 		{
 			debug(LOG_FATAL, "Could not find sensor component");
@@ -941,7 +902,7 @@ bool scrValDefLoad(INTERP_VAL *psVal, WzConfig &ini)
 		psVal->v.ival = index;
 		break;
 	case ST_CONSTRUCT:
-		index = getCompFromResName(COMP_CONSTRUCT, ini.value("data").toString().toAscii().constData());
+		index = getCompFromName(COMP_CONSTRUCT, ini.value("data").toString());
 		if (index == -1)
 		{
 			debug(LOG_FATAL, "Could not find constructor component");
@@ -950,7 +911,7 @@ bool scrValDefLoad(INTERP_VAL *psVal, WzConfig &ini)
 		psVal->v.ival = index;
 		break;
 	case ST_WEAPON:
-		index = getCompFromResName(COMP_WEAPON, ini.value("data").toString().toAscii().constData());
+		index = getCompFromName(COMP_WEAPON, ini.value("data").toString());
 		if (index == -1)
 		{
 			debug(LOG_FATAL, "Could not find weapon");
@@ -959,7 +920,7 @@ bool scrValDefLoad(INTERP_VAL *psVal, WzConfig &ini)
 		psVal->v.ival = index;
 		break;
 	case ST_REPAIR:
-		index = getCompFromResName(COMP_REPAIRUNIT, ini.value("data").toString().toAscii().constData());
+		index = getCompFromName(COMP_REPAIRUNIT, ini.value("data").toString());
 		if (index == -1)
 		{
 			debug(LOG_FATAL, "Could not find repair component");
@@ -968,7 +929,7 @@ bool scrValDefLoad(INTERP_VAL *psVal, WzConfig &ini)
 		psVal->v.ival = index;
 		break;
 	case ST_BRAIN:
-		index = getCompFromResName(COMP_BRAIN, ini.value("data").toString().toAscii().constData());
+		index = getCompFromName(COMP_BRAIN, ini.value("data").toString());
 		if (index == -1)
 		{
 			debug(LOG_FATAL, "Could not find repair brain");
@@ -992,14 +953,14 @@ bool scrValDefLoad(INTERP_VAL *psVal, WzConfig &ini)
 		psVal->v.sval = NULL;
 		if (ini.contains("data"))
 		{
-			psVal->v.sval = strdup(ini.value("data").toString().toAscii().constData());
+			psVal->v.sval = strdup(ini.value("data").toString().toUtf8().constData());
 		}
 		break;
 	case ST_LEVEL:
 		psVal->v.sval = NULL;
 		if (ini.contains("data"))
 		{
-			psLevel = levFindDataSet(ini.value("data").toString().toAscii().constData());
+			psLevel = levFindDataSet(ini.value("data").toString().toUtf8().constData());
 			if (psLevel == NULL)
 			{
 				debug(LOG_FATAL, "Could not find level dataset");
@@ -1066,16 +1027,16 @@ bool scrValDefLoad(INTERP_VAL *psVal, WzConfig &ini)
 			break;
 		}
 
-		index = audio_GetTrackID(ini.value("data").toString().toAscii().constData());
+		index = audio_GetTrackID(ini.value("data").toString().toUtf8().constData());
 		if (index == SAMPLE_NOT_FOUND)
 		{
 			// find empty id and set track vals
 			QString soundname = ini.value("data").toString();
-			index = audio_SetTrackVals(soundname.toAscii().constData(), false, 100, 1800);
+			index = audio_SetTrackVals(soundname.toUtf8().constData(), false, 100, 1800);
 			if (!index)			// this is a NON fatal error.
 			{
 				// We can't find filename of the sound for some reason.
-				debug(LOG_ERROR, "Sound ID not available %s not found", soundname.toAscii().constData());
+				debug(LOG_ERROR, "Sound ID not available %s not found", soundname.toUtf8().constData());
 				break;
 			}
 		}

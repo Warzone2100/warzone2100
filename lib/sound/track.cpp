@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -267,7 +267,6 @@ const char *sound_GetTrackName(SDWORD iTrack)
 	if (iTrack <= 0
 	    || iTrack >= MAX_TRACKS
 	    || iTrack == SAMPLE_NOT_FOUND
-	    || g_apTrack == NULL
 	    || g_apTrack[iTrack] == NULL)
 	{
 		return NULL;
@@ -320,9 +319,7 @@ void sound_StopTrack(AUDIO_SAMPLE *psSample)
 {
 	ASSERT_OR_RETURN(, psSample != NULL, "Sample pointer invalid");
 
-#ifndef WZ_NOSOUND
 	sound_StopSample(psSample);
-#endif
 
 	// do stopped callback
 	if (g_pStopTrackCallback != NULL && psSample->psObj != NULL)
@@ -337,9 +334,7 @@ void sound_StopTrack(AUDIO_SAMPLE *psSample)
 //
 void sound_PauseTrack(AUDIO_SAMPLE *psSample)
 {
-#ifndef WZ_NOSOUND
 	sound_StopSample(psSample);
-#endif
 }
 
 //*

@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -33,15 +33,10 @@ extern void intProcessInGameOptions(UDWORD);
 extern void intAddInGamePopup(void);
 
 // status bools.
-extern bool	ClosingInGameOp;
 extern bool	InGameOpUp;
 extern bool isInGamePopupUp;
 // ////////////////////////////////////////////////////////////////////////////
 // defines
-
-// the screen itself.
-#define INTINGAMEOP				10500
-#define INTINGAMEPOPUP			77335
 
 // position info for window.
 
@@ -75,7 +70,9 @@ extern bool isInGamePopupUp;
 
 enum
 {
-	INTINGAMEOP_QUIT = INTINGAMEOP + 1,
+	INTINGAMEOP = 10500,
+	INTINGAMEPOPUP,
+	INTINGAMEOP_QUIT,
 	INTINGAMEOP_QUIT_CONFIRM,               ///< The all important quit button
 	INTINGAMEOP_RESUME,
 	INTINGAMEOP_LOAD_MISSION,
@@ -104,8 +101,7 @@ enum
 	INTINGAMEOP_TUI_TARGET_ORIGIN_SW,		///< Switch
 	INTINGAMEOP_POPUP_QUIT,
 	INTINGAMEOP_POPUP_MSG1,
-	INTINGAMEOP_POPUP_MSG2,
-	INTINGAMEOP_POPUP_MSG3
+	INTINGAMEOP_POPUP_MSG2
 };
 
 

@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -31,6 +31,9 @@
 #include <algorithm>
 #include <map>
 
+#if defined(WZ_CC_MSVC)
+# define ZLIB_WINAPI
+#endif
 #include <zlib.h>
 
 enum
@@ -49,7 +52,11 @@ struct Socket
 	 *
 	 * All non-listening sockets will only use the first socket handle.
 	 */
-	Socket() : ready(false), writeError(false), deleteLater(false), isCompressed(false), readDisconnected(false), zDeflateInSize(0) {}
+	Socket() : ready(false), writeError(false), deleteLater(false), isCompressed(false), readDisconnected(false), zDeflateInSize(0)
+	{
+		memset(&zDeflate, 0, sizeof(zDeflate));
+		memset(&zInflate, 0, sizeof(zInflate));
+	}
 	~Socket();
 
 	SOCKET fd[SOCK_COUNT];
@@ -209,18 +216,16 @@ static void freeaddrinfo(struct addrinfo *res)
 
 static int addressToText(const struct sockaddr *addr, char *buf, size_t size)
 {
+	auto handleIpv4 = [&](in_addr_t s_addr) {
+		uint32_t val = ntohl(s_addr);
+		return snprintf(buf, size, "%u.%u.%u.%u", (val>>24)&0xFF, (val>>16)&0xFF, (val>>8)&0xFF, val&0xFF);
+	};
+
 	switch (addr->sa_family)
 	{
 	case AF_INET:
 		{
-			unsigned char *address = (unsigned char *) & ((const struct sockaddr_in *)addr)->sin_addr.s_addr;
-
-			return snprintf(buf, size,
-			                "%hhu.%hhu.%hhu.%hhu",
-			                address[0],
-			                address[1],
-			                address[2],
-			                address[3]);
+			return handleIpv4(((const struct sockaddr_in *)addr)->sin_addr.s_addr);
 		}
 	case AF_INET6:
 		{
@@ -235,9 +240,7 @@ static int addressToText(const struct sockaddr *addr, char *buf, size_t size)
 				// At this time, we only care about the address, nothing else.
 				struct sockaddr_in addr4;
 				memcpy(&addr4.sin_addr.s_addr, mappedIP->sin6_addr.s6_addr + 12, sizeof(addr4.sin_addr.s_addr));
-				char buffer[16];
-				const char *ipv4 = inet_ntop(AF_INET, &addr4.sin_addr, buffer, sizeof(buffer));
-				return snprintf(buf, size, "%s", ipv4);
+				return handleIpv4(addr4.sin_addr.s_addr);
 			}
 			else
 			{
@@ -596,8 +599,7 @@ ssize_t writeAll(Socket *sock, const void *buf, size_t size, size_t *rawByteCoun
 	size_t &rawBytes = rawByteCount != NULL ? *rawByteCount : ignored;
 	rawBytes = 0;
 
-	if (!sock
-	    || sock->fd[SOCK_CONNECTION] == INVALID_SOCKET)
+	if (sock->fd[SOCK_CONNECTION] == INVALID_SOCKET)
 	{
 		debug(LOG_ERROR, "Invalid socket (EBADF)");
 		setSockErr(EBADF);
@@ -760,9 +762,6 @@ void deleteSocketSet(SocketSet *set)
  */
 void SocketSet_AddSocket(SocketSet *set, Socket *socket)
 {
-	ASSERT_OR_RETURN(, set != NULL, "NULL SocketSet provided");
-	ASSERT_OR_RETURN(, socket != NULL, "NULL Socket provided");
-
 	/* Check whether this socket is already present in this set (i.e. it
 	 * shouldn't be added again).
 	 */
@@ -782,9 +781,6 @@ void SocketSet_AddSocket(SocketSet *set, Socket *socket)
  */
 void SocketSet_DelSocket(SocketSet *set, Socket *socket)
 {
-	ASSERT_OR_RETURN(, set != NULL, "NULL SocketSet provided");
-	ASSERT_OR_RETURN(, socket != NULL, "NULL Socket provided");
-
 	size_t i = std::find(set->fds.begin(), set->fds.end(), socket) - set->fds.begin();
 	if (i != set->fds.size())
 	{
@@ -933,15 +929,13 @@ int checkSockets(const SocketSet *set, unsigned int timeout)
  */
 ssize_t readAll(Socket *sock, void *buf, size_t size, unsigned int timeout)
 {
-	ASSERT_OR_RETURN(SOCKET_ERROR, sock, "We don't have a valid socket!");
 	ASSERT(!sock->isCompressed, "readAll on compressed sockets not implemented.");
 
 	const SocketSet set = {std::vector<Socket *>(1, sock)};
 
 	size_t received = 0;
 
-	if (!sock
-	    || sock->fd[SOCK_CONNECTION] == INVALID_SOCKET)
+	if (sock->fd[SOCK_CONNECTION] == INVALID_SOCKET)
 	{
 		debug(LOG_ERROR, "Invalid socket (%p), sock->fd[SOCK_CONNECTION]=%x  (error: EBADF)", sock, sock->fd[SOCK_CONNECTION]);
 		setSockErr(EBADF);
@@ -1029,10 +1023,6 @@ static void socketCloseNow(Socket *sock)
 
 void socketClose(Socket *sock)
 {
-	if (sock == NULL)
-	{
-		return;
-	}
 	wzMutexLock(socketThreadMutex);
 	//Instead of socketThreadWrites.erase(sock);, try sending the data before actually deleting.
 	if (socketThreadWrites.find(sock) != socketThreadWrites.end())
@@ -1051,8 +1041,6 @@ void socketClose(Socket *sock)
 Socket *socketAccept(Socket *sock)
 {
 	unsigned int i;
-
-	ASSERT_OR_RETURN(NULL, sock != NULL, "NULL Socket provided");
 
 	/* Search for a socket that has a pending connection on it and accept
 	 * the first one.

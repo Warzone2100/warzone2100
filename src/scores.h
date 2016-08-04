@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -20,6 +20,8 @@
 
 #ifndef __INCLUDED_SRC_SCORES_H__
 #define __INCLUDED_SRC_SCORES_H__
+
+class WIDGET;
 
 enum DATA_INDEX
 {
@@ -87,14 +89,12 @@ enum
 	STAT_ACE
 };
 
-
-
-extern bool	scoreInitSystem(void);
-extern void	scoreUpdateVar(DATA_INDEX var);
-extern void	scoreDataToConsole(void);
-extern void	scoreDataToScreen(void);
+bool scoreInitSystem();
+void scoreUpdateVar(DATA_INDEX var);
+void scoreDataToConsole();
+void scoreDataToScreen(WIDGET *psWidget);
 void getAsciiTime(char *psText, unsigned time);
-extern bool readScoreData(const char *fileName);
-extern bool writeScoreData(const char *fileName);
+bool readScoreData(const char *fileName);
+bool writeScoreData(const char *fileName);
 
 #endif // __INCLUDED_SRC_SCORES_H__

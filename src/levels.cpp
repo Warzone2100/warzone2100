@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -29,11 +29,13 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/frameresource.h"
-#include "lib/framework/listmacs.h"
 #include "lib/framework/file.h"
 #include "lib/framework/crc.h"
 #include "lib/framework/physfs_ext.h"
+#include "lib/framework/rational.h"
+#include "lib/gamelib/gtime.h"
 #include "lib/exceptionhandler/dumpinfo.h"
+#include "clparse.h"
 #include "init.h"
 #include "objects.h"
 #include "hci.h"
@@ -43,7 +45,6 @@
 #include "game.h"
 #include "lib/ivis_opengl/piestate.h"
 #include "data.h"
-#include "lib/ivis_opengl/ivi.h"
 #include "lib/script/script.h"
 #include "scripttabs.h"
 #include "research.h"
@@ -51,6 +52,7 @@
 #include "effects.h"
 #include "main.h"
 #include "multiint.h"
+#include "qtscript.h"
 
 extern int lev_get_lineno(void);
 extern char *lev_get_text(void);
@@ -64,18 +66,18 @@ extern int lev_lex_destroy(void);
 static	char	currentLevelName[32] = { "main" };
 
 // the current level descriptions
-LEVEL_DATASET	*psLevels = NULL;
+LEVEL_LIST psLevels;
 
 // the currently loaded data set
 static LEVEL_DATASET	*psBaseData = NULL;
 static LEVEL_DATASET	*psCurrLevel = NULL;
 
 // dummy level data for single WRF loads
-static LEVEL_DATASET	sSingleWRF = {0, 0, 0, 0, mod_clean, {0}, 0, 0, 0, NULL, {{0}}};
+static LEVEL_DATASET	sSingleWRF = {LDS_COMPLETE, 0, 0, 0, mod_clean, {0}, 0, 0, 0, {{0}}};
 
 // return values from the lexer
 char *pLevToken;
-SDWORD levVal;
+LEVEL_TYPE levVal;
 static GAME_TYPE levelLoadType;
 
 // modes for the parser
@@ -96,7 +98,7 @@ enum LEVELPARSER_STATE
 // initialise the level system
 bool levInitialise(void)
 {
-	psLevels = NULL;
+	psLevels.clear();
 	psBaseData = NULL;
 	psCurrLevel = NULL;
 
@@ -111,14 +113,9 @@ SDWORD getLevelLoadType(void)
 // shutdown the level system
 void levShutDown(void)
 {
-	while (psLevels != NULL)
+	for (auto toDelete : psLevels)
 	{
-		unsigned int i;
-		LEVEL_DATASET *const toDelete = psLevels;
-
-		psLevels = psLevels->psNext;
-
-		for (i = 0; i < ARRAY_SIZE(toDelete->apDataFiles); ++i)
+		for (int i = 0; i < ARRAY_SIZE(toDelete->apDataFiles); ++i)
 		{
 			if (toDelete->apDataFiles[i] != NULL)
 			{
@@ -130,9 +127,8 @@ void levShutDown(void)
 		free(toDelete->realFileName);
 		free(toDelete);
 	}
-	psLevels = NULL;
+	psLevels.clear();
 }
-
 
 // error report function for the level parser
 void lev_error(const char *msg)
@@ -152,9 +148,9 @@ LEVEL_DATASET *levFindDataSet(char const *name, Sha256 const *hash)
 		hash = NULL;  // Don't check hash if it's just 0000000000000000000000000000000000000000000000000000000000000000. Assuming real map files probably won't have that particular SHA-256 hash.
 	}
 
-	for (LEVEL_DATASET *psNewLevel = psLevels; psNewLevel != NULL; psNewLevel = psNewLevel->psNext)
+	for (auto psNewLevel : psLevels)
 	{
-		if (psNewLevel->pName != NULL && strcmp(psNewLevel->pName, name) == 0)
+		if (psNewLevel->pName && strcmp(psNewLevel->pName, name) == 0)
 		{
 			if (hash == NULL || levGetFileHash(psNewLevel) == *hash)
 			{
@@ -236,7 +232,7 @@ bool levParse(const char *buffer, size_t size, searchPathMode datadir, bool igno
 				psDataSet->dataDir = datadir;
 				psDataSet->realFileName = realFileName != NULL ? strdup(realFileName) : NULL;
 				psDataSet->realFileHash.setZero();  // The hash is only calculated on demand; for example, if the map name matches.
-				LIST_APPEND(psLevels, psDataSet, LEVEL_DATASET);
+				psLevels.push_back(psDataSet);
 				currData = 0;
 
 				// set the dataset type
@@ -320,7 +316,7 @@ bool levParse(const char *buffer, size_t size, searchPathMode datadir, bool igno
 					return false;
 				}
 
-				psDataSet->type = (SWORD)levVal;
+				psDataSet->type = levVal;
 			}
 			else
 			{
@@ -451,12 +447,6 @@ bool levParse(const char *buffer, size_t size, searchPathMode datadir, bool igno
 
 				// store the data name
 				psDataSet->apDataFiles[currData] = strdup(pLevToken);
-				if (psDataSet->apDataFiles[currData] == NULL)
-				{
-					debug(LOG_FATAL, "Out of memory!");
-					abort();
-					return false;
-				}
 
 				resToLower(pLevToken);
 
@@ -493,8 +483,6 @@ bool levParse(const char *buffer, size_t size, searchPathMode datadir, bool igno
 // free the data for the current mission
 bool levReleaseMissionData(void)
 {
-	SDWORD i;
-
 	// release old data if any was loaded
 	if (psCurrLevel != NULL)
 	{
@@ -504,7 +492,7 @@ bool levReleaseMissionData(void)
 		}
 
 		// free up the old data
-		for (i = LEVEL_MAXFILES - 1; i >= 0; i--)
+		for (int i = LEVEL_MAXFILES - 1; i >= 0; i--)
 		{
 			if (i == psCurrLevel->game)
 			{
@@ -518,7 +506,6 @@ bool levReleaseMissionData(void)
 			}
 			else// if (psCurrLevel->apDataFiles[i])
 			{
-
 				resReleaseBlockData(i + CURRENT_DATAID);
 			}
 		}
@@ -530,10 +517,9 @@ bool levReleaseMissionData(void)
 // free the currently loaded dataset
 bool levReleaseAll(void)
 {
-	SDWORD i;
-
 	// clear out old effect data first
 	initEffectsSystem();
+
 	// release old data if any was loaded
 	if (psCurrLevel != NULL)
 	{
@@ -556,7 +542,7 @@ bool levReleaseAll(void)
 
 		if (psCurrLevel->psBaseData)
 		{
-			for (i = LEVEL_MAXFILES - 1; i >= 0; i--)
+			for (int i = LEVEL_MAXFILES - 1; i >= 0; i--)
 			{
 				if (psCurrLevel->psBaseData->apDataFiles[i])
 				{
@@ -629,7 +615,6 @@ char *getLevelName(void)
 bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYPE saveType)
 {
 	LEVEL_DATASET	*psNewLevel, *psBaseData, *psChangeLevel;
-	SDWORD			i;
 	bool            bCamChangeSaveGame;
 
 	debug(LOG_WZ, "Loading level %s hash %s (%s, type %d)", name, hash == NULL ? "builtin" : hash->toString().c_str(), pSaveName, (int)saveType);
@@ -721,8 +706,7 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 		}
 	}
 
-	setCurrentMap(psNewLevel->realFileName, psNewLevel->players);
-	if (!rebuildSearchPath(psNewLevel->dataDir, true))
+	if (!rebuildSearchPath(psNewLevel->dataDir, true, psNewLevel->realFileName))
 	{
 		debug(LOG_ERROR, "Failed to rebuild search path");
 		return false;
@@ -740,8 +724,7 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 	}
 
 	// need to free the current map and droids etc for a save game
-	if ((psBaseData == NULL) &&
-	    (pSaveName != NULL))
+	if (psBaseData == NULL && pSaveName != NULL)
 	{
 		if (!saveGameReset())
 		{
@@ -751,8 +734,7 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 	}
 
 	// initialise if necessary
-	if (psNewLevel->type == LDS_COMPLETE || //psNewLevel->type >= LDS_MULTI_TYPE_START ||
-	    psBaseData != NULL)
+	if (psNewLevel->type == LDS_COMPLETE || psBaseData != NULL)
 	{
 		debug(LOG_WZ, "Calling stageOneInitialise!");
 		if (!stageOneInitialise())
@@ -766,7 +748,7 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 	if (psBaseData != NULL)
 	{
 		debug(LOG_WZ, "Loading base dataset %s", psBaseData->pName);
-		for (i = 0; i < LEVEL_MAXFILES; i++)
+		for (int i = 0; i < LEVEL_MAXFILES; i++)
 		{
 			if (psBaseData->apDataFiles[i])
 			{
@@ -790,8 +772,7 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 	}
 	if (psNewLevel->game == -1)  //no .gam file to load - BETWEEN missions (for Editor games only)
 	{
-		ASSERT(psNewLevel->type == LDS_BETWEEN,
-		       "levLoadData: only BETWEEN missions do not need a .gam file");
+		ASSERT(psNewLevel->type == LDS_BETWEEN, "Only BETWEEN missions do not need a .gam file");
 		debug(LOG_WZ, "No .gam file for level: BETWEEN mission");
 		if (pSaveName != NULL)
 		{
@@ -826,8 +807,7 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 			}
 		}
 
-		if ((pSaveName == NULL) ||
-		    (saveType == GTYPE_SAVE_START))
+		if (pSaveName == NULL || saveType == GTYPE_SAVE_START)
 		{
 			debug(LOG_NEVER, "Start mission - no .gam");
 			if (!startMission((LEVEL_TYPE)psNewLevel->type, NULL))
@@ -859,17 +839,14 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 				return false;
 			}
 
-			if (!campaignReset())
-			{
-				return false;
-			}
+			campaignReset();
 		}
 	}
 
 
 	// load the new data
 	debug(LOG_NEVER, "Loading mission dataset: %s", psNewLevel->pName);
-	for (i = 0; i < LEVEL_MAXFILES; i++)
+	for (int i = 0; i < LEVEL_MAXFILES; i++)
 	{
 		if (psNewLevel->game == i)
 		{
@@ -908,8 +885,7 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 				}
 			}
 
-			if ((pSaveName == NULL) ||
-			    (saveType == GTYPE_SAVE_START))
+			if (pSaveName == NULL || saveType == GTYPE_SAVE_START)
 			{
 				// load the game
 				debug(LOG_WZ, "Loading scenario file %s", psNewLevel->apDataFiles[i]);
@@ -1058,14 +1034,50 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 		psCurrLevel = psChangeLevel;
 	}
 
-	{
-		// Copy this info to be used by the crash handler for the dump file
-		char buf[256];
+	// Copy this info to be used by the crash handler for the dump file
+	char buf[256];
 
-		ssprintf(buf, "Current Level/map is %s", psCurrLevel->pName);
-		addDumpInfo(buf);
+	ssprintf(buf, "Current Level/map is %s", psCurrLevel->pName);
+	addDumpInfo(buf);
+
+	triggerEvent(TRIGGER_GAME_LOADED);
+
+	if (autogame_enabled())
+	{
+		gameTimeSetMod(Rational(500));
+		jsAutogameSpecific("multiplay/skirmish/semperfi.js", selectedPlayer);
 	}
 
-
 	return true;
+}
+
+/// returns maps of the right 'type'
+LEVEL_LIST enumerateMultiMaps(int camToUse, int numPlayers)
+{
+	LEVEL_LIST list;
+
+	for (auto lev : psLevels)
+	{
+		if (game.type == SKIRMISH)
+		{
+			int cam = 1;
+			if (lev->type == MULTI_SKIRMISH2)
+			{
+				cam = 2;
+			}
+			else if (lev->type == MULTI_SKIRMISH3)
+			{
+				cam = 3;
+			}
+
+			if ((lev->type == SKIRMISH || lev->type == MULTI_SKIRMISH2 || lev->type == MULTI_SKIRMISH3)
+			    && (numPlayers == 0 || numPlayers == lev->players)
+			    && cam == camToUse)
+			{
+				list.push_back(lev);
+			}
+		}
+	}
+
+	return list;
 }

@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -47,6 +47,7 @@ enum tMode
 	AUDIO_OPTIONS,          // 18 audio options menu
 	VIDEO_OPTIONS,          // 19 video options menu
 	MOUSE_OPTIONS,          // 20 mouse options menu
+	CAMPAIGNS,              // 21 campaign selector
 };
 
 extern tMode titleMode;					// the global case
@@ -62,6 +63,7 @@ extern bool	bLimiterLoaded;
 void changeTitleMode(tMode mode);
 bool runTitleMenu(void);
 bool runSinglePlayerMenu(void);
+bool runCampaignSelector();
 bool runMultiPlayerMenu(void);
 bool runGameOptionsMenu(void);
 bool runOptionsMenu(void);
@@ -76,13 +78,10 @@ void addBottomForm(void);
 void addBackdrop(void);
 void addTextButton(UDWORD id, UDWORD PosX, UDWORD PosY, const char *txt, unsigned int style);
 void addSmallTextButton(UDWORD id, UDWORD PosX, UDWORD PosY, const char *txt, unsigned int style);
-void addTextHint(UDWORD id, UDWORD PosX, UDWORD PosY, const char *txt);
-void addText(UDWORD id, UDWORD PosX, UDWORD PosY, const char *txt, UDWORD formID);
 void addSideText(UDWORD id, UDWORD PosX, UDWORD PosY, const char *txt);
 void addFESlider(UDWORD id, UDWORD parent, UDWORD x, UDWORD y, UDWORD stops, UDWORD pos);
-void addFEAISlider(UDWORD id, UDWORD parent, UDWORD x, UDWORD y, UDWORD stops, UDWORD pos);
 
-void displayTextOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
+void displayTextOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 
 bool CancelPressed(void);
 
@@ -157,8 +156,6 @@ enum
 	FRONTEND_SIDETEXT2,					// side-ee-ways text
 	FRONTEND_SIDETEXT3,					// side-ee-ways text
 	FRONTEND_SIDETEXT4,					// side-ee-ways text
-	FRONTEND_LOADCAM2,					// loading via --GAME CAM_2A
-	FRONTEND_LOADCAM3,					// loading via --GAME CAM_3A
 	FRONTEND_PASSWORDFORM,
 	FRONTEND_HYPERLINK,
 	FRONTEND_UPGRDLINK,
@@ -188,6 +185,13 @@ enum
 	FE_P7,								// player 7 buton
 	FE_MP_PR,  // Multiplayer player random button
 	FE_MP_PMAX = FE_MP_PR + MAX_PLAYERS_IN_GUI,  // Multiplayer player blah button
+
+	FRONTEND_CAMPAIGN_1,
+	FRONTEND_CAMPAIGN_2,
+	FRONTEND_CAMPAIGN_3,
+	FRONTEND_CAMPAIGN_4,
+	FRONTEND_CAMPAIGN_5,
+	FRONTEND_CAMPAIGN_6,
 
 	FRONTEND_GAMEOPTIONS = 21000,           // Game Options menu
 	FRONTEND_LANGUAGE,
@@ -229,15 +233,14 @@ enum
 	FRONTEND_RESOLUTION_R,
 	FRONTEND_TEXTURESZ,
 	FRONTEND_TEXTURESZ_R,
-	FRONTEND_TAKESEFFECT,
 	FRONTEND_VSYNC,
 	FRONTEND_VSYNC_R,
 	FRONTEND_FSAA,
 	FRONTEND_FSAA_R,
-	FRONTEND_SHADERS,
-	FRONTEND_SHADERS_R,
 
 	FRONTEND_MOUSEOPTIONS = 25000,          // Mouse Options Menu
+	FRONTEND_CURSORMODE,
+	FRONTEND_CURSORMODE_R,
 	FRONTEND_TRAP,
 	FRONTEND_TRAP_R,
 	FRONTEND_MFLIP,

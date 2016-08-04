@@ -67,7 +67,7 @@ startStruct	[25]	STRUCTURESTAT	"Emplacement-MRL-pit"
 //startStruct	[28]	STRUCTURESTAT	"GuardTower5"
 //startStruct	[29]	STRUCTURESTAT	"GuardTower6"
 
-numWeapons		int		20
+numWeapons		int		29
 startWeapon	[0]	WEAPON		"Cannon1Mk1"
 startWeapon	[1]	WEAPON		"Cannon2A-TMk1"
 startWeapon	[2]	WEAPON		"Cannon375mmMk1"
@@ -88,7 +88,15 @@ startWeapon	[16]	WEAPON		"MG3-VTOL"
 startWeapon	[17]	WEAPON		"Rocket-VTOL-LtA-T"
 startWeapon	[18]	WEAPON		"Rocket-VTOL-Pod"
 startWeapon	[19]	WEAPON		"Rocket-VTOL-BB"
-
+startWeapon	[20]	WEAPON		"CyborgFlamer01"
+startWeapon	[21]	WEAPON		"CyborgCannon"
+startWeapon	[22]	WEAPON		"CyborgChaingun"
+startWeapon	[23]	WEAPON		"Cyb-Wpn-Atmiss"
+startWeapon	[24]	WEAPON		"Cyb-Wpn-Laser"
+startWeapon	[25]	WEAPON		"Cyb-Wpn-Rail1"
+startWeapon	[26]	WEAPON		"CyborgRocket"
+startWeapon	[27]	WEAPON		"CyborgRotMG"
+startWeapon	[28]	WEAPON		"CommandTurret1"
 
 numBodies		int		10
 startBody	[0]	BODY		"Body1REC"

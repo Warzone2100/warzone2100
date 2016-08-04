@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -44,7 +44,7 @@
 #include "radar.h"
 #include "seqdisp.h"
 #include "texture.h"
-#include "warzoneconfig.h"	// renderMode
+#include "warzoneconfig.h"
 
 // ////////////////////////////////////////////////////////////////////////////
 
@@ -122,9 +122,10 @@ bool loadConfig()
 	game.hash.setZero();
 	game.maxPlayers = 4;
 
-	game.power = ini.value("power", LEV_MED).toInt();
+	game.power = ini.value("powerLevel", LEV_MED).toInt();
 	game.base = ini.value("base", CAMP_BASE).toInt();
 	game.alliance = ini.value("alliance", NO_ALLIANCES).toInt();
+	game.scavengers = ini.value("scavengers", false).toBool();
 	memset(&ingame.phrases, 0, sizeof(ingame.phrases));
 	for (int i = 1; i < 5; i++)
 	{
@@ -146,18 +147,16 @@ bool loadConfig()
 	{
 		war_setFSAA(ini.value("FSAA").toInt());
 	}
-	if (ini.contains("shaders"))
-	{
-		war_SetShaders(ini.value("shaders").toInt());
-	}
 	// Leave this to false, some system will fail and they can't see the system popup dialog!
 	war_setFullscreen(ini.value("fullscreen", false).toBool());
 	war_SetTrapCursor(ini.value("trapCursor", false).toBool());
+	war_SetColouredCursor(ini.value("coloredCursor", true).toBool());
 	// this should be enabled on all systems by default
 	war_SetVsync(ini.value("vsync", true).toBool());
 	// 640x480 is minimum that we will support
 	int width = ini.value("width", 640).toInt();
 	int height = ini.value("height", 480).toInt();
+	int screen = ini.value("screen", 0).toInt();
 	if (width < 640 || height < 480)	// sanity check
 	{
 		width = 640;
@@ -167,6 +166,7 @@ bool loadConfig()
 	pie_SetVideoBufferHeight(height);
 	war_SetWidth(width);
 	war_SetHeight(height);
+	war_SetScreen(screen);
 
 	if (ini.contains("bpp"))
 	{
@@ -194,6 +194,7 @@ bool saveConfig()
 	ini.setValue("music_enabled", war_GetMusicEnabled());
 	ini.setValue("width", war_GetWidth());
 	ini.setValue("height", war_GetHeight());
+	ini.setValue("screen", war_GetScreen());
 	ini.setValue("bpp", pie_GetVideoBufferDepth());
 	ini.setValue("fullscreen", war_getFullscreen());
 	ini.setValue("language", getLanguage());
@@ -207,6 +208,7 @@ bool saveConfig()
 	ini.setValue("shake", (SDWORD)(getShakeStatus()));		// screenshake
 	ini.setValue("mouseflip", (SDWORD)(getInvertMouseStatus()));	// flipmouse
 	ini.setValue("nomousewarp", (SDWORD)getMouseWarp()); 		// mouse warp
+	ini.setValue("coloredCursor", (SDWORD)war_GetColouredCursor());
 	ini.setValue("RightClickOrders", (SDWORD)(getRightClickOrders()));
 	ini.setValue("MiddleClickRotate", (SDWORD)(getMiddleClickRotate()));
 	ini.setValue("showFPS", (SDWORD)showFPS);
@@ -219,7 +221,6 @@ bool saveConfig()
 	ini.setValue("radarTerrainMode", (SDWORD)radarDrawMode);
 	ini.setValue("trapCursor", war_GetTrapCursor());
 	ini.setValue("vsync", war_GetVsync());
-	ini.setValue("shaders", war_GetShaders());
 	ini.setValue("textureSize", getTextureSize());
 	ini.setValue("FSAA", war_getFSAA());
 	ini.setValue("UPnP", (SDWORD)NetPlay.isUPNP);
@@ -243,9 +244,10 @@ bool saveConfig()
 			ini.setValue("mapName", game.map);				//  map name
 			ini.setValue("mapHash", game.hash.toString().c_str());          //  map hash
 			ini.setValue("maxPlayers", game.maxPlayers);		// maxPlayers
-			ini.setValue("power", game.power);				// power
+			ini.setValue("powerLevel", game.power);				// power
 			ini.setValue("base", game.base);				// size of base
 			ini.setValue("alliance", game.alliance);		// allow alliances
+			ini.setValue("scavengers", game.scavengers);
 		}
 		ini.setValue("playerName", (char *)sPlayer);		// player name
 	}
@@ -303,7 +305,7 @@ bool reloadMPConfig(void)
 		game.hash.setZero();
 		game.maxPlayers = 4;
 
-		ini.setValue("power", game.power);				// power
+		ini.setValue("powerLevel", game.power);				// power
 		ini.setValue("base", game.base);				// size of base
 		ini.setValue("alliance", game.alliance);		// allow alliances
 		return true;
@@ -322,7 +324,7 @@ bool reloadMPConfig(void)
 	game.hash.setZero();
 	game.maxPlayers = 4;
 
-	game.power = ini.value("power", LEV_MED).toInt();
+	game.power = ini.value("powerLevel", LEV_MED).toInt();
 	game.base = ini.value("base", CAMP_BASE).toInt();
 	game.alliance = ini.value("alliance", NO_ALLIANCES).toInt();
 

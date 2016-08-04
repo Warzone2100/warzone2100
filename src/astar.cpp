@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -50,6 +50,7 @@
 #include <list>
 #include <vector>
 #include <algorithm>
+#include <memory>
 
 #include "lib/framework/crc.h"
 #include "lib/netplay/netplay.h"
@@ -168,12 +169,12 @@ struct PathfindContext
 	{
 		return !blockingMap->dangerMap.empty() && blockingMap->dangerMap[x + y * mapWidth];
 	}
-	bool matches(PathBlockingMap const *blockingMap_, PathCoord tileS_, PathNonblockingArea dstIgnore_) const
+	bool matches(std::shared_ptr<PathBlockingMap> &blockingMap_, PathCoord tileS_, PathNonblockingArea dstIgnore_) const
 	{
 		// Must check myGameTime == blockingMap_->type.gameTime, otherwise blockingMap could be a deleted pointer which coincidentally compares equal to the valid pointer blockingMap_.
 		return myGameTime == blockingMap_->type.gameTime && blockingMap == blockingMap_ && tileS == tileS_ && dstIgnore == dstIgnore_;
 	}
-	void assign(PathBlockingMap const *blockingMap_, PathCoord tileS_, PathNonblockingArea dstIgnore_)
+	void assign(std::shared_ptr<PathBlockingMap> &blockingMap_, PathCoord tileS_, PathNonblockingArea dstIgnore_)
 	{
 		blockingMap = blockingMap_;
 		tileS = tileS_;
@@ -203,7 +204,7 @@ struct PathfindContext
 
 	std::vector<PathNode> nodes;        ///< Edge of explored region of the map.
 	std::vector<PathExploredTile> map;  ///< Map, with paths leading back to tileS.
-	PathBlockingMap const *blockingMap; ///< Map of blocking tiles for the type of object which needs a path.
+	std::shared_ptr<PathBlockingMap> blockingMap; ///< Map of blocking tiles for the type of object which needs a path.
 	PathNonblockingArea dstIgnore;      ///< Area of structure at destination which should be considered nonblocking.
 };
 
@@ -211,9 +212,7 @@ struct PathfindContext
 static std::list<PathfindContext> fpathContexts;
 
 /// Lists of blocking maps from current tick.
-static std::list<PathBlockingMap> fpathBlockingMaps;
-/// Lists of blocking maps from previous tick, will be cleared next tick (since it will be no longer needed after that).
-static std::list<PathBlockingMap> fpathPrevBlockingMaps;
+static std::vector<std::shared_ptr<PathBlockingMap>> fpathBlockingMaps;
 /// Game time for all blocking maps in fpathBlockingMaps.
 static uint32_t fpathCurrentGameTime;
 
@@ -235,7 +234,6 @@ void fpathHardTableReset()
 {
 	fpathContexts.clear();
 	fpathBlockingMaps.clear();
-	fpathPrevBlockingMaps.clear();
 }
 
 /** Get the nearest entry in the open list
@@ -432,7 +430,7 @@ static PathCoord fpathAStarExplore(PathfindContext &context, PathCoord tileF)
 	return nearestCoord;
 }
 
-static void fpathInitContext(PathfindContext &context, PathBlockingMap const *blockingMap, PathCoord tileS, PathCoord tileRealS, PathCoord tileF, PathNonblockingArea dstIgnore)
+static void fpathInitContext(PathfindContext &context, std::shared_ptr<PathBlockingMap> &blockingMap, PathCoord tileS, PathCoord tileRealS, PathCoord tileF, PathNonblockingArea dstIgnore)
 {
 	context.assign(blockingMap, tileS, dstIgnore);
 
@@ -613,7 +611,6 @@ void fpathSetBlockingMap(PATHJOB *psJob)
 	{
 		// New tick, remove maps which are no longer needed.
 		fpathCurrentGameTime = gameTime;
-		fpathPrevBlockingMaps.swap(fpathBlockingMaps);
 		fpathBlockingMaps.clear();
 	}
 
@@ -625,16 +622,18 @@ void fpathSetBlockingMap(PATHJOB *psJob)
 	type.moveType = psJob->moveType;
 
 	// Find the map.
-	std::list<PathBlockingMap>::iterator i = std::find(fpathBlockingMaps.begin(), fpathBlockingMaps.end(), type);
+	auto i = std::find_if(fpathBlockingMaps.begin(), fpathBlockingMaps.end(), [&](std::shared_ptr<PathBlockingMap> const &ptr) {
+		return *ptr == type;
+	});
 	if (i == fpathBlockingMaps.end())
 	{
 		// Didn't find the map, so i does not point to a map.
-		fpathBlockingMaps.push_back(PathBlockingMap());
-		--i;
+		PathBlockingMap *blockMap = new PathBlockingMap();
+		fpathBlockingMaps.emplace_back(blockMap);
 
-		// i now points to an empty map with no data. Fill the map.
-		i->type = type;
-		std::vector<bool> &map = i->map;
+		// blockMap now points to an empty map with no data. Fill the map.
+		blockMap->type = type;
+		std::vector<bool> &map = blockMap->map;
 		map.resize(mapWidth * mapHeight);
 		uint32_t checksumMap = 0, checksumDangerMap = 0, factor = 0;
 		for (int y = 0; y < mapHeight; ++y)
@@ -645,7 +644,7 @@ void fpathSetBlockingMap(PATHJOB *psJob)
 			}
 		if (!isHumanPlayer(type.owner) && type.moveType == FMT_MOVE)
 		{
-			std::vector<bool> &dangerMap = i->dangerMap;
+			std::vector<bool> &dangerMap = blockMap->dangerMap;
 			dangerMap.resize(mapWidth * mapHeight);
 			for (int y = 0; y < mapHeight; ++y)
 				for (int x = 0; x < mapWidth; ++x)
@@ -655,12 +654,13 @@ void fpathSetBlockingMap(PATHJOB *psJob)
 				}
 		}
 		syncDebug("blockingMap(%d,%d,%d,%d) = %08X %08X", gameTime, psJob->propulsion, psJob->owner, psJob->moveType, checksumMap, checksumDangerMap);
+
+		psJob->blockingMap = fpathBlockingMaps.back();
 	}
 	else
 	{
 		syncDebug("blockingMap(%d,%d,%d,%d) = cached", gameTime, psJob->propulsion, psJob->owner, psJob->moveType);
-	}
 
-	// i now points to the correct map. Make psJob->blockingMap point to it.
-	psJob->blockingMap = &*i;
+		psJob->blockingMap = *i;
+	}
 }

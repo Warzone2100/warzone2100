@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -29,25 +29,52 @@
 #include "lib/ivis_opengl/textdraw.h"
 
 
-struct W_LABEL : public WIDGET
+class W_LABEL : public WIDGET
 {
+	Q_OBJECT
+
+public:
 	W_LABEL(W_LABINIT const *init);
+	W_LABEL(WIDGET *parent);
 
 	void highlight(W_CONTEXT *psContext);
-	void highlightLost(W_CONTEXT *);
+	void highlightLost();
+	void display(int xOffset, int yOffset);
 
-	char		aText[WIDG_MAXSTR];		// Text on the label
-	enum iV_fonts FontID;
-	const char	*pTip;					// The tool tip for the button
+	QString getString() const;
+	void setString(QString string);
+	void setTip(QString string);
+
+	void setFont(iV_fonts font)
+	{
+		FontID = font;
+	}
+	void setFontColour(PIELIGHT colour)
+	{
+		fontColour = colour;
+	}
+	void setFont(iV_fonts font, PIELIGHT colour)
+	{
+		setFont(font);
+		setFontColour(colour);
+	}
+	void setTextAlignment(WzTextAlignment align);
+
+	void setString(char const *stringUtf8)
+	{
+		WIDGET::setString(stringUtf8);    // Unhide the WIDGET::setString(char const *) function...
+	}
+	void setTip(char const *stringUtf8)
+	{
+		WIDGET::setTip(stringUtf8);    // Unhide the WIDGET::setTip(char const *) function...
+	}
+
+	QString  aText;         // Text on the label
+	iV_fonts FontID;
+	QString  pTip;          // The tool tip for the button
+
+private:
+	PIELIGHT fontColour;
 };
-
-/* Create a button widget data structure */
-extern W_LABEL *labelCreate(const W_LABINIT *psInit);
-
-/* Free the memory used by a button */
-extern void labelFree(W_LABEL *psWidget);
-
-/* label display function */
-extern void labelDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 
 #endif // __INCLUDED_LIB_WIDGET_LABEL_H__

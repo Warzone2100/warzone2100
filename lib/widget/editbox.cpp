@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -29,10 +29,11 @@
 #include "widget.h"
 #include "widgint.h"
 #include "editbox.h"
+#if defined(WZ_CC_MSVC)
+#include "editbox_moc.h"		// this is generated on the pre-build event.
+#endif
 #include "form.h"
-// FIXME Direct iVis implementation include!
 #include "lib/ivis_opengl/pieblitfunc.h"
-#include "lib/ivis_opengl/textdraw.h"
 
 
 /* Pixel gap between edge of edit box and text */
@@ -50,23 +51,33 @@
 /* Number of characters to jump the edit box text when moving the cursor */
 #define WEDB_CHARJUMP		6
 
+// Max size for a string in a editbox
+#define EB_MAX_STRINGSIZE 72
 
 W_EDBINIT::W_EDBINIT()
 	: pText(NULL)
 	, FontID(font_regular)
 	, pBoxDisplay(NULL)
-	, pFontDisplay(NULL)
 {}
 
 W_EDITBOX::W_EDITBOX(W_EDBINIT const *init)
 	: WIDGET(init, WIDG_EDITBOX)
+	, state(WEDBS_FIXED)
 	, FontID(init->FontID)
 	, blinkOffset(wzGetTicks())
+	, maxStringSize(EB_MAX_STRINGSIZE)
+	, insPos(0)
+	, printStart(0)
+	, printChars(0)
+	, printWidth(0)
 	, pBoxDisplay(init->pBoxDisplay)
-	, pFontDisplay(init->pFontDisplay)
 	, HilightAudioID(WidgGetHilightAudioID())
 	, ClickedAudioID(WidgGetClickedAudioID())
+	, ErrorAudioID(WidgGetErrorAudioID())
 	, AudioCallback(WidgGetAudioCallback())
+	, boxColourFirst(WZCOL_FORM_DARK)
+	, boxColourSecond(WZCOL_FORM_LIGHT)
+	, boxColourBackground(WZCOL_FORM_BACKGROUND)
 {
 	char const *text = init->pText;
 	if (!text)
@@ -75,41 +86,36 @@ W_EDITBOX::W_EDITBOX(W_EDBINIT const *init)
 	}
 	aText = QString::fromUtf8(text);
 
-	if (display == NULL)
-	{
-		display = editBoxDisplay;
-	}
-
 	initialise();
+
+	ASSERT((init->style & ~(WEDB_PLAIN | WIDG_HIDDEN)) == 0, "Unknown edit box style");
 }
 
-/* Create an edit box widget data structure */
-W_EDITBOX *editBoxCreate(const W_EDBINIT *psInit)
-{
-	if (psInit->style & ~(WEDB_PLAIN | WIDG_HIDDEN))
-	{
-		ASSERT(false, "Unknown edit box style");
-		return NULL;
-	}
+W_EDITBOX::W_EDITBOX(WIDGET *parent)
+	: WIDGET(parent)
+	, state(WEDBS_FIXED)
+	, FontID(font_regular)
+	, blinkOffset(wzGetTicks())
+	, maxStringSize(EB_MAX_STRINGSIZE)
+	, insPos(0)
+	, printStart(0)
+	, printChars(0)
+	, printWidth(0)
+	, pBoxDisplay(nullptr)
+	, HilightAudioID(WidgGetHilightAudioID())
+	, ClickedAudioID(WidgGetClickedAudioID())
+	, ErrorAudioID(WidgGetErrorAudioID())
+	, AudioCallback(WidgGetAudioCallback())
+	, boxColourFirst(WZCOL_FORM_DARK)
+	, boxColourSecond(WZCOL_FORM_LIGHT)
+	, boxColourBackground(WZCOL_FORM_BACKGROUND)
+{}
 
-	/* Allocate the required memory */
-	W_EDITBOX *psWidget = new W_EDITBOX(psInit);
-	if (psWidget == NULL)
-	{
-		debug(LOG_FATAL, "editBoxCreate: Out of memory");
-		abort();
-		return NULL;
-	}
-
-	return psWidget;
-}
-
-
-/* Initialise an edit box widget */
 void W_EDITBOX::initialise()
 {
 	state = WEDBS_FIXED;
 	printStart = 0;
+	maxStringSize = EB_MAX_STRINGSIZE;
 	iV_SetFont(FontID);
 	fitStringStart();
 }
@@ -124,7 +130,14 @@ void W_EDITBOX::insertChar(QChar ch)
 	}
 
 	ASSERT(insPos <= aText.length(), "Invalid insertion point");
-
+	if (aText.length() >= maxStringSize)
+	{
+		if (AudioCallback)
+		{
+			AudioCallback(ErrorAudioID);
+		}
+		return;		// string too big, just return
+	}
 	/* Move the end of the string up by one (including terminating \0) */
 	/* Insert the character */
 	aText.insert(insPos, ch);
@@ -143,6 +156,7 @@ void W_EDITBOX::overwriteChar(QChar ch)
 	}
 
 	ASSERT(insPos <= aText.length(), "overwriteChar: Invalid insertion point");
+	dirty = true;
 
 	if (insPos == aText.length())
 	{
@@ -198,7 +212,7 @@ void W_EDITBOX::fitStringStart()
 	{
 		int pixelWidth = iV_GetTextWidth(tmp.toUtf8().constData());
 
-		if (pixelWidth <= width - (WEDB_XGAP * 2 + WEDB_CURSORSIZE))
+		if (pixelWidth <= width() - (WEDB_XGAP * 2 + WEDB_CURSORSIZE))
 		{
 			printChars = tmp.length();
 			printWidth = pixelWidth;
@@ -224,7 +238,7 @@ void W_EDITBOX::fitStringEnd()
 	{
 		int pixelWidth = iV_GetTextWidth(tmp.toUtf8().constData());
 
-		if (pixelWidth <= width - (WEDB_XGAP * 2 + WEDB_CURSORSIZE))
+		if (pixelWidth <= width() - (WEDB_XGAP * 2 + WEDB_CURSORSIZE))
 		{
 			printChars = tmp.length();
 			printWidth = pixelWidth;
@@ -239,8 +253,6 @@ void W_EDITBOX::fitStringEnd()
 	printWidth = 0;
 }
 
-
-/* Calculate how much of the end of a string can fit into the edit box */
 void W_EDITBOX::setCursorPosPixels(int xPos)
 {
 	QString tmp = aText;
@@ -281,13 +293,15 @@ void W_EDITBOX::run(W_CONTEXT *psContext)
 	{
 		return;
 	}
-
+	dirty = true;
+	StartTextInput();
 	/* If there is a mouse click outside of the edit box - stop editing */
 	int mx = psContext->mx;
 	int my = psContext->my;
-	if (mousePressed(MOUSE_LMB) && (mx < x || mx > x + width || my < y || my > y + height))
+	if (mousePressed(MOUSE_LMB) && !geometry().contains(mx, my))
 	{
-		screenClearFocus(psContext->psScreen);
+		StopTextInput();
+		screenPointer->setFocus(nullptr);
 		return;
 	}
 
@@ -334,7 +348,7 @@ void W_EDITBOX::run(W_CONTEXT *psContext)
 				printStart = MIN(printStart + WEDB_CHARJUMP, len - 1);
 				fitStringStart();
 			}
-			debug(LOG_INPUT, "EditBox cursor right");
+			debug(LOG_INPUT, "EditBox cursor right (%d, %d, %d)", insPos, printStart, printChars);
 			break;
 		case INPBUF_UP :
 			debug(LOG_INPUT, "EditBox cursor up");
@@ -398,10 +412,10 @@ void W_EDITBOX::run(W_CONTEXT *psContext)
 			debug(LOG_INPUT, "EditBox cursor tab");
 			break;
 		case INPBUF_CR :
-		case KEY_KPENTER:                  // either normal return key || keypad enter
+		case KEY_KPENTER:					// either normal return key || keypad enter
 			/* Finish editing */
-			focusLost(psContext->psScreen);
-			screenClearFocus(psContext->psScreen);
+			StopTextInput();
+			screenPointer->setFocus(nullptr);
 			debug(LOG_INPUT, "EditBox cursor return");
 			return;
 			break;
@@ -416,6 +430,10 @@ void W_EDITBOX::run(W_CONTEXT *psContext)
 				{
 				case KEY_V:
 					aText = wzGetSelection();
+					if (aText.length() >= maxStringSize)
+					{
+						aText.truncate(maxStringSize);
+					}
 					insPos = aText.length();
 					/* Update the printable text */
 					fitStringEnd();
@@ -461,12 +479,17 @@ void W_EDITBOX::run(W_CONTEXT *psContext)
 	state = (state & ~WEDBS_MASK) | editState;
 }
 
+QString W_EDITBOX::getString() const
+{
+	return aText;
+}
 
 /* Set the current string for the edit box */
-void W_EDITBOX::setString(char const *utf8)
+void W_EDITBOX::setString(QString string)
 {
-	aText = QString::fromUtf8(utf8);
+	aText = string;
 	initialise();
+	dirty = true;
 }
 
 
@@ -480,7 +503,7 @@ void W_EDITBOX::clicked(W_CONTEXT *psContext, WIDGET_KEY)
 
 	// Set cursor position to the click location.
 	iV_SetFont(FontID);
-	setCursorPosPixels(psContext->mx - x);
+	setCursorPosPixels(psContext->mx - x());
 
 	// Cursor should be visible instantly.
 	blinkOffset = wzGetTicks();
@@ -502,13 +525,14 @@ void W_EDITBOX::clicked(W_CONTEXT *psContext, WIDGET_KEY)
 		inputClearBuffer();
 
 		/* Tell the form that the edit box has focus */
-		screenSetFocus(psContext->psScreen, this);
+		screenPointer->setFocus(this);
 	}
+	dirty = true;
 }
 
 
 /* Respond to loss of focus */
-void W_EDITBOX::focusLost(W_SCREEN *psScreen)
+void W_EDITBOX::focusLost()
 {
 	ASSERT(!(state & WEDBS_DISABLE), "editBoxFocusLost: disabled edit box");
 
@@ -517,7 +541,8 @@ void W_EDITBOX::focusLost(W_SCREEN *psScreen)
 	printStart = 0;
 	fitStringStart();
 
-	widgSetReturn(psScreen, this);
+	screenPointer->setReturn(this);
+	dirty = true;
 }
 
 
@@ -540,7 +565,7 @@ void W_EDITBOX::highlight(W_CONTEXT *)
 
 
 /* Respond to the mouse moving off an edit box */
-void W_EDITBOX::highlightLost(W_CONTEXT *)
+void W_EDITBOX::highlightLost()
 {
 	W_EDITBOX *psWidget = this;
 	if (psWidget->state & WEDBS_DISABLE)
@@ -551,117 +576,94 @@ void W_EDITBOX::highlightLost(W_CONTEXT *)
 	psWidget->state = psWidget->state & WEDBS_MASK;
 }
 
-
-/* The edit box display function */
-void editBoxDisplay(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+void W_EDITBOX::setBoxColours(PIELIGHT first, PIELIGHT second, PIELIGHT background)
 {
-	W_EDITBOX	*psEdBox;
-	SDWORD		x0, y0, x1, y1, fx, fy, cx, cy;
-	enum iV_fonts CurrFontID;
+	boxColourFirst = first;
+	boxColourSecond = second;
+	boxColourBackground = background;
+}
 
-#if CURSOR_BLINK
-	bool		blink;
-#endif
+void W_EDITBOX::display(int xOffset, int yOffset)
+{
+	int x0 = x() + xOffset;
+	int y0 = y() + yOffset;
+	int x1 = x0 + width();
+	int y1 = y0 + height();
 
-	psEdBox = (W_EDITBOX *)psWidget;
-	CurrFontID = psEdBox->FontID;
-
-	x0 = psEdBox->x + xOffset;
-	y0 = psEdBox->y + yOffset;
-	x1 = x0 + psEdBox->width;
-	y1 = y0 + psEdBox->height;
-
-	if (psEdBox->pBoxDisplay)
+	if (pBoxDisplay != NULL)
 	{
-		psEdBox->pBoxDisplay((WIDGET *)psEdBox, xOffset, yOffset, pColours);
+		pBoxDisplay(this, xOffset, yOffset);
 	}
 	else
 	{
-		pie_BoxFill(x0, y0, x1, y1, pColours[WCOL_BKGRND]);
-
-		iV_Line(x0, y0, x1, y0, pColours[WCOL_DARK]);
-		iV_Line(x0, y0, x0, y1, pColours[WCOL_DARK]);
-		iV_Line(x0, y1, x1, y1, pColours[WCOL_LIGHT]);
-		iV_Line(x1, y1, x1, y0, pColours[WCOL_LIGHT]);
+		iV_ShadowBox(x0, y0, x1, y1, 0, boxColourFirst, boxColourSecond, boxColourBackground);
 	}
 
-	fx = x0 + WEDB_XGAP;// + (psEdBox->width - fw) / 2;
+	int fx = x0 + WEDB_XGAP;// + (psEdBox->width - fw) / 2;
 
-	iV_SetFont(CurrFontID);
-	iV_SetTextColour(pColours[WCOL_TEXT]);
+	iV_SetFont(FontID);
+	iV_SetTextColour(WZCOL_FORM_TEXT);
 
-	fy = y0 + (psEdBox->height - iV_GetTextLineSize()) / 2 - iV_GetTextAboveBase();
+	int fy = y0 + (height() - iV_GetTextLineSize()) / 2 - iV_GetTextAboveBase();
 
 	/* If there is more text than will fit into the box, display the bit with the cursor in it */
-	QString tmp = psEdBox->aText;
-	tmp.remove(0, psEdBox->printStart);  // Erase anything there isn't room to display.
-	tmp.remove(psEdBox->printChars, tmp.length());
+	QString tmp = aText;
+	tmp.remove(0, printStart);  // Erase anything there isn't room to display.
+	tmp.remove(printChars, tmp.length());
 
-//	if(psEdBox->pFontDisplay) {
-//		psEdBox->pFontDisplay(fx,fy, pPrint);
-//	} else {
 	iV_DrawText(tmp.toUtf8().constData(), fx, fy);
-//	}
 
 	// Display the cursor if editing
 #if CURSOR_BLINK
-	blink = !(((wzGetTicks() - psEdBox->blinkOffset) / WEDB_BLINKRATE) % 2);
-	if ((psEdBox->state & WEDBS_MASK) == WEDBS_INSERT && blink)
+	bool blink = !(((wzGetTicks() - blinkOffset) / WEDB_BLINKRATE) % 2);
+	if ((state & WEDBS_MASK) == WEDBS_INSERT && blink)
 #else
-	if ((psEdBox->state & WEDBS_MASK) == WEDBS_INSERT)
+	if ((state & WEDBS_MASK) == WEDBS_INSERT)
 #endif
 	{
 		// insert mode
-		QString tmp = psEdBox->aText;
-		tmp.remove(psEdBox->insPos, tmp.length());         // Erase from the cursor on, to find where the cursor should be.
-		tmp.remove(0, psEdBox->printStart);
+		QString tmp = aText;
+		tmp.remove(insPos, tmp.length());         // Erase from the cursor on, to find where the cursor should be.
+		tmp.remove(0, printStart);
 
-		cx = x0 + WEDB_XGAP + iV_GetTextWidth(tmp.toUtf8().constData());
+		int cx = x0 + WEDB_XGAP + iV_GetTextWidth(tmp.toUtf8().constData());
 		cx += iV_GetTextWidth("-");
-		cy = fy;
-		iV_Line(cx, cy + iV_GetTextAboveBase(), cx, cy - iV_GetTextBelowBase(), pColours[WCOL_CURSOR]);
+		int cy = fy;
+		iV_Line(cx, cy + iV_GetTextAboveBase(), cx, cy - iV_GetTextBelowBase(), WZCOL_FORM_CURSOR);
 	}
 #if CURSOR_BLINK
-	else if ((psEdBox->state & WEDBS_MASK) == WEDBS_OVER && blink)
+	else if ((state & WEDBS_MASK) == WEDBS_OVER && blink)
 #else
-	else if ((psEdBox->state & WEDBS_MASK) == WEDBS_OVER)
+	else if ((state & WEDBS_MASK) == WEDBS_OVER)
 #endif
 	{
 		// overwrite mode
-		QString tmp = psEdBox->aText;
-		tmp.remove(psEdBox->insPos, tmp.length());         // Erase from the cursor on, to find where the cursor should be.
-		tmp.remove(0, psEdBox->printStart);
+		QString tmp = aText;
+		tmp.remove(insPos, tmp.length());         // Erase from the cursor on, to find where the cursor should be.
+		tmp.remove(0, printStart);
 
-		cx = x0 + WEDB_XGAP + iV_GetTextWidth(tmp.toUtf8().constData());
-		cy = fy;
-		iV_Line(cx, cy, cx + WEDB_CURSORSIZE, cy, pColours[WCOL_CURSOR]);
+		int cx = x0 + WEDB_XGAP + iV_GetTextWidth(tmp.toUtf8().constData());
+		int cy = fy;
+		iV_Line(cx, cy, cx + WEDB_CURSORSIZE, cy, WZCOL_FORM_CURSOR);
 	}
 
-	if (psEdBox->pBoxDisplay == NULL)
+	if (pBoxDisplay == NULL)
 	{
-		if (psEdBox->state & WEDBS_HILITE)
+		if ((state & WEDBS_HILITE) != 0)
 		{
 			/* Display the button hilite */
-			iV_Line(x0 - 2, y0 - 2, x1 + 2, y0 - 2, pColours[WCOL_HILITE]);
-			iV_Line(x0 - 2, y0 - 2, x0 - 2, y1 + 2, pColours[WCOL_HILITE]);
-			iV_Line(x0 - 2, y1 + 2, x1 + 2, y1 + 2, pColours[WCOL_HILITE]);
-			iV_Line(x1 + 2, y1 + 2, x1 + 2, y0 - 2, pColours[WCOL_HILITE]);
+			iV_Box(x0 - 2, y0 - 2, x1 + 2, y1 + 2, WZCOL_FORM_HILITE);
 		}
 	}
 }
 
-
-
-/* Set an edit box'sstate */
-void editBoxSetState(W_EDITBOX *psEditBox, UDWORD state)
+void W_EDITBOX::setMaxStringSize(int size)
 {
-	if (state & WEDBS_DISABLE)
-	{
-		psEditBox->state |= WEDBS_DISABLE;
-	}
-	else
-	{
-		psEditBox->state &= ~WEDBS_DISABLE;
-	}
+	maxStringSize = size;
+}
 
+void W_EDITBOX::setState(unsigned newState)
+{
+	unsigned mask = WEDBS_DISABLE;
+	state = (state & ~mask) | (newState & mask);
 }

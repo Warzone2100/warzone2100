@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -45,6 +45,7 @@
 #include "src/scriptfuncs.h"
 #include "fpath.h"
 #include "multigifts.h"
+#include "template.h"
 
 static INTERP_VAL	scrFunctionResult;	//function return value to be pushed to stack
 
@@ -107,8 +108,6 @@ bool scrGroupAddArea(void)
 		ASSERT(false, "scrGroupAddArea: invalid player");
 		return false;
 	}
-
-// 	debug( LOG_SCRIPT, "groupAddArea: player %d (%d,%d) -> (%d,%d)\n", player, x1, y1, x2, y2 );
 
 	for (psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
 	{
@@ -317,39 +316,6 @@ bool scrIterateGroup(void)
 }
 
 
-// initialise iterating a cluster
-bool scrInitIterateCluster(void)
-{
-	SDWORD	clusterID;
-
-	if (!stackPopParams(1, VAL_INT, &clusterID))
-	{
-		return false;
-	}
-
-	clustInitIterate(clusterID);
-
-	return true;
-}
-
-
-// iterate a cluster
-bool scrIterateCluster(void)
-{
-	BASE_OBJECT		*psObj;
-
-	psObj = clustIterate();
-
-	scrFunctionResult.v.oval = psObj;
-	if (!stackPushResult((INTERP_TYPE)ST_BASEOBJECT, &scrFunctionResult))
-	{
-		return false;
-	}
-
-	return true;
-}
-
-
 // remove a droid from a group
 bool scrDroidLeaveGroup(void)
 {
@@ -385,7 +351,6 @@ bool scrOrderGroup(void)
 
 	if (order != DORDER_STOP &&
 	    order != DORDER_RETREAT &&
-	    order != DORDER_DESTRUCT &&
 	    order != DORDER_RTR &&
 	    order != DORDER_RTB &&
 	    order != DORDER_RUN)
@@ -497,7 +462,6 @@ bool scrOrderDroid(void)
 
 	if (order != DORDER_STOP &&
 	    order != DORDER_RETREAT &&
-	    order != DORDER_DESTRUCT &&
 	    order != DORDER_RTR &&
 	    order != DORDER_RTB &&
 	    order != DORDER_RUN &&
@@ -620,10 +584,6 @@ bool scrOrderDroidStatsLoc(void)
 
 	ASSERT_OR_RETURN(false, psDroid != NULL, "Invalid Unit pointer");
 	ASSERT_OR_RETURN(false, psStats != NULL, "Invalid object pointer");
-	if (psDroid == NULL)
-	{
-		return false;
-	}
 
 	if ((x < 0) || (x > (SDWORD)mapWidth * TILE_UNITS) ||
 	    (y < 0) || (y > (SDWORD)mapHeight * TILE_UNITS))
@@ -637,22 +597,16 @@ bool scrOrderDroidStatsLoc(void)
 		ASSERT(false, "Invalid order");
 		return false;
 	}
-
-	// Don't allow scripts to order structure builds if players structure
-	// limit has been reached.
-	if (!IsPlayerStructureLimitReached(psDroid->player))
+	// HACK: FIXME: Looks like a script error in the player*.slo files
+	// buildOnExactLocation() which references previously destroyed buildings from
+	// _stat = rebuildStructStat[_count]  causes this.
+	if (psStats->id.compare("A0ADemolishStructure") == 0)
 	{
-		// HACK: FIXME: Looks like a script error in the player*.slo files
-		// buildOnExactLocation() which references previously destroyed buildings from
-		// _stat = rebuildStructStat[_count]  causes this.
-		if (strcmp(psStats->pName, "A0ADemolishStructure") == 0)
-		{
-			// I don't feel like spamming a ASSERT here, we *know* it is a issue.
-			return true;
-		}
-
-		orderDroidStatsLocDir(psDroid, order, psStats, x, y, 0, ModeQueue);
+		// I don't feel like spamming a ASSERT here, we *know* it is a issue.
+		return true;
 	}
+
+	orderDroidStatsLocDir(psDroid, order, psStats, x, y, 0, ModeQueue);
 
 	return true;
 }
@@ -985,7 +939,7 @@ static UDWORD scrStructTargetMask(STRUCTURE *psStruct)
 	case REF_LAB:
 	case REF_BRIDGE:
 	case REF_DEMOLISH:
-	case REF_BLASTDOOR:
+	case REF_GENERIC:
 	case REF_GATE:
 	default:
 		ASSERT(false,
@@ -1074,7 +1028,7 @@ static UDWORD scrDroidTargetMask(DROID *psDroid)
 	}
 
 	// get the body type
-	psBStats = asBodyStats + psDroid->asBits[COMP_BODY].nStat;
+	psBStats = asBodyStats + psDroid->asBits[COMP_BODY];
 	switch (psBStats->size)
 	{
 	case SIZE_LIGHT:
@@ -1096,7 +1050,7 @@ static UDWORD scrDroidTargetMask(DROID *psDroid)
 	}
 
 	// get the propulsion type
-	psPStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
+	psPStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION];
 	switch (psPStats->propulsionType)
 	{
 	case PROPULSION_TYPE_WHEELED:
@@ -1106,7 +1060,6 @@ static UDWORD scrDroidTargetMask(DROID *psDroid)
 		mask |= SCR_DT_TRACK;
 		break;
 	case PROPULSION_TYPE_LEGGED:
-	case PROPULSION_TYPE_JUMP:
 		mask |= SCR_DT_LEGS;
 		break;
 	case PROPULSION_TYPE_HOVER:
@@ -1121,7 +1074,6 @@ static UDWORD scrDroidTargetMask(DROID *psDroid)
 	case PROPULSION_TYPE_PROPELLOR:
 		mask |= SCR_DT_PROPELLOR;
 		break;
-	case PROPULSION_TYPE_SKI:
 	default:
 		ASSERT(false,
 		       "scrUnitTargetMask: unknown or invalid target unit propulsion type");
@@ -1390,12 +1342,12 @@ bool scrSkCanBuildTemplate(void)
 	}
 
 	// is factory big enough?
-	if (!validTemplateForFactory(psTempl, psStructure))
+	if (!validTemplateForFactory(psTempl, psStructure, false))
 	{
 		goto failTempl;
 	}
 
-	if ((asBodyStats + psTempl->asParts[COMP_BODY])->size > ((FACTORY *)psStructure->pFunctionality)->capacity)
+	if ((asBodyStats + psTempl->asParts[COMP_BODY])->size > psStructure->capacity)
 	{
 		goto failTempl;
 	}
@@ -1413,71 +1365,9 @@ bool scrSkCanBuildTemplate(void)
 		goto failTempl;
 	}
 
-	// weapon/sensor
-
-	switch (droidTemplateType(psTempl))
+	if (!researchedTemplate(psTempl, player, true, false))
 	{
-	case DROID_CYBORG:		        // cyborg-type thang.. no need to check weapon.
-	case DROID_CYBORG_SUPER:		// super cyborg-type thang
-		break;
-	case DROID_WEAPON:
-		if (apCompLists[player][COMP_WEAPON][ psTempl->asWeaps[0] ] != AVAILABLE)
-		{
-			goto failTempl;
-		}
-		break;
-	case DROID_SENSOR:
-		if (apCompLists[player][COMP_SENSOR][psTempl->asParts[COMP_SENSOR]] != AVAILABLE)
-		{
-			goto failTempl;
-		}
-		break;
-	case DROID_ECM:
-		if (apCompLists[player][COMP_ECM][psTempl->asParts[COMP_ECM]] != AVAILABLE)
-		{
-			goto failTempl;
-		}
-		break;
-	case DROID_REPAIR:
-		if (apCompLists[player][COMP_REPAIRUNIT][psTempl->asParts[COMP_REPAIRUNIT]] != AVAILABLE)
-		{
-			goto failTempl;
-		}
-		break;
-	case DROID_CYBORG_REPAIR:
-		if (apCompLists[player][COMP_REPAIRUNIT][psTempl->asParts[COMP_REPAIRUNIT]] != AVAILABLE)
-		{
-			goto failTempl;
-		}
-		break;
-	case DROID_COMMAND:
-		if (apCompLists[player][COMP_BRAIN][psTempl->asParts[COMP_BRAIN]] != AVAILABLE)
-		{
-			goto failTempl;
-		}
-		break;
-	case DROID_CONSTRUCT:
-		if (apCompLists[player][COMP_CONSTRUCT][psTempl->asParts[COMP_CONSTRUCT]] != AVAILABLE)
-		{
-			goto failTempl;
-		}
-		break;
-	case DROID_CYBORG_CONSTRUCT:
-		if (apCompLists[player][COMP_CONSTRUCT][psTempl->asParts[COMP_CONSTRUCT]] != AVAILABLE)
-		{
-			goto failTempl;
-		}
-		break;
-
-	case DROID_PERSON:		        // person
-	case DROID_TRANSPORTER:	        // guess what this is!
-	case DROID_SUPERTRANSPORTER:
-	case DROID_DEFAULT:		        // Default droid
-	case DROID_ANY:
-	default:
-		debug(LOG_FATAL, "scrSkCanBuildTemplate: Unhandled template type");
-		abort();
-		break;
+		goto failTempl;
 	}
 
 	scrFunctionResult.v.bval = true;
@@ -1647,7 +1537,7 @@ bool scrSkDoResearch(void)
 #if defined (DEBUG)
 		{
 			char	sTemp[128];
-			sprintf(sTemp, "[debug]player:%d starts topic: %s", player, asResearch[i].pName);
+			sprintf(sTemp, "[debug]player:%d starts topic: %s", player, getName(&asResearch[i]));
 			NETlogEntry(sTemp, SYNC_FLAG, 0);
 		}
 #endif
@@ -1709,7 +1599,7 @@ bool scrSkGetFactoryCapacity(void)
 
 	if (psStructure && StructIsFactory(psStructure))
 	{
-		count = ((FACTORY *)psStructure->pFunctionality)->capacity;
+		count = psStructure->capacity;
 	}
 
 	scrFunctionResult.v.ival = count;
@@ -1773,7 +1663,7 @@ static bool defenseLocation(bool variantB)
 {
 	SDWORD		*pX, *pY, statIndex, statIndex2;
 	UDWORD		x, y, gX, gY, dist, player, nearestSoFar, count;
-	GATEWAY		*psGate, *psChosenGate;
+	GATEWAY		*psChosenGate;
 	DROID		*psDroid;
 	UDWORD		x1, x2, x3, x4, y1, y2, y3, y4;
 	bool		noWater;
@@ -1819,7 +1709,7 @@ static bool defenseLocation(bool variantB)
 	// go down the gateways, find the nearest gateway with >1 empty tiles
 	nearestSoFar = UDWORD_MAX;
 	psChosenGate = NULL;
-	for (psGate = gwGetGateways(); psGate; psGate = psGate->psNext)
+	for (auto psGate : gwGetGateways())
 	{
 		if (auxTile(psGate->x1, psGate->y1, player) & AUXBITS_THREAT)
 		{
@@ -2082,8 +1972,8 @@ bool scrActionDroidObj(void)
 
 //<script function - improved version
 // variables for the group iterator
-DROID_GROUP		*psScrIterateGroupB[MAX_PLAYERS];
-DROID			*psScrIterateGroupDroidB[MAX_PLAYERS];
+static DROID_GROUP *psScrIterateGroupB[MAX_PLAYERS];
+static DROID *psScrIterateGroupDroidB[MAX_PLAYERS];
 
 // initialise iterating a groups members
 bool scrInitIterateGroupB(void)
@@ -2160,7 +2050,7 @@ bool scrDroidCanReach(void)
 	}
 	if (psDroid)
 	{
-		const PROPULSION_STATS *psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION].nStat;
+		const PROPULSION_STATS *psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION];
 		const Vector3i rPos(x, y, 0);
 
 		scrFunctionResult.v.bval = fpathCheck(psDroid->pos, rPos, psPropStats->propulsionType);

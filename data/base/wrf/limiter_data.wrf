@@ -3,16 +3,12 @@
 /*         Load structures and weapons/ecm/sensors         */ 
 /**********       WRF\limiter_data.wrf       ***************/
 
-directory	"structs"
-file		IMD	"blderik.pie"
-
 directory	"stats"
-file		SWEAPON		"weapons.txt"
-file		SSENSOR		"sensor.txt"
-file		SECM		"ecm.txt"
-file		SREPAIR		"repair.txt"
-file		SSTRUCT		"structures.txt"
-file		SSTRWEAP	"structureweapons.txt"
+file		SWEAPON		"weapons.json"
+file		SSENSOR		"sensor.json"
+file		SECM		"ecm.json"
+file		SREPAIR		"repair.json"
+file		SSTRUCT		"structure.json"
 directory	"multiplay/script"
 file		SCRIPT		"multilim.slo"
 file		SCRIPTVAL	"multilim.vlo"

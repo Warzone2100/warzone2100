@@ -19,12 +19,11 @@ public		STRUCTURESTAT	testStat;
 public		SOUND		capturedSnd, warnSatSnd, failedSnd;
 private		int		uplinkX[3], uplinkY[3], tempX, tempY, temp;
 private		int		lasX1, lasX2, lasY1, lasY2, yMax, switch1, switch2, chance;
-//private		STRUCTURE	target;
 private		BASEOBJ		target;
 private		BOOL		flag;
 private		int		numTargets, targets[13], res;
 private		int		count, uplinkPlayer;
-private     RESEARCHSTAT    researchDone;
+private		RESEARCHSTAT    researchDone;
 
 trigger captureTrig((droidInRange(player, uplinkX[0], uplinkY[0], 300) and ((silo[0] != NULLOBJECT) or (silo[1] != NULLOBJECT) or (silo[2] != NULLOBJECT))), 13);	//3 tiles range
 trigger	nexusGoTrig(wait, 3000);		//wait 5 mins after warning
@@ -66,9 +65,9 @@ event start(CALL_GAMEINIT)
 	yMax = 16384;	//24576;	//allow 3A-B
 	switch1 = 8192;		//when switches speed for covering 3A
 	switch2 = 16384;	//when switches speed for covering 3C
-//setup target types
+	// setup target types
 	numTargets = 13;
-//use wall more than anything else so picks more often
+	// use wall more than anything else so picks more often
 	targets[0] = ST_HQ;		//ST_WALL
 	targets[1] = ST_FACTORY;
 	targets[2] = ST_POWER_GEN;
@@ -93,9 +92,9 @@ event clearMessage(inactive)
 //need to check this again later (with different structure IDs, since player number has changed!!!)
 event captureDeadEvnt(captureDeadTrig)
 {
-//don't allow win
+	// don't allow win
 	setEventTrigger(captureEvnt, inactive);
-//need to play audio if possible
+	// need to play audio if possible
 	addConsoleText(_("Objective Destroyed"), player);
 	playSound(failedSnd, player);
 	pause(20);
@@ -135,10 +134,9 @@ event captureEvnt(captureTrig)
 
 event fireLasSat(fireLasSatTrig)	//every 5 seconds
 {
-//find a target in area
+	// find a target in area
 	resetStructTargets();
 	setStructTarPref(targets[random(numTargets)]);		//pick random target type preference
-	//setStructTarPref(targets[4]);		//pick walls to check
 	target = structTargetInArea(player, -1, lasX1, lasY1, lasX2, lasY2);
 	//if no structures to hit go for Droids
 	if (target == NULLOBJECT)
@@ -168,7 +166,7 @@ event fireLasSat(fireLasSatTrig)	//every 5 seconds
 				tempY = tempY - 64 + random(128);
 				fireWeaponAtLoc(lasSat, tempX, tempY);
 			}
-//if can't miss, then hit close by anyway!
+			// if can't miss, then hit close by anyway!
 			else
 			{
 				//pick random coords (hopefully miss!)
@@ -180,19 +178,19 @@ event fireLasSat(fireLasSatTrig)	//every 5 seconds
 	}
 	else
 	{
-//pick random coords (hopefully miss!)
+		// pick random coords (hopefully miss!)
 		tempX = lasX1 + random(lasX2 - lasX1);
 		tempY = lasY1 + random(lasY2 - lasY1);
 		fireWeaponAtLoc(lasSat, tempX, tempY);
 	}
 
-//warn player that lassat has fired!
+	// warn player that lassat has fired!
 	if (random(100) < 50)
 	{
 		playSoundPos(warnSatSnd, selectedPlayer, tempX, tempY, 0);	//warn player!!
 	}
 
-//set random time for next firing
+	// set random time for next firing
 	temp = random(4);
 	if (temp == 0)
 	{
@@ -217,8 +215,6 @@ event moveSat(moveSatTrig)	//every 10 seconds
 	if (lasY2 < yMax)
 	{
 		lasY2 = lasY2 + 128; //add another tile to limit, so creeps to North of 3A in 10 mins
-		//lasY1 = lasY1 + 64; //add another 1/2 tile to limit, so stops targetting north so much
-
 
 		//slow down for covering 3A
 		if (lasY2 > switch1)
@@ -234,18 +230,3 @@ event moveSat(moveSatTrig)	//every 10 seconds
 		}
 	}
 }
-
-
-/* not needed
-event incChance(every, 10)
-{
-	if (chance < 50)
-	{
-		chance = chance + 1; 	//increment chance up to maximum (50%)
-	}
-	else
-	{
-		setEventTrigger(incChance, inactive);
-	}
-}
-*/

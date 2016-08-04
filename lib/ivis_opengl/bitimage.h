@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -21,50 +21,37 @@
 #define __INCLUDED_BITIMAGE__
 
 #include "ivisdef.h"
+#include "piedef.h"
 
 static inline WZ_DECL_PURE unsigned short iV_GetImageWidth(const IMAGEFILE *ImageFile, const unsigned short ID)
 {
 	assert(ID < ImageFile->imageDefs.size());
-	return ImageFile->imageDefs[ID].Width;
+	return Image(ImageFile, ID).width();
 }
 
 
 static inline WZ_DECL_PURE unsigned short iV_GetImageHeight(const IMAGEFILE *ImageFile, const unsigned short ID)
 {
 	assert(ID < ImageFile->imageDefs.size());
-	return ImageFile->imageDefs[ID].Height;
+	return Image(ImageFile, ID).height();
 }
 
 
 static inline WZ_DECL_PURE short iV_GetImageXOffset(const IMAGEFILE *ImageFile, const unsigned short ID)
 {
 	assert(ID < ImageFile->imageDefs.size());
-	return ImageFile->imageDefs[ID].XOffset;
+	return Image(ImageFile, ID).xOffset();
 }
 
 
 static inline WZ_DECL_PURE short iV_GetImageYOffset(const IMAGEFILE *ImageFile, const unsigned short ID)
 {
 	assert(ID < ImageFile->imageDefs.size());
-	return ImageFile->imageDefs[ID].YOffset;
+	return Image(ImageFile, ID).yOffset();
 }
 
-
-static inline WZ_DECL_PURE unsigned short iV_GetImageCenterX(const IMAGEFILE *ImageFile, const unsigned short ID)
-{
-	assert(ID < ImageFile->imageDefs.size());
-	return ImageFile->imageDefs[ID].XOffset + ImageFile->imageDefs[ID].Width / 2;
-}
-
-
-static inline WZ_DECL_PURE unsigned short iV_GetImageCenterY(const IMAGEFILE *ImageFile, const unsigned short ID)
-{
-	assert(ID < ImageFile->imageDefs.size());
-	return ImageFile->imageDefs[ID].YOffset + ImageFile->imageDefs[ID].Height / 2;
-}
-
-
-extern IMAGEFILE *iV_LoadImageFile(const char *FileData);
-extern void iV_FreeImageFile(IMAGEFILE *ImageFile);
+ImageDef *iV_GetImage(const QString &filename);
+IMAGEFILE *iV_LoadImageFile(const char *FileData);
+void iV_FreeImageFile(IMAGEFILE *ImageFile);
 
 #endif

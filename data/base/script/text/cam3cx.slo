@@ -108,8 +108,6 @@ event seen(inactive)
 
 //has player found gamma base?
 //needs to be object seen
-//CALL_OBJ_SEEN, INT player, ref BASEOBJ object, ref BASEOBJ viewer
-//event seen2(CALL_DROID_SEEN, player, ref objectDroid, ref viewerDroid)
 event seen2(CALL_OBJ_SEEN, player, ref objectObj, ref viewerObj)
 {
 	if (objectObj.player == curPlayer)

@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -39,7 +39,7 @@
  * \param p1,p2,p3 Points for forming 2 vector for cross product
  * \return Normal vector
  */
-static inline WZ_DECL_CONST WZ_DECL_WARN_UNUSED_RESULT
+static inline WZ_DECL_CONST
 Vector3f pie_SurfaceNormal3fv(const Vector3f p1, const Vector3f p2, const Vector3f p3)
 {
 	return normalise(crossProduct(p3 - p1, p2 - p1));
@@ -47,26 +47,9 @@ Vector3f pie_SurfaceNormal3fv(const Vector3f p1, const Vector3f p2, const Vector
 
 //*************************************************************************
 
-
-extern void pie_MatInit(void);
-
-
-//*************************************************************************
-
-extern void pie_MatBegin(void);
-extern void pie_MatEnd(void);
-
-struct ScopedPieMatrix
-{
-	ScopedPieMatrix()
-	{
-		pie_MatBegin();
-	}
-	~ScopedPieMatrix()
-	{
-		pie_MatEnd();    // Automatic end of scope matrix popping
-	}
-};
+void pie_MatInit();
+void pie_MatBegin(bool cached = false);
+void pie_MatEnd();
 
 //*************************************************************************
 
@@ -76,6 +59,7 @@ extern void pie_MatRotX(uint16_t x);
 extern void pie_MatRotY(uint16_t y);
 extern void pie_MatRotZ(uint16_t z);
 extern int32_t pie_RotateProject(const Vector3i *src, Vector2i *dest);
+void pie_GetMatrix(float *matrix);
 
 //*************************************************************************
 

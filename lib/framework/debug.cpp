@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -39,8 +39,6 @@
 #ifdef WZ_OS_LINUX
 #include <execinfo.h>  // Nonfatal runtime backtraces.
 #endif //WZ_OS_LINUX
-
-extern void NotifyUserOfError(char *);		// will throw up a notifier on error
 
 #define MAX_LEN_LOG_LINE 512
 
@@ -240,21 +238,21 @@ void debugFlushStderr()
 }
 // MSVC specific rotuines to set/clear allocation tracking
 #if defined(WZ_CC_MSVC) && defined(DEBUG)
-void debug_MEMCHKOFF(void)
+void debug_MEMCHKOFF()
 {
 	// Disable allocation tracking
 	int flags = _CrtSetDbgFlag(_CRTDBG_REPORT_FLAG);
 	flags &= ~_CRTDBG_ALLOC_MEM_DF;
 	_CrtSetDbgFlag(flags);
 }
-void debug_MEMCHKON(void)
+void debug_MEMCHKON()
 {
 	// Enable allocation tracking
 	int flags = _CrtSetDbgFlag(_CRTDBG_REPORT_FLAG);
 	flags |= _CRTDBG_ALLOC_MEM_DF;
 	_CrtSetDbgFlag(flags);
 }
-void debug_MEMSTATS(void)
+void debug_MEMSTATS()
 {
 	_CrtMemState state;
 	_CrtMemCheckpoint(&state);
@@ -262,7 +260,7 @@ void debug_MEMSTATS(void)
 }
 #endif
 
-void debug_init(void)
+void debug_init()
 {
 	/*** Initialize the debug subsystem ***/
 #if defined(WZ_CC_MSVC) && defined(DEBUG)
@@ -293,7 +291,7 @@ void debug_init(void)
 }
 
 
-void debug_exit(void)
+void debug_exit()
 {
 	debug_callback *curCallback = callbackRegistry, * tmpCallback = NULL;
 
@@ -391,6 +389,24 @@ void _realObjTrace(int id, const char *function, const char *str, ...)
 	printToDebugCallbacks(outputBuffer);
 }
 
+// Thread local to prevent a race condition on read and write to this buffer if multiple
+// threads log errors. This means we will not be reporting any errors to console from threads
+// other than main. If we want to fix this, make sure accesses are protected by a mutex.
+static WZ_DECL_THREAD char errorStore[512];
+static WZ_DECL_THREAD bool errorWaiting = false;
+const char *debugLastError()
+{
+	if (errorWaiting)
+	{
+		errorWaiting = false;
+		return errorStore;
+	}
+	else
+	{
+		return NULL;
+	}
+}
+
 void _debug(int line, code_part part, const char *function, const char *str, ...)
 {
 	va_list ap;
@@ -479,13 +495,14 @@ void _debug(int line, code_part part, const char *function, const char *str, ...
 		if (part == LOG_ERROR)
 		{
 			// used to signal user that there was a error condition, and to check the logs.
-			NotifyUserOfError(useInputBuffer1 ? inputBuffer[1] : inputBuffer[0]);
+			sstrcpy(errorStore, useInputBuffer1 ? inputBuffer[1] : inputBuffer[0]);
+			errorWaiting = true;
 		}
 
 		// Throw up a dialog box for users since most don't have a clue to check the dump file for information. Use for (duh) Fatal errors, that force us to terminate the game.
 		if (part == LOG_FATAL)
 		{
-			if (war_getFullscreen())
+			if (wzIsFullscreen())
 			{
 				wzToggleFullscreen();
 			}

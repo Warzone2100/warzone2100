@@ -1,6 +1,6 @@
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2013  Warzone 2100 Project
+	Copyright (C) 2013-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -27,7 +27,7 @@
 #ifndef __INCLUDED_SRC_INTFAC_H__
 #define __INCLUDED_SRC_INTFAC_H__
 
-enum
+enum INTFAC_TYPE
 {
 	IMAGE_PBAR_EMPTY,
 	IMAGE_PBAR_AVAIL,
@@ -375,6 +375,12 @@ enum
 	IMAGE_VDP_DOWN,
 	IMAGE_VDP_UP,
 	IMAGE_VDP_HI,
+	IMAGE_OBSOLETE_HIDE_UP,
+	IMAGE_OBSOLETE_HIDE_DOWN,
+	IMAGE_OBSOLETE_HIDE_HI,
+	IMAGE_OBSOLETE_SHOW_UP,
+	IMAGE_OBSOLETE_SHOW_DOWN,
+	IMAGE_OBSOLETE_SHOW_HI,
 	IMAGE_GN_STAR,
 	IMAGE_GN_15,
 	IMAGE_GN_14,
@@ -574,6 +580,16 @@ enum
 	IMAGE_DES_SAVEH,
 	IMAGE_DES_DELETE,
 	IMAGE_DES_DELETEH,
+	IMAGE_ATTACK_UP,
+	IMAGE_ATTACK_DOWN,
+	IMAGE_HOLD_UP,
+	IMAGE_HOLD_DOWN,
+	IMAGE_PATROL_UP,
+	IMAGE_PATROL_DOWN,
+	IMAGE_STOP_UP,
+	IMAGE_STOP_DOWN,
+	IMAGE_GUARD_UP,
+	IMAGE_GUARD_DOWN,
 };
 
 #endif //__INCLUDED_SRC_INTFAC_H__

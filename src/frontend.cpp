@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -31,6 +31,8 @@
 #endif
 
 #include "lib/framework/input.h"
+#include "lib/framework/wzconfig.h"
+#include "lib/framework/physfs_ext.h"
 #include "lib/ivis_opengl/bitimage.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
 #include "lib/ivis_opengl/piestate.h"
@@ -63,14 +65,20 @@
 #include "version.h"
 #include "warzoneconfig.h"
 #include "wrappers.h"
-#include "autorevision.h"
+
+
+struct CAMPAIGN_FILE
+{
+	QString name;
+	QString level;
+	QString video;
+	QString captions;
+	QString package;
+	QString loading;
+};
 
 // ////////////////////////////////////////////////////////////////////////////
 // Global variables
-
-// Widget code and non-constant strings do not get along
-static char resolution[WIDG_MAXSTR];
-static char textureSize[WIDG_MAXSTR];
 
 tMode titleMode; // the global case
 tMode lastTitleMode; // Since skirmish and multiplayer setup use the same functions, we use this to go back to the corresponding menu.
@@ -79,7 +87,6 @@ char			aLevelName[MAX_LEVEL_NAME_SIZE + 1];	//256];			// vital! the wrf file to 
 
 bool			bLimiterLoaded = false;
 
-#define DEFAULT_LEVEL "CAM_1A"
 #define TUTORIAL_LEVEL "TUTORIAL3"
 
 
@@ -93,6 +100,24 @@ bool CancelPressed(void)
 		inputLoseFocus();	// clear the input buffer.
 	}
 	return cancel;
+}
+
+// Cycle through options, one at a time.
+template <typename T>
+static T stepCycle(T value, T min, T max)
+{
+	return !mouseReleased(MOUSE_RMB) ?
+	       value < max ? T(value + 1) : min :  // Cycle forwards. The T cast is to cycle through enums.
+	       min < value ? T(value - 1) : max;  // Cycle backwards.
+}
+
+// Cycle through options, which are powers of two, such as [128, 256, 512, 1024, 2048].
+template <typename T>
+static T pow2Cycle(T value, T min, T max)
+{
+	return !mouseReleased(MOUSE_RMB) ?
+	       value < max ? value * 2 : min :  // Cycle forwards.
+	       min < value ? value / 2 : max;  // Cycle backwards.
 }
 
 
@@ -134,39 +159,26 @@ static bool startTitleMenu(void)
 static void runUpgrdHyperlink(void)
 {
 	//FIXME: There is no decent way we can re-init the display to switch to window or fullscreen within game. refs: screenToggleMode().
-	char buf[250] = { '\0' };
-	const char *segment;
-	const char vcs_branch_cstr[] = VCS_BRANCH;
-	const char vcs_tag[] = VCS_TAG;
-
-	if (strlen(vcs_tag))
+	std::string link = "http://gamecheck.wz2100.net/";
+	std::string version = version_getVersionString();
+	for (char ch : version)
 	{
-		segment = vcs_tag;
+		link += ch == ' '? '_' : ch;
 	}
-	else if (strlen(vcs_branch_cstr))
-	{
-		segment = vcs_branch_cstr;
-	}
-	else
-	{
-		segment = "unknown";
-	}
-
-	ssprintf(buf, "http://gamecheck.wz2100.net/%s", segment);
 
 #if defined(WZ_OS_WIN)
 	wchar_t  wszDest[250] = {'/0'};
-	MultiByteToWideChar(CP_UTF8, 0, buf, -1, wszDest, 250);
+	MultiByteToWideChar(CP_UTF8, 0, link.c_str(), -1, wszDest, 250);
 
 	ShellExecuteW(NULL, L"open", wszDest, NULL, NULL, SW_SHOWNORMAL);
 #elif defined (WZ_OS_MAC)
 	char lbuf[250] = {'\0'};
-	ssprintf(lbuf, "open %s &", buf);
+	ssprintf(lbuf, "open %s &", link.c_str());
 	system(lbuf);
 #else
 	// for linux
 	char lbuf[250] = {'\0'};
-	ssprintf(lbuf, "xdg-open %s &", buf);
+	ssprintf(lbuf, "xdg-open %s &", link.c_str());
 	int stupidWarning = system(lbuf);
 	(void)stupidWarning;  // Why is system() a warn_unused_result function..?
 #endif
@@ -320,7 +332,7 @@ static void startSinglePlayerMenu(void)
 	addTextButton(FRONTEND_LOADGAME_MISSION, FRONTEND_POS5X, FRONTEND_POS5Y, _("Load Campaign Game"), WBUT_TXTCENTRE);
 	addTextButton(FRONTEND_LOADGAME_SKIRMISH, FRONTEND_POS6X, FRONTEND_POS6Y, _("Load Skirmish Game"), WBUT_TXTCENTRE);
 
-	addSideText(FRONTEND_SIDETEXT , FRONTEND_SIDEX, FRONTEND_SIDEY, _("SINGLE PLAYER"));
+	addSideText(FRONTEND_SIDETEXT, FRONTEND_SIDEX, FRONTEND_SIDEY, _("SINGLE PLAYER"));
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_QUIT, 10, 10, 30, 29, P_("menu", "Return"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
 	// show this only when the video sequences are not installed
 	if (!PHYSFS_exists("sequences/devastation.ogg"))
@@ -329,13 +341,86 @@ static void startSinglePlayerMenu(void)
 	}
 }
 
-static void frontEndNewGame(void)
+static QList<CAMPAIGN_FILE> readCampaignFiles()
 {
-	sstrcpy(aLevelName, DEFAULT_LEVEL);
-	seq_ClearSeqList();
-	seq_AddSeqToList("cam1/c001.ogg", NULL, "cam1/c001.txa", false);
-	seq_StartNextFullScreenVideo();
+	QList<CAMPAIGN_FILE> result;
+	char **files = PHYSFS_enumerateFiles("campaigns");
+	for (char **i = files; *i != NULL; ++i)
+	{
+		CAMPAIGN_FILE c;
+		QString filename("campaigns/");
+		filename += *i;
+		if (!filename.endsWith(".json"))
+		{
+			continue;
+		}
+		WzConfig ini(filename, WzConfig::ReadOnlyAndRequired);
+		c.name = ini.value("name").toString();
+		c.level = ini.value("level").toString();
+		c.package = ini.value("package").toString();
+		c.loading = ini.value("loading").toString();
+		c.video = ini.value("video").toString();
+		c.captions = ini.value("captions").toString();
+		result += c;
+	}
+	PHYSFS_freeList(files);
+	return result;
+}
 
+static void startCampaignSelector()
+{
+	addBackdrop();
+	addTopForm();
+	addBottomForm();
+
+	QList<CAMPAIGN_FILE> list = readCampaignFiles();
+	for (int i = 0; i < list.size(); i++)
+	{
+		addTextButton(FRONTEND_CAMPAIGN_1 + i, FRONTEND_POS1X, FRONTEND_POS2Y + 40 * i, gettext(list[i].name.toUtf8().constData()), WBUT_TXTCENTRE);
+	}
+	addSideText(FRONTEND_SIDETEXT, FRONTEND_SIDEX, FRONTEND_SIDEY, _("CAMPAIGNS"));
+	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_QUIT, 10, 10, 30, 29, P_("menu", "Return"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
+	// show this only when the video sequences are not installed
+	if (!PHYSFS_exists("sequences/devastation.ogg"))
+	{
+		addSmallTextButton(FRONTEND_HYPERLINK, FRONTEND_POS8X, FRONTEND_POS8Y, _("Campaign videos are missing! Get them from http://wz2100.net"), 0);
+	}
+}
+
+static void frontEndNewGame(int which)
+{
+	QList<CAMPAIGN_FILE> list = readCampaignFiles();
+	sstrcpy(aLevelName, list[which].level.toUtf8().constData());
+	if (!list[which].video.isEmpty())
+	{
+		seq_ClearSeqList();
+		seq_AddSeqToList(list[which].video.toUtf8().constData(), NULL, list[which].captions.toUtf8().constData(), false);
+		seq_StartNextFullScreenVideo();
+	}
+	if (!list[which].package.isEmpty())
+	{
+		QString path;
+		path += PHYSFS_getWriteDir();
+		path += PHYSFS_getDirSeparator();
+		path += "campaigns";
+		path += PHYSFS_getDirSeparator();
+		path += list[which].package;
+		if (!PHYSFS_mount(path.toUtf8().constData(), NULL, PHYSFS_APPEND))
+		{
+			debug(LOG_ERROR, "Failed to load campaign mod \"%s\": %s",
+			      path.toUtf8().constData(), PHYSFS_getLastError());
+		}
+	}
+	if (!list[which].loading.isEmpty())
+	{
+		debug(LOG_WZ, "Adding campaign mod level \"%s\"", list[which].loading.toUtf8().constData());
+		if (!loadLevFile(list[which].loading.toUtf8().constData(), mod_campaign, false, NULL))
+		{
+			debug(LOG_ERROR, "Failed to load %s", list[which].loading.toUtf8().constData());
+			return;
+		}
+	}
+	debug(LOG_WZ, "Loading campaign mod -- %s", aLevelName);
 	changeTitleMode(STARTGAME);
 }
 
@@ -374,6 +459,23 @@ void SPinit()
 	game.hash.setZero();	// must reset this to zero
 }
 
+bool runCampaignSelector()
+{
+	WidgetTriggers const &triggers = widgRunScreen(psWScreen);
+	unsigned id = triggers.empty() ? 0 : triggers.front().widget->id; // Just use first click here, since the next click could be on another menu.
+	if (id == FRONTEND_QUIT)
+	{
+		changeTitleMode(SINGLE); // go back
+	}
+	else if (id >= FRONTEND_CAMPAIGN_1 && id <= FRONTEND_CAMPAIGN_6) // chose a campaign
+	{
+		SPinit();
+		frontEndNewGame(id - FRONTEND_CAMPAIGN_1);
+	}
+	widgDisplayScreen(psWScreen); // show the widgets currently running
+	return true;
+}
+
 bool runSinglePlayerMenu(void)
 {
 	if (bLoadSaveUp)
@@ -395,8 +497,7 @@ bool runSinglePlayerMenu(void)
 		switch (id)
 		{
 		case FRONTEND_NEWGAME:
-			SPinit();
-			frontEndNewGame();
+			changeTitleMode(CAMPAIGNS);
 			break;
 
 		case FRONTEND_LOADGAME_MISSION:
@@ -588,6 +689,47 @@ bool runOptionsMenu(void)
 	return true;
 }
 
+static char const *graphicsOptionsFmvmodeString()
+{
+	switch (war_GetFMVmode())
+	{
+	case FMV_1X: return _("1×");
+	case FMV_2X: return _("2×");
+	case FMV_FULLSCREEN: return _("Fullscreen");
+	default: return _("Unsupported");
+	}
+}
+
+static char const *graphicsOptionsScanlinesString()
+{
+	switch (war_getScanlineMode())
+	{
+	case SCANLINES_OFF: return _("Off");
+	case SCANLINES_50: return _("50%");
+	case SCANLINES_BLACK: return _("Black");
+	default: return _("Unsupported");
+	}
+}
+
+static char const *graphicsOptionsScreenShakeString()
+{
+	return getShakeStatus() ? _("On") : _("Off");
+}
+
+static char const *graphicsOptionsSubtitlesString()
+{
+	return seq_GetSubtitles() ? _("On") : _("Off");
+}
+
+static char const *graphicsOptionsShadowsString()
+{
+	return getDrawShadows() ? _("On") : _("Off");
+}
+
+static char const *graphicsOptionsRadarString()
+{
+	return rotateRadar ? _("Rotating") : _("Fixed");
+}
 
 // ////////////////////////////////////////////////////////////////////////////
 // Graphics Options
@@ -599,85 +741,31 @@ static bool startGraphicsOptionsMenu(void)
 
 	////////////
 	//FMV mode.
-	addTextButton(FRONTEND_FMVMODE,	FRONTEND_POS2X - 35, FRONTEND_POS2Y, _("Video Playback"), 0);
-	switch (war_GetFMVmode())
-	{
-	case FMV_1X:
-		addTextButton(FRONTEND_FMVMODE_R, FRONTEND_POS2M - 55, FRONTEND_POS2Y, _("1X"), 0);
-		break;
-
-	case FMV_2X:
-		addTextButton(FRONTEND_FMVMODE_R, FRONTEND_POS2M - 55, FRONTEND_POS2Y, _("2X"), 0);
-		break;
-
-	case FMV_FULLSCREEN:
-		addTextButton(FRONTEND_FMVMODE_R, FRONTEND_POS2M - 55, FRONTEND_POS2Y, _("Fullscreen"), 0);
-		break;
-
-	default:
-		ASSERT(!"invalid FMV mode", "Invalid FMV mode: %u", (unsigned int)war_GetFMVmode());
-		break;
-	}
+	addTextButton(FRONTEND_FMVMODE,   FRONTEND_POS2X - 35, FRONTEND_POS2Y, _("Video Playback"), WBUT_SECONDARY);
+	addTextButton(FRONTEND_FMVMODE_R, FRONTEND_POS2M - 55, FRONTEND_POS2Y, graphicsOptionsFmvmodeString(), WBUT_SECONDARY);
 
 	// Scanlines
-	addTextButton(FRONTEND_SCANLINES, FRONTEND_POS3X - 35, FRONTEND_POS3Y, _("Scanlines"), 0);
-	switch (war_getScanlineMode())
-	{
-	case SCANLINES_OFF:
-		addTextButton(FRONTEND_SCANLINES_R, FRONTEND_POS3M - 55, FRONTEND_POS3Y, _("Off"), 0);
-		break;
-
-	case SCANLINES_50:
-		addTextButton(FRONTEND_SCANLINES_R, FRONTEND_POS3M - 55, FRONTEND_POS3Y, _("50%"), 0);
-		break;
-
-	case SCANLINES_BLACK:
-		addTextButton(FRONTEND_SCANLINES_R, FRONTEND_POS3M - 55, FRONTEND_POS3Y, _("Black"), 0);
-		break;
-	}
+	addTextButton(FRONTEND_SCANLINES,   FRONTEND_POS3X - 35, FRONTEND_POS3Y, _("Scanlines"), WBUT_SECONDARY);
+	addTextButton(FRONTEND_SCANLINES_R, FRONTEND_POS3M - 55, FRONTEND_POS3Y, graphicsOptionsScanlinesString(), WBUT_SECONDARY);
 
 	////////////
 	// screenshake
-	addTextButton(FRONTEND_SSHAKE,	 FRONTEND_POS4X - 35,   FRONTEND_POS4Y, _("Screen Shake"), 0);
-	if (getShakeStatus())
-	{
-		// shaking on
-		addTextButton(FRONTEND_SSHAKE_R, FRONTEND_POS4M - 55,  FRONTEND_POS4Y, _("On"), 0);
-	}
-	else
-	{
-		//shaking off.
-		addTextButton(FRONTEND_SSHAKE_R, FRONTEND_POS4M - 55,  FRONTEND_POS4Y, _("Off"), 0);
-	}
+	addTextButton(FRONTEND_SSHAKE,   FRONTEND_POS4X - 35, FRONTEND_POS4Y, _("Screen Shake"), WBUT_SECONDARY);
+	addTextButton(FRONTEND_SSHAKE_R, FRONTEND_POS4M - 55, FRONTEND_POS4Y, graphicsOptionsScreenShakeString(), WBUT_SECONDARY);
 
 	////////////
 	//subtitle mode.
-	addTextButton(FRONTEND_SUBTITLES, FRONTEND_POS6X - 35, FRONTEND_POS5Y, _("Subtitles"), 0);
-	if (!seq_GetSubtitles())
-	{
-		addTextButton(FRONTEND_SUBTITLES_R, FRONTEND_POS6M - 55, FRONTEND_POS5Y, _("Off"), 0);
-	}
-	else
-	{
-		addTextButton(FRONTEND_SUBTITLES_R, FRONTEND_POS6M - 55, FRONTEND_POS5Y, _("On"), 0);
-	}
+	addTextButton(FRONTEND_SUBTITLES,   FRONTEND_POS6X - 35, FRONTEND_POS5Y, _("Subtitles"), WBUT_SECONDARY);
+	addTextButton(FRONTEND_SUBTITLES_R, FRONTEND_POS6M - 55, FRONTEND_POS5Y, graphicsOptionsSubtitlesString(), WBUT_SECONDARY);
 
 	////////////
 	//shadows
-	addTextButton(FRONTEND_SHADOWS, FRONTEND_POS7X - 35, FRONTEND_POS6Y, _("Shadows"), 0);
-	if (getDrawShadows())
-	{
-		addTextButton(FRONTEND_SHADOWS_R, FRONTEND_POS7M - 55,  FRONTEND_POS6Y, _("On"), 0);
-	}
-	else
-	{
-		// not flipped
-		addTextButton(FRONTEND_SHADOWS_R, FRONTEND_POS7M - 55,  FRONTEND_POS6Y, _("Off"), 0);
-	}
+	addTextButton(FRONTEND_SHADOWS,   FRONTEND_POS7X - 35, FRONTEND_POS6Y, _("Shadows"), WBUT_SECONDARY);
+	addTextButton(FRONTEND_SHADOWS_R, FRONTEND_POS7M - 55, FRONTEND_POS6Y, graphicsOptionsShadowsString(), WBUT_SECONDARY);
 
 	// Radar
-	addTextButton(FRONTEND_RADAR, FRONTEND_POS7X - 35, FRONTEND_POS7Y, _("Radar"), 0);
-	addTextButton(FRONTEND_RADAR_R, FRONTEND_POS7M - 55, FRONTEND_POS7Y, rotateRadar ? _("Rotating") : _("Fixed"), 0);
+	addTextButton(FRONTEND_RADAR,   FRONTEND_POS7X - 35, FRONTEND_POS7Y, _("Radar"), WBUT_SECONDARY);
+	addTextButton(FRONTEND_RADAR_R, FRONTEND_POS7M - 55, FRONTEND_POS7Y, graphicsOptionsRadarString(), WBUT_SECONDARY);
 
 	// Add some text down the side of the form
 	addSideText(FRONTEND_SIDETEXT, FRONTEND_SIDEX, FRONTEND_SIDEY, _("GRAPHICS OPTIONS"));
@@ -691,7 +779,6 @@ static bool startGraphicsOptionsMenu(void)
 
 bool runGraphicsOptionsMenu(void)
 {
-	int mode = 0;
 	WidgetTriggers const &triggers = widgRunScreen(psWScreen);
 	unsigned id = triggers.empty() ? 0 : triggers.front().widget->id; // Just use first click here, since the next click could be on another menu.
 
@@ -699,16 +786,8 @@ bool runGraphicsOptionsMenu(void)
 	{
 	case FRONTEND_SSHAKE:
 	case FRONTEND_SSHAKE_R:
-		if (getShakeStatus())
-		{
-			setShakeStatus(false);
-			widgSetString(psWScreen, FRONTEND_SSHAKE_R, _("Off"));
-		}
-		else
-		{
-			setShakeStatus(true);
-			widgSetString(psWScreen, FRONTEND_SSHAKE_R, _("On"));
-		}
+		setShakeStatus(!getShakeStatus());
+		widgSetString(psWScreen, FRONTEND_SSHAKE_R, graphicsOptionsScreenShakeString());
 		break;
 
 	case FRONTEND_QUIT:
@@ -717,82 +796,31 @@ bool runGraphicsOptionsMenu(void)
 
 	case FRONTEND_SUBTITLES:
 	case FRONTEND_SUBTITLES_R:
-		if (seq_GetSubtitles())
-		{
-			// turn off
-			seq_SetSubtitles(false);
-			widgSetString(psWScreen, FRONTEND_SUBTITLES_R, _("Off"));
-		}
-		else
-		{
-			// turn on
-			seq_SetSubtitles(true);
-			widgSetString(psWScreen, FRONTEND_SUBTITLES_R, _("On"));
-		}
+		seq_SetSubtitles(!seq_GetSubtitles());
+		widgSetString(psWScreen, FRONTEND_SUBTITLES_R, graphicsOptionsSubtitlesString());
 		break;
 
 	case FRONTEND_SHADOWS:
 	case FRONTEND_SHADOWS_R:
 		setDrawShadows(!getDrawShadows());
-		if (getDrawShadows())
-		{
-			widgSetString(psWScreen, FRONTEND_SHADOWS_R, _("On"));
-		}
-		else
-		{
-			widgSetString(psWScreen, FRONTEND_SHADOWS_R, _("Off"));
-		}
+		widgSetString(psWScreen, FRONTEND_SHADOWS_R, graphicsOptionsShadowsString());
 		break;
 
 	case FRONTEND_FMVMODE:
 	case FRONTEND_FMVMODE_R:
-		switch (mode = war_GetFMVmode())
-		{
-		case FMV_1X:
-			war_SetFMVmode((FMV_MODE)(mode + 1));
-			widgSetString(psWScreen, FRONTEND_FMVMODE_R, _("2X"));
-			break;
-
-		case FMV_2X:
-			war_SetFMVmode((FMV_MODE)(mode + 1));
-			widgSetString(psWScreen, FRONTEND_FMVMODE_R, _("Fullscreen"));
-			break;
-
-		case FMV_FULLSCREEN:
-			war_SetFMVmode((FMV_MODE)(mode + 1));
-			widgSetString(psWScreen, FRONTEND_FMVMODE_R, _("1X"));
-			break;
-
-		default:
-			ASSERT(!"invalid FMV mode", "Invalid FMV mode: %u", (unsigned int)mode);
-			break;
-		}
+		war_SetFMVmode(stepCycle(war_GetFMVmode(), FMV_FULLSCREEN, FMV_MODE(FMV_MAX - 1)));
+		widgSetString(psWScreen, FRONTEND_FMVMODE_R, graphicsOptionsFmvmodeString());
 		break;
 
 	case FRONTEND_SCANLINES:
 	case FRONTEND_SCANLINES_R:
-		switch (mode = war_getScanlineMode())
-		{
-		case SCANLINES_OFF:
-			war_setScanlineMode(SCANLINES_50);
-			widgSetString(psWScreen, FRONTEND_SCANLINES_R, _("50%"));
-			break;
-
-		case SCANLINES_50:
-			war_setScanlineMode(SCANLINES_BLACK);
-			widgSetString(psWScreen, FRONTEND_SCANLINES_R, _("Black"));
-			break;
-
-		case SCANLINES_BLACK:
-			war_setScanlineMode(SCANLINES_OFF);
-			widgSetString(psWScreen, FRONTEND_SCANLINES_R, _("Off"));
-			break;
-		}
+		war_setScanlineMode(stepCycle(war_getScanlineMode(), SCANLINES_OFF, SCANLINES_BLACK));
+		widgSetString(psWScreen, FRONTEND_SCANLINES_R, graphicsOptionsScanlinesString());
 		break;
 
 	case FRONTEND_RADAR_R:
 		rotateRadar = !rotateRadar;
-		widgSetString(psWScreen, FRONTEND_RADAR_R, rotateRadar ? _("Rotating") : _("Fixed"));
+		widgSetString(psWScreen, FRONTEND_RADAR_R, graphicsOptionsRadarString());
 		break;
 
 	default:
@@ -886,95 +914,79 @@ bool runAudioOptionsMenu(void)
 	return true;
 }
 
+static char const *videoOptionsWindowModeString()
+{
+	return war_getFullscreen()? _("Fullscreen") : _("Windowed");
+}
+
+static char const *videoOptionsFsaaString()
+{
+	switch (war_getFSAA())
+	{
+	case FSAA_OFF: return _("Off");
+	case FSAA_2X: return _("2×");
+	case FSAA_4X: return _("4×");
+	case FSAA_8X: return _("8×");
+	// Some cards can do 16x & 32x ...
+	default: return _("Unsupported");
+	}
+}
+
+static std::string videoOptionsResolutionString()
+{
+	char resolution[100];
+	ssprintf(resolution, "[%d] %d × %d", war_GetScreen(), war_GetWidth(), war_GetHeight());
+	return resolution;
+}
+
+static std::string videoOptionsTextureSizeString()
+{
+	char textureSize[20];
+	ssprintf(textureSize, "%d", getTextureSize());
+	return textureSize;
+}
+
+static char const *videoOptionsVsyncString()
+{
+	return war_GetVsync()? _("On") : _("Off");
+}
+
 // ////////////////////////////////////////////////////////////////////////////
 // Video Options
 static bool startVideoOptionsMenu(void)
 {
-	// Generate the resolution string
-	snprintf(resolution, WIDG_MAXSTR, "%d x %d",
-	         war_GetWidth(), war_GetHeight());
-	// Generate texture size string
-	snprintf(textureSize, WIDG_MAXSTR, "%d", getTextureSize());
-
 	addBackdrop();
 	addTopForm();
 	addBottomForm();
 
 	// Add a note about changes taking effect on restart for certain options
-	addTextHint(FRONTEND_TAKESEFFECT, FRONTEND_POS1X + 48, FRONTEND_POS1Y + 24, _("* Takes effect on game restart"));
+	WIDGET *parent = widgGetFromID(psWScreen, FRONTEND_BOTFORM);
+
+	W_LABEL *label = new W_LABEL(parent);
+	label->setGeometry(FRONTEND_POS1X + 48, FRONTEND_POS1Y, FRONTEND_BUTWIDTH - FRONTEND_POS1X - 48, FRONTEND_BUTHEIGHT);
+	label->setFontColour(WZCOL_TEXT_BRIGHT);
+	label->setString(_("* Takes effect on game restart"));
+	label->setTextAlignment(WLAB_ALIGNBOTTOMLEFT);
 
 	// Fullscreen/windowed
-	addTextButton(FRONTEND_WINDOWMODE, FRONTEND_POS2X - 35, FRONTEND_POS2Y, _("Graphics Mode*"), 0);
-
-	if (war_getFullscreen())
-	{
-		addTextButton(FRONTEND_WINDOWMODE_R, FRONTEND_POS2M - 55, FRONTEND_POS2Y, _("Fullscreen"), 0);
-	}
-	else
-	{
-		addTextButton(FRONTEND_WINDOWMODE_R, FRONTEND_POS2M - 55, FRONTEND_POS2Y, _("Windowed"), 0);
-	}
+	addTextButton(FRONTEND_WINDOWMODE, FRONTEND_POS2X - 35, FRONTEND_POS2Y, _("Graphics Mode*"), WBUT_SECONDARY);
+	addTextButton(FRONTEND_WINDOWMODE_R, FRONTEND_POS2M - 55, FRONTEND_POS2Y, videoOptionsWindowModeString(), WBUT_SECONDARY);
 
 	// Resolution
 	addTextButton(FRONTEND_RESOLUTION, FRONTEND_POS3X - 35, FRONTEND_POS3Y, _("Resolution*"), WBUT_SECONDARY);
-	addTextButton(FRONTEND_RESOLUTION_R, FRONTEND_POS3M - 55, FRONTEND_POS3Y, resolution, WBUT_SECONDARY);
-	widgSetString(psWScreen, FRONTEND_RESOLUTION_R, resolution);
+	addTextButton(FRONTEND_RESOLUTION_R, FRONTEND_POS3M - 55, FRONTEND_POS3Y, videoOptionsResolutionString().c_str(), WBUT_SECONDARY);
 
 	// Texture size
-	addTextButton(FRONTEND_TEXTURESZ, FRONTEND_POS4X - 35, FRONTEND_POS4Y, _("Texture size"), 0);
-	addTextButton(FRONTEND_TEXTURESZ_R, FRONTEND_POS4M - 55, FRONTEND_POS4Y, textureSize, 0);
+	addTextButton(FRONTEND_TEXTURESZ, FRONTEND_POS4X - 35, FRONTEND_POS4Y, _("Texture size"), WBUT_SECONDARY);
+	addTextButton(FRONTEND_TEXTURESZ_R, FRONTEND_POS4M - 55, FRONTEND_POS4Y, videoOptionsTextureSizeString().c_str(), WBUT_SECONDARY);
 
 	// Vsync
-	addTextButton(FRONTEND_VSYNC, FRONTEND_POS5X - 35, FRONTEND_POS5Y, _("Vertical sync"), 0);
-
-	if (war_GetVsync())
-	{
-		addTextButton(FRONTEND_VSYNC_R, FRONTEND_POS5M - 55, FRONTEND_POS5Y, _("On"), 0);
-	}
-	else
-	{
-		addTextButton(FRONTEND_VSYNC_R, FRONTEND_POS5M - 55, FRONTEND_POS5Y, _("Off"), 0);
-	}
-
+	addTextButton(FRONTEND_VSYNC, FRONTEND_POS5X - 35, FRONTEND_POS5Y, _("Vertical sync"), WBUT_SECONDARY);
+	addTextButton(FRONTEND_VSYNC_R, FRONTEND_POS5M - 55, FRONTEND_POS5Y, videoOptionsVsyncString(), WBUT_SECONDARY);
 
 	// FSAA
-	addTextButton(FRONTEND_FSAA, FRONTEND_POS5X - 35, FRONTEND_POS6Y, "FSAA*", 0);
-
-	switch (war_getFSAA())
-	{
-	case FSAA_OFF:
-		addTextButton(FRONTEND_FSAA_R, FRONTEND_POS5M - 55, FRONTEND_POS6Y, _("Off"), 0);
-		break;
-
-	case FSAA_2X:
-		addTextButton(FRONTEND_FSAA_R, FRONTEND_POS5M - 55, FRONTEND_POS6Y, "2X", 0);
-		break;
-
-	case FSAA_4X:
-		addTextButton(FRONTEND_FSAA_R, FRONTEND_POS5M - 55, FRONTEND_POS6Y, "4X", 0);
-		break;
-
-	case FSAA_8X:
-		addTextButton(FRONTEND_FSAA_R, FRONTEND_POS5M - 55, FRONTEND_POS6Y, "8X", 0);
-		break;
-
-	default:
-		// Some cards can do 16x & 32x ...
-		addTextButton(FRONTEND_FSAA_R, FRONTEND_POS5M - 55, FRONTEND_POS6Y, _("Unsupported"), 0);
-		break;
-	}
-
-	// Shaders
-	addTextButton(FRONTEND_SHADERS, FRONTEND_POS6X - 35, FRONTEND_POS7Y, _("Shaders"), 0);
-
-	if (war_GetShaders() == SHADERS_ON || war_GetShaders() == SHADERS_ONLY)
-	{
-		addTextButton(FRONTEND_SHADERS_R, FRONTEND_POS6M - 55, FRONTEND_POS7Y, _("On"), 0);
-	}
-	else
-	{
-		addTextButton(FRONTEND_SHADERS_R, FRONTEND_POS6M - 55, FRONTEND_POS7Y, _("Off"), 0);
-	}
+	addTextButton(FRONTEND_FSAA, FRONTEND_POS5X - 35, FRONTEND_POS6Y, "FSAA*", WBUT_SECONDARY);
+	addTextButton(FRONTEND_FSAA_R, FRONTEND_POS5M - 55, FRONTEND_POS6Y, videoOptionsFsaaString(), WBUT_SECONDARY);
 
 	// Add some text down the side of the form
 	addSideText(FRONTEND_SIDETEXT, FRONTEND_SIDEX, FRONTEND_SIDEY, _("VIDEO OPTIONS"));
@@ -987,182 +999,91 @@ static bool startVideoOptionsMenu(void)
 
 bool runVideoOptionsMenu(void)
 {
-	QList<QSize> modes = wzAvailableResolutions();
 	WidgetTriggers const &triggers = widgRunScreen(psWScreen);
 	unsigned id = triggers.empty() ? 0 : triggers.front().widget->id; // Just use first click here, since the next click could be on another menu.
-
-	int level;
 
 	switch (id)
 	{
 	case FRONTEND_WINDOWMODE:
 	case FRONTEND_WINDOWMODE_R:
-		if (war_getFullscreen())
-		{
-			war_setFullscreen(false);
-			widgSetString(psWScreen, FRONTEND_WINDOWMODE_R, _("Windowed"));
-		}
-		else
-		{
-			war_setFullscreen(true);
-			widgSetString(psWScreen, FRONTEND_WINDOWMODE_R, _("Fullscreen"));
-		}
+		war_setFullscreen(!war_getFullscreen());
+		widgSetString(psWScreen, FRONTEND_WINDOWMODE_R, videoOptionsWindowModeString());
 		break;
 
 	case FRONTEND_FSAA:
 	case FRONTEND_FSAA_R:
-		switch (level = war_getFSAA())
 		{
-		case FSAA_OFF:
-			war_setFSAA((FSAA_LEVEL)(level + 1));
-			widgSetString(psWScreen, FRONTEND_FSAA_R, "2X");
-			break;
-		case FSAA_2X:
-			war_setFSAA((FSAA_LEVEL)(level + 1));
-			widgSetString(psWScreen, FRONTEND_FSAA_R, "4X");
-			break;
-
-		case FSAA_4X:
-			war_setFSAA((FSAA_LEVEL)(level + 1));
-			widgSetString(psWScreen, FRONTEND_FSAA_R, "8X");
-			break;
-
-		case FSAA_8X:
-			war_setFSAA((FSAA_LEVEL)(level + 1));
-			widgSetString(psWScreen, FRONTEND_FSAA_R, _("Off"));
-			break;
-
-		default:
-			// we can't check what the max level the card is capable of, without first creating that level, and testing.
-			ASSERT(!"invalid FSAA level ?", "Invalid FSAA level: %u", (unsigned int)level);
-			addTextButton(FRONTEND_FSAA_R, FRONTEND_POS5M - 55, FRONTEND_POS6Y, _("Unsupported"), 0);
+			war_setFSAA(stepCycle(war_getFSAA(), FSAA_OFF, FSAA_LEVEL(FSAA_MAX - 1)));
+			widgSetString(psWScreen, FRONTEND_FSAA_R, videoOptionsFsaaString());
 			break;
 		}
-		break;
 
 	case FRONTEND_RESOLUTION:
 	case FRONTEND_RESOLUTION_R:
 		{
-			int current, count;
+			auto compareKey = [](screeninfo const &x) { return std::make_tuple(x.screen, x.width, x.height); };
+			auto compareLess = [&](screeninfo const &a, screeninfo const &b) { return compareKey(a) < compareKey(b); };
+			auto compareEq = [&](screeninfo const &a, screeninfo const &b) { return compareKey(a) == compareKey(b); };
 
-			// Get the current mode offset
-			for (count = 0, current = 0; count < modes.size(); count++)
-			{
-				if (war_GetWidth() == modes[count].width() && war_GetHeight() == modes[count].height())
-				{
-					current = count;
-				}
-			}
+			// Get resolutions, sorted with duplicates removed.
+			std::vector<screeninfo> modes = wzAvailableResolutions();
+			std::sort(modes.begin(), modes.end(), compareLess);
+			modes.erase(std::unique(modes.begin(), modes.end(), compareEq), modes.end());
 
-			// Increment and clip if required
-			if (!mouseReleased(MOUSE_RMB))
-			{
-				if (--current < 0)
-				{
-					current = count - 1;
-				}
-			}
-			else
-			{
-				if (++current == count)
-				{
-					current = 0;
-				}
-			}
-
-			// We can't pick resolutions if there are any.
-			if (modes.isEmpty())
+			// We can't pick resolutions if there aren't any.
+			if (modes.empty())
 			{
 				debug(LOG_ERROR, "No resolutions available to change.");
 				break;
 			}
 
-			// Set the new width and height (takes effect on restart)
-			war_SetWidth(modes[current].width());
-			war_SetHeight(modes[current].height());
+			// Get currently configured resolution.
+			screeninfo config;
+			config.screen = war_GetScreen();
+			config.width = war_GetWidth();
+			config.height = war_GetHeight();
+			config.refresh_rate = -1;  // Unused.
 
-			// Generate the textual representation of the new width and height
-			snprintf(resolution, WIDG_MAXSTR, "%d x %d", modes[current].width(), modes[current].height());
+			// Find current resolution in list.
+			auto current = std::lower_bound(modes.begin(), modes.end(), config, compareLess);
+			if (current == modes.end() || !compareEq(*current, config))
+			{
+				--current;  // If current resolution doesn't exist, round down to next-highest one.
+			}
+
+			// Increment/decrement and loop if required.
+			current = stepCycle(current, modes.begin(), modes.end() - 1);
+
+			// Set the new width and height (takes effect on restart)
+			war_SetScreen(current->screen);
+			war_SetWidth(current->width);
+			war_SetHeight(current->height);
 
 			// Update the widget
-			widgSetString(psWScreen, FRONTEND_RESOLUTION_R, resolution);
+			widgSetString(psWScreen, FRONTEND_RESOLUTION_R, videoOptionsResolutionString().c_str());
 			break;
 		}
-
-	case FRONTEND_TRAP:
-	case FRONTEND_TRAP_R:
-		if (war_GetTrapCursor())
-		{
-			war_SetTrapCursor(false);
-			widgSetString(psWScreen, FRONTEND_TRAP_R, _("Off"));
-		}
-		else
-		{
-			war_SetTrapCursor(true);
-			widgSetString(psWScreen, FRONTEND_TRAP_R, _("On"));
-		}
-		break;
 
 	case FRONTEND_TEXTURESZ:
 	case FRONTEND_TEXTURESZ_R:
 		{
-			int newTexSize = getTextureSize() * 2;
-
-			// Clip such that 128 <= size <= 2048
-			if (newTexSize > 2048)
-			{
-				newTexSize = 128;
-			}
+			int newTexSize = pow2Cycle(getTextureSize(), 128, 2048);
 
 			// Set the new size
 			setTextureSize(newTexSize);
 
-			// Generate the string representation of the new size
-			snprintf(textureSize, WIDG_MAXSTR, "%d", newTexSize);
-
 			// Update the widget
-			widgSetString(psWScreen, FRONTEND_TEXTURESZ_R, textureSize);
+			widgSetString(psWScreen, FRONTEND_TEXTURESZ_R, videoOptionsTextureSizeString().c_str());
 
 			break;
 		}
 
 	case FRONTEND_VSYNC:
 	case FRONTEND_VSYNC_R:
-		{
-			wzSetSwapInterval(!war_GetVsync());
-			war_SetVsync(wzGetSwapInterval());
-			if (war_GetVsync())
-			{
-				widgSetString(psWScreen, FRONTEND_VSYNC_R, _("On"));
-			}
-			else
-			{
-				widgSetString(psWScreen, FRONTEND_VSYNC_R, _("Off"));
-			}
-			break;
-		}
-
-	case FRONTEND_SHADERS:
-	case FRONTEND_SHADERS_R:
-		{
-			switch (war_GetShaders())
-			{
-			case SHADERS_ON:
-				war_SetShaders(SHADERS_OFF);
-				pie_SetShaderUsage(false);
-				widgSetString(psWScreen, FRONTEND_SHADERS_R, _("Off"));
-				break;
-			case SHADERS_OFF:
-				war_SetShaders(SHADERS_ON);
-				pie_SetShaderUsage(true);
-				widgSetString(psWScreen, FRONTEND_SHADERS_R, _("On"));
-				break;
-			case FALLBACK:
-			case SHADERS_ONLY:
-				break;
-			}
-			break;
-		}
+		wzSetSwapInterval(!war_GetVsync());
+		war_SetVsync(wzGetSwapInterval());
+		widgSetString(psWScreen, FRONTEND_VSYNC_R, videoOptionsVsyncString());
+		break;
 
 	case FRONTEND_QUIT:
 		changeTitleMode(OPTIONS);
@@ -1183,6 +1104,31 @@ bool runVideoOptionsMenu(void)
 }
 
 
+static char const *mouseOptionsMflipString()
+{
+	return getInvertMouseStatus() ? _("On") : _("Off");
+}
+
+static char const *mouseOptionsTrapString()
+{
+	return war_GetTrapCursor() ? _("On") : _("Off");
+}
+
+static char const *mouseOptionsMbuttonsString()
+{
+	return getRightClickOrders() ? _("On") : _("Off");
+}
+
+static char const *mouseOptionsMmrotateString()
+{
+	return getMiddleClickRotate() ? _("Middle Mouse") : _("Right Mouse");
+}
+
+static char const *mouseOptionsCursorModeString()
+{
+	return war_GetColouredCursor() ? _("On") : _("Off");
+}
+
 // ////////////////////////////////////////////////////////////////////////////
 // Mouse Options
 static bool startMouseOptionsMenu(void)
@@ -1193,57 +1139,26 @@ static bool startMouseOptionsMenu(void)
 
 	////////////
 	// mouseflip
-	addTextButton(FRONTEND_MFLIP,	 FRONTEND_POS2X - 35,   FRONTEND_POS2Y, _("Reverse Rotation"), 0);
-	if (getInvertMouseStatus())
-	{
-		// flipped
-		addTextButton(FRONTEND_MFLIP_R, FRONTEND_POS2M - 25,  FRONTEND_POS2Y, _("On"), 0);
-	}
-	else
-	{
-		// not flipped
-		addTextButton(FRONTEND_MFLIP_R, FRONTEND_POS2M - 25,  FRONTEND_POS2Y, _("Off"), 0);
-	}
+	addTextButton(FRONTEND_MFLIP,   FRONTEND_POS2X - 35, FRONTEND_POS2Y, _("Reverse Rotation"), WBUT_SECONDARY);
+	addTextButton(FRONTEND_MFLIP_R, FRONTEND_POS2M - 25, FRONTEND_POS2Y, mouseOptionsMflipString(), WBUT_SECONDARY);
 
 	// Cursor trapping
-	addTextButton(FRONTEND_TRAP, FRONTEND_POS3X - 35, FRONTEND_POS3Y, _("Trap Cursor"), 0);
-
-	if (war_GetTrapCursor())
-	{
-		addTextButton(FRONTEND_TRAP_R, FRONTEND_POS3M - 25, FRONTEND_POS3Y, _("On"), 0);
-	}
-	else
-	{
-		addTextButton(FRONTEND_TRAP_R, FRONTEND_POS3M - 25, FRONTEND_POS3Y, _("Off"), 0);
-	}
+	addTextButton(FRONTEND_TRAP,   FRONTEND_POS3X - 35, FRONTEND_POS3Y, _("Trap Cursor"), WBUT_SECONDARY);
+	addTextButton(FRONTEND_TRAP_R, FRONTEND_POS3M - 25, FRONTEND_POS3Y, mouseOptionsTrapString(), WBUT_SECONDARY);
 
 	////////////
 	// left-click orders
-	addTextButton(FRONTEND_MBUTTONS,	 FRONTEND_POS2X - 35,   FRONTEND_POS4Y, _("Switch Mouse Buttons"), 0);
-	if (getRightClickOrders())
-	{
-		// right-click orders
-		addTextButton(FRONTEND_MBUTTONS_R, FRONTEND_POS2M - 25,  FRONTEND_POS4Y, _("On"), 0);
-	}
-	else
-	{
-		// left-click orders
-		addTextButton(FRONTEND_MBUTTONS_R, FRONTEND_POS2M - 25,  FRONTEND_POS4Y, _("Off"), 0);
-	}
+	addTextButton(FRONTEND_MBUTTONS,   FRONTEND_POS2X - 35, FRONTEND_POS4Y, _("Switch Mouse Buttons"), WBUT_SECONDARY);
+	addTextButton(FRONTEND_MBUTTONS_R, FRONTEND_POS2M - 25, FRONTEND_POS4Y, mouseOptionsMbuttonsString(), WBUT_SECONDARY);
 
 	////////////
 	// middle-click rotate
-	addTextButton(FRONTEND_MMROTATE,	 FRONTEND_POS2X - 35,   FRONTEND_POS5Y, _("Rotate Screen"), 0);
-	if (getMiddleClickRotate())
-	{
-		// right-click orders
-		addTextButton(FRONTEND_MMROTATE_R, FRONTEND_POS2M - 25,  FRONTEND_POS5Y, _("Middle Mouse"), 0);
-	}
-	else
-	{
-		// left-click orders
-		addTextButton(FRONTEND_MMROTATE_R, FRONTEND_POS2M - 25,  FRONTEND_POS5Y, _("Right Mouse"), 0);
-	}
+	addTextButton(FRONTEND_MMROTATE,   FRONTEND_POS2X - 35, FRONTEND_POS5Y, _("Rotate Screen"), WBUT_SECONDARY);
+	addTextButton(FRONTEND_MMROTATE_R, FRONTEND_POS2M - 25, FRONTEND_POS5Y, mouseOptionsMmrotateString(), WBUT_SECONDARY);
+
+	// Hardware / software cursor toggle
+	addTextButton(FRONTEND_CURSORMODE,   FRONTEND_POS4X - 35, FRONTEND_POS6Y, _("Colored Cursors"), WBUT_SECONDARY);
+	addTextButton(FRONTEND_CURSORMODE_R, FRONTEND_POS4M - 25, FRONTEND_POS6Y, mouseOptionsCursorModeString(), WBUT_SECONDARY);
 
 	// Add some text down the side of the form
 	addSideText(FRONTEND_SIDETEXT, FRONTEND_SIDEX, FRONTEND_SIDEY, _("MOUSE OPTIONS"));
@@ -1263,59 +1178,32 @@ bool runMouseOptionsMenu(void)
 	{
 	case FRONTEND_MFLIP:
 	case FRONTEND_MFLIP_R:
-		if (getInvertMouseStatus())
-		{
-			//	 flipped
-			setInvertMouseStatus(false);
-			widgSetString(psWScreen, FRONTEND_MFLIP_R, _("Off"));
-		}
-		else
-		{
-			// not flipped
-			setInvertMouseStatus(true);
-			widgSetString(psWScreen, FRONTEND_MFLIP_R, _("On"));
-		}
+		setInvertMouseStatus(!getInvertMouseStatus());
+		widgSetString(psWScreen, FRONTEND_MFLIP_R, mouseOptionsMflipString());
 		break;
 	case FRONTEND_TRAP:
 	case FRONTEND_TRAP_R:
-		if (war_GetTrapCursor())
-		{
-			war_SetTrapCursor(false);
-			widgSetString(psWScreen, FRONTEND_TRAP_R, _("Off"));
-		}
-		else
-		{
-			war_SetTrapCursor(true);
-			widgSetString(psWScreen, FRONTEND_TRAP_R, _("On"));
-		}
+		war_SetTrapCursor(!war_GetTrapCursor());
+		widgSetString(psWScreen, FRONTEND_TRAP_R, mouseOptionsTrapString());
 		break;
 
 	case FRONTEND_MBUTTONS:
 	case FRONTEND_MBUTTONS_R:
-		if (getRightClickOrders())
-		{
-			setRightClickOrders(false);
-			widgSetString(psWScreen, FRONTEND_MBUTTONS_R, _("Off"));
-		}
-		else
-		{
-			setRightClickOrders(true);
-			widgSetString(psWScreen, FRONTEND_MBUTTONS_R, _("On"));
-		}
+		setRightClickOrders(!getRightClickOrders());
+		widgSetString(psWScreen, FRONTEND_MBUTTONS_R, mouseOptionsMbuttonsString());
 		break;
 
 	case FRONTEND_MMROTATE:
 	case FRONTEND_MMROTATE_R:
-		if (getMiddleClickRotate())
-		{
-			setMiddleClickRotate(false);
-			widgSetString(psWScreen, FRONTEND_MMROTATE_R, _("Right Mouse"));
-		}
-		else
-		{
-			setMiddleClickRotate(true);
-			widgSetString(psWScreen, FRONTEND_MMROTATE_R, _("Middle Mouse"));
-		}
+		setMiddleClickRotate(!getMiddleClickRotate());
+		widgSetString(psWScreen, FRONTEND_MMROTATE_R, mouseOptionsMmrotateString());
+		break;
+
+	case FRONTEND_CURSORMODE:
+	case FRONTEND_CURSORMODE_R:
+		war_SetColouredCursor(!war_GetColouredCursor());
+		widgSetString(psWScreen, FRONTEND_CURSORMODE_R, mouseOptionsCursorModeString());
+		wzSetCursor(CURSOR_DEFAULT);
 		break;
 
 	case FRONTEND_QUIT:
@@ -1336,6 +1224,19 @@ bool runMouseOptionsMenu(void)
 	return true;
 }
 
+static char const *gameOptionsDifficultyString()
+{
+	switch (getDifficultyLevel())
+	{
+	case DL_EASY: return _("Easy");
+	case DL_NORMAL: return _("Normal");
+	case DL_HARD: return _("Hard");
+	case DL_INSANE: return _("Insane");
+	case DL_TOUGH: return _("Tough");
+	case DL_KILLER: return _("Killer");
+	}
+	return _("Unsupported");
+}
 
 // ////////////////////////////////////////////////////////////////////////////
 // Game Options Menu
@@ -1349,24 +1250,12 @@ static bool startGameOptionsMenu(void)
 	addBottomForm();
 
 	// language
-	addTextButton(FRONTEND_LANGUAGE,  FRONTEND_POS2X - 25, FRONTEND_POS2Y, _("Language"), 0);
-	addTextButton(FRONTEND_LANGUAGE_R,  FRONTEND_POS2M - 25, FRONTEND_POS2Y, getLanguageName(), 0);
+	addTextButton(FRONTEND_LANGUAGE,  FRONTEND_POS2X - 25, FRONTEND_POS2Y, _("Language"), WBUT_SECONDARY);
+	addTextButton(FRONTEND_LANGUAGE_R,  FRONTEND_POS2M - 25, FRONTEND_POS2Y, getLanguageName(), WBUT_SECONDARY);
 
 	// Difficulty
-	addTextButton(FRONTEND_DIFFICULTY, FRONTEND_POS3X - 25, FRONTEND_POS3Y, _("Difficulty"), 0);
-	switch (getDifficultyLevel())
-	{
-	case DL_EASY:
-		addTextButton(FRONTEND_DIFFICULTY_R, FRONTEND_POS3M - 25, FRONTEND_POS3Y, _("Easy"), 0);
-		break;
-	case DL_NORMAL:
-		addTextButton(FRONTEND_DIFFICULTY_R, FRONTEND_POS3M - 25, FRONTEND_POS3Y, _("Normal"), 0);
-		break;
-	case DL_HARD:
-	default:
-		addTextButton(FRONTEND_DIFFICULTY_R, FRONTEND_POS3M - 25, FRONTEND_POS3Y, _("Hard"), 0);
-		break;
-	}
+	addTextButton(FRONTEND_DIFFICULTY,   FRONTEND_POS3X - 25, FRONTEND_POS3Y, _("Campaign Difficulty"), WBUT_SECONDARY);
+	addTextButton(FRONTEND_DIFFICULTY_R, FRONTEND_POS3M - 25, FRONTEND_POS3Y, gameOptionsDifficultyString(), WBUT_SECONDARY);
 
 	// Scroll speed
 	addTextButton(FRONTEND_SCROLLSPEED, FRONTEND_POS4X - 25, FRONTEND_POS4Y, _("Scroll Speed"), 0);
@@ -1422,35 +1311,18 @@ bool runGameOptionsMenu(void)
 	switch (id)
 	{
 	case FRONTEND_LANGUAGE_R:
-		setNextLanguage();
+		setNextLanguage(mouseReleased(MOUSE_RMB));
 		widgSetString(psWScreen, FRONTEND_LANGUAGE_R, getLanguageName());
 		/* Hack to reset current menu text, which looks fancy. */
 		widgSetString(psWScreen, FRONTEND_SIDETEXT, _("GAME OPTIONS"));
-		widgSetTipText(widgGetFromID(psWScreen, FRONTEND_QUIT), P_("menu", "Return"));
+		widgGetFromID(psWScreen, FRONTEND_QUIT)->setTip(P_("menu", "Return"));
 		widgSetString(psWScreen, FRONTEND_LANGUAGE, _("Language"));
 		widgSetString(psWScreen, FRONTEND_COLOUR, _("Unit Colour:"));
 		widgSetString(psWScreen, FRONTEND_COLOUR_CAM, _("Campaign"));
 		widgSetString(psWScreen, FRONTEND_COLOUR_MP, _("Skirmish/Multiplayer"));
-		widgSetString(psWScreen, FRONTEND_DIFFICULTY, _("Difficulty"));
+		widgSetString(psWScreen, FRONTEND_DIFFICULTY, _("Campaign Difficulty"));
 		widgSetString(psWScreen, FRONTEND_SCROLLSPEED, _("Scroll Speed"));
-		widgSetString(psWScreen, FRONTEND_RADAR, _("Radar"));
-		widgSetString(psWScreen, FRONTEND_RADAR_R, rotateRadar ? _("Rotating") : _("Fixed"));
-		switch (getDifficultyLevel())
-		{
-		case DL_EASY:
-			widgSetString(psWScreen, FRONTEND_DIFFICULTY_R, _("Easy"));
-			break;
-		case DL_NORMAL:
-			widgSetString(psWScreen, FRONTEND_DIFFICULTY_R, _("Normal"));
-			break;
-		case DL_HARD:
-			widgSetString(psWScreen, FRONTEND_DIFFICULTY_R, _("Hard"));
-			break;
-		case DL_TOUGH:
-		case DL_KILLER:
-			debug(LOG_ERROR, "runGameOptionsMenu: Unused difficulty level selected!");
-			break;
-		}
+		widgSetString(psWScreen, FRONTEND_DIFFICULTY_R, gameOptionsDifficultyString());
 		break;
 
 	case FRONTEND_SCROLLSPEED:
@@ -1458,23 +1330,8 @@ bool runGameOptionsMenu(void)
 
 	case FRONTEND_DIFFICULTY:
 	case FRONTEND_DIFFICULTY_R:
-		switch (getDifficultyLevel())
-		{
-		case DL_EASY:
-			setDifficultyLevel(DL_NORMAL);
-			widgSetString(psWScreen, FRONTEND_DIFFICULTY_R, _("Normal"));
-			break;
-		case DL_NORMAL:
-			setDifficultyLevel(DL_HARD);
-			widgSetString(psWScreen, FRONTEND_DIFFICULTY_R, _("Hard"));
-			break;
-		case DL_HARD:
-			setDifficultyLevel(DL_EASY);
-			widgSetString(psWScreen, FRONTEND_DIFFICULTY_R, _("Easy"));
-			break;
-		default: // DL_TOUGH and DL_KILLER
-			break;
-		}
+		setDifficultyLevel(stepCycle(getDifficultyLevel(), DL_EASY, DL_HARD));
+		widgSetString(psWScreen, FRONTEND_DIFFICULTY_R, gameOptionsDifficultyString());
 		break;
 
 	case FRONTEND_SCROLLSPEED_SL:
@@ -1539,7 +1396,7 @@ bool runGameOptionsMenu(void)
 		int chosenColour = id - FE_MP_PR - 1;
 		for (int colour = -1; colour < MAX_PLAYERS_IN_GUI; ++colour)
 		{
-			int thisID = FE_MP_PR + colour + 1;
+			unsigned thisID = FE_MP_PR + colour + 1;
 			widgSetButtonState(psWScreen, thisID, id == thisID ? WBUT_LOCK : 0);
 		}
 		war_setMPcolour(chosenColour);
@@ -1561,7 +1418,7 @@ bool runGameOptionsMenu(void)
 // drawing functions
 
 // show a background piccy (currently used for version and mods labels)
-static void displayTitleBitmap(WZ_DECL_UNUSED WIDGET *psWidget, WZ_DECL_UNUSED UDWORD xOffset, WZ_DECL_UNUSED UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
+static void displayTitleBitmap(WZ_DECL_UNUSED WIDGET *psWidget, WZ_DECL_UNUSED UDWORD xOffset, WZ_DECL_UNUSED UDWORD yOffset)
 {
 	char modListText[MAX_STR_LENGTH] = "";
 
@@ -1587,72 +1444,29 @@ static void displayTitleBitmap(WZ_DECL_UNUSED WIDGET *psWidget, WZ_DECL_UNUSED U
 
 // ////////////////////////////////////////////////////////////////////////////
 // show warzone logo
-static void displayLogo(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
+static void displayLogo(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
-	iV_DrawImageScaled(FrontImages, IMAGE_FE_LOGO, xOffset + psWidget->x, yOffset + psWidget->y, psWidget->width, psWidget->height);
+	iV_DrawImage2("image_fe_logo.png", xOffset + psWidget->x(), yOffset + psWidget->y(), psWidget->width(), psWidget->height());
 }
 
 
 // ////////////////////////////////////////////////////////////////////////////
 // show, well have a guess..
-static void displayBigSlider(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
+static void displayBigSlider(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
 	W_SLIDER *Slider = (W_SLIDER *)psWidget;
-	UDWORD x = xOffset + psWidget->x;
-	UDWORD y = yOffset + psWidget->y;
-	SWORD sx;
+	int x = xOffset + psWidget->x();
+	int y = yOffset + psWidget->y();
 
 	iV_DrawImage(IntImages, IMAGE_SLIDER_BIG, x + STAT_SLD_OX, y + STAT_SLD_OY);			// draw bdrop
 
-	sx = (SWORD)((Slider->width - 3 - Slider->barSize) * Slider->pos / Slider->numStops);	// determine pos.
+	int sx = (Slider->width() - 3 - Slider->barSize) * Slider->pos / Slider->numStops;  // determine pos.
 	iV_DrawImage(IntImages, IMAGE_SLIDER_BIGBUT, x + 3 + sx, y + 3);								//draw amount
-}
-
-static void displayAISlider(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
-{
-	W_SLIDER *Slider = (W_SLIDER *)psWidget;
-	UDWORD x = xOffset + psWidget->x;
-	UDWORD y = yOffset + psWidget->y;
-	SWORD sx;
-
-	iV_DrawImage(IntImages, IMAGE_SLIDER_AI, x + STAT_SLD_OX, y + STAT_SLD_OY);			// draw bdrop
-
-	sx = (SWORD)((Slider->width - 3 - Slider->barSize) * Slider->pos / Slider->numStops);	// determine pos.
-	iV_DrawImage(IntImages, IMAGE_SLIDER_BIGBUT, x + 3 + sx, y + 3);								//draw amount
-}
-
-
-// ////////////////////////////////////////////////////////////////////////////
-// show text.
-static void displayText(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
-{
-	SDWORD			fx, fy, fw;
-	W_LABEL		*psLab;
-
-	psLab = (W_LABEL *)psWidget;
-	iV_SetFont(psLab->FontID);
-
-	fw = iV_GetTextWidth(psLab->aText);
-	fy = yOffset + psWidget->y;
-
-	if (psWidget->style & WLAB_ALIGNCENTRE)	//check for centering, calculate offset.
-	{
-		fx = xOffset + psWidget->x + ((psWidget->width - fw) / 2);
-	}
-	else
-	{
-		fx = xOffset + psWidget->x;
-	}
-
-	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
-	iV_DrawText(psLab->aText, fx, fy);
-
-	return;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
 // show text written on its side.
-static void displayTextAt270(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
+static void displayTextAt270(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
 	SDWORD		fx, fy;
 	W_LABEL		*psLab;
@@ -1661,18 +1475,18 @@ static void displayTextAt270(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, W
 
 	iV_SetFont(font_large);
 
-	fx = xOffset + psWidget->x;
-	fy = yOffset + psWidget->y + iV_GetTextWidth(psLab->aText) ;
+	fx = xOffset + psWidget->x();
+	fy = yOffset + psWidget->y() + iV_GetTextWidth(psLab->aText.toUtf8().constData());
 
 	iV_SetTextColour(WZCOL_GREY);
-	iV_DrawTextRotated(psLab->aText, fx + 2, fy + 2, 270.f);
+	iV_DrawTextRotated(psLab->aText.toUtf8().constData(), fx + 2, fy + 2, 270.f);
 	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
-	iV_DrawTextRotated(psLab->aText, fx, fy, 270.f);
+	iV_DrawTextRotated(psLab->aText.toUtf8().constData(), fx, fy, 270.f);
 }
 
 // ////////////////////////////////////////////////////////////////////////////
 // show a text option.
-void displayTextOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
+void displayTextOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
 	SDWORD			fx, fy, fw;
 	W_BUTTON		*psBut;
@@ -1687,16 +1501,16 @@ void displayTextOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL
 		hilight = true;
 	}
 
-	fw = iV_GetTextWidth(psBut->pText);
-	fy = yOffset + psWidget->y + (psWidget->height - iV_GetTextLineSize()) / 2 - iV_GetTextAboveBase();
+	fw = iV_GetTextWidth(psBut->pText.toUtf8().constData());
+	fy = yOffset + psWidget->y() + (psWidget->height() - iV_GetTextLineSize()) / 2 - iV_GetTextAboveBase();
 
 	if (psWidget->style & WBUT_TXTCENTRE)							//check for centering, calculate offset.
 	{
-		fx = xOffset + psWidget->x + ((psWidget->width - fw) / 2);
+		fx = xOffset + psWidget->x() + ((psWidget->width() - fw) / 2);
 	}
 	else
 	{
-		fx = xOffset + psWidget->x;
+		fx = xOffset + psWidget->x();
 	}
 
 	if (greyOut)														// unavailable
@@ -1719,7 +1533,7 @@ void displayTextOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL
 		}
 	}
 
-	iV_DrawText(psBut->pText, fx, fy);
+	iV_DrawText(psBut->pText.toUtf8().constData(), fx, fy);
 
 	return;
 }
@@ -1747,36 +1561,26 @@ void addBackdrop(void)
 // ////////////////////////////////////////////////////////////////////////////
 void addTopForm(void)
 {
-	W_FORMINIT sFormInit;
+	WIDGET *parent = widgGetFromID(psWScreen, FRONTEND_BACKDROP);
 
-	sFormInit.formID = FRONTEND_BACKDROP;
-	sFormInit.id = FRONTEND_TOPFORM;
-	sFormInit.style = WFORM_PLAIN;
-
+	IntFormAnimated *topForm = new IntFormAnimated(parent, false);
+	topForm->id = FRONTEND_TOPFORM;
 	if (titleMode == MULTIOPTION)
 	{
-		sFormInit.x		= FRONTEND_TOPFORM_WIDEX;
-		sFormInit.y		= FRONTEND_TOPFORM_WIDEY;
-		sFormInit.width = FRONTEND_TOPFORM_WIDEW;
-		sFormInit.height = FRONTEND_TOPFORM_WIDEH;
+		topForm->setGeometry(FRONTEND_TOPFORM_WIDEX, FRONTEND_TOPFORM_WIDEY, FRONTEND_TOPFORM_WIDEW, FRONTEND_TOPFORM_WIDEH);
 	}
 	else
-
 	{
-		sFormInit.x		= FRONTEND_TOPFORMX;
-		sFormInit.y		= FRONTEND_TOPFORMY;
-		sFormInit.width = FRONTEND_TOPFORMW;
-		sFormInit.height = FRONTEND_TOPFORMH;
+		topForm->setGeometry(FRONTEND_TOPFORMX, FRONTEND_TOPFORMY, FRONTEND_TOPFORMW, FRONTEND_TOPFORMH);
 	}
-	sFormInit.pDisplay = intDisplayPlainForm;
-	widgAddForm(psWScreen, &sFormInit);
 
+	W_FORMINIT sFormInit;
 	sFormInit.formID = FRONTEND_TOPFORM;
 	sFormInit.id	= FRONTEND_LOGO;
 	int imgW = iV_GetImageWidth(FrontImages, IMAGE_FE_LOGO);
 	int imgH = iV_GetImageHeight(FrontImages, IMAGE_FE_LOGO);
-	int dstW = sFormInit.width;
-	int dstH = sFormInit.height;
+	int dstW = topForm->width();
+	int dstH = topForm->height();
 	if (imgW * dstH < imgH * dstW) // Want to set aspect ratio dstW/dstH = imgW/imgH.
 	{
 		dstW = imgW * dstH / imgH; // Too wide.
@@ -1785,8 +1589,8 @@ void addTopForm(void)
 	{
 		dstH = imgH * dstW / imgW; // Too high.
 	}
-	sFormInit.x = (sFormInit.width  - dstW) / 2;
-	sFormInit.y = (sFormInit.height - dstH) / 2;
+	sFormInit.x = (topForm->width()  - dstW) / 2;
+	sFormInit.y = (topForm->height() - dstH) / 2;
 	sFormInit.width  = dstW;
 	sFormInit.height = dstH;
 	sFormInit.pDisplay = displayLogo;
@@ -1796,59 +1600,24 @@ void addTopForm(void)
 // ////////////////////////////////////////////////////////////////////////////
 void addBottomForm(void)
 {
-	W_FORMINIT sFormInit;
+	WIDGET *parent = widgGetFromID(psWScreen, FRONTEND_BACKDROP);
 
-	sFormInit.formID = FRONTEND_BACKDROP;
-	sFormInit.id = FRONTEND_BOTFORM;
-	sFormInit.style = WFORM_PLAIN;
-	sFormInit.x = FRONTEND_BOTFORMX;
-	sFormInit.y = FRONTEND_BOTFORMY;
-	sFormInit.width = FRONTEND_BOTFORMW;
-	sFormInit.height = FRONTEND_BOTFORMH;
-
-	sFormInit.pDisplay = intOpenPlainForm;
-	sFormInit.disableChildren = true;
-
-	widgAddForm(psWScreen, &sFormInit);
-}
-
-// ////////////////////////////////////////////////////////////////////////////
-void addTextHint(UDWORD id, UDWORD PosX, UDWORD PosY, const char *txt)
-{
-	W_LABINIT sLabInit;
-
-	sLabInit.formID = FRONTEND_BOTFORM;
-	sLabInit.id = id;
-	sLabInit.x = (short)PosX;
-	sLabInit.y = (short)PosY;
-
-	sLabInit.width = MULTIOP_READY_WIDTH;
-	sLabInit.height = FRONTEND_BUTHEIGHT;
-	sLabInit.pDisplay = displayText;
-	sLabInit.pText = txt;
-	widgAddLabel(psWScreen, &sLabInit);
+	IntFormAnimated *botForm = new IntFormAnimated(parent);
+	botForm->id = FRONTEND_BOTFORM;
+	botForm->setGeometry(FRONTEND_BOTFORMX, FRONTEND_BOTFORMY, FRONTEND_BOTFORMW, FRONTEND_BOTFORMH);
 }
 
 // ////////////////////////////////////////////////////////////////////////////
 void addText(UDWORD id, UDWORD PosX, UDWORD PosY, const char *txt, UDWORD formID)
 {
-	W_LABINIT sLabInit;
+	WIDGET *parent = widgGetFromID(psWScreen, formID);
 
-	sLabInit.formID = formID;
-	sLabInit.id = id;
-	sLabInit.x = (short)PosX;
-	sLabInit.y = (short)PosY;
-	sLabInit.style = WLAB_ALIGNCENTRE;
-
-	// Align
-	sLabInit.width = MULTIOP_READY_WIDTH;
-	//sButInit.x+=35;
-
-	sLabInit.height = FRONTEND_BUTHEIGHT;
-	sLabInit.pDisplay = displayText;
-	sLabInit.FontID = font_small;
-	sLabInit.pText = txt;
-	widgAddLabel(psWScreen, &sLabInit);
+	W_LABEL *label = new W_LABEL(parent);
+	label->id = id;
+	label->setGeometry(PosX, PosY, MULTIOP_READY_WIDTH, FRONTEND_BUTHEIGHT);
+	label->setTextAlignment(WLAB_ALIGNCENTRE);
+	label->setFont(font_small, WZCOL_TEXT_BRIGHT);
+	label->setString(txt);
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -1917,7 +1686,6 @@ void addSmallTextButton(UDWORD id,  UDWORD PosX, UDWORD PosY, const char *txt, u
 {
 	W_BUTINIT sButInit;
 
-	memset(&sButInit, 0, sizeof(W_BUTINIT));
 	sButInit.formID = FRONTEND_BOTFORM;
 	sButInit.id = id;
 	sButInit.x = (short)PosX;
@@ -1956,6 +1724,7 @@ void addSmallTextButton(UDWORD id,  UDWORD PosX, UDWORD PosY, const char *txt, u
 		widgSetButtonState(psWScreen, id, WBUT_DISABLE);
 	}
 }
+
 // ////////////////////////////////////////////////////////////////////////////
 void addFESlider(UDWORD id, UDWORD parent, UDWORD x, UDWORD y, UDWORD stops, UDWORD pos)
 {
@@ -1974,24 +1743,6 @@ void addFESlider(UDWORD id, UDWORD parent, UDWORD x, UDWORD y, UDWORD stops, UDW
 	widgAddSlider(psWScreen, &sSldInit);
 }
 
-void addFEAISlider(UDWORD id, UDWORD parent, UDWORD x, UDWORD y, UDWORD stops, UDWORD pos)
-{
-	W_SLDINIT sSldInit;
-	sSldInit.formID		= parent;
-	sSldInit.id			= id;
-	sSldInit.x			= (short)x;
-	sSldInit.y			= (short)y;
-	sSldInit.width		= iV_GetImageWidth(IntImages, IMAGE_SLIDER_BIG);
-	sSldInit.height		= iV_GetImageHeight(IntImages, IMAGE_SLIDER_BIG);
-	sSldInit.numStops	= (UBYTE) stops;
-	sSldInit.barSize	= iV_GetImageHeight(IntImages, IMAGE_SLIDER_BIG);
-	sSldInit.pos		= (UBYTE) pos;
-	sSldInit.pDisplay	= displayAISlider;
-	sSldInit.pCallback  = intUpdateQuantitySlider;
-	widgAddSlider(psWScreen, &sSldInit);
-}
-
-
 // ////////////////////////////////////////////////////////////////////////////
 // Change Mode
 void changeTitleMode(tMode mode)
@@ -2005,6 +1756,9 @@ void changeTitleMode(tMode mode)
 
 	switch (mode)
 	{
+	case CAMPAIGNS:
+		startCampaignSelector();
+		break;
 	case SINGLE:
 		startSinglePlayerMenu();
 		break;
@@ -2042,14 +1796,7 @@ void changeTitleMode(tMode mode)
 		startConnectionScreen();
 		break;
 	case MULTIOPTION:
-		if (oldMode == MULTILIMIT)
-		{
-			startMultiOptions(true);
-		}
-		else
-		{
-			startMultiOptions(false);
-		}
+		startMultiOptions(oldMode == MULTILIMIT);
 		break;
 	case GAMEFIND:
 		startGameFind();

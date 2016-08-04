@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -100,7 +100,7 @@ static bool multiLoadMiscImds(void)
 		snprintf(name, sizeof(name), "%s.pie", miscImds[i].pName);
 
 		/* see if the resource loader can find it */
-		miscImds[i].pImd = (iIMDShape *)resGetData("IMD", name);
+		miscImds[i].pImd = modelGet(name);
 		/* If it didn't get it then... */
 		if (!miscImds[i].pImd)
 		{
@@ -145,11 +145,10 @@ static bool initMiscImd(unsigned i, unsigned n, const char *nameFormat, unsigned
 {
 	char pieName[100];
 	snprintf(pieName, sizeof(pieName), nameFormat, n);
-	pAssemblyPointIMDs[flagType][i] = (iIMDShape *)resGetData("IMD", pieName);
+	pAssemblyPointIMDs[flagType][i] = modelGet(pieName);
 	if (!pAssemblyPointIMDs[flagType][i])
 	{
 		debug(LOG_ERROR, "Can't find assembly point graphic %s for factory", pieName);
-
 		return false;
 	}
 	return true;

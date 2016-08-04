@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -53,13 +53,11 @@ extern bool showSAMPLES;
 extern bool showORDERS;
 extern bool showLevelName;
 
-extern void	setViewAngle(SDWORD angle);
-extern UDWORD getViewDistance(void);
-extern void	setViewDistance(UDWORD dist);
+extern float getViewDistance(void);
+extern void setViewDistance(float dist);
 extern bool	radarOnScreen;
 extern bool	radarPermitted;
 extern bool rangeOnScreen; // Added to get sensor/gun range on screen.  -Q 5-10-05
-extern void	scaleMatrix(UDWORD percent);
 extern void setViewPos(UDWORD x, UDWORD y, bool Pan);
 Vector2i    getPlayerPos();
 extern void setPlayerPos(SDWORD x, SDWORD y);
@@ -68,7 +66,6 @@ extern void disp3d_resetView(void);
 extern void disp3d_getView(iView *newView);
 
 extern void draw3DScene(void);
-extern void renderDroid(DROID *psDroid);
 extern void renderStructure(STRUCTURE *psStructure);
 extern void renderFeature(FEATURE *psFeature);
 extern void renderProximityMsg(PROXIMITY_DISPLAY	*psProxDisp);
@@ -77,11 +74,6 @@ extern void renderAnimComponent(const COMPONENT_OBJECT *psObj);
 extern void renderDeliveryPoint(FLAG_POSITION *psPosition, bool blueprint);
 extern void debugToggleSensorDisplay(void);
 
-extern void displayFeatures(void);
-extern void displayStaticObjects(void);
-extern void displayDynamicObjects(void);
-extern void displayProximityMsgs(void);
-extern void displayDelivPoints(void);
 extern void calcScreenCoords(DROID *psDroid);
 extern ENERGY_BAR toggleEnergyBars(void);
 
@@ -92,24 +84,16 @@ extern void renderShadow(DROID *psDroid, iIMDShape *psShadowIMD);
 extern bool	clipXY(SDWORD x, SDWORD y);
 
 extern bool init3DView(void);
-extern void initViewPosition(void);
 extern iView player;
 extern bool selectAttempt;
-extern bool draggingTile;
-extern iIMDShape *g_imd;
-extern bool	droidSelected;
 
 extern SDWORD scrollSpeed;
-//extern void	assignSensorTarget( DROID *psDroid );
 extern void assignSensorTarget(BASE_OBJECT *psObj);
 extern void assignDestTarget(void);
 extern UDWORD getWaterTileNum(void);
 extern void setUnderwaterTile(UDWORD num);
 extern UDWORD getRubbleTileNum(void);
 extern void setRubbleTile(UDWORD num);
-
-extern SDWORD	getCentreX(void);
-extern SDWORD	getCentreZ(void);
 
 STRUCTURE *getTileBlueprintStructure(int mapX, int mapY);  ///< Gets the blueprint at those coordinates, if any. Previous return value becomes invalid.
 STRUCTURE_STATS const *getTileBlueprintStats(int mapX, int mapY);  ///< Gets the structure stats of the blueprint at those coordinates, if any.
@@ -129,6 +113,8 @@ extern UDWORD  getDroidRankGraphic(DROID *psDroid);
 
 /* Visualize radius at position */
 extern void showRangeAtPos(SDWORD centerX, SDWORD centerY, SDWORD radius);
+
+void setSkyBox(const char *page, float mywind, float myscale);
 
 #define	BASE_MUZZLE_FLASH_DURATION	(GAME_TICKS_PER_SEC/10)
 #define	EFFECT_MUZZLE_ADDITIVE		128

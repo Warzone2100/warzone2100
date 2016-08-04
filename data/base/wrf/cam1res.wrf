@@ -2,12 +2,5 @@
 /*  You may have to modify this file for it to be correct! */ 
 /*******************       wrf/cam1res.wrf      *******************/
 
-directory 	"stats/research/cam1"
-file		RESCH	"research.txt"
-file		RPREREQ	"prresearch.txt"
-file		RCOMPRED	"redcomponents.txt"
-file		RCOMPRES	"resultcomponent.txt"
-file		RSTRREQ	"researchstruct.txt"
-file		RSTRRED	"redstructure.txt"
-file		RSTRRES	"resultstructure.txt"
-file		RFUNC	"researchfunctions.txt"
+directory 	"stats"
+file		RESCH	"research_cam1.json"

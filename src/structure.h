@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -45,15 +45,8 @@
 /*This should correspond to the structLimits! */
 #define	MAX_FACTORY			5
 
-
-
 //used to flag when the Factory is ready to start building
 #define ACTION_START_TIME	0
-
-
-extern iIMDShape *factoryModuleIMDs[NUM_FACTORY_MODULES][NUM_FACMOD_TYPES];
-extern iIMDShape *researchModuleIMDs[NUM_RESEARCH_MODULES];
-extern iIMDShape *powerModuleIMDs[NUM_POWER_MODULES];
 
 extern std::vector<ProductionRun> asProductionRun[NUM_FACTORY_TYPES];
 
@@ -72,38 +65,32 @@ extern SBYTE         productionPlayer;
 extern STRUCTURE_STATS		*asStructureStats;
 extern UDWORD				numStructureStats;
 extern STRUCTURE_LIMITS		*asStructLimits[MAX_PLAYERS];
-//holds the upgrades attained through research for structure stats
-extern STRUCTURE_UPGRADE	asStructureUpgrade[MAX_PLAYERS];
-extern WALLDEFENCE_UPGRADE	asWallDefenceUpgrade[MAX_PLAYERS];
-//holds the upgrades for the functionality of structures through research
-extern RESEARCH_UPGRADE	asResearchUpgrade[MAX_PLAYERS];
-extern POWER_UPGRADE		asPowerUpgrade[MAX_PLAYERS];
-extern REPAIR_FACILITY_UPGRADE	asRepairFacUpgrade[MAX_PLAYERS];
-extern PRODUCTION_UPGRADE	asProductionUpgrade[MAX_PLAYERS][NUM_FACTORY_TYPES];
-extern REARM_UPGRADE		asReArmUpgrade[MAX_PLAYERS];
 
 //used to hold the modifiers cross refd by weapon effect and structureStrength
 extern STRUCTSTRENGTH_MODIFIER		asStructStrengthModifier[WE_NUMEFFECTS][
     NUM_STRUCT_STRENGTH];
-
 extern void handleAbandonedStructures(void);
 
-extern bool IsPlayerDroidLimitReached(UDWORD PlayerNumber);
-extern bool IsPlayerStructureLimitReached(UDWORD PlayerNumber);
-extern bool CheckHaltOnMaxUnitsReached(STRUCTURE *psStructure);
+int getMaxDroids(int player);
+int getMaxCommanders(int player);
+int getMaxConstructors(int player);
+void setMaxDroids(int player, int value);
+void setMaxCommanders(int player, int value);
+void setMaxConstructors(int player, int value);
 
-extern bool loadStructureStats(const char *pStructData, UDWORD bufferSize);
-extern bool loadStructureWeapons(const char *pWeaponData, UDWORD bufferSize);
-extern bool loadStructureFunctions(const char *pFunctionData, UDWORD bufferSize);
+bool IsPlayerDroidLimitReached(int player);
+bool CheckHaltOnMaxUnitsReached(STRUCTURE *psStructure);
+
+extern bool loadStructureStats(QString filename);
 /*Load the Structure Strength Modifiers from the file exported from Access*/
-extern bool loadStructureStrengthModifiers(const char *pStrengthModData, UDWORD bufferSize);
+extern bool loadStructureStrengthModifiers(const char *pFileName);
 
 extern bool	structureStatsShutDown(void);
 
 int requestOpenGate(STRUCTURE *psStructure);
 int gateCurrentOpenHeight(STRUCTURE const *psStructure, uint32_t time, int minimumStub);  ///< Returns how far open the gate is, or 0 if the structure is not a gate.
 
-int32_t structureDamage(STRUCTURE *psStructure, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime, bool isDamagePerSecond);
+int32_t structureDamage(STRUCTURE *psStructure, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime, bool isDamagePerSecond, int minDamage);
 extern void structureBuild(STRUCTURE *psStructure, DROID *psDroid, int buildPoints, int buildRate = 1);
 extern void structureDemolish(STRUCTURE *psStructure, DROID *psDroid, int buildPoints);
 void structureRepair(STRUCTURE *psStruct, DROID *psDroid, int buildRate);
@@ -172,10 +159,6 @@ extern bool checkStructureStatus(STRUCTURE_STATS *psStats, UDWORD player, UDWORD
 /*sets the point new droids go to - x/y in world coords for a Factory*/
 extern void setAssemblyPoint(FLAG_POSITION *psAssemblyPoint, UDWORD x, UDWORD y,
                              UDWORD player, bool bCheck);
-
-/*called when a structure has been built - checks through the list of callbacks
-for the scripts*/
-extern void structureCompletedCallback(STRUCTURE_STATS *psStructType);
 
 /*initialises the flag before a new data set is loaded up*/
 extern void initFactoryNumFlag(void);
@@ -246,7 +229,7 @@ extern void printStructureInfo(STRUCTURE *psStructure);
 
 /*Checks the template type against the factory type - returns false
 if not a good combination!*/
-extern bool validTemplateForFactory(DROID_TEMPLATE *psTemplate, STRUCTURE *psFactory);
+extern bool validTemplateForFactory(const DROID_TEMPLATE *psTemplate, STRUCTURE *psFactory, bool complain);
 
 /*calculates the damage caused to the resistance levels of structures*/
 //extern bool electronicDamage(STRUCTURE *psStructure, UDWORD damage, UBYTE attackPlayer);
@@ -267,8 +250,6 @@ unsigned structureBodyBuilt(STRUCTURE const *psStruct);  ///< Returns the maximu
 extern UDWORD	structureBody(const STRUCTURE *psStruct);
 extern UDWORD	structureArmour(STRUCTURE_STATS *psStats, UBYTE player);
 extern UDWORD	structureResistance(STRUCTURE_STATS *psStats, UBYTE player);
-/*this returns the Base Body points of a structure - regardless of upgrade*/
-extern UDWORD	structureBaseBody(const STRUCTURE *psStructure);
 
 extern void hqReward(UBYTE losingPlayer, UBYTE rewardPlayer);
 
@@ -376,14 +357,8 @@ bool IsStatExpansionModule(STRUCTURE_STATS const *psStats);
 bool structureIsBlueprint(STRUCTURE *psStructure);
 bool isBlueprint(BASE_OBJECT *psObject);
 
-/*checks that the structure stats have loaded up as expected - must be done after
-all StructureStats parts have been loaded*/
-extern bool checkStructureStats(void);
-
 /*returns the power cost to build this structure*/
 extern UDWORD structPowerToBuild(const STRUCTURE *psStruct);
-
-extern UDWORD getMaxDroids(UDWORD PlayerNumber);
 
 // check whether a factory of a certain number and type exists
 extern bool checkFactoryExists(UDWORD player, UDWORD factoryType, UDWORD inc);
@@ -391,8 +366,6 @@ extern bool checkFactoryExists(UDWORD player, UDWORD factoryType, UDWORD inc);
 /*checks the structure passed in is a Las Sat structure which is currently
 selected - returns true if valid*/
 extern bool lasSatStructSelected(STRUCTURE *psStruct);
-
-bool structureCheckReferences(STRUCTURE *psVictimStruct);
 
 void cbNewDroid(STRUCTURE *psFactory, DROID *psDroid);
 
@@ -428,23 +401,18 @@ static inline int structJammerPower(const STRUCTURE *psObj)
 	return objJammerPower((const BASE_OBJECT *)psObj);
 }
 
-static inline int structConcealment(const STRUCTURE *psObj)
-{
-	return objConcealment((const BASE_OBJECT *)psObj);
-}
-
 static inline Rotation structureGetInterpolatedWeaponRotation(STRUCTURE *psStructure, int weaponSlot, uint32_t time)
 {
 	return interpolateRot(psStructure->asWeaps[weaponSlot].prevRot, psStructure->asWeaps[weaponSlot].rot, psStructure->prevTime, psStructure->time, time);
 }
 
 #define setStructureTarget(_psBuilding, _psNewTarget, _idx, _targetOrigin) _setStructureTarget(_psBuilding, _psNewTarget, _idx, _targetOrigin, __LINE__, __FUNCTION__)
-static inline void _setStructureTarget(STRUCTURE *psBuilding, BASE_OBJECT *psNewTarget, UWORD idx, UWORD targetOrigin, int line, const char *func)
+static inline void _setStructureTarget(STRUCTURE *psBuilding, BASE_OBJECT *psNewTarget, UWORD idx, TARGET_ORIGIN targetOrigin, int line, const char *func)
 {
-	assert(idx < STRUCT_MAXWEAPS);
+	ASSERT_OR_RETURN(, idx < STRUCT_MAXWEAPS, "Bad index");
+	ASSERT_OR_RETURN(, psNewTarget == nullptr || !psNewTarget->died, "setStructureTarget set dead target");
 	psBuilding->psTarget[idx] = psNewTarget;
 	psBuilding->targetOrigin[idx] = targetOrigin;
-	ASSERT(psNewTarget == NULL || !psNewTarget->died, "setStructureTarget set dead target");
 #ifdef DEBUG
 	psBuilding->targetLine[idx] = line;
 	sstrcpy(psBuilding->targetFunc[idx], func);
@@ -538,5 +506,32 @@ static inline STRUCTURE const *castStructure(SIMPLE_OBJECT const *psObject)
 	return isStructure(psObject) ? (STRUCTURE const *)psObject : (STRUCTURE const *)NULL;
 }
 
+static inline int getBuildingResearchPoints(STRUCTURE *psStruct)
+{
+	auto &upgrade = psStruct->pStructureType->upgrade[psStruct->player];
+	return upgrade.research + upgrade.moduleResearch * psStruct->capacity;
+}
+
+static inline int getBuildingProductionPoints(STRUCTURE *psStruct)
+{
+	auto &upgrade = psStruct->pStructureType->upgrade[psStruct->player];
+	return upgrade.production + upgrade.moduleProduction * psStruct->capacity;
+}
+
+static inline int getBuildingPowerPoints(STRUCTURE *psStruct)
+{
+	auto &upgrade = psStruct->pStructureType->upgrade[psStruct->player];
+	return upgrade.power + upgrade.modulePower * psStruct->capacity;
+}
+
+static inline int getBuildingRepairPoints(STRUCTURE *psStruct)
+{
+	return psStruct->pStructureType->upgrade[psStruct->player].repair;
+}
+
+static inline int getBuildingRearmPoints(STRUCTURE *psStruct)
+{
+	return psStruct->pStructureType->upgrade[psStruct->player].rearm;
+}
 
 #endif // __INCLUDED_SRC_STRUCTURE_H__

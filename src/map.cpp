@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -108,8 +108,8 @@ MAPTILE	*psMapTiles = NULL;
 uint8_t *psBlockMap[AUX_MAX];
 uint8_t *psAuxMap[MAX_PLAYERS + AUX_MAX];        // yes, we waste one element... eyes wide open... makes API nicer
 
-#define WATER_MIN_DEPTH 180
-#define WATER_MAX_DEPTH (WATER_MIN_DEPTH + 100)
+#define WATER_MIN_DEPTH 500
+#define WATER_MAX_DEPTH (WATER_MIN_DEPTH + 400)
 
 static void SetGroundForTile(const char *filename, const char *nametype);
 static int getTextureType(const char *textureType);
@@ -120,7 +120,7 @@ static void init_tileNames(int type);
 /// The different ground types
 GROUND_TYPE *psGroundTypes;
 int numGroundTypes;
-char *tileset = NULL;
+char *tilesetDir = NULL;
 static int numTile_names;
 static char *Tile_names = NULL;
 #define ARIZONA 1
@@ -133,81 +133,6 @@ static bool *mapDecals;           // array that tells us what tile is a decal
 
 /* Look up table that returns the terrain type of a given tile texture */
 UBYTE terrainTypes[MAX_TILE_TEXTURES];
-
-/* Create a new map of a specified size */
-bool mapNew(UDWORD width, UDWORD height)
-{
-	MAPTILE *psTile;
-	UDWORD	i;
-
-	/* See if a map has already been allocated */
-	if (psMapTiles != NULL)
-	{
-		/* Clear all the objects off the map and free up the map memory */
-		gwShutDown();
-		releaseAllProxDisp();
-		freeAllDroids();
-		freeAllStructs();
-		freeAllFeatures();
-		freeAllFlagPositions();
-		proj_FreeAllProjectiles();
-		free(psMapTiles);
-		psMapTiles = NULL;
-		initStructLimits();
-
-		free(psGroundTypes);
-	}
-
-	if (width * height > MAP_MAXAREA)
-	{
-		debug(LOG_ERROR, "Map too large : %u %u", width, height);
-		return false;
-	}
-
-	if (width <= 1 || height <= 1)
-	{
-		debug(LOG_ERROR, "Map is too small : %u, %u", width, height);
-		return false;
-	}
-
-	psMapTiles = (MAPTILE *)calloc(width * height, sizeof(MAPTILE));
-	if (psMapTiles == NULL)
-	{
-		debug(LOG_FATAL, "Out of memory");
-		abort();
-		return false;
-	}
-
-	psTile = psMapTiles;
-	for (i = 0; i < width * height; i++)
-	{
-		psTile->height = MAX_HEIGHT * ELEVATION_SCALE / 4;
-		psTile->illumination = 255;
-		psTile->level = psTile->illumination;
-		memset(psTile->watchers, 0, sizeof(psTile->watchers));
-		memset(psTile->sensors, 0, sizeof(psTile->sensors));
-		memset(psTile->jammers, 0, sizeof(psTile->jammers));
-		psTile->colour = WZCOL_WHITE;
-		psTile->tileExploredBits = 0;
-		psTile->sensorBits = 0;
-		psTile->jammerBits = 0;
-		psTile++;
-	}
-
-	mapWidth = width;
-	mapHeight = height;
-
-	intSetMapPos(mapWidth * TILE_UNITS / 2, mapHeight * TILE_UNITS / 2);
-
-	/*set up the scroll mins and maxs - set values to valid ones for a new map*/
-	scrollMinX = scrollMinY = 0;
-	scrollMaxX = mapWidth;
-	scrollMaxY = mapHeight;
-
-	gridReset();
-
-	return true;
-}
 
 static void init_tileNames(int type)
 {
@@ -318,9 +243,9 @@ static bool mapLoadGroundTypes(void)
 
 	pFileData = fileLoadBuffer;
 
-	debug(LOG_TERRAIN, "tileset: %s", tileset);
+	debug(LOG_TERRAIN, "tileset: %s", tilesetDir);
 	// For Arizona
-	if (strcmp(tileset, "texpages/tertilesc1hw") == 0)
+	if (strcmp(tilesetDir, "texpages/tertilesc1hw") == 0)
 	{
 fallback:
 		init_tileNames(ARIZONA);
@@ -360,7 +285,7 @@ fallback:
 		SetDecals("tileset/arizonadecals.txt", "arizona_decals");
 	}
 	// for Urban
-	else if (strcmp(tileset, "texpages/tertilesc2hw") == 0)
+	else if (strcmp(tilesetDir, "texpages/tertilesc2hw") == 0)
 	{
 		init_tileNames(URBAN);
 		if (!loadFileToBuffer("tileset/tertilesc2hwGtype.txt", pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
@@ -399,7 +324,7 @@ fallback:
 		SetDecals("tileset/urbandecals.txt", "urban_decals");
 	}
 	// for Rockie
-	else if (strcmp(tileset, "texpages/tertilesc3hw") == 0)
+	else if (strcmp(tilesetDir, "texpages/tertilesc3hw") == 0)
 	{
 		init_tileNames(ROCKIE);
 		if (!loadFileToBuffer("tileset/tertilesc3hwGtype.txt", pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
@@ -440,7 +365,7 @@ fallback:
 	// When a map uses something other than the above, we fallback to Arizona
 	else
 	{
-		debug(LOG_ERROR, "unsupported tileset: %s", tileset);
+		debug(LOG_ERROR, "unsupported tileset: %s", tilesetDir);
 		debug(LOG_POPUP, "This is a UNSUPPORTED map with a custom tileset.\nDefaulting to tertilesc1hw -- map may look strange!");
 		// HACK: / FIXME: For now, we just pretend this is a tertilesc1hw map.
 		goto fallback;
@@ -558,7 +483,7 @@ static int determineGroundType(int x, int y, const char *tileset)
 	int weight[2][2];
 	int i, j, tile;
 	int a, b, best;
-	MAPTILE *psTile = mapTile(x, y);
+	MAPTILE *psTile;
 
 	if (x < 0 || y < 0 || x >= mapWidth || y >= mapHeight)
 	{
@@ -572,7 +497,7 @@ static int determineGroundType(int x, int y, const char *tileset)
 		{
 			if (x + i - 1 < 0 || y + j - 1 < 0 || x + i - 1 >= mapWidth || y + j - 1 >= mapHeight)
 			{
-				psTile = 0;
+				psTile = NULL;
 				tile = 0;
 			}
 			else
@@ -713,7 +638,7 @@ static bool mapSetGroundTypes(void)
 		{
 			MAPTILE *psTile = mapTile(i, j);
 
-			psTile->ground = determineGroundType(i, j, tileset);
+			psTile->ground = determineGroundType(i, j, tilesetDir);
 
 			if (hasDecals(i, j))
 			{
@@ -728,13 +653,92 @@ static bool mapSetGroundTypes(void)
 	return true;
 }
 
+static bool isWaterVertex(int x, int y)
+{
+	if (x < 1 || y < 1 || x > mapWidth - 1 || y > mapHeight - 1)
+	{
+		return false;
+	}
+	return terrainType(mapTile(x, y)) == TER_WATER && terrainType(mapTile(x - 1, y)) == TER_WATER
+	       && terrainType(mapTile(x, y - 1)) == TER_WATER && terrainType(mapTile(x - 1, y - 1)) == TER_WATER;
+}
+
+static void generateRiverbed(void)
+{
+	MersenneTwister mt(12345);  // 12345 = random seed.
+	int maxIdx = 1, idx[MAP_MAXWIDTH][MAP_MAXHEIGHT];
+	int i, j, l = 0;
+
+	for (i = 0; i < mapWidth; i++)
+	{
+		for (j = 0; j < mapHeight; j++)
+		{
+			// initially set the seabed index to 0 for ground and 100 for water
+			idx[i][j] = 100 * isWaterVertex(i, j);
+			if (idx[i][j] > 0)
+			{
+				l++;
+			}
+		}
+	}
+	debug(LOG_TERRAIN, "Generating riverbed for %d water tiles.", l);
+	if (l == 0) // no water on map
+	{
+		return;
+	}
+	l = 0;
+	do
+	{
+		maxIdx = 1;
+		for (i = 1; i < mapWidth - 2; i++)
+		{
+			for (j = 1; j < mapHeight - 2; j++)
+			{
+
+				if (idx[i][j] > 0)
+				{
+					idx[i][j] = (idx[i - 1][j] + idx[i][j - 1] + idx[i][j + 1] + idx[i + 1][j]) / 4;
+					if (idx[i][j] > maxIdx)
+					{
+						maxIdx = idx[i][j];
+					}
+				}
+			}
+		}
+		++l;
+		debug(LOG_TERRAIN, "%d%% completed after %d iterations", 10 * (100 - maxIdx), l);
+	}
+	while (maxIdx > 90 && l < 20);
+
+	for (i = 0; i < mapWidth; i++)
+	{
+		for (j = 0; j < mapHeight; j++)
+		{
+			if (idx[i][j] > maxIdx)
+			{
+				idx[i][j] = maxIdx;
+			}
+			if (idx[i][j] < 1)
+			{
+				idx[i][j] = 1;
+			}
+			if (isWaterVertex(i, j))
+			{
+				l = (WATER_MAX_DEPTH + 1 - WATER_MIN_DEPTH) * (maxIdx - idx[i][j] - mt.u32() % (maxIdx / 6 + 1));
+				mapTile(i, j)->height -= WATER_MIN_DEPTH - (l / maxIdx);
+			}
+		}
+	}
+
+}
+
 /* Initialise the map structure */
 bool mapLoad(char *filename, bool preview)
 {
 	UDWORD		numGw, width, height;
 	char		aFileType[4];
 	UDWORD		version;
-	UDWORD		i, j, x, y;
+	UDWORD		i, x, y;
 	PHYSFS_file	*fp = PHYSFS_openRead(filename);
 	MersenneTwister mt(12345);  // 12345 = random seed.
 
@@ -787,9 +791,9 @@ bool mapLoad(char *filename, bool preview)
 	mapHeight = height;
 
 	// FIXME: the map preview code loads the map without setting the tileset
-	if (!tileset)
+	if (!tilesetDir)
 	{
-		tileset = strdup("texpages/tertilesc1hw");
+		tilesetDir = strdup("texpages/tertilesc1hw");
 	}
 
 	// load the ground types
@@ -856,21 +860,15 @@ bool mapLoad(char *filename, bool preview)
 		goto failure;
 	}
 
-	// reset the random water bottom heights
-	// set the river bed
-	for (i = 0; i < mapWidth; i++)
+	for (y = 0; y < mapHeight; y++)
 	{
-		for (j = 0; j < mapHeight; j++)
+		for (x = 0; x < mapWidth; x++)
 		{
 			// FIXME: magic number
-			mapTile(i, j)->waterLevel = mapTile(i, j)->height - world_coord(1) / 3;
-			// lower riverbed
-			if (terrainType(mapTile(i, j)) == TER_WATER && terrainType(mapTile(i - 1, j)) == TER_WATER && terrainType(mapTile(i, j - 1)) == TER_WATER && terrainType(mapTile(i - 1, j - 1)) == TER_WATER)
-			{
-				mapTile(i, j)->height -= WATER_MIN_DEPTH - mt.u32() % (WATER_MAX_DEPTH + 1 - WATER_MIN_DEPTH);
-			}
+			mapTile(x, y)->waterLevel = mapTile(x, y)->height - world_coord(1) / 3;
 		}
 	}
+	generateRiverbed();
 
 	/* set up the scroll mins and maxs - set values to valid ones for any new map */
 	scrollMinX = scrollMinY = 0;
@@ -933,16 +931,9 @@ bool mapSave(char **ppFileData, UDWORD *pFileSize)
 	MAP_SAVEHEADER	*psHeader = NULL;
 	MAP_SAVETILE	*psTileData = NULL;
 	MAPTILE	*psTile = NULL;
-	GATEWAY *psCurrGate = NULL;
 	GATEWAY_SAVEHEADER *psGateHeader = NULL;
 	GATEWAY_SAVE *psGate = NULL;
-	SDWORD	numGateways = 0;
-
-	// find the number of non water gateways
-	for (psCurrGate = gwGetGateways(); psCurrGate; psCurrGate = psCurrGate->psNext)
-	{
-		numGateways += 1;
-	}
+	SDWORD	numGateways = gwNumGateways();
 
 	/* Allocate the data buffer */
 	*pFileSize = SAVE_HEADER_SIZE + mapWidth * mapHeight * SAVE_TILE_SIZE;
@@ -1006,7 +997,7 @@ bool mapSave(char **ppFileData, UDWORD *pFileSize)
 	psGate = (GATEWAY_SAVE *)(psGateHeader + 1);
 
 	// Put the gateway data.
-	for (psCurrGate = gwGetGateways(); psCurrGate; psCurrGate = psCurrGate->psNext)
+	for (auto psCurrGate : gwGetGateways())
 	{
 		psGate->x0 = psCurrGate->x1;
 		psGate->y0 = psCurrGate->y1;
@@ -1014,6 +1005,8 @@ bool mapSave(char **ppFileData, UDWORD *pFileSize)
 		psGate->y1 = psCurrGate->y2;
 		ASSERT(psGate->x0 == psGate->x1 || psGate->y0 == psGate->y1, "Invalid gateway coordinates (%d, %d, %d, %d)",
 		       psGate->x0, psGate->y0, psGate->x1, psGate->y1);
+		ASSERT(psGate->x0 < mapWidth && psGate->y0 < mapHeight && psGate->x1 < mapWidth && psGate->y1 < mapHeight,
+		       "Bad gateway dimensions for savegame");
 		psGate++;
 	}
 
@@ -1862,7 +1855,6 @@ static int dangerThreadFunc(WZ_DECL_UNUSED void *data)
 	while (lastDangerPlayer != -1)
 	{
 		dangerFloodFill(lastDangerPlayer);	// Do the actual work
-		lastDangerUpdate = gameTime;
 		wzSemaphorePost(dangerDoneSemaphore);   // Signal that we are done
 		wzSemaphoreWait(dangerSemaphore);	// Go to sleep until needed.
 	}
@@ -2011,6 +2003,9 @@ void mapUpdate()
 
 	if (gameTime > lastDangerUpdate + GAME_TICKS_FOR_DANGER && game.type == SKIRMISH)
 	{
+		syncDebug("Do danger maps.");
+		lastDangerUpdate = gameTime;
+
 		// Lock if previous job not done yet
 		wzSemaphoreWait(dangerDoneSemaphore);
 

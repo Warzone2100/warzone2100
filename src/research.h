@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -83,15 +83,7 @@ extern UDWORD	aDefaultECM[MAX_PLAYERS];
 extern UDWORD	aDefaultRepair[MAX_PLAYERS];
 
 //extern bool loadResearch(void);
-extern bool loadResearch(const char *pResearchData, UDWORD bufferSize);
-//Load the pre-requisites for a research list
-extern bool loadResearchPR(const char *pPRData, UDWORD bufferSize);
-//Load the artefacts for a research list
-extern bool loadResearchArtefacts(const char *pArteData, UDWORD bufferSize, UDWORD listNumber);
-//Load the pre-requisites for a research list
-extern bool loadResearchFunctions(const char *pFunctionData, UDWORD bufferSize);
-//Load the Structures for a research list
-extern bool loadResearchStructures(const char *pStructData, UDWORD bufferSize, UDWORD listNumber);
+extern bool loadResearch(QString filename);
 
 /*function to check what can be researched for a particular player at any one
   instant. Returns the number to research*/
@@ -133,7 +125,6 @@ extern bool selfRepairEnabled(UBYTE player);
 
 extern SDWORD	mapRIDToIcon(UDWORD rid);
 extern SDWORD	mapIconToRID(UDWORD iconID);
-extern bool checkResearchStats(void);
 
 /*puts research facility on hold*/
 extern void holdResearch(STRUCTURE *psBuilding, QUEUE_MODE mode);

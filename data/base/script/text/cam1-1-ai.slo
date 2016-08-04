@@ -49,24 +49,18 @@ trigger		every10(every, 40);	//slowed since ordering every time
 event startup(CALL_GAMEINIT)
 {
 	ld=75;						//enemy2 leadership (change to higher when fixed!)
-//make up starting forces
+	//make up starting forces
 	groupAddArea(enemy1Force1, enemy1, 2624, 1088, 4160, 2496);	//east ambush at base
 	groupAddArea(enemy1Force1, enemy1, 704, 4288, 1472, 5184);	//sw of base on ridge
-	//setGroupSecondary(enemy1Force1, DSO_ATTACK_LEVEL, DSS_ALEV_ATTACKED);	//return fire only
-//don't bother with hold until cancelling Hold works!!! (John needs to fix)
-	//setGroupSecondary(enemy1Force1, DSO_HALTTYPE, DSS_HALT_HOLD);		//hold position
 	groupAddArea(enemy1Force2, enemy1, 448, 1088, 960, 1728);	//to west of base on hill
 	orderGroupLoc(enemy1Force2,  DORDER_SCOUT, 1600, 2624);
-	//groupAddArea(enemy1Guard, enemy1, 1728, 1344, 2368, 1728);	//around artifact
 
 	groupAddArea(enemy1Rear2, enemy1, 3904, 10944, 4288, 11328);	//rear 2 (trikes and buggies)
 
-	//orderGroupLoc(enemy1Guard, DORDER_SCOUT, 2212, 1600);
-//set retreat point?
+	//set retreat point?
 	setRetreatPoint(enemy1, enm1Ret1X, enm1Ret1Y);	//retreat to base
 	setRetreatForce(enemy1, 75);			//set morale to 25%
 	setRetreatLeadership(enemy1, 50);		//set leadership chance (small=more likely?)
-
 }
 
 
@@ -127,7 +121,6 @@ event letGo(CALL_DROID_ATTACKED, enemy1, ref hitDroid, ref attackerObj)
 		else
 		{
 			setDroidSecondary(hitDroid, DSO_ATTACK_LEVEL, DSS_ALEV_ALWAYS);
-			setDroidSecondary(hitDroid, DSO_HALTTYPE, DSS_HALT_GUARD);
 		}
 	}
 }

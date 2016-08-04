@@ -1,0 +1,990 @@
+{
+    "feature_0007": {
+        "name": "OilResource",
+        "position": [
+            7872,
+            2240,
+            510
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0009": {
+        "name": "OilResource",
+        "position": [
+            7872,
+            3648,
+            510
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0011": {
+        "name": "OilResource",
+        "position": [
+            9280,
+            2240,
+            510
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0013": {
+        "name": "OilResource",
+        "position": [
+            9280,
+            3648,
+            510
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0033": {
+        "name": "OilResource",
+        "position": [
+            15296,
+            2240,
+            510
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0035": {
+        "name": "OilResource",
+        "position": [
+            15296,
+            3648,
+            502
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0037": {
+        "name": "OilResource",
+        "position": [
+            16704,
+            2240,
+            510
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0039": {
+        "name": "OilResource",
+        "position": [
+            16704,
+            3648,
+            510
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0055": {
+        "name": "OilResource",
+        "position": [
+            20928,
+            7872,
+            510
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0057": {
+        "name": "OilResource",
+        "position": [
+            20928,
+            9280,
+            502
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0059": {
+        "name": "OilResource",
+        "position": [
+            22336,
+            7872,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0061": {
+        "name": "OilResource",
+        "position": [
+            22336,
+            9280,
+            510
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0077": {
+        "name": "OilResource",
+        "position": [
+            20928,
+            15296,
+            510
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0079": {
+        "name": "OilResource",
+        "position": [
+            20928,
+            16704,
+            510
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0081": {
+        "name": "OilResource",
+        "position": [
+            22336,
+            15296,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0083": {
+        "name": "OilResource",
+        "position": [
+            22336,
+            16704,
+            510
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0099": {
+        "name": "OilResource",
+        "position": [
+            15296,
+            20928,
+            510
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0101": {
+        "name": "OilResource",
+        "position": [
+            15296,
+            22336,
+            510
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0103": {
+        "name": "OilResource",
+        "position": [
+            16704,
+            20928,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0105": {
+        "name": "OilResource",
+        "position": [
+            16704,
+            22336,
+            510
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0121": {
+        "name": "OilResource",
+        "position": [
+            7872,
+            20928,
+            510
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0123": {
+        "name": "OilResource",
+        "position": [
+            7872,
+            22336,
+            510
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0125": {
+        "name": "OilResource",
+        "position": [
+            9280,
+            20928,
+            502
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0127": {
+        "name": "OilResource",
+        "position": [
+            9280,
+            22336,
+            510
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0143": {
+        "name": "OilResource",
+        "position": [
+            2240,
+            15296,
+            510
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0145": {
+        "name": "OilResource",
+        "position": [
+            2240,
+            16704,
+            510
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0147": {
+        "name": "OilResource",
+        "position": [
+            3648,
+            15296,
+            502
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0149": {
+        "name": "OilResource",
+        "position": [
+            3648,
+            16704,
+            510
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0165": {
+        "name": "OilResource",
+        "position": [
+            2240,
+            7872,
+            510
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0167": {
+        "name": "OilResource",
+        "position": [
+            2240,
+            9280,
+            510
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0169": {
+        "name": "OilResource",
+        "position": [
+            3648,
+            7872,
+            510
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0171": {
+        "name": "OilResource",
+        "position": [
+            3648,
+            9280,
+            510
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0214": {
+        "name": "OilResource",
+        "position": [
+            4800,
+            4928,
+            222
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0215": {
+        "name": "OilResource",
+        "position": [
+            12224,
+            2624,
+            235
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0216": {
+        "name": "OilResource",
+        "position": [
+            19648,
+            4800,
+            253
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0217": {
+        "name": "OilResource",
+        "position": [
+            21952,
+            12224,
+            252
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0218": {
+        "name": "OilResource",
+        "position": [
+            19776,
+            19648,
+            222
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0219": {
+        "name": "OilResource",
+        "position": [
+            12352,
+            21952,
+            237
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0220": {
+        "name": "OilResource",
+        "position": [
+            4928,
+            19776,
+            241
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0221": {
+        "name": "OilResource",
+        "position": [
+            2624,
+            12352,
+            222
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0222": {
+        "name": "OilResource",
+        "position": [
+            13888,
+            10688,
+            62
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0223": {
+        "name": "OilResource",
+        "position": [
+            13888,
+            13888,
+            62
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0224": {
+        "name": "OilResource",
+        "position": [
+            10688,
+            13888,
+            62
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0225": {
+        "name": "OilResource",
+        "position": [
+            10688,
+            10688,
+            62
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0226": {
+        "name": "OilResource",
+        "position": [
+            6848,
+            1216,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0227": {
+        "name": "OilResource",
+        "position": [
+            10304,
+            1216,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0228": {
+        "name": "OilResource",
+        "position": [
+            10304,
+            4672,
+            318
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0229": {
+        "name": "OilResource",
+        "position": [
+            6848,
+            4672,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0230": {
+        "name": "OilResource",
+        "position": [
+            14272,
+            1216,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0231": {
+        "name": "OilResource",
+        "position": [
+            17728,
+            1216,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0232": {
+        "name": "OilResource",
+        "position": [
+            17728,
+            4672,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0233": {
+        "name": "OilResource",
+        "position": [
+            14272,
+            4672,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0234": {
+        "name": "OilResource",
+        "position": [
+            19904,
+            6848,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0235": {
+        "name": "OilResource",
+        "position": [
+            23360,
+            6848,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0236": {
+        "name": "OilResource",
+        "position": [
+            23360,
+            10304,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0237": {
+        "name": "OilResource",
+        "position": [
+            19904,
+            10304,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0238": {
+        "name": "OilResource",
+        "position": [
+            19904,
+            14272,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0239": {
+        "name": "OilResource",
+        "position": [
+            23360,
+            14272,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0240": {
+        "name": "OilResource",
+        "position": [
+            23360,
+            17728,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0241": {
+        "name": "OilResource",
+        "position": [
+            19904,
+            17728,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0242": {
+        "name": "OilResource",
+        "position": [
+            17728,
+            19904,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0243": {
+        "name": "OilResource",
+        "position": [
+            17728,
+            23360,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0244": {
+        "name": "OilResource",
+        "position": [
+            14272,
+            23360,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0245": {
+        "name": "OilResource",
+        "position": [
+            14272,
+            19904,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0246": {
+        "name": "OilResource",
+        "position": [
+            10304,
+            19904,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0247": {
+        "name": "OilResource",
+        "position": [
+            10304,
+            23360,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0248": {
+        "name": "OilResource",
+        "position": [
+            6848,
+            23360,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0249": {
+        "name": "OilResource",
+        "position": [
+            6848,
+            19904,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0250": {
+        "name": "OilResource",
+        "position": [
+            4672,
+            17728,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0251": {
+        "name": "OilResource",
+        "position": [
+            4672,
+            14272,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0252": {
+        "name": "OilResource",
+        "position": [
+            1216,
+            14272,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0253": {
+        "name": "OilResource",
+        "position": [
+            1216,
+            17728,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0254": {
+        "name": "OilResource",
+        "position": [
+            4672,
+            10304,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0255": {
+        "name": "OilResource",
+        "position": [
+            4672,
+            6848,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0256": {
+        "name": "OilResource",
+        "position": [
+            1216,
+            6848,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0257": {
+        "name": "OilResource",
+        "position": [
+            1216,
+            10304,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    }
+}

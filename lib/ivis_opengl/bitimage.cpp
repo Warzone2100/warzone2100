@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -27,7 +27,11 @@
 
 #include <set>
 #include <algorithm>
+#include <QtCore/QHash>
+#include <QtCore/QString>
 
+static QHash<QString, ImageDef *> images;
+static QList<IMAGEFILE *> files;
 
 struct ImageMergeRectangle
 {
@@ -59,6 +63,16 @@ struct ImageMerge
 	std::vector<ImageMergeRectangle> images;
 	std::vector<int> pages;  // List of page sizes, normally all pageSize, unless an image is too large for a normal page.
 };
+
+ImageDef *iV_GetImage(const QString &filename)
+{
+	if (!images.contains(filename))
+	{
+		debug(LOG_ERROR, "%s not found in image list!", filename.toUtf8().constData());
+		return NULL;
+	}
+	return images.value(filename);
+}
 
 inline void ImageMerge::arrange()
 {
@@ -153,6 +167,7 @@ IMAGEFILE *iV_LoadImageFile(const char *fileName)
 	}
 	IMAGEFILE *imageFile = new IMAGEFILE;
 	imageFile->imageDefs.resize(numImages);
+	imageFile->imageNames.resize(numImages);
 	ImageMerge pageLayout;
 	pageLayout.images.resize(numImages);
 	ptr = pFileData;
@@ -170,6 +185,8 @@ IMAGEFILE *iV_LoadImageFile(const char *fileName)
 			delete imageFile;
 			return NULL;
 		}
+		imageFile->imageNames[numImages].first = tmpName;
+		imageFile->imageNames[numImages].second = numImages;
 		std::string spriteName = imageDir + tmpName;
 
 		ImageMergeRectangle *imageRect = &pageLayout.images[numImages];
@@ -185,8 +202,12 @@ IMAGEFILE *iV_LoadImageFile(const char *fileName)
 		numImages++;
 		ptr += temp;
 		while (ptr < pFileData + pFileSize && *ptr++ != '\n') {} // skip rest of line
+
+		images.insert(tmpName, ImageDef);
 	}
 	free(pFileData);
+
+	std::sort(imageFile->imageNames.begin(), imageFile->imageNames.end());
 
 	pageLayout.arrange();  // Arrange all the images onto texture pages (attempt to do so with as few pages as possible).
 	imageFile->pages.resize(pageLayout.pages.size());
@@ -257,13 +278,36 @@ IMAGEFILE *iV_LoadImageFile(const char *fileName)
 		char arbitraryName[256];
 		ssprintf(arbitraryName, "%s-%03u", fileName, p);
 		// Now we can set imageFile->pages[p].id. This free()s the ivImages[p].bmp array!
-		imageFile->pages[p].id = pie_AddTexPage(&ivImages[p], arbitraryName, 0, 0, true);
+		imageFile->pages[p].id = pie_AddTexPage(&ivImages[p], arbitraryName, false);
 	}
+
+	// duplicate some data, since we want another access point to these data structures now, FIXME
+	for (unsigned i = 0; i < imageFile->imageDefs.size(); i++)
+	{
+		imageFile->imageDefs[i].textureId = imageFile->pages[imageFile->imageDefs[i].TPageID].id;
+		imageFile->imageDefs[i].invTextureSize = 1.f / imageFile->pages[imageFile->imageDefs[i].TPageID].size;
+	}
+
+	files.append(imageFile);
 
 	return imageFile;
 }
 
 void iV_FreeImageFile(IMAGEFILE *imageFile)
 {
+	// so when we get here, it is time to redo everything. will clean this up later. TODO.
+	files.clear();
+	images.clear();
 	delete imageFile;
+}
+
+Image IMAGEFILE::find(std::string const &name)
+{
+	std::pair<std::string, int> val(name, 0);
+	std::vector<std::pair<std::string, int> >::const_iterator i = std::lower_bound(imageNames.begin(), imageNames.end(), val);
+	if (i != imageNames.end() && i->first == name)
+	{
+		return Image(this, i->second);
+	}
+	return Image(this, 0);  // Error, image not found.
 }

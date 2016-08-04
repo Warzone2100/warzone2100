@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1992-2007  Trolltech ASA.
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -400,6 +400,15 @@
 #  define WZ_DECL_FORMAT(archetype, string_index, first_to_check)
 #endif
 
+#if WZ_CC_GNU_PREREQ(4,9)
+#  define WZ_DECL_NONNULL(...) __attribute__((nonnull(__VA_ARGS__)))
+#  define WZ_DECL_RETURNS_NONNULL  __attribute__((returns_nonnull))
+#  define WZ_DECL_ALLOCATION __attribute__((returns_nonnull, malloc, warn_unused_result))
+#else
+#  define WZ_DECL_ALLOCATION
+#  define WZ_DECL_NONNULL(...)
+#  define WZ_DECL_RETURNS_NONNULL
+#endif
 
 /*!
  * \def WZ_DECL_NORETURN
@@ -512,7 +521,9 @@
 /*! \def WZ_DECL_THREAD
  * Declares a variable to be local to the running thread, and not shared between threads.
  */
-#if defined(WZ_CC_GNU) || defined(WZ_CC_INTEL)
+#if defined(__MACOSX__)
+#  define WZ_DECL_THREAD // nothing, MacOSX does not yet support this
+#elif defined(WZ_CC_GNU) || defined(WZ_CC_INTEL)
 #  define WZ_DECL_THREAD __thread
 #elif defined(WZ_CC_MSVC)
 #  define WZ_DECL_THREAD __declspec(thread)
@@ -680,6 +691,12 @@ static inline char *_WZ_ASSERT_ARRAY_EXPR_FUNCTION(T *&)
 #endif
 #define WZ_ASSERT_ARRAY(a) (void)WZ_ASSERT_ARRAY_EXPR(a)
 
-
+#ifdef HAVE___BUILTIN_EXPECT
+# define unlikely(expr) __builtin_expect(!!(expr),0)
+# define likely(expr)	__builtin_expect(!!(expr),1)
+#else
+# define unlikely(expr) (expr)
+# define likely(expr)	(expr)
+#endif
 
 #endif /* WZGLOBAL_H */

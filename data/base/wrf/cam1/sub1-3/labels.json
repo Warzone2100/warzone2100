@@ -1,0 +1,44 @@
+{
+	"position_0": { "label": "StartPosition", "pos": [ 640, 640 ] },
+	"position_1": { "label": "TransporterEntry", "pos": [ 128, 1280 ] },
+	"position_2": { "label": "TransporterExit", "pos": [ 1280, 128 ] },
+
+	"area_0": { "label": "LandingZone", "pos1": [ 512, 512 ], "pos2": [ 768, 768 ] },
+	"area_1": { "label": "RTLZ", "pos1": [ 64, 64 ], "pos2": [ 1344, 1344 ] },
+
+	"area_2": { "label": "NorthConvoyTrigger", "subscriber": 0, "pos1" : [ 4416, 64 ], "pos2": [ 5952, 1984 ] },
+	"area_3": { "label": "NorthConvoyForce", "pos1" : [ 4928, 448 ], "pos2": [ 5824, 1728 ] },
+	"position_3": { "label": "NorthConvoyLoc", "pos": [ 5184, 5440 ] },
+
+	"area_4": { "label": "SouthConvoyTrigger", "subscriber": 0, "pos1" : [ 5824, 6080 ], "pos2": [ 8000, 8000 ] },
+	"area_5": { "label": "SouthConvoyForce", "pos1" : [ 6464, 6976 ], "pos2": [ 7616, 7872 ] },
+	"position_4": { "label": "SouthConvoyLoc", "pos": [ 5952, 4288 ] },
+
+	"area_6": { "label": "WestConvoyTrigger", "subscriber": 0, "pos1" : [ 192, 5568 ], "pos2": [ 2624, 7488 ] },
+	"area_7": { "label": "WestConvoyForce", "pos1" : [ 704, 6336 ], "pos2": [ 1344, 6848 ] },
+	"position_5": { "label": "WestConvoyLoc", "pos": [ 6080, 5312 ] },
+
+	"object_0": { "label": "NPHQ", "id": 542, "player": 1, "type": 1 },
+	"object_1": { "label": "NPCRC", "id": 543, "player": 1, "type": 1 },
+
+	"radius_0": { "label": "RemoveBeacon", "subscriber": 0, "pos" : [ 448, 6592 ], "radius": 640 },
+
+	"area_8": { "label": "ScavBase", "pos1" : [ 4416, 4032 ], "pos2": [ 6208, 5184 ] },
+	"object_2": { "label": "ScavFactory", "id": 270, "player": 7, "type": 1 },
+	"position_6": { "label": "ScavAssembly", "pos": [ 5312, 4288 ] },
+	"radius_1": { "label": "ScavTrigger", "subscriber": 0, "pos" : [ 4544, 4288 ], "radius": 640 },
+
+	"area_10": { "label": "NPBase", "pos1" : [ 5440, 64 ], "pos2": [ 8000, 3136 ] },
+	"object_3": { "label": "NPFactory", "id": 528, "player": 1, "type": 1 },
+	"position_7": { "label": "NPAssembly", "pos": [ 6720, 1728 ] },
+	"radius_2": { "label": "NPTrigger", "subscriber": 0, "pos" : [ 6848, 2880 ], "radius": 1920 },
+
+	"area_13": { "label": "ScavScoutForce", "pos1" : [ 576, 6336 ], "pos2": [ 832, 6848 ] },
+
+	"object_4": { "label": "NPCommander", "id": 544, "player": 1, "type": 0 },
+	"group_0": { "label": "NPDefense", "members": [ 545, 546, 547, 551 ], "player": 1 },
+	"area_14": { "label": "NPScoutForce", "pos1" : [ 6336, 1984 ], "pos2": [ 6848, 2240 ] },
+
+	"object_5": { "label": "ScoutDroid", "id": 639, "player": 1, "type": 0 },
+	"position_8": { "label": "ScoutDroidTarget", "pos": [ 5312, 3904 ] }
+}

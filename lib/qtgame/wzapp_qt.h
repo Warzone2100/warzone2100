@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -20,14 +20,15 @@
 #ifndef WZAPP_H
 #define WZAPP_H
 
-#include <QtGui/QApplication>
+#include <QtWidgets/QApplication>
 #include <QtGui/QImage>
-#include <QtOpenGL/QGLWidget>
 #include <QtCore/QBuffer>
 #include <QtCore/QTime>
 #include <QtCore/QThread>
 #include <QtCore/QMutex>
 #include <QtCore/QSemaphore>
+#include "lib/framework/opengl.h"  // This may not be included after <QtOpenGL/QGLWidget> which includes <GL/gl.h>, since this includes <GL/glew.h>.
+#include <QtOpenGL/QGLWidget>
 #include <physfs.h>
 
 #include "qtgame.h"

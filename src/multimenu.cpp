@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -60,7 +60,6 @@
 #include "keymap.h"
 #include "keybind.h"
 #include "loop.h"
-#include "lib/framework/frameint.h"
 #include "frontend.h"
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -69,20 +68,12 @@
 W_SCREEN  *psRScreen;			// requester stuff.
 
 extern char	MultiCustomMapsPath[PATH_MAX];
-extern void	displayMultiBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours);
 
 bool	MultiMenuUp			= false;
-bool	ClosingMultiMenu	= false;
-bool	DebugMenuUp		= false;
 static UDWORD	context = 0;
 UDWORD	current_tech = 1;
 UDWORD	current_numplayers = 4;
-
-#define DEBUGMENU_FORM_W		200
-#define DEBUGMENU_FORM_X		(screenWidth - DEBUGMENU_FORM_W)		//pie_GetVideoBufferWidth() ?
-#define DEBUGMENU_FORM_Y		110 + D_H
-
-#define DEBUGMENU_ENTRY_H		20
+static std::string current_searchString;
 
 #define MULTIMENU_FORM_X		10 + D_W
 #define MULTIMENU_FORM_Y		23 + D_H
@@ -117,7 +108,6 @@ UDWORD	current_numplayers = 4;
 /// requester stuff.
 #define M_REQUEST_CLOSE (MULTIMENU+49)
 #define M_REQUEST		(MULTIMENU+50)
-#define M_REQUEST_TAB	(MULTIMENU+51)
 
 #define M_REQUEST_C1	(MULTIMENU+61)
 #define M_REQUEST_C2	(MULTIMENU+62)
@@ -158,8 +148,6 @@ bool			multiRequestUp = false;				//multimenu is up.
 static unsigned         hoverPreviewId;
 static bool		giftsUp[MAX_PLAYERS] = {true};		//gift buttons for player are up.
 
-char		debugMenuEntry[DEBUGMENU_MAX_ENTRIES][MAX_STR_LENGTH];
-
 // ////////////////////////////////////////////////////////////////////////////
 // Map / force / name load save stuff.
 
@@ -188,91 +176,20 @@ static void SetPlayerTextColor(int mode, UDWORD player)
 		iV_SetTextColour(WZCOL_RED);			// Enemy color
 	}
 }
-// ////////////////////////////////////////////////////////////////////////////
-// enumerates maps in the gamedesc file.
-// returns only maps that are valid the right 'type'
-static LEVEL_DATASET *enumerateMultiMaps(bool first, unsigned camToUse, unsigned numPlayers)
-{
-	static LEVEL_DATASET *lev;
-	unsigned int cam;
-
-	if (first)
-	{
-		lev = psLevels;
-	}
-	while (lev)
-	{
-		if (game.type == SKIRMISH)
-		{
-			if (lev->type == MULTI_SKIRMISH2)
-			{
-				cam = 2;
-			}
-			else if (lev->type == MULTI_SKIRMISH3)
-			{
-				cam = 3;
-			}
-			else
-			{
-				cam = 1;
-			}
-
-			if ((lev->type == SKIRMISH || lev->type == MULTI_SKIRMISH2 || lev->type == MULTI_SKIRMISH3)
-			    && (numPlayers == 0 || numPlayers == lev->players)
-			    && cam == camToUse)
-			{
-				LEVEL_DATASET *found = lev;
-
-				lev = lev->psNext;
-				return found;
-			}
-		}
-		else	//  campaign
-		{
-// 'service pack 1'
-			if (lev->type == MULTI_CAMPAIGN2)
-			{
-				cam = 2;
-			}
-			else if (lev->type == MULTI_CAMPAIGN3)
-			{
-				cam = 3;
-			}
-			else
-			{
-				cam = 1;
-			}
-//	end of service pack
-
-			if ((lev->type == CAMPAIGN || lev->type == MULTI_CAMPAIGN2 || lev->type == MULTI_CAMPAIGN3)
-			    && (numPlayers == 0 || numPlayers == lev->players)
-			    && cam == camToUse)
-			{
-				LEVEL_DATASET *found = lev;
-
-				lev = lev->psNext;
-				return found;
-			}
-		}
-		lev = lev->psNext;
-	}
-
-	return NULL;
-}
 
 // ////////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////////
-void displayRequestOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+void displayRequestOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
 	LEVEL_DATASET *mapData = (LEVEL_DATASET *)psWidget->pUserData;
 
-	UDWORD	x = xOffset + psWidget->x;
-	UDWORD	y = yOffset + psWidget->y;
+	int x = xOffset + psWidget->x();
+	int y = yOffset + psWidget->y();
 	char  butString[255];
 
-	sstrcpy(butString, ((W_BUTTON *)psWidget)->pTip);
+	sstrcpy(butString, ((W_BUTTON *)psWidget)->pTip.toUtf8().constData());
 
-	drawBlueBox(x, y, psWidget->width, psWidget->height);	//draw box
+	drawBlueBox(x, y, psWidget->width(), psWidget->height());
 
 	iV_SetFont(font_regular);					// font
 
@@ -286,7 +203,7 @@ void displayRequestOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIEL
 	}
 
 
-	while (iV_GetTextWidth(butString) > psWidget->width - 10)
+	while (iV_GetTextWidth(butString) > psWidget->width() - 10)
 	{
 		butString[strlen(butString) - 1] = '\0';
 	}
@@ -311,11 +228,12 @@ void displayRequestOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIEL
 			iV_SetFont(font_small);
 			iV_SetTextColour(WZCOL_TEXT_DARK);
 			sstrcpy(butString, hash.toString().c_str());
-			while (iV_GetTextWidth(butString) > psWidget->width - 10 - (8 + mapData->players * 6))
+			while (iV_GetTextWidth(butString) > psWidget->width() - 10 - (8 + mapData->players * 6))
 			{
 				butString[strlen(butString) - 1] = '\0';
 			}
 			iV_DrawText(butString, x + 6 + 8 + mapData->players * 6, y + 26);
+			iV_SetFont(font_regular);
 		}
 
 		// if map, then draw no. of players.
@@ -329,13 +247,14 @@ void displayRequestOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIEL
 // ////////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////////
 
-static void displayCamTypeBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+static void displayCamTypeBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
-	UDWORD	x = xOffset + psWidget->x;
-	UDWORD	y = yOffset + psWidget->y;
+	int x = xOffset + psWidget->x();
+	int y = yOffset + psWidget->y();
 	char buffer[8];
 
-	drawBlueBox(x, y, psWidget->width, psWidget->height);	//draw box
+	iV_SetFont(font_regular);
+	drawBlueBox(x, y, psWidget->width(), psWidget->height());
 	sprintf(buffer, "T%i", (int)(psWidget->UserData));
 	if ((unsigned int)(psWidget->UserData) == current_tech)
 	{
@@ -348,13 +267,14 @@ static void displayCamTypeBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, 
 	iV_DrawText(buffer, x + 2, y + 12);
 }
 
-static void displayNumPlayersBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+static void displayNumPlayersBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
-	UDWORD	x = xOffset + psWidget->x;
-	UDWORD	y = yOffset + psWidget->y;
+	int x = xOffset + psWidget->x();
+	int y = yOffset + psWidget->y();
 	char buffer[8];
 
-	drawBlueBox(x, y, psWidget->width, psWidget->height);	//draw box
+	iV_SetFont(font_regular);
+	drawBlueBox(x, y, psWidget->width(), psWidget->height());
 	if ((unsigned int)(psWidget->UserData) == current_numplayers)
 	{
 		iV_SetTextColour(WZCOL_TEXT_BRIGHT);
@@ -376,19 +296,49 @@ static void displayNumPlayersBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffse
 
 }
 
-#define NBTIPS 512
-
-static unsigned int check_tip_index(unsigned int i)
+static int stringRelevance(std::string const &string, std::string const &search)
 {
-	if (i < NBTIPS)
+	QString str = QString::fromUtf8(string.c_str()).normalized(QString::NormalizationForm_KD);
+	QString sea = QString::fromUtf8(search.c_str()).normalized(QString::NormalizationForm_KD);
+	int strDim = str.size() + 1;
+	int seaDim = sea.size() + 1;
+
+	if (strDim > 10000 || seaDim > 10000 || strDim * seaDim > 100000)
 	{
-		return i;
+		return 0;
 	}
-	else
-	{
-		debug(LOG_MAIN, "Tip window index too high (%ud)", i);
-		return NBTIPS - 1;
-	}
+
+	std::vector<unsigned> scores(strDim * seaDim);
+	for (int sum = 0; sum <= str.size() + sea.size(); ++sum)
+		for (int iStr = std::max(0, sum - sea.size()); iStr <= std::min(str.size(), sum - 0); ++iStr)
+		{
+			int iSea = sum - iStr;
+			unsigned score = 0;
+			if (iStr > 0 && iSea > 0)
+			{
+				score = (scores[iStr - 1 + (iSea - 1) * strDim] + 1) | 1;
+				QChar a = str[iStr - 1], b = sea[iSea - 1];
+				if (a == b)
+				{
+					score += 100;
+				}
+				else if (a.toUpper() == b.toUpper())
+				{
+					score += 80;
+				}
+			}
+			if (iStr > 0)
+			{
+				score = std::max(score, scores[iStr - 1 + iSea * strDim] & ~1);
+			}
+			if (iSea > 0)
+			{
+				score = std::max(score, scores[iStr + (iSea - 1) * strDim] & ~1);
+			}
+			scores[iStr + iSea * strDim] = score;
+		}
+
+	return scores[str.size() + sea.size() * strDim];
 }
 
 /** Searches in the given search directory for files ending with the
@@ -401,17 +351,10 @@ static unsigned int check_tip_index(unsigned int i)
  *  \param mode (purpose unknown)
  *  \param numPlayers (purpose unknown)
  */
-void addMultiRequest(const char *searchDir, const char *fileExtension, UDWORD mode, UBYTE mapCam, UBYTE numPlayers)
+void addMultiRequest(const char *searchDir, const char *fileExtension, UDWORD mode, UBYTE mapCam, UBYTE numPlayers, std::string const &searchString)
 {
-	char             **fileList;
-	char             **currFile;
 	const unsigned int extensionLength = strlen(fileExtension);
 	const unsigned int buttonsX = (mode == MULTIOP_MAP) ? 22 : 17;
-
-	unsigned int       numButtons, count, butPerForm, i;
-
-	static char		tips[NBTIPS][MAX_STR_LENGTH];
-
 
 	context = mode;
 	if (mode == MULTIOP_MAP)
@@ -419,97 +362,24 @@ void addMultiRequest(const char *searchDir, const char *fileExtension, UDWORD mo
 		// only save these when they select MAP button
 		current_tech = mapCam;
 		current_numplayers = numPlayers;
+		current_searchString = searchString;
 	}
-	fileList = PHYSFS_enumerateFiles(searchDir);
-	if (!fileList)
-	{
-		debug(LOG_FATAL, "addMultiRequest: Out of memory");
-		abort();
-		return;
-	}
+	char **fileList = PHYSFS_enumerateFiles(searchDir);
 
-	// Count number of required buttons
-	numButtons = 0;
-	for (currFile = fileList; *currFile != NULL; ++currFile)
-	{
-		const unsigned int fileNameLength = strlen(*currFile);
+	psRScreen = new W_SCREEN; ///< move this to intinit or somewhere like that.. (close too.)
 
-		// Check to see if this file matches the given extension
-		if (fileNameLength > extensionLength
-		    && strcmp(&(*currFile)[fileNameLength - extensionLength], fileExtension) == 0)
-		{
-			++numButtons;
-		}
-	}
-
-	if (mode == MULTIOP_MAP)									// if its a map, also look in the predone stuff.
-	{
-		bool first = true;
-		while (enumerateMultiMaps(first, mapCam, numPlayers) != NULL)
-		{
-			first = false;
-			numButtons++;
-		}
-	}
-
-	psRScreen = widgCreateScreen(); ///< move this to intinit or somewhere like that.. (close too.)
-	widgSetTipFont(psRScreen, font_regular);
-
-	/* Calculate how many buttons will go on a single form */
-	butPerForm = ((M_REQUEST_W - 0 - 4) /
-	              (R_BUT_W + 4)) *
-	             ((M_REQUEST_H - 0 - 4) /
-	              (R_BUT_H + 4));
+	WIDGET *parent = psRScreen->psForm;
 
 	/* add a form to place the tabbed form on */
-	W_FORMINIT sFormInit;
-	sFormInit.formID = 0;
-	sFormInit.id = M_REQUEST;
-	sFormInit.style = WFORM_PLAIN;
-	sFormInit.x = (SWORD)(M_REQUEST_X + D_W);
-	sFormInit.y = (SWORD)(M_REQUEST_Y + D_H);
-	sFormInit.width = M_REQUEST_W;
-	sFormInit.height = M_REQUEST_H;
-	sFormInit.disableChildren = true;
-	sFormInit.pDisplay = intOpenPlainForm;
-	widgAddForm(psRScreen, &sFormInit);
+	IntFormAnimated *requestForm = new IntFormAnimated(parent);
+	requestForm->id = M_REQUEST;
+	requestForm->setGeometry(M_REQUEST_X + D_W, M_REQUEST_Y + D_H, M_REQUEST_W, M_REQUEST_H);
 
-	/* Add the tabs */
-	sFormInit = W_FORMINIT();
-	sFormInit.formID = M_REQUEST;
-	sFormInit.id = M_REQUEST_TAB;
-	sFormInit.style = WFORM_TABBED;
-	sFormInit.x = 2;
-	sFormInit.y = 2;
-	sFormInit.width = M_REQUEST_W;
-	sFormInit.height = M_REQUEST_H - 4;
-
-	sFormInit.numMajor = numForms(numButtons, butPerForm);
-
-	sFormInit.majorPos = WFORM_TABTOP;
-	sFormInit.minorPos = WFORM_TABNONE;
-	sFormInit.majorSize = OBJ_TABWIDTH + 2;
-	sFormInit.majorOffset = OBJ_TABOFFSET;
-	sFormInit.tabVertOffset = (OBJ_TABHEIGHT / 2);
-	sFormInit.tabMajorThickness = OBJ_TABHEIGHT;
-	sFormInit.pUserData = &StandardTab;
-	sFormInit.pTabDisplay = intDisplayTab;
-
-	// TABFIXME:
-	// This appears to be the map pick screen, when we have lots of maps
-	// this will need to change.
-	if (sFormInit.numMajor > MAX_TAB_STD_SHOWN)
-	{
-		ASSERT(sFormInit.numMajor < MAX_TAB_SMALL_SHOWN, "Too many maps! Need scroll tabs here.");
-		sFormInit.pUserData = &SmallTab;
-		sFormInit.majorSize /= 2;
-	}
-
-	for (i = 0; i < sFormInit.numMajor; ++i)
-	{
-		sFormInit.aNumMinors[i] = 2;
-	}
-	widgAddForm(psRScreen, &sFormInit);
+	// Add the button list.
+	IntListTabWidget *requestList = new IntListTabWidget(requestForm);
+	requestList->setChildSize(R_BUT_W, R_BUT_H);
+	requestList->setChildSpacing(4, 4);
+	requestList->setGeometry(2 + buttonsX, 2, M_REQUEST_W - buttonsX, M_REQUEST_H - 4);
 
 	// Add the close button.
 	W_BUTINIT sButInit;
@@ -524,129 +394,75 @@ void addMultiRequest(const char *searchDir, const char *fileExtension, UDWORD mo
 	sButInit.UserData = PACKDWORD_TRI(0, IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
 	widgAddButton(psRScreen, &sButInit);
 
-	/* Put the buttons on it *//* Set up the button struct */
-	sButInit = W_BUTINIT();
-	sButInit.formID		= M_REQUEST_TAB;
-	sButInit.id		= M_REQUEST_BUT;
-	sButInit.x		= buttonsX;
-	sButInit.y		= 4;
-	sButInit.width		= R_BUT_W;
-	sButInit.height		= R_BUT_H;
-	sButInit.pUserData	= NULL;
-	sButInit.pDisplay	= displayRequestOption;
-
-	for (currFile = fileList, count = 0; *currFile != NULL && count < (butPerForm * 4); ++currFile)
+	// Put the buttons on it.
+	int nextButtonId = M_REQUEST_BUT;
+	for (char **currFile = fileList; *currFile != NULL; ++currFile)
 	{
-		const unsigned int tip_index = check_tip_index(sButInit.id - M_REQUEST_BUT);
 		const unsigned int fileNameLength = strlen(*currFile);
-		const unsigned int tipStringLength = fileNameLength - extensionLength;
 
 		// Check to see if this file matches the given extension
-		if (!(fileNameLength > extensionLength)
+		if (fileNameLength <= extensionLength
 		    || strcmp(&(*currFile)[fileNameLength - extensionLength], fileExtension) != 0)
 		{
 			continue;
 		}
 
+		char *withoutExtension = strdup(*currFile);
+		withoutExtension[fileNameLength - extensionLength] = '\0';
+
 		// Set the tip and add the button
+		W_BUTTON *button = new W_BUTTON(requestList);
+		button->id = nextButtonId;
+		button->setTip(withoutExtension);
+		button->setString(withoutExtension);
+		button->displayFunction = displayRequestOption;
+		requestList->addWidgetToLayout(button);
 
-		// Copy all of the filename except for the extension into the tiptext string
-		strlcpy(tips[tip_index], *currFile, MIN(tipStringLength + 1, sizeof(tips[tip_index])));
-
-		sButInit.pTip		= tips[tip_index];
-		sButInit.pText		= tips[tip_index];
-
-		if (mode == MULTIOP_MAP)											// if its a map, set player flag.
-		{
-			ASSERT(false, "Confusing code, can we even get here?");
-
-			const char *mapText;
-			unsigned int mapTextLength;
-
-			sButInit.UserData = (*currFile)[0] - '0';
-
-			if ((*currFile)[1] != 'c')
-			{
-				continue;
-			}
-
-			// Chop off description
-			mapText = strrchr(*currFile, '-') + 1;
-			if (mapText - 1 == NULL)
-			{
-				continue;
-			}
-
-			mapTextLength = tipStringLength - (mapText - *currFile);
-			strlcpy(tips[tip_index], mapText, MIN(mapTextLength + 1, sizeof(tips[tip_index])));
-		}
-
-		++count;
-		widgAddButton(psRScreen, &sButInit);
+		free(withoutExtension);
 
 		/* Update the init struct for the next button */
-		sButInit.id += 1;
-		sButInit.x = (SWORD)(sButInit.x + (R_BUT_W + 4));
-		if (sButInit.x + R_BUT_W + 2 > M_REQUEST_W)
-		{
-			sButInit.x = buttonsX;
-			sButInit.y = (SWORD)(sButInit.y + R_BUT_H + 4);
-		}
-		if (sButInit.y + R_BUT_H + 4 > M_REQUEST_H)
-		{
-			sButInit.y = 4;
-			sButInit.majorID += 1;
-		}
+		++nextButtonId;
 	}
 
 	// Make sure to return memory back to PhyscisFS
 	PHYSFS_freeList(fileList);
 
-	if (mode == MULTIOP_MAP)
-	{
-		LEVEL_DATASET *mapData;
-		bool first = true;
-		while ((mapData = enumerateMultiMaps(first, mapCam, numPlayers)) != NULL)
-		{
-			first = false;
-
-			unsigned int tip_index = check_tip_index(sButInit.id - M_REQUEST_BUT);
-
-			// add number of players to string.
-			sstrcpy(tips[tip_index], mapData->pName);
-
-			sButInit.pTip = tips[tip_index];
-			sButInit.pText = tips[tip_index];
-			sButInit.pUserData = mapData;
-
-			widgAddButton(psRScreen, &sButInit);
-
-			sButInit.id += 1;
-			sButInit.x = (SWORD)(sButInit.x + (R_BUT_W + 4));
-			if (sButInit.x + R_BUT_W + 2 > M_REQUEST_W)
-			{
-				sButInit.x = buttonsX;
-				sButInit.y = (SWORD)(sButInit.y + R_BUT_H + 4);
-			}
-			if (sButInit.y + R_BUT_H + 4 > M_REQUEST_H)
-			{
-				sButInit.y = 4;
-				sButInit.majorID += 1;
-			}
-		}
-	}
 	multiRequestUp = true;
 	hoverPreviewId = 0;
 
-
-	// if it's map select then add the cam style buttons.
 	if (mode == MULTIOP_MAP)
 	{
+		LEVEL_LIST levels = enumerateMultiMaps(mapCam, numPlayers);
+		using Pair = std::pair<int, W_BUTTON *>;
+		std::vector<Pair> buttons;
+
+		for (auto mapData : levels)
+		{
+			// add number of players to string.
+			W_BUTTON *button = new W_BUTTON(requestList);
+			button->id = nextButtonId;
+			button->setTip(mapData->pName);
+			button->setString(mapData->pName);
+			button->pUserData = mapData;
+			button->displayFunction = displayRequestOption;
+			buttons.push_back({stringRelevance(mapData->pName, searchString), button});
+
+			++nextButtonId;
+		}
+		std::stable_sort(buttons.begin(), buttons.end(), [](Pair const &a, Pair const &b) {
+			return a.first > b.first;
+		});
+		for (Pair const &p : buttons)
+		{
+			requestList->addWidgetToLayout(p.second);
+		}
+
+		// if it's map select then add the cam style buttons.
 		sButInit = W_BUTINIT();
-		sButInit.formID		= M_REQUEST_TAB;
+		sButInit.formID		= M_REQUEST;
 		sButInit.id		= M_REQUEST_C1;
-		sButInit.x		= 1;
-		sButInit.y		= 252;
+		sButInit.x              = 3;
+		sButInit.y              = 254;
 		sButInit.width		= 17;
 		sButInit.height		= 17;
 		sButInit.UserData	= 1;
@@ -686,22 +502,23 @@ void addMultiRequest(const char *searchDir, const char *fileExtension, UDWORD mo
 			widgAddButton(psRScreen, &sButInit);
 		}
 	}
-
 }
 
 static void closeMultiRequester(void)
 {
-	widgDelete(psRScreen, M_REQUEST);
 	multiRequestUp = false;
 	resetReadyStatus(false);
-	widgReleaseScreen(psRScreen);		// move this to the frontend shutdown...
+	delete psRScreen;  // move this to the frontend shutdown...
+	psRScreen = NULL;
 	return;
 }
 
-bool runMultiRequester(UDWORD id, UDWORD *mode, char *chosen, LEVEL_DATASET **chosenValue, bool *isHoverPreview)
+bool runMultiRequester(UDWORD id, UDWORD *mode, QString *chosen, LEVEL_DATASET **chosenValue, bool *isHoverPreview)
 {
 	static unsigned hoverId = 0;
 	static unsigned hoverStartTime = 0;
+
+	*isHoverPreview = false;
 
 	if ((id == M_REQUEST_CLOSE) || CancelPressed())			// user hit close box || hit the cancel key
 	{
@@ -727,7 +544,7 @@ bool runMultiRequester(UDWORD id, UDWORD *mode, char *chosen, LEVEL_DATASET **ch
 	}
 	if (id >= M_REQUEST_BUT && id <= M_REQUEST_BUTM)  // chose a file.
 	{
-		strcpy(chosen, ((W_BUTTON *)widgGetFromID(psRScreen, id))->pText);
+		*chosen = ((W_BUTTON *)widgGetFromID(psRScreen, id))->pText;
 
 		*chosenValue = (LEVEL_DATASET *)((W_BUTTON *)widgGetFromID(psRScreen, id))->pUserData;
 		*mode = context;
@@ -749,19 +566,19 @@ bool runMultiRequester(UDWORD id, UDWORD *mode, char *chosen, LEVEL_DATASET **ch
 	{
 	case M_REQUEST_C1:
 		closeMultiRequester();
-		addMultiRequest(MultiCustomMapsPath, ".wrf", MULTIOP_MAP, 1, current_numplayers);
+		addMultiRequest(MultiCustomMapsPath, ".wrf", MULTIOP_MAP, 1, current_numplayers, current_searchString);
 		break;
 	case M_REQUEST_C2:
 		closeMultiRequester();
-		addMultiRequest(MultiCustomMapsPath, ".wrf", MULTIOP_MAP, 2, current_numplayers);
+		addMultiRequest(MultiCustomMapsPath, ".wrf", MULTIOP_MAP, 2, current_numplayers, current_searchString);
 		break;
 	case M_REQUEST_C3:
 		closeMultiRequester();
-		addMultiRequest(MultiCustomMapsPath, ".wrf", MULTIOP_MAP, 3, current_numplayers);
+		addMultiRequest(MultiCustomMapsPath, ".wrf", MULTIOP_MAP, 3, current_numplayers, current_searchString);
 		break;
 	case M_REQUEST_AP:
 		closeMultiRequester();
-		addMultiRequest(MultiCustomMapsPath, ".wrf", MULTIOP_MAP, current_tech, 0);
+		addMultiRequest(MultiCustomMapsPath, ".wrf", MULTIOP_MAP, current_tech, 0, current_searchString);
 		break;
 	default:
 		for (unsigned numPlayers = 2; numPlayers <= MAX_PLAYERS_IN_GUI; ++numPlayers)
@@ -769,7 +586,7 @@ bool runMultiRequester(UDWORD id, UDWORD *mode, char *chosen, LEVEL_DATASET **ch
 			if (id == M_REQUEST_NP[numPlayers - 2])
 			{
 				closeMultiRequester();
-				addMultiRequest(MultiCustomMapsPath, ".wrf", MULTIOP_MAP, current_tech, numPlayers);
+				addMultiRequest(MultiCustomMapsPath, ".wrf", MULTIOP_MAP, current_tech, numPlayers, current_searchString);
 				break;
 			}
 		}
@@ -869,16 +686,16 @@ static void displayExtraGubbins(UDWORD height)
 }
 
 
-static void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+static void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
 	char str[128];
-	int x = xOffset + psWidget->x;
-	int y = yOffset + psWidget->y;
+	int x = xOffset + psWidget->x();
+	int y = yOffset + psWidget->y();
 	unsigned player = psWidget->UserData;  // Get the in game player number.
 
 	if (responsibleFor(player, 0))
 	{
-		displayExtraGubbins(widgGetFromID(psWScreen, MULTIMENU_FORM)->height);
+		displayExtraGubbins(widgGetFromID(psWScreen, MULTIMENU_FORM)->height());
 	}
 
 	iV_SetFont(font_regular);  // font
@@ -902,11 +719,11 @@ static void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 
 		//c3-7 alliance
 		//manage buttons by showing or hiding them. gifts only in campaign,
-		if (game.alliance != NO_ALLIANCES)
+		if (alliancesCanGiveAnything(game.alliance))
 		{
 			if (isAlly && !isSelectedPlayer && !giftsUp[player])
 			{
-				if (game.alliance != ALLIANCES_TEAMS)
+				if (alliancesCanGiveResearchAndRadar(game.alliance))
 				{
 					widgReveal(psWScreen, MULTIMENU_GIFT_RAD + player);
 					widgReveal(psWScreen, MULTIMENU_GIFT_RES + player);
@@ -917,7 +734,7 @@ static void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 			}
 			else if (!isAlly && !isSelectedPlayer && giftsUp[player])
 			{
-				if (game.alliance != ALLIANCES_TEAMS)
+				if (alliancesCanGiveResearchAndRadar(game.alliance))
 				{
 					widgHide(psWScreen, MULTIMENU_GIFT_RAD + player);
 					widgHide(psWScreen, MULTIMENU_GIFT_RES + player);
@@ -932,7 +749,6 @@ static void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 	// Let's use the real score for MP games
 	if (NetPlay.bComms)
 	{
-		//c8:score,
 		if (Cheated)
 		{
 			sprintf(str, "(cheated)");
@@ -1016,7 +832,7 @@ static void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 	{
 		pie_SetGeometricOffset(MULTIMENU_FORM_X + MULTIMENU_C1 , y + MULTIMENU_PLAYER_H);
 		Vector3i rotation(-15, 45, 0);
-		Position position(0, 0, 2000);  // Scale them.
+		Position position(0, 0, BUTTON_DEPTH);  // Scale them.
 		if (displayDroid->droidType == DROID_SUPERTRANSPORTER)
 		{
 			position.z = 7850;
@@ -1026,7 +842,7 @@ static void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 			position.z = 4100;
 		}
 
-		displayComponentButtonObject(displayDroid, &rotation, &position, false, 100);
+		displayComponentButtonObject(displayDroid, &rotation, &position, 100);
 	}
 	else if (apsDroidLists[player])
 	{
@@ -1054,28 +870,10 @@ static void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset,
 	}
 }
 
-static void displayDebugMenu(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
-{
-	char			str[128];
-	UDWORD			x					= xOffset + psWidget->x;
-	UDWORD			y					= yOffset + psWidget->y;
-	UDWORD			index = psWidget->UserData;
-
-	iV_SetFont(font_regular);											// font
-	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
-
-	if (strcmp(debugMenuEntry[index], ""))
-	{
-		sprintf(str, "%s", debugMenuEntry[index]);
-		iV_DrawText(str, x, y + MULTIMENU_FONT_OSET);
-	}
-}
-
-
 // ////////////////////////////////////////////////////////////////////////////
 // alliance display funcs
 
-static void displayAllianceState(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+static void displayAllianceState(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
 	UDWORD a, b, c, player = psWidget->UserData;
 	switch (alliances[selectedPlayer][player])
@@ -1104,11 +902,11 @@ static void displayAllianceState(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffse
 	}
 
 	psWidget->UserData = PACKDWORD_TRI(a, b, c);
-	intDisplayImageHilight(psWidget,  xOffset,  yOffset, pColours);
+	intDisplayImageHilight(psWidget,  xOffset,  yOffset);
 	psWidget->UserData = player;
 }
 
-static void displayChannelState(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, PIELIGHT *pColours)
+static void displayChannelState(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
 	UDWORD player = psWidget->UserData;
 
@@ -1120,7 +918,7 @@ static void displayChannelState(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset
 	{
 		psWidget->UserData = PACKDWORD_TRI(0, IMAGE_MULTI_NOCHAN, IMAGE_MULTI_NOCHAN);
 	}
-	intDisplayImageHilight(psWidget, xOffset, yOffset, pColours);
+	intDisplayImageHilight(psWidget, xOffset, yOffset);
 	psWidget->UserData = player;
 }
 
@@ -1146,12 +944,6 @@ static void addMultiPlayer(UDWORD player, UDWORD pos)
 	sFormInit.UserData		  = player;
 	widgAddForm(psWScreen, &sFormInit);
 
-	//name,
-	//score,
-	//kills,
-	//ping
-	//ALL DONE IN THE DISPLAY FUNC.
-
 	W_BUTINIT sButInit;
 
 	// add channel opener.
@@ -1169,7 +961,7 @@ static void addMultiPlayer(UDWORD player, UDWORD pos)
 		widgAddButton(psWScreen, &sButInit);
 	}
 
-	if (game.alliance != NO_ALLIANCES && player != selectedPlayer)
+	if (alliancesCanGiveAnything(game.alliance) && player != selectedPlayer)
 	{
 		//alliance
 		sButInit.x		= MULTIMENU_C3;
@@ -1182,7 +974,7 @@ static void addMultiPlayer(UDWORD player, UDWORD pos)
 		sButInit.UserData = player;
 
 		//can't break alliances in 'Locked Teams' mode
-		if (game.alliance != ALLIANCES_TEAMS)
+		if (!alliancesFixed(game.alliance))
 		{
 			widgAddButton(psWScreen, &sButInit);
 		}
@@ -1192,7 +984,7 @@ static void addMultiPlayer(UDWORD player, UDWORD pos)
 		// add the gift buttons.
 		sButInit.y		+= 1;	// move down a wee bit.
 
-		if (game.alliance != ALLIANCES_TEAMS)
+		if (alliancesCanGiveResearchAndRadar(game.alliance))
 		{
 			sButInit.id		= MULTIMENU_GIFT_RAD + player;
 			sButInit.x		= MULTIMENU_C4;
@@ -1223,125 +1015,6 @@ static void addMultiPlayer(UDWORD player, UDWORD pos)
 	}
 }
 
-/* Output some text to the debug menu */
-void setDebugMenuEntry(char *entry, SDWORD index)
-{
-	bool		bAddingNew = false;
-
-	/* New one? */
-	if (!strcmp(debugMenuEntry[index], ""))
-	{
-		bAddingNew = true;
-	}
-
-	/* Set */
-	sstrcpy(debugMenuEntry[index], entry);
-
-	/* Re-open it if already open to recalculate height */
-	if (DebugMenuUp && bAddingNew)
-	{
-		intCloseDebugMenuNoAnim();
-		(void)addDebugMenu(true);
-	}
-}
-
-void intCloseDebugMenuNoAnim(void)
-{
-	//widgDelete(psWScreen, DEBUGMENU_CLOSE);
-	widgDelete(psWScreen, DEBUGMENU);
-	DebugMenuUp = false;
-	//intMode		= INT_NORMAL;
-}
-
-/* Opens/closes a 'watch' window (Default key combo: Alt+Space),
- * only available in debug mode
- */
-bool addDebugMenu(bool bAdd)
-{
-	UDWORD			i, pos = 0, formHeight = 0;
-
-	/* Close */
-	if (!bAdd)	//|| widgGetFromID(psWScreen,DEBUGMENU)
-	{
-		intCloseDebugMenuNoAnim();
-		return true;
-	}
-
-	intResetScreen(false);
-
-	// calculate required height.
-	formHeight = 12;		//DEBUGMENU_ENTRY_H
-	for (i = 0; i < DEBUGMENU_MAX_ENTRIES; i++)
-	{
-		if (strcmp(debugMenuEntry[i], ""))
-		{
-			formHeight += DEBUGMENU_ENTRY_H;
-		}
-	}
-
-	// add form
-	W_FORMINIT sFormInit;
-	sFormInit.formID		  = 0;
-	sFormInit.id			  = DEBUGMENU;
-	sFormInit.style			  = WFORM_PLAIN;
-	sFormInit.x				  = (SWORD)(DEBUGMENU_FORM_X);
-	sFormInit.y				  = (SWORD)(DEBUGMENU_FORM_Y);
-	sFormInit.width			  = DEBUGMENU_FORM_W;
-	sFormInit.height          = formHeight;
-	sFormInit.pDisplay		  = intOpenPlainForm;
-	sFormInit.disableChildren = true;
-
-	if (!widgAddForm(psWScreen, &sFormInit))
-	{
-		return false;
-	}
-
-	// add debug info
-	pos = 0;
-	for (i = 0; i < DEBUGMENU_MAX_ENTRIES; i++)
-	{
-		if (strcmp(debugMenuEntry[i], ""))
-		{
-			// add form
-			sFormInit = W_FORMINIT();
-			sFormInit.formID		  = DEBUGMENU;
-			sFormInit.id			  = DEBUGMENU_CLOSE + pos + 1;
-			sFormInit.style			  = WFORM_PLAIN;
-			sFormInit.x				  = 5;
-			sFormInit.y				  = 5 + DEBUGMENU_ENTRY_H * pos;
-			sFormInit.width			  = DEBUGMENU_FORM_W;
-			sFormInit.height		  = DEBUGMENU_ENTRY_H;
-			sFormInit.pDisplay		  = displayDebugMenu;
-			sFormInit.UserData		  = i;
-			widgAddForm(psWScreen, &sFormInit);
-
-			pos++;
-		}
-	}
-
-	// Add the close button.
-	/*
-	sButInit.formID = DEBUGMENU;
-	sButInit.id = DEBUGMENU_CLOSE;
-	sButInit.style = WBUT_PLAIN;
-	sButInit.x = DEBUGMENU_FORM_W - CLOSE_WIDTH;
-	sButInit.y = 0;
-	sButInit.width = CLOSE_WIDTH;
-	sButInit.height = CLOSE_HEIGHT;
-	sButInit.pTip = _("Close");
-	sButInit.FontID = font_regular;
-	sButInit.pDisplay = intDisplayImageHilight;
-	sButInit.pUserData = (void*)PACKDWORD_TRI(0,IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
-	if (!widgAddButton(psWScreen, &sButInit))
-	{
-		return false;
-	} */
-
-	DebugMenuUp = true;
-
-	return true;
-}
-
 bool intAddMultiMenu(void)
 {
 	UDWORD			i;
@@ -1358,22 +1031,12 @@ bool intAddMultiMenu(void)
 		intResetScreen(false);
 	}
 
-	// add form
-	W_FORMINIT sFormInit;
-	sFormInit.formID		  = 0;
-	sFormInit.id			  = MULTIMENU_FORM;
-	sFormInit.style			  = WFORM_PLAIN;
-	sFormInit.x				  = (SWORD)(MULTIMENU_FORM_X);
-	sFormInit.y				  = (SWORD)(MULTIMENU_FORM_Y);
-	sFormInit.width			  = MULTIMENU_FORM_W;
-	sFormInit.height          = MULTIMENU_PLAYER_H * game.maxPlayers + MULTIMENU_PLAYER_H + 7;
-	sFormInit.pDisplay		  = intOpenPlainForm;
-	sFormInit.disableChildren = true;
+	WIDGET *parent = psWScreen->psForm;
 
-	if (!widgAddForm(psWScreen, &sFormInit))
-	{
-		return false;
-	}
+	// add form
+	IntFormAnimated *multiMenuForm = new IntFormAnimated(parent);
+	multiMenuForm->id = MULTIMENU_FORM;
+	multiMenuForm->setGeometry(MULTIMENU_FORM_X, MULTIMENU_FORM_Y, MULTIMENU_FORM_W, MULTIMENU_PLAYER_H * game.maxPlayers + MULTIMENU_PLAYER_H + 7);
 
 	// add any players
 	for (i = 0; i < MAX_PLAYERS; i++)
@@ -1413,12 +1076,11 @@ bool intAddMultiMenu(void)
 // ////////////////////////////////////////////////////////////////////////////
 void intCloseMultiMenuNoAnim(void)
 {
-	if (!MultiMenuUp && !ClosingMultiMenu)
+	widgDelete(psWScreen, MULTIMENU_FORM);
+	if (!MultiMenuUp)
 	{
 		return;
 	}
-	widgDelete(psWScreen, MULTIMENU_CLOSE);
-	widgDelete(psWScreen, MULTIMENU_FORM);
 	MultiMenuUp = false;
 	if (intMode != INT_INTELMAP)
 	{
@@ -1430,23 +1092,16 @@ void intCloseMultiMenuNoAnim(void)
 // ////////////////////////////////////////////////////////////////////////////
 bool intCloseMultiMenu(void)
 {
-	W_TABFORM *Form;
-
 	if (!MultiMenuUp)
 	{
 		return true;
 	}
 
-	widgDelete(psWScreen, MULTIMENU_CLOSE);
-
 	// Start the window close animation.
-	Form = (W_TABFORM *)widgGetFromID(psWScreen, MULTIMENU_FORM);
-	if (Form)
+	IntFormAnimated *form = (IntFormAnimated *)widgGetFromID(psWScreen, MULTIMENU_FORM);
+	if (form != nullptr)
 	{
-		Form->display = intClosePlainForm;
-		Form->pUserData = NULL;	// Used to signal when the close anim has finished.
-		Form->disableChildren = true;
-		ClosingMultiMenu = true;
+		form->closeAnimateDelete();
 		MultiMenuUp  = false;
 	}
 

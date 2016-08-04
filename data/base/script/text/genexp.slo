@@ -36,7 +36,6 @@ public		RESEARCHSTAT	startTech[2][40];
 
 /* Transport Entry/Exit coords */
 public		int		transX[2], transY[2];	//done in arrays so don't need to define for non submaps
-//transX[0] = entryX, transX[1] = exitX
 public		INT		ReinforceTime, timeLimit;
 public		int		entryX[2], entryY[2], exitX[2], exitY[2];	//enemy transport entry, exit
 public		TEMPLATE	transporter;	//required for enemy transports landing
@@ -75,7 +74,6 @@ private		int		objectivesDone;
 /* Artifacts */
 public		SOUND		artSnd1, artSnd2;
 public		int		numArt, victoryArt, artType[6], artVal[6], artX[6], artY[6];
-//public		INTMESSAGE	artMsg[6];
 public		RESEARCHSTAT	artComp[6];
 private		FEATURE		artID[6];
 private		int		artFlag[6];
@@ -144,12 +142,12 @@ private		DROID		testDroid, newDroid;
 private		STRUCTURE	newDroidFactory;			//new droid built
 private		int		newDroidFactoryIndex;		//for phantom factories
 private		int		countBriefs, temp, temp1, temp2, tempX, tempY;
-private     int     countVideos;
+private		int		countVideos;
 private		STRUCTURE	hitStruc;				//Base Under Attack
-private		BASEOBJ	attackerObj;			//Base Under Attack
+private		BASEOBJ		attackerObj;			//Base Under Attack
 private		int		t;					//Base Under Attack time delay for next warning
 private		int		enemyCount;				//for enemy base attack stuff!
-private		FEATURE	feature;				//for building oil derricks on oil resources
+private		FEATURE		feature;				//for building oil derricks on oil resources
 
 /* Trucks stuff */
 public		BOOL		trucksOn;	//won't work without this set to TRUE!!!
@@ -514,7 +512,6 @@ event	briefings(inactive)
 	}
 }
 
-
 /* Base Under Attack */
 event baseHit(CALL_STRUCT_ATTACKED, selectedPlayer, ref hitStruc, ref attackerObj)
 {
@@ -637,7 +634,6 @@ event artLoop(artTrig)		//update artifact list
 			count = count + 1;
 		}
 	}
-
 }
 
 /* Enemy Base Blips */
@@ -763,7 +759,6 @@ event lostYetEvnt(inactive)	//triggered on (every, 25) now, set at end of start 
 				temp2 = 1;
 			}
 		}
-
 	}
 
 	// cope with failure set in other scripts
@@ -1010,7 +1005,6 @@ event checkGroups(checkGroupsTrig)
 		count = count + 1;
 	}
 }
-
 
 // not finished yet! Now includes attack groups as well as scout groups
 event sectorGroups(sectorGroupsTrig)
@@ -1308,7 +1302,6 @@ event droidBuilt(inactive)	//triggered by later callbacks
 				}
 				count2 = count2 + 1;
 			}
-			//count = numGroups;	//Don't skip next bit! (needs to go into a group, unlike Trucks!)
 		}
 	}
 
@@ -1383,7 +1376,6 @@ event droidBuilt(inactive)	//triggered by later callbacks
 					if (numStructsInArea(enemy[grpPlayer[count]], (LZX[temp1] - 4) * 128, (LZY[temp1] - 4) * 128,
 					                     (LZX[temp1] + 4) * 128, (LZY[temp1] + 4) * 128) == 0)
 					{
-						//playSound(lostSnd, player);	//test
 						factFlagGo[newDroidFactoryIndex] = FALSE;
 						factEvery[newDroidFactoryIndex] = 32767;	//make next time very large ~100 hours
 					}
@@ -1445,16 +1437,11 @@ event droidBuilt(inactive)	//triggered by later callbacks
 				groupAddGroup(grpGroup[count], grpReinforce[count]);
 				//grpPosCurrent[count] = grpPosMin[count];		//test for now so can see if added to group
 			}
-			//test order only!!!
-			//orderGroupLoc(grpGroup[count], DORDER_SCOUT, coordsX[grpPosCurrent[count]], coordsY[grpPosCurrent[count]]);
 			count = numGroups;	//exit early
 			temp2 = 1;
 		}
 		count = count + 1;
 	}
-	//if temp2 != 0, ie not assigned to a group, put in a special group for that player, and pull out if a group can take from any and
-	//needs reinforcing. (another event to check thru pooled group?)
-	//still to be done!
 }
 
 //hack to allow CALL_NEWDROID to work with unspecified enemy players!!!!
@@ -1649,7 +1636,6 @@ event timeGroupsEvnt(timeGroupsTrig)
 	}
 }
 
-
 event enemyBaseHit(CALL_STRUCT_ATTACKED, enemy[enemyCount], ref hitStruc, ref attackerObj)
 {
 	if ((attackerObj != NULLOBJECT) and(hitStruc != NULLOBJECT))
@@ -1683,7 +1669,6 @@ event enemyBaseHit(CALL_STRUCT_ATTACKED, enemy[enemyCount], ref hitStruc, ref at
 	}
 
 }
-
 
 //Updates enemyCount for enemyBaseHit event.
 event updateEnemy(updateEnemyTrig)

@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 2007  Giel van Schijndel
-	Copyright (C) 2007-2013  Warzone 2100 Project
+	Copyright (C) 2007-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -25,7 +25,7 @@
 #include "version.h"
 #include "stringdef.h"
 
-#include "src/autorevision.h"
+#include "src/autorevision.h"  // Apparently must add the "src/" so make doesn't needlessly recompile version.cpp every time.
 
 static const char vcs_branch_cstr[] = VCS_BRANCH;
 static const char vcs_tag[] = VCS_TAG;
@@ -37,7 +37,7 @@ static const char vcs_tag[] = VCS_TAG;
 */
 const char *version_getVersionString()
 {
-	static const char *version_string = NULL;
+	static const char *version_string = nullptr;
 
 	if (version_string == NULL)
 	{

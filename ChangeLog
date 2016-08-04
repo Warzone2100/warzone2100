@@ -1,3 +1,155 @@
+2016-07-28: Version 3.2.1
+ * General:
+   * Fix: Cursor flickering on some hardware (commit:ec3eb89550752db7098952af6aa79b20d4bfc9de, ticket:4450)
+   * Fix: Assert on burning babas in campaign (commit:31d9772e4ccda50de48325801397215e3a025f92)
+   * Fix: Assert when placing artefacts (commit:commit d3f56e0be196a1ed0f4f7c20f8a71cd144d70ffb)
+   * Fix: Crash on transition between alpha and beta campaign (commit:75778395a1ff635786329c12a2a9a637640b4be0, ticket:4439)
+   * Fix: Disappearing commander designs in campaign (commit:5a1142606b8fd86efdfe21dee856a2795ebc335c, ticket:4438)
+   * Fix: Wrong hit chance for cyborg grenadier, changed from 70 to 65 (commit:8a929fcbd29a433c1a150573555748c8b35ee6ad, ticket:4436)
+   * Fix: Reorder libs to fix linker error (commit:ff9631198cdfe7751a0f5c164ab15817c4cc6242)
+   * Fix: Incorrect rendering of structure turrets (commit:d1bfaa32c3b8bb85d8e046ad9b110d3d7fb4e0a6, ticket:4453)
+
+2016-07-10: Version 3.2.0
+ * General:
+   * Fix: Clear factory indicators when switching between commanders (commit:75da8d95bdd89724b8fe3d7b7816928e7773d071, ticket:1131)
+   * Fix: Do not clear chat on setting structure limits (commit:a10dc950080ec4ad757591f644afe1d2e917f74c, ticket:4276)
+   * Fix: Crash while loading map (commit:db886e7be065e3da25d1e7a106de5ede5e677a97, ticket:4426)
+   * Fix: Saving/loading of command and repair droids (commit:3c0e4c77da70c81e86e4383ec38e4a1da5e7e5de, ticket:4426)
+ * AI:
+   * Change: Update the NullBot AI to version 3.06 (commit:11ef36281652b2933d982bf2379f54dc2d4da6f5)
+
+2016-06-19: Version 3.2.0 beta4
+ * General:
+   * Change: Add default teams for Clover, Manhattan and MizaMaze (commit:d53404f63bdc543e577ca3ecd00e0ab783bdc8a5)
+   * Fix: Crash if construction droids were doing construction without being ordered to (commit:4c6d778351333bde00bedb1958965df23ccd1c98, ticket:4417, ticket:4417)
+   * Fix: Loading of default teams, given non-default starting positions (commit:d53404f63bdc543e577ca3ecd00e0ab783bdc8a5, ticket:4341)
+   * Fix: Desynch on destroying droids while trying to build droids at droid limit (commit:63506e684962a0639927abe5d7866f4b0bf1c6b0)
+ * Graphics:
+   * Change: Add team colour to repair facility turret (commit:2fd3a506080eaaca2e9cb96bf90e36199c152ab2, ticket:4415)
+   * Fix: Stretch to ground of defensive and wall structures did not work (commit:94d0afe21c515e63f8543aa694eba43be6584a95)
+   * Fix: Structure direction not taken into account when stretching to ground (commit:04df320e5a4df64c9e06153d5da00f951db55af8, ticket:4366)
+ * Balance:
+   * Fix: Weapon rate of fire upgrades did not take effect on burst-fire weapons (commit:9498600700129d69d3633adecef76ea1a4de33c0, ticket:4411)
+
+2016-05-28: Version 3.2.0 beta3
+ * General:
+   * Fix: Some maps would not load or give wrong minimap resolution (commit:e75d0f926540a505ca750691bdf0a1a95e8df8b4, ticket:4404, ticket:4405)
+   * Fix: Several issues related to saving and loading templates (commit:73dba8a5ed032f9388c8eb940595cd287029ae6c, ticket:4406)
+   * Fix: Superfluous templates removed and cyborgs added to cam2/cam3 starts (commit:fa8c431511308eeff70136f64febf4a62898334f, commit:0f312d0c8ca14c22dd448543771eec3c5cc9c561)
+   * Fix: Lobby console output (commit:c3080516a4e10c90cd6ef911c9ba5c874382217c, ticket:4403)
+   * Fix: Default template should not be present in tutorial (commit:85ac04406facd3a97342d1da45c256bc0fa47207, ticket:4402)
+   * Fix: Broken warning on exiting multiplayer games (commit:b93cac88d978dd0dd06a2c29928e12f5e2759b18, ticket:4384)
+   * Fix: Skewed video playback resolution (commit:be9548bdec4ac6e6644c04f5a0a2536e6190804e, ticket:4382)
+   * Fix: Dangling tooltip on removing owning widget (commit:04a68d30fea972502d83c64b0790ee7a48ad811e, ticket:4396)
+   * Fix: Cycle through menu lists consistently (commit:95d5bb5483e0919a2bb1dffa82ed85b0b3423501, ticket:3318)
+ * Balance:
+   * Fix: Improve repair droid targeting (commit:2b9b042cd8d0e9f9c736c39e0fe1d027416e8fff, commit:9d2108ed87e5e1f6319d78f53c12e1ca84be7869, ticket:3895, ticket:3362)
+   * Fix: Factory upgrades were set to incorrect values (commit:9e6857a7424518d834b7509f8dd9a44cdcebd696)
+ * Graphics:
+   * Fix: Resolution and screen settings (commit:630c624433ead2663c1576a8491f409ea5a5766e, ticket:4410, ticket:4386)
+ * Translations:
+   * Fix: Garbled translations in scripts due to parsing as Latin1 instead of UTF-8 (commit:ee69d3ae2974f41844cd311171053d81c3c43aac, ticket:4380)
+   * Fix: Language names for NSIS installer (commit:11fc451b41c98cd780ed1d5a3886cb6d30190ce6)
+   * Fix: Untranslatable text in lobby (commit:f03488e704b8a5fb93d6f861b615a2ba2348069c, ticket:4296)
+
+2016-05-16: Version 3.2.0 beta2
+ * Balance:
+   * Fix: Some weapon accuracy values tweaked to be closer to the 3.1 experience (commit:dc6ddae6953c7f8cb2b0bd073641f02ed348da8b)
+   * Fix: Inconsistent application of body upgrades (commit:11150dacac874ee973b94cee3a63175ed933d112, ticket:4369)
+ * General:
+   * Fix: Crash on choosing AI while another player clicks ready (commit:c58e747775fa3618d61b325e38fd4f15281220e3, ticket:4392)
+   * Fix: Small bodied droids did not count for transport capacity (commit:5e457617b67cf02baceaad38efd7f7fe443a8db6, ticket:4394)
+   * Fix: Designed templates did not survive save and load (commit:0556c63f676828db552420bff3e979b5a0be1c72, ticket:4372)
+   * Fix: Droid selection bounding box improvements (commit:07e33362d4ee5d9c4b1d9f3ccd63ecc88f73d93b, ticket:4157)
+   * Fix: Allied research time display (commit:1ee5fcb42ae5fe20ebbc35b911ee09696d2bbb3e)
+   * Fix: Alphabetical map name sorting, was reversed (commit:c82e091c62b3273411012d3035e342912fce4ef8)
+   * Fix: Visibility issues in loaded games (commit:c94b5437e41a2a86d7bc024c23889ac6ef1bdc24, ticket:4388)
+   * Fix: Building aborted on burning oil wells (commit:2da928680fdb4a34b9a46b4ae41845f84f41d9fe, ticket:4379)
+   * Fix: Let idle trucks help with building structures as well as repairing them (commit:24c8416c1345594e834629d0cf467e37088964b7, ticket:737)
+   * Fix: Specific .png files which were causing libpng warnings (commit:0fde4c81152463389e906998f4590873d8058eb7, ticket:4320)
+   * Fix: WzScript-based AIs were trying to build illegal cyborgs (commit:f9a723424f51ffa578b1bfce179f1bf30f277675, commit:712e3adffd334d7fdba3cef210aeb41560b204f7, ticket:4364)
+ * Graphics:
+   * Change: Enable coloured cursors by default (commit:a1c76bacd80cdd4a5652f5f25fb6a697b9174510, ticket:4387)
+   * Fix: Shadow rendering (commit:c0f41c445e19546271ea1dcc23010db2f4f5fa26, ticket:4378)
+
+2016-05-07: Version 3.2.0 beta1
+ * UI:
+   * Add: Add teams mode without shared research (commit:8713039c5f1309bbb5e1c269d83cf91877b99646)
+   * Add: Add Shift+V to select all fully-armed VTOLs (commit:0694970497e7ee8903c115249c11d40772ab3edb)
+   * Add: Default map team setups supported, added for some maps (commit:30612665dc978457ff80f299db88fc64cb527e7c)
+   * Add: Enable ECM Jammer tech. Increase radar detector cost to 2000, from 900 (commit:fdfc3d837b7236c2440b29f8c6d4771bb5d1f83d)
+   * Add: Add minipod tower research to full base starts (commit:d8500eb7b7dc7e37bdabc35b529f6b9b3efcff84)
+   * Change: Move Command HUD to make more room for more items (commit:e252b9a460829f03ea0557330de1789fd5f4ee30)
+   * Change: Make VTOLs return to rearm when out of ammo, if told to patrol or circle (commit:7a52d37d5f3e6e3a0093bcc198a3fbfe3e344bec, ticket:3705)
+   * Change: Allow designing and building obsolete tanks (commit:714727e241e286e395ad09313315de7c3655d90b)
+   * Change: Make smooth water bed generation, instead of random jitter (commit:4aa873b3aa57f1426d9ef4f239409d41ec3491a8)
+   * Change: Default stop/hold/hq hotkeys changed (commit:81c1c76dbf88e680f867e7c75a74dc5a85e178ba)
+   * Change: Only play 'power resource' message once for each research (commit:88dc5c1b9b5145f2a4a67c916bbb3b3849fd5d01)
+   * Change: No armour bonus while building is in construction (commit:e547361d0c8d9cad9c096d3188ce3726de03f91e, ticket:3641)
+   * Remove: Secondary orders hold and pursue removed, use primary order hold and attack instead (commit:8fd88edcc2adf804dc5cf032076137f434fcf7b4)
+   * Remove: The optimal/short/long range GUI elements have been removed (commit:244c8ec1418d21484499d9a1f79f7afeb9330b86)
+ * Balance:
+   * Change: Always use latest armour upgrade value for already built droids (commit:01510e4dda3de00f3164b7f6722a55401f8d39cb)
+   * Change: Improved doomed target calculations (commit:78fdea0c8c37b783861332ec9aae2646fe8672b1, commit:ab26ab2af27c7baabdd6f6c098760fe09e3fe78a, commit:3c12b7a6ab85e15ad20ca06ed4d249c490b0bdcb)
+   * Change: Make easy difficulty AIs get 25% less power from derricks (commit:ba592d6d1b7fcea7ec786e8db85a280be90590cd)
+   * Change: Make insane difficulty give 2x power income to AIs (commit:7e18c73af439ec4b3bd5940e8b41231933d7fbc6)
+   * Change: Improved counterbattery target checking, can also now use allied counterbattery sensors (commit:70c5bd3088ec670702d950e6fe9f3c541ffc996b)
+   * Fix: Fix wrong calculation of rate in some cases (commit:3f2dd664dddb2ea4d3b16a3b0399e4dddf9dc4c8)
+   * Remove: Command turret upgrades (commit:40bbf3a40ece5aa206c9508beb37711c2df9b45a, ticket:4019)
+   * Remove: Transports no longer have weapons (commit:e8550e49dec90352043f6f83087ead77e98e2125)
+   * Remove: Remove the distinction between short and long range for accuracy purposes (commit:30e0f8e65c475c094ac6032d523c94af38f2522c)
+ * Graphics:
+   * Add: Now possible to render multiple levels for all features, structures and walls (commit:443702483a08a27f1fb89bd47364d9b9c74224df)
+   * Add: Generalized support for standing still and moving effects for propulsions (commit:500f3a8aec96d4eb1dca3db69eb91d801b160496)
+   * Add: Can now set a shader program for each model level (commit:1b826910c44003a7d9ecf7e86d128dcb1bfaa6ea, commit:465894d7b9d36f103a2bf196077bd9071ab75757)
+   * Change: Significantly improve model rendering performance (commit:e4e9ed5a54032b2c5f76e8a53c1b7d1ace7b69ad, commit:06e4590128a6b23e0b6186247e9d0024390bdb14, commit:aa40e70b44523820f628352ba546cadb6fb494af, commit:8d5b07485f1b8e4e118b9f6a07bf837e9f85bce4)
+ * Scripting:
+   * Add eventGroupSeen() and improve eventArea(), rename resetArea() to resetLabel() (commit:52ab1be90ddb25d84977b4effb476ddac68522cd)
+   * Add: New functions setReticuleButton(), showInterface() and hideInterface() to control the UI (commit:c0abe4efe3967daccf76fbb8a9e14d00be3f4012, commit:cd54d3880cb5bc742b4b46725ea55a7b9a042c75)
+   * Add: New function syncRequest() and event eventSyncRequest for synced game updates (commit:569975e6ea1f3a00c793b2f2434783f55a584ae8)
+   * Add: New structure flag which requires it to be built adjacent to another completed structure the player owns (commit:d7df351d498c6b8bc06201bcc4c1900315869e22, ticket:4016)
+   * Add: New functions addSpotter() and removeSpotter() to add and remove temporary areas of vision (commit:371ab04cdacfd6d7727decb06a94f17dd6a03fa6)
+   * Add: New event 'eventObjectRecycled(object)' for demolish and recycle actions (commit:a98cf2ace771bdde9556eadd6243691264d50864)
+   * Add: New cheat 'jsload' which allows you to load any AI script you want from the 'scripts' directory (commit:ccc540b24e527618c6d84096fc00cb6a6d14ec51)
+   * Add: Two new functions for transporter handling in campaign startTransporterEntry() and setTransporterExit() (commits:b1b60ba7a3781303d349099403c7e48d92c4d121)
+   * Add: New function makeTemplate() (commit:8b14b26ae797f76c4093ea8c6cd2f031d911afa3)
+   * Add: New events eventPlayerLeft() and eventDesignCreated() (commit:391492ddfc35e76a3e6d4fb06874a6aacd67e74a)
+   * Add: New function propulsionCanReach() (commit:be44aaf8429f6da22e24ca9243500e01e675177f)
+   * Add: New function removeLabel() (commit:7437d6662c822ded2baa18b473912bc7398c0184)
+   * Add: New event enumSelectionChanged() and new function enumSelected() (commit:1072228b92e40d0b0b538d8213091c02b48613f4)
+   * Add: New functions missionTime() and extraPowerTime() (commit:9b38f6188b1841ddd4b34f740c897483e8665eb6)
+   * Add: New function getLabel(object) function for retrieving the label of an object (commit:c22375c1263458177ea2cf564f6a9e9aab53e633)
+   * Add: New event eventBeaconRemoved() (commit:d573f3856554062963d73787e06ac15cda8c26ad)
+   * Add: New function function cameraZoom() to change camera zoom (commit:aedb42f4821da20da368341ce5fbad30c1d233bd)
+   * Add: New function setPowerModifier() to change the power modifier (commit:7e18c73af439ec4b3bd5940e8b41231933d7fbc6, ticket:3820)
+   * Add: New event eventArea<label>() and new function resetArea() (commit:f7144766384691dc1dadf1b3dd1785fff058403b)
+   * Add: New functions getExperienceGain() and setExperienceGain() (commit:55be151a66eb0a1a8b38149728951a1992b28c62)
+   * Add: New functions addBeacon() and removeBeacon(), and new event eventBeacon() (commit:88b6abff593912567018589255c314bf4be7dc43, commit:acf0f0083b2288a87ae7ef718301f80152a4a1a5)
+   * Add: New function addLabel() for dynamic creation of script labels (commit:5de3539dd1cbc129e1c1a595e41e0a7128756635)
+   * Add: New function setSky() to change the skybox on the fly (commit:b4ed741ee1cf0ef75c2b13b673e5bfa4438d5fcc)
+   * Add: New event eventCheatMode() (commit:30da9a9d4b7088facc632723f2c36f33efd879c6)
+   * Add: New events eventGameLoaded(), eventGameSaving(), and eventGameSaved() (commit:c7cabf192b5b1d5f698f0402c30dd737ecd06846)
+   * Add: New function setDroidLimit() that sets game build limits (commit:ee6da7ce13f73ab47c8e83a1c59658d2d2408ac1)
+   * Add: New function enumTemplates() to list the templates of a player (commit:33f6a2a51bbf3ef1800f5fe818013cdc27531759)
+   * Add: New function getDroidProduction() for virtual representation of production (commit:40fcab0f6c476c5915c193477d3e3dacbf62ed23)
+   * Add: New event eventPickup() for whenever an object is picked up (commit:70684314e2b2d09c55c045e5f0765fd845896850)
+   * Add: New functions setAlliance() and removeObject() (commit:deb1cd08ec10594c7cb7d7b88f656aec31b44ddb, commit:6b4d2eade249fe6988f6a3fe3630106ecda4c968)
+   * Change: New function groupAdd(group, object) that deprecates groupAddDroid() (commit:dc46de746baa6238f66b51831954b1ae3954d515)
+   * Change: Rename setScrollParams() -> setScrollLimits(), new function getScrollLimits() (commit:0e703c683fea98f3f30655dae3fa0814c8474bfe)
+   * Change: Rename label() to getObject() and make it more flexible (commit:30886e207a3b30feaa9fe5b430d45d2a25c32ad6)
+   * Change: Rename missionTimer() -> getMissionTimer() for consistency (commit:7de0941fce4baf4b7471c8789324651601abff1c)
+ * Modding:
+   * Change: Savegames and stats are now in JSON format
+   * Change: Lazy loading of textures and PIE files,  no longer any need to add them in WRF files (commit:6a9ca8c0e8bdfb21c25cf1f45ede28a12c6a1e59, commit:035c7bf2034bfe4064c86e4053e008726c02132d)
+   * Add: The minimum damage that a weapon causes is now moddable (commit:889ed7727f8f3fd55428092f14008dde8ab6b5be)
+ * Testing:
+   * Support for autogames using command line --autogame (commit:c6e96a71643978ed7f950f56bd71fb03e3475ff1, commit:edc47e872011ef06d2f10fe938c2e2c7e9f29fd8)
+   * For analysing graphics performance issues, there is a new hotkey ctrl+k in debug mode to get info on what takes time (commit:5f32c3eafe26c959045f10b21bea2efc69c770d2)
+ * Other:
+   * We now require OpenGL 2.0
+   * Parts of the campaign has been ported to javascript
+   * The entire codebase has been run through astyle to clean it up
+
 2016-01-01: Version 3.1.3
  * General:
    * Change: Ping only displayed for multiplayer games (commit:2199ffdd416cb5189c0ee5af4137a6248c3a2ff1)

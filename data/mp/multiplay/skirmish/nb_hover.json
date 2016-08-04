@@ -1,0 +1,7 @@
+{
+    "AI": {
+        "js": "nb_hover.js",
+        "name": "Hover AI",
+        "tip": "An AI specially tweaked for sea maps, based on NullBot"
+    }
+}

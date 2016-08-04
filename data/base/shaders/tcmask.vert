@@ -21,7 +21,7 @@ void main(void)
 	gl_FrontColor = gl_Color;
 
 	// Implement building stretching to accomodate terrain
-	if (position.y <= 0.0)
+	if (gl_Vertex.y <= 0.0) // use gl_Vertex here directly to help shader compiler optimization
 	{
 		position.y -= stretch;
 	}

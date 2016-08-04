@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -29,6 +29,7 @@
 #include "lib/framework/wzapp.h"
 #include "lib/framework/strres.h"
 #include "lib/widget/widget.h"
+#include "lib/widget/label.h"
 #include "lib/netplay/netplay.h"
 #include "lib/ivis_opengl/piestate.h"		// for getrendertype
 #include "lib/sound/audio.h"					// for sound.
@@ -52,8 +53,7 @@
 #include "main.h"
 #include "warzoneconfig.h"
 
-//status bools.(for hci.h)
-bool	ClosingInGameOp	= false;
+
 bool	InGameOpUp		= false;
 bool 	isInGamePopupUp = false;
 // ////////////////////////////////////////////////////////////////////////////
@@ -85,56 +85,31 @@ static bool addIGTextButton(UDWORD id, UWORD x, UWORD y, UWORD width, const char
 
 static bool addQuitOptions(void)
 {
-	if (widgGetFromID(psWScreen, INTINGAMEOP))
-	{
-		widgDelete(psWScreen, INTINGAMEOP);		// get rid of the old stuff.
-	}
+	// get rid of the old stuff.
+	delete widgGetFromID(psWScreen, INTINGAMEOP);
+	delete widgGetFromID(psWScreen, INTINGAMEPOPUP);
 
-	if (widgGetFromID(psWScreen, INTINGAMEPOPUP))
-	{
-		widgDelete(psWScreen, INTINGAMEPOPUP);		// get rid of the old stuff.
-	}
+	WIDGET *parent = psWScreen->psForm;
 
-	W_FORMINIT sFormInit;
 	// add form
-	sFormInit.formID	= 0;
-	sFormInit.id		= INTINGAMEOP;
-	sFormInit.style		= WFORM_PLAIN;
-	sFormInit.width		= INTINGAMEOP3_W;
-	sFormInit.height	= INTINGAMEOP3_H;
-	sFormInit.x		= (SWORD)INTINGAMEOP3_X;
-	sFormInit.y		= (SWORD)INTINGAMEOP3_Y;
-	sFormInit.pDisplay	= intOpenPlainForm;
-	sFormInit.disableChildren = true;
-
-	widgAddForm(psWScreen, &sFormInit);
+	auto inGameOp = new IntFormAnimated(parent);
+	inGameOp->id = INTINGAMEOP;
+	inGameOp->setGeometry(INTINGAMEOP3_X, INTINGAMEOP3_Y, INTINGAMEOP3_W, INTINGAMEOP3_H);
 
 	addIGTextButton(INTINGAMEOP_RESUME, INTINGAMEOP_1_X, INTINGAMEOP_1_Y, INTINGAMEOP_OP_W, _("Resume Game"), OPALIGN);
 	addIGTextButton(INTINGAMEOP_QUIT_CONFIRM, INTINGAMEOP_1_X, INTINGAMEOP_2_Y, INTINGAMEOP_OP_W, _("Quit"), OPALIGN);
 
 	if (NetPlay.isHost && bMultiPlayer && NetPlay.bComms)		// only show for real MP games
 	{
-		sFormInit.id		= INTINGAMEPOPUP;
-		sFormInit.width		= 600;
-		sFormInit.height	= 26;
-		sFormInit.x			= (SWORD)(20 + D_W);	// center it
-		sFormInit.y			= (SWORD) 130;
+		auto inGamePopup = new IntFormAnimated(parent);
+		inGamePopup->id = INTINGAMEPOPUP;
+		inGamePopup->setGeometry((pie_GetVideoBufferWidth() - 600)/2, inGameOp->y() - 26 - 20, 600, 26);
 
-		widgAddForm(psWScreen, &sFormInit);
-
-		W_BUTINIT sButInit;
-
-		sButInit.formID		= INTINGAMEPOPUP;
-		sButInit.style		= OPALIGN;
-		sButInit.width		= 600;
-		sButInit.height		= 10;
-		sButInit.x			= 0;
-		sButInit.y			= 8;
-		sButInit.pDisplay	= displayTextOption;
-		sButInit.id			= INTINGAMEOP_POPUP_MSG3;
-		sButInit.pText		= _("WARNING: You're the host. If you quit, the game ends for everyone!");
-
-		widgAddButton(psWScreen, &sButInit);
+		auto label = new W_LABEL(inGamePopup);
+		label->setGeometry(0, 0, inGamePopup->width(), inGamePopup->height());
+		label->setString(_("WARNING: You're the host. If you quit, the game ends for everyone!"));
+		label->setTextAlignment(WLAB_ALIGNCENTRE);
+		label->setFont(font_medium, WZCOL_YELLOW);
 	}
 
 	return true;
@@ -143,26 +118,14 @@ static bool addQuitOptions(void)
 
 static bool addSlideOptions(void)
 {
-	if (widgGetFromID(psWScreen, INTINGAMEOP))
-	{
-		widgDelete(psWScreen, INTINGAMEOP);		// get rid of the old stuff.
-	}
+	delete widgGetFromID(psWScreen, INTINGAMEOP);  // get rid of the old stuff.
 
-	W_FORMINIT sFormInit;
+	WIDGET *parent = psWScreen->psForm;
 
 	// add form
-	sFormInit.formID	= 0;
-	sFormInit.id		= INTINGAMEOP;
-	sFormInit.style		= WFORM_PLAIN;
-	sFormInit.x		= (SWORD)INTINGAMEOP2_X;
-	sFormInit.y		= (SWORD)INTINGAMEOP2_Y;
-	sFormInit.width		= INTINGAMEOP2_W;
-	sFormInit.height	= INTINGAMEOP2_H;
-
-	sFormInit.pDisplay	= intOpenPlainForm;
-	sFormInit.disableChildren = true;
-
-	widgAddForm(psWScreen, &sFormInit);
+	IntFormAnimated *ingameOp = new IntFormAnimated(parent);
+	ingameOp->id = INTINGAMEOP;
+	ingameOp->setGeometry(INTINGAMEOP2_X, INTINGAMEOP2_Y, INTINGAMEOP2_W, INTINGAMEOP2_H);
 
 	// fx vol
 	addIGTextButton(INTINGAMEOP_FXVOL, INTINGAMEOP_2_X, INTINGAMEOP_1_Y, INTINGAMEOP_OP_W, _("Voice Volume"), WBUT_PLAIN);
@@ -227,39 +190,17 @@ static bool _intAddInGameOptions(void)
 		kf_TogglePauseMode();
 	}
 
-	W_FORMINIT sFormInit;
-	sFormInit.width		= INTINGAMEOP_W;
+	WIDGET *parent = psWScreen->psForm;
+
+	bool s = (bMultiPlayer && NetPlay.bComms != 0) || bInTutorial;
 
 	// add form
-	sFormInit.formID	= 0;
-	sFormInit.id		= INTINGAMEOP;
-	sFormInit.style		= WFORM_PLAIN;
-	sFormInit.x			= (SWORD)INTINGAMEOP_X;
-	sFormInit.y			= (SWORD)INTINGAMEOP_Y;
-	sFormInit.height	= INTINGAMEOP_H;
-
-	if ((!bMultiPlayer || (NetPlay.bComms == 0)) && !bInTutorial)
-	{
-	}
-	else
-	{
-		sFormInit.height	= INTINGAMEOP_HS;
-	}
-
-	sFormInit.pDisplay	= intOpenPlainForm;
-	sFormInit.disableChildren = true;
-
-	widgAddForm(psWScreen, &sFormInit);
+	IntFormAnimated *ingameOp = new IntFormAnimated(parent);
+	ingameOp->id = INTINGAMEOP;
+	ingameOp->setGeometry(INTINGAMEOP_X, INTINGAMEOP_Y, INTINGAMEOP_W, s ? INTINGAMEOP_HS : INTINGAMEOP_H);
 
 	// add 'quit' text
-	if ((!bMultiPlayer || (NetPlay.bComms == 0)) && !bInTutorial)
-	{
-		addIGTextButton(INTINGAMEOP_QUIT, INTINGAMEOP_1_X, INTINGAMEOP_5_Y, INTINGAMEOP_OP_W, _("Quit"), OPALIGN);
-	}
-	else
-	{
-		addIGTextButton(INTINGAMEOP_QUIT, INTINGAMEOP_1_X, INTINGAMEOP_3_Y, INTINGAMEOP_OP_W, _("Quit"), OPALIGN);
-	}
+	addIGTextButton(INTINGAMEOP_QUIT, INTINGAMEOP_1_X, s ? INTINGAMEOP_3_Y : INTINGAMEOP_5_Y, INTINGAMEOP_OP_W, _("Quit"), OPALIGN);
 
 	// add 'resume'
 	addIGTextButton(INTINGAMEOP_RESUME, INTINGAMEOP_1_X, INTINGAMEOP_1_Y, INTINGAMEOP_OP_W, _("Resume Game"), OPALIGN);
@@ -267,7 +208,7 @@ static bool _intAddInGameOptions(void)
 	// add 'options'
 	addIGTextButton(INTINGAMEOP_OPTIONS, INTINGAMEOP_1_X, INTINGAMEOP_2_Y, INTINGAMEOP_OP_W, _("Audio Options"), OPALIGN);
 
-	if ((!bMultiPlayer || (NetPlay.bComms == 0)) && !bInTutorial)
+	if (!s)
 	{
 		if (!bMultiPlayer)
 		{
@@ -322,19 +263,11 @@ void intAddInGamePopup(void)
 		kf_TogglePauseMode();	// Pause the game.
 	}
 
-	W_FORMINIT sFormInit;
+	WIDGET *parent = psWScreen->psForm;
 
-	sFormInit.formID	= 0;
-	sFormInit.id		= INTINGAMEPOPUP;
-	sFormInit.style		= WFORM_PLAIN;
-	sFormInit.width		= 600;
-	sFormInit.height	= 160;
-	sFormInit.x			= (SWORD)(20 + D_W);
-	sFormInit.y			= (SWORD)((240 - (160 / 2)) + D_H);
-	sFormInit.pDisplay	= intOpenPlainForm;
-	sFormInit.disableChildren = true;
-
-	widgAddForm(psWScreen, &sFormInit);
+	IntFormAnimated *ingamePopup = new IntFormAnimated(parent);
+	ingamePopup->id = INTINGAMEPOPUP;
+	ingamePopup->setGeometry(20 + D_W, (240 - 160 / 2) + D_H, 600, 160);
 
 	// add the text "buttons" now
 	W_BUTINIT sButInit;
@@ -410,9 +343,6 @@ void intCloseInGameOptionsNoAnim(bool bResetMissionWidgets)
 bool intCloseInGameOptions(bool bPutUpLoadSave, bool bResetMissionWidgets)
 {
 
-	W_TABFORM	*Form;
-	WIDGET		*widg;
-
 	if (NetPlay.isHost)
 	{
 		widgDelete(psWScreen, INTINGAMEPOPUP);
@@ -420,35 +350,32 @@ bool intCloseInGameOptions(bool bPutUpLoadSave, bool bResetMissionWidgets)
 
 	if (bPutUpLoadSave)
 	{
-		widg = widgGetFromID(psWScreen, INTINGAMEOP);
+		WIDGET *widg = widgGetFromID(psWScreen, INTINGAMEOP);
 		if (widg)
 		{
 			widgDelete(psWScreen, INTINGAMEOP);
 		}
 
 		InGameOpUp = false;
-		ClosingInGameOp = true;
 	}
 	else
 	{
 		// close the form.
 		// Start the window close animation.
+		IntFormAnimated *form;
 		if (isInGamePopupUp)	// FIXME: we hijack this routine for the popup close.
 		{
-			Form = (W_TABFORM *)widgGetFromID(psWScreen, INTINGAMEPOPUP);
+			form = (IntFormAnimated *)widgGetFromID(psWScreen, INTINGAMEPOPUP);
 			isInGamePopupUp = false;
 		}
 		else
 		{
-			Form = (W_TABFORM *)widgGetFromID(psWScreen, INTINGAMEOP);
+			form = (IntFormAnimated *)widgGetFromID(psWScreen, INTINGAMEOP);
 		}
 
-		if (Form)
+		if (form)
 		{
-			Form->display		 = intClosePlainForm;
-			Form->pUserData		 = NULL; // Used to signal when the close anim has finished.
-			Form->disableChildren = true;
-			ClosingInGameOp		 = true;		// like orderup/closingorder
+			form->closeAnimateDelete();
 			InGameOpUp			 = false;
 		}
 	}
@@ -470,8 +397,6 @@ bool intCloseInGameOptions(bool bPutUpLoadSave, bool bResetMissionWidgets)
 // process clicks made by user.
 void intProcessInGameOptions(UDWORD id)
 {
-
-
 	switch (id)
 	{
 	// NORMAL KEYS
@@ -550,8 +475,4 @@ void intProcessInGameOptions(UDWORD id)
 	default:
 		break;
 	}
-
-
 }
-
-

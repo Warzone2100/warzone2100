@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -97,10 +97,8 @@ void cmdDroidAddDroid(DROID *psCommander, DROID *psDroid)
 		psDroid->group = UBYTE_MAX;
 
 		// set the secondary states for the unit
-		secondarySetState(psDroid, DSO_ATTACK_RANGE, (SECONDARY_STATE)(psCommander->secondaryOrder & DSS_ARANGE_MASK), ModeImmediate);
 		secondarySetState(psDroid, DSO_REPAIR_LEVEL, (SECONDARY_STATE)(psCommander->secondaryOrder & DSS_REPLEV_MASK), ModeImmediate);
 		secondarySetState(psDroid, DSO_ATTACK_LEVEL, (SECONDARY_STATE)(psCommander->secondaryOrder & DSS_ALEV_MASK), ModeImmediate);
-		secondarySetState(psDroid, DSO_HALTTYPE, (SECONDARY_STATE)(psCommander->secondaryOrder & DSS_HALT_MASK), ModeImmediate);
 
 		orderDroidObj(psDroid, DORDER_GUARD, (BASE_OBJECT *)psCommander, ModeImmediate);
 	}
@@ -171,7 +169,8 @@ bool cmdGetDroidMultiExpBoost()
 /** This function returns the maximum group size of the command droid.*/
 unsigned int cmdDroidMaxGroup(const DROID *psCommander)
 {
-	return getDroidLevel(psCommander) * 2 + MIN_CMD_GROUP_DROIDS;
+	return getDroidLevel(psCommander) * getBrainStats(const_cast<DROID *>(psCommander))->maxDroidsMult
+	       + getBrainStats(const_cast<DROID *>(psCommander))->maxDroids;
 }
 
 /** This function adds experience to the command droid of the psKiller's command group.*/

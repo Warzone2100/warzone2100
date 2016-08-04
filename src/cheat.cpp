@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -31,17 +31,24 @@
 #include "keybind.h"
 #include "keymap.h"
 #include "multiplay.h"
+#include "qtscript.h"
+#include "template.h"
 
 struct CHEAT_ENTRY
 {
 	const char *pName;
-	void (*function)(void);	// pointer to void* function
+	void (*function)();  // pointer to void* function
 };
 
 bool Cheated = false;
 static CHEAT_ENTRY cheatCodes[] =
 {
-	{"clone wars", kf_CloneSelected}, // clone selected units
+	{"templates", listTemplates}, // print templates
+	{"jsload", jsAutogame}, // load an AI script for selectedPlayer
+	{"jsdebug", jsShowDebug}, // show scripting states
+	{"clone wars", []{ kf_CloneSelected(10); }}, // clone selected units
+	{"clone wars!", []{ kf_CloneSelected(40); }}, // clone selected units
+	{"clone wars!!", []{ kf_CloneSelected(135); }}, // clone selected units
 	{"noassert", kf_NoAssert}, // turn off asserts
 	{"count me", kf_ShowNumObjects}, // give a count of objects in the world
 	{"give all", kf_AllAvailable},	// give all
@@ -54,7 +61,6 @@ static CHEAT_ENTRY cheatCodes[] =
 	{"let me win", kf_AddMissionOffWorld},	//let me win
 	{"timedemo", kf_FrameRate},	 //timedemo
 	{"kill", kf_KillSelected},	//kill slected
-	{"demo", kf_ToggleDemoMode},	//demo mode
 	{"john kettley", kf_ToggleWeather},	//john kettley
 	{"shakey", kf_ToggleShakeStatus},	//shakey
 	{"mouseflip", kf_ToggleMouseInvert},	//mouseflip
@@ -72,8 +78,6 @@ static CHEAT_ENTRY cheatCodes[] =
 	{"showfps", kf_ToggleFPS},	//displays your average FPS
 	{"showsamples", kf_ToggleSamples}, //displays the # of Sound samples in Queue & List
 	{"showorders", kf_ToggleOrders}, //displays unit order/action state.
-	{"showlevelname", kf_ToggleLevelName}, // shows the current level name on screen
-	{"logical", kf_ToggleLogical}, //logical game updates separated from graphics updates.
 	{"pause", kf_TogglePauseMode}, // Pause the game.
 	{"power info", kf_PowerInfo},
 	{"reload me", kf_Reload},	// reload selected weapons immediately
@@ -93,11 +97,6 @@ bool attemptCheatCode(const char *cheat_name)
 	if (!strcasecmp("showfps", cheat_name))
 	{
 		kf_ToggleFPS();
-		return true;
-	}
-	else if (!strcasecmp("showlevelname", cheat_name))
-	{
-		kf_ToggleLevelName();
 		return true;
 	}
 
@@ -174,9 +173,11 @@ void recvProcessDebugMappings(NETQUEUE queue)
 	{
 		addConsoleMessage(_("Debug mode now enabled!"), DEFAULT_JUSTIFY,  SYSTEM_MESSAGE);
 		Cheated = true;
+		triggerEventCheatMode(true);
 	}
 	else if (oldDebugMode && !newDebugMode)
 	{
 		addConsoleMessage(_("Debug mode now disabled!"), DEFAULT_JUSTIFY,  SYSTEM_MESSAGE);
+		triggerEventCheatMode(false);
 	}
 }

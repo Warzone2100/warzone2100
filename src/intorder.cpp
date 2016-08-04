@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -31,7 +31,7 @@
 #include <set>
 
 
-#define ORDER_X			23
+#define ORDER_X			6
 #define ORDER_Y			45
 #define ORDER_WIDTH		RET_FORMWIDTH
 #define ORDER_HEIGHT	273
@@ -44,11 +44,9 @@
 #define MAX_ORDER_BUTS 5		// Max number of buttons for a given order.
 #define NUM_ORDERS 12			// Number of orders in OrderButtons list.
 
-#define IDORDER_ATTACK_RANGE				8010
 #define IDORDER_REPAIR_LEVEL				8020
 #define IDORDER_ATTACK_LEVEL				8030
 #define IDORDER_PATROL						8040
-#define IDORDER_HALT_TYPE					8050
 #define IDORDER_RETURN						8060
 #define IDORDER_RECYCLE						8070
 #define IDORDER_ASSIGN_PRODUCTION			8080
@@ -56,11 +54,6 @@
 #define IDORDER_FIRE_DESIGNATOR				8100
 #define IDORDER_ASSIGN_VTOL_PRODUCTION		8110
 #define IDORDER_CIRCLE						8120
-
-//#define IDORDER_RETURN_TO_BASE		8050
-//#define IDORDER_DESTRUCT				8060
-//#define IDORDER_RETURN_TO_REPAIR		8080
-//#define IDORDER_EMBARK				8100
 
 enum ORDBUTTONTYPE
 {
@@ -75,7 +68,6 @@ enum ORDBUTTONTYPE
 enum ORDBUTTONCLASS
 {
 	ORDBUTCLASS_NORMAL,			// A normal button, one order type per line.
-//	ORDBUTCLASS_NORMALMIXED,	// A normal button but multiple order types on one line.
 	ORDBUTCLASS_FACTORY,		// A factory assignment button.
 	ORDBUTCLASS_CYBORGFACTORY,	// A cyborg factory assignment button.
 	ORDBUTCLASS_VTOLFACTORY, 	// A VTOL factory assignment button.
@@ -139,9 +131,6 @@ struct AVORDER
 
 enum
 {
-	STR_DORD_RANGE1,
-	STR_DORD_RANGE2,
-	STR_DORD_RANGE3,
 	STR_DORD_REPAIR1,
 	STR_DORD_REPAIR2,
 	STR_DORD_REPAIR3,
@@ -149,9 +138,6 @@ enum
 	STR_DORD_FIRE2,
 	STR_DORD_FIRE3,
 	STR_DORD_PATROL,
-	STR_DORD_PURSUE,
-	STR_DORD_GUARD,
-	STR_DORD_HOLDPOS,
 	STR_DORD_RETREPAIR,
 	STR_DORD_RETBASE,
 	STR_DORD_EMBARK,
@@ -169,9 +155,6 @@ static const char *getDORDDescription(int id)
 {
 	switch (id)
 	{
-	case STR_DORD_RANGE1         : return _("Short Range");
-	case STR_DORD_RANGE2         : return _("Long Range");
-	case STR_DORD_RANGE3         : return _("Optimum Range");
 	case STR_DORD_REPAIR1        : return _("Retreat at Medium Damage");
 	case STR_DORD_REPAIR2        : return _("Retreat at Heavy Damage");
 	case STR_DORD_REPAIR3        : return _("Do or Die!");
@@ -179,9 +162,6 @@ static const char *getDORDDescription(int id)
 	case STR_DORD_FIRE2          : return _("Return Fire");
 	case STR_DORD_FIRE3          : return _("Hold Fire");
 	case STR_DORD_PATROL         : return _("Patrol");
-	case STR_DORD_PURSUE         : return _("Pursue");
-	case STR_DORD_GUARD          : return _("Guard Position");
-	case STR_DORD_HOLDPOS        : return _("Hold Position");
 	case STR_DORD_RETREPAIR      : return _("Return For Repair");
 	case STR_DORD_RETBASE        : return _("Return To HQ");
 	case STR_DORD_EMBARK         : return _("Go to Transport");
@@ -198,22 +178,8 @@ static const char *getDORDDescription(int id)
 };
 
 // Define the order button groups.
-ORDERBUTTONS OrderButtons[NUM_ORDERS] =
+static ORDERBUTTONS OrderButtons[NUM_ORDERS] =
 {
-	{
-		ORDBUTCLASS_NORMAL,
-		DSO_ATTACK_RANGE,
-		DSS_ARANGE_MASK,
-		ORD_BTYPE_RADIO,
-		ORD_JUSTIFY_CENTER | ORD_JUSTIFY_NEWLINE,
-		IDORDER_ATTACK_RANGE,
-		3, 0,
-		{IMAGE_ORD_RANGE3UP,	IMAGE_ORD_RANGE1UP,	IMAGE_ORD_RANGE2UP},
-		{IMAGE_ORD_RANGE3UP,	IMAGE_ORD_RANGE1UP,	IMAGE_ORD_RANGE2UP},
-		{IMAGE_DES_HILIGHT,		IMAGE_DES_HILIGHT,	IMAGE_DES_HILIGHT},
-		{STR_DORD_RANGE3,	STR_DORD_RANGE1,	STR_DORD_RANGE2},
-		{DSS_ARANGE_DEFAULT,	DSS_ARANGE_SHORT,	DSS_ARANGE_LONG}
-	},
 	{
 		ORDBUTCLASS_NORMAL,
 		DSO_REPAIR_LEVEL,
@@ -256,7 +222,6 @@ ORDERBUTTONS OrderButtons[NUM_ORDERS] =
 		{STR_DORD_FIREDES,	0,	0},
 		{DSS_FIREDES_SET,	0,	0}
 	},
-
 	{
 		ORDBUTCLASS_NORMAL,
 		DSO_PATROL,
@@ -271,7 +236,6 @@ ORDERBUTTONS OrderButtons[NUM_ORDERS] =
 		{STR_DORD_PATROL,	0,	0},
 		{DSS_PATROL_SET,	0,	0}
 	},
-
 	{
 		ORDBUTCLASS_NORMAL,
 		DSO_CIRCLE,
@@ -285,21 +249,6 @@ ORDERBUTTONS OrderButtons[NUM_ORDERS] =
 		{IMAGE_DES_HILIGHT,	0,	0},
 		{STR_DORD_CIRCLE,	0,	0},
 		{DSS_CIRCLE_SET,	0,	0}
-	},
-
-	{
-		ORDBUTCLASS_NORMAL,
-		DSO_HALTTYPE,
-		DSS_HALT_MASK,
-		ORD_BTYPE_RADIO,
-		ORD_JUSTIFY_CENTER | ORD_JUSTIFY_NEWLINE,
-		IDORDER_HALT_TYPE,
-		3, 0,
-		{IMAGE_ORD_PURSUEUP,	IMAGE_ORD_GUARDUP,	IMAGE_ORD_HALTUP},
-		{IMAGE_ORD_PURSUEUP,	IMAGE_ORD_GUARDUP,	IMAGE_ORD_HALTUP},
-		{IMAGE_DES_HILIGHT,		IMAGE_DES_HILIGHT,	IMAGE_DES_HILIGHT},
-		{STR_DORD_PURSUE,	STR_DORD_GUARD,	STR_DORD_HOLDPOS},
-		{DSS_HALT_PURSUE,	DSS_HALT_GUARD,	DSS_HALT_HOLD}
 	},
 	{
 		ORDBUTCLASS_NORMAL,
@@ -317,90 +266,6 @@ ORDERBUTTONS OrderButtons[NUM_ORDERS] =
 		{STR_DORD_RETREPAIR,	STR_DORD_RETBASE,	STR_DORD_EMBARK},
 		{DSS_RTL_REPAIR,	DSS_RTL_BASE,	DSS_RTL_TRANSPORT},
 	},
-	/*	{
-			ORDBUTCLASS_NORMAL,
-			DSO_HOLD,
-			DSS_HOLD_MASK,
-			ORD_BTYPE_BOOLEAN,
-			ORD_JUSTIFY_CENTER | ORD_JUSTIFY_NEWLINE,
-			IDORDER_HOLD,
-			1,0,
-			{IMAGE_ORD_HALTUP,	0,	0},
-			{IMAGE_ORD_HALTUP,	0,	0},
-			{IMAGE_DES_HILIGHT,	0,	0},
-			{STR_DORD_HOLDPOS,	0,	0},
-			{DSS_HOLD_SET,	0,	0}
-		},
-	//	{
-	//		ORDBUTCLASS_NORMALMIXED,
-	//		DSO_RETURN_TO_BASE, DSO_EMBARK,		 DSO_RETURN_TO_REPAIR,
-	//		DSS_RTB_MASK,		DSS_EMBARK_MASK, DSS_RTR_MASK,
-	//		ORD_BTYPE_BOOLEAN,
-	//		ORD_JUSTIFY_CENTER,
-	//		IDORDER_RETURN_TO_BASE,IDORDER_EMBARK,IDORDER_RETURN_TO_REPAIR,
-	//		3,0,
-	//		{IMAGE_ORD_GOTOHQUP,	IMAGE_ORD_GOTOHQUP,	IMAGE_ORD_GOTOHQUP},
-	//		{IMAGE_ORD_GOTOHQUP,	IMAGE_ORD_GOTOHQUP,	IMAGE_ORD_GOTOHQUP},
-	//		{IMAGE_DES_HILIGHT,	IMAGE_DES_HILIGHT,	IMAGE_DES_HILIGHT},
-	//		{STR_DORD_RETBASE,	STR_DORD_RETBASE,	STR_DORD_RETREPAIR},
-	//		{DSS_RTB_SET,	DSS_EMBARK_SET,	DSS_RTR_SET}
-	//	},
-		{
-			ORDBUTCLASS_NORMAL,
-			DSO_RETURN_TO_BASE,
-			DSS_RTB_MASK,
-			ORD_BTYPE_BOOLEAN,
-			ORD_JUSTIFY_CENTER | ORD_JUSTIFY_NEWLINE,
-			IDORDER_RETURN_TO_BASE,
-			1,0,
-			{IMAGE_ORD_GOTOHQUP,	0,	0},
-			{IMAGE_ORD_GOTOHQUP,	0,	0},
-			{IMAGE_DES_HILIGHT,	0,	0},
-			{STR_DORD_RETBASE,	0,	0},
-			{DSS_RTB_SET,	0,	0}
-		},
-		{
-			ORDBUTCLASS_NORMAL,
-			DSO_EMBARK,
-			DSS_EMBARK_MASK,
-			ORD_BTYPE_BOOLEAN,
-			ORD_JUSTIFY_CENTER,
-			IDORDER_EMBARK,
-			1,0,
-			{IMAGE_ORD_GOTOHQUP,	0,	0},
-			{IMAGE_ORD_GOTOHQUP,	0,	0},
-			{IMAGE_DES_HILIGHT,	0,	0},
-			{STR_DORD_EMBARK,	0,	0},
-			{DSS_EMBARK_SET,	0,	0}
-		},
-		{
-			ORDBUTCLASS_NORMAL,
-			DSO_RETURN_TO_REPAIR,
-			DSS_RTR_MASK,
-			ORD_BTYPE_BOOLEAN,
-			ORD_JUSTIFY_CENTER,
-			IDORDER_RETURN_TO_REPAIR,
-			1,0,
-			{IMAGE_ORD_GOTOHQUP,	0,	0},
-			{IMAGE_ORD_GOTOHQUP,	0,	0},
-			{IMAGE_DES_HILIGHT,	0,	0},
-			{STR_DORD_RETREPAIR,	0,	0},
-			{DSS_RTR_SET,	0,	0}
-		},
-	//	{
-	//		ORDBUTCLASS_NORMAL,
-	//		DSO_DESTRUCT,
-	//		DSS_DESTRUCT_MASK,
-	//		ORD_BTYPE_BOOLEAN_DEPEND,
-	//		ORD_JUSTIFY_CENTER | ORD_JUSTIFY_NEWLINE,
-	//		IDORDER_DESTRUCT,
-	//		2,0,
-	//		{IMAGE_ORD_DESTRUCT1UP,	IMAGE_ORD_DESTRUCT2UP,	0},
-	//		{IMAGE_ORD_DESTRUCT1UP,	IMAGE_ORD_DESTRUCT2GREY,	0},
-	//		{IMAGE_DES_HILIGHT,	IMAGE_DES_HILIGHT,	0},
-	//		{STR_DORD_ARMDESTRUCT,	STR_DORD_DESTRUCT,	0},
-	//		{DSS_DESTRUCT_SET,	DSS_DESTRUCT_SET,	0}
-	//	},*/
 	{
 		ORDBUTCLASS_NORMAL,
 		DSO_RECYCLE,
@@ -476,21 +341,6 @@ static std::vector<AVORDER> AvailableOrders;
 
 bool OrderUp = false;
 
-// update the order interface only if it is already open.
-// NOTE: Unused! bool intUpdateOrder(DROID *psDroid)
-bool intUpdateOrder(DROID *psDroid)
-{
-	if (widgGetFromID(psWScreen, IDORDER_FORM) != NULL && OrderUp)
-	{
-		widgDelete(psWScreen, IDORDER_CLOSE);
-		//changed to a BASE_OBJECT to accomodate the factories - AB 21/04/99
-		//intAddOrder(psDroid);
-		intAddOrder((BASE_OBJECT *)psDroid);
-	}
-
-	return true;
-}
-
 // Build a list of currently selected droids.
 // Returns true if droids were selected.
 //
@@ -538,19 +388,15 @@ static std::vector<AVORDER> buildDroidOrderList(void)
 // Build a list of orders available for the selected structure.
 static std::vector<AVORDER> buildStructureOrderList(STRUCTURE *psStructure)
 {
-	//only valid for Factories (at the moment)
 	ASSERT_OR_RETURN(std::vector<AVORDER>(), StructIsFactory(psStructure), "BuildStructureOrderList: structure is not a factory");
 
 	//this can be hard-coded!
-	std::vector<AVORDER> orders(4);
-	orders[0].OrderIndex = 0;//DSO_ATTACK_RANGE;
-	orders[1].OrderIndex = 1;//DSO_REPAIR_LEVEL;
-	orders[2].OrderIndex = 2;//DSO_ATTACK_LEVEL;
-	orders[3].OrderIndex = 5;//DSO_HALTTYPE;
+	std::vector<AVORDER> orders(2);
+	orders[0].OrderIndex = 0;//DSO_REPAIR_LEVEL;
+	orders[1].OrderIndex = 1;//DSO_ATTACK_LEVEL;
 
 	return orders;
 }
-
 
 // return the state for an order for all the units selected
 // if there are multiple states then don't return a state
@@ -609,7 +455,6 @@ bool intAddOrder(BASE_OBJECT *psObj)
 	bool Animate = true;
 	SECONDARY_STATE State;
 	UWORD OrdIndex;
-	W_FORM *Form;
 	UWORD Height, NumDisplayedOrders;
 	UWORD NumButs;
 	UWORD NumJustifyButs, NumCombineButs, NumCombineBefore;
@@ -705,35 +550,12 @@ bool intAddOrder(BASE_OBJECT *psObj)
 		}
 	}
 
-	widgEndScreen(psWScreen);
+	WIDGET *parent = psWScreen->psForm;
 
 	/* Create the basic form */
-
-	W_FORMINIT sFormInit;
-	sFormInit.formID = 0;
-	sFormInit.id = IDORDER_FORM;
-	sFormInit.style = WFORM_PLAIN;
-	sFormInit.x = ORDER_X;
-	sFormInit.y = ORDER_Y;
-	sFormInit.width = ORDER_WIDTH;
-	sFormInit.height = 	ORDER_HEIGHT;
-	// If the window was closed then do open animation.
-	if (Animate)
-	{
-		sFormInit.pDisplay = intOpenPlainForm;
-		sFormInit.disableChildren = true;
-	}
-	else
-	{
-		// otherwise just recreate it.
-		sFormInit.pDisplay = intDisplayPlainForm;
-	}
-	if (!widgAddForm(psWScreen, &sFormInit))
-	{
-		return false;
-	}
-
-
+	IntFormAnimated *orderForm = new IntFormAnimated(parent, Animate);  // Do not animate the opening, if the window was already open.
+	orderForm->id = IDORDER_FORM;
+	orderForm->setGeometry(ORDER_X, ORDER_Y, ORDER_WIDTH, ORDER_HEIGHT);
 
 	// Add the close button.
 	W_BUTINIT sButInit;
@@ -750,7 +572,6 @@ bool intAddOrder(BASE_OBJECT *psObj)
 	{
 		return false;
 	}
-
 
 	sButInit = W_BUTINIT();
 	sButInit.formID = IDORDER_FORM;
@@ -792,16 +613,6 @@ bool intAddOrder(BASE_OBJECT *psObj)
 		sButInit.id = OrderButtons[OrdIndex].ButBaseID;
 
 		NumJustifyButs = NumButs;
-//		for(k=j; k<NumAvailableOrders; k++) {
-//	   		UWORD Index = AvailableOrders[j].OrderIndex;
-//			if(OrderButtons[OrdIndex].ButJustify & ORD_JUSTIFY_NEWLINE) {
-//				DBPRINTF(("NewLine %d \n",k);
-//				break;
-//			} else {
-//				DBPRINTF(("SameLine %d \n",k);
-//			}
-//		}
-
 		bLastCombine = false;
 
 		switch (OrderButtons[OrdIndex].ButJustify & ORD_JUSTIFY_MASK)
@@ -811,18 +622,15 @@ bool intAddOrder(BASE_OBJECT *psObj)
 			break;
 
 		case ORD_JUSTIFY_RIGHT:
-			sButInit.x = (SWORD)(sFormInit.width - ORDER_BUTX -
-			                     (((NumJustifyButs * GetImageWidth(IntImages, OrderButtons[OrdIndex].ButImageID[0])) +
-			                       ((NumJustifyButs - 1) * ORDER_BUTGAP))));
+			sButInit.x = orderForm->width() - ORDER_BUTX -
+			             (NumJustifyButs * GetImageWidth(IntImages, OrderButtons[OrdIndex].ButImageID[0]) +
+			              (NumJustifyButs - 1) * ORDER_BUTGAP);
 			break;
 
 		case ORD_JUSTIFY_CENTER:
-//				sButInit.x = (SWORD)((sFormInit.width / 2) -
-//						( ((NumJustifyButs * GetImageWidth(IntImages,OrderButtons[OrdIndex].ButImageID[0])) +
-//						((NumJustifyButs-1) * ORDER_BUTGAP ) ) / 2 ));
-			sButInit.x = ((SWORD)((sFormInit.width) -
-			                      (((NumJustifyButs * GetImageWidth(IntImages, OrderButtons[OrdIndex].ButImageID[0])) +
-			                        ((NumJustifyButs - 1) * ORDER_BUTGAP))))) / 2;
+			sButInit.x = (orderForm->width() -
+			              (NumJustifyButs * GetImageWidth(IntImages, OrderButtons[OrdIndex].ButImageID[0]) +
+			               (NumJustifyButs - 1) * ORDER_BUTGAP)) / 2;
 			break;
 
 		case ORD_JUSTIFY_COMBINE:
@@ -860,9 +668,9 @@ bool intAddOrder(BASE_OBJECT *psObj)
 			else
 			{
 				// center the buttons
-				sButInit.x = (SWORD)((sFormInit.width / 2) -
-				                     (((NumCombineButs * GetImageWidth(IntImages, OrderButtons[OrdIndex].ButImageID[0])) +
-				                       ((NumCombineButs - 1) * ORDER_BUTGAP)) / 2));
+				sButInit.x = orderForm->width() / 2 -
+				             (NumCombineButs * GetImageWidth(IntImages, OrderButtons[OrdIndex].ButImageID[0]) +
+				              (NumCombineButs - 1) * ORDER_BUTGAP) / 2;
 				sButInit.x = (SWORD)(sButInit.x +
 				                     (GetImageWidth(IntImages, OrderButtons[OrdIndex].ButImageID[0]) + ORDER_BUTGAP) * NumCombineBefore);
 			}
@@ -881,11 +689,9 @@ bool intAddOrder(BASE_OBJECT *psObj)
 			sButInit.pTip = getDORDDescription(OrderButtons[OrdIndex].ButTips[i]);
 			sButInit.width = (UWORD)GetImageWidth(IntImages, OrderButtons[OrdIndex].ButImageID[i]);
 			sButInit.height = (UWORD)GetImageHeight(IntImages, OrderButtons[OrdIndex].ButImageID[i]);
-			sButInit.UserData = PACKDWORD_TRI(
-			                        OrderButtons[OrdIndex].ButGreyID[i],
-			                        OrderButtons[OrdIndex].ButHilightID[i],
-			                        OrderButtons[OrdIndex].ButImageID[i]
-			                    );
+			sButInit.UserData = PACKDWORD_TRI(OrderButtons[OrdIndex].ButGreyID[i],
+			                                  OrderButtons[OrdIndex].ButHilightID[i],
+			                                  OrderButtons[OrdIndex].ButImageID[i]);
 			if (!widgAddButton(psWScreen, &sButInit))
 			{
 				return false;
@@ -896,39 +702,24 @@ bool intAddOrder(BASE_OBJECT *psObj)
 			{
 			case ORD_BTYPE_RADIO:
 			case ORD_BTYPE_BOOLEAN:
-				if ((State & OrderButtons[OrdIndex].StateMask) == (UDWORD)OrderButtons[OrdIndex].States[i])
-				{
-					widgSetButtonState(psWScreen, sButInit.id, WBUT_CLICKLOCK);
-				}
-				else
-				{
-					widgSetButtonState(psWScreen, sButInit.id, 0);
-				}
+			 {
+				bool selected = (State & OrderButtons[OrdIndex].StateMask) == (UDWORD)OrderButtons[OrdIndex].States[i];
+				widgSetButtonState(psWScreen, sButInit.id, selected? WBUT_CLICKLOCK : 0);
 				break;
-
+			 }
 			case ORD_BTYPE_BOOLEAN_DEPEND:
-				if ((State & OrderButtons[OrdIndex].StateMask) == (UDWORD)OrderButtons[OrdIndex].States[i])
-				{
-					widgSetButtonState(psWScreen, sButInit.id, WBUT_CLICKLOCK);
-				}
-				else
-				{
-					if (i == 0)
-					{
-						widgSetButtonState(psWScreen, sButInit.id, 0);
-					}
-					else
-					{
-						widgSetButtonState(psWScreen, sButInit.id, WBUT_DISABLE);
-					}
-				}
+			 {
+				bool selected = (State & OrderButtons[OrdIndex].StateMask) == (UDWORD)OrderButtons[OrdIndex].States[i];
+				bool first = i == 0;
+				widgSetButtonState(psWScreen, sButInit.id, selected? WBUT_CLICKLOCK : first? 0 : WBUT_DISABLE);
 				break;
+			 }
 			case ORD_BTYPE_BOOLEAN_COMBINE:
-				if (State & (UDWORD)OrderButtons[OrdIndex].States[i])
-				{
-					widgSetButtonState(psWScreen, sButInit.id, WBUT_CLICKLOCK);
-				}
+			 {
+				bool selected = State & (UDWORD)OrderButtons[OrdIndex].States[i];
+				widgSetButtonState(psWScreen, sButInit.id, selected? WBUT_CLICKLOCK : 0);
 				break;
+			 }
 			}
 
 			// may not add a button if the factory doesn't exist
@@ -978,11 +769,8 @@ bool intAddOrder(BASE_OBJECT *psObj)
 	}
 
 	// Now we know how many orders there are we can resize the form accordingly.
-	Form = (W_FORM *)widgGetFromID(psWScreen, IDORDER_FORM);
-	Form->height = (UWORD)(Height + CLOSE_HEIGHT + ORDER_BUTGAP);
-	Form->y = (SWORD)(ORDER_BOTTOMY - Form->height);
-
-
+	int newHeight = Height + CLOSE_HEIGHT + ORDER_BUTGAP;
+	orderForm->setGeometry(orderForm->x(), ORDER_BOTTOMY - newHeight, orderForm->width(), newHeight);
 
 	OrderUp = true;
 
@@ -1242,39 +1030,24 @@ static bool intRefreshOrderButtons(void)
 			{
 			case ORD_BTYPE_RADIO:
 			case ORD_BTYPE_BOOLEAN:
-				if ((State & OrderButtons[OrdIndex].StateMask) == (UDWORD)OrderButtons[OrdIndex].States[i])
-				{
-					widgSetButtonState(psWScreen, id, WBUT_CLICKLOCK);
-				}
-				else
-				{
-					widgSetButtonState(psWScreen, id, 0);
-				}
+			 {
+				bool selected = (State & OrderButtons[OrdIndex].StateMask) == (UDWORD)OrderButtons[OrdIndex].States[i];
+				widgSetButtonState(psWScreen, id, selected? WBUT_CLICKLOCK : 0);
 				break;
-
+			 }
 			case ORD_BTYPE_BOOLEAN_DEPEND:
-				if ((State & OrderButtons[OrdIndex].StateMask) == (UDWORD)OrderButtons[OrdIndex].States[i])
-				{
-					widgSetButtonState(psWScreen, id, WBUT_CLICKLOCK);
-				}
-				else
-				{
-					if (i == 0)
-					{
-						widgSetButtonState(psWScreen, id, 0);
-					}
-					else
-					{
-						widgSetButtonState(psWScreen, id, WBUT_DISABLE);
-					}
-				}
+			 {
+				bool selected = (State & OrderButtons[OrdIndex].StateMask) == (UDWORD)OrderButtons[OrdIndex].States[i];
+				bool first = i == 0;
+				widgSetButtonState(psWScreen, id, selected? WBUT_CLICKLOCK : first? 0 : WBUT_DISABLE);
 				break;
+			 }
 			case ORD_BTYPE_BOOLEAN_COMBINE:
-				if (State & (UDWORD)OrderButtons[OrdIndex].States[i])
-				{
-					widgSetButtonState(psWScreen, id, WBUT_CLICKLOCK);
-				}
+			 {
+				bool selected = State & (UDWORD)OrderButtons[OrdIndex].States[i];
+				widgSetButtonState(psWScreen, id, selected? WBUT_CLICKLOCK : 0);
 				break;
+			 }
 			}
 
 			id ++;
@@ -1333,18 +1106,13 @@ bool intRefreshOrder(void)
 //
 void intRemoveOrder(void)
 {
-	W_TABFORM *Form;
-
 	widgDelete(psWScreen, IDORDER_CLOSE);
 
 	// Start the window close animation.
-	Form = (W_TABFORM *)widgGetFromID(psWScreen, IDORDER_FORM);
-	if (Form)
+	IntFormAnimated *form = (IntFormAnimated *)widgGetFromID(psWScreen, IDORDER_FORM);
+	if (form != nullptr)
 	{
-		Form->display = intClosePlainForm;
-		Form->pUserData = NULL; // Used to signal when the close anim has finished.
-		Form->disableChildren = true;
-		ClosingOrder = true;
+		form->closeAnimateDelete();
 		OrderUp = false;
 		SelectedDroids.clear();
 		psSelectedFactory = NULL;

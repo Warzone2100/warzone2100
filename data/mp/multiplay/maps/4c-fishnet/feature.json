@@ -1,0 +1,1198 @@
+{
+    "feature_0001": {
+        "name": "TreeSnow2",
+        "position": [
+            1152,
+            9344,
+            456
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0002": {
+        "name": "TreeSnow3",
+        "position": [
+            832,
+            11072,
+            510
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0003": {
+        "name": "TreeSnow2",
+        "position": [
+            768,
+            11392,
+            510
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0004": {
+        "name": "TreeSnow3",
+        "position": [
+            1472,
+            11072,
+            457
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0005": {
+        "name": "TreeSnow2",
+        "position": [
+            1280,
+            10880,
+            458
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0006": {
+        "name": "TreeSnow1",
+        "position": [
+            640,
+            9600,
+            482
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0007": {
+        "name": "TreeSnow1",
+        "position": [
+            640,
+            6656,
+            510
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0008": {
+        "name": "TreeSnow2",
+        "position": [
+            384,
+            6400,
+            510
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0009": {
+        "name": "TreeSnow2",
+        "position": [
+            896,
+            6144,
+            510
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0012": {
+        "name": "TreeSnow3",
+        "position": [
+            1344,
+            1088,
+            390
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0014": {
+        "name": "Tree2",
+        "position": [
+            2816,
+            2944,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0015": {
+        "name": "Tree1",
+        "position": [
+            2688,
+            2688,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0016": {
+        "name": "Tree3",
+        "position": [
+            3008,
+            2624,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0017": {
+        "name": "Tree2",
+        "position": [
+            2688,
+            5888,
+            82
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0018": {
+        "name": "Tree1",
+        "position": [
+            2816,
+            5376,
+            76
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0019": {
+        "name": "Tree3",
+        "position": [
+            2880,
+            5696,
+            75
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0020": {
+        "name": "Tree1",
+        "position": [
+            2688,
+            5632,
+            74
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0021": {
+        "name": "Tree1",
+        "position": [
+            9088,
+            7296,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0022": {
+        "name": "Tree2",
+        "position": [
+            8960,
+            7040,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0023": {
+        "name": "Tree2",
+        "position": [
+            9216,
+            4992,
+            2
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0024": {
+        "name": "Tree3",
+        "position": [
+            9280,
+            5312,
+            41
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0028": {
+        "name": "Tree3",
+        "position": [
+            7872,
+            6464,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0029": {
+        "name": "Tree2",
+        "position": [
+            7680,
+            8576,
+            26
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0030": {
+        "name": "Tree3",
+        "position": [
+            7744,
+            8384,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0031": {
+        "name": "Tree2",
+        "position": [
+            4096,
+            8192,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0032": {
+        "name": "Tree3",
+        "position": [
+            6336,
+            11968,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0033": {
+        "name": "Tree2",
+        "position": [
+            6144,
+            11904,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0034": {
+        "name": "Tree3",
+        "position": [
+            4416,
+            8384,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0035": {
+        "name": "Tree1",
+        "position": [
+            4352,
+            8192,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0037": {
+        "name": "TreeSnow2",
+        "position": [
+            1664,
+            10624,
+            362
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0039": {
+        "name": "TreeSnow2",
+        "position": [
+            1536,
+            10368,
+            362
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0040": {
+        "name": "TreeSnow1",
+        "position": [
+            1664,
+            10112,
+            362
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0042": {
+        "name": "TreeSnow1",
+        "position": [
+            640,
+            6272,
+            510
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0043": {
+        "name": "TreeSnow3",
+        "position": [
+            832,
+            5952,
+            510
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0044": {
+        "name": "TreeSnow1",
+        "position": [
+            10240,
+            9856,
+            510
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0045": {
+        "name": "TreeSnow2",
+        "position": [
+            10496,
+            10112,
+            510
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0046": {
+        "name": "TreeSnow1",
+        "position": [
+            10496,
+            9856,
+            510
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0047": {
+        "name": "TreeSnow1",
+        "position": [
+            9600,
+            12032,
+            400
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0048": {
+        "name": "TreeSnow2",
+        "position": [
+            10112,
+            11520,
+            400
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0049": {
+        "name": "TreeSnow1",
+        "position": [
+            9856,
+            11776,
+            400
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0050": {
+        "name": "TreeSnow1",
+        "position": [
+            10240,
+            10752,
+            262
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0051": {
+        "name": "TreeSnow1",
+        "position": [
+            10752,
+            6784,
+            336
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0052": {
+        "name": "TreeSnow2",
+        "position": [
+            11392,
+            4736,
+            336
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0054": {
+        "name": "TreeSnow1",
+        "position": [
+            11776,
+            2048,
+            372
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0055": {
+        "name": "Tree1",
+        "position": [
+            8960,
+            5376,
+            27
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0056": {
+        "name": "Tree1",
+        "position": [
+            8832,
+            7296,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0057": {
+        "name": "TreeSnow2",
+        "position": [
+            10368,
+            512,
+            460
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0058": {
+        "name": "TreeSnow1",
+        "position": [
+            10240,
+            256,
+            470
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0059": {
+        "name": "Tree2",
+        "position": [
+            9088,
+            2816,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0062": {
+        "name": "Tree2",
+        "position": [
+            6656,
+            768,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0064": {
+        "name": "Tree1",
+        "position": [
+            6400,
+            896,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0065": {
+        "name": "Tree2",
+        "position": [
+            6400,
+            640,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0066": {
+        "name": "Tree3",
+        "position": [
+            6592,
+            960,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0126": {
+        "name": "OilResource",
+        "position": [
+            3008,
+            1344,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0127": {
+        "name": "OilResource",
+        "position": [
+            3264,
+            1344,
+            1
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0128": {
+        "name": "OilResource",
+        "position": [
+            3008,
+            1600,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0129": {
+        "name": "OilResource",
+        "position": [
+            3264,
+            1600,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0146": {
+        "name": "OilResource",
+        "position": [
+            8000,
+            1472,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0147": {
+        "name": "OilResource",
+        "position": [
+            8256,
+            1472,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0148": {
+        "name": "OilResource",
+        "position": [
+            8000,
+            1728,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0149": {
+        "name": "OilResource",
+        "position": [
+            8256,
+            1728,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0166": {
+        "name": "OilResource",
+        "position": [
+            8128,
+            10688,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0167": {
+        "name": "OilResource",
+        "position": [
+            8384,
+            10688,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0168": {
+        "name": "OilResource",
+        "position": [
+            8128,
+            10944,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0169": {
+        "name": "OilResource",
+        "position": [
+            8384,
+            10944,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0186": {
+        "name": "OilResource",
+        "position": [
+            3392,
+            11456,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0187": {
+        "name": "OilResource",
+        "position": [
+            3648,
+            11456,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0188": {
+        "name": "OilResource",
+        "position": [
+            3392,
+            11712,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0189": {
+        "name": "OilResource",
+        "position": [
+            3648,
+            11712,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0225": {
+        "name": "OilResource",
+        "position": [
+            11456,
+            11328,
+            486
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0226": {
+        "name": "OilResource",
+        "position": [
+            11072,
+            8768,
+            336
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0227": {
+        "name": "OilResource",
+        "position": [
+            11456,
+            6592,
+            336
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0228": {
+        "name": "OilResource",
+        "position": [
+            11200,
+            4032,
+            496
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0229": {
+        "name": "OilResource",
+        "position": [
+            11456,
+            2368,
+            478
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0230": {
+        "name": "OilResource",
+        "position": [
+            11584,
+            832,
+            504
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0231": {
+        "name": "OilResource",
+        "position": [
+            832,
+            576,
+            510
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0232": {
+        "name": "OilResource",
+        "position": [
+            576,
+            3392,
+            510
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0233": {
+        "name": "OilResource",
+        "position": [
+            576,
+            5184,
+            510
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0234": {
+        "name": "OilResource",
+        "position": [
+            832,
+            8128,
+            484
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0235": {
+        "name": "OilResource",
+        "position": [
+            960,
+            9408,
+            470
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0236": {
+        "name": "OilResource",
+        "position": [
+            960,
+            11584,
+            510
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0237": {
+        "name": "OilResource",
+        "position": [
+            7104,
+            4288,
+            75
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0238": {
+        "name": "OilResource",
+        "position": [
+            5440,
+            3904,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0239": {
+        "name": "OilResource",
+        "position": [
+            7104,
+            9024,
+            75
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0240": {
+        "name": "OilResource",
+        "position": [
+            6080,
+            8896,
+            79
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0241": {
+        "name": "OilResource",
+        "position": [
+            2880,
+            6080,
+            94
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0242": {
+        "name": "OilResource",
+        "position": [
+            8768,
+            5568,
+            46
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0409": {
+        "name": "BarbWarehouse2",
+        "position": [
+            7040,
+            4672,
+            75
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0410": {
+        "name": "BarbWarehouse2",
+        "position": [
+            7040,
+            4544,
+            75
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0455": {
+        "name": "OldFactory",
+        "position": [
+            6784,
+            8320,
+            75
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0462": {
+        "name": "BarbWarehouse2",
+        "position": [
+            7040,
+            8256,
+            75
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0463": {
+        "name": "BarbWarehouse3",
+        "position": [
+            6464,
+            8256,
+            75
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    }
+}

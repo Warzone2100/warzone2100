@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -32,9 +32,13 @@
 #define ALLIANCE_FORMED		3
 #define	ALLIANCE_NULL		4			// for setting values only.
 
-#define NO_ALLIANCES		0			//alliance possibilities for games.
-#define ALLIANCES			1
-#define	ALLIANCES_TEAMS		2			//locked teams
+enum AllianceType
+{
+	NO_ALLIANCES,        // FFA
+	ALLIANCES,           // Players can make and break alliances during the game.
+	ALLIANCES_TEAMS,     // Alliances are set before the game.
+	ALLIANCES_UNSHARED,  // Alliances are set before the game. No shared research.
+};
 
 /// Amount of time to rage at the world when frustrated (10 seconds)
 #define FRUSTRATED_TIME (1000 * 10)
@@ -62,17 +66,16 @@ void aiUpdateDroid(DROID *psDroid);
 // Find the nearest best target for a droid
 // returns integer representing quality of choice, -1 if failed
 int aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot, int extraRange = 0);
-int aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot, void const *extraRange);
 
 // Are there a lot of bullets heading towards the structure?
-bool aiObjectIsProbablyDoomed(BASE_OBJECT *psObject);
+bool aiObjectIsProbablyDoomed(BASE_OBJECT *psObject, bool isDirect);
 
 // Update the expected damage of the object.
-void aiObjectAddExpectedDamage(BASE_OBJECT *psObject, SDWORD damage);
+void aiObjectAddExpectedDamage(BASE_OBJECT *psObject, SDWORD damage, bool isDirect);
 
 /* See if there is a target in range added int weapon_slot*/
 bool aiChooseTarget(BASE_OBJECT *psObj,
-                    BASE_OBJECT **ppsTarget, int weapon_slot, bool bUpdateTarget, UWORD *targetOrigin);
+                    BASE_OBJECT **ppsTarget, int weapon_slot, bool bUpdateTarget, TARGET_ORIGIN *targetOrigin);
 
 /** See if there is a target in range for Sensor objects. */
 bool aiChooseSensorTarget(BASE_OBJECT *psObj, BASE_OBJECT **ppsTarget);
@@ -82,4 +85,30 @@ can fire on the propulsion type of the target*/
 bool validTarget(BASE_OBJECT *psObject, BASE_OBJECT *psTarget, int weapon_slot);
 // Check if any of the weapons can target the target
 bool checkAnyWeaponsTarget(BASE_OBJECT *psObject, BASE_OBJECT *psTarget);
+// Check properties of the AllianceType enum.
+static inline bool alliancesFixed(int t)
+{
+	return t != ALLIANCES;
+}
+static inline bool alliancesSharedVision(int t)
+{
+	return t == ALLIANCES_TEAMS || t == ALLIANCES_UNSHARED;
+}
+static inline bool alliancesSharedResearch(int t)
+{
+	return t == ALLIANCES || t == ALLIANCES_TEAMS;
+}
+static inline bool alliancesSetTeamsBeforeGame(int t)
+{
+	return t == ALLIANCES_TEAMS || t == ALLIANCES_UNSHARED;
+}
+static inline bool alliancesCanGiveResearchAndRadar(int t)
+{
+	return t == ALLIANCES;
+}
+static inline bool alliancesCanGiveAnything(int t)
+{
+	return t != NO_ALLIANCES;
+}
+
 #endif // __INCLUDED_SRC_AI_H__

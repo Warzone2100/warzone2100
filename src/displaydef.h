@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -27,10 +27,9 @@
 #include "lib/ivis_opengl/imd.h"
 #include "lib/ivis_opengl/pieclip.h"
 
-#define	BOUNDARY_X			(22)
-#define BOUNDARY_Y			(22)
-//#define BOUNDARY_X		(DISP_WIDTH/20)	   // proportional to resolution - Alex M
-//#define	BOUNDARY_Y		(DISP_WIDTH/16)
+// for mouse scrolling. (how many pixels from the edge before pointer scrolls the screen in a direction)
+#define	BOUNDARY_X	(2)
+#define	BOUNDARY_Y	(2)
 
 struct SCREEN_DISP_DATA
 {

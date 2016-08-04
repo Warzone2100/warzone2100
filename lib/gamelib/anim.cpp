@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -29,16 +29,15 @@
 /***************************************************************************/
 
 #include <string.h>
+#include <list>
 
 #include "lib/framework/frame.h"
 #include "lib/framework/string_ext.h"
 #include "lib/framework/frameresource.h"
-#include "lib/ivis_opengl/piematrix.h"
 #include "lib/framework/fixedpoint.h"
 
 #include "anim.h"
 #include "parser.h"
-#include "lib/framework/listmacs.h"
 
 #define INT_SCALE       1000
 
@@ -51,9 +50,9 @@
 
 static struct
 {
-	BASEANIM                *psAnimList;
-	UWORD                   uwCurObj;
-	UWORD			uwCurState;
+	std::list<BASEANIM *> psAnimList;
+	UWORD uwCurObj;
+	UWORD uwCurState;
 }
 g_animGlobals;
 
@@ -69,33 +68,21 @@ g_animGlobals;
 bool anim_Init()
 {
 	/* init globals */
-	g_animGlobals.psAnimList    = NULL;
-	g_animGlobals.uwCurObj      = 0;
-	g_animGlobals.uwCurState    = 0;
+	g_animGlobals.psAnimList.clear();
+	g_animGlobals.uwCurObj = 0;
+	g_animGlobals.uwCurState = 0;
 
 	return true;
 }
 
-/***************************************************************************/
-
-/**
- *	Stop and release given animation.
- */
-void anim_ReleaseAnim(BASEANIM *psAnim)
+static void freeAnim(BASEANIM *psAnim)
 {
-	// remove the anim from the list
-	if (g_animGlobals.psAnimList)
-	{
-		LIST_REMOVE(g_animGlobals.psAnimList, psAnim, BASEANIM);
-	}
-	/* free anim scripts */
-	free(psAnim->psStates);
+	free(psAnim->psStates);	// free anim scripts
 
 	/* free anim shape */
 	if (psAnim->animType == ANIM_3D_FRAMES || psAnim->animType == ANIM_3D_TRANS)
 	{
 		ANIM3D	*psAnim3D = (ANIM3D *)psAnim;
-
 		free(psAnim3D->apFrame);
 	}
 
@@ -103,25 +90,24 @@ void anim_ReleaseAnim(BASEANIM *psAnim)
 }
 
 /**
+ *	Stop and release given animation.
+ */
+void anim_ReleaseAnim(BASEANIM *psAnim)
+{
+	g_animGlobals.psAnimList.remove(psAnim);
+	freeAnim(psAnim);
+}
+
+/**
  *	Shut down animation subsystem.
  */
 bool anim_Shutdown()
 {
-	BASEANIM	*psAnim, *psAnimTmp;
-
-	if (g_animGlobals.psAnimList != NULL)
+	for (auto psAnim : g_animGlobals.psAnimList)
 	{
-		debug(LOG_ERROR, "anim_Shutdown: warning: anims still allocated");
+		freeAnim(psAnim);
 	}
-
-	/* empty anim list */
-	psAnim = g_animGlobals.psAnimList;
-	while (psAnim != NULL)
-	{
-		psAnimTmp = psAnim->psNext;
-		anim_ReleaseAnim(psAnim);
-		psAnim = psAnimTmp;
-	}
+	g_animGlobals.psAnimList.clear();
 
 	return true;
 }
@@ -157,7 +143,7 @@ bool anim_Create3D(char szPieFileName[], UWORD uwStates, UWORD uwFrameRate, UWOR
 	}
 
 	/* get local pointer to shape */
-	psAnim3D->psFrames = (iIMDShape *)resGetData("IMD", szPieFileName);
+	psAnim3D->psFrames = modelGet(szPieFileName);
 
 	/* count frames in imd */
 	psFrames = psAnim3D->psFrames;
@@ -187,12 +173,9 @@ bool anim_Create3D(char szPieFileName[], UWORD uwStates, UWORD uwFrameRate, UWOR
 
 	/* init members */
 	psAnim3D->animType = ubType;
-	anim_InitBaseMembers((BASEANIM *) psAnim3D, uwStates,
-	                     uwFrameRate, uwObj, ubType, uwID);
+	anim_InitBaseMembers((BASEANIM *)psAnim3D, uwStates, uwFrameRate, uwObj, ubType, uwID);
 
-	/* add to head of list */
-	psAnim3D->psNext = g_animGlobals.psAnimList;
-	g_animGlobals.psAnimList = (BASEANIM *) psAnim3D;
+	g_animGlobals.psAnimList.push_front(psAnim3D);
 
 	/* update globals */
 	g_animGlobals.uwCurObj = 0;
@@ -200,28 +183,19 @@ bool anim_Create3D(char szPieFileName[], UWORD uwStates, UWORD uwFrameRate, UWOR
 	return true;
 }
 
-/***************************************************************************/
-
 void anim_BeginScript()
 {
 	/* update globals */
 	g_animGlobals.uwCurState = 0;
 }
 
-/***************************************************************************/
-
 bool anim_EndScript()
 {
-	BASEANIM	*psAnim;
-
 	/* get pointer to current anim */
-	psAnim = g_animGlobals.psAnimList;
+	BASEANIM *psAnim = g_animGlobals.psAnimList.front();
 
-	if (g_animGlobals.uwCurState != psAnim->uwStates)
-	{
-		ASSERT(false, "States in current anim not consistent with header");
-		return false;
-	}
+	ASSERT_OR_RETURN(false, g_animGlobals.uwCurState == psAnim->uwStates,
+	                 "States in current anim not consistent with header");
 
 	/* update globals */
 	g_animGlobals.uwCurObj++;
@@ -229,45 +203,27 @@ bool anim_EndScript()
 	return true;
 }
 
-/***************************************************************************/
-
 bool anim_AddFrameToAnim(int iFrame, Vector3i vecPos, Vector3i vecRot, Vector3i vecScale)
 {
-	ANIM_STATE	*psState;
-	BASEANIM	*psAnim;
-	UWORD		uwState;
+	ANIM_STATE *psState;
+	UWORD uwState;
 
 	/* get pointer to current anim */
-	psAnim = g_animGlobals.psAnimList;
-
-	/* check current anim valid */
-	ASSERT(psAnim != NULL, "anim_AddFrameToAnim: NULL current anim\n");
+	BASEANIM *psAnim = g_animGlobals.psAnimList.front();
 
 	/* check frame number in range */
-	ASSERT(iFrame < psAnim->uwStates,
-	       "anim_AddFrameToAnim: frame number %i > %i frames in imd\n",
-	       iFrame, psAnim->uwObj);
+	ASSERT(iFrame < psAnim->uwStates, "frame number %i > %i frames in imd", iFrame, psAnim->uwObj);
 
 	/* get state */
-	uwState = (g_animGlobals.uwCurObj * psAnim->uwStates) +
-	          g_animGlobals.uwCurState;
+	uwState = (g_animGlobals.uwCurObj * psAnim->uwStates) + g_animGlobals.uwCurState;
 	psState = &psAnim->psStates[uwState];
 
 	/* set state pointer */
-	psState->uwFrame = (UWORD) iFrame;
+	psState->uwFrame = iFrame;
 
-	psState->vecPos.x = vecPos.x;
-	psState->vecPos.y = vecPos.y;
-	psState->vecPos.z = vecPos.z;
-
-	/* max anims right-handed; Necromancer anims left */
-	psState->vecAngle.x  = vecRot.x;
-	psState->vecAngle.y  = vecRot.y;
-	psState->vecAngle.z  = vecRot.z;
-
-	psState->vecScale.x  = vecScale.x;
-	psState->vecScale.y  = vecScale.y;
-	psState->vecScale.z  = vecScale.z;
+	psState->vecPos = vecPos;
+	psState->vecAngle  = vecRot;
+	psState->vecScale  = vecScale;
 
 	/* update globals */
 	g_animGlobals.uwCurState++;
@@ -275,41 +231,29 @@ bool anim_AddFrameToAnim(int iFrame, Vector3i vecPos, Vector3i vecRot, Vector3i 
 	return true;
 }
 
-/***************************************************************************/
-
 BASEANIM *anim_GetAnim(UWORD uwAnimID)
 {
-	BASEANIM	*psAnim;
-
-	/* find matching anim id in list */
-	psAnim = g_animGlobals.psAnimList;
-	while (psAnim != NULL && psAnim->uwID != uwAnimID)
+	for (auto psAnim : g_animGlobals.psAnimList)
 	{
-		psAnim = psAnim->psNext;
+		if (psAnim->uwID == uwAnimID)
+		{
+			return psAnim;
+		}
 	}
-
-	return psAnim;
+	return NULL;
 }
-
-/***************************************************************************/
 
 void anim_SetVals(char szFileName[], UWORD uwAnimID)
 {
 	/* get track pointer from resource */
-	BASEANIM	*psAnim = (BASEANIM *)resGetData("ANI", szFileName);
+	BASEANIM *psAnim = (BASEANIM *)resGetData("ANI", szFileName);
 
-	if (psAnim == NULL)
-	{
-		ASSERT(false, "Can't find anim %s", szFileName);
-		return ;
-	}
+	ASSERT_OR_RETURN(, psAnim, "Cannot find anim %s", szFileName);
 
 	/* set anim vals */
 	psAnim->uwID = uwAnimID;
 	sstrcpy(psAnim->szFileName, szFileName);
 }
-
-/***************************************************************************/
 
 BASEANIM *anim_LoadFromFile(PHYSFS_file *fileHandle)
 {
@@ -320,76 +264,47 @@ BASEANIM *anim_LoadFromFile(PHYSFS_file *fileHandle)
 	}
 
 	/* loaded anim is at head of list */
-	return g_animGlobals.psAnimList;
+	return g_animGlobals.psAnimList.front();
 }
-
-/***************************************************************************/
 
 UWORD anim_GetAnimID(char *szName)
 {
-	BASEANIM	*psAnim;
-	char		*cPos = strstr(szName, ".ani");
-
-	if (cPos == NULL)
-	{
-		ASSERT(false, "%s isn't .ani file", szName);
-		return NO_ANIM;
-	}
+	ASSERT_OR_RETURN(NO_ANIM, strstr(szName, ".ani"), "%s isn't .ani file", szName);
 
 	/* find matching anim string in list */
-	psAnim = g_animGlobals.psAnimList;
-	while (psAnim != NULL && strcasecmp(psAnim->szFileName, szName) != 0)
+	for (auto psAnim : g_animGlobals.psAnimList)
 	{
-		psAnim = psAnim->psNext;
+		if (strcasecmp(psAnim->szFileName, szName) == 0)
+		{
+			return psAnim->uwID;
+		}
 	}
-
-	if (psAnim != NULL)
-	{
-		return psAnim->uwID;
-	}
-	else
-	{
-		return NO_ANIM;
-	}
+	return NO_ANIM;
 }
-
-/***************************************************************************/
 
 iIMDShape *anim_GetShapeFromID(UWORD uwID)
 {
-	BASEANIM	*psAnim = g_animGlobals.psAnimList;
-
-	/* find matching anim id in list */
-	while (psAnim != NULL && psAnim->uwID != uwID)
+	for (auto psAnim : g_animGlobals.psAnimList)
 	{
-		psAnim = psAnim->psNext;
+		if (psAnim->uwID == uwID)
+		{
+			ANIM3D *psAnim3D = (ANIM3D *)psAnim;
+			ASSERT(psAnim3D != NULL, "Invalid anim pointer");
+			return psAnim3D->psFrames;
+		}
 	}
-
-	if (psAnim == NULL)
-	{
-		return NULL;
-	}
-	else
-	{
-		ANIM3D	*psAnim3D = (ANIM3D *)psAnim;
-
-		ASSERT(psAnim3D != NULL, "anim_GetShapeFromID: invalid anim pointer");
-
-		return psAnim3D->psFrames;
-	}
+	return NULL;
 }
 
-/***************************************************************************/
-
 UWORD anim_GetFrame3D(ANIM3D *psAnim, UWORD uwObj, UDWORD udwGraphicsTime, UDWORD udwStartTime,
-                      UDWORD udwStartDelay, Vector3i *psVecPos, Vector3i *psVecRot, Vector3i *psVecScale)
+                      Vector3i *psVecPos, Vector3i *psVecRot, Vector3i *psVecScale)
 {
 	SDWORD		dwTime;
 	UWORD		uwState, uwFrame;
 	ANIM_STATE	*psState;
 
 	/* calculate current anim frame */
-	dwTime = udwGraphicsTime - udwStartTime - udwStartDelay;
+	dwTime = udwGraphicsTime - udwStartTime;
 
 	/* return NULL if animation still delayed */
 	if (dwTime < 0)
@@ -427,5 +342,3 @@ UWORD anim_GetFrame3D(ANIM3D *psAnim, UWORD uwObj, UDWORD udwGraphicsTime, UDWOR
 		return psAnim->psStates[uwState].uwFrame;
 	}
 }
-
-/***************************************************************************/

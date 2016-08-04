@@ -90,7 +90,7 @@ startStruct	[38]	STRUCTURESTAT	"Tower-Projector"	//Inferno Emplacement
 startStruct	[39]	STRUCTURESTAT	"Pillbox-RotMG"
 
 
-numWeapons		int		36
+numWeapons		int		37
 startWeapon	[0]	WEAPON		"AAGun2Mk1"
 startWeapon	[1]	WEAPON		"Bomb1-VTOL-LtHE"
 startWeapon	[2]	WEAPON		"Bomb2-VTOL-HvHE"
@@ -127,6 +127,7 @@ startWeapon	[32]	WEAPON		"Rocket-MRL"
 startWeapon	[33]	WEAPON		"Rocket-Pod"
 startWeapon	[34]	WEAPON		"Rocket-VTOL-Pod"
 startWeapon	[35]	WEAPON		"Mortar2Mk1"
+startWeapon	[36]	WEAPON		"CommandTurret1"
 
 numBodies		int		13
 startBody	[0]	BODY		"Body11ABT"

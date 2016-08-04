@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -80,36 +80,6 @@ void iV_font(const char *fontName, const char *fontFace, const char *fontFaceBol
 	if (fontFaceBold)
 	{
 		sstrcpy(font_face_bold, fontFaceBold);
-	}
-}
-
-static inline void iV_printFontList(void)
-{
-	unsigned int i;
-	unsigned int font_count = glcGeti(GLC_CURRENT_FONT_COUNT);
-	debug(LOG_NEVER, "GLC_CURRENT_FONT_COUNT = %d", font_count);
-
-	if (font_count == 0)
-	{
-		debug(LOG_ERROR, "The required font (%s) isn't loaded", font_family);
-
-		// Fall back to unselected fonts since the requested font apparently
-		// isn't available.
-		glcEnable(GLC_AUTO_FONT);
-	}
-
-	for (i = 0; i < font_count; ++i)
-	{
-		GLint font = glcGetListi(GLC_CURRENT_FONT_LIST, i);
-		/* The output of the family name and the face is printed using 2 steps
-		 * because glcGetFontc and glcGetFontFace return their result in the
-		 * same buffer (according to GLC specs).
-		 */
-		char prBuffer[1024];
-		snprintf(prBuffer, sizeof(prBuffer), "Font #%d : %s ", (int)font, (const char *)glcGetFontc(font, GLC_FAMILY));
-		prBuffer[sizeof(prBuffer) - 1] = 0;
-		sstrcat(prBuffer, (char const *)glcGetFontFace(font));
-		debug(LOG_NEVER, "%s", prBuffer);
 	}
 }
 
@@ -203,10 +173,6 @@ void iV_TextInit()
 {
 	iV_initializeGLC();
 	iV_SetFont(font_regular);
-
-#ifdef DEBUG
-	iV_printFontList();
-#endif
 }
 
 void iV_TextShutdown()

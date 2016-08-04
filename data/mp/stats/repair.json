@@ -1,0 +1,60 @@
+{
+    "AutoRepair": {
+        "id": "AutoRepair",
+        "location": "DEFAULT",
+        "name": "Auto Repair",
+        "repairPoints": 100,
+        "time": 75
+    },
+    "CyborgRepair": {
+        "buildPoints": 100,
+        "buildPower": 35,
+        "id": "CyborgRepair",
+        "location": "TURRET",
+        "model": "cy_rep.pie",
+        "mountModel": "cybody.pie",
+        "name": "*Cyborg Mechanic*",
+        "repairPoints": 10,
+        "time": 7,
+        "weight": 150
+    },
+    "HeavyRepair": {
+        "buildPoints": 300,
+        "buildPower": 70,
+        "designable": 1,
+        "id": "HeavyRepair",
+        "location": "TURRET",
+        "model": "GNMREPR2.PIE",
+        "mountModel": "TRMECM1.PIE",
+        "name": "Heavy Repair Turret",
+        "repairPoints": 30,
+        "time": 7,
+        "weight": 3000
+    },
+    "LightRepair1": {
+        "buildPoints": 250,
+        "buildPower": 50,
+        "designable": 1,
+        "id": "LightRepair1",
+        "location": "TURRET",
+        "model": "GNMREPAR.PIE",
+        "mountModel": "TRMECM1.PIE",
+        "name": "Repair Turret",
+        "repairPoints": 15,
+        "time": 7,
+        "weight": 800
+    },
+    "NEXUSrepair": {
+        "id": "NEXUSrepair",
+        "location": "DEFAULT",
+        "name": "*NEXUSrepair*",
+        "repairPoints": 100,
+        "time": 100
+    },
+    "ZNULLREPAIR": {
+        "id": "ZNULLREPAIR",
+        "location": "DEFAULT",
+        "name": "ZNULLREPAIR",
+        "time": 100
+    }
+}

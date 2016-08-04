@@ -5,7 +5,6 @@
  *
  */
 
-
 // general use variables
 private INT			count;
 private	BOOL		flag;
@@ -48,7 +47,6 @@ public	int		numDead, deadX1[2], deadY1[2], deadX2[2], deadY2[2];
 private	int		temp;
 private	GROUP		deadGroup;
 
-
 // pause before playing the 1B breifing
 trigger	briefPause(wait, 30);
 trigger	vidTrig(CALL_VIDEO_QUIT);
@@ -65,32 +63,13 @@ event start(CALL_GAMEINIT)
 	addMessage(targets, PROX_MSG, player, false);
 	tarGone[0] = FALSE;
 	msgAdded = FALSE;
-    //we don't want the coded countdown
-    setPlayCountDown(FALSE);
+	//we don't want the coded countdown
+	setPlayCountDown(FALSE);
 }
-
-
-/*
-// add individual blips for each silo once they have been seen
-event silosSeen(seenStructInArea(player, enemy[0], FALSE, tarX1,tarY1,tarX2,tarY2), 20)
-{
-	count = 1;
-	while (count < numTargets)
-	{
-		addMessage(targets[count], PROX_MSG, player, false);
-		tarGone[count] = FALSE;
-		count = count + 1;
-	}
-
-	msgAdded = TRUE;
-
-	setEventTrigger(silosSeen, inactive);
-}
-*/
 
 event playBrief2(inactive)
 {
-    removeMessage(cam3_1ABrief, MISS_MSG, player);  //remove cam3-1A message
+	removeMessage(cam3_1ABrief, MISS_MSG, player);  //remove cam3-1A message
 	removeMessage(briefing, MISS_MSG, player);	//remove earlier bit
 	addMessage(briefing2, MISS_MSG, player, TRUE);	//summary to keep
 	pause(20);
@@ -103,13 +82,10 @@ event playBriefing(inactive)
 {
 	setEventTrigger(playBrief2, vidTrig);
 	addMessage(briefing, MISS_MSG, player, TRUE);
-
-
-    //set the reinforcement time to -1 so that the timer widget disappears
-    setReinforcementTime(-1);
-    //set up the proximity message for the hideaway location
+	// set the reinforcement time to -1 so that the timer widget disappears
+	setReinforcementTime(-1);
+	// set up the proximity message for the hideaway location
 	addMessage(hideLocBlip, PROX_MSG, player, false);
-
 	setScrollParams(0, 0, 64, 64);
 	//allow valley checks
 	setEventTrigger(checkValley, checkValleyTrig);
@@ -127,14 +103,6 @@ event silosDead(every, 21)
 		{
 			flag = FALSE;
 		}
-/*
-		else if ( (not tarGone[count]) and
-				  ((count == 0) or (msgAdded)) )
-		{
-			removeMessage(targets[count], PROX_MSG, player);
-			tarGone[count] = TRUE;
-		}
-*/
 		count = count + 1;
 	}
 
@@ -185,24 +153,6 @@ event nuke(inactive)
 		//flag won
 		extraVictoryFlag = TRUE;
 		pause(35);
-/* old system
-		//kill everything outside area
-		count = 0;
-		while (count < numDead)
-		{
-			groupAddArea(deadGroup, player, deadX1[count], deadY1[count], deadX2[count], deadY2[count]);
-			count = count + 1;
-		}
-		initIterateGroup(deadGroup);
-		count = 0;
-		while (count < deadGroup.members)
-		{
-			droid = iterateGroup(deadGroup);
-			vanishUnit(droid);
-			count = count + 1;
-		}
-*/
-//new system
 		count = 0;
 		while (count < numDead)
 		{

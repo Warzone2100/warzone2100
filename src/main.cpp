@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -24,8 +24,8 @@
 // Get platform defines before checking for them!
 #include "lib/framework/wzapp.h"
 #include <QtCore/QTextCodec>
-#include <QtGui/QApplication>
-#include <QtGui/QMessageBox>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QMessageBox>
 
 #if defined(WZ_OS_WIN)
 #  include <shlobj.h> /* For SHGetFolderPath */
@@ -35,11 +35,9 @@
 #endif // WZ_OS_WIN
 
 #include "lib/framework/input.h"
-#include "lib/framework/frameint.h"
 #include "lib/framework/physfs_ext.h"
 #include "lib/exceptionhandler/exceptionhandler.h"
 #include "lib/exceptionhandler/dumpinfo.h"
-#include "lib/framework/wzfs.h"
 
 #include "lib/sound/playlist.h"
 #include "lib/gamelib/gtime.h"
@@ -96,6 +94,12 @@
 #  define WZ_DATADIR "data"
 #endif
 
+#include <openssl/conf.h>
+#include <openssl/evp.h>
+#include <openssl/err.h>
+#include <openssl/rand.h>
+
+
 enum FOCUS_STATE
 {
 	FOCUS_OUT,		// Window does not have the focus
@@ -106,7 +110,7 @@ bool customDebugfile = false;		// Default false: user has NOT specified where to
 
 char datadir[PATH_MAX] = ""; // Global that src/clparse.c:ParseCommandLine can write to, so it can override the default datadir on runtime. Needs to be empty on startup for ParseCommandLine to work!
 char configdir[PATH_MAX] = ""; // specifies custom USER directory. Same rules apply as datadir above.
-
+char rulesettag[40] = "";
 char *global_mods[MAX_MODS] = { NULL };
 char *campaign_mods[MAX_MODS] = { NULL };
 char *multiplay_mods[MAX_MODS] = { NULL };
@@ -114,8 +118,6 @@ char *multiplay_mods[MAX_MODS] = { NULL };
 char *override_mods[MAX_MODS] = { NULL };
 char *override_mod_list = NULL;
 bool use_override_mods = false;
-
-char *current_map = NULL;
 
 char *loaded_mods[MAX_MODS] = { NULL };
 char *mod_list = NULL;
@@ -137,22 +139,6 @@ static GS_GAMEMODE gameStatus = GS_TITLE_SCREEN;
 // Status of the gameloop
 static int gameLoopStatus = 0;
 static FOCUS_STATE focusState = FOCUS_IN;
-
-class PhysicsEngineHandler : public QAbstractFileEngineHandler
-{
-public:
-	QAbstractFileEngine *create(const QString &fileName) const;
-};
-
-inline QAbstractFileEngine *PhysicsEngineHandler::create(const QString &fileName) const
-{
-	if (fileName.toLower().startsWith("wz::"))
-	{
-		QString newPath = fileName;
-		return new PhysicsFileSystem(newPath.remove(0, 4));
-	}
-	return NULL;
-}
 
 extern void debug_callback_stderr(void **, const char *);
 extern void debug_callback_win32debug(void **, const char *);
@@ -273,12 +259,6 @@ void setOverrideMods(char *modlist)
 	override_mods[i + 1] = NULL;
 	override_mod_list = modlist;
 	use_override_mods = true;
-}
-
-void setCurrentMap(char *map, int maxPlayers)
-{
-	free(current_map);
-	current_map = map != NULL ? strdup(map) : NULL;
 }
 
 void clearOverrideMods(void)
@@ -793,24 +773,9 @@ static void startGameLoop(void)
 {
 	SetGameMode(GS_NORMAL);
 
-	//if (!levLoadData(game.map /*aLevelName*/, &game.hash, NULL, GTYPE_SCENARIO_START))
 	// Not sure what aLevelName is, in relation to game.map. But need to use aLevelName here, to be able to start the right map for campaign, and need game.hash, to start the right non-campaign map, if there are multiple identically named maps.
 	if (!levLoadData(aLevelName, &game.hash, NULL, GTYPE_SCENARIO_START))
 	{
-		debug(LOG_FATAL, "Shutting down after failure");
-		exit(EXIT_FAILURE);
-	}
-	//after data is loaded check the research stats are valid
-	if (!checkResearchStats())
-	{
-		debug(LOG_FATAL, "Invalid Research Stats");
-		debug(LOG_FATAL, "Shutting down after failure");
-		exit(EXIT_FAILURE);
-	}
-	//and check the structure stats are valid
-	if (!checkStructureStats())
-	{
-		debug(LOG_FATAL, "Invalid Structure Stats");
 		debug(LOG_FATAL, "Shutting down after failure");
 		exit(EXIT_FAILURE);
 	}
@@ -1034,6 +999,10 @@ void mainLoop(void)
 			}
 		realTimeUpdate(); // Update realTime.
 	}
+
+	// Feed a bit of randomness into libcrypto.
+	unsigned buf[] = {mouseX(), mouseY(), realTime, graphicsTime, gameTime, (unsigned) rand(), 4};  // http://xkcd.com/221/
+	RAND_add(buf, sizeof(buf), 1);
 }
 
 bool getUTF8CmdLine(int *const utfargc, const char *** const utfargv) // explicitely pass by reference
@@ -1087,9 +1056,17 @@ extern const char *BACKEND;
 
 int realmain(int argc, char *argv[])
 {
-	wzMain(argc, argv);
 	int utfargc = argc;
 	const char **utfargv = (const char **)argv;
+	wzMain(argc, argv);		// init Qt integration first
+
+	// The libcrypto startup stuff... May or may not actually be needed for anything at all.
+	ERR_load_crypto_strings();  // This is needed for descriptive error messages.
+	OpenSSL_add_all_algorithms();  // Don't actually use the EVP functions, so probably not needed.
+	OPENSSL_config(nullptr);  // What does this actually do?
+#ifdef WZ_OS_WIN
+	RAND_screen();  // Uses a screenshot as a random seed, on systems lacking /dev/random.
+#endif
 
 #ifdef WZ_OS_MAC
 	cocoaInit();
@@ -1108,7 +1085,6 @@ int realmain(int argc, char *argv[])
 	{
 		return EXIT_FAILURE;
 	}
-	QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));	// make Qt treat all C strings in Warzone as UTF-8
 
 	setupExceptionHandler(utfargc, utfargv, version_getFormattedVersionString());
 
@@ -1139,6 +1115,8 @@ int realmain(int argc, char *argv[])
 	make_dir(MultiCustomMapsPath, "maps", NULL); // MUST have this to prevent crashes when getting map
 	PHYSFS_mkdir("music");
 	PHYSFS_mkdir("logs");		// a place to hold our netplay, mingw crash reports & WZ logs
+	PHYSFS_mkdir("userdata");	// a place to store per-mod data user generated data
+	memset(rulesettag, 0, sizeof(rulesettag)); // tag to add to userdata to find user generated stuff
 	make_dir(MultiPlayersPath, "multiplay", NULL);
 	make_dir(MultiPlayersPath, "multiplay", "players");
 
@@ -1178,8 +1156,6 @@ int realmain(int argc, char *argv[])
 	war_SetDefaultStates();
 
 	debug(LOG_MAIN, "initializing");
-
-	PhysicsEngineHandler engine;	// register abstract physfs filesystem
 
 	loadConfig();
 
@@ -1266,10 +1242,17 @@ int realmain(int argc, char *argv[])
 		}
 	}
 
-	if (!wzMain2())
+	if (!wzMainScreenSetup(war_getFSAA(), war_getFullscreen(), war_GetVsync()))
 	{
 		return EXIT_FAILURE;
 	}
+
+	debug(LOG_WZ, "Warzone 2100 - %s", version_getFormattedVersionString());
+	debug(LOG_WZ, "Using language: %s", getLanguage());
+	debug(LOG_WZ, "Backend: %s", BACKEND);
+	debug(LOG_MEMORY, "sizeof: SIMPLE_OBJECT=%ld, BASE_OBJECT=%ld, DROID=%ld, STRUCTURE=%ld, FEATURE=%ld, PROJECTILE=%ld",
+	      (long)sizeof(SIMPLE_OBJECT), (long)sizeof(BASE_OBJECT), (long)sizeof(DROID), (long)sizeof(STRUCTURE), (long)sizeof(FEATURE), (long)sizeof(PROJECTILE));
+
 	int w = pie_GetVideoBufferWidth();
 	int h = pie_GetVideoBufferHeight();
 
@@ -1282,37 +1265,16 @@ int realmain(int argc, char *argv[])
 	{
 		return EXIT_FAILURE;
 	}
+	if (!screenInitialise())
+	{
+		return EXIT_FAILURE;
+	}
+	if (!pie_LoadShaders())
+	{
+		return EXIT_FAILURE;
+	}
 	war_SetWidth(pie_GetVideoBufferWidth());
 	war_SetHeight(pie_GetVideoBufferHeight());
-
-	// Fix up settings from the config file
-	// And initialize shader usage setting
-	if (!pie_GetShaderAvailability())
-	{
-		war_SetShaders(FALLBACK);
-		pie_SetShaderUsage(false);
-	}
-	else
-	{
-		if (war_GetShaders() == FALLBACK)
-		{
-			war_SetShaders(SHADERS_OFF);
-		}
-		if (!pie_GetFallbackAvailability())
-		{
-			war_SetShaders(SHADERS_ONLY);
-			pie_SetShaderUsage(true);
-		}
-		else if (war_GetShaders() == SHADERS_ONLY || war_GetShaders() == SHADERS_ON)
-		{
-			war_SetShaders(SHADERS_ON);
-			pie_SetShaderUsage(true);
-		}
-		else  // (war_GetShaders() == SHADERS_OFF)
-		{
-			pie_SetShaderUsage(false);
-		}
-	}
 
 	pie_SetFogStatus(false);
 	pie_ScreenFlip(CLEAR_BLACK);
@@ -1358,7 +1320,7 @@ int realmain(int argc, char *argv[])
 	debug_MEMSTATS();
 #endif
 	debug(LOG_MAIN, "Entering main loop");
-	wzMain3();
+	wzMainEventLoop();
 	saveConfig();
 	systemShutdown();
 #ifdef WZ_OS_WIN	// clean up the memory allocated for the command line conversion

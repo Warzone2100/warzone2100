@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -65,10 +65,6 @@ static inline MESSAGE *createMessage(MESSAGE_TYPE msgType, UDWORD player)
 
 	ASSERT_OR_RETURN(NULL, player < MAX_PLAYERS, "Bad player");
 	ASSERT_OR_RETURN(NULL, msgType < MSG_TYPES, "Bad message");
-	if (player >= MAX_PLAYERS || msgType >= MSG_TYPES)
-	{
-		return NULL;
-	}
 
 	// Allocate memory for the message, and on failure return a NULL pointer
 	newMsg = (MESSAGE *)malloc(sizeof(MESSAGE));
@@ -428,7 +424,7 @@ void releaseAllProxDisp(void)
 bool initMessage(void)
 {
 	//set up the imd used for proximity messages
-	pProximityMsgIMD = (iIMDShape *)resGetData("IMD", "arrow.pie");
+	pProximityMsgIMD = modelGet("arrow.pie");
 	if (pProximityMsgIMD == NULL)
 	{
 		ASSERT(false, "Unable to load Proximity Message PIE");
@@ -508,7 +504,7 @@ const char *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 			       imdName, imdName2, string, audioName, &dummy, &cnt);
 			pViewMsgData += cnt;
 			psViewRes = (VIEW_RESEARCH *)psViewData->pData;
-			psViewRes->pIMD = (iIMDShape *) resGetData("IMD", imdName);
+			psViewRes->pIMD = modelGet(imdName);
 			if (psViewRes->pIMD == NULL)
 			{
 				ASSERT(false, "Cannot find the PIE for message %s", name);
@@ -517,7 +513,7 @@ const char *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 			}
 			if (strcmp(imdName2, "0"))
 			{
-				psViewRes->pIMD2 = (iIMDShape *) resGetData("IMD", imdName2);
+				psViewRes->pIMD2 = modelGet(imdName2);
 				if (psViewRes->pIMD2 == NULL)
 				{
 					ASSERT(false, "Cannot find the 2nd PIE for message %s", name);
@@ -696,9 +692,7 @@ const char *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 const char *loadResearchViewData(const char *fileName)
 {
 	ASSERT_OR_RETURN(NULL, PHYSFS_exists(fileName), "%s not found", fileName);
-	WzConfig ini(fileName);
-	ASSERT_OR_RETURN(NULL, ini.status() == QSettings::NoError, "%s not loaded", fileName);
-
+	WzConfig ini(fileName, WzConfig::ReadOnlyAndRequired);
 	const char *filedup = strdup(fileName);
 	QStringList list = ini.childGroups();
 	for (int i = 0; i < list.size(); ++i)
@@ -717,8 +711,6 @@ const char *loadResearchViewData(const char *fileName)
 		for (int j = 0; j < v->textMsg.size(); j++)
 		{
 			v->textMsg[j].remove('\t');
-			v->textMsg[j].remove(0, 2); // initial _(
-			v->textMsg[j].remove(v->textMsg[j].length() - 1, 1); // final )
 			v->textMsg[j] = QString(_(v->textMsg[j].toUtf8().constData()));
 			v->textMsg[j].replace("%%", "%");
 		}
@@ -726,11 +718,11 @@ const char *loadResearchViewData(const char *fileName)
 		v->pData = r;
 		if (ini.contains("imdName"))
 		{
-			r->pIMD = (iIMDShape *) resGetData("IMD", ini.value("imdName").toString().toUtf8().constData());
+			r->pIMD = modelGet(ini.value("imdName").toString());
 		}
 		if (ini.contains("imdName2"))
 		{
-			r->pIMD2 = (iIMDShape *) resGetData("IMD", ini.value("imdName2").toString().toUtf8().constData());
+			r->pIMD2 = modelGet(ini.value("imdName2").toString());
 		}
 		if (ini.contains("sequenceName"))
 		{
@@ -769,7 +761,6 @@ VIEWDATA *getViewData(const char *pName)
 bool messageShutdown(void)
 {
 	freeMessages();
-	apsViewData.clear();
 	return true;
 }
 
@@ -879,7 +870,7 @@ void displayProximityMessage(PROXIMITY_DISPLAY *psProxDisp)
 		//display text - if any
 		if (psViewData->textMsg.size() > 0 && psViewData->type != VIEW_BEACON)
 		{
-			addConsoleMessage(psViewData->textMsg[0].toAscii().constData(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+			addConsoleMessage(psViewData->textMsg[0].toUtf8().constData(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 		}
 
 		//play message - if any

@@ -19,23 +19,19 @@ const resModule = "A0ResearchModule1";
 var attackGroup;
 var vtolGroup;
 var attackRun = 0;
+var researchDone = false;
+var fundamentalsTriggered = false; // avoid triggering it multiple times
 
 // --- utility functions
 
-function dbgPlr(message)
+function log(message)
 {
-	if (me == selectedPlayer)
-	{
-		console(message);
-	}
+	dump(gameTime + " : " + message);
 }
 
-function dbgObj(obj, message)
+function logObj(obj, message)
 {
-	if (obj.selected)
-	{
-		console(message);
-	}
+	dump(gameTime + " [" + obj.name + " id=" + obj.id + "] > " + message);
 }
 
 function buildAttacker(struct)
@@ -65,9 +61,9 @@ function buildAttacker(struct)
 		"MG2Mk1", // twin mg
 		"MG1Mk1", // mg, initial weapon
 	];
-	if (!buildDroid(struct, "Ranged Attacker", bodylist, proplist, "", DROID_WEAPON, weaplist, weaplist))
+	if (!buildDroid(struct, "Ranged Attacker", bodylist, proplist, null, null, weaplist, weaplist))
 	{
-		debug("Failed to construct new attacker");
+		logObj(struct, "Failed to construct new attacker");
 	}
 }
 
@@ -84,22 +80,22 @@ function buildTruck(struct)
 		"hover01", // hover
 		"wheeled01", // wheels
 	];
-	if (!buildDroid(struct, "Constructor", bodylist, proplist, "", DROID_CONSTRUCT, "Spade1Mk1"))
+	if (!buildDroid(struct, "Constructor", bodylist, proplist, null, null, "Spade1Mk1"))
 	{
-		debug("Failed to construct new truck");
+		log("Failed to construct new truck");
 	}
 }
 
 function buildCyborg(struct)
 {
 	// Cyborg templates are special -- their bodies, legs and weapons are linked. We should fix this one day...
-	if (!buildDroid(struct, "Cyborg Thermite", "Cyb-Bod-Thermite", "CyborgLegs", "", DROID_CYBORG, "Cyb-Wpn-Thermite"))
+	if (!buildDroid(struct, "Cyborg Thermite", "CyborgLightBody", "CyborgLegs", null, null, "Cyb-Wpn-Thermite"))
 	{
-		if (!buildDroid(struct, "Cyborg Flamer", "CyborgFlamerGrd", "CyborgLegs", "", DROID_CYBORG, "CyborgFlamer01"))
+		if (!buildDroid(struct, "Cyborg Flamer", "CyborgLightBody", "CyborgLegs", null, null, "CyborgFlamer01"))
 		{
-			if (!buildDroid(struct, "Cyborg MG", "CyborgChain1Ground", "CyborgLegs", "", DROID_CYBORG, "CyborgChaingun"))
+			if (!buildDroid(struct, "Cyborg MG", "CyborgLightBody", "CyborgLegs", null, null, "CyborgChaingun"))
 			{
-				debug("Failed to construct new cyborg");
+				log("Failed to construct new cyborg");
 			}
 		}
 	}
@@ -119,9 +115,9 @@ function buildVTOL(struct)
 		    "Body4ABT", // bug
 		    "Body1REC", // viper
 	];
-	if (!buildDroid(struct, "Bomber", bodylist, "V-Tol", "", DROID_WEAPON, bomblist))
+	if (!buildDroid(struct, "Bomber", bodylist, "V-Tol", null, null, bomblist))
 	{
-		debug("Failed to construct new VTOL");
+		log("Failed to construct new VTOL");
 	}
 }
 
@@ -157,17 +153,17 @@ function grabTrucksAndBuild(range, bstats, maxBlockingTiles)
 		{
 			if (currDist < range)
 			{
-				dbgObj(mydroid, "added to build list");
+				logObj(mydroid, "added to build list");
 				droidlist.push(mydroid);
 			}
 			else if (currDist < closestDist)
 			{
-				dbgObj(mydroid, "is closest to build");
+				logObj(mydroid, "is closest to build");
 				closestDroid = mydroid;	// record this droid as being closest so far
 				closestDist = currDist;
 			}
 		}
-		else dbgObj(mydroid, "cannot help, sorry; order is " + mydroid.order + " and can reach? " + conCanHelp(mydroid, startPositions[me].x, startPositions[me].y));
+		else logObj(mydroid, "cannot help, sorry; order is " + mydroid.order + " and can reach? " + conCanHelp(mydroid, startPositions[me].x, startPositions[me].y));
 	}
 	if (droidlist.length == 0 && closestDroid) droidlist.push(closestDroid);
 	for (i = 0; i < droidlist.length; i++)
@@ -176,14 +172,14 @@ function grabTrucksAndBuild(range, bstats, maxBlockingTiles)
 		var result = pickStructLocation(mydroid, bstats, startPositions[me].x, startPositions[me].y, maxBlockingTiles);
 		if (result)
 		{
-			dbgObj(mydroid, "Construction work");
+			logObj(mydroid, "Construction work");
 			orderDroidBuild(mydroid, DORDER_BUILD, bstats, result.x, result.y);
 			found = true;
 		}
 		else
 		{
-			dbgObj(mydroid, "Pick struct location failed");
-			debug("Pick struct location failed for droid " + mydroid.id);
+			logObj(mydroid, "Pick struct location failed");
+			log("Pick struct location failed for droid " + mydroid.id);
 		}
 	}
 	return found;
@@ -193,11 +189,11 @@ function grabTrucksAndBuild(range, bstats, maxBlockingTiles)
 
 function buildPowerGenerators()
 {
-	if (isStructureAvailable(powGen, me))
+	if (isStructureAvailable(powGen))
 	{
 		if (!grabTrucksAndBuild(20, powGen, 1))
 		{
-			dbgPlr("Needed power generator but could not build one");
+			log("Needed power generator but could not build one");
 		}
 	}
 }
@@ -214,7 +210,7 @@ function checkLocalJobs(truck, structlist)
 	for (var i = 0; i < structlist.length; i++)
 	{
 		var struct = structlist[i];
-		if (struct.status != BUILT)
+		if (struct.status != BUILT && conCanHelp(truck, struct.x, struct.y))
 		{
 			var dist = distBetweenTwoPoints(truck.x, truck.y, struct.x, struct.y);
 			if (dist < 50 && (dist < bestDist || struct.stattype == POWER_GEN))
@@ -227,7 +223,7 @@ function checkLocalJobs(truck, structlist)
 	if (bestStruct)
 	{
 		orderDroidObj(truck, DORDER_HELPBUILD, bestStruct);
-		dbgObj(truck, "Go help construction");
+		logObj(truck, "Go help construction");
 		return true;
 	}
 	return false;
@@ -240,58 +236,78 @@ function sortByDistToBase(obj1, obj2)
 	return (dist1 - dist2);
 }
 
+function lookForOil(droids)
+{
+	var droids = enumDroid(me, DROID_CONSTRUCT);
+	var oils = enumFeature(-1, oilRes);
+	var bestDroid = null;
+	var bestDist = 99999;
+	log("looking for oil... " + oils.length + " available");
+	if (oils.length > 0)
+	{
+		oils.sort(sortByDistToBase); // grab closer oils first
+		for (var i = 0; i < oils.length; i++)
+		{
+			for (var j = 0; j < droids.length; j++)
+			{
+				var dist = distBetweenTwoPoints(droids[j].x, droids[j].y, oils[i].x, oils[i].y);
+				if (droidCanReach(droids[j], oils[i].x, oils[i].y)
+				    && safeDest(me, oils[i].x, oils[i].y)
+				    && droids[j].order != DORDER_BUILD  // but can snatch from HELPBUILD
+				    && droids[j].order != DORDER_LINEBUILD
+				    && bestDist > dist
+				    && !droids[j].busy)
+				{
+					bestDroid = droids[j];
+					bestDist = dist;
+				}
+			}
+			if (bestDroid)
+			{
+				bestDroid.busy = true;
+				orderDroidBuild(bestDroid, DORDER_BUILD, derrick, oils[i].x, oils[i].y);
+				bestDist = 99999;
+				bestDroid = null;
+			}
+		}
+	}
+	return bestDroid;
+}
+
 function buildFundamentals()
 {
+	log("build fundamentals");
 	var needPwGen = false;
-	var droids = enumDroid(me, DROID_CONSTRUCT);
+
+	fundamentalsTriggered = false;
 
 	// Do we need power generators?
 	if (playerPower(me) < 1000 && numUnusedDerricks() > 0)
 	{
 		needPwGen = true;
-		dbgPlr("More power generators needed");
+		log("More power generators needed");
 	}
 	if (!needPwGen && playerPower(me) < 500) // check for more income
 	{
-		var oils = enumFeature(-1, oilRes);
-		if (oils.length > 0)
+		if (lookForOil())
 		{
-			oils.sort(sortByDistToBase); // grab closer oils first
-			for (var i = 0; i < oils.length; i++)
-			{
-				var bestDroid = null;
-				var bestDist = 99999;
-				for (var j = 0; j < droids.length; j++)
-				{
-					var dist = distBetweenTwoPoints(droids[j].x, droids[j].y, oils[i].x, oils[i].y);
-					if (droidCanReach(droids[j], oils[i].x, oils[i].y)
-					    && safeDest(me, oils[i].x, oils[i].y)
-					    && droids[j].order != DORDER_BUILD  // but can snatch from HELPBUILD
-					    && droids[j].order != DORDER_LINEBUILD
-					    && bestDist > dist
-					    && !droids[j].busy)
-					{
-						bestDroid = droids[j];
-						bestDist = dist;
-					}
-				}
-				if (bestDroid)
-				{
-					bestDroid.busy = true;
-					orderDroidStatsLoc(bestDroid, DORDER_BUILD, derrick, oils[i].x, oils[i].y);
-				}
-			}
+			log("Now looking for oil");
+			return; // do not build anything else
 		}
-		return; // do not build anything else
+		log("No oil found");
 	}
 	// Help build unfinished buildings
 	var structlist = enumStruct(me);
+	var droids = enumDroid(me, DROID_CONSTRUCT);
 	for (var j = 0; j < droids.length; j++)
 	{
-		checkLocalJobs(droids[j], structlist);
+		if (droids[j].order != DORDER_BUILD)
+		{
+			checkLocalJobs(droids[j], structlist);
+		}
 	}
 	// If we need power generators, try to queue up production of them with any idle trucks
-	if (needPwGen && isStructureAvailable(powGen, me) && grabTrucksAndBuild(20, powGen, 1))
+	if (needPwGen && isStructureAvailable(powGen) && grabTrucksAndBuild(20, powGen, 1))
 	{
 		return; // exit early
 	}
@@ -300,54 +316,133 @@ function buildFundamentals()
 
 function buildFundamentals2()
 {
-	// Need factories? FIXME, check real limits
+	log("build fundamentals2");
 	var factcount = countStruct(factory);
-	var rescount = countStruct(resLab);
-	var hqcount = countStruct(playerHQ);
 	// Build as many research labs as factories
-	if (rescount < factcount && grabTrucksAndBuild(20, resLab, 1))
+	if (!researchDone && isStructureAvailable(resLab))
 	{
-		return;
+		if (countStruct(resLab) < factcount && grabTrucksAndBuild(20, resLab, 1))
+		{
+			return;	// done here
+		}
 	}
 	// Build as many factories as we can afford
-	if ((factcount < 2 || (factcount < 4 && playerPower(me) > factcount * 1000))
-	    && grabTrucksAndBuild(20, factory, 1))
+	if (playerPower(me) > factcount * 750 && isStructureAvailable(factory) && grabTrucksAndBuild(20, factory, 1))
 	{
 		return; // done here
 	}
+	// Build power generator if missing
+	if (isStructureAvailable(powGen) && countStruct(powGen) == 0 && grabTrucksAndBuild(20, powGen, 1))
+	{
+		return;
+	}
 	// Build HQ if missing
-	if (hqcount == 0 && grabTrucksAndBuild(20, playerHQ, 1))
+	if (isStructureAvailable(playerHQ) && countStruct(playerHQ) == 0 && grabTrucksAndBuild(20, playerHQ, 1))
 	{
 		return;
 	}
 	// Build cyborg factory if we don't have one
-	if (isStructureAvailable(cybFactory, me))
+	if (isStructureAvailable(cybFactory))
 	{
-		var cybcount = countStruct(cybFactory);
-		if (cybcount == 0 && playerPower(me) > 250 && grabTrucksAndBuild(20, cybFactory, 1))
+		if (countStruct(cybFactory) == 0 && playerPower(me) > 500 && grabTrucksAndBuild(20, cybFactory, 1))
 		{
 			return;
 		}
 	}
 	// Build VTOL factory if we don't have one
-	if (isStructureAvailable(vtolFactory, me))
+	if (isStructureAvailable(vtolFactory))
 	{
-		var vfaccount = countStruct(vtolFactory);
-		if (vfaccount == 0 && playerPower(me) > 500 && grabTrucksAndBuild(20, vtolFactory, 1))
+		if (countStruct(vtolFactory) == 0 && playerPower(me) > 750 && grabTrucksAndBuild(20, vtolFactory, 1))
 		{
 			return;
 		}
 	}
+	log("All fundamental buildings built -- proceed to military stuff");
+	// FIXME ... but instead look for oil
+	lookForOil();
 	// queue("buildDefenses");
 }
 
 function maintenance()
 {
-	// Salvage unusable buildings?
+	log("Maintenance check");
+
+	var struct = null, module = "";
+	if (isStructureAvailable(powModule))
+	{
+		var structlist = enumStruct(me, POWER_GEN);
+		for (i = 0; i < structlist.length; i++)
+		{
+			if (structlist[i].modules < 1) 
+			{
+				struct = structlist[i];
+				module = powModule;
+				break;
+			}
+		}
+	}
+	if (!struct && isStructureAvailable(facModule))
+	{
+		var structlist = enumStruct(me, FACTORY);
+		for (i = 0; i < structlist.length; i++)
+		{
+			if (structlist[i].modules < 2) 
+			{
+				struct = structlist[i];
+				module = facModule;
+				break;
+			}
+		}
+	}
+	if (!struct && isStructureAvailable(facModule))
+	{
+		var structlist = enumStruct(me, VTOL_FACTORY);
+		for (i = 0; i < structlist.length; i++)
+		{
+			if (structlist[i].modules < 2) 
+			{
+				struct = structlist[i];
+				module = facModule;
+				break;
+			}
+		}
+	}
+	if (isStructureAvailable(resModule))
+	{
+		var structlist = enumStruct(me, RESEARCH_LAB);
+		for (i = 0; i < structlist.length; i++)
+		{
+			if (structlist[i].modules < 1) 
+			{
+				struct = structlist[i];
+				module = resModule;
+				break;
+			}
+		}
+	}
+	if (struct) 
+	{
+		log("Found a structure to upgrade");
+		var builders = enumDroid(me, DROID_CONSTRUCT);
+		for (j = 0; j < builders.length; j++)
+		{
+			mydroid = builders[j];
+			var currDist = distBetweenTwoPoints(struct.x, struct.y, mydroid.x, mydroid.y);
+			if (conCanHelp(mydroid, struct.x, struct.y) && currDist < 20)
+			{
+				orderDroidBuild(mydroid, DORDER_BUILD, module, struct.x, struct.y);
+			}
+		}
+		return;
+	}
+	
 	var reslist = enumResearch();
 	if (reslist.length == 0)
 	{
+		log("Done researching - salvage unusable buildings");
+
 		// No research left, salvage res lab
+		researchDone = true; // and do not rebuild them
 		var lablist = enumStruct(me, resLab);
 		var builders = enumDroid(me, DROID_CONSTRUCT);
 		for (i = 0; i < lablist.length; i++)
@@ -360,7 +455,7 @@ function maintenance()
 				if (droid.order != DORDER_DEMOLISH && droid.order != DORDER_BUILD
 				    && droid.order != DORDER_LINEBUILD && !droid.busy)
 				{
-					dbgObj(droid, "Ordered to salvage research lab");
+					logObj(droid, "Ordered to salvage research lab");
 					orderDroidObj(droid, DORDER_DEMOLISH, lab);
 					droid.busy = true;
 					break;
@@ -369,20 +464,38 @@ function maintenance()
 		}
 	}
 	// Check for idle trucks
-	queue("buildFundamentals");
-	// Check for idle labs
-	queue("eventResearched");
+	if (!fundamentalsTriggered)
+	{
+		queue("buildFundamentals");
+		fundamentalsTriggered = true;
+	}
+	// Check for idle structures (eg factories, labs...)
+	var faclist = enumStruct(me);
+	for (var j = 0; j < faclist.length; j++)
+	{
+		if (structureIdle(faclist[j]))
+		{
+			eventStructureBuilt(faclist[j], null);
+		}
+	}
 }
 
 // --- game events
 
 function eventResearched(tech, labparam)
 {
+	if (playerPower(me) < 100)
+	{
+		return; // wait
+	}
 	var techlist = [
 		"R-Defense-Tower01",	// mg tower
-		"R-Struc-PowerModuleMk1",	// power module
-		"R-Struc-Factory-Module",	// factory module
-		"R-Struc-Research-Upgrade06",	// final research upgrade
+		"R-Vehicle-Prop-Halftracks",	// halftracks
+		"R-Defense-Tower06", // pod tower
+		"R-Vehicle-Body09", // tiger body (implies python and factory module)
+		"R-Struc-Power-Upgrade03a", // final power upgrade
+		"R-Cyborg-Armor-Heat07", // some cyborg armor
+		"R-Vehicle-Body14", // dragon body (implies vengeance)
 	];
 	var anyfound = true; // assume success
 	var lablist;
@@ -432,35 +545,22 @@ function eventStructureBuilt(struct, droid)
 	{
 		eventDroidBuilt(null, struct);
 	}
-	else if (struct.stattype == POWER_GEN && droid)
+	if (!fundamentalsTriggered)
 	{
-		if (isStructureAvailable(powModule, me)) // Immediately upgrade it, if possible
-		{
-			var builders = enumDroid(me, DROID_CONSTRUCT);
-			for (i = 0; i < builders.length; i++)
-			{
-				mydroid = builders[i];
-				var currDist = distBetweenTwoPoints(struct.x, struct.y, mydroid.x, mydroid.y);
-				if (conCanHelp(mydroid, struct.x, struct.y) && currDist < 20)
-				{
-					orderDroidBuild(droid, DORDER_BUILD, powModule, struct.x, struct.y);
-				}
-				return;
-			}
-		}
+		queue("buildFundamentals"); // see if we should build something else
+		fundamentalsTriggered = true;
 	}
-	queue("buildFundamentals"); // see if we should build something else
 }
 
 function eventDroidBuilt(droid, struct)
 {
 	var sensorlist = enumBlips(me);
 
-	if (struct)
+	if (struct && structureIdle(struct))
 	{
-		if (struct.stattype == FACTORY)
+		if (struct.stattype == FACTORY && playerPower(me) > 100)
 		{
-			if (countDroid(DROID_CONSTRUCT) < 6)
+			if (countDroid(DROID_CONSTRUCT) < 5)
 			{
 				buildTruck(struct);
 			}
@@ -482,17 +582,19 @@ function eventDroidBuilt(droid, struct)
 	{
 		if (isVTOL(droid))
 		{
-			groupAddDroid(vtolGroup, droid);
+			groupAdd(vtolGroup, droid);
 		}
 		else if (droid.droidType == DROID_WEAPON || droid.droidType == DROID_CYBORG)
 		{
-			groupAddDroid(attackGroup, droid);
+			groupAdd(attackGroup, droid);
 
 			// HUUUGE hack here :) -- naive attack code nested up in here, 'cos i'm so lazy
 			// Only attack once every four minutes
-			var attackers = enumGroup(attackGroup);
-			if (attackers.length > 20 && gameTime > attackRun + 4 * 60 * 1000)
+			if (groupSizes[attackGroup] > 20 && gameTime > attackRun + 4 * 60 * 1000)
 			{
+				log("-- Military offensive --");
+
+				var attackers = enumGroup(attackGroup);
 				// Attack! Find a random enemy, since that is more fun.
 				var numEnemies = 0;
 				for (var i = 0; i < maxPlayers; i++)
@@ -510,7 +612,7 @@ function eventDroidBuilt(droid, struct)
 						for (var j = 0; j < attackers.length; j++)
 						{
 							orderDroidLoc(attackers[j], DORDER_SCOUT, startPositions[i].x, startPositions[i].y);
-							dbgObj(attackers[j], "sent to attack");
+							logObj(attackers[j], "sent to attack");
 						}
 						var vtols = enumGroup(vtolGroup);
 						for (var j = 0; j < vtols.length; j++)
@@ -518,10 +620,10 @@ function eventDroidBuilt(droid, struct)
 							if (vtols[j].armed == 100) // only if fully armed
 							{
 								orderDroidLoc(vtols[j], DORDER_SCOUT, startPositions[i].x, startPositions[i].y);
-								dbgObj(vtols[j], "sent to attack");
+								logObj(vtols[j], "sent to attack");
 							}
 						}
-						dbgPlr("ATTACKING player " + i);
+						log("ATTACKING player " + i);
 						attackRun = gameTime;
 						return;
 					}
@@ -531,9 +633,10 @@ function eventDroidBuilt(droid, struct)
 		}
 		else if (droid.droidType == DROID_CONSTRUCT)
 		{
-			if (!checkLocalJobs(droid))
+			if (!checkLocalJobs(droid) && !fundamentalsTriggered)
 			{
 				queue("buildFundamentals");
+				fundamentalsTriggered = true;
 			}
 		}
 	}
@@ -561,7 +664,7 @@ function eventAttacked(victim, attacker)
 	// TBD, for now -- SEND EVERYONE!!!
 	if (attacker && victim && victim.type == STRUCTURE && attacker.player != me)
 	{
-		dbgPlr("Defend!");
+		log("Defend!");
 		var i;
 		var defenders = enumDroid(me, DROID_WEAPON);
 		for (i = 0; i < defenders.length; i++)
@@ -587,19 +690,57 @@ function eventStartLevel()
 	attackRun = gameTime;
 
 	// Make missing buildings
-	queue("buildFundamentals");
+	if (!fundamentalsTriggered)
+	{
+		queue("buildFundamentals");
+		fundamentalsTriggered = true;
+	}
 
 	// Maintenance calls - to fix quirks
-	setTimer("maintenance", 1000 * 60 * 2); // every 2 minutes, call it to check if anything left to do
+	setTimer("maintenance", 1000 * 15); // every 15 seconds, call it to check if anything left to do
+
+	dump("== level started ==");
 }
 
 function eventDroidIdle(droid)
 {
 	if (droid.droidType == DROID_CONSTRUCT)
 	{
-		if (!checkLocalJobs(droid))
+		if (!checkLocalJobs(droid) && !fundamentalsTriggered)
 		{
 			queue("buildFundamentals"); // build something
+			fundamentalsTriggered = true;
 		}
+	}
+}
+
+function eventGroupLoss(droid, group, size)
+{
+	log("lost " + droid.id + " in group " + group + " which is now size " + size);
+}
+
+function eventChat(from, to, message)
+{
+	if (to != me || to == from)
+	{
+		return; // not for me
+	}
+	if (message == "donatetruck" && allianceExistsBetween(from, to))
+	{
+		// donate first truck
+		var droids = enumDroid(me, DROID_CONSTRUCT);
+		for (var i = 0; i < droids.length; i++)
+		{
+			donateObject(droids[i], from);
+			return;
+		}
+	}
+	else if (message == "donatepower" && allianceExistsBetween(from, to))
+	{
+		donatePower(playerPower(me) / 2, from);
+	}
+	else if (message == "crazycolours")
+	{
+		setSunIntensity(0.6, 0.4, 0.3,  1.0, 0.8, 0.7,  1.2, 0.9, 0.8);
 	}
 }

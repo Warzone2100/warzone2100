@@ -109,12 +109,6 @@ victory[1]	int		10	//all players vehicles at REGION index # (eg LZ REGION)
 victory[2]	int		1	//number of objectives to get to (uses objective[0] to objective[#])
 victory[3]	int		2	//number of bases to destroy (uses base[0] to base[#])
 
-/* might use these later if necessary
-victory[4]	int		-1	//kill all UNITS belonging to enemy # index
-victory[5]	int		-1	//kill all STRUCTURES belonging to enemy # index
-victory[6]	int		-1	//REGION index to check for defences built
-victory[7]	int		-1	//# of EXTRA defences to build in REGION
-*/
 //use this to communicate extra victory conditions in another script run beside the generic one
 linkVictory	BOOL		TRUE
 
@@ -128,11 +122,6 @@ fail	[0]	int		0	//DROID # index all got to REGION (no longer a group #)
 fail	[1]	int		10	//REGION index for above (these count as one condition!)
 failSnd	SOUND		"pcv632.ogg"	//"Enemy Escaping" played for failure
 
-/* might use these later if necessary
-fail	[2]	int		-1	//only Player UNITS need to be killed to lose
-fail	[3]	int		-1	//only Player STRUCTURES need to be killed to lose
-fail	[4]	int		-1	//Structure index # to be destroyed to lose????
-*/
 //use this to communicate extra fail conditions in another script run beside the generic one
 linkFail	BOOL		TRUE
 //use this to prevent generic script failing when time is up!

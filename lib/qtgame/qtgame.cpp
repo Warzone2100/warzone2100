@@ -1,6 +1,6 @@
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2013  Warzone 2100 Project
+	Copyright (C) 2013-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -23,7 +23,6 @@
  */
 #include "qtgame.h"
 
-#include "lib/framework/wzglobal.h"
 #include "swapinterval.h"
 
 #if defined(WZ_CC_MSVC)
@@ -32,7 +31,7 @@
 
 #ifdef WZ_WS_X11
 #include <X11/extensions/Xrandr.h>
-#include <QX11Info>
+#include <QtX11Extras/QX11Info>
 #endif
 
 #ifdef WZ_WS_MAC
@@ -175,7 +174,7 @@ void QtGameWidget::updateResolutionList()
 	int minHeight = mMinimumSize.height();
 	mResolutions.clear();
 #ifdef WZ_WS_X11
-	XRRScreenConfiguration *config = XRRGetScreenInfo(QX11Info::display(), RootWindow(QX11Info::display(), x11Info().screen()));
+	XRRScreenConfiguration *config = XRRGetScreenInfo(QX11Info::display(), RootWindow(QX11Info::display(), QX11Info::appScreen()));
 	int sizeCount = 0;
 	XRRScreenSize *sizes = XRRSizes(QX11Info::display(), 0, &sizeCount);
 	for (int i = 0; i < sizeCount; i++)
@@ -264,7 +263,7 @@ bool QtGameWidget::setResolution(const QSize res, int rate, int depth)
 {
 #ifdef WZ_WS_X11
 	Q_UNUSED(depth);
-	Window root = RootWindow(QX11Info::display(), x11Info().screen());
+	Window root = RootWindow(QX11Info::display(), QX11Info::appScreen());
 	XRRScreenConfiguration *config = XRRGetScreenInfo(QX11Info::display(), root);
 	int sizeCount, i;
 	XRRScreenSize *sizes = XRRSizes(QX11Info::display(), 0, &sizeCount);

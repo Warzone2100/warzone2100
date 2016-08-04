@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -40,6 +40,7 @@
 #include "lib/ivis_opengl/piedef.h"
 #include "lib/ivis_opengl/piestate.h"
 #include "lib/ivis_opengl/pieclip.h"
+#include "lib/ivis_opengl/piestate.h"
 #include "lib/ivis_opengl/screen.h"
 
 #include "terrain.h"
@@ -120,19 +121,6 @@ static int xSectors, ySectors;
 
 /// Did we initialise the terrain renderer yet?
 static bool terrainInitalised = false;
-
-#ifdef DEBUG
-/// Check for OpenGL errors
-#define glError() { \
-		GLenum err = glGetError(); \
-		while (err != GL_NO_ERROR) { \
-			debug(LOG_ERROR, "OpenGL error %i caught at %s:%u\n", (int)err, __FILE__, __LINE__); \
-			err = glGetError(); \
-		} \
-	}
-#else
-#define glError()
-#endif
 
 /// Helper to specify the offset in a VBO
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))
@@ -219,6 +207,7 @@ PIELIGHT getTileColour(int x, int y)
 {
 	return mapTile(x, y)->colour;
 }
+
 /// Set the colour of the tile at the specified position
 void setTileColour(int x, int y, PIELIGHT colour)
 {
@@ -397,36 +386,6 @@ static inline void averageColour(PIELIGHT *average, PIELIGHT a, PIELIGHT b,
 	average->byte.r = (a.byte.r + b.byte.r + c.byte.r + d.byte.r) / 4;
 	average->byte.g = (a.byte.g + b.byte.g + c.byte.g + d.byte.g) / 4;
 	average->byte.b = (a.byte.b + b.byte.b + c.byte.b + d.byte.b) / 4;
-}
-
-/// Get the tiles colour
-static inline void getColour(PIELIGHT *colour, int x, int y, bool center)
-{
-	MAPTILE *psTile;
-
-	if (center)
-	{
-		PIELIGHT a, b, c, d;
-		getColour(&a, x  , y  , false);
-		getColour(&b, x + 1, y  , false);
-		getColour(&c, x  , y + 1, false);
-		getColour(&d, x + 1, y + 1, false);
-		averageColour(colour, a, b, c, d);
-		return;
-	}
-
-	*colour = WZCOL_BLACK;
-	if (x < 0 || y < 0 || x > mapWidth - 1 || y > mapHeight - 1)
-	{
-		return;
-	}
-	psTile = mapTile(x, y);
-	*colour = psTile->colour;
-
-	if (psTile->tileInfoBits & BITS_GATEWAY && showGateways)
-	{
-		colour->byte.g = 255;
-	}
 }
 
 /**
@@ -614,12 +573,12 @@ static void updateSectorGeometry(int x, int y)
 	ASSERT(geometrySize == sectors[x * ySectors + y].geometrySize, "something went seriously wrong updating the terrain");
 	ASSERT(waterSize    == sectors[x * ySectors + y].waterSize   , "something went seriously wrong updating the terrain");
 
-	glBindBuffer(GL_ARRAY_BUFFER, geometryVBO); glError();
+	glBindBuffer(GL_ARRAY_BUFFER, geometryVBO); glErrors();
 	glBufferSubData(GL_ARRAY_BUFFER, sizeof(RenderVertex)*sectors[x * ySectors + y].geometryOffset,
-	                sizeof(RenderVertex)*sectors[x * ySectors + y].geometrySize, geometry); glError();
-	glBindBuffer(GL_ARRAY_BUFFER, waterVBO); glError();
+	                sizeof(RenderVertex)*sectors[x * ySectors + y].geometrySize, geometry); glErrors();
+	glBindBuffer(GL_ARRAY_BUFFER, waterVBO); glErrors();
 	glBufferSubData(GL_ARRAY_BUFFER, sizeof(RenderVertex)*sectors[x * ySectors + y].waterOffset,
-	                sizeof(RenderVertex)*sectors[x * ySectors + y].waterSize, water); glError();
+	                sizeof(RenderVertex)*sectors[x * ySectors + y].waterSize, water); glErrors();
 
 	free(geometry);
 	free(water);
@@ -634,9 +593,9 @@ static void updateSectorGeometry(int x, int y)
 	setSectorDecals(x, y, decaldata, &decalSize);
 	ASSERT(decalSize == sectors[x * ySectors + y].decalSize   , "the amount of decals has changed");
 
-	glBindBuffer(GL_ARRAY_BUFFER, decalVBO); glError();
+	glBindBuffer(GL_ARRAY_BUFFER, decalVBO); glErrors();
 	glBufferSubData(GL_ARRAY_BUFFER, sizeof(DecalVertex)*sectors[x * ySectors + y].decalOffset,
-	                sizeof(DecalVertex)*sectors[x * ySectors + y].decalSize, decaldata); glError();
+	                sizeof(DecalVertex)*sectors[x * ySectors + y].decalSize, decaldata); glErrors();
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	free(decaldata);
@@ -860,24 +819,24 @@ bool initTerrain(void)
 			sectors[x * ySectors + y].waterIndexSize = waterIndexSize - sectors[x * ySectors + y].waterIndexOffset;
 		}
 	}
-	glGenBuffers(1, &geometryVBO); glError();
-	glBindBuffer(GL_ARRAY_BUFFER, geometryVBO); glError();
-	glBufferData(GL_ARRAY_BUFFER, sizeof(RenderVertex)*geometrySize, geometry, GL_DYNAMIC_DRAW); glError();
+	glGenBuffers(1, &geometryVBO); glErrors();
+	glBindBuffer(GL_ARRAY_BUFFER, geometryVBO); glErrors();
+	glBufferData(GL_ARRAY_BUFFER, sizeof(RenderVertex)*geometrySize, geometry, GL_DYNAMIC_DRAW); glErrors();
 	free(geometry);
 
-	glGenBuffers(1, &geometryIndexVBO); glError();
-	glBindBuffer(GL_ARRAY_BUFFER, geometryIndexVBO); glError();
-	glBufferData(GL_ARRAY_BUFFER, sizeof(GLuint)*geometryIndexSize, geometryIndex, GL_STATIC_DRAW); glError();
+	glGenBuffers(1, &geometryIndexVBO); glErrors();
+	glBindBuffer(GL_ARRAY_BUFFER, geometryIndexVBO); glErrors();
+	glBufferData(GL_ARRAY_BUFFER, sizeof(GLuint)*geometryIndexSize, geometryIndex, GL_STATIC_DRAW); glErrors();
 	free(geometryIndex);
 
-	glGenBuffers(1, &waterVBO); glError();
-	glBindBuffer(GL_ARRAY_BUFFER, waterVBO); glError();
-	glBufferData(GL_ARRAY_BUFFER, sizeof(RenderVertex)*waterSize, water, GL_DYNAMIC_DRAW); glError();
+	glGenBuffers(1, &waterVBO); glErrors();
+	glBindBuffer(GL_ARRAY_BUFFER, waterVBO); glErrors();
+	glBufferData(GL_ARRAY_BUFFER, sizeof(RenderVertex)*waterSize, water, GL_DYNAMIC_DRAW); glErrors();
 	free(water);
 
-	glGenBuffers(1, &waterIndexVBO); glError();
-	glBindBuffer(GL_ARRAY_BUFFER, waterIndexVBO); glError();
-	glBufferData(GL_ARRAY_BUFFER, sizeof(GLuint)*waterIndexSize, waterIndex, GL_STATIC_DRAW); glError();
+	glGenBuffers(1, &waterIndexVBO); glErrors();
+	glBindBuffer(GL_ARRAY_BUFFER, waterIndexVBO); glErrors();
+	glBufferData(GL_ARRAY_BUFFER, sizeof(GLuint)*waterIndexSize, waterIndex, GL_STATIC_DRAW); glErrors();
 	free(waterIndex);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
@@ -984,14 +943,14 @@ bool initTerrain(void)
 			}
 		}
 	}
-	glGenBuffers(1, &textureVBO); glError();
-	glBindBuffer(GL_ARRAY_BUFFER, textureVBO); glError();
-	glBufferData(GL_ARRAY_BUFFER, sizeof(PIELIGHT)*xSectors * ySectors * (sectorSize + 1) * (sectorSize + 1) * 2 * numGroundTypes, texture, GL_STATIC_DRAW); glError();
+	glGenBuffers(1, &textureVBO); glErrors();
+	glBindBuffer(GL_ARRAY_BUFFER, textureVBO); glErrors();
+	glBufferData(GL_ARRAY_BUFFER, sizeof(PIELIGHT)*xSectors * ySectors * (sectorSize + 1) * (sectorSize + 1) * 2 * numGroundTypes, texture, GL_STATIC_DRAW); glErrors();
 	free(texture);
 
-	glGenBuffers(1, &textureIndexVBO); glError();
-	glBindBuffer(GL_ARRAY_BUFFER, textureIndexVBO); glError();
-	glBufferData(GL_ARRAY_BUFFER, sizeof(GLuint)*textureIndexSize, textureIndex, GL_STATIC_DRAW); glError();
+	glGenBuffers(1, &textureIndexVBO); glErrors();
+	glBindBuffer(GL_ARRAY_BUFFER, textureIndexVBO); glErrors();
+	glBufferData(GL_ARRAY_BUFFER, sizeof(GLuint)*textureIndexSize, textureIndex, GL_STATIC_DRAW); glErrors();
 	free(textureIndex);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
@@ -1009,9 +968,9 @@ bool initTerrain(void)
 		}
 	}
 	debug(LOG_TERRAIN, "%i decals found", decalSize / 12);
-	glGenBuffers(1, &decalVBO); glError();
-	glBindBuffer(GL_ARRAY_BUFFER, decalVBO); glError();
-	glBufferData(GL_ARRAY_BUFFER, sizeof(DecalVertex)*decalSize, decaldata, GL_STATIC_DRAW); glError();
+	glGenBuffers(1, &decalVBO); glErrors();
+	glBindBuffer(GL_ARRAY_BUFFER, decalVBO); glErrors();
+	glBufferData(GL_ARRAY_BUFFER, sizeof(DecalVertex)*decalSize, decaldata, GL_STATIC_DRAW); glErrors();
 	free(decaldata);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
@@ -1038,8 +997,8 @@ bool initTerrain(void)
 	glBindTexture(GL_TEXTURE_2D, lightmap_tex_num);
 
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
@@ -1100,7 +1059,7 @@ void drawTerrain(void)
 	const GLfloat paramsY[4] = {0, 0, -1.0f / world_coord(mapHeight) *((float)mapHeight / lightmapHeight), 0};
 
 	///////////////////////////////////
-	glError();	// clear error codes
+	glErrors();	// clear error codes
 	// set up the lightmap texture
 	glActiveTexture(GL_TEXTURE1);
 	// bind the texture
@@ -1116,7 +1075,18 @@ void drawTerrain(void)
 		{
 			for (i = 0; i < mapWidth; ++i)
 			{
-				const PIELIGHT colour = getTileColour(i, j);
+				MAPTILE *psTile = mapTile(i, j);
+				PIELIGHT colour = psTile->colour;
+
+				if (psTile->tileInfoBits & BITS_GATEWAY && showGateways)
+				{
+					colour.byte.g = 255;
+				}
+				if (psTile->tileInfoBits & BITS_MARKED)
+				{
+					int m = getModularScaledGraphicsTime(2048, 255);
+					colour.byte.r = MAX(m, 255 - m);
+				}
 
 				lightmapPixmap[(i + j * lightmapWidth) * 3 + 0] = colour.byte.r;
 				lightmapPixmap[(i + j * lightmapWidth) * 3 + 1] = colour.byte.g;
@@ -1198,8 +1168,8 @@ void drawTerrain(void)
 	}
 
 	// enable texture coord generation
-	glEnable(GL_TEXTURE_GEN_S); glError();
-	glEnable(GL_TEXTURE_GEN_T); glError();
+	glEnable(GL_TEXTURE_GEN_S); glErrors();
+	glEnable(GL_TEXTURE_GEN_T); glErrors();
 
 	// set the parameters for the texture coord generation
 	glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);
@@ -1239,10 +1209,10 @@ void drawTerrain(void)
 
 	// bind the vertex buffer
 	glEnableClientState(GL_VERTEX_ARRAY);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, geometryIndexVBO); glError();
-	glBindBuffer(GL_ARRAY_BUFFER, geometryVBO); glError();
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, geometryIndexVBO); glErrors();
+	glBindBuffer(GL_ARRAY_BUFFER, geometryVBO); glErrors();
 
-	glVertexPointer(3, GL_FLOAT, sizeof(RenderVertex), BUFFER_OFFSET(0)); glError();
+	glVertexPointer(3, GL_FLOAT, sizeof(RenderVertex), BUFFER_OFFSET(0)); glErrors();
 
 	for (x = 0; x < xSectors; x++)
 	{
@@ -1294,12 +1264,11 @@ void drawTerrain(void)
 	glDepthMask(GL_FALSE);
 
 	glEnableClientState(GL_VERTEX_ARRAY);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, textureIndexVBO); glError();
-	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, textureIndexVBO); glErrors();
 
 	// load the vertex (geometry) buffer
 	glBindBuffer(GL_ARRAY_BUFFER, geometryVBO);
-	glVertexPointer(3, GL_FLOAT, sizeof(RenderVertex), BUFFER_OFFSET(0)); glError();
+	glVertexPointer(3, GL_FLOAT, sizeof(RenderVertex), BUFFER_OFFSET(0)); glErrors();
 
 	glBindBuffer(GL_ARRAY_BUFFER, textureVBO);
 
@@ -1347,14 +1316,14 @@ void drawTerrain(void)
 	glDisableClientState(GL_COLOR_ARRAY);
 
 	// no more texture generation
-	glDisable(GL_TEXTURE_GEN_S); glError();
-	glDisable(GL_TEXTURE_GEN_T); glError();
+	glDisable(GL_TEXTURE_GEN_S); glErrors();
+	glDisable(GL_TEXTURE_GEN_T); glErrors();
 
 	//////////////////////////////////
 	// decals
 
 	// select the terrain texture page
-	pie_SetTexturePage(terrainPage); glError();
+	pie_SetTexturePage(terrainPage); glErrors();
 
 	// use the alpha to blend
 	pie_SetRendMode(REND_ALPHA);
@@ -1362,11 +1331,11 @@ void drawTerrain(void)
 	glColor3f(1.f, 1.f, 1.f);
 
 	// and the texture coordinates buffer
-	glEnableClientState(GL_TEXTURE_COORD_ARRAY); glError();
-	glEnableClientState(GL_VERTEX_ARRAY); glError();
-	glBindBuffer(GL_ARRAY_BUFFER, decalVBO); glError();
-	glVertexPointer(3, GL_FLOAT, sizeof(DecalVertex), BUFFER_OFFSET(0)); glError();
-	glTexCoordPointer(2, GL_FLOAT, sizeof(DecalVertex), BUFFER_OFFSET(12)); glError();
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY); glErrors();
+	glEnableClientState(GL_VERTEX_ARRAY); glErrors();
+	glBindBuffer(GL_ARRAY_BUFFER, decalVBO); glErrors();
+	glVertexPointer(3, GL_FLOAT, sizeof(DecalVertex), BUFFER_OFFSET(0)); glErrors();
+	glTexCoordPointer(2, GL_FLOAT, sizeof(DecalVertex), BUFFER_OFFSET(12)); glErrors();
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	size = 0;
@@ -1384,7 +1353,7 @@ void drawTerrain(void)
 			// can't append, so draw what we have and start anew
 			if (size > 0)
 			{
-				glDrawArrays(GL_TRIANGLES, offset, size); glError();
+				glDrawArrays(GL_TRIANGLES, offset, size); glErrors();
 			}
 			size = 0;
 			if (y < ySectors && sectors[x * ySectors + y].draw)
@@ -1433,8 +1402,8 @@ void drawWater(void)
 	                              pie_GetFogColour().byte.a / 255.f
 	                             };
 
-	glEnable(GL_TEXTURE_GEN_S); glError();
-	glEnable(GL_TEXTURE_GEN_T); glError();
+	glEnable(GL_TEXTURE_GEN_S); glErrors();
+	glEnable(GL_TEXTURE_GEN_T); glErrors();
 
 	glColor4ub(0xFF, 0xFF, 0xFF, 0xFF);
 	glDepthMask(GL_FALSE);
@@ -1445,7 +1414,7 @@ void drawWater(void)
 	}
 
 	// first texture unit
-	pie_SetTexturePage(iV_GetTexture("page-80")); glError();
+	pie_SetTexturePage(iV_GetTexture("page-80-water-1.png")); glErrors();
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);
@@ -1461,12 +1430,11 @@ void drawWater(void)
 
 	// second texture unit
 	glActiveTexture(GL_TEXTURE1);
-	glBindTexture(GL_TEXTURE_2D, iV_NativeTexID(iV_GetTexture("page-81")));
-	glError();
+	glBindTexture(GL_TEXTURE_2D, pie_Texture(iV_GetTexture("page-81-water-2.png")));
+	glErrors();
 	glEnable(GL_TEXTURE_2D);
-	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-	glEnable(GL_TEXTURE_GEN_S); glError();
-	glEnable(GL_TEXTURE_GEN_T); glError();
+	glEnable(GL_TEXTURE_GEN_S); glErrors();
+	glEnable(GL_TEXTURE_GEN_T); glErrors();
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);
@@ -1478,10 +1446,10 @@ void drawWater(void)
 
 	// bind the vertex buffer
 	glEnableClientState(GL_VERTEX_ARRAY);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, waterIndexVBO); glError();
-	glBindBuffer(GL_ARRAY_BUFFER, waterVBO); glError();
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, waterIndexVBO); glErrors();
+	glBindBuffer(GL_ARRAY_BUFFER, waterVBO); glErrors();
 
-	glVertexPointer(3, GL_FLOAT, sizeof(RenderVertex), BUFFER_OFFSET(0)); glError();
+	glVertexPointer(3, GL_FLOAT, sizeof(RenderVertex), BUFFER_OFFSET(0)); glErrors();
 
 	for (x = 0; x < xSectors; x++)
 	{

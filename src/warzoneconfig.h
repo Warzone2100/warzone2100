@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -49,13 +49,6 @@ enum FSAA_LEVEL
 	FSAA_MAX
 };
 
-enum RENDER_MODE
-{
-	FALLBACK,	/// Shaders not supported
-	SHADERS_OFF,/// Shaders supported but off (fallback supported)
-	SHADERS_ON,	/// Shaders supported and on (fallback supported)
-	SHADERS_ONLY/// Shaders but no fallback support
-};
 /***************************************************************************/
 /*
  *	Global ProtoTypes
@@ -69,15 +62,17 @@ extern bool war_GetAllowSubtitles(void);
 extern void war_setFullscreen(bool);
 extern bool war_getFullscreen(void);
 extern void war_setFSAA(unsigned int);
-extern unsigned int war_getFSAA(void);
+FSAA_LEVEL war_getFSAA();
 extern void war_SetTrapCursor(bool b);
 extern bool war_GetTrapCursor(void);
+extern bool war_GetColouredCursor(void);
+extern void war_SetColouredCursor(bool enabled);
 extern void war_SetVsync(bool b);
 extern bool war_GetVsync(void);
-extern void war_SetShaders(unsigned);
-extern unsigned war_GetShaders(void);
 extern void war_SetWidth(UDWORD width);
 extern UDWORD war_GetWidth(void);
+void war_SetScreen(int screen);
+int war_GetScreen();
 extern void war_SetHeight(UDWORD height);
 extern UDWORD war_GetHeight(void);
 extern void war_SetPauseOnFocusLoss(bool enabled);

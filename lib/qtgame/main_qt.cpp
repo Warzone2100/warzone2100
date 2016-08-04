@@ -1,6 +1,6 @@
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2013  Warzone 2100 Project
+	Copyright (C) 2013-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -21,12 +21,12 @@
  *
  * Qt backend
  */
-#include <QtGui/QMessageBox>
+#include <QtWidgets/QMessageBox>
 
 #include "lib/framework/frame.h"
+#include "lib/framework/wzapp.h"
 #include "lib/ivis_opengl/pieclip.h"
-#include "src/warzoneconfig.h"
-#include "lib/framework/frameint.h"
+#include "lib/ivis_opengl/screen.h"
 #include "wzapp_qt.h"
 
 // used in crash reports & version info
@@ -43,25 +43,27 @@ WzMainWindow *mainWindowPtr;
 
 void wzMain(int &argc, char **argv)
 {
+	debug(LOG_MAIN, "Qt initialization");
+
 	appPtr = new QApplication(argc, argv);
 }
 
-bool wzMain2()
+bool wzMainScreenSetup(int antialiasing, bool fullscreen, bool vsync)
 {
 	debug(LOG_MAIN, "Qt initialization");
-	QGL::setPreferredPaintEngine(QPaintEngine::OpenGL); // Workaround for incorrect text rendering on nany platforms.
+	//QGL::setPreferredPaintEngine(QPaintEngine::OpenGL); // Workaround for incorrect text rendering on many platforms, doesn't exist in Qt5…
 
 	// Setting up OpenGL
 	QGLFormat format;
 	format.setDoubleBuffer(true);
-	format.setAlpha(true);
+	//format.setAlpha(true);
 	int w = pie_GetVideoBufferWidth();
 	int h = pie_GetVideoBufferHeight();
 
-	if (war_getFSAA())
+	if (antialiasing)
 	{
 		format.setSampleBuffers(true);
-		format.setSamples(war_getFSAA());
+		format.setSamples(antialiasing);
 	}
 	mainWindowPtr = new WzMainWindow(QSize(w, h), format);
 	WzMainWindow &mainwindow = *mainWindowPtr;
@@ -74,7 +76,7 @@ bool wzMain2()
 
 	screenWidth = w;
 	screenHeight = h;
-	if (war_getFullscreen())
+	if (fullscreen)
 	{
 		mainwindow.resize(w, h);
 		mainwindow.showFullScreen();
@@ -96,15 +98,13 @@ bool wzMain2()
 		mainwindow.setMaximumSize(w, h);
 	}
 
-	mainwindow.setSwapInterval(war_GetVsync());
-	war_SetVsync(mainwindow.swapInterval() > 0);
-
+	mainwindow.setSwapInterval(vsync);
 	mainwindow.setReadyToPaint();
 
 	return true;
 }
 
-void wzMain3()
+void wzMainEventLoop()
 {
 	QApplication &app = *appPtr;
 	WzMainWindow &mainwindow = *mainWindowPtr;
@@ -120,13 +120,28 @@ void wzShutdown()
 	appPtr = NULL;
 }
 
+bool wzIsFullscreen()
+{
+	return false; // for relevant intents and purposes, we are never in that kind of fullscreen
+}
+
 void wzToggleFullscreen()
 {
 }
 
-QList<QSize> wzAvailableResolutions()
+std::vector<screeninfo> wzAvailableResolutions()
 {
-	return WzMainWindow::instance()->availableResolutions();
+	std::vector<screeninfo> res;
+	for (auto const &r : WzMainWindow::instance()->availableResolutions())
+	{
+		screeninfo info;
+		info.width = r.width();
+		info.height = r.height();
+		info.refresh_rate = 0;
+		info.screen = 0;
+		res.push_back(info);
+	}
+	return res;
 }
 
 void wzSetSwapInterval(int swap)
@@ -137,4 +152,14 @@ void wzSetSwapInterval(int swap)
 int wzGetSwapInterval()
 {
 	return WzMainWindow::instance()->swapInterval();
+}
+
+void StartTextInput()
+{
+	// Something started?
+}
+
+void StopTextInput()
+{
+	// Whatever it was, it stopped…
 }

@@ -28,10 +28,9 @@ trigger delayWinTrig((not anyStructButWallsLeft(enemy)) and (getDroidCount(enemy
 
 event powStuff(wait, 5)
 {
-//Increase player's power (has to be done outside of GameInit, for savegame reasons!)
+	//Increase player's power (has to be done outside of GameInit, for savegame reasons!)
 	addPower(power, player);
 	playSound(powTransSnd, player);
-
 }
 
 //keep taking over structures until player does correct research
@@ -134,22 +133,14 @@ event delayWin(inactive)	//player must research before can win!
 	setEventTrigger(delayWin, inactive);
 }
 
-/*
-event weatheredAttack(missionTimeRemaining() < 100, 10)
-{
-	extraVictoryFlag = TRUE;
-	setEventTrigger(weatheredAttack, inactive);
-}
-*/
-
 event resDone(resDoneTrig)
 {
-    if (researchDone == playerRes)
-    {
-	//allow player to win if this research topic has been done
-	setEventTrigger(delayWin, delayWinTrig);
-	setEventTrigger(changeDroids, inactive);
-	setEventTrigger(nexus, inactive);
-	setEventTrigger(resDone, inactive);
-    }
+	if (researchDone == playerRes)
+	{
+		// allow player to win if this research topic has been done
+		setEventTrigger(delayWin, delayWinTrig);
+		setEventTrigger(changeDroids, inactive);
+		setEventTrigger(nexus, inactive);
+		setEventTrigger(resDone, inactive);
+	}
 }

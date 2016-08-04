@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -36,9 +36,6 @@
  */
 #define         MAX_NOGO_AREAS          (MAX_PLAYERS + 1)
 #define         LIMBO_LANDING           MAX_PLAYERS
-
-/** Set by scrFlyInTransporter. True if were currenly tracking the transporter. */
-extern bool		bTrackingTransporter;
 
 extern MISSION		mission;
 extern bool			offWorldKeepLists;
@@ -101,7 +98,6 @@ extern void swapMissionPointers(void);
 
 // status of the mission result screens.
 extern bool MissionResUp;
-extern bool ClosingMissionRes;
 
 extern void intRemoveMissionResult(void);
 extern void intRemoveMissionResultNoAnim(void);

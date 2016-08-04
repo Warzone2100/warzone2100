@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -24,12 +24,10 @@
 #include "lib/framework/frame.h"
 #include <physfs.h>
 
-#ifndef WZ_NOSOUND
-# ifdef WZ_OS_MAC
-#  include <OpenAL/al.h>
-# else
-#  include <AL/al.h>
-# endif
+#ifdef WZ_OS_MAC
+#include <OpenAL/al.h>
+#else
+#include <AL/al.h>
 #endif
 
 #define ATTENUATION_FACTOR	0.0003f
@@ -53,13 +51,11 @@ struct SIMPLE_OBJECT;
 struct AUDIO_SAMPLE
 {
 	SDWORD                  iTrack;         // ID number identifying a specific sound; currently (r1182) mapped in audio_id.c
-#ifndef WZ_NOSOUND
 	ALuint                  iSample;        // OpenAL name of the sound source
 #ifdef DEBUG	// only used for debugging
 	ALboolean			isLooping;		// if	sample loops
 	ALboolean			is3d;			// if	sample is 3d (as opposed to 2d)
 	char				filename[256];	// actual filename of sample
-#endif
 #endif
 	SDWORD                  x, y, z;
 	float                   fVol;           // computed volume of sample
@@ -78,9 +74,7 @@ struct TRACK
 	SDWORD          iTime;                  // duration in milliseconds
 	UDWORD          iTimeLastFinished;      // time last finished in ms
 	UDWORD          iNumPlaying;
-#ifndef WZ_NOSOUND
 	ALuint          iBufferName;            // OpenAL name of the buffer
-#endif
 	const char     *fileName;
 };
 
@@ -127,14 +121,12 @@ void	sound_SetStoppedCallback(AUDIO_CALLBACK pStopTrackCallback);
 UDWORD	sound_GetTrackTimeLastFinished(SDWORD iTrack);
 void	sound_SetTrackTimeLastFinished(SDWORD iTrack, UDWORD iTime);
 
-extern bool sound_isStreamPlaying(AUDIO_STREAM *stream);
-extern void sound_StopStream(AUDIO_STREAM *stream);
-extern void sound_PauseStream(AUDIO_STREAM *stream);
-extern void sound_ResumeStream(AUDIO_STREAM *stream);
-extern AUDIO_STREAM *sound_PlayStreamWithBuf(PHYSFS_file *fileHandle, float volume, void (*onFinished)(void *), void *user_data, size_t streamBufferSize, unsigned int buffer_count);
-extern float sound_GetStreamVolume(const AUDIO_STREAM *stream);
-extern void sound_SetStreamVolume(AUDIO_STREAM *stream, float volume);
-
-void soundTest(void);
+bool sound_isStreamPlaying(AUDIO_STREAM *stream);
+void sound_StopStream(AUDIO_STREAM *stream);
+void sound_PauseStream(AUDIO_STREAM *stream);
+void sound_ResumeStream(AUDIO_STREAM *stream);
+AUDIO_STREAM *sound_PlayStreamWithBuf(PHYSFS_file *fileHandle, float volume, void (*onFinished)(void *), void *user_data, size_t streamBufferSize, unsigned int buffer_count);
+float sound_GetStreamVolume(const AUDIO_STREAM *stream);
+void sound_SetStreamVolume(AUDIO_STREAM *stream, float volume);
 
 #endif	// __INCLUDED_LIB_SOUND_TRACK_H__

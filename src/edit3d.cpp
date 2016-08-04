@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -42,7 +42,6 @@ UDWORD	buildState = BUILD3D_NONE;
 BUILDDETAILS	sBuildDetails;
 HIGHLIGHT		buildSite;
 int brushSize = 1;
-bool editMode = false;
 bool quickQueueMode = false;
 
 // Initialisation function for statis & globals in this module.
@@ -119,11 +118,7 @@ bool	inHighlight(UDWORD realX, UDWORD realY)
 
 void init3DBuilding(BASE_STATS *psStats, BUILDCALLBACK CallBack, void *UserData)
 {
-	ASSERT(psStats, "Bad parameter");
-	if (!psStats)
-	{
-		return;
-	}
+	ASSERT_OR_RETURN(, psStats, "Bad parameter");
 
 	buildState = BUILD3D_POS;
 

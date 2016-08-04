@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -67,6 +67,7 @@
 #include "multiint.h"
 #include "multistat.h"
 #include "multigifts.h"
+#include "qtscript.h"
 #include "scriptcb.h"
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -236,12 +237,25 @@ static void sendPlayerLeft(uint32_t playerIndex)
 	NETend();
 }
 
+static void addConsolePlayerLeftMessage(unsigned playerIndex)
+{
+	if (selectedPlayer != playerIndex)
+	{
+		char buf[256];
+		ssprintf(buf, _("%s has Left the Game"), getPlayerName(playerIndex));
+		addConsoleMessage(buf, DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+	}
+}
+
 void recvPlayerLeft(NETQUEUE queue)
 {
 	uint32_t playerIndex = 0;
 	NETbeginDecode(queue, GAME_PLAYER_LEFT);
 	NETuint32_t(&playerIndex);
 	NETend();
+
+	addConsolePlayerLeftMessage(playerIndex);
+
 	if (whosResponsible(playerIndex) != queue.index)
 	{
 		return;
@@ -252,9 +266,6 @@ void recvPlayerLeft(NETQUEUE queue)
 	turnOffMultiMsg(false);
 	NetPlay.players[playerIndex].allocated = false;
 
-	char buf[256];
-	ssprintf(buf, _("%s has Left the Game"), getPlayerName(playerIndex));
-	addConsoleMessage(buf, DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 	NETsetPlayerConnectionStatus(CONNECTIONSTATUS_PLAYER_DROPPED, playerIndex);
 
 	debug(LOG_INFO, "** player %u has dropped, in-game!", playerIndex);
@@ -275,6 +286,7 @@ bool MultiPlayerLeave(UDWORD playerIndex)
 
 	if (ingame.localJoiningInProgress)
 	{
+		addConsolePlayerLeftMessage(playerIndex);
 		clearPlayer(playerIndex, false);
 	}
 	else if (NetPlay.isHost)  // If hosting, and game has started (not in pre-game lobby screen, that is).
@@ -302,6 +314,7 @@ bool MultiPlayerLeave(UDWORD playerIndex)
 	// fire script callback to reassign skirmish players.
 	CBPlayerLeft = playerIndex;
 	eventFireCallbackTrigger((TRIGGER_TYPE)CALL_PLAYERLEFT);
+	triggerEventPlayerLeft(playerIndex);
 
 	netPlayersUpdated = true;
 	return true;

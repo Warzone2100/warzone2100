@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -39,9 +39,11 @@ extern void gridShutDown(void);
 // Resets seenThisTick[] to false.
 extern void gridReset(void);
 
-#define PREVIOUS_DEFAULT_GRID_SEARCH_RADIUS (20*TILE_UNITS)
 /// Find all objects within radius.
 GridList const &gridStartIterate(int32_t x, int32_t y, uint32_t radius);
+
+/// Find all objects within radius.
+GridList const &gridStartIterateArea(int32_t x, int32_t y, uint32_t x2, uint32_t y2);
 
 // Isn't, but could be used by some cluster system. Don't really understand what cluster.c is for.
 /// Find all objects within radius where object->type == OBJ_DROID && object->player == player.

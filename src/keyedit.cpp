@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -33,6 +33,7 @@
 #include "lib/ivis_opengl/pieblitfunc.h"
 #include "lib/sound/audio.h"
 #include "lib/sound/audio_id.h"
+#include "lib/widget/button.h"
 
 #include "frend.h"
 #include "frontend.h"
@@ -49,7 +50,6 @@
 // defines
 
 #define KM_FORM				10200
-#define	KM_FORM_TABS		10201
 #define KM_RETURN			10202
 #define KM_DEFAULT			10203
 
@@ -62,10 +62,9 @@
 #define KM_Y				20
 #define KM_SX				FRONTEND_SIDEX
 
-#define BUTTONSPERKEYMAPPAGE 20
 
 #define KM_ENTRYW			(FRONTEND_BOTFORMW - 80)
-#define KM_ENTRYH			(( (KM_H-50)/BUTTONSPERKEYMAPPAGE )-3 )
+#define KM_ENTRYH			(16)
 
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -79,23 +78,6 @@ static char keymapVersion[8] = "KM_0002";
 
 static bool pushedKeyMap(UDWORD key)
 {
-//	UDWORD count =0;
-//	id-KM_START
-//	for(selectedKeyMap = keyMappings;
-//		selectedKeyMap->status != KEYMAP_ASSIGNABLE;
-//		(selectedKeyMap->status= KEYMAP__DEBUG) && (selectedKeyMap->status==KEYMAP___HIDE);
-//
-//		selectedKeyMap = selectedKeyMap->psNext);
-//
-//	while(count!=key)
-//	{
-//		selectedKeyMap = selectedKeyMap->psNext;
-//		if((selectedKeyMap->status!=KEYMAP__DEBUG)&&(selectedKeyMap->status!=KEYMAP___HIDE))		// if it's not a debug mapping..
-//		if(selectedKeyMap->status == KEYMAP_ASSIGNABLE)
-//		{
-//			count++;
-//		}
-//	}
 	selectedKeyMap = (KEY_MAPPING *)widgGetFromID(psWScreen, key)->pUserData;
 	if (selectedKeyMap && selectedKeyMap->status != KEYMAP_ASSIGNABLE)
 	{
@@ -107,7 +89,6 @@ static bool pushedKeyMap(UDWORD key)
 	return true;
 }
 
-
 // ////////////////////////////////////////////////////////////////////////////
 static bool pushedKeyCombo(KEY_CODE subkey)
 {
@@ -115,10 +96,6 @@ static bool pushedKeyCombo(KEY_CODE subkey)
 	KEY_MAPPING	*pExist;
 	KEY_MAPPING	*psMapping;
 	KEY_CODE	alt;
-	//	void (*function)(void);
-	//	KEY_ACTION	action;
-	//	KEY_STATUS	status;
-	//	char	name[255];
 
 	// check for
 	// alt
@@ -128,21 +105,18 @@ static bool pushedKeyCombo(KEY_CODE subkey)
 		metakey = KEY_LALT;
 		alt = KEY_RALT;
 	}
-
 	// ctrl
 	else if (keyDown(KEY_RCTRL) || keyDown(KEY_LCTRL))
 	{
 		metakey = KEY_LCTRL;
 		alt = KEY_RCTRL;
 	}
-
 	// shift
 	else if (keyDown(KEY_RSHIFT) || keyDown(KEY_LSHIFT))
 	{
 		metakey = KEY_LSHIFT;
 		alt = KEY_RSHIFT;
 	}
-
 	// meta (cmd)
 	else if (keyDown(KEY_RMETA) || keyDown(KEY_LMETA))
 	{
@@ -176,34 +150,6 @@ static bool pushedKeyCombo(KEY_CODE subkey)
 	{
 		psMapping->altMetaKeyCode = alt;
 	}
-
-
-
-	/*
-
-
-
-	// unbind old mapping with this combo.
-	//	function = selectedKeyMap->function;
-	//	action = selectedKeyMap->action;
-	//	status = selectedKeyMap->status;
-	//	sstrcpy(name, selectedKeyMap->pName);
-	//	keyRemoveMappingPt(selectedKeyMap);
-
-	keyAddMapping(status,metakey,subkey,action,function,name);
-
-	// add new binding.
-	//	keyReAssignMapping( selectedKeyMap->metaKeyCode, selectedKeyMap->subKeyCode, metakey, subkey);
-	//	keyAddMapping(
-
-	selectedKeyMap->metaKeyCode = metakey;
-	selectedKeyMap->subKeyCode = subkey;
-
-	// readd the widgets.
-	//	widgDelete(psWScreen,FRONTEND_BACKDROP);
-	//	startKeyMapEditor(false);
-
-	*/
 	selectedKeyMap = NULL;	// unhighlght selected .
 	return true;
 }
@@ -302,12 +248,12 @@ static bool keyMapToString(char *pStr, KEY_MAPPING *psMapping)
 
 // ////////////////////////////////////////////////////////////////////////////
 // display a keymap on the interface.
-static void displayKeyMap(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_DECL_UNUSED PIELIGHT *pColours)
+static void displayKeyMap(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
-	UDWORD		x = xOffset + psWidget->x;
-	UDWORD		y = yOffset + psWidget->y;
-	UDWORD		w = psWidget->width;
-	UDWORD		h = psWidget->height;
+	int x = xOffset + psWidget->x();
+	int y = yOffset + psWidget->y();
+	int w = psWidget->width();
+	int h = psWidget->height();
 	KEY_MAPPING *psMapping = (KEY_MAPPING *)psWidget->pUserData;
 	char		sKey[MAX_STR_LENGTH];
 
@@ -329,7 +275,7 @@ static void displayKeyMap(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_D
 	iV_SetFont(font_regular);											// font type
 	iV_SetTextColour(WZCOL_FORM_TEXT);
 
-	iV_DrawText(_(psMapping->pName), x + 2, y + (psWidget->height / 2) + 3);
+	iV_DrawText(_(psMapping->pName), x + 2, y + (psWidget->height() / 2) + 3);
 
 	// draw binding
 	keyMapToString(sKey, psMapping);
@@ -339,36 +285,30 @@ static void displayKeyMap(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, WZ_D
 		iV_SetTextColour(WZCOL_YELLOW);
 		sstrcat(sKey, " (numpad)");
 	}
-	iV_DrawText(sKey, x + 364, y + (psWidget->height / 2) + 3);
+	iV_DrawText(sKey, x + 364, y + (psWidget->height() / 2) + 3);
+}
+
+static bool keyMappingSort(KEY_MAPPING const *a, KEY_MAPPING const *b)
+{
+	return strcmp(a->pName, b->pName) < 0;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
 bool startKeyMapEditor(bool first)
 {
-	KEY_MAPPING	*psMapping;
-	UDWORD		i, mapcount = 0;
-	UDWORD		bubbleCount;
-	bool		bAtEnd, bGotOne;
-	KEY_MAPPING	*psPresent = NULL, *psNext;
-	char		test[255];
 	addBackdrop();
-	addSideText(FRONTEND_SIDETEXT , KM_SX, KM_Y, _("KEY MAPPING"));
+	addSideText(FRONTEND_SIDETEXT, KM_SX, KM_Y, _("KEY MAPPING"));
 
 	if (first)
 	{
 		loadKeyMap();									// get the current mappings.
 	}
-	W_FORMINIT sFormInit;
-	sFormInit.formID	= FRONTEND_BACKDROP;
-	sFormInit.id		= KM_FORM;
-	sFormInit.style		= WFORM_PLAIN;
-	sFormInit.x			= KM_X;
-	sFormInit.y			= KM_Y;
-	sFormInit.width		= KM_W;
-	sFormInit.height	= KM_H;
-	sFormInit.pDisplay	= intDisplayPlainForm;
-	widgAddForm(psWScreen, &sFormInit);
 
+	WIDGET *parent = widgGetFromID(psWScreen, FRONTEND_BACKDROP);
+
+	IntFormAnimated *kmForm = new IntFormAnimated(parent, false);
+	kmForm->id = KM_FORM;
+	kmForm->setGeometry(KM_X, KM_Y, KM_W, KM_H);
 
 	addMultiBut(psWScreen, KM_FORM, KM_RETURN,			// return button.
 	            8, 5,
@@ -378,123 +318,38 @@ bool startKeyMapEditor(bool first)
 
 	addMultiBut(psWScreen, KM_FORM, KM_DEFAULT,
 	            11, 45,
-	            56, 38,
+	            iV_GetImageWidth(FrontImages, IMAGE_KEYMAP_DEFAULT), iV_GetImageWidth(FrontImages, IMAGE_KEYMAP_DEFAULT),
 	            _("Select Default"),
 	            IMAGE_KEYMAP_DEFAULT, IMAGE_KEYMAP_DEFAULT_HI, IMAGE_KEYMAP_DEFAULT_HI);	// default.
 
-
-	/* Better be none that come after this...! */
-	sstrcpy(test, "zzzzzzzzzzzzzzzzzzzzz");
-	psMapping = NULL;
-
-	//count mappings required.
-	for (psMapping = keyMappings; psMapping; psMapping = psMapping->psNext)
-	{
-		if ((psMapping->status != KEYMAP__DEBUG) && (psMapping->status != KEYMAP___HIDE))		// if it's not a debug mapping..
-		{
-			mapcount++;
-			if (strcmp(psMapping->pName, test) < 0)
-			{
-				/* Best one found so far */
-				sstrcpy(test, psMapping->pName);
-				psPresent = psMapping;
-			}
-		}
-	}
-
 	// add tab form..
-	sFormInit = W_FORMINIT();
-	sFormInit.formID		= KM_FORM;
-	sFormInit.id			= KM_FORM_TABS;
-	sFormInit.style			= WFORM_TABBED;
-	sFormInit.x			= 50;
-	sFormInit.y			= 10;
-	sFormInit.width			= KM_W - 100;
-	sFormInit.height		= KM_H - 4;
-	sFormInit.numMajor		= numForms(mapcount, BUTTONSPERKEYMAPPAGE);
-	sFormInit.majorPos		= WFORM_TABTOP;
-	sFormInit.minorPos		= WFORM_TABNONE;
-	sFormInit.majorSize		= OBJ_TABWIDTH + 3;
-	sFormInit.majorOffset		= OBJ_TABOFFSET;
-	sFormInit.tabVertOffset		= (OBJ_TABHEIGHT / 2);
-	sFormInit.tabMajorThickness 	= OBJ_TABHEIGHT;
-	sFormInit.pUserData		= &StandardTab;
-	sFormInit.pTabDisplay		= intDisplayTab;
-
-	// TABFIXME: Special case for tabs, since this one has whole screen to itself. No need to modify(?)
-	for (i = 0; i < sFormInit.numMajor; i++)
-	{
-		sFormInit.aNumMinors[i] = 1;
-	}
-	widgAddForm(psWScreen, &sFormInit);
+	IntListTabWidget *kmList = new IntListTabWidget(kmForm);
+	kmList->setChildSize(KM_ENTRYW, KM_ENTRYH);
+	kmList->setChildSpacing(3, 3);
+	kmList->setGeometry(52, 10, KM_ENTRYW, KM_H - 10 - 25);
 
 	//Put the buttons on it
-	W_BUTINIT sButInit;
-	sButInit.formID   = KM_FORM_TABS;
-	sButInit.width    = KM_ENTRYW;
-	sButInit.height	  = KM_ENTRYH;
-	sButInit.pDisplay = displayKeyMap;
-	sButInit.x	  = 2;
-	sButInit.y	  = 16;
-	sButInit.id	  = KM_START;
-
-
-	/* Add our first mapping to the form */
-	sButInit.pUserData = psPresent;
-	widgAddButton(psWScreen, &sButInit);
-	sButInit.id++;
-	sButInit.y +=  KM_ENTRYH + 3;
-
-	/* Now add the others... */
-	bubbleCount = 0;
-	bAtEnd = false;
-	/* Stop when the right number or when aphabetically last - not sure...! */
-	while (bubbleCount < mapcount - 1 && !bAtEnd)
+	std::vector<KEY_MAPPING *> mappings;
+	for (KEY_MAPPING *m = keyMappings; m != nullptr; m = m->psNext)
 	{
-		/* Same test as before for upper limit */
-		sstrcpy(test, "zzzzzzzzzzzzzzzzzzzzz");
-		for (psMapping = keyMappings, psNext = NULL, bGotOne = false; psMapping; psMapping = psMapping->psNext)
+		if (m->status != KEYMAP__DEBUG && m->status != KEYMAP___HIDE)  // if it's not a debug mapping..
 		{
-			/* Only certain mappings get displayed */
-			if ((psMapping->status != KEYMAP__DEBUG) && (psMapping->status != KEYMAP___HIDE))		// if it's not a debug mapping..
-			{
-				/* If it's alphabetically good but better then next one */
-				if (strcmp(psMapping->pName, test) < 0 && strcmp(psMapping->pName, psPresent->pName) > 0)
-				{
-					/* Keep a record of it */
-					sstrcpy(test, psMapping->pName);
-					psNext = psMapping;
-					bGotOne = true;
-				}
-			}
-		}
-		/* We found one matching criteria */
-		if (bGotOne)
-		{
-			psPresent = psNext;
-			bubbleCount++;
-			sButInit.pUserData = psNext;
-			widgAddButton(psWScreen, &sButInit);
-			// move on..
-			sButInit.id++;
-			/* Might be no more room on the page */
-			if ((sButInit.y + KM_ENTRYH + 5) > (3 + (BUTTONSPERKEYMAPPAGE * (KM_ENTRYH + 3))))
-			{
-				sButInit.y = 16;
-				sButInit.majorID += 1;
-			}
-			else
-			{
-				sButInit.y +=  KM_ENTRYH + 3;
-			}
-		}
-		else
-		{
-			/* The previous one we found was alphabetically last - time to stop */
-			bAtEnd = true;
+			mappings.push_back(m);
 		}
 	}
+	std::sort(mappings.begin(), mappings.end(), keyMappingSort);
+	/* Add our first mapping to the form */
+	/* Now add the others... */
+	for (std::vector<KEY_MAPPING *>::const_iterator i = mappings.begin(); i != mappings.end(); ++i)
+	{
+		W_BUTTON *button = new W_BUTTON(kmList);
+		button->id = KM_START + (i - mappings.begin());
+		button->pUserData = *i;
+		button->displayFunction = displayKeyMap;
+		kmList->addWidgetToLayout(button);
+	}
 
+	/* Stop when the right number or when aphabetically last - not sure...! */
 	/* Go home... */
 	return true;
 }

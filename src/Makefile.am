@@ -1,6 +1,22 @@
-AM_CPPFLAGS = -DYY_NO_INPUT $(SDL_CFLAGS) $(PHYSFS_CFLAGS) $(PNG_CFLAGS) $(VORBISFILE_CFLAGS) $(VORBIS_CFLAGS) $(OPENAL_CFLAGS) $(OPENGLC_CFLAGS) $(OPENGL_CFLAGS) $(WZ_CPPFLAGS) $(GLEW_CFLAGS)
+AM_CPPFLAGS = -DYY_NO_INPUT $(SDL_CFLAGS) $(PHYSFS_CFLAGS) $(PNG_CFLAGS) $(VORBISFILE_CFLAGS) $(VORBIS_CFLAGS) $(OPENAL_CFLAGS) $(OPENGLC_CFLAGS) $(OPENGL_CFLAGS) $(WZ_CPPFLAGS) $(GLEW_CFLAGS) $(LIBCRYPTO_CFLAGS)
 AM_CFLAGS = $(WZ_CFLAGS)
-AM_CXXFLAGS = $(WZ_CXXFLAGS) $(QT4_CFLAGS)
+AM_CXXFLAGS = $(WZ_CXXFLAGS) $(QT5_CFLAGS)
+
+# Here, we need to set "plugins" for Qt5 to be static
+# FIXME: At a future date, we should check if they want static builds, but, since we only support those for now...
+if MINGW32
+AM_CFLAGS += -DQT_STATICPLUGIN
+AM_CPPFLAGS += -DQT_STATICPLUGIN
+AM_CXXFLAGS += -DQT_STATICPLUGIN
+endif
+
+MOCHEADER = \
+	multiint.h \
+	qtscriptdebug.h
+MOCEDFILES = $(MOCHEADER:%.h=%_moc.cpp)
+
+%_moc.cpp: %.h
+	$(MOC5) -o $@ $<
 
 .PHONY: autorevision.h
 
@@ -10,7 +26,8 @@ autorevision.h autorevision.cache:
 
 CLEANFILES = \
 	$(BUILT_SOURCES) \
-	autorevision.h.new
+	autorevision.h.new \
+	$(MOCEDFILES)
 
 BUILT_SOURCES = \
 	autorevision.h
@@ -31,6 +48,7 @@ noinst_HEADERS = \
 	advvis.h \
 	ai.h \
 	anim_id.h \
+	animobj.h \
 	astar.h \
 	atmos.h \
 	basedef.h \
@@ -57,7 +75,6 @@ noinst_HEADERS = \
 	drive.h \
 	droiddef.h \
 	droid.h \
-	e3demo.h \
 	edit3d.h \
 	effects.h \
 	featuredef.h \
@@ -65,8 +82,6 @@ noinst_HEADERS = \
 	fpath.h \
 	frend.h \
 	frontend.h \
-	functiondef.h \
-	function.h \
 	game.h \
 	gateway.h \
 	geometry.h \
@@ -153,12 +168,18 @@ noinst_HEADERS = \
 	warzoneconfig.h \
 	wavecast.h \
 	weapondef.h \
-	wrappers.h
+	wrappers.h \
+	$(MOCHEADER)
+
+nodist_COMMONSOURCES = \
+	multiint_moc.cpp \
+	qtscriptdebug_moc.cpp
 
 COMMONSOURCES = \
 	action.cpp \
 	advvis.cpp \
 	ai.cpp \
+	animobj.cpp \
 	astar.cpp \
 	atmos.cpp \
 	aud.cpp \
@@ -181,13 +202,11 @@ COMMONSOURCES = \
 	display.cpp \
 	drive.cpp \
 	droid.cpp \
-	e3demo.cpp \
 	edit3d.cpp \
 	effects.cpp \
 	feature.cpp \
 	fpath.cpp \
 	frontend.cpp \
-	function.cpp \
 	game.cpp \
 	gateway.cpp \
 	geometry.cpp \
@@ -235,6 +254,7 @@ COMMONSOURCES = \
 	power.cpp \
 	projectile.cpp \
 	qtscript.cpp \
+	qtscriptdebug.cpp \
 	qtscriptfuncs.cpp \
 	radar.cpp \
 	random.cpp \
@@ -276,7 +296,6 @@ COMMONLIBS = \
 	$(top_builddir)/lib/netplay/libnetplay.a \
 	$(top_builddir)/lib/ivis_opengl/libivis_opengl.a \
 	$(top_builddir)/lib/gamelib/libgamelib.a \
-	$(top_builddir)/lib/framework/libframework.a \
 	$(top_builddir)/lib/exceptionhandler/libexceptionhandler.a \
 	$(top_builddir)/3rdparty/miniupnpc/libminiupnpc.a \
 	$(top_builddir)/3rdparty/quesoglc/libquesoglc.a
@@ -291,36 +310,48 @@ endif
 
 if BACKEND_QT
 if PORTABLE
-warzone2100_portable_LIBS += $(top_builddir)/lib/qtgame/libqtgame.a
+warzone2100_portable_LIBS += $(top_builddir)/lib/qtgame/libqtgame.a \
+							 $(top_builddir)/lib/framework/libframework.a
 else
-warzone2100_LIBS += $(top_builddir)/lib/qtgame/libqtgame.a
+warzone2100_LIBS += $(top_builddir)/lib/qtgame/libqtgame.a \
+					$(top_builddir)/lib/framework/libframework.a
 endif
 endif
 
 if BACKEND_SDL
 if PORTABLE
-warzone2100_portable_LIBS += $(top_builddir)/lib/sdl/libsdl.a
+warzone2100_portable_LIBS += $(top_builddir)/lib/sdl/libsdl.a \
+							 $(top_builddir)/lib/framework/libframework.a
 else
-warzone2100_LIBS += $(top_builddir)/lib/sdl/libsdl.a
+warzone2100_LIBS += $(top_builddir)/lib/sdl/libsdl.a \
+					$(top_builddir)/lib/framework/libframework.a
 endif
 endif
 
+# Here, we need to bring in the "plugins" for Qt5 and they MUST come before the other QT libs.
+# FIXME: At a future date, we should check if they want static builds, but, since we only support those for now...
+if MINGW32
+SQT5_LIBS =  -L$(QT5_PLUGIN)/plugins/platforms -lQt5PlatformSupport -lqwindows
+else
+SQT5_LIBS =
+endif
 
 if PORTABLE
 warzone2100_portable_LDADD = $(warzone2100_portable_LIBS) $(LTLIBINTL) $(SDL_LIBS) $(PHYSFS_LIBS) $(PNG_LIBS) $(VORBISFILE_LIBS) $(VORBIS_LIBS) \
-	$(THEORA_LIBS) $(OPENAL_LIBS) $(OPENGLC_LIBS) $(OPENGL_LIBS) $(QT4_LIBS) $(GLEW_LIBS) \
+	$(THEORA_LIBS) $(OPENAL_LIBS) $(OPENGLC_LIBS) $(OPENGL_LIBS) $(SQT5_LIBS) $(QT5_LIBS) $(GLEW_LIBS) \
 	$(X_LIBS) $(X_EXTRA_LIBS) $(LIBCRYPTO_LIBS) $(LDFLAGS)
 else
 warzone2100_LDADD = $(warzone2100_LIBS) $(LTLIBINTL) $(SDL_LIBS) $(PHYSFS_LIBS) $(PNG_LIBS) $(VORBISFILE_LIBS) $(VORBIS_LIBS) \
-	$(THEORA_LIBS) $(OPENAL_LIBS) $(OPENGLC_LIBS) $(OPENGL_LIBS) $(QT4_LIBS) $(GLEW_LIBS) \
-	$(X_LIBS) $(X_EXTRA_LIBS) $(LDFLAGS)
+	$(THEORA_LIBS) $(OPENAL_LIBS) $(OPENGLC_LIBS) $(OPENGL_LIBS) $(SQT5_LIBS) $(QT5_LIBS) $(GLEW_LIBS) \
+	$(X_LIBS) $(X_EXTRA_LIBS) $(LIBCRYPTO_LIBS) $(LDFLAGS)
 endif
+
 
 if MINGW32
 if PORTABLE
 warzone2100_portable_LDADD += $(top_builddir)/win32/warzone2100_portable.o $(WIN32_LIBS)
 else
-warzone2100_LDADD += $(top_builddir)/win32/warzone2100.o $(WIN32_LIBS)
+warzone2100_LDADD += $(top_builddir)/win32/warzone2100.o  $(WIN32_LIBS)
 endif
 endif
 

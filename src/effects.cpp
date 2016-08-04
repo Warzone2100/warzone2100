@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -151,47 +151,9 @@
 #define SHOCKWAVE_SPEED	(GAME_TICKS_PER_SEC)
 #define	MAX_SHOCKWAVE_SIZE				500
 
-
-/*! Number of effects in one chunk */
-#define EFFECT_CHUNK_SIZE 10000
-
-
-/*! A memory chunk of effects */
-struct EffectChunk
-{
-	EFFECT effects[EFFECT_CHUNK_SIZE]; //!< Chunk of effects
-	EffectChunk *next; //!< Next element in list
-};
-
-
-/*! List containing all allocated effect chunks */
-struct chunkList_t
-{
-	EffectChunk *first; //!< First element of list, used for iteration
-	EffectChunk *last; //!< Last element of list, used for appending
-} chunkList =
-{
-	NULL, NULL
-};
-
-
-/*! Our lists of all game world effects */
-struct activeList_t
-{
-	size_t num; //!< Number of effects in this list, used when saving
-	EFFECT *first; //!< First element of list, used for iteration / finding free effects
-	EFFECT *last; //!< Last element of list, used for appending
-} activeList =   //!< List of all active effects
-{
-	0, NULL, NULL
-}, inactiveList =   //!< List of unused effects
-{
-	0, NULL, NULL
-};
-
+static std::list<EFFECT *> activeList;
 
 /* Tick counts for updates on a particular interval */
-static	UDWORD	lastUpdateDroids[EFFECT_DROID_DIVISION];
 static	UDWORD	lastUpdateStructures[EFFECT_STRUCTURE_DIVISION];
 
 static	UDWORD	auxVar; // dirty filthy hack - don't look for what this does.... //FIXME
@@ -204,27 +166,27 @@ static	uint8_t	EffectForPlayer = 0;
 
 // ----------------------------------------------------------------------------------------
 // ---- Update functions - every group type of effect has one of these */
-static void updateWaypoint(EFFECT *psEffect);
-static void updateExplosion(EFFECT *psEffect);
-static void updatePolySmoke(EFFECT *psEffect);
-static void updateGraviton(EFFECT *psEffect);
-static void updateConstruction(EFFECT *psEffect);
-static void updateBlood(EFFECT *psEffect);
-static void updateDestruction(EFFECT *psEffect);
-static void updateFire(EFFECT *psEffect);
-static void updateSatLaser(EFFECT *psEffect);
-static void updateFirework(EFFECT *psEffect);
-static void updateEffect(EFFECT *psEffect);	// MASTER function
+static bool updateWaypoint(EFFECT *psEffect);
+static bool updateExplosion(EFFECT *psEffect);
+static bool updatePolySmoke(EFFECT *psEffect);
+static bool updateGraviton(EFFECT *psEffect);
+static bool updateConstruction(EFFECT *psEffect);
+static bool updateBlood(EFFECT *psEffect);
+static bool updateDestruction(EFFECT *psEffect);
+static bool updateFire(EFFECT *psEffect);
+static bool updateSatLaser(EFFECT *psEffect);
+static bool updateFirework(EFFECT *psEffect);
+static bool updateEffect(EFFECT *psEffect);	// MASTER function
 
 // ----------------------------------------------------------------------------------------
 // ---- The render functions - every group type of effect has a distinct one
-static void	renderExplosionEffect(const EFFECT *psEffect);
-static void	renderSmokeEffect(const EFFECT *psEffect);
-static void	renderGravitonEffect(const EFFECT *psEffect);
-static void	renderConstructionEffect(const EFFECT *psEffect);
-static void	renderWaypointEffect(const EFFECT *psEffect);
-static void	renderBloodEffect(const EFFECT *psEffect);
-static void	renderDestructionEffect(const EFFECT *psEffect);
+static void renderExplosionEffect(const EFFECT *psEffect);
+static void renderSmokeEffect(const EFFECT *psEffect);
+static void renderGravitonEffect(const EFFECT *psEffect);
+static void renderConstructionEffect(const EFFECT *psEffect);
+static void renderWaypointEffect(const EFFECT *psEffect);
+static void renderBloodEffect(const EFFECT *psEffect);
+static void renderDestructionEffect(const EFFECT *psEffect);
 static void renderFirework(const EFFECT *psEffect);
 
 static void positionEffect(const EFFECT *psEffect);
@@ -232,203 +194,37 @@ static void positionEffect(const EFFECT *psEffect);
 
 // ----------------------------------------------------------------------------------------
 // ---- The set up functions - every type has one
-static void	effectSetupSmoke(EFFECT *psEffect);
-static void	effectSetupGraviton(EFFECT *psEffect);
-static void	effectSetupExplosion(EFFECT *psEffect);
-static void	effectSetupConstruction(EFFECT *psEffect);
-static void	effectSetupWayPoint(EFFECT *psEffect);
-static void	effectSetupBlood(EFFECT *psEffect);
+static void effectSetupSmoke(EFFECT *psEffect);
+static void effectSetupGraviton(EFFECT *psEffect);
+static void effectSetupExplosion(EFFECT *psEffect);
+static void effectSetupConstruction(EFFECT *psEffect);
+static void effectSetupWayPoint(EFFECT *psEffect);
+static void effectSetupBlood(EFFECT *psEffect);
 static void effectSetupDestruction(EFFECT *psEffect);
-static void	effectSetupFire(EFFECT *psEffect);
-static void	effectSetupSatLaser(EFFECT *psEffect);
+static void effectSetupFire(EFFECT *psEffect);
+static void effectSetupSatLaser(EFFECT *psEffect);
 static void effectSetupFirework(EFFECT *psEffect);
 
-static void effectStructureUpdates(void);
-static void effectDroidUpdates(void);
+static void effectStructureUpdates();
 
 static UDWORD effectGetNumFrames(EFFECT *psEffect);
-static void killEffect(EFFECT *e);
 
-/*!
- * Initialise memory between first and last as singly linked list
- * \param first First element in memory chunk
- * \param last Last element in memory chunk
- */
-static void initEffectPool(EFFECT *first, EFFECT *last)
+void shutdownEffectsSystem()
 {
-	EFFECT *it;
-	for (it = first; it < last; it++)
+	for (auto eff : activeList)
 	{
-		// We do not need a double-linked-list for inactiveeffects, since we always pick from the front:
-		it->prev = NULL;
-		it->next = it + 1;
+		delete eff;
 	}
-
-	last->prev = NULL;
-	last->next = NULL;
-}
-
-
-/*!
- * Allocate a new effect from memory pool
- * FIXME: Does not deal with out-of-memory conditions (yet)
- * \return New, uninitialised effect
- */
-static EFFECT *Effect_malloc(void)
-{
-	/* Take the first item in inactiveList */
-	EFFECT *instance = inactiveList.first;
-
-	/* Remove from inactiveList */
-	inactiveList.first = instance->next; // Singly linked, so do not update prev
-	instance->next = NULL; // We are the last in activeList now
-
-	/* Append to activeList */
-	instance->prev = activeList.last;
-
-	if (instance->prev == NULL)
-	{
-		activeList.first = instance; // activeList was empty, so fill it
-	}
-	else
-	{
-		activeList.last->next = instance;
-	}
-
-	activeList.last = instance;
-
-	/* Adjust counts */
-	activeList.num++;
-	inactiveList.num--;
-
-	/* Ensure the next search will have something to feed its hunger with */
-	if (inactiveList.first == NULL)
-	{
-		/* Allocate new effect chunk */
-		EffectChunk *chunk = (EffectChunk *)calloc(1, sizeof(EffectChunk));
-
-		debug(LOG_MEMORY, "%lu effects in use, allocating %d extra", (unsigned long)activeList.num, EFFECT_CHUNK_SIZE);
-
-		/* Deal with out-of-memory conditions */
-		if (chunk == NULL)
-		{
-			debug(LOG_ERROR, "Out of memory");
-			return NULL; // The next call relies on inactiveList being non-empty, and would thus segfault, so bail out early instead
-		}
-
-		/* Append to list */
-		chunk->next = NULL; // Last element
-		chunkList.last->next = chunk;  // chunkList is never empty, thus we can rely on last!=NULL
-
-		/* Update inactiveList */
-		inactiveList.num = EFFECT_CHUNK_SIZE;
-		inactiveList.first = &chunk->effects[0];
-		inactiveList.last = &chunk->effects[EFFECT_CHUNK_SIZE - 1];
-
-		/* Initialise list links between inactive effects */
-		initEffectPool(inactiveList.first, inactiveList.last);
-	}
-
-	return instance;
-}
-
-
-/*!
- * Return an effect into memory pool
- * \param self Effect to be freed
- */
-static void Effect_free(EFFECT *instance)
-{
-	instance->group = EFFECT_FREED;
-
-	/* Remove from activeList and fixup endings necessary */
-	if (instance->prev != NULL)
-	{
-		instance->prev->next = instance->next;
-	}
-	else
-	{
-		activeList.first = instance->next; // We were the first in activeList
-	}
-	if (instance->next != NULL)
-	{
-		instance->next->prev = instance->prev;
-	}
-	else
-	{
-		activeList.last = instance->prev; // We were the last in activeList
-	}
-
-	/* Append to inactiveList */
-	instance->prev = NULL; // Singly linked
-	instance->next = NULL; // Last element
-
-	// inactiveList is never empty (guaranteed in Effect_malloc), thus we can rely on last!=NULL
-	inactiveList.last->next = instance;
-	inactiveList.last = instance;
-
-	/* Adjust counts */
-	inactiveList.num++;
-	ASSERT_OR_RETURN(, activeList.num > 0, "Underflow");
-	activeList.num--;
-}
-
-void shutdownEffectsSystem(void)
-{
-	EFFECT *eff;
-
-	/* Traverse the list */
-	for (eff = activeList.first; eff;)
-	{
-		EFFECT *effNext = eff->next;
-
-		killEffect(eff);
-		eff = effNext;
-	}
-	free(chunkList.first);
-	chunkList.first = NULL;
-	chunkList.last = NULL;
+	activeList.clear();
 }
 
 /*!
  * Initialise effects system
- * Cleans up old effects, allocates a first chunk of effects, initialises (in)active lists
  */
-void initEffectsSystem(void)
+void initEffectsSystem()
 {
-	EffectChunk *chunk;
-
-	/* Clean up old chunks */
 	shutdownEffectsSystem();
-
-	/* Allocate new chunk */
-	chunk = (EffectChunk *)calloc(1, sizeof(EffectChunk));
-
-	/* Deal with out-of-memory conditions */
-	if (chunk == NULL)
-	{
-		return;    // FIXME We have no way to report an error here...
-	}
-
-	/* Create chunkList */
-	chunkList.first = chunk;
-	chunkList.last = chunk;
-	chunk->next = NULL; // Last element
-
-	/* activeList is empty at start */
-	activeList.num = 0;
-	activeList.first = NULL;
-	activeList.last = NULL;
-
-	/* inactiveList contains all elements */
-	inactiveList.num = EFFECT_CHUNK_SIZE;
-	inactiveList.first = &chunk->effects[0];
-	inactiveList.last = &chunk->effects[EFFECT_CHUNK_SIZE - 1];
-
-	/* Initialise free-effects pool */
-	initEffectPool(inactiveList.first, inactiveList.last);
 }
-
 
 static void positionEffect(const EFFECT *psEffect)
 {
@@ -446,18 +242,12 @@ static void positionEffect(const EFFECT *psEffect)
 	pie_TRANSLATE(dv.x, dv.y, dv.z);
 }
 
-static void killEffect(EFFECT *e)
-{
-	/* Put effect back into pool */
-	Effect_free(e);
-}
-
-void	effectSetLandLightSpec(LAND_LIGHT_SPEC spec)
+void effectSetLandLightSpec(LAND_LIGHT_SPEC spec)
 {
 	ellSpec = spec;
 }
 
-void	effectSetSize(UDWORD size)
+void effectSetSize(UDWORD size)
 {
 	specifiedSize = size;
 }
@@ -499,7 +289,7 @@ void addMultiEffect(const Vector3i *basePos, Vector3i *scatter, EFFECT_GROUP gro
 }
 
 // When we need to set the effect for the player's color
-void	SetEffectForPlayer(uint8_t player)
+void SetEffectForPlayer(uint8_t player)
 {
 	ASSERT(player < MAX_PLAYERS, "player is set to a invalid number of %d", (int) player);
 
@@ -513,23 +303,11 @@ void addEffect(const Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type, bool s
 
 void addEffect(const Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type, bool specified, iIMDShape *imd, int lit, unsigned effectTime)
 {
-	EFFECT *psEffect = NULL;
-
 	if (gamePaused())
 	{
 		return;
 	}
-
-	/* Retrieve a new effect from pool */
-	psEffect = Effect_malloc();
-
-	/* Deal with out-of-memory conditions */
-	if (psEffect == NULL)
-	{
-		debug(LOG_ERROR, "Out of memory");
-		return; // FIXME We have no way to report an error here...
-	}
-
+	EFFECT *psEffect = new EFFECT();
 	/* Reset control bits */
 	psEffect->control = 0;
 
@@ -621,119 +399,103 @@ void addEffect(const Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type, bool s
 	}
 
 	ASSERT(psEffect->imd != NULL || group == EFFECT_DESTRUCTION || group == EFFECT_FIRE || group == EFFECT_SAT_LASER, "null effect imd");
+
+	activeList.push_back(psEffect);
 }
 
 
 /* Calls all the update functions for each different currently active effect */
-void processEffects(void)
+void processEffects()
 {
-	EFFECT *it;
-	/* Traverse the list */
-	for (it = activeList.first; it != NULL;)
+	for (auto it = activeList.begin(); it != activeList.end(); )
 	{
-		EFFECT *itNext = it->next; // If updateEffect deletes something, we would be screwed...
+		EFFECT *psEffect = *it;
 
-		if (it->birthTime <= graphicsTime)  // Don't process, if it doesn't exist yet.
+		if (psEffect->birthTime <= graphicsTime)  // Don't process, if it doesn't exist yet
 		{
-			/* Run updates, effect may be deleted here */
-			updateEffect(it);
-
-			/* Is it on the grid */
-			if (it->group != EFFECT_FREED && clipXY(it->position.x, it->position.z))
+			if (!updateEffect(psEffect))
 			{
-				/* Add it to the bucket */
-				bucketAddTypeToList(RENDER_EFFECT, it);
+				delete psEffect;
+				it = activeList.erase(it);
+				continue;
+			}
+			if (psEffect->group != EFFECT_FREED && clipXY(psEffect->position.x, psEffect->position.z))
+			{
+				bucketAddTypeToList(RENDER_EFFECT, psEffect);
 			}
 		}
-
-		it = itNext;
+		++it;
 	}
-
-	/* Add any droid effects */
-	effectDroidUpdates();
 
 	/* Add any structure effects */
 	effectStructureUpdates();
 }
 
-
-/* The general update function for all effects - calls a specific one for each */
-static void updateEffect(EFFECT *psEffect)
+/* The general update function for all effects - calls a specific one for each. Returns false if effect should be deleted. */
+static bool updateEffect(EFFECT *psEffect)
 {
 	/* What type of effect are we dealing with? */
 	switch (psEffect->group)
 	{
 	case EFFECT_EXPLOSION:
-		updateExplosion(psEffect);
-		return;
-
+		return updateExplosion(psEffect);
 	case EFFECT_WAYPOINT:
 		if (!gamePaused())
 		{
-			updateWaypoint(psEffect);
+			return updateWaypoint(psEffect);
 		}
-		return;
-
+		return true;
 	case EFFECT_CONSTRUCTION:
 		if (!gamePaused())
 		{
-			updateConstruction(psEffect);
+			return updateConstruction(psEffect);
 		}
-		return;
-
+		return true;
 	case EFFECT_SMOKE:
 		if (!gamePaused())
 		{
-			updatePolySmoke(psEffect);
+			return updatePolySmoke(psEffect);
 		}
-		return;
-
+		return true;
 	case EFFECT_GRAVITON:
 		if (!gamePaused())
 		{
-			updateGraviton(psEffect);
+			return updateGraviton(psEffect);
 		}
-		return;
-
+		return true;
 	case EFFECT_BLOOD:
 		if (!gamePaused())
 		{
-			updateBlood(psEffect);
+			return updateBlood(psEffect);
 		}
-		return;
-
+		return true;
 	case EFFECT_DESTRUCTION:
 		if (!gamePaused())
 		{
-			updateDestruction(psEffect);
+			return updateDestruction(psEffect);
 		}
-		return;
-
+		return true;
 	case EFFECT_FIRE:
 		if (!gamePaused())
 		{
-			updateFire(psEffect);
+			return updateFire(psEffect);
 		}
-		return;
-
+		return true;
 	case EFFECT_SAT_LASER:
 		if (!gamePaused())
 		{
-			updateSatLaser(psEffect);
+			return updateSatLaser(psEffect);
 		}
-		return;
-
+		return true;
 	case EFFECT_FIREWORK:
 		if (!gamePaused())
 		{
-			updateFirework(psEffect);
+			return updateFirework(psEffect);
 		}
-		return;
-
+		return true;
 	case EFFECT_FREED:
 		break;
 	}
-
 	debug(LOG_ERROR, "Weirdy class of effect passed to updateEffect");
 	abort();
 }
@@ -742,16 +504,16 @@ static void updateEffect(EFFECT *psEffect)
 // ALL THE UPDATE FUNCTIONS
 // ----------------------------------------------------------------------------------------
 /** Update the waypoint effects.*/
-static void updateWaypoint(EFFECT *psEffect)
+static bool updateWaypoint(EFFECT *psEffect)
 {
-	if (!(keyDown(KEY_LCTRL) || keyDown(KEY_RCTRL) ||
-	      keyDown(KEY_LSHIFT) || keyDown(KEY_RSHIFT)))
+	if (!(keyDown(KEY_LCTRL) || keyDown(KEY_RCTRL) || keyDown(KEY_LSHIFT) || keyDown(KEY_RSHIFT)))
 	{
-		killEffect(psEffect);
+		return false;
 	}
+	return true;
 }
 
-static void updateFirework(EFFECT *psEffect)
+static bool updateFirework(EFFECT *psEffect)
 {
 	UDWORD	height;
 	UDWORD	xDif, yDif, radius, val;
@@ -813,7 +575,7 @@ static void updateFirework(EFFECT *psEffect)
 					addEffect(&dv, EFFECT_FIREWORK, FIREWORK_TYPE_STARBURST, false, NULL, 0);
 				}
 			}
-			killEffect(psEffect);
+			return false;
 		}
 		else
 		{
@@ -844,9 +606,7 @@ static void updateFirework(EFFECT *psEffect)
 				}
 				else
 				{
-					/* Kill it off */
-					killEffect(psEffect);
-					return;
+					return false; /* Kill it off */
 				}
 			}
 		}
@@ -857,14 +617,14 @@ static void updateFirework(EFFECT *psEffect)
 			/* Has it overstayed it's welcome? */
 			if (graphicsTime - psEffect->birthTime > psEffect->lifeSpan)
 			{
-				/* Kill it */
-				killEffect(psEffect);
+				return false; /* Kill it */
 			}
 		}
 	}
+	return true;
 }
 
-static void updateSatLaser(EFFECT *psEffect)
+static bool updateSatLaser(EFFECT *psEffect)
 {
 	Vector3i dv;
 	UDWORD	val;
@@ -902,7 +662,6 @@ static void updateSatLaser(EFFECT *psEffect)
 		dv.z = yPos;
 		dv.y = startHeight + SHOCK_WAVE_HEIGHT;
 		addEffect(&dv, EFFECT_EXPLOSION, EXPLOSION_TYPE_SHOCKWAVE, false, NULL, 0);
-
 
 		/* Now, add the column of light */
 		for (i = startHeight; i < endHeight; i += 56)
@@ -945,24 +704,22 @@ static void updateSatLaser(EFFECT *psEffect)
 		light.range = 800;
 		light.colour = LIGHT_BLUE;
 		processLight(&light);
-
+		return true;
 	}
 	else
 	{
-		killEffect(psEffect);
+		return false;
 	}
 }
 
 /** The update function for the explosions */
-static void updateExplosion(EFFECT *psEffect)
+static bool updateExplosion(EFFECT *psEffect)
 {
-	LIGHT light;
-	UDWORD percent;
-	UDWORD range;
-	float scaling;
-
 	if (TEST_LIT(psEffect))
 	{
+		UDWORD percent;
+		LIGHT light;
+
 		if (psEffect->lifeSpan)
 		{
 			percent = PERCENT(graphicsTime - psEffect->birthTime, psEffect->lifeSpan);
@@ -980,7 +737,7 @@ static void updateExplosion(EFFECT *psEffect)
 			percent = 100;
 		}
 
-		range = percent;
+		UDWORD range = percent;
 		light.position.x = psEffect->position.x;
 		light.position.y = psEffect->position.y;
 		light.position.z = psEffect->position.z;
@@ -991,8 +748,10 @@ static void updateExplosion(EFFECT *psEffect)
 
 	if (psEffect->type == EXPLOSION_TYPE_SHOCKWAVE)
 	{
+		LIGHT light;
+		const float scaling = (float)psEffect->size / (float)MAX_SHOCKWAVE_SIZE;
+
 		psEffect->size += graphicsTimeAdjustedIncrement(SHOCKWAVE_SPEED);
-		scaling = (float)psEffect->size / (float)MAX_SHOCKWAVE_SIZE;
 		psEffect->frameNumber = scaling * effectGetNumFrames(psEffect);
 
 		light.position.x = psEffect->position.x;
@@ -1004,9 +763,7 @@ static void updateExplosion(EFFECT *psEffect)
 
 		if (psEffect->size > MAX_SHOCKWAVE_SIZE || light.range > 600)
 		{
-			/* Kill it off */
-			killEffect(psEffect);
-			return;
+			return false; /* Kill it off */
 		}
 	}
 	/* Time to update the frame number on the explosion */
@@ -1019,9 +776,7 @@ static void updateExplosion(EFFECT *psEffect)
 			{
 				if (psEffect->type != EXPLOSION_TYPE_LAND_LIGHT)
 				{
-					/* Kill it off */
-					killEffect(psEffect);
-					return;
+					return false; /* Kill it off */
 				}
 				else
 				{
@@ -1038,11 +793,11 @@ static void updateExplosion(EFFECT *psEffect)
 			psEffect->position.y += graphicsTimeAdjustedIncrement(psEffect->velocity.y);
 		}
 	}
+	return true;
 }
 
-
 /** The update function for blood */
-static void updateBlood(EFFECT *psEffect)
+static bool updateBlood(EFFECT *psEffect)
 {
 	/* Time to update the frame number on the blood */
 	if (graphicsTime - psEffect->lastFrame > psEffect->frameDelay)
@@ -1051,22 +806,19 @@ static void updateBlood(EFFECT *psEffect)
 		/* Are we on the last frame? */
 		if (++psEffect->frameNumber >= effectGetNumFrames(psEffect))
 		{
-			/* Kill it off */
-			killEffect(psEffect);
-			return;
+			return false; /* Kill it off */
 		}
 	}
 	/* Move it about in the world */
 	psEffect->position.x += graphicsTimeAdjustedIncrement(psEffect->velocity.x);
 	psEffect->position.y += graphicsTimeAdjustedIncrement(psEffect->velocity.y);
 	psEffect->position.z += graphicsTimeAdjustedIncrement(psEffect->velocity.z);
+	return true;
 }
 
-/** Processes all the drifting smoke
-	Handles the smoke puffing out the factory as well */
-static void updatePolySmoke(EFFECT *psEffect)
+/** Processes all the drifting smoke. Handles the smoke puffing out the factory as well. */
+static bool updatePolySmoke(EFFECT *psEffect)
 {
-
 	/* Time to update the frame number on the smoke sprite */
 	while (graphicsTime - psEffect->lastFrame > psEffect->frameDelay)
 	{
@@ -1093,8 +845,7 @@ static void updatePolySmoke(EFFECT *psEffect)
 			else
 			{
 				/* Kill it off */
-				killEffect(psEffect);
-				return;
+				return false;
 			}
 		}
 	}
@@ -1110,17 +861,17 @@ static void updatePolySmoke(EFFECT *psEffect)
 		/* Has it overstayed it's welcome? */
 		if (graphicsTime - psEffect->birthTime > psEffect->lifeSpan)
 		{
-			/* Kill it */
-			killEffect(psEffect);
+			return false; /* Kill it */
 		}
 	}
+	return true;
 }
 
 /**
 	Gravitons just fly up for a bit and then drop down and are
 	killed off when they hit the ground
 */
-static void updateGraviton(EFFECT *psEffect)
+static bool updateGraviton(EFFECT *psEffect)
 {
 	float	accel;
 	Vector3i dv;
@@ -1140,30 +891,26 @@ static void updateGraviton(EFFECT *psEffect)
 	if (gamePaused())
 	{
 		/* Only update the lights if it's paused */
-		return;
+		return true;
 	}
-	/* Move it about in the world */
 
+	/* Move it about in the world */
 	psEffect->position.x += graphicsTimeAdjustedIncrement(psEffect->velocity.x);
 	psEffect->position.y += graphicsTimeAdjustedIncrement(psEffect->velocity.y);
 	psEffect->position.z += graphicsTimeAdjustedIncrement(psEffect->velocity.z);
 
 	/* If it's bounced/drifted off the map then kill it */
-	if (map_coord(psEffect->position.x) >= mapWidth
-	    || map_coord(psEffect->position.z) >= mapHeight)
+	if (map_coord(psEffect->position.x) >= mapWidth || map_coord(psEffect->position.z) >= mapHeight)
 	{
-		killEffect(psEffect);
-		return;
+		return false;
 	}
 
 	int groundHeight = map_Height(psEffect->position.x, psEffect->position.z);
 
 	/* If it's going up and it's still under the landscape, then remove it... */
-	if (psEffect->position.y < groundHeight
-	    && psEffect->velocity.y > 0)
+	if (psEffect->position.y < groundHeight && psEffect->velocity.y > 0)
 	{
-		killEffect(psEffect);
-		return;
+		return false;
 	}
 
 	/* Does it emit a trail? And is it high enough? */
@@ -1186,7 +933,6 @@ static void updateGraviton(EFFECT *psEffect)
 			addEffect(&dv, EFFECT_SMOKE, SMOKE_TYPE_TRAIL, false, NULL, 0);
 		}
 	}
-
 	else if (psEffect->type == GRAVITON_TYPE_GIBLET && (psEffect->position.y > (groundHeight + 5)))
 	{
 		/* Time to add another trail 'thing'? */
@@ -1213,11 +959,9 @@ static void updateGraviton(EFFECT *psEffect)
 	psEffect->velocity.y += accel;
 
 	/* If it's bounced/drifted off the map then kill it */
-	if ((int)psEffect->position.x <= TILE_UNITS
-	    || (int)psEffect->position.z <= TILE_UNITS)
+	if ((int)psEffect->position.x <= TILE_UNITS || (int)psEffect->position.z <= TILE_UNITS)
 	{
-		killEffect(psEffect);
-		return;
+		return false;
 	}
 
 	/* Are we below it? - Hit the ground? */
@@ -1226,46 +970,42 @@ static void updateGraviton(EFFECT *psEffect)
 		psTile = mapTile(map_coord(psEffect->position.x), map_coord(psEffect->position.z));
 		if (terrainType(psTile) == TER_WATER)
 		{
-			killEffect(psEffect);
-			return;
+			return false;
 		}
-		else
-			/* Are we falling - rather than rising? */
-			if ((int)psEffect->velocity.y < 0)
+		else if ((int)psEffect->velocity.y < 0) // Are we falling - rather than rising?
+		{
+			/* Has it sufficient energy to keep bouncing? */
+			if (abs(psEffect->velocity.y) > 16 && psEffect->specific <= 2)
 			{
-				/* Has it sufficient energy to keep bouncing? */
-				if (abs(psEffect->velocity.y) > 16
-				    && psEffect->specific <= 2)
-				{
-					psEffect->specific++;
-					/* Half it's velocity */
+				psEffect->specific++;
 
-					psEffect->velocity.y /= (float)(-2); // only y gets flipped
+				/* Half it's velocity */
+				psEffect->velocity.y /= (float)(-2); // only y gets flipped
 
-					/* Set it at ground level - may have gone through */
-					psEffect->position.y = (float)groundHeight;
-				}
-				else
-				{
-					/* Giblets don't blow up when they hit the ground! */
-					if (psEffect->type != GRAVITON_TYPE_GIBLET)
-					{
-						/* Remove the graviton and add an explosion */
-						dv.x = psEffect->position.x;
-						dv.y = psEffect->position.y + 10;
-						dv.z = psEffect->position.z;
-						addEffect(&dv, EFFECT_EXPLOSION, EXPLOSION_TYPE_VERY_SMALL, false, NULL, 0);
-					}
-					killEffect(psEffect);
-					return;
-				}
+				/* Set it at ground level - may have gone through */
+				psEffect->position.y = (float)groundHeight;
 			}
+			else
+			{
+				/* Giblets don't blow up when they hit the ground! */
+				if (psEffect->type != GRAVITON_TYPE_GIBLET)
+				{
+					/* Remove the graviton and add an explosion */
+					dv.x = psEffect->position.x;
+					dv.y = psEffect->position.y + 10;
+					dv.z = psEffect->position.z;
+					addEffect(&dv, EFFECT_EXPLOSION, EXPLOSION_TYPE_VERY_SMALL, false, NULL, 0);
+				}
+				return false;
+			}
+		}
 	}
+	return true;
 }
 
 
 /** This isn't really an on-screen effect itself - it just spawns other ones.... */
-static void updateDestruction(EFFECT *psEffect)
+static bool updateDestruction(EFFECT *psEffect)
 {
 	Vector3i pos;
 	UDWORD	effectType;
@@ -1309,8 +1049,7 @@ static void updateDestruction(EFFECT *psEffect)
 	if (graphicsTime > psEffect->birthTime + psEffect->lifeSpan)
 	{
 		/* Kill it - it's too old */
-		killEffect(psEffect);
-		return;
+		return false;
 	}
 
 	if (psEffect->type == DESTRUCTION_TYPE_SKYSCRAPER)
@@ -1322,8 +1061,7 @@ static void updateDestruction(EFFECT *psEffect)
 			pos.z = psEffect->position.z;
 			pos.y = psEffect->position.y;
 			addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_LARGE, false, NULL, 0);
-			killEffect(psEffect);
-			return;
+			return false;
 		}
 
 		div = 1.f - (float)(graphicsTime - psEffect->birthTime) / psEffect->lifeSpan;
@@ -1337,7 +1075,6 @@ static void updateDestruction(EFFECT *psEffect)
 	{
 		height = 16;
 	}
-
 
 	/* Time to add another effect? */
 	if ((graphicsTime - psEffect->lastFrame) > psEffect->frameDelay)
@@ -1441,12 +1178,12 @@ static void updateDestruction(EFFECT *psEffect)
 
 		}
 	}
+	return true;
 }
 
 /** Moves the construction graphic about - dust cloud or whatever.... */
-static void updateConstruction(EFFECT *psEffect)
+static bool updateConstruction(EFFECT *psEffect)
 {
-
 	/* Time to update the frame number on the construction sprite */
 	if (graphicsTime - psEffect->lastFrame > psEffect->frameDelay)
 	{
@@ -1461,8 +1198,7 @@ static void updateConstruction(EFFECT *psEffect)
 			}
 			else
 			{
-				killEffect(psEffect);
-				return;
+				return false;
 			}
 		}
 	}
@@ -1478,23 +1214,21 @@ static void updateConstruction(EFFECT *psEffect)
 	if (TEST_CYCLIC(psEffect))
 	{
 		/* Has it hit the ground */
-		if ((int)psEffect->position.y <=
-		    map_Height(psEffect->position.x, psEffect->position.z))
+		if ((int)psEffect->position.y <= map_Height(psEffect->position.x, psEffect->position.z))
 		{
-			killEffect(psEffect);
-			return;
+			return false;
 		}
 
 		if (graphicsTime - psEffect->birthTime > psEffect->lifeSpan)
 		{
-			killEffect(psEffect);
-			return;
+			return false;
 		}
 	}
+	return true;
 }
 
 /** Update fire sequences */
-static void updateFire(EFFECT *psEffect)
+static bool updateFire(EFFECT *psEffect)
 {
 	Vector3i pos;
 	LIGHT	light;
@@ -1523,8 +1257,7 @@ static void updateFire(EFFECT *psEffect)
 		// Effect is off map, no need to update it anymore
 		if (!worldOnMap(pos.x, pos.z))
 		{
-			killEffect(psEffect);
-			return;
+			return false;
 		}
 
 		pos.y = map_Height(pos.x, pos.z);
@@ -1553,8 +1286,7 @@ static void updateFire(EFFECT *psEffect)
 			// Effect is off map, no need to update it anymore
 			if (!worldOnMap(pos.x, pos.z))
 			{
-				killEffect(psEffect);
-				return;
+				return false;
 			}
 
 			pos.y = map_Height(pos.x, pos.z);
@@ -1574,9 +1306,9 @@ static void updateFire(EFFECT *psEffect)
 
 	if (graphicsTime - psEffect->birthTime > psEffect->lifeSpan)
 	{
-		killEffect(psEffect);
-		return;
+		return false;
 	}
+	return true;
 }
 
 // ----------------------------------------------------------------------------------------
@@ -2198,7 +1930,7 @@ void effectSetupExplosion(EFFECT *psEffect)
 			SET_ESSENTIAL(psEffect);		// Landing lights are permanent and cyclic
 			break;
 		case EXPLOSION_TYPE_SHOCKWAVE:
-			psEffect->imd = getImdFromIndex(MI_SHOCK);//resGetData("IMD","blbhq.pie");
+			psEffect->imd = getImdFromIndex(MI_SHOCK);
 			psEffect->size = 50;
 			psEffect->velocity.y = 0.0f;
 			break;
@@ -2439,169 +2171,93 @@ void	effectGiveAuxVarSec(UDWORD var)
 	auxVarSec = var;
 }
 
-
-/** Runs all the spot effect stuff for the droids - adding of dust and the like... */
-static void effectDroidUpdates(void)
-{
-	unsigned int i;
-
-	/* Go through all players */
-	for (i = 0; i < MAX_PLAYERS; i++)
-	{
-		DROID *psDroid;
-
-		/* Now go through all their droids */
-		for (psDroid = apsDroidLists[i]; psDroid; psDroid = psDroid->psNext)
-		{
-			/* Gets it's group number */
-			unsigned int partition = psDroid->id % EFFECT_DROID_DIVISION;
-
-			/* Right frame to process? */
-			if (partition == frameGetFrameNumber() % EFFECT_DROID_DIVISION && ONEINFOUR)
-			{
-				/* Sufficent time since last update? - The EQUALS comparison is needed */
-				if (graphicsTime >= lastUpdateDroids[partition] + DROID_UPDATE_INTERVAL)
-				{
-					/* Store away when we last processed this group */
-					lastUpdateDroids[partition] = graphicsTime;
-
-					/*	Now add some dust at it's arse end if it's moving or skidding.
-						The check that it's not 0 is probably not sufficient.
-					*/
-					if ((int)psDroid->sMove.speed != 0)
-					{
-						/* Present direction is important */
-						Vector2i behind = iSinCosR(psDroid->rot.direction, 50);
-						Vector3i pos(
-						    clip(psDroid->pos.x - behind.x, 0, mapWidth),
-						    clip(psDroid->pos.y - behind.y, 0, mapHeight),
-						    0
-						);
-
-						pos.z = map_Height(pos.x, pos.y);
-
-						// FIXME This does not do anything!!
-					}
-				}
-			}
-		}
-	}
-}
-
-
 /** Runs all the structure effect stuff - steam puffing out etc */
-static void effectStructureUpdates(void)
+static void effectStructureUpdates()
 {
-	unsigned int i;
+	unsigned curPartition = frameGetFrameNumber() % EFFECT_STRUCTURE_DIVISION;
+	// Is it the right time?
+	if (graphicsTime <= lastUpdateStructures[curPartition] + STRUCTURE_UPDATE_INTERVAL)
+	{
+		return;
+	}
+	// Store away the last update time.
+	lastUpdateStructures[curPartition] = graphicsTime;
 
 	/* Go thru' all players */
-	for (i = 0; i < MAX_PLAYERS; i++)
+	for (unsigned player = 0; player < MAX_PLAYERS; ++player)
 	{
-		STRUCTURE *psStructure;
-
-		for (psStructure = apsStructLists[i]; psStructure; psStructure = psStructure->psNext)
+		for (STRUCTURE *psStructure = apsStructLists[player]; psStructure != nullptr; psStructure = psStructure->psNext)
 		{
-			/* Find it's group */
+			// Find its group.
 			unsigned int partition = psStructure->id % EFFECT_STRUCTURE_DIVISION;
 
 			/* Is it the right frame? */
-			if (partition == frameGetFrameNumber() % EFFECT_STRUCTURE_DIVISION)
+			if (partition != curPartition)
 			{
-				/* Is it the right time? */
-				if (graphicsTime > lastUpdateStructures[partition] + STRUCTURE_UPDATE_INTERVAL)
+				continue;
+			}
+
+			if (psStructure->status != SS_BUILT || !psStructure->visible[selectedPlayer])
+			{
+				continue;
+			}
+
+			/* Factories puff out smoke, power stations puff out tesla stuff */
+			switch (psStructure->pStructureType->type)
+			{
+			case REF_FACTORY:
+			case REF_CYBORG_FACTORY:
+			case REF_VTOL_FACTORY:
+				/*
+					We're a factory, so better puff out a bit of steam
+					Complete hack with the magic numbers - just for IAN demo
+				*/
+				if (psStructure->sDisplay.imd->nconnectors == 1)
 				{
-					/* Store away the last update time */
-					lastUpdateStructures[partition] = graphicsTime;
+					Vector3i eventPos = swapYZ(psStructure->pos) + Vector3i(
+					                        psStructure->sDisplay.imd->connectors->x,
+					                        psStructure->sDisplay.imd->connectors->z,
+					                        -psStructure->sDisplay.imd->connectors->y
+					                    );
 
-					/* Factories puff out smoke, power stations puff out tesla stuff */
-					if ((psStructure->pStructureType->type == REF_FACTORY
-					     || psStructure->pStructureType->type == REF_POWER_GEN)
-					    && psStructure->status == SS_BUILT
-					    && psStructure->visible[selectedPlayer])
-					{
-						/*
-							We're a factory, so better puff out a bit of steam
-							Complete hack with the magic numbers - just for IAN demo
-						*/
-						if (psStructure->pStructureType->type == REF_FACTORY)
-						{
-							if (psStructure->sDisplay.imd->nconnectors == 1)
-							{
-								Vector3i eventPos = swapYZ(psStructure->pos) + Vector3i(
-								                        psStructure->sDisplay.imd->connectors->x,
-								                        psStructure->sDisplay.imd->connectors->z,
-								                        -psStructure->sDisplay.imd->connectors->y
-								                    );
+					addEffect(&eventPos, EFFECT_SMOKE, SMOKE_TYPE_STEAM, false, NULL, 0);
 
-								addEffect(&eventPos, EFFECT_SMOKE, SMOKE_TYPE_STEAM, false, NULL, 0);
-
-								if (selectedPlayer == psStructure->player)
-								{
-									audio_PlayObjStaticTrack(psStructure, ID_SOUND_STEAM);
-								}
-							}
-						}
-						else if (psStructure->pStructureType->type == REF_POWER_GEN)
-						{
-							POWER_GEN *psPowerGen = &psStructure->pFunctionality->powerGenerator;
-							Vector3i eventPos = swapYZ(psStructure->pos);
-
-							if (psStructure->sDisplay.imd->nconnectors > 0)
-							{
-								eventPos.y += psStructure->sDisplay.imd->connectors->z;
-							}
-
-							/* Add an effect over the central spire - if
-							connected to Res Extractor and it is active*/
-							for (i = 0; i < NUM_POWER_MODULES; i++)
-							{
-								if (psPowerGen->apResExtractors[i]
-								    && psPowerGen->apResExtractors[i]->pFunctionality->resourceExtractor.active)
-								{
-									break;
-								}
-							}
-
-							{
-								eventPos.y = psStructure->pos.z + 48;
-
-								addEffect(&eventPos, EFFECT_EXPLOSION, EXPLOSION_TYPE_TESLA, false, NULL, 0);
-
-								if (selectedPlayer == psStructure->player)
-								{
-									audio_PlayObjStaticTrack(psStructure, ID_SOUND_POWER_SPARK);
-								}
-							}
-						}
-					}
+					audio_PlayObjStaticTrack(psStructure, ID_SOUND_STEAM);
 				}
+				break;
+			case REF_POWER_GEN:
+				{
+					Vector3i eventPos = swapYZ(psStructure->pos);
+
+					// Add an effect over the central spire.
+
+					eventPos.y = psStructure->pos.z + 48;
+
+					addEffect(&eventPos, EFFECT_EXPLOSION, EXPLOSION_TYPE_TESLA, false, NULL, 0);
+
+					audio_PlayObjStaticTrack(psStructure, ID_SOUND_POWER_SPARK);
+					break;
+				}
+			default:
+				break;
 			}
 		}
 	}
 }
 
-
-void effectResetUpdates(void)
+void effectResetUpdates()
 {
-	memset(lastUpdateDroids, 0, sizeof(lastUpdateDroids));
 	memset(lastUpdateStructures, 0, sizeof(lastUpdateStructures));
 }
-
 
 /** This will save out the effects data */
 bool writeFXData(const char *fileName)
 {
-	EFFECT *it;
 	int i = 0;
-
-	WzConfig ini(fileName);
-	if (ini.status() != QSettings::NoError)
+	WzConfig ini(fileName, WzConfig::ReadAndWrite);
+	for (auto iter = activeList.cbegin(); iter != activeList.end(); ++iter, i++)
 	{
-		debug(LOG_ERROR, "Could not open %s", fileName);
-		return false;
-	}
-	for (it = activeList.first; it != NULL; it = it->next, i++)
-	{
+		EFFECT *it = *iter;
 		ini.beginGroup("effect_" + QString::number(i));
 		ini.setValue("control", it->control);
 		ini.setValue("group", it->group);
@@ -2620,9 +2276,9 @@ bool writeFXData(const char *fileName)
 		ini.setValue("lifeSpan", it->lifeSpan);
 		ini.setValue("radius", it->radius);
 
-		const char *imd_name = resGetNamefromData("IMD", it->imd);
-		if (imd_name && *imd_name)
+		if (it->imd)
 		{
+			const QString &imd_name = modelName(it->imd);
 			ini.setValue("imd_name", imd_name);
 		}
 
@@ -2640,17 +2296,13 @@ bool readFXData(const char *fileName)
 	// Clear out anything that's there already!
 	initEffectsSystem();
 
-	WzConfig ini(fileName);
-	if (ini.status() != QSettings::NoError)
-	{
-		debug(LOG_ERROR, "Could not open %s", fileName);
-		return false;
-	}
+	WzConfig ini(fileName, WzConfig::ReadOnly);
 	QStringList list = ini.childGroups();
+
 	for (int i = 0; i < list.size(); ++i)
 	{
 		ini.beginGroup(list[i]);
-		EFFECT *curEffect = Effect_malloc();
+		EFFECT *curEffect = new EFFECT();
 
 		curEffect->control      = ini.value("control").toInt();
 		curEffect->group        = (EFFECT_GROUP)ini.value("group").toInt();
@@ -2673,7 +2325,7 @@ bool readFXData(const char *fileName)
 			QString imd_name = ini.value("imd_name").toString();
 			if (!imd_name.isEmpty())
 			{
-				curEffect->imd = (iIMDShape *)resGetData("IMD", imd_name.toUtf8().constData());
+				curEffect->imd = modelGet(imd_name);
 			}
 		}
 		else
@@ -2683,6 +2335,8 @@ bool readFXData(const char *fileName)
 
 		// Move on to reading the next effect
 		ini.endGroup();
+
+		activeList.push_back(curEffect);
 	}
 
 	/* Hopefully everything's just fine by now */

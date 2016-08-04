@@ -16,6 +16,7 @@
 	<http://www.gnu.org/licenses/>.
 */
 
+#include <GL/glu.h>
 #include "wzmglwidget.h"
 
 #define gl_errors() really_report_gl_errors(__FILE__, __LINE__)

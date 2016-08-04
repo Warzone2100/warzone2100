@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2013  Warzone 2100 Project
+	Copyright (C) 2005-2015  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -34,7 +34,7 @@ extern UDWORD			numFeatureStats;
 extern FEATURE_STATS *oilResFeature;
 
 /* Load the feature stats */
-extern bool loadFeatureStats(const char *pFeatureData, UDWORD bufferSize);
+bool loadFeatureStats(const char *pFileName);
 
 /* Release the feature stats memory */
 extern void featureStatsShutDown(void);
@@ -54,7 +54,7 @@ bool destroyFeature(FEATURE *psDel, unsigned impactTime);
 /* get a feature stat id from its name */
 extern SDWORD getFeatureStatFromName(const char *pName);
 
-int32_t featureDamage(FEATURE *psFeature, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime, bool isDamagePerSecond);
+int32_t featureDamage(FEATURE *psFeature, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime, bool isDamagePerSecond, int minDamage);
 
 extern void     featureInitVars(void);
 
