@@ -27,7 +27,7 @@
 #include "src/warzoneconfig.h"
 #include "src/frontend.h"
 #include "cursors_sdl.h"
-#include <SDL2/SDL.h>
+#include <SDL.h>
 
 static CURSOR currentCursor = CURSOR_MAX;
 static SDL_Cursor *aCursors[CURSOR_MAX];
