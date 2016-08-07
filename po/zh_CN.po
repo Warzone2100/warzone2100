@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2016-07-10 23:18+0200\n"
+"POT-Creation-Date: 2016-08-02 17:03+0200\n"
 "PO-Revision-Date: 2013-05-20 01:25+1000\n"
 "Last-Translator: Shinyu <shinyuwu@gnu.hk>\n"
 "Language-Team: Chinese Simplified <kde-i18n-doc@kde.org>\n"
@@ -1205,7 +1205,7 @@ msgid "Demolish"
 msgstr "破坏"
 
 #: data/base/messages/strings/names.txt:156
-#: po/custom/fromJson.txt:479
+#: po/custom/fromJson.txt:482
 msgid "Naval"
 msgstr "海军"
 
@@ -1233,19 +1233,19 @@ msgstr "龙之牙"
 
 #: data/base/messages/strings/names.txt:215
 #: data/mp/messages/strings/names.txt:251
-#: po/custom/fromJson.txt:350
+#: po/custom/fromJson.txt:353
 msgid "Howitzer Emplacement"
 msgstr "榴弹炮炮台"
 
 #: data/base/messages/strings/names.txt:216
 #: data/mp/messages/strings/names.txt:252
-#: po/custom/fromJson.txt:234
+#: po/custom/fromJson.txt:237
 msgid "Ground Shaker Emplacement"
 msgstr "撼地者级榴弹炮炮塔"
 
 #: data/base/messages/strings/names.txt:217
 #: data/mp/messages/strings/names.txt:253
-#: po/custom/fromJson.txt:317
+#: po/custom/fromJson.txt:320
 msgid "Hellstorm Emplacement"
 msgstr "地狱风暴炮台"
 
@@ -1320,13 +1320,13 @@ msgstr "生化人步兵跳跃背包"
 
 #: data/base/messages/strings/names.txt:298
 #: data/mp/messages/strings/names.txt:381
-#: po/custom/fromJson.txt:159
+#: po/custom/fromJson.txt:161
 msgid "Cyborg Propulsion II"
 msgstr "生化人步兵二型"
 
 #: data/base/messages/strings/names.txt:299
 #: data/mp/messages/strings/names.txt:382
-#: po/custom/fromJson.txt:160
+#: po/custom/fromJson.txt:162
 msgid "Cyborg Propulsion III"
 msgstr "生化人步兵三型"
 
@@ -1337,13 +1337,13 @@ msgstr "NP-钛钢筋墙"
 
 #: data/base/messages/strings/names.txt:314
 #: data/mp/messages/strings/names.txt:395
-#: po/custom/fromJson.txt:293
+#: po/custom/fromJson.txt:296
 msgid "Heavy Machinegun Bunker"
 msgstr "重机枪碉堡"
 
 #: data/base/messages/strings/names.txt:316
 #: data/mp/messages/strings/names.txt:397
-#: po/custom/fromJson.txt:213
+#: po/custom/fromJson.txt:215
 msgid "Flashlight Emplacement"
 msgstr "激光激光炮台"
 
@@ -1352,7 +1352,7 @@ msgid "Heavy Machinegun Guard Tower"
 msgstr "重机枪防卫塔"
 
 #: data/base/messages/strings/names.txt:323
-#: po/custom/fromJson.txt:208
+#: po/custom/fromJson.txt:210
 msgid "Flamer Guard Tower"
 msgstr "火焰喷射防卫塔"
 
@@ -1362,7 +1362,7 @@ msgstr "枪骑兵火箭防卫塔"
 
 #: data/base/messages/strings/names.txt:327
 #: data/mp/messages/strings/names.txt:409
-#: po/custom/fromJson.txt:209
+#: po/custom/fromJson.txt:211
 msgid "Flamer Hardpoint"
 msgstr "火焰喷射要塞"
 
@@ -2123,7 +2123,7 @@ msgstr "改善生化人生产速度"
 
 #: data/base/messages/strings/resstrings.txt:348
 #: data/mp/messages/strings/resstrings.txt:172
-#: po/custom/fromJson.txt:577
+#: po/custom/fromJson.txt:582
 msgid "Robotic Cyborg Production"
 msgstr "中级自动化生化人生产"
 
@@ -2187,7 +2187,7 @@ msgstr "改善研发科技能力"
 
 #: data/base/messages/strings/resstrings.txt:390
 #: data/mp/messages/strings/resstrings.txt:192
-#: po/custom/fromJson.txt:174
+#: po/custom/fromJson.txt:176
 msgid "Dedicated Synaptic Link Data Analysis"
 msgstr "专注突触连结资料分析一型"
 
@@ -2208,7 +2208,7 @@ msgstr "增加攻击抵抗能力"
 
 #: data/base/messages/strings/resstrings.txt:400
 #: data/mp/messages/strings/resstrings.txt:197
-#: po/custom/fromJson.txt:244
+#: po/custom/fromJson.txt:247
 msgid "Hardened Base Structure Materials"
 msgstr "中级强化建材一型"
 
@@ -2224,7 +2224,7 @@ msgstr "改善生产能力"
 
 #: data/base/messages/strings/resstrings.txt:412
 #: data/mp/messages/strings/resstrings.txt:202
-#: po/custom/fromJson.txt:588
+#: po/custom/fromJson.txt:593
 msgid "Robotic VTOL Production"
 msgstr "中级自动化VTOL生产"
 
@@ -2245,7 +2245,7 @@ msgstr "VTOL补给时间缩短"
 
 #: data/base/messages/strings/resstrings.txt:422
 #: data/mp/messages/strings/resstrings.txt:207
-#: po/custom/fromJson.txt:78
+#: po/custom/fromJson.txt:79
 msgid "Automated VTOL Rearming"
 msgstr "初级自动化VTOL补给一型"
 
@@ -2438,7 +2438,7 @@ msgstr "车辆引擎升级"
 
 #: data/base/messages/strings/resstrings.txt:560
 #: data/mp/messages/strings/resstrings.txt:257
-#: po/custom/fromJson.txt:723
+#: po/custom/fromJson.txt:728
 msgid "Turbo-Charged Engine"
 msgstr "涡轮增压引擎一型"
 
@@ -4028,7 +4028,7 @@ msgstr "来自核武器的沉重打击。在核武器打击中的幸存者受到
 
 #: data/base/sequenceaudio/devastation.txt:11
 msgid "We'd fled Seattle early in '86. We'd heard that the Rocky Mountains were relatively rad-free."
-msgstr "在1986年初，我们从西雅图逃出。我们听所Rocky Moountain的核辐射危险相对较低。"
+msgstr "在2086年初，我们从西雅图逃出。我们听所Rocky Mountain的核辐射危险相对较低。"
 
 #: data/base/sequenceaudio/devastation.txt:13
 msgid "After fighting off bands of marauders we came across the base. Its personnel were dead. Killed by any one of a number of virulent diseases."
@@ -4067,12 +4067,12 @@ msgid "Slowly, out of the ashes we will rise again..."
 msgstr "慢慢地，我们将从灰烬里重生"
 
 #: data/mp/messages/strings/names.txt:15
-#: po/custom/fromJson.txt:430
+#: po/custom/fromJson.txt:433
 msgid "Machinegun Viper Wheels"
 msgstr "轮式响尾蛇坦克（机枪）"
 
 #: data/mp/messages/strings/names.txt:213
-#: po/custom/fromJson.txt:635
+#: po/custom/fromJson.txt:640
 msgid "Sensor Tower"
 msgstr "雷达塔"
 
@@ -4081,7 +4081,7 @@ msgid "Tornado AA Site"
 msgstr "龙卷风级高射炮"
 
 #: data/mp/messages/strings/names.txt:271
-#: po/custom/fromJson.txt:422
+#: po/custom/fromJson.txt:425
 msgid "Machinegun"
 msgstr "机枪"
 
@@ -4090,7 +4090,7 @@ msgid "VTOL Flak Cannon"
 msgstr "VTOL（轻型加农炮） "
 
 #: data/mp/messages/strings/names.txt:293
-#: po/custom/fromJson.txt:127
+#: po/custom/fromJson.txt:129
 msgid "Collective Wall"
 msgstr "Collective钛钢筋墙"
 
@@ -4168,42 +4168,42 @@ msgid "CAM3 RESEARCH"
 msgstr "战役三：研发"
 
 #: data/mp/messages/strings/names.txt:361
-#: po/custom/fromJson.txt:466
+#: po/custom/fromJson.txt:469
 msgid "Missile Targeting Codes"
 msgstr "第一阶导弹密码"
 
 #: data/mp/messages/strings/names.txt:362
-#: po/custom/fromJson.txt:630
+#: po/custom/fromJson.txt:635
 msgid "Second Level Missile Targeting Codes"
 msgstr "第二阶导弹密码"
 
 #: data/mp/messages/strings/names.txt:363
-#: po/custom/fromJson.txt:706
+#: po/custom/fromJson.txt:711
 msgid "Third Level Missile Firing Codes"
 msgstr "第三阶导弹密码"
 
 #: data/mp/messages/strings/names.txt:371
-#: po/custom/fromJson.txt:286
+#: po/custom/fromJson.txt:289
 msgid "Heavy Gunner Cyborg"
 msgstr "生化人步兵（重机枪）"
 
 #: data/mp/messages/strings/names.txt:372
-#: po/custom/fromJson.txt:207
+#: po/custom/fromJson.txt:209
 msgid "Flamer Cyborg"
 msgstr "生化人步兵（火焰喷射）"
 
 #: data/mp/messages/strings/names.txt:373
-#: po/custom/fromJson.txt:427
+#: po/custom/fromJson.txt:430
 msgid "Machinegunner Cyborg"
 msgstr "生化人步兵（机枪）"
 
 #: data/mp/messages/strings/names.txt:380
-#: po/custom/fromJson.txt:158
+#: po/custom/fromJson.txt:160
 msgid "Cyborg Propulsion"
 msgstr "生化人步兵"
 
 #: data/mp/messages/strings/names.txt:404
-#: po/custom/fromJson.txt:301
+#: po/custom/fromJson.txt:304
 msgid "Heavy Machinegun Tower"
 msgstr "重机枪防卫塔"
 
@@ -4212,7 +4212,7 @@ msgid "Flamer Tower"
 msgstr "火焰喷射防卫塔"
 
 #: data/mp/messages/strings/names.txt:406
-#: po/custom/fromJson.txt:400
+#: po/custom/fromJson.txt:403
 msgid "Lancer Tower"
 msgstr "枪骑兵火箭防卫塔"
 
@@ -4233,7 +4233,7 @@ msgid "Advanced Repair Facility Mk3"
 msgstr "高级修理工厂 Mk3"
 
 #: data/mp/messages/strings/names.txt:469
-#: po/custom/fromJson.txt:307
+#: po/custom/fromJson.txt:310
 msgid "Heavy Repair Turret"
 msgstr "重型修理车"
 
@@ -4242,7 +4242,7 @@ msgid "Nexus Intruder Program"
 msgstr "NEXUS入侵程式"
 
 #: data/mp/messages/strings/names.txt:490
-#: po/custom/fromJson.txt:499
+#: po/custom/fromJson.txt:502
 msgid "Nexus Resistance Circuits"
 msgstr "NEXUS 电脑入侵防御系统一型"
 
@@ -4255,93 +4255,93 @@ msgid "Nexus Resistance Circuits Mk3"
 msgstr "NEXUS 电脑入侵防御系统三型"
 
 #: data/mp/messages/strings/names.txt:504
-#: po/custom/fromJson.txt:345
+#: po/custom/fromJson.txt:348
 msgid "Hover Propulsion II"
 msgstr "推进动力：气垫船二型"
 
 #: data/mp/messages/strings/names.txt:506
-#: po/custom/fromJson.txt:236
+#: po/custom/fromJson.txt:239
 msgid "Half-tracked Propulsion II"
 msgstr "推进动力：半履带二型"
 
 #: data/mp/messages/strings/names.txt:508
-#: po/custom/fromJson.txt:709
+#: po/custom/fromJson.txt:714
 msgid "Tracked Propulsion II"
 msgstr "推进动力：履带二型"
 
 #: data/mp/messages/strings/names.txt:510
-#: po/custom/fromJson.txt:789
+#: po/custom/fromJson.txt:794
 msgid "VTOL Propulsion II"
 msgstr "推进动力：VTOL二型"
 
 #: data/mp/messages/strings/names.txt:512
-#: po/custom/fromJson.txt:805
+#: po/custom/fromJson.txt:810
 msgid "Wheeled Propulsion II"
 msgstr "推进动力：轮二型"
 
 #: data/mp/messages/strings/names.txt:537
-#: po/custom/fromJson.txt:182
+#: po/custom/fromJson.txt:184
 msgid "Depleted Uranium MG Bullets Mk2"
 msgstr "贫化铀弹二型"
 
 #: data/mp/messages/strings/names.txt:566
-#: po/custom/fromJson.txt:423
+#: po/custom/fromJson.txt:426
 msgid "Machinegun Artifact"
 msgstr "机枪科技"
 
 #: data/mp/messages/strings/names.txt:569
-#: po/custom/fromJson.txt:490
+#: po/custom/fromJson.txt:493
 msgid "New Paradigm Command Center"
 msgstr "New Paradigm指挥中心"
 
 #: data/mp/messages/strings/names.txt:570
-#: po/custom/fromJson.txt:125
+#: po/custom/fromJson.txt:127
 msgid "Collective Command Center"
 msgstr "Collective指挥中心"
 
 #: data/mp/messages/strings/names.txt:723
 #: data/mp/messages/strings/names.txt:724
-#: po/custom/fromJson.txt:465
+#: po/custom/fromJson.txt:468
 msgid "Missile Silo"
 msgstr "导弹发射井"
 
 #: data/mp/messages/strings/names.txt:775
-#: po/custom/fromJson.txt:661
+#: po/custom/fromJson.txt:666
 msgid "Super Heavy-Gunner"
 msgstr "超级生化人步兵（中型加农炮）"
 
 #: data/mp/messages/strings/names.txt:777
-#: po/custom/fromJson.txt:654
+#: po/custom/fromJson.txt:659
 msgid "Super Auto-Cannon Cyborg"
 msgstr "超级生化人步兵（高速加农炮Auto-Cannon）"
 
 #: data/mp/messages/strings/names.txt:779
-#: po/custom/fromJson.txt:668
+#: po/custom/fromJson.txt:673
 msgid "Super HPV Cyborg"
 msgstr "超级生化人步兵（高速加农炮HPV）"
 
 #: data/mp/messages/strings/names.txt:781
-#: po/custom/fromJson.txt:672
+#: po/custom/fromJson.txt:677
 msgid "Super Tank-Killer Cyborg"
 msgstr "超级生化人步兵（坦克杀手火箭）"
 
 #: data/mp/messages/strings/names.txt:788
-#: po/custom/fromJson.txt:605
+#: po/custom/fromJson.txt:610
 msgid "Satellite Uplink Center"
 msgstr "卫星资料上传中心"
 
 #: data/mp/messages/strings/names.txt:799
-#: po/custom/fromJson.txt:669
+#: po/custom/fromJson.txt:674
 msgid "Super Pulse Laser Cyborg"
 msgstr "超级生化人步兵（脉冲激光）"
 
 #: data/mp/messages/strings/names.txt:801
-#: po/custom/fromJson.txt:670
+#: po/custom/fromJson.txt:675
 msgid "Super Rail-Gunner"
 msgstr "超级生化人步兵（轨道炮）"
 
 #: data/mp/messages/strings/names.txt:803
-#: po/custom/fromJson.txt:671
+#: po/custom/fromJson.txt:676
 msgid "Super Scourge Cyborg"
 msgstr "超级生化人步兵（天谴导弹）"
 
@@ -4673,2942 +4673,2967 @@ msgid "Ally"
 msgstr ""
 
 #: po/custom/fromJson.txt:40
+#, fuzzy
+msgid "Alpha Campaign"
+msgstr "情节"
+
+#: po/custom/fromJson.txt:41
 msgid "Angel Missile"
 msgstr "天使导弹"
 
-#: po/custom/fromJson.txt:41
+#: po/custom/fromJson.txt:42
 msgid "Angel Missile Battery"
 msgstr "天使导弹炮台"
 
-#: po/custom/fromJson.txt:42
+#: po/custom/fromJson.txt:43
 msgid "Angel Missile Emplacement"
 msgstr "天使导弹炮台"
 
-#: po/custom/fromJson.txt:43
+#: po/custom/fromJson.txt:44
 msgid "APDSB MG Bullets"
 msgstr "穿甲脱壳弹一型"
 
-#: po/custom/fromJson.txt:44
+#: po/custom/fromJson.txt:45
 msgid "APDSB MG Bullets Mk2"
 msgstr "穿甲脱壳弹二型"
 
-#: po/custom/fromJson.txt:45
+#: po/custom/fromJson.txt:46
 msgid "APDSB MG Bullets Mk3"
 msgstr "穿甲脱壳弹三型"
 
-#: po/custom/fromJson.txt:46
+#: po/custom/fromJson.txt:47
 msgid "APFSDS Cannon Rounds"
 msgstr "APFSDS加农炮弹一型"
 
-#: po/custom/fromJson.txt:47
+#: po/custom/fromJson.txt:48
 msgid "APFSDS Cannon Rounds Mk2"
 msgstr "APFSDS加农炮弹二型"
 
-#: po/custom/fromJson.txt:48
+#: po/custom/fromJson.txt:49
 msgid "APFSDS Cannon Rounds Mk3"
 msgstr "APFSDS加农炮弹三型"
 
-#: po/custom/fromJson.txt:49
+#: po/custom/fromJson.txt:50
 msgid "Archangel Missile"
 msgstr "大天使导弹"
 
-#: po/custom/fromJson.txt:50
+#: po/custom/fromJson.txt:51
 msgid "Archangel Missile Battery"
 msgstr "大天使导弹炮台"
 
-#: po/custom/fromJson.txt:51
+#: po/custom/fromJson.txt:52
 msgid "Archangel Missile Emplacement"
 msgstr "大天使导弹炮台"
 
-#: po/custom/fromJson.txt:52
+#: po/custom/fromJson.txt:53
 msgid "Artifact"
 msgstr "遗留科技"
 
-#: po/custom/fromJson.txt:53
+#: po/custom/fromJson.txt:54
 msgid "Assault Cannon"
 msgstr "突击加农炮"
 
-#: po/custom/fromJson.txt:54
+#: po/custom/fromJson.txt:55
 msgid "Assault Cannon Emplacement"
 msgstr "突击加农炮炮台"
 
-#: po/custom/fromJson.txt:55
+#: po/custom/fromJson.txt:56
 msgid "Assault Cannon Guard Tower"
 msgstr "突击加农炮防卫塔"
 
-#: po/custom/fromJson.txt:56
+#: po/custom/fromJson.txt:57
 msgid "Assault Cannon Hardpoint"
 msgstr "突击加农炮要塞"
 
-#: po/custom/fromJson.txt:57
+#: po/custom/fromJson.txt:58
 msgid "Assault Cannon Mantis Hover"
 msgstr "突击加农炮气垫船"
 
-#: po/custom/fromJson.txt:58
+#: po/custom/fromJson.txt:59
 msgid "Assault Gun"
 msgstr "突击枪"
 
-#: po/custom/fromJson.txt:59
+#: po/custom/fromJson.txt:60
 msgid "Assault Gun Emplacement"
 msgstr "突击枪炮台"
 
-#: po/custom/fromJson.txt:60
+#: po/custom/fromJson.txt:61
 msgid "Assault Gun Guard Tower"
 msgstr "突击枪防卫塔"
 
-#: po/custom/fromJson.txt:61
+#: po/custom/fromJson.txt:62
 msgid "Assault Gun Hardpoint"
 msgstr "突击枪要塞"
 
-#: po/custom/fromJson.txt:62
+#: po/custom/fromJson.txt:63
 msgid "Assault Gunner"
 msgstr "生化人步兵（突击枪）"
 
-#: po/custom/fromJson.txt:63
+#: po/custom/fromJson.txt:64
 msgid "Assault Gunner Cyborg"
 msgstr "生化人步兵（突击枪）"
 
-#: po/custom/fromJson.txt:64
+#: po/custom/fromJson.txt:65
 msgid "Assault Gun Python Half Track"
 msgstr "半履带式蟒蛇坦克（突击枪）"
 
-#: po/custom/fromJson.txt:65
+#: po/custom/fromJson.txt:66
 msgid "Assault Gun Python Hover"
 msgstr "履带式蟒蛇气垫船（突击枪）"
 
-#: po/custom/fromJson.txt:66
+#: po/custom/fromJson.txt:67
 msgid "Assault Gun Python Tracks"
 msgstr "履带式蟒蛇坦克（突击枪）"
 
-#: po/custom/fromJson.txt:67
+#: po/custom/fromJson.txt:68
 msgid "Assault Gun Tower"
 msgstr "突击枪防卫塔"
 
-#: po/custom/fromJson.txt:68
+#: po/custom/fromJson.txt:69
 msgid "Automated Cyborg Production"
 msgstr "初级自动化生化人生产"
 
-#: po/custom/fromJson.txt:69
+#: po/custom/fromJson.txt:70
 msgid "Automated Cyborg Production Mk2"
 msgstr "初级自动化生化人生产二型"
 
-#: po/custom/fromJson.txt:70
+#: po/custom/fromJson.txt:71
 msgid "Automated Cyborg Production Mk3"
 msgstr "初级自动化生化人生产三型"
 
-#: po/custom/fromJson.txt:71
+#: po/custom/fromJson.txt:72
 msgid "Automated Factory Production"
 msgstr "初级自动化生产工厂"
 
-#: po/custom/fromJson.txt:72
+#: po/custom/fromJson.txt:73
 msgid "Automated Factory Production Mk2"
 msgstr "初级自动化生产工厂二型"
 
-#: po/custom/fromJson.txt:73
+#: po/custom/fromJson.txt:74
 msgid "Automated Factory Production Mk3"
 msgstr "初级自动化生产工厂三型"
 
-#: po/custom/fromJson.txt:74
+#: po/custom/fromJson.txt:75
 msgid "Automated Manufacturing"
 msgstr "自动化生产"
 
-#: po/custom/fromJson.txt:75
+#: po/custom/fromJson.txt:76
 msgid "Automated Repair Facility"
 msgstr "初级自动修理工厂"
 
-#: po/custom/fromJson.txt:76
+#: po/custom/fromJson.txt:77
 msgid "Automated Repair Facility Upgrade Mk2"
 msgstr "初级自动修理工厂二型"
 
-#: po/custom/fromJson.txt:77
+#: po/custom/fromJson.txt:78
 msgid "Automated Repair Facility Upgrade Mk3"
 msgstr "初级自动修理工厂三型"
 
-#: po/custom/fromJson.txt:79
+#: po/custom/fromJson.txt:80
 msgid "Automated VTOL Rearming Mk2"
 msgstr "初级自动化VTOL补给二型"
 
-#: po/custom/fromJson.txt:80
+#: po/custom/fromJson.txt:81
 msgid "Automated VTOL Rearming Mk3"
 msgstr "初级自动化VTOL补给三型"
 
-#: po/custom/fromJson.txt:81
+#: po/custom/fromJson.txt:82
 #, fuzzy
 msgid "Auto Repair"
 msgstr "自动修理技术"
 
-#: po/custom/fromJson.txt:82
+#: po/custom/fromJson.txt:83
 msgid "Auto-Repair"
 msgstr "自动修理技术"
 
-#: po/custom/fromJson.txt:83
+#: po/custom/fromJson.txt:84
 msgid "Avenger Hardpoint"
 msgstr "复仇者者级地对空导弹要塞"
 
-#: po/custom/fromJson.txt:84
+#: po/custom/fromJson.txt:85
 msgid "Avenger SAM"
 msgstr "复仇者级地对空导弹"
 
-#: po/custom/fromJson.txt:85
+#: po/custom/fromJson.txt:86
 msgid "Avenger SAM Site"
 msgstr "复仇者级地对空导弹炮台"
 
-#: po/custom/fromJson.txt:86
+#: po/custom/fromJson.txt:87
 msgid "BaBaLegs"
 msgstr "野蛮人步兵"
 
-#: po/custom/fromJson.txt:87
+#: po/custom/fromJson.txt:88
 msgid "BaBaProp"
 msgstr "野蛮人推进动力"
 
-#: po/custom/fromJson.txt:88
+#: po/custom/fromJson.txt:89
 #, fuzzy
 msgid "Back to Basics"
 msgstr "回到正常状态"
 
-#: po/custom/fromJson.txt:89
+#: po/custom/fromJson.txt:90
+#, fuzzy
+msgid "Beta Campaign"
+msgstr "新的任务"
+
+#: po/custom/fromJson.txt:91
 msgid "Bombard"
 msgstr "重装迫击炮"
 
-#: po/custom/fromJson.txt:90
+#: po/custom/fromJson.txt:92
 msgid "Bombard Cobra Half-tracks"
 msgstr "半履带式眼镜蛇坦克（重装迫击炮）"
 
-#: po/custom/fromJson.txt:91
+#: po/custom/fromJson.txt:93
 msgid "Bombard Pit"
 msgstr "重装迫击阵地"
 
-#: po/custom/fromJson.txt:92
+#: po/custom/fromJson.txt:94
 msgid "Bug"
 msgstr "毒虫"
 
-#: po/custom/fromJson.txt:93
+#: po/custom/fromJson.txt:95
 msgid "Buggy"
 msgstr "四轮马车"
 
-#: po/custom/fromJson.txt:94
+#: po/custom/fromJson.txt:96
 msgid "Bunker Buster"
 msgstr "碉堡终结者"
 
-#: po/custom/fromJson.txt:95
+#: po/custom/fromJson.txt:97
 msgid "Bunker Buster Cobra Hover"
 msgstr "眼镜蛇气垫船（碉堡终结者）"
 
-#: po/custom/fromJson.txt:96
+#: po/custom/fromJson.txt:98
 msgid "Bunker Buster Cobra Tracks"
 msgstr "履带式眼镜蛇坦克（碉堡终结者）"
 
-#: po/custom/fromJson.txt:97
+#: po/custom/fromJson.txt:99
 msgid "Bunker Buster Mantis Tracks"
 msgstr "履带式螳螂坦克（碉堡终结者）"
 
-#: po/custom/fromJson.txt:98
+#: po/custom/fromJson.txt:100
 msgid "Bunker Buster Rocket"
 msgstr "火箭（碉堡终结者）"
 
-#: po/custom/fromJson.txt:99
+#: po/custom/fromJson.txt:101
 msgid "Bunker Buster Rockets Viper Wheels"
 msgstr "轮式响尾蛇坦克（碉堡终结者）"
 
-#: po/custom/fromJson.txt:100
+#: po/custom/fromJson.txt:102
 msgid "Bunker Buster Scorpion Tracks"
 msgstr "履带式毒蝎坦克（碉堡终结者）"
 
-#: po/custom/fromJson.txt:101
+#: po/custom/fromJson.txt:103
 msgid "Bunker Buster Scorpion VTOL"
 msgstr "毒蝎VTOL（碉堡终结者）"
 
-#: po/custom/fromJson.txt:102
+#: po/custom/fromJson.txt:104
 msgid "Bunker Buster Viper Wheels"
 msgstr "轮式响尾蛇坦克（碉堡终结者）"
 
-#: po/custom/fromJson.txt:103
+#: po/custom/fromJson.txt:105
 msgid "Cannon Autoloader"
 msgstr "加农炮自动装填系统一型"
 
-#: po/custom/fromJson.txt:104
+#: po/custom/fromJson.txt:106
 msgid "Cannon Autoloader Mk2"
 msgstr "加农炮自动装填系统二型"
 
-#: po/custom/fromJson.txt:105
+#: po/custom/fromJson.txt:107
 msgid "Cannon Autoloader Mk3"
 msgstr "加农炮自动装填系统三型"
 
-#: po/custom/fromJson.txt:106
+#: po/custom/fromJson.txt:108
 msgid "Cannon Fire Truck"
 msgstr "大炮消防车"
 
-#: po/custom/fromJson.txt:107
+#: po/custom/fromJson.txt:109
 msgid "Cannon Fortress"
 msgstr "加农炮堡垒"
 
-#: po/custom/fromJson.txt:108
+#: po/custom/fromJson.txt:110
 msgid "Cannon Laser Designator"
 msgstr "加农炮激光指向器"
 
-#: po/custom/fromJson.txt:109
+#: po/custom/fromJson.txt:111
 msgid "Cannon Laser Rangefinder"
 msgstr "加农炮激光测距仪"
 
-#: po/custom/fromJson.txt:110
+#: po/custom/fromJson.txt:112
 msgid "Cannon Rapid Loader"
 msgstr "加农炮高速装填系统一型"
 
-#: po/custom/fromJson.txt:111
+#: po/custom/fromJson.txt:113
 msgid "Cannon Rapid Loader Mk2"
 msgstr "加农炮高速装填系统二型"
 
-#: po/custom/fromJson.txt:112
+#: po/custom/fromJson.txt:114
 msgid "Cannon Rapid Loader Mk3"
 msgstr "加农炮高速装填系统三型"
 
-#: po/custom/fromJson.txt:113
+#: po/custom/fromJson.txt:115
 msgid "Cannon Tower"
 msgstr "加农炮防卫塔"
 
-#: po/custom/fromJson.txt:114
+#: po/custom/fromJson.txt:116
 msgid "CB Radar Turret"
 msgstr "反炮兵雷达"
 
-#: po/custom/fromJson.txt:115
+#: po/custom/fromJson.txt:117
 msgid "CB Tower"
 msgstr "反炮兵雷达"
 
-#: po/custom/fromJson.txt:116
+#: po/custom/fromJson.txt:118
 msgid "CB Turret"
 msgstr "反炮兵雷达"
 
-#: po/custom/fromJson.txt:117
+#: po/custom/fromJson.txt:119
 msgid "Chaingun Upgrade"
 msgstr "初级高速型链枪升级"
 
-#: po/custom/fromJson.txt:118
+#: po/custom/fromJson.txt:120
 msgid "Civilian"
 msgstr "平民"
 
-#: po/custom/fromJson.txt:119
+#: po/custom/fromJson.txt:121
 msgid "Cluster Bomb Bay"
 msgstr "集束炸弹舱 "
 
-#: po/custom/fromJson.txt:120
+#: po/custom/fromJson.txt:122
 msgid "Cluster Bombs Bay"
 msgstr "集束炸弹舱"
 
-#: po/custom/fromJson.txt:121
+#: po/custom/fromJson.txt:123
 msgid "Cobra"
 msgstr "眼镜蛇"
 
-#: po/custom/fromJson.txt:122
+#: po/custom/fromJson.txt:124
 msgid "Cobra Flamer Tracks"
 msgstr "履带式眼镜蛇坦克（火焰喷射）"
 
-#: po/custom/fromJson.txt:123
+#: po/custom/fromJson.txt:125
 msgid "Cobra Medium Cannon Tracks"
 msgstr "履带式眼镜蛇坦克（中型加农炮）"
 
-#: po/custom/fromJson.txt:124
+#: po/custom/fromJson.txt:126
 msgid "Cobra Truck"
 msgstr "眼镜蛇工程车"
 
-#: po/custom/fromJson.txt:126
+#: po/custom/fromJson.txt:128
 msgid "Collective CWall"
 msgstr "Collective钛钢筋角墙"
 
-#: po/custom/fromJson.txt:128
+#: po/custom/fromJson.txt:130
 msgid "Combat Engineer"
 msgstr "工程生化人步兵"
 
-#: po/custom/fromJson.txt:129
+#: po/custom/fromJson.txt:131
 msgid "Command Center"
 msgstr "指挥中心"
 
-#: po/custom/fromJson.txt:130
+#: po/custom/fromJson.txt:132
 msgid "Command Relay Center"
 msgstr "命令传递中心"
 
-#: po/custom/fromJson.txt:131
+#: po/custom/fromJson.txt:133
 msgid "Command Relay Post"
 msgstr "命令传递基地"
 
-#: po/custom/fromJson.txt:132
+#: po/custom/fromJson.txt:134
 msgid "Command Turret"
 msgstr "指挥官"
 
-#: po/custom/fromJson.txt:133
+#: po/custom/fromJson.txt:135
 msgid "Command Turret Cobra Half-tracks"
 msgstr "半履带式眼镜蛇坦克（指挥官）"
 
-#: po/custom/fromJson.txt:134
+#: po/custom/fromJson.txt:136
 msgid "Command Turret Cobra Tracks"
 msgstr "眼镜蛇指挥车"
 
-#: po/custom/fromJson.txt:135
+#: po/custom/fromJson.txt:137
 msgid "Command Turret Mantis Tracks"
 msgstr "螳螂指挥车"
 
-#: po/custom/fromJson.txt:136
+#: po/custom/fromJson.txt:138
 msgid "Command Turret Python Tracks"
 msgstr "履带式蟒蛇坦克（指挥官）"
 
-#: po/custom/fromJson.txt:137
+#: po/custom/fromJson.txt:139
 msgid "Command Turret Scorpion Tracks"
 msgstr "毒蝎指挥车"
 
-#: po/custom/fromJson.txt:138
+#: po/custom/fromJson.txt:140
 msgid "Command Turret Viper Tracks"
 msgstr "响尾蛇指挥车"
 
-#: po/custom/fromJson.txt:139
+#: po/custom/fromJson.txt:141
 msgid "Composite Alloys"
 msgstr "复合合金一型"
 
-#: po/custom/fromJson.txt:140
+#: po/custom/fromJson.txt:142
 msgid "Composite Alloys Mk2"
 msgstr "复合合金二型"
 
-#: po/custom/fromJson.txt:141
+#: po/custom/fromJson.txt:143
 msgid "Composite Alloys Mk3"
 msgstr "复合合金三型"
 
-#: po/custom/fromJson.txt:142
+#: po/custom/fromJson.txt:144
 msgid "Construction Unit"
 msgstr "建筑单位"
 
-#: po/custom/fromJson.txt:143
+#: po/custom/fromJson.txt:145
 msgid "Cyborg Composite Alloys"
 msgstr "生化人复合合金一型"
 
-#: po/custom/fromJson.txt:144
+#: po/custom/fromJson.txt:146
 msgid "Cyborg Composite Alloys Mk2"
 msgstr "生化人复合合金二型"
 
-#: po/custom/fromJson.txt:145
+#: po/custom/fromJson.txt:147
 msgid "Cyborg Composite Alloys Mk3"
 msgstr "生化人复合合金三型"
 
-#: po/custom/fromJson.txt:146
+#: po/custom/fromJson.txt:148
 msgid "Cyborg Dense Composite Alloys"
 msgstr "生化人紧密合金一型"
 
-#: po/custom/fromJson.txt:147
+#: po/custom/fromJson.txt:149
 msgid "Cyborg Dense Composite Alloys Mk2"
 msgstr "生化人紧密合金二型"
 
-#: po/custom/fromJson.txt:148
+#: po/custom/fromJson.txt:150
 msgid "Cyborg Dense Composite Alloys Mk3"
 msgstr "生化人紧密合金三型"
 
-#: po/custom/fromJson.txt:149
+#: po/custom/fromJson.txt:151
 msgid "Cyborg Factory"
 msgstr "生化人步兵工厂"
 
-#: po/custom/fromJson.txt:150
+#: po/custom/fromJson.txt:152
 msgid "Cyborg Flamer"
 msgstr "生化人步兵（火焰喷射）"
 
-#: po/custom/fromJson.txt:151
+#: po/custom/fromJson.txt:153
 #, fuzzy
 msgid "Cyborg Heavy Body"
 msgstr "Project的重量级车身"
 
-#: po/custom/fromJson.txt:152
+#: po/custom/fromJson.txt:154
 msgid "Cyborg High Intensity Thermal Armor"
 msgstr "生化人高强度热能装甲一型"
 
-#: po/custom/fromJson.txt:153
+#: po/custom/fromJson.txt:155
 msgid "Cyborg High Intensity Thermal Armor Mk2"
 msgstr "生化人高强度热能装甲二型"
 
-#: po/custom/fromJson.txt:154
+#: po/custom/fromJson.txt:156
 msgid "Cyborg High Intensity Thermal Armor Mk3"
 msgstr "生化人高强度热能装甲三型"
 
-#: po/custom/fromJson.txt:155
+#: po/custom/fromJson.txt:157
 #, fuzzy
 msgid "Cyborg Lancer"
 msgstr "生化人步兵（火焰喷射）"
 
-#: po/custom/fromJson.txt:156
+#: po/custom/fromJson.txt:158
 #, fuzzy
 msgid "Cyborg Light Body"
 msgstr "Project的轻量级车身"
 
-#: po/custom/fromJson.txt:157
+#: po/custom/fromJson.txt:159
 msgid "Cyborg Mechanic"
 msgstr "维修生化人步兵"
 
-#: po/custom/fromJson.txt:161
+#: po/custom/fromJson.txt:163
 msgid "Cyborg Superdense Composite Alloys"
 msgstr "生化人高密合金一型"
 
-#: po/custom/fromJson.txt:162
+#: po/custom/fromJson.txt:164
 msgid "Cyborg Superdense Composite Alloys Mk2"
 msgstr "生化人高密合金二型"
 
-#: po/custom/fromJson.txt:163
+#: po/custom/fromJson.txt:165
 msgid "Cyborg Superdense Composite Alloys Mk3"
 msgstr "生化人高密合金三型"
 
-#: po/custom/fromJson.txt:164
+#: po/custom/fromJson.txt:166
 msgid "Cyborg Superdense Thermal Armor"
 msgstr "超紧密生化人热能装甲一型"
 
-#: po/custom/fromJson.txt:165
+#: po/custom/fromJson.txt:167
 msgid "Cyborg Superdense Thermal Armor Mk2"
 msgstr "超紧密生化人热能装甲二型"
 
-#: po/custom/fromJson.txt:166
+#: po/custom/fromJson.txt:168
 msgid "Cyborg Superdense Thermal Armor Mk3"
 msgstr "超紧密生化人热能装甲三型"
 
-#: po/custom/fromJson.txt:167
+#: po/custom/fromJson.txt:169
 msgid "Cyborg Thermal Armor"
 msgstr "生化人热能装甲一型"
 
-#: po/custom/fromJson.txt:168
+#: po/custom/fromJson.txt:170
 msgid "Cyborg Thermal Armor Mk2"
 msgstr "生化人热能装甲二型"
 
-#: po/custom/fromJson.txt:169
+#: po/custom/fromJson.txt:171
 msgid "Cyborg Thermal Armor Mk3"
 msgstr "生化人热能装甲三型"
 
-#: po/custom/fromJson.txt:170
+#: po/custom/fromJson.txt:172
 msgid "Cyborg Transport"
 msgstr "生化人运输舰"
 
-#: po/custom/fromJson.txt:171
+#: po/custom/fromJson.txt:173
 msgid "Cyclone AA Flak Site"
 msgstr "暴风级高射炮"
 
-#: po/custom/fromJson.txt:172
+#: po/custom/fromJson.txt:174
 msgid "Cyclone AA Python Half-tracks"
 msgstr "半履带式蟒蛇坦克（暴风式空对空导弹）"
 
-#: po/custom/fromJson.txt:173
+#: po/custom/fromJson.txt:175
 msgid "Cyclone Flak Turret"
 msgstr "暴风级高射炮"
 
-#: po/custom/fromJson.txt:175
+#: po/custom/fromJson.txt:177
 msgid "Dedicated Synaptic Link Data Analysis Mk2"
 msgstr "专注突触连结资料分析二型"
 
-#: po/custom/fromJson.txt:176
+#: po/custom/fromJson.txt:178
 msgid "Dedicated Synaptic Link Data Analysis Mk3"
 msgstr "专注突触连结资料分析三型"
 
-#: po/custom/fromJson.txt:177
+#: po/custom/fromJson.txt:179
 msgid "Demolish Structure"
 msgstr "破坏建筑物"
 
-#: po/custom/fromJson.txt:178
+#: po/custom/fromJson.txt:180
 msgid "Dense Composite Alloys"
 msgstr "紧密合金一型"
 
-#: po/custom/fromJson.txt:179
+#: po/custom/fromJson.txt:181
 msgid "Dense Composite Alloys Mk2"
 msgstr "紧密合金二型"
 
-#: po/custom/fromJson.txt:180
+#: po/custom/fromJson.txt:182
 msgid "Dense Composite Alloys Mk3"
 msgstr "紧密合金三型"
 
-#: po/custom/fromJson.txt:181
+#: po/custom/fromJson.txt:183
 msgid "Depleted Uranium MG Bullets"
 msgstr "贫化铀弹一型"
 
-#: po/custom/fromJson.txt:183
+#: po/custom/fromJson.txt:185
 msgid "Downed Transport"
 msgstr "卸载运输舰"
 
-#: po/custom/fromJson.txt:184
+#: po/custom/fromJson.txt:186
 msgid "Dragon"
 msgstr "龙"
 
-#: po/custom/fromJson.txt:185
+#: po/custom/fromJson.txt:187
 msgid "Electronic Countermeasures"
 msgstr "电子干扰"
 
-#: po/custom/fromJson.txt:186
+#: po/custom/fromJson.txt:188
 #, fuzzy
 msgid "Electronic Countermeasures Mk2"
 msgstr "电子干扰"
 
-#: po/custom/fromJson.txt:187
+#: po/custom/fromJson.txt:189
 msgid "EMP Cannon"
 msgstr "电磁脉冲加农炮"
 
-#: po/custom/fromJson.txt:188
+#: po/custom/fromJson.txt:190
 msgid "EMP Cannon Tower"
 msgstr "电磁脉冲加农炮防卫塔"
 
-#: po/custom/fromJson.txt:189
+#: po/custom/fromJson.txt:191
 msgid "EMP Missile Launcher"
 msgstr "电磁脉冲导弹"
 
-#: po/custom/fromJson.txt:190
+#: po/custom/fromJson.txt:192
 msgid "EMP Mortar"
 msgstr "电磁脉冲迫击炮炮台"
 
-#: po/custom/fromJson.txt:191
+#: po/custom/fromJson.txt:193
 msgid "EMP Mortar Pit"
 msgstr "电磁脉冲迫击炮阵地"
 
-#: po/custom/fromJson.txt:192
+#: po/custom/fromJson.txt:194
 #, fuzzy
 msgid "Enemy"
 msgstr "敌方基地"
 
-#: po/custom/fromJson.txt:193
+#: po/custom/fromJson.txt:195
 msgid "Engineering"
 msgstr "初级工程科技"
 
-#: po/custom/fromJson.txt:194
+#: po/custom/fromJson.txt:196
 msgid "Factory"
 msgstr "工厂"
 
-#: po/custom/fromJson.txt:195
+#: po/custom/fromJson.txt:197
 msgid "Factory Module"
 msgstr "工厂模组"
 
-#: po/custom/fromJson.txt:196
+#: po/custom/fromJson.txt:198
 msgid "Fast Fire Mini-Rockets"
 msgstr "快速射击迷你火箭一型"
 
-#: po/custom/fromJson.txt:197
+#: po/custom/fromJson.txt:199
 msgid "Fast Fire Mini-Rockets Mk2"
 msgstr "快速射击迷你火箭二型"
 
-#: po/custom/fromJson.txt:198
+#: po/custom/fromJson.txt:200
 msgid "Fast Fire Mini-Rockets Mk3"
 msgstr "快速射击迷你火箭三型"
 
-#: po/custom/fromJson.txt:199
+#: po/custom/fromJson.txt:201
 msgid "Fast Loader"
 msgstr "榴弹炮快速装填"
 
-#: po/custom/fromJson.txt:200
+#: po/custom/fromJson.txt:202
 msgid "Fire Truck"
 msgstr "消防车"
 
-#: po/custom/fromJson.txt:201
+#: po/custom/fromJson.txt:203
 msgid "Flamer"
 msgstr "火焰喷射"
 
-#: po/custom/fromJson.txt:202
+#: po/custom/fromJson.txt:204
 msgid "Flamer Autoloader"
 msgstr "自动装填喷射一型"
 
-#: po/custom/fromJson.txt:203
+#: po/custom/fromJson.txt:205
 msgid "Flamer Autoloader Mk2"
 msgstr "自动装填喷射二型"
 
-#: po/custom/fromJson.txt:204
+#: po/custom/fromJson.txt:206
 msgid "Flamer Autoloader Mk3"
 msgstr "自动装填喷射三型"
 
-#: po/custom/fromJson.txt:205
+#: po/custom/fromJson.txt:207
 msgid "Flamer Bunker"
 msgstr "火焰喷射碉堡"
 
-#: po/custom/fromJson.txt:206
+#: po/custom/fromJson.txt:208
 msgid "Flamer Cobra Tracks"
 msgstr "履带式眼镜蛇坦克（火焰喷射）"
 
-#: po/custom/fromJson.txt:210
+#: po/custom/fromJson.txt:212
 msgid "Flamer Viper Half-Tracks"
 msgstr "半履带式响尾蛇坦克（火焰喷射）"
 
-#: po/custom/fromJson.txt:211
+#: po/custom/fromJson.txt:213
 msgid "Flamer Viper Wheels"
 msgstr "轮式响尾蛇坦克（火焰喷射）"
 
-#: po/custom/fromJson.txt:212
+#: po/custom/fromJson.txt:214
 msgid "Flashlight"
 msgstr "激光激光"
 
-#: po/custom/fromJson.txt:214
+#: po/custom/fromJson.txt:216
 msgid "Flashlight Gunner"
 msgstr "激光激光"
 
-#: po/custom/fromJson.txt:215
+#: po/custom/fromJson.txt:217
 msgid "Flashlight Gunner Cyborg"
 msgstr "生化人步兵（激光激光）"
 
-#: po/custom/fromJson.txt:216
+#: po/custom/fromJson.txt:218
 msgid "Flashlight Hardpoint"
 msgstr "激光激光要塞"
 
-#: po/custom/fromJson.txt:217
+#: po/custom/fromJson.txt:219
 msgid "Flashlight Retribution Hover"
 msgstr "闪光聚焦激光气垫船"
 
-#: po/custom/fromJson.txt:218
+#: po/custom/fromJson.txt:220
 msgid "Fuel Injection Engine"
 msgstr "燃油喷射引擎一型"
 
-#: po/custom/fromJson.txt:219
+#: po/custom/fromJson.txt:221
 msgid "Fuel Injection Engine Mk2"
 msgstr "燃油喷射引擎二型"
 
-#: po/custom/fromJson.txt:220
+#: po/custom/fromJson.txt:222
 msgid "Fuel Injection Engine Mk3"
 msgstr "燃油喷射引擎三型"
 
-#: po/custom/fromJson.txt:221
+#: po/custom/fromJson.txt:223
+#, fuzzy
+msgid "Gamma Campaign"
+msgstr "情节"
+
+#: po/custom/fromJson.txt:224
 msgid "Gas Turbine Engine"
 msgstr "燃气涡轮增压引擎一型"
 
-#: po/custom/fromJson.txt:222
+#: po/custom/fromJson.txt:225
 msgid "Gas Turbine Engine Mk2"
 msgstr "燃气涡轮增压引擎二型"
 
-#: po/custom/fromJson.txt:223
+#: po/custom/fromJson.txt:226
 msgid "Gas Turbine Engine Mk3"
 msgstr "燃气涡轮增压引擎三型"
 
-#: po/custom/fromJson.txt:224
+#: po/custom/fromJson.txt:227
 msgid "Gas Turbine Generator"
 msgstr "燃气涡轮发电机一型"
 
-#: po/custom/fromJson.txt:225
+#: po/custom/fromJson.txt:228
 msgid "Gas Turbine Generator Mk2"
 msgstr "燃气涡轮发电机二型"
 
-#: po/custom/fromJson.txt:226
+#: po/custom/fromJson.txt:229
 msgid "Gas Turbine Generator Mk3"
 msgstr "燃气涡轮发电机三型"
 
-#: po/custom/fromJson.txt:227
+#: po/custom/fromJson.txt:230
 msgid "Gauss Cannon"
 msgstr "高斯加农炮"
 
-#: po/custom/fromJson.txt:228
+#: po/custom/fromJson.txt:231
 msgid "Gauss Cannon Emplacement"
 msgstr "高斯加农炮炮台"
 
-#: po/custom/fromJson.txt:229
+#: po/custom/fromJson.txt:232
 msgid "Gauss Cannon Hardpoint"
 msgstr "高斯加农炮要塞"
 
-#: po/custom/fromJson.txt:230
+#: po/custom/fromJson.txt:233
 msgid "Gauss Cannon Python Tracks"
 msgstr "履带式蟒蛇坦克（高速加农炮）"
 
-#: po/custom/fromJson.txt:231
+#: po/custom/fromJson.txt:234
 msgid "Gauss Cannon Wyvern Tracks"
 msgstr "履带式中国龙坦克（高斯加农炮）"
 
-#: po/custom/fromJson.txt:232
+#: po/custom/fromJson.txt:235
 msgid "Grenadier"
 msgstr "生化人步兵（手榴弹）"
 
-#: po/custom/fromJson.txt:233
+#: po/custom/fromJson.txt:236
 msgid "Ground Shaker"
 msgstr "撼地者级榴弹炮"
 
-#: po/custom/fromJson.txt:235
+#: po/custom/fromJson.txt:238
 msgid "Half-tracked Propulsion"
 msgstr "推进动力：半履带"
 
-#: po/custom/fromJson.txt:237
+#: po/custom/fromJson.txt:240
 msgid "Half-tracks"
 msgstr "半履带式"
 
-#: po/custom/fromJson.txt:238
+#: po/custom/fromJson.txt:241
 msgid "Half-tracks II"
 msgstr "半履带式二型"
 
-#: po/custom/fromJson.txt:239
+#: po/custom/fromJson.txt:242
 msgid "Half-tracks III"
 msgstr "半履带式三型"
 
-#: po/custom/fromJson.txt:240
+#: po/custom/fromJson.txt:243
 msgid "Hardcrete"
 msgstr "钛钢筋墙"
 
-#: po/custom/fromJson.txt:241
+#: po/custom/fromJson.txt:244
 msgid "Hardcrete Corner Wall"
 msgstr "钛钢筋角墙"
 
-#: po/custom/fromJson.txt:242
+#: po/custom/fromJson.txt:245
 msgid "Hardcrete Gate"
 msgstr "Hardcrete 大门"
 
-#: po/custom/fromJson.txt:243
+#: po/custom/fromJson.txt:246
 msgid "Hardcrete Wall"
 msgstr "钛钢筋墙"
 
-#: po/custom/fromJson.txt:245
+#: po/custom/fromJson.txt:248
 msgid "Hardened Base Structure Materials Mk2"
 msgstr "中级强化建材二型"
 
-#: po/custom/fromJson.txt:246
+#: po/custom/fromJson.txt:249
 msgid "Hardened Base Structure Materials Mk3"
 msgstr "中级强化建材三型"
 
-#: po/custom/fromJson.txt:247
+#: po/custom/fromJson.txt:250
 msgid "Hardened MG Bullets"
 msgstr "强化子弹"
 
-#: po/custom/fromJson.txt:248
+#: po/custom/fromJson.txt:251
 msgid "Hardened Rail Dart"
 msgstr "强化轨道炮"
 
-#: po/custom/fromJson.txt:249
+#: po/custom/fromJson.txt:252
 msgid "Hardened Rail Dart Mk2"
 msgstr "强化轨道炮 二型"
 
-#: po/custom/fromJson.txt:250
+#: po/custom/fromJson.txt:253
 msgid "Hardened Rail Dart Mk3"
 msgstr "强化轨道炮 三型"
 
-#: po/custom/fromJson.txt:251
+#: po/custom/fromJson.txt:254
 msgid "Hardened Sensor Tower"
 msgstr "强化雷达塔"
 
-#: po/custom/fromJson.txt:252
+#: po/custom/fromJson.txt:255
 msgid "HEAP Bomb Bay"
 msgstr "高爆性穿甲炸弹舱"
 
-#: po/custom/fromJson.txt:253
+#: po/custom/fromJson.txt:256
 msgid "Heap Bomb Bay Mantis VTOL"
 msgstr "VTOL（高爆性穿甲炸弹舱）"
 
-#: po/custom/fromJson.txt:254
+#: po/custom/fromJson.txt:257
 msgid "Heap Bomb Bay Retribution VTOL"
 msgstr "中量级车身：惩罚者 VTOL"
 
-#: po/custom/fromJson.txt:255
+#: po/custom/fromJson.txt:258
 msgid "HEAP Howitzer Shells"
 msgstr "HEAP榴弹炮一型"
 
-#: po/custom/fromJson.txt:256
+#: po/custom/fromJson.txt:259
 msgid "HEAP Howitzer Shells Mk2"
 msgstr "HEAP榴弹炮二型"
 
-#: po/custom/fromJson.txt:257
+#: po/custom/fromJson.txt:260
 msgid "HEAP Howitzer Shells Mk3"
 msgstr "HEAP榴弹炮三型"
 
-#: po/custom/fromJson.txt:258
+#: po/custom/fromJson.txt:261
 msgid "HEAP Mini-Rockets"
 msgstr "HEAP迷你火箭一型"
 
-#: po/custom/fromJson.txt:259
+#: po/custom/fromJson.txt:262
 msgid "HEAP Mini-Rockets Mk2"
 msgstr "HEAP迷你火箭二型"
 
-#: po/custom/fromJson.txt:260
+#: po/custom/fromJson.txt:263
 msgid "HEAP Mini-Rockets Mk3"
 msgstr "HEAP迷你火箭三型"
 
-#: po/custom/fromJson.txt:261
+#: po/custom/fromJson.txt:264
 msgid "HEAP Mortar Shells"
 msgstr "HEAP迫击炮弹一型"
 
-#: po/custom/fromJson.txt:262
+#: po/custom/fromJson.txt:265
 msgid "HEAP Mortar Shells Mk2"
 msgstr "HEAP迫击炮弹二型"
 
-#: po/custom/fromJson.txt:263
+#: po/custom/fromJson.txt:266
 msgid "HEAP Mortar Shells Mk3"
 msgstr "HEAP迫击炮弹三型"
 
-#: po/custom/fromJson.txt:264
+#: po/custom/fromJson.txt:267
 msgid "HEAT Cannon Shells"
 msgstr "HEAT加农炮弹一型"
 
-#: po/custom/fromJson.txt:265
+#: po/custom/fromJson.txt:268
 msgid "HEAT Cannon Shells Mk2"
 msgstr "HEAT加农炮弹二型"
 
-#: po/custom/fromJson.txt:266
+#: po/custom/fromJson.txt:269
 msgid "HEAT Cannon Shells Mk3"
 msgstr "HEAT加农炮弹三型"
 
-#: po/custom/fromJson.txt:267
+#: po/custom/fromJson.txt:270
 msgid "HEAT Rocket Warhead"
 msgstr "HEAT火箭弹头一型"
 
-#: po/custom/fromJson.txt:268
+#: po/custom/fromJson.txt:271
 msgid "HEAT Rocket Warhead Mk2"
 msgstr "HEAT火箭弹头二型"
 
-#: po/custom/fromJson.txt:269
+#: po/custom/fromJson.txt:272
 msgid "HEAT Rocket Warhead Mk3"
 msgstr "HEAT火箭弹头三型"
 
-#: po/custom/fromJson.txt:270
+#: po/custom/fromJson.txt:273
 msgid "Heavy Body - Mantis"
 msgstr "重量级车身：螳螂"
 
-#: po/custom/fromJson.txt:271
+#: po/custom/fromJson.txt:274
 msgid "Heavy Body - Python"
 msgstr "重量级车身：蟒蛇"
 
-#: po/custom/fromJson.txt:272
+#: po/custom/fromJson.txt:275
 msgid "Heavy Body - Tiger"
 msgstr "重量级车身：虎式"
 
-#: po/custom/fromJson.txt:273
+#: po/custom/fromJson.txt:276
 msgid "Heavy Body - Vengeance"
 msgstr "重量级车身：复仇者"
 
-#: po/custom/fromJson.txt:274
+#: po/custom/fromJson.txt:277
 msgid "Heavy Body - Wyvern"
 msgstr "超重量级车身：中国龙"
 
-#: po/custom/fromJson.txt:275
+#: po/custom/fromJson.txt:278
 msgid "Heavy Cannon"
 msgstr "重型加农炮"
 
-#: po/custom/fromJson.txt:276
+#: po/custom/fromJson.txt:279
 msgid "Heavy Cannon Cobra Hover"
 msgstr "眼镜蛇气垫船（重型加农炮）"
 
-#: po/custom/fromJson.txt:277
+#: po/custom/fromJson.txt:280
 msgid "Heavy Cannon Cobra Tracks"
 msgstr "履带式眼镜蛇坦克（重型加农炮）"
 
-#: po/custom/fromJson.txt:278
+#: po/custom/fromJson.txt:281
 msgid "Heavy Cannon Hardpoint"
 msgstr "重型加农炮要塞"
 
-#: po/custom/fromJson.txt:279
+#: po/custom/fromJson.txt:282
 msgid "Heavy Cannon Mantis Tracks"
 msgstr "履带式螳螂坦克（重型加农炮）"
 
-#: po/custom/fromJson.txt:280
+#: po/custom/fromJson.txt:283
 msgid "Heavy Cannon Python Hover"
 msgstr "蟒蛇气垫船（重型加农炮）"
 
-#: po/custom/fromJson.txt:281
+#: po/custom/fromJson.txt:284
 msgid "Heavy Cannon Python Tracks"
 msgstr "履带式蟒蛇坦克（高速加农炮）"
 
-#: po/custom/fromJson.txt:282
+#: po/custom/fromJson.txt:285
 msgid "Heavy Cannon Scorpion Tracks"
 msgstr "履带式毒蝎坦克（重型加农炮）"
 
-#: po/custom/fromJson.txt:283
+#: po/custom/fromJson.txt:286
 msgid "Heavy Cannon Tiger Tracks"
 msgstr "履带式虎式坦克（重型加农炮）"
 
-#: po/custom/fromJson.txt:284
+#: po/custom/fromJson.txt:287
 msgid "Heavy Flamer - Inferno"
 msgstr "重型火焰喷射 - 地狱火"
 
-#: po/custom/fromJson.txt:285
+#: po/custom/fromJson.txt:288
 msgid "Heavy Gunner"
 msgstr "生化人步兵（重机枪）"
 
-#: po/custom/fromJson.txt:287
+#: po/custom/fromJson.txt:290
 msgid "Heavy Howitzer - Ground Shaker"
 msgstr "重型榴弹炮-憾地者"
 
-#: po/custom/fromJson.txt:288
+#: po/custom/fromJson.txt:291
 msgid "Heavy Laser"
 msgstr "高能激光"
 
-#: po/custom/fromJson.txt:289
+#: po/custom/fromJson.txt:292
 msgid "Heavy Laser Emplacement"
 msgstr "高能激光炮台"
 
-#: po/custom/fromJson.txt:290
+#: po/custom/fromJson.txt:293
 msgid "Heavy Laser Tiger Tracks"
 msgstr "履带式虎式坦克（高能激光）"
 
-#: po/custom/fromJson.txt:291
+#: po/custom/fromJson.txt:294
 msgid "Heavy Laser Wyvern Tracks"
 msgstr "履带式中国龙坦克（高能激光）"
 
-#: po/custom/fromJson.txt:292
+#: po/custom/fromJson.txt:295
 msgid "Heavy Machinegun"
 msgstr "重机枪"
 
-#: po/custom/fromJson.txt:294
+#: po/custom/fromJson.txt:297
 msgid "Heavy Machinegun Cobra Half-tracks"
 msgstr "半履带式眼镜蛇坦克（重机枪）"
 
-#: po/custom/fromJson.txt:295
+#: po/custom/fromJson.txt:298
 msgid "Heavy Machinegun Cobra Hover"
 msgstr "眼镜蛇气垫船（重机枪）"
 
-#: po/custom/fromJson.txt:296
+#: po/custom/fromJson.txt:299
 msgid "Heavy Machinegun Cobra Tracks"
 msgstr "履带式响尾蛇坦克（重机枪）"
 
-#: po/custom/fromJson.txt:297
+#: po/custom/fromJson.txt:300
 msgid "Heavy Machinegun Cobra Wheels"
 msgstr "轮式眼镜蛇坦克（重机枪）"
 
-#: po/custom/fromJson.txt:298
+#: po/custom/fromJson.txt:301
 msgid "Heavy Machinegun Hardpoint"
 msgstr "重机枪要塞"
 
-#: po/custom/fromJson.txt:299
+#: po/custom/fromJson.txt:302
 msgid "Heavy Machinegun Scorpion Half Tracks"
 msgstr "半履带式毒蝎坦克（重机枪）"
 
-#: po/custom/fromJson.txt:300
+#: po/custom/fromJson.txt:303
 msgid "Heavy Machinegun Scorpion Tracks"
 msgstr "履带式毒蝎坦克（重机枪）"
 
-#: po/custom/fromJson.txt:302
+#: po/custom/fromJson.txt:305
 msgid "Heavy Machinegun Viper Half-tracks"
 msgstr "半履带式响尾蛇坦克（重机枪）"
 
-#: po/custom/fromJson.txt:303
+#: po/custom/fromJson.txt:306
 msgid "Heavy Machinegun Viper Tracks"
 msgstr "履带式响尾蛇坦克（重机枪）"
 
-#: po/custom/fromJson.txt:304
+#: po/custom/fromJson.txt:307
 msgid "Heavy Machinegun Viper Wheels"
 msgstr "轮式响尾蛇坦克（重机枪）"
 
-#: po/custom/fromJson.txt:305
+#: po/custom/fromJson.txt:308
 msgid "Heavy Mortar - Bombard"
 msgstr "重装迫击炮"
 
-#: po/custom/fromJson.txt:306
+#: po/custom/fromJson.txt:309
 msgid "Heavy Repair Scorpion Hover"
 msgstr "毒蝎重型修理气垫船"
 
-#: po/custom/fromJson.txt:308
+#: po/custom/fromJson.txt:311
 msgid "Heavy Repair Turret Cobra Hover"
 msgstr "眼镜蛇重型修理气垫船"
 
-#: po/custom/fromJson.txt:309
+#: po/custom/fromJson.txt:312
 msgid "Heavy Rocket Bastion"
 msgstr "重型火箭堡垒"
 
-#: po/custom/fromJson.txt:310
+#: po/custom/fromJson.txt:313
 msgid "Heavyweaponslab"
 msgstr ""
 
-#: po/custom/fromJson.txt:311
+#: po/custom/fromJson.txt:314
 msgid "HE Bomb Shells"
 msgstr "HE炸弹壳"
 
-#: po/custom/fromJson.txt:312
+#: po/custom/fromJson.txt:315
 msgid "HE Howitzer Shells"
 msgstr "HE榴弹炮一型"
 
-#: po/custom/fromJson.txt:313
+#: po/custom/fromJson.txt:316
 msgid "HE Howitzer Shells Mk2"
 msgstr "HE榴弹炮二型"
 
-#: po/custom/fromJson.txt:314
+#: po/custom/fromJson.txt:317
 msgid "HE Howitzer Shells Mk3"
 msgstr "HE榴弹炮三型"
 
-#: po/custom/fromJson.txt:315
+#: po/custom/fromJson.txt:318
 msgid "Helicopter"
 msgstr ""
 
-#: po/custom/fromJson.txt:316
+#: po/custom/fromJson.txt:319
 msgid "Hellstorm"
 msgstr "地狱风暴"
 
-#: po/custom/fromJson.txt:318
+#: po/custom/fromJson.txt:321
 msgid "HE Mini-Rockets"
 msgstr "HE迷你火箭一型（"
 
-#: po/custom/fromJson.txt:319
+#: po/custom/fromJson.txt:322
 msgid "HE Mini-Rockets Mk2"
 msgstr "HE迷你火箭二型"
 
-#: po/custom/fromJson.txt:320
+#: po/custom/fromJson.txt:323
 msgid "HE Mini-Rockets Mk3"
 msgstr "HE迷你火箭三型"
 
-#: po/custom/fromJson.txt:321
+#: po/custom/fromJson.txt:324
 msgid "HE Mortar Shells"
 msgstr "HE迫击炮弹一型"
 
-#: po/custom/fromJson.txt:322
+#: po/custom/fromJson.txt:325
 msgid "HE Mortar Shells Mk2"
 msgstr "HE迫击炮弹二型"
 
-#: po/custom/fromJson.txt:323
+#: po/custom/fromJson.txt:326
 msgid "HE Mortar Shells Mk3"
 msgstr "HE迫击炮弹三型"
 
-#: po/custom/fromJson.txt:324
+#: po/custom/fromJson.txt:327
 msgid "HE Rockets"
 msgstr "HE 火箭"
 
-#: po/custom/fromJson.txt:325
+#: po/custom/fromJson.txt:328
 msgid "HE Rockets Mk2"
 msgstr "HE 火箭Mk2"
 
-#: po/custom/fromJson.txt:326
+#: po/custom/fromJson.txt:329
 msgid "HE Rockets Mk3"
 msgstr "HE 火箭Mk3"
 
-#: po/custom/fromJson.txt:327
+#: po/custom/fromJson.txt:330
 msgid "HESH Rocket Warhead"
 msgstr "HESH火箭弹头一型"
 
-#: po/custom/fromJson.txt:328
+#: po/custom/fromJson.txt:331
 msgid "HESH Rocket Warhead Mk2"
 msgstr "HESH火箭弹头二型"
 
-#: po/custom/fromJson.txt:329
+#: po/custom/fromJson.txt:332
 msgid "HESH Rocket Warhead Mk3"
 msgstr "HESH火箭弹头三型"
 
-#: po/custom/fromJson.txt:330
+#: po/custom/fromJson.txt:333
 msgid "Hide Behind Me"
 msgstr ""
 
-#: po/custom/fromJson.txt:331
+#: po/custom/fromJson.txt:334
 msgid "Hi-Energy Laser Emitter"
 msgstr "高能激光发射极一型"
 
-#: po/custom/fromJson.txt:332
+#: po/custom/fromJson.txt:335
 msgid "Hi-Energy Laser Emitter Mk2"
 msgstr "高能激光发射极二型"
 
-#: po/custom/fromJson.txt:333
+#: po/custom/fromJson.txt:336
 msgid "Hi-Energy Laser Emitter Mk3"
 msgstr "高能激光发射极三型"
 
-#: po/custom/fromJson.txt:334
+#: po/custom/fromJson.txt:337
 msgid "High Intensity Thermal Armor"
 msgstr "高强度热能装甲一型"
 
-#: po/custom/fromJson.txt:335
+#: po/custom/fromJson.txt:338
 msgid "High Intensity Thermal Armor Mk2"
 msgstr "高强度热能装甲二型"
 
-#: po/custom/fromJson.txt:336
+#: po/custom/fromJson.txt:339
 msgid "High Intensity Thermal Armor Mk3"
 msgstr "高强度热能装甲三型"
 
-#: po/custom/fromJson.txt:337
+#: po/custom/fromJson.txt:340
 msgid "High Temperature Flamer Gel"
 msgstr "高温火焰凝胶一型"
 
-#: po/custom/fromJson.txt:338
+#: po/custom/fromJson.txt:341
 msgid "High Temperature Flamer Gel Mk2"
 msgstr "高温火焰凝胶二型"
 
-#: po/custom/fromJson.txt:339
+#: po/custom/fromJson.txt:342
 msgid "High Temperature Flamer Gel Mk3"
 msgstr "高温火焰凝胶三型"
 
-#: po/custom/fromJson.txt:340
+#: po/custom/fromJson.txt:343
 msgid "Hover"
 msgstr "气垫船"
 
-#: po/custom/fromJson.txt:341
+#: po/custom/fromJson.txt:344
 #, fuzzy
 msgid "Hover AI"
 msgstr "气垫船二型"
 
-#: po/custom/fromJson.txt:342
+#: po/custom/fromJson.txt:345
 msgid "Hover II"
 msgstr "气垫船二型"
 
-#: po/custom/fromJson.txt:343
+#: po/custom/fromJson.txt:346
 msgid "Hover III"
 msgstr "气垫船三型"
 
-#: po/custom/fromJson.txt:344
+#: po/custom/fromJson.txt:347
 msgid "Hover Propulsion"
 msgstr "推进动力：气垫船"
 
-#: po/custom/fromJson.txt:346
+#: po/custom/fromJson.txt:349
 msgid "Howitzer"
 msgstr "榴弹炮"
 
-#: po/custom/fromJson.txt:347
+#: po/custom/fromJson.txt:350
 msgid "Howitzer Autoloader"
 msgstr "榴弹炮自动装填器一型"
 
-#: po/custom/fromJson.txt:348
+#: po/custom/fromJson.txt:351
 msgid "Howitzer Autoloader Mk2"
 msgstr "榴弹炮自动装填器二型"
 
-#: po/custom/fromJson.txt:349
+#: po/custom/fromJson.txt:352
 msgid "Howitzer Autoloader Mk3"
 msgstr "榴弹炮自动装填器三型"
 
-#: po/custom/fromJson.txt:351
+#: po/custom/fromJson.txt:354
 msgid "Howitzer Fast Loader"
 msgstr "迫击炮快速装载系统"
 
-#: po/custom/fromJson.txt:352
+#: po/custom/fromJson.txt:355
 msgid "HPV Cannon Emplacement"
 msgstr "高速加农炮炮台"
 
-#: po/custom/fromJson.txt:353
+#: po/custom/fromJson.txt:356
 msgid "HPV Cannon Hardpoint"
 msgstr "高速加农炮要塞"
 
-#: po/custom/fromJson.txt:354
+#: po/custom/fromJson.txt:357
 msgid "HPV Cannon Python Tracks"
 msgstr "履带式蟒蛇坦克（高速加农炮）"
 
-#: po/custom/fromJson.txt:355
+#: po/custom/fromJson.txt:358
 msgid "Hurricane AA Site"
 msgstr "飓风级高射炮"
 
-#: po/custom/fromJson.txt:356
+#: po/custom/fromJson.txt:359
 msgid "Hurricane AA Turret"
 msgstr "飓风级高射炮"
 
-#: po/custom/fromJson.txt:357
+#: po/custom/fromJson.txt:360
 msgid "Hut"
 msgstr "茅屋"
 
-#: po/custom/fromJson.txt:358
+#: po/custom/fromJson.txt:361
 msgid "HVAPFSDS Cannon Rounds"
 msgstr "HVAPFSDS加农炮一型"
 
-#: po/custom/fromJson.txt:359
+#: po/custom/fromJson.txt:362
 msgid "HVAPFSDS Cannon Rounds Mk2"
 msgstr "HVAPFSDS加农炮二型"
 
-#: po/custom/fromJson.txt:360
+#: po/custom/fromJson.txt:363
 msgid "HVAPFSDS Cannon Rounds Mk3"
 msgstr "HVAPFSDS加农炮三型"
 
-#: po/custom/fromJson.txt:361
+#: po/custom/fromJson.txt:364
 msgid "Hyper Fire Chaingun Upgrade"
 msgstr "高级高速型链枪升级"
 
-#: po/custom/fromJson.txt:362
+#: po/custom/fromJson.txt:365
 msgid "Hyper Velocity Cannon"
 msgstr "高速加农炮"
 
-#: po/custom/fromJson.txt:363
+#: po/custom/fromJson.txt:366
 msgid "Hyper Velocity Cannon Emplacement"
 msgstr "高速加农炮跑位"
 
-#: po/custom/fromJson.txt:364
+#: po/custom/fromJson.txt:367
 msgid "Hyper Velocity Cannon Hardpoint"
 msgstr "超级速度炮挂载点"
 
-#: po/custom/fromJson.txt:365
+#: po/custom/fromJson.txt:368
 msgid "Hyper Velocity Cannon Python Hover"
 msgstr "蟒蛇气垫船（高速加农炮）"
 
-#: po/custom/fromJson.txt:366
+#: po/custom/fromJson.txt:369
 msgid "Hyper Velocity Cannon Python Tracks"
 msgstr "履带式蟒蛇坦克（高速加农炮）"
 
-#: po/custom/fromJson.txt:367
+#: po/custom/fromJson.txt:370
 msgid "Improved Bomb Warhead"
 msgstr "改进的炸弹弹头"
 
-#: po/custom/fromJson.txt:368
+#: po/custom/fromJson.txt:371
 msgid "Improved Engineering"
 msgstr "中级工程科技"
 
-#: po/custom/fromJson.txt:369
+#: po/custom/fromJson.txt:372
 msgid "Improved Hardcrete"
 msgstr "改良钛钢筋墙一型"
 
-#: po/custom/fromJson.txt:370
+#: po/custom/fromJson.txt:373
 msgid "Improved Hardcrete Mk2"
 msgstr "改良钛钢筋墙二型"
 
-#: po/custom/fromJson.txt:371
+#: po/custom/fromJson.txt:374
 msgid "Improved Hardcrete Mk3"
 msgstr "改良钛钢筋墙三型"
 
-#: po/custom/fromJson.txt:372
+#: po/custom/fromJson.txt:375
 msgid "Improved Laser Focusing"
 msgstr "改进激光对焦系统一型"
 
-#: po/custom/fromJson.txt:373
+#: po/custom/fromJson.txt:376
 msgid "Improved Rocket Wire Guidance"
 msgstr "缆线火箭导引系统"
 
-#: po/custom/fromJson.txt:374
+#: po/custom/fromJson.txt:377
 msgid "Incendiary Howitzer"
 msgstr "燃烧榴弹炮"
 
-#: po/custom/fromJson.txt:375
+#: po/custom/fromJson.txt:378
 msgid "Incendiary Howitzer Emplacement"
 msgstr "燃烧榴弹炮炮台"
 
-#: po/custom/fromJson.txt:376
+#: po/custom/fromJson.txt:379
 msgid "Incendiary Mortar"
 msgstr "燃烧迫击炮"
 
-#: po/custom/fromJson.txt:377
+#: po/custom/fromJson.txt:380
 msgid "Incendiary Mortar Pit"
 msgstr "燃烧迫击炮矿井"
 
-#: po/custom/fromJson.txt:378
+#: po/custom/fromJson.txt:381
 #, fuzzy
 msgid "Indirectweaponslab"
 msgstr "可使用新的非直射型武器"
 
-#: po/custom/fromJson.txt:379
+#: po/custom/fromJson.txt:382
 msgid "Inferno"
 msgstr "地狱火"
 
-#: po/custom/fromJson.txt:380
+#: po/custom/fromJson.txt:383
 msgid "Inferno Bunker"
 msgstr "地狱地堡"
 
-#: po/custom/fromJson.txt:381
+#: po/custom/fromJson.txt:384
 msgid "Inferno Cobra Half-Tracks"
 msgstr "半履带式眼镜蛇坦克（地狱火）"
 
-#: po/custom/fromJson.txt:382
+#: po/custom/fromJson.txt:385
 msgid "Inferno Cobra Hover"
 msgstr "半履带式眼镜蛇气垫船（地狱火）"
 
-#: po/custom/fromJson.txt:383
+#: po/custom/fromJson.txt:386
 msgid "Inferno Emplacement"
 msgstr "地狱火炮台"
 
-#: po/custom/fromJson.txt:384
+#: po/custom/fromJson.txt:387
 msgid "Inferno Hardpoint"
 msgstr "地狱火要塞"
 
-#: po/custom/fromJson.txt:385
+#: po/custom/fromJson.txt:388
 msgid "Inferno Python Hover"
 msgstr "履带式蟒蛇气垫船（高速加农炮）"
 
-#: po/custom/fromJson.txt:386
+#: po/custom/fromJson.txt:389
 msgid "Jammer Tower"
 msgstr "干扰机塔"
 
-#: po/custom/fromJson.txt:387
+#: po/custom/fromJson.txt:390
 msgid "Jammer Turret"
 msgstr "干扰机炮塔"
 
-#: po/custom/fromJson.txt:388
+#: po/custom/fromJson.txt:391
 msgid "Jeep"
 msgstr "吉普车"
 
-#: po/custom/fromJson.txt:389
+#: po/custom/fromJson.txt:392
 msgid "Lancer"
 msgstr "枪骑兵火箭"
 
-#: po/custom/fromJson.txt:390
+#: po/custom/fromJson.txt:393
 msgid "Lancer AT Rocket"
 msgstr "火箭（枪骑兵）"
 
-#: po/custom/fromJson.txt:391
+#: po/custom/fromJson.txt:394
 msgid "Lancer Bunker"
 msgstr "枪骑兵火箭碉堡"
 
-#: po/custom/fromJson.txt:392
+#: po/custom/fromJson.txt:395
 msgid "Lancer Cobra Half-tracks"
 msgstr "半履带式眼镜蛇坦克（枪骑兵火箭）"
 
-#: po/custom/fromJson.txt:393
+#: po/custom/fromJson.txt:396
 msgid "Lancer Cobra Tracks"
 msgstr "履带式眼镜蛇坦克（枪骑兵火箭）"
 
-#: po/custom/fromJson.txt:394
+#: po/custom/fromJson.txt:397
 msgid "Lancer Cyborg"
 msgstr "生化人步兵（枪骑兵火箭）"
 
-#: po/custom/fromJson.txt:395
+#: po/custom/fromJson.txt:398
 msgid "Lancer Hardpoint"
 msgstr "枪骑兵火箭要塞"
 
-#: po/custom/fromJson.txt:396
+#: po/custom/fromJson.txt:399
 msgid "Lancer Mantis Tracks"
 msgstr "履带式螳螂坦克（枪骑兵火箭）"
 
-#: po/custom/fromJson.txt:397
+#: po/custom/fromJson.txt:400
 msgid "Lancer Python Tracks"
 msgstr "履带式蟒蛇坦克（枪骑兵火箭）"
 
-#: po/custom/fromJson.txt:398
+#: po/custom/fromJson.txt:401
 msgid "Lancer Scorpion Tracks"
 msgstr "履带式毒蝎坦克（枪骑兵火箭）"
 
-#: po/custom/fromJson.txt:399
+#: po/custom/fromJson.txt:402
 msgid "Lancer Scorpion VTOL"
 msgstr "毒蝎VTOL（枪骑兵火箭）"
 
-#: po/custom/fromJson.txt:401
+#: po/custom/fromJson.txt:404
 msgid "Lancer Viper Tracks"
 msgstr "履带式响尾蛇坦克（枪骑兵火箭）"
 
-#: po/custom/fromJson.txt:402
+#: po/custom/fromJson.txt:405
 msgid "Lancer Viper Wheels"
 msgstr "轮式响尾蛇坦克（枪骑兵火箭）"
 
-#: po/custom/fromJson.txt:403
+#: po/custom/fromJson.txt:406
 msgid "Laser - Flashlight"
 msgstr "激光-激光激光"
 
-#: po/custom/fromJson.txt:404
+#: po/custom/fromJson.txt:407
 msgid "Laser Guided Bombsight"
 msgstr "激光导引投弹瞄准器"
 
-#: po/custom/fromJson.txt:405
+#: po/custom/fromJson.txt:408
 #, fuzzy
 msgid "Laseropticslab"
 msgstr "激光学实验室"
 
-#: po/custom/fromJson.txt:406
+#: po/custom/fromJson.txt:409
 msgid "Laser Satellite Command Post"
 msgstr "激光卫星指挥中心"
 
-#: po/custom/fromJson.txt:407
+#: po/custom/fromJson.txt:410
 msgid "LasSat"
 msgstr "激光卫星"
 
-#: po/custom/fromJson.txt:408
+#: po/custom/fromJson.txt:411
 msgid "Leopard"
 msgstr "美洲豹"
 
-#: po/custom/fromJson.txt:409
+#: po/custom/fromJson.txt:412
 msgid "Light Body - Bug"
 msgstr "轻量级车身：毒虫"
 
-#: po/custom/fromJson.txt:410
+#: po/custom/fromJson.txt:413
 msgid "Light Body - Leopard"
 msgstr "轻量级车身：美洲豹"
 
-#: po/custom/fromJson.txt:411
+#: po/custom/fromJson.txt:414
 msgid "Light Body - Retaliation"
 msgstr "轻量级车身：报复者"
 
-#: po/custom/fromJson.txt:412
+#: po/custom/fromJson.txt:415
 msgid "Light Body - Viper"
 msgstr "轻量级车身：响尾蛇"
 
-#: po/custom/fromJson.txt:413
+#: po/custom/fromJson.txt:416
 msgid "Light Cannon"
 msgstr "轻型加农炮"
 
-#: po/custom/fromJson.txt:414
+#: po/custom/fromJson.txt:417
 msgid "Light Cannon Bunker"
 msgstr "轻型加农炮碉堡"
 
-#: po/custom/fromJson.txt:415
+#: po/custom/fromJson.txt:418
 msgid "Light Cannon Cobra Tracks"
 msgstr "履带式眼镜蛇坦克（轻型加农炮）"
 
-#: po/custom/fromJson.txt:416
+#: po/custom/fromJson.txt:419
 msgid "Light Cannon Hardpoint"
 msgstr "轻型加农炮要塞"
 
-#: po/custom/fromJson.txt:417
+#: po/custom/fromJson.txt:420
 msgid "Light Cannon Python Tracks"
 msgstr "履带式蟒蛇坦克（轻型加农炮）"
 
-#: po/custom/fromJson.txt:418
+#: po/custom/fromJson.txt:421
 msgid "Light Cannon Viper Half-tracks"
 msgstr "半履带式响尾蛇坦克（轻型加农炮）"
 
-#: po/custom/fromJson.txt:419
+#: po/custom/fromJson.txt:422
 msgid "Light Cannon Viper Tracks"
 msgstr "履带式响尾蛇坦克（轻型加农炮）"
 
-#: po/custom/fromJson.txt:420
+#: po/custom/fromJson.txt:423
 msgid "Light Cannon Viper Wheels"
 msgstr "轮式响尾蛇坦克（轻型加农炮）"
 
-#: po/custom/fromJson.txt:421
+#: po/custom/fromJson.txt:424
 msgid "Look-Out Tower"
 msgstr "瞭望台"
 
-#: po/custom/fromJson.txt:424
+#: po/custom/fromJson.txt:427
 msgid "Machinegun Bunker"
 msgstr "机枪碉堡"
 
-#: po/custom/fromJson.txt:425
+#: po/custom/fromJson.txt:428
 msgid "Machinegun Guard Tower"
 msgstr "机枪防卫塔"
 
-#: po/custom/fromJson.txt:426
+#: po/custom/fromJson.txt:429
 msgid "Machinegunner"
 msgstr "生化人步兵（机枪）"
 
-#: po/custom/fromJson.txt:428
+#: po/custom/fromJson.txt:431
 msgid "Machinegun Viper Half-Tracks"
 msgstr "半履带式响尾蛇坦克（机枪）"
 
-#: po/custom/fromJson.txt:429
+#: po/custom/fromJson.txt:432
 msgid "Machinegun Viper Tracks"
 msgstr "轮式响尾蛇坦克（机枪）"
 
-#: po/custom/fromJson.txt:431
+#: po/custom/fromJson.txt:434
 msgid "Mantis"
 msgstr "螳螂"
 
-#: po/custom/fromJson.txt:432
+#: po/custom/fromJson.txt:435
 msgid "Mass Driver"
 msgstr "质量投射器"
 
-#: po/custom/fromJson.txt:433
+#: po/custom/fromJson.txt:436
 msgid "Mass Driver Fortress"
 msgstr "质量投射器堡垒"
 
-#: po/custom/fromJson.txt:434
+#: po/custom/fromJson.txt:437
 msgid "Medium Body - Cobra"
 msgstr "中量级车身：眼镜蛇"
 
-#: po/custom/fromJson.txt:435
+#: po/custom/fromJson.txt:438
 msgid "Medium Body - Panther"
 msgstr "中量级车身：黑豹"
 
-#: po/custom/fromJson.txt:436
+#: po/custom/fromJson.txt:439
 msgid "Medium Body - Retribution"
 msgstr "中量级车身：惩罚者"
 
-#: po/custom/fromJson.txt:437
+#: po/custom/fromJson.txt:440
 msgid "Medium Body - Scorpion"
 msgstr "中量级车身：毒蝎"
 
-#: po/custom/fromJson.txt:438
+#: po/custom/fromJson.txt:441
 msgid "Medium Cannon"
 msgstr "中型加农炮"
 
-#: po/custom/fromJson.txt:439
+#: po/custom/fromJson.txt:442
 msgid "Medium Cannon Cobra Half Track"
 msgstr "半履带式眼镜蛇坦克（中型加农炮）"
 
-#: po/custom/fromJson.txt:440
+#: po/custom/fromJson.txt:443
 msgid "Medium Cannon Cobra Hover"
 msgstr "眼镜蛇气垫船（中型加农炮）"
 
-#: po/custom/fromJson.txt:441
+#: po/custom/fromJson.txt:444
 msgid "Medium Cannon Cobra Tracks"
 msgstr "履带式眼镜蛇坦克（中型加农炮）"
 
-#: po/custom/fromJson.txt:442
+#: po/custom/fromJson.txt:445
 msgid "Medium Cannon Hardpoint"
 msgstr "中型加农炮要塞"
 
-#: po/custom/fromJson.txt:443
+#: po/custom/fromJson.txt:446
 msgid "Medium Cannon Python Hover"
 msgstr "蟒蛇气垫船（中型加农炮）"
 
-#: po/custom/fromJson.txt:444
+#: po/custom/fromJson.txt:447
 msgid "Medium Cannon Python Tracks"
 msgstr "履带式蟒蛇坦克（中型加农炮）"
 
-#: po/custom/fromJson.txt:445
+#: po/custom/fromJson.txt:448
 msgid "Medium Cannon Scorpion Hover"
 msgstr "毒蝎气垫船（中型加农炮）"
 
-#: po/custom/fromJson.txt:446
+#: po/custom/fromJson.txt:449
 msgid "Medium Cannon Scorpion Tracks"
 msgstr "履带式毒蝎坦克（中型加农炮）"
 
-#: po/custom/fromJson.txt:447
+#: po/custom/fromJson.txt:450
 msgid "Medium Cannon Viper Tracks"
 msgstr "履带式响尾蛇坦克（中型加农炮）"
 
-#: po/custom/fromJson.txt:448
+#: po/custom/fromJson.txt:451
 msgid "Mini-Rocket Array"
 msgstr "迷你火箭阵列"
 
-#: po/custom/fromJson.txt:449
+#: po/custom/fromJson.txt:452
 msgid "Mini-Rocket Array Cobra Half-tracks"
 msgstr "半履带式眼镜蛇坦克（迷你火箭阵列） "
 
-#: po/custom/fromJson.txt:450
+#: po/custom/fromJson.txt:453
 msgid "Mini-Rocket Array Cobra Tracks"
 msgstr "半履带式眼镜蛇坦克（迷你火箭阵列）"
 
-#: po/custom/fromJson.txt:451
+#: po/custom/fromJson.txt:454
 msgid "Mini-Rocket Array Viper Half Track"
 msgstr "半履带式眼镜蛇坦克（迷你火箭阵列阵列）"
 
-#: po/custom/fromJson.txt:452
+#: po/custom/fromJson.txt:455
 msgid "Mini-Rocket Array Viper Wheels"
 msgstr "轮式响尾蛇坦克（迷你火箭阵列） "
 
-#: po/custom/fromJson.txt:453
+#: po/custom/fromJson.txt:456
 msgid "Mini-Rocket Artillery"
 msgstr "迷你火箭阵列"
 
-#: po/custom/fromJson.txt:454
+#: po/custom/fromJson.txt:457
 msgid "Mini-Rocket Artillery Cobra Half-tracks"
 msgstr "半履带式眼镜蛇坦克（迷你火箭阵列）"
 
-#: po/custom/fromJson.txt:455
+#: po/custom/fromJson.txt:458
 msgid "Mini-Rocket Artillery Viper Wheels"
 msgstr "轮式响尾蛇坦克（迷你火箭阵列）"
 
-#: po/custom/fromJson.txt:456
+#: po/custom/fromJson.txt:459
 msgid "Mini-Rocket Battery"
 msgstr "迷你火箭阵列"
 
-#: po/custom/fromJson.txt:457
+#: po/custom/fromJson.txt:460
 msgid "Mini-Rocket Cobra Half-Tracks"
 msgstr "半履带式眼镜蛇坦克（迷你火箭）"
 
-#: po/custom/fromJson.txt:458
+#: po/custom/fromJson.txt:461
 msgid "Mini-Rocket Cobra Tracks"
 msgstr "履带式眼镜蛇坦克（迷你火箭）"
 
-#: po/custom/fromJson.txt:459
+#: po/custom/fromJson.txt:462
 msgid "Mini-Rocket Guard Tower"
 msgstr "迷你火箭防卫塔"
 
-#: po/custom/fromJson.txt:460
+#: po/custom/fromJson.txt:463
 msgid "Mini-Rocket Pod"
 msgstr "迷你火箭升级"
 
-#: po/custom/fromJson.txt:461
+#: po/custom/fromJson.txt:464
 msgid "Mini-Rocket Tower"
 msgstr "迷你火箭阵列防卫塔"
 
-#: po/custom/fromJson.txt:462
+#: po/custom/fromJson.txt:465
 msgid "Mini-Rocket Viper Half Track"
 msgstr "半履带式眼镜蛇坦克（迷你火箭）"
 
-#: po/custom/fromJson.txt:463
+#: po/custom/fromJson.txt:466
 msgid "Mini-Rocket Viper Wheels"
 msgstr "轮式响尾蛇坦克（迷你火箭）"
 
-#: po/custom/fromJson.txt:464
+#: po/custom/fromJson.txt:467
 msgid "Missile Fortress"
 msgstr "导弹堡垒"
 
-#: po/custom/fromJson.txt:467
+#: po/custom/fromJson.txt:470
 msgid "Mobile Repair Turret"
 msgstr "移动修理车"
 
-#: po/custom/fromJson.txt:468
+#: po/custom/fromJson.txt:471
 msgid "Mortar"
 msgstr "迫击炮"
 
-#: po/custom/fromJson.txt:469
+#: po/custom/fromJson.txt:472
 msgid "Mortar Autoloader"
 msgstr "迫击炮自动装载系统一型"
 
-#: po/custom/fromJson.txt:470
+#: po/custom/fromJson.txt:473
 msgid "Mortar Autoloader Mk2"
 msgstr "迫击炮自动装载系统二型"
 
-#: po/custom/fromJson.txt:471
+#: po/custom/fromJson.txt:474
 msgid "Mortar Autoloader Mk3"
 msgstr "迫击炮自动装载系统三型"
 
-#: po/custom/fromJson.txt:472
+#: po/custom/fromJson.txt:475
 msgid "Mortar Cobra Half-tracks"
 msgstr "半履带式眼镜蛇坦克（迫击炮）"
 
-#: po/custom/fromJson.txt:473
+#: po/custom/fromJson.txt:476
 msgid "Mortar Fast Loader"
 msgstr "迫击炮快速装载系统"
 
-#: po/custom/fromJson.txt:474
+#: po/custom/fromJson.txt:477
 msgid "Mortar Pit"
 msgstr "迫击炮阵地"
 
-#: po/custom/fromJson.txt:475
+#: po/custom/fromJson.txt:478
 msgid "Mortar Targeting Computer"
 msgstr "迫击炮目标锁定电脑"
 
-#: po/custom/fromJson.txt:476
+#: po/custom/fromJson.txt:479
 msgid "MRL Emplacement"
 msgstr "迷你火箭阵列台"
 
-#: po/custom/fromJson.txt:477
+#: po/custom/fromJson.txt:480
 msgid "Multi Turret Body - Dragon"
 msgstr "多重跑塔塔身：龙"
 
-#: po/custom/fromJson.txt:478
+#: po/custom/fromJson.txt:481
 msgid "Nanolab"
 msgstr ""
 
-#: po/custom/fromJson.txt:480
+#: po/custom/fromJson.txt:483
 msgid "Needle Gun"
 msgstr "针刺炮"
 
-#: po/custom/fromJson.txt:481
+#: po/custom/fromJson.txt:484
 msgid "Needle Gunner"
 msgstr "针刺导弹"
 
-#: po/custom/fromJson.txt:482
+#: po/custom/fromJson.txt:485
 msgid "Needle Gunner Cyborg"
 msgstr "生化人步兵（针刺炮）"
 
-#: po/custom/fromJson.txt:483
+#: po/custom/fromJson.txt:486
 msgid "Needle Gun Retribution Tracks"
 msgstr "履带式惩罚者坦克（针刺炮）"
 
-#: po/custom/fromJson.txt:484
+#: po/custom/fromJson.txt:487
 msgid "Needle Gun Tiger Tracks"
 msgstr "履带式虎式坦克（针刺炮）"
 
-#: po/custom/fromJson.txt:485
+#: po/custom/fromJson.txt:488
 msgid "Needle Gun Tower"
 msgstr "针刺炮防卫塔"
 
-#: po/custom/fromJson.txt:486
+#: po/custom/fromJson.txt:489
 msgid "Needle Gun Vengeance Tracks"
 msgstr "履带式复仇者坦克（针刺炮）"
 
-#: po/custom/fromJson.txt:487
+#: po/custom/fromJson.txt:490
 msgid "Neural Synapse Research Brain"
 msgstr "神经突触智慧研究一型"
 
-#: po/custom/fromJson.txt:488
+#: po/custom/fromJson.txt:491
 msgid "Neural Synapse Research Brain Mk2"
 msgstr "神经突触智慧研究二型"
 
-#: po/custom/fromJson.txt:489
+#: po/custom/fromJson.txt:492
 msgid "Neural Synapse Research Brain Mk3"
 msgstr "神经突触智慧研究三型"
 
-#: po/custom/fromJson.txt:491
+#: po/custom/fromJson.txt:494
 #, fuzzy
 msgid "Nexus"
 msgstr "Nexus Link（可搭载新的武器）"
 
-#: po/custom/fromJson.txt:492
+#: po/custom/fromJson.txt:495
 msgid "NEXUS CWall"
 msgstr "NEXUS钛钢筋角墙"
 
-#: po/custom/fromJson.txt:493
+#: po/custom/fromJson.txt:496
 msgid "NEXUS Intruder Program"
 msgstr "NEXUS入侵程式"
 
-#: po/custom/fromJson.txt:494
+#: po/custom/fromJson.txt:497
 msgid "Nexus Link"
 msgstr "Nexus Link（可搭载新的武器）"
 
-#: po/custom/fromJson.txt:495
+#: po/custom/fromJson.txt:498
 msgid "NEXUS Link"
 msgstr "NEXUS Link"
 
-#: po/custom/fromJson.txt:496
+#: po/custom/fromJson.txt:499
 msgid "Nexus Link Tower"
 msgstr "Nexus Link防卫塔"
 
-#: po/custom/fromJson.txt:497
+#: po/custom/fromJson.txt:500
 msgid "Nexus Link Turret"
 msgstr "Nexus Link（可搭载新的武器）"
 
-#: po/custom/fromJson.txt:498
+#: po/custom/fromJson.txt:501
 #, fuzzy
 msgid "Nexus Missile Silo"
 msgstr "导弹发射井"
 
-#: po/custom/fromJson.txt:500
+#: po/custom/fromJson.txt:503
 msgid "NEXUS Resistance Circuits"
 msgstr "NEXUS阻抗回路"
 
-#: po/custom/fromJson.txt:501
+#: po/custom/fromJson.txt:504
 msgid "NEXUS Resistance Circuits Mk2"
 msgstr "NEXUS阻抗回路二型"
 
-#: po/custom/fromJson.txt:502
+#: po/custom/fromJson.txt:505
 msgid "NEXUS Resistance Circuits Mk3"
 msgstr "NEXUS阻抗回路三型"
 
-#: po/custom/fromJson.txt:503
+#: po/custom/fromJson.txt:506
 msgid "NEXUS Wall"
 msgstr "NEXUS钛钢筋墙"
 
-#: po/custom/fromJson.txt:504
+#: po/custom/fromJson.txt:507
 msgid "No Place To Hide"
 msgstr ""
 
-#: po/custom/fromJson.txt:505
+#: po/custom/fromJson.txt:508
 msgid "NullBot"
 msgstr ""
 
-#: po/custom/fromJson.txt:506
+#: po/custom/fromJson.txt:509
 msgid "Oil Derrick"
 msgstr "钻油井"
 
-#: po/custom/fromJson.txt:507
+#: po/custom/fromJson.txt:510
 msgid "Oil Drum"
 msgstr "钻油井"
 
-#: po/custom/fromJson.txt:508
+#: po/custom/fromJson.txt:511
 msgid "Oil Resource"
 msgstr "油田"
 
-#: po/custom/fromJson.txt:509
+#: po/custom/fromJson.txt:512
+#, fuzzy
+msgid "Original Campaign"
+msgstr "情节"
+
+#: po/custom/fromJson.txt:513
+#, fuzzy
+msgid "Original Skirmish"
+msgstr "单人战役模式 "
+
+#: po/custom/fromJson.txt:514
 msgid "Panther"
 msgstr "黑豹"
 
-#: po/custom/fromJson.txt:510
+#: po/custom/fromJson.txt:515
 msgid "Pepperpot"
 msgstr "旋转迫击炮"
 
-#: po/custom/fromJson.txt:511
+#: po/custom/fromJson.txt:516
 msgid "Pepperpot Pit"
 msgstr "旋转迫击炮阵地"
 
-#: po/custom/fromJson.txt:512
+#: po/custom/fromJson.txt:517
 msgid "Phosphor Bomb Bay"
 msgstr "燐光炸弹舱"
 
-#: po/custom/fromJson.txt:513
+#: po/custom/fromJson.txt:518
 msgid "Phosphor Bomb Bay Mantis VTOL"
 msgstr "燐光炸弹舱"
 
-#: po/custom/fromJson.txt:514
+#: po/custom/fromJson.txt:519
 msgid "Pick-Up Truck"
 msgstr "轻型小货车"
 
-#: po/custom/fromJson.txt:515
+#: po/custom/fromJson.txt:520
 msgid "Plascrete"
 msgstr "超合金钢筋墙一型"
 
-#: po/custom/fromJson.txt:516
+#: po/custom/fromJson.txt:521
 msgid "Plascrete Mk2"
 msgstr "超合金钢筋墙二型"
 
-#: po/custom/fromJson.txt:517
+#: po/custom/fromJson.txt:522
 msgid "Plascrete Mk3"
 msgstr "超合金钢筋墙三型"
 
-#: po/custom/fromJson.txt:518
+#: po/custom/fromJson.txt:523
 msgid "Plasma Cannon"
 msgstr "离子加农炮"
 
-#: po/custom/fromJson.txt:519
+#: po/custom/fromJson.txt:524
 msgid "Plasma Cannon Emplacement"
 msgstr "离子加农炮炮台"
 
-#: po/custom/fromJson.txt:520
+#: po/custom/fromJson.txt:525
 msgid "Plasma Cannon Wyvern Tracks"
 msgstr "履带式中国龙坦克（等离子加农炮）"
 
-#: po/custom/fromJson.txt:521
+#: po/custom/fromJson.txt:526
 msgid "Plasmite Bomb"
 msgstr "等离子炸弹舱"
 
-#: po/custom/fromJson.txt:522
+#: po/custom/fromJson.txt:527
 msgid "Plasmite Flamer"
 msgstr "等离子火焰喷射"
 
-#: po/custom/fromJson.txt:523
+#: po/custom/fromJson.txt:528
 msgid "Plasmite Flamer Bunker"
 msgstr "等离子火焰喷射碉堡"
 
-#: po/custom/fromJson.txt:524
+#: po/custom/fromJson.txt:529
 msgid "Plasmite Retribution VTOL"
 msgstr "惩罚者激光VTOL"
 
-#: po/custom/fromJson.txt:525
+#: po/custom/fromJson.txt:530
 msgid "Plasteel"
 msgstr "超塑钢筋墙一型"
 
-#: po/custom/fromJson.txt:526
+#: po/custom/fromJson.txt:531
 msgid "Plasteel Mk2"
 msgstr "超塑钢筋墙二型"
 
-#: po/custom/fromJson.txt:527
+#: po/custom/fromJson.txt:532
 msgid "Plasteel Mk3"
 msgstr "超塑钢筋墙一型"
 
-#: po/custom/fromJson.txt:528
+#: po/custom/fromJson.txt:533
 msgid "Power Generator"
 msgstr "发电厂"
 
-#: po/custom/fromJson.txt:529
+#: po/custom/fromJson.txt:534
 #, fuzzy
 msgid "Powerlab"
 msgstr "能源"
 
-#: po/custom/fromJson.txt:530
+#: po/custom/fromJson.txt:535
 msgid "Power Module"
 msgstr "发电模组"
 
-#: po/custom/fromJson.txt:531
+#: po/custom/fromJson.txt:536
 msgid "Pulse Laser"
 msgstr "脉冲激光"
 
-#: po/custom/fromJson.txt:532
+#: po/custom/fromJson.txt:537
 msgid "Pulse Laser Emplacement"
 msgstr "脉冲激光炮台"
 
-#: po/custom/fromJson.txt:533
+#: po/custom/fromJson.txt:538
 msgid "Pulse Laser Hardpoint"
 msgstr "脉冲激光挂载点"
 
-#: po/custom/fromJson.txt:534
+#: po/custom/fromJson.txt:539
 msgid "Pulse Laser Leopard Hover"
 msgstr "脉冲激光气垫船"
 
-#: po/custom/fromJson.txt:535
+#: po/custom/fromJson.txt:540
 msgid "Pulse Laser Mantis Tracks"
 msgstr "履带式螳螂坦克（脉冲激光）"
 
-#: po/custom/fromJson.txt:536
+#: po/custom/fromJson.txt:541
 msgid "Pulse Laser Panther Hover"
 msgstr "脉冲激光气垫船二型"
 
-#: po/custom/fromJson.txt:537
+#: po/custom/fromJson.txt:542
 msgid "Pulse Laser Python Tracks"
 msgstr "履带式蟒蛇坦克（脉冲激光）"
 
-#: po/custom/fromJson.txt:538
+#: po/custom/fromJson.txt:543
 msgid "Pulse Laser Tiger Hover"
 msgstr "履带式虎式气垫船（脉冲激光）"
 
-#: po/custom/fromJson.txt:539
+#: po/custom/fromJson.txt:544
 msgid "Pulse Laser Tiger Tracks"
 msgstr "履带式虎式坦克（脉冲激光）"
 
-#: po/custom/fromJson.txt:540
+#: po/custom/fromJson.txt:545
 msgid "Pulse Laser Tower"
 msgstr "脉冲激光塔"
 
-#: po/custom/fromJson.txt:541
+#: po/custom/fromJson.txt:546
 msgid "Pulse Laser Wyvern Tracks"
 msgstr "履带式中国龙坦克（脉冲激光）"
 
-#: po/custom/fromJson.txt:542
+#: po/custom/fromJson.txt:547
 msgid "Python"
 msgstr "蟒蛇"
 
-#: po/custom/fromJson.txt:543
+#: po/custom/fromJson.txt:548
 msgid "Python Heavy Cannon Tracks"
 msgstr "履带式蟒蛇坦克（重型加农炮）"
 
-#: po/custom/fromJson.txt:544
+#: po/custom/fromJson.txt:549
 msgid "Radar Detector"
 msgstr "雷达检测器"
 
-#: po/custom/fromJson.txt:545
+#: po/custom/fromJson.txt:550
 msgid "Radar Detector Tower"
 msgstr "雷达探测器塔"
 
-#: po/custom/fromJson.txt:546
+#: po/custom/fromJson.txt:551
 msgid "Rail Gun"
 msgstr "轨道炮"
 
-#: po/custom/fromJson.txt:547
+#: po/custom/fromJson.txt:552
 msgid "Railgun Emplacement"
 msgstr "轨道炮炮台"
 
-#: po/custom/fromJson.txt:548
+#: po/custom/fromJson.txt:553
 msgid "Rail Gun Emplacement"
 msgstr "轨道炮炮台"
 
-#: po/custom/fromJson.txt:549
+#: po/custom/fromJson.txt:554
 msgid "Rail Gun Hardpoint"
 msgstr "轨道炮要塞"
 
-#: po/custom/fromJson.txt:550
+#: po/custom/fromJson.txt:555
 msgid "Rail Gun Mantis Tracks"
 msgstr "履带式螳螂坦克（轨道炮）"
 
-#: po/custom/fromJson.txt:551
+#: po/custom/fromJson.txt:556
 msgid "Rail Gun ROF"
 msgstr "轨道炮射速一型"
 
-#: po/custom/fromJson.txt:552
+#: po/custom/fromJson.txt:557
 msgid "Rail Gun ROF Mk2"
 msgstr "轨道炮射速二型"
 
-#: po/custom/fromJson.txt:553
+#: po/custom/fromJson.txt:558
 msgid "Rail Gun ROF Mk3"
 msgstr "轨道炮射速三型"
 
-#: po/custom/fromJson.txt:554
+#: po/custom/fromJson.txt:559
 msgid "Rail Gun Tiger Hover"
 msgstr "轨道炮系武器气垫船"
 
-#: po/custom/fromJson.txt:555
+#: po/custom/fromJson.txt:560
 msgid "Rail Target Prediction Computer"
 msgstr "轨道目标预测电脑"
 
-#: po/custom/fromJson.txt:556
+#: po/custom/fromJson.txt:561
 msgid "Rapid Fire Chaingun"
 msgstr "中级高速型链枪升级"
 
-#: po/custom/fromJson.txt:557
+#: po/custom/fromJson.txt:562
 msgid "Rapid Fire Chaingun Upgrade"
 msgstr "中级高速型链枪升级"
 
-#: po/custom/fromJson.txt:558
+#: po/custom/fromJson.txt:563
 msgid "Reinforced Base Structure Materials"
 msgstr "初级强化建材一型"
 
-#: po/custom/fromJson.txt:559
+#: po/custom/fromJson.txt:564
 msgid "Reinforced Base Structure Materials Mk2"
 msgstr "初级强化建材二型"
 
-#: po/custom/fromJson.txt:560
+#: po/custom/fromJson.txt:565
 msgid "Reinforced Base Structure Materials Mk3"
 msgstr "初级强化建材三型"
 
-#: po/custom/fromJson.txt:561
+#: po/custom/fromJson.txt:566
 #, fuzzy
 msgid "Repair Center Turret"
 msgstr "修理厂"
 
-#: po/custom/fromJson.txt:562
+#: po/custom/fromJson.txt:567
 msgid "Repair Cobra Tracks"
 msgstr "履带式眼镜蛇修理车"
 
-#: po/custom/fromJson.txt:563
+#: po/custom/fromJson.txt:568
 msgid "Repair Facility"
 msgstr "修理工厂"
 
-#: po/custom/fromJson.txt:564
+#: po/custom/fromJson.txt:569
 msgid "Repair Scorpion Tracks"
 msgstr "毒蝎修理车"
 
-#: po/custom/fromJson.txt:565
+#: po/custom/fromJson.txt:570
 msgid "Repair Turret"
 msgstr "修理车"
 
-#: po/custom/fromJson.txt:566
+#: po/custom/fromJson.txt:571
 msgid "Repair Turret Cobra Tracks"
 msgstr "履带式眼镜蛇修理车"
 
-#: po/custom/fromJson.txt:567
+#: po/custom/fromJson.txt:572
 msgid "Repair Turret Mantis Tracks"
 msgstr "修理螳螂追踪塔"
 
-#: po/custom/fromJson.txt:568
+#: po/custom/fromJson.txt:573
 msgid "Repair Turret Viper Half-track"
 msgstr "半履带式响尾蛇修理车"
 
-#: po/custom/fromJson.txt:569
+#: po/custom/fromJson.txt:574
 msgid "Repair Turret Viper Half-tracks"
 msgstr "半履带式响尾蛇修理车"
 
-#: po/custom/fromJson.txt:570
+#: po/custom/fromJson.txt:575
 msgid "Repair Turret Viper Wheels"
 msgstr "轮式响尾蛇修理车"
 
-#: po/custom/fromJson.txt:571
+#: po/custom/fromJson.txt:576
 msgid "Research Facility"
 msgstr "研发中心"
 
-#: po/custom/fromJson.txt:572
+#: po/custom/fromJson.txt:577
 msgid "Research Module"
 msgstr "研发模组"
 
-#: po/custom/fromJson.txt:573
+#: po/custom/fromJson.txt:578
 msgid "Retaliation"
 msgstr "报复者"
 
-#: po/custom/fromJson.txt:574
+#: po/custom/fromJson.txt:579
 msgid "Retribution"
 msgstr "惩罚者"
 
-#: po/custom/fromJson.txt:575
+#: po/custom/fromJson.txt:580
 msgid "Ripple Rocket Battery"
 msgstr "多管火箭阵列台"
 
-#: po/custom/fromJson.txt:576
+#: po/custom/fromJson.txt:581
 msgid "Ripple Rockets"
 msgstr "多管火箭"
 
-#: po/custom/fromJson.txt:578
+#: po/custom/fromJson.txt:583
 msgid "Robotic Cyborg Production Mk2"
 msgstr "中级自动化生化人生产二型"
 
-#: po/custom/fromJson.txt:579
+#: po/custom/fromJson.txt:584
 msgid "Robotic Cyborg Production Mk3"
 msgstr "中级自动化生化人生产三型"
 
-#: po/custom/fromJson.txt:580
+#: po/custom/fromJson.txt:585
 msgid "Robotic Factory Production"
 msgstr "中级自动化生产工厂一型"
 
-#: po/custom/fromJson.txt:581
+#: po/custom/fromJson.txt:586
 msgid "Robotic Factory Production Mk2"
 msgstr "中级自动化生产工厂二型"
 
-#: po/custom/fromJson.txt:582
+#: po/custom/fromJson.txt:587
 msgid "Robotic Factory Production Mk3"
 msgstr "中级自动化生产工厂三型"
 
-#: po/custom/fromJson.txt:583
+#: po/custom/fromJson.txt:588
 msgid "Robotic Manufacturing"
 msgstr "机械制造"
 
-#: po/custom/fromJson.txt:584
+#: po/custom/fromJson.txt:589
 msgid "Robotic Repair Facility"
 msgstr "机器人维修设施"
 
-#: po/custom/fromJson.txt:585
+#: po/custom/fromJson.txt:590
 msgid "Robotic Repair Facility Upgrade"
 msgstr "中级自动修理工厂"
 
-#: po/custom/fromJson.txt:586
+#: po/custom/fromJson.txt:591
 msgid "Robotic Repair Facility Upgrade Mk2"
 msgstr "中级自动修理工厂二型"
 
-#: po/custom/fromJson.txt:587
+#: po/custom/fromJson.txt:592
 msgid "Robotic Repair Facility Upgrade Mk3"
 msgstr "中级自动修理工厂三型"
 
-#: po/custom/fromJson.txt:589
+#: po/custom/fromJson.txt:594
 msgid "Robotic VTOL Production Mk2"
 msgstr "中级自动化VTOL生产二型"
 
-#: po/custom/fromJson.txt:590
+#: po/custom/fromJson.txt:595
 msgid "Robotic VTOL Production Mk3"
 msgstr "中级自动化VTOL生产三型"
 
-#: po/custom/fromJson.txt:591
+#: po/custom/fromJson.txt:596
 msgid "Robotic VTOL Rearming"
 msgstr "中级自动化VTOL补给一型"
 
-#: po/custom/fromJson.txt:592
+#: po/custom/fromJson.txt:597
 msgid "Robotic VTOL Rearming Mk2"
 msgstr "中级自动化VTOL补给二型"
 
-#: po/custom/fromJson.txt:593
+#: po/custom/fromJson.txt:598
 msgid "Robotic VTOL Rearming Mk3"
 msgstr "中级自动化VTOL补给三型"
 
-#: po/custom/fromJson.txt:594
+#: po/custom/fromJson.txt:599
 msgid "Rocket Autoloader"
 msgstr "火箭自动装载系统一型"
 
-#: po/custom/fromJson.txt:595
+#: po/custom/fromJson.txt:600
 msgid "Rocket Autoloader Mk2"
 msgstr "火箭自动装载系统二型"
 
-#: po/custom/fromJson.txt:596
+#: po/custom/fromJson.txt:601
 msgid "Rocket Autoloader Mk3"
 msgstr "火箭自动装载系统三型"
 
-#: po/custom/fromJson.txt:597
+#: po/custom/fromJson.txt:602
 msgid "Rocket Buggy"
 msgstr "火箭四轮马车"
 
-#: po/custom/fromJson.txt:598
+#: po/custom/fromJson.txt:603
 msgid "Rocket Jeep"
 msgstr "火箭吉普车"
 
-#: po/custom/fromJson.txt:599
+#: po/custom/fromJson.txt:604
 msgid "Rocket Laser Designator"
 msgstr "激光火箭导引系统"
 
-#: po/custom/fromJson.txt:600
+#: po/custom/fromJson.txt:605
 msgid "Rotary Howitzer - Hellstorm"
 msgstr "旋转榴弹炮-地狱风暴"
 
-#: po/custom/fromJson.txt:601
+#: po/custom/fromJson.txt:606
 msgid "Rotary MG Bunker"
 msgstr "旋转机枪碉堡"
 
-#: po/custom/fromJson.txt:602
+#: po/custom/fromJson.txt:607
 msgid "Rotary Mortar - Pepperpot"
 msgstr "旋转迫击炮-Pepperpot（胡椒瓶）"
 
-#: po/custom/fromJson.txt:603
+#: po/custom/fromJson.txt:608
 msgid "Rotaryweaponslab"
 msgstr ""
 
-#: po/custom/fromJson.txt:604
+#: po/custom/fromJson.txt:609
 msgid "Ruined Factory"
 msgstr "荒废的工厂"
 
-#: po/custom/fromJson.txt:606
+#: po/custom/fromJson.txt:611
 msgid "Scavenger"
 msgstr "拾荒者"
 
-#: po/custom/fromJson.txt:607
+#: po/custom/fromJson.txt:612
 msgid "Scavenger AT-Rocket Pit"
 msgstr "拾荒者反坦克火箭阵地"
 
-#: po/custom/fromJson.txt:608
+#: po/custom/fromJson.txt:613
 msgid "Scavenger Bunker"
 msgstr "拾荒者碉堡"
 
-#: po/custom/fromJson.txt:609
+#: po/custom/fromJson.txt:614
 msgid "Scavenger CornerWall"
 msgstr "拾荒者角墙"
 
-#: po/custom/fromJson.txt:610
+#: po/custom/fromJson.txt:615
 msgid "Scavenger Factory"
 msgstr "拾荒者工厂"
 
-#: po/custom/fromJson.txt:611
+#: po/custom/fromJson.txt:616
 msgid "Scavenger Flame Tower"
 msgstr "拾荒者火焰塔"
 
-#: po/custom/fromJson.txt:612
+#: po/custom/fromJson.txt:617
 msgid "Scavenger Gun Tower"
 msgstr "拾荒者枪塔"
 
-#: po/custom/fromJson.txt:613
+#: po/custom/fromJson.txt:618
 msgid "Scavenger Horizontal Wall"
 msgstr "拾荒者横墙"
 
-#: po/custom/fromJson.txt:614
+#: po/custom/fromJson.txt:619
 msgid "Scavenger Power Generator"
 msgstr "拾荒者发电厂"
 
-#: po/custom/fromJson.txt:615
+#: po/custom/fromJson.txt:620
 msgid "Scavenger Rocket Pit"
 msgstr "拾荒者火箭坑"
 
-#: po/custom/fromJson.txt:616
+#: po/custom/fromJson.txt:621
 msgid "School Bus"
 msgstr "学校巴士"
 
-#: po/custom/fromJson.txt:617
+#: po/custom/fromJson.txt:622
 msgid "Scorpion"
 msgstr "毒蝎"
 
-#: po/custom/fromJson.txt:618
+#: po/custom/fromJson.txt:623
 msgid "Scourge"
 msgstr "天谴导弹"
 
-#: po/custom/fromJson.txt:619
+#: po/custom/fromJson.txt:624
 msgid "Scourge Cyborg"
 msgstr "生化人步兵（天谴导弹）"
 
-#: po/custom/fromJson.txt:620
+#: po/custom/fromJson.txt:625
 msgid "Scourge Mantis Hover"
 msgstr "螳螂气垫船（天谴导弹）"
 
-#: po/custom/fromJson.txt:621
+#: po/custom/fromJson.txt:626
 msgid "Scourge Mantis Tracks"
 msgstr "履带式螳螂坦克（天谴导弹）"
 
-#: po/custom/fromJson.txt:622
+#: po/custom/fromJson.txt:627
 msgid "Scourge Missile"
 msgstr "天谴导弹"
 
-#: po/custom/fromJson.txt:623
+#: po/custom/fromJson.txt:628
 msgid "Scourge Missile Hardpoint"
 msgstr "天谴导弹要塞"
 
-#: po/custom/fromJson.txt:624
+#: po/custom/fromJson.txt:629
 msgid "Scourge Missile Tower"
 msgstr "天谴导弹防卫塔"
 
-#: po/custom/fromJson.txt:625
+#: po/custom/fromJson.txt:630
 msgid "Scourge Missile Wyvern Tracks"
 msgstr "天谴导弹中国龙坦克"
 
-#: po/custom/fromJson.txt:626
+#: po/custom/fromJson.txt:631
 msgid "Scourge Python Tracks"
 msgstr "履带式蟒蛇坦克（天谴导弹）"
 
-#: po/custom/fromJson.txt:627
+#: po/custom/fromJson.txt:632
 msgid "Scourge Retaliation VTOL"
 msgstr "报复者导弹VTOL"
 
-#: po/custom/fromJson.txt:628
+#: po/custom/fromJson.txt:633
 msgid "Scrambler Turret"
 msgstr "扰频器"
 
-#: po/custom/fromJson.txt:629
+#: po/custom/fromJson.txt:634
 msgid "Search & Destroy Missiles"
 msgstr "巡弋导弹"
 
-#: po/custom/fromJson.txt:631
+#: po/custom/fromJson.txt:636
 msgid "Self-Replicating Manufacturing"
 msgstr "自我复制生产"
 
-#: po/custom/fromJson.txt:632
+#: po/custom/fromJson.txt:637
 msgid "Semperfi"
 msgstr ""
 
-#: po/custom/fromJson.txt:633
+#: po/custom/fromJson.txt:638
 msgid "Semperfi JS"
 msgstr ""
 
-#: po/custom/fromJson.txt:634
+#: po/custom/fromJson.txt:639
 msgid "Sensor Cobra Half-tracks"
 msgstr "半履带式眼镜蛇雷达车"
 
-#: po/custom/fromJson.txt:636
+#: po/custom/fromJson.txt:641
 msgid "Sensor Turret"
 msgstr "雷达"
 
-#: po/custom/fromJson.txt:637
+#: po/custom/fromJson.txt:642
 msgid "Sensor Turret Cobra Half-tracks"
 msgstr "半履带式眼镜蛇雷达车"
 
-#: po/custom/fromJson.txt:638
+#: po/custom/fromJson.txt:643
 msgid "Sensor Turret Viper Wheels"
 msgstr "轮式响尾蛇雷达车"
 
-#: po/custom/fromJson.txt:639
+#: po/custom/fromJson.txt:644
 msgid "Sensor Upgrade"
 msgstr "雷达升级一型"
 
-#: po/custom/fromJson.txt:640
+#: po/custom/fromJson.txt:645
 msgid "Sensor Upgrade Mk2"
 msgstr "雷达升级二型"
 
-#: po/custom/fromJson.txt:641
+#: po/custom/fromJson.txt:646
 msgid "Sensor Upgrade Mk3"
 msgstr "雷达升级三型"
 
-#: po/custom/fromJson.txt:642
+#: po/custom/fromJson.txt:647
 msgid "Seraph Missile Array"
 msgstr "炽天使导弹矩阵"
 
-#: po/custom/fromJson.txt:643
+#: po/custom/fromJson.txt:648
 msgid "Seraph Missile Battery"
 msgstr "炽天使导弹组"
 
-#: po/custom/fromJson.txt:644
+#: po/custom/fromJson.txt:649
 msgid "Smashedcornerwall"
 msgstr ""
 
-#: po/custom/fromJson.txt:645
+#: po/custom/fromJson.txt:650
 msgid "Smashedwall"
 msgstr ""
 
-#: po/custom/fromJson.txt:646
+#: po/custom/fromJson.txt:651
 msgid "Stabilized Mini-Rockets"
 msgstr "安定迷你火箭一型"
 
-#: po/custom/fromJson.txt:647
+#: po/custom/fromJson.txt:652
 msgid "Stabilized Mini-Rockets Mk2"
 msgstr "安定迷你火箭二型"
 
-#: po/custom/fromJson.txt:648
+#: po/custom/fromJson.txt:653
 msgid "Stabilized Rockets"
 msgstr "稳定火箭"
 
-#: po/custom/fromJson.txt:649
+#: po/custom/fromJson.txt:654
 msgid "Stormbringer AA Laser"
 msgstr "兴风者级防空激光"
 
-#: po/custom/fromJson.txt:650
+#: po/custom/fromJson.txt:655
 msgid "Stormbringer Emplacement"
 msgstr "兴风者级高射炮台"
 
-#: po/custom/fromJson.txt:651
+#: po/custom/fromJson.txt:656
 msgid "Sunburst AA"
 msgstr "森伯斯特级防空"
 
-#: po/custom/fromJson.txt:652
+#: po/custom/fromJson.txt:657
 msgid "Sunburst AA Rocket Array"
 msgstr "森伯斯特级防空火箭阵列"
 
-#: po/custom/fromJson.txt:653
+#: po/custom/fromJson.txt:658
 msgid "Sunburst AA Site"
 msgstr "森伯斯特级高射炮"
 
-#: po/custom/fromJson.txt:655
+#: po/custom/fromJson.txt:660
 msgid "Supercrete"
 msgstr "硼合金钢筋墙一型"
 
-#: po/custom/fromJson.txt:656
+#: po/custom/fromJson.txt:661
 msgid "Supercrete Mk2"
 msgstr "硼合金钢筋墙二型"
 
-#: po/custom/fromJson.txt:657
+#: po/custom/fromJson.txt:662
 msgid "Supercrete Mk3"
 msgstr "硼合金钢筋墙三型"
 
-#: po/custom/fromJson.txt:658
+#: po/custom/fromJson.txt:663
 msgid "Superdense Composite Alloys"
 msgstr "高密合金一型"
 
-#: po/custom/fromJson.txt:659
+#: po/custom/fromJson.txt:664
 msgid "Superdense Composite Alloys Mk2"
 msgstr "高密合金二型"
 
-#: po/custom/fromJson.txt:660
+#: po/custom/fromJson.txt:665
 msgid "Superdense Composite Alloys Mk3"
 msgstr "高密合金三型"
 
-#: po/custom/fromJson.txt:662
+#: po/custom/fromJson.txt:667
 msgid "Superhot Flamer Gel"
 msgstr "超热火焰凝胶一型"
 
-#: po/custom/fromJson.txt:663
+#: po/custom/fromJson.txt:668
 msgid "Superhot Flamer Gel Mk2"
 msgstr "超热火焰凝胶二型"
 
-#: po/custom/fromJson.txt:664
+#: po/custom/fromJson.txt:669
 msgid "Superhot Flamer Gel Mk3"
 msgstr "超热火焰凝胶三型"
 
-#: po/custom/fromJson.txt:665
+#: po/custom/fromJson.txt:670
 msgid "Superhot Plasmite gel"
 msgstr "超热等离子凝胶一型"
 
-#: po/custom/fromJson.txt:666
+#: po/custom/fromJson.txt:671
 msgid "Superhot Plasmite gel Mk2"
 msgstr "超热等离子凝胶二型"
 
-#: po/custom/fromJson.txt:667
+#: po/custom/fromJson.txt:672
 msgid "Superhot Plasmite gel Mk3"
 msgstr "超热等离子凝胶三型"
 
-#: po/custom/fromJson.txt:673
+#: po/custom/fromJson.txt:678
 #: src/design.cpp:1054
 msgid "Super Transport"
 msgstr "超级运输舰"
 
-#: po/custom/fromJson.txt:674
+#: po/custom/fromJson.txt:679
 msgid "Super Transport Body"
 msgstr "运输车身"
 
-#: po/custom/fromJson.txt:675
+#: po/custom/fromJson.txt:680
 msgid "Synaptic Link"
 msgstr "突触连结"
 
-#: po/custom/fromJson.txt:676
+#: po/custom/fromJson.txt:681
 msgid "Synaptic Link Data Analysis"
 msgstr "突触连结资料分析一型"
 
-#: po/custom/fromJson.txt:677
+#: po/custom/fromJson.txt:682
 msgid "Synaptic Link Data Analysis Mk2"
 msgstr "突触连结资料分析二型"
 
-#: po/custom/fromJson.txt:678
+#: po/custom/fromJson.txt:683
 msgid "Synaptic Link Data Analysis Mk3"
 msgstr "突触连结资料分析三型"
 
-#: po/custom/fromJson.txt:679
+#: po/custom/fromJson.txt:684
 msgid "Tank Killer"
 msgstr "坦克杀手"
 
-#: po/custom/fromJson.txt:680
+#: po/custom/fromJson.txt:685
 msgid "Tank Killer Emplacement"
 msgstr "坦克杀手炮台"
 
-#: po/custom/fromJson.txt:681
+#: po/custom/fromJson.txt:686
 msgid "Tank Killer Hardpoint"
 msgstr "坦克杀手要塞"
 
-#: po/custom/fromJson.txt:682
+#: po/custom/fromJson.txt:687
 msgid "Tank Killer Mantis Hover"
 msgstr "螳螂气垫船（坦克杀手）"
 
-#: po/custom/fromJson.txt:683
+#: po/custom/fromJson.txt:688
 msgid "Tank Killer Mantis Tracks"
 msgstr "履带式螳螂坦克（坦克杀手）"
 
-#: po/custom/fromJson.txt:684
+#: po/custom/fromJson.txt:689
 msgid "Tank Killer Python Tracks"
 msgstr "履带式蟒蛇坦克（坦克杀手）"
 
-#: po/custom/fromJson.txt:685
+#: po/custom/fromJson.txt:690
 msgid "Tank Killer Rocket"
 msgstr "火箭（坦克杀手）"
 
-#: po/custom/fromJson.txt:686
+#: po/custom/fromJson.txt:691
 msgid "Tank Killer Vengeance Tracks"
 msgstr "履带式复仇者坦克（坦克杀手）"
 
-#: po/custom/fromJson.txt:687
+#: po/custom/fromJson.txt:692
 msgid "Tank Traps"
 msgstr "坦克陷阱"
 
-#: po/custom/fromJson.txt:688
+#: po/custom/fromJson.txt:693
 msgid "Target Acquisition Artillery Shells"
 msgstr "目标追踪炮弹一型"
 
-#: po/custom/fromJson.txt:689
+#: po/custom/fromJson.txt:694
 msgid "Target Acquisition Artillery Shells Mk2"
 msgstr "目标追踪炮弹二型"
 
-#: po/custom/fromJson.txt:690
+#: po/custom/fromJson.txt:695
 msgid "Target Acquisition Bombsight"
 msgstr "目标追踪投弹瞄准器"
 
-#: po/custom/fromJson.txt:691
+#: po/custom/fromJson.txt:696
 msgid "Target Acquisition Mortar Shells"
 msgstr "目标追踪迫击炮弹"
 
-#: po/custom/fromJson.txt:692
+#: po/custom/fromJson.txt:697
 msgid "Target Prediction Artillery Shells"
 msgstr "目标预测炮弹 "
 
-#: po/custom/fromJson.txt:693
+#: po/custom/fromJson.txt:698
 msgid "Target Prediction Computer"
 msgstr "目标预测电脑"
 
-#: po/custom/fromJson.txt:694
+#: po/custom/fromJson.txt:699
 msgid "Target Prediction Missiles"
 msgstr "目标预测导弹"
 
-#: po/custom/fromJson.txt:695
+#: po/custom/fromJson.txt:700
 msgid "Thermal Armor"
 msgstr "热能装甲一型"
 
-#: po/custom/fromJson.txt:696
+#: po/custom/fromJson.txt:701
 msgid "Thermal Armor Mk2"
 msgstr "热能装甲二型"
 
-#: po/custom/fromJson.txt:697
+#: po/custom/fromJson.txt:702
 msgid "Thermal Armor Mk3"
 msgstr "热能装甲三型"
 
-#: po/custom/fromJson.txt:698
+#: po/custom/fromJson.txt:703
 msgid "Thermal Imaging Bombsight"
 msgstr "热相感应投弹瞄准器"
 
-#: po/custom/fromJson.txt:699
+#: po/custom/fromJson.txt:704
 msgid "Thermal Imaging Mortar Shells"
 msgstr "热影像感应迫击炮弹"
 
-#: po/custom/fromJson.txt:700
+#: po/custom/fromJson.txt:705
 msgid "Thermal Imaging Rockets"
 msgstr "热感火箭导引系统"
 
-#: po/custom/fromJson.txt:701
+#: po/custom/fromJson.txt:706
 msgid "Thermite Bomb Bay"
 msgstr "铝热反应炸弹舱"
 
-#: po/custom/fromJson.txt:702
+#: po/custom/fromJson.txt:707
 msgid "Thermite Flamer"
 msgstr "铝热反应火焰喷射步兵"
 
-#: po/custom/fromJson.txt:703
+#: po/custom/fromJson.txt:708
 msgid "Thermopole Energizer"
 msgstr "热极加速器一型"
 
-#: po/custom/fromJson.txt:704
+#: po/custom/fromJson.txt:709
 msgid "Thermopole Energizer Mk2"
 msgstr "热极加速器二型"
 
-#: po/custom/fromJson.txt:705
+#: po/custom/fromJson.txt:710
 msgid "Thermopole Energizer Mk3"
 msgstr "热极加速器三型"
 
-#: po/custom/fromJson.txt:707
+#: po/custom/fromJson.txt:712
 msgid "Tiger"
 msgstr "虎式"
 
-#: po/custom/fromJson.txt:708
+#: po/custom/fromJson.txt:713
 msgid "Tracked Propulsion"
 msgstr "推进动力：履带"
 
-#: po/custom/fromJson.txt:710
+#: po/custom/fromJson.txt:715
 msgid "Tracks"
 msgstr "履带式"
 
-#: po/custom/fromJson.txt:711
+#: po/custom/fromJson.txt:716
 msgid "Tracks II"
 msgstr "履带式二型"
 
-#: po/custom/fromJson.txt:712
+#: po/custom/fromJson.txt:717
 msgid "Tracks III"
 msgstr "履带式三型"
 
-#: po/custom/fromJson.txt:713
+#: po/custom/fromJson.txt:718
 #: src/design.cpp:1049
 msgid "Transport"
 msgstr "运输舰"
 
-#: po/custom/fromJson.txt:714
+#: po/custom/fromJson.txt:719
 msgid "Transport Body"
 msgstr "运输车身"
 
-#: po/custom/fromJson.txt:715
+#: po/custom/fromJson.txt:720
 msgid "Trike"
 msgstr "三轮脚踏车"
 
-#: po/custom/fromJson.txt:716
+#: po/custom/fromJson.txt:721
 msgid "Truck"
 msgstr "工程车"
 
-#: po/custom/fromJson.txt:717
+#: po/custom/fromJson.txt:722
 msgid "Truck Cobra Hover"
 msgstr "眼镜蛇工程气垫船"
 
-#: po/custom/fromJson.txt:718
+#: po/custom/fromJson.txt:723
 msgid "Truck Mantis Hover"
 msgstr "螳螂工程气垫船"
 
-#: po/custom/fromJson.txt:719
+#: po/custom/fromJson.txt:724
 msgid "Truck Scorpion Hover"
 msgstr "毒蝎工程气垫船"
 
-#: po/custom/fromJson.txt:720
+#: po/custom/fromJson.txt:725
 msgid "Tungsten-Tipped MG Bullets"
 msgstr "尖端钨化弹一型"
 
-#: po/custom/fromJson.txt:721
+#: po/custom/fromJson.txt:726
 msgid "Tungsten-Tipped MG Bullets Mk2"
 msgstr "尖端钨化弹二型"
 
-#: po/custom/fromJson.txt:722
+#: po/custom/fromJson.txt:727
 msgid "Tungsten-Tipped MG Bullets Mk3"
 msgstr "尖端钨化弹三型"
 
-#: po/custom/fromJson.txt:724
+#: po/custom/fromJson.txt:729
 msgid "Turbo-Charged Engine Mk2"
 msgstr "涡轮增压引擎二型"
 
-#: po/custom/fromJson.txt:725
+#: po/custom/fromJson.txt:730
 msgid "Turbo-Charged Engine Mk3"
 msgstr "涡轮增压引擎三型"
 
-#: po/custom/fromJson.txt:726
+#: po/custom/fromJson.txt:731
 msgid "Turtle AI"
 msgstr ""
 
-#: po/custom/fromJson.txt:727
+#: po/custom/fromJson.txt:732
 msgid "Twin Assault Cannon"
 msgstr "双管突击加农炮"
 
-#: po/custom/fromJson.txt:728
+#: po/custom/fromJson.txt:733
 msgid "Twin Assault Cannon Bunker"
 msgstr "双管突击加农炮碉堡"
 
-#: po/custom/fromJson.txt:729
+#: po/custom/fromJson.txt:734
 msgid "Twin Assault Gun"
 msgstr "双管突击枪"
 
-#: po/custom/fromJson.txt:730
+#: po/custom/fromJson.txt:735
 msgid "Twin Assault Gun Hardpoint"
 msgstr "双管突击枪要塞"
 
-#: po/custom/fromJson.txt:731
+#: po/custom/fromJson.txt:736
 msgid "Twin Machinegun"
 msgstr "双管机枪"
 
-#: po/custom/fromJson.txt:732
+#: po/custom/fromJson.txt:737
 msgid "Twin Machinegun Bunker"
 msgstr "双管机枪碉堡"
 
-#: po/custom/fromJson.txt:733
+#: po/custom/fromJson.txt:738
 msgid "Twin Machinegun Guard Tower"
 msgstr "双管机枪防卫塔"
 
-#: po/custom/fromJson.txt:734
+#: po/custom/fromJson.txt:739
 msgid "Twin Machinegun Viper Half-tracks"
 msgstr "半履带式响尾蛇坦克（双管机枪）"
 
-#: po/custom/fromJson.txt:735
+#: po/custom/fromJson.txt:740
 msgid "Twin Machinegun Viper Tracks"
 msgstr "轮式响尾蛇坦克（双管机枪）"
 
-#: po/custom/fromJson.txt:736
+#: po/custom/fromJson.txt:741
 msgid "Twin Machinegun Viper Wheels"
 msgstr "轮式响尾蛇坦克（双管机枪）"
 
-#: po/custom/fromJson.txt:737
+#: po/custom/fromJson.txt:742
 msgid "Uplink Sensor"
 msgstr "上传中心"
 
-#: po/custom/fromJson.txt:738
+#: po/custom/fromJson.txt:743
 msgid "Vapor Turbine Generator"
 msgstr "蒸气涡轮发电机一型"
 
-#: po/custom/fromJson.txt:739
+#: po/custom/fromJson.txt:744
 msgid "Vapor Turbine Generator Mk2"
 msgstr "蒸气涡轮发电机二型"
 
-#: po/custom/fromJson.txt:740
+#: po/custom/fromJson.txt:745
 msgid "Vapor Turbine Generator Mk3"
 msgstr "蒸气涡轮发电机三型"
 
-#: po/custom/fromJson.txt:741
+#: po/custom/fromJson.txt:746
 msgid "Vehicle Superdense Thermal Armor"
 msgstr "超紧密热能装甲一型"
 
-#: po/custom/fromJson.txt:742
+#: po/custom/fromJson.txt:747
 msgid "Vehicle Superdense Thermal Armor Mk2"
 msgstr "超紧密热能装甲二型"
 
-#: po/custom/fromJson.txt:743
+#: po/custom/fromJson.txt:748
 msgid "Vehicle Superdense Thermal Armor Mk3"
 msgstr "超紧密热能装甲三型"
 
-#: po/custom/fromJson.txt:744
+#: po/custom/fromJson.txt:749
 msgid "Vengeance"
 msgstr "复仇者"
 
-#: po/custom/fromJson.txt:745
+#: po/custom/fromJson.txt:750
 msgid "Vengeance Tracks Gauss Cannon"
 msgstr "履带式复仇者坦克（高斯加农炮）"
 
-#: po/custom/fromJson.txt:746
+#: po/custom/fromJson.txt:751
 msgid "Vengeance Tracks Gauss Scourge"
 msgstr "履带式复仇者坦克（天谴导弹）"
 
-#: po/custom/fromJson.txt:747
+#: po/custom/fromJson.txt:752
 msgid "Vengeance Tracks Rail Gun"
 msgstr "履带式复仇者坦克（轨道炮）"
 
-#: po/custom/fromJson.txt:748
+#: po/custom/fromJson.txt:753
 msgid "Vindicator Hardpoint"
 msgstr "拥护者级地对空导弹要塞"
 
-#: po/custom/fromJson.txt:749
+#: po/custom/fromJson.txt:754
 msgid "Vindicator SAM"
 msgstr "拥护者级地对空导弹"
 
-#: po/custom/fromJson.txt:750
+#: po/custom/fromJson.txt:755
 msgid "Vindicator SAM Site"
 msgstr "拥护者级地对空导弹炮台"
 
-#: po/custom/fromJson.txt:751
+#: po/custom/fromJson.txt:756
 msgid "Viper"
 msgstr "响尾蛇"
 
-#: po/custom/fromJson.txt:752
+#: po/custom/fromJson.txt:757
 msgid "VTOL"
 msgstr "VTOL"
 
-#: po/custom/fromJson.txt:753
+#: po/custom/fromJson.txt:758
 msgid "VTOL Assault Cannon"
 msgstr "VTOL（突击加农炮）"
 
-#: po/custom/fromJson.txt:754
+#: po/custom/fromJson.txt:759
 msgid "VTOL Assault Gun"
 msgstr "VTOL（突击枪）"
 
-#: po/custom/fromJson.txt:755
+#: po/custom/fromJson.txt:760
 msgid "VTOL Bunker Buster"
 msgstr "VTOL（碉堡终结者）"
 
-#: po/custom/fromJson.txt:756
+#: po/custom/fromJson.txt:761
 msgid "VTOL Bunker Buster Bug VTOL"
 msgstr "毒虫VTOL（碉堡终结者） "
 
-#: po/custom/fromJson.txt:757
+#: po/custom/fromJson.txt:762
 msgid "VTOL Bunker Buster Scorpion VTOL"
 msgstr "毒蝎VTOL（碉堡终结者）"
 
-#: po/custom/fromJson.txt:758
+#: po/custom/fromJson.txt:763
 msgid "VTOL Cannon"
 msgstr "VTOL（轻型加农炮）"
 
-#: po/custom/fromJson.txt:759
+#: po/custom/fromJson.txt:764
 msgid "VTOL CB Radar Tower"
 msgstr "VTOL反炮兵雷达塔"
 
-#: po/custom/fromJson.txt:760
+#: po/custom/fromJson.txt:765
 msgid "VTOL CB Radar Turret"
 msgstr "VTOL反炮兵雷达"
 
-#: po/custom/fromJson.txt:761
+#: po/custom/fromJson.txt:766
 msgid "VTOL CB Tower"
 msgstr "VTOL反炮兵雷达"
 
-#: po/custom/fromJson.txt:762
+#: po/custom/fromJson.txt:767
 msgid "VTOL CB Turret"
 msgstr "VTOL反炮兵雷达"
 
-#: po/custom/fromJson.txt:763
+#: po/custom/fromJson.txt:768
 msgid "VTOL Cluster Bomb Bay"
 msgstr "VTOL（集束炸弹舱）"
 
-#: po/custom/fromJson.txt:764
+#: po/custom/fromJson.txt:769
 msgid "VTOL Cluster Bomb Bay Bug VTOL"
 msgstr "VTOL（集束炸弹舱)"
 
-#: po/custom/fromJson.txt:765
+#: po/custom/fromJson.txt:770
 msgid "VTOL Cluster Bomb Bay Scorpion VTOL"
 msgstr "毒蝎VTOL（集束炸弹舱） "
 
-#: po/custom/fromJson.txt:766
+#: po/custom/fromJson.txt:771
 msgid "VTOL Cluster Bombs Bay"
 msgstr "VTOL（集束炸弹舱）"
 
-#: po/custom/fromJson.txt:767
+#: po/custom/fromJson.txt:772
 msgid "VTOL EMP Missile Launcher"
 msgstr "VTOL电磁脉冲导弹发射器"
 
-#: po/custom/fromJson.txt:768
+#: po/custom/fromJson.txt:773
 msgid "VTOL Factory"
 msgstr "VTOL工厂"
 
-#: po/custom/fromJson.txt:769
+#: po/custom/fromJson.txt:774
 msgid "VTOL Flashlight"
 msgstr "VTOL激光激光"
 
-#: po/custom/fromJson.txt:770
+#: po/custom/fromJson.txt:775
 msgid "VTOL Heap Bomb Bay"
 msgstr "VTOL（高爆性穿甲炸弹舱）"
 
-#: po/custom/fromJson.txt:771
+#: po/custom/fromJson.txt:776
 msgid "VTOL Heavy Laser"
 msgstr "VTOL（高能激光）"
 
-#: po/custom/fromJson.txt:772
+#: po/custom/fromJson.txt:777
 msgid "VTOL Heavy Machinegun"
 msgstr "VTOL（重机枪）"
 
-#: po/custom/fromJson.txt:773
+#: po/custom/fromJson.txt:778
 msgid "VTOL Hyper Velocity Cannon"
 msgstr "VTOL（高速加农炮）"
 
-#: po/custom/fromJson.txt:774
+#: po/custom/fromJson.txt:779
 msgid "VTOL Hyper Velocity Cannon Bug VTOL"
 msgstr "VTOL（高速加农炮）"
 
-#: po/custom/fromJson.txt:775
+#: po/custom/fromJson.txt:780
 msgid "VTOL Hyper Velocity Cannon Mantis VTOL"
 msgstr "VTOL（高速加农螳螂炮）"
 
-#: po/custom/fromJson.txt:776
+#: po/custom/fromJson.txt:781
 msgid "VTOL Hyper Velocity Cannon Scorpion VTOL"
 msgstr "毒蝎VTOL（高速加农炮）"
 
-#: po/custom/fromJson.txt:777
+#: po/custom/fromJson.txt:782
 msgid "VTOL II"
 msgstr "VTOL二型"
 
-#: po/custom/fromJson.txt:778
+#: po/custom/fromJson.txt:783
 msgid "VTOL III"
 msgstr "VTOL三型"
 
-#: po/custom/fromJson.txt:779
+#: po/custom/fromJson.txt:784
 msgid "VTOL Lancer"
 msgstr "VTOL（枪骑兵）"
 
-#: po/custom/fromJson.txt:780
+#: po/custom/fromJson.txt:785
 msgid "VTOL Lancer Bug VTOL"
 msgstr "毒虫VTOL（枪骑兵火箭）"
 
-#: po/custom/fromJson.txt:781
+#: po/custom/fromJson.txt:786
 msgid "VTOL Lancer Mantis VTOL"
 msgstr "螳螂VTOL（枪骑兵火箭）"
 
-#: po/custom/fromJson.txt:782
+#: po/custom/fromJson.txt:787
 msgid "VTOL Lancer Scorpion VTOL"
 msgstr "毒蝎VTOL（枪骑兵火箭）"
 
-#: po/custom/fromJson.txt:783
+#: po/custom/fromJson.txt:788
 msgid "VTOL Machinegun"
 msgstr "VTOL（机枪）"
 
-#: po/custom/fromJson.txt:784
+#: po/custom/fromJson.txt:789
 msgid "VTOL Mini-Rocket"
 msgstr "VTOL HE迷你火箭"
 
-#: po/custom/fromJson.txt:785
+#: po/custom/fromJson.txt:790
 msgid "VTOL Needle Gun"
 msgstr "VTOL（针刺炮）"
 
-#: po/custom/fromJson.txt:786
+#: po/custom/fromJson.txt:791
 msgid "VTOL Phosphor Bomb Bay"
 msgstr "VTOL（燐光炸弹舱）"
 
-#: po/custom/fromJson.txt:787
+#: po/custom/fromJson.txt:792
 msgid "VTOL Plasmite Bomb Bay"
 msgstr "VTOL等离子炸弹舱"
 
-#: po/custom/fromJson.txt:788
+#: po/custom/fromJson.txt:793
 msgid "VTOL Propulsion"
 msgstr "推进动力：垂直起降飞行器（VTOL）"
 
-#: po/custom/fromJson.txt:790
+#: po/custom/fromJson.txt:795
 msgid "VTOL Pulse Laser"
 msgstr "VTOL（脉冲激光）"
 
-#: po/custom/fromJson.txt:791
+#: po/custom/fromJson.txt:796
 msgid "VTOL Radar Tower"
 msgstr "VTOL反炮兵雷达塔"
 
-#: po/custom/fromJson.txt:792
+#: po/custom/fromJson.txt:797
 msgid "VTOL Rail Gun"
 msgstr "VTOL（轨道炮）"
 
-#: po/custom/fromJson.txt:793
+#: po/custom/fromJson.txt:798
 msgid "VTOL Rearming Pad"
 msgstr "VTOL补给点"
 
-#: po/custom/fromJson.txt:794
+#: po/custom/fromJson.txt:799
 msgid "VTOL Scourge Missile"
 msgstr "VTOL（天谴导弹）"
 
-#: po/custom/fromJson.txt:795
+#: po/custom/fromJson.txt:800
 msgid "VTOL Strike Tower"
 msgstr "VTOL攻击雷达"
 
-#: po/custom/fromJson.txt:796
+#: po/custom/fromJson.txt:801
 msgid "VTOL Strike Turret"
 msgstr "VTOL攻击雷达"
 
-#: po/custom/fromJson.txt:797
+#: po/custom/fromJson.txt:802
 msgid "VTOL Sunburst AA"
 msgstr "森伯斯特级高射炮"
 
-#: po/custom/fromJson.txt:798
+#: po/custom/fromJson.txt:803
 msgid "VTOL Tank Killer"
 msgstr "VTOL（坦克杀手）"
 
-#: po/custom/fromJson.txt:799
+#: po/custom/fromJson.txt:804
 msgid "VTOL Thermite Bomb Bay"
 msgstr "VTOL（铝热反应炸弹舱）"
 
-#: po/custom/fromJson.txt:800
+#: po/custom/fromJson.txt:805
 msgid "VTOL Twin Machinegun"
 msgstr "VTOL（双管机枪）"
 
-#: po/custom/fromJson.txt:801
+#: po/custom/fromJson.txt:806
 msgid "Wall"
 msgstr ""
 
-#: po/custom/fromJson.txt:802
+#: po/custom/fromJson.txt:807
 msgid "Wallcorner"
 msgstr ""
 
-#: po/custom/fromJson.txt:803
+#: po/custom/fromJson.txt:808
 msgid "Warehouse"
 msgstr "仓库"
 
-#: po/custom/fromJson.txt:804
+#: po/custom/fromJson.txt:809
 msgid "Wheeled Propulsion"
 msgstr "推进动力：轮"
 
-#: po/custom/fromJson.txt:806
+#: po/custom/fromJson.txt:811
 msgid "Wheels"
 msgstr "轮式"
 
-#: po/custom/fromJson.txt:807
+#: po/custom/fromJson.txt:812
 msgid "Wheels II"
 msgstr "轮式二型"
 
-#: po/custom/fromJson.txt:808
+#: po/custom/fromJson.txt:813
 msgid "Wheels III"
 msgstr "轮式三型"
 
-#: po/custom/fromJson.txt:809
+#: po/custom/fromJson.txt:814
 msgid "Whirlwind AA Site"
 msgstr "旋风级高射炮"
 
-#: po/custom/fromJson.txt:810
+#: po/custom/fromJson.txt:815
 msgid "Whirlwind AA Turret"
 msgstr "旋风级高射炮"
 
-#: po/custom/fromJson.txt:811
+#: po/custom/fromJson.txt:816
 msgid "Whirlwind Hardpoint"
 msgstr "旋风级高射炮要塞"
 
-#: po/custom/fromJson.txt:812
+#: po/custom/fromJson.txt:817
 msgid "Wide Spectrum Sensor"
 msgstr "广域雷达"
 
-#: po/custom/fromJson.txt:813
+#: po/custom/fromJson.txt:818
 msgid "Wide Spectrum Sensor Tower"
 msgstr "广域雷达"
 
-#: po/custom/fromJson.txt:814
+#: po/custom/fromJson.txt:819
 msgid "Wreck"
 msgstr "残骸"
 
-#: po/custom/fromJson.txt:815
+#: po/custom/fromJson.txt:820
 msgid "Wrecked Bridge"
 msgstr "残破的桥"
 
-#: po/custom/fromJson.txt:816
+#: po/custom/fromJson.txt:821
 msgid "Wrecked Tanker"
 msgstr "残破的油罐车"
 
-#: po/custom/fromJson.txt:817
+#: po/custom/fromJson.txt:822
 msgid "Wrecked Van"
 msgstr "残破的卡车"
 
-#: po/custom/fromJson.txt:818
+#: po/custom/fromJson.txt:823
 msgid "Wrecked Vehicle"
 msgstr "残破的车身"
 
-#: po/custom/fromJson.txt:819
+#: po/custom/fromJson.txt:824
 msgid "Wyvern"
 msgstr "中国龙"
 
@@ -7657,21 +7682,21 @@ msgstr "核心实时策略"
 msgid "Strategy Game"
 msgstr "战略游戏"
 
-#: src/cheat.cpp:162
+#: src/cheat.cpp:164
 #, c-format
 msgid "%s wants to enable debug mode. Enabled: %s, Disabled: %s."
 msgstr "%s希望使用调试模式。激活;%s,关闭：%s。"
 
-#: src/cheat.cpp:166
+#: src/cheat.cpp:168
 #, c-format
 msgid "%s wants to disable debug mode. Enabled: %s, Disabled: %s."
 msgstr "%s不希望使用调试模式。激活;%s,关闭：%s。"
 
-#: src/cheat.cpp:172
+#: src/cheat.cpp:174
 msgid "Debug mode now enabled!"
 msgstr "调试模式开启"
 
-#: src/cheat.cpp:178
+#: src/cheat.cpp:180
 msgid "Debug mode now disabled!"
 msgstr "开发模式现在被禁用"
 
@@ -8011,16 +8036,16 @@ msgstr "等待其他玩家"
 msgid "Out of sync"
 msgstr "不同步"
 
-#: src/display.cpp:1625
+#: src/display.cpp:1628
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "油田燃烧中，无法建筑钻油井"
 
-#: src/display.cpp:1641
+#: src/display.cpp:1644
 #, fuzzy, c-format
 msgid "%s - Hitpoints %d/%d - Experience %.1f, %s"
 msgstr "%s - 损伤 %d%% - 经验值 %.1f, %s"
 
-#: src/display.cpp:1805
+#: src/display.cpp:1808
 #, fuzzy, c-format
 msgid "%s - Allied - Hitpoints %d/%d - Experience %d, %s"
 msgstr "%s - 同盟 - 伤害 %d%% - 经验 %d, %s"
@@ -8029,72 +8054,72 @@ msgstr "%s - 同盟 - 伤害 %d%% - 经验 %d, %s"
 msgid "Unit Lost!"
 msgstr "损失单位！"
 
-#: src/droid.cpp:1276
+#: src/droid.cpp:1277
 msgid "Structure Restored"
 msgstr "建筑物重建"
 
-#: src/droid.cpp:2057
+#: src/droid.cpp:2058
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] "第 %u 队听令 - 共 %u 单位"
 
-#: src/droid.cpp:2066
+#: src/droid.cpp:2067
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] "共 %u 单位 被指派为 第 %u 队"
 
-#: src/droid.cpp:2077
+#: src/droid.cpp:2078
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "视角移动至第%u 队- 共%u 单位"
 
-#: src/droid.cpp:2081
+#: src/droid.cpp:2082
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] "Aligning with Group %u - %u 单位"
 
-#: src/droid.cpp:2237
+#: src/droid.cpp:2238
 msgid "Rookie"
 msgstr "菜鸟"
 
-#: src/droid.cpp:2238
+#: src/droid.cpp:2239
 msgctxt "rank"
 msgid "Green"
 msgstr "青涩"
 
-#: src/droid.cpp:2239
+#: src/droid.cpp:2240
 msgid "Trained"
 msgstr "训练有素的"
 
-#: src/droid.cpp:2240
+#: src/droid.cpp:2241
 msgid "Regular"
 msgstr "好样的"
 
-#: src/droid.cpp:2241
+#: src/droid.cpp:2242
 msgid "Professional"
 msgstr "专家"
 
-#: src/droid.cpp:2242
+#: src/droid.cpp:2243
 msgid "Veteran"
 msgstr "老手"
 
-#: src/droid.cpp:2243
+#: src/droid.cpp:2244
 msgid "Elite"
 msgstr "菁英"
 
-#: src/droid.cpp:2244
+#: src/droid.cpp:2245
 msgid "Special"
 msgstr "特务"
 
-#: src/droid.cpp:2245
+#: src/droid.cpp:2246
 msgid "Hero"
 msgstr "英雄"
 
-#: src/droid.cpp:3156
+#: src/droid.cpp:3157
 msgid "Unit transfer failed -- unit limits exceeded"
 msgstr ""
 
@@ -8164,15 +8189,15 @@ msgstr "教学模式"
 #. TRANSLATORS: "Return", in this context, means "return to previous screen/menu"
 #: src/frontend.cpp:273
 #: src/frontend.cpp:336
-#: src/frontend.cpp:385
-#: src/frontend.cpp:573
-#: src/frontend.cpp:647
-#: src/frontend.cpp:778
-#: src/frontend.cpp:867
-#: src/frontend.cpp:998
-#: src/frontend.cpp:1170
-#: src/frontend.cpp:1301
-#: src/frontend.cpp:1321
+#: src/frontend.cpp:382
+#: src/frontend.cpp:570
+#: src/frontend.cpp:644
+#: src/frontend.cpp:775
+#: src/frontend.cpp:864
+#: src/frontend.cpp:995
+#: src/frontend.cpp:1167
+#: src/frontend.cpp:1298
+#: src/frontend.cpp:1318
 msgctxt "menu"
 msgid "Return"
 msgstr "返回"
@@ -8202,321 +8227,321 @@ msgid "SINGLE PLAYER"
 msgstr "单人游戏"
 
 #: src/frontend.cpp:340
-#: src/frontend.cpp:389
+#: src/frontend.cpp:386
 msgid "Campaign videos are missing! Get them from http://wz2100.net"
 msgstr "战役视频丢失！从 http://wz2100.net 获取"
 
-#: src/frontend.cpp:384
+#: src/frontend.cpp:381
 #, fuzzy
 msgid "CAMPAIGNS"
 msgstr "战役一"
 
-#: src/frontend.cpp:508
+#: src/frontend.cpp:505
 #: src/ingameop.cpp:432
 msgid "Load Campaign Saved Game"
 msgstr "载入已储存的情节游戏"
 
-#: src/frontend.cpp:514
+#: src/frontend.cpp:511
 #: src/ingameop.cpp:436
 msgid "Load Skirmish Saved Game"
 msgstr "载入已储存的练习游戏"
 
-#: src/frontend.cpp:568
+#: src/frontend.cpp:565
 msgid "MULTI PLAYER"
 msgstr "多人游戏"
 
-#: src/frontend.cpp:570
+#: src/frontend.cpp:567
 msgid "Host Game"
 msgstr "开启游戏"
 
-#: src/frontend.cpp:571
+#: src/frontend.cpp:568
 msgid "Join Game"
 msgstr "加入游戏"
 
-#: src/frontend.cpp:576
+#: src/frontend.cpp:573
 msgid "TCP port 2100 must be opened in your firewall or router to host games!"
 msgstr "在你的防火墙或主机游戏中必需打开TCP端口2100"
 
-#: src/frontend.cpp:640
+#: src/frontend.cpp:637
 #: src/multiint.cpp:1575
 msgid "OPTIONS"
 msgstr "选项"
 
-#: src/frontend.cpp:641
+#: src/frontend.cpp:638
 msgid "Game Options"
 msgstr "游戏选项"
 
-#: src/frontend.cpp:642
+#: src/frontend.cpp:639
 msgid "Graphics Options"
 msgstr "图形选项"
 
-#: src/frontend.cpp:643
+#: src/frontend.cpp:640
 msgid "Video Options"
 msgstr "显示选项"
 
-#: src/frontend.cpp:644
+#: src/frontend.cpp:641
 #: src/ingameop.cpp:209
 msgid "Audio Options"
 msgstr "音效选项"
 
-#: src/frontend.cpp:645
+#: src/frontend.cpp:642
 msgid "Mouse Options"
 msgstr "滑鼠选项"
 
-#: src/frontend.cpp:646
+#: src/frontend.cpp:643
 msgid "Key Mappings"
 msgstr "键盘配置"
 
-#: src/frontend.cpp:699
+#: src/frontend.cpp:696
 msgid "1×"
 msgstr ""
 
-#: src/frontend.cpp:700
-#: src/frontend.cpp:930
+#: src/frontend.cpp:697
+#: src/frontend.cpp:927
 msgid "2×"
 msgstr ""
 
-#: src/frontend.cpp:701
-#: src/frontend.cpp:922
+#: src/frontend.cpp:698
+#: src/frontend.cpp:919
 msgid "Fullscreen"
 msgstr "全萤幕"
 
-#: src/frontend.cpp:702
-#: src/frontend.cpp:713
-#: src/frontend.cpp:934
-#: src/frontend.cpp:1241
+#: src/frontend.cpp:699
+#: src/frontend.cpp:710
+#: src/frontend.cpp:931
+#: src/frontend.cpp:1238
 msgid "Unsupported"
 msgstr "不支持的"
 
-#: src/frontend.cpp:710
-#: src/frontend.cpp:719
-#: src/frontend.cpp:724
-#: src/frontend.cpp:729
-#: src/frontend.cpp:929
-#: src/frontend.cpp:954
-#: src/frontend.cpp:1112
-#: src/frontend.cpp:1117
-#: src/frontend.cpp:1122
-#: src/frontend.cpp:1132
+#: src/frontend.cpp:707
+#: src/frontend.cpp:716
+#: src/frontend.cpp:721
+#: src/frontend.cpp:726
+#: src/frontend.cpp:926
+#: src/frontend.cpp:951
+#: src/frontend.cpp:1109
+#: src/frontend.cpp:1114
+#: src/frontend.cpp:1119
+#: src/frontend.cpp:1129
 msgid "Off"
 msgstr "关闭"
 
-#: src/frontend.cpp:711
+#: src/frontend.cpp:708
 msgid "50%"
 msgstr "50%"
 
-#: src/frontend.cpp:712
+#: src/frontend.cpp:709
 #: src/multiplay.cpp:2019
 msgid "Black"
 msgstr "黑色"
 
-#: src/frontend.cpp:719
-#: src/frontend.cpp:724
-#: src/frontend.cpp:729
-#: src/frontend.cpp:954
-#: src/frontend.cpp:1112
-#: src/frontend.cpp:1117
-#: src/frontend.cpp:1122
-#: src/frontend.cpp:1132
+#: src/frontend.cpp:716
+#: src/frontend.cpp:721
+#: src/frontend.cpp:726
+#: src/frontend.cpp:951
+#: src/frontend.cpp:1109
+#: src/frontend.cpp:1114
+#: src/frontend.cpp:1119
+#: src/frontend.cpp:1129
 msgid "On"
 msgstr "开启"
 
-#: src/frontend.cpp:734
+#: src/frontend.cpp:731
 msgid "Rotating"
 msgstr "旋转"
 
-#: src/frontend.cpp:734
+#: src/frontend.cpp:731
 msgid "Fixed"
 msgstr "已修复"
 
-#: src/frontend.cpp:747
+#: src/frontend.cpp:744
 msgid "Video Playback"
 msgstr "播放影片"
 
-#: src/frontend.cpp:751
+#: src/frontend.cpp:748
 msgid "Scanlines"
 msgstr "扫描线"
 
-#: src/frontend.cpp:756
+#: src/frontend.cpp:753
 msgid "Screen Shake"
 msgstr "震动萤幕"
 
-#: src/frontend.cpp:761
+#: src/frontend.cpp:758
 msgid "Subtitles"
 msgstr "字幕"
 
-#: src/frontend.cpp:766
+#: src/frontend.cpp:763
 msgid "Shadows"
 msgstr "影子"
 
-#: src/frontend.cpp:770
+#: src/frontend.cpp:767
 msgid "Radar"
 msgstr "雷达"
 
-#: src/frontend.cpp:774
+#: src/frontend.cpp:771
 msgid "GRAPHICS OPTIONS"
 msgstr "图形选项"
 
-#: src/frontend.cpp:855
+#: src/frontend.cpp:852
 #: src/ingameop.cpp:131
 msgid "Voice Volume"
 msgstr "语音音量"
 
-#: src/frontend.cpp:859
+#: src/frontend.cpp:856
 #: src/ingameop.cpp:136
 msgid "FX Volume"
 msgstr "音效音量"
 
-#: src/frontend.cpp:863
+#: src/frontend.cpp:860
 #: src/ingameop.cpp:141
 msgid "Music Volume"
 msgstr "背景音乐音量"
 
-#: src/frontend.cpp:870
+#: src/frontend.cpp:867
 msgid "AUDIO OPTIONS"
 msgstr "音效选项"
 
-#: src/frontend.cpp:922
+#: src/frontend.cpp:919
 msgid "Windowed"
 msgstr "视窗模式"
 
-#: src/frontend.cpp:931
+#: src/frontend.cpp:928
 msgid "4×"
 msgstr ""
 
-#: src/frontend.cpp:932
+#: src/frontend.cpp:929
 msgid "8×"
 msgstr ""
 
-#: src/frontend.cpp:971
+#: src/frontend.cpp:968
 msgid "* Takes effect on game restart"
 msgstr "*重启游戏后生效"
 
-#: src/frontend.cpp:975
+#: src/frontend.cpp:972
 msgid "Graphics Mode*"
 msgstr "图形模式*"
 
-#: src/frontend.cpp:979
+#: src/frontend.cpp:976
 msgid "Resolution*"
 msgstr "解析度*"
 
-#: src/frontend.cpp:983
+#: src/frontend.cpp:980
 msgid "Texture size"
 msgstr "贴图精细度"
 
-#: src/frontend.cpp:987
+#: src/frontend.cpp:984
 msgid "Vertical sync"
 msgstr "垂直同步*"
 
-#: src/frontend.cpp:995
+#: src/frontend.cpp:992
 msgid "VIDEO OPTIONS"
 msgstr "视屏选项"
 
-#: src/frontend.cpp:1127
+#: src/frontend.cpp:1124
 msgid "Middle Mouse"
 msgstr "鼠标中键"
 
-#: src/frontend.cpp:1127
+#: src/frontend.cpp:1124
 msgid "Right Mouse"
 msgstr "鼠标右键"
 
-#: src/frontend.cpp:1145
+#: src/frontend.cpp:1142
 msgid "Reverse Rotation"
 msgstr "反向旋转"
 
-#: src/frontend.cpp:1149
+#: src/frontend.cpp:1146
 msgid "Trap Cursor"
 msgstr "捕捉滑鼠"
 
-#: src/frontend.cpp:1154
+#: src/frontend.cpp:1151
 msgid "Switch Mouse Buttons"
 msgstr "交换鼠标按钮"
 
-#: src/frontend.cpp:1159
+#: src/frontend.cpp:1156
 msgid "Rotate Screen"
 msgstr "旋转屏幕"
 
-#: src/frontend.cpp:1163
+#: src/frontend.cpp:1160
 #, fuzzy
 msgid "Colored Cursors"
 msgstr "彩色指针"
 
-#: src/frontend.cpp:1167
+#: src/frontend.cpp:1164
 msgid "MOUSE OPTIONS"
 msgstr "鼠标选项"
 
-#: src/frontend.cpp:1234
+#: src/frontend.cpp:1231
 #: src/multiint.cpp:211
 msgid "Easy"
 msgstr "容易"
 
-#: src/frontend.cpp:1235
+#: src/frontend.cpp:1232
 msgid "Normal"
 msgstr "普通"
 
-#: src/frontend.cpp:1236
+#: src/frontend.cpp:1233
 #: src/multiint.cpp:211
 msgid "Hard"
 msgstr "困难"
 
-#: src/frontend.cpp:1237
+#: src/frontend.cpp:1234
 #: src/multiint.cpp:211
 msgid "Insane"
 msgstr "疯狂的"
 
-#: src/frontend.cpp:1238
+#: src/frontend.cpp:1235
 msgid "Tough"
 msgstr ""
 
-#: src/frontend.cpp:1239
+#: src/frontend.cpp:1236
 #, fuzzy
 msgid "Killer"
 msgstr "杀敌数"
 
-#: src/frontend.cpp:1256
-#: src/frontend.cpp:1322
+#: src/frontend.cpp:1253
+#: src/frontend.cpp:1319
 msgid "Language"
 msgstr "语言"
 
-#: src/frontend.cpp:1260
-#: src/frontend.cpp:1326
+#: src/frontend.cpp:1257
+#: src/frontend.cpp:1323
 #, fuzzy
 msgid "Campaign Difficulty"
 msgstr "难度"
 
-#: src/frontend.cpp:1264
-#: src/frontend.cpp:1327
+#: src/frontend.cpp:1261
+#: src/frontend.cpp:1324
 msgid "Scroll Speed"
 msgstr "卷动速度"
 
-#: src/frontend.cpp:1268
-#: src/frontend.cpp:1323
+#: src/frontend.cpp:1265
+#: src/frontend.cpp:1320
 msgid "Unit Colour:"
 msgstr "势力颜色"
 
-#: src/frontend.cpp:1288
-#: src/frontend.cpp:1324
+#: src/frontend.cpp:1285
+#: src/frontend.cpp:1321
 msgid "Campaign"
 msgstr "情节"
 
-#: src/frontend.cpp:1298
-#: src/frontend.cpp:1325
+#: src/frontend.cpp:1295
+#: src/frontend.cpp:1322
 msgid "Skirmish/Multiplayer"
 msgstr "练习/多人"
 
-#: src/frontend.cpp:1304
-#: src/frontend.cpp:1320
+#: src/frontend.cpp:1301
+#: src/frontend.cpp:1317
 msgid "GAME OPTIONS"
 msgstr "游戏选项"
 
-#: src/frontend.cpp:1434
+#: src/frontend.cpp:1431
 #: src/multiint.cpp:2645
 msgid "Mod: "
 msgstr "Mod："
 
 #: src/hci.cpp:1184
-#: src/loop.cpp:257
-#: src/loop.cpp:273
+#: src/loop.cpp:258
+#: src/loop.cpp:274
 msgid "GAME SAVED: "
 msgstr "游戏已储存"
 
@@ -8706,7 +8731,7 @@ msgid "Need more resources!"
 msgstr "需要更多资源！"
 
 #: src/intelmap.cpp:245
-#: src/keybind.cpp:1422
+#: src/keybind.cpp:1420
 msgid "PAUSED"
 msgstr "已暂停"
 
@@ -8827,251 +8852,251 @@ msgstr "让我看看你看到了什么！"
 msgid "Fine, weapon & sensor display is off!"
 msgstr "关闭细节、武器及雷达显示"
 
-#: src/keybind.cpp:432
-#, c-format
-msgid "Player %u is cheating a new droid army of: %s."
+#: src/keybind.cpp:431
+#, fuzzy, c-format
+msgid "Player %u is cheating a new droid army of: %d × %s."
 msgstr "玩家%u 利用作弊（除错）模式建立了一个新droid: %s. "
 
-#: src/keybind.cpp:480
-#: src/keybind.cpp:510
-#: src/keybind.cpp:527
-#: src/keybind.cpp:571
-#: src/keybind.cpp:675
-#: src/keybind.cpp:714
-#: src/keybind.cpp:820
-#: src/keybind.cpp:1369
-#: src/keybind.cpp:1476
-#: src/keybind.cpp:1581
-#: src/keybind.cpp:1920
-#: src/keybind.cpp:1961
+#: src/keybind.cpp:479
+#: src/keybind.cpp:509
+#: src/keybind.cpp:526
+#: src/keybind.cpp:570
+#: src/keybind.cpp:674
+#: src/keybind.cpp:713
+#: src/keybind.cpp:819
+#: src/keybind.cpp:1367
+#: src/keybind.cpp:1474
+#: src/keybind.cpp:1579
+#: src/keybind.cpp:1918
+#: src/keybind.cpp:1959
 #, c-format
 msgid "(Player %u) is using cheat :%s"
 msgstr "玩家 %u 正在作弊：%s"
 
-#: src/keybind.cpp:481
+#: src/keybind.cpp:480
 msgid "Hard as nails!!!"
 msgstr "像爪子一样硬！！"
 
-#: src/keybind.cpp:495
+#: src/keybind.cpp:494
 msgid "Takings thing easy!"
 msgstr "让事情变简单！"
 
-#: src/keybind.cpp:511
+#: src/keybind.cpp:510
 msgid "1000 big ones!!!"
 msgstr "1000 big ones!!!"
 
-#: src/keybind.cpp:528
+#: src/keybind.cpp:527
 msgid "Power overwhelming"
 msgstr "巨大的能量"
 
-#: src/keybind.cpp:543
+#: src/keybind.cpp:542
 msgid "Back to normality!"
 msgstr "回到正常状态"
 
-#: src/keybind.cpp:556
+#: src/keybind.cpp:555
 msgid "Getting tricky!"
 msgstr "得到技巧！"
 
-#: src/keybind.cpp:572
+#: src/keybind.cpp:571
 msgid "Twice as nice!"
 msgstr "给我两倍的力量！！"
 
-#: src/keybind.cpp:583
+#: src/keybind.cpp:582
 msgid "FPS display is enabled."
 msgstr "FPS显示开启"
 
-#: src/keybind.cpp:587
+#: src/keybind.cpp:586
 msgid "FPS display is disabled."
 msgstr "FPS显示关闭"
 
-#: src/keybind.cpp:640
+#: src/keybind.cpp:639
 #, c-format
 msgid "(Player %u) is using a cheat :Num Droids: %d  Num Structures: %d  Num Features: %d"
 msgstr "（玩家%u）出现欺诈行为：机器人编号：%d 机构编码：%d 编码特征：%d"
 
-#: src/keybind.cpp:676
+#: src/keybind.cpp:675
 msgid "Infinite power disabled"
 msgstr "无限制能源：关"
 
-#: src/keybind.cpp:676
+#: src/keybind.cpp:675
 msgid "Infinite power enabled"
 msgstr "无限制能源：开"
 
-#: src/keybind.cpp:715
+#: src/keybind.cpp:714
 msgid "All items made available"
 msgstr "可使用所有的项目"
 
-#: src/keybind.cpp:821
+#: src/keybind.cpp:820
 msgid "Fog on"
 msgstr "战争迷雾开启"
 
-#: src/keybind.cpp:821
+#: src/keybind.cpp:820
 msgid "Fog off"
 msgstr "战争迷雾关闭"
 
-#: src/keybind.cpp:1254
+#: src/keybind.cpp:1253
 #, c-format
 msgid "Warning!  This cheat can cause dire problems later on! [%s]"
 msgstr "警告！此欺诈行为会导致严重的后果！[%s]"
 
-#: src/keybind.cpp:1254
+#: src/keybind.cpp:1253
 msgid "Ending Mission."
 msgstr "任务结束中。"
 
-#: src/keybind.cpp:1370
+#: src/keybind.cpp:1368
 msgid "God Mode ON"
 msgstr "上帝模式打开"
 
-#: src/keybind.cpp:1370
+#: src/keybind.cpp:1368
 msgid "God Mode OFF"
 msgstr "上帝模式关闭"
 
-#: src/keybind.cpp:1382
+#: src/keybind.cpp:1380
 msgid "View Aligned to North"
 msgstr "View Aligned to North"
 
-#: src/keybind.cpp:1391
+#: src/keybind.cpp:1389
 #, c-format
 msgid "Trap cursor %s"
 msgstr "捕捉光标%s"
 
-#: src/keybind.cpp:1477
+#: src/keybind.cpp:1475
 msgid "Researched EVERYTHING for you!"
 msgstr "替你研发所有科技！"
 
-#: src/keybind.cpp:1501
+#: src/keybind.cpp:1499
 msgid "Selected buildings instantly recharged!"
 msgstr ""
 
-#: src/keybind.cpp:1542
+#: src/keybind.cpp:1540
 #, c-format
 msgid "(Player %u) is using cheat :%s %s"
 msgstr "（玩家%u）出现欺诈行为:%s%s"
 
-#: src/keybind.cpp:1542
+#: src/keybind.cpp:1540
 msgid "Researched"
 msgstr "调查"
 
-#: src/keybind.cpp:1563
+#: src/keybind.cpp:1561
 msgid "Only displaying energy bars when selected"
 msgstr "选择后只显示能量条"
 
-#: src/keybind.cpp:1566
+#: src/keybind.cpp:1564
 msgid "Always displaying energy bars for units"
 msgstr "总是显示能量条单位"
 
-#: src/keybind.cpp:1569
+#: src/keybind.cpp:1567
 msgid "Always displaying energy bars for units and structures"
 msgstr "总是显示能量条单位个结构"
 
-#: src/keybind.cpp:1582
+#: src/keybind.cpp:1580
 msgid "Debug menu is Open"
 msgstr "调试菜单开启"
 
-#: src/keybind.cpp:1619
+#: src/keybind.cpp:1617
 msgid "Unable to locate any oil derricks!"
 msgstr "找不到任何井架！"
 
-#: src/keybind.cpp:1814
+#: src/keybind.cpp:1812
 msgid "Oh, the weather outside is frightful... SNOW"
 msgstr "喔，外面的天气真糟...下雪"
 
-#: src/keybind.cpp:1820
+#: src/keybind.cpp:1818
 msgid "Singing in the rain, I'm singing in the rain... RAIN"
 msgstr "下雨啦～下雨啦～"
 
-#: src/keybind.cpp:1826
+#: src/keybind.cpp:1824
 msgid "Forecast : Clear skies for all areas... NO WEATHER"
 msgstr "天气预报：一整片晴朗的天空。"
 
-#: src/keybind.cpp:1919
+#: src/keybind.cpp:1917
 msgid "Warning! This can have drastic consequences if used incorrectly in missions."
 msgstr "警告！在任务中使用错误会导致激烈的后果。"
 
-#: src/keybind.cpp:1921
+#: src/keybind.cpp:1919
 msgid "All enemies destroyed by cheating!"
 msgstr "由于作弊，你已全军覆没！"
 
-#: src/keybind.cpp:1962
+#: src/keybind.cpp:1960
 msgid "Destroying selected droids and structures!"
 msgstr "摧毁选中的机器人和结构！"
 
-#: src/keybind.cpp:2360
+#: src/keybind.cpp:2358
 msgid "Reveal OFF"
 msgstr ""
 
-#: src/keybind.cpp:2365
+#: src/keybind.cpp:2363
 msgid "Reveal ON"
 msgstr ""
 
-#: src/keybind.cpp:2446
+#: src/keybind.cpp:2444
 msgid "Centered on player HQ, direction NORTH"
 msgstr "视角移至主基地，面向北方"
 
-#: src/keybind.cpp:2458
+#: src/keybind.cpp:2456
 msgid "Unable to locate HQ!"
 msgstr "无法定位至主基地"
 
-#: src/keybind.cpp:2465
+#: src/keybind.cpp:2463
 msgid "Formation speed limiting has been removed from the game due to bugs."
 msgstr "由于漏洞，速度限制形成将从游戏中被移除。"
 
-#: src/keybind.cpp:2514
+#: src/keybind.cpp:2512
 msgid "Vertical rotation direction: Normal"
 msgstr "上下垂直方向：正常"
 
-#: src/keybind.cpp:2519
+#: src/keybind.cpp:2517
 msgid "Vertical rotation direction: Flipped"
 msgstr "上下垂直方向：快速翻动"
 
-#: src/keybind.cpp:2528
+#: src/keybind.cpp:2526
 msgid "Screen shake when things die: Off"
 msgstr "物体死亡后屏幕抖动：关"
 
-#: src/keybind.cpp:2533
+#: src/keybind.cpp:2531
 msgid "Screen shake when things die: On"
 msgstr "物体死亡后屏幕抖动：开"
 
-#: src/keybind.cpp:2584
+#: src/keybind.cpp:2582
 msgid "Sorry, but game speed cannot be changed in multiplayer."
 msgstr "对不起，在多人游戏中游戏速度不能被更改。"
 
-#: src/keybind.cpp:2619
-#: src/keybind.cpp:2673
+#: src/keybind.cpp:2617
+#: src/keybind.cpp:2671
 msgid "Game Speed Reset"
 msgstr "游戏速度复位"
 
-#: src/keybind.cpp:2623
+#: src/keybind.cpp:2621
 #, c-format
 msgid "Game Speed Increased to %s"
 msgstr "游戏速度增加至 %s"
 
-#: src/keybind.cpp:2627
+#: src/keybind.cpp:2625
 #, c-format
 msgid "Game Speed Reduced to %s"
 msgstr "游戏速度减少至 %s"
 
-#: src/keybind.cpp:2685
+#: src/keybind.cpp:2683
 msgid "Radar showing friend-foe colors"
 msgstr "雷达显示友军颜色"
 
-#: src/keybind.cpp:2689
+#: src/keybind.cpp:2687
 msgid "Radar showing player colors"
 msgstr "雷达显示玩家颜色"
 
-#: src/keybind.cpp:2704
+#: src/keybind.cpp:2702
 msgid "Radar showing only objects"
 msgstr "雷达仅显示物件"
 
-#: src/keybind.cpp:2707
+#: src/keybind.cpp:2705
 msgid "Radar blending terrain and height"
 msgstr "雷达描绘地形及高度"
 
-#: src/keybind.cpp:2710
+#: src/keybind.cpp:2708
 msgid "Radar showing terrain"
 msgstr "雷达显示地形"
 
-#: src/keybind.cpp:2713
+#: src/keybind.cpp:2711
 msgid "Radar showing height"
 msgstr "雷达显示高度"
 
@@ -9614,8 +9639,8 @@ msgstr "跟踪一个游戏中的物体"
 msgid "Toggle Driving Mode"
 msgstr "切换追踪视角"
 
-#: src/loop.cpp:264
-#: src/loop.cpp:280
+#: src/loop.cpp:265
+#: src/loop.cpp:281
 msgid "Could not save game!"
 msgstr "游戏储存失败！"
 
@@ -10612,64 +10637,64 @@ msgstr "不能生产新的单位，已达到指挥官可控制单位总数上限
 msgid "Can't build anymore \"%s\", Construction Unit Limit Reached — Production Halted"
 msgstr "不能生产新的单位，已达到指挥官可控制单位总数上限，停止生产新单位"
 
-#: src/structure.cpp:5533
+#: src/structure.cpp:5534
 #, fuzzy, c-format
 msgid "%s - %u Unit assigned - Hitpoints %d/%d"
 msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
 msgstr[0] "%s -%u 已指派 -伤害%3.0f%%"
 
-#: src/structure.cpp:5552
+#: src/structure.cpp:5553
 #, fuzzy, c-format
 msgid "%s - %u Unit assigned - Damage %3.0f%%"
 msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
 msgstr[0] "%s -%u 已指派 -伤害%3.0f%%"
 
-#: src/structure.cpp:5557
-#: src/structure.cpp:5567
-#: src/structure.cpp:5574
-#: src/structure.cpp:5600
-#: src/structure.cpp:5609
-#: src/structure.cpp:5616
+#: src/structure.cpp:5558
+#: src/structure.cpp:5568
+#: src/structure.cpp:5575
+#: src/structure.cpp:5601
+#: src/structure.cpp:5610
+#: src/structure.cpp:5617
 #, c-format
 msgid "%s - Hitpoints %d/%d"
 msgstr ""
 
-#: src/structure.cpp:5590
+#: src/structure.cpp:5591
 #, fuzzy, c-format
 msgid "%s - Connected %u of %u - Hitpoints %d/%d"
 msgstr "%s - 连接 %u of %u - 伤害%3.0f%%"
 
-#: src/structure.cpp:5740
-#: src/structure.cpp:5787
+#: src/structure.cpp:5741
+#: src/structure.cpp:5788
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s -电子伤害"
 
-#: src/structure.cpp:5914
+#: src/structure.cpp:5915
 msgid "Electronic Reward - Visibility Report"
 msgstr "电子回馈—可检视报告"
 
-#: src/structure.cpp:5953
+#: src/structure.cpp:5954
 msgid "Factory Reward - Propulsion"
 msgstr "工厂奖励—推进动力"
 
-#: src/structure.cpp:5975
+#: src/structure.cpp:5976
 msgid "Factory Reward - Body"
 msgstr "工厂奖励—车身"
 
-#: src/structure.cpp:5997
+#: src/structure.cpp:5998
 msgid "Factory Reward - Weapon"
 msgstr "工厂奖励—武器"
 
-#: src/structure.cpp:6005
+#: src/structure.cpp:6006
 msgid "Factory Reward - Nothing"
 msgstr "工厂奖励—无"
 
-#: src/structure.cpp:6032
+#: src/structure.cpp:6033
 msgid "Repair Facility Award - Repair"
 msgstr "修理中心奖励—修理"
 
-#: src/structure.cpp:6038
+#: src/structure.cpp:6039
 msgid "Repair Facility Award - Nothing"
 msgstr "修理工厂回馈—无"
 
