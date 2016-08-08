@@ -148,11 +148,8 @@
         "sequenceName": "res_weapons.ogg",
         "text": [
             "New Weapon Turret Available",
-            "\n\"Multi-barrel",
-            " rapid-fire machinegun\"",
-            "\n\"Best Targets: Infantry",
-            " base structures",
-            " wheeled vehicles\"",
+            "Multi-barrel, rapid-fire machinegun",
+            "Best Targets: Infantry, base structures, wheeled vehicles",
             "Replaces all machineguns"
         ]
     },
@@ -185,9 +182,7 @@
         "text": [
             "New Indirect Fire Weapon Available",
             "105mm multi-barrel Howitzer may be assigned to a sensor",
-            "\n\"Best Targets: Base Structures",
-            " infantry",
-            " wheeled vehicles\"",
+            "Best Targets: Base Structures, infantry, wheeled vehicles",
             "Body Points: Low"
         ]
     }

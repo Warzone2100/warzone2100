@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Warzone 2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2016-08-02 17:03+0200\n"
+"POT-Creation-Date: 2016-08-08 17:59+0200\n"
 "PO-Revision-Date: 2023-11-27 20:18+0100\n"
 "Last-Translator: Magyar (Hungary) Mészáros Tamás <tamasm78@invitel.hu>\n"
 "Language-Team: Kálmán „KAMI” Szalai <kami911@gmail.com>\n"
@@ -1367,6 +1367,7 @@ msgid "Flamer Hardpoint"
 msgstr "Lángszóró talapzat"
 
 #: data/base/messages/strings/names.txt:330
+#: po/custom/fromJson.txt:876
 msgid "Advanced Cyborg Production"
 msgstr "Fejlett Cyborg gyártás"
 
@@ -1379,6 +1380,7 @@ msgid "Advanced Cyborg Production Mk3"
 msgstr "Fejlett Cyborg gyártás Mk3"
 
 #: data/base/messages/strings/names.txt:334
+#: po/custom/fromJson.txt:1169
 msgid "Advanced Factory Production"
 msgstr "Fejlett gyári termelés"
 
@@ -1660,6 +1662,14 @@ msgstr "Bunker romboló"
 
 #: data/base/messages/strings/resstrings.txt:31
 #: data/mp/messages/strings/resstrings.txt:1
+#: po/custom/fromJson.txt:868
+#: po/custom/fromJson.txt:869
+#: po/custom/fromJson.txt:870
+#: po/custom/fromJson.txt:871
+#: po/custom/fromJson.txt:872
+#: po/custom/fromJson.txt:873
+#: po/custom/fromJson.txt:874
+#: po/custom/fromJson.txt:875
 msgid "Cyborg Materials Improved"
 msgstr "Cyborg anyagok korszerűsítve"
 
@@ -1667,11 +1677,19 @@ msgstr "Cyborg anyagok korszerűsítve"
 #: data/base/messages/strings/resstrings.txt:572
 #: data/mp/messages/strings/resstrings.txt:2
 #: data/mp/messages/strings/resstrings.txt:262
+#: po/custom/fromJson.txt:872
+#: po/custom/fromJson.txt:873
+#: po/custom/fromJson.txt:1232
+#: po/custom/fromJson.txt:1233
 msgid "Layered dense composite alloys and energy-absorbing fibres"
 msgstr "Sűrűn rétegelt kompozit ötvözetek és energiaelnyelő szálak"
 
 #: data/base/messages/strings/resstrings.txt:33
 #: data/mp/messages/strings/resstrings.txt:3
+#: po/custom/fromJson.txt:868
+#: po/custom/fromJson.txt:870
+#: po/custom/fromJson.txt:872
+#: po/custom/fromJson.txt:874
 msgid "Increases Kinetic Armor and Body Points"
 msgstr "Megnövekedett kinetikus páncél és karosszéria értékek"
 
@@ -1679,21 +1697,40 @@ msgstr "Megnövekedett kinetikus páncél és karosszéria értékek"
 #: data/base/messages/strings/resstrings.txt:44
 #: data/mp/messages/strings/resstrings.txt:4
 #: data/mp/messages/strings/resstrings.txt:9
+#: po/custom/fromJson.txt:868
+#: po/custom/fromJson.txt:869
+#: po/custom/fromJson.txt:870
+#: po/custom/fromJson.txt:871
+#: po/custom/fromJson.txt:872
+#: po/custom/fromJson.txt:873
+#: po/custom/fromJson.txt:874
+#: po/custom/fromJson.txt:875
+#: po/custom/fromJson.txt:879
+#: po/custom/fromJson.txt:880
+#: po/custom/fromJson.txt:881
+#: po/custom/fromJson.txt:882
 msgid "All Cyborgs upgraded automatically"
 msgstr "Cyborgok automatikusan fejlesztve"
 
 #: data/base/messages/strings/resstrings.txt:41
 #: data/mp/messages/strings/resstrings.txt:6
+#: po/custom/fromJson.txt:880
+#: po/custom/fromJson.txt:881
+#: po/custom/fromJson.txt:882
 msgid "Cyborg Thermal Armor Improved"
 msgstr "Cyborg hőpajzs fejlesztve"
 
 #: data/base/messages/strings/resstrings.txt:42
 #: data/mp/messages/strings/resstrings.txt:7
+#: po/custom/fromJson.txt:880
+#: po/custom/fromJson.txt:881
+#: po/custom/fromJson.txt:882
 msgid "Heat resistant armored layers"
 msgstr "Hőálló páncélozott rétegek"
 
 #: data/base/messages/strings/resstrings.txt:43
 #: data/mp/messages/strings/resstrings.txt:8
+#: po/custom/fromJson.txt:882
 msgid "Thermal Armor increased"
 msgstr "Hőpajzs fejlődött"
 
@@ -1701,6 +1738,26 @@ msgstr "Hőpajzs fejlődött"
 #: data/base/messages/strings/resstrings.txt:65
 #: data/mp/messages/strings/resstrings.txt:11
 #: data/mp/messages/strings/resstrings.txt:16
+#: po/custom/fromJson.txt:999
+#: po/custom/fromJson.txt:1000
+#: po/custom/fromJson.txt:1001
+#: po/custom/fromJson.txt:1002
+#: po/custom/fromJson.txt:1003
+#: po/custom/fromJson.txt:1004
+#: po/custom/fromJson.txt:1005
+#: po/custom/fromJson.txt:1006
+#: po/custom/fromJson.txt:1007
+#: po/custom/fromJson.txt:1008
+#: po/custom/fromJson.txt:1009
+#: po/custom/fromJson.txt:1010
+#: po/custom/fromJson.txt:1011
+#: po/custom/fromJson.txt:1012
+#: po/custom/fromJson.txt:1013
+#: po/custom/fromJson.txt:1014
+#: po/custom/fromJson.txt:1015
+#: po/custom/fromJson.txt:1016
+#: po/custom/fromJson.txt:1017
+#: po/custom/fromJson.txt:1018
 msgid "New Cyborg Available"
 msgstr "Új Cyborg érhető el"
 
@@ -1708,6 +1765,7 @@ msgstr "Új Cyborg érhető el"
 #: data/base/messages/strings/resstrings.txt:84
 #: data/mp/messages/strings/resstrings.txt:12
 #: data/mp/messages/strings/resstrings.txt:27
+#: po/custom/fromJson.txt:999
 msgid "Armed with Bunker Buster rocket"
 msgstr "Bunkertörő rakétával felszerelt"
 
@@ -1731,6 +1789,55 @@ msgstr "Bunkertörő rakétával felszerelt"
 #: data/mp/messages/strings/resstrings.txt:309
 #: data/mp/messages/strings/resstrings.txt:329
 #: data/mp/messages/strings/resstrings.txt:334
+#: po/custom/fromJson.txt:883
+#: po/custom/fromJson.txt:898
+#: po/custom/fromJson.txt:899
+#: po/custom/fromJson.txt:901
+#: po/custom/fromJson.txt:902
+#: po/custom/fromJson.txt:929
+#: po/custom/fromJson.txt:981
+#: po/custom/fromJson.txt:982
+#: po/custom/fromJson.txt:983
+#: po/custom/fromJson.txt:984
+#: po/custom/fromJson.txt:999
+#: po/custom/fromJson.txt:1000
+#: po/custom/fromJson.txt:1001
+#: po/custom/fromJson.txt:1002
+#: po/custom/fromJson.txt:1003
+#: po/custom/fromJson.txt:1004
+#: po/custom/fromJson.txt:1005
+#: po/custom/fromJson.txt:1006
+#: po/custom/fromJson.txt:1007
+#: po/custom/fromJson.txt:1008
+#: po/custom/fromJson.txt:1009
+#: po/custom/fromJson.txt:1010
+#: po/custom/fromJson.txt:1011
+#: po/custom/fromJson.txt:1012
+#: po/custom/fromJson.txt:1013
+#: po/custom/fromJson.txt:1014
+#: po/custom/fromJson.txt:1015
+#: po/custom/fromJson.txt:1016
+#: po/custom/fromJson.txt:1017
+#: po/custom/fromJson.txt:1018
+#: po/custom/fromJson.txt:1091
+#: po/custom/fromJson.txt:1092
+#: po/custom/fromJson.txt:1093
+#: po/custom/fromJson.txt:1094
+#: po/custom/fromJson.txt:1095
+#: po/custom/fromJson.txt:1096
+#: po/custom/fromJson.txt:1097
+#: po/custom/fromJson.txt:1098
+#: po/custom/fromJson.txt:1105
+#: po/custom/fromJson.txt:1109
+#: po/custom/fromJson.txt:1110
+#: po/custom/fromJson.txt:1112
+#: po/custom/fromJson.txt:1113
+#: po/custom/fromJson.txt:1145
+#: po/custom/fromJson.txt:1155
+#: po/custom/fromJson.txt:1156
+#: po/custom/fromJson.txt:1157
+#: po/custom/fromJson.txt:1159
+#: po/custom/fromJson.txt:1225
 msgid "Body Points: Medium"
 msgstr "Karosszéria fejlettsége: közepes"
 
@@ -1742,11 +1849,36 @@ msgstr "Karosszéria fejlettsége: közepes"
 #: data/mp/messages/strings/resstrings.txt:19
 #: data/mp/messages/strings/resstrings.txt:24
 #: data/mp/messages/strings/resstrings.txt:29
+#: po/custom/fromJson.txt:999
+#: po/custom/fromJson.txt:1000
+#: po/custom/fromJson.txt:1001
+#: po/custom/fromJson.txt:1002
+#: po/custom/fromJson.txt:1003
+#: po/custom/fromJson.txt:1004
+#: po/custom/fromJson.txt:1005
+#: po/custom/fromJson.txt:1006
+#: po/custom/fromJson.txt:1007
+#: po/custom/fromJson.txt:1008
+#: po/custom/fromJson.txt:1009
+#: po/custom/fromJson.txt:1010
+#: po/custom/fromJson.txt:1011
+#: po/custom/fromJson.txt:1012
+#: po/custom/fromJson.txt:1013
+#: po/custom/fromJson.txt:1014
+#: po/custom/fromJson.txt:1015
+#: po/custom/fromJson.txt:1016
+#: po/custom/fromJson.txt:1017
+#: po/custom/fromJson.txt:1018
+#: po/custom/fromJson.txt:1091
+#: po/custom/fromJson.txt:1093
+#: po/custom/fromJson.txt:1094
+#: po/custom/fromJson.txt:1095
 msgid "Requires Cyborg factory to produce"
 msgstr "Cyborg gyár szükséges az előállításhoz"
 
 #: data/base/messages/strings/resstrings.txt:66
 #: data/mp/messages/strings/resstrings.txt:17
+#: po/custom/fromJson.txt:1000
 msgid "Armed with Cyborg Assault Gun"
 msgstr "Cyborg ostromfegyverrel felszerelt"
 
@@ -1754,21 +1886,37 @@ msgstr "Cyborg ostromfegyverrel felszerelt"
 #: data/base/messages/strings/resstrings.txt:83
 #: data/mp/messages/strings/resstrings.txt:21
 #: data/mp/messages/strings/resstrings.txt:26
+#: po/custom/fromJson.txt:1091
+#: po/custom/fromJson.txt:1092
+#: po/custom/fromJson.txt:1093
+#: po/custom/fromJson.txt:1094
+#: po/custom/fromJson.txt:1095
 msgid "New Jump Cyborg Available"
 msgstr "Új ejtőernyős Cyborg érhető el"
 
 #: data/base/messages/strings/resstrings.txt:78
 #: data/mp/messages/strings/resstrings.txt:22
+#: po/custom/fromJson.txt:1014
 msgid "Armed with Revenger Surface-to-Air missile"
 msgstr "Revenger föld-levegő rakétával felszerelt"
 
 #: data/base/messages/strings/resstrings.txt:103
 #: data/mp/messages/strings/resstrings.txt:31
+#: po/custom/fromJson.txt:884
+#: po/custom/fromJson.txt:885
+#: po/custom/fromJson.txt:886
+#: po/custom/fromJson.txt:887
+#: po/custom/fromJson.txt:888
+#: po/custom/fromJson.txt:889
+#: po/custom/fromJson.txt:890
+#: po/custom/fromJson.txt:891
 msgid "Defenses Improved"
 msgstr "Védművek továbfejlesztve"
 
 #: data/base/messages/strings/resstrings.txt:104
 #: data/mp/messages/strings/resstrings.txt:32
+#: po/custom/fromJson.txt:888
+#: po/custom/fromJson.txt:889
 msgid "High-tensile concrete reinforced with boron"
 msgstr "Nagy szilárdságú vasbeton Bórral megerősítve"
 
@@ -1776,11 +1924,26 @@ msgstr "Nagy szilárdságú vasbeton Bórral megerősítve"
 #: data/base/messages/strings/resstrings.txt:401
 #: data/mp/messages/strings/resstrings.txt:33
 #: data/mp/messages/strings/resstrings.txt:198
+#: po/custom/fromJson.txt:885
+#: po/custom/fromJson.txt:887
+#: po/custom/fromJson.txt:889
+#: po/custom/fromJson.txt:921
+#: po/custom/fromJson.txt:923
+#: po/custom/fromJson.txt:925
+#: po/custom/fromJson.txt:927
 msgid "Increases Armor and Body Points"
 msgstr "Megnövekedett páncél és karosszéria értékek"
 
 #: data/base/messages/strings/resstrings.txt:106
 #: data/mp/messages/strings/resstrings.txt:34
+#: po/custom/fromJson.txt:884
+#: po/custom/fromJson.txt:885
+#: po/custom/fromJson.txt:886
+#: po/custom/fromJson.txt:887
+#: po/custom/fromJson.txt:888
+#: po/custom/fromJson.txt:889
+#: po/custom/fromJson.txt:890
+#: po/custom/fromJson.txt:891
 msgid "All defenses and walls upgraded automatically"
 msgstr "Védművek és falak automatikusan fejlesztve"
 
@@ -1836,11 +1999,75 @@ msgstr "Védművek és falak automatikusan fejlesztve"
 #: data/mp/messages/strings/resstrings.txt:151
 #: data/mp/messages/strings/resstrings.txt:156
 #: data/mp/messages/strings/resstrings.txt:161
+#: po/custom/fromJson.txt:1020
+#: po/custom/fromJson.txt:1021
+#: po/custom/fromJson.txt:1022
+#: po/custom/fromJson.txt:1023
+#: po/custom/fromJson.txt:1024
+#: po/custom/fromJson.txt:1025
+#: po/custom/fromJson.txt:1026
+#: po/custom/fromJson.txt:1027
+#: po/custom/fromJson.txt:1028
+#: po/custom/fromJson.txt:1029
+#: po/custom/fromJson.txt:1030
+#: po/custom/fromJson.txt:1031
+#: po/custom/fromJson.txt:1032
+#: po/custom/fromJson.txt:1033
+#: po/custom/fromJson.txt:1034
+#: po/custom/fromJson.txt:1035
+#: po/custom/fromJson.txt:1036
+#: po/custom/fromJson.txt:1037
+#: po/custom/fromJson.txt:1038
+#: po/custom/fromJson.txt:1039
+#: po/custom/fromJson.txt:1040
+#: po/custom/fromJson.txt:1041
+#: po/custom/fromJson.txt:1042
+#: po/custom/fromJson.txt:1043
+#: po/custom/fromJson.txt:1044
+#: po/custom/fromJson.txt:1045
+#: po/custom/fromJson.txt:1046
+#: po/custom/fromJson.txt:1047
+#: po/custom/fromJson.txt:1048
+#: po/custom/fromJson.txt:1049
+#: po/custom/fromJson.txt:1050
+#: po/custom/fromJson.txt:1051
+#: po/custom/fromJson.txt:1052
+#: po/custom/fromJson.txt:1053
+#: po/custom/fromJson.txt:1054
+#: po/custom/fromJson.txt:1055
+#: po/custom/fromJson.txt:1056
+#: po/custom/fromJson.txt:1057
+#: po/custom/fromJson.txt:1058
+#: po/custom/fromJson.txt:1059
+#: po/custom/fromJson.txt:1060
+#: po/custom/fromJson.txt:1061
+#: po/custom/fromJson.txt:1062
+#: po/custom/fromJson.txt:1063
+#: po/custom/fromJson.txt:1064
+#: po/custom/fromJson.txt:1065
+#: po/custom/fromJson.txt:1066
+#: po/custom/fromJson.txt:1067
+#: po/custom/fromJson.txt:1068
+#: po/custom/fromJson.txt:1069
+#: po/custom/fromJson.txt:1070
+#: po/custom/fromJson.txt:1071
+#: po/custom/fromJson.txt:1072
+#: po/custom/fromJson.txt:1073
+#: po/custom/fromJson.txt:1074
+#: po/custom/fromJson.txt:1075
+#: po/custom/fromJson.txt:1076
+#: po/custom/fromJson.txt:1077
+#: po/custom/fromJson.txt:1078
+#: po/custom/fromJson.txt:1079
+#: po/custom/fromJson.txt:1080
+#: po/custom/fromJson.txt:1081
+#: po/custom/fromJson.txt:1082
 msgid "New Defensive Structure Available"
 msgstr "Új védelmi rendszer érhető el"
 
 #: data/base/messages/strings/resstrings.txt:114
 #: data/mp/messages/strings/resstrings.txt:37
+#: po/custom/fromJson.txt:1022
 msgid "AA Site with Tornado Flak Turret"
 msgstr "Légvédelmi platform Tornado légelhárító lövegtoronnyal"
 
@@ -1850,6 +2077,11 @@ msgstr "Légvédelmi platform Tornado légelhárító lövegtoronnyal"
 #: data/mp/messages/strings/resstrings.txt:38
 #: data/mp/messages/strings/resstrings.txt:43
 #: data/mp/messages/strings/resstrings.txt:53
+#: po/custom/fromJson.txt:1020
+#: po/custom/fromJson.txt:1022
+#: po/custom/fromJson.txt:1023
+#: po/custom/fromJson.txt:1076
+#: po/custom/fromJson.txt:1077
 msgid "Automatically targets VTOLs"
 msgstr "Automatikus támadás VTOL-okkal"
 
@@ -1887,31 +2119,71 @@ msgstr "Automatikus támadás VTOL-okkal"
 #: data/mp/messages/strings/resstrings.txt:119
 #: data/mp/messages/strings/resstrings.txt:124
 #: data/mp/messages/strings/resstrings.txt:129
+#: po/custom/fromJson.txt:998
+#: po/custom/fromJson.txt:1020
+#: po/custom/fromJson.txt:1021
+#: po/custom/fromJson.txt:1022
+#: po/custom/fromJson.txt:1023
+#: po/custom/fromJson.txt:1024
+#: po/custom/fromJson.txt:1029
+#: po/custom/fromJson.txt:1030
+#: po/custom/fromJson.txt:1031
+#: po/custom/fromJson.txt:1032
+#: po/custom/fromJson.txt:1033
+#: po/custom/fromJson.txt:1034
+#: po/custom/fromJson.txt:1036
+#: po/custom/fromJson.txt:1037
+#: po/custom/fromJson.txt:1038
+#: po/custom/fromJson.txt:1053
+#: po/custom/fromJson.txt:1054
+#: po/custom/fromJson.txt:1055
+#: po/custom/fromJson.txt:1056
+#: po/custom/fromJson.txt:1057
+#: po/custom/fromJson.txt:1061
+#: po/custom/fromJson.txt:1063
+#: po/custom/fromJson.txt:1064
+#: po/custom/fromJson.txt:1067
+#: po/custom/fromJson.txt:1068
+#: po/custom/fromJson.txt:1069
+#: po/custom/fromJson.txt:1070
+#: po/custom/fromJson.txt:1071
+#: po/custom/fromJson.txt:1072
+#: po/custom/fromJson.txt:1073
+#: po/custom/fromJson.txt:1074
+#: po/custom/fromJson.txt:1075
+#: po/custom/fromJson.txt:1076
+#: po/custom/fromJson.txt:1077
+#: po/custom/fromJson.txt:1161
 msgid "Defensive Strength: Medium"
 msgstr "Védekezo ero: közepes"
 
 #: data/base/messages/strings/resstrings.txt:120
 #: data/mp/messages/strings/resstrings.txt:42
+#: po/custom/fromJson.txt:1020
 msgid "AA Site with Cyclone Flak Turret"
 msgstr "Légvédelmi platform Cyclone légelhárító lövegtoronnyal"
 
 #: data/base/messages/strings/resstrings.txt:126
 #: data/mp/messages/strings/resstrings.txt:47
+#: po/custom/fromJson.txt:1021
 msgid "AA Site with Hurricane Gun Turret"
 msgstr "Légvédelmi platform Hurricane lövegtoronnyal"
 
 #: data/base/messages/strings/resstrings.txt:127
 #: data/mp/messages/strings/resstrings.txt:48
+#: po/custom/fromJson.txt:1021
 msgid "Automatically targets VTOL"
 msgstr "Automatikus támadás VTOL"
 
 #: data/base/messages/strings/resstrings.txt:132
 #: data/mp/messages/strings/resstrings.txt:52
+#: po/custom/fromJson.txt:1023
 msgid "AA Site with Whirlwind Gun Turret"
 msgstr "Légvédelmi platform Whirlwind lövegtoronnyal"
 
 #: data/base/messages/strings/resstrings.txt:142
 #: data/mp/messages/strings/resstrings.txt:57
+#: po/custom/fromJson.txt:1071
 msgid "Indirect fire rocket battery"
 msgstr "Általános tűz a rakéta ütegekkel"
 
@@ -1929,26 +2201,43 @@ msgstr "Általános tűz a rakéta ütegekkel"
 #: data/mp/messages/strings/resstrings.txt:78
 #: data/mp/messages/strings/resstrings.txt:83
 #: data/mp/messages/strings/resstrings.txt:88
+#: po/custom/fromJson.txt:1024
+#: po/custom/fromJson.txt:1029
+#: po/custom/fromJson.txt:1030
+#: po/custom/fromJson.txt:1053
+#: po/custom/fromJson.txt:1054
+#: po/custom/fromJson.txt:1055
+#: po/custom/fromJson.txt:1056
+#: po/custom/fromJson.txt:1057
+#: po/custom/fromJson.txt:1068
+#: po/custom/fromJson.txt:1069
+#: po/custom/fromJson.txt:1070
+#: po/custom/fromJson.txt:1071
+#: po/custom/fromJson.txt:1072
 msgid "Assigned automatically to nearest sensor or CB tower"
 msgstr "Automatikusan a legközelebbi érzékelőt vagy CB tornyot rendeli hozzá"
 
 #: data/base/messages/strings/resstrings.txt:154
 #: data/mp/messages/strings/resstrings.txt:62
+#: po/custom/fromJson.txt:1024
 msgid "Armored Bombard battery pit"
 msgstr "Páncélozott bombavető árok"
 
 #: data/base/messages/strings/resstrings.txt:160
 #: data/mp/messages/strings/resstrings.txt:67
+#: po/custom/fromJson.txt:1057
 msgid "Armored Pepperpot mortar battery pit"
 msgstr "Páncélozott Pepperpot aknavető árok"
 
 #: data/base/messages/strings/resstrings.txt:168
 #: data/mp/messages/strings/resstrings.txt:72
+#: po/custom/fromJson.txt:1054
 msgid "Armored howitzer emplacement"
 msgstr "Páncélozott tarack állás"
 
 #: data/base/messages/strings/resstrings.txt:174
 #: data/mp/messages/strings/resstrings.txt:77
+#: po/custom/fromJson.txt:1030
 msgid "Armored Ground Shaker howitzer emplacement"
 msgstr "Páncélozott Ground Shaker tarack állás"
 
@@ -1956,11 +2245,13 @@ msgstr "Páncélozott Ground Shaker tarack állás"
 #: data/base/messages/strings/resstrings.txt:186
 #: data/mp/messages/strings/resstrings.txt:82
 #: data/mp/messages/strings/resstrings.txt:87
+#: po/custom/fromJson.txt:1053
 msgid "Armored Hellstorm howitzer emplacement"
 msgstr "Páncélozott Hellstorm tarack állás"
 
 #: data/base/messages/strings/resstrings.txt:192
 #: data/mp/messages/strings/resstrings.txt:92
+#: po/custom/fromJson.txt:1067
 msgid "Armored strongpoint with Tank Killer rocket"
 msgstr "Páncélozott erőd Tank Killer rakétával"
 
@@ -1974,11 +2265,24 @@ msgstr "Páncélozott erőd Tank Killer rakétával"
 #: data/mp/messages/strings/resstrings.txt:103
 #: data/mp/messages/strings/resstrings.txt:108
 #: data/mp/messages/strings/resstrings.txt:113
+#: po/custom/fromJson.txt:1037
+#: po/custom/fromJson.txt:1058
+#: po/custom/fromJson.txt:1059
+#: po/custom/fromJson.txt:1060
+#: po/custom/fromJson.txt:1061
+#: po/custom/fromJson.txt:1062
+#: po/custom/fromJson.txt:1063
+#: po/custom/fromJson.txt:1064
+#: po/custom/fromJson.txt:1065
+#: po/custom/fromJson.txt:1066
+#: po/custom/fromJson.txt:1067
+#: po/custom/fromJson.txt:1075
 msgid "Automatically targets enemies in range"
 msgstr "Automatikus támadás a hatótávon belüli ellenségekre"
 
 #: data/base/messages/strings/resstrings.txt:198
 #: data/mp/messages/strings/resstrings.txt:97
+#: po/custom/fromJson.txt:1062
 msgid "Armored strongpoint with Hyper-Velocity Cannon"
 msgstr "Páncélozott erőd nagysebességű ágyúval"
 
@@ -2000,21 +2304,49 @@ msgstr "Páncélozott erőd nagysebességű ágyúval"
 #: data/mp/messages/strings/resstrings.txt:154
 #: data/mp/messages/strings/resstrings.txt:159
 #: data/mp/messages/strings/resstrings.txt:164
+#: po/custom/fromJson.txt:1025
+#: po/custom/fromJson.txt:1026
+#: po/custom/fromJson.txt:1027
+#: po/custom/fromJson.txt:1028
+#: po/custom/fromJson.txt:1035
+#: po/custom/fromJson.txt:1039
+#: po/custom/fromJson.txt:1040
+#: po/custom/fromJson.txt:1041
+#: po/custom/fromJson.txt:1042
+#: po/custom/fromJson.txt:1043
+#: po/custom/fromJson.txt:1044
+#: po/custom/fromJson.txt:1045
+#: po/custom/fromJson.txt:1046
+#: po/custom/fromJson.txt:1047
+#: po/custom/fromJson.txt:1048
+#: po/custom/fromJson.txt:1049
+#: po/custom/fromJson.txt:1050
+#: po/custom/fromJson.txt:1051
+#: po/custom/fromJson.txt:1052
+#: po/custom/fromJson.txt:1058
+#: po/custom/fromJson.txt:1059
+#: po/custom/fromJson.txt:1060
+#: po/custom/fromJson.txt:1062
+#: po/custom/fromJson.txt:1065
+#: po/custom/fromJson.txt:1066
 msgid "Defensive Strength: High"
 msgstr "Védekező erő: magas"
 
 #: data/base/messages/strings/resstrings.txt:204
 #: data/mp/messages/strings/resstrings.txt:102
+#: po/custom/fromJson.txt:1063
 msgid "Armored strongpoint with Inferno Flamer"
 msgstr "Páncélozott erőd Inferno lángszóróval"
 
 #: data/base/messages/strings/resstrings.txt:218
 #: data/mp/messages/strings/resstrings.txt:107
+#: po/custom/fromJson.txt:1058
 msgid "Armored strongpoint with Assault Cannon"
 msgstr "Páncélozott erőd ostromágyúval"
 
 #: data/base/messages/strings/resstrings.txt:224
 #: data/mp/messages/strings/resstrings.txt:112
+#: po/custom/fromJson.txt:1075
 msgid "Reinforced tower with Assault Gun"
 msgstr "Megerősített torony ostromfegyverrel"
 
@@ -2041,6 +2373,32 @@ msgstr "Páncélozott őrtorony nehéz gépfegyverrel"
 #: data/mp/messages/strings/resstrings.txt:148
 #: data/mp/messages/strings/resstrings.txt:153
 #: data/mp/messages/strings/resstrings.txt:158
+#: po/custom/fromJson.txt:1025
+#: po/custom/fromJson.txt:1026
+#: po/custom/fromJson.txt:1027
+#: po/custom/fromJson.txt:1028
+#: po/custom/fromJson.txt:1031
+#: po/custom/fromJson.txt:1032
+#: po/custom/fromJson.txt:1033
+#: po/custom/fromJson.txt:1034
+#: po/custom/fromJson.txt:1035
+#: po/custom/fromJson.txt:1036
+#: po/custom/fromJson.txt:1038
+#: po/custom/fromJson.txt:1039
+#: po/custom/fromJson.txt:1040
+#: po/custom/fromJson.txt:1041
+#: po/custom/fromJson.txt:1042
+#: po/custom/fromJson.txt:1043
+#: po/custom/fromJson.txt:1044
+#: po/custom/fromJson.txt:1045
+#: po/custom/fromJson.txt:1046
+#: po/custom/fromJson.txt:1047
+#: po/custom/fromJson.txt:1048
+#: po/custom/fromJson.txt:1049
+#: po/custom/fromJson.txt:1050
+#: po/custom/fromJson.txt:1051
+#: po/custom/fromJson.txt:1052
+#: po/custom/fromJson.txt:1078
 msgid "Automatically targets enemies within sensor range"
 msgstr "Érzékelőtartományon belül automatikusan célozza meg az ellenséget"
 
@@ -2066,51 +2424,74 @@ msgstr "Páncélozott talapzat lángszóróval"
 
 #: data/base/messages/strings/resstrings.txt:288
 #: data/mp/messages/strings/resstrings.txt:142
+#: po/custom/fromJson.txt:1040
 msgid "Armored hardpoint with Assault Gun"
 msgstr "Páncélozott talapzat ostromfegyverrel"
 
 #: data/base/messages/strings/resstrings.txt:294
 #: data/mp/messages/strings/resstrings.txt:147
+#: po/custom/fromJson.txt:1039
 msgid "Armored hardpoint with Assault Cannon"
 msgstr "Páncélozott talapzat ostromágyúval"
 
 #: data/base/messages/strings/resstrings.txt:302
 #: data/mp/messages/strings/resstrings.txt:152
+#: po/custom/fromJson.txt:1046
 msgid "Armored hardpoint with Inferno flamer"
 msgstr "Páncélozott talapzat Inferno lángszóróval"
 
 #: data/base/messages/strings/resstrings.txt:308
 #: data/mp/messages/strings/resstrings.txt:157
+#: po/custom/fromJson.txt:1052
 msgid "Armored hardpoint with Tank Killer AT missile"
 msgstr "Páncélozott talapzat Tank Killer rakétával"
 
 #: data/base/messages/strings/resstrings.txt:324
 #: data/mp/messages/strings/resstrings.txt:162
+#: po/custom/fromJson.txt:1074
 msgid "Reinforced concrete tank traps"
 msgstr "Megerősített vasbeton tankcsapda"
 
 #: data/base/messages/strings/resstrings.txt:325
 #: data/mp/messages/strings/resstrings.txt:163
+#: po/custom/fromJson.txt:1074
 msgid "Prevents enemy movement"
 msgstr "Megakadályozza az ellenség mozgását"
 
 #: data/base/messages/strings/resstrings.txt:333
 #: data/mp/messages/strings/resstrings.txt:166
+#: po/custom/fromJson.txt:1184
+#: po/custom/fromJson.txt:1185
+#: po/custom/fromJson.txt:1186
+#: po/custom/fromJson.txt:1187
+#: po/custom/fromJson.txt:1188
+#: po/custom/fromJson.txt:1189
 msgid "Repair Facility Improved"
 msgstr "Szervizüzem fejlesztve"
 
 #: data/base/messages/strings/resstrings.txt:334
 #: data/mp/messages/strings/resstrings.txt:167
+#: po/custom/fromJson.txt:1188
+#: po/custom/fromJson.txt:1189
 msgid "New robotic repair techniques"
 msgstr "Új javítórobot technikák"
 
 #: data/base/messages/strings/resstrings.txt:335
 #: data/mp/messages/strings/resstrings.txt:168
+#: po/custom/fromJson.txt:1184
+#: po/custom/fromJson.txt:1186
+#: po/custom/fromJson.txt:1188
 msgid "Increases Repair Speed"
 msgstr "Megnövekedett szervizsebesség"
 
 #: data/base/messages/strings/resstrings.txt:336
 #: data/mp/messages/strings/resstrings.txt:169
+#: po/custom/fromJson.txt:1184
+#: po/custom/fromJson.txt:1185
+#: po/custom/fromJson.txt:1186
+#: po/custom/fromJson.txt:1187
+#: po/custom/fromJson.txt:1188
+#: po/custom/fromJson.txt:1189
 msgid "All repair facilities upgraded automatically"
 msgstr "Szervízüzemek automatikusan fejlesztve"
 
@@ -2118,12 +2499,16 @@ msgstr "Szervízüzemek automatikusan fejlesztve"
 #: data/base/messages/strings/resstrings.txt:355
 #: data/mp/messages/strings/resstrings.txt:171
 #: data/mp/messages/strings/resstrings.txt:176
+#: po/custom/fromJson.txt:876
+#: po/custom/fromJson.txt:877
+#: po/custom/fromJson.txt:878
 msgid "Cyborg Production Improved"
 msgstr "Cyborg gyártás fejlesztve"
 
 #: data/base/messages/strings/resstrings.txt:348
 #: data/mp/messages/strings/resstrings.txt:172
 #: po/custom/fromJson.txt:582
+#: po/custom/fromJson.txt:878
 msgid "Robotic Cyborg Production"
 msgstr "Robotizált Cyborg gyártás"
 
@@ -2131,6 +2516,9 @@ msgstr "Robotizált Cyborg gyártás"
 #: data/base/messages/strings/resstrings.txt:357
 #: data/mp/messages/strings/resstrings.txt:173
 #: data/mp/messages/strings/resstrings.txt:178
+#: po/custom/fromJson.txt:876
+#: po/custom/fromJson.txt:877
+#: po/custom/fromJson.txt:878
 msgid "Increases Cyborg factory output"
 msgstr "Megnövekedett Cyborg gyártási teljesítmény"
 
@@ -2138,6 +2526,9 @@ msgstr "Megnövekedett Cyborg gyártási teljesítmény"
 #: data/base/messages/strings/resstrings.txt:358
 #: data/mp/messages/strings/resstrings.txt:174
 #: data/mp/messages/strings/resstrings.txt:179
+#: po/custom/fromJson.txt:876
+#: po/custom/fromJson.txt:877
+#: po/custom/fromJson.txt:878
 msgid "All Cyborg factories upgraded automatically"
 msgstr "Cyborg gyárak automatikusan fejlesztve"
 
@@ -2150,16 +2541,22 @@ msgstr "Ön sokszorozó Cyborg termelés"
 #: data/base/messages/strings/resstrings.txt:373
 #: data/mp/messages/strings/resstrings.txt:181
 #: data/mp/messages/strings/resstrings.txt:186
+#: po/custom/fromJson.txt:1244
+#: po/custom/fromJson.txt:1245
+#: po/custom/fromJson.txt:1246
 msgid "Vehicle Production Improved"
 msgstr "Járműgyártás növekedett"
 
 #: data/base/messages/strings/resstrings.txt:366
 #: data/mp/messages/strings/resstrings.txt:182
+#: po/custom/fromJson.txt:1173
+#: po/custom/fromJson.txt:1246
 msgid "New Robotic Techniques improve factory production"
 msgstr "Az új robotizálási módszerek megnövelték a gyárak termelékenységét"
 
 #: data/base/messages/strings/resstrings.txt:367
 #: data/mp/messages/strings/resstrings.txt:183
+#: po/custom/fromJson.txt:1246
 msgid "Increases factory production rate"
 msgstr "Megnövekedett gyári termelés arány"
 
@@ -2167,6 +2564,9 @@ msgstr "Megnövekedett gyári termelés arány"
 #: data/base/messages/strings/resstrings.txt:376
 #: data/mp/messages/strings/resstrings.txt:184
 #: data/mp/messages/strings/resstrings.txt:189
+#: po/custom/fromJson.txt:1244
+#: po/custom/fromJson.txt:1245
+#: po/custom/fromJson.txt:1246
 msgid "All vehicle factories upgraded automatically"
 msgstr "Járműgyárak automatikusan fejlesztve"
 
@@ -2177,85 +2577,146 @@ msgstr "Önreprodukáló gyári termelés"
 
 #: data/base/messages/strings/resstrings.txt:375
 #: data/mp/messages/strings/resstrings.txt:188
+#: po/custom/fromJson.txt:1172
+#: po/custom/fromJson.txt:1245
 msgid "Increases factory output"
 msgstr "Megnövekedett gyártási teljesítmény"
 
 #: data/base/messages/strings/resstrings.txt:389
 #: data/mp/messages/strings/resstrings.txt:191
+#: po/custom/fromJson.txt:1195
+#: po/custom/fromJson.txt:1196
+#: po/custom/fromJson.txt:1197
+#: po/custom/fromJson.txt:1198
+#: po/custom/fromJson.txt:1199
+#: po/custom/fromJson.txt:1200
 msgid "Research Improved"
 msgstr "Kutatás fejlesztve"
 
 #: data/base/messages/strings/resstrings.txt:390
 #: data/mp/messages/strings/resstrings.txt:192
 #: po/custom/fromJson.txt:176
+#: po/custom/fromJson.txt:1195
+#: po/custom/fromJson.txt:1196
 msgid "Dedicated Synaptic Link Data Analysis"
 msgstr "Célirányos szinaptikus kapcsolatú adatelemzés"
 
 #: data/base/messages/strings/resstrings.txt:391
 #: data/mp/messages/strings/resstrings.txt:193
+#: po/custom/fromJson.txt:1195
+#: po/custom/fromJson.txt:1197
+#: po/custom/fromJson.txt:1199
+#: po/custom/fromJson.txt:1201
 msgid "Increases research speed"
 msgstr "Megnövekedett kutatási sebesség"
 
 #: data/base/messages/strings/resstrings.txt:392
 #: data/mp/messages/strings/resstrings.txt:194
+#: po/custom/fromJson.txt:1195
+#: po/custom/fromJson.txt:1196
+#: po/custom/fromJson.txt:1197
+#: po/custom/fromJson.txt:1198
+#: po/custom/fromJson.txt:1199
+#: po/custom/fromJson.txt:1200
 msgid "All research facilities upgraded automatically"
 msgstr "Kutatási létesítmények automatikusan fejlesztve"
 
 #: data/base/messages/strings/resstrings.txt:399
 #: data/mp/messages/strings/resstrings.txt:196
+#: po/custom/fromJson.txt:920
+#: po/custom/fromJson.txt:921
+#: po/custom/fromJson.txt:922
+#: po/custom/fromJson.txt:923
+#: po/custom/fromJson.txt:924
+#: po/custom/fromJson.txt:925
+#: po/custom/fromJson.txt:926
+#: po/custom/fromJson.txt:927
 msgid "Increases Damage Resistance"
 msgstr "Megnövekedett sebzés ellenállás"
 
 #: data/base/messages/strings/resstrings.txt:400
 #: data/mp/messages/strings/resstrings.txt:197
 #: po/custom/fromJson.txt:247
+#: po/custom/fromJson.txt:922
+#: po/custom/fromJson.txt:923
 msgid "Hardened Base Structure Materials"
 msgstr "Edzett bázis épület alapanyagok"
 
 #: data/base/messages/strings/resstrings.txt:402
 #: data/mp/messages/strings/resstrings.txt:199
+#: po/custom/fromJson.txt:920
+#: po/custom/fromJson.txt:921
+#: po/custom/fromJson.txt:922
+#: po/custom/fromJson.txt:923
+#: po/custom/fromJson.txt:924
+#: po/custom/fromJson.txt:925
+#: po/custom/fromJson.txt:926
+#: po/custom/fromJson.txt:927
 msgid "All base structures upgraded automatically"
 msgstr "Bázisépületek automatikusan fejlesztve"
 
 #: data/base/messages/strings/resstrings.txt:411
 #: data/mp/messages/strings/resstrings.txt:201
+#: po/custom/fromJson.txt:1169
+#: po/custom/fromJson.txt:1170
+#: po/custom/fromJson.txt:1171
+#: po/custom/fromJson.txt:1172
+#: po/custom/fromJson.txt:1173
+#: po/custom/fromJson.txt:1174
 msgid "Production Improved"
 msgstr "Gyártás fejlesztve"
 
 #: data/base/messages/strings/resstrings.txt:412
 #: data/mp/messages/strings/resstrings.txt:202
 #: po/custom/fromJson.txt:593
+#: po/custom/fromJson.txt:1174
 msgid "Robotic VTOL Production"
 msgstr "Robotizált VTOL gyártás"
 
 #: data/base/messages/strings/resstrings.txt:413
 #: data/mp/messages/strings/resstrings.txt:203
+#: po/custom/fromJson.txt:1170
+#: po/custom/fromJson.txt:1174
 msgid "Increases VTOL factory output"
 msgstr "Megnövekedett VTOL gyártási teljesítmény"
 
 #: data/base/messages/strings/resstrings.txt:414
 #: data/mp/messages/strings/resstrings.txt:204
+#: po/custom/fromJson.txt:1170
+#: po/custom/fromJson.txt:1174
 msgid "All VTOL factories upgraded automatically"
 msgstr "VTOL gyárak automatikusan fejlesztve"
 
 #: data/base/messages/strings/resstrings.txt:421
 #: data/mp/messages/strings/resstrings.txt:206
+#: po/custom/fromJson.txt:1258
+#: po/custom/fromJson.txt:1259
+#: po/custom/fromJson.txt:1260
+#: po/custom/fromJson.txt:1261
 msgid "VTOL Rearming Times Reduced"
 msgstr "VTOL újratöltési idő csökkent"
 
 #: data/base/messages/strings/resstrings.txt:422
 #: data/mp/messages/strings/resstrings.txt:207
 #: po/custom/fromJson.txt:79
+#: po/custom/fromJson.txt:1258
+#: po/custom/fromJson.txt:1259
 msgid "Automated VTOL Rearming"
 msgstr "Automatizált VTOL újratöltés"
 
 #: data/base/messages/strings/resstrings.txt:423
 #: data/mp/messages/strings/resstrings.txt:208
+#: po/custom/fromJson.txt:1259
+#: po/custom/fromJson.txt:1261
 msgid "Reduces rearming time"
 msgstr "Az újratöltési idő rövidül"
 
 #: data/base/messages/strings/resstrings.txt:424
 #: data/mp/messages/strings/resstrings.txt:209
+#: po/custom/fromJson.txt:1258
+#: po/custom/fromJson.txt:1259
+#: po/custom/fromJson.txt:1260
+#: po/custom/fromJson.txt:1261
 msgid "All rearming pads upgraded automatically"
 msgstr "Újratöltő platformok automatikusan fejlesztve"
 
@@ -2263,21 +2724,32 @@ msgstr "Újratöltő platformok automatikusan fejlesztve"
 #: data/base/messages/strings/resstrings.txt:479
 #: data/mp/messages/strings/resstrings.txt:211
 #: data/mp/messages/strings/resstrings.txt:226
+#: po/custom/fromJson.txt:1135
+#: po/custom/fromJson.txt:1139
+#: po/custom/fromJson.txt:1140
+#: po/custom/fromJson.txt:1141
+#: po/custom/fromJson.txt:1142
+#: po/custom/fromJson.txt:1143
 msgid "New Systems Turret Available"
 msgstr "Új rendszertorony érhető el"
 
 #: data/base/messages/strings/resstrings.txt:444
 #: data/mp/messages/strings/resstrings.txt:212
+#: po/custom/fromJson.txt:1139
 msgid "Heavy repair unit"
 msgstr "Nehéz szerviz egység"
 
 #: data/base/messages/strings/resstrings.txt:445
 #: data/mp/messages/strings/resstrings.txt:213
+#: po/custom/fromJson.txt:1135
+#: po/custom/fromJson.txt:1139
 msgid "Automatically Repairs Damaged Units"
 msgstr "Automatikusan javítja a sérült egységeket"
 
 #: data/base/messages/strings/resstrings.txt:446
 #: data/mp/messages/strings/resstrings.txt:214
+#: po/custom/fromJson.txt:1135
+#: po/custom/fromJson.txt:1139
 msgid "Or damaged units may be selected as target"
 msgstr "vagy a sérült egységeket, mint a kijelölt célt"
 
@@ -2298,76 +2770,108 @@ msgstr "Szervizegységek automatikusan fejlesztve"
 
 #: data/base/messages/strings/resstrings.txt:459
 #: data/mp/messages/strings/resstrings.txt:221
+#: po/custom/fromJson.txt:919
 msgid "Improved Sensor Tower Available"
 msgstr "Továbbfejlesztett érzékelő torony érhető el"
 
 #: data/base/messages/strings/resstrings.txt:460
 #: data/mp/messages/strings/resstrings.txt:222
+#: po/custom/fromJson.txt:919
 msgid "New construction techniques improve tower"
 msgstr "Az új építési eljárásokkal fejlődik a torony"
 
 #: data/base/messages/strings/resstrings.txt:461
 #: data/mp/messages/strings/resstrings.txt:223
+#: po/custom/fromJson.txt:919
 msgid "Replaces existing sensor tower"
 msgstr "Felváltja a meglévő érzékelő tornyokat"
 
 #: data/base/messages/strings/resstrings.txt:462
 #: data/mp/messages/strings/resstrings.txt:224
+#: po/custom/fromJson.txt:919
+#: po/custom/fromJson.txt:1131
+#: po/custom/fromJson.txt:1137
 msgid "May be assigned as spotter for indirect fire weapons"
 msgstr "Mint felderítőt lehet hozzárendelni az általános tűzfegyverekhez"
 
 #: data/base/messages/strings/resstrings.txt:480
 #: data/mp/messages/strings/resstrings.txt:227
+#: po/custom/fromJson.txt:1142
 msgid "VTOL CB turret detects enemy indirect fire batteries"
 msgstr "VTOL CB torony, általános ellenséges tüzet észlelt"
 
 #: data/base/messages/strings/resstrings.txt:481
 #: data/mp/messages/strings/resstrings.txt:228
+#: po/custom/fromJson.txt:1133
+#: po/custom/fromJson.txt:1142
 msgid "Orders assigned VTOLs to attack the enemy batteries"
 msgstr "Támadási parancs a kijelölt VTOL egységeknek az ellenséges ütegekere"
 
 #: data/base/messages/strings/resstrings.txt:482
 #: data/mp/messages/strings/resstrings.txt:229
+#: po/custom/fromJson.txt:1133
+#: po/custom/fromJson.txt:1142
 msgid "VTOLs attack until enemy battery is suppressed"
 msgstr "VTOL egységek támadása az ellenséges ütegek megsemmisüléséig"
 
 #: data/base/messages/strings/resstrings.txt:485
 #: data/mp/messages/strings/resstrings.txt:231
+#: po/custom/fromJson.txt:1255
+#: po/custom/fromJson.txt:1256
+#: po/custom/fromJson.txt:1257
 msgid "VTOL CB Improved"
 msgstr "VTOL CB fejlesztve"
 
 #: data/base/messages/strings/resstrings.txt:486
 #: data/mp/messages/strings/resstrings.txt:232
+#: po/custom/fromJson.txt:860
+#: po/custom/fromJson.txt:1257
 msgid "New fire detection systems"
 msgstr "Új tűzérzékelő rendszerek"
 
 #: data/base/messages/strings/resstrings.txt:487
 #: data/mp/messages/strings/resstrings.txt:233
+#: po/custom/fromJson.txt:1255
+#: po/custom/fromJson.txt:1256
+#: po/custom/fromJson.txt:1257
 msgid "Extends VTOL CB Range"
 msgstr "Megnöveli VTOL CB hatósugarát"
 
 #: data/base/messages/strings/resstrings.txt:488
 #: data/mp/messages/strings/resstrings.txt:234
+#: po/custom/fromJson.txt:1255
+#: po/custom/fromJson.txt:1256
+#: po/custom/fromJson.txt:1257
 msgid "All VTOL CB sensors upgraded automatically"
 msgstr "VTOL CB érzékelők automatikusan fejlesztve"
 
 #: data/base/messages/strings/resstrings.txt:499
 #: data/mp/messages/strings/resstrings.txt:236
+#: po/custom/fromJson.txt:1262
+#: po/custom/fromJson.txt:1263
+#: po/custom/fromJson.txt:1264
 msgid "VTOL Strike Improved"
 msgstr "VTOL csapásmérő fejlesztve"
 
 #: data/base/messages/strings/resstrings.txt:500
 #: data/mp/messages/strings/resstrings.txt:237
+#: po/custom/fromJson.txt:1264
 msgid "New target recognition systems"
 msgstr "Új célfelismerő rendszerek"
 
 #: data/base/messages/strings/resstrings.txt:501
 #: data/mp/messages/strings/resstrings.txt:238
+#: po/custom/fromJson.txt:1262
+#: po/custom/fromJson.txt:1263
+#: po/custom/fromJson.txt:1264
 msgid "Extends VTOL Strike Range"
 msgstr "Megnöveli a VTOL csapás hatótávját"
 
 #: data/base/messages/strings/resstrings.txt:502
 #: data/mp/messages/strings/resstrings.txt:239
+#: po/custom/fromJson.txt:1262
+#: po/custom/fromJson.txt:1263
+#: po/custom/fromJson.txt:1264
 msgid "All VTOL Strike sensors upgraded automatically"
 msgstr "VTOL csapásmérő érzékelők automatikusan fejlesztve"
 
@@ -2393,57 +2897,81 @@ msgstr "Kódolók automatikusan fejlesztve"
 
 #: data/base/messages/strings/resstrings.txt:527
 #: data/mp/messages/strings/resstrings.txt:246
+#: po/custom/fromJson.txt:862
 msgid "Collective Light Body"
 msgstr "Kollektív könnyű karosszéria"
 
 #: data/base/messages/strings/resstrings.txt:528
 #: data/mp/messages/strings/resstrings.txt:247
+#: po/custom/fromJson.txt:862
+#: po/custom/fromJson.txt:1165
 msgid "Superior armor and body points to Viper"
 msgstr "Kiváló páncélzat és karosszéria értékek Viper-hez"
 
 #: data/base/messages/strings/resstrings.txt:529
 #: data/mp/messages/strings/resstrings.txt:248
+#: po/custom/fromJson.txt:862
 msgid "Slower than Viper"
 msgstr "Lassabb mint a Viper"
 
 #: data/base/messages/strings/resstrings.txt:530
 #: data/mp/messages/strings/resstrings.txt:249
+#: po/custom/fromJson.txt:862
 msgid "High power costs and slower to produce than Viper"
 msgstr "Magas az energia költsége és lassabb a gyártása mint a Viper-nek"
 
 #: data/base/messages/strings/resstrings.txt:539
 #: data/mp/messages/strings/resstrings.txt:251
+#: po/custom/fromJson.txt:863
 msgid "Collective Medium Body"
 msgstr "Kollektív közepes karosszéria"
 
 #: data/base/messages/strings/resstrings.txt:540
 #: data/mp/messages/strings/resstrings.txt:252
+#: po/custom/fromJson.txt:863
+#: po/custom/fromJson.txt:1166
 msgid "Superior armor and body points to Cobra"
 msgstr "Kiváló páncélzat és karosszéria értékek Cobra-hoz"
 
 #: data/base/messages/strings/resstrings.txt:541
 #: data/mp/messages/strings/resstrings.txt:253
+#: po/custom/fromJson.txt:863
 msgid "Slower than Cobra"
 msgstr "Lassabb mint a Cobra"
 
 #: data/base/messages/strings/resstrings.txt:542
 #: data/mp/messages/strings/resstrings.txt:254
+#: po/custom/fromJson.txt:863
 msgid "High power costs and slower to produce than Cobra"
 msgstr "Magas az energia költsége és lassabb a gyártása mint a Cobra-nak"
 
 #: data/base/messages/strings/resstrings.txt:559
 #: data/mp/messages/strings/resstrings.txt:256
+#: po/custom/fromJson.txt:1236
+#: po/custom/fromJson.txt:1237
+#: po/custom/fromJson.txt:1238
+#: po/custom/fromJson.txt:1239
+#: po/custom/fromJson.txt:1240
+#: po/custom/fromJson.txt:1241
+#: po/custom/fromJson.txt:1242
+#: po/custom/fromJson.txt:1243
 msgid "Vehicle Engine Upgrade"
 msgstr "Jármű motor fejlesztés"
 
 #: data/base/messages/strings/resstrings.txt:560
 #: data/mp/messages/strings/resstrings.txt:257
 #: po/custom/fromJson.txt:728
+#: po/custom/fromJson.txt:1242
+#: po/custom/fromJson.txt:1243
 msgid "Turbo-Charged Engine"
 msgstr "Turbófeltöltős motor"
 
 #: data/base/messages/strings/resstrings.txt:561
 #: data/mp/messages/strings/resstrings.txt:258
+#: po/custom/fromJson.txt:1236
+#: po/custom/fromJson.txt:1238
+#: po/custom/fromJson.txt:1240
+#: po/custom/fromJson.txt:1242
 msgid "Improves vehicle speed"
 msgstr "Jármű sebesség továbbfejlesztése"
 
@@ -2453,31 +2981,69 @@ msgstr "Jármű sebesség továbbfejlesztése"
 #: data/mp/messages/strings/resstrings.txt:259
 #: data/mp/messages/strings/resstrings.txt:264
 #: data/mp/messages/strings/resstrings.txt:269
+#: po/custom/fromJson.txt:1228
+#: po/custom/fromJson.txt:1229
+#: po/custom/fromJson.txt:1230
+#: po/custom/fromJson.txt:1231
+#: po/custom/fromJson.txt:1232
+#: po/custom/fromJson.txt:1233
+#: po/custom/fromJson.txt:1234
+#: po/custom/fromJson.txt:1235
+#: po/custom/fromJson.txt:1236
+#: po/custom/fromJson.txt:1237
+#: po/custom/fromJson.txt:1238
+#: po/custom/fromJson.txt:1239
+#: po/custom/fromJson.txt:1240
+#: po/custom/fromJson.txt:1241
+#: po/custom/fromJson.txt:1242
+#: po/custom/fromJson.txt:1243
+#: po/custom/fromJson.txt:1252
+#: po/custom/fromJson.txt:1253
+#: po/custom/fromJson.txt:1254
 msgid "All vehicles upgraded automatically"
 msgstr "Járművek automatikusan fejlesztve"
 
 #: data/base/messages/strings/resstrings.txt:571
 #: data/mp/messages/strings/resstrings.txt:261
+#: po/custom/fromJson.txt:1228
+#: po/custom/fromJson.txt:1229
+#: po/custom/fromJson.txt:1230
+#: po/custom/fromJson.txt:1231
+#: po/custom/fromJson.txt:1232
+#: po/custom/fromJson.txt:1233
+#: po/custom/fromJson.txt:1234
+#: po/custom/fromJson.txt:1235
 msgid "Vehicle Bodies Improved"
 msgstr "Jármű karosszériák fejlesztve"
 
 #: data/base/messages/strings/resstrings.txt:573
 #: data/mp/messages/strings/resstrings.txt:263
+#: po/custom/fromJson.txt:1228
+#: po/custom/fromJson.txt:1230
+#: po/custom/fromJson.txt:1232
+#: po/custom/fromJson.txt:1234
 msgid "Increases kinetic armor and body points"
 msgstr "Megnövekedett kinetikus páncél és karosszéria értékek"
 
 #: data/base/messages/strings/resstrings.txt:581
 #: data/mp/messages/strings/resstrings.txt:266
+#: po/custom/fromJson.txt:1252
+#: po/custom/fromJson.txt:1253
+#: po/custom/fromJson.txt:1254
 msgid "Vehicle Thermal Armor Improved"
 msgstr "Jármű hőpajzs fejlesztve"
 
 #: data/base/messages/strings/resstrings.txt:582
 #: data/mp/messages/strings/resstrings.txt:267
+#: po/custom/fromJson.txt:1252
+#: po/custom/fromJson.txt:1253
+#: po/custom/fromJson.txt:1254
 msgid "Heat-resistant armored layers"
 msgstr "Hőálló páncélozott rétegek"
 
 #: data/base/messages/strings/resstrings.txt:583
 #: data/mp/messages/strings/resstrings.txt:268
+#: po/custom/fromJson.txt:1252
 msgid "Increases Thermal Armor"
 msgstr "Megnövekedett hőpajzs értékek"
 
@@ -2489,6 +3055,11 @@ msgstr "Megnövekedett hőpajzs értékek"
 #: data/mp/messages/strings/resstrings.txt:276
 #: data/mp/messages/strings/resstrings.txt:281
 #: data/mp/messages/strings/resstrings.txt:286
+#: po/custom/fromJson.txt:1247
+#: po/custom/fromJson.txt:1248
+#: po/custom/fromJson.txt:1249
+#: po/custom/fromJson.txt:1250
+#: po/custom/fromJson.txt:1251
 msgid "Vehicle Propulsion Improved"
 msgstr "Járműhajtómű fejlesztve"
 
@@ -2500,6 +3071,11 @@ msgstr "Járműhajtómű fejlesztve"
 #: data/mp/messages/strings/resstrings.txt:277
 #: data/mp/messages/strings/resstrings.txt:282
 #: data/mp/messages/strings/resstrings.txt:287
+#: po/custom/fromJson.txt:879
+#: po/custom/fromJson.txt:1247
+#: po/custom/fromJson.txt:1248
+#: po/custom/fromJson.txt:1249
+#: po/custom/fromJson.txt:1250
 msgid "New armored construction"
 msgstr "Új páncélzat építése"
 
@@ -2511,26 +3087,35 @@ msgstr "Új páncélzat építése"
 #: data/mp/messages/strings/resstrings.txt:278
 #: data/mp/messages/strings/resstrings.txt:283
 #: data/mp/messages/strings/resstrings.txt:288
+#: po/custom/fromJson.txt:879
+#: po/custom/fromJson.txt:1247
+#: po/custom/fromJson.txt:1248
+#: po/custom/fromJson.txt:1249
+#: po/custom/fromJson.txt:1250
 msgid "Increases Body Points"
 msgstr "Megnövekedett karosszéria értékek"
 
 #: data/base/messages/strings/resstrings.txt:594
 #: data/mp/messages/strings/resstrings.txt:274
+#: po/custom/fromJson.txt:1247
 msgid "All half-tracks upgraded automatically"
 msgstr "Féllánctalpasok automatikusan fejlesztve"
 
 #: data/base/messages/strings/resstrings.txt:604
 #: data/mp/messages/strings/resstrings.txt:279
+#: po/custom/fromJson.txt:1248
 msgid "All hovers upgraded automatically"
 msgstr "Légpárnások automatikusan fejlesztve"
 
 #: data/base/messages/strings/resstrings.txt:614
 #: data/mp/messages/strings/resstrings.txt:284
+#: po/custom/fromJson.txt:1249
 msgid "All tracks upgraded automatically"
 msgstr "Lánctalpasok automatikusan fejlesztve"
 
 #: data/base/messages/strings/resstrings.txt:624
 #: data/mp/messages/strings/resstrings.txt:289
+#: po/custom/fromJson.txt:1250
 msgid "All wheels upgraded automatically"
 msgstr "Kerekes járművek automatikusan fejlesztve"
 
@@ -2542,11 +3127,16 @@ msgstr "Kerekes járművek automatikusan fejlesztve"
 #: data/mp/messages/strings/resstrings.txt:296
 #: data/mp/messages/strings/resstrings.txt:301
 #: data/mp/messages/strings/resstrings.txt:306
+#: po/custom/fromJson.txt:981
+#: po/custom/fromJson.txt:982
+#: po/custom/fromJson.txt:983
+#: po/custom/fromJson.txt:984
 msgid "New AA Turret Available"
 msgstr "Új légvédelmi lövegtorony érhető el"
 
 #: data/base/messages/strings/resstrings.txt:636
 #: data/mp/messages/strings/resstrings.txt:292
+#: po/custom/fromJson.txt:984
 msgid "Twin 80mm flak weapon"
 msgstr "80mm iker légelhárító löveg"
 
@@ -2558,21 +3148,32 @@ msgstr "80mm iker légelhárító löveg"
 #: data/mp/messages/strings/resstrings.txt:298
 #: data/mp/messages/strings/resstrings.txt:303
 #: data/mp/messages/strings/resstrings.txt:308
+#: po/custom/fromJson.txt:899
+#: po/custom/fromJson.txt:902
+#: po/custom/fromJson.txt:929
+#: po/custom/fromJson.txt:981
+#: po/custom/fromJson.txt:982
+#: po/custom/fromJson.txt:983
+#: po/custom/fromJson.txt:984
 msgid "Aerial targets only"
 msgstr "Csak légi célok"
 
 #: data/base/messages/strings/resstrings.txt:642
 #: data/mp/messages/strings/resstrings.txt:297
+#: po/custom/fromJson.txt:983
 msgid "Quad 80mm flak weapon"
 msgstr "80mm négyes légelhárító löveg"
 
 #: data/base/messages/strings/resstrings.txt:648
 #: data/mp/messages/strings/resstrings.txt:302
+#: po/custom/fromJson.txt:981
 msgid "30mm Anti-Aircraft machinegun"
 msgstr "30mm légvédelmi gépfegyver"
 
 #: data/base/messages/strings/resstrings.txt:654
 #: data/mp/messages/strings/resstrings.txt:307
+#: po/custom/fromJson.txt:902
+#: po/custom/fromJson.txt:982
 msgid "Quad 30mm Anti-Aircraft machinegun"
 msgstr "30mm négyes légvédelmi gépfegyver"
 
@@ -2580,16 +3181,31 @@ msgstr "30mm négyes légvédelmi gépfegyver"
 #: data/base/messages/strings/resstrings.txt:677
 #: data/mp/messages/strings/resstrings.txt:311
 #: data/mp/messages/strings/resstrings.txt:321
+#: po/custom/fromJson.txt:829
+#: po/custom/fromJson.txt:830
+#: po/custom/fromJson.txt:831
+#: po/custom/fromJson.txt:832
+#: po/custom/fromJson.txt:833
+#: po/custom/fromJson.txt:834
+#: po/custom/fromJson.txt:835
+#: po/custom/fromJson.txt:836
+#: po/custom/fromJson.txt:837
+#: po/custom/fromJson.txt:838
 msgid "AA Upgrade"
 msgstr "Légvédelmi fejlesztés"
 
 #: data/base/messages/strings/resstrings.txt:660
 #: data/mp/messages/strings/resstrings.txt:312
+#: po/custom/fromJson.txt:833
+#: po/custom/fromJson.txt:834
 msgid "Detects and locks-on to VTOL engine emissions"
 msgstr "Érzékeli és célként rögzíti a VTOL hajtóművet"
 
 #: data/base/messages/strings/resstrings.txt:661
 #: data/mp/messages/strings/resstrings.txt:313
+#: po/custom/fromJson.txt:832
+#: po/custom/fromJson.txt:834
+#: po/custom/fromJson.txt:838
 msgid "Increases AA accuracy"
 msgstr "Megnövekedett légvédelmi célpontosság"
 
@@ -2597,36 +3213,62 @@ msgstr "Megnövekedett légvédelmi célpontosság"
 #: data/base/messages/strings/resstrings.txt:680
 #: data/mp/messages/strings/resstrings.txt:314
 #: data/mp/messages/strings/resstrings.txt:324
+#: po/custom/fromJson.txt:829
+#: po/custom/fromJson.txt:830
+#: po/custom/fromJson.txt:831
+#: po/custom/fromJson.txt:832
+#: po/custom/fromJson.txt:833
+#: po/custom/fromJson.txt:834
+#: po/custom/fromJson.txt:835
+#: po/custom/fromJson.txt:836
+#: po/custom/fromJson.txt:837
+#: po/custom/fromJson.txt:838
 msgid "All AA weapons upgraded automatically"
 msgstr "Légvédelmi fegyverek automatikusan fejlesztve"
 
 #: data/base/messages/strings/resstrings.txt:669
 #: data/mp/messages/strings/resstrings.txt:316
+#: po/custom/fromJson.txt:825
+#: po/custom/fromJson.txt:826
+#: po/custom/fromJson.txt:827
+#: po/custom/fromJson.txt:828
 msgid "AA Flak Upgrade"
 msgstr "Légelhárító fejlesztés"
 
 #: data/base/messages/strings/resstrings.txt:670
 #: data/mp/messages/strings/resstrings.txt:317
+#: po/custom/fromJson.txt:827
+#: po/custom/fromJson.txt:828
 msgid "High Explosive Flak shards"
 msgstr "Nagy hatóerejű légelhárító szilánk"
 
 #: data/base/messages/strings/resstrings.txt:671
 #: data/mp/messages/strings/resstrings.txt:318
+#: po/custom/fromJson.txt:826
+#: po/custom/fromJson.txt:828
 msgid "Increases AA Flak damage"
 msgstr "Megnövekedett légelhárító sebzés"
 
 #: data/base/messages/strings/resstrings.txt:672
 #: data/mp/messages/strings/resstrings.txt:319
+#: po/custom/fromJson.txt:825
+#: po/custom/fromJson.txt:826
+#: po/custom/fromJson.txt:827
+#: po/custom/fromJson.txt:828
 msgid "All AA flak weapons upgraded automatically"
 msgstr "Légelhárító fegyverek automatikusan fejlesztve"
 
 #: data/base/messages/strings/resstrings.txt:678
 #: data/mp/messages/strings/resstrings.txt:322
+#: po/custom/fromJson.txt:835
+#: po/custom/fromJson.txt:836
 msgid "Recoil loaded AA ammunition hopper"
 msgstr "Hopper rendszerű automatikus légvédelmi lőszeradagolás"
 
 #: data/base/messages/strings/resstrings.txt:679
 #: data/mp/messages/strings/resstrings.txt:323
+#: po/custom/fromJson.txt:830
+#: po/custom/fromJson.txt:836
 msgid "Increases AA ROF"
 msgstr "Megnövekedett légvédelmi tűzgyorsaság"
 
@@ -2634,11 +3276,14 @@ msgstr "Megnövekedett légvédelmi tűzgyorsaság"
 #: data/base/messages/strings/resstrings.txt:691
 #: data/mp/messages/strings/resstrings.txt:326
 #: data/mp/messages/strings/resstrings.txt:331
+#: po/custom/fromJson.txt:1109
+#: po/custom/fromJson.txt:1110
 msgid "New Proximity Bomb Turret Available"
 msgstr "Új közelségi gyújtólöveg bomba érhető el"
 
 #: data/base/messages/strings/resstrings.txt:686
 #: data/mp/messages/strings/resstrings.txt:327
+#: po/custom/fromJson.txt:1109
 msgid "Bomb turret explodes in proximity to enemy"
 msgstr "Bomba az ellenség közelében robban"
 
@@ -2646,11 +3291,14 @@ msgstr "Bomba az ellenség közelében robban"
 #: data/base/messages/strings/resstrings.txt:693
 #: data/mp/messages/strings/resstrings.txt:328
 #: data/mp/messages/strings/resstrings.txt:333
+#: po/custom/fromJson.txt:1109
+#: po/custom/fromJson.txt:1110
 msgid "Best Targets: Base Structures and Defenses"
 msgstr "Célok: bázis épületek és védművek"
 
 #: data/base/messages/strings/resstrings.txt:692
 #: data/mp/messages/strings/resstrings.txt:332
+#: po/custom/fromJson.txt:1110
 msgid "Superbomb turret explodes in proximity to enemy"
 msgstr "Szuperbomba az ellenség közelében robban"
 
@@ -2658,16 +3306,23 @@ msgstr "Szuperbomba az ellenség közelében robban"
 #: data/base/messages/strings/resstrings.txt:703
 #: data/mp/messages/strings/resstrings.txt:336
 #: data/mp/messages/strings/resstrings.txt:341
+#: po/custom/fromJson.txt:993
+#: po/custom/fromJson.txt:994
+#: po/custom/fromJson.txt:995
+#: po/custom/fromJson.txt:996
+#: po/custom/fromJson.txt:997
 msgid "New Bomb Bay Available"
 msgstr "Új bombaszekrény érhető el"
 
 #: data/base/messages/strings/resstrings.txt:698
 #: data/mp/messages/strings/resstrings.txt:337
+#: po/custom/fromJson.txt:994
 msgid "Drops High Explosive Cluster bombs"
 msgstr "Nagy hatóerejű kazettás bombákat dob le"
 
 #: data/base/messages/strings/resstrings.txt:699
 #: data/mp/messages/strings/resstrings.txt:338
+#: po/custom/fromJson.txt:994
 msgid "Best Targets: Base Structures"
 msgstr "Célok: bázis épületek"
 
@@ -2683,36 +3338,68 @@ msgstr "Célok: bázis épületek"
 #: data/mp/messages/strings/resstrings.txt:374
 #: data/mp/messages/strings/resstrings.txt:379
 #: data/mp/messages/strings/resstrings.txt:384
+#: po/custom/fromJson.txt:993
+#: po/custom/fromJson.txt:994
+#: po/custom/fromJson.txt:995
+#: po/custom/fromJson.txt:996
+#: po/custom/fromJson.txt:997
+#: po/custom/fromJson.txt:1084
+#: po/custom/fromJson.txt:1085
+#: po/custom/fromJson.txt:1086
+#: po/custom/fromJson.txt:1087
+#: po/custom/fromJson.txt:1088
+#: po/custom/fromJson.txt:1104
+#: po/custom/fromJson.txt:1107
+#: po/custom/fromJson.txt:1108
+#: po/custom/fromJson.txt:1144
+#: po/custom/fromJson.txt:1146
+#: po/custom/fromJson.txt:1152
+#: po/custom/fromJson.txt:1162
 msgid "Body Points: Low"
 msgstr "Karosszéria fejlettsége: alacsony"
 
 #: data/base/messages/strings/resstrings.txt:704
 #: data/mp/messages/strings/resstrings.txt:342
+#: po/custom/fromJson.txt:993
 msgid "Drops High Explosive Armor Piercing bombs"
 msgstr "Nagy hatóerejű páncéltörő bombákat dob le"
 
 #: data/base/messages/strings/resstrings.txt:705
 #: data/mp/messages/strings/resstrings.txt:343
+#: po/custom/fromJson.txt:993
 msgid "Best Targets: Defenses"
 msgstr "Célok: védművek"
 
 #: data/base/messages/strings/resstrings.txt:713
 #: data/mp/messages/strings/resstrings.txt:346
+#: po/custom/fromJson.txt:839
+#: po/custom/fromJson.txt:840
+#: po/custom/fromJson.txt:841
 msgid "Bombsight Upgrade"
 msgstr "Bombacélzó fejlesztés"
 
 #: data/base/messages/strings/resstrings.txt:714
 #: data/mp/messages/strings/resstrings.txt:347
+#: po/custom/fromJson.txt:841
 msgid "Locks on to thermal emissions"
 msgstr "Hőkibocsájtás becélozva"
 
 #: data/base/messages/strings/resstrings.txt:715
 #: data/mp/messages/strings/resstrings.txt:348
+#: po/custom/fromJson.txt:839
+#: po/custom/fromJson.txt:840
+#: po/custom/fromJson.txt:841
 msgid "Increases Bombing accuracy"
 msgstr "Megnövekedett bombázási célpontosság"
 
 #: data/base/messages/strings/resstrings.txt:716
 #: data/mp/messages/strings/resstrings.txt:349
+#: po/custom/fromJson.txt:839
+#: po/custom/fromJson.txt:840
+#: po/custom/fromJson.txt:841
+#: po/custom/fromJson.txt:842
+#: po/custom/fromJson.txt:843
+#: po/custom/fromJson.txt:844
 msgid "All bomb bays upgraded automatically"
 msgstr "Bombaszekrények automatikusan fejlesztve"
 
@@ -2722,11 +3409,32 @@ msgstr "Bombaszekrények automatikusan fejlesztve"
 #: data/mp/messages/strings/resstrings.txt:351
 #: data/mp/messages/strings/resstrings.txt:356
 #: data/mp/messages/strings/resstrings.txt:361
+#: po/custom/fromJson.txt:1145
+#: po/custom/fromJson.txt:1146
+#: po/custom/fromJson.txt:1147
+#: po/custom/fromJson.txt:1148
+#: po/custom/fromJson.txt:1149
+#: po/custom/fromJson.txt:1150
+#: po/custom/fromJson.txt:1151
+#: po/custom/fromJson.txt:1152
+#: po/custom/fromJson.txt:1153
+#: po/custom/fromJson.txt:1154
+#: po/custom/fromJson.txt:1155
+#: po/custom/fromJson.txt:1156
+#: po/custom/fromJson.txt:1157
+#: po/custom/fromJson.txt:1158
+#: po/custom/fromJson.txt:1159
+#: po/custom/fromJson.txt:1160
+#: po/custom/fromJson.txt:1161
+#: po/custom/fromJson.txt:1162
+#: po/custom/fromJson.txt:1163
 msgid "New Weapon Turret Available"
 msgstr "Új lövegtorony érhető el"
 
 #: data/base/messages/strings/resstrings.txt:730
 #: data/mp/messages/strings/resstrings.txt:352
+#: po/custom/fromJson.txt:1153
+#: po/custom/fromJson.txt:1154
 msgid "Hyper-velocity automatic-cannon firing 88mm rounds"
 msgstr "Nagy sebességű automataágyú 88mm-es löveggel tüzel"
 
@@ -2734,51 +3442,96 @@ msgstr "Nagy sebességű automataágyú 88mm-es löveggel tüzel"
 #: data/base/messages/strings/resstrings.txt:737
 #: data/mp/messages/strings/resstrings.txt:353
 #: data/mp/messages/strings/resstrings.txt:358
+#: po/custom/fromJson.txt:1099
+#: po/custom/fromJson.txt:1111
+#: po/custom/fromJson.txt:1112
+#: po/custom/fromJson.txt:1113
+#: po/custom/fromJson.txt:1119
+#: po/custom/fromJson.txt:1122
+#: po/custom/fromJson.txt:1144
+#: po/custom/fromJson.txt:1147
+#: po/custom/fromJson.txt:1148
+#: po/custom/fromJson.txt:1150
+#: po/custom/fromJson.txt:1154
+#: po/custom/fromJson.txt:1155
+#: po/custom/fromJson.txt:1156
+#: po/custom/fromJson.txt:1159
 msgid "Best Targets: Vehicles"
 msgstr "Célok: járművek"
 
 #: data/base/messages/strings/resstrings.txt:732
 #: data/mp/messages/strings/resstrings.txt:354
+#: po/custom/fromJson.txt:1153
+#: po/custom/fromJson.txt:1154
 msgid "Replaces Medium Cannon"
 msgstr "Felváltja a közepes ágyú"
 
 #: data/base/messages/strings/resstrings.txt:736
 #: data/mp/messages/strings/resstrings.txt:357
+#: po/custom/fromJson.txt:1147
 msgid "76mm hyper-velocity quad-barrel automatic-cannon"
 msgstr "76mm-es nagy sebességű négycsöves automataágyú"
 
 #: data/base/messages/strings/resstrings.txt:738
 #: data/mp/messages/strings/resstrings.txt:359
+#: po/custom/fromJson.txt:1106
+#: po/custom/fromJson.txt:1111
+#: po/custom/fromJson.txt:1138
+#: po/custom/fromJson.txt:1147
+#: po/custom/fromJson.txt:1148
+#: po/custom/fromJson.txt:1150
+#: po/custom/fromJson.txt:1151
+#: po/custom/fromJson.txt:1223
 msgid "Body Points: High"
 msgstr "Karosszéria fejlettsége: magas"
 
 #: data/base/messages/strings/resstrings.txt:758
 #: data/mp/messages/strings/resstrings.txt:362
+#: po/custom/fromJson.txt:1152
 msgid "Heavy Flame-thrower firing Propylene Oxide gel"
 msgstr "Nehéz lángszóróval Propilén-oxiddal tüzel"
 
 #: data/base/messages/strings/resstrings.txt:759
 #: data/mp/messages/strings/resstrings.txt:363
+#: po/custom/fromJson.txt:1149
+#: po/custom/fromJson.txt:1152
+#: po/custom/fromJson.txt:1160
 msgid "Best Targets: Bunkers, wheeled and hover vehicles"
 msgstr "Célok: bunkerek, kerekes és légpárnás járművek"
 
 #: data/base/messages/strings/resstrings.txt:765
 #: data/mp/messages/strings/resstrings.txt:366
+#: po/custom/fromJson.txt:892
+#: po/custom/fromJson.txt:893
+#: po/custom/fromJson.txt:894
+#: po/custom/fromJson.txt:895
+#: po/custom/fromJson.txt:896
+#: po/custom/fromJson.txt:897
 msgid "Flamer Upgrade"
 msgstr "Lángszóró fejlesztés"
 
 #: data/base/messages/strings/resstrings.txt:766
 #: data/mp/messages/strings/resstrings.txt:367
+#: po/custom/fromJson.txt:896
+#: po/custom/fromJson.txt:897
 msgid "Propylene Oxide treated to burn at superhot temperatures"
 msgstr "Propilén-oxid kezelése a szuper magas égési hőmérséklet eléréséhez"
 
 #: data/base/messages/strings/resstrings.txt:767
 #: data/mp/messages/strings/resstrings.txt:368
+#: po/custom/fromJson.txt:895
+#: po/custom/fromJson.txt:897
 msgid "Increases Flamer damage"
 msgstr "Megnövekedett lángszóró sebzés"
 
 #: data/base/messages/strings/resstrings.txt:768
 #: data/mp/messages/strings/resstrings.txt:369
+#: po/custom/fromJson.txt:892
+#: po/custom/fromJson.txt:893
+#: po/custom/fromJson.txt:894
+#: po/custom/fromJson.txt:895
+#: po/custom/fromJson.txt:896
+#: po/custom/fromJson.txt:897
 msgid "All flamers upgraded automatically"
 msgstr "Lángszóró automatikusan továbbfejlesztve"
 
@@ -2790,11 +3543,19 @@ msgstr "Lángszóró automatikusan továbbfejlesztve"
 #: data/mp/messages/strings/resstrings.txt:376
 #: data/mp/messages/strings/resstrings.txt:381
 #: data/mp/messages/strings/resstrings.txt:411
+#: po/custom/fromJson.txt:1084
+#: po/custom/fromJson.txt:1085
+#: po/custom/fromJson.txt:1086
+#: po/custom/fromJson.txt:1087
+#: po/custom/fromJson.txt:1088
+#: po/custom/fromJson.txt:1089
+#: po/custom/fromJson.txt:1090
 msgid "New Indirect Fire Weapon Available"
 msgstr "Új indirekt tűzfegyver érhető el"
 
 #: data/base/messages/strings/resstrings.txt:774
 #: data/mp/messages/strings/resstrings.txt:372
+#: po/custom/fromJson.txt:1085
 msgid "105mm Howitzer may be assigned to a sensor"
 msgstr "Érzékelőt lehet rendelni a 105mm-es tarackhoz"
 
@@ -2802,21 +3563,28 @@ msgstr "Érzékelőt lehet rendelni a 105mm-es tarackhoz"
 #: data/base/messages/strings/resstrings.txt:781
 #: data/mp/messages/strings/resstrings.txt:373
 #: data/mp/messages/strings/resstrings.txt:378
+#: po/custom/fromJson.txt:1085
+#: po/custom/fromJson.txt:1086
+#: po/custom/fromJson.txt:1087
+#: po/custom/fromJson.txt:1088
 msgid "Best Targets: Base Structures, infantry, wheeled vehicles"
 msgstr "Célok: bázis épületek, gyalogság, kerekes járművek"
 
 #: data/base/messages/strings/resstrings.txt:780
 #: data/mp/messages/strings/resstrings.txt:377
+#: po/custom/fromJson.txt:1087
 msgid "155mm Howitzer may be assigned to a sensor"
 msgstr "Érzékelőt lehet rendelni a 155mm-es tarackhoz"
 
 #: data/base/messages/strings/resstrings.txt:788
 #: data/mp/messages/strings/resstrings.txt:382
+#: po/custom/fromJson.txt:1084
 msgid "105m Howitzer firing incendiaries, may be assigned to a sensor"
 msgstr "Érzékelőt lehet rendelni a 105mm-es gyutacsos tarackhoz"
 
 #: data/base/messages/strings/resstrings.txt:789
 #: data/mp/messages/strings/resstrings.txt:383
+#: po/custom/fromJson.txt:1084
 msgid "Best Targets: Base Structures, bunkers"
 msgstr "Célok: bázis épületek, bunkerek"
 
@@ -2826,16 +3594,34 @@ msgstr "Célok: bázis épületek, bunkerek"
 #: data/mp/messages/strings/resstrings.txt:386
 #: data/mp/messages/strings/resstrings.txt:391
 #: data/mp/messages/strings/resstrings.txt:396
+#: po/custom/fromJson.txt:903
+#: po/custom/fromJson.txt:904
+#: po/custom/fromJson.txt:905
+#: po/custom/fromJson.txt:906
+#: po/custom/fromJson.txt:907
+#: po/custom/fromJson.txt:908
+#: po/custom/fromJson.txt:909
+#: po/custom/fromJson.txt:910
+#: po/custom/fromJson.txt:911
+#: po/custom/fromJson.txt:912
+#: po/custom/fromJson.txt:913
+#: po/custom/fromJson.txt:914
 msgid "Howitzer Upgrade"
 msgstr "Tarack fejlesztés"
 
 #: data/base/messages/strings/resstrings.txt:794
 #: data/mp/messages/strings/resstrings.txt:387
+#: po/custom/fromJson.txt:837
+#: po/custom/fromJson.txt:838
+#: po/custom/fromJson.txt:913
+#: po/custom/fromJson.txt:914
 msgid "Self-guided rocket powered shells"
 msgstr "Önvezérelt rakéta hajtású gránát"
 
 #: data/base/messages/strings/resstrings.txt:795
 #: data/mp/messages/strings/resstrings.txt:388
+#: po/custom/fromJson.txt:906
+#: po/custom/fromJson.txt:914
 msgid "Increases Howitzer accuracy"
 msgstr "Megnövelt tarack célpontosság"
 
@@ -2845,26 +3631,51 @@ msgstr "Megnövelt tarack célpontosság"
 #: data/mp/messages/strings/resstrings.txt:389
 #: data/mp/messages/strings/resstrings.txt:394
 #: data/mp/messages/strings/resstrings.txt:399
+#: po/custom/fromJson.txt:903
+#: po/custom/fromJson.txt:904
+#: po/custom/fromJson.txt:905
+#: po/custom/fromJson.txt:906
+#: po/custom/fromJson.txt:907
+#: po/custom/fromJson.txt:908
+#: po/custom/fromJson.txt:909
+#: po/custom/fromJson.txt:910
+#: po/custom/fromJson.txt:911
+#: po/custom/fromJson.txt:912
+#: po/custom/fromJson.txt:913
+#: po/custom/fromJson.txt:914
 msgid "All howitzers upgraded automatically"
 msgstr "Minden tarack fejlesztése automatikus"
 
 #: data/base/messages/strings/resstrings.txt:802
 #: data/mp/messages/strings/resstrings.txt:392
+#: po/custom/fromJson.txt:842
+#: po/custom/fromJson.txt:909
+#: po/custom/fromJson.txt:910
 msgid "High Explosive shells"
 msgstr "Nagy hatóerejű gránát"
 
 #: data/base/messages/strings/resstrings.txt:803
 #: data/mp/messages/strings/resstrings.txt:393
+#: po/custom/fromJson.txt:908
+#: po/custom/fromJson.txt:910
 msgid "Increases Howitzer damage"
 msgstr "Megnövelt tarack sebzés"
 
 #: data/base/messages/strings/resstrings.txt:810
 #: data/mp/messages/strings/resstrings.txt:397
+#: po/custom/fromJson.txt:847
+#: po/custom/fromJson.txt:848
+#: po/custom/fromJson.txt:892
+#: po/custom/fromJson.txt:893
+#: po/custom/fromJson.txt:903
+#: po/custom/fromJson.txt:904
 msgid "Automatic loading mechanism replaces manual loader"
 msgstr "Automatikus újratöltés felváltja a kézi újratöltést"
 
 #: data/base/messages/strings/resstrings.txt:811
 #: data/mp/messages/strings/resstrings.txt:398
+#: po/custom/fromJson.txt:904
+#: po/custom/fromJson.txt:912
 msgid "Increases Howitzer ROF"
 msgstr "Megnövelt tarack tűzerő"
 
@@ -2872,16 +3683,39 @@ msgstr "Megnövelt tarack tűzerő"
 #: data/base/messages/strings/resstrings.txt:857
 #: data/mp/messages/strings/resstrings.txt:401
 #: data/mp/messages/strings/resstrings.txt:406
+#: po/custom/fromJson.txt:936
+#: po/custom/fromJson.txt:937
+#: po/custom/fromJson.txt:938
+#: po/custom/fromJson.txt:939
+#: po/custom/fromJson.txt:940
+#: po/custom/fromJson.txt:941
+#: po/custom/fromJson.txt:942
+#: po/custom/fromJson.txt:943
+#: po/custom/fromJson.txt:944
+#: po/custom/fromJson.txt:945
+#: po/custom/fromJson.txt:946
+#: po/custom/fromJson.txt:947
+#: po/custom/fromJson.txt:948
+#: po/custom/fromJson.txt:949
+#: po/custom/fromJson.txt:950
+#: po/custom/fromJson.txt:951
 msgid "Machinegun Upgrade"
 msgstr "Gépfegyver fejlesztés"
 
 #: data/base/messages/strings/resstrings.txt:846
 #: data/mp/messages/strings/resstrings.txt:402
+#: po/custom/fromJson.txt:950
+#: po/custom/fromJson.txt:951
 msgid "Tungsten-tipped armor-piercing bullets"
 msgstr "Wolfram magvas páncéltörő lövedék"
 
 #: data/base/messages/strings/resstrings.txt:847
 #: data/mp/messages/strings/resstrings.txt:403
+#: po/custom/fromJson.txt:936
+#: po/custom/fromJson.txt:940
+#: po/custom/fromJson.txt:942
+#: po/custom/fromJson.txt:944
+#: po/custom/fromJson.txt:950
 msgid "Increases Machinegun damage"
 msgstr "Megnövelt gépfegyver sebzés"
 
@@ -2889,51 +3723,121 @@ msgstr "Megnövelt gépfegyver sebzés"
 #: data/base/messages/strings/resstrings.txt:860
 #: data/mp/messages/strings/resstrings.txt:404
 #: data/mp/messages/strings/resstrings.txt:409
+#: po/custom/fromJson.txt:936
+#: po/custom/fromJson.txt:937
+#: po/custom/fromJson.txt:938
+#: po/custom/fromJson.txt:939
+#: po/custom/fromJson.txt:940
+#: po/custom/fromJson.txt:941
+#: po/custom/fromJson.txt:942
+#: po/custom/fromJson.txt:943
+#: po/custom/fromJson.txt:944
+#: po/custom/fromJson.txt:945
+#: po/custom/fromJson.txt:946
+#: po/custom/fromJson.txt:947
+#: po/custom/fromJson.txt:948
+#: po/custom/fromJson.txt:949
+#: po/custom/fromJson.txt:950
+#: po/custom/fromJson.txt:951
 msgid "All machineguns upgraded automatically"
 msgstr "Gépfegyverek automatikusan fejlesztve"
 
 #: data/base/messages/strings/resstrings.txt:858
 #: data/mp/messages/strings/resstrings.txt:407
+#: po/custom/fromJson.txt:946
+#: po/custom/fromJson.txt:947
 msgid "Improved chaingun mechanism"
 msgstr "Továbbfejlesztett láncfegyver mechanika"
 
 #: data/base/messages/strings/resstrings.txt:859
 #: data/mp/messages/strings/resstrings.txt:408
+#: po/custom/fromJson.txt:938
+#: po/custom/fromJson.txt:946
+#: po/custom/fromJson.txt:948
 msgid "Increases Machinegun ROF"
 msgstr "Megnövekedett gépfegyver tűzgyorsaság"
 
 #: data/base/messages/strings/resstrings.txt:892
 #: data/mp/messages/strings/resstrings.txt:412
+#: po/custom/fromJson.txt:1089
 msgid "May be assigned to a sensor"
 msgstr "Hozzárendelhető egy érzékelőhöz"
 
 #: data/base/messages/strings/resstrings.txt:893
 #: data/mp/messages/strings/resstrings.txt:413
+#: po/custom/fromJson.txt:1089
+#: po/custom/fromJson.txt:1090
 msgid "Best Targets: Base structures, infantry, wheeled vehicles"
 msgstr "Célok: bázis épületek, gyalogság, kerekes járművek"
 
 #: data/base/messages/strings/resstrings.txt:894
 #: data/mp/messages/strings/resstrings.txt:414
+#: po/custom/fromJson.txt:986
+#: po/custom/fromJson.txt:987
+#: po/custom/fromJson.txt:1089
+#: po/custom/fromJson.txt:1090
+#: po/custom/fromJson.txt:1099
+#: po/custom/fromJson.txt:1100
+#: po/custom/fromJson.txt:1119
+#: po/custom/fromJson.txt:1120
+#: po/custom/fromJson.txt:1121
+#: po/custom/fromJson.txt:1122
+#: po/custom/fromJson.txt:1123
+#: po/custom/fromJson.txt:1124
+#: po/custom/fromJson.txt:1125
+#: po/custom/fromJson.txt:1126
 msgid "Body Points: Very Low"
 msgstr "Karosszéria fejlettsége: nagyon alacsony"
 
 #: data/base/messages/strings/resstrings.txt:905
 #: data/mp/messages/strings/resstrings.txt:416
+#: po/custom/fromJson.txt:967
+#: po/custom/fromJson.txt:968
+#: po/custom/fromJson.txt:969
+#: po/custom/fromJson.txt:970
+#: po/custom/fromJson.txt:971
+#: po/custom/fromJson.txt:972
+#: po/custom/fromJson.txt:973
+#: po/custom/fromJson.txt:974
+#: po/custom/fromJson.txt:975
+#: po/custom/fromJson.txt:976
+#: po/custom/fromJson.txt:977
+#: po/custom/fromJson.txt:978
+#: po/custom/fromJson.txt:979
+#: po/custom/fromJson.txt:980
 msgid "Mortar Upgrade"
 msgstr "Aknavető fejlesztés"
 
 #: data/base/messages/strings/resstrings.txt:906
 #: data/mp/messages/strings/resstrings.txt:417
+#: po/custom/fromJson.txt:969
+#: po/custom/fromJson.txt:970
 msgid "High Explosive Armor-Piercing Shells"
 msgstr "Nagy hatóerejű, páncéltörő gránátok"
 
 #: data/base/messages/strings/resstrings.txt:907
 #: data/mp/messages/strings/resstrings.txt:418
+#: po/custom/fromJson.txt:969
+#: po/custom/fromJson.txt:971
 msgid "Increases Mortar damage"
 msgstr "Megnövelt aknavető sebzés"
 
 #: data/base/messages/strings/resstrings.txt:908
 #: data/mp/messages/strings/resstrings.txt:419
+#: po/custom/fromJson.txt:967
+#: po/custom/fromJson.txt:968
+#: po/custom/fromJson.txt:969
+#: po/custom/fromJson.txt:970
+#: po/custom/fromJson.txt:971
+#: po/custom/fromJson.txt:972
+#: po/custom/fromJson.txt:973
+#: po/custom/fromJson.txt:974
+#: po/custom/fromJson.txt:975
+#: po/custom/fromJson.txt:976
+#: po/custom/fromJson.txt:977
+#: po/custom/fromJson.txt:978
+#: po/custom/fromJson.txt:979
+#: po/custom/fromJson.txt:980
 msgid "All mortars upgraded automatically"
 msgstr "Aknavetők automatikusan fejlesztve"
 
@@ -2941,16 +3845,23 @@ msgstr "Aknavetők automatikusan fejlesztve"
 #: data/base/messages/strings/resstrings.txt:951
 #: data/mp/messages/strings/resstrings.txt:421
 #: data/mp/messages/strings/resstrings.txt:426
+#: po/custom/fromJson.txt:953
+#: po/custom/fromJson.txt:954
+#: po/custom/fromJson.txt:955
+#: po/custom/fromJson.txt:956
 msgid "Mini-Rocket Upgrade"
 msgstr "Kisrakéta fejlesztés"
 
 #: data/base/messages/strings/resstrings.txt:944
 #: data/mp/messages/strings/resstrings.txt:422
+#: po/custom/fromJson.txt:955
 msgid "High Explosive Armor-Piercing warheads"
 msgstr "Nagy hatóerejű, páncéltörő robbanófej"
 
 #: data/base/messages/strings/resstrings.txt:945
 #: data/mp/messages/strings/resstrings.txt:423
+#: po/custom/fromJson.txt:955
+#: po/custom/fromJson.txt:956
 msgid "Increases Mini-Rocket damage"
 msgstr "Megnövekedett kisrakéta sebzés"
 
@@ -2958,6 +3869,10 @@ msgstr "Megnövekedett kisrakéta sebzés"
 #: data/base/messages/strings/resstrings.txt:954
 #: data/mp/messages/strings/resstrings.txt:424
 #: data/mp/messages/strings/resstrings.txt:429
+#: po/custom/fromJson.txt:953
+#: po/custom/fromJson.txt:954
+#: po/custom/fromJson.txt:955
+#: po/custom/fromJson.txt:956
 msgid "All mini-rockets upgraded automatically"
 msgstr "Kisrakéták automatikusan fejlesztve"
 
@@ -2973,21 +3888,57 @@ msgstr "Megnövekedett kisrakéta tűzgyorsaság"
 
 #: data/base/messages/strings/resstrings.txt:965
 #: data/mp/messages/strings/resstrings.txt:431
+#: po/custom/fromJson.txt:1203
+#: po/custom/fromJson.txt:1204
+#: po/custom/fromJson.txt:1205
+#: po/custom/fromJson.txt:1206
+#: po/custom/fromJson.txt:1207
+#: po/custom/fromJson.txt:1208
+#: po/custom/fromJson.txt:1209
+#: po/custom/fromJson.txt:1210
+#: po/custom/fromJson.txt:1211
+#: po/custom/fromJson.txt:1212
+#: po/custom/fromJson.txt:1213
+#: po/custom/fromJson.txt:1214
+#: po/custom/fromJson.txt:1215
+#: po/custom/fromJson.txt:1216
+#: po/custom/fromJson.txt:1217
+#: po/custom/fromJson.txt:1218
 msgid "Rocket Upgrade"
 msgstr "Rakéta fejlesztés"
 
 #: data/base/messages/strings/resstrings.txt:966
 #: data/mp/messages/strings/resstrings.txt:432
+#: po/custom/fromJson.txt:1210
+#: po/custom/fromJson.txt:1211
 msgid "High Explosive Squash Head warhead"
 msgstr "Nagy hatóerejű, rogyókúpos repeszhatású robbanófej"
 
 #: data/base/messages/strings/resstrings.txt:967
 #: data/mp/messages/strings/resstrings.txt:433
+#: po/custom/fromJson.txt:1207
+#: po/custom/fromJson.txt:1210
 msgid "Increases Rocket damage"
 msgstr "Megnövekedett rakéta sebzés"
 
 #: data/base/messages/strings/resstrings.txt:968
 #: data/mp/messages/strings/resstrings.txt:434
+#: po/custom/fromJson.txt:1203
+#: po/custom/fromJson.txt:1204
+#: po/custom/fromJson.txt:1205
+#: po/custom/fromJson.txt:1206
+#: po/custom/fromJson.txt:1207
+#: po/custom/fromJson.txt:1208
+#: po/custom/fromJson.txt:1209
+#: po/custom/fromJson.txt:1210
+#: po/custom/fromJson.txt:1211
+#: po/custom/fromJson.txt:1212
+#: po/custom/fromJson.txt:1213
+#: po/custom/fromJson.txt:1214
+#: po/custom/fromJson.txt:1215
+#: po/custom/fromJson.txt:1216
+#: po/custom/fromJson.txt:1217
+#: po/custom/fromJson.txt:1218
 msgid "All rockets upgraded automatically"
 msgstr "Rakéták automatikusan fejlesztve"
 
@@ -4592,6 +5543,8 @@ msgid "AA Thermal Imaging Sensor"
 msgstr "Légvédelmi hőkép érzékelő"
 
 #: po/custom/fromJson.txt:20
+#: po/custom/fromJson.txt:920
+#: po/custom/fromJson.txt:921
 msgid "Advanced Base Structure Materials"
 msgstr "Fejlett bázisépület alapanyagok"
 
@@ -4648,6 +5601,7 @@ msgid "Advanced Repair Facility"
 msgstr "Fejlett szervizüzem"
 
 #: po/custom/fromJson.txt:35
+#: po/custom/fromJson.txt:1170
 msgid "Advanced VTOL Production"
 msgstr "Fejlett VTOL gyártás"
 
@@ -4784,6 +5738,7 @@ msgid "Assault Gun Tower"
 msgstr "Ostromlöveg torony"
 
 #: po/custom/fromJson.txt:69
+#: po/custom/fromJson.txt:877
 msgid "Automated Cyborg Production"
 msgstr "Automatizált Cyborg gyártás"
 
@@ -4796,6 +5751,8 @@ msgid "Automated Cyborg Production Mk3"
 msgstr "Automatizált Cyborg gyártás Mk3"
 
 #: po/custom/fromJson.txt:72
+#: po/custom/fromJson.txt:1244
+#: po/custom/fromJson.txt:1245
 msgid "Automated Factory Production"
 msgstr "Automatizált gyári termelés"
 
@@ -5100,6 +6057,7 @@ msgid "Cyborg Dense Composite Alloys Mk3"
 msgstr "Cyborg sűrű kompozit ötvözetek Mk3"
 
 #: po/custom/fromJson.txt:151
+#: po/custom/fromJson.txt:988
 msgid "Cyborg Factory"
 msgstr "Cyborg gyár"
 
@@ -5340,6 +6298,8 @@ msgid "Flashlight Retribution Hover"
 msgstr "Retribution légpárnás könnyűlézer"
 
 #: po/custom/fromJson.txt:220
+#: po/custom/fromJson.txt:1236
+#: po/custom/fromJson.txt:1237
 msgid "Fuel Injection Engine"
 msgstr "Üzemanyag befecskendezéses motor"
 
@@ -5356,6 +6316,8 @@ msgid "Gamma Campaign"
 msgstr "Gamma küldetés"
 
 #: po/custom/fromJson.txt:224
+#: po/custom/fromJson.txt:1238
+#: po/custom/fromJson.txt:1239
 msgid "Gas Turbine Engine"
 msgstr "Gázturbina motor"
 
@@ -6348,6 +7310,8 @@ msgid "Needle Gun Vengeance Tracks"
 msgstr "Vengeance lánctalpas nyíllövedékes ágyú"
 
 #: po/custom/fromJson.txt:490
+#: po/custom/fromJson.txt:1197
+#: po/custom/fromJson.txt:1198
 msgid "Neural Synapse Research Brain"
 msgstr "Idegi szinaptikus kutató agy"
 
@@ -6634,6 +7598,8 @@ msgid "Rapid Fire Chaingun Upgrade"
 msgstr "Gyorstüzelésű láncfegyver fejlesztés"
 
 #: po/custom/fromJson.txt:563
+#: po/custom/fromJson.txt:926
+#: po/custom/fromJson.txt:927
 msgid "Reinforced Base Structure Materials"
 msgstr "Megerősített bázisépület alapanyagok"
 
@@ -6758,6 +7724,8 @@ msgid "Robotic VTOL Production Mk3"
 msgstr "Robotizált VTOL gyártás Mk3"
 
 #: po/custom/fromJson.txt:596
+#: po/custom/fromJson.txt:1260
+#: po/custom/fromJson.txt:1261
 msgid "Robotic VTOL Rearming"
 msgstr "Robotizált VTOL újratöltés"
 
@@ -7556,6 +8524,7 @@ msgid "Warehouse"
 msgstr "Raktár"
 
 #: po/custom/fromJson.txt:809
+#: po/custom/fromJson.txt:1108
 msgid "Wheeled Propulsion"
 msgstr "Kerekes hajtómű"
 
@@ -7614,6 +8583,2134 @@ msgstr "Roncs jármű"
 #: po/custom/fromJson.txt:824
 msgid "Wyvern"
 msgstr "Wyvern"
+
+#: po/custom/fromJson.txt:825
+#: po/custom/fromJson.txt:826
+msgid "High Explosive Armor Piercing Flak"
+msgstr "Nagy hatóerejű páncéltörő légelhárító"
+
+#: po/custom/fromJson.txt:825
+#: po/custom/fromJson.txt:827
+msgid "AA Flak damage +25%"
+msgstr "Légelhárító sebzés +25%"
+
+#: po/custom/fromJson.txt:829
+#: po/custom/fromJson.txt:830
+msgid "Chainfeed loader eradicates jams and improves performance"
+msgstr "Láncos lőszeradagolás megszünteti az elakadást, és növeli a tűzgyorsaságot"
+
+#: po/custom/fromJson.txt:829
+#: po/custom/fromJson.txt:835
+msgid "AA reload time -15%"
+msgstr "Légvédelmi újratöltési idő -15%"
+
+#: po/custom/fromJson.txt:831
+#: po/custom/fromJson.txt:832
+msgid "Computer plots and guides shell to target's position"
+msgstr "Számítógép tervezi és irányítja az ágyúzást a célpontra"
+
+#: po/custom/fromJson.txt:831
+#: po/custom/fromJson.txt:833
+#: po/custom/fromJson.txt:837
+msgid "AA accuracy +10%"
+msgstr "Légvédelmi célpontosság +10%"
+
+#: po/custom/fromJson.txt:839
+msgid "Bombs lock on and guide themselves to the target"
+msgstr "A bombák bemérik és önmagukat irányítják a célra"
+
+#: po/custom/fromJson.txt:840
+msgid "Laser designator paints and guides bombs to the target"
+msgstr "A lézeres célzórendszer megjelöli és célra vezeti a bombákat"
+
+#: po/custom/fromJson.txt:842
+#: po/custom/fromJson.txt:843
+#: po/custom/fromJson.txt:844
+msgid "Bomb Upgrade"
+msgstr "Bomba feljavítás"
+
+#: po/custom/fromJson.txt:842
+#: po/custom/fromJson.txt:843
+#: po/custom/fromJson.txt:844
+msgid "Bomb damage +25%"
+msgstr "Bomba sebzés +25%"
+
+#: po/custom/fromJson.txt:843
+msgid "Improved trinitramine explosive formula"
+msgstr "Jobb trinitramin robbanóanyag képlet"
+
+#: po/custom/fromJson.txt:844
+#: po/custom/fromJson.txt:957
+#: po/custom/fromJson.txt:958
+msgid "Low yield thermonuclear warhead"
+msgstr "Kisteljesítményű termonukleáris robbanófej"
+
+#: po/custom/fromJson.txt:845
+#: po/custom/fromJson.txt:846
+#: po/custom/fromJson.txt:847
+#: po/custom/fromJson.txt:848
+#: po/custom/fromJson.txt:849
+#: po/custom/fromJson.txt:850
+#: po/custom/fromJson.txt:851
+#: po/custom/fromJson.txt:852
+#: po/custom/fromJson.txt:853
+#: po/custom/fromJson.txt:854
+#: po/custom/fromJson.txt:855
+#: po/custom/fromJson.txt:856
+#: po/custom/fromJson.txt:857
+#: po/custom/fromJson.txt:858
+msgid "Cannon Upgrade"
+msgstr "Ágyú fejlesztés"
+
+#: po/custom/fromJson.txt:845
+#: po/custom/fromJson.txt:846
+msgid "Armor-Piercing Fin-Stabilized Discarding Sabot"
+msgstr "Leváló köpenyes szárnystabilizált páncéltörő lövedék (APFSDS)"
+
+#: po/custom/fromJson.txt:845
+#: po/custom/fromJson.txt:851
+#: po/custom/fromJson.txt:853
+msgid "Cannon damage +25%"
+msgstr "Löveg sebzés +25%"
+
+#: po/custom/fromJson.txt:845
+#: po/custom/fromJson.txt:846
+#: po/custom/fromJson.txt:847
+#: po/custom/fromJson.txt:848
+#: po/custom/fromJson.txt:849
+#: po/custom/fromJson.txt:850
+#: po/custom/fromJson.txt:851
+#: po/custom/fromJson.txt:852
+#: po/custom/fromJson.txt:853
+#: po/custom/fromJson.txt:854
+#: po/custom/fromJson.txt:855
+#: po/custom/fromJson.txt:856
+#: po/custom/fromJson.txt:857
+#: po/custom/fromJson.txt:858
+msgid "All cannons upgraded automatically"
+msgstr "Lövegek automatikusan fejlesztve"
+
+#: po/custom/fromJson.txt:846
+#: po/custom/fromJson.txt:852
+#: po/custom/fromJson.txt:854
+msgid "Increases Cannon damage"
+msgstr "Megnövekedett ágyú sebzés"
+
+#: po/custom/fromJson.txt:847
+#: po/custom/fromJson.txt:857
+msgid "Cannon reload time -10%"
+msgstr "Löveg újratöltési idő -10%"
+
+#: po/custom/fromJson.txt:848
+#: po/custom/fromJson.txt:858
+msgid "Increases Cannon ROF"
+msgstr "Megnövekedett ágyú tűzgyorsaság"
+
+#: po/custom/fromJson.txt:849
+#: po/custom/fromJson.txt:850
+msgid "Determines range to target"
+msgstr "Céltávolság meghatározása"
+
+#: po/custom/fromJson.txt:849
+#: po/custom/fromJson.txt:855
+msgid "Cannon accuracy +10%"
+msgstr "Löveg célpontosság +10%"
+
+#: po/custom/fromJson.txt:850
+#: po/custom/fromJson.txt:856
+msgid "Increases Cannon accuracy"
+msgstr "Megnövekedett ágyú célpontosság"
+
+#: po/custom/fromJson.txt:851
+#: po/custom/fromJson.txt:852
+msgid "High Explosive Anti-Tank Cannon Shells"
+msgstr "Nagy hatóerejű tankelhárító gránát"
+
+#: po/custom/fromJson.txt:853
+#: po/custom/fromJson.txt:854
+msgid "High-Velocity Armor-Piercing Fin-Stabilised Discarding Sabot"
+msgstr "Nagy sebességű, leváló köpenyes, szárnystabilizált, űrméret alatti páncéltörő lövedék (HVAPFSDS)"
+
+#: po/custom/fromJson.txt:855
+#: po/custom/fromJson.txt:856
+msgid "Laser designator paints and guides rounds to the target"
+msgstr "A lézeres célzórendszer megjelöl és célravezet"
+
+#: po/custom/fromJson.txt:857
+#: po/custom/fromJson.txt:858
+#: po/custom/fromJson.txt:911
+#: po/custom/fromJson.txt:912
+#: po/custom/fromJson.txt:973
+#: po/custom/fromJson.txt:974
+msgid "Robotic loading system feeds rounds into breech"
+msgstr "Robotizált lőszeradagoló rendszer závárzathoz"
+
+#: po/custom/fromJson.txt:859
+#: po/custom/fromJson.txt:860
+msgid "CB Sensor Improved"
+msgstr "CB érzékelő fejlesztve"
+
+#: po/custom/fromJson.txt:859
+#: po/custom/fromJson.txt:1256
+msgid "Improved fire detection systems"
+msgstr "Továbbfejlesztett tűzérzékelő rendszerek"
+
+#: po/custom/fromJson.txt:859
+#: po/custom/fromJson.txt:860
+msgid "Extends CB Range"
+msgstr "Megnöveli a CB hatósugarát"
+
+#: po/custom/fromJson.txt:859
+#: po/custom/fromJson.txt:860
+msgid "All CB sensors upgraded automatically"
+msgstr "CB érzékelők automatikusan fejlesztve"
+
+#: po/custom/fromJson.txt:861
+msgid "Collective Heavy Body"
+msgstr "Kollektív nehéz karosszéria"
+
+#: po/custom/fromJson.txt:861
+#: po/custom/fromJson.txt:1164
+msgid "More armor and body points than Python"
+msgstr "Több páncél és karosszéria érték mint a Python-nak"
+
+#: po/custom/fromJson.txt:861
+msgid "Slower than Python"
+msgstr "Lassabb mint a Python"
+
+#: po/custom/fromJson.txt:861
+msgid "High power costs and slow to produce"
+msgstr "Magas költség és lassú gyártás"
+
+#: po/custom/fromJson.txt:864
+msgid "Computer Research Completed"
+msgstr "Számítógép fejlesztés elkészült"
+
+#: po/custom/fromJson.txt:865
+#: po/custom/fromJson.txt:866
+#: po/custom/fromJson.txt:867
+msgid "Computer Technology Breakthrough"
+msgstr "Számítógépes technológiai áttörés"
+
+#: po/custom/fromJson.txt:865
+msgid "Improved NEXUS resistance circuitry"
+msgstr "Továbbfejlesztett NEXUS ellenálló áramkör"
+
+#: po/custom/fromJson.txt:865
+msgid "Computer systems can now be 'ring-fenced' from NEXUS"
+msgstr "A számítógépes rendszerek ma már elszigetelődtek a NEXUS-tól"
+
+#: po/custom/fromJson.txt:865
+#: po/custom/fromJson.txt:866
+msgid "Reduced chance of NEXUS take-over"
+msgstr "Csökkent az esély a NEXUS átvételére"
+
+#: po/custom/fromJson.txt:866
+msgid "NEXUS Intruder Program analyzed"
+msgstr "NEXUS behatoló program analizálva"
+
+#: po/custom/fromJson.txt:866
+msgid "Intruder parasite isolated"
+msgstr "Behatoló program izolálva"
+
+#: po/custom/fromJson.txt:867
+msgid "Synaptic Link allows humans to interface directly with computers"
+msgstr "A szinaptikus kapcsolat lehetővé teszi, hogy az emberek közvetlenül kapcsolódjanak a számítógépekhez"
+
+#: po/custom/fromJson.txt:867
+msgid "Cyborgs can now be researched"
+msgstr "Cyborg kutatás megkezdhető"
+
+#: po/custom/fromJson.txt:867
+msgid "New research options available"
+msgstr "Rendelkezésre álló új kutatóopciók"
+
+#: po/custom/fromJson.txt:868
+#: po/custom/fromJson.txt:869
+#: po/custom/fromJson.txt:1228
+#: po/custom/fromJson.txt:1229
+msgid "Laminated alloys bonded with energy-deflecting optic bundles"
+msgstr "Ragasztással rétegelt ötvözetek, energiaeltérítő optikai szállal"
+
+#: po/custom/fromJson.txt:869
+#: po/custom/fromJson.txt:871
+#: po/custom/fromJson.txt:875
+msgid "Kinetic Armor +35%, Body Points +35%"
+msgstr "Kinetikus páncél +35%, karosszéria értékek +35%"
+
+#: po/custom/fromJson.txt:870
+#: po/custom/fromJson.txt:871
+#: po/custom/fromJson.txt:1230
+#: po/custom/fromJson.txt:1231
+msgid "Layered composite alloys and energy-absorbing fibres"
+msgstr "Rétegelt kompozit ötvözetek és energiaelnyelő szálak"
+
+#: po/custom/fromJson.txt:873
+msgid "Kinetic Armor +35%, and Body Points +35%"
+msgstr "Kinetikus páncél +35% és karosszéria értékek +35%"
+
+#: po/custom/fromJson.txt:874
+#: po/custom/fromJson.txt:875
+#: po/custom/fromJson.txt:1234
+#: po/custom/fromJson.txt:1235
+msgid "Superdense composite alloys and energy-absorbing fibres"
+msgstr "Szupersűrű kompozit ötvözetek és energiaelnyelő szálak"
+
+#: po/custom/fromJson.txt:879
+msgid "Cyborg Propulsion Improved"
+msgstr "Cyborg hajtómű fejlesztve"
+
+#: po/custom/fromJson.txt:880
+msgid "Thermal Armor +35%"
+msgstr "Hővédelem +35%"
+
+#: po/custom/fromJson.txt:881
+msgid "Thermal Armor +45%"
+msgstr "Hővédelem +45%"
+
+#: po/custom/fromJson.txt:883
+msgid "Cyborg Transport Available"
+msgstr "Cyborg szállítóeszköz áll rendelkezésre"
+
+#: po/custom/fromJson.txt:883
+#: po/custom/fromJson.txt:1225
+msgid "Armed with Machinegun"
+msgstr "Gépfegyverrel szerelt"
+
+#: po/custom/fromJson.txt:883
+#: po/custom/fromJson.txt:1225
+msgid "Requires heavy VTOL factory to produce"
+msgstr "Szükséges a nehéz VTOL gyár az előállításhoz"
+
+#: po/custom/fromJson.txt:884
+#: po/custom/fromJson.txt:885
+msgid "Bonded metallic laminates formed into walls and defenses"
+msgstr "Ragaszással rétegelt fémerősítés a falakba és a védművekbe"
+
+#: po/custom/fromJson.txt:884
+#: po/custom/fromJson.txt:886
+#: po/custom/fromJson.txt:888
+#: po/custom/fromJson.txt:920
+#: po/custom/fromJson.txt:922
+#: po/custom/fromJson.txt:924
+#: po/custom/fromJson.txt:926
+msgid "Armor +35%, Body Points +30%"
+msgstr "Páncél +35%, karosszéria értékek +30%"
+
+#: po/custom/fromJson.txt:886
+#: po/custom/fromJson.txt:887
+msgid "High tensile concrete-plastic composite"
+msgstr "Nagy szilárdságú vasbeton műanyag kompozit"
+
+#: po/custom/fromJson.txt:890
+#: po/custom/fromJson.txt:891
+msgid "Improved Titanium-reinforced concrete"
+msgstr "Korszerűsített Titán erősítésű vasbeton"
+
+#: po/custom/fromJson.txt:890
+msgid "Armour +35%, Body Points +30%"
+msgstr "Páncél +35%, karosszéria értékek +30%"
+
+#: po/custom/fromJson.txt:891
+msgid "Increases Armour and Body Points"
+msgstr "Megnövekedett páncél és karosszéria értékek"
+
+#: po/custom/fromJson.txt:892
+msgid "Flamer reload time -15%"
+msgstr "Lángszóró újratöltési idő -15%"
+
+#: po/custom/fromJson.txt:893
+msgid "Increases Flamer ROF"
+msgstr "Megnövekedett lángszóró tűzgyorsaság"
+
+#: po/custom/fromJson.txt:894
+#: po/custom/fromJson.txt:895
+msgid "Propylene Oxide gel treated to burn at higher temperatures"
+msgstr "Propilén-oxid kezelése a magasabb égési hőmérséklet eléréséhez"
+
+#: po/custom/fromJson.txt:894
+#: po/custom/fromJson.txt:896
+msgid "Flamer damage +25%"
+msgstr "Lángszóró sebzés +25%"
+
+#: po/custom/fromJson.txt:898
+msgid "Hardpoint Avenger SAM Site Available"
+msgstr "Elérhető Avenger SAM kilövőállás talapzat"
+
+#: po/custom/fromJson.txt:898
+#: po/custom/fromJson.txt:1126
+msgid "Surface-to-air missile"
+msgstr "Föld-levegő rakéta (SAM)"
+
+#: po/custom/fromJson.txt:898
+#: po/custom/fromJson.txt:901
+#: po/custom/fromJson.txt:1125
+#: po/custom/fromJson.txt:1126
+msgid "Best Targets: Aerial targets only"
+msgstr "Célok: csak légi célok"
+
+#: po/custom/fromJson.txt:899
+msgid "Hardpoint Cyclone AA Gun Available"
+msgstr "Elérhetőt Cyclone légvédelmi löveg"
+
+#: po/custom/fromJson.txt:899
+msgid "Quad 80mm Anti-Aircraft machinegun"
+msgstr "80mm négyes légvédelmi gépfegyver"
+
+#: po/custom/fromJson.txt:900
+msgid "Hardpoint Twin Assault Gun Available"
+msgstr "Elérhető ikercsöves ostromlöveg"
+
+#: po/custom/fromJson.txt:900
+#: po/custom/fromJson.txt:1163
+msgid "Twin Multi-barrel, rapid-fire machinegun"
+msgstr "Iker többcsöves, gyorstüzelő gépfegyver"
+
+#: po/custom/fromJson.txt:900
+#: po/custom/fromJson.txt:1145
+#: po/custom/fromJson.txt:1146
+#: po/custom/fromJson.txt:1158
+#: po/custom/fromJson.txt:1162
+#: po/custom/fromJson.txt:1163
+msgid "Best Targets: Infantry, base structures, wheeled vehicles"
+msgstr "Célok: gyalogság, bázis épületek, kerekes járművek"
+
+#: po/custom/fromJson.txt:900
+#: po/custom/fromJson.txt:1158
+#: po/custom/fromJson.txt:1163
+msgid "Replaces all machineguns"
+msgstr "Felvált minden gépfegyvert"
+
+#: po/custom/fromJson.txt:901
+msgid "Hardpoint Vindicator SAM Site Available"
+msgstr "Elérhető Vindicator SAM kilövő állás talapzat"
+
+#: po/custom/fromJson.txt:901
+#: po/custom/fromJson.txt:1125
+msgid "Heavy surface-to-air missile"
+msgstr "Nehéz föld-levegő rakéta"
+
+#: po/custom/fromJson.txt:902
+msgid "Hardpoint Whirlwind AA Gun Available"
+msgstr "Elérhető Whirlwind légvédelmi fegyver"
+
+#: po/custom/fromJson.txt:903
+#: po/custom/fromJson.txt:911
+msgid "Howitzer reload time -10%"
+msgstr "Tarack újratöltés idő -10%"
+
+#: po/custom/fromJson.txt:905
+#: po/custom/fromJson.txt:906
+msgid "Computer guided shells"
+msgstr "Számítógép vezérelt gránát"
+
+#: po/custom/fromJson.txt:905
+#: po/custom/fromJson.txt:913
+msgid "Howitzer accuracy +10%"
+msgstr "Tarack célpontosság +10%"
+
+#: po/custom/fromJson.txt:907
+#: po/custom/fromJson.txt:908
+msgid "High Explosive Armor Piercing Shells"
+msgstr "Nagy hatóerejű páncéltörő gránát"
+
+#: po/custom/fromJson.txt:907
+#: po/custom/fromJson.txt:909
+msgid "Howitzer damage +25%"
+msgstr "Tarack sebzés +25%"
+
+#: po/custom/fromJson.txt:915
+#: po/custom/fromJson.txt:916
+#: po/custom/fromJson.txt:917
+#: po/custom/fromJson.txt:918
+#: po/custom/fromJson.txt:1167
+msgid "Improved Power Generator Performance"
+msgstr "Jobb erőmű teljesítmény"
+
+#: po/custom/fromJson.txt:915
+#: po/custom/fromJson.txt:916
+msgid "Gas turbine boosts power output"
+msgstr "Megnövelt gázturbina teljesítmény"
+
+#: po/custom/fromJson.txt:915
+msgid "Power output +25%"
+msgstr "Energia termelés +25%"
+
+#: po/custom/fromJson.txt:915
+#: po/custom/fromJson.txt:916
+#: po/custom/fromJson.txt:917
+#: po/custom/fromJson.txt:918
+msgid "All power generators upgraded automatically"
+msgstr "Áramfejlesztők automatikusan fejlesztve"
+
+#: po/custom/fromJson.txt:916
+#: po/custom/fromJson.txt:917
+msgid "New Power Generation Technology"
+msgstr "Új energiatermelés technológia"
+
+#: po/custom/fromJson.txt:917
+#: po/custom/fromJson.txt:918
+msgid "Vapor Turbine boosts power output"
+msgstr "Megnövelt gőzturbina teljesítmény"
+
+#: po/custom/fromJson.txt:918
+msgid "Power output +30%"
+msgstr "Energia termelés +30%"
+
+#: po/custom/fromJson.txt:924
+#: po/custom/fromJson.txt:925
+msgid "High Density Base Structure Materials"
+msgstr "Nagy sűrűségű bázisépület alapanyagok"
+
+#: po/custom/fromJson.txt:928
+msgid "Large Super Heavy Body"
+msgstr "Nagyméretű extra nehéz karosszéria"
+
+#: po/custom/fromJson.txt:928
+msgid "Maximum armor and body points"
+msgstr "Maximum páncél és karosszéria érték."
+
+#: po/custom/fromJson.txt:928
+msgid "Very slow moving Body"
+msgstr "Nagyon lassú mozgású karosszéria."
+
+#: po/custom/fromJson.txt:928
+#: po/custom/fromJson.txt:952
+#: po/custom/fromJson.txt:1164
+msgid "Very expensive to produce"
+msgstr "Nagyon költséges az előállítása"
+
+#: po/custom/fromJson.txt:929
+msgid "Laser AA Gun Available"
+msgstr "Elérhető lézer légvédelmi löveg"
+
+#: po/custom/fromJson.txt:929
+msgid "Twin Medium Anti-Aircraft Laser"
+msgstr "Közepes iker légvédelmi lézer"
+
+#: po/custom/fromJson.txt:930
+#: po/custom/fromJson.txt:931
+#: po/custom/fromJson.txt:932
+#: po/custom/fromJson.txt:933
+#: po/custom/fromJson.txt:934
+#: po/custom/fromJson.txt:935
+msgid "Laser Upgrade"
+msgstr "Lézer fejlesztés"
+
+#: po/custom/fromJson.txt:930
+#: po/custom/fromJson.txt:931
+msgid "Improved Energizer reduces laser recharge time"
+msgstr "Jobb energiacellák csökkentik a lézerek újratöltési idejét"
+
+#: po/custom/fromJson.txt:930
+msgid "Increases Laser ROF"
+msgstr "Megnövekedett lézer tűzgyorsaság"
+
+#: po/custom/fromJson.txt:930
+#: po/custom/fromJson.txt:931
+#: po/custom/fromJson.txt:932
+#: po/custom/fromJson.txt:933
+#: po/custom/fromJson.txt:934
+#: po/custom/fromJson.txt:935
+msgid "All lasers upgraded automatically"
+msgstr "Lézerek automatikusan fejlesztve"
+
+#: po/custom/fromJson.txt:931
+msgid "Laser reload time -15%"
+msgstr "Lézer újratöltési idő -15%"
+
+#: po/custom/fromJson.txt:932
+#: po/custom/fromJson.txt:933
+msgid "Improvement in laser emission density"
+msgstr "Lézeremisszió javult"
+
+#: po/custom/fromJson.txt:932
+msgid "Increases Laser damage"
+msgstr "Megnövekedett lézer sebzés"
+
+#: po/custom/fromJson.txt:933
+msgid "Laser damage +25%"
+msgstr "Lézer sebzés +25%"
+
+#: po/custom/fromJson.txt:934
+#: po/custom/fromJson.txt:935
+msgid "Improvement in laser optics reduces light dispersal"
+msgstr "Lézeroptika javulása csökkenti a fényszóródást"
+
+#: po/custom/fromJson.txt:934
+msgid "Increases Laser accuracy"
+msgstr "Megnövekedett lézer célpontosság"
+
+#: po/custom/fromJson.txt:935
+msgid "Laser accuracy +10%"
+msgstr "Lézer pontosság +10%"
+
+#: po/custom/fromJson.txt:936
+#: po/custom/fromJson.txt:937
+msgid "Armor-Piercing Discard Sabot Bullets"
+msgstr "Leválóköpenyes páncéltörő lövedék (APDSB)"
+
+#: po/custom/fromJson.txt:937
+#: po/custom/fromJson.txt:941
+#: po/custom/fromJson.txt:943
+#: po/custom/fromJson.txt:945
+#: po/custom/fromJson.txt:951
+msgid "Machinegun damage +25%"
+msgstr "Gépfegyver sebzés +25%"
+
+#: po/custom/fromJson.txt:938
+#: po/custom/fromJson.txt:939
+msgid "Chaingun mechanism replaces belt-feed"
+msgstr "Láncfegyver mechanikát felváltja az őv rendszerű"
+
+#: po/custom/fromJson.txt:939
+#: po/custom/fromJson.txt:947
+#: po/custom/fromJson.txt:949
+msgid "Machinegun reload time -15%"
+msgstr "Gépfegyver újratöltési idő -15%"
+
+#: po/custom/fromJson.txt:940
+#: po/custom/fromJson.txt:941
+msgid "Collapsing Plutonium kinetic energy bullets"
+msgstr "Összeomló plutónium magvas, kinetikus lőszer"
+
+#: po/custom/fromJson.txt:942
+#: po/custom/fromJson.txt:943
+msgid "Depleted uranium kinetic energy bullets"
+msgstr "Szegényített uránmagvas, kinetikus lőszer"
+
+#: po/custom/fromJson.txt:944
+#: po/custom/fromJson.txt:945
+msgid "Hardened case machinegun bullets"
+msgstr "Edzett fémmagvas gépfegyver lőszer"
+
+#: po/custom/fromJson.txt:948
+#: po/custom/fromJson.txt:949
+msgid "Robotic advances make new chaingun upgrade available"
+msgstr "A fejlett robotizálás lehetővé teszi az új láncfegyver fejlesztését"
+
+#: po/custom/fromJson.txt:952
+msgid "Medium Super Heavy Body"
+msgstr "Középméretű extra nehéz karosszéria"
+
+#: po/custom/fromJson.txt:952
+msgid "More armor and body points than Vengeance"
+msgstr "Több páncél és karosszéria pont, mint a Vengance-nek"
+
+#: po/custom/fromJson.txt:952
+msgid "Slow moving Body"
+msgstr "Lassú mozgású karosszéria."
+
+#: po/custom/fromJson.txt:953
+#: po/custom/fromJson.txt:1205
+msgid "Automated reload system"
+msgstr "Automatikus újratöltő rendszer"
+
+#: po/custom/fromJson.txt:953
+msgid "Increases Mini-Rockets ROF"
+msgstr "Megnövekedett kisrakéta tűzgyorsaság"
+
+#: po/custom/fromJson.txt:954
+#: po/custom/fromJson.txt:1206
+msgid "Fin-stabilization improves flight trajectory"
+msgstr "Szárny stabilizáció javítja a röppályát"
+
+#: po/custom/fromJson.txt:954
+msgid "Increases Mini-Rocket accuracy"
+msgstr "Megnövekedett kisrakéta célpontosság"
+
+#: po/custom/fromJson.txt:956
+#: po/custom/fromJson.txt:1212
+msgid "Improved shaped charge warhead"
+msgstr "Jobb kumulatív robbanófej"
+
+#: po/custom/fromJson.txt:957
+#: po/custom/fromJson.txt:958
+#: po/custom/fromJson.txt:959
+#: po/custom/fromJson.txt:960
+#: po/custom/fromJson.txt:961
+#: po/custom/fromJson.txt:962
+#: po/custom/fromJson.txt:963
+#: po/custom/fromJson.txt:964
+#: po/custom/fromJson.txt:965
+#: po/custom/fromJson.txt:966
+msgid "Missile Upgrade"
+msgstr "Rakéta fejlesztés"
+
+#: po/custom/fromJson.txt:957
+msgid "Increases Missile damage"
+msgstr "Megnövekedett rakéta sebzés"
+
+#: po/custom/fromJson.txt:957
+#: po/custom/fromJson.txt:958
+#: po/custom/fromJson.txt:959
+#: po/custom/fromJson.txt:960
+#: po/custom/fromJson.txt:961
+#: po/custom/fromJson.txt:962
+#: po/custom/fromJson.txt:963
+#: po/custom/fromJson.txt:964
+#: po/custom/fromJson.txt:965
+#: po/custom/fromJson.txt:966
+msgid "All missiles upgraded automatically"
+msgstr "Rakéták automatikusan fejlesztve"
+
+#: po/custom/fromJson.txt:958
+msgid "Missile damage +25%"
+msgstr "Rakéta sebzés +25%"
+
+#: po/custom/fromJson.txt:959
+#: po/custom/fromJson.txt:960
+msgid "Missile actively seeks and homes on targets"
+msgstr "A rakéták aktívan keresik és rögzítik a célt"
+
+#: po/custom/fromJson.txt:959
+#: po/custom/fromJson.txt:963
+msgid "Increases Missile accuracy"
+msgstr "Megnövekedett rakéta célpontosság"
+
+#: po/custom/fromJson.txt:960
+#: po/custom/fromJson.txt:964
+msgid "Missile accuracy +10%"
+msgstr "Rakéta célpontosítás +10%"
+
+#: po/custom/fromJson.txt:961
+#: po/custom/fromJson.txt:962
+msgid "Missiles detect and lock-on to targets while loading"
+msgstr "Rakéták érzékelik és rögzítik a célpontokat töltődés közben"
+
+#: po/custom/fromJson.txt:961
+#: po/custom/fromJson.txt:965
+msgid "Increases Missile ROF"
+msgstr "Megnövekedett rakéta tűzgyorsaság"
+
+#: po/custom/fromJson.txt:962
+#: po/custom/fromJson.txt:966
+msgid "Missile reload time -15%"
+msgstr "Rakéta újratöltési idő -15%"
+
+#: po/custom/fromJson.txt:963
+#: po/custom/fromJson.txt:964
+msgid "On-board computer predicts target movement"
+msgstr "Fedélzeti számítógép előrejelzi a cél mozgását"
+
+#: po/custom/fromJson.txt:965
+#: po/custom/fromJson.txt:966
+msgid "Racked missile dispensers allow for fast reloading"
+msgstr "Keretes rakéta adagoló, lehetővé teszi a gyors újratöltés"
+
+#: po/custom/fromJson.txt:967
+#: po/custom/fromJson.txt:968
+msgid "Automatic loader replaces manual feed"
+msgstr "Automatikus betöltő helyettesíti a kéz betöltést"
+
+#: po/custom/fromJson.txt:967
+#: po/custom/fromJson.txt:973
+msgid "Increases Mortar ROF"
+msgstr "Megnövelt aknavető tűzgyorsaság"
+
+#: po/custom/fromJson.txt:968
+#: po/custom/fromJson.txt:974
+msgid "Mortar reload time -10%"
+msgstr "Aknavető újratöltési idő -10%"
+
+#: po/custom/fromJson.txt:970
+#: po/custom/fromJson.txt:972
+msgid "Mortar damage +25%"
+msgstr "Aknavető sebzés +25%"
+
+#: po/custom/fromJson.txt:971
+#: po/custom/fromJson.txt:972
+msgid "Improved high explosive shells"
+msgstr "Továbbfejlesztett nagy hatóerejű gránát"
+
+#: po/custom/fromJson.txt:975
+#: po/custom/fromJson.txt:976
+msgid "Self-guided rocket-powered shells"
+msgstr "Önvezérelt rakéta hajtású gránát"
+
+#: po/custom/fromJson.txt:975
+#: po/custom/fromJson.txt:977
+#: po/custom/fromJson.txt:979
+msgid "Increases Mortar accuracy"
+msgstr "Megnövelt aknavető célpontosság"
+
+#: po/custom/fromJson.txt:976
+#: po/custom/fromJson.txt:978
+#: po/custom/fromJson.txt:980
+msgid "Mortar accuracy +10%"
+msgstr "Aknavető célpontosság +10%"
+
+#: po/custom/fromJson.txt:977
+#: po/custom/fromJson.txt:978
+msgid "Shells detect and home to thermal heat signatures"
+msgstr "Gránátok észlelik és célként rögzítik az egyedi hőképeket"
+
+#: po/custom/fromJson.txt:979
+#: po/custom/fromJson.txt:980
+msgid "Targeting systems compensate for distance and weather conditions"
+msgstr "Célzó rendszer kompenzálja a távolság-és időjárási viszonyokat"
+
+#: po/custom/fromJson.txt:985
+msgid "New Advanced Weapon Available"
+msgstr "Új fejlett fegyver érhető el"
+
+#: po/custom/fromJson.txt:985
+msgid "Very slow recharge time"
+msgstr "Nagyon lassú újratöltési idő"
+
+#: po/custom/fromJson.txt:985
+msgid "Immense damage infliction capability"
+msgstr "Hatalmas károkozási képesség"
+
+#: po/custom/fromJson.txt:985
+msgid "Narrow area of effect"
+msgstr "Effektek csak szűk területen"
+
+#: po/custom/fromJson.txt:986
+#: po/custom/fromJson.txt:987
+msgid "New Artillery Missile Turret Available"
+msgstr "Új tüzérségi rakéta lövegtorony érhető el"
+
+#: po/custom/fromJson.txt:986
+msgid "High explosive artillery missile"
+msgstr "Nagy hatóerejű tüzérségi rakéta"
+
+#: po/custom/fromJson.txt:986
+#: po/custom/fromJson.txt:987
+msgid "Best Targets: Base structures and cyborgs"
+msgstr "Célok: bázis épületek és cyborgok"
+
+#: po/custom/fromJson.txt:987
+msgid "High explosive heavy artillery missile"
+msgstr "Nagy hatóerejű nehéztüzérségi rakéta"
+
+#: po/custom/fromJson.txt:988
+#: po/custom/fromJson.txt:989
+#: po/custom/fromJson.txt:990
+#: po/custom/fromJson.txt:991
+#: po/custom/fromJson.txt:992
+msgid "New Base Structure Available"
+msgstr "Új bázisépület érhető el"
+
+#: po/custom/fromJson.txt:988
+msgid "Produces Cyborgs"
+msgstr "Cyborgokat gyárt"
+
+#: po/custom/fromJson.txt:988
+msgid "Research makes additional Cyborgs available"
+msgstr "Kutatással további Cyborgok érhetőek el"
+
+#: po/custom/fromJson.txt:989
+msgid "Enables command turret research"
+msgstr "Engedélyezi a parancsnoki lövegtorony fejlesztését"
+
+#: po/custom/fromJson.txt:989
+msgid "Directs and collates information for command turrets"
+msgstr "Parancsnoki lövegtornyokhoz irányítja és gyűjti össze az információkat"
+
+#: po/custom/fromJson.txt:989
+msgid "Controls up to five commanders"
+msgstr "5 feletti parancsnok irányítása"
+
+#: po/custom/fromJson.txt:990
+msgid "New Repair Facility Repairs Damaged Units"
+msgstr "Új szerviz létesítmény javítja a sérült egységeket"
+
+#: po/custom/fromJson.txt:990
+msgid "Use the Command Console to send units back for repair"
+msgstr "Az egységek szervizüzembe küldéséhez használja a parancskonzolt"
+
+#: po/custom/fromJson.txt:990
+msgid "Or select the Repair Facility as a unit's target"
+msgstr "Vagy válassza ki a szervizüzemet, mint egység célt"
+
+#: po/custom/fromJson.txt:991
+msgid "Refuels, rearms and repairs VTOLs"
+msgstr "VTOL javítás, üzemanyag és lőszer újratöltés"
+
+#: po/custom/fromJson.txt:991
+msgid "Assign a VTOL by selecting the rearming pad as its target"
+msgstr "Újratöltő platform hozzárendelése a VTOL-hez, mint célt"
+
+#: po/custom/fromJson.txt:991
+msgid "The VTOL returns to the selected pad for rearming"
+msgstr "A VTOL visszatér a kijelölt platformhoz az újratöltésre"
+
+#: po/custom/fromJson.txt:992
+msgid "VTOL factory enables VTOL production"
+msgstr "VTOL gyár lehetővé teszi a VTOL gyártását"
+
+#: po/custom/fromJson.txt:992
+msgid "VTOL rearming pads required to keep VTOLs flying"
+msgstr "VTOL újratöltő platformok szükségesek a VTOL-ek repüléséhez"
+
+#: po/custom/fromJson.txt:992
+msgid "May be upgraded using factory modules"
+msgstr "Fejlesztéshez használd a gyármodulokat"
+
+#: po/custom/fromJson.txt:995
+msgid "Drops high intensity Plasmite bombs"
+msgstr "Nagy erejű plazma gyújtóbombákat dob le"
+
+#: po/custom/fromJson.txt:995
+#: po/custom/fromJson.txt:996
+#: po/custom/fromJson.txt:1100
+#: po/custom/fromJson.txt:1123
+msgid "Best Targets: Bunkers and hardpoints"
+msgstr "Célok: bunkerek és fegyvertartó talapzatok"
+
+#: po/custom/fromJson.txt:996
+msgid "Drops high intensity thermite bombs"
+msgstr "Nagy erejű termit gyújtóbombákat dob le"
+
+#: po/custom/fromJson.txt:997
+msgid "Drops incendiary bombs"
+msgstr "Gyújtóbombákat dob le"
+
+#: po/custom/fromJson.txt:997
+msgid "Best Targets: Bunkers and Hardpoints"
+msgstr "Célok: bunkerek és fegyvertartó talapzatok"
+
+#: po/custom/fromJson.txt:998
+msgid "New Construction Options Available"
+msgstr "Új építési lehetőségek állnak rendelkezésre"
+
+#: po/custom/fromJson.txt:998
+msgid "Titanium-reinforced concrete"
+msgstr "Titán erősítésű vasbeton"
+
+#: po/custom/fromJson.txt:998
+msgid "Enables Hardcrete walls"
+msgstr "Engedélyezi a vasbeton falat"
+
+#: po/custom/fromJson.txt:1001
+msgid "Armed with Cyborg Cannon"
+msgstr "Cyborg ágyúval felszerelt"
+
+#: po/custom/fromJson.txt:1002
+msgid "Armed with Cyborg Flamer"
+msgstr "Cyborg lángszóróval felszerelt"
+
+#: po/custom/fromJson.txt:1003
+msgid "Armed with Cyborg Machinegun"
+msgstr "Cyborg gépfegyverrel felszerelt"
+
+#: po/custom/fromJson.txt:1004
+msgid "Armed with Cyborg Pulse Laser"
+msgstr "Cyborg impulzus lézerrel"
+
+#: po/custom/fromJson.txt:1005
+msgid "Armed with Cyborg Rail Gun"
+msgstr "Cyborg sínágyúval"
+
+#: po/custom/fromJson.txt:1006
+msgid "Armed with Cyborg Scourge Missile Launcher"
+msgstr "Cyborg Scourge rakétakilövővel felszerelt"
+
+#: po/custom/fromJson.txt:1007
+msgid "Armed with Cyborg Thermite Flamer"
+msgstr "Cyborg termit lángszóróval felszerelt"
+
+#: po/custom/fromJson.txt:1008
+msgid "Armed with flashlight laser"
+msgstr "Könnyűlézerrel felszerelt"
+
+#: po/custom/fromJson.txt:1009
+msgid "Armed with grenades"
+msgstr "Gránátokkal felszerelt"
+
+#: po/custom/fromJson.txt:1010
+msgid "Armed with hyper velocity cannon"
+msgstr "Nagysebességű ágyúval felszerelt"
+
+#: po/custom/fromJson.txt:1011
+msgid "Armed with Lance Anti-Tank rocket"
+msgstr "Tankelhárító rakétával szerelt"
+
+#: po/custom/fromJson.txt:1012
+msgid "Armed with medium cannon"
+msgstr "Közepes ágyúval felszerelt"
+
+#: po/custom/fromJson.txt:1013
+#: po/custom/fromJson.txt:1094
+msgid "Armed with Needle Gun"
+msgstr "Flechette ágyúval felszerelt"
+
+#: po/custom/fromJson.txt:1015
+#: po/custom/fromJson.txt:1095
+msgid "Armed with Scourge anti-tank missile"
+msgstr "Scourge tankelhárító rakétával felszerelt"
+
+#: po/custom/fromJson.txt:1016
+msgid "Armed with tank killer rockets"
+msgstr "Tank Killer rakétákkal felszerelt"
+
+#: po/custom/fromJson.txt:1017
+msgid "Combat engineer with construction ability"
+msgstr "Hadi mérnök építési képességgel"
+
+#: po/custom/fromJson.txt:1018
+msgid "Mechanic with repair ability"
+msgstr "Szerelő javítási képességgel"
+
+#: po/custom/fromJson.txt:1019
+msgid "New Cyborg Research Available"
+msgstr "Új Cyborg kutatás érhető el"
+
+#: po/custom/fromJson.txt:1019
+#, fuzzy
+msgid "Aerodynamic Jump Pack"
+msgstr "Aerodinamikus labor"
+
+#: po/custom/fromJson.txt:1019
+msgid "Gives Cyborg limited flight abilities"
+msgstr "A Cyborg-oknak korlátozott repülési képességeket ad"
+
+#: po/custom/fromJson.txt:1019
+msgid "Jump Cyborgs can now be researched"
+msgstr "Ejtőernyős Cyborg-ok kutathatók"
+
+#: po/custom/fromJson.txt:1025
+msgid "Armored bunker with Flamer"
+msgstr "Páncélozott bunker lánszóróval"
+
+#: po/custom/fromJson.txt:1026
+msgid "Armored bunker with Lancer AT rocket"
+msgstr "Páncélozott bunker tankelhárító rakétával"
+
+#: po/custom/fromJson.txt:1027
+msgid "Armored bunker with Light Cannon"
+msgstr "Páncélozott bunker könnyű ágyúval"
+
+#: po/custom/fromJson.txt:1028
+msgid "Armored bunker with Machinegun"
+msgstr "Páncélozott bunker gépfegyverrel"
+
+#: po/custom/fromJson.txt:1029
+msgid "Armored EMP Mortar battery pit"
+msgstr "Páncélozott EMP aknavető árok"
+
+#: po/custom/fromJson.txt:1031
+msgid "Armored guard tower with EMP Cannon"
+msgstr "EMP ágyúval szerelt őrtorony"
+
+#: po/custom/fromJson.txt:1032
+msgid "Armored guard tower with Lancer AT rocket"
+msgstr "Tankelhárító rakétával felszerelt őrtorony"
+
+#: po/custom/fromJson.txt:1033
+msgid "Armored guard tower with Mini-Pod Rocket"
+msgstr "Páncélozott őrtoron kis rakétavetővel"
+
+#: po/custom/fromJson.txt:1034
+msgid "Armored guard tower with Mini-Rocket Pod"
+msgstr "Páncélozott őrtoron kisrakéta vetővel"
+
+#: po/custom/fromJson.txt:1035
+msgid "Armored guard tower with Needle Gun"
+msgstr "Páncélozott őrtorony nyílövedékes ágyúval"
+
+#: po/custom/fromJson.txt:1036
+msgid "Armored guard tower with Nexus Link"
+msgstr "Páncélozott őrtorony NEXUS dekóderrel"
+
+#: po/custom/fromJson.txt:1037
+msgid "Armored guard tower with Pulse Laser"
+msgstr "Páncélozott őrtorony impulzus lézerrel"
+
+#: po/custom/fromJson.txt:1038
+msgid "Armored guard tower with Scourge Missile"
+msgstr "Páncélozott őrtorony Scourge rakétával"
+
+#: po/custom/fromJson.txt:1041
+msgid "Armored hardpoint with Flashlight laser"
+msgstr "Páncélozott talapzat könnyűlézerrel"
+
+#: po/custom/fromJson.txt:1042
+msgid "Armored hardpoint with Gauss Cannon"
+msgstr "Páncélozott talapzat Gauss ágyúval"
+
+#: po/custom/fromJson.txt:1043
+msgid "Armored hardpoint with Heavy Cannon"
+msgstr "Páncélozott talapzat nehéz ágyúval"
+
+#: po/custom/fromJson.txt:1044
+msgid "Armored hardpoint with Heavy Machinegun"
+msgstr "Páncélozott talapzat nehéz gépfegyverrel"
+
+#: po/custom/fromJson.txt:1045
+msgid "Armored hardpoint with Hyper-Velocity Cannon"
+msgstr "Páncélozott talapzat nagysebességű ágyúval"
+
+#: po/custom/fromJson.txt:1047
+msgid "Armored hardpoint with Lancer AT missile"
+msgstr "Páncélozott fegyverfelfüggesztő csomópont tankelhárító rakétával"
+
+#: po/custom/fromJson.txt:1048
+msgid "Armored hardpoint with Light Cannon"
+msgstr "Páncélozott talapzat könnyű ágyúval"
+
+#: po/custom/fromJson.txt:1049
+msgid "Armored hardpoint with Medium Cannon"
+msgstr "Páncélozott talapzat közepes ágyúval"
+
+#: po/custom/fromJson.txt:1050
+msgid "Armored hardpoint with Rail Gun"
+msgstr "Páncélozott talapzat sínágyúval"
+
+#: po/custom/fromJson.txt:1051
+msgid "Armored hardpoint with Scourge AT Missile"
+msgstr "Páncélozott talapzat Scourge tankelhárító rakétával"
+
+#: po/custom/fromJson.txt:1055
+msgid "Armored Incendiary Mortar battery pit"
+msgstr "Páncélozott gyújtóbombás aknavető árok"
+
+#: po/custom/fromJson.txt:1056
+msgid "Armored Mortar battery pit"
+msgstr "Páncélozott aknavető árok"
+
+#: po/custom/fromJson.txt:1059
+msgid "Armored strongpoint with Flashlight laser"
+msgstr "Páncélozott erőd könnyűlézerrel"
+
+#: po/custom/fromJson.txt:1060
+msgid "Armored strongpoint with Gauss Cannon"
+msgstr "Páncélozott erőd Gauss ágyúval"
+
+#: po/custom/fromJson.txt:1061
+msgid "Armored strongpoint with Heavy Laser"
+msgstr "Nehéz lézerrel szerelt erőd"
+
+#: po/custom/fromJson.txt:1064
+msgid "Armored strongpoint with Plasmite Flamer"
+msgstr "Páncélozott erőd plazmavetővel"
+
+#: po/custom/fromJson.txt:1065
+msgid "Armored strongpoint with Pulse Laser"
+msgstr "Páncélozott erőd impulzus lézerrel"
+
+#: po/custom/fromJson.txt:1066
+msgid "Armored strongpoint with Rail Gun"
+msgstr "Páncélozott erőd sínágyúval"
+
+#: po/custom/fromJson.txt:1068
+msgid "Artillery battery firing Firestorm Missiles"
+msgstr "A tüzérség Firestorm rakétákkal tüzel"
+
+#: po/custom/fromJson.txt:1069
+msgid "Artillery battery firing Novastorm Missiles"
+msgstr "A tüzérségi üteg Novastorm rakétákkal tüzel"
+
+#: po/custom/fromJson.txt:1070
+msgid "Incendiary howitzer emplacement"
+msgstr "Gyújtóbombás tarack állás"
+
+#: po/custom/fromJson.txt:1072
+msgid "Mini-rocket armored strongpoint"
+msgstr "Kisrakéta páncélozott erőd"
+
+#: po/custom/fromJson.txt:1073
+#: po/custom/fromJson.txt:1159
+msgid "Plasma Cannon firing plasma"
+msgstr "Plazma ágyú plazmával tüzel"
+
+#: po/custom/fromJson.txt:1073
+#: po/custom/fromJson.txt:1079
+#: po/custom/fromJson.txt:1080
+#: po/custom/fromJson.txt:1081
+#: po/custom/fromJson.txt:1082
+#: po/custom/fromJson.txt:1161
+msgid "Best Targets : Vehicles"
+msgstr "Célok: járművek"
+
+#: po/custom/fromJson.txt:1076
+msgid "SAM site with Avenger missiles"
+msgstr "SAM kilövő állás Avenger rakétákkal"
+
+#: po/custom/fromJson.txt:1077
+msgid "SAM site with Vindicator missiles"
+msgstr "SAM kilövő állás Vindicator rakétákkal"
+
+#: po/custom/fromJson.txt:1078
+msgid "Steel tower with machinegun"
+msgstr "Gépfegyver torony"
+
+#: po/custom/fromJson.txt:1078
+msgid "Defensive Strength: Low"
+msgstr "Védelmi erő: alacsony"
+
+#: po/custom/fromJson.txt:1079
+msgid "Uses advanced cannon technology"
+msgstr "Fejlett ágyút használ."
+
+#: po/custom/fromJson.txt:1079
+#: po/custom/fromJson.txt:1080
+#: po/custom/fromJson.txt:1081
+#: po/custom/fromJson.txt:1082
+msgid "Defensive Strength : High"
+msgstr "Védelmi erő : Magas"
+
+#: po/custom/fromJson.txt:1080
+msgid "Uses advanced mass driver railgun technology"
+msgstr "Fejlett elektromágneses katapult, sínágyú technológiát használ."
+
+#: po/custom/fromJson.txt:1081
+msgid "Uses advanced missile gun technology"
+msgstr "Fejlett légvédelmi rakéta technológiát használ."
+
+#: po/custom/fromJson.txt:1082
+msgid "Uses advanced rocket gun technology"
+msgstr "Fejlett rakéta technológiát használ."
+
+#: po/custom/fromJson.txt:1083
+msgid "New Electronic Technology Discovered"
+msgstr "Új elektronikai technológia felfedezve."
+
+#: po/custom/fromJson.txt:1083
+#: po/custom/fromJson.txt:1114
+#: po/custom/fromJson.txt:1115
+#: po/custom/fromJson.txt:1116
+#: po/custom/fromJson.txt:1117
+#: po/custom/fromJson.txt:1118
+msgid "Synaptic Link technology breakthrough"
+msgstr "Szinaptikus kapcsolat technológiai áttörés"
+
+#: po/custom/fromJson.txt:1083
+msgid "On-board resistance circuit systems"
+msgstr "Fedélzeti ellenálló áramkör rendszerek"
+
+#: po/custom/fromJson.txt:1083
+msgid "Enables resistance to Nexus Link technology"
+msgstr "Lehetővé teszi az ellenállást a NEXUS dekódoló technológia"
+
+#: po/custom/fromJson.txt:1086
+msgid "105mm multi-barrel Howitzer may be assigned to a sensor"
+msgstr "Érzékelőt lehet rendelni a 105mm-es többcsöves tarackhoz"
+
+#: po/custom/fromJson.txt:1088
+msgid "Incendiary Howitzer may be assigned to a sensor"
+msgstr "Érzékelőt lehet rendelni a gyutacsos tarackhoz"
+
+#: po/custom/fromJson.txt:1090
+msgid "May be targeted directly or assigned to a sensor turret or tower"
+msgstr "Célba vehető közvetlenül, felderítő vagy érzékelő tornyon keresztül"
+
+#: po/custom/fromJson.txt:1091
+msgid "Armed with Cyborg assault gun"
+msgstr "Cyborg ostromfegyverrel felszerelt"
+
+#: po/custom/fromJson.txt:1092
+msgid "Armed with Flashlight Laser"
+msgstr "Könnyűlézerrel szerelt"
+
+#: po/custom/fromJson.txt:1092
+msgid "Requires cyborg factory to produce"
+msgstr "Cyborg gyár szükséges az előállításhoz"
+
+#: po/custom/fromJson.txt:1093
+msgid "Armed with Lancer anti-tank missile"
+msgstr "Tankelhárító rakétával felszerelt"
+
+#: po/custom/fromJson.txt:1096
+#: po/custom/fromJson.txt:1097
+#: po/custom/fromJson.txt:1098
+msgid "New Laser Weapon Available"
+msgstr "Új lézerfegyver érhető el"
+
+#: po/custom/fromJson.txt:1096
+msgid "Fires heavy pulses of laser light"
+msgstr "Tüzelés nagy impulzusú lézerrel"
+
+#: po/custom/fromJson.txt:1096
+msgid "Best Targets: Heavy cyborgs"
+msgstr "Célok: nehéz cyborgok"
+
+#: po/custom/fromJson.txt:1097
+msgid "Fires pulses of laser light"
+msgstr "Tüzelés impulzus lézerrel"
+
+#: po/custom/fromJson.txt:1097
+#: po/custom/fromJson.txt:1098
+msgid "Best Targets: Cyborgs"
+msgstr "Célok: Cyborgok"
+
+#: po/custom/fromJson.txt:1098
+msgid "Generates and concentrates bursts of laser energy"
+msgstr "Generálja és koncentrálja a kitörő lézer energiáját"
+
+#: po/custom/fromJson.txt:1099
+#: po/custom/fromJson.txt:1100
+msgid "New Missile Turret Available"
+msgstr "Új rakéta lövegtorony érhető el"
+
+#: po/custom/fromJson.txt:1099
+msgid "Anti-tank missile"
+msgstr "Tankelhárító rakéta"
+
+#: po/custom/fromJson.txt:1100
+msgid "Bunker buster missile"
+msgstr "Bunkertörő rakéta"
+
+#: po/custom/fromJson.txt:1101
+msgid "New Paradigm Heavy Body"
+msgstr "Új Paradigma nehéz karosszéria"
+
+#: po/custom/fromJson.txt:1101
+msgid "Less armor and body points than Python"
+msgstr "Kevesebb páncél és karosszéria érték mint a Python-nak"
+
+#: po/custom/fromJson.txt:1101
+#: po/custom/fromJson.txt:1164
+msgid "Faster than Python"
+msgstr "Gyorsabb mint a Python"
+
+#: po/custom/fromJson.txt:1101
+msgid "Power cost and production time the same as Python"
+msgstr "Energia igény és a gyártási idő megegyezik a Python-nal"
+
+#: po/custom/fromJson.txt:1102
+msgid "New Paradigm Light Body"
+msgstr "Új Paradigma könnyű karosszéria"
+
+#: po/custom/fromJson.txt:1102
+msgid "Inferior armor and body points to Viper"
+msgstr "Rosszabb páncél és karosszéria értékek a Viper-nél"
+
+#: po/custom/fromJson.txt:1102
+#: po/custom/fromJson.txt:1165
+msgid "Faster than Viper"
+msgstr "Gyorsabb mint a Viper"
+
+#: po/custom/fromJson.txt:1102
+msgid "Power cost and production time similar to Viper"
+msgstr "Energia igény és gyártási idő hasonló a Viper-hez"
+
+#: po/custom/fromJson.txt:1103
+msgid "New Paradigm Medium body"
+msgstr "Új Paradigma közepes karosszéria"
+
+#: po/custom/fromJson.txt:1103
+msgid "Inferior armor and body points to Cobra"
+msgstr "Rosszabb páncél és karosszéria értékek a Cobra-nál"
+
+#: po/custom/fromJson.txt:1103
+#: po/custom/fromJson.txt:1166
+msgid "Faster than Cobra"
+msgstr "Gyorsabb mint a Cobra"
+
+#: po/custom/fromJson.txt:1103
+msgid "Power cost and production time similar to Cobra"
+msgstr "Az energia igény és a gyártási idő hasonló a Cobra-hoz"
+
+#: po/custom/fromJson.txt:1104
+#: po/custom/fromJson.txt:1105
+#: po/custom/fromJson.txt:1106
+#: po/custom/fromJson.txt:1108
+msgid "New Propulsion Available"
+msgstr "Új meghajtás érhető el"
+
+#: po/custom/fromJson.txt:1104
+msgid "Amphibious hover propulsion"
+msgstr "Kétéltű légpárnás hajtómű"
+
+#: po/custom/fromJson.txt:1104
+#: po/custom/fromJson.txt:1108
+msgid "Speed: Fast"
+msgstr "Sebesség: gyors"
+
+#: po/custom/fromJson.txt:1105
+msgid "Armored Half-tracks"
+msgstr "Páncélozott féllánctalpas"
+
+#: po/custom/fromJson.txt:1105
+msgid "Speed: Medium"
+msgstr "Sebesség: Közepes"
+
+#: po/custom/fromJson.txt:1106
+msgid "Armored Tracks"
+msgstr "Páncélozott lánctalpas"
+
+#: po/custom/fromJson.txt:1106
+msgid "Speed: Slow"
+msgstr "Sebesség: lassú"
+
+#: po/custom/fromJson.txt:1107
+msgid "New Propulsion Available for Design"
+msgstr "A tervezéshez új hajtómű érhető el"
+
+#: po/custom/fromJson.txt:1107
+msgid "Vertical Take Off and Landing Propulsion"
+msgstr "Függőleges fel-és leszállási hajtómű"
+
+#: po/custom/fromJson.txt:1107
+msgid "Speed: VTOL"
+msgstr "Sebesség: VTOL"
+
+#: po/custom/fromJson.txt:1111
+#: po/custom/fromJson.txt:1112
+#: po/custom/fromJson.txt:1113
+msgid "New Rail Gun Available"
+msgstr "Új sínágyú érhető el"
+
+#: po/custom/fromJson.txt:1111
+msgid "Heavy rail gun firing large kinetic energy darts"
+msgstr "Nehéz sínágyú, nagy kinetikus energiájú, nyíllövedékekkel tüzel"
+
+#: po/custom/fromJson.txt:1112
+msgid "Rail gun firing armor-piercing darts"
+msgstr "Sínágyú, páncéltörő nyíllövedékekkel tüzel"
+
+#: po/custom/fromJson.txt:1113
+msgid "Rapid fire rail gun firing needle darts"
+msgstr "Gyorstüzelésű sínágyú nyíllövedékekkel tüzel"
+
+#: po/custom/fromJson.txt:1114
+#: po/custom/fromJson.txt:1115
+#: po/custom/fromJson.txt:1116
+#: po/custom/fromJson.txt:1117
+#: po/custom/fromJson.txt:1118
+msgid "New Repair Technology Discovered"
+msgstr "Új javítási technológia felfedezve"
+
+#: po/custom/fromJson.txt:1114
+#: po/custom/fromJson.txt:1115
+msgid "Built-in diagnostic and repair systems"
+msgstr "Beépített diagnosztikai és szerviz rendszerek"
+
+#: po/custom/fromJson.txt:1114
+msgid "Enables self-repair in all base structures"
+msgstr "Önjavítás képessége a bázis épületeknek"
+
+#: po/custom/fromJson.txt:1115
+msgid "Enables self-repair in all defenses"
+msgstr "Önjavítás képessége az összes védműnek"
+
+#: po/custom/fromJson.txt:1116
+#: po/custom/fromJson.txt:1117
+#: po/custom/fromJson.txt:1118
+msgid "On-board diagnostic and repair systems"
+msgstr "Fedélzeti diagnosztikai és szerviz rendszerek"
+
+#: po/custom/fromJson.txt:1116
+msgid "Enables self-repair"
+msgstr "Önjavítást tesz lehetővé"
+
+#: po/custom/fromJson.txt:1117
+msgid "Enables self-repair in all Cyborgs"
+msgstr "Önjavítás képessége a Cyborg-oknak"
+
+#: po/custom/fromJson.txt:1118
+msgid "Enables self-repair in all vehicles"
+msgstr "Önjavítás képessége az összes járműnek"
+
+#: po/custom/fromJson.txt:1119
+#: po/custom/fromJson.txt:1120
+#: po/custom/fromJson.txt:1121
+#: po/custom/fromJson.txt:1122
+#: po/custom/fromJson.txt:1123
+#: po/custom/fromJson.txt:1124
+msgid "New Rocket Available"
+msgstr "Új rakéta érhető el"
+
+#: po/custom/fromJson.txt:1119
+msgid "Anti-tank rocket"
+msgstr "Tankelhárító rakéta"
+
+#: po/custom/fromJson.txt:1120
+msgid "Fast firing light anti-vehicle rockets"
+msgstr "Gyorstüzelésű könnyű járműelhárító rakéták"
+
+#: po/custom/fromJson.txt:1120
+msgid "Best Targets: Wheeled and hover vehicles"
+msgstr "Célok: kerekes és légpárnás járművek"
+
+#: po/custom/fromJson.txt:1121
+msgid "Fires salvoes of mini-rockets"
+msgstr "Sortűz kisrakétákkal"
+
+#: po/custom/fromJson.txt:1121
+msgid "Best Targets: Base structures"
+msgstr "Célok: bázis épületek"
+
+#: po/custom/fromJson.txt:1122
+msgid "Heavy anti-tank rocket"
+msgstr "Nehéz tankelhárító rakéta"
+
+#: po/custom/fromJson.txt:1123
+msgid "High explosive shaped charge missile"
+msgstr "Nagy hatóerejű kumulatív töltetű rakéta"
+
+#: po/custom/fromJson.txt:1124
+msgid "Rocket artillery; can be assigned to a sensor"
+msgstr "Rakéta tüzérség; hozzárendelhető egy érzékelőhöz"
+
+#: po/custom/fromJson.txt:1124
+msgid "Best Targets: Vehicles and Emplacements"
+msgstr "Célok: járművek és védelmi állások"
+
+#: po/custom/fromJson.txt:1125
+#: po/custom/fromJson.txt:1126
+msgid "New SAM Turret Available"
+msgstr "Új SAM lövegtorony érhető el"
+
+#: po/custom/fromJson.txt:1127
+msgid "New System Available"
+msgstr "Új rendszer áll rendelkezésre."
+
+#: po/custom/fromJson.txt:1127
+#: po/custom/fromJson.txt:1128
+msgid "Combines standard, counter battery and VTOL sensors"
+msgstr "Egyesített szabvány, válaszüteg és VTOL érzékelők"
+
+#: po/custom/fromJson.txt:1127
+#: po/custom/fromJson.txt:1128
+#: po/custom/fromJson.txt:1129
+#: po/custom/fromJson.txt:1131
+msgid "Keeps map areas under constant surveillance"
+msgstr "A területet állandó megfigyelés alatt tartja"
+
+#: po/custom/fromJson.txt:1127
+#: po/custom/fromJson.txt:1128
+#: po/custom/fromJson.txt:1137
+msgid "Improved sensor range"
+msgstr "Fejlesztett érzékelő tartomány"
+
+#: po/custom/fromJson.txt:1128
+#: po/custom/fromJson.txt:1129
+msgid "New Systems Structure Available"
+msgstr "Új építmény szerkezet érhető el"
+
+#: po/custom/fromJson.txt:1129
+msgid "Complete battlefield visibility"
+msgstr "Teljes csatatér felderítve"
+
+#: po/custom/fromJson.txt:1129
+msgid "Does not offer sensor targeting"
+msgstr "Nem lehet radarral bemérni"
+
+#: po/custom/fromJson.txt:1130
+#: po/custom/fromJson.txt:1131
+#: po/custom/fromJson.txt:1132
+#: po/custom/fromJson.txt:1133
+#: po/custom/fromJson.txt:1134
+msgid "New Systems Tower Available"
+msgstr "Új rendszertorony érhető el"
+
+#: po/custom/fromJson.txt:1130
+msgid "Counter-battery tower detects enemy indirect fire batteries"
+msgstr "Válaszüteg torony általános ellenséges tüzet észlelt"
+
+#: po/custom/fromJson.txt:1130
+#: po/custom/fromJson.txt:1136
+msgid "Orders assigned indirect fire units to fire at the enemy batteries"
+msgstr "Kijelölt egységeknek általános tűzparancs az ellenséges ütegekre"
+
+#: po/custom/fromJson.txt:1130
+#: po/custom/fromJson.txt:1136
+msgid "Counter-battery fire continues until enemy battery is suppressed"
+msgstr "Folyamatos válaszüteg tűz, az ellenséges lövegek megsemmisüléséig"
+
+#: po/custom/fromJson.txt:1131
+msgid "Extended sensor range"
+msgstr "Kiterjesztett érzékelő tartomány"
+
+#: po/custom/fromJson.txt:1132
+msgid "Radar detector tower detects enemy sensors"
+msgstr "A radarérzékelő torony ellenséges érzékelőket észlel"
+
+#: po/custom/fromJson.txt:1132
+msgid "Orders assigned indirect fire units to fire at the enemy sensors"
+msgstr "Kijelölt egységeknek általános tűzparancs az ellenséges érzékelők ellen."
+
+#: po/custom/fromJson.txt:1132
+msgid "Counter-battery fire continues until enemy sensor is suppressed"
+msgstr "Folyamatos válaszüteg tűz, amíg az ellenséges érzékelő elfojtott."
+
+#: po/custom/fromJson.txt:1133
+msgid "VTOL CB Tower detects enemy indirect fire batteries"
+msgstr "VTOL CB torony általános ellenséges tüzet észlelt"
+
+#: po/custom/fromJson.txt:1134
+msgid "VTOL Strike Tower detects approaching enemies"
+msgstr "VTOL csapásmérő torony közeledő ellenséget észlelt"
+
+#: po/custom/fromJson.txt:1134
+msgid "Assigned VTOLs attack the enemy units"
+msgstr "A kijelölt VTOL egységek támadják az ellenséget"
+
+#: po/custom/fromJson.txt:1134
+msgid "Strike mission continues until enemy destroyed or they retreat"
+msgstr "Csapásmérés folytamatos az ellenség visszavonulásáig vagy megsemmisüléséig"
+
+#: po/custom/fromJson.txt:1135
+msgid "Battlefield repair unit"
+msgstr "Harctéri szerviz egység"
+
+#: po/custom/fromJson.txt:1136
+#: po/custom/fromJson.txt:1138
+msgid "New Systems Turret Available for Design"
+msgstr "A tervezéshez új rendszerű lövegtorony érhető el"
+
+#: po/custom/fromJson.txt:1136
+msgid "Counter-battery turret detects enemy indirect fire batteries"
+msgstr "Válaszüteg ellenséges ütegtüzet észlelt"
+
+#: po/custom/fromJson.txt:1137
+msgid "New Systems Turret Available For Design"
+msgstr "A tervezéshez újrendszerű lövegtorony érhető el"
+
+#: po/custom/fromJson.txt:1137
+msgid "Makes excellent scout vehicle"
+msgstr "Kiváló felderítő járművet készít"
+
+#: po/custom/fromJson.txt:1138
+msgid "New battlefield computer system"
+msgstr "Új harctéri számítógép rendszer"
+
+#: po/custom/fromJson.txt:1138
+#: po/custom/fromJson.txt:1223
+msgid "Commander leads groups acts as factory delivery point"
+msgstr "A parancsnok irányítja a csapatokat a gyári szállítási ponthoz"
+
+#: po/custom/fromJson.txt:1140
+#: po/custom/fromJson.txt:1141
+msgid "Synaptic Link Scrambler technology"
+msgstr "Szinaptikus kapcsolatú kódolási technológia"
+
+#: po/custom/fromJson.txt:1140
+#: po/custom/fromJson.txt:1141
+msgid "Electronically attacks and disrupts enemy structures"
+msgstr "Elektronikus úton támad és rombolja az ellenséges épületeket"
+
+#: po/custom/fromJson.txt:1140
+msgid "Steals technology from enemies"
+msgstr "Technológiát lop az ellenségektől"
+
+#: po/custom/fromJson.txt:1141
+msgid "Steals technology from structures and takes control of weapons"
+msgstr "Ellopja a technológiát az építményekből és átveszi a fegyverek irányítását"
+
+#: po/custom/fromJson.txt:1143
+msgid "VTOL Strike turret used to spot targets"
+msgstr "VTOL csapásmérő lövegtorony az ellenség beméréséhez"
+
+#: po/custom/fromJson.txt:1143
+msgid "Assigned VTOLs attack the designated targets"
+msgstr "Kijelölt VTOL egységek támadják a kijelölt célokat"
+
+#: po/custom/fromJson.txt:1143
+msgid "Select new targets to continue the VTOL strikes"
+msgstr "Jelöljön ki új célt VTOL csapás folytatásához"
+
+#: po/custom/fromJson.txt:1144
+msgid "New VTOL Missile Launcher"
+msgstr "Új VTOL rakétakilövő"
+
+#: po/custom/fromJson.txt:1144
+msgid "Fires Electronic Magnetic Pulse Missiles"
+msgstr "Tüzelés elektromágneses impulzus rakétákkal"
+
+#: po/custom/fromJson.txt:1145
+msgid ".50-calibre heavy machinegun"
+msgstr "50-es kaliberű nehéz gépfegyver"
+
+#: po/custom/fromJson.txt:1146
+msgid "7.62mm machinegun"
+msgstr "7.62mm-es gépfegyver"
+
+#: po/custom/fromJson.txt:1148
+msgid "76mm twin-barrel automatic-cannon"
+msgstr "76mm ikercsöves automata ágyú"
+
+#: po/custom/fromJson.txt:1149
+msgid "Flame-thrower firing Propylene Oxide gel"
+msgstr "Lángszóró Propilén-oxiddal tüzel"
+
+#: po/custom/fromJson.txt:1149
+#: po/custom/fromJson.txt:1160
+msgid "Body Points: Very low"
+msgstr "Karosszéria fejlettsége: nagyon alacsony"
+
+#: po/custom/fromJson.txt:1150
+#: po/custom/fromJson.txt:1151
+msgid "Heavy Cannon firing 120 mm rounds"
+msgstr "Nehéz ágyú 120mm-es löveggel tüzel"
+
+#: po/custom/fromJson.txt:1151
+#: po/custom/fromJson.txt:1153
+#: po/custom/fromJson.txt:1157
+msgid "Best Targets: Vehicles, Hardpoints"
+msgstr "Célok: járművek, fegyvertartó talapzatok"
+
+#: po/custom/fromJson.txt:1155
+msgid "Light Cannon firing 40mm rounds"
+msgstr "Könnyű ágyú 40mm-es löveggel tüzel"
+
+#: po/custom/fromJson.txt:1156
+#: po/custom/fromJson.txt:1157
+msgid "Medium Cannon firing 76mm rounds"
+msgstr "Közepes ágyú 76mm-es löveggel tüzel"
+
+#: po/custom/fromJson.txt:1158
+msgid "Multi-barrel, rapid-fire machinegun"
+msgstr "Többcsöves, gyorstüzelő gépfegyver"
+
+#: po/custom/fromJson.txt:1160
+msgid "Plasmite Flame-thrower"
+msgstr "Plazmaláng vető"
+
+#: po/custom/fromJson.txt:1161
+msgid "Powerful Electronic magnetic pulse weapon"
+msgstr "Erőteljes elektromágneses impulzus fegyver."
+
+#: po/custom/fromJson.txt:1162
+msgid "Twin 7.62mm machineguns"
+msgstr "7.62mm-es iker gépfegyverek"
+
+#: po/custom/fromJson.txt:1164
+msgid "NEXUS Heavy Body"
+msgstr "NEXUS nehéz karosszéria"
+
+#: po/custom/fromJson.txt:1165
+msgid "NEXUS Light Body"
+msgstr "NEXUS könnyű karosszéria"
+
+#: po/custom/fromJson.txt:1165
+msgid "Expensive to produce"
+msgstr "Költséges az előállítása"
+
+#: po/custom/fromJson.txt:1166
+msgid "NEXUS Medium Body"
+msgstr "NEXUS közepes karosszéria"
+
+#: po/custom/fromJson.txt:1166
+msgid "Expensive and slow to produce"
+msgstr "Költséges és lassú az előállítása"
+
+#: po/custom/fromJson.txt:1167
+msgid "Power Module Available"
+msgstr "Energiamodul rendelkezésre áll"
+
+#: po/custom/fromJson.txt:1167
+msgid "Burns oil more efficiently"
+msgstr "Hatékonyabb olajfelhasználás"
+
+#: po/custom/fromJson.txt:1167
+msgid "Use a truck to add the module to a power generator"
+msgstr "Használd a munkagépet az áramfejlesztő bővítéséhez"
+
+#: po/custom/fromJson.txt:1168
+msgid "Power Research Completed"
+msgstr "Energetikai fejlesztés elkészült"
+
+#: po/custom/fromJson.txt:1169
+#: po/custom/fromJson.txt:1244
+msgid "Factory output speed +60%"
+msgstr "Gyár termelékenység +60%"
+
+#: po/custom/fromJson.txt:1169
+#: po/custom/fromJson.txt:1173
+msgid "All factories upgraded automatically"
+msgstr "Minden gyár automatikusan továbbfejlesztve"
+
+#: po/custom/fromJson.txt:1171
+#: po/custom/fromJson.txt:1172
+msgid "Factory module enables medium and large bodies"
+msgstr "A gyármodul lehetővé teszi a közepes és nagy karosszéria osztályt"
+
+#: po/custom/fromJson.txt:1171
+#, c-format
+msgid "Factory output speed +100%% per module"
+msgstr "Gyár termelékenység +100% modulonként"
+
+#: po/custom/fromJson.txt:1171
+#: po/custom/fromJson.txt:1172
+msgid "Use a truck to add modules to a factory"
+msgstr "Használd a munkagépet a gyár bővítéséhez"
+
+#: po/custom/fromJson.txt:1173
+msgid "Factory production rate +60%"
+msgstr "Termelési arány +60%"
+
+#: po/custom/fromJson.txt:1175
+#, fuzzy
+msgid "Project Heavy Body"
+msgstr "Kollektív nehéz karosszéria"
+
+#: po/custom/fromJson.txt:1175
+msgid "Heavy body increases armor and body points"
+msgstr "Nehéz osztály, növeli a páncél és karosszéria értékeket"
+
+#: po/custom/fromJson.txt:1175
+msgid "Good main battle tank and heavy artillery platform"
+msgstr "Jó harckocsi és nehéztüzérségi platform"
+
+#: po/custom/fromJson.txt:1175
+msgid "Very high power costs and very slow to produce"
+msgstr "Nagyon magas energia igény és gyártási idő"
+
+#: po/custom/fromJson.txt:1176
+#, fuzzy
+msgid "Project Light Body"
+msgstr "Kollektív könnyű karosszéria"
+
+#: po/custom/fromJson.txt:1176
+msgid "Light body vulnerable to heavy weapons"
+msgstr "A könnyű karosszéria érzékeny a nehéz fegyverekre"
+
+#: po/custom/fromJson.txt:1176
+msgid "Good scout vehicle"
+msgstr "Jó felderítő jármű"
+
+#: po/custom/fromJson.txt:1176
+msgid "Low power cost and low production times"
+msgstr "Alacson energia igény és gyártási idő"
+
+#: po/custom/fromJson.txt:1177
+msgid "Project Medium Body"
+msgstr "Közepes karosszéria terv"
+
+#: po/custom/fromJson.txt:1177
+msgid "Medium body increases armor and body points"
+msgstr "Közepes osztály, növeli a páncél és karosszéria értékeket"
+
+#: po/custom/fromJson.txt:1177
+msgid "Good medium tank and support vehicle"
+msgstr "Jó közepes tank és támogató jármű"
+
+#: po/custom/fromJson.txt:1177
+msgid "Average power costs and production times"
+msgstr "Átlagos energia igény és gyártási idő"
+
+#: po/custom/fromJson.txt:1178
+#: po/custom/fromJson.txt:1179
+#: po/custom/fromJson.txt:1180
+#: po/custom/fromJson.txt:1181
+#: po/custom/fromJson.txt:1182
+#: po/custom/fromJson.txt:1183
+msgid "Rail Gun Upgrade"
+msgstr "Sínágyú fejlesztés"
+
+#: po/custom/fromJson.txt:1178
+#: po/custom/fromJson.txt:1179
+msgid "Computer predicts and compensates for target's movement"
+msgstr "A számítógép élőrre jelzi és kompenzálja a célpontok mozgását"
+
+#: po/custom/fromJson.txt:1178
+msgid "Increases Rail Gun accuracy"
+msgstr "Megnövekedett sínágyú célpontosság"
+
+#: po/custom/fromJson.txt:1178
+#: po/custom/fromJson.txt:1179
+#: po/custom/fromJson.txt:1180
+#: po/custom/fromJson.txt:1181
+#: po/custom/fromJson.txt:1182
+#: po/custom/fromJson.txt:1183
+msgid "All rail guns upgraded automatically"
+msgstr "Sínágyúk automatikusan fejlesztve"
+
+#: po/custom/fromJson.txt:1179
+msgid "Rail Gun accuracy +10%"
+msgstr "Sínágyú célpontosság +10%"
+
+#: po/custom/fromJson.txt:1180
+#: po/custom/fromJson.txt:1181
+msgid "Improved armor-piercing dart"
+msgstr "Jobb páncéltörő nyíllövedék"
+
+#: po/custom/fromJson.txt:1180
+msgid "Increases Rail Gun damage"
+msgstr "Megnövekedett sínágyú sebzés"
+
+#: po/custom/fromJson.txt:1181
+msgid "Rail Gun damage +25%"
+msgstr "Sínágyú sebzés +25%"
+
+#: po/custom/fromJson.txt:1182
+#: po/custom/fromJson.txt:1183
+msgid "Increased gauss output speeds up reload time"
+msgstr "Fokozott gauss kilépő sebesség, felgyorsítja az újratöltési időt"
+
+#: po/custom/fromJson.txt:1182
+msgid "Increases Rail Gun ROF"
+msgstr "Megnövekedett sínágyú tűzgyorsaság"
+
+#: po/custom/fromJson.txt:1183
+msgid "Rail Gun reload time -15%"
+msgstr "Sínágyú újratöltési idő -15%"
+
+#: po/custom/fromJson.txt:1184
+#: po/custom/fromJson.txt:1185
+msgid "Advanced repair techniques"
+msgstr "Fejlett javítási technikák"
+
+#: po/custom/fromJson.txt:1185
+#: po/custom/fromJson.txt:1187
+#: po/custom/fromJson.txt:1189
+msgid "Repair Speed +100%"
+msgstr "Javítási sebesség +100%"
+
+#: po/custom/fromJson.txt:1186
+#: po/custom/fromJson.txt:1187
+msgid "New automated repair techniques"
+msgstr "Új automatikus szerviz technológia"
+
+#: po/custom/fromJson.txt:1190
+#: po/custom/fromJson.txt:1191
+#: po/custom/fromJson.txt:1192
+#: po/custom/fromJson.txt:1193
+#: po/custom/fromJson.txt:1194
+msgid "Research Breakthrough Improves Construction Rates"
+msgstr "Kutatási áttörés növeli az építési sebességet"
+
+#: po/custom/fromJson.txt:1190
+#: po/custom/fromJson.txt:1191
+msgid "Advanced Engineering Techniques"
+msgstr "Fejlett mérnöki módszerek"
+
+#: po/custom/fromJson.txt:1190
+#: po/custom/fromJson.txt:1193
+msgid "Construction speed +20%"
+msgstr "Építési sebesség +20%"
+
+#: po/custom/fromJson.txt:1190
+#: po/custom/fromJson.txt:1191
+#: po/custom/fromJson.txt:1192
+#: po/custom/fromJson.txt:1193
+#: po/custom/fromJson.txt:1194
+msgid "All trucks upgraded automatically"
+msgstr "Munkagépek automatikusan fejlesztve"
+
+#: po/custom/fromJson.txt:1191
+#: po/custom/fromJson.txt:1194
+msgid "Increases construction speed"
+msgstr "Megnövekedett építési sebesség"
+
+#: po/custom/fromJson.txt:1192
+#: po/custom/fromJson.txt:1193
+#: po/custom/fromJson.txt:1194
+msgid "Improved Engineering Techniques"
+msgstr "Továbbfejlesztett mérnöki módszerek"
+
+#: po/custom/fromJson.txt:1192
+msgid "Construction speed +10%"
+msgstr "Építési sebesség +10%"
+
+#: po/custom/fromJson.txt:1196
+#: po/custom/fromJson.txt:1198
+#: po/custom/fromJson.txt:1200
+msgid "Research speed +30%"
+msgstr "Kutatási sebesség +30%"
+
+#: po/custom/fromJson.txt:1199
+#: po/custom/fromJson.txt:1200
+msgid "Synaptic link data analysis"
+msgstr "Szinaptikus kapcsolatú adatelemzés"
+
+#: po/custom/fromJson.txt:1201
+#: po/custom/fromJson.txt:1202
+msgid "Research Module Available"
+msgstr "Kutatási modul rendelkezésre áll"
+
+#: po/custom/fromJson.txt:1201
+#: po/custom/fromJson.txt:1202
+msgid "Research module expands research facilities"
+msgstr "A kutatási modul bővíti a kutató létesítményeket"
+
+#: po/custom/fromJson.txt:1201
+#: po/custom/fromJson.txt:1202
+msgid "Use a truck to add the module to a research facility"
+msgstr "Használd a munkagépet a kutatóközpont bővítéséhez"
+
+#: po/custom/fromJson.txt:1202
+msgid "Research speed +85%"
+msgstr "Kutatási sebesség +85%"
+
+#: po/custom/fromJson.txt:1203
+#: po/custom/fromJson.txt:1204
+msgid "Autoloader increases reload rate"
+msgstr "Automatikus újratöltés felgyorsítja az újratöltést"
+
+#: po/custom/fromJson.txt:1203
+msgid "Increases Rocket ROF"
+msgstr "Megnövelt rakéta tűzgyorsaság"
+
+#: po/custom/fromJson.txt:1204
+#: po/custom/fromJson.txt:1205
+msgid "Rocket reload time -15%"
+msgstr "Rakéta újratöltési idő -15%"
+
+#: po/custom/fromJson.txt:1206
+#: po/custom/fromJson.txt:1214
+#: po/custom/fromJson.txt:1216
+#: po/custom/fromJson.txt:1218
+msgid "Rocket accuracy +10%"
+msgstr "Rakéta célpontosság +10%"
+
+#: po/custom/fromJson.txt:1207
+#: po/custom/fromJson.txt:1208
+msgid "High Explosive Anti-Tank warhead"
+msgstr "Nagy hatóerejű tankelhárító robbanófej (HEAT)"
+
+#: po/custom/fromJson.txt:1208
+#: po/custom/fromJson.txt:1209
+#: po/custom/fromJson.txt:1211
+#: po/custom/fromJson.txt:1212
+msgid "Rocket damage +25%"
+msgstr "Rakéta sebzés +25%"
+
+#: po/custom/fromJson.txt:1209
+msgid "High Explosive Anti-Tank warheads"
+msgstr "Nagy hatóerejű tankelhárító robbanófejek (HEAT)"
+
+#: po/custom/fromJson.txt:1213
+#: po/custom/fromJson.txt:1214
+msgid "Rocket detects and locks on to engine emissions"
+msgstr "Rakéták érzékelik és célként rögzítik hajtóművet"
+
+#: po/custom/fromJson.txt:1213
+#: po/custom/fromJson.txt:1215
+#: po/custom/fromJson.txt:1217
+msgid "Increases Rocket accuracy"
+msgstr "Megnövekedett rakéta célpontosság"
+
+#: po/custom/fromJson.txt:1215
+#: po/custom/fromJson.txt:1216
+msgid "Rocket tracks the laser designator to the target"
+msgstr "Rakéta a lézeres célkijelölést követi"
+
+#: po/custom/fromJson.txt:1217
+#: po/custom/fromJson.txt:1218
+msgid "Tracks and directs in-flight rocket to target"
+msgstr "Repülés közben célra tart és irányít"
+
+#: po/custom/fromJson.txt:1219
+#: po/custom/fromJson.txt:1220
+#: po/custom/fromJson.txt:1221
+#: po/custom/fromJson.txt:1222
+msgid "Sensors Improved"
+msgstr "Továbbfejlesztett érzékelők"
+
+#: po/custom/fromJson.txt:1219
+msgid "Advanced Thermal Emissions detection"
+msgstr "Fejlett hőérzékelés"
+
+#: po/custom/fromJson.txt:1219
+msgid "Sensor Range +10%"
+msgstr "Észlelési távolság +10%"
+
+#: po/custom/fromJson.txt:1219
+#: po/custom/fromJson.txt:1220
+#: po/custom/fromJson.txt:1221
+#: po/custom/fromJson.txt:1222
+msgid "All sensors upgraded automatically"
+msgstr "Érzékelők automatikusan fejlesztve"
+
+#: po/custom/fromJson.txt:1220
+msgid "Improved Thermal Emissions detection"
+msgstr "Hőérzékelés fejlődött"
+
+#: po/custom/fromJson.txt:1220
+msgid "Sensor Range +15%"
+msgstr "Észlelési távolság +15%"
+
+#: po/custom/fromJson.txt:1221
+#: po/custom/fromJson.txt:1222
+msgid "New Thermal Emissions detection"
+msgstr "Új hőérzékelés"
+
+#: po/custom/fromJson.txt:1221
+msgid "Extends Sensor Range"
+msgstr "Megnöveli az érzékelő hatósugarát"
+
+#: po/custom/fromJson.txt:1222
+msgid "Sensor Range +25%"
+msgstr "Észlelési távolság +25%"
+
+#: po/custom/fromJson.txt:1223
+msgid "Stronger Commander Turret Available for Design"
+msgstr "A tervezéshez erősebb parancsnoki lövegtorony érhető el"
+
+#: po/custom/fromJson.txt:1223
+msgid "Upgraded battlefield computer system"
+msgstr "Feljavított harctéri számítógép rendszer"
+
+#: po/custom/fromJson.txt:1224
+msgid "Structure Research Completed"
+msgstr "Építmény fejlesztés elkészült"
+
+#: po/custom/fromJson.txt:1225
+msgid "Super Transport Available"
+msgstr "Extra szállítóeszköz áll rendelkezésre"
+
+#: po/custom/fromJson.txt:1226
+msgid "Systems Research Completed"
+msgstr "Rendszer fejlesztés elkészült"
+
+#: po/custom/fromJson.txt:1227
+msgid "Unit Research Completed"
+msgstr "Egység fejlesztés elkészült"
+
+#: po/custom/fromJson.txt:1229
+#: po/custom/fromJson.txt:1231
+#: po/custom/fromJson.txt:1233
+#: po/custom/fromJson.txt:1235
+msgid "Kinetic armor +30%, body points +30%"
+msgstr "Kinetikus páncél +30%, karosszéria értékek +30%"
+
+#: po/custom/fromJson.txt:1237
+#: po/custom/fromJson.txt:1239
+#: po/custom/fromJson.txt:1241
+#: po/custom/fromJson.txt:1243
+msgid "Vehicle speed +5%"
+msgstr "Jármű sebesség +5%"
+
+#: po/custom/fromJson.txt:1240
+#: po/custom/fromJson.txt:1241
+msgid "Ionizing Turbine Engine"
+msgstr "Ionturbina motor"
+
+#: po/custom/fromJson.txt:1251
+msgid "New power efficient propulsion"
+msgstr "Új energiatakarékos meghajtás"
+
+#: po/custom/fromJson.txt:1251
+msgid "Body Points and Speed Increased"
+msgstr "Sebesség és karosszéria értékek növekedtek"
+
+#: po/custom/fromJson.txt:1251
+msgid "All VTOLs upgraded automatically"
+msgstr "Minden VTOL automatikusan fejlesztve"
+
+#: po/custom/fromJson.txt:1253
+msgid "Thermal armor +40%"
+msgstr "Hővédelem +40%"
+
+#: po/custom/fromJson.txt:1254
+msgid "Thermal Armor +40%"
+msgstr "Hővédelem +40%"
+
+#: po/custom/fromJson.txt:1255
+msgid "Advanced fire detection systems"
+msgstr "Fejlett tűzérzékelő rendszerek"
+
+#: po/custom/fromJson.txt:1258
+#: po/custom/fromJson.txt:1260
+msgid "Rearming speed +30%"
+msgstr "Újratöltési idő +30%"
+
+#: po/custom/fromJson.txt:1262
+msgid "Advanced target recognition systems"
+msgstr "Fejlett célfelismerő rendszer"
+
+#: po/custom/fromJson.txt:1263
+msgid "Improved target recognition systems"
+msgstr "Jobb célfelismerő rendszer"
+
+#: po/custom/fromJson.txt:1265
+msgid "Weapon Research Completed"
+msgstr "Fegyver fejlesztés elkészült"
 
 #: po/custom/mac-infoplist.txt:1
 msgid ""
@@ -10693,1344 +13790,6 @@ msgstr " - HIBAKERESÉS"
 #, c-format
 msgid "Version: %s,%s Built:%s%s"
 msgstr "Verzió: %s,%s Felépült:%s%s"
-
-#~ msgid "Structure Research Completed"
-#~ msgstr "Építmény fejlesztés elkészült"
-
-#~ msgid "Power Research Completed"
-#~ msgstr "Energetikai fejlesztés elkészült"
-
-#~ msgid "Computer Research Completed"
-#~ msgstr "Számítógép fejlesztés elkészült"
-
-#~ msgid "Unit Research Completed"
-#~ msgstr "Egység fejlesztés elkészült"
-
-#~ msgid "Systems Research Completed"
-#~ msgstr "Rendszer fejlesztés elkészült"
-
-#~ msgid "Weapon Research Completed"
-#~ msgstr "Fegyver fejlesztés elkészült"
-
-#~ msgid "Armored Mortar battery pit"
-#~ msgstr "Páncélozott aknavető árok"
-
-#~ msgid "Mini-rocket armored strongpoint"
-#~ msgstr "Kisrakéta páncélozott erőd"
-
-#~ msgid "Armored hardpoint with Heavy Machinegun"
-#~ msgstr "Páncélozott talapzat nehéz gépfegyverrel"
-
-#~ msgid "Armored hardpoint with Lancer AT missile"
-#~ msgstr "Páncélozott fegyverfelfüggesztő csomópont tankelhárító rakétával"
-
-#~ msgid "Research Breakthrough Improves Construction Rates"
-#~ msgstr "Kutatási áttörés növeli az építési sebességet"
-
-#~ msgid "Improved Engineering Techniques"
-#~ msgstr "Továbbfejlesztett mérnöki módszerek"
-
-#~ msgid "Increases construction speed"
-#~ msgstr "Megnövekedett építési sebesség"
-
-#~ msgid "All trucks upgraded automatically"
-#~ msgstr "Munkagépek automatikusan fejlesztve"
-
-#~ msgid "New Systems Turret Available for Design"
-#~ msgstr "A tervezéshez új rendszerű lövegtorony érhető el"
-
-#~ msgid "Counter-battery turret detects enemy indirect fire batteries"
-#~ msgstr "Válaszüteg ellenséges ütegtüzet észlelt"
-
-#~ msgid "Orders assigned indirect fire units to fire at the enemy batteries"
-#~ msgstr "Kijelölt egységeknek általános tűzparancs az ellenséges ütegekre"
-
-#~ msgid "Counter-battery fire continues until enemy battery is suppressed"
-#~ msgstr "Folyamatos válaszüteg tűz, az ellenséges lövegek megsemmisüléséig"
-
-#~ msgid "CB Sensor Improved"
-#~ msgstr "CB érzékelő fejlesztve"
-
-#~ msgid "Extends CB Range"
-#~ msgstr "Megnöveli a CB hatósugarát"
-
-#~ msgid "All CB sensors upgraded automatically"
-#~ msgstr "CB érzékelők automatikusan fejlesztve"
-
-#~ msgid "Cannon Upgrade"
-#~ msgstr "Ágyú fejlesztés"
-
-#~ msgid "Determines range to target"
-#~ msgstr "Céltávolság meghatározása"
-
-#~ msgid "Increases Cannon accuracy"
-#~ msgstr "Megnövekedett ágyú célpontosság"
-
-#~ msgid "All cannons upgraded automatically"
-#~ msgstr "Lövegek automatikusan fejlesztve"
-
-#~ msgid "Increases Flamer ROF"
-#~ msgstr "Megnövekedett lángszóró tűzgyorsaság"
-
-#~ msgid ".50-calibre heavy machinegun"
-#~ msgstr "50-es kaliberű nehéz gépfegyver"
-
-#~ msgid "Best Targets: Infantry, base structures, wheeled vehicles"
-#~ msgstr "Célok: gyalogság, bázis épületek, kerekes járművek"
-
-#~ msgid "Chaingun mechanism replaces belt-feed"
-#~ msgstr "Láncfegyver mechanikát felváltja az őv rendszerű"
-
-#~ msgid "Targeting systems compensate for distance and weather conditions"
-#~ msgstr "Célzó rendszer kompenzálja a távolság-és időjárási viszonyokat"
-
-#~ msgid "Increases Mortar accuracy"
-#~ msgstr "Megnövelt aknavető célpontosság"
-
-#~ msgid "Automatic loader replaces manual feed"
-#~ msgstr "Automatikus betöltő helyettesíti a kéz betöltést"
-
-#~ msgid "Increases Mortar ROF"
-#~ msgstr "Megnövelt aknavető tűzgyorsaság"
-
-#~ msgid "New Rocket Available"
-#~ msgstr "Új rakéta érhető el"
-
-#~ msgid "Rocket artillery; can be assigned to a sensor"
-#~ msgstr "Rakéta tüzérség; hozzárendelhető egy érzékelőhöz"
-
-#~ msgid "Best Targets: Vehicles and Emplacements"
-#~ msgstr "Célok: járművek és védelmi állások"
-
-#~ msgid "Autoloader increases reload rate"
-#~ msgstr "Automatikus újratöltés felgyorsítja az újratöltést"
-
-#~ msgid "Increases Rocket ROF"
-#~ msgstr "Megnövelt rakéta tűzgyorsaság"
-
-#~ msgid "Increases Cannon ROF"
-#~ msgstr "Megnövekedett ágyú tűzgyorsaság"
-
-#~ msgid "Armor-Piercing Fin-Stabilized Discarding Sabot"
-#~ msgstr "Leváló köpenyes szárnystabilizált páncéltörő lövedék (APFSDS)"
-
-#~ msgid "Increases Cannon damage"
-#~ msgstr "Megnövekedett ágyú sebzés"
-
-#~ msgid "Rocket tracks the laser designator to the target"
-#~ msgstr "Rakéta a lézeres célkijelölést követi"
-
-#~ msgid "Increases Rocket accuracy"
-#~ msgstr "Megnövekedett rakéta célpontosság"
-
-#~ msgid "Heavy anti-tank rocket"
-#~ msgstr "Nehéz tankelhárító rakéta"
-
-#~ msgid "Fires salvoes of mini-rockets"
-#~ msgstr "Sortűz kisrakétákkal"
-
-#~ msgid "Best Targets: Base structures"
-#~ msgstr "Célok: bázis épületek"
-
-#~ msgid "New battlefield computer system"
-#~ msgstr "Új harctéri számítógép rendszer"
-
-#~ msgid "Commander leads groups acts as factory delivery point"
-#~ msgstr "A parancsnok irányítja a csapatokat a gyári szállítási ponthoz"
-
-#~ msgid "Computer Technology Breakthrough"
-#~ msgstr "Számítógépes technológiai áttörés"
-
-#~ msgid "Synaptic Link allows humans to interface directly with computers"
-#~ msgstr "A szinaptikus kapcsolat lehetővé teszi, hogy az emberek közvetlenül kapcsolódjanak a számítógépekhez"
-
-#~ msgid "Cyborgs can now be researched"
-#~ msgstr "Cyborg kutatás megkezdhető"
-
-#~ msgid "New research options available"
-#~ msgstr "Rendelkezésre álló új kutatóopciók"
-
-#~ msgid "Layered composite alloys and energy-absorbing fibres"
-#~ msgstr "Rétegelt kompozit ötvözetek és energiaelnyelő szálak"
-
-#~ msgid "Armed with Cyborg Machinegun"
-#~ msgstr "Cyborg gépfegyverrel felszerelt"
-
-#~ msgid "Armed with Cyborg Cannon"
-#~ msgstr "Cyborg ágyúval felszerelt"
-
-#~ msgid "Armed with Cyborg Flamer"
-#~ msgstr "Cyborg lángszóróval felszerelt"
-
-#~ msgid "Armed with Lance Anti-Tank rocket"
-#~ msgstr "Tankelhárító rakétával szerelt"
-
-#~ msgid "Improved Titanium-reinforced concrete"
-#~ msgstr "Korszerűsített Titán erősítésű vasbeton"
-
-#~ msgid "Increases Armour and Body Points"
-#~ msgstr "Megnövekedett páncél és karosszéria értékek"
-
-#~ msgid "Steel tower with machinegun"
-#~ msgstr "Gépfegyver torony"
-
-#~ msgid "Defensive Strength: Low"
-#~ msgstr "Védelmi erő: alacsony"
-
-#~ msgid "Armored guard tower with Mini-Pod Rocket"
-#~ msgstr "Páncélozott őrtoron kis rakétavetővel"
-
-#~ msgid "Armored bunker with Machinegun"
-#~ msgstr "Páncélozott bunker gépfegyverrel"
-
-#~ msgid "Armored bunker with Lancer AT rocket"
-#~ msgstr "Páncélozott bunker tankelhárító rakétával"
-
-#~ msgid "Armored bunker with Flamer"
-#~ msgstr "Páncélozott bunker lánszóróval"
-
-#~ msgid "Armored bunker with Light Cannon"
-#~ msgstr "Páncélozott bunker könnyű ágyúval"
-
-#~ msgid "Armored hardpoint with Light Cannon"
-#~ msgstr "Páncélozott talapzat könnyű ágyúval"
-
-#~ msgid "Armored hardpoint with Medium Cannon"
-#~ msgstr "Páncélozott talapzat közepes ágyúval"
-
-#~ msgid "Armored hardpoint with Heavy Cannon"
-#~ msgstr "Páncélozott talapzat nehéz ágyúval"
-
-#~ msgid "New Base Structure Available"
-#~ msgstr "Új bázisépület érhető el"
-
-#~ msgid "New Repair Facility Repairs Damaged Units"
-#~ msgstr "Új szerviz létesítmény javítja a sérült egységeket"
-
-#~ msgid "Use the Command Console to send units back for repair"
-#~ msgstr "Az egységek szervizüzembe küldéséhez használja a parancskonzolt"
-
-#~ msgid "Or select the Repair Facility as a unit's target"
-#~ msgstr "Vagy válassza ki a szervizüzemet, mint egység célt"
-
-#~ msgid "New automated repair techniques"
-#~ msgstr "Új automatikus szerviz technológia"
-
-#~ msgid "Enables command turret research"
-#~ msgstr "Engedélyezi a parancsnoki lövegtorony fejlesztését"
-
-#~ msgid "Directs and collates information for command turrets"
-#~ msgstr "Parancsnoki lövegtornyokhoz irányítja és gyűjti össze az információkat"
-
-#~ msgid "Controls up to five commanders"
-#~ msgstr "5 feletti parancsnok irányítása"
-
-#~ msgid "Produces Cyborgs"
-#~ msgstr "Cyborgokat gyárt"
-
-#~ msgid "Research makes additional Cyborgs available"
-#~ msgstr "Kutatással további Cyborgok érhetőek el"
-
-#~ msgid "Factory module enables medium and large bodies"
-#~ msgstr "A gyármodul lehetővé teszi a közepes és nagy karosszéria osztályt"
-
-#~ msgid "Use a truck to add modules to a factory"
-#~ msgstr "Használd a munkagépet a gyár bővítéséhez"
-
-#~ msgid "Power Module Available"
-#~ msgstr "Energiamodul rendelkezésre áll"
-
-#~ msgid "Improved Power Generator Performance"
-#~ msgstr "Jobb erőmű teljesítmény"
-
-#~ msgid "Burns oil more efficiently"
-#~ msgstr "Hatékonyabb olajfelhasználás"
-
-#~ msgid "Use a truck to add the module to a power generator"
-#~ msgstr "Használd a munkagépet az áramfejlesztő bővítéséhez"
-
-#~ msgid "Research Module Available"
-#~ msgstr "Kutatási modul rendelkezésre áll"
-
-#~ msgid "Research module expands research facilities"
-#~ msgstr "A kutatási modul bővíti a kutató létesítményeket"
-
-#~ msgid "Use a truck to add the module to a research facility"
-#~ msgstr "Használd a munkagépet a kutatóközpont bővítéséhez"
-
-#~ msgid "Synaptic link data analysis"
-#~ msgstr "Szinaptikus kapcsolatú adatelemzés"
-
-#~ msgid "Light body vulnerable to heavy weapons"
-#~ msgstr "A könnyű karosszéria érzékeny a nehéz fegyverekre"
-
-#~ msgid "Good scout vehicle"
-#~ msgstr "Jó felderítő jármű"
-
-#~ msgid "Low power cost and low production times"
-#~ msgstr "Alacson energia igény és gyártási idő"
-
-#~ msgid "New Paradigm Light Body"
-#~ msgstr "Új Paradigma könnyű karosszéria"
-
-#~ msgid "Inferior armor and body points to Viper"
-#~ msgstr "Rosszabb páncél és karosszéria értékek a Viper-nél"
-
-#~ msgid "Faster than Viper"
-#~ msgstr "Gyorsabb mint a Viper"
-
-#~ msgid "Power cost and production time similar to Viper"
-#~ msgstr "Energia igény és gyártási idő hasonló a Viper-hez"
-
-#~ msgid "Project Medium Body"
-#~ msgstr "Közepes karosszéria terv"
-
-#~ msgid "Medium body increases armor and body points"
-#~ msgstr "Közepes osztály, növeli a páncél és karosszéria értékeket"
-
-#~ msgid "Good medium tank and support vehicle"
-#~ msgstr "Jó közepes tank és támogató jármű"
-
-#~ msgid "Average power costs and production times"
-#~ msgstr "Átlagos energia igény és gyártási idő"
-
-#~ msgid "New Paradigm Medium body"
-#~ msgstr "Új Paradigma közepes karosszéria"
-
-#~ msgid "Inferior armor and body points to Cobra"
-#~ msgstr "Rosszabb páncél és karosszéria értékek a Cobra-nál"
-
-#~ msgid "Faster than Cobra"
-#~ msgstr "Gyorsabb mint a Cobra"
-
-#~ msgid "Power cost and production time similar to Cobra"
-#~ msgstr "Az energia igény és a gyártási idő hasonló a Cobra-hoz"
-
-#~ msgid "Heavy body increases armor and body points"
-#~ msgstr "Nehéz osztály, növeli a páncél és karosszéria értékeket"
-
-#~ msgid "Good main battle tank and heavy artillery platform"
-#~ msgstr "Jó harckocsi és nehéztüzérségi platform"
-
-#~ msgid "Very high power costs and very slow to produce"
-#~ msgstr "Nagyon magas energia igény és gyártási idő"
-
-#~ msgid "New Paradigm Heavy Body"
-#~ msgstr "Új Paradigma nehéz karosszéria"
-
-#~ msgid "Less armor and body points than Python"
-#~ msgstr "Kevesebb páncél és karosszéria érték mint a Python-nak"
-
-#~ msgid "Faster than Python"
-#~ msgstr "Gyorsabb mint a Python"
-
-#~ msgid "Power cost and production time the same as Python"
-#~ msgstr "Energia igény és a gyártási idő megegyezik a Python-nal"
-
-#~ msgid "New Propulsion Available"
-#~ msgstr "Új meghajtás érhető el"
-
-#~ msgid "Armored Half-tracks"
-#~ msgstr "Páncélozott féllánctalpas"
-
-#~ msgid "Speed: Medium"
-#~ msgstr "Sebesség: Közepes"
-
-#~ msgid "Amphibious hover propulsion"
-#~ msgstr "Kétéltű légpárnás hajtómű"
-
-#~ msgid "Speed: Fast"
-#~ msgstr "Sebesség: gyors"
-
-#~ msgid "Armored Tracks"
-#~ msgstr "Páncélozott lánctalpas"
-
-#~ msgid "Speed: Slow"
-#~ msgstr "Sebesség: lassú"
-
-#~ msgid "Light Cannon firing 40mm rounds"
-#~ msgstr "Könnyű ágyú 40mm-es löveggel tüzel"
-
-#~ msgid "Medium Cannon firing 76mm rounds"
-#~ msgstr "Közepes ágyú 76mm-es löveggel tüzel"
-
-#~ msgid "Heavy Cannon firing 120 mm rounds"
-#~ msgstr "Nehéz ágyú 120mm-es löveggel tüzel"
-
-#~ msgid "High Explosive Anti-Tank Cannon Shells"
-#~ msgstr "Nagy hatóerejű tankelhárító gránát"
-
-#~ msgid "Flame-thrower firing Propylene Oxide gel"
-#~ msgstr "Lángszóró Propilén-oxiddal tüzel"
-
-#~ msgid "Body Points: Very low"
-#~ msgstr "Karosszéria fejlettsége: nagyon alacsony"
-
-#~ msgid "Propylene Oxide gel treated to burn at higher temperatures"
-#~ msgstr "Propilén-oxid kezelése a magasabb égési hőmérséklet eléréséhez"
-
-#~ msgid "7.62mm machinegun"
-#~ msgstr "7.62mm-es gépfegyver"
-
-#~ msgid "Twin 7.62mm machineguns"
-#~ msgstr "7.62mm-es iker gépfegyverek"
-
-#~ msgid "Hardened case machinegun bullets"
-#~ msgstr "Edzett fémmagvas gépfegyver lőszer"
-
-#~ msgid "Armor-Piercing Discard Sabot Bullets"
-#~ msgstr "Leválóköpenyes páncéltörő lövedék (APDSB)"
-
-#~ msgid "May be targeted directly or assigned to a sensor turret or tower"
-#~ msgstr "Célba vehető közvetlenül, felderítő vagy érzékelő tornyon keresztül"
-
-#~ msgid "Improved high explosive shells"
-#~ msgstr "Továbbfejlesztett nagy hatóerejű gránát"
-
-#~ msgid "Fast firing light anti-vehicle rockets"
-#~ msgstr "Gyorstüzelésű könnyű járműelhárító rakéták"
-
-#~ msgid "Best Targets: Wheeled and hover vehicles"
-#~ msgstr "Célok: kerekes és légpárnás járművek"
-
-#~ msgid "Fin-stabilization improves flight trajectory"
-#~ msgstr "Szárny stabilizáció javítja a röppályát"
-
-#~ msgid "Increases Mini-Rocket accuracy"
-#~ msgstr "Megnövekedett kisrakéta célpontosság"
-
-#~ msgid "Improved shaped charge warhead"
-#~ msgstr "Jobb kumulatív robbanófej"
-
-#~ msgid "Automated reload system"
-#~ msgstr "Automatikus újratöltő rendszer"
-
-#~ msgid "Increases Mini-Rockets ROF"
-#~ msgstr "Megnövekedett kisrakéta tűzgyorsaság"
-
-#~ msgid "Tracks and directs in-flight rocket to target"
-#~ msgstr "Repülés közben célra tart és irányít"
-
-#~ msgid "High Explosive Anti-Tank warhead"
-#~ msgstr "Nagy hatóerejű tankelhárító robbanófej (HEAT)"
-
-#~ msgid "Cyborg Propulsion Improved"
-#~ msgstr "Cyborg hajtómű fejlesztve"
-
-#~ msgid "Armored hardpoint with Hyper-Velocity Cannon"
-#~ msgstr "Páncélozott talapzat nagysebességű ágyúval"
-
-#~ msgid "New Power Generation Technology"
-#~ msgstr "Új energiatermelés technológia"
-
-#~ msgid "Gas turbine boosts power output"
-#~ msgstr "Megnövelt gázturbina teljesítmény"
-
-#~ msgid "All power generators upgraded automatically"
-#~ msgstr "Áramfejlesztők automatikusan fejlesztve"
-
-#~ msgid "Improved fire detection systems"
-#~ msgstr "Továbbfejlesztett tűzérzékelő rendszerek"
-
-#~ msgid "New Systems Tower Available"
-#~ msgstr "Új rendszertorony érhető el"
-
-#~ msgid "VTOL CB Tower detects enemy indirect fire batteries"
-#~ msgstr "VTOL CB torony általános ellenséges tüzet észlelt"
-
-#~ msgid "VTOL Strike Tower detects approaching enemies"
-#~ msgstr "VTOL csapásmérő torony közeledő ellenséget észlelt"
-
-#~ msgid "Assigned VTOLs attack the enemy units"
-#~ msgstr "A kijelölt VTOL egységek támadják az ellenséget"
-
-#~ msgid "Strike mission continues until enemy destroyed or they retreat"
-#~ msgstr "Csapásmérés folytamatos az ellenség visszavonulásáig vagy megsemmisüléséig"
-
-#~ msgid "VTOL Strike turret used to spot targets"
-#~ msgstr "VTOL csapásmérő lövegtorony az ellenség beméréséhez"
-
-#~ msgid "Assigned VTOLs attack the designated targets"
-#~ msgstr "Kijelölt VTOL egységek támadják a kijelölt célokat"
-
-#~ msgid "Select new targets to continue the VTOL strikes"
-#~ msgstr "Jelöljön ki új célt VTOL csapás folytatásához"
-
-#~ msgid "Improved target recognition systems"
-#~ msgstr "Jobb célfelismerő rendszer"
-
-#~ msgid "Drops incendiary bombs"
-#~ msgstr "Gyújtóbombákat dob le"
-
-#~ msgid "Best Targets: Bunkers and Hardpoints"
-#~ msgstr "Célok: bunkerek és fegyvertartó talapzatok"
-
-#~ msgid "Laser designator paints and guides bombs to the target"
-#~ msgstr "A lézeres célzórendszer megjelöli és célra vezeti a bombákat"
-
-#~ msgid "Robotic advances make new chaingun upgrade available"
-#~ msgstr "A fejlett robotizálás lehetővé teszi az új láncfegyver fejlesztését"
-
-#~ msgid "Shells detect and home to thermal heat signatures"
-#~ msgstr "Gránátok észlelik és célként rögzítik az egyedi hőképeket"
-
-#~ msgid "105mm multi-barrel Howitzer may be assigned to a sensor"
-#~ msgstr "Érzékelőt lehet rendelni a 105mm-es többcsöves tarackhoz"
-
-#~ msgid "Multi-barrel, rapid-fire machinegun"
-#~ msgstr "Többcsöves, gyorstüzelő gépfegyver"
-
-#~ msgid "Replaces all machineguns"
-#~ msgstr "Felvált minden gépfegyvert"
-
-#~ msgid "NEXUS Intruder Program analyzed"
-#~ msgstr "NEXUS behatoló program analizálva"
-
-#~ msgid "Intruder parasite isolated"
-#~ msgstr "Behatoló program izolálva"
-
-#~ msgid "Reduced chance of NEXUS take-over"
-#~ msgstr "Csökkent az esély a NEXUS átvételére"
-
-#~ msgid "Improved NEXUS resistance circuitry"
-#~ msgstr "Továbbfejlesztett NEXUS ellenálló áramkör"
-
-#~ msgid "Computer systems can now be 'ring-fenced' from NEXUS"
-#~ msgstr "A számítógépes rendszerek ma már elszigetelődtek a NEXUS-tól"
-
-#~ msgid "New Cyborg Research Available"
-#~ msgstr "Új Cyborg kutatás érhető el"
-
-#~ msgid "Gives Cyborg limited flight abilities"
-#~ msgstr "A Cyborg-oknak korlátozott repülési képességeket ad"
-
-#~ msgid "Jump Cyborgs can now be researched"
-#~ msgstr "Ejtőernyős Cyborg-ok kutathatók"
-
-#~ msgid "Superdense composite alloys and energy-absorbing fibres"
-#~ msgstr "Szupersűrű kompozit ötvözetek és energiaelnyelő szálak"
-
-#~ msgid "Laminated alloys bonded with energy-deflecting optic bundles"
-#~ msgstr "Ragasztással rétegelt ötvözetek, energiaeltérítő optikai szállal"
-
-#~ msgid "Armed with Needle Gun"
-#~ msgstr "Flechette ágyúval felszerelt"
-
-#~ msgid "Armed with Scourge anti-tank missile"
-#~ msgstr "Scourge tankelhárító rakétával felszerelt"
-
-#~ msgid "Armed with flashlight laser"
-#~ msgstr "Könnyűlézerrel felszerelt"
-
-#~ msgid "Armed with Lancer anti-tank missile"
-#~ msgstr "Tankelhárító rakétával felszerelt"
-
-#~ msgid "Armed with Cyborg assault gun"
-#~ msgstr "Cyborg ostromfegyverrel felszerelt"
-
-#~ msgid "Armed with Flashlight Laser"
-#~ msgstr "Könnyűlézerrel szerelt"
-
-#~ msgid "Requires cyborg factory to produce"
-#~ msgstr "Cyborg gyár szükséges az előállításhoz"
-
-#~ msgid "High tensile concrete-plastic composite"
-#~ msgstr "Nagy szilárdságú vasbeton műanyag kompozit"
-
-#~ msgid "Bonded metallic laminates formed into walls and defenses"
-#~ msgstr "Ragaszással rétegelt fémerősítés a falakba és a védművekbe"
-
-#~ msgid "SAM site with Avenger missiles"
-#~ msgstr "SAM kilövő állás Avenger rakétákkal"
-
-#~ msgid "SAM site with Vindicator missiles"
-#~ msgstr "SAM kilövő állás Vindicator rakétákkal"
-
-#~ msgid "Artillery battery firing Firestorm Missiles"
-#~ msgstr "A tüzérség Firestorm rakétákkal tüzel"
-
-#~ msgid "Artillery battery firing Novastorm Missiles"
-#~ msgstr "A tüzérségi üteg Novastorm rakétákkal tüzel"
-
-#~ msgid "Armored strongpoint with Flashlight laser"
-#~ msgstr "Páncélozott erőd könnyűlézerrel"
-
-#~ msgid "Armored strongpoint with Pulse Laser"
-#~ msgstr "Páncélozott erőd impulzus lézerrel"
-
-#~ msgid "Armored strongpoint with Rail Gun"
-#~ msgstr "Páncélozott erőd sínágyúval"
-
-#~ msgid "Armored strongpoint with Gauss Cannon"
-#~ msgstr "Páncélozott erőd Gauss ágyúval"
-
-#~ msgid "Armored guard tower with Scourge Missile"
-#~ msgstr "Páncélozott őrtorony Scourge rakétával"
-
-#~ msgid "Armored guard tower with Needle Gun"
-#~ msgstr "Páncélozott őrtorony nyílövedékes ágyúval"
-
-#~ msgid "Armored hardpoint with Scourge AT Missile"
-#~ msgstr "Páncélozott talapzat Scourge tankelhárító rakétával"
-
-#~ msgid "Armored hardpoint with Flashlight laser"
-#~ msgstr "Páncélozott talapzat könnyűlézerrel"
-
-#~ msgid "Armored hardpoint with Rail Gun"
-#~ msgstr "Páncélozott talapzat sínágyúval"
-
-#~ msgid "Armored hardpoint with Gauss Cannon"
-#~ msgstr "Páncélozott talapzat Gauss ágyúval"
-
-#~ msgid "Advanced repair techniques"
-#~ msgstr "Fejlett javítási technikák"
-
-#~ msgid "Vapor Turbine boosts power output"
-#~ msgstr "Megnövelt gőzturbina teljesítmény"
-
-#~ msgid "High Density Base Structure Materials"
-#~ msgstr "Nagy sűrűségű bázisépület alapanyagok"
-
-#~ msgid "Advanced Engineering Techniques"
-#~ msgstr "Fejlett mérnöki módszerek"
-
-#~ msgid "Advanced fire detection systems"
-#~ msgstr "Fejlett tűzérzékelő rendszerek"
-
-#~ msgid "Advanced target recognition systems"
-#~ msgstr "Fejlett célfelismerő rendszer"
-
-#~ msgid "Synaptic Link Scrambler technology"
-#~ msgstr "Szinaptikus kapcsolatú kódolási technológia"
-
-#~ msgid "Electronically attacks and disrupts enemy structures"
-#~ msgstr "Elektronikus úton támad és rombolja az ellenséges épületeket"
-
-#~ msgid "Steals technology from enemies"
-#~ msgstr "Technológiát lop az ellenségektől"
-
-#~ msgid "New Repair Technology Discovered"
-#~ msgstr "Új javítási technológia felfedezve"
-
-#~ msgid "Synaptic Link technology breakthrough"
-#~ msgstr "Szinaptikus kapcsolat technológiai áttörés"
-
-#~ msgid "On-board diagnostic and repair systems"
-#~ msgstr "Fedélzeti diagnosztikai és szerviz rendszerek"
-
-#~ msgid "Enables self-repair in all Cyborgs"
-#~ msgstr "Önjavítás képessége a Cyborg-oknak"
-
-#~ msgid "Built-in diagnostic and repair systems"
-#~ msgstr "Beépített diagnosztikai és szerviz rendszerek"
-
-#~ msgid "Enables self-repair in all base structures"
-#~ msgstr "Önjavítás képessége a bázis épületeknek"
-
-#~ msgid "Enables self-repair in all defenses"
-#~ msgstr "Önjavítás képessége az összes védműnek"
-
-#~ msgid "Enables self-repair in all vehicles"
-#~ msgstr "Önjavítás képessége az összes járműnek"
-
-#~ msgid "NEXUS Light Body"
-#~ msgstr "NEXUS könnyű karosszéria"
-
-#~ msgid "Expensive to produce"
-#~ msgstr "Költséges az előállítása"
-
-#~ msgid "NEXUS Medium Body"
-#~ msgstr "NEXUS közepes karosszéria"
-
-#~ msgid "Expensive and slow to produce"
-#~ msgstr "Költséges és lassú az előállítása"
-
-#~ msgid "NEXUS Heavy Body"
-#~ msgstr "NEXUS nehéz karosszéria"
-
-#~ msgid "More armor and body points than Python"
-#~ msgstr "Több páncél és karosszéria érték mint a Python-nak"
-
-#~ msgid "Very expensive to produce"
-#~ msgstr "Nagyon költséges az előállítása"
-
-#~ msgid "Ionizing Turbine Engine"
-#~ msgstr "Ionturbina motor"
-
-#~ msgid "New power efficient propulsion"
-#~ msgstr "Új energiatakarékos meghajtás"
-
-#~ msgid "Body Points and Speed Increased"
-#~ msgstr "Sebesség és karosszéria értékek növekedtek"
-
-#~ msgid "All VTOLs upgraded automatically"
-#~ msgstr "Minden VTOL automatikusan fejlesztve"
-
-#~ msgid "Computer plots and guides shell to target's position"
-#~ msgstr "Számítógép tervezi és irányítja az ágyúzást a célpontra"
-
-#~ msgid "High Explosive Armor Piercing Flak"
-#~ msgstr "Nagy hatóerejű páncéltörő légelhárító"
-
-#~ msgid "Chainfeed loader eradicates jams and improves performance"
-#~ msgstr "Láncos lőszeradagolás megszünteti az elakadást, és növeli a tűzgyorsaságot"
-
-#~ msgid "Drops high intensity thermite bombs"
-#~ msgstr "Nagy erejű termit gyújtóbombákat dob le"
-
-#~ msgid "Best Targets: Bunkers and hardpoints"
-#~ msgstr "Célok: bunkerek és fegyvertartó talapzatok"
-
-#~ msgid "Bombs lock on and guide themselves to the target"
-#~ msgstr "A bombák bemérik és önmagukat irányítják a célra"
-
-#~ msgid "High-Velocity Armor-Piercing Fin-Stabilised Discarding Sabot"
-#~ msgstr "Nagy sebességű, leváló köpenyes, szárnystabilizált, űrméret alatti páncéltörő lövedék (HVAPFSDS)"
-
-#~ msgid "Robotic loading system feeds rounds into breech"
-#~ msgstr "Robotizált lőszeradagoló rendszer závárzathoz"
-
-#~ msgid "Computer guided shells"
-#~ msgstr "Számítógép vezérelt gránát"
-
-#~ msgid "High Explosive Armor Piercing Shells"
-#~ msgstr "Nagy hatóerejű páncéltörő gránát"
-
-#~ msgid "New Laser Weapon Available"
-#~ msgstr "Új lézerfegyver érhető el"
-
-#~ msgid "Generates and concentrates bursts of laser energy"
-#~ msgstr "Generálja és koncentrálja a kitörő lézer energiáját"
-
-#~ msgid "Best Targets: Cyborgs"
-#~ msgstr "Célok: Cyborgok"
-
-#~ msgid "Fires pulses of laser light"
-#~ msgstr "Tüzelés impulzus lézerrel"
-
-#~ msgid "Laser Upgrade"
-#~ msgstr "Lézer fejlesztés"
-
-#~ msgid "Improvement in laser optics reduces light dispersal"
-#~ msgstr "Lézeroptika javulása csökkenti a fényszóródást"
-
-#~ msgid "Increases Laser accuracy"
-#~ msgstr "Megnövekedett lézer célpontosság"
-
-#~ msgid "All lasers upgraded automatically"
-#~ msgstr "Lézerek automatikusan fejlesztve"
-
-#~ msgid "Improvement in laser emission density"
-#~ msgstr "Lézeremisszió javult"
-
-#~ msgid "Increases Laser damage"
-#~ msgstr "Megnövekedett lézer sebzés"
-
-#~ msgid "Improved Energizer reduces laser recharge time"
-#~ msgstr "Jobb energiacellák csökkentik a lézerek újratöltési idejét"
-
-#~ msgid "Increases Laser ROF"
-#~ msgstr "Megnövekedett lézer tűzgyorsaság"
-
-#~ msgid "Depleted uranium kinetic energy bullets"
-#~ msgstr "Szegényített uránmagvas, kinetikus lőszer"
-
-#~ msgid "Collapsing Plutonium kinetic energy bullets"
-#~ msgstr "Összeomló plutónium magvas, kinetikus lőszer"
-
-#~ msgid "New Missile Turret Available"
-#~ msgstr "Új rakéta lövegtorony érhető el"
-
-#~ msgid "Anti-tank missile"
-#~ msgstr "Tankelhárító rakéta"
-
-#~ msgid "Bunker buster missile"
-#~ msgstr "Bunkertörő rakéta"
-
-#~ msgid "Missile Upgrade"
-#~ msgstr "Rakéta fejlesztés"
-
-#~ msgid "On-board computer predicts target movement"
-#~ msgstr "Fedélzeti számítógép előrejelzi a cél mozgását"
-
-#~ msgid "Increases Missile accuracy"
-#~ msgstr "Megnövekedett rakéta célpontosság"
-
-#~ msgid "All missiles upgraded automatically"
-#~ msgstr "Rakéták automatikusan fejlesztve"
-
-#~ msgid "Missile actively seeks and homes on targets"
-#~ msgstr "A rakéták aktívan keresik és rögzítik a célt"
-
-#~ msgid "Low yield thermonuclear warhead"
-#~ msgstr "Kisteljesítményű termonukleáris robbanófej"
-
-#~ msgid "Increases Missile damage"
-#~ msgstr "Megnövekedett rakéta sebzés"
-
-#~ msgid "New SAM Turret Available"
-#~ msgstr "Új SAM lövegtorony érhető el"
-
-#~ msgid "Surface-to-air missile"
-#~ msgstr "Föld-levegő rakéta (SAM)"
-
-#~ msgid "Best Targets: Aerial targets only"
-#~ msgstr "Célok: csak légi célok"
-
-#~ msgid "Heavy surface-to-air missile"
-#~ msgstr "Nehéz föld-levegő rakéta"
-
-#~ msgid "New Artillery Missile Turret Available"
-#~ msgstr "Új tüzérségi rakéta lövegtorony érhető el"
-
-#~ msgid "High explosive artillery missile"
-#~ msgstr "Nagy hatóerejű tüzérségi rakéta"
-
-#~ msgid "Best Targets: Base structures and cyborgs"
-#~ msgstr "Célok: bázis épületek és cyborgok"
-
-#~ msgid "High explosive heavy artillery missile"
-#~ msgstr "Nagy hatóerejű nehéztüzérségi rakéta"
-
-#~ msgid "Missiles detect and lock-on to targets while loading"
-#~ msgstr "Rakéták érzékelik és rögzítik a célpontokat töltődés közben"
-
-#~ msgid "Increases Missile ROF"
-#~ msgstr "Megnövekedett rakéta tűzgyorsaság"
-
-#~ msgid "Racked missile dispensers allow for fast reloading"
-#~ msgstr "Keretes rakéta adagoló, lehetővé teszi a gyors újratöltés"
-
-#~ msgid "Self-guided rocket-powered shells"
-#~ msgstr "Önvezérelt rakéta hajtású gránát"
-
-#~ msgid "New Rail Gun Available"
-#~ msgstr "Új sínágyú érhető el"
-
-#~ msgid "Rapid fire rail gun firing needle darts"
-#~ msgstr "Gyorstüzelésű sínágyú nyíllövedékekkel tüzel"
-
-#~ msgid "Rail gun firing armor-piercing darts"
-#~ msgstr "Sínágyú, páncéltörő nyíllövedékekkel tüzel"
-
-#~ msgid "Heavy rail gun firing large kinetic energy darts"
-#~ msgstr "Nehéz sínágyú, nagy kinetikus energiájú, nyíllövedékekkel tüzel"
-
-#~ msgid "Rail Gun Upgrade"
-#~ msgstr "Sínágyú fejlesztés"
-
-#~ msgid "Computer predicts and compensates for target's movement"
-#~ msgstr "A számítógép élőrre jelzi és kompenzálja a célpontok mozgását"
-
-#~ msgid "Increases Rail Gun accuracy"
-#~ msgstr "Megnövekedett sínágyú célpontosság"
-
-#~ msgid "All rail guns upgraded automatically"
-#~ msgstr "Sínágyúk automatikusan fejlesztve"
-
-#~ msgid "Improved armor-piercing dart"
-#~ msgstr "Jobb páncéltörő nyíllövedék"
-
-#~ msgid "Increases Rail Gun damage"
-#~ msgstr "Megnövekedett sínágyú sebzés"
-
-#~ msgid "Increased gauss output speeds up reload time"
-#~ msgstr "Fokozott gauss kilépő sebesség, felgyorsítja az újratöltési időt"
-
-#~ msgid "Increases Rail Gun ROF"
-#~ msgstr "Megnövekedett sínágyú tűzgyorsaság"
-
-#~ msgid "New Construction Options Available"
-#~ msgstr "Új építési lehetőségek állnak rendelkezésre"
-
-#~ msgid "Titanium-reinforced concrete"
-#~ msgstr "Titán erősítésű vasbeton"
-
-#~ msgid "Enables Hardcrete walls"
-#~ msgstr "Engedélyezi a vasbeton falat"
-
-#~ msgid "VTOL factory enables VTOL production"
-#~ msgstr "VTOL gyár lehetővé teszi a VTOL gyártását"
-
-#~ msgid "VTOL rearming pads required to keep VTOLs flying"
-#~ msgstr "VTOL újratöltő platformok szükségesek a VTOL-ek repüléséhez"
-
-#~ msgid "May be upgraded using factory modules"
-#~ msgstr "Fejlesztéshez használd a gyármodulokat"
-
-#~ msgid "Refuels, rearms and repairs VTOLs"
-#~ msgstr "VTOL javítás, üzemanyag és lőszer újratöltés"
-
-#~ msgid "Assign a VTOL by selecting the rearming pad as its target"
-#~ msgstr "Újratöltő platform hozzárendelése a VTOL-hez, mint célt"
-
-#~ msgid "The VTOL returns to the selected pad for rearming"
-#~ msgstr "A VTOL visszatér a kijelölt platformhoz az újratöltésre"
-
-#~ msgid "Battlefield repair unit"
-#~ msgstr "Harctéri szerviz egység"
-
-#~ msgid "New Systems Turret Available For Design"
-#~ msgstr "A tervezéshez újrendszerű lövegtorony érhető el"
-
-#~ msgid "Improved sensor range"
-#~ msgstr "Fejlesztett érzékelő tartomány"
-
-#~ msgid "Makes excellent scout vehicle"
-#~ msgstr "Kiváló felderítő járművet készít"
-
-#~ msgid "Extended sensor range"
-#~ msgstr "Kiterjesztett érzékelő tartomány"
-
-#~ msgid "Keeps map areas under constant surveillance"
-#~ msgstr "A területet állandó megfigyelés alatt tartja"
-
-#~ msgid "Sensors Improved"
-#~ msgstr "Továbbfejlesztett érzékelők"
-
-#~ msgid "New Thermal Emissions detection"
-#~ msgstr "Új hőérzékelés"
-
-#~ msgid "Extends Sensor Range"
-#~ msgstr "Megnöveli az érzékelő hatósugarát"
-
-#~ msgid "All sensors upgraded automatically"
-#~ msgstr "Érzékelők automatikusan fejlesztve"
-
-#~ msgid "Counter-battery tower detects enemy indirect fire batteries"
-#~ msgstr "Válaszüteg torony általános ellenséges tüzet észlelt"
-
-#~ msgid "Collective Heavy Body"
-#~ msgstr "Kollektív nehéz karosszéria"
-
-#~ msgid "Slower than Python"
-#~ msgstr "Lassabb mint a Python"
-
-#~ msgid "High power costs and slow to produce"
-#~ msgstr "Magas költség és lassú gyártás"
-
-#~ msgid "New Propulsion Available for Design"
-#~ msgstr "A tervezéshez új hajtómű érhető el"
-
-#~ msgid "Vertical Take Off and Landing Propulsion"
-#~ msgstr "Függőleges fel-és leszállási hajtómű"
-
-#~ msgid "Speed: VTOL"
-#~ msgstr "Sebesség: VTOL"
-
-#~ msgid "Rocket detects and locks on to engine emissions"
-#~ msgstr "Rakéták érzékelik és célként rögzítik hajtóművet"
-
-#~ msgid "Anti-tank rocket"
-#~ msgstr "Tankelhárító rakéta"
-
-#~ msgid "High explosive shaped charge missile"
-#~ msgstr "Nagy hatóerejű kumulatív töltetű rakéta"
-
-#~ msgid "Laser designator paints and guides rounds to the target"
-#~ msgstr "A lézeres célzórendszer megjelöl és célravezet"
-
-#~ msgid "Construction speed +10%"
-#~ msgstr "Építési sebesség +10%"
-
-#~ msgid "Cannon accuracy +10%"
-#~ msgstr "Löveg célpontosság +10%"
-
-#~ msgid "Flamer reload time -15%"
-#~ msgstr "Lángszóró újratöltési idő -15%"
-
-#~ msgid "Machinegun reload time -15%"
-#~ msgstr "Gépfegyver újratöltési idő -15%"
-
-#~ msgid "Mortar accuracy +10%"
-#~ msgstr "Aknavető célpontosság +10%"
-
-#~ msgid "Mortar reload time -10%"
-#~ msgstr "Aknavető újratöltési idő -10%"
-
-#~ msgid "Rocket reload time -15%"
-#~ msgstr "Rakéta újratöltési idő -15%"
-
-#~ msgid "Cannon reload time -10%"
-#~ msgstr "Löveg újratöltési idő -10%"
-
-#~ msgid "Cannon damage +25%"
-#~ msgstr "Löveg sebzés +25%"
-
-#~ msgid "Rocket accuracy +10%"
-#~ msgstr "Rakéta célpontosság +10%"
-
-#~ msgid "Kinetic Armor +35%, Body Points +35%"
-#~ msgstr "Kinetikus páncél +35%, karosszéria értékek +35%"
-
-#~ msgid "Armour +35%, Body Points +30%"
-#~ msgstr "Páncél +35%, karosszéria értékek +30%"
-
-#~ msgid "Armored guard tower with Mini-Rocket Pod"
-#~ msgstr "Páncélozott őrtoron kisrakéta vetővel"
-
-#~ msgid "Armored guard tower with Lancer AT rocket"
-#~ msgstr "Tankelhárító rakétával felszerelt őrtorony"
-
-#~ msgid "Repair Speed +100%"
-#~ msgstr "Javítási sebesség +100%"
-
-#~ msgid "Factory output speed +100%% per module"
-#~ msgstr "Gyár termelékenység +100% modulonként"
-
-#~ msgid "Factory output speed +60%"
-#~ msgstr "Gyár termelékenység +60%"
-
-#~ msgid "Research speed +85%"
-#~ msgstr "Kutatási sebesség +85%"
-
-#~ msgid "Research speed +30%"
-#~ msgstr "Kutatási sebesség +30%"
-
-#~ msgid "Armor +35%, Body Points +30%"
-#~ msgstr "Páncél +35%, karosszéria értékek +30%"
-
-#~ msgid "Vehicle speed +5%"
-#~ msgstr "Jármű sebesség +5%"
-
-#~ msgid "Kinetic armor +30%, body points +30%"
-#~ msgstr "Kinetikus páncél +30%, karosszéria értékek +30%"
-
-#~ msgid "Best Targets: Vehicles, Hardpoints"
-#~ msgstr "Célok: járművek, fegyvertartó talapzatok"
-
-#~ msgid "Flamer damage +25%"
-#~ msgstr "Lángszóró sebzés +25%"
-
-#~ msgid "Machinegun damage +25%"
-#~ msgstr "Gépfegyver sebzés +25%"
-
-#~ msgid "Mortar damage +25%"
-#~ msgstr "Aknavető sebzés +25%"
-
-#~ msgid "Rocket damage +25%"
-#~ msgstr "Rakéta sebzés +25%"
-
-#~ msgid "Power output +25%"
-#~ msgstr "Energia termelés +25%"
-
-#~ msgid "Construction speed +20%"
-#~ msgstr "Építési sebesség +20%"
-
-#~ msgid "AA accuracy +10%"
-#~ msgstr "Légvédelmi célpontosság +10%"
-
-#~ msgid "Bomb Upgrade"
-#~ msgstr "Bomba feljavítás"
-
-#~ msgid "Improved trinitramine explosive formula"
-#~ msgstr "Jobb trinitramin robbanóanyag képlet"
-
-#~ msgid "Bomb damage +25%"
-#~ msgstr "Bomba sebzés +25%"
-
-#~ msgid "Thermal Armor +45%"
-#~ msgstr "Hővédelem +45%"
-
-#~ msgid "Kinetic Armor +35%, and Body Points +35%"
-#~ msgstr "Kinetikus páncél +35% és karosszéria értékek +35%"
-
-#~ msgid "Factory production rate +60%"
-#~ msgstr "Termelési arány +60%"
-
-#~ msgid "All factories upgraded automatically"
-#~ msgstr "Minden gyár automatikusan továbbfejlesztve"
-
-#~ msgid "Rearming speed +30%"
-#~ msgstr "Újratöltési idő +30%"
-
-#~ msgid "Thermal armor +40%"
-#~ msgstr "Hővédelem +40%"
-
-#~ msgid "AA Flak damage +25%"
-#~ msgstr "Légelhárító sebzés +25%"
-
-#~ msgid "AA reload time -15%"
-#~ msgstr "Légvédelmi újratöltési idő -15%"
-
-#~ msgid "Howitzer accuracy +10%"
-#~ msgstr "Tarack célpontosság +10%"
-
-#~ msgid "Howitzer damage +25%"
-#~ msgstr "Tarack sebzés +25%"
-
-#~ msgid "Howitzer reload time -10%"
-#~ msgstr "Tarack újratöltés idő -10%"
-
-#~ msgid "High Explosive Anti-Tank warheads"
-#~ msgstr "Nagy hatóerejű tankelhárító robbanófejek (HEAT)"
-
-#~ msgid "Thermal Armor +35%"
-#~ msgstr "Hővédelem +35%"
-
-#~ msgid "Armored guard tower with Pulse Laser"
-#~ msgstr "Páncélozott őrtorony impulzus lézerrel"
-
-#~ msgid "Power output +30%"
-#~ msgstr "Energia termelés +30%"
-
-#~ msgid "Thermal Armor +40%"
-#~ msgstr "Hővédelem +40%"
-
-#~ msgid "Laser accuracy +10%"
-#~ msgstr "Lézer pontosság +10%"
-
-#~ msgid "Laser damage +25%"
-#~ msgstr "Lézer sebzés +25%"
-
-#~ msgid "Laser reload time -15%"
-#~ msgstr "Lézer újratöltési idő -15%"
-
-#~ msgid "Missile accuracy +10%"
-#~ msgstr "Rakéta célpontosítás +10%"
-
-#~ msgid "Missile damage +25%"
-#~ msgstr "Rakéta sebzés +25%"
-
-#~ msgid "Missile reload time -15%"
-#~ msgstr "Rakéta újratöltési idő -15%"
-
-#~ msgid "Rail Gun accuracy +10%"
-#~ msgstr "Sínágyú célpontosság +10%"
-
-#~ msgid "Rail Gun damage +25%"
-#~ msgstr "Sínágyú sebzés +25%"
-
-#~ msgid "Rail Gun reload time -15%"
-#~ msgstr "Sínágyú újratöltési idő -15%"
-
-#~ msgid "Sensor Range +25%"
-#~ msgstr "Észlelési távolság +25%"
-
-#~ msgid "Improved Thermal Emissions detection"
-#~ msgstr "Hőérzékelés fejlődött"
-
-#~ msgid "Sensor Range +15%"
-#~ msgstr "Észlelési távolság +15%"
-
-#~ msgid "Advanced Thermal Emissions detection"
-#~ msgstr "Fejlett hőérzékelés"
-
-#~ msgid "Sensor Range +10%"
-#~ msgstr "Észlelési távolság +10%"
-
-#~ msgid "Radar detector tower detects enemy sensors"
-#~ msgstr "A radarérzékelő torony ellenséges érzékelőket észlel"
-
-#~ msgid "Orders assigned indirect fire units to fire at the enemy sensors"
-#~ msgstr "Kijelölt egységeknek általános tűzparancs az ellenséges érzékelők ellen."
-
-#~ msgid "Counter-battery fire continues until enemy sensor is suppressed"
-#~ msgstr "Folyamatos válaszüteg tűz, amíg az ellenséges érzékelő elfojtott."
-
-#~ msgid "Cyborg Transport Available"
-#~ msgstr "Cyborg szállítóeszköz áll rendelkezésre"
-
-#~ msgid "Armed with Machinegun"
-#~ msgstr "Gépfegyverrel szerelt"
-
-#~ msgid "Requires heavy VTOL factory to produce"
-#~ msgstr "Szükséges a nehéz VTOL gyár az előállításhoz"
-
-#~ msgid "Super Transport Available"
-#~ msgstr "Extra szállítóeszköz áll rendelkezésre"
-
-#~ msgid "Incendiary howitzer emplacement"
-#~ msgstr "Gyújtóbombás tarack állás"
-
-#~ msgid "Armored Incendiary Mortar battery pit"
-#~ msgstr "Páncélozott gyújtóbombás aknavető árok"
-
-#~ msgid "Armored strongpoint with Plasmite Flamer"
-#~ msgstr "Páncélozott erőd plazmavetővel"
-
-#~ msgid "Armed with Cyborg Thermite Flamer"
-#~ msgstr "Cyborg termit lángszóróval felszerelt"
-
-#~ msgid "Armed with grenades"
-#~ msgstr "Gránátokkal felszerelt"
-
-#~ msgid "Combat engineer with construction ability"
-#~ msgstr "Hadi mérnök építési képességgel"
-
-#~ msgid "Mechanic with repair ability"
-#~ msgstr "Szerelő javítási képességgel"
-
-#~ msgid "Incendiary Howitzer may be assigned to a sensor"
-#~ msgstr "Érzékelőt lehet rendelni a gyutacsos tarackhoz"
-
-#~ msgid "Plasmite Flame-thrower"
-#~ msgstr "Plazmaláng vető"
-
-#~ msgid "Steals technology from structures and takes control of weapons"
-#~ msgstr "Ellopja a technológiát az építményekből és átveszi a fegyverek irányítását"
-
-#~ msgid "New Electronic Technology Discovered"
-#~ msgstr "Új elektronikai technológia felfedezve."
-
-#~ msgid "On-board resistance circuit systems"
-#~ msgstr "Fedélzeti ellenálló áramkör rendszerek"
-
-#~ msgid "Enables resistance to Nexus Link technology"
-#~ msgstr "Lehetővé teszi az ellenállást a NEXUS dekódoló technológia"
-
-#~ msgid "Enables self-repair"
-#~ msgstr "Önjavítást tesz lehetővé"
-
-#~ msgid "Armed with medium cannon"
-#~ msgstr "Közepes ágyúval felszerelt"
-
-#~ msgid "Armed with hyper velocity cannon"
-#~ msgstr "Nagysebességű ágyúval felszerelt"
-
-#~ msgid "Armed with tank killer rockets"
-#~ msgstr "Tank Killer rakétákkal felszerelt"
-
-#~ msgid "Fires heavy pulses of laser light"
-#~ msgstr "Tüzelés nagy impulzusú lézerrel"
-
-#~ msgid "Best Targets: Heavy cyborgs"
-#~ msgstr "Célok: nehéz cyborgok"
-
-#~ msgid "76mm twin-barrel automatic-cannon"
-#~ msgstr "76mm ikercsöves automata ágyú"
-
-#~ msgid "New Systems Structure Available"
-#~ msgstr "Új építmény szerkezet érhető el"
-
-#~ msgid "Complete battlefield visibility"
-#~ msgstr "Teljes csatatér felderítve"
-
-#~ msgid "Does not offer sensor targeting"
-#~ msgstr "Nem lehet radarral bemérni"
-
-#~ msgid "Combines standard, counter battery and VTOL sensors"
-#~ msgstr "Egyesített szabvány, válaszüteg és VTOL érzékelők"
-
-#~ msgid "New Advanced Weapon Available"
-#~ msgstr "Új fejlett fegyver érhető el"
-
-#~ msgid "Very slow recharge time"
-#~ msgstr "Nagyon lassú újratöltési idő"
-
-#~ msgid "Immense damage infliction capability"
-#~ msgstr "Hatalmas károkozási képesség"
-
-#~ msgid "Narrow area of effect"
-#~ msgstr "Effektek csak szűk területen"
-
-#~ msgid "Armored guard tower with Nexus Link"
-#~ msgstr "Páncélozott őrtorony NEXUS dekóderrel"
-
-#~ msgid "Plasma Cannon firing plasma"
-#~ msgstr "Plazma ágyú plazmával tüzel"
-
-#~ msgid "Best Targets : Vehicles"
-#~ msgstr "Célok: járművek"
-
-#~ msgid "Armored strongpoint with Heavy Laser"
-#~ msgstr "Nehéz lézerrel szerelt erőd"
-
-#~ msgid "Armored guard tower with EMP Cannon"
-#~ msgstr "EMP ágyúval szerelt őrtorony"
-
-#~ msgid "Armed with Cyborg Pulse Laser"
-#~ msgstr "Cyborg impulzus lézerrel"
-
-#~ msgid "Armed with Cyborg Rail Gun"
-#~ msgstr "Cyborg sínágyúval"
-
-#~ msgid "Armed with Cyborg Scourge Missile Launcher"
-#~ msgstr "Cyborg Scourge rakétakilövővel felszerelt"
-
-#~ msgid "Uses advanced mass driver railgun technology"
-#~ msgstr "Fejlett elektromágneses katapult, sínágyú technológiát használ."
-
-#~ msgid "Defensive Strength : High"
-#~ msgstr "Védelmi erő : Magas"
-
-#~ msgid "Uses advanced cannon technology"
-#~ msgstr "Fejlett ágyút használ."
-
-#~ msgid "Uses advanced rocket gun technology"
-#~ msgstr "Fejlett rakéta technológiát használ."
-
-#~ msgid "Uses advanced missile gun technology"
-#~ msgstr "Fejlett légvédelmi rakéta technológiát használ."
-
-#~ msgid "Powerful Electronic magnetic pulse weapon"
-#~ msgstr "Erőteljes elektromágneses impulzus fegyver."
-
-#~ msgid "New System Available"
-#~ msgstr "Új rendszer áll rendelkezésre."
-
-#~ msgid "Medium Super Heavy Body"
-#~ msgstr "Középméretű extra nehéz karosszéria"
-
-#~ msgid "More armor and body points than Vengeance"
-#~ msgstr "Több páncél és karosszéria pont, mint a Vengance-nek"
-
-#~ msgid "Slow moving Body"
-#~ msgstr "Lassú mozgású karosszéria."
-
-#~ msgid "Large Super Heavy Body"
-#~ msgstr "Nagyméretű extra nehéz karosszéria"
-
-#~ msgid "Maximum armor and body points"
-#~ msgstr "Maximum páncél és karosszéria érték."
-
-#~ msgid "Very slow moving Body"
-#~ msgstr "Nagyon lassú mozgású karosszéria."
-
-#~ msgid "Hardpoint Vindicator SAM Site Available"
-#~ msgstr "Elérhető Vindicator SAM kilövő állás talapzat"
-
-#~ msgid "Hardpoint Whirlwind AA Gun Available"
-#~ msgstr "Elérhető Whirlwind légvédelmi fegyver"
-
-#~ msgid "Armored EMP Mortar battery pit"
-#~ msgstr "Páncélozott EMP aknavető árok"
-
-#~ msgid "Laser AA Gun Available"
-#~ msgstr "Elérhető lézer légvédelmi löveg"
-
-#~ msgid "Twin Medium Anti-Aircraft Laser"
-#~ msgstr "Közepes iker légvédelmi lézer"
-
-#~ msgid "Hardpoint Avenger SAM Site Available"
-#~ msgstr "Elérhető Avenger SAM kilövőállás talapzat"
-
-#~ msgid "Hardpoint Cyclone AA Gun Available"
-#~ msgstr "Elérhetőt Cyclone légvédelmi löveg"
-
-#~ msgid "Quad 80mm Anti-Aircraft machinegun"
-#~ msgstr "80mm négyes légvédelmi gépfegyver"
-
-#~ msgid "Twin Multi-barrel, rapid-fire machinegun"
-#~ msgstr "Iker többcsöves, gyorstüzelő gépfegyver"
-
-#~ msgid "Hardpoint Twin Assault Gun Available"
-#~ msgstr "Elérhető ikercsöves ostromlöveg"
-
-#~ msgid "Drops high intensity Plasmite bombs"
-#~ msgstr "Nagy erejű plazma gyújtóbombákat dob le"
-
-#~ msgid "New VTOL Missile Launcher"
-#~ msgstr "Új VTOL rakétakilövő"
-
-#~ msgid "Fires Electronic Magnetic Pulse Missiles"
-#~ msgstr "Tüzelés elektromágneses impulzus rakétákkal"
-
-#~ msgid "Stronger Commander Turret Available for Design"
-#~ msgstr "A tervezéshez erősebb parancsnoki lövegtorony érhető el"
-
-#~ msgid "Upgraded battlefield computer system"
-#~ msgstr "Feljavított harctéri számítógép rendszer"
 
 #~ msgid "OpenGL GLSL shader version 1.20 is not supported by your system. Some things may look wrong. Please upgrade your graphics driver/hardware, if possible."
 #~ msgstr "OpenGL GLSL 1.20 árnyékolási verziót nem támogatja a te rendszered. Néhány dolgot rossznak látok. Kérlek frissítsd fel a drivert vagy hardware videokártyád, ha ez lehetséges."

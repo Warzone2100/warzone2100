@@ -237,8 +237,7 @@
         "text": [
             "New Weapon Turret Available",
             "Heavy Flame-thrower firing Propylene Oxide gel",
-            "\n\"Best Targets: Bunkers",
-            " wheeled and hover vehicles\"",
+            "Best Targets: Bunkers, wheeled and hover vehicles",
             "Body Points: Low"
         ]
     },
@@ -656,9 +655,7 @@
         "text": [
             "New Indirect Fire Weapon Available",
             "155mm Howitzer may be assigned to a sensor",
-            "\n\"Best Targets: Base Structures",
-            " infantry",
-            " wheeled vehicles\"",
+            "Best Targets: Base Structures, infantry, wheeled vehicles",
             "Body Points: Low"
         ]
     },
@@ -669,9 +666,7 @@
         "text": [
             "New Indirect Fire Weapon Available",
             "105mm Howitzer may be assigned to a sensor",
-            "\n\"Best Targets: Base Structures",
-            " infantry",
-            " wheeled vehicles\"",
+            "Best Targets: Base Structures, infantry, wheeled vehicles",
             "Body Points: Low"
         ]
     },
@@ -714,10 +709,8 @@
         "sequenceName": "res_weapons.ogg",
         "text": [
             "New Indirect Fire Weapon Available",
-            "\n\"105m Howitzer firing incendiaries",
-            " may be assigned to a sensor\"",
-            "\n\"Best Targets: Base Structures",
-            " bunkers\"",
+            "105m Howitzer firing incendiaries, may be assigned to a sensor",
+            "Best Targets: Base Structures, bunkers",
             "Body Points: Low"
         ]
     },
@@ -728,9 +721,7 @@
         "text": [
             "New Indirect Fire Weapon Available",
             "May be assigned to a sensor",
-            "\n\"Best Targets: Base structures",
-            " infantry",
-            " wheeled vehicles\"",
+            "Best Targets: Base structures, infantry, wheeled vehicles",
             "Body Points: Very Low"
         ]
     },

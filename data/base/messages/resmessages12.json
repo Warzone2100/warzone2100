@@ -50,9 +50,7 @@
         "text": [
             "New Weapon Turret Available",
             ".50-calibre heavy machinegun",
-            "\n\"Best Targets: Infantry",
-            " base structures",
-            " wheeled vehicles\"",
+            "Best Targets: Infantry, base structures, wheeled vehicles",
             "Body Points: Medium"
         ]
     },
@@ -140,9 +138,7 @@
         "text": [
             "New Indirect Fire Weapon Available",
             "May be assigned to a sensor",
-            "\n\"Best Targets: Base structures",
-            " infantry",
-            " wheeled vehicles\"",
+            "Best Targets: Base structures, infantry, wheeled vehicles",
             "Body Points: Very Low"
         ]
     },

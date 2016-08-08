@@ -4,9 +4,7 @@
 cd "`dirname "$0"`/.."
 
 find data -name '*.json' -type f '-!' -path 'data/mp/multiplay/maps/*' -exec \
-	grep '"name"\s*:\s*".*"' {} + |
-	sed -r 's/.*"name"\s*:\s*"([^"]*)".*/_("\1")/' |
-	grep -v -e "\*" -e "NULL" -e "CAM" |
+	python po/parseJson.py '{}' ';' |
 	sort | uniq > po/custom/fromJson.txt
 
 # Add the comment to the top of the file

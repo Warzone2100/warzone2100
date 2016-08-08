@@ -325,9 +325,7 @@
         "text": [
             "New Indirect Fire Weapon Available",
             "May be targeted directly or assigned to a sensor turret or tower",
-            "\n\"Best Targets: Base structures",
-            " infantry",
-            " wheeled vehicles\"",
+            "Best Targets: Base structures, infantry, wheeled vehicles",
             "Body Points: Very Low"
         ]
     },
@@ -360,8 +358,7 @@
         "text": [
             "New Weapon Turret Available",
             "Plasmite Flame-thrower",
-            "\n\"Best Targets: Bunkers",
-            " wheeled and hover vehicles\"",
+            "Best Targets: Bunkers, wheeled and hover vehicles",
             "Body Points: Very low"
         ]
     },
@@ -437,8 +434,7 @@
         "sequenceName": "res_struttech.ogg",
         "text": [
             "New Base Structure Available",
-            "\n\"Refuels",
-            " rearms and repairs VTOLs\"",
+            "Refuels, rearms and repairs VTOLs",
             "Assign a VTOL by selecting the rearming pad as its target",
             "The VTOL returns to the selected pad for rearming"
         ]
@@ -581,8 +577,7 @@
         "sequenceName": "res_systech.ogg",
         "text": [
             "New Systems Structure Available",
-            "\n\"Combines standard",
-            " counter battery and VTOL sensors\"",
+            "Combines standard, counter battery and VTOL sensors",
             "Keeps map areas under constant surveillance",
             "Improved sensor range"
         ]
@@ -593,8 +588,7 @@
         "sequenceName": "res_systech.ogg",
         "text": [
             "New System Available",
-            "\n\"Combines standard",
-            " counter battery and VTOL sensors\"",
+            "Combines standard, counter battery and VTOL sensors",
             "Keeps map areas under constant surveillance",
             "Improved sensor range"
         ]
@@ -682,11 +676,8 @@
         "sequenceName": "res_struttech.ogg",
         "text": [
             "Hardpoint Twin Assault Gun Available",
-            "\n\"Twin Multi-barrel",
-            " rapid-fire machinegun\"",
-            "\n\"Best Targets: Infantry",
-            " base structures",
-            " wheeled vehicles\"",
+            "Twin Multi-barrel, rapid-fire machinegun",
+            "Best Targets: Infantry, base structures, wheeled vehicles",
             "Replaces all machineguns"
         ]
     },
@@ -696,11 +687,8 @@
         "sequenceName": "res_weapons.ogg",
         "text": [
             "New Weapon Turret Available",
-            "\n\"Twin Multi-barrel",
-            " rapid-fire machinegun\"",
-            "\n\"Best Targets: Infantry",
-            " base structures",
-            " wheeled vehicles\"",
+            "Twin Multi-barrel, rapid-fire machinegun",
+            "Best Targets: Infantry, base structures, wheeled vehicles",
             "Replaces all machineguns"
         ]
     },
@@ -777,9 +765,7 @@
         "text": [
             "New Indirect Fire Weapon Available",
             "Incendiary Howitzer may be assigned to a sensor",
-            "\n\"Best Targets: Base Structures",
-            " infantry",
-            " wheeled vehicles\"",
+            "Best Targets: Base Structures, infantry, wheeled vehicles",
             "Body Points: Low"
         ]
     },

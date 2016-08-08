@@ -71,7 +71,7 @@ UPDATEPOFILES = @UPDATEPOFILES@
 DUMMYPOFILES = @DUMMYPOFILES@
 DISTFILES.common = Makefile.in.in remove-potcdate.sin \
 $(DISTFILES.common.extra1) $(DISTFILES.common.extra2) $(DISTFILES.common.extra3)
-DISTFILES = $(DISTFILES.common) Makevars POTFILES.in update-po.sh \
+DISTFILES = $(DISTFILES.common) Makevars POTFILES.in update-po.sh parseJson.py \
 $(POFILES) $(GMOFILES) \
 $(DISTFILES.extra1) $(DISTFILES.extra2) $(DISTFILES.extra3)
 
@@ -378,7 +378,7 @@ dist2: stamp-po $(DISTFILES)
 	  fi; \
 	done
 
-POTFILES.in: $(srcdir)/update-po.sh
+POTFILES.in: $(srcdir)/update-po.sh $(srcdir)/parseJson.py
 	(cd $(srcdir); ./update-po.sh)
 
 update-po-custom: POTFILES.in

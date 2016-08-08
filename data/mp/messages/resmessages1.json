@@ -17,8 +17,7 @@
         "text": [
             "New Weapon Turret Available",
             "Medium Cannon firing 76mm rounds",
-            "\n\"Best Targets: Vehicles",
-            " Hardpoints\"",
+            "Best Targets: Vehicles, Hardpoints",
             "Body Points: Medium"
         ]
     },
@@ -29,8 +28,7 @@
         "text": [
             "New Weapon Turret Available",
             "Heavy Cannon firing 120 mm rounds",
-            "\n\"Best Targets: Vehicles",
-            " Hardpoints\"",
+            "Best Targets: Vehicles, Hardpoints",
             "Body Points: High"
         ]
     },
@@ -41,8 +39,7 @@
         "text": [
             "Cyborg Materials Improved",
             "Layered composite alloys and energy-absorbing fibres",
-            "\n\"Kinetic Armor +35%",
-            " Body Points +35%\"",
+            "Kinetic Armor +35%, Body Points +35%",
             "All Cyborgs upgraded automatically"
         ]
     },
@@ -130,8 +127,7 @@
         "text": [
             "Defenses Improved",
             "Improved Titanium-reinforced concrete",
-            "\n\"Armour +35%",
-            " Body Points +30%\"",
+            "Armour +35%, Body Points +30%",
             "All defenses and walls upgraded automatically"
         ]
     },
@@ -153,8 +149,7 @@
         "text": [
             "New Weapon Turret Available",
             "Flame-thrower firing Propylene Oxide gel",
-            "\n\"Best Targets: Bunkers",
-            " wheeled and hover vehicles\"",
+            "Best Targets: Bunkers, wheeled and hover vehicles",
             "Body Points: Very low"
         ]
     },
@@ -176,9 +171,7 @@
         "text": [
             "New Weapon Turret Available",
             "7.62mm machinegun",
-            "\n\"Best Targets: Infantry",
-            " base structures",
-            " wheeled vehicles\"",
+            "Best Targets: Infantry, base structures, wheeled vehicles",
             "Body Points: Low"
         ]
     },
@@ -189,9 +182,7 @@
         "text": [
             "New Weapon Turret Available",
             "Twin 7.62mm machineguns",
-            "\n\"Best Targets: Infantry",
-            " base structures",
-            " wheeled vehicles\"",
+            "Best Targets: Infantry, base structures, wheeled vehicles",
             "Body Points: Low"
         ]
     },
@@ -202,9 +193,7 @@
         "text": [
             "New Indirect Fire Weapon Available",
             "May be targeted directly or assigned to a sensor turret or tower",
-            "\n\"Best Targets: Base structures",
-            " infantry",
-            " wheeled vehicles\"",
+            "Best Targets: Base structures, infantry, wheeled vehicles",
             "Body Points: Very Low"
         ]
     },
@@ -325,8 +314,7 @@
         "text": [
             "Increases Damage Resistance",
             "Reinforced Base Structure Materials",
-            "\n\"Armor +35%",
-            " Body Points +30%\"",
+            "Armor +35%, Body Points +30%",
             "All base structures upgraded automatically"
         ]
     },
@@ -480,8 +468,7 @@
         "text": [
             "Vehicle Bodies Improved",
             "Layered composite alloys and energy-absorbing fibres",
-            "\n\"Kinetic armor +30%",
-            " body points +30%\"",
+            "Kinetic armor +30%, body points +30%",
             "All vehicles upgraded automatically"
         ]
     },
