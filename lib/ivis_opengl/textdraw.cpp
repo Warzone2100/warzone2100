@@ -41,6 +41,9 @@
 # include <CoreFoundation/CFURL.h>
 # include <QuesoGLC/glc.h>
 #else
+#ifdef WZ_OS_WIN
+#define GLCAPI extern
+#endif
 # include <GL/glc.h>
 #endif
 
@@ -55,6 +58,163 @@ static float font_colour[4] = {1.f, 1.f, 1.f, 1.f};
 static GLint _glcContext = 0;
 static GLint _glcFont_Regular = 0;
 static GLint _glcFont_Bold = 0;
+
+#ifdef WZ_OS_WIN
+namespace
+{
+	void(__stdcall *glcContextPtr)(GLint inContext);
+	void(__stdcall *glcDeleteContextPtr)(GLint inContext);
+	void(__stdcall *glcEnablePtr)(GLCenum inAttrib);
+	void(__stdcall *glcFontPtr)(GLint inFont);
+	GLint(__stdcall *glcGenFontIDPtr)();
+	void(__stdcall *glcRenderStringPtr)(const GLCchar *inString);
+	GLfloat* (__stdcall *glcGetMaxCharMetricPtr)(GLCenum inMetric,
+		GLfloat *outVec);
+	GLfloat* (__stdcall *glcGetStringMetricPtr)(GLCenum inMetric, GLfloat *outVec);
+	GLint(__stdcall *glcMeasureStringPtr)(GLboolean inMeasureChars,
+		const GLCchar *inString);
+	void(__stdcall *glcDeleteFontPtr)(GLint inFont);
+	GLfloat* (__stdcall *glcGetCharMetricPtr)(GLint inCode, GLCenum inMetric,
+		GLfloat *outVec);
+	GLfloat(__stdcall *glcGetfPtr)(GLCenum inAttrib);
+	GLint(__stdcall *glcMeasureCountedStringPtr)(GLboolean inMeasureChars,
+		GLint inCount,
+		const GLCchar *inString);
+	void(__stdcall *glcRenderStylePtr)(GLCenum inStyle);
+	void(__stdcall *glcStringTypePtr)(GLCenum inStringType);
+	GLboolean(__stdcall *glcFontFacePtr)(GLint inFont, const GLCchar *inFace);
+	GLint(__stdcall *glcNewFontFromFamilyPtr)(GLint inFont,
+		const GLCchar *inFamily);
+	GLint(__stdcall *glcGenContextPtr)();
+
+	HINSTANCE dllHandle;
+
+#define LOAD_CALLBACK(name, symbol) name = (decltype(name))GetProcAddress(dllHandle, #symbol)
+
+	void loadDLL()
+	{
+		dllHandle = LoadLibrary(L"glc32.dll");
+
+		LOAD_CALLBACK(glcContextPtr, _glcContext@4);
+		LOAD_CALLBACK(glcDeleteContextPtr, _glcDeleteContext@4);
+		LOAD_CALLBACK(glcDeleteFontPtr, _glcDeleteFont@4);
+		LOAD_CALLBACK(glcEnablePtr, _glcEnable@4);
+		LOAD_CALLBACK(glcFontPtr, _glcFont@4);
+		LOAD_CALLBACK(glcFontFacePtr, _glcFontFace@8);
+		LOAD_CALLBACK(glcGenFontIDPtr, _glcGenFontID@0);
+		LOAD_CALLBACK(glcGetMaxCharMetricPtr, _glcGetMaxCharMetric@8);
+		LOAD_CALLBACK(glcGetStringMetricPtr, _glcGetStringMetric@8);
+		LOAD_CALLBACK(glcMeasureCountedStringPtr, _glcMeasureCountedString@12);
+		LOAD_CALLBACK(glcMeasureStringPtr, _glcMeasureString@8);
+		LOAD_CALLBACK(glcNewFontFromFamilyPtr, _glcNewFontFromFamily@8);
+		LOAD_CALLBACK(glcRenderStringPtr, _glcRenderString@4);
+		LOAD_CALLBACK(glcRenderStylePtr, _glcRenderStyle@4);
+		LOAD_CALLBACK(glcStringTypePtr, _glcStringType@4);
+		LOAD_CALLBACK(glcGetCharMetricPtr, _glcGetCharMetric@12);
+		LOAD_CALLBACK(glcGetfPtr, _glcGetf@4);
+		LOAD_CALLBACK(glcGenContextPtr, _glcGenContext@0);
+	}
+}
+
+extern "C"
+{
+	void APIENTRY glcContext(GLint inContext)
+	{
+		glcContextPtr(inContext);
+	}
+
+	void APIENTRY glcDeleteContext(GLint inContext)
+	{
+		glcDeleteContextPtr(inContext);
+	}
+
+	void APIENTRY glcEnable(GLCenum inAttrib)
+	{
+		glcEnablePtr(inAttrib);
+	}
+
+	void APIENTRY glcFont(GLint inFont)
+	{
+		glcFontPtr(inFont);
+	}
+
+	GLint APIENTRY glcGenFontID(void)
+	{
+		return glcGenFontIDPtr();
+	}
+
+	void APIENTRY glcRenderString(const GLCchar *inString)
+	{
+		glcRenderStringPtr(inString);
+	}
+
+	GLfloat* APIENTRY glcGetMaxCharMetric(GLCenum inMetric,
+		GLfloat *outVec)
+	{
+		return glcGetMaxCharMetricPtr(inMetric, outVec);
+	}
+
+	GLfloat* APIENTRY glcGetStringMetric(GLCenum inMetric, GLfloat *outVec)
+	{
+		return glcGetStringMetricPtr(inMetric, outVec);
+	}
+
+	GLint APIENTRY glcMeasureString(GLboolean inMeasureChars,
+		const GLCchar *inString)
+	{
+		return glcMeasureStringPtr(inMeasureChars, inString);
+	}
+
+	void APIENTRY glcDeleteFont(GLint inFont)
+	{
+		glcDeleteFontPtr(inFont);
+	}
+
+	GLfloat* APIENTRY glcGetCharMetric(GLint inCode, GLCenum inMetric,
+		GLfloat *outVec)
+	{
+		return glcGetCharMetricPtr(inCode, inMetric, outVec);
+	}
+
+	GLfloat APIENTRY glcGetf(GLCenum inAttrib)
+	{
+		return glcGetfPtr(inAttrib);
+	}
+
+	GLint APIENTRY glcMeasureCountedString(GLboolean inMeasureChars,
+		GLint inCount,
+		const GLCchar *inString)
+	{
+		return glcMeasureCountedStringPtr(inMeasureChars, inCount, inString);
+	}
+
+	void APIENTRY glcRenderStyle(GLCenum inStyle)
+	{
+		glcRenderStylePtr(inStyle);
+	}
+
+	void APIENTRY glcStringType(GLCenum inStringType)
+	{
+		glcStringTypePtr(inStringType);
+	}
+
+	GLboolean APIENTRY glcFontFace(GLint inFont, const GLCchar *inFace)
+	{
+		return glcFontFacePtr(inFont, inFace);
+	}
+
+	GLint APIENTRY glcNewFontFromFamily(GLint inFont,
+		const GLCchar *inFamily)
+	{
+		return glcNewFontFromFamilyPtr(inFont, inFamily);
+	}
+
+	GLint APIENTRY glcGenContext()
+	{
+		return glcGenContextPtr();
+	}
+}
+#endif
 
 /***************************************************************************/
 /*
@@ -89,6 +249,10 @@ static void iV_initializeGLC(void)
 	{
 		return;
 	}
+
+#ifdef WZ_OS_WIN
+	loadDLL();
+#endif
 
 	_glcContext = glcGenContext();
 	if (!_glcContext)

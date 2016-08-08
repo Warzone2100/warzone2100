@@ -11,73 +11,64 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="bar.cpp">
+    <ClCompile Include="audio.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="button.cpp">
+    <ClCompile Include="audio_id.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="editbox.cpp">
+    <ClCompile Include="cdaudio.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="form.cpp">
+    <ClCompile Include="oggvorbis.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="label.cpp">
+    <ClCompile Include="openal_error.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="slider.cpp">
+    <ClCompile Include="openal_track.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="tip.cpp">
+    <ClCompile Include="playlist.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="widget.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="listwidget.cpp">
+    <ClCompile Include="track.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="bar.h">
+    <ClInclude Include="aud.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="button.h">
+    <ClInclude Include="audio.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="editbox.h">
+    <ClInclude Include="audio_id.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="form.h">
+    <ClInclude Include="cdaudio.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="label.h">
+    <ClInclude Include="mixer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="slider.h">
+    <ClInclude Include="oggvorbis.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="tip.h">
+    <ClInclude Include="openal_error.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="widgbase.h">
+    <ClInclude Include="playlist.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="widget.h">
+    <ClInclude Include="track.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="widgint.h">
+    <ClInclude Include="tracklib.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="listwidget.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="label_moc.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="slider_moc.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>

@@ -11,73 +11,70 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="bar.cpp">
+    <ClCompile Include="codeprint.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="button.cpp">
+    <ClCompile Include="event.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="editbox.cpp">
+    <ClCompile Include="eventsave.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="form.cpp">
+    <ClCompile Include="interpreter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="label.cpp">
+    <ClCompile Include="script.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="slider.cpp">
+    <ClCompile Include="stack.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="tip.cpp">
+    <ClCompile Include="chat_lexer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="widget.cpp">
+    <ClCompile Include="chat_parser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="listwidget.cpp">
+    <ClCompile Include="script_lexer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="script_parser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="bar.h">
+    <ClInclude Include="chat_processing.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="button.h">
+    <ClInclude Include="codeprint.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="editbox.h">
+    <ClInclude Include="event.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="form.h">
+    <ClInclude Include="eventsave.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="label.h">
+    <ClInclude Include="interpreter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="slider.h">
+    <ClInclude Include="parse.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="tip.h">
+    <ClInclude Include="script.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="widgbase.h">
+    <ClInclude Include="stack.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="widget.h">
+    <ClInclude Include="chat_parser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="widgint.h">
+    <ClInclude Include="script_parser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="listwidget.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="label_moc.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="slider_moc.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>

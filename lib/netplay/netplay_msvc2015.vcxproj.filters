@@ -146,4 +146,7 @@
       <Filter>Source Files\miniUPnP\header files</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
 </Project>

@@ -11,73 +11,103 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="bar.cpp">
+    <ClCompile Include="bitimage.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="button.cpp">
+    <ClCompile Include="imdload.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="editbox.cpp">
+    <ClCompile Include="jpeg_encoder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="form.cpp">
+    <ClCompile Include="pieblitfunc.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="label.cpp">
+    <ClCompile Include="pieclip.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="slider.cpp">
+    <ClCompile Include="piedraw.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="tip.cpp">
+    <ClCompile Include="piefunc.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="widget.cpp">
+    <ClCompile Include="piematrix.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="listwidget.cpp">
+    <ClCompile Include="piemode.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="piepalette.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="piestate.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="png_util.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="screen.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="tex.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="textdraw.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="bar.h">
+    <ClInclude Include="piematrix.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="button.h">
+    <ClInclude Include="screen.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="editbox.h">
+    <ClInclude Include="imd.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="form.h">
+    <ClInclude Include="ivisdef.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="label.h">
+    <ClInclude Include="jpeg_encoder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="slider.h">
+    <ClInclude Include="pieblitfunc.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="tip.h">
+    <ClInclude Include="pieclip.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="widgbase.h">
+    <ClInclude Include="piedef.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="widget.h">
+    <ClInclude Include="piefunc.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="widgint.h">
+    <ClInclude Include="piemode.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="listwidget.h">
+    <ClInclude Include="piepalette.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="label_moc.h">
+    <ClInclude Include="piestate.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="slider_moc.h">
+    <ClInclude Include="pietypes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="png_util.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="tex.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="textdraw.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>

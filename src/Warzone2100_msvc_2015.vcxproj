@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug_QT_backend|Win32">
       <Configuration>Debug_QT_backend</Configuration>
@@ -29,40 +29,44 @@
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <BisonParserAfterTargets>CustomBuild</BisonParserAfterTargets>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_QT_backend|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <BisonParserAfterTargets>CustomBuild</BisonParserAfterTargets>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
     <BisonParserAfterTargets>CustomBuild</BisonParserAfterTargets>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_QT_backend|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
     <BisonParserAfterTargets>CustomBuild</BisonParserAfterTargets>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings" />
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\win32\common.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release_QT_backend|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\win32\common.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\win32\common.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug_QT_backend|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\win32\common.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
@@ -138,7 +142,7 @@ call $(ProjectDir)..\build_tools\autorevision.bat $(ProjectDir)</Command>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>libogg_static.lib;libvorbis_static.lib;libvorbisfile_static.lib;OpenAL32.lib;glc32.lib;OpenGL32.lib;GLU32.lib;shfolder.lib;winmm.lib;Iphlpapi.lib;ws2_32.lib;dbghelp.lib;physfs.lib;glew.lib;libtheora_static.lib;libpng16.lib;SDL2main.lib;SDL2.lib;Qt5Cored.lib;Qt5Widgetsd.lib;Qt5Guid.lib;Qt5Scriptd.lib;Qt5ScriptToolsd.lib;zlibstat.lib;ssleay32.lib;libeay32.lib;crypt32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>../win32/ogg-build/Release/ogg.lib;../win32/vorbis-build/lib/Release/vorbis.lib;../win32/vorbis-build/lib/Release/vorbisfile.lib;../win32/openal-build/Release/OpenAL32.lib;OpenGL32.lib;GLU32.lib;shfolder.lib;winmm.lib;Iphlpapi.lib;ws2_32.lib;dbghelp.lib;../win32/Win32/Debug/libtheora_static.lib;crypt32.lib;$(Qt5Dir)/lib/Qt5Core.lib;$(Qt5Dir)/lib/Qt5Widgets.lib;$(Qt5Dir)/lib/Qt5Gui.lib;$(Qt5Dir)/lib/Qt5Script.lib;$(Qt5Dir)/lib/Qt5ScriptTools.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(ProjectName)-Dbg.exe</OutputFile>
       <AdditionalLibraryDirectories>$(SolutionDir)\..\devpkg\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>MSVCRT.lib;libcmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
@@ -193,7 +197,7 @@ call $(ProjectDir)..\build_tools\autorevision.bat $(ProjectDir)</Command>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>libogg_static.lib;libvorbis_static.lib;libvorbisfile_static.lib;OpenAL32.lib;glc32.lib;OpenGL32.lib;GLU32.lib;shfolder.lib;winmm.lib;Iphlpapi.lib;ws2_32.lib;dbghelp.lib;physfs.lib;glew.lib;libtheora_static.lib;libpng16.lib;SDLmain.lib;SDL.lib;Qt5Cored.lib;Qt5Widgetsd.lib;Qt5Guid.lib;Qt5Scriptd.lib;Qt5ScriptToolsd.lib;zlibstat.lib;ssleay32.lib;libeay32.lib;crypt32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>../win32/ogg-build/Release/ogg.lib;../win32/vorbis-build/lib/Release/vorbis.lib;../win32/vorbis-build/lib/Release/vorbisfile.lib;../win32/openal-build/Release/OpenAL32.lib;OpenGL32.lib;GLU32.lib;shfolder.lib;winmm.lib;Iphlpapi.lib;ws2_32.lib;dbghelp.lib;../win32/Win32/Debug/libtheora_static.lib;SDLmain.lib;SDL.lib;Qt5Cored.lib;Qt5Widgetsd.lib;Qt5Guid.lib;Qt5Scriptd.lib;Qt5ScriptToolsd.lib;zlibstat.lib;ssleay32.lib;libeay32.lib;crypt32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(ProjectName)-Dbg.exe</OutputFile>
       <AdditionalLibraryDirectories>$(SolutionDir)\..\devpkg\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>MSVCRT.lib;libcmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
@@ -240,7 +244,7 @@ call $(ProjectDir)..\build_tools\autorevision.bat $(ProjectDir)</Command>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>libogg_static.lib;libvorbis_static.lib;libvorbisfile_static.lib;OpenAL32.lib;glc32.lib;OpenGL32.lib;GLU32.lib;shfolder.lib;winmm.lib;Iphlpapi.lib;ws2_32.lib;dbghelp.lib;physfs.lib;glew.lib;libtheora_static.lib;libpng16.lib;SDL2main.lib;SDL2.lib;Qt5Core.lib;Qt5Widgets.lib;Qt5Gui.lib;Qt5Script.lib;Qt5ScriptTools.lib;zlibstat.lib;ssleay32.lib;libeay32.lib;crypt32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>../win32/ogg-build/Release/ogg.lib;../win32/vorbis-build/lib/Release/vorbis.lib;../win32/vorbis-build/lib/Release/vorbisfile.lib;../win32/openal-build/Release/OpenAL32.lib;OpenGL32.lib;GLU32.lib;shfolder.lib;winmm.lib;Iphlpapi.lib;ws2_32.lib;dbghelp.lib;../win32/Win32/Debug/libtheora_static.lib;SDL2main.lib;SDL2.lib;Qt5Core.lib;Qt5Widgets.lib;Qt5Gui.lib;Qt5Script.lib;Qt5ScriptTools.lib;zlibstat.lib;ssleay32.lib;libeay32.lib;crypt32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)\..\devpkg\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>libcmt.lib;MSVCRTD.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -281,7 +285,7 @@ call $(ProjectDir)..\build_tools\autorevision.bat $(ProjectDir)</Command>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>libogg_static.lib;libvorbis_static.lib;libvorbisfile_static.lib;OpenAL32.lib;glc32.lib;OpenGL32.lib;GLU32.lib;shfolder.lib;winmm.lib;Iphlpapi.lib;ws2_32.lib;dbghelp.lib;physfs.lib;glew.lib;libtheora_static.lib;libpng16.lib;SDLmain.lib;SDL.lib;Qt5Core.lib;Qt5Widgets.lib;Qt5Gui.lib;Qt5Script.lib;Qt5ScriptTools.lib;zlibstat.lib;ssleay32.lib;libeay32.lib;crypt32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>../win32/ogg-build/Release/ogg.lib;../win32/vorbis-build/lib/Release/vorbis.lib;../win32/vorbis-build/lib/Release/vorbisfile.lib;../win32/openal-build/Release/OpenAL32.lib;OpenGL32.lib;GLU32.lib;shfolder.lib;winmm.lib;Iphlpapi.lib;ws2_32.lib;dbghelp.lib;../win32/Win32/Debug/libtheora_static.lib;SDLmain.lib;SDL.lib;Qt5Core.lib;Qt5Widgets.lib;Qt5Gui.lib;Qt5Script.lib;Qt5ScriptTools.lib;zlibstat.lib;ssleay32.lib;libeay32.lib;crypt32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)\..\devpkg\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>libcmt.lib;MSVCRTD.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -538,51 +542,76 @@ call $(ProjectDir)..\build_tools\autorevision.bat $(ProjectDir)</Command>
     <ClInclude Include="wrappers.h" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\lib\exceptionhandler\exceptionhandler.vcxproj">
+    <ProjectReference Include="..\lib\exceptionhandler\exceptionhandler_msvc2015.vcxproj">
       <Project>{9dc871e4-d58d-4af6-85a6-7df7a39b8c18}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\lib\framework\framework.vcxproj">
+    <ProjectReference Include="..\lib\framework\framework_msvc2015.vcxproj">
       <Project>{33979915-684a-4885-bfea-2a4ccc5a5fd6}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
-    <ProjectReference Include="..\lib\gamelib\gamelib.vcxproj">
+    <ProjectReference Include="..\lib\gamelib\gamelib_msvc2015.vcxproj">
       <Project>{efe011b6-4c0b-40aa-9f18-5ad599e70d28}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
-    <ProjectReference Include="..\lib\ivis_opengl\ivis_opengl.vcxproj">
+    <ProjectReference Include="..\lib\ivis_opengl\ivis_opengl_msvc2015.vcxproj">
       <Project>{4d637147-73f9-4a51-944b-34bf78e6c6dc}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
-    <ProjectReference Include="..\lib\netplay\netplay.vcxproj">
+    <ProjectReference Include="..\lib\netplay\netplay_msvc2015.vcxproj">
       <Project>{c7698ece-9255-4a60-8091-a9a76e8be911}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
-    <ProjectReference Include="..\lib\qtgame\qtgame.vcxproj">
+    <ProjectReference Include="..\lib\qtgame\qtgame_msvc2015.vcxproj">
       <Project>{d16b1cc1-0a16-48b0-8868-5e573f7f96df}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\lib\script\script.vcxproj">
+    <ProjectReference Include="..\lib\script\script_msvc2015.vcxproj">
       <Project>{2d0b0f06-3ca2-46c7-908d-5c7098645021}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
-    <ProjectReference Include="..\lib\sdl\SDL.vcxproj">
+    <ProjectReference Include="..\lib\sdl\SDL_msvc2015.vcxproj">
       <Project>{6d2e13fd-fd25-4bdc-a898-8a2e1f1e1336}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\lib\sequence\sequence.vcxproj">
+    <ProjectReference Include="..\lib\sequence\sequence_msvc2015.vcxproj">
       <Project>{30f5fc4a-31f5-42f5-9581-45309559382f}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
-    <ProjectReference Include="..\lib\sound\sound.vcxproj">
+    <ProjectReference Include="..\lib\sound\sound_msvc2015.vcxproj">
       <Project>{8136a1f0-463e-44f6-b0b2-64b12f4c27ba}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
-    <ProjectReference Include="..\lib\widget\widget.vcxproj">
+    <ProjectReference Include="..\lib\widget\widget_msvc2015.vcxproj">
       <Project>{e538d7a9-0660-4979-95f4-80b0c5c11da7}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\win32\warzone2100.rc" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
-  <ImportGroup Label="ExtensionTargets" />
+  <ImportGroup Label="ExtensionTargets">
+    <Import Project="..\win32\packages\physfs.v140.2.0.3.1\build\native\physfs.v140.targets" Condition="Exists('..\win32\packages\physfs.v140.2.0.3.1\build\native\physfs.v140.targets')" />
+    <Import Project="..\win32\packages\zlib.v120.windesktop.msvcstl.dyn.rt-dyn.1.2.8.8\build\native\zlib.v120.windesktop.msvcstl.dyn.rt-dyn.targets" Condition="Exists('..\win32\packages\zlib.v120.windesktop.msvcstl.dyn.rt-dyn.1.2.8.8\build\native\zlib.v120.windesktop.msvcstl.dyn.rt-dyn.targets')" />
+    <Import Project="..\win32\packages\openssl.v120.windesktop.msvcstl.dyn.rt-dyn.x64.1.0.2.0\build\native\openssl.v120.windesktop.msvcstl.dyn.rt-dyn.x64.targets" Condition="Exists('..\win32\packages\openssl.v120.windesktop.msvcstl.dyn.rt-dyn.x64.1.0.2.0\build\native\openssl.v120.windesktop.msvcstl.dyn.rt-dyn.x64.targets')" />
+    <Import Project="..\win32\packages\openssl.v120.windesktop.msvcstl.dyn.rt-dyn.x86.1.0.2.0\build\native\openssl.v120.windesktop.msvcstl.dyn.rt-dyn.x86.targets" Condition="Exists('..\win32\packages\openssl.v120.windesktop.msvcstl.dyn.rt-dyn.x86.1.0.2.0\build\native\openssl.v120.windesktop.msvcstl.dyn.rt-dyn.x86.targets')" />
+    <Import Project="..\win32\packages\zlib.v140.windesktop.msvcstl.dyn.rt-dyn.1.2.8.8\build\native\zlib.v140.windesktop.msvcstl.dyn.rt-dyn.targets" Condition="Exists('..\win32\packages\zlib.v140.windesktop.msvcstl.dyn.rt-dyn.1.2.8.8\build\native\zlib.v140.windesktop.msvcstl.dyn.rt-dyn.targets')" />
+    <Import Project="..\win32\packages\openssl.v140.windesktop.msvcstl.dyn.rt-dyn.x64.1.0.2.0\build\native\openssl.v140.windesktop.msvcstl.dyn.rt-dyn.x64.targets" Condition="Exists('..\win32\packages\openssl.v140.windesktop.msvcstl.dyn.rt-dyn.x64.1.0.2.0\build\native\openssl.v140.windesktop.msvcstl.dyn.rt-dyn.x64.targets')" />
+    <Import Project="..\win32\packages\openssl.v140.windesktop.msvcstl.dyn.rt-dyn.x86.1.0.2.0\build\native\openssl.v140.windesktop.msvcstl.dyn.rt-dyn.x86.targets" Condition="Exists('..\win32\packages\openssl.v140.windesktop.msvcstl.dyn.rt-dyn.x86.1.0.2.0\build\native\openssl.v140.windesktop.msvcstl.dyn.rt-dyn.x86.targets')" />
+    <Import Project="..\win32\packages\libpng.redist.1.6.23.1\build\native\libpng.redist.targets" Condition="Exists('..\win32\packages\libpng.redist.1.6.23.1\build\native\libpng.redist.targets')" />
+    <Import Project="..\win32\packages\libpng.1.6.23.1\build\native\libpng.targets" Condition="Exists('..\win32\packages\libpng.1.6.23.1\build\native\libpng.targets')" />
+    <Import Project="..\win32\packages\glew.v140.1.12.0\build\native\glew.v140.targets" Condition="Exists('..\win32\packages\glew.v140.1.12.0\build\native\glew.v140.targets')" />
+    <Import Project="..\win32\packages\sdl2.v140.redist.2.0.4\build\native\sdl2.v140.redist.targets" Condition="Exists('..\win32\packages\sdl2.v140.redist.2.0.4\build\native\sdl2.v140.redist.targets')" />
+    <Import Project="..\win32\packages\sdl2.v140.2.0.4\build\native\sdl2.v140.targets" Condition="Exists('..\win32\packages\sdl2.v140.2.0.4\build\native\sdl2.v140.targets')" />
+  </ImportGroup>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\win32\packages\physfs.v140.2.0.3.1\build\native\physfs.v140.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\win32\packages\physfs.v140.2.0.3.1\build\native\physfs.v140.targets'))" />
+    <Error Condition="!Exists('..\win32\packages\zlib.v120.windesktop.msvcstl.dyn.rt-dyn.1.2.8.8\build\native\zlib.v120.windesktop.msvcstl.dyn.rt-dyn.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\win32\packages\zlib.v120.windesktop.msvcstl.dyn.rt-dyn.1.2.8.8\build\native\zlib.v120.windesktop.msvcstl.dyn.rt-dyn.targets'))" />
+    <Error Condition="!Exists('..\win32\packages\openssl.v120.windesktop.msvcstl.dyn.rt-dyn.x64.1.0.2.0\build\native\openssl.v120.windesktop.msvcstl.dyn.rt-dyn.x64.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\win32\packages\openssl.v120.windesktop.msvcstl.dyn.rt-dyn.x64.1.0.2.0\build\native\openssl.v120.windesktop.msvcstl.dyn.rt-dyn.x64.targets'))" />
+    <Error Condition="!Exists('..\win32\packages\openssl.v120.windesktop.msvcstl.dyn.rt-dyn.x86.1.0.2.0\build\native\openssl.v120.windesktop.msvcstl.dyn.rt-dyn.x86.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\win32\packages\openssl.v120.windesktop.msvcstl.dyn.rt-dyn.x86.1.0.2.0\build\native\openssl.v120.windesktop.msvcstl.dyn.rt-dyn.x86.targets'))" />
+    <Error Condition="!Exists('..\win32\packages\zlib.v140.windesktop.msvcstl.dyn.rt-dyn.1.2.8.8\build\native\zlib.v140.windesktop.msvcstl.dyn.rt-dyn.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\win32\packages\zlib.v140.windesktop.msvcstl.dyn.rt-dyn.1.2.8.8\build\native\zlib.v140.windesktop.msvcstl.dyn.rt-dyn.targets'))" />
+    <Error Condition="!Exists('..\win32\packages\openssl.v140.windesktop.msvcstl.dyn.rt-dyn.x64.1.0.2.0\build\native\openssl.v140.windesktop.msvcstl.dyn.rt-dyn.x64.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\win32\packages\openssl.v140.windesktop.msvcstl.dyn.rt-dyn.x64.1.0.2.0\build\native\openssl.v140.windesktop.msvcstl.dyn.rt-dyn.x64.targets'))" />
+    <Error Condition="!Exists('..\win32\packages\openssl.v140.windesktop.msvcstl.dyn.rt-dyn.x86.1.0.2.0\build\native\openssl.v140.windesktop.msvcstl.dyn.rt-dyn.x86.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\win32\packages\openssl.v140.windesktop.msvcstl.dyn.rt-dyn.x86.1.0.2.0\build\native\openssl.v140.windesktop.msvcstl.dyn.rt-dyn.x86.targets'))" />
+    <Error Condition="!Exists('..\win32\packages\libpng.redist.1.6.23.1\build\native\libpng.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\win32\packages\libpng.redist.1.6.23.1\build\native\libpng.redist.targets'))" />
+    <Error Condition="!Exists('..\win32\packages\libpng.1.6.23.1\build\native\libpng.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\win32\packages\libpng.1.6.23.1\build\native\libpng.targets'))" />
+    <Error Condition="!Exists('..\win32\packages\glew.v140.1.12.0\build\native\glew.v140.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\win32\packages\glew.v140.1.12.0\build\native\glew.v140.targets'))" />
+    <Error Condition="!Exists('..\win32\packages\sdl2.v140.redist.2.0.4\build\native\sdl2.v140.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\win32\packages\sdl2.v140.redist.2.0.4\build\native\sdl2.v140.redist.targets'))" />
+    <Error Condition="!Exists('..\win32\packages\sdl2.v140.2.0.4\build\native\sdl2.v140.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\win32\packages\sdl2.v140.2.0.4\build\native\sdl2.v140.targets'))" />
+  </Target>
 </Project>

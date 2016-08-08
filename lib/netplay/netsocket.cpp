@@ -31,9 +31,6 @@
 #include <algorithm>
 #include <map>
 
-#if defined(WZ_CC_MSVC)
-# define ZLIB_WINAPI
-#endif
 #include <zlib.h>
 
 enum
@@ -216,8 +213,8 @@ static void freeaddrinfo(struct addrinfo *res)
 
 static int addressToText(const struct sockaddr *addr, char *buf, size_t size)
 {
-	auto handleIpv4 = [&](in_addr_t s_addr) {
-		uint32_t val = ntohl(s_addr);
+	auto handleIpv4 = [&](uint32_t addr) {
+		uint32_t val = ntohl(addr);
 		return snprintf(buf, size, "%u.%u.%u.%u", (val>>24)&0xFF, (val>>16)&0xFF, (val>>8)&0xFF, val&0xFF);
 	};
 
