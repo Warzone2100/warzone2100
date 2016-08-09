@@ -952,10 +952,8 @@ bool structSetManufacture(STRUCTURE *psStruct, DROID_TEMPLATE *psTempl, QUEUE_MO
 
 	CHECK_STRUCTURE(psStruct);
 
-	ASSERT_OR_RETURN(false, psStruct != NULL && psStruct->type == OBJ_STRUCTURE, "Invalid factory pointer");
-	ASSERT_OR_RETURN(false, psStruct->pStructureType->type == REF_FACTORY || psStruct->pStructureType->type == REF_CYBORG_FACTORY
-	                 || psStruct->pStructureType->type == REF_VTOL_FACTORY, "Invalid structure type %d for factory",
-	                 (int)psStruct->pStructureType->type);
+	ASSERT_OR_RETURN(false, StructIsFactory(psStruct), "structure not a factory");
+
 	/* psTempl might be NULL if the build is being cancelled in the middle */
 	ASSERT_OR_RETURN(false, !psTempl
 	                 || (validTemplateForFactory(psTempl, psStruct, true) && researchedTemplate(psTempl, psStruct->player, true, true))
@@ -6098,18 +6096,13 @@ void hqReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 //
 bool StructIsFactory(STRUCTURE *Struct)
 {
-	ASSERT_OR_RETURN(false, Struct != NULL, "Invalid structure!");
-	ASSERT_OR_RETURN(false, Struct->pStructureType != NULL, "Invalid structureType!");
+	ASSERT_OR_RETURN(false, Struct != nullptr, "Invalid structure!");
+	ASSERT_OR_RETURN(false, Struct->pStructureType != nullptr, "Invalid structureType!");
 
-	if ((Struct->type == OBJ_STRUCTURE) &&
-		((Struct->pStructureType->type == REF_FACTORY) ||
-	    (Struct->pStructureType->type == REF_CYBORG_FACTORY) ||
-	    (Struct->pStructureType->type == REF_VTOL_FACTORY)))
-	{
-		return true;
-	}
-
-	return false;
+	return Struct->type == OBJ_STRUCTURE && (
+		Struct->pStructureType->type == REF_FACTORY ||
+		Struct->pStructureType->type == REF_CYBORG_FACTORY ||
+		Struct->pStructureType->type == REF_VTOL_FACTORY);
 }
 
 

@@ -634,8 +634,7 @@ void ResearchRelease(void)
 /*puts research facility on hold*/
 void holdResearch(STRUCTURE *psBuilding, QUEUE_MODE mode)
 {
-	ASSERT(psBuilding->pStructureType->type == REF_RESEARCH,
-	       "holdResearch: structure not a research facility");
+	ASSERT_OR_RETURN(, psBuilding->pStructureType->type == REF_RESEARCH, "structure not a research facility");
 
 	RESEARCH_FACILITY *psResFac = &psBuilding->pFunctionality->researchFacility;
 
@@ -663,8 +662,7 @@ void holdResearch(STRUCTURE *psBuilding, QUEUE_MODE mode)
 /*release a research facility from hold*/
 void releaseResearch(STRUCTURE *psBuilding, QUEUE_MODE mode)
 {
-	ASSERT(psBuilding->pStructureType->type == REF_RESEARCH,
-	       "releaseResearch: structure not a research facility");
+	ASSERT_OR_RETURN(, psBuilding->pStructureType->type == REF_RESEARCH, "structure not a research facility");
 
 	RESEARCH_FACILITY *psResFac = &psBuilding->pFunctionality->researchFacility;
 
