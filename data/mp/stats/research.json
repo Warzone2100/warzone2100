@@ -1058,7 +1058,7 @@
         "iconID": "IMAGE_RES_DEFENCE",
         "id": "R-Defense-Pillbox01",
         "msgName": "RES_DF_P1",
-        "name": "Machinegun Bunker",
+        "name": "Heavy Machinegun Bunker",
         "requiredResearch": [
             "R-Defense-HardcreteWall",
             "R-Wpn-MG-Damage01"
@@ -1387,7 +1387,7 @@
         "id": "R-Defense-Tower01",
         "keyTopic": 1,
         "msgName": "RES_TOWER1",
-        "name": "Machinegun Guard Tower",
+        "name": "Heavy Machinegun Guard Tower",
         "requiredResearch": [
             "R-Wpn-MG1Mk1"
         ],
