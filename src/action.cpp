@@ -427,13 +427,13 @@ static void actionAddVtolAttackRun(DROID *psDroid)
 	}
 
 	/* get normal vector from droid to target */
-	Vector2i delta = removeZ(psTarget->pos - psDroid->pos);
+	Vector2i delta = (psTarget->pos - psDroid->pos).xy;
 
 	/* get magnitude of normal vector (Pythagorean theorem) */
 	int dist = std::max(iHypot(delta), 1);
 
 	/* add waypoint behind target attack length away*/
-	Vector2i dest = removeZ(psTarget->pos) + delta * VTOL_ATTACK_LENGTH / dist;
+	Vector2i dest = psTarget->pos.xy + delta * VTOL_ATTACK_LENGTH / dist;
 
 	if (!worldOnMap(dest))
 	{
@@ -525,7 +525,7 @@ bool actionReachedBuildPos(DROID const *psDroid, int x, int y, uint16_t dir, BAS
 	// do all calculations in half tile units so that
 	// the droid moves to within half a tile of the target
 	// NOT ANY MORE - JOHN
-	Vector2i delta = map_coord(removeZ(psDroid->pos)) - b.map;
+	Vector2i delta = map_coord(psDroid->pos.xy) - b.map;
 	return delta.x >= -1 && delta.x <= b.size.x && delta.y >= -1 && delta.y <= b.size.y;
 }
 
@@ -552,7 +552,7 @@ static bool actionRemoveDroidsFromBuildPos(unsigned player, Vector2i pos, uint16
 			continue;  // Only looking for droids.
 		}
 
-		Vector2i delta = map_coord(removeZ(droid->pos)) - b.map;
+		Vector2i delta = map_coord(droid->pos.xy) - b.map;
 		if (delta.x < 0 || delta.x >= b.size.x || delta.y < 0 || delta.y >= b.size.y || isFlying(droid))
 		{
 			continue;  // Droid not under new structure (just near it).
@@ -572,7 +572,7 @@ static bool actionRemoveDroidsFromBuildPos(unsigned player, Vector2i pos, uint16
 			for (int x = -1; x <= b.size.x; x += y >= 0 && y < b.size.y ? b.size.x + 1 : 1)
 			{
 				Vector2i dest = world_coord(b.map + Vector2i(x, y)) + Vector2i(TILE_UNITS, TILE_UNITS) / 2;
-				unsigned dist = iHypot(removeZ(droid->pos) - dest);
+				unsigned dist = iHypot(droid->pos.xy - dest);
 				if (dist < bestDist && !fpathBlockingTile(map_coord(dest.x), map_coord(dest.y), getPropulsionStats(droid)->propulsionType))
 				{
 					bestDest = dest;
@@ -582,7 +582,7 @@ static bool actionRemoveDroidsFromBuildPos(unsigned player, Vector2i pos, uint16
 		if (bestDist != UINT32_MAX)
 		{
 			// Push the droid out of the way.
-			Vector2i newPos = removeZ(droid->pos) + iSinCosR(iAtan2(bestDest - removeZ(droid->pos)), gameTimeAdjustedIncrement(TILE_UNITS));
+			Vector2i newPos = droid->pos.xy + iSinCosR(iAtan2(bestDest - droid->pos.xy), gameTimeAdjustedIncrement(TILE_UNITS));
 			droidSetPosition(droid, newPos.x, newPos.y);
 		}
 	}
@@ -1109,7 +1109,7 @@ void actionUpdateDroid(DROID *psDroid)
 			}
 
 			/* circle around target if hovering and not cyborg */
-			Vector2i attackRunDelta = psDroid->pos - psDroid->sMove.destination;
+			Vector2i attackRunDelta = psDroid->pos.xy - psDroid->sMove.destination;
 			if (DROID_STOPPED(psDroid) || attackRunDelta * attackRunDelta < TILE_UNITS * TILE_UNITS)
 			{
 				actionAddVtolAttackRun(psDroid);
@@ -1117,12 +1117,12 @@ void actionUpdateDroid(DROID *psDroid)
 			else
 			{
 				// if the vtol is close to the target, go around again
-				const Vector2i diff = removeZ(psDroid->pos - psDroid->psActionTarget[0]->pos);
+				const Vector2i diff = (psDroid->pos - psDroid->psActionTarget[0]->pos).xy;
 				const int rangeSq = diff * diff;
 				if (rangeSq < VTOL_ATTACK_TARDIST * VTOL_ATTACK_TARDIST)
 				{
 					// don't do another attack run if already moving away from the target
-					const Vector2i diff = psDroid->sMove.destination - removeZ(psDroid->psActionTarget[0]->pos);
+					const Vector2i diff = psDroid->sMove.destination - psDroid->psActionTarget[0]->pos.xy;
 					if (diff * diff < VTOL_ATTACK_TARDIST * VTOL_ATTACK_TARDIST)
 					{
 						actionAddVtolAttackRun(psDroid);
@@ -1135,7 +1135,7 @@ void actionUpdateDroid(DROID *psDroid)
 					if (rangeSq > psWeapStats->upgrade[psDroid->player].maxRange * psWeapStats->upgrade[psDroid->player].maxRange)
 					{
 						// don't do another attack run if already heading for the target
-						const Vector2i diff = psDroid->sMove.destination - removeZ(psDroid->psActionTarget[0]->pos);
+						const Vector2i diff = psDroid->sMove.destination - psDroid->psActionTarget[0]->pos.xy;
 						if (diff * diff > VTOL_ATTACK_TARDIST * VTOL_ATTACK_TARDIST)
 						{
 							moveDroidToDirect(psDroid, psDroid->psActionTarget[0]->pos.x, psDroid->psActionTarget[0]->pos.y);
@@ -1643,7 +1643,7 @@ void actionUpdateDroid(DROID *psDroid)
 		if (!isVtolDroid(psDroid) &&
 		    (order->psObj->type != OBJ_STRUCTURE))
 		{
-			Vector2i diff = removeZ(psDroid->pos - order->psObj->pos);
+			Vector2i diff = (psDroid->pos - order->psObj->pos).xy;
 			int rangeSq = asWeaponStats[psDroid->asWeaps[0].nStat].upgrade[psDroid->player].maxRange / 2; // move close to sensor
 			rangeSq = rangeSq * rangeSq;
 			if (diff * diff < rangeSq)
@@ -1657,7 +1657,7 @@ void actionUpdateDroid(DROID *psDroid)
 			{
 				if (!DROID_STOPPED(psDroid))
 				{
-					diff = removeZ(order->psObj->pos) - psDroid->sMove.destination;
+					diff = order->psObj->pos.xy - psDroid->sMove.destination;
 				}
 				if (DROID_STOPPED(psDroid) || diff * diff > rangeSq)
 				{
@@ -1669,7 +1669,7 @@ void actionUpdateDroid(DROID *psDroid)
 		break;
 	case DACTION_MOVETODROIDREPAIR:
 		{
-			Vector2i diff = removeZ(psDroid->pos - psDroid->psActionTarget[0]->pos);
+			Vector2i diff = (psDroid->pos - psDroid->psActionTarget[0]->pos).xy;
 			// moving to repair a droid
 			if (!psDroid->psActionTarget[0] ||  // Target missing.
 				(psDroid->order.type != DORDER_DROIDREPAIR && diff * diff > 2 * REPAIR_MAXDIST * REPAIR_MAXDIST))  // Target farther then 1.4142 * REPAIR_MAXDIST and we aren't ordered to follow.
@@ -1689,7 +1689,7 @@ void actionUpdateDroid(DROID *psDroid)
 			if (DROID_STOPPED(psDroid))
 			{
 				// Couldn't reach destination - try and find a new one
-				psDroid->actionPos = psDroid->psActionTarget[0]->pos;
+				psDroid->actionPos = psDroid->psActionTarget[0]->pos.xy;
 				moveDroidTo(psDroid, psDroid->actionPos.x, psDroid->actionPos.y);
 			}
 			break;
@@ -1739,7 +1739,7 @@ void actionUpdateDroid(DROID *psDroid)
 				if (order->type == DORDER_REPAIR)
 				{
 					// damaged droid has moved off - follow if we're not holding position!
-					psDroid->actionPos = psDroid->psActionTarget[0]->pos;
+					psDroid->actionPos = psDroid->psActionTarget[0]->pos.xy;
 					psDroid->action = DACTION_MOVETODROIDREPAIR;
 					moveDroidTo(psDroid, psDroid->actionPos.x, psDroid->actionPos.y);
 				}
@@ -1824,7 +1824,7 @@ void actionUpdateDroid(DROID *psDroid)
 		if (DROID_STOPPED(psDroid) ||
 		    (psDroid->action == DACTION_WAITFORREARM))
 		{
-			Vector2i pos = removeZ(psDroid->psActionTarget[0]->pos);
+			Vector2i pos = psDroid->psActionTarget[0]->pos.xy;
 			if (!actionVTOLLandingPos(psDroid, &pos))
 			{
 				// totally bunged up - give up
@@ -1955,7 +1955,7 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 		// note the droid's current pos so that scout & patrol orders know how far the
 		// droid has gone during an attack
 		// slightly strange place to store this I know, but I didn't want to add any more to the droid
-		psDroid->actionPos = psDroid->pos;
+		psDroid->actionPos = psDroid->pos.xy;
 		setDroidActionTarget(psDroid, psAction->psObj, 0);
 
 		if (!isVtolDroid(psDroid) && (orderStateObj(psDroid, DORDER_FIRESUPPORT) != NULL))
@@ -1998,10 +1998,10 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 
 	case DACTION_MOVETOREARM:
 		psDroid->action = DACTION_MOVETOREARM;
-		psDroid->actionPos = psAction->psObj->pos;
+		psDroid->actionPos = psAction->psObj->pos.xy;
 		psDroid->actionStarted = gameTime;
 		setDroidActionTarget(psDroid, psAction->psObj, 0);
-		pos = removeZ(psDroid->psActionTarget[0]->pos);
+		pos = psDroid->psActionTarget[0]->pos.xy;
 		if (!actionVTOLLandingPos(psDroid, &pos))
 		{
 			// totally bunged up - give up
@@ -2014,7 +2014,7 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 		debug(LOG_NEVER, "Unit %d clearing rearm pad", psDroid->id);
 		psDroid->action = DACTION_CLEARREARMPAD;
 		setDroidActionTarget(psDroid, psAction->psObj, 0);
-		pos = removeZ(psDroid->psActionTarget[0]->pos);
+		pos = psDroid->psActionTarget[0]->pos.xy;
 		if (!actionVTOLLandingPos(psDroid, &pos))
 		{
 			// totally bunged up - give up
@@ -2390,7 +2390,7 @@ bool actionVTOLLandingPos(DROID const *psDroid, Vector2i *p)
 		Vector2i t;
 		if (DROID_STOPPED(psCurr))
 		{
-			t = map_coord(removeZ(psCurr->pos));
+			t = map_coord(psCurr->pos.xy);
 		}
 		else
 		{
@@ -2422,7 +2422,7 @@ bool actionVTOLLandingPos(DROID const *psDroid, Vector2i *p)
 		Vector2i t;
 		if (DROID_STOPPED(psCurr))
 		{
-			t = map_coord(removeZ(psCurr->pos));
+			t = map_coord(psCurr->pos.xy);
 		}
 		else
 		{

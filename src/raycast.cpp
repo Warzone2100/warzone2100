@@ -194,7 +194,7 @@ void getBestPitchToEdgeOfGrid(UDWORD x, UDWORD y, uint16_t direction, uint16_t *
 
 	Vector3i src(x, y, 0);
 	Vector3i delta(iSinCosR(direction, 5430), 0);
-	rayCast(src, src + delta, getTileHeightCallback, &help); // FIXME Magic value
+	rayCast(src.xy, (src + delta).xy, getTileHeightCallback, &help); // FIXME Magic value
 
 	*pitch = help.pitch;
 }

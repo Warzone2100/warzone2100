@@ -1283,7 +1283,7 @@ unsigned map_LineIntersect(Vector3i src, Vector3i dst, unsigned tMax)
 {
 	// Transform src and dst to a coordinate system such that the tile quadrant containing src has
 	// corners at (0, 0), (TILE_UNITS, 0), (TILE_UNITS/2, TILE_UNITS/2).
-	Vector2i tile = map_coord(removeZ(src));
+	Vector2i tile = map_coord(src.xy);
 	src -= Vector3i(world_coord(tile), 0);
 	dst -= Vector3i(world_coord(tile), 0);
 	//            +0+

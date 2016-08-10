@@ -1284,8 +1284,8 @@ void alignStructure(STRUCTURE *psBuilding)
 
 		Vector2i dir = iSinCosR(psBuilding->rot.direction, 1);
 		// Rotate s->max.{x, z} and s->min.{x, z} by angle rot.direction.
-		Vector2i p1 = {s->max.x * dir.y - s->max.z * dir.x, s->max.x * dir.x + s->max.z * dir.y};
-		Vector2i p2 = {s->min.x * dir.y - s->min.z * dir.x, s->min.x * dir.x + s->min.z * dir.y};
+		Vector2i p1{s->max.x * dir.y - s->max.z * dir.x, s->max.x * dir.x + s->max.z * dir.y};
+		Vector2i p2{s->min.x * dir.y - s->min.z * dir.x, s->min.x * dir.x + s->min.z * dir.y};
 
 		int h1 = map_Height(psBuilding->pos.x + p1.x, psBuilding->pos.y + p2.y);
 		int h2 = map_Height(psBuilding->pos.x + p1.x, psBuilding->pos.y + p1.y);
@@ -1633,7 +1633,7 @@ STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 				}
 				if (fp != NULL)
 				{
-					Vector2i pos = map_coord(removeZ(fp->coords));
+					Vector2i pos = map_coord(fp->coords.xy);
 					if (unsigned(pos.x - bounds.map.x) < unsigned(bounds.size.x) && unsigned(pos.y - bounds.map.y) < unsigned(bounds.size.y))
 					{
 						// Delivery point fp is under the new structure. Need to move it.
@@ -1837,7 +1837,7 @@ STRUCTURE *buildBlueprint(STRUCTURE_STATS const *psStats, Vector2i xy, uint16_t 
 	// Rotate wall if needed.
 	if (blueprint->pStructureType->type == REF_WALL || blueprint->pStructureType->type == REF_GATE)
 	{
-		WallOrientation scanType = structChooseWallTypeBlueprint(map_coord(removeZ(blueprint->pos)));
+		WallOrientation scanType = structChooseWallTypeBlueprint(map_coord(blueprint->pos.xy));
 		unsigned type = wallType(scanType);
 		if (scanType != WallConnectNone)
 		{
@@ -2407,7 +2407,7 @@ static bool structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl, DR
 			//if vtol droid - send it to ReArm Pad if one exists
 			if (psFlag && isVtolDroid(psNewDroid))
 			{
-				Vector2i pos = removeZ(psFlag->coords);
+				Vector2i pos = psFlag->coords.xy;
 				//find a suitable location near the delivery point
 				actionVTOLLandingPos(psNewDroid, &pos);
 				orderDroidLoc(psNewDroid, DORDER_MOVE, pos.x, pos.y, ModeQueue);
@@ -4049,7 +4049,7 @@ bool validLocation(BASE_STATS *psStats, Vector2i pos, uint16_t direction, unsign
 		for (FLAG_POSITION const *psCurrFlag = apsFlagPosLists[selectedPlayer]; psCurrFlag; psCurrFlag = psCurrFlag->psNext)
 		{
 			ASSERT_OR_RETURN(false, psCurrFlag->coords.x != ~0, "flag has invalid position");
-			Vector2i flagTile = map_coord(removeZ(psCurrFlag->coords));
+			Vector2i flagTile = map_coord(psCurrFlag->coords.xy);
 			if (flagTile.x >= b.map.x && flagTile.x < b.map.x + b.size.x && flagTile.y >= b.map.y && flagTile.y < b.map.y + b.size.y)
 			{
 				return false;
@@ -5096,7 +5096,7 @@ bool calcStructureMuzzleBaseLocation(STRUCTURE *psStructure, Vector3i *muzzle, i
 		         -psShape->connectors[weapon_slot].y);//note y and z flipped
 
 
-		*muzzle = swapYZ(af * barrel);
+		*muzzle = (af * barrel).xzy;
 		muzzle->z = -muzzle->z;
 	}
 	else
@@ -5164,7 +5164,7 @@ bool calcStructureMuzzleLocation(STRUCTURE *psStructure, Vector3i *muzzle, int w
 			barrel = Vector3i(psWeaponImd->connectors[connector_num].x, -psWeaponImd->connectors[connector_num].z, -psWeaponImd->connectors[connector_num].y);
 		}
 
-		*muzzle = swapYZ(af * barrel);
+		*muzzle = (af * barrel).xzy;
 		muzzle->z = -muzzle->z;
 	}
 	else
@@ -7171,7 +7171,7 @@ Vector2i getStructureStatsSize(STRUCTURE_STATS const *pStructureType, uint16_t d
 StructureBounds getStructureBounds(STRUCTURE const *object)
 {
 	Vector2i size = getStructureSize(object);
-	Vector2i map = map_coord(removeZ(object->pos)) - size / 2;
+	Vector2i map = map_coord(object->pos.xy) - size / 2;
 
 	return StructureBounds(map, size);
 }

@@ -21,9 +21,6 @@
  *  Matrix manipulation functions.
  */
 
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-
 #include "lib/framework/frame.h"
 #include "lib/framework/opengl.h"
 
@@ -31,6 +28,8 @@
 #include "lib/ivis_opengl/pieclip.h"
 #include "piematrix.h"
 #include "lib/ivis_opengl/piemode.h"
+
+#include <glm/gtc/matrix_transform.hpp>
 
 /***************************************************************************/
 /*

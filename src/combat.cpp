@@ -125,7 +125,7 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	// if the turret doesn't turn, check if the attacker is in alignment with the target
 	if (psAttacker->type == OBJ_DROID && !psStats->rotate)
 	{
-		uint16_t targetDir = iAtan2(removeZ(deltaPos));
+		uint16_t targetDir = iAtan2(deltaPos.xy);
 		int dirDiff = abs(angleDelta(targetDir - psAttacker->rot.direction));
 		if (dirDiff > FIXED_TURRET_DIR)
 		{
@@ -134,7 +134,7 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 	}
 
 	/* Now see if the target is in range  - also check not too near */
-	int dist = iHypot(removeZ(deltaPos));
+	int dist = iHypot(deltaPos.xy);
 	longRange = proj_GetLongRange(psStats, psAttacker->player);
 
 	int min_angle = 0;
@@ -254,7 +254,7 @@ bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, in
 		predict += Vector3i(iSinCosR(psDroid->sMove.moveDir, psDroid->sMove.speed * flightTime / GAME_TICKS_PER_SEC), 0);
 		if (!isFlying(psDroid))
 		{
-			predict.z = map_Height(removeZ(predict));  // Predict that the object will be on the ground.
+			predict.z = map_Height(predict.xy);  // Predict that the object will be on the ground.
 		}
 	}
 

@@ -504,11 +504,11 @@ bool proj_SendProjectileAngled(WEAPON *psWeap, SIMPLE_OBJECT *psAttacker, int pl
 	/* roll never set */
 	psProj->rot.roll = 0;
 
-	psProj->rot.direction = iAtan2(removeZ(deltaPos));
+	psProj->rot.direction = iAtan2(deltaPos.xy);
 
 
 	// Get target distance, horizontal distance only.
-	uint32_t dist = iHypot(removeZ(deltaPos));
+	uint32_t dist = iHypot(deltaPos.xy);
 
 	if (proj_Direct(psStats))
 	{
@@ -715,7 +715,7 @@ static void proj_InFlightFunc(PROJECTILE *psProj)
 				// LASSAT doesn't have a z
 				delta.z = 0;
 			}
-			int targetDistance = std::max(iHypot(removeZ(delta)), 1);
+			int targetDistance = std::max(iHypot(delta.xy), 1);
 			currentDistance = timeSoFar * psStats->flightSpeed / GAME_TICKS_PER_SEC;
 			psProj->pos = psProj->src + delta * currentDistance / targetDistance;
 			break;
@@ -724,7 +724,7 @@ static void proj_InFlightFunc(PROJECTILE *psProj)
 		{
 			Vector3i delta = psProj->dst - psProj->src;
 			delta.z = (psProj->vZ - (timeSoFar * ACC_GRAVITY / (GAME_TICKS_PER_SEC * 2))) * timeSoFar / GAME_TICKS_PER_SEC; // '2' because we reach our highest point in the mid of flight, when "vZ is 0".
-			int targetDistance = std::max(iHypot(removeZ(delta)), 1);
+			int targetDistance = std::max(iHypot(delta.xy), 1);
 			currentDistance = timeSoFar * psProj->vXY / GAME_TICKS_PER_SEC;
 			psProj->pos = psProj->src + delta * currentDistance / targetDistance;
 			psProj->pos.z = psProj->src.z + delta.z;  // Use raw z value.
@@ -751,7 +751,7 @@ static void proj_InFlightFunc(PROJECTILE *psProj)
 				{
 					// Do target prediction.
 					Vector3i delta = psProj->dst - psProj->pos;
-					int flightTime = iHypot(removeZ(delta)) * GAME_TICKS_PER_SEC / psStats->flightSpeed;
+					int flightTime = iHypot(delta.xy) * GAME_TICKS_PER_SEC / psStats->flightSpeed;
 					psProj->dst += Vector3i(iSinCosR(targetDroid->sMove.moveDir, std::min<int>(targetDroid->sMove.speed, psStats->flightSpeed * 3 / 4) * flightTime / GAME_TICKS_PER_SEC), 0);
 				}
 				psProj->dst.x = clip(psProj->dst.x, 0, world_coord(mapWidth) - 1);
@@ -761,10 +761,10 @@ static void proj_InFlightFunc(PROJECTILE *psProj)
 			{
 				if (psProj->psDest == NULL)
 				{
-					psProj->dst.z = map_Height(removeZ(psProj->pos)) - 1;  // Target missing, so just home in on the ground under where the target was.
+					psProj->dst.z = map_Height(psProj->pos.xy) - 1;  // Target missing, so just home in on the ground under where the target was.
 				}
-				int horizontalTargetDistance = iHypot(removeZ(psProj->dst - psProj->pos));
-				int terrainHeight = std::max(map_Height(removeZ(psProj->pos)), map_Height(removeZ(psProj->pos) + iSinCosR(iAtan2(removeZ(psProj->dst - psProj->pos)), psStats->flightSpeed * 2 * deltaProjectileTime / GAME_TICKS_PER_SEC)));
+				int horizontalTargetDistance = iHypot((psProj->dst - psProj->pos).xy);
+				int terrainHeight = std::max(map_Height(psProj->pos.xy), map_Height(psProj->pos.xy + iSinCosR(iAtan2((psProj->dst - psProj->pos).xy), psStats->flightSpeed * 2 * deltaProjectileTime / GAME_TICKS_PER_SEC)));
 				int desiredMinHeight = terrainHeight + std::min(horizontalTargetDistance / 4, HOMINGINDIRECT_HEIGHT_MIN);
 				int desiredMaxHeight = std::max(psProj->dst.z, terrainHeight + HOMINGINDIRECT_HEIGHT_MAX);
 				int heightError = psProj->pos.z - clip(psProj->pos.z, desiredMinHeight, desiredMaxHeight);
@@ -777,20 +777,20 @@ static void proj_InFlightFunc(PROJECTILE *psProj)
 				psProj->dst = psProj->pos + delta * 10; // Target missing, so just keep going in a straight line.
 			}
 			currentDistance = timeSoFar * psStats->flightSpeed / GAME_TICKS_PER_SEC;
-			Vector3i step = quantiseFraction(delta * psStats->flightSpeed, GAME_TICKS_PER_SEC * targetDistance, psProj->time, psProj->prevSpacetime.time);
+			Vector3i step = quantiseFraction(delta * int32_t(psStats->flightSpeed), GAME_TICKS_PER_SEC * targetDistance, psProj->time, psProj->prevSpacetime.time);
 			if (psStats->movementModel == MM_HOMINGINDIRECT && psProj->psDest != NULL)
 			{
 				for (int tries = 0; tries < 10 && map_LineIntersect(psProj->prevSpacetime.pos, psProj->pos + step, iHypot(step)) < targetDistance - 1u; ++tries)
 				{
-					psProj->dst.z += iHypot(removeZ(psProj->dst - psProj->pos));  // Would collide with terrain this tick, change trajectory.
+					psProj->dst.z += iHypot((psProj->dst - psProj->pos).xy);  // Would collide with terrain this tick, change trajectory.
 					// Recalculate delta, targetDistance and step.
 					delta = psProj->dst - psProj->pos;
 					targetDistance = std::max(iHypot(delta), 1);
-					step = quantiseFraction(delta * psStats->flightSpeed, GAME_TICKS_PER_SEC * targetDistance, psProj->time, psProj->prevSpacetime.time);
+					step = quantiseFraction(delta * int32_t(psStats->flightSpeed), GAME_TICKS_PER_SEC * targetDistance, psProj->time, psProj->prevSpacetime.time);
 				}
 			}
 			psProj->pos += step;
-			psProj->rot.direction = iAtan2(removeZ(delta));
+			psProj->rot.direction = iAtan2(delta.xy);
 			psProj->rot.pitch = iAtan2(delta.z, targetDistance);
 			break;
 		}
@@ -910,7 +910,7 @@ static void proj_InFlightFunc(PROJECTILE *psProj)
 		for (effectTime = ((psProj->prevSpacetime.time + 31) & ~31); effectTime < psProj->time; effectTime += 32)
 		{
 			Spacetime st = interpolateObjectSpacetime(psProj, effectTime);
-			Vector3i posFlip = swapYZ(st.pos);
+			Vector3i posFlip = st.pos.xzy;
 			switch (psStats->weaponSubClass)
 			{
 			case WSC_FLAME:

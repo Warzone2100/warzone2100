@@ -62,7 +62,7 @@ static void calcTileIllum(UDWORD tileX, UDWORD tileY);
 
 void setTheSun(Vector3f newSun)
 {
-	theSun = normalise(newSun) * FP12_MULTIPLIER;
+	theSun = normalise(newSun) * float(FP12_MULTIPLIER);
 }
 
 Vector3f getTheSun(void)
@@ -217,7 +217,7 @@ static void calcTileIllum(UDWORD tileX, UDWORD tileY)
 		finalVector = finalVector + normals[i];
 	}
 
-	dotProduct = normalise(finalVector) * theSun;
+	dotProduct = glm::dot(normalise(finalVector), theSun);
 
 	val = abs(dotProduct) / 16;
 	if (val == 0)

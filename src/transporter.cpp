@@ -867,7 +867,7 @@ void transporterRemoveDroid(DROID *psTransport, DROID *psDroid, QUEUE_MODE mode)
 		if (bMultiPlayer)
 		{
 			//set the units next to the transporter's current location
-			droidPos = map_coord(psTransport->pos);
+			droidPos = map_coord(psTransport->pos.xy);
 		}
 		else
 		{

@@ -379,7 +379,7 @@ bool areaLabelCheck(DROID *psDroid)
 		labeltype &l = i.value();
 		if (l.triggered == 0 && (l.subscriber == ALL_PLAYERS || l.subscriber == psDroid->player)
 		    && ((l.type == SCRIPT_AREA && l.p1.x < x && l.p1.y < y && l.p2.x > x && l.p2.y > y)
-		        || (l.type == SCRIPT_RADIUS && iHypot(l.p1 - removeZ(psDroid->pos)) < l.p2.x)))
+		        || (l.type == SCRIPT_RADIUS && iHypot(l.p1 - psDroid->pos.xy) < l.p2.x)))
 		{
 			// We're inside an untriggered area
 			activated = true;

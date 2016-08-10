@@ -145,7 +145,7 @@ static void orderCheckGuardPosition(DROID *psDroid, SDWORD range)
 		}
 		else
 		{
-			psDroid->order.pos = removeZ(psDroid->order.psObj->pos);
+			psDroid->order.pos = psDroid->order.psObj->pos.xy;
 		}
 	}
 
@@ -651,11 +651,11 @@ void orderUpdateDroid(DROID *psDroid)
 				}
 			}
 
-			Vector2i edgeDiff = removeZ(psDroid->pos) - psDroid->actionPos;
+			Vector2i edgeDiff = psDroid->pos.xy - psDroid->actionPos;
 			if (psDroid->action != DACTION_MOVE || edgeDiff * edgeDiff <= TILE_UNITS * 4 * TILE_UNITS * 4)
 			{
 				//Watermelon:use orderX,orderY as local space origin and calculate droid direction in local space
-				Vector2i diff = removeZ(psDroid->pos) - psDroid->order.pos;
+				Vector2i diff = psDroid->pos.xy - psDroid->order.pos;
 				uint16_t angle = iAtan2(diff) - DEG(30);
 				do
 				{
@@ -1411,7 +1411,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		break;
 	case DORDER_PATROL:
 		psDroid->order = *psOrder;
-		psDroid->order.pos2 = removeZ(psDroid->pos);
+		psDroid->order.pos2 = psDroid->pos.xy;
 		actionDroid(psDroid, DACTION_MOVE, psOrder->pos.x, psOrder->pos.y);
 		break;
 	case DORDER_RECOVER:
@@ -1483,7 +1483,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		{
 			break;
 		}
-		psDroid->order = DroidOrder(DORDER_BUILD, getModuleStat((STRUCTURE *)psOrder->psObj), removeZ(psOrder->psObj->pos), 0);
+		psDroid->order = DroidOrder(DORDER_BUILD, getModuleStat((STRUCTURE *)psOrder->psObj), psOrder->psObj->pos.xy, 0);
 		ASSERT_OR_RETURN(, psDroid->order.psStats != NULL, "should have found a module stats");
 		ASSERT_OR_RETURN(, !psDroid->order.psStats || psDroid->order.psStats->type != REF_DEMOLISH, "Cannot build demolition");
 		actionDroid(psDroid, DACTION_BUILD, psOrder->psObj->pos.x, psOrder->psObj->pos.y);
@@ -1494,7 +1494,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		ASSERT_OR_RETURN(, isConstructionDroid(psDroid), "Not a constructor droid");
 		ASSERT_OR_RETURN(, psOrder->psObj != NULL, "Help to build a NULL pointer?");
 		psDroid->order = *psOrder;
-		psDroid->order.pos = removeZ(psOrder->psObj->pos);
+		psDroid->order.pos = psOrder->psObj->pos.xy;
 		psDroid->order.psStats = ((STRUCTURE *)psOrder->psObj)->pStructureType;
 		ASSERT_OR_RETURN(,!psDroid->order.psStats || psDroid->order.psStats->type != REF_DEMOLISH, "Cannot build demolition");
 		actionDroid(psDroid, DACTION_BUILD, psDroid->order.pos.x, psDroid->order.pos.y);
@@ -1506,7 +1506,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 			break;
 		}
 		psDroid->order = *psOrder;
-		psDroid->order.pos = removeZ(psOrder->psObj->pos);
+		psDroid->order.pos = psOrder->psObj->pos.xy;
 		actionDroid(psDroid, DACTION_DEMOLISH, psOrder->psObj);
 		break;
 	case DORDER_REPAIR:
@@ -1515,7 +1515,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 			break;
 		}
 		psDroid->order = *psOrder;
-		psDroid->order.pos = removeZ(psOrder->psObj->pos);
+		psDroid->order.pos = psOrder->psObj->pos.xy;
 		actionDroid(psDroid, DACTION_REPAIR, psOrder->psObj);
 		break;
 	case DORDER_DROIDREPAIR:
@@ -1603,7 +1603,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		{
 			if (psStruct->pStructureType->type == REF_HQ)
 			{
-				Vector2i pos = removeZ(psStruct->pos);
+				Vector2i pos = psStruct->pos.xy;
 
 				psDroid->order = *psOrder;
 				// Find a place to land for vtols. And Transporters in a multiPlay game.
@@ -1688,7 +1688,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		{
 			/* move to front of structure */
 			psDroid->order = DroidOrder(psOrder->type, psRepairFac);
-			psDroid->order.pos = removeZ(psRepairFac->pos);
+			psDroid->order.pos = psRepairFac->pos.xy;
 			/* If in multiPlayer, and the Transporter has been sent to be
 				* repaired, need to find a suitable location to drop down. */
 			if (game.type == SKIRMISH && isTransporter(psDroid))
@@ -1726,7 +1726,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 			}
 			// move the droid to the transporter location
 			psDroid->order = *psOrder;
-			psDroid->order.pos = removeZ(psOrder->psObj->pos);
+			psDroid->order.pos = psOrder->psObj->pos.xy;
 			actionDroid(psDroid, DACTION_MOVE, psOrder->psObj->pos.x, psOrder->psObj->pos.y);
 			break;
 		}
@@ -1774,7 +1774,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		{
 			/* move to front of structure */
 			psDroid->order = DroidOrder(psOrder->type, psFactory);
-			psDroid->order.pos = removeZ(psFactory->pos);
+			psDroid->order.pos = psFactory->pos.xy;
 			setDroidTarget(psDroid,  psFactory);
 			actionDroid(psDroid, DACTION_MOVE, psFactory, psDroid->order.pos.x, psDroid->order.pos.y);
 		}
@@ -1783,7 +1783,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		psDroid->order = *psOrder;
 		if (psOrder->psObj != NULL)
 		{
-			psDroid->order.pos = removeZ(psOrder->psObj->pos);
+			psDroid->order.pos = psOrder->psObj->pos.xy;
 		}
 		actionDroid(psDroid, DACTION_NONE);
 		break;
@@ -1798,7 +1798,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 			break;
 		}
 		psDroid->order = *psOrder;
-		psDroid->order.pos = removeZ(psOrder->psObj->pos);
+		psDroid->order.pos = psOrder->psObj->pos.xy;
 		actionDroid(psDroid, DACTION_RESTORE, psOrder->psObj);
 		break;
 	case DORDER_REARM:
@@ -2188,7 +2188,7 @@ void orderDroidAddPending(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		}
 		else
 		{
-			position = swapYZ(psOrder->psObj->pos);
+			position = psOrder->psObj->pos.xzy;
 		}
 		position.y = map_Height(position.x, position.z) + 32;
 		if (psOrder->psObj != NULL && psOrder->psObj->sDisplay.imd != NULL)
@@ -2895,7 +2895,7 @@ DROID *FindATransporter(DROID const *embarkee)
 	{
 		if ((isCyborg && psDroid->droidType == DROID_TRANSPORTER) || psDroid->droidType == DROID_SUPERTRANSPORTER)
 		{
-			unsigned dist = iHypot(removeZ(psDroid->pos - embarkee->pos));
+			unsigned dist = iHypot((psDroid->pos - embarkee->pos).xy);
 			if (!checkTransporterSpace(psDroid, embarkee, false))
 			{
 				dist += 0x8000000;  // Should prefer transports that aren't full.

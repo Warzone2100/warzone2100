@@ -601,7 +601,7 @@ in the case of location and degrees of arc in the case of rotation.
 
 static void updateCameraAcceleration(UBYTE update)
 {
-	Vector3i concern = swapYZ(trackingCamera.target->pos);
+	Vector3i concern = trackingCamera.target->pos.xzy;
 	Vector2i behind(0, 0); /* Irrelevant for normal radar tracking */
 	bool bFlying = false;
 
@@ -647,7 +647,7 @@ static void updateCameraAcceleration(UBYTE update)
 	}
 
 	Vector3i realPos = concern - Vector3i(-behind.x, 0, -behind.y);
-	Vector3f separation = realPos - trackingCamera.position;
+	Vector3f separation = Vector3f(realPos) - trackingCamera.position;
 	Vector3f acceleration;
 	if (!bFlying)
 	{
@@ -973,8 +973,8 @@ static bool camTrackCamera()
 		/*	This will ensure we come to a rest and terminate the tracking
 			routine once we're close enough
 		*/
-		if (trackingCamera.velocity * trackingCamera.velocity + trackingCamera.acceleration * trackingCamera.acceleration < 1.f &&
-		    trackingCamera.rotVel * trackingCamera.rotVel     + trackingCamera.rotAccel * trackingCamera.rotAccel         < 1.f)
+		if (glm::dot(trackingCamera.velocity, trackingCamera.velocity) + glm::dot(trackingCamera.acceleration, trackingCamera.acceleration) < 1.f &&
+		    glm::dot(trackingCamera.rotVel, trackingCamera.rotVel)     + glm::dot(trackingCamera.rotAccel, trackingCamera.rotAccel)         < 1.f)
 		{
 			setWarCamActive(false);
 		}

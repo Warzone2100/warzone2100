@@ -4549,7 +4549,7 @@ static bool writeDroid(WzConfig &ini, DROID *psCurr, bool onMission, int &counte
 	setPlayer(ini, psCurr->player);
 	ini.setValue("name", psCurr->aName);
 	ini.setVector3i("position", psCurr->pos);
-	ini.setVector3i("rotation", psCurr->rot);
+	ini.setVector3i("rotation", toVector(psCurr->rot));
 	ini.setValue("health", psCurr->body);
 	for (int i = 0; i < psCurr->numWeaps; i++)
 	{
@@ -4558,7 +4558,7 @@ static bool writeDroid(WzConfig &ini, DROID *psCurr, bool onMission, int &counte
 			ini.setValue("ammo/" + QString::number(i), psCurr->asWeaps[i].ammo);
 			ini.setValue("lastFired/" + QString::number(i), psCurr->asWeaps[i].lastFired);
 			ini.setValue("shotsFired/" + QString::number(i), psCurr->asWeaps[i].shotsFired);
-			ini.setVector3i("rotation/" + QString::number(i), psCurr->asWeaps[i].rot);
+			ini.setVector3i("rotation/" + QString::number(i), toVector(psCurr->asWeaps[i].rot));
 		}
 	}
 	for (int i = 0; i < DROID_MAXWEAPS; i++)
@@ -5203,7 +5203,7 @@ bool writeStructFile(const char *pFileName)
 			setPlayer(ini, psCurr->player);
 			ini.setValue("name", psCurr->pStructureType->id);
 			ini.setVector3i("position", psCurr->pos);
-			ini.setVector3i("rotation", psCurr->rot);
+			ini.setVector3i("rotation", toVector(psCurr->rot));
 			ini.setValue("health", psCurr->body);
 			ini.setValue("born", psCurr->born);
 			if (psCurr->timeLastHit != UDWORD_MAX)
@@ -5250,7 +5250,7 @@ bool writeStructFile(const char *pFileName)
 					ini.setValue("ammo/" + QString::number(j), psCurr->asWeaps[j].ammo);
 					ini.setValue("lastFired/" + QString::number(j), psCurr->asWeaps[j].lastFired);
 					ini.setValue("shotsFired/" + QString::number(j), psCurr->asWeaps[j].shotsFired);
-					ini.setVector3i("rotation/" + QString::number(j), psCurr->asWeaps[j].rot);
+					ini.setVector3i("rotation/" + QString::number(j), toVector(psCurr->asWeaps[j].rot));
 				}
 			}
 			for (int i = 0; i < psCurr->numWeaps; i++)
@@ -5652,7 +5652,7 @@ bool writeFeatureFile(const char *pFileName)
 		ini.setValue("id", psCurr->id);
 		ini.setValue("name", psCurr->psStats->id);
 		ini.setVector3i("position", psCurr->pos);
-		ini.setVector3i("rotation", psCurr->rot);
+		ini.setVector3i("rotation", toVector(psCurr->rot));
 		ini.setValue("periodicalDamage", psCurr->periodicalDamage);
 		ini.setValue("periodicalDamageStart", psCurr->periodicalDamageStart);
 		ini.setValue("health", psCurr->body);

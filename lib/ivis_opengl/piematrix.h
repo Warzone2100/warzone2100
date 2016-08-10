@@ -42,7 +42,7 @@
 static inline WZ_DECL_CONST
 Vector3f pie_SurfaceNormal3fv(const Vector3f p1, const Vector3f p2, const Vector3f p3)
 {
-	return normalise(crossProduct(p3 - p1, p2 - p1));
+	return normalise(glm::cross(p3 - p1, p2 - p1));
 }
 
 //*************************************************************************

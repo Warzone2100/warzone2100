@@ -412,7 +412,7 @@ void kf_CloneSelected(int limit)
 			// create a new droid army
 			for (int i = 0; i < limit; i++)
 			{
-				Vector2i pos = removeZ(psDroid->pos) + iSinCosR(40503 * i, iSqrt(50 * 50 * i));  // 40503 = 65536/φ
+				Vector2i pos = psDroid->pos.xy + iSinCosR(40503 * i, iSqrt(50 * 50 * i));  // 40503 = 65536/φ
 				DROID *psNewDroid = buildDroid(sTemplate, pos.x, pos.y, psDroid->player, false, nullptr);
 				if (psNewDroid)
 				{

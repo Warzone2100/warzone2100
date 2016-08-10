@@ -561,7 +561,7 @@ void driveUpdate(void)
 	{
 		if (bMultiMessages && (driveBumpTime < gameTime))	// send latest info about driven droid.
 		{
-			sendDroidInfo(psDrivenDroid, DroidOrder(DORDER_MOVE, removeZ(psDrivenDroid->pos)), false);
+			sendDroidInfo(psDrivenDroid, DroidOrder(DORDER_MOVE, psDrivenDroid->pos.xy), false);
 		}
 
 		// Check the driven droid is still selected

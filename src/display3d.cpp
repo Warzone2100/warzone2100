@@ -1570,7 +1570,7 @@ static void renderBuildOrder(DroidOrder const &order, STRUCT_STATES state)
 			return;
 		}
 		stats = getModuleStat(structure);
-		pos = removeZ(structure->pos);
+		pos = structure->pos.xy;
 	}
 	else
 	{
@@ -1872,7 +1872,7 @@ void setViewPos(UDWORD x, UDWORD y, WZ_DECL_UNUSED bool Pan)
 /// Get the player position
 Vector2i getPlayerPos()
 {
-	return removeZ(swapYZ(player.p));
+	return player.p.xz;
 }
 
 /// Set the player position
@@ -1914,7 +1914,7 @@ void	renderFeature(FEATURE *psFeature)
 	psFeature->sDisplay.frameNumber = currentGameFrame;
 
 	/* Daft hack to get around the oil derrick issue */
-	if (!TileHasFeature(mapTile(map_coord(removeZ(psFeature->pos)))))
+	if (!TileHasFeature(mapTile(map_coord(psFeature->pos.xy))))
 	{
 		return;
 	}

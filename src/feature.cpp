@@ -545,7 +545,7 @@ Vector2i getFeatureStatsSize(FEATURE_STATS const *pFeatureType)
 StructureBounds getStructureBounds(FEATURE const *object)
 {
 	Vector2i size = getFeatureStatsSize(object->psStats);
-	Vector2i map = map_coord(removeZ(object->pos)) - size / 2;
+	Vector2i map = map_coord(object->pos.xy) - size / 2;
 
 	return StructureBounds(map, size);
 }
