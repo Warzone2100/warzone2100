@@ -2509,7 +2509,14 @@ static QScriptValue js_orderDroid(QScriptContext *context, QScriptEngine *)
 	              "Invalid order: %s", getDroidOrderName(order));
 	if (order == DORDER_REARM)
 	{
-		moveToRearm(psDroid);
+		if (STRUCTURE *psStruct = findNearestReArmPad(psDroid, psDroid->psBaseStruct, false))
+		{
+			orderDroidObj(psDroid, order, psStruct, ModeQueue);
+		}
+		else
+		{
+			orderDroid(psDroid, DORDER_RTB, ModeQueue);
+		}
 	}
 	else
 	{
