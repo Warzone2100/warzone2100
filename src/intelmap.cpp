@@ -763,7 +763,7 @@ void intIntelButtonPressed(bool proxMsg, UDWORD id)
 				if (psResearch != NULL)
 				{
 					static const float maxVolume = 1.f;
-					static AUDIO_STREAM *playing = NULL;
+					static AUDIO_STREAM *playing = nullptr;
 
 					// only play the sample once, otherwise, they tend to overlap each other
 					if (sound_isStreamPlaying(playing))
@@ -771,32 +771,34 @@ void intIntelButtonPressed(bool proxMsg, UDWORD id)
 						sound_StopStream(playing);
 					}
 
+					char const *audio = nullptr;
 					switch (psResearch->iconID)
 					{
 					case IMAGE_RES_DROIDTECH:
-						playing = audio_PlayStream("sequenceaudio/res_droid.ogg", maxVolume, NULL, NULL);
+					case IMAGE_RES_CYBORGTECH:
+						audio = "sequenceaudio/res_droid.ogg";
 						break;
 					case IMAGE_RES_WEAPONTECH:
-						playing = audio_PlayStream("sequenceaudio/res_weapons.ogg", maxVolume, NULL, NULL);
+						audio = "sequenceaudio/res_weapons.ogg";
 						break;
 					case IMAGE_RES_COMPUTERTECH:
-						playing = audio_PlayStream("sequenceaudio/res_com.ogg", maxVolume, NULL, NULL);
+						audio = "sequenceaudio/res_com.ogg";
 						break;
 					case IMAGE_RES_POWERTECH:
-						playing = audio_PlayStream("sequenceaudio/res_pow.ogg", maxVolume, NULL, NULL);
+						audio = "sequenceaudio/res_pow.ogg";
 						break;
 					case IMAGE_RES_SYSTEMTECH:
-						playing = audio_PlayStream("sequenceaudio/res_systech.ogg", maxVolume, NULL, NULL);
+						audio = "sequenceaudio/res_systech.ogg";
 						break;
 					case IMAGE_RES_STRUCTURETECH:
-						playing = audio_PlayStream("sequenceaudio/res_strutech.ogg", maxVolume, NULL, NULL);
-						break;
-					case IMAGE_RES_CYBORGTECH:
-						playing = audio_PlayStream("sequenceaudio/res_droid.ogg", maxVolume, NULL, NULL);
-						break;
 					case IMAGE_RES_DEFENCE:
-						playing = audio_PlayStream("sequenceaudio/res_strutech.ogg", maxVolume, NULL, NULL);
+						audio = "sequenceaudio/res_strutech.ogg";
 						break;
+					}
+
+					if (audio != nullptr)
+					{
+						playing = audio_PlayStream(audio, maxVolume, [](void *) { playing = nullptr; }, nullptr);
 					}
 				}
 
