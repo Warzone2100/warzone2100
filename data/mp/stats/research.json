@@ -284,6 +284,7 @@
         "msgName": "RES_CYW_H_MC",
         "name": "Super Heavy-Gunner",
         "requiredResearch": [
+            "R-Cyborg-Metals04",
             "R-Wpn-Cannon2Mk1"
         ],
         "researchPoints": 4000,
