@@ -24,6 +24,9 @@
  *
  */
 
+#include <future>
+#include <unordered_map>
+
 #include "lib/framework/frame.h"
 #include "lib/framework/crc.h"
 #include "lib/netplay/netplay.h"
@@ -61,14 +64,15 @@ struct PATHRESULT
 static WZ_THREAD        *fpathThread = NULL;
 static WZ_MUTEX         *fpathMutex = NULL;
 static WZ_SEMAPHORE     *fpathSemaphore = NULL;
-static std::list<PATHJOB>    pathJobs;
-static std::list<PATHRESULT> pathResults;
+using packagedPathJob = std::packaged_task<PATHRESULT()>;
+static std::list<packagedPathJob>    pathJobs;
+static std::unordered_map<uint32_t, std::future<PATHRESULT>> pathResults;
 
 static bool             waitingForResult = false;
 static uint32_t         waitingForResultId;
 static WZ_SEMAPHORE     *waitingForResultSemaphore = NULL;
 
-static void fpathExecute(PATHJOB *psJob, PATHRESULT *psResult);
+static PATHRESULT fpathExecute(PATHJOB psJob);
 
 
 /** This runs in a separate thread */
@@ -87,36 +91,18 @@ static int fpathThreadFunc(void *)
 			continue;
 		}
 
-		// Copy the first job from the queue. Don't pop yet, since the main thread may want to set .deleted = true.
-		PATHJOB job = pathJobs.front();
-
+		// Copy the first job from the queue.
+		packagedPathJob job = std::move(pathJobs.front());
+		pathJobs.pop_front();
 		wzMutexUnlock(fpathMutex);
 
-		// Execute path-finding for this job using our local temporaries
-		PATHRESULT result;
-		result.droidID = job.droidID;
-		memset(&result.sMove, 0, sizeof(result.sMove));
-		result.retval = FPR_FAILED;
-		result.originalDest = Vector2i(job.destX, job.destY);
-
 		// we need to lock BEFORE we fiddle with the data, or we get ugly data race conditions.
+		job();
 		wzMutexLock(fpathMutex);
-		fpathExecute(&job, &result);
 
-		ASSERT(pathJobs.front().droidID == job.droidID, "Bug");  // The front of pathJobs may have .deleted set to true, but should not otherwise have been modified or deleted.
-		if (!pathJobs.front().deleted)
-		{
-			pathResults.push_back(result);
-		}
-		pathJobs.pop_front();
-
-		// Unblock the main thread, if it was waiting for this particular result.
-		if (waitingForResult && waitingForResultId == job.droidID)
-		{
-			waitingForResult = false;
-			objTrace(waitingForResultId, "These are the droids you are looking for.");
-			wzSemaphorePost(waitingForResultSemaphore);
-		}
+		waitingForResult = false;
+		objTrace(waitingForResultId, "These are the droids you are looking for.");
+		wzSemaphorePost(waitingForResultSemaphore);
 	}
 	wzMutexUnlock(fpathMutex);
 	return 0;
@@ -329,28 +315,7 @@ void fpathSetDirectRoute(DROID *psDroid, SDWORD targetX, SDWORD targetY)
 
 void fpathRemoveDroidData(int id)
 {
-	wzMutexLock(fpathMutex);
-
-	for (std::list<PATHJOB>::iterator psJob = pathJobs.begin(); psJob != pathJobs.end(); ++psJob)
-	{
-		if (psJob->droidID == id)
-		{
-			psJob->deleted = true;  // Don't delete the job, since job execution order matters, so tell it to throw away the result after executing, instead.
-		}
-	}
-	for (std::list<PATHRESULT>::iterator psResult = pathResults.begin(); psResult != pathResults.end();)
-	{
-		if (psResult->droidID == id)
-		{
-			psResult = pathResults.erase(psResult);
-		}
-		else
-		{
-			++psResult;
-		}
-	}
-
-	wzMutexUnlock(fpathMutex);
+	pathResults.erase(id);
 }
 
 static FPATH_RETVAL fpathRoute(MOVE_CONTROL *psMove, int id, int startX, int startY, int tX, int tY, PROPULSION_TYPE propulsionType,
@@ -379,50 +344,45 @@ static FPATH_RETVAL fpathRoute(MOVE_CONTROL *psMove, int id, int startX, int sta
 	while (psMove->Status == MOVEWAITROUTE)
 	{
 		objTrace(id, "Checking if we have a path yet");
-		wzMutexLock(fpathMutex);
 
-		for (std::list<PATHRESULT>::iterator psResult = pathResults.begin(); psResult != pathResults.end(); ++psResult)
+		auto const &I = pathResults.find(id);
+		assert(I != pathResults.end());
+		bool isReady = I->second.wait_for(std::chrono::seconds(0)) == std::future_status::ready;
+		if (!isReady)
 		{
-			if (psResult->droidID != id)
-			{
-				continue;  // Wrong result, try next one.
-			}
+			objTrace(id, "No path yet. Waiting.");
+			waitingForResult = true;
+			waitingForResultId = id;
+			wzSemaphoreWait(waitingForResultSemaphore);  // keep waiting
+			continue;
+		}
+		PATHRESULT result = I->second.get();
+		ASSERT(result.retval != FPR_OK || result.sMove.asPath, "Ok result but no path in list");
 
-			ASSERT(psResult->retval != FPR_OK || psResult->sMove.asPath, "Ok result but no path in list");
+		// Copy over select fields - preserve others
+		psMove->destination = result.sMove.destination;
+		psMove->numPoints = result.sMove.numPoints;
+		bool correctDestination = tX == result.originalDest.x && tY == result.originalDest.y;
+		psMove->pathIndex = 0;
+		psMove->Status = MOVENAVIGATE;
+		free(psMove->asPath);
+		psMove->asPath = result.sMove.asPath;
+		FPATH_RETVAL retval = result.retval;
+		ASSERT(retval != FPR_OK || psMove->asPath, "Ok result but no path after copy");
+		ASSERT(retval != FPR_OK || psMove->numPoints > 0, "Ok result but path empty after copy");
 
-			// Copy over select fields - preserve others
-			psMove->destination = psResult->sMove.destination;
-			psMove->numPoints = psResult->sMove.numPoints;
-			bool correctDestination = tX == psResult->originalDest.x && tY == psResult->originalDest.y;
-			psMove->pathIndex = 0;
-			psMove->Status = MOVENAVIGATE;
-			free(psMove->asPath);
-			psMove->asPath = psResult->sMove.asPath;
-			FPATH_RETVAL retval = psResult->retval;
-			ASSERT(retval != FPR_OK || psMove->asPath, "Ok result but no path after copy");
-			ASSERT(retval != FPR_OK || psMove->numPoints > 0, "Ok result but path empty after copy");
+		// Remove it from the result list
+		pathResults.erase(id);
 
-			// Remove it from the result list
-			psResult = pathResults.erase(psResult);
+		objTrace(id, "Got a path to (%d, %d)! Length=%d Retval=%d", psMove->destination.x, psMove->destination.y, psMove->numPoints, (int)retval);
+		syncDebug("fpathRoute(..., %d, %d, %d, %d, %d, %d, %d, %d, %d) = %d, path[%d] = %08X->(%d, %d)", id, startX, startY, tX, tY, propulsionType, droidType, moveType, owner, retval, psMove->numPoints, ~crcSumVector2i(0, psMove->asPath, psMove->numPoints), psMove->destination.x, psMove->destination.y);
 
-			wzMutexUnlock(fpathMutex);
-
-			objTrace(id, "Got a path to (%d, %d)! Length=%d Retval=%d", psMove->destination.x, psMove->destination.y, psMove->numPoints, (int)retval);
-			syncDebug("fpathRoute(..., %d, %d, %d, %d, %d, %d, %d, %d, %d) = %d, path[%d] = %08X->(%d, %d)", id, startX, startY, tX, tY, propulsionType, droidType, moveType, owner, retval, psMove->numPoints, ~crcSumVector2i(0, psMove->asPath, psMove->numPoints), psMove->destination.x, psMove->destination.y);
-
-			if (!correctDestination)
-			{
-				goto queuePathfinding;  // Seems we got the result of an old pathfinding job for this droid, so need to pathfind again.
-			}
-
-			return retval;
+		if (!correctDestination)
+		{
+			goto queuePathfinding;  // Seems we got the result of an old pathfinding job for this droid, so need to pathfind again.
 		}
 
-		objTrace(id, "No path yet. Waiting.");
-		waitingForResult = true;
-		waitingForResultId = id;
-		wzMutexUnlock(fpathMutex);
-		wzSemaphoreWait(waitingForResultSemaphore);  // keep waiting
+		return retval;
 	}
 queuePathfinding:
 
@@ -447,17 +407,19 @@ queuePathfinding:
 	// job or result for each droid in the system at any time.
 	fpathRemoveDroidData(id);
 
-	wzMutexLock(fpathMutex);
+	packagedPathJob task([job]() { return fpathExecute(job); });
+	pathResults[id] = std::move(task.get_future());
 
 	// Add to end of list
+	wzMutexLock(fpathMutex);
 	bool isFirstJob = pathJobs.empty();
-	pathJobs.push_back(job);
+	pathJobs.push_back(std::move(task));
+	wzMutexUnlock(fpathMutex);
+
 	if (isFirstJob)
 	{
 		wzSemaphorePost(fpathSemaphore);  // Wake up processing thread.
 	}
-
-	wzMutexUnlock(fpathMutex);
 
 	objTrace(id, "Queued up a path-finding request to (%d, %d), at least %d items earlier in queue", tX, tY, isFirstJob);
 	syncDebug("fpathRoute(..., %d, %d, %d, %d, %d, %d, %d, %d, %d) = FPR_WAIT", id, startX, startY, tX, tY, propulsionType, droidType, moveType, owner);
@@ -510,45 +472,52 @@ FPATH_RETVAL fpathDroidRoute(DROID *psDroid, SDWORD tX, SDWORD tY, FPATH_MOVETYP
 }
 
 // Run only from path thread
-static void fpathExecute(PATHJOB *psJob, PATHRESULT *psResult)
+PATHRESULT fpathExecute(PATHJOB job)
 {
-	ASR_RETVAL retval = fpathAStarRoute(&psResult->sMove, psJob);
+	PATHRESULT result;
+	result.droidID = job.droidID;
+	memset(&result.sMove, 0, sizeof(result.sMove));
+	result.retval = FPR_FAILED;
+	result.originalDest = Vector2i(job.destX, job.destY);
 
-	ASSERT(retval != ASR_OK || psResult->sMove.asPath, "Ok result but no path in result");
-	ASSERT(retval == ASR_FAILED || psResult->sMove.numPoints > 0, "Ok result but no length of path in result");
+	ASR_RETVAL retval = fpathAStarRoute(&result.sMove, &job);
+
+	ASSERT(retval != ASR_OK || result.sMove.asPath, "Ok result but no path in result");
+	ASSERT(retval == ASR_FAILED || result.sMove.numPoints > 0, "Ok result but no length of path in result");
 	switch (retval)
 	{
 	case ASR_NEAREST:
-		if (psJob->acceptNearest)
+		if (job.acceptNearest)
 		{
-			objTrace(psJob->droidID, "** Nearest route -- accepted **");
-			psResult->retval = FPR_OK;
+			objTrace(job.droidID, "** Nearest route -- accepted **");
+			result.retval = FPR_OK;
 		}
 		else
 		{
-			objTrace(psJob->droidID, "** Nearest route -- rejected **");
-			psResult->retval = FPR_FAILED;
+			objTrace(job.droidID, "** Nearest route -- rejected **");
+			result.retval = FPR_FAILED;
 		}
 		break;
 	case ASR_FAILED:
-		objTrace(psJob->droidID, "** Failed route **");
+		objTrace(job.droidID, "** Failed route **");
 		// Is this really a good idea? Was in original code.
-		if (psJob->propulsion == PROPULSION_TYPE_LIFT && (psJob->droidType != DROID_TRANSPORTER && psJob->droidType != DROID_SUPERTRANSPORTER))
+		if (job.propulsion == PROPULSION_TYPE_LIFT && (job.droidType != DROID_TRANSPORTER && job.droidType != DROID_SUPERTRANSPORTER))
 		{
-			objTrace(psJob->droidID, "Doing fallback for non-transport VTOL");
-			fpathSetMove(&psResult->sMove, psJob->destX, psJob->destY);
-			psResult->retval = FPR_OK;
+			objTrace(job.droidID, "Doing fallback for non-transport VTOL");
+			fpathSetMove(&result.sMove, job.destX, job.destY);
+			result.retval = FPR_OK;
 		}
 		else
 		{
-			psResult->retval = FPR_FAILED;
+			result.retval = FPR_FAILED;
 		}
 		break;
 	case ASR_OK:
-		objTrace(psJob->droidID, "Got route of length %d", psResult->sMove.numPoints);
-		psResult->retval = FPR_OK;
+		objTrace(job.droidID, "Got route of length %d", result.sMove.numPoints);
+		result.retval = FPR_OK;
 		break;
 	}
+	return result;
 }
 
 /** Find the length of the job queue. Function is thread-safe. */
