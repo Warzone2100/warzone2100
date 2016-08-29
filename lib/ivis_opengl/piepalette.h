@@ -168,12 +168,14 @@ WZ_DECL_CONST static inline PIELIGHT pal_RGBA(UBYTE r, UBYTE g, UBYTE b, UBYTE a
 	return c;
 }
 
-static inline void pal_PIELIGHTtoRGBA4f(float *rgba4f, PIELIGHT rgba)
+static inline glm::vec4 pal_PIELIGHTtoVec4(PIELIGHT rgba)
 {
-	rgba4f[0] = rgba.byte.r / 255.0;
-	rgba4f[1] = rgba.byte.g / 255.0;
-	rgba4f[2] = rgba.byte.b / 255.0;
-	rgba4f[3] = rgba.byte.a / 255.0;
+	return (1 / 255.0f) * glm::vec4{
+		rgba.byte.r,
+		rgba.byte.g,
+		rgba.byte.b,
+		rgba.byte.a
+	};
 }
 
 #endif

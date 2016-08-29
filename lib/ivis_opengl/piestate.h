@@ -40,7 +40,26 @@
  */
 /***************************************************************************/
 
-struct SHADER_PROGRAM;
+struct SHADER_PROGRAM
+{
+	GLuint program;
+
+	// Uniforms
+	GLint locColour;
+	GLint locTeam;
+	GLint locStretch;
+	GLint locTCMask;
+	GLint locFog;
+	GLint locNormalMap;
+	GLint locSpecularMap;
+	GLint locEcm;
+	GLint locTime;
+
+	// Attributes
+	GLint locVertex;
+	GLint locNormal;
+	GLint locTexCoord;
+};
 
 struct RENDER_STATE
 {
@@ -84,10 +103,10 @@ extern void pie_SetRendMode(REND_MODE rendMode);
 
 bool pie_LoadShaders();
 void pie_FreeShaders();
-GLuint pie_LoadShader(const char *programName, const char *vertexPath, const char *fragmentPath);
+SHADER_MODE pie_LoadShader(const char *programName, const char *vertexPath, const char *fragmentPath);
 
 // Actual shaders (we do not want to export these calls)
-void pie_ActivateShader(int shaderMode, const iIMDShape *shape, PIELIGHT teamcolour, PIELIGHT colour);
+SHADER_PROGRAM &pie_ActivateShader(SHADER_MODE shaderMode, const iIMDShape *shape, PIELIGHT teamcolour, PIELIGHT colour);
 void pie_DeactivateShader();
 void pie_SetShaderStretchDepth(float stretch);
 float pie_GetShaderStretchDepth();

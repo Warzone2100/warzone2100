@@ -378,8 +378,6 @@ void iV_DrawImageTc(Image image, Image imageTc, int x, int y, PIELIGHT colour)
 // Repeat a texture
 void iV_DrawImageRepeatX(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Width)
 {
-	int hRep, hRemainder;
-
 	assertValidImage(ImageFile, ID);
 	const ImageDef *Image = &ImageFile->imageDefs[ID];
 
@@ -388,9 +386,9 @@ void iV_DrawImageRepeatX(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Width
 	PIERECT dest;
 	Vector2i pieImage = makePieImage(ImageFile, ID, &dest, x, y);
 
-	hRemainder = Width % Image->Width;
+	unsigned hRemainder = Width % Image->Width;
 
-	for (hRep = 0; hRep < Width / Image->Width; hRep++)
+	for (unsigned hRep = 0; hRep < Width / Image->Width; hRep++)
 	{
 		pie_DrawImage(ImageFile, ID, pieImage, &dest);
 		dest.x += Image->Width;
@@ -407,8 +405,6 @@ void iV_DrawImageRepeatX(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Width
 
 void iV_DrawImageRepeatY(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Height)
 {
-	int vRep, vRemainder;
-
 	assertValidImage(ImageFile, ID);
 	const ImageDef *Image = &ImageFile->imageDefs[ID];
 
@@ -417,9 +413,9 @@ void iV_DrawImageRepeatY(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Heigh
 	PIERECT dest;
 	Vector2i pieImage = makePieImage(ImageFile, ID, &dest, x, y);
 
-	vRemainder = Height % Image->Height;
+	unsigned vRemainder = Height % Image->Height;
 
-	for (vRep = 0; vRep < Height / Image->Height; vRep++)
+	for (unsigned vRep = 0; vRep < Height / Image->Height; vRep++)
 	{
 		pie_DrawImage(ImageFile, ID, pieImage, &dest);
 		dest.y += Image->Height;

@@ -3,29 +3,33 @@
 
 uniform float stretch;
 
+attribute vec4 vertex;
+attribute vec3 vertexNormal;
+attribute vec4 vertexTexCoord;
+
 varying float vertexDistance;
 varying vec3 normal, lightDir, eyeVec;
+varying vec2 texCoord;
 
-void main(void)
+void main()
 {
-	vec3 vVertex = vec3(gl_ModelViewMatrix * gl_Vertex);
-	vec4 position = gl_Vertex;
+	vec3 vVertex = (gl_ModelViewMatrix * vertex).xyz;
+	vec4 position = vertex;
 
 	// Pass texture coordinates to fragment shader
-	gl_TexCoord[0] = gl_TextureMatrix[0] * gl_MultiTexCoord0;
+	texCoord = (gl_TextureMatrix[0] * vertexTexCoord).xy;
 
 	// Lighting -- we pass these to the fragment shader
-	normal = gl_NormalMatrix * gl_Normal;
-	lightDir = vec3(gl_LightSource[0].position.xyz - vVertex);
+	normal = gl_NormalMatrix * vertexNormal;
+	lightDir = gl_LightSource[0].position.xyz - vVertex;
 	eyeVec = -vVertex;
-	gl_FrontColor = gl_Color;
 
 	// Implement building stretching to accomodate terrain
-	if (gl_Vertex.y <= 0.0) // use gl_Vertex here directly to help shader compiler optimization
+	if (vertex.y <= 0.0) // use vertex here directly to help shader compiler optimization
 	{
 		position.y -= stretch;
 	}
-	
+
 	// Translate every vertex according to the Model View and Projection Matrix
 	gl_Position = gl_ModelViewProjectionMatrix * position;
 

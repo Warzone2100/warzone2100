@@ -38,7 +38,6 @@
 #include "lib/ivis_opengl/piefunc.h"
 #include "lib/ivis_opengl/tex.h"
 #include "lib/ivis_opengl/piedef.h"
-#include "lib/ivis_opengl/piestate.h"
 #include "lib/ivis_opengl/pieclip.h"
 #include "lib/ivis_opengl/piestate.h"
 #include "lib/ivis_opengl/screen.h"

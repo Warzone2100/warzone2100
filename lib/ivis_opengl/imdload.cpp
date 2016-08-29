@@ -62,7 +62,7 @@ iIMDShape::iIMDShape()
 	normalpage = iV_TEX_INVALID;
 	specularpage = iV_TEX_INVALID;
 	numFrames = 0;
-	shaderProgram = 0;
+	shaderProgram = SHADER_NONE;
 }
 
 static void iV_IMDRelease(iIMDShape *s)
@@ -760,7 +760,7 @@ static iIMDShape *_imd_load_level(const char **ppFileData, const char *FileDataE
 	for (int k = 0; k < MAX(1, s->numFrames); k++)
 	{
 		// Go through all polygons for each frame
-		for (int i = 0; i < s->npolys; i++)
+		for (unsigned i = 0; i < s->npolys; i++)
 		{
 			const iIMDPoly *pPolys = &s->polys[i];
 
@@ -808,7 +808,7 @@ static iIMDShape *iV_ProcessIMD(const char **ppFileData, const char *FileDataEnd
 	int32_t imd_version;
 	uint32_t imd_flags;
 	bool bTextured = false;
-	GLuint shader = 0;
+	SHADER_MODE shader = SHADER_NONE;
 
 	memset(normalfile, 0, sizeof(normalfile));
 	memset(specfile, 0, sizeof(specfile));

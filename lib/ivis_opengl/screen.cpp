@@ -179,6 +179,11 @@ bool screenInitialise()
 	debug(LOG_3D, "%s", opengl.GLEWversion);
 
 	GLubyte const *extensionsBegin = glGetString(GL_EXTENSIONS);
+	if (extensionsBegin == nullptr)
+	{
+		static GLubyte const emptyString[] = "";
+		extensionsBegin = emptyString;
+	}
 	GLubyte const *extensionsEnd = extensionsBegin + strlen((char const *)extensionsBegin);
 	std::vector<std::string> glExtensions;
 	for (GLubyte const *i = extensionsBegin; i < extensionsEnd;)

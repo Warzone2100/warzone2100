@@ -165,14 +165,13 @@ void pie_MakeTexPageTCMaskName(char *filename)
  */
 int iV_GetTexture(const char *filename, bool compression)
 {
-	unsigned int i = 0;
 	iV_Image sSprite;
 	char path[PATH_MAX];
 
 	/* Have we already loaded this one then? */
 	sstrcpy(path, filename);
 	pie_MakeTexPageName(path);
-	for (i = 0; i < _TEX_PAGE.size(); i++)
+	for (int i = 0; i < _TEX_PAGE.size(); i++)
 	{
 		if (strncmp(path, _TEX_PAGE[i].name, iV_TEXNAME_MAX) == 0)
 		{
