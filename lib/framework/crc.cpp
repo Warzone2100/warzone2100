@@ -331,7 +331,7 @@ bool EcKey::verify(Sig const &sig, void const *data, size_t dataLen) const
 
 EcKey::Key EcKey::toBytes(Privacy privacy) const
 {
-	int (*toBytesFunc)(EC_KEY * key, unsigned char **out) = nullptr;
+	decltype(i2o_ECPublicKey) *toBytesFunc = nullptr;  // int (EC_KEY const *key, unsigned char **out), "const" only in OpenSSL 1.1.0+
 	switch (privacy)
 	{
 	case Private: toBytesFunc = i2d_ECPrivateKey; break;  // Note that the format for private keys is somewhat bloated, and even contains the public key which could be (efficiently) computed from the private key.
@@ -358,7 +358,7 @@ EcKey::Key EcKey::toBytes(Privacy privacy) const
 
 void EcKey::fromBytes(EcKey::Key const &key, EcKey::Privacy privacy)
 {
-	EC_KEY *(*fromBytesFunc)(EC_KEY **key, unsigned char const **in, long len) = nullptr;
+	decltype(o2i_ECPublicKey) *fromBytesFunc = nullptr;  // EC_KEY *(EC_KEY **key, unsigned char const **in, long len)
 	switch (privacy)
 	{
 	case Private: fromBytesFunc = d2i_ECPrivateKey; break;
