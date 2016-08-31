@@ -287,7 +287,7 @@ protected:
 };
 
 /*draws blips on radar to represent Proximity Display*/
-extern void drawRadarBlips(int radarX, int radarY, float pixSizeH, float pixSizeV);
+extern void drawRadarBlips(int radarX, int radarY, float pixSizeH, float pixSizeV, const glm::mat4 &modelViewProjection);
 
 /*Displays the proximity messages blips over the world*/
 void intDisplayProximityBlips(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);

@@ -78,11 +78,11 @@ void pie_SetViewingWindow(Vector3i *v, PIELIGHT colour)
 	radarViewGfx[1]->buffers(VW_VERTICES, vert, cols);
 }
 
-void pie_DrawViewingWindow()
+void pie_DrawViewingWindow(const glm::mat4 &modelViewProjectionMatrix)
 {
 	pie_SetRendMode(REND_ALPHA);
-	radarViewGfx[0]->draw();
-	radarViewGfx[1]->draw();
+	radarViewGfx[0]->draw(modelViewProjectionMatrix);
+	radarViewGfx[1]->draw(modelViewProjectionMatrix);
 }
 
 void pie_TransColouredTriangle(Vector3f *vrt, PIELIGHT c)
@@ -198,8 +198,10 @@ void pie_DrawSkybox(float scale)
 
 	// Apply scale matrix
 	glScalef(scale, scale / 2.0f, scale);
-
-	skyboxGfx->draw();
+	GLfloat p[16], vm[16];
+	glGetFloatv(GL_PROJECTION_MATRIX, p);
+	glGetFloatv(GL_MODELVIEW_MATRIX, vm);
+	skyboxGfx->draw(glm::make_mat4(p) * glm::make_mat4(vm));
 
 	glPopAttrib();
 }

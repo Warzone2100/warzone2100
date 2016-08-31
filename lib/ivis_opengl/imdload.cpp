@@ -1029,6 +1029,7 @@ static iIMDShape *iV_ProcessIMD(const QString &filename, const char **ppFileData
 			return NULL;
 		}
 		pFileData += cnt;
+
 		objanimpie[nlevels] = modelGet(animpie);
 
 		/* Try -yet again- to read in LEVELS directive */

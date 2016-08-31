@@ -385,6 +385,28 @@ bool pie_LoadShaders()
 		"fogEnabled", "fogEnd", "fogStart" });
 	ASSERT_OR_RETURN(false, result, "Failed to load water shader");
 
+	// Rectangular shader
+	debug(LOG_3D, "Loading shader: RECT");
+	result = pie_LoadShader("Rect program", "shaders/rect.vert", "shaders/rect.frag",
+		{ "transformationMatrix", "color" });
+	ASSERT_OR_RETURN(false, result, "Failed to load rect shader");
+
+	// Textured rectangular shader
+	debug(LOG_3D, "Loading shader: TEXRECT");
+	result = pie_LoadShader("Rect program", "shaders/rect.vert", "shaders/texturedrect.frag",
+		{ "transformationMatrix", "tuv_offset", "tuv_scale", "color", "texture" });
+	ASSERT_OR_RETURN(false, result, "Failed to load textured rect shader");
+
+	debug(LOG_3D, "Loading shader: GFX_COLOR");
+	result = pie_LoadShader("gfx_color program", "shaders/gfx.vert", "shaders/gfx.frag",
+		{ "posMatrix" });
+	ASSERT_OR_RETURN(false, result, "Failed to load textured gfx shader");
+
+	debug(LOG_3D, "Loading shader: GFX_TEXT");
+	result = pie_LoadShader("gfx_text program", "shaders/gfx.vert", "shaders/texturedrect.frag",
+		{ "posMatrix", "texture" });
+	ASSERT_OR_RETURN(false, result, "Failed to load textured gfx shader");
+
 	pie_internal::currentShaderMode = SHADER_NONE;
 	return true;
 }

@@ -51,6 +51,7 @@
 #include <string>
 #include <vector>
 #include <cstring>
+#include <glm/gtx/transform.hpp>
 
 //using namespace std;
 
@@ -483,8 +484,7 @@ void screen_Display()
 	pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_OFF);
 
 	// Draw backdrop
-	glColor3f(1, 1, 1);
-	backdropGfx->draw();
+	backdropGfx->draw(glm::ortho(0.f, (float)pie_GetVideoBufferWidth(), (float)pie_GetVideoBufferHeight(), 0.f));
 
 	if (mappreview)
 	{

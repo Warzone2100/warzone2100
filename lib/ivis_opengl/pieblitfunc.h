@@ -35,6 +35,8 @@
 #include "lib/framework/string_ext.h"
 #include "piedef.h"
 #include "piepalette.h"
+#include <glm/gtx/transform.hpp>
+#include "pieclip.h"
 
 /***************************************************************************/
 /*
@@ -85,7 +87,7 @@ public:
 	void buffers(int vertices, const GLvoid *vertBuf, const GLvoid *texBuf);
 
 	/// Draw everything
-	void draw();
+	void draw(const glm::mat4 &modelViewProjectionMatrix);
 
 private:
 	GFXTYPE mType;
@@ -104,6 +106,13 @@ private:
  *	Global ProtoTypes
  */
 /***************************************************************************/
+static inline glm::mat4 defaultProjectionMatrix()
+{
+	float w = pie_GetVideoBufferWidth();
+	float h = pie_GetVideoBufferHeight();
+
+	return glm::ortho(0.f, static_cast<float>(w), static_cast<float>(h), 0.f);
+}
 void iV_ShadowBox(int x0, int y0, int x1, int y1, int pad, PIELIGHT first, PIELIGHT second, PIELIGHT fill);
 extern void iV_Line(int x0, int y0, int x1, int y1, PIELIGHT colour);
 extern void iV_Box2(int x0, int y0, int x1, int y1, PIELIGHT first, PIELIGHT second);
@@ -112,12 +121,12 @@ static inline void iV_Box(int x0, int y0, int x1, int y1, PIELIGHT first)
 	iV_Box2(x0, y0, x1, y1, first, first);
 }
 extern void pie_BoxFill(int x0, int y0, int x1, int y1, PIELIGHT colour, REND_MODE rendermode = REND_OPAQUE);
-extern void iV_DrawImage(GLuint TextureID, Vector2i position, Vector2i size, REND_MODE mode, PIELIGHT colour);
-extern void iV_DrawImage(IMAGEFILE *ImageFile, UWORD ID, int x, int y);
+extern void iV_DrawImage(GLuint TextureID, Vector2i position, Vector2i offset, Vector2i size, float angle, REND_MODE mode, PIELIGHT colour);
+extern void iV_DrawImage(IMAGEFILE *ImageFile, UWORD ID, int x, int y, const glm::mat4 &modelViewProjection = defaultProjectionMatrix());
 void iV_DrawImage2(const QString &filename, float x, float y, float width = -0.0f, float height = -0.0f);
-void iV_DrawImageTc(Image image, Image imageTc, int x, int y, PIELIGHT colour);
-void iV_DrawImageRepeatX(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Width);
-void iV_DrawImageRepeatY(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Height);
+void iV_DrawImageTc(Image image, Image imageTc, int x, int y, PIELIGHT colour, const glm::mat4 &modelViewProjection = defaultProjectionMatrix());
+void iV_DrawImageRepeatX(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Width, const glm::mat4 &modelViewProjection = defaultProjectionMatrix());
+void iV_DrawImageRepeatY(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Height, const glm::mat4 &modelViewProjection = defaultProjectionMatrix());
 
 static inline void iV_DrawImage(Image image, int x, int y)
 {
@@ -134,7 +143,7 @@ extern void pie_UniTransBoxFill(float x0, float y0, float x1, float y1, PIELIGHT
 bool pie_InitRadar();
 bool pie_ShutdownRadar();
 void pie_DownLoadRadar(UDWORD *buffer);
-void pie_RenderRadar();
+void pie_RenderRadar(const glm::mat4 &modelViewProjectionMatrix);
 void pie_SetRadar(GLfloat x, GLfloat y, GLfloat width, GLfloat height, int twidth, int theight, bool filter);
 
 enum SCREENTYPE

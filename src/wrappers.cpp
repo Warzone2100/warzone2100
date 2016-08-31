@@ -298,7 +298,7 @@ void loadingScreenCallback(void)
 	for (i = 1; i < starsNum; ++i)
 	{
 		stars[i].xPos = stars[i].xPos + stars[i].speed;
-		if (stars[i].xPos >= barRightX)
+		if (barLeftX + stars[i].xPos >= barRightX)
 		{
 			stars[i] = newStar();
 			stars[i].xPos = 1;

@@ -657,26 +657,14 @@ int iV_DrawFormattedText(const char *String, UDWORD x, UDWORD y, UDWORD Width, U
 
 void iV_DrawTextRotated(const char *string, float XPos, float YPos, float rotation)
 {
-	GLint matrix_mode = 0;
 	ASSERT_OR_RETURN(, string, "Couldn't render string!");
 	pie_SetTexturePage(TEXPAGE_EXTERN);
-
-	glGetIntegerv(GL_MATRIX_MODE, &matrix_mode);
-	glMatrixMode(GL_TEXTURE);
-	glPushMatrix();
-	glLoadIdentity();
-	glMatrixMode(GL_MODELVIEW);
-	glPushMatrix();
 
 	if (rotation != 0.f)
 	{
 		rotation = 180. - rotation;
 	}
 
-	glTranslatef(floor(XPos), floor(YPos), 0.f);
-	glRotatef(rotation, 0.f, 0.f, 1.f);
-
-	glColor4fv(font_colour);
 	PIELIGHT color;
 	color.vector[0] = font_colour[0] * 255.f;
 	color.vector[1] = font_colour[1] * 255.f;
@@ -700,14 +688,10 @@ void iV_DrawTextRotated(const char *string, float XPos, float YPos, float rotati
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
-		iV_DrawImage(textureID, Vector2i(xoffset, yoffset), Vector2i(width, height), REND_TEXT, color);
+		glDisable(GL_CULL_FACE);
+		iV_DrawImage(textureID, Vector2i(XPos, YPos), Vector2i(xoffset, yoffset), Vector2i(width, height), rotation, REND_TEXT, color);
+		glEnable(GL_CULL_FACE);
 	}
-
-	glPopMatrix();
-	glMatrixMode(GL_TEXTURE);
-	glPopMatrix();
-	glMatrixMode(matrix_mode);
 
 	// Reset the current model view matrix
 	glLoadIdentity();

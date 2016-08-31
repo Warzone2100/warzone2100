@@ -160,7 +160,7 @@ bool imageInitBitmaps(void)
 
 // Render a window frame.
 //
-void RenderWindowFrame(FRAMETYPE frame, UDWORD x, UDWORD y, UDWORD Width, UDWORD Height)
+void RenderWindowFrame(FRAMETYPE frame, UDWORD x, UDWORD y, UDWORD Width, UDWORD Height, const glm::mat4 &modelViewProjectionMatrix)
 {
 	SWORD WTopRight = 0;
 	SWORD WTopLeft = 0;
@@ -241,24 +241,24 @@ void RenderWindowFrame(FRAMETYPE frame, UDWORD x, UDWORD y, UDWORD Width, UDWORD
 	if (Frame->TopEdge >= 0)
 	{
 		iV_DrawImageRepeatX(IntImages, Frame->TopEdge, x + iV_GetImageWidth(IntImages, Frame->TopLeft), y,
-		                    Width - WTopLeft - WTopRight);
+		                    Width - WTopLeft - WTopRight, modelViewProjectionMatrix);
 	}
 
 	if (Frame->BottomEdge >= 0)
 	{
 		iV_DrawImageRepeatX(IntImages, Frame->BottomEdge, x + WBottomLeft, y + Height - iV_GetImageHeight(IntImages, Frame->BottomEdge),
-		                    Width - WBottomLeft - WBottomRight);
+		                    Width - WBottomLeft - WBottomRight, modelViewProjectionMatrix);
 	}
 
 	if (Frame->LeftEdge >= 0)
 	{
-		iV_DrawImageRepeatY(IntImages, Frame->LeftEdge, x, y + HTopLeft, Height - HTopLeft - HBottomLeft);
+		iV_DrawImageRepeatY(IntImages, Frame->LeftEdge, x, y + HTopLeft, Height - HTopLeft - HBottomLeft, modelViewProjectionMatrix);
 	}
 
 	if (Frame->RightEdge >= 0)
 	{
 		iV_DrawImageRepeatY(IntImages, Frame->RightEdge, x + Width - iV_GetImageWidth(IntImages, Frame->RightEdge), y + HTopRight,
-		                    Height - HTopRight - HBottomRight);
+		                    Height - HTopRight - HBottomRight, modelViewProjectionMatrix);
 	}
 }
 

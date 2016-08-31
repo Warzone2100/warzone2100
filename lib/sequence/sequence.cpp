@@ -66,6 +66,8 @@
 #include "lib/sound/audio.h"
 #include "lib/sound/openal_error.h"
 #include "lib/sound/mixer.h"
+#include <glm/gtx/transform.hpp>
+#include "lib/ivis_opengl/pieclip.h"
 
 #include <theora/theora.h>
 #include <physfs.h>
@@ -382,12 +384,11 @@ static void video_write(bool update)
 	glDisable(GL_DEPTH_TEST);
 	glDepthMask(GL_FALSE);
 
-	glPushMatrix();
-	glTranslatef(Scrnvidpos[0], Scrnvidpos[1], Scrnvidpos[2]);
+	videoGfx->draw(
+		glm::ortho(0.f, static_cast<float>(pie_GetVideoBufferWidth()), static_cast<float>(pie_GetVideoBufferHeight()), 0.f) *
+		glm::translate(glm::vec3(Scrnvidpos[0], Scrnvidpos[1], Scrnvidpos[2]))
+	);
 
-	videoGfx->draw();
-
-	glPopMatrix();
 	glErrors();
 }
 

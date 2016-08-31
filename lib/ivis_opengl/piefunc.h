@@ -36,7 +36,7 @@
 void pie_TransColouredTriangle(Vector3f *vrt, PIELIGHT c);
 
 void pie_SetViewingWindow(Vector3i *v, PIELIGHT colour);
-void pie_DrawViewingWindow();
+void pie_DrawViewingWindow(const glm::mat4 &modelViewProjectionMatrix);
 
 void pie_DrawSkybox(float scale);
 void pie_Skybox_Init();

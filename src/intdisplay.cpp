@@ -2045,7 +2045,7 @@ void IntTransportButton::display(int xOffset, int yOffset)
 }
 
 /* Draws blips on radar to represent Proximity Display and damaged structures */
-void drawRadarBlips(int radarX, int radarY, float pixSizeH, float pixSizeV)
+void drawRadarBlips(int radarX, int radarY, float pixSizeH, float pixSizeV, const glm::mat4 &modelViewProjection)
 {
 	PROXIMITY_DISPLAY	*psProxDisp;
 	UWORD			imageID;
@@ -2168,7 +2168,7 @@ void drawRadarBlips(int radarX, int radarY, float pixSizeH, float pixSizeV)
 		    && (y + radarY) < height * pixSizeH / 2 && (y + radarY) > -height * pixSizeH / 2)
 		{
 			// Draw the 'blip'
-			iV_DrawImage(IntImages, imageID, x + radarX, y + radarY);
+			iV_DrawImage(IntImages, imageID, x + radarX, y + radarY, modelViewProjection);
 		}
 	}
 	if (audio_GetPreviousQueueTrackRadarBlipPos(&x, &y))
@@ -2186,7 +2186,7 @@ void drawRadarBlips(int radarX, int radarY, float pixSizeH, float pixSizeV)
 		    && (y + radarY) < height * pixSizeH / 2 && (y + radarY) > -height * pixSizeH / 2)
 		{
 			// Draw the 'blip'
-			iV_DrawImage(IntImages, imageID, x + radarX, y + radarY);
+			iV_DrawImage(IntImages, imageID, x + radarX, y + radarY, modelViewProjection);
 		}
 	}
 }

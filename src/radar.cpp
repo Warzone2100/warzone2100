@@ -46,6 +46,7 @@
 #include "multiplay.h"
 #include "intdisplay.h"
 #include "texture.h"
+#include <glm/gtx/transform.hpp>
 
 #define HIT_NOTIFICATION	(GAME_TICKS_PER_SEC * 2)
 #define RADAR_FRAME_SKIP	10
@@ -110,8 +111,8 @@ static int frameSkip = 0;
 
 static void DrawRadarTiles();
 static void DrawRadarObjects();
-static void DrawRadarExtras();
-static void DrawNorth();
+static void DrawRadarExtras(const glm::mat4 &modelViewProjectionMatrix);
+static void DrawNorth(const glm::mat4 &modelViewProjectionMatrix);
 static void setViewingWindow();
 
 static void radarSize(int ZoomLevel)
@@ -282,26 +283,24 @@ void drawRadar()
 	}
 	frameSkip--;
 	pie_SetRendMode(REND_ALPHA);
-	pie_MatBegin();
-	pie_TRANSLATE(radarCenterX, radarCenterY, 0);
+	glm::mat4 radarMatrix =
+		glm::translate(static_cast<float>(radarCenterX), static_cast<float>(radarCenterY), 0.f);
+	glm::mat4 orthoMatrix = glm::ortho(0.f, static_cast<float>(pie_GetVideoBufferWidth()), static_cast<float>(pie_GetVideoBufferHeight()), 0.f);
 	if (rotateRadar)
 	{
 		// rotate the map
-		pie_MatRotZ(player.r.y);
-		DrawNorth();
+		radarMatrix *= glm::rotate(UNDEG(player.r.y), glm::vec3(0.f, 0.f, 1.f));
+		DrawNorth(orthoMatrix * radarMatrix);
 	}
-	pie_RenderRadar();
-	pie_MatBegin();
-	pie_TRANSLATE(-radarWidth / 2 - 1, -radarHeight / 2 - 1, 0);
-	DrawRadarExtras();
-	pie_MatEnd();
-	drawRadarBlips(-radarWidth / 2.0 - 1, -radarHeight / 2.0 - 1, pixSizeH, pixSizeV);
-	pie_MatEnd();
+
+	pie_RenderRadar(orthoMatrix * radarMatrix);
+	DrawRadarExtras(orthoMatrix * radarMatrix * glm::translate(-radarWidth / 2.f - 1.f, -radarHeight / 2.f - 1.f, 0.f));
+	drawRadarBlips(-radarWidth / 2.0 - 1, -radarHeight / 2.0 - 1, pixSizeH, pixSizeV, orthoMatrix * radarMatrix);
 }
 
-static void DrawNorth()
+static void DrawNorth(const glm::mat4 &modelViewProjectionMatrix)
 {
-	iV_DrawImage(IntImages, RADAR_NORTH, -((radarWidth / 2.0) + iV_GetImageWidth(IntImages, RADAR_NORTH) + 1), -(radarHeight / 2.0));
+	iV_DrawImage(IntImages, RADAR_NORTH, -((radarWidth / 2.0) + iV_GetImageWidth(IntImages, RADAR_NORTH) + 1), -(radarHeight / 2.0), modelViewProjectionMatrix);
 }
 
 static PIELIGHT appliedRadarColour(RADAR_DRAW_MODE radarDrawMode, MAPTILE *WTile)
@@ -645,10 +644,10 @@ static void setViewingWindow()
 	pie_SetViewingWindow(tv, colour);
 }
 
-static void DrawRadarExtras()
+static void DrawRadarExtras(const glm::mat4 &modelViewProjectionMatrix)
 {
-	pie_DrawViewingWindow();
-	RenderWindowFrame(FRAME_RADAR, -1, -1, radarWidth + 2, radarHeight + 2);
+	pie_DrawViewingWindow(modelViewProjectionMatrix);
+	RenderWindowFrame(FRAME_RADAR, -1, -1, radarWidth + 2, radarHeight + 2, modelViewProjectionMatrix);
 }
 
 /** Does a screen coordinate lie within the radar area? */

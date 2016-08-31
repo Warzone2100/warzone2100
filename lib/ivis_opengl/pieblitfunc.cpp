@@ -40,7 +40,8 @@
 #include "lib/ivis_opengl/tex.h"
 #include "piematrix.h"
 #include "screen.h"
-
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/gtx/transform.hpp>
 
 /***************************************************************************/
 /*
@@ -146,34 +147,44 @@ void GFX::buffers(int vertices, const GLvoid *vertBuf, const GLvoid *auxBuf)
 	mSize = vertices;
 }
 
-void GFX::draw()
+#define VERTEX_POS_ATTRIB_INDEX 0
+#define VERTEX_COORDS_ATTRIB_INDEX 1
+#define VERTEX_COLOR_ATTRIB_INDEX 2
+
+void GFX::draw(const glm::mat4 &modelViewProjectionMatrix)
 {
 	if (mType == GFX_TEXTURE)
 	{
 		pie_SetTexturePage(TEXPAGE_EXTERN);
 		glBindTexture(GL_TEXTURE_2D, mTexture);
-		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-		glBindBuffer(GL_ARRAY_BUFFER, mBuffers[VBO_TEXCOORD]); glTexCoordPointer(2, GL_FLOAT, 0, NULL);
+		pie_ActivateShader(SHADER_GFX_TEXT, modelViewProjectionMatrix, 0);
+		glEnableVertexAttribArray(VERTEX_COORDS_ATTRIB_INDEX);
+		glBindBuffer(GL_ARRAY_BUFFER, mBuffers[VBO_TEXCOORD]);
+		glVertexAttribPointer(VERTEX_COORDS_ATTRIB_INDEX, 2, GL_FLOAT, false, 0, nullptr);
 	}
 	else if (mType == GFX_COLOUR)
 	{
 		pie_SetTexturePage(TEXPAGE_NONE);
-		glEnableClientState(GL_COLOR_ARRAY);
-		glBindBuffer(GL_ARRAY_BUFFER, mBuffers[VBO_TEXCOORD]); glColorPointer(4, GL_UNSIGNED_BYTE, 0, NULL);
+		pie_ActivateShader(SHADER_GFX_COLOUR, modelViewProjectionMatrix);
+		glEnableVertexAttribArray(VERTEX_COLOR_ATTRIB_INDEX);
+		glBindBuffer(GL_ARRAY_BUFFER, mBuffers[VBO_TEXCOORD]);
+		glVertexAttribPointer(VERTEX_COLOR_ATTRIB_INDEX, 4, GL_UNSIGNED_BYTE, true, 0, nullptr);
 	}
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glBindBuffer(GL_ARRAY_BUFFER, mBuffers[VBO_VERTEX]); glVertexPointer(mCoordsPerVertex, GL_FLOAT, 0, NULL);
+	glEnableVertexAttribArray(VERTEX_POS_ATTRIB_INDEX);
+	glBindBuffer(GL_ARRAY_BUFFER, mBuffers[VBO_VERTEX]);
+	glVertexAttribPointer(VERTEX_POS_ATTRIB_INDEX, mCoordsPerVertex, GL_FLOAT, false, 0, nullptr);
 	glDrawArrays(mdrawType, 0, mSize);
-	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableVertexAttribArray(VERTEX_POS_ATTRIB_INDEX);
 	if (mType == GFX_TEXTURE)
 	{
-		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+		glDisableVertexAttribArray(VERTEX_COORDS_ATTRIB_INDEX);
 	}
 	else if (mType == GFX_COLOUR)
 	{
-		glDisableClientState(GL_COLOR_ARRAY);
+		glDisableVertexAttribArray(VERTEX_COLOR_ATTRIB_INDEX);
 	}
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	pie_DeactivateShader();
 }
 
 GFX::~GFX()
@@ -201,13 +212,19 @@ void iV_Line(int x0, int y0, int x1, int y1, PIELIGHT colour)
  */
 static void pie_DrawRect(float x0, float y0, float x1, float y1, PIELIGHT colour)
 {
-	glColor4ubv(colour.vector);
-	glBegin(GL_TRIANGLE_STRIP);
-	glVertex2f(x0, y0);
-	glVertex2f(x1, y0);
-	glVertex2f(x0, y1);
-	glVertex2f(x1, y1);
-	glEnd();
+	if (x0 > x1)
+	{
+		debug(LOG_FATAL, "Passing box as right to left is not allowed");
+	}
+	const auto& center = Vector2f(x0, y0);
+	const auto& mvp = defaultProjectionMatrix() *
+		glm::translate(Vector3f(center, 0.f)) *
+		glm::scale(Vector3f(x1 - x0, y1 - y0, 1.f));
+
+	pie_ActivateShader(SHADER_RECT, mvp,
+		glm::vec4(colour.vector[0] / 255.f, colour.vector[1] / 255.f, colour.vector[2] / 255.f, colour.vector[3] / 255.f));
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+	pie_DeactivateShader();
 }
 
 void iV_ShadowBox(int x0, int y0, int x1, int y1, int pad, PIELIGHT first, PIELIGHT second, PIELIGHT fill)
@@ -274,46 +291,48 @@ static bool assertValidImage(IMAGEFILE *imageFile, unsigned id)
 	return true;
 }
 
-static void iv_DrawImageImpl(Vector2i Position, Vector2i size, Vector2f TextureUV, Vector2f TextureSize, PIELIGHT colour)
+static void iv_DrawImageImpl(Vector2i offset, Vector2i size, Vector2f TextureUV, Vector2f TextureSize, PIELIGHT colour, const glm::mat4 &modelViewProjection)
 {
-	glColor4ubv(colour.vector);
-	glBegin(GL_TRIANGLE_STRIP);
-	glTexCoord2f(TextureUV.x, TextureUV.y);
-	glVertex2f(Position.x, Position.y);
+	glm::mat4 transformMat = modelViewProjection *
+		glm::translate(static_cast<float>(offset.x), static_cast<float>(offset.y), 0.f) *
+		glm::scale(static_cast<float>(size.x), static_cast<float>(size.y), 1.f);
 
-	glTexCoord2f(TextureUV.x + TextureSize.x, TextureUV.y);
-	glVertex2f(Position.x + size.x, Position.y);
-
-	glTexCoord2f(TextureUV.x, TextureUV.y + TextureSize.y);
-	glVertex2f(Position.x, Position.y + size.y);
-
-	glTexCoord2f(TextureUV.x + TextureSize.x, TextureUV.y + TextureSize.y);
-	glVertex2f(Position.x + size.x, Position.y + size.y);
-	glEnd();
-
+	pie_ActivateShader(SHADER_TEXRECT,
+		transformMat,
+		Vector2f(TextureUV.x, TextureUV.y),
+		Vector2f(TextureSize.x, TextureSize.y),
+		glm::vec4(colour.vector[0] / 255.f, colour.vector[1] / 255.f, colour.vector[2] / 255.f, colour.vector[3] / 255.f), 0);
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+	pie_DeactivateShader();
 }
 
-void iV_DrawImage(GLuint TextureID, Vector2i Position, Vector2i size, REND_MODE mode, PIELIGHT colour)
+void iV_DrawImage(GLuint TextureID, Vector2i Position, Vector2i offset, Vector2i size, float angle, REND_MODE mode, PIELIGHT colour)
 {
 	pie_SetRendMode(mode);
 	pie_SetTexturePage(TEXPAGE_EXTERN);
 	glBindTexture(GL_TEXTURE_2D, TextureID);
-	iv_DrawImageImpl(Position, size, Vector2f(0.f, 0.f), Vector2f(1.f, 1.f), colour);
+
+	glm::mat4 mvp = defaultProjectionMatrix() *
+		glm::translate(static_cast<float>(Position.x), static_cast<float>(Position.y), 0.f) *
+		glm::rotate(angle, glm::vec3(0.f, 0.f, 1.f));
+
+	iv_DrawImageImpl(offset, size, Vector2f(0.f, 0.f), Vector2f(1.f, 1.f), colour, mvp);
 }
 
-static void pie_DrawImage(IMAGEFILE *imageFile, int id, Vector2i size, const PIERECT *dest, PIELIGHT colour = WZCOL_WHITE)
+static void pie_DrawImage(IMAGEFILE *imageFile, int id, Vector2i size, const PIERECT *dest, PIELIGHT colour, const glm::mat4 &modelViewProjection)
 {
 	ImageDef const &image2 = imageFile->imageDefs[id];
 	GLuint texPage = imageFile->pages[image2.TPageID].id;
 	GLfloat invTextureSize = 1.f / imageFile->pages[image2.TPageID].size;
-	int tu = image2.Tu;
-	int tv = image2.Tv;
+	float tu = image2.Tu * invTextureSize;
+	float tv = image2.Tv * invTextureSize;
+	float su = size.x * invTextureSize;
+	float sv = size.y * invTextureSize;
+
+	glm::mat4 mvp = modelViewProjection * glm::translate(static_cast<float>(dest->x), static_cast<float>(dest->y), 0.f);
 
 	pie_SetTexturePage(texPage);
-	iv_DrawImageImpl(Vector2i(dest->x, dest->y), Vector2i(dest->w, dest->h),
-		Vector2f(tu * invTextureSize, tv * invTextureSize),
-		Vector2f(size.x * invTextureSize, size.y * invTextureSize),
-		colour);
+	iv_DrawImageImpl(Vector2i(0, 0), Vector2i(dest->w, dest->h), Vector2f(tu, tv), Vector2f(su, sv), colour, mvp);
 }
 
 static Vector2i makePieImage(IMAGEFILE *imageFile, unsigned id, PIERECT *dest, int x, int y)
@@ -344,13 +363,15 @@ void iV_DrawImage2(const QString &filename, float x, float y, float width, float
 	y += image->YOffset;
 	pie_SetTexturePage(image->textureId);
 	pie_SetRendMode(REND_ALPHA);
-	iv_DrawImageImpl(Vector2i(x, y), Vector2i(w, h),
+
+	glm::mat4 mvp = defaultProjectionMatrix() * glm::translate(static_cast<float>(x), static_cast<float>(y), 0.f);
+	iv_DrawImageImpl(Vector2i(0, 0), Vector2i(w, h),
 		Vector2f(tu * invTextureSize, tv * invTextureSize),
 		Vector2f(image->Width * invTextureSize, image->Height * invTextureSize),
-		WZCOL_WHITE);
+		WZCOL_WHITE, mvp);
 }
 
-void iV_DrawImage(IMAGEFILE *ImageFile, UWORD ID, int x, int y)
+void iV_DrawImage(IMAGEFILE *ImageFile, UWORD ID, int x, int y, const glm::mat4 &modelViewProjection)
 {
 	if (!assertValidImage(ImageFile, ID))
 	{
@@ -362,10 +383,10 @@ void iV_DrawImage(IMAGEFILE *ImageFile, UWORD ID, int x, int y)
 
 	pie_SetRendMode(REND_ALPHA);
 
-	pie_DrawImage(ImageFile, ID, pieImage, &dest);
+	pie_DrawImage(ImageFile, ID, pieImage, &dest, WZCOL_WHITE, modelViewProjection);
 }
 
-void iV_DrawImageTc(Image image, Image imageTc, int x, int y, PIELIGHT colour)
+void iV_DrawImageTc(Image image, Image imageTc, int x, int y, PIELIGHT colour, const glm::mat4 &modelViewProjection)
 {
 	if (!assertValidImage(image.images, image.id) || !assertValidImage(imageTc.images, imageTc.id))
 	{
@@ -378,12 +399,12 @@ void iV_DrawImageTc(Image image, Image imageTc, int x, int y, PIELIGHT colour)
 
 	pie_SetRendMode(REND_ALPHA);
 
-	pie_DrawImage(image.images, image.id, pieImage, &dest);
-	pie_DrawImage(imageTc.images, imageTc.id, pieImageTc, &dest, colour);
+	pie_DrawImage(image.images, image.id, pieImage, &dest, WZCOL_WHITE, modelViewProjection);
+	pie_DrawImage(imageTc.images, imageTc.id, pieImageTc, &dest, colour, modelViewProjection);
 }
 
 // Repeat a texture
-void iV_DrawImageRepeatX(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Width)
+void iV_DrawImageRepeatX(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Width, const glm::mat4 &modelViewProjection)
 {
 	assertValidImage(ImageFile, ID);
 	const ImageDef *Image = &ImageFile->imageDefs[ID];
@@ -397,7 +418,7 @@ void iV_DrawImageRepeatX(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Width
 
 	for (unsigned hRep = 0; hRep < Width / Image->Width; hRep++)
 	{
-		pie_DrawImage(ImageFile, ID, pieImage, &dest);
+		pie_DrawImage(ImageFile, ID, pieImage, &dest, WZCOL_WHITE, modelViewProjection);
 		dest.x += Image->Width;
 	}
 
@@ -406,11 +427,11 @@ void iV_DrawImageRepeatX(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Width
 	{
 		pieImage.x = hRemainder;
 		dest.w = hRemainder;
-		pie_DrawImage(ImageFile, ID, pieImage, &dest);
+		pie_DrawImage(ImageFile, ID, pieImage, &dest, WZCOL_WHITE, modelViewProjection);
 	}
 }
 
-void iV_DrawImageRepeatY(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Height)
+void iV_DrawImageRepeatY(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Height, const glm::mat4 &modelViewProjection)
 {
 	assertValidImage(ImageFile, ID);
 	const ImageDef *Image = &ImageFile->imageDefs[ID];
@@ -424,7 +445,7 @@ void iV_DrawImageRepeatY(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Heigh
 
 	for (unsigned vRep = 0; vRep < Height / Image->Height; vRep++)
 	{
-		pie_DrawImage(ImageFile, ID, pieImage, &dest);
+		pie_DrawImage(ImageFile, ID, pieImage, &dest, WZCOL_WHITE, modelViewProjection);
 		dest.y += Image->Height;
 	}
 
@@ -433,7 +454,7 @@ void iV_DrawImageRepeatY(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Heigh
 	{
 		pieImage.y = vRemainder;
 		dest.h = vRemainder;
-		pie_DrawImage(ImageFile, ID, pieImage, &dest);
+		pie_DrawImage(ImageFile, ID, pieImage, &dest, WZCOL_WHITE, modelViewProjection);
 	}
 }
 
@@ -465,11 +486,10 @@ void pie_DownLoadRadar(UDWORD *buffer)
 }
 
 /** Display radar texture using the given height and width, depending on zoom level. */
-void pie_RenderRadar()
+void pie_RenderRadar(const glm::mat4 &modelViewProjectionMatrix)
 {
 	pie_SetRendMode(REND_ALPHA);
-	glColor4ubv(WZCOL_WHITE.vector); // hack
-	radarGfx->draw();
+	radarGfx->draw(modelViewProjectionMatrix);
 }
 
 /// Load and display a random backdrop picture.
