@@ -1060,10 +1060,16 @@ int realmain(int argc, char *argv[])
 	const char **utfargv = (const char **)argv;
 	wzMain(argc, argv);		// init Qt integration first
 
+#if !defined(OPENSSL_API_COMPAT) || OPENSSL_API_COMPAT < 0x10100000L
 	// The libcrypto startup stuff... May or may not actually be needed for anything at all.
 	ERR_load_crypto_strings();  // This is needed for descriptive error messages.
 	OpenSSL_add_all_algorithms();  // Don't actually use the EVP functions, so probably not needed.
 	OPENSSL_config(nullptr);  // What does this actually do?
+#else
+	// The libcrypto startup stuff... May or may not actually be needed for anything at all.
+	OPENSSL_init_crypto(OPENSSL_INIT_LOAD_CRYPTO_STRINGS | OPENSSL_INIT_ADD_ALL_CIPHERS | OPENSSL_INIT_ADD_ALL_DIGESTS | OPENSSL_INIT_LOAD_CONFIG, nullptr);
+#endif
+
 #ifdef WZ_OS_WIN
 	RAND_screen();  // Uses a screenshot as a random seed, on systems lacking /dev/random.
 #endif

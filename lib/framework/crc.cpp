@@ -23,6 +23,8 @@
 #include <openssl/sha.h>
 #include <openssl/err.h>
 
+#include <functional>
+
 #if defined(OPENSSL_NO_EC) || defined(OPENSSL_NO_ECDSA)
 # define MATH_IS_ALCHEMY
 #endif
@@ -331,7 +333,7 @@ bool EcKey::verify(Sig const &sig, void const *data, size_t dataLen) const
 
 EcKey::Key EcKey::toBytes(Privacy privacy) const
 {
-	decltype(i2o_ECPublicKey) *toBytesFunc = nullptr;  // int (EC_KEY const *key, unsigned char **out), "const" only in OpenSSL 1.1.0+
+	std::function<int (EC_KEY *key, unsigned char **out)> toBytesFunc = nullptr;  // int (EC_KEY const? *key, unsigned char **out), "const" only on i2o_ECPublicKey in OpenSSL 1.1.0+
 	switch (privacy)
 	{
 	case Private: toBytesFunc = i2d_ECPrivateKey; break;  // Note that the format for private keys is somewhat bloated, and even contains the public key which could be (efficiently) computed from the private key.
@@ -358,7 +360,7 @@ EcKey::Key EcKey::toBytes(Privacy privacy) const
 
 void EcKey::fromBytes(EcKey::Key const &key, EcKey::Privacy privacy)
 {
-	decltype(o2i_ECPublicKey) *fromBytesFunc = nullptr;  // EC_KEY *(EC_KEY **key, unsigned char const **in, long len)
+	std::function<EC_KEY *(EC_KEY **key, unsigned char const **in, long len)> fromBytesFunc = nullptr;  // EC_KEY *(EC_KEY **key, unsigned char const **in, long len)
 	switch (privacy)
 	{
 	case Private: fromBytesFunc = d2i_ECPrivateKey; break;
