@@ -149,6 +149,18 @@ $(Qt5dir)\bin\moc.exe  widgbase.h -o widgbase_moc.h
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
     </ClCompile>
+    <PreBuildEvent>
+      <Command>$(Qt5dir)\bin\moc.exe bar.h. -o bar_moc.h
+$(Qt5dir)\bin\moc.exe  button.h -o button_moc.h 
+$(Qt5dir)\bin\moc.exe  editbox.h -o editbox_moc.h
+$(Qt5dir)\bin\moc.exe  form.h   -o form_moc.h 
+$(Qt5dir)\bin\moc.exe  label.h  -o label_moc.h 
+$(Qt5dir)\bin\moc.exe  listwidget.h -o listwidget_moc.h 
+$(Qt5dir)\bin\moc.exe  slider.h -o slider_moc.h 
+$(Qt5dir)\bin\moc.exe  widgbase.h -o widgbase_moc.h
+
+</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_QT_backend|Win32'">
     <ClCompile>

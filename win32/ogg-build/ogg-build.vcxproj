@@ -104,7 +104,7 @@ msbuild.exe ALL_BUILD.vcxproj /t:build /p:Configuration=Release</Command>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <PreBuildEvent>
-      <Command>cmake -G "Visual Studio 14 2015 Win64" -DCMAKE_CONFIGURATION_TYPES="Release" ../../3rdparty/ogg
+      <Command>cmake -G "Visual Studio 14 2015" -DCMAKE_CONFIGURATION_TYPES="Release" ../../3rdparty/ogg
 msbuild.exe ALL_BUILD.vcxproj /t:build /p:Configuration=Release</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>

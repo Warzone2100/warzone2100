@@ -1,0 +1,26 @@
+environment:
+  QT5DIR: C:\Qt\5.7\msvc2015
+
+cache:
+  - win32/packages -> **\packages.config
+
+platform:
+  - Win32
+
+configuration:
+  - Debug
+  - Release
+
+before_build:
+ - git submodule update --init
+ - nuget restore win32/warzone2100_msvc2015.sln
+ - ps: pushd build_tools
+ - ps: ./autorevision.ps1
+ - ps: popd
+ - ps: pushd 3rdparty/theora/win32/VS2010/
+ - cmd: '"C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\devenv.exe" libtheora_static.sln /upgrade'
+ - ps: popd
+
+build:
+ parallel: true
+ project: win32/warzone2100_msvc2015.sln

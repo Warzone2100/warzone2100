@@ -113,8 +113,7 @@
     <PreBuildEvent>
       <Message>Generating the autorevison.h file...</Message>
       <Command>$(Qt5dir)\bin\moc.exe qtscriptdebug.h  -o qtscriptdebug.h.moc
-$(Qt5dir)\bin\moc.exe multiint.h  -o multiint_moc.h
-call $(ProjectDir)..\build_tools\autorevision.bat $(ProjectDir)</Command>
+$(Qt5dir)\bin\moc.exe multiint.h  -o multiint_moc.h</Command>
     </PreBuildEvent>
     <BisonParser>
       <Defines>true</Defines>
@@ -168,8 +167,7 @@ call $(ProjectDir)..\build_tools\autorevision.bat $(ProjectDir)</Command>
     <PreBuildEvent>
       <Message>Generating the autorevison.h file...</Message>
       <Command>$(Qt5dir)\bin\moc.exe qtscriptdebug.h  -o qtscriptdebug.h.moc
-$(Qt5dir)\bin\moc.exe multiint.h  -o multiint_moc.h
-call $(ProjectDir)..\build_tools\autorevision.bat $(ProjectDir)</Command>
+$(Qt5dir)\bin\moc.exe multiint.h  -o multiint_moc.h</Command>
     </PreBuildEvent>
     <BisonParser>
       <Defines>true</Defines>
@@ -223,7 +221,7 @@ call $(ProjectDir)..\build_tools\autorevision.bat $(ProjectDir)</Command>
     <PreBuildEvent>
       <Message>Generating the autorevison.h file...</Message>
       <Command>$(Qt5dir)\bin\moc.exe qtscriptdebug.h  -o qtscriptdebug.h.moc
-call $(ProjectDir)..\build_tools\autorevision.bat $(ProjectDir)</Command>
+$(Qt5dir)\bin\moc.exe multiint.h  -o multiint_moc.h</Command>
     </PreBuildEvent>
     <BisonParser>
       <Defines>true</Defines>
@@ -244,7 +242,7 @@ call $(ProjectDir)..\build_tools\autorevision.bat $(ProjectDir)</Command>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>../win32/ogg-build/Release/ogg.lib;../win32/vorbis-build/lib/Release/vorbis.lib;../win32/vorbis-build/lib/Release/vorbisfile.lib;../win32/openal-build/Release/OpenAL32.lib;OpenGL32.lib;GLU32.lib;shfolder.lib;winmm.lib;Iphlpapi.lib;ws2_32.lib;dbghelp.lib;../win32/Win32/Debug/libtheora_static.lib;SDL2main.lib;SDL2.lib;Qt5Core.lib;Qt5Widgets.lib;Qt5Gui.lib;Qt5Script.lib;Qt5ScriptTools.lib;zlibstat.lib;ssleay32.lib;libeay32.lib;crypt32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>../win32/ogg-build/Release/ogg.lib;../win32/vorbis-build/lib/Release/vorbis.lib;../win32/vorbis-build/lib/Release/vorbisfile.lib;../win32/openal-build/Release/OpenAL32.lib;OpenGL32.lib;GLU32.lib;shfolder.lib;winmm.lib;Iphlpapi.lib;ws2_32.lib;dbghelp.lib;../win32/Win32/Release/libtheora_static.lib;Qt5Core.lib;Qt5Widgets.lib;Qt5Gui.lib;Qt5Script.lib;Qt5ScriptTools.lib;crypt32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)\..\devpkg\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>libcmt.lib;MSVCRTD.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -263,8 +261,7 @@ call $(ProjectDir)..\build_tools\autorevision.bat $(ProjectDir)</Command>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_QT_backend|Win32'">
     <PreBuildEvent>
       <Message>Generating the autorevison.h file...</Message>
-      <Command>$(Qt5dir)\bin\moc.exe qtscriptdebug.h  -o qtscriptdebug.h.moc
-call $(ProjectDir)..\build_tools\autorevision.bat $(ProjectDir)</Command>
+      <Command>$(Qt5dir)\bin\moc.exe qtscriptdebug.h  -o qtscriptdebug.h.moc</Command>
     </PreBuildEvent>
     <BisonParser>
       <Defines>true</Defines>
