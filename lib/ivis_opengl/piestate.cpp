@@ -199,6 +199,7 @@ static void getLocs(SHADER_PROGRAM *program)
 	program->locNormalMap = glGetUniformLocation(program->program, "normalmap");
 	program->locSpecularMap = glGetUniformLocation(program->program, "specularmap");
 	program->locEcm = glGetUniformLocation(program->program, "ecmEffect");
+	program->locAlphaTest = glGetUniformLocation(program->program, "alphaTest");
 	program->locTime = glGetUniformLocation(program->program, "graphicsCycle");
 
 	// Attributes

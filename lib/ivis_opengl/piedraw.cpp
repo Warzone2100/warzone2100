@@ -226,12 +226,6 @@ static void pie_Draw3DShape2(const iIMDShape *shape, int frame, PIELIGHT colour,
 		pie_SetRendMode(REND_OPAQUE);
 	}
 
-	if ((pieFlag & pie_PREMULTIPLIED) == 0)
-	{
-		glEnable(GL_ALPHA_TEST);
-		glAlphaFunc(GL_GREATER, 0.001f);
-	}
-
 	if (pieFlag & pie_ECM)
 	{
 		pie_SetRendMode(REND_ALPHA);
@@ -241,6 +235,8 @@ static void pie_Draw3DShape2(const iIMDShape *shape, int frame, PIELIGHT colour,
 
 	SHADER_MODE mode = shape->shaderProgram == SHADER_NONE ? light ? SHADER_COMPONENT : SHADER_NOLIGHT : shape->shaderProgram;
 	SHADER_PROGRAM &program = pie_ActivateShader(mode, shape, teamcolour, colour);
+
+	glUniform1i(program.locAlphaTest, (pieFlag & pie_PREMULTIPLIED) == 0);
 
 	pie_SetTexturePage(shape->texpage);
 
@@ -256,7 +252,6 @@ static void pie_Draw3DShape2(const iIMDShape *shape, int frame, PIELIGHT colour,
 	polyCount += shape->npolys;
 
 	pie_SetShaderEcmEffect(false);
-	glDisable(GL_ALPHA_TEST);
 }
 
 static inline bool edgeLessThan(EDGE const &e1, EDGE const &e2)

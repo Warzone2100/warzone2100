@@ -53,6 +53,7 @@ struct SHADER_PROGRAM
 	GLint locNormalMap;
 	GLint locSpecularMap;
 	GLint locEcm;
+	GLint locAlphaTest;
 	GLint locTime;
 
 	// Attributes

@@ -12,6 +12,7 @@ uniform int normalmap; // whether a normal map exists for the model
 uniform int specularmap; // whether a specular map exists for the model
 uniform int fogEnabled; // whether fog is enabled
 uniform bool ecmEffect; // whether ECM special effect is enabled
+uniform bool alphaTest;
 uniform float graphicsCycle; // a periodically cycling value for special effects
 
 varying float vertexDistance;
@@ -36,22 +37,23 @@ void main()
 	// Get color from texture unit 0, merge with lighting
 	vec4 texColour = texture2D(Texture, texCoord) * light;
 
+	vec4 fragColour;
 	if (tcmask == 1)
 	{
 		// Get tcmask information from texture unit 1
 		vec4 mask = texture2D(TextureTcmask, texCoord);
 
 		// Apply color using grain merge with tcmask
-		gl_FragColor = (texColour + (teamcolour - 0.5) * mask.a) * colour;
+		fragColour = (texColour + (teamcolour - 0.5) * mask.a) * colour;
 	}
 	else
 	{
-		gl_FragColor = texColour * colour;
+		fragColour = texColour * colour;
 	}
 
 	if (ecmEffect)
 	{
-		gl_FragColor.a = 0.45 + 0.225 * graphicsCycle;
+		fragColour.a = 0.45 + 0.225 * graphicsCycle;
 	}
 
 	if (fogEnabled > 0)
@@ -61,6 +63,13 @@ void main()
 		fogFactor = clamp(fogFactor, 0.0, 1.0);
 
 		// Return fragment color
-		gl_FragColor = mix(gl_Fog.color, gl_FragColor, fogFactor);
+		fragColour = mix(gl_Fog.color, fragColour, fogFactor);
 	}
+
+	if (alphaTest && (fragColour.a <= 0.001))
+	{
+		discard;
+	}
+
+	gl_FragColor = fragColour;
 }
