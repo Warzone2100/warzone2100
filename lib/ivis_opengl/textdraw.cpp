@@ -1,4 +1,4 @@
-/*
+﻿/*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
 	Copyright (C) 2005-2015  Warzone 2100 Project
@@ -31,30 +31,340 @@
 #include "lib/ivis_opengl/textdraw.h"
 #include "lib/ivis_opengl/bitimage.h"
 #include "src/multiplay.h"
+#include <algorithm>
+#include <numeric>
+#include <array>
+#include <physfs.h>
 
 #define ASCII_SPACE			(32)
 #define ASCII_NEWLINE			('@')
 #define ASCII_COLOURMODE		('#')
 
-#ifdef WZ_OS_MAC
-# include <CoreFoundation/CoreFoundation.h>
-# include <CoreFoundation/CFURL.h>
-# include <QuesoGLC/glc.h>
-#else
-# include <GL/glc.h>
-#endif
-
-static char font_family[128];
-static char font_face_regular[128];
-static char font_face_bold[128];
-
 static float font_size = 12.f;
 // Contains the font color in the following order: red, green, blue, alpha
 static float font_colour[4] = {1.f, 1.f, 1.f, 1.f};
 
-static GLint _glcContext = 0;
-static GLint _glcFont_Regular = 0;
-static GLint _glcFont_Bold = 0;
+#include "hb.h"
+#include "hb-ft.h"
+#include "ftglyph.h"
+#include <unordered_map>
+#include <memory>
+
+namespace
+{
+	namespace HBFeature {
+		const hb_tag_t KernTag = HB_TAG('k', 'e', 'r', 'n'); // kerning operations
+		const hb_tag_t LigaTag = HB_TAG('l', 'i', 'g', 'a'); // standard ligature substitution
+		const hb_tag_t CligTag = HB_TAG('c', 'l', 'i', 'g'); // contextual ligature substitution
+
+		static hb_feature_t LigatureOn = { LigaTag, 1, 0, std::numeric_limits<unsigned int>::max() };
+		static hb_feature_t KerningOn = { KernTag, 1, 0, std::numeric_limits<unsigned int>::max() };
+		static hb_feature_t CligOn = { CligTag, 1, 0, std::numeric_limits<unsigned int>::max() };
+	}
+
+	struct RasterizedGlyph {
+		std::unique_ptr<unsigned char[]> buffer;
+		uint32_t pitch;
+		uint32_t width;
+		uint32_t height;
+		int32_t bearing_x;
+		int32_t bearing_y;
+	};
+
+	struct GlyphMetrics {
+		uint32_t width;
+		uint32_t height;
+		int32_t bearing_x;
+		int32_t bearing_y;
+	};
+
+	struct FTFace
+	{
+		FTFace(FT_Library &lib, const std::string &fileName, int32_t charSize, int32_t horizDPI, int32_t vertDPI)
+		{
+			FT_Error error = FT_New_Face(lib, fileName.c_str(), 0, &m_face);
+			if (error == FT_Err_Unknown_File_Format)
+			{
+				debug(LOG_FATAL, "Unknown font file format for %s", fileName.c_str());
+			}
+			else if (error != FT_Err_Ok)
+			{
+				debug(LOG_FATAL, "Font file %s not found, or other error", fileName.c_str());
+			}
+			error = FT_Set_Char_Size(m_face, 0, charSize, horizDPI, vertDPI);
+			if (error != FT_Err_Ok)
+			{
+				debug(LOG_FATAL, "Could not set character size");
+			}
+			m_font = hb_ft_font_create(m_face, nullptr);
+		}
+
+		~FTFace()
+		{
+			hb_font_destroy(m_font);
+			FT_Done_Face(m_face);
+		}
+
+		uint32_t getGlyphWidth(uint32_t codePoint)
+		{
+			FT_Error error = FT_Load_Glyph(m_face,
+				codePoint, // the glyph_index in the font file
+				FT_LOAD_NO_HINTING // by default hb load fonts without hinting
+			);
+			if (error != FT_Err_Ok)
+			{
+				debug(LOG_FATAL, "unable to load glyph");
+			}
+
+			return m_face->glyph->metrics.width;
+		}
+
+		RasterizedGlyph get(uint32_t codePoint, Vector2i subpixeloffset64)
+		{
+			FT_Error error = FT_Load_Glyph(m_face,
+				codePoint, // the glyph_index in the font file
+				FT_LOAD_NO_HINTING // by default hb load fonts without hinting
+			);
+			if (error != FT_Err_Ok)
+			{
+				debug(LOG_FATAL, "unable to load glyph");
+			}
+
+			FT_GlyphSlot slot = m_face->glyph;
+			FT_Render_Glyph(m_face->glyph, FT_RENDER_MODE_LCD);
+			FT_Bitmap ftBitmap = slot->bitmap;
+
+			RasterizedGlyph g;
+			g.buffer.reset(new unsigned char[ftBitmap.pitch * ftBitmap.rows]);
+			memcpy(g.buffer.get(), ftBitmap.buffer, ftBitmap.pitch * ftBitmap.rows);
+			g.width = ftBitmap.width / 3;
+			g.height = ftBitmap.rows;
+			g.bearing_x = slot->bitmap_left;
+			g.bearing_y = slot->bitmap_top;
+			g.pitch = ftBitmap.pitch;
+			return g;
+		}
+
+		GlyphMetrics getGlyphMetrics(uint32_t codePoint, Vector2i subpixeloffset64)
+		{
+			FT_Vector delta;
+			delta.x = subpixeloffset64.x;
+			delta.y = subpixeloffset64.y;
+			FT_Set_Transform(m_face, nullptr, &delta);
+			FT_Error error = FT_Load_Glyph(m_face,
+				codePoint, // the glyph_index in the font file
+				FT_LOAD_NO_HINTING // by default hb load fonts without hinting
+			);
+			if (error != FT_Err_Ok)
+			{
+				debug(LOG_FATAL, "unable to load glyph");
+			}
+
+			FT_GlyphSlot slot = m_face->glyph;
+			return{
+				static_cast<uint32_t>(slot->metrics.width),
+				static_cast<uint32_t>(slot->metrics.height),
+				slot->bitmap_left, slot->bitmap_top};
+		}
+
+
+		operator FT_Face()
+		{
+			return m_face;
+		}
+
+		hb_font_t *m_font;
+	private:
+		FT_Face m_face;
+	};
+
+	struct FTlib
+	{
+		FTlib()
+		{
+			FT_Init_FreeType(&lib);
+		}
+
+		~FTlib()
+		{
+			FT_Done_FreeType(lib);
+		}
+
+		FT_Library lib;
+	};
+
+	struct TextRun
+	{
+		std::string text;
+		std::string language;
+		hb_script_t script;
+		hb_direction_t direction;
+
+		TextRun(const std::string &t, const std::string &l, hb_script_t s, hb_direction_t d) :
+			text(t), language(l), script(s), direction(d)
+		{}
+	};
+
+	struct ShapedText
+	{
+		std::unique_ptr<unsigned char[]> texture;
+		uint32_t width;
+		uint32_t height;
+	};
+
+	// Note:
+	// Technically glyph antialiasing is dependent of text rotation.
+	// Rotated text needs to set transform inside freetype2.
+	// However there is few rotated text in wz2100 and it's likely to make
+	// only minimal visual difference.
+	struct TextShaper
+	{
+		TextShaper()
+		{
+			m_buffer = hb_buffer_create();
+		}
+
+		~TextShaper()
+		{
+			hb_buffer_destroy(m_buffer);
+		}
+
+		std::tuple<uint32_t, uint32_t> getTextMetrics(const TextRun& text, FTFace &face)
+		{
+			const std::vector<HarfbuzzPosition> &shapingResult = shapeText(text, face);
+			if (shapingResult.empty())
+				return std::make_tuple(0, 0);
+
+			int32_t min_x;
+			int32_t max_x;
+			int32_t min_y;
+			int32_t max_y;
+
+			std::tie(min_x, max_x, min_y, max_y) = std::accumulate(shapingResult.begin(), shapingResult.end(), std::make_tuple(1000, -1000, 1000, -1000),
+				[&face] (const std::tuple<int32_t, int32_t, int32_t, int32_t> &bounds, const HarfbuzzPosition &g) {
+				RasterizedGlyph glyph = face.get(g.codepoint, g.penPosition % 64);
+				int32_t x0 = g.penPosition.x / 64 + glyph.bearing_x;
+				int32_t y0 = g.penPosition.y / 64 - glyph.bearing_y;
+				return std::make_tuple(
+					std::min(x0, std::get<0>(bounds)),
+					std::max(static_cast<int32_t>(x0 + glyph.width), std::get<1>(bounds)),
+					std::min(y0, std::get<2>(bounds)),
+					std::max(static_cast<int32_t>(y0 + glyph.height), std::get<3>(bounds))
+					);
+				});
+
+			return std::make_tuple(max_x - min_x + 1, max_y - min_y + 1);
+		}
+
+		std::tuple<std::unique_ptr<unsigned char[]>, uint32_t, uint32_t, int32_t, int32_t> drawText(const TextRun& text, FTFace &face)
+		{
+			const std::vector<HarfbuzzPosition> &shapingResult = shapeText(text, face);
+
+			if (shapingResult.empty())
+				return std::make_tuple(nullptr, 0, 0, 0, 0);
+
+			int32_t min_x = 1000;
+			int32_t max_x = -1000;
+			int32_t min_y = 1000;
+			int32_t max_y = -1000;
+
+			// build glyphes
+
+			struct glyphRaster
+			{
+				std::unique_ptr<unsigned char[]> buffer;
+				Vector2i pixelPosition;
+				Vector2i size;
+				uint32_t pitch;
+
+				glyphRaster(std::unique_ptr<unsigned char[]> &&b, Vector2i &&p, Vector2i &&s, uint32_t _pitch)
+					: buffer(std::move(b)), pixelPosition(p), size(s), pitch(_pitch)
+				{}
+			};
+
+			std::vector<glyphRaster> glyphes;
+			std::transform(shapingResult.begin(), shapingResult.end(), std::back_inserter(glyphes),
+				[&] (const HarfbuzzPosition &g) {
+				RasterizedGlyph glyph = face.get(g.codepoint, g.penPosition % 64);
+				int32_t x0 = g.penPosition.x / 64 + glyph.bearing_x;
+				int32_t y0 = g.penPosition.y / 64 - glyph.bearing_y;
+				min_x = std::min(x0, min_x);
+				max_x = std::max(static_cast<int32_t>(x0 + glyph.width), max_x);
+				min_y = std::min(y0, min_y);
+				max_y = std::max(static_cast<int32_t>(y0 + glyph.height), max_y);
+				return glyphRaster(std::move(glyph.buffer), Vector2i(x0, y0), Vector2i(glyph.width, glyph.height), glyph.pitch);
+				});
+
+			uint32_t width = max_x - min_x + 1;
+			uint32_t height = max_y - min_y + 1;
+
+			std::unique_ptr<unsigned char[]> stringTexture(new unsigned char[4 * width * height]);
+			memset(stringTexture.get(), 0, 4 * width * height);
+
+			std::for_each(glyphes.begin(), glyphes.end(),
+				[&](const glyphRaster &g)
+				{
+					for (int i = 0; i < g.size.y; ++i)
+					{
+						uint32_t i0 = g.pixelPosition.y - min_y;
+						for (int j = 0; j < g.size.x; ++j)
+						{
+							uint32_t j0 = g.pixelPosition.x - min_x;
+							stringTexture[4 * ((i0 + i) * width + j + j0)] = g.buffer[i * g.pitch + 3 * j];
+							stringTexture[4 * ((i0 + i) * width + j + j0) + 1] = g.buffer[i * g.pitch + 3 * j + 1];
+							stringTexture[4 * ((i0 + i) * width + j + j0) + 2] = g.buffer[i * g.pitch + 3 * j + 2];
+						}
+					}
+				});
+			return std::make_tuple(std::move(stringTexture), width, height, min_x, min_y);
+		}
+
+	public:
+		hb_buffer_t* m_buffer;
+
+		struct HarfbuzzPosition
+		{
+			hb_codepoint_t codepoint;
+			Vector2i penPosition;
+
+			HarfbuzzPosition(hb_codepoint_t c, Vector2i &&p) : codepoint(c), penPosition(p) {}
+		};
+
+		std::vector<HarfbuzzPosition> shapeText(const TextRun& text, FTFace &face)
+		{
+			hb_buffer_reset(m_buffer);
+			size_t length = text.text.size();
+
+			hb_buffer_add_utf8(m_buffer, text.text.c_str(), length, 0, length);
+			hb_buffer_guess_segment_properties(m_buffer);
+
+			// harfbuzz shaping
+			std::array<hb_feature_t, 3> features = { HBFeature::KerningOn, HBFeature::LigatureOn, HBFeature::CligOn };
+			hb_shape(face.m_font, m_buffer, features.data(), features.size());
+
+			unsigned int glyphCount;
+			hb_glyph_info_t *glyphInfo = hb_buffer_get_glyph_infos(m_buffer, &glyphCount);
+			hb_glyph_position_t *glyphPos = hb_buffer_get_glyph_positions(m_buffer, &glyphCount);
+			if (glyphCount == 0)
+				return{};
+
+			int32_t x = 0;
+			int32_t y = 0;
+			std::vector<HarfbuzzPosition> glyphes;
+			for (int glyphIndex = 0; glyphIndex < glyphCount; ++glyphIndex)
+			{
+				glyphes.emplace_back(glyphInfo[glyphIndex].codepoint, Vector2i(x + glyphPos[glyphIndex].x_offset, y + glyphPos[glyphIndex].y_offset));
+
+				x += glyphPos[glyphIndex].x_advance;
+				y += glyphPos[glyphIndex].y_advance;
+			};
+			return glyphes;
+		}
+
+	};
+} // end anonymous namespace
+
+
 
 /***************************************************************************/
 /*
@@ -64,351 +374,121 @@ static GLint _glcFont_Bold = 0;
 
 void iV_font(const char *fontName, const char *fontFace, const char *fontFaceBold)
 {
-	if (_glcContext)
-	{
-		debug(LOG_ERROR, "Cannot change font in running game, yet.");
-		return;
-	}
-	if (fontName)
-	{
-		sstrcpy(font_family, fontName);
-	}
-	if (fontFace)
-	{
-		sstrcpy(font_face_regular, fontFace);
-	}
-	if (fontFaceBold)
-	{
-		sstrcpy(font_face_bold, fontFaceBold);
-	}
 }
 
-static void iV_initializeGLC(void)
+FTlib &getGlobalFTlib()
 {
-	if (_glcContext)
-	{
-		return;
-	}
+	static FTlib globalFT;
+	return globalFT;
+}
 
-	_glcContext = glcGenContext();
-	if (!_glcContext)
-	{
-		debug(LOG_ERROR, "Failed to initialize");
-	}
-	else
-	{
-		debug(LOG_NEVER, "Successfully initialized. _glcContext = %d", (int)_glcContext);
-	}
+TextShaper &getShaper()
+{
+	static TextShaper shaper;
+	return shaper;
+}
 
-	glcContext(_glcContext);
-
-	glcEnable(GLC_AUTO_FONT);		// We *do* want font fall-backs
-	glcRenderStyle(GLC_TEXTURE);
-	glcStringType(GLC_UTF8_QSO); // Set GLC's string type to UTF-8 FIXME should be UCS4 to avoid conversions
-
-#ifdef WZ_OS_MAC
-	{
-		char resourcePath[PATH_MAX];
-		CFURLRef resourceURL = CFBundleCopyResourcesDirectoryURL(CFBundleGetMainBundle());
-		if (CFURLGetFileSystemRepresentation(resourceURL, true, (UInt8 *) resourcePath, PATH_MAX))
-		{
-			sstrcat(resourcePath, "/Fonts");
-			glcAppendCatalog(resourcePath);
-		}
-		else
-		{
-			debug(LOG_ERROR, "Could not change to resources directory.");
-		}
-
-		if (resourceURL != NULL)
-		{
-			CFRelease(resourceURL);
-		}
-	}
+#define DPI 72
+#ifdef WZ_OS_WIN32
+#define FONT_PATH std::string(PHYSFS_getBaseDir()) + "fonts\\"
+#else
+#define FONT_PATH std::string("/usr/share/fonts/dejavu/") 
 #endif
 
-	_glcFont_Regular = glcGenFontID();
-	_glcFont_Bold = glcGenFontID();
-
-	if (!glcNewFontFromFamily(_glcFont_Regular, font_family))
+FTFace &getFTFace(iV_fonts FontID)
+{
+	switch (FontID)
 	{
-		debug(LOG_ERROR, "Failed to select font family %s as regular font", font_family);
+	default:
+	case font_regular:
+	{
+		static FTFace regular(getGlobalFTlib().lib, FONT_PATH + "DejaVuSans.ttf", 12 * 64, DPI, DPI);
+		return regular;
 	}
-	else
+	case font_large:
 	{
-		debug(LOG_NEVER, "Successfully selected font family %s as regular font", font_family);
+		static FTFace bold(getGlobalFTlib().lib, FONT_PATH + "DejaVuSans-Bold.ttf", 21 * 64, DPI, DPI);
+		return bold;
 	}
-
-	if (!glcFontFace(_glcFont_Regular, font_face_regular))
+	case font_medium:
 	{
-		debug(LOG_WARNING, "Failed to select the \"%s\" font face of font family %s", font_face_regular, font_family);
+		static FTFace medium(getGlobalFTlib().lib, FONT_PATH + "DejaVuSans.ttf", 16 * 64, DPI, DPI);
+		return medium;
 	}
-	else
+	case font_small:
 	{
-		debug(LOG_NEVER, "Successfully selected the \"%s\" font face of font family %s", font_face_regular, font_family);
+		static FTFace small(getGlobalFTlib().lib, FONT_PATH + "DejaVuSans.ttf", 9 * 64, DPI, DPI);
+		return small;
 	}
-
-	if (!glcNewFontFromFamily(_glcFont_Bold, font_family))
-	{
-		debug(LOG_ERROR, "iV_initializeGLC: Failed to select font family %s for the bold font", font_family);
-	}
-	else
-	{
-		debug(LOG_NEVER, "Successfully selected font family %s for the bold font", font_family);
 	}
 
-	if (!glcFontFace(_glcFont_Bold, font_face_bold))
-	{
-		debug(LOG_WARNING, "Failed to select the \"%s\" font face of font family %s", font_face_bold, font_family);
-	}
-	else
-	{
-		debug(LOG_NEVER, "Successfully selected the \"%s\" font face of font family %s", font_face_bold, font_family);
-	}
-
-	debug(LOG_NEVER, "Finished initializing GLC");
 }
+
+static GLuint textureID;
+static GLuint pbo;
 
 void iV_TextInit()
 {
-	iV_initializeGLC();
+	glGenTextures(1, &textureID);
+	glGenBuffers(1, &pbo);
 	iV_SetFont(font_regular);
 }
 
 void iV_TextShutdown()
 {
-	if (_glcFont_Regular)
-	{
-		glcDeleteFont(_glcFont_Regular);
-	}
-
-	if (_glcFont_Bold)
-	{
-		glcDeleteFont(_glcFont_Bold);
-	}
-
-	glcContext(0);
-
-	if (_glcContext)
-	{
-		glcDeleteContext(_glcContext);
-	}
+	glDeleteBuffers(1, &pbo);
+	glDeleteTextures(1, &textureID);
 }
+
+static iV_fonts s_FondID;
 
 void iV_SetFont(enum iV_fonts FontID)
 {
-	switch (FontID)
-	{
-	case font_scaled:
-		iV_SetTextSize(12.f * pie_GetVideoBufferHeight() / 480);
-		glcFont(_glcFont_Regular);
-		break;
-
-	default:
-	case font_regular:
-		iV_SetTextSize(12.f);
-		glcFont(_glcFont_Regular);
-		break;
-
-	case font_large:
-		iV_SetTextSize(21.f);
-		glcFont(_glcFont_Bold);
-		break;
-
-	case font_medium:
-		iV_SetTextSize(16.f);
-		glcFont(_glcFont_Regular);
-		break;
-
-	case font_small:
-		iV_SetTextSize(9.f);
-		glcFont(_glcFont_Regular);
-		break;
-	}
-}
-
-static inline float getGLCResolution(void)
-{
-	float resolution = glcGetf(GLC_RESOLUTION);
-
-	// The default resolution as used by OpenGLC is 72 dpi
-	if (resolution == 0.f)
-	{
-		return 72.f;
-	}
-
-	return resolution;
-}
-
-static inline float getGLCPixelSize(void)
-{
-	float pixel_size = font_size * getGLCResolution() / 72.f;
-	return pixel_size;
-}
-
-static inline float getGLCPointWidth(const float *boundingbox)
-{
-	// boundingbox contains: [ xlb ylb xrb yrb xrt yrt xlt ylt ]
-	// l = left; r = right; b = bottom; t = top;
-	float rightTopX = boundingbox[4];
-	float leftTopX = boundingbox[6];
-
-	float point_width = rightTopX - leftTopX;
-
-	return point_width;
-}
-
-static inline float getGLCPointHeight(const float *boundingbox)
-{
-	// boundingbox contains: [ xlb ylb xrb yrb xrt yrt xlt ylt ]
-	// l = left; r = right; b = bottom; t = top;
-	float leftBottomY = boundingbox[1];
-	float leftTopY = boundingbox[7];
-
-	float point_height = fabsf(leftTopY - leftBottomY);
-
-	return point_height;
-}
-
-static inline float getGLCPointToPixel(float point_width)
-{
-	float pixel_width = point_width * getGLCPixelSize();
-
-	return pixel_width;
+	s_FondID = FontID;
 }
 
 unsigned int iV_GetTextWidth(const char *string)
 {
-	float boundingbox[8];
-	float pixel_width, point_width;
-
-	glcMeasureString(GL_FALSE, string);
-	if (!glcGetStringMetric(GLC_BOUNDS, boundingbox))
-	{
-		debug(LOG_ERROR, "Couldn't retrieve a bounding box for the string \"%s\"", string);
-		return 0;
-	}
-
-	point_width = getGLCPointWidth(boundingbox);
-	pixel_width = getGLCPointToPixel(point_width);
-	return (unsigned int)pixel_width;
+	uint32_t width;
+	TextRun tr(string, "en", HB_SCRIPT_COMMON, HB_DIRECTION_LTR);
+	std::tie(width, std::ignore) = getShaper().getTextMetrics(tr, getFTFace(s_FondID));
+	return width;
 }
 
 unsigned int iV_GetCountedTextWidth(const char *string, size_t string_length)
 {
-	float boundingbox[8];
-	float pixel_width, point_width;
-
-	glcMeasureCountedString(GL_FALSE, string_length, string);
-	if (!glcGetStringMetric(GLC_BOUNDS, boundingbox))
-	{
-		debug(LOG_ERROR, "Couldn't retrieve a bounding box for the string \"%s\" of length %u", string, (unsigned int)string_length);
-		return 0;
-	}
-
-	point_width = getGLCPointWidth(boundingbox);
-	pixel_width = getGLCPointToPixel(point_width);
-	return (unsigned int)pixel_width;
+	return iV_GetTextWidth(string);
 }
 
 unsigned int iV_GetTextHeight(const char *string)
 {
-	float boundingbox[8];
-	float pixel_height, point_height;
-
-	glcMeasureString(GL_FALSE, string);
-	if (!glcGetStringMetric(GLC_BOUNDS, boundingbox))
-	{
-		debug(LOG_ERROR, "Couldn't retrieve a bounding box for the string \"%s\"", string);
-		return 0;
-	}
-
-	point_height = getGLCPointHeight(boundingbox);
-	pixel_height = getGLCPointToPixel(point_height);
-	return (unsigned int)pixel_height;
+	uint32_t height;
+	TextRun tr(string, "en", HB_SCRIPT_COMMON, HB_DIRECTION_LTR);
+	std::tie(std::ignore, height) = getShaper().getTextMetrics(tr, getFTFace(s_FondID));
+	return height;
 }
 
 unsigned int iV_GetCharWidth(uint32_t charCode)
 {
-	float boundingbox[8];
-	float pixel_width, point_width;
-
-	if (!glcGetCharMetric(charCode, GLC_BOUNDS, boundingbox))
-	{
-		debug(LOG_ERROR, "Couldn't retrieve a bounding box for the character code %u", charCode);
-		return 0;
-	}
-
-	point_width = getGLCPointWidth(boundingbox);
-	pixel_width = getGLCPointToPixel(point_width);
-	return (unsigned int)pixel_width;
+	return getFTFace(s_FondID).getGlyphWidth(charCode) >> 6;
 }
 
 int iV_GetTextLineSize()
 {
-	float boundingbox[8];
-	float pixel_height, point_height;
-
-	if (!glcGetMaxCharMetric(GLC_BOUNDS, boundingbox))
-	{
-		debug(LOG_ERROR, "Couldn't retrieve a bounding box for the character");
-		return 0;
-	}
-
-	point_height = getGLCPointHeight(boundingbox);
-	pixel_height = getGLCPointToPixel(point_height);
-	return (unsigned int)pixel_height;
-}
-
-static float iV_GetMaxCharBaseY(void)
-{
-	float base_line[4]; // [ xl yl xr yr ]
-
-	if (!glcGetMaxCharMetric(GLC_BASELINE, base_line))
-	{
-		debug(LOG_ERROR, "Couldn't retrieve the baseline for the character");
-		return 0;
-	}
-
-	return base_line[1];
+	FT_Face face = getFTFace(s_FondID);
+	return (face->size->metrics.ascender - face->size->metrics.descender) >> 6;
 }
 
 int iV_GetTextAboveBase(void)
 {
-	float point_base_y = iV_GetMaxCharBaseY();
-	float point_top_y;
-	float boundingbox[8];
-	float pixel_height, point_height;
-
-	if (!glcGetMaxCharMetric(GLC_BOUNDS, boundingbox))
-	{
-		debug(LOG_ERROR, "Couldn't retrieve a bounding box for the character");
-		return 0;
-	}
-
-	point_top_y = boundingbox[7];
-	point_height = point_base_y - point_top_y;
-	pixel_height = getGLCPointToPixel(point_height);
-	return (int)pixel_height;
+	FT_Face face = getFTFace(s_FondID);
+	return -(face->size->metrics.ascender >> 6);
 }
 
 int iV_GetTextBelowBase(void)
 {
-	float point_base_y = iV_GetMaxCharBaseY();
-	float point_bottom_y;
-	float boundingbox[8];
-	float pixel_height, point_height;
-
-	if (!glcGetMaxCharMetric(GLC_BOUNDS, boundingbox))
-	{
-		debug(LOG_ERROR, "Couldn't retrieve a bounding box for the character");
-		return 0;
-	}
-
-	point_bottom_y = boundingbox[1];
-	point_height = point_bottom_y - point_base_y;
-	pixel_height = getGLCPointToPixel(point_height);
-	return (int)pixel_height;
+	FT_Face face = getFTFace(s_FondID);
+	return face->size->metrics.descender >> 6;
 }
 
 void iV_SetTextColour(PIELIGHT colour)
@@ -569,7 +649,6 @@ int iV_DrawFormattedText(const char *String, UDWORD x, UDWORD y, UDWORD Width, U
 
 void iV_DrawTextRotated(const char *string, float XPos, float YPos, float rotation)
 {
-	GLint matrix_mode = 0;
 	ASSERT_OR_RETURN(, string, "Couldn't render string!");
 	pie_SetTexturePage(TEXPAGE_EXTERN);
 
@@ -582,19 +661,39 @@ void iV_DrawTextRotated(const char *string, float XPos, float YPos, float rotati
 
 	if (rotation != 0.f)
 	{
-		rotation = 360.f - rotation;
+		rotation = 180. - rotation;
 	}
 
-	glTranslatef(XPos, YPos, 0.f);
-	glRotatef(180.f, 1.f, 0.f, 0.f);
+	glTranslatef(floor(XPos), floor(YPos), 0.f);
 	glRotatef(rotation, 0.f, 0.f, 1.f);
-	glScalef(font_size, font_size, 0.f);
 
 	glColor4fv(font_colour);
+	PIELIGHT color;
+	color.vector[0] = font_colour[0] * 255.f;
+	color.vector[1] = font_colour[1] * 255.f;
+	color.vector[2] = font_colour[2] * 255.f;
+	color.vector[3] = font_colour[3] * 255.f;
 
-	glFrontFace(GL_CW);
-	glcRenderString(string);
-	glFrontFace(GL_CCW);
+	TextRun tr(string, "en", HB_SCRIPT_COMMON, HB_DIRECTION_LTR);
+	uint32_t width, height;
+	std::unique_ptr<unsigned char[]> texture;
+	int32_t xoffset, yoffset;
+	std::tie(texture, width, height, xoffset, yoffset) = getShaper().drawText(tr, getFTFace(s_FondID));
+	if (width > 0 && height > 0)
+	{
+		pie_SetTexturePage(TEXPAGE_EXTERN);
+		glBindTexture(GL_TEXTURE_2D, textureID);
+		glBindBuffer(GL_PIXEL_UNPACK_BUFFER, pbo);
+		glBufferData(GL_PIXEL_UNPACK_BUFFER, 4 * width * height, texture.get(), GL_STREAM_DRAW);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+		glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+		iV_DrawImage(textureID, Vector2i(xoffset, yoffset), Vector2i(width, height), REND_TEXT, color);
+	}
 
 	glPopMatrix();
 	glMatrixMode(GL_TEXTURE);
@@ -641,4 +740,12 @@ void iV_DrawTextF(float x, float y, const char *format, ...)
 void iV_SetTextSize(float size)
 {
 	font_size = size;
+	if (size == 12)
+		s_FondID = font_regular;
+	if (size == 21)
+		s_FondID = font_large;
+	if (size == 16)
+		s_FondID = font_medium;
+	if (size == 9)
+		s_FondID = font_small;
 }

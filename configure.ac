@@ -453,12 +453,14 @@ AX_TLS
 
 PKG_CHECK_MODULES([FRIBIDI], [fribidi])
 PKG_CHECK_MODULES([FREETYPE], [freetype2])
+PKG_CHECK_MODULES([HARFBUZZ], [harfbuzz])
+WZ_CXXFLAGS="${WZ_CXXFLAGS} ${HARFBUZZ_CFLAGS} ${FREETYPE_CFLAGS}"
 AC_CHECK_LIB(freetype, FTC_Manager_New,
              AC_DEFINE([HAVE_FT_CACHE], [1],
                        [Define if FreeType supports the caching routines]))
 PKG_CHECK_MODULES([FONTCONFIG], [fontconfig])
 
-OPENGLC_LIBS="${FRIBIDI_LIBS} ${FREETYPE_LIBS} ${FONTCONFIG_LIBS} ${PTHREAD_LIBS} ${OPENGL_LIBS} ${GLEW_LIBS}"
+OPENGLC_LIBS="${FRIBIDI_LIBS} ${FREETYPE_LIBS} ${FONTCONFIG_LIBS} ${PTHREAD_LIBS} ${OPENGL_LIBS} ${GLEW_LIBS} ${HARFBUZZ_LIBS}"
 AC_SUBST([OPENGLC_LIBS], [${OPENGLC_LIBS}])
 
 # When (cross-)compiling for Windows (MinGW) we need to link in BFD for the Dr.

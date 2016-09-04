@@ -274,6 +274,33 @@ static bool assertValidImage(IMAGEFILE *imageFile, unsigned id)
 	return true;
 }
 
+static void iv_DrawImageImpl(Vector2i Position, Vector2i size, Vector2f TextureUV, Vector2f TextureSize, PIELIGHT colour)
+{
+	glColor4ubv(colour.vector);
+	glBegin(GL_TRIANGLE_STRIP);
+	glTexCoord2f(TextureUV.x, TextureUV.y);
+	glVertex2f(Position.x, Position.y);
+
+	glTexCoord2f(TextureUV.x + TextureSize.x, TextureUV.y);
+	glVertex2f(Position.x + size.x, Position.y);
+
+	glTexCoord2f(TextureUV.x, TextureUV.y + TextureSize.y);
+	glVertex2f(Position.x, Position.y + size.y);
+
+	glTexCoord2f(TextureUV.x + TextureSize.x, TextureUV.y + TextureSize.y);
+	glVertex2f(Position.x + size.x, Position.y + size.y);
+	glEnd();
+
+}
+
+void iV_DrawImage(GLuint TextureID, Vector2i Position, Vector2i size, REND_MODE mode, PIELIGHT colour)
+{
+	pie_SetRendMode(mode);
+	pie_SetTexturePage(TEXPAGE_EXTERN);
+	glBindTexture(GL_TEXTURE_2D, TextureID);
+	iv_DrawImageImpl(Position, size, Vector2f(0.f, 0.f), Vector2f(1.f, 1.f), colour);
+}
+
 static void pie_DrawImage(IMAGEFILE *imageFile, int id, Vector2i size, const PIERECT *dest, PIELIGHT colour = WZCOL_WHITE)
 {
 	ImageDef const &image2 = imageFile->imageDefs[id];
@@ -283,20 +310,10 @@ static void pie_DrawImage(IMAGEFILE *imageFile, int id, Vector2i size, const PIE
 	int tv = image2.Tv;
 
 	pie_SetTexturePage(texPage);
-	glColor4ubv(colour.vector);
-	glBegin(GL_TRIANGLE_STRIP);
-	glTexCoord2f(tu * invTextureSize, tv * invTextureSize);
-	glVertex2f(dest->x, dest->y);
-
-	glTexCoord2f((tu + size.x) * invTextureSize, tv * invTextureSize);
-	glVertex2f(dest->x + dest->w, dest->y);
-
-	glTexCoord2f(tu * invTextureSize, (tv + size.y) * invTextureSize);
-	glVertex2f(dest->x, dest->y + dest->h);
-
-	glTexCoord2f((tu + size.x) * invTextureSize, (tv + size.y) * invTextureSize);
-	glVertex2f(dest->x + dest->w, dest->y + dest->h);
-	glEnd();
+	iv_DrawImageImpl(Vector2i(dest->x, dest->y), Vector2i(dest->w, dest->h),
+		Vector2f(tu * invTextureSize, tv * invTextureSize),
+		Vector2f(size.x * invTextureSize, size.y * invTextureSize),
+		colour);
 }
 
 static Vector2i makePieImage(IMAGEFILE *imageFile, unsigned id, PIERECT *dest, int x, int y)
@@ -326,21 +343,11 @@ void iV_DrawImage2(const QString &filename, float x, float y, float width, float
 	x += image->XOffset;
 	y += image->YOffset;
 	pie_SetTexturePage(image->textureId);
-	glColor4ubv(WZCOL_WHITE.vector);
 	pie_SetRendMode(REND_ALPHA);
-	glBegin(GL_TRIANGLE_STRIP);
-	glTexCoord2f(tu * image->invTextureSize, tv * invTextureSize);
-	glVertex2f(x, y);
-
-	glTexCoord2f((tu + image->Width) * invTextureSize, tv * invTextureSize);
-	glVertex2f(x + w, y);
-
-	glTexCoord2f(tu * invTextureSize, (tv + image->Height) * invTextureSize);
-	glVertex2f(x, y + h);
-
-	glTexCoord2f((tu + image->Width) * invTextureSize, (tv + image->Height) * invTextureSize);
-	glVertex2f(x + w, y + h);
-	glEnd();
+	iv_DrawImageImpl(Vector2i(x, y), Vector2i(w, h),
+		Vector2f(tu * invTextureSize, tv * invTextureSize),
+		Vector2f(image->Width * invTextureSize, image->Height * invTextureSize),
+		WZCOL_WHITE);
 }
 
 void iV_DrawImage(IMAGEFILE *ImageFile, UWORD ID, int x, int y)

@@ -602,6 +602,8 @@ $(Qt5dir)\bin\moc.exe multiint.h  -o multiint_moc.h</Command>
     <Import Project="..\win32\packages\libiconv.vp.1.14.0.1\build\native\libiconv.vp.targets" Condition="Exists('..\win32\packages\libiconv.vp.1.14.0.1\build\native\libiconv.vp.targets')" />
     <Import Project="..\win32\packages\libintl.vp.redist.0.19.8.2\build\native\libintl.vp.redist.targets" Condition="Exists('..\win32\packages\libintl.vp.redist.0.19.8.2\build\native\libintl.vp.redist.targets')" />
     <Import Project="..\win32\packages\libintl.vp.0.19.8.2\build\native\libintl.vp.targets" Condition="Exists('..\win32\packages\libintl.vp.0.19.8.2\build\native\libintl.vp.targets')" />
+    <Import Project="..\win32\packages\freetype2.2.6.0.1\build\native\freetype2.targets" Condition="Exists('..\win32\packages\freetype2.2.6.0.1\build\native\freetype2.targets')" />
+    <Import Project="..\win32\packages\harfbuzz.0.9.41.1\build\native\harfbuzz.targets" Condition="Exists('..\win32\packages\harfbuzz.0.9.41.1\build\native\harfbuzz.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
@@ -627,5 +629,7 @@ $(Qt5dir)\bin\moc.exe multiint.h  -o multiint_moc.h</Command>
     <Error Condition="!Exists('..\win32\packages\libiconv.vp.1.14.0.1\build\native\libiconv.vp.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\win32\packages\libiconv.vp.1.14.0.1\build\native\libiconv.vp.targets'))" />
     <Error Condition="!Exists('..\win32\packages\libintl.vp.redist.0.19.8.2\build\native\libintl.vp.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\win32\packages\libintl.vp.redist.0.19.8.2\build\native\libintl.vp.redist.targets'))" />
     <Error Condition="!Exists('..\win32\packages\libintl.vp.0.19.8.2\build\native\libintl.vp.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\win32\packages\libintl.vp.0.19.8.2\build\native\libintl.vp.targets'))" />
+    <Error Condition="!Exists('..\win32\packages\freetype2.2.6.0.1\build\native\freetype2.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\win32\packages\freetype2.2.6.0.1\build\native\freetype2.targets'))" />
+    <Error Condition="!Exists('..\win32\packages\harfbuzz.0.9.41.1\build\native\harfbuzz.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\win32\packages\harfbuzz.0.9.41.1\build\native\harfbuzz.targets'))" />
   </Target>
 </Project>
