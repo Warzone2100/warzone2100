@@ -526,7 +526,7 @@ static SDWORD targetAttackWeight(BASE_OBJECT *psTarget, BASE_OBJECT *psAttacker,
 // Returns integer representing target priority, -1 if failed
 int aiBestNearestTarget(DROID *psDroid, BASE_OBJECT **ppsObj, int weapon_slot, int extraRange)
 {
-	constexpr int failure = -1;
+	int failure = -1;
 	int bestMod = 0;
 	BASE_OBJECT                     *psTarget = NULL, *bestTarget = NULL, *tempTarget;
 	bool				electronic = false;

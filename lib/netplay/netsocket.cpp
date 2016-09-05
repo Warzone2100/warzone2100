@@ -31,6 +31,9 @@
 #include <algorithm>
 #include <map>
 
+#if defined(WZ_CC_MSVC)
+# define ZLIB_WINAPI
+#endif
 #include <zlib.h>
 
 enum
