@@ -64,9 +64,9 @@ struct PATHRESULT
 static WZ_THREAD        *fpathThread = NULL;
 static WZ_MUTEX         *fpathMutex = NULL;
 static WZ_SEMAPHORE     *fpathSemaphore = NULL;
-using packagedPathJob = std::packaged_task<PATHRESULT()>;
+using packagedPathJob = wz::packaged_task<PATHRESULT()>;
 static std::list<packagedPathJob>    pathJobs;
-static std::unordered_map<uint32_t, std::future<PATHRESULT>> pathResults;
+static std::unordered_map<uint32_t, wz::future<PATHRESULT>> pathResults;
 
 static bool             waitingForResult = false;
 static uint32_t         waitingForResultId;
@@ -94,9 +94,8 @@ static int fpathThreadFunc(void *)
 		// Copy the first job from the queue.
 		packagedPathJob job = std::move(pathJobs.front());
 		pathJobs.pop_front();
-		wzMutexUnlock(fpathMutex);
 
-		// we need to lock BEFORE we fiddle with the data, or we get ugly data race conditions.
+		wzMutexUnlock(fpathMutex);
 		job();
 		wzMutexLock(fpathMutex);
 
@@ -318,7 +317,7 @@ void fpathRemoveDroidData(int id)
 	pathResults.erase(id);
 }
 
-static FPATH_RETVAL fpathRoute(MOVE_CONTROL *psMove, int id, int startX, int startY, int tX, int tY, PROPULSION_TYPE propulsionType,
+static FPATH_RETVAL fpathRoute(MOVE_CONTROL *psMove, unsigned id, int startX, int startY, int tX, int tY, PROPULSION_TYPE propulsionType,
                                DROID_TYPE droidType, FPATH_MOVETYPE moveType, int owner, bool acceptNearest, StructureBounds const &dstStructure)
 {
 	objTrace(id, "called(*,id=%d,sx=%d,sy=%d,ex=%d,ey=%d,prop=%d,type=%d,move=%d,owner=%d)", id, startX, startY, tX, tY, (int)propulsionType, (int)droidType, (int)moveType, owner);
@@ -346,16 +345,7 @@ static FPATH_RETVAL fpathRoute(MOVE_CONTROL *psMove, int id, int startX, int sta
 		objTrace(id, "Checking if we have a path yet");
 
 		auto const &I = pathResults.find(id);
-		assert(I != pathResults.end());
-		bool isReady = I->second.wait_for(std::chrono::seconds(0)) == std::future_status::ready;
-		if (!isReady)
-		{
-			objTrace(id, "No path yet. Waiting.");
-			waitingForResult = true;
-			waitingForResultId = id;
-			wzSemaphoreWait(waitingForResultSemaphore);  // keep waiting
-			continue;
-		}
+		ASSERT(I != pathResults.end(), "Missing path result promise");
 		PATHRESULT result = I->second.get();
 		ASSERT(result.retval != FPR_OK || result.sMove.asPath, "Ok result but no path in list");
 
