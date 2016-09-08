@@ -183,6 +183,10 @@
   <ImportGroup Label="ExtensionTargets">
     <Import Project="..\..\win32\packages\physfs.v140.2.0.3.1\build\native\physfs.v140.targets" Condition="Exists('..\..\win32\packages\physfs.v140.2.0.3.1\build\native\physfs.v140.targets')" />
     <Import Project="..\..\win32\packages\glew.v140.1.12.0\build\native\glew.v140.targets" Condition="Exists('..\..\win32\packages\glew.v140.1.12.0\build\native\glew.v140.targets')" />
+    <Import Project="..\..\win32\packages\libiconv.redist.1.14.0.10\build\native\libiconv.redist.targets" Condition="Exists('..\..\win32\packages\libiconv.redist.1.14.0.10\build\native\libiconv.redist.targets')" />
+    <Import Project="..\..\win32\packages\libiconv.1.14.0.10\build\native\libiconv.targets" Condition="Exists('..\..\win32\packages\libiconv.1.14.0.10\build\native\libiconv.targets')" />
+    <Import Project="..\..\win32\packages\libintl.redist.0.18.2.10\build\native\libintl.redist.targets" Condition="Exists('..\..\win32\packages\libintl.redist.0.18.2.10\build\native\libintl.redist.targets')" />
+    <Import Project="..\..\win32\packages\libintl.0.18.2.10\build\native\libintl.targets" Condition="Exists('..\..\win32\packages\libintl.0.18.2.10\build\native\libintl.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
@@ -190,5 +194,9 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\..\win32\packages\physfs.v140.2.0.3.1\build\native\physfs.v140.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\win32\packages\physfs.v140.2.0.3.1\build\native\physfs.v140.targets'))" />
     <Error Condition="!Exists('..\..\win32\packages\glew.v140.1.12.0\build\native\glew.v140.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\win32\packages\glew.v140.1.12.0\build\native\glew.v140.targets'))" />
+    <Error Condition="!Exists('..\..\win32\packages\libiconv.redist.1.14.0.10\build\native\libiconv.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\win32\packages\libiconv.redist.1.14.0.10\build\native\libiconv.redist.targets'))" />
+    <Error Condition="!Exists('..\..\win32\packages\libiconv.1.14.0.10\build\native\libiconv.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\win32\packages\libiconv.1.14.0.10\build\native\libiconv.targets'))" />
+    <Error Condition="!Exists('..\..\win32\packages\libintl.redist.0.18.2.10\build\native\libintl.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\win32\packages\libintl.redist.0.18.2.10\build\native\libintl.redist.targets'))" />
+    <Error Condition="!Exists('..\..\win32\packages\libintl.0.18.2.10\build\native\libintl.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\win32\packages\libintl.0.18.2.10\build\native\libintl.targets'))" />
   </Target>
 </Project>

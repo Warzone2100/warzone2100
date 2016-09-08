@@ -284,3 +284,6 @@ win32/CodeAnalyst
 /tests/jslist.txt
 /tests/maplist.txt
 /tests/modellist.txt
+
+# Locale
+/locale

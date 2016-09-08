@@ -22,6 +22,12 @@
 /* NLS can be disabled through the configure --disable-nls option.  */
 #if ENABLE_NLS
 
+// Note: libintl_dcgettext symbol is not properly exported with MSVC build
+// We use dcgettext symbol instead which is exported.
+#ifdef WZ_CC_MSVC
+#define dcgettext dcgettext_dummy
+#endif
+
 /* Get declarations of GNU message catalog functions.  */
 # include <libintl.h>
 
@@ -123,6 +129,13 @@
 #define dcnpgettext(Domainname, Msgctxt, Msgid, MsgidPlural, N, Category) \
 	npgettext_aux (Domainname, Msgctxt GETTEXT_CONTEXT_GLUE Msgid, Msgid, MsgidPlural, N, Category)
 
+#ifdef WZ_CC_MSVC
+#undef dcgettext
+
+extern "C" char *dcgettext(const char *__domainname, const char *__msgid,
+	int __category)
+	_INTL_MAY_RETURN_STRING_ARG(2);
+#endif
 #ifdef __GNUC__
 __inline
 #else

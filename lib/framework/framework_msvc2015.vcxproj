@@ -254,6 +254,10 @@
     <Import Project="..\..\win32\packages\zlib.v140.windesktop.msvcstl.dyn.rt-dyn.1.2.8.8\build\native\zlib.v140.windesktop.msvcstl.dyn.rt-dyn.targets" Condition="Exists('..\..\win32\packages\zlib.v140.windesktop.msvcstl.dyn.rt-dyn.1.2.8.8\build\native\zlib.v140.windesktop.msvcstl.dyn.rt-dyn.targets')" />
     <Import Project="..\..\win32\packages\openssl.v140.windesktop.msvcstl.dyn.rt-dyn.x64.1.0.2.0\build\native\openssl.v140.windesktop.msvcstl.dyn.rt-dyn.x64.targets" Condition="Exists('..\..\win32\packages\openssl.v140.windesktop.msvcstl.dyn.rt-dyn.x64.1.0.2.0\build\native\openssl.v140.windesktop.msvcstl.dyn.rt-dyn.x64.targets')" />
     <Import Project="..\..\win32\packages\openssl.v140.windesktop.msvcstl.dyn.rt-dyn.x86.1.0.2.0\build\native\openssl.v140.windesktop.msvcstl.dyn.rt-dyn.x86.targets" Condition="Exists('..\..\win32\packages\openssl.v140.windesktop.msvcstl.dyn.rt-dyn.x86.1.0.2.0\build\native\openssl.v140.windesktop.msvcstl.dyn.rt-dyn.x86.targets')" />
+    <Import Project="..\..\win32\packages\libiconv.redist.1.14.0.10\build\native\libiconv.redist.targets" Condition="Exists('..\..\win32\packages\libiconv.redist.1.14.0.10\build\native\libiconv.redist.targets')" />
+    <Import Project="..\..\win32\packages\libiconv.1.14.0.10\build\native\libiconv.targets" Condition="Exists('..\..\win32\packages\libiconv.1.14.0.10\build\native\libiconv.targets')" />
+    <Import Project="..\..\win32\packages\libintl.redist.0.18.2.10\build\native\libintl.redist.targets" Condition="Exists('..\..\win32\packages\libintl.redist.0.18.2.10\build\native\libintl.redist.targets')" />
+    <Import Project="..\..\win32\packages\libintl.0.18.2.10\build\native\libintl.targets" Condition="Exists('..\..\win32\packages\libintl.0.18.2.10\build\native\libintl.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
@@ -266,5 +270,9 @@
     <Error Condition="!Exists('..\..\win32\packages\zlib.v140.windesktop.msvcstl.dyn.rt-dyn.1.2.8.8\build\native\zlib.v140.windesktop.msvcstl.dyn.rt-dyn.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\win32\packages\zlib.v140.windesktop.msvcstl.dyn.rt-dyn.1.2.8.8\build\native\zlib.v140.windesktop.msvcstl.dyn.rt-dyn.targets'))" />
     <Error Condition="!Exists('..\..\win32\packages\openssl.v140.windesktop.msvcstl.dyn.rt-dyn.x64.1.0.2.0\build\native\openssl.v140.windesktop.msvcstl.dyn.rt-dyn.x64.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\win32\packages\openssl.v140.windesktop.msvcstl.dyn.rt-dyn.x64.1.0.2.0\build\native\openssl.v140.windesktop.msvcstl.dyn.rt-dyn.x64.targets'))" />
     <Error Condition="!Exists('..\..\win32\packages\openssl.v140.windesktop.msvcstl.dyn.rt-dyn.x86.1.0.2.0\build\native\openssl.v140.windesktop.msvcstl.dyn.rt-dyn.x86.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\win32\packages\openssl.v140.windesktop.msvcstl.dyn.rt-dyn.x86.1.0.2.0\build\native\openssl.v140.windesktop.msvcstl.dyn.rt-dyn.x86.targets'))" />
+    <Error Condition="!Exists('..\..\win32\packages\libiconv.redist.1.14.0.10\build\native\libiconv.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\win32\packages\libiconv.redist.1.14.0.10\build\native\libiconv.redist.targets'))" />
+    <Error Condition="!Exists('..\..\win32\packages\libiconv.1.14.0.10\build\native\libiconv.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\win32\packages\libiconv.1.14.0.10\build\native\libiconv.targets'))" />
+    <Error Condition="!Exists('..\..\win32\packages\libintl.redist.0.18.2.10\build\native\libintl.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\win32\packages\libintl.redist.0.18.2.10\build\native\libintl.redist.targets'))" />
+    <Error Condition="!Exists('..\..\win32\packages\libintl.0.18.2.10\build\native\libintl.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\win32\packages\libintl.0.18.2.10\build\native\libintl.targets'))" />
   </Target>
 </Project>
