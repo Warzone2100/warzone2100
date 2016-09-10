@@ -104,9 +104,7 @@ void visUpdateLevel(void)
 
 static inline void updateTileVis(MAPTILE *psTile)
 {
-	int i;
-
-	for (i = 0; i < MAX_PLAYERS; i++)
+	for (int i = 0; i < MAX_PLAYERS; i++)
 	{
 		/// The definition of whether a player can see something on a given tile or not
 		if (psTile->watchers[i] > 0 || (psTile->sensors[i] > 0 && !(psTile->jammerBits & ~alliancebits[i])))
@@ -126,7 +124,7 @@ uint32_t addSpotter(int x, int y, int player, int radius, bool radar, uint32_t e
 	size_t size;
 	const WavecastTile *tiles = getWavecastTable(radius, &size);
 	psSpot->watchedTiles = (TILEPOS *)malloc(size * sizeof(*psSpot->watchedTiles));
-	for (int i = 0; i < size; ++i)
+	for (unsigned i = 0; i < size; ++i)
 	{
 		const int mapX = x + tiles[i].dx;
 		const int mapY = y + tiles[i].dy;
@@ -151,7 +149,7 @@ uint32_t addSpotter(int x, int y, int player, int radius, bool radar, uint32_t e
 
 bool removeSpotter(uint32_t id)
 {
-	for (int i = 0; i < apsInvisibleViewers.size(); i++)
+	for (unsigned i = 0; i < apsInvisibleViewers.size(); i++)
 	{
 		SPOTTER *psSpot = apsInvisibleViewers.at(i);
 		if (psSpot->id == id)
@@ -177,7 +175,7 @@ void removeSpotters()
 static void updateSpotters()
 {
 	static GridList gridList;  // static to avoid allocations.
-	for (int i = 0; i < apsInvisibleViewers.size(); i++)
+	for (unsigned i = 0; i < apsInvisibleViewers.size(); i++)
 	{
 		SPOTTER *psSpot = apsInvisibleViewers.at(i);
 		if (psSpot->expiryTime != 0 && psSpot->expiryTime < gameTime)
@@ -249,10 +247,8 @@ static void doWaveTerrain(const BASE_OBJECT *psObj, TILEPOS *recordTilePos, int 
 	const int sz = psObj->pos.z + MAX(MIN_VIS_HEIGHT, psObj->sDisplay.imd->max.y);
 	const unsigned radius = objSensorRange(psObj);
 	const int rayPlayer = psObj->player;
-	size_t i;
 	size_t size;
 	const WavecastTile *tiles = getWavecastTable(radius, &size);
-	int tileHeight, perspectiveHeight, perspectiveHeightLeeway;
 #define MAX_WAVECAST_LIST_SIZE 1360  // Trivial upper bound to what a fully upgraded WSS can use (its number of angles). Should probably be some factor times the maximum possible radius. Is probably a lot more than needed. Tested to need at least 180.
 	int heights[2][MAX_WAVECAST_LIST_SIZE];
 	int angles[2][MAX_WAVECAST_LIST_SIZE + 1];
@@ -266,21 +262,19 @@ static void doWaveTerrain(const BASE_OBJECT *psObj, TILEPOS *recordTilePos, int 
 	angles[!readList][writeListPos] = 0;               // Smallest angle.
 	++writeListPos;
 
-	for (i = 0; i < size; ++i)
+	for (size_t i = 0; i < size; ++i)
 	{
 		const int mapX = map_coord(sx) + tiles[i].dx;
 		const int mapY = map_coord(sy) + tiles[i].dy;
-		MAPTILE *psTile;
-		bool seen = false;
-
 		if (mapX < 0 || mapX >= mapWidth || mapY < 0 || mapY >= mapHeight)
 		{
 			continue;
 		}
-		psTile = mapTile(mapX, mapY);
-		tileHeight = psTile->height;
-		perspectiveHeight = (tileHeight - sz) * tiles[i].invRadius;
-		perspectiveHeightLeeway = (tileHeight - sz + MIN_VIS_HEIGHT) * tiles[i].invRadius;
+
+		MAPTILE *psTile = mapTile(mapX, mapY);
+		int tileHeight = std::max(psTile->height, psTile->waterLevel);  // If we can see the water surface, then let us see water-covered tiles too.
+		int perspectiveHeight = (tileHeight - sz) * tiles[i].invRadius;
+		int perspectiveHeightLeeway = (tileHeight - sz + MIN_VIS_HEIGHT) * tiles[i].invRadius;
 
 		if (tiles[i].angBegin < lastAngle)
 		{
@@ -301,6 +295,7 @@ static void doWaveTerrain(const BASE_OBJECT *psObj, TILEPOS *recordTilePos, int 
 			++readListPos;  // Skip, not relevant.
 		}
 
+		bool seen = false;
 		while (angles[readList][readListPos] < tiles[i].angEnd && readListPos < readListSize)
 		{
 			int oldHeight = heights[readList][readListPos];
@@ -321,7 +316,7 @@ static void doWaveTerrain(const BASE_OBJECT *psObj, TILEPOS *recordTilePos, int 
 		if (seen)
 		{
 			// Can see this tile.
-			psTile->tileExploredBits |= alliancebits[rayPlayer];                            // Share exploration with allies too
+			psTile->tileExploredBits |= alliancebits[rayPlayer];                        // Share exploration with allies too
 			visMarkTile(psObj, mapX, mapY, psTile, recordTilePos, lastRecordTilePos);   // Mark this tile as seen by our sensor
 		}
 	}
@@ -430,7 +425,7 @@ void revealAll(UBYTE player)
  * psTarget can be any type of BASE_OBJECT (e.g. a tree).
  * struckBlock controls whether structures block LOS
  */
-int visibleObject(const BASE_OBJECT *psViewer, const BASE_OBJECT *psTarget, bool wallsBlock)
+int visibleObject(const BASE_OBJECT *psViewer, const BASE_OBJECT *psTarget, bool /*wallsBlock*/)
 {
 	ASSERT_OR_RETURN(0, psViewer != NULL, "Invalid viewer pointer!");
 	ASSERT_OR_RETURN(0, psTarget != NULL, "Invalid viewed pointer!");
@@ -599,8 +594,6 @@ static void setSeenByInstantly(BASE_OBJECT *psObj, unsigned viewer, int val /*= 
 // Calculate which objects we should know about based on alliances and satellite view.
 static void processVisibilitySelf(BASE_OBJECT *psObj)
 {
-	int viewer;
-
 	if (psObj->type != OBJ_FEATURE && objSensorRange(psObj) > 0)
 	{
 		// one can trivially see oneself
@@ -609,7 +602,7 @@ static void processVisibilitySelf(BASE_OBJECT *psObj)
 
 	// if a player has a SAT_UPLINK structure, or has godMode enabled,
 	// they can see everything!
-	for (viewer = 0; viewer < MAX_PLAYERS; viewer++)
+	for (unsigned viewer = 0; viewer < MAX_PLAYERS; viewer++)
 	{
 		if (getSatUplinkExists(viewer) || (viewer == selectedPlayer && godMode))
 		{
@@ -678,10 +671,8 @@ static void processVisibilityVision(BASE_OBJECT *psViewer)
 // Fade in/out of view. Must be called after calculation of which objects are seen.
 static void processVisibilityLevel(BASE_OBJECT *psObj)
 {
-	int player;
-
 	// update the visibility levels
-	for (player = 0; player < MAX_PLAYERS; player++)
+	for (unsigned player = 0; player < MAX_PLAYERS; player++)
 	{
 		bool justBecameVisible = false;
 		int visLevel = psObj->seenThisTick[player];
