@@ -30,7 +30,6 @@ enum GS_GAMEMODE
 
 //flag to indicate when initialisation is complete
 extern bool gameInitialised;
-extern bool bDisableLobby;
 extern bool customDebugfile;
 extern GS_GAMEMODE GetGameMode(void) WZ_DECL_PURE;
 extern void SetGameMode(GS_GAMEMODE status);
@@ -52,5 +51,7 @@ extern char *multiplay_mods[MAX_MODS];
 extern char *override_mods[MAX_MODS];
 extern char *override_mod_list;
 extern bool use_override_mods;
+
+extern char *mod_list;
 
 #endif // __INCLUDED_SRC_MAIN_H__

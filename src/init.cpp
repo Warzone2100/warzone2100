@@ -725,8 +725,6 @@ bool systemInitialise(void)
 // ////////////////////////////////////////////////////////////////////////////
 // Called once at program shutdown.
 //
-extern char *mod_list;
-
 void systemShutdown(void)
 {
 	pie_ShutdownRadar();

@@ -119,18 +119,14 @@ char *override_mods[MAX_MODS] = { NULL };
 char *override_mod_list = NULL;
 bool use_override_mods = false;
 
-char *loaded_mods[MAX_MODS] = { NULL };
 char *mod_list = NULL;
-int num_loaded_mods = 0;
-
-
-// Warzone 2100 . Pumpkin Studios
+static char *loaded_mods[MAX_MODS] = { NULL };
+static int num_loaded_mods = 0;
 
 //flag to indicate when initialisation is complete
 bool	gameInitialised = false;
 char	SaveGamePath[PATH_MAX];
 char	ScreenDumpPath[PATH_MAX];
-char	MultiForcesPath[PATH_MAX];
 char	MultiCustomMapsPath[PATH_MAX];
 char	MultiPlayersPath[PATH_MAX];
 char	KeyMapPath[PATH_MAX];
@@ -139,9 +135,6 @@ static GS_GAMEMODE gameStatus = GS_TITLE_SCREEN;
 // Status of the gameloop
 static int gameLoopStatus = 0;
 static FOCUS_STATE focusState = FOCUS_IN;
-
-extern void debug_callback_stderr(void **, const char *);
-extern void debug_callback_win32debug(void **, const char *);
 
 static bool inList(char *list[], const char *item)
 {
