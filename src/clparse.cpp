@@ -35,6 +35,7 @@
 #include "keybind.h"
 #include "loadsave.h"
 #include "main.h"
+#include "modding.h"
 #include "multiplay.h"
 #include "version.h"
 #include "warzoneconfig.h"
@@ -487,8 +488,6 @@ bool ParseCommandLine(int argc, const char **argv)
 			break;
 		case CLI_MOD_GLOB:
 			{
-				unsigned int i;
-
 				// retrieve the file name
 				token = poptGetOptArg(poptCon);
 				if (token == NULL)
@@ -496,19 +495,11 @@ bool ParseCommandLine(int argc, const char **argv)
 					qFatal("Missing mod name?");
 				}
 
-				// Find an empty place in the global_mods list
-				for (i = 0; i < 100 && global_mods[i] != NULL; ++i) {}
-				if (i >= 100 || global_mods[i] != NULL)
-				{
-					qFatal("Too many mods registered! Aborting!");
-				}
-				global_mods[i] = strdup(token);
+				global_mods.push_back(token);
 				break;
 			}
 		case CLI_MOD_CA:
 			{
-				unsigned int i;
-
 				// retrieve the file name
 				token = poptGetOptArg(poptCon);
 				if (token == NULL)
@@ -516,19 +507,11 @@ bool ParseCommandLine(int argc, const char **argv)
 					qFatal("Missing mod name?");
 				}
 
-				// Find an empty place in the campaign_mods list
-				for (i = 0; i < 100 && campaign_mods[i] != NULL; ++i) {}
-				if (i >= 100 || campaign_mods[i] != NULL)
-				{
-					qFatal("Too many mods registered! Aborting!");
-				}
-				campaign_mods[i] = strdup(token);
+				campaign_mods.push_back(token);
 				break;
 			}
 		case CLI_MOD_MP:
 			{
-				unsigned int i;
-
 				// retrieve the file name
 				token = poptGetOptArg(poptCon);
 				if (token == NULL)
@@ -536,12 +519,7 @@ bool ParseCommandLine(int argc, const char **argv)
 					qFatal("Missing mod name?");
 				}
 
-				for (i = 0; i < 100 && multiplay_mods[i] != NULL; ++i) {}
-				if (i >= 100 || multiplay_mods[i] != NULL)
-				{
-					qFatal("Too many mods registered! Aborting!");
-				}
-				multiplay_mods[i] = strdup(token);
+				multiplay_mods.push_back(token);
 				break;
 			}
 		case CLI_RESOLUTION:

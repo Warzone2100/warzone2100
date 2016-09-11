@@ -111,17 +111,6 @@ bool customDebugfile = false;		// Default false: user has NOT specified where to
 char datadir[PATH_MAX] = ""; // Global that src/clparse.c:ParseCommandLine can write to, so it can override the default datadir on runtime. Needs to be empty on startup for ParseCommandLine to work!
 char configdir[PATH_MAX] = ""; // specifies custom USER directory. Same rules apply as datadir above.
 char rulesettag[40] = "";
-char *global_mods[MAX_MODS] = { NULL };
-char *campaign_mods[MAX_MODS] = { NULL };
-char *multiplay_mods[MAX_MODS] = { NULL };
-
-char *override_mods[MAX_MODS] = { NULL };
-char *override_mod_list = NULL;
-bool use_override_mods = false;
-
-char *mod_list = NULL;
-static char *loaded_mods[MAX_MODS] = { NULL };
-static int num_loaded_mods = 0;
 
 //flag to indicate when initialisation is complete
 bool	gameInitialised = false;
@@ -133,201 +122,8 @@ char	KeyMapPath[PATH_MAX];
 // Start game in title mode:
 static GS_GAMEMODE gameStatus = GS_TITLE_SCREEN;
 // Status of the gameloop
-static int gameLoopStatus = 0;
+static GAMECODE gameLoopStatus = GAMECODE_CONTINUE;
 static FOCUS_STATE focusState = FOCUS_IN;
-
-static bool inList(char *list[], const char *item)
-{
-	int i = 0;
-#ifdef DEBUG
-	debug(LOG_NEVER, "inList: Current item: [%s]", item);
-#endif
-	while (list[i] != NULL)
-	{
-#ifdef DEBUG
-		debug(LOG_NEVER, "inList: Checking for match with: [%s]", list[i]);
-#endif
-		if (strcmp(list[i], item) == 0)
-		{
-			return true;
-		}
-		i++;
-	}
-	return false;
-}
-
-
-/*!
- * Tries to mount a list of directories, found in /basedir/subdir/<list>.
- * \param basedir Base directory
- * \param subdir A subdirectory of basedir
- * \param appendToPath Whether to append or prepend
- * \param checkList List of directories to check. NULL means any.
- */
-void addSubdirs(const char *basedir, const char *subdir, const bool appendToPath, char *checkList[], bool addToModList)
-{
-	char tmpstr[PATH_MAX];
-	char buf[256];
-	char **subdirlist = PHYSFS_enumerateFiles(subdir);
-	char **i = subdirlist;
-	while (*i != NULL)
-	{
-#ifdef DEBUG
-		debug(LOG_NEVER, "addSubdirs: Examining subdir: [%s]", *i);
-#endif // DEBUG
-		if (*i[0] != '.' && (!checkList || inList(checkList, *i)))
-		{
-			snprintf(tmpstr, sizeof(tmpstr), "%s%s%s%s", basedir, subdir, PHYSFS_getDirSeparator(), *i);
-#ifdef DEBUG
-			debug(LOG_NEVER, "addSubdirs: Adding [%s] to search path", tmpstr);
-#endif // DEBUG
-			if (addToModList)
-			{
-				addLoadedMod(*i);
-				snprintf(buf, sizeof(buf), "mod: %s", *i);
-				addDumpInfo(buf);
-			}
-			PHYSFS_addToSearchPath(tmpstr, appendToPath);
-		}
-		i++;
-	}
-	PHYSFS_freeList(subdirlist);
-}
-
-void removeSubdirs(const char *basedir, const char *subdir, char *checkList[])
-{
-	char tmpstr[PATH_MAX];
-	char **subdirlist = PHYSFS_enumerateFiles(subdir);
-	char **i = subdirlist;
-	while (*i != NULL)
-	{
-#ifdef DEBUG
-		debug(LOG_NEVER, "removeSubdirs: Examining subdir: [%s]", *i);
-#endif // DEBUG
-		if (!checkList || inList(checkList, *i))
-		{
-			snprintf(tmpstr, sizeof(tmpstr), "%s%s%s%s", basedir, subdir, PHYSFS_getDirSeparator(), *i);
-#ifdef DEBUG
-			debug(LOG_NEVER, "removeSubdirs: Removing [%s] from search path", tmpstr);
-#endif // DEBUG
-			if (!PHYSFS_removeFromSearchPath(tmpstr))
-			{
-#ifdef DEBUG	// spams a ton!
-				debug(LOG_NEVER, "Couldn't remove %s from search path because %s", tmpstr, PHYSFS_getLastError());
-#endif // DEBUG
-			}
-		}
-		i++;
-	}
-	PHYSFS_freeList(subdirlist);
-}
-
-void printSearchPath(void)
-{
-	char **i, ** searchPath;
-
-	debug(LOG_WZ, "Search paths:");
-	searchPath = PHYSFS_getSearchPath();
-	for (i = searchPath; *i != NULL; i++)
-	{
-		debug(LOG_WZ, "    [%s]", *i);
-	}
-	PHYSFS_freeList(searchPath);
-}
-
-void setOverrideMods(char *modlist)
-{
-	char *curmod = modlist;
-	char *nextmod;
-	int i = 0;
-	while ((nextmod = strstr(curmod, ", ")) && i < MAX_MODS - 2)
-	{
-		override_mods[i] = (char *)malloc(nextmod - curmod + 1);
-		strlcpy(override_mods[i], curmod, nextmod - curmod + 1);
-		override_mods[i][nextmod - curmod] = '\0';
-		curmod = nextmod + 2;
-		i++;
-	}
-	override_mods[i] = strdup(curmod);
-	override_mods[i + 1] = NULL;
-	override_mod_list = modlist;
-	use_override_mods = true;
-}
-
-void clearOverrideMods(void)
-{
-	int i;
-	use_override_mods = false;
-	for (i = 0; i < MAX_MODS && override_mods[i]; i++)
-	{
-		free(override_mods[i]);
-	}
-	override_mods[0] = NULL;
-	override_mod_list = NULL;
-}
-
-void addLoadedMod(const char *modname)
-{
-	if (num_loaded_mods >= MAX_MODS)
-	{
-		// mod list full
-		return;
-	}
-	char *mod = strdup(modname);
-	// Yes, this is an online insertion sort.
-	// I swear, for the numbers of mods this is going to be dealing with
-	// (i.e. 0 to 2), it really is faster than, say, Quicksort.
-	int i;
-	for (i = 0; i < num_loaded_mods && strcmp(loaded_mods[i], mod) > 0; i++) {}
-	if (i < num_loaded_mods)
-	{
-		if (strcmp(loaded_mods[i], mod) == 0)
-		{
-			// mod already in list
-			free(mod);
-			return;
-		}
-		memmove(&loaded_mods[i + 1], &loaded_mods[i], (num_loaded_mods - i)*sizeof(char *));
-	}
-	loaded_mods[i] = mod;
-	num_loaded_mods++;
-}
-
-void clearLoadedMods(void)
-{
-	int i;
-	for (i = 0; i < num_loaded_mods; i++)
-	{
-		free(loaded_mods[i]);
-	}
-	num_loaded_mods = 0;
-	if (mod_list)
-	{
-		free(mod_list);
-		mod_list = NULL;
-	}
-}
-
-char *getModList(void)
-{
-	int i;
-	if (mod_list)
-	{
-		// mod list already constructed
-		return mod_list;
-	}
-	mod_list = (char *)malloc(modlist_string_size);
-	mod_list[0] = 0; //initialize
-	for (i = 0; i < num_loaded_mods; i++)
-	{
-		if (i != 0)
-		{
-			strlcat(mod_list, ", ", modlist_string_size);
-		}
-		strlcat(mod_list, loaded_mods[i], modlist_string_size);
-	}
-	return mod_list;
-}
 
 
 /*!
@@ -998,7 +794,7 @@ void mainLoop(void)
 	RAND_add(buf, sizeof(buf), 1);
 }
 
-bool getUTF8CmdLine(int *const utfargc, const char *** const utfargv) // explicitely pass by reference
+bool getUTF8CmdLine(int *const utfargc WZ_DECL_UNUSED, const char *** const utfargv WZ_DECL_UNUSED) // explicitely pass by reference
 {
 #ifdef WZ_OS_WIN
 	int wargc;
@@ -1171,72 +967,54 @@ int realmain(int argc, char *argv[])
 	scanDataDirs();
 
 	// Now we check the mods to see if they exist or not (specified on the command line)
-	// They are all capped at 100 mods max(see clparse.c)
 	// FIX ME: I know this is a bit hackish, but better than nothing for now?
 	{
-		char *modname;
 		char modtocheck[256];
-		int i = 0;
 		int result = 0;
 
 		// check global mods
-		for (i = 0; i < 100; i++)
+		for (auto const &modname : global_mods)
 		{
-			modname = global_mods[i];
-			if (modname == NULL)
-			{
-				break;
-			}
-			ssprintf(modtocheck, "mods/global/%s", modname);
+			ssprintf(modtocheck, "mods/global/%s", modname.c_str());
 			result = PHYSFS_exists(modtocheck);
 			result |= PHYSFS_isDirectory(modtocheck);
 			if (!result)
 			{
-				debug(LOG_ERROR, "The (global) mod (%s) you have specified doesn't exist!", modname);
+				debug(LOG_ERROR, "The (global) mod (%s) you have specified doesn't exist!", modtocheck);
 			}
 			else
 			{
-				info("(global) mod (%s) is enabled", modname);
+				info("(global) mod (%s) is enabled", modname.c_str());
 			}
 		}
 		// check campaign mods
-		for (i = 0; i < 100; i++)
+		for (auto const &modname : campaign_mods)
 		{
-			modname = campaign_mods[i];
-			if (modname == NULL)
-			{
-				break;
-			}
-			ssprintf(modtocheck, "mods/campaign/%s", modname);
+			ssprintf(modtocheck, "mods/campaign/%s", modname.c_str());
 			result = PHYSFS_exists(modtocheck);
 			result |= PHYSFS_isDirectory(modtocheck);
 			if (!result)
 			{
-				debug(LOG_ERROR, "The mod_ca (%s) you have specified doesn't exist!", modname);
+				debug(LOG_ERROR, "The mod_ca (%s) you have specified doesn't exist!", modtocheck);
 			}
 			else
 			{
-				info("mod_ca (%s) is enabled", modname);
+				info("mod_ca (%s) is enabled", modname.c_str());
 			}
 		}
 		// check multiplay mods
-		for (i = 0; i < 100; i++)
+		for (auto const &modname : multiplay_mods)
 		{
-			modname = multiplay_mods[i];
-			if (modname == NULL)
-			{
-				break;
-			}
-			ssprintf(modtocheck, "mods/multiplay/%s", modname);
+			ssprintf(modtocheck, "mods/multiplay/%s", modname.c_str());
 			result = PHYSFS_exists(modtocheck);
 			result |= PHYSFS_isDirectory(modtocheck);
 			if (!result)
 			{
-				debug(LOG_ERROR, "The mod_mp (%s) you have specified doesn't exist!", modname);
+				debug(LOG_ERROR, "The mod_mp (%s) you have specified doesn't exist!", modtocheck);
 			}
 			else
 			{
-				info("mod_mp (%s) is enabled", modname);
+				info("mod_mp (%s) is enabled", modname.c_str());
 			}
 		}
 	}

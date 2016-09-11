@@ -356,6 +356,7 @@ call $(ProjectDir)..\build_tools\autorevision.bat $(ProjectDir)</Command>
     <ClCompile Include="message.cpp" />
     <ClCompile Include="miscimd.cpp" />
     <ClCompile Include="mission.cpp" />
+    <ClCompile Include="modding.cpp" />
     <ClCompile Include="move.cpp" />
     <ClCompile Include="multibot.cpp" />
     <ClCompile Include="multigifts.cpp" />

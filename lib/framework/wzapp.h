@@ -151,7 +151,7 @@ namespace wz
 		packaged_task(packaged_task const &) = delete;
 
 		future<R> get_future() { future<R> future; future.internal = internal; return std::move(future); }
-		void operator ()(A... args) { auto &data = *internal; data.ret = function(std::forward<A>(args)...); wzSemaphorePost(data.sem); }
+		void operator ()(A &&... args) { auto &data = *internal; data.ret = function(std::forward<A>(args)...); wzSemaphorePost(data.sem); }
 
 	private:
 		std::function<R (A...)> function;

@@ -1004,7 +1004,7 @@ static void addGames(void)
 				{
 					sButInit.pTip = wrongVersionTip;
 				}
-				else if (strcmp(NetPlay.games[i].modlist, getModList()) != 0)
+				else if (strcmp(NetPlay.games[i].modlist, getModList().c_str()) != 0)
 				{
 					sButInit.pTip = badModTip;
 				}
@@ -2640,10 +2640,10 @@ static void addChatBox(bool preserveOldChat)
 
 	widgAddEditBox(psWScreen, &sEdInit);
 
-	if (*getModList())
+	if (!getModList().empty())
 	{
 		QString modListMessage = _("Mod: ");
-		modListMessage += getModList();
+		modListMessage += getModList().c_str();
 		addConsoleMessage(modListMessage.toUtf8().constData(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 		if (NetPlay.bComms)
 		{
@@ -3980,7 +3980,7 @@ void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	// As long as they got room, and mods are the same then we proccess the button(s)
 	if (NETisCorrectVersion(NetPlay.games[gameID].game_version_major, NetPlay.games[gameID].game_version_minor))
 	{
-		if (strcmp(NetPlay.games[gameID].modlist, getModList()) != 0)
+		if (strcmp(NetPlay.games[gameID].modlist, getModList().c_str()) != 0)
 		{
 			// If wrong mod loaded.
 			statusStart = IMAGE_NOJOIN_MOD;

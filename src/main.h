@@ -42,16 +42,4 @@ extern char KeyMapPath[PATH_MAX];
 extern char MultiPlayersPath[PATH_MAX];
 extern char rulesettag[40];
 
-#define MAX_MODS 100
-
-extern char *global_mods[MAX_MODS];
-extern char *campaign_mods[MAX_MODS];
-extern char *multiplay_mods[MAX_MODS];
-
-extern char *override_mods[MAX_MODS];
-extern char *override_mod_list;
-extern bool use_override_mods;
-
-extern char *mod_list;
-
 #endif // __INCLUDED_SRC_MAIN_H__

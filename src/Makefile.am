@@ -234,6 +234,7 @@ COMMONSOURCES = \
 	message.cpp \
 	miscimd.cpp \
 	mission.cpp \
+	modding.cpp \
 	move.cpp \
 	multibot.cpp \
 	multigifts.cpp \

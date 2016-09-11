@@ -4025,7 +4025,7 @@ static bool writeGameFile(const char *fileName, SDWORD saveType)
 	}
 
 	//version 38
-	sstrcpy(saveGame.modList, getModList());
+	sstrcpy(saveGame.modList, getModList().c_str());
 	// Attempt to see if we have a corrupted game structure in campaigns.
 	if (saveGame.sGame.type == CAMPAIGN)
 	{
@@ -5173,7 +5173,7 @@ bool writeGameInfo(const char *pFileName)
 	ini.setValue("cheated", Cheated);
 	ini.setValue("debug", getDebugMappingStatus());
 	ini.setValue("level/map", getLevelName());
-	ini.setValue("mods", getModList() ? getModList() : "None");
+	ini.setValue("mods", !getModList().empty() ? getModList().c_str() : "None");
 	ini.setValue("openGL_vendor", opengl.vendor);
 	ini.setValue("openGL_renderer", opengl.renderer);
 	ini.setValue("openGL_version", opengl.version);

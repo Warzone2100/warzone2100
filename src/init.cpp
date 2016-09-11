@@ -256,7 +256,7 @@ bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map)
 	char tmpstr[PATH_MAX] = "\0";
 
 	if (mode != current_mode || (current_map != NULL ? current_map : "") != current_current_map || force ||
-	    (use_override_mods && strcmp(override_mod_list, getModList())))
+	    (use_override_mods && override_mod_list != getModList()))
 	{
 		if (mode != mod_clean)
 		{
@@ -284,12 +284,12 @@ bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map)
 				debug(LOG_WZ, "Removing [%s] from search path", curSearchPath->path);
 #endif // DEBUG
 				// Remove maps and mods
-				removeSubdirs(curSearchPath->path, "maps", NULL);
-				removeSubdirs(curSearchPath->path, "mods/music", NULL);
-				removeSubdirs(curSearchPath->path, "mods/global", NULL);
-				removeSubdirs(curSearchPath->path, "mods/campaign", NULL);
-				removeSubdirs(curSearchPath->path, "mods/multiplay", NULL);
-				removeSubdirs(curSearchPath->path, "mods/autoload", NULL);
+				removeSubdirs(curSearchPath->path, "maps");
+				removeSubdirs(curSearchPath->path, "mods/music");
+				removeSubdirs(curSearchPath->path, "mods/global");
+				removeSubdirs(curSearchPath->path, "mods/campaign");
+				removeSubdirs(curSearchPath->path, "mods/multiplay");
+				removeSubdirs(curSearchPath->path, "mods/autoload");
 
 				// Remove multiplay patches
 				sstrcpy(tmpstr, curSearchPath->path);
@@ -342,11 +342,11 @@ bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map)
 				// Add global and campaign mods
 				PHYSFS_addToSearchPath(curSearchPath->path, PHYSFS_APPEND);
 
-				addSubdirs(curSearchPath->path, "mods/music", PHYSFS_APPEND, NULL, false);
-				addSubdirs(curSearchPath->path, "mods/global", PHYSFS_APPEND, use_override_mods ? override_mods : global_mods, true);
-				addSubdirs(curSearchPath->path, "mods", PHYSFS_APPEND, use_override_mods ? override_mods : global_mods, true);
-				addSubdirs(curSearchPath->path, "mods/autoload", PHYSFS_APPEND, use_override_mods ? override_mods : NULL, true);
-				addSubdirs(curSearchPath->path, "mods/campaign", PHYSFS_APPEND, use_override_mods ? override_mods : campaign_mods, true);
+				addSubdirs(curSearchPath->path, "mods/music", PHYSFS_APPEND, nullptr, false);
+				addSubdirs(curSearchPath->path, "mods/global", PHYSFS_APPEND, use_override_mods ? &override_mods : &global_mods, true);
+				addSubdirs(curSearchPath->path, "mods", PHYSFS_APPEND, use_override_mods ? &override_mods : &global_mods, true);
+				addSubdirs(curSearchPath->path, "mods/autoload", PHYSFS_APPEND, use_override_mods ? &override_mods : nullptr, true);
+				addSubdirs(curSearchPath->path, "mods/campaign", PHYSFS_APPEND, use_override_mods ? &override_mods : &campaign_mods, true);
 				if (!PHYSFS_removeFromSearchPath(curSearchPath->path))
 				{
 					debug(LOG_WZ, "* Failed to remove path %s again", curSearchPath->path);
@@ -397,11 +397,11 @@ bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map)
 #endif // DEBUG
 				// Add global and multiplay mods
 				PHYSFS_addToSearchPath(curSearchPath->path, PHYSFS_APPEND);
-				addSubdirs(curSearchPath->path, "mods/music", PHYSFS_APPEND, NULL, false);
-				addSubdirs(curSearchPath->path, "mods/global", PHYSFS_APPEND, use_override_mods ? override_mods : global_mods, true);
-				addSubdirs(curSearchPath->path, "mods", PHYSFS_APPEND, use_override_mods ? override_mods : global_mods, true);
-				addSubdirs(curSearchPath->path, "mods/autoload", PHYSFS_APPEND, use_override_mods ? override_mods : NULL, true);
-				addSubdirs(curSearchPath->path, "mods/multiplay", PHYSFS_APPEND, use_override_mods ? override_mods : multiplay_mods, true);
+				addSubdirs(curSearchPath->path, "mods/music", PHYSFS_APPEND, nullptr, false);
+				addSubdirs(curSearchPath->path, "mods/global", PHYSFS_APPEND, use_override_mods ? &override_mods : &global_mods, true);
+				addSubdirs(curSearchPath->path, "mods", PHYSFS_APPEND, use_override_mods ? &override_mods : &global_mods, true);
+				addSubdirs(curSearchPath->path, "mods/autoload", PHYSFS_APPEND, use_override_mods ? &override_mods : nullptr, true);
+				addSubdirs(curSearchPath->path, "mods/multiplay", PHYSFS_APPEND, use_override_mods ? &override_mods : &multiplay_mods, true);
 				PHYSFS_removeFromSearchPath(curSearchPath->path);
 
 				// Add multiplay patches
@@ -432,9 +432,9 @@ bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map)
 		}
 		if (use_override_mods && mode != mod_clean)
 		{
-			if (strcmp(getModList(), override_mod_list))
+			if (getModList() != override_mod_list)
 			{
-				debug(LOG_POPUP, _("The required mod could not be loaded: %s\n\nWarzone will try to load the game without it."), override_mod_list);
+				debug(LOG_POPUP, _("The required mod could not be loaded: %s\n\nWarzone will try to load the game without it."), override_mod_list.c_str());
 			}
 			clearOverrideMods();
 			current_mode = mod_override;
@@ -728,10 +728,7 @@ bool systemInitialise(void)
 void systemShutdown(void)
 {
 	pie_ShutdownRadar();
-	if (mod_list)
-	{
-		free(mod_list);
-	}
+	mod_list.clear();
 
 	shutdownEffectsSystem();
 	wzSceneEnd(nullptr);  // Might want to end the "Main menu loop" or "Main game loop".

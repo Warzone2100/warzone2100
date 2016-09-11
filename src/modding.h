@@ -21,15 +21,28 @@
 #ifndef __INCLUDED_SRC_MODDING_H__
 #define __INCLUDED_SRC_MODDING_H__
 
-void addSubdirs(const char *basedir, const char *subdir, const bool appendToPath, char *checkList[], bool addToModList);
-void removeSubdirs(const char *basedir, const char *subdir, char *checkList[]);
-void printSearchPath(void);
+#include <string>
+#include <vector>
+
+
+void addSubdirs(const char *basedir, const char *subdir, const bool appendToPath, std::vector<std::string> const *checkList, bool addToModList);
+void removeSubdirs(const char *basedir, const char *subdir);
+void printSearchPath();
 
 void setOverrideMods(char *modlist);
-void clearOverrideMods(void);
+void clearOverrideMods();
 
-void addLoadedMod(const char *modname);
-void clearLoadedMods(void);
-char *getModList(void);
+void clearLoadedMods();
+std::string const &getModList();
+
+extern std::vector<std::string> global_mods;
+extern std::vector<std::string> campaign_mods;
+extern std::vector<std::string> multiplay_mods;
+
+extern std::vector<std::string> override_mods;
+extern std::string override_mod_list;
+extern bool use_override_mods;
+
+extern std::string mod_list;
 
 #endif // __INCLUDED_SRC_MODDING_H__

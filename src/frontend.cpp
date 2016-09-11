@@ -1426,17 +1426,17 @@ static void displayTitleBitmap(WZ_DECL_UNUSED WIDGET *psWidget, WZ_DECL_UNUSED U
 	iV_SetTextColour(WZCOL_GREY);
 	iV_DrawTextRotated(version_getFormattedVersionString(), pie_GetVideoBufferWidth() - 9, pie_GetVideoBufferHeight() - 14, 270.f);
 
-	if (*getModList())
+	if (!getModList().empty())
 	{
 		sstrcat(modListText, _("Mod: "));
-		sstrcat(modListText, getModList());
+		sstrcat(modListText, getModList().c_str());
 		iV_DrawText(modListText, 9, 14);
 	}
 
 	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
 	iV_DrawTextRotated(version_getFormattedVersionString(), pie_GetVideoBufferWidth() - 10, pie_GetVideoBufferHeight() - 15, 270.f);
 
-	if (*getModList())
+	if (!getModList().empty())
 	{
 		iV_DrawText(modListText, 10, 15);
 	}

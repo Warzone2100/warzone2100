@@ -276,6 +276,7 @@ src/mechanics.cpp
 src/message.cpp
 src/miscimd.cpp
 src/mission.cpp
+src/modding.cpp
 src/move.cpp
 src/multibot.cpp
 src/multigifts.cpp

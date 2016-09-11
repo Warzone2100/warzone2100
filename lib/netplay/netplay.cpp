@@ -2578,7 +2578,7 @@ static void NETallowJoining(void)
 						// Game full. Reject.
 						rejected = (uint8_t)ERROR_FULL;
 					}
-					else if (strcmp(getModList(), ModList) != 0)
+					else if (getModList() != ModList)
 					{
 						// Incompatible mods. Reject.
 						rejected = (uint8_t)ERROR_WRONGDATA;
@@ -2750,7 +2750,7 @@ bool NEThostGame(const char *SessionName, const char *PlayerName,
 	sstrcpy(gamestruct.mapname, game.map);					// map we are hosting
 	sstrcpy(gamestruct.hostname, PlayerName);
 	sstrcpy(gamestruct.versionstring, versionString);		// version (string)
-	sstrcpy(gamestruct.modlist, getModList());				// List of mods
+	sstrcpy(gamestruct.modlist, getModList().c_str());      // List of mods
 	gamestruct.GAMESTRUCT_VERSION = 3;						// version of this structure
 	gamestruct.game_version_major = NETCODE_VERSION_MAJOR;	// Netcode Major version
 	gamestruct.game_version_minor = NETCODE_VERSION_MINOR;	// NetCode Minor version
@@ -3045,7 +3045,7 @@ bool NETjoinGame(const char *host, uint32_t port, const char *playername)
 	// Send a join message to the host
 	NETbeginEncode(NETnetQueue(NET_HOST_ONLY), NET_JOIN);
 	NETstring(playername, 64);
-	NETstring(getModList(), modlist_string_size);
+	NETstring(getModList().c_str(), modlist_string_size);
 	NETstring(NetPlay.gamePassword, sizeof(NetPlay.gamePassword));
 	NETend();
 	if (bsocket == NULL)

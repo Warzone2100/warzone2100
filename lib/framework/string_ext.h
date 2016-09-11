@@ -170,20 +170,16 @@ static inline size_t strlcat(char *WZ_DECL_RESTRICT dest, const char *WZ_DECL_RE
 
 /*
  * Static array versions of common string functions. Safer because one less parameter to screw up.
- * Can only be used on strings longer than the length of a pointer, because we use this for debugging.
  */
-#ifndef DEBUG
-#define sstrcpy(dest, src) strlcpy((dest), (src), sizeof(dest))
-#define sstrcat(dest, src) strlcat((dest), (src), sizeof(dest))
-#define ssprintf(dest, ...) snprintf((dest), sizeof(dest), __VA_ARGS__)
-#define vssprintf(dest, format, ap) vsnprintf((dest), sizeof(dest), format, ap)
-#define sstrcmp(str1, str2) strncmp((str1), (str2), sizeof(str1) > sizeof(str2) ? sizeof(str2) : sizeof(str1))
-#else
-#define sstrcpy(dest, src) (WZ_ASSERT_STATIC_STRING(dest), strlcpy((dest), (src), sizeof(dest)))
-#define sstrcat(dest, src) (WZ_ASSERT_STATIC_STRING(dest), strlcat((dest), (src), sizeof(dest)))
-#define ssprintf(dest, ...) (WZ_ASSERT_STATIC_STRING(dest), snprintf((dest), sizeof(dest), __VA_ARGS__))
-#define vssprintf(dest, format, ap) (WZ_ASSERT_STATIC_STRING(dest), vsnprintf((dest), sizeof(dest), format, ap))
-#define sstrcmp(str1, str2) (WZ_ASSERT_STATIC_STRING(str1), WZ_ASSERT_STATIC_STRING(str2), strncmp((str1), (str2), sizeof(str1) > sizeof(str2) ? sizeof(str2) : sizeof(str1)))
-#endif
+template <unsigned N>
+static inline size_t sstrcpy(char (&dest)[N], char const *src) { return strlcpy(dest, src, N); }
+template <unsigned N>
+static inline size_t sstrcat(char (&dest)[N], char const *src) { return strlcat(dest, src, N); }
+template <unsigned N1, unsigned N2>
+static inline int sstrcmp(char const (&str1)[N1], char const (&str2)[N2]) { return strncmp(str1, str2, std::min(N1, N2)); }
+template <unsigned N, typename... P>
+static inline int ssprintf(char (&dest)[N], char const *format, P &&... params) { return snprintf(dest, N, format, std::forward<P>(params)...); }
+template <unsigned N, typename... P>
+static inline int vssprintf(char (&dest)[N], char const *format, P &&... params) { return vsnprintf(dest, N, format, std::forward<P>(params)...); }
 
 #endif // STRING_EXT_H

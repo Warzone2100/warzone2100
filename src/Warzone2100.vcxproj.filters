@@ -183,6 +183,9 @@
     <ClCompile Include="mission.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="modding.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="move.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
