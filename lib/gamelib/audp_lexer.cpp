@@ -555,7 +555,7 @@ char *audp_text;
 #include "lib/gamelib/parser.h"
 
 #if defined (WZ_CC_MSVC)
-#include "audp_parser.hpp"
+#include "audp_parser.h"
 #else
 /* Get the Yacc definitions */
 #include "audp_parser.h"
