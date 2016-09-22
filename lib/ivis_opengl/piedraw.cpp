@@ -168,12 +168,12 @@ static std::vector<ShadowcastingShape> scshapes;
 static std::vector<SHAPE> tshapes;
 static std::vector<SHAPE> shapes;
 
-static void pie_Draw3DButton(iIMDShape *shape, PIELIGHT teamcolour)
+static void pie_Draw3DButton(iIMDShape *shape, PIELIGHT teamcolour, const glm::mat4 &matrix)
 {
 	const PIELIGHT colour = WZCOL_WHITE;
 	pie_SetFogStatus(false);
 	pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
-	pie_internal::SHADER_PROGRAM &program = pie_ActivateShaderDeprecated(SHADER_BUTTON, shape, teamcolour, colour);
+	pie_internal::SHADER_PROGRAM &program = pie_ActivateShaderDeprecated(SHADER_BUTTON, shape, teamcolour, colour, matrix, pie_PerspectiveGet());
 	pie_SetRendMode(REND_OPAQUE);
 	pie_SetTexturePage(shape->texpage);
 	enableArray(shape->buffers[VBO_VERTEX], program.locVertex, 3, GL_FLOAT, false, 0, 0);
@@ -190,8 +190,6 @@ static void pie_Draw3DButton(iIMDShape *shape, PIELIGHT teamcolour)
 static void pie_Draw3DShape2(const iIMDShape *shape, int frame, PIELIGHT colour, PIELIGHT teamcolour, int pieFlag, int pieFlagData, glm::mat4 const &matrix)
 {
 	bool light = true;
-
-	glLoadMatrixf(&matrix[0][0]);
 
 	/* Set fog status */
 	if (!(pieFlag & pie_FORCE_FOG) && (pieFlag & pie_ADDITIVE || pieFlag & pie_TRANSLUCENT || pieFlag & pie_PREMULTIPLIED))
@@ -234,7 +232,7 @@ static void pie_Draw3DShape2(const iIMDShape *shape, int frame, PIELIGHT colour,
 	}
 
 	SHADER_MODE mode = shape->shaderProgram == SHADER_NONE ? light ? SHADER_COMPONENT : SHADER_NOLIGHT : shape->shaderProgram;
-	pie_internal::SHADER_PROGRAM &program = pie_ActivateShaderDeprecated(mode, shape, teamcolour, colour);
+	pie_internal::SHADER_PROGRAM &program = pie_ActivateShaderDeprecated(mode, shape, teamcolour, colour, matrix, pie_PerspectiveGet());
 
 	if (program.locations.size() >= 9)
 		glUniform1i(program.locations[8], (pieFlag & pie_PREMULTIPLIED) == 0);
@@ -253,6 +251,7 @@ static void pie_Draw3DShape2(const iIMDShape *shape, int frame, PIELIGHT colour,
 	polyCount += shape->npolys;
 
 	pie_SetShaderEcmEffect(false);
+	pie_DeactivateShader();
 }
 
 static inline bool edgeLessThan(EDGE const &e1, EDGE const &e2)
@@ -399,7 +398,7 @@ void pie_CleanUp(void)
 	scshapes.clear();
 }
 
-void pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, int pieFlag, int pieFlagData)
+void pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, int pieFlag, int pieFlagData, const glm::mat4 &modelView)
 {
 	pieCount++;
 
@@ -409,7 +408,7 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, int
 	const PIELIGHT teamcolour = pal_GetTeamColour(team);
 	if (pieFlag & pie_BUTTON)
 	{
-		pie_Draw3DButton(shape, teamcolour);
+		pie_Draw3DButton(shape, teamcolour, modelView);
 	}
 	else
 	{
@@ -421,7 +420,7 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, int
 		tshape.flag = pieFlag;
 		tshape.flag_data = pieFlagData;
 		tshape.stretch = pie_GetShaderStretchDepth();
-		pie_GetMatrix(&tshape.matrix[0][0]);
+		tshape.matrix = modelView;
 
 		if (pieFlag & pie_HEIGHT_SCALED)	// construct
 		{
@@ -444,7 +443,7 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, int
 
 				// draw a shadow
 				ShadowcastingShape scshape;
-				pie_GetMatrix(&scshape.matrix[0][0]);
+				scshape.matrix = modelView;
 				distance = scshape.matrix[3][0] * scshape.matrix[3][0];
 				distance += scshape.matrix[3][1] * scshape.matrix[3][1];
 				distance += scshape.matrix[3][2] * scshape.matrix[3][2];
@@ -503,7 +502,6 @@ static void pie_DrawShadows(void)
 	glStencilFunc(GL_LESS, 0, ~0);
 	glColor4f(0, 0, 0, 0.5);
 
-	pie_PerspectiveEnd();
 	glLoadIdentity();
 	glDisable(GL_DEPTH_TEST);
 	glBegin(GL_TRIANGLE_STRIP);
@@ -512,7 +510,7 @@ static void pie_DrawShadows(void)
 	glVertex2f(0, height);
 	glVertex2f(width, height);
 	glEnd();
-	pie_PerspectiveBegin();
+
 
 	pie_SetRendMode(REND_OPAQUE);
 	glDisable(GL_STENCIL_TEST);
@@ -536,7 +534,6 @@ void pie_RemainingPasses(void)
 	// Draw models
 	// TODO, sort list to reduce state changes
 	GL_DEBUG("Remaining passes - opaque models");
-	glPushMatrix();
 	for (SHAPE const &shape : shapes)
 	{
 		pie_SetShaderStretchDepth(shape.stretch);
@@ -553,7 +550,6 @@ void pie_RemainingPasses(void)
 	pie_SetShaderStretchDepth(0);
 	glDisable(GL_LIGHT0);
 	pie_DeactivateShader();
-	glPopMatrix();
 	tshapes.clear();
 	shapes.clear();
 	GL_DEBUG("Remaining passes - done");

@@ -70,6 +70,7 @@
 #include "multiplay.h"
 #include "game.h"
 #include "component.h"
+#include <glm/gtx/transform.hpp>
 
 #define	GRAVITON_GRAVITY	((float)-800)
 #define	EFFECT_X_FLIP		0x1
@@ -180,16 +181,16 @@ static bool updateEffect(EFFECT *psEffect);	// MASTER function
 
 // ----------------------------------------------------------------------------------------
 // ---- The render functions - every group type of effect has a distinct one
-static void renderExplosionEffect(const EFFECT *psEffect);
-static void renderSmokeEffect(const EFFECT *psEffect);
-static void renderGravitonEffect(const EFFECT *psEffect);
-static void renderConstructionEffect(const EFFECT *psEffect);
-static void renderWaypointEffect(const EFFECT *psEffect);
-static void renderBloodEffect(const EFFECT *psEffect);
-static void renderDestructionEffect(const EFFECT *psEffect);
-static void renderFirework(const EFFECT *psEffect);
+static void renderExplosionEffect(const EFFECT *psEffect, const glm::mat4 &viewMatrix);
+static void renderSmokeEffect(const EFFECT *psEffect, const glm::mat4 &viewMatrix);
+static void renderGravitonEffect(const EFFECT *psEffect, const glm::mat4 &viewMatrix);
+static void renderConstructionEffect(const EFFECT *psEffect, const glm::mat4 &viewMatrix);
+static void renderWaypointEffect(const EFFECT *psEffect, const glm::mat4 &viewMatrix);
+static void renderBloodEffect(const EFFECT *psEffect, const glm::mat4 &viewMatrix);
+static void renderDestructionEffect(const EFFECT *psEffect, const glm::mat4 &viewMatrix);
+static void renderFirework(const EFFECT *psEffect, const glm::mat4 &viewMatrix);
 
-static void positionEffect(const EFFECT *psEffect);
+static glm::mat4 positionEffect(const EFFECT *psEffect);
 /* There is no render destruction effect! */
 
 // ----------------------------------------------------------------------------------------
@@ -226,20 +227,16 @@ void initEffectsSystem()
 	shutdownEffectsSystem();
 }
 
-static void positionEffect(const EFFECT *psEffect)
+static glm::mat4 positionEffect(const EFFECT *psEffect)
 {
 	/* Establish world position */
-	Vector3i dv(
+	glm::vec3 dv(
 	    psEffect->position.x - player.p.x,
 	    psEffect->position.y,
 	    -(psEffect->position.z - player.p.z)
 	);
 
-	/* Push the indentity matrix */
-	pie_MatBegin();
-
-	/* Move to position */
-	pie_TRANSLATE(dv.x, dv.y, dv.z);
+	return glm::translate(dv.x, dv.y, dv.z);
 }
 
 void effectSetLandLightSpec(LAND_LIGHT_SPEC spec)
@@ -405,7 +402,7 @@ void addEffect(const Vector3i *pos, EFFECT_GROUP group, EFFECT_TYPE type, bool s
 
 
 /* Calls all the update functions for each different currently active effect */
-void processEffects()
+void processEffects(const glm::mat4 &viewMatrix)
 {
 	for (auto it = activeList.begin(); it != activeList.end(); )
 	{
@@ -421,7 +418,7 @@ void processEffects()
 			}
 			if (psEffect->group != EFFECT_FREED && clipXY(psEffect->position.x, psEffect->position.z))
 			{
-				bucketAddTypeToList(RENDER_EFFECT, psEffect);
+				bucketAddTypeToList(RENDER_EFFECT, psEffect, viewMatrix);
 			}
 		}
 		++it;
@@ -1315,39 +1312,39 @@ static bool updateFire(EFFECT *psEffect)
 // ALL THE RENDER FUNCTIONS
 // ----------------------------------------------------------------------------------------
 /** Calls the appropriate render routine for each type of effect */
-void renderEffect(const EFFECT *psEffect)
+void renderEffect(const EFFECT *psEffect, const glm::mat4 &viewMatrix)
 {
 	/* What type of effect are we dealing with? */
 	switch (psEffect->group)
 	{
 	case EFFECT_WAYPOINT:
-		renderWaypointEffect(psEffect);
+		renderWaypointEffect(psEffect, viewMatrix);
 		return;
 
 	case EFFECT_EXPLOSION:
-		renderExplosionEffect(psEffect);
+		renderExplosionEffect(psEffect, viewMatrix);
 		return;
 
 	case EFFECT_CONSTRUCTION:
-		renderConstructionEffect(psEffect);
+		renderConstructionEffect(psEffect, viewMatrix);
 		return;
 
 	case EFFECT_SMOKE:
-		renderSmokeEffect(psEffect);
+		renderSmokeEffect(psEffect, viewMatrix);
 		return;
 
 	case EFFECT_GRAVITON:
-		renderGravitonEffect(psEffect);
+		renderGravitonEffect(psEffect, viewMatrix);
 		return;
 
 	case EFFECT_BLOOD:
-		renderBloodEffect(psEffect);
+		renderBloodEffect(psEffect, viewMatrix);
 		return;
 
 	case EFFECT_DESTRUCTION:
 		/*	There is no display func for a destruction effect -
 			it merely spawn other effects over time */
-		renderDestructionEffect(psEffect);
+		renderDestructionEffect(psEffect, viewMatrix);
 		return;
 
 	case EFFECT_FIRE:
@@ -1359,7 +1356,7 @@ void renderEffect(const EFFECT *psEffect)
 		return;
 
 	case EFFECT_FIREWORK:
-		renderFirework(psEffect);
+		renderFirework(psEffect, viewMatrix);
 		return;
 
 	case EFFECT_FREED:
@@ -1371,15 +1368,12 @@ void renderEffect(const EFFECT *psEffect)
 }
 
 /** drawing func for wapypoints */
-static void renderWaypointEffect(const EFFECT *psEffect)
+static void renderWaypointEffect(const EFFECT *psEffect, const glm::mat4 &viewMatrix)
 {
-	positionEffect(psEffect);
-
-	pie_Draw3DShape(psEffect->imd, 0, 0, WZCOL_WHITE, 0, 0);
-	pie_MatEnd();
+	pie_Draw3DShape(psEffect->imd, 0, 0, WZCOL_WHITE, 0, 0, viewMatrix * positionEffect(psEffect));
 }
 
-static void renderFirework(const EFFECT *psEffect)
+static void renderFirework(const EFFECT *psEffect, const glm::mat4 &viewMatrix)
 {
 	/* these don't get rendered */
 	if (psEffect->type == FIREWORK_TYPE_LAUNCHER)
@@ -1387,30 +1381,28 @@ static void renderFirework(const EFFECT *psEffect)
 		return;
 	}
 
-	positionEffect(psEffect);
+	glm::mat4 modelMatrix = positionEffect(psEffect);
+	modelMatrix *=
+		glm::rotate(UNDEG(-player.r.y), glm::vec3(0.f, 1.f, 0.f)) *
+		glm::rotate(UNDEG(-player.r.x), glm::vec3(1.f, 0.f, 0.f)) *
+		glm::scale(psEffect->size / 100.f, psEffect->size / 100.f, psEffect->size / 100.f);
 
-	pie_MatRotY(-player.r.y);
-	pie_MatRotX(-player.r.x);
-
-	pie_MatScale(psEffect->size / 100.f);
-	pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, WZCOL_WHITE, pie_ADDITIVE, EFFECT_EXPLOSION_ADDITIVE);
-	pie_MatEnd();
+	pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, WZCOL_WHITE, pie_ADDITIVE, EFFECT_EXPLOSION_ADDITIVE, viewMatrix * modelMatrix);
 }
 
 /** drawing func for blood. */
-static void renderBloodEffect(const EFFECT *psEffect)
+static void renderBloodEffect(const EFFECT *psEffect, const glm::mat4 &viewMatrix)
 {
-	positionEffect(psEffect);
+	glm::mat4 modelMatrix = positionEffect(psEffect);
+	modelMatrix *=
+		glm::rotate(UNDEG(-player.r.y), glm::vec3(0.f, 1.f, 0.f)) *
+		glm::rotate(UNDEG(-player.r.x), glm::vec3(1.f, 0.f, 0.f)) *
+		glm::scale(psEffect->size / 100.f, psEffect->size / 100.f, psEffect->size / 100.f);
 
-	pie_MatRotY(-player.r.y);
-	pie_MatRotX(-player.r.x);
-	pie_MatScale(psEffect->size / 100.f);
-
-	pie_Draw3DShape(getImdFromIndex(MI_BLOOD), psEffect->frameNumber, 0, WZCOL_WHITE, pie_TRANSLUCENT, EFFECT_BLOOD_TRANSPARENCY);
-	pie_MatEnd();
+	pie_Draw3DShape(getImdFromIndex(MI_BLOOD), psEffect->frameNumber, 0, WZCOL_WHITE, pie_TRANSLUCENT, EFFECT_BLOOD_TRANSPARENCY, viewMatrix * modelMatrix);
 }
 
-static void renderDestructionEffect(const EFFECT *psEffect)
+static void renderDestructionEffect(const EFFECT *psEffect, const glm::mat4 &viewMatrix)
 {
 	float	div;
 	SDWORD	percent;
@@ -1420,7 +1412,7 @@ static void renderDestructionEffect(const EFFECT *psEffect)
 		return;
 	}
 
-	positionEffect(psEffect);
+	glm::mat4 modelMatrix = positionEffect(psEffect);
 
 	div = (float)(graphicsTime - psEffect->birthTime) / psEffect->lifeSpan;
 	if (div > 1.0)
@@ -1434,13 +1426,12 @@ static void renderDestructionEffect(const EFFECT *psEffect)
 
 	if (!gamePaused())
 	{
-		pie_MatRotX(SKY_SHIMMY);
-		pie_MatRotY(SKY_SHIMMY);
-		pie_MatRotZ(SKY_SHIMMY);
+		modelMatrix *=
+			glm::rotate(UNDEG(SKY_SHIMMY), glm::vec3(1.f, 0.f, 0.f)) *
+			glm::rotate(UNDEG(SKY_SHIMMY), glm::vec3(0.f, 1.f, 0.f)) *
+			glm::rotate(UNDEG(SKY_SHIMMY), glm::vec3(0.f, 0.f, 1.f));
 	}
-	pie_Draw3DShape(psEffect->imd, 0, 0, WZCOL_WHITE, pie_RAISE, percent);
-
-	pie_MatEnd();
+	pie_Draw3DShape(psEffect->imd, 0, 0, WZCOL_WHITE, pie_RAISE, percent, viewMatrix * modelMatrix);
 }
 
 static bool rejectLandLight(LAND_LIGHT_SPEC type)
@@ -1470,7 +1461,7 @@ static bool rejectLandLight(LAND_LIGHT_SPEC type)
 }
 
 /** Renders the standard explosion effect */
-static void renderExplosionEffect(const EFFECT *psEffect)
+static void renderExplosionEffect(const EFFECT *psEffect, const glm::mat4 &viewMatrix)
 {
 	const PIELIGHT brightness = WZCOL_WHITE;
 
@@ -1482,15 +1473,16 @@ static void renderExplosionEffect(const EFFECT *psEffect)
 		}
 	}
 
-	positionEffect(psEffect);
+	glm::mat4 modelMatrix = positionEffect(psEffect);
 
 	/* Bit in comments - doesn't quite work yet? */
 	if (TEST_FACING(psEffect))
 	{
 		/* Always face the viewer! */
 		// TODO This only faces towards the viewer, if the effect is in the middle of the screen... It draws the effect parallel with the screens near/far planes.
-		pie_MatRotY(-player.r.y);
-		pie_MatRotX(-player.r.x);
+		modelMatrix *=
+			glm::rotate(UNDEG(-player.r.y), glm::vec3(0.f, 1.f, 0.f)) *
+			glm::rotate(UNDEG(-player.r.x), glm::vec3(1.f, 0.f, 0.f));
 	}
 
 	/* Tesla explosions diminish in size */
@@ -1505,16 +1497,19 @@ static void renderExplosionEffect(const EFFECT *psEffect)
 		{
 			scale = .45f;
 		}
-		pie_MatScale(psEffect->size / 100.f - scale);
+		modelMatrix *=
+			glm::scale(psEffect->size / 100.f - scale, psEffect->size / 100.f - scale, psEffect->size / 100.f - scale);
 	}
 	else if (psEffect->type == EXPLOSION_TYPE_PLASMA)
 	{
 		float scale = (graphicsTime - psEffect->birthTime) / (float)psEffect->lifeSpan / 3.f;
-		pie_MatScale(BASE_PLASMA_SIZE / 100.f + scale);
+		modelMatrix *=
+			glm::scale(BASE_PLASMA_SIZE / 100.f + scale, BASE_PLASMA_SIZE / 100.f + scale, BASE_PLASMA_SIZE / 100.f + scale);
 	}
 	else
 	{
-		pie_MatScale(psEffect->size / 100.f);
+		modelMatrix *=
+			glm::scale(psEffect->size / 100.f, psEffect->size / 100.f, psEffect->size / 100.f);
 	}
 
 	bool premultiplied = false;
@@ -1525,48 +1520,43 @@ static void renderExplosionEffect(const EFFECT *psEffect)
 
 	if (premultiplied)
 	{
-		pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, pie_PREMULTIPLIED, 0);
+		pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, pie_PREMULTIPLIED, 0, viewMatrix * modelMatrix);
 	}
 	else if (psEffect->type == EXPLOSION_TYPE_PLASMA)
 	{
-		pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, pie_ADDITIVE, EFFECT_PLASMA_ADDITIVE);
+		pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, pie_ADDITIVE, EFFECT_PLASMA_ADDITIVE, viewMatrix * modelMatrix);
 	}
 	else if (psEffect->type == EXPLOSION_TYPE_KICKUP)
 	{
-		pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, pie_TRANSLUCENT, 128);
+		pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, pie_TRANSLUCENT, 128, viewMatrix * modelMatrix);
 	}
 	else
 	{
-		pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, pie_ADDITIVE, EFFECT_EXPLOSION_ADDITIVE);
+		pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, pie_ADDITIVE, EFFECT_EXPLOSION_ADDITIVE, viewMatrix * modelMatrix);
 	}
-
-	pie_MatEnd();
 }
 
-static void renderGravitonEffect(const EFFECT *psEffect)
+static void renderGravitonEffect(const EFFECT *psEffect, const glm::mat4 &viewMatrix)
 {
-
-	positionEffect(psEffect);
-
-	pie_MatRotX(psEffect->rotation.x);
-	pie_MatRotY(psEffect->rotation.y);
-	pie_MatRotZ(psEffect->rotation.z);
+	glm::mat4 modelMatrix = positionEffect(psEffect);
+	modelMatrix *=
+		glm::rotate(UNDEG(psEffect->rotation.x), glm::vec3(1.f, 0.f, 0.f)) *
+		glm::rotate(UNDEG(psEffect->rotation.y), glm::vec3(0.f, 1.f, 0.f)) *
+		glm::rotate(UNDEG(psEffect->rotation.z), glm::vec3(0.f, 0.f, 1.f));
 
 	/* Buildings emitted by gravitons are chunkier */
 	if (psEffect->type == GRAVITON_TYPE_EMITTING_ST)
 	{
 		/* Twice as big - 150 percent */
-		pie_MatScale(psEffect->size / 100.f);
+		modelMatrix *=
+			glm::scale(psEffect->size / 100.f, psEffect->size / 100.f, psEffect->size / 100.f);
 	}
 
-	pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, psEffect->player, WZCOL_WHITE, 0, 0);
-
-	/* Pop the matrix */
-	pie_MatEnd();
+	pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, psEffect->player, WZCOL_WHITE, 0, 0, viewMatrix * modelMatrix);
 }
 
 /** Renders the standard construction effect */
-static void renderConstructionEffect(const EFFECT *psEffect)
+static void renderConstructionEffect(const EFFECT *psEffect, const glm::mat4 &viewMatrix)
 {
 	Vector3i null;
 	int percent, translucency;
@@ -1575,13 +1565,14 @@ static void renderConstructionEffect(const EFFECT *psEffect)
 	/* No rotation about arbitrary axis */
 	null.x = null.y = null.z = 0;
 
-	positionEffect(psEffect);
+	glm::mat4 modelMatrix = positionEffect(psEffect);
 
 	/* Bit in comments doesn't quite work yet? */
 	if (TEST_FACING(psEffect))
 	{
-		pie_MatRotY(-player.r.y);
-		pie_MatRotX(-player.r.x);
+		modelMatrix *=
+			glm::rotate(UNDEG(-player.r.y), glm::vec3(0.f, 1.f, 0.f)) *
+			glm::rotate(UNDEG(-player.r.x), glm::vec3(1.f, 0.f, 0.f));
 	}
 
 	/* Scale size according to age */
@@ -1606,28 +1597,25 @@ static void renderConstructionEffect(const EFFECT *psEffect)
 	}
 	translucency += 10;
 	size = MIN(2.f * translucency / 100.f, .90f);
-	pie_MatScale(size);
+	modelMatrix *= glm::scale(size, size, size);
 
-	pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, WZCOL_WHITE, pie_TRANSLUCENT, translucency);
-
-	/* Pop the matrix */
-	pie_MatEnd();
+	pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, WZCOL_WHITE, pie_TRANSLUCENT, translucency, viewMatrix * modelMatrix);
 }
 
 /** Renders the standard smoke effect - it is now scaled in real-time as well */
-static void renderSmokeEffect(const EFFECT *psEffect)
+static void renderSmokeEffect(const EFFECT *psEffect, const glm::mat4 &viewMatrix)
 {
 	int transparency = 0;
 	const PIELIGHT brightness = WZCOL_WHITE;
 
-	positionEffect(psEffect);
+	glm::mat4 modelMatrix = positionEffect(psEffect);
 
 	/* Bit in comments doesn't quite work yet? */
 	if (TEST_FACING(psEffect))
 	{
 		/* Always face the viewer! */
-		pie_MatRotY(-player.r.y);
-		pie_MatRotX(-player.r.x);
+		modelMatrix *= glm::rotate(UNDEG(-player.r.y), glm::vec3(0.f, 1.f, 0.f)) *
+			glm::rotate(UNDEG(-player.r.x), glm::vec3(1.f, 0.f, 0.f));
 	}
 
 	if (TEST_SCALED(psEffect))
@@ -1654,8 +1642,8 @@ static void renderSmokeEffect(const EFFECT *psEffect)
 			percent = 100;
 		}
 
-
-		pie_MatScale((percent + psEffect->baseScale) / 100.f);
+		float scale = (percent + psEffect->baseScale) / 100.f;
+		modelMatrix *= glm::scale(scale, scale, scale);
 		transparency = (EFFECT_SMOKE_TRANSPARENCY * (100 - percent)) / 100;
 	}
 
@@ -1664,22 +1652,19 @@ static void renderSmokeEffect(const EFFECT *psEffect)
 	/* Make imds be transparent on 3dfx */
 	if (psEffect->type == SMOKE_TYPE_STEAM)
 	{
-		pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, pie_TRANSLUCENT, EFFECT_STEAM_TRANSPARENCY / 2);
+		pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, pie_TRANSLUCENT, EFFECT_STEAM_TRANSPARENCY / 2, viewMatrix * modelMatrix);
 	}
 	else
 	{
 		if (psEffect->type == SMOKE_TYPE_TRAIL)
 		{
-			pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, pie_TRANSLUCENT, (2 * transparency) / 3);
+			pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, pie_TRANSLUCENT, (2 * transparency) / 3, viewMatrix * modelMatrix);
 		}
 		else
 		{
-			pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, pie_TRANSLUCENT, transparency / 2);
+			pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, brightness, pie_TRANSLUCENT, transparency / 2, viewMatrix * modelMatrix);
 		}
 	}
-
-	/* Pop the matrix */
-	pie_MatEnd();
 }
 
 

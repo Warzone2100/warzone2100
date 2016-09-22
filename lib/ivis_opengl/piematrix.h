@@ -45,30 +45,11 @@ static inline Vector3f pie_SurfaceNormal3fv(const Vector3f p1, const Vector3f p2
 }
 
 //*************************************************************************
-
-void pie_MatInit();
-void pie_MatBegin(bool cached = false);
-void pie_MatEnd();
+int32_t pie_RotateProject(const Vector3i *src, const glm::mat4& matrix, Vector2i *dest);
 
 //*************************************************************************
 
-void pie_TRANSLATE(int32_t x, int32_t y, int32_t z);
-static inline void pie_TRANSLATE(Position p) { pie_TRANSLATE(p.x, p.y, p.z); }
-void pie_MatScale(float scale);
-void pie_MatScale(Vector3f scale);
-void pie_MatRotX(uint16_t pitch);
-void pie_MatRotY(uint16_t direction);
-void pie_MatRotZ(uint16_t roll);
-static inline void pie_MatRot(Rotation rot) { pie_MatRotX(rot.pitch); pie_MatRotY(rot.direction); pie_MatRotZ(rot.roll); }
-int32_t pie_RotateProject(const Vector3i *src, Vector2i *dest);
-void pie_GetMatrix(float *matrix);
-glm::mat4 pie_MatGet();
-
-//*************************************************************************
-
-extern void pie_PerspectiveBegin(void);
 glm::mat4 pie_PerspectiveGet();
-extern void pie_PerspectiveEnd(void);
 
 //*************************************************************************
 

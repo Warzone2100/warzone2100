@@ -43,8 +43,8 @@ enum WT_CLASS
 
 void atmosInitSystem(void);
 void atmosUpdateSystem(void);
-void renderParticle(ATPART *psPart);
-void atmosDrawParticles(void);
+void renderParticle(ATPART *psPart, const glm::mat4 &viewMatrix);
+void atmosDrawParticles(const glm::mat4 &viewMatrix);
 void atmosSetWeatherType(WT_CLASS type);
 WT_CLASS atmosGetWeatherType(void);
 

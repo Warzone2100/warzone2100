@@ -77,6 +77,7 @@
 #include "multiplay.h"
 #include "qtscript.h"
 #include "warzoneconfig.h"
+#include "lib/ivis_opengl/piematrix.h"
 
 struct	_dragBox dragBox3D, wallDrag;
 
@@ -1421,11 +1422,11 @@ void cancelDeliveryRepos(void)
 	flagReposVarsValid = false;
 }
 
-void renderDeliveryRepos(void)
+void renderDeliveryRepos(const glm::mat4 &viewMatrix)
 {
 	if (flagReposVarsValid)
 	{
-		renderDeliveryPoint(&flagPos, true);
+		renderDeliveryPoint(&flagPos, true, viewMatrix);
 	}
 }
 

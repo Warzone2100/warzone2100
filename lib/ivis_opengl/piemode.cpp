@@ -64,8 +64,6 @@ bool pie_Initialise(void)
 		wz_texture_compression = GL_RGBA;
 	}
 
-	pie_MatInit();
-
 	rendSurface.width	= pie_GetVideoBufferWidth();
 	rendSurface.height	= pie_GetVideoBufferHeight();
 	rendSurface.xcentre	= pie_GetVideoBufferWidth() / 2;

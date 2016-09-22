@@ -61,6 +61,7 @@
 
 #include <algorithm>
 #include <functional>
+#include <glm/gtx/transform.hpp>
 
 #define VTOL_HITBOX_MODIFICATOR 100
 
@@ -1576,18 +1577,20 @@ static bool	justBeenHitByEW(BASE_OBJECT *psObj)
 	return false;
 }
 
-void	objectShimmy(BASE_OBJECT *psObj)
+glm::mat4 objectShimmy(BASE_OBJECT *psObj)
 {
 	if (justBeenHitByEW(psObj))
 	{
-		pie_MatRotX(SKY_SHIMMY);
-		pie_MatRotY(SKY_SHIMMY);
-		pie_MatRotZ(SKY_SHIMMY);
-		if (psObj->type == OBJ_DROID)
-		{
-			pie_TRANSLATE(1 - rand() % 3, 0, 1 - rand() % 3);
-		}
+		const glm::mat4 rotations =
+			glm::rotate(UNDEG(SKY_SHIMMY), glm::vec3(1.f, 0.f, 0.f)) *
+			glm::rotate(UNDEG(SKY_SHIMMY), glm::vec3(0.f, 1.f, 0.f)) *
+			glm::rotate(UNDEG(SKY_SHIMMY), glm::vec3(0.f, 0.f, 1.f));
+		if (psObj->type != OBJ_DROID)
+			return rotations;
+		return rotations * glm::translate(
+			static_cast<float>(1 - rand() % 3), 0.f, static_cast<float>(1 - rand() % 3));
 	}
+	return glm::mat4();
 }
 
 

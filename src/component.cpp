@@ -39,6 +39,7 @@
 #include "projectile.h"
 #include "transporter.h"
 #include "mission.h"
+#include <glm/gtx/transform.hpp>
 
 #define GetRadius(x) ((x)->sradius)
 
@@ -69,24 +70,14 @@ UBYTE getPlayerColour(UDWORD pl)
 	return NetPlay.players[pl].colour;
 }
 
-static void setMatrix(const Vector3i *Position, const Vector3i *Rotation, int scale)
+static glm::mat4 setMatrix(const Vector3i *Position, const Vector3i *Rotation, int scale)
 {
-	pie_PerspectiveBegin();
-	pie_MatBegin();
-
-	pie_TRANSLATE(Position->x, Position->y, Position->z);
-	pie_MatRotX(DEG(Rotation->x));
-	pie_MatRotY(DEG(Rotation->y));
-	pie_MatRotZ(DEG(Rotation->z));
-	pie_MatScale(scale / 100.f);
+	return glm::translate(static_cast<float>(Position->x), static_cast<float>(Position->y), static_cast<float>(Position->z)) *
+		glm::rotate(UNDEG(DEG(Rotation->x)), glm::vec3(1.f, 0.f, 0.f)) *
+		glm::rotate(UNDEG(DEG(Rotation->y)), glm::vec3(0.f, 1.f, 0.f)) *
+		glm::rotate(UNDEG(DEG(Rotation->z)), glm::vec3(0.f, 0.f, 1.f)) *
+		glm::scale(scale / 100.f, scale / 100.f, scale / 100.f);
 }
-
-static void unsetMatrix(void)
-{
-	pie_MatEnd();
-	pie_PerspectiveEnd();
-}
-
 
 UDWORD getComponentDroidRadius(DROID *)
 {
@@ -167,9 +158,7 @@ UDWORD getStructureStatHeight(STRUCTURE_STATS *psStat)
 
 void displayIMDButton(iIMDShape *IMDShape, const Vector3i *Rotation, const Vector3i *Position, int scale)
 {
-	setMatrix(Position, Rotation, scale);
-	pie_Draw3DShape(IMDShape, 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, pie_BUTTON, 0);
-	unsetMatrix();
+	pie_Draw3DShape(IMDShape, 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, pie_BUTTON, 0, setMatrix(Position, Rotation, scale));
 }
 
 static void sharedStructureButton(STRUCTURE_STATS *Stats, iIMDShape *strImd, const Vector3i *Rotation, const Vector3i *Position, int scale)
@@ -184,16 +173,16 @@ static void sharedStructureButton(STRUCTURE_STATS *Stats, iIMDShape *strImd, con
 		pos.y -= 20;
 	}
 
-	setMatrix(&pos, Rotation, scale);
+	const glm::mat4 matrix = setMatrix(&pos, Rotation, scale);
 
 	/* Draw the building's base first */
 	baseImd = Stats->pBaseIMD;
 
 	if (baseImd != NULL)
 	{
-		pie_Draw3DShape(baseImd, 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, pie_BUTTON, 0);
+		pie_Draw3DShape(baseImd, 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, pie_BUTTON, 0, matrix);
 	}
-	pie_Draw3DShape(strImd, 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, pie_BUTTON, 0);
+	pie_Draw3DShape(strImd, 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, pie_BUTTON, 0, matrix);
 
 	//and draw the turret
 	if (strImd->nconnectors)
@@ -243,24 +232,27 @@ static void sharedStructureButton(STRUCTURE_STATS *Stats, iIMDShape *strImd, con
 		{
 			for (int i = 0; i < MAX(1, Stats->numWeaps); i++)
 			{
-				pie_MatBegin();
-				pie_TRANSLATE(strImd->connectors[i].x, strImd->connectors[i].z, strImd->connectors[i].y);
+				glm::mat4 localMatrix =
+					glm::translate(
+						static_cast<float>(strImd->connectors[i].x),
+						static_cast<float>(strImd->connectors[i].z),
+						static_cast<float>(strImd->connectors[i].y)
+					);
 				if (mountImd[i] != NULL)
 				{
-					pie_Draw3DShape(mountImd[i], 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, pie_BUTTON, 0);
+					pie_Draw3DShape(mountImd[i], 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, pie_BUTTON, 0, matrix * localMatrix);
 					if (mountImd[i]->nconnectors)
 					{
-						pie_TRANSLATE(mountImd[i]->connectors->x, mountImd[i]->connectors->z, mountImd[i]->connectors->y);
+						localMatrix *=
+							glm::translate(
+								static_cast<float>(mountImd[i]->connectors->x), static_cast<float>(mountImd[i]->connectors->z), static_cast<float>(mountImd[i]->connectors->y));
 					}
 				}
-				pie_Draw3DShape(weaponImd[i], 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, pie_BUTTON, 0);
+				pie_Draw3DShape(weaponImd[i], 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, pie_BUTTON, 0, matrix * localMatrix);
 				//we have a droid weapon so do we draw a muzzle flash
-				pie_MatEnd();
 			}
 		}
 	}
-
-	unsetMatrix();
 }
 
 void displayStructureButton(STRUCTURE *psStructure, const Vector3i *rotation, const Vector3i *Position, int scale)
@@ -289,7 +281,7 @@ void displayComponentButton(BASE_STATS *Stat, const Vector3i *Rotation, const Ve
 	{
 		return;
 	}
-	setMatrix(Position, Rotation, scale);
+	glm::mat4 matrix = setMatrix(Position, Rotation, scale);
 
 	/* VTOL bombs are only stats allowed to have NULL ComponentIMD */
 	if (StatIsComponent(Stat) != COMP_WEAPON
@@ -301,20 +293,20 @@ void displayComponentButton(BASE_STATS *Stat, const Vector3i *Rotation, const Ve
 
 	if (MountIMD)
 	{
-		pie_Draw3DShape(MountIMD, 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, pie_BUTTON, 0);
+		pie_Draw3DShape(MountIMD, 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, pie_BUTTON, 0, matrix);
 
 		/* translate for weapon mount point */
 		if (MountIMD->nconnectors)
 		{
-			pie_TRANSLATE(MountIMD->connectors->x, MountIMD->connectors->z, MountIMD->connectors->y);
+			matrix *= glm::translate(
+				static_cast<float>(MountIMD->connectors->x), static_cast<float>(MountIMD->connectors->z), static_cast<float>(MountIMD->connectors->y)
+			);
 		}
 	}
 	if (ComponentIMD)
 	{
-		pie_Draw3DShape(ComponentIMD, 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, pie_BUTTON, 0);
+		pie_Draw3DShape(ComponentIMD, 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, pie_BUTTON, 0, matrix);
 	}
-
-	unsetMatrix();
 }
 
 
@@ -328,15 +320,13 @@ void displayResearchButton(BASE_STATS *Stat, const Vector3i *Rotation, const Vec
 	ASSERT(ResearchIMD, "ResearchIMD is NULL");
 	if (ResearchIMD)
 	{
-		setMatrix(Position, Rotation, scale);
+		const glm::mat4 &matrix = setMatrix(Position, Rotation, scale);
 
 		if (MountIMD)
 		{
-			pie_Draw3DShape(MountIMD, 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, pie_BUTTON, 0);
+			pie_Draw3DShape(MountIMD, 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, pie_BUTTON, 0, matrix);
 		}
-		pie_Draw3DShape(ResearchIMD, 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, pie_BUTTON, 0);
-
-		unsetMatrix();
+		pie_Draw3DShape(ResearchIMD, 0, getPlayerColour(selectedPlayer), WZCOL_WHITE, pie_BUTTON, 0, matrix);
 	}
 }
 
@@ -355,7 +345,7 @@ static inline iIMDShape *getRightPropulsionIMD(DROID *psDroid)
 	return asBodyStats[bodyStat].ppIMDList[propStat * NUM_PROP_SIDES + RIGHT_PROP];
 }
 
-void drawMuzzleFlash(WEAPON sWeap, iIMDShape *weaponImd, iIMDShape *flashImd, PIELIGHT buildingBrightness, int pieFlag, int iPieData, UBYTE colour)
+void drawMuzzleFlash(WEAPON sWeap, iIMDShape *weaponImd, iIMDShape *flashImd, PIELIGHT buildingBrightness, int pieFlag, int iPieData, const glm::mat4 &viewMatrix, UBYTE colour)
 {
 	if (!weaponImd || !flashImd || !weaponImd->nconnectors || graphicsTime < sWeap.lastFired)
 	{
@@ -372,9 +362,12 @@ void drawMuzzleFlash(WEAPON sWeap, iIMDShape *weaponImd, iIMDShape *flashImd, PI
 	}
 
 	/* Now we need to move to the end of the firing barrel */
-	pie_TRANSLATE(weaponImd->connectors[connector_num].x,
-	              weaponImd->connectors[connector_num].z,
-	              weaponImd->connectors[connector_num].y);
+	const glm::mat4 modelMatrix =
+		glm::translate(
+			static_cast<float>(weaponImd->connectors[connector_num].x),
+			static_cast<float>(weaponImd->connectors[connector_num].z),
+			static_cast<float>(weaponImd->connectors[connector_num].y)
+		);
 
 	// assume no clan colours for muzzle effects
 	if (flashImd->numFrames == 0 || flashImd->animInterval <= 0)
@@ -382,7 +375,7 @@ void drawMuzzleFlash(WEAPON sWeap, iIMDShape *weaponImd, iIMDShape *flashImd, PI
 		// no anim so display one frame for a fixed time
 		if (graphicsTime >= sWeap.lastFired && graphicsTime < sWeap.lastFired + BASE_MUZZLE_FLASH_DURATION)
 		{
-			pie_Draw3DShape(flashImd, 0, colour, buildingBrightness, pieFlag | pie_ADDITIVE, EFFECT_MUZZLE_ADDITIVE);
+			pie_Draw3DShape(flashImd, 0, colour, buildingBrightness, pieFlag | pie_ADDITIVE, EFFECT_MUZZLE_ADDITIVE, viewMatrix * modelMatrix);
 		}
 	}
 	else if (graphicsTime >= sWeap.lastFired)
@@ -391,7 +384,7 @@ void drawMuzzleFlash(WEAPON sWeap, iIMDShape *weaponImd, iIMDShape *flashImd, PI
 		int frame = (graphicsTime - sWeap.lastFired) / flashImd->animInterval;
 		if (frame < flashImd->numFrames)
 		{
-			pie_Draw3DShape(flashImd, frame, colour, buildingBrightness, pieFlag | pie_ADDITIVE, EFFECT_MUZZLE_ADDITIVE);
+			pie_Draw3DShape(flashImd, frame, colour, buildingBrightness, pieFlag | pie_ADDITIVE, EFFECT_MUZZLE_ADDITIVE, viewMatrix * modelMatrix);
 		}
 	}
 }
@@ -399,7 +392,7 @@ void drawMuzzleFlash(WEAPON sWeap, iIMDShape *weaponImd, iIMDShape *flashImd, PI
 /* Assumes matrix context is already set */
 // this is able to handle multiple weapon graphics now
 // removed mountRotation,they get such stuff from psObj directly now
-static void displayCompObj(DROID *psDroid, bool bButton)
+static void displayCompObj(DROID *psDroid, bool bButton, const glm::mat4 &viewMatrix)
 {
 	iIMDShape *psMoveAnim, *psStillAnim;
 	SDWORD				iConnector;
@@ -408,6 +401,8 @@ static void displayCompObj(DROID *psDroid, bool bButton)
 	PIELIGHT			brightness;
 	UDWORD				colour;
 	UBYTE	i;
+
+	glm::mat4 modelMatrix = glm::mat4(1.f);
 
 	if (graphicsTime - psDroid->timeLastHit < GAME_TICKS_PER_SEC / 4 && psDroid->lastHitWeapon == WSC_ELECTRONIC && !gamePaused())
 	{
@@ -457,13 +452,13 @@ static void displayCompObj(DROID *psDroid, bool bButton)
 	if (!bButton && psPropStats->propulsionType == PROPULSION_TYPE_PROPELLOR)
 	{
 		// FIXME: change when adding submarines to the game
-		pie_TRANSLATE(0, -world_coord(1) / 2.3f, 0);
+		modelMatrix *= glm::translate(0.f, -world_coord(1) / 2.3f, 0.f);
 	}
 
 	iIMDShape *psShapeProp = (leftFirst ? getLeftPropulsionIMD(psDroid) : getRightPropulsionIMD(psDroid));
 	if (psShapeProp)
 	{
-		pie_Draw3DShape(psShapeProp, 0, colour, brightness, pieFlag, iPieData);
+		pie_Draw3DShape(psShapeProp, 0, colour, brightness, pieFlag, iPieData, viewMatrix * modelMatrix);
 	}
 
 	/* set default components transparent */
@@ -485,7 +480,7 @@ static void displayCompObj(DROID *psDroid, bool bButton)
 		iIMDShape *strImd = psShapeBody;
 		if (psDroid->droidType == DROID_PERSON)
 		{
-			pie_MatScale(.75f); // FIXME - hideous....!!!!
+			modelMatrix *= glm::scale(.75f, .75f, .75f); // FIXME - hideous....!!!!
 		}
 		if (strImd->objanimpie[psDroid->animationEvent])
 		{
@@ -493,7 +488,7 @@ static void displayCompObj(DROID *psDroid, bool bButton)
 		}
 		while (strImd)
 		{
-			drawShape(psDroid, strImd, colour, brightness, pieFlag, iPieData);
+			drawShape(psDroid, strImd, colour, brightness, pieFlag, iPieData, viewMatrix * modelMatrix);
 			strImd = strImd->next;
 		}
 	}
@@ -503,18 +498,18 @@ static void displayCompObj(DROID *psDroid, bool bButton)
 	psStillAnim = asBodyStats[psDroid->asBits[COMP_BODY]].ppStillIMDList[psDroid->asBits[COMP_PROPULSION]];
 	if (!bButton && psMoveAnim && psDroid->sMove.Status != MOVEINACTIVE)
 	{
-		pie_Draw3DShape(psMoveAnim, getModularScaledGraphicsTime(psMoveAnim->animInterval, psMoveAnim->numFrames), colour, brightness, pie_ADDITIVE, 200);
+		pie_Draw3DShape(psMoveAnim, getModularScaledGraphicsTime(psMoveAnim->animInterval, psMoveAnim->numFrames), colour, brightness, pie_ADDITIVE, 200, viewMatrix * modelMatrix);
 	}
 	else if (!bButton && psStillAnim) // standing still
 	{
-		pie_Draw3DShape(psStillAnim, getModularScaledGraphicsTime(psStillAnim->animInterval, psStillAnim->numFrames), colour, brightness, 0, 0);
+		pie_Draw3DShape(psStillAnim, getModularScaledGraphicsTime(psStillAnim->animInterval, psStillAnim->numFrames), colour, brightness, 0, 0, viewMatrix * modelMatrix);
 	}
 
 	//don't change the screen coords of an object if drawing it in a button
 	if (!bButton)
 	{
 		/* set up all the screen coords stuff - need to REMOVE FROM THIS LOOP */
-		calcScreenCoords(psDroid);
+		calcScreenCoords(psDroid, viewMatrix * modelMatrix);
 	}
 
 	/* set default components transparent */
@@ -569,60 +564,64 @@ static void displayCompObj(DROID *psDroid, bool bButton)
 				{
 					Rotation rot = getInterpolatedWeaponRotation(psDroid, i, graphicsTime);
 
-					pie_MatBegin(!bButton);
+					glm::mat4 localModelMatrix = modelMatrix;
 
 					//to skip number of VTOL_CONNECTOR_START ground unit connectors
 					if (iConnector < VTOL_CONNECTOR_START)
 					{
-						pie_TRANSLATE(psShapeBody->connectors[i].x,
-						              psShapeBody->connectors[i].z,
-						              psShapeBody->connectors[i].y);
+						localModelMatrix *= glm::translate(
+							static_cast<float>(psShapeBody->connectors[i].x),
+							static_cast<float>(psShapeBody->connectors[i].z),
+							static_cast<float>(psShapeBody->connectors[i].y));
 					}
 					else
 					{
-						pie_TRANSLATE(psShapeBody->connectors[iConnector + i].x,
-						              psShapeBody->connectors[iConnector + i].z,
-						              psShapeBody->connectors[iConnector + i].y);
+						localModelMatrix *= glm::translate(
+							static_cast<float>(psShapeBody->connectors[iConnector + i].x),
+							static_cast<float>(psShapeBody->connectors[iConnector + i].z),
+							static_cast<float>(psShapeBody->connectors[iConnector + i].y));
 					}
-
-					pie_MatRotY(-rot.direction);
+					localModelMatrix *= glm::rotate(UNDEG(-rot.direction), glm::vec3(0.f, 1.f, 0.f));
 
 					/* vtol weapons inverted */
 					if (iConnector >= VTOL_CONNECTOR_START)
 					{
-						pie_MatRotZ(65536 / 2); //this might affect gun rotation
+						//this might affect gun rotation
+						localModelMatrix *= glm::rotate(UNDEG(65536 / 2), glm::vec3(0.f, 0.f, 1.f));
 					}
 
 					/* Get the mount graphic */
 					iIMDShape *psShape = WEAPON_MOUNT_IMD(psDroid, i);
 
 					int recoilValue = getRecoil(psDroid->asWeaps[i]);
-					pie_TRANSLATE(0, 0, recoilValue / 3);
+					localModelMatrix *= glm::translate(0.f, 0.f, recoilValue / 3.f);
 
 					/* Draw it */
 					if (psShape)
 					{
-						pie_Draw3DShape(psShape, 0, colour, brightness, pieFlag, iPieData);
+						pie_Draw3DShape(psShape, 0, colour, brightness, pieFlag, iPieData, viewMatrix * localModelMatrix);
 					}
-
-					pie_TRANSLATE(0, 0, recoilValue);
+					localModelMatrix *= glm::translate(0.f, 0.f, static_cast<float>(recoilValue));
 
 					/* translate for weapon mount point */
 					if (psShape && psShape->nconnectors)
 					{
-						pie_TRANSLATE(psShape->connectors->x, psShape->connectors->z, psShape->connectors->y);
+						localModelMatrix *= glm::translate(
+							static_cast<float>(psShape->connectors->x),
+							static_cast<float>(psShape->connectors->z),
+							static_cast<float>(psShape->connectors->y));
 					}
 
 					/* vtol weapons inverted */
 					if (iConnector >= VTOL_CONNECTOR_START)
 					{
 						//pitch the barrel down
-						pie_MatRotX(-rot.pitch);
+						localModelMatrix *= glm::rotate(UNDEG(-rot.pitch), glm::vec3(1.f, 0.f, 0.f));
 					}
 					else
 					{
 						//pitch the barrel up
-						pie_MatRotX(rot.pitch);
+						localModelMatrix *= glm::rotate(UNDEG(rot.pitch), glm::vec3(1.f, 0.f, 0.f));
 					}
 
 					/* Get the weapon (gun?) graphic */
@@ -631,11 +630,9 @@ static void displayCompObj(DROID *psDroid, bool bButton)
 					// We have a weapon so we draw it and a muzzle flash from weapon connector
 					if (psShape)
 					{
-						pie_Draw3DShape(psShape, 0, colour, brightness, pieFlag, iPieData);
-						drawMuzzleFlash(psDroid->asWeaps[i], psShape, MUZZLE_FLASH_PIE(psDroid, i), brightness, pieFlag, iPieData);
+						pie_Draw3DShape(psShape, 0, colour, brightness, pieFlag, iPieData, viewMatrix * localModelMatrix);
+						drawMuzzleFlash(psDroid->asWeaps[i], psShape, MUZZLE_FLASH_PIE(psDroid, i), brightness, pieFlag, iPieData, viewMatrix * localModelMatrix);
 					}
-					/* Pop Matrix */
-					pie_MatEnd();
 				}
 			}
 			break;
@@ -680,68 +677,70 @@ static void displayCompObj(DROID *psDroid, bool bButton)
 				Allegedly - all droids will have a mount graphic so this shouldn't
 				fall on it's arse......*/
 				//sensor and cyborg and ecm uses connectors[0]
-				pie_MatBegin(!bButton);
+
+				glm::mat4 localModelMatrix = modelMatrix;
 				/* vtol weapons inverted */
 				if (iConnector >= VTOL_CONNECTOR_START)
 				{
-					pie_MatRotZ(65536 / 2); //this might affect gun rotation
+					//this might affect gun rotation
+					localModelMatrix *= glm::rotate(UNDEG(65536 / 2), glm::vec3(0.f, 0.f, 1.f));
 				}
 
-				pie_TRANSLATE(psShapeBody->connectors[0].x,
-				              psShapeBody->connectors[0].z,
-				              psShapeBody->connectors[0].y);
+				localModelMatrix *= glm::translate(
+					static_cast<float>(psShapeBody->connectors[0].x),
+					static_cast<float>(psShapeBody->connectors[0].z),
+					static_cast<float>(psShapeBody->connectors[0].y));
 
-				pie_MatRotY(-rot.direction);
+				localModelMatrix *= glm::rotate(UNDEG(-rot.direction), glm::vec3(0.f, 1.f, 0.f));
 				/* Draw it */
 				if (psMountShape)
 				{
-					pie_Draw3DShape(psMountShape, 0, colour, brightness, pieFlag, iPieData);
+					pie_Draw3DShape(psMountShape, 0, colour, brightness, pieFlag, iPieData, viewMatrix * localModelMatrix);
 				}
 
 				/* translate for construct mount point if cyborg */
 				if (cyborgDroid(psDroid) && psMountShape && psMountShape->nconnectors)
 				{
-					pie_TRANSLATE(psMountShape->connectors[0].x,
-					              psMountShape->connectors[0].z,
-					              psMountShape->connectors[0].y);
+					localModelMatrix *= glm::translate(
+						static_cast<float>(psMountShape->connectors[0].x),
+						static_cast<float>(psMountShape->connectors[0].z),
+						static_cast<float>(psMountShape->connectors[0].y));
 				}
 
 				/* Draw it */
 				if (psShape)
 				{
-					pie_Draw3DShape(psShape, 0, colour, brightness, pieFlag, iPieData);
+					pie_Draw3DShape(psShape, 0, colour, brightness, pieFlag, iPieData, viewMatrix * localModelMatrix);
 
 					// In repair droid case only:
 					if ((psDroid->droidType == DROID_REPAIR || psDroid->droidType == DROID_CYBORG_REPAIR) &&
 					    psShape->nconnectors && psDroid->action == DACTION_DROIDREPAIR)
 					{
 						Spacetime st = interpolateObjectSpacetime(psDroid, graphicsTime);
-
-						pie_TRANSLATE(psShape->connectors[0].x,
-						              psShape->connectors[0].z,
-						              psShape->connectors[0].y);
-						pie_TRANSLATE(0, -20, 0);
+						localModelMatrix *= glm::translate(
+							static_cast<float>(psShape->connectors[0].x),
+							static_cast<float>(psShape->connectors[0].z),
+							static_cast<float>(psShape->connectors[0].y));
+						localModelMatrix *= glm::translate(0.f, -20.f, 0.f);
 
 						psShape = getImdFromIndex(MI_FLAME);
 
 						/* Rotate for droid */
-						pie_MatRotY(st.rot.direction);
-						pie_MatRotX(-st.rot.pitch);
-						pie_MatRotZ(-st.rot.roll);
+						localModelMatrix *= glm::rotate(UNDEG(st.rot.direction), glm::vec3(0.f, 1.f, 0.f));
+						localModelMatrix *= glm::rotate(UNDEG(-st.rot.pitch), glm::vec3(1.f, 0.f, 0.f));
+						localModelMatrix *= glm::rotate(UNDEG(-st.rot.roll), glm::vec3(0.f, 0.f, 1.f));
 						//rotate Y
-						pie_MatRotY(rot.direction);
+						localModelMatrix *= glm::rotate(UNDEG(rot.direction), glm::vec3(0.f, 1.f, 0.f));
 
-						pie_MatRotY(-player.r.y);
-						pie_MatRotX(-player.r.x);
+						localModelMatrix *= glm::rotate(UNDEG(-player.r.y), glm::vec3(0.f, 1.f, 0.f));
+						localModelMatrix *= glm::rotate(UNDEG(-player.r.x), glm::vec3(1.f, 0.f, 0.f));
 
-						pie_Draw3DShape(psShape, getModularScaledGraphicsTime(psShape->animInterval, psShape->numFrames), 0, brightness, pie_ADDITIVE, 140);
+						pie_Draw3DShape(psShape, getModularScaledGraphicsTime(psShape->animInterval, psShape->numFrames), 0, brightness, pie_ADDITIVE, 140, viewMatrix * localModelMatrix);
 
-						pie_MatRotX(player.r.x);
-						pie_MatRotY(player.r.y);
+						localModelMatrix *= glm::rotate(UNDEG(player.r.x), glm::vec3(1.f, 0.f, 0.f));
+						localModelMatrix *= glm::rotate(UNDEG(player.r.y), glm::vec3(0.f, 1.f, 0.f));
 					}
 				}
-				/* Pop Matrix */
-				pie_MatEnd();
 				break;
 			}
 		case DROID_PERSON:
@@ -769,7 +768,7 @@ static void displayCompObj(DROID *psDroid, bool bButton)
 	psShapeProp = (leftFirst ? getRightPropulsionIMD(psDroid) : getLeftPropulsionIMD(psDroid));
 	if (psShapeProp)
 	{
-		pie_Draw3DShape(psShapeProp, 0, colour, brightness, pieFlag, iPieData);
+		pie_Draw3DShape(psShapeProp, 0, colour, brightness, pieFlag, iPieData, viewMatrix * modelMatrix);
 	}
 }
 
@@ -778,7 +777,7 @@ static void displayCompObj(DROID *psDroid, bool bButton)
 //
 void displayComponentButtonTemplate(DROID_TEMPLATE *psTemplate, const Vector3i *Rotation, const Vector3i *Position, int scale)
 {
-	setMatrix(Position, Rotation, scale);
+	const glm::mat4 matrix = setMatrix(Position, Rotation, scale);
 
 	// Decide how to sort it.
 	leftFirst = angleDelta(DEG(Rotation->y)) < 0;
@@ -791,9 +790,7 @@ void displayComponentButtonTemplate(DROID_TEMPLATE *psTemplate, const Vector3i *
 	Droid.rot = Vector3i(0, 0, 0);
 
 	//draw multi component object as a button object
-	displayCompObj(&Droid, true);
-
-	unsetMatrix();
+	displayCompObj(&Droid, true, matrix);
 }
 
 
@@ -803,7 +800,7 @@ void displayComponentButtonObject(DROID *psDroid, const Vector3i *Rotation, cons
 {
 	SDWORD		difference;
 
-	setMatrix(Position, Rotation, scale);
+	const glm::mat4 matrix = setMatrix(Position, Rotation, scale);
 
 	// Decide how to sort it.
 	difference = Rotation->y % 360;
@@ -812,23 +809,18 @@ void displayComponentButtonObject(DROID *psDroid, const Vector3i *Rotation, cons
 
 	// And render the composite object.
 	//draw multi component object as a button object
-	displayCompObj(psDroid, true);
-
-	unsetMatrix();
+	displayCompObj(psDroid, true, matrix);
 }
 
 
 /* Assumes matrix context is already set */
 // multiple turrets display removed the pointless mountRotation
-void displayComponentObject(DROID *psDroid)
+void displayComponentObject(DROID *psDroid, const glm::mat4 &viewMatrix)
 {
 	Vector3i position, rotation;
 	Spacetime st = interpolateObjectSpacetime(psDroid, graphicsTime);
 
 	leftFirst = angleDelta(player.r.y - st.rot.direction) <= 0;
-
-	/* Push the matrix */
-	pie_MatBegin(true);
 
 	/* Get the real position */
 	position.x = st.pos.x - player.p.x;
@@ -846,16 +838,16 @@ void displayComponentObject(DROID *psDroid)
 	rotation.z = st.rot.roll;
 
 	/* Translate origin */
-	pie_TRANSLATE(position.x, position.y, position.z);
-
 	/* Rotate for droid */
-	pie_MatRotY(rotation.y);
-	pie_MatRotX(rotation.x);
-	pie_MatRotZ(rotation.z);
+	glm::mat4 modelMatrix =
+		glm::translate(static_cast<float>(position.x), static_cast<float>(position.y), static_cast<float>(position.z)) *
+		glm::rotate(UNDEG(rotation.y), glm::vec3(0.f, 1.f, 0.f)) *
+		glm::rotate(UNDEG(rotation.x), glm::vec3(1.f, 0.f, 0.f)) *
+		glm::rotate(UNDEG(rotation.z), glm::vec3(0.f, 0.f, 1.f));
 
 	if (graphicsTime - psDroid->timeLastHit < GAME_TICKS_PER_SEC && psDroid->lastHitWeapon == WSC_ELECTRONIC)
 	{
-		objectShimmy((BASE_OBJECT *) psDroid);
+		modelMatrix *= objectShimmy((BASE_OBJECT *) psDroid);
 	}
 
 	if (psDroid->lastHitWeapon == WSC_EMP && graphicsTime - psDroid->timeLastHit < EMP_DISABLE_TIME)
@@ -874,14 +866,13 @@ void displayComponentObject(DROID *psDroid)
 	{
 		//ingame not button object
 		//should render 3 mounted weapons now
-		displayCompObj(psDroid, false);
+		displayCompObj(psDroid, false, viewMatrix * modelMatrix);
 	}
 	else
 	{
 		int frame = graphicsTime / BLIP_ANIM_DURATION + psDroid->id % 8192; // de-sync the blip effect, but don't overflow the int
-		pie_Draw3DShape(getImdFromIndex(MI_BLIP), frame, 0, WZCOL_WHITE, pie_ADDITIVE, psDroid->visible[selectedPlayer] / 2);
+		pie_Draw3DShape(getImdFromIndex(MI_BLIP), frame, 0, WZCOL_WHITE, pie_ADDITIVE, psDroid->visible[selectedPlayer] / 2, viewMatrix * modelMatrix);
 	}
-	pie_MatEnd();
 }
 
 

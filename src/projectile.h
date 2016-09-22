@@ -79,7 +79,7 @@ extern bool gfxVisible(PROJECTILE *psObj);
 
 /***************************************************************************/
 
-extern void	objectShimmy(BASE_OBJECT *psObj);
+extern glm::mat4	objectShimmy(BASE_OBJECT *psObj);
 
 static inline void setProjectileSource(PROJECTILE *psProj, SIMPLE_OBJECT *psObj)
 {

@@ -347,19 +347,22 @@ bool pie_LoadShaders()
 	// TCMask shader for map-placed models with advanced lighting
 	debug(LOG_3D, "Loading shader: SHADER_COMPONENT");
 	result = pie_LoadShader("Component program", "shaders/tcmask.vert", "shaders/tcmask.frag",
-		{ "colour", "teamcolour", "stretch", "tcmask", "fogEnabled", "normalmap", "specularmap", "ecmEffect", "alphaTest", "graphicsCycle" });
+		{ "colour", "teamcolour", "stretch", "tcmask", "fogEnabled", "normalmap", "specularmap", "ecmEffect", "alphaTest", "graphicsCycle",
+		"ModelViewMatrix", "ModelViewProjectionMatrix", "NormalMatrix" });
 	ASSERT_OR_RETURN(false, result, "Failed to load component shader");
 
 	// TCMask shader for buttons with flat lighting
 	debug(LOG_3D, "Loading shader: SHADER_BUTTON");
 	result = pie_LoadShader("Button program", "shaders/button.vert", "shaders/button.frag",
-		{ "colour", "teamcolour", "stretch", "tcmask", "fogEnabled", "normalmap", "specularmap", "ecmEffect", "alphaTest", "graphicsCycle" });
+		{ "colour", "teamcolour", "stretch", "tcmask", "fogEnabled", "normalmap", "specularmap", "ecmEffect", "alphaTest", "graphicsCycle",
+		"ModelViewMatrix", "ModelViewProjectionMatrix", "NormalMatrix" });
 	ASSERT_OR_RETURN(false, result, "Failed to load button shader");
 
 	// Plain shader for no lighting
 	debug(LOG_3D, "Loading shader: SHADER_NOLIGHT");
 	result = pie_LoadShader("Plain program", "shaders/nolight.vert", "shaders/nolight.frag",
-		{ "colour", "teamcolour", "stretch", "tcmask", "fogEnabled", "normalmap", "specularmap", "ecmEffect", "alphaTest", "graphicsCycle" });
+		{ "colour", "teamcolour", "stretch", "tcmask", "fogEnabled", "normalmap", "specularmap", "ecmEffect", "alphaTest", "graphicsCycle",
+		"ModelViewMatrix", "ModelViewProjectionMatrix", "NormalMatrix" });
 	ASSERT_OR_RETURN(false, result, "Failed to load no-lighting shader");
 
 	debug(LOG_3D, "Loading shader: TERRAIN");
@@ -442,7 +445,7 @@ float pie_GetShaderStretchDepth()
 	return shaderStretch;
 }
 
-pie_internal::SHADER_PROGRAM &pie_ActivateShaderDeprecated(SHADER_MODE shaderMode, const iIMDShape *shape, PIELIGHT teamcolour, PIELIGHT colour)
+pie_internal::SHADER_PROGRAM &pie_ActivateShaderDeprecated(SHADER_MODE shaderMode, const iIMDShape *shape, PIELIGHT teamcolour, PIELIGHT colour, const glm::mat4 &ModelView, const glm::mat4 &Proj)
 {
 	int maskpage = shape->tcmaskpage;
 	int normalpage = shape->normalpage;
@@ -467,6 +470,10 @@ pie_internal::SHADER_PROGRAM &pie_ActivateShaderDeprecated(SHADER_MODE shaderMod
 	glUniform1i(program.locations[3], maskpage != iV_TEX_INVALID);
 
 	glUniform1i(program.locations[8], 0);
+
+	glUniformMatrix4fv(program.locations[10], 1, GL_FALSE, glm::value_ptr(ModelView));
+	glUniformMatrix4fv(program.locations[11], 1, GL_FALSE, glm::value_ptr(Proj * ModelView));
+	glUniformMatrix4fv(program.locations[12], 1, GL_FALSE, glm::value_ptr(glm::transpose(glm::inverse(ModelView))));
 
 	if (program.locations[2] >= 0)
 	{

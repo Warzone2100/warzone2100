@@ -65,19 +65,19 @@ extern void disp3d_resetView(void);
 extern void disp3d_getView(iView *newView);
 
 extern void draw3DScene(void);
-extern void renderStructure(STRUCTURE *psStructure);
-extern void renderFeature(FEATURE *psFeature);
-extern void renderProximityMsg(PROXIMITY_DISPLAY	*psProxDisp);
-extern void renderProjectile(PROJECTILE *psCurr);
-extern void renderDeliveryPoint(FLAG_POSITION *psPosition, bool blueprint);
+extern void renderStructure(STRUCTURE *psStructure, const glm::mat4 &viewMatrix);
+extern void renderFeature(FEATURE *psFeature, const glm::mat4 &viewMatrix);
+extern void renderProximityMsg(PROXIMITY_DISPLAY	*psProxDisp, const glm::mat4 &viewMatrix);
+extern void renderProjectile(PROJECTILE *psCurr, const glm::mat4 &viewMatrix);
+extern void renderDeliveryPoint(FLAG_POSITION *psPosition, bool blueprint, const glm::mat4 &viewMatrix);
 extern void debugToggleSensorDisplay(void);
 
-extern void calcScreenCoords(DROID *psDroid);
+extern void calcScreenCoords(DROID *psDroid, const glm::mat4 &viewMatrix);
 extern ENERGY_BAR toggleEnergyBars(void);
 
 extern bool doWeDrawProximitys(void);
 extern void setProximityDraw(bool val);
-extern void renderShadow(DROID *psDroid, iIMDShape *psShadowIMD);
+extern void renderShadow(DROID *psDroid, iIMDShape *psShadowIMD, const glm::mat4 &viewMatrix);
 
 extern bool	clipXY(SDWORD x, SDWORD y);
 
@@ -124,6 +124,6 @@ extern bool CauseCrash;
 extern bool tuiTargetOrigin;
 
 /// Draws using the animation systems. Usually want to use in a while loop to get all model levels.
-void drawShape(BASE_OBJECT *psObj, iIMDShape *strImd, int colour, PIELIGHT buildingBrightness, int pieFlag, int pieFlagData);
+void drawShape(BASE_OBJECT *psObj, iIMDShape *strImd, int colour, PIELIGHT buildingBrightness, int pieFlag, int pieFlagData, const glm::mat4& viewMatrix);
 
 #endif // __INCLUDED_SRC_DISPLAY3D_H__

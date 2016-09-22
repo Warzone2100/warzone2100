@@ -75,7 +75,7 @@ union PIELIGHT
  *	Global ProtoTypes
  */
 /***************************************************************************/
-void pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, int pieFlag, int pieFlagData);
+void pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, int pieFlag, int pieFlagData, const glm::mat4 &modelView);
 
 extern void pie_GetResetCounts(unsigned int *pPieCount, unsigned int *pPolyCount, unsigned int *pStateCount);
 

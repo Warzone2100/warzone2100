@@ -2,6 +2,9 @@
 #pragma debug(on)
 
 uniform float stretch;
+uniform mat4 ModelViewMatrix;
+uniform mat4 ModelViewProjectionMatrix;
+uniform mat4 NormalMatrix;
 
 attribute vec4 vertex;
 attribute vec3 vertexNormal;
@@ -13,14 +16,14 @@ varying vec2 texCoord;
 
 void main()
 {
-	vec3 vVertex = (gl_ModelViewMatrix * vertex).xyz;
+	vec3 vVertex = (ModelViewMatrix * vertex).xyz;
 	vec4 position = vertex;
 
 	// Pass texture coordinates to fragment shader
 	texCoord = (gl_TextureMatrix[0] * vertexTexCoord).xy;
 
 	// Lighting -- we pass these to the fragment shader
-	normal = gl_NormalMatrix * vertexNormal;
+	normal = (NormalMatrix * vec4(vertexNormal, 0)).xyz;
 	lightDir = gl_LightSource[0].position.xyz - vVertex;
 	eyeVec = -vVertex;
 
@@ -31,7 +34,7 @@ void main()
 	}
 
 	// Translate every vertex according to the Model View and Projection Matrix
-	gl_Position = gl_ModelViewProjectionMatrix * position;
+	gl_Position = ModelViewProjectionMatrix * position;
 
 	// Remember vertex distance
 	vertexDistance = gl_Position.z;

@@ -33,6 +33,7 @@
 #include "loop.h"
 #include "map.h"
 #include "miscimd.h"
+#include <glm/gtx/transform.hpp>
 
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
@@ -290,7 +291,7 @@ void atmosUpdateSystem()
 	}
 }
 
-void atmosDrawParticles()
+void atmosDrawParticles(const glm::mat4 &viewMatrix)
 {
 	UDWORD	i;
 
@@ -308,13 +309,13 @@ void atmosDrawParticles()
 			/* Is it on the grid */
 			if (clipXY(asAtmosParts[i].position.x, asAtmosParts[i].position.z))
 			{
-				renderParticle(&asAtmosParts[i]);
+				renderParticle(&asAtmosParts[i], viewMatrix);
 			}
 		}
 	}
 }
 
-void renderParticle(ATPART *psPart)
+void renderParticle(ATPART *psPart, const glm::mat4 &viewMatrix)
 {
 	Vector3i dv;
 
@@ -322,16 +323,15 @@ void renderParticle(ATPART *psPart)
 	dv.x = psPart->position.x - player.p.x;
 	dv.y = psPart->position.y;
 	dv.z = -(psPart->position.z - player.p.z);
-	pie_MatBegin(true);					/* Push the current matrix */
-	pie_TRANSLATE(dv.x, dv.y, dv.z);
 	/* Make it face camera */
-	pie_MatRotY(-player.r.y);
-	pie_MatRotY(-player.r.x);
 	/* Scale it... */
-	pie_MatScale(psPart->size / 100.f);
+	const glm::mat4 modelMatrix =
+		glm::translate(static_cast<float>(dv.x), static_cast<float>(dv.y), static_cast<float>(dv.z)) *
+		glm::rotate(UNDEG(-player.r.y), glm::vec3(0.f, 1.f, 0.f)) *
+		glm::rotate(UNDEG(-player.r.x), glm::vec3(0.f, 1.f, 0.f)) *
+		glm::scale(psPart->size / 100.f, psPart->size / 100.f, psPart->size / 100.f);
+	pie_Draw3DShape(psPart->imd, 0, 0, WZCOL_WHITE, 0, 0, viewMatrix * modelMatrix);
 	/* Draw it... */
-	pie_Draw3DShape(psPart->imd, 0, 0, WZCOL_WHITE, 0, 0);
-	pie_MatEnd();
 }
 
 void atmosSetWeatherType(WT_CLASS type)

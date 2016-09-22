@@ -48,9 +48,6 @@ void renderResearchToBuffer(RESEARCH *psResearch, UDWORD OriginX, UDWORD OriginY
 	UDWORD          basePlateSize, Radius;
 	SDWORD          scale = 0;
 
-	// Set identity (present) context
-	pie_MatBegin();
-
 	pie_SetGeometricOffset(OriginX + 10, OriginY + 10);
 
 	// Rotate round
@@ -174,7 +171,4 @@ void renderResearchToBuffer(RESEARCH *psResearch, UDWORD OriginX, UDWORD OriginY
 	{
 		ASSERT(false, "Unknown PIEType");
 	}
-
-	// close matrix context
-	pie_MatEnd();
 }

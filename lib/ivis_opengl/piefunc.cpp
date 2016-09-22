@@ -181,7 +181,7 @@ void pie_Skybox_Shutdown()
 	delete skyboxGfx;
 }
 
-void pie_DrawSkybox(float scale)
+void pie_DrawSkybox(float scale, const glm::mat4 &viewMatrix)
 {
 	glPushAttrib(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_ENABLE_BIT | GL_FOG_BIT);
 	// no use in updating the depth buffer
@@ -197,11 +197,7 @@ void pie_DrawSkybox(float scale)
 	pie_SetRendMode(REND_ALPHA);
 
 	// Apply scale matrix
-	glScalef(scale, scale / 2.0f, scale);
-	GLfloat p[16], vm[16];
-	glGetFloatv(GL_PROJECTION_MATRIX, p);
-	glGetFloatv(GL_MODELVIEW_MATRIX, vm);
-	skyboxGfx->draw(glm::make_mat4(p) * glm::make_mat4(vm));
+	skyboxGfx->draw(pie_PerspectiveGet() * viewMatrix * glm::scale(scale, scale / 2.f, scale));
 
 	glPopAttrib();
 }
