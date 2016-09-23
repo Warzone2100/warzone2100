@@ -182,4 +182,37 @@ static inline int ssprintf(char (&dest)[N], char const *format, P &&... params) 
 template <unsigned N, typename... P>
 static inline int vssprintf(char (&dest)[N], char const *format, P &&... params) { return vsnprintf(dest, N, format, std::forward<P>(params)...); }
 
+template <typename... P>
+static inline std::string astringf(char const *format, P &&... params)
+{
+	int len = snprintf(nullptr, 0, format, std::forward<P>(params)...);
+	if (len <= 0)
+	{
+		return {};
+	}
+	std::string str;
+	str.resize(len + 1);
+	snprintf(&str[0], len + 1, format, std::forward<P>(params)...);
+	str.resize(len);
+	return str;
+}
+
+
+template <typename... P>
+static inline void sstringf(std::string &str, char const *format, P &&... params)
+{
+	str.resize(str.capacity());
+	int len = snprintf(&str[0], str.size(), format, std::forward<P>(params)...);
+	if (len <= 0)
+	{
+		str.clear();
+	}
+	else if ((unsigned)len >= str.size())
+	{
+		str.resize(len + 1);
+		snprintf(&str[0], len + 1, format, std::forward<P>(params)...);
+	}
+	str.resize(len);
+}
+
 #endif // STRING_EXT_H

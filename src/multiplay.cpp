@@ -63,6 +63,7 @@
 #include "scriptfuncs.h"
 #include "template.h"
 #include "lib/netplay/netplay.h"								// the netplay library.
+#include "modding.h"
 #include "multiplay.h"								// warzone net stuff.
 #include "multijoin.h"								// player management stuff.
 #include "multirecv.h"								// incoming messages stuff
@@ -1592,90 +1593,97 @@ bool recvDestroyFeature(NETQUEUE queue)
 // Network File packet processor.
 bool recvMapFileRequested(NETQUEUE queue)
 {
-	//char mapStr[256],mapName[256],fixedname[256];
-	uint32_t player;
+	ASSERT_OR_RETURN(false, NetPlay.isHost, "Host only routine detected for client!");
 
-	PHYSFS_sint64 fileSize_64;
-	PHYSFS_file	*pFileHandle;
+	uint32_t player = queue.index;
 
-	if (!NetPlay.isHost)				// only host should act
-	{
-		ASSERT(false, "Host only routine detected for client!");
-		return false;
-	}
-
-	//	Check to see who wants the file
+	Sha256 hash;
+	hash.setZero();
 	NETbeginDecode(queue, NET_FILE_REQUESTED);
-	NETuint32_t(&player);
+	NETbin(hash.bytes, hash.Bytes);
 	NETend();
 
-	if (!NetPlay.players[player].wzFile.isSending)
+	auto &files = NetPlay.players[player].wzFiles;
+	if (std::any_of(files.begin(), files.end(), [&](WZFile const &file) { return file.hash == hash; }))
 	{
-		NetPlay.players[player].needFile = true;
-		NetPlay.players[player].wzFile.isCancelled = false;
-		NetPlay.players[player].wzFile.isSending = true;
+		return true;  // Already sending this file, do nothing.
+	}
+
+	netPlayersUpdated = true;  // Show download icon on player.
+
+	std::string filename;
+	if (hash == game.hash)
+	{
+		addConsoleMessage(_("Map was requested: SENDING MAP!"), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 
 		LEVEL_DATASET *mapData = levFindDataSet(game.map, &game.hash);
-
-		addConsoleMessage("Map was requested: SENDING MAP!", DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
-
-		char *mapStr = mapData->realFileName;
-		debug(LOG_INFO, "Map was requested. Looking for %s", mapStr);
-
-		// Checking to see if file is available...
-		pFileHandle = PHYSFS_openRead(mapStr);
-		if (pFileHandle == NULL)
+		filename = mapData->realFileName;
+		debug(LOG_INFO, "Map was requested. Looking for %s", filename.c_str());
+	}
+	else
+	{
+		filename = getModFilename(hash);
+		if (filename.empty())
 		{
-			debug(LOG_ERROR, "Failed to open %s for reading: %s", mapStr, PHYSFS_getLastError());
-			debug(LOG_FATAL, "You have a map (%s) that can't be located.\n\nMake sure it is in the correct directory and or format! (No map packs!)", mapStr);
-			// NOTE: if we get here, then the game is basically over, The host can't send the file for whatever reason...
-			// Which also means, that we can't continue.
-			debug(LOG_NET, "***Host has a file issue, and is being forced to quit!***");
-			NETbeginEncode(NETbroadcastQueue(), NET_HOST_DROPPED);
-			NETend();
-			abort();
+			debug(LOG_INFO, "Unknown file requested by %u.", player);
+			return false;
 		}
 
-		// get the file's size.
-		fileSize_64 = PHYSFS_fileLength(pFileHandle);
-		debug(LOG_INFO, "File is valid, sending [directory: %s] %s to client %u", PHYSFS_getRealDir(mapStr), mapStr, player);
-
-		NetPlay.players[player].wzFile.pFileHandle = pFileHandle;
-		NetPlay.players[player].wzFile.fileSize_32 = (int32_t) fileSize_64;		//we don't support 64bit int nettypes.
-		NetPlay.players[player].wzFile.currPos = 0;
-
-		NETsendFile(game.map, game.hash, player);
+		addConsoleMessage(_("Mod was requested: SENDING MOD!"), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 	}
+
+	// Checking to see if file is available...
+	PHYSFS_file *pFileHandle = PHYSFS_openRead(filename.c_str());
+	if (pFileHandle == nullptr)
+	{
+		debug(LOG_ERROR, "Failed to open %s for reading: %s", filename.c_str(), PHYSFS_getLastError());
+		debug(LOG_FATAL, "You have a map (%s) that can't be located.\n\nMake sure it is in the correct directory and or format! (No map packs!)", filename.c_str());
+		// NOTE: if we get here, then the game is basically over, The host can't send the file for whatever reason...
+		// Which also means, that we can't continue.
+		debug(LOG_NET, "***Host has a file issue, and is being forced to quit!***");
+		NETbeginEncode(NETbroadcastQueue(), NET_HOST_DROPPED);
+		NETend();
+		abort();
+	}
+
+	debug(LOG_INFO, "File is valid, sending [directory: %s] %s to client %u", PHYSFS_getRealDir(filename.c_str()), filename.c_str(), player);
+
+	PHYSFS_sint64 fileSize_64 = PHYSFS_fileLength(pFileHandle);
+	ASSERT_OR_RETURN(false, fileSize_64 <= 0xFFFFFFFF, "File too big!");
+
+	// Schedule file to be sent.
+	files.emplace_back(pFileHandle, hash, fileSize_64);
+
 	return true;
 }
 
-// continue sending the map
-void sendMap(void)
+// Continue sending maps and mods.
+void sendMap()
 {
-	int i = 0;
-
-	for (i = 0; i < MAX_PLAYERS; i++)
+	for (int i = 0; i < MAX_PLAYERS; ++i)
 	{
-		if (NetPlay.players[i].wzFile.isSending)
+		auto &files = NetPlay.players[i].wzFiles;
+		for (auto &file : files)
 		{
-			int done = NETsendFile(game.map, game.hash, i);
+			int done = NETsendFile(file, i);
 			if (done == 100)
 			{
-				addConsoleMessage("MAP SENT!", DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+				netPlayersUpdated = true;  // Remove download icon from player.
+				addConsoleMessage(_("FILE SENT!"), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 				debug(LOG_INFO, "=== File has been sent to player %d ===", i);
-				NetPlay.players[i].wzFile.isSending = false;
-				NetPlay.players[i].needFile = false;
 			}
 		}
+		files.erase(std::remove_if(files.begin(), files.end(), [](WZFile const &file) { return file.handle == nullptr; }), files.end());
 	}
 }
 
 // Another player is broadcasting a map, recv a chunk. Returns false if not yet done.
 bool recvMapFileData(NETQUEUE queue)
 {
-	mapDownloadProgress = NETrecvFile(queue);
-	if (mapDownloadProgress == 100)
+	NETrecvFile(queue);
+	if (NetPlay.wzFiles.empty())
 	{
+		netPlayersUpdated = true;  // Remove download icon from ourselves.
 		addConsoleMessage("MAP DOWNLOADED!", DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 		sendTextMessage("MAP DOWNLOADED", true);					//send
 		debug(LOG_INFO, "=== File has been received. ===");

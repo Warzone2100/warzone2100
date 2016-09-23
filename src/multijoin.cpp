@@ -295,15 +295,14 @@ bool MultiPlayerLeave(UDWORD playerIndex)
 	}
 	game.skDiff[playerIndex] = 0;
 
-	if (NetPlay.players[playerIndex].wzFile.isSending)
+	if (!NetPlay.players[playerIndex].wzFiles.empty())
 	{
 		char buf[256];
 
 		ssprintf(buf, _("File transfer has been aborted for %d.") , playerIndex);
 		addConsoleMessage(buf, DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 		debug(LOG_INFO, "=== File has been aborted for %d ===", playerIndex);
-		NetPlay.players[playerIndex].wzFile.isSending = false;
-		NetPlay.players[playerIndex].needFile = false;
+		NetPlay.players[playerIndex].wzFiles.clear();
 	}
 
 	if (widgGetFromID(psWScreen, IDRET_FORM))

@@ -40,7 +40,8 @@ struct MULTIPLAYERGAME
 	char		map[128];					// name of multiplayer map being used.
 	uint8_t		maxPlayers;					// max players to allow
 	char		name[128];					// game name   (to be used)
-	Sha256          hash;                                           ///< Hash of map file. Zero if built in.
+	Sha256      hash;                       ///< Hash of map file. Zero if built in.
+	std::vector<Sha256> modHashes;          // Hash of mods.
 	uint32_t    power;						// power level for arena game
 	uint8_t		base;						// clean/base/base&defence
 	uint8_t		alliance;					// no/yes/locked

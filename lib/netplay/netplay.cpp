@@ -126,7 +126,6 @@ static GAMESTRUCT	gamestruct;
 
 // update flags
 bool netPlayersUpdated;
-int mapDownloadProgress;
 
 /**
  * Socket used for these purposes:
@@ -177,15 +176,15 @@ static int NETCODE_VERSION_MINOR = 0;
 
 bool NETisCorrectVersion(uint32_t game_version_major, uint32_t game_version_minor)
 {
-	return (NETCODE_VERSION_MAJOR == game_version_major && NETCODE_VERSION_MINOR == game_version_minor);
+	return (uint32_t)NETCODE_VERSION_MAJOR == game_version_major && (uint32_t)NETCODE_VERSION_MINOR == game_version_minor;
 }
 
-int NETGetMajorVersion(void)
+int NETGetMajorVersion()
 {
 	return NETCODE_VERSION_MAJOR;
 }
 
-int NETGetMinorVersion(void)
+int NETGetMinorVersion()
 {
 	return NETCODE_VERSION_MINOR;
 }
@@ -319,7 +318,6 @@ void NET_InitPlayer(int i, bool initPosition, bool initTeams)
 		NetPlay.players[i].team = initTeams? i/playersPerTeam() : i;
 	}
 	NetPlay.players[i].ready = false;
-	NetPlay.players[i].needFile = false;
 	if (NetPlay.bComms)
 	{
 		NetPlay.players[i].ai = AI_OPEN;
@@ -329,8 +327,7 @@ void NET_InitPlayer(int i, bool initPosition, bool initTeams)
 		NetPlay.players[i].ai = 0;			// default AI
 	}
 	NetPlay.players[i].difficulty = 1;		// normal
-	NetPlay.players[i].wzFile.isCancelled = false;
-	NetPlay.players[i].wzFile.isSending = false;
+	NetPlay.players[i].wzFiles.clear();
 	ingame.JoiningInProgress[i] = false;
 }
 
@@ -348,17 +345,15 @@ void NET_InitPlayers(bool initTeams)
 
 	NetPlay.hostPlayer = NET_HOST_ONLY;	// right now, host starts always at index zero
 	NetPlay.playercount = 0;
-	NetPlay.pMapFileHandle = NULL;
+	NetPlay.wzFiles.clear();
 	debug(LOG_NET, "Players initialized");
 }
 
 static void NETSendNPlayerInfoTo(uint32_t *index, uint32_t indexLen, unsigned to)
 {
-	int n;
-
 	NETbeginEncode(NETnetQueue(to), NET_PLAYER_INFO);
 	NETuint32_t(&indexLen);
-	for (n = 0; n < indexLen; ++n)
+	for (unsigned n = 0; n < indexLen; ++n)
 	{
 		debug(LOG_NET, "sending player's (%u) info to all players", index[n]);
 		NETlogEntry(" sending player's info to all players", SYNC_FLAG, index[n]);
@@ -937,7 +932,7 @@ static bool NETrecvGAMESTRUCT(GAMESTRUCT *ourgamestruct)
 }
 
 
-static int upnp_init(void *asdf)
+static int upnp_init(void *)
 {
 	struct UPNPDev *devlist;
 	struct UPNPDev *dev;
@@ -1913,195 +1908,111 @@ bool NETrecvGame(NETQUEUE *queue, uint8_t *type)
 *         NET_BUFFER_SIZE is at 16k.  (also remember text chat, plus all the other cruff)
 */
 #define MAX_FILE_TRANSFER_PACKET 2048
-int NETsendFile(char *fileName, Sha256 const &fileHash, UDWORD player)
+int NETsendFile(WZFile &file, unsigned player)
 {
-	uint32_t        bytesToRead = 0;
-	uint8_t		sendto = 0;
-	uint8_t         inBuff[MAX_FILE_TRANSFER_PACKET];
+	ASSERT_OR_RETURN(100, NetPlay.isHost, "Trying to send a file and we are not the host!");
 
-	// We are not the host, so we don't care. (in fact, this would be a error)
-	if (!NetPlay.isHost)
-	{
-		debug(LOG_ERROR, "trying to send a file and we are not the host!");
-		return true;
-	}
-
+	uint8_t inBuff[MAX_FILE_TRANSFER_PACKET];
 	memset(inBuff, 0x0, sizeof(inBuff));
 
 	// read some bytes.
-	bytesToRead = PHYSFS_read(NetPlay.players[player].wzFile.pFileHandle, inBuff, 1, MAX_FILE_TRANSFER_PACKET);
+	uint32_t bytesToRead = PHYSFS_read(file.handle, inBuff, 1, MAX_FILE_TRANSFER_PACKET);
 	ASSERT_OR_RETURN(100, (int32_t)bytesToRead >= 0, "Error reading file.");
-	sendto = (uint8_t) player;
 
-	NETbeginEncode(NETnetQueue(sendto), NET_FILE_PAYLOAD);
-	NETint32_t(&NetPlay.players[player].wzFile.fileSize_32);		// total bytes in this file. (we don't support 64bit yet)
-	NETuint32_t(&bytesToRead);                                                // bytes in this packet
-	NETint32_t(&NetPlay.players[player].wzFile.currPos);			// start byte
-	if (NetPlay.players[player].wzFile.currPos == 0)
-	{
-		NETstring(fileName, 256);  //256 = max filename size
-		NETbin(const_cast<uint8_t *>(fileHash.bytes), fileHash.Bytes);  // const_cast ok since we're encoding, not decoding.
-	}
+	NETbeginEncode(NETnetQueue(player), NET_FILE_PAYLOAD);
+	NETbin(file.hash.bytes, file.hash.Bytes);
+	NETuint32_t(&file.size);  // total bytes in this file. (we don't support 64bit yet)
+	NETuint32_t(&file.pos);  // start byte
+	NETuint32_t(&bytesToRead);  // bytes in this packet
 	NETbin(inBuff, bytesToRead);
 	NETend();
 
-	NetPlay.players[player].wzFile.currPos += bytesToRead;		// update position!
-	if (NetPlay.players[player].wzFile.currPos == NetPlay.players[player].wzFile.fileSize_32)
+	file.pos += bytesToRead;  // update position!
+	if (file.pos == file.size)
 	{
-		PHYSFS_close(NetPlay.players[player].wzFile.pFileHandle);
-		NetPlay.players[player].wzFile.isSending = false;	// we are done sending to this client.
-		NetPlay.players[player].needFile = false;
+		PHYSFS_close(file.handle);
+		file.handle = nullptr;  // We are done sending to this client.
 	}
 
-	return (NetPlay.players[player].wzFile.currPos * 100) / NetPlay.players[player].wzFile.fileSize_32;
+	return (uint64_t)file.pos * 100 / file.size;
 }
 
-/* @TODO more error checking (?) different file types (?) */
 // recv file. it returns % of the file so far recvd.
-UBYTE NETrecvFile(NETQUEUE queue)
+int NETrecvFile(NETQUEUE queue)
 {
-	uint32_t        bytesToRead = 0;
-	int32_t		fileSize = 0, currPos = 0;
-	uint8_t         outBuff[MAX_FILE_TRANSFER_PACKET];
-	static bool isLoop = false;
-
-	memset(outBuff, 0x0, sizeof(outBuff));
+	Sha256 hash;
+	hash.setZero();
+	uint32_t size = 0;
+	uint32_t pos = 0;
+	uint32_t bytesToRead = 0;
+	uint8_t buf[MAX_FILE_TRANSFER_PACKET];
+	memset(buf, 0x0, sizeof(buf));
 
 	//read incoming bytes.
 	NETbeginDecode(queue, NET_FILE_PAYLOAD);
-	NETint32_t(&fileSize);		// total bytes in this file.
-	NETuint32_t(&bytesToRead);      // bytes in this packet
-	NETint32_t(&currPos);		// start byte
+	NETbin(hash.bytes, hash.Bytes);
+	NETuint32_t(&size);  // total bytes in this file. (we don't support 64bit yet)
+	NETuint32_t(&pos);  // start byte
+	NETuint32_t(&bytesToRead);  // bytes in this packet
+	ASSERT_OR_RETURN(100, bytesToRead <= sizeof(buf), "Bad value.");
+	NETbin(buf, bytesToRead);
+	NETend();
 
-	if (currPos == 0)	// first packet!
+	debug(LOG_NET, "New file position is %u", pos);
+
+	auto file = std::find_if(NetPlay.wzFiles.begin(), NetPlay.wzFiles.end(), [&](WZFile const &file) { return file.hash == hash; });
+
+	if (file == NetPlay.wzFiles.end())
 	{
-		char mapName[256];
-		Sha256 fileHash;
-		memset(mapName, 0x0, sizeof(mapName));
-		fileHash.setZero();
-		// Read filename and hash (only valid on 1st packet)
-		NETstring(mapName, 256);
-		NETbin(fileHash.bytes, fileHash.Bytes);
-
-		removeWildcards(mapName);
-		char fileName[256];
-		if (strlen(mapName) >= 3 && mapName[strlen(mapName) - 3] == '-' && mapName[strlen(mapName) - 2] == 'T' && unsigned(mapName[strlen(mapName) - 1] - '1') < 3)
-		{
-			mapName[strlen(mapName) - 3] = '\0';  // Cut off "-T1", "-T2" or "-T3".
-		}
-		snprintf(fileName, sizeof(fileName), "maps/%dc-%s-%s.wz", game.maxPlayers, mapName, fileHash.toString().c_str());  // Wonder whether game.maxPlayers is initialised already?
-
-		debug(LOG_INFO, "Creating new file %s hash %s", fileName, fileHash.toString().c_str());
-
-		if (PHYSFS_exists(fileName))
-		{
-			PHYSFS_file *fin;
-			fin = PHYSFS_openRead(fileName);
-			if (!fin)
-			{
-				NETend();
-
-				// the file exists, but we can't open it, and I have no clue how to fix this...
-				debug(LOG_FATAL, "PHYSFS_openRead(\"%s\") failed with error: %s\n", fileName, PHYSFS_getLastError());
-
-				debug(LOG_NET, "We are leaving 'nicely' after a fatal error");
-				NETbeginEncode(NETnetQueue(NET_HOST_ONLY), NET_PLAYER_LEAVING);
-				{
-					uint32_t id = selectedPlayer;
-
-					NETuint32_t(&id);
-				}
-				NETend();
-
-				abort();
-			}
-			Sha256 ourHash = findHashOfFile(fileName);
-			if (ourHash == fileHash)
-			{
-				uint32_t reason = ALREADY_HAVE_FILE;
-				debug(LOG_NET, "We already have the file %s! ", fileName);
-				PHYSFS_close(fin);
-				NETend();
-
-				NETbeginEncode(NETnetQueue(NET_HOST_ONLY), NET_FILE_CANCELLED);
-				NETuint32_t(&selectedPlayer);
-				NETuint32_t(&reason);
-				NETend();
-				if (!isLoop)
-				{
-					isLoop = true;
-				}
-				else
-				{
-					uint32_t reason = STUCK_IN_FILE_LOOP;
-
-					NETend();
-					// we should never get here, it means, that the game can't detect the level, but we have the file.
-					// so we kick this player out.
-					NETbeginEncode(NETnetQueue(NET_HOST_ONLY), NET_FILE_CANCELLED);
-					NETuint32_t(&selectedPlayer);
-					NETuint32_t(&reason);
-					NETend();
-					PHYSFS_close(NetPlay.pMapFileHandle);
-					NetPlay.pMapFileHandle = NULL;
-					debug(LOG_FATAL, "Something is really wrong with the file's (%s) data, game can't detect it?", fileName);
-				}
-				return 100;
-			}
-			PHYSFS_close(fin);
-
-			debug(LOG_NET, "We already have the file %s, but wrong hash, ours %s vs theirs %s.  Redownloading", fileName, ourHash.toString().c_str(), fileHash.toString().c_str());
-
-		}
-		NetPlay.pMapFileHandle = PHYSFS_openWrite(fileName);	// create a new file.
-		sstrcpy(NetPlay.mapFileName, fileName);
-	}
-
-	debug(LOG_NET, "New file position is %d", currPos);
-
-	if (!NetPlay.pMapFileHandle) // file can't be opened
-	{
-		debug(LOG_FATAL, "Fatal error while creating file: %s", PHYSFS_getLastError());
-		debug(LOG_FATAL, "Either we do not have write permission, or the host sent us a invalid file!");
-		abort();
-	}
-
-	if (bytesToRead > sizeof(outBuff))
-	{
-		debug(LOG_ERROR, "Error receiving file from host.");
+		debug(LOG_WARNING, "Receiving file data we didn't request.");
+		NETbeginEncode(NETnetQueue(NET_HOST_ONLY), NET_FILE_CANCELLED);
+		NETbin(hash.bytes, hash.Bytes);
 		NETend();
 		return 100;
 	}
 
-	NETbin(outBuff, bytesToRead);
-	NETend();
+	// Write packet to the file.
+	PHYSFS_write(file->handle, buf, bytesToRead, 1);
 
-	//write packet to the file.
-	PHYSFS_write(NetPlay.pMapFileHandle, outBuff, bytesToRead, 1);
+	uint32_t newPos = pos + bytesToRead;
+	file->pos = newPos;
 
-	if (currPos + bytesToRead == fileSize)	// last packet
+	if (newPos == size)  // last packet
 	{
-		int noError = PHYSFS_close(NetPlay.pMapFileHandle);
+		int actualFileSize = PHYSFS_fileLength(file->handle);
+		ASSERT((unsigned)actualFileSize == size, "Downloaded map too small! Got %d, expected %d!", actualFileSize, size);
+
+		int noError = PHYSFS_close(file->handle);
 		if (noError == 0)
 		{
 			debug(LOG_ERROR, "Could not close file handle after trying to save map: %s", PHYSFS_getLastError());
 		}
-		NetPlay.pMapFileHandle = NULL;
-		PHYSFS_File *file = PHYSFS_openRead(NetPlay.mapFileName);
-		int actualFileSize = PHYSFS_fileLength(file);
-		PHYSFS_close(file);
-		NetPlay.mapFileName[0] = '\0';
-		ASSERT(actualFileSize == fileSize, "Downloaded map too small! Got %d, expected %d!", actualFileSize, fileSize);
+		file->handle = nullptr;
+		NetPlay.wzFiles.erase(file);
 	}
+	// 'file' may now be an invalidated iterator.
 
 	//return the percentage count
-	if (fileSize)
+	if (size)
 	{
-
-		return ((currPos + bytesToRead) * 100) / fileSize;
+		return (newPos * 100) / size;
 	}
 	debug(LOG_ERROR, "Received 0 byte file from host?");
 	return 100;		// file is nullbyte, so we are done.
+}
+
+int NETgetDownloadProgress(unsigned player)
+{
+	std::vector<WZFile> const &files = player == selectedPlayer ?
+		NetPlay.wzFiles :  // Check our own download progress.
+		NetPlay.players[player].wzFiles;  // Check their download progress (currently only works if we are the host).
+
+	int progress = 100;
+	for (WZFile const &file : files)
+	{
+		progress = std::min<unsigned>(progress, file.pos * 100 / std::max<unsigned>(file.size, 1));
+	}
+	return progress;
 }
 
 static ssize_t readLobbyResponse(Socket *sock, unsigned int timeout)
@@ -2312,7 +2223,7 @@ static void NETregisterServer(int state)
 void NETfixPlayerCount(void)
 {
 	int maxPlayers = game.maxPlayers;
-	int playercount = 0;
+	unsigned playercount = 0;
 	for (int index = 0; index < game.maxPlayers; ++index)
 	{
 		if (NetPlay.players[index].ai == AI_CLOSED)
@@ -2578,11 +2489,6 @@ static void NETallowJoining(void)
 						// Game full. Reject.
 						rejected = (uint8_t)ERROR_FULL;
 					}
-					else if (getModList() != ModList)
-					{
-						// Incompatible mods. Reject.
-						rejected = (uint8_t)ERROR_WRONGDATA;
-					}
 
 					if (rejected)
 					{
@@ -2654,11 +2560,8 @@ static void NETallowJoining(void)
 					// Send the updated GAMESTRUCT to the masterserver
 					NETregisterServer(WZ_SERVER_UPDATE);
 
-
 					// reset flags for new players
-					NetPlay.players[index].wzFile.isCancelled = false;
-					NetPlay.players[index].wzFile.isSending = false;
-					NetPlay.players[index].needFile = false;
+					NetPlay.players[index].wzFiles.clear();
 				}
 			}
 		}
@@ -2674,7 +2577,6 @@ bool NEThostGame(const char *SessionName, const char *PlayerName,
 	debug(LOG_NET, "NEThostGame(%s, %s, %d, %d, %d, %d, %u)", SessionName, PlayerName,
 	      one, two, three, four, plyrs);
 
-	mapDownloadProgress = 100;
 	netPlayersUpdated = true;
 
 	NET_InitPlayers(true);
@@ -2971,7 +2873,6 @@ bool NETjoinGame(const char *host, uint32_t port, const char *playername)
 
 	debug(LOG_NET, "Trying to join [%s]:%d ...", host, port);
 
-	mapDownloadProgress = 100;
 	netPlayersUpdated = true;
 
 	hosts = resolveHost(host, port);
@@ -3062,7 +2963,7 @@ bool NETjoinGame(const char *host, uint32_t port, const char *playername)
 		uint8_t type;
 
 		// FIXME: shouldn't there be some sort of rejection message?
-		if (wzGetTicks() > i + 5000)
+		if ((unsigned)wzGetTicks() > i + 5000)
 		{
 			// timeout
 			return false;

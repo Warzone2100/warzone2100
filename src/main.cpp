@@ -914,6 +914,7 @@ int realmain(int argc, char *argv[])
 	memset(rulesettag, 0, sizeof(rulesettag)); // tag to add to userdata to find user generated stuff
 	make_dir(MultiPlayersPath, "multiplay", NULL);
 	make_dir(MultiPlayersPath, "multiplay", "players");
+	PHYSFS_mkdir("mods/downloads");
 
 	if (!customDebugfile)
 	{

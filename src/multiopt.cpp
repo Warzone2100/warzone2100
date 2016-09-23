@@ -18,13 +18,19 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 /*
- * MultiOpt.c
+ * multiopt.cpp
  *
  * Alex Lee,97/98, Pumpkin Studios
  *
  * Routines for setting the game options and starting the init process.
  */
 #include "lib/framework/frame.h"			// for everything
+
+#include "lib/framework/file.h"
+#include "lib/framework/wzapp.h"
+
+#include "lib/ivis_opengl/piestate.h"
+
 #include "map.h"
 #include "game.h"			// for loading maps
 #include "message.h"		// for clearing messages.
@@ -37,7 +43,6 @@
 #include "hci.h"
 #include "configuration.h"			// lobby cfg.
 #include "clparse.h"
-#include "lib/ivis_opengl/piestate.h"
 
 #include "component.h"
 #include "console.h"
@@ -46,6 +51,8 @@
 #include "multijoin.h"
 #include "frontend.h"
 #include "levels.h"
+#include "loadsave.h"
+#include "modding.h"
 #include "multistat.h"
 #include "multiint.h"
 #include "multilimit.h"
@@ -54,7 +61,6 @@
 #include "multirecv.h"
 #include "scriptfuncs.h"
 #include "template.h"
-#include "lib/framework/wzapp.h"
 
 // send complete game info set!
 void sendOptions()
@@ -67,12 +73,20 @@ void sendOptions()
 		return;
 	}
 
+	game.modHashes = getModHashList();
+
 	NETbeginEncode(NETbroadcastQueue(), NET_OPTIONS);
 
 	// First send information about the game
 	NETuint8_t(&game.type);
 	NETstring(game.map, 128);
 	NETbin(game.hash.bytes, game.hash.Bytes);
+	uint32_t modHashesSize = game.modHashes.size();
+	NETuint32_t(&modHashesSize);
+	for (auto &hash : game.modHashes)
+	{
+		NETbin(hash.bytes, hash.Bytes);
+	}
 	NETuint8_t(&game.maxPlayers);
 	NETstring(game.name, 128);
 	NETuint32_t(&game.power);
@@ -131,6 +145,14 @@ void recvOptions(NETQUEUE queue)
 	NETuint8_t(&game.type);
 	NETstring(game.map, 128);
 	NETbin(game.hash.bytes, game.hash.Bytes);
+	uint32_t modHashesSize;
+	NETuint32_t(&modHashesSize);
+	ASSERT_OR_RETURN(, modHashesSize < 1000000, "Way too many mods %u", modHashesSize);
+	game.modHashes.resize(modHashesSize);
+	for (auto &hash : game.modHashes)
+	{
+		NETbin(hash.bytes, hash.Bytes);
+	}
 	NETuint8_t(&game.maxPlayers);
 	NETstring(game.name, 128);
 	NETuint32_t(&game.power);
@@ -202,37 +224,90 @@ void recvOptions(NETQUEUE queue)
 	levInitialise();
 	rebuildSearchPath(mod_multiplay, true);	// MUST rebuild search path for the new maps we just got!
 	buildMapList();
-	LEVEL_DATASET *mapData = levFindDataSet(game.map, &game.hash);
-	// See if we have the map or not
-	if (mapData == NULL)
-	{
-		uint32_t player = selectedPlayer;
 
-		debug(LOG_INFO, "Map was not found, requesting map %s from host, type %d", game.map, game.isMapMod);
-		// Request the map from the host
-		NETbeginEncode(NETnetQueue(NET_HOST_ONLY), NET_FILE_REQUESTED);
-		NETuint32_t(&player);
-		NETend();
-
-		addConsoleMessage("MAP REQUESTED!", DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
-	}
-	else
-	{
-		if (mapData && CheckForMod(mapData->realFileName))
+	bool haveData = true;
+	auto requestFile = [&haveData](Sha256 &hash, char const *filename) {
+		if (std::any_of(NetPlay.wzFiles.begin(), NetPlay.wzFiles.end(), [&hash](WZFile const &file) { return file.hash == hash; }))
 		{
-			char buf[256];
-			if (game.isMapMod)
-			{
-				ssprintf(buf, _("Warning, this is a map-mod, it could alter normal gameplay."));
-			}
-			else
-			{
-				ssprintf(buf, _("Warning, HOST has altered the game code, and can't be trusted!"));
-			}
-			addConsoleMessage(buf, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
-			game.isMapMod = true;
+			debug(LOG_INFO, "Already requested file, continue waiting.");
+			haveData = false;
+			return false;  // Downloading the file already
 		}
 
+		if (!PHYSFS_exists(filename))
+		{
+			debug(LOG_INFO, "Creating new file %s", filename);
+		}
+		else if (findHashOfFile(filename) != hash)
+		{
+			debug(LOG_INFO, "Overwriting old incomplete or corrupt file %s", filename);
+		}
+		else
+		{
+			return false;  // Have the file already.
+		}
+
+		NetPlay.wzFiles.emplace_back(PHYSFS_openWrite(filename), hash);
+
+		// Request the map/mod from the host
+		NETbeginEncode(NETnetQueue(NET_HOST_ONLY), NET_FILE_REQUESTED);
+		NETbin(hash.bytes, hash.Bytes);
+		NETend();
+
+		haveData = false;
+		return true;  // Starting download now.
+	};
+
+	LEVEL_DATASET *mapData = levFindDataSet(game.map, &game.hash);
+	// See if we have the map or not
+	if (mapData == nullptr)
+	{
+		char mapName[256];
+		sstrcpy(mapName, game.map);
+		removeWildcards(mapName);
+
+		if (strlen(mapName) >= 3 && mapName[strlen(mapName) - 3] == '-' && mapName[strlen(mapName) - 2] == 'T' && unsigned(mapName[strlen(mapName) - 1] - '1') < 3)
+		{
+			mapName[strlen(mapName) - 3] = '\0';  // Cut off "-T1", "-T2" or "-T3".
+		}
+		char filename[256];
+		ssprintf(filename, "maps/%dc-%s-%s.wz", game.maxPlayers, mapName, game.hash.toString().c_str());  // Wonder whether game.maxPlayers is initialised already?
+
+		if (requestFile(game.hash, filename))
+		{
+			debug(LOG_INFO, "Map was not found, requesting map %s from host, type %d", game.map, game.isMapMod);
+			addConsoleMessage("MAP REQUESTED!", DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+		}
+		else
+		{
+			debug(LOG_FATAL, "Can't load map %s, even though we downloaded %s", game.map, filename);
+			abort();
+		}
+	}
+
+	for (Sha256 &hash : game.modHashes)
+	{
+		char filename[256];
+		ssprintf(filename, "mods/downloads/%s", hash.toString().c_str());
+
+		if (requestFile(hash, filename))
+		{
+			debug(LOG_INFO, "Mod was not found, requesting mod %s from host", hash.toString().c_str());
+			addConsoleMessage("MOD REQUESTED!", DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+		}
+	}
+
+	if (mapData && CheckForMod(mapData->realFileName))
+	{
+		char const *str = game.isMapMod ?
+			_("Warning, this is a map-mod, it could alter normal gameplay.") :
+			_("Warning, HOST has altered the game code, and can't be trusted!");
+		addConsoleMessage(str, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
+		game.isMapMod = true;
+	}
+
+	if (mapData)
+	{
 		loadMapPreview(false);
 	}
 }

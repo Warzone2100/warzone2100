@@ -18,14 +18,24 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 #include "lib/framework/frame.h"
-#include "lib/framework/physfs_ext.h"
+
 #include "lib/exceptionhandler/dumpinfo.h"
+#include "lib/framework/file.h"
+#include "lib/framework/physfs_ext.h"
 #include "lib/netplay/netplay.h"
 
 #include "modding.h"
 
 #include <string>
 #include <vector>
+
+namespace {
+	struct LoadedMod
+	{
+		std::string name;
+		std::string filename;
+	};
+}
 
 std::vector<std::string> global_mods;
 std::vector<std::string> campaign_mods;
@@ -35,11 +45,12 @@ std::vector<std::string> override_mods;
 std::string override_mod_list;
 bool use_override_mods = false;
 
-std::string mod_list;
-static std::vector<std::string> loaded_mods;
+static std::vector<LoadedMod> loaded_mods;
+static std::string mod_list;
+static std::vector<Sha256> mod_hash_list;
 
 
-static void addLoadedMod(const char *modname);
+static void addLoadedMod(std::string modname, std::string filename);
 
 
 static inline std::vector<std::string> split(std::string const &str, std::string const &sep)
@@ -87,8 +98,6 @@ static inline std::string join(std::vector<std::string> const &strs, std::string
  */
 void addSubdirs(const char *basedir, const char *subdir, const bool appendToPath, std::vector<std::string> const *checkList, bool addToModList)
 {
-	char tmpstr[PATH_MAX];
-	char buf[256];
 	char **subdirlist = PHYSFS_enumerateFiles(subdir);
 	char **i = subdirlist;
 	while (*i != NULL)
@@ -98,13 +107,16 @@ void addSubdirs(const char *basedir, const char *subdir, const bool appendToPath
 #endif // DEBUG
 		if (*i[0] != '.' && (!checkList || std::find(checkList->begin(), checkList->end(), *i) != checkList->end()))
 		{
+			char tmpstr[PATH_MAX];
 			snprintf(tmpstr, sizeof(tmpstr), "%s%s%s%s", basedir, subdir, PHYSFS_getDirSeparator(), *i);
 #ifdef DEBUG
 			debug(LOG_NEVER, "Adding [%s] to search path", tmpstr);
 #endif // DEBUG
 			if (addToModList)
 			{
-				addLoadedMod(*i);
+				std::string filename = astringf("%s%s%s", subdir, PHYSFS_getDirSeparator(), *i);
+				addLoadedMod(*i, std::move(filename));
+				char buf[256];
 				snprintf(buf, sizeof(buf), "mod: %s", *i);
 				addDumpInfo(buf);
 			}
@@ -165,17 +177,10 @@ void clearOverrideMods(void)
 	use_override_mods = false;
 }
 
-static void addLoadedMod(const char *modname)
+static void addLoadedMod(std::string modname, std::string filename)
 {
-	auto i = std::lower_bound(loaded_mods.begin(), loaded_mods.end(), modname);
-	if (i != loaded_mods.end() && *i == modname)
-	{
-		return;  // Mod already in list.
-	}
-	// Yes, this is an online insertion sort.
-	// I swear, for the numbers of mods this is going to be dealing with
-	// (i.e. 0 to 2), it really is faster than, say, Quicksort.
-	loaded_mods.insert(i, modname);
+	// Note, findHashOfFile won't work right now, since the search paths aren't set up until after all calls to addSubdirs, see rebuildSearchPath in init.cpp.
+	loaded_mods.push_back({std::move(modname), std::move(filename)});
 }
 
 void clearLoadedMods()
@@ -189,8 +194,42 @@ std::string const &getModList()
 	if (mod_list.empty())
 	{
 		// Construct mod list.
-		mod_list = join(loaded_mods, ", ");
+		std::vector<std::string> mods;
+		for (auto const &mod : loaded_mods)
+		{
+			mods.push_back(mod.name);
+		}
+		std::sort(mods.begin(), mods.end());
+		mods.erase(std::unique(mods.begin(), mods.end()), mods.end());
+		mod_list = join(mods, ", ");
 		mod_list.resize(std::min<size_t>(mod_list.size(), modlist_string_size - 1));  // Probably not needed.
 	}
 	return mod_list;
+}
+
+std::vector<Sha256> const &getModHashList()
+{
+	if (mod_hash_list.empty())
+	{
+		for (auto const &mod : loaded_mods)
+		{
+			Sha256 hash = findHashOfFile(mod.filename.c_str());
+			debug(LOG_WZ, "Mod[%s]: %s\n", hash.toString().c_str(), mod.filename.c_str());
+			mod_hash_list.push_back(hash);
+		}
+	}
+	return mod_hash_list;
+}
+
+std::string getModFilename(Sha256 const &hash)
+{
+	for (auto const &mod : loaded_mods)
+	{
+		Sha256 foundHash = findHashOfFile(mod.filename.c_str());
+		if (foundHash == hash)
+		{
+			return mod.filename;
+		}
+	}
+	return {};
 }

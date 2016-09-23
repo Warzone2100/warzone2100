@@ -287,9 +287,11 @@ bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map)
 				removeSubdirs(curSearchPath->path, "maps");
 				removeSubdirs(curSearchPath->path, "mods/music");
 				removeSubdirs(curSearchPath->path, "mods/global");
+				removeSubdirs(curSearchPath->path, "mods");
+				removeSubdirs(curSearchPath->path, "mods/autoload");
 				removeSubdirs(curSearchPath->path, "mods/campaign");
 				removeSubdirs(curSearchPath->path, "mods/multiplay");
-				removeSubdirs(curSearchPath->path, "mods/autoload");
+				removeSubdirs(curSearchPath->path, "mods/downloads");
 
 				// Remove multiplay patches
 				sstrcpy(tmpstr, curSearchPath->path);
@@ -398,10 +400,22 @@ bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map)
 				// Add global and multiplay mods
 				PHYSFS_addToSearchPath(curSearchPath->path, PHYSFS_APPEND);
 				addSubdirs(curSearchPath->path, "mods/music", PHYSFS_APPEND, nullptr, false);
-				addSubdirs(curSearchPath->path, "mods/global", PHYSFS_APPEND, use_override_mods ? &override_mods : &global_mods, true);
-				addSubdirs(curSearchPath->path, "mods", PHYSFS_APPEND, use_override_mods ? &override_mods : &global_mods, true);
-				addSubdirs(curSearchPath->path, "mods/autoload", PHYSFS_APPEND, use_override_mods ? &override_mods : nullptr, true);
-				addSubdirs(curSearchPath->path, "mods/multiplay", PHYSFS_APPEND, use_override_mods ? &override_mods : &multiplay_mods, true);
+				if (NetPlay.isHost || !NetPlay.bComms)
+				{
+					addSubdirs(curSearchPath->path, "mods/global", PHYSFS_APPEND, use_override_mods ? &override_mods : &global_mods, true);
+					addSubdirs(curSearchPath->path, "mods", PHYSFS_APPEND, use_override_mods ? &override_mods : &global_mods, true);
+					addSubdirs(curSearchPath->path, "mods/autoload", PHYSFS_APPEND, use_override_mods ? &override_mods : nullptr, true);
+					addSubdirs(curSearchPath->path, "mods/multiplay", PHYSFS_APPEND, use_override_mods ? &override_mods : &multiplay_mods, true);
+				}
+				else
+				{
+					std::vector<std::string> hashList;
+					for (Sha256 &hash : game.modHashes)
+					{
+						hashList = {hash.toString()};
+						addSubdirs(curSearchPath->path, "mods/downloads", PHYSFS_APPEND, &hashList, true);
+					}
+				}
 				PHYSFS_removeFromSearchPath(curSearchPath->path);
 
 				// Add multiplay patches
@@ -728,7 +742,7 @@ bool systemInitialise(void)
 void systemShutdown(void)
 {
 	pie_ShutdownRadar();
-	mod_list.clear();
+	clearLoadedMods();
 
 	shutdownEffectsSystem();
 	wzSceneEnd(nullptr);  // Might want to end the "Main menu loop" or "Main game loop".

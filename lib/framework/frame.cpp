@@ -23,8 +23,6 @@
  *
  * Initialisation and shutdown for the framework library.
  *
- * Includes a basic windows message loop.
- *
  */
 #include "frame.h"
 #include "file.h"
@@ -37,8 +35,6 @@
 #include "physfs_ext.h"
 
 #include "cursors.h"
-
-/* Linux specific stuff */
 
 /************************************************************************************
  *
@@ -60,7 +56,7 @@ static uint32_t lastTicks = 0;
 /* InitFrameStuff - needs to be called once before frame loop commences */
 static void InitFrameStuff()
 {
-	frameCount = 0.0;
+	frameCount = 0;
 	curFrames = 0;
 	lastFrames = 0;
 	curTicks = 0;
@@ -325,12 +321,17 @@ bool loadFileToBufferNoError(const char *pFileName, char *pFileBuffer, UDWORD bu
 
 Sha256 findHashOfFile(char const *realFileName)
 {
-	char *realFileData = NULL;
+	char *realFileData = nullptr;
 	uint32_t realFileSize = 0;
-	loadFile(realFileName, &realFileData, &realFileSize);
-	Sha256 realFileHash = sha256Sum(realFileData, realFileSize);
-	free(realFileData);
-	return realFileHash;
+	if (loadFile(realFileName, &realFileData, &realFileSize))
+	{
+		Sha256 realFileHash = sha256Sum(realFileData, realFileSize);
+		free(realFileData);
+		return realFileHash;
+	}
+	Sha256 zero;
+	zero.setZero();
+	return zero;
 }
 
 bool PHYSFS_printf(PHYSFS_file *file, const char *format, ...)

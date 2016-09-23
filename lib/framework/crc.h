@@ -34,6 +34,7 @@ struct Sha256
 	static const int Bytes = 32;
 
 	bool operator ==(Sha256 const &b) const;
+	bool operator !=(Sha256 const &b) const { return !(*this == b); }
 	bool isZero() const;
 	void setZero();
 	std::string toString() const;

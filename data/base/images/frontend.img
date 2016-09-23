@@ -101,6 +101,7 @@
 0,0,image_lamp_green.png
 0,0,image_skirmish_over.png
 0,0,image_team_over.png
+0,0,image_mod_over.png
 0,0,image_skirmish.png
 0,0,image_team.png
 0,0,image_skirmish_hi.png
@@ -176,8 +177,10 @@
 0,0,image_team15_hi.png
 0,0,image_check_off.png
 0,0,image_check_on.png
+0,0,image_check_download.png
 0,0,image_check_off_hi.png
 0,0,image_check_on_hi.png
+0,0,image_check_download_hi.png
 0,0,image_dark_locked.png
 0,0,image_dark_unlocked.png
 -4,0,image_locked_nobg.png

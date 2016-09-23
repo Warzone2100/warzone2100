@@ -117,7 +117,7 @@ enum MESSAGE_TYPES
 	// End of debug messages.
 	GAME_MAX_TYPE                   ///< Maximum+1 valid GAME_ type, *MUST* be last.
 };
-//#define SYNC_FLAG (NUM_GAME_PACKETS * NUM_GAME_PACKETS)	//special flag used for logging.
+
 #define SYNC_FLAG 0x10000000	//special flag used for logging. (Not sure what this is. Was added in trunk, NUM_GAME_PACKETS not in newnet.)
 
 // Constants
@@ -196,26 +196,13 @@ struct SYNC_COUNTER
 
 struct WZFile
 {
-	PHYSFS_file	*pFileHandle;		// handle
-	PHYSFS_sint32 fileSize_32;		// size
-	int32_t		currPos;			// current position
-	bool	isSending;				// sending to this player
-	bool	isCancelled;			// player cancelled
-	int32_t	filetype;				// future use (1=map 2=mod 3=...)
-};
+	//WZFile() : handle(nullptr), size(0), pos(0) { hash.setZero(); }
+	WZFile(PHYSFS_file *handle, Sha256 hash, uint32_t size = 0) : handle(handle), hash(hash), size(size), pos(0) {}
 
-struct wzFileStatus
-{
-	int32_t player;					// the client we sent data to
-	int32_t done;					// how far done we are (100= finished)
-	int32_t byteCount;				// current byte count
-};
-
-enum wzFileEnum
-{
-	WZ_FILE_OK,
-	ALREADY_HAVE_FILE,
-	STUCK_IN_FILE_LOOP
+	PHYSFS_file *handle;
+	Sha256 hash;
+	uint32_t size;
+	uint32_t pos;  // Current position, the range [0; currPos[ has been sent or received already.
 };
 
 enum
@@ -241,8 +228,7 @@ struct PLAYER
 	int8_t		ai;			///< index into sorted list of AIs, zero is always default AI
 	int8_t		difficulty;		///< difficulty level of AI
 	bool		autoGame;		// if we are running a autogame (AI controls us)
-	bool		needFile;			///< if We need a file sent to us
-	WZFile		wzFile;				///< for each player, we keep track of map progress
+	std::vector<WZFile> wzFiles;    ///< for each player, we keep track of map/mod download progress
 	char		IPtextAddress[40];	///< IP of this player
 };
 
@@ -260,8 +246,7 @@ struct NETPLAY
 	bool		isUPNP_CONFIGURED;	// if UPnP was successful
 	bool		isUPNP_ERROR;		//If we had a error during detection/config process
 	bool		isHostAlive;	/// if the host is still alive
-	PHYSFS_file    *pMapFileHandle;         ///< Only non-NULL during map download.
-	char mapFileName[255];            ///< Only valid during map download.
+	std::vector<WZFile> wzFiles;      ///< Only non-empty during map/mod download.
 	char gamePassword[password_string_size];		//
 	bool GamePassworded;				// if we have a password or not.
 	bool ShowedMOTD;					// only want to show this once
@@ -279,12 +264,11 @@ struct PLAYER_IP
 // ////////////////////////////////////////////////////////////////////////
 // variables
 
-extern NETPLAY				NetPlay;
+extern NETPLAY NetPlay;
 extern SYNC_COUNTER sync_counter;
 extern PLAYER_IP	*IPlist;
 // update flags
 extern bool netPlayersUpdated;
-extern int mapDownloadProgress;
 extern char iptoconnect[PATH_MAX]; // holds IP/hostname from command line
 
 // ////////////////////////////////////////////////////////////////////////
@@ -295,8 +279,9 @@ WZ_DECL_NONNULL(1, 2) bool NETrecvNet(NETQUEUE *queue, uint8_t *type);        //
 WZ_DECL_NONNULL(1, 2) bool NETrecvGame(NETQUEUE *queue, uint8_t *type);       ///< recv a message from the game queues which is sceduled to execute by time, if possible.
 void NETflush();                                                              ///< Flushes any data stuck in compression buffers.
 
-int NETsendFile(char *mapName, Sha256 const &fileHash, UDWORD player);  ///< Send file chunk.
-UBYTE NETrecvFile(NETQUEUE queue);                                ///< Receive file chunk.
+int NETsendFile(WZFile &file, unsigned player);  ///< Send file chunk. Returns 100 when done.
+int NETrecvFile(NETQUEUE queue);                 ///< Receive file chunk. Returns 100 when done.
+int NETgetDownloadProgress(unsigned player);     ///< Returns 100 when done.
 
 int NETclose();					// close current game
 int NETshutdown();					// leave the game in play.

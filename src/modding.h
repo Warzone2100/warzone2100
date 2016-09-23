@@ -21,6 +21,8 @@
 #ifndef __INCLUDED_SRC_MODDING_H__
 #define __INCLUDED_SRC_MODDING_H__
 
+#include "lib/framework/crc.h"
+
 #include <string>
 #include <vector>
 
@@ -34,6 +36,8 @@ void clearOverrideMods();
 
 void clearLoadedMods();
 std::string const &getModList();
+std::vector<Sha256> const &getModHashList();
+std::string getModFilename(Sha256 const &hash);
 
 extern std::vector<std::string> global_mods;
 extern std::vector<std::string> campaign_mods;
@@ -42,7 +46,5 @@ extern std::vector<std::string> multiplay_mods;
 extern std::vector<std::string> override_mods;
 extern std::string override_mod_list;
 extern bool use_override_mods;
-
-extern std::string mod_list;
 
 #endif // __INCLUDED_SRC_MODDING_H__
