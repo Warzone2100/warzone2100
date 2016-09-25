@@ -3731,6 +3731,5 @@ static void addConstructionLine(DROID *psDroid, STRUCTURE *psStructure, const gl
 	pts[2] = Vector3f(each.x - player.p.x, each.y, -(each.z - player.p.z));
 
 	colour = (psDroid->action == DACTION_DEMOLISH) ? WZCOL_DEMOLISH_BEAM : WZCOL_CONSTRUCTOR_BEAM;
-	glLoadMatrixf(glm::value_ptr(viewMatrix));
-	pie_TransColouredTriangle(pts, colour);
+	pie_TransColouredTriangle({ pts[0], pts[1], pts[2] }, colour, viewMatrix);
 }

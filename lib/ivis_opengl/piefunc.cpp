@@ -85,21 +85,37 @@ void pie_DrawViewingWindow(const glm::mat4 &modelViewProjectionMatrix)
 	radarViewGfx[1]->draw(modelViewProjectionMatrix);
 }
 
-void pie_TransColouredTriangle(Vector3f *vrt, PIELIGHT c)
+namespace
 {
-	UDWORD i;
+	struct glBufferWrapper
+	{
+		GLuint id;
+		glBufferWrapper()
+		{
+			glGenBuffers(1, &id);
+		}
 
+		~glBufferWrapper()
+		{
+			glDeleteBuffers(1, &id);
+		}
+	};
+}
+
+void pie_TransColouredTriangle(const std::array<Vector3f, 3> &vrt, PIELIGHT c, const glm::mat4 &modelViewMatrix)
+{
 	pie_SetTexturePage(TEXPAGE_NONE);
 	pie_SetRendMode(REND_ADDITIVE);
+	glm::vec4 color(c.byte.r / 255.f, c.byte.g / 255.f, c.byte.b / 255.f, 128.f / 255.f);
+	const auto &program = pie_ActivateShader(SHADER_GENERIC_COLOR, pie_PerspectiveGet() * modelViewMatrix, color);
 
-	glColor4ub(c.byte.r, c.byte.g, c.byte.b, 128);
-
-	glBegin(GL_TRIANGLE_FAN);
-	for (i = 0; i < 3; ++i)
-	{
-		glVertex3f(vrt[i].x, vrt[i].y, vrt[i].z);
-	}
-	glEnd();
+	static glBufferWrapper buffer;
+	glBindBuffer(GL_ARRAY_BUFFER, buffer.id);
+	glBufferData(GL_ARRAY_BUFFER, 3 * sizeof(Vector3f), vrt.data(), GL_STREAM_DRAW);
+	glEnableVertexAttribArray(program.locVertex);
+	glVertexAttribPointer(program.locVertex, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+	glDrawArrays(GL_TRIANGLE_FAN, 0, 3);
+	glDisableVertexAttribArray(program.locVertex);
 }
 
 void pie_Skybox_Init()

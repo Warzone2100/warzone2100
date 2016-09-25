@@ -33,6 +33,7 @@
 #include "lib/ivis_opengl/piestate.h"
 #include "lib/ivis_opengl/piepalette.h"
 #include "lib/ivis_opengl/pieclip.h"
+#include "lib/ivis_opengl/pieblitfunc.h"
 #include "piematrix.h"
 #include "screen.h"
 
@@ -287,8 +288,26 @@ static inline float scale_y(float y, int flag, int flag_data)
 	return tempY;
 }
 
+namespace
+{
+	struct glBufferWrapper
+	{
+		GLuint id;
+
+		glBufferWrapper()
+		{
+			glGenBuffers(1, &id);
+		}
+
+		~glBufferWrapper()
+		{
+			glDeleteBuffers(1, &id);
+		}
+	};
+}
+
 /// Draw the shadow for a shape
-static void pie_DrawShadow(iIMDShape *shape, int flag, int flag_data, const glm::vec4 &light)
+static void pie_DrawShadow(iIMDShape *shape, int flag, int flag_data, const glm::vec4 &light, const glm::mat4 &modelViewMatrix)
 {
 	static std::vector<EDGE> edgelist;  // Static, to save allocations.
 	static std::vector<EDGE> edgelistFlipped;  // Static, to save allocations.
@@ -345,19 +364,36 @@ static void pie_DrawShadow(iIMDShape *shape, int flag, int flag_data, const glm:
 		}
 	}
 
-	// draw the shadow volume
-	glBegin(GL_QUADS);
-	glNormal3f(0.0, 1.0, 0.0);
+	std::vector<Vector3f> vertexes;
 	for (unsigned i = 0; i < edge_count; i++)
 	{
 		int a = drawlist[i].from, b = drawlist[i].to;
 
-		glVertex3f(pVertices[b].x, scale_y(pVertices[b].y, flag, flag_data), pVertices[b].z);
-		glVertex3f(pVertices[b].x + light[0], scale_y(pVertices[b].y, flag, flag_data) + light[1], pVertices[b].z + light[2]);
-		glVertex3f(pVertices[a].x + light[0], scale_y(pVertices[a].y, flag, flag_data) + light[1], pVertices[a].z + light[2]);
-		glVertex3f(pVertices[a].x, scale_y(pVertices[a].y, flag, flag_data), pVertices[a].z);
+		glm::vec3 v1(pVertices[b].x, scale_y(pVertices[b].y, flag, flag_data), pVertices[b].z);
+		glm::vec3 v2(pVertices[b].x + light[0], scale_y(pVertices[b].y, flag, flag_data) + light[1], pVertices[b].z + light[2]);
+		glm::vec3 v3(pVertices[a].x + light[0], scale_y(pVertices[a].y, flag, flag_data) + light[1], pVertices[a].z + light[2]);
+		glm::vec3 v4(pVertices[a].x, scale_y(pVertices[a].y, flag, flag_data), pVertices[a].z);
+
+		vertexes.push_back(v1);
+		vertexes.push_back(v2);
+		vertexes.push_back(v3);
+
+		vertexes.push_back(v3);
+		vertexes.push_back(v4);
+		vertexes.push_back(v1);
 	}
-	glEnd();
+
+	// draw the shadow volume
+	const auto &program = pie_ActivateShader(SHADER_GENERIC_COLOR, pie_PerspectiveGet() * modelViewMatrix, glm::vec4());
+	static glBufferWrapper buffer;
+	glBindBuffer(GL_ARRAY_BUFFER, buffer.id);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(Vector3f) * vertexes.size(), vertexes.data(), GL_STREAM_DRAW);
+	glEnableVertexAttribArray(program.locVertex);
+	glVertexAttribPointer(program.locVertex, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+
+	glDrawArrays(GL_TRIANGLES, 0, edge_count * 2 * 3);
+	glDisableVertexAttribArray(program.locVertex);
+	pie_DeactivateShader();
 }
 
 void pie_SetUp(void)
@@ -469,8 +505,7 @@ static void pie_ShadowDrawLoop(void)
 {
 	for (unsigned i = 0; i < scshapes.size(); i++)
 	{
-		glLoadMatrixf(&scshapes[i].matrix[0][0]);
-		pie_DrawShadow(scshapes[i].shape, scshapes[i].flag, scshapes[i].flag_data, scshapes[i].light);
+		pie_DrawShadow(scshapes[i].shape, scshapes[i].flag, scshapes[i].flag_data, scshapes[i].light, scshapes[i].matrix);
 	}
 }
 
@@ -481,8 +516,6 @@ static void pie_DrawShadows(void)
 
 	pie_SetTexturePage(TEXPAGE_NONE);
 
-	glPushMatrix();
-
 	glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
 	glDepthFunc(GL_LESS);
 	glDepthMask(GL_FALSE);
@@ -490,30 +523,21 @@ static void pie_DrawShadows(void)
 
 	ShadowStencilFunc();
 
-	pie_SetRendMode(REND_ALPHA);
 	glEnable(GL_CULL_FACE);
 	glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
 	glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
 	glStencilMask(~0);
 	glStencilFunc(GL_LESS, 0, ~0);
-	glColor4f(0, 0, 0, 0.5);
 
-	glLoadIdentity();
 	glDisable(GL_DEPTH_TEST);
-	glBegin(GL_TRIANGLE_STRIP);
-	glVertex2f(0, 0);
-	glVertex2f(width, 0);
-	glVertex2f(0, height);
-	glVertex2f(width, height);
-	glEnd();
-
+	PIELIGHT grey;
+	grey.byte = { 0, 0, 0, 128 };
+	pie_BoxFill(0, 0, width, height, grey, REND_ALPHA);
 
 	pie_SetRendMode(REND_OPAQUE);
 	glDisable(GL_STENCIL_TEST);
 	glEnable(GL_DEPTH_TEST);
 	glDepthMask(GL_TRUE);
-
-	glPopMatrix();
 
 	scshapes.resize(0);
 }

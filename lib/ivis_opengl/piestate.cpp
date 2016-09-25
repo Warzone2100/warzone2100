@@ -416,6 +416,10 @@ bool pie_LoadShaders()
 		{ "posMatrix", "texture" });
 	ASSERT_OR_RETURN(false, result, "Failed to load textured gfx shader");
 
+	debug(LOG_3D, "Loading shader: GENERIC_COLOR");
+	result = pie_LoadShader("generic color program", "shaders/generic.vert", "shaders/rect.frag", { "ModelViewProjectionMatrix", "color" });
+	ASSERT_OR_RETURN(false, result, "Failed to load generic color shader");
+
 	pie_internal::currentShaderMode = SHADER_NONE;
 	return true;
 }
@@ -462,7 +466,6 @@ pie_internal::SHADER_PROGRAM &pie_ActivateShaderDeprecated(SHADER_MODE shaderMod
 	if (shaderMode != pie_internal::currentShaderMode)
 	{
 		glUseProgram(program.program);
-		pie_internal::SHADER_PROGRAM &program = pie_internal::shaderProgram[shaderMode];
 
 		// These do not change during our drawing pass
 		glUniform1i(program.locations[4], rendStates.fog);

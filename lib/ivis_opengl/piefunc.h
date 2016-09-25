@@ -32,8 +32,9 @@
 #include "lib/framework/frame.h"
 #include "lib/ivis_opengl/piedef.h"
 #include "lib/ivis_opengl/pieclip.h"
+#include <array>
 
-void pie_TransColouredTriangle(Vector3f *vrt, PIELIGHT c);
+void pie_TransColouredTriangle(const std::array<Vector3f, 3> &vrt, PIELIGHT c, const glm::mat4 &modelViewMatrix);
 
 void pie_SetViewingWindow(Vector3i *v, PIELIGHT colour);
 void pie_DrawViewingWindow(const glm::mat4 &modelViewProjectionMatrix);
