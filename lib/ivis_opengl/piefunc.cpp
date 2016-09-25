@@ -183,21 +183,11 @@ void pie_Skybox_Shutdown()
 
 void pie_DrawSkybox(float scale, const glm::mat4 &viewMatrix)
 {
-	glPushAttrib(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_ENABLE_BIT | GL_FOG_BIT);
 	// no use in updating the depth buffer
 	glDepthMask(GL_FALSE);
-
-	// fog should not affect the sky
-	glDisable(GL_FOG);
-
-	// So we have realistic colors
-	glColor4ub(0xFF, 0xFF, 0xFF, 0xFF);
-
 	// enable alpha
 	pie_SetRendMode(REND_ALPHA);
 
 	// Apply scale matrix
 	skyboxGfx->draw(pie_PerspectiveGet() * viewMatrix * glm::scale(scale, scale / 2.f, scale));
-
-	glPopAttrib();
 }

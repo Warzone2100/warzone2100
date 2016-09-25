@@ -98,16 +98,6 @@ void pie_InitLighting()
 {
 	const GLfloat defaultLight[LIGHT_MAX][4] = {{0.0f, 0.0f, 0.0f, 1.0f},  {0.5f, 0.5f, 0.5f, 1.0f},  {0.8f, 0.8f, 0.8f, 1.0f},  {1.0f, 1.0f, 1.0f, 1.0f}};
 	memcpy(lighting0, defaultLight, sizeof(lighting0));
-	pie_SetupLighting();
-}
-
-void pie_SetupLighting()
-{
-	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, lighting0[LIGHT_EMISSIVE]);
-	glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_FALSE);
-	glLightfv(GL_LIGHT0, GL_AMBIENT, lighting0[LIGHT_AMBIENT]);
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, lighting0[LIGHT_DIFFUSE]);
-	glLightfv(GL_LIGHT0, GL_SPECULAR, lighting0[LIGHT_SPECULAR]);
 }
 
 void pie_Lighting0(LIGHTING_TYPE entry, float value[4])
@@ -123,11 +113,11 @@ void pie_setShadows(bool drawShadows)
 	shadows = drawShadows;
 }
 
-void pie_BeginLighting(const Vector3f *light)
-{
-	const float pos[4] = { light->x, light->y, light->z, 0.0f };
+static Vector3f currentSunPosition;
 
-	glLightfv(GL_LIGHT0, GL_POSITION, pos);
+void pie_BeginLighting(const Vector3f &light)
+{
+	currentSunPosition = light;
 }
 
 void pie_EndLighting(void)
@@ -173,7 +163,8 @@ static void pie_Draw3DButton(iIMDShape *shape, PIELIGHT teamcolour, const glm::m
 	const PIELIGHT colour = WZCOL_WHITE;
 	pie_SetFogStatus(false);
 	pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
-	pie_internal::SHADER_PROGRAM &program = pie_ActivateShaderDeprecated(SHADER_BUTTON, shape, teamcolour, colour, matrix, pie_PerspectiveGet());
+	pie_internal::SHADER_PROGRAM &program = pie_ActivateShaderDeprecated(SHADER_BUTTON, shape, teamcolour, colour, matrix, pie_PerspectiveGet(),
+		glm::vec4(), glm::vec4(), glm::vec4(), glm::vec4(), glm::vec4());
 	pie_SetRendMode(REND_OPAQUE);
 	pie_SetTexturePage(shape->texpage);
 	enableArray(shape->buffers[VBO_VERTEX], program.locVertex, 3, GL_FLOAT, false, 0, 0);
@@ -231,8 +222,14 @@ static void pie_Draw3DShape2(const iIMDShape *shape, int frame, PIELIGHT colour,
 		pie_SetShaderEcmEffect(true);
 	}
 
+	glm::vec4 sceneColor(lighting0[LIGHT_EMISSIVE][0], lighting0[LIGHT_EMISSIVE][1], lighting0[LIGHT_EMISSIVE][2], lighting0[LIGHT_EMISSIVE][3]);
+	glm::vec4 ambient(lighting0[LIGHT_AMBIENT][0], lighting0[LIGHT_AMBIENT][1], lighting0[LIGHT_AMBIENT][2], lighting0[LIGHT_AMBIENT][3]);
+	glm::vec4 diffuse(lighting0[LIGHT_DIFFUSE][0], lighting0[LIGHT_DIFFUSE][1], lighting0[LIGHT_DIFFUSE][2], lighting0[LIGHT_DIFFUSE][3]);
+	glm::vec4 specular(lighting0[LIGHT_SPECULAR][0], lighting0[LIGHT_SPECULAR][1], lighting0[LIGHT_SPECULAR][2], lighting0[LIGHT_SPECULAR][3]);
+
 	SHADER_MODE mode = shape->shaderProgram == SHADER_NONE ? light ? SHADER_COMPONENT : SHADER_NOLIGHT : shape->shaderProgram;
-	pie_internal::SHADER_PROGRAM &program = pie_ActivateShaderDeprecated(mode, shape, teamcolour, colour, matrix, pie_PerspectiveGet());
+	pie_internal::SHADER_PROGRAM &program = pie_ActivateShaderDeprecated(mode, shape, teamcolour, colour, matrix, pie_PerspectiveGet(),
+		glm::vec4(currentSunPosition, 0.f), sceneColor, ambient, diffuse, specular);
 
 	if (program.locations.size() >= 9)
 		glUniform1i(program.locations[8], (pieFlag & pie_PREMULTIPLIED) == 0);
@@ -451,11 +448,10 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, int
 				// if object is too far in the fog don't generate a shadow.
 				if (distance < SHADOW_END_DISTANCE)
 				{
-					glm::vec4 pos_light0;
+					// Calculate the light position relative to the object
+					glm::vec4 pos_light0 = glm::vec4(currentSunPosition, 0.f);
 					glm::mat4 invmat = glm::inverse(scshape.matrix);
 
-					// Calculate the light position relative to the object
-					glGetLightfv(GL_LIGHT0, GL_POSITION, &pos_light0[0]);
 					scshape.light = invmat * pos_light0;
 					scshape.shape = shape;
 					scshape.flag = pieFlag;
@@ -525,7 +521,6 @@ static void pie_DrawShadows(void)
 void pie_RemainingPasses(void)
 {
 	GL_DEBUG("Remaining passes - shadows");
-	glEnable(GL_LIGHT0);
 	// Draw shadows
 	if (shadows)
 	{
@@ -548,7 +543,6 @@ void pie_RemainingPasses(void)
 		pie_Draw3DShape2(shape.shape, shape.frame, shape.colour, shape.teamcolour, shape.flag, shape.flag_data, shape.matrix);
 	}
 	pie_SetShaderStretchDepth(0);
-	glDisable(GL_LIGHT0);
 	pie_DeactivateShader();
 	tshapes.clear();
 	shapes.clear();

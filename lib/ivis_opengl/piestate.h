@@ -218,7 +218,8 @@ pie_internal::SHADER_PROGRAM &pie_ActivateShader(SHADER_MODE shaderMode, const T
 
 
 // Actual shaders (we do not want to export these calls)
-pie_internal::SHADER_PROGRAM &pie_ActivateShaderDeprecated(SHADER_MODE shaderMode, const iIMDShape *shape, PIELIGHT teamcolour, PIELIGHT colour, const glm::mat4 &ModelView, const glm::mat4 &Proj);
+pie_internal::SHADER_PROGRAM &pie_ActivateShaderDeprecated(SHADER_MODE shaderMode, const iIMDShape *shape, PIELIGHT teamcolour, PIELIGHT colour, const glm::mat4 &ModelView, const glm::mat4 &Proj,
+	const glm::vec4 &sunPos, const glm::vec4 &sceneColor, const glm::vec4 &ambient, const glm::vec4 &diffuse, const glm::vec4 &specular);
 void pie_DeactivateShader();
 void pie_SetShaderStretchDepth(float stretch);
 float pie_GetShaderStretchDepth();

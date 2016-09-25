@@ -6,6 +6,8 @@ uniform mat4 ModelViewMatrix;
 uniform mat4 ModelViewProjectionMatrix;
 uniform mat4 NormalMatrix;
 
+uniform vec4 lightPosition;
+
 attribute vec4 vertex;
 attribute vec3 vertexNormal;
 attribute vec4 vertexTexCoord;
@@ -20,11 +22,11 @@ void main()
 	vec4 position = vertex;
 
 	// Pass texture coordinates to fragment shader
-	texCoord = (gl_TextureMatrix[0] * vertexTexCoord).xy;
+	texCoord = vertexTexCoord.xy;
 
 	// Lighting -- we pass these to the fragment shader
 	normal = (NormalMatrix * vec4(vertexNormal, 0)).xyz;
-	lightDir = gl_LightSource[0].position.xyz - vVertex;
+	lightDir = lightPosition.xyz - vVertex;
 	eyeVec = -vVertex;
 
 	// Implement building stretching to accomodate terrain

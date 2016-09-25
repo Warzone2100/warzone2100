@@ -1344,7 +1344,6 @@ void drawTerrain(const glm::mat4 &mvp)
 	glActiveTexture(GL_TEXTURE1);
 	// bind the texture
 	glBindTexture(GL_TEXTURE_2D, lightmap_tex_num);
-	glEnable(GL_TEXTURE_2D);
 
 	// we limit the framerate of the lightmap, because updating a texture is an expensive operation
 	if (realTime - lightmapLastUpdate >= LIGHTMAP_REFRESH)
@@ -1382,7 +1381,6 @@ void drawTerrain(const glm::mat4 &mvp)
 	////////////////////////////////
 	// disable the lightmap texture
 	glActiveTexture(GL_TEXTURE1);
-	glDisable(GL_TEXTURE_2D);
 	glActiveTexture(GL_TEXTURE0);
 
 	// leave everything in a sane state so it won't mess up somewhere else
@@ -1419,7 +1417,6 @@ void drawWater(const glm::mat4 &viewMatrix)
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_2D, pie_Texture(iV_GetTexture("page-81-water-2.png")));
 	glErrors();
-	glEnable(GL_TEXTURE_2D);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
@@ -1458,7 +1455,6 @@ void drawWater(const glm::mat4 &viewMatrix)
 	}
 
 	// disable second texture
-	glDisable(GL_TEXTURE_2D);
 	glActiveTexture(GL_TEXTURE0);
 
 	// clean up

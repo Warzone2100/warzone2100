@@ -80,12 +80,11 @@ void pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, int
 extern void pie_GetResetCounts(unsigned int *pPieCount, unsigned int *pPolyCount, unsigned int *pStateCount);
 
 /** Setup stencil shadows and OpenGL lighting. */
-void pie_BeginLighting(const Vector3f *light);
+void pie_BeginLighting(const Vector3f &light);
 void pie_setShadows(bool drawShadows);
 
 /** Set light parameters */
 void pie_InitLighting();
-void pie_SetupLighting();
 void pie_Lighting0(LIGHTING_TYPE entry, float value[4]);
 
 void pie_RemainingPasses(void);

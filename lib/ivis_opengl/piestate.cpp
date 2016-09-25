@@ -334,6 +334,9 @@ SHADER_MODE pie_LoadShader(const char *programName, const char *vertexPath, cons
 	return SHADER_MODE(pie_internal::shaderProgram.size() - 1);
 }
 
+static float fogBegin;
+static float fogEnd;
+
 // Run from screen.c on init. Do not change the order of loading here! First ones are enumerated.
 bool pie_LoadShaders()
 {
@@ -348,21 +351,24 @@ bool pie_LoadShaders()
 	debug(LOG_3D, "Loading shader: SHADER_COMPONENT");
 	result = pie_LoadShader("Component program", "shaders/tcmask.vert", "shaders/tcmask.frag",
 		{ "colour", "teamcolour", "stretch", "tcmask", "fogEnabled", "normalmap", "specularmap", "ecmEffect", "alphaTest", "graphicsCycle",
-		"ModelViewMatrix", "ModelViewProjectionMatrix", "NormalMatrix" });
+		"ModelViewMatrix", "ModelViewProjectionMatrix", "NormalMatrix", "lightPosition", "sceneColor", "ambient", "diffuse", "specular",
+		"fogEnd", "fogStart", "fogColor" });
 	ASSERT_OR_RETURN(false, result, "Failed to load component shader");
 
 	// TCMask shader for buttons with flat lighting
 	debug(LOG_3D, "Loading shader: SHADER_BUTTON");
 	result = pie_LoadShader("Button program", "shaders/button.vert", "shaders/button.frag",
 		{ "colour", "teamcolour", "stretch", "tcmask", "fogEnabled", "normalmap", "specularmap", "ecmEffect", "alphaTest", "graphicsCycle",
-		"ModelViewMatrix", "ModelViewProjectionMatrix", "NormalMatrix" });
+		"ModelViewMatrix", "ModelViewProjectionMatrix", "NormalMatrix", "lightPosition", "sceneColor", "ambient", "diffuse", "specular",
+		"fogEnd", "fogStart", "fogColor" });
 	ASSERT_OR_RETURN(false, result, "Failed to load button shader");
 
 	// Plain shader for no lighting
 	debug(LOG_3D, "Loading shader: SHADER_NOLIGHT");
 	result = pie_LoadShader("Plain program", "shaders/nolight.vert", "shaders/nolight.frag",
 		{ "colour", "teamcolour", "stretch", "tcmask", "fogEnabled", "normalmap", "specularmap", "ecmEffect", "alphaTest", "graphicsCycle",
-		"ModelViewMatrix", "ModelViewProjectionMatrix", "NormalMatrix" });
+		"ModelViewMatrix", "ModelViewProjectionMatrix", "NormalMatrix", "lightPosition", "sceneColor", "ambient", "diffuse", "specular",
+		"fogEnd", "fogStart", "fogColor" });
 	ASSERT_OR_RETURN(false, result, "Failed to load no-lighting shader");
 
 	debug(LOG_3D, "Loading shader: TERRAIN");
@@ -445,7 +451,8 @@ float pie_GetShaderStretchDepth()
 	return shaderStretch;
 }
 
-pie_internal::SHADER_PROGRAM &pie_ActivateShaderDeprecated(SHADER_MODE shaderMode, const iIMDShape *shape, PIELIGHT teamcolour, PIELIGHT colour, const glm::mat4 &ModelView, const glm::mat4 &Proj)
+pie_internal::SHADER_PROGRAM &pie_ActivateShaderDeprecated(SHADER_MODE shaderMode, const iIMDShape *shape, PIELIGHT teamcolour, PIELIGHT colour, const glm::mat4 &ModelView, const glm::mat4 &Proj,
+	const glm::vec4 &sunPos, const glm::vec4 &sceneColor, const glm::vec4 &ambient, const glm::vec4 &diffuse, const glm::vec4 &specular)
 {
 	int maskpage = shape->tcmaskpage;
 	int normalpage = shape->normalpage;
@@ -474,6 +481,22 @@ pie_internal::SHADER_PROGRAM &pie_ActivateShaderDeprecated(SHADER_MODE shaderMod
 	glUniformMatrix4fv(program.locations[10], 1, GL_FALSE, glm::value_ptr(ModelView));
 	glUniformMatrix4fv(program.locations[11], 1, GL_FALSE, glm::value_ptr(Proj * ModelView));
 	glUniformMatrix4fv(program.locations[12], 1, GL_FALSE, glm::value_ptr(glm::transpose(glm::inverse(ModelView))));
+	glUniform4fv(program.locations[13], 1, &sunPos[0]);
+	glUniform4fv(program.locations[14], 1, &sceneColor[0]);
+	glUniform4fv(program.locations[15], 1, &ambient[0]);
+	glUniform4fv(program.locations[16], 1, &diffuse[0]);
+	glUniform4fv(program.locations[17], 1, &specular[0]);
+
+	glUniform1f(program.locations[18], fogBegin);
+	glUniform1f(program.locations[19], fogEnd);
+
+	float color[4] = {
+		rendStates.fogColour.vector[0] / 255.f,
+		rendStates.fogColour.vector[1] / 255.f,
+		rendStates.fogColour.vector[2] / 255.f,
+		rendStates.fogColour.vector[3] / 255.f
+	};
+	glUniform4fv(program.locations[20], 1, color);
 
 	if (program.locations[2] >= 0)
 	{
@@ -586,17 +609,11 @@ void pie_SetTexturePage(SDWORD num)
 		switch (num)
 		{
 		case TEXPAGE_NONE:
-			glDisable(GL_TEXTURE_2D);
+			glBindTexture(GL_TEXTURE_2D, 0);
 			break;
 		case TEXPAGE_EXTERN:
-			// GLC will set the texture, we just need to enable texturing
-			glEnable(GL_TEXTURE_2D);
 			break;
 		default:
-			if (rendStates.texPage == TEXPAGE_NONE)
-			{
-				glEnable(GL_TEXTURE_2D);
-			}
 			glBindTexture(GL_TEXTURE_2D, pie_Texture(num));
 		}
 		rendStates.texPage = num;

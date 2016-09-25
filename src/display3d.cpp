@@ -994,7 +994,7 @@ static void drawTiles(iView *player)
 	theSun = getTheSun();
 	auto suntmp = (viewMatrix * glm::vec4(theSun, 0.f));
 	theSun = suntmp.xyz;
-	pie_BeginLighting(&theSun);
+	pie_BeginLighting(theSun);
 
 	// update the fog of war... FIXME: Remove this
 	for (i = -visibleTiles.y / 2, idx = 0; i <= visibleTiles.y / 2; i++, ++idx)
