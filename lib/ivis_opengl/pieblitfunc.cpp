@@ -199,12 +199,16 @@ GFX::~GFX()
 void iV_Line(int x0, int y0, int x1, int y1, PIELIGHT colour)
 {
 	pie_SetTexturePage(TEXPAGE_NONE);
-
-	glColor4ubv(colour.vector);
-	glBegin(GL_LINES);
-	glVertex2i(x0, y0);
-	glVertex2i(x1, y1);
-	glEnd();
+	const glm::vec4 color(
+		colour.vector[0] / 255.f,
+		colour.vector[1] / 255.f,
+		colour.vector[2] / 255.f,
+		colour.vector[3] / 255.f
+	);
+	const auto &mat = glm::ortho(0.f, static_cast<float>(pie_GetVideoBufferWidth()), static_cast<float>(pie_GetVideoBufferHeight()), 0.f);
+	pie_ActivateShader(SHADER_LINE, glm::vec2(x0, y0), glm::vec2(x1, y1), color, mat);
+	glDrawArrays(GL_LINES, 0, 2);
+	pie_DeactivateShader();
 }
 
 /**
@@ -240,21 +244,29 @@ void iV_ShadowBox(int x0, int y0, int x1, int y1, int pad, PIELIGHT first, PIELI
 void iV_Box2(int x0, int y0, int x1, int y1, PIELIGHT first, PIELIGHT second)
 {
 	pie_SetTexturePage(TEXPAGE_NONE);
+	const glm::mat4 mat = glm::ortho(0.f, static_cast<float>(pie_GetVideoBufferWidth()), static_cast<float>(pie_GetVideoBufferHeight()), 0.f);
+	const glm::vec4 firstColor(
+		first.vector[0] / 255.f,
+		first.vector[1] / 255.f,
+		first.vector[2] / 255.f,
+		first.vector[3] / 255.f
+	);
+	pie_ActivateShader(SHADER_LINE, glm::vec2(x0, y1), glm::vec2(x0, y0), firstColor, mat);
+	glDrawArrays(GL_LINES, 0, 2);
+	pie_ActivateShader(SHADER_LINE, glm::vec2(x0, y0), glm::vec2(x1, y0), firstColor, mat);
+	glDrawArrays(GL_LINES, 0, 2);
 
-	glColor4ubv(first.vector);
-	glBegin(GL_LINES);
-	glVertex2i(x0, y1);
-	glVertex2i(x0, y0);
-	glVertex2i(x0, y0);
-	glVertex2i(x1, y0);
-	glEnd();
-	glColor4ubv(second.vector);
-	glBegin(GL_LINES);
-	glVertex2i(x1, y0);
-	glVertex2i(x1, y1);
-	glVertex2i(x0, y1);
-	glVertex2i(x1, y1);
-	glEnd();
+	const glm::vec4 secondColor(
+		second.vector[0] / 255.f,
+		second.vector[1] / 255.f,
+		second.vector[2] / 255.f,
+		second.vector[3] / 255.f
+	);
+	pie_ActivateShader(SHADER_LINE, glm::vec2(x1, y0), glm::vec2(x1, y1), secondColor, mat);
+	glDrawArrays(GL_LINES, 0, 2);
+	pie_ActivateShader(SHADER_LINE, glm::vec2(x0, y1), glm::vec2(x1, y1), secondColor, mat);
+	glDrawArrays(GL_LINES, 0, 2);
+	pie_DeactivateShader();
 }
 
 /***************************************************************************/

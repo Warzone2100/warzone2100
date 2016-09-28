@@ -420,6 +420,10 @@ bool pie_LoadShaders()
 	result = pie_LoadShader("generic color program", "shaders/generic.vert", "shaders/rect.frag", { "ModelViewProjectionMatrix", "color" });
 	ASSERT_OR_RETURN(false, result, "Failed to load generic color shader");
 
+	debug(LOG_3D, "Loading shader: LINE");
+	result = pie_LoadShader("line program", "shaders/line.vert", "shaders/rect.frag", { "from", "to", "color", "ModelViewProjectionMatrix" });
+	ASSERT_OR_RETURN(false, result, "Failed to load line shader");
+
 	pie_internal::currentShaderMode = SHADER_NONE;
 	return true;
 }
