@@ -1,4 +1,4 @@
-/*
+	/*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
 	Copyright (C) 2005-2015  Warzone 2100 Project
@@ -58,8 +58,6 @@ enum
 };
 
 extern int iV_DrawFormattedText(const char *String, UDWORD x, UDWORD y, UDWORD Width, UDWORD Justify);
-
-extern void iV_SetTextSize(float size);
 
 extern void iV_DrawTextRotated(const char *string, float x, float y, float rotation);
 

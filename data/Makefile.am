@@ -21,6 +21,7 @@ BASELIST = \
 	images \
 	messages \
 	misc \
+	fonts \
 	script \
 	sequenceaudio \
 	shaders\

@@ -1191,10 +1191,6 @@ void iV_DrawTextRotated(const char *string, float XPos, float YPos, float rotati
 }
 
 
-void iV_SetTextSize(float size)
-{
-	WzMainWindow::instance()->setFontSize(size);
-}
 #endif
 
 QString wzGetSelection()
