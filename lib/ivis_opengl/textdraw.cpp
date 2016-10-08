@@ -46,7 +46,11 @@ static float font_colour[4] = {1.f, 1.f, 1.f, 1.f};
 
 #include "hb.h"
 #include "hb-ft.h"
+#ifdef WZ_OS_WIN
+#include "freetype/ftglyph.h"
+#else
 #include "ftglyph.h"
+#endif
 #include <unordered_map>
 #include <memory>
 
