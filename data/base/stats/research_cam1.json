@@ -239,6 +239,7 @@
         "researchPoints": 1500,
         "researchPower": 46,
         "resultComponents": [
+            "CyborgCannon",
             "CyborgCannonGrd"
         ],
         "statID": "Cannon1Mk1"
@@ -258,6 +259,7 @@
         "researchPoints": 900,
         "researchPower": 28,
         "resultComponents": [
+            "CyborgFlamer01",
             "CyborgFlamerGrd"
         ],
         "statID": "Flame1Mk1"
@@ -276,6 +278,8 @@
         "researchPoints": 600,
         "researchPower": 18,
         "resultComponents": [
+            "CyborgLegs",
+            "CyborgChaingun",
             "CyborgChain1Ground"
         ],
         "statID": "MG1Mk1"
@@ -295,6 +299,7 @@
         "researchPoints": 900,
         "researchPower": 28,
         "resultComponents": [
+            "CyborgRocket",
             "CyborgRkt1Ground"
         ],
         "statID": "Rocket-LtA-T"
