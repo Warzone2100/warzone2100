@@ -34,7 +34,7 @@
 
 #include <utility>
 #if defined(WZ_CC_MSVC)
-#include "widgbase_moc.h"		// this is generated on the pre-build event.
+#include "widgbase.h"		// this is generated on the pre-build event.
 #endif
 #include "widgint.h"
 

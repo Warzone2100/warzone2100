@@ -84,9 +84,6 @@
 
 #include "multiplay.h"
 #include "multiint.h"
-#if defined(WZ_CC_MSVC)
-#include "multiint_moc.h"	// this is generated on the pre-build event.
-#endif
 #include "multijoin.h"
 #include "multistat.h"
 #include "multirecv.h"

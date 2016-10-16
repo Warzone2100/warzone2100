@@ -24,9 +24,6 @@
 #include "widget.h"
 #include "widgint.h"
 #include "slider.h"
-#if defined(WZ_CC_MSVC)
-#include "slider_moc.h"		// this is generated on the pre-build event.
-#endif
 #include "lib/ivis_opengl/pieblitfunc.h"
 
 static bool DragEnabled = true;

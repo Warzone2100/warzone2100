@@ -26,9 +26,6 @@
 #include "tip.h"
 #include "form.h"
 #include "bar.h"
-#if defined(WZ_CC_MSVC)
-#include "bar_moc.h"		// this is generated on the pre-build event.
-#endif
 #include "lib/ivis_opengl/pieblitfunc.h"
 #include "lib/ivis_opengl/piepalette.h"
 

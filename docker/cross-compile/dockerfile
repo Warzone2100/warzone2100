@@ -5,7 +5,7 @@ RUN apt-get -u update && apt-get -y install \
     git g++ gperf intltool libffi-dev libgdk-pixbuf2.0-dev \
     libtool libtool-bin libltdl-dev libssl-dev libxml-parser-perl make \
     openssl p7zip-full patch perl pkg-config python ruby scons \
-    sed unzip wget xz-utils
+    sed unzip wget xz-utils cmake asciidoc
 
 RUN git clone https://github.com/mxe/mxe.git
 
