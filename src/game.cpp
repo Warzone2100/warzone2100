@@ -3873,8 +3873,6 @@ static bool writeGameFile(const char *fileName, SDWORD saveType)
 	}
 
 	ASSERT(saveType == GTYPE_SAVE_START || saveType == GTYPE_SAVE_MIDMISSION, "invalid save type");
-	// clear out structure
-	memset(&saveGame, 0x0, sizeof(SAVE_GAME));
 	// saveKeymissionIsOffworld
 	saveGame.saveKey = getCampaignNumber();
 	if (missionIsOffworld())

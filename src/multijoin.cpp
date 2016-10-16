@@ -425,12 +425,8 @@ bool recvDataCheck(NETQUEUE queue)
 		{
 			char msg[256] = {'\0'};
 
-			for (i = 0; i < DATA_MAXDATA; i++)
+			for (i = 0; DataHash[i] == tempBuffer[i]; ++i)
 			{
-				if (DataHash[i] != tempBuffer[i])
-				{
-					break;
-				}
 			}
 
 			sprintf(msg, _("%s (%u) has an incompatible mod, and has been kicked."), getPlayerName(player), player);
