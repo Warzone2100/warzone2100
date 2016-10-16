@@ -1,0 +1,11 @@
+cmake_minimum_required (VERSION 3.5)
+project (sdl-backend CXX)
+
+file(GLOB HEADERS "*.h")
+file(GLOB SRC "*.cpp")
+
+find_package(SDL2 REQUIRED)
+
+add_library(sdl-backend ${HEADERS} ${SRC})
+target_include_directories(sdl-backend PRIVATE ${SDL2_INCLUDE_DIR})
+target_link_libraries(sdl-backend Qt5::Core ${SDL2_LIBRARY})

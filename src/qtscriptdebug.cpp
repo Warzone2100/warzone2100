@@ -24,10 +24,6 @@
 
 #include "qtscriptdebug.h"
 
-#if defined(WZ_CC_MSVC)
-#include "qtscriptdebug.h.moc"         // this is generated on the pre-build event.
-#endif
-
 #include <QtCore/QHash>
 #include <QtScript/QScriptEngine>
 #include <QtScript/QScriptValue>

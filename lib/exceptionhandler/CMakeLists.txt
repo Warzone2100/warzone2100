@@ -1,0 +1,17 @@
+cmake_minimum_required (VERSION 3.5)
+project (exception-handler CXX)
+
+file(GLOB HEADERS "*.h")
+if(WIN32)
+file(GLOB SRC "*.cpp")
+else()
+set(SRC "dumpinfo.cpp" "exceptionhandler.cpp")
+endif()
+
+add_library(exception-handler ${HEADERS} ${SRC})
+if("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU" AND ${CMAKE_CROSSCOMPILING})
+  target_link_libraries(exception-handler bfd iberty)
+elseif("${CMAKE_CXX_COMPILER_ID}" MATCHES "MSVC")
+  target_link_libraries(exception-handler "dbghelp.lib")
+endif()
+target_link_libraries(exception-handler Qt5::Core)

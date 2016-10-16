@@ -130,11 +130,13 @@
 	npgettext_aux (Domainname, Msgctxt GETTEXT_CONTEXT_GLUE Msgid, Msgid, MsgidPlural, N, Category)
 
 #ifdef WZ_CC_MSVC
+#if ENABLE_NLS
 #undef dcgettext
 
 extern "C" char *dcgettext(const char *__domainname, const char *__msgid,
 	int __category)
 	_INTL_MAY_RETURN_STRING_ARG(2);
+#endif
 #endif
 #ifdef __GNUC__
 __inline

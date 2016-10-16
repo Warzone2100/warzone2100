@@ -27,9 +27,6 @@
 #include "widget.h"
 #include "widgint.h"
 #include "form.h"
-#if defined(WZ_CC_MSVC)
-#include "form_moc.h"		// this is generated on the pre-build event.
-#endif
 #include "tip.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
 #include "lib/ivis_opengl/piepalette.h"
