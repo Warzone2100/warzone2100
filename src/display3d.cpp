@@ -3269,7 +3269,7 @@ static void renderSurroundings(void)
 
 	if (!gamePaused())
 	{
-		wind = wrapf(wind + graphicsTimeAdjustedIncrement(windSpeed), 360.0f);
+		wind = std::remainder(wind + graphicsTimeAdjustedIncrement(windSpeed), 360.0f);
 	}
 	pie_DrawSkybox(skybox_scale);
 

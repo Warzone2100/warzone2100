@@ -430,9 +430,13 @@
  * GCC: "Many functions do not examine any values except their arguments, and have no effects
  *       except the return value. Basically this is just slightly more strict class than
  *       the pure attribute below, since function is not allowed to read global memory."
+ *
+ * Note that __attribute__((__const__)) doesn't work with some versions of gcc, in C++, at least
+ * for functions returning structures, and may silently return random results instead. So use
+ * constexpr instead, which seems to work (although can't be added to all types of function).
  */
 #if WZ_CC_GNU_PREREQ(2,5) && !defined(WZ_CC_INTEL)
-#  define WZ_DECL_CONST __attribute__((__const__,__warn_unused_result__))
+#  define WZ_DECL_CONST constexpr __attribute__((__warn_unused_result__))
 #else
 #  define WZ_DECL_CONST
 #endif

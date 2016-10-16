@@ -122,7 +122,7 @@ static inline WZ_DECL_PURE Vector2f Vector2f_Rotate2f(Vector2f v, int angle)
  * \param r The radius of the circle
  * \return If v falls within the circle
  */
-static inline WZ_DECL_CONST bool Vector3i_InCircle(const Vector3i v, const Vector3i c, const unsigned int r)
+static inline bool Vector3i_InCircle(Vector3i v, Vector3i c, unsigned r)
 {
 	Vector2i delta = Vector3i(v - c).xy;
 	// Explictily cast to "unsigned int" because this number never can be
@@ -144,7 +144,7 @@ static inline WZ_DECL_CONST bool Vector3i_InCircle(const Vector3i v, const Vecto
  * \param r The radius of the sphere
  * \return If v falls within the sphere
  */
-static inline WZ_DECL_CONST bool Vector3i_InSphere(const Vector3i v, const Vector3i c, const unsigned int r)
+static inline bool Vector3i_InSphere(Vector3i v, Vector3i c, unsigned r)
 {
 	Vector3i delta = v - c;
 	// Explictily cast to "unsigned int" because this number never can be

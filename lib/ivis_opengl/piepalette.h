@@ -132,7 +132,7 @@ extern void		pal_Init(void);
 extern void		pal_ShutDown(void);
 extern PIELIGHT		pal_GetTeamColour(int team);
 
-WZ_DECL_CONST static inline PIELIGHT pal_Colour(UBYTE r, UBYTE g, UBYTE b)
+static inline PIELIGHT pal_Colour(UBYTE r, UBYTE g, UBYTE b)
 {
 	PIELIGHT c;
 
@@ -144,7 +144,7 @@ WZ_DECL_CONST static inline PIELIGHT pal_Colour(UBYTE r, UBYTE g, UBYTE b)
 	return c;
 }
 
-WZ_DECL_CONST static inline PIELIGHT pal_SetBrightness(UBYTE brightness)
+static inline PIELIGHT pal_SetBrightness(UBYTE brightness)
 {
 	PIELIGHT c;
 
@@ -156,7 +156,7 @@ WZ_DECL_CONST static inline PIELIGHT pal_SetBrightness(UBYTE brightness)
 	return c;
 }
 
-WZ_DECL_CONST static inline PIELIGHT pal_RGBA(UBYTE r, UBYTE g, UBYTE b, UBYTE a)
+static inline PIELIGHT pal_RGBA(UBYTE r, UBYTE g, UBYTE b, UBYTE a)
 {
 	PIELIGHT c;
 

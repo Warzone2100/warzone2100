@@ -137,14 +137,14 @@ extern float graphicsTimeFraction;  ///< Private performance calculation. Do not
 extern float realTimeFraction;  ///< Private performance calculation. Do not use.
 
 /// Returns numerator/denominator * (newTime - oldTime). Rounds up or down such that the average return value is right, if oldTime is always the previous newTime.
-static inline WZ_DECL_CONST int quantiseFraction(int numerator, int denominator, int newTime, int oldTime)
+static inline int quantiseFraction(int numerator, int denominator, int newTime, int oldTime)
 {
 	int64_t newValue = (int64_t)newTime * numerator / denominator;
 	int64_t oldValue = (int64_t)oldTime * numerator / denominator;
 	return newValue - oldValue;
 }
 /// Returns numerator/denominator * (newTime - oldTime). Rounds up or down such that the average return value is right, if oldTime is always the previous newTime.
-static inline WZ_DECL_CONST Vector3i quantiseFraction(Vector3i numerator, int denominator, int newTime, int oldTime)
+static inline Vector3i quantiseFraction(Vector3i numerator, int denominator, int newTime, int oldTime)
 {
 	return Vector3i(quantiseFraction(numerator.x, denominator, newTime, oldTime),
 	                quantiseFraction(numerator.y, denominator, newTime, oldTime),
