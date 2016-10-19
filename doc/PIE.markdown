@@ -18,13 +18,13 @@ Format
 
 ### PIE
 
-  PIE 3
+> PIE 3
 
 The first line specifies the version number (3) and MUST read like that.
 
 ### TYPE
 
-  TYPE X
+> TYPE X
 
 This indicates the type of the file through a hexadecimal combination of flags. The following values can be used:
  * 0x00200  - Reserved for backward compatibility.
@@ -33,25 +33,25 @@ This indicates the type of the file through a hexadecimal combination of flags. 
 
 ### TEXTURE
 
-  TEXTURE 0 page-7-barbarians-arizona.png 0 0
+> TEXTURE 0 page-7-barbarians-arizona.png 0 0
 
 This sets the texture page for the model. The second value gives you the filename of the texture page, which must end with ".png". The PIE file MUST contain exactly one TEXTURE line. The filename MUST only contain [a-zA-Z0-9._\-]. The file name SHOULD start with "page-NN-" for correct handling of dynamic texture replacement. The first, third and fourth values are ignored, and should be zero.
 
 ### NORMALMAP
 
-  NORMALMAP 0 page-7-barbarians-arizona_normal.png 0 0
+> NORMALMAP 0 page-7-barbarians-arizona_normal.png 0 0
 
 Optional. As above, but this sets the normal map texture page for the model.
 
 ### SPECULARMAP
 
-  SPECULARMAP 0 page-7-barbarians-arizona.png 0 0
+> SPECULARMAP 0 page-7-barbarians-arizona.png 0 0
 
 Optional. As above, but this sets the specular map texture page for the model.
 
 ### EVENT
 
-  EVENT type filename.pie
+> EVENT type filename.pie
 
 An animation event associated with this model. If the event type is triggered, the model is
 replaced with the specified model for the duration of the event. The following event types are defined:
@@ -64,49 +64,49 @@ replaced with the specified model for the duration of the event. The following e
 
 ### LEVELS
 
-  LEVELS 1
+> LEVELS 1
 
 This gives the number of meshes that are contained in this model. Each mesh can be animated separately in ANI files.
 
 ### LEVEL
 
-  LEVEL 1
+> LEVEL 1
 
 This starts the model description for mesh 1. Repeat the below as necessary while incrementing the value above as needed.
 
 ### SHADERS
 
-  SHADERS 2 vertex.vert fragment.vert
+> SHADERS 2 vertex.vert fragment.vert
 
 Optional. Create a specific shader program for this mesh. The number '2' is not parsed but should always be '2'.
 
 ### POINTS
 
-  POINTS n
+> POINTS n
 
 This starts a list of vertex coordinates (points) that is ''n'' lines long. ''n'' MUST be less than or equal to 768. This is followed by the list of points.
 
 #### Point
 
-  	-4.0 4.0 8.0
+> -4.0 4.0 8.0
 
 Each point MUST be on a seperate line and MUST be indented with a tab. It MUST contain exactly 3 floating-point values in the order ''x y z''. Y denotes "up".
 
 ### POLYGONS
 
-  POLYGONS n
+> POLYGONS n
 
 This starts a list of polygon faces. ''n'' MUST be less than or equal to 512.
 
 #### Polygon
 
-  	200 3 3 2 1 0.82 0.78 0.186 0.78 0.199 0.82
+> 200 3 3 2 1 0.82 0.78 0.186 0.78 0.199 0.82
 
 Each polygon MUST be on a separate line and MUST be indented with a tab.
 
 It is made out of following sections:
 
-  Flags Points Texture_coordinates
+> Flags Points Texture_coordinates
 
 ''' Flags '''
  * +200 means the polygon is textured. Each entry in POLYGONS MUST have this flag.
@@ -121,7 +121,7 @@ It is made out of following sections:
 
 ### CONNECTORS
 
-  CONNECTORS n
+> CONNECTORS n
 
 This starts a list of connectors for the model. These are used to place other components against this one. For each line following this, you should indent by a tab, then give the x, y, and z coordinates of a connector. Z denotes "up." The meaning of each connector is special and hard-coded. Some models do not need connectors.
 
@@ -129,7 +129,7 @@ The exact purpose of each connector is hard-coded for each model type. TODO: Lis
 
 ### ANIMOBJECT
 
-  ANIMOBJECT time cycles frames
+> ANIMOBJECT time cycles frames
 
 If the mesh is animated, this directive will tell the game how to animate it. The values
 are the total animation time (of all frames), the number of cycles to render the animation,
@@ -137,7 +137,7 @@ where zero is infinitely many, and finally the number of animation frames that f
 
 #### Animation frame
 
-  	frame xpos ypos zpos xrot yrot zrot xscale yscale zscale
+> frame xpos ypos zpos xrot yrot zrot xscale yscale zscale
 
 Each animation line starts with the serially increasing frame number, followed by
 three (x, y, z) vectors, one for position, one for rotation, and one for scaling.
