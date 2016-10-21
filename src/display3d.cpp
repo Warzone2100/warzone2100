@@ -333,7 +333,7 @@ void drawShape(BASE_OBJECT *psObj, iIMDShape *strImd, int colour, PIELIGHT build
 	{
 		animFrame = getModularScaledGraphicsTime(strImd->animInterval, strImd->numFrames);
 	}
-	if (psObj->timeAnimationStarted && strImd->objanimframes)
+	if (strImd->objanimframes)
 	{
 		const int elapsed = graphicsTime - psObj->timeAnimationStarted;
 		const int frame = (elapsed / strImd->objanimtime) % strImd->objanimframes;
@@ -348,7 +348,7 @@ void drawShape(BASE_OBJECT *psObj, iIMDShape *strImd, int colour, PIELIGHT build
 		pie_MatScale(state.scale);
 	}
 	pie_Draw3DShape(strImd, animFrame, colour, buildingBrightness, pieFlag, pieFlagData);
-	if (psObj->timeAnimationStarted && strImd->objanimframes)
+	if (strImd->objanimframes)
 	{
 		pie_MatEnd();
 	}
@@ -2240,7 +2240,7 @@ void renderStructure(STRUCTURE *psStructure)
 	}
 
 	// check for animation model replacement - if none found, use animation in existing IMD
-	if (psStructure->timeAnimationStarted && strImd->objanimpie[psStructure->animationEvent])
+	if (strImd->objanimpie[psStructure->animationEvent])
 	{
 		strImd = strImd->objanimpie[psStructure->animationEvent];
 	}

@@ -1616,12 +1616,12 @@ static void moveUpdatePersonModel(DROID *psDroid, SDWORD speed, uint16_t directi
 		if (psDroid->droidType == DROID_PERSON &&
 		    (psDroid->action == DACTION_ATTACK ||
 		     psDroid->action == DACTION_ROTATETOATTACK)
-		    && psDroid->timeAnimationStarted == 0)
+		    && psDroid->animationEvent == ANIM_EVENT_NONE)
 		{
 			psDroid->timeAnimationStarted = gameTime;
 			psDroid->animationEvent = ANIM_EVENT_FIRING;
 		}
-		else if (psDroid->timeAnimationStarted && psDroid->animationEvent == ANIM_EVENT_ACTIVE)
+		else if (psDroid->animationEvent == ANIM_EVENT_ACTIVE)
 		{
 			psDroid->timeAnimationStarted = 0; // turn off movement animation, since we stopped
 			psDroid->animationEvent = ANIM_EVENT_NONE;
@@ -1650,8 +1650,8 @@ static void moveUpdatePersonModel(DROID *psDroid, SDWORD speed, uint16_t directi
 	//set the droid height here so other routines can use it
 	psDroid->pos.z = map_Height(psDroid->pos.x, psDroid->pos.y);//jps 21july96
 
-	/* update anim if moving and not on fire */
-	if (psDroid->droidType == DROID_PERSON && speed != 0 && psDroid->timeAnimationStarted == 0)
+	/* update anim if moving and not shooting */
+	if (psDroid->droidType == DROID_PERSON && speed != 0 && psDroid->animationEvent == ANIM_EVENT_NONE)
 	{
 		psDroid->timeAnimationStarted = gameTime;
 		psDroid->animationEvent = ANIM_EVENT_ACTIVE;
@@ -1778,11 +1778,12 @@ static void moveUpdateCyborgModel(DROID *psDroid, SDWORD moveSpeed, uint16_t mov
 		if (psDroid->animationEvent == ANIM_EVENT_ACTIVE)
 		{
 			psDroid->timeAnimationStarted = 0;
+			psDroid->animationEvent = ANIM_EVENT_NONE;
 		}
 		return;
 	}
 
-	if (psDroid->timeAnimationStarted == 0)
+	if (psDroid->animationEvent == ANIM_EVENT_NONE)
 	{
 		psDroid->timeAnimationStarted = gameTime;
 		psDroid->animationEvent = ANIM_EVENT_ACTIVE;
@@ -2070,9 +2071,10 @@ void moveUpdateDroid(DROID *psDroid)
 	switch (psDroid->sMove.Status)
 	{
 	case MOVEINACTIVE:
-		if (psDroid->animationEvent == ANIM_EVENT_ACTIVE && psDroid->timeAnimationStarted)
+		if (psDroid->animationEvent == ANIM_EVENT_ACTIVE)
 		{
 			psDroid->timeAnimationStarted = 0;
+			psDroid->animationEvent = ANIM_EVENT_NONE;
 		}
 		break;
 	case MOVESHUFFLE:

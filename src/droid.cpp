@@ -721,7 +721,7 @@ void droidUpdate(DROID *psDroid)
 	if (psDroid->animationEvent != ANIM_EVENT_NONE)
 	{
 		iIMDShape *imd = psDroid->sDisplay.imd->objanimpie[psDroid->animationEvent];
-		if (imd->objanimcycles > 0 && gameTime > psDroid->timeAnimationStarted + imd->objanimtime * imd->objanimcycles)
+		if (imd && imd->objanimcycles > 0 && gameTime > psDroid->timeAnimationStarted + imd->objanimtime * imd->objanimcycles)
 		{
 			// Done animating (animation is defined by body - other components should follow suit)
 			if (psDroid->animationEvent == ANIM_EVENT_DYING)

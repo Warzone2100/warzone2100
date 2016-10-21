@@ -1,7 +1,7 @@
 PIE 2
 TYPE 200
 TEXTURE 0 page-14-droid-hubs.png 256 256
-EVENT 0 scbd_run.pie
+EVENT 1 scbd_run.pie
 LEVELS 1
 LEVEL 1
 POINTS 48 

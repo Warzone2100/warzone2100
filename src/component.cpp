@@ -487,7 +487,7 @@ static void displayCompObj(DROID *psDroid, bool bButton)
 		{
 			pie_MatScale(.75f); // FIXME - hideous....!!!!
 		}
-		if (psDroid->timeAnimationStarted && strImd->objanimpie[psDroid->animationEvent])
+		if (strImd->objanimpie[psDroid->animationEvent])
 		{
 			strImd = psShapeBody->objanimpie[psDroid->animationEvent];
 		}
