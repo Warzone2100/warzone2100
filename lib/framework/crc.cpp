@@ -21,15 +21,15 @@
 #include "crc.h"
 #include "lib/netplay/netsocket.h"  // For htonl
 #include <openssl/sha.h>
-#include <openssl/err.h>
 
 #include <functional>
 
-#if defined(OPENSSL_NO_EC) || defined(OPENSSL_NO_ECDSA)
+#if defined(OPENSSL_NO_EC2M) || defined(OPENSSL_NO_ECDSA)
 # define MATH_IS_ALCHEMY
 #endif
 
 #ifndef MATH_IS_ALCHEMY
+#include <openssl/err.h>
 # include <openssl/ec.h>
 # include <openssl/ecdsa.h>
 # include <openssl/obj_mac.h>
@@ -44,6 +44,17 @@ struct EC_KEY
 	std::vector<uint8_t> publicVoodoo;
 };
 struct ECDSA_SIG {};
+
+unsigned long ERR_get_error()
+{
+	return 1;
+}
+
+const char *ERR_error_string(unsigned long e, char *buf)
+{
+	(void)buf;
+	return "";
+}
 
 EC_KEY *EC_KEY_new_by_curve_name(int)
 {

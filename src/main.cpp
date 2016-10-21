@@ -850,10 +850,13 @@ int realmain(int argc, char *argv[])
 	wzMain(argc, argv);		// init Qt integration first
 
 #if !defined(OPENSSL_API_COMPAT) || OPENSSL_API_COMPAT < 0x10100000L
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 	// The libcrypto startup stuff... May or may not actually be needed for anything at all.
 	ERR_load_crypto_strings();  // This is needed for descriptive error messages.
 	OpenSSL_add_all_algorithms();  // Don't actually use the EVP functions, so probably not needed.
 	OPENSSL_config(nullptr);  // What does this actually do?
+#pragma GCC diagnostic pop
 #else
 	// The libcrypto startup stuff... May or may not actually be needed for anything at all.
 	OPENSSL_init_crypto(OPENSSL_INIT_LOAD_CRYPTO_STRINGS | OPENSSL_INIT_ADD_ALL_CIPHERS | OPENSSL_INIT_ADD_ALL_DIGESTS | OPENSSL_INIT_LOAD_CONFIG, nullptr);
