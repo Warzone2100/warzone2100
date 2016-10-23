@@ -1622,7 +1622,7 @@ function __camTruckTick()
 		if (camDef(truck))
 		{
 			enableStructure("A0ResourceExtractor", player);
-			orderDroidBuild(minDroid, DORDER_BUILD, "A0ResourceExtractor",
+			orderDroidBuild(truck, DORDER_BUILD, "A0ResourceExtractor",
 			                oil.x, oil.y);
 			continue;
 		}
