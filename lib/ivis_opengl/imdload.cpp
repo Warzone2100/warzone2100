@@ -702,7 +702,9 @@ static iIMDShape *_imd_load_level(const QString &filename, const char **ppFileDa
 			debug(LOG_ERROR, "%s shader corrupt: %s", filename.toUtf8().constData(), buffer);
 			return NULL;
 		}
-		s->shaderProgram = pie_LoadShader(filename.toUtf8().constData(), vertex, fragment);
+		std::vector<std::string> uniform_names { "colour", "teamcolour", "stretch", "tcmask", "fogEnabled", "normalmap",
+		                                         "specularmap", "ecmEffect", "alphaTest", "graphicsCycle", "ModelViewProjectionMatrix" };
+		s->shaderProgram = pie_LoadShader(filename.toUtf8().constData(), vertex, fragment, uniform_names);
 		pFileData += cnt;
 	}
 

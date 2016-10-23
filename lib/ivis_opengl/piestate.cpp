@@ -31,6 +31,9 @@
 #include "lib/ivis_opengl/tex.h"
 #include "lib/ivis_opengl/piepalette.h"
 #include "screen.h"
+#include "pieclip.h"
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/gtx/transform.hpp>
 
 #ifndef GLEW_VERSION_4_3
 #define GLEW_VERSION_4_3 false
@@ -43,9 +46,9 @@
  *	Global Variables
  */
 
-static std::vector<SHADER_PROGRAM> shaderProgram;
+std::vector<pie_internal::SHADER_PROGRAM> pie_internal::shaderProgram;
 static GLfloat shaderStretch = 0;
-static SHADER_MODE currentShaderMode = SHADER_NONE;
+SHADER_MODE pie_internal::currentShaderMode = SHADER_NONE;
 unsigned int pieStateCount = 0; // Used in pie_GetResetCounts
 static RENDER_STATE rendStates;
 static GLint ecmState = 0;
@@ -186,21 +189,9 @@ static void printProgramInfoLog(code_part part, GLuint program)
 	}
 }
 
-static void getLocs(SHADER_PROGRAM *program)
+static void getLocs(pie_internal::SHADER_PROGRAM *program)
 {
 	glUseProgram(program->program);
-
-	// Uniforms
-	program->locColour = glGetUniformLocation(program->program, "colour");
-	program->locTeam = glGetUniformLocation(program->program, "teamcolour");
-	program->locStretch = glGetUniformLocation(program->program, "stretch");
-	program->locTCMask = glGetUniformLocation(program->program, "tcmask");
-	program->locFog = glGetUniformLocation(program->program, "fogEnabled");
-	program->locNormalMap = glGetUniformLocation(program->program, "normalmap");
-	program->locSpecularMap = glGetUniformLocation(program->program, "specularmap");
-	program->locEcm = glGetUniformLocation(program->program, "ecmEffect");
-	program->locAlphaTest = glGetUniformLocation(program->program, "alphaTest");
-	program->locTime = glGetUniformLocation(program->program, "graphicsCycle");
 
 	// Attributes
 	program->locVertex = glGetAttribLocation(program->program, "vertex");
@@ -220,24 +211,26 @@ static void getLocs(SHADER_PROGRAM *program)
 
 void pie_FreeShaders()
 {
-	while (shaderProgram.size() > SHADER_MAX)
+	while (pie_internal::shaderProgram.size() > SHADER_MAX)
 	{
-		glDeleteShader(shaderProgram.back().program);
-		shaderProgram.pop_back();
+		glDeleteShader(pie_internal::shaderProgram.back().program);
+		pie_internal::shaderProgram.pop_back();
 	}
 }
 
 // Read/compile/link shaders
-SHADER_MODE pie_LoadShader(const char *programName, const char *vertexPath, const char *fragmentPath)
+SHADER_MODE pie_LoadShader(const char *programName, const char *vertexPath, const char *fragmentPath,
+	const std::vector<std::string> &uniformNames)
 {
-	SHADER_PROGRAM program;
+	pie_internal::SHADER_PROGRAM program;
 	GLint status;
 	bool success = true; // Assume overall success
 	char *buffer[2];
 
-	memset(&program, 0, sizeof(program));
-
 	program.program = glCreateProgram();
+	glBindAttribLocation(program.program, 0, "vertex");
+	glBindAttribLocation(program.program, 1, "vertexTexCoord");
+	glBindAttribLocation(program.program, 2, "vertexColor");
 	ASSERT_OR_RETURN(SHADER_NONE, program.program, "Could not create shader program!");
 
 	*buffer = (char *)"";
@@ -327,47 +320,54 @@ SHADER_MODE pie_LoadShader(const char *programName, const char *vertexPath, cons
 			glObjectLabel(GL_PROGRAM, program.program, -1, programName);
 		}
 	}
+	GLuint p = program.program;
+	std::transform(uniformNames.begin(), uniformNames.end(),
+		std::back_inserter(program.locations),
+		[p](const std::string name) { return glGetUniformLocation(p, name.data()); });
 
 	getLocs(&program);
 	glUseProgram(0);
 
-	shaderProgram.push_back(program);
+	pie_internal::shaderProgram.push_back(program);
 
-	return SHADER_MODE(shaderProgram.size() - 1);
+	return SHADER_MODE(pie_internal::shaderProgram.size() - 1);
 }
 
 // Run from screen.c on init. Do not change the order of loading here! First ones are enumerated.
 bool pie_LoadShaders()
 {
-	SHADER_PROGRAM program;
+	pie_internal::SHADER_PROGRAM program;
 	int result;
 
 	// Load some basic shaders
 	memset(&program, 0, sizeof(program));
-	shaderProgram.push_back(program);
+	pie_internal::shaderProgram.push_back(program);
 
 	// TCMask shader for map-placed models with advanced lighting
 	debug(LOG_3D, "Loading shader: SHADER_COMPONENT");
-	result = pie_LoadShader("Component program", "shaders/tcmask.vert", "shaders/tcmask.frag");
+	result = pie_LoadShader("Component program", "shaders/tcmask.vert", "shaders/tcmask.frag",
+		{ "colour", "teamcolour", "stretch", "tcmask", "fogEnabled", "normalmap", "specularmap", "ecmEffect", "alphaTest", "graphicsCycle" });
 	ASSERT_OR_RETURN(false, result, "Failed to load component shader");
 
 	// TCMask shader for buttons with flat lighting
 	debug(LOG_3D, "Loading shader: SHADER_BUTTON");
-	result = pie_LoadShader("Button program", "shaders/button.vert", "shaders/button.frag");
+	result = pie_LoadShader("Button program", "shaders/button.vert", "shaders/button.frag",
+		{ "colour", "teamcolour", "stretch", "tcmask", "fogEnabled", "normalmap", "specularmap", "ecmEffect", "alphaTest", "graphicsCycle" });
 	ASSERT_OR_RETURN(false, result, "Failed to load button shader");
 
 	// Plain shader for no lighting
 	debug(LOG_3D, "Loading shader: SHADER_NOLIGHT");
-	result = pie_LoadShader("Plain program", "shaders/nolight.vert", "shaders/nolight.frag");
+	result = pie_LoadShader("Plain program", "shaders/nolight.vert", "shaders/nolight.frag",
+		{ "colour", "teamcolour", "stretch", "tcmask", "fogEnabled", "normalmap", "specularmap", "ecmEffect", "alphaTest", "graphicsCycle" });
 	ASSERT_OR_RETURN(false, result, "Failed to load no-lighting shader");
 
-	currentShaderMode = SHADER_NONE;
+	pie_internal::currentShaderMode = SHADER_NONE;
 	return true;
 }
 
 void pie_DeactivateShader()
 {
-	currentShaderMode = SHADER_NONE;
+	pie_internal::currentShaderMode = SHADER_NONE;
 	glUseProgram(0);
 }
 
@@ -396,44 +396,47 @@ float pie_GetShaderStretchDepth()
 	return shaderStretch;
 }
 
-SHADER_PROGRAM &pie_ActivateShader(SHADER_MODE shaderMode, const iIMDShape *shape, PIELIGHT teamcolour, PIELIGHT colour)
+pie_internal::SHADER_PROGRAM &pie_ActivateShaderDeprecated(SHADER_MODE shaderMode, const iIMDShape *shape, PIELIGHT teamcolour, PIELIGHT colour)
 {
 	int maskpage = shape->tcmaskpage;
 	int normalpage = shape->normalpage;
 	int specularpage = shape->specularpage;
-	SHADER_PROGRAM &program = shaderProgram[shaderMode];
+	pie_internal::SHADER_PROGRAM &program = pie_internal::shaderProgram[shaderMode];
 
-	if (shaderMode != currentShaderMode)
+	if (shaderMode != pie_internal::currentShaderMode)
 	{
 		glUseProgram(program.program);
+		pie_internal::SHADER_PROGRAM &program = pie_internal::shaderProgram[shaderMode];
 
 		// These do not change during our drawing pass
-		glUniform1i(program.locFog, rendStates.fog);
-		glUniform1f(program.locTime, timeState);
+		glUniform1i(program.locations[4], rendStates.fog);
+		glUniform1f(program.locations[9], timeState);
 
-		currentShaderMode = shaderMode;
+		pie_internal::currentShaderMode = shaderMode;
 	}
-
-	glUniform4fv(program.locColour, 1, &pal_PIELIGHTtoVec4(colour)[0]);
+	glUniform4fv(program.locations[0], 1, &pal_PIELIGHTtoVec4(colour)[0]);
 	pie_SetTexturePage(shape->texpage);
 
-	glUniform4fv(program.locTeam, 1, &pal_PIELIGHTtoVec4(teamcolour)[0]);
-	glUniform1i(program.locTCMask, maskpage != iV_TEX_INVALID);
-	if (program.locStretch >= 0)
+	glUniform4fv(program.locations[1], 1, &pal_PIELIGHTtoVec4(teamcolour)[0]);
+	glUniform1i(program.locations[3], maskpage != iV_TEX_INVALID);
+
+	glUniform1i(program.locations[8], 0);
+
+	if (program.locations[2] >= 0)
 	{
-		glUniform1f(program.locStretch, shaderStretch);
+		glUniform1f(program.locations[2], shaderStretch);
 	}
-	if (program.locNormalMap >= 0)
+	if (program.locations[5] >= 0)
 	{
-		glUniform1i(program.locNormalMap, normalpage != iV_TEX_INVALID);
+		glUniform1i(program.locations[5], normalpage != iV_TEX_INVALID);
 	}
-	if (program.locSpecularMap >= 0)
+	if (program.locations[6] >= 0)
 	{
-		glUniform1i(program.locSpecularMap, specularpage != iV_TEX_INVALID);
+		glUniform1i(program.locations[6], specularpage != iV_TEX_INVALID);
 	}
-	if (program.locEcm >= 0)
+	if (program.locations[7] >= 0)
 	{
-		glUniform1i(program.locEcm, ecmState);
+		glUniform1i(program.locations[7], ecmState);
 	}
 
 	if (maskpage != iV_TEX_INVALID)
@@ -452,10 +455,6 @@ SHADER_PROGRAM &pie_ActivateShader(SHADER_MODE shaderMode, const iIMDShape *shap
 		glBindTexture(GL_TEXTURE_2D, pie_Texture(specularpage));
 	}
 	glActiveTexture(GL_TEXTURE0);
-
-#ifdef _DEBUG
-	glErrors();
-#endif
 
 	return program;
 }

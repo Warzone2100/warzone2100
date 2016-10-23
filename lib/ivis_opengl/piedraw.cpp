@@ -173,7 +173,7 @@ static void pie_Draw3DButton(iIMDShape *shape, PIELIGHT teamcolour)
 	const PIELIGHT colour = WZCOL_WHITE;
 	pie_SetFogStatus(false);
 	pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
-	SHADER_PROGRAM &program = pie_ActivateShader(SHADER_BUTTON, shape, teamcolour, colour);
+	pie_internal::SHADER_PROGRAM &program = pie_ActivateShaderDeprecated(SHADER_BUTTON, shape, teamcolour, colour);
 	pie_SetRendMode(REND_OPAQUE);
 	pie_SetTexturePage(shape->texpage);
 	enableArray(shape->buffers[VBO_VERTEX], program.locVertex, 3, GL_FLOAT, false, 0, 0);
@@ -234,9 +234,10 @@ static void pie_Draw3DShape2(const iIMDShape *shape, int frame, PIELIGHT colour,
 	}
 
 	SHADER_MODE mode = shape->shaderProgram == SHADER_NONE ? light ? SHADER_COMPONENT : SHADER_NOLIGHT : shape->shaderProgram;
-	SHADER_PROGRAM &program = pie_ActivateShader(mode, shape, teamcolour, colour);
+	pie_internal::SHADER_PROGRAM &program = pie_ActivateShaderDeprecated(mode, shape, teamcolour, colour);
 
-	glUniform1i(program.locAlphaTest, (pieFlag & pie_PREMULTIPLIED) == 0);
+	if (program.locations.size() >= 9)
+		glUniform1i(program.locations[8], (pieFlag & pie_PREMULTIPLIED) == 0);
 
 	pie_SetTexturePage(shape->texpage);
 

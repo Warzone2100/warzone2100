@@ -242,9 +242,9 @@ void iV_Box2(int x0, int y0, int x1, int y1, PIELIGHT first, PIELIGHT second)
 
 /***************************************************************************/
 
-void pie_BoxFill(int x0, int y0, int x1, int y1, PIELIGHT colour)
+void pie_BoxFill(int x0, int y0, int x1, int y1, PIELIGHT colour, REND_MODE rendermode)
 {
-	pie_SetRendMode(REND_OPAQUE);
+	pie_SetRendMode(rendermode);
 	pie_SetTexturePage(TEXPAGE_NONE);
 	pie_DrawRect(x0, y0, x1, y1, colour);
 }
