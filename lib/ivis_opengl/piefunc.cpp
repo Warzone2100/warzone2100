@@ -32,6 +32,8 @@
 #include "lib/ivis_opengl/piemode.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
 #include "lib/ivis_opengl/pieclip.h"
+#include <glm/gtc/type_ptr.hpp>
+#include <array>
 
 static GFX *skyboxGfx = NULL;
 static GFX *radarViewGfx[2] = { NULL, NULL };
@@ -107,20 +109,65 @@ void pie_Skybox_Init()
 	const int w = 1;
 	const int h = 1;
 	const float r = 1.0f; // just because it is shorter than 1.0f
-	GLfloat vert[] = { -r, 0, r, -r, r, r, r, 0, r, r, r, r, // front
-	                   r, 0, -r, r, r, -r, // right
-	                   -r, 0, -r, -r, r, -r, // back
-	                   -r, 0, r, -r, r, r
-	                 };
-	GLfloat texc[] = { u + w * 0, v + h, u + w * 0, v, u + w * 2, v + h, u + w * 2, v,
-	                   u + w * 4, v + h, u + w * 4, v,
-	                   u + w * 6, v + h, u + w * 6, v,
-	                   u + w * 8, v + h, u + w * 8, v
-	                 };
+
+	const Vector3f
+		vertexFront0 = Vector3f(-r, 0, r), // front
+		vertexFront1 = Vector3f(-r, r, r),
+		vertexFront2 = Vector3f(r, 0, r),
+		vertexFront3 = Vector3f(r, r, r),
+		vertexRight0 = Vector3f(r, 0, -r), // right
+		vertexRight1 = Vector3f(r, r, -r),
+		vertexBack0 = Vector3f(-r, 0, -r), // back
+		vertexBack1 = Vector3f(-r, r, -r),
+		vertexLeft0 = Vector3f(-r, 0, r),
+		vertexLeft1 = Vector3f(-r, r, r);
+
+	const std::array<Vector3f, 24> vertex{
+		// Front quad
+		vertexFront0, vertexFront1, vertexFront2,
+		vertexFront3, vertexFront2, vertexFront1,
+		// Right quad
+		vertexFront2, vertexFront3, vertexRight0,
+		vertexRight1, vertexRight0, vertexFront3,
+		// Back quad
+		vertexRight0, vertexRight1, vertexBack0,
+		vertexBack1, vertexBack0, vertexRight1,
+		// Left quad
+		vertexBack0, vertexBack1, vertexLeft0,
+		vertexLeft1, vertexLeft0, vertexBack1,
+
+	};
+	const Vector2f
+		uvFront0 = Vector2f(u + w * 0, (v + h)),
+		uvFront1 = Vector2f(u + w * 0, v),
+		uvFront2 = Vector2f(u + w * 2, v + h),
+		uvFront3 = Vector2f(u + w * 2, v),
+		uvRight0 = Vector2f(u + w * 4, v + h),
+		uvRight1 = Vector2f(u + w * 4, v),
+		uvBack0 = Vector2f(u + w * 6, v + h),
+		uvBack1 = Vector2f(u + w * 6, v),
+		uvLeft0 = Vector2f(u + w * 8, v + h),
+		uvLeft1 = Vector2f(u + w * 8, v);
+
+	const std::array<Vector2f, 24> texc =
+	{
+		// Front quad
+		uvFront0, uvFront1, uvFront2,
+		uvFront3, uvFront2, uvFront1,
+		// Right quad
+		uvFront2, uvFront3, uvRight0,
+		uvRight1, uvRight0, uvFront3,
+		// Back quad
+		uvRight0, uvRight1, uvBack0,
+		uvBack1, uvBack0, uvRight1,
+		// Left quad
+		uvBack0, uvBack1, uvLeft0,
+		uvLeft1, uvLeft0, uvBack1,
+	};
 
 	GL_DEBUG("Initializing skybox");
-	skyboxGfx = new GFX(GFX_TEXTURE, GL_QUAD_STRIP, 3);
-	skyboxGfx->buffers(10, vert, texc);
+	skyboxGfx = new GFX(GFX_TEXTURE, GL_TRIANGLES, 3);
+	skyboxGfx->buffers(24, vertex.data(), texc.data());
 }
 
 void pie_Skybox_Texture(const char *filename)
