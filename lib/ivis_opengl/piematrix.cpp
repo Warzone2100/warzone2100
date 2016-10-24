@@ -29,7 +29,8 @@
 #include "piematrix.h"
 #include "lib/ivis_opengl/piemode.h"
 
-#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 /***************************************************************************/
 /*
@@ -359,6 +360,14 @@ void pie_GetMatrix(float *matrix)
 	}
 }
 
+glm::mat4 pie_MatGet()
+{
+	float m[16];
+	glGetFloatv(GL_MODELVIEW_MATRIX, m);
+	return glm::make_mat4(m);
+	return psMatrix->matrix;
+}
+
 /*!
  * 3D vector perspective projection
  * Projects 3D vector into 2D screen space
@@ -395,6 +404,8 @@ int32_t pie_RotateProject(const Vector3i *v3d, Vector2i *v2d)
 	return zz;
 }
 
+static glm::mat4 currentProjectionMatrix;
+
 void pie_PerspectiveBegin(void)
 {
 	const float width = std::max(pie_GetVideoBufferWidth(), 1);  // Require width > 0 && height > 0, to avoid glScalef(1, 1, -1) crashing in some graphics drivers.
@@ -411,6 +422,18 @@ void pie_PerspectiveBegin(void)
 	glFrustum(-xangle, xangle, -yangle, yangle, 330, 100000);
 	glScalef(1, 1, -1);
 	glMatrixMode(GL_MODELVIEW);
+
+	currentProjectionMatrix = glm::translate(
+		(2.f * rendSurface.xcentre - width) / width,
+		(height - 2.f * rendSurface.ycentre) / height,
+		0.f) *
+		glm::frustum(-xangle, xangle, -yangle, yangle, 330.f, 100000.f) *
+		glm::scale(1.f, 1.f, -1.f);
+}
+
+glm::mat4 pie_PerspectiveGet()
+{
+	return currentProjectionMatrix;
 }
 
 void pie_PerspectiveEnd(void)

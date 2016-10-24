@@ -46,6 +46,8 @@
 #include "lib/sound/audio_id.h"
 #include "lib/netplay/netplay.h"
 
+#include <glm/gtx/transform.hpp>
+
 #include "loop.h"
 #include "atmos.h"
 #include "levels.h"
@@ -1040,11 +1042,13 @@ static void drawTiles(iView *player)
 	// also, make sure we can use world coordinates directly
 	pie_TRANSLATE(-player->p.x, 0, player->p.z);
 
+	// draw it
 	// and draw it
-	drawTerrain();
+	drawTerrain(pie_PerspectiveGet() * pie_MatGet());
 
 	// and to the warzone modelview transform
 	pie_MatEnd();
+
 	wzPerfEnd(PERF_TERRAIN);
 
 	// draw skybox
@@ -1080,14 +1084,8 @@ static void drawTiles(iView *player)
 	// prepare for the water and the lightmap
 	pie_SetFogStatus(true);
 
-	pie_MatBegin();
 	// also, make sure we can use world coordinates directly
-	pie_TRANSLATE(-player->p.x, 0, player->p.z);
-
-	drawWater();
-
-	// and to the warzone modelview transform
-	pie_MatEnd();
+	drawWater(pie_PerspectiveGet() * pie_MatGet() * glm::translate(static_cast<float>(-player->p.x), 0.f, static_cast<float>(player->p.z)));
 	wzPerfEnd(PERF_WATER);
 
 	wzPerfBegin(PERF_MODELS, "3D scene - models");

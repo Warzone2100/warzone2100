@@ -33,6 +33,7 @@
 
 #include "lib/framework/frame.h"
 #include "piedef.h"
+#include "lib/framework/vector.h"
 #include <glm/gtc/type_ptr.hpp>
 
 /***************************************************************************/
@@ -46,6 +47,8 @@ struct RENDER_STATE
 	bool				fogEnabled;
 	bool				fog;
 	PIELIGHT			fogColour;
+	float				fogBegin;
+	float				fogEnd;
 	SDWORD				texPage;
 	REND_MODE			rendMode;
 };
@@ -80,6 +83,7 @@ extern void pie_UpdateFogDistance(float begin, float end);
 //render states
 extern void pie_SetTexturePage(SDWORD num);
 extern void pie_SetRendMode(REND_MODE rendMode);
+RENDER_STATE getCurrentRenderState();
 
 bool pie_LoadShaders();
 void pie_FreeShaders();
@@ -99,6 +103,7 @@ namespace pie_internal
 		GLint locVertex;
 		GLint locNormal;
 		GLint locTexCoord;
+		GLint locColor;
 	};
 
 	extern std::vector<SHADER_PROGRAM> shaderProgram;
@@ -210,6 +215,7 @@ pie_internal::SHADER_PROGRAM &pie_ActivateShader(SHADER_MODE shaderMode, const T
 	pie_internal::uniformSetter<T...>()(program.locations, Args...);
 	return program;
 }
+
 
 // Actual shaders (we do not want to export these calls)
 pie_internal::SHADER_PROGRAM &pie_ActivateShaderDeprecated(SHADER_MODE shaderMode, const iIMDShape *shape, PIELIGHT teamcolour, PIELIGHT colour);

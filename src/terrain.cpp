@@ -41,6 +41,8 @@
 #include "lib/ivis_opengl/pieclip.h"
 #include "lib/ivis_opengl/piestate.h"
 #include "lib/ivis_opengl/screen.h"
+#include "lib/ivis_opengl/piematrix.h"
+#include <glm/gtx/transform.hpp>
 
 #include "terrain.h"
 #include "map.h"
@@ -1042,113 +1044,84 @@ void shutdownTerrain(void)
 	terrainInitalised = false;
 }
 
-/**
- * Update the lightmap and draw the terrain and decals.
- * This function first draws the terrain in black, and then uses additive blending to put the terrain layers
- * on it one by one. Finally the decals are drawn.
- */
-void drawTerrain(void)
+static void updateLightMap()
 {
-	int i, j, x, y;
-	int texPage;
-	int layer;
-	int offset, size;
-	float xPos, yPos, distance;
-	const GLfloat paramsX[4] = {1.0f / world_coord(mapWidth) *((float)mapWidth / lightmapWidth), 0, 0, 0};
-	const GLfloat paramsY[4] = {0, 0, -1.0f / world_coord(mapHeight) *((float)mapHeight / lightmapHeight), 0};
-
-	///////////////////////////////////
-	glErrors();	// clear error codes
-	// set up the lightmap texture
-	glActiveTexture(GL_TEXTURE1);
-	// bind the texture
-	glBindTexture(GL_TEXTURE_2D, lightmap_tex_num);
-	glEnable(GL_TEXTURE_2D);
-
-	// we limit the framerate of the lightmap, because updating a texture is an expensive operation
-	if (realTime - lightmapLastUpdate >= LIGHTMAP_REFRESH)
+	for (int j = 0; j < mapHeight; ++j)
 	{
-		lightmapLastUpdate = realTime;
-
-		for (j = 0; j < mapHeight; ++j)
+		for (int i = 0; i < mapWidth; ++i)
 		{
-			for (i = 0; i < mapWidth; ++i)
+			MAPTILE *psTile = mapTile(i, j);
+			PIELIGHT colour = psTile->colour;
+
+			if (psTile->tileInfoBits & BITS_GATEWAY && showGateways)
 			{
-				MAPTILE *psTile = mapTile(i, j);
-				PIELIGHT colour = psTile->colour;
+				colour.byte.g = 255;
+			}
+			if (psTile->tileInfoBits & BITS_MARKED)
+			{
+				int m = getModularScaledGraphicsTime(2048, 255);
+				colour.byte.r = MAX(m, 255 - m);
+			}
 
-				if (psTile->tileInfoBits & BITS_GATEWAY && showGateways)
+			lightmapPixmap[(i + j * lightmapWidth) * 3 + 0] = colour.byte.r;
+			lightmapPixmap[(i + j * lightmapWidth) * 3 + 1] = colour.byte.g;
+			lightmapPixmap[(i + j * lightmapWidth) * 3 + 2] = colour.byte.b;
+
+			if (!pie_GetFogStatus())
+			{
+				// fade to black at the edges of the visible terrain area
+				const float playerX = map_coordf(player.p.x);
+				const float playerY = map_coordf(player.p.z);
+
+				const float distA = i - (playerX - visibleTiles.x / 2);
+				const float distB = (playerX + visibleTiles.x / 2) - i;
+				const float distC = j - (playerY - visibleTiles.y / 2);
+				const float distD = (playerY + visibleTiles.y / 2) - j;
+				float darken, distToEdge;
+
+				// calculate the distance to the closest edge of the visible map
+				// determine the smallest distance
+				distToEdge = distA;
+				if (distB < distToEdge)
 				{
-					colour.byte.g = 255;
+					distToEdge = distB;
 				}
-				if (psTile->tileInfoBits & BITS_MARKED)
+				if (distC < distToEdge)
 				{
-					int m = getModularScaledGraphicsTime(2048, 255);
-					colour.byte.r = MAX(m, 255 - m);
+					distToEdge = distC;
+				}
+				if (distD < distToEdge)
+				{
+					distToEdge = distD;
 				}
 
-				lightmapPixmap[(i + j * lightmapWidth) * 3 + 0] = colour.byte.r;
-				lightmapPixmap[(i + j * lightmapWidth) * 3 + 1] = colour.byte.g;
-				lightmapPixmap[(i + j * lightmapWidth) * 3 + 2] = colour.byte.b;
-
-				if (!pie_GetFogStatus())
+				darken = (distToEdge) / 2.0f;
+				if (darken <= 0)
 				{
-					// fade to black at the edges of the visible terrain area
-					const float playerX = map_coordf(player.p.x);
-					const float playerY = map_coordf(player.p.z);
-
-					const float distA = i - (playerX - visibleTiles.x / 2);
-					const float distB = (playerX + visibleTiles.x / 2) - i;
-					const float distC = j - (playerY - visibleTiles.y / 2);
-					const float distD = (playerY + visibleTiles.y / 2) - j;
-					float darken, distToEdge;
-
-					// calculate the distance to the closest edge of the visible map
-					// determine the smallest distance
-					distToEdge = distA;
-					if (distB < distToEdge)
-					{
-						distToEdge = distB;
-					}
-					if (distC < distToEdge)
-					{
-						distToEdge = distC;
-					}
-					if (distD < distToEdge)
-					{
-						distToEdge = distD;
-					}
-
-					darken = (distToEdge) / 2.0f;
-					if (darken <= 0)
-					{
-						lightmapPixmap[(i + j * lightmapWidth) * 3 + 0] = 0;
-						lightmapPixmap[(i + j * lightmapWidth) * 3 + 1] = 0;
-						lightmapPixmap[(i + j * lightmapWidth) * 3 + 2] = 0;
-					}
-					else if (darken < 1)
-					{
-						lightmapPixmap[(i + j * lightmapWidth) * 3 + 0] *= darken;
-						lightmapPixmap[(i + j * lightmapWidth) * 3 + 1] *= darken;
-						lightmapPixmap[(i + j * lightmapWidth) * 3 + 2] *= darken;
-					}
+					lightmapPixmap[(i + j * lightmapWidth) * 3 + 0] = 0;
+					lightmapPixmap[(i + j * lightmapWidth) * 3 + 1] = 0;
+					lightmapPixmap[(i + j * lightmapWidth) * 3 + 2] = 0;
+				}
+				else if (darken < 1)
+				{
+					lightmapPixmap[(i + j * lightmapWidth) * 3 + 0] *= darken;
+					lightmapPixmap[(i + j * lightmapWidth) * 3 + 1] *= darken;
+					lightmapPixmap[(i + j * lightmapWidth) * 3 + 2] *= darken;
 				}
 			}
 		}
-
-		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, lightmapWidth, lightmapHeight, GL_RGB, GL_UNSIGNED_BYTE, lightmapPixmap);
 	}
+}
 
-	///////////////////////////////////
-	// terrain culling
-	for (x = 0; x < xSectors; x++)
+static void cullTerrain()
+{
+	for (int x = 0; x < xSectors; x++)
 	{
-		for (y = 0; y < ySectors; y++)
+		for (int y = 0; y < ySectors; y++)
 		{
-			xPos = world_coord(x * sectorSize + sectorSize / 2);
-			yPos = world_coord(y * sectorSize + sectorSize / 2);
-			distance = pow(player.p.x - xPos, 2) + pow(player.p.z - yPos, 2);
+			float xPos = world_coord(x * sectorSize + sectorSize / 2);
+			float yPos = world_coord(y * sectorSize + sectorSize / 2);
+			float distance = pow(player.p.x - xPos, 2) + pow(player.p.z - yPos, 2);
 
 			if (distance > pow((double)world_coord(terrainDistance), 2))
 			{
@@ -1165,38 +1138,16 @@ void drawTerrain(void)
 			}
 		}
 	}
+}
 
-	// enable texture coord generation
-	glEnable(GL_TEXTURE_GEN_S); glErrors();
-	glEnable(GL_TEXTURE_GEN_T); glErrors();
-
-	// set the parameters for the texture coord generation
-	glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);
-	glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);
-	glTexGenfv(GL_S, GL_OBJECT_PLANE, paramsX);
-	glTexGenfv(GL_T, GL_OBJECT_PLANE, paramsY);
-
-	// shift the lightmap half a tile as lights are supposed to be placed at the center of a tile
-	glMatrixMode(GL_TEXTURE);
-	glLoadIdentity();
-	glTranslatef(1.0 / lightmapWidth / 2, 1.0 / lightmapHeight / 2, 0);
-	glMatrixMode(GL_MODELVIEW);
-
-	glActiveTexture(GL_TEXTURE0);
-
-	//////////////////////////////////////
-	// canvas to draw on
+static void drawDepthOnly(const glm::mat4 &ModelViewProjection, const glm::vec4 &paramsXLight, const glm::vec4 &paramsYLight)
+{
+	const auto &program = pie_ActivateShader(SHADER_TERRAIN_DEPTH, ModelViewProjection, paramsXLight, paramsYLight, 1);
 	pie_SetTexturePage(TEXPAGE_NONE);
 	pie_SetRendMode(REND_OPAQUE);
 
 	// we only draw in the depth buffer of using fog of war, as the clear color is black then
-	if (pie_GetFogStatus())
-	{
-		// FIXME: with fog enabled we draw this also to the color buffer. A fogbox might be faster.
-		glDisable(GL_FOG);
-		glColor4ub(0x00, 0x00, 0x00, 0xFF);
-	}
-	else
+	if (!pie_GetFogStatus())
 	{
 		glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
 	}
@@ -1207,24 +1158,26 @@ void drawTerrain(void)
 	glPolygonOffset(0.1f, 1.0f);
 
 	// bind the vertex buffer
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, geometryIndexVBO); glErrors();
+	glEnableVertexAttribArray(program.locVertex);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, geometryIndexVBO);
+	glErrors();
 	glBindBuffer(GL_ARRAY_BUFFER, geometryVBO); glErrors();
 
-	glVertexPointer(3, GL_FLOAT, sizeof(RenderVertex), BUFFER_OFFSET(0)); glErrors();
+	glVertexAttribPointer(program.locVertex, 3, GL_FLOAT, GL_FALSE, sizeof(RenderVertex), BUFFER_OFFSET(0));
+	glErrors();
 
-	for (x = 0; x < xSectors; x++)
+	for (int x = 0; x < xSectors; x++)
 	{
-		for (y = 0; y < ySectors; y++)
+		for (int y = 0; y < ySectors; y++)
 		{
 			if (sectors[x * ySectors + y].draw)
 			{
 				addDrawRangeElements(GL_TRIANGLES,
-				                     sectors[x * ySectors + y].geometryOffset,
-				                     sectors[x * ySectors + y].geometryOffset + sectors[x * ySectors + y].geometrySize,
-				                     sectors[x * ySectors + y].geometryIndexSize,
-				                     GL_UNSIGNED_INT,
-				                     sectors[x * ySectors + y].geometryIndexOffset);
+					sectors[x * ySectors + y].geometryOffset,
+					sectors[x * ySectors + y].geometryOffset + sectors[x * ySectors + y].geometrySize,
+					sectors[x * ySectors + y].geometryIndexSize,
+					GL_UNSIGNED_INT,
+					sectors[x * ySectors + y].geometryIndexOffset);
 			}
 		}
 	}
@@ -1232,29 +1185,28 @@ void drawTerrain(void)
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-	if (pie_GetFogStatus())
-	{
-		glEnable(GL_FOG); // resync fog state
-		glColor4ub(0xFF, 0xFF, 0xFF, 0xFF);
-	}
-	else
+	if (!pie_GetFogStatus())
 	{
 		glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
 	}
 
 	// disable the depth offset
 	glDisable(GL_POLYGON_OFFSET_FILL);
+	glDisableVertexAttribArray(program.locVertex);
+	pie_DeactivateShader();
+}
 
-	///////////////////////////////////
-	// terrain
-
-	glEnableClientState(GL_COLOR_ARRAY);
-
-	// set up for texture coord generation
-	glEnable(GL_TEXTURE_GEN_S);
-	glEnable(GL_TEXTURE_GEN_T);
-	glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);
-	glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);
+static void drawTerrainLayers(const glm::mat4 &ModelViewProjection, const glm::vec4 &paramsXLight, const glm::vec4 &paramsYLight, const glm::mat4 &textureMatrix)
+{
+	const auto &renderState = getCurrentRenderState();
+	const glm::vec4 fogColor(
+		renderState.fogColour.vector[0] / 255.f,
+		renderState.fogColour.vector[1] / 255.f,
+		renderState.fogColour.vector[2] / 255.f,
+		renderState.fogColour.vector[3] / 255.f
+	);
+	const auto &program = pie_ActivateShader(SHADER_TERRAIN, ModelViewProjection, glm::vec4(), glm::vec4(), paramsXLight, paramsYLight, 0, 1, textureMatrix,
+		renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd, fogColor);
 
 	// additive blending
 	pie_SetRendMode(REND_ADDITIVE);
@@ -1262,48 +1214,48 @@ void drawTerrain(void)
 	// only draw colors
 	glDepthMask(GL_FALSE);
 
-	glEnableClientState(GL_VERTEX_ARRAY);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, textureIndexVBO); glErrors();
 
 	// load the vertex (geometry) buffer
 	glBindBuffer(GL_ARRAY_BUFFER, geometryVBO);
-	glVertexPointer(3, GL_FLOAT, sizeof(RenderVertex), BUFFER_OFFSET(0)); glErrors();
+	glEnableVertexAttribArray(program.locVertex);
+	glVertexAttribPointer(program.locVertex, 3, GL_FLOAT, GL_FALSE, sizeof(RenderVertex), BUFFER_OFFSET(0));
+	glErrors();
 
+	glEnableVertexAttribArray(program.locColor);
 	glBindBuffer(GL_ARRAY_BUFFER, textureVBO);
 
 	ASSERT_OR_RETURN(, psGroundTypes, "Ground type was not set, no textures will be seen.");
 
 	// draw each layer separately
-	for (layer = 0; layer < numGroundTypes; layer++)
+	for (int layer = 0; layer < numGroundTypes; layer++)
 	{
-		const GLfloat paramsX[4] = {0, 0, -1.0f / world_coord(psGroundTypes[layer].textureSize), 0};
-		const GLfloat paramsY[4] = {1.0f / world_coord(psGroundTypes[layer].textureSize), 0, 0, 0};
+		const glm::vec4 paramsX(0, 0, -1.0f / world_coord(psGroundTypes[layer].textureSize), 0 );
+		const glm::vec4 paramsY(1.0f / world_coord(psGroundTypes[layer].textureSize), 0, 0, 0 );
+		pie_ActivateShader(SHADER_TERRAIN, ModelViewProjection, paramsX, paramsY, paramsXLight, paramsYLight, 0, 1, textureMatrix,
+			renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd, fogColor);
 
 		// load the texture
-		texPage = iV_GetTexture(psGroundTypes[layer].textureName);
+		int texPage = iV_GetTexture(psGroundTypes[layer].textureName);
 		pie_SetTexturePage(texPage);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-		// set the texture generation parameters
-		glTexGenfv(GL_S, GL_OBJECT_PLANE, paramsX);
-		glTexGenfv(GL_T, GL_OBJECT_PLANE, paramsY);
-
 		// load the color buffer
-		glColorPointer(4, GL_UNSIGNED_BYTE, sizeof(PIELIGHT), BUFFER_OFFSET(sizeof(PIELIGHT)*xSectors * ySectors * (sectorSize + 1) * (sectorSize + 1) * 2 * layer));
+		glVertexAttribPointer(program.locColor, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(PIELIGHT), BUFFER_OFFSET(sizeof(PIELIGHT)*xSectors * ySectors * (sectorSize + 1) * (sectorSize + 1) * 2 * layer));
 
-		for (x = 0; x < xSectors; x++)
+		for (int x = 0; x < xSectors; x++)
 		{
-			for (y = 0; y < ySectors; y++)
+			for (int y = 0; y < ySectors; y++)
 			{
 				if (sectors[x * ySectors + y].draw)
 				{
 					addDrawRangeElements(GL_TRIANGLES,
-					                     sectors[x * ySectors + y].geometryOffset,
-					                     sectors[x * ySectors + y].geometryOffset + sectors[x * ySectors + y].geometrySize,
-					                     sectors[x * ySectors + y].textureIndexSize[layer],
-					                     GL_UNSIGNED_INT,
-					                     sectors[x * ySectors + y].textureIndexOffset[layer]);
+						sectors[x * ySectors + y].geometryOffset,
+						sectors[x * ySectors + y].geometryOffset + sectors[x * ySectors + y].geometrySize,
+						sectors[x * ySectors + y].textureIndexSize[layer],
+						GL_UNSIGNED_INT,
+						sectors[x * ySectors + y].textureIndexOffset[layer]);
 				}
 			}
 		}
@@ -1312,36 +1264,42 @@ void drawTerrain(void)
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	// we don't need this one anymore
-	glDisableClientState(GL_COLOR_ARRAY);
+	glDisableVertexAttribArray(program.locVertex);
+	glDisableVertexAttribArray(program.locColor);
+	pie_DeactivateShader();
+}
 
-	// no more texture generation
-	glDisable(GL_TEXTURE_GEN_S); glErrors();
-	glDisable(GL_TEXTURE_GEN_T); glErrors();
-
-	//////////////////////////////////
-	// decals
-
+static void drawDecals(const glm::mat4 &ModelViewProjection, const glm::vec4 &paramsXLight, const glm::vec4 &paramsYLight, const glm::mat4 &textureMatrix)
+{
+	const auto &renderState = getCurrentRenderState();
+	const glm::vec4 fogColor(
+		renderState.fogColour.vector[0] / 255.f,
+		renderState.fogColour.vector[1] / 255.f,
+		renderState.fogColour.vector[2] / 255.f,
+		renderState.fogColour.vector[3] / 255.f
+	);
+	const auto &program = pie_ActivateShader(SHADER_DECALS, ModelViewProjection, paramsXLight, paramsYLight, 0, 1, textureMatrix,
+		renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd, fogColor);
 	// select the terrain texture page
 	pie_SetTexturePage(terrainPage); glErrors();
 
 	// use the alpha to blend
 	pie_SetRendMode(REND_ALPHA);
-	// don't blend decals with another color
-	glColor3f(1.f, 1.f, 1.f);
 
 	// and the texture coordinates buffer
-	glEnableClientState(GL_TEXTURE_COORD_ARRAY); glErrors();
-	glEnableClientState(GL_VERTEX_ARRAY); glErrors();
+	glEnableVertexAttribArray(program.locVertex); glErrors();
 	glBindBuffer(GL_ARRAY_BUFFER, decalVBO); glErrors();
-	glVertexPointer(3, GL_FLOAT, sizeof(DecalVertex), BUFFER_OFFSET(0)); glErrors();
-	glTexCoordPointer(2, GL_FLOAT, sizeof(DecalVertex), BUFFER_OFFSET(12)); glErrors();
+	glVertexAttribPointer(program.locVertex, 3, GL_FLOAT, GL_FALSE, sizeof(DecalVertex), BUFFER_OFFSET(0)); glErrors();
+
+	glEnableVertexAttribArray(program.locTexCoord); glErrors();
+	glVertexAttribPointer(program.locTexCoord, 2, GL_FLOAT, GL_FALSE, sizeof(DecalVertex), BUFFER_OFFSET(12)); glErrors();
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-	size = 0;
-	offset = 0;
-	for (x = 0; x < xSectors; x++)
+	int size = 0;
+	int offset = 0;
+	for (int x = 0; x < xSectors; x++)
 	{
-		for (y = 0; y < ySectors + 1; y++)
+		for (int y = 0; y < ySectors + 1; y++)
 		{
 			if (y < ySectors && offset + size == sectors[x * ySectors + y].decalOffset && sectors[x * ySectors + y].draw)
 			{
@@ -1363,23 +1321,71 @@ void drawTerrain(void)
 		}
 	}
 
+	glDepthMask(GL_TRUE);
+	glDisableVertexAttribArray(program.locTexCoord);
+	glDisableVertexAttribArray(program.locVertex);
+	pie_DeactivateShader();
+}
+
+
+/**
+ * Update the lightmap and draw the terrain and decals.
+ * This function first draws the terrain in black, and then uses additive blending to put the terrain layers
+ * on it one by one. Finally the decals are drawn.
+ */
+void drawTerrain(const glm::mat4 &mvp)
+{
+	const glm::vec4 paramsXLight(1.0f / world_coord(mapWidth) *((float)mapWidth / lightmapWidth), 0, 0, 0);
+	const glm::vec4 paramsYLight(0, 0, -1.0f / world_coord(mapHeight) *((float)mapHeight / lightmapHeight), 0);
+
+	///////////////////////////////////
+	glErrors();	// clear error codes
+	// set up the lightmap texture
+	glActiveTexture(GL_TEXTURE1);
+	// bind the texture
+	glBindTexture(GL_TEXTURE_2D, lightmap_tex_num);
+	glEnable(GL_TEXTURE_2D);
+
+	// we limit the framerate of the lightmap, because updating a texture is an expensive operation
+	if (realTime - lightmapLastUpdate >= LIGHTMAP_REFRESH)
+	{
+		lightmapLastUpdate = realTime;
+		updateLightMap();
+
+		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, lightmapWidth, lightmapHeight, GL_RGB, GL_UNSIGNED_BYTE, lightmapPixmap);
+	}
+
+	///////////////////////////////////
+	// terrain culling
+	cullTerrain();
+
+	// shift the lightmap half a tile as lights are supposed to be placed at the center of a tile
+	//glTranslatef(1.0 / lightmapWidth / 2, 1.0 / lightmapHeight / 2, 0);
+
+	glActiveTexture(GL_TEXTURE0);
+
+	const glm::mat4 lightMatrix = glm::translate(1.f / lightmapWidth / 2, 1.f / lightmapHeight / 2, 0.f);
+
+	//////////////////////////////////////
+	// canvas to draw on
+	drawDepthOnly(mvp, paramsXLight, paramsYLight);
+
+	///////////////////////////////////
+	// terrain
+	drawTerrainLayers(mvp, paramsXLight, paramsYLight, lightMatrix);
+
+	//////////////////////////////////
+	// decals
+	drawDecals(mvp, paramsXLight, paramsYLight, lightMatrix);
+
 	////////////////////////////////
 	// disable the lightmap texture
 	glActiveTexture(GL_TEXTURE1);
 	glDisable(GL_TEXTURE_2D);
-	glDisable(GL_TEXTURE_GEN_S);
-	glDisable(GL_TEXTURE_GEN_T);
-	glMatrixMode(GL_TEXTURE);
-	glLoadIdentity();
 	glActiveTexture(GL_TEXTURE0);
-	glLoadIdentity();
-	glMatrixMode(GL_MODELVIEW);
 
 	// leave everything in a sane state so it won't mess up somewhere else
-	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-	glDisableClientState(GL_VERTEX_ARRAY);
-
-	glDepthMask(GL_TRUE);
 
 	//glBindBuffer(GL_ARRAY_BUFFER, 0);  // HACK Must unbind GL_ARRAY_BUFFER (don't know if it has to be unbound everywhere), otherwise text rendering may mysteriously crash.
 }
@@ -1387,42 +1393,24 @@ void drawTerrain(void)
 /**
  * Draw the water.
  */
-void drawWater(void)
+void drawWater(const glm::mat4 &viewMatrix)
 {
 	int x, y;
-	const GLfloat paramsX[4] = {0, 0, -1.0f / world_coord(4), 0};
-	const GLfloat paramsY[4] = {1.0f / world_coord(4), 0, 0, 0};
-	const GLfloat paramsX2[4] = {0, 0, -1.0f / world_coord(5), 0};
-	const GLfloat paramsY2[4] = {1.0f / world_coord(5), 0, 0, 0};
-	const GLfloat white[4] = {1.0f, 1.0f, 1.0f, 1.0f};
-	const GLfloat fogColour[4] = {pie_GetFogColour().byte.r / 255.f,
-	                              pie_GetFogColour().byte.g / 255.f,
-	                              pie_GetFogColour().byte.b / 255.f,
-	                              pie_GetFogColour().byte.a / 255.f
-	                             };
+	const glm::vec4 paramsX(0, 0, -1.0f / world_coord(4), 0);
+	const glm::vec4 paramsY(1.0f / world_coord(4), 0, 0, 0);
+	const glm::vec4 paramsX2(0, 0, -1.0f / world_coord(5), 0);
+	const glm::vec4 paramsY2(1.0f / world_coord(5), 0, 0, 0);
+	const auto &renderState = getCurrentRenderState();
 
-	glEnable(GL_TEXTURE_GEN_S); glErrors();
-	glEnable(GL_TEXTURE_GEN_T); glErrors();
+	const auto &program = pie_ActivateShader(SHADER_WATER, viewMatrix, paramsX, paramsY, paramsX2, paramsY2, 0, 1,
+		glm::translate(waterOffset, 0.f, 0.f), renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd);
 
-	glColor4ub(0xFF, 0xFF, 0xFF, 0xFF);
 	glDepthMask(GL_FALSE);
-
-	if (pie_GetFogStatus())
-	{
-		glFogfv(GL_FOG_COLOR, white);
-	}
 
 	// first texture unit
 	pie_SetTexturePage(iV_GetTexture("page-80-water-1.png")); glErrors();
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);
-	glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);
-	glTexGenfv(GL_S, GL_OBJECT_PLANE, paramsX);
-	glTexGenfv(GL_T, GL_OBJECT_PLANE, paramsY);
-	glMatrixMode(GL_TEXTURE);
-	glLoadIdentity();
-	glTranslatef(waterOffset, 0, 0);
 
 	// multiplicative blending
 	pie_SetRendMode(REND_MULTIPLICATIVE);
@@ -1432,23 +1420,15 @@ void drawWater(void)
 	glBindTexture(GL_TEXTURE_2D, pie_Texture(iV_GetTexture("page-81-water-2.png")));
 	glErrors();
 	glEnable(GL_TEXTURE_2D);
-	glEnable(GL_TEXTURE_GEN_S); glErrors();
-	glEnable(GL_TEXTURE_GEN_T); glErrors();
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);
-	glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);
-	glTexGenfv(GL_S, GL_OBJECT_PLANE, paramsX2);
-	glTexGenfv(GL_T, GL_OBJECT_PLANE, paramsY2);
-	glLoadIdentity();
-	glTranslatef(-waterOffset, 0, 0);
 
 	// bind the vertex buffer
-	glEnableClientState(GL_VERTEX_ARRAY);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, waterIndexVBO); glErrors();
 	glBindBuffer(GL_ARRAY_BUFFER, waterVBO); glErrors();
-
-	glVertexPointer(3, GL_FLOAT, sizeof(RenderVertex), BUFFER_OFFSET(0)); glErrors();
+	glEnableVertexAttribArray(program.locVertex);
+	glVertexAttribPointer(program.locVertex, 3, GL_FLOAT, GL_FALSE, sizeof(RenderVertex), BUFFER_OFFSET(0));
+	glErrors();
 
 	for (x = 0; x < xSectors; x++)
 	{
@@ -1469,7 +1449,7 @@ void drawWater(void)
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableVertexAttribArray(program.locVertex);
 
 	// move the water
 	if (!gamePaused())
@@ -1478,25 +1458,12 @@ void drawWater(void)
 	}
 
 	// disable second texture
-	glLoadIdentity();
 	glDisable(GL_TEXTURE_2D);
-	glDisable(GL_TEXTURE_GEN_S);
-	glDisable(GL_TEXTURE_GEN_T);
 	glActiveTexture(GL_TEXTURE0);
-
-	if (pie_GetFogStatus())
-	{
-		glFogfv(GL_FOG_COLOR, fogColour);  // resync fog state
-	}
 
 	// clean up
 	glDepthMask(GL_TRUE);
-	glLoadIdentity();
-	glDisable(GL_TEXTURE_GEN_S);
-	glDisable(GL_TEXTURE_GEN_T);
-	glMatrixMode(GL_MODELVIEW);
-	glDisable(GL_TEXTURE_GEN_S);
-	glDisable(GL_TEXTURE_GEN_T);
+	pie_DeactivateShader();
 
 	//glBindBuffer(GL_ARRAY_BUFFER, 0);  // HACK Must unbind GL_ARRAY_BUFFER (don't know if it has to be unbound everywhere), otherwise text rendering may mysteriously crash.
 }

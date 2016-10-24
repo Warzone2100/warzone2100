@@ -62,10 +62,12 @@ void pie_MatRotZ(uint16_t roll);
 static inline void pie_MatRot(Rotation rot) { pie_MatRotX(rot.pitch); pie_MatRotY(rot.direction); pie_MatRotZ(rot.roll); }
 int32_t pie_RotateProject(const Vector3i *src, Vector2i *dest);
 void pie_GetMatrix(float *matrix);
+glm::mat4 pie_MatGet();
 
 //*************************************************************************
 
 extern void pie_PerspectiveBegin(void);
+glm::mat4 pie_PerspectiveGet();
 extern void pie_PerspectiveEnd(void);
 
 //*************************************************************************

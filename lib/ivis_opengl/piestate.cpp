@@ -197,6 +197,7 @@ static void getLocs(pie_internal::SHADER_PROGRAM *program)
 	program->locVertex = glGetAttribLocation(program->program, "vertex");
 	program->locNormal = glGetAttribLocation(program->program, "vertexNormal");
 	program->locTexCoord = glGetAttribLocation(program->program, "vertexTexCoord");
+	program->locColor = glGetAttribLocation(program->program, "vertexColor");
 
 	// Uniforms, these never change.
 	GLint locTex0 = glGetUniformLocation(program->program, "Texture");
@@ -361,6 +362,29 @@ bool pie_LoadShaders()
 		{ "colour", "teamcolour", "stretch", "tcmask", "fogEnabled", "normalmap", "specularmap", "ecmEffect", "alphaTest", "graphicsCycle" });
 	ASSERT_OR_RETURN(false, result, "Failed to load no-lighting shader");
 
+	debug(LOG_3D, "Loading shader: TERRAIN");
+	result = pie_LoadShader("terrain program", "shaders/terrain_water.vert", "shaders/terrain.frag",
+		{ "ModelViewProjectionMatrix", "paramx1", "paramy1", "paramx2", "paramy2", "tex", "lightmap_tex", "textureMatrix2",
+		"fogEnabled", "fogEnd", "fogStart", "fogColor" });
+	ASSERT_OR_RETURN(false, result, "Failed to load terrain shader");
+
+	debug(LOG_3D, "Loading shader: TERRAIN_DEPTH");
+	result = pie_LoadShader("terrain_depth program", "shaders/terrain_water.vert", "shaders/terraindepth.frag",
+	{ "ModelViewProjectionMatrix", "paramx2", "paramy2", "lightmap_tex" });
+	ASSERT_OR_RETURN(false, result, "Failed to load terrain_depth shader");
+
+	debug(LOG_3D, "Loading shader: DECALS");
+	result = pie_LoadShader("decals program", "shaders/decals.vert", "shaders/decals.frag",
+		{ "ModelViewProjectionMatrix", "paramxlight", "paramylight", "tex", "lightmap_tex", "lightTextureMatrix",
+		"fogEnabled", "fogEnd", "fogStart", "fogColor" });
+	ASSERT_OR_RETURN(false, result, "Failed to load decals shader");
+
+	debug(LOG_3D, "Loading shader: WATER");
+	result = pie_LoadShader("water program", "shaders/terrain_water.vert", "shaders/water.frag",
+		{ "ModelViewProjectionMatrix", "paramx1", "paramy1", "paramx2", "paramy2", "tex1", "tex2", "textureMatrix1",
+		"fogEnabled", "fogEnd", "fogStart" });
+	ASSERT_OR_RETURN(false, result, "Failed to load water shader");
+
 	pie_internal::currentShaderMode = SHADER_NONE;
 	return true;
 }
@@ -499,8 +523,8 @@ void pie_SetDepthOffset(float offset)
 /// Set the OpenGL fog start and end
 void pie_UpdateFogDistance(float begin, float end)
 {
-	glFogf(GL_FOG_START, begin);
-	glFogf(GL_FOG_END, end);
+	rendStates.fogBegin = begin;
+	rendStates.fogEnd = end;
 }
 
 //
@@ -510,42 +534,14 @@ void pie_UpdateFogDistance(float begin, float end)
 //
 void pie_SetFogStatus(bool val)
 {
-	float fog_colour[4];
-
 	if (rendStates.fogEnabled)
 	{
 		//fog enabled so toggle if required
-		if (rendStates.fog != val)
-		{
-			rendStates.fog = val;
-			if (rendStates.fog)
-			{
-				PIELIGHT fog = pie_GetFogColour();
-
-				fog_colour[0] = fog.byte.r / 255.0f;
-				fog_colour[1] = fog.byte.g / 255.0f;
-				fog_colour[2] = fog.byte.b / 255.0f;
-				fog_colour[3] = fog.byte.a / 255.0f;
-
-				glFogi(GL_FOG_MODE, GL_LINEAR);
-				glFogfv(GL_FOG_COLOR, fog_colour);
-				glFogf(GL_FOG_DENSITY, 0.35f);
-				glHint(GL_FOG_HINT, GL_DONT_CARE);
-				glEnable(GL_FOG);
-			}
-			else
-			{
-				glDisable(GL_FOG);
-			}
-		}
+		rendStates.fog = val;
 	}
 	else
 	{
-		//fog disabled so turn it off if not off already
-		if (rendStates.fog != false)
-		{
-			rendStates.fog = false;
-		}
+		rendStates.fog = false;
 	}
 }
 
@@ -620,6 +616,11 @@ void pie_SetRendMode(REND_MODE rendMode)
 		}
 	}
 	return;
+}
+
+RENDER_STATE getCurrentRenderState()
+{
+	return rendStates;
 }
 
 bool _glerrors(const char *function, const char *file, int line)
