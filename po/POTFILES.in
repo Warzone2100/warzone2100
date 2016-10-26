@@ -224,7 +224,6 @@ src/astar.cpp
 src/atmos.cpp
 src/aud.cpp
 src/baseobject.cpp
-src/bridge.cpp
 src/bucket3d.cpp
 src/challenge.cpp
 src/cheat.cpp
@@ -240,7 +239,6 @@ src/design.cpp
 src/difficulty.cpp
 src/display3d.cpp
 src/display.cpp
-src/drive.cpp
 src/droid.cpp
 src/edit3d.cpp
 src/effects.cpp
