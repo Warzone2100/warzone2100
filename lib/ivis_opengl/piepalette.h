@@ -132,40 +132,19 @@ extern void		pal_Init(void);
 extern void		pal_ShutDown(void);
 extern PIELIGHT		pal_GetTeamColour(int team);
 
-static inline PIELIGHT pal_Colour(UBYTE r, UBYTE g, UBYTE b)
+static inline PIELIGHT WZ_DECL_PURE pal_Colour(UBYTE r, UBYTE g, UBYTE b)
 {
-	PIELIGHT c;
-
-	c.byte.r = r;
-	c.byte.g = g;
-	c.byte.b = b;
-	c.byte.a = UBYTE_MAX;
-
-	return c;
+	return { r, g, b, UBYTE_MAX };
 }
 
-static inline PIELIGHT pal_SetBrightness(UBYTE brightness)
+static inline PIELIGHT WZ_DECL_PURE pal_SetBrightness(UBYTE brightness)
 {
-	PIELIGHT c;
-
-	c.byte.r = brightness;
-	c.byte.g = brightness;
-	c.byte.b = brightness;
-	c.byte.a = UBYTE_MAX;
-
-	return c;
+	return { brightness, brightness, brightness, UBYTE_MAX };
 }
 
-static inline PIELIGHT pal_RGBA(UBYTE r, UBYTE g, UBYTE b, UBYTE a)
+static inline PIELIGHT WZ_DECL_PURE pal_RGBA(UBYTE r, UBYTE g, UBYTE b, UBYTE a)
 {
-	PIELIGHT c;
-
-	c.byte.r = r;
-	c.byte.g = g;
-	c.byte.b = b;
-	c.byte.a = a;
-
-	return c;
+	return { r, g, b, a };
 }
 
 static inline glm::vec4 pal_PIELIGHTtoVec4(PIELIGHT rgba)

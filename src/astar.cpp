@@ -254,13 +254,13 @@ static inline PathNode fpathTakeNode(std::vector<PathNode> &nodes)
 
 /** Estimate the distance to the target point
  */
-static inline unsigned fpathEstimate(PathCoord s, PathCoord f)
+static inline unsigned WZ_DECL_PURE fpathEstimate(PathCoord s, PathCoord f)
 {
 	// Cost of moving horizontal/vertical = 70*2, cost of moving diagonal = 99*2, 99/70 = 1.41428571... ≈ √2 = 1.41421356...
 	unsigned xDelta = abs(s.x - f.x), yDelta = abs(s.y - f.y);
 	return std::min(xDelta, yDelta) * (198 - 140) + std::max(xDelta, yDelta) * 140;
 }
-static inline unsigned fpathGoodEstimate(PathCoord s, PathCoord f)
+static inline unsigned WZ_DECL_PURE fpathGoodEstimate(PathCoord s, PathCoord f)
 {
 	// Cost of moving horizontal/vertical = 70*2, cost of moving diagonal = 99*2, 99/70 = 1.41428571... ≈ √2 = 1.41421356...
 	return iHypot((s.x - f.x) * 140, (s.y - f.y) * 140);
