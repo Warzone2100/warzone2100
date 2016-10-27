@@ -11,13 +11,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="anim.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="gtime.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="hashtable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="audp_parser.cpp">
@@ -28,13 +22,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="anim.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="gtime.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="hashtable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="parser.h">
