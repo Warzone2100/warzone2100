@@ -141,3 +141,6 @@ where zero is infinitely many, and finally the number of animation frames that f
 
 Each animation line starts with the serially increasing frame number, followed by
 three (x, y, z) vectors, one for position, one for rotation, and one for scaling.
+
+If the scaling values are negative, they indicate that the animation is a legacy
+keyframe animation sequence. Do not use this in future content.

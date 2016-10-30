@@ -339,7 +339,8 @@ void drawShape(BASE_OBJECT *psObj, iIMDShape *strImd, int colour, PIELIGHT build
 	{
 		const int elapsed = graphicsTime - psObj->timeAnimationStarted;
 		const int frame = (elapsed / strImd->objanimtime) % strImd->objanimframes;
-		const ANIMFRAME &state = strImd->objanimdata[frame];
+		ASSERT(frame < strImd->objanimframes, "Bad index %d >= %d", frame, strImd->objanimframes);
+		const ANIMFRAME &state = strImd->objanimdata.at(frame);
 		if (state.scale.x == -1.0f) // disabled frame, for implementing key frame animation
 		{
 			return;

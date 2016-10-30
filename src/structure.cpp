@@ -3608,7 +3608,7 @@ void structureUpdate(STRUCTURE *psBuilding, bool mission)
 		else if (psBuilding->pFunctionality->resourceExtractor.psPowerGen
 		         && psBuilding->animationEvent == ANIM_EVENT_NONE) // we have a power generator, but no animation
 		{
-			psBuilding->timeAnimationStarted = gameTime; // so start animation
+			psBuilding->timeAnimationStarted = graphicsTime; // so start animation
 			psBuilding->animationEvent = ANIM_EVENT_ACTIVE;
 		}
 	}

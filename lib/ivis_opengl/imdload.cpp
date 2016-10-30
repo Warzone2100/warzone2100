@@ -666,7 +666,7 @@ static inline int addVertex(iIMDShape *s, int i, const iIMDPoly *p, int frameidx
  * \pre ppFileData loaded
  * \post s allocated
  */
-static iIMDShape *_imd_load_level(const QString &filename, const char **ppFileData, const char *FileDataEnd, int nlevels, int pieVersion)
+static iIMDShape *_imd_load_level(const QString &filename, const char **ppFileData, const char *FileDataEnd, int nlevels, int pieVersion, int level)
 {
 	const char *pFileData = *ppFileData;
 	char buffer[PATH_MAX] = {'\0'};
@@ -746,7 +746,7 @@ static iIMDShape *_imd_load_level(const QString &filename, const char **ppFileDa
 		if (strcmp(buffer, "LEVEL") == 0)	// check for next level
 		{
 			debug(LOG_3D, "imd[_load_level] = npoints %d, npolys %d", s->npoints, s->npolys);
-			s->next = _imd_load_level(filename, &pFileData, FileDataEnd, nlevels - 1, pieVersion);
+			s->next = _imd_load_level(filename, &pFileData, FileDataEnd, nlevels - 1, pieVersion, level + 1);
 		}
 		else if (strcmp(buffer, "CONNECTORS") == 0)
 		{
@@ -767,23 +767,21 @@ static iIMDShape *_imd_load_level(const QString &filename, const char **ppFileDa
 			for (int i = 0; i < s->objanimframes; i++)
 			{
 				int frame;
-				Vector3i pos, rot, scale;
+				Vector3i pos, rot;
 
-				if (sscanf(pFileData, "%d %d %d %d %d %d %d %d %d %d%n",
-				           &frame, &pos.x, &pos.y, &pos.z, &rot.x, &rot.y, &rot.z, &scale.x, &scale.y, &scale.z, &cnt) != 10)
+				if (sscanf(pFileData, "%d %d %d %d %d %d %d %f %f %f%n",
+				           &frame, &pos.x, &pos.y, &pos.z, &rot.x, &rot.y, &rot.z,
+				           &s->objanimdata[i].scale.x, &s->objanimdata[i].scale.y, &s->objanimdata[i].scale.z, &cnt) != 10)
 				{
-					debug(LOG_ERROR, "%s: Invalid object animation line frame %d", filename.toUtf8().constData(), frame);
+					debug(LOG_ERROR, "%s: Invalid object animation level %d, line %d, frame %d", filename.toUtf8().constData(), level, i, frame);
 				}
-				ASSERT(frame == i, "%s: Invalid frame enumeration object animation %d: %d", filename.toUtf8().constData(), i, frame);
+				ASSERT(frame == i, "%s: Invalid frame enumeration object animation (level %d) %d: %d", filename.toUtf8().constData(), level, i, frame);
 				s->objanimdata[i].pos.x = pos.x / INT_SCALE;
 				s->objanimdata[i].pos.y = pos.z / INT_SCALE;
 				s->objanimdata[i].pos.z = pos.y / INT_SCALE;
 				s->objanimdata[i].rot.pitch = -(rot.x * DEG_1 / INT_SCALE);
 				s->objanimdata[i].rot.direction = -(rot.z * DEG_1 / INT_SCALE);
 				s->objanimdata[i].rot.roll = -(rot.y * DEG_1 / INT_SCALE);
-				s->objanimdata[i].scale.x = scale.x / 1000.0f;
-				s->objanimdata[i].scale.y = scale.z / 1000.0f;
-				s->objanimdata[i].scale.z = scale.y / 1000.0f;
 				pFileData += cnt;
 			}
 		}
@@ -1062,7 +1060,7 @@ static iIMDShape *iV_ProcessIMD(const QString &filename, const char **ppFileData
 		return NULL;
 	}
 
-	shape = _imd_load_level(filename, &pFileData, FileDataEnd, nlevels, imd_version);
+	shape = _imd_load_level(filename, &pFileData, FileDataEnd, nlevels, imd_version, level);
 	if (shape == NULL)
 	{
 		debug(LOG_ERROR, "%s: Unsuccessful", filename.toUtf8().constData());
