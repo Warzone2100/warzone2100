@@ -4,7 +4,7 @@
 cd "`dirname "$0"`/.."
 
 find data -name '*.json' -type f '-!' -path 'data/mp/multiplay/maps/*' -exec \
-	python po/parseJson.py '{}' ';' |
+	python3 po/parseJson.py '{}' ';' |
 	sort | uniq > po/custom/fromJson.txt
 
 # Add the comment to the top of the file
