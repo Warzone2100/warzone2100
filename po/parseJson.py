@@ -11,11 +11,9 @@ def parse(obj):
 			if k == 'name' and isinstance(v, str):
 				printString(v, '', '\n')
 			elif k == 'text' and isinstance(v, list):
-				sys.stdout.write('ZZ')
 				for s in v:
 					if isinstance(s, str):
-						printString(s, ' ', '')
-				print('')
+						printString(s, '', '\n')
 	elif isinstance(obj, list):
 		for v in obj:
 			parse(v)
