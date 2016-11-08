@@ -30,5 +30,10 @@ npmrl: { body: "Body4ABT", prop: "HalfTrack", weap: "Rocket-MRL" },
 npmmct: { body: "Body12SUP", prop: "tracked01", weap: "Cannon2A-TMk1" },
 npsbb: { body: "Body8MBT", prop: "HalfTrack", weap: "Rocket-BB" },
 
+// CAM_1_5
+npcybc: { body: "CyborgCannonGrd", prop: "CyborgLegs", weap: "CyborgCannon" },
+npcybf: { body: "CyborgFlamerGrd", prop: "CyborgLegs", weap: "CyborgFlamer01" },
+npcybm: { body: "CyborgChain1Ground", prop: "CyborgLegs", weap: "CyborgChaingun" },
+
 ////////////////////////////////////////////////////////////////////////////////
 };
