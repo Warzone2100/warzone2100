@@ -1442,6 +1442,10 @@ function __camTacticsTickForGroup(group)
 			}
 			break;
 		case CAM_ORDER_PATROL:
+			if (!camDef(gi.data.interval))
+			{
+				gi.data.interval = 60000;
+			}
 			if (!camDef(gi.lastmove) || !camDef(gi.lastspot))
 			{
 				gi.lastspot = 0;
@@ -1453,7 +1457,7 @@ function __camTacticsTickForGroup(group)
 				// find random new position to visit
 				var list = [];
 				for (var i = 0; i < gi.data.pos.length; ++i)
-					if (i !== gi.lastpos)
+					if (i !== gi.lastspot)
 						list[list.length] = i;
 				gi.lastspot = list[camRand(list.length)];
 			}

@@ -35,5 +35,10 @@ npcybc: { body: "CyborgCannonGrd", prop: "CyborgLegs", weap: "CyborgCannon" },
 npcybf: { body: "CyborgFlamerGrd", prop: "CyborgLegs", weap: "CyborgFlamer01" },
 npcybm: { body: "CyborgChain1Ground", prop: "CyborgLegs", weap: "CyborgChaingun" },
 
+// CAM_1AC
+nphct: { body: "Body12SUP", prop: "tracked01", weap: "Cannon375mmMk1" },
+npmorb: { body: "Body8MBT", prop: "HalfTrack", weap: "Mortar2Mk1" },
+npmsens: { body: "Body8MBT", prop: "HalfTrack", weap: "SensorTurret1Mk1" },
+
 ////////////////////////////////////////////////////////////////////////////////
 };
