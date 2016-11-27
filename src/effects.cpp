@@ -630,9 +630,8 @@ static bool updateSatLaser(EFFECT *psEffect)
 	UDWORD	i;
 	UDWORD	startHeight, endHeight;
 	UDWORD	xPos, yPos;
-	LIGHT	light;
 
-	// Do these here cause there used by the lighting code below this if.
+	// Do these here because they are used by the lighting code below this if
 	xPos = psEffect->position.x;
 	startHeight = psEffect->position.y;
 	endHeight = startHeight + 1064;
@@ -695,11 +694,10 @@ static bool updateSatLaser(EFFECT *psEffect)
 
 	if (graphicsTime - psEffect->birthTime < 1000)
 	{
-		light.position.x = xPos;
-		light.position.y = startHeight;
-		light.position.z = yPos;
+		LIGHT light;
+		light.position = Vector3f(xPos, startHeight, yPos);
 		light.range = 800;
-		light.colour = LIGHT_BLUE;
+		light.colour = pal_Colour(0, 0, 255);
 		processLight(&light);
 		return true;
 	}
@@ -735,11 +733,9 @@ static bool updateExplosion(EFFECT *psEffect)
 		}
 
 		UDWORD range = percent;
-		light.position.x = psEffect->position.x;
-		light.position.y = psEffect->position.y;
-		light.position.z = psEffect->position.z;
+		light.position = psEffect->position;
 		light.range = (3 * range) / 2;
-		light.colour = LIGHT_RED;
+		light.colour = pal_Colour(255, 0, 0);
 		processLight(&light);
 	}
 
@@ -751,11 +747,9 @@ static bool updateExplosion(EFFECT *psEffect)
 		psEffect->size += graphicsTimeAdjustedIncrement(SHOCKWAVE_SPEED);
 		psEffect->frameNumber = scaling * effectGetNumFrames(psEffect);
 
-		light.position.x = psEffect->position.x;
-		light.position.y = psEffect->position.y;
-		light.position.z = psEffect->position.z;
+		light.position = psEffect->position;
 		light.range = psEffect->size + 200;
-		light.colour = LIGHT_YELLOW;
+		light.colour = pal_Colour(255, 255, 0);
 		processLight(&light);
 
 		if (psEffect->size > MAX_SHOCKWAVE_SIZE || light.range > 600)
@@ -877,11 +871,9 @@ static bool updateGraviton(EFFECT *psEffect)
 
 	if (psEffect->type != GRAVITON_TYPE_GIBLET)
 	{
-		light.position.x = psEffect->position.x;
-		light.position.y = psEffect->position.y;
-		light.position.z = psEffect->position.z;
+		light.position = psEffect->position;
 		light.range = 128;
-		light.colour = LIGHT_YELLOW;
+		light.colour = pal_Colour(255, 255, 0);
 		processLight(&light);
 	}
 
@@ -1021,9 +1013,7 @@ static bool updateDestruction(EFFECT *psEffect)
 	}
 	range = 50 - abs(50 - percent);
 
-	light.position.x = psEffect->position.x;
-	light.position.y = psEffect->position.y;
-	light.position.z = psEffect->position.z;
+	light.position = psEffect->position;
 	if (psEffect->type == DESTRUCTION_TYPE_STRUCTURE)
 	{
 		light.range = range * 10;
@@ -1035,11 +1025,11 @@ static bool updateDestruction(EFFECT *psEffect)
 	if (psEffect->type == DESTRUCTION_TYPE_POWER_STATION)
 	{
 		light.range *= 3;
-		light.colour = LIGHT_WHITE;
+		light.colour = pal_Colour(255, 255, 255);
 	}
 	else
 	{
-		light.colour = LIGHT_RED;
+		light.colour = pal_Colour(255, 0, 0);
 	}
 	processLight(&light);
 
@@ -1237,11 +1227,9 @@ static bool updateFire(EFFECT *psEffect)
 		percent = 100;
 	}
 
-	light.position.x = psEffect->position.x;
-	light.position.y = psEffect->position.y;
-	light.position.z = psEffect->position.z;
+	light.position = psEffect->position;
 	light.range = (percent * psEffect->radius * 3) / 100;
-	light.colour = LIGHT_RED;
+	light.colour = pal_Colour(255, 0, 0);
 	processLight(&light);
 
 	/* Time to update the frame number on the construction sprite */

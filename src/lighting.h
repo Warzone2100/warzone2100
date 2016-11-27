@@ -27,34 +27,23 @@
 #define FOG_BACKGROUND	1
 #define FOG_DISTANCE	2
 
-
 extern UDWORD fogStatus;
-
-enum LIGHT_COLOUR
-{
-	LIGHT_RED,
-	LIGHT_GREEN,
-	LIGHT_BLUE,
-	LIGHT_YELLOW,
-	LIGHT_WHITE
-};
 
 struct LIGHT
 {
-	Vector3i	position;
-	UBYTE	type;
-	UDWORD	range;
-	LIGHT_COLOUR	colour;
+	Vector3i position;
+	UDWORD range;
+	PIELIGHT colour;
 };
 
-extern void setTheSun(Vector3f newSun);
-extern Vector3f getTheSun(void);
+void setTheSun(Vector3f newSun);
+Vector3f getTheSun();
 
-extern void	processLight(LIGHT *psLight);
-extern void initLighting(UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2);
-extern void	lightValueForTile(UDWORD tileX, UDWORD tileY);
-extern void	doBuildingLights(void);
-extern void UpdateFogDistance(float distance);
-extern void	calcDroidIllumination(DROID *psDroid);
+void processLight(LIGHT *psLight);
+void initLighting(UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2);
+void lightValueForTile(UDWORD tileX, UDWORD tileY);
+void doBuildingLights();
+void UpdateFogDistance(float distance);
+void calcDroidIllumination(DROID *psDroid);
 
 #endif // __INCLUDED_SRC_LIGHTNING_H__

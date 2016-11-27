@@ -29,6 +29,7 @@
 
 #include "lib/ivis_opengl/piestate.h"
 #include "lib/ivis_opengl/piematrix.h"
+#include "lib/ivis_opengl/piepalette.h"
 #include "lib/framework/fixedpoint.h"
 
 #include "lib/gamelib/gtime.h"
@@ -56,7 +57,6 @@ static Vector3f theSun;
 UDWORD fogStatus = 0;
 
 /*	Module function Prototypes */
-static void colourTile(SDWORD xIndex, SDWORD yIndex, LIGHT_COLOUR colour, UBYTE percent);
 static UDWORD calcDistToTile(UDWORD tileX, UDWORD tileY, Vector3i *pos);
 static void calcTileIllum(UDWORD tileX, UDWORD tileY);
 
@@ -65,7 +65,7 @@ void setTheSun(Vector3f newSun)
 	theSun = normalise(newSun) * float(FP12_MULTIPLIER);
 }
 
-Vector3f getTheSun(void)
+Vector3f getTheSun()
 {
 	return theSun;
 }
@@ -80,8 +80,6 @@ Vector3f getTheSun(void)
 //we can re-do over the area that hasn't been seen
 void initLighting(UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2)
 {
-	UDWORD       i, j;
-
 	// quick check not trying to go off the map - don't need to check for < 0 since UWORD's!!
 	if (x1 > mapWidth || x2 > mapWidth || y1 > mapHeight || y2 > mapHeight)
 	{
@@ -89,9 +87,9 @@ void initLighting(UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2)
 		return;
 	}
 
-	for (i = x1; i < x2; i++)
+	for (unsigned i = x1; i < x2; i++)
 	{
-		for (j = y1; j < y2; j++)
+		for (unsigned j = y1; j < y2; j++)
 		{
 			MAPTILE	*psTile = mapTile(i, j);
 
@@ -231,33 +229,32 @@ static void calcTileIllum(UDWORD tileX, UDWORD tileY)
 	mapTile(tileX, tileY)->illumination = val;
 }
 
-
-void	processLight(LIGHT *psLight)
+static void colourTile(SDWORD xIndex, SDWORD yIndex, PIELIGHT light_colour, double fraction)
 {
-	SDWORD	tileX, tileY;
-	SDWORD	startX, endX;
-	SDWORD	startY, endY;
-	SDWORD	rangeSkip;
-	SDWORD	i, j;
-	SDWORD	distToCorner;
-	UDWORD	percent;
+	PIELIGHT colour = getTileColour(xIndex, yIndex);
+	colour.byte.r = MIN(255, colour.byte.r + light_colour.byte.r * fraction);
+	colour.byte.g = MIN(255, colour.byte.g + light_colour.byte.g * fraction);
+	colour.byte.b = MIN(255, colour.byte.b + light_colour.byte.b * fraction);
+	setTileColour(xIndex, yIndex, colour);
+}
 
+void processLight(LIGHT *psLight)
+{
 	/* Firstly - there's no point processing lights that are off the grid */
 	if (clipXY(psLight->position.x, psLight->position.z) == false)
 	{
 		return;
 	}
 
-	tileX = psLight->position.x / TILE_UNITS;
-	tileY = psLight->position.z / TILE_UNITS;
-
-	rangeSkip = sqrtf(psLight->range * psLight->range * 2) / TILE_UNITS + 1;
+	const int tileX = psLight->position.x / TILE_UNITS;
+	const int tileY = psLight->position.z / TILE_UNITS;
+	const int rangeSkip = sqrtf(psLight->range * psLight->range * 2) / TILE_UNITS + 1;
 
 	/* Rough guess? */
-	startX = tileX - rangeSkip;
-	endX = tileX + rangeSkip;
-	startY = tileY - rangeSkip;
-	endY = tileY + rangeSkip;
+	int startX = tileX - rangeSkip;
+	int endX = tileX + rangeSkip;
+	int startY = tileY - rangeSkip;
+	int endY = tileY + rangeSkip;
 
 	/* Clip to grid limits */
 	startX = MAX(startX, 0);
@@ -269,18 +266,18 @@ void	processLight(LIGHT *psLight)
 	endY = MIN(endY, mapHeight - 1);
 	startY = MIN(startY, endY);
 
-	for (i = startX; i <= endX; i++)
+	for (int i = startX; i <= endX; i++)
 	{
-		for (j = startY; j <= endY; j++)
+		for (int j = startY; j <= endY; j++)
 		{
-			distToCorner = calcDistToTile(i, j, &psLight->position);
+			int distToCorner = calcDistToTile(i, j, &psLight->position);
 
 			/* If we're inside the range of the light */
 			if (distToCorner < (SDWORD)psLight->range)
 			{
 				/* Find how close we are to it */
-				percent = 100 - PERCENT(distToCorner, psLight->range);
-				colourTile(i, j, psLight->colour, 2 * percent);
+				double ratio = (100.0 - PERCENT(distToCorner, psLight->range)) / 100.0;
+				colourTile(i, j, psLight->colour, ratio);
 			}
 		}
 	}
@@ -299,43 +296,6 @@ static UDWORD calcDistToTile(UDWORD tileX, UDWORD tileY, Vector3i *pos)
 	return iHypot3(x1 - pos->x, y1 - pos->y, z1 - pos->z);
 }
 
-// FIXME: Is the percent variable misnamed here, or is the code wrong? Because we do
-// not use it as a percentage!
-static void colourTile(SDWORD xIndex, SDWORD yIndex, LIGHT_COLOUR colouridx, UBYTE percent)
-{
-	PIELIGHT colour = getTileColour(xIndex, yIndex);
-
-	switch (colouridx)
-	{
-	case LIGHT_RED:
-		/* And add that to the lighting value */
-		colour.byte.r = MIN(255, colour.byte.r + percent);
-		break;
-	case LIGHT_GREEN:
-		/* And add that to the lighting value */
-		colour.byte.g = MIN(255, colour.byte.g + percent);
-		break;
-	case LIGHT_BLUE:
-		/* And add that to the lighting value */
-		colour.byte.b = MIN(255, colour.byte.b + percent);
-		break;
-	case LIGHT_YELLOW:
-		/* And add that to the lighting value */
-		colour.byte.r = MIN(255, colour.byte.r + percent);
-		colour.byte.g = MIN(255, colour.byte.g + percent);
-		break;
-	case LIGHT_WHITE:
-		colour.byte.r = MIN(255, colour.byte.r + percent);
-		colour.byte.g = MIN(255, colour.byte.g + percent);
-		colour.byte.b = MIN(255, colour.byte.b + percent);
-		break;
-	default:
-		ASSERT(false, "Weirdy colour of light attempted");
-		break;
-	}
-	setTileColour(xIndex, yIndex, colour);
-}
-
 /// Sets the begin and end distance for the distance fog (mist)
 /// It should provide maximum visiblitiy and minimum
 /// "popping" tiles
@@ -348,7 +308,7 @@ void UpdateFogDistance(float distance)
 #define MIN_DROID_LIGHT_LEVEL	96
 #define	DROID_SEEK_LIGHT_SPEED	2
 
-void	calcDroidIllumination(DROID *psDroid)
+void calcDroidIllumination(DROID *psDroid)
 {
 	int lightVal, presVal, retVal;
 	float adjust;
@@ -393,7 +353,7 @@ void	calcDroidIllumination(DROID *psDroid)
 	psDroid->illumination = retVal;
 }
 
-void	doBuildingLights(void)
+void doBuildingLights()
 {
 	STRUCTURE	*psStructure;
 	UDWORD	i;
@@ -408,7 +368,7 @@ void	doBuildingLights(void)
 			light.position.z = psStructure->pos.y;
 			light.position.y = map_Height(light.position.x, light.position.z);
 			light.range = psStructure->pStructureType->baseWidth * TILE_UNITS;
-			light.colour = LIGHT_WHITE;
+			light.colour = pal_Colour(255, 255, 255);
 			processLight(&light);
 		}
 	}
@@ -416,7 +376,7 @@ void	doBuildingLights(void)
 
 #if 0
 /* Experimental moving shadows code */
-void	findSunVector(void)
+void findSunVector()
 {
 	Vector3f val(
 	    4096 - getModularScaledGraphicsTime(16384, 8192),
