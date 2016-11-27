@@ -484,6 +484,20 @@ function camAllArtifactsPickedUp()
 	return __camNumArtifacts === Object.keys(__camArtifacts).length;
 }
 
+//Returns the label of all existing artifacts
+function getArtifacts()
+{
+	var camArti = [];
+	for(var alabel in __camArtifacts)
+	{
+		if(camDef(__camArtifacts[alabel]))
+		{
+			camArti[camArti.length] = __camGetArtifactLabel(alabel);
+		}
+	}
+	return camArti;
+}
+
 //////////// privates
 
 var __camArtifacts;
