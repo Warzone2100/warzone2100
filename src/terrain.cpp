@@ -76,17 +76,13 @@ struct Sector
 	bool dirty;              ///< Do we need to update the geometry for this sector?
 };
 
-/// A vertex with just a position
-struct RenderVertex
-{
-	GLfloat x, y, z;        // Vertex
-};
+using RenderVertex = Vector3f;
 
 /// A vertex with a position and texture coordinates
 struct DecalVertex
 {
-	GLfloat x, y, z;
-	GLfloat u, v;          // uv
+	Vector3f pos;
+	Vector2f uv;
 };
 
 /// The lightmap texture
@@ -133,7 +129,7 @@ GLsizei dreCount;
 bool drawRangeElementsStarted = false;
 
 /// Pass all remaining triangles to OpenGL
-static void finishDrawRangeElements(void)
+static void finishDrawRangeElements()
 {
 	if (drawRangeElementsStarted && dreCount > 0)
 	{
@@ -221,7 +217,7 @@ void setTileColour(int x, int y, PIELIGHT colour)
 // of 2048.  This will cause ugly seams for the decals, if user picks a texture size bigger than the tile!
 #define MAX_TILE_TEXTURE_SIZE 128.0f
 /// Set up the texture coordinates for a tile
-static void getTileTexCoords(Vector2f *uv, unsigned int tileNumber)
+static Vector2f getTileTexCoords(Vector2f *uv, unsigned int tileNumber)
 {
 	/* unmask proper values from compressed data */
 	const unsigned short texture = TileNumber_texture(tileNumber);
@@ -231,53 +227,38 @@ static void getTileTexCoords(Vector2f *uv, unsigned int tileNumber)
 	const float xMult = 1.0f / TILES_IN_PAGE_COLUMN;
 	const float yMult = 1.0f / TILES_IN_PAGE_ROW;
 	float texsize = (float)getTextureSize();
-	float centertile, shiftamount, one;
-	Vector2f sP1, sP2, sP3, sP4, sPTemp;
 
 	// the decals are 128x128 (at this time), we should not go above this value.  See note above
 	if (texsize > MAX_TILE_TEXTURE_SIZE)
 	{
 		texsize = MAX_TILE_TEXTURE_SIZE;
 	}
-	centertile = 0.5f / texsize;			//compute center of tile
-	shiftamount = (texsize - 1.0) / texsize;	// 1 pixel border
-	one = 1.0f / (TILES_IN_PAGE_COLUMN * texsize);
-
+	const float centertile = 0.5f / texsize;	// compute center of tile
+	const float shiftamount = (texsize - 1.0) / texsize;	// 1 pixel border
 	// bump the texture coords, for 1 pixel border, so our range is [.5,(texsize - .5)]
-	one += centertile * shiftamount;
+	const float one = 1.0f / (TILES_IN_PAGE_COLUMN * texsize) + centertile * shiftamount;
+
 	/*
 	 * Points for flipping the texture around if the tile is flipped or rotated
 	 * Store the source rect as four points
 	 */
-	sP1.x = one;
-	sP1.y = one;
-	sP2.x = xMult - one;
-	sP2.y = one;
-	sP3.x = xMult - one;
-	sP3.y = yMult - one;
-	sP4.x = one;
-	sP4.y = yMult - one;
+	Vector2f sP1 { one, one };
+	Vector2f sP2 { xMult - one, one };
+	Vector2f sP3 { xMult - one, yMult - one };
+	Vector2f sP4 { one, yMult - one };
 
 	if (texture & TILE_XFLIP)
 	{
-		sPTemp = sP1;
-		sP1 = sP2;
-		sP2 = sPTemp;
-
-		sPTemp = sP3;
-		sP3 = sP4;
-		sP4 = sPTemp;
+		std::swap(sP1, sP2);
+		std::swap(sP3, sP4);
 	}
 	if (texture & TILE_YFLIP)
 	{
-		sPTemp = sP1;
-		sP1 = sP4;
-		sP4 = sPTemp;
-		sPTemp = sP2;
-		sP2 = sP3;
-		sP3 = sPTemp;
+		std::swap(sP1, sP4);
+		std::swap(sP2, sP3);
 	}
 
+	Vector2f sPTemp;
 	switch ((texture & TILE_ROTMASK) >> TILE_ROTSHIFT)
 	{
 	case 1:
@@ -303,17 +284,15 @@ static void getTileTexCoords(Vector2f *uv, unsigned int tileNumber)
 		sP4 = sPTemp;
 		break;
 	}
-	uv[0 + 0].x = tileTexInfo[tile].uOffset + sP1.x;
-	uv[0 + 0].y = tileTexInfo[tile].vOffset + sP1.y;
+	const Vector2f offset { tileTexInfo[tile].uOffset, tileTexInfo[tile].vOffset };
 
-	uv[0 + 2].x = tileTexInfo[tile].uOffset + sP2.x;
-	uv[0 + 2].y = tileTexInfo[tile].vOffset + sP2.y;
+	uv[0 + 0] = offset + sP1;
+	uv[0 + 2] = offset + sP2;
+	uv[1 + 2] = offset + sP3;
+	uv[1 + 0] = offset + sP4;
 
-	uv[1 + 2].x = tileTexInfo[tile].uOffset + sP3.x;
-	uv[1 + 2].y = tileTexInfo[tile].vOffset + sP3.y;
-
-	uv[1 + 0].x = tileTexInfo[tile].uOffset + sP4.x;
-	uv[1 + 0].y = tileTexInfo[tile].vOffset + sP4.y;
+	/// Calculate the average texture coordinates of 4 points
+	return Vector2f { (uv[0].x + uv[1].x + uv[2].x + uv[3].x) / 4, (uv[0].y + uv[1].y + uv[2].y + uv[3].y) / 4 };
 }
 
 /// Average the four positions to get the center
@@ -363,13 +342,6 @@ static void getGridPos(Vector3i *result, int x, int y, bool center, bool water)
 			result->y = map_WaterHeight(x, y);
 		}
 	}
-}
-
-/// Calculate the average texture coordinates of 4 points
-static inline void averageUV(Vector2f *center, Vector2f *uv)
-{
-	center->x = (uv[0].x + uv[1].x + uv[2].x + uv[3].x) / 4;
-	center->y = (uv[0].y + uv[1].y + uv[2].y + uv[3].y) / 4;
 }
 
 /// Get the texture coordinates for the map position
@@ -433,9 +405,7 @@ static void setSectorGeometry(int x, int y,
 /**
  * Set the decals for a sector. This takes care of both the geometry and the texture part.
  */
-static void setSectorDecals(int x, int y,
-                            DecalVertex *decaldata,
-                            int *decalSize)
+static void setSectorDecals(int x, int y, DecalVertex *decaldata, int *decalSize)
 {
 	Vector3i pos;
 	Vector2f uv[2][2], center;
@@ -452,103 +422,66 @@ static void setSectorDecals(int x, int y,
 			}
 			if (TILE_HAS_DECAL(mapTile(i, j)))
 			{
-				getTileTexCoords(*uv, mapTile(i, j)->texture);
-				averageUV(&center, *uv);
+				Vector2f center = getTileTexCoords(*uv, mapTile(i, j)->texture);
 
 				getGridPos(&pos, i, j, true, false);
-				decaldata[*decalSize].x = pos.x;
-				decaldata[*decalSize].y = pos.y;
-				decaldata[*decalSize].z = pos.z;
-				decaldata[*decalSize].u = center.x;
-				decaldata[*decalSize].v = center.y;
+				decaldata[*decalSize].pos = pos;
+				decaldata[*decalSize].uv = center;
 				(*decalSize)++;
 				a = 0; b = 1;
 				getGridPos(&pos, i + a, j + b, false, false);
-				decaldata[*decalSize].x = pos.x;
-				decaldata[*decalSize].y = pos.y;
-				decaldata[*decalSize].z = pos.z;
-				decaldata[*decalSize].u = uv[a][b].x;
-				decaldata[*decalSize].v = uv[a][b].y;
+				decaldata[*decalSize].pos = pos;
+				decaldata[*decalSize].uv = uv[a][b];
 				(*decalSize)++;
 				a = 0; b = 0;
 				getGridPos(&pos, i + a, j + b, false, false);
-				decaldata[*decalSize].x = pos.x;
-				decaldata[*decalSize].y = pos.y;
-				decaldata[*decalSize].z = pos.z;
-				decaldata[*decalSize].u = uv[a][b].x;
-				decaldata[*decalSize].v = uv[a][b].y;
+				decaldata[*decalSize].pos = pos;
+				decaldata[*decalSize].uv = uv[a][b];
 				(*decalSize)++;
 
 				getGridPos(&pos, i, j, true, false);
-				decaldata[*decalSize].x = pos.x;
-				decaldata[*decalSize].y = pos.y;
-				decaldata[*decalSize].z = pos.z;
-				decaldata[*decalSize].u = center.x;
-				decaldata[*decalSize].v = center.y;
+				decaldata[*decalSize].pos = pos;
+				decaldata[*decalSize].uv = center;
 				(*decalSize)++;
 				a = 1; b = 1;
 				getGridPos(&pos, i + a, j + b, false, false);
-				decaldata[*decalSize].x = pos.x;
-				decaldata[*decalSize].y = pos.y;
-				decaldata[*decalSize].z = pos.z;
-				decaldata[*decalSize].u = uv[a][b].x;
-				decaldata[*decalSize].v = uv[a][b].y;
+				decaldata[*decalSize].pos = pos;
+				decaldata[*decalSize].uv = uv[a][b];
 				(*decalSize)++;
 				a = 0; b = 1;
 				getGridPos(&pos, i + a, j + b, false, false);
-				decaldata[*decalSize].x = pos.x;
-				decaldata[*decalSize].y = pos.y;
-				decaldata[*decalSize].z = pos.z;
-				decaldata[*decalSize].u = uv[a][b].x;
-				decaldata[*decalSize].v = uv[a][b].y;
+				decaldata[*decalSize].pos = pos;
+				decaldata[*decalSize].uv = uv[a][b];
 				(*decalSize)++;
 
 				getGridPos(&pos, i, j, true, false);
-				decaldata[*decalSize].x = pos.x;
-				decaldata[*decalSize].y = pos.y;
-				decaldata[*decalSize].z = pos.z;
-				decaldata[*decalSize].u = center.x;
-				decaldata[*decalSize].v = center.y;
+				decaldata[*decalSize].pos = pos;
+				decaldata[*decalSize].uv = center;
 				(*decalSize)++;
 				a = 1; b = 0;
 				getGridPos(&pos, i + a, j + b, false, false);
-				decaldata[*decalSize].x = pos.x;
-				decaldata[*decalSize].y = pos.y;
-				decaldata[*decalSize].z = pos.z;
-				decaldata[*decalSize].u = uv[a][b].x;
-				decaldata[*decalSize].v = uv[a][b].y;
+				decaldata[*decalSize].pos = pos;
+				decaldata[*decalSize].uv = uv[a][b];
 				(*decalSize)++;
 				a = 1; b = 1;
 				getGridPos(&pos, i + a, j + b, false, false);
-				decaldata[*decalSize].x = pos.x;
-				decaldata[*decalSize].y = pos.y;
-				decaldata[*decalSize].z = pos.z;
-				decaldata[*decalSize].u = uv[a][b].x;
-				decaldata[*decalSize].v = uv[a][b].y;
+				decaldata[*decalSize].pos = pos;
+				decaldata[*decalSize].uv = uv[a][b];
 				(*decalSize)++;
 
 				getGridPos(&pos, i, j, true, false);
-				decaldata[*decalSize].x = pos.x;
-				decaldata[*decalSize].y = pos.y;
-				decaldata[*decalSize].z = pos.z;
-				decaldata[*decalSize].u = center.x;
-				decaldata[*decalSize].v = center.y;
+				decaldata[*decalSize].pos = pos;
+				decaldata[*decalSize].uv = center;
 				(*decalSize)++;
 				a = 0; b = 0;
 				getGridPos(&pos, i + a, j + b, false, false);
-				decaldata[*decalSize].x = pos.x;
-				decaldata[*decalSize].y = pos.y;
-				decaldata[*decalSize].z = pos.z;
-				decaldata[*decalSize].u = uv[a][b].x;
-				decaldata[*decalSize].v = uv[a][b].y;
+				decaldata[*decalSize].pos = pos;
+				decaldata[*decalSize].uv = uv[a][b];
 				(*decalSize)++;
 				a = 1; b = 0;
 				getGridPos(&pos, i + a, j + b, false, false);
-				decaldata[*decalSize].x = pos.x;
-				decaldata[*decalSize].y = pos.y;
-				decaldata[*decalSize].z = pos.z;
-				decaldata[*decalSize].u = uv[a][b].x;
-				decaldata[*decalSize].v = uv[a][b].y;
+				decaldata[*decalSize].pos = pos;
+				decaldata[*decalSize].uv = uv[a][b];
 				(*decalSize)++;
 			}
 		}
@@ -652,7 +585,7 @@ void markTileDirty(int i, int j)
  * Check what the videocard + drivers support and divide the loaded map into sectors that can be drawn.
  * It also determines the lightmap size.
  */
-bool initTerrain(void)
+bool initTerrain()
 {
 	int i, j, x, y, a, b, absX, absY;
 	PIELIGHT colour[2][2], centerColour;
@@ -1013,7 +946,7 @@ bool initTerrain(void)
 }
 
 /// free all memory and opengl buffers used by the terrain renderer
-void shutdownTerrain(void)
+void shutdownTerrain()
 {
 	ASSERT_OR_RETURN(, sectors, "trying to shutdown terrain when it didn't need it!");
 	glDeleteBuffers(1, &geometryVBO);
