@@ -121,11 +121,6 @@ void pie_BeginLighting(const Vector3f &light)
 	currentSunPosition = light;
 }
 
-void pie_EndLighting(void)
-{
-	shadows = false;
-}
-
 /***************************************************************************
  * pie_Draw3dShape
  *
@@ -162,7 +157,6 @@ static std::vector<SHAPE> shapes;
 static void pie_Draw3DButton(iIMDShape *shape, PIELIGHT teamcolour, const glm::mat4 &matrix)
 {
 	const PIELIGHT colour = WZCOL_WHITE;
-	pie_SetFogStatus(false);
 	pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
 	pie_internal::SHADER_PROGRAM &program = pie_ActivateShaderDeprecated(SHADER_BUTTON, shape, teamcolour, colour, matrix, pie_PerspectiveGet(),
 		glm::vec4(), glm::vec4(), glm::vec4(), glm::vec4(), glm::vec4());

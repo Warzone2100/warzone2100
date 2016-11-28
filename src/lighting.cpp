@@ -54,7 +54,6 @@
 
 /*	The vector that holds the sun's lighting direction - planar */
 static Vector3f theSun;
-UDWORD fogStatus = 0;
 
 /*	Module function Prototypes */
 static UDWORD calcDistToTile(UDWORD tileX, UDWORD tileY, Vector3i *pos);

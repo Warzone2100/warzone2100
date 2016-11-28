@@ -343,11 +343,6 @@ static GAMECODE renderLoop()
 
 	pie_GetResetCounts(&loopPieCount, &loopPolyCount, &loopStateChanges);
 
-	if ((fogStatus & FOG_BACKGROUND) && (loopMissionState == LMS_SAVECONTINUE))
-	{
-		pie_SetFogStatus(false);
-	}
-
 	if (!quitting)
 	{
 		/* Check for toggling display mode */

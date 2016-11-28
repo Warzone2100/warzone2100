@@ -738,56 +738,6 @@ void	kf_TileInfo(void)
 	addConsoleMessage("Tile info dumped into log", DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 }
 
-// --------------------------------------------------------------------------
-void	kf_ToggleBackgroundFog(void)
-{
-	static bool bEnabled  = true;//start in nicks mode
-
-	if (bEnabled)//true, so go to false
-	{
-		bEnabled = false;
-		fogStatus &= FOG_FLAGS - FOG_BACKGROUND; //clear lowest bit of 3
-		if (fogStatus == 0)
-		{
-			pie_SetFogStatus(false);
-			pie_EnableFog(false);
-		}
-	}
-	else
-	{
-		bEnabled = true;
-		if (fogStatus == 0)
-		{
-			pie_EnableFog(true);
-		}
-		fogStatus |= FOG_BACKGROUND;//set lowest bit of 3
-	}
-}
-
-extern void	kf_ToggleDistanceFog(void)
-{
-	static bool bEnabled  = true;//start in nicks mode
-
-	if (bEnabled)//true, so go to false
-	{
-		bEnabled = false;
-		fogStatus &= FOG_FLAGS - FOG_DISTANCE; //clear middle bit of 3
-		if (fogStatus == 0)
-		{
-			pie_SetFogStatus(false);
-			pie_EnableFog(false);
-		}
-	}
-	else
-	{
-		bEnabled = true;
-		if (fogStatus == 0)
-		{
-			pie_EnableFog(true);
-		}
-		fogStatus |= FOG_DISTANCE;//set lowest bit of 3
-	}
-}
 /* Toggles fog on/off */
 void	kf_ToggleFog(void)
 {

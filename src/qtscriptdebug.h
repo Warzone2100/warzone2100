@@ -58,6 +58,8 @@ private:
 	EDITMAP editMap;
 	int powerValue = 0;
 
+	QPushButton *createButton(const QString &text, const char *slot, QWidget *parent);
+
 protected slots:
 	void labelClickedIdx(const QModelIndex &idx);
 	void labelClicked();
@@ -66,9 +68,16 @@ protected slots:
 	void powerEditing(const QString &value);
 	void powerEditingFinished();
 	void playerButtonClicked(int value);
-	void unitButtonClicked();
+	void droidButtonClicked();
 	void structButtonClicked();
 	void featButtonClicked();
+	void researchButtonClicked();
+	void sensorsButtonClicked();
+	void deityButtonClicked();
+	void weatherButtonClicked();
+	void revealButtonClicked();
+	void shadowButtonClicked();
+	void fogButtonClicked();
 };
 
 void jsDebugCreate(const MODELMAP &models, QStandardItemModel *triggerModel);

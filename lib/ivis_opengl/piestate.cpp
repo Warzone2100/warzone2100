@@ -111,13 +111,6 @@ bool pie_GetFogEnabled(void)
 	return rendStates.fogEnabled;
 }
 
-//***************************************************************************
-//
-// pie_SetFogStatus(bool val)
-//
-// Toggle fog on and off for rendering objects inside or outside the 3D world
-//
-//***************************************************************************
 bool pie_GetFogStatus(void)
 {
 	return rendStates.fog;
@@ -586,11 +579,6 @@ void pie_UpdateFogDistance(float begin, float end)
 	rendStates.fogEnd = end;
 }
 
-//
-// pie_SetFogStatus(bool val)
-//
-// Toggle fog on and off for rendering objects inside or outside the 3D world
-//
 void pie_SetFogStatus(bool val)
 {
 	if (rendStates.fogEnabled)

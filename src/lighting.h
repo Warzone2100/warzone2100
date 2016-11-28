@@ -23,12 +23,6 @@
 
 #include "lib/ivis_opengl/pietypes.h"
 
-#define FOG_FLAGS		7
-#define FOG_BACKGROUND	1
-#define FOG_DISTANCE	2
-
-extern UDWORD fogStatus;
-
 struct LIGHT
 {
 	Vector3i position;

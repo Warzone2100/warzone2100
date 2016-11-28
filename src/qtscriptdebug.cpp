@@ -54,6 +54,8 @@
 #include "multiplay.h"
 #include "power.h"
 #include "hci.h"
+#include "display.h"
+#include "keybind.h"
 
 #include "qtscript.h"
 #include "qtscriptfuncs.h"
@@ -63,6 +65,50 @@ bool doUpdateModels = false;
 
 // ----------------------------------------------------------
 
+QPushButton *ScriptDebugger::createButton(const QString &text, const char *slot, QWidget *parent)
+{
+	QPushButton *button = new QPushButton(text, parent);
+	connect(button, SIGNAL(pressed()), this, slot);
+	button->setDefault(false);
+	button->setAutoDefault(false);
+	return button;
+}
+
+void ScriptDebugger::researchButtonClicked()
+{
+	kf_FinishAllResearch();
+}
+
+void ScriptDebugger::sensorsButtonClicked()
+{
+	kf_ToggleSensorDisplay();
+}
+
+void ScriptDebugger::deityButtonClicked()
+{
+	kf_ToggleGodMode();
+}
+
+void ScriptDebugger::weatherButtonClicked()
+{
+	kf_ToggleWeather();
+}
+
+void ScriptDebugger::revealButtonClicked()
+{
+	kf_ToggleVisibility();
+}
+
+void ScriptDebugger::shadowButtonClicked()
+{
+	setDrawShadows(!getDrawShadows());
+}
+
+void ScriptDebugger::fogButtonClicked()
+{
+	kf_ToggleFog();
+}
+
 ScriptDebugger::ScriptDebugger(const MODELMAP &models, QStandardItemModel *triggerModel) : QDialog(NULL, Qt::Window)
 {
 	modelMap = models;
@@ -70,24 +116,23 @@ ScriptDebugger::ScriptDebugger(const MODELMAP &models, QStandardItemModel *trigg
 
 	// Add main page
 	QWidget *mainWidget = new QWidget(this);
-	QHBoxLayout *placementLayout = new QHBoxLayout();
 	QVBoxLayout *mainLayout = new QVBoxLayout();
-	QPushButton *unitButton = new QPushButton("Units", this);
-	unitButton->setDefault(false);
-	unitButton->setAutoDefault(false);
-	QPushButton *structButton = new QPushButton("Structures", this);
-	structButton->setDefault(false);
-	structButton->setAutoDefault(false);
-	QPushButton *featButton = new QPushButton("Features", this);
-	featButton->setDefault(false);
-	featButton->setAutoDefault(false);
-	connect(unitButton, SIGNAL(pressed()), this, SLOT(unitButtonClicked()));
-	connect(structButton, SIGNAL(pressed()), this, SLOT(structButtonClicked()));
-	connect(featButton, SIGNAL(pressed()), this, SLOT(featButtonClicked()));
-	placementLayout->addWidget(unitButton);
-	placementLayout->addWidget(structButton);
-	placementLayout->addWidget(featButton);
+	QHBoxLayout *placementLayout = new QHBoxLayout();
+	placementLayout->addWidget(createButton("Add droids", SLOT(droidButtonClicked()), this));
+	placementLayout->addWidget(createButton("Add structures", SLOT(structButtonClicked()), this));
+	placementLayout->addWidget(createButton("Add features", SLOT(featButtonClicked()), this));
 	mainLayout->addLayout(placementLayout);
+	QHBoxLayout *miscLayout = new QHBoxLayout();
+	miscLayout->addWidget(createButton("Research all", SLOT(researchButtonClicked()), this));
+	miscLayout->addWidget(createButton("Show sensors", SLOT(sensorsButtonClicked()), this));
+	miscLayout->addWidget(createButton("Shadows", SLOT(shadowButtonClicked()), this));
+	miscLayout->addWidget(createButton("Fog", SLOT(fogButtonClicked()), this));
+	mainLayout->addLayout(miscLayout);
+	QHBoxLayout *worldLayout = new QHBoxLayout();
+	worldLayout->addWidget(createButton("Show all", SLOT(deityButtonClicked()), this));
+	worldLayout->addWidget(createButton("Weather", SLOT(weatherButtonClicked()), this));
+	worldLayout->addWidget(createButton("Reveal mode", SLOT(revealButtonClicked()), this));
+	mainLayout->addLayout(worldLayout);
 	QHBoxLayout *selectedPlayerLayout = new QHBoxLayout();
 	QLabel *selectPlayerLabel = new QLabel("Selected Player:");
 	QComboBox *playerComboBox = new QComboBox;
@@ -229,7 +274,7 @@ void ScriptDebugger::playerButtonClicked(int value)
 	NetPlay.players[oldSelectedPlayer].allocated = !NetPlay.players[oldSelectedPlayer].allocated;
 }
 
-void ScriptDebugger::unitButtonClicked()
+void ScriptDebugger::droidButtonClicked()
 {
 	intOpenDebugMenu(OBJ_DROID);
 }
