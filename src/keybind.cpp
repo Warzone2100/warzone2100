@@ -1571,9 +1571,7 @@ void	kf_ChooseOptions(void)
 	sasprintf((char **)&cmsg, _("(Player %u) is using cheat :%s"),
 	          selectedPlayer, _("Debug menu is Open"));
 	sendTextMessage(cmsg, true);
-	intResetScreen(true);
-	setWidgetsStatus(true);
-	intAddOptions();
+	jsShowDebug();
 }
 
 // --------------------------------------------------------------------------

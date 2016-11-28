@@ -198,35 +198,6 @@ static bool Refreshing = false;
 #define STAT_BUTWIDTH		60
 #define STAT_BUTHEIGHT		46
 
-/* Close strings */
-static char pCloseText[] = "X";
-
-/* Player button strings */
-static const char	*apPlayerText[] =
-{
-	"0", "1", "2", "3", "4", "5", "6", "7",
-	"8", "9", "10", "11", "12", "13", "14", "15",
-};
-static const char	*apPlayerTip[] =
-{
-	"Select Player 0",
-	"Select Player 1",
-	"Select Player 2",
-	"Select Player 3",
-	"Select Player 4",
-	"Select Player 5",
-	"Select Player 6",
-	"Select Player 7",
-	"Select Player 8",
-	"Select Player 9",
-	"Select Player 10",
-	"Select Player 11",
-	"Select Player 12",
-	"Select Player 13",
-	"Select Player 14",
-	"Select Player 15",
-};
-
 /* The widget screen */
 W_SCREEN		*psWScreen;
 
@@ -806,13 +777,6 @@ void intHidePowerBar()
 	}
 }
 
-/* Remove the options widgets from the widget screen */
-static void intRemoveOptions(void)
-{
-	widgDelete(psWScreen, IDOPT_FORM);
-}
-
-
 /* Reset the widget screen to just the reticule */
 void intResetScreen(bool NoAnim)
 {
@@ -835,9 +799,6 @@ void intResetScreen(bool NoAnim)
 	/* Remove whatever extra screen was displayed */
 	switch (intMode)
 	{
-	case INT_OPTION:
-		intRemoveOptions();
-		break;
 	case INT_EDITSTAT:
 		intStopStructPosition();
 		if (NoAnim)
@@ -972,83 +933,48 @@ static void intCalcStructCenter(STRUCTURE_STATS *psStats, UDWORD tilex, UDWORD t
 	*pcy = tiley * TILE_UNITS + height / 2;
 }
 
-
-/* Process return codes from the Options screen */
-static void intProcessOptions(UDWORD id)
+void intOpenDebugMenu(OBJECT_TYPE id)
 {
-	if (id >= IDOPT_PLAYERSTART && id <= IDOPT_PLAYEREND)
+	switch (id)
 	{
-		int oldSelectedPlayer = selectedPlayer;
-
-		widgSetButtonState(psWScreen, IDOPT_PLAYERSTART + selectedPlayer, 0);
-		selectedPlayer = id - IDOPT_PLAYERSTART;
-		ASSERT_OR_RETURN(, selectedPlayer < MAX_PLAYERS, "Invalid player number");
-		NetPlay.players[selectedPlayer].allocated = !NetPlay.players[selectedPlayer].allocated;
-		NetPlay.players[oldSelectedPlayer].allocated = !NetPlay.players[oldSelectedPlayer].allocated;
-		// Do not change realSelectedPlayer here, so game doesn't pause.
-		widgSetButtonState(psWScreen, IDOPT_PLAYERSTART + selectedPlayer, WBUT_LOCK);
-	}
-	else
-	{
-		switch (id)
+	case OBJ_DROID:
+		apsTemplateList.clear();
+		for (std::list<DROID_TEMPLATE>::iterator i = localTemplates.begin(); i != localTemplates.end(); ++i)
 		{
-		/* The add object buttons */
-		case IDOPT_DROID:
-			intRemoveOptions();
-			apsTemplateList.clear();
-			for (std::list<DROID_TEMPLATE>::iterator i = localTemplates.begin(); i != localTemplates.end(); ++i)
-			{
-				apsTemplateList.push_back(&*i);
-			}
-			ppsStatsList = (BASE_STATS **)&apsTemplateList[0]; // FIXME Ugly cast, and is undefined behaviour (strict-aliasing violation) in C/C++.
-			objMode = IOBJ_MANUFACTURE;
-			intAddStats(ppsStatsList, apsTemplateList.size(), NULL, NULL);
-			intMode = INT_EDITSTAT;
-			editPosMode = IED_NOPOS;
-			break;
-		case IDOPT_STRUCT:
-			intRemoveOptions();
-			for (unsigned i = 0; i < std::min<unsigned>(numStructureStats, MAXSTRUCTURES); ++i)
-			{
-				apsStructStatsList[i] = asStructureStats + i;
-			}
-			ppsStatsList = (BASE_STATS **)apsStructStatsList;
-			objMode = IOBJ_BUILD;
-			intAddStats(ppsStatsList, std::min<unsigned>(numStructureStats, MAXSTRUCTURES), NULL, NULL);
-			intMode = INT_EDITSTAT;
-			editPosMode = IED_NOPOS;
-			break;
-		case IDOPT_FEATURE:
-			intRemoveOptions();
-			for (unsigned i = 0; i < std::min<unsigned>(numFeatureStats, MAXFEATURES); ++i)
-			{
-				apsFeatureList[i] = asFeatureStats + i;
-			}
-			ppsStatsList = (BASE_STATS **)apsFeatureList;
-			intAddStats(ppsStatsList, std::min<unsigned>(numFeatureStats, MAXFEATURES), NULL, NULL);
-			intMode = INT_EDITSTAT;
-			editPosMode = IED_NOPOS;
-			break;
-		/* Close window buttons */
-		case IDOPT_CLOSE:
-			intRemoveOptions();
-			intMode = INT_NORMAL;
-			break;
-		/* Ignore these */
-		case IDOPT_FORM:
-		case IDOPT_LABEL:
-		case IDOPT_PLAYERFORM:
-		case IDOPT_PLAYERLABEL:
-		case IDOPT_IVISFORM:
-		case IDOPT_IVISLABEL:
-			break;
-		default:
-			ASSERT(false, "Unknown return code");
-			break;
+			apsTemplateList.push_back(&*i);
 		}
+		ppsStatsList = (BASE_STATS **)&apsTemplateList[0]; // FIXME Ugly cast, and is undefined behaviour (strict-aliasing violation) in C/C++.
+		objMode = IOBJ_MANUFACTURE;
+		intAddStats(ppsStatsList, apsTemplateList.size(), NULL, NULL);
+		intMode = INT_EDITSTAT;
+		editPosMode = IED_NOPOS;
+		break;
+	case OBJ_STRUCTURE:
+		for (unsigned i = 0; i < std::min<unsigned>(numStructureStats, MAXSTRUCTURES); ++i)
+		{
+			apsStructStatsList[i] = asStructureStats + i;
+		}
+		ppsStatsList = (BASE_STATS **)apsStructStatsList;
+		objMode = IOBJ_BUILD;
+		intAddStats(ppsStatsList, std::min<unsigned>(numStructureStats, MAXSTRUCTURES), NULL, NULL);
+		intMode = INT_EDITSTAT;
+		editPosMode = IED_NOPOS;
+		break;
+	case OBJ_FEATURE:
+		for (unsigned i = 0; i < std::min<unsigned>(numFeatureStats, MAXFEATURES); ++i)
+		{
+			apsFeatureList[i] = asFeatureStats + i;
+		}
+		ppsStatsList = (BASE_STATS **)apsFeatureList;
+		intAddStats(ppsStatsList, std::min<unsigned>(numFeatureStats, MAXFEATURES), NULL, NULL);
+		intMode = INT_EDITSTAT;
+		editPosMode = IED_NOPOS;
+		break;
+	default:
+		ASSERT(false, "Unknown debug menu code");
+		break;
 	}
 }
-
 
 /* Process return codes from the object placement stats screen */
 static void intProcessEditStats(UDWORD id)
@@ -1269,12 +1195,6 @@ INT_RETVAL intRunWidgets(void)
 		{
 		/*****************  Reticule buttons  *****************/
 
-		case IDRET_OPTIONS:
-			intResetScreen(false);
-			(void)intAddOptions();
-			intMode = INT_OPTION;
-			break;
-
 		case IDRET_COMMAND:
 			intResetScreen(false);
 			widgSetButtonState(psWScreen, IDRET_COMMAND, WBUT_CLICKLOCK);
@@ -1377,9 +1297,6 @@ INT_RETVAL intRunWidgets(void)
 		default:
 			switch (intMode)
 			{
-			case INT_OPTION:
-				intProcessOptions(retID);
-				break;
 			case INT_EDITSTAT:
 				intProcessEditStats(retID);
 				break;
@@ -2808,182 +2725,6 @@ bool intAddPower()
 	powerBarUp = true;
 	return true;
 }
-
-/* Add the options widgets to the widget screen */
-bool intAddOptions(void)
-{
-	W_FORMINIT	sFormInit;
-	W_BUTINIT	sButInit;
-	W_LABINIT	sLabInit;
-	UDWORD		player;
-
-	/* Add the option form */
-
-	sFormInit.formID = 0;
-	sFormInit.id = IDOPT_FORM;
-	sFormInit.style = WFORM_PLAIN;
-	sFormInit.x = OPT_X;
-	sFormInit.y = OPT_Y;
-	sFormInit.width = OPT_WIDTH;
-	sFormInit.height = OPT_HEIGHT;
-	if (!widgAddForm(psWScreen, &sFormInit))
-	{
-		return false;
-	}
-
-	// set the interface mode
-	intMode = INT_OPTION;
-
-	/* Add the Option screen label */
-	sLabInit.formID = IDOPT_FORM;
-	sLabInit.id = IDOPT_LABEL;
-	sLabInit.x = OPT_GAP;
-	sLabInit.y = OPT_GAP;
-	sLabInit.width = OPT_BUTWIDTH;
-	sLabInit.height = OPT_BUTHEIGHT;
-	sLabInit.pText = _("Options");
-	if (!widgAddLabel(psWScreen, &sLabInit))
-	{
-		return false;
-	}
-
-	/* Add the close box */
-	sButInit.formID = IDOPT_FORM;
-	sButInit.id = IDOPT_CLOSE;
-	sButInit.x = OPT_WIDTH - OPT_GAP - CLOSE_SIZE;
-	sButInit.y = OPT_GAP;
-	sButInit.width = CLOSE_SIZE;
-	sButInit.height = CLOSE_SIZE;
-	sButInit.pText = pCloseText;
-	sButInit.pTip = _("Close");
-	if (!widgAddButton(psWScreen, &sButInit))
-	{
-		return false;
-	}
-
-	/* Add the add object buttons */
-	sButInit.id = IDOPT_DROID;
-	sButInit.width = OPT_BUTWIDTH;
-	sButInit.height = OPT_BUTHEIGHT;
-	sButInit.x = OPT_GAP;
-	sButInit.y = OPT_EDITY;
-	sButInit.pText = _("Unit");
-	sButInit.pTip = _("Place Unit on map");
-	if (!widgAddButton(psWScreen, &sButInit))
-	{
-		return false;
-	}
-
-	sButInit.id = IDOPT_STRUCT;
-	sButInit.x += OPT_GAP + OPT_BUTWIDTH;
-	sButInit.pText = _("Struct");
-	sButInit.pTip = _("Place Structures on map");
-	if (!widgAddButton(psWScreen, &sButInit))
-	{
-		return false;
-	}
-
-	sButInit.id = IDOPT_FEATURE;
-	sButInit.x += OPT_GAP + OPT_BUTWIDTH;
-	sButInit.pText = _("Feat");
-	sButInit.pTip = _("Place Features on map");
-	if (!widgAddButton(psWScreen, &sButInit))
-	{
-		return false;
-	}
-	if (NetPlay.bComms)
-	{
-		widgSetButtonState(psWScreen, sButInit.id, WBUT_DISABLE);
-	}
-
-	/* Add the quit button */
-	sButInit.formID = IDOPT_FORM;
-	sButInit.id = IDOPT_QUIT;
-	sButInit.x = OPT_GAP;
-	sButInit.y = OPT_HEIGHT - OPT_GAP - OPT_BUTHEIGHT;
-	sButInit.width = OPT_WIDTH - OPT_GAP * 2;
-	sButInit.height = OPT_BUTHEIGHT;
-	sButInit.pText = _("Quit");
-	sButInit.pTip = _("Exit Game");
-	int quitButtonY = sButInit.y - OPT_GAP;
-	if (!widgAddButton(psWScreen, &sButInit))
-	{
-		return false;
-	}
-
-	/* Add the player form */
-	sFormInit.formID = IDOPT_FORM;
-	sFormInit.id = IDOPT_PLAYERFORM;
-	sFormInit.style = WFORM_PLAIN;
-	sFormInit.x = OPT_GAP;
-	sFormInit.y = OPT_PLAYERY;
-	sFormInit.width = OPT_WIDTH - OPT_GAP * 2;
-	sFormInit.height = (OPT_BUTHEIGHT + OPT_GAP) * (1 + (MAX_PLAYERS + 3) / 4) + OPT_GAP;
-	int nextFormY = sFormInit.y + sFormInit.height + OPT_GAP;
-	if (!widgAddForm(psWScreen, &sFormInit))
-	{
-		return false;
-	}
-
-	/* Add the player label */
-	sLabInit.formID = IDOPT_PLAYERFORM;
-	sLabInit.id = IDOPT_PLAYERLABEL;
-	sLabInit.x = OPT_GAP;
-	sLabInit.y = OPT_GAP;
-	sLabInit.pText = _("Current Player:");
-	if (!widgAddLabel(psWScreen, &sLabInit))
-	{
-		return false;
-	}
-
-	/* Add the player buttons */
-	sButInit.formID = IDOPT_PLAYERFORM;
-	sButInit.id = IDOPT_PLAYERSTART;
-	sButInit.x = OPT_GAP;
-	sButInit.y = OPT_BUTHEIGHT + OPT_GAP * 2;
-	sButInit.width = OPT_BUTWIDTH;
-	sButInit.height = OPT_BUTHEIGHT;
-	for (player = 0; player < MAX_PLAYERS; player++)
-	{
-		STATIC_ASSERT(MAX_PLAYERS <= ARRAY_SIZE(apPlayerText) && MAX_PLAYERS <= ARRAY_SIZE(apPlayerTip));
-		sButInit.pText = apPlayerText[player];
-		sButInit.pTip = apPlayerTip[player];
-		if (!widgAddButton(psWScreen, &sButInit))
-		{
-			return false;
-		}
-		if (NetPlay.bComms)
-		{
-			widgSetButtonState(psWScreen, sButInit.id, WBUT_DISABLE);
-		}
-		/* Update the initialisation structure for the next button */
-		sButInit.id += 1;
-		sButInit.x += OPT_BUTWIDTH + OPT_GAP;
-		if (sButInit.x + OPT_BUTWIDTH + OPT_GAP > OPT_WIDTH - OPT_GAP * 2)
-		{
-			sButInit.x = OPT_GAP;
-			sButInit.y += OPT_BUTHEIGHT + OPT_GAP;
-		}
-	}
-
-	/* Add iViS form */
-	sFormInit.formID = IDOPT_FORM;
-	sFormInit.id = IDOPT_IVISFORM;
-	sFormInit.style = WFORM_PLAIN;
-	sFormInit.x = OPT_GAP;
-	sFormInit.y = nextFormY;  //OPT_PLAYERY + OPT_BUTHEIGHT * 3 + OPT_GAP * 5;
-	sFormInit.width = OPT_WIDTH - OPT_GAP * 2;
-	sFormInit.height = quitButtonY - nextFormY;  //OPT_BUTHEIGHT * 3 + OPT_GAP * 4;
-	if (!widgAddForm(psWScreen, &sFormInit))
-	{
-		return false;
-	}
-
-	widgSetButtonState(psWScreen, IDOPT_PLAYERSTART + selectedPlayer, WBUT_LOCK);
-
-	return true;
-}
-
 
 /* Add the object screen widgets to the widget screen.
  * select is a pointer to a function that returns true when the object is

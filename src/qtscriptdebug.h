@@ -56,12 +56,19 @@ private:
 	QTreeView triggerView;
 	MODELMAP modelMap;
 	EDITMAP editMap;
+	int powerValue = 0;
 
 protected slots:
 	void labelClickedIdx(const QModelIndex &idx);
 	void labelClicked();
 	void runClicked(QObject *obj);
 	void updateModels();
+	void powerEditing(const QString &value);
+	void powerEditingFinished();
+	void playerButtonClicked(int value);
+	void unitButtonClicked();
+	void structButtonClicked();
+	void featButtonClicked();
 };
 
 void jsDebugCreate(const MODELMAP &models, QStandardItemModel *triggerModel);

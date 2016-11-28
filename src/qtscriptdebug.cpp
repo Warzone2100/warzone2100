@@ -36,16 +36,24 @@
 #include <QtCore/QString>
 #include <QtCore/QStringList>
 #include <QtWidgets/QDialog>
+#include <QtWidgets/QLabel>
 #include <QtWidgets/QTreeView>
 #include <QtWidgets/QTabWidget>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QLineEdit>
+#include <QtWidgets/QComboBox>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QVBoxLayout>
 #include <QtGui/QStandardItemModel>
 
+#include "lib/framework/frame.h"
 #include "lib/framework/wzapp.h"
 #include "lib/framework/wzconfig.h"
+#include "lib/netplay/netplay.h"
+
+#include "multiplay.h"
+#include "power.h"
+#include "hci.h"
 
 #include "qtscript.h"
 #include "qtscriptfuncs.h"
@@ -59,6 +67,49 @@ ScriptDebugger::ScriptDebugger(const MODELMAP &models, QStandardItemModel *trigg
 {
 	modelMap = models;
 	QSignalMapper *signalMapper = new QSignalMapper(this);
+
+	// Add main page
+	QWidget *mainWidget = new QWidget(this);
+	QHBoxLayout *placementLayout = new QHBoxLayout();
+	QVBoxLayout *mainLayout = new QVBoxLayout();
+	QPushButton *unitButton = new QPushButton("Units", this);
+	unitButton->setDefault(false);
+	unitButton->setAutoDefault(false);
+	QPushButton *structButton = new QPushButton("Structures", this);
+	structButton->setDefault(false);
+	structButton->setAutoDefault(false);
+	QPushButton *featButton = new QPushButton("Features", this);
+	featButton->setDefault(false);
+	featButton->setAutoDefault(false);
+	connect(unitButton, SIGNAL(pressed()), this, SLOT(unitButtonClicked()));
+	connect(structButton, SIGNAL(pressed()), this, SLOT(structButtonClicked()));
+	connect(featButton, SIGNAL(pressed()), this, SLOT(featButtonClicked()));
+	placementLayout->addWidget(unitButton);
+	placementLayout->addWidget(structButton);
+	placementLayout->addWidget(featButton);
+	mainLayout->addLayout(placementLayout);
+	QHBoxLayout *selectedPlayerLayout = new QHBoxLayout();
+	QLabel *selectPlayerLabel = new QLabel("Selected Player:");
+	QComboBox *playerComboBox = new QComboBox;
+	for (int i = 0; i < game.maxPlayers; i++)
+	{
+		playerComboBox->addItem(QString::number(i));
+	}
+	connect(playerComboBox, SIGNAL(activated(int)), this, SLOT(playerButtonClicked(int)));
+	selectedPlayerLayout->addWidget(selectPlayerLabel);
+	selectedPlayerLayout->addWidget(playerComboBox);
+	mainLayout->addLayout(selectedPlayerLayout);
+	QHBoxLayout *powerLayout = new QHBoxLayout();
+	QLabel *powerLabel = new QLabel("Power:");
+	QLineEdit *powerLineEdit = new QLineEdit;
+	powerLineEdit->setText(QString::number(getPower(selectedPlayer)));
+	connect(powerLineEdit, SIGNAL(textEdited(const QString&)), this, SLOT(powerEditing(const QString&)));
+	connect(powerLineEdit, SIGNAL(returnPressed()), this, SLOT(powerEditingFinished()));
+	powerLayout->addWidget(powerLabel);
+	powerLayout->addWidget(powerLineEdit);
+	mainLayout->addLayout(powerLayout);
+	mainWidget->setLayout(mainLayout);
+	tab.addTab(mainWidget, "Main");
 
 	// Add globals
 	for (MODELMAP::const_iterator i = models.constBegin(); i != models.constEnd(); ++i)
@@ -121,9 +172,12 @@ ScriptDebugger::ScriptDebugger(const MODELMAP &models, QStandardItemModel *trigg
 	QHBoxLayout *layout = new QHBoxLayout(this);
 	layout->addWidget(&tab);
 	setLayout(layout);
+	resize(400, 500);
 	setSizeGripEnabled(true);
 	show();
 	raise();
+	powerLineEdit->setFocusPolicy(Qt::StrongFocus);
+	powerLineEdit->setFocus();
 	activateWindow();
 }
 
@@ -154,6 +208,40 @@ void ScriptDebugger::labelClicked()
 			showLabel(item->text());
 		}
 	}
+}
+
+void ScriptDebugger::powerEditing(const QString &value)
+{
+	powerValue = value.toInt();
+}
+
+void ScriptDebugger::powerEditingFinished()
+{
+	setPower(selectedPlayer, powerValue);
+}
+
+void ScriptDebugger::playerButtonClicked(int value)
+{
+	// Do not change realSelectedPlayer here, so game doesn't pause.
+	const int oldSelectedPlayer = selectedPlayer;
+	selectedPlayer = value;
+	NetPlay.players[selectedPlayer].allocated = !NetPlay.players[selectedPlayer].allocated;
+	NetPlay.players[oldSelectedPlayer].allocated = !NetPlay.players[oldSelectedPlayer].allocated;
+}
+
+void ScriptDebugger::unitButtonClicked()
+{
+	intOpenDebugMenu(OBJ_DROID);
+}
+
+void ScriptDebugger::structButtonClicked()
+{
+	intOpenDebugMenu(OBJ_STRUCTURE);
+}
+
+void ScriptDebugger::featButtonClicked()
+{
+	intOpenDebugMenu(OBJ_FEATURE);
 }
 
 void ScriptDebugger::labelClickedIdx(const QModelIndex &idx)

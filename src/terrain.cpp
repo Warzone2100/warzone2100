@@ -1292,11 +1292,9 @@ void drawTerrain(const glm::mat4 &mvp)
 	// terrain culling
 	cullTerrain();
 
-	// shift the lightmap half a tile as lights are supposed to be placed at the center of a tile
-	//glTranslatef(1.0 / lightmapWidth / 2, 1.0 / lightmapHeight / 2, 0);
-
 	glActiveTexture(GL_TEXTURE0);
 
+	// shift the lightmap half a tile as lights are supposed to be placed at the center of a tile
 	const glm::mat4 lightMatrix = glm::translate(1.f / lightmapWidth / 2, 1.f / lightmapHeight / 2, 0.f);
 
 	//////////////////////////////////////

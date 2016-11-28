@@ -323,9 +323,6 @@ extern void intResetScreen(bool NoAnim);
 /* Refresh icons on the interface, without disturbing the layout. i.e. smartreset*/
 extern void intRefreshScreen(void);
 
-/* Add the options widgets to the widget screen */
-extern bool intAddOptions(void);
-
 /* Remove the stats widgets from the widget screen */
 extern void intRemoveStats(void);
 
@@ -389,5 +386,7 @@ StateButton *makeObsoleteButton(WIDGET *parent);  ///< Makes a button to toggle 
 extern void chatDialog(int mode);
 extern bool isChatUp(void);
 extern bool isSecondaryWindowUp(void);
+
+void intOpenDebugMenu(OBJECT_TYPE id);
 
 #endif // __INCLUDED_SRC_HCI_H__
