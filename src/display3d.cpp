@@ -2331,27 +2331,6 @@ static bool renderWallSection(STRUCTURE *psStructure, const glm::mat4 &viewMatri
 	return true;
 }
 
-/// Draws a shadow under a droid
-void renderShadow(DROID *psDroid, iIMDShape *psShadowIMD, const glm::mat4 &viewMatrix)
-{
-	Vector3i dv;
-
-	dv.x = psDroid->pos.x - player.p.x;
-	if (isTransporter(psDroid))
-	{
-		dv.x -= bobTransporterHeight() / 2;
-	}
-	dv.z = -(psDroid->pos.y - player.p.z);
-	dv.y = map_Height(psDroid->pos.x, psDroid->pos.y);
-
-	const glm::mat4 modelMatrix =
-		glm::translate(glm::vec3(dv)) *
-		glm::rotate(UNDEG(-psDroid->rot.direction), glm::vec3(0.f, 1.f, 0.f)) *
-		glm::rotate(UNDEG(psDroid->rot.pitch), glm::vec3(1.f, 0.f, 0.f)) *
-		glm::rotate(UNDEG(psDroid->rot.roll), glm::vec3(0.f, 0.f, 1.f));
-	pie_Draw3DShape(psShadowIMD, 0, 0, WZCOL_WHITE, pie_TRANSLUCENT, 128, viewMatrix * modelMatrix);
-}
-
 /// Draws the strobing 3D drag box that is used for multiple selection
 static void	drawDragBox(void)
 {

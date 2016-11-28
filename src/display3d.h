@@ -77,7 +77,6 @@ extern ENERGY_BAR toggleEnergyBars(void);
 
 extern bool doWeDrawProximitys(void);
 extern void setProximityDraw(bool val);
-extern void renderShadow(DROID *psDroid, iIMDShape *psShadowIMD, const glm::mat4 &viewMatrix);
 
 extern bool	clipXY(SDWORD x, SDWORD y);
 

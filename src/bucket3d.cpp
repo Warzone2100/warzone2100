@@ -188,17 +188,12 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void *pObject, const glm:
 		}
 		break;
 	case RENDER_DROID:
-	case RENDER_SHADOW:
 		psDroid = (DROID *) pObject;
 
 		psSimpObj = (SIMPLE_OBJECT *) pObject;
 		position.x = psSimpObj->pos.x - player.p.x;
 		position.z = -(psSimpObj->pos.y - player.p.z);
 		position.y = psSimpObj->pos.z;
-		if (objectType == RENDER_SHADOW)
-		{
-			position.y += 4;
-		}
 
 		psBStats = asBodyStats + psDroid->asBits[COMP_BODY];
 		droidSize = psBStats->pIMD->radius;
@@ -403,9 +398,6 @@ void bucketRenderCurrentList(const glm::mat4 &viewMatrix)
 			break;
 		case RENDER_DROID:
 			displayComponentObject((DROID *)thisTag->pObject, viewMatrix);
-			break;
-		case RENDER_SHADOW:
-			renderShadow((DROID *)thisTag->pObject, getImdFromIndex(MI_SHADOW), viewMatrix);
 			break;
 		case RENDER_STRUCTURE:
 			renderStructure((STRUCTURE *)thisTag->pObject, viewMatrix);
