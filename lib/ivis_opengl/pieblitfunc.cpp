@@ -218,7 +218,11 @@ static void pie_DrawRect(float x0, float y0, float x1, float y1, PIELIGHT colour
 {
 	if (x0 > x1)
 	{
-		debug(LOG_FATAL, "Passing box as right to left is not allowed");
+		std::swap(x0, x1);
+	}
+	if (y0 > y1)
+	{
+		std::swap(y0, y1);
 	}
 	const auto& center = Vector2f(x0, y0);
 	const auto& mvp = defaultProjectionMatrix() *
