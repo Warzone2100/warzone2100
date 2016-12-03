@@ -1,3 +1,22 @@
+2016-12-04: Version 3.2.2
+ * General:
+   * Change: Improved debug menu (commit:e89e1625401dfd9eefef8851f4a7af3245ce283e, commit:550f6eb01e2fabd27e491f71223b3c323c20cad6)
+   * Change: Improved handling of multiplayer map/mod downloads (commit:4b73c266fd9a232902500cb48a98ec8d4f8985c2)
+   * Fix: Fixed super heavy-gunner dependency (ticket:4490, commit:116ac5c679e978025f91c53ff91a16847e131226)
+   * Fix: Do not crash on invalid research orders (commit:c6e9dfcf658ce7f6c62a6ae5b7fa5c06a559e332)
+   * Fix: Improved Windows XP compatibility (commit:e58323f8cba93cc1f06f5cf6913c1c8876ff9f93)
+   * Fix: Do not enter an infinite loop on loading invalid stored templates (commit:a394991dd19e93248ef3c409a4147c23ed7cc3b4)
+ * Graphics:
+   * Change: Fixed functionality graphics rewritten to use programmable shaders - this should fix crashes on Windows with Intel drivers (several commits, too many tickets)
+   * Fix: Make water tiles visible even when just the water surface is visible (commit:4e6d245b7540cc7e07bb573754bfcd6083c15c81, ticket:4504)
+ * Modding:
+   * Change: New animation system (commit:af9c9137d231d4b2c1d4e5e1ffde0e86dc443b3c)
+ * Campaign:
+   * Fix: Alpha campaign cyborg production (commit:bc3db59f5f28e20683901645949acfeb316b0774, ticket:4515)
+   * Fix: Disappearing commander designs in beta and gamma campaigns (commit:df4e1e378c77cffbf164d55f8e7ea4b9a9aadf8d, ticket:4458)
+ * AI:
+   * Fix: Do not desynch when NullBot VTOLs rearm (commit:216827c96f1eda16aedb2c444055415d35f84097, ticket:4464)
+
 2016-07-28: Version 3.2.1
  * General:
    * Fix: Cursor flickering on some hardware (commit:ec3eb89550752db7098952af6aa79b20d4bfc9de, ticket:4450)
