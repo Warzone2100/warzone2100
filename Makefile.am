@@ -29,6 +29,7 @@ SUBDIRS = \
 dist_doc_DATA = \
 	AUTHORS \
 	ChangeLog \
+	README.md \
 	COPYING \
 	COPYING.NONGPL \
 	COPYING.README
