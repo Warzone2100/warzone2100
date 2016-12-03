@@ -159,10 +159,7 @@ Section $(TEXT_SecBase) SecBase
   File "/oname=ChangeLog.txt" "..\..\ChangeLog"
   File "/oname=Authors.txt" "..\..\AUTHORS"
   File "/oname=License.txt" "..\..\COPYING"
-  File "/oname=Readme.en.txt" "..\..\doc\Readme.en"
-  File "/oname=Readme.de.txt" "..\..\doc\Readme.de"
-  File "/oname=Readme.en.html" "..\..\doc\Readme.en.xhtml"
-  File "/oname=Readme.de.html" "..\..\doc\Readme.de.xhtml"
+  File "/oname=README.md.txt" "..\..\README.md"
 
   SetOutPath "$INSTDIR\styles"
 

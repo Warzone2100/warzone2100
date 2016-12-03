@@ -215,6 +215,11 @@ Section $(TEXT_SecBase) SecBase
   Push "COPYING.README.txt"
   Call unix2dos
 
+  File "${TOP_SRCDIR}\README.md"
+  Push "README.md"
+  Push "README.md.txt"
+  Call unix2dos
+
 ; Create mod directories
   CreateDirectory "$INSTDIR\mods\campaign"
   CreateDirectory "$INSTDIR\mods\music"
@@ -222,10 +227,6 @@ Section $(TEXT_SecBase) SecBase
   CreateDirectory "$INSTDIR\mods\multiplay"
 
   SetOutPath "$INSTDIR\doc"
-  File "${TOP_SRCDIR}\doc\Readme.en"
-  Push "Readme.en"
-  Push "Readme.en.txt"
-  Call unix2dos
   File "${TOP_SRCDIR}\doc\quickstartguide.html"
   File "${TOP_SRCDIR}\doc\quickstartguide.pdf"
   File "${TOP_SRCDIR}\doc\docbook-xsl.css"
