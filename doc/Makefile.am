@@ -56,7 +56,6 @@ nobase_dist_doc_DATA = \
 	images/unitordersmenu.jpg \
 	images/wss.png \
 	images/www.png \
-	Readme.en \
 	ScriptingManual.htm \
 	docbook-xsl.css
 
