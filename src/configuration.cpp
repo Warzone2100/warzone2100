@@ -152,9 +152,9 @@ bool loadConfig()
 	war_SetColouredCursor(ini.value("coloredCursor", true).toBool());
 	// this should be enabled on all systems by default
 	war_SetVsync(ini.value("vsync", true).toBool());
-	// 640x480 is minimum that we will support
-	int width = ini.value("width", 640).toInt();
-	int height = ini.value("height", 480).toInt();
+	// 640x480 is minimum that we will support, but default to something more sensible
+	int width = ini.value("width", 1024).toInt();
+	int height = ini.value("height", 720).toInt();
 	int screen = ini.value("screen", 0).toInt();
 	if (width < 640 || height < 480)	// sanity check
 	{
