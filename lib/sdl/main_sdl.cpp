@@ -1236,50 +1236,6 @@ static void inputHandleMouseMotionEvent(SDL_MouseMotionEvent *motionEvent)
 	}
 }
 
-// Get human readable results
-const char *getSDL_fmt_string(Uint32 format)
-{
-	switch (format)
-	{
-	case SDL_PIXELFORMAT_INDEX1LSB: return "SDL_PIXELFORMAT_INDEX1LSB"; break;
-	case SDL_PIXELFORMAT_INDEX1MSB: return "SDL_PIXELFORMAT_INDEX1MSB"; break;
-	case SDL_PIXELFORMAT_INDEX4LSB: return "SDL_PIXELFORMAT_INDEX4LSB"; break;
-	case SDL_PIXELFORMAT_INDEX4MSB: return "SDL_PIXELFORMAT_INDEX4MSB"; break;
-	case SDL_PIXELFORMAT_INDEX8: return "SDL_PIXELFORMAT_INDEX8"; break;
-	case SDL_PIXELFORMAT_RGB332: return "SDL_PIXELFORMAT_RGB332"; break;
-	case SDL_PIXELFORMAT_RGB444: return "SDL_PIXELFORMAT_RGB444"; break;
-	case SDL_PIXELFORMAT_RGB555: return "SDL_PIXELFORMAT_RGB555"; break;
-	case SDL_PIXELFORMAT_BGR555: return "SDL_PIXELFORMAT_BGR555"; break;
-	case SDL_PIXELFORMAT_ARGB4444: return "SDL_PIXELFORMAT_ARGB4444"; break;
-	case SDL_PIXELFORMAT_RGBA4444: return "SDL_PIXELFORMAT_RGBA4444"; break;
-	case SDL_PIXELFORMAT_ABGR4444: return "SDL_PIXELFORMAT_ABGR4444"; break;
-	case SDL_PIXELFORMAT_BGRA4444: return "SDL_PIXELFORMAT_BGRA4444"; break;
-	case SDL_PIXELFORMAT_ARGB1555: return "SDL_PIXELFORMAT_ARGB1555"; break;
-	case SDL_PIXELFORMAT_RGBA5551: return "SDL_PIXELFORMAT_RGBA5551"; break;
-	case SDL_PIXELFORMAT_ABGR1555: return "SDL_PIXELFORMAT_ABGR1555"; break;
-	case SDL_PIXELFORMAT_BGRA5551: return "SDL_PIXELFORMAT_BGRA5551"; break;
-	case SDL_PIXELFORMAT_RGB565: return "SDL_PIXELFORMAT_RGB565"; break;
-	case SDL_PIXELFORMAT_BGR565: return "SDL_PIXELFORMAT_BGR565"; break;
-	case SDL_PIXELFORMAT_RGB24: return "SDL_PIXELFORMAT_RGB24"; break;
-	case SDL_PIXELFORMAT_BGR24: return "SDL_PIXELFORMAT_BGR24"; break;
-	case SDL_PIXELFORMAT_RGB888: return "SDL_PIXELFORMAT_RGB888"; break;
-	case SDL_PIXELFORMAT_RGBX8888: return "SDL_PIXELFORMAT_RGBX8888"; break;
-	case SDL_PIXELFORMAT_BGR888: return "SDL_PIXELFORMAT_BGR888"; break;
-	case SDL_PIXELFORMAT_BGRX8888: return "SDL_PIXELFORMAT_BGRX8888"; break;
-	case SDL_PIXELFORMAT_ARGB8888: return "SDL_PIXELFORMAT_ARGB8888"; break;
-	case SDL_PIXELFORMAT_RGBA8888: return "SDL_PIXELFORMAT_RGBA8888"; break;
-	case SDL_PIXELFORMAT_ABGR8888: return "SDL_PIXELFORMAT_ABGR8888"; break;
-	case SDL_PIXELFORMAT_BGRA8888: return "SDL_PIXELFORMAT_BGRA8888"; break;
-	case SDL_PIXELFORMAT_ARGB2101010: return "SDL_PIXELFORMAT_ARGB2101010"; break;
-	case SDL_PIXELFORMAT_YV12: return "SDL_PIXELFORMAT_YV12"; break;
-	case SDL_PIXELFORMAT_IYUV: return "SDL_PIXELFORMAT_IYUV"; break;
-	case SDL_PIXELFORMAT_YUY2: return "SDL_PIXELFORMAT_YUY2"; break;
-	case SDL_PIXELFORMAT_UYVY: return "SDL_PIXELFORMAT_UYVY"; break;
-	case SDL_PIXELFORMAT_YVYU: return "SDL_PIXELFORMAT_YVYU"; break;
-	default : return "SDL_PIXELFORMAT_UNKNOWN"; break;
-	}
-}
-
 // This stage, we only setup keycodes, and let Qt (for the script engine) know we are alive.
 void wzMain(int &argc, char **argv)
 {
@@ -1331,7 +1287,7 @@ bool wzMainScreenSetup(int antialiasing, bool fullscreen, bool vsync)
 				exit(EXIT_FAILURE);
 			}
 
-			debug(LOG_WZ, "Monitor[%d]%dx%d %d %s", i, displaymode.w, displaymode.h, displaymode.refresh_rate, getSDL_fmt_string(displaymode.format));
+			debug(LOG_WZ, "Monitor[%d]%dx%d %d %s", i, displaymode.w, displaymode.h, displaymode.refresh_rate, SDL_GetPixelFormatName(displaymode.format));
 			if (displaymode.refresh_rate < 59)
 			{
 				//continue;    // only store 60Hz & higher modes, some display report 59 on linux
@@ -1410,7 +1366,7 @@ bool wzMainScreenSetup(int antialiasing, bool fullscreen, bool vsync)
 	}
 
 	int bpp = SDL_BITSPERPIXEL(SDL_GetWindowPixelFormat(WZwindow));
-	debug(LOG_WZ, "Bpp = %d format %s" , bpp, getSDL_fmt_string(SDL_GetWindowPixelFormat(WZwindow)));
+	debug(LOG_WZ, "Bpp = %d format %s" , bpp, SDL_GetPixelFormatName(SDL_GetWindowPixelFormat(WZwindow)));
 	if (!bpp)
 	{
 		debug(LOG_ERROR, "Video mode %dx%d@%dbpp is not supported!", width, height, bitDepth);
