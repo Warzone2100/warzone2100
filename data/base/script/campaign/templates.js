@@ -40,5 +40,12 @@ nphct: { body: "Body12SUP", prop: "tracked01", weap: "Cannon375mmMk1" },
 npmorb: { body: "Body8MBT", prop: "HalfTrack", weap: "Mortar2Mk1" },
 npmsens: { body: "Body8MBT", prop: "HalfTrack", weap: "SensorTurret1Mk1" },
 
+// CAM_1_D
+npcybr: { body: "CyborgRkt1Ground", prop: "CyborgLegs", weap: "CyborgRocket" },
+npltat: { body: "Body4ABT", prop: "HalfTrack", weap: "Rocket-LtA-T" },
+nphmgh: { body: "Body8MBT", prop: "hover01", weap: "MG3Mk1" },
+npltath: { body: "Body8MBT", prop: "hover01", weap: "Rocket-LtA-T" },
+nphch: { body: "Body12SUP", prop: "hover01", weap: "Cannon375mmMk1" },
+
 ////////////////////////////////////////////////////////////////////////////////
 };
