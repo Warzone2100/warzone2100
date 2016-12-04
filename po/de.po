@@ -8,6 +8,7 @@
 # Martin Koller <m.koller@surfeu.at>, 2007.
 # Steven \"Kreuvf\" Koenig <translations@kreuvf.de>, 2008-2014.
 # raymond, 2011.
+# Markus Enzenberger, 2013.
 msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
@@ -5208,7 +5209,7 @@ msgstr "Zerstören Sie die Einrichtung und kehren Sie zur Basis zurück."
 
 #: data/base/messages/strings/cam2strings.txt:126
 msgid "TRANSPORT MISSION: Destroy Enemy SAM Sites"
-msgstr "TRASNPORTERMISSION: Feindliche Boden-Luft-Raketenstellungen ausschalten"
+msgstr "TRANSPORTERMISSION: Feindliche Boden-Luft-Raketenstellungen ausschalten"
 
 #: data/base/messages/strings/cam2strings.txt:127
 msgid "If you are to escape, eradicate the surface-to-air missile sites around your base."
