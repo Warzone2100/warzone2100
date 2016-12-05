@@ -11,11 +11,16 @@ const cyborgPatrolList = ["seCybPos1", "seCybPos2", "seCybPos3", "northCybPos1",
 						  "1aCybPos2", "1aCybPos3" ];
 const NP = 1; //New Paradigm player number
 var index; //Current LZ (SE, N, canyon, south hill, road north of base)
-var switchLZ;//Counter for incrementing index every third landing
+var switchLZ; //Counter for incrementing index every third landing
 
 function secondVideo()
 {
 	hackAddMessage("MB1A-C_MSG2", MISS_MSG, CAM_HUMAN_PLAYER, true);
+}
+
+function eventVideoDone()
+{
+	camCallOnce("secondVideo");
 }
 
 //Check if all enemies are gone and win after 15 transports
@@ -36,7 +41,7 @@ function checkForGroundForces()
 		const firstAmount = 10;
 
 		var droidGroup1 = []; //Heavy cannon mantis track units
-		var droidGroup2 = []; //Sensor and mortar units
+		var droidGroup2 = []; //Sensor and heavy mortar units
 		var templates;
 		with (camTemplates) templates = [ nphct, npmsens, npmorb ];
 
@@ -169,9 +174,7 @@ function eventStartLevel()
 
 	index = 0;
 	switchLZ = 0;
-	//mission video messages
+
 	hackAddMessage("MB1A-C_MSG", MISS_MSG, CAM_HUMAN_PLAYER, true);
-	
-	queue("secondVideo", 5000);
 	queue("sendTransport", 10000);
 }
