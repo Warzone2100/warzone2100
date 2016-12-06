@@ -410,6 +410,7 @@ void selNextSpecifiedBuilding(STRUCTURE_TYPE structType)
 		}
 		psResult->selected = true;
 		triggerEventSelected();
+		jsDebugSelected(psResult);
 	}
 	else
 	{

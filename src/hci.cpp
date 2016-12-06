@@ -1785,6 +1785,7 @@ static void intSelectDroid(BASE_OBJECT *psObj)
 	clearSelection();
 	((DROID *)psObj)->selected = true;
 	triggerEventSelected();
+	jsDebugSelected(psObj);
 }
 
 
@@ -1869,6 +1870,7 @@ static void intProcessObject(UDWORD id)
 			psObj->selected = true;
 			widgSetButtonState(psWScreen, statButID, WBUT_CLICKLOCK);
 			intAddObjectStats(psObj, statButID);
+			jsDebugSelected(psObj);
 		}
 		triggerEventSelected();
 	}
@@ -1900,6 +1902,7 @@ static void intProcessObject(UDWORD id)
 				/* Select new one */
 				((STRUCTURE *)psObj)->selected = true;
 				triggerEventSelected();
+				jsDebugSelected(psObj);
 			}
 
 			// don't do this if offWorld and a structure object has been selected
@@ -1943,7 +1946,6 @@ static void intProcessObject(UDWORD id)
 			{
 				intSelectDroid(psObj);
 				psObjSelected = psObj;
-
 			}
 		}
 	}
@@ -1990,6 +1992,7 @@ static void intProcessObject(UDWORD id)
 				}
 				psObj->selected = true;
 				triggerEventSelected();
+				jsDebugSelected(psObj);
 			}
 		}
 	}
@@ -4455,6 +4458,7 @@ STRUCTURE *intCheckForStructure(UDWORD structType)
 			{
 				clearSelection();
 				psSel->selected = true;
+				jsDebugSelected(psSel);
 				break;
 			}
 			psSel = psStruct;
@@ -4716,6 +4720,7 @@ static STRUCTURE *intGotoNextStructureType(UDWORD structType)
 				{
 					clearSel();
 					psStruct->selected = true;
+					jsDebugSelected(psStruct);
 					CurrentStruct = psStruct;
 					break;
 				}

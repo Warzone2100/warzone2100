@@ -667,7 +667,7 @@ void _syncDebugDroid(const char *function, DROID const *psDroid, char ch)
 		psDroid->sMove.speed, psDroid->sMove.moveDir,
 		psDroid->sMove.pathIndex, psDroid->sMove.numPoints,
 		psDroid->sMove.src.x, psDroid->sMove.src.y, psDroid->sMove.target.x, psDroid->sMove.target.y, psDroid->sMove.destination.x, psDroid->sMove.destination.y,
-		psDroid->sMove.bumpDir, (int)psDroid->sMove.bumpTime, psDroid->sMove.lastBump, psDroid->sMove.pauseTime, psDroid->sMove.bumpX, psDroid->sMove.bumpY, (int)psDroid->sMove.shuffleStart,
+		psDroid->sMove.bumpDir, (int)psDroid->sMove.bumpTime, psDroid->sMove.lastBump, psDroid->sMove.pauseTime, psDroid->sMove.bumpPos.x, psDroid->sMove.bumpPos.y, (int)psDroid->sMove.shuffleStart,
 		(int)psDroid->experience,
 	};
 	_syncDebugIntList(function, "%c droid%d = p%d;pos(%d,%d,%d),rot(%d,%d,%d),order%d(%d,%d)^%d,action%d,secondaryOrder%X,body%d,sMove(status%d,speed%d,moveDir%d,path%d/%d,src(%d,%d),target(%d,%d),destination(%d,%d),bump(%d,%d,%d,%d,(%d,%d),%d)),exp%u", list, ARRAY_SIZE(list));
@@ -3171,6 +3171,7 @@ void SelectDroid(DROID *psDroid)
 		intRefreshScreen();
 	}
 	triggerEventSelected();
+	jsDebugSelected(psDroid);
 }
 
 // De-select a droid and do any necessary housekeeping.

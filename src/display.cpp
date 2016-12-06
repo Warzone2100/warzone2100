@@ -1760,6 +1760,7 @@ static void dealWithLMBStructure(STRUCTURE *psStructure, SELECTION_TYPE selectio
 				/* Establish new one */
 				psStructure->selected = true;
 				triggerEventSelected();
+				jsDebugSelected(psStructure);
 			}
 			//determine if LasSat structure has been selected
 			bLasSatStruct = lasSatStructSelected(psStructure);
@@ -1780,6 +1781,7 @@ static void dealWithLMBStructure(STRUCTURE *psStructure, SELECTION_TYPE selectio
 		/* Establish new one */
 		psStructure->selected = true;
 		triggerEventSelected();
+		jsDebugSelected(psStructure);
 	}
 	bSensorAssigned = false;
 	orderSelectedObjAdd(selectedPlayer, (BASE_OBJECT *)psStructure, ctrlShiftDown());
@@ -2182,6 +2184,7 @@ static void dealWithRMB(void)
 					psStructure->selected = false;
 					intObjectSelected(NULL);
 					triggerEventSelected();
+					jsDebugSelected(psStructure);
 				}
 				else if (!structureIsBlueprint(psStructure))
 				{
@@ -2195,6 +2198,7 @@ static void dealWithRMB(void)
 							printStructureInfo(psStructure);
 
 							psStructure->selected = true;
+							jsDebugSelected(psStructure);
 
 							// Open structure menu
 							intObjectSelected((BASE_OBJECT *)psStructure);

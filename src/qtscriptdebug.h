@@ -28,10 +28,10 @@
 #include "featuredef.h"
 
 class QScriptEngine;
-class QStandardItemModel;
 class QModelIndex;
 class QLineEdit;
 
+#include <QtGui/QStandardItemModel>
 #include <QtCore/QHash>
 #include <QtCore/QSignalMapper>
 #include <QtWidgets/QDialog>
@@ -48,10 +48,13 @@ class ScriptDebugger : public QDialog
 public:
 	ScriptDebugger(const MODELMAP &models, QStandardItemModel *triggerModel);
 	~ScriptDebugger();
+	void selected(const BASE_OBJECT *psObj);
 
 private:
 	QTabWidget tab;
 	QStandardItemModel *labelModel;
+	QStandardItemModel selectedModel;
+	QTreeView selectedView;
 	QTreeView labelView;
 	QTreeView triggerView;
 	MODELMAP modelMap;
@@ -82,5 +85,7 @@ protected slots:
 
 void jsDebugCreate(const MODELMAP &models, QStandardItemModel *triggerModel);
 bool jsDebugShutdown();
+
+// jsDebugSelected() defined in qtscript.h since it is used widely
 
 #endif

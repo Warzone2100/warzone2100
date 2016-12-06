@@ -55,7 +55,7 @@ struct MOVE_CONTROL
 	UDWORD	bumpTime;					// time of first bump with something
 	UWORD	lastBump;					// time of last bump with a droid - relative to bumpTime
 	UWORD	pauseTime;					// when MOVEPAUSE started - relative to bumpTime
-	UWORD	bumpX, bumpY;				// position of last bump
+	Position bumpPos;					// position of last bump
 
 	UDWORD	shuffleStart;				// when a shuffle started
 

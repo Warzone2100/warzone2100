@@ -649,8 +649,8 @@ static bool moveBlocked(DROID *psDroid)
 		psDroid->sMove.lastBump = 0;
 		return false;
 	}
-	xdiff = (SDWORD)psDroid->pos.x - (SDWORD)psDroid->sMove.bumpX;
-	ydiff = (SDWORD)psDroid->pos.y - (SDWORD)psDroid->sMove.bumpY;
+	xdiff = (SDWORD)psDroid->pos.x - (SDWORD)psDroid->sMove.bumpPos.x;
+	ydiff = (SDWORD)psDroid->pos.y - (SDWORD)psDroid->sMove.bumpPos.y;
 	diffSq = xdiff * xdiff + ydiff * ydiff;
 	if (diffSq > BLOCK_DIST * BLOCK_DIST)
 	{
@@ -801,8 +801,7 @@ static void moveCalcBlockingSlide(DROID *psDroid, int32_t *pmx, int32_t *pmy, ui
 		psDroid->sMove.bumpTime = gameTime;
 		psDroid->sMove.lastBump = 0;
 		psDroid->sMove.pauseTime = 0;
-		psDroid->sMove.bumpX = psDroid->pos.x;
-		psDroid->sMove.bumpY = psDroid->pos.y;
+		psDroid->sMove.bumpPos = psDroid->pos;
 		psDroid->sMove.bumpDir = psDroid->rot.direction;
 	}
 
@@ -1106,8 +1105,7 @@ static void moveCalcDroidSlide(DROID *psDroid, int *pmx, int *pmy)
 					psDroid->sMove.bumpTime = gameTime;
 					psDroid->sMove.lastBump = 0;
 					psDroid->sMove.pauseTime = 0;
-					psDroid->sMove.bumpX = psDroid->pos.x;
-					psDroid->sMove.bumpY = psDroid->pos.y;
+					psDroid->sMove.bumpPos = psDroid->pos;
 					psDroid->sMove.bumpDir = psDroid->rot.direction;
 				}
 				else

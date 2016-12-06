@@ -4554,8 +4554,7 @@ static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 		psDroid->sMove.lastBump = ini.value("lastBump").toInt();
 		psDroid->sMove.pauseTime = ini.value("pauseTime").toInt();
 		tmp = ini.vector2i("bumpPosition");
-		psDroid->sMove.bumpX = tmp.x;
-		psDroid->sMove.bumpY = tmp.y;
+		psDroid->sMove.bumpPos = Vector3i(tmp.x, tmp.y, 0);
 
 		// Recreate path-finding jobs
 		if (psDroid->sMove.Status == MOVEWAITROUTE)
@@ -4704,7 +4703,7 @@ static bool writeDroid(WzConfig &ini, DROID *psCurr, bool onMission, int &counte
 	}
 	ini.setValue("lastBump", psCurr->sMove.lastBump);
 	ini.setValue("pauseTime", psCurr->sMove.pauseTime);
-	ini.setVector2i("bumpPosition", Vector2i(psCurr->sMove.bumpX, psCurr->sMove.bumpY));
+	ini.setVector2i("bumpPosition", psCurr->sMove.bumpPos.xy);
 	ini.setValue("onMission", onMission);
 	ini.endGroup();
 	return true;
