@@ -818,7 +818,6 @@ bool loadSensorStats(const char *pFileName)
 		{
 			psStats->upgrade[j].range = psStats->base.range;
 		}
-		psStats->time = ini.value("time").toInt();
 
 		psStats->ref = REF_SENSOR_START + i;
 
@@ -864,8 +863,6 @@ bool loadSensorStats(const char *pFileName)
 		{
 			ASSERT(false, "Invalid Sensor type");
 		}
-		//multiply time stats
-		psStats->time *= WEAPON_TIME;
 
 		//get the IMD for the component
 		psStats->pIMD = statsGetIMD(ini, psStats, "sensorModel");

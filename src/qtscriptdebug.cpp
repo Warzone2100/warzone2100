@@ -395,7 +395,6 @@ QStandardItemList componentToString(const QString &name, const COMPONENT_STATS *
 	{
 		const SENSOR_STATS *psSensor = (const SENSOR_STATS *)psStats;
 		key->appendRow(QStandardItemList{ new QStandardItem("^Sensor type"), new QStandardItem(QString::number(psSensor->type)) });
-		key->appendRow(QStandardItemList{ new QStandardItem("^Delay"), new QStandardItem(QString::number(psSensor->time)) });
 		key->appendRow(QStandardItemList{ new QStandardItem("^Base range"), new QStandardItem(QString::number(psSensor->base.range)) });
 	}
 	else if (psStats->compType == COMP_CONSTRUCT)

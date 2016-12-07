@@ -288,7 +288,7 @@ struct PROPULSION_STATS : public COMPONENT_STATS
 
 struct SENSOR_STATS : public COMPONENT_STATS
 {
-	SENSOR_STATS() : location(0), type(STANDARD_SENSOR), time(0), pMountGraphic(NULL)
+	SENSOR_STATS() : location(0), type(STANDARD_SENSOR), pMountGraphic(NULL)
 	{
 		memset(&upgrade, 0, sizeof(upgrade));
 		memset(&base, 0, sizeof(base));
@@ -296,7 +296,6 @@ struct SENSOR_STATS : public COMPONENT_STATS
 
 	UDWORD		location;		///< specifies whether the Sensor is default or for the Turret
 	SENSOR_TYPE type;			///< used for combat
-	UDWORD		time;			///< time delay before associated weapon droids 'know' where the attack is from
 	iIMDShape	*pMountGraphic; ///< The turret mount to use
 
 	struct
