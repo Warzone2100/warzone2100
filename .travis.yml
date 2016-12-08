@@ -1,0 +1,12 @@
+language: c
+dist:
+# precise doesn't have `qtscript5-dev`
+- trusty
+- xenial
+install:
+- sudo apt-get update
+- sudo apt-get build-dep warzone2100
+- sudo apt-get install qtscript5-dev libsdl2-dev libharfbuzz-dev
+script:
+- export MAKEFLAGS="-j$((`grep -c ^processor /proc/cpuinfo`*2))"
+- ./autogen.sh && ./configure && make && make check && sudo make install
