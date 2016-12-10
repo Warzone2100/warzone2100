@@ -316,6 +316,9 @@ function eventStartLevel()
 	});
 
 	camManageTrucks(1);
+	
+	replaceTexture("page-7-barbarians-arizona.png",
+		       "page-7-barbarians-kevlar.png");
 
 	NPDefenseGroup = newGroup();
 	camEnableFactory("ScavSouthFactory");
