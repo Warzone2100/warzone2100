@@ -47,5 +47,18 @@ nphmgh: { body: "Body8MBT", prop: "hover01", weap: "MG3Mk1" },
 npltath: { body: "Body8MBT", prop: "hover01", weap: "Rocket-LtA-T" },
 nphch: { body: "Body12SUP", prop: "hover01", weap: "Cannon375mmMk1" },
 
+// CAM_2_A
+commgt: { body: "Body6SUPP", prop: "tracked01", weap: "MG3Mk1" },
+comsens: { body: "Body6SUPP", prop: "tracked01", weap: "SensorTurret1Mk1" },
+cohct: { body: "Body9REC", prop: "tracked01", weap: "Cannon375mmMk1" },
+comct: { body: "Body6SUPP", prop: "tracked01", weap: "Cannon2A-TMk1" },
+comorb: { body: "Body6SUPP", prop: "HalfTrack", weap: "Mortar2Mk1" },
+colcbv: { body: "Body2SUP", prop: "V-Tol", weap: "Bomb1-VTOL-LtHE" },
+colatv: { body: "Body2SUP", prop: "V-Tol", weap: "Rocket-VTOL-LtA-T" },
+prtruck: { body: "Body5REC", prop: "tracked01", weap: "Spade1Mk1" },
+prhct: { body: "Body11ABT", prop: "tracked01", weap: "Cannon375mmMk1" },
+prltat: { body: "Body5REC", prop: "tracked01", weap: "Rocket-LtA-T" },
+prrept: { body: "Body5REC", prop: "tracked01", weap: "LightRepair1" },
+
 ////////////////////////////////////////////////////////////////////////////////
 };

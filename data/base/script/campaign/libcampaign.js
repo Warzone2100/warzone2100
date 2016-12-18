@@ -274,6 +274,20 @@ function __camGlobalContext()
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+// Research related functions.
+////////////////////////////////////////////////////////////////////////////////
+
+//;; \subsection{camEnableRes(list, player)}
+//;; Grants research from the given list to player
+function camEnableRes(list, player)
+{
+	for(var i = 0; i < list.length; ++i)
+	{
+		completeResearch(list[i], player);
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////
 // Debugging helpers.
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -762,6 +776,16 @@ function camAllEnemyBasesEliminated()
 function camSendReinforcement(player, position, list, kind, data)
 {
 	var pos = camMakePos(position);
+	var order = CAM_ORDER_ATTACK
+	var order_data = { regroup: true, count: -1 };
+	if (camDef(data) && camDef(data.order))
+	{
+		order = data.order;
+		if (camDef(data) && camDef(data.data))
+		{
+			order_data = data.data;
+		}
+	}
 	switch(kind)
 	{
 		case CAM_REINFORCE_GROUND:
@@ -772,24 +796,9 @@ function camSendReinforcement(player, position, list, kind, data)
 				                        "Reinforcement", list[i].body,
 				                        list[i].prop, null, null, list[i].weap);
 			}
-			camManageGroup(camMakeGroup(droids), CAM_ORDER_ATTACK, {
-				regroup: true,
-				count: -1
-			});
+			camManageGroup(camMakeGroup(droids), order, order_data);
 			break;
 		case CAM_REINFORCE_TRANSPORT:
-			var order = CAM_ORDER_ATTACK, order_data = {
-				regroup: true,
-				count: -1
-			};
-			if (camDef(data) && camDef(data.order))
-			{
-				order = data.order;
-				if (camDef(data) && camDef(data.data))
-				{
-					order_data = data.data;
-				}
-			}
 			__camTransporterQueue[__camTransporterQueue.length] = {
 				player: player,
 				position: position,
@@ -1065,7 +1074,7 @@ const CAM_ORDER_FOLLOW = 4;
 //;; 		\item[pos] Position to defend.
 //;; 		\item[radius] Circle radius around \textbf{pos} to scan for targets.
 //;; 		\item[count] Override size of the original group. If unspecified,
-//;; 		number of doids in the group at call time. Regroup is calculated
+//;; 		number of droids in the group at call time. Regroup is calculated
 //;; 		against this value.
 //;; 		\item[repair] Health percentage to fall back to repair facility,
 //;; 		if any.
@@ -1080,7 +1089,7 @@ const CAM_ORDER_FOLLOW = 4;
 //;; 		\item[pos] An array of positions to patrol between.
 //;; 		\item[interval] Change positions every this many milliseconds.
 //;; 		\item[count] Override size of the original group. If unspecified,
-//;; 		number of doids in the group at call time. Regroup is calculated
+//;; 		number of droids in the group at call time. Regroup is calculated
 //;; 		against this value.
 //;; 		\item[repair] Health percentage to fall back to repair facility,
 //;; 		if any.
@@ -2373,7 +2382,9 @@ __camPreHookEvent("eventGroupSeen", function(viewer, group)
 
 __camPreHookEvent("eventTransporterExit", function(transport)
 {
-	if (transport.player !== CAM_HUMAN_PLAYER)
+	if (transport.player !== CAM_HUMAN_PLAYER ||
+	   (__camWinLossCallback === "__camVictoryStandard" &&
+	   transport.player === CAM_HUMAN_PLAYER) )
 	{
 		// allow the next transport to enter
 		if (camDef(__camIncomingTransports[transport.player]))
