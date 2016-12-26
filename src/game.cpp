@@ -4469,7 +4469,7 @@ static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 		/* Create the Droid */
 		turnOffMultiMsg(true);
 		psDroid = reallyBuildDroid(psTemplate, pos, player, onMission, rot);
-		ASSERT_OR_RETURN(NULL, psDroid != NULL, "Failed to build unit %s", sortedList[i].second.toUtf8().constData());
+		ASSERT_OR_RETURN(false, psDroid != NULL, "Failed to build unit %s", sortedList[i].second.toUtf8().constData());
 		turnOffMultiMsg(false);
 
 		// Copy the values across
