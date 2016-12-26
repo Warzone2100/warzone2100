@@ -96,6 +96,23 @@ static void check_pie(const char *input)
 		fprintf(stderr, "Bad TEXTURE directive in %s\n", input);
 		exit(1);
 	}
+	for (;;)
+	{
+		num = fscanf(fp, "EVENT %d %s\n", &x, s);
+		if (num == 0)
+			break;
+		if (num != 2)
+		{
+			fprintf(stderr, "Bad EVENT directive in %s\n", input);
+			exit(1);
+		}
+		if (x < 1
+		 || x > 3)
+		{
+			fprintf(stderr, "Bad type for EVENT directive in %s: %d\n", input, x);
+			exit(1);
+		}
+	}
 	num = fscanf(fp, "LEVELS %d\n", &levels);
 	if (num != 1)
 	{
@@ -137,7 +154,7 @@ static void check_pie(const char *input)
 		if (num != 1)
 		{
 			fprintf(stderr, "Bad POLYGONS directive in %s, level %d.\n", input, level);
-			exit(1);			
+			exit(1);
 		}
 		for (j = 0; j < faces; ++j)
 		{
@@ -224,6 +241,28 @@ static void check_pie(const char *input)
 				if (num != 3)
 				{
 					fprintf(stderr, "File %s. Bad CONNECTORS directive entry level %d, number %d\n", input, level, j);
+					exit(1);
+				}
+			}
+		}
+		num = fscanf(fp, "\nANIMOBJECT %*d %*d %d", &x);
+		if (num == 1)
+		{
+			if (x < 0)
+			{
+				fprintf(stderr, "Bad ANIMOBJECT directive in %s, level %d\n", input, level);
+				exit(1);
+			}
+			for (j = 0; j < x; ++j)
+			{
+				int frame;
+				float xpos, ypos, zpos, xrot, yrot, zrot, xscale, yscale, zscale;
+
+				num = fscanf(fp, "\n%d %f %f %f %f %f %f %f %f %f",
+						&frame, &xpos, &ypos, &zpos, &xrot, &yrot, &zrot, &xscale, &yscale, &zscale);
+				if (num != 10)
+				{
+					fprintf(stderr, "File %s. Bad ANIMOBJECT directive entry level %d, number %d\n", input, level, j);
 					exit(1);
 				}
 			}
