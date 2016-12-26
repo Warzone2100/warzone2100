@@ -142,8 +142,6 @@ static LONG WINAPI windowsExceptionHandler(PEXCEPTION_POINTERS pExceptionInfo)
 #  define MAX_BACKTRACE 20
 # endif
 
-#define write(x, y, z) abs(write(x, y, z))  // HACK Squelch unused result warning.
-
 # define MAX_PID_STRING 16
 # define MAX_DATE_STRING 256
 
@@ -382,6 +380,33 @@ static void setFatalSignalHandler(SigActionHandler signalHandler)
 #endif // _XOPEN_UNIX
 }
 
+static ssize_t writeAll(int const fd, const char* const str)
+{
+	size_t const to_write = strlen(str);
+	size_t written = 0;
+	while (written < to_write)
+	{
+		ssize_t ret = write(fd, str + written, to_write - written);
+		if (ret == -1)
+		{
+			switch (errno)
+			{
+				case EAGAIN:
+#if defined(EWOULDBLOCK) && EAGAIN != EWOULDBLOCK
+				case EWOULDBLOCK:
+#endif
+				case EINTR:
+					continue;
+				default:
+					return -1;
+			}
+		}
+		written += ret;
+	}
+
+	return written;
+}
+
 /**
  * Spawn a new GDB process and attach it to the current process.
  *
@@ -415,18 +440,15 @@ static pid_t execGdb(int const dumpFile, int *gdbWritePipe)
 	if (!programIsAvailable
 	    || !gdbIsAvailable)
 	{
-		write(dumpFile, "No extended backtrace dumped:\n",
-		      strlen("No extended backtrace dumped:\n"));
+		writeAll(dumpFile, "No extended backtrace dumped:\n");
 
 		if (!programIsAvailable)
 		{
-			write(dumpFile, "- Program path not available\n",
-			      strlen("- Program path not available\n"));
+			writeAll(dumpFile, "- Program path not available\n");
 		}
 		if (!gdbIsAvailable)
 		{
-			write(dumpFile, "- GDB not available\n",
-			      strlen("- GDB not available\n"));
+			writeAll(dumpFile, "- GDB not available\n");
 		}
 
 		return 0;
@@ -435,8 +457,7 @@ static pid_t execGdb(int const dumpFile, int *gdbWritePipe)
 	// Create a pipe to use for communication with 'gdb'
 	if (pipe(gdbPipe) == -1)
 	{
-		write(dumpFile, "Pipe failed\n",
-		      strlen("Pipe failed\n"));
+		writeAll(dumpFile, "Pipe failed\n");
 
 		printf("Pipe failed\n");
 
@@ -447,8 +468,7 @@ static pid_t execGdb(int const dumpFile, int *gdbWritePipe)
 	pid = fork();
 	if (pid == -1)
 	{
-		write(dumpFile, "Fork failed\n",
-		      strlen("Fork failed\n"));
+		writeAll(dumpFile, "Fork failed\n");
 
 		printf("Fork failed\n");
 
@@ -478,8 +498,7 @@ static pid_t execGdb(int const dumpFile, int *gdbWritePipe)
 	dup2(gdbPipe[0], STDIN_FILENO); // STDIN from pipe
 	dup2(dumpFile, STDOUT_FILENO); // STDOUT to dumpFile
 
-	write(dumpFile, "GDB extended backtrace:\n",
-	      strlen("GDB extended backtrace:\n"));
+	writeAll(dumpFile, "GDB extended backtrace:\n");
 
 	/* If execve() is successful it effectively prevents further
 	 * execution of this function.
@@ -487,8 +506,7 @@ static pid_t execGdb(int const dumpFile, int *gdbWritePipe)
 	execve(gdbPath, (char **)gdbArgv, (char **)gdbEnv);
 
 	// If we get here it means that execve failed!
-	write(dumpFile, "execcv(\"gdb\") failed\n",
-	      strlen("execcv(\"gdb\") failed\n"));
+	writeAll(dumpFile, "execcv(\"gdb\") failed\n");
 
 	// Terminate the child, indicating failure
 	_exit(1);
@@ -574,7 +592,7 @@ static bool gdbExtendedBacktrace(int const dumpFile)
 		        "disassemble /m\n", frame);
 	}
 
-	write(gdbPipe, gdbCommands, strlen(gdbCommands));
+	writeAll(gdbPipe, gdbCommands);
 
 	/* Flush our end of the pipe to make sure that GDB has all commands
 	 * directly available to it.
@@ -590,8 +608,7 @@ static bool gdbExtendedBacktrace(int const dumpFile)
 	// waitpid(): on error, -1 is returned
 	if (wpid == -1)
 	{
-		write(dumpFile, "GDB failed\n",
-		      strlen("GDB failed\n"));
+		writeAll(dumpFile, "GDB failed\n");
 		printf("GDB failed\n");
 
 		return false;
@@ -612,8 +629,7 @@ static bool gdbExtendedBacktrace(int const dumpFile)
 	if (!WIFEXITED(status)
 	    || WEXITSTATUS(status) != 0)
 	{
-		write(dumpFile, "GDB failed\n",
-		      strlen("GDB failed\n"));
+		writeAll(dumpFile, "GDB failed\n");
 		printf("GDB failed\n");
 
 		return false;
@@ -671,23 +687,22 @@ static void posixExceptionHandler(int signum)
 	dbgDumpHeader(dumpFile);
 
 #ifdef SA_SIGINFO
-	write(dumpFile, "Dump caused by signal: ", strlen("Dump caused by signal: "));
+	writeAll(dumpFile, "Dump caused by signal: ");
 
 	signal = wz_strsignal(siginfo->si_signo, siginfo->si_code);
-	write(dumpFile, signal, strlen(signal));
-	write(dumpFile, "\n\n", 2);
+	writeAll(dumpFile, signal);
+	writeAll(dumpFile, "\n\n");
 #endif
 
 	dbgDumpLog(dumpFile); // dump out the last several log calls
 
 # if defined(__GLIBC__)
 	// Dump raw backtrace in case GDB is not available or fails
-	write(dumpFile, "GLIBC raw backtrace:\n", strlen("GLIBC raw backtrace:\n"));
+	writeAll(dumpFile, "GLIBC raw backtrace:\n");
 	backtrace_symbols_fd(btBuffer, btSize, dumpFile);
-	write(dumpFile, "\n", 1);
+	writeAll(dumpFile, "\n");
 # else
-	write(dumpFile, "GLIBC not available, no raw backtrace dumped\n\n",
-	      strlen("GLIBC not available, no raw backtrace dumped\n\n"));
+	writeAll(dumpFile, "GLIBC not available, no raw backtrace dumped\n\n");
 # endif
 
 
