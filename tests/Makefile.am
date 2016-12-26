@@ -21,10 +21,17 @@ framework_linktest_SOURCES = framework_linktest.cpp
 framework_linktest_LDADD = $(top_builddir)/lib/framework/libframework.a $(PHYSFS_LIBS) $(LIBCRYPTO_LIBS) $(LDFLAGS)
 
 ivis_linktest_SOURCES = ivis_linktest.cpp
-ivis_linktest_LDADD = $(top_builddir)/lib/sdl/libsdl.a $(top_builddir)/lib/framework/libframework.a \
-	$(top_builddir)/lib/ivis_opengl/libivis_opengl.a $(top_builddir)/3rdparty/quesoglc/libquesoglc.a  \
+ivis_linktest_LDADD =
+if BACKEND_SDL
+ivis_linktest_LDADD += $(top_builddir)/lib/sdl/libsdl.a
+endif
+if BACKEND_QT
+ivis_linktest_LDADD += $(top_builddir)/lib/qtgame/libqtgame.a
+endif
+ivis_linktest_LDADD += $(top_builddir)/lib/framework/libframework.a \
+	$(top_builddir)/lib/ivis_opengl/libivis_opengl.a \
 	$(PHYSFS_LIBS) $(LIBCRYPTO_LIBS) $(QT5_LIBS) $(SDL_LIBS) $(OPENGL_LIBS) $(OPENGLC_LIBS) $(GLEW_LIBS) \
-	$(X_LIBS) $(X_EXTRA_LIBS) $(LDFLAGS) $(PNG_LIBS)
+	$(X_LIBS) $(X_EXTRA_LIBS) $(LDFLAGS) $(PNG_LIBS) $(FONT_LIBS)
 
 modeltest_SOURCES = modeltest.c
 
