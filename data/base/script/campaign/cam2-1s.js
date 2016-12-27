@@ -1,5 +1,6 @@
 /* 
 SUB_2_1S campaign script
+Author: Cristian Odorico / Alpha93
  */
 include("script/campaign/libcampaign.js");
 
@@ -23,6 +24,5 @@ function eventLevelStart()
     hackAddMessage("MB2_1MSG", MISS_MSG, 0, true);
     hackAddMessage("MB2_1MSG2", MISS_MSG, 0, false);
     //Set Victory Conditions
-    camSetStandardWinLossConditions(CAM_VICTORY_PRE_OFFWORLD, "SUB_2_1");
-    
+    camSetStandardWinLossConditions(CAM_VICTORY_PRE_OFFWORLD, "SUB_2_1");   
 }
