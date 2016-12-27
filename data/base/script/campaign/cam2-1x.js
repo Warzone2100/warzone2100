@@ -30,16 +30,16 @@ function preDamageUnits()
     downedTransportUnits = enumArea ("crashSite", ALLIES, false);
     // index initialization
     var j = 0; 
-    for ( j = 0; j < downedTransportUnits.length; j++)
+    for (j = 0; j < downedTransportUnits.length; j++)
     {
         // if Object type is DROID run this
-        if ( downedTransportUnits.type[j] === DROID )
+        if (downedTransportUnits.type[j] === DROID )
         {
             //reduce unit HPs between 50% and 70%
             downedTransportUnits.health[j] = downedTransportUnits.health[j] * preDamage(0.3, 0.5);
         }
         // if Object type is STRUCTURE (i.e. j index points to the element containing the transport)
-        if ( downedTransportUnits.type[j] === STRUCTURE)
+        if (downedTransportUnits.type[j] === STRUCTURE)
         {
             //reduce transport HPs anywhere between 30% and 50%
             downedTransportUnits.health[j] = downedTransportUnits.health[j] * preDamage(0.5, 0.7); 
