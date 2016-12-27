@@ -131,7 +131,7 @@ static QImage loadQImage(char const *fileName, char const *format = nullptr)
 			data.resize(lengthRead);
 			QImage image;
 			image.loadFromData(&data[0], data.size(), format);
-			return std::move(image);
+			return image;
 		}
 		data.resize(data.size() + 16384);
 	}
