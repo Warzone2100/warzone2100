@@ -25,7 +25,8 @@ function preDamage(min, max)
 
 function preDamageUnits() // function that applies damage to units in the downed transport transport team
 {
-    downedTransportUnits = enumArea ("crashSite", ALLIES, false); // fill the array with the objects defining the allied units in the crash site area
+    // fill the array with the objects defining the allied units in the crash site area
+    downedTransportUnits = enumArea ("crashSite", ALLIES, false); 
     var j = 0; // index initialization
     for ( j = 0; j < downedTransportUnits.length; j++)
     {
