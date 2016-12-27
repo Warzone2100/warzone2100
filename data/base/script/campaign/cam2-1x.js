@@ -23,21 +23,22 @@ function preDamage(min, max)
     return Math.floor(Math.random () * ( max - min + 1) + min);
 }
 
-// function that applies damage to units in the downed transport transport team
-function preDamageUnits() 
+ // function that applies damage to units in the downed transport transport team
+function preDamageUnits()
 {
-    // fill the array with the objects defining the allied units in the crash site area
-    downedTransportUnits = enumArea ("crashSite", ALLIES, false); 
-    var j = 0; // index initialization
+     // fill the array with the objects defining the allied units in the crash site area
+    downedTransportUnits = enumArea ("crashSite", ALLIES, false);
+    // index initialization
+    var j = 0; 
     for ( j = 0; j < downedTransportUnits.length; j++)
     {
         // if Object type is DROID run this
-        if ( downedTransportUnits.type[j] === DROID ) 
+        if ( downedTransportUnits.type[j] === DROID )
         {
             //reduce unit HPs between 50% and 70%
             downedTransportUnits.health[j] = downedTransportUnits.health[j] * preDamage(0.3, 0.5);
         }
-         // if Object type is STRUCTURE (i.e. j index points to the element containing the transport)
+        // if Object type is STRUCTURE (i.e. j index points to the element containing the transport)
         if ( downedTransportUnits.type[j] === STRUCTURE)
         {
             //reduce transport HPs anywhere between 30% and 50%
@@ -52,11 +53,13 @@ camAreaEvent("crashSite", function(droid)
 {
     // initialize index variable to transfer droid
     var i = 0;
-    // victory conditions check and unit transfer
+    //transfer units
     for ( i = 0; i < downedTransportUnits.length; i++)
     {
-        if (downedTransportUnits[i].type === STRUCTURE) //condition to
+        //if index points to transport, check win condition
+        if (downedTransportUnits[i].type === STRUCTURE) 
         {
+            //condition for win: transport must be alive
             if (downedTransportUnits[i].health !== NULLOBJECT)
             {
                 playSound(successSound);
@@ -68,8 +71,11 @@ camAreaEvent("crashSite", function(droid)
                 gameOverMessage(false);
             }
         }
-        //transfer the units
-        eventObjectTransfer (downedTransportUnits[i].me, downedTransportTeam); 
+        else
+        {
+            //transfer the units
+            eventObjectTransfer (downedTransportUnits[i].me, downedTransportTeam);
+        }
     }
     remainingTime = getMissionTime();
     if (customVictoryFlag === 1)
