@@ -59,7 +59,7 @@ camAreaEvent("crashSite", function(droid)
         //if index points to transport, check win condition
         if (downedTransportUnits[i].type === STRUCTURE) 
         {
-            //condition for win: transport must be alive
+            //victory condition: transport must be alive
             if (downedTransportUnits[i].health !== NULLOBJECT)
             {
                 playSound(successSound);
