@@ -451,7 +451,7 @@ bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map)
 			current_mode = mod_override;
 		}
 
-		// User's home dir must be first so we allways see what we write
+		// User's home dir must be first so we always see what we write
 		PHYSFS_removeFromSearchPath(PHYSFS_getWriteDir());
 		PHYSFS_addToSearchPath(PHYSFS_getWriteDir(), PHYSFS_PREPEND);
 

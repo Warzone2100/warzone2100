@@ -2618,8 +2618,7 @@ error:
 }
 // -----------------------------------------------------------------------------------------
 
-// Modified by AlexL , now takes a filename, with no popup....
-bool saveGame(char *aFileName, GAME_TYPE saveType)
+bool saveGame(const char *aFileName, GAME_TYPE saveType)
 {
 	UDWORD			fileExtension;
 	DROID			*psDroid, *psNext;

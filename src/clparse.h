@@ -29,5 +29,6 @@ bool ParseCommandLine(int argc, const char **argv);
 bool ParseCommandLineEarly(int argc, const char **argv);
 
 bool autogame_enabled();
+const std::string &saveandquit_enabled();
 
 #endif // __INCLUDED_SRC_CLPARSE_H__

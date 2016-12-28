@@ -120,7 +120,7 @@ extern bool loadScriptState(char *pFileName);
 /// Load the terrain types
 extern bool loadTerrainTypeMap(const char *pFileData, UDWORD filesize);
 
-extern bool saveGame(char *aFileName, GAME_TYPE saveType);
+bool saveGame(const char *aFileName, GAME_TYPE saveType);
 
 // Get the campaign number for loadGameInit game
 extern UDWORD getCampaign(const char *fileName);

@@ -139,11 +139,11 @@ static bool getCurrentDir(char *const dest, size_t const size)
 	{
 		if (errno == ERANGE)
 		{
-			debug(LOG_ERROR, "getPlatformUserDir: The buffer to contain our current directory is too small (%u bytes and more needed)", (unsigned int)size);
+			debug(LOG_ERROR, "The buffer to contain our current directory is too small (%u bytes and more needed)", (unsigned int)size);
 		}
 		else
 		{
-			debug(LOG_ERROR, "getPlatformUserDir: getcwd failed: %s", strerror(errno));
+			debug(LOG_ERROR, "getcwd failed: %s", strerror(errno));
 		}
 
 		return false;
@@ -162,7 +162,7 @@ static bool getCurrentDir(char *const dest, size_t const size)
 		FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, NULL, err, 0, (char *)&err_string, 0, NULL);
 
 		// Print an error message with the above description
-		debug(LOG_ERROR, "getPlatformUserDir: GetCurrentDirectory failed (error code: %d): %s", err, err_string);
+		debug(LOG_ERROR, "GetCurrentDirectory failed (error code: %d): %s", err, err_string);
 
 		// Free our chunk of memory FormatMessageA gave us
 		LocalFree(err_string);
@@ -171,7 +171,7 @@ static bool getCurrentDir(char *const dest, size_t const size)
 	}
 	else if (len > size)
 	{
-		debug(LOG_ERROR, "getPlatformUserDir: The buffer to contain our current directory is too small (%u bytes and %d needed)", (unsigned int)size, len);
+		debug(LOG_ERROR, "The buffer to contain our current directory is too small (%u bytes and %d needed)", (unsigned int)size, len);
 
 		return false;
 	}
@@ -306,7 +306,7 @@ static void initialize_ConfigDir(void)
 	}
 
 
-	// User's home dir first so we allways see what we write
+	// User's home dir first so we always see what we write
 	PHYSFS_addToSearchPath(PHYSFS_getWriteDir(), PHYSFS_PREPEND);
 
 	PHYSFS_permitSymbolicLinks(1);
@@ -376,9 +376,9 @@ static void check_Physfs(void)
  *
  * Priority:
  * Lower loads first. Current:
- * -datadir > User's home dir > source tree data > AutoPackage > BaseDir > DEFAULT_DATADIR
+ * --datadir > User's home dir > source tree data > AutoPackage > BaseDir > DEFAULT_DATADIR
  *
- * Only -datadir and home dir are allways examined. Others only if data still not found.
+ * Only --datadir and home dir are always examined. Others only if data still not found.
  *
  * We need ParseCommandLine, before we can add any mods...
  *

@@ -43,11 +43,12 @@
 #include "lib/framework/wzconfig.h"
 #include "lib/framework/file.h"
 #include "lib/gamelib/gtime.h"
+#include "lib/netplay/netplay.h"
 #include "multiplay.h"
 #include "map.h"
 #include "difficulty.h"
 #include "console.h"
-#include "lib/netplay/netplay.h"
+#include "clparse.h"
 
 #include "qtscriptdebug.h"
 #include "qtscriptfuncs.h"
@@ -1016,6 +1017,13 @@ bool triggerEvent(SCRIPT_TRIGGER_TYPE trigger, BASE_OBJECT *psObj)
 			break;
 		}
 	}
+
+	if ((trigger == TRIGGER_START_LEVEL || trigger == TRIGGER_GAME_LOADED) && !saveandquit_enabled().empty())
+	{
+		saveGame(saveandquit_enabled().c_str(), GTYPE_SAVE_START);
+		exit(0);
+	}
+
 	return true;
 }
 

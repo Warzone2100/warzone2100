@@ -345,6 +345,7 @@ static QString arrayToString(const T *array, int length)
 	return l.join(", ");
 }
 
+// Using ^ to denote stats that are in templates, and as such do not change.
 QStandardItemList componentToString(const QString &name, const COMPONENT_STATS *psStats)
 {
 	QStandardItem *key = new QStandardItem(name);
