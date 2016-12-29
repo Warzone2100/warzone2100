@@ -65,6 +65,7 @@
 #include "atmos.h"
 #include "warcam.h"
 #include "projectile.h"
+#include "component.h"
 
 #define FAKE_REF_LASSAT 999
 #define ALL_PLAYERS -1
@@ -4215,6 +4216,17 @@ static QScriptValue js_replaceTexture(QScriptContext *context, QScriptEngine *)
 	return QScriptValue();
 }
 
+//-- \subsection{changePlayerColour(player, colour)}
+//-- Change a player's colour slot. The current player colour can be read from the playerData array. There are as many
+//-- colour slots as the maximum number of players. (3.2.3+ only)
+static QScriptValue js_changePlayerColour(QScriptContext *context, QScriptEngine *)
+{
+	int player = context->argument(0).toInt32();
+	int colour = context->argument(1).toInt32();
+	setPlayerColour(player, colour);
+	return QScriptValue();
+}
+
 // ----------------------------------------------------------------------------------------
 // Register functions with scripting system
 
@@ -4940,6 +4952,7 @@ bool registerFunctions(QScriptEngine *engine, QString scriptName)
 	engine->globalObject().setProperty("removeSpotter", engine->newFunction(js_removeSpotter));
 	engine->globalObject().setProperty("syncRequest", engine->newFunction(js_syncRequest));
 	engine->globalObject().setProperty("replaceTexture", engine->newFunction(js_replaceTexture));
+	engine->globalObject().setProperty("changePlayerColour", engine->newFunction(js_changePlayerColour));
 
 	// horrible hacks follow -- do not rely on these being present!
 	engine->globalObject().setProperty("hackNetOff", engine->newFunction(js_hackNetOff));
