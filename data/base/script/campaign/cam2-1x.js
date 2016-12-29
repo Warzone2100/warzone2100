@@ -20,20 +20,20 @@ function preDamage(min, max)
 {
     min = Math.ceil(min);
     max = Math.floor(max);
-    return Math.floor(Math.random () * ( max - min + 1) + min);
+    return Math.floor(Math.random () * (max - min + 1) + min);
 }
 
  // function that applies damage to units in the downed transport transport team
 function preDamageUnits()
 {
-     // fill the array with the objects defining the allied units in the crash site area
+    // fill the array with the objects defining the allied units in the crash site area
     downedTransportUnits = enumArea ("crashSite", ALLIES, false);
     // index initialization
     var j = 0; 
     for (j = 0; j < downedTransportUnits.length; j++)
     {
         // if Object type is DROID run this
-        if (downedTransportUnits.type[j] === DROID )
+        if (downedTransportUnits.type[j] === DROID)
         {
             //reduce unit HPs between 50% and 70%
             downedTransportUnits.health[j] = downedTransportUnits.health[j] * preDamage(0.3, 0.5);
@@ -54,9 +54,9 @@ camAreaEvent("crashSite", function(droid)
     // initialize index variable to transfer droid
     var i = 0;
     //transfer units
-    for ( i = 0; i < downedTransportUnits.length; i++)
+    for (i = 0; i < downedTransportUnits.length; i++)
     {
-        //if index points to transport, check win condition
+        //if index points to transport, check victory condition
         if (downedTransportUnits[i].type === STRUCTURE) 
         {
             //victory condition: transport must be alive
@@ -67,20 +67,26 @@ camAreaEvent("crashSite", function(droid)
             }
             else
             {
+                //if transport died, the game is over
                 playSound(failureSound);
                 gameOverMessage(false);
             }
-        }
-        else
+        }              
+    }
+    i = 0;
+    //store the time in the variable to give power later
+    remainingTime = getMissionTime();
+    //if transport is alive, transfer units, turn time into power and load next level
+    if (customVictoryFlag === 1)
+    {
+        for(i = 0; i < downedTransportUnits.length; i++)
         {
             //transfer the units
             eventObjectTransfer (downedTransportUnits[i].me, downedTransportTeam);
         }
-    }
-    remainingTime = getMissionTime();
-    if (customVictoryFlag === 1)
-    {
+        //turn time into power
         extraPowerTime(remainingTime, player);
+        //load next level
         camNextLevel("CAM_2B");
     }
 });
