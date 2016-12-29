@@ -488,6 +488,10 @@ bool ParseCommandLine(int argc, const char **argv)
 			bMultiPlayer = false;
 			bMultiMessages = false;
 			NetPlay.players[0].allocated = true;
+			for (int i = 0; i < MAX_PLAYERS; i++)
+			{
+				NET_InitPlayer(i, true, false);
+			}
 			if (!strcmp(token, "CAM_1A") || !strcmp(token, "CAM_2A") || !strcmp(token, "CAM_3A"))
 			{
 				game.type = CAMPAIGN;

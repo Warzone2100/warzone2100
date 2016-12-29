@@ -948,7 +948,12 @@ bool initTerrain()
 /// free all memory and opengl buffers used by the terrain renderer
 void shutdownTerrain()
 {
-	ASSERT_OR_RETURN(, sectors, "trying to shutdown terrain when it didn't need it!");
+	if (!sectors)
+	{
+		// This happens in some cases when loading a savegame from level init
+		debug(LOG_ERROR, "Trying to shutdown terrain when we did not need to!");
+		return;
+	}
 	glDeleteBuffers(1, &geometryVBO);
 	glDeleteBuffers(1, &geometryIndexVBO);
 	glDeleteBuffers(1, &waterVBO);
