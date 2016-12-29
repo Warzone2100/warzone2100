@@ -6,14 +6,10 @@ Author: Cristian Odorico (Alpha93)
 include ("script/campaign/libcampaign.js");
 include ("script/campaign/templates.js");
 
-//variables initialization
+//global variables initialization
 var player = 0;
 var downedTransportTeam = 1;
 var downedTransportUnits = [];
-var successSound = "pcv615.ogg";
-var failureSound = "pcv622.ogg";
-var customVictoryFlag = 0;
-var remainingTime = 0;
 
 // generate a random number between a min and max range (both ends included)
 function preDamage(min, max)
@@ -53,6 +49,11 @@ camAreaEvent("crashSite", function(droid)
 {
     // initialize index variable to transfer droid
     var i = 0;
+    //initialize function specific variables
+    var successSound = "pcv615.ogg";
+    var failureSound = "pcv622.ogg";
+    var customVictoryFlag = 0;
+    var remainingTime = 0;
     //transfer units
     for (i = 0; i < downedTransportUnits.length; i++)
     {
