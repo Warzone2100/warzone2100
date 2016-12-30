@@ -14,8 +14,6 @@ var downedTransportUnits = [];
 // generate a random number between a min and max range (both ends included)
 function preDamage(min, max)
 {
-    min = Math.ceil(min);
-    max = Math.floor(max);
     return Math.floor(Math.random () * (max - min + 1) + min);
 }
 
@@ -100,6 +98,8 @@ function eventStartLevel()
     setNoGoArea(subLandingZone.x, subLandingZone.y, subLandingZone.x2, subLandingZone.y2);
     //set alliance between player and AI downed transport team
     setAlliance(player, downedTransportTeam, true);
+    //set downed transport team colour to be Project Green
+    changePlayerColour(downedTransportTeam, 0);
     //disable reinforcements
     setReinforcementTime(-1);
 };
