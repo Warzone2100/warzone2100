@@ -4137,6 +4137,39 @@ static QScriptValue js_cameraTrack(QScriptContext *context, QScriptEngine *)
 	return QScriptValue();
 }
 
+//-- \subsection{setHealth(object, health)}
+//-- Change the health of the given game object, in percentage. Does not take care of network sync, so for multiplayer games,
+//-- needs wrapping in a syncRequest. (3.2.3+ only.)
+static QScriptValue js_setHealth(QScriptContext *context, QScriptEngine *)
+{
+	QScriptValue objVal = context->argument(0);
+	int health = context->argument(1).toInt32();
+	SCRIPT_ASSERT(context, health >= 1, "Bad health value %d", health);
+	int id = objVal.property("id").toInt32();
+	int player = objVal.property("player").toInt32();
+	OBJECT_TYPE type = (OBJECT_TYPE)objVal.property("type").toInt32();
+	SCRIPT_ASSERT(context, type == OBJ_DROID || type == OBJ_STRUCTURE || type == OBJ_FEATURE, "Bad object type");
+	if (type == OBJ_DROID)
+	{
+		DROID *psDroid = IdToDroid(id, player);
+		SCRIPT_ASSERT(context, psDroid, "No such droid id %d belonging to player %d", id, player);
+		psDroid->body = health * (double)psDroid->originalBody / 100;
+	}
+	else if (type == OBJ_STRUCTURE)
+	{
+		STRUCTURE *psStruct = IdToStruct(id, player);
+		SCRIPT_ASSERT(context, psStruct, "No such structure id %d belonging to player %d", id, player);
+		psStruct->body = health * MAX(1, structureBody(psStruct)) / 100;
+	}
+	else
+	{
+		FEATURE *psFeat = IdToFeature(id, player);
+		SCRIPT_ASSERT(context, psFeat, "No such feature id %d belonging to player %d", id, player);
+		psFeat->body = health * psFeat->psStats->body / 100;
+	}
+	return QScriptValue();
+}
+
 //-- \subsection{addSpotter(x, y, player, range, type, expiry)}
 //-- Add an invisible viewer at a given position for given player that shows map in given range. \emph{type}
 //-- is zero for vision reveal, or one for radar reveal. The difference is that a radar reveal can be obstructed
@@ -4953,6 +4986,7 @@ bool registerFunctions(QScriptEngine *engine, QString scriptName)
 	engine->globalObject().setProperty("syncRequest", engine->newFunction(js_syncRequest));
 	engine->globalObject().setProperty("replaceTexture", engine->newFunction(js_replaceTexture));
 	engine->globalObject().setProperty("changePlayerColour", engine->newFunction(js_changePlayerColour));
+	engine->globalObject().setProperty("setHealth", engine->newFunction(js_setHealth));
 
 	// horrible hacks follow -- do not rely on these being present!
 	engine->globalObject().setProperty("hackNetOff", engine->newFunction(js_hackNetOff));
