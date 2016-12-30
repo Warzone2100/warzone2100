@@ -7,7 +7,7 @@ include ("script/campaign/libcampaign.js");
 include ("script/campaign/templates.js");
 
 //global variables initialization
-var player = 0;
+var CAM_HUMAN_PLAYER = 0;
 var downedTransportTeam = 1;
 var downedTransportUnits = [];
 
@@ -84,7 +84,7 @@ camAreaEvent("crashSite", function(droid)
             eventObjectTransfer (downedTransportUnits[i].me, downedTransportTeam);
         }
         //turn time into power
-        extraPowerTime(remainingTime, player);
+        extraPowerTime(remainingTime, CAM_HUMAN_PLAYER);
         //load next level
         camNextLevel("CAM_2B");
     }
@@ -97,7 +97,7 @@ function eventStartLevel()
     //set landing zone
     setNoGoArea(subLandingZone.x, subLandingZone.y, subLandingZone.x2, subLandingZone.y2);
     //set alliance between player and AI downed transport team
-    setAlliance(player, downedTransportTeam, true);
+    setAlliance(CAM_HUMAN_PLAYER, downedTransportTeam, true);
     //set downed transport team colour to be Project Green
     changePlayerColour(downedTransportTeam, 0);
     //disable reinforcements
