@@ -1,87 +1,72 @@
 /* 
 SUB_2_1 Script
-Author: Cristian Odorico (Alpha93)
+Authors: Cristian Odorico (Alpha93) / KJeff01
  */
 //libraries initialization
 include ("script/campaign/libcampaign.js");
 include ("script/campaign/templates.js");
 
-//global variables initialization
-var CAM_HUMAN_PLAYER = 0;
-var downedTransportTeam = 1;
-var downedTransportUnits = [];
+//constants initialization
+const downedTransportTeam = 1;
 
-// generate a random number between a min and max range (both ends included)
-function preDamage(min, max)
-{
-    return Math.floor(Math.random () * (max - min + 1) + min);
-}
-
- // function that applies damage to units in the downed transport transport team
+//function that applies damage to units in the downed transport transport team
 function preDamageUnits()
 {
     // fill the array with the objects defining the allied units in the crash site area
-    downedTransportUnits = enumArea ("crashSite", ALLIES, false);
-    // index initialization
-    var j = 0; 
+    var downedTransportUnits = enumArea ("crashSite", ALLIES, false);
+    
     for (j = 0; j < downedTransportUnits.length; j++)
     {
-        // if Object type is DROID run this
-        if (downedTransportUnits.type[j] === DROID)
-        {
-            //reduce unit HPs between 50% and 70%
-            downedTransportUnits.health[j] = downedTransportUnits.health[j] * preDamage(0.3, 0.5);
-        }
-        // if Object type is STRUCTURE (i.e. j index points to the element containing the transport)
-        if (downedTransportUnits.type[j] === STRUCTURE)
-        {
-            //reduce transport HPs anywhere between 30% and 50%
-            downedTransportUnits.health[j] = downedTransportUnits.health[j] * preDamage(0.5, 0.7); 
-        }
+        setHealth(downedTransportUnits, 40 + camRand(20));
     }
-    return downedTransportUnits;
 }
 
+//create group of cyborgs and send them on war path
+camManageGroup ( camMakeGroup("cyborgPosition"), CAM_ORDER_ATTACK, {
+                            pos: camMakePos ("cyborgAttack"),
+                            morale: 50,
+                            regroup: true
+                            });
+//all other tanks are to defend their positions
+                          
 //trigger event when droid reaches the downed transport
 camAreaEvent("crashSite", function(droid)
 {
-    // initialize index variable to transfer droid
-    var i = 0;
     //initialize function specific variables
-    var successSound = "pcv615.ogg";
-    var failureSound = "pcv622.ogg";
+    const successSound = "pcv615.ogg";
+    const failureSound = "pcv622.ogg";
+    const downedTransportTeam = 1;
+    //count structures in the crash area
+    const transport = enumStruct(downedTransportTeam).length;
     var customVictoryFlag = 0;
     var remainingTime = 0;
-    //transfer units
-    for (i = 0; i < downedTransportUnits.length; i++)
+    //remove blip
+    hackRemoveMessage("C21_OBJECTIVE", PROX_MSG, CAM_HUMAN_PLAYER, true);
+    //victory condition: transport must be alive
+    if (transport === 1)
     {
-        //if index points to transport, check victory condition
-        if (downedTransportUnits[i].type === STRUCTURE) 
-        {
-            //victory condition: transport must be alive
-            if (downedTransportUnits[i].health !== NULLOBJECT)
-            {
-                playSound(successSound);
-                customVictoryFlag = 1;
-            }
-            else
-            {
-                //if transport died, the game is over
-                playSound(failureSound);
-                gameOverMessage(false);
-            }
-        }              
+            playSound(successSound);
+            customVictoryFlag = 1;
     }
-    i = 0;
+    else
+    {
+            //if transport died, the game is over
+            playSound(failureSound);
+            gameOverMessage(false);
+    }             
+
     //store the time in the variable to give power later
     remainingTime = getMissionTime();
+
     //if transport is alive, transfer units, turn time into power and load next level
     if (customVictoryFlag === 1)
     {
-        for(i = 0; i < downedTransportUnits.length; i++)
+        //get a list of droids in the downed transport team array
+        var downedTransportUnits = enumDroid(downedTransportTeam);
+        for(var i = 0; i < downedTransportUnits.length; i++)
         {
             //transfer the units
-            eventObjectTransfer (downedTransportUnits[i].me, downedTransportTeam);
+            donateObject(downedTransportUnits[i], CAM_HUMAN_PLAYER);
         }
         //turn time into power
         extraPowerTime(remainingTime, CAM_HUMAN_PLAYER);
@@ -93,7 +78,7 @@ camAreaEvent("crashSite", function(droid)
 function eventStartLevel()
 {
     //variables initialization for LZ setup
-    var subLandingZone = getObject("subLandingZone");
+    var subLandingZone = getObject("landingZone");
     //set landing zone
     setNoGoArea(subLandingZone.x, subLandingZone.y, subLandingZone.x2, subLandingZone.y2);
     //set alliance between player and AI downed transport team
@@ -102,4 +87,14 @@ function eventStartLevel()
     changePlayerColour(downedTransportTeam, 0);
     //disable reinforcements
     setReinforcementTime(-1);
+    //centre view on starting position
+    var startpos = getObject("startingPosition");
+    centreView(startpos.x, startpos.y);
+    //Setup transporter entry/exit points
+    var tent = getObject("transporterEntry");
+    startTransporterEntry(tent.x, tent.y, CAM_HUMAN_PLAYER);
+    var text = getObject("transporterExit");
+    setTransporterExit(text.x, text.y, CAM_HUMAN_PLAYER);
+    //add crash site blip
+    hackAddMessage("C21_OBJECTIVE", PROX_MSG, CAM_HUMAN_PLAYER, true);
 };
