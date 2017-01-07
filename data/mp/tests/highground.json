@@ -9,10 +9,12 @@
         "version": 2
     },
     "player_0": {
-        "team": 0
+        "team": 0,
+	"ai": "multiplay/skirmish/semperfi.js"
     },
     "player_1": {
         "difficulty": "Medium",
-        "team": 1
+        "team": 1,
+	"ai": "multiplay/skirmish/semperfi.js"
     }
 }

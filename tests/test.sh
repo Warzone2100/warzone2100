@@ -26,6 +26,17 @@ function cam
 	run "--loadcampaign=$1 --saveandquit=savegames/campaign/$1-loadsave.gam" "Loadsave run"
 }
 
+function skirmish
+{
+	echo
+	echo " ==== $1 : $2 ===="
+	run "--skirmish=$1.json --autogame" "$1 : Running"
+	# TBD: Use the below instead when we have ported player part of savegames to JSON, and can save more AI state. For now,
+	# this will crash, because it expects an AI name. We do not want to use AI names for challenge files.
+	#run "--skirmish=$1.json --autogame --saveandquit=savegames/skirmish/$1.gam" "$1 : Launching and saving"
+	#run "--autogame --loadskirmish=$1" "$1 : Loading and running"
+}
+
 echo
 echo "Running Warzone2100 automated tests"
 echo -n "Time is: "
@@ -36,3 +47,7 @@ cam CAM_2A "Beta campaign"
 cam CAM_3A "Gamma campaign"
 cam TUTORIAL3 "Tutorial"
 cam FASTPLAY "Fastplay"
+
+skirmish highground "Basic skirmish"
+skirmish miza "All AIs"
+skirmish miza_challenge "Best AI vs 7 old timers"

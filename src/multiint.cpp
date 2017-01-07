@@ -302,7 +302,6 @@ void loadMultiScripts()
 		ininame = "tests/" + QString::fromStdString(wz_skirmish_test());
 		path = "tests/";
 	}
-	hostlaunch = 0;
 
 	// Reset assigned counter
 	for (auto it = aidata.begin(); it < aidata.end(); ++it)
@@ -353,12 +352,12 @@ void loadMultiScripts()
 		}
 		// The i == selectedPlayer hack is to enable autogames
 		if (bMultiPlayer && game.type == SKIRMISH && (!NetPlay.players[i].allocated || i == selectedPlayer)
-		    && NetPlay.players[i].ai >= 0 && myResponsibility(i))
+		    && (NetPlay.players[i].ai >= 0 || hostlaunch == 2) && myResponsibility(i))
 		{
 			if (PHYSFS_exists(ininame.toUtf8().constData())) // challenge file may override AI
 			{
 				WzConfig ini(ininame, WzConfig::ReadOnly);
-				ini.beginGroup("player_" + QString::number(i + 1));
+				ini.beginGroup("player_" + QString::number(i));
 				if (ini.contains("ai"))
 				{
 					QString val = ini.value("ai").toString();
@@ -369,6 +368,7 @@ void loadMultiScripts()
 					}
 					loadPlayerScript(val, i, NetPlay.players[i].difficulty);
 					NetPlay.players[i].ai = AI_CUSTOM;
+					debug(LOG_WZ, "Custom AI %s loaded for player %u", val.toUtf8().constData(), i);
 					continue;
 				}
 				ini.endGroup();

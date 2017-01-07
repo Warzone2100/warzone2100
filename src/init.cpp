@@ -1289,6 +1289,8 @@ bool stageThreeShutDown(void)
 {
 	debug(LOG_WZ, "== stageThreeShutDown ==");
 
+	hostlaunch = 0;
+
 	removeSpotters();
 
 	// There is an assymetry in scripts initialization and destruction, due

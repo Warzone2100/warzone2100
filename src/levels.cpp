@@ -53,6 +53,7 @@
 #include "main.h"
 #include "multiint.h"
 #include "qtscript.h"
+#include "wrappers.h"
 
 extern int lev_get_lineno(void);
 extern char *lev_get_text(void);
@@ -1045,7 +1046,10 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 	if (autogame_enabled())
 	{
 		gameTimeSetMod(Rational(500));
-		jsAutogameSpecific("multiplay/skirmish/semperfi.js", selectedPlayer);
+		if (hostlaunch != 2) // tests will specify the AI manually
+		{
+			jsAutogameSpecific("multiplay/skirmish/semperfi.js", selectedPlayer);
+		}
 	}
 
 	return true;
