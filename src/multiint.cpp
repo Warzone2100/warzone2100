@@ -287,8 +287,8 @@ void loadMultiScripts()
 	bool defaultRules = true;
 	char aFileName[256];
 	char aPathName[256];
-	const char *ininame = challengeActive ? sRequestResult : aFileName;
-	const char *path = challengeActive ? "challenges/" : aPathName;
+	QString ininame = challengeActive ? sRequestResult : aFileName;
+	QString path = challengeActive ? "challenges/" : aPathName;
 	LEVEL_DATASET *psLevel = levFindDataSet(game.map, &game.hash);
 	ASSERT_OR_RETURN(, psLevel, "No level found for %s", game.map);
 	sstrcpy(aFileName, psLevel->apDataFiles[psLevel->game]);
@@ -297,6 +297,13 @@ void loadMultiScripts()
 	sstrcat(aFileName, ".json");
 	sstrcat(aPathName, "/");
 
+	if (hostlaunch == 2)
+	{
+		ininame = "tests/" + QString::fromStdString(wz_skirmish_test());
+		path = "tests/";
+	}
+	hostlaunch = 0;
+
 	// Reset assigned counter
 	for (auto it = aidata.begin(); it < aidata.end(); ++it)
 	{
@@ -304,7 +311,7 @@ void loadMultiScripts()
 	}
 
 	// Load map scripts
-	if (PHYSFS_exists(ininame))
+	if (PHYSFS_exists(ininame.toUtf8().constData()))
 	{
 		WzConfig ini(ininame, WzConfig::ReadOnly);
 		debug(LOG_SAVE, "Loading map scripts");
@@ -348,7 +355,7 @@ void loadMultiScripts()
 		if (bMultiPlayer && game.type == SKIRMISH && (!NetPlay.players[i].allocated || i == selectedPlayer)
 		    && NetPlay.players[i].ai >= 0 && myResponsibility(i))
 		{
-			if (PHYSFS_exists(ininame)) // challenge file may override AI
+			if (PHYSFS_exists(ininame.toUtf8().constData())) // challenge file may override AI
 			{
 				WzConfig ini(ininame, WzConfig::ReadOnly);
 				ini.beginGroup("player_" + QString::number(i + 1));
@@ -2758,8 +2765,13 @@ static void stopJoining(void)
 static void loadMapSettings1()
 {
 	char aFileName[256];
-	const char *ininame = challengeActive ? sRequestResult : aFileName;
+	QString ininame = challengeActive ? sRequestResult : aFileName;
 	LEVEL_DATASET *psLevel = levFindDataSet(game.map, &game.hash);
+
+	if (hostlaunch == 2)
+	{
+		ininame = "tests/" + QString::fromStdString(wz_skirmish_test());
+	}
 
 	ASSERT_OR_RETURN(, psLevel, "No level found for %s", game.map);
 	sstrcpy(aFileName, psLevel->apDataFiles[psLevel->game]);
@@ -2767,7 +2779,7 @@ static void loadMapSettings1()
 	sstrcat(aFileName, ".json");
 	WzConfig ini(ininame, WzConfig::ReadOnly);
 
-	if (!PHYSFS_exists(ininame))
+	if (!PHYSFS_exists(ininame.toUtf8().constData()))
 	{
 		return;
 	}
@@ -2797,15 +2809,20 @@ static void loadMapSettings1()
 static void loadMapSettings2()
 {
 	char aFileName[256];
-	const char *ininame = challengeActive ? sRequestResult : aFileName;
+	QString ininame = challengeActive ? sRequestResult : aFileName;
 	LEVEL_DATASET *psLevel = levFindDataSet(game.map, &game.hash);
+
+	if (hostlaunch == 2)
+	{
+		ininame = "tests/" + QString::fromStdString(wz_skirmish_test());
+	}
 
 	ASSERT_OR_RETURN(, psLevel, "No level found for %s", game.map);
 	sstrcpy(aFileName, psLevel->apDataFiles[psLevel->game]);
 	aFileName[strlen(aFileName) - 4] = '\0';
 	sstrcat(aFileName, ".json");
 
-	if (!PHYSFS_exists(ininame))
+	if (!PHYSFS_exists(ininame.toUtf8().constData()))
 	{
 		return;
 	}
@@ -3740,6 +3757,23 @@ void runMultiOptions(void)
 	}
 }
 
+static bool loadSettings(const QString &filename)
+{
+	WzConfig ini(filename, WzConfig::ReadOnlyAndRequired);
+	ini.beginGroup("challenge");
+	sstrcpy(game.map, ini.value("map", game.map).toString().toUtf8().constData());
+	game.hash = levGetMapNameHash(game.map);
+	game.maxPlayers = ini.value("maxPlayers", game.maxPlayers).toInt();	// TODO, read from map itself, not here!!
+	game.scavengers = ini.value("scavengers", game.scavengers).toBool();
+	game.alliance = ini.value("alliances", ALLIANCES_TEAMS).toInt();
+	game.power = ini.value("powerLevel", game.power).toInt();
+	game.base = ini.value("bases", game.base + 1).toInt() - 1;		// count from 1 like the humans do
+	sstrcpy(game.name, ini.value("name").toString().toUtf8().constData());
+	locked.position = ini.value("allowPositionChange", locked.position).toBool();
+	ini.endGroup();
+	return true;
+}
+
 bool startMultiOptions(bool bReenter)
 {
 	PLAYERSTATS		nullStats;
@@ -3810,19 +3844,8 @@ bool startMultiOptions(bool bReenter)
 		loadMapSettings1();
 		loadMapSettings2();
 
-		WzConfig ini(sRequestResult, WzConfig::ReadOnly);
-		ini.beginGroup("challenge");
-		sstrcpy(game.map, ini.value("map", game.map).toString().toUtf8().constData());
-		game.hash = levGetMapNameHash(game.map);
-		game.maxPlayers = ini.value("maxPlayers", game.maxPlayers).toInt();	// TODO, read from map itself, not here!!
-		game.scavengers = ini.value("scavengers", game.scavengers).toBool();
-		game.alliance = ALLIANCES_TEAMS;
+		loadSettings(sRequestResult);
 		netPlayersUpdated = true;
-		game.power = ini.value("powerLevel", game.power).toInt();
-		game.base = ini.value("bases", game.base + 1).toInt() - 1;		// count from 1 like the humans do
-		sstrcpy(game.name, ini.value("name").toString().toUtf8().constData());
-		locked.position = ini.value("allowPositionChange", locked.position).toBool();
-		ini.endGroup();
 
 		ingame.localOptionsReceived = true;
 		addGameOptions();									// update game options box.
@@ -3892,6 +3915,13 @@ bool startMultiOptions(bool bReenter)
 			processMultiopWidgets(MULTIOP_HOST);
 		}
 		SendReadyRequest(selectedPlayer, true);
+		if (hostlaunch == 2)
+		{
+			loadSettings("tests/" + QString::fromStdString(wz_skirmish_test()));
+			startMultiplayerGame();
+			// reset flag in case people dropped/quit on join screen
+			NETsetPlayerConnectionStatus(CONNECTIONSTATUS_NORMAL, NET_ALL_PLAYERS);
+		}
 	}
 
 	return true;

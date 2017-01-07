@@ -1,0 +1,55 @@
+{
+    "challenge": {
+        "bases": 2,
+        "difficulty": "Medium",
+        "map": "Sk-MizaMaze",
+        "maxPlayers": 8,
+        "powerLevel": 1,
+        "scavengers": "false",
+        "version": 2
+    },
+    "player_0": {
+        "team": 0
+    },
+    "player_1": {
+        "difficulty": "Medium",
+	"ai": "multiplay/skirmish/semperfi.js",
+        "name": "Ally",
+        "position": 4,
+        "team": 0
+    },
+    "player_2": {
+        "difficulty": "Medium",
+	"ai": "multiplay/skirmish/nb_turtle.js",
+        "name": "Ally",
+        "position": 6,
+        "team": 0
+    },
+    "player_3": {
+        "difficulty": "Hard",
+	"ai": "multiplay/skirmish/nb_hover.js",
+        "name": "Enemy",
+        "team": 1
+    },
+    "player_4": {
+        "difficulty": "Hard",
+	"ai": "multiplay/skirmish/nb_generic.js",
+        "name": "Enemy",
+        "team": 1
+    },
+    "player_5": {
+        "difficulty": "Hard",
+        "name": "Enemy",
+        "team": 1
+    },
+    "player_6": {
+        "difficulty": "Hard",
+        "name": "Enemy",
+        "team": 1
+    },
+    "player_7": {
+        "difficulty": "Hard",
+        "name": "Enemy",
+        "team": 1
+    }
+}

@@ -59,7 +59,7 @@ static UBYTE    scriptWinLoseVideo = PLAY_NONE;
 void	runCreditsScreen(void);
 
 static	UDWORD	lastChange = 0;
-bool hostlaunch = false;				// used to detect if we are hosting a game via command line option.
+int hostlaunch = 0;				// used to detect if we are hosting a game via command line option.
 
 static uint32_t lastTick = 0;
 static int barLeftX, barLeftY, barRightX, barRightY, boxWidth, boxHeight, starsNum, starHeight;
@@ -135,17 +135,23 @@ TITLECODE titleLoop(void)
 		// then check --join and if neither, run the normal game menu.
 		if (hostlaunch)
 		{
-			NetPlay.bComms = true; // use network = true
-			NetPlay.isUPNP_CONFIGURED = false;
-			NetPlay.isUPNP_ERROR = false;
-			ingame.bHostSetup = true;
+			if (hostlaunch == 2)
+			{
+				SPinit();
+			}
+			else // single player
+			{
+				NetPlay.bComms = true; // use network = true
+				NetPlay.isUPNP_CONFIGURED = false;
+				NetPlay.isUPNP_ERROR = false;
+				bMultiMessages = true;
+				NETinit(true);
+				NETdiscoverUPnPDevices();
+			}
 			bMultiPlayer = true;
-			bMultiMessages = true;
-			NETinit(true);
-			NETdiscoverUPnPDevices();
+			ingame.bHostSetup = true;
 			game.type = SKIRMISH;
 			changeTitleMode(MULTIOPTION);
-			hostlaunch = false;			// reset the bool to default state.
 		}
 		else if (strlen(iptoconnect))
 		{
@@ -215,7 +221,6 @@ TITLECODE titleLoop(void)
 	case GAME:
 		runGameOptionsMenu();
 		break;
-
 
 	case GRAPHICS_OPTIONS:
 		runGraphicsOptionsMenu();

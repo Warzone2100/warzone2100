@@ -35,7 +35,7 @@ enum TITLECODE
 #define PLAY_WIN    1
 #define PLAY_LOSE   2
 
-extern bool hostlaunch;
+extern int hostlaunch;
 
 bool frontendInitVars(void);
 TITLECODE titleLoop(void);

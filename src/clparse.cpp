@@ -79,6 +79,7 @@ typedef struct _poptContext
 /// Enable automatic test games
 static bool wz_autogame = false;
 static std::string wz_saveandquit;
+static std::string wz_test;
 
 static void poptPrintHelp(poptContext ctx, FILE *output, bool show_all)
 {
@@ -248,6 +249,7 @@ typedef enum
 	CLI_NOTEXTURECOMPRESSION,
 	CLI_AUTOGAME,
 	CLI_SAVEANDQUIT,
+	CLI_SKIRMISH,
 } CLI_OPTIONS;
 
 static const struct poptOption *getOptionsTable(void)
@@ -282,7 +284,8 @@ static const struct poptOption *getOptionsTable(void)
 		{ "texturecompression", '\0', POPT_ARG_NONE, NULL, CLI_TEXTURECOMPRESSION, N_("Enable texture compression"), NULL, false },
 		{ "notexturecompression", '\0', POPT_ARG_NONE, NULL, CLI_NOTEXTURECOMPRESSION, N_("Disable texture compression"), NULL, false },
 		{ "autogame",   '\0', POPT_ARG_NONE,   NULL, CLI_AUTOGAME,   N_("Run games automatically for testing"), NULL, true },
-		{ "saveandquit",   '\0', POPT_ARG_STRING,   NULL, CLI_SAVEANDQUIT,   N_("Immediately save game and quit"), N_("save name"), true },
+		{ "saveandquit", '\0', POPT_ARG_STRING, NULL, CLI_SAVEANDQUIT, N_("Immediately save game and quit"), N_("save name"), true },
+		{ "skirmish",   '\0', POPT_ARG_STRING, NULL, CLI_SKIRMISH,   N_("Start skirmish game with given settings file"), N_("test"), true },
 		// Terminating entry
 		{ NULL,         '\0', 0,               NULL, 0,              NULL,                                    NULL, true },
 	};
@@ -472,7 +475,7 @@ bool ParseCommandLine(int argc, const char **argv)
 			break;
 		case CLI_HOSTLAUNCH:
 			// go directly to host screen, bypass all others.
-			hostlaunch = true;
+			hostlaunch = 1;
 			break;
 		case CLI_GAME:
 			// retrieve the game name
@@ -619,6 +622,10 @@ bool ParseCommandLine(int argc, const char **argv)
 			wz_texture_compression = GL_RGBA;
 			break;
 
+		case CLI_AUTOGAME:
+			wz_autogame = true;
+			break;
+
 		case CLI_SAVEANDQUIT:
 			token = poptGetOptArg(poptCon);
 			if (token == NULL || !strchr(token, '/'))
@@ -628,8 +635,14 @@ bool ParseCommandLine(int argc, const char **argv)
 			wz_saveandquit = token;
 			break;
 
-		case CLI_AUTOGAME:
-			wz_autogame = true;
+		case CLI_SKIRMISH:
+			hostlaunch = 2;
+			token = poptGetOptArg(poptCon);
+			if (token == NULL)
+			{
+				qFatal("Bad test key");
+			}
+			wz_test = token;
 			break;
 		};
 	}
@@ -645,4 +658,9 @@ bool autogame_enabled()
 const std::string &saveandquit_enabled()
 {
 	return wz_saveandquit;
+}
+
+const std::string &wz_skirmish_test()
+{
+	return wz_test;
 }

@@ -35,6 +35,7 @@ PATCHLIST = \
 	ruleset.json \
 	anims \
 	challenges \
+	tests \
 	components \
 	effects \
 	messages \

@@ -1,0 +1,18 @@
+{
+    "challenge": {
+        "bases": 3,
+        "difficulty": "Easy",
+        "map": "Sk-HighGround",
+        "maxPlayers": 2,
+        "powerLevel": 1,
+        "scavengers": "true",
+        "version": 2
+    },
+    "player_0": {
+        "team": 0
+    },
+    "player_1": {
+        "difficulty": "Medium",
+        "team": 1
+    }
+}
