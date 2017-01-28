@@ -60,8 +60,14 @@ prhct: { body: "Body11ABT", prop: "tracked01", weap: "Cannon375mmMk1" },
 prltat: { body: "Body5REC", prop: "tracked01", weap: "Rocket-LtA-T" },
 prrept: { body: "Body5REC", prop: "tracked01", weap: "LightRepair1" },
 
-// CAM_2_2
+// CAM_2_B
+cotruck: { body: "Body6SUPP", prop: "tracked01", weap: "Spade1Mk1" },
+comatt: { body: "Body6SUPP", prop: "tracked01", weap: "Rocket-LtA-T" },
+comit: { body: "Body6SUPP", prop: "tracked01", weap: "Flame2" },
+comrept: { body: "Body6SUPP", prop: "tracked01", weap: "LightRepair1" },
 comorbt: { body: "Body6SUPP", prop: "tracked01", weap: "Mortar2Mk1" },
+ 
+// CAM_2_2
 comtath: { body: "Body6SUPP", prop: "hover01", weap: "Rocket-LtA-T" },
 comtathh: { body: "Body6SUPP", prop: "HalfTrack", weap: "Rocket-LtA-T" },
 comih: { body: "Body6SUPP", prop: "hover01", weap: "Flame2" },
@@ -69,7 +75,6 @@ comih: { body: "Body6SUPP", prop: "hover01", weap: "Flame2" },
 // CAM_2_C
 commorv: { body: "Body6SUPP", prop: "V-Tol", weap: "Bomb2-VTOL-HvHE" },
 colagv: { body: "Body2SUP", prop: "V-Tol", weap: "MG4ROTARY-VTOL" },
-comit: { body: "Body6SUPP", prop: "tracked01", weap: "Flame2" },
 comhpv: { body: "Body6SUPP", prop: "tracked01", weap: "Cannon4AUTOMk1" },
 cohbbt: { body: "Body9REC", prop: "tracked01", weap: "Rocket-BB" },
 cohhot: { body: "Body9REC", prop: "tracked01", weap: "Howitzer105Mk1" },
