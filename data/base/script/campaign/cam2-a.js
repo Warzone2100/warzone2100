@@ -3,7 +3,14 @@ include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
 const CO = 2; //The Collective player number
-var transportLimit, index; //Player transports limits for this level	
+var transportLimit, index; //Player transports limits for this level
+
+
+camAreaEvent("vtolRemoveZone", function(droid)
+{
+	camSafeRemoveObject(droid, false);
+	resetLabel("vtolRemoveZone", CO);
+});
 
 //Attack and destroy all those who resist the Machine! -The Collective
 function secondVideo()
@@ -26,7 +33,7 @@ function preDamageStuff()
 	for(var x = 0; x < structures.length; ++x)
 	{
 		var struc = structures[x];
-		setHealth(struc, 40 + camRand(45));
+		setHealth(struc, 45 + camRand(45));
 	}
 }
 
@@ -91,24 +98,6 @@ function sendPlayerTransporter()
 	queue("sendPlayerTransporter", 300000); //5 min
 }
 
-//Spawns vtol units
-function vtolAttack()
-{
-	const TankNum = 2 + camRand(3);
-	var list
-	with (camTemplates) list = [colcbv, colatv];
-
-	var droids = [];
-	for (var i = 0; i <= TankNum; ++i)
-	{
-		droids[droids.length] = list[camRand(list.length)];
-	}
-
-	camSendReinforcement(CO, camMakePos("vtolAppearPos"), droids, CAM_REINFORCE_GROUND);
-	camMakeGroup(enumArea(8700, 9000, 8900, 9300, CO, false));
-	queue("vtolAttack", 300000); //5 min
-}
-
 //Continuously spawns heavy units on the north part of the map every 7 minutes
 function mapEdgeDroids()
 {
@@ -126,6 +115,19 @@ function mapEdgeDroids()
 	queue("mapEdgeDroids", 420000) //7 min
 }
 
+function removeVtols()
+{
+	camRetreatVtols(CO, "vtolRemoveZone");
+	queue("removeVtols", 2000);
+}
+
+function vtolAttack()
+{
+	var list; with (camTemplates) list = [colcbv, colatv];
+	camSpawnVtols(CO, "vtolAppearPos", list, 5, 300000); //5 min
+	queue("vtolAttack", 300000);
+}
+
 function groupPatrol()
 {
 	camManageGroup(camMakeGroup("edgeGroup"), CAM_ORDER_ATTACK, {
@@ -134,14 +136,16 @@ function groupPatrol()
 	});
 
 	camManageGroup(camMakeGroup("IDFGroup"), CAM_ORDER_DEFEND, { 
-		pos: camMakePos("waypoint1")
+		pos: [
+			camMakePos("waypoint1"),
+			camMakePos("waypoint2")
+		]
 	});
 
 	camManageGroup(camMakeGroup("sensorGroup"), CAM_ORDER_PATROL, { 
 		pos: [
 			camMakePos("waypoint1"),
-			camMakePos("waypoint2"),
-			camMakePos("waypoint3")
+			camMakePos("waypoint2")
 		]
 	});
 }
@@ -218,10 +222,11 @@ function cam2Setup()
 	preDamageStuff();
 }
 
+
 function eventStartLevel()
 {
 	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, "SUB_2_1S");
-	setReinforcementTime(LZ_COMPROMISED_TIME); // disable transporter button
+	setReinforcementTime(LZ_COMPROMISED_TIME);
 
 	var startpos = getObject("startPosition");
 	centreView(startpos.x, startpos.y);
@@ -279,6 +284,7 @@ function eventStartLevel()
 	queue("truckDefense", 15000);// 15 sec.
 	queue("groupPatrol", 15000); // 15 sec
 	queue("sendCOTransporter", 30000); //30 sec
+	queue("removeVtols", 300000);//5 min
 	queue("vtolAttack", 300000); //5 min
 	queue("mapEdgeDroids", 420000) //7 min
 }

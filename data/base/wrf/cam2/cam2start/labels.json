@@ -12,15 +12,16 @@
 	"position_10": { "label": "COTranportRet",   "pos": [ 14784, 15424] },
 	
 	"area_0": { "label": "landingZone",    "pos1": [ 11008, 12672 ], "pos2": [ 11264, 12928 ] },
-	"area_1": { "label": "vtolRemoveZone", "pos1": [ 8576, 8704 ],   "pos2": [ 9472, 9088 ] },
-	"area_2": { "label": "edgeGroup",      "pos1": [ 11968, 8640 ],  "pos2": [ 12352, 10176 ] },
-	"area_3": { "label": "IDFGroup",       "pos1": [ 9664, 9792 ],   "pos2": [ 10048, 10304 ] },
-	"area_4": { "label": "sensorGroup",    "pos1": [ 10176, 10944 ], "pos2": [ 10560, 11328 ] },
-	"area_5": { "label": "CONorth",        "pos1": [ 12288, 8960 ],  "pos2": [ 13312, 10240 ] },
-	"area_6": { "label": "COLandingZone",  "pos1": [ 14464, 14464 ], "pos2": [ 15360, 15360 ] },
-	"area_7": { "label": "CONorthWest",    "pos1": [ 9344, 9344 ],   "pos2": [ 11520, 10880 ] },
+	"area_1": { "label": "edgeGroup",      "pos1": [ 11968, 8640 ],  "pos2": [ 12352, 10176 ] },
+	"area_2": { "label": "IDFGroup",       "pos1": [ 9664, 9792 ],   "pos2": [ 10048, 10304 ] },
+	"area_3": { "label": "sensorGroup",    "pos1": [ 10176, 10944 ], "pos2": [ 10560, 11328 ] },
+	"area_4": { "label": "CONorth",        "pos1": [ 12288, 8960 ],  "pos2": [ 13312, 10240 ] },
+	"area_5": { "label": "COLandingZone",  "pos1": [ 14464, 14464 ], "pos2": [ 15360, 15360 ] },
+	"area_6": { "label": "CONorthWest",    "pos1": [ 9344, 9344 ],   "pos2": [ 11520, 10880 ] },
 
 	"object_0": { "label": "COCommandCenter",   "id": 1529, "player": 2, "type": 1 },
 	"object_1": { "label": "COArtiPillbox",     "id": 4551, "player": 2, "type": 1 },
-	"object_2": { "label": "COArtiCBTower",     "id": 4576, "player": 2, "type": 1 }
+	"object_2": { "label": "COArtiCBTower",     "id": 4576, "player": 2, "type": 1 },
+
+	"radius_0": { "label": "vtolRemoveZone", "subscriber": 2, "pos" : [ 8576, 8704 ], "radius": 300 }
 }

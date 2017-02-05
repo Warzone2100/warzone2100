@@ -274,7 +274,7 @@ function __camGlobalContext()
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-// Research related functions.
+// Research and structure related functions.
 ////////////////////////////////////////////////////////////////////////////////
 
 //;; \subsection{camEnableRes(list, player)}
@@ -776,7 +776,7 @@ function camAllEnemyBasesEliminated()
 function camSendReinforcement(player, position, list, kind, data)
 {
 	var pos = camMakePos(position);
-	var order = CAM_ORDER_ATTACK
+	var order = CAM_ORDER_ATTACK;
 	var order_data = { regroup: true, count: -1 };
 	if (camDef(data) && camDef(data.order))
 	{
@@ -2210,6 +2210,50 @@ function camSetupTransporter(x, y, x1, y1)
 
 
 ////////////////////////////////////////////////////////////////////////////////
+// VTOL management.
+////////////////////////////////////////////////////////////////////////////////
+
+//;; \subsection{camSpawnVtols(player, Start-point, list, amount, time)}
+//;; A sane way to handle enemy Vtol attack actions.
+//;; list is the enemy templates for these vtols.
+//;; Amount is the number of vtols to spawn.
+function camSpawnVtols(player, startPos, list, amount)
+{
+	var startPoint = camMakePos(startPos);
+
+	var droids = [];
+	for (var i = 0; i < amount; ++i)
+	{
+		droids.push(list[camRand(list.length)]);
+	}
+
+	camSendReinforcement(player, startPos, droids, CAM_REINFORCE_GROUND);
+}
+
+//;; \subsection{camRetreatVtols(player, Exit-point)}
+//;; A sane way to handle enemy Vtol retreat actions.
+function camRetreatVtols(player, exitPos)
+{
+	var vtols = enumDroid(player).filter(function(obj) { 
+		return isVTOL(obj);
+	});
+	var droids = [];
+
+	for (var i = 0; i < vtols.length; ++i)
+	{
+		if(vtols[i].ammo < 60 || vtols[i].health < 60)
+		{
+			droids.push(vtols[i]);
+		}
+	}
+
+	camManageGroup(camMakeGroup(droids), CAM_ORDER_DEFEND, { 
+		pos: [camMakePos(exitPos)]
+	});
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
 // Event hooks magic. This makes all the library catch all the necessary events
 // without distracting the script authors from handling them on their own.
 // It assumes that script authors do not implement another similar mechanism,
@@ -2242,6 +2286,7 @@ function __camPreHookEvent(eventname, hookcode)
 	// store the original event handler
 	if (camDef(__camGlobalContext()[eventname]))
 		__camOriginalEvents[eventname] = __camGlobalContext()[eventname];
+
 	__camGlobalContext()[eventname] = function()
 	{
 		// Don't trigger hooks after level end.
@@ -2382,9 +2427,9 @@ __camPreHookEvent("eventGroupSeen", function(viewer, group)
 
 __camPreHookEvent("eventTransporterExit", function(transport)
 {
-	if (transport.player !== CAM_HUMAN_PLAYER ||
-	   (__camWinLossCallback === "__camVictoryStandard" &&
-	   transport.player === CAM_HUMAN_PLAYER) )
+	if (transport.player !== CAM_HUMAN_PLAYER || 
+		(__camWinLossCallback === "__camVictoryStandard" && 
+		transport.player === CAM_HUMAN_PLAYER) )
 	{
 		// allow the next transport to enter
 		if (camDef(__camIncomingTransports[transport.player]))
