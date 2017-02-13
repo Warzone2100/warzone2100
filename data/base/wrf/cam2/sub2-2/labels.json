@@ -26,7 +26,6 @@
 	"object_0": { "label": "COCommander",   "id": 581, "player": 2, "type": 0 },
 	"object_1": { "label": "COFactoryEast", "id": 518, "player": 2, "type": 1 },
 	"object_2": { "label": "COFactoryWest", "id": 517, "player": 2, "type": 1 },
-	"object_3": { "label": "failZoneBuilding", "id": 119, "type": 2 },
 
 	"radius_0": { "label": "failZone", "subscriber": 2, "pos" : [ 600, 7800 ], "radius": 700 },
 	"radius_1": { "label": "wayPoint1Rad", "subscriber": 2, "pos" : [ 4672, 1984 ], "radius": 300 },
