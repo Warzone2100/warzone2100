@@ -79,7 +79,6 @@ camAreaEvent("wayPoint2Rad", function(droid)
 	});
 
 	playSound(warning);
-	collapseFailZoneBuilding();
 });
 
 camAreaEvent("failZone", function(droid)
@@ -121,15 +120,6 @@ function failSequence()
 	camTrace("Collective Commander escaped with artifact");
 	gameOverMessage(false);
 }
-
-//Miraculously collapse this building to free up space in the fail zone
-//This is a change from the wzScript version of 2-2.
-function collapseFailZoneBuilding()
-{
-	var obj = getObject("failZoneBuilding");
-	camSafeRemoveObject(obj, true);
-}
-
 
 function enableReinforcements()
 {
