@@ -41,7 +41,7 @@ camAreaEvent("group1Trigger", function()
 	camEnableFactory("COFactoryEast");
 
 	camManageGroup(commandGroup, CAM_ORDER_DEFEND, {
-		pos: camMakePos("wayPoint1Rad"),
+		pos: camMakePos("wayPoint1"),
 		regroup: false,
 	});
 });
@@ -68,14 +68,21 @@ camAreaEvent("wayPoint2Rad", function(droid)
 		resetLabel("wayPoint2Rad", CO);
 		return;
 	}
-	
-	var defGroup = enumDroid(CO).filter(function(obj) {
-		return obj.droidType == DROID_COMMAND || obj.droidType == DROID_WEAPON;
+
+	var point = getObject("wayPoint3");
+	var defGroup = enumRange(point.x, point.y, 10, CO, false).filter(function(obj) {
+		return obj.droidType == DROID_WEAPON
 	});
 
-	camManageGroup(camMakeGroup(defGroup), CAM_ORDER_DEFEND, { 
+
+	camManageGroup(commandGroup, CAM_ORDER_DEFEND, {
 		pos: camMakePos("wayPoint4"),
-		regroup: false,
+		regroup: false
+	});
+
+	camManageGroup(camMakeGroup(defGroup), CAM_ORDER_DEFEND, {
+		pos: camMakePos("defensePos"),
+		regroup: false
 	});
 
 	playSound(warning);
@@ -89,12 +96,12 @@ camAreaEvent("failZone", function(droid)
 		failSequence();
 	}
 	else
-		resetLabel("failZone", CO);
+		resetLabel("failZone");
 });
 
 function vtolRetreat()
 {
-	camRetreatVtols(CO, "vtolRemoveZone");
+	camRetreatVtols(CO, "vtolRemovePoint");
 	queue("vtolRetreat", 2000);
 }
 
@@ -105,6 +112,7 @@ function vtolAttack()
 	queue("vtolAttack", 120000);
 }
 
+//Order the truck to build some defenses.
 function truckDefense()
 {
 	var truck = enumDroid(CO, DROID_CONSTRUCT);
@@ -115,10 +123,17 @@ function truckDefense()
 	camQueueBuilding(CO, list[camRand(list.length)]);
 }
 
+function showGameOver()
+{
+	var arti = getArtifacts();
+	camSafeRemoveObject(arti[0], false);
+	gameOverMessage(false);
+}
+
 function failSequence()
 {
 	camTrace("Collective Commander escaped with artifact");
-	gameOverMessage(false);
+	queue("showGameOver", 300);
 }
 
 function enableReinforcements()
@@ -152,7 +167,7 @@ function eventStartLevel()
 		"COCommander": { tech: "R-Wpn-RocketSlow-Accuracy03" },
 	});
 
-	setPower(6500, CO); //used to be 10000
+	setPower(8000, CO); //used to be 10000
 
 	camSetEnemyBases({
 		"COEastBase": {
