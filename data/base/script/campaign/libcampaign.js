@@ -1456,11 +1456,21 @@ function __camTacticsTickForGroup(group)
 						done = true;
 					}
 				}
-				if (!done && droid.order !== DORDER_SCOUT
+				if (!done && (droid.order !== DORDER_SCOUT
+					|| droid.propulsion === "V-Tol")
 					&& camDist(droid, target) >= __CAM_CLOSE_RADIUS)
 				{
-					orderDroidLoc(droid, DORDER_SCOUT,
-					              target.x, target.y);
+					if (droid.propulsion === "V-Tol" 
+						&& droid.weapons[0].armed < 60)
+					{
+						var pads = countStruct("A0VtolPad", droid.player);
+						if(pads > 0)
+							orderDroid(droid, DORDER_REARM);
+					}
+					else
+					{
+						orderDroidLoc(droid, DORDER_SCOUT, target.x, target.y);
+					}
 				}
 			}
 			break;
@@ -2213,45 +2223,50 @@ function camSetupTransporter(x, y, x1, y1)
 // VTOL management.
 ////////////////////////////////////////////////////////////////////////////////
 
-//;; \subsection{camSpawnVtols(player, Start-point, list, amount, time)}
-//;; A sane way to handle enemy Vtol attack actions.
+//;; \subsection{camSpawnVtols(player, Start-position-label, list, amount)}
+//;; Builds a group of vtol units at a given position
 //;; list is the enemy templates for these vtols.
 //;; Amount is the number of vtols to spawn.
 function camSpawnVtols(player, startPos, list, amount)
 {
-	var startPoint = camMakePos(startPos);
-
 	var droids = [];
 	for (var i = 0; i < amount; ++i)
 	{
 		droids.push(list[camRand(list.length)]);
 	}
 
-	camSendReinforcement(player, startPos, droids, CAM_REINFORCE_GROUND);
+	camSendReinforcement(player, camMakePos(startPos), droids,
+		CAM_REINFORCE_GROUND,
+		{
+			order: CAM_ORDER_ATTACK,
+			data: { regroup: false, count: -1 }
+		});
 }
 
-//;; \subsection{camRetreatVtols(player, Exit-point)}
-//;; A sane way to handle enemy Vtol retreat actions.
+//;; \subsection{camRetreatVtols(player, Exit-position-label)}
+//;; This function orders vtol units to run away to a defined position when 
+//;; either health or ammo is low.
 function camRetreatVtols(player, exitPos)
 {
 	var vtols = enumDroid(player).filter(function(obj) { 
-		return isVTOL(obj);
+		return obj.propulsion === "V-Tol"
 	});
-	var droids = [];
+	var exit = camMakePos(exitPos);
 
 	for (var i = 0; i < vtols.length; ++i)
 	{
-		if(vtols[i].ammo < 60 || vtols[i].health < 60)
+		var vt = vtols[i];
+		for (var c = 0; c < vt.weapons.length; ++c)
 		{
-			droids.push(vtols[i]);
+			if ((vt.order == DORDER_RTB)
+				|| (vt.weapons[c].armed < 20) || (vt.health < 60))
+			{
+				orderDroidLoc(vt, DORDER_MOVE, exit.x, exit.y);
+				break;
+			}
 		}
 	}
-
-	camManageGroup(camMakeGroup(droids), CAM_ORDER_DEFEND, { 
-		pos: [camMakePos(exitPos)]
-	});
 }
-
 
 ////////////////////////////////////////////////////////////////////////////////
 // Event hooks magic. This makes all the library catch all the necessary events
