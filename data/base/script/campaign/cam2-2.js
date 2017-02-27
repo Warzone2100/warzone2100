@@ -108,8 +108,7 @@ function vtolRetreat()
 function vtolAttack()
 {
 	var list; with (camTemplates) list = [colatv, colatv];
-	camSpawnVtols(CO, "vtolAppearPoint", list, 5);
-	queue("vtolAttack", 120000);
+	camSetVtolData(CO, "vtolAppearPoint", "vtolRemovePoint", list, 120000);
 }
 
 //Order the truck to build some defenses.
@@ -139,7 +138,7 @@ function failSequence()
 function enableReinforcements()
 {
 	playSound("pcv440.ogg"); // Reinforcements are available.
-	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "SUB_2C", {
+	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "CAM_2C", {
 		area: "RTLZ",
 		message: "C22_LZ",
 		reinforcements: 180 //3 min
@@ -148,7 +147,7 @@ function enableReinforcements()
 
 function eventStartLevel()
 {
-	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "SUB_2C",{
+	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "CAM_2C",{
 		area: "RTLZ",
 		message: "C22_LZ",
 		reinforcements: -1
@@ -211,5 +210,4 @@ function eventStartLevel()
 
 	queue("enableReinforcements", 20000);
 	queue("vtolAttack", 60000);
-	queue("vtolRetreat", 60000);
 }

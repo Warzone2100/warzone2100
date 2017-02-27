@@ -747,6 +747,9 @@ function camDetectEnemyBase(blabel)
 function camAllEnemyBasesEliminated()
 {
 	// FIXME: O(n) lookup here
+	camTrace(__camNumEnemyBases);
+	camTrace(Object.keys(__camEnemyBases).length);
+	camTrace(__camNumEnemyBases === Object.keys(__camEnemyBases).length);
 	return __camNumEnemyBases === Object.keys(__camEnemyBases).length;
 }
 
@@ -1456,15 +1459,16 @@ function __camTacticsTickForGroup(group)
 						done = true;
 					}
 				}
-				if (!done && (droid.order !== DORDER_SCOUT
-					|| droid.propulsion === "V-Tol")
+				if (!done && ((droid.order !== DORDER_SCOUT) || isVTOL(droid))
 					&& camDist(droid, target) >= __CAM_CLOSE_RADIUS)
 				{
-					if (droid.propulsion === "V-Tol" 
-						&& droid.weapons[0].armed < 60)
+					//Rearm vtols.
+					if (isVTOL(droid) && ((droid.weapons[0].armed < 60) ||
+						((droid.order === DORDER_REARM) &&
+						(droid.weapons[0].armed < 99))))
 					{
 						var pads = countStruct("A0VtolPad", droid.player);
-						if(pads > 0)
+						if((pads > 0) && (droid.order !== DORDER_REARM))
 							orderDroid(droid, DORDER_REARM);
 					}
 					else
@@ -1499,7 +1503,10 @@ function __camTacticsTickForGroup(group)
 			for (var i = 0; i < droids.length; ++i)
 			{
 				var droid = droids[i];
-				orderDroidLoc(droid, DORDER_MOVE, pos.x, pos.y);
+				if(!isVTOL(droid))
+					orderDroidLoc(droid, DORDER_MOVE, pos.x, pos.y);
+				else
+					orderDroidLoc(droid, DORDER_SCOUT, pos.x, pos.y);
 			}
 			break;
 		case CAM_ORDER_FOLLOW:
@@ -2221,37 +2228,52 @@ function camSetupTransporter(x, y, x1, y1)
 
 ////////////////////////////////////////////////////////////////////////////////
 // VTOL management.
+// These functions create the hit and run vtols for the given player.
+// Vtol rearming is handled in group management.
 ////////////////////////////////////////////////////////////////////////////////
+var __vtolPlayer;
+var __vtolStartPosition;
+var __vtolTemplates;
+var __vtolExitPosition;
+var __vtolTimer;
 
-//;; \subsection{camSpawnVtols(player, Start-position-label, list, amount)}
-//;; Builds a group of vtol units at a given position
-//;; list is the enemy templates for these vtols.
-//;; Amount is the number of vtols to spawn.
-function camSpawnVtols(player, startPos, list, amount)
+
+function camSetVtolData(player, startPos, exitPos, templates, timer)
 {
+	__vtolPlayer = player;
+	__vtolStartPosition = camMakePos(startPos);
+	__vtolExitPosition = camMakePos(exitPos);
+	__vtolTemplates = templates;
+	__vtolTimer = timer;
+
+	__camSpawnVtols();
+	__camRetreatVtols();
+}
+
+function __camSpawnVtols()
+{
+	var amount = 5 + camRand(2);
 	var droids = [];
 	for (var i = 0; i < amount; ++i)
 	{
-		droids.push(list[camRand(list.length)]);
+		droids.push(__vtolTemplates[camRand(__vtolTemplates.length)]);
 	}
 
-	camSendReinforcement(player, camMakePos(startPos), droids,
+	camSendReinforcement(__vtolPlayer, camMakePos(__vtolStartPosition), droids,
 		CAM_REINFORCE_GROUND,
 		{
 			order: CAM_ORDER_ATTACK,
 			data: { regroup: false, count: -1 }
 		});
+
+	queue("__camSpawnVtols", __vtolTimer);
 }
 
-//;; \subsection{camRetreatVtols(player, Exit-position-label)}
-//;; This function orders vtol units to run away to a defined position when 
-//;; either health or ammo is low.
-function camRetreatVtols(player, exitPos)
+function __camRetreatVtols()
 {
-	var vtols = enumDroid(player).filter(function(obj) { 
-		return obj.propulsion === "V-Tol"
+	var vtols = enumDroid(__vtolPlayer).filter(function(obj) { 
+		return isVTOL(obj)
 	});
-	var exit = camMakePos(exitPos);
 
 	for (var i = 0; i < vtols.length; ++i)
 	{
@@ -2261,12 +2283,16 @@ function camRetreatVtols(player, exitPos)
 			if ((vt.order == DORDER_RTB)
 				|| (vt.weapons[c].armed < 20) || (vt.health < 60))
 			{
-				orderDroidLoc(vt, DORDER_MOVE, exit.x, exit.y);
+				orderDroidLoc(vt, DORDER_MOVE, __vtolExitPosition.x,
+					__vtolExitPosition.y);
 				break;
 			}
 		}
 	}
+
+	queue("__camRetreatVtols", 3000);
 }
+
 
 ////////////////////////////////////////////////////////////////////////////////
 // Event hooks magic. This makes all the library catch all the necessary events
@@ -2404,6 +2430,11 @@ __camPreHookEvent("eventStartLevel", function()
 	__camArtifacts = {};
 	__camNumEnemyBases = 0;
 	__camEnemyBases = {};
+	__vtolPlayer = 0;
+	__vtolStartPosition = {};
+	__vtolTemplates = {};
+	__vtolExitPosition = {};
+	__vtolTimer = 0;
 	setTimer("__camTick", 1000); // campaign pollers
 	setTimer("__camTruckTick", 150100); // some slower campaign pollers
 	queue("__camTacticsTick", 100); // would re-queue itself

@@ -115,17 +115,10 @@ function mapEdgeDroids()
 	queue("mapEdgeDroids", 420000) //7 min
 }
 
-function removeVtols()
-{
-	camRetreatVtols(CO, "vtolRemoveZone");
-	queue("removeVtols", 2000);
-}
-
 function vtolAttack()
 {
 	var list; with (camTemplates) list = [colcbv, colatv];
-	camSpawnVtols(CO, "vtolAppearPos", list, 5, 300000); //5 min
-	queue("vtolAttack", 300000);
+	camSetVtolData(CO, "vtolAppearPos", "vtolRemoveZone", list, 300000); //5 min
 }
 
 function groupPatrol()
@@ -284,7 +277,6 @@ function eventStartLevel()
 	queue("truckDefense", 15000);// 15 sec.
 	queue("groupPatrol", 15000); // 15 sec
 	queue("sendCOTransporter", 30000); //30 sec
-	queue("removeVtols", 300000);//5 min
 	queue("vtolAttack", 300000); //5 min
 	queue("mapEdgeDroids", 420000) //7 min
 }
