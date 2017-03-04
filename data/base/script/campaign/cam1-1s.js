@@ -18,7 +18,7 @@ function powerModuleBuilt()
 	var gens = enumStruct(CAM_HUMAN_PLAYER, "A0PowerGenerator", false);
 	for(var x = 0; x < gens.length; ++x)
 	{
-		if(gens[x].modules > 0)
+		if((gens[x].modules > 0) && (gens[x].status === BUILT))
 		{
 			return true;
 		}

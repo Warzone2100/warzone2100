@@ -32,14 +32,6 @@ camAreaEvent("ambush2Trigger", function()
 	);
 });
 
-function ambushPlayerStart()
-{
-	var ambushGroup = camMakeGroup(enumArea("ambushScavs", scavs, false));
-	camManageGroup(ambushGroup, CAM_ORDER_ATTACK, 
-		{ pos: camMakePos("RTLZ") }
-	);
-}
-
 //Mission setup stuff
 function eventStartLevel()
 {
@@ -67,5 +59,4 @@ function eventStartLevel()
 	hackAddMessage("FLIGHT", MISS_MSG, CAM_HUMAN_PLAYER, true);
 	hackAddMessage("C1-1_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, true);
 
-	queue("ambushPlayerStart", 30000);
 }

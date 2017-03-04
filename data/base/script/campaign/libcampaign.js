@@ -53,7 +53,7 @@
 
 	, for easier reading (all the useful stuff on top).
 
-	Please leave camDebug() around iff something that should never happen
+	Please leave camDebug() around if something that should never happen
 	occurs, indicating an actual bug in campaign. Then a sensible message
 	should be helpful as well. But normally, no warnings should ever be
 	printed.
@@ -747,9 +747,6 @@ function camDetectEnemyBase(blabel)
 function camAllEnemyBasesEliminated()
 {
 	// FIXME: O(n) lookup here
-	camTrace(__camNumEnemyBases);
-	camTrace(Object.keys(__camEnemyBases).length);
-	camTrace(__camNumEnemyBases === Object.keys(__camEnemyBases).length);
 	return __camNumEnemyBases === Object.keys(__camEnemyBases).length;
 }
 
@@ -1061,7 +1058,7 @@ const CAM_ORDER_FOLLOW = 4;
 //;; 		If new droids are added to the group, it can recover and attack
 //;; 		again.
 //;; 		\item[count] Override size of the original group. If unspecified,
-//;; 		number of doids in the group at call time. Retreat on low morale
+//;; 		number of droids in the group at call time. Retreat on low morale
 //;; 		and regroup is calculated against this value.
 //;; 		\item[repair] Health percentage to fall back to repair facility,
 //;; 		if any.
@@ -1111,7 +1108,7 @@ const CAM_ORDER_FOLLOW = 4;
 //;; 		first positions in the list will be compromised first.
 //;; 		\item[radius] Circle radius around \textbf{pos} to scan for targets.
 //;; 		\item[count] Override size of the original group. If unspecified,
-//;; 		number of doids in the group at call time. Regroup is calculated
+//;; 		number of droids in the group at call time. Regroup is calculated
 //;; 		against this value.
 //;; 		\item[repair] Health percentage to fall back to repair facility,
 //;; 		if any.

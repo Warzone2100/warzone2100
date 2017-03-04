@@ -3,8 +3,8 @@ include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
 var NPDefenseGroup;
-var NP = 1; //New Paradigm player number
-var scavs = 7; // Scav player number
+const NP = 1; //New Paradigm player number
+const scavs = 7; // Scav player number
 
 //Get some droids for the NP transport
 function getDroidsForNPLZ(args)
