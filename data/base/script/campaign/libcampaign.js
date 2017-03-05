@@ -2081,7 +2081,11 @@ function __camTriggerLastAttack()
 {
 	if (!__camLastAttackTriggered)
 	{
-		var enemies = enumArea(0, 0, mapWidth, mapHeight, ENEMIES, false);
+		var enemies = enumArea(0, 0, mapWidth, mapHeight, ENEMIES, false).filter(
+		function(obj) { 
+			return (obj.type === DROID) && ((obj.droidType !== DROID_TRANSPORTER) &&
+				(obj.droidType !== DROID_SUPERTRANSPORTER))
+		});
 		camTrace(enemies.length, "enemy droids remaining");
 		camManageGroup(camMakeGroup(enemies), CAM_ORDER_ATTACK);
 		__camLastAttackTriggered = true;
