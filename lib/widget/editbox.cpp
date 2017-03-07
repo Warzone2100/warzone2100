@@ -124,7 +124,7 @@ void W_EDITBOX::initialise()
 /* Insert a character into a text buffer */
 void W_EDITBOX::insertChar(QChar ch)
 {
-	if (ch == '\0')
+	if (ch == QChar('\0'))
 	{
 		return;
 	}
@@ -150,7 +150,7 @@ void W_EDITBOX::insertChar(QChar ch)
 /* Put a character into a text buffer overwriting any text under the cursor */
 void W_EDITBOX::overwriteChar(QChar ch)
 {
-	if (ch == '\0')
+	if (ch == QChar('\0'))
 	{
 		return;
 	}
