@@ -114,11 +114,6 @@ static void updateMaxECMStats(UWORD maxValue);
 static void updateMaxBodyStats(UWORD maxBody, UWORD maxPower, UWORD maxArmour);
 static void updateMaxConstStats(UWORD maxValue);
 
-static inline bool stringToEnumFindFunction(std::pair<char const *, unsigned> const &a, char const *b)
-{
-	return strcmp(a.first, b) < 0;
-}
-
 /***********************************************************************************
 *	Dealloc the extra storage tables
 ***********************************************************************************/

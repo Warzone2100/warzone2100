@@ -398,7 +398,7 @@ queuePathfinding:
 	fpathRemoveDroidData(id);
 
 	packagedPathJob task([job]() { return fpathExecute(job); });
-	pathResults[id] = std::move(task.get_future());
+	pathResults[id] = task.get_future();
 
 	// Add to end of list
 	wzMutexLock(fpathMutex);

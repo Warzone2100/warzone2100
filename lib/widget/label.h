@@ -60,14 +60,8 @@ public:
 	}
 	void setTextAlignment(WzTextAlignment align);
 
-	void setString(char const *stringUtf8)
-	{
-		WIDGET::setString(stringUtf8);    // Unhide the WIDGET::setString(char const *) function...
-	}
-	void setTip(char const *stringUtf8)
-	{
-		WIDGET::setTip(stringUtf8);    // Unhide the WIDGET::setTip(char const *) function...
-	}
+	using WIDGET::setString;
+	using WIDGET::setTip;
 
 	QString  aText;         // Text on the label
 	iV_fonts FontID;

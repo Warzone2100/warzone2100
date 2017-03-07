@@ -344,13 +344,6 @@ static void getGridPos(Vector3i *result, int x, int y, bool center, bool water)
 	}
 }
 
-/// Get the texture coordinates for the map position
-static inline void getTexCoords(Vector2f *uv, float x, float y, int groundType)
-{
-	uv->x = (x / psGroundTypes[groundType].textureSize);
-	uv->y = (y / psGroundTypes[groundType].textureSize);
-}
-
 /// Calculate the average colour of 4 points
 static inline void averageColour(PIELIGHT *average, PIELIGHT a, PIELIGHT b,
                                  PIELIGHT c, PIELIGHT d)

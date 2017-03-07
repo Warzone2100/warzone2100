@@ -65,14 +65,8 @@ public:
 	void setImages(Images const &images);
 	void setImages(Image image, Image imageDown, Image imageHighlight, Image imageDisabled = Image());
 
-	void setString(char const *stringUtf8)
-	{
-		WIDGET::setString(stringUtf8);    // Unhide the WIDGET::setString(char const *) function...
-	}
-	void setTip(char const *stringUtf8)
-	{
-		WIDGET::setTip(stringUtf8);    // Unhide the WIDGET::setTip(char const *) function...
-	}
+	using WIDGET::setString;
+	using WIDGET::setTip;
 
 signals:
 	void clicked();
@@ -98,6 +92,8 @@ public:
 	void setTip(int state, QString string);
 	void setTip(int state, char const *stringUtf8);
 	void setImages(int state, Images const &images);
+
+	using WIDGET::setTip;
 
 private:
 	int currentState;

@@ -50,9 +50,6 @@
 #include "scriptvals.h"
 #include "research.h"
 
-// Marks a NULL pointer for the script value save/load routines
-static const int UNALLOCATED_OBJECT = -1;
-
 static INTERP_VAL	scrFunctionResult;	//function return value to be pushed to stack
 
 // Get values from a base object
