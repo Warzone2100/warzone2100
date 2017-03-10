@@ -255,16 +255,6 @@ void WzMainWindow::resizeGL(int width, int height)
 	scaledFont.setPixelSize(12 * height / 480);
 
 	glViewport(0, 0, width, height);
-	glMatrixMode(GL_PROJECTION);
-	glPushMatrix();
-	glLoadIdentity();
-	glOrtho(0, width, height, 0, 1, -1);
-
-	glMatrixMode(GL_TEXTURE);
-	glLoadIdentity();
-
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
 	glCullFace(GL_FRONT);
 	glEnable(GL_CULL_FACE);
 }

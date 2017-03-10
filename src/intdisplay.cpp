@@ -281,14 +281,69 @@ void intUpdateQuantity(WIDGET *psWidget, W_CONTEXT *psContext)
 {
 	W_LABEL *Label = (W_LABEL *)psWidget;
 	BASE_OBJECT *psObj = (BASE_OBJECT *)Label->pUserData; // Get the object associated with this widget.
-	STRUCTURE *Structure = (STRUCTURE *)psObj;
 
-	if (psObj != NULL && StructIsFactory(Structure) && StructureIsManufacturingPending(Structure))
+	int remaining = -1;
+
+	if (STRUCTURE *psStruct = castStructure(psObj))
 	{
-		ASSERT(!isDead(psObj), "Object is dead");
+		if (StructIsFactory(psStruct) && StructureIsManufacturingPending(psStruct))
+		{
+			ASSERT(!isDead(psObj), "Object is dead");
 
-		DROID_TEMPLATE *psTemplate = FactoryGetTemplate(StructureGetFactory(Structure));
-		int remaining = getProduction(Structure, psTemplate).numRemaining();
+			DROID_TEMPLATE *psTemplate = FactoryGetTemplate(StructureGetFactory(psStruct));
+			remaining = getProduction(psStruct, psTemplate).numRemaining();
+		}
+	}
+	else if (DROID *psDroid = castDroid(psObj))
+	{
+		STRUCTURE_STATS const *stats = nullptr;
+		int count = 0;
+		auto processOrder = [&](DroidOrder const &order) {
+			STRUCTURE_STATS *newStats = nullptr;
+			int deltaCount = 0;
+			switch (order.type)
+			{
+				case DORDER_BUILD:
+				case DORDER_LINEBUILD:
+					newStats = order.psStats;
+					deltaCount = order.type == DORDER_LINEBUILD? 1 + (abs(order.pos.x - order.pos2.x) + abs(order.pos.y - order.pos2.y))/TILE_UNITS : 1;
+					break;
+				case DORDER_HELPBUILD:
+					if (STRUCTURE *target = castStructure(order.psObj))
+					{
+						newStats = target->pStructureType;
+						deltaCount = 1;
+					}
+					break;
+				default:
+					return false;
+			}
+			if (newStats != nullptr && (stats == nullptr || stats == newStats))
+			{
+				stats = newStats;
+				count += deltaCount;
+				return true;
+			}
+			return false;
+		};
+		if (processOrder(psDroid->order))
+		{
+			for (auto const &order : psDroid->asOrderList)
+			{
+				if (!processOrder(order))
+				{
+					break;
+				}
+			}
+		}
+		if (count > 1)
+		{
+			remaining = count;
+		}
+	}
+
+	if (remaining != -1)
+	{
 		char tmp[20];
 		ssprintf(tmp, "%d", remaining);
 		Label->aText = QString::fromUtf8(tmp);

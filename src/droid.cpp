@@ -357,6 +357,10 @@ DROID::DROID(uint32_t id, unsigned player)
  */
 DROID::~DROID()
 {
+	// Make sure to get rid of some final references in the sound code to this object first
+	// In BASE_OBJECT::~BASE_OBJECT() is too late for this, since some callbacks require us to still be a DROID.
+	audio_RemoveObj(this);
+
 	DROID *psDroid = this;
 	DROID	*psCurr, *psNext;
 

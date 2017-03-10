@@ -3787,6 +3787,9 @@ STRUCTURE::STRUCTURE(uint32_t id, unsigned player)
 /* Release all resources associated with a structure */
 STRUCTURE::~STRUCTURE()
 {
+	// Make sure to get rid of some final references in the sound code to this object first
+	audio_RemoveObj(this);
+
 	STRUCTURE *psBuilding = this;
 
 	// free up the space used by the functionality array

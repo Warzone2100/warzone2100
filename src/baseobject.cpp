@@ -104,6 +104,7 @@ BASE_OBJECT::BASE_OBJECT(OBJECT_TYPE type, uint32_t id, unsigned player)
 	, periodicalDamageStart(0)
 	, periodicalDamage(0)
 	, flags(0)
+	, jammedTiles(false)
 	, watchedTiles(NULL)
 	, timeAnimationStarted(0)
 	, animationEvent(ANIM_EVENT_NONE)
@@ -118,9 +119,6 @@ BASE_OBJECT::BASE_OBJECT(OBJECT_TYPE type, uint32_t id, unsigned player)
 
 BASE_OBJECT::~BASE_OBJECT()
 {
-	// Make sure to get rid of some final references in the sound code to this object first
-	audio_RemoveObj(this);
-
 	visRemoveVisibility(this);
 	free(watchedTiles);
 

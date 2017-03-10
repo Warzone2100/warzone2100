@@ -228,7 +228,7 @@ static inline void visMarkTile(const BASE_OBJECT *psObj, int mapX, int mapY, MAP
 		TILEPOS tilePos = {uint8_t(mapX), uint8_t(mapY), uint8_t(inRange)};
 
 		visionType[rayPlayer]++;                        // we observe this tile
-		if (objJammerPower(psObj) > 0)                  // we are a jammer object
+		if (psObj->jammedTiles)                         // we are a jammer object
 		{
 			psTile->jammers[rayPlayer]++;
 			psTile->jammerBits |= (1 << rayPlayer); // mark it as being jammed
@@ -341,7 +341,7 @@ void visRemoveVisibility(BASE_OBJECT *psObj)
 			}
 			ASSERT(visionType[psObj->player] > 0, "No %s on watched tile (%d, %d)", pos.type ? "radar" : "vision", (int)pos.x, (int)pos.y);
 			visionType[psObj->player]--;
-			if (objJammerPower(psObj) > 0)                  // we are a jammer object
+			if (psObj->jammedTiles)  // we are a jammer object — we cannot check objJammerPower(psObj) > 0 directly here, we may be in the BASE_OBJECT destructor).
 			{
 				// No jammers in campaign, no need for special hack
 				ASSERT(psTile->jammers[psObj->player] > 0, "Not jamming watched tile (%d, %d)", (int)pos.x, (int)pos.y);
@@ -357,6 +357,7 @@ void visRemoveVisibility(BASE_OBJECT *psObj)
 	free(psObj->watchedTiles);
 	psObj->watchedTiles = NULL;
 	psObj->numWatchedTiles = 0;
+	psObj->jammedTiles = false;
 }
 
 void visRemoveVisibilityOffWorld(BASE_OBJECT *psObj)
@@ -389,6 +390,7 @@ void visTilesUpdate(BASE_OBJECT *psObj)
 	}
 
 	// Do the whole circle in ∞ steps. No more pretty moiré patterns.
+	psObj->jammedTiles = objJammerPower(psObj) > 0;
 	doWaveTerrain(psObj, recordTilePos, &lastRecordTilePos);
 
 	// Record new map visibility provided by object

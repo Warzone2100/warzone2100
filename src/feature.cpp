@@ -316,6 +316,8 @@ FEATURE::FEATURE(uint32_t id, FEATURE_STATS const *psStats)
 /* Release the resources associated with a feature */
 FEATURE::~FEATURE()
 {
+	// Make sure to get rid of some final references in the sound code to this object first
+	audio_RemoveObj(this);
 }
 
 void _syncDebugFeature(const char *function, FEATURE const *psFeature, char ch)

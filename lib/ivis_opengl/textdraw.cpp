@@ -149,7 +149,14 @@ struct FTFace
 
 		RasterizedGlyph g;
 		g.buffer.reset(new unsigned char[ftBitmap.pitch * ftBitmap.rows]);
-		memcpy(g.buffer.get(), ftBitmap.buffer, ftBitmap.pitch * ftBitmap.rows);
+		if (ftBitmap.buffer != nullptr)
+		{
+			memcpy(g.buffer.get(), ftBitmap.buffer, ftBitmap.pitch * ftBitmap.rows);
+		}
+		else if (ftBitmap.pitch != 0 && ftBitmap.rows != 0)
+		{
+			debug(LOG_FATAL, "glyph buffer missing");  // This probably doesn't happen.
+		}
 		g.width = ftBitmap.width / 3;
 		g.height = ftBitmap.rows;
 		g.bearing_x = slot->bitmap_left;

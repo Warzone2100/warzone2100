@@ -117,6 +117,7 @@ struct BASE_OBJECT : public SIMPLE_OBJECT
 	UDWORD              periodicalDamageStart;                  ///< When the object entered the fire
 	UDWORD              periodicalDamage;                 ///< How much damage has been done since the object entered the fire
 	uint16_t            flags;                      ///< Various flags
+	bool                jammedTiles;                ///< True if any tiles are being jammed.
 	TILEPOS             *watchedTiles;              ///< Variable size array of watched tiles, NULL for features
 
 	UDWORD              timeAnimationStarted;       ///< Animation start time, zero for do not animate
