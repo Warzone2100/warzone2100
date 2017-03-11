@@ -97,6 +97,7 @@ bool researchedTemplate(const DROID_TEMPLATE *psCurr, int player, bool allowRedu
 DROID_TEMPLATE loadTemplateCommon(WzConfig &ini)
 {
 	DROID_TEMPLATE design;
+	design.name = ini.value("name").toString();
 	QString droidType = ini.value("type").toString();
 
 	if (droidType == "ECM")
@@ -196,18 +197,31 @@ bool initTemplates()
 		design.multiPlayerID = generateNewObjectId();
 		design.prefab = false;		// not AI template
 		design.stored = true;
-		if (!(asBodyStats + design.asParts[COMP_BODY])->designable
-		    || !(asPropulsionStats + design.asParts[COMP_PROPULSION])->designable
-		    || (design.asParts[COMP_BRAIN] > 0 && !(asBrainStats + design.asParts[COMP_BRAIN])->designable)
+		
+		if (!(asBodyStats + design.asParts[COMP_BODY])->designable)
+                   { 
+			debug(LOG_ERROR, "Body \"%s\" for \"%s\" from stored templates cannot be designed", ini.value("body").toString().toUtf8().constData(), design.name.toUtf8().constData());
+			ini.nextArrayItem();
+			continue;
+		   }
+		else if (!(asPropulsionStats + design.asParts[COMP_PROPULSION])->designable)
+		   {
+			debug(LOG_ERROR, "Propulsion \"%s\" for \"%s\" from stored templates cannot be designed", ini.value("propulsion").toString().toUtf8().constData(), design.name.toUtf8().constData());
+			ini.nextArrayItem();
+			continue;
+		   }
+		else if ((design.asParts[COMP_BRAIN] > 0 && !(asBrainStats + design.asParts[COMP_BRAIN])->designable)
 		    || (design.asParts[COMP_REPAIRUNIT] > 0 && !(asRepairStats + design.asParts[COMP_REPAIRUNIT])->designable)
 		    || (design.asParts[COMP_ECM] > 0 && !(asECMStats + design.asParts[COMP_ECM])->designable)
-		    || (design.asParts[COMP_SENSOR] > 0 && !(asSensorStats + design.asParts[COMP_SENSOR])->designable)
-		    || (design.asParts[COMP_CONSTRUCT] > 0 && !(asConstructStats + design.asParts[COMP_CONSTRUCT])->designable)
-		    || (design.numWeaps > 0 && !(asWeaponStats + design.asWeaps[0])->designable)
+		    || (design.asParts[COMP_SENSOR] > 0 && !(asSensorStats + design.asParts[COMP_SENSOR])->designable) || (design.asParts[COMP_CONSTRUCT] > 0 && !(asConstructStats + design.asParts[COMP_CONSTRUCT])->designable)
+		      
+		    //Commanders fail these checks
+		    || (design.asParts[COMP_BRAIN] == 0
+		    && ((design.numWeaps > 0 && !(asWeaponStats + design.asWeaps[0])->designable)
 		    || (design.numWeaps > 1 && !(asWeaponStats + design.asWeaps[1])->designable)
-		    || (design.numWeaps > 2 && !(asWeaponStats + design.asWeaps[2])->designable))
+		    || (design.numWeaps > 2 && !(asWeaponStats + design.asWeaps[2])->designable))))
 		{
-			debug(LOG_ERROR, "Template %s from stored templates cannot be designed", design.name.toUtf8().constData());
+			debug(LOG_ERROR, "Turret for \"%s\" from stored templates cannot be designed", design.name.toUtf8().constData());
 			ini.nextArrayItem();
 			continue;
 		}
@@ -251,7 +265,7 @@ bool initTemplates()
 		copyTemplate(selectedPlayer, &design);
 		localTemplates.push_back(design);
 		ini.nextArrayItem();
-	}
+        }
 	ini.endArray();
 	return true;
 }
