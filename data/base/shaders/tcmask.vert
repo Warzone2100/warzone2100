@@ -10,7 +10,7 @@ uniform vec4 lightPosition;
 
 attribute vec4 vertex;
 attribute vec3 vertexNormal;
-attribute vec4 vertexTexCoord;
+attribute vec2 vertexTexCoord;
 
 varying float vertexDistance;
 varying vec3 normal, lightDir, eyeVec;
@@ -22,10 +22,10 @@ void main()
 	vec4 position = vertex;
 
 	// Pass texture coordinates to fragment shader
-	texCoord = vertexTexCoord.xy;
+	texCoord = vertexTexCoord;
 
 	// Lighting -- we pass these to the fragment shader
-	normal = (NormalMatrix * vec4(vertexNormal, 0)).xyz;
+	normal = (NormalMatrix * vec4(vertexNormal, 0.0)).xyz;
 	lightDir = lightPosition.xyz - vVertex;
 	eyeVec = -vVertex;
 
@@ -36,8 +36,9 @@ void main()
 	}
 
 	// Translate every vertex according to the Model View and Projection Matrix
-	gl_Position = ModelViewProjectionMatrix * position;
+	vec4 gposition = ModelViewProjectionMatrix * position;
+	gl_Position = gposition;
 
 	// Remember vertex distance
-	vertexDistance = gl_Position.z;
+	vertexDistance = gposition.z;
 }

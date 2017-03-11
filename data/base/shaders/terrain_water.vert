@@ -21,10 +21,11 @@ varying float vertexDistance;
 void main()
 {
 	color = vertexColor;
-	gl_Position = ModelViewProjectionMatrix * vertex;
+	vec4 position = ModelViewProjectionMatrix * vertex;
+	gl_Position = position;
 	vec4 uv1_tmp = textureMatrix1 * vec4(dot(paramx1, vertex), dot(paramy1, vertex), 0., 1.);
 	uv1 = uv1_tmp.xy / uv1_tmp.w;
 	vec4 uv2_tmp = textureMatrix2 * vec4(dot(paramx2, vertex), dot(paramy2, vertex), 0., 1.);
 	uv2 = uv2_tmp.xy / uv2_tmp.w;
-	vertexDistance = gl_Position.z;
+	vertexDistance = position.z;
 }

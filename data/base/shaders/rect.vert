@@ -13,18 +13,18 @@ out vec2 uv;
 
 vec4 getPos(int id)
 {
-	if (id == 0) return vec4(0, 1, 0, 1);
-	if (id == 1) return vec4(0, 0, 0, 1);
-	if (id == 2) return vec4(1, 1, 0, 1);
-	if (id == 3) return vec4(1, 0, 0, 1);
+	if (id == 0) return vec4(0.0, 1.0, 0.0, 1.0);
+	if (id == 1) return vec4(0.0, 0.0, 0.0, 1.0);
+	if (id == 2) return vec4(1.0, 1.0, 0.0, 1.0);
+	if (id == 3) return vec4(1.0, 0.0, 0.0, 1.0);
 }
 
 vec2 getTC(int id)
 {
-	if (id == 0) return vec2(0., 1.);
-	if (id == 1) return vec2(0., 0.);
-	if (id == 2) return vec2(1., 1.);
-	if (id == 3) return vec2(1., 0.);
+	if (id == 0) return vec2(0.0, 1.0);
+	if (id == 1) return vec2(0.0, 0.0);
+	if (id == 2) return vec2(1.0, 1.0);
+	if (id == 3) return vec2(1.0, 0.0);
 }
 
 void main()

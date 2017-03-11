@@ -15,9 +15,10 @@ varying float vertexDistance;
 
 void main()
 {
-	gl_Position = ModelViewProjectionMatrix * vertex;
+	vec4 position = ModelViewProjectionMatrix * vertex;
+	gl_Position = position;
 	uv_tex = vertexTexCoord;
-	vec4 uv_lightmap_tmp = lightTextureMatrix * vec4(dot(paramxlight, vertex), dot(paramylight, vertex), 0., 1.);
+	vec4 uv_lightmap_tmp = lightTextureMatrix * vec4(dot(paramxlight, vertex), dot(paramylight, vertex), 0.0, 1.0);
 	uv_lightmap = uv_lightmap_tmp.xy / uv_lightmap_tmp.w;
-	vertexDistance = gl_Position.z;
+	vertexDistance = position.z;
 }
