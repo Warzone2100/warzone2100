@@ -447,7 +447,7 @@ FPATH_RETVAL fpathDroidRoute(DROID *psDroid, SDWORD tX, SDWORD tY, FPATH_MOVETYP
 	case DORDER_BUILD:
 	case DORDER_LINEBUILD:                       // build a number of structures in a row (walls + bridges)
 		dstStructure = getStructureBounds(psDroid->order.psStats, psDroid->order.pos, psDroid->order.direction);  // Just need to get close enough to build (can be diagonally), do not need to reach the destination tile.
-	// Continue, do not break.
+		// fallthrough
 	case DORDER_HELPBUILD:                       // help to build a structure
 	case DORDER_DEMOLISH:                        // demolish a structure
 	case DORDER_REPAIR:

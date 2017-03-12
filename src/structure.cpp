@@ -3516,8 +3516,7 @@ int requestOpenGate(STRUCTURE *psStructure)
 	case SAS_CLOSING:
 		psStructure->lastStateTime = 2 * gameTime - psStructure->lastStateTime - SAS_OPEN_SPEED;
 		psStructure->state = SAS_OPENING;
-	default:
-		return 0;  // Unknown state...
+		return 0; // Busy
 	}
 
 	return psStructure->lastStateTime + SAS_OPEN_SPEED - gameTime;

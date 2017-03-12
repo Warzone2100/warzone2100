@@ -4399,8 +4399,8 @@ static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 		int priority = 0;
 		switch (droidType)
 		{
-		case DROID_TRANSPORTER: ++priority;
-		case DROID_SUPERTRANSPORTER: ++priority;
+		case DROID_TRANSPORTER: ++priority; // fallthrough
+		case DROID_SUPERTRANSPORTER: ++priority; // fallthrough
 		case DROID_COMMAND:     ++priority;
 		default:                break;
 		}

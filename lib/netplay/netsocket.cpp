@@ -456,8 +456,6 @@ static int socketThreadFunction(void *)
 						break;
 #if defined(EPIPE)
 					case EPIPE:
-						debug(LOG_NET, "EPIPE generated");
-						// fall through
 #endif
 					default:
 						sock->writeError = true;

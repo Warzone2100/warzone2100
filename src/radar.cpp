@@ -630,9 +630,10 @@ static void setViewingWindow()
 	case 3:
 		// greenish
 		colour.byte.r = 0x3f;
-		colour.byte.a = 0x3f;
 		colour.byte.g = UBYTE_MAX;
 		colour.byte.b = 0x3f;
+		colour.byte.a = 0x3f;
+		break;
 	default:
 		// black
 		colour.rgba = 0;

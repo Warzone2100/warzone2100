@@ -2998,7 +2998,7 @@ static void processMultiopWidgets(UDWORD id)
 					break;
 				}
 			}
-		// Continue, do not break, since we just set a password.
+			// fallthrough
 		case MULTIOP_PASSWORD_BUT:
 			{
 				char buf[255];
