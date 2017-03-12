@@ -88,7 +88,7 @@ class StateButton : public W_BUTTON
 
 public:
 	StateButton(WIDGET *parent) : W_BUTTON(parent) {}
-	void setState(int state);
+	void setState(unsigned state);
 	void setTip(int state, QString string);
 	void setTip(int state, char const *stringUtf8);
 	void setImages(int state, Images const &images);
