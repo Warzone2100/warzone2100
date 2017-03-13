@@ -287,8 +287,6 @@ void loadMultiScripts()
 	bool defaultRules = true;
 	char aFileName[256];
 	char aPathName[256];
-	QString ininame = challengeActive ? sRequestResult : aFileName;
-	QString path = challengeActive ? "challenges/" : aPathName;
 	LEVEL_DATASET *psLevel = levFindDataSet(game.map, &game.hash);
 	ASSERT_OR_RETURN(, psLevel, "No level found for %s", game.map);
 	sstrcpy(aFileName, psLevel->apDataFiles[psLevel->game]);
@@ -296,6 +294,8 @@ void loadMultiScripts()
 	sstrcpy(aPathName, aFileName);
 	sstrcat(aFileName, ".json");
 	sstrcat(aPathName, "/");
+	QString ininame = challengeActive ? sRequestResult : aFileName;
+	QString path = challengeActive ? "challenges/" : aPathName;
 
 	if (hostlaunch == 2)
 	{
