@@ -1,0 +1,8 @@
+{
+    "area1": { "label": "landingZone", "pos1" : [ 10880, 12544], "pos2" : [ 11392, 13056 ]},
+    "area2" : { "label" : "crashSite", "pos1" : [ 6080, 1088 ], "pos2" : [ 6976, 1856]},
+    "area3" : { "label" : "subLandingZone", "pos1" : [ 640, 7040 ], "pos2" : [ 1152, 7552 ]},
+    "position1": { "label": "startingPosition", "pos" : [ 11200, 12864 ]},
+    "position2": { "label": "transporterTakeOff", "pos" : [ 11136, 12800]},
+    "position3": { "label": "transporterExit", "pos" : [ 8960, 16128]}
+}
