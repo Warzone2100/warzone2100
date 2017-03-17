@@ -46,20 +46,20 @@ enum FEATURE_TYPE
 /* Stats for a feature */
 struct FEATURE_STATS : public BASE_STATS
 {
-	FEATURE_STATS(int idx = 0) : BASE_STATS(idx), subType(FEAT_COUNT), psImd(NULL), tileDraw(false), allowLOS(false), visibleAtStart(false), damageable(false) {}
+	FEATURE_STATS(int idx = 0) : BASE_STATS(idx) {}
 
-	FEATURE_TYPE    subType;                ///< type of feature
+	FEATURE_TYPE    subType = FEAT_COUNT;   ///< type of feature
 
-	iIMDShape      *psImd;                  ///< Graphic for the feature
-	UWORD           baseWidth;              ///< The width of the base in tiles
-	UWORD           baseBreadth;            ///< The breadth of the base in tiles
+	iIMDShape      *psImd = nullptr;        ///< Graphic for the feature
+	UWORD           baseWidth = 0;          ///< The width of the base in tiles
+	UWORD           baseBreadth = 0;        ///< The breadth of the base in tiles
 
-	bool            tileDraw;               ///< Whether the tile needs to be drawn
-	bool            allowLOS;               ///< Whether the feature allows the LOS. true = can see through the feature
-	bool            visibleAtStart;         ///< Whether the feature is visible at the start of the mission
-	bool            damageable;             ///< Whether the feature can be destroyed
-	UDWORD		body;			///< Number of body points
-	UDWORD          armourValue;            ///< Feature armour
+	bool            tileDraw = false;       ///< Whether the tile needs to be drawn
+	bool            allowLOS = false;       ///< Whether the feature allows the LOS. true = can see through the feature
+	bool            visibleAtStart = false; ///< Whether the feature is visible at the start of the mission
+	bool            damageable = false;     ///< Whether the feature can be destroyed
+	UDWORD		body = 0;               ///< Number of body points
+	UDWORD          armourValue = 0;        ///< Feature armour
 };
 
 struct FEATURE : public BASE_OBJECT

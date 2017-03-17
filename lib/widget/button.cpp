@@ -263,7 +263,7 @@ void W_BUTTON::setImages(Image image, Image imageDown, Image imageHighlight, Ima
 	setImages(Images(image, imageDown, imageHighlight, imageDisabled));
 }
 
-void StateButton::setState(int state)
+void StateButton::setState(unsigned state)
 {
 	if (currentState == state)
 	{

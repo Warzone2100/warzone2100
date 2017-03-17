@@ -1296,14 +1296,14 @@ void PROJECTILE::update()
 		{
 			break;
 		}
-	// Continue.
+		// fallthrough
 	case PROJ_IMPACT:
 		proj_ImpactFunc(psObj);
 		if (psObj->state != PROJ_POSTIMPACT)
 		{
 			break;
 		}
-	// Continue.
+		// fallthrough
 	case PROJ_POSTIMPACT:
 		proj_PostImpactFunc(psObj);
 		break;

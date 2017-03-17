@@ -2193,11 +2193,6 @@ void renderStructure(STRUCTURE *psStructure, const glm::mat4 &viewMatrix)
 		pieFlagData = 0;
 	}
 
-	if (defensive && !structureIsBlueprint(psStructure) && !(strImd->flags & iV_IMD_NOSTRETCH))
-	{
-		pie_SetShaderStretchDepth(psStructure->pos.z - psStructure->foundationDepth);
-	}
-
 	// check for animation model replacement - if none found, use animation in existing IMD
 	if (strImd->objanimpie[psStructure->animationEvent])
 	{
@@ -2206,7 +2201,12 @@ void renderStructure(STRUCTURE *psStructure, const glm::mat4 &viewMatrix)
 
 	while (strImd)
 	{
+		if (defensive && !structureIsBlueprint(psStructure) && !(strImd->flags & iV_IMD_NOSTRETCH))
+		{
+			pie_SetShaderStretchDepth(psStructure->pos.z - psStructure->foundationDepth);
+		}
 		drawShape(psStructure, strImd, colour, buildingBrightness, pieFlag, pieFlagData, viewMatrix * modelMatrix);
+		pie_SetShaderStretchDepth(0);
 		if (psStructure->sDisplay.imd->nconnectors > 0)
 		{
 			renderStructureTurrets(psStructure, strImd, buildingBrightness, pieFlag, pieFlagData, ecmFlag, viewMatrix * modelMatrix);

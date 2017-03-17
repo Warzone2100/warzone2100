@@ -2102,7 +2102,7 @@ void moveUpdateDroid(DROID *psDroid)
 		{
 			break;
 		}
-	// No break.
+		// fallthrough
 	case MOVENAVIGATE:
 		// Get the next control point
 		if (!moveNextTarget(psDroid))
@@ -2133,8 +2133,7 @@ void moveUpdateDroid(DROID *psDroid)
 		{
 			bStarted = true;
 		}
-
-	// No break.
+		// fallthrough
 	case MOVEPOINTTOPOINT:
 	case MOVEPAUSE:
 		// moving between two way points

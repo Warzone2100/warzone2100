@@ -1029,7 +1029,7 @@ void IntFormAnimated::display(int xOffset, int yOffset)
 		}
 		startTime = realTime;
 		++currentAction;
-	// No break.
+		// fallthrough
 	case 1:  // Continue opening.
 		aBegin = aClosed;
 		aEnd = aOpen;
@@ -1047,7 +1047,7 @@ void IntFormAnimated::display(int xOffset, int yOffset)
 		}
 		startTime = realTime;
 		++currentAction;
-	// No break.
+		// fallthrough
 	case 4:  // Continue closing.
 		aBegin = aOpen;
 		aEnd = aClosed;

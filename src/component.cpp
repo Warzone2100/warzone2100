@@ -645,11 +645,14 @@ static void displayCompObj(DROID *psDroid, bool bButton, const glm::mat4 &viewMa
 		case DROID_CYBORG_REPAIR:
 			{
 				Rotation rot = getInterpolatedWeaponRotation(psDroid, 0, graphicsTime);
-				iIMDShape *psShape, *psMountShape;
+				iIMDShape *psShape = nullptr;
+				iIMDShape *psMountShape = nullptr;
 
 				switch (psDroid->droidType)
 				{
-				default: ASSERT(false, "...");
+				default:
+					ASSERT(false, "Bad component type");
+					break;
 				case DROID_SENSOR:
 					psMountShape = SENSOR_MOUNT_IMD(psDroid, psDroid->player);
 					/* Get the sensor graphic, assuming it's there */
