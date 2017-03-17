@@ -46,7 +46,7 @@ bool allowDesign = true;
 bool includeRedundantDesigns = false;
 
 
-static bool researchedItem(const DROID_TEMPLATE *psCurr, int player, COMPONENT_TYPE partIndex, int part, bool allowZero, bool allowRedundant)
+static bool researchedItem(const DROID_TEMPLATE */*psCurr*/, int player, COMPONENT_TYPE partIndex, int part, bool allowZero, bool allowRedundant)
 {
 	if (allowZero && part <= 0)
 	{
@@ -83,7 +83,7 @@ bool researchedTemplate(const DROID_TEMPLATE *psCurr, int player, bool allowRedu
 		debug(LOG_ERROR, "%s : not researched : body=%d brai=%d prop=%d sensor=%d ecm=%d rep=%d con=%d", getName(psCurr),
 		      (int)resBody, (int)resBrain, (int)resProp, (int)resSensor, (int)resEcm, (int)resRepair, (int)resConstruct);
 	}
-	for (unsigned weapIndex = 0; weapIndex < psCurr->numWeaps && researchedEverything; ++weapIndex)
+	for (int weapIndex = 0; weapIndex < psCurr->numWeaps && researchedEverything; ++weapIndex)
 	{
 		researchedEverything = researchedWeap(psCurr, player, weapIndex, allowRedundant);
 		if (!researchedEverything && verbose)
@@ -197,38 +197,40 @@ bool initTemplates()
 		design.multiPlayerID = generateNewObjectId();
 		design.prefab = false;		// not AI template
 		design.stored = true;
-		
-		if (!(asBodyStats + design.asParts[COMP_BODY])->designable)
-                   { 
-			debug(LOG_ERROR, "Body \"%s\" for \"%s\" from stored templates cannot be designed", ini.value("body").toString().toUtf8().constData(), design.name.toUtf8().constData());
-			ini.nextArrayItem();
-			continue;
-		   }
-		else if (!(asPropulsionStats + design.asParts[COMP_PROPULSION])->designable)
-		   {
-			debug(LOG_ERROR, "Propulsion \"%s\" for \"%s\" from stored templates cannot be designed", ini.value("propulsion").toString().toUtf8().constData(), design.name.toUtf8().constData());
-			ini.nextArrayItem();
-			continue;
-		   }
-		else if ((design.asParts[COMP_BRAIN] > 0 && !(asBrainStats + design.asParts[COMP_BRAIN])->designable)
-		    || (design.asParts[COMP_REPAIRUNIT] > 0 && !(asRepairStats + design.asParts[COMP_REPAIRUNIT])->designable)
-		    || (design.asParts[COMP_ECM] > 0 && !(asECMStats + design.asParts[COMP_ECM])->designable)
-		    || (design.asParts[COMP_SENSOR] > 0 && !(asSensorStats + design.asParts[COMP_SENSOR])->designable) || (design.asParts[COMP_CONSTRUCT] > 0 && !(asConstructStats + design.asParts[COMP_CONSTRUCT])->designable)
-		      
-		    //Commanders fail these checks
-		    || (design.asParts[COMP_BRAIN] == 0
-		    && ((design.numWeaps > 0 && !(asWeaponStats + design.asWeaps[0])->designable)
-		    || (design.numWeaps > 1 && !(asWeaponStats + design.asWeaps[1])->designable)
-		    || (design.numWeaps > 2 && !(asWeaponStats + design.asWeaps[2])->designable))))
+
+		char const *failPart = nullptr;
+		QString failPartName;
+		auto designablePart = [&](COMPONENT_STATS const &component, char const *part) {
+			if (!component.designable)
+			{
+				failPart = part;
+				failPartName = component.name;
+			}
+			return component.designable;
+		};
+
+		bool designable =
+			   designablePart(asBodyStats      [design.asParts[COMP_BODY]],       "Body")
+			&& designablePart(asPropulsionStats[design.asParts[COMP_PROPULSION]], "Propulsion")
+			&& (design.asParts[COMP_BRAIN]      == 0 || designablePart(asBrainStats    [design.asParts[COMP_BRAIN]],      "Brain"))
+			&& (design.asParts[COMP_REPAIRUNIT] == 0 || designablePart(asRepairStats   [design.asParts[COMP_REPAIRUNIT]], "Repair unit"))
+			&& (design.asParts[COMP_ECM]        == 0 || designablePart(asECMStats      [design.asParts[COMP_ECM]],        "ECM"))
+			&& (design.asParts[COMP_SENSOR]     == 0 || designablePart(asSensorStats   [design.asParts[COMP_SENSOR]],     "Sensor"))
+			&& (design.asParts[COMP_CONSTRUCT]  == 0 || designablePart(asConstructStats[design.asParts[COMP_CONSTRUCT]],  "Construction part"))
+			&& (design.numWeaps <= 0 || asBrainStats[design.asParts[COMP_BRAIN]].psWeaponStat == &asWeaponStats[design.asWeaps[0]]
+			                         || designablePart(asWeaponStats[design.asWeaps[0]], "Weapon 0"))
+			&& (design.numWeaps <= 1 || designablePart(asWeaponStats[design.asWeaps[1]], "Weapon 1"))
+			&& (design.numWeaps <= 2 || designablePart(asWeaponStats[design.asWeaps[2]], "Weapon 2"));
+		if (!designable)
 		{
-			debug(LOG_ERROR, "Turret for \"%s\" from stored templates cannot be designed", design.name.toUtf8().constData());
+			debug(LOG_ERROR, "%s \"%s\" for \"%s\" from stored templates cannot be designed", failPart, failPartName.toUtf8().constData(), design.name.toUtf8().constData());
 			ini.nextArrayItem();
 			continue;
 		}
 		bool valid = intValidTemplate(&design, ini.value("name").toString().toUtf8().constData(), false, selectedPlayer);
 		if (!valid)
 		{
-			debug(LOG_ERROR, "Invalid template %s from stored templates", design.name.toUtf8().constData());
+			debug(LOG_ERROR, "Invalid template \"%s\" from stored templates", design.name.toUtf8().constData());
 			ini.nextArrayItem();
 			continue;
 		}
@@ -265,7 +267,7 @@ bool initTemplates()
 		copyTemplate(selectedPlayer, &design);
 		localTemplates.push_back(design);
 		ini.nextArrayItem();
-        }
+	}
 	ini.endArray();
 	return true;
 }
