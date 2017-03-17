@@ -26,8 +26,9 @@ function countStructuresInBuildArea()
 // a simple extra victory condition callback
 function extraVictoryCondition()
 {
-	// at least one enemy transporter should have landed
-	if (camDef(lastLZ))
+	var enemies = enumArea(0, 0, mapWidth, mapHeight, ENEMIES, false);
+	// at least one enemy transporter should have landed and no enemies on map
+	if (camDef(lastLZ) && enemies.length === 0)
 	{
 		if (baseEstablished) // if base is destroyed later, we don't care
 			return true;

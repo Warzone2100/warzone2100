@@ -1,0 +1,27 @@
+{
+	"position_0": { "label": "startPosition",    "pos": [ 11200, 12864 ] },
+	"position_1": { "label": "transporterEntry", "pos": [ 11136, 16128 ] },
+	"position_2": { "label": "transporterExit",  "pos": [ 11136, 16128 ] },
+	"position_3": { "label": "TransportPos",     "pos": [ 11136, 12800 ] },
+	"position_4": { "label": "COTransportPos",   "pos": [ 14976, 14848 ] },
+	"position_5": { "label": "vtolAppearPos",    "pos": [ 8960, 9216] },
+	"position_6": { "label": "groundUnitPos",    "pos": [ 12160, 8576] },
+	"position_7": { "label": "waypoint1",        "pos": [ 12224, 10560] },
+	"position_8": { "label": "waypoint2",        "pos": [ 12480, 12480] },
+	"position_9": { "label": "waypoint3",        "pos": [ 11200, 12864] },
+	"position_10": { "label": "COTranportRet",   "pos": [ 14784, 15424] },
+	
+	"area_0": { "label": "landingZone",    "pos1": [ 11008, 12672 ], "pos2": [ 11264, 12928 ] },
+	"area_1": { "label": "edgeGroup",      "pos1": [ 11968, 8640 ],  "pos2": [ 12352, 10176 ] },
+	"area_2": { "label": "IDFGroup",       "pos1": [ 9664, 9792 ],   "pos2": [ 10048, 10304 ] },
+	"area_3": { "label": "sensorGroup",    "pos1": [ 10176, 10944 ], "pos2": [ 10560, 11328 ] },
+	"area_4": { "label": "CONorth",        "pos1": [ 12288, 8960 ],  "pos2": [ 13312, 10240 ] },
+	"area_5": { "label": "COLandingZone",  "pos1": [ 14464, 14464 ], "pos2": [ 15360, 15360 ] },
+	"area_6": { "label": "CONorthWest",    "pos1": [ 9344, 9344 ],   "pos2": [ 11520, 10880 ] },
+
+	"object_0": { "label": "COCommandCenter",   "id": 1529, "player": 2, "type": 1 },
+	"object_1": { "label": "COArtiPillbox",     "id": 4551, "player": 2, "type": 1 },
+	"object_2": { "label": "COArtiCBTower",     "id": 4576, "player": 2, "type": 1 },
+
+	"radius_0": { "label": "vtolRemoveZone", "subscriber": 2, "pos" : [ 8576, 8704 ], "radius": 300 }
+}

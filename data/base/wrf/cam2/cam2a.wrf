@@ -7,27 +7,20 @@
 directory	"messages"
 
 file		SMSG		"brief2a.txt"
-//file		SMSG		"brief2intro.txt" //will be hard coded
 file		SMSG		"prox2a.txt"
 
 /* Directory for uncompiled script files */
 directory       "script/text"
 
-file		SCRIPT		"genexp.slo"
 file		SCRIPT		"cam2daynight.slo"
-file            SCRIPT		"cam2ax.slo"
-file            SCRIPT		"vtols.slo"
-file            SCRIPT		"reinforcement.slo"	
-file            SCRIPT		"tech.slo"
+
 
 /* Directory for script value files*/
 directory       "script/data"
-file            SCRIPTVAL       "cam2a.vlo"
-file            SCRIPTVAL       "cam2day.vlo"
-file            SCRIPTVAL       "cam2ax.vlo"
-file            SCRIPTVAL       "vtols2a.vlo"
-file            SCRIPTVAL       "cam2arein.vlo"	
-file            SCRIPTVAL       "cam2tech.vlo"
 
-directory       "script"
-file            JAVASCRIPT      "rules.js"
+file            SCRIPTVAL       "cam2day.vlo"
+
+directory "script"
+file JAVASCRIPT      "rules.js"
+directory "script/campaign"
+file JAVASCRIPT "cam2-a.js"

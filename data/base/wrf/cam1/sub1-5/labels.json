@@ -1,0 +1,32 @@
+{
+	"position_0": { "label": "TransporterEntry",      "pos": [ 7232, 4416 ] },
+	"position_1": { "label": "TransporterExit",       "pos": [ 100, 8000 ] },
+	"position_2": { "label": "ScavSouthWestAssembly", "pos": [ 4928, 7488 ] },
+	"position_3": { "label": "ScavSouthEastAssembly", "pos": [ 6336, 7616 ] },
+	"position_4": { "label": "ScavNorthAssembly",     "pos": [ 3136, 1600 ] },
+	"position_5": { "label": "NPTransportPos",        "pos": [ 6144, 2560 ] },
+
+	"area_0": { "label": "RTLZ",                  "pos1": [ 0, 6400 ],    "pos2": [ 1664, 8000 ] },
+	"area_1": { "label": "LandingZone1",          "pos1": [ 640, 7040 ],  "pos2": [ 896, 7296 ] },
+	"area_2": { "label": "LandingZone2",          "pos1": [ 6016, 2688 ], "pos2": [ 6272, 2432 ] },
+	"area_3": { "label": "ScavNorth",             "pos1": [ 2240, 192 ],  "pos2": [ 4160, 1728 ] },
+	"area_4": { "label": "ScavSouthWest",         "pos1": [ 3392, 6848 ], "pos2": [ 4928, 8000 ] },
+	"area_5": { "label": "ScavSouthEast",         "pos1": [ 5056, 6592 ], "pos2": [ 6464, 8000 ] },
+	"area_6": { "label": "NPBase",                "pos1": [ 3520, 1728 ], "pos2": [ 6976, 5056 ] },
+	
+	"object_0": { "label": "NPLeftFactory",        "id": 481, "player": 1, "type": 1 },
+	"object_1": { "label": "NPRightFactory",       "id": 483, "player": 1, "type": 1 },
+	"object_2": { "label": "NPCyborgFactory",      "id": 407, "player": 1, "type": 1 },
+	"object_3": { "label": "NPResearchFacility",   "id": 485, "player": 1, "type": 1 },
+	"object_4": { "label": "NPCommandRelay",       "id": 200, "player": 1, "type": 1 },
+	"object_5": { "label": "NPCommandCenter",      "id": 216, "player": 1, "type": 1 },
+	"object_6": { "label": "NPRepairFacility",     "id": 486, "player": 1, "type": 1 },
+	"object_7": { "label": "ScavSouthWestFactory", "id": 280, "player": 7, "type": 1 },
+	"object_8": { "label": "ScavSouthEastFactory", "id": 279, "player": 7, "type": 1 },
+	"object_9": { "label": "ScavNorthFactory",     "id": 223, "player": 7, "type": 1 },
+
+	"radius_0": { "label": "NorthScavFactoryTrigger",     "subscriber": 0, "pos" : [ 3200, 900 ],  "radius": 1280 },
+	"radius_1": { "label": "SouthWestScavFactoryTrigger", "subscriber": 0, "pos" : [ 4200, 7500 ], "radius": 800 },
+	"radius_2": { "label": "SouthEastScavFactoryTrigger", "subscriber": 0, "pos" : [ 5600, 7500 ], "radius": 800 },
+	"radius_3": { "label": "NPLZTrigger",                 "subscriber": 0, "pos" : [ 4288, 4160 ], "radius": 1100 }
+}

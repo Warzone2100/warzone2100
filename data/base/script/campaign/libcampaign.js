@@ -53,7 +53,7 @@
 
 	, for easier reading (all the useful stuff on top).
 
-	Please leave camDebug() around iff something that should never happen
+	Please leave camDebug() around if something that should never happen
 	occurs, indicating an actual bug in campaign. Then a sensible message
 	should be helpful as well. But normally, no warnings should ever be
 	printed.
@@ -274,6 +274,20 @@ function __camGlobalContext()
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+// Research and structure related functions.
+////////////////////////////////////////////////////////////////////////////////
+
+//;; \subsection{camEnableRes(list, player)}
+//;; Grants research from the given list to player
+function camEnableRes(list, player)
+{
+	for(var i = 0; i < list.length; ++i)
+	{
+		completeResearch(list[i], player);
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////
 // Debugging helpers.
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -482,6 +496,20 @@ function camAllArtifactsPickedUp()
 {
 	// FIXME: O(n) lookup here
 	return __camNumArtifacts === Object.keys(__camArtifacts).length;
+}
+
+//Returns the label of all existing artifacts
+function getArtifacts()
+{
+	var camArti = [];
+	for(var alabel in __camArtifacts)
+	{
+		if(camDef(__camArtifacts[alabel]))
+		{
+			camArti[camArti.length] = __camGetArtifactLabel(alabel);
+		}
+	}
+	return camArti;
 }
 
 //////////// privates
@@ -748,6 +776,16 @@ function camAllEnemyBasesEliminated()
 function camSendReinforcement(player, position, list, kind, data)
 {
 	var pos = camMakePos(position);
+	var order = CAM_ORDER_ATTACK;
+	var order_data = { regroup: true, count: -1 };
+	if (camDef(data) && camDef(data.order))
+	{
+		order = data.order;
+		if (camDef(data) && camDef(data.data))
+		{
+			order_data = data.data;
+		}
+	}
 	switch(kind)
 	{
 		case CAM_REINFORCE_GROUND:
@@ -758,24 +796,9 @@ function camSendReinforcement(player, position, list, kind, data)
 				                        "Reinforcement", list[i].body,
 				                        list[i].prop, null, null, list[i].weap);
 			}
-			camManageGroup(camMakeGroup(droids), CAM_ORDER_ATTACK, {
-				regroup: true,
-				count: -1
-			});
+			camManageGroup(camMakeGroup(droids), order, order_data);
 			break;
 		case CAM_REINFORCE_TRANSPORT:
-			var order = CAM_ORDER_ATTACK, order_data = {
-				regroup: true,
-				count: -1
-			};
-			if (camDef(data) && camDef(data.order))
-			{
-				order = data.order;
-				if (camDef(data) && camDef(data.data))
-				{
-					order_data = data.data;
-				}
-			}
 			__camTransporterQueue[__camTransporterQueue.length] = {
 				player: player,
 				position: position,
@@ -1035,7 +1058,7 @@ const CAM_ORDER_FOLLOW = 4;
 //;; 		If new droids are added to the group, it can recover and attack
 //;; 		again.
 //;; 		\item[count] Override size of the original group. If unspecified,
-//;; 		number of doids in the group at call time. Retreat on low morale
+//;; 		number of droids in the group at call time. Retreat on low morale
 //;; 		and regroup is calculated against this value.
 //;; 		\item[repair] Health percentage to fall back to repair facility,
 //;; 		if any.
@@ -1051,7 +1074,7 @@ const CAM_ORDER_FOLLOW = 4;
 //;; 		\item[pos] Position to defend.
 //;; 		\item[radius] Circle radius around \textbf{pos} to scan for targets.
 //;; 		\item[count] Override size of the original group. If unspecified,
-//;; 		number of doids in the group at call time. Regroup is calculated
+//;; 		number of droids in the group at call time. Regroup is calculated
 //;; 		against this value.
 //;; 		\item[repair] Health percentage to fall back to repair facility,
 //;; 		if any.
@@ -1066,7 +1089,7 @@ const CAM_ORDER_FOLLOW = 4;
 //;; 		\item[pos] An array of positions to patrol between.
 //;; 		\item[interval] Change positions every this many milliseconds.
 //;; 		\item[count] Override size of the original group. If unspecified,
-//;; 		number of doids in the group at call time. Regroup is calculated
+//;; 		number of droids in the group at call time. Regroup is calculated
 //;; 		against this value.
 //;; 		\item[repair] Health percentage to fall back to repair facility,
 //;; 		if any.
@@ -1085,7 +1108,7 @@ const CAM_ORDER_FOLLOW = 4;
 //;; 		first positions in the list will be compromised first.
 //;; 		\item[radius] Circle radius around \textbf{pos} to scan for targets.
 //;; 		\item[count] Override size of the original group. If unspecified,
-//;; 		number of doids in the group at call time. Regroup is calculated
+//;; 		number of droids in the group at call time. Regroup is calculated
 //;; 		against this value.
 //;; 		\item[repair] Health percentage to fall back to repair facility,
 //;; 		if any.
@@ -1433,15 +1456,30 @@ function __camTacticsTickForGroup(group)
 						done = true;
 					}
 				}
-				if (!done && droid.order !== DORDER_SCOUT
+				if (!done && ((droid.order !== DORDER_SCOUT) || isVTOL(droid))
 					&& camDist(droid, target) >= __CAM_CLOSE_RADIUS)
 				{
-					orderDroidLoc(droid, DORDER_SCOUT,
-					              target.x, target.y);
+					//Rearm vtols.
+					if (isVTOL(droid) && ((droid.weapons[0].armed < 60) ||
+						((droid.order === DORDER_REARM) &&
+						(droid.weapons[0].armed < 99))))
+					{
+						var pads = countStruct("A0VtolPad", droid.player);
+						if((pads > 0) && (droid.order !== DORDER_REARM))
+							orderDroid(droid, DORDER_REARM);
+					}
+					else
+					{
+						orderDroidLoc(droid, DORDER_SCOUT, target.x, target.y);
+					}
 				}
 			}
 			break;
 		case CAM_ORDER_PATROL:
+			if (!camDef(gi.data.interval))
+			{
+				gi.data.interval = 60000;
+			}
 			if (!camDef(gi.lastmove) || !camDef(gi.lastspot))
 			{
 				gi.lastspot = 0;
@@ -1453,7 +1491,7 @@ function __camTacticsTickForGroup(group)
 				// find random new position to visit
 				var list = [];
 				for (var i = 0; i < gi.data.pos.length; ++i)
-					if (i !== gi.lastpos)
+					if (i !== gi.lastspot)
 						list[list.length] = i;
 				gi.lastspot = list[camRand(list.length)];
 			}
@@ -1462,7 +1500,10 @@ function __camTacticsTickForGroup(group)
 			for (var i = 0; i < droids.length; ++i)
 			{
 				var droid = droids[i];
-				orderDroidLoc(droid, DORDER_MOVE, pos.x, pos.y);
+				if(!isVTOL(droid))
+					orderDroidLoc(droid, DORDER_MOVE, pos.x, pos.y);
+				else
+					orderDroidLoc(droid, DORDER_SCOUT, pos.x, pos.y);
 			}
 			break;
 		case CAM_ORDER_FOLLOW:
@@ -2040,7 +2081,11 @@ function __camTriggerLastAttack()
 {
 	if (!__camLastAttackTriggered)
 	{
-		var enemies = enumArea(0, 0, mapWidth, mapHeight, ENEMIES, false);
+		var enemies = enumArea(0, 0, mapWidth, mapHeight, ENEMIES, false).filter(
+		function(obj) { 
+			return (obj.type === DROID) && ((obj.droidType !== DROID_TRANSPORTER) &&
+				(obj.droidType !== DROID_SUPERTRANSPORTER))
+		});
 		camTrace(enemies.length, "enemy droids remaining");
 		camManageGroup(camMakeGroup(enemies), CAM_ORDER_ATTACK);
 		__camLastAttackTriggered = true;
@@ -2183,6 +2228,74 @@ function camSetupTransporter(x, y, x1, y1)
 
 
 ////////////////////////////////////////////////////////////////////////////////
+// VTOL management.
+// These functions create the hit and run vtols for the given player.
+// Vtol rearming is handled in group management.
+////////////////////////////////////////////////////////////////////////////////
+var __vtolPlayer;
+var __vtolStartPosition;
+var __vtolTemplates;
+var __vtolExitPosition;
+var __vtolTimer;
+
+
+function camSetVtolData(player, startPos, exitPos, templates, timer)
+{
+	__vtolPlayer = player;
+	__vtolStartPosition = camMakePos(startPos);
+	__vtolExitPosition = camMakePos(exitPos);
+	__vtolTemplates = templates;
+	__vtolTimer = timer;
+
+	__camSpawnVtols();
+	__camRetreatVtols();
+}
+
+function __camSpawnVtols()
+{
+	var amount = 5 + camRand(2);
+	var droids = [];
+	for (var i = 0; i < amount; ++i)
+	{
+		droids.push(__vtolTemplates[camRand(__vtolTemplates.length)]);
+	}
+
+	camSendReinforcement(__vtolPlayer, camMakePos(__vtolStartPosition), droids,
+		CAM_REINFORCE_GROUND,
+		{
+			order: CAM_ORDER_ATTACK,
+			data: { regroup: false, count: -1 }
+		});
+
+	queue("__camSpawnVtols", __vtolTimer);
+}
+
+function __camRetreatVtols()
+{
+	var vtols = enumDroid(__vtolPlayer).filter(function(obj) { 
+		return isVTOL(obj)
+	});
+
+	for (var i = 0; i < vtols.length; ++i)
+	{
+		var vt = vtols[i];
+		for (var c = 0; c < vt.weapons.length; ++c)
+		{
+			if ((vt.order == DORDER_RTB)
+				|| (vt.weapons[c].armed < 20) || (vt.health < 60))
+			{
+				orderDroidLoc(vt, DORDER_MOVE, __vtolExitPosition.x,
+					__vtolExitPosition.y);
+				break;
+			}
+		}
+	}
+
+	queue("__camRetreatVtols", 3000);
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
 // Event hooks magic. This makes all the library catch all the necessary events
 // without distracting the script authors from handling them on their own.
 // It assumes that script authors do not implement another similar mechanism,
@@ -2215,6 +2328,7 @@ function __camPreHookEvent(eventname, hookcode)
 	// store the original event handler
 	if (camDef(__camGlobalContext()[eventname]))
 		__camOriginalEvents[eventname] = __camGlobalContext()[eventname];
+
 	__camGlobalContext()[eventname] = function()
 	{
 		// Don't trigger hooks after level end.
@@ -2317,6 +2431,11 @@ __camPreHookEvent("eventStartLevel", function()
 	__camArtifacts = {};
 	__camNumEnemyBases = 0;
 	__camEnemyBases = {};
+	__vtolPlayer = 0;
+	__vtolStartPosition = {};
+	__vtolTemplates = {};
+	__vtolExitPosition = {};
+	__vtolTimer = 0;
 	setTimer("__camTick", 1000); // campaign pollers
 	setTimer("__camTruckTick", 150100); // some slower campaign pollers
 	queue("__camTacticsTick", 100); // would re-queue itself
@@ -2355,7 +2474,9 @@ __camPreHookEvent("eventGroupSeen", function(viewer, group)
 
 __camPreHookEvent("eventTransporterExit", function(transport)
 {
-	if (transport.player !== CAM_HUMAN_PLAYER)
+	if (transport.player !== CAM_HUMAN_PLAYER || 
+		(__camWinLossCallback === "__camVictoryStandard" && 
+		transport.player === CAM_HUMAN_PLAYER) )
 	{
 		// allow the next transport to enter
 		if (camDef(__camIncomingTransports[transport.player]))

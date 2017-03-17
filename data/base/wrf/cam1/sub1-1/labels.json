@@ -1,0 +1,21 @@
+{
+	"position_0": { "label": "startPosition",    "pos": [ 1152, 10752 ] },
+	"position_1": { "label": "transporterEntry", "pos": [ 128, 11008 ] },
+	"position_2": { "label": "transporterExit",  "pos": [ 640, 11392 ] },
+	"position_3": { "label": "artifactLocation", "pos": [ 2112, 1600 ] },
+	"position_4": { "label": "ambush1",          "pos": [ 2240, 1728 ] },
+	"position_5": { "label": "ambush2",          "pos": [ 2240, 10304 ] },
+	"position_6": { "label": "westScoutPos",     "pos": [ 1600, 2624 ] },
+
+	"area_0": { "label": "RTLZ",            "pos1": [ 768, 10368 ],  "pos2": [ 1792, 11136 ] },
+	"area_1": { "label": "landingZone",     "pos1": [ 1024, 10624 ], "pos2": [ 1280, 10880 ] },
+	"area_2": { "label": "eastScavs",       "pos1": [ 2624, 1088 ],  "pos2": [ 4160, 2496 ] },
+	"area_3": { "label": "westScavs",       "pos1": [ 704, 4288 ],   "pos2": [ 1472, 5184 ] },
+	"area_4": { "label": "northWestScavs",  "pos1": [ 448, 1088 ],   "pos2": [ 960, 1728 ] },
+	"area_5": { "label": "ambushScavs",     "pos1": [ 3904, 10944 ], "pos2": [ 4288, 11328 ] },
+	"area_6": { "label": "ambush1Trigger",  "pos1": [ 2816, 6272 ],  "pos2": [ 5376, 6600 ] },
+	"area_7": { "label": "ambush2Trigger",  "pos1": [ 1024, 7680 ],  "pos2": [ 1408, 8320 ] },
+	"area_8": { "label": "scavBaseTrigger", "pos1": [ 2048, 3000 ],  "pos2": [ 6600, 3300 ] },
+
+	"object_0": { "label": "artifact1", "id": 160831, "type": 2 }
+}
