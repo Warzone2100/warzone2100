@@ -179,8 +179,8 @@ template <unsigned N1, unsigned N2>
 static inline int sstrcmp(char const (&str1)[N1], char const (&str2)[N2]) { return strncmp(str1, str2, std::min(N1, N2)); }
 template <unsigned N, typename... P>
 static inline int ssprintf(char (&dest)[N], char const *format, P &&... params) { return snprintf(dest, N, format, std::forward<P>(params)...); }
-template <unsigned N, typename... P>
-static inline int vssprintf(char (&dest)[N], char const *format, P &&... params) { return vsnprintf(dest, N, format, std::forward<P>(params)...); }
+template <unsigned N>
+static inline int vssprintf(char (&dest)[N], char const *format, va_list params) { return vsnprintf(dest, N, format, params); }
 
 template <typename... P>
 static inline std::string astringf(char const *format, P &&... params)
