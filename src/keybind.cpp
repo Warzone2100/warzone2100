@@ -1935,9 +1935,9 @@ void kf_ShowGridInfo(void)
 #endif
 // --------------------------------------------------------------------------
 // Chat message. NOTE THIS FUNCTION CAN DISABLE ALL OTHER KEYPRESSES
-void kf_SendTeamMessage(void)
+void kf_SendTeamMessage()
 {
-	if (bAllowOtherKeyPresses)		// just starting.
+	if (bAllowOtherKeyPresses && !gamePaused())  // just starting.
 	{
 		bAllowOtherKeyPresses = false;
 		sstrcpy(sTextToSend, "");
@@ -1952,9 +1952,9 @@ void kf_SendTeamMessage(void)
 }
 
 // Chat message. NOTE THIS FUNCTION CAN DISABLE ALL OTHER KEYPRESSES
-void kf_SendGlobalMessage(void)
+void kf_SendGlobalMessage()
 {
-	if (bAllowOtherKeyPresses)		// just starting.
+	if (bAllowOtherKeyPresses && !gamePaused())  // just starting.
 	{
 		bAllowOtherKeyPresses = false;
 		sstrcpy(sTextToSend, "");
