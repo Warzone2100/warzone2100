@@ -2765,24 +2765,23 @@ static void stopJoining(void)
 static void loadMapSettings1()
 {
 	char aFileName[256];
-	QString ininame = challengeActive ? sRequestResult : aFileName;
 	LEVEL_DATASET *psLevel = levFindDataSet(game.map, &game.hash);
 
+	ASSERT_OR_RETURN(, psLevel, "No level found for %s", game.map);
+	sstrcpy(aFileName, psLevel->apDataFiles[psLevel->game]);
+	aFileName[std::max<size_t>(strlen(aFileName), 4) - 4] = '\0';
+	sstrcat(aFileName, ".json");
+
+	QString ininame = challengeActive ? sRequestResult : aFileName;
 	if (hostlaunch == 2)
 	{
 		ininame = "tests/" + QString::fromStdString(wz_skirmish_test());
 	}
-
-	ASSERT_OR_RETURN(, psLevel, "No level found for %s", game.map);
-	sstrcpy(aFileName, psLevel->apDataFiles[psLevel->game]);
-	aFileName[strlen(aFileName) - 4] = '\0';
-	sstrcat(aFileName, ".json");
-	WzConfig ini(ininame, WzConfig::ReadOnly);
-
 	if (!PHYSFS_exists(ininame.toUtf8().constData()))
 	{
 		return;
 	}
+	WzConfig ini(ininame, WzConfig::ReadOnly);
 
 	ini.beginGroup("locked"); // GUI lockdown
 	locked.power = ini.value("power", challengeActive).toBool();
@@ -2809,19 +2808,18 @@ static void loadMapSettings1()
 static void loadMapSettings2()
 {
 	char aFileName[256];
-	QString ininame = challengeActive ? sRequestResult : aFileName;
 	LEVEL_DATASET *psLevel = levFindDataSet(game.map, &game.hash);
 
+	ASSERT_OR_RETURN(, psLevel, "No level found for %s", game.map);
+	sstrcpy(aFileName, psLevel->apDataFiles[psLevel->game]);
+	aFileName[std::max<size_t>(strlen(aFileName), 4) - 4] = '\0';
+	sstrcat(aFileName, ".json");
+
+	QString ininame = challengeActive ? sRequestResult : aFileName;
 	if (hostlaunch == 2)
 	{
 		ininame = "tests/" + QString::fromStdString(wz_skirmish_test());
 	}
-
-	ASSERT_OR_RETURN(, psLevel, "No level found for %s", game.map);
-	sstrcpy(aFileName, psLevel->apDataFiles[psLevel->game]);
-	aFileName[strlen(aFileName) - 4] = '\0';
-	sstrcat(aFileName, ".json");
-
 	if (!PHYSFS_exists(ininame.toUtf8().constData()))
 	{
 		return;
