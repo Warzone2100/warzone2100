@@ -315,7 +315,7 @@ void NET_InitPlayer(int i, bool initPosition, bool initTeams)
 		NetPlay.players[i].colour = i;
 		setPlayerColour(i, i);  // PlayerColour[] in component.c must match this! Why is this in more than one place??!
 		NetPlay.players[i].position = i;
-		NetPlay.players[i].team = initTeams? i/playersPerTeam() : i;
+		NetPlay.players[i].team = initTeams && i < game.maxPlayers? i/playersPerTeam() : i;
 	}
 	NetPlay.players[i].ready = false;
 	if (NetPlay.bComms)
