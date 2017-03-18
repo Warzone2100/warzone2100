@@ -36,7 +36,7 @@ struct WARZONE_GLOBALS
 {
 	FMV_MODE FMVmode = FMV_FULLSCREEN;
 	UDWORD width = 1024;
-	UDWORD height = 720;
+	UDWORD height = 768;
 	int screen = 0;
 	int8_t SPcolor = 0;
 	int MPcolour = -1;
