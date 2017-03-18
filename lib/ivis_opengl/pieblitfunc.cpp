@@ -211,6 +211,24 @@ void iV_Line(int x0, int y0, int x1, int y1, PIELIGHT colour)
 	pie_DeactivateShader();
 }
 
+void iV_Lines(const std::vector<glm::ivec4> &lines, PIELIGHT colour)
+{
+	pie_SetTexturePage(TEXPAGE_NONE);
+	const glm::vec4 color(
+		colour.vector[0] / 255.f,
+		colour.vector[1] / 255.f,
+		colour.vector[2] / 255.f,
+		colour.vector[3] / 255.f
+	);
+	const auto &mat = glm::ortho(0.f, static_cast<float>(pie_GetVideoBufferWidth()), static_cast<float>(pie_GetVideoBufferHeight()), 0.f);
+	for (const auto &line : lines)
+	{
+		pie_ActivateShader(SHADER_LINE, glm::vec2(line.x, line.y), glm::vec2(line.z, line.w), color, mat);
+		glDrawArrays(GL_LINES, 0, 2);
+	}
+	pie_DeactivateShader();
+}
+
 /**
  *	Assumes render mode set up externally, draws filled rectangle.
  */

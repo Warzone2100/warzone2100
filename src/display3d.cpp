@@ -3235,50 +3235,32 @@ void	assignDestTarget(void)
 }
 
 /// Draw a graphical effect after selecting a sensor target
-static void	processSensorTarget(void)
+static void processSensorTarget()
 {
-	SWORD x, y;
-	SWORD offset;
-	SWORD x0, y0, x1, y1;
-	UDWORD	index;
-
-
 	if (bSensorTargetting)
 	{
 		if ((realTime - lastTargetAssignation) < TARGET_TO_SENSOR_TIME)
 		{
 			if (!psSensorObj->died && psSensorObj->sDisplay.frameNumber == currentGameFrame)
 			{
-				x = /*mouseX();*/(SWORD)psSensorObj->sDisplay.screenX;
-				y = (SWORD)psSensorObj->sDisplay.screenY;
+				const int x = /*mouseX();*/(SWORD)psSensorObj->sDisplay.screenX;
+				const int y = (SWORD)psSensorObj->sDisplay.screenY;
+				int index = IMAGE_BLUE1;
 				if (!gamePaused())
 				{
 					index = IMAGE_BLUE1 + getModularScaledGraphicsTime(1020, 5);
 				}
-				else
-				{
-					index = IMAGE_BLUE1;
-				}
 				iV_DrawImage(IntImages, index, x, y);
-
-				offset = (SWORD)(12 + ((TARGET_TO_SENSOR_TIME) - (realTime - lastTargetAssignation)) / 2);
-
-				x0 = (SWORD)(x - offset);
-				y0 = (SWORD)(y - offset);
-				x1 = (SWORD)(x + offset);
-				y1 = (SWORD)(y + offset);
-
-				iV_Line(x0, y0, x0 + 8, y0, WZCOL_WHITE);
-				iV_Line(x0, y0, x0, y0 + 8, WZCOL_WHITE);
-
-				iV_Line(x1, y0, x1 - 8, y0, WZCOL_WHITE);
-				iV_Line(x1, y0, x1, y0 + 8, WZCOL_WHITE);
-
-				iV_Line(x1, y1, x1 - 8, y1, WZCOL_WHITE);
-				iV_Line(x1, y1, x1, y1 - 8, WZCOL_WHITE);
-
-				iV_Line(x0, y1, x0 + 8, y1, WZCOL_WHITE);
-				iV_Line(x0, y1, x0, y1 - 8, WZCOL_WHITE);
+				const int offset = 12 + ((TARGET_TO_SENSOR_TIME) - (realTime - lastTargetAssignation)) / 2;
+				const int x0 = x - offset;
+				const int y0 = y - offset;
+				const int x1 = x + offset;
+				const int y1 = y + offset;
+				const std::vector<glm::ivec4> lines = { glm::ivec4(x0, y0, x0 + 8, y0), glm::ivec4(x0, y0, x0, y0 + 8),
+				                                        glm::ivec4(x1, y0, x1 - 8, y0), glm::ivec4(x1, y0, x1, y0 + 8),
+				                                        glm::ivec4(x1, y1, x1 - 8, y1), glm::ivec4(x1, y1, x1, y1 - 8),
+				                                        glm::ivec4(x0, y1, x0 + 8, y1), glm::ivec4(x0, y1, x0, y1 - 8) };
+				iV_Lines(std::vector<glm::ivec4>{glm::ivec4(x0, y0, x0 + 8, y0), glm::ivec4(x0, y0, x0, y0 + 8),
 			}
 			else
 			{

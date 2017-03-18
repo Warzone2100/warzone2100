@@ -114,8 +114,9 @@ static inline glm::mat4 defaultProjectionMatrix()
 	return glm::ortho(0.f, static_cast<float>(w), static_cast<float>(h), 0.f);
 }
 void iV_ShadowBox(int x0, int y0, int x1, int y1, int pad, PIELIGHT first, PIELIGHT second, PIELIGHT fill);
-extern void iV_Line(int x0, int y0, int x1, int y1, PIELIGHT colour);
-extern void iV_Box2(int x0, int y0, int x1, int y1, PIELIGHT first, PIELIGHT second);
+void iV_Line(int x0, int y0, int x1, int y1, PIELIGHT colour);
+void iV_Lines(const std::vector<glm::ivec4> &lines, PIELIGHT colour);
+void iV_Box2(int x0, int y0, int x1, int y1, PIELIGHT first, PIELIGHT second);
 static inline void iV_Box(int x0, int y0, int x1, int y1, PIELIGHT first)
 {
 	iV_Box2(x0, y0, x1, y1, first, first);
