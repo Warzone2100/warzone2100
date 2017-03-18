@@ -31,67 +31,32 @@
 #include "component.h"
 
 /***************************************************************************/
-/*
- *	Global Variables
- */
-/***************************************************************************/
-
-
-/***************************************************************************/
-/*
- *	Local Definitions
- */
-/***************************************************************************/
 
 struct WARZONE_GLOBALS
 {
-	FMV_MODE	FMVmode;
-	SWORD		effectsLevel;
-	UDWORD		width;
-	UDWORD		height;
-	int		screen;
-	int8_t		SPcolor;
-	int			MPcolour;
-	FSAA_LEVEL  fsaa;
-	bool		Fullscreen;
-	bool		soundEnabled;
-	bool		trapCursor;
-	bool		vsync;
-	bool		pauseOnFocusLoss;
-	bool		ColouredCursor;
-	bool		MusicEnabled;
+	FMV_MODE FMVmode = FMV_FULLSCREEN;
+	UDWORD width = 1024;
+	UDWORD height = 720;
+	int screen = 0;
+	int8_t SPcolor = 0;
+	int MPcolour = -1;
+	int antialiasing = 0;
+	bool Fullscreen = false;
+	bool soundEnabled = true;
+	bool trapCursor = false;
+	bool vsync = true;
+	bool pauseOnFocusLoss = true;
+	bool ColouredCursor = true;
+	bool MusicEnabled = true;
 };
 
-/***************************************************************************/
-/*
- *	Local Variables
- */
-/***************************************************************************/
-
-static WARZONE_GLOBALS	warGlobs;//STATIC use or write an access function if you need any of this
+static WARZONE_GLOBALS warGlobs;
 
 /***************************************************************************/
-/*
- *	Local ProtoTypes
- */
-/***************************************************************************/
 
-/***************************************************************************/
-/*
- *	Source
- */
-/***************************************************************************/
-void war_SetDefaultStates(void)//Sets all states
+void war_SetDefaultStates()
 {
-	//set those here and reset in clParse or loadConfig
-	war_setFSAA(0);
-	war_SetVsync(true);
-	war_setSoundEnabled(true);
-	war_SetPauseOnFocusLoss(false);
-	war_SetColouredCursor(true);
-	war_SetMusicEnabled(true);
-	war_SetSPcolor(0);		//default color is green
-	war_setMPcolour(-1);            // Default color is random.
+	warGlobs = WARZONE_GLOBALS();
 }
 
 void war_SetSPcolor(int color)
@@ -129,14 +94,14 @@ bool war_getFullscreen(void)
 	return warGlobs.Fullscreen;
 }
 
-void war_setFSAA(unsigned int fsaa)
+void war_setAntialiasing(int antialiasing)
 {
-	warGlobs.fsaa = (FSAA_LEVEL)(fsaa % FSAA_MAX);
+	warGlobs.antialiasing = antialiasing;
 }
 
-FSAA_LEVEL war_getFSAA()
+int war_getAntialiasing()
 {
-	return warGlobs.fsaa;
+	return warGlobs.antialiasing;
 }
 
 void war_SetTrapCursor(bool b)
@@ -189,8 +154,6 @@ int war_GetScreen()
 	return warGlobs.screen;
 }
 
-/***************************************************************************/
-/***************************************************************************/
 void war_SetFMVmode(FMV_MODE mode)
 {
 	warGlobs.FMVmode = (FMV_MODE)(mode % FMV_MAX);

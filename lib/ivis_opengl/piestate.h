@@ -85,6 +85,8 @@ extern void pie_SetTexturePage(SDWORD num);
 extern void pie_SetRendMode(REND_MODE rendMode);
 RENDER_STATE getCurrentRenderState();
 
+int pie_GetMaxAntialiasing();
+
 bool pie_LoadShaders();
 void pie_FreeShaders();
 SHADER_MODE pie_LoadShader(const char *programName, const char *vertexPath, const char *fragmentPath,

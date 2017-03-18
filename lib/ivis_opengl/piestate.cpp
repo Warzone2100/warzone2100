@@ -676,3 +676,10 @@ bool _glerrors(const char *function, const char *file, int line)
 	}
 	return ret;
 }
+
+int pie_GetMaxAntialiasing()
+{
+	GLint maxSamples = 0;
+	glGetIntegerv(GL_MAX_SAMPLES, &maxSamples);
+	return maxSamples;
+}

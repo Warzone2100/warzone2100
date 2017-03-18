@@ -142,9 +142,9 @@ bool loadConfig()
 		setTextureSize(ini.value("textureSize").toInt());
 	}
 	NetPlay.isUPNP = ini.value("UPnP", true).toBool();
-	if (ini.contains("FSAA"))
+	if (ini.contains("antialiasing"))
 	{
-		war_setFSAA(ini.value("FSAA").toInt());
+		war_setAntialiasing(ini.value("antialiasing").toInt());
 	}
 	// Leave this to false, some system will fail and they can't see the system popup dialog!
 	war_setFullscreen(ini.value("fullscreen", false).toBool());
@@ -220,7 +220,7 @@ bool saveConfig()
 	ini.setValue("trapCursor", war_GetTrapCursor());
 	ini.setValue("vsync", war_GetVsync());
 	ini.setValue("textureSize", getTextureSize());
-	ini.setValue("FSAA", war_getFSAA());
+	ini.setValue("antialiasing", war_getAntialiasing());
 	ini.setValue("UPnP", (SDWORD)NetPlay.isUPNP);
 	ini.setValue("rotateRadar", rotateRadar);
 	ini.setValue("PauseOnFocusLoss", war_GetPauseOnFocusLoss());

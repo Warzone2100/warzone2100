@@ -89,6 +89,13 @@ bool			bLimiterLoaded = false;
 
 #define TUTORIAL_LEVEL "TUTORIAL3"
 
+// ////////////////////////////////////////////////////////////////////////////
+// Forward definitions
+
+static void addSmallTextButton(UDWORD id, UDWORD PosX, UDWORD PosY, const char *txt, unsigned int style);
+
+// ////////////////////////////////////////////////////////////////////////////
+// Helper functions
 
 // Returns true if escape key pressed.
 //
@@ -116,8 +123,8 @@ template <typename T>
 static T pow2Cycle(T value, T min, T max)
 {
 	return !mouseReleased(MOUSE_RMB) ?
-	       value < max ? value * 2 : min :  // Cycle forwards.
-	       min < value ? value / 2 : max;  // Cycle backwards.
+	       value < max ? std::max<T>(1, value) * 2 : min :  // Cycle forwards.
+	       min < value ? (value / 2 > 1 ? value / 2 : 0) : max;  // Cycle backwards.
 }
 
 
@@ -903,16 +910,15 @@ static char const *videoOptionsWindowModeString()
 	return war_getFullscreen()? _("Fullscreen") : _("Windowed");
 }
 
-static char const *videoOptionsFsaaString()
+static std::string videoOptionsAntialiasingString()
 {
-	switch (war_getFSAA())
+	if (war_getAntialiasing() == 0)
 	{
-	case FSAA_OFF: return _("Off");
-	case FSAA_2X: return _("2×");
-	case FSAA_4X: return _("4×");
-	case FSAA_8X: return _("8×");
-	// Some cards can do 16x & 32x ...
-	default: return _("Unsupported");
+		return _("Off");
+	}
+	else
+	{
+		return std::to_string(war_getAntialiasing()) + "×";
 	}
 }
 
@@ -958,19 +964,19 @@ static bool startVideoOptionsMenu(void)
 
 	// Resolution
 	addTextButton(FRONTEND_RESOLUTION, FRONTEND_POS3X - 35, FRONTEND_POS3Y, _("Resolution*"), WBUT_SECONDARY);
-	addTextButton(FRONTEND_RESOLUTION_R, FRONTEND_POS3M - 55, FRONTEND_POS3Y, videoOptionsResolutionString().c_str(), WBUT_SECONDARY);
+	addTextButton(FRONTEND_RESOLUTION_R, FRONTEND_POS3M - 55, FRONTEND_POS3Y, videoOptionsResolutionString(), WBUT_SECONDARY);
 
 	// Texture size
 	addTextButton(FRONTEND_TEXTURESZ, FRONTEND_POS4X - 35, FRONTEND_POS4Y, _("Texture size"), WBUT_SECONDARY);
-	addTextButton(FRONTEND_TEXTURESZ_R, FRONTEND_POS4M - 55, FRONTEND_POS4Y, videoOptionsTextureSizeString().c_str(), WBUT_SECONDARY);
+	addTextButton(FRONTEND_TEXTURESZ_R, FRONTEND_POS4M - 55, FRONTEND_POS4Y, videoOptionsTextureSizeString(), WBUT_SECONDARY);
 
 	// Vsync
 	addTextButton(FRONTEND_VSYNC, FRONTEND_POS5X - 35, FRONTEND_POS5Y, _("Vertical sync"), WBUT_SECONDARY);
 	addTextButton(FRONTEND_VSYNC_R, FRONTEND_POS5M - 55, FRONTEND_POS5Y, videoOptionsVsyncString(), WBUT_SECONDARY);
 
-	// FSAA
-	addTextButton(FRONTEND_FSAA, FRONTEND_POS5X - 35, FRONTEND_POS6Y, "FSAA*", WBUT_SECONDARY);
-	addTextButton(FRONTEND_FSAA_R, FRONTEND_POS5M - 55, FRONTEND_POS6Y, videoOptionsFsaaString(), WBUT_SECONDARY);
+	// Antialiasing
+	addTextButton(FRONTEND_FSAA, FRONTEND_POS5X - 35, FRONTEND_POS6Y, "Antialiasing*", WBUT_SECONDARY);
+	addTextButton(FRONTEND_FSAA_R, FRONTEND_POS5M - 55, FRONTEND_POS6Y, videoOptionsAntialiasingString(), WBUT_SECONDARY);
 
 	// Add some text down the side of the form
 	addSideText(FRONTEND_SIDETEXT, FRONTEND_SIDEX, FRONTEND_SIDEY, _("VIDEO OPTIONS"));
@@ -997,8 +1003,8 @@ bool runVideoOptionsMenu(void)
 	case FRONTEND_FSAA:
 	case FRONTEND_FSAA_R:
 		{
-			war_setFSAA(stepCycle(war_getFSAA(), FSAA_OFF, FSAA_LEVEL(FSAA_MAX - 1)));
-			widgSetString(psWScreen, FRONTEND_FSAA_R, videoOptionsFsaaString());
+			war_setAntialiasing(pow2Cycle(war_getAntialiasing(), 0, pie_GetMaxAntialiasing()));
+			widgSetString(psWScreen, FRONTEND_FSAA_R, videoOptionsAntialiasingString().c_str());
 			break;
 		}
 
@@ -1624,7 +1630,7 @@ void addSideText(UDWORD id,  UDWORD PosX, UDWORD PosY, const char *txt)
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-void addTextButton(UDWORD id,  UDWORD PosX, UDWORD PosY, const char *txt, unsigned int style)
+void addTextButton(UDWORD id,  UDWORD PosX, UDWORD PosY, const std::string &txt, unsigned int style)
 {
 	W_BUTINIT sButInit;
 
@@ -1636,7 +1642,7 @@ void addTextButton(UDWORD id,  UDWORD PosX, UDWORD PosY, const char *txt, unsign
 	// Align
 	if (!(style & WBUT_TXTCENTRE))
 	{
-		sButInit.width = (short)(iV_GetTextWidth(txt) + 10);
+		sButInit.width = (short)(iV_GetTextWidth(txt.c_str()) + 10);
 		sButInit.x += 35;
 	}
 	else
@@ -1656,7 +1662,7 @@ void addTextButton(UDWORD id,  UDWORD PosX, UDWORD PosY, const char *txt, unsign
 	sButInit.height = FRONTEND_BUTHEIGHT;
 	sButInit.pDisplay = displayTextOption;
 	sButInit.FontID = font_large;
-	sButInit.pText = txt;
+	sButInit.pText = txt.c_str();
 	widgAddButton(psWScreen, &sButInit);
 
 	// Disable button

@@ -1022,7 +1022,7 @@ int realmain(int argc, char *argv[])
 		}
 	}
 
-	if (!wzMainScreenSetup(war_getFSAA(), war_getFullscreen(), war_GetVsync()))
+	if (!wzMainScreenSetup(war_getAntialiasing(), war_getFullscreen(), war_GetVsync()))
 	{
 		return EXIT_FAILURE;
 	}

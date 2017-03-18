@@ -40,15 +40,6 @@ enum FMV_MODE
 	FMV_MAX
 };
 
-enum FSAA_LEVEL
-{
-	FSAA_OFF,
-	FSAA_2X,
-	FSAA_4X,
-	FSAA_8X,
-	FSAA_MAX
-};
-
 /***************************************************************************/
 /*
  *	Global ProtoTypes
@@ -61,8 +52,8 @@ extern void war_SetAllowSubtitles(bool);
 extern bool war_GetAllowSubtitles(void);
 extern void war_setFullscreen(bool);
 extern bool war_getFullscreen(void);
-extern void war_setFSAA(unsigned int);
-FSAA_LEVEL war_getFSAA();
+void war_setAntialiasing(int);
+int war_getAntialiasing();
 extern void war_SetTrapCursor(bool b);
 extern bool war_GetTrapCursor(void);
 extern bool war_GetColouredCursor(void);

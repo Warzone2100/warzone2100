@@ -1263,7 +1263,6 @@ bool wzMainScreenSetup(int antialiasing, bool fullscreen, bool vsync)
 	// Enable stencil buffer, needed for shadows to work.
 	SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
 
-	// Enable FSAA anti-aliasing if and at the level requested by the user
 	if (antialiasing)
 	{
 		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
