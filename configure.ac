@@ -267,8 +267,8 @@ AC_MSG_RESULT([${enable_debug}])
 # versions. The -Werror is necessary since otherwise gcc prints a warning that
 # the option is only valid for c++/objc++, but the test succeeds. The order is
 # also important, it doesn't work if -Werror comes last.
-AX_C_CHECK_FLAG([-Werror -Wno-switch], , , CFLAGS_IGNORE_WARNINGS="${CFLAGS_IGNORE_WARNINGS} -Wno-switch")
-AX_C_CHECK_FLAG([-Werror -Wno-enum-compare], , , CFLAGS_IGNORE_WARNINGS="${CFLAGS_IGNORE_WARNINGS} -Wno-enum-compare")
+AX_C_CHECK_FLAG([-Werror -Wno-switch -Wno-error=cpp], [#warning x], , CFLAGS_IGNORE_WARNINGS="${CFLAGS_IGNORE_WARNINGS} -Wno-switch")
+AX_C_CHECK_FLAG([-Werror -Wno-enum-compare -Wno-error=cpp], [#warning x], , CFLAGS_IGNORE_WARNINGS="${CFLAGS_IGNORE_WARNINGS} -Wno-enum-compare")
 # Only needed for CXX, actually.
 WZ_CPPFLAGS="${WZ_CPPFLAGS} -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS"
 
@@ -284,7 +284,7 @@ else
 fi
 
 WZ_WARNINGS_GCC="-Wall -Wextra ${WZ_Wno_}unused-parameter ${WZ_Wno_}sign-compare -Wcast-align -Wwrite-strings -Wpointer-arith ${WZ_Wno_}format-security"
-AX_C_CHECK_FLAG([-Werror -Wno-expansion-to-defined], , , WZ_WARNINGS_GCC="${WZ_WARNINGS_GCC} -Wno-expansion-to-defined")
+AX_C_CHECK_FLAG([-Werror -Wno-expansion-to-defined -Wno-error=cpp], [#warning x], , WZ_WARNINGS_GCC="${WZ_WARNINGS_GCC} -Wno-expansion-to-defined")
 WZ_WARNINGS_GCC_C="${WZ_WARNINGS_GCC} -Wstrict-prototypes -Wdeclaration-after-statement ${CFLAGS_IGNORE_WARNINGS}"
 WZ_WARNINGS_GCC_CXX="${WZ_Wno_}enum-compare ${WZ_WARNINGS_GCC}"
 if test "x$enable_debug" = "xyes" ; then
