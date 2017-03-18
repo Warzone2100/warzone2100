@@ -9,7 +9,6 @@ file		SMSG		"brief2-1.txt"
 
 /* Directory for uncompiled script files */
 directory       "script/text"
-file		SCRIPT		"genbet.slo"
 file		SCRIPT		"cam2daynight.slo"
 
 /* Directory for script value files*/

@@ -1,9 +1,18 @@
 {
-    "area_0" : { "label" : "crashSite", "pos1" : [ 6080, 1088 ], "pos2" : [ 6976, 1856]},
-    "area_1" : { "label" : "landingZone", "pos1" : [ 768, 7296 ], "pos2" : [ 1024, 7552 ]},
-    "area_3" : { "label" : "cyborgPosition", "pos1" : [ 1024, 1024 ], "pos2" : [ 1536, 1536 ],
-    "position_0": { "label": "startingPosition", "pos" : [ 960, 7488 ]},
-    "position_1": { "label": "transporterEntry", "pos" : [ 128, 7040 ]},
-    "position_2": { "label": "transporterExit", "pos" : [ 1280, 7936 ]},
-    "position_3": { "label": "cyborgAttack", "pos" : [ 896, 6272 ]
+	"position_0": { "label": "startingPosition", "pos" : [ 960, 7488 ]},
+	"position_1": { "label": "transporterEntry", "pos" : [ 128, 7040 ]},
+	"position_2": { "label": "transporterExit", "pos" : [ 1280, 7936 ]},
+	"position_3": { "label": "cyborgAttack", "pos" : [ 896, 6272 ]},
+	"position_4": { "label": "cybEastPatrol1", "pos" : [ 7168, 6528 ]},
+	"position_5": { "label": "cybEastPatrol2", "pos" : [ 6016, 6400 ]},
+	"position_6": { "label": "cybEastPatrol3", "pos" : [ 6016, 7168 ]},
+	"position_7": { "label": "cybEastPatrol4", "pos" : [ 7168, 7168 ]},
+
+	"area_0" : { "label" : "crashSite", "pos1" : [ 6080, 1088 ], "pos2" : [ 6976, 1856]},
+	"area_1" : { "label" : "landingZone", "pos1" : [ 768, 7296 ], "pos2" : [ 1024, 7552 ]},
+	"area_2" : { "label" : "cyborgPositionNorth", "pos1" : [ 512, 1024 ], "pos2" : [ 1792, 2048 ]},
+	"area_3" : { "label" : "cyborgPositionEast", "pos1" : [ 7168, 6272 ], "pos2" : [ 7552, 6784 ]},
+	"area_4" : { "label" : "bunkerBaseCleanup", "pos1" : [ 512, 384 ], "pos2" : [ 2304, 3200 ]},
+	"area_5" : { "label" : "hardpointBaseCleanup", "pos1" : [ 2432, 3456 ], "pos2" : [ 4480, 5888 ]},
+	"area_6" : { "label" : "bombardBaseCleanup", "pos1" : [ 4608, 4992 ], "pos2" : [ 7808, 7680 ]}
 }
