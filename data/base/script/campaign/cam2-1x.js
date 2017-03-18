@@ -85,14 +85,12 @@ camAreaEvent("crashSite", function(droid)
 function setupCyborgGroups()
 {
 	//create group of cyborgs and send them on war path
-	camManageGroup ( camMakeGroup("cyborgPositionNorth"), CAM_ORDER_ATTACK, {
-		pos: camMakePos ("cyborgAttack"),
-		morale: 50,
-		regroup: true
+	camManageGroup(camMakeGroup("cyborgPositionNorth"), CAM_ORDER_ATTACK, {
+		regroup: false
 	});
 
 	//East cyborg group patrols around the bombard pits
-	camManageGroup ( camMakeGroup("cyborgPositionEast"), CAM_ORDER_PATROL, {
+	camManageGroup(camMakeGroup("cyborgPositionEast"), CAM_ORDER_PATROL, {
 		pos: [
 			camMakePos ("cybEastPatrol1"),
 			camMakePos ("cybEastPatrol2"),
