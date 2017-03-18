@@ -42,6 +42,8 @@ enum SCRIPT_TYPE
 // ----------------------------------------------
 // Private to scripting module functions below
 
+void doNotSaveGlobal(const QString &global);
+
 void groupRemoveObject(BASE_OBJECT *psObj);
 
 /// Register functions to engine context

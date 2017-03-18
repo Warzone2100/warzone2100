@@ -4027,6 +4027,16 @@ static QScriptValue js_setSky(QScriptContext *context, QScriptEngine *)
 	return QScriptValue();
 }
 
+//-- \subsection{hackDoNotSave(name)}
+//-- Do not save the given global given by name to savegames. Must be
+//-- done again each time game is loaded, since this too is not saved.
+static QScriptValue js_hackDoNotSave(QScriptContext *context, QScriptEngine *)
+{
+	QString name = context->argument(0).toString();
+	doNotSaveGlobal(name);
+	return QScriptValue();
+}
+
 //-- \subsection{hackMarkTiles([label | x, y[, x2, y2]])}
 //-- Mark the given tile(s) on the map. Either give a POSITION or AREA label,
 //-- or a tile x, y position, or four positions for a square area. If no parameter
@@ -4999,6 +5009,7 @@ bool registerFunctions(QScriptEngine *engine, QString scriptName)
 	engine->globalObject().setProperty("hackAssert", engine->newFunction(js_hackAssert));
 	engine->globalObject().setProperty("hackMarkTiles", engine->newFunction(js_hackMarkTiles));
 	engine->globalObject().setProperty("receiveAllEvents", engine->newFunction(js_receiveAllEvents));
+	engine->globalObject().setProperty("hackDoNotSave", engine->newFunction(js_hackDoNotSave));
 
 	// General functions -- geared for use in AI scripts
 	engine->globalObject().setProperty("debug", engine->newFunction(js_debug));

@@ -50,6 +50,8 @@
 #include "console.h"
 #include "clparse.h"
 
+#include <set>
+
 #include "qtscriptdebug.h"
 #include "qtscriptfuncs.h"
 
@@ -116,7 +118,7 @@ struct researchEvent
 static QQueue<struct researchEvent> eventQueue;
 
 /// Remember what names are used internally in the scripting engine, we don't want to save these to the savegame
-static QHash<QString, int> internalNamespace;
+static std::set<QString> internalNamespace;
 
 typedef struct monitor_bin
 {
@@ -138,6 +140,11 @@ static bool globalDialog = false;
 static void updateGlobalModels();
 
 // ----------------------------------------------------------
+
+void doNotSaveGlobal(const QString &global)
+{
+	internalNamespace.insert(global);
+}
 
 // Call a function by name
 static QScriptValue callFunction(QScriptEngine *engine, const QString &function, const QScriptValueList &args, bool required = false)
@@ -614,7 +621,7 @@ QScriptEngine *loadPlayerScript(QString path, int player, int difficulty)
 	while (it.hasNext())
 	{
 		it.next();
-		internalNamespace.insert(it.name(), 1);
+		internalNamespace.insert(it.name());
 	}
 
 	// We need to always save the 'me' special variable.
@@ -660,7 +667,7 @@ bool saveScriptStates(const char *filename)
 		while (it.hasNext())
 		{
 			it.next();
-			if (!internalNamespace.contains(it.name()) && !it.value().isFunction()
+			if (internalNamespace.count(it.name()) == 0 && !it.value().isFunction()
 			    && !it.value().equals(engine->globalObject()))
 			{
 				ini.setValue(it.name(), it.value().toVariant());
@@ -803,7 +810,7 @@ static void updateGlobalModels()
 		while (it.hasNext())
 		{
 			it.next();
-			if ((!internalNamespace.contains(it.name()) && !it.value().isFunction()
+			if ((internalNamespace.count(it.name()) == 0 && !it.value().isFunction()
 			     && !it.value().equals(engine->globalObject()))
 			    || it.name() == "Upgrades" || it.name() == "Stats")
 			{
