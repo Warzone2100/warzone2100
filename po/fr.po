@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2016-11-28 19:46+0100\n"
-"PO-Revision-Date: 2015-05-31 11:40+0100\n"
-"Last-Translator: Amiral JCDG <freddys3@hotmail.fr>\n"
+"PO-Revision-Date: 2017-03-18 22:52+0100\n"
+"Last-Translator: AmiralJCDG\n"
 "Language-Team: French <warzone2100-project@lists.sourceforge.net>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -47,11 +47,11 @@ msgstr "Défendez vos positions et détruisez leurs campements."
 #: data/base/messages/strings/cam1strings.txt:11
 #: data/base/messages/strings/cam1strings.txt:65
 msgid "ALPHA BASE MISSION: Power Surge Detected"
-msgstr "OPÉRATION BASE ALPHA : Ondes d'énergie détectées."
+msgstr "OPÉRATION BASE ALPHA : Impulsion d'énergie détectée."
 
 #: data/base/messages/strings/cam1strings.txt:12
 msgid "A power surge has been detected to the south of our position."
-msgstr "D'importantes émissions d'énergie ont été détectées au sud de votre position."
+msgstr "Une impulsion d'énergie électromagnétique a été détectée au sud de votre position."
 
 #: data/base/messages/strings/cam1strings.txt:13
 msgid "Investigate and secure the area."
@@ -67,7 +67,7 @@ msgstr "Le Nouveau Paradigme dispose de technologies d'armement plus avancées q
 
 #: data/base/messages/strings/cam1strings.txt:17
 msgid "They may have the synaptic link technology, it's vital we retrieve it."
-msgstr "Ils doivent être en possession de la technologie du lien Synaptique. Il est vital pour Le Projet de la retrouver."
+msgstr "Ils doivent sûrement être en possession de la technologie du lien Synaptique. Il est vital pour le Projet de la retrouver."
 
 #: data/base/messages/strings/cam1strings.txt:19
 msgid "TRANSPORT MISSION: Locate and Recover Artifacts"
@@ -140,7 +140,7 @@ msgstr "Le Nouveau Paradigme cherche des artefacts dans les environs."
 
 #: data/base/messages/strings/cam1strings.txt:41
 msgid "Intercept them. Do not let any enemies exit this area."
-msgstr "Interceptez-les !  Ne les laissez surtout pas s'enfuir !"
+msgstr "Interceptez-les ! Ne les laissez surtout pas s'enfuir !"
 
 #: data/base/messages/strings/cam1strings.txt:43
 msgid "TRANSPORT MISSION: Enemy Base Under Construction"
@@ -172,7 +172,7 @@ msgstr "OPÉRATION BASE ALPHA : Contre-attaque."
 
 #: data/base/messages/strings/cam1strings.txt:53
 msgid "Enemy forces are approaching from the east and north."
-msgstr "Des forces ennemies sont en approche au Nord et à l'Est."
+msgstr "Des forces ennemies sont en approche au nord et à l'est."
 
 #: data/base/messages/strings/cam1strings.txt:54
 msgid "Hold the bases and repulse any attacks."
@@ -188,7 +188,7 @@ msgstr "Nous détectons des forces ennemies dans les alentours."
 
 #: data/base/messages/strings/cam1strings.txt:58
 msgid "This is our chance to defeat the New Paradigm and destroy their base."
-msgstr "Voilà notre chance de renverser le Nouveau Paradigme et de détruire leur base"
+msgstr "Voilà notre chance de renverser le Nouveau Paradigme et de détruire leur base."
 
 #: data/base/messages/strings/cam1strings.txt:62
 #: data/base/messages/strings/cam1strings.txt:72
@@ -230,7 +230,7 @@ msgstr "Nous avons retrouvé des artefacts."
 
 #: data/base/messages/strings/cam1strings.txt:80
 msgid "There is a better equipped force operating in this area."
-msgstr "Il y a une force mieux équipée que nous en opération dans cette zone."
+msgstr "Il y a une force bien mieux équipée que nous en opération dans cette zone."
 
 #: data/base/messages/strings/cam1strings.txt:83
 msgid "TEAM GAMMA UPDATE"
@@ -246,7 +246,7 @@ msgstr "Nous n'avons découvert aucun artefact et n'avons pas non plus rencontr�
 
 #: data/base/messages/strings/cam1strings.txt:88
 msgid "ALPHA BASE INTELLIGENCE REPORT: Enemy Attack"
-msgstr "RAPPORT DE LA BASE ALPHA : Attaque Ennemie."
+msgstr "RAPPORT DE LA BASE ALPHA : Attaque ennemie."
 
 #: data/base/messages/strings/cam1strings.txt:89
 msgid "We are detecting an enemy attack force at this location."
@@ -334,7 +334,7 @@ msgstr "Les premières recherches confirment que ce sera une grande avancée pou
 
 #: data/base/messages/strings/cam1strings.txt:132
 msgid "Base Beta is under heavy attack, they may need assistance."
-msgstr "La base Beta est attaquée, ils pourraient avoir besoin de renforts."
+msgstr "La base Beta est attaquée, ils ont besoin de renforts."
 
 #: data/base/messages/strings/cam1strings.txt:133
 msgid "We will send further updates as they arrive."
@@ -346,7 +346,7 @@ msgstr "Nous avons intercepté cette transmission il y a à peine quelques minut
 
 #: data/base/messages/strings/cam1strings.txt:137
 msgid "It originates from the east."
-msgstr "Elle provient de l'Est."
+msgstr "Elle provient de l'est."
 
 #: data/base/messages/strings/cam1strings.txt:140
 msgid "POWER MODULE ARTIFACT"
@@ -393,7 +393,7 @@ msgstr "Commandant, vous allez maintenant devoir assister l'équipe Beta."
 #: data/base/sequenceaudio/cam2/c002.txa:8
 #: data/base/sequenceaudio/cam2/c002.txa:14
 msgid "BETA BASE MISSION: Eastern Sector"
-msgstr "OPÉRATION BASE BETA : Le secteur Est."
+msgstr "OPÉRATION BASE BETA : Le secteur est."
 
 #: data/base/messages/strings/cam2strings.txt:5
 #: data/base/sequenceaudio/cam2/c002.txa:9
@@ -477,7 +477,7 @@ msgstr "OPÉRATION BASE BETA : Tenir coûte que coûte."
 
 #: data/base/messages/strings/cam2strings.txt:43
 msgid "We are detecting ground and aerial forces from the north."
-msgstr "Nous détectons des forces terrestres et aériennes en provenance du Nord."
+msgstr "Nous détectons des forces terrestres et aériennes en provenance du nord."
 
 #: data/base/messages/strings/cam2strings.txt:44
 msgid "Hold your position and repulse these attacks, then eradicate the enemy's northern base."
@@ -501,7 +501,7 @@ msgstr "Un commandant ennemi livre une cargaison de NEXUS à cet endroit."
 
 #: data/base/messages/strings/cam2strings.txt:52
 msgid "Once at the LZ, eradicate the enemy commander and recover the shipment."
-msgstr "Une fois arrivé à la ZA, éradiquez le commandant et retrouvez la cargaison."
+msgstr "Une fois arrivé à la ZA, éliminez le commandant et retrouvez la cargaison."
 
 #: data/base/messages/strings/cam2strings.txt:53
 msgid "Then return to the LZ."
@@ -509,7 +509,7 @@ msgstr "Puis, revenez à la ZA."
 
 #: data/base/messages/strings/cam2strings.txt:55
 msgid "Disturbing news regarding NASDA."
-msgstr "Nous avons des nouvelles dérangeantes au sujet de la NASDA."
+msgstr "Nous avons des nouvelles préoccupantes au sujet de la NASDA."
 
 #: data/base/messages/strings/cam2strings.txt:58
 #: data/base/messages/strings/cam2strings.txt:63
@@ -530,7 +530,7 @@ msgstr "Vous devez l'intercepter et retrouver sa cargaison."
 
 #: data/base/messages/strings/cam2strings.txt:65
 msgid "Enemy VTOLs are likely to be flying close escort."
-msgstr "Quelques VTOLs semblent faire partie du groupe d'escorte ennemi."
+msgstr "Des VTOLs ennemis semblent voler en formation sérée."
 
 #: data/base/messages/strings/cam2strings.txt:68
 #: data/base/messages/strings/cam2strings.txt:72
@@ -539,15 +539,15 @@ msgstr "OPÉRATION AÉROTRANSPORTÉE : Sauvez les civils des camps de concentrat
 
 #: data/base/messages/strings/cam2strings.txt:69
 msgid "The Collective are processing and exterminating civilians at this base."
-msgstr "Le Collectif est littéralement en train d'exterminer les civils survivants dans cette base."
+msgstr "Le Collectif est en train d'exterminer les civils survivants dans cette base."
 
 #: data/base/messages/strings/cam2strings.txt:73
 msgid "You are to rescue the civilians."
-msgstr "Vous devez sauver ces citoyens."
+msgstr "Vous devez sauver ces civils."
 
 #: data/base/messages/strings/cam2strings.txt:74
 msgid "Then destroy the camp."
-msgstr "Puis, détruisez ces bases."
+msgstr "Puis, détruisez le camp."
 
 #: data/base/messages/strings/cam2strings.txt:77
 msgid "BETA BASE MISSION: Destroy Enemy Air Base and Recover VTOLs."
@@ -555,7 +555,7 @@ msgstr "OPÉRATION BASE BETA : Détruire la base aérienne ennemie et récupére
 
 #: data/base/messages/strings/cam2strings.txt:78
 msgid "Analysis of flight paths indicate that The Collective's VTOLs originate from here."
-msgstr "L'analyse des corridors aériens indique que les VTOLs du Collectif proviennent d'ici."
+msgstr "L'analyse des couloirs aériens indique que les VTOLs du Collectif proviennent d'ici."
 
 #: data/base/messages/strings/cam2strings.txt:81
 msgid "BETA BASE MISSION: Destroy Enemy Air Base and Recover VTOLs"
@@ -563,7 +563,7 @@ msgstr "OPÉRATION BASE BETA : Détruire la base aérienne ennemie et récupére
 
 #: data/base/messages/strings/cam2strings.txt:82
 msgid "The location of the enemy airbase is here; this is your primary objective."
-msgstr "La base aérienne ennemie se trouve ici ; c'est votre objectif principal."
+msgstr "La base aérienne ennemie se trouve ici. C'est votre objectif principal."
 
 #: data/base/messages/strings/cam2strings.txt:83
 msgid "Eradicate all Collective forces and recover all artifacts."
@@ -572,7 +572,7 @@ msgstr "Supprimez-en toutes les forces du Collectif et récupérez chaque artefa
 #: data/base/messages/strings/cam2strings.txt:86
 #: data/base/messages/strings/cam2strings.txt:91
 msgid "SECONDARY MISSION: Destroy or Drive Off Enemy Transport"
-msgstr "MISSION SECONDAIRE : Détruire ou chasser les transporteurs ennemis."
+msgstr "MISSION SECONDAIRE : Détruire ou faire fuir les transporteurs ennemis."
 
 #: data/base/messages/strings/cam2strings.txt:87
 msgid "The Collective are rounding up all civilians in this area."
@@ -609,7 +609,7 @@ msgstr "Détruisez le réacteur en prenant appui sur les défenses que vous aure
 
 #: data/base/messages/strings/cam2strings.txt:103
 msgid "Do not allow the Collective to bring the reactor on-line."
-msgstr "Ne laissez surtout pas le Collectif mettre le réacteur en fonction."
+msgstr "Ne laissez surtout pas le Collectif mettre le réacteur en fonction !"
 
 #: data/base/messages/strings/cam2strings.txt:106
 msgid "BETA BASE MISSION: Capture NASDA Central"
@@ -635,7 +635,7 @@ msgstr "Une bonne partie de son attention est fixée vers une base de contrôle 
 
 #: data/base/messages/strings/cam2strings.txt:117
 msgid "We are detecting transmissions from this site that are reaching high orbit."
-msgstr "Nous détectons des transmissions émises de de cet endroit qui atteignent l'orbite stratosphérique."
+msgstr "Nous détectons des transmissions émises de de cet endroit qui atteignent la stratosphère."
 
 #: data/base/messages/strings/cam2strings.txt:118
 msgid "NEXUS has now reconnected itself with the NASDA satellites."
@@ -655,7 +655,7 @@ msgstr "MISSION LONGUE DISTANCE : Détruire les sites de lancement de missiles s
 
 #: data/base/messages/strings/cam2strings.txt:127
 msgid "If you are to escape, eradicate the surface-to-air missile sites around your base."
-msgstr "Si vous avez à prendre la fuite, démontez toutes les bases de lance-missile sol-air autour de votre QG."
+msgstr "Si vous avez à prendre la fuite, démontez toutes les bases de lance-missile sol-air autour de votre poste avancé."
 
 #: data/base/messages/strings/cam2strings.txt:128
 msgid "Fly to the LZ, then head overland to destroy the SAM sites."
@@ -698,7 +698,7 @@ msgstr "La base Alpha a été anéantie par une attaque au missile nucléaire."
 
 #: data/base/messages/strings/cam2strings.txt:147
 msgid "The Collective are unaware of the nuclear attack and have air units heading for your base."
-msgstr "Le Collectif n'était pas informé de cette attaque et a déjà des unités aériennes en route vers votre base."
+msgstr "Cependant le Collectif n'était pas informé de cette attaque et a déjà des unités aériennes en route vers votre base."
 
 #: data/base/messages/strings/cam2strings.txt:148
 msgid "This message was intercepted a few moments ago..."
@@ -717,7 +717,7 @@ msgstr "Bonne chance, Commandant."
 #: data/base/sequenceaudio/cam3/c003.txa:4
 #: data/base/sequenceaudio/cam3/c003.txa:14
 msgid "TRANSPORT MISSION: Northern Sector"
-msgstr "MISSION LONGUE DISTANCE : Le secteur Nord."
+msgstr "MISSION LONGUE DISTANCE : Le secteur nord."
 
 #: data/base/messages/strings/cam3strings.txt:5
 #: data/base/sequenceaudio/cam3/c003.txa:5
@@ -736,7 +736,7 @@ msgstr "Amenez vos forces au secteur Nord."
 #: data/base/messages/strings/cam3strings.txt:10
 #: data/base/sequenceaudio/cam3/c003.txa:15
 msgid "Once at the mountains secure an LZ. Then establish a forward base."
-msgstr "Une fois dans les montagnes, vous sécuriserez la ZA. Puis, établissez une base avancée."
+msgstr "Une fois dans les montagnes, vous sécuriserez la ZA. Puis, établissez un poste avancé."
 
 #: data/base/messages/strings/cam3strings.txt:11
 #: data/base/sequenceaudio/cam3/c003.txa:16
@@ -754,7 +754,7 @@ msgstr "Commandant, la survie du Projet dépend entièrement de vous !"
 
 #: data/base/messages/strings/cam3strings.txt:16
 msgid "Secure an LZ, then establish a forward base."
-msgstr "Sécurisez la ZA puis établissez une base avancée."
+msgstr "Sécurisez la ZA puis établissez un poste avancé."
 
 #: data/base/messages/strings/cam3strings.txt:19
 #: data/base/messages/strings/cam3strings.txt:28
@@ -771,7 +771,7 @@ msgstr "Il y a eu au moins un missile sur ce site de la NASDA."
 
 #: data/base/messages/strings/cam3strings.txt:24
 msgid "We are transmitting coordinates of an LZ near the silos."
-msgstr "Nous allons vous transmettre les coordonnées d'une ZA située dans les alentours des puits de lancement."
+msgstr "Nous allons vous transmettre les coordonnées d'une ZA située dans les alentours des silos de lancement."
 
 #: data/base/messages/strings/cam3strings.txt:25
 #: data/base/messages/strings/cam3strings.txt:61
@@ -781,7 +781,7 @@ msgstr "Téléchargement des coordonnées terminé."
 
 #: data/base/messages/strings/cam3strings.txt:29
 msgid "Secure your LZ, then head overland to destroy the missile silo."
-msgstr "Sécurisez votre ZA puis allez anéantir ces installations de lancement."
+msgstr "Sécurisez votre ZA puis allez détruire ces installations de lancement."
 
 #: data/base/messages/strings/cam3strings.txt:33
 #: data/base/messages/strings/cam3strings.txt:38
@@ -790,7 +790,7 @@ msgstr "EXPÉDITION DANS LE SECTEUR NORD : L'explosion nucléaire."
 
 #: data/base/messages/strings/cam3strings.txt:34
 msgid "All units must escape the area before the warhead detonates."
-msgstr "Toutes les unités doivent avoir déserté le secteur avant que la bombe n'explose."
+msgstr "Toutes les unités doivent avoir quitté le secteur avant que la bombe n'explose."
 
 #: data/base/messages/strings/cam3strings.txt:35
 msgid "Air-lift by transport is not possible. You'll have to head overland."
@@ -798,7 +798,7 @@ msgstr "Il nous est impossible de faire décoller le transporteur. Vous irez don
 
 #: data/base/messages/strings/cam3strings.txt:39
 msgid "The mountain range to the east should shield you from the blast."
-msgstr "La montagne à l'Est de votre position devrait vous protéger de celle-ci."
+msgstr "La chaîne de collines à l'est de votre position devrait vous protéger du souffle."
 
 #: data/base/messages/strings/cam3strings.txt:40
 msgid "The valley is your only chance of escape."
@@ -850,7 +850,7 @@ msgstr "MISSION À DISTANCE : Division Alpha localisée."
 
 #: data/base/messages/strings/cam3strings.txt:65
 msgid "Take a scout force to these coordinates and evaluate the situation."
-msgstr "Amenez une force d'exploration à ces coordonnées et évaluez la situation."
+msgstr "Explores le secteur à ces coordonnées et évaluez la situation."
 
 #: data/base/messages/strings/cam3strings.txt:66
 msgid "Determine whether they are Team Alpha. If so, rescue and escort them back to the LZ."
@@ -870,11 +870,11 @@ msgstr "Le transfert de l'énergie de l'équipe Alpha est en cours."
 
 #: data/base/messages/strings/cam3strings.txt:75
 msgid "Commander, after you left the Western Sector we recovered this artifact."
-msgstr "Commandant, après que vous ayez quitté le Secteur Est, nous avons trouvé un artefact."
+msgstr "Commandant, après que vous ayez quitté le secteur est, nous avons trouvé un artefact."
 
 #: data/base/messages/strings/cam3strings.txt:76
 msgid "The benefits from researching it could be vast."
-msgstr "Les bénéfices de la recherche sur cet artefact pourraient êtres considérables."
+msgstr "Les bénéfices de la recherche sur cet artefact pourraient être considérables."
 
 #: data/base/messages/strings/cam3strings.txt:79
 msgid "Enemy forces are ....... from these coordinates."
@@ -890,7 +890,7 @@ msgstr "Trouvez et mettez un terme à .........."
 
 #: data/base/messages/strings/cam3strings.txt:84
 msgid "TRANSPORT MISSION: Ambush NEXUS Forces"
-msgstr "MISSION LONGUE DISTANCE : Coup-fourré des forces de NEXUS"
+msgstr "MISSION LONGUE DISTANCE : Prendre les forces de NEXUS en embuscade"
 
 #: data/base/messages/strings/cam3strings.txt:85
 msgid "Commander, your decisive actions halted the spread of NEXUS."
@@ -958,7 +958,7 @@ msgstr "Les éléments de la Division Gamma nous ont contactés."
 
 #: data/base/messages/strings/cam3strings.txt:117
 msgid "They claim to be free of NEXUS, and offer their base as a site of operations."
-msgstr "Ils disent être hors du contrôle de NEXUS et offrent leur base comme site d'opération...."
+msgstr "Ils disent être hors du contrôle de NEXUS et offrent leur base comme site d'opération."
 
 #: data/base/messages/strings/cam3strings.txt:118
 msgid "Base coordinates download in progress."
@@ -974,7 +974,7 @@ msgstr "Nous venons de détecter de fortes ondes d'énergie dans l'orbite strato
 
 #: data/base/messages/strings/cam3strings.txt:123
 msgid "The laser satellites are charged and moving towards our position."
-msgstr "Ce sont en fait des satellites lasers chargés qui se déplacent vers nous !"
+msgstr "Ce sont des satellites lasers chargés qui se déplacent vers nous !"
 
 #: data/base/messages/strings/cam3strings.txt:126
 msgid "The 2nd Team Gamma base is at this location."
@@ -994,15 +994,15 @@ msgstr "Ils dirigent maintenant leurs tirs vers votre position."
 
 #: data/base/messages/strings/cam3strings.txt:132
 msgid "We will need to evacuate this base shortly."
-msgstr "Évacuez cette base."
+msgstr "Évacuez cette base immédiatement."
 
 #: data/base/messages/strings/cam3strings.txt:135
 msgid "Team Gamma reports a missile silo at this location."
-msgstr "La Division Gamma a rapporté avoir vu un puits de lancement de missiles à cet endroit."
+msgstr "La Division Gamma a rapporté avoir vu un silo de lancement de missiles à cet endroit."
 
 #: data/base/messages/strings/cam3strings.txt:136
 msgid "They believe that the silo contains missiles capable of reaching high orbit."
-msgstr "Nous avons raison de croire que les missiles qu'il contient sont capables d'atteindre la haute orbite."
+msgstr "Nous avons raison de croire que les missiles qu'il contient ont une portée de tir très importante."
 
 #: data/base/messages/strings/cam3strings.txt:137
 msgid "Capture this silo at all costs."
@@ -1010,7 +1010,7 @@ msgstr "Capturez ce site à tout prix !"
 
 #: data/base/messages/strings/cam3strings.txt:140
 msgid "Missile silos captured."
-msgstr "Puits de lancement capturé !"
+msgstr "Silos de lancement capturés !"
 
 #: data/base/messages/strings/cam3strings.txt:143
 #: data/base/messages/strings/cam3strings.txt:161
@@ -1019,7 +1019,7 @@ msgstr "EXPÉDITION DANS LE SECTEUR NORD : Les codes des missiles."
 
 #: data/base/messages/strings/cam3strings.txt:144
 msgid "Commander, there are missiles present at the silos."
-msgstr "Commandant, il y a bel et bien des missiles dans le puits."
+msgstr "Commandant, il y a bel et bien des missiles dans les silos."
 
 #: data/base/messages/strings/cam3strings.txt:145
 msgid "Nexus is preventing us from accessing the missile control code."
@@ -1059,7 +1059,7 @@ msgstr "Protégez le silo à missile des efforts de NEXUS pour le récupérer."
 
 #: data/base/messages/strings/cam3strings.txt:166
 msgid "PROJECT UPDATE: 1st Level Missile Code Cracked."
-msgstr "RAPPORT DU PROJET : Code de lancement Niveau 1 forcé."
+msgstr "Code de lancement Niveau 1 forcé."
 
 #: data/base/messages/strings/cam3strings.txt:167
 msgid "Missile arming in progress."
@@ -1071,7 +1071,7 @@ msgstr "Une recherche approfondie est requise pour aller plus loin."
 
 #: data/base/messages/strings/cam3strings.txt:171
 msgid "PROJECT UPDATE: 2nd Level Missile Code Cracked."
-msgstr "RAPPORT DU PROJET : Code de lancement Niveau 2 forcé."
+msgstr "Code de lancement Niveau 2 forcé."
 
 #: data/base/messages/strings/cam3strings.txt:172
 msgid "Missile target programming in progress."
@@ -1083,7 +1083,7 @@ msgstr "Une fois que nous aurons forcé les codes niveau trois, nous allons init
 
 #: data/base/messages/strings/cam3strings.txt:176
 msgid "PROJECT UPDATE: 3rd Level Missile Code Cracked."
-msgstr "RAPPORT DU PROJET : Code de lancement Niveau 3 Forcé."
+msgstr "Code de lancement Niveau 3 Forcé."
 
 #: data/base/messages/strings/cam3strings.txt:177
 msgid "Missile launch sequence initiated."
@@ -1103,11 +1103,11 @@ msgstr "Cette zone contient une densité impressionnante de leurs structures."
 
 #: data/base/messages/strings/cam3strings.txt:185
 msgid "We are certain that NEXUS's core systems are located here."
-msgstr "Nous sommes sûrs que le système central de NEXUS est situé ici."
+msgstr "Nous sommes sûrs que les systèmes centraux de NEXUS se trouvent ici."
 
 #: data/base/messages/strings/cam3strings.txt:188
 msgid "Establish an LZ."
-msgstr "Établissez une ZA."
+msgstr "Établissez une Zone d'Atterrissage."
 
 #: data/base/messages/strings/cam3strings.txt:189
 msgid "Begin your attacks on NEXUS. You must destroy his core systems."
@@ -1190,7 +1190,7 @@ msgstr "Nouveau modèle"
 #: data/base/messages/strings/names.txt:103
 #: data/mp/messages/strings/names.txt:160
 msgid "Cyborg Cannon"
-msgstr "Canon"
+msgstr "Cyborg à Canon"
 
 #: data/base/messages/strings/names.txt:149
 #: data/base/messages/strings/names.txt:182
@@ -1202,14 +1202,14 @@ msgstr "Démolition"
 #: data/base/messages/strings/names.txt:156
 #: po/custom/fromJson.txt:923
 msgid "Naval"
-msgstr "Maritime"
+msgstr "Naval"
 
 #: data/base/messages/strings/names.txt:183
 #: data/base/messages/strings/names.txt:558
 #: data/mp/messages/strings/names.txt:219
 #: data/mp/messages/strings/names.txt:708
 msgid "Repair Center"
-msgstr "Atelier de réparation"
+msgstr "Centre de réparation"
 
 #: data/base/messages/strings/names.txt:190
 #: data/base/messages/strings/names.txt:307
@@ -1299,7 +1299,7 @@ msgstr "Aérocyborg à fusil d'assaut"
 
 #: data/base/messages/strings/names.txt:293
 msgid "Jump Needle Gunner"
-msgstr "Aérocyborg à canon à rail léger"
+msgstr "Aérocyborg à canon électrique léger"
 
 #: data/base/messages/strings/names.txt:294
 msgid "Jump Scourge"
@@ -1390,15 +1390,15 @@ msgstr "Production de véhicules avancée Mk3"
 
 #: data/base/messages/strings/names.txt:342
 msgid "Advanced Repair Facility Upgrade"
-msgstr "Atelier de réparation avancé"
+msgstr "Centre de réparation avancé"
 
 #: data/base/messages/strings/names.txt:343
 msgid "Advanced Repair Facility Upgrade Mk2"
-msgstr "Atelier de réparations avancées Mk2"
+msgstr "Centre de réparation avancé Mk2"
 
 #: data/base/messages/strings/names.txt:344
 msgid "Advanced Repair Facility Upgrade Mk3"
-msgstr "Atelier de réparation avancé Mk3"
+msgstr "Centre de réparation avancé Mk3"
 
 #: data/base/messages/strings/names.txt:347
 #: data/mp/messages/strings/names.txt:441
@@ -1474,57 +1474,57 @@ msgstr "Tourelle de réparation lourde"
 #: data/mp/messages/strings/names.txt:470
 #: data/mp/messages/strings/resstrings.txt:217
 msgid "Mobile Repair Upgrade"
-msgstr "Mise à jour pour tourelles de réparation"
+msgstr "Amélioration des tourelles de réparation"
 
 #: data/base/messages/strings/names.txt:370
 #: data/mp/messages/strings/names.txt:471
 msgid "Mobile Repair Upgrade Mk2"
-msgstr "Mise à jour pour tourelles de réparation Mk2"
+msgstr "Amélioration des tourelles de réparation Mk2"
 
 #: data/base/messages/strings/names.txt:373
 #: data/mp/messages/strings/names.txt:474
 msgid "CB Sensor Upgrade"
-msgstr "Mise à jour pour radar de CB"
+msgstr "Amélioration des radars de CB"
 
 #: data/base/messages/strings/names.txt:374
 #: data/mp/messages/strings/names.txt:475
 msgid "CB Sensor Upgrade 2"
-msgstr "Mise à jour pour radar de CB Mk2"
+msgstr "Amélioration des radars de CB Mk2"
 
 #: data/base/messages/strings/names.txt:375
 #: data/mp/messages/strings/names.txt:476
 msgid "CB Sensor Upgrade 3"
-msgstr "Mise à jour pour radar de CB Mk3"
+msgstr "Amélioration des radars de CB Mk3"
 
 #: data/base/messages/strings/names.txt:378
 #: data/mp/messages/strings/names.txt:479
 msgid "VTOL CB Upgrade"
-msgstr "Mise à jour pour radars de CB pour VTOLs"
+msgstr "Amélioration des radars de CB pour VTOLs"
 
 #: data/base/messages/strings/names.txt:379
 #: data/mp/messages/strings/names.txt:480
 msgid "VTOL CB Upgrade 2"
-msgstr "Mise à jour pour radars de CB pour VTOLs Mk2"
+msgstr "Amélioration des radars de CB pour VTOLs Mk2"
 
 #: data/base/messages/strings/names.txt:380
 #: data/mp/messages/strings/names.txt:481
 msgid "VTOL CB Upgrade 3"
-msgstr "Mise à jour pour radars de CB pour VTOLs Mk3"
+msgstr "Amélioration des radars de CB pour VTOLs Mk3"
 
 #: data/base/messages/strings/names.txt:381
 #: data/mp/messages/strings/names.txt:482
 msgid "VTOL Strike Upgrade"
-msgstr "Mise à jour pour radars pour VTOLs"
+msgstr "Amélioration des radars pour VTOLs"
 
 #: data/base/messages/strings/names.txt:382
 #: data/mp/messages/strings/names.txt:483
 msgid "VTOL Strike Upgrade Mk2"
-msgstr "Mise à jour pour radars pour VTOLs Mk2"
+msgstr "Amélioration des radars pour VTOLs Mk2"
 
 #: data/base/messages/strings/names.txt:383
 #: data/mp/messages/strings/names.txt:484
 msgid "VTOL Strike Upgrade Mk3"
-msgstr "Mise à jour pour radars pour VTOLs Mk3"
+msgstr "Amélioration des radars pour VTOLs Mk3"
 
 #: data/base/messages/strings/names.txt:385
 #: data/mp/messages/strings/names.txt:486
@@ -1554,17 +1554,17 @@ msgstr "Concentration laser améliorée Mk3"
 #: data/base/messages/strings/names.txt:429
 #: data/mp/messages/strings/names.txt:540
 msgid "HEAP Missile Warhead"
-msgstr "Ogive HEAP pour missiles"
+msgstr "Ogive anti-blindage hautement explosive (HEAP) pour missiles"
 
 #: data/base/messages/strings/names.txt:430
 #: data/mp/messages/strings/names.txt:541
 msgid "HEAP Missile Warhead Mk2"
-msgstr "Ogive HEAP pour missiles Mk2"
+msgstr "Ogive anti-blindage hautement explosive (HEAP) pour missiles Mk2"
 
 #: data/base/messages/strings/names.txt:431
 #: data/mp/messages/strings/names.txt:542
 msgid "HEAP Missile Warhead Mk3"
-msgstr "Ogive HEAP pour missiles Mk3"
+msgstr "Ogive anti-blindage hautement explosive (HEAP) pour missiles Mk3"
 
 #: data/base/messages/strings/names.txt:432
 #: data/mp/messages/strings/names.txt:543
@@ -1682,7 +1682,7 @@ msgstr "Blindage cinétique et résistance augmentés"
 #: data/mp/messages/strings/resstrings.txt:9
 #: po/custom/fromJson.txt:73
 msgid "All Cyborgs upgraded automatically"
-msgstr "Mise à jour automatique de tous les Cyborgs"
+msgstr "Amélioration automatique de tous les Cyborgs"
 
 #: data/base/messages/strings/resstrings.txt:41
 #: data/mp/messages/strings/resstrings.txt:6
@@ -1798,7 +1798,7 @@ msgstr "Augmente le blindage et la résistance"
 #: data/mp/messages/strings/resstrings.txt:34
 #: po/custom/fromJson.txt:74
 msgid "All defenses and walls upgraded automatically"
-msgstr "Mise à jour automatique de tous les murs et défenses"
+msgstr "Amélioration automatique de tous les murs et défenses"
 
 #: data/base/messages/strings/resstrings.txt:113
 #: data/base/messages/strings/resstrings.txt:119
@@ -1994,7 +1994,7 @@ msgstr "Emplacement blindé à Hellstorm"
 #: data/mp/messages/strings/resstrings.txt:92
 #: po/custom/fromJson.txt:185
 msgid "Armored strongpoint with Tank Killer rocket"
-msgstr "Pont défensif blindé à roquettes AC"
+msgstr "Pont défensif blindé à roquettes anti-char"
 
 #: data/base/messages/strings/resstrings.txt:193
 #: data/base/messages/strings/resstrings.txt:199
@@ -2014,7 +2014,7 @@ msgstr "Attaque automatiquement les ennemis à portée"
 #: data/mp/messages/strings/resstrings.txt:97
 #: po/custom/fromJson.txt:180
 msgid "Armored strongpoint with Hyper-Velocity Cannon"
-msgstr "Pont défensif blindé à canon Mach2"
+msgstr "Pont défensif blindé à canon hypersonique"
 
 #: data/base/messages/strings/resstrings.txt:200
 #: data/base/messages/strings/resstrings.txt:220
@@ -2091,7 +2091,7 @@ msgstr "Tour de garde renforcée à lance-flammes"
 #: data/base/messages/strings/resstrings.txt:246
 #: data/mp/messages/strings/resstrings.txt:127
 msgid "Armored guard tower with Lancer AT Rocket"
-msgstr "Tour de garde renforcée à roquettes AC"
+msgstr "Tour de garde renforcée à roquettes anti-char"
 
 #: data/base/messages/strings/resstrings.txt:260
 #: data/mp/messages/strings/resstrings.txt:132
@@ -2125,13 +2125,13 @@ msgstr "Pont défensif à lance-flammes Inferno"
 #: data/mp/messages/strings/resstrings.txt:157
 #: po/custom/fromJson.txt:170
 msgid "Armored hardpoint with Tank Killer AT missile"
-msgstr "Pont défensif à lance-missile AC"
+msgstr "Pont défensif à lance-missile anti-char"
 
 #: data/base/messages/strings/resstrings.txt:324
 #: data/mp/messages/strings/resstrings.txt:162
 #: po/custom/fromJson.txt:1098
 msgid "Reinforced concrete tank traps"
-msgstr "Pièges à tank en béton renforcé"
+msgstr "Blocs de béton renforcé ancrés au sol"
 
 #: data/base/messages/strings/resstrings.txt:325
 #: data/mp/messages/strings/resstrings.txt:163
@@ -2161,7 +2161,7 @@ msgstr "Accélère la vitesse de réparation"
 #: data/mp/messages/strings/resstrings.txt:169
 #: po/custom/fromJson.txt:88
 msgid "All repair facilities upgraded automatically"
-msgstr "Mise à jour automatique de tous les ateliers de réparation"
+msgstr "Amélioration automatique de tous les ateliers de réparation"
 
 #: data/base/messages/strings/resstrings.txt:347
 #: data/base/messages/strings/resstrings.txt:355
@@ -2191,7 +2191,7 @@ msgstr "Augmente la vitesse de production des usines à Cyborgs"
 #: data/mp/messages/strings/resstrings.txt:179
 #: po/custom/fromJson.txt:72
 msgid "All Cyborg factories upgraded automatically"
-msgstr "Mise à jour automatique de toutes les usines à Cyborgs"
+msgstr "Amélioration automatique de toutes les usines à Cyborgs"
 
 #: data/base/messages/strings/resstrings.txt:356
 #: data/mp/messages/strings/resstrings.txt:177
@@ -2247,7 +2247,7 @@ msgstr "Recherches accélérées"
 #: data/mp/messages/strings/resstrings.txt:192
 #: po/custom/fromJson.txt:399
 msgid "Dedicated Synaptic Link Data Analysis"
-msgstr "Analyse de données par Lien Synaptique spécialisé"
+msgstr "Analyse de données par Lien Synaptique Spécialisé"
 
 #: data/base/messages/strings/resstrings.txt:391
 #: data/mp/messages/strings/resstrings.txt:193
@@ -2259,7 +2259,7 @@ msgstr "Augmente la vitesse de recherche"
 #: data/mp/messages/strings/resstrings.txt:194
 #: po/custom/fromJson.txt:89
 msgid "All research facilities upgraded automatically"
-msgstr "Mise à jour automatique de tous les centres de recherche"
+msgstr "Amélioration automatique de tous les centres de recherche"
 
 #: data/base/messages/strings/resstrings.txt:399
 #: data/mp/messages/strings/resstrings.txt:196
@@ -2277,7 +2277,7 @@ msgstr "Matériaux de construction renforcés"
 #: data/mp/messages/strings/resstrings.txt:199
 #: po/custom/fromJson.txt:68
 msgid "All base structures upgraded automatically"
-msgstr "Mise à jour automatique de tous les bâtiments (non-défensifs)"
+msgstr "Amélioration automatique de tous les bâtiments (non-défensifs)"
 
 #: data/base/messages/strings/resstrings.txt:411
 #: data/mp/messages/strings/resstrings.txt:201
@@ -2301,7 +2301,7 @@ msgstr "Augmente la vitesse de production des usines de VTOLs"
 #: data/mp/messages/strings/resstrings.txt:204
 #: po/custom/fromJson.txt:97
 msgid "All VTOL factories upgraded automatically"
-msgstr "Mise à jour automatique de toutes les usines de VTOLs"
+msgstr "Amélioration automatique de toutes les usines de VTOLs"
 
 #: data/base/messages/strings/resstrings.txt:421
 #: data/mp/messages/strings/resstrings.txt:206
@@ -2325,7 +2325,7 @@ msgstr "Réduit le temps de réarmement"
 #: data/mp/messages/strings/resstrings.txt:209
 #: po/custom/fromJson.txt:87
 msgid "All rearming pads upgraded automatically"
-msgstr "Mise à jour automatique de toutes les plateformes de réarmement"
+msgstr "Amélioration automatique de toutes les plateformes de réarmement"
 
 #: data/base/messages/strings/resstrings.txt:443
 #: data/base/messages/strings/resstrings.txt:479
@@ -2351,7 +2351,7 @@ msgstr "Répare automatiquement les unités endommagées situées à proximité"
 #: data/mp/messages/strings/resstrings.txt:214
 #: po/custom/fromJson.txt:1005
 msgid "Or damaged units may be selected as target"
-msgstr "Les unités endommagées peuvent aussi être choisies pour cible"
+msgstr "Les unités endommagées peuvent aussi être désignées"
 
 #: data/base/messages/strings/resstrings.txt:449
 #: data/mp/messages/strings/resstrings.txt:216
@@ -2366,7 +2366,7 @@ msgstr "Augmente la vitesse de réparation"
 #: data/base/messages/strings/resstrings.txt:452
 #: data/mp/messages/strings/resstrings.txt:219
 msgid "All mobile repair units upgraded automatically"
-msgstr "Mise à jour automatique de toutes les unités de réparation"
+msgstr "Amélioration automatique de toutes les unités de réparation"
 
 #: data/base/messages/strings/resstrings.txt:459
 #: data/mp/messages/strings/resstrings.txt:221
@@ -2432,7 +2432,7 @@ msgstr "Augmente la portée des radars de contre-batterie pour VTOLs"
 #: data/mp/messages/strings/resstrings.txt:234
 #: po/custom/fromJson.txt:96
 msgid "All VTOL CB sensors upgraded automatically"
-msgstr "Mise à jour automatique de toutes les radars de contre-batterie pour VTOLs"
+msgstr "Amélioration automatique de toutes les radars de contre-batterie pour VTOLs"
 
 #: data/base/messages/strings/resstrings.txt:499
 #: data/mp/messages/strings/resstrings.txt:236
@@ -2456,7 +2456,7 @@ msgstr "Augmente la portée des radars pour VTOLs"
 #: data/mp/messages/strings/resstrings.txt:239
 #: po/custom/fromJson.txt:98
 msgid "All VTOL Strike sensors upgraded automatically"
-msgstr "Mise à jour automatique de toutes les tours radar pour VTOLs"
+msgstr "Amélioration automatique de toutes les tours radar pour VTOLs"
 
 #: data/base/messages/strings/resstrings.txt:511
 #: data/mp/messages/strings/resstrings.txt:241
@@ -2476,7 +2476,7 @@ msgstr "Augmente le taux de brouillage"
 #: data/base/messages/strings/resstrings.txt:514
 #: data/mp/messages/strings/resstrings.txt:244
 msgid "All scramblers upgraded automatically"
-msgstr "Mise à jour automatique de tous les brouilleurs"
+msgstr "Amélioration automatique de tous les brouilleurs"
 
 #: data/base/messages/strings/resstrings.txt:527
 #: data/mp/messages/strings/resstrings.txt:246
@@ -2530,7 +2530,7 @@ msgstr "Plus cher et plus lent à produire que le Cobra"
 #: data/mp/messages/strings/resstrings.txt:256
 #: po/custom/fromJson.txt:1365
 msgid "Vehicle Engine Upgrade"
-msgstr "Mise à jour pour moteurs"
+msgstr "Amélioration des moteurs"
 
 #: data/base/messages/strings/resstrings.txt:560
 #: data/mp/messages/strings/resstrings.txt:257
@@ -2552,7 +2552,7 @@ msgstr "Augmente la vitesse des véhicules"
 #: data/mp/messages/strings/resstrings.txt:269
 #: po/custom/fromJson.txt:95
 msgid "All vehicles upgraded automatically"
-msgstr "Mise à jour automatique de tous les véhicules"
+msgstr "Amélioration automatique de tous les véhicules"
 
 #: data/base/messages/strings/resstrings.txt:571
 #: data/mp/messages/strings/resstrings.txt:261
@@ -2624,25 +2624,25 @@ msgstr "Augmente la résistance"
 #: data/mp/messages/strings/resstrings.txt:274
 #: po/custom/fromJson.txt:77
 msgid "All half-tracks upgraded automatically"
-msgstr "Mise à jour automatique de tous les véhicules à autochenilles"
+msgstr "Amélioration automatique de tous les véhicules à autochenilles"
 
 #: data/base/messages/strings/resstrings.txt:604
 #: data/mp/messages/strings/resstrings.txt:279
 #: po/custom/fromJson.txt:78
 msgid "All hovers upgraded automatically"
-msgstr "Mise à jour automatique de tous les aéroglisseurs"
+msgstr "Amélioration automatique de tous les aéroglisseurs"
 
 #: data/base/messages/strings/resstrings.txt:614
 #: data/mp/messages/strings/resstrings.txt:284
 #: po/custom/fromJson.txt:92
 msgid "All tracks upgraded automatically"
-msgstr "Mise à jour automatique de tous les véhicules à chenilles"
+msgstr "Amélioration automatique de tous les véhicules à chenilles"
 
 #: data/base/messages/strings/resstrings.txt:624
 #: data/mp/messages/strings/resstrings.txt:289
 #: po/custom/fromJson.txt:100
 msgid "All wheels upgraded automatically"
-msgstr "Mise à jour automatique de tous les véhicules à roues"
+msgstr "Amélioration automatique de tous les véhicules à roues"
 
 #: data/base/messages/strings/resstrings.txt:635
 #: data/base/messages/strings/resstrings.txt:641
@@ -2698,13 +2698,13 @@ msgstr "Mitrailleuse anti-aérienne quadritube de 30mm"
 #: data/mp/messages/strings/resstrings.txt:321
 #: po/custom/fromJson.txt:37
 msgid "AA Upgrade"
-msgstr "Mise à jour pour armes DCA"
+msgstr "Amélioration des armes DCA"
 
 #: data/base/messages/strings/resstrings.txt:660
 #: data/mp/messages/strings/resstrings.txt:312
 #: po/custom/fromJson.txt:414
 msgid "Detects and locks-on to VTOL engine emissions"
-msgstr "Détecte et se verrouille sur les émissions moteur des VTOLs"
+msgstr "Détecte et se verrouille sur les émissions thermiques des moteurs des VTOLs"
 
 #: data/base/messages/strings/resstrings.txt:661
 #: data/mp/messages/strings/resstrings.txt:313
@@ -2718,13 +2718,13 @@ msgstr "Augmente la précision des armes DCA"
 #: data/mp/messages/strings/resstrings.txt:324
 #: po/custom/fromJson.txt:67
 msgid "All AA weapons upgraded automatically"
-msgstr "Mise à jour automatique de toutes les armes DCA"
+msgstr "Amélioration automatique de toutes les armes DCA"
 
 #: data/base/messages/strings/resstrings.txt:669
 #: data/mp/messages/strings/resstrings.txt:316
 #: po/custom/fromJson.txt:22
 msgid "AA Flak Upgrade"
-msgstr "Mise à jour pour armes DCA à fragmentation (flak)"
+msgstr "Amélioration des armes DCA à fragmentation (flak)"
 
 #: data/base/messages/strings/resstrings.txt:670
 #: data/mp/messages/strings/resstrings.txt:317
@@ -2742,7 +2742,7 @@ msgstr "Augmente les dégâts des armes de DCA flak"
 #: data/mp/messages/strings/resstrings.txt:319
 #: po/custom/fromJson.txt:66
 msgid "All AA flak weapons upgraded automatically"
-msgstr "Mise à jour automatique de toutes les armes de DCA flak"
+msgstr "Amélioration automatique de toutes les armes de DCA flak"
 
 #: data/base/messages/strings/resstrings.txt:678
 #: data/mp/messages/strings/resstrings.txt:322
@@ -2824,7 +2824,7 @@ msgstr "Résistance : faible"
 #: data/mp/messages/strings/resstrings.txt:342
 #: po/custom/fromJson.txt:420
 msgid "Drops High Explosive Armor Piercing bombs"
-msgstr "Largue des bombes HEAP"
+msgstr "Largue des bombes anti-blindage hautement explosives (HEAP)"
 
 #: data/base/messages/strings/resstrings.txt:705
 #: data/mp/messages/strings/resstrings.txt:343
@@ -2836,7 +2836,7 @@ msgstr "Efficace contre : défenses"
 #: data/mp/messages/strings/resstrings.txt:346
 #: po/custom/fromJson.txt:275
 msgid "Bombsight Upgrade"
-msgstr "Mise à jour pour bombardiers"
+msgstr "Amélioration des bombardiers"
 
 #: data/base/messages/strings/resstrings.txt:714
 #: data/mp/messages/strings/resstrings.txt:347
@@ -2854,7 +2854,7 @@ msgstr "Augmente la précision des bombes"
 #: data/mp/messages/strings/resstrings.txt:349
 #: po/custom/fromJson.txt:69
 msgid "All bomb bays upgraded automatically"
-msgstr "Mise à jour automatique de tous les bombardiers"
+msgstr "Amélioration automatique de tous les bombardiers"
 
 #: data/base/messages/strings/resstrings.txt:729
 #: data/base/messages/strings/resstrings.txt:735
@@ -2914,7 +2914,7 @@ msgstr "Efficace contre : bunkers, véhicules à roues et aéroglisseurs"
 #: data/mp/messages/strings/resstrings.txt:366
 #: po/custom/fromJson.txt:481
 msgid "Flamer Upgrade"
-msgstr "Mise à jour pour lance-flammes"
+msgstr "Amélioration des lance-flammes"
 
 #: data/base/messages/strings/resstrings.txt:766
 #: data/mp/messages/strings/resstrings.txt:367
@@ -2932,7 +2932,7 @@ msgstr "Augmente les dégâts des lance-flammes"
 #: data/mp/messages/strings/resstrings.txt:369
 #: po/custom/fromJson.txt:76
 msgid "All flamers upgraded automatically"
-msgstr "Mise à jour automatique de tous les lance-flammes"
+msgstr "Amélioration automatique de tous les lance-flammes"
 
 #: data/base/messages/strings/resstrings.txt:773
 #: data/base/messages/strings/resstrings.txt:779
@@ -2986,7 +2986,7 @@ msgstr "Efficace contre : bâtiments, bunkers"
 #: data/mp/messages/strings/resstrings.txt:396
 #: po/custom/fromJson.txt:671
 msgid "Howitzer Upgrade"
-msgstr "Mise à jour pour obusiers"
+msgstr "Amélioration des obusiers"
 
 #: data/base/messages/strings/resstrings.txt:794
 #: data/mp/messages/strings/resstrings.txt:387
@@ -3008,7 +3008,7 @@ msgstr "Augmente la précision des obusiers"
 #: data/mp/messages/strings/resstrings.txt:399
 #: po/custom/fromJson.txt:79
 msgid "All howitzers upgraded automatically"
-msgstr "Mise à jour automatique de tous les obusiers"
+msgstr "Amélioration automatique de tous les obusiers"
 
 #: data/base/messages/strings/resstrings.txt:802
 #: data/mp/messages/strings/resstrings.txt:392
@@ -3040,7 +3040,7 @@ msgstr "Augmente la cadence de tir des obusiers"
 #: data/mp/messages/strings/resstrings.txt:406
 #: po/custom/fromJson.txt:845
 msgid "Machinegun Upgrade"
-msgstr "Mise à jour pour mitrailleuses"
+msgstr "Amélioration des mitrailleuses"
 
 #: data/base/messages/strings/resstrings.txt:846
 #: data/mp/messages/strings/resstrings.txt:402
@@ -3060,7 +3060,7 @@ msgstr "Augmente les dégâts des mitrailleuses"
 #: data/mp/messages/strings/resstrings.txt:409
 #: po/custom/fromJson.txt:81
 msgid "All machineguns upgraded automatically"
-msgstr "Mise à jour automatique de toutes les mitrailleuses"
+msgstr "Amélioration automatique de toutes les mitrailleuses"
 
 #: data/base/messages/strings/resstrings.txt:858
 #: data/mp/messages/strings/resstrings.txt:407
@@ -3078,7 +3078,7 @@ msgstr "Cadence de tir des mitrailleuses augmentée"
 #: data/mp/messages/strings/resstrings.txt:412
 #: po/custom/fromJson.txt:855
 msgid "May be assigned to a sensor"
-msgstr "Peut être affecté(e) à un radar"
+msgstr "Peut être affecté à un radar"
 
 #: data/base/messages/strings/resstrings.txt:893
 #: data/mp/messages/strings/resstrings.txt:413
@@ -3096,13 +3096,13 @@ msgstr "Résistance : très faible"
 #: data/mp/messages/strings/resstrings.txt:416
 #: po/custom/fromJson.txt:917
 msgid "Mortar Upgrade"
-msgstr "Mise à jour pour mortiers"
+msgstr "Amélioration des mortiers"
 
 #: data/base/messages/strings/resstrings.txt:906
 #: data/mp/messages/strings/resstrings.txt:417
 #: po/custom/fromJson.txt:636
 msgid "High Explosive Armor-Piercing Shells"
-msgstr "Obus HEAP pour obusiers"
+msgstr "Obus anti-blindage hautement explosifs (HEAP) pour obusiers"
 
 #: data/base/messages/strings/resstrings.txt:907
 #: data/mp/messages/strings/resstrings.txt:418
@@ -3114,7 +3114,7 @@ msgstr "Augmente les dégâts des mortiers"
 #: data/mp/messages/strings/resstrings.txt:419
 #: po/custom/fromJson.txt:84
 msgid "All mortars upgraded automatically"
-msgstr "Mise à jour automatique de tous les mortiers"
+msgstr "Amélioration automatique de tous les mortiers"
 
 #: data/base/messages/strings/resstrings.txt:943
 #: data/base/messages/strings/resstrings.txt:951
@@ -3122,13 +3122,13 @@ msgstr "Mise à jour automatique de tous les mortiers"
 #: data/mp/messages/strings/resstrings.txt:426
 #: po/custom/fromJson.txt:891
 msgid "Mini-Rocket Upgrade"
-msgstr "Mise à jour pour mini-roquettes"
+msgstr "Amélioration des mini-roquettes"
 
 #: data/base/messages/strings/resstrings.txt:944
 #: data/mp/messages/strings/resstrings.txt:422
 #: po/custom/fromJson.txt:637
 msgid "High Explosive Armor-Piercing warheads"
-msgstr "Ogives HEAP pour roquettes"
+msgstr "Ogives anti-blindage hautement explosives (HEAP) pour roquettes"
 
 #: data/base/messages/strings/resstrings.txt:945
 #: data/mp/messages/strings/resstrings.txt:423
@@ -3142,7 +3142,7 @@ msgstr "Augmente les dégâts des mini-roquettes"
 #: data/mp/messages/strings/resstrings.txt:429
 #: po/custom/fromJson.txt:82
 msgid "All mini-rockets upgraded automatically"
-msgstr "Mise à jour automatique de toutes les mini-roquettes"
+msgstr "Amélioration automatique de toutes les mini-roquettes"
 
 #: data/base/messages/strings/resstrings.txt:952
 #: data/mp/messages/strings/resstrings.txt:427
@@ -3158,7 +3158,7 @@ msgstr "Augmente la cadence de tir des mini-roquettes"
 #: data/mp/messages/strings/resstrings.txt:431
 #: po/custom/fromJson.txt:1162
 msgid "Rocket Upgrade"
-msgstr "Mise à jour pour roquettes"
+msgstr "Amélioration des roquettes"
 
 #: data/base/messages/strings/resstrings.txt:966
 #: data/mp/messages/strings/resstrings.txt:432
@@ -3176,7 +3176,7 @@ msgstr "Augmente les dégâts des roquettes"
 #: data/mp/messages/strings/resstrings.txt:434
 #: po/custom/fromJson.txt:90
 msgid "All rockets upgraded automatically"
-msgstr "Mise à jour automatique de toutes les roquettes"
+msgstr "Amélioration automatique de toutes les roquettes"
 
 #: data/base/script/rules.js:22
 #: data/base/script/tutorial.js:9
@@ -3801,7 +3801,7 @@ msgstr "Au début de l'offensive décisive des satellites contrôlés par NEXUS,
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:6
 msgid "The ensuing nuclear-magnetic pulses wiped clean large amounts of NASDA's memory banks, shattering its core processor, and sent shockwaves blasting through Nexus."
-msgstr "Les pulses magnétiques engendrés par les explosions nucléaires ont effacé la majeure partie des banques de données de la NASDA, démoli leurs superordinateurs centraux, et gravement atteint le virus de NEXUS."
+msgstr "Les impulsions magnétiques engendrés par les explosions nucléaires ont effacé la majeure partie des banques de données de la NASDA, démoli leurs superordinateurs centraux, et gravement atteint le virus de NEXUS."
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:8
 msgid "Nexus was fried as whole sections of its consciousness were obliterated in the counterstrikes."
@@ -3961,7 +3961,7 @@ msgstr "Mais c'est quand-même gentil de votre part d'être venu jusqu'ici."
 
 #: data/base/sequenceaudio/cam3/cam3_1bn.txt:6
 msgid "Buried beneath this silo is a tactical nuclear warhead that is set to go off soon."
-msgstr "L'ogive nucléaire est toujours au frais au fond du puits."
+msgstr "Une ogive nucléaire tactique est au fond de ce silo, prête à être lancée."
 
 #: data/base/sequenceaudio/cam3/cam3_1bn.txt:9
 msgid "As I cannot launch it, it'll just have to blow where it is."
@@ -4408,15 +4408,15 @@ msgstr "Production de véhicules avancée Mk3"
 
 #: data/mp/messages/strings/names.txt:436
 msgid "Robotic Repair Facility Mk3"
-msgstr "Atelier de réparation robotisé Mk3"
+msgstr "Centre de réparation robotisé Mk3"
 
 #: data/mp/messages/strings/names.txt:437
 msgid "Advanced Repair Facility Mk2"
-msgstr "Atelier de réparation avancé Mk2"
+msgstr "Centre de réparation avancé Mk2"
 
 #: data/mp/messages/strings/names.txt:438
 msgid "Advanced Repair Facility Mk3"
-msgstr "Atelier de réparation avancé Mk3"
+msgstr "Centre de réparation avancé Mk3"
 
 #: data/mp/messages/strings/names.txt:469
 #: po/custom/fromJson.txt:601
@@ -4489,7 +4489,7 @@ msgstr "Centre de commandement du Collectif"
 #: data/mp/messages/strings/names.txt:724
 #: po/custom/fromJson.txt:900
 msgid "Missile Silo"
-msgstr "Puits de lancement de missiles"
+msgstr "Silo de lancement de missiles nucléaires"
 
 #: data/mp/messages/strings/names.txt:775
 #: po/custom/fromJson.txt:1250
@@ -4504,12 +4504,12 @@ msgstr "Super Cyborg à canon d'assaut"
 #: data/mp/messages/strings/names.txt:779
 #: po/custom/fromJson.txt:1257
 msgid "Super HPV Cyborg"
-msgstr "Super Cyborg à canon Mach2"
+msgstr "Super Cyborg à canon hypersonique"
 
 #: data/mp/messages/strings/names.txt:781
 #: po/custom/fromJson.txt:1263
 msgid "Super Tank-Killer Cyborg"
-msgstr "Super Cyborg à roquettes AC"
+msgstr "Super Cyborg à roquettes anti-char"
 
 #: data/mp/messages/strings/names.txt:788
 #: po/custom/fromJson.txt:1170
@@ -4524,7 +4524,7 @@ msgstr "Super Cyborg à laser à impulsions"
 #: data/mp/messages/strings/names.txt:801
 #: po/custom/fromJson.txt:1261
 msgid "Super Rail-Gunner"
-msgstr "Super Cyborg à canon à rail"
+msgstr "Super Cyborg à canon électrique lourd"
 
 #: data/mp/messages/strings/names.txt:803
 #: po/custom/fromJson.txt:1262
@@ -4844,15 +4844,15 @@ msgstr "Techniques de guerre avancées"
 
 #: po/custom/fromJson.txt:49
 msgid "Advanced Missile Allocation System"
-msgstr "Système d'allocation de missiles avancé"
+msgstr "Système de programmation des missiles avancé"
 
 #: po/custom/fromJson.txt:50
 msgid "Advanced Missile Allocation System Mk2"
-msgstr "Système d'allocation de missiles avancé Mk2"
+msgstr "Système de programmation des missiles avancé Mk2"
 
 #: po/custom/fromJson.txt:51
 msgid "Advanced Missile Allocation System Mk3"
-msgstr "Système d'allocation de missiles avancé Mk3"
+msgstr "Système de programmation des missiles avancé Mk3"
 
 #: po/custom/fromJson.txt:52
 msgid "Advanced Missile Warhead"
@@ -4868,7 +4868,7 @@ msgstr "Ogive avancée pour missiles Mk3"
 
 #: po/custom/fromJson.txt:55
 msgid "Advanced Repair Facility"
-msgstr "Atelier de réparation avancé"
+msgstr "Centre de réparation avancé"
 
 #: po/custom/fromJson.txt:56
 msgid "Advanced repair techniques"
@@ -4906,43 +4906,43 @@ msgstr "Jet-pack aérodynamique"
 
 #: po/custom/fromJson.txt:70
 msgid "All cannons upgraded automatically"
-msgstr "Mise à jour automatique de tous les canons"
+msgstr "Amélioration automatique de tous les canons"
 
 #: po/custom/fromJson.txt:71
 msgid "All CB sensors upgraded automatically"
-msgstr "Mise à jour automatique de tous les radars de contre-batterie"
+msgstr "Amélioration automatique de tous les radars de contre-batterie"
 
 #: po/custom/fromJson.txt:75
 msgid "All factories upgraded automatically"
-msgstr "Mise à jour automatique de toutes les usines de VTOLs"
+msgstr "Amélioration automatique de toutes les usines de VTOLs"
 
 #: po/custom/fromJson.txt:80
 msgid "All lasers upgraded automatically"
-msgstr "Mise à jour automatique de tous les lasers"
+msgstr "Amélioration automatique de tous les lasers"
 
 #: po/custom/fromJson.txt:83
 msgid "All missiles upgraded automatically"
-msgstr "Mise à jour automatique de tous les missiles"
+msgstr "Amélioration automatique de tous les missiles"
 
 #: po/custom/fromJson.txt:85
 msgid "All power generators upgraded automatically"
-msgstr "Mise à jour automatique de tous les générateurs d'énergie"
+msgstr "Amélioration automatique de tous les générateurs d'énergie"
 
 #: po/custom/fromJson.txt:86
 msgid "All rail guns upgraded automatically"
-msgstr "Mise à jour automatique de tous les canons à rail"
+msgstr "Amélioration automatique de tous les canons électriques et magnétiques"
 
 #: po/custom/fromJson.txt:91
 msgid "All sensors upgraded automatically"
-msgstr "Mise à jour automatique de tous les radars"
+msgstr "Amélioration automatique de tous les radars"
 
 #: po/custom/fromJson.txt:93
 msgid "All trucks upgraded automatically"
-msgstr "Mise à jour automatique de tous les véhicules de construction"
+msgstr "Amélioration automatique de tous les véhicules de construction"
 
 #: po/custom/fromJson.txt:99
 msgid "All VTOLs upgraded automatically"
-msgstr "Mise à jour automatique de tous les VTOLs"
+msgstr "Amélioration automatique de tous les VTOLs"
 
 #: po/custom/fromJson.txt:101
 msgid "Ally"
@@ -4978,20 +4978,20 @@ msgid "Anti-tank rocket"
 msgstr "Roquettes anti-char"
 
 #: po/custom/fromJson.txt:109
-msgid "APDSB MG Bullets"
-msgstr "Balles APDS pour mitrailleuses"
+msgid "APDS MG Bullets"
+msgstr "Balles perforantes à sabot détachable (APDS) pour mitrailleuses"
 
 #: po/custom/fromJson.txt:110
-msgid "APDSB MG Bullets Mk2"
+msgid "APDS MG Bullets Mk2"
 msgstr "Balles APDS pour mitrailleuses Mk2"
 
 #: po/custom/fromJson.txt:111
-msgid "APDSB MG Bullets Mk3"
+msgid "APDS MG Bullets Mk3"
 msgstr "Balles APDS pour mitrailleuses Mk3"
 
 #: po/custom/fromJson.txt:112
 msgid "APFSDS Cannon Rounds"
-msgstr "Obus APFSDS pour canons"
+msgstr "Obus perforant à sabot détachable stabilisé par ailettes (APFSDS) pour canons"
 
 #: po/custom/fromJson.txt:113
 msgid "APFSDS Cannon Rounds Mk2"
@@ -5035,15 +5035,15 @@ msgstr "Armé d'un laser à impulsions"
 
 #: po/custom/fromJson.txt:125
 msgid "Armed with Cyborg Rail Gun"
-msgstr "Armé d'un canon à rail"
+msgstr "Armé d'un canon électrique"
 
 #: po/custom/fromJson.txt:126
 msgid "Armed with Cyborg Scourge Missile Launcher"
-msgstr "Armé d'un lance-missiles Scourge "
+msgstr "Armé d'un lance-missiles anti-char"
 
 #: po/custom/fromJson.txt:127
 msgid "Armed with Cyborg Thermite Flamer"
-msgstr "Armé d'un lance-flammes au plasma"
+msgstr "Armé d'un lance-plasma"
 
 #: po/custom/fromJson.txt:128
 msgid "Armed with flashlight laser"
@@ -5059,15 +5059,15 @@ msgstr "Armé de grenades"
 
 #: po/custom/fromJson.txt:131
 msgid "Armed with hyper velocity cannon"
-msgstr "Armé d'un canon Mach2"
+msgstr "Armé d'un canon hypersonique"
 
 #: po/custom/fromJson.txt:132
 msgid "Armed with Lance Anti-Tank rocket"
-msgstr "Armé d'un lance-roquettes AC"
+msgstr "Armé d'un lance-roquettes anti-char"
 
 #: po/custom/fromJson.txt:133
 msgid "Armed with Lancer anti-tank missile"
-msgstr "Armé d'un lance-roquettes AC"
+msgstr "Armé d'un lance-roquettes anti-char"
 
 #: po/custom/fromJson.txt:134
 msgid "Armed with Machinegun"
@@ -5079,11 +5079,11 @@ msgstr "Armé d'un canon moyen"
 
 #: po/custom/fromJson.txt:136
 msgid "Armed with Needle Gun"
-msgstr "Armé d'un canon à rail léger"
+msgstr "Armé d'un canon électrique léger"
 
 #: po/custom/fromJson.txt:138
 msgid "Armed with Scourge anti-tank missile"
-msgstr "Armé de missiles Scourge AC"
+msgstr "Armé de missiles anti-char"
 
 #: po/custom/fromJson.txt:139
 msgid "Armed with tank killer rockets"
@@ -5119,7 +5119,7 @@ msgstr "Tour de garde renforcée à canon EMP"
 
 #: po/custom/fromJson.txt:149
 msgid "Armored guard tower with Lancer AT rocket"
-msgstr "Tour de défense renforcée à roquettes AC"
+msgstr "Tour de défense renforcée à roquettes anti-char"
 
 #: po/custom/fromJson.txt:150
 msgid "Armored guard tower with Mini-Pod Rocket"
@@ -5131,7 +5131,7 @@ msgstr "Tour renforcée à PMR"
 
 #: po/custom/fromJson.txt:152
 msgid "Armored guard tower with Needle Gun"
-msgstr "Tour de garde renforcée à canon à rail léger"
+msgstr "Tour de garde renforcée à canon électrique léger"
 
 #: po/custom/fromJson.txt:153
 msgid "Armored guard tower with Nexus Link"
@@ -5143,7 +5143,7 @@ msgstr "Tour de défense renforcée à laser à impulsions"
 
 #: po/custom/fromJson.txt:155
 msgid "Armored guard tower with Scourge Missile"
-msgstr "Tour de garde renforcée à missiles Scourge"
+msgstr "Tour de garde renforcée à missiles anti-char"
 
 #: po/custom/fromJson.txt:156
 msgid "Armored Half-tracks"
@@ -5155,7 +5155,7 @@ msgstr "Pont défensif à laser Flashlight"
 
 #: po/custom/fromJson.txt:160
 msgid "Armored hardpoint with Gauss Cannon"
-msgstr "Pont défensif à canon Gauss"
+msgstr "Pont défensif à canon magnétique"
 
 #: po/custom/fromJson.txt:161
 msgid "Armored hardpoint with Heavy Cannon"
@@ -5167,7 +5167,7 @@ msgstr "Pont défensif à mitrailleuse lourde"
 
 #: po/custom/fromJson.txt:163
 msgid "Armored hardpoint with Hyper-Velocity Cannon"
-msgstr "Pont défensif à canon Mach2"
+msgstr "Pont défensif à canon hypersonique"
 
 #: po/custom/fromJson.txt:165
 msgid "Armored hardpoint with Lancer AT missile"
@@ -5183,11 +5183,11 @@ msgstr "Pont défensif à canon moyen"
 
 #: po/custom/fromJson.txt:168
 msgid "Armored hardpoint with Rail Gun"
-msgstr "Pont défensif à canon à rail moyen"
+msgstr "Pont défensif à canon électrique lourd"
 
 #: po/custom/fromJson.txt:169
 msgid "Armored hardpoint with Scourge AT Missile"
-msgstr "Pont défensif à missiles Scourge AC"
+msgstr "Pont défensif à missiles anti-char"
 
 #: po/custom/fromJson.txt:173
 msgid "Armored Incendiary Mortar battery pit"
@@ -5203,7 +5203,7 @@ msgstr "Pont défensif blindé à laser Flashlight"
 
 #: po/custom/fromJson.txt:178
 msgid "Armored strongpoint with Gauss Cannon"
-msgstr "Pont défensif blindé à canon Gauss"
+msgstr "Pont défensif blindé à canon magnétique"
 
 #: po/custom/fromJson.txt:179
 msgid "Armored strongpoint with Heavy Laser"
@@ -5219,7 +5219,7 @@ msgstr "Pont défensif blindé à laser à impulsions"
 
 #: po/custom/fromJson.txt:184
 msgid "Armored strongpoint with Rail Gun"
-msgstr "Pont défensif blindé à canon à rail moyen"
+msgstr "Pont défensif blindé à canon électrique lourd"
 
 #: po/custom/fromJson.txt:186
 msgid "Armored Tracks"
@@ -5227,11 +5227,11 @@ msgstr "Chenilles blindées"
 
 #: po/custom/fromJson.txt:187
 msgid "Armor-Piercing Discard Sabot Bullets"
-msgstr "Balles APDS"
+msgstr "Balles perforantes à sabot détachable (APDS)"
 
 #: po/custom/fromJson.txt:188
 msgid "Armor-Piercing Fin-Stabilized Discarding Sabot"
-msgstr "Obus APFSDS pour canons"
+msgstr "Obus perforant à sabot détachable stabilisé par ailettes (APFSDS) pour canons"
 
 #: po/custom/fromJson.txt:189
 msgid "Armour +35%, Body Points +30%"
@@ -5359,15 +5359,15 @@ msgstr "Système de rechargement automatisé"
 
 #: po/custom/fromJson.txt:221
 msgid "Automated Repair Facility"
-msgstr "Atelier de réparation automatisé"
+msgstr "Centre de réparation automatisé"
 
 #: po/custom/fromJson.txt:222
 msgid "Automated Repair Facility Upgrade Mk2"
-msgstr "Atelier de réparation automatisé Mk2"
+msgstr "Centre de réparation automatisé Mk2"
 
 #: po/custom/fromJson.txt:223
 msgid "Automated Repair Facility Upgrade Mk3"
-msgstr "Atelier de réparation automatisé Mk3"
+msgstr "Centre de réparation automatisé Mk3"
 
 #: po/custom/fromJson.txt:225
 msgid "Automated VTOL Rearming Mk2"
@@ -5506,7 +5506,7 @@ msgstr "Les bombes se verrouillent sur la cible et s'y dirigent d'elles-mêmes"
 
 #: po/custom/fromJson.txt:278
 msgid "Bomb Upgrade"
-msgstr "Mise à jour pour bombes"
+msgstr "Amélioration des bombes"
 
 #: po/custom/fromJson.txt:279
 msgid "Bonded metallic laminates formed into walls and defenses"
@@ -5626,7 +5626,7 @@ msgstr "Tour à canon"
 
 #: po/custom/fromJson.txt:308
 msgid "Cannon Upgrade"
-msgstr "Mise à jour pour canons"
+msgstr "Amélioration des canons"
 
 #: po/custom/fromJson.txt:309
 msgid "CB Radar Turret"
@@ -6029,12 +6029,12 @@ msgstr "Attaque électroniquement les structures ennemies et empêche leur bon f
 
 #: po/custom/fromJson.txt:426
 msgid "Electronic Countermeasures"
-msgstr "Contre-mesures électroniques"
+msgstr "Brouillage électronique"
 
 #: po/custom/fromJson.txt:427
 #, fuzzy
 msgid "Electronic Countermeasures Mk2"
-msgstr "Contre-mesures électroniques"
+msgstr "Brouillage électronique Mk2"
 
 #: po/custom/fromJson.txt:428
 msgid "EMP Cannon"
@@ -6074,19 +6074,19 @@ msgstr "Permet l'auto-réparation"
 
 #: po/custom/fromJson.txt:437
 msgid "Enables self-repair in all base structures"
-msgstr "Active l'auto-réparation pour tous les bâtiments"
+msgstr "Permet l'auto-réparation de tous les bâtiments"
 
 #: po/custom/fromJson.txt:438
 msgid "Enables self-repair in all Cyborgs"
-msgstr "Active l'auto-réparation pour tous les Cyborgs"
+msgstr "Permet l'auto-réparation de tous les Cyborgs"
 
 #: po/custom/fromJson.txt:439
 msgid "Enables self-repair in all defenses"
-msgstr "Active l'auto-réparation pour tous les systèmes de défense"
+msgstr "Permet l'auto-réparation de tous les systèmes de défense"
 
 #: po/custom/fromJson.txt:440
 msgid "Enables self-repair in all vehicles"
-msgstr "Active l'auto-réparation pour tous les véhicules"
+msgstr "Permet l'auto-réparation de tous les véhicules"
 
 #: po/custom/fromJson.txt:441
 #, fuzzy
@@ -6168,7 +6168,7 @@ msgstr "Mini-roquettes à tir rapide Mk3"
 
 #: po/custom/fromJson.txt:462
 msgid "Fast firing light anti-vehicle rockets"
-msgstr "Roquettes légères anti-char à tir rapide"
+msgstr "Roquettes anti-char légères à tir rapide"
 
 #: po/custom/fromJson.txt:463
 msgid "Fast Loader"
@@ -6180,7 +6180,7 @@ msgstr "Ailerons stabilisateurs affinant la trajectoire"
 
 #: po/custom/fromJson.txt:465
 msgid "Fires Electronic Magnetic Pulse Missiles"
-msgstr "Lance des missiles EMP (Pulsations ÉlectroMagnétiques)"
+msgstr "Lance des missiles EMP (Impulsions ÉlectroMagnétiques)"
 
 #: po/custom/fromJson.txt:466
 msgid "Fires heavy pulses of laser light"
@@ -6192,7 +6192,7 @@ msgstr "Tire des impulsions laser"
 
 #: po/custom/fromJson.txt:468
 msgid "Fires salvoes of mini-rockets"
-msgstr "Tire des salves de mini-roquettes à charge creuse"
+msgstr "Tire des salves de mini-roquettes"
 
 #: po/custom/fromJson.txt:469
 msgid "Fire Truck"
@@ -6200,7 +6200,7 @@ msgstr "Camion lance-flammes"
 
 #: po/custom/fromJson.txt:470
 msgid "Flamer"
-msgstr "Incendieur"
+msgstr "Lance-flammes"
 
 #: po/custom/fromJson.txt:471
 msgid "Flamer Autoloader"
@@ -6309,23 +6309,23 @@ msgstr "Générateur à turbine à gaz Mk3"
 
 #: po/custom/fromJson.txt:502
 msgid "Gauss Cannon"
-msgstr "Canon Gauss"
+msgstr "Canon magnétique"
 
 #: po/custom/fromJson.txt:503
 msgid "Gauss Cannon Emplacement"
-msgstr "Emplacement à canon Gauss"
+msgstr "Emplacement à canon magnétique"
 
 #: po/custom/fromJson.txt:504
 msgid "Gauss Cannon Hardpoint"
-msgstr "Pont défensif à canon Gauss"
+msgstr "Pont défensif à canon magnétique"
 
 #: po/custom/fromJson.txt:505
 msgid "Gauss Cannon Python Tracks"
-msgstr "Canon Gauss Python chenilles"
+msgstr "Canon magnétique Python chenilles"
 
 #: po/custom/fromJson.txt:506
 msgid "Gauss Cannon Wyvern Tracks"
-msgstr "Canon Gauss Varan chenilles"
+msgstr "Canon magnétique Varan chenilles"
 
 #: po/custom/fromJson.txt:507
 msgid "Generates and concentrates bursts of laser energy"
@@ -6405,15 +6405,15 @@ msgstr "Balles renforcées pour mitrailleuses"
 
 #: po/custom/fromJson.txt:529
 msgid "Hardened Rail Dart"
-msgstr "Projectile renforcé pour canons à rail"
+msgstr "Projectile renforcé pour canons électriques et magnétiques"
 
 #: po/custom/fromJson.txt:530
 msgid "Hardened Rail Dart Mk2"
-msgstr "Projectile renforcé pour canons à rail Mk2"
+msgstr "Projectile renforcé pour canons électriques et magnétiques Mk2"
 
 #: po/custom/fromJson.txt:531
 msgid "Hardened Rail Dart Mk3"
-msgstr "Projectile renforcé pour canons à rail Mk3"
+msgstr "Projectile renforcé pour canons électriques et magnétiques Mk3"
 
 #: po/custom/fromJson.txt:532
 msgid "Hardened Sensor Tower"
@@ -6441,19 +6441,19 @@ msgstr "Pont défensif à DCA Tourbillon disponible"
 
 #: po/custom/fromJson.txt:538
 msgid "HEAP Bomb Bay"
-msgstr "Bombes HEAP"
+msgstr "Bombes anti-blindage hautement explosives (HEAP)"
 
 #: po/custom/fromJson.txt:539
 msgid "Heap Bomb Bay Mantis VTOL"
-msgstr "Bombes anti-blindage Mante VTOL"
+msgstr "Bombes HEAP Mante VTOL"
 
 #: po/custom/fromJson.txt:540
 msgid "Heap Bomb Bay Retribution VTOL"
-msgstr "Bombes anti-blindage Châtiment VTOL"
+msgstr "Bombes HEAP Châtiment VTOL"
 
 #: po/custom/fromJson.txt:541
 msgid "HEAP Howitzer Shells"
-msgstr "Obus HEAP pour obusiers"
+msgstr "Obus anti-blindage hautement explosifs (HEAP) pour obusiers"
 
 #: po/custom/fromJson.txt:542
 msgid "HEAP Howitzer Shells Mk2"
@@ -6465,7 +6465,7 @@ msgstr "Obus HEAP pour obusiers Mk3"
 
 #: po/custom/fromJson.txt:544
 msgid "HEAP Mini-Rockets"
-msgstr "Mini-roquettes HEAP"
+msgstr "Mini-roquettes anti-blindage hautement explosives (HEAP)"
 
 #: po/custom/fromJson.txt:545
 msgid "HEAP Mini-Rockets Mk2"
@@ -6477,7 +6477,7 @@ msgstr "Mini-roquettes HEAP Mk3"
 
 #: po/custom/fromJson.txt:547
 msgid "HEAP Mortar Shells"
-msgstr "Obus HEAP pour mortiers"
+msgstr "Obus anti-blindage hautement explosifs (HEAP) pour mortiers"
 
 #: po/custom/fromJson.txt:548
 msgid "HEAP Mortar Shells Mk2"
@@ -6489,7 +6489,7 @@ msgstr "Obus HEAP pour mortiers Mk3"
 
 #: po/custom/fromJson.txt:550
 msgid "HEAT Cannon Shells"
-msgstr "Obus HEAT pour canons"
+msgstr "Obus anti-tank à charge creuse (HEAT) pour canons"
 
 #: po/custom/fromJson.txt:551
 msgid "HEAT Cannon Shells Mk2"
@@ -6501,7 +6501,7 @@ msgstr "Obus HEAT pour canons Mk3"
 
 #: po/custom/fromJson.txt:555
 msgid "HEAT Rocket Warhead"
-msgstr "Ogive HEAT pour roquettes"
+msgstr "Ogive anti-tank à charge creuse (HEAT) pour roquettes"
 
 #: po/custom/fromJson.txt:556
 msgid "HEAT Rocket Warhead Mk2"
@@ -6657,7 +6657,7 @@ msgstr "Mortier lourd - Bombarde"
 
 #: po/custom/fromJson.txt:599
 msgid "Heavy rail gun firing large kinetic energy darts"
-msgstr "Canon à rail lourd projetant de grosses fléchettes denses à haute énergie cinétique"
+msgstr "Canon projetant de grosses fléchettes denses à haute énergie cinétique"
 
 #: po/custom/fromJson.txt:600
 msgid "Heavy Repair Scorpion Hover"
@@ -6773,23 +6773,23 @@ msgstr "Matériaux de construction à haute densité"
 
 #: po/custom/fromJson.txt:631
 msgid "High Explosive Anti-Tank Cannon Shells"
-msgstr "Obus HEAT pour canons"
+msgstr "Obus anti-tank hautement explosifs pour canons"
 
 #: po/custom/fromJson.txt:632
 msgid "High Explosive Anti-Tank warhead"
-msgstr "Ogive HEAT pour roquettes"
+msgstr "Ogive anti-tank hautement explosive"
 
 #: po/custom/fromJson.txt:633
 msgid "High Explosive Anti-Tank warheads"
-msgstr "Ogives HEAT"
+msgstr "Ogives anti-tank hautement explosives"
 
 #: po/custom/fromJson.txt:634
 msgid "High Explosive Armor Piercing Flak"
-msgstr "Obus HEAP pour canons de DCA"
+msgstr "Obus anti-blindage hautement explosifs (HEAP) pour canons de DCA"
 
 #: po/custom/fromJson.txt:635
 msgid "High Explosive Armor Piercing Shells"
-msgstr "Obus HEAP"
+msgstr "Obus anti-blindage hautement explosifs (HEAP)"
 
 #: po/custom/fromJson.txt:638
 msgid "High explosive artillery missile"
@@ -6837,7 +6837,7 @@ msgstr "Composé mixte béton-plastique HLE"
 
 #: po/custom/fromJson.txt:655
 msgid "High-Velocity Armor-Piercing Fin-Stabilised Discarding Sabot"
-msgstr "Obus HVAPFSDS"
+msgstr "Obus perforant haute vitesse à sabot détachable stabilisé par ailettes (HVAPFSDS)"
 
 #: po/custom/fromJson.txt:656
 msgid "Hover"
@@ -6894,15 +6894,15 @@ msgstr "Temps de rechargement des obusiers : -10%"
 
 #: po/custom/fromJson.txt:672
 msgid "HPV Cannon Emplacement"
-msgstr "Emplacement à canon Mach2"
+msgstr "Emplacement à canon hypersonique"
 
 #: po/custom/fromJson.txt:673
 msgid "HPV Cannon Hardpoint"
-msgstr "Pont défensif à canon Mach2"
+msgstr "Pont défensif à canon hypersonique"
 
 #: po/custom/fromJson.txt:674
 msgid "HPV Cannon Python Tracks"
-msgstr "Canon Mach2 Python chenilles"
+msgstr "Canon hypersonique Python chenilles"
 
 #: po/custom/fromJson.txt:675
 msgid "Hurricane AA Site"
@@ -6918,7 +6918,7 @@ msgstr "Hutte"
 
 #: po/custom/fromJson.txt:678
 msgid "HVAPFSDS Cannon Rounds"
-msgstr "Obus HVAPFSDS pour canons"
+msgstr "Obus perforant haute vitesse à sabot détachable stabilisé par ailettes (HVAPFSDS) pour canons"
 
 #: po/custom/fromJson.txt:679
 msgid "HVAPFSDS Cannon Rounds Mk2"
@@ -6934,23 +6934,23 @@ msgstr "Chargeur à cadence hyper-rapide pour mitrailleuses"
 
 #: po/custom/fromJson.txt:683
 msgid "Hyper Velocity Cannon"
-msgstr "Canon Mach2"
+msgstr "Canon hypersonique"
 
 #: po/custom/fromJson.txt:684
 msgid "Hyper Velocity Cannon Emplacement"
-msgstr "Emplacement à canon Mach2"
+msgstr "Emplacement à canon hypersonique"
 
 #: po/custom/fromJson.txt:685
 msgid "Hyper Velocity Cannon Hardpoint"
-msgstr "Pont défensif à canon Mach2"
+msgstr "Pont défensif à canon hypersonique"
 
 #: po/custom/fromJson.txt:686
 msgid "Hyper Velocity Cannon Python Hover"
-msgstr "Canon Mach2 Python aéroglisseur"
+msgstr "Canon hypersonique Python aéroglisseur"
 
 #: po/custom/fromJson.txt:687
 msgid "Hyper Velocity Cannon Python Tracks"
-msgstr "Canon Mach2 Python chenilles"
+msgstr "Canon hypersonique Python chenilles"
 
 #: po/custom/fromJson.txt:688
 msgid "Immense damage infliction capability"
@@ -7138,15 +7138,15 @@ msgstr "Cadence de tir des mortiers augmentée"
 
 #: po/custom/fromJson.txt:757
 msgid "Increases Rail Gun accuracy"
-msgstr "Précision de tir des canons à rail augmentée"
+msgstr "Précision de tir des canons électriques et magnétiques augmentée"
 
 #: po/custom/fromJson.txt:758
 msgid "Increases Rail Gun damage"
-msgstr "Augmente les dégâts des canons à rail"
+msgstr "Augmente les dégâts des canons électriques et magnétiques"
 
 #: po/custom/fromJson.txt:759
 msgid "Increases Rail Gun ROF"
-msgstr "Cadence de tir des canons à rail augmentée"
+msgstr "Cadence de tir des canons électriques et magnétiques augmentée"
 
 #: po/custom/fromJson.txt:762
 msgid "Increases Rocket accuracy"
@@ -7340,7 +7340,7 @@ msgstr "Poste de commande pour satellite laser"
 
 #: po/custom/fromJson.txt:814
 msgid "Laser Upgrade"
-msgstr "Mise à jour pour lasers"
+msgstr "Amélioration des lasers"
 
 #: po/custom/fromJson.txt:815
 msgid "LasSat"
@@ -7460,11 +7460,11 @@ msgstr "Mante"
 
 #: po/custom/fromJson.txt:851
 msgid "Mass Driver"
-msgstr "Catapulte électromagnétique"
+msgstr "Catapulte à accélération magnétique de masse"
 
 #: po/custom/fromJson.txt:852
 msgid "Mass Driver Fortress"
-msgstr "Forteresse à catapulte électromagnétique"
+msgstr "Forteresse à accélération magnétique de masse"
 
 #: po/custom/fromJson.txt:853
 msgid "Maximum armor and body points"
@@ -7644,7 +7644,7 @@ msgstr "Les missiles détectent des cibles et se verrouillent dessus lors de leu
 
 #: po/custom/fromJson.txt:902
 msgid "Missile Upgrade"
-msgstr "Mise à jour pour missiles"
+msgstr "Amélioration des missiles"
 
 #: po/custom/fromJson.txt:903
 msgid "Mobile Repair Turret"
@@ -7724,31 +7724,31 @@ msgstr "Effet sur une zone étroite"
 
 #: po/custom/fromJson.txt:924
 msgid "Needle Gun"
-msgstr "Canon à rail léger"
+msgstr "Canon électrique léger"
 
 #: po/custom/fromJson.txt:925
 msgid "Needle Gunner"
-msgstr "Cyborg à canon à rail léger"
+msgstr "Cyborg à canon électrique léger"
 
 #: po/custom/fromJson.txt:926
 msgid "Needle Gunner Cyborg"
-msgstr "Cyborg à canon à rail léger"
+msgstr "Cyborg à canon électrique léger"
 
 #: po/custom/fromJson.txt:927
 msgid "Needle Gun Retribution Tracks"
-msgstr "Canon à rail léger Châtiment chenilles"
+msgstr "Canon électrique léger Châtiment chenilles"
 
 #: po/custom/fromJson.txt:928
 msgid "Needle Gun Tiger Tracks"
-msgstr "Canon à rail léger Tigre chenilles"
+msgstr "Canon électrique léger Tigre chenilles"
 
 #: po/custom/fromJson.txt:929
 msgid "Needle Gun Tower"
-msgstr "Tour à canon à rail léger"
+msgstr "Tour à canon électrique léger"
 
 #: po/custom/fromJson.txt:930
 msgid "Needle Gun Vengeance Tracks"
-msgstr "Canon à rail léger Vengeance chenilles"
+msgstr "Canon électrique léger Vengeance chenilles"
 
 #: po/custom/fromJson.txt:931
 msgid "Neural Synapse Research Brain"
@@ -7832,11 +7832,11 @@ msgstr "Nouveau type de propulsion disponible pour conception"
 
 #: po/custom/fromJson.txt:962
 msgid "New Rail Gun Available"
-msgstr "Nouveau canon à rail disponible"
+msgstr "Nouveau canon électrique disponible"
 
 #: po/custom/fromJson.txt:963
 msgid "New Repair Facility Repairs Damaged Units"
-msgstr "Nouvel atelier de réparation réparant les unités endommagées"
+msgstr "Nouveau centre de réparation pour les unités endommagées"
 
 #: po/custom/fromJson.txt:964
 msgid "New Repair Technology Discovered"
@@ -7930,7 +7930,7 @@ msgstr "Châssis moyen de NEXUS"
 #: po/custom/fromJson.txt:991
 #, fuzzy
 msgid "Nexus Missile Silo"
-msgstr "Puits de lancement de missiles"
+msgstr "Silo de lancement de missiles nucléaires de NEXUS"
 
 #: po/custom/fromJson.txt:993
 msgid "NEXUS Resistance Circuits"
@@ -8000,7 +8000,7 @@ msgstr "Escarmouche un joueur"
 
 #: po/custom/fromJson.txt:1011
 msgid "Or select the Repair Facility as a unit's target"
-msgstr "ou sélectionnez l'atelier de réparation comme cible pour une unité"
+msgstr "ou sélectionnez le centre de réparation comme cible pour une unité"
 
 #: po/custom/fromJson.txt:1012
 msgid "Panther"
@@ -8227,63 +8227,63 @@ msgstr "Tour radar à détectant les radars ennemis"
 
 #: po/custom/fromJson.txt:1072
 msgid "Rail Gun"
-msgstr "Canon à rail moyen"
+msgstr "Canon électrique lourd"
 
 #: po/custom/fromJson.txt:1073
 msgid "Rail Gun accuracy +10%"
-msgstr "Précision de tir des canons à rail : +10%"
+msgstr "Précision de tir des canons électriques et magnétiques : +10%"
 
 #: po/custom/fromJson.txt:1074
 msgid "Rail Gun damage +25%"
-msgstr "Dégâts des canons à rail : +25%"
+msgstr "Dégâts des canons électriques et magnétiques : +25%"
 
 #: po/custom/fromJson.txt:1075
 msgid "Railgun Emplacement"
-msgstr "Emplacement à canon à rail moyen"
+msgstr "Emplacement à canon électrique lourd"
 
 #: po/custom/fromJson.txt:1076
 msgid "Rail Gun Emplacement"
-msgstr "Emplacement à canon à rail moyen"
+msgstr "Emplacement à canon électrique lourd"
 
 #: po/custom/fromJson.txt:1077
 msgid "Rail gun firing armor-piercing darts"
-msgstr "Canon à rail projetant des fléchettes métalliques perforantes"
+msgstr "Canon électrique projetant des fléchettes métalliques perforantes"
 
 #: po/custom/fromJson.txt:1078
 msgid "Rail Gun Hardpoint"
-msgstr "Pont défensif à canon à rail moyen"
+msgstr "Pont défensif à canon électrique lourd"
 
 #: po/custom/fromJson.txt:1079
 msgid "Rail Gun Mantis Tracks"
-msgstr "Canon à rail moyen Mante chenilles"
+msgstr "Canon électrique lourd Mante chenilles"
 
 #: po/custom/fromJson.txt:1080
 msgid "Rail Gun reload time -15%"
-msgstr "Temps de rechargement des canons à rail : -15%"
+msgstr "Temps de rechargement des canons électriques et magnétiques : -15%"
 
 #: po/custom/fromJson.txt:1081
 msgid "Rail Gun ROF"
-msgstr "Cadence de tir des canons à rail augmentée"
+msgstr "Cadence de tir des canons électriques et magnétiques augmentée"
 
 #: po/custom/fromJson.txt:1082
 msgid "Rail Gun ROF Mk2"
-msgstr "Cadence de tir des canons à rail augmentée Mk2"
+msgstr "Cadence de tir des canons électriques et magnétiques augmentée Mk2"
 
 #: po/custom/fromJson.txt:1083
 msgid "Rail Gun ROF Mk3"
-msgstr "Cadence de tir des canons à rail augmentée Mk3"
+msgstr "Cadence de tir des canons électriques et magnétiques augmentée Mk3"
 
 #: po/custom/fromJson.txt:1084
 msgid "Rail Gun Tiger Hover"
-msgstr "Canon à rail moyen Tigre aéroglisseur"
+msgstr "Canon électrique lourd Tigre aéroglisseur"
 
 #: po/custom/fromJson.txt:1085
 msgid "Rail Gun Upgrade"
-msgstr "Mise à jour pour canons à rail"
+msgstr "Amélioration des canons électriques et magnétiques"
 
 #: po/custom/fromJson.txt:1086
 msgid "Rail Target Prediction Computer"
-msgstr "Ordinateur balistique pour canons à rail"
+msgstr "Ordinateur balistique pour canons électriques et magnétiques"
 
 #: po/custom/fromJson.txt:1087
 msgid "Rapid Fire Chaingun"
@@ -8295,7 +8295,7 @@ msgstr "Chargeur à cadence rapide pour mitrailleuses"
 
 #: po/custom/fromJson.txt:1089
 msgid "Rapid fire rail gun firing needle darts"
-msgstr "Canon à rail à tir rapide projetant des aiguilles métalliques"
+msgstr "Canon électrique à tir rapide projetant des aiguilles métalliques"
 
 #: po/custom/fromJson.txt:1090
 msgid "Rearming speed +30%"
@@ -8324,7 +8324,7 @@ msgstr "Matériaux de construction améliorés Mk3"
 #: po/custom/fromJson.txt:1100
 #, fuzzy
 msgid "Repair Center Turret"
-msgstr "Atelier de réparation"
+msgstr "Centre de réparation"
 
 #: po/custom/fromJson.txt:1101
 msgid "Repair Cobra Tracks"
@@ -8332,7 +8332,7 @@ msgstr "Tourelle de réparation Cobra chenilles"
 
 #: po/custom/fromJson.txt:1102
 msgid "Repair Facility"
-msgstr "Atelier de réparation"
+msgstr "Centre de réparation"
 
 #: po/custom/fromJson.txt:1104
 msgid "Repair Scorpion Tracks"
@@ -8420,15 +8420,15 @@ msgstr "Châtiment"
 
 #: po/custom/fromJson.txt:1129
 msgid "Ripple Rocket Battery"
-msgstr "Batterie de roquettes à répercussion"
+msgstr "Batterie de roquettes d'artillerie"
 
 #: po/custom/fromJson.txt:1130
 msgid "Ripple Rockets"
-msgstr "Roquettes à répercussion"
+msgstr "Roquettes d'artillerie"
 
 #: po/custom/fromJson.txt:1131
 msgid "Robotic advances make new chaingun upgrade available"
-msgstr "Les avancées en robotique permettent de mettre à jour les chargeurs"
+msgstr "Les avancées en robotique permettent d'améliorer les chargeurs"
 
 #: po/custom/fromJson.txt:1133
 msgid "Robotic Cyborg Production Mk2"
@@ -8460,19 +8460,19 @@ msgstr "Production de véhicules robotisée"
 
 #: po/custom/fromJson.txt:1140
 msgid "Robotic Repair Facility"
-msgstr "Atelier de réparation robotisé"
+msgstr "Centre de réparation robotisé"
 
 #: po/custom/fromJson.txt:1141
 msgid "Robotic Repair Facility Upgrade"
-msgstr "Atelier de réparations robotisées"
+msgstr "Centre de réparation robotisée"
 
 #: po/custom/fromJson.txt:1142
 msgid "Robotic Repair Facility Upgrade Mk2"
-msgstr "Atelier de réparation robotisé Mk2"
+msgstr "Centre de réparation robotisé Mk2"
 
 #: po/custom/fromJson.txt:1143
 msgid "Robotic Repair Facility Upgrade Mk3"
-msgstr "Atelier réparations robotisées Mk3"
+msgstr "Centre de réparation robotisée Mk3"
 
 #: po/custom/fromJson.txt:1145
 msgid "Robotic VTOL Production Mk2"
@@ -8576,7 +8576,7 @@ msgstr "Pillard"
 
 #: po/custom/fromJson.txt:1172
 msgid "Scavenger AT-Rocket Pit"
-msgstr "Lance-roquettes AC retranché des Pillards"
+msgstr "Lance-roquettes anti-char retranché des Pillards"
 
 #: po/custom/fromJson.txt:1173
 msgid "Scavenger Bunker"
@@ -8620,43 +8620,43 @@ msgstr "Scorpion"
 
 #: po/custom/fromJson.txt:1183
 msgid "Scourge"
-msgstr "Cyborg à missiles Scourge"
+msgstr "Cyborg à missiles anti-char"
 
 #: po/custom/fromJson.txt:1184
 msgid "Scourge Cyborg"
-msgstr "Super Cyborg à missiles Scourge"
+msgstr "Super Cyborg à missiles anti-char"
 
 #: po/custom/fromJson.txt:1185
 msgid "Scourge Mantis Hover"
-msgstr "Missiles Scourge Mante aéroglisseur"
+msgstr "Missiles anti-char Mante aéroglisseur"
 
 #: po/custom/fromJson.txt:1186
 msgid "Scourge Mantis Tracks"
-msgstr "Missiles Scourge Mante chenilles"
+msgstr "Missiles anti-char Mante chenilles"
 
 #: po/custom/fromJson.txt:1187
 msgid "Scourge Missile"
-msgstr "Missiles Scourge"
+msgstr "Missiles anti-char"
 
 #: po/custom/fromJson.txt:1188
 msgid "Scourge Missile Hardpoint"
-msgstr "Pont défensif à missiles Scourge"
+msgstr "Pont défensif à missiles anti-char"
 
 #: po/custom/fromJson.txt:1189
 msgid "Scourge Missile Tower"
-msgstr "Tour à missiles Scourge"
+msgstr "Tour à missiles anti-char"
 
 #: po/custom/fromJson.txt:1190
 msgid "Scourge Missile Wyvern Tracks"
-msgstr "Missiles Scourge Varan chenilles"
+msgstr "Missiles anti-char Varan chenilles"
 
 #: po/custom/fromJson.txt:1191
 msgid "Scourge Python Tracks"
-msgstr "Missiles Scourge Python chenilles"
+msgstr "Missiles anti-char Python chenilles"
 
 #: po/custom/fromJson.txt:1192
 msgid "Scourge Retaliation VTOL"
-msgstr "Missiles Scourge Revanche VTOL"
+msgstr "Missiles anti-char Revanche VTOL"
 
 #: po/custom/fromJson.txt:1193
 msgid "Scrambler Turret"
@@ -8720,15 +8720,15 @@ msgstr "Radar Vipère roues"
 
 #: po/custom/fromJson.txt:1211
 msgid "Sensor Upgrade"
-msgstr "Mise à jour pour radars"
+msgstr "Amélioration des radars"
 
 #: po/custom/fromJson.txt:1212
 msgid "Sensor Upgrade Mk2"
-msgstr "Mise à jour pour radars Mk2"
+msgstr "Amélioration des radars Mk2"
 
 #: po/custom/fromJson.txt:1213
 msgid "Sensor Upgrade Mk3"
-msgstr "Mise à jour pour radars Mk3"
+msgstr "Amélioration des radars Mk3"
 
 #: po/custom/fromJson.txt:1214
 msgid "Seraph Missile Array"
@@ -8937,27 +8937,27 @@ msgstr "Recherche de système terminée"
 
 #: po/custom/fromJson.txt:1277
 msgid "Tank Killer"
-msgstr "Roquettes anti-char"
+msgstr "Anti-char"
 
 #: po/custom/fromJson.txt:1278
 msgid "Tank Killer Emplacement"
-msgstr "Emplacement à lance-roquettes AC"
+msgstr "Emplacement à lance-roquettes anti-char"
 
 #: po/custom/fromJson.txt:1279
 msgid "Tank Killer Hardpoint"
-msgstr "Pont défensif à roquettes AC"
+msgstr "Pont défensif à roquettes anti-char"
 
 #: po/custom/fromJson.txt:1280
 msgid "Tank Killer Mantis Hover"
-msgstr "Roquettes AC Mante aéroglisseur"
+msgstr "Roquettes anti-char Mante aéroglisseur"
 
 #: po/custom/fromJson.txt:1281
 msgid "Tank Killer Mantis Tracks"
-msgstr "Roquettes AC Mante chenilles"
+msgstr "Roquettes anti-char Mante chenilles"
 
 #: po/custom/fromJson.txt:1282
 msgid "Tank Killer Python Tracks"
-msgstr "Roquettes AC Python chenilles"
+msgstr "Roquettes anti-char Python chenilles"
 
 #: po/custom/fromJson.txt:1283
 msgid "Tank Killer Rocket"
@@ -8965,11 +8965,11 @@ msgstr "Roquettes anti-char"
 
 #: po/custom/fromJson.txt:1284
 msgid "Tank Killer Vengeance Tracks"
-msgstr "Roquettes AC Vengeance chenilles"
+msgstr "Roquettes anti-char Vengeance chenilles"
 
 #: po/custom/fromJson.txt:1285
 msgid "Tank Traps"
-msgstr "Piège anti-char"
+msgstr "Défense anti-char"
 
 #: po/custom/fromJson.txt:1286
 msgid "Target Acquisition Artillery Shells"
@@ -9230,7 +9230,7 @@ msgstr "Utilise la technologie des canons à un niveau avancé"
 
 #: po/custom/fromJson.txt:1356
 msgid "Uses advanced mass driver railgun technology"
-msgstr "Utilise la technologie des canons électromagnétiques à un niveau avancé"
+msgstr "Utilise la technologie des canons électriques à un niveau avancé"
 
 #: po/custom/fromJson.txt:1357
 msgid "Uses advanced missile gun technology"
@@ -9282,15 +9282,15 @@ msgstr "Vengeance"
 
 #: po/custom/fromJson.txt:1374
 msgid "Vengeance Tracks Gauss Cannon"
-msgstr "Canon Gauss Vengeance chenilles"
+msgstr "Canon magnétique Vengeance chenilles"
 
 #: po/custom/fromJson.txt:1375
 msgid "Vengeance Tracks Gauss Scourge"
-msgstr "Missiles Scourge Vengeance chenilles"
+msgstr "Missiles anti-char canon magnétique Vengeance chenilles"
 
 #: po/custom/fromJson.txt:1376
 msgid "Vengeance Tracks Rail Gun"
-msgstr "Canon à rail moyen Vengeance chenilles"
+msgstr "Canon électrique lourd Vengeance chenilles"
 
 #: po/custom/fromJson.txt:1377
 msgid "Vertical Take Off and Landing Propulsion"
@@ -9410,7 +9410,7 @@ msgstr "Laser Flashlight VTOL"
 
 #: po/custom/fromJson.txt:1408
 msgid "VTOL Heap Bomb Bay"
-msgstr "Bombes anti-blindage VTOL"
+msgstr "Bombes anti-blindage hautement explosives (HEAP) pour VTOL"
 
 #: po/custom/fromJson.txt:1409
 msgid "VTOL Heavy Laser"
@@ -9422,19 +9422,19 @@ msgstr "Mitrailleuse lourde VTOL"
 
 #: po/custom/fromJson.txt:1411
 msgid "VTOL Hyper Velocity Cannon"
-msgstr "Canon Mach2 VTOL"
+msgstr "Canon hypersonique VTOL"
 
 #: po/custom/fromJson.txt:1412
 msgid "VTOL Hyper Velocity Cannon Bug VTOL"
-msgstr "Canon Mach2 Guêpe VTOL"
+msgstr "Canon hypersonique Guêpe VTOL"
 
 #: po/custom/fromJson.txt:1413
 msgid "VTOL Hyper Velocity Cannon Mantis VTOL"
-msgstr "Canon Mach2 Mante VTOL"
+msgstr "Canon hypersonique Mante VTOL"
 
 #: po/custom/fromJson.txt:1414
 msgid "VTOL Hyper Velocity Cannon Scorpion VTOL"
-msgstr "Canon Mach2 Scorpion VTOL"
+msgstr "Canon hypersonique Scorpion VTOL"
 
 #: po/custom/fromJson.txt:1415
 msgid "VTOL II"
@@ -9470,7 +9470,7 @@ msgstr "PMR VTOL"
 
 #: po/custom/fromJson.txt:1423
 msgid "VTOL Needle Gun"
-msgstr "Canon à rail léger VTOL"
+msgstr "Canon électrique léger VTOL"
 
 #: po/custom/fromJson.txt:1424
 msgid "VTOL Phosphor Bomb Bay"
@@ -9494,7 +9494,7 @@ msgstr "Tour radar pour VTOLs"
 
 #: po/custom/fromJson.txt:1430
 msgid "VTOL Rail Gun"
-msgstr "Canon à rail moyen VTOL"
+msgstr "Canon électrique lourd VTOL"
 
 #: po/custom/fromJson.txt:1431
 msgid "VTOL Rearming Pad"
@@ -9506,7 +9506,7 @@ msgstr "Des plateformes de réarment sont nécessaires pour maintenir les VTOL e
 
 #: po/custom/fromJson.txt:1435
 msgid "VTOL Scourge Missile"
-msgstr "Missiles Scourge VTOL"
+msgstr "Missiles anti-char VTOL"
 
 #: po/custom/fromJson.txt:1437
 msgid "VTOL Strike Tower"
@@ -10680,7 +10680,7 @@ msgstr "PAUSE"
 
 #: src/intelmap.cpp:325
 msgid "Research Update"
-msgstr "Recherche des mises à jour"
+msgstr "Améliorarion de la recherche"
 
 #: src/intelmap.cpp:329
 msgid "Project Goals"
@@ -12649,11 +12649,11 @@ msgstr "Butin d'usine - Rien"
 
 #: src/structure.cpp:5981
 msgid "Repair Facility Award - Repair"
-msgstr "Butin d'atelier de réparation - Réparation"
+msgstr "Butin de centre de réparation - Réparation"
 
 #: src/structure.cpp:5987
 msgid "Repair Facility Award - Nothing"
-msgstr "Butin atelier de réparation - Rien"
+msgstr "Butin de centre de réparation - Rien"
 
 #: src/transporter.cpp:293
 #: src/transporter.cpp:341
@@ -12864,19 +12864,19 @@ msgstr "Version %s - %s%s%s%s"
 #~ msgstr "Couleur des unités (multijoueurs)"
 
 #~ msgid "VTOL HPV Cannon Bug VTOL"
-#~ msgstr "Canon Mach2 Guêpe VTOL"
+#~ msgstr "Canon hypersonique Guêpe VTOL"
 
 #~ msgid "VTOL HPV Cannon Scorpion VTOL"
-#~ msgstr "Canon Mach2 Scorpion VTOL"
+#~ msgstr "Canon hypersonique Scorpion VTOL"
 
 #~ msgid "VTOL HPV Cannon Mantis VTOL"
-#~ msgstr "Canon Mach2 Mante VTOL"
+#~ msgstr "Canon hypersonique Mante VTOL"
 
 #~ msgid "Mini-Rocket Artillery Cobra Tracks"
 #~ msgstr "AMR Cobra chenilles"
 
 #~ msgid "HPV Cannon Python Hover"
-#~ msgstr "Canon Mach2 Python aéroglisseur"
+#~ msgstr "Canon hypersonique Python aéroglisseur"
 
 #~ msgid "CHEATS ARE NOW ENABLED!"
 #~ msgstr "LES TRICHERIES SONT MAINTENANT ACTIVÉES !"
@@ -12933,10 +12933,10 @@ msgstr "Version %s - %s%s%s%s"
 #~ msgstr "Canon lourd Mante chenilles"
 
 #~ msgid "Mantis Tank Killer Tracks"
-#~ msgstr "Roquettes AC Mante chenilles"
+#~ msgstr "Roquettes anti-char Mante chenilles"
 
 #~ msgid "Mantis Scourge Tracks"
-#~ msgstr "Missiles Scourge Mante chenilles"
+#~ msgstr "Missiles anti-char Mante chenilles"
 
 #~ msgid "Scorpion Heavy Machinegun Tracks"
 #~ msgstr "Mitrailleuse lourde Scorpion chenilles"
@@ -12981,13 +12981,13 @@ msgstr "Version %s - %s%s%s%s"
 #~ msgstr "Inferno Cobra autochenilles"
 
 #~ msgid "Python HVC Hover"
-#~ msgstr "Canon Mach2 Python aéroglisseur"
+#~ msgstr "Canon hypersonique Python aéroglisseur"
 
 #~ msgid "Python Scourge Tracks"
-#~ msgstr "Missiles Scourge Python chenilles"
+#~ msgstr "Missiles anti-char Python chenilles"
 
 #~ msgid "Python Gauss Cannon Tracks"
-#~ msgstr "Canon Gauss Python chenilles"
+#~ msgstr "Canon magnétique Python chenilles"
 
 #~ msgid "Python Pulse Laser Tracks"
 #~ msgstr "Laser à impulsions Python chenilles"
@@ -12999,7 +12999,7 @@ msgstr "Version %s - %s%s%s%s"
 #~ msgstr "Laser lourd Tigre chenilles"
 
 #~ msgid "Wyvern Gauss Cannon Tracks"
-#~ msgstr "Canon Gauss Varan chenilles"
+#~ msgstr "Canon magnétique Varan chenilles"
 
 #~ msgid "Wyvern Pulse Laser Tracks"
 #~ msgstr "Laser à impulsions Varan chenilles"
@@ -13158,13 +13158,13 @@ msgstr "Version %s - %s%s%s%s"
 #~ msgstr "Production de véhicules avancée Mk2"
 
 #~ msgid "Automated Repair Facility Mk2"
-#~ msgstr "Atelier de réparation automatisé Mk2"
+#~ msgstr "Centre de réparation automatisé Mk2"
 
 #~ msgid "Automated Repair Facility Mk3"
-#~ msgstr "Atelier de réparation automatisé Mk3"
+#~ msgstr "Centre de réparation automatisé Mk3"
 
 #~ msgid "Robotic Repair Facility Mk2"
-#~ msgstr "Atelier de réparation robotisé Mk2"
+#~ msgstr "Centre de réparation robotisé Mk2"
 
 #~ msgid "HESH Mini-Rockets"
 #~ msgstr "Mini-roquettes HESH"
@@ -13797,7 +13797,7 @@ msgstr "Version %s - %s%s%s%s"
 #~ msgstr "Lance-roquettes Mante VTOL"
 
 #~ msgid "Mantis HPV VTOL"
-#~ msgstr "Canon Mach2 Mante VTOL"
+#~ msgstr "Canon hypersonique Mante VTOL"
 
 #~ msgid "%s - Damage %u%%"
 #~ msgstr "%s - Endommagé(e) à %u%%"
@@ -13818,4 +13818,4 @@ msgstr "Version %s - %s%s%s%s"
 #~ msgstr "Amélioration de la densité des émissions laser"
 
 #~ msgid "Python Tank Killer Tracks"
-#~ msgstr "Roquettes AC Python chenilles"
+#~ msgstr "Roquettes anti-char Python chenilles"
