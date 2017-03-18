@@ -850,7 +850,7 @@ msgstr "MISSION À DISTANCE : Division Alpha localisée."
 
 #: data/base/messages/strings/cam3strings.txt:65
 msgid "Take a scout force to these coordinates and evaluate the situation."
-msgstr "Explores le secteur à ces coordonnées et évaluez la situation."
+msgstr "Explorez le secteur à ces coordonnées et évaluez la situation."
 
 #: data/base/messages/strings/cam3strings.txt:66
 msgid "Determine whether they are Team Alpha. If so, rescue and escort them back to the LZ."
