@@ -3259,8 +3259,9 @@ static void processSensorTarget()
 				const std::vector<glm::ivec4> lines = { glm::ivec4(x0, y0, x0 + 8, y0), glm::ivec4(x0, y0, x0, y0 + 8),
 				                                        glm::ivec4(x1, y0, x1 - 8, y0), glm::ivec4(x1, y0, x1, y0 + 8),
 				                                        glm::ivec4(x1, y1, x1 - 8, y1), glm::ivec4(x1, y1, x1, y1 - 8),
-				                                        glm::ivec4(x0, y1, x0 + 8, y1), glm::ivec4(x0, y1, x0, y1 - 8) };
-				iV_Lines(std::vector<glm::ivec4>{glm::ivec4(x0, y0, x0 + 8, y0), glm::ivec4(x0, y0, x0, y0 + 8),
+				                                        glm::ivec4(x0, y1, x0 + 8, y1), glm::ivec4(x0, y1, x0, y1 - 8),
+				                                        glm::ivec4(x0, y0, x0 + 8, y0), glm::ivec4(x0, y0, x0, y0 + 8) };
+				iV_Lines(lines, WZCOL_WHITE);
 			}
 			else
 			{
