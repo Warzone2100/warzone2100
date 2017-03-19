@@ -1305,7 +1305,7 @@ STRUCTURE *buildStructure(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y, U
 
 STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y, uint16_t direction, UDWORD player, bool FromSave)
 {
-	STRUCTURE	*psBuilding = NULL;
+	STRUCTURE *psBuilding = nullptr;
 	Vector2i size = getStructureStatsSize(pStructureType, direction);
 
 	ASSERT_OR_RETURN(NULL, pStructureType && pStructureType->type != REF_DEMOLISH, "You cannot build demolition!");
@@ -1412,11 +1412,11 @@ STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 			}
 		}
 
-		for (int width = 0; width < size.x; width++)
+		for (int y = map.y; y < map.y + size.y; ++y)
 		{
-			for (int breadth = 0; breadth < size.y; breadth++)
+			for (int x = map.x; x < map.x + size.x; ++x)
 			{
-				MAPTILE *psTile = mapTile(map.x + width, map.y + breadth);
+				MAPTILE *psTile = mapTile(x, y);
 
 				/* Remove any walls underneath the building. You can build defense buildings on top
 				 * of walls, you see. This is not the place to test whether we own it! */
@@ -1424,36 +1424,28 @@ STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 				{
 					removeStruct((STRUCTURE *)psTile->psObject, true);
 				}
-
-				// don't really think this should be done here, but dont know otherwise.alexl
-				if (isWall(pStructureType->type))
-				{
-					if (TileHasStructure(mapTile(map.x + width, map.y + breadth)))
-					{
-						if (getTileStructure(map.x + width, map.y + breadth)->pStructureType->type == REF_WALLCORNER)
-						{
-							delete psBuilding;
-							return NULL; // dont build.
-						}
-					}
-				}
-				// end of dodgy stuff
 				else if (TileHasStructure(psTile))
 				{
 					debug(LOG_ERROR, "Player %u (%s): is building %s at (%d, %d) but found %s already at (%d, %d)",
 					      player, isHumanPlayer(player) ? "Human" : "AI", getName(pStructureType), map.x, map.y,
-					      getName(getTileStructure(map.x + width, map.y + breadth)->pStructureType),
-					      map.x + width, map.y + breadth);
+					      getName(getTileStructure(x, y)->pStructureType), x, y);
 					delete psBuilding;
 					return NULL;
 				}
-
+			}
+		}
+		for (int y = map.y; y < map.y + size.y; ++y)
+		{
+			for (int x = map.x; x < map.x + size.x; ++x)
+			{
+				// We now know the previous loop didn't return early, so it is safe to save references to psBuilding now.
+				MAPTILE *psTile = mapTile(x, y);
 				psTile->psObject = psBuilding;
 
 				// if it's a tall structure then flag it in the map.
 				if (psBuilding->sDisplay.imd->max.y > TALLOBJECT_YMAX)
 				{
-					auxSetBlocking(map.x + width, map.y + breadth, AIR_BLOCKED);
+					auxSetBlocking(x, y, AIR_BLOCKED);
 				}
 			}
 		}
