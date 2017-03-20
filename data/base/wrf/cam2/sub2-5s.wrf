@@ -9,7 +9,6 @@ file		SMSG		"brief2-5.txt"
 
 /* Directory for uncompiled script files */
 directory       "script/text"
-file		SCRIPT		"genbet.slo"
 file		SCRIPT		"cam2daynight.slo"
 
 /* Directory for compiled script files*/
@@ -17,8 +16,9 @@ directory       "script/binary"
 
 /* Directory for script value files*/
 directory       "script/data"
-file            SCRIPTVAL       "cam2-5s.vlo"
 file            SCRIPTVAL       "cam2day.vlo"
 
 directory       "script"
 file            JAVASCRIPT      "rules.js"
+directory		"script/campaign"
+file 			JAVASCRIPT		"cam2-5s.js"
