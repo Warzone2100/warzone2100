@@ -66,7 +66,7 @@ void EC_KEY_free(EC_KEY *key)
 }
 EC_KEY *EC_KEY_dup(EC_KEY const *key)
 {
-	return key != nullptr ? new EC_KEY(*key) : nullptr;
+	return new EC_KEY(*key);
 }
 int EC_KEY_generate_key(EC_KEY *)
 {
@@ -256,7 +256,7 @@ EcKey::EcKey()
 
 EcKey::EcKey(EcKey const &b)
 {
-	vKey = (void *)EC_KEY_dup((EC_KEY *)b.vKey);
+	vKey = b.vKey != nullptr ? (void *)EC_KEY_dup((EC_KEY *)b.vKey) : nullptr;
 }
 
 EcKey::EcKey(EcKey &&b)
@@ -273,7 +273,7 @@ EcKey::~EcKey()
 EcKey &EcKey::operator =(EcKey const &b)
 {
 	clear();
-	vKey = (void *)EC_KEY_dup((EC_KEY *)b.vKey);
+	vKey = b.vKey != nullptr ? (void *)EC_KEY_dup((EC_KEY *)b.vKey) : nullptr;
 	return *this;
 }
 
