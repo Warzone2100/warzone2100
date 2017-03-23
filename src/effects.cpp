@@ -236,7 +236,7 @@ static glm::mat4 positionEffect(const EFFECT *psEffect)
 	    -(psEffect->position.z - player.p.z)
 	);
 
-	return glm::translate(dv.x, dv.y, dv.z);
+	return glm::translate(dv);
 }
 
 void effectSetLandLightSpec(LAND_LIGHT_SPEC spec)
@@ -1370,10 +1370,8 @@ static void renderFirework(const EFFECT *psEffect, const glm::mat4 &viewMatrix)
 	}
 
 	glm::mat4 modelMatrix = positionEffect(psEffect);
-	modelMatrix *=
-		glm::rotate(UNDEG(-player.r.y), glm::vec3(0.f, 1.f, 0.f)) *
-		glm::rotate(UNDEG(-player.r.x), glm::vec3(1.f, 0.f, 0.f)) *
-		glm::scale(psEffect->size / 100.f, psEffect->size / 100.f, psEffect->size / 100.f);
+	modelMatrix *= glm::rotate(UNDEG(-player.r.y), glm::vec3(0.f, 1.f, 0.f)) * glm::rotate(UNDEG(-player.r.x), glm::vec3(1.f, 0.f, 0.f))
+	               * glm::scale(psEffect->size / 100.f, psEffect->size / 100.f, psEffect->size / 100.f);
 
 	pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, WZCOL_WHITE, pie_ADDITIVE, EFFECT_EXPLOSION_ADDITIVE, viewMatrix * modelMatrix);
 }
@@ -1382,10 +1380,8 @@ static void renderFirework(const EFFECT *psEffect, const glm::mat4 &viewMatrix)
 static void renderBloodEffect(const EFFECT *psEffect, const glm::mat4 &viewMatrix)
 {
 	glm::mat4 modelMatrix = positionEffect(psEffect);
-	modelMatrix *=
-		glm::rotate(UNDEG(-player.r.y), glm::vec3(0.f, 1.f, 0.f)) *
-		glm::rotate(UNDEG(-player.r.x), glm::vec3(1.f, 0.f, 0.f)) *
-		glm::scale(psEffect->size / 100.f, psEffect->size / 100.f, psEffect->size / 100.f);
+	modelMatrix *= glm::rotate(UNDEG(-player.r.y), glm::vec3(0.f, 1.f, 0.f)) * glm::rotate(UNDEG(-player.r.x), glm::vec3(1.f, 0.f, 0.f))
+	               * glm::scale(psEffect->size / 100.f, psEffect->size / 100.f, psEffect->size / 100.f);
 
 	pie_Draw3DShape(getImdFromIndex(MI_BLOOD), psEffect->frameNumber, 0, WZCOL_WHITE, pie_TRANSLUCENT, EFFECT_BLOOD_TRANSPARENCY, viewMatrix * modelMatrix);
 }
@@ -1485,19 +1481,16 @@ static void renderExplosionEffect(const EFFECT *psEffect, const glm::mat4 &viewM
 		{
 			scale = .45f;
 		}
-		modelMatrix *=
-			glm::scale(psEffect->size / 100.f - scale, psEffect->size / 100.f - scale, psEffect->size / 100.f - scale);
+		modelMatrix *= glm::scale(psEffect->size / 100.f - scale, psEffect->size / 100.f - scale, psEffect->size / 100.f - scale);
 	}
 	else if (psEffect->type == EXPLOSION_TYPE_PLASMA)
 	{
 		float scale = (graphicsTime - psEffect->birthTime) / (float)psEffect->lifeSpan / 3.f;
-		modelMatrix *=
-			glm::scale(BASE_PLASMA_SIZE / 100.f + scale, BASE_PLASMA_SIZE / 100.f + scale, BASE_PLASMA_SIZE / 100.f + scale);
+		modelMatrix *= glm::scale(BASE_PLASMA_SIZE / 100.f + scale, BASE_PLASMA_SIZE / 100.f + scale, BASE_PLASMA_SIZE / 100.f + scale);
 	}
 	else
 	{
-		modelMatrix *=
-			glm::scale(psEffect->size / 100.f, psEffect->size / 100.f, psEffect->size / 100.f);
+		modelMatrix *= glm::scale(psEffect->size / 100.f, psEffect->size / 100.f, psEffect->size / 100.f);
 	}
 
 	bool premultiplied = false;
@@ -1536,8 +1529,7 @@ static void renderGravitonEffect(const EFFECT *psEffect, const glm::mat4 &viewMa
 	if (psEffect->type == GRAVITON_TYPE_EMITTING_ST)
 	{
 		/* Twice as big - 150 percent */
-		modelMatrix *=
-			glm::scale(psEffect->size / 100.f, psEffect->size / 100.f, psEffect->size / 100.f);
+		modelMatrix *= glm::scale(psEffect->size / 100.f, psEffect->size / 100.f, psEffect->size / 100.f);
 	}
 
 	pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, psEffect->player, WZCOL_WHITE, 0, 0, viewMatrix * modelMatrix);

@@ -154,5 +154,4 @@ static inline bool WZ_DECL_PURE Vector3i_InSphere(Vector3i v, Vector3i c, unsign
 	return (unsigned int)(delta * delta) < r * r;
 }
 
-
 #endif // VECTOR_H

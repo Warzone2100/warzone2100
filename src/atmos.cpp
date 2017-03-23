@@ -325,8 +325,7 @@ void renderParticle(ATPART *psPart, const glm::mat4 &viewMatrix)
 	dv.z = -(psPart->position.z - player.p.z);
 	/* Make it face camera */
 	/* Scale it... */
-	const glm::mat4 modelMatrix =
-		glm::translate(static_cast<float>(dv.x), static_cast<float>(dv.y), static_cast<float>(dv.z)) *
+	const glm::mat4 modelMatrix = glm::translate(dv) *
 		glm::rotate(UNDEG(-player.r.y), glm::vec3(0.f, 1.f, 0.f)) *
 		glm::rotate(UNDEG(-player.r.x), glm::vec3(0.f, 1.f, 0.f)) *
 		glm::scale(psPart->size / 100.f, psPart->size / 100.f, psPart->size / 100.f);

@@ -17,20 +17,12 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/***************************************************************************/
-/*
- * pieMatrix.h
- *
- * matrix functions for pumpkin image library.
- *
- */
-/***************************************************************************/
+
 #ifndef _pieMatrix_h
 #define _pieMatrix_h
 
 #include "lib/ivis_opengl/piedef.h"
-
-//*************************************************************************
+#include <glm/gtx/transform.hpp>
 
 /*!
  * Calculate surface normal
@@ -44,18 +36,35 @@ static inline Vector3f pie_SurfaceNormal3fv(const Vector3f p1, const Vector3f p2
 	return normalise(glm::cross(p3 - p1, p2 - p1));
 }
 
-//*************************************************************************
 int32_t pie_RotateProject(const Vector3i *src, const glm::mat4& matrix, Vector2i *dest);
-
-//*************************************************************************
-
 glm::mat4 pie_PerspectiveGet();
+void pie_SetGeometricOffset(int x, int y);
+void pie_Begin3DScene();
+void pie_BeginInterface();
 
-//*************************************************************************
+namespace glm
+{
 
-extern void pie_SetGeometricOffset(int x, int y);
+static inline glm::mat4 translate(int x, int y, int z)
+{
+	return glm::translate(Vector3f{static_cast<float>(x), static_cast<float>(y), static_cast<float>(z)});
+}
 
-extern void pie_Begin3DScene(void);
-extern void pie_BeginInterface(void);
+static inline glm::mat4 translate(const Vector3i &v)
+{
+	return glm::translate(Vector3f{static_cast<float>(v.x), static_cast<float>(v.y), static_cast<float>(v.z)});
+}
+
+static inline glm::mat4 scale(int x, int y, int z)
+{
+	return glm::scale(Vector3f{static_cast<float>(x), static_cast<float>(y), static_cast<float>(z)});
+}
+
+static inline glm::mat4 scale(const Vector3i &v)
+{
+	return glm::scale(Vector3f{static_cast<float>(v.x), static_cast<float>(v.y), static_cast<float>(v.z)});
+}
+
+};
 
 #endif

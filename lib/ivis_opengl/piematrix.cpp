@@ -78,12 +78,8 @@ glm::mat4 pie_PerspectiveGet()
 	const float xangle = width / 6.0f;
 	const float yangle = height / 6.0f;
 
-	return glm::translate(
-		(2.f * rendSurface.xcentre - width) / width,
-		(height - 2.f * rendSurface.ycentre) / height,
-		0.f) *
-		glm::frustum(-xangle, xangle, -yangle, yangle, 330.f, 100000.f) *
-		glm::scale(1.f, 1.f, -1.f);;
+	return glm::translate((2.f * rendSurface.xcentre - width) / width, (height - 2.f * rendSurface.ycentre) / height, 0.f)
+	       * glm::frustum(-xangle, xangle, -yangle, yangle, 330.f, 100000.f) * glm::scale(1.f, 1.f, -1.f);
 }
 
 

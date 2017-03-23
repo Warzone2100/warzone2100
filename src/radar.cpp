@@ -283,8 +283,7 @@ void drawRadar()
 	}
 	frameSkip--;
 	pie_SetRendMode(REND_ALPHA);
-	glm::mat4 radarMatrix =
-		glm::translate(static_cast<float>(radarCenterX), static_cast<float>(radarCenterY), 0.f);
+	glm::mat4 radarMatrix = glm::translate(radarCenterX, radarCenterY, 0);
 	glm::mat4 orthoMatrix = glm::ortho(0.f, static_cast<float>(pie_GetVideoBufferWidth()), static_cast<float>(pie_GetVideoBufferHeight()), 0.f);
 	if (rotateRadar)
 	{
