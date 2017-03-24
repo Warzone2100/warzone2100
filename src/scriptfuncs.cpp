@@ -5647,7 +5647,7 @@ bool scrTakeOverSingleStructure(void)
 	}
 	else
 	{
-		psNewStruct = giftSingleStructure(psStructToTake, (UBYTE)playerToGain, true);
+		psNewStruct = giftSingleStructure(psStructToTake, (UBYTE)playerToGain);
 		if (psNewStruct)
 		{
 			//check the structure limits aren't compromised
@@ -5736,7 +5736,7 @@ bool scrTakeOverStructsInArea(void)
 			else
 			{
 				//give the structure away
-				psNewStruct = giftSingleStructure(psStruct, (UBYTE)toPlayer, true);
+				psNewStruct = giftSingleStructure(psStruct, (UBYTE)toPlayer);
 				if (psNewStruct)
 				{
 					numChanged++;

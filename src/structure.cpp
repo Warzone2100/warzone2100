@@ -5687,7 +5687,7 @@ bool electronicDamage(BASE_OBJECT *psTarget, UDWORD damage, UBYTE attackPlayer)
 				}
 				bCompleted = true;
 				//give the structure to the attacking player
-				(void)giftSingleStructure(psStructure, attackPlayer, false);
+				(void)giftSingleStructure(psStructure, attackPlayer);
 			}
 		}
 	}
@@ -6832,7 +6832,7 @@ bool	structIsDamaged(STRUCTURE *psStruct)
 
 // give a structure from one player to another - used in Electronic Warfare
 //returns pointer to the new structure
-STRUCTURE *giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, bool bFromScript)
+STRUCTURE *giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, bool electronic_warfare)
 {
 	STRUCTURE           *psNewStruct, *psStruct;
 	DROID               *psCurr;
@@ -6846,23 +6846,12 @@ STRUCTURE *giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, bool 
 	CHECK_STRUCTURE(psStructure);
 	visRemoveVisibility(psStructure);
 
-	//this is not the case for EW in multiPlayer mode
-	if (!bMultiPlayer)
-	{
-		//added 'selectedPlayer != 0' to be able to test the game by changing player...
-		//in this version of Warzone, the attack Player can NEVER be the selectedPlayer (unless from the script)
-		ASSERT_OR_RETURN(NULL, bFromScript || selectedPlayer != 0 || attackPlayer != selectedPlayer, "EW attack by selectedPlayer on a structure");
-	}
-
 	int prevState = intGetResearchState();
-
-	//don't want the hassle in multiplayer either
-	//and now we do! - AB 13/05/99
 
 	if (bMultiPlayer)
 	{
 		//certain structures give specific results - the rest swap sides!
-		if (!electronicReward(psStructure, attackPlayer))
+		if (!electronic_warfare || !electronicReward(psStructure, attackPlayer))
 		{
 			//tell the system the structure no longer exists
 			(void)removeStruct(psStructure, false);
@@ -6926,7 +6915,6 @@ STRUCTURE *giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, bool 
 		intNotifyResearchButton(prevState);
 		return NULL;
 	}
-
 
 	//save info about the structure
 	psType = psStructure->pStructureType;

@@ -344,7 +344,7 @@ bool vtolOnRearmPad(STRUCTURE *psStruct, DROID *psDroid);
 extern bool	structIsDamaged(STRUCTURE *psStruct);
 
 // give a structure from one player to another - used in Electronic Warfare
-extern STRUCTURE *giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, bool bFromScript);
+STRUCTURE *giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, bool electronic_warfare = true);
 
 /*Initialise the production list and set up the production player*/
 extern void changeProductionPlayer(UBYTE player);

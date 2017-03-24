@@ -58,10 +58,12 @@
 ///////////////////////////////////////////////////////////////////////////////
 // prototypes
 
-static void		recvGiftDroids(uint8_t from, uint8_t to, uint32_t droidID);
-static void		sendGiftDroids(uint8_t from, uint8_t to);
-static void		giftResearch(uint8_t from, uint8_t to, bool send);
-static void	giftAutoGame(uint8_t from, uint8_t to, bool send);
+static void recvGiftStruct(uint8_t from, uint8_t to, uint32_t structID);
+static void recvGiftDroids(uint8_t from, uint8_t to, uint32_t droidID);
+static void sendGiftDroids(uint8_t from, uint8_t to);
+static void giftResearch(uint8_t from, uint8_t to, bool send);
+static void giftAutoGame(uint8_t from, uint8_t to, bool send);
+
 ///////////////////////////////////////////////////////////////////////////////
 // gifts..
 
@@ -95,6 +97,10 @@ bool recvGift(NETQUEUE queue)
 	case DROID_GIFT:
 		audioTrack = ID_UNITS_TRANSFER;
 		recvGiftDroids(from, to, droidID);
+		break;
+	case STRUCTURE_GIFT:
+		audioTrack = ID_GIFT;
+		recvGiftStruct(from, to, droidID);
 		break;
 	case RESEARCH_GIFT:
 		audioTrack = ID_TECHNOLOGY_TRANSFER;
@@ -148,9 +154,10 @@ bool sendGift(uint8_t type, uint8_t to)
 		giftAutoGame(selectedPlayer, to, true);
 		return true;
 		break;
+	case STRUCTURE_GIFT:
+		// not implemented
 	default:
 		debug(LOG_ERROR, "Unknown Gift sent");
-
 		return false;
 		break;
 	}
@@ -215,6 +222,26 @@ void giftRadar(uint8_t from, uint8_t to, bool send)
 		{
 			CONPRINTF(ConsoleString, (ConsoleString, _("%s Gives You A Visibility Report"), getPlayerName(from)));
 		}
+	}
+}
+
+// NOTICE: the packet is already set-up for decoding via recvGift()
+static void recvGiftStruct(uint8_t from, uint8_t to, uint32_t structID)
+{
+	STRUCTURE *psStruct = IdToStruct(structID, from);
+	if (psStruct)
+	{
+		syncDebugStructure(psStruct, '<');
+		giftSingleStructure(psStruct, to, false);
+		syncDebugStructure(psStruct, '>');
+		if (to == selectedPlayer)
+		{
+			CONPRINTF(ConsoleString, (ConsoleString, _("%s Gives you a %s"), getPlayerName(from), objInfo(psStruct)));
+		}
+	}
+	else
+	{
+		debug(LOG_ERROR, "Bad structure id %u, from %u to %u", structID, from, to);
 	}
 }
 

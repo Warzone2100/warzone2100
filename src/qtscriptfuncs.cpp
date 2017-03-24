@@ -1407,13 +1407,18 @@ static QScriptValue js_activateStructure(QScriptContext *context, QScriptEngine 
 	return QScriptValue(true);
 }
 
-//-- \subsection{findResearch(research)}
+//-- \subsection{findResearch(research, [player])}
 //-- Return list of research items remaining to be researched for the given research item. (3.2+ only)
+//-- (Optional second argument 3.2.3+ only)
 static QScriptValue js_findResearch(QScriptContext *context, QScriptEngine *engine)
 {
 	QList<RESEARCH *> list;
 	QString resName = context->argument(0).toString();
 	int player = engine->globalObject().property("me").toInt32();
+	if (context->argumentCount() == 2)
+	{
+		player = context->argument(1).toInt32();
+	}
 	RESEARCH *psTarget = getResearch(resName.toUtf8().constData());
 	SCRIPT_ASSERT(context, psTarget, "No such research: %s", resName.toUtf8().constData());
 	PLAYER_RESEARCH *plrRes = &asPlayerResList[player][psTarget->index];
@@ -3293,7 +3298,7 @@ static QScriptValue js_setDroidExperience(QScriptContext *context, QScriptEngine
 }
 
 //-- \subsection{donateObject(object, to)}
-//-- Donate a game object (currently restricted to droids) to another player. Returns true if
+//-- Donate a game object (restricted to droids before 3.2.3) to another player. Returns true if
 //-- donation was successful. May return false if this donation would push the receiving player
 //-- over unit limits. (3.2+ only)
 static QScriptValue js_donateObject(QScriptContext *context, QScriptEngine *engine)
@@ -3303,6 +3308,7 @@ static QScriptValue js_donateObject(QScriptContext *context, QScriptEngine *engi
 	uint8_t player = val.property("player").toInt32();
 	OBJECT_TYPE type = (OBJECT_TYPE)val.property("type").toInt32();
 	uint8_t to = context->argument(1).toInt32();
+	uint8_t giftType = 0;
 	if (type == OBJ_DROID)
 	{
 		// Check unit limits.
@@ -3314,14 +3320,29 @@ static QScriptValue js_donateObject(QScriptContext *context, QScriptEngine *engi
 		{
 			return QScriptValue(false);
 		}
-		uint8_t giftType = DROID_GIFT;
-		NETbeginEncode(NETgameQueue(selectedPlayer), GAME_GIFT);
-		NETuint8_t(&giftType);
-		NETuint8_t(&player);
-		NETuint8_t(&to);
-		NETuint32_t(&id);
-		NETend();
+		giftType = DROID_GIFT;
 	}
+	else if (type == OBJ_STRUCTURE)
+	{
+		STRUCTURE *psStruct = IdToStruct(id, player);
+		SCRIPT_ASSERT(context, psStruct, "No such struct id %u belonging to player %u", id, player);
+		int max = psStruct->pStructureType - asStructureStats;
+		if (asStructLimits[player][max].currentQuantity + 1 > asStructLimits[player][max].limit)
+		{
+			return QScriptValue(false);
+		}
+		giftType = STRUCTURE_GIFT;
+	}
+	else
+	{
+		return QScriptValue(false);
+	}
+	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_GIFT);
+	NETuint8_t(&giftType);
+	NETuint8_t(&player);
+	NETuint8_t(&to);
+	NETuint32_t(&id);
+	NETend();
 	return QScriptValue(true);
 }
 
