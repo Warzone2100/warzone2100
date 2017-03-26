@@ -1,0 +1,26 @@
+{
+	"position_0": { "label": "startPosition",		"pos": [ 704, 704 ] },
+	"position_1": { "label": "transporterEntry",	"pos": [ 128, 640 ] },
+	"position_2": { "label": "transporterExit",		"pos": [ 1408, 128 ] },
+	"position_3": { "label": "vtolAppearPos",		"pos": [ 5952, 7872 ] },
+	"position_4": { "label": "vtolRemovePos",		"pos": [ 128, 2560 ] },
+	"position_5": { "label": "northGate",			"pos": [ 3648, 1984 ] },
+	"position_6": { "label": "southGate",			"pos": [ 5056, 7616 ] },
+	"position_7": { "label": "westOfBase",			"pos": [ 2240, 440 ] },
+	"position_8": { "label": "northDefense",		"pos": [ 4160, 1216 ] },
+	"position_9": { "label": "uplinkPos",			"pos": [ 4600, 4800 ] },
+	
+	"area_0": { "label": "landingZone",			"pos1": [ 640, 512 ], "pos2": [ 896, 640 ] },
+	"area_1": { "label": "RTLZ",				"pos1": [ 0, 0 ], "pos2": [ 2048, 2048 ] },
+	"area_2": { "label": "baseCleanup",			"pos1": [ 1000, 1000 ], "pos2": [ 7000, 7000 ] },
+	"area_3": { "label": "uplinkClearArea",		"pos1": [ 4200, 4200 ], "pos2": [ 5400, 5400 ] },
+
+	"object_0": { "label": "COCommandCenter",		"id": 2414, "player": 2, "type": 1 },
+	"object_1": { "label": "uplink",				"id": 3223, "player": 1, "type": 1 },
+	"object_2": { "label": "COHeavyFactory",		"id": 3231, "player": 2, "type": 1 },
+	"object_3": { "label": "COSouthCyborgFactory",	"id": 2419, "player": 2, "type": 1 },
+	"object_4": { "label": "COResearchLab",			"id": 4175, "player": 2, "type": 1 },
+	"object_5": { "label": "COCommandRelay",		"id": 2415, "player": 2, "type": 1 },
+
+	"radius_0": { "label": "vtolRemoveZone", "subscriber": 2, "pos" : [ 128, 2560 ], "radius": 200 }
+}

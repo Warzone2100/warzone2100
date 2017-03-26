@@ -1876,7 +1876,7 @@ function __camBuildDroid(template, structure)
 	          template.body, template.prop, template.weap ].join(" ");
 	// multi-turret templates are not supported yet
 	return buildDroid(structure, n, template.body, template.prop,
-	                          null, null, template.weap);
+	                          "", "", template.weap);
 }
 
 function __camContinueProduction(structure)
@@ -2097,7 +2097,9 @@ function __camTriggerLastAttack()
 	}
 }
 
-function __camVictoryStandard()
+//Checks for extra win conditions defined in level scripts, if any.
+//Not recommended to be defined within eventStartLevel() in offworld missions.
+function __camCheckExtraObjective()
 {
 	var extraObjMet = true;
 	if (camDef(__camVictoryData) && camDef(__camVictoryData.callback))
@@ -2116,6 +2118,13 @@ function __camVictoryStandard()
 			extraObjMet = false;
 		}
 	}
+
+	return extraObjMet;
+}
+
+function __camVictoryStandard()
+{
+	var extraObj = __camCheckExtraObjective();
 	// check if game is lost
 	if (__camPlayerDead())
 	{
@@ -2123,7 +2132,7 @@ function __camVictoryStandard()
 		return;
 	}
 	// check if game is won
-	if (camAllArtifactsPickedUp() && camAllEnemyBasesEliminated() && extraObjMet)
+	if (camAllArtifactsPickedUp() && camAllEnemyBasesEliminated() && extraObj)
 	{
 		if (enumArea(0, 0, mapWidth, mapHeight, ENEMIES, false).length === 0)
 		{
@@ -2147,6 +2156,7 @@ function __camVictoryPreOffworld()
 
 function __camVictoryOffworld()
 {
+	var extraObj = __camCheckExtraObjective();
 	var lz = __camVictoryData.area;
 	if (!camDef(lz))
 	{
@@ -2160,15 +2170,18 @@ function __camVictoryOffworld()
 	{
 		if (enumArea(0, 0, mapWidth, mapHeight, ENEMIES, false).length === 0)
 		{
-			// if there are no more enemies, win instantly
-			__camGameWon();
+			//if there are no more enemies, win instantly. Unless the extra
+			//victory condition has not been met.
+			if(extraObj === true)
+				__camGameWon();
 			return;
 		}
 
 		var atlz = enumArea(lz, CAM_HUMAN_PLAYER, false).length;
 		if (atlz === total)
 		{
-			__camGameWon();
+			if(extraObj === true)
+				__camGameWon();
 			return;
 		}
 		else
@@ -2242,7 +2255,7 @@ var __vtolStartPosition;
 var __vtolTemplates;
 var __vtolExitPosition;
 var __vtolTimer;
-
+var __disableVtolSpawn;
 
 function camSetVtolData(player, startPos, exitPos, templates, timer)
 {
@@ -2254,6 +2267,11 @@ function camSetVtolData(player, startPos, exitPos, templates, timer)
 
 	__camSpawnVtols();
 	__camRetreatVtols();
+}
+
+function camEnableVtolSpawn(arg)
+{
+	__disableVtolSpawn = arg;
 }
 
 function __camSpawnVtols()
@@ -2272,7 +2290,8 @@ function __camSpawnVtols()
 			data: { regroup: false, count: -1 }
 		});
 
-	queue("__camSpawnVtols", __vtolTimer);
+	if(__disableVtolSpawn === false)
+		queue("__camSpawnVtols", __vtolTimer);
 }
 
 function __camRetreatVtols()
@@ -2296,7 +2315,8 @@ function __camRetreatVtols()
 		}
 	}
 
-	queue("__camRetreatVtols", 3000);
+	if(__disableVtolSpawn === false)
+		queue("__camRetreatVtols", 3000);
 }
 
 
@@ -2448,6 +2468,7 @@ __camPreHookEvent("eventStartLevel", function()
 	__vtolTemplates = {};
 	__vtolExitPosition = {};
 	__vtolTimer = 0;
+	__disableVtolSpawn = false;
 	setTimer("__camTick", 1000); // campaign pollers
 	setTimer("__camTruckTick", 150100); // some slower campaign pollers
 	queue("__camTacticsTick", 100); // would re-queue itself
