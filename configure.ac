@@ -107,8 +107,6 @@ AC_SUBST(QT5_VERSION)
 QT_PATH=`$PKG_CONFIG --variable=exec_prefix Qt5Core`
 QT_HOST_PATH=`$PKG_CONFIG --variable=host_bins Qt5Core`
 AC_PATH_PROGS(MOC5, [moc-qt5 moc], moc, ["${QT_HOST_PATH}" "${QT_PATH}/bin"])
-AC_PATH_PROGS(UIC5, [uic-qt5 uic], uic, ["${QT_HOST_PATH}" "${QT_PATH}/bin"])
-AC_PATH_PROGS(RCC5, [rcc-qt5 rcc], rcc, ["${QT_HOST_PATH}" "${QT_PATH}/bin"])
 
 # Check for compiler
 case ${CC} in
