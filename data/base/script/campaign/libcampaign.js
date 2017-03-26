@@ -2177,6 +2177,14 @@ function __camVictoryOffworld()
 			return;
 		}
 
+		//Missions that are not won based on artifact count (see campaign 2-1).
+		if(getArtifacts().length === 0)
+		{
+			if(extraObj === true)
+				__camGameWon();
+			return;
+		}
+
 		var atlz = enumArea(lz, CAM_HUMAN_PLAYER, false).length;
 		if (atlz === total)
 		{
@@ -2185,7 +2193,11 @@ function __camVictoryOffworld()
 			return;
 		}
 		else
+		{
 			__camTriggerLastAttack();
+		}
+
+
 		if (__camRTLZTicker === 0 && camDef(__camVictoryData.message))
 		{
 			camTrace("Return to LZ message displayed");

@@ -2,12 +2,10 @@
 SUB_2_1 Script
 Authors: Cristian Odorico (Alpha93) / KJeff01
  */
-//libraries initialization
 include ("script/campaign/libcampaign.js");
 include ("script/campaign/templates.js");
 
-//constants initialization
-const downedTransportTeam = 1;
+const TRANSPORT_TEAM = 1;
 const CO = 2;
 const collectiveRes = [
 	"R-Defense-WallUpgrade03", "R-Struc-Materials03", "R-Vehicle-Engine04",
@@ -18,69 +16,52 @@ const collectiveRes = [
 	"R-Wpn-Mortar-Damage03", "R-Wpn-Mortar-ROF01", "R-Wpn-RocketSlow-Accuracy03",
 	"R-Wpn-RocketSlow-Damage03", "R-Wpn-RocketSlow-ROF03"
 ];
+                       
+//trigger event when droid reaches the downed transport.
+camAreaEvent("crashSite", function(droid)
+{
+	//Unlikely to happen.
+	if(enumDroid(TRANSPORT_TEAM).length === 0)
+	{
+		gameOverMessage(false);
+		return;
+	}
 
-//function that applies damage to units in the downed transport transport team
+	const GOODSND = "pcv615.ogg";
+	playSound(GOODSND);
+
+	//set downed transport team colour to be Project Green.
+	changePlayerColour(TRANSPORT_TEAM, 0);
+	hackRemoveMessage("C21_OBJECTIVE", PROX_MSG, CAM_HUMAN_PLAYER, true);
+         
+	var downedTransportUnits = enumDroid(TRANSPORT_TEAM);
+	for(var i = 0; i < downedTransportUnits.length; i++)
+	{
+		donateObject(downedTransportUnits[i], CAM_HUMAN_PLAYER);
+	}
+
+	//Give the donation enough time to transfer them to the player. Otherwise
+	//the level will end too fast and will trigger asserts in the next level.
+	queue("triggerWin", 2000);
+});
+
+//function that applies damage to units in the downed transport transport team.
 function preDamageUnits()
 {
-	var transport = enumStruct(downedTransportTeam);
-	setHealth(transport[0], 40);
+	setHealth(getObject("transporter"), 40);
 	// fill the array with the objects defining the allied units in the crash site area
-	var downedTransportUnits = enumDroid(downedTransportTeam);
+	var downedTransportUnits = enumDroid(TRANSPORT_TEAM);
 	for (var j = 0; j < downedTransportUnits.length; j++)
 	{
 		setHealth(downedTransportUnits[j], 40 + camRand(20));
 	}
 }
 
-function proceedToNextLevel()
+//victory callback will thus complete the level.
+function triggerWin()
 {
-	//turn time into power
-	extraPowerTime(getMissionTime(), CAM_HUMAN_PLAYER);
-	//load next level
-	camNextLevel("CAM_2B");
+	victoryFlag = true;
 }
-                          
-//trigger event when droid reaches the downed transport
-camAreaEvent("crashSite", function(droid)
-{
-	//initialize function specific variables
-	const successSound = "pcv615.ogg";
-	const failureSound = "pcv622.ogg";
-	//count structures in the crash area
-	var transport = enumStruct(downedTransportTeam).length;
-	var customVictoryFlag = 0;
-	var remainingTime = 0;
-
-	//set downed transport team colour to be Project Green
-	changePlayerColour(downedTransportTeam, 0);
-
-	//remove blip
-	hackRemoveMessage("C21_OBJECTIVE", PROX_MSG, CAM_HUMAN_PLAYER, true);
-	//victory condition: transport must be alive
-	if (transport === 1)
-	{
-		playSound(successSound);
-		customVictoryFlag = 1;
-	}
-	else
-	{
-		//if transport died, the game is over
-		playSound(failureSound);
-		gameOverMessage(false);
-	}             
-	//if transport is alive, transfer units, turn time into power and load next level
-	if (customVictoryFlag === 1)
-	{
-		//get a list of droids in the downed transport team array
-		var downedTransportUnits = enumDroid(downedTransportTeam);
-		for(var i = 0; i < downedTransportUnits.length; i++)
-		{
-			//transfer the units
-			donateObject(downedTransportUnits[i], CAM_HUMAN_PLAYER);
-		}
-		queue("proceedToNextLevel", 2000);
-	}
-});
 
 function setupCyborgGroups()
 {
@@ -106,7 +87,7 @@ function setupCyborgGroups()
 //and recreate them.
 function updateTransportUnits()
 {
-	var downedTransportUnits = enumDroid(downedTransportTeam);
+	var downedTransportUnits = enumDroid(TRANSPORT_TEAM);
 	for(var i = 0; i < downedTransportUnits.length; i++)
 	{
 		if(camDef(downedTransportUnits[i]))
@@ -114,12 +95,12 @@ function updateTransportUnits()
 			var temp = downedTransportUnits[i];
 			if(camDef(temp.weapons[0]))
 			{
-				addDroid(downedTransportTeam, temp.x, temp.y, "Team Alpha unit",
+				addDroid(TRANSPORT_TEAM, temp.x, temp.y, "Team Alpha unit",
 					temp.body, temp.propulsion, "", "", temp.weapons[0].name);
 			}
 			else
 			{
-				addDroid(downedTransportTeam, temp.x, temp.y, "Team Alpha unit",
+				addDroid(TRANSPORT_TEAM, temp.x, temp.y, "Team Alpha unit",
 					temp.body, temp.propulsion, "", "", "Spade1Mk1");
 			}
 		}
@@ -137,29 +118,47 @@ function updateTransportUnits()
 	preDamageUnits();
 }
 
+//Checks if the downed tranport has been destroyed and issues a game lose. This
+//likely will never happen as with the WZ Script version.
+function checkCrashedTeam()
+{
+	if(getObject("transporter") == null)
+	{
+		const BADSND = "pcv622.ogg";
+		playSound(BADSND);
+		return false;
+	}
+
+	if(camDef(victoryFlag) && (victoryFlag === true))
+	{
+		return true;
+	}
+}
+
 function eventStartLevel()
 {
-	//variables initialization for LZ setup
+	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "CAM_2B", {
+		area: "RTLZ",
+		message: "C21_LZ",
+		reinforcements: -1,
+		callback: "checkCrashedTeam"
+	});
+
 	var subLandingZone = getObject("landingZone");
-	//set landing zone
-	setNoGoArea(subLandingZone.x, subLandingZone.y, subLandingZone.x2, subLandingZone.y2);
-	//set alliance between player and AI downed transport team
-	setAlliance(CAM_HUMAN_PLAYER, downedTransportTeam, true);
-	//disable reinforcements
-	setReinforcementTime(-1);
-	//centre view on starting position
 	var startpos = getObject("startingPosition");
-	centreView(startpos.x, startpos.y);
-	//Setup transporter entry/exit points
 	var tent = getObject("transporterEntry");
-	startTransporterEntry(tent.x, tent.y, CAM_HUMAN_PLAYER);
 	var text = getObject("transporterExit");
+	centreView(startpos.x, startpos.y);
+	setNoGoArea(subLandingZone.x, subLandingZone.y, subLandingZone.x2, subLandingZone.y2);
+	startTransporterEntry(tent.x, tent.y, CAM_HUMAN_PLAYER);
 	setTransporterExit(text.x, text.y, CAM_HUMAN_PLAYER);
-	//add crash site blip
+
+	//Add crash site blip and from an alliance with the crashed team.
 	hackAddMessage("C21_OBJECTIVE", PROX_MSG, CAM_HUMAN_PLAYER, true);
+	setAlliance(CAM_HUMAN_PLAYER, TRANSPORT_TEAM, true);
 
 	camEnableRes(CO, collectiveRes);
-	/*
+
 	camSetEnemyBases({
 		"COHardpointBase": {
 			cleanup: "hardpointBaseCleanup",
@@ -178,10 +177,10 @@ function eventStartLevel()
 			detectMsg: "C21_BASE3",
 			detectSnd: "pcv379.ogg",
 			eliminateSnd: "pcv393.ogg",
-		},
+		}
 	});
-	*/
 
+	victoryFlag = false;
 	setupCyborgGroups();
 	queue("updateTransportUnits", 20000);
 };

@@ -13,5 +13,8 @@
 	"area_3" : { "label" : "cyborgPositionEast", "pos1" : [ 7168, 6272 ], "pos2" : [ 7552, 6784 ]},
 	"area_4" : { "label" : "bunkerBaseCleanup",	"pos1" : [ 512, 384 ], "pos2" : [ 2304, 3200 ]},
 	"area_5" : { "label" : "hardpointBaseCleanup", "pos1" : [ 2432, 3456 ], "pos2" : [ 4480, 5888 ]},
-	"area_6" : { "label" : "bombardBaseCleanup", "pos1" : [ 4608, 4992 ], "pos2" : [ 7808, 7680 ]}
+	"area_6" : { "label" : "bombardBaseCleanup", "pos1" : [ 4608, 4992 ], "pos2" : [ 7808, 7680 ]},
+	"area_7" : { "label" : "RTLZ", "pos1" : [ 200, 5800 ], "pos2" : [ 1700, 7800 ]},
+
+	"object_0": { "label": "transporter", "id": 751, "player": 1, "type": 1 }
 }
