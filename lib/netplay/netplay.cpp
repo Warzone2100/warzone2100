@@ -29,13 +29,16 @@
 #include "lib/framework/crc.h"
 #include "lib/framework/file.h"
 #include "lib/gamelib/gtime.h"
+#include "lib/exceptionhandler/dumpinfo.h"
 #include "src/console.h"
 #include "src/component.h"		// FIXME: we need to handle this better
 #include "src/modding.h"		// FIXME: we need to handle this better
+
 #include <time.h>			// for stats
 #include <physfs.h>
 #include <string.h>
 #include <memory>
+#include <thread>
 
 #include "netplay.h"
 #include "netlog.h"
@@ -44,7 +47,6 @@
 #include <miniupnpc/miniwget.h>
 #include <miniupnpc/miniupnpc.h>
 #include <miniupnpc/upnpcommands.h>
-#include "lib/exceptionhandler/dumpinfo.h"
 
 #include "src/multistat.h"
 #include "src/multijoin.h"
@@ -78,6 +80,10 @@ static unsigned int masterserver_port = 0, gameserver_port = 0;
 */
 #define NET_BUFFER_SIZE	(MaxMsgSize)	// Would be 16K
 
+#define UPNP_SUCCESS 1
+#define UPNP_ERROR_DEVICE_NOT_FOUND -1
+#define UPNP_ERROR_CONTROL_NOT_AVAILABLE -2
+
 // ////////////////////////////////////////////////////////////////////////
 // Function prototypes
 static void NETplayerLeaving(UDWORD player);		// Cleanup sockets on player leaving (nicely)
@@ -94,6 +100,8 @@ static void NETfixPlayerCount(void);
 SYNC_COUNTER sync_counter;		// keeps track on how well we are in sync
 // ////////////////////////////////////////////////////////////////////////
 // Types
+
+std::atomic_int upnp_status;
 
 struct Statistic
 {
@@ -931,86 +939,64 @@ static bool NETrecvGAMESTRUCT(GAMESTRUCT *ourgamestruct)
 	return true;
 }
 
-
-static int upnp_init(void *)
+// This function is run in its own thread! Do not call any non-threadsafe functions!
+static void upnp_init(std::atomic_int &retval)
 {
 	struct UPNPDev *devlist;
 	struct UPNPDev *dev;
 	char *descXML;
+	int result = 0;
 	int descXMLsize = 0;
-	char buf[255];
-	int result;
 	memset(&urls, 0, sizeof(struct UPNPUrls));
 	memset(&data, 0, sizeof(struct IGDdatas));
 
-	if (NetPlay.isUPNP)
+	debug(LOG_NET, "Searching for UPnP devices for automatic port forwarding...");
+	devlist = upnpDiscover(3000, NULL, NULL, 0, 0, 2, &result);
+	debug(LOG_NET, "UPnP device search finished.");
+
+	if (devlist)
 	{
-		debug(LOG_NET, "Searching for UPnP devices for automatic port forwarding...");
-		devlist = upnpDiscover(3000, NULL, NULL, 0, 0, 2, &result);
-		debug(LOG_NET, "UPnP device search finished.");
-		if (devlist)
+		dev = devlist;
+		while (dev)
 		{
-			dev = devlist;
-			while (dev)
+			if (strstr(dev->st, "InternetGatewayDevice"))
 			{
-				if (strstr(dev->st, "InternetGatewayDevice"))
-				{
-					break;
-				}
-				dev = dev->pNext;
+				break;
 			}
-			if (!dev)
-			{
-				dev = devlist; /* defaulting to first device */
-			}
-
-			debug(LOG_NET, "UPnP device found: %s %s\n", dev->descURL, dev->st);
-
-			descXML = (char *)miniwget_getaddr(dev->descURL, &descXMLsize, lanaddr, sizeof(lanaddr), dev->scope_id);
-			debug(LOG_NET, "LAN address: %s", lanaddr);
-			if (descXML)
-			{
-				parserootdesc(descXML, descXMLsize, &data);
-				free(descXML); descXML = 0;
-				GetUPNPUrls(&urls, &data, dev->descURL, dev->scope_id);
-			}
-			ssprintf(buf, "UPnP device found: %s %s LAN address %s", dev->descURL, dev->st, lanaddr);
-			addDumpInfo(buf);
-			freeUPNPDevlist(devlist);
-
-			if (!urls.controlURL || urls.controlURL[0] == '\0')
-			{
-				ssprintf(buf, "controlURL not available, UPnP disabled");
-				addDumpInfo(buf);
-				// beware of writing a line too long, it screws up console line count. \n is safe for line split
-				ssprintf(buf, _("Your router doesn't support UPnP, you must manually configure your router & firewall to\nopen port 2100 before you can host a game."));
-				addConsoleMessage(buf, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
-				NetPlay.isUPNP_CONFIGURED = false;
-				NetPlay.isUPNP_ERROR = true;
-				return false;
-			}
-
-			NETaddRedirects();
-			return true;
+			dev = dev->pNext;
 		}
-		ssprintf(buf, "UPnP device not found.");
-		addDumpInfo(buf);
-		debug(LOG_NET, "No UPnP devices found.");
-		// beware of writing a line too long, it screws up console line count. \n is safe for line split
-		ssprintf(buf, _("No UPnP device was found. You must manually configure your router & firewall to\nopen port 2100 before you can host a game."));
-		addConsoleMessage(buf, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
-		NetPlay.isUPNP_CONFIGURED = false;
-		NetPlay.isUPNP_ERROR = true;
-		return false;
+		if (!dev)
+		{
+			dev = devlist; /* defaulting to first device */
+		}
+
+		debug(LOG_NET, "UPnP device found: %s %s\n", dev->descURL, dev->st);
+
+		descXML = (char *)miniwget_getaddr(dev->descURL, &descXMLsize, lanaddr, sizeof(lanaddr), dev->scope_id);
+		debug(LOG_NET, "LAN address: %s", lanaddr);
+		if (descXML)
+		{
+			parserootdesc(descXML, descXMLsize, &data);
+			free(descXML); descXML = 0;
+			GetUPNPUrls(&urls, &data, dev->descURL, dev->scope_id);
+		}
+
+		debug(LOG_NET, "UPnP device found: %s %s LAN address %s", dev->descURL, dev->st, lanaddr);
+		freeUPNPDevlist(devlist);
+
+		if (!urls.controlURL || urls.controlURL[0] == '\0')
+		{
+			retval = UPNP_ERROR_CONTROL_NOT_AVAILABLE;
+		}
+		else
+		{
+			retval = UPNP_SUCCESS;
+		}
 	}
 	else
 	{
-		ssprintf(buf, "UPnP detection routine disabled by user.");
-		addDumpInfo(buf);
-		debug(LOG_NET, "UPnP detection routine disabled by user.");
-		return false;
+		retval = UPNP_ERROR_DEVICE_NOT_FOUND;
 	}
-
 }
 
 static bool upnp_add_redirect(int port)
@@ -1088,10 +1074,14 @@ void NETremRedirects(void)
 
 void NETdiscoverUPnPDevices(void)
 {
-	if (!NetPlay.isUPNP_CONFIGURED)
+	if (!NetPlay.isUPNP_CONFIGURED && NetPlay.isUPNP)
 	{
-		upnpdiscover = wzThreadCreate(&upnp_init, NULL);
-		wzThreadStart(upnpdiscover);
+		std::thread t(upnp_init, std::ref(upnp_status));
+		t.detach();
+	}
+	else if (!NetPlay.isUPNP)
+	{
+		debug(LOG_INFO, "UPnP detection disabled by user.");
 	}
 }
 
@@ -1100,6 +1090,7 @@ void NETdiscoverUPnPDevices(void)
 int NETinit(bool bFirstCall)
 {
 	debug(LOG_NET, "NETinit");
+	upnp_status = 0;
 	NETlogEntry("NETinit!", SYNC_FLAG, selectedPlayer);
 	NET_InitPlayers(true);
 
@@ -1791,6 +1782,34 @@ static void NETcheckPlayers(void)
 // We should not block here.
 bool NETrecvNet(NETQUEUE *queue, uint8_t *type)
 {
+	switch (upnp_status)
+	{
+	case UPNP_ERROR_CONTROL_NOT_AVAILABLE:
+	case UPNP_ERROR_DEVICE_NOT_FOUND:
+		if (upnp_status == UPNP_ERROR_DEVICE_NOT_FOUND)
+		{
+			debug(LOG_NET, "UPnP device not found");
+		}
+		else if (upnp_status == UPNP_ERROR_CONTROL_NOT_AVAILABLE)
+		{
+			debug(LOG_NET, "controlURL not available, UPnP disabled");
+		}
+		// beware of writing a line too long, it screws up console line count. \n is safe for line split
+		addConsoleMessage(_("No UPnP device found. Configure your router/firewall to open port 2100!"), DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
+		NetPlay.isUPNP_CONFIGURED = false;
+		NetPlay.isUPNP_ERROR = true;
+		upnp_status = 0;
+		break;
+	case UPNP_SUCCESS:
+		NETaddRedirects();
+		upnp_status = 0;
+		break;
+	default:
+	case 0:
+		ASSERT(upnp_status == 0, "bad value");
+		break;
+	}
+
 	uint32_t current;
 
 	if (!NetPlay.bComms)

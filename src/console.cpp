@@ -41,7 +41,6 @@
 #include <string>
 #include <istream>
 #include <deque>
-#include <mutex>
 
 // FIXME: When we switch over to full JS, use class version of this file
 
@@ -71,7 +70,6 @@ struct CONSOLE_MESSAGE
 	bool	team;			// team message or not
 	CONSOLE_MESSAGE() : timeAdded(0), JustifyType(0), player(0), team(false) {}
 };
-wz::mutex mtx;                                  // prevent adding messages when we are not expecting them
 std::deque<CONSOLE_MESSAGE> ActiveMessages;		// we add all messages to this container
 std::deque<CONSOLE_MESSAGE> TeamMessages;		// history of team/private communications
 std::deque<CONSOLE_MESSAGE> HistoryMessages;	// history of all other communications
@@ -148,7 +146,7 @@ bool addConsoleMessage(const char *Text, CONSOLE_TEXT_JUSTIFICATION jusType, SDW
 
 	if (!allowNewMessages)
 	{
-		return false ;	// Don't allow it to be added if we've disabled adding of new messages
+		return false;	// Don't allow it to be added if we've disabled adding of new messages
 	}
 
 	std::istringstream stream(Text);
@@ -163,7 +161,7 @@ bool addConsoleMessage(const char *Text, CONSOLE_TEXT_JUSTIFICATION jusType, SDW
 		std::string FitText(lines);
 		while (!FitText.empty())
 		{
-			int pixelWidth = iV_GetTextWidth(FitText.c_str());
+			int pixelWidth = iV_GetTextWidth(FitText.c_str(), font_regular);
 			if (pixelWidth <= mainConsole.width)
 			{
 				break;
@@ -197,7 +195,6 @@ bool addConsoleMessage(const char *Text, CONSOLE_TEXT_JUSTIFICATION jusType, SDW
 
 		consoleStorage.text = messageText;
 		consoleStorage.timeAdded = realTime;		// Store the time when it was added
-		std::lock_guard<wz::mutex> lck(mtx);        // Don't add messages unless locked!
 		if (player == INFO_MESSAGE)
 		{
 			InfoMessages.push_back(consoleStorage);
@@ -231,7 +228,6 @@ void	updateConsoleMessages(void)
 	{
 		return;
 	}
-	std::lock_guard<wz::mutex> lck(mtx);  // Don't remove messages unless locked.
 	for (auto i = InfoMessages.begin(); i != InfoMessages.end();)
 	{
 		if (realTime - i->timeAdded > messageDuration)
@@ -421,7 +417,6 @@ void	displayConsoleMessages(void)
 		displayOldMessages(HistoryMode);
 	}
 
-	std::lock_guard<wz::mutex> lck(mtx);  // Don't iterate without a lock.
 	if (InfoMessages.size())
 	{
 		auto i = InfoMessages.end() - 1;		// we can only show the last one...

@@ -124,11 +124,7 @@ struct FTFace
 			codePoint, // the glyph_index in the font file
 			FT_LOAD_NO_HINTING // by default hb load fonts without hinting
 		);
-
-		if (error != FT_Err_Ok)
-		{
-			debug(LOG_FATAL, "unable to load glyph");
-		}
+		ASSERT(error == FT_Err_Ok, "Unable to load glyph for %u", codePoint);
 		return m_face->glyph->metrics.width;
 	}
 
@@ -138,10 +134,7 @@ struct FTFace
 			codePoint, // the glyph_index in the font file
 			FT_LOAD_NO_HINTING // by default hb load fonts without hinting
 		);
-		if (error != FT_Err_Ok)
-		{
-			debug(LOG_FATAL, "unable to load glyph");
-		}
+		ASSERT(error == FT_Err_Ok, "Unable to load glyph %u", codePoint);
 
 		FT_GlyphSlot slot = m_face->glyph;
 		FT_Render_Glyph(m_face->glyph, FT_RENDER_MODE_LCD);
@@ -153,9 +146,9 @@ struct FTFace
 		{
 			memcpy(g.buffer.get(), ftBitmap.buffer, ftBitmap.pitch * ftBitmap.rows);
 		}
-		else if (ftBitmap.pitch != 0 && ftBitmap.rows != 0)
+		else
 		{
-			debug(LOG_FATAL, "glyph buffer missing");  // This probably doesn't happen.
+			ASSERT(ftBitmap.pitch == 0 || ftBitmap.rows == 0, "Glyph buffer missing (%d and %d)", ftBitmap.pitch, ftBitmap.rows);
 		}
 		g.width = ftBitmap.width / 3;
 		g.height = ftBitmap.rows;
@@ -464,11 +457,15 @@ void iV_SetFont(enum iV_fonts FontID)
 	s_FondID = FontID;
 }
 
-unsigned int iV_GetTextWidth(const char *string)
+unsigned int iV_GetTextWidth(const char *string, iV_fonts FontID)
 {
 	uint32_t width;
+	if (FontID == font_count) // support legacy API with global font selection for a while
+	{
+		FontID = s_FondID;
+	}
 	TextRun tr(string, "en", HB_SCRIPT_COMMON, HB_DIRECTION_LTR);
-	std::tie(width, std::ignore) = getShaper().getTextMetrics(tr, getFTFace(s_FondID));
+	std::tie(width, std::ignore) = getShaper().getTextMetrics(tr, getFTFace(FontID));
 	return width;
 }
 

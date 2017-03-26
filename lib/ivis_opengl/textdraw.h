@@ -34,17 +34,17 @@ enum iV_fonts
 	font_count
 };
 
-extern void iV_TextInit(void);
-extern void iV_TextShutdown(void);
-extern void iV_font(const char *fontName, const char *fontFace, const char *fontFaceBold);
+void iV_TextInit();
+void iV_TextShutdown();
+void iV_font(const char *fontName, const char *fontFace, const char *fontFaceBold);
 
-extern void iV_SetFont(enum iV_fonts FontID);
-extern int iV_GetTextAboveBase(void);
-extern int iV_GetTextBelowBase(void);
-extern int iV_GetTextLineSize(void);
-extern unsigned int iV_GetTextWidth(const char *String);
-extern unsigned int iV_GetCountedTextWidth(const char *string, size_t string_length);
-extern unsigned int iV_GetCharWidth(uint32_t charCode);
+void iV_SetFont(enum iV_fonts FontID);
+int iV_GetTextAboveBase();
+int iV_GetTextBelowBase();
+int iV_GetTextLineSize();
+unsigned int iV_GetTextWidth(const char *String, iV_fonts = font_count);
+unsigned int iV_GetCountedTextWidth(const char *string, size_t string_length);
+unsigned int iV_GetCharWidth(uint32_t charCode);
 
 extern unsigned int iV_GetTextHeight(const char *string);
 extern void iV_SetTextColour(PIELIGHT colour);
@@ -57,9 +57,8 @@ enum
 	FTEXT_RIGHTJUSTIFY,			// Right justify.
 };
 
-extern int iV_DrawFormattedText(const char *String, UDWORD x, UDWORD y, UDWORD Width, UDWORD Justify);
-
-extern void iV_DrawTextRotated(const char *string, float x, float y, float rotation);
+int iV_DrawFormattedText(const char *String, UDWORD x, UDWORD y, UDWORD Width, UDWORD Justify);
+void iV_DrawTextRotated(const char *string, float x, float y, float rotation);
 
 /** Draws text with a printf syntax to the screen.
  */
