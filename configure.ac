@@ -3,6 +3,8 @@ AC_INIT([Warzone 2100],[master],[http://wz2100.net/],[warzone2100])
 
 AM_INIT_AUTOMAKE([1.11 tar-ustar no-dist-gzip dist-xz])
 
+IT_PROG_INTLTOOL([0.50.2],[no-xml])
+
 # Set to the default or stupid automake will use the much slower but useless -e(xtreme!!!) option.
 AC_SUBST([XZ_OPT], ["-6"])
 

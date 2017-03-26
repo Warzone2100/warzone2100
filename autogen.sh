@@ -159,6 +159,12 @@ fi
   exit 1
 }
 
+echo "+ running intltoolize ..."
+intltoolize --force || {
+  echo
+  echo "intltoolize failed - check that all needed development files are present on system"
+  exit 1
+}
 echo "+ running aclocal ..."
 aclocal -I m4 || {
   echo

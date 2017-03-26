@@ -155,6 +155,8 @@ Makefile.in
 /m4/wchar_t.m4
 /m4/wint_t.m4
 /m4/xsize.m4
+/m4/intltool.m4
+/po/stamp-it
 /po/POTFILES
 /po/messages.mo
 /po/remove-potcdate.sed
