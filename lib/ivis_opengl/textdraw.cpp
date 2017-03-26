@@ -450,58 +450,66 @@ void iV_TextShutdown()
 	glDeleteTextures(1, &textureID);
 }
 
-static iV_fonts s_FondID;
+static iV_fonts s_FontID;
 
-void iV_SetFont(enum iV_fonts FontID)
+void iV_SetFont(iV_fonts fontID)
 {
-	s_FondID = FontID;
+	s_FontID = fontID;
 }
 
-unsigned int iV_GetTextWidth(const char *string, iV_fonts FontID)
+unsigned int iV_GetTextWidth(const char *string, iV_fonts fontID)
 {
+	if (fontID == font_count) fontID = s_FontID; // support legacy API with global font selection for a while
+
 	uint32_t width;
-	if (FontID == font_count) // support legacy API with global font selection for a while
-	{
-		FontID = s_FondID;
-	}
 	TextRun tr(string, "en", HB_SCRIPT_COMMON, HB_DIRECTION_LTR);
-	std::tie(width, std::ignore) = getShaper().getTextMetrics(tr, getFTFace(FontID));
+	std::tie(width, std::ignore) = getShaper().getTextMetrics(tr, getFTFace(fontID));
 	return width;
 }
 
-unsigned int iV_GetCountedTextWidth(const char *string, size_t string_length)
+unsigned int iV_GetCountedTextWidth(const char *string, size_t string_length, iV_fonts fontID)
 {
-	return iV_GetTextWidth(string);
+	return iV_GetTextWidth(string, fontID);
 }
 
-unsigned int iV_GetTextHeight(const char *string)
+unsigned int iV_GetTextHeight(const char *string, iV_fonts fontID)
 {
+	if (fontID == font_count) fontID = s_FontID; // support legacy API with global font selection for a while
+
 	uint32_t height;
 	TextRun tr(string, "en", HB_SCRIPT_COMMON, HB_DIRECTION_LTR);
-	std::tie(std::ignore, height) = getShaper().getTextMetrics(tr, getFTFace(s_FondID));
+	std::tie(std::ignore, height) = getShaper().getTextMetrics(tr, getFTFace(fontID));
 	return height;
 }
 
-unsigned int iV_GetCharWidth(uint32_t charCode)
+unsigned int iV_GetCharWidth(uint32_t charCode, iV_fonts fontID)
 {
-	return getFTFace(s_FondID).getGlyphWidth(charCode) >> 6;
+	if (fontID == font_count) fontID = s_FontID; // support legacy API with global font selection for a while
+
+	return getFTFace(fontID).getGlyphWidth(charCode) >> 6;
 }
 
-int iV_GetTextLineSize()
+int iV_GetTextLineSize(iV_fonts fontID)
 {
-	FT_Face face = getFTFace(s_FondID);
+	if (fontID == font_count) fontID = s_FontID; // support legacy API with global font selection for a while
+
+	FT_Face face = getFTFace(fontID);
 	return (face->size->metrics.ascender - face->size->metrics.descender) >> 6;
 }
 
-int iV_GetTextAboveBase(void)
+int iV_GetTextAboveBase(iV_fonts fontID)
 {
-	FT_Face face = getFTFace(s_FondID);
+	if (fontID == font_count) fontID = s_FontID; // support legacy API with global font selection for a while
+
+	FT_Face face = getFTFace(fontID);
 	return -(face->size->metrics.ascender >> 6);
 }
 
-int iV_GetTextBelowBase(void)
+int iV_GetTextBelowBase(iV_fonts fontID)
 {
-	FT_Face face = getFTFace(s_FondID);
+	if (fontID == font_count) fontID = s_FontID; // support legacy API with global font selection for a while
+
+	FT_Face face = getFTFace(fontID);
 	return face->size->metrics.descender >> 6;
 }
 
@@ -525,7 +533,7 @@ void iV_SetTextColour(PIELIGHT colour)
  *                  FTEXT_LEFTJUSTIFY, FTEXT_CENTRE or FTEXT_RIGHTJUSTIFY.
  *  @return the Y coordinate for the next text line.
  */
-int iV_DrawFormattedText(const char *String, UDWORD x, UDWORD y, UDWORD Width, UDWORD Justify)
+int iV_DrawFormattedText(const char *String, UDWORD x, UDWORD y, UDWORD Width, UDWORD Justify, iV_fonts fontID)
 {
 	std::string FString;
 	std::string FWord;
@@ -659,8 +667,10 @@ int iV_DrawFormattedText(const char *String, UDWORD x, UDWORD y, UDWORD Width, U
 	return jy;
 }
 
-void iV_DrawTextRotated(const char *string, float XPos, float YPos, float rotation)
+void iV_DrawTextRotated(const char *string, float XPos, float YPos, float rotation, iV_fonts fontID)
 {
+	if (fontID == font_count) fontID = s_FontID; // support legacy API with global font selection for a while
+
 	ASSERT_OR_RETURN(, string, "Couldn't render string!");
 	pie_SetTexturePage(TEXPAGE_EXTERN);
 
@@ -679,7 +689,7 @@ void iV_DrawTextRotated(const char *string, float XPos, float YPos, float rotati
 	uint32_t width, height;
 	std::unique_ptr<unsigned char[]> texture;
 	int32_t xoffset, yoffset;
-	std::tie(texture, width, height, xoffset, yoffset) = getShaper().drawText(tr, getFTFace(s_FondID));
+	std::tie(texture, width, height, xoffset, yoffset) = getShaper().drawText(tr, getFTFace(fontID));
 	if (width > 0 && height > 0)
 	{
 		pie_SetTexturePage(TEXPAGE_EXTERN);
@@ -698,7 +708,8 @@ void iV_DrawTextRotated(const char *string, float XPos, float YPos, float rotati
 	}
 }
 
-static void iV_DrawTextRotatedFv(float x, float y, float rotation, const char *format, va_list ap)
+#if 0
+static void iV_DrawTextRotatedFv(float x, float y, float rotation, const char *format, va_list ap, iV_fonts fontID)
 {
 	va_list aq;
 	size_t size;
@@ -719,7 +730,7 @@ static void iV_DrawTextRotatedFv(float x, float y, float rotation, const char *f
 	va_end(aq);
 
 	// Draw the produced string to the screen at the given position and rotation
-	iV_DrawTextRotated(str, x, y, rotation);
+	iV_DrawTextRotated(str, x, y, rotation, fontID);
 }
 
 void iV_DrawTextF(float x, float y, const char *format, ...)
@@ -730,3 +741,4 @@ void iV_DrawTextF(float x, float y, const char *format, ...)
 	iV_DrawTextRotatedFv(x, y, 0.f, format, ap);
 	va_end(ap);
 }
+#endif

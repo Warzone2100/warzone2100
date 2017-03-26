@@ -579,9 +579,8 @@ void intDisplayPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	realPower = (displayPower + 1e-8) - ManuPower;
 
 	BarWidth = BarGraph->width();
-	iV_SetFont(font_regular);
 	sprintf(szVal, "%d", realPower);
-	textWidth = iV_GetTextWidth(szVal);
+	textWidth = iV_GetTextWidth(szVal, font_regular);
 	BarWidth -= textWidth;
 
 	if (ManPow > Avail)
@@ -660,15 +659,13 @@ void intDisplayPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 		if ((realTime / 1250) % 5 == 0)
 		{
 			iV_SetTextColour(WZCOL_BLACK);
-			iV_SetFont(font_small);
-			iV_DrawText(need, iX + 102, iY - 1);
+			iV_DrawText(need, iX + 102, iY - 1, font_small);
 			iV_SetTextColour(WZCOL_RED);
 		}
 		else
 		{
 			iV_SetTextColour(WZCOL_RED);
-			iV_SetFont(font_small);
-			iV_DrawText(need, iX + 102, iY - 1);
+			iV_DrawText(need, iX + 102, iY - 1, font_small);
 		}
 	}
 	else
@@ -676,8 +673,7 @@ void intDisplayPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 		iV_SetTextColour(WZCOL_TEXT_BRIGHT);
 	}
 	// draw text value
-	iV_SetFont(font_regular);
-	iV_DrawText(szVal, iX, iY);
+	iV_DrawText(szVal, iX, iY, font_regular);
 }
 
 IntFancyButton::IntFancyButton(WIDGET *parent)
@@ -2028,7 +2024,7 @@ static void intDisplayBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, bool
 	value = (BarGraph->iOriginal * precisionFactor + BarGraph->denominator / 2) / BarGraph->denominator;
 	sprintf(szVal, "%d%s%.*d", value / precisionFactor, precisionFactor == 1 ? "" : ".", BarGraph->precision, value % precisionFactor);
 	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
-	iV_DrawText(szVal, x0, iY);
+	iV_DrawText(szVal, x0, iY, font_regular);
 
 	//draw the comparison value - only if not zero
 	if (BarGraph->minorSize != 0)

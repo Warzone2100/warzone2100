@@ -547,21 +547,17 @@ static bool intDisplaySeqTextViewPage(VIEW_REPLAY *psViewReplay,
                                       bool render,
                                       size_t *cur_seq, size_t *cur_seqpage)
 {
-	UDWORD i, cur_y;
-	UDWORD sequence;
-
 	if (!psViewReplay)
 	{
 		return true;	/* nothing to do */
 	}
 
-	iV_SetFont(font_regular);
-
 	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
-
-	cur_y = y0 + iV_GetTextLineSize() / 2 + 2 * TEXT_YINDENT;
+	unsigned cur_y = y0 + iV_GetTextLineSize(font_regular) / 2 + 2 * TEXT_YINDENT;
 
 	/* add each message */
+	unsigned i;
+	unsigned sequence;
 	for (sequence = *cur_seq, i = *cur_seqpage; sequence < psViewReplay->numSeq; sequence++)
 	{
 		SEQ_DISPLAY *psSeqDisplay = &psViewReplay->pSeqList[sequence];
@@ -570,12 +566,11 @@ static bool intDisplaySeqTextViewPage(VIEW_REPLAY *psViewReplay,
 			if (render)
 			{
 				cur_y = iV_DrawFormattedText(psSeqDisplay->textMsg[i].toUtf8().constData(),
-				                             x0 + TEXT_XINDENT,
-				                             cur_y, width, false);
+				                             x0 + TEXT_XINDENT, cur_y, width, false, font_regular);
 			}
 			else
 			{
-				cur_y += iV_GetTextLineSize();
+				cur_y += iV_GetTextLineSize(font_regular);
 			}
 			if (cur_y > y0 + height)
 			{

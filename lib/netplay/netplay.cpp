@@ -39,6 +39,7 @@
 #include <string.h>
 #include <memory>
 #include <thread>
+#include <atomic>
 
 #include "netplay.h"
 #include "netlog.h"

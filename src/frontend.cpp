@@ -1412,23 +1412,22 @@ static void displayTitleBitmap(WZ_DECL_UNUSED WIDGET *psWidget, WZ_DECL_UNUSED U
 {
 	char modListText[MAX_STR_LENGTH] = "";
 
-	iV_SetFont(font_regular);
 	iV_SetTextColour(WZCOL_GREY);
-	iV_DrawTextRotated(version_getFormattedVersionString(), pie_GetVideoBufferWidth() - 9, pie_GetVideoBufferHeight() - 14, 270.f);
+	iV_DrawTextRotated(version_getFormattedVersionString(), pie_GetVideoBufferWidth() - 9, pie_GetVideoBufferHeight() - 14, 270.f, font_regular);
 
 	if (!getModList().empty())
 	{
 		sstrcat(modListText, _("Mod: "));
 		sstrcat(modListText, getModList().c_str());
-		iV_DrawText(modListText, 9, 14);
+		iV_DrawText(modListText, 9, 14, font_regular);
 	}
 
 	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
-	iV_DrawTextRotated(version_getFormattedVersionString(), pie_GetVideoBufferWidth() - 10, pie_GetVideoBufferHeight() - 15, 270.f);
+	iV_DrawTextRotated(version_getFormattedVersionString(), pie_GetVideoBufferWidth() - 10, pie_GetVideoBufferHeight() - 15, 270.f, font_regular);
 
 	if (!getModList().empty())
 	{
-		iV_DrawText(modListText, 10, 15);
+		iV_DrawText(modListText, 10, 15, font_regular);
 	}
 }
 
@@ -1463,15 +1462,13 @@ static void displayTextAt270(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 
 	psLab = (W_LABEL *)psWidget;
 
-	iV_SetFont(font_large);
-
 	fx = xOffset + psWidget->x();
-	fy = yOffset + psWidget->y() + iV_GetTextWidth(psLab->aText.toUtf8().constData());
+	fy = yOffset + psWidget->y() + iV_GetTextWidth(psLab->aText.toUtf8().constData(), font_large);
 
 	iV_SetTextColour(WZCOL_GREY);
-	iV_DrawTextRotated(psLab->aText.toUtf8().constData(), fx + 2, fy + 2, 270.f);
+	iV_DrawTextRotated(psLab->aText.toUtf8().constData(), fx + 2, fy + 2, 270.f, font_large);
 	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
-	iV_DrawTextRotated(psLab->aText.toUtf8().constData(), fx, fy, 270.f);
+	iV_DrawTextRotated(psLab->aText.toUtf8().constData(), fx, fy, 270.f, font_large);
 }
 
 // ////////////////////////////////////////////////////////////////////////////

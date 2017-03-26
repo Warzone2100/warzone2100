@@ -100,8 +100,7 @@ static void	setConsoleMessageDuration(UDWORD time)
 /** Sets the system up */
 void	initConsoleMessages(void)
 {
-	iV_SetFont(font_regular);
-	linePitch = iV_GetTextLineSize();						// NOTE: if font changes, this must also be changed!
+	linePitch = iV_GetTextLineSize(font_regular);
 	bConsoleDropped = false;
 	setConsoleMessageDuration(DEFAULT_MESSAGE_DURATION);	// Setup how long messages are displayed for
 	setConsoleBackdropStatus(true);							// No box under the text
@@ -387,7 +386,7 @@ void displayOldMessages(bool mode)
 			                                historyConsole.topX + nudgeright,
 			                                TextYpos,
 			                                historyConsole.width,
-			                                (*WhichMessages)[i].JustifyType);
+			                                (*WhichMessages)[i].JustifyType, font_regular);
 		}
 	}
 }
@@ -407,8 +406,6 @@ void	displayConsoleMessages(void)
 		return;
 	}
 
-	iV_SetFont(font_regular);
-
 	pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
 	pie_SetFogStatus(false);
 
@@ -424,8 +421,8 @@ void	displayConsoleMessages(void)
 
 		int tmp = pie_GetVideoBufferWidth();
 		drawBlueBox(0, 0,tmp, 18);
-		tmp -= iV_GetTextWidth(i->text.c_str());
-		iV_DrawFormattedText(i->text.c_str(), tmp - 6, linePitch - 2, iV_GetTextWidth(i->text.c_str()), i->JustifyType);
+		tmp -= iV_GetTextWidth(i->text.c_str(), font_regular);
+		iV_DrawFormattedText(i->text.c_str(), tmp - 6, linePitch - 2, iV_GetTextWidth(i->text.c_str()), i->JustifyType, font_regular);
 	}
 	int TextYpos = mainConsole.topY;
 	// Draw the blue background for the text (only in game, not lobby)
@@ -437,7 +434,7 @@ void	displayConsoleMessages(void)
 	for (auto i = ActiveMessages.begin(); i != ActiveMessages.end(); ++i)
 	{
 		setConsoleTextColor(i->player);
-		TextYpos = iV_DrawFormattedText(i->text.c_str(), mainConsole.topX, TextYpos, mainConsole.width, i->JustifyType);
+		TextYpos = iV_DrawFormattedText(i->text.c_str(), mainConsole.topX, TextYpos, mainConsole.width, i->JustifyType, font_regular);
 	}
 }
 
