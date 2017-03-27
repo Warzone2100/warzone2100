@@ -508,14 +508,13 @@ void screen_Display()
 			x = screenWidth / 2 - w / 2 + x * scale;
 			y = screenHeight / 2 - h / 2 + y * scale;
 			ssprintf(text, "%d", i);
-			iV_SetFont(font_large);
 			iV_SetTextColour(WZCOL_BLACK);
-			iV_DrawText(text, x - 1, y - 1);
-			iV_DrawText(text, x + 1, y - 1);
-			iV_DrawText(text, x - 1, y + 1);
-			iV_DrawText(text, x + 1, y + 1);
+			iV_DrawText(text, x - 1, y - 1, font_large);
+			iV_DrawText(text, x + 1, y - 1, font_large);
+			iV_DrawText(text, x - 1, y + 1, font_large);
+			iV_DrawText(text, x + 1, y + 1, font_large);
 			iV_SetTextColour(WZCOL_WHITE);
-			iV_DrawText(text, x, y);
+			iV_DrawText(text, x, y, font_large);
 		}
 	}
 	pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);

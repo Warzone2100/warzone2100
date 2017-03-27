@@ -1237,8 +1237,7 @@ void runGameFind(void)
 	widgDisplayScreen(psWScreen);								// show the widgets currently running
 	if (safeSearch)
 	{
-		iV_SetFont(font_large);
-		iV_DrawText(_("Searching"), D_W + 260, D_H + 460);
+		iV_DrawText(_("Searching"), D_W + 260, D_H + 460, font_large);
 	}
 
 	if (CancelPressed())
@@ -1247,7 +1246,6 @@ void runGameFind(void)
 	}
 
 	// console box handling
-	iV_SetFont(font_small);
 	if (widgGetFromID(psWScreen, MULTIOP_CONSOLEBOX))
 	{
 		while (getNumberConsoleMessages() > getConsoleLineInfo())
@@ -1564,8 +1562,6 @@ static void addGameOptions()
 {
 	widgDelete(psWScreen, MULTIOP_OPTIONS);  				// clear options list
 	widgDelete(psWScreen, FRONTEND_SIDETEXT3);				// del text..
-
-	iV_SetFont(font_regular);
 
 	WIDGET *parent = widgGetFromID(psWScreen, FRONTEND_BACKDROP);
 
@@ -3740,7 +3736,6 @@ void runMultiOptions(void)
 
 	if (widgGetFromID(psWScreen, MULTIOP_CHATBOX))
 	{
-		iV_SetFont(font_regular);											// switch to small font.
 		displayConsoleMessages();									// draw the chatbox
 	}
 
@@ -3961,9 +3956,6 @@ void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	drawBlueBox(x, y, GAMES_PLAYERS_START - 4 , psWidget->height());
 	drawBlueBox(x, y, GAMES_MAPNAME_START - 4, psWidget->height());
 
-	//draw game info
-	iV_SetFont(font_regular);
-
 	int lamp = IMAGE_LAMP_RED;
 	int statusStart = IMAGE_NOJOIN;
 	bool disableButton = true;
@@ -3997,7 +3989,7 @@ void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 		}
 
 		ssprintf(tmp, "%d/%d", NetPlay.games[gameID].desc.dwCurrentPlayers, NetPlay.games[gameID].desc.dwMaxPlayers);
-		iV_DrawText(tmp, x + GAMES_PLAYERS_START + 4 , y + 18);
+		iV_DrawText(tmp, x + GAMES_PLAYERS_START + 4 , y + 18, font_regular);
 
 		// see what host limits are... then draw them.
 		if (NetPlay.games[gameID].limits)
@@ -4027,11 +4019,11 @@ void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	//draw game name, chop when we get a too long name
 	sstrcpy(name, NetPlay.games[gameID].name);
 	// box size in pixels
-	while (iV_GetTextWidth(name) > (GAMES_MAPNAME_START - GAMES_GAMENAME_START - 4))
+	while (iV_GetTextWidth(name, font_regular) > (GAMES_MAPNAME_START - GAMES_GAMENAME_START - 4))
 	{
 		name[strlen(name) - 1] = '\0';
 	}
-	iV_DrawText(name, x + GAMES_GAMENAME_START, y + 12);
+	iV_DrawText(name, x + GAMES_GAMENAME_START, y + 12, font_regular);
 
 	if (NetPlay.games[gameID].pureMap)
 	{
@@ -4044,14 +4036,13 @@ void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	// draw map name, chop when we get a too long name
 	sstrcpy(name, NetPlay.games[gameID].mapname);
 	// box size in pixels
-	while (iV_GetTextWidth(name) > (GAMES_PLAYERS_START - GAMES_MAPNAME_START - 4))
+	while (iV_GetTextWidth(name, font_regular) > (GAMES_PLAYERS_START - GAMES_MAPNAME_START - 4))
 	{
 		name[strlen(name) - 1] = '\0';
 	}
-	iV_DrawText(name, x + GAMES_MAPNAME_START, y + 12);	// map name
+	iV_DrawText(name, x + GAMES_MAPNAME_START, y + 12, font_regular);	// map name
 
 	iV_SetTextColour(WZCOL_FORM_TEXT);
-	iV_SetFont(font_small);
 	// draw mod name (if any)
 	if (strlen(NetPlay.games[gameID].modlist))
 	{
@@ -4060,27 +4051,26 @@ void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 		sprintf(tmp, _("Mods: %s"), NetPlay.games[gameID].modlist);
 		tmp[StringSize] = '\0';
 		sstrcpy(name, tmp);
-
 	}
 	else
 	{
 		sstrcpy(name, _("Mods: None!"));
 	}
 	// box size in pixels
-	while (iV_GetTextWidth(name) > (GAMES_PLAYERS_START - GAMES_MAPNAME_START - 8))
+	while (iV_GetTextWidth(name, font_small) > (GAMES_PLAYERS_START - GAMES_MAPNAME_START - 8))
 	{
 		name[strlen(name) - 1] = '\0';
 	}
-	iV_DrawText(name, x + GAMES_MODNAME_START, y + 24);
+	iV_DrawText(name, x + GAMES_MODNAME_START, y + 24, font_small);
 
 	// draw version string
 	sprintf(name, _("Version: %s"), NetPlay.games[gameID].versionstring);
 	// box size in pixels
-	while (iV_GetTextWidth(name) > (GAMES_MAPNAME_START - 6 - GAMES_GAMENAME_START - 4))
+	while (iV_GetTextWidth(name, font_small) > (GAMES_MAPNAME_START - 6 - GAMES_GAMENAME_START - 4))
 	{
 		name[strlen(name) - 1] = '\0';
 	}
-	iV_DrawText(name, x + GAMES_GAMENAME_START + 6, y + 24);
+	iV_DrawText(name, x + GAMES_GAMENAME_START + 6, y + 24, font_small);
 
 	// crappy hack to only draw this once for the header.  TODO fix GUI
 	if (gameID == 0)
@@ -4088,10 +4078,10 @@ void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 		iV_SetTextColour(WZCOL_YELLOW);
 		// make the 'header' for the table...
 		drawBlueBox(x , y - 12 , GAMES_GAMEWIDTH, 12);
-		iV_DrawText(_("Game Name"), x - 2 + GAMES_GAMENAME_START + 48, y - 3);
-		iV_DrawText(_("Map Name"), x - 2 + GAMES_MAPNAME_START + 48, y - 3);
-		iV_DrawText(_("Players"), x - 2 + GAMES_PLAYERS_START, y - 3);
-		iV_DrawText(_("Status"), x - 2 + GAMES_STATUS_START + 48, y - 3);
+		iV_DrawText(_("Game Name"), x - 2 + GAMES_GAMENAME_START + 48, y - 3, font_small);
+		iV_DrawText(_("Map Name"), x - 2 + GAMES_MAPNAME_START + 48, y - 3, font_small);
+		iV_DrawText(_("Players"), x - 2 + GAMES_PLAYERS_START, y - 3, font_small);
+		iV_DrawText(_("Status"), x - 2 + GAMES_STATUS_START + 48, y - 3, font_small);
 	}
 }
 
@@ -4119,10 +4109,9 @@ void displayPosition(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	char text[80];
 
 	drawBlueBox(x, y, psWidget->width(), psWidget->height());
-	iV_SetFont(font_regular);
 	iV_SetTextColour(WZCOL_FORM_TEXT);
 	ssprintf(text, _("Click to take player slot %d"), NetPlay.players[i].position);
-	iV_DrawText(text, x + 10, y + 22);
+	iV_DrawText(text, x + 10, y + 22, font_regular);
 }
 
 static void displayAi(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
@@ -4133,9 +4122,8 @@ static void displayAi(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	const char *commsText[] = { N_("Open"), N_("Closed") };
 
 	drawBlueBox(x, y, psWidget->width(), psWidget->height());
-	iV_SetFont(font_regular);
 	iV_SetTextColour(WZCOL_FORM_TEXT);
-	iV_DrawText((j >= 0) ? aidata[j].name : gettext(commsText[j + 2]), x + 10, y + 22);
+	iV_DrawText((j >= 0) ? aidata[j].name : gettext(commsText[j + 2]), x + 10, y + 22, font_regular);
 }
 
 static int difficultyIcon(int difficulty)
@@ -4158,10 +4146,9 @@ static void displayDifficulty(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 
 	ASSERT_OR_RETURN(, j < ARRAY_SIZE(difficultyList), "Bad difficulty found: %d", j);
 	drawBlueBox(x, y, psWidget->width(), psWidget->height());
-	iV_SetFont(font_regular);
 	iV_SetTextColour(WZCOL_FORM_TEXT);
 	iV_DrawImage(FrontImages, difficultyIcon(j), x + 5, y + 5);
-	iV_DrawText(gettext(difficultyList[j]), x + 42, y + 22);
+	iV_DrawText(gettext(difficultyList[j]), x + 42, y + 22, font_regular);
 }
 
 static bool isKnownPlayer(std::map<std::string, EcKey::Key> const &knownPlayers, std::string const &name, EcKey const &key)
@@ -4191,9 +4178,8 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	{
 		char progressString[MAX_STR_LENGTH];
 		ssprintf(progressString, j != selectedPlayer ? _("Sending Map: %d%% ") : _("Map: %d%% downloaded"), downloadProgress);
-		iV_SetFont(font_regular); // font
 		iV_SetTextColour(WZCOL_FORM_TEXT);
-		iV_DrawText(progressString, x + 5, y + 22);
+		iV_DrawText(progressString, x + 5, y + 22, font_regular);
 		return;
 	}
 	else if (ingame.localOptionsReceived && NetPlay.players[j].allocated)					// only draw if real player!
@@ -4202,7 +4188,6 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 
 		drawBlueBox(x, y, psWidget->width(), psWidget->height());
 
-		iV_SetFont(font_regular);											// font
 		std::map<std::string, EcKey::Key> serverPlayers;  // TODO Fill this with players known to the server (needs implementing on the server, too). Currently useless.
 		if (ingame.PingTimes[j] >= PING_LIMIT)
 		{
@@ -4222,9 +4207,9 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 		}
 
 		// name
-		if ((int)iV_GetTextWidth(name.c_str()) > psWidget->width() - nameX)
+		if ((int)iV_GetTextWidth(name.c_str(), font_regular) > psWidget->width() - nameX)
 		{
-			while (!name.empty() && (int)iV_GetTextWidth((name + "...").c_str()) > psWidget->width() - nameX)
+			while (!name.empty() && (int)iV_GetTextWidth((name + "...").c_str(), font_regular) > psWidget->width() - nameX)
 			{
 				name.resize(name.size() - 1);  // Clip name.
 			}
@@ -4252,13 +4237,11 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 			}
 			subText += buf;
 		}
-		iV_DrawText(name.c_str(), x + nameX, y + (subText.empty() ? 22 : 18));
+		iV_DrawText(name.c_str(), x + nameX, y + (subText.empty() ? 22 : 18), font_regular);
 		if (!subText.empty())
 		{
-			iV_SetFont(font_small);
 			iV_SetTextColour(WZCOL_TEXT_MEDIUM);
-			iV_DrawText(subText.c_str(), x + nameX, y + 28);
-			iV_SetFont(font_regular);
+			iV_DrawText(subText.c_str(), x + nameX, y + 28, font_small);
 			iV_SetTextColour(WZCOL_FORM_TEXT);
 		}
 
@@ -4346,7 +4329,6 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 		{
 			iV_DrawImage(FrontImages, IMAGE_PLAYER_PC, x, y + 11);
 		}
-		iV_SetFont(font_regular);
 		iV_SetTextColour(WZCOL_FORM_TEXT);
 		ASSERT_OR_RETURN(, NetPlay.players[j].ai < (int)aidata.size(), "Uh-oh, AI index out of bounds");
 		switch (NetPlay.players[j].ai)
@@ -4355,7 +4337,7 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 		case AI_CLOSED: sstrcpy(aitext, _("Closed")); break;
 		default: sstrcpy(aitext, nameOverrides[j][0] == '\0' ? NetPlay.isHost ? aidata[NetPlay.players[j].ai].name : NetPlay.players[j].name : nameOverrides[j]); break;
 		}
-		iV_DrawText(aitext, x + nameX, y + 22);
+		iV_DrawText(aitext, x + nameX, y + 22, font_regular);
 	}
 }
 

@@ -138,17 +138,16 @@ void tipDisplay()
 
 			/* Calculate the size of the tip box */
 			topGap = TIP_VGAP;
-			iV_SetFont(FontID);
 
-			lineHeight = iV_GetTextLineSize();
+			lineHeight = iV_GetTextLineSize(FontID);
 
 			fw = 0;
 			for (int n = 0; n < pTip.size(); ++n)
 			{
-				fw = std::max<int>(fw, iV_GetTextWidth(pTip[n].toUtf8().constData()));
+				fw = std::max<int>(fw, iV_GetTextWidth(pTip[n].toUtf8().constData(), FontID));
 			}
 			tw = fw + TIP_HGAP * 2;
-			th = topGap * 2 + lineHeight * pTip.size() + iV_GetTextBelowBase();
+			th = topGap * 2 + lineHeight * pTip.size() + iV_GetTextBelowBase(FontID);
 
 			/* Position the tip box */
 			tx = clip(wx + ww / 2, 0, screenWidth - tw - 1);
@@ -161,7 +160,7 @@ void tipDisplay()
 
 			/* Position the text */
 			fx = tx + TIP_HGAP;
-			fy = ty + (th - lineHeight * pTip.size()) / 2 - iV_GetTextAboveBase();
+			fy = ty + (th - lineHeight * pTip.size()) / 2 - iV_GetTextAboveBase(FontID);
 
 			/* Note the time */
 			startTime = wzGetTicks();
@@ -178,11 +177,10 @@ void tipDisplay()
 	case TIP_ACTIVE:
 		/* Draw the tool tip */
 		iV_ShadowBox(tx - 2, ty - 2, tx + tw + 2, ty + th + 2, 1, WZCOL_FORM_LIGHT, WZCOL_FORM_DARK, WZCOL_FORM_TIP_BACKGROUND);
-		iV_SetFont(FontID);
 		iV_SetTextColour(TipColour);
 		for (int n = 0; n < pTip.size(); ++n)
 		{
-			iV_DrawText(pTip[n].toUtf8().constData(), fx, fy + lineHeight * n);
+			iV_DrawText(pTip[n].toUtf8().constData(), fx, fy + lineHeight * n, FontID);
 		}
 
 		break;

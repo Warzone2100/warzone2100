@@ -367,12 +367,12 @@ void scoreDataToScreen(WIDGET *psWidget)
 	/* Get the mission result time in a string - and write it out */
 	getAsciiTime((char *)&text2, gameTime - missionData.missionStarted);
 	sprintf(text, _("Mission Time - %s"), text2);
-	iV_DrawText(text, (pie_GetVideoBufferWidth() - iV_GetTextWidth(text, font_regular)) / 2, 320 + D_H);
+	iV_DrawText(text, (pie_GetVideoBufferWidth() - iV_GetTextWidth(text, font_regular)) / 2, 320 + D_H, font_regular);
 
 	/* Write out total game time so far */
 	getAsciiTime((char *)&text2, gameTime);
 	sprintf(text, _("Total Game Time - %s"), text2);
-	iV_DrawText(text, (pie_GetVideoBufferWidth() - iV_GetTextWidth(text, font_regular)) / 2, 340 + D_H);
+	iV_DrawText(text, (pie_GetVideoBufferWidth() - iV_GetTextWidth(text, font_regular)) / 2, 340 + D_H, font_regular);
 	if (Cheated)
 	{
 		// A quick way to flash the text

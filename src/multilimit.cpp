@@ -368,13 +368,12 @@ static void displayStructureBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset
 	pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
 
 	// draw name
-	iV_SetFont(font_regular);											// font
 	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
-	iV_DrawText(_(getName(stat)), x + 80, y + psWidget->height() / 2 + 3);
+	iV_DrawText(_(getName(stat)), x + 80, y + psWidget->height() / 2 + 3, font_regular);
 
 	// draw limit
 	ssprintf(str, "%d", ((W_SLIDER *)widgGetFromID(psWScreen, psWidget->id + 1))->pos);
-	iV_DrawText(str, x + 270, y + psWidget->height() / 2 + 3);
+	iV_DrawText(str, x + 270, y + psWidget->height() / 2 + 3, font_regular);
 
 	return;
 }

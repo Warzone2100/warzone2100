@@ -1476,20 +1476,17 @@ static void displayTextAt270(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 void displayTextOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
 	SDWORD			fx, fy, fw;
-	W_BUTTON		*psBut;
+	W_BUTTON		*psBut = (W_BUTTON *)psWidget;
 	bool			hilight = false;
 	bool			greyOut = psWidget->UserData; // if option is unavailable.
-
-	psBut = (W_BUTTON *)psWidget;
-	iV_SetFont(psBut->FontID);
 
 	if (widgGetMouseOver(psWScreen) == psBut->id)					// if mouse is over text then hilight.
 	{
 		hilight = true;
 	}
 
-	fw = iV_GetTextWidth(psBut->pText.toUtf8().constData());
-	fy = yOffset + psWidget->y() + (psWidget->height() - iV_GetTextLineSize()) / 2 - iV_GetTextAboveBase();
+	fw = iV_GetTextWidth(psBut->pText.toUtf8().constData(), psBut->FontID);
+	fy = yOffset + psWidget->y() + (psWidget->height() - iV_GetTextLineSize(psBut->FontID)) / 2 - iV_GetTextAboveBase(psBut->FontID);
 
 	if (psWidget->style & WBUT_TXTCENTRE)							//check for centering, calculate offset.
 	{
@@ -1520,7 +1517,7 @@ void displayTextOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 		}
 	}
 
-	iV_DrawText(psBut->pText.toUtf8().constData(), fx, fy);
+	iV_DrawText(psBut->pText.toUtf8().constData(), fx, fy, psBut->FontID);
 
 	return;
 }
@@ -1639,7 +1636,7 @@ void addTextButton(UDWORD id,  UDWORD PosX, UDWORD PosY, const std::string &txt,
 	// Align
 	if (!(style & WBUT_TXTCENTRE))
 	{
-		sButInit.width = (short)(iV_GetTextWidth(txt.c_str()) + 10);
+		sButInit.width = (short)(iV_GetTextWidth(txt.c_str(), font_large) + 10);
 		sButInit.x += 35;
 	}
 	else
@@ -1681,8 +1678,7 @@ void addSmallTextButton(UDWORD id,  UDWORD PosX, UDWORD PosY, const char *txt, u
 	// Align
 	if (!(style & WBUT_TXTCENTRE))
 	{
-		iV_SetFont(font_small);
-		sButInit.width = (short)(iV_GetTextWidth(txt) + 10);
+		sButInit.width = (short)(iV_GetTextWidth(txt, font_small) + 10);
 		sButInit.x += 35;
 	}
 	else

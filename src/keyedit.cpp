@@ -255,7 +255,7 @@ static void displayKeyMap(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	int w = psWidget->width();
 	int h = psWidget->height();
 	KEY_MAPPING *psMapping = (KEY_MAPPING *)psWidget->pUserData;
-	char		sKey[MAX_STR_LENGTH];
+	char sKey[MAX_STR_LENGTH];
 
 	if (psMapping == selectedKeyMap)
 	{
@@ -272,10 +272,8 @@ static void displayKeyMap(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	}
 
 	// draw name
-	iV_SetFont(font_regular);											// font type
 	iV_SetTextColour(WZCOL_FORM_TEXT);
-
-	iV_DrawText(_(psMapping->pName), x + 2, y + (psWidget->height() / 2) + 3);
+	iV_DrawText(_(psMapping->pName), x + 2, y + (psWidget->height() / 2) + 3, font_regular);
 
 	// draw binding
 	keyMapToString(sKey, psMapping);
@@ -285,7 +283,7 @@ static void displayKeyMap(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 		iV_SetTextColour(WZCOL_YELLOW);
 		sstrcat(sKey, " (numpad)");
 	}
-	iV_DrawText(sKey, x + 364, y + (psWidget->height() / 2) + 3);
+	iV_DrawText(sKey, x + 364, y + (psWidget->height() / 2) + 3, font_regular);
 }
 
 static bool keyMappingSort(KEY_MAPPING const *a, KEY_MAPPING const *b)

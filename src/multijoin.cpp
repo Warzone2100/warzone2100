@@ -88,14 +88,12 @@ bool intDisplayMultiJoiningStatus(UBYTE joinCount)
 	x = RET_X;
 	y = RET_Y;
 
-//	cameraToHome(selectedPlayer);				// home the camera to the player.
 	RenderWindowFrame(FRAME_NORMAL, x, y , w, h);		// draw a wee blu box.
 
 	// display how far done..
-	iV_SetFont(font_regular);
 	iV_DrawText(_("Players Still Joining"),
-	            x + (w / 2) - (iV_GetTextWidth(_("Players Still Joining")) / 2),
-	            y + (h / 2) - 8);
+	            x + (w / 2) - (iV_GetTextWidth(_("Players Still Joining"), font_regular) / 2),
+	            y + (h / 2) - 8, font_regular);
 	unsigned playerCount = 0;  // Calculate what NetPlay.playercount should be, which is apparently only non-zero for the host.
 	for (unsigned player = 0; player < game.maxPlayers; ++player)
 	{
@@ -108,12 +106,10 @@ bool intDisplayMultiJoiningStatus(UBYTE joinCount)
 	{
 		return true;
 	}
-	iV_SetFont(font_large);
 	sprintf(sTmp, "%d%%", PERCENT(playerCount - joinCount, playerCount));
-	iV_DrawText(sTmp , x + (w / 2) - 10, y + (h / 2) + 10);
+	iV_DrawText(sTmp , x + (w / 2) - 10, y + (h / 2) + 10, font_large);
 
-	iV_SetFont(font_small);
-	int yStep = iV_GetTextLineSize();
+	int yStep = iV_GetTextLineSize(font_small);
 	int yPos = RET_Y - yStep * game.maxPlayers;
 
 	static const std::string statusStrings[3] = {"☐ ", "☑ ", "☒ "};
@@ -131,7 +127,7 @@ bool intDisplayMultiJoiningStatus(UBYTE joinCount)
 		}
 		if (status >= 0)
 		{
-			iV_DrawText((statusStrings[status] + getPlayerName(player)).c_str(), x + 5, yPos + yStep * NetPlay.players[player].position);
+			iV_DrawText((statusStrings[status] + getPlayerName(player)).c_str(), x + 5, yPos + yStep * NetPlay.players[player].position, font_small);
 		}
 	}
 

@@ -38,15 +38,14 @@ void iV_TextInit();
 void iV_TextShutdown();
 void iV_font(const char *fontName, const char *fontFace, const char *fontFaceBold);
 
-void iV_SetFont(iV_fonts fontID);
-int iV_GetTextAboveBase(iV_fonts fontID = font_count);
-int iV_GetTextBelowBase(iV_fonts fontID = font_count);
-int iV_GetTextLineSize(iV_fonts fontID = font_count);
-unsigned int iV_GetTextWidth(const char *String, iV_fonts fontID = font_count);
-unsigned int iV_GetCountedTextWidth(const char *string, size_t string_length, iV_fonts fontID = font_count);
-unsigned int iV_GetCharWidth(uint32_t charCode, iV_fonts fontID = font_count);
+int iV_GetTextAboveBase(iV_fonts fontID);
+int iV_GetTextBelowBase(iV_fonts fontID);
+int iV_GetTextLineSize(iV_fonts fontID);
+unsigned int iV_GetTextWidth(const char *String, iV_fonts fontID);
+unsigned int iV_GetCountedTextWidth(const char *string, size_t string_length, iV_fonts fontID);
+unsigned int iV_GetCharWidth(uint32_t charCode, iV_fonts fontID);
 
-unsigned int iV_GetTextHeight(const char *string, iV_fonts fontID = font_count);
+unsigned int iV_GetTextHeight(const char *string, iV_fonts fontID);
 void iV_SetTextColour(PIELIGHT colour);
 
 /// Valid values for "Justify" argument of iV_DrawFormattedText().
@@ -61,7 +60,7 @@ int iV_DrawFormattedText(const char *String, UDWORD x, UDWORD y, UDWORD Width, U
 void iV_DrawTextRotated(const char *string, float x, float y, float rotation, iV_fonts fontID);
 
 /// Draws text with a printf syntax to the screen.
-static inline void iV_DrawText(const char *string, float x, float y, iV_fonts fontID = font_count)
+static inline void iV_DrawText(const char *string, float x, float y, iV_fonts fontID)
 {
 	iV_DrawTextRotated(string, x, y, 0.f, fontID);
 }

@@ -222,22 +222,20 @@ void W_BUTTON::display(int xOffset, int yOffset)
 	if (haveText)
 	{
 		QByteArray textBytes = pText.toUtf8();
-
-		iV_SetFont(FontID);
-		int fw = iV_GetTextWidth(textBytes.constData());
+		int fw = iV_GetTextWidth(textBytes.constData(), FontID);
 		int fx = x0 + (width() - fw) / 2;
-		int fy = y0 + (height() - iV_GetTextLineSize()) / 2 - iV_GetTextAboveBase();
+		int fy = y0 + (height() - iV_GetTextLineSize(FontID)) / 2 - iV_GetTextAboveBase(FontID);
 		if (isDisabled)
 		{
 			iV_SetTextColour(WZCOL_FORM_LIGHT);
-			iV_DrawText(textBytes.constData(), fx + 1, fy + 1);
+			iV_DrawText(textBytes.constData(), fx + 1, fy + 1, FontID);
 			iV_SetTextColour(WZCOL_FORM_DISABLE);
 		}
 		else
 		{
 			iV_SetTextColour(WZCOL_FORM_TEXT);
 		}
-		iV_DrawText(textBytes.constData(), fx, fy);
+		iV_DrawText(textBytes.constData(), fx, fy, FontID);
 	}
 
 	if (isDisabled && !images.normal.isNull() && images.disabled.isNull())

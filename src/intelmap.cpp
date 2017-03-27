@@ -1107,14 +1107,12 @@ void intDisplayTEXTView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 
 	if (psMessage)
 	{
-		iV_SetFont(font_regular);
 		/* Get the travel to the next line */
-		int linePitch = iV_GetTextLineSize();
+		int linePitch = iV_GetTextLineSize(font_regular);
 		/* Fix for spacing.... */
 		linePitch += 3;
 		ty += 3;
 		/* Fix for spacing.... */
-
 
 		iV_SetTextColour(WZCOL_TEXT_BRIGHT);
 		//add each message
@@ -1128,7 +1126,7 @@ void intDisplayTEXTView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 			}
 			//need to check the string will fit!
 			iV_DrawText(_(((VIEWDATA *)psMessage->pViewData)->textMsg[i].toUtf8().constData()), x0 + TEXT_XINDENT,
-			            (ty + TEXT_YINDENT * 3) + (i * linePitch));
+			            (ty + TEXT_YINDENT * 3) + (i * linePitch), font_regular);
 		}
 	}
 }

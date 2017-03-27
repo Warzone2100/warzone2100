@@ -574,12 +574,11 @@ static void NetworkDisplayImage(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset
 		}
 		players[c] = '\0';
 
-		iV_SetFont(font_regular);
-		width = iV_GetTextWidth(players) + 10;
-		height = iV_GetTextHeight(players) + 10;
+		width = iV_GetTextWidth(players, font_regular) + 10;
+		height = iV_GetTextHeight(players, font_regular) + 10;
 
 		iV_SetTextColour(WZCOL_TEXT_BRIGHT);
-		iV_DrawText(players, x - width, y + height);
+		iV_DrawText(players, x - width, y + height, font_regular);
 	}
 
 	iV_DrawImage(IntImages, ImageID, x, y);
@@ -789,37 +788,34 @@ void draw3DScene(void)
 	}
 	if (showSAMPLES)		//Displays the number of sound samples we currently have
 	{
-		iV_SetFont(font_regular);
 		unsigned int width, height;
 		const char *Qbuf, *Lbuf, *Abuf;
 
 		sasprintf((char **)&Qbuf, "Que: %04u", audio_GetSampleQueueCount());
 		sasprintf((char **)&Lbuf, "Lst: %04u", audio_GetSampleListCount());
 		sasprintf((char **)&Abuf, "Act: %04u", sound_GetActiveSamplesCount());
-		width = iV_GetTextWidth(Qbuf) + 11;
-		height = iV_GetTextHeight(Qbuf);
+		width = iV_GetTextWidth(Qbuf, font_regular) + 11;
+		height = iV_GetTextHeight(Qbuf, font_regular);
 
-		iV_DrawText(Qbuf, pie_GetVideoBufferWidth() - width, height + 2);
-		iV_DrawText(Lbuf, pie_GetVideoBufferWidth() - width, height + 48);
-		iV_DrawText(Abuf, pie_GetVideoBufferWidth() - width, height + 59);
+		iV_DrawText(Qbuf, pie_GetVideoBufferWidth() - width, height + 2, font_regular);
+		iV_DrawText(Lbuf, pie_GetVideoBufferWidth() - width, height + 48, font_regular);
+		iV_DrawText(Abuf, pie_GetVideoBufferWidth() - width, height + 59, font_regular);
 	}
 	if (showFPS)
 	{
-		iV_SetFont(font_regular);
 		unsigned int width, height;
 		const char *fps;
 		sasprintf((char **)&fps, "FPS: %d", frameRate());
-		width = iV_GetTextWidth(fps) + 10;
-		height = iV_GetTextHeight(fps);
+		width = iV_GetTextWidth(fps, font_regular) + 10;
+		height = iV_GetTextHeight(fps, font_regular);
 
-		iV_DrawText(fps, pie_GetVideoBufferWidth() - width, pie_GetVideoBufferHeight() - height);
+		iV_DrawText(fps, pie_GetVideoBufferWidth() - width, pie_GetVideoBufferHeight() - height, font_regular);
 	}
 	if (showORDERS)
 	{
-		iV_SetFont(font_regular);
 		unsigned int height;
-		height = iV_GetTextHeight(DROIDDOING);
-		iV_DrawText(DROIDDOING, 0, pie_GetVideoBufferHeight() - height);
+		height = iV_GetTextHeight(DROIDDOING, font_regular);
+		iV_DrawText(DROIDDOING, 0, pie_GetVideoBufferHeight() - height, font_regular);
 	}
 
 	setupConnectionStatusForm();
@@ -827,14 +823,13 @@ void draw3DScene(void)
 	if (getWidgetsStatus() && !gamePaused())
 	{
 		char buildInfo[255];
-		iV_SetFont(font_small);
 		iV_SetTextColour(WZCOL_TEXT_MEDIUM);
-		iV_DrawText(getLevelName(), RET_X + 134, 410 + E_H);
+		iV_DrawText(getLevelName(), RET_X + 134, 410 + E_H, font_small);
 		getAsciiTime(buildInfo, graphicsTime);
-		iV_DrawText(buildInfo, RET_X + 134, 422 + E_H);
+		iV_DrawText(buildInfo, RET_X + 134, 422 + E_H, font_small);
 		if (getDebugMappingStatus())
 		{
-			iV_DrawText("DEBUG ", RET_X + 134, 436 + E_H);
+			iV_DrawText("DEBUG ", RET_X + 134, 436 + E_H, font_small);
 		}
 	}
 

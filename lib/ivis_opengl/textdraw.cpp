@@ -429,7 +429,6 @@ void iV_TextInit()
 {
 	glGenTextures(1, &textureID);
 	glGenBuffers(1, &pbo);
-	iV_SetFont(font_regular);
 	regular = new FTFace(getGlobalFTlib().lib, "fonts/DejaVuSans.ttf", 12 * 64, DPI, DPI);
 	bold = new FTFace(getGlobalFTlib().lib, "fonts/DejaVuSans-Bold.ttf", 21 * 64, DPI, DPI);
 	medium = new FTFace(getGlobalFTlib().lib, "fonts/DejaVuSans.ttf", 16 * 64, DPI, DPI);
@@ -450,17 +449,8 @@ void iV_TextShutdown()
 	glDeleteTextures(1, &textureID);
 }
 
-static iV_fonts s_FontID;
-
-void iV_SetFont(iV_fonts fontID)
-{
-	s_FontID = fontID;
-}
-
 unsigned int iV_GetTextWidth(const char *string, iV_fonts fontID)
 {
-	if (fontID == font_count) fontID = s_FontID; // support legacy API with global font selection for a while
-
 	uint32_t width;
 	TextRun tr(string, "en", HB_SCRIPT_COMMON, HB_DIRECTION_LTR);
 	std::tie(width, std::ignore) = getShaper().getTextMetrics(tr, getFTFace(fontID));
@@ -474,8 +464,6 @@ unsigned int iV_GetCountedTextWidth(const char *string, size_t string_length, iV
 
 unsigned int iV_GetTextHeight(const char *string, iV_fonts fontID)
 {
-	if (fontID == font_count) fontID = s_FontID; // support legacy API with global font selection for a while
-
 	uint32_t height;
 	TextRun tr(string, "en", HB_SCRIPT_COMMON, HB_DIRECTION_LTR);
 	std::tie(std::ignore, height) = getShaper().getTextMetrics(tr, getFTFace(fontID));
@@ -484,31 +472,23 @@ unsigned int iV_GetTextHeight(const char *string, iV_fonts fontID)
 
 unsigned int iV_GetCharWidth(uint32_t charCode, iV_fonts fontID)
 {
-	if (fontID == font_count) fontID = s_FontID; // support legacy API with global font selection for a while
-
 	return getFTFace(fontID).getGlyphWidth(charCode) >> 6;
 }
 
 int iV_GetTextLineSize(iV_fonts fontID)
 {
-	if (fontID == font_count) fontID = s_FontID; // support legacy API with global font selection for a while
-
 	FT_Face face = getFTFace(fontID);
 	return (face->size->metrics.ascender - face->size->metrics.descender) >> 6;
 }
 
 int iV_GetTextAboveBase(iV_fonts fontID)
 {
-	if (fontID == font_count) fontID = s_FontID; // support legacy API with global font selection for a while
-
 	FT_Face face = getFTFace(fontID);
 	return -(face->size->metrics.ascender >> 6);
 }
 
 int iV_GetTextBelowBase(iV_fonts fontID)
 {
-	if (fontID == font_count) fontID = s_FontID; // support legacy API with global font selection for a while
-
 	FT_Face face = getFTFace(fontID);
 	return face->size->metrics.descender >> 6;
 }
@@ -558,7 +538,7 @@ int iV_DrawFormattedText(const char *String, UDWORD x, UDWORD y, UDWORD Width, U
 		while (*curChar != 0 && WWidth < Width && !NewLine)
 		{
 			const char *startOfWord = curChar;
-			const unsigned int FStringWidth = iV_GetTextWidth(FString.c_str());
+			const unsigned int FStringWidth = iV_GetTextWidth(FString.c_str(), fontID);
 
 			// Get the next word.
 			i = 0;
@@ -578,8 +558,8 @@ int iV_DrawFormattedText(const char *String, UDWORD x, UDWORD y, UDWORD Width, U
 				}
 
 				// Update this line's pixel width.
-				//WWidth = FStringWidth + iV_GetCountedTextWidth(FWord.c_str(), i + 1);  // This triggers tonnes of valgrind warnings, if the string contains unicode. Adding lots of trailing garbage didn't help... Using iV_GetTextWidth with a null-terminated string, instead.
-				WWidth = FStringWidth + iV_GetTextWidth(FWord.c_str());
+				//WWidth = FStringWidth + iV_GetCountedTextWidth(FWord.c_str(), i + 1, fontID);  // This triggers tonnes of valgrind warnings, if the string contains unicode. Adding lots of trailing garbage didn't help... Using iV_GetTextWidth with a null-terminated string, instead.
+				WWidth = FStringWidth + iV_GetTextWidth(FWord.c_str(), fontID);
 
 				// If this word doesn't fit on the current line then break out
 				if (WWidth > Width)
@@ -594,7 +574,7 @@ int iV_DrawFormattedText(const char *String, UDWORD x, UDWORD y, UDWORD Width, U
 			// Don't forget the space.
 			if (*curChar == ASCII_SPACE)
 			{
-				WWidth += iV_GetCharWidth(' ');
+				WWidth += iV_GetCharWidth(' ', fontID);
 				if (WWidth <= Width)
 				{
 					FWord.push_back(' ');
@@ -639,7 +619,7 @@ int iV_DrawFormattedText(const char *String, UDWORD x, UDWORD y, UDWORD Width, U
 			FString.erase(FString.size() - 1);  // std::string has no pop_back().
 		}
 
-		TWidth = iV_GetTextWidth(FString.c_str());
+		TWidth = iV_GetTextWidth(FString.c_str(), fontID);
 
 		// Do justify.
 		switch (Justify)
@@ -658,10 +638,10 @@ int iV_DrawFormattedText(const char *String, UDWORD x, UDWORD y, UDWORD Width, U
 		}
 
 		// draw the text.
-		iV_DrawText(FString.c_str(), jx, jy);
+		iV_DrawText(FString.c_str(), jx, jy, fontID);
 
 		// and move down a line.
-		jy += iV_GetTextLineSize();
+		jy += iV_GetTextLineSize(fontID);
 	}
 
 	return jy;
@@ -669,8 +649,6 @@ int iV_DrawFormattedText(const char *String, UDWORD x, UDWORD y, UDWORD Width, U
 
 void iV_DrawTextRotated(const char *string, float XPos, float YPos, float rotation, iV_fonts fontID)
 {
-	if (fontID == font_count) fontID = s_FontID; // support legacy API with global font selection for a while
-
 	ASSERT_OR_RETURN(, string, "Couldn't render string!");
 	pie_SetTexturePage(TEXPAGE_EXTERN);
 

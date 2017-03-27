@@ -53,19 +53,18 @@ W_LABEL::W_LABEL(WIDGET *parent)
 
 void W_LABEL::display(int xOffset, int yOffset)
 {
-	iV_SetFont(FontID);
 	iV_SetTextColour(fontColour);
 
 	QByteArray text = aText.toUtf8();
 	int fx;
 	if (style & WLAB_ALIGNCENTRE)
 	{
-		int fw = iV_GetTextWidth(text.constData());
+		int fw = iV_GetTextWidth(text.constData(), FontID);
 		fx = xOffset + x() + (width() - fw) / 2;
 	}
 	else if (style & WLAB_ALIGNRIGHT)
 	{
-		int fw = iV_GetTextWidth(text.constData());
+		int fw = iV_GetTextWidth(text.constData(), FontID);
 		fx = xOffset + x() + width() - fw;
 	}
 	else
@@ -75,17 +74,17 @@ void W_LABEL::display(int xOffset, int yOffset)
 	int fy;
 	if ((style & WLAB_ALIGNTOPLEFT) != 0)  // Align top
 	{
-		fy = yOffset + y() - iV_GetTextAboveBase();
+		fy = yOffset + y() - iV_GetTextAboveBase(FontID);
 	}
 	else if ((style & WLAB_ALIGNBOTTOMLEFT) != 0)  // Align bottom
 	{
-		fy = yOffset + y() - iV_GetTextAboveBase() + (height() - iV_GetTextLineSize());
+		fy = yOffset + y() - iV_GetTextAboveBase(FontID) + (height() - iV_GetTextLineSize(FontID));
 	}
 	else
 	{
-		fy = yOffset + y() - iV_GetTextAboveBase() + (height() - iV_GetTextLineSize()) / 2;
+		fy = yOffset + y() - iV_GetTextAboveBase(FontID) + (height() - iV_GetTextLineSize(FontID)) / 2;
 	}
-	iV_DrawText(text.constData(), fx, fy);
+	iV_DrawText(text.constData(), fx, fy, FontID);
 }
 
 /* Respond to a mouse moving over a label */

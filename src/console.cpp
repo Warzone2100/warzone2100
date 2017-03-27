@@ -422,7 +422,7 @@ void	displayConsoleMessages(void)
 		int tmp = pie_GetVideoBufferWidth();
 		drawBlueBox(0, 0,tmp, 18);
 		tmp -= iV_GetTextWidth(i->text.c_str(), font_regular);
-		iV_DrawFormattedText(i->text.c_str(), tmp - 6, linePitch - 2, iV_GetTextWidth(i->text.c_str()), i->JustifyType, font_regular);
+		iV_DrawFormattedText(i->text.c_str(), tmp - 6, linePitch - 2, iV_GetTextWidth(i->text.c_str(), font_regular), i->JustifyType, font_regular);
 	}
 	int TextYpos = mainConsole.topY;
 	// Draw the blue background for the text (only in game, not lobby)

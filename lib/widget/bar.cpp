@@ -130,18 +130,19 @@ static void barGraphDisplayText(W_BARGRAPH *barGraph, int x0, int x1, int y1)
 	if (!barGraph->text.isEmpty())
 	{
 		QByteArray utf = barGraph->text.toUtf8();
-		iV_SetFont(font_small);
-		int textWidth = iV_GetTextWidth(utf.constData());
+		int textWidth = iV_GetTextWidth(utf.constData(), font_small);
 		Vector2i pos((x0 + x1 - textWidth) / 2, y1);
 		iV_SetTextColour(WZCOL_BLACK);  // Add a shadow, to make it visible against any background.
 		for (int dx = -1; dx <= 1; ++dx)
+		{
 			for (int dy = -1; dy <= 1; ++dy)
 			{
-				iV_DrawText(utf.constData(), pos.x + dx * 1.25f, pos.y + dy * 1.25f);
+				iV_DrawText(utf.constData(), pos.x + dx * 1.25f, pos.y + dy * 1.25f, font_small);
 			}
+		}
 		iV_SetTextColour(barGraph->textCol);
-		iV_DrawText(utf.constData(), pos.x, pos.y - 0.25f);
-		iV_DrawText(utf.constData(), pos.x, pos.y + 0.25f);  // Draw twice, to make it more visible.
+		iV_DrawText(utf.constData(), pos.x, pos.y - 0.25f, font_small);
+		iV_DrawText(utf.constData(), pos.x, pos.y + 0.25f, font_small);  // Draw twice, to make it more visible.
 	}
 }
 

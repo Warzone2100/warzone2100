@@ -661,16 +661,13 @@ static void displayLoadSlot(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	{
 		sstrcpy(butString, ((W_BUTTON *)psWidget)->pText.toUtf8().constData());
 
-		iV_SetFont(font_regular);									// font
 		iV_SetTextColour(WZCOL_FORM_TEXT);
-
-		while (iV_GetTextWidth(butString) > psWidget->width())
+		while (iV_GetTextWidth(butString, font_regular) > psWidget->width())
 		{
 			butString[strlen(butString) - 1] = '\0';
 		}
 
-		//draw text
-		iV_DrawText(butString, x + 4, y + 17);
+		iV_DrawText(butString, x + 4, y + 17, font_regular);
 	}
 }
 

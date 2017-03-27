@@ -2003,8 +2003,8 @@ static void intDisplayBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, bool
 	y0 += arbitaryOffset;
 
 	/* indent to allow text value */
-	iX = x0 + iV_GetTextWidth(szCheckWidth);
-	iY = y0 + (iV_GetImageHeight(IntImages, IMAGE_DES_STATSCURR) - iV_GetTextLineSize()) / 2 - iV_GetTextAboveBase();
+	iX = x0 + iV_GetTextWidth(szCheckWidth, font_regular);
+	iY = y0 + (iV_GetImageHeight(IntImages, IMAGE_DES_STATSCURR) - iV_GetTextLineSize(font_regular)) / 2 - iV_GetTextAboveBase(font_regular);
 
 	if (isPowerBar)
 	{
