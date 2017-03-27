@@ -1041,6 +1041,15 @@ int wzThreadJoin(WZ_THREAD *thread)
 	return ret;
 }
 
+void wzThreadDetach(WZ_THREAD *thread)
+{
+	QEventLoop::connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
+	if (thread->isFinished())
+	{
+		delete thread;
+	}
+}
+
 void wzThreadStart(WZ_THREAD *thread)
 {
 	thread->start();

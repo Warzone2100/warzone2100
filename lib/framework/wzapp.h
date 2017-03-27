@@ -65,6 +65,7 @@ void StopTextInput();
 // Thread related
 WZ_THREAD *wzThreadCreate(int (*threadFunc)(void *), void *data);
 WZ_DECL_NONNULL(1) int wzThreadJoin(WZ_THREAD *thread);
+WZ_DECL_NONNULL(1) void wzThreadDetach(WZ_THREAD *thread);
 WZ_DECL_NONNULL(1) void wzThreadStart(WZ_THREAD *thread);
 void wzYieldCurrentThread();
 WZ_MUTEX *wzMutexCreate();
@@ -88,11 +89,13 @@ namespace wz
 	using future = std::future<R>;
 	template <typename RA>
 	using packaged_task = std::packaged_task<RA>;
+	using thread = std::thread;
 }
 
 #else  // Workaround for cross-compiler without std::mutex.
 
 #include <memory>
+#include <functional>
 
 namespace wz
 {
@@ -156,6 +159,23 @@ namespace wz
 	private:
 		std::function<R (A...)> function;
 		std::shared_ptr<typename future<R>::Internal> internal;
+	};
+
+	class thread
+	{
+	public:
+		thread() : internal(nullptr) {}
+		thread(thread &&other) : internal(other.internal) { other.internal = nullptr; }
+		template <typename Function, typename... Args>
+		explicit thread(Function &&f, Args &&...args) : internal(wzThreadCreate([](void *vf) { auto F = (std::function<void ()> *)vf; (*F)(); delete F; return 0; }, new std::function<void ()>(std::bind(std::forward<Function>(f), std::forward<Args>(args)...)))) { wzThreadStart(internal); }
+		thread(thread const &) = delete;
+		~thread() { if (internal) { std::terminate(); } }
+		thread &operator =(thread &&other) { std::swap(internal, other.internal); return *this; }
+		void join() { if (!internal) { std::terminate(); } wzThreadJoin(internal); internal = nullptr; }
+		void detach() { if (!internal) { std::terminate(); } wzThreadDetach(internal); internal = nullptr; }
+
+	private:
+		WZ_THREAD *internal;
 	};
 }
 

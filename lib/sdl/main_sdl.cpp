@@ -507,6 +507,11 @@ int wzThreadJoin(WZ_THREAD *thread)
 	return result;
 }
 
+void wzThreadDetach(WZ_THREAD *thread)
+{
+	SDL_DetachThread((SDL_Thread *)thread);
+}
+
 void wzThreadStart(WZ_THREAD *thread)
 {
 	(void)thread; // no-op

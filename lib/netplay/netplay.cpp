@@ -1077,7 +1077,7 @@ void NETdiscoverUPnPDevices(void)
 {
 	if (!NetPlay.isUPNP_CONFIGURED && NetPlay.isUPNP)
 	{
-		std::thread t(upnp_init, std::ref(upnp_status));
+		wz::thread t(upnp_init, std::ref(upnp_status));
 		t.detach();
 	}
 	else if (!NetPlay.isUPNP)
