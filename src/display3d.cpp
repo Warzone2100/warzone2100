@@ -132,6 +132,11 @@ static void NetworkDisplayPlainForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOf
 static void NetworkDisplayImage(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 extern bool writeGameInfo(const char *pFileName); // Used to help debug issues when we have fatal errors & crash handler testing.
 
+static WzText txtLevelName;
+static WzText txtDebugStatus;
+static WzText txtCurrentTime;
+static WzText txtShowFPS;
+
 /********************  Variables  ********************/
 // Should be cleaned up properly and be put in structures.
 
@@ -803,13 +808,12 @@ void draw3DScene(void)
 	}
 	if (showFPS)
 	{
-		unsigned int width, height;
 		const char *fps;
 		sasprintf((char **)&fps, "FPS: %d", frameRate());
-		width = iV_GetTextWidth(fps, font_regular) + 10;
-		height = iV_GetTextHeight(fps, font_regular);
-
-		iV_DrawText(fps, pie_GetVideoBufferWidth() - width, pie_GetVideoBufferHeight() - height, font_regular);
+		txtShowFPS.setText(fps, font_regular);
+		const unsigned width = txtShowFPS.width() + 10;
+		const unsigned height = txtShowFPS.height();
+		txtShowFPS.render(pie_GetVideoBufferWidth() - width, pie_GetVideoBufferHeight() - height, WZCOL_TEXT_BRIGHT);
 	}
 	if (showORDERS)
 	{
@@ -823,14 +827,14 @@ void draw3DScene(void)
 	if (getWidgetsStatus() && !gamePaused())
 	{
 		char buildInfo[255];
-		iV_SetTextColour(WZCOL_TEXT_MEDIUM);
-		iV_DrawText(getLevelName(), RET_X + 134, 410 + E_H, font_small);
 		getAsciiTime(buildInfo, graphicsTime);
-		iV_DrawText(buildInfo, RET_X + 134, 422 + E_H, font_small);
+		txtLevelName.render(RET_X + 134, 410 + E_H, WZCOL_TEXT_MEDIUM);
 		if (getDebugMappingStatus())
 		{
-			iV_DrawText("DEBUG ", RET_X + 134, 436 + E_H, font_small);
+			txtDebugStatus.render(RET_X + 134, 436 + E_H, WZCOL_TEXT_MEDIUM);
 		}
+		txtCurrentTime.setText(buildInfo, font_small);
+		txtCurrentTime.render(RET_X + 134, 422 + E_H, WZCOL_TEXT_MEDIUM);
 	}
 
 	while (player.r.y > DEG(360))
@@ -1123,6 +1127,9 @@ bool init3DView(void)
 	{
 		return false;
 	}
+
+	txtLevelName.setText(getLevelName(), font_small);
+	txtDebugStatus.setText("DEBUG ", font_small);
 
 	return true;
 }

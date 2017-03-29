@@ -34,6 +34,32 @@ enum iV_fonts
 	font_count
 };
 
+class WzText
+{
+public:
+	WzText() {}
+	WzText(const std::string &text, iV_fonts fontID);
+	void setText(const std::string &text, iV_fonts fontID);
+	~WzText();
+	int width() { return dimensions.x; }
+	int height() { return dimensions.y; }
+	void render(Vector2i position, PIELIGHT colour, float rotation = 0.0f);
+	void render(int x, int y, PIELIGHT colour, float rotation = 0.0f) { render(Vector2i{x,y}, colour, rotation); }
+	int aboveBase() { return mAboveBase; }
+	int belowBase() { return mBelowBase; }
+	int lineSize() { return mLineSize; }
+
+private:
+	iV_fonts mFontID = font_count;
+	std::string mText;
+	GLuint texture = 0;
+	int mAboveBase = 0;
+	int mBelowBase = 0;
+	int mLineSize = 0;
+	Vector2i offsets;
+	Vector2i dimensions;
+};
+
 void iV_TextInit();
 void iV_TextShutdown();
 void iV_font(const char *fontName, const char *fontFace, const char *fontFaceBold);

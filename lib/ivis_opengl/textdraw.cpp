@@ -186,6 +186,8 @@ struct FTFace
 		return m_face;
 	}
 
+	FT_Face &face() { return m_face; }
+
 	hb_font_t *m_font;
 
 private:
@@ -422,8 +424,8 @@ static FTFace &getFTFace(iV_fonts FontID)
 	}
 }
 
-static GLuint textureID;
-static GLuint pbo;
+static GLuint textureID = 0;
+static GLuint pbo = 0;
 
 void iV_TextInit()
 {
@@ -723,3 +725,64 @@ void iV_DrawTextF(float x, float y, const char *format, ...)
 	va_end(ap);
 }
 #endif
+
+void WzText::setText(const std::string &string, iV_fonts fontID)
+{
+	if (mText == string && fontID == mFontID)
+	{
+		return; // cached
+	}
+	mFontID = fontID;
+	mText = string;
+	if (texture == 0)
+	{
+		pie_SetTexturePage(TEXPAGE_EXTERN);
+		glGenTextures(1, &texture);
+		glBindTexture(GL_TEXTURE_2D, texture);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	}
+	TextRun tr(string, "en", HB_SCRIPT_COMMON, HB_DIRECTION_LTR);
+	std::unique_ptr<unsigned char[]> data;
+	FTFace &face = getFTFace(fontID);
+	FT_Face &type = face.face();
+	std::tie(data, dimensions.x, dimensions.y, offsets.x, offsets.y) = getShaper().drawText(tr, face);
+	if (dimensions.x > 0 && dimensions.y > 0)
+	{
+		pie_SetTexturePage(TEXPAGE_EXTERN);
+		glBindTexture(GL_TEXTURE_2D, texture);
+		glBindBuffer(GL_PIXEL_UNPACK_BUFFER, pbo);
+		glBufferData(GL_PIXEL_UNPACK_BUFFER, 4 * dimensions.x * dimensions.y, data.get(), GL_STREAM_DRAW);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, dimensions.x, dimensions.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+		glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
+
+		mAboveBase = -(type->size->metrics.ascender >> 6);
+		mLineSize = (type->size->metrics.ascender - type->size->metrics.descender) >> 6;
+		mBelowBase = type->size->metrics.descender >> 6;
+	}
+	glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+WzText::WzText(const std::string &string, iV_fonts fontID)
+{
+	setText(string, fontID);
+}
+
+WzText::~WzText()
+{
+	glDeleteTextures(1, &texture); // ok to call with texture ID zero
+}
+
+void WzText::render(Vector2i position, PIELIGHT colour, float rotation)
+{
+	ASSERT(texture != 0, "Text not initialized before rendering");
+	if (rotation != 0.f)
+	{
+		rotation = 180. - rotation;
+	}
+	glDisable(GL_CULL_FACE);
+	iV_DrawImage(texture, position, offsets, dimensions, rotation, REND_TEXT, colour);
+	glEnable(GL_CULL_FACE);
+}
