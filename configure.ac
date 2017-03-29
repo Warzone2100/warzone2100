@@ -275,6 +275,9 @@ WZ_CPPFLAGS="${WZ_CPPFLAGS} -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS"
 # zlib
 LDFLAGS="-lz ${LDFLAGS} -fPIC"
 
+# thread support
+LDFLAGS="${LDFLAGS} -lpthread"
+
 if test "x$enable_warnings" = "xyes" ; then
 	# Only disable -Werror for the warning.
 	WZ_Wno_="-Wno-error="
