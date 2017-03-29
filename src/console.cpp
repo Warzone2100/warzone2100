@@ -65,10 +65,10 @@ struct CONSOLE_MESSAGE
 {
 	std::string text;
 	UDWORD	timeAdded;		// When was it added to our list?
-	int		JustifyType;	// text justification
+	CONSOLE_TEXT_JUSTIFICATION JustifyType;	// text justification
 	int		player;			// Player who sent this message or SYSTEM_MESSAGE
 	bool	team;			// team message or not
-	CONSOLE_MESSAGE() : timeAdded(0), JustifyType(0), player(0), team(false) {}
+	CONSOLE_MESSAGE() : timeAdded(0), JustifyType(DEFAULT_JUSTIFY), player(0), team(false) {}
 };
 std::deque<CONSOLE_MESSAGE> ActiveMessages;		// we add all messages to this container
 std::deque<CONSOLE_MESSAGE> TeamMessages;		// history of team/private communications
@@ -171,27 +171,7 @@ bool addConsoleMessage(const char *Text, CONSOLE_TEXT_JUSTIFICATION jusType, SDW
 		sstrcpy(messageText, FitText.c_str());
 		debug(LOG_CONSOLE, "(to player %d): %s", (int)player, messageText);
 		consoleStorage.player = player;
-
-		// set justified text flags
-		switch (jusType)
-		{
-		case LEFT_JUSTIFY:
-			consoleStorage.JustifyType = FTEXT_LEFTJUSTIFY;		// Align to left edge of screen
-			break;
-
-		case RIGHT_JUSTIFY:
-			consoleStorage.JustifyType = FTEXT_RIGHTJUSTIFY;	// Align to right edge of screen
-			break;
-
-		case CENTRE_JUSTIFY:
-			consoleStorage.JustifyType = FTEXT_CENTRE;			// Align to centre of the screen
-			break;
-		default:
-			debug(LOG_FATAL, "Unknown type of text justification for console print, aborting.");
-			abort();
-			break;
-		}
-
+		consoleStorage.JustifyType = jusType;
 		consoleStorage.text = messageText;
 		consoleStorage.timeAdded = realTime;		// Store the time when it was added
 		if (player == INFO_MESSAGE)
@@ -281,20 +261,20 @@ void	flushConsoleMessages(void)
 }
 
 /** Sets console text color depending on message type */
-static void setConsoleTextColor(SDWORD player)
+static PIELIGHT getConsoleTextColor(int player)
 {
 	// System messages
 	if (player == SYSTEM_MESSAGE)
 	{
-		iV_SetTextColour(WZCOL_CONS_TEXT_SYSTEM);
+		return WZCOL_CONS_TEXT_SYSTEM;
 	}
 	else if (player == NOTIFY_MESSAGE)
 	{
-		iV_SetTextColour(WZCOL_YELLOW);
+		return WZCOL_YELLOW;
 	}
 	else if (player == INFO_MESSAGE)
 	{
-		iV_SetTextColour(WZCOL_CONS_TEXT_INFO);
+		return WZCOL_CONS_TEXT_INFO;
 	}
 	else
 	{
@@ -303,19 +283,33 @@ static void setConsoleTextColor(SDWORD player)
 		{
 			if (aiCheckAlliances(player, selectedPlayer))
 			{
-				iV_SetTextColour(WZCOL_CONS_TEXT_USER_ALLY);
+				return WZCOL_CONS_TEXT_USER_ALLY;
 			}
 			else
 			{
-				iV_SetTextColour(WZCOL_CONS_TEXT_USER_ENEMY);
+				return WZCOL_CONS_TEXT_USER_ENEMY;
 			}
 		}
-		else
-		{
-			// Friend-foe is off
-			iV_SetTextColour(WZCOL_TEXT_BRIGHT);
-		}
+		// Friend-foe is off
+		return WZCOL_TEXT_BRIGHT;
 	}
+}
+
+static void console_drawtext(const std::string &text, PIELIGHT colour, int x, int y, CONSOLE_TEXT_JUSTIFICATION justify, int width)
+{
+	iV_SetTextColour(colour);
+	switch (justify)
+	{
+	case LEFT_JUSTIFY:
+		break; // do nothing
+	case RIGHT_JUSTIFY:
+		x = x + width - iV_GetTextWidth(text.c_str(), font_regular);
+		break;
+	case CENTRE_JUSTIFY:
+		x = x + (width - iV_GetTextWidth(text.c_str(), font_regular)) / 2;
+		break;
+	}
+	iV_DrawText(text.c_str(), x, y, font_regular);
 }
 
 // Show global (mode=true) or team (mode=false) history messages
@@ -373,20 +367,9 @@ void displayOldMessages(bool mode)
 		}
 		for (int i = startpos; i < count; ++i)
 		{
-			// Set text color depending on message type
-			if (mode)
-			{
-				iV_SetTextColour(WZCOL_CONS_TEXT_USER_ALLY);
-			}
-			else
-			{
-				setConsoleTextColor((*WhichMessages)[i].player);
-			}
-			TextYpos = iV_DrawFormattedText((*WhichMessages)[i].text.c_str(),
-			                                historyConsole.topX + nudgeright,
-			                                TextYpos,
-			                                historyConsole.width,
-			                                (*WhichMessages)[i].JustifyType, font_regular);
+			PIELIGHT colour = mode ? WZCOL_CONS_TEXT_USER_ALLY : getConsoleTextColor((*WhichMessages)[i].player);
+			console_drawtext((*WhichMessages)[i].text, colour, historyConsole.topX + nudgeright, TextYpos, (*WhichMessages)[i].JustifyType, historyConsole.width);
+			TextYpos += iV_GetTextLineSize(font_regular);
 		}
 	}
 }
@@ -417,12 +400,10 @@ void	displayConsoleMessages(void)
 	if (InfoMessages.size())
 	{
 		auto i = InfoMessages.end() - 1;		// we can only show the last one...
-		setConsoleTextColor(i->player);
-
 		int tmp = pie_GetVideoBufferWidth();
 		drawBlueBox(0, 0,tmp, 18);
 		tmp -= iV_GetTextWidth(i->text.c_str(), font_regular);
-		iV_DrawFormattedText(i->text.c_str(), tmp - 6, linePitch - 2, iV_GetTextWidth(i->text.c_str(), font_regular), i->JustifyType, font_regular);
+		console_drawtext(i->text, getConsoleTextColor(i->player), tmp - 6, linePitch - 2, i->JustifyType, iV_GetTextWidth(i->text.c_str(), font_regular));
 	}
 	int TextYpos = mainConsole.topY;
 	// Draw the blue background for the text (only in game, not lobby)
@@ -433,8 +414,8 @@ void	displayConsoleMessages(void)
 	}
 	for (auto i = ActiveMessages.begin(); i != ActiveMessages.end(); ++i)
 	{
-		setConsoleTextColor(i->player);
-		TextYpos = iV_DrawFormattedText(i->text.c_str(), mainConsole.topX, TextYpos, mainConsole.width, i->JustifyType, font_regular);
+		console_drawtext(i->text, getConsoleTextColor(i->player), mainConsole.topX, TextYpos, i->JustifyType, mainConsole.width);
+		TextYpos += iV_GetTextLineSize(font_regular);
 	}
 }
 
