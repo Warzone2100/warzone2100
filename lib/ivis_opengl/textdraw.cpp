@@ -427,7 +427,14 @@ static GLuint pbo;
 
 void iV_TextInit()
 {
+	pie_SetTexturePage(TEXPAGE_EXTERN);
 	glGenTextures(1, &textureID);
+	glBindTexture(GL_TEXTURE_2D, textureID);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glBindTexture(GL_TEXTURE_2D, 0);
 	glGenBuffers(1, &pbo);
 	regular = new FTFace(getGlobalFTlib().lib, "fonts/DejaVuSans.ttf", 12 * 64, DPI, DPI);
 	bold = new FTFace(getGlobalFTlib().lib, "fonts/DejaVuSans-Bold.ttf", 21 * 64, DPI, DPI);
@@ -676,10 +683,6 @@ void iV_DrawTextRotated(const char *string, float XPos, float YPos, float rotati
 		glBufferData(GL_PIXEL_UNPACK_BUFFER, 4 * width * height, texture.get(), GL_STREAM_DRAW);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
 		glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 		glDisable(GL_CULL_FACE);
 		iV_DrawImage(textureID, Vector2i(XPos, YPos), Vector2i(xoffset, yoffset), Vector2i(width, height), rotation, REND_TEXT, color);
 		glEnable(GL_CULL_FACE);
