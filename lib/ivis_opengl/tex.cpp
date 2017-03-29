@@ -216,7 +216,6 @@ bool replaceTexture(const QString &oldfile, const QString &newfile)
 			pie_MakeTexPageName(tmpname);
 			pie_AddTexPage(&image, tmpname, true, i);
 			iV_unloadImage(&image);
-			glErrors();
 			return true;
 		}
 	}

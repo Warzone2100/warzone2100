@@ -147,8 +147,6 @@ bool screenInitialise()
 	GLint glMaxTUs;
 	GLenum err;
 
-	glErrors();
-
 	err = glewInit();
 	if (GLEW_OK != err)
 	{
@@ -287,7 +285,6 @@ bool screenInitialise()
 		debug(LOG_3D, "Enabling KHR_debug message callback");
 	}
 
-	glErrors();
 	return true;
 }
 
@@ -349,7 +346,6 @@ void wzPerfFrame()
 	{
 		glGetQueryObjectui64v(perfpos[i], GL_QUERY_RESULT, &store.counters[i]);
 	}
-	glErrors();
 	perfList.append(store);
 	perfStarted = false;
 
@@ -400,7 +396,6 @@ void wzPerfBegin(PERF_POINT pp, const char *descr)
 		return;
 	}
 	glBeginQuery(GL_TIME_ELAPSED, perfpos[pp]);
-	glErrors();
 }
 
 void wzPerfEnd(PERF_POINT pp)
@@ -429,7 +424,6 @@ void screenShutDown(void)
 	delete backdropGfx;
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-	glErrors();
 }
 
 /// Display a random backdrop from files in dirname starting with basename.

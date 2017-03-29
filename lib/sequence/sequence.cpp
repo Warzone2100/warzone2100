@@ -388,8 +388,6 @@ static void video_write(bool update)
 		glm::ortho(0.f, static_cast<float>(pie_GetVideoBufferWidth()), static_cast<float>(pie_GetVideoBufferHeight()), 0.f) *
 		glm::translate(glm::vec3(Scrnvidpos[0], Scrnvidpos[1], Scrnvidpos[2]))
 	);
-
-	glErrors();
 }
 
 // FIXME: perhaps we should use wz's routine for audio?
