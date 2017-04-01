@@ -89,7 +89,7 @@ cohaaq: { body: "Body9REC", prop: "tracked01", weap: "QuadRotAAGun" },
 comhltat: { body: "Body6SUPP", prop: "tracked01", weap: "Rocket-HvyA-T" },
 
 // CAM_2_6
-cohhpv: { body: "Body9REC", prop: "tracked01", weap: "Cannon5VulcanMk1" },
+cohact: { body: "Body9REC", prop: "tracked01", weap: "Cannon5VulcanMk1" },
 comrotm: { body: "Body6SUPP", prop: "HalfTrack", weap: "Mortar3ROTARYMk1" },
 comsensh: { body: "Body6SUPP", prop: "HalfTrack", weap: "SensorTurret1Mk1" },
 
