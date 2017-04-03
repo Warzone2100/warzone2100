@@ -117,17 +117,17 @@
             "V-Tol": {
                 "left": "prhlvtl2.pie",
                 "right": "prhrvtl2.pie",
-                "still": "fxvtl10.pie"
+                "moving": "fxvtl10.pie"
             },
             "V-Tol02": {
                 "left": "prhlvtl2.pie",
                 "right": "prhrvtl2.pie",
-                "still": "fxvtl10.pie"
+                "moving": "fxvtl10.pie"
             },
             "V-Tol03": {
                 "left": "prhlvtl2.pie",
                 "right": "prhrvtl2.pie",
-                "still": "fxvtl10.pie"
+                "moving": "fxvtl10.pie"
             },
             "hover01": {
                 "left": "prhhov1.pie"
@@ -195,17 +195,17 @@
             "V-Tol": {
                 "left": "prhlvtl3.pie",
                 "right": "prhrvtl3.pie",
-                "still": "fxvtl11.pie"
+                "moving": "fxvtl11.pie"
             },
             "V-Tol02": {
                 "left": "prhlvtl3.pie",
                 "right": "prhrvtl3.pie",
-                "still": "fxvtl11.pie"
+                "moving": "fxvtl11.pie"
             },
             "V-Tol03": {
                 "left": "prhlvtl3.pie",
                 "right": "prhrvtl3.pie",
-                "still": "fxvtl11.pie"
+                "moving": "fxvtl11.pie"
             },
             "hover01": {
                 "left": "prhhov1.pie"
@@ -273,17 +273,17 @@
             "V-Tol": {
                 "left": "prhlvtl4.pie",
                 "right": "prhrvtl4.pie",
-                "still": "fxvtl12.pie"
+                "moving": "fxvtl12.pie"
             },
             "V-Tol02": {
                 "left": "prhlvtl4.pie",
                 "right": "prhrvtl4.pie",
-                "still": "fxvtl12.pie"
+                "moving": "fxvtl12.pie"
             },
             "V-Tol03": {
                 "left": "prhlvtl4.pie",
                 "right": "prhrvtl4.pie",
-                "still": "fxvtl12.pie"
+                "moving": "fxvtl12.pie"
             },
             "hover01": {
                 "left": "prhhov1.pie"
@@ -351,17 +351,17 @@
             "V-Tol": {
                 "left": "prllvtl1.pie",
                 "right": "prlrvtl1.pie",
-                "still": "fxvtl01.pie"
+                "moving": "fxvtl01.pie"
             },
             "V-Tol02": {
                 "left": "prllvtl1.pie",
                 "right": "prlrvtl1.pie",
-                "still": "fxvtl01.pie"
+                "moving": "fxvtl01.pie"
             },
             "V-Tol03": {
                 "left": "prllvtl1.pie",
                 "right": "prlrvtl1.pie",
-                "still": "fxvtl01.pie"
+                "moving": "fxvtl01.pie"
             },
             "hover01": {
                 "left": "prlhov1.pie"
@@ -429,17 +429,17 @@
             "V-Tol": {
                 "left": "prllvtl2.pie",
                 "right": "prlrvtl2.pie",
-                "still": "fxvtl2and3.pie"
+                "moving": "fxvtl2and3.pie"
             },
             "V-Tol02": {
                 "left": "prllvtl2.pie",
                 "right": "prlrvtl2.pie",
-                "still": "fxvtl2and3.pie"
+                "moving": "fxvtl2and3.pie"
             },
             "V-Tol03": {
                 "left": "prllvtl2.pie",
                 "right": "prlrvtl2.pie",
-                "still": "fxvtl2and3.pie"
+                "moving": "fxvtl2and3.pie"
             },
             "hover01": {
                 "left": "prlhov1.pie"
@@ -507,17 +507,17 @@
             "V-Tol": {
                 "left": "prllvtl2.pie",
                 "right": "prlrvtl2.pie",
-                "still": "fxvtl2and3.pie"
+                "moving": "fxvtl2and3.pie"
             },
             "V-Tol02": {
                 "left": "prllvtl2.pie",
                 "right": "prlrvtl2.pie",
-                "still": "fxvtl2and3.pie"
+                "moving": "fxvtl2and3.pie"
             },
             "V-Tol03": {
                 "left": "prllvtl2.pie",
                 "right": "prlrvtl2.pie",
-                "still": "fxvtl2and3.pie"
+                "moving": "fxvtl2and3.pie"
             },
             "hover01": {
                 "left": "prlhov1.pie"
@@ -585,17 +585,17 @@
             "V-Tol": {
                 "left": "prllvtl3.pie",
                 "right": "prlrvtl3.pie",
-                "still": "fxvtl04.pie"
+                "moving": "fxvtl04.pie"
             },
             "V-Tol02": {
                 "left": "prllvtl3.pie",
                 "right": "prlrvtl3.pie",
-                "still": "fxvtl04.pie"
+                "moving": "fxvtl04.pie"
             },
             "V-Tol03": {
                 "left": "prllvtl3.pie",
                 "right": "prlrvtl3.pie",
-                "still": "fxvtl04.pie"
+                "moving": "fxvtl04.pie"
             },
             "hover01": {
                 "left": "prlhov1.pie"
@@ -663,17 +663,17 @@
             "V-Tol": {
                 "left": "prmlvtl1.pie",
                 "right": "prmrvtl1.pie",
-                "still": "fxvtl5to8.pie"
+                "moving": "fxvtl5to8.pie"
             },
             "V-Tol02": {
                 "left": "prmlvtl1.pie",
                 "right": "prmrvtl1.pie",
-                "still": "fxvtl5to8.pie"
+                "moving": "fxvtl5to8.pie"
             },
             "V-Tol03": {
                 "left": "prmlvtl1.pie",
                 "right": "prmrvtl1.pie",
-                "still": "fxvtl5to8.pie"
+                "moving": "fxvtl5to8.pie"
             },
             "hover01": {
                 "left": "prmhov1.pie"
@@ -741,17 +741,17 @@
             "V-Tol": {
                 "left": "prmlvtl1.pie",
                 "right": "prmrvtl1.pie",
-                "still": "fxvtl5to8.pie"
+                "moving": "fxvtl5to8.pie"
             },
             "V-Tol02": {
                 "left": "prmlvtl1.pie",
                 "right": "prmrvtl1.pie",
-                "still": "fxvtl5to8.pie"
+                "moving": "fxvtl5to8.pie"
             },
             "V-Tol03": {
                 "left": "prmlvtl1.pie",
                 "right": "prmrvtl1.pie",
-                "still": "fxvtl5to8.pie"
+                "moving": "fxvtl5to8.pie"
             },
             "hover01": {
                 "left": "prmhov1.pie"
@@ -819,17 +819,17 @@
             "V-Tol": {
                 "left": "prmlvtl1.pie",
                 "right": "prmrvtl1.pie",
-                "still": "fxvtl5to8.pie"
+                "moving": "fxvtl5to8.pie"
             },
             "V-Tol02": {
                 "left": "prmlvtl1.pie",
                 "right": "prmrvtl1.pie",
-                "still": "fxvtl5to8.pie"
+                "moving": "fxvtl5to8.pie"
             },
             "V-Tol03": {
                 "left": "prmlvtl1.pie",
                 "right": "prmrvtl1.pie",
-                "still": "fxvtl5to8.pie"
+                "moving": "fxvtl5to8.pie"
             },
             "hover01": {
                 "left": "prmhov1.pie"
@@ -897,17 +897,17 @@
             "V-Tol": {
                 "left": "prmlvtl1.pie",
                 "right": "prmrvtl1.pie",
-                "still": "fxvtl5to8.pie"
+                "moving": "fxvtl5to8.pie"
             },
             "V-Tol02": {
                 "left": "prmlvtl1.pie",
                 "right": "prmrvtl1.pie",
-                "still": "fxvtl5to8.pie"
+                "moving": "fxvtl5to8.pie"
             },
             "V-Tol03": {
                 "left": "prmlvtl1.pie",
                 "right": "prmrvtl1.pie",
-                "still": "fxvtl5to8.pie"
+                "moving": "fxvtl5to8.pie"
             },
             "hover01": {
                 "left": "prmhov1.pie"
@@ -975,17 +975,17 @@
             "V-Tol": {
                 "left": "prhlvtl1.pie",
                 "right": "prhrvtl1.pie",
-                "still": "fxvtl09.pie"
+                "moving": "fxvtl09.pie"
             },
             "V-Tol02": {
                 "left": "prhlvtl1.pie",
                 "right": "prhrvtl1.pie",
-                "still": "fxvtl09.pie"
+                "moving": "fxvtl09.pie"
             },
             "V-Tol03": {
                 "left": "prhlvtl1.pie",
                 "right": "prhrvtl1.pie",
-                "still": "fxvtl09.pie"
+                "moving": "fxvtl09.pie"
             },
             "hover01": {
                 "left": "prhhov1.pie"
