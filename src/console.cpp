@@ -63,17 +63,18 @@ struct CONSOLE
 
 struct CONSOLE_MESSAGE
 {
-	std::string text;
+	WzText display;
 	UDWORD	timeAdded;		// When was it added to our list?
 	CONSOLE_TEXT_JUSTIFICATION JustifyType;	// text justification
 	int		player;			// Player who sent this message or SYSTEM_MESSAGE
-	bool	team;			// team message or not
-	CONSOLE_MESSAGE() : timeAdded(0), JustifyType(DEFAULT_JUSTIFY), player(0), team(false) {}
+	CONSOLE_MESSAGE(const std::string &text, iV_fonts fontID, UDWORD time, CONSOLE_TEXT_JUSTIFICATION justify, int plr)
+	                : display(text, fontID), timeAdded(time), JustifyType(justify), player(plr) {}
 };
-std::deque<CONSOLE_MESSAGE> ActiveMessages;		// we add all messages to this container
-std::deque<CONSOLE_MESSAGE> TeamMessages;		// history of team/private communications
-std::deque<CONSOLE_MESSAGE> HistoryMessages;	// history of all other communications
-std::deque<CONSOLE_MESSAGE> InfoMessages;
+
+static std::deque<CONSOLE_MESSAGE> ActiveMessages;		// we add all messages to this container
+static std::deque<CONSOLE_MESSAGE> TeamMessages;		// history of team/private communications
+static std::deque<CONSOLE_MESSAGE> HistoryMessages;	// history of all other communications
+static std::deque<CONSOLE_MESSAGE> InfoMessages;
 static bool	bConsoleDropped = false;			// Is the console history on or off?
 static bool HistoryMode = false;				// toggle between team & global history
 static int updatepos = 0;						// if user wants to scroll back the history log
@@ -141,8 +142,6 @@ void	toggleConsoleDrop(void)
 /** Add a string to the console. */
 bool addConsoleMessage(const char *Text, CONSOLE_TEXT_JUSTIFICATION jusType, SDWORD player, bool team)
 {
-	CONSOLE_MESSAGE	consoleStorage;
-
 	if (!allowNewMessages)
 	{
 		return false;	// Don't allow it to be added if we've disabled adding of new messages
@@ -150,7 +149,6 @@ bool addConsoleMessage(const char *Text, CONSOLE_TEXT_JUSTIFICATION jusType, SDW
 
 	std::istringstream stream(Text);
 	std::string lines;
-	char messageText[MAX_CONSOLE_STRING_LENGTH];
 
 	while (std::getline(stream, lines))
 	{
@@ -168,24 +166,20 @@ bool addConsoleMessage(const char *Text, CONSOLE_TEXT_JUSTIFICATION jusType, SDW
 			FitText.resize(FitText.length() - 1);	// Erase last char.
 		}
 
-		sstrcpy(messageText, FitText.c_str());
-		debug(LOG_CONSOLE, "(to player %d): %s", (int)player, messageText);
-		consoleStorage.player = player;
-		consoleStorage.JustifyType = jusType;
-		consoleStorage.text = messageText;
-		consoleStorage.timeAdded = realTime;		// Store the time when it was added
+		debug(LOG_CONSOLE, "(to player %d): %s", (int)player, FitText.c_str());
+
 		if (player == INFO_MESSAGE)
 		{
-			InfoMessages.push_back(consoleStorage);
+			InfoMessages.emplace_back(FitText, font_regular, realTime, jusType, player);
 		}
 		else
 		{
-			ActiveMessages.push_back(consoleStorage);	// everything gets logged here for a specific period of time
+			ActiveMessages.emplace_back(FitText, font_regular, realTime, jusType, player);	// everything gets logged here for a specific period of time
 			if (team)
 			{
-				TeamMessages.push_back(consoleStorage);	// persistent team specific logs
+				TeamMessages.emplace_back(FitText, font_regular, realTime, jusType, player);	// persistent team specific logs
 			}
-			HistoryMessages.push_back(consoleStorage);	// persistent messages (all types)
+			HistoryMessages.emplace_back(FitText, font_regular, realTime, jusType, player);	// persistent messages (all types)
 		}
 	}
 	return true;
@@ -295,21 +289,20 @@ static PIELIGHT getConsoleTextColor(int player)
 	}
 }
 
-static void console_drawtext(const std::string &text, PIELIGHT colour, int x, int y, CONSOLE_TEXT_JUSTIFICATION justify, int width)
+static void console_drawtext(WzText &display, PIELIGHT colour, int x, int y, CONSOLE_TEXT_JUSTIFICATION justify, int width)
 {
-	iV_SetTextColour(colour);
 	switch (justify)
 	{
 	case LEFT_JUSTIFY:
 		break; // do nothing
 	case RIGHT_JUSTIFY:
-		x = x + width - iV_GetTextWidth(text.c_str(), font_regular);
+		x = x + width - display.width();
 		break;
 	case CENTRE_JUSTIFY:
-		x = x + (width - iV_GetTextWidth(text.c_str(), font_regular)) / 2;
+		x = x + (width - display.width()) / 2;
 		break;
 	}
-	iV_DrawText(text.c_str(), x, y, font_regular);
+	display.render(x, y, colour);
 }
 
 // Show global (mode=true) or team (mode=false) history messages
@@ -368,8 +361,8 @@ void displayOldMessages(bool mode)
 		for (int i = startpos; i < count; ++i)
 		{
 			PIELIGHT colour = mode ? WZCOL_CONS_TEXT_USER_ALLY : getConsoleTextColor((*WhichMessages)[i].player);
-			console_drawtext((*WhichMessages)[i].text, colour, historyConsole.topX + nudgeright, TextYpos, (*WhichMessages)[i].JustifyType, historyConsole.width);
-			TextYpos += iV_GetTextLineSize(font_regular);
+			console_drawtext((*WhichMessages)[i].display, colour, historyConsole.topX + nudgeright, TextYpos, (*WhichMessages)[i].JustifyType, historyConsole.width);
+			TextYpos += (*WhichMessages)[i].display.lineSize();
 		}
 	}
 }
@@ -402,8 +395,8 @@ void	displayConsoleMessages(void)
 		auto i = InfoMessages.end() - 1;		// we can only show the last one...
 		int tmp = pie_GetVideoBufferWidth();
 		drawBlueBox(0, 0,tmp, 18);
-		tmp -= iV_GetTextWidth(i->text.c_str(), font_regular);
-		console_drawtext(i->text, getConsoleTextColor(i->player), tmp - 6, linePitch - 2, i->JustifyType, iV_GetTextWidth(i->text.c_str(), font_regular));
+		tmp -= i->display.width();
+		console_drawtext(i->display, getConsoleTextColor(i->player), tmp - 6, linePitch - 2, i->JustifyType, i->display.width());
 	}
 	int TextYpos = mainConsole.topY;
 	// Draw the blue background for the text (only in game, not lobby)
@@ -414,8 +407,8 @@ void	displayConsoleMessages(void)
 	}
 	for (auto i = ActiveMessages.begin(); i != ActiveMessages.end(); ++i)
 	{
-		console_drawtext(i->text, getConsoleTextColor(i->player), mainConsole.topX, TextYpos, i->JustifyType, mainConsole.width);
-		TextYpos += iV_GetTextLineSize(font_regular);
+		console_drawtext(i->display, getConsoleTextColor(i->player), mainConsole.topX, TextYpos, i->JustifyType, mainConsole.width);
+		TextYpos += i->display.lineSize();
 	}
 }
 
