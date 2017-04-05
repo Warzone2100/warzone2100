@@ -297,8 +297,8 @@ struct TextShaper
 				: buffer(std::move(b)), pixelPosition(p), size(s), pitch(_pitch) {}
 		};
 
-		std::vector<glyphRaster> glyphes;
-		std::transform(shapingResult.begin(), shapingResult.end(), std::back_inserter(glyphes),
+		std::vector<glyphRaster> glyphs;
+		std::transform(shapingResult.begin(), shapingResult.end(), std::back_inserter(glyphs),
 			[&] (const HarfbuzzPosition &g) {
 			RasterizedGlyph glyph = face.get(g.codepoint, g.penPosition % 64);
 			int32_t x0 = g.penPosition.x / 64 + glyph.bearing_x;
@@ -316,7 +316,7 @@ struct TextShaper
 		std::unique_ptr<unsigned char[]> stringTexture(new unsigned char[4 * width * height]);
 		memset(stringTexture.get(), 0, 4 * width * height);
 
-		std::for_each(glyphes.begin(), glyphes.end(),
+		std::for_each(glyphs.begin(), glyphs.end(),
 			[&](const glyphRaster &g)
 			{
 				for (int i = 0; i < g.size.y; ++i)
@@ -325,9 +325,12 @@ struct TextShaper
 					for (int j = 0; j < g.size.x; ++j)
 					{
 						uint32_t j0 = g.pixelPosition.x - min_x;
-						stringTexture[4 * ((i0 + i) * width + j + j0)] = g.buffer[i * g.pitch + 3 * j];
-						stringTexture[4 * ((i0 + i) * width + j + j0) + 1] = g.buffer[i * g.pitch + 3 * j + 1];
-						stringTexture[4 * ((i0 + i) * width + j + j0) + 2] = g.buffer[i * g.pitch + 3 * j + 2];
+						uint8_t const *src = &g.buffer[i * g.pitch + 3 * j];
+						uint8_t *dst = &stringTexture[4 * ((i0 + i) * width + j + j0)];
+						dst[0] = std::min(dst[0] + src[0], 255);
+						dst[1] = std::min(dst[1] + src[1], 255);
+						dst[2] = std::min(dst[2] + src[2], 255);
+						dst[3] = std::min(dst[3] + ((src[0] * 77 + src[1] * 150 + src[2] * 29) >> 8), 255);
 					}
 				}
 			});
