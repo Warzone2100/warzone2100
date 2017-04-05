@@ -3087,7 +3087,7 @@ DROID *giftSingleDroid(DROID *psD, UDWORD to)
 	psNewDroid = reallyBuildDroid(&sTemplate, Position(psD->pos.x, psD->pos.y, 0), to, false, psD->rot);
 	ASSERT_OR_RETURN(NULL, psNewDroid, "Unable to build unit");
 	addDroid(psNewDroid, apsDroidLists);
-	psNewDroid->body = psD->body;
+	psNewDroid->body = clip((psD->body*psNewDroid->originalBody + psD->originalBody/2)/std::max(psD->originalBody, 1u), 1u, psNewDroid->originalBody);
 	psNewDroid->experience = psD->experience;
 	if (!(psNewDroid->droidType == DROID_PERSON || cyborgDroid(psNewDroid) || isTransporter(psNewDroid)))
 	{
