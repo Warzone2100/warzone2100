@@ -1,5 +1,5 @@
 #version 120
-#pragma debug(on)
+//#pragma debug(on)
 
 uniform sampler2D Texture; // diffuse
 uniform sampler2D TextureTcmask; // tcmask

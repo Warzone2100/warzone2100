@@ -1,5 +1,5 @@
 #version 120
-#pragma debug(on)
+//#pragma debug(on)
 
 uniform mat4 ModelViewProjectionMatrix;
 

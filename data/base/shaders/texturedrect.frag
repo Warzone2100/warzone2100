@@ -1,12 +1,11 @@
-#version 130
+#version 120
 
 uniform vec4 color = vec4(1.);
 uniform sampler2D texture;
 
-in vec2 uv;
-out vec4 FragColor;
+varying vec2 uv;
 
 void main()
 {
-	FragColor = texture2D(texture, uv) * color;
+	gl_FragColor = texture2D(texture, uv) * color;
 }

@@ -49,6 +49,7 @@
 std::vector<pie_internal::SHADER_PROGRAM> pie_internal::shaderProgram;
 static GLfloat shaderStretch = 0;
 SHADER_MODE pie_internal::currentShaderMode = SHADER_NONE;
+GLuint pie_internal::rectBuffer = 0;
 unsigned int pieStateCount = 0; // Used in pie_GetResetCounts
 static RENDER_STATE rendStates;
 static GLint ecmState = 0;
@@ -396,7 +397,7 @@ bool pie_LoadShaders()
 
 	// Textured rectangular shader
 	debug(LOG_3D, "Loading shader: SHADER_TEXRECT");
-	result = pie_LoadShader("Rect program", "shaders/rect.vert", "shaders/texturedrect.frag",
+	result = pie_LoadShader("Textured rect program", "shaders/rect.vert", "shaders/texturedrect.frag",
 		{ "transformationMatrix", "tuv_offset", "tuv_scale", "color", "texture" });
 	ASSERT_OR_RETURN(false, result && ++shaderEnum == SHADER_TEXRECT, "Failed to load textured rect shader");
 
@@ -425,6 +426,18 @@ bool pie_LoadShaders()
 	ASSERT_OR_RETURN(false, result && ++shaderEnum == SHADER_TEXT, "Failed to load text shader");
 
 	pie_internal::currentShaderMode = SHADER_NONE;
+
+	GLbyte rect[] {
+		0, 1, 0, 1,
+		0, 0, 0, 1,
+		1, 1, 0, 1,
+		1, 0, 0, 1
+	};
+	glGenBuffers(1, &pie_internal::rectBuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, pie_internal::rectBuffer);
+	glBufferData(GL_ARRAY_BUFFER, 16 * sizeof(GLbyte), rect, GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
 	return true;
 }
 

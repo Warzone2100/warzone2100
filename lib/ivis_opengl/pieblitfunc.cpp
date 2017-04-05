@@ -196,6 +196,19 @@ GFX::~GFX()
 	}
 }
 
+static void enableRect()
+{
+	glEnableVertexAttribArray(VERTEX_POS_ATTRIB_INDEX);
+	glBindBuffer(GL_ARRAY_BUFFER, pie_internal::rectBuffer);
+	glVertexAttribPointer(VERTEX_POS_ATTRIB_INDEX, 4, GL_BYTE, false, 0, nullptr);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
+static void disableRect()
+{
+	glDisableVertexAttribArray(VERTEX_POS_ATTRIB_INDEX);
+}
+
 void iV_Line(int x0, int y0, int x1, int y1, PIELIGHT colour)
 {
 	pie_SetTexturePage(TEXPAGE_NONE);
@@ -207,7 +220,9 @@ void iV_Line(int x0, int y0, int x1, int y1, PIELIGHT colour)
 	);
 	const auto &mat = glm::ortho(0.f, static_cast<float>(pie_GetVideoBufferWidth()), static_cast<float>(pie_GetVideoBufferHeight()), 0.f);
 	pie_ActivateShader(SHADER_LINE, glm::vec2(x0, y0), glm::vec2(x1, y1), color, mat);
+	enableRect();
 	glDrawArrays(GL_LINES, 0, 2);
+	disableRect();
 	pie_DeactivateShader();
 }
 
@@ -221,12 +236,14 @@ void iV_Lines(const std::vector<glm::ivec4> &lines, PIELIGHT colour)
 		colour.vector[3] / 255.f
 	);
 	const auto &mat = glm::ortho(0.f, static_cast<float>(pie_GetVideoBufferWidth()), static_cast<float>(pie_GetVideoBufferHeight()), 0.f);
+	enableRect();
 	for (const auto &line : lines)
 	{
 		pie_ActivateShader(SHADER_LINE, glm::vec2(line.x, line.y), glm::vec2(line.z, line.w), color, mat);
 		glDrawArrays(GL_LINES, 0, 2);
 	}
 	pie_DeactivateShader();
+	disableRect();
 }
 
 /**
@@ -247,7 +264,9 @@ static void pie_DrawRect(float x0, float y0, float x1, float y1, PIELIGHT colour
 
 	pie_ActivateShader(SHADER_RECT, mvp,
 		glm::vec4(colour.vector[0] / 255.f, colour.vector[1] / 255.f, colour.vector[2] / 255.f, colour.vector[3] / 255.f));
+	enableRect();
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+	disableRect();
 	pie_DeactivateShader();
 }
 
@@ -271,6 +290,7 @@ void iV_Box2(int x0, int y0, int x1, int y1, PIELIGHT first, PIELIGHT second)
 		first.vector[2] / 255.f,
 		first.vector[3] / 255.f
 	);
+	enableRect();
 	pie_ActivateShader(SHADER_LINE, glm::vec2(x0, y1), glm::vec2(x0, y0), firstColor, mat);
 	glDrawArrays(GL_LINES, 0, 2);
 	pie_ActivateShader(SHADER_LINE, glm::vec2(x0, y0), glm::vec2(x1, y0), firstColor, mat);
@@ -287,6 +307,7 @@ void iV_Box2(int x0, int y0, int x1, int y1, PIELIGHT first, PIELIGHT second)
 	pie_ActivateShader(SHADER_LINE, glm::vec2(x0, y1), glm::vec2(x1, y1), secondColor, mat);
 	glDrawArrays(GL_LINES, 0, 2);
 	pie_DeactivateShader();
+	disableRect();
 }
 
 /***************************************************************************/
@@ -332,7 +353,9 @@ static void iv_DrawImageImpl(Vector2i offset, Vector2i size, Vector2f TextureUV,
 		Vector2f(TextureUV.x, TextureUV.y),
 		Vector2f(TextureSize.x, TextureSize.y),
 		glm::vec4(colour.vector[0] / 255.f, colour.vector[1] / 255.f, colour.vector[2] / 255.f, colour.vector[3] / 255.f), 0);
+	enableRect();
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+	disableRect();
 	pie_DeactivateShader();
 }
 

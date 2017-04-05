@@ -1,13 +1,13 @@
-#version 130
+#version 120
 
 uniform mat4 posMatrix;
 
-in vec4 vertex;
-in vec2 vertexTexCoord;
-in vec4 vertexColor;
+attribute vec4 vertex;
+attribute vec2 vertexTexCoord;
+attribute vec4 vertexColor;
 
-out vec2 uv;
-out vec4 color;
+varying vec2 uv;
+varying vec4 color;
 
 void main()
 {

@@ -110,6 +110,7 @@ namespace pie_internal
 
 	extern std::vector<SHADER_PROGRAM> shaderProgram;
 	extern SHADER_MODE currentShaderMode;
+	extern GLuint rectBuffer;
 
 	/**
 	 * setUniforms is an overloaded wrapper around glUniform* functions
