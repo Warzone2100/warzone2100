@@ -12,13 +12,13 @@ uniform mat4 transformationMatrix;
 uniform vec2 tuv_offset;
 uniform vec2 tuv_scale;
 
-attribute vec4 rect;
+attribute vec4 vertex;
 
 varying vec2 uv;
 
 
 void main()
 {
-	gl_Position = transformationMatrix * rect;
-	uv = tuv_scale * rect.xy + tuv_offset;
+	gl_Position = transformationMatrix * vertex;
+	uv = tuv_scale * vertex.xy + tuv_offset;
 }
