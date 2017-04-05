@@ -123,6 +123,7 @@ static inline void iV_Box(int x0, int y0, int x1, int y1, PIELIGHT first)
 }
 extern void pie_BoxFill(int x0, int y0, int x1, int y1, PIELIGHT colour, REND_MODE rendermode = REND_OPAQUE);
 extern void iV_DrawImage(GLuint TextureID, Vector2i position, Vector2i offset, Vector2i size, float angle, REND_MODE mode, PIELIGHT colour);
+extern void iV_DrawImageText(GLuint TextureID, Vector2i position, Vector2i offset, Vector2i size, float angle, REND_MODE mode, PIELIGHT colour);
 extern void iV_DrawImage(IMAGEFILE *ImageFile, UWORD ID, int x, int y, const glm::mat4 &modelViewProjection = defaultProjectionMatrix());
 void iV_DrawImage2(const QString &filename, float x, float y, float width = -0.0f, float height = -0.0f);
 void iV_DrawImageTc(Image image, Image imageTc, int x, int y, PIELIGHT colour, const glm::mat4 &modelViewProjection = defaultProjectionMatrix());

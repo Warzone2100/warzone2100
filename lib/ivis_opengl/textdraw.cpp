@@ -407,6 +407,7 @@ static FTFace *regular = nullptr;
 static FTFace *bold = nullptr;
 static FTFace *medium = nullptr;
 static FTFace *small = nullptr;
+static FTFace *smallBold = nullptr;
 
 static FTFace &getFTFace(iV_fonts FontID)
 {
@@ -421,6 +422,8 @@ static FTFace &getFTFace(iV_fonts FontID)
 		return *medium;
 	case font_small:
 		return *small;
+	case font_bar:
+		return *smallBold;
 	}
 }
 
@@ -442,6 +445,7 @@ void iV_TextInit()
 	bold = new FTFace(getGlobalFTlib().lib, "fonts/DejaVuSans-Bold.ttf", 21 * 64, DPI, DPI);
 	medium = new FTFace(getGlobalFTlib().lib, "fonts/DejaVuSans.ttf", 16 * 64, DPI, DPI);
 	small = new FTFace(getGlobalFTlib().lib, "fonts/DejaVuSans.ttf", 9 * 64, DPI, DPI);
+	smallBold = new FTFace(getGlobalFTlib().lib, "fonts/DejaVuSans-Bold.ttf", 9 * 64, DPI, DPI);
 }
 
 void iV_TextShutdown()
@@ -449,11 +453,14 @@ void iV_TextShutdown()
 	delete regular;
 	delete medium;
 	delete bold;
+	delete small;
+	delete smallBold;
 	small = nullptr;
 	regular = nullptr;
 	medium = nullptr;
 	bold = nullptr;
 	small = nullptr;
+	smallBold = nullptr;
 	glDeleteBuffers(1, &pbo);
 	glDeleteTextures(1, &textureID);
 }
@@ -686,7 +693,7 @@ void iV_DrawTextRotated(const char *string, float XPos, float YPos, float rotati
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
 		glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
 		glDisable(GL_CULL_FACE);
-		iV_DrawImage(textureID, Vector2i(XPos, YPos), Vector2i(xoffset, yoffset), Vector2i(width, height), rotation, REND_TEXT, color);
+		iV_DrawImageText(textureID, Vector2i(XPos, YPos), Vector2i(xoffset, yoffset), Vector2i(width, height), rotation, REND_TEXT, color);
 		glEnable(GL_CULL_FACE);
 	}
 }
@@ -783,6 +790,6 @@ void WzText::render(Vector2i position, PIELIGHT colour, float rotation)
 		rotation = 180. - rotation;
 	}
 	glDisable(GL_CULL_FACE);
-	iV_DrawImage(texture, position, offsets, dimensions, rotation, REND_TEXT, colour);
+	iV_DrawImageText(texture, position, offsets, dimensions, rotation, REND_TEXT, colour);
 	glEnable(GL_CULL_FACE);
 }

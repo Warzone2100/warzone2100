@@ -323,11 +323,11 @@ static bool assertValidImage(IMAGEFILE *imageFile, unsigned id)
 	return true;
 }
 
-static void iv_DrawImageImpl(Vector2i offset, Vector2i size, Vector2f TextureUV, Vector2f TextureSize, PIELIGHT colour, const glm::mat4 &modelViewProjection)
+static void iv_DrawImageImpl(Vector2i offset, Vector2i size, Vector2f TextureUV, Vector2f TextureSize, PIELIGHT colour, const glm::mat4 &modelViewProjection, SHADER_MODE mode = SHADER_TEXRECT)
 {
 	glm::mat4 transformMat = modelViewProjection * glm::translate(offset.x, offset.y, 0) * glm::scale(size.x, size.y, 1);
 
-	pie_ActivateShader(SHADER_TEXRECT,
+	pie_ActivateShader(mode,
 		transformMat,
 		Vector2f(TextureUV.x, TextureUV.y),
 		Vector2f(TextureSize.x, TextureSize.y),
@@ -345,6 +345,17 @@ void iV_DrawImage(GLuint TextureID, Vector2i Position, Vector2i offset, Vector2i
 	glm::mat4 mvp = defaultProjectionMatrix() * glm::translate(Position.x, Position.y, 0) * glm::rotate(angle, glm::vec3(0.f, 0.f, 1.f));
 
 	iv_DrawImageImpl(offset, size, Vector2f(0.f, 0.f), Vector2f(1.f, 1.f), colour, mvp);
+}
+
+void iV_DrawImageText(GLuint TextureID, Vector2i Position, Vector2i offset, Vector2i size, float angle, REND_MODE mode, PIELIGHT colour)
+{
+	pie_SetRendMode(mode);
+	pie_SetTexturePage(TEXPAGE_EXTERN);
+	glBindTexture(GL_TEXTURE_2D, TextureID);
+
+	glm::mat4 mvp = defaultProjectionMatrix() * glm::translate(Position.x, Position.y, 0) * glm::rotate(angle, glm::vec3(0.f, 0.f, 1.f));
+
+	iv_DrawImageImpl(offset, size, Vector2f(0.f, 0.f), Vector2f(1.f, 1.f), colour, mvp, SHADER_TEXT);
 }
 
 static void pie_DrawImage(IMAGEFILE *imageFile, int id, Vector2i size, const PIERECT *dest, PIELIGHT colour, const glm::mat4 &modelViewProjection)
