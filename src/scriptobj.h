@@ -25,7 +25,9 @@
 #define __INCLUDED_SRC_SCRIPTOBJ_H__
 
 #include "lib/framework/types.h"
-#include "lib/script/interpreter.h"
+
+class WzConfig;
+struct INTERP_VAL;
 
 // id's for object variables
 enum _objids

@@ -24,7 +24,10 @@
 #ifndef __INCLUDED_SRC_GROUP_H__
 #define __INCLUDED_SRC_GROUP_H__
 
-#include "order.h"
+#include "orderdef.h"
+
+struct BASE_OBJECT;
+struct DROID;
 
 enum GROUP_TYPE
 {

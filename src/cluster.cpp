@@ -30,8 +30,7 @@
 #include "cluster.h"
 #include "map.h"
 #include "scriptcb.h"
-#include "scripttabs.h"
-#include "projectile.h"
+#include "objmem.h"
 
 // distance between units for them to be in the same cluster
 #define CLUSTER_DIST	(TILE_UNITS*8)

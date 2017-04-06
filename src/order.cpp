@@ -34,7 +34,6 @@
 #include "order.h"
 #include "action.h"
 #include "map.h"
-#include "geometry.h"
 #include "projectile.h"
 #include "effects.h"	// for waypoint display
 #include "lib/gamelib/gtime.h"
@@ -46,9 +45,8 @@
 #include "group.h"
 #include "cmddroid.h"
 #include "lib/script/script.h"
-#include "scripttabs.h"
 #include "scriptcb.h"
-
+#include "move.h"
 #include "multiplay.h"  //ajl
 
 #include "mission.h"
@@ -61,7 +59,6 @@
 #include "lib/sound/audio.h"
 #include "fpath.h"
 #include "display3d.h"
-#include "combat.h"
 #include "console.h"
 #include "mapgrid.h"
 

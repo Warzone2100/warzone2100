@@ -28,6 +28,8 @@
 #include "init.h"
 #include "game.h"
 
+#include <list>
+
 /// maximum number of data files
 #define LEVEL_MAXFILES	9
 

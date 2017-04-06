@@ -52,7 +52,6 @@
 #include <algorithm>
 #include <memory>
 
-#include "lib/framework/crc.h"
 #include "lib/netplay/netplay.h"
 
 /// A coordinate.

@@ -31,7 +31,6 @@
 #include <algorithm>
 
 #include "lib/framework/frame.h"
-#include "lib/framework/strres.h"
 #include "lib/framework/stdio_ext.h"
 #include "lib/gamelib/gtime.h"
 #include "lib/ivis_opengl/bitimage.h"
@@ -66,6 +65,7 @@
 #include "keymap.h"
 #include "loadsave.h"
 #include "loop.h"
+#include "order.h"
 #include "mapdisplay.h"
 #include "mission.h"
 #include "multimenu.h"
@@ -75,7 +75,6 @@
 #include "research.h"
 #include "scriptcb.h"
 #include "scriptextern.h"
-#include "scripttabs.h"
 #include "transporter.h"
 #include "warcam.h"
 #include "main.h"

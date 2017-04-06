@@ -36,7 +36,7 @@
 #include "console.h"
 #include "scores.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
-#include "lib/ivis_opengl/piedef.h"
+#include "lib/ivis_opengl/pietypes.h"
 #include "lib/ivis_opengl/piefunc.h"
 #include "lib/ivis_opengl/piemode.h"
 #include "lib/ivis_opengl/piestate.h"

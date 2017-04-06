@@ -47,6 +47,11 @@ enum ENERGY_BAR
 	BAR_LAST
 };
 
+struct iView
+{
+	Vector3i p, r;
+};
+
 extern bool showFPS;
 extern bool showSAMPLES;
 extern bool showORDERS;

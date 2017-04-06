@@ -28,10 +28,9 @@
 #include <QtCore/QJsonArray>
 
 #include "lib/framework/frame.h"
-#include "lib/framework/strres.h"
-#include "lib/framework/frameresource.h"
 #include "lib/framework/wzconfig.h"
 #include "lib/netplay/netplay.h"
+#include "lib/ivis_opengl/imd.h"
 #include "objects.h"
 #include "lib/gamelib/gtime.h"
 #include "research.h"
@@ -39,7 +38,6 @@
 #include "lib/sound/audio.h"
 #include "lib/sound/audio_id.h"
 #include "lib/script/script.h"
-#include "scripttabs.h"
 #include "hci.h"
 #include "console.h"
 #include "cmddroid.h"

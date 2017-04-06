@@ -24,21 +24,19 @@
  */
 
 #include <QtCore/QSettings>
-#include "lib/framework/wzapp.h"
 #include "lib/framework/wzconfig.h"
 #include "lib/framework/input.h"
 #include "lib/netplay/netplay.h"
 #include "lib/sound/mixer.h"
 #include "lib/ivis_opengl/screen.h"
 #include "lib/framework/opengl.h"
+#include "lib/ivis_opengl/pieclip.h"
 
-#include "advvis.h"
 #include "ai.h"
 #include "component.h"
 #include "configuration.h"
 #include "difficulty.h"
 #include "display3d.h"
-#include "hci.h"
 #include "multiint.h"
 #include "multiplay.h"
 #include "radar.h"

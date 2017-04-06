@@ -43,6 +43,7 @@
 #include "challenge.h"
 #include "intelmap.h"
 #include "map.h"
+#include "move.h"
 #include "structure.h"
 #include "display3d.h"
 #include "research.h"

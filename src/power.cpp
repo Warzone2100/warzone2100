@@ -26,7 +26,6 @@
 #include <string.h>
 #include "objectdef.h"
 #include "power.h"
-#include "hci.h"
 #include "lib/gamelib/gtime.h"
 #include "lib/sound/audio.h"
 #include "objmem.h"
@@ -34,16 +33,10 @@
 #include "lib/netplay/netplay.h"
 #include "multiplay.h"
 #include "multiint.h"
-
 #include "feature.h"
 #include "structure.h"
 #include "mission.h"
-#include "research.h"
 #include "intdisplay.h"
-#include "action.h"
-#include "difficulty.h"
-#include "random.h"
-
 
 #define EXTRACT_POINTS      1
 #define MAX_POWER           1000000

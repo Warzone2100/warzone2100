@@ -28,6 +28,7 @@
 #include "lib/framework/opengl.h"
 #include "lib/ivis_opengl/screen.h"
 #include "lib/netplay/netplay.h"
+#include "lib/ivis_opengl/pieclip.h"
 
 #include "clparse.h"
 #include "display3d.h"

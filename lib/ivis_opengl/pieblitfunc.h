@@ -33,9 +33,12 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/string_ext.h"
+#include "lib/framework/vector.h"
+#include "glm/core/type.hpp"
 #include "piedef.h"
+#include "ivisdef.h"
+#include "pietypes.h"
 #include "piepalette.h"
-#include <glm/gtx/transform.hpp>
 #include "pieclip.h"
 
 /***************************************************************************/
@@ -106,13 +109,7 @@ private:
  *	Global ProtoTypes
  */
 /***************************************************************************/
-static inline glm::mat4 defaultProjectionMatrix()
-{
-	float w = pie_GetVideoBufferWidth();
-	float h = pie_GetVideoBufferHeight();
-
-	return glm::ortho(0.f, static_cast<float>(w), static_cast<float>(h), 0.f);
-}
+glm::mat4 defaultProjectionMatrix();
 void iV_ShadowBox(int x0, int y0, int x1, int y1, int pad, PIELIGHT first, PIELIGHT second, PIELIGHT fill);
 void iV_Line(int x0, int y0, int x1, int y1, PIELIGHT colour);
 void iV_Lines(const std::vector<glm::ivec4> &lines, PIELIGHT colour);

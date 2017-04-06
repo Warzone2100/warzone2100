@@ -24,7 +24,7 @@
 #ifndef __INCLUDED_STATSDEF_H__
 #define __INCLUDED_STATSDEF_H__
 
-#include "lib/ivis_opengl/ivisdef.h"
+struct iIMDShape;
 
 #include <vector>
 #include <algorithm>

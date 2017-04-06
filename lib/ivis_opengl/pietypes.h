@@ -113,15 +113,25 @@ enum SHADER_MODE
 // Simple derived types
 //
 //*************************************************************************
-struct iView
-{
-	Vector3i p, r;
-};
 
 struct iV_Image
 {
 	unsigned int width, height, depth;
 	unsigned char *bmp;
+};
+
+struct PIELIGHTBYTES
+{
+        uint8_t r, g, b, a;
+};
+
+/** Our basic colour type. Use whenever you want to define a colour.
+ *  Set bytes separetely, and do not assume a byte order between the components. */
+union PIELIGHT
+{
+        PIELIGHTBYTES byte;
+        UDWORD rgba;
+        UBYTE vector[4];
 };
 
 #endif // _pieTypes_h

@@ -24,18 +24,18 @@
  */
 
 #include "lib/framework/frame.h"
+#include "lib/framework/vector.h"
 #include "lib/ivis_opengl/piematrix.h"
+#include "lib/ivis_opengl/pieclip.h"
 
 #include "atmos.h"
 #include "bucket3d.h"
 #include "component.h"
 #include "display3d.h"
 #include "effects.h"
-#include "map.h"
 #include "miscimd.h"
 
 #include <algorithm>
-#include <glm/gtx/transform.hpp>
 
 #define CLIP_LEFT	((SDWORD)0)
 #define CLIP_RIGHT	((SDWORD)pie_GetVideoBufferWidth())

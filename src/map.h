@@ -30,6 +30,7 @@
 #include "terrain.h"
 #include "multiplay.h"
 #include "display.h"
+#include "ai.h"
 
 /* The different types of terrain as far as the game is concerned */
 enum TYPE_OF_TERRAIN

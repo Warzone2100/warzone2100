@@ -23,14 +23,8 @@
  *
  */
 
-#include <ctype.h>
 #include <physfs.h>
 #include <time.h>
-#ifndef WIN32
-#include <dirent.h>
-#include <sys/stat.h>
-#include <sys/types.h>
-#endif
 
 #include <QtCore/QTime>
 #include "lib/framework/frame.h"
@@ -47,7 +41,6 @@
 #include "intdisplay.h"
 #include "loadsave.h"
 #include "multiplay.h"
-#include "scores.h"
 #include "mission.h"
 
 #define totalslots 36			// challenge slots

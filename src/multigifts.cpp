@@ -33,6 +33,7 @@
 #include "power.h"
 #include "group.h"
 #include "hci.h"
+#include "order.h"
 #include "scriptfuncs.h"		// for objectinrange.
 #include "lib/gamelib/gtime.h"
 #include "effects.h"

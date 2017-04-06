@@ -24,13 +24,11 @@
 
 #include "lib/ivis_opengl/ivisdef.h"
 #include "lib/ivis_opengl/piematrix.h"
-#include "lib/gamelib/gtime.h"
+#include "lib/ivis_opengl/pieclip.h"
 
 #include "geometry.h"
 #include "objectdef.h"
 #include "map.h"
-#include "display3d.h"
-#include "hci.h"
 #include "display.h"
 
 uint16_t calcDirection(int32_t x0, int32_t y0, int32_t x1, int32_t y1)

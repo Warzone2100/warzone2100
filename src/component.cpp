@@ -23,7 +23,6 @@
 */
 
 #include "lib/framework/frame.h"
-#include "lib/ivis_opengl/piestate.h"
 #include "lib/ivis_opengl/piematrix.h"
 #include "lib/netplay/netplay.h"
 
@@ -35,7 +34,6 @@
 #include "loop.h"
 #include "map.h"
 #include "miscimd.h"
-#include "order.h"
 #include "projectile.h"
 #include "transporter.h"
 #include "mission.h"

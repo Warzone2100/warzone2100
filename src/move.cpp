@@ -31,6 +31,7 @@
 #include "lib/netplay/netplay.h"
 #include "lib/sound/audio.h"
 #include "lib/sound/audio_id.h"
+#include "lib/ivis_opengl/ivisdef.h"
 #include "console.h"
 
 #include "move.h"
@@ -42,10 +43,8 @@
 #include "loop.h"
 #include "geometry.h"
 #include "action.h"
-#include "display3d.h"
 #include "order.h"
 #include "astar.h"
-#include "combat.h"
 #include "mapgrid.h"
 #include "display.h"	// needed for widgetsOn flag.
 #include "effects.h"

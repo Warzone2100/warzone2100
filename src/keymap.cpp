@@ -31,7 +31,6 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/input.h"
-#include "lib/framework/strres.h"
 #include "lib/netplay/netplay.h"
 #include "lib/gamelib/gtime.h"
 #include "keymap.h"
@@ -41,7 +40,6 @@
 #include "display3d.h"
 #include "keymap.h"
 #include "keyedit.h"
-#include "lib/script/script.h"
 
 static UDWORD asciiKeyCodeToTable(KEY_CODE code);
 

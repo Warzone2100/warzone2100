@@ -26,7 +26,6 @@
 #include <string.h>
 
 #include "lib/framework/frame.h"
-#include "lib/framework/strres.h"
 #include "lib/widget/widget.h"
 
 #include "objects.h"
@@ -39,46 +38,32 @@
 #include "lib/ivis_opengl/pieblitfunc.h"
 // FIXME Direct iVis implementation include!
 #include "lib/ivis_opengl/piematrix.h"//matrix code
-#include "lib/ivis_opengl/piestate.h"
 #include "lib/ivis_opengl/screen.h"
 #include "lib/ivis_opengl/piemode.h"
 
+#include "objmem.h"
 #include "display3d.h"
-#include "edit3d.h"
 #include "structure.h"
 #include "research.h"
 #include "lib/gamelib/gtime.h"
 #include "hci.h"
 #include "stats.h"
-#include "game.h"
 #include "power.h"
-#include "lib/sound/audio.h"
-#include "lib/widget/widgint.h"
-#include "lib/widget/bar.h"
-#include "lib/widget/form.h"
-#include "lib/widget/label.h"
 #include "lib/widget/button.h"
-#include "lib/widget/editbox.h"
-#include "lib/widget/slider.h"
 #include "order.h"
 #include "projectile.h"
-
 #include "intimage.h"
 #include "intdisplay.h"
 #include "design.h"
 #include "component.h"
 #include "lib/script/script.h"
-#include "scripttabs.h"
 #include "main.h"
-#include "objects.h"
 #include "display.h"
-#include "console.h"
 #include "cmddroid.h"
 #include "scriptextern.h"
 #include "mission.h"
 #include "template.h"
 #include "multiplay.h"
-#include "multistat.h"
 #include "qtscript.h"
 
 

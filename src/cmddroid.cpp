@@ -29,14 +29,13 @@
 #include "objects.h"
 #include "cmddroiddef.h"
 #include "cmddroid.h"
-#include "lib/netplay/netplay.h"
-#include "lib/gamelib/gtime.h"
 #include "group.h"
 #include "order.h"
-#include "multiplay.h"
 #include "lib/sound/audio.h"
 #include "lib/sound/audio_id.h"
 #include "console.h"
+#include "objmem.h"
+#include "droid.h"
 
 /**This represents the current selected player, which is the client's player.*/
 extern UDWORD selectedPlayer;

@@ -21,8 +21,11 @@
 #ifndef __INCLUDED_SRC_CHEAT_H__
 #define __INCLUDED_SRC_CHEAT_H__
 
+struct NETQUEUE;
+
 bool attemptCheatCode(const char *cheat_name);
 
 void sendProcessDebugMappings(bool val);
 void recvProcessDebugMappings(NETQUEUE queue);
+
 #endif // __INCLUDED_SRC_CHEAT_H__

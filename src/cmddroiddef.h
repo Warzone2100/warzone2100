@@ -28,7 +28,8 @@
 #define __INCLUDED_CMDDROIDDEF_H__
 
 #include "statsdef.h"
-#include "droiddef.h"
+
+struct DROID;
 
 /** This defines the maximum number of command droids allowed per player.*/
 #define MAX_CMDDROIDS	5

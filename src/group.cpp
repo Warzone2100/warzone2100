@@ -28,6 +28,7 @@
 #include "lib/netplay/netplay.h"
 
 #include "multiplay.h"
+#include "order.h"
 #include <QtCore/QMap>
 
 // Group system variables: grpGlobalManager enables to remove all the groups to Shutdown the system

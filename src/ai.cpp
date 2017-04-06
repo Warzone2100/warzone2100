@@ -32,6 +32,8 @@
 #include "mapgrid.h"
 #include "map.h"
 #include "projectile.h"
+#include "objmem.h"
+#include "order.h"
 
 /* Weights used for target selection code,
  * target distance is used as 'common currency'

@@ -25,10 +25,10 @@
 #define __INCLUDED_MESSAGEDEF_H__
 
 #include <QtCore/QStringList>
-#include "lib/ivis_opengl/pietypes.h"
-#include "lib/ivis_opengl/ivisdef.h"
 #include "positiondef.h"
 #include "stringdef.h"
+
+struct iIMDShape;
 
 /// max number of text strings or sequences for VIEWDATA
 static const unsigned int MAX_DATA = 4;

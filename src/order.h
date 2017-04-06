@@ -27,10 +27,7 @@
 #ifndef __INCLUDED_SRC_ORDER_H__
 #define __INCLUDED_SRC_ORDER_H__
 
-#include "droiddef.h"
 #include "orderdef.h"
-#include "droiddef.h"
-#include "structuredef.h"
 
 /** Retreat positions for the players. This is a global instance of RUN_DATA.*/
 extern RUN_DATA asRunData[MAX_PLAYERS];

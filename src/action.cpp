@@ -33,16 +33,17 @@
 #include "action.h"
 #include "combat.h"
 #include "geometry.h"
-#include "intdisplay.h"
 #include "mission.h"
 #include "projectile.h"
 #include "qtscript.h"
 #include "random.h"
-#include "research.h"
 #include "scriptcb.h"
-#include "scripttabs.h"
 #include "transporter.h"
 #include "mapgrid.h"
+#include "hci.h"
+#include "order.h"
+#include "objmem.h"
+#include "move.h"
 
 /* attack run distance */
 #define	VTOL_ATTACK_LENGTH		1000

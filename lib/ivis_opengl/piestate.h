@@ -31,10 +31,16 @@
 
 /***************************************************************************/
 
+#include <string>
+#include <vector>
+
 #include "lib/framework/frame.h"
-#include "piedef.h"
 #include "lib/framework/vector.h"
+#include "lib/framework/opengl.h"
 #include <glm/gtc/type_ptr.hpp>
+#include "piedef.h"
+
+struct iIMDShape;
 
 /***************************************************************************/
 /*

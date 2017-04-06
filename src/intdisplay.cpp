@@ -24,7 +24,6 @@
  *
  */
 #include "lib/framework/frame.h"
-#include "lib/framework/strres.h"
 #include "lib/framework/math_ext.h"
 
 /* Includes direct access to render library */
@@ -32,8 +31,6 @@
 #include "lib/ivis_opengl/piestate.h"
 #include "lib/ivis_opengl/piepalette.h"
 
-#include "lib/ivis_opengl/piemode.h"			// ffs
-#include "lib/ivis_opengl/pieclip.h"			// ffs
 #include "lib/ivis_opengl/pieblitfunc.h"
 
 // FIXME Direct iVis implementation include!
@@ -58,12 +55,10 @@
 #include "radar.h"
 
 #include "display3d.h"
-#include "edit3d.h"
 #include "structure.h"
 #include "research.h"
 #include "hci.h"
 #include "stats.h"
-#include "game.h"
 #include "power.h"
 #include "order.h"
 #include "frontend.h"
@@ -71,7 +66,6 @@
 #include "component.h"
 #include "console.h"
 #include "cmddroid.h"
-#include "group.h"
 #include "transporter.h"
 #include "mission.h"
 

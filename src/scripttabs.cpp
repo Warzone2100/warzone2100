@@ -26,8 +26,7 @@
 
 
 #include "lib/framework/frame.h"
-#include "lib/widget/widget.h"
-#include "objects.h"
+#include "lib/script/event.h"
 #include "lib/script/script.h"
 #include "scripttabs.h"
 
@@ -46,7 +45,6 @@
 #include "levels.h"
 #include "order.h"
 #include "action.h"		//new member variable - .action
-#include "lib/gamelib/gtime.h"
 #include "mission.h"
 
 #include "design.h"			// for the iddes_...

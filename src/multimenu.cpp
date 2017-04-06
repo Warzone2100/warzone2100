@@ -33,7 +33,7 @@
 #include "intdisplay.h"
 // FIXME Direct iVis implementation include!
 #include "lib/ivis_opengl/pieblitfunc.h"
-#include "lib/ivis_opengl/piedef.h"
+#include "lib/ivis_opengl/pietypes.h"
 #include "lib/ivis_opengl/piepalette.h"
 #include "lib/ivis_opengl/bitimage.h"
 #include "lib/gamelib/gtime.h"

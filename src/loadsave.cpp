@@ -30,7 +30,6 @@
 #include <time.h>
 
 #include "lib/framework/frame.h"
-#include "lib/framework/strres.h"
 #include "lib/framework/input.h"
 #include "lib/framework/stdio_ext.h"
 #include "lib/widget/button.h"
@@ -49,11 +48,6 @@
 #include "main.h"
 #include "display3d.h"
 #include "display.h"
-#ifndef WIN32
-#include <dirent.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#endif
 #include "lib/netplay/netplay.h"
 #include "loop.h"
 #include "intdisplay.h"

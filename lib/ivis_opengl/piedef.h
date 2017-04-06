@@ -33,28 +33,10 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/vector.h"
-#include "ivisdef.h"
+#include "glm/core/type.hpp"
 #include "pietypes.h"
 
-/***************************************************************************/
-/*
- *	Global Definitions (STRUCTURES)
- */
-/***************************************************************************/
-
-struct PIELIGHTBYTES
-{
-	uint8_t r, g, b, a;
-};
-
-/** Our basic colour type. Use whenever you want to define a colour.
- *  Set bytes separetely, and do not assume a byte order between the components. */
-union PIELIGHT
-{
-	PIELIGHTBYTES byte;
-	UDWORD rgba;
-	UBYTE vector[4];
-};
+struct iIMDShape;
 
 /***************************************************************************/
 /*

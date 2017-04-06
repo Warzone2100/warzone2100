@@ -31,6 +31,13 @@
 
 #include "basedef.h"
 
+class DROID_GROUP;
+struct BASE_OBJECT;
+struct BASE_STATS;
+struct DROID;
+struct STRUCTURE;
+struct STRUCTURE_STATS;
+
 /** All the possible droid orders.
  * @todo DORDER_CIRCLE = 40 which is not consistent with rest of the enum.
  */

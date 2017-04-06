@@ -33,7 +33,9 @@
 
 #include "wzglobal.h"
 
+#if defined(WZ_OS_WIN)
 #include <assert.h>
+#endif
 #if !defined(WZ_OS_WIN)
 #include <signal.h>
 #endif

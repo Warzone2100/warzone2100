@@ -25,9 +25,9 @@
 #define __INCLUDED_SRC_SCRIPTVALS_H__
 
 #include "lib/script/interpreter.h"
-#include "lib/script/event.h"
-#include "basedef.h"
 #include <physfs.h>
+
+struct SCRIPT_CONTEXT;
 
 // The possible types of initialisation values
 enum INIT_TYPE

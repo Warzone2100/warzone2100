@@ -24,7 +24,10 @@
 #ifndef __INCLUDED_SRC_AI_H__
 #define __INCLUDED_SRC_AI_H__
 
-#include "droiddef.h"
+struct BASE_OBJECT;
+struct DROID;
+
+#include "weapondef.h"
 
 #define ALLIANCE_BROKEN		0			// states of alliance between players
 #define ALLIANCE_REQUESTED	1

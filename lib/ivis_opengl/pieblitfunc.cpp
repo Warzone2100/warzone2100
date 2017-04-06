@@ -570,3 +570,11 @@ void pie_LoadBackDrop(SCREENTYPE screenType)
 		break;
 	}
 }
+
+glm::mat4 defaultProjectionMatrix()
+{
+        float w = pie_GetVideoBufferWidth();
+        float h = pie_GetVideoBufferHeight();
+
+        return glm::ortho(0.f, static_cast<float>(w), static_cast<float>(h), 0.f);
+}

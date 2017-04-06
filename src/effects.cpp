@@ -41,13 +41,14 @@
 #include "lib/framework/input.h"
 #include "lib/framework/math_ext.h"
 
-#include "lib/ivis_opengl/ivisdef.h" //ivis matrix code
-#include "lib/ivis_opengl/piedef.h" //ivis matrix code
+#include "lib/ivis_opengl/ivisdef.h"
+#include "lib/ivis_opengl/pietypes.h"
 #include "lib/framework/fixedpoint.h"
 #include "lib/ivis_opengl/piepalette.h"
 #include "lib/ivis_opengl/piestate.h"
 #include "lib/ivis_opengl/piematrix.h"
 #include "lib/ivis_opengl/piemode.h"
+#include "lib/ivis_opengl/imd.h"
 
 #include "lib/gamelib/gtime.h"
 #include "lib/sound/audio.h"
@@ -59,16 +60,12 @@
 
 #include "effects.h"
 
-#include "mission.h"
-
 #include "miscimd.h"
-#include "hci.h"
 #include "lighting.h"
 #include "console.h"
 #include "loop.h"
 
 #include "multiplay.h"
-#include "game.h"
 #include "component.h"
 #include <glm/gtx/transform.hpp>
 

@@ -20,7 +20,9 @@
 #ifndef _imd_
 #define _imd_
 
-#include "ivisdef.h"
+#include <QtCore/qstring.h>
+
+struct iIMDShape;
 
 #define PIE_NAME				"PIE"  // Pumpkin image export data file
 #define PIE_VER				2

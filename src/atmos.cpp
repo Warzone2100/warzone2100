@@ -25,15 +25,14 @@
 
 #include "lib/framework/frame.h"
 #include "lib/ivis_opengl/piematrix.h"
+#include "lib/ivis_opengl/piepalette.h"
 
 #include "atmos.h"
 #include "display3d.h"
 #include "effects.h"
-#include "hci.h"
 #include "loop.h"
 #include "map.h"
 #include "miscimd.h"
-#include <glm/gtx/transform.hpp>
 
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------

@@ -31,6 +31,7 @@
 #include "lib/framework/strres.h"
 #include "lib/sound/audio.h"
 #include "lib/sound/audio_id.h"
+#include "lib/ivis_opengl/imd.h"
 
 #include "console.h"
 #include "hci.h"

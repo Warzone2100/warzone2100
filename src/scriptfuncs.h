@@ -24,6 +24,7 @@
 #ifndef __INCLUDED_SRC_SCRIPTFUNCS_H__
 #define __INCLUDED_SRC_SCRIPTFUNCS_H__
 
+#include "lib/framework/vector.h"
 #include "messagedef.h"			//for VIEWDATA
 
 // AI won't build there if there are more than

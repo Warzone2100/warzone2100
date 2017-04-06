@@ -36,7 +36,8 @@
 #include "projectile.h"
 #include "random.h"
 #include "qtscript.h"
-
+#include "order.h"
+#include "objmem.h"
 
 /* Fire a weapon at something */
 bool combFire(WEAPON *psWeap, BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget, int weapon_slot)

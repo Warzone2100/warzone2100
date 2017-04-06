@@ -21,6 +21,7 @@
 #ifndef __INCLUDED_SRC_COMPONENT_H__
 #define __INCLUDED_SRC_COMPONENT_H__
 
+#include "lib/ivis_opengl/pietypes.h"
 #include "droiddef.h"
 #include "structuredef.h"
 

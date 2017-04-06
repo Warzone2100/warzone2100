@@ -24,6 +24,10 @@
 #ifndef __INCLUDED_SRC_SCRIPTCB_H__
 #define __INCLUDED_SRC_SCRIPTCB_H__
 
+struct BASE_OBJECT;
+struct DROID;
+struct STRUCTURE;
+
 //console callback stuff
 //---------------------------
 #ifndef MAXSTRLEN

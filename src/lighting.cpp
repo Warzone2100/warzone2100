@@ -37,8 +37,6 @@
 #include "map.h"
 #include "lighting.h"
 #include "display3d.h"
-#include "effects.h"
-#include "atmos.h"
 #include "terrain.h"
 
 // These values determine the fog when fully zoomed in

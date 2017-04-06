@@ -19,7 +19,6 @@
 */
 
 #include "crc.h"
-#include "lib/netplay/netsocket.h"  // For htonl
 #include <openssl/sha.h>
 
 #include <functional>

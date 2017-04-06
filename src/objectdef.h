@@ -25,7 +25,6 @@
 #define __INCLUDED_OBJECTDEF_H__
 
 #include "lib/framework/frame.h"
-#include "lib/ivis_opengl/pietypes.h"
 
 #include "movedef.h"
 #include "statsdef.h"

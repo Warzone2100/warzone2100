@@ -21,13 +21,14 @@
 #define __INCLUDED_QTSCRIPT_H__
 
 #include "lib/framework/frame.h"
-#include "basedef.h"
-#include "droiddef.h"
-#include "structuredef.h"
-#include "researchdef.h"
-#include "featuredef.h"
 
 class QScriptEngine;
+struct BASE_OBJECT;
+struct DROID;
+struct DROID_TEMPLATE;
+struct FEATURE;
+struct RESEARCH;
+struct STRUCTURE;
 
 enum SCRIPT_TRIGGER_TYPE
 {

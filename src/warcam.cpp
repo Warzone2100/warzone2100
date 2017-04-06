@@ -58,6 +58,25 @@
 #include "display3d.h"
 #include "selection.h"
 
+/* Storage for old viewnagles etc */
+struct WARCAM
+{
+	WARSTATUS status;
+	UDWORD trackClass;
+	UDWORD lastUpdate;
+	iView oldView;
+
+	Vector3f acceleration;
+	Vector3f velocity;
+	Vector3f position;
+
+	Vector3f rotation;
+	Vector3f rotVel;
+	Vector3f rotAccel;
+
+	UDWORD oldDistance;
+	BASE_OBJECT *target;
+};
 
 #define MIN_TRACK_HEIGHT 16
 

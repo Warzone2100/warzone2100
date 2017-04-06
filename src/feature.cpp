@@ -23,14 +23,13 @@
  * Load feature stats
  */
 #include "lib/framework/frame.h"
-#include "lib/framework/frameresource.h"
-#include "lib/framework/strres.h"
 #include "lib/framework/wzconfig.h"
 
 #include "lib/gamelib/gtime.h"
 #include "lib/sound/audio.h"
 #include "lib/sound/audio_id.h"
 #include "lib/netplay/netplay.h"
+#include "lib/ivis_opengl/imd.h"
 
 #include "feature.h"
 #include "map.h"
@@ -38,18 +37,14 @@
 #include "power.h"
 #include "objects.h"
 #include "display.h"
-#include "console.h"
 #include "order.h"
 #include "structure.h"
 #include "miscimd.h"
 #include "visibility.h"
-#include "text.h"
 #include "effects.h"
-#include "geometry.h"
 #include "scores.h"
 #include "combat.h"
 #include "multiplay.h"
-#include "advvis.h"
 
 #include "mapgrid.h"
 #include "display3d.h"

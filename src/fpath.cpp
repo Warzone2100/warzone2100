@@ -35,13 +35,8 @@
 
 #include "objects.h"
 #include "map.h"
-#include "raycast.h"
-#include "geometry.h"
-#include "hci.h"
-#include "order.h"
 #include "multiplay.h"
 #include "astar.h"
-#include "action.h"
 
 #include "fpath.h"
 

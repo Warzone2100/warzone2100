@@ -30,10 +30,6 @@
 #include "feature.h"
 #include "objmem.h"
 
-#include "ai.h"
-#include "move.h"
-#include "stats.h"
-
 /* Initialise the object system */
 extern bool objInitialise(void);
 

@@ -24,8 +24,7 @@
 #ifndef __INCLUDED_DISPLAYDEF_H__
 #define __INCLUDED_DISPLAYDEF_H__
 
-#include "lib/ivis_opengl/imd.h"
-#include "lib/ivis_opengl/pieclip.h"
+struct iIMDShape;
 
 // for mouse scrolling. (how many pixels from the edge before pointer scrolls the screen in a direction)
 #define	BOUNDARY_X	(2)

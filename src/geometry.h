@@ -22,7 +22,6 @@
 #define __INCLUDED_SRC_GEOMETRY_H__
 
 #include "map.h"
-#include "hci.h"
 
 struct QUAD
 {

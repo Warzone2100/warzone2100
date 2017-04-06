@@ -25,7 +25,6 @@
 
 #include "lib/framework/frame.h"
 #include "lib/sound/aud.h"
-#include "lib/sound/tracklib.h"
 
 #include "display3d.h"
 #include "map.h"

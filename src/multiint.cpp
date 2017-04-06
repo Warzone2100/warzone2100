@@ -37,7 +37,7 @@
 /* Includes direct access to render library */
 #include "lib/ivis_opengl/bitimage.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
-#include "lib/ivis_opengl/piedef.h"
+#include "lib/ivis_opengl/pietypes.h"
 #include "lib/ivis_opengl/piestate.h"
 #include "lib/ivis_opengl/pieclip.h"
 #include "lib/ivis_opengl/piemode.h"

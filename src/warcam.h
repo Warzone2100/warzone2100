@@ -21,8 +21,10 @@
 #ifndef __INCLUDED_SRC_WARCAM_H__
 #define __INCLUDED_SRC_WARCAM_H__
 
-#include "lib/ivis_opengl/pietypes.h"
-#include "objectdef.h"
+#include "lib/framework/vector.h"
+
+struct BASE_OBJECT;
+struct DROID;
 
 #define X_UPDATE 0x1
 #define Y_UPDATE 0x2
@@ -46,26 +48,6 @@ enum WARSTATUS
 	CAM_RESET,
 	CAM_TRACK_OBJECT,
 	CAM_TRACK_LOCATION
-};
-
-/* Storage for old viewnagles etc */
-struct WARCAM
-{
-	WARSTATUS status;
-	UDWORD trackClass;
-	UDWORD lastUpdate;
-	iView oldView;
-
-	Vector3f acceleration;
-	Vector3f velocity;
-	Vector3f position;
-
-	Vector3f rotation;
-	Vector3f rotVel;
-	Vector3f rotAccel;
-
-	UDWORD oldDistance;
-	BASE_OBJECT *target;
 };
 
 /* Externally referenced functions */

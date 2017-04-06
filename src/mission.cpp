@@ -47,6 +47,7 @@
 #include "message.h"
 #include "research.h"
 #include "hci.h"
+#include "move.h"
 #include "order.h"
 #include "action.h"
 #include "display3d.h"

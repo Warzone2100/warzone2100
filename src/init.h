@@ -24,7 +24,7 @@
 #ifndef __INCLUDED_SRC_INIT_H__
 #define __INCLUDED_SRC_INIT_H__
 
-#include "lib/ivis_opengl/ivisdef.h"
+struct IMAGEFILE;
 
 // the size of the file loading buffer
 // FIXME Totally inappropriate place for this.
