@@ -4703,15 +4703,15 @@ msgid "Anti-tank rocket"
 msgstr "Roquettes anti-char"
 
 #: po/custom/fromJson.txt:109
-msgid "APDS MG Bullets"
+msgid "APDSB MG Bullets"
 msgstr "Balles perforantes à sabot détachable (APDS) pour mitrailleuses"
 
 #: po/custom/fromJson.txt:110
-msgid "APDS MG Bullets Mk2"
+msgid "APDSB MG Bullets Mk2"
 msgstr "Balles APDS pour mitrailleuses Mk2"
 
 #: po/custom/fromJson.txt:111
-msgid "APDS MG Bullets Mk3"
+msgid "APDSB MG Bullets Mk3"
 msgstr "Balles APDS pour mitrailleuses Mk3"
 
 #: po/custom/fromJson.txt:112
